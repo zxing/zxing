@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="core-ext" default="build">
+
+  <target name="init">
+    <tstamp/>
+  </target>
+
+  <target name="build" depends="init">
+    <mkdir dir="build"/>
+    <javac srcdir="src"
+           destdir="build"
+           source="1.5"
+           target="1.5"
+           optimize="true"
+           debug="true"
+           deprecation="true">
+      <classpath>
+        <pathelement location="../core/core.jar"/>
+      </classpath>
+    </javac>
+    <jar jarfile="core-ext.jar" basedir="build"/>
+  </target>
+
+  <target name="clean">
+    <delete dir="build"/>
+    <delete file="core-ext.jar"/>
+  </target>
+
+</project>

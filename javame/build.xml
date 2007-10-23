@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="javame" default="build">
+
+  <property name="WTK-home" value="/usr/local/WTK2.5.2"/>
+  <property name="JDK1.4-home" value="/usr/lib/jvm/j2sdk1.4.2_16"/>
+
+  <target name="init">
+    <tstamp/>
+  </target>
+
+  <target name="build" depends="init">
+    <mkdir dir="build"/>
+    <javac srcdir="src"
+           destdir="build"
+           source="1.4"
+           target="1.4"
+           bootclasspath="${JDK1.4-home}/jre/lib/rt.jar"
+           optimize="true"
+           debug="true"
+           deprecation="true"
+           fork="true">
+      <classpath>
+        <pathelement location="${WTK-home}/lib/cldcapi11.jar"/>
+        <pathelement location="${WTK-home}/lib/midpapi20.jar"/>
+        <pathelement location="${WTK-home}/lib/mmapi.jar"/>
+        <pathelement location="../core/core.jar"/>
+      </classpath>
+    </javac>
+
+    <mkdir dir="build-j2me"/>
+    <exec executable="${WTK-home}/bin/preverify">
+      <arg line="-classpath ${WTK-home}/lib/cldcapi11.jar:${WTK-home}/lib/midpapi20.jar:${WTK-home}/lib/mmapi.jar:${WTK-home}/lib/satsa-apdu.jar:../core/core.jar -d build-j2me build"/>
+    </exec>
+
+    <!-- TODO add manifest -->
+    <jar jarfile="javame.jar" basedir="build-j2me"/>
+
+  </target>
+
+  <target name="clean">
+    <delete dir="build"/>
+    <delete dir="build-j2me"/>
+    <delete file="javame.jar"/>
+  </target>
+
+</project>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="core" default="build">
+
+  <property name="WTK-home" value="/usr/local/WTK2.5.2"/>
+  <property name="JDK1.4-home" value="/usr/lib/jvm/j2sdk1.4.2_16"/>
+
+  <target name="init">
+    <tstamp/>
+  </target>
+
+  <target name="build" depends="init">
+    <mkdir dir="build"/>
+    <javac srcdir="src"
+           destdir="build"
+           source="1.4"
+           target="1.4"
+           bootclasspath="${JDK1.4-home}/jre/lib/rt.jar"
+           optimize="true"
+           debug="true"
+           deprecation="true"
+           fork="true"/>
+    <jar jarfile="core.jar" basedir="build"/>
+  </target>
+
+  <target name="clean">
+    <delete dir="build"/>
+    <delete file="core.jar"/>
+  </target>
+
+</project>
