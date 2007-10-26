@@ -67,7 +67,7 @@ public final class DefaultGridSampler extends GridSampler {
       int max = points.length;
       float iValue = (float) i + 0.5f;
       for (int j = 0; j < max; j += 2) {
-        points[j] = (float) j + 0.5f;
+        points[j] = (float) (j >> 1) + 0.5f;
         points[j + 1] = iValue;
       }
       transform.transform(points);
