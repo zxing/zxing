@@ -30,9 +30,13 @@ import com.google.zxing.qrcode.detector.DetectorResult;
 import java.util.Hashtable;
 
 /**
+ * This implementation can detect and decode QR Codes in an image.
+ *
  * @author srowen@google.com (Sean Owen)
  */
 public final class QRCodeReader implements Reader {
+
+  private static final ResultPoint[] NO_POINTS = new ResultPoint[0];
 
   /**
    * Locates and decodes a QR code in an image.
@@ -51,7 +55,7 @@ public final class QRCodeReader implements Reader {
     if (hints != null && hints.containsKey(DecodeHintType.PURE_BARCODE)) {
       BitMatrix bits = extractPureBits(image);
       text = Decoder.decode(bits);
-      points = new ResultPoint[0];
+      points = NO_POINTS;
     } else {
       DetectorResult result = new Detector(image).detect();
       text = Decoder.decode(result.getBits());
@@ -60,26 +64,36 @@ public final class QRCodeReader implements Reader {
     return new Result(text, points);
   }
 
+  /**
+   * This method detects a barcode in a "pure" image -- that is, pure monochrome image
+   * which contains only an unrotated, unskewed, image of a barcode, with some white border
+   * around it. This is a specialized method that works exceptionally fast in this special
+   * case.
+   */
   private static BitMatrix extractPureBits(MonochromeBitmapSource image)
       throws ReaderException {
     // Now need to determine module size in pixels
-    // First, skip white border
+
+    // First, skip white border by tracking diagonally from the top left down and to the right:
     int borderWidth = 0;
     while (!image.isBlack(borderWidth, borderWidth)) {
       borderWidth++;
     }
+    // And then keep tracking across the top-left black module to determine module size
     int moduleEnd = borderWidth;
     while (image.isBlack(moduleEnd, moduleEnd)) {
       moduleEnd++;
     }
     int moduleSize = moduleEnd - borderWidth;
 
+    // And now find where the rightmost black module on the first row ends
     int rowEndOfSymbol = image.getWidth() - 1;
     while (!image.isBlack(rowEndOfSymbol, borderWidth)) {
       rowEndOfSymbol--;
     }
     rowEndOfSymbol++;
 
+    // Make sure width of barcode is a multiple of module size
     if ((rowEndOfSymbol - borderWidth) % moduleSize != 0) {
       throw new ReaderException("Bad module size / width: " + moduleSize +
           " / " + (rowEndOfSymbol - borderWidth));
@@ -91,6 +105,7 @@ public final class QRCodeReader implements Reader {
     // little off, this will help recover.
     borderWidth += moduleSize >> 1;
 
+    // Now just read off the bits
     BitMatrix bits = new BitMatrix(dimension);
     for (int i = 0; i < dimension; i++) {
       int iOffset = borderWidth + i * moduleSize;
