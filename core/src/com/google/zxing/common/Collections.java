@@ -30,8 +30,8 @@ public final class Collections {
    * Sorts its argument (destructively) using insert sort; in the context of this package
    * insertion sort is simple and efficient given its relatively small inputs.
    * 
-   * @param vector
-   * @param comparator
+   * @param vector vector to sort
+   * @param comparator comparator to define sort ordering
    */
   public static void insertionSort(Vector vector, Comparator comparator) {
     int max = vector.size();

@@ -51,16 +51,24 @@ final class GF256 {
   }
 
   /**
-   * Addition and subtraction are the same in GF(256).
+   * Implements both addition and subtraction -- they are the same in GF(256).
+   * 
+   * @return sum/difference of a and b
    */
   static int addOrSubtract(int a, int b) {
     return a ^ b;
   }
 
+  /**
+   * @return 2 to the power of a in GF(256)
+   */
   static int exp(int a) {
     return exp[a];
   }
 
+  /**
+   * @return base 2 log of a in GF(256)
+   */
   static int log(int a) {
     if (a == 0) {
       throw new IllegalArgumentException();
@@ -78,6 +86,12 @@ final class GF256 {
     return exp[255 - log[a]];
   }
 
+  /**
+   *
+   * @param a
+   * @param b
+   * @return product of a and b in GF(256)
+   */
   static int multiply(int a, int b) {
     if (a == 0 || b == 0) {
       return 0;

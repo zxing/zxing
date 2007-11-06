@@ -34,6 +34,7 @@ public final class BitArray {
   }
 
   /**
+   * @param i bit to get
    * @return true iff bit i is set
    */
   public boolean get(int i) {
@@ -42,17 +43,26 @@ public final class BitArray {
 
   /**
    * Sets bit i.
+   *
+   * @param i bit to set
    */
   public void set(int i) {
     bits[i >> 5] |= 1 << (i & 0x1F);
   }
 
+  /**
+   * Sets a block of 32 bits, starting at bit i.
+   *
+   * @param i first bit to set
+   * @param newBits the new value of the next 32 bits. Note again that the least-significant bit
+   *  correponds to bit i, the next-least-significant to i+1, and so on.
+   */
   public void setBulk(int i, int newBits) {
     bits[i >> 5] = newBits;
   }
 
   /**
-   * Clears all bits.
+   * Clears all bits (sets to false).
    */
   public void clear() {
     int max = bits.length;

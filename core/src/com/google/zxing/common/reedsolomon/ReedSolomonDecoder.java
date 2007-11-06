@@ -37,12 +37,22 @@ import java.util.Vector;
  * port of his C++ Reed-Solomon implementation.</p>
  *
  * @author srowen@google.com (Sean Owen)
+ * @author William Rucklidge
  */
 public final class ReedSolomonDecoder {
   
   private ReedSolomonDecoder() {
   }
 
+  /**
+   * <p>Decodes given set of received codewords, which include both data and error-correction
+   * codewords. Really, this means it uses Reed-Solomon to detect and correct errors, in-place,
+   * in the input.</p>
+   *
+   * @param received data and error-correction codewords
+   * @param twoS number of error-correction codewords available
+   * @throws ReedSolomonException if decoding fails for any reaosn
+   */
   public static void decode(int[] received, int twoS) throws ReedSolomonException {
     GF256Poly poly = new GF256Poly(received);
     int[] syndromeCoefficients = new int[twoS];
