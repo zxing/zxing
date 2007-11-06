@@ -21,7 +21,11 @@ import com.google.zxing.qrcode.QRCodeReader;
 import java.util.Hashtable;
 
 /**
- * For now, only delegates to {@link QRCodeReader}.
+ * <p>This implementation can detect barcodes in one of several formats within
+ * an image, and then decode what it finds. This implementation supports all
+ * barcode formats that this library supports.</p>
+ *
+ * <p>For now, only delegates to {@link QRCodeReader}.</p>
  *
  * @author srowen@google.com (Sean Owen), dswitkin@google.com (Daniel Switkin)
  */
@@ -35,6 +39,8 @@ public final class MultiFormatReader implements Reader {
       throws ReaderException {
     Hashtable possibleFormats =
         hints == null ? null : (Hashtable) hints.get(DecodeHintType.POSSIBLE_FORMATS);
+    // TODO for now we are only support QR Code so this behaves accordingly. This needs to
+    // become more sophisticated
     if (possibleFormats == null || possibleFormats.contains(BarcodeFormat.QR_CODE)) {
       return new QRCodeReader().decode(image, hints);
     } else {

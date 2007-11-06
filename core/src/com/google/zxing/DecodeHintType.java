@@ -22,7 +22,7 @@ package com.google.zxing;
  * if anything, to do with the information that is supplied.
  *
  * @author srowen@google.com (Sean Owen), dswitkin@google.com (Daniel Switkin)
- * @see Reader#decode(MonochromeBitmapSource, java.util.Map)
+ * @see Reader#decode(MonochromeBitmapSource, java.util.Hashtable)
  */
 public final class DecodeHintType {
 
