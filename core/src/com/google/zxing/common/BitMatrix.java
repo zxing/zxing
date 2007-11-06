@@ -50,16 +50,35 @@ public final class BitMatrix {
     bits = new int[arraySize];
   }
 
+  /**
+   * @param i row offset
+   * @param j column offset
+   * @return value of given bit in matrix
+   */
   public boolean get(int i, int j) {
     int offset = i + dimension * j;
     return ((bits[offset >> 5] >>> (offset & 0x1F)) & 0x01) != 0;
   }
 
+  /**
+   * <p>Sets the given bit to true.</p>
+   *
+   * @param i row offset
+   * @param j column offset
+   */
   public void set(int i, int j) {
     int offset = i + dimension * j;
     bits[offset >> 5] |= 1 << (offset & 0x1F);
   }
 
+  /**
+   * <p>Sets a square region of the bit matrix to true.</p>
+   *
+   * @param topI row offset of region's top-left corner (inclusive)
+   * @param leftJ column offset of region's top-left corner (inclusive)
+   * @param height height of region
+   * @param width width of region
+   */
   public void setRegion(int topI, int leftJ, int height, int width) {
     if (topI < 0 || leftJ < 0) {
       throw new IllegalArgumentException("topI and leftJ must be nonnegative");
@@ -82,25 +101,30 @@ public final class BitMatrix {
     }
   }
 
+  /**
+   * @return row/column dimension of this matrix
+   */
   public int getDimension() {
     return dimension;
   }
 
+  /**
+   * @return array of ints holding internal representation of this matrix's bits
+   */
   public int[] getBits() {
     return bits;
   }
 
   /*
   public BufferedImage toBufferedImage() {
-		BufferedImage image =
-		  new BufferedImage(dimension, dimension, BufferedImage.TYPE_BYTE_BINARY);
-		for (int j = 0; j < dimension; j++) {
-			for (int i = 0; i < dimension; i++) {
-				image.setRGB(j, i, get(i, j) ? 0x00000000 : 0x00FFFFFF);
-			}
-		}
-		return image;
-	}
-	 */
+    BufferedImage image = new BufferedImage(dimension, dimension, BufferedImage.TYPE_BYTE_BINARY);
+    for (int j = 0; j < dimension; j++) {
+      for (int i = 0; i < dimension; i++) {
+        image.setRGB(j, i, get(i, j) ? 0x00000000 : 0x00FFFFFF);
+      }
+    }
+    return image;
+  }
+   */
 
 }
