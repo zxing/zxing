@@ -17,7 +17,12 @@
 package com.google.zxing.qrcode.decoder;
 
 /**
+ * <p>Encapsulates a QR Code's format information, including the data mask used and
+ * error correction level.</p>
+ *
  * @author srowen@google.com (Sean Owen)
+ * @see DataMask
+ * @see ErrorCorrectionLevel
  */
 final class FormatInformation {
 
@@ -61,6 +66,7 @@ final class FormatInformation {
       {0x2BED, 0x1F},
   };
 
+  /** Offset i holds the number of 1 bits in the binary representation of i */
   private static final int[] BITS_SET_IN_HALF_BYTE =
       new int[]{0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4};
 
@@ -69,16 +75,15 @@ final class FormatInformation {
 
   private FormatInformation(int formatInfo) {
     // Bits 3,4
-    errorCorrectionLevel =
-        ErrorCorrectionLevel.forBits((formatInfo >> 3) & 0x03);
+    errorCorrectionLevel = ErrorCorrectionLevel.forBits((formatInfo >> 3) & 0x03);
     // Bottom 3 bits
     dataMask = (byte) (formatInfo & 0x07);
   }
 
   static int numBitsDiffering(int a, int b) {
-    a ^= b;
-    return
-        BITS_SET_IN_HALF_BYTE[a & 0x0F] +
+    a ^= b; // a now has a 1 bit exactly where its bit differs with b's
+    // Count bits set quickly with a series of lookups:
+    return  BITS_SET_IN_HALF_BYTE[a & 0x0F] +
             BITS_SET_IN_HALF_BYTE[(a >>> 4 & 0x0F)] +
             BITS_SET_IN_HALF_BYTE[(a >>> 8 & 0x0F)] +
             BITS_SET_IN_HALF_BYTE[(a >>> 12 & 0x0F)] +
@@ -88,6 +93,11 @@ final class FormatInformation {
             BITS_SET_IN_HALF_BYTE[(a >>> 28 & 0x0F)];
   }
 
+  /**
+   *
+   * @param rawFormatInfo
+   * @return
+   */
   static FormatInformation decodeFormatInformation(int rawFormatInfo) {
     FormatInformation formatInfo = doDecodeFormatInformation(rawFormatInfo);
     if (formatInfo != null) {
@@ -99,16 +109,17 @@ final class FormatInformation {
     return doDecodeFormatInformation(rawFormatInfo ^ FORMAT_INFO_MASK_QR);
   }
 
-  private static FormatInformation doDecodeFormatInformation(
-      int rawFormatInfo) {
+  private static FormatInformation doDecodeFormatInformation(int rawFormatInfo) {
     // Unmask:
     int unmaskedFormatInfo = rawFormatInfo ^ FORMAT_INFO_MASK_QR;
+    // Find the int in FORMAT_INFO_DECODE_LOOKUP with fewest bits differing
     int bestDifference = Integer.MAX_VALUE;
     int bestFormatInfo = 0;
     for (int i = 0; i < FORMAT_INFO_DECODE_LOOKUP.length; i++) {
       int[] decodeInfo = FORMAT_INFO_DECODE_LOOKUP[i];
       int targetInfo = decodeInfo[0];
       if (targetInfo == unmaskedFormatInfo) {
+        // Found an exact match
         return new FormatInformation(decodeInfo[1]);
       }
       int bitsDifference = numBitsDiffering(unmaskedFormatInfo, targetInfo);
