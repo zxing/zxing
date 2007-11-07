@@ -19,6 +19,9 @@ package com.google.zxing.qrcode.detector;
 import com.google.zxing.ResultPoint;
 
 /**
+ * <p>Encapsulates an alignment pattern, which are the smaller square patterns found in
+ * all but the simplest QR Codes.</p>
+ *
  * @author srowen@google.com (Sean Owen)
  */
 public final class AlignmentPattern implements ResultPoint {
@@ -45,6 +48,10 @@ public final class AlignmentPattern implements ResultPoint {
     return estimatedModuleSize;
   }
 
+  /**
+   * <p>Determines if this alignment pattern "about equals" an alignment pattern at the stated
+   * position and size -- meaning, it is at nearly the same center with nearly the same size.</p>
+   */
   boolean aboutEquals(float moduleSize, float i, float j) {
     return
         Math.abs(i - posY) <= moduleSize &&

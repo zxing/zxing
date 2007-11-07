@@ -23,6 +23,9 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.decoder.Version;
 
 /**
+ * <p>Encapsulates logic that can detect a QR Code in an image, even if the QR Code
+ * is rotated or skewed, or partially obscured.</p>
+ *
  * @author srowen@google.com (Sean Owen)
  */
 public final class Detector {
@@ -33,6 +36,12 @@ public final class Detector {
     this.image = image;
   }
 
+    /**
+     * <p>Detects a QR Code in an image, simply.</p>
+     *
+     * @return {@link DetectorResult} encapsulating results of detecting a QR Code
+     * @throws ReaderException if no QR Code can be found
+     */
   public DetectorResult detect() throws ReaderException {
 
     MonochromeBitmapSource image = this.image;
@@ -71,7 +80,7 @@ public final class Detector {
               estAlignmentY,
               (float) i);
           break;
-        } catch (ReaderException de) {
+        } catch (ReaderException re) {
           // try next round
         }
       }
@@ -82,12 +91,7 @@ public final class Detector {
     }
 
     GridSampler sampler = GridSampler.getInstance();
-    BitMatrix bits = sampler.sampleGrid(image,
-        topLeft,
-        topRight,
-        bottomLeft,
-        alignmentPattern,
-        dimension);
+    BitMatrix bits = sampler.sampleGrid(image, topLeft, topRight, bottomLeft, alignmentPattern, dimension);
 
     /*
     try {
@@ -104,8 +108,7 @@ public final class Detector {
           }
         }
       }
-      ImageIO.write(outImage, "PNG",
-          new File("/home/srowen/out.png"));
+      ImageIO.write(outImage, "PNG", new File("/tmp/out.png"));
     } catch (IOException ioe) {
       ioe.printStackTrace();
     }
@@ -120,21 +123,22 @@ public final class Detector {
     return new DetectorResult(bits, points);
   }
 
+  /**
+   * <p>Computes the dimension (number of modules on a size) of the QR Code based on the position
+   * of the finder patterns and estimated module size.</p>
+   */
   private static int computeDimension(ResultPoint topLeft,
                                       ResultPoint topRight,
                                       ResultPoint bottomLeft,
-                                      float moduleSize)
-      throws ReaderException {
-    int tltrCentersDimension =
-        round(FinderPatternFinder.distance(topLeft, topRight) / moduleSize);
-    int tlblCentersDimension =
-        round(FinderPatternFinder.distance(topLeft, bottomLeft) / moduleSize);
+                                      float moduleSize) throws ReaderException {
+    int tltrCentersDimension = round(FinderPatternFinder.distance(topLeft, topRight) / moduleSize);
+    int tlblCentersDimension = round(FinderPatternFinder.distance(topLeft, bottomLeft) / moduleSize);
     int dimension = ((tltrCentersDimension + tlblCentersDimension) >> 1) + 7;
     switch (dimension & 0x03) { // mod 4
       case 0:
         dimension++;
         break;
-        // 1? do nothing
+      // 1? do nothing
       case 2:
         dimension--;
         break;
@@ -144,16 +148,22 @@ public final class Detector {
     return dimension;
   }
 
-  private float calculateModuleSize(ResultPoint topLeft,
-                                    ResultPoint topRight,
-                                    ResultPoint bottomLeft) {
+  /**
+   * <p>Computes an average estimated module size based on estimated derived from the positions
+   * of the three finder patterns.</p>
+   */
+  private float calculateModuleSize(ResultPoint topLeft, ResultPoint topRight, ResultPoint bottomLeft) {
     // Take the average
     return (calculateModuleSizeOneWay(topLeft, topRight) +
             calculateModuleSizeOneWay(topLeft, bottomLeft)) / 2.0f;
   }
 
-  private float calculateModuleSizeOneWay(ResultPoint pattern,
-                                          ResultPoint otherPattern) {
+    /**
+     * <p>Estimates module size based on two finder patterns -- it uses
+     * {@link #sizeOfBlackWhiteBlackRunBothWays(int, int, int, int)} to figure the
+     * width of each, measuring along the axis between their centers.</p>
+     */
+  private float calculateModuleSizeOneWay(ResultPoint pattern, ResultPoint otherPattern) {
     float moduleSizeEst1 = sizeOfBlackWhiteBlackRunBothWays((int) pattern.getX(),
                                                             (int) pattern.getY(),
                                                             (int) otherPattern.getX(),
@@ -173,12 +183,25 @@ public final class Detector {
     return (moduleSizeEst1 + moduleSizeEst2) / 14.0f;
   }
 
+  /**
+   * See {@link #sizeOfBlackWhiteBlackRun(int, int, int, int)}; computes the total width of
+   * a finder pattern by looking for a black-white-black run from the center in the direction
+   * of another point (another finder pattern center), and in the opposite direction too.</p>
+   */
   private float sizeOfBlackWhiteBlackRunBothWays(int fromX, int fromY, int toX, int toY) {
     float result = sizeOfBlackWhiteBlackRun(fromX, fromY, toX, toY);
     result += sizeOfBlackWhiteBlackRun(fromX, fromY, fromX - (toX - fromX), fromY - (toY - fromY));
     return result - 1.0f; // -1 because we counted the middle pixel twice
   }
 
+  /**
+   * <p>This method traces a line from a point in the image, in the direction towards another point.
+   * It begins in a black region, and keeps going until it finds white, then black, then white again.
+   * It reports the distance from the start to this point.</p>
+   *
+   * <p>This is used when figuring out how wide a finder pattern is, when the finder pattern
+   * may be skewed or rotated.</p>
+   */
   private float sizeOfBlackWhiteBlackRun(int fromX, int fromY, int toX, int toY) {
     // Mild variant of Bresenham's algorithm;
     // see http://en.wikipedia.org/wiki/Bresenham's_line_algorithm
@@ -227,6 +250,17 @@ public final class Detector {
     return Float.NaN;
   }
 
+  /**
+   * <p>Attempts to locate an alignment pattern in a limited region of the image, which is
+   * guessed to contain it. This method uses {@link AlignmentPattern}.</p>
+   *
+   * @param overallEstModuleSize estimated module size so far
+   * @param estAlignmentX x coordinate of center of area probably containing alignment pattern
+   * @param estAlignmentY y coordinate of above
+   * @param allowanceFactor number of pixels in all directons to search from the center
+   * @return {@link AlignmentPattern} if found, or null otherwise
+   * @throws ReaderException if an unexpected error occurs during detection
+   */
   private AlignmentPattern findAlignmentInRegion(float overallEstModuleSize,
                                                  int estAlignmentX,
                                                  int estAlignmentY,
@@ -236,11 +270,9 @@ public final class Detector {
     // should be
     int allowance = (int) (allowanceFactor * overallEstModuleSize);
     int alignmentAreaLeftX = Math.max(0, estAlignmentX - allowance);
-    int alignmentAreaRightX = Math.min(image.getWidth() - 1,
-        estAlignmentX + allowance);
+    int alignmentAreaRightX = Math.min(image.getWidth() - 1, estAlignmentX + allowance);
     int alignmentAreaTopY = Math.max(0, estAlignmentY - allowance);
-    int alignmentAreaBottomY = Math.min(image.getHeight() - 1,
-        estAlignmentY + allowance);
+    int alignmentAreaBottomY = Math.min(image.getHeight() - 1, estAlignmentY + allowance);
 
     AlignmentPatternFinder alignmentFinder =
         new AlignmentPatternFinder(
@@ -254,7 +286,8 @@ public final class Detector {
   }
 
   /**
-   * Ends up being a bit faster than Math.round()
+   * Ends up being a bit faster than Math.round(). This merely rounds its argument to the nearest int,
+   * where x.5 rounds up.
    */
   private static int round(float d) {
     return (int) (d + 0.5f);
