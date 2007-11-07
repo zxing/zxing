@@ -1,0 +1,11 @@
+MIDlet-1: ZXingReader, , com.google.zxing.client.j2me.ZXingMIDlet
+MIDlet-Description: Bar Code Reader
+MIDlet-Info-URL: code.google.com/p/zxing
+MIDlet-Jar-Size: @JAR_SIZE@
+MIDlet-Jar-URL: ZXingReader.jar
+MIDlet-Name: ZXingReader
+MIDlet-Permissions-Opt: javax.microedition.media.control.VideoControl.getSnapshot
+MIDlet-Vendor: ZXing Project
+MIDlet-Version: 1.0
+MicroEdition-Configuration: CLDC-1.1
+MicroEdition-Profile: MIDP-2.0
