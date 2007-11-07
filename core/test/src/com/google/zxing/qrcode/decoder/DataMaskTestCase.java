@@ -18,10 +18,9 @@ package com.google.zxing.qrcode.decoder;
 
 import com.google.zxing.common.BitMatrix;
 import junit.framework.TestCase;
-import junit.textui.TestRunner;
 
 /**
- * @author Sean Owen
+ * @author srowen@google.com (Sean Owen)
  */
 public final class DataMaskTestCase extends TestCase {
 
@@ -113,10 +112,6 @@ public final class DataMaskTestCase extends TestCase {
 
   private static interface MaskCondition {
     boolean isMasked(int i, int j);
-  }
-
-  public static void main(String[] args) {
-    TestRunner.run(new DataMaskTestCase());
   }
 
 }
