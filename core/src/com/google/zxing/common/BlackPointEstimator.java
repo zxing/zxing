@@ -58,8 +58,7 @@ public final class BlackPointEstimator {
     int secondPeakScore = 0;
     for (int i = 0; i < numBuckets; i++) {
       int distanceToBiggest = i - firstPeak;
-      // Encourage more distant second peaks by multiplying by square
-      // of distance
+      // Encourage more distant second peaks by multiplying by square of distance
       int score = luminanceBuckets[i] * distanceToBiggest * distanceToBiggest;
       if (score > secondPeakScore) {
         secondPeak = i;
@@ -79,8 +78,7 @@ public final class BlackPointEstimator {
     int bestValleyScore = 0;
     for (int i = firstPeak + 1; i < secondPeak; i++) {
       // Encourage low valleys near the mid point between peaks
-      int score = (firstPeakSize - luminanceBuckets[i]) *
-          (i - firstPeak) * (secondPeak - i);
+      int score = (firstPeakSize - luminanceBuckets[i]) * (i - firstPeak) * (secondPeak - i);
       if (score > bestValleyScore) {
         bestValley = i;
         bestValleyScore = score;
