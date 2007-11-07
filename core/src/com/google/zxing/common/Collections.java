@@ -19,7 +19,10 @@ package com.google.zxing.common;
 import java.util.Vector;
 
 /**
- * This is basically a substitute for <code>java.util.Collections</code>.
+ * <p>This is basically a substitute for <code>java.util.Collections</code>, which is not
+ * present in MIDP 2.0 / CLDC 1.1.</p>
+ *
+ * @author srowen@google.com (Sean Owen)
  */
 public final class Collections {
 
