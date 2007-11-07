@@ -17,10 +17,9 @@
 package com.google.zxing.qrcode.decoder;
 
 import junit.framework.TestCase;
-import junit.textui.TestRunner;
 
 /**
- * @author Sean Owen
+ * @author srowen@google.com (Sean Owen)
  */
 public final class FormatInformationTestCase extends TestCase {
 
@@ -33,24 +32,17 @@ public final class FormatInformationTestCase extends TestCase {
 
   public void testDecode() {
     // Normal case
-    FormatInformation expected =
-        FormatInformation.decodeFormatInformation(0x2BED ^ 0x5412);
+    FormatInformation expected = FormatInformation.decodeFormatInformation(0x2BED ^ 0x5412);
     assertEquals((byte) 0x07, expected.getDataMask());
     assertEquals(ErrorCorrectionLevel.Q, expected.getErrorCorrectionLevel());
     // where the code forgot the mask!
     assertEquals(expected, FormatInformation.decodeFormatInformation(0x2BED));
-    // 1,2,3,4 bits difference
-    assertEquals(expected, FormatInformation.decodeFormatInformation(
-                           0x2BEF ^ 0x5412));
-    assertEquals(expected, FormatInformation.decodeFormatInformation(
-                           0x2BEE ^ 0x5412));
-    assertEquals(expected, FormatInformation.decodeFormatInformation(
-                           0x2BEA ^ 0x5412));
-    assertNull(FormatInformation.decodeFormatInformation(0x2BE2 ^ 0x5412));
-  }
 
-  public static void main(String[] args) {
-    TestRunner.run(new DataMaskTestCase());
+    // 1,2,3,4 bits difference
+    assertEquals(expected, FormatInformation.decodeFormatInformation(0x2BEF ^ 0x5412));
+    assertEquals(expected, FormatInformation.decodeFormatInformation(0x2BEE ^ 0x5412));
+    assertEquals(expected, FormatInformation.decodeFormatInformation(0x2BEA ^ 0x5412));
+    assertNull(FormatInformation.decodeFormatInformation(0x2BE2 ^ 0x5412));
   }
 
 }
