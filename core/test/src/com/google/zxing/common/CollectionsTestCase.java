@@ -34,11 +34,12 @@ public final class CollectionsTestCase extends TestCase {
     }
     Collections.insertionSort(v, new Comparator() {
       public int compare(Object o1, Object o2) {
-        return (Integer) o1 - (Integer) o2;
+        return ((Integer) o1).intValue() - ((Integer) o2).intValue();
       }
     });
     for (int i = 1; i < 100; i++) {
-      assertTrue("Element " + i, (Integer) v.elementAt(i-1) <= (Integer) v.elementAt(i));
+      assertTrue("Element " + i, ((Integer) v.elementAt(i-1)).intValue() <=
+                                 ((Integer) v.elementAt(i)).intValue());
     }
   }
 
