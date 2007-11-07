@@ -21,7 +21,6 @@ import com.google.zxing.MultiFormatReader;
 import com.google.zxing.Reader;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
-import com.google.zxing.qrcode.detector.GridSampler;
 
 import javax.microedition.lcdui.Alert;
 import javax.microedition.lcdui.AlertType;
@@ -48,10 +47,6 @@ public final class ZXingMIDlet extends MIDlet implements CommandListener {
   private static final Command DECODE = new Command("Decode", Command.SCREEN, 1);
   private static final Command EXIT = new Command("Exit", Command.EXIT, 1);
 
-  static {
-    GridSampler.setGridSamplerClassName("com.google.zxing.client.j2me.JAIGridSampler");
-  }
-
   private Player player;
   private VideoControl videoControl;
 
@@ -66,15 +61,6 @@ public final class ZXingMIDlet extends MIDlet implements CommandListener {
       videoControl.setDisplaySize(canvas.getWidth(), canvas.getHeight());
       videoControl.setVisible(true);
       /*
-      FormatControl imageFormatControl = (FormatControl)
-          player.getControl("javax.microedition.amms.control.ImageFormatControl");
-      if (imageFormatControl != null) {
-        imageFormatControl.setFormat("image/png");
-        imageFormatControl.setParameter(FormatControl.PARAM_VERSION_TYPE, "PNG");
-      } else {
-        System.out.println("ImageFormatControl not supported");
-      }
-
       FocusControl focusControl = (FocusControl)
           player.getControl("javax.microedition.amms.control.FocusControl");
       if (focusControl != null) {

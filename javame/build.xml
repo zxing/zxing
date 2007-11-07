@@ -27,20 +27,31 @@
       </classpath>
     </javac>
 
+    <unzip src="../core/core.jar" dest="build"/>
+
     <mkdir dir="build-j2me"/>
-    <exec executable="${WTK-home}/bin/preverify">
-      <arg line="-classpath ${WTK-home}/lib/cldcapi11.jar:${WTK-home}/lib/midpapi20.jar:${WTK-home}/lib/mmapi.jar:${WTK-home}/lib/satsa-apdu.jar:../core/core.jar -d build-j2me build"/>
+    <exec executable="${WTK-home}/bin/preverify1.1">
+      <arg line="-classpath ${WTK-home}/lib/cldcapi11.jar:${WTK-home}/lib/midpapi20.jar:${WTK-home}/lib/mmapi.jar:${WTK-home}/lib/satsa-apdu.jar -d build-j2me build"/>
     </exec>
 
-    <!-- TODO add manifest -->
-    <jar jarfile="javame.jar" basedir="build-j2me"/>
+    <jar jarfile="ZXingReader.jar" basedir="build-j2me" manifest="src/com/google/zxing/client/j2me/MANIFEST.MF"/>
+
+    <exec executable="sh" outputproperty="jar-size">
+      <arg line="-c &quot;wc -c ZXingReader.jar | cut -d' ' -f1&quot;"/>
+    </exec>
+    <copy file="ZXingReader.jad.template" tofile="ZXingReader.jad">
+      <filterset>
+        <filter token="JAR_SIZE" value="${jar-size}"/>
+      </filterset>
+    </copy>
 
   </target>
 
   <target name="clean">
     <delete dir="build"/>
     <delete dir="build-j2me"/>
-    <delete file="javame.jar"/>
+    <delete file="ZXingReader.jar"/>
+    <delete file="ZXingReader.jad"/>    
   </target>
 
 </project>
