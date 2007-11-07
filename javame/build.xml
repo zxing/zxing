@@ -34,6 +34,12 @@
       <arg line="-classpath ${WTK-home}/lib/cldcapi11.jar:${WTK-home}/lib/midpapi20.jar:${WTK-home}/lib/mmapi.jar:${WTK-home}/lib/satsa-apdu.jar -d build-j2me build"/>
     </exec>
 
+    <copy todir="build-j2me">
+      <fileset dir=".">
+        <include name="res/**"/>
+      </fileset>
+    </copy>
+
     <jar jarfile="ZXingReader.jar" basedir="build-j2me" manifest="src/com/google/zxing/client/j2me/MANIFEST.MF"/>
 
     <exec executable="sh" outputproperty="jar-size">
