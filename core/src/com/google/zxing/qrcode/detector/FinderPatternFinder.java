@@ -178,13 +178,14 @@ final class FinderPatternFinder {
     if (totalModuleSize < 7) {
       return false;
     }
-    int moduleSize = totalModuleSize / 7;
-    // Allow less than 50% deviance from 1-1-3-1-1 pattern
-    return  Math.abs(moduleSize - stateCount[0]) << 1 <= moduleSize &&
-            Math.abs(moduleSize - stateCount[1]) << 1 <= moduleSize &&
-            Math.abs(3 * moduleSize - stateCount[2]) << 1 <= 3 * moduleSize &&
-            Math.abs(moduleSize - stateCount[3]) << 1 <= moduleSize &&
-            Math.abs(moduleSize - stateCount[4]) << 1 <= moduleSize;
+    float moduleSize = (float) totalModuleSize / 7.0f;
+    float maxVariance = moduleSize / 2.5f;
+    // Allow less than 40% variance from 1-1-3-1-1 proportions
+    return  Math.abs(moduleSize - stateCount[0]) < maxVariance &&
+            Math.abs(moduleSize - stateCount[1]) < maxVariance &&
+            Math.abs(3.0f * moduleSize - stateCount[2]) < 3.0f * maxVariance &&
+            Math.abs(moduleSize - stateCount[3]) < maxVariance &&
+            Math.abs(moduleSize - stateCount[4]) < maxVariance;
   }
 
   /**

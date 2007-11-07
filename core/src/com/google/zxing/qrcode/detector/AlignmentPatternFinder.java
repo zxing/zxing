@@ -164,8 +164,9 @@ final class AlignmentPatternFinder {
    */
   private boolean foundPatternCross(int[] stateCount) {
     float moduleSize = this.moduleSize;
+    float maxVariance = moduleSize / 2.5f;
     for (int i = 0; i < 3; i++) {
-      if (2.0f * Math.abs(moduleSize - stateCount[i]) >= moduleSize) {
+      if (Math.abs(moduleSize - stateCount[i]) >= maxVariance) {
         return false;
       }
     }
