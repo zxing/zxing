@@ -84,7 +84,7 @@ abstract class DataMask {
   }
 
   /**
-   * 001: mask bits for which j mod 2 == 0
+   * 001: mask bits for which i mod 2 == 0
    */
   private static class DataMask001 extends DataMask {
     void unmaskBitMatrix(int[] bits, int dimension) {
@@ -165,9 +165,9 @@ abstract class DataMask {
       int count = 0;
       int offset = 0;
       for (int j = 0; j < dimension; j++) {
-        int jComponent = j / 3;
+        int jComponentParity = (j / 3) & 0x01;
         for (int i = 0; i < dimension; i++) {
-          if (((i >> 1 + jComponent) & 0x01) == 0) {
+          if (((i >> 1) & 0x01) == jComponentParity) {
             bitMask |= 1 << count;
           }
           if (++count == 32) {
