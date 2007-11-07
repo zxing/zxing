@@ -39,7 +39,7 @@ final class ErrorCorrectionLevel {
 
   private final int ordinal;
 
-  private ErrorCorrectionLevel(final int ordinal) {
+  private ErrorCorrectionLevel(int ordinal) {
     this.ordinal = ordinal;
   }
 
@@ -47,6 +47,10 @@ final class ErrorCorrectionLevel {
     return ordinal;
   }
 
+  /**
+   * @param bits int containing the two bits encoding a QR Code's error correction level
+   * @return {@link ErrorCorrectionLevel} representing the encoded error correction level
+   */
   static ErrorCorrectionLevel forBits(int bits) {
     return FOR_BITS[bits];
   }

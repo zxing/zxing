@@ -40,6 +40,11 @@ final class Mode {
     this.characterCountBitsForVersions = characterCountBitsForVersions;
   }
 
+  /**
+   * @param bits four bits encoding a QR Code data mode
+   * @return {@link Mode} encoded by these bits
+   * @throws ReaderException if bits do not correspond to a known mode
+   */
   static Mode forBits(int bits) throws ReaderException {
     switch (bits) {
       case 0x0:
@@ -57,6 +62,11 @@ final class Mode {
     }
   }
 
+  /**
+   * @param version version in question
+   * @return number of bits used, in this QR Code symbol {@link Version}, to encode the
+   *  count of characters that will follow encoded in this {@link Mode}
+   */
   int getCharacterCountBits(Version version) {
     int number = version.getVersionNumber();
     int offset;

@@ -17,13 +17,13 @@
 package com.google.zxing.qrcode.decoder;
 
 /**
- * Encapsulates data masks for the data bits in a QR code, per ISO 18004:2006 6.8. Implementations
+ * <p>Encapsulates data masks for the data bits in a QR code, per ISO 18004:2006 6.8. Implementations
  * of this class can un-mask a raw BitMatrix. For simplicity, they will unmask the entire BitMatrix,
  * including areas used for finder patterns, timing patterns, etc. These areas should be unused
- * after the point they are unmasked anyway.
+ * after the point they are unmasked anyway.</p>
  *
- * Note that the diagram in section 6.8.1 is misleading since it indicates that i is column position
- * and j is row position. In fact, as the text says, i is row position and j is column position.
+ * <p>Note that the diagram in section 6.8.1 is misleading since it indicates that i is column position
+ * and j is row position. In fact, as the text says, i is row position and j is column position.</p>
  *
  * @author srowen@google.com (Sean Owen)
  */
@@ -46,8 +46,20 @@ abstract class DataMask {
   private DataMask() {
   }
 
+  /**
+   * <p>Implementations of this method reverse the data masking process applied to a QR Code and
+   * make its bits ready to read.</p>
+   *
+   * @param bits representation of QR Code bits from {@link com.google.zxing.common.BitMatrix#getBits()}
+   * @param dimension dimension of QR Code, represented by bits, being unmasked
+   */
   abstract void unmaskBitMatrix(int[] bits, int dimension);
 
+  /**
+   * @param reference a value between 0 and 7 indicating one of the eight possible
+   *  data mask patterns a QR Code may use
+   * @return {@link DataMask} encapsulating the data mask pattern
+   */
   static DataMask forReference(int reference) {
     if (reference < 0 || reference > 7) {
       throw new IllegalArgumentException();

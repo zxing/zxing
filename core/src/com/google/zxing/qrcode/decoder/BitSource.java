@@ -17,8 +17,10 @@
 package com.google.zxing.qrcode.decoder;
 
 /**
- * This provides an easy abstraction to read bits at a time from a sequence of bytes, where the
- * number of bits read is not often a multiple of 8.
+ * <p>This provides an easy abstraction to read bits at a time from a sequence of bytes, where the
+ * number of bits read is not often a multiple of 8.</p>
+ *
+ * <p>This class is not thread-safe.</p>
  *
  * @author srowen@google.com (Sean Owen)
  */
@@ -28,11 +30,18 @@ final class BitSource {
   private int byteOffset;
   private int bitOffset;
 
+  /**
+   * @param bytes bytes from which this will read bits. Bits will be read from the first byte first.
+   *  Bits are read within a byte from most-significant to least-significant bit.
+   */
   BitSource(byte[] bytes) {
     this.bytes = bytes;
   }
 
   /**
+   * @param numBits number of bits to read
+   * @return int representing the bits read. The bits will appear as the least-significant
+   *  bits of the int
    * @throws IllegalArgumentException if numBits isn't in [1,32]
    */
   int readBits(int numBits) {
@@ -77,6 +86,9 @@ final class BitSource {
     return result;
   }
 
+  /**
+   * @return number of bits that can be read successfully
+   */
   int available() {
     return 8 * (bytes.length - byteOffset) - bitOffset;
   }

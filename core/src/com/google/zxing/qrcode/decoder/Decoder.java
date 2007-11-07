@@ -22,6 +22,9 @@ import com.google.zxing.common.reedsolomon.ReedSolomonDecoder;
 import com.google.zxing.common.reedsolomon.ReedSolomonException;
 
 /**
+ * <p>The main class which implements QR Code decoding -- as opposed to locating and extracting
+ * the QR Code from an image.</p>
+ *
  * @author srowen@google.com (Sean Owen)
  */
 public final class Decoder {
@@ -29,6 +32,14 @@ public final class Decoder {
   private Decoder() {
   }
 
+  /**
+   * <p>Convenience method that can decode a QR Code represented as a 2D array of booleans.
+   * "true" is taken to mean a black module.</p>
+   *
+   * @param image booleans representing white/black QR Code modules
+   * @return text encoded within the QR Code
+   * @throws ReaderException if the QR Code cannot be decoded
+   */
   public static String decode(boolean[][] image) throws ReaderException {
     int dimension = image.length;
     BitMatrix bits = new BitMatrix(dimension);
@@ -42,18 +53,34 @@ public final class Decoder {
     return decode(bits);
   }
 
+  /**
+   * <p>Decodes a QR Code represented as a {@link BitMatrix}. A 1 or "true" is taken to mean a black module.</p>
+   *
+   * @param bits booleans representing white/black QR Code modules
+   * @return text encoded within the QR Code
+   * @throws ReaderException if the QR Code cannot be decoded
+   */
   public static String decode(BitMatrix bits) throws ReaderException {
+
+    // Construct a parser and read version, error-correction level
     BitMatrixParser parser = new BitMatrixParser(bits);
     Version version = parser.readVersion();
     ErrorCorrectionLevel ecLevel = parser.readFormatInformation().getErrorCorrectionLevel();
+
+    // Read codewords
     byte[] codewords = parser.readCodewords();
+    // Separate into data blocks
     DataBlock[] dataBlocks = DataBlock.getDataBlocks(codewords, version, ecLevel);
+
+    // Count total number of data bytes
     int totalBytes = 0;
     for (int i = 0; i < dataBlocks.length; i++) {
       totalBytes += dataBlocks[i].getNumDataCodewords();
     }
     byte[] resultBytes = new byte[totalBytes];
     int resultOffset = 0;
+
+    // Error-correct and copy data blocks together into a stream of bytes
     for (int j = 0; j < dataBlocks.length; j++) {
       DataBlock dataBlock = dataBlocks[j];
       byte[] codewordBytes = dataBlock.getCodewords();
@@ -64,12 +91,21 @@ public final class Decoder {
       }
     }
 
+    // Decode the contents of that stream of bytes
     return DecodedBitStreamParser.decode(resultBytes, version);
   }
 
-  private static void correctErrors(byte[] codewordBytes, int numDataCodewords)
-      throws ReaderException {
+  /**
+   * <p>Given data and error-correction codewords received, possibly corrupted by errors, attempts to
+   * correct the errors in-place using Reed-Solomon error correction.</p>
+   *
+   * @param codewordBytes data and error correction codewords
+   * @param numDataCodewords number of codewords that are data bytes
+   * @throws ReaderException if error correction fails
+   */
+  private static void correctErrors(byte[] codewordBytes, int numDataCodewords) throws ReaderException {
     int numCodewords = codewordBytes.length;
+    // First read into an array of ints
     int[] codewordsInts = new int[numCodewords];
     for (int i = 0; i < numCodewords; i++) {
       codewordsInts[i] = codewordBytes[i] & 0xFF;
@@ -80,6 +116,8 @@ public final class Decoder {
     } catch (ReedSolomonException rse) {
       throw new ReaderException(rse.toString());
     }
+    // Copy back into array of bytes -- only need to worry about the bytes that were data
+    // We don't care about errors in the error-correction codewords
     for (int i = 0; i < numDataCodewords; i++) {
       codewordBytes[i] = (byte) codewordsInts[i];
     }

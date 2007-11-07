@@ -21,7 +21,10 @@ import com.google.zxing.ReaderException;
 import java.io.UnsupportedEncodingException;
 
 /**
- * See ISO 18004:2006, 6.4.3 - 6.4.7
+ * <p>QR Codes can encode text as bits in one of several modes, and can use multiple modes
+ * in one QR Code. This class decodes the bits back into text.</p>
+ *
+ * <p>See ISO 18004:2006, 6.4.3 - 6.4.7</p>
  *
  * @author srowen@google.com (Sean Owen)
  */
@@ -54,8 +57,9 @@ final class DecodedBitStreamParser {
     Mode mode;
     do {
       // While still another segment to read...
-      mode = Mode.forBits(bits.readBits(4));
+      mode = Mode.forBits(bits.readBits(4)); // mode is encoded by 4 bits
       if (!mode.equals(Mode.TERMINATOR)) {
+        // How many characters will follow, encoded in this mode?
         int count = bits.readBits(mode.getCharacterCountBits(version));
         if (mode.equals(Mode.NUMERIC)) {
           decodeNumericSegment(bits, result, count);
@@ -66,11 +70,12 @@ final class DecodedBitStreamParser {
         } else if (mode.equals(Mode.KANJI)) {
           decodeKanjiSegment(bits, result, count);
         } else {
-          throw new ReaderException("Unsupported mode indicator: " + mode);
+          throw new ReaderException("Unsupported mode indicator");
         }
       }
     } while (!mode.equals(Mode.TERMINATOR));
 
+    // I thought it wasn't allowed to leave extra bytes after the terminator but it happens
     /*
     int bitsLeft = bits.available();
     if (bitsLeft > 0) {
@@ -85,9 +90,12 @@ final class DecodedBitStreamParser {
   private static void decodeKanjiSegment(BitSource bits,
                                          StringBuffer result,
                                          int count) throws ReaderException {
+    // Each character will require 2 bytes. Read the characters as 2-byte pairs
+    // and decode as Shift_JIS afterwards
     byte[] buffer = new byte[2 * count];
     int offset = 0;
     while (count > 0) {
+      // Each 13 bits encodes a 2-byte character
       int twoBytes = bits.readBits(13);
       int assembledTwoBytes = ((twoBytes / 0x0C0) << 8) | (twoBytes % 0x0C0);
       if (assembledTwoBytes < 0x01F00) {
@@ -144,7 +152,7 @@ final class DecodedBitStreamParser {
       count -= 2;
     }
     if (count == 1) {
-      // special case on char left
+      // special case: one character left
       result.append(ALPHANUMERIC_CHARS[bits.readBits(6)]);
     }
   }
@@ -152,7 +160,9 @@ final class DecodedBitStreamParser {
   private static void decodeNumericSegment(BitSource bits,
                                            StringBuffer result,
                                            int count) throws ReaderException {
+    // Read three digits at a time
     while (count >= 3) {
+      // Each 10 bits encodes three digits
       int threeDigitsBits = bits.readBits(10);
       if (threeDigitsBits >= 1000) {
         throw new ReaderException("Illegal value for 3-digit unit: " + threeDigitsBits);
@@ -163,6 +173,7 @@ final class DecodedBitStreamParser {
       count -= 3;
     }
     if (count == 2) {
+      // Two digits left over to read, encoded in 7 bits
       int twoDigitsBits = bits.readBits(7);
       if (twoDigitsBits >= 100) {
         throw new ReaderException("Illegal value for 2-digit unit: " + twoDigitsBits);
@@ -170,6 +181,7 @@ final class DecodedBitStreamParser {
       result.append(ALPHANUMERIC_CHARS[twoDigitsBits / 10]);
       result.append(ALPHANUMERIC_CHARS[twoDigitsBits % 10]);
     } else if (count == 1) {
+      // One digit left over to read
       int digitBits = bits.readBits(4);
       if (digitBits >= 10) {
         throw new ReaderException("Illegal value for digit unit: " + digitBits);
