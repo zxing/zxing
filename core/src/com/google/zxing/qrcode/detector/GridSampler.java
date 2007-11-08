@@ -35,12 +35,17 @@ import com.google.zxing.common.BitMatrix;
  */
 public abstract class GridSampler {
 
-  private static final String DEFAULT_IMPL_CLASS =
-      "com.google.zxing.qrcode.detector.DefaultGridSampler";
+  private static final String DEFAULT_IMPL_CLASS = "com.google.zxing.qrcode.detector.DefaultGridSampler";
 
   private static String gridSamplerClassName = DEFAULT_IMPL_CLASS;
   private static GridSampler gridSampler;
 
+  /**
+   * <p>Sets the (fully-qualified) name of the implementation of {@link GridSampler} which will be
+   * returned from {@link #getInstance()}.</p>
+   *
+   * @param className {@link GridSampler} implementation to instantiate
+   */
   public static void setGridSamplerClassName(String className) {
     if (className == null) {
       throw new IllegalArgumentException();
@@ -48,12 +53,21 @@ public abstract class GridSampler {
     gridSamplerClassName = className;
   }
 
+  /**
+   * @return the current implementation of {@link GridSampler}, instantiating one if one does
+   *  not already exist. The class which is instantied may be set by
+   *  {@link #setGridSamplerClassName(String)}
+   */
   public static GridSampler getInstance() {
     if (gridSampler == null) {
+      // We don't need to synchronize this -- don't really care if two threads initialize at once.
+      // The second one will win.
       try {
         Class gridSamplerClass = Class.forName(gridSamplerClassName);
         gridSampler = (GridSampler) gridSamplerClass.newInstance();
       } catch (ClassNotFoundException cnfe) {
+        // The exceptions below would represent bad programming errors;
+        // For J2ME we're punting them out with RuntimeException
         throw new RuntimeException(cnfe.toString());
       } catch (IllegalAccessException iae) {
         throw new RuntimeException(iae.toString());
@@ -64,6 +78,22 @@ public abstract class GridSampler {
     return gridSampler;
   }
 
+  /**
+   * <p>Given an image, locations of a QR Code's finder patterns and bottom-right alignment pattern,
+   * and the presumed dimension in modules of the QR Code, implemntations of this method extract
+   * the QR Code from the image by sampling the points in the image which should correspond to the
+   * modules of the QR Code.</p>
+   *
+   * @param image image to sample
+   * @param topLeft top-left finder pattern location
+   * @param topRight top-right finder pattern location
+   * @param bottomLeft bottom-left finder pattern location
+   * @param alignmentPattern bottom-right alignment pattern location
+   * @param dimension dimension of QR Code
+   * @return {@link BitMatrix} representing QR Code's modules
+   * @throws ReaderException if QR Code cannot be reasonably sampled -- for example if the location
+   *  of the finder patterns imply a transformation that would require sampling off the image
+   */
   protected abstract BitMatrix sampleGrid(MonochromeBitmapSource image,
                                           FinderPattern topLeft,
                                           FinderPattern topRight,
@@ -71,8 +101,17 @@ public abstract class GridSampler {
                                           AlignmentPattern alignmentPattern,
                                           int dimension) throws ReaderException;
 
-  protected static void checkEndpoint(MonochromeBitmapSource image, float[] points)
-      throws ReaderException {
+  /**
+   * <p>Checks a set of points that have been transformed to sample points on an image against
+   * the image's dimensions to see if the endpoints are even within the image.
+   * This method actually only checks the endpoints since the points are assumed to lie
+   * on a line.</p>
+   *
+   * @param image image into which the points should map
+   * @param points actual points in x1,y1,...,xn,yn form
+   * @throws ReaderException if an endpoint is lies outside the image boundaries
+   */
+  protected static void checkEndpoint(MonochromeBitmapSource image, float[] points) throws ReaderException {
     int x = (int) points[0];
     int y = (int) points[1];
     if (x < 0 || x >= image.getWidth() || y < 0 || y >= image.getHeight()) {

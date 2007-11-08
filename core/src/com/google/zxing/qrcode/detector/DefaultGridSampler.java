@@ -43,7 +43,7 @@ public final class DefaultGridSampler extends GridSampler {
     }
 
     float dimMinusThree = (float) dimension - 3.5f;
-    JAIPerspectiveTransform transform = JAIPerspectiveTransform.getQuadToQuad(
+    PerspectiveTransform transform = PerspectiveTransform.quadrilateralToQuadrilateral(
         3.5f,
         3.5f,
         dimMinusThree,
@@ -70,7 +70,7 @@ public final class DefaultGridSampler extends GridSampler {
         points[j] = (float) (j >> 1) + 0.5f;
         points[j + 1] = iValue;
       }
-      transform.transform(points);
+      transform.transformPoints(points);
       // Quick check to see if points transformed to something inside the image;
       // sufficent to check the endpoints
       checkEndpoint(image, points);
