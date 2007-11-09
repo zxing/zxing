@@ -48,18 +48,18 @@ public final class DefaultGridSampler extends GridSampler {
         3.5f,
         dimMinusThree,
         3.5f,
+        dimMinusThree - 3.0f,
+        dimMinusThree - 3.0f,
         3.5f,
         dimMinusThree,
-        dimMinusThree - 3.0f,
-        dimMinusThree - 3.0f,
         topLeft.getX(),
         topLeft.getY(),
         topRight.getX(),
         topRight.getY(),
-        bottomLeft.getX(),
-        bottomLeft.getY(),
         bottomRightX,
-        bottomRightY);
+        bottomRightY,
+        bottomLeft.getX(),
+        bottomLeft.getY());
 
     BitMatrix bits = new BitMatrix(dimension);
     float[] points = new float[dimension << 1];
