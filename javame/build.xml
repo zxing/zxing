@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="javame" default="build">
 
-  <property name="WTK-home" value="/usr/local/WTK2.5.2"/>
-  <property name="JDK1.4-home" value="/usr/lib/jvm/j2sdk1.4.2_16"/>
+  <property file="build.properties"/>
 
   <target name="init">
     <tstamp/>
@@ -42,6 +41,7 @@
 
     <jar jarfile="ZXingReader.jar" basedir="build-j2me" manifest="src/com/google/zxing/client/j2me/MANIFEST.MF"/>
 
+    <!-- get .jar size to include it in the .jad file -->
     <exec executable="sh" outputproperty="jar-size">
       <arg line="-c &quot;wc -c ZXingReader.jar | cut -d' ' -f1&quot;"/>
     </exec>
