@@ -53,9 +53,17 @@ public final class CommandLineRunner {
 
   private static void decode(URI uri) throws IOException, ReaderException {
     BufferedImage image = ImageIO.read(uri.toURL());
-    String result =
-        new MultiFormatReader().decode(new BufferedImageMonochromeBitmapSource(image)).getText();
-    System.out.println(result);
+    if (image == null) {
+      System.out.println(uri.toString() + ": Could not load image");
+      return;
+    }
+    try {
+      String result =
+          new MultiFormatReader().decode(new BufferedImageMonochromeBitmapSource(image)).getText();
+      System.out.println(uri.toString() + ": " + result);
+    } catch (ReaderException e) {
+      System.out.println(uri.toString() + ": No barcode found");
+    }
   }
 
 }

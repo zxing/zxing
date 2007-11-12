@@ -17,6 +17,7 @@
 package com.google.zxing;
 
 import com.google.zxing.qrcode.QRCodeReader;
+import com.google.zxing.upc.UPCReader;
 
 import java.util.Hashtable;
 
@@ -39,13 +40,37 @@ public final class MultiFormatReader implements Reader {
       throws ReaderException {
     Hashtable possibleFormats =
         hints == null ? null : (Hashtable) hints.get(DecodeHintType.POSSIBLE_FORMATS);
-    // TODO for now we are only support QR Code so this behaves accordingly. This needs to
-    // become more sophisticated
-    if (possibleFormats == null || possibleFormats.contains(BarcodeFormat.QR_CODE)) {
-      return new QRCodeReader().decode(image, hints);
+    boolean tryUPC = false;
+    boolean tryQR = false;
+    
+    if (possibleFormats == null) {
+      tryUPC = true;
+      tryQR = true;
+    } else if (possibleFormats.contains(BarcodeFormat.UPC)) {
+      tryUPC = true;
+    } else if (possibleFormats.contains(BarcodeFormat.QR_CODE)) {
+      tryQR = true;
     } else {
       throw new ReaderException();
     }
+    
+    // UPC is much faster to decode, so try it first.
+    if (tryUPC) {
+      try {
+        return new UPCReader().decode(image, hints);
+      } catch (ReaderException e) {
+      }
+    }
+    
+    // Then fall through to QR codes.
+    if (tryQR) {
+      try {
+        return new QRCodeReader().decode(image, hints);
+      } catch (ReaderException e) {
+      }
+    }
+    
+    throw new ReaderException();
   }
 
 }
