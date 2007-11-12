@@ -23,14 +23,12 @@ package com.google.zxing.common;
  */
 public final class BitArray {
 
-  private final int[] bits;
+  private int[] bits;
+  private int size;
 
   public BitArray(int size) {
-    int arraySize = size >> 5;
-    if ((size & 0x1F) != 0) {
-      arraySize++;
-    }
-    bits = new int[arraySize];
+    this.size = size;
+    this.bits = makeArray(size);
   }
 
   /**
@@ -55,7 +53,7 @@ public final class BitArray {
    *
    * @param i first bit to set
    * @param newBits the new value of the next 32 bits. Note again that the least-significant bit
-   *  correponds to bit i, the next-least-significant to i+1, and so on.
+   *  corresponds to bit i, the next-least-significant to i+1, and so on.
    */
   public void setBulk(int i, int newBits) {
     bits[i >> 5] = newBits;
@@ -77,6 +75,32 @@ public final class BitArray {
    */
   public int[] getBitArray() {
     return bits;
+  }
+  
+  /**
+   * Reverses all bits in the array.
+   */
+  public void reverse() {
+    int[] newBits = makeArray(size);
+    int max = newBits.length;
+    for (int i = 0; i < max; i++) {
+      newBits[i] = 0;
+    }
+    for (int i = 0; i < size; i++) {
+      if (this.get(size - i - 1)) {
+        newBits[i >> 5] |= 1 << (i & 0x1F);
+      }
+    }
+    bits = newBits;
+  }
+  
+  private int[] makeArray(int size) {
+    int arraySize = size >> 5;
+    if ((size & 0x1F) != 0) {
+      arraySize++;
+    }
+    int[] result = new int[arraySize];
+    return result;
   }
 
 }
