@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="core" default="build">
 
-  <property name="WTK-home" value="/usr/local/WTK2.5.2"/>
-  <property name="JDK1.4-home" value="/usr/lib/jvm/j2sdk1.4.2_16"/>
+  <property file="../build.properties"/>
 
   <target name="init">
     <tstamp/>
@@ -20,6 +19,33 @@
            deprecation="true"
            fork="true"/>
     <jar jarfile="core.jar" basedir="build"/>
+  </target>
+
+  <target name="test" depends="init,build">
+    <mkdir dir="build-test"/>
+    <javac srcdir="test/src"
+           destdir="build-test"
+           debug="true"
+           deprecation="true">
+      <classpath>
+        <pathelement location="build"/>
+      </classpath>
+    </javac>
+    <junit printsummary="on" haltonfailure="on" haltonerror="on">
+      <formatter type="plain" usefile="false"/>
+      <classpath>
+        <pathelement location="build"/>
+        <pathelement location="build-test"/>        
+      </classpath>
+      <assertions>
+        <enable/>
+      </assertions>
+      <batchtest>
+        <fileset dir="test/src">
+          <include name="**/*.java"/>
+        </fileset>
+      </batchtest>
+    </junit>
   </target>
 
   <target name="clean">
