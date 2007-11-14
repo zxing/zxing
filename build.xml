@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="ZXing" default="build">
+
+  <target name="build">
+    <ant dir="core" target="build"/>
+    <ant dir="javame" target="build"/>
+    <ant dir="core-ext" target="build"/>
+    <ant dir="javase" target="build"/>
+  </target>
+
+</project>
