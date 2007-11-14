@@ -52,4 +52,5 @@ public final class UPCReader implements Reader {
     }
     return new Result(result, NO_POINTS);
   }
+
 }

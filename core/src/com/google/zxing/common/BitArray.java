@@ -86,21 +86,21 @@ public final class BitArray {
     for (int i = 0; i < max; i++) {
       newBits[i] = 0;
     }
+    int size = this.size;
     for (int i = 0; i < size; i++) {
-      if (this.get(size - i - 1)) {
+      if (get(size - i - 1)) {
         newBits[i >> 5] |= 1 << (i & 0x1F);
       }
     }
     bits = newBits;
   }
   
-  private int[] makeArray(int size) {
+  private static int[] makeArray(int size) {
     int arraySize = size >> 5;
     if ((size & 0x1F) != 0) {
       arraySize++;
     }
-    int[] result = new int[arraySize];
-    return result;
+    return new int[arraySize];
   }
 
 }

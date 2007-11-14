@@ -38,8 +38,7 @@ public final class MultiFormatReader implements Reader {
 
   public Result decode(MonochromeBitmapSource image, Hashtable hints)
       throws ReaderException {
-    Hashtable possibleFormats =
-        hints == null ? null : (Hashtable) hints.get(DecodeHintType.POSSIBLE_FORMATS);
+    Hashtable possibleFormats = hints == null ? null : (Hashtable) hints.get(DecodeHintType.POSSIBLE_FORMATS);
     boolean tryUPC = false;
     boolean tryQR = false;
     
@@ -51,7 +50,7 @@ public final class MultiFormatReader implements Reader {
     } else if (possibleFormats.contains(BarcodeFormat.QR_CODE)) {
       tryQR = true;
     } else {
-      throw new ReaderException();
+      throw new ReaderException("POSSIBLE_FORMATS specifies no supported types");
     }
     
     // UPC is much faster to decode, so try it first.
@@ -70,7 +69,7 @@ public final class MultiFormatReader implements Reader {
       }
     }
     
-    throw new ReaderException();
+    throw new ReaderException("Could not locate and decode a barcode in the image");
   }
 
 }
