@@ -40,12 +40,11 @@ import javax.microedition.midlet.MIDletStateChangeException;
 import java.io.IOException;
 
 /**
+ * <p>The actual reader application {@link MIDlet}.</p>
+ *
  * @author Sean Owen (srowen@google.com)
  */
-public final class ZXingMIDlet extends MIDlet implements CommandListener {
-
-  private static final Command DECODE = new Command("Decode", Command.SCREEN, 1);
-  private static final Command EXIT = new Command("Exit", Command.EXIT, 1);
+public final class ZXingMIDlet extends MIDlet {
 
   private Player player;
   private VideoControl videoControl;
@@ -74,24 +73,12 @@ public final class ZXingMIDlet extends MIDlet implements CommandListener {
         System.out.println("FocusControl not supported");
       }
        */
-      canvas.addCommand(DECODE);
-      canvas.addCommand(EXIT);
-      canvas.setCommandListener(this);
       Display.getDisplay(this).setCurrent(canvas);
       player.start();
     } catch (IOException ioe) {
       throw new MIDletStateChangeException(ioe.toString());
     } catch (MediaException me) {
       throw new MIDletStateChangeException(me.toString());
-    }
-  }
-
-  public void commandAction(Command command, Displayable displayable) {
-    if (command.equals(DECODE)) {
-      new SnapshotThread().start();
-    } else if (command.equals(EXIT)) {
-      destroyApp(false);
-      notifyDestroyed();
     }
   }
 
@@ -114,6 +101,8 @@ public final class ZXingMIDlet extends MIDlet implements CommandListener {
     }
   }
 
+  // Convenience methods to show dialogs
+
   private void showAlert(String title, String text) {
     Alert alert = new Alert(title, text, null, AlertType.INFO);
     alert.setTimeout(Alert.FOREVER);
@@ -129,12 +118,33 @@ public final class ZXingMIDlet extends MIDlet implements CommandListener {
     display.setCurrent(alert, display.getCurrent());
   }
 
-  private static class VideoCanvas extends Canvas {
+  private class VideoCanvas extends Canvas implements CommandListener {
+    private final Command decode = new Command("Decode", Command.SCREEN, 1);
+    private final Command exit = new Command("Exit", Command.EXIT, 1);
+    private VideoCanvas() {
+      addCommand(decode);
+      addCommand(exit);
+      setCommandListener(this);
+    }
     protected void paint(Graphics graphics) {
       // do nothing
     }
+    protected void keyPressed(int keyCode) {
+      if (FIRE == getGameAction(keyCode)) {
+        new SnapshotThread().start();
+      }
+    }
+    public void commandAction(Command command, Displayable displayable) {
+      if (command.equals(decode)) {
+        new SnapshotThread().start();
+      } else if (command.equals(exit)) {
+        destroyApp(false);
+        notifyDestroyed();
+      }
+    }
   }
 
+  // TODO make sure we do not start two threads at once
   private class SnapshotThread extends Thread {
     public void run() {
       try {
