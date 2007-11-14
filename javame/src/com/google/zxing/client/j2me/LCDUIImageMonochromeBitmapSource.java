@@ -23,6 +23,8 @@ import com.google.zxing.common.BlackPointEstimator;
 import javax.microedition.lcdui.Image;
 
 /**
+ * <p>An implementation based on Java ME's {@link Image} representation.</p>
+ * 
  * @author Sean Owen (srowen@google.com)
  */
 final class LCDUIImageMonochromeBitmapSource implements MonochromeBitmapSource {
