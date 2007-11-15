@@ -45,7 +45,7 @@
     <exec executable="sh" outputproperty="jar-size">
       <arg line="-c &quot;wc -c ZXingReader.jar | cut -d' ' -f1&quot;"/>
     </exec>
-    <copy file="ZXingReader.jad.template" tofile="ZXingReader.jad">
+    <copy file="ZXingReader.jad.template" tofile="ZXingReader.jad" overwrite="true">
       <filterset>
         <filter token="JAR_SIZE" value="${jar-size}"/>
       </filterset>
