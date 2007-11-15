@@ -16,6 +16,8 @@
 
 package com.google.zxing.client.j2se;
 
+import com.google.zxing.MonochromeBitmapSource;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -33,52 +35,52 @@ import java.net.URI;
 public final class ImageConverter {
 
   private static final String FORMAT = "gif";
+  private static final int WHITE = 0xFFFFFFFF;
+  private static final int BLACK = 0x000000FF;
 
   private ImageConverter() {
   }
 
   public static void main(String[] args) throws Exception {
-    for (int i = 0; i < args.length; i++) {
-      File inputFile = new File(args[i]);
+    for (String arg : args) {
+      File inputFile = new File(arg);
       if (inputFile.exists()) {
         if (inputFile.isDirectory()) {
           int count = 0;
           for (File input : inputFile.listFiles()) {
-            convertImage(input.toURI(), count++);
+            convertImage(input.toURI());
           }
         } else {
-          convertImage(inputFile.toURI(), 0);
+          convertImage(inputFile.toURI());
         }
       } else {
-        convertImage(new URI(args[i]), 0);
+        convertImage(new URI(arg));
       }
     }
   }
 
 
-  private static void convertImage(URI uri, int count) throws IOException {
+  private static void convertImage(URI uri) throws IOException {
     BufferedImage image = ImageIO.read(uri.toURL());
-    BufferedImageMonochromeBitmapSource src = new BufferedImageMonochromeBitmapSource(image);
+    MonochromeBitmapSource src = new BufferedImageMonochromeBitmapSource(image);
     int width = src.getWidth();
     int height = src.getHeight();
     
     BufferedImage result = new BufferedImage(width, height, BufferedImage.TYPE_BYTE_BINARY);
-    int white = 0xFFFFFFFF;
-    int black = 0x000000FF;
     for (int i = 0; i < width; i++) {
       for (int j = 0; j < height; j++) {
-        result.setRGB(i, j, src.isBlack(i,j) ? black : white);
+        result.setRGB(i, j, src.isBlack(i,j) ? BLACK : WHITE);
       }
     }
 
-    File output = getOutput(uri, count);
+    File output = getOutput(uri);
     System.out.printf("Writing output to %s\n", output);
     ImageIO.write(result, FORMAT, output);
   }
 
   private static File getFileOfUri(URI uri) {
     String name = uri.getPath();
-    int slashPos = name.lastIndexOf('/');
+    int slashPos = name.lastIndexOf((int) '/');
     String parent, basename;
     if (slashPos != -1 && slashPos != name.length()-1) {
       parent = name.substring(0, slashPos);
@@ -88,26 +90,28 @@ public final class ImageConverter {
       basename = name;
     }
     File parentFile = new File(parent);
-    if (!parentFile.exists())
+    if (!parentFile.exists()) {
       return null;
+    }
 
     File baseFile = new File(parent,basename);
-    if (!baseFile.exists())
+    if (!baseFile.exists()) {
       return null;
+    }
 
     return baseFile;
   }
-    
 
-  private static File getOutput(URI uri, int count) {
+  private static File getOutput(URI uri) {
     File result = getFileOfUri(uri);
     if (result == null) {
       result = new File("ConvertedImage." + FORMAT);
     } else {
       String name = result.getPath();
-      int dotpos = name.lastIndexOf('.');
-      if (dotpos != -1)
+      int dotpos = name.lastIndexOf((int) '.');
+      if (dotpos != -1) {
         name = name.substring(0, dotpos);
+      }
       result = new File(name + "_converted." + FORMAT);
     }
     return result;
