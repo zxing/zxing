@@ -16,12 +16,7 @@
 
 package com.google.zxing.client.j2me;
 
-import com.google.zxing.MonochromeBitmapSource;
-import com.google.zxing.MultiFormatReader;
-import com.google.zxing.Reader;
-import com.google.zxing.ReaderException;
-import com.google.zxing.Result;
-
+import javax.microedition.io.ConnectionNotFoundException;
 import javax.microedition.lcdui.Alert;
 import javax.microedition.lcdui.AlertType;
 import javax.microedition.lcdui.Canvas;
@@ -29,8 +24,6 @@ import javax.microedition.lcdui.Command;
 import javax.microedition.lcdui.CommandListener;
 import javax.microedition.lcdui.Display;
 import javax.microedition.lcdui.Displayable;
-import javax.microedition.lcdui.Graphics;
-import javax.microedition.lcdui.Image;
 import javax.microedition.media.Manager;
 import javax.microedition.media.MediaException;
 import javax.microedition.media.Player;
@@ -49,12 +42,21 @@ public final class ZXingMIDlet extends MIDlet {
   private Player player;
   private VideoControl videoControl;
 
+  Player getPlayer() {
+    return player;
+  }
+
+  VideoControl getVideoControl() {
+    return videoControl;
+  }
+
   protected void startApp() throws MIDletStateChangeException {
     try {
       player = Manager.createPlayer("capture://video");
       player.realize();
       videoControl = (VideoControl) player.getControl("VideoControl");
-      Displayable canvas = new VideoCanvas();
+      Canvas canvas = new VideoCanvas(this);
+      canvas.setFullScreenMode(true);
       videoControl.initDisplayMode(VideoControl.USE_DIRECT_VIDEO, canvas);
       videoControl.setDisplayLocation(0, 0);
       videoControl.setDisplaySize(canvas.getWidth(), canvas.getHeight());
@@ -95,21 +97,57 @@ public final class ZXingMIDlet extends MIDlet {
 
   protected void destroyApp(boolean unconditional) {
     if (player != null) {
+      videoControl = null;      
+      try {
+        player.stop();
+      } catch (MediaException me) {
+        // continue
+      }
+      player.deallocate();
       player.close();
       player = null;
-      videoControl = null;
     }
+  }
+
+  void stop() {
+    destroyApp(false);
+    notifyDestroyed();
   }
 
   // Convenience methods to show dialogs
 
-  private void showAlert(String title, String text) {
+  void showYesNo(String title, final String text) {
+    Alert alert = new Alert(title, text, null, AlertType.INFO);
+    alert.setTimeout(Alert.FOREVER);
+    final Command yes = new Command("Yes", Command.OK, 0);
+    final Command no = new Command("No", Command.CANCEL, 0);
+    alert.addCommand(yes);
+    alert.addCommand(no);
+    CommandListener listener = new CommandListener() {
+      public void commandAction(Command command, Displayable displayable) {
+        if (command.equals(yes)) {
+          try {
+            if (platformRequest(text)) {
+              // Successfully opened URL; exit
+              stop();
+            }
+          } catch (ConnectionNotFoundException cnfe) {
+            showError(cnfe);
+          }
+        }
+      }
+    };
+    alert.setCommandListener(listener);
+    showAlert(alert);
+  }
+
+  void showAlert(String title, String text) {
     Alert alert = new Alert(title, text, null, AlertType.INFO);
     alert.setTimeout(Alert.FOREVER);
     showAlert(alert);
   }
 
-  private void showError(Throwable t) {
+  void showError(Throwable t) {
     showAlert(new Alert("Error", t.getMessage(), null, AlertType.ERROR));
   }
 
@@ -118,59 +156,20 @@ public final class ZXingMIDlet extends MIDlet {
     display.setCurrent(alert, display.getCurrent());
   }
 
-  private class VideoCanvas extends Canvas implements CommandListener {
-    private final Command decode = new Command("Decode", Command.SCREEN, 1);
-    private final Command exit = new Command("Exit", Command.EXIT, 1);
-    private VideoCanvas() {
-      addCommand(decode);
-      addCommand(exit);
-      setCommandListener(this);
-    }
-    protected void paint(Graphics graphics) {
-      // do nothing
-    }
-    protected void keyPressed(int keyCode) {
-      if (FIRE == getGameAction(keyCode)) {
-        new SnapshotThread().start();
-      }
-    }
-    public void commandAction(Command command, Displayable displayable) {
-      if (command.equals(decode)) {
-        new SnapshotThread().start();
-      } else if (command.equals(exit)) {
-        destroyApp(false);
-        notifyDestroyed();
-      }
+  void handleDecodedText(String text) {
+    // This is a crude imitation of the code found in module core-ext, which handles the contents
+    // in a more sophisticated way. It can't be accessed from JavaME just yet because it relies
+    // on URL parsing routines in java.net. This should be somehow worked around: TODO
+    // For now, detect URLs in a simple way, and treat everything else as text
+    if (text.startsWith("http://") || text.startsWith("https://") || maybeURLWithoutScheme(text)) {
+      showYesNo("Open URL?", text);
+    } else {
+      showAlert("Barcode detected", text);
     }
   }
 
-  // TODO make sure we do not start two threads at once
-  private class SnapshotThread extends Thread {
-    public void run() {
-      try {
-        player.stop();
-        byte[] snapshot = videoControl.getSnapshot(null);
-        Image capturedImage = Image.createImage(snapshot, 0, snapshot.length);
-        MonochromeBitmapSource source = new LCDUIImageMonochromeBitmapSource(capturedImage);
-        Reader reader = new MultiFormatReader();
-        Result result = reader.decode(source);
-        showAlert("Barcode detected", result.getText());
-      } catch (ReaderException re) {
-        showError(re);
-      } catch (MediaException me) {
-        showError(me);
-      } catch (Throwable t) {
-        showError(t);
-      } finally {
-        try {
-          player.start();
-        } catch (MediaException me) {
-          // continue?
-          showError(me);
-        }
-      }
-
-    }
+  private static boolean maybeURLWithoutScheme(String text) {
+    return text.indexOf((int) '.') >= 0 && text.indexOf((int) ' ') < 0;
   }
 
 }
