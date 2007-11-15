@@ -20,7 +20,9 @@ package com.google.zxing.common;
  * <p>Encapsulates logic that estimates the optimal "black point", the luminance value
  * which is the best line between "white" and "black" in a grayscale image.</p>
  *
- * <p>TODO: Include reference to paper with similar ideas</p>
+ * <p>For an interesting discussion of this issue, see
+ * <a href="http://webdiis.unizar.es/~neira/12082/thresholding.pdf">http://webdiis.unizar.es/~neira/12082/thresholding.pdf</a>.
+ * </p>
  *
  * @author srowen@google.com (Sean Owen)
  */
