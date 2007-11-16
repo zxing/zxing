@@ -27,14 +27,12 @@ import javax.microedition.lcdui.Graphics;
  */
 final class VideoCanvas extends Canvas implements CommandListener {
 
-  private static final Command decode = new Command("Decode", Command.SCREEN, 1);
   private static final Command exit = new Command("Exit", Command.EXIT, 1);
 
   private final ZXingMIDlet zXingMIDlet;
 
   VideoCanvas(ZXingMIDlet zXingMIDlet) {
     this.zXingMIDlet = zXingMIDlet;
-    addCommand(decode);
     addCommand(exit);
     setCommandListener(this);
   }
@@ -51,9 +49,7 @@ final class VideoCanvas extends Canvas implements CommandListener {
   }
 
   public void commandAction(Command command, Displayable displayable) {
-    if (command.equals(decode)) {
-      SnapshotThread.startThread(zXingMIDlet);
-    } else if (command.equals(exit)) {
+    if (command.getCommandType() == Command.EXIT || command.getCommandType() == Command.STOP) {
       zXingMIDlet.stop();
     }
   }

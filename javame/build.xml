@@ -22,6 +22,7 @@
         <pathelement location="${WTK-home}/lib/cldcapi11.jar"/>
         <pathelement location="${WTK-home}/lib/midpapi20.jar"/>
         <pathelement location="${WTK-home}/lib/mmapi.jar"/>
+        <pathelement location="${WTK-home}/lib/jsr234.jar"/>
         <pathelement location="../core/core.jar"/>
       </classpath>
     </javac>
@@ -30,7 +31,7 @@
 
     <mkdir dir="build-j2me"/>
     <exec executable="${WTK-home}/bin/preverify1.1">
-      <arg line="-classpath ${WTK-home}/lib/cldcapi11.jar:${WTK-home}/lib/midpapi20.jar:${WTK-home}/lib/mmapi.jar:${WTK-home}/lib/satsa-apdu.jar -d build-j2me build"/>
+      <arg line="-classpath ${WTK-home}/lib/cldcapi11.jar:${WTK-home}/lib/midpapi20.jar:${WTK-home}/lib/mmapi.jar:${WTK-home}/lib/jsr234.jar:${WTK-home}/lib/satsa-apdu.jar -d build-j2me build"/>
     </exec>
 
     <copy todir="build-j2me">
