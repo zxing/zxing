@@ -17,6 +17,7 @@
 package com.google.zxing.client.j2me;
 
 import com.google.zxing.MonochromeBitmapSource;
+import com.google.zxing.BlackPointEstimationMethod;
 import com.google.zxing.common.BitArray;
 import com.google.zxing.common.BlackPointEstimator;
 
@@ -25,29 +26,22 @@ import javax.microedition.lcdui.Image;
 /**
  * <p>An implementation based on Java ME's {@link Image} representation.</p>
  * 
- * @author Sean Owen (srowen@google.com)
+ * @author Sean Owen (srowen@google.com), Daniel Switkin (dswitkin@google.com)
  */
 final class LCDUIImageMonochromeBitmapSource implements MonochromeBitmapSource {
 
   private final int[] rgbPixels;
-  private final int blackPoint;
   private final int width;
   private final int height;
+  private int blackPoint;
+  private BlackPointEstimationMethod lastMethod;
 
   LCDUIImageMonochromeBitmapSource(final Image image) {
-    int width = image.getWidth();
-    int height = image.getHeight();
-    this.width = width;
-    this.height = height;
-    int[] rgbPixels = new int[width * height];
-    this.rgbPixels = rgbPixels;
+    width = image.getWidth();
+    height = image.getHeight();
+    rgbPixels = new int[width * height];
     image.getRGB(rgbPixels, 0, width, 0, 0, width, height);
-    int[] luminanceBuckets = new int[32];
-    int minDimension = width < height ? width : height;
-    for (int n = 0, offset = 0; n < minDimension; n++, offset += width + 1) {
-      luminanceBuckets[computeRGBLuminance(rgbPixels[offset]) >> 3]++;
-    }
-    blackPoint = BlackPointEstimator.estimate(luminanceBuckets) << 3;
+    blackPoint = 0x7F;
   }
 
   public boolean isBlack(int x, int y) {
@@ -74,6 +68,28 @@ final class LCDUIImageMonochromeBitmapSource implements MonochromeBitmapSource {
 
   public int getWidth() {
     return width;
+  }
+
+  public void estimateBlackPoint(BlackPointEstimationMethod method, int argument) {
+    if (method.equals(BlackPointEstimationMethod.TWO_D_SAMPLING)) {
+      if (!BlackPointEstimationMethod.TWO_D_SAMPLING.equals(lastMethod)) {
+        int[] luminanceBuckets = new int[32];
+        int minDimension = width < height ? width : height;
+        for (int n = 0, offset = 0; n < minDimension; n++, offset += width + 1) {
+          luminanceBuckets[computeRGBLuminance(rgbPixels[offset]) >> 3]++;
+        }
+        blackPoint = BlackPointEstimator.estimate(luminanceBuckets) << 3;
+      }
+    } else if (method.equals(BlackPointEstimationMethod.ROW_SAMPLING)) {
+      // TODO
+    } else {
+      throw new IllegalArgumentException("Unknown method: " + method);
+    }
+    lastMethod = method;
+  }
+
+  public BlackPointEstimationMethod getLastEstimationMethod() {
+    return lastMethod;
   }
 
   /**

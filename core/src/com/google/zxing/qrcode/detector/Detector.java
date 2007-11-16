@@ -16,6 +16,7 @@
 
 package com.google.zxing.qrcode.detector;
 
+import com.google.zxing.BlackPointEstimationMethod;
 import com.google.zxing.MonochromeBitmapSource;
 import com.google.zxing.ReaderException;
 import com.google.zxing.ResultPoint;
@@ -45,6 +46,9 @@ public final class Detector {
   public DetectorResult detect() throws ReaderException {
 
     MonochromeBitmapSource image = this.image;
+    if (!BlackPointEstimationMethod.TWO_D_SAMPLING.equals(image.getLastEstimationMethod())) {
+      image.estimateBlackPoint(BlackPointEstimationMethod.TWO_D_SAMPLING, 0);
+    }
 
     FinderPatternFinder finder = new FinderPatternFinder(image);
     FinderPatternInfo info = finder.find();
@@ -92,27 +96,6 @@ public final class Detector {
 
     GridSampler sampler = GridSampler.getInstance();
     BitMatrix bits = sampler.sampleGrid(image, topLeft, topRight, bottomLeft, alignmentPattern, dimension);
-
-    /*
-    try {
-      BufferedImage outImage =
-          new BufferedImage(dimension,
-                            dimension,
-                            BufferedImage.TYPE_BYTE_BINARY);
-      for (int i = 0; i < dimension; i++) {
-        for (int j = 0; j < dimension; j++) {
-          if (bits.get(i, j)) {
-            outImage.setRGB(j, i, 0xFF000000);
-          } else {
-            outImage.setRGB(j, i, 0xFFFFFFFF);
-          }
-        }
-      }
-      ImageIO.write(outImage, "PNG", new File("/tmp/out.png"));
-    } catch (IOException ioe) {
-      ioe.printStackTrace();
-    }
-     */
 
     ResultPoint[] points;
     if (alignmentPattern == null) {
