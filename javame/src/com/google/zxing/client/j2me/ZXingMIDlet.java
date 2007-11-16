@@ -30,6 +30,7 @@ import javax.microedition.media.Player;
 import javax.microedition.media.control.VideoControl;
 import javax.microedition.midlet.MIDlet;
 import javax.microedition.midlet.MIDletStateChangeException;
+import javax.microedition.amms.control.camera.ZoomControl;
 import java.io.IOException;
 
 /**
@@ -39,6 +40,9 @@ import java.io.IOException;
  */
 public final class ZXingMIDlet extends MIDlet {
 
+  private static final int MAX_ZOOM = 200;
+
+  private Canvas canvas;
   private Player player;
   private VideoControl videoControl;
 
@@ -54,33 +58,36 @@ public final class ZXingMIDlet extends MIDlet {
     try {
       player = Manager.createPlayer("capture://video");
       player.realize();
+      setZoom(player);
       videoControl = (VideoControl) player.getControl("VideoControl");
-      Canvas canvas = new VideoCanvas(this);
+      canvas = new VideoCanvas(this);
       canvas.setFullScreenMode(true);
       videoControl.initDisplayMode(VideoControl.USE_DIRECT_VIDEO, canvas);
       videoControl.setDisplayLocation(0, 0);
       videoControl.setDisplaySize(canvas.getWidth(), canvas.getHeight());
       videoControl.setVisible(true);
-      /*
-      FocusControl focusControl = (FocusControl)
-          player.getControl("javax.microedition.amms.control.FocusControl");
-      if (focusControl != null) {
-        if (focusControl.isAutoFocusSupported()) {
-          focusControl.setFocus(FocusControl.AUTO);
-        }
-        if (focusControl.isMacroSupported()) {
-          focusControl.setMacro(true);
-        }
-      } else {
-        System.out.println("FocusControl not supported");
-      }
-       */
-      Display.getDisplay(this).setCurrent(canvas);
       player.start();
+      Display.getDisplay(this).setCurrent(canvas);
     } catch (IOException ioe) {
       throw new MIDletStateChangeException(ioe.toString());
     } catch (MediaException me) {
       throw new MIDletStateChangeException(me.toString());
+    }
+  }
+
+  private static void setZoom(Player player) {
+    // zoom up to 2x if possible
+    ZoomControl zoomControl = (ZoomControl) player.getControl("javax.microedition.amms.control.camera.ZoomControl");
+    if (zoomControl != null) {
+      int maxZoom = zoomControl.getMaxOpticalZoom();
+      if (maxZoom > 100) {
+        zoomControl.setOpticalZoom(maxZoom > MAX_ZOOM ? MAX_ZOOM : maxZoom);
+      } else {
+        int maxDigitalZoom = zoomControl.getMaxDigitalZoom();
+        if (maxDigitalZoom > 100) {
+          zoomControl.setDigitalZoom(maxDigitalZoom > MAX_ZOOM ? MAX_ZOOM : maxDigitalZoom);
+        }
+      }
     }
   }
 
@@ -117,23 +124,23 @@ public final class ZXingMIDlet extends MIDlet {
   // Convenience methods to show dialogs
 
   void showYesNo(String title, final String text) {
-    Alert alert = new Alert(title, text, null, AlertType.INFO);
+    Alert alert = new Alert(title, text, null, AlertType.CONFIRMATION);
     alert.setTimeout(Alert.FOREVER);
-    final Command yes = new Command("Yes", Command.OK, 0);
-    final Command no = new Command("No", Command.CANCEL, 0);
-    alert.addCommand(yes);
-    alert.addCommand(no);
+    final Command cancel = new Command("Cancel", Command.CANCEL, 1);
+    alert.addCommand(cancel);
     CommandListener listener = new CommandListener() {
       public void commandAction(Command command, Displayable displayable) {
-        if (command.equals(yes)) {
+        if (command.getCommandType() == Command.OK) {
           try {
-            if (platformRequest(text)) {
-              // Successfully opened URL; exit
-              stop();
-            }
+            platformRequest(text);
           } catch (ConnectionNotFoundException cnfe) {
             showError(cnfe);
+          } finally {
+            stop();
           }
+        } else {
+          // cancel
+          Display.getDisplay(ZXingMIDlet.this).setCurrent(canvas);
         }
       }
     };
@@ -153,7 +160,7 @@ public final class ZXingMIDlet extends MIDlet {
 
   private void showAlert(Alert alert) {
     Display display = Display.getDisplay(this);
-    display.setCurrent(alert, display.getCurrent());
+    display.setCurrent(alert, canvas);
   }
 
   void handleDecodedText(String text) {
@@ -162,7 +169,7 @@ public final class ZXingMIDlet extends MIDlet {
     // on URL parsing routines in java.net. This should be somehow worked around: TODO
     // For now, detect URLs in a simple way, and treat everything else as text
     if (text.startsWith("http://") || text.startsWith("https://") || maybeURLWithoutScheme(text)) {
-      showYesNo("Open URL?", text);
+      showYesNo("Open web page?", text);
     } else {
       showAlert("Barcode detected", text);
     }

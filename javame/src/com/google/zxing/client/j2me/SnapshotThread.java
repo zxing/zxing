@@ -17,13 +17,14 @@
 package com.google.zxing.client.j2me;
 
 import com.google.zxing.MonochromeBitmapSource;
-import com.google.zxing.Reader;
 import com.google.zxing.MultiFormatReader;
+import com.google.zxing.Reader;
 import com.google.zxing.Result;
-import com.google.zxing.ReaderException;
 
+import javax.microedition.amms.control.camera.FocusControl;
 import javax.microedition.lcdui.Image;
 import javax.microedition.media.MediaException;
+import javax.microedition.media.Player;
 
 /**
  * @author Sean Owen (srowen@google.com)
@@ -46,23 +47,21 @@ final class SnapshotThread extends Thread {
   }
 
   public void run() {
+    Player player = zXingMIDlet.getPlayer();
     try {
-      zXingMIDlet.getPlayer().stop();
+      setFocus(player);
+      player.stop();
       byte[] snapshot = zXingMIDlet.getVideoControl().getSnapshot(null);
       Image capturedImage = Image.createImage(snapshot, 0, snapshot.length);
       MonochromeBitmapSource source = new LCDUIImageMonochromeBitmapSource(capturedImage);
       Reader reader = new MultiFormatReader();
       Result result = reader.decode(source);
       zXingMIDlet.handleDecodedText(result.getText());
-    } catch (ReaderException re) {
-      zXingMIDlet.showError(re);
-    } catch (MediaException me) {
-      zXingMIDlet.showError(me);
     } catch (Throwable t) {
       zXingMIDlet.showError(t);
     } finally {
       try {
-        zXingMIDlet.getPlayer().start();
+        player.start();
       } catch (MediaException me) {
         // continue?
         zXingMIDlet.showError(me);
@@ -71,4 +70,20 @@ final class SnapshotThread extends Thread {
     }
 
   }
+
+  private static void setFocus(Player player) throws MediaException, InterruptedException {
+    FocusControl focusControl = (FocusControl)
+      player.getControl("javax.microedition.amms.control.camera.FocusControl");
+    if (focusControl != null) {
+      if (focusControl.isMacroSupported() && !focusControl.getMacro()) {
+        focusControl.setMacro(true);
+      }
+      if (focusControl.isAutoFocusSupported()) {
+        focusControl.setFocus(FocusControl.AUTO);
+        Thread.sleep(1500L); // let it focus...
+        focusControl.setFocus(FocusControl.AUTO_LOCK);
+      }
+    }
+  }
+
 }
