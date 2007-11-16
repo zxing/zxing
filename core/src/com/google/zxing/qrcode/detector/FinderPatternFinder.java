@@ -49,7 +49,7 @@ final class FinderPatternFinder {
    */
   FinderPatternFinder(MonochromeBitmapSource image) {
     this.image = image;
-    this.possibleCenters = new Vector(5);
+    this.possibleCenters = new Vector();
   }
 
   FinderPatternInfo find() throws ReaderException {
@@ -437,12 +437,11 @@ final class FinderPatternFinder {
 
     if (size == 3) {
       // Found just enough -- hope these are good!
-      // toArray() is not available
-      FinderPattern[] result = new FinderPattern[possibleCenters.size()];
-      for (int i = 0; i < possibleCenters.size(); i++) {
-        result[i] = (FinderPattern) possibleCenters.elementAt(i);
-      }
-      return result;
+      return new FinderPattern[] {
+        (FinderPattern) possibleCenters.elementAt(0),
+        (FinderPattern) possibleCenters.elementAt(1),
+        (FinderPattern) possibleCenters.elementAt(2) 
+      };
     }
 
     possibleCenters.setSize(size);
@@ -459,11 +458,11 @@ final class FinderPatternFinder {
     // We don't have java.util.Collections in J2ME
     Collections.insertionSort(possibleCenters, new ClosestToAverageComparator(averageModuleSize));
 
-    FinderPattern[] result = new FinderPattern[3];
-    for (int i = 0; i < 3; i++) {
-      result[i] = (FinderPattern) possibleCenters.elementAt(i);
-    }
-    return result;
+    return new FinderPattern[] {
+      (FinderPattern) possibleCenters.elementAt(0),
+      (FinderPattern) possibleCenters.elementAt(1),
+      (FinderPattern) possibleCenters.elementAt(2)
+    };
   }
 
   /**
@@ -511,7 +510,7 @@ final class FinderPatternFinder {
       bottomLeft = temp;
     }
 
-    return new FinderPattern[]{bottomLeft, topLeft, topRight};
+    return new FinderPattern[] {bottomLeft, topLeft, topRight};
   }
 
   /**
@@ -536,17 +535,14 @@ final class FinderPatternFinder {
    * <p>Orders by variance from average module size, ascending.</p>
    */
   private static class ClosestToAverageComparator implements Comparator {
-    private float averageModuleSize;
-
+    private final float averageModuleSize;
     private ClosestToAverageComparator(float averageModuleSize) {
       this.averageModuleSize = averageModuleSize;
     }
-
     public int compare(Object center1, Object center2) {
-      return
-          Math.abs(((FinderPattern) center1).getEstimatedModuleSize() - averageModuleSize) <
-              Math.abs(((FinderPattern) center2).getEstimatedModuleSize() - averageModuleSize) ?
-              -1 :
+      return Math.abs(((FinderPattern) center1).getEstimatedModuleSize() - averageModuleSize) <
+             Math.abs(((FinderPattern) center2).getEstimatedModuleSize() - averageModuleSize) ?
+             -1 :
               1;
     }
   }
