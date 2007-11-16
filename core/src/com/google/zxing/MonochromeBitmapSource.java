@@ -19,8 +19,8 @@ package com.google.zxing;
 import com.google.zxing.common.BitArray;
 
 /**
- * Encapsulates a generic black-and-white bitmap -- a collection of pixels in two dimensions.
- * This unifies many possible representations, like AWT's <code>BufferedImage</code>.
+ * <p>Encapsulates a generic black-and-white bitmap -- a collection of pixels in two dimensions.
+ * This unifies many possible representations, like AWT's <code>BufferedImage</code>.</p>
  *
  * @author srowen@google.com (Sean Owen)
  */
@@ -34,9 +34,9 @@ public interface MonochromeBitmapSource {
   boolean isBlack(int x, int y);
 
   /**
-   * Returns an entire row of black/white pixels as an array of bits, where "true" means "black".
+   * <p>Returns an entire row of black/white pixels as an array of bits, where "true" means "black".
    * This is a sort of "bulk get" operation intended to enable efficient access in
-   * certain situations.
+   * certain situations.</p>
    *
    * @param y vertical offset, from top, of the row of pixels
    * @param row if not null, {@link BitArray} to write pixels into. If null, a new {@link BitArray}
@@ -57,5 +57,23 @@ public interface MonochromeBitmapSource {
    * @return width of underlying image
    */
   int getWidth();
+
+  /**
+   * <p>Estimates black point according to the given method, which is optionally parameterized by
+   * a single int argument. For {@link BlackPointEstimationMethod#ROW_SAMPLING}, this
+   * specifies the row to sample.</p>
+   *
+   * <p>The estimated value will be used in subsequent computations that rely on an estimated black
+   * point.</p>
+   *
+   * @param method black point estimation method
+   * @param argument method-specific argument
+   */
+  void estimateBlackPoint(BlackPointEstimationMethod method, int argument);
+
+  /**
+   * @return {@link BlackPointEstimationMethod} representing last sampling method used
+   */
+  BlackPointEstimationMethod getLastEstimationMethod();
 
 }
