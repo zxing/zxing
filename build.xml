@@ -1,11 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="ZXing" default="build">
 
+  <property file="build.properties"/>
+
   <target name="build">
     <ant dir="core" target="build"/>
     <ant dir="javame" target="build"/>
     <ant dir="core-ext" target="build"/>
     <ant dir="javase" target="build"/>
+  </target>
+
+  <target name="clean">
+    <ant dir="core" target="clean"/>
+    <ant dir="javame" target="clean"/>
+    <ant dir="core-ext" target="clean"/>
+    <ant dir="javase" target="clean"/>
+  </target>
+
+  <target name="release">
+    <zip file="ZXing-${version}.zip" basedir=".">
+      <include name="COPYING"/>
+      <include name="README"/>
+      <include name="core/**"/>
+      <include name="javame/**"/>
+      <include name="core-ext/**"/>
+      <include name="javase/**"/>
+    </zip>
   </target>
 
 </project>
