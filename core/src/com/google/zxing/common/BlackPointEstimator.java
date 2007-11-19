@@ -36,21 +36,21 @@ public final class BlackPointEstimator {
    * decides which bucket of values corresponds to the black point -- which bucket contains the
    * count of the brightest luminance values that should be considered "black".</p>
    *
-   * @param luminanceBuckets an array of <em>counts</em> of luminance values
+   * @param histogram an array of <em>counts</em> of luminance values
    * @return index within argument of bucket corresponding to brightest values which should be
    *  considered "black"
    */
-  public static int estimate(int[] luminanceBuckets) {
+  public static int estimate(int[] histogram) {
 
-    int numBuckets = luminanceBuckets.length;
+    int numBuckets = histogram.length;
 
     // Find tallest peak in histogram
     int firstPeak = 0;
     int firstPeakSize = 0;
     for (int i = 0; i < numBuckets; i++) {
-      if (luminanceBuckets[i] > firstPeakSize) {
+      if (histogram[i] > firstPeakSize) {
         firstPeak = i;
-        firstPeakSize = luminanceBuckets[i];
+        firstPeakSize = histogram[i];
       }
     }
 
@@ -61,7 +61,7 @@ public final class BlackPointEstimator {
     for (int i = 0; i < numBuckets; i++) {
       int distanceToBiggest = i - firstPeak;
       // Encourage more distant second peaks by multiplying by square of distance
-      int score = luminanceBuckets[i] * distanceToBiggest * distanceToBiggest;
+      int score = histogram[i] * distanceToBiggest * distanceToBiggest;
       if (score > secondPeakScore) {
         secondPeak = i;
         secondPeakScore = score;
@@ -75,13 +75,13 @@ public final class BlackPointEstimator {
       secondPeak = temp;
     }
 
-    // Find a valley between them that is low and close to the midpoint of the two peaks
-    int bestValley = firstPeak;
-    int bestValleyScore = 0;
-    for (int i = firstPeak + 1; i < secondPeak; i++) {
-      // Encourage low valleys near the mid point between peaks
-      int score = (firstPeakSize - luminanceBuckets[i]) * (i - firstPeak) * (secondPeak - i);
-      if (score > bestValleyScore) {
+    // Find a valley between them that is low and closer to the white peak
+    int bestValley = secondPeak;
+    int bestValleyScore = Integer.MAX_VALUE;
+    for (int i = secondPeak; i > firstPeak; i--) {
+      int distance = secondPeak - i + 3;
+      int score = distance * histogram[i];
+      if (score < bestValleyScore) {
         bestValley = i;
         bestValleyScore = score;
       }

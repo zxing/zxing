@@ -16,6 +16,7 @@
 
 package com.google.zxing.upc;
 
+import com.google.zxing.BlackPointEstimationMethod;
 import com.google.zxing.common.BitArray;
 import com.google.zxing.MonochromeBitmapSource;
 
@@ -66,6 +67,7 @@ final class UPCDecoder {
     int found = -1;
     for (int x = 0; x < BITMAP_SEARCH_PATTERN.length; x++) {
       int row = height * BITMAP_SEARCH_PATTERN[x] / 100;
+      bitmap.estimateBlackPoint(BlackPointEstimationMethod.ROW_SAMPLING, row);
       bitmap.getBlackRow(row, rowData, 0, width);
 
       if (decodeRow(rowData)) {
