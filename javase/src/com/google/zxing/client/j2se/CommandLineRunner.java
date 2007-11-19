@@ -40,9 +40,11 @@ public final class CommandLineRunner {
     File inputFile = new File(args[0]);
     if (inputFile.exists()) {
       if (inputFile.isDirectory()) {
+        int successful = 0;
         for (File input : inputFile.listFiles()) {
-          decode(input.toURI());
+          if (decode(input.toURI())) successful++;
         }
+        System.out.println("Decoded " + successful + " files successfully");
       } else {
         decode(inputFile.toURI());
       }
@@ -51,17 +53,19 @@ public final class CommandLineRunner {
     }
   }
 
-  private static void decode(URI uri) throws IOException {
+  private static boolean decode(URI uri) throws IOException {
     BufferedImage image = ImageIO.read(uri.toURL());
     if (image == null) {
       System.err.println(uri.toString() + ": Could not load image");
-      return;
+      return false;
     }
     try {
       String result = new MultiFormatReader().decode(new BufferedImageMonochromeBitmapSource(image)).getText();
       System.out.println(uri.toString() + ": " + result);
+      return true;
     } catch (ReaderException e) {
       System.out.println(uri.toString() + ": No barcode found");
+      return false;
     }
   }
 

@@ -35,6 +35,11 @@ final class LCDUIImageMonochromeBitmapSource implements MonochromeBitmapSource {
   private final int height;
   private int blackPoint;
   private BlackPointEstimationMethod lastMethod;
+  private int lastArgument;
+  
+  private static final int LUMINANCE_BITS = 5;
+  private static final int LUMINANCE_SHIFT = 8 - LUMINANCE_BITS;
+  private static final int LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
 
   LCDUIImageMonochromeBitmapSource(final Image image) {
     width = image.getWidth();
@@ -42,6 +47,8 @@ final class LCDUIImageMonochromeBitmapSource implements MonochromeBitmapSource {
     rgbPixels = new int[width * height];
     image.getRGB(rgbPixels, 0, width, 0, 0, width, height);
     blackPoint = 0x7F;
+    lastMethod = null;
+    lastArgument = 0;
   }
 
   public boolean isBlack(int x, int y) {
@@ -71,21 +78,28 @@ final class LCDUIImageMonochromeBitmapSource implements MonochromeBitmapSource {
   }
 
   public void estimateBlackPoint(BlackPointEstimationMethod method, int argument) {
-    if (method.equals(BlackPointEstimationMethod.TWO_D_SAMPLING)) {
-      if (!BlackPointEstimationMethod.TWO_D_SAMPLING.equals(lastMethod)) {
-        int[] luminanceBuckets = new int[32];
+    if (!method.equals(lastMethod) || argument != lastArgument) {
+      int[] histogram = new int[LUMINANCE_BUCKETS];
+      if (method.equals(BlackPointEstimationMethod.TWO_D_SAMPLING)) {
         int minDimension = width < height ? width : height;
         for (int n = 0, offset = 0; n < minDimension; n++, offset += width + 1) {
-          luminanceBuckets[computeRGBLuminance(rgbPixels[offset]) >> 3]++;
+          histogram[computeRGBLuminance(rgbPixels[offset]) >> LUMINANCE_SHIFT]++;
         }
-        blackPoint = BlackPointEstimator.estimate(luminanceBuckets) << 3;
+      } else if (method.equals(BlackPointEstimationMethod.ROW_SAMPLING)) {
+        if (argument < 0 || argument >= height) {
+          throw new IllegalArgumentException("Row is not within the image: " + argument);
+        }
+        int offset = argument * width;
+        for (int x = 0; x < width; x++) {
+          histogram[computeRGBLuminance(rgbPixels[offset + x]) >> LUMINANCE_SHIFT]++;
+        }
+      } else {
+        throw new IllegalArgumentException("Unknown method: " + method);
       }
-    } else if (method.equals(BlackPointEstimationMethod.ROW_SAMPLING)) {
-      // TODO
-    } else {
-      throw new IllegalArgumentException("Unknown method: " + method);
+      blackPoint = BlackPointEstimator.estimate(histogram) << LUMINANCE_SHIFT;
+      lastMethod = method;
+      lastArgument = argument;
     }
-    lastMethod = method;
   }
 
   public BlackPointEstimationMethod getLastEstimationMethod() {
