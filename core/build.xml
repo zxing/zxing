@@ -50,6 +50,7 @@
 
   <target name="clean">
     <delete dir="build"/>
+    <delete dir="build-test"/>    
     <delete file="core.jar"/>
   </target>
 
