@@ -42,7 +42,9 @@ public final class CommandLineRunner {
       if (inputFile.isDirectory()) {
         int successful = 0;
         for (File input : inputFile.listFiles()) {
-          if (decode(input.toURI())) successful++;
+          if (decode(input.toURI())) {
+            successful++;
+          }
         }
         System.out.println("Decoded " + successful + " files successfully");
       } else {
