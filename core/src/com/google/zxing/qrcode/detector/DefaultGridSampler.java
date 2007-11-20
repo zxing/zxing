@@ -31,25 +31,27 @@ public final class DefaultGridSampler extends GridSampler {
                                  FinderPattern bottomLeft,
                                  AlignmentPattern alignmentPattern,
                                  int dimension) throws ReaderException {
-    float bottomRightX;
-    float bottomRightY;
+    float dimMinusThree = (float) dimension - 3.5f;
+    float bottomRightX, bottomRightY;
+    float sourceBottomRightX, sourceBottomRightY;
     if (alignmentPattern != null) {
       bottomRightX = alignmentPattern.getX();
       bottomRightY = alignmentPattern.getY();
+      sourceBottomRightX = sourceBottomRightY = dimMinusThree - 3.0f;
     } else {
       // Don't have an alignment pattern, just make up the bottom-right point
       bottomRightX = (topRight.getX() - topLeft.getX()) + bottomLeft.getX();
       bottomRightY = (topRight.getY() - topLeft.getY()) + bottomLeft.getY();
+      sourceBottomRightX = sourceBottomRightY = dimMinusThree;
     }
 
-    float dimMinusThree = (float) dimension - 3.5f;
     PerspectiveTransform transform = PerspectiveTransform.quadrilateralToQuadrilateral(
         3.5f,
         3.5f,
         dimMinusThree,
         3.5f,
-        dimMinusThree - 3.0f,
-        dimMinusThree - 3.0f,
+        sourceBottomRightX,
+        sourceBottomRightY,
         3.5f,
         dimMinusThree,
         topLeft.getX(),
