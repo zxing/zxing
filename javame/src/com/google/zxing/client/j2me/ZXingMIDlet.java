@@ -40,7 +40,8 @@ import java.io.IOException;
  */
 public final class ZXingMIDlet extends MIDlet {
 
-  private static final int MAX_ZOOM = 200;
+  private static final int NO_ZOOM = 100;
+  private static final int MAX_ZOOM = 250;
 
   private Canvas canvas;
   private Player player;
@@ -76,15 +77,17 @@ public final class ZXingMIDlet extends MIDlet {
   }
 
   private static void setZoom(Player player) {
-    // zoom up to 2x if possible
     ZoomControl zoomControl = (ZoomControl) player.getControl("javax.microedition.amms.control.camera.ZoomControl");
     if (zoomControl != null) {
+      // We zoom in if possible to encourage the viewer to take a snapshot from a greater distance.
+      // This is a crude way of dealing with the fact that many phone cameras will not focus at a
+      // very close range.
       int maxZoom = zoomControl.getMaxOpticalZoom();
-      if (maxZoom > 100) {
+      if (maxZoom > NO_ZOOM) {
         zoomControl.setOpticalZoom(maxZoom > MAX_ZOOM ? MAX_ZOOM : maxZoom);
       } else {
         int maxDigitalZoom = zoomControl.getMaxDigitalZoom();
-        if (maxDigitalZoom > 100) {
+        if (maxDigitalZoom > NO_ZOOM) {
           zoomControl.setDigitalZoom(maxDigitalZoom > MAX_ZOOM ? MAX_ZOOM : maxDigitalZoom);
         }
       }
