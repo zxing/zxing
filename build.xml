@@ -21,6 +21,8 @@
     <zip file="ZXing-${version}.zip" basedir=".">
       <include name="COPYING"/>
       <include name="README"/>
+      <include name="build.xml"/>
+      <include name="build.properties"/>
       <include name="core/**"/>
       <include name="javame/**"/>
       <include name="core-ext/**"/>

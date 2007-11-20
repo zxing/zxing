@@ -13,7 +13,7 @@
            destdir="build"
            source="1.4"
            target="1.4"
-           bootclasspath="${JDK1.4-home}/jre/lib/rt.jar"
+           bootclasspath="${JDK1.4-classes}"
            optimize="true"
            debug="true"
            deprecation="true"
