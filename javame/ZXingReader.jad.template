@@ -7,6 +7,6 @@ MIDlet-Jar-URL: ZXingReader.jar
 MIDlet-Name: ZXingReader
 MIDlet-Permissions: javax.microedition.media.control.VideoControl.getSnapshot
 MIDlet-Vendor: ZXing Project
-MIDlet-Version: 1.0
+MIDlet-Version: 0.1.1
 MicroEdition-Configuration: CLDC-1.1
 MicroEdition-Profile: MIDP-2.0
