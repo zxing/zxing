@@ -1,0 +1,6 @@
+0.1 (09 Nov 2007)
+- Initial release
+
+0.1.1 (11 Nov 2007)
+- Fixed bug decoding version 0 QR Codes
+- Now default zoom is 2.5x in Java ME client
