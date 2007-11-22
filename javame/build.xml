@@ -3,6 +3,17 @@
 
   <property file="../build.properties"/>
 
+  <path id="wtk-build-path">
+    <fileset dir="${WTK-home}/lib">
+      <include name="cldcapi11.jar"/>
+      <include name="midpapi20.jar"/>
+      <include name="mmapi.jar"/>
+      <include name="jsr234.jar"/>
+      <include name="satsa-apdu.jar"/>
+    </fileset>
+    <pathelement location="../core/core.jar"/>
+  </path>
+
   <target name="init">
     <tstamp/>
   </target>
@@ -18,20 +29,15 @@
            debug="true"
            deprecation="true"
            fork="true">
-      <classpath>
-        <pathelement location="${WTK-home}/lib/cldcapi11.jar"/>
-        <pathelement location="${WTK-home}/lib/midpapi20.jar"/>
-        <pathelement location="${WTK-home}/lib/mmapi.jar"/>
-        <pathelement location="${WTK-home}/lib/jsr234.jar"/>
-        <pathelement location="../core/core.jar"/>
-      </classpath>
+           <classpath refid="wtk-build-path"/>
     </javac>
 
     <unzip src="../core/core.jar" dest="build"/>
 
     <mkdir dir="build-j2me"/>
+    <property name="preverify-classpath" refid="wtk-build-path"/>
     <exec executable="${WTK-home}/bin/preverify1.1">
-      <arg line="-classpath ${WTK-home}/lib/cldcapi11.jar:${WTK-home}/lib/midpapi20.jar:${WTK-home}/lib/mmapi.jar:${WTK-home}/lib/jsr234.jar:${WTK-home}/lib/satsa-apdu.jar -d build-j2me build"/>
+      <arg line="-classpath ${preverify-classpath} -d build-j2me build"/>
     </exec>
 
     <copy todir="build-j2me">
