@@ -30,7 +30,6 @@ import javax.microedition.media.Player;
 import javax.microedition.media.control.VideoControl;
 import javax.microedition.midlet.MIDlet;
 import javax.microedition.midlet.MIDletStateChangeException;
-import javax.microedition.amms.control.camera.ZoomControl;
 import java.io.IOException;
 
 /**
@@ -39,9 +38,6 @@ import java.io.IOException;
  * @author Sean Owen (srowen@google.com)
  */
 public final class ZXingMIDlet extends MIDlet {
-
-  private static final int NO_ZOOM = 100;
-  private static final int MAX_ZOOM = 250;
 
   private Canvas canvas;
   private Player player;
@@ -59,7 +55,7 @@ public final class ZXingMIDlet extends MIDlet {
     try {
       player = Manager.createPlayer("capture://video");
       player.realize();
-      setZoom(player);
+      AdvancedMultimediaManager.setZoom(player);
       videoControl = (VideoControl) player.getControl("VideoControl");
       canvas = new VideoCanvas(this);
       canvas.setFullScreenMode(true);
@@ -73,24 +69,6 @@ public final class ZXingMIDlet extends MIDlet {
       throw new MIDletStateChangeException(ioe.toString());
     } catch (MediaException me) {
       throw new MIDletStateChangeException(me.toString());
-    }
-  }
-
-  private static void setZoom(Player player) {
-    ZoomControl zoomControl = (ZoomControl) player.getControl("javax.microedition.amms.control.camera.ZoomControl");
-    if (zoomControl != null) {
-      // We zoom in if possible to encourage the viewer to take a snapshot from a greater distance.
-      // This is a crude way of dealing with the fact that many phone cameras will not focus at a
-      // very close range.
-      int maxZoom = zoomControl.getMaxOpticalZoom();
-      if (maxZoom > NO_ZOOM) {
-        zoomControl.setOpticalZoom(maxZoom > MAX_ZOOM ? MAX_ZOOM : maxZoom);
-      } else {
-        int maxDigitalZoom = zoomControl.getMaxDigitalZoom();
-        if (maxDigitalZoom > NO_ZOOM) {
-          zoomControl.setDigitalZoom(maxDigitalZoom > MAX_ZOOM ? MAX_ZOOM : maxDigitalZoom);
-        }
-      }
     }
   }
 

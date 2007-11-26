@@ -1,10 +1,10 @@
-MIDlet-1: ZXingReader, /res/qr2.png, com.google.zxing.client.j2me.ZXingMIDlet
+MIDlet-1: @APP_NAME@, /res/qr2.png, com.google.zxing.client.j2me.ZXingMIDlet
 MIDlet-Description: Bar Code Reader
 MIDlet-Icon: /res/qr2.png
 MIDlet-Info-URL: code.google.com/p/zxing
 MIDlet-Jar-Size: @JAR_SIZE@
-MIDlet-Jar-URL: ZXingReader.jar
-MIDlet-Name: ZXingReader
+MIDlet-Jar-URL: @APP_NAME@.jar
+MIDlet-Name: @APP_NAME@
 MIDlet-Permissions: javax.microedition.media.control.VideoControl.getSnapshot
 MIDlet-Vendor: ZXing Project
 MIDlet-Version: 0.1.1

@@ -5,9 +5,6 @@
 
   <target name="init">
     <tstamp/>
-  </target>
-
-  <target name="build" depends="init">
     <fail message="Please set 'JDK1.4-classes' in build.properties">
       <condition>
         <not>
@@ -15,6 +12,9 @@
         </not>
       </condition>
     </fail>
+  </target>
+
+  <target name="build" depends="init">
     <mkdir dir="build"/>
     <javac srcdir="src"
            destdir="build"

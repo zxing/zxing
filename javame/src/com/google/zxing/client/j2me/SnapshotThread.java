@@ -21,7 +21,6 @@ import com.google.zxing.MultiFormatReader;
 import com.google.zxing.Reader;
 import com.google.zxing.Result;
 
-import javax.microedition.amms.control.camera.FocusControl;
 import javax.microedition.lcdui.Image;
 import javax.microedition.media.MediaException;
 import javax.microedition.media.Player;
@@ -49,7 +48,7 @@ final class SnapshotThread extends Thread {
   public void run() {
     Player player = zXingMIDlet.getPlayer();
     try {
-      setFocus(player);
+      AdvancedMultimediaManager.setFocus(player);
       player.stop();
       byte[] snapshot = zXingMIDlet.getVideoControl().getSnapshot(null);
       Image capturedImage = Image.createImage(snapshot, 0, snapshot.length);
@@ -69,21 +68,6 @@ final class SnapshotThread extends Thread {
       currentThread = null;
     }
 
-  }
-
-  private static void setFocus(Player player) throws MediaException, InterruptedException {
-    FocusControl focusControl = (FocusControl)
-      player.getControl("javax.microedition.amms.control.camera.FocusControl");
-    if (focusControl != null) {
-      if (focusControl.isMacroSupported() && !focusControl.getMacro()) {
-        focusControl.setMacro(true);
-      }
-      if (focusControl.isAutoFocusSupported()) {
-        focusControl.setFocus(FocusControl.AUTO);
-        Thread.sleep(1500L); // let it focus...
-        focusControl.setFocus(FocusControl.AUTO_LOCK);
-      }
-    }
   }
 
 }

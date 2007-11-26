@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
-MIDlet-1: ZXingReader, , com.google.zxing.client.j2me.ZXingMidlet
+MIDlet-1: @APP_NAME@, , com.google.zxing.client.j2me.ZXingMidlet
 MIDlet-Description: Bar Code Reader
 MIDlet-Icon: /res/qr2.png
 MIDlet-Info-URL: code.google.com/p/zxing
-MIDlet-Name: ZXingReader
+MIDlet-Name: @APP_NAME@
 MIDlet-Permissions: javax.microedition.media.control.VideoControl.getSnapshot
 MIDlet-Vendor: ZXing Project
 MIDlet-Version: 0.1.1
