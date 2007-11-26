@@ -19,6 +19,22 @@
   </target>
 
   <target name="build" depends="init">
+
+    <fail message="Please set 'JDK1.4-classes' in build.properties">
+      <condition>
+        <not>
+          <available file="${JDK1.4-classes}" type="file"/>
+        </not>
+      </condition>
+    </fail>
+    <fail message="Please set 'WTK-home' in build.properties">
+      <condition>
+        <not>
+          <available file="${WTK-home}" type="dir"/>
+        </not>
+      </condition>
+    </fail>
+
     <mkdir dir="build"/>
     <javac srcdir="src"
            destdir="build"
@@ -49,9 +65,8 @@
     <jar jarfile="ZXingReader.jar" basedir="build-j2me" manifest="src/com/google/zxing/client/j2me/MANIFEST.MF"/>
 
     <!-- get .jar size to include it in the .jad file -->
-    <exec executable="sh" outputproperty="jar-size">
-      <arg line="-c &quot;wc -c ZXingReader.jar | cut -d' ' -f1&quot;"/>
-    </exec>
+    <length file="ZXingReader.jar" property="jar-size"/>
+    
     <copy file="ZXingReader.jad.template" tofile="ZXingReader.jad" overwrite="true">
       <filterset>
         <filter token="JAR_SIZE" value="${jar-size}"/>

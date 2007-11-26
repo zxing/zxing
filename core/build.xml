@@ -8,6 +8,13 @@
   </target>
 
   <target name="build" depends="init">
+    <fail message="Please set 'JDK1.4-classes' in build.properties">
+      <condition>
+        <not>
+          <available file="${JDK1.4-classes}" type="file"/>
+        </not>
+      </condition>
+    </fail>
     <mkdir dir="build"/>
     <javac srcdir="src"
            destdir="build"
