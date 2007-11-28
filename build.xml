@@ -18,16 +18,18 @@
   </target>
 
   <target name="release" depends="build,clean">
-    <zip file="ZXing-${version}.zip" basedir=".">
-      <include name="COPYING"/>
-      <include name="README"/>
-      <include name="CHANGES"/>
-      <include name="build.xml"/>
-      <include name="build.properties"/>
-      <include name="core/**"/>
-      <include name="javame/**"/>
-      <include name="core-ext/**"/>
-      <include name="javase/**"/>
+    <zip file="ZXing-${version}.zip">
+      <zipfileset dir="." prefix="zxing-${version}">
+        <include name="COPYING"/>
+        <include name="README"/>
+        <include name="CHANGES"/>
+        <include name="build.xml"/>
+        <include name="build.properties"/>
+        <include name="core/**"/>
+        <include name="javame/**"/>
+        <include name="core-ext/**"/>
+        <include name="javase/**"/>
+      </zipfileset>
     </zip>
   </target>
 
