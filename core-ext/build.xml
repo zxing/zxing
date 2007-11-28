@@ -35,7 +35,7 @@
         <pathelement location="../core/core.jar"/>
       </classpath>
     </javac>
-    <jar jarfile="core-ext.jar" basedir="build"/>
+    <jar jarfile="core-ext.jar" basedir="build" level="9"/>
   </target>
 
   <target name="clean">
