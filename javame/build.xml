@@ -114,7 +114,7 @@
       </filterset>
     </copy>
 
-    <jar jarfile="${jar-name}.jar" basedir="build-j2me" manifest="src/com/google/zxing/client/j2me/MANIFEST.MF"/>
+    <jar jarfile="${jar-name}.jar" basedir="build-j2me" manifest="src/com/google/zxing/client/j2me/MANIFEST.MF" level="9"/>
 
     <!-- get .jar size to include it in the .jad file -->
     <length file="${jar-name}.jar" property="jar-size"/>

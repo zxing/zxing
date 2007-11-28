@@ -42,7 +42,7 @@
            debug="true"
            deprecation="true"
            fork="true"/>
-    <jar jarfile="core.jar" basedir="build"/>
+    <jar jarfile="core.jar" basedir="build" level="9"/>
   </target>
 
   <target name="test" depends="init,build">
