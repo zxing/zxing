@@ -20,24 +20,25 @@
 
   <property file="../build.properties"/>
 
+  <path id="javame-compile-bootclasspath">
+    <fileset dir="${WTK-home}/lib">
+      <include name="cldcapi11.jar"/>
+      <include name="midpapi20.jar"/>
+    </fileset>
+  </path>
+  <property name="javame-compile-bootclasspath-path" refid="javame-compile-bootclasspath"/>
+
   <target name="init">
     <tstamp/>
-    <fail message="Please set 'JDK1.4-classes' in build.properties">
-      <condition>
-        <not>
-          <available file="${JDK1.4-classes}" type="file"/>
-        </not>
-      </condition>
-    </fail>
   </target>
 
   <target name="build" depends="init">
     <mkdir dir="build"/>
     <javac srcdir="src"
            destdir="build"
-           source="1.4"
-           target="1.4"
-           bootclasspath="${JDK1.4-classes}"
+           source="1.2"
+           target="1.2"
+           bootclasspath="${javame-compile-bootclasspath-path}"
            optimize="true"
            debug="true"
            deprecation="true"
@@ -59,7 +60,7 @@
       <formatter type="plain" usefile="false"/>
       <classpath>
         <pathelement location="build"/>
-        <pathelement location="build-test"/>        
+        <pathelement location="build-test"/>
       </classpath>
       <assertions>
         <enable/>
@@ -74,7 +75,7 @@
 
   <target name="clean">
     <delete dir="build"/>
-    <delete dir="build-test"/>    
+    <delete dir="build-test"/>
     <delete file="core.jar"/>
   </target>
 
