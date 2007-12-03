@@ -26,6 +26,7 @@ public enum ParsedReaderResultType {
   BOOKMARK(BookmarkDoCoMoResult.class),
   ADDRESSBOOK(AddressBookDoCoMoResult.class),
   EMAIL(EmailDoCoMoResult.class),
+  UPC(UPCParsedResult.class),
   URI(URIParsedResult.class),
   TEXT(TextParsedResult.class);
 

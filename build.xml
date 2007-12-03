@@ -26,6 +26,12 @@
     <ant dir="core-ext" target="build"/>
     <ant dir="javase" target="build"/>
   </target>
+	
+	<target name="buildwithoutj2me">
+	  <ant dir="core" target="build"/>
+	  <ant dir="core-ext" target="build"/>
+	  <ant dir="javase" target="build"/>
+	</target>
 
   <target name="clean">
     <ant dir="core" target="clean"/>
