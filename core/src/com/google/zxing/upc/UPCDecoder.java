@@ -17,8 +17,8 @@
 package com.google.zxing.upc;
 
 import com.google.zxing.BlackPointEstimationMethod;
-import com.google.zxing.common.BitArray;
 import com.google.zxing.MonochromeBitmapSource;
+import com.google.zxing.common.BitArray;
 
 /**
  * This class takes a bitmap, and attempts to return a String which is the contents of the UPC
@@ -45,7 +45,7 @@ final class UPCDecoder {
     { 30, 10, 10, 20 }  // 9
   };
 
-  // Alternative even-parity patterns for EAN-13 barcodes
+  /** Alternative even-parity patterns for EAN-13 barcodes. */
   private static final byte[][] EVEN_PARITY_PATTERNS = {
     { 10, 10, 20, 30 }, // 0
     { 10, 20, 20, 20 }, // 1
@@ -97,10 +97,11 @@ final class UPCDecoder {
   private static final int UNKNOWN_PARITY  = 0;
   private static final int ODD_PARITY      = 1;
   private static final int EVEN_PARITY     = 2;
-  
 
-  // Utility class for returning a matched character. Defines the character
-  // plus the parity used for encoding it.
+  /**
+   * Utility class for returning a matched character. Defines the character
+   * plus the parity used for encoding it.
+   */
   private static class CharResult {
     public char character;   // the encoded character
     public int parity;       // one of the parity types above
@@ -119,10 +120,12 @@ final class UPCDecoder {
     height = bitmap.getHeight();
   }
 
-  // To decode the image, we follow a search pattern defined in kBitmapSearchPattern. It is a
-  // list of percentages which translate to row numbers to scan across. For each row, we scan
-  // left to right, and if that fails, we reverse the row in place and try again to see if the
-  // bar code was upside down.
+  /**
+   * To decode the image, we follow a search pattern defined in kBitmapSearchPattern. It is a
+   * list of percentages which translate to row numbers to scan across. For each row, we scan
+   * left to right, and if that fails, we reverse the row in place and try again to see if the
+   * bar code was upside down.
+   */
   String decode() {
     BitArray rowData = new BitArray(width);
     String longestResult = "";
@@ -196,21 +199,23 @@ final class UPCDecoder {
     return verifyResult();
   }
 
-  
-  // Verifies the checksum. This is computed by adding up digits in the even
-  // indices (0, 2, 4...) then adding the digits in the odd indices (1, 3, 5..)
-  // and multiplying by 3. The total, plus the final checksum digit, should be
-  // divisible by 10.
-  //
-  // Note that for a UPC barcode, we add the additional '0' to the front
-  // (converting it to a EAN-13 code) for purposes of calculating the checksum
-  //
+
+  /**
+   * Verifies the checksum. This is computed by adding up digits in the even
+   * indices (0, 2, 4...) then adding the digits in the odd indices (1, 3, 5..)
+   * and multiplying by 3. The total, plus the final checksum digit, should be
+   * divisible by 10.
+   *
+   * Note that for a UPC barcode, we add the additional '0' to the front
+   * (converting it to a EAN-13 code) for purposes of calculating the checksum
+   */
   private boolean verifyResult() {
     // TODO - handle compressed barcodes.
 
     // length is 12 for UPC and 13 for EAN-13
-    if (result.length() != 12 && result.length() != 13)
+    if (result.length() != 12 && result.length() != 13) {
       return false;
+    }
     
     int checksum = 0;
     int end = result.length()-2;
@@ -231,7 +236,6 @@ final class UPCDecoder {
   private int decodeOneSide(BitArray rowData, int rowOffset, boolean checkBothParities) {
     int[] counters = new int[4];
     byte firstDigitPattern = 0;
-    char firstDigit = '-';
     for (int x = 0; x < 6 && rowOffset < width; x++) {
       recordPattern(rowData, rowOffset, counters, 4);
       for (int y = 0; y < 4; y++) {
@@ -239,28 +243,35 @@ final class UPCDecoder {
       }
       CharResult foundChar = new CharResult();
       findDigit(counters, foundChar, checkBothParities);
-      if (foundChar.parity == UNKNOWN_PARITY)
+      if (foundChar.parity == UNKNOWN_PARITY) {
         return -1;
-      if (foundChar.parity == EVEN_PARITY) 
-        firstDigitPattern |= 1 << (5-x);
+      }
+      if (foundChar.parity == EVEN_PARITY) {
+        firstDigitPattern |= 1 << (5 - x);
+      }
       result.append(foundChar.character);
     }
+    char firstDigit = '-';
     for (int i = 0; i < FIRST_DIGIT_ENCODINGS.length; i++) {
       if (firstDigitPattern == FIRST_DIGIT_ENCODINGS[i]) {
         firstDigit = (char) ((int) '0' + i);
         break;
       }
     }
-    if (firstDigit == '-')
+    if (firstDigit == '-') {
       return -1;
-    if (firstDigit != '0')
+    }
+    if (firstDigit != '0') {
       result.insert(0, firstDigit);
+    }
     return rowOffset;
   }
 
-  // Returns the horizontal position just after the pattern was found if successful, otherwise
-  // returns -1 if the pattern was not found. Searches are always left to right, and patterns
-  // begin on white or black based on the flag.
+  /**
+   * Returns the horizontal position just after the pattern was found if successful, otherwise
+   * returns -1 if the pattern was not found. Searches are always left to right, and patterns
+   * begin on white or black based on the flag.
+   */
   private int findPattern(BitArray rowData, int rowOffset, byte[] pattern, boolean whiteFirst) {
     int[] counters = new int[pattern.length];
     int width = this.width;
