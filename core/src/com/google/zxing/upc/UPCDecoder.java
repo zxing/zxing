@@ -44,6 +44,68 @@ final class UPCDecoder {
     { 10, 20, 10, 30 }, // 8
     { 30, 10, 10, 20 }  // 9
   };
+
+  // Alternative even-parity patterns for EAN-13 barcodes
+  private static final byte[][] EVEN_PARITY_PATTERNS = {
+    { 10, 10, 20, 30 }, // 0
+    { 10, 20, 20, 20 }, // 1
+    { 20, 20, 10, 20 }, // 2
+    { 10, 10, 40, 10 }, // 3
+    { 20, 30, 10, 10 }, // 4
+    { 10, 30, 20, 10 }, // 5
+    { 40, 10, 10, 10 }, // 6
+    { 20, 10, 30, 10 }, // 7
+    { 30, 10, 20, 10 }, // 8
+    { 20, 10, 10, 30 }  // 9
+  };
+
+  // For an EAN-13 barcode, the first digit is represented by the parities used
+  // to encode the next six digits, according to the table below. For example,
+  // if the barcode is 5 123456 789012 then the value of the first digit is
+  // signified by using odd for '1', even for '2', even for '3', odd for '4',
+  // odd for '5', and even for '6'. See http://en.wikipedia.org/wiki/EAN-13
+  //
+  //                Parity of next 6 digits
+  //    Digit   0     1     2     3     4     5 
+  //       0    Odd   Odd   Odd   Odd   Odd   Odd
+  //       1    Odd   Odd   Even  Odd   Even  Even
+  //       2    Odd   Odd   Even  Even  Odd   Even
+  //       3    Odd   Odd   Even  Even  Even  Odd
+  //       4    Odd   Even  Odd   Odd   Even  Even
+  //       5    Odd   Even  Even  Odd   Odd   Even
+  //       6    Odd   Even  Even  Even  Odd   Odd
+  //       7    Odd   Even  Odd   Even  Odd   Even
+  //       8    Odd   Even  Odd   Even  Even  Odd
+  //       9    Odd   Even  Even  Odd   Even  Odd
+  //
+  // Note that the encoding for '0' uses the same parity as a UPC barcode. Hence
+  // a UPC barcode can be converted to an EAN-13 barcode by prepending a 0.
+  // 
+  // The encodong is represented by the following array, which is a bit pattern
+  // using Odd = 0 and Even = 1. For example, 5 is represented by:
+  //
+  //              Odd Even Even Odd Odd Even
+  // in binary:
+  //                0    1    1   0   0    1   == 0x19 
+  //
+  private static final byte[] FIRST_DIGIT_ENCODINGS = {
+    0x00, 0x0B, 0x0D, 0xE, 0x13, 0x19, 0x1C, 0x15, 0x16, 0x1A
+  };
+
+
+  // Parity types indicating how a given digit is encoded
+  private static final int UNKNOWN_PARITY  = 0;
+  private static final int ODD_PARITY      = 1;
+  private static final int EVEN_PARITY     = 2;
+  
+
+  // Utility class for returning a matched character. Defines the character
+  // plus the parity used for encoding it.
+  private static class CharResult {
+    public char character;   // the encoded character
+    public int parity;       // one of the parity types above
+  }
+
   private static final int TOLERANCE = 5;
 
   private MonochromeBitmapSource bitmap;
@@ -74,7 +136,7 @@ final class UPCDecoder {
         found = x;
         break;
       }
-      //Log("decode: row " + row + " normal result: " + mResult);
+      //Log("decode: row " + row + " normal result: " + result);
       if (result.length() > longestResult.length()) {
         longestResult = result.toString();
       }
@@ -84,7 +146,7 @@ final class UPCDecoder {
         found = x;
         break;
       }
-      //Log("decode: row " + row + " inverted result: " + mResult);
+      //Log("decode: row " + row + " inverted result: " + result);
       if (result.length() > longestResult.length()) {
         longestResult = result.toString();
       }
@@ -105,7 +167,6 @@ final class UPCDecoder {
    */
   private boolean decodeRow(BitArray rowData) {
     // TODO: Add support for UPC-E Zero Compressed bar codes.
-    // TODO: Add support for EAN-13 (European Article Number) bar codes.
     // FIXME: Don't trust the first result from findPattern() for the start sequence - resume from
     // that spot and try to start again if finding digits fails.
     result = new StringBuffer();
@@ -115,7 +176,7 @@ final class UPCDecoder {
     }
     //Log("Start pattern ends at column " + rowOffset);
 
-    rowOffset = decodeOneSide(rowData, rowOffset);
+    rowOffset = decodeOneSide(rowData, rowOffset, true);
     if (rowOffset < 0) {
       return false;
     }
@@ -126,30 +187,74 @@ final class UPCDecoder {
     }
     //Log("Middle pattern ends at column " + rowOffset);
 
-    rowOffset = decodeOneSide(rowData, rowOffset);
+    // Pass in false for checkBothParities(). For an EAN-13 barcode, only the
+    // left had side will use mixed parities.
+    rowOffset = decodeOneSide(rowData, rowOffset, false);
     if (rowOffset < 0) {
       return false;
     }
-
-    // We could attempt to read the end pattern for sanity, but there's not much point.
-    // UPC-A codes have 12 digits, so any other result is garbage.
-    return result.length() == 12;
+    return verifyResult();
   }
 
-  private int decodeOneSide(BitArray rowData, int rowOffset) {
+  
+  // Verifies the checksum. This is computed by adding up digits in the even
+  // indices (0, 2, 4...) then adding the digits in the odd indices (1, 3, 5..)
+  // and multiplying by 3. The total, plus the final checksum digit, should be
+  // divisible by 10.
+  //
+  // Note that for a UPC barcode, we add the additional '0' to the front
+  // (converting it to a EAN-13 code) for purposes of calculating the checksum
+  //
+  private boolean verifyResult() {
+    // TODO - handle compressed barcodes.
+
+    // length is 12 for UPC and 13 for EAN-13
+    if (result.length() != 12 && result.length() != 13)
+      return false;
+    
+    int checksum = 0;
+    int end = result.length()-2;
+    int factor = 3;
+    // Calculate from penultimate digit down to first. This avoids having to
+    // account for the optional '0' on the front, which won't actually affect
+    // the calculation.
+    for (int i = end; i >= 0; i--) {
+      int value = (result.charAt(i) - (int) '0') * factor;
+      checksum += value;
+      factor = factor == 3 ? 1 : 3;
+    }
+    int endValue = (result.charAt(end+1) - (int) '0');
+    //Log("checksum + endValue = " + (checksum + endValue));
+    return (checksum + endValue) % 10 == 0;
+  }
+
+  private int decodeOneSide(BitArray rowData, int rowOffset, boolean checkBothParities) {
     int[] counters = new int[4];
+    byte firstDigitPattern = 0;
+    char firstDigit = '-';
     for (int x = 0; x < 6 && rowOffset < width; x++) {
       recordPattern(rowData, rowOffset, counters, 4);
       for (int y = 0; y < 4; y++) {
         rowOffset += counters[y];
       }
-      char c = findDigit(counters);
-      if (c == '-') {
+      CharResult foundChar = new CharResult();
+      findDigit(counters, foundChar, checkBothParities);
+      if (foundChar.parity == UNKNOWN_PARITY)
         return -1;
-      } else {
-        result.append(c);
+      if (foundChar.parity == EVEN_PARITY) 
+        firstDigitPattern |= 1 << (5-x);
+      result.append(foundChar.character);
+    }
+    for (int i = 0; i < FIRST_DIGIT_ENCODINGS.length; i++) {
+      if (firstDigitPattern == FIRST_DIGIT_ENCODINGS[i]) {
+        firstDigit = (char) ((int) '0' + i);
+        break;
       }
     }
+    if (firstDigit == '-')
+      return -1;
+    if (firstDigit != '0')
+      result.insert(0, firstDigit);
     return rowOffset;
   }
 
@@ -228,8 +333,8 @@ final class UPCDecoder {
    * that the contents of the counters array are modified to save an extra allocation, so don't
    * use these values after returning from this call.
    */
-  private static char findDigit(int[] counters) {
-    // TODO: add EAN even parity support
+  private static void findDigit(int[] counters, CharResult result, boolean checkBothParities) {
+    result.parity = UNKNOWN_PARITY;
     int total = counters[0] + counters[1] + counters[2] + counters[3];
     int average = total * 10 / 7;
     for (int x = 0; x < 4; x++) {
@@ -246,10 +351,30 @@ final class UPCDecoder {
         }
       }
       if (match) {
-        return (char) ((int) '0' + x);
+        result.parity = ODD_PARITY;
+        result.character =  (char) ((int) '0' + x);
+        return;
       }
     }
-    return '-';
+    // If first pattern didn't match, look for even parity patterns, as used in
+    // EAN-13 barcodes.
+    if (checkBothParities) {
+      for (int x = 0; x < 10; x++) {
+        boolean match = true;
+        for (int y = 0; y < 4; y++) {
+          int diff = counters[y] - EVEN_PARITY_PATTERNS[x][y];
+          if (diff > TOLERANCE || diff < -TOLERANCE) {
+            match = false;
+            break;
+          }
+        }
+        if (match) {
+          result.parity = EVEN_PARITY;
+          result.character =  (char) ((int) '0' + x);
+          return;
+        }
+      }
+    }
   }
 
   /**
