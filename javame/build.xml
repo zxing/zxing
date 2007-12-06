@@ -132,7 +132,7 @@
       <arg value="-libraryjars ${preverify-classpath}"/>
       <arg value="-microedition"/>
       <arg value="-keep public class com.google.zxing.client.j2me.ZXingMIDlet"/>
-      <arg value="-keep public class com.google.zxing.qrcode.deteor.DefaultGridSampler"/>
+      <arg value="-keep public class com.google.zxing.qrcode.detector.DefaultGridSampler"/>
       <arg value="-keep public class com.google.zxing.qrcode.detector.GridSampler"/>
       <arg value="-optimizationpasses 5"/>
       <arg value="-verbose"/>
