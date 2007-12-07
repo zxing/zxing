@@ -251,18 +251,24 @@ final class UPCDecoder {
       }
       result.append(foundChar.character);
     }
-    char firstDigit = '-';
-    for (int i = 0; i < FIRST_DIGIT_ENCODINGS.length; i++) {
-      if (firstDigitPattern == FIRST_DIGIT_ENCODINGS[i]) {
-        firstDigit = (char)((int)'0' + i);
-        break;
+    // If checkBothParities is true then we're potentially looking at the left
+    // hand side of an EAN-13 barcode, where the first digit is encoded by the
+    // parity pattern. In that case, calculate the first digit by checking
+    // the parity patterns.
+    if (checkBothParities) {
+      char firstDigit = '-';
+      for (int i = 0; i < FIRST_DIGIT_ENCODINGS.length; i++) {
+        if (firstDigitPattern == FIRST_DIGIT_ENCODINGS[i]) {
+          firstDigit = (char)((int)'0' + i);
+          break;
+        }
       }
-    }
-    if (firstDigit == '-') {
-      return -1;
-    }
-    if (firstDigit != '0') {
-      result.insert(0, firstDigit);
+      if (firstDigit == '-') {
+        return -1;
+      }
+      if (firstDigit != '0') {
+        result.insert(0, firstDigit);
+      }
     }
     return rowOffset;
   }
