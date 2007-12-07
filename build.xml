@@ -52,6 +52,7 @@
         <include name="javame/**"/>
         <include name="core-ext/**"/>
         <include name="javase/**"/>
+        <exclude name="*.iml"/>
       </zipfileset>
     </zip>
   </target>

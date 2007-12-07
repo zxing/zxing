@@ -172,7 +172,8 @@
     <delete dir="build"/>
     <delete dir="build-j2me"/>
     <delete dir="." includes="*.jar"/>
-    <delete dir="." includes="*.jad"/>    
+    <delete dir="." includes="*.jad"/>
+    <delete file="src/com/google/zxing/client/j2me/MANIFEST.MF"/>
   </target>
 
 </project>
