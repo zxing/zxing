@@ -9,3 +9,9 @@
 - Issue 11 fixed: Build problems on Windows
 - Can now build "ZXingReaderBasic" which does not require JSR-234
 - Issue 14 fixed: release .zip builds into one directory
+
+0.1.3 (7 Dec 2007)
+- Unit test for QR Code decoding
+- Added EAN-13 support
+- Now builds with class file format version 1.2 -- may solve some compatibility issues?
+- Fixed obfuscation step bug causing NoClassDefFoundError
