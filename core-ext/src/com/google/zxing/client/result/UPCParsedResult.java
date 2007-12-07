@@ -25,10 +25,11 @@ public final class UPCParsedResult extends ParsedReaderResult {
 
   public UPCParsedResult(String rawText) {
     super(ParsedReaderResultType.UPC);
-    if (rawText.length() != 12 && rawText.length() != 13) {
+    int length = rawText.length();
+    if (length != 12 && length != 13) {
       throw new IllegalArgumentException("Wrong number of digits for UPC");
     }
-    for (int x = 0; x < rawText.length(); x++) {
+    for (int x = 0; x < length; x++) {
       char c = rawText.charAt(x);
       if (c < '0' || c > '9') {
         throw new IllegalArgumentException("Invalid character found in UPC");
