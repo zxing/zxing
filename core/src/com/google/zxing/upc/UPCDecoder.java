@@ -218,17 +218,17 @@ final class UPCDecoder {
     }
     
     int checksum = 0;
-    int end = result.length()-2;
+    int end = result.length() - 2;
     int factor = 3;
     // Calculate from penultimate digit down to first. This avoids having to
     // account for the optional '0' on the front, which won't actually affect
     // the calculation.
     for (int i = end; i >= 0; i--) {
-      int value = (result.charAt(i) - (int) '0') * factor;
+      int value = (result.charAt(i) - (int)'0') * factor;
       checksum += value;
       factor = factor == 3 ? 1 : 3;
     }
-    int endValue = (result.charAt(end+1) - (int) '0');
+    int endValue = (result.charAt(end + 1) - (int)'0');
     //Log("checksum + endValue = " + (checksum + endValue));
     return (checksum + endValue) % 10 == 0;
   }
@@ -236,12 +236,12 @@ final class UPCDecoder {
   private int decodeOneSide(BitArray rowData, int rowOffset, boolean checkBothParities) {
     int[] counters = new int[4];
     byte firstDigitPattern = 0;
+    CharResult foundChar = new CharResult();
     for (int x = 0; x < 6 && rowOffset < width; x++) {
       recordPattern(rowData, rowOffset, counters, 4);
       for (int y = 0; y < 4; y++) {
         rowOffset += counters[y];
       }
-      CharResult foundChar = new CharResult();
       findDigit(counters, foundChar, checkBothParities);
       if (foundChar.parity == UNKNOWN_PARITY) {
         return -1;
@@ -254,7 +254,7 @@ final class UPCDecoder {
     char firstDigit = '-';
     for (int i = 0; i < FIRST_DIGIT_ENCODINGS.length; i++) {
       if (firstDigitPattern == FIRST_DIGIT_ENCODINGS[i]) {
-        firstDigit = (char) ((int) '0' + i);
+        firstDigit = (char)((int)'0' + i);
         break;
       }
     }
@@ -363,7 +363,7 @@ final class UPCDecoder {
       }
       if (match) {
         result.parity = ODD_PARITY;
-        result.character =  (char) ((int) '0' + x);
+        result.character =  (char)((int)'0' + x);
         return;
       }
     }
@@ -381,7 +381,7 @@ final class UPCDecoder {
         }
         if (match) {
           result.parity = EVEN_PARITY;
-          result.character =  (char) ((int) '0' + x);
+          result.character =  (char)((int)'0' + x);
           return;
         }
       }
