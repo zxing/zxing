@@ -52,9 +52,22 @@
         <include name="javame/**"/>
         <include name="core-ext/**"/>
         <include name="javase/**"/>
+        <include name="docs/**"/>
         <exclude name="*.iml"/>
       </zipfileset>
     </zip>
+  </target>
+
+  <target name="javadoc">
+    <mkdir dir="docs/javadoc"/>
+    <javadoc destdir="docs/javadoc">
+      <sourcepath>
+        <pathelement location="core/src"/>
+        <pathelement location="core-ext/src"/>
+        <pathelement location="javame/src"/>
+        <pathelement location="javase/src"/>
+      </sourcepath>
+    </javadoc>
   </target>
 
 </project>
