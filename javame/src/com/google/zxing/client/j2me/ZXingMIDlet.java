@@ -104,8 +104,8 @@ public final class ZXingMIDlet extends MIDlet {
 
   // Convenience methods to show dialogs
 
-  void showYesNo(String title, final String text) {
-    Alert alert = new Alert(title, text, null, AlertType.CONFIRMATION);
+  private void showOpenURL(final String text) {
+    Alert alert = new Alert("Open web page?", text, null, AlertType.CONFIRMATION);
     alert.setTimeout(Alert.FOREVER);
     final Command cancel = new Command("Cancel", Command.CANCEL, 1);
     alert.addCommand(cancel);
@@ -129,7 +129,7 @@ public final class ZXingMIDlet extends MIDlet {
     showAlert(alert);
   }
 
-  void showAlert(String title, String text) {
+  private void showAlert(String title, String text) {
     Alert alert = new Alert(title, text, null, AlertType.INFO);
     alert.setTimeout(Alert.FOREVER);
     showAlert(alert);
@@ -144,18 +144,50 @@ public final class ZXingMIDlet extends MIDlet {
     display.setCurrent(alert, canvas);
   }
 
+  /// TODO this whole bit needs to be merged with the code in core-ext -- this is messy and duplicative
+
   void handleDecodedText(String text) {
     // This is a crude imitation of the code found in module core-ext, which handles the contents
     // in a more sophisticated way. It can't be accessed from JavaME just yet because it relies
     // on URL parsing routines in java.net. This should be somehow worked around: TODO
     // For now, detect URLs in a simple way, and treat everything else as text
-    if (text.startsWith("http://") || text.startsWith("https://") || maybeURLWithoutScheme(text)) {
-      showYesNo("Open web page?", text);
+    if (text.startsWith("http://") || text.startsWith("https://")) {
+      showOpenURL(text);
+    } else if (text.startsWith("HTTP://") || text.startsWith("HTTPS://")) {
+      showOpenURL(decapitalizeProtocol(text));
+    } else if (text.startsWith("URL:")) {
+      showOpenURL(decapitalizeProtocol(text.substring(4)));
+    } else if (text.startsWith("MEBKM:")) {
+      int urlIndex = text.indexOf("URL:", 6);
+      if (urlIndex >= 6) {
+        String url = text.substring( urlIndex + 4);
+        int semicolon = url.indexOf((int) ';');
+        if (semicolon >= 0) {
+          url = url.substring(0, semicolon);
+        }
+        showOpenURL(decapitalizeProtocol(url));
+      } else {
+        showAlert("Barcode detected", text);
+      }
+    } else if (maybeURLWithoutScheme(text)) {
+      showOpenURL("http://" + text);
     } else {
       showAlert("Barcode detected", text);
     }
   }
 
+  private static String decapitalizeProtocol(String url) {
+    int protocolEnd = url.indexOf("://");
+    if (protocolEnd >= 0) {
+      return url.substring(0, protocolEnd).toLowerCase() + url.substring(protocolEnd);
+    } else {
+      return url;
+    }
+  }
+
+  /**
+   * Crudely guesses that a string may represent a URL if it has a '.' and no spaces.
+   */
   private static boolean maybeURLWithoutScheme(String text) {
     return text.indexOf((int) '.') >= 0 && text.indexOf((int) ' ') < 0;
   }
