@@ -28,6 +28,10 @@ public final class URIParsedResult extends ParsedReaderResult {
 
   public URIParsedResult(String rawText) {
     super(ParsedReaderResultType.URI);
+    if (rawText.startsWith("URL:")) {
+      // Sometimes a URL is prefixed with "URL:" -- support this
+      rawText = rawText.substring(4);
+    }
     try {
       uri = new URI(rawText);
     } catch (URISyntaxException urise) {
