@@ -17,6 +17,7 @@
 package com.google.zxing.client.j2me;
 
 import com.google.zxing.client.result.BookmarkDoCoMoResult;
+import com.google.zxing.client.result.EmailAddressResult;
 import com.google.zxing.client.result.EmailDoCoMoResult;
 import com.google.zxing.client.result.ParsedReaderResult;
 import com.google.zxing.client.result.ParsedReaderResultType;
@@ -110,8 +111,8 @@ public final class ZXingMIDlet extends MIDlet {
 
   // Convenience methods to show dialogs
 
-  private void showOpenURL(final String text) {
-    Alert alert = new Alert("Open web page?", text, null, AlertType.CONFIRMATION);
+  private void showOpenURL(String title, final String display, final String uri) {
+    Alert alert = new Alert(title, display, null, AlertType.CONFIRMATION);
     alert.setTimeout(Alert.FOREVER);
     final Command cancel = new Command("Cancel", Command.CANCEL, 1);
     alert.addCommand(cancel);
@@ -119,7 +120,7 @@ public final class ZXingMIDlet extends MIDlet {
       public void commandAction(Command command, Displayable displayable) {
         if (command.getCommandType() == Command.OK) {
           try {
-            platformRequest(text);
+            platformRequest(uri);
           } catch (ConnectionNotFoundException cnfe) {
             showError(cnfe);
           } finally {
@@ -154,11 +155,17 @@ public final class ZXingMIDlet extends MIDlet {
     ParsedReaderResult result = ParsedReaderResult.parseReaderResult(text);
     ParsedReaderResultType type = result.getType();
     if (type.equals(ParsedReaderResultType.URI)) {
-      showOpenURL(((URIParsedResult) result).getURI());
+      String uri = ((URIParsedResult) result).getURI();
+      showOpenURL("Open web page?", uri, uri);
     } else if (type.equals(ParsedReaderResultType.BOOKMARK)) {
-      showOpenURL(((BookmarkDoCoMoResult) result).getURI());
+      String uri = ((BookmarkDoCoMoResult) result).getURI();
+      showOpenURL("Open web page?", uri, uri);
     } else if (type.equals(ParsedReaderResultType.EMAIL)) {
-      showOpenURL(((EmailDoCoMoResult) result).getMailtoURI());
+      String email = ((EmailDoCoMoResult) result).getTo();
+      showOpenURL("Compose e-mail?", email, "mailto:" + email);
+    } else if (type.equals(ParsedReaderResultType.EMAIL_ADDRESS)) {
+      String email = ((EmailAddressResult) result).getEmailAddress();
+      showOpenURL("Compose e-mail?", email, "mailto:" + email);
     } else {
       showAlert("Barcode detected", result.getDisplayResult());
     }
