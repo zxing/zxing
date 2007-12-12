@@ -16,9 +16,6 @@
 
 package com.google.zxing.client.result;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-
 /**
  * Implements the "MATMSG" email message entry format.
  *
@@ -31,7 +28,6 @@ public final class EmailDoCoMoResult extends AbstractDoCoMoResult {
   private final String to;
   private final String subject;
   private final String body;
-  private final URI mailtoURI;
 
   public EmailDoCoMoResult(String rawText) {
     super(ParsedReaderResultType.EMAIL);
@@ -39,10 +35,8 @@ public final class EmailDoCoMoResult extends AbstractDoCoMoResult {
       throw new IllegalArgumentException("Does not begin with MATMSG");
     }
     to = matchRequiredPrefixedField("TO:", rawText)[0];
-    try {
-      mailtoURI = new URI("mailto:" + to);
-    } catch (URISyntaxException urise) {
-      throw new IllegalArgumentException(urise.toString());
+    if (!isBasicallyValidEmailAddress(to)) {
+      throw new IllegalArgumentException("Invalid email address: " + to);
     }
     subject = matchSinglePrefixedField("SUB:", rawText);
     body = matchSinglePrefixedField("BODY:", rawText);
@@ -50,10 +44,6 @@ public final class EmailDoCoMoResult extends AbstractDoCoMoResult {
 
   public String getTo() {
     return to;
-  }
-
-  public URI getMailtoURI() {
-    return mailtoURI;
   }
 
   public String getSubject() {
@@ -64,12 +54,22 @@ public final class EmailDoCoMoResult extends AbstractDoCoMoResult {
     return body;
   }
 
-  @Override
   public String getDisplayResult() {
-    StringBuilder result = new StringBuilder(to);
+    StringBuffer result = new StringBuffer(to);
     maybeAppend(subject, result);
     maybeAppend(body, result);
     return result.toString();
+  }
+
+  /**
+   * This implements only the most basic checking for an email address's validity -- that it contains
+   * an '@' and a '.' somewhere after that, and that it contains no space.
+   * We want to generally be lenient here since this class is only intended to encapsulate what's
+   * in a barcode, not "judge" it.
+   */
+  static boolean isBasicallyValidEmailAddress(String email) {
+    int atIndex = email.indexOf('@');
+    return atIndex >= 0 && email.indexOf('.') > atIndex && email.indexOf(' ') < 0;
   }
 
 }

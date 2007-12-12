@@ -16,9 +16,6 @@
 
 package com.google.zxing.client.result;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-
 /**
  * @author srowen@google.com (Sean Owen)
  */
@@ -37,30 +34,42 @@ public abstract class ParsedReaderResult {
   public abstract String getDisplayResult();
 
   public static ParsedReaderResult parseReaderResult(String rawText) {
-    for (ParsedReaderResultType type : ParsedReaderResultType.values()) {
-      Class<? extends ParsedReaderResult> resultClass = type.getResultClass();
-      try {
-        Constructor<? extends ParsedReaderResult> constructor =
-            resultClass.getConstructor(String.class);
-        return constructor.newInstance(rawText);
-      } catch (InvocationTargetException ite) {
-        Throwable cause = ite.getCause();
-        if (cause instanceof IllegalArgumentException) {
-          continue;
-        }
-        throw new RuntimeException(cause);
-      } catch (NoSuchMethodException nsme) {
-        throw new RuntimeException(nsme);
-      } catch (IllegalAccessException iae) {
-        throw new RuntimeException(iae);
-      } catch (InstantiationException ie) {
-        throw new RuntimeException(ie);
-      }
+    // This is a bit messy, but given limited options in MIDP / CLDC, this may well be the simplest
+    // way to go about this. For example, we have no reflection available, really.
+    // Order is important here.
+    try {
+      return new BookmarkDoCoMoResult(rawText);
+    } catch (IllegalArgumentException iae) {
+      // continue
     }
-    throw new IllegalStateException("TextResult should always work");
+    try {
+      return new AddressBookDoCoMoResult(rawText);
+    } catch (IllegalArgumentException iae) {
+      // continue
+    }
+    try {
+      return new EmailDoCoMoResult(rawText);
+    } catch (IllegalArgumentException iae) {
+      // continue
+    }
+    try {
+      return new EmailAddressResult(rawText);
+    } catch (IllegalArgumentException iae) {
+      // continue
+    }
+    try {
+      return new URIParsedResult(rawText);
+    } catch (IllegalArgumentException iae) {
+      // continue
+    }
+    try {
+      return new UPCParsedResult(rawText);
+    } catch (IllegalArgumentException iae) {
+      // continue
+    }
+    return new TextParsedResult(rawText);
   }
 
-  @Override
   public String toString() {
     return getDisplayResult();
   }

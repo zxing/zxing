@@ -16,8 +16,7 @@
 
 package com.google.zxing.client.result;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Vector;
 
 /**
  * See
@@ -36,7 +35,7 @@ abstract class AbstractDoCoMoResult extends ParsedReaderResult {
   // to run in a J2ME enviroment, where this unavailable.
 
   static String[] matchPrefixedField(String prefix, String rawText) {
-    List<String> matches = null;
+    Vector matches = null;
     int i = 0;
     int max = rawText.length();
     while (i < max) {
@@ -59,9 +58,9 @@ abstract class AbstractDoCoMoResult extends ParsedReaderResult {
         } else {
           // found a match
           if (matches == null) {
-            matches = new ArrayList<String>(3); // lazy init
+            matches = new Vector(3); // lazy init
           }
-          matches.add(unescape(rawText.substring(start, i)));
+          matches.addElement(unescape(rawText.substring(start, i)));
           i++;
           done = true;
         }
@@ -70,7 +69,12 @@ abstract class AbstractDoCoMoResult extends ParsedReaderResult {
     if (matches == null) {
       return null;
     }
-    return matches.toArray(new String[matches.size()]);
+    int size = matches.size();
+    String[] result = new String[size];
+    for (int j = 0; j < size; j++) {
+      result[j] = (String) matches.elementAt(j);
+    }
+    return result;
   }
 
   static String matchSinglePrefixedField(String prefix, String rawText) {
@@ -91,7 +95,7 @@ abstract class AbstractDoCoMoResult extends ParsedReaderResult {
       int backslash = escaped.indexOf((int) '\\');
       if (backslash >= 0) {
         int max = escaped.length();
-        StringBuilder unescaped = new StringBuilder(max - 1);
+        StringBuffer unescaped = new StringBuffer(max - 1);
         unescaped.append(escaped.toCharArray(), 0, backslash);
         boolean nextIsEscaped = false;
         for (int i = backslash; i < max; i++) {
@@ -109,7 +113,7 @@ abstract class AbstractDoCoMoResult extends ParsedReaderResult {
     return escaped;
   }
 
-  static void maybeAppend(String value, StringBuilder result) {
+  static void maybeAppend(String value, StringBuffer result) {
     if (value != null) {
       result.append('\n');
       result.append(value);

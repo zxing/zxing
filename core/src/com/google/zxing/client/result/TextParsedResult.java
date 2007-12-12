@@ -32,7 +32,6 @@ public final class TextParsedResult extends ParsedReaderResult {
     return text;
   }
 
-  @Override
   public String getDisplayResult() {
     return text;
   }

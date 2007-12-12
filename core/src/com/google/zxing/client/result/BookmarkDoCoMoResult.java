@@ -16,16 +16,13 @@
 
 package com.google.zxing.client.result;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-
 /**
  * @author srowen@google.com (Sean Owen)
  */
 public final class BookmarkDoCoMoResult extends AbstractDoCoMoResult {
 
   private final String title;
-  private final URI uri;
+  private final String uri;
 
   public BookmarkDoCoMoResult(String rawText) {
     super(ParsedReaderResultType.BOOKMARK);
@@ -34,25 +31,23 @@ public final class BookmarkDoCoMoResult extends AbstractDoCoMoResult {
     }
     title = matchSinglePrefixedField("TITLE:", rawText);
     String uriString = matchRequiredPrefixedField("URL:", rawText)[0];
-    try {
-      this.uri = new URI(uriString);
-    } catch (URISyntaxException urise) {
-      throw new IllegalArgumentException(urise.toString());
+    if (!URIParsedResult.isBasicallyValidURI(uriString)) {
+      throw new IllegalArgumentException("Invalid URI: " + uriString);
     }
+    uri = uriString;
   }
 
   public String getTitle() {
     return title;
   }
 
-  public URI getURI() {
+  public String getURI() {
     return uri;
   }
 
-  @Override
   public String getDisplayResult() {
     if (title == null) {
-      return uri.toString();
+      return uri;
     } else {
       return title + '\n' + uri;
     }
