@@ -16,6 +16,12 @@
 
 package com.google.zxing.client.j2me;
 
+import com.google.zxing.client.result.BookmarkDoCoMoResult;
+import com.google.zxing.client.result.EmailDoCoMoResult;
+import com.google.zxing.client.result.ParsedReaderResult;
+import com.google.zxing.client.result.ParsedReaderResultType;
+import com.google.zxing.client.result.URIParsedResult;
+
 import javax.microedition.io.ConnectionNotFoundException;
 import javax.microedition.lcdui.Alert;
 import javax.microedition.lcdui.AlertType;
@@ -144,52 +150,18 @@ public final class ZXingMIDlet extends MIDlet {
     display.setCurrent(alert, canvas);
   }
 
-  /// TODO this whole bit needs to be merged with the code in core-ext -- this is messy and duplicative
-
   void handleDecodedText(String text) {
-    // This is a crude imitation of the code found in module core-ext, which handles the contents
-    // in a more sophisticated way. It can't be accessed from JavaME just yet because it relies
-    // on URL parsing routines in java.net. This should be somehow worked around: TODO
-    // For now, detect URLs in a simple way, and treat everything else as text
-    if (text.startsWith("http://") || text.startsWith("https://")) {
-      showOpenURL(text);
-    } else if (text.startsWith("HTTP://") || text.startsWith("HTTPS://")) {
-      showOpenURL(decapitalizeProtocol(text));
-    } else if (text.startsWith("URL:")) {
-      showOpenURL(decapitalizeProtocol(text.substring(4)));
-    } else if (text.startsWith("MEBKM:")) {
-      int urlIndex = text.indexOf("URL:", 6);
-      if (urlIndex >= 6) {
-        String url = text.substring( urlIndex + 4);
-        int semicolon = url.indexOf((int) ';');
-        if (semicolon >= 0) {
-          url = url.substring(0, semicolon);
-        }
-        showOpenURL(decapitalizeProtocol(url));
-      } else {
-        showAlert("Barcode detected", text);
-      }
-    } else if (maybeURLWithoutScheme(text)) {
-      showOpenURL("http://" + text);
+    ParsedReaderResult result = ParsedReaderResult.parseReaderResult(text);
+    ParsedReaderResultType type = result.getType();
+    if (type.equals(ParsedReaderResultType.URI)) {
+      showOpenURL(((URIParsedResult) result).getURI());
+    } else if (type.equals(ParsedReaderResultType.BOOKMARK)) {
+      showOpenURL(((BookmarkDoCoMoResult) result).getURI());
+    } else if (type.equals(ParsedReaderResultType.EMAIL)) {
+      showOpenURL(((EmailDoCoMoResult) result).getMailtoURI());
     } else {
-      showAlert("Barcode detected", text);
+      showAlert("Barcode detected", result.getDisplayResult());
     }
-  }
-
-  private static String decapitalizeProtocol(String url) {
-    int protocolEnd = url.indexOf("://");
-    if (protocolEnd >= 0) {
-      return url.substring(0, protocolEnd).toLowerCase() + url.substring(protocolEnd);
-    } else {
-      return url;
-    }
-  }
-
-  /**
-   * Crudely guesses that a string may represent a URL if it has a '.' and no spaces.
-   */
-  private static boolean maybeURLWithoutScheme(String text) {
-    return text.indexOf((int) '.') >= 0 && text.indexOf((int) ' ') < 0;
   }
 
 }

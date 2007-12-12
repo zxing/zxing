@@ -42,7 +42,6 @@ public final class UPCParsedResult extends ParsedReaderResult {
     return upc;
   }
 
-  @Override
   public String getDisplayResult() {
     return upc;
   }

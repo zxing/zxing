@@ -66,9 +66,8 @@ public final class AddressBookDoCoMoResult extends AbstractDoCoMoResult {
     return address;
   }
 
-  @Override
   public String getDisplayResult() {
-    StringBuilder result = new StringBuilder(name);
+    StringBuffer result = new StringBuffer(name);
     maybeAppend(email, result);
     maybeAppend(address, result);
     for (int i = 0; i < phoneNumbers.length; i++) {
