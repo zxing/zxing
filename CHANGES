@@ -15,3 +15,11 @@
 - Added EAN-13 support
 - Now builds with class file format version 1.2 -- may solve some compatibility issues?
 - Fixed obfuscation step bug causing NoClassDefFoundError
+
+0.1.4 (13 Dec 2007)
+- Added Blackberry client build script -- does not yet work
+- Big change to handling of content of barcodes:
+  - com.google.zxing.client.result moved from core-ext to core
+  - Rewritten for J2ME
+  - core-ext removed
+  - J2ME client now uses this code for better parsing/handling of results
