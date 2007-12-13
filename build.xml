@@ -25,11 +25,6 @@
     <ant dir="javame" target="build"/>
     <ant dir="javase" target="build"/>
   </target>
-	
-	<target name="buildwithoutj2me">
-	  <ant dir="core" target="build"/>
-	  <ant dir="javase" target="build"/>
-	</target>
 
   <target name="clean">
     <ant dir="core" target="clean"/>
@@ -37,7 +32,11 @@
     <ant dir="javase" target="clean"/>
   </target>
 
-  <target name="release" depends="build,clean">
+  <target name="test">
+    <ant dir="core" target="test"/>
+  </target>
+
+  <target name="release" depends="build,clean,javadoc">
     <zip file="ZXing-${version}.zip" level="9">
       <zipfileset dir="." prefix="zxing-${version}">
         <include name="COPYING"/>
@@ -48,6 +47,8 @@
         <include name="core/**"/>
         <include name="javame/**"/>
         <include name="javase/**"/>
+        <!-- Only include the build script for now -->
+        <include name="rim/build.xml"/>
         <include name="docs/**"/>
         <exclude name="*.iml"/>
       </zipfileset>
@@ -56,7 +57,7 @@
 
   <target name="javadoc">
     <mkdir dir="docs/javadoc"/>
-    <javadoc destdir="docs/javadoc" footer="&lt;script src=&quot;http://www.google-analytics.com/urchin.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;&lt;script type=&quot;text/javascript&quot;&gt;_uacct = &quot;UA-788492-4&quot;; urchinTracker();&lt;/script&gt;">
+    <javadoc destdir="docs/javadoc" footer="&lt;script src=&quot;http://www.google-analytics.com/urchin.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;&lt;script type=&quot;text/javascript&quot;&gt;_uacct = &quot;UA-788492-5&quot;; urchinTracker();&lt;/script&gt;">
       <sourcepath>
         <pathelement location="core/src"/>
         <pathelement location="javame/src"/>
