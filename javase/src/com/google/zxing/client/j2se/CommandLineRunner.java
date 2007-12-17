@@ -62,7 +62,8 @@ public final class CommandLineRunner {
       return false;
     }
     try {
-      String result = new MultiFormatReader().decode(new BufferedImageMonochromeBitmapSource(image)).getText();
+      BufferedImageMonochromeBitmapSource source = new BufferedImageMonochromeBitmapSource(image);
+      String result = new MultiFormatReader().decode(source).getText();
       System.out.println(uri.toString() + ": " + result);
       return true;
     } catch (ReaderException e) {
