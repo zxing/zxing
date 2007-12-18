@@ -28,7 +28,7 @@ import javax.microedition.lcdui.Image;
  * 
  * @author Sean Owen (srowen@google.com), Daniel Switkin (dswitkin@google.com)
  */
-final class LCDUIImageMonochromeBitmapSource implements MonochromeBitmapSource {
+public final class LCDUIImageMonochromeBitmapSource implements MonochromeBitmapSource {
 
   private final int[] rgbPixels;
   private final int width;
@@ -41,7 +41,7 @@ final class LCDUIImageMonochromeBitmapSource implements MonochromeBitmapSource {
   private static final int LUMINANCE_SHIFT = 8 - LUMINANCE_BITS;
   private static final int LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
 
-  LCDUIImageMonochromeBitmapSource(final Image image) {
+  public LCDUIImageMonochromeBitmapSource(Image image) {
     width = image.getWidth();
     height = image.getHeight();
     rgbPixels = new int[width * height];
