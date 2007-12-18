@@ -26,8 +26,6 @@ import java.util.Hashtable;
  * an image, and then decode what it finds. This implementation supports all
  * barcode formats that this library supports.</p>
  *
- * <p>For now, only delegates to {@link QRCodeReader}.</p>
- *
  * @author srowen@google.com (Sean Owen), dswitkin@google.com (Daniel Switkin)
  */
 public final class MultiFormatReader implements Reader {
@@ -39,25 +37,29 @@ public final class MultiFormatReader implements Reader {
   public Result decode(MonochromeBitmapSource image, Hashtable hints)
       throws ReaderException {
     Hashtable possibleFormats = hints == null ? null : (Hashtable) hints.get(DecodeHintType.POSSIBLE_FORMATS);
-    boolean tryUPC = false;
-    boolean tryQR = false;
-    
+
+    boolean tryUPC;
+    boolean tryQR;
     if (possibleFormats == null) {
       tryUPC = true;
       tryQR = true;
-    } else if (possibleFormats.contains(BarcodeFormat.UPC)) {
-      tryUPC = true;
-    } else if (possibleFormats.contains(BarcodeFormat.QR_CODE)) {
-      tryQR = true;
     } else {
+      tryUPC = possibleFormats.contains(BarcodeFormat.UPC);
+      tryQR = possibleFormats.contains(BarcodeFormat.QR_CODE);
+    }
+    if (!(tryUPC || tryQR)) {
       throw new ReaderException("POSSIBLE_FORMATS specifies no supported types");
     }
-    
+
+    // Save the last exception as what we'll report if nothing decodes
+    ReaderException savedRE = null;
+
     // UPC is much faster to decode, so try it first.
     if (tryUPC) {
       try {
         return new UPCReader().decode(image, hints);
-      } catch (ReaderException e) {
+      } catch (ReaderException re) {
+        savedRE = re;
       }
     }
     
@@ -65,11 +67,12 @@ public final class MultiFormatReader implements Reader {
     if (tryQR) {
       try {
         return new QRCodeReader().decode(image, hints);
-      } catch (ReaderException e) {
+      } catch (ReaderException re) {
+        savedRE = re;
       }
     }
     
-    throw new ReaderException("Could not locate and decode a barcode in the image");
+    throw savedRE;
   }
 
 }
