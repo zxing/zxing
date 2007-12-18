@@ -99,7 +99,7 @@ final class AlignmentPatternFinder {
       // Burn off leading white pixels before anything else; if we start in the middle of
       // a white run, it doesn't make sense to count its length, since we don't know if the
       // white run continued to the left of the start point
-      while (!luminanceRow.get(j - startX) && j < maxJ) {
+      while (j < maxJ && !luminanceRow.get(j - startX)) {
         j++;
       }
       while (j < maxJ) {
