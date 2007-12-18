@@ -172,8 +172,23 @@ public final class Detector {
    * of another point (another finder pattern center), and in the opposite direction too.</p>
    */
   private float sizeOfBlackWhiteBlackRunBothWays(int fromX, int fromY, int toX, int toY) {
+
     float result = sizeOfBlackWhiteBlackRun(fromX, fromY, toX, toY);
-    result += sizeOfBlackWhiteBlackRun(fromX, fromY, fromX - (toX - fromX), fromY - (toY - fromY));
+
+    // Now count other way -- don't run off image though of course
+    int otherToX = fromX - (toX - fromX);
+    if (otherToX < 0) {
+      otherToX = 0;
+    } else if (otherToX >= image.getWidth()) {
+      otherToX = image.getWidth();
+    }
+    int otherToY = fromY - (toY - fromY);
+    if (otherToY < 0) {
+      otherToY = 0;
+    } else if (otherToY >= image.getHeight()) {
+      otherToY = image.getHeight();
+    }
+    result += sizeOfBlackWhiteBlackRun(fromX, fromY, otherToX, otherToY);
     return result - 1.0f; // -1 because we counted the middle pixel twice
   }
 
@@ -229,8 +244,9 @@ public final class Detector {
         error -= dx;
       }
     }
-    // Hmm, couldn't find all of what we wanted -- don't know
-    return Float.NaN;
+    int diffX = toX - fromX;
+    int diffY = toY - fromY;
+    return (float) Math.sqrt((double) (diffX * diffX + diffY * diffY));
   }
 
   /**
