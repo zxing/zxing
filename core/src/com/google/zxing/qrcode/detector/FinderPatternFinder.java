@@ -226,7 +226,7 @@ final class FinderPatternFinder {
       stateCount[0]++;
       i--;
     }
-    if (i < 0 || stateCount[0] > maxCount) {
+    if (stateCount[0] > maxCount) {
       return Float.NaN;
     }
 
@@ -287,7 +287,7 @@ final class FinderPatternFinder {
       stateCount[0]++;
       j--;
     }
-    if (j < 0 || stateCount[0] > maxCount) {
+    if (stateCount[0] > maxCount) {
       return Float.NaN;
     }
 
