@@ -107,20 +107,36 @@ public abstract class GridSampler {
    * This method actually only checks the endpoints since the points are assumed to lie
    * on a line.</p>
    *
+   * <p>This method will actually "nudge" the endpoints back onto the image if they are found to be barely
+   * (less than 1 pixel) off the image. This accounts for imperfect detection of finder patterns in an image
+   * where the QR Code runs all the way to the image border.</p>
+   *
    * @param image image into which the points should map
    * @param points actual points in x1,y1,...,xn,yn form
    * @throws ReaderException if an endpoint is lies outside the image boundaries
    */
   protected static void checkEndpoint(MonochromeBitmapSource image, float[] points) throws ReaderException {
-    int x = (int) points[0];
-    int y = (int) points[1];
-    if (x < 0 || x >= image.getWidth() || y < 0 || y >= image.getHeight()) {
+    int width = image.getWidth();
+    int height = image.getHeight();
+    checkOneEndpoint(points, (int) points[0], (int) points[1], width, height);
+    checkOneEndpoint(points, (int) points[points.length - 2], (int) points[points.length - 1], width, height);
+  }
+
+  private static void checkOneEndpoint(float[] points, int x, int y, int width, int height) throws ReaderException {
+    if (x < -1 || x > width || y < -1 || y > height) {
       throw new ReaderException("Transformed point out of bounds at " + x + ',' + y);
     }
-    x = (int) points[points.length - 2];
-    y = (int) points[points.length - 1];
-    if (x < 0 || x >= image.getWidth() || y < 0 || y >= image.getHeight()) {
-      throw new ReaderException("Transformed point out of bounds at " + x + ',' + y);
+    if (x == -1) {
+      points[0] = 0.0f;
+    }
+    if (y == -1) {
+      points[1] = 0.0f;
+    }
+    if (x == width) {
+      points[0] = width - 1;
+    }
+    if (y == height) {
+      points[1] = height - 1;
     }
   }
 
