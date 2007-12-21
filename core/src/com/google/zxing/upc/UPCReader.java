@@ -31,8 +31,6 @@ import java.util.Hashtable;
  */
 public final class UPCReader implements Reader {
 
-  private static final ResultPoint[] NO_POINTS = new ResultPoint[0];
-
   /**
    * Locates and decodes a UPC barcode in an image.
    *
@@ -50,7 +48,7 @@ public final class UPCReader implements Reader {
     if (result == null || result.length() == 0) {
       throw new ReaderException("No UPC barcode found");
     }
-    return new Result(result, NO_POINTS);
+    return new Result(result, decoder.getPoints());
   }
 
 }

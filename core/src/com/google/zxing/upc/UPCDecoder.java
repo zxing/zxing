@@ -18,6 +18,7 @@ package com.google.zxing.upc;
 
 import com.google.zxing.BlackPointEstimationMethod;
 import com.google.zxing.MonochromeBitmapSource;
+import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitArray;
 
 /**
@@ -108,16 +109,19 @@ final class UPCDecoder {
   }
 
   private static final int TOLERANCE = 5;
+  private static final UPCPoint[] NO_POINTS = new UPCPoint[0];
 
   private MonochromeBitmapSource bitmap;
   private int width;
   private int height;
   private StringBuffer result;
+  private UPCPoint[] points;
 
   UPCDecoder(MonochromeBitmapSource bitmap) {
 	  this.bitmap = bitmap;
     width = bitmap.getWidth();
     height = bitmap.getHeight();
+    points = NO_POINTS;
   }
 
   /**
@@ -126,7 +130,7 @@ final class UPCDecoder {
    * left to right, and if that fails, we reverse the row in place and try again to see if the
    * bar code was upside down.
    */
-  String decode() {
+  public String decode() {
     BitArray rowData = new BitArray(width);
     String longestResult = "";
     int found = -1;
@@ -135,7 +139,7 @@ final class UPCDecoder {
       bitmap.estimateBlackPoint(BlackPointEstimationMethod.ROW_SAMPLING, row);
       bitmap.getBlackRow(row, rowData, 0, width);
 
-      if (decodeRow(rowData)) {
+      if (decodeRow(row, rowData)) {
         found = x;
         break;
       }
@@ -145,7 +149,7 @@ final class UPCDecoder {
       }
       
       rowData.reverse();
-      if (decodeRow(rowData)) {
+      if (decodeRow(row, rowData)) {
         found = x;
         break;
       }
@@ -162,13 +166,17 @@ final class UPCDecoder {
     }
   }
   
+  public ResultPoint[] getPoints() {
+    return points;
+  }
+  
   /**
    * UPC-A bar codes are made up of a left marker, six digits, a middle marker, six more digits,
    * and an end marker, reading from left to right. For more information, see:
    * <a href="http://en.wikipedia.org/wiki/Universal_Product_Code">
    * http://en.wikipedia.org/wiki/Universal_Product_Code</a>
    */
-  private boolean decodeRow(BitArray rowData) {
+  private boolean decodeRow(int row, BitArray rowData) {
     // TODO: Add support for UPC-E Zero Compressed bar codes.
     // FIXME: Don't trust the first result from findPattern() for the start sequence - resume from
     // that spot and try to start again if finding digits fails.
@@ -177,6 +185,7 @@ final class UPCDecoder {
     if (rowOffset < 0) {
       return false;
     }
+    int startOffset = rowOffset;
     //Log("Start pattern ends at column " + rowOffset);
 
     rowOffset = decodeOneSide(rowData, rowOffset, true);
@@ -196,7 +205,14 @@ final class UPCDecoder {
     if (rowOffset < 0) {
       return false;
     }
-    return verifyResult();
+    
+    boolean result = verifyResult();
+    if (result) {
+      points = new UPCPoint[2];
+      points[0] = new UPCPoint(startOffset, row);
+      points[1] = new UPCPoint(rowOffset, row);
+    }
+    return result;
   }
 
 
