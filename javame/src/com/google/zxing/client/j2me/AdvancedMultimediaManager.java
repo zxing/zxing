@@ -36,7 +36,7 @@ import javax.microedition.media.MediaException;
 final class AdvancedMultimediaManager {
 
   private static final int NO_ZOOM = 100;
-  private static final int MAX_ZOOM = 250;
+  private static final int MAX_ZOOM = 200;
 
   private AdvancedMultimediaManager() {
     // do nothing
