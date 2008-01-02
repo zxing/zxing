@@ -114,7 +114,7 @@ final class DecodedBitStreamParser {
     try {
       result.append(new String(buffer, "Shift_JIS"));
     } catch (UnsupportedEncodingException uee) {
-      throw new ReaderException("Can't decode SHIFT_JIS string: " + uee);
+      throw new ReaderException("SHIFT_JIS encoding is not supported on this device");
     }
   }
 
