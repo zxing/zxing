@@ -72,4 +72,16 @@ public final class CommandLineRunner {
     }
   }
 
+  /*
+  public BufferedImage toBufferedImage() {
+    BufferedImage image = new BufferedImage(dimension, dimension, BufferedImage.TYPE_BYTE_BINARY);
+    for (int j = 0; j < dimension; j++) {
+      for (int i = 0; i < dimension; i++) {
+        image.setRGB(j, i, get(i, j) ? 0x00000000 : 0x00FFFFFF);
+      }
+    }
+    return image;
+  }
+   */
+
 }
