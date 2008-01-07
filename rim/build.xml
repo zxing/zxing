@@ -33,8 +33,8 @@
 
   <target name="build" depends="init,clean">
     <copy file="../javame/ZXingReaderBasic.jad" todir="."/>
-    <java jar="${BB-JDK-home}/rapc.jar" fork="true">
-      <arg value="import=${BB-JDK-home}/net_rim_api.jar"/>
+    <java jar="${BB-JDK-home}/bin/rapc.jar" fork="true">
+      <arg value="import=${BB-JDK-home}/lib/net_rim_api.jar"/>
       <arg value="codename=ZXingReaderBasic"/>
       <arg value="-midlet"/>
       <arg value="jad=ZXingReaderBasic.jad"/>
