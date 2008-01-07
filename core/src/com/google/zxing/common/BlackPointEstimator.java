@@ -77,11 +77,13 @@ public final class BlackPointEstimator {
 
     // Find a valley between them that is low and closer to the white peak
     int bestValley = secondPeak - 1;
-    int bestValleyScore = Integer.MAX_VALUE;
+    int bestValleyScore = -1;
     for (int i = secondPeak - 1; i > firstPeak; i--) {
-      int distance = secondPeak - i + 3;
-      int score = distance * histogram[i];
-      if (score < bestValleyScore) {
+      int fromFirst = i - firstPeak;
+      // Favor a "valley" that is not too close to either peak -- especially not the black peak --
+      // and that has a low value of course
+      int score = fromFirst * fromFirst * (secondPeak - i) * (256 - histogram[i]);
+      if (score > bestValleyScore) {
         bestValley = i;
         bestValleyScore = score;
       }

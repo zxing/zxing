@@ -73,6 +73,8 @@ public final class QRCodeReaderTestCase extends TestCase {
               "http://staticrooster.com");
     doTestURI("http://www.ihaveanidea.org/blogs/uploads/i/interactive/270.png",
               "Morden");
+    doTestURI("http://www.google.co.jp/mobile/images/qrcode_mobile.gif",
+              "Google \u30e2\u30d0\u30a4\u30eb\r\nhttp://google.jp");
   }
 
   private static void doTestURI(final String uriString, final String expected)
