@@ -23,3 +23,10 @@
   - Rewritten for J2ME
   - core-ext removed
   - J2ME client now uses this code for better parsing/handling of results
+
+0.2 (07 Jan 2008)
+  - Few small bug fixes in AlignmentPatternFinder, MultiFormatReader
+    (thank K. Kakima, Andreas)
+  - LCDUIImageMonochromeBitmapSource now public
+  - Notably improved decoding for Basic version -- Regular version still
+    your best bet if you can run it though
