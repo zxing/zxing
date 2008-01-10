@@ -30,7 +30,6 @@ import com.google.zxing.common.BitArray;
  */
 final class UPCDecoder {
 
-  private static final byte[] BITMAP_SEARCH_PATTERN = { 50, 49, 51, 48, 52, 46, 54, 43, 57, 40, 60 };
   private static final byte[] START_END_PATTERN = { 1, 1, 1 };
   private static final byte[] MIDDLE_PATTERN = { 1, 1, 1, 1, 1 };
   private static final byte[][] DIGIT_PATTERNS = {
@@ -125,41 +124,53 @@ final class UPCDecoder {
   }
 
   /**
-   * To decode the image, we follow a search pattern defined in kBitmapSearchPattern. It is a
-   * list of percentages which translate to row numbers to scan across. For each row, we scan
+   * To decode the image, we attempt to decode rows across from the middle outwards.For each row, we scan
    * left to right, and if that fails, we reverse the row in place and try again to see if the
    * bar code was upside down.
    */
   public String decode() {
     BitArray rowData = new BitArray(width);
-    String longestResult = "";
-    int found = -1;
-    for (int x = 0; x < BITMAP_SEARCH_PATTERN.length; x++) {
-      int row = height * BITMAP_SEARCH_PATTERN[x] / 100;
+    //String longestResult = "";
+    boolean found = false;
+
+    // We're going to examine rows from the middle outward, searching alternately above and below the middle,
+    // and farther out each time. rowStep is the number of rows between each successive attempt above and below
+    // the middle. So we'd scan row middle, then middle - rowStep, then middle + rowStep,
+    // then middle - 2*rowStep, etc.
+    // rowStep is bigger as the image is taller, but is always at least 1. We've somewhat arbitrarily decided
+    // that moving up and down by about 1/32 of the image is pretty good.
+    int middle = height >> 1;
+    int rowStep = Math.max(1, height >> 5);
+    for (int x = 0; x < 11; x++) {
+
+      int rowStepsAboveOrBelow = (x + 1) >> 1;
+      boolean isAbove = (x & 0x01) == 0; // i.e. is x even?
+      int row = middle + rowStep * (isAbove ? rowStepsAboveOrBelow : -rowStepsAboveOrBelow);
+
       bitmap.estimateBlackPoint(BlackPointEstimationMethod.ROW_SAMPLING, row);
       bitmap.getBlackRow(row, rowData, 0, width);
 
       if (decodeRow(row, rowData)) {
-        found = x;
+        found = true;
         break;
       }
       //Log("decode: row " + row + " normal result: " + result);
-      if (result.length() > longestResult.length()) {
-        longestResult = result.toString();
-      }
+      //if (result.length() > longestResult.length()) {
+      //  longestResult = result.toString();
+      //}
       
       rowData.reverse();
       if (decodeRow(row, rowData)) {
-        found = x;
+        found = true;
         break;
       }
       //Log("decode: row " + row + " inverted result: " + result);
-      if (result.length() > longestResult.length()) {
-        longestResult = result.toString();
-      }
+      //if (result.length() > longestResult.length()) {
+      //  longestResult = result.toString();
+      //}
     }
     
-    if (found >= 0) {
+    if (found) {
       return result.toString();
     } else {
       return "";
@@ -206,13 +217,11 @@ final class UPCDecoder {
       return false;
     }
     
-    boolean result = verifyResult();
-    if (result) {
-      points = new UPCPoint[2];
-      points[0] = new UPCPoint(startOffset, row);
-      points[1] = new UPCPoint(rowOffset, row);
+    boolean verified = verifyResult();
+    if (verified) {
+      points = new UPCPoint[] { new UPCPoint(startOffset, row), new UPCPoint(rowOffset, row) };
     }
-    return result;
+    return verified;
   }
 
 
@@ -295,7 +304,8 @@ final class UPCDecoder {
    * begin on white or black based on the flag.
    */
   private int findPattern(BitArray rowData, int rowOffset, byte[] pattern, boolean whiteFirst) {
-    int[] counters = new int[pattern.length];
+    int patternLength = pattern.length;
+    int[] counters = new int[patternLength];
     int width = this.width;
     boolean isWhite = false;
     while (rowOffset < width) {
@@ -312,11 +322,11 @@ final class UPCDecoder {
       if ((!pixel && isWhite) || (pixel && !isWhite)) {
         counters[counterPosition]++;
       } else {
-        if (counterPosition == pattern.length - 1) {
+        if (counterPosition == patternLength - 1) {
           if (doesPatternMatch(counters, pattern)) {
             return x;
           }
-          for (int y = 2; y < pattern.length; y++) {
+          for (int y = 2; y < patternLength; y++) {
             counters[y - 2] = counters[y];
           }
           counterPosition--;
@@ -376,8 +386,9 @@ final class UPCDecoder {
 
     for (int x = 0; x < 10; x++) {
       boolean match = true;
+      byte[] pattern = DIGIT_PATTERNS[x];
       for (int y = 0; y < 4; y++) {
-        int diff = counters[y] - DIGIT_PATTERNS[x][y];
+        int diff = counters[y] - pattern[y];
         if (diff > TOLERANCE || diff < -TOLERANCE) {
           match = false;
           break;
@@ -394,8 +405,9 @@ final class UPCDecoder {
     if (checkBothParities) {
       for (int x = 0; x < 10; x++) {
         boolean match = true;
+        byte[] pattern = EVEN_PARITY_PATTERNS[x];
         for (int y = 0; y < 4; y++) {
-          int diff = counters[y] - EVEN_PARITY_PATTERNS[x][y];
+          int diff = counters[y] - pattern[y];
           if (diff > TOLERANCE || diff < -TOLERANCE) {
             match = false;
             break;
