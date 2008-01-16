@@ -55,6 +55,7 @@
       <classpath>
         <pathelement location="build"/>
         <pathelement location="../javase/javase.jar"/>
+        <pathelement location="lib/junit.jar"/>
       </classpath>
     </javac>
     <junit printsummary="on" haltonfailure="on" haltonerror="on">
@@ -62,7 +63,8 @@
       <classpath>
         <pathelement location="build"/>
         <pathelement location="build-test"/>
-        <pathelement location="../javase/javase.jar"/>        
+        <pathelement location="../javase/javase.jar"/>
+        <pathelement location="lib/junit.jar"/>
       </classpath>
       <assertions>
         <enable/>
