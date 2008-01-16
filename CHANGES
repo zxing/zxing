@@ -30,3 +30,8 @@
   - LCDUIImageMonochromeBitmapSource now public
   - Notably improved decoding for Basic version -- Regular version still
     your best bet if you can run it though
+
+0.2.1 (16 Jan 2008)
+  - Slight tweaks and enhancements to decode and runtime performance of UPCDecoder
+  - Added black-box test suites against a known set of images
+    (Thanks to Enrique G. S. for additional images)
