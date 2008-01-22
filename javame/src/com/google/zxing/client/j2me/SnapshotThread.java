@@ -19,6 +19,7 @@ package com.google.zxing.client.j2me;
 import com.google.zxing.MonochromeBitmapSource;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.Reader;
+import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 
 import javax.microedition.lcdui.Image;
@@ -56,6 +57,9 @@ final class SnapshotThread extends Thread {
       Reader reader = new MultiFormatReader();
       Result result = reader.decode(source);
       zXingMIDlet.handleDecodedText(result.getText());
+    } catch (ReaderException re) {
+	    // Show a friendlier message on a mere failure to read the barcode
+	    zXingMIDlet.showError("No barcode was detected in this image. Try again.");
     } catch (Throwable t) {
       zXingMIDlet.showError(t);
     } finally {
