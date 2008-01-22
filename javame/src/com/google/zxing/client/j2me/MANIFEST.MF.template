@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-MIDlet-1: @APP_NAME@, , com.google.zxing.client.j2me.ZXingMidlet
+MIDlet-1: @APP_NAME@, , com.google.zxing.client.j2me.ZXingMIDlet
 MIDlet-Description: Bar Code Reader
 MIDlet-Icon: /res/zxing-icon.png
 MIDlet-Info-URL: code.google.com/p/zxing
