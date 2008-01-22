@@ -143,8 +143,12 @@ public final class ZXingMIDlet extends MIDlet {
   }
 
   void showError(Throwable t) {
-    showAlert(new Alert("Error", t.getMessage(), null, AlertType.ERROR));
+	  showError(t.getMessage());
   }
+
+	void showError(String message) {
+		showAlert(new Alert("Error", message, null, AlertType.ERROR));
+	}
 
   private void showAlert(Alert alert) {
     Display display = Display.getDisplay(this);
