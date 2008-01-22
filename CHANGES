@@ -35,3 +35,8 @@
   - Slight tweaks and enhancements to decode and runtime performance of UPCDecoder
   - Added black-box test suites against a known set of images
     (Thanks to Enrique G. S. for additional images)
+
+0.2.2 (22 Jan 2008)
+  - Now includes junit locally to build tests
+  - Fixed "MIDlet" name in MANIFEST.MF, which may solve some problems
+  - Friendlier error message when barcode can't be found
