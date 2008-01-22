@@ -31,6 +31,10 @@ public final class BitArray {
     this.bits = makeArray(size);
   }
 
+	public int getSize() {
+		return size;
+	}
+
   /**
    * @param i bit to get
    * @return true iff bit i is set
