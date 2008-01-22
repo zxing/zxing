@@ -114,8 +114,10 @@ public final class ZXingMIDlet extends MIDlet {
   private void showOpenURL(String title, final String display, final String uri) {
     Alert alert = new Alert(title, display, null, AlertType.CONFIRMATION);
     alert.setTimeout(Alert.FOREVER);
-    final Command cancel = new Command("Cancel", Command.CANCEL, 1);
-    alert.addCommand(cancel);
+	  Command yes = new Command("Yes", Command.OK, 1);
+    alert.addCommand(yes);
+    Command no = new Command("No", Command.CANCEL, 1);
+    alert.addCommand(no);
     CommandListener listener = new CommandListener() {
       public void commandAction(Command command, Displayable displayable) {
         if (command.getCommandType() == Command.OK) {
