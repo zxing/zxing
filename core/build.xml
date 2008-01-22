@@ -58,7 +58,7 @@
         <pathelement location="lib/junit.jar"/>
       </classpath>
     </javac>
-    <junit printsummary="on" haltonfailure="on" haltonerror="on">
+    <junit printsummary="on" haltonfailure="on" haltonerror="on" fork="true" dir=".">
       <formatter type="plain" usefile="false"/>
       <classpath>
         <pathelement location="build"/>
@@ -71,7 +71,8 @@
       </assertions>
       <batchtest>
         <fileset dir="test/src">
-          <include name="**/*.java"/>
+          <include name="**/*TestCase.java"/>
+	        <exclude name="com/google/zxing/common/AbstractBlackBoxTestCase.java"/>
         </fileset>
       </batchtest>
     </junit>
