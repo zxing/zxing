@@ -25,6 +25,7 @@ import com.google.zxing.Result;
 import javax.microedition.lcdui.Image;
 import javax.microedition.media.MediaException;
 import javax.microedition.media.Player;
+import javax.microedition.media.control.VideoControl;
 
 /**
  * @author Sean Owen (srowen@google.com)
@@ -50,8 +51,12 @@ final class SnapshotThread extends Thread {
     Player player = zXingMIDlet.getPlayer();
     try {
       AdvancedMultimediaManager.setFocus(player);
-      player.stop();
-      byte[] snapshot = zXingMIDlet.getVideoControl().getSnapshot(null);
+	    try {
+	      player.stop();
+	    } catch (MediaException me) {
+		    // continue
+	    }
+	    byte[] snapshot = takeSnapshot();
       Image capturedImage = Image.createImage(snapshot, 0, snapshot.length);
       MonochromeBitmapSource source = new LCDUIImageMonochromeBitmapSource(capturedImage);
       Reader reader = new MultiFormatReader();
@@ -63,15 +68,32 @@ final class SnapshotThread extends Thread {
     } catch (Throwable t) {
       zXingMIDlet.showError(t);
     } finally {
-      try {
-        player.start();
-      } catch (MediaException me) {
-        // continue?
-        zXingMIDlet.showError(me);
-      }
+	    try {
+	      player.start();
+	    } catch (MediaException me) {
+		    // continue
+	    }
       currentThread = null;
     }
 
   }
+
+	private byte[] takeSnapshot() throws MediaException {
+		VideoControl videoControl = zXingMIDlet.getVideoControl();
+		byte[] snapshot = null;
+		try {
+	    snapshot = videoControl.getSnapshot(null);
+		} catch (MediaException me) {
+		}
+		if (snapshot == null) {
+			// Fall back on JPEG; seems that some cameras default to PNG even
+			// when PNG isn't supported!
+			snapshot = videoControl.getSnapshot("encoding=jpeg");
+			if (snapshot == null) {
+				throw new MediaException("Can't obtain a snapshot");
+			}
+		}
+		return snapshot;
+	}
 
 }
