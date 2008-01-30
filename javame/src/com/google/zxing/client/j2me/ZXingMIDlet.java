@@ -21,6 +21,7 @@ import com.google.zxing.client.result.EmailAddressResult;
 import com.google.zxing.client.result.EmailDoCoMoResult;
 import com.google.zxing.client.result.ParsedReaderResult;
 import com.google.zxing.client.result.ParsedReaderResultType;
+import com.google.zxing.client.result.UPCParsedResult;
 import com.google.zxing.client.result.URIParsedResult;
 
 import javax.microedition.io.ConnectionNotFoundException;
@@ -189,6 +190,10 @@ public final class ZXingMIDlet extends MIDlet {
     } else if (type.equals(ParsedReaderResultType.EMAIL_ADDRESS)) {
       String email = ((EmailAddressResult) result).getEmailAddress();
       showOpenURL("Compose e-mail?", email, "mailto:" + email);
+    } else if (type.equals(ParsedReaderResultType.UPC)) {
+	    String upc = ((UPCParsedResult) result).getUPC();
+	    String uri = "http://www.upcdatabase.com/item.asp?upc=" + upc;
+	    showOpenURL("Look up UPC?", upc, uri);
     } else {
       showAlert("Barcode detected", result.getDisplayResult());
     }
