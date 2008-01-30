@@ -42,8 +42,8 @@ final class VideoCanvas extends Canvas implements CommandListener {
   }
 
   protected void keyPressed(int keyCode) {
-    // Use the "FIRE" key as a "take snapshot" key
-    if (FIRE == getGameAction(keyCode)) {
+    // Any valid game key will trigger a capture
+    if (getGameAction(keyCode) != 0) {
       SnapshotThread.startThread(zXingMIDlet);
     }
   }
