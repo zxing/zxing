@@ -56,6 +56,13 @@
         </not>
       </condition>
     </fail>
+	  <fail message="Please build 'core' first">
+      <condition>
+        <not>
+          <available file="../core/core.jar" type="file"/>
+        </not>
+      </condition>
+    </fail>
   </target>
 
   <target name="compile" depends="init">

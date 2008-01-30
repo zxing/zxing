@@ -29,6 +29,13 @@
         </not>
       </condition>
     </fail>
+	  <fail message="Please build target 'build-basic' in 'javame' first">
+      <condition>
+        <not>
+          <available file="../javame/ZXingReaderBasic.jar" type="file"/>
+        </not>
+      </condition>
+    </fail>
   </target>
 
   <target name="build" depends="init,clean">
