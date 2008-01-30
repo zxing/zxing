@@ -60,7 +60,7 @@ public final class ZXingMIDlet extends MIDlet {
 
   protected void startApp() throws MIDletStateChangeException {
     try {
-      player = Manager.createPlayer("capture://video");
+      player = createPlayer();
       player.realize();
       AdvancedMultimediaManager.setZoom(player);
       videoControl = (VideoControl) player.getControl("VideoControl");
@@ -78,6 +78,23 @@ public final class ZXingMIDlet extends MIDlet {
       throw new MIDletStateChangeException(me.toString());
     }
   }
+
+	private static Player createPlayer() throws IOException, MediaException {
+		// Try a workaround for Nokias, which want to use capture://image in some cases
+		Player player = null;
+		String platform = System.getProperty("microedition.platform");
+		if (platform != null && platform.indexOf("Nokia") >= 0) {
+			try {
+				player = Manager.createPlayer("capture://image");
+			} catch (MediaException me) {
+				// if this fails, just continue with capture://video
+			}
+		}
+		if (player == null) {
+			player = Manager.createPlayer("capture://video");
+		}
+		return player;
+	}
 
   protected void pauseApp() {
     if (player != null) {
