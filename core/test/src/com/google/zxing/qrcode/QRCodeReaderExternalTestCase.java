@@ -16,6 +16,7 @@
 
 package com.google.zxing.qrcode;
 
+import com.google.zxing.MultiFormatReader;
 import com.google.zxing.common.AbstractBlackBoxTestCase;
 
 import java.io.File;
@@ -26,7 +27,7 @@ import java.io.File;
 public final class QRCodeReaderExternalTestCase extends AbstractBlackBoxTestCase {
 
   public QRCodeReaderExternalTestCase() {
-    super(new File("test/data/blackbox/qrcode2"), new QRCodeReader(), 1.0);
+    super(new File("test/data/blackbox/qrcode2"), new MultiFormatReader(), 1.0);
   }
 
 }

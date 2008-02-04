@@ -16,8 +16,8 @@
 
 package com.google.zxing;
 
+import com.google.zxing.oned.MultiFormatOneDReader;
 import com.google.zxing.qrcode.QRCodeReader;
-import com.google.zxing.upc.UPCReader;
 
 import java.util.Hashtable;
 
@@ -38,28 +38,24 @@ public final class MultiFormatReader implements Reader {
       throws ReaderException {
     Hashtable possibleFormats = hints == null ? null : (Hashtable) hints.get(DecodeHintType.POSSIBLE_FORMATS);
 
-    boolean tryUPC;
+    boolean tryOneD;
     boolean tryQR;
     if (possibleFormats == null) {
-      tryUPC = true;
+      tryOneD = true;
       tryQR = true;
     } else {
-      tryUPC = possibleFormats.contains(BarcodeFormat.UPC);
+      tryOneD = possibleFormats.contains(BarcodeFormat.ONED);
       tryQR = possibleFormats.contains(BarcodeFormat.QR_CODE);
     }
-    if (!(tryUPC || tryQR)) {
+    if (!(tryOneD || tryQR)) {
       throw new ReaderException("POSSIBLE_FORMATS specifies no supported types");
     }
 
-    // Save the last exception as what we'll report if nothing decodes
-    ReaderException savedRE = null;
-
     // UPC is much faster to decode, so try it first.
-    if (tryUPC) {
+    if (tryOneD) {
       try {
-        return new UPCReader().decode(image, hints);
+        return new MultiFormatOneDReader().decode(image, hints);
       } catch (ReaderException re) {
-        savedRE = re;
       }
     }
     
@@ -68,11 +64,10 @@ public final class MultiFormatReader implements Reader {
       try {
         return new QRCodeReader().decode(image, hints);
       } catch (ReaderException re) {
-        savedRE = re;
       }
     }
     
-    throw savedRE;
+    throw new ReaderException("No barcode was detected in this image.");
   }
 
 }

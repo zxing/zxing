@@ -16,6 +16,7 @@
 
 package com.google.zxing.upc;
 
+import com.google.zxing.MultiFormatReader;
 import com.google.zxing.common.AbstractBlackBoxTestCase;
 
 import java.io.File;
@@ -26,7 +27,7 @@ import java.io.File;
 public final class UPCReaderBlackBoxTestCase extends AbstractBlackBoxTestCase {
 
   public UPCReaderBlackBoxTestCase() {
-    super(new File("test/data/blackbox/upc1"), new UPCReader(), 0.5);
+    super(new File("test/data/blackbox/upc1"), new MultiFormatReader(), 0.5);
   }
 
 }

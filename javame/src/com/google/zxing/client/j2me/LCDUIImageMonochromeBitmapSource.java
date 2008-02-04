@@ -80,6 +80,7 @@ public final class LCDUIImageMonochromeBitmapSource implements MonochromeBitmapS
   public void estimateBlackPoint(BlackPointEstimationMethod method, int argument) {
     if (!method.equals(lastMethod) || argument != lastArgument) {
       int[] histogram = new int[LUMINANCE_BUCKETS];
+	    float biasTowardsWhite = 1.0f;
       if (method.equals(BlackPointEstimationMethod.TWO_D_SAMPLING)) {
         int minDimension = width < height ? width : height;
         for (int n = 0, offset = 0; n < minDimension; n++, offset += width + 1) {
@@ -89,6 +90,7 @@ public final class LCDUIImageMonochromeBitmapSource implements MonochromeBitmapS
         if (argument < 0 || argument >= height) {
           throw new IllegalArgumentException("Row is not within the image: " + argument);
         }
+	      biasTowardsWhite = 2.0f;
         int offset = argument * width;
         for (int x = 0; x < width; x++) {
           histogram[computeRGBLuminance(rgbPixels[offset + x]) >> LUMINANCE_SHIFT]++;
@@ -96,7 +98,7 @@ public final class LCDUIImageMonochromeBitmapSource implements MonochromeBitmapS
       } else {
         throw new IllegalArgumentException("Unknown method: " + method);
       }
-      blackPoint = BlackPointEstimator.estimate(histogram) << LUMINANCE_SHIFT;
+      blackPoint = BlackPointEstimator.estimate(histogram, biasTowardsWhite) << LUMINANCE_SHIFT;
       lastMethod = method;
       lastArgument = argument;
     }
