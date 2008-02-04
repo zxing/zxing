@@ -133,7 +133,7 @@
     <jar jarfile="${jar-name}.jar" basedir="build-j2me" manifest="src/com/google/zxing/client/j2me/MANIFEST.MF" level="9"/>
 
     <move file="${jar-name}.jar" tofile="temp.jar"/>
-    <java jar="${WTK-home}/bin/proguard.jar" fork="true">
+    <java jar="${WTK-home}/bin/proguard.jar" fork="true" failonerror="true">
       <arg value="-injars temp.jar"/>
       <arg value="-outjars ${jar-name}.jar"/>
       <arg value="-libraryjars ${preverify-classpath}"/>
