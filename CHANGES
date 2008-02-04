@@ -40,3 +40,11 @@
   - Now includes junit locally to build tests
   - Fixed "MIDlet" name in MANIFEST.MF, which may solve some problems
   - Friendlier error message when barcode can't be found
+
+0.3 (04 Feb 2008)
+  - Major refactoring of 1D barcode decoding
+  - Added support for UPC-E, EAN-8
+  - Also added Code 39, Code 128 support -- may need refinement
+  - Now any "game" key triggers photo capture
+  - Workaround implemented for Nokias that use "capture://image" in MMAPI
+  - UPC codes now trigger lookup to upcdatabase.com
