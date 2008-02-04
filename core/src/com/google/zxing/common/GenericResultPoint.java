@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 Google Inc.
+ * Copyright 2008 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,22 @@
  * limitations under the License.
  */
 
-package com.google.zxing.upc;
+package com.google.zxing.common;
 
 import com.google.zxing.ResultPoint;
 
 /**
+ * <p>Simple implementation of {@link ResultPoint} for applications that don't need
+ * to use anything more complex.</p>
+ * 
  * @author dswitkin@google.com (Daniel Switkin)
  */
-public final class UPCPoint implements ResultPoint {
+public final class GenericResultPoint implements ResultPoint {
 
   private final float posX;
   private final float posY;
 
-  UPCPoint(float posX, float posY) {
+  public GenericResultPoint(float posX, float posY) {
     this.posX = posX;
     this.posY = posY;
   }

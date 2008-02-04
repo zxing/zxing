@@ -25,6 +25,7 @@ package com.google.zxing.common;
  * </p>
  *
  * @author srowen@google.com (Sean Owen)
+ * @author dswitkin@google.com (Daniel Switkin)
  */
 public final class BlackPointEstimator {
 
@@ -37,10 +38,17 @@ public final class BlackPointEstimator {
    * count of the brightest luminance values that should be considered "black".</p>
    *
    * @param histogram an array of <em>counts</em> of luminance values
+   * @param biasTowardsWhite values higher than 1.0 suggest that a higher black point is desirable (e.g.
+   *  more values are considered black); less than 1.0 suggests that lower is desirable. Must be greater
+   *  than 0.0; 1.0 is a good "default"
    * @return index within argument of bucket corresponding to brightest values which should be
    *  considered "black"
    */
-  public static int estimate(int[] histogram) {
+  public static int estimate(int[] histogram, float biasTowardsWhite) {
+
+	  if (Float.isNaN(biasTowardsWhite) || biasTowardsWhite <= 0.0f) {
+		  throw new IllegalArgumentException("Illegal biasTowardsWhite: " + biasTowardsWhite);
+	  }
 
     int numBuckets = histogram.length;
 
@@ -79,7 +87,7 @@ public final class BlackPointEstimator {
     int bestValley = secondPeak - 1;
     int bestValleyScore = -1;
     for (int i = secondPeak - 1; i > firstPeak; i--) {
-      int fromFirst = i - firstPeak;
+      int fromFirst = (int) (biasTowardsWhite * (i - firstPeak));
       // Favor a "valley" that is not too close to either peak -- especially not the black peak --
       // and that has a low value of course
       int score = fromFirst * fromFirst * (secondPeak - i) * (256 - histogram[i]);
