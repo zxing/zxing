@@ -163,7 +163,12 @@ public final class ZXingMIDlet extends MIDlet {
   }
 
   void showError(Throwable t) {
-	  showError(t.getMessage());
+    String message = t.getMessage();
+    if (message != null && message.length() > 0) {
+      showError(message);
+    } else {
+      showError(t.toString());
+    }
   }
 
 	void showError(String message) {
