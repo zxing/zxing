@@ -55,7 +55,6 @@
         <!-- Only include the build script for now -->
         <include name="rim/build.xml"/>
         <include name="docs/**"/>
-        <exclude name="*.iml"/>
       </zipfileset>
     </zip>
   </target>
@@ -68,6 +67,12 @@
         <pathelement location="javame/src"/>
         <pathelement location="javase/src"/>
       </sourcepath>
+      <classpath>
+        <pathelement location="${WTK-home}/lib/cldcapi11.jar"/>
+        <pathelement location="${WTK-home}/lib/midpapi20.jar"/>
+        <pathelement location="${WTK-home}/lib/mmapi.jar"/>
+        <pathelement location="${WTK-home}/lib/jsr234.jar"/>        
+      </classpath>
     </javadoc>
   </target>
 
