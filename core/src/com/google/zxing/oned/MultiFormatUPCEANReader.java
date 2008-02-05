@@ -38,23 +38,12 @@ public final class MultiFormatUPCEANReader extends AbstractOneDReader {
   };
 
   public Result decodeRow(int rowNumber, BitArray row) throws ReaderException {
+    // Compute this location once and reuse it on multiple implementations
     int[] startGuardPattern = AbstractUPCEANReader.findStartGuardPattern(row);
-    return decodeRow(rowNumber, row, startGuardPattern);
-  }
-
-  /**
-   *
-   * @param rowNumber
-   * @param row
-   * @param startGuardRange
-   * @return
-   * @throws ReaderException
-   */
-  public Result decodeRow(int rowNumber, BitArray row, int[] startGuardRange) throws ReaderException {
     ReaderException saved = null;
     for (int i = 0; i < readers.length; i++) {
       try {
-        return readers[i].decodeRow(rowNumber, row, startGuardRange);
+        return readers[i].decodeRow(rowNumber, row, startGuardPattern);
       } catch (ReaderException re) {
         saved = re;
       }
