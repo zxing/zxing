@@ -128,9 +128,12 @@ public abstract class AbstractUPCEANReader extends AbstractOneDReader implements
   }
 
   /**
-   * Computes the UPC/EAN checksum on a string of digits
-   * @param s
-   * @return
+   * Computes the UPC/EAN checksum on a string of digits, and reports
+   * whether the checksum is correct or not.
+   *
+   * @param s string of digits to check
+   * @return true iff string of digits passes the UPC/EAN checksum algorithm
+   * @throws ReaderException if the string does not contain only digits
    */
   protected boolean checkChecksum(String s) throws ReaderException {
     int sum = 0;
