@@ -37,6 +37,7 @@ final class AdvancedMultimediaManager {
 
   private static final int NO_ZOOM = 100;
   private static final int MAX_ZOOM = 200;
+  private static final long FOCUS_TIME_MS = 1000L;
 
   private AdvancedMultimediaManager() {
     // do nothing
@@ -51,8 +52,12 @@ final class AdvancedMultimediaManager {
       }
       if (focusControl.isAutoFocusSupported()) {
         focusControl.setFocus(FocusControl.AUTO);
-        Thread.sleep(1000L); // let it focus...
-        focusControl.setFocus(FocusControl.AUTO_LOCK);
+        Thread.sleep(FOCUS_TIME_MS); // let it focus...
+        try {
+          focusControl.setFocus(FocusControl.AUTO_LOCK);
+        } catch (MediaException me) {
+          // continue; some phones like the SE K850 don't support this?
+        }
       }
     }
   }
