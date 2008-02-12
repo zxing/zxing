@@ -82,7 +82,7 @@ public abstract class AbstractUPCEANReader extends AbstractOneDReader implements
       nextStart = startRange[1];
       // As a check, we want to see some white in front of this "start pattern",
       // maybe as wide as the start pattern itself?
-      foundStart = isWhiteRange(row, Math.max(0, start - 2 * (startRange[1] - start)), start);
+      foundStart = row.isRange(Math.max(0, start - 2 * (startRange[1] - start)), start, false);
     }
     return startRange;
   }
@@ -101,7 +101,7 @@ public abstract class AbstractUPCEANReader extends AbstractOneDReader implements
 
     // Check for whitespace after the pattern
     int end = endRange[1];
-    if (!isWhiteRange(row, end, Math.min(row.getSize(), end + 2 * (end - endRange[0])))) {
+    if (!row.isRange(end, Math.min(row.getSize(), end + 2 * (end - endRange[0])), false)) {
       throw new ReaderException("Pattern not followed by whitespace");
     }
 
@@ -113,18 +113,6 @@ public abstract class AbstractUPCEANReader extends AbstractOneDReader implements
     return new Result(resultString, new ResultPoint[]{
         new GenericResultPoint((float) (startGuardRange[1] - startGuardRange[0]) / 2.0f, (float) rowNumber),
         new GenericResultPoint((float) (endRange[1] - endRange[0]) / 2.0f, (float) rowNumber)});
-  }
-
-  /**
-   * @return true iff row consists of white values in the range [start,end)
-   */
-  protected static boolean isWhiteRange(BitArray row, int start, int end) {
-    for (int i = start; i < end; i++) {
-      if (row.get(i)) {
-        return false;
-      }
-    }
-    return true;
   }
 
   /**
