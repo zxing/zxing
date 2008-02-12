@@ -51,12 +51,15 @@ public abstract class AbstractOneDReader implements OneDReader {
     // rowStep is bigger as the image is taller, but is always at least 1. We've somewhat arbitrarily decided
     // that moving up and down by about 1/16 of the image is pretty good.
     int middle = height >> 1;
-    int rowStep = Math.max(1, height >> 5);
-    for (int x = 0; x < 11; x++) {
+    int rowStep = Math.max(1, height >> 4);
+    for (int x = 0; x < 7; x++) {
 
       int rowStepsAboveOrBelow = (x + 1) >> 1;
       boolean isAbove = (x & 0x01) == 0; // i.e. is x even?
       int rowNumber = middle + rowStep * (isAbove ? rowStepsAboveOrBelow : -rowStepsAboveOrBelow);
+      if (rowNumber < 0 || rowNumber >= height) {
+        break;
+      }
 
       image.estimateBlackPoint(BlackPointEstimationMethod.ROW_SAMPLING, rowNumber);
       image.getBlackRow(rowNumber, row, 0, width);
