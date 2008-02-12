@@ -47,6 +47,13 @@
   </target>
 
   <target name="test" depends="init,build">
+    <fail message="Please build 'javase' first">
+      <condition>
+        <not>
+          <available file="../javase/javase.jar" type="file"/>
+        </not>
+      </condition>
+    </fail>
     <mkdir dir="build-test"/>
     <javac srcdir="test/src"
            destdir="build-test"
