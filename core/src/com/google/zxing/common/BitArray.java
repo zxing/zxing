@@ -74,6 +74,50 @@ public final class BitArray {
   }
 
   /**
+   * Efficient method to check if a range of bits is set, or not set.
+   *
+   * @param start start of range, inclusive.
+   * @param end end of range, exclusive
+   * @param value if true, checks that bits in range are set, otherwise checks that they are not set
+   * @return true iff all bits are set or not set in range, according to value argument
+   * @throws IllegalArgumentException if end is less than or equal to start
+   */
+  public boolean isRange(int start, int end, boolean value) {
+    if (end < start) {
+      throw new IllegalArgumentException();
+    }
+    if (end == start) {
+      return true; // empty range matches
+    }
+    end--; // will be easier to treat this as the last actually set bit -- inclusive    
+    int firstInt = start >> 5;
+    int lastInt = end >> 5;
+    for (int i = firstInt; i <= lastInt; i++) {
+      int firstBit = i > firstInt ? 0 : start & 0x1F;
+      int lastBit = i < lastInt ? 31 : end & 0x1F;
+      int mask;
+      if (firstBit == 0 && lastBit == 31) {
+        mask = -1;
+      } else {
+        mask = 0;
+        for (int j = firstBit; j <= lastBit; j++) {
+          mask |= 1 << j;
+        }
+      }
+      if (value) {
+        if ((bits[i] & mask) != mask) {
+          return false;
+        }
+      } else {
+        if ((bits[i] & mask) != 0) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  /**
    * @return underlying array of ints. The first element holds the first 32 bits, and the least
    *  significant bit is bit 0.
    */
