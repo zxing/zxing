@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.zxing.upc;
+package com.google.zxing.qrcode;
 
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.common.AbstractBlackBoxTestCase;
@@ -24,10 +24,10 @@ import java.io.File;
 /**
  * @author srowen@google.com (Sean Owen)
  */
-public final class UPCReaderBlackBoxTestCase extends AbstractBlackBoxTestCase {
+public final class QRCodeBlackBox2TestCase extends AbstractBlackBoxTestCase {
 
-  public UPCReaderBlackBoxTestCase() {
-    super(new File("test/data/blackbox/upc1"), new MultiFormatReader(), 0.5);
+  public QRCodeBlackBox2TestCase() {
+    super(new File("test/data/blackbox/qrcode-2"), new MultiFormatReader(), 1.0);
   }
 
 }

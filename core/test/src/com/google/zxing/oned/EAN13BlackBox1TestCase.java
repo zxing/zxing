@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-package com.google.zxing.qrcode;
+package com.google.zxing.oned;
 
-import com.google.zxing.MultiFormatReader;
 import com.google.zxing.common.AbstractBlackBoxTestCase;
+import com.google.zxing.MultiFormatReader;
 
 import java.io.File;
 
 /**
  * @author srowen@google.com (Sean Owen)
  */
-public final class QRCodeReaderBlackBoxTestCase extends AbstractBlackBoxTestCase {
+public final class EAN13BlackBox1TestCase extends AbstractBlackBoxTestCase {
 
-  public QRCodeReaderBlackBoxTestCase() {
-    super(new File("test/data/blackbox/qrcode1"), new MultiFormatReader(), 0.5);
+  public EAN13BlackBox1TestCase() {
+    super(new File("test/data/blackbox/ean13-1"), new MultiFormatReader(), 0.66);
   }
 
 }

@@ -24,10 +24,10 @@ import java.io.File;
 /**
  * @author srowen@google.com (Sean Owen)
  */
-public final class QRCodeReaderExternalTestCase extends AbstractBlackBoxTestCase {
+public final class QRCodeBlackBox1TestCase extends AbstractBlackBoxTestCase {
 
-  public QRCodeReaderExternalTestCase() {
-    super(new File("test/data/blackbox/qrcode2"), new MultiFormatReader(), 1.0);
+  public QRCodeBlackBox1TestCase() {
+    super(new File("test/data/blackbox/qrcode-1"), new MultiFormatReader(), 0.5);
   }
 
 }
