@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package com.google.zxing;
+package com.google.zxing.oned;
 
+import com.google.zxing.MultiFormatReader;
 import com.google.zxing.common.AbstractBlackBoxTestCase;
 
 import java.io.File;
@@ -23,10 +24,10 @@ import java.io.File;
 /**
  * @author srowen@google.com (Sean Owen)
  */
-public final class UPCReaderBlackBox2TestCase extends AbstractBlackBoxTestCase {
+public final class UPCABlackBox1TestCase extends AbstractBlackBoxTestCase {
 
-  public UPCReaderBlackBox2TestCase() {
-    super(new File("test/data/blackbox/upc2"), new MultiFormatReader(), 0.66);
+  public UPCABlackBox1TestCase() {
+    super(new File("test/data/blackbox/upca-1"), new MultiFormatReader(), 0.5);
   }
 
 }
