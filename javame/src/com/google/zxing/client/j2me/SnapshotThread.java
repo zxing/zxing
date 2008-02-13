@@ -64,7 +64,7 @@ final class SnapshotThread extends Thread {
       zXingMIDlet.handleDecodedText(result.getText());
     } catch (ReaderException re) {
 	    // Show a friendlier message on a mere failure to read the barcode
-	    zXingMIDlet.showError("No barcode was detected in this image. Try again.");
+	    zXingMIDlet.showError("Sorry, no barcode was found.");
     } catch (Throwable t) {
       zXingMIDlet.showError(t);
     } finally {
