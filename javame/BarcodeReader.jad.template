@@ -1,5 +1,5 @@
 MIDlet-1: @APP_NAME@, /res/zxing-icon.png, com.google.zxing.client.j2me.ZXingMIDlet
-MIDlet-Description: Bar Code Reader
+MIDlet-Description: ZXing Barcode Reader
 MIDlet-Icon: /res/zxing-icon.png
 MIDlet-Info-URL: code.google.com/p/zxing
 MIDlet-Jar-Size: @JAR_SIZE@

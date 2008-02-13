@@ -153,7 +153,7 @@
     <!-- get .jar size to include it in the .jad file -->
     <length file="${jar-name}.jar" property="jar-size"/>
 
-    <copy file="ZXingReader.jad.template" tofile="${jar-name}.jad" overwrite="true">
+    <copy file="BarcodeReader.jad.template" tofile="${jar-name}.jad" overwrite="true">
       <filterset>
         <filter token="JAR_SIZE" value="${jar-size}"/>
         <filter token="APP_NAME" value="${jar-name}"/>
@@ -165,7 +165,7 @@
 
   <target name="build">
     <description>Builds the main reader .jar file</description>
-    <property name="jar-name" value="ZXingReader"/>
+    <property name="jar-name" value="BarcodeReader"/>
     <antcall target="clean"/>
     <antcall target="compile"/>
     <antcall target="package"/>
@@ -173,7 +173,7 @@
 
   <target name="build-basic">
     <description>Builds the basic reader .jar file</description>
-    <property name="jar-name" value="ZXingReaderBasic"/>
+    <property name="jar-name" value="BarcodeReaderBasic"/>
     <antcall target="clean"/>
     <antcall target="compile-basic"/>
     <antcall target="package"/>

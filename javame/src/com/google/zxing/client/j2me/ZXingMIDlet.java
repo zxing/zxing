@@ -185,22 +185,22 @@ public final class ZXingMIDlet extends MIDlet {
     ParsedReaderResultType type = result.getType();
     if (type.equals(ParsedReaderResultType.URI)) {
       String uri = ((URIParsedResult) result).getURI();
-      showOpenURL("Open web page?", uri, uri);
+      showOpenURL("Open Web Page?", uri, uri);
     } else if (type.equals(ParsedReaderResultType.BOOKMARK)) {
       String uri = ((BookmarkDoCoMoResult) result).getURI();
-      showOpenURL("Open web page?", uri, uri);
+      showOpenURL("Open Web Page?", uri, uri);
     } else if (type.equals(ParsedReaderResultType.EMAIL)) {
       String email = ((EmailDoCoMoResult) result).getTo();
-      showOpenURL("Compose e-mail?", email, "mailto:" + email);
+      showOpenURL("Compose E-mail?", email, "mailto:" + email);
     } else if (type.equals(ParsedReaderResultType.EMAIL_ADDRESS)) {
       String email = ((EmailAddressResult) result).getEmailAddress();
-      showOpenURL("Compose e-mail?", email, "mailto:" + email);
+      showOpenURL("Compose E-mail?", email, "mailto:" + email);
     } else if (type.equals(ParsedReaderResultType.UPC)) {
 	    String upc = ((UPCParsedResult) result).getUPC();
 	    String uri = "http://www.upcdatabase.com/item.asp?upc=" + upc;
-	    showOpenURL("Look up UPC?", upc, uri);
+	    showOpenURL("Look Up Barcode Online?", upc, uri);
     } else {
-      showAlert("Barcode detected", result.getDisplayResult());
+      showAlert("Barcode Detected", result.getDisplayResult());
     }
   }
 
