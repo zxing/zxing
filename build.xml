@@ -24,6 +24,7 @@
     <ant dir="core" target="build"/>
     <ant dir="javame" target="build"/>
     <ant dir="javase" target="build"/>
+    <ant dir="android" target="build"/>
   </target>
 
   <target name="buildwithoutj2me">
@@ -35,6 +36,7 @@
     <ant dir="core" target="clean"/>
     <ant dir="javame" target="clean"/>
     <ant dir="javase" target="clean"/>
+    <ant dir="android" target="clean"/>
   </target>
 
   <target name="test">
@@ -49,6 +51,7 @@
         <include name="CHANGES"/>
         <include name="build.xml"/>
         <include name="build.properties"/>
+        <include name="android/**"/>
         <include name="core/**"/>
         <include name="javame/**"/>
         <include name="javase/**"/>
@@ -64,6 +67,7 @@
     <javadoc destdir="docs/javadoc"
              footer="&lt;script src=&quot;http://www.google-analytics.com/urchin.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;&lt;script type=&quot;text/javascript&quot;&gt;_uacct = &quot;UA-788492-5&quot;; urchinTracker();&lt;/script&gt;">
       <sourcepath>
+        <pathelement location="android/src"/>
         <pathelement location="core/src"/>
         <pathelement location="javame/src"/>
         <pathelement location="javase/src"/>
@@ -73,6 +77,7 @@
         <pathelement location="${WTK-home}/lib/midpapi20.jar"/>
         <pathelement location="${WTK-home}/lib/mmapi.jar"/>
         <pathelement location="${WTK-home}/lib/jsr234.jar"/>
+        <pathelement location="${android-home}/android.jar"/>
       </classpath>
     </javadoc>
   </target>
