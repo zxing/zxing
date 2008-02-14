@@ -48,3 +48,14 @@
   - Now any "game" key triggers photo capture
   - Workaround implemented for Nokias that use "capture://image" in MMAPI
   - UPC codes now trigger lookup to upcdatabase.com
+
+0.4 (15 Feb 2008)
+  - First release of Android client -- only guaranteed to work with "M3"
+    builds so far.
+  - Major reorganization of current test cases and data
+  - Worked around ProGuard issue with paths with spaces on Windows
+  - Phones that don't like FocusControl.AUTO_LOCK won't cause an error now
+  - Fixed ArrayIndexOutOfBoundsException in 1D barcode decoders
+  - Worked around "java.lang.Error 136" from Nokia N70 (?)
+  - Fixed bug in Shift_JIS detection and implemented basic UTF-8 detection
+    for nonstandard QR Codes that don't use ISO-8859-1
