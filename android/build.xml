@@ -1,0 +1,202 @@
+<?xml version="1.0" ?>
+
+<!--
+ Copyright (C) 2008 Google Inc.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+
+<!-- This is a mildly hacked version of the auto-generated project
+     build.xml file. -->
+<project name="BarcodeReader" default="package">
+  <property file="../build.properties"/>
+  <property name="sdk-folder" value="${android-home}"/>
+  <property name="android-tools" value="${sdk-folder}/tools"/>
+
+  <!-- The intermediates directory -->
+  <!-- Eclipse uses "bin" for its own output, so we do the same. -->
+  <property name="outdir" value="bin"/>
+
+  <!-- No user servicable parts below. -->
+
+  <!-- Input directories -->
+  <property name="resource-dir" value="res"/>
+  <property name="asset-dir" value="assets"/>
+  <property name="srcdir" value="src"/>
+
+  <!-- Output directories -->
+  <property name="outdir-classes" value="${outdir}/classes"/>
+
+  <!-- Create R.java in the source directory -->
+  <property name="outdir-r" value="src"/>
+
+  <!-- Intermediate files -->
+  <property name="dex-file" value="classes.dex"/>
+  <property name="intermediate-dex" value="${outdir}/${dex-file}"/>
+
+  <!-- The final package file to generate -->
+  <property name="out-package" value="${outdir}/${ant.project.name}.apk"/>
+
+  <!-- Tools -->
+  <property name="aapt" value="${android-tools}/aapt"/>
+  <property name="aidl" value="${android-tools}/aidl"/>
+  <property name="dx" value="${android-tools}/dx"/>
+  <property name="zip" value="zip"/>
+  <property name="android-jar" value="${sdk-folder}/android.jar"/>
+
+  <!-- Rules -->
+
+  <target name="init">
+    <tstamp/>
+    <fail message="Please set 'android-home' in build.properties">
+      <condition>
+        <not>
+          <available file="${android-home}" type="dir"/>
+        </not>
+      </condition>
+    </fail>
+	  <fail message="Please build 'core' first">
+      <condition>
+        <not>
+          <available file="../core/core.jar" type="file"/>
+        </not>
+      </condition>
+    </fail>
+  </target>
+
+  <!-- Create the output directories if they don't exist yet. -->
+  <target name="dirs">
+    <mkdir dir="${outdir}"/>
+    <mkdir dir="${outdir-classes}"/>
+  </target>
+
+  <!-- Generate the R.java file for this project's resources. -->
+  <target name="resource-src" depends="dirs">
+    <echo>Generating R.java...</echo>
+    <exec executable="${aapt}" failonerror="true">
+      <arg value="compile"/>
+      <arg value="-m"/>
+      <arg value="-J"/>
+      <arg value="${outdir-r}"/>
+      <arg value="-M"/>
+      <arg value="AndroidManifest.xml"/>
+      <arg value="-S"/>
+      <arg value="${resource-dir}"/>
+      <arg value="-I"/>
+      <arg value="${android-jar}"/>
+    </exec>
+  </target>
+
+  <!-- Generate java classes from .aidl files. -->
+  <target name="aidl" depends="dirs">
+    <apply executable="${aidl}" failonerror="true">
+      <fileset dir="${srcdir}">
+        <include name="**/*.aidl"/>
+      </fileset>
+    </apply>
+  </target>
+
+  <!-- Compile this project's .java files into .class files. -->
+  <target name="compile" depends="init, dirs, resource-src, aidl">
+    <javac encoding="ascii" target="1.5" debug="true" extdirs=""
+           srcdir="."
+           destdir="${outdir-classes}"
+           bootclasspath="${android-jar}">
+      <classpath>
+        <pathelement location="../core/core.jar"/>
+      </classpath>
+    </javac>
+    <unzip src="../core/core.jar" dest="${outdir-classes}"/>
+  </target>
+
+  <!-- Convert this project's .class files into .dex files. -->
+  <target name="dex" depends="compile">
+    <exec executable="${dx}" failonerror="true">
+      <arg value="-JXmx384M"/>
+      <arg value="--dex"/>
+      <arg value="--output=${intermediate-dex}"/>
+      <arg value="--locals=full"/>
+      <arg value="--positions=lines"/>
+      <arg path="${outdir-classes}"/>
+    </exec>
+  </target>
+
+  <!-- Put the project's resources into the output package file. -->
+  <target name="package-res-and-assets">
+    <echo>Packaging resources and assets...</echo>
+    <exec executable="${aapt}" failonerror="true">
+      <arg value="package"/>
+      <arg value="-f"/>
+      <arg value="-c"/>
+      <arg value="-M"/>
+      <arg value="AndroidManifest.xml"/>
+      <arg value="-S"/>
+      <arg value="${resource-dir}"/>
+      <arg value="-A"/>
+      <arg value="${asset-dir}"/>
+      <arg value="-I"/>
+      <arg value="${android-jar}"/>
+      <arg value="${out-package}"/>
+    </exec>
+  </target>
+
+  <!-- Same as package-res-and-assets, but without "-A ${asset-dir}" -->
+  <target name="package-res-no-assets">
+    <echo>Packaging resources...</echo>
+    <exec executable="${aapt}" failonerror="true">
+      <arg value="package"/>
+      <arg value="-f"/>
+      <arg value="-c"/>
+      <arg value="-M"/>
+      <arg value="AndroidManifest.xml"/>
+      <arg value="-S"/>
+      <arg value="${resource-dir}"/>
+      <!-- No assets directory -->
+      <arg value="-I"/>
+      <arg value="${android-jar}"/>
+      <arg value="${out-package}"/>
+    </exec>
+  </target>
+
+  <!-- Invoke the proper target depending on whether or not
+an assets directory is present. -->
+  <!-- TODO: find a nicer way to include the "-A ${asset-dir}" argument
+only when the assets dir exists. -->
+  <target name="package-res">
+    <available file="${asset-dir}" type="dir"
+               property="res-target" value="and-assets"/>
+    <property name="res-target" value="no-assets"/>
+    <antcall target="package-res-${res-target}"/>
+  </target>
+
+  <!-- Put the project's .class files into the output package file. -->
+  <target name="package-java" depends="compile, package-res">
+    <echo>Packaging java...</echo>
+    <jar destfile="${out-package}"
+         basedir="${outdir-classes}"
+         update="true"/>
+  </target>
+
+  <!-- Put the project's .dex files into the output package file. -->
+  <target name="package-dex" depends="dex, package-res">
+    <echo>Packaging dex...</echo>
+    <exec executable="${zip}" failonerror="true">
+      <arg value="-qj"/>
+      <arg value="${out-package}"/>
+      <arg value="${intermediate-dex}"/>
+    </exec>
+  </target>
+
+  <!-- Create the package file for this project from the sources. -->
+  <target name="package" depends="package-dex"/>
+</project>
