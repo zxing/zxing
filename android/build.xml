@@ -199,4 +199,9 @@ only when the assets dir exists. -->
 
   <!-- Create the package file for this project from the sources. -->
   <target name="package" depends="package-dex"/>
+
+  <target name="clean">
+    <delete dir="${outdir}"/>
+  </target>
+
 </project>
