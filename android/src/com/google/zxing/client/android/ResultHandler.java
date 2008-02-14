@@ -16,17 +16,28 @@
 
 package com.google.zxing.client.android;
 
-import com.google.zxing.client.result.*;
-
 import android.content.Intent;
 import android.net.ContentURI;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Contacts;
+import com.google.zxing.client.result.AddressBookDoCoMoResult;
+import com.google.zxing.client.result.BookmarkDoCoMoResult;
+import com.google.zxing.client.result.EmailAddressResult;
+import com.google.zxing.client.result.EmailDoCoMoResult;
+import com.google.zxing.client.result.ParsedReaderResult;
+import com.google.zxing.client.result.ParsedReaderResultType;
+import com.google.zxing.client.result.UPCParsedResult;
+import com.google.zxing.client.result.URIParsedResult;
+
 import java.net.URISyntaxException;
 
 /**
+ * Handles the result of barcode decoding in the context of the Android platform,
+ * by dispatching the proper intents and so on.
+ *
  * @author srowen@google.com (Sean Owen)
+ * @author dswitkin@google.com (Daniel Switkin)
  */
 final class ResultHandler extends Handler {
 
