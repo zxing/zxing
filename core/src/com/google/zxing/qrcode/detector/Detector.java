@@ -37,12 +37,12 @@ public final class Detector {
     this.image = image;
   }
 
-    /**
-     * <p>Detects a QR Code in an image, simply.</p>
-     *
-     * @return {@link DetectorResult} encapsulating results of detecting a QR Code
-     * @throws ReaderException if no QR Code can be found
-     */
+  /**
+   * <p>Detects a QR Code in an image, simply.</p>
+   *
+   * @return {@link DetectorResult} encapsulating results of detecting a QR Code
+   * @throws ReaderException if no QR Code can be found
+   */
   public DetectorResult detect() throws ReaderException {
 
     MonochromeBitmapSource image = this.image;
@@ -99,9 +99,9 @@ public final class Detector {
 
     ResultPoint[] points;
     if (alignmentPattern == null) {
-      points = new ResultPoint[] { bottomLeft, topLeft, topRight };      
+      points = new ResultPoint[]{bottomLeft, topLeft, topRight};
     } else {
-      points = new ResultPoint[] { bottomLeft, topLeft, topRight, alignmentPattern };
+      points = new ResultPoint[]{bottomLeft, topLeft, topRight, alignmentPattern};
     }
     return new DetectorResult(bits, points);
   }
@@ -121,7 +121,7 @@ public final class Detector {
       case 0:
         dimension++;
         break;
-      // 1? do nothing
+        // 1? do nothing
       case 2:
         dimension--;
         break;
@@ -138,23 +138,23 @@ public final class Detector {
   private float calculateModuleSize(ResultPoint topLeft, ResultPoint topRight, ResultPoint bottomLeft) {
     // Take the average
     return (calculateModuleSizeOneWay(topLeft, topRight) +
-            calculateModuleSizeOneWay(topLeft, bottomLeft)) / 2.0f;
+        calculateModuleSizeOneWay(topLeft, bottomLeft)) / 2.0f;
   }
 
-    /**
-     * <p>Estimates module size based on two finder patterns -- it uses
-     * {@link #sizeOfBlackWhiteBlackRunBothWays(int, int, int, int)} to figure the
-     * width of each, measuring along the axis between their centers.</p>
-     */
+  /**
+   * <p>Estimates module size based on two finder patterns -- it uses
+   * {@link #sizeOfBlackWhiteBlackRunBothWays(int, int, int, int)} to figure the
+   * width of each, measuring along the axis between their centers.</p>
+   */
   private float calculateModuleSizeOneWay(ResultPoint pattern, ResultPoint otherPattern) {
     float moduleSizeEst1 = sizeOfBlackWhiteBlackRunBothWays((int) pattern.getX(),
-                                                            (int) pattern.getY(),
-                                                            (int) otherPattern.getX(),
-                                                            (int) otherPattern.getY());
+        (int) pattern.getY(),
+        (int) otherPattern.getX(),
+        (int) otherPattern.getY());
     float moduleSizeEst2 = sizeOfBlackWhiteBlackRunBothWays((int) otherPattern.getX(),
-                                                            (int) otherPattern.getY(),
-                                                            (int) pattern.getX(),
-                                                            (int) pattern.getY());
+        (int) otherPattern.getY(),
+        (int) pattern.getX(),
+        (int) pattern.getY());
     if (Float.isNaN(moduleSizeEst1)) {
       return moduleSizeEst2;
     }

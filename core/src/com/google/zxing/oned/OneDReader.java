@@ -34,7 +34,7 @@ public interface OneDReader extends Reader {
    * an image.</p>
    *
    * @param rowNumber row number from top of the row
-   * @param row       the black/white pixel data of the row
+   * @param row the black/white pixel data of the row
    * @return {@link Result} containing encoded string and start/end of barcode
    * @throws ReaderException if an error occurs or barcode cannot be found
    */

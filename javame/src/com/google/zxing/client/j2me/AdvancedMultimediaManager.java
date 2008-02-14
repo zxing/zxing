@@ -30,7 +30,7 @@ import javax.microedition.media.MediaException;
  * JSR-234 methods. The other does nothing. The build script creates two build products then
  * one compiled with this class and one with other, to create both the JSR-234 version
  * and the "basic" non-JSR-234 version.</p>
- * 
+ *
  * @author Sean Owen (srowen@google.com)
  */
 final class AdvancedMultimediaManager {
@@ -45,7 +45,7 @@ final class AdvancedMultimediaManager {
 
   static void setFocus(Controllable player) throws MediaException, InterruptedException {
     FocusControl focusControl = (FocusControl)
-      player.getControl("javax.microedition.amms.control.camera.FocusControl");
+        player.getControl("javax.microedition.amms.control.camera.FocusControl");
     if (focusControl != null) {
       if (focusControl.isMacroSupported() && !focusControl.getMacro()) {
         focusControl.setMacro(true);

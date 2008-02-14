@@ -19,7 +19,7 @@ package com.google.zxing.client.result;
 /**
  * Represents the type of data encoded by a barcode -- from plain text, to a
  * URI, to an e-mail address, etc.
- * 
+ *
  * @author srowen@google.com (Sean Owen)
  */
 public final class ParsedReaderResultType {
@@ -27,7 +27,7 @@ public final class ParsedReaderResultType {
   public static final ParsedReaderResultType BOOKMARK = new ParsedReaderResultType();
   public static final ParsedReaderResultType ADDRESSBOOK = new ParsedReaderResultType();
   public static final ParsedReaderResultType EMAIL = new ParsedReaderResultType();
-  public static final ParsedReaderResultType EMAIL_ADDRESS = new ParsedReaderResultType();  
+  public static final ParsedReaderResultType EMAIL_ADDRESS = new ParsedReaderResultType();
   public static final ParsedReaderResultType UPC = new ParsedReaderResultType();
   public static final ParsedReaderResultType URI = new ParsedReaderResultType();
   public static final ParsedReaderResultType TEXT = new ParsedReaderResultType();

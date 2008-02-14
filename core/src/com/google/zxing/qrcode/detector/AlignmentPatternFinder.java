@@ -160,7 +160,7 @@ final class AlignmentPatternFinder {
   /**
    * @param stateCount count of black/white/black pixels just read
    * @return true iff the proportions of the counts is close enough to the 1/1/1 ratios
-   *  used by alignment patterns to be considered a match
+   *         used by alignment patterns to be considered a match
    */
   private boolean foundPatternCross(int[] stateCount) {
     float moduleSize = this.moduleSize;
@@ -181,7 +181,7 @@ final class AlignmentPatternFinder {
    * @param startI row where an alignment pattern was detected
    * @param centerJ center of the section that appears to cross an alignment pattern
    * @param maxCount maximum reasonable number of modules that should be
-   *  observed in any reading state, based on the results of the horizontal scan
+   * observed in any reading state, based on the results of the horizontal scan
    * @return vertical center of alignment pattern, or {@link Float#NaN} if not found
    */
   private float crossCheckVertical(int startI, int centerJ, int maxCount) {

@@ -32,7 +32,7 @@ final class BitSource {
 
   /**
    * @param bytes bytes from which this will read bits. Bits will be read from the first byte first.
-   *  Bits are read within a byte from most-significant to least-significant bit.
+   * Bits are read within a byte from most-significant to least-significant bit.
    */
   BitSource(byte[] bytes) {
     this.bytes = bytes;
@@ -41,7 +41,7 @@ final class BitSource {
   /**
    * @param numBits number of bits to read
    * @return int representing the bits read. The bits will appear as the least-significant
-   *  bits of the int
+   *         bits of the int
    * @throws IllegalArgumentException if numBits isn't in [1,32]
    */
   int readBits(int numBits) {

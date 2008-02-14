@@ -27,12 +27,12 @@ import com.google.zxing.ReaderException;
 final class Mode {
 
   // No, we can't use an enum here. J2ME doesn't support it.
-  
-  static final Mode TERMINATOR = new Mode(new int[] {0, 0, 0}); // Not really a mode...
-  static final Mode NUMERIC = new Mode(new int[] {10, 12, 14});
-  static final Mode ALPHANUMERIC = new Mode(new int[] {9, 11, 13});
-  static final Mode BYTE = new Mode(new int[] {8, 16, 16});
-  static final Mode KANJI = new Mode(new int[] {8, 10, 12});
+
+  static final Mode TERMINATOR = new Mode(new int[]{0, 0, 0}); // Not really a mode...
+  static final Mode NUMERIC = new Mode(new int[]{10, 12, 14});
+  static final Mode ALPHANUMERIC = new Mode(new int[]{9, 11, 13});
+  static final Mode BYTE = new Mode(new int[]{8, 16, 16});
+  static final Mode KANJI = new Mode(new int[]{8, 10, 12});
 
   private int[] characterCountBitsForVersions;
 
@@ -65,7 +65,7 @@ final class Mode {
   /**
    * @param version version in question
    * @return number of bits used, in this QR Code symbol {@link Version}, to encode the
-   *  count of characters that will follow encoded in this {@link Mode}
+   *         count of characters that will follow encoded in this {@link Mode}
    */
   int getCharacterCountBits(Version version) {
     int number = version.getVersionNumber();

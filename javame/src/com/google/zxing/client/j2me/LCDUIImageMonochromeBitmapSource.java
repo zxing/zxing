@@ -16,8 +16,8 @@
 
 package com.google.zxing.client.j2me;
 
-import com.google.zxing.MonochromeBitmapSource;
 import com.google.zxing.BlackPointEstimationMethod;
+import com.google.zxing.MonochromeBitmapSource;
 import com.google.zxing.common.BitArray;
 import com.google.zxing.common.BlackPointEstimator;
 
@@ -25,7 +25,7 @@ import javax.microedition.lcdui.Image;
 
 /**
  * <p>An implementation based on Java ME's {@link Image} representation.</p>
- * 
+ *
  * @author Sean Owen (srowen@google.com), Daniel Switkin (dswitkin@google.com)
  */
 public final class LCDUIImageMonochromeBitmapSource implements MonochromeBitmapSource {
@@ -36,7 +36,7 @@ public final class LCDUIImageMonochromeBitmapSource implements MonochromeBitmapS
   private int blackPoint;
   private BlackPointEstimationMethod lastMethod;
   private int lastArgument;
-  
+
   private static final int LUMINANCE_BITS = 5;
   private static final int LUMINANCE_SHIFT = 8 - LUMINANCE_BITS;
   private static final int LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
@@ -80,7 +80,7 @@ public final class LCDUIImageMonochromeBitmapSource implements MonochromeBitmapS
   public void estimateBlackPoint(BlackPointEstimationMethod method, int argument) {
     if (!method.equals(lastMethod) || argument != lastArgument) {
       int[] histogram = new int[LUMINANCE_BUCKETS];
-	    float biasTowardsWhite = 1.0f;
+      float biasTowardsWhite = 1.0f;
       if (method.equals(BlackPointEstimationMethod.TWO_D_SAMPLING)) {
         int minDimension = width < height ? width : height;
         for (int n = 0, offset = 0; n < minDimension; n++, offset += width + 1) {
@@ -90,7 +90,7 @@ public final class LCDUIImageMonochromeBitmapSource implements MonochromeBitmapS
         if (argument < 0 || argument >= height) {
           throw new IllegalArgumentException("Row is not within the image: " + argument);
         }
-	      biasTowardsWhite = 2.0f;
+        biasTowardsWhite = 2.0f;
         int offset = argument * width;
         for (int x = 0; x < width; x++) {
           histogram[computeRGBLuminance(rgbPixels[offset + x]) >> LUMINANCE_SHIFT]++;

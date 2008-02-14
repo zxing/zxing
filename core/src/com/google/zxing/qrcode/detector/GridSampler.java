@@ -55,8 +55,8 @@ public abstract class GridSampler {
 
   /**
    * @return the current implementation of {@link GridSampler}, instantiating one if one does
-   *  not already exist. The class which is instantied may be set by
-   *  {@link #setGridSamplerClassName(String)}
+   *         not already exist. The class which is instantied may be set by
+   *         {@link #setGridSamplerClassName(String)}
    */
   public static GridSampler getInstance() {
     if (gridSampler == null) {
@@ -92,7 +92,7 @@ public abstract class GridSampler {
    * @param dimension dimension of QR Code
    * @return {@link BitMatrix} representing QR Code's modules
    * @throws ReaderException if QR Code cannot be reasonably sampled -- for example if the location
-   *  of the finder patterns imply a transformation that would require sampling off the image
+   * of the finder patterns imply a transformation that would require sampling off the image
    */
   protected abstract BitMatrix sampleGrid(MonochromeBitmapSource image,
                                           FinderPattern topLeft,

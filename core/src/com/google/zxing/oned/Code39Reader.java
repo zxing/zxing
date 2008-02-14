@@ -56,7 +56,7 @@ public final class Code39Reader extends AbstractOneDReader {
    * Creates a reader that can be configured to check the last character as a check digit.
    *
    * @param usingCheckDigit if true, treat the last data character as a check digit, not
-   *                        data, and verify that the checksum passes
+   * data, and verify that the checksum passes
    */
   public Code39Reader(boolean usingCheckDigit) {
     this.usingCheckDigit = usingCheckDigit;
@@ -138,7 +138,7 @@ public final class Code39Reader extends AbstractOneDReader {
         if (counterPosition == patternLength - 1) {
           try {
             if (toNarrowWidePattern(counters) == ASTERISK_ENCODING) {
-              return new int[] {patternStart, i};
+              return new int[]{patternStart, i};
             }
           } catch (ReaderException re) {
             // no match, continue

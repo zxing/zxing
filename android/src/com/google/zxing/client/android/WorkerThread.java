@@ -16,41 +16,42 @@
 
 package com.google.zxing.client.android;
 
+import android.graphics.Bitmap;
+import android.os.Handler;
+import android.os.Message;
 import com.google.zxing.MonochromeBitmapSource;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 
-import android.graphics.Bitmap;
-import android.os.Handler;
-import android.os.Message;
-
 /**
  * This thread does all the heavy lifting, both during preview and for the final capture and
  * decoding. That leaves the main thread free to handle UI tasks.
- * 
+ *
  * @author dswitkin@google.com (Daniel Switkin)
  */
 final class WorkerThread extends Thread {
-  
+
   private CameraSurfaceView surfaceView;
   private CameraManager cameraManager;
   private Handler handler;
+
   private enum State {
     IDLE,
     PREVIEW_LOOP,
     STILL_AND_DECODE,
     DONE
   }
+
   private State state;
-  
+
   WorkerThread(CameraSurfaceView surfaceView, CameraManager cameraManager, Handler handler) {
     this.surfaceView = surfaceView;
     this.cameraManager = cameraManager;
     this.handler = handler;
     state = State.IDLE;
   }
-  
+
   @Override
   public void run() {
     while (true) {
@@ -58,7 +59,8 @@ final class WorkerThread extends Thread {
         case IDLE:
           try {
             sleep(50);
-          } catch (InterruptedException e) { }
+          } catch (InterruptedException e) {
+          }
           break;
         case PREVIEW_LOOP:
           surfaceView.capturePreviewAndDraw();
@@ -84,15 +86,15 @@ final class WorkerThread extends Thread {
       }
     }
   }
-  
+
   public void requestPreviewLoop() {
     state = State.PREVIEW_LOOP;
   }
-  
+
   public void requestStillAndDecode() {
     state = State.STILL_AND_DECODE;
   }
-  
+
   public void requestExitAndWait() {
     state = State.DONE;
     try {
@@ -100,5 +102,5 @@ final class WorkerThread extends Thread {
     } catch (InterruptedException e) {
     }
   }
-  
+
 }

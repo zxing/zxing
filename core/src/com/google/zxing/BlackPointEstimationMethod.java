@@ -18,14 +18,18 @@ package com.google.zxing;
 
 /**
  * <p>Enumerates different methods of sampling an imagine to estimate a black point.</p>
- * 
+ *
  * @author srowen@google.com (Sean Owen), dswitkin@google.com (Daniel Switkin)
  */
 public final class BlackPointEstimationMethod {
 
-  /** Method probably most suitable for use with 2D barcdoe format. */
+  /**
+   * Method probably most suitable for use with 2D barcdoe format.
+   */
   public static final BlackPointEstimationMethod TWO_D_SAMPLING = new BlackPointEstimationMethod();
-  /** Method probably most suitable for 1D barcode decoding, where one row at a time is sampled. */
+  /**
+   * Method probably most suitable for 1D barcode decoding, where one row at a time is sampled.
+   */
   public static final BlackPointEstimationMethod ROW_SAMPLING = new BlackPointEstimationMethod();
 
   private BlackPointEstimationMethod() {

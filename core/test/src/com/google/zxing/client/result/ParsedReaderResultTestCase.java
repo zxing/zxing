@@ -44,7 +44,7 @@ public final class ParsedReaderResultTestCase extends TestCase {
     doTestResult("MATMSG:TO:srowen@example.org;SUB:Stuff;;", ParsedReaderResultType.EMAIL);
     doTestResult("MATMSG:TO:srowen@example.org;SUB:Stuff;BODY:This is some text;;", ParsedReaderResultType.EMAIL);
     doTestResult("MATMSG:SUB:Stuff;BODY:This is some text;TO:srowen@example.org;;", ParsedReaderResultType.EMAIL);
-    doTestResult("TO:srowen@example.org;SUB:Stuff;BODY:This is some text;;", ParsedReaderResultType.TEXT);    
+    doTestResult("TO:srowen@example.org;SUB:Stuff;BODY:This is some text;;", ParsedReaderResultType.TEXT);
   }
 
   public void testEmailAddressType() {
@@ -59,7 +59,7 @@ public final class ParsedReaderResultTestCase extends TestCase {
     doTestResult("MECARD:N:Sean Owen;;", ParsedReaderResultType.ADDRESSBOOK);
     doTestResult("MECARD:TEL:+12125551212;N:Sean Owen;;", ParsedReaderResultType.ADDRESSBOOK);
     doTestResult("MECARD:TEL:+12125551212;N:Sean Owen;URL:google.com;;", ParsedReaderResultType.ADDRESSBOOK);
-    doTestResult("TEL:+12125551212;N:Sean Owen;;", ParsedReaderResultType.TEXT);    
+    doTestResult("TEL:+12125551212;N:Sean Owen;;", ParsedReaderResultType.TEXT);
   }
 
   public void testUPC() {
@@ -75,7 +75,7 @@ public final class ParsedReaderResultTestCase extends TestCase {
     doTestResult("HTTP://google.com", ParsedReaderResultType.URI);
     doTestResult("http://google.com/foobar", ParsedReaderResultType.URI);
     doTestResult("https://google.com:443/foobar", ParsedReaderResultType.URI);
-    doTestResult("google.com:443/foobar", ParsedReaderResultType.URI);        
+    doTestResult("google.com:443/foobar", ParsedReaderResultType.URI);
   }
 
   private static void doTestResult(String text, ParsedReaderResultType type) {

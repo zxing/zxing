@@ -55,7 +55,7 @@ final class ResultHandler extends Handler {
       Intent intent = null;
       ParsedReaderResultType type = result.getType();
       if (type == ParsedReaderResultType.ADDRESSBOOK) {
-        AddressBookDoCoMoResult addressResult = (AddressBookDoCoMoResult)result;
+        AddressBookDoCoMoResult addressResult = (AddressBookDoCoMoResult) result;
         intent = new Intent(Contacts.Intents.Insert.ACTION, Contacts.People.CONTENT_URI);
         putExtra(intent, Contacts.Intents.Insert.NAME, addressResult.getName());
         putExtra(intent, Contacts.Intents.Insert.PHONE, addressResult.getPhoneNumbers()[0]);
@@ -66,12 +66,12 @@ final class ResultHandler extends Handler {
         // For now, we can only open the browser, and not actually add a bookmark
         try {
           intent = new Intent(Intent.VIEW_ACTION,
-              new ContentURI(((BookmarkDoCoMoResult)result).getURI()));
+              new ContentURI(((BookmarkDoCoMoResult) result).getURI()));
         } catch (URISyntaxException e) {
           return;
         }
       } else if (type == ParsedReaderResultType.EMAIL) {
-        EmailDoCoMoResult emailResult = (EmailDoCoMoResult)result;
+        EmailDoCoMoResult emailResult = (EmailDoCoMoResult) result;
         try {
           intent = new Intent(Intent.SENDTO_ACTION, new ContentURI(emailResult.getTo()));
         } catch (URISyntaxException e) {
@@ -80,14 +80,14 @@ final class ResultHandler extends Handler {
         putExtra(intent, "subject", emailResult.getSubject());
         putExtra(intent, "body", emailResult.getBody());
       } else if (type == ParsedReaderResultType.EMAIL_ADDRESS) {
-        EmailAddressResult emailResult = (EmailAddressResult)result;
+        EmailAddressResult emailResult = (EmailAddressResult) result;
         try {
           intent = new Intent(Intent.SENDTO_ACTION, new ContentURI(emailResult.getEmailAddress()));
         } catch (URISyntaxException e) {
           return;
         }
       } else if (type == ParsedReaderResultType.UPC) {
-        UPCParsedResult upcResult = (UPCParsedResult)result;
+        UPCParsedResult upcResult = (UPCParsedResult) result;
         try {
           ContentURI uri = new ContentURI("http://www.upcdatabase.com/item.asp?upc=" +
               upcResult.getUPC());
@@ -96,7 +96,7 @@ final class ResultHandler extends Handler {
           return;
         }
       } else if (type == ParsedReaderResultType.URI) {
-        URIParsedResult uriResult = (URIParsedResult)result;
+        URIParsedResult uriResult = (URIParsedResult) result;
         try {
           intent = new Intent(Intent.VIEW_ACTION, new ContentURI(uriResult.getURI()));
         } catch (URISyntaxException e) {

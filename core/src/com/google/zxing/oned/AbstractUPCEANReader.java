@@ -16,9 +16,9 @@
 
 package com.google.zxing.oned;
 
+import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
-import com.google.zxing.ReaderException;
 import com.google.zxing.common.BitArray;
 import com.google.zxing.common.GenericResultPoint;
 
@@ -34,13 +34,19 @@ public abstract class AbstractUPCEANReader extends AbstractOneDReader implements
 
   private static final float MAX_VARIANCE = 0.4f;
 
-  /** Start/end guard pattern. */
+  /**
+   * Start/end guard pattern.
+   */
   protected static final int[] START_END_PATTERN = {1, 1, 1,};
 
-  /** Pattern marking the middle of a UPC/EAN pattern, separating the two halves. */
+  /**
+   * Pattern marking the middle of a UPC/EAN pattern, separating the two halves.
+   */
   protected static final int[] MIDDLE_PATTERN = {1, 1, 1, 1, 1};
 
-  /** "Odd", or "L" patterns used to encode UPC/EAN digits. */
+  /**
+   * "Odd", or "L" patterns used to encode UPC/EAN digits.
+   */
   protected static final int[][] L_PATTERNS = {
       {3, 2, 1, 1}, // 0
       {2, 2, 2, 1}, // 1
@@ -54,7 +60,9 @@ public abstract class AbstractUPCEANReader extends AbstractOneDReader implements
       {3, 1, 1, 2}  // 9
   };
 
-  /** As above but also including the "even", or "G" patterns used to encode UPC/EAN digits. */
+  /**
+   * As above but also including the "even", or "G" patterns used to encode UPC/EAN digits.
+   */
   protected static final int[][] L_AND_G_PATTERNS;
 
   static {
@@ -164,9 +172,9 @@ public abstract class AbstractUPCEANReader extends AbstractOneDReader implements
    * @param row row of black/white values to search
    * @param rowOffset position to start search
    * @param whiteFirst if true, indicates that the pattern specifies white/black/white/...
-   *  pixel counts, otherwise, it is interpreted as black/white/black/...
+   * pixel counts, otherwise, it is interpreted as black/white/black/...
    * @param pattern pattern of counts of number of black and white pixels that are being
-   *  searched for as a pattern
+   * searched for as a pattern
    * @return start/end horizontal offset of guard pattern, as an array of two ints
    * @throws ReaderException if pattern is not found
    */
@@ -193,7 +201,7 @@ public abstract class AbstractUPCEANReader extends AbstractOneDReader implements
       } else {
         if (counterPosition == patternLength - 1) {
           if (patternMatchVariance(counters, pattern) < MAX_VARIANCE) {
-            return new int[] {patternStart, x};
+            return new int[]{patternStart, x};
           }
           patternStart += counters[0] + counters[1];
           for (int y = 2; y < patternLength; y++) {
@@ -217,8 +225,8 @@ public abstract class AbstractUPCEANReader extends AbstractOneDReader implements
    * @param counters the counts of runs of observed black/white/black/... values
    * @param rowOffset horizontal offset to start decoding from
    * @param patterns the set of patterns to use to decode -- sometimes different encodings
-   *  for the digits 0-9 are used, and this indicates the encodings for 0 to 9 that should
-   *  be used
+   * for the digits 0-9 are used, and this indicates the encodings for 0 to 9 that should
+   * be used
    * @return horizontal offset of first pixel beyond the decoded digit
    * @throws ReaderException if digit cannot be decoded
    */

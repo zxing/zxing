@@ -58,7 +58,7 @@ public final class MultiFormatReader implements Reader {
       } catch (ReaderException re) {
       }
     }
-    
+
     // Then fall through to QR codes.
     if (tryQR) {
       try {
@@ -66,7 +66,7 @@ public final class MultiFormatReader implements Reader {
       } catch (ReaderException re) {
       }
     }
-    
+
     throw new ReaderException("No barcode was detected in this image.");
   }
 

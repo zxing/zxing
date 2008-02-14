@@ -27,19 +27,23 @@ package com.google.zxing.common.reedsolomon;
  */
 final class GF256Poly {
 
-  /** Polynimal representing the monomial 0. */
-  static final GF256Poly ZERO = new GF256Poly(new int[] { 0 });
-  /** Polynimal representing the monomial 1. */
-  static final GF256Poly ONE = new GF256Poly(new int[] { 1 });
+  /**
+   * Polynimal representing the monomial 0.
+   */
+  static final GF256Poly ZERO = new GF256Poly(new int[]{0});
+  /**
+   * Polynimal representing the monomial 1.
+   */
+  static final GF256Poly ONE = new GF256Poly(new int[]{1});
 
   private final int[] coefficients;
 
   /**
    * @param coefficients coefficients as ints representing elements of GF(256), arranged
-   *  from most significant (highest-power term) coefficient to least significant
+   * from most significant (highest-power term) coefficient to least significant
    * @throws IllegalArgumentException if argument is null or empty,
-   *  or if leading coefficient is 0 and this is not a
-   *  constant polynomial (that is, it is not the monomial "0")
+   * or if leading coefficient is 0 and this is not a
+   * constant polynomial (that is, it is not the monomial "0")
    */
   GF256Poly(int[] coefficients) {
     if (coefficients == null || coefficients.length == 0) {
@@ -56,10 +60,10 @@ final class GF256Poly {
       } else {
         this.coefficients = new int[coefficients.length - firstNonZero];
         System.arraycopy(coefficients,
-                         firstNonZero,
-                         this.coefficients,
-                         0,
-                         this.coefficients.length);
+            firstNonZero,
+            this.coefficients,
+            0,
+            this.coefficients.length);
       }
     } else {
       this.coefficients = coefficients;
@@ -183,7 +187,7 @@ final class GF256Poly {
       int aCoeff = aCoefficients[i];
       for (int j = 0; j < bLength; j++) {
         product[i + j] = GF256.addOrSubtract(product[i + j],
-                                             GF256.multiply(aCoeff, bCoefficients[j]));
+            GF256.multiply(aCoeff, bCoefficients[j]));
       }
     }
     return new GF256Poly(product);
@@ -212,7 +216,7 @@ final class GF256Poly {
     if (coefficient == 0) {
       return ZERO;
     }
-    int size = coefficients.length;    
+    int size = coefficients.length;
     int[] product = new int[size + degree];
     System.arraycopy(coefficients, 0, product, 0, size);
     for (int i = 0; i < size; i++) {

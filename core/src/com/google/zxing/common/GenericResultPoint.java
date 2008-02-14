@@ -21,7 +21,7 @@ import com.google.zxing.ResultPoint;
 /**
  * <p>Simple implementation of {@link ResultPoint} for applications that don't need
  * to use anything more complex.</p>
- * 
+ *
  * @author dswitkin@google.com (Daniel Switkin)
  */
 public final class GenericResultPoint implements ResultPoint {

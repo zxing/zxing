@@ -79,7 +79,7 @@
       <batchtest>
         <fileset dir="test/src">
           <include name="**/*TestCase.java"/>
-	        <exclude name="com/google/zxing/common/AbstractBlackBoxTestCase.java"/>
+          <exclude name="com/google/zxing/common/AbstractBlackBoxTestCase.java"/>
         </fileset>
       </batchtest>
     </junit>

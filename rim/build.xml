@@ -29,7 +29,7 @@
         </not>
       </condition>
     </fail>
-	  <fail message="Please build target 'build-basic' in 'javame' first">
+    <fail message="Please build target 'build-basic' in 'javame' first">
       <condition>
         <not>
           <available file="../javame/ZXingReaderBasic.jar" type="file"/>

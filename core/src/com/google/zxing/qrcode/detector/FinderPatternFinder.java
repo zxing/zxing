@@ -165,7 +165,7 @@ final class FinderPatternFinder {
   /**
    * @param stateCount count of black/white/black/white/black pixels just read
    * @return true iff the proportions of the counts is close enough to the 1/13/1/1 ratios
-   *  used by finder patterns to be considered a match
+   *         used by finder patterns to be considered a match
    */
   private static boolean foundPatternCross(int[] stateCount) {
     int totalModuleSize = 0;
@@ -181,11 +181,11 @@ final class FinderPatternFinder {
     float moduleSize = (float) totalModuleSize / 7.0f;
     float maxVariance = moduleSize / 2.5f;
     // Allow less than 40% variance from 1-1-3-1-1 proportions
-    return  Math.abs(moduleSize - stateCount[0]) < maxVariance &&
-            Math.abs(moduleSize - stateCount[1]) < maxVariance &&
-            Math.abs(3.0f * moduleSize - stateCount[2]) < 3.0f * maxVariance &&
-            Math.abs(moduleSize - stateCount[3]) < maxVariance &&
-            Math.abs(moduleSize - stateCount[4]) < maxVariance;
+    return Math.abs(moduleSize - stateCount[0]) < maxVariance &&
+        Math.abs(moduleSize - stateCount[1]) < maxVariance &&
+        Math.abs(3.0f * moduleSize - stateCount[2]) < 3.0f * maxVariance &&
+        Math.abs(moduleSize - stateCount[3]) < maxVariance &&
+        Math.abs(moduleSize - stateCount[4]) < maxVariance;
   }
 
   /**
@@ -196,7 +196,7 @@ final class FinderPatternFinder {
    * @param startI row where a finder pattern was detected
    * @param centerJ center of the section that appears to cross a finder pattern
    * @param maxCount maximum reasonable number of modules that should be
-   *  observed in any reading state, based on the results of the horizontal scan
+   * observed in any reading state, based on the results of the horizontal scan
    * @return vertical center of finder pattern, or {@link Float#NaN} if not found
    */
   private float crossCheckVertical(int startI, int centerJ, int maxCount) {
@@ -343,7 +343,7 @@ final class FinderPatternFinder {
       centerJ = crossCheckHorizontal((int) centerJ, (int) centerI, stateCount[2]);
       if (!Float.isNaN(centerJ)) {
         float estimatedModuleSize =
-          (float) (stateCount[0] + stateCount[1] + stateCount[2] + stateCount[3] + stateCount[4]) / 7.0f;
+            (float) (stateCount[0] + stateCount[1] + stateCount[2] + stateCount[3] + stateCount[4]) / 7.0f;
         boolean found = false;
         int max = possibleCenters.size();
         for (int index = 0; index < max; index++) {
@@ -366,9 +366,9 @@ final class FinderPatternFinder {
 
   /**
    * @return number of rows we could safely skip during scanning, based on the first
-   *  two finder patterns that have been located. In some cases their position will
-   *  allow us to infer that the third pattern must lie below a certain point farther
-   *  down in the image.
+   *         two finder patterns that have been located. In some cases their position will
+   *         allow us to infer that the third pattern must lie below a certain point farther
+   *         down in the image.
    */
   private int findRowSkip() {
     int max = possibleCenters.size();
@@ -389,7 +389,7 @@ final class FinderPatternFinder {
           // This is the case where you find top left first. Draw it out.
           hasSkipped = true;
           return (int) Math.abs(Math.abs(firstConfirmedCenter.getX() - center.getX()) -
-                                Math.abs(firstConfirmedCenter.getY() - center.getY()));
+              Math.abs(firstConfirmedCenter.getY() - center.getY()));
         }
       }
     }
@@ -398,7 +398,7 @@ final class FinderPatternFinder {
 
   /**
    * @return true iff we have found at least 3 finder patterns that have been detected
-   *  at least {@link #CENTER_QUORUM} times each
+   *         at least {@link #CENTER_QUORUM} times each
    */
   private boolean haveMulitplyConfirmedCenters() {
     int count = 0;
@@ -415,8 +415,8 @@ final class FinderPatternFinder {
 
   /**
    * @return the 3 best {@link FinderPattern}s from our list of candidates. The "best" are
-   *  those that have been detected at least {@link #CENTER_QUORUM} times, and whose module
-   *  size differs from the average among those patterns the least
+   *         those that have been detected at least {@link #CENTER_QUORUM} times, and whose module
+   *         size differs from the average among those patterns the least
    * @throws ReaderException if 3 such finder patterns do not exist
    */
   private FinderPattern[] selectBestPatterns() throws ReaderException {
@@ -437,10 +437,10 @@ final class FinderPatternFinder {
 
     if (size == 3) {
       // Found just enough -- hope these are good!
-      return new FinderPattern[] {
-        (FinderPattern) possibleCenters.elementAt(0),
-        (FinderPattern) possibleCenters.elementAt(1),
-        (FinderPattern) possibleCenters.elementAt(2) 
+      return new FinderPattern[]{
+          (FinderPattern) possibleCenters.elementAt(0),
+          (FinderPattern) possibleCenters.elementAt(1),
+          (FinderPattern) possibleCenters.elementAt(2)
       };
     }
 
@@ -458,10 +458,10 @@ final class FinderPatternFinder {
     // We don't have java.util.Collections in J2ME
     Collections.insertionSort(possibleCenters, new ClosestToAverageComparator(averageModuleSize));
 
-    return new FinderPattern[] {
-      (FinderPattern) possibleCenters.elementAt(0),
-      (FinderPattern) possibleCenters.elementAt(1),
-      (FinderPattern) possibleCenters.elementAt(2)
+    return new FinderPattern[]{
+        (FinderPattern) possibleCenters.elementAt(0),
+        (FinderPattern) possibleCenters.elementAt(1),
+        (FinderPattern) possibleCenters.elementAt(2)
     };
   }
 
@@ -510,7 +510,7 @@ final class FinderPatternFinder {
       bottomLeft = temp;
     }
 
-    return new FinderPattern[] {bottomLeft, topLeft, topRight};
+    return new FinderPattern[]{bottomLeft, topLeft, topRight};
   }
 
   /**
@@ -536,14 +536,16 @@ final class FinderPatternFinder {
    */
   private static class ClosestToAverageComparator implements Comparator {
     private final float averageModuleSize;
+
     private ClosestToAverageComparator(float averageModuleSize) {
       this.averageModuleSize = averageModuleSize;
     }
+
     public int compare(Object center1, Object center2) {
       return Math.abs(((FinderPattern) center1).getEstimatedModuleSize() - averageModuleSize) <
-             Math.abs(((FinderPattern) center2).getEstimatedModuleSize() - averageModuleSize) ?
-             -1 :
-              1;
+          Math.abs(((FinderPattern) center2).getEstimatedModuleSize() - averageModuleSize) ?
+          -1 :
+          1;
     }
   }
 

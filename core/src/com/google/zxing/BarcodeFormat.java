@@ -25,13 +25,20 @@ public final class BarcodeFormat {
 
   // No, we can't use an enum here. J2ME doesn't support it.
 
-  /** 1D barcode format family. */
+  /**
+   * 1D barcode format family.
+   */
   public static final BarcodeFormat ONED = new BarcodeFormat();
-  /** QR Code 2D barcode format */
+  /**
+   * QR Code 2D barcode format
+   */
   public static final BarcodeFormat QR_CODE = new BarcodeFormat();
-  /** DataMatrix 2D barcode format */
+  /**
+   * DataMatrix 2D barcode format
+   */
   public static final BarcodeFormat DATAMATRIX = new BarcodeFormat();
-    
-  private BarcodeFormat() {}
+
+  private BarcodeFormat() {
+  }
 
 }
