@@ -32,26 +32,26 @@
     <fail message="Please build target 'build-basic' in 'javame' first">
       <condition>
         <not>
-          <available file="../javame/ZXingReaderBasic.jar" type="file"/>
+          <available file="../javame/BarcodeReaderBasic.jar" type="file"/>
         </not>
       </condition>
     </fail>
   </target>
 
   <target name="build" depends="init,clean">
-    <copy file="../javame/ZXingReaderBasic.jad" todir="."/>
+    <copy file="../javame/BarcodeReaderBasic.jad" todir="."/>
     <java jar="${BB-JDK-home}/bin/rapc.jar" fork="true">
       <arg value="import=${BB-JDK-home}/lib/net_rim_api.jar"/>
-      <arg value="codename=ZXingReaderBasic"/>
+      <arg value="codename=BarcodeReaderBasic"/>
       <arg value="-midlet"/>
-      <arg value="jad=ZXingReaderBasic.jad"/>
-      <arg value="../javame/ZXingReaderBasic.jar"/>
+      <arg value="jad=BarcodeReaderBasic.jad"/>
+      <arg value="../javame/BarcodeReaderBasic.jar"/>
     </java>
   </target>
 
 
   <target name="clean">
-    <delete dir="." includes="ZXingReader*"/>
+    <delete dir="." includes="BarcodeReader*"/>
   </target>
 
 </project>

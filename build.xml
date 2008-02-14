@@ -24,7 +24,7 @@
     <ant dir="core" target="build"/>
     <ant dir="javame" target="build"/>
     <ant dir="javase" target="build"/>
-    <ant dir="android" target="build"/>
+    <ant dir="android" target="package"/>
   </target>
 
   <target name="buildwithoutj2me">
