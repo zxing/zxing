@@ -89,7 +89,10 @@ public final class ZXingMIDlet extends MIDlet {
 				player = Manager.createPlayer("capture://image");
 			} catch (MediaException me) {
 				// if this fails, just continue with capture://video
-			}
+			} catch (Error e) {
+        // Ugly, but, it seems the Nokia N70 throws "java.lang.Error: 136" here
+        // We should still try to continue
+      }
 		}
 		if (player == null) {
 			player = Manager.createPlayer("capture://video");
