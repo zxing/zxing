@@ -27,6 +27,9 @@ import android.graphics.Rect;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+/**
+ * @author dswitkin@google.com (Daniel Switkin)
+ */
 final class CameraSurfaceView extends SurfaceView implements SurfaceHolder.Callback {
 
   private static int[] SCANNER_ALPHA = { 0, 64, 128, 192, 255, 192, 128, 64 };

@@ -16,11 +16,6 @@
 
 package com.google.zxing.client.android;
 
-import com.google.zxing.Result;
-import com.google.zxing.ResultPoint;
-import com.google.zxing.client.result.ParsedReaderResult;
-import com.google.zxing.client.result.ParsedReaderResultType;
-
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.PixelFormat;
@@ -31,7 +26,18 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.Window;
 import android.view.WindowManager.LayoutParams;
+import com.google.zxing.Result;
+import com.google.zxing.ResultPoint;
+import com.google.zxing.client.result.ParsedReaderResult;
+import com.google.zxing.client.result.ParsedReaderResultType;
 
+/**
+ * The barcode reader activity itself. This is loosely based on the CameraPreview
+ * example included in the Android SDK.
+ * 
+ * @author dswitkin@google.com (Daniel Switkin)
+ * @author Android Team (for CameraPreview example)
+ */
 public final class BarcodeReaderCaptureActivity extends Activity {
   
   private CameraManager cameraManager;

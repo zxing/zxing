@@ -103,8 +103,8 @@ public abstract class AbstractBlackBoxTestCase extends TestCase {
   private static String readFileAsString(File file) throws IOException {
     StringBuilder result = new StringBuilder();
     InputStreamReader reader = new InputStreamReader(new FileInputStream(file), "UTF-8");
-    char[] buffer = new char[512];
     try {
+      char[] buffer = new char[256];
       int charsRead;
       while ((charsRead = reader.read(buffer)) > 0) {
         result.append(buffer, 0, charsRead);
