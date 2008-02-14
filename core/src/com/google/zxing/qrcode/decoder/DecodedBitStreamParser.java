@@ -41,6 +41,8 @@ final class DecodedBitStreamParser {
   };
   private static final String SHIFT_JIS = "Shift_JIS";
   private static final boolean ASSUME_SHIFT_JIS;
+  private static final String UTF8 = "UTF-8";
+  private static final String ISO88591 = "ISO-8859-1";
 
   static {
     String platformDefault = System.getProperty("file.encoding");
@@ -112,9 +114,9 @@ final class DecodedBitStreamParser {
     }
     // Shift_JIS may not be supported in some environments:
     try {
-      result.append(new String(buffer, "Shift_JIS"));
+      result.append(new String(buffer, SHIFT_JIS));
     } catch (UnsupportedEncodingException uee) {
-      throw new ReaderException("SHIFT_JIS encoding is not supported on this device");
+      throw new ReaderException(SHIFT_JIS + " encoding is not supported on this device");
     }
   }
 
@@ -194,11 +196,17 @@ final class DecodedBitStreamParser {
     if (ASSUME_SHIFT_JIS) {
       return SHIFT_JIS;
     }
-    // For now, merely tries to distinguish ISO-8859-1 and Shift_JIS,
+    // Does it start with the UTF-8 byte order mark? then guess it's UTF-8
+    if (bytes.length > 3 && bytes[0] == (byte) 0xEF && bytes[1] == (byte) 0xBB && bytes[2] == (byte) 0xBF) {
+      return UTF8;
+    }
+    // For now, merely tries to distinguish ISO-8859-1, UTF-8 and Shift_JIS,
     // which should be by far the most common encodings. ISO-8859-1
     // should not have bytes in the 0x80 - 0x9F range, while Shift_JIS
     // uses this as a first byte of a two-byte character. If we see this
     // followed by a valid second byte in Shift_JIS, assume it is Shift_JIS.
+    // If we see something else in that second byte, we'll make the risky guess
+    // that it's UTF-8.
     int length = bytes.length;
     for (int i = 0; i < length; i++) {
       int value = bytes[i] & 0xFF;
@@ -217,9 +225,11 @@ final class DecodedBitStreamParser {
             return SHIFT_JIS;
           }
         }
+        // otherwise we're going to take a guess that it's UTF-8
+        return UTF8;
       }
     }
-    return "ISO-8859-1";
+    return ISO88591;
   }
 
 }
