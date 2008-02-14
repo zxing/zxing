@@ -16,19 +16,18 @@
 
 package com.google.zxing.client.android;
 
-import com.google.zxing.MonochromeBitmapSource;
+import android.graphics.Bitmap;
 import com.google.zxing.BlackPointEstimationMethod;
+import com.google.zxing.MonochromeBitmapSource;
 import com.google.zxing.common.BitArray;
 import com.google.zxing.common.BlackPointEstimator;
-
-import android.graphics.Bitmap;
 
 /**
  * This object implements MonochromeBitmapSource around an Android Bitmap. Rather than capturing an
  * RGB image and calculating the grey value at each pixel, we ask the camera driver for YUV data and
  * strip out the luminance channel directly. This should be faster but provides fewer bits, i.e.
  * fewer grey levels.
- * 
+ *
  * @author dswitkin@google.com (Daniel Switkin)
  * @author srowen@google.com (Sean Owen)
  */
@@ -41,7 +40,7 @@ final class YUVMonochromeBitmapSource implements MonochromeBitmapSource {
   private int blackPoint;
   private BlackPointEstimationMethod lastMethod;
   private int lastArgument;
-  
+
   private static final int LUMINANCE_BITS = 5;
   private static final int LUMINANCE_SHIFT = 8 - LUMINANCE_BITS;
   private static final int LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;

@@ -46,8 +46,8 @@ public interface Reader {
    *
    * @param image image of barcode to decode
    * @param hints passed as a {@link Hashtable} from {@link DecodeHintType} to aribtrary data. The
-   *  meaning of the data depends upon the hint type. The implementation may or may not do
-   *  anything with these hints. 
+   * meaning of the data depends upon the hint type. The implementation may or may not do
+   * anything with these hints.
    * @return String which the barcode encodes
    * @throws ReaderException if the barcode cannot be located or decoded for any reason
    */

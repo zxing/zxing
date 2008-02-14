@@ -40,8 +40,8 @@ public final class Result {
 
   /**
    * @return points related to the barcode in the image. These are typically points
-   *  identifying finder patterns or the corners of the barcode. The exact meaning is
-   *  specific to the type of barcode that was decoded.
+   *         identifying finder patterns or the corners of the barcode. The exact meaning is
+   *         specific to the type of barcode that was decoded.
    */
   public ResultPoint[] getResultPoints() {
     return resultPoints;

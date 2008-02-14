@@ -16,8 +16,8 @@
 
 package com.google.zxing.oned;
 
-import com.google.zxing.Result;
 import com.google.zxing.ReaderException;
+import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitArray;
 import com.google.zxing.common.GenericResultPoint;
@@ -182,7 +182,7 @@ public final class Code128Reader extends AbstractOneDReader {
         if (counterPosition == patternLength - 1) {
           for (int startCode = CODE_START_A; startCode <= CODE_START_C; startCode++) {
             if (patternMatchVariance(counters, CODE_PATTERNS[startCode]) < MAX_VARIANCE) {
-              return new int[] {patternStart, i, startCode};
+              return new int[]{patternStart, i, startCode};
             }
           }
           patternStart += counters[0] + counters[1];

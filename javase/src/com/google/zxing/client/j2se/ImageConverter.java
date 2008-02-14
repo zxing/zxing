@@ -27,7 +27,7 @@ import java.net.URI;
 /**
  * Utility application for evaluating the effectiveness of the
  * MonochromeBitmapSource. Given a set of images on the command line,
- * converts each to a black-and-white GIF. The result is placed in 
+ * converts each to a black-and-white GIF. The result is placed in
  * a file based on the input name, with "_converted" appended.
  *
  * @author alasdair@google.com (Alasdair Mackintosh)
@@ -65,11 +65,11 @@ public final class ImageConverter {
     MonochromeBitmapSource src = new BufferedImageMonochromeBitmapSource(image);
     int width = src.getWidth();
     int height = src.getHeight();
-    
+
     BufferedImage result = new BufferedImage(width, height, BufferedImage.TYPE_BYTE_BINARY);
     for (int i = 0; i < width; i++) {
       for (int j = 0; j < height; j++) {
-        result.setRGB(i, j, src.isBlack(i,j) ? BLACK : WHITE);
+        result.setRGB(i, j, src.isBlack(i, j) ? BLACK : WHITE);
       }
     }
 
@@ -82,9 +82,9 @@ public final class ImageConverter {
     String name = uri.getPath();
     int slashPos = name.lastIndexOf((int) '/');
     String parent, basename;
-    if (slashPos != -1 && slashPos != name.length()-1) {
+    if (slashPos != -1 && slashPos != name.length() - 1) {
       parent = name.substring(0, slashPos);
-      basename = name.substring(slashPos+1);
+      basename = name.substring(slashPos + 1);
     } else {
       parent = ".";
       basename = name;
@@ -94,7 +94,7 @@ public final class ImageConverter {
       return null;
     }
 
-    File baseFile = new File(parent,basename);
+    File baseFile = new File(parent, basename);
     if (!baseFile.exists()) {
       return null;
     }

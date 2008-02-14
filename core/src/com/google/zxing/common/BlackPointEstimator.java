@@ -39,16 +39,16 @@ public final class BlackPointEstimator {
    *
    * @param histogram an array of <em>counts</em> of luminance values
    * @param biasTowardsWhite values higher than 1.0 suggest that a higher black point is desirable (e.g.
-   *  more values are considered black); less than 1.0 suggests that lower is desirable. Must be greater
-   *  than 0.0; 1.0 is a good "default"
+   * more values are considered black); less than 1.0 suggests that lower is desirable. Must be greater
+   * than 0.0; 1.0 is a good "default"
    * @return index within argument of bucket corresponding to brightest values which should be
-   *  considered "black"
+   *         considered "black"
    */
   public static int estimate(int[] histogram, float biasTowardsWhite) {
 
-	  if (Float.isNaN(biasTowardsWhite) || biasTowardsWhite <= 0.0f) {
-		  throw new IllegalArgumentException("Illegal biasTowardsWhite: " + biasTowardsWhite);
-	  }
+    if (Float.isNaN(biasTowardsWhite) || biasTowardsWhite <= 0.0f) {
+      throw new IllegalArgumentException("Illegal biasTowardsWhite: " + biasTowardsWhite);
+    }
 
     int numBuckets = histogram.length;
 

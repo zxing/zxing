@@ -33,7 +33,7 @@ public final class MultiFormatUPCEANReader extends AbstractOneDReader {
    * Reader implementations to which this implementation delegates, in the order
    * they will be attempted. Order is important.
    */
-  private final UPCEANReader[] readers = new UPCEANReader[] {
+  private final UPCEANReader[] readers = new UPCEANReader[]{
       new EAN13Reader(), new UPCAReader(), new EAN8Reader(), new UPCEReader()
   };
 

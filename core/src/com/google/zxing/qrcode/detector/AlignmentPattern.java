@@ -55,9 +55,9 @@ public final class AlignmentPattern implements ResultPoint {
   boolean aboutEquals(float moduleSize, float i, float j) {
     return
         Math.abs(i - posY) <= moduleSize &&
-        Math.abs(j - posX) <= moduleSize &&
-        (Math.abs(moduleSize - estimatedModuleSize) <= 1.0f ||
-         Math.abs(moduleSize - estimatedModuleSize) / estimatedModuleSize <= 0.1f);
+            Math.abs(j - posX) <= moduleSize &&
+            (Math.abs(moduleSize - estimatedModuleSize) <= 1.0f ||
+                Math.abs(moduleSize - estimatedModuleSize) / estimatedModuleSize <= 0.1f);
   }
 
 }

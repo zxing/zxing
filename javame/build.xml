@@ -56,7 +56,7 @@
         </not>
       </condition>
     </fail>
-	  <fail message="Please build 'core' first">
+    <fail message="Please build 'core' first">
       <condition>
         <not>
           <available file="../core/core.jar" type="file"/>
@@ -93,7 +93,7 @@
            debug="true"
            deprecation="true"
            fork="true">
-       <classpath refid="wtk-build-path"/>
+      <classpath refid="wtk-build-path"/>
     </javac>
     <javac srcdir="src"
            destdir="build"
@@ -123,14 +123,16 @@
       </fileset>
     </copy>
 
-    <copy file="src/com/google/zxing/client/j2me/MANIFEST.MF.template" tofile="src/com/google/zxing/client/j2me/MANIFEST.MF" overwrite="true">
+    <copy file="src/com/google/zxing/client/j2me/MANIFEST.MF.template"
+          tofile="src/com/google/zxing/client/j2me/MANIFEST.MF" overwrite="true">
       <filterset>
         <filter token="APP_NAME" value="${jar-name}"/>
         <filter token="VERSION" value="${version}"/>
       </filterset>
     </copy>
 
-    <jar jarfile="${jar-name}.jar" basedir="build-j2me" manifest="src/com/google/zxing/client/j2me/MANIFEST.MF" level="9"/>
+    <jar jarfile="${jar-name}.jar" basedir="build-j2me" manifest="src/com/google/zxing/client/j2me/MANIFEST.MF"
+         level="9"/>
 
     <move file="${jar-name}.jar" tofile="temp.jar"/>
     <java jar="${WTK-home}/bin/proguard.jar" fork="true" failonerror="true">

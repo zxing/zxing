@@ -40,11 +40,11 @@ public interface MonochromeBitmapSource {
    *
    * @param y vertical offset, from top, of the row of pixels
    * @param row if not null, {@link BitArray} to write pixels into. If null, a new {@link BitArray}
-   *  is allocated and returned.
+   * is allocated and returned.
    * @param startX horizontal offset, from left, from which to start getting pixels
    * @param getWidth number of pixels to get from the row
    * @return {@link BitArray} representing the (subset of the) row of pixels. If row parameter
-   *  was not null, it is returned.
+   *         was not null, it is returned.
    */
   BitArray getBlackRow(int y, BitArray row, int startX, int getWidth);
 

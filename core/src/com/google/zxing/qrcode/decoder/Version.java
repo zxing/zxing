@@ -55,7 +55,7 @@ public final class Version {
                   ECBlocks ecBlocks4) {
     this.versionNumber = versionNumber;
     this.alignmentPatternCenters = alignmentPatternCenters;
-    this.ecBlocks = new ECBlocks[] { ecBlocks1, ecBlocks2, ecBlocks3, ecBlocks4 };
+    this.ecBlocks = new ECBlocks[]{ecBlocks1, ecBlocks2, ecBlocks3, ecBlocks4};
     int total = 0;
     ECBlocks levelLECBlocks = ecBlocks1; // L,M,Q,H -- all the same total
     int ecCodewords = levelLECBlocks.ecCodewords;
@@ -187,12 +187,12 @@ public final class Version {
 
     private ECBlocks(int ecCodewords, ECB ecBlocks) {
       this.ecCodewords = ecCodewords;
-      this.ecBlocks = new ECB[] { ecBlocks };
+      this.ecBlocks = new ECB[]{ecBlocks};
     }
 
     private ECBlocks(int ecCodewords, ECB ecBlocks1, ECB ecBlocks2) {
       this.ecCodewords = ecCodewords;
-      this.ecBlocks = new ECB[] { ecBlocks1, ecBlocks2 };
+      this.ecBlocks = new ECB[]{ecBlocks1, ecBlocks2};
     }
 
     int getECCodewords() {

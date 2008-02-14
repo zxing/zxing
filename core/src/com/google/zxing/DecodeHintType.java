@@ -28,9 +28,13 @@ public final class DecodeHintType {
 
   // No, we can't use an enum here. J2ME doesn't support it.
 
-  /** Unspecified, application-specific hint. */
+  /**
+   * Unspecified, application-specific hint.
+   */
   public static final DecodeHintType OTHER = new DecodeHintType();
-  /** Image is a pure monochrome image of a barcode. */
+  /**
+   * Image is a pure monochrome image of a barcode.
+   */
   public static final DecodeHintType PURE_BARCODE = new DecodeHintType();
   /**
    * Image is known to be of one of a few possible formats.
@@ -38,6 +42,7 @@ public final class DecodeHintType {
    */
   public static final DecodeHintType POSSIBLE_FORMATS = new DecodeHintType();
 
-  private DecodeHintType() {}
+  private DecodeHintType() {
+  }
 
 }

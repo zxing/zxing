@@ -26,16 +26,24 @@ final class ErrorCorrectionLevel {
 
   // No, we can't use an enum here. J2ME doesn't support it.
 
-  /** L = ~7% correction */
+  /**
+   * L = ~7% correction
+   */
   static final ErrorCorrectionLevel L = new ErrorCorrectionLevel(0);
-  /** M = ~15% correction */
+  /**
+   * M = ~15% correction
+   */
   static final ErrorCorrectionLevel M = new ErrorCorrectionLevel(1);
-  /** Q = ~25% correction */
+  /**
+   * Q = ~25% correction
+   */
   static final ErrorCorrectionLevel Q = new ErrorCorrectionLevel(2);
-  /** H = ~30% correction */
+  /**
+   * H = ~30% correction
+   */
   static final ErrorCorrectionLevel H = new ErrorCorrectionLevel(3);
 
-  private static final ErrorCorrectionLevel[] FOR_BITS = new ErrorCorrectionLevel[] { M, L, H, Q };
+  private static final ErrorCorrectionLevel[] FOR_BITS = new ErrorCorrectionLevel[]{M, L, H, Q};
 
   private final int ordinal;
 

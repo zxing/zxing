@@ -26,8 +26,8 @@ import java.util.Vector;
  *
  * <ul>
  * <li>Bruce Maggs.
- *  <a href="http://www.cs.cmu.edu/afs/cs.cmu.edu/project/pscico-guyb/realworld/www/rs_decode.ps">
- *  "Decoding Reed-Solomon Codes"</a> (see discussion of Forney's Formula)</li>
+ * <a href="http://www.cs.cmu.edu/afs/cs.cmu.edu/project/pscico-guyb/realworld/www/rs_decode.ps">
+ * "Decoding Reed-Solomon Codes"</a> (see discussion of Forney's Formula)</li>
  * <li>J.I. Hall. <a href="www.mth.msu.edu/~jhall/classes/codenotes/GRS.pdf">
  * "Chapter 5. Generalized Reed-Solomon Codes"</a>
  * (see discussion of Euclidean algorithm)</li>
@@ -40,7 +40,7 @@ import java.util.Vector;
  * @author William Rucklidge
  */
 public final class ReedSolomonDecoder {
-  
+
   private ReedSolomonDecoder() {
   }
 
@@ -125,7 +125,7 @@ public final class ReedSolomonDecoder {
     int inverse = GF256.inverse(sigmaTildeAtZero);
     GF256Poly sigma = t.multiply(inverse);
     GF256Poly omega = r.multiply(inverse);
-    return new GF256Poly[] { sigma, omega };
+    return new GF256Poly[]{sigma, omega};
   }
 
   private static int[] findErrorLocations(GF256Poly errorLocator)
@@ -162,7 +162,7 @@ public final class ReedSolomonDecoder {
         }
       }
       result[i] = GF256.multiply(errorEvaluator.evaluateAt(xiInverse),
-                                 GF256.inverse(denominator));
+          GF256.inverse(denominator));
     }
     return result;
   }

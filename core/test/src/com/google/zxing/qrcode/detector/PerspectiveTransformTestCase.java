@@ -45,11 +45,11 @@ public final class PerspectiveTransformTestCase extends TestCase {
     assertPointEquals(290.0f, 270.0f, 16.0f, 15.0f, pt);
     assertPointEquals(150.0f, 280.0f, 4.0f, 9.0f, pt);
     assertPointEquals(7.1516876f, -64.60185f, 0.5f, 0.5f, pt);
-    assertPointEquals(328.09116f, 334.16385f,50.0f, 50.0f, pt);
+    assertPointEquals(328.09116f, 334.16385f, 50.0f, 50.0f, pt);
   }
 
   private static void assertPointEquals(float expectedX, float expectedY, float sourceX, float sourceY, PerspectiveTransform pt) {
-    float[] points = new float[] { sourceX, sourceY };
+    float[] points = new float[]{sourceX, sourceY};
     pt.transformPoints(points);
     assertEquals(expectedX, points[0], EPSILON);
     assertEquals(expectedY, points[1], EPSILON);

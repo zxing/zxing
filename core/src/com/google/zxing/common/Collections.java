@@ -32,7 +32,7 @@ public final class Collections {
   /**
    * Sorts its argument (destructively) using insert sort; in the context of this package
    * insertion sort is simple and efficient given its relatively small inputs.
-   * 
+   *
    * @param vector vector to sort
    * @param comparator comparator to define sort ordering
    */

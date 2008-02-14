@@ -80,25 +80,25 @@ public final class ZXingMIDlet extends MIDlet {
     }
   }
 
-	private static Player createPlayer() throws IOException, MediaException {
-		// Try a workaround for Nokias, which want to use capture://image in some cases
-		Player player = null;
-		String platform = System.getProperty("microedition.platform");
-		if (platform != null && platform.indexOf("Nokia") >= 0) {
-			try {
-				player = Manager.createPlayer("capture://image");
-			} catch (MediaException me) {
-				// if this fails, just continue with capture://video
-			} catch (Error e) {
+  private static Player createPlayer() throws IOException, MediaException {
+    // Try a workaround for Nokias, which want to use capture://image in some cases
+    Player player = null;
+    String platform = System.getProperty("microedition.platform");
+    if (platform != null && platform.indexOf("Nokia") >= 0) {
+      try {
+        player = Manager.createPlayer("capture://image");
+      } catch (MediaException me) {
+        // if this fails, just continue with capture://video
+      } catch (Error e) {
         // Ugly, but, it seems the Nokia N70 throws "java.lang.Error: 136" here
         // We should still try to continue
       }
-		}
-		if (player == null) {
-			player = Manager.createPlayer("capture://video");
-		}
-		return player;
-	}
+    }
+    if (player == null) {
+      player = Manager.createPlayer("capture://video");
+    }
+    return player;
+  }
 
   protected void pauseApp() {
     if (player != null) {
@@ -106,14 +106,14 @@ public final class ZXingMIDlet extends MIDlet {
         player.stop();
       } catch (MediaException me) {
         // continue?
-        showError(me);        
+        showError(me);
       }
     }
   }
 
   protected void destroyApp(boolean unconditional) {
     if (player != null) {
-      videoControl = null;      
+      videoControl = null;
       try {
         player.stop();
       } catch (MediaException me) {
@@ -135,7 +135,7 @@ public final class ZXingMIDlet extends MIDlet {
   private void showOpenURL(String title, final String display, final String uri) {
     Alert alert = new Alert(title, display, null, AlertType.CONFIRMATION);
     alert.setTimeout(Alert.FOREVER);
-	  Command yes = new Command("Yes", Command.OK, 1);
+    Command yes = new Command("Yes", Command.OK, 1);
     alert.addCommand(yes);
     Command no = new Command("No", Command.CANCEL, 1);
     alert.addCommand(no);
@@ -174,9 +174,9 @@ public final class ZXingMIDlet extends MIDlet {
     }
   }
 
-	void showError(String message) {
-		showAlert(new Alert("Error", message, null, AlertType.ERROR));
-	}
+  void showError(String message) {
+    showAlert(new Alert("Error", message, null, AlertType.ERROR));
+  }
 
   private void showAlert(Alert alert) {
     Display display = Display.getDisplay(this);
@@ -199,9 +199,9 @@ public final class ZXingMIDlet extends MIDlet {
       String email = ((EmailAddressResult) result).getEmailAddress();
       showOpenURL("Compose E-mail?", email, "mailto:" + email);
     } else if (type.equals(ParsedReaderResultType.UPC)) {
-	    String upc = ((UPCParsedResult) result).getUPC();
-	    String uri = "http://www.upcdatabase.com/item.asp?upc=" + upc;
-	    showOpenURL("Look Up Barcode Online?", upc, uri);
+      String upc = ((UPCParsedResult) result).getUPC();
+      String uri = "http://www.upcdatabase.com/item.asp?upc=" + upc;
+      showOpenURL("Look Up Barcode Online?", upc, uri);
     } else {
       showAlert("Barcode Detected", result.getDisplayResult());
     }

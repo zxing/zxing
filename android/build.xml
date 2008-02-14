@@ -65,7 +65,7 @@
         </not>
       </condition>
     </fail>
-	  <fail message="Please build 'core' first">
+    <fail message="Please build 'core' first">
       <condition>
         <not>
           <available file="../core/core.jar" type="file"/>

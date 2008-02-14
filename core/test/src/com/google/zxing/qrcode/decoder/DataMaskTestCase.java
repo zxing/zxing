@@ -59,7 +59,7 @@ public final class DataMaskTestCase extends TestCase {
   public void testMask4() {
     testMaskAcrossDimensions(4, new MaskCondition() {
       public boolean isMasked(int i, int j) {
-        return (i/2 + j/3) % 2 == 0;
+        return (i / 2 + j / 3) % 2 == 0;
       }
     });
   }
@@ -67,7 +67,7 @@ public final class DataMaskTestCase extends TestCase {
   public void testMask5() {
     testMaskAcrossDimensions(5, new MaskCondition() {
       public boolean isMasked(int i, int j) {
-        return (i*j) % 2 + (i*j) % 3 == 0;
+        return (i * j) % 2 + (i * j) % 3 == 0;
       }
     });
   }
@@ -75,7 +75,7 @@ public final class DataMaskTestCase extends TestCase {
   public void testMask6() {
     testMaskAcrossDimensions(6, new MaskCondition() {
       public boolean isMasked(int i, int j) {
-        return ((i*j) % 2 + (i*j) % 3) % 2 == 0;
+        return ((i * j) % 2 + (i * j) % 3) % 2 == 0;
       }
     });
   }
@@ -83,7 +83,7 @@ public final class DataMaskTestCase extends TestCase {
   public void testMask7() {
     testMaskAcrossDimensions(7, new MaskCondition() {
       public boolean isMasked(int i, int j) {
-        return ((i+j) % 2 + (i*j) % 3) % 2 == 0;
+        return ((i + j) % 2 + (i * j) % 3) % 2 == 0;
       }
     });
   }
@@ -92,7 +92,7 @@ public final class DataMaskTestCase extends TestCase {
                                         MaskCondition condition) {
     DataMask mask = DataMask.forReference(reference);
     for (int version = 1; version <= 40; version++) {
-      int dimension = 17 + 4*version;
+      int dimension = 17 + 4 * version;
       testMask(mask, dimension, condition);
     }
   }
@@ -103,7 +103,7 @@ public final class DataMaskTestCase extends TestCase {
     for (int i = 0; i < dimension; i++) {
       for (int j = 0; j < dimension; j++) {
         assertEquals(
-            "(" + i + ',' + j + ')', 
+            "(" + i + ',' + j + ')',
             condition.isMasked(i, j),
             bits.get(i, j));
       }

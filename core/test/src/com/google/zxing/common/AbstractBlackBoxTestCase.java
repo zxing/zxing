@@ -42,19 +42,19 @@ public abstract class AbstractBlackBoxTestCase extends TestCase {
       String lowerCase = name.toLowerCase();
       return
           lowerCase.endsWith(".jpg") || lowerCase.endsWith(".jpeg") ||
-          lowerCase.endsWith(".gif") || lowerCase.endsWith(".png") ||
-		      lowerCase.endsWith(".url");
+              lowerCase.endsWith(".gif") || lowerCase.endsWith(".png") ||
+              lowerCase.endsWith(".url");
     }
   };
 
   private final File testBase;
   private final Reader barcodeReader;
-	private final double passPercent;
+  private final double passPercent;
 
   protected AbstractBlackBoxTestCase(File testBase, Reader barcodeReader, double passPercent) {
     this.testBase = testBase;
     this.barcodeReader = barcodeReader;
-	  this.passPercent = passPercent;
+    this.passPercent = passPercent;
   }
 
   public void testBlackBox() throws IOException {
@@ -66,13 +66,13 @@ public abstract class AbstractBlackBoxTestCase extends TestCase {
     for (File testImage : imageFiles) {
       System.out.println("Starting " + testImage.getAbsolutePath());
 
-	    BufferedImage image;
-	    if (testImage.getName().endsWith(".url")) {
-		    String urlString = readFileAsString(testImage);
-		    image = ImageIO.read(new URL(urlString));
-	    } else {
-		    image = ImageIO.read(testImage);
-	    }
+      BufferedImage image;
+      if (testImage.getName().endsWith(".url")) {
+        String urlString = readFileAsString(testImage);
+        image = ImageIO.read(new URL(urlString));
+      } else {
+        image = ImageIO.read(testImage);
+      }
       MonochromeBitmapSource source = new BufferedImageMonochromeBitmapSource(image);
       Result result;
       try {

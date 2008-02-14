@@ -51,49 +51,49 @@ final class SnapshotThread extends Thread {
     Player player = zXingMIDlet.getPlayer();
     try {
       AdvancedMultimediaManager.setFocus(player);
-	    try {
-	      player.stop();
-	    } catch (MediaException me) {
-		    // continue
-	    }
-	    byte[] snapshot = takeSnapshot();
+      try {
+        player.stop();
+      } catch (MediaException me) {
+        // continue
+      }
+      byte[] snapshot = takeSnapshot();
       Image capturedImage = Image.createImage(snapshot, 0, snapshot.length);
       MonochromeBitmapSource source = new LCDUIImageMonochromeBitmapSource(capturedImage);
       Reader reader = new MultiFormatReader();
       Result result = reader.decode(source);
       zXingMIDlet.handleDecodedText(result.getText());
     } catch (ReaderException re) {
-	    // Show a friendlier message on a mere failure to read the barcode
-	    zXingMIDlet.showError("Sorry, no barcode was found.");
+      // Show a friendlier message on a mere failure to read the barcode
+      zXingMIDlet.showError("Sorry, no barcode was found.");
     } catch (Throwable t) {
       zXingMIDlet.showError(t);
     } finally {
-	    try {
-	      player.start();
-	    } catch (MediaException me) {
-		    // continue
-	    }
+      try {
+        player.start();
+      } catch (MediaException me) {
+        // continue
+      }
       currentThread = null;
     }
 
   }
 
-	private byte[] takeSnapshot() throws MediaException {
-		VideoControl videoControl = zXingMIDlet.getVideoControl();
-		byte[] snapshot = null;
-		try {
-	    snapshot = videoControl.getSnapshot(null);
-		} catch (MediaException me) {
-		}
-		if (snapshot == null) {
-			// Fall back on JPEG; seems that some cameras default to PNG even
-			// when PNG isn't supported!
-			snapshot = videoControl.getSnapshot("encoding=jpeg");
-			if (snapshot == null) {
-				throw new MediaException("Can't obtain a snapshot");
-			}
-		}
-		return snapshot;
-	}
+  private byte[] takeSnapshot() throws MediaException {
+    VideoControl videoControl = zXingMIDlet.getVideoControl();
+    byte[] snapshot = null;
+    try {
+      snapshot = videoControl.getSnapshot(null);
+    } catch (MediaException me) {
+    }
+    if (snapshot == null) {
+      // Fall back on JPEG; seems that some cameras default to PNG even
+      // when PNG isn't supported!
+      snapshot = videoControl.getSnapshot("encoding=jpeg");
+      if (snapshot == null) {
+        throw new MediaException("Can't obtain a snapshot");
+      }
+    }
+    return snapshot;
+  }
 
 }

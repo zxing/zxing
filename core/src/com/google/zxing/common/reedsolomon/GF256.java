@@ -32,6 +32,7 @@ final class GF256 {
   private static final int PRIMITIVE = 0x011D;
   private static final int[] exp = new int[256];
   private static final int[] log = new int[256];
+
   static {
     int x = 1;
     for (int i = 0; i < 256; i++) {
@@ -52,7 +53,7 @@ final class GF256 {
 
   /**
    * Implements both addition and subtraction -- they are the same in GF(256).
-   * 
+   *
    * @return sum/difference of a and b
    */
   static int addOrSubtract(int a, int b) {
@@ -87,7 +88,6 @@ final class GF256 {
   }
 
   /**
-   *
    * @param a
    * @param b
    * @return product of a and b in GF(256)

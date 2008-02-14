@@ -102,7 +102,7 @@ public final class EAN13Reader extends AbstractUPCEANReader {
    *
    * @param resultString string to insert decoded first digit into
    * @param lgPatternFound int whose bits indicates the pattern of odd/even L/G patterns used to
-   *  encode digits
+   * encode digits
    * @throws ReaderException if first digit cannot be determined
    */
   private static void determineFirstDigit(StringBuffer resultString, int lgPatternFound) throws ReaderException {

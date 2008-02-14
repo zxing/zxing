@@ -16,8 +16,8 @@
 
 package com.google.zxing.client.j2se;
 
-import com.google.zxing.MonochromeBitmapSource;
 import com.google.zxing.BlackPointEstimationMethod;
+import com.google.zxing.MonochromeBitmapSource;
 import com.google.zxing.common.BitArray;
 import com.google.zxing.common.BlackPointEstimator;
 
@@ -27,7 +27,7 @@ import java.awt.image.BufferedImage;
  * <p>An implementation based upon {@link BufferedImage}. This provides access to the
  * underlying image as if it were a monochrome image. Behind the scenes, it is evaluating
  * the luminance of the underlying image by retrieving its pixels' RGB values.</p>
- * 
+ *
  * @author srowen@google.com (Sean Owen), Daniel Switkin (dswitkin@google.com)
  */
 public final class BufferedImageMonochromeBitmapSource implements MonochromeBitmapSource {
@@ -36,7 +36,7 @@ public final class BufferedImageMonochromeBitmapSource implements MonochromeBitm
   private int blackPoint;
   private BlackPointEstimationMethod lastMethod;
   private int lastArgument;
-  
+
   private static final int LUMINANCE_BITS = 5;
   private static final int LUMINANCE_SHIFT = 8 - LUMINANCE_BITS;
   private static final int LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
@@ -80,7 +80,7 @@ public final class BufferedImageMonochromeBitmapSource implements MonochromeBitm
       int width = image.getWidth();
       int height = image.getHeight();
       int[] histogram = new int[LUMINANCE_BUCKETS];
-	    float biasTowardsWhite = 1.0f;
+      float biasTowardsWhite = 1.0f;
       if (method.equals(BlackPointEstimationMethod.TWO_D_SAMPLING)) {
         int minDimension = width < height ? width : height;
         int startI = height == minDimension ? 0 : (height - width) >> 1;
@@ -93,7 +93,7 @@ public final class BufferedImageMonochromeBitmapSource implements MonochromeBitm
         if (argument < 0 || argument >= height) {
           throw new IllegalArgumentException("Row is not within the image: " + argument);
         }
-	      biasTowardsWhite = 2.0f;
+        biasTowardsWhite = 2.0f;
         int[] rgbArray = new int[width];
         image.getRGB(0, argument, width, 1, rgbArray, 0, width);
         for (int x = 0; x < width; x++) {

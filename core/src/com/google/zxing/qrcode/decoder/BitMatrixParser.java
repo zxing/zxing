@@ -45,7 +45,7 @@ final class BitMatrixParser {
    *
    * @return {@link FormatInformation} encapsulating the QR Code's format info
    * @throws ReaderException if both format information locations cannot be parsed as
-   *  the valid encoding of format information
+   * the valid encoding of format information
    */
   FormatInformation readFormatInformation() throws ReaderException {
 
@@ -95,7 +95,7 @@ final class BitMatrixParser {
    *
    * @return {@link Version} encapsulating the QR Code's version
    * @throws ReaderException if both version information locations cannot be parsed as
-   *  the valid encoding of version information
+   * the valid encoding of version information
    */
   Version readVersion() throws ReaderException {
 

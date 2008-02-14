@@ -34,18 +34,18 @@ import com.google.zxing.client.result.ParsedReaderResultType;
 /**
  * The barcode reader activity itself. This is loosely based on the CameraPreview
  * example included in the Android SDK.
- * 
+ *
  * @author dswitkin@google.com (Daniel Switkin)
  * @author Android Team (for CameraPreview example)
  */
 public final class BarcodeReaderCaptureActivity extends Activity {
-  
+
   private CameraManager cameraManager;
   private CameraSurfaceView surfaceView;
   private WorkerThread workerThread;
-  
+
   private static final int ABOUT_ID = Menu.FIRST;
-  
+
   @Override
   public void onCreate(Bundle icicle) {
     super.onCreate(icicle);
@@ -64,7 +64,7 @@ public final class BarcodeReaderCaptureActivity extends Activity {
     workerThread.requestPreviewLoop();
     workerThread.start();
   }
-  
+
   @Override
   protected boolean isFullscreenOpaque() {
     // Our main window is set to translucent, but we know that we will
@@ -103,14 +103,14 @@ public final class BarcodeReaderCaptureActivity extends Activity {
       return super.onKeyDown(keyCode, event);
     }
   }
-  
+
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
-      super.onCreateOptionsMenu(menu);
-      menu.add(0, ABOUT_ID, R.string.menu_about);
-      return true;
+    super.onCreateOptionsMenu(menu);
+    menu.add(0, ABOUT_ID, R.string.menu_about);
+    return true;
   }
-  
+
   @Override
   public boolean onOptionsItemSelected(Menu.Item item) {
     switch (item.getId()) {
@@ -120,31 +120,31 @@ public final class BarcodeReaderCaptureActivity extends Activity {
             context.getString(R.string.msg_about),
             context.getString(R.string.button_ok), null, true, null);
         break;
-      }
-      return super.onOptionsItemSelected(item);
+    }
+    return super.onOptionsItemSelected(item);
   }
-  
-  Handler messageHandler = new Handler() {
+
+  private final Handler messageHandler = new Handler() {
     @Override
     public void handleMessage(Message message) {
       switch (message.what) {
-      case R.id.decoding_succeeded_message:
-        handleDecode((Result)message.obj);
-        break;
-      case R.id.decoding_failed_message:
-        Context context = getApplication();
-        showAlert(context.getString(R.string.title_no_barcode_detected),
-            context.getString(R.string.msg_no_barcode_detected),
-            context.getString(R.string.button_ok), null, true, null);
-        break;
+        case R.id.decoding_succeeded_message:
+          handleDecode((Result) message.obj);
+          break;
+        case R.id.decoding_failed_message:
+          Context context = getApplication();
+          showAlert(context.getString(R.string.title_no_barcode_detected),
+              context.getString(R.string.msg_no_barcode_detected),
+              context.getString(R.string.button_ok), null, true, null);
+          break;
       }
     }
   };
-  
+
   public void restartPreview() {
     workerThread.requestPreviewLoop();
   }
-  
+
   // TODO(dswitkin): These deprecated showAlert calls need to be updated.
   private void handleDecode(Result rawResult) {
     ResultPoint[] points = rawResult.getResultPoints();
@@ -191,5 +191,5 @@ public final class BarcodeReaderCaptureActivity extends Activity {
       return R.string.title_barcode_detected;
     }
   }
-  
+
 }

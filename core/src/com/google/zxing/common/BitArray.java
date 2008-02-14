@@ -31,9 +31,9 @@ public final class BitArray {
     this.bits = makeArray(size);
   }
 
-	public int getSize() {
-		return size;
-	}
+  public int getSize() {
+    return size;
+  }
 
   /**
    * @param i bit to get
@@ -57,7 +57,7 @@ public final class BitArray {
    *
    * @param i first bit to set
    * @param newBits the new value of the next 32 bits. Note again that the least-significant bit
-   *  corresponds to bit i, the next-least-significant to i+1, and so on.
+   * corresponds to bit i, the next-least-significant to i+1, and so on.
    */
   public void setBulk(int i, int newBits) {
     bits[i >> 5] = newBits;
@@ -119,12 +119,12 @@ public final class BitArray {
 
   /**
    * @return underlying array of ints. The first element holds the first 32 bits, and the least
-   *  significant bit is bit 0.
+   *         significant bit is bit 0.
    */
   public int[] getBitArray() {
     return bits;
   }
-  
+
   /**
    * Reverses all bits in the array.
    */
@@ -142,7 +142,7 @@ public final class BitArray {
     }
     bits = newBits;
   }
-  
+
   private static int[] makeArray(int size) {
     int arraySize = size >> 5;
     if ((size & 0x1F) != 0) {

@@ -52,7 +52,7 @@ abstract class AbstractDoCoMoResult extends ParsedReaderResult {
           // No terminating semicolon? uh, done. Set i such that loop terminates and break
           i = rawText.length();
           done = true;
-        } else if (rawText.charAt(i-1) == '\\') {
+        } else if (rawText.charAt(i - 1) == '\\') {
           // semicolon was escaped so continue
           i++;
         } else {

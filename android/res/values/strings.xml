@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="app_name">Barcode Reader</string>
-  <string name="button_no">No</string>  
+  <string name="button_no">No</string>
   <string name="button_ok">OK</string>
   <string name="button_yes">Yes</string>
   <string name="menu_about">About...</string>

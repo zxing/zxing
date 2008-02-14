@@ -38,8 +38,8 @@ public final class CollectionsTestCase extends TestCase {
       }
     });
     for (int i = 1; i < 100; i++) {
-      assertTrue("Element " + i, ((Integer) v.elementAt(i-1)).intValue() <=
-                                 ((Integer) v.elementAt(i)).intValue());
+      assertTrue("Element " + i, ((Integer) v.elementAt(i - 1)).intValue() <=
+          ((Integer) v.elementAt(i)).intValue());
     }
   }
 
