@@ -78,6 +78,7 @@
            fork="true">
       <classpath refid="wtk-build-path"/>
     </javac>
+    <jar jarfile="javame.jar" basedir="build" level="9"/>
   </target>
 
   <target name="compile-basic" depends="init">
@@ -107,13 +108,14 @@
       <classpath refid="wtk-build-path"/>
       <exclude name="com/google/zxing/client/j2me/AdvancedMultimediaManager.java"/>
     </javac>
+    <jar jarfile="javame-basic.jar" basedir="build" level="9"/>    
   </target>
 
   <target name="package">
     <unzip src="../core/core.jar" dest="build"/>
 
     <mkdir dir="build-j2me"/>
-    <exec executable="${WTK-home}/bin/preverify1.1">
+    <exec executable="${WTK-home}/bin/preverify1.1" failonerror="true">
       <arg line="-classpath ${preverify-classpath} -d build-j2me build"/>
     </exec>
 
