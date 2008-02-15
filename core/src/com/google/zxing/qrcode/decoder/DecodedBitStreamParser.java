@@ -208,28 +208,31 @@ final class DecodedBitStreamParser {
     // If we see something else in that second byte, we'll make the risky guess
     // that it's UTF-8.
     int length = bytes.length;
+    boolean canBeISO88591 = true;
     for (int i = 0; i < length; i++) {
       int value = bytes[i] & 0xFF;
       if (value >= 0x80 && value <= 0x9F && i < length - 1) {
+        canBeISO88591 = false;
         // ISO-8859-1 shouldn't use this, but before we decide it is Shift_JIS,
         // just double check that it is followed by a byte that's valid in
         // the Shift_JIS encoding
         int nextValue = bytes[i + 1] & 0xFF;
         if ((value & 0x1) == 0) {
-          // if even,
-          if (nextValue >= 0x9F && nextValue <= 0xFC) {
-            return SHIFT_JIS;
+          // if even, next value should be in [0x9F,0xFC]
+          // if not, we'll guess UTF-8
+          if (nextValue < 0x9F || nextValue > 0xFC) {
+            return UTF8;
           }
         } else {
-          if (nextValue >= 0x40 && nextValue <= 0x9E) {
-            return SHIFT_JIS;
+          // if odd, next value should be in [0x40,0x9E]
+          // if not, we'll guess UTF-8
+          if (nextValue < 0x40 || nextValue > 0x9E) {
+            return UTF8;
           }
         }
-        // otherwise we're going to take a guess that it's UTF-8
-        return UTF8;
       }
     }
-    return ISO88591;
+    return canBeISO88591 ? ISO88591 : SHIFT_JIS;
   }
 
 }
