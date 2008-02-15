@@ -32,9 +32,11 @@ import com.google.zxing.Result;
  */
 final class WorkerThread extends Thread {
 
-  private CameraSurfaceView surfaceView;
-  private CameraManager cameraManager;
-  private Handler handler;
+  private final CameraSurfaceView surfaceView;
+  private final CameraManager cameraManager;
+  private final Handler handler;
+  private final Object idleLock;
+  private State state;
 
   private enum State {
     IDLE,
@@ -43,12 +45,11 @@ final class WorkerThread extends Thread {
     DONE
   }
 
-  private State state;
-
   WorkerThread(CameraSurfaceView surfaceView, CameraManager cameraManager, Handler handler) {
     this.surfaceView = surfaceView;
     this.cameraManager = cameraManager;
     this.handler = handler;
+    this.idleLock = new Object();
     state = State.IDLE;
   }
 
@@ -57,10 +58,7 @@ final class WorkerThread extends Thread {
     while (true) {
       switch (state) {
         case IDLE:
-          try {
-            sleep(50);
-          } catch (InterruptedException e) {
-          }
+          idle();
           break;
         case PREVIEW_LOOP:
           surfaceView.capturePreviewAndDraw();
@@ -89,17 +87,36 @@ final class WorkerThread extends Thread {
 
   public void requestPreviewLoop() {
     state = State.PREVIEW_LOOP;
+    wakeFromIdle();
   }
 
   public void requestStillAndDecode() {
     state = State.STILL_AND_DECODE;
+    wakeFromIdle();
   }
 
   public void requestExitAndWait() {
     state = State.DONE;
+    wakeFromIdle();
     try {
       join();
     } catch (InterruptedException e) {
+    }
+  }
+
+  private void idle() {
+    try {
+      synchronized (idleLock) {
+        idleLock.wait();
+      }
+    } catch (InterruptedException ie) {
+      // continue
+    }
+  }
+
+  private void wakeFromIdle() {
+    synchronized (idleLock) {
+      idleLock.notifyAll();
     }
   }
 
