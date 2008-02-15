@@ -25,6 +25,7 @@
     <ant dir="javame" target="build"/>
     <ant dir="javase" target="build"/>
     <ant dir="android" target="package"/>
+    <ant dir="rim" target="build"/>
   </target>
 
   <target name="buildwithoutj2me">
@@ -37,6 +38,7 @@
     <ant dir="javame" target="clean"/>
     <ant dir="javase" target="clean"/>
     <ant dir="android" target="clean"/>
+    <ant dir="rim" target="clean"/>
   </target>
 
   <target name="test">
@@ -55,8 +57,10 @@
         <include name="core/**"/>
         <include name="javame/**"/>
         <include name="javase/**"/>
-        <!-- Only include the build script for now -->
         <include name="rim/build.xml"/>
+        <include name="rim/src/**"/>
+        <include name="rim/res/**"/>
+        <include name="rim/BarcodeReader.rapc"/>
         <include name="docs/**"/>
       </zipfileset>
     </zip>
@@ -71,6 +75,7 @@
         <pathelement location="core/src"/>
         <pathelement location="javame/src"/>
         <pathelement location="javase/src"/>
+        <pathelement location="rim/src"/>
       </sourcepath>
       <classpath>
         <pathelement location="${WTK-home}/lib/cldcapi11.jar"/>
@@ -78,6 +83,7 @@
         <pathelement location="${WTK-home}/lib/mmapi.jar"/>
         <pathelement location="${WTK-home}/lib/jsr234.jar"/>
         <pathelement location="${android-home}/android.jar"/>
+        <pathelement location="${BB-JDK-home}/lib/net_rim_api.jar"/>
       </classpath>
     </javadoc>
   </target>
