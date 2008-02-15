@@ -60,7 +60,7 @@
         <include name="rim/build.xml"/>
         <include name="rim/src/**"/>
         <include name="rim/res/**"/>
-        <include name="rim/BarcodeReader.rapc"/>
+        <include name="rim/BarcodeReader.jad.template"/>
         <include name="docs/**"/>
       </zipfileset>
     </zip>

@@ -79,16 +79,30 @@
       <arg line="-classpath ${rim-api-jar} -d build-j2me build"/>
     </exec>
 
+    <copy todir="build-j2me">
+      <fileset dir=".">
+        <include name="res/**"/>
+      </fileset>
+    </copy>
+
+    <copy file="BarcodeReader.jad.template" tofile="BarcodeReader.jad" overwrite="true">
+      <filterset>
+        <filter token="VERSION" value="${version}"/>
+      </filterset>
+    </copy>
+
     <jar jarfile="temp.jar" basedir="build-j2me"/>
     <java jar="${BB-JDK-home}/bin/rapc.jar" fork="true">
       <arg value="-quiet"/>
       <arg value="import=${rim-api-jar}"/>
-      <arg value="jad=BarcodeReader.rapc"/>
+      <arg value="jad=BarcodeReader.jad"/>
       <arg value="codename=BarcodeReader"/>
       <arg value="temp.jar"/>
     </java>
-  </target>
 
+    <echo>Remember to sign the .cod file!</echo>
+
+  </target>
 
   <target name="clean">
     <delete dir="build"/>
@@ -98,7 +112,9 @@
     <delete file="BarcodeReader.csl"/>
     <delete file="BarcodeReader.cso"/>
     <delete file="BarcodeReader.debug"/>
-    <delete file="BarcodeReader.jar"/>    
+    <delete file="BarcodeReader.jad"/>        
+    <delete file="BarcodeReader.jar"/>
+    <delete file="LogFile.txt"/>        
   </target>
 
 </project>
