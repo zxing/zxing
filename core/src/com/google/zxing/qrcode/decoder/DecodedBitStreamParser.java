@@ -209,6 +209,7 @@ final class DecodedBitStreamParser {
     // that it's UTF-8.
     int length = bytes.length;
     boolean canBeISO88591 = true;
+    boolean lastWasPossibleDoubleByteStart = false;
     for (int i = 0; i < length; i++) {
       int value = bytes[i] & 0xFF;
       if (value >= 0x80 && value <= 0x9F && i < length - 1) {
@@ -216,18 +217,29 @@ final class DecodedBitStreamParser {
         // ISO-8859-1 shouldn't use this, but before we decide it is Shift_JIS,
         // just double check that it is followed by a byte that's valid in
         // the Shift_JIS encoding
-        int nextValue = bytes[i + 1] & 0xFF;
-        if ((value & 0x1) == 0) {
-          // if even, next value should be in [0x9F,0xFC]
-          // if not, we'll guess UTF-8
-          if (nextValue < 0x9F || nextValue > 0xFC) {
-            return UTF8;
-          }
+        if (lastWasPossibleDoubleByteStart) {
+          // If we just checked this and the last byte for being a valid double-byte
+          // char, don't check starting on this byte. If the this and the last byte
+          // formed a valid pair, then this shouldn't be checked to see if it starts
+          // a double byte pair of course.
+          lastWasPossibleDoubleByteStart = false;
         } else {
-          // if odd, next value should be in [0x40,0x9E]
-          // if not, we'll guess UTF-8
-          if (nextValue < 0x40 || nextValue > 0x9E) {
-            return UTF8;
+          // ... otherwise do check to see if this plus the next byte form a valid
+          // double byte pair encoding a character.
+          lastWasPossibleDoubleByteStart = true;
+          int nextValue = bytes[i + 1] & 0xFF;
+          if ((value & 0x1) == 0) {
+            // if even, next value should be in [0x9F,0xFC]
+            // if not, we'll guess UTF-8
+            if (nextValue < 0x9F || nextValue > 0xFC) {
+              return UTF8;
+            }
+          } else {
+            // if odd, next value should be in [0x40,0x9E]
+            // if not, we'll guess UTF-8
+            if (nextValue < 0x40 || nextValue > 0x9E) {
+              return UTF8;
+            }
           }
         }
       }
