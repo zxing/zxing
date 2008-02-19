@@ -178,13 +178,15 @@ public final class Detector {
     // Now count other way -- don't run off image though of course
     int otherToX = fromX - (toX - fromX);
     if (otherToX < 0) {
-      otherToX = 0;
+      // "to" should the be the first value not included, so, the first value off
+      // the edge is -1
+      otherToX = -1;
     } else if (otherToX >= image.getWidth()) {
       otherToX = image.getWidth();
     }
     int otherToY = fromY - (toY - fromY);
     if (otherToY < 0) {
-      otherToY = 0;
+      otherToY = -1;
     } else if (otherToY >= image.getHeight()) {
       otherToY = image.getHeight();
     }
