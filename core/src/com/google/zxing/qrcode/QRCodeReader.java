@@ -38,6 +38,8 @@ public final class QRCodeReader implements Reader {
 
   private static final ResultPoint[] NO_POINTS = new ResultPoint[0];
 
+  private final Decoder decoder = new Decoder();
+
   /**
    * Locates and decodes a QR code in an image.
    *
@@ -54,11 +56,11 @@ public final class QRCodeReader implements Reader {
     ResultPoint[] points;
     if (hints != null && hints.containsKey(DecodeHintType.PURE_BARCODE)) {
       BitMatrix bits = extractPureBits(image);
-      text = Decoder.decode(bits);
+      text = decoder.decode(bits);
       points = NO_POINTS;
     } else {
       DetectorResult result = new Detector(image).detect();
-      text = Decoder.decode(result.getBits());
+      text = decoder.decode(result.getBits());
       points = result.getPoints();
     }
     return new Result(text, points);
