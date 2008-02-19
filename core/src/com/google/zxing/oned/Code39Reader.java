@@ -48,23 +48,42 @@ public final class Code39Reader extends AbstractOneDReader {
   private static final int ASTERISK_ENCODING = CHARACTER_ENCODINGS[39];
 
   private final boolean usingCheckDigit;
+  private final boolean extendedMode;
 
   /**
    * Creates a reader that assumes all encoded data is data, and does not treat the final
-   * character as a check digit.
+   * character as a check digit. It will not decoded "extended Code 39" sequences.
    */
   public Code39Reader() {
     usingCheckDigit = false;
+    extendedMode = false;
   }
 
   /**
    * Creates a reader that can be configured to check the last character as a check digit.
+   * It will not decoded "extended Code 39" sequences.
    *
    * @param usingCheckDigit if true, treat the last data character as a check digit, not
    * data, and verify that the checksum passes
    */
   public Code39Reader(boolean usingCheckDigit) {
     this.usingCheckDigit = usingCheckDigit;
+    this.extendedMode = false;
+  }
+
+  /**
+   * Creates a reader that can be configured to check the last character as a check digit,
+   * or optionally attempt to decode "extended Code 39" sequences that are used to encode
+   * the full ASCII character set.
+   *
+   * @param usingCheckDigit if true, treat the last data character as a check digit, not
+   * data, and verify that the checksum passes
+   * @param extendedMode if true, willa tetmpt to decode extended Code 39 sequences in the
+   * text
+   */
+  public Code39Reader(boolean usingCheckDigit, boolean extendedMode) {
+    this.usingCheckDigit = usingCheckDigit;
+    this.extendedMode = extendedMode;
   }
 
   public Result decodeRow(final int rowNumber, final BitArray row) throws ReaderException {
@@ -113,6 +132,9 @@ public final class Code39Reader extends AbstractOneDReader {
     }
 
     String resultString = result.toString();
+    if (extendedMode) {
+      resultString = decodeExtended(resultString);
+    }
     return new Result(resultString,
         new ResultPoint[]{new GenericResultPoint((float) (start[1] - start[0]) / 2.0f, (float) rowNumber),
             new GenericResultPoint((float) (nextStart - lastStart) / 2.0f, (float) rowNumber)});
@@ -192,6 +214,62 @@ public final class Code39Reader extends AbstractOneDReader {
       }
     }
     throw new ReaderException("Pattern did not match character encoding");
+  }
+
+  private static String decodeExtended(String encoded) throws ReaderException {
+    int length = encoded.length();
+    StringBuffer decoded = new StringBuffer(length);
+    for (int i = 0; i < length; i++) {
+      char c = encoded.charAt(i);
+      if (c == '+' || c == '$' || c == '%' || c == '/') {
+        char next = encoded.charAt(i + 1);
+        char decodedChar = '\0';
+        switch (c) {
+          case '+':
+            // +A to +Z map to a to z
+            if (next >= 'A' && next <= 'Z') {
+              decodedChar = (char) (next + 32);
+            } else {
+              throw new ReaderException("Invalid extended code 39 sequence: " + c + next);
+            }
+            break;
+          case '$':
+            // $A to $Z map to control codes SH to SB
+            if (next >= 'A' && next <= 'Z') {
+              decodedChar = (char) (next - 64);
+            } else {
+              throw new ReaderException("Invalid extended code 39 sequence: " + c + next);
+            }
+            break;
+          case '%':
+            // %A to %E map to control codes ESC to US
+            if (next >= 'A' && next <= 'E') {
+              decodedChar = (char) (next - 38);
+            } else if (next >= 'F' && next <= 'W') {
+              decodedChar = (char) (next - 11);
+            } else {
+              throw new ReaderException("Invalid extended code 39 sequence: " + c + next);
+            }
+            break;
+          case '/':
+            // /A to /O map to ! to , and /Z maps to :
+            if (next >= 'A' && next <= 'O') {
+              decodedChar = (char) (next - 32);
+            } else if (next == 'Z') {
+              decodedChar = ':';
+            } else {
+              throw new ReaderException("Invalid extended sequence: " + c + next);
+            }
+            break;
+        }
+        decoded.append(decodedChar);
+        // bump up i again since we read two characters
+        i++;
+      } else {
+        decoded.append(c);
+      }
+    }
+    return decoded.toString();
   }
 
 }
