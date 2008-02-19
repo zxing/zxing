@@ -18,6 +18,7 @@ package com.google.zxing.qrcode.decoder;
 
 import com.google.zxing.ReaderException;
 import com.google.zxing.common.BitMatrix;
+import com.google.zxing.common.reedsolomon.GF256;
 import com.google.zxing.common.reedsolomon.ReedSolomonDecoder;
 import com.google.zxing.common.reedsolomon.ReedSolomonException;
 
@@ -29,7 +30,10 @@ import com.google.zxing.common.reedsolomon.ReedSolomonException;
  */
 public final class Decoder {
 
-  private Decoder() {
+  private final ReedSolomonDecoder rsDecoder;
+
+  public Decoder() {
+    rsDecoder = new ReedSolomonDecoder(GF256.QR_CODE_FIELD);
   }
 
   /**
@@ -40,7 +44,7 @@ public final class Decoder {
    * @return text encoded within the QR Code
    * @throws ReaderException if the QR Code cannot be decoded
    */
-  public static String decode(boolean[][] image) throws ReaderException {
+  public String decode(boolean[][] image) throws ReaderException {
     int dimension = image.length;
     BitMatrix bits = new BitMatrix(dimension);
     for (int i = 0; i < dimension; i++) {
@@ -60,7 +64,7 @@ public final class Decoder {
    * @return text encoded within the QR Code
    * @throws ReaderException if the QR Code cannot be decoded
    */
-  public static String decode(BitMatrix bits) throws ReaderException {
+  public String decode(BitMatrix bits) throws ReaderException {
 
     // Construct a parser and read version, error-correction level
     BitMatrixParser parser = new BitMatrixParser(bits);
@@ -103,7 +107,7 @@ public final class Decoder {
    * @param numDataCodewords number of codewords that are data bytes
    * @throws ReaderException if error correction fails
    */
-  private static void correctErrors(byte[] codewordBytes, int numDataCodewords) throws ReaderException {
+  private void correctErrors(byte[] codewordBytes, int numDataCodewords) throws ReaderException {
     int numCodewords = codewordBytes.length;
     // First read into an array of ints
     int[] codewordsInts = new int[numCodewords];
@@ -112,7 +116,7 @@ public final class Decoder {
     }
     int numECCodewords = codewordBytes.length - numDataCodewords;
     try {
-      ReedSolomonDecoder.decode(codewordsInts, numECCodewords);
+      rsDecoder.decode(codewordsInts, numECCodewords);
     } catch (ReedSolomonException rse) {
       throw new ReaderException(rse.toString());
     }
