@@ -116,9 +116,8 @@ public abstract class AbstractOneDReader implements OneDReader {
 
   /**
    * Determines how closely a set of observed counts of runs of black/white values matches a given
-   * target pattern. For each counter, the ratio of the difference between it and the pattern value
-   * is compared to the expected pattern value. This ratio is averaged across counters to produce
-   * the return value. 0.0 means an exact match; higher values mean poorer matches.
+   * target pattern. This is reported as the ratio of the total variance from the expected pattern proportions
+   * across all pattern elements, to the length of the pattern.
    *
    * @param counters observed counters
    * @param pattern expected pattern
@@ -139,9 +138,9 @@ public abstract class AbstractOneDReader implements OneDReader {
       float scaledCounter = (float) counters[x] / unitBarWidth;
       float width = pattern[x];
       float abs = scaledCounter > width ? scaledCounter - width : width - scaledCounter;
-      totalVariance += abs / width;
+      totalVariance += abs;
     }
-    return totalVariance / (float) numCounters;
+    return totalVariance / (float) patternLength;
   }
 
   /**

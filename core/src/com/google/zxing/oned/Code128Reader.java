@@ -139,7 +139,7 @@ public final class Code128Reader extends AbstractOneDReader {
       {2, 3, 3, 1, 1, 1, 2}
   };
 
-  private static final float MAX_VARIANCE = 0.4f;
+  private static final float MAX_VARIANCE = 0.3f;
 
   private static final int CODE_SHIFT = 98;
 
@@ -180,10 +180,17 @@ public final class Code128Reader extends AbstractOneDReader {
         counters[counterPosition]++;
       } else {
         if (counterPosition == patternLength - 1) {
+          float bestVariance = MAX_VARIANCE;
+          int bestMatch = -1;
           for (int startCode = CODE_START_A; startCode <= CODE_START_C; startCode++) {
-            if (patternMatchVariance(counters, CODE_PATTERNS[startCode]) < MAX_VARIANCE) {
-              return new int[]{patternStart, i, startCode};
+            float variance = patternMatchVariance(counters, CODE_PATTERNS[startCode]);
+            if (variance < bestVariance) {
+              bestVariance = variance;
+              bestMatch = startCode;
             }
+          }
+          if (bestMatch >= 0) {
+            return new int[]{patternStart, i, bestMatch};
           }
           patternStart += counters[0] + counters[1];
           for (int y = 2; y < patternLength; y++) {
@@ -202,7 +209,7 @@ public final class Code128Reader extends AbstractOneDReader {
 
   private static int decodeCode(BitArray row, int[] counters, int rowOffset) throws ReaderException {
     recordPattern(row, rowOffset, counters);
-    float bestVariance = 0.4f; // worst variance we'll accept
+    float bestVariance = MAX_VARIANCE; // worst variance we'll accept
     int bestMatch = -1;
     for (int d = 0; d < CODE_PATTERNS.length; d++) {
       int[] pattern = CODE_PATTERNS[d];
