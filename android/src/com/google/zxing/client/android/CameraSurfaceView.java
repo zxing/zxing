@@ -48,10 +48,7 @@ final class CameraSurfaceView extends SurfaceView implements SurfaceHolder.Callb
     surfaceHolder.setCallback(this);
     hasSurface = false;
     scannerAlpha = 0;
-
-    // FIXME(dswitkin): This resolution needs to be made dynamic to handle different devices and
-    // orientations.
-    surfaceHolder.setFixedSize(320, 240);
+    surfaceHolder.setSizeFromLayout();
   }
 
   public boolean surfaceCreated(SurfaceHolder holder) {
