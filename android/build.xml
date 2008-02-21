@@ -108,7 +108,7 @@
 
   <!-- Compile this project's .java files into .class files. -->
   <target name="compile" depends="init, dirs, resource-src, aidl">
-    <javac encoding="ascii" target="1.5" debug="true" extdirs=""
+    <javac encoding="ascii" target="1.5" debug="false" optimize="true" extdirs=""
            srcdir="."
            destdir="${outdir-classes}"
            bootclasspath="${android-jar}">
@@ -119,14 +119,35 @@
     <unzip src="../core/core.jar" dest="${outdir-classes}"/>
   </target>
 
+  <target name="optimize" depends="compile">
+    <jar basedir="${outdir-classes}" destfile="temp.jar"/>
+    <java jar="${WTK-home}/bin/proguard.jar" fork="true" failonerror="true">
+     <arg value="-injars temp.jar"/>
+     <arg value="-outjars optimized.jar"/>
+     <arg value="-libraryjars ${android-jar}"/>
+     <arg value="-dontpreverify"/>
+     <arg value="-dontobfuscate"/>
+     <arg value="-keep public class com.google.zxing.client.android.BarcodeReaderCaptureActivity"/>
+     <arg value="-keep public class com.google.zxing.qrcode.detector.DefaultGridSampler"/>
+     <arg value="-keep public class com.google.zxing.qrcode.detector.GridSampler"/>      
+     <arg value="-optimizationpasses 4"/>
+     <arg value="-verbose"/>
+   </java>
+   <delete file="temp.jar"/>
+   <delete dir="${outdir-classes}"/>
+   <mkdir dir="${outdir-classes}"/>
+   <unzip src="optimized.jar" dest="${outdir-classes}"/>
+   <delete file="optimized.jar"/>
+  </target>
+
   <!-- Convert this project's .class files into .dex files. -->
-  <target name="dex" depends="compile">
+  <target name="dex" depends="compile, optimize">
     <exec executable="${dx}" failonerror="true">
       <arg value="-JXmx384M"/>
       <arg value="--dex"/>
       <arg value="--output=${intermediate-dex}"/>
-      <arg value="--locals=full"/>
-      <arg value="--positions=lines"/>
+      <arg value="--locals=none"/>
+      <arg value="--positions=none"/>
       <arg path="${outdir-classes}"/>
     </exec>
   </target>
