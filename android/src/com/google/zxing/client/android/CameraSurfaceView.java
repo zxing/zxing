@@ -31,7 +31,7 @@ import com.google.zxing.ResultPoint;
  */
 final class CameraSurfaceView extends SurfaceView implements SurfaceHolder.Callback {
 
-  private static int[] SCANNER_ALPHA = {0, 64, 128, 192, 255, 192, 128, 64};
+  private static final int[] SCANNER_ALPHA = {0, 64, 128, 192, 255, 192, 128, 64};
 
   private CameraManager cameraManager;
   private SurfaceHolder surfaceHolder;
