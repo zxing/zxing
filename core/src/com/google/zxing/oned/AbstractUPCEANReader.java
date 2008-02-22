@@ -207,6 +207,8 @@ public abstract class AbstractUPCEANReader extends AbstractOneDReader implements
           for (int y = 2; y < patternLength; y++) {
             counters[y - 2] = counters[y];
           }
+          counters[patternLength - 2] = 0;
+          counters[patternLength - 1] = 0;
           counterPosition--;
         } else {
           counterPosition++;
