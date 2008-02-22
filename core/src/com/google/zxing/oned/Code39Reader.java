@@ -38,9 +38,9 @@ public final class Code39Reader extends AbstractOneDReader {
    * with 1s representing "wide" and 0s representing narrow.
    */
   private static final int[] CHARACTER_ENCODINGS = {
-      0x038, 0x121, 0x061, 0x160, 0x031, 0x130, 0x070, 0x025, 0x124, 0x064, // 0-9
+      0x034, 0x121, 0x061, 0x160, 0x031, 0x130, 0x070, 0x025, 0x124, 0x064, // 0-9
       0x109, 0x049, 0x148, 0x019, 0x118, 0x058, 0x00D, 0x10C, 0x04C, 0x01C, // A-J
-      0x103, 0x043, 0x142, 0x013, 0x112, 0x052, 0x007, 0x106, 0x046, 0x016,  // K-T
+      0x103, 0x043, 0x142, 0x013, 0x112, 0x052, 0x007, 0x106, 0x046, 0x016, // K-T
       0x181, 0x0C1, 0x1C0, 0x091, 0x190, 0x0D0, 0x085, 0x184, 0x0C4, 0x094, // U-*
       0x0A8, 0x0A2, 0x08A, 0x02A // $-%
   };
@@ -174,6 +174,8 @@ public final class Code39Reader extends AbstractOneDReader {
           for (int y = 2; y < patternLength; y++) {
             counters[y - 2] = counters[y];
           }
+          counters[patternLength - 2] = 0;
+          counters[patternLength - 1] = 0;
           counterPosition--;
         } else {
           counterPosition++;
@@ -186,25 +188,31 @@ public final class Code39Reader extends AbstractOneDReader {
   }
 
   private static int toNarrowWidePattern(int[] counters) throws ReaderException {
-    int minCounter = Integer.MAX_VALUE;
-    for (int i = 0; i < counters.length; i++) {
-      if (counters[i] < minCounter) {
-        minCounter = counters[i];
+    int numCounters = counters.length;
+    int maxNarrowCounter = 0;
+    int wideCounters;
+    do {
+      int minCounter = Integer.MAX_VALUE;
+      for (int i = 0; i < numCounters; i++) {
+        int counter = counters[i];
+        if (counter < minCounter && counter > maxNarrowCounter) {
+          minCounter = counter;
+        }
       }
-    }
-    int maxNarrowCounter = (int) (minCounter * 1.5f);
-    int wideCounters = 0;
-    int pattern = 0;
-    for (int i = 0; i < counters.length; i++) {
-      if (counters[i] > maxNarrowCounter) {
-        pattern |= 1 << (counters.length - 1 - i);
-        wideCounters++;
+      maxNarrowCounter = minCounter;
+      wideCounters = 0;
+      int pattern = 0;
+      for (int i = 0; i < numCounters; i++) {
+        if (counters[i] > maxNarrowCounter) {
+          pattern |= 1 << (numCounters - 1 - i);
+          wideCounters++;
+        }
       }
-    }
-    if (wideCounters != 3) {
-      throw new ReaderException("Can't find 3 wide bars/spaces out of 9");
-    }
-    return pattern;
+      if (wideCounters == 3) {
+        return pattern;
+      }
+    } while (wideCounters > 3);
+    throw new ReaderException("Can't find 3 wide bars/spaces out of 9");
   }
 
   private static char patternToChar(int pattern) throws ReaderException {
