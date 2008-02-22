@@ -63,6 +63,9 @@ public final class BarcodeReaderCaptureActivity extends Activity {
     workerThread = new WorkerThread(surfaceView, cameraManager, messageHandler);
     workerThread.requestPreviewLoop();
     workerThread.start();
+
+    // TODO re-enable this when issues with Matrix.setPolyToPoly() are resolved
+    //GridSampler.setGridSampler(new AndroidGraphicsGridSampler());
   }
 
   @Override
