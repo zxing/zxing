@@ -59,3 +59,18 @@
   - Worked around "java.lang.Error 136" from Nokia N70 (?)
   - Fixed bug in Shift_JIS detection and implemented basic UTF-8 detection
     for nonstandard QR Codes that don't use ISO-8859-1
+
+0.4.5 (22 Feb 2008)
+  - Checked in first minimal working Blackberry client. Still quite crude.
+  - Fixed UTF-8 detection again
+  - Refactored Reed-Solomon to allow different GF(256) primitive polynomials,
+    in preparation for Data Matrix
+  - Slight improvement to 1D decoding accuracy, most noticeable in
+    improvements to Code 128 decoding
+  - Bug fix in Code39Reader -- typo in encoding of letter "I" and "0"
+  - Bug fix in 1D readers -- error in counting black/white pixel counts
+    in certain situations
+  - Now supports Extended Code 39
+  - Tiny bug fix to QRCodeReader for images that extend all the way
+    to top or left
+  - Android client now builds with ProGuard optimization
