@@ -72,6 +72,18 @@
         </not>
       </condition>
     </fail>
+    <fail message="Please put proguard.jar in 'bin' under the WTK install directory">
+      <condition>
+        <and>
+          <not>
+            <isset property="debug"/>
+          </not>
+          <not>
+            <available file="${WTK-home}/bin/proguard.jar" type="file"/>
+          </not>
+        </and>
+      </condition>
+    </fail>
   </target>
 
   <!-- Create the output directories if they don't exist yet. -->
@@ -108,7 +120,7 @@
 
   <!-- Compile this project's .java files into .class files. -->
   <target name="compile" depends="init, dirs, resource-src, aidl">
-    <javac encoding="ascii" target="1.5" debug="false" optimize="true" extdirs=""
+    <javac encoding="ascii" target="1.5" debug="true" optimize="true" extdirs=""
            srcdir="."
            destdir="${outdir-classes}"
            bootclasspath="${android-jar}">
@@ -119,7 +131,7 @@
     <unzip src="../core/core.jar" dest="${outdir-classes}"/>
   </target>
 
-  <target name="optimize" depends="compile">
+  <target name="optimize" depends="compile" unless="debug">
     <jar basedir="${outdir-classes}" destfile="temp.jar"/>
     <java jar="${WTK-home}/bin/proguard.jar" fork="true" failonerror="true">
      <arg value="-injars temp.jar"/>
@@ -140,12 +152,30 @@
 
   <!-- Convert this project's .class files into .dex files. -->
   <target name="dex" depends="compile, optimize">
+
+    <condition property="locals" value="full">
+      <isset property="debug"/>
+    </condition>
+    <condition property="locals" value="none">
+      <not>
+        <isset property="debug"/>
+      </not>
+    </condition>
+    <condition property="positions" value="lines">
+      <isset property="debug"/>
+    </condition>
+    <condition property="positions" value="none">
+      <not>
+        <isset property="debug"/>
+      </not>
+    </condition>
+
     <exec executable="${dx}" failonerror="true">
       <arg value="-JXmx384M"/>
       <arg value="--dex"/>
       <arg value="--output=${intermediate-dex}"/>
-      <arg value="--locals=none"/>
-      <arg value="--positions=none"/>
+      <arg value="--locals=${locals}"/>
+      <arg value="--positions=${positions}"/>
       <arg path="${outdir-classes}"/>
     </exec>
   </target>
