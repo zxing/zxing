@@ -119,7 +119,7 @@
   </target>
 
   <!-- Compile this project's .java files into .class files. -->
-  <target name="compile" depends="init, dirs, resource-src, aidl">
+  <target name="compile" depends="init, clean, dirs, resource-src, aidl">
     <javac encoding="ascii" target="1.5" debug="true" optimize="true" extdirs=""
            srcdir="."
            destdir="${outdir-classes}"
