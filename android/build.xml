@@ -128,8 +128,6 @@
      <arg value="-dontpreverify"/>
      <arg value="-dontobfuscate"/>
      <arg value="-keep public class com.google.zxing.client.android.BarcodeReaderCaptureActivity"/>
-     <arg value="-keep public class com.google.zxing.qrcode.detector.DefaultGridSampler"/>
-     <arg value="-keep public class com.google.zxing.qrcode.detector.GridSampler"/>      
      <arg value="-optimizationpasses 4"/>
      <arg value="-verbose"/>
    </java>

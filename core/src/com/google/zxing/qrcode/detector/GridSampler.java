@@ -28,52 +28,37 @@ import com.google.zxing.common.BitMatrix;
  * Imaging library, but which may not be available in other environments such as J2ME, and vice
  * versa.
  *
- * The implementation used can be controlled by calling {@link #setGridSamplerClassName(String)}
- * with the name of a class which implements this interface.
+ * The implementation used can be controlled by calling {@link #setGridSampler(GridSampler)}
+ * with an instance of a class which implements this interface.
  *
  * @author srowen@google.com (Sean Owen)
  */
 public abstract class GridSampler {
 
-  private static final String DEFAULT_IMPL_CLASS = "com.google.zxing.qrcode.detector.DefaultGridSampler";
-
-  private static String gridSamplerClassName = DEFAULT_IMPL_CLASS;
   private static GridSampler gridSampler;
 
   /**
-   * <p>Sets the (fully-qualified) name of the implementation of {@link GridSampler} which will be
-   * returned from {@link #getInstance()}.</p>
-   *
-   * @param className {@link GridSampler} implementation to instantiate
+   * Sets the implementation of {@link GridSampler} used by the library. One global
+   * instance is stored, which may sound problematic. But, the implementation provided
+   * ought to be appropriate for the entire platform, and all uses of this library
+   * in the whole lifetime of the JVM. For instance, an Android activity can swap in
+   * an implementation that takes advantage of native platform libraries.
+   * 
+   * @param newGridSampler
    */
-  public static void setGridSamplerClassName(String className) {
-    if (className == null) {
+  public static void setGridSampler(GridSampler newGridSampler) {
+    if (newGridSampler == null) {
       throw new IllegalArgumentException();
     }
-    gridSamplerClassName = className;
+    gridSampler = newGridSampler;
   }
 
   /**
-   * @return the current implementation of {@link GridSampler}, instantiating one if one does
-   *         not already exist. The class which is instantied may be set by
-   *         {@link #setGridSamplerClassName(String)}
+   * @return the current implementation of {@link GridSampler}
    */
   public static GridSampler getInstance() {
     if (gridSampler == null) {
-      // We don't need to synchronize this -- don't really care if two threads initialize at once.
-      // The second one will win.
-      try {
-        Class gridSamplerClass = Class.forName(gridSamplerClassName);
-        gridSampler = (GridSampler) gridSamplerClass.newInstance();
-      } catch (ClassNotFoundException cnfe) {
-        // The exceptions below would represent bad programming errors;
-        // For J2ME we're punting them out with RuntimeException
-        throw new RuntimeException(cnfe.toString());
-      } catch (IllegalAccessException iae) {
-        throw new RuntimeException(iae.toString());
-      } catch (InstantiationException ie) {
-        throw new RuntimeException(ie.toString());
-      }
+      gridSampler = new DefaultGridSampler();
     }
     return gridSampler;
   }
