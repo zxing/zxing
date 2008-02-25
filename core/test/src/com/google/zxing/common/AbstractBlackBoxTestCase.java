@@ -16,6 +16,7 @@
 
 package com.google.zxing.common;
 
+import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MonochromeBitmapSource;
 import com.google.zxing.Reader;
 import com.google.zxing.ReaderException;
@@ -50,11 +51,16 @@ public abstract class AbstractBlackBoxTestCase extends TestCase {
   private final File testBase;
   private final Reader barcodeReader;
   private final double passPercent;
+  private final BarcodeFormat expectedFormat;
 
-  protected AbstractBlackBoxTestCase(File testBase, Reader barcodeReader, double passPercent) {
+  protected AbstractBlackBoxTestCase(File testBase,
+                                     Reader barcodeReader,
+                                     double passPercent,
+                                     BarcodeFormat expectedFormat) {
     this.testBase = testBase;
     this.barcodeReader = barcodeReader;
     this.passPercent = passPercent;
+    this.expectedFormat = expectedFormat;
   }
 
   public void testBlackBox() throws IOException {
@@ -81,6 +87,8 @@ public abstract class AbstractBlackBoxTestCase extends TestCase {
         System.out.println(re);
         continue;
       }
+
+      assertEquals(expectedFormat, result.getBarcodeFormat());
 
       String testImageFileName = testImage.getName();
       File expectedTextFile =

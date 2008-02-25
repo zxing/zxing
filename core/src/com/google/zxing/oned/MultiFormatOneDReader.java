@@ -16,9 +16,14 @@
 
 package com.google.zxing.oned;
 
+import com.google.zxing.DecodeHintType;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
+import com.google.zxing.BarcodeFormat;
 import com.google.zxing.common.BitArray;
+
+import java.util.Hashtable;
+import java.util.Vector;
 
 /**
  * @author dswitkin@google.com (Daniel Switkin)
@@ -26,20 +31,40 @@ import com.google.zxing.common.BitArray;
  */
 public final class MultiFormatOneDReader extends AbstractOneDReader {
 
-  private final OneDReader[] readers = new OneDReader[]{
-      new MultiFormatUPCEANReader(), new Code39Reader(), new Code128Reader()
-  };
+  public Result decodeRow(int rowNumber, BitArray row, Hashtable hints) throws ReaderException {
 
-  public Result decodeRow(int rowNumber, BitArray row) throws ReaderException {
-    ReaderException saved = null;
-    for (int i = 0; i < readers.length; i++) {
-      try {
-        return readers[i].decodeRow(rowNumber, row);
-      } catch (ReaderException re) {
-        saved = re;
+    Hashtable possibleFormats = hints == null ? null : (Hashtable) hints.get(DecodeHintType.POSSIBLE_FORMATS);
+    Vector readers = new Vector();
+    if (possibleFormats != null) {
+      if (possibleFormats.contains(BarcodeFormat.EAN_13) ||
+          possibleFormats.contains(BarcodeFormat.UPC_A) ||
+          possibleFormats.contains(BarcodeFormat.EAN_8) ||
+          possibleFormats.contains(BarcodeFormat.UPC_E)) {
+        readers.addElement(new MultiFormatUPCEANReader());
+      }
+      if (possibleFormats.contains(BarcodeFormat.CODE_39)) {
+        readers.addElement(new Code39Reader());
+      }
+      if (possibleFormats.contains(BarcodeFormat.CODE_128)) {
+        readers.addElement(new Code128Reader());
       }
     }
-    throw saved;
+    if (readers.isEmpty()) {
+      readers.addElement(new MultiFormatUPCEANReader());
+      readers.addElement(new Code39Reader());
+      readers.addElement(new Code128Reader());
+    }
+
+    for (int i = 0; i < readers.size(); i++) {
+      OneDReader reader = (OneDReader) readers.elementAt(i);
+      try {
+        return reader.decodeRow(rowNumber, row, hints);
+      } catch (ReaderException re) {
+        // continue
+      }
+    }
+
+    throw new ReaderException("No barcode was detected in this image.");
   }
 
 }

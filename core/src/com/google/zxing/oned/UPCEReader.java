@@ -17,6 +17,7 @@
 package com.google.zxing.oned;
 
 import com.google.zxing.ReaderException;
+import com.google.zxing.BarcodeFormat;
 import com.google.zxing.common.BitArray;
 
 /**
@@ -90,6 +91,10 @@ public final class UPCEReader extends AbstractUPCEANReader {
       }
     }
     throw new ReaderException("Unable to determine number system and check digit");
+  }
+
+  BarcodeFormat getBarcodeFormat() {
+    return BarcodeFormat.UPC_E;  
   }
 
   /**

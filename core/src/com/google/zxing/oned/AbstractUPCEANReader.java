@@ -16,11 +16,14 @@
 
 package com.google.zxing.oned;
 
+import com.google.zxing.BarcodeFormat;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitArray;
 import com.google.zxing.common.GenericResultPoint;
+
+import java.util.Hashtable;
 
 /**
  * <p>Encapsulates functionality and implementation that is common to UPC and EAN families
@@ -95,7 +98,7 @@ public abstract class AbstractUPCEANReader extends AbstractOneDReader implements
     return startRange;
   }
 
-  public final Result decodeRow(int rowNumber, BitArray row) throws ReaderException {
+  public final Result decodeRow(int rowNumber, BitArray row, Hashtable hints) throws ReaderException {
     return decodeRow(rowNumber, row, findStartGuardPattern(row));
   }
 
@@ -118,10 +121,15 @@ public abstract class AbstractUPCEANReader extends AbstractOneDReader implements
       throw new ReaderException("Checksum failed");
     }
 
-    return new Result(resultString, new ResultPoint[]{
-        new GenericResultPoint((float) (startGuardRange[1] - startGuardRange[0]) / 2.0f, (float) rowNumber),
-        new GenericResultPoint((float) (endRange[1] - endRange[0]) / 2.0f, (float) rowNumber)});
+    return new Result(
+        resultString,
+        new ResultPoint[]{
+            new GenericResultPoint((float) (startGuardRange[1] - startGuardRange[0]) / 2.0f, (float) rowNumber),
+            new GenericResultPoint((float) (endRange[1] - endRange[0]) / 2.0f, (float) rowNumber)},
+        getBarcodeFormat());
   }
+
+  abstract BarcodeFormat getBarcodeFormat();
 
   /**
    * Computes the UPC/EAN checksum on a string of digits, and reports

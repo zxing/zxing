@@ -17,6 +17,7 @@
 package com.google.zxing.oned;
 
 import com.google.zxing.MultiFormatReader;
+import com.google.zxing.BarcodeFormat;
 import com.google.zxing.common.AbstractBlackBoxTestCase;
 
 import java.io.File;
@@ -27,7 +28,7 @@ import java.io.File;
 public final class EAN13BlackBox1TestCase extends AbstractBlackBoxTestCase {
 
   public EAN13BlackBox1TestCase() {
-    super(new File("test/data/blackbox/ean13-1"), new MultiFormatReader(), 0.66);
+    super(new File("test/data/blackbox/ean13-1"), new MultiFormatReader(), 0.66, BarcodeFormat.EAN_13);
   }
 
 }

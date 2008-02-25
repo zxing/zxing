@@ -20,6 +20,7 @@ import com.google.zxing.oned.MultiFormatOneDReader;
 import com.google.zxing.qrcode.QRCodeReader;
 
 import java.util.Hashtable;
+import java.util.Vector;
 
 /**
  * <p>This implementation can detect barcodes in one of several formats within
@@ -34,36 +35,34 @@ public final class MultiFormatReader implements Reader {
     return decode(image, null);
   }
 
-  public Result decode(MonochromeBitmapSource image, Hashtable hints)
-      throws ReaderException {
+  public Result decode(MonochromeBitmapSource image, Hashtable hints) throws ReaderException {
+
     Hashtable possibleFormats = hints == null ? null : (Hashtable) hints.get(DecodeHintType.POSSIBLE_FORMATS);
-
-    boolean tryOneD;
-    boolean tryQR;
-    if (possibleFormats == null) {
-      tryOneD = true;
-      tryQR = true;
-    } else {
-      tryOneD = possibleFormats.contains(BarcodeFormat.ONED);
-      tryQR = possibleFormats.contains(BarcodeFormat.QR_CODE);
-    }
-    if (!(tryOneD || tryQR)) {
-      throw new ReaderException("POSSIBLE_FORMATS specifies no supported types");
-    }
-
-    // UPC is much faster to decode, so try it first.
-    if (tryOneD) {
-      try {
-        return new MultiFormatOneDReader().decode(image, hints);
-      } catch (ReaderException re) {
+    Vector readers = new Vector();
+    if (possibleFormats != null) {
+      if (possibleFormats.contains(BarcodeFormat.UPC_A) ||
+          possibleFormats.contains(BarcodeFormat.UPC_E) ||
+          possibleFormats.contains(BarcodeFormat.EAN_13) ||
+          possibleFormats.contains(BarcodeFormat.EAN_8) ||
+          possibleFormats.contains(BarcodeFormat.CODE_39) ||
+          possibleFormats.contains(BarcodeFormat.CODE_128)) {
+        readers.addElement(new MultiFormatOneDReader());
+      }
+      if (possibleFormats.contains(BarcodeFormat.QR_CODE)) {
+        readers.addElement(new QRCodeReader());
       }
     }
+    if (readers.isEmpty()) {
+      readers.addElement(new MultiFormatOneDReader());
+      readers.addElement(new QRCodeReader());
+    }
 
-    // Then fall through to QR codes.
-    if (tryQR) {
+    for (int i = 0; i < readers.size(); i++) {
+      Reader reader = (Reader) readers.elementAt(i);
       try {
-        return new QRCodeReader().decode(image, hints);
+        return reader.decode(image, hints);
       } catch (ReaderException re) {
+        // continue
       }
     }
 

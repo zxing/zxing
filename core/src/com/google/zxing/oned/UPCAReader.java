@@ -17,6 +17,7 @@
 package com.google.zxing.oned;
 
 import com.google.zxing.ReaderException;
+import com.google.zxing.BarcodeFormat;
 import com.google.zxing.common.BitArray;
 
 /**
@@ -52,6 +53,10 @@ public final class UPCAReader extends AbstractUPCEANReader {
       }
     }
     return rowOffset;
+  }
+
+  BarcodeFormat getBarcodeFormat() {
+    return BarcodeFormat.UPC_A;  
   }
 
 }

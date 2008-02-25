@@ -16,6 +16,7 @@
 
 package com.google.zxing.oned;
 
+import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.common.AbstractBlackBoxTestCase;
 
@@ -27,7 +28,7 @@ import java.io.File;
 public final class Code128BlackBox1TestCase extends AbstractBlackBoxTestCase {
 
   public Code128BlackBox1TestCase() {
-    super(new File("test/data/blackbox/code128-1"), new MultiFormatReader(), 1.0);
+    super(new File("test/data/blackbox/code128-1"), new MultiFormatReader(), 1.0, BarcodeFormat.CODE_128);
   }
 
 }

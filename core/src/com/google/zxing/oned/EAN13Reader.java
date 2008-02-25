@@ -17,6 +17,7 @@
 package com.google.zxing.oned;
 
 import com.google.zxing.ReaderException;
+import com.google.zxing.BarcodeFormat;
 import com.google.zxing.common.BitArray;
 
 /**
@@ -96,6 +97,10 @@ public final class EAN13Reader extends AbstractUPCEANReader {
     return rowOffset;
   }
 
+  BarcodeFormat getBarcodeFormat() {
+    return BarcodeFormat.EAN_13;
+  }
+
   /**
    * Based on pattern of odd-even ('L' and 'G') patterns used to encoded the explicitly-encoded digits
    * in a barcode, determines the implicitly encoded first digit and adds it to the result string.
@@ -108,12 +113,7 @@ public final class EAN13Reader extends AbstractUPCEANReader {
   private static void determineFirstDigit(StringBuffer resultString, int lgPatternFound) throws ReaderException {
     for (int d = 0; d < 10; d++) {
       if (lgPatternFound == FIRST_DIGIT_ENCODINGS[d]) {
-        // OK, if the first digit is a 0, then this is effectively also a UPC-A code.
-        // I think it's best (?) to go ahead and treat it as if it had matched as UPC-A, and return a result
-        // *without* the leading 0
-        if (d != 0) {
-          resultString.insert(0, (char) ('0' + d));
-        }
+        resultString.insert(0, (char) ('0' + d));
         return;
       }
     }

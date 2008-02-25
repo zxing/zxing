@@ -16,6 +16,7 @@
 
 package com.google.zxing.qrcode;
 
+import com.google.zxing.BarcodeFormat;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.MonochromeBitmapSource;
 import com.google.zxing.Reader;
@@ -63,7 +64,7 @@ public final class QRCodeReader implements Reader {
       text = decoder.decode(result.getBits());
       points = result.getPoints();
     }
-    return new Result(text, points);
+    return new Result(text, points, BarcodeFormat.QR_CODE);
   }
 
   /**
