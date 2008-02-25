@@ -58,6 +58,11 @@ public abstract class ParsedReaderResult {
       // continue
     }
     try {
+      return new URLTOResult(rawText);
+    } catch (IllegalArgumentException iae) {
+      // continue
+    }
+    try {
       return new URIParsedResult(rawText);
     } catch (IllegalArgumentException iae) {
       // continue

@@ -182,14 +182,15 @@ public final class BarcodeReaderCaptureActivity extends Activity {
   private static int getDialogTitleID(ParsedReaderResultType type) {
     if (type == ParsedReaderResultType.ADDRESSBOOK) {
       return R.string.title_add_contact;
-    } else if (type == ParsedReaderResultType.BOOKMARK) {
+    } else if (type == ParsedReaderResultType.URI ||
+               type == ParsedReaderResultType.BOOKMARK ||
+               type == ParsedReaderResultType.URLTO) {
       return R.string.title_open_url;
-    } else if (type == ParsedReaderResultType.EMAIL || type == ParsedReaderResultType.EMAIL_ADDRESS) {
+    } else if (type == ParsedReaderResultType.EMAIL ||
+               type == ParsedReaderResultType.EMAIL_ADDRESS) {
       return R.string.title_compose_email;
     } else if (type == ParsedReaderResultType.UPC) {
       return R.string.title_lookup_barcode;
-    } else if (type == ParsedReaderResultType.URI) {
-      return R.string.title_open_url;
     } else {
       return R.string.title_barcode_detected;
     }
