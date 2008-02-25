@@ -29,6 +29,7 @@ import com.google.zxing.client.result.ParsedReaderResult;
 import com.google.zxing.client.result.ParsedReaderResultType;
 import com.google.zxing.client.result.UPCParsedResult;
 import com.google.zxing.client.result.URIParsedResult;
+import com.google.zxing.client.result.URLTOResult;
 
 import java.net.URISyntaxException;
 
@@ -67,6 +68,13 @@ final class ResultHandler extends Handler {
         try {
           intent = new Intent(Intent.VIEW_ACTION,
               new ContentURI(((BookmarkDoCoMoResult) result).getURI()));
+        } catch (URISyntaxException e) {
+          return;
+        }
+      } else if (type == ParsedReaderResultType.URLTO) {
+        try {
+          intent = new Intent(Intent.VIEW_ACTION,
+              new ContentURI(((URLTOResult) result).getURI()));
         } catch (URISyntaxException e) {
           return;
         }

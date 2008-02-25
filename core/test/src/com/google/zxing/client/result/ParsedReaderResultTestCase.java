@@ -39,6 +39,12 @@ public final class ParsedReaderResultTestCase extends TestCase {
     doTestResult("MEBKM:URL:HTTPS://google.com;;", ParsedReaderResultType.BOOKMARK);
   }
 
+  public void testURLTOType() {
+    doTestResult("URLTO:foo:bar.com", ParsedReaderResultType.URLTO);
+    doTestResult("URLTO::bar.com", ParsedReaderResultType.URLTO);
+    doTestResult("URLTO::http://bar.com", ParsedReaderResultType.URLTO);
+  }
+
   public void testEmailType() {
     doTestResult("MATMSG:TO:srowen@example.org;;", ParsedReaderResultType.EMAIL);
     doTestResult("MATMSG:TO:srowen@example.org;SUB:Stuff;;", ParsedReaderResultType.EMAIL);

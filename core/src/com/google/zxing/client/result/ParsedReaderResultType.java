@@ -24,16 +24,23 @@ package com.google.zxing.client.result;
  */
 public final class ParsedReaderResultType {
 
-  public static final ParsedReaderResultType BOOKMARK = new ParsedReaderResultType();
-  public static final ParsedReaderResultType ADDRESSBOOK = new ParsedReaderResultType();
-  public static final ParsedReaderResultType EMAIL = new ParsedReaderResultType();
-  public static final ParsedReaderResultType EMAIL_ADDRESS = new ParsedReaderResultType();
-  public static final ParsedReaderResultType UPC = new ParsedReaderResultType();
-  public static final ParsedReaderResultType URI = new ParsedReaderResultType();
-  public static final ParsedReaderResultType TEXT = new ParsedReaderResultType();
+  public static final ParsedReaderResultType BOOKMARK = new ParsedReaderResultType("BOOKMARK");
+  public static final ParsedReaderResultType URLTO = new ParsedReaderResultType("URLTO");
+  public static final ParsedReaderResultType ADDRESSBOOK = new ParsedReaderResultType("ADDRESSBOOK");
+  public static final ParsedReaderResultType EMAIL = new ParsedReaderResultType("EMAIL");
+  public static final ParsedReaderResultType EMAIL_ADDRESS = new ParsedReaderResultType("EMAIL_ADDRESS");
+  public static final ParsedReaderResultType UPC = new ParsedReaderResultType("UPC");
+  public static final ParsedReaderResultType URI = new ParsedReaderResultType("URI");
+  public static final ParsedReaderResultType TEXT = new ParsedReaderResultType("TEXT");
 
-  private ParsedReaderResultType() {
-    // do nothing
+  private final String name;
+
+  private ParsedReaderResultType(String name) {
+    this.name = name;
+  }
+
+  public String toString() {
+    return name;
   }
 
 }

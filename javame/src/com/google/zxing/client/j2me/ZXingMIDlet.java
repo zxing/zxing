@@ -23,6 +23,7 @@ import com.google.zxing.client.result.ParsedReaderResult;
 import com.google.zxing.client.result.ParsedReaderResultType;
 import com.google.zxing.client.result.UPCParsedResult;
 import com.google.zxing.client.result.URIParsedResult;
+import com.google.zxing.client.result.URLTOResult;
 
 import javax.microedition.io.ConnectionNotFoundException;
 import javax.microedition.lcdui.Alert;
@@ -191,6 +192,9 @@ public final class ZXingMIDlet extends MIDlet {
       showOpenURL("Open Web Page?", uri, uri);
     } else if (type.equals(ParsedReaderResultType.BOOKMARK)) {
       String uri = ((BookmarkDoCoMoResult) result).getURI();
+      showOpenURL("Open Web Page?", uri, uri);      
+    } else if (type.equals(ParsedReaderResultType.URLTO)) {
+      String uri = ((URLTOResult) result).getURI();
       showOpenURL("Open Web Page?", uri, uri);
     } else if (type.equals(ParsedReaderResultType.EMAIL)) {
       String email = ((EmailDoCoMoResult) result).getTo();
