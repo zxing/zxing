@@ -17,6 +17,7 @@
 package com.google.zxing.oned;
 
 import com.google.zxing.BlackPointEstimationMethod;
+import com.google.zxing.DecodeHintType;
 import com.google.zxing.MonochromeBitmapSource;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
@@ -65,15 +66,16 @@ public abstract class AbstractOneDReader implements OneDReader {
       image.getBlackRow(rowNumber, row, 0, width);
 
       try {
-        return decodeRow(rowNumber, row);
+        return decodeRow(rowNumber, row, hints);
       } catch (ReaderException re) {
-        // TODO re-enable this in a "try harder" mode?
-        //row.reverse(); // try scanning the row backwards
-        //try {
-        //  return decodeRow(rowNumber, row);
-        //} catch (ReaderException re2) {
-        // continue
-        //}
+        if (hints != null && hints.contains(DecodeHintType.TRY_HARDER)) {
+          row.reverse(); // try scanning the row backwards
+          try {
+            return decodeRow(rowNumber, row, hints);
+          } catch (ReaderException re2) {
+            // continue
+          }
+        }
       }
 
     }
@@ -82,7 +84,8 @@ public abstract class AbstractOneDReader implements OneDReader {
   }
 
   protected static void recordPattern(BitArray row, int start, int[] counters) throws ReaderException {
-    for (int i = 0; i < counters.length; i++) {
+    int numCounters = counters.length;
+    for (int i = 0; i < numCounters; i++) {
       counters[i] = 0;
     }
     int end = row.getSize();
@@ -98,7 +101,7 @@ public abstract class AbstractOneDReader implements OneDReader {
         counters[counterPosition]++;
       } else {
         counterPosition++;
-        if (counterPosition == counters.length) {
+        if (counterPosition == numCounters) {
           break;
         } else {
           counters[counterPosition] = 1;
@@ -109,7 +112,7 @@ public abstract class AbstractOneDReader implements OneDReader {
     }
     // If we read fully the last section of pixels and filled up our counters -- or filled
     // the last counter but ran off the side of the image, OK. Otherwise, a problem.
-    if (!(counterPosition == counters.length || (counterPosition == counters.length - 1 && i == end))) {
+    if (!(counterPosition == numCounters || (counterPosition == numCounters - 1 && i == end))) {
       throw new ReaderException("Couldn't fully read a pattern");
     }
   }

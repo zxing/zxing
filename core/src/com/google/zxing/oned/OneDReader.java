@@ -21,6 +21,8 @@ import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 import com.google.zxing.common.BitArray;
 
+import java.util.Hashtable;
+
 /**
  * <p>{@link Reader}s which also implement this interface read one-dimensional barcode
  * formats, and expose additional functionality that is specific to this type of barcode.</p>
@@ -35,9 +37,10 @@ public interface OneDReader extends Reader {
    *
    * @param rowNumber row number from top of the row
    * @param row the black/white pixel data of the row
+   * @param hints decode hints
    * @return {@link Result} containing encoded string and start/end of barcode
    * @throws ReaderException if an error occurs or barcode cannot be found
    */
-  Result decodeRow(int rowNumber, BitArray row) throws ReaderException;
+  Result decodeRow(int rowNumber, BitArray row, Hashtable hints) throws ReaderException;
 
 }

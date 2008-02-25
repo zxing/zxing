@@ -25,10 +25,12 @@ public final class Result {
 
   private final String text;
   private final ResultPoint[] resultPoints;
+  private final BarcodeFormat format;
 
-  public Result(String text, ResultPoint[] resultPoints) {
+  public Result(String text, ResultPoint[] resultPoints, BarcodeFormat format) {
     this.text = text;
     this.resultPoints = resultPoints;
+    this.format = format;
   }
 
   /**
@@ -45,6 +47,13 @@ public final class Result {
    */
   public ResultPoint[] getResultPoints() {
     return resultPoints;
+  }
+
+  /**
+   * @return {@link BarcodeFormat} representing the format of the barcode that was recognized and decoded
+   */
+  public BarcodeFormat getBarcodeFormat() {
+    return format;
   }
 
 }

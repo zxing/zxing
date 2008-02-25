@@ -16,11 +16,14 @@
 
 package com.google.zxing.oned;
 
+import com.google.zxing.BarcodeFormat;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitArray;
 import com.google.zxing.common.GenericResultPoint;
+
+import java.util.Hashtable;
 
 /**
  * <p>Decodes Code 128 barcodes.</p>
@@ -229,7 +232,7 @@ public final class Code128Reader extends AbstractOneDReader {
     }
   }
 
-  public Result decodeRow(final int rowNumber, final BitArray row) throws ReaderException {
+  public Result decodeRow(int rowNumber, BitArray row, Hashtable hints) throws ReaderException {
 
     int[] startPatternInfo = findStartPattern(row);
     int startCode = startPatternInfo[2];
@@ -402,11 +405,12 @@ public final class Code128Reader extends AbstractOneDReader {
     }
 
     String resultString = result.toString();
-    return new Result(resultString,
-        new ResultPoint[]{new GenericResultPoint((float) (startPatternInfo[1] - startPatternInfo[0]) / 2.0f,
-            (float) rowNumber),
-            new GenericResultPoint((float) (nextStart - lastStart) / 2.0f,
-                (float) rowNumber)});
+    return new Result(
+        resultString,
+        new ResultPoint[]{
+            new GenericResultPoint((float) (startPatternInfo[1] - startPatternInfo[0]) / 2.0f, (float) rowNumber),
+            new GenericResultPoint((float) (nextStart - lastStart) / 2.0f, (float) rowNumber)},
+        BarcodeFormat.CODE_128);
 
   }
 

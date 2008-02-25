@@ -16,11 +16,14 @@
 
 package com.google.zxing.oned;
 
+import com.google.zxing.BarcodeFormat;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitArray;
 import com.google.zxing.common.GenericResultPoint;
+
+import java.util.Hashtable;
 
 /**
  * <p>Decodes Code 39 barcodes. This does not supported "Full ASCII Code 39" yet.</p>
@@ -86,7 +89,7 @@ public final class Code39Reader extends AbstractOneDReader {
     this.extendedMode = extendedMode;
   }
 
-  public Result decodeRow(final int rowNumber, final BitArray row) throws ReaderException {
+  public Result decodeRow(int rowNumber, BitArray row, Hashtable hints) throws ReaderException {
 
     int[] start = findAsteriskPattern(row);
 
@@ -135,9 +138,12 @@ public final class Code39Reader extends AbstractOneDReader {
     if (extendedMode) {
       resultString = decodeExtended(resultString);
     }
-    return new Result(resultString,
-        new ResultPoint[]{new GenericResultPoint((float) (start[1] - start[0]) / 2.0f, (float) rowNumber),
-            new GenericResultPoint((float) (nextStart - lastStart) / 2.0f, (float) rowNumber)});
+    return new Result(
+        resultString,
+        new ResultPoint[]{
+            new GenericResultPoint((float) (start[1] - start[0]) / 2.0f, (float) rowNumber),
+            new GenericResultPoint((float) (nextStart - lastStart) / 2.0f, (float) rowNumber)},
+        BarcodeFormat.CODE_39);
 
   }
 
