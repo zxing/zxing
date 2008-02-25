@@ -40,6 +40,8 @@ public abstract class AbstractOneDReader implements OneDReader {
 
   public final Result decode(MonochromeBitmapSource image, Hashtable hints) throws ReaderException {
 
+    boolean tryHarder = hints != null && hints.contains(DecodeHintType.TRY_HARDER);
+
     int width = image.getWidth();
     int height = image.getHeight();
 
@@ -53,7 +55,8 @@ public abstract class AbstractOneDReader implements OneDReader {
     // that moving up and down by about 1/16 of the image is pretty good.
     int middle = height >> 1;
     int rowStep = Math.max(1, height >> 4);
-    for (int x = 0; x < 7; x++) {
+    int maxLines = tryHarder ? 15 : 7;
+    for (int x = 0; x < maxLines; x++) {
 
       int rowStepsAboveOrBelow = (x + 1) >> 1;
       boolean isAbove = (x & 0x01) == 0; // i.e. is x even?
@@ -68,7 +71,7 @@ public abstract class AbstractOneDReader implements OneDReader {
       try {
         return decodeRow(rowNumber, row, hints);
       } catch (ReaderException re) {
-        if (hints != null && hints.contains(DecodeHintType.TRY_HARDER)) {
+        if (tryHarder) {
           row.reverse(); // try scanning the row backwards
           try {
             return decodeRow(rowNumber, row, hints);
