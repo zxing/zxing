@@ -112,7 +112,7 @@ public final class LCDUIImageMonochromeBitmapSource implements MonochromeBitmapS
     throw new IllegalStateException("Rotate not supported");
   }
 
-  public boolean isRotatedSupported() {
+  public boolean isRotateSupported() {
     return false;
   }
 

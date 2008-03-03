@@ -93,6 +93,6 @@ public interface MonochromeBitmapSource {
    * @return true iff rotation is supported
    * @see #rotateCounterClockwise()
    */
-  boolean isRotatedSupported();
+  boolean isRotateSupported();
 
 }

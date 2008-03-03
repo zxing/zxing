@@ -118,7 +118,7 @@ final class YUVMonochromeBitmapSource implements MonochromeBitmapSource {
     throw new IllegalStateException("Rotate not supported");
   }
 
-  public boolean isRotatedSupported() {
+  public boolean isRotateSupported() {
     return false;
   }
 
