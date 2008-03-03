@@ -55,7 +55,7 @@ final class ResultHandler extends Handler {
     if (message.what == R.string.button_yes) {
       Intent intent = null;
       ParsedReaderResultType type = result.getType();
-      if (type == ParsedReaderResultType.ADDRESSBOOK) {
+      if (type.equals(ParsedReaderResultType.ADDRESSBOOK)) {
         AddressBookDoCoMoResult addressResult = (AddressBookDoCoMoResult) result;
         intent = new Intent(Contacts.Intents.Insert.ACTION, Contacts.People.CONTENT_URI);
         putExtra(intent, Contacts.Intents.Insert.NAME, addressResult.getName());
@@ -63,7 +63,7 @@ final class ResultHandler extends Handler {
         putExtra(intent, Contacts.Intents.Insert.EMAIL, addressResult.getEmail());
         putExtra(intent, Contacts.Intents.Insert.NOTES, addressResult.getNote());
         putExtra(intent, Contacts.Intents.Insert.POSTAL, addressResult.getAddress());
-      } else if (type == ParsedReaderResultType.BOOKMARK) {
+      } else if (type.equals(ParsedReaderResultType.BOOKMARK)) {
         // For now, we can only open the browser, and not actually add a bookmark
         try {
           intent = new Intent(Intent.VIEW_ACTION,
@@ -71,14 +71,14 @@ final class ResultHandler extends Handler {
         } catch (URISyntaxException e) {
           return;
         }
-      } else if (type == ParsedReaderResultType.URLTO) {
+      } else if (type.equals(ParsedReaderResultType.URLTO)) {
         try {
           intent = new Intent(Intent.VIEW_ACTION,
               new ContentURI(((URLTOResult) result).getURI()));
         } catch (URISyntaxException e) {
           return;
         }
-      } else if (type == ParsedReaderResultType.EMAIL) {
+      } else if (type.equals(ParsedReaderResultType.EMAIL)) {
         EmailDoCoMoResult emailResult = (EmailDoCoMoResult) result;
         try {
           intent = new Intent(Intent.SENDTO_ACTION, new ContentURI(emailResult.getTo()));
@@ -87,14 +87,14 @@ final class ResultHandler extends Handler {
         }
         putExtra(intent, "subject", emailResult.getSubject());
         putExtra(intent, "body", emailResult.getBody());
-      } else if (type == ParsedReaderResultType.EMAIL_ADDRESS) {
+      } else if (type.equals(ParsedReaderResultType.EMAIL_ADDRESS)) {
         EmailAddressResult emailResult = (EmailAddressResult) result;
         try {
           intent = new Intent(Intent.SENDTO_ACTION, new ContentURI(emailResult.getEmailAddress()));
         } catch (URISyntaxException e) {
           return;
         }
-      } else if (type == ParsedReaderResultType.UPC) {
+      } else if (type.equals(ParsedReaderResultType.UPC)) {
         UPCParsedResult upcResult = (UPCParsedResult) result;
         try {
           ContentURI uri = new ContentURI("http://www.upcdatabase.com/item.asp?upc=" +
@@ -103,7 +103,7 @@ final class ResultHandler extends Handler {
         } catch (URISyntaxException e) {
           return;
         }
-      } else if (type == ParsedReaderResultType.URI) {
+      } else if (type.equals(ParsedReaderResultType.URI)) {
         URIParsedResult uriResult = (URIParsedResult) result;
         try {
           intent = new Intent(Intent.VIEW_ACTION, new ContentURI(uriResult.getURI()));
