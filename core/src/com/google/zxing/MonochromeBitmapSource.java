@@ -76,4 +76,23 @@ public interface MonochromeBitmapSource {
    */
   BlackPointEstimationMethod getLastEstimationMethod();
 
+  /**
+   * <p>Optional operation which returns an implementation based on the same underlying
+   * image, but which behaves as if the underlying image had been rotated 90 degrees
+   * counterclockwise. This is useful in the context of 1D barcodes and the
+   * {@link DecodeHintType#TRY_HARDER} decode hint, and is only intended to be
+   * used in non-resource-constrained environments. Hence, implementations
+   * of this class which are only used in resource-constrained mobile environments
+   * don't have a need to implement this.</p>
+   *
+   * @throws IllegalStateException if not supported
+   */
+  MonochromeBitmapSource rotateCounterClockwise();
+
+  /**
+   * @return true iff rotation is supported
+   * @see #rotateCounterClockwise()
+   */
+  boolean isRotatedSupported();
+
 }

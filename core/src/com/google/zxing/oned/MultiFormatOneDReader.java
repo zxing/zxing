@@ -33,7 +33,7 @@ public final class MultiFormatOneDReader extends AbstractOneDReader {
 
   public Result decodeRow(int rowNumber, BitArray row, Hashtable hints) throws ReaderException {
 
-    Hashtable possibleFormats = hints == null ? null : (Hashtable) hints.get(DecodeHintType.POSSIBLE_FORMATS);
+    Vector possibleFormats = hints == null ? null : (Vector) hints.get(DecodeHintType.POSSIBLE_FORMATS);
     Vector readers = new Vector();
     if (possibleFormats != null) {
       if (possibleFormats.contains(BarcodeFormat.EAN_13) ||

@@ -108,6 +108,14 @@ public final class LCDUIImageMonochromeBitmapSource implements MonochromeBitmapS
     return lastMethod;
   }
 
+  public MonochromeBitmapSource rotateCounterClockwise() {
+    throw new IllegalStateException("Rotate not supported");
+  }
+
+  public boolean isRotatedSupported() {
+    return false;
+  }
+
   /**
    * Extracts luminance from a pixel from this source. By default, the source is assumed to use RGB,
    * so this implementation computes luminance is a function of a red, green and blue components as

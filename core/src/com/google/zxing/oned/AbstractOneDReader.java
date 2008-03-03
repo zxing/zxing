@@ -39,8 +39,20 @@ public abstract class AbstractOneDReader implements OneDReader {
   }
 
   public final Result decode(MonochromeBitmapSource image, Hashtable hints) throws ReaderException {
+    boolean tryHarder = hints != null && hints.containsKey(DecodeHintType.TRY_HARDER);
+    try {
+      return doDecode(image, hints, tryHarder);
+    } catch (ReaderException re) {
+      if (tryHarder && image.isRotatedSupported()) {
+        MonochromeBitmapSource rotatedImage = image.rotateCounterClockwise();
+        return doDecode(rotatedImage, hints, tryHarder);        
+      } else {
+        throw re;
+      }
+    }
+  }
 
-    boolean tryHarder = hints != null && hints.contains(DecodeHintType.TRY_HARDER);
+  private Result doDecode(MonochromeBitmapSource image, Hashtable hints, boolean tryHarder) throws ReaderException {
 
     int width = image.getWidth();
     int height = image.getHeight();

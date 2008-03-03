@@ -37,7 +37,7 @@ public final class MultiFormatReader implements Reader {
 
   public Result decode(MonochromeBitmapSource image, Hashtable hints) throws ReaderException {
 
-    Hashtable possibleFormats = hints == null ? null : (Hashtable) hints.get(DecodeHintType.POSSIBLE_FORMATS);
+    Vector possibleFormats = hints == null ? null : (Vector) hints.get(DecodeHintType.POSSIBLE_FORMATS);
     Vector readers = new Vector();
     if (possibleFormats != null) {
       if (possibleFormats.contains(BarcodeFormat.UPC_A) ||

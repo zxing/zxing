@@ -21,7 +21,10 @@ import com.google.zxing.MonochromeBitmapSource;
 import com.google.zxing.common.BitArray;
 import com.google.zxing.common.BlackPointEstimator;
 
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
+import java.awt.image.BufferedImageOp;
 
 /**
  * <p>An implementation based upon {@link BufferedImage}. This provides access to the
@@ -110,6 +113,19 @@ public final class BufferedImageMonochromeBitmapSource implements MonochromeBitm
 
   public BlackPointEstimationMethod getLastEstimationMethod() {
     return lastMethod;
+  }
+
+  public MonochromeBitmapSource rotateCounterClockwise() {
+    // 90 degrees counterclockwise:
+    AffineTransform transform = new AffineTransform(0.0, -1.0, 1.0, 0.0, 0.0, image.getHeight());
+    BufferedImageOp op = new AffineTransformOp(transform, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+    BufferedImage rotatedImage = new BufferedImage(image.getHeight(), image.getWidth(), image.getType());
+    op.filter(image, rotatedImage);
+    return new BufferedImageMonochromeBitmapSource(rotatedImage);
+  }
+
+  public boolean isRotatedSupported() {
+    return true;
   }
 
   /**
