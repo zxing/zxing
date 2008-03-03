@@ -45,6 +45,9 @@ public final class BufferedImageMonochromeBitmapSource implements MonochromeBitm
   private static final int LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
 
   public BufferedImageMonochromeBitmapSource(BufferedImage image) {
+    if (image.getType() == BufferedImage.TYPE_CUSTOM) {
+      throw new IllegalArgumentException("Can't handle BufferedImage of type TYPE_CUSTOM");
+    }
     this.image = image;
     blackPoint = 0x7F;
     lastMethod = null;
@@ -125,9 +128,7 @@ public final class BufferedImageMonochromeBitmapSource implements MonochromeBitm
   }
 
   public boolean isRotateSupported() {
-    return image.getType() != BufferedImage.TYPE_CUSTOM;
-    // Not sure what to make of the situation where a BufferedImage is parsed, but its format is not known
-    // In any event an AffineTransformOp on it will fail, so say it's not supported
+    return true;
   }
 
   /**
