@@ -43,7 +43,7 @@ public abstract class AbstractOneDReader implements OneDReader {
     try {
       return doDecode(image, hints, tryHarder);
     } catch (ReaderException re) {
-      if (tryHarder && image.isRotatedSupported()) {
+      if (tryHarder && image.isRotateSupported()) {
         MonochromeBitmapSource rotatedImage = image.rotateCounterClockwise();
         return doDecode(rotatedImage, hints, tryHarder);        
       } else {

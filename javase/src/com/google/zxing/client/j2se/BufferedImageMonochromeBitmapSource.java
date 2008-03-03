@@ -124,8 +124,10 @@ public final class BufferedImageMonochromeBitmapSource implements MonochromeBitm
     return new BufferedImageMonochromeBitmapSource(rotatedImage);
   }
 
-  public boolean isRotatedSupported() {
-    return true;
+  public boolean isRotateSupported() {
+    return image.getType() != BufferedImage.TYPE_CUSTOM;
+    // Not sure what to make of the situation where a BufferedImage is parsed, but its format is not known
+    // In any event an AffineTransformOp on it will fail, so say it's not supported
   }
 
   /**
