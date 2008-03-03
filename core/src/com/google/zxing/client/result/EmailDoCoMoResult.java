@@ -29,17 +29,28 @@ public final class EmailDoCoMoResult extends AbstractDoCoMoResult {
   private final String subject;
   private final String body;
 
-  public EmailDoCoMoResult(String rawText) {
+  private EmailDoCoMoResult(String to, String subject, String body) {
     super(ParsedReaderResultType.EMAIL);
+    this.to = to;
+    this.subject = subject;
+    this.body = body;
+  }
+
+  public static EmailDoCoMoResult parse(String rawText) {
     if (!rawText.startsWith("MATMSG:")) {
-      throw new IllegalArgumentException("Does not begin with MATMSG");
+      return null;
     }
-    to = matchRequiredPrefixedField("TO:", rawText)[0];
+    String[] rawTo = matchPrefixedField("TO:", rawText);
+    if (rawTo == null) {
+      return null;
+    }
+    String to = rawTo[0];
     if (!isBasicallyValidEmailAddress(to)) {
-      throw new IllegalArgumentException("Invalid email address: " + to);
+      return null;
     }
-    subject = matchSinglePrefixedField("SUB:", rawText);
-    body = matchSinglePrefixedField("BODY:", rawText);
+    String subject = matchSinglePrefixedField("SUB:", rawText);
+    String body = matchSinglePrefixedField("BODY:", rawText);
+    return new EmailDoCoMoResult(to, subject, body);
   }
 
   public String getTo() {

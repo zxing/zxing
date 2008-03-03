@@ -24,17 +24,26 @@ public final class BookmarkDoCoMoResult extends AbstractDoCoMoResult {
   private final String title;
   private final String uri;
 
-  public BookmarkDoCoMoResult(String rawText) {
+  private BookmarkDoCoMoResult(String title, String uri) {
     super(ParsedReaderResultType.BOOKMARK);
+    this.title = title;
+    this.uri = uri;
+  }
+
+  public static BookmarkDoCoMoResult parse(String rawText) {
     if (!rawText.startsWith("MEBKM:")) {
-      throw new IllegalArgumentException("Does not begin with MEBKM");
+      return null;
     }
-    title = matchSinglePrefixedField("TITLE:", rawText);
-    String uriString = matchRequiredPrefixedField("URL:", rawText)[0];
-    if (!URIParsedResult.isBasicallyValidURI(uriString)) {
-      throw new IllegalArgumentException("Invalid URI: " + uriString);
+    String title = matchSinglePrefixedField("TITLE:", rawText);
+    String[] rawUri = matchPrefixedField("URL:", rawText);
+    if (rawUri == null) {
+      return null;
     }
-    uri = uriString;
+    String uri = rawUri[0];
+    if (!URIParsedResult.isBasicallyValidURI(uri)) {
+      return null;
+    }
+    return new BookmarkDoCoMoResult(title, uri);
   }
 
   public String getTitle() {

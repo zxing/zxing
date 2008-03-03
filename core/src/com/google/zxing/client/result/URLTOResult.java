@@ -28,14 +28,23 @@ public final class URLTOResult extends ParsedReaderResult {
   private final String title;
   private final String uri;
 
-  public URLTOResult(String rawText) {
+  private URLTOResult(String title, String uri) {
     super(ParsedReaderResultType.URLTO);
+    this.title = title;
+    this.uri = uri;
+  }
+
+  public static URLTOResult parse(String rawText) {
     if (!rawText.startsWith("URLTO:")) {
-      throw new IllegalArgumentException("Does not begin with URLTO");
+      return null;
     }
     int titleEnd = rawText.indexOf(':', 6);
-    title = rawText.substring(6, titleEnd);
-    uri = rawText.substring(titleEnd + 1);
+    if (titleEnd < 0) {
+      return null;
+    }
+    String title = rawText.substring(6, titleEnd);
+    String uri = rawText.substring(titleEnd + 1);
+    return new URLTOResult(title, uri);
   }
 
   public String getTitle() {

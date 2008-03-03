@@ -26,17 +26,23 @@ public final class EmailAddressResult extends AbstractDoCoMoResult {
 
   private final String emailAddress;
 
-  public EmailAddressResult(String rawText) {
+  private EmailAddressResult(String emailAddress) {
     super(ParsedReaderResultType.EMAIL_ADDRESS);
+    this.emailAddress = emailAddress;
+  }
+
+  public static EmailAddressResult parse(String rawText) {
+    String emailAddress;
     if (rawText.startsWith("mailto:")) {
       // If it starts with mailto:, assume it is definitely trying to be an email address
       emailAddress = rawText.substring(7);
     } else {
       if (!EmailDoCoMoResult.isBasicallyValidEmailAddress(rawText)) {
-        throw new IllegalArgumentException("Invalid email address: " + rawText);
+        return null;
       }
       emailAddress = rawText;
     }
+    return new EmailAddressResult(emailAddress);
   }
 
   public String getEmailAddress() {
