@@ -16,6 +16,7 @@
 
 package com.google.zxing.client.j2se;
 
+import com.google.zxing.DecodeHintType;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.ReaderException;
 
@@ -24,6 +25,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.util.Hashtable;
 
 /**
  * <p>Simply attempts to decode the barcode in the image indicated by the single argument
@@ -62,8 +64,10 @@ public final class CommandLineRunner {
       return false;
     }
     try {
+      Hashtable hints = new Hashtable();
+      hints.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
       BufferedImageMonochromeBitmapSource source = new BufferedImageMonochromeBitmapSource(image);
-      String result = new MultiFormatReader().decode(source).getText();
+      String result = new MultiFormatReader().decode(source, hints).getText();
       System.out.println(uri.toString() + ": " + result);
       return true;
     } catch (ReaderException e) {

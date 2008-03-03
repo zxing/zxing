@@ -114,4 +114,12 @@ final class YUVMonochromeBitmapSource implements MonochromeBitmapSource {
     return lastMethod;
   }
 
+  public MonochromeBitmapSource rotateCounterClockwise() {
+    throw new IllegalStateException("Rotate not supported");
+  }
+
+  public boolean isRotatedSupported() {
+    return false;
+  }
+
 }
