@@ -17,6 +17,7 @@
 package com.google.zxing.common;
 
 import com.google.zxing.BarcodeFormat;
+import com.google.zxing.DecodeHintType;
 import com.google.zxing.MonochromeBitmapSource;
 import com.google.zxing.Reader;
 import com.google.zxing.ReaderException;
@@ -32,11 +33,18 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.Hashtable;
 
 /**
  * @author srowen@google.com (Sean Owen)
  */
 public abstract class AbstractBlackBoxTestCase extends TestCase {
+
+  private static final Hashtable TRY_HARDER_HINT;
+  static {
+    TRY_HARDER_HINT = new Hashtable();
+    TRY_HARDER_HINT.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
+  }
 
   private static final FilenameFilter IMAGE_NAME_FILTER = new FilenameFilter() {
     public boolean accept(File dir, String name) {
@@ -96,12 +104,24 @@ public abstract class AbstractBlackBoxTestCase extends TestCase {
       String expectedText = readFileAsString(expectedTextFile);
       String resultText = result.getText();
 
-      if (expectedText.equals(resultText)) {
+      boolean passed = expectedText.equals(resultText);
+      if (passed) {
         passedCount++;
       } else {
         System.out.println("Mismatch: expected '" + expectedText + "' but got '" + resultText + '\'');
       }
 
+      // Try "try harder" mode
+      try {
+        result = barcodeReader.decode(source, TRY_HARDER_HINT);
+      } catch (ReaderException re) {
+        if (passed) {
+          fail("Normal mode succeed but \"try harder\" failed");
+        }
+        continue;
+      }
+      assertEquals("Normal mode succeed but \"try harder\" failed", expectedFormat, result.getBarcodeFormat());
+      assertEquals("Normal mode succeed but \"try harder\" failed", expectedText, result.getText());
     }
 
     System.out.println(passedCount + " of " + imageFiles.length + " images passed");
