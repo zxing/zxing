@@ -23,13 +23,17 @@ public final class URIParsedResult extends ParsedReaderResult {
 
   private final String uri;
 
-  public URIParsedResult(String rawText) {
+  private URIParsedResult(String uri) {
     super(ParsedReaderResultType.URI);
-    if (!isBasicallyValidURI(rawText)) {
-      throw new IllegalArgumentException("Invalid URI: " + rawText);
-    }
-    uri = massagePossibleURI(rawText);
+    this.uri = uri;
+  }
 
+  public static URIParsedResult parse(String rawText) {
+    if (!isBasicallyValidURI(rawText)) {
+      return null;
+    }
+    String uri = massagePossibleURI(rawText);
+    return new URIParsedResult(uri);
   }
 
   public String getURI() {

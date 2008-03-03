@@ -34,16 +34,29 @@ public final class AddressBookDoCoMoResult extends AbstractDoCoMoResult {
   private final String note;
   private final String address;
 
-  public AddressBookDoCoMoResult(String rawText) {
+  private AddressBookDoCoMoResult(String name, String[] phoneNumbers, String email, String note, String address) {
     super(ParsedReaderResultType.ADDRESSBOOK);
+    this.name = name;
+    this.phoneNumbers = phoneNumbers;
+    this.email = email;
+    this.note = note;
+    this.address = address;
+  }
+
+  public static AddressBookDoCoMoResult parse(String rawText) {
     if (!rawText.startsWith("MECARD:")) {
-      throw new IllegalArgumentException("Does not begin with MECARD");
+      return null;
     }
-    name = parseName(matchRequiredPrefixedField("N:", rawText)[0]);
-    phoneNumbers = matchPrefixedField("TEL:", rawText);
-    email = matchSinglePrefixedField("EMAIL:", rawText);
-    note = matchSinglePrefixedField("NOTE:", rawText);
-    address = matchSinglePrefixedField("ADR:", rawText);
+    String[] rawName = matchPrefixedField("N:", rawText);
+    if (rawName == null) {
+      return null;
+    }
+    String name = parseName(rawName[0]);
+    String[] phoneNumbers = matchPrefixedField("TEL:", rawText);
+    String email = matchSinglePrefixedField("EMAIL:", rawText);
+    String note = matchSinglePrefixedField("NOTE:", rawText);
+    String address = matchSinglePrefixedField("ADR:", rawText);
+    return new AddressBookDoCoMoResult(name, phoneNumbers, email, note, address);
   }
 
   public String getName() {

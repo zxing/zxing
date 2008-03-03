@@ -23,9 +23,13 @@ public final class TextParsedResult extends ParsedReaderResult {
 
   private final String text;
 
-  public TextParsedResult(String rawText) {
+  private TextParsedResult(String text) {
     super(ParsedReaderResultType.TEXT);
-    text = rawText;
+    this.text = text;
+  }
+
+  public static TextParsedResult parse(String rawText) {
+    return new TextParsedResult(rawText);
   }
 
   public String getText() {

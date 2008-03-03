@@ -23,19 +23,24 @@ public final class UPCParsedResult extends ParsedReaderResult {
 
   private final String upc;
 
-  public UPCParsedResult(String rawText) {
+  private UPCParsedResult(String upc) {
     super(ParsedReaderResultType.UPC);
+    this.upc = upc;
+  }
+
+  public static UPCParsedResult parse(String rawText) {
     int length = rawText.length();
     if (length != 12 && length != 13) {
-      throw new IllegalArgumentException("Wrong number of digits for UPC");
+      return null;
     }
     for (int x = 0; x < length; x++) {
       char c = rawText.charAt(x);
       if (c < '0' || c > '9') {
-        throw new IllegalArgumentException("Invalid character found in UPC");
+        return null;
       }
     }
-    upc = rawText;
+    // Not actually checking the checkusm again here
+    return new UPCParsedResult(rawText);
   }
 
   public String getUPC() {

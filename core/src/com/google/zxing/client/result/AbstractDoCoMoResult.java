@@ -19,9 +19,12 @@ package com.google.zxing.client.result;
 import java.util.Vector;
 
 /**
- * See
+ * <p>See
  * <a href="http://www.nttdocomo.co.jp/english/service/imode/make/content/barcode/about/s2.html">
- * DoCoMo's documentation</a> about the result types represented by subclasses of this class.
+ * DoCoMo's documentation</a> about the result types represented by subclasses of this class.</p>
+ *
+ * <p>Thanks to Jeff Griffin for proposing rewrite of these classes that relies less
+ * on exception-based mechanisms during parsing.</p>
  *
  * @author srowen@google.com (Sean Owen)
  */
@@ -66,7 +69,7 @@ abstract class AbstractDoCoMoResult extends ParsedReaderResult {
         }
       }
     }
-    if (matches == null) {
+    if (matches == null || matches.isEmpty()) {
       return null;
     }
     int size = matches.size();
@@ -80,14 +83,6 @@ abstract class AbstractDoCoMoResult extends ParsedReaderResult {
   static String matchSinglePrefixedField(String prefix, String rawText) {
     String[] matches = matchPrefixedField(prefix, rawText);
     return matches == null ? null : matches[0];
-  }
-
-  static String[] matchRequiredPrefixedField(String prefix, String rawText) {
-    String[] result = matchPrefixedField(prefix, rawText);
-    if (result == null) {
-      throw new IllegalArgumentException("Did not match prefix " + prefix);
-    }
-    return result;
   }
 
   private static String unescape(String escaped) {

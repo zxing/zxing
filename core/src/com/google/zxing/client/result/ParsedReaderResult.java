@@ -17,6 +17,14 @@
 package com.google.zxing.client.result;
 
 /**
+ * <p>Abstract class representing the result of decoding a barcode, as more than
+ * a String -- as some type of structured data. This might be a subclass which represents
+ * a URL, or an e-mail address. {@link #parseReaderResult(String)} will turn a raw
+ * decoded string into the most appropriate type of structured representation.</p>
+ *
+ * <p>Thanks to Jeff Griffin for proposing rewrite of these classes that relies less
+ * on exception-based mechanisms during parsing.</p>
+ *
  * @author srowen@google.com (Sean Owen)
  */
 public abstract class ParsedReaderResult {
@@ -37,42 +45,23 @@ public abstract class ParsedReaderResult {
     // This is a bit messy, but given limited options in MIDP / CLDC, this may well be the simplest
     // way to go about this. For example, we have no reflection available, really.
     // Order is important here.
-    try {
-      return new BookmarkDoCoMoResult(rawText);
-    } catch (IllegalArgumentException iae) {
-      // continue
+    ParsedReaderResult result;
+    if ((result = BookmarkDoCoMoResult.parse(rawText)) != null) {
+      return result;
+    } else if ((result = AddressBookDoCoMoResult.parse(rawText)) != null) {
+      return result;
+    } else if ((result = EmailDoCoMoResult.parse(rawText)) != null) {
+      return result;
+    } else if ((result = EmailAddressResult.parse(rawText)) != null) {
+      return result;
+    } else if ((result = URLTOResult.parse(rawText)) != null) {
+      return result;
+    } else if ((result = URIParsedResult.parse(rawText)) != null) {
+      return result;
+    } else if ((result = UPCParsedResult.parse(rawText)) != null) {
+      return result;
     }
-    try {
-      return new AddressBookDoCoMoResult(rawText);
-    } catch (IllegalArgumentException iae) {
-      // continue
-    }
-    try {
-      return new EmailDoCoMoResult(rawText);
-    } catch (IllegalArgumentException iae) {
-      // continue
-    }
-    try {
-      return new EmailAddressResult(rawText);
-    } catch (IllegalArgumentException iae) {
-      // continue
-    }
-    try {
-      return new URLTOResult(rawText);
-    } catch (IllegalArgumentException iae) {
-      // continue
-    }
-    try {
-      return new URIParsedResult(rawText);
-    } catch (IllegalArgumentException iae) {
-      // continue
-    }
-    try {
-      return new UPCParsedResult(rawText);
-    } catch (IllegalArgumentException iae) {
-      // continue
-    }
-    return new TextParsedResult(rawText);
+    return TextParsedResult.parse(rawText);
   }
 
   public String toString() {
