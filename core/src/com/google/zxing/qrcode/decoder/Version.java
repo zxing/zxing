@@ -57,12 +57,11 @@ public final class Version {
     this.alignmentPatternCenters = alignmentPatternCenters;
     this.ecBlocks = new ECBlocks[]{ecBlocks1, ecBlocks2, ecBlocks3, ecBlocks4};
     int total = 0;
-    ECBlocks levelLECBlocks = ecBlocks1; // L,M,Q,H -- all the same total
-    int ecCodewords = levelLECBlocks.ecCodewords;
-    ECB[] ecbArray = levelLECBlocks.ecBlocks;
+    int ecCodewords = ecBlocks1.getECCodewords();
+    ECB[] ecbArray = ecBlocks1.getECBlocks();
     for (int i = 0; i < ecbArray.length; i++) {
       ECB ecBlock = ecbArray[i];
-      total += ecBlock.count * (ecBlock.dataCodewords + ecCodewords);
+      total += ecBlock.getCount() * (ecBlock.getDataCodewords() + ecCodewords);
     }
     this.totalCodewords = total;
   }
