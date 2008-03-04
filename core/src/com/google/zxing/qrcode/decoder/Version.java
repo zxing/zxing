@@ -422,7 +422,7 @@ public final class Version {
             new ECBlocks(30, new ECB(30, 16),
                 new ECB(2, 17))),
         new Version(25, new int[]{6, 32, 58, 84, 110},
-            new ECBlocks(26, new ECB(8, 1061),
+            new ECBlocks(26, new ECB(8, 106),
                 new ECB(4, 107)),
             new ECBlocks(28, new ECB(8, 47),
                 new ECB(13, 48)),
