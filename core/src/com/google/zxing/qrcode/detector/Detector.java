@@ -62,13 +62,13 @@ public final class Detector {
     Version provisionalVersion = Version.getProvisionalVersionForDimension(dimension);
     int modulesBetweenFPCenters = provisionalVersion.getDimensionForVersion() - 7;
 
-    // Guess where a "bottom right" finder pattern would have been
-    float bottomRightX = topRight.getX() - topLeft.getX() + bottomLeft.getX();
-    float bottomRightY = topRight.getY() - topLeft.getY() + bottomLeft.getY();
-
     AlignmentPattern alignmentPattern = null;
     // Anything above version 1 has an alignment pattern
     if (provisionalVersion.getAlignmentPatternCenters().length > 0) {
+
+      // Guess where a "bottom right" finder pattern would have been
+      float bottomRightX = topRight.getX() - topLeft.getX() + bottomLeft.getX();
+      float bottomRightY = topRight.getY() - topLeft.getY() + bottomLeft.getY();
 
       // Estimate that alignment pattern is closer by 3 modules
       // from "bottom right" to known top left location
