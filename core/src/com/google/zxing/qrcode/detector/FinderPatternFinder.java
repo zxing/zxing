@@ -179,8 +179,8 @@ final class FinderPatternFinder {
       return false;
     }
     float moduleSize = (float) totalModuleSize / 7.0f;
-    float maxVariance = moduleSize / 2.5f;
-    // Allow less than 40% variance from 1-1-3-1-1 proportions
+    float maxVariance = moduleSize / 2.0f;
+    // Allow less than 50% variance from 1-1-3-1-1 proportions
     return Math.abs(moduleSize - stateCount[0]) < maxVariance &&
         Math.abs(moduleSize - stateCount[1]) < maxVariance &&
         Math.abs(3.0f * moduleSize - stateCount[2]) < 3.0f * maxVariance &&
@@ -199,7 +199,7 @@ final class FinderPatternFinder {
    * observed in any reading state, based on the results of the horizontal scan
    * @return vertical center of finder pattern, or {@link Float#NaN} if not found
    */
-  private float crossCheckVertical(int startI, int centerJ, int maxCount) {
+  private float crossCheckVertical(int startI, int centerJ, int maxCount, int originalStateCountTotal) {
     MonochromeBitmapSource image = this.image;
 
     int maxI = image.getHeight();
@@ -254,15 +254,22 @@ final class FinderPatternFinder {
       return Float.NaN;
     }
 
+    // If we found a finder-pattern-like section, but its size is more than 20% different than
+    // the original, assume it's a false positive
+    int stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2] + stateCount[3] + stateCount[4];
+    if (5 * Math.abs(stateCountTotal - originalStateCountTotal) >= originalStateCountTotal) {
+      return Float.NaN;
+    }
+
     return foundPatternCross(stateCount) ? centerFromEnd(stateCount, i) : Float.NaN;
   }
 
   /**
-   * <p>Like {@link #crossCheckVertical(int, int, int)}, and in fact is basically identical,
+   * <p>Like {@link #crossCheckVertical(int, int, int, int)}, and in fact is basically identical,
    * except it reads horizontally instead of vertically. This is used to cross-cross
    * check a vertical cross check and locate the real center of the alignment pattern.</p>
    */
-  private float crossCheckHorizontal(int startJ, int centerI, int maxCount) {
+  private float crossCheckHorizontal(int startJ, int centerI, int maxCount, int originalStateCountTotal) {
     MonochromeBitmapSource image = this.image;
 
     int maxJ = image.getWidth();
@@ -314,6 +321,13 @@ final class FinderPatternFinder {
       return Float.NaN;
     }
 
+    // If we found a finder-pattern-like section, but its size is significantly different than
+    // the original, assume it's a false positive
+    int stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2] + stateCount[3] + stateCount[4];
+    if (5 * Math.abs(stateCountTotal - originalStateCountTotal) >= originalStateCountTotal) {
+      return Float.NaN;
+    }
+
     return foundPatternCross(stateCount) ? centerFromEnd(stateCount, j) : Float.NaN;
   }
 
@@ -336,14 +350,14 @@ final class FinderPatternFinder {
   private boolean handlePossibleCenter(int[] stateCount,
                                        int i,
                                        int j) {
+    int stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2] + stateCount[3] + stateCount[4];
     float centerJ = centerFromEnd(stateCount, j);
-    float centerI = crossCheckVertical(i, (int) centerJ, stateCount[2]);
+    float centerI = crossCheckVertical(i, (int) centerJ, stateCount[2], stateCountTotal);
     if (!Float.isNaN(centerI)) {
       // Re-cross check
-      centerJ = crossCheckHorizontal((int) centerJ, (int) centerI, stateCount[2]);
+      centerJ = crossCheckHorizontal((int) centerJ, (int) centerI, stateCount[2], stateCountTotal);
       if (!Float.isNaN(centerJ)) {
-        float estimatedModuleSize =
-            (float) (stateCount[0] + stateCount[1] + stateCount[2] + stateCount[3] + stateCount[4]) / 7.0f;
+        float estimatedModuleSize = (float) stateCountTotal / 7.0f;
         boolean found = false;
         int max = possibleCenters.size();
         for (int index = 0; index < max; index++) {

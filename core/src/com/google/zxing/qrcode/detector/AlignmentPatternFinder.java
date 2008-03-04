@@ -164,7 +164,7 @@ final class AlignmentPatternFinder {
    */
   private boolean foundPatternCross(int[] stateCount) {
     float moduleSize = this.moduleSize;
-    float maxVariance = moduleSize / 2.5f;
+    float maxVariance = moduleSize / 2.0f;
     for (int i = 0; i < 3; i++) {
       if (Math.abs(moduleSize - stateCount[i]) >= maxVariance) {
         return false;
@@ -184,7 +184,7 @@ final class AlignmentPatternFinder {
    * observed in any reading state, based on the results of the horizontal scan
    * @return vertical center of alignment pattern, or {@link Float#NaN} if not found
    */
-  private float crossCheckVertical(int startI, int centerJ, int maxCount) {
+  private float crossCheckVertical(int startI, int centerJ, int maxCount, int originalStateCountTotal) {
     MonochromeBitmapSource image = this.image;
 
     int maxI = image.getHeight();
@@ -225,6 +225,11 @@ final class AlignmentPatternFinder {
       return Float.NaN;
     }
 
+    int stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2];
+    if (5 * Math.abs(stateCountTotal - originalStateCountTotal) >= originalStateCountTotal) {
+      return Float.NaN;
+    }
+
     return foundPatternCross(stateCount) ? centerFromEnd(stateCount, i) : Float.NaN;
   }
 
@@ -240,8 +245,9 @@ final class AlignmentPatternFinder {
    * @return {@link AlignmentPattern} if we have found the same pattern twice, or null if not
    */
   private AlignmentPattern handlePossibleCenter(int[] stateCount, int i, int j) {
+    int stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2];
     float centerJ = centerFromEnd(stateCount, j);
-    float centerI = crossCheckVertical(i, (int) centerJ, 2 * stateCount[1]);
+    float centerI = crossCheckVertical(i, (int) centerJ, 2 * stateCount[1], stateCountTotal);
     if (!Float.isNaN(centerI)) {
       float estimatedModuleSize = (float) (stateCount[0] + stateCount[1] + stateCount[2]) / 3.0f;
       int max = possibleCenters.size();
