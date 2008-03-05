@@ -70,7 +70,7 @@ public final class ReedSolomonDecoder {
       int[] errorMagnitudes = findErrorMagnitudes(sigmaOmega[1], errorLocations);
       for (int i = 0; i < errorLocations.length; i++) {
         int position = received.length - 1 - field.log(errorLocations[i]);
-        received[position] = field.addOrSubtract(received[position], errorMagnitudes[i]);
+        received[position] = GF256.addOrSubtract(received[position], errorMagnitudes[i]);
       }
     }
   }
@@ -161,7 +161,7 @@ public final class ReedSolomonDecoder {
       for (int j = 0; j < s; j++) {
         if (i != j) {
           denominator = field.multiply(denominator,
-              field.addOrSubtract(1, field.multiply(errorLocations[j], xiInverse)));
+              GF256.addOrSubtract(1, field.multiply(errorLocations[j], xiInverse)));
         }
       }
       result[i] = field.multiply(errorEvaluator.evaluateAt(xiInverse),

@@ -24,7 +24,7 @@ package com.google.zxing.common;
 public final class BitArray {
 
   private int[] bits;
-  private int size;
+  private final int size;
 
   public BitArray(int size) {
     this.size = size;

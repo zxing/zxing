@@ -34,7 +34,7 @@ final class AdvancedMultimediaManager {
 
   // These signatures must match those in the other class exactly
 
-  static void setFocus(Controllable player) throws MediaException, InterruptedException {
+  static void setFocus(Controllable player) throws MediaException {
     // do nothing
   }
 

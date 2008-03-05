@@ -43,7 +43,7 @@ final class AdvancedMultimediaManager {
     // do nothing
   }
 
-  static void setFocus(Controllable player) throws MediaException, InterruptedException {
+  static void setFocus(Controllable player) throws MediaException {
     FocusControl focusControl = (FocusControl)
         player.getControl("javax.microedition.amms.control.camera.FocusControl");
     if (focusControl != null) {
@@ -52,7 +52,11 @@ final class AdvancedMultimediaManager {
       }
       if (focusControl.isAutoFocusSupported()) {
         focusControl.setFocus(FocusControl.AUTO);
-        Thread.sleep(FOCUS_TIME_MS); // let it focus...
+        try {
+          Thread.sleep(FOCUS_TIME_MS); // let it focus...
+        } catch (InterruptedException ie) {
+          // continue
+        }
         try {
           focusControl.setFocus(FocusControl.AUTO_LOCK);
         } catch (MediaException me) {

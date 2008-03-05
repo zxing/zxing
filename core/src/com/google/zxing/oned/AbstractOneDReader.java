@@ -98,7 +98,7 @@ public abstract class AbstractOneDReader implements OneDReader {
     throw new ReaderException("No barcode found");
   }
 
-  protected static void recordPattern(BitArray row, int start, int[] counters) throws ReaderException {
+  static void recordPattern(BitArray row, int start, int[] counters) throws ReaderException {
     int numCounters = counters.length;
     for (int i = 0; i < numCounters; i++) {
       counters[i] = 0;
@@ -141,7 +141,7 @@ public abstract class AbstractOneDReader implements OneDReader {
    * @param pattern expected pattern
    * @return average variance between counters and pattern
    */
-  protected static float patternMatchVariance(int[] counters, int[] pattern) {
+  static float patternMatchVariance(int[] counters, int[] pattern) {
     int total = 0;
     int numCounters = counters.length;
     int patternLength = 0;
@@ -159,15 +159,6 @@ public abstract class AbstractOneDReader implements OneDReader {
       totalVariance += abs;
     }
     return totalVariance / (float) patternLength;
-  }
-
-  /**
-   * Fast round method.
-   *
-   * @return argument rounded to nearest int
-   */
-  protected static int round(float f) {
-    return (int) (f + 0.5f);
   }
 
 }

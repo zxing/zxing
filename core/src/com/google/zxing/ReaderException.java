@@ -25,9 +25,6 @@ package com.google.zxing;
  */
 public final class ReaderException extends Exception {
 
-  public ReaderException() {
-  }
-
   public ReaderException(String message) {
     super(message);
   }

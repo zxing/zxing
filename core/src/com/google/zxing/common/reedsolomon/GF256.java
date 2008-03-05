@@ -90,7 +90,7 @@ public final class GF256 {
    *
    * @return sum/difference of a and b
    */
-  int addOrSubtract(int a, int b) {
+  static int addOrSubtract(int a, int b) {
     return a ^ b;
   }
 

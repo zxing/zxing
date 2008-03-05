@@ -24,21 +24,14 @@ package com.google.zxing.qrcode.detector;
  */
 final class FinderPatternInfo {
 
-  private final float rawEstimatedModuleSize;
   private final FinderPattern bottomLeft;
   private final FinderPattern topLeft;
   private final FinderPattern topRight;
 
-  FinderPatternInfo(float rawEstimatedModuleSize,
-                    FinderPattern[] patternCenters) {
-    this.rawEstimatedModuleSize = rawEstimatedModuleSize;
+  FinderPatternInfo(FinderPattern[] patternCenters) {
     this.bottomLeft = patternCenters[0];
     this.topLeft = patternCenters[1];
     this.topRight = patternCenters[2];
-  }
-
-  float getRawEstimatedModuleSize() {
-    return rawEstimatedModuleSize;
   }
 
   FinderPattern getBottomLeft() {

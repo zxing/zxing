@@ -52,8 +52,7 @@ final class PerspectiveTransform {
 
     PerspectiveTransform qToS = quadrilateralToSquare(x0, y0, x1, y1, x2, y2, x3, y3);
     PerspectiveTransform sToQ = squareToQuadrilateral(x0p, y0p, x1p, y1p, x2p, y2p, x3p, y3p);
-    PerspectiveTransform product = sToQ.times(qToS);
-    return product;
+    return sToQ.times(qToS);
   }
 
   void transformPoints(float[] points) {
@@ -100,10 +99,10 @@ final class PerspectiveTransform {
     }
   }
 
-  static PerspectiveTransform quadrilateralToSquare(float x0, float y0,
-                                                    float x1, float y1,
-                                                    float x2, float y2,
-                                                    float x3, float y3) {
+  private static PerspectiveTransform quadrilateralToSquare(float x0, float y0,
+                                                            float x1, float y1,
+                                                            float x2, float y2,
+                                                            float x3, float y3) {
     // Here, the adjoint serves as the inverse:
     return squareToQuadrilateral(x0, y0, x1, y1, x2, y2, x3, y3).buildAdjoint();
   }
