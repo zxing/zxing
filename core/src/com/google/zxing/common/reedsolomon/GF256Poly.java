@@ -44,16 +44,17 @@ final class GF256Poly {
       throw new IllegalArgumentException();
     }
     this.field = field;
-    if (coefficients.length > 1 && coefficients[0] == 0) {
+    int coefficientsLength = coefficients.length;
+    if (coefficientsLength > 1 && coefficients[0] == 0) {
       // Leading term must be non-zero for anything except the constant polynomial "0"
       int firstNonZero = 1;
-      while (firstNonZero < coefficients.length && coefficients[firstNonZero] == 0) {
+      while (firstNonZero < coefficientsLength && coefficients[firstNonZero] == 0) {
         firstNonZero++;
       }
-      if (firstNonZero == coefficients.length) {
+      if (firstNonZero == coefficientsLength) {
         this.coefficients = field.getZero().coefficients;
       } else {
-        this.coefficients = new int[coefficients.length - firstNonZero];
+        this.coefficients = new int[coefficientsLength - firstNonZero];
         System.arraycopy(coefficients,
             firstNonZero,
             this.coefficients,
@@ -190,9 +191,8 @@ final class GF256Poly {
     }
     int size = coefficients.length;
     int[] product = new int[size];
-    System.arraycopy(coefficients, 0, product, 0, size);
     for (int i = 0; i < size; i++) {
-      product[i] = field.multiply(product[i], scalar);
+      product[i] = field.multiply(coefficients[i], scalar);
     }
     return new GF256Poly(field, product);
   }
@@ -206,9 +206,8 @@ final class GF256Poly {
     }
     int size = coefficients.length;
     int[] product = new int[size + degree];
-    System.arraycopy(coefficients, 0, product, 0, size);
     for (int i = 0; i < size; i++) {
-      product[i] = field.multiply(product[i], coefficient);
+      product[i] = field.multiply(coefficients[i], coefficient);
     }
     return new GF256Poly(field, product);
   }

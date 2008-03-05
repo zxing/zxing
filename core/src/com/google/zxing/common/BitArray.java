@@ -27,6 +27,9 @@ public final class BitArray {
   private final int size;
 
   public BitArray(int size) {
+    if (size < 1) {
+      throw new IllegalArgumentException("size must be at least 1");
+    }
     this.size = size;
     this.bits = makeArray(size);
   }
