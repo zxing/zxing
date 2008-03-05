@@ -44,10 +44,6 @@ public final class AlignmentPattern implements ResultPoint {
     return posY;
   }
 
-  float getEstimatedModuleSize() {
-    return estimatedModuleSize;
-  }
-
   /**
    * <p>Determines if this alignment pattern "about equals" an alignment pattern at the stated
    * position and size -- meaning, it is at nearly the same center with nearly the same size.</p>

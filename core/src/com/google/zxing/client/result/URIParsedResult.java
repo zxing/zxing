@@ -48,7 +48,7 @@ public final class URIParsedResult extends ParsedReaderResult {
    * Transforms a string that possibly represents a URI into something more proper, by adding or canonicalizing
    * the protocol.
    */
-  static String massagePossibleURI(String uri) {
+  private static String massagePossibleURI(String uri) {
     // Take off leading "URL:" if present
     if (uri.startsWith("URL:")) {
       uri = uri.substring(4);

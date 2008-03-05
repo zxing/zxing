@@ -34,7 +34,7 @@ final class Mode {
   static final Mode BYTE = new Mode(new int[]{8, 16, 16});
   static final Mode KANJI = new Mode(new int[]{8, 10, 12});
 
-  private int[] characterCountBitsForVersions;
+  private final int[] characterCountBitsForVersions;
 
   private Mode(int[] characterCountBitsForVersions) {
     this.characterCountBitsForVersions = characterCountBitsForVersions;

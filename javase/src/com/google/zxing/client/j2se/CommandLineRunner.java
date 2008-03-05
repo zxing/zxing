@@ -19,6 +19,7 @@ package com.google.zxing.client.j2se;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.ReaderException;
+import com.google.zxing.MonochromeBitmapSource;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -64,9 +65,9 @@ public final class CommandLineRunner {
       return false;
     }
     try {
-      Hashtable hints = new Hashtable();
+      Hashtable<DecodeHintType, Object> hints = new Hashtable<DecodeHintType, Object>(3);
       hints.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
-      BufferedImageMonochromeBitmapSource source = new BufferedImageMonochromeBitmapSource(image);
+      MonochromeBitmapSource source = new BufferedImageMonochromeBitmapSource(image);
       String result = new MultiFormatReader().decode(source, hints).getText();
       System.out.println(uri.toString() + ": " + result);
       return true;

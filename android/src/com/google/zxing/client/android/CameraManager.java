@@ -38,15 +38,15 @@ final class CameraManager {
 
   private static final String TAG = "CameraManager";
 
-  private Context context;
+  private final Context context;
   private Point cameraResolution;
   private Point stillResolution;
   private int stillMultiplier;
   private Point screenResolution;
   private Rect framingRect;
-  private Bitmap bitmap;
+  private final Bitmap bitmap;
   private CameraDevice camera;
-  private CameraDevice.CaptureParams params;
+  private final CameraDevice.CaptureParams params;
   private boolean previewMode;
 
   CameraManager(Context context) {
@@ -200,7 +200,7 @@ final class CameraManager {
 
     // The camera driver can only capture images which are a multiple of eight, so it's necessary to
     // round up.
-    nativeResolution = (nativeResolution + 7) / 8 * 8;
+    nativeResolution = ((nativeResolution + 7) >> 3) << 3;
     if (nativeResolution > minDimension) {
       nativeResolution = minDimension;
     }

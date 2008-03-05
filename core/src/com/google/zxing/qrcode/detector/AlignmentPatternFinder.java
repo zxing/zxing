@@ -94,7 +94,6 @@ final class AlignmentPatternFinder {
       stateCount[0] = 0;
       stateCount[1] = 0;
       stateCount[2] = 0;
-      int currentState = 0;
       int j = startX;
       // Burn off leading white pixels before anything else; if we start in the middle of
       // a white run, it doesn't make sense to count its length, since we don't know if the
@@ -102,6 +101,7 @@ final class AlignmentPatternFinder {
       while (j < maxJ && !luminanceRow.get(j - startX)) {
         j++;
       }
+      int currentState = 0;
       while (j < maxJ) {
         if (luminanceRow.get(j - startX)) {
           // Black pixel

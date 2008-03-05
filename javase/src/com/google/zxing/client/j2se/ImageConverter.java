@@ -46,7 +46,6 @@ public final class ImageConverter {
       File inputFile = new File(arg);
       if (inputFile.exists()) {
         if (inputFile.isDirectory()) {
-          int count = 0;
           for (File input : inputFile.listFiles()) {
             convertImage(input.toURI());
           }

@@ -52,6 +52,10 @@ public final class ZXingMIDlet extends MIDlet {
   private Player player;
   private VideoControl videoControl;
 
+  Canvas getCanvas() {
+    return canvas;
+  }
+
   Player getPlayer() {
     return player;
   }
@@ -152,7 +156,7 @@ public final class ZXingMIDlet extends MIDlet {
           }
         } else {
           // cancel
-          Display.getDisplay(ZXingMIDlet.this).setCurrent(canvas);
+          Display.getDisplay(ZXingMIDlet.this).setCurrent(getCanvas());
         }
       }
     };

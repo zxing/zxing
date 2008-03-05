@@ -99,17 +99,18 @@ final class GF256Poly {
       // Just the sum of the coefficients
       int result = 0;
       for (int i = 0; i < size; i++) {
-        result = field.addOrSubtract(result, coefficients[i]);
+        result = GF256.addOrSubtract(result, coefficients[i]);
       }
       return result;
     }
     int result = coefficients[0];
     for (int i = 1; i < size; i++) {
-      result = field.addOrSubtract(field.multiply(a, result), coefficients[i]);
+      result = GF256.addOrSubtract(field.multiply(a, result), coefficients[i]);
     }
     return result;
   }
 
+  /*
   int evaluateFormatDerivativeAt(int a) {
     int degree = getDegree();
     if (degree == 0) {
@@ -126,6 +127,7 @@ final class GF256Poly {
     }
     return sum;
   }
+   */
 
   GF256Poly addOrSubtract(GF256Poly other) {
     if (!field.equals(other.field)) {
@@ -151,7 +153,7 @@ final class GF256Poly {
     System.arraycopy(largerCoefficients, 0, sumDiff, 0, lengthDiff);
 
     for (int i = lengthDiff; i < largerCoefficients.length; i++) {
-      sumDiff[i] = field.addOrSubtract(smallerCoefficients[i - lengthDiff], largerCoefficients[i]);
+      sumDiff[i] = GF256.addOrSubtract(smallerCoefficients[i - lengthDiff], largerCoefficients[i]);
     }
 
     return new GF256Poly(field, sumDiff);
@@ -172,7 +174,7 @@ final class GF256Poly {
     for (int i = 0; i < aLength; i++) {
       int aCoeff = aCoefficients[i];
       for (int j = 0; j < bLength; j++) {
-        product[i + j] = field.addOrSubtract(product[i + j],
+        product[i + j] = GF256.addOrSubtract(product[i + j],
             field.multiply(aCoeff, bCoefficients[j]));
       }
     }

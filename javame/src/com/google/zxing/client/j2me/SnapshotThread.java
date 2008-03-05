@@ -36,7 +36,7 @@ final class SnapshotThread extends Thread {
 
   private final ZXingMIDlet zXingMIDlet;
 
-  SnapshotThread(ZXingMIDlet zXingMIDlet) {
+  private SnapshotThread(ZXingMIDlet zXingMIDlet) {
     this.zXingMIDlet = zXingMIDlet;
   }
 
@@ -65,8 +65,10 @@ final class SnapshotThread extends Thread {
     } catch (ReaderException re) {
       // Show a friendlier message on a mere failure to read the barcode
       zXingMIDlet.showError("Sorry, no barcode was found.");
-    } catch (Throwable t) {
-      zXingMIDlet.showError(t);
+    } catch (MediaException me) {
+      zXingMIDlet.showError(me);
+    } catch (RuntimeException re) {
+      zXingMIDlet.showError(re);
     } finally {
       try {
         player.start();

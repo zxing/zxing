@@ -33,8 +33,8 @@ final class CameraSurfaceView extends SurfaceView implements SurfaceHolder.Callb
 
   private static final int[] SCANNER_ALPHA = {0, 64, 128, 192, 255, 192, 128, 64};
 
-  private CameraManager cameraManager;
-  private SurfaceHolder surfaceHolder;
+  private final CameraManager cameraManager;
+  private final SurfaceHolder surfaceHolder;
   private boolean hasSurface;
   private int scannerAlpha;
 

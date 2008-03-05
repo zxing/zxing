@@ -146,12 +146,8 @@ final class FinderPatternFinder {
 
     FinderPattern[] patternInfo = selectBestPatterns();
     patternInfo = orderBestPatterns(patternInfo);
-    float totalModuleSize = 0.0f;
-    for (int i = 0; i < patternInfo.length; i++) {
-      totalModuleSize += patternInfo[i].getEstimatedModuleSize();
-    }
 
-    return new FinderPatternInfo(totalModuleSize / (float) patternInfo.length, patternInfo);
+    return new FinderPatternInfo(patternInfo);
   }
 
   /**

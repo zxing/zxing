@@ -40,17 +40,17 @@ public abstract class AbstractUPCEANReader extends AbstractOneDReader implements
   /**
    * Start/end guard pattern.
    */
-  protected static final int[] START_END_PATTERN = {1, 1, 1,};
+  private static final int[] START_END_PATTERN = {1, 1, 1,};
 
   /**
    * Pattern marking the middle of a UPC/EAN pattern, separating the two halves.
    */
-  protected static final int[] MIDDLE_PATTERN = {1, 1, 1, 1, 1};
+  static final int[] MIDDLE_PATTERN = {1, 1, 1, 1, 1};
 
   /**
    * "Odd", or "L" patterns used to encode UPC/EAN digits.
    */
-  protected static final int[][] L_PATTERNS = {
+  static final int[][] L_PATTERNS = {
       {3, 2, 1, 1}, // 0
       {2, 2, 2, 1}, // 1
       {2, 1, 2, 2}, // 2
@@ -66,7 +66,7 @@ public abstract class AbstractUPCEANReader extends AbstractOneDReader implements
   /**
    * As above but also including the "even", or "G" patterns used to encode UPC/EAN digits.
    */
-  protected static final int[][] L_AND_G_PATTERNS;
+  static final int[][] L_AND_G_PATTERNS;
 
   static {
     L_AND_G_PATTERNS = new int[20][];
@@ -139,7 +139,7 @@ public abstract class AbstractUPCEANReader extends AbstractOneDReader implements
    * @return true iff string of digits passes the UPC/EAN checksum algorithm
    * @throws ReaderException if the string does not contain only digits
    */
-  protected boolean checkChecksum(String s) throws ReaderException {
+  boolean checkChecksum(String s) throws ReaderException {
     int sum = 0;
     int length = s.length();
     for (int i = length - 2; i >= 0; i -= 2) {
@@ -172,7 +172,7 @@ public abstract class AbstractUPCEANReader extends AbstractOneDReader implements
   protected abstract int decodeMiddle(BitArray row, int[] startRange, StringBuffer resultString)
       throws ReaderException;
 
-  protected int[] decodeEnd(BitArray row, int endStart) throws ReaderException {
+  int[] decodeEnd(BitArray row, int endStart) throws ReaderException {
     return findGuardPattern(row, endStart, false, START_END_PATTERN);
   }
 
@@ -186,7 +186,7 @@ public abstract class AbstractUPCEANReader extends AbstractOneDReader implements
    * @return start/end horizontal offset of guard pattern, as an array of two ints
    * @throws ReaderException if pattern is not found
    */
-  protected static int[] findGuardPattern(BitArray row, int rowOffset, boolean whiteFirst, int[] pattern)
+  static int[] findGuardPattern(BitArray row, int rowOffset, boolean whiteFirst, int[] pattern)
       throws ReaderException {
     int patternLength = pattern.length;
     int[] counters = new int[patternLength];
@@ -240,7 +240,7 @@ public abstract class AbstractUPCEANReader extends AbstractOneDReader implements
    * @return horizontal offset of first pixel beyond the decoded digit
    * @throws ReaderException if digit cannot be decoded
    */
-  protected static int decodeDigit(BitArray row,
+  static int decodeDigit(BitArray row,
                                    int[] counters,
                                    int rowOffset,
                                    int[][] patterns) throws ReaderException {
