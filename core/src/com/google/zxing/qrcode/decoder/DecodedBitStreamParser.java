@@ -40,14 +40,14 @@ final class DecodedBitStreamParser {
       ' ', '$', '%', '*', '+', '-', '.', '/', ':'
   };
   private static final String SHIFT_JIS = "Shift_JIS";
+  private static final String EUC_JP = "EUC-JP";
   private static final boolean ASSUME_SHIFT_JIS;
   private static final String UTF8 = "UTF-8";
   private static final String ISO88591 = "ISO-8859-1";
 
   static {
     String platformDefault = System.getProperty("file.encoding");
-    ASSUME_SHIFT_JIS = SHIFT_JIS.equalsIgnoreCase(platformDefault) ||
-        "EUC-JP".equalsIgnoreCase(platformDefault);
+    ASSUME_SHIFT_JIS = SHIFT_JIS.equalsIgnoreCase(platformDefault) || EUC_JP.equalsIgnoreCase(platformDefault);
   }
 
   private DecodedBitStreamParser() {
