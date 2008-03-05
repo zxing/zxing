@@ -74,3 +74,21 @@
   - Tiny bug fix to QRCodeReader for images that extend all the way
     to top or left
   - Android client now builds with ProGuard optimization
+
+0.5 (05 Mar 2008)
+  - Improvement in QR Code decoding accuracy on non-JSR-234 phones
+  - Supports "URLTO" data in barcodes.
+  - Restructured ParsedReaderResult parsing code to not use so many
+    exceptions, for more efficiency.
+  - "TRY_HARDER" decoding hint now supported. Will do more work in some cases
+    to find an image, such as scan for 1D barcodes at a right angle and
+    backwards. Only recommended for non-mobile applications.
+  - Result now indicates the format of the decoded barcode with a
+    BarcodeFormat instance
+  - More intelligent handling of POSSIBLE_FORMATS decoding hint
+  - Fixed sub-optimal handling of EAN-13 barcodes which encode a string
+    starting with "0". These are now returned as a full 13-digit string
+    from EAN13Reader, but will continue to be construed as 12-digit UPC-A
+    codes from the MultiFormatReader.
+  - A host of small bug fixes, including bug in Version 25 QR Code support
+  - A round of code cleanup and refactoring from IntelliJ inspections
