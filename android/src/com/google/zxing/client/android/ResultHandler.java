@@ -21,6 +21,7 @@ import android.net.ContentURI;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Contacts;
+import com.google.zxing.client.result.AddressBookAUResult;
 import com.google.zxing.client.result.AddressBookDoCoMoResult;
 import com.google.zxing.client.result.BookmarkDoCoMoResult;
 import com.google.zxing.client.result.EmailAddressResult;
@@ -59,8 +60,16 @@ final class ResultHandler extends Handler {
         AddressBookDoCoMoResult addressResult = (AddressBookDoCoMoResult) result;
         intent = new Intent(Contacts.Intents.Insert.ACTION, Contacts.People.CONTENT_URI);
         putExtra(intent, Contacts.Intents.Insert.NAME, addressResult.getName());
-        putExtra(intent, Contacts.Intents.Insert.PHONE, addressResult.getPhoneNumbers()[0]);
+        putExtra(intent, Contacts.Intents.Insert.PHONE, addressResult.getPhoneNumbers());
         putExtra(intent, Contacts.Intents.Insert.EMAIL, addressResult.getEmail());
+        putExtra(intent, Contacts.Intents.Insert.NOTES, addressResult.getNote());
+        putExtra(intent, Contacts.Intents.Insert.POSTAL, addressResult.getAddress());
+      } else if (type.equals(ParsedReaderResultType.ADDRESSBOOK_AU)) {
+        AddressBookAUResult addressResult = (AddressBookAUResult) result;
+        intent = new Intent(Contacts.Intents.Insert.ACTION, Contacts.People.CONTENT_URI);
+        putExtra(intent, Contacts.Intents.Insert.NAME, addressResult.getNames());
+        putExtra(intent, Contacts.Intents.Insert.PHONE, addressResult.getPhoneNumbers());
+        putExtra(intent, Contacts.Intents.Insert.EMAIL, addressResult.getEmails());
         putExtra(intent, Contacts.Intents.Insert.NOTES, addressResult.getNote());
         putExtra(intent, Contacts.Intents.Insert.POSTAL, addressResult.getAddress());
       } else if (type.equals(ParsedReaderResultType.BOOKMARK)) {
@@ -120,8 +129,14 @@ final class ResultHandler extends Handler {
   }
 
   private static void putExtra(Intent intent, String key, String value) {
-    if (key != null && key.length() > 0) {
+    if (value != null && value.length() > 0) {
       intent.putExtra(key, value);
+    }
+  }
+
+  private static void putExtra(Intent intent, String key, String[] value) {
+    if (value != null && value.length > 0) {
+      putExtra(intent, key, value[0]);
     }
   }
 

@@ -68,6 +68,12 @@ public final class ParsedReaderResultTestCase extends TestCase {
     doTestResult("TEL:+12125551212;N:Sean Owen;;", ParsedReaderResultType.TEXT);
   }
 
+  public void testAddressBookAUType() {
+    doTestResult("MEMORY:\r\n", ParsedReaderResultType.ADDRESSBOOK_AU);
+    doTestResult("MEMORY:foo\r\nNAME1:Sean\r\n", ParsedReaderResultType.ADDRESSBOOK_AU);
+    doTestResult("TEL1:+12125551212\r\nMEMORY:\r\n", ParsedReaderResultType.ADDRESSBOOK_AU);
+  }
+
   public void testUPC() {
     doTestResult("123456789012", ParsedReaderResultType.UPC);
     doTestResult("1234567890123", ParsedReaderResultType.UPC);

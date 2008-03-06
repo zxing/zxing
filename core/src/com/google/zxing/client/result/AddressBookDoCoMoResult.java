@@ -83,9 +83,7 @@ public final class AddressBookDoCoMoResult extends AbstractDoCoMoResult {
     StringBuffer result = new StringBuffer(name);
     maybeAppend(email, result);
     maybeAppend(address, result);
-    for (int i = 0; i < phoneNumbers.length; i++) {
-      maybeAppend(phoneNumbers[i], result);
-    }
+    maybeAppend(phoneNumbers, result);
     maybeAppend(note, result);
     return result.toString();
   }
