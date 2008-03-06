@@ -27,6 +27,7 @@ public final class ParsedReaderResultType {
   public static final ParsedReaderResultType BOOKMARK = new ParsedReaderResultType("BOOKMARK");
   public static final ParsedReaderResultType URLTO = new ParsedReaderResultType("URLTO");
   public static final ParsedReaderResultType ADDRESSBOOK = new ParsedReaderResultType("ADDRESSBOOK");
+  public static final ParsedReaderResultType ADDRESSBOOK_AU = new ParsedReaderResultType("ADDRESSBOOK_AU");  
   public static final ParsedReaderResultType EMAIL = new ParsedReaderResultType("EMAIL");
   public static final ParsedReaderResultType EMAIL_ADDRESS = new ParsedReaderResultType("EMAIL_ADDRESS");
   public static final ParsedReaderResultType UPC = new ParsedReaderResultType("UPC");
