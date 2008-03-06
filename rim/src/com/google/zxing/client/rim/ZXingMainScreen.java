@@ -25,6 +25,7 @@ import com.google.zxing.client.j2me.LCDUIImageMonochromeBitmapSource;
 import net.rim.blackberry.api.invoke.CameraArguments;
 import net.rim.blackberry.api.invoke.Invoke;
 import net.rim.device.api.system.Characters;
+import net.rim.device.api.system.EventInjector;
 import net.rim.device.api.ui.UiApplication;
 import net.rim.device.api.ui.component.Dialog;
 import net.rim.device.api.ui.component.LabelField;
@@ -45,8 +46,12 @@ final class ZXingMainScreen extends MainScreen {
   private final ImageCapturedJournalListener captureListener;
 
   ZXingMainScreen() {
-    setTitle("Barcode Reader");
-    add(new LabelField("ZXing"));
+    setTitle("ZXing Barcode Reader");
+    add(new LabelField("UNDER CONSTRUCTION"));
+    add(new LabelField("1. Press 'Enter' at right to launch the Camera application"));
+    add(new LabelField("2. Configure Camera to capture 640x480 image"));
+    add(new LabelField("3. Take a picture of a barcode"));
+    add(new LabelField("4. If not returned to this application to see result, close Camera application"));
     app = (ZXingUIApp) UiApplication.getUiApplication();
     captureListener = new ImageCapturedJournalListener(this);
     app.addFileSystemJournalListener(captureListener);
@@ -74,6 +79,10 @@ final class ZXingMainScreen extends MainScreen {
 
   void handleFile(String path) {
     if (path.endsWith(".jpg") && path.indexOf("IMG") >= 0) {
+      // Get out of camera app
+      EventInjector.invokeEvent(new EventInjector.KeyEvent(EventInjector.KeyEvent.KEY_DOWN, Characters.ESCAPE, 0, 1));
+      EventInjector.invokeEvent(new EventInjector.KeyEvent(EventInjector.KeyEvent.KEY_UP, Characters.ESCAPE, 0, 1));
+      // Try to come to foreground for good measure
       app.requestForeground();
       try {
         FileConnection file = null;
@@ -87,14 +96,14 @@ final class ZXingMainScreen extends MainScreen {
           if (is != null) {
             try {
               is.close();
-            } catch (IOException ioe ) {
+            } catch (IOException ioe) {
               // continue
             }
           }
           if (file != null) {
             try {
               file.close();
-            } catch (IOException ioe ) {
+            } catch (IOException ioe) {
               // continue
             }
           }
@@ -102,6 +111,7 @@ final class ZXingMainScreen extends MainScreen {
         MonochromeBitmapSource source = new LCDUIImageMonochromeBitmapSource(capturedImage);
         Reader reader = new MultiFormatReader();
         Result result = reader.decode(source);
+        // If decode was successful...
         try {
           file.delete();
         } catch (IOException ioe) {
