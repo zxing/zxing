@@ -33,6 +33,7 @@ public final class ParsedReaderResultType {
   public static final ParsedReaderResultType UPC = new ParsedReaderResultType("UPC");
   public static final ParsedReaderResultType URI = new ParsedReaderResultType("URI");
   public static final ParsedReaderResultType TEXT = new ParsedReaderResultType("TEXT");
+  public static final ParsedReaderResultType ANDROID_INTENT = new ParsedReaderResultType("ANDROID_INTENT");  
 
   private final String name;
 
