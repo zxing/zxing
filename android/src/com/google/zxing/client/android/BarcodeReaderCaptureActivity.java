@@ -156,7 +156,7 @@ public final class BarcodeReaderCaptureActivity extends Activity {
     }
 
     Context context = getApplication();
-    ParsedReaderResult readerResult = ParsedReaderResult.parseReaderResult(rawResult.getText());
+    ParsedReaderResult readerResult = parseReaderResult(rawResult);
     Handler handler = new ResultHandler(this, readerResult);
     if (canBeHandled(readerResult.getType())) {
       // Can be handled by some external app; ask if the user wants to
@@ -173,6 +173,18 @@ public final class BarcodeReaderCaptureActivity extends Activity {
           readerResult.getDisplayResult(), context.getString(R.string.button_ok), okMessage, null,
           null, true, okMessage);
     }
+  }
+
+  private static ParsedReaderResult parseReaderResult(Result rawResult) {
+    String rawText = rawResult.getText();
+    ParsedReaderResult readerResult = ParsedReaderResult.parseReaderResult(rawText);
+    if (readerResult.getType().equals(ParsedReaderResultType.TEXT)) {
+      ParsedReaderResult androidResult = AndroidIntentParsedResult.parse(rawText);
+      if (androidResult != null) {
+        readerResult = androidResult;
+      }
+    }
+    return readerResult;
   }
 
   private static boolean canBeHandled(ParsedReaderResultType type) {
