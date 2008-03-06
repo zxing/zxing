@@ -76,7 +76,7 @@
 
     <mkdir dir="build-j2me"/>
     <exec executable="${WTK-home}/bin/preverify1.1" failonerror="true">
-      <arg line="-classpath ${rim-api-jar} -d build-j2me build"/>
+      <arg line="-classpath '${rim-api-jar}' -d build-j2me build"/>
     </exec>
 
     <copy todir="build-j2me">
