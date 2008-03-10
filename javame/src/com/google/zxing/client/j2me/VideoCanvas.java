@@ -23,6 +23,9 @@ import javax.microedition.lcdui.Displayable;
 import javax.microedition.lcdui.Graphics;
 
 /**
+ * The main {@link Canvas} onto which the camera's field of view is painted.
+ * This class manages decoding via {@link SnapshotThread}.
+ *
  * @author Sean Owen (srowen@google.com)
  */
 final class VideoCanvas extends Canvas implements CommandListener {
@@ -30,11 +33,14 @@ final class VideoCanvas extends Canvas implements CommandListener {
   private static final Command exit = new Command("Exit", Command.EXIT, 1);
 
   private final ZXingMIDlet zXingMIDlet;
+  private final SnapshotThread snapshotThread;
 
   VideoCanvas(ZXingMIDlet zXingMIDlet) {
     this.zXingMIDlet = zXingMIDlet;
     addCommand(exit);
     setCommandListener(this);
+    snapshotThread = new SnapshotThread(zXingMIDlet);
+    snapshotThread.start();
   }
 
   protected void paint(Graphics graphics) {
@@ -44,12 +50,16 @@ final class VideoCanvas extends Canvas implements CommandListener {
   protected void keyPressed(int keyCode) {
     // Any valid game key will trigger a capture
     if (getGameAction(keyCode) != 0) {
-      SnapshotThread.startThread(zXingMIDlet);
+      snapshotThread.continueRun();
+    } else {
+      super.keyPressed(keyCode);
     }
   }
 
   public void commandAction(Command command, Displayable displayable) {
-    if (command.getCommandType() == Command.EXIT || command.getCommandType() == Command.STOP) {
+    int type = command.getCommandType();
+    if (type == Command.EXIT || type == Command.STOP || type == Command.BACK || type == Command.CANCEL) {
+      snapshotThread.stop();
       zXingMIDlet.stop();
     }
   }
