@@ -17,6 +17,7 @@
 package com.google.zxing.qrcode.decoder;
 
 import com.google.zxing.ReaderException;
+import com.google.zxing.common.BitSource;
 
 import java.io.UnsupportedEncodingException;
 
