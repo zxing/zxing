@@ -16,6 +16,8 @@
 
 package com.google.zxing.qrcode.decoder;
 
+import com.google.zxing.ReaderException;
+
 /**
  * <p>See ISO 18004:2006, 6.5.1. This enum encapsulates the four error correction levels
  * defined by the QR code standard.</p>
@@ -59,7 +61,10 @@ final class ErrorCorrectionLevel {
    * @param bits int containing the two bits encoding a QR Code's error correction level
    * @return {@link ErrorCorrectionLevel} representing the encoded error correction level
    */
-  static ErrorCorrectionLevel forBits(int bits) {
+  static ErrorCorrectionLevel forBits(int bits) throws ReaderException {
+    if (bits < 0 || bits >= FOR_BITS.length) {
+      throw new ReaderException("Illegal error correction level bits" + bits);
+    }
     return FOR_BITS[bits];
   }
 

@@ -16,6 +16,7 @@
 
 package com.google.zxing.qrcode.decoder;
 
+import com.google.zxing.ReaderException;
 import junit.framework.TestCase;
 
 /**
@@ -30,7 +31,7 @@ public final class FormatInformationTestCase extends TestCase {
     assertEquals(32, FormatInformation.numBitsDiffering(-1, 0));
   }
 
-  public void testDecode() {
+  public void testDecode() throws ReaderException {
     // Normal case
     FormatInformation expected = FormatInformation.decodeFormatInformation(0x2BED ^ 0x5412);
     assertEquals((byte) 0x07, expected.getDataMask());

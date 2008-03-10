@@ -16,6 +16,8 @@
 
 package com.google.zxing.qrcode.decoder;
 
+import com.google.zxing.ReaderException;
+
 /**
  * <p>Encapsulates a QR Code's format information, including the data mask used and
  * error correction level.</p>
@@ -75,7 +77,7 @@ final class FormatInformation {
   private final ErrorCorrectionLevel errorCorrectionLevel;
   private final byte dataMask;
 
-  private FormatInformation(int formatInfo) {
+  private FormatInformation(int formatInfo) throws ReaderException {
     // Bits 3,4
     errorCorrectionLevel = ErrorCorrectionLevel.forBits((formatInfo >> 3) & 0x03);
     // Bottom 3 bits
@@ -99,7 +101,7 @@ final class FormatInformation {
    * @param rawFormatInfo
    * @return
    */
-  static FormatInformation decodeFormatInformation(int rawFormatInfo) {
+  static FormatInformation decodeFormatInformation(int rawFormatInfo) throws ReaderException {
     FormatInformation formatInfo = doDecodeFormatInformation(rawFormatInfo);
     if (formatInfo != null) {
       return formatInfo;
@@ -110,7 +112,7 @@ final class FormatInformation {
     return doDecodeFormatInformation(rawFormatInfo ^ FORMAT_INFO_MASK_QR);
   }
 
-  private static FormatInformation doDecodeFormatInformation(int rawFormatInfo) {
+  private static FormatInformation doDecodeFormatInformation(int rawFormatInfo) throws ReaderException {
     // Unmask:
     int unmaskedFormatInfo = rawFormatInfo ^ FORMAT_INFO_MASK_QR;
     // Find the int in FORMAT_INFO_DECODE_LOOKUP with fewest bits differing
