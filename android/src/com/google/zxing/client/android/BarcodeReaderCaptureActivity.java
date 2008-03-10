@@ -18,6 +18,7 @@ package com.google.zxing.client.android;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.os.Handler;
@@ -179,9 +180,14 @@ public final class BarcodeReaderCaptureActivity extends Activity {
     String rawText = rawResult.getText();
     ParsedReaderResult readerResult = ParsedReaderResult.parseReaderResult(rawText);
     if (readerResult.getType().equals(ParsedReaderResultType.TEXT)) {
-      ParsedReaderResult androidResult = AndroidIntentParsedResult.parse(rawText);
+      AndroidIntentParsedResult androidResult = AndroidIntentParsedResult.parse(rawText);
       if (androidResult != null) {
-        readerResult = androidResult;
+        Intent intent = androidResult.getIntent();
+        if (!Intent.VIEW_ACTION.equals(intent.getAction())) {
+          // For now, don't take anything that just parses as a View action. A lot
+          // of things are accepted as a View action by default.
+          readerResult = androidResult;          
+        }
       }
     }
     return readerResult;

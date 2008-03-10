@@ -119,6 +119,8 @@ final class ResultHandler extends Handler {
         } catch (URISyntaxException e) {
           return;
         }
+      } else if (type.equals(ParsedReaderResultType.ANDROID_INTENT)) {
+        intent = ((AndroidIntentParsedResult) result).getIntent();
       }
       if (intent != null) {
         captureActivity.startActivity(intent);

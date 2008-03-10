@@ -42,6 +42,8 @@ public final class AndroidIntentParsedResult extends ParsedReaderResult {
       return new AndroidIntentParsedResult(Intent.getIntent(rawText));
     } catch (URISyntaxException urise) {
       return null;
+    } catch (IllegalArgumentException iae) {
+      return null;
     }
   }
 
