@@ -37,7 +37,7 @@ final class AdvancedMultimediaManager {
 
   private static final int NO_ZOOM = 100;
   private static final int MAX_ZOOM = 200;
-  private static final long FOCUS_TIME_MS = 1000L;
+  private static final long FOCUS_TIME_MS = 750L;
 
   private AdvancedMultimediaManager() {
     // do nothing

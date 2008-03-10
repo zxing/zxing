@@ -117,19 +117,27 @@ public final class LCDUIImageMonochromeBitmapSource implements MonochromeBitmapS
   }
 
   /**
-   * Extracts luminance from a pixel from this source. By default, the source is assumed to use RGB,
-   * so this implementation computes luminance is a function of a red, green and blue components as
-   * follows:
-   *
-   * <code>Y = 0.299R + 0.587G + 0.114B</code>
-   *
-   * where R, G, and B are values in [0,1].
+   * An optimized approximation of a more proper conversion from RGB to luminance which
+   * only uses shifts. See BufferedImageMonochromeBitmapSource for an original version.
    */
   private static int computeRGBLuminance(int pixel) {
-    // Coefficients add up to 1024 to make the divide into a fast shift
-    return (306 * ((pixel >> 16) & 0xFF) +
-        601 * ((pixel >> 8) & 0xFF) +
-        117 * (pixel & 0xFF)) >> 10;
+    // Instead of multiplying by 306, 601, 117, we multiply by 256, 512, 256, so that
+    // the multiplies can be implemented as shifts.
+    //
+    // Really, it's:
+    //
+    // return ((((pixel >> 16) & 0xFF) << 8) +
+    //         (((pixel >>  8) & 0xFF) << 9) +
+    //         (( pixel        & 0xFF) << 8)) >> 10;
+    //
+    // That is, we're replacing the coefficients in the original with powers of two,
+    // which can be implemented as shifts, even though changing the coefficients slightly
+    // corrupts the conversion. Not significant for our purposes.
+    //
+    // But we can get even cleverer and eliminate a few shifts:
+    return (((pixel & 0x00FF0000) >> 8)  +
+            ((pixel & 0x0000FF00) << 1) +
+            ((pixel & 0x000000FF) << 8)) >> 10;
   }
 
 }
