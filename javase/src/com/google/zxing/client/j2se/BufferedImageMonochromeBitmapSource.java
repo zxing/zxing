@@ -45,9 +45,6 @@ public final class BufferedImageMonochromeBitmapSource implements MonochromeBitm
   private static final int LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
 
   public BufferedImageMonochromeBitmapSource(BufferedImage image) {
-    if (image.getType() == BufferedImage.TYPE_CUSTOM) {
-      throw new IllegalArgumentException("Can't handle BufferedImage of type TYPE_CUSTOM");
-    }
     this.image = image;
     blackPoint = 0x7F;
     lastMethod = null;
@@ -119,6 +116,9 @@ public final class BufferedImageMonochromeBitmapSource implements MonochromeBitm
   }
 
   public MonochromeBitmapSource rotateCounterClockwise() {
+    if (!isRotateSupported()) {
+      throw new IllegalStateException("Rotate not supported");
+    }
     // 90 degrees counterclockwise:
     AffineTransform transform = new AffineTransform(0.0, -1.0, 1.0, 0.0, 0.0, image.getHeight());
     BufferedImageOp op = new AffineTransformOp(transform, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
@@ -128,7 +128,8 @@ public final class BufferedImageMonochromeBitmapSource implements MonochromeBitm
   }
 
   public boolean isRotateSupported() {
-    return true;
+    // Can't run AffineTransforms on images of unknown format
+    return image.getType() != BufferedImage.TYPE_CUSTOM;
   }
 
   /**
