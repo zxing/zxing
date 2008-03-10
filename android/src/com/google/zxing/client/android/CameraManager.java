@@ -157,7 +157,7 @@ final class CameraManager {
         params.topPixel = (cameraResolution.y - params.srcHeight) / 2;
         params.outputWidth = stillResolution.x;
         params.outputHeight = stillResolution.y;
-        params.dataFormat = 0; // YUV packed (planar would be better, but it doesn't work right now)
+        params.dataFormat = 2; // RGB565
       }
       String captureType = on ? "preview" : "still";
       Log.v(TAG, "Setting params for " + captureType + ": srcWidth " + params.srcWidth +

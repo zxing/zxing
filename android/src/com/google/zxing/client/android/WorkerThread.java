@@ -67,7 +67,7 @@ final class WorkerThread extends Thread {
           Bitmap bitmap = cameraManager.captureStill();
           Result rawResult;
           try {
-            MonochromeBitmapSource source = new YUVMonochromeBitmapSource(bitmap);
+            MonochromeBitmapSource source = new RGBMonochromeBitmapSource(bitmap);
             rawResult = new MultiFormatReader().decode(source);
           } catch (ReaderException e) {
             Message message = Message.obtain(handler, R.id.decoding_failed_message);
