@@ -30,7 +30,9 @@ import com.google.zxing.common.BlackPointEstimator;
  *
  * @author dswitkin@google.com (Daniel Switkin)
  * @author srowen@google.com (Sean Owen)
+ * @deprecated
  */
+@Deprecated
 final class YUVMonochromeBitmapSource implements MonochromeBitmapSource {
 
   private final Bitmap image;
