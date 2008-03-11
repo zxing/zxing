@@ -73,26 +73,38 @@ public final class QRCodeReader implements Reader {
    * around it. This is a specialized method that works exceptionally fast in this special
    * case.
    */
-  private static BitMatrix extractPureBits(MonochromeBitmapSource image)
-      throws ReaderException {
+  private static BitMatrix extractPureBits(MonochromeBitmapSource image) throws ReaderException {
     // Now need to determine module size in pixels
+
+    int minDimension = Math.min(image.getHeight(), image.getWidth());
 
     // First, skip white border by tracking diagonally from the top left down and to the right:
     int borderWidth = 0;
-    while (!image.isBlack(borderWidth, borderWidth)) {
+    while (borderWidth < minDimension && !image.isBlack(borderWidth, borderWidth)) {
       borderWidth++;
     }
+    if (borderWidth == minDimension) {
+      throw new ReaderException("No black pixels found along diagonal");
+    }
+
     // And then keep tracking across the top-left black module to determine module size
     int moduleEnd = borderWidth;
-    while (image.isBlack(moduleEnd, moduleEnd)) {
+    while (moduleEnd < minDimension && image.isBlack(moduleEnd, moduleEnd)) {
       moduleEnd++;
     }
+    if (moduleEnd == minDimension) {
+      throw new ReaderException("No end to black pixels found along diagonal");
+    }
+
     int moduleSize = moduleEnd - borderWidth;
 
     // And now find where the rightmost black module on the first row ends
     int rowEndOfSymbol = image.getWidth() - 1;
-    while (!image.isBlack(rowEndOfSymbol, borderWidth)) {
+    while (rowEndOfSymbol >= 0 && !image.isBlack(rowEndOfSymbol, borderWidth)) {
       rowEndOfSymbol--;
+    }
+    if (rowEndOfSymbol < 0) {
+      throw new ReaderException("Can't find end of rightmost black module");
     }
     rowEndOfSymbol++;
 
