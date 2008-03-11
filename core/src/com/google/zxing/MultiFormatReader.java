@@ -18,6 +18,7 @@ package com.google.zxing;
 
 import com.google.zxing.oned.MultiFormatOneDReader;
 import com.google.zxing.qrcode.QRCodeReader;
+import com.google.zxing.datamatrix.DataMatrixReader;
 
 import java.util.Hashtable;
 import java.util.Vector;
@@ -51,10 +52,14 @@ public final class MultiFormatReader implements Reader {
       if (possibleFormats.contains(BarcodeFormat.QR_CODE)) {
         readers.addElement(new QRCodeReader());
       }
+      if (possibleFormats.contains(BarcodeFormat.DATAMATRIX)) {
+        readers.addElement(new DataMatrixReader());
+      }
     }
     if (readers.isEmpty()) {
       readers.addElement(new MultiFormatOneDReader());
       readers.addElement(new QRCodeReader());
+      readers.addElement(new DataMatrixReader());
     }
 
     for (int i = 0; i < readers.size(); i++) {
