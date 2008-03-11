@@ -25,10 +25,10 @@ import java.io.File;
 /**
  * @author srowen@google.com (Sean Owen)
  */
-public final class EAN8BlackBox1TestCase extends AbstractBlackBoxTestCase {
+public final class UPCEBlackBox1TestCase extends AbstractBlackBoxTestCase {
 
-  public EAN8BlackBox1TestCase() {
-    super(new File("test/data/blackbox/ean8-1"), new MultiFormatReader(), 1.0, BarcodeFormat.EAN_8);
+  public UPCEBlackBox1TestCase() {
+    super(new File("test/data/blackbox/upce-1"), new MultiFormatReader(), 1.0, BarcodeFormat.UPC_E);
   }
 
 }
