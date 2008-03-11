@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package com.google.zxing.qrcode.detector;
+package com.google.zxing.common;
 
 import com.google.zxing.ResultPoint;
-import com.google.zxing.common.BitMatrix;
 
 /**
  * <p>Encapsulates the result of detecting a barcode in an image. This includes the raw
@@ -31,7 +30,7 @@ public final class DetectorResult {
   private final BitMatrix bits;
   private final ResultPoint[] points;
 
-  DetectorResult(BitMatrix bits, ResultPoint[] points) {
+  public DetectorResult(BitMatrix bits, ResultPoint[] points) {
     this.bits = bits;
     this.points = points;
   }

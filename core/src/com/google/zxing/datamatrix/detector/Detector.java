@@ -16,12 +16,9 @@
 
 package com.google.zxing.datamatrix.detector;
 
-import com.google.zxing.BlackPointEstimationMethod;
 import com.google.zxing.MonochromeBitmapSource;
 import com.google.zxing.ReaderException;
-import com.google.zxing.ResultPoint;
-import com.google.zxing.common.BitMatrix;
-import com.google.zxing.datamatrix.decoder.Version;
+import com.google.zxing.common.DetectorResult;
 
 /**
  * <p>Encapsulates logic that can detect a Data Matrix Code in an image, even if the Data Matrix Code
