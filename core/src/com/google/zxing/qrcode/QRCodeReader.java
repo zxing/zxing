@@ -76,7 +76,9 @@ public final class QRCodeReader implements Reader {
   private static BitMatrix extractPureBits(MonochromeBitmapSource image) throws ReaderException {
     // Now need to determine module size in pixels
 
-    int minDimension = Math.min(image.getHeight(), image.getWidth());
+    int height = image.getHeight();
+    int width = image.getWidth();
+    int minDimension = Math.min(height, width);
 
     // First, skip white border by tracking diagonally from the top left down and to the right:
     int borderWidth = 0;
@@ -99,7 +101,7 @@ public final class QRCodeReader implements Reader {
     int moduleSize = moduleEnd - borderWidth;
 
     // And now find where the rightmost black module on the first row ends
-    int rowEndOfSymbol = image.getWidth() - 1;
+    int rowEndOfSymbol = width - 1;
     while (rowEndOfSymbol >= 0 && !image.isBlack(rowEndOfSymbol, borderWidth)) {
       rowEndOfSymbol--;
     }
@@ -119,6 +121,11 @@ public final class QRCodeReader implements Reader {
     // sampling in the middle of the module. Just in case the image is a
     // little off, this will help recover.
     borderWidth += moduleSize >> 1;
+
+    int sampleDimension = borderWidth + (dimension - 1) * moduleSize;
+    if (sampleDimension >= width || sampleDimension >= height) {
+      throw new ReaderException("Estimated pure image size is beyond image boundaries");
+    }
 
     // Now just read off the bits
     BitMatrix bits = new BitMatrix(dimension);

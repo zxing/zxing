@@ -98,7 +98,7 @@ public final class DataMatrixReader implements Reader {
     int moduleSize = moduleEnd - borderWidth;
 
     // And now find where the bottommost black module on the first column ends
-    int columnEndOfSymbol = image.getHeight() - 1;
+    int columnEndOfSymbol = height - 1;
     while (columnEndOfSymbol >= 0 && !image.isBlack(borderWidth, columnEndOfSymbol)) {
     	columnEndOfSymbol--;
     }
@@ -118,6 +118,11 @@ public final class DataMatrixReader implements Reader {
     // sampling in the middle of the module. Just in case the image is a
     // little off, this will help recover.
     borderWidth += moduleSize >> 1;
+
+    int sampleDimension = borderWidth + (dimension - 1) * moduleSize;
+    if (sampleDimension >= width || sampleDimension >= height) {
+      throw new ReaderException("Estimated pure image size is beyond image boundaries");
+    }
 
     // Now just read off the bits
     BitMatrix bits = new BitMatrix(dimension);
