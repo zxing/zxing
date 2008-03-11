@@ -25,17 +25,11 @@ import com.google.zxing.ReaderException;
  */
 public final class DecodedBitStreamParserTestCase extends TestCase{
 
-  public void testAsciiStandardDecode() {
+  public void testAsciiStandardDecode() throws ReaderException {
     // ASCII characters 0-127 are encoded as the value + 1
     byte[] bytes = new byte[]{(byte) ('a' + 1), (byte) ('b' + 1), (byte) ('c' + 1),
                               (byte) ('A' + 1), (byte) ('B' + 1), (byte) ('C' + 1)};
-    String decodedString = "";
-    try {
-      decodedString = DecodedBitStreamParser.decode(bytes);
-    } catch (ReaderException readerException) {
-      // TODO(bbrown): Throw this to junit?
-    }
-    
+    String decodedString = DecodedBitStreamParser.decode(bytes);
     assertEquals("abcABC", decodedString);
   }
   
@@ -43,9 +37,7 @@ public final class DecodedBitStreamParserTestCase extends TestCase{
     // ASCII double digit (00 - 99) Numeric Value + 130
     byte[] bytes = new byte[]{(byte) (00 + 130), (byte) (01 + 130),
                               (byte) (98 + 130), (byte) (99 + 130)};
-    String decodedString = "";
-    decodedString = DecodedBitStreamParser.decode(bytes);
-
+    String decodedString = DecodedBitStreamParser.decode(bytes);
     assertEquals("00019899", decodedString);
   }
   
