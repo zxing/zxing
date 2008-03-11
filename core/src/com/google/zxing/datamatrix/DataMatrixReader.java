@@ -70,26 +70,40 @@ public final class DataMatrixReader implements Reader {
    * around it. This is a specialized method that works exceptionally fast in this special
    * case.
    */
-  private static BitMatrix extractPureBits(MonochromeBitmapSource image)
-      throws ReaderException {
+  private static BitMatrix extractPureBits(MonochromeBitmapSource image) throws ReaderException {
     // Now need to determine module size in pixels
 
-	// First, skip white border by tracking diagonally from the top left down and to the right:
+    int height = image.getHeight();
+    int width = image.getWidth();
+    int minDimension = Math.min(height, width);
+
+    // First, skip white border by tracking diagonally from the top left down and to the right:
     int borderWidth = 0;
-    while (!image.isBlack(borderWidth, borderWidth)) {
+    while (borderWidth < minDimension && !image.isBlack(borderWidth, borderWidth)) {
       borderWidth++;
     }
+    if (borderWidth == minDimension) {
+      throw new ReaderException("No black pixels found along diagonal");
+    }
+
     // And then keep tracking across the top-left black module to determine module size
     int moduleEnd = borderWidth + 1;
-    while (image.isBlack(moduleEnd, borderWidth)) {
+    while (moduleEnd < width && image.isBlack(moduleEnd, borderWidth)) {
       moduleEnd++;
     }
+    if (moduleEnd == width) {
+      throw new ReaderException("No end to black pixels found along row");
+    }
+
     int moduleSize = moduleEnd - borderWidth;
 
     // And now find where the bottommost black module on the first column ends
     int columnEndOfSymbol = image.getHeight() - 1;
-    while (!image.isBlack(borderWidth, columnEndOfSymbol)) {
+    while (columnEndOfSymbol >= 0 && !image.isBlack(borderWidth, columnEndOfSymbol)) {
     	columnEndOfSymbol--;
+    }
+    if (columnEndOfSymbol < 0) {
+      throw new ReaderException("Can't find end of bottommost black module");
     }
     columnEndOfSymbol++;
 
