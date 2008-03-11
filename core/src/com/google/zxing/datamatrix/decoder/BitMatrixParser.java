@@ -40,7 +40,7 @@ final class BitMatrixParser {
     }
     
     version = readVersion(bitMatrix);
-    this.mappingBitMatrix = ExtractDataRegion(bitMatrix, version);
+    this.mappingBitMatrix = extractDataRegion(bitMatrix, version);
     // TODO(bbrown): Make this work for rectangular symbols
     this.readMappingMatrix = new BitMatrix(this.mappingBitMatrix.getDimension());
   }
@@ -81,8 +81,6 @@ final class BitMatrixParser {
 
     byte[] result = new byte[version.getTotalCodewords()];
     int resultOffset = 0;
-    int currentByte = 0;
-    int bitsRead = 0;
     
     int row = 4;
     int column = 0;
@@ -144,10 +142,10 @@ final class BitMatrixParser {
   /**
    * <p>Reads a bit of the mapping matrix accounting for boundry wrapping.</p>
    * 
-   * @param Row to read in the mapping matrix
-   * @param Column to read in the mapping matrix
-   * @param Number of rows in the mapping matrix
-   * @param Number of columns in the mapping matrix
+   * @param row Row to read in the mapping matrix
+   * @param column Column to read in the mapping matrix
+   * @param numRows Number of rows in the mapping matrix
+   * @param numColumns Number of columns in the mapping matrix
    * @return value of the given bit in the mapping matrix
    */
   boolean readModule(int row, int column, int numRows, int numColumns) {
@@ -169,10 +167,10 @@ final class BitMatrixParser {
    * 
    * <p>See ISO 16022:2006, 5.8.1 Figure 6</p>
    * 
-   * @param Current row in the mapping matrix, anchored at the 8th bit (LSB) of the pattern
-   * @param Current column in the mapping matrix, anchored at the 8th bit (LSB) of the pattern
-   * @param Number of rows in the mapping matrix
-   * @param Number of columns in the mapping matrix
+   * @param row Current row in the mapping matrix, anchored at the 8th bit (LSB) of the pattern
+   * @param column Current column in the mapping matrix, anchored at the 8th bit (LSB) of the pattern
+   * @param numRows Number of rows in the mapping matrix
+   * @param numColumns Number of columns in the mapping matrix
    * @return byte from the utah shape
    */
   int readUtah(int row, int column, int numRows, int numColumns) {
@@ -216,8 +214,8 @@ final class BitMatrixParser {
    * 
    * <p>See ISO 16022:2006, Figure F.3</p>
    * 
-   * @param Number of rows in the mapping matrix
-   * @param Number of columns in the mapping matrix
+   * @param numRows Number of rows in the mapping matrix
+   * @param numColumns Number of columns in the mapping matrix
    * @return byte from the Corner condition 1
    */
   int readCorner1(int numRows, int numColumns) {
@@ -261,8 +259,8 @@ final class BitMatrixParser {
    * 
    * <p>See ISO 16022:2006, Figure F.4</p>
    * 
-   * @param Number of rows in the mapping matrix
-   * @param Number of columns in the mapping matrix
+   * @param numRows Number of rows in the mapping matrix
+   * @param numColumns Number of columns in the mapping matrix
    * @return byte from the Corner condition 2
    */
   int readCorner2(int numRows, int numColumns) {
@@ -306,8 +304,8 @@ final class BitMatrixParser {
    * 
    * <p>See ISO 16022:2006, Figure F.5</p>
    * 
-   * @param Number of rows in the mapping matrix
-   * @param Number of columns in the mapping matrix
+   * @param numRows Number of rows in the mapping matrix
+   * @param numColumns Number of columns in the mapping matrix
    * @return byte from the Corner condition 3
    */
   int readCorner3(int numRows, int numColumns) {
@@ -351,8 +349,8 @@ final class BitMatrixParser {
    * 
    * <p>See ISO 16022:2006, Figure F.6</p>
    * 
-   * @param Number of rows in the mapping matrix
-   * @param Number of columns in the mapping matrix
+   * @param numRows Number of rows in the mapping matrix
+   * @param numColumns Number of columns in the mapping matrix
    * @return byte from the Corner condition 4
    */
   int readCorner4(int numRows, int numColumns) {
@@ -395,11 +393,11 @@ final class BitMatrixParser {
    * <p>Extracts the data region from a {@link BitMatrix} that contains
    * alignment patterns.</p>
    * 
-   * @param bitMarix Original {@link BitMatrix} with alignment patterns
+   * @param bitMatrix Original {@link BitMatrix} with alignment patterns
    * @param version {@link Version} information corresponding with the bitMatrix
    * @return BitMatrix that has the alignment patterns removed
    */
-  BitMatrix ExtractDataRegion(BitMatrix bitMatrix, Version version) {
+  BitMatrix extractDataRegion(BitMatrix bitMatrix, Version version) {
     int symbolSizeRows = version.getSymbolSizeRows();
     int symbolSizeColumns = version.getSymbolSizeColumns();
     

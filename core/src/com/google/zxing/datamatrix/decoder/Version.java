@@ -17,7 +17,6 @@
 package com.google.zxing.datamatrix.decoder;
 
 import com.google.zxing.ReaderException;
-import com.google.zxing.common.BitMatrix;
 
 /**
  * The Version object encapsulates attributes about a particular
@@ -108,10 +107,8 @@ public final class Version {
     int numVersions = VERSIONS.length;
     for (int i = 0; i < numVersions; ++i){
       Version version = VERSIONS[i];
-      if (version.symbolSizeRows == numRows) {
-        if (version.symbolSizeColumns == numColumns) {
-          return version;
-        }
+      if (version.symbolSizeRows == numRows && version.symbolSizeColumns == numColumns) {
+        return version;
       }
     }
     
