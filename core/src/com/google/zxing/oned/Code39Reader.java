@@ -140,6 +140,7 @@ public final class Code39Reader extends AbstractOneDReader {
     }
     return new Result(
         resultString,
+        null,
         new ResultPoint[]{
             new GenericResultPoint((float) (start[1] - start[0]) / 2.0f, (float) rowNumber),
             new GenericResultPoint((float) (nextStart - lastStart) / 2.0f, (float) rowNumber)},

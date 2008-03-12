@@ -76,7 +76,7 @@ final class SnapshotThread extends Thread {
         MonochromeBitmapSource source = new LCDUIImageMonochromeBitmapSource(capturedImage);
         Reader reader = new MultiFormatReader();
         Result result = reader.decode(source);
-        zXingMIDlet.handleDecodedText(result.getText());
+        zXingMIDlet.handleDecodedText(result);
       } catch (ReaderException re) {
         // Show a friendlier message on a mere failure to read the barcode
         zXingMIDlet.showError("Sorry, no barcode was found.");

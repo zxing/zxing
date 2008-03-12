@@ -16,6 +16,8 @@
 
 package com.google.zxing.client.result;
 
+import com.google.zxing.Result;
+
 /**
  * <p>Abstract class representing the result of decoding a barcode, as more than
  * a String -- as some type of structured data. This might be a subclass which represents
@@ -41,10 +43,11 @@ public abstract class ParsedReaderResult {
 
   public abstract String getDisplayResult();
 
-  public static ParsedReaderResult parseReaderResult(String rawText) {
+  public static ParsedReaderResult parseReaderResult(Result theResult) {
     // This is a bit messy, but given limited options in MIDP / CLDC, this may well be the simplest
     // way to go about this. For example, we have no reflection available, really.
     // Order is important here.
+    String rawText = theResult.getText();
     ParsedReaderResult result;
     if ((result = BookmarkDoCoMoResult.parse(rawText)) != null) {
       return result;

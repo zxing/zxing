@@ -24,20 +24,29 @@ package com.google.zxing;
 public final class Result {
 
   private final String text;
+  private final byte[] rawBytes;
   private final ResultPoint[] resultPoints;
   private final BarcodeFormat format;
 
-  public Result(String text, ResultPoint[] resultPoints, BarcodeFormat format) {
+  public Result(String text, byte[] rawBytes, ResultPoint[] resultPoints, BarcodeFormat format) {
     this.text = text;
+    this.rawBytes = rawBytes;
     this.resultPoints = resultPoints;
     this.format = format;
   }
 
   /**
-   * @return raw text encoded by the barcode, if any
+   * @return raw text encoded by the barcode, if applicable, otherwise <code>null</code>
    */
   public String getText() {
     return text;
+  }
+
+  /**
+   * @return raw bytes encoded by the barcode, if applicable, otherwise <code>null</code>
+   */
+  public byte[] getRawBytes() {
+    return rawBytes;
   }
 
   /**

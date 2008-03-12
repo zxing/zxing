@@ -407,6 +407,7 @@ public final class Code128Reader extends AbstractOneDReader {
     String resultString = result.toString();
     return new Result(
         resultString,
+        null,
         new ResultPoint[]{
             new GenericResultPoint((float) (startPatternInfo[1] - startPatternInfo[0]) / 2.0f, (float) rowNumber),
             new GenericResultPoint((float) (nextStart - lastStart) / 2.0f, (float) rowNumber)},

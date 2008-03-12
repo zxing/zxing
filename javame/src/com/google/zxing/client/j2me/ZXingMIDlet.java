@@ -16,6 +16,7 @@
 
 package com.google.zxing.client.j2me;
 
+import com.google.zxing.Result;
 import com.google.zxing.client.result.BookmarkDoCoMoResult;
 import com.google.zxing.client.result.EmailAddressResult;
 import com.google.zxing.client.result.EmailDoCoMoResult;
@@ -188,8 +189,8 @@ public final class ZXingMIDlet extends MIDlet {
     display.setCurrent(alert, canvas);
   }
 
-  void handleDecodedText(String text) {
-    ParsedReaderResult result = ParsedReaderResult.parseReaderResult(text);
+  void handleDecodedText(Result theResult) {
+    ParsedReaderResult result = ParsedReaderResult.parseReaderResult(theResult);
     ParsedReaderResultType type = result.getType();
     if (type.equals(ParsedReaderResultType.URI)) {
       String uri = ((URIParsedResult) result).getURI();

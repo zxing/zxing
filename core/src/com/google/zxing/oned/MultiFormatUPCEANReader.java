@@ -81,7 +81,7 @@ public final class MultiFormatUPCEANReader extends AbstractOneDReader {
       // Here is, therefore, where we implement this logic:
       if (result.getBarcodeFormat().equals(BarcodeFormat.EAN_13) &&
           result.getText().charAt(0) == '0') {
-        return new Result(result.getText().substring(1), result.getResultPoints(), BarcodeFormat.UPC_A);
+        return new Result(result.getText().substring(1), null, result.getResultPoints(), BarcodeFormat.UPC_A);
       }
       return result;
     }

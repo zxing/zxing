@@ -123,6 +123,7 @@ public abstract class AbstractUPCEANReader extends AbstractOneDReader implements
 
     return new Result(
         resultString,
+        null, // no natural byte representation for these barcodes
         new ResultPoint[]{
             new GenericResultPoint((float) (startGuardRange[1] - startGuardRange[0]) / 2.0f, (float) rowNumber),
             new GenericResultPoint((float) (endRange[1] - endRange[0]) / 2.0f, (float) rowNumber)},
