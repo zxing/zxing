@@ -92,3 +92,14 @@
     codes from the MultiFormatReader.
   - A host of small bug fixes, including bug in Version 25 QR Code support
   - A round of code cleanup and refactoring from IntelliJ inspections
+
+0.5.5 (12 Mar 2008)
+  - Revert change that rejected BufferedImage of type TYPE_CUSTOM in javase
+  - Now supports KDDI/AU / Softbank address book format
+  - Now can read Android "Intent" URIs (Android only)
+  - Modest improvements to efficiency of J2ME client: shorter autofocus,
+    better use of threads
+  - First checkin of Data Matrix decoder code. Not yet enabled in reader
+    applications.
+  - "Result" object now returns raw bytes decoded; maybe useful in some cases
+  - More unit tests for common code, EAN-8, UPC-E
