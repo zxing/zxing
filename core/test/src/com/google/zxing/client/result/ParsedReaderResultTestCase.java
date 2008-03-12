@@ -16,6 +16,7 @@
 
 package com.google.zxing.client.result;
 
+import com.google.zxing.Result;
 import junit.framework.TestCase;
 
 /**
@@ -91,7 +92,8 @@ public final class ParsedReaderResultTestCase extends TestCase {
   }
 
   private static void doTestResult(String text, ParsedReaderResultType type) {
-    ParsedReaderResult result = ParsedReaderResult.parseReaderResult(text);
+    Result fakeResult = new Result(text, null, null, null);
+    ParsedReaderResult result = ParsedReaderResult.parseReaderResult(fakeResult);
     assertNotNull(result);
     assertEquals(type, result.getType());
   }

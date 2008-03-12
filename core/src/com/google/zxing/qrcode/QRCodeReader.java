@@ -24,6 +24,7 @@ import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitMatrix;
+import com.google.zxing.common.DecoderResult;
 import com.google.zxing.common.DetectorResult;
 import com.google.zxing.qrcode.decoder.Decoder;
 import com.google.zxing.qrcode.detector.Detector;
@@ -53,18 +54,18 @@ public final class QRCodeReader implements Reader {
 
   public Result decode(MonochromeBitmapSource image, Hashtable hints)
       throws ReaderException {
-    String text;
+    DecoderResult decoderResult;
     ResultPoint[] points;
     if (hints != null && hints.containsKey(DecodeHintType.PURE_BARCODE)) {
       BitMatrix bits = extractPureBits(image);
-      text = decoder.decode(bits);
+      decoderResult = decoder.decode(bits);
       points = NO_POINTS;
     } else {
       DetectorResult result = new Detector(image).detect();
-      text = decoder.decode(result.getBits());
+      decoderResult = decoder.decode(result.getBits());
       points = result.getPoints();
     }
-    return new Result(text, points, BarcodeFormat.QR_CODE);
+    return new Result(decoderResult.getText(), decoderResult.getRawBytes(), points, BarcodeFormat.QR_CODE);
   }
 
   /**

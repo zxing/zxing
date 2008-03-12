@@ -18,6 +18,7 @@ package com.google.zxing.datamatrix.decoder;
 
 import com.google.zxing.ReaderException;
 import com.google.zxing.common.BitMatrix;
+import com.google.zxing.common.DecoderResult;
 import com.google.zxing.common.reedsolomon.GF256;
 import com.google.zxing.common.reedsolomon.ReedSolomonDecoder;
 import com.google.zxing.common.reedsolomon.ReedSolomonException;
@@ -41,10 +42,10 @@ public final class Decoder {
    * "true" is taken to mean a black module.</p>
    *
    * @param image booleans representing white/black Data Matrix Code modules
-   * @return text encoded within the Data Matrix Code
+   * @return text and bytes encoded within the Data Matrix Code
    * @throws ReaderException if the Data Matrix Code cannot be decoded
    */
-  public String decode(boolean[][] image) throws ReaderException {
+  public DecoderResult decode(boolean[][] image) throws ReaderException {
     int dimension = image.length;
     BitMatrix bits = new BitMatrix(dimension);
     for (int i = 0; i < dimension; i++) {
@@ -62,10 +63,10 @@ public final class Decoder {
    * to mean a black module.</p>
    *
    * @param bits booleans representing white/black Data Matrix Code modules
-   * @return text encoded within the Data Matrix Code
+   * @return text and bytes encoded within the Data Matrix Code
    * @throws ReaderException if the Data Matrix Code cannot be decoded
    */
-  public String decode(BitMatrix bits) throws ReaderException {
+  public DecoderResult decode(BitMatrix bits) throws ReaderException {
 
     // Construct a parser and read version, error-correction level
     BitMatrixParser parser = new BitMatrixParser(bits);
@@ -96,7 +97,8 @@ public final class Decoder {
     }
 
     // Decode the contents of that stream of bytes
-    return DecodedBitStreamParser.decode(resultBytes);
+    String text = DecodedBitStreamParser.decode(resultBytes);
+    return new DecoderResult(resultBytes, text);
   }
 
   /**
