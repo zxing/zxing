@@ -59,7 +59,8 @@ public final class MultiFormatReader implements Reader {
     if (readers.isEmpty()) {
       readers.addElement(new MultiFormatOneDReader());
       readers.addElement(new QRCodeReader());
-      readers.addElement(new DataMatrixReader());
+      // TODO re-enable once Data Matrix is ready
+      // readers.addElement(new DataMatrixReader());
     }
 
     for (int i = 0; i < readers.size(); i++) {
