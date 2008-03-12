@@ -28,6 +28,7 @@ import java.io.File;
 public final class DataMatrixBlackBox1TestCase extends AbstractBlackBoxTestCase {
 
   public DataMatrixBlackBox1TestCase() {
+    // TODO use MultiFormatReader here once Data Matrix decoder is done
     super(new File("test/data/blackbox/datamatrix-1"), new DataMatrixReader(), 1.0, BarcodeFormat.DATAMATRIX);
   }
 
