@@ -52,6 +52,13 @@ public final class DecodeHintType {
    */
   public static final DecodeHintType TRY_HARDER = new DecodeHintType();
 
+  /**
+   * Skip the first n barcodes found. Currently applies only to 1D formats. This
+   * enables a caller to repeatedly decode and find multiple barcodes. Maps
+   * to an {@link Integer}.
+   */
+  public static final DecodeHintType SKIP_N_BARCODES = new DecodeHintType();
+
   private DecodeHintType() {
   }
 
