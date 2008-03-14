@@ -84,12 +84,17 @@ public abstract class AbstractOneDReader implements OneDReader {
     // rowStep is bigger as the image is taller, but is always at least 1. We've somewhat arbitrarily decided
     // that moving up and down by about 1/16 of the image is pretty good.
     int middle = height >> 1;
-    int rowStep = Math.max(1, height >> 4);
+    int rowStep;
+    if (tryHarder) {
+      rowStep = 2; // Look at every other line if "trying harder"
+    } else {
+      rowStep = Math.max(1, height >> 4);
+    }
     int maxLines;
-    if (barcodesToSkip > 0) {
+    if (tryHarder || barcodesToSkip > 0) {
       maxLines = height; // Look at the whole image; looking for more than one barcode
     } else {
-      maxLines = tryHarder ? 15 : 7; // If "trying harder", examine more lines
+      maxLines = 7;
     }
     for (int x = 0; x < maxLines; x++) {
 
