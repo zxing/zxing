@@ -21,6 +21,7 @@ import com.google.zxing.DecodeHintType;
 import com.google.zxing.MonochromeBitmapSource;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
+import com.google.zxing.ResultMetadataType;
 import com.google.zxing.common.BitArray;
 
 import java.util.Hashtable;
@@ -45,7 +46,16 @@ public abstract class AbstractOneDReader implements OneDReader {
     } catch (ReaderException re) {
       if (tryHarder && image.isRotateSupported()) {
         MonochromeBitmapSource rotatedImage = image.rotateCounterClockwise();
-        return doDecode(rotatedImage, hints, tryHarder);        
+        Result result = doDecode(rotatedImage, hints, tryHarder);
+        // Record that we found it rotated 90 degrees CCW / 270 degrees CW
+        Hashtable metadata = result.getResultMetadata();
+        int orientation = 270;
+        if (metadata != null && metadata.containsKey(ResultMetadataType.ORIENTATION)) {
+          // But if we found it reversed in doDecode(), add in that result here:
+          orientation = (orientation + ((Integer) metadata.get(ResultMetadataType.ORIENTATION)).intValue()) % 360;
+        }
+        result.putMetadata(ResultMetadataType.ORIENTATION, new Integer(orientation));
+        return result;
       } else {
         throw re;
       }
@@ -108,6 +118,8 @@ public abstract class AbstractOneDReader implements OneDReader {
             if (barcodesToSkip > 0) { // See if we should skip and keep looking
               barcodesToSkip--;
             } else {
+              // Found it, but upside-down:
+              result.putMetadata(ResultMetadataType.ORIENTATION, new Integer(180));
               return result;
             }
           } catch (ReaderException re2) {
