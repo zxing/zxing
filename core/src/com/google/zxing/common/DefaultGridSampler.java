@@ -14,25 +14,16 @@
  * limitations under the License.
  */
 
-package com.google.zxing.client.android;
+package com.google.zxing.common;
 
-import android.graphics.Matrix;
 import com.google.zxing.MonochromeBitmapSource;
 import com.google.zxing.ReaderException;
-import com.google.zxing.common.BitMatrix;
-import com.google.zxing.common.GridSampler;
 
 /**
- * Implementation based on Android's
- * {@link Matrix#setPolyToPoly(float[], int, float[], int, int)}
- * class, which should offer faster performance for these matrix
- * operations.
- * 
  * @author srowen@google.com (Sean Owen)
  */
-public final class AndroidGraphicsGridSampler extends GridSampler {
+public final class DefaultGridSampler extends GridSampler {
 
-  @Override
   public BitMatrix sampleGrid(MonochromeBitmapSource image,
                               int dimension,
                               float p1ToX, float p1ToY,
@@ -44,17 +35,9 @@ public final class AndroidGraphicsGridSampler extends GridSampler {
                               float p3FromX, float p3FromY,
                               float p4FromX, float p4FromY) throws ReaderException {
 
-    Matrix transformMatrix = new Matrix();
-    boolean succeeded = transformMatrix.setPolyToPoly(
-      new float[] { p1FromX, p1FromY, p2FromX, p2FromY, p3FromX, p3FromY, p4FromX, p4FromY },
-      0,
-      new float[] { p1ToX, p1ToY, p2ToX, p2ToY, p3ToX, p3ToY, p4ToX, p4ToY },
-      0,
-      4
-    );
-    if (!succeeded) {
-      throw new ReaderException("Could not establish transformation matrix");
-    }
+    PerspectiveTransform transform = PerspectiveTransform.quadrilateralToQuadrilateral(
+        p1ToX, p1ToY, p2ToX, p2ToY, p3ToX, p3ToY, p4ToX, p4ToY,
+        p1FromX, p1FromY, p2FromX, p2FromY, p3FromX, p3FromY, p4FromX, p4FromY);
 
     BitMatrix bits = new BitMatrix(dimension);
     float[] points = new float[dimension << 1];
@@ -65,7 +48,7 @@ public final class AndroidGraphicsGridSampler extends GridSampler {
         points[j] = (float) (j >> 1) + 0.5f;
         points[j + 1] = iValue;
       }
-      transformMatrix.mapPoints(points);
+      transform.transformPoints(points);
       // Quick check to see if points transformed to something inside the image;
       // sufficent to check the endpoints
       checkEndpoint(image, points);

@@ -22,6 +22,7 @@ import com.google.zxing.ReaderException;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.DetectorResult;
+import com.google.zxing.common.GridSampler;
 import com.google.zxing.qrcode.decoder.Version;
 
 /**
@@ -95,8 +96,7 @@ public final class Detector {
 
     }
 
-    GridSampler sampler = GridSampler.getInstance();
-    BitMatrix bits = sampler.sampleGrid(image, topLeft, topRight, bottomLeft, alignmentPattern, dimension);
+    BitMatrix bits = sampleGrid(image, topLeft, topRight, bottomLeft, alignmentPattern, dimension);
 
     ResultPoint[] points;
     if (alignmentPattern == null) {
@@ -105,6 +105,50 @@ public final class Detector {
       points = new ResultPoint[]{bottomLeft, topLeft, topRight, alignmentPattern};
     }
     return new DetectorResult(bits, points);
+  }
+
+  private static BitMatrix sampleGrid(MonochromeBitmapSource image,
+                                      ResultPoint topLeft,
+                                      ResultPoint topRight,
+                                      ResultPoint bottomLeft,
+                                      ResultPoint alignmentPattern,
+                                      int dimension) throws ReaderException {
+    float dimMinusThree = (float) dimension - 3.5f;
+    float bottomRightX;
+    float bottomRightY;
+    float sourceBottomRightX;
+    float sourceBottomRightY;
+    if (alignmentPattern != null) {
+      bottomRightX = alignmentPattern.getX();
+      bottomRightY = alignmentPattern.getY();
+      sourceBottomRightX = sourceBottomRightY = dimMinusThree - 3.0f;
+    } else {
+      // Don't have an alignment pattern, just make up the bottom-right point
+      bottomRightX = (topRight.getX() - topLeft.getX()) + bottomLeft.getX();
+      bottomRightY = (topRight.getY() - topLeft.getY()) + bottomLeft.getY();
+      sourceBottomRightX = sourceBottomRightY = dimMinusThree;
+    }
+
+    GridSampler sampler = GridSampler.getInstance();
+    return sampler.sampleGrid(
+        image,
+        dimension,
+        3.5f,
+        3.5f,
+        dimMinusThree,
+        3.5f,
+        sourceBottomRightX,
+        sourceBottomRightY,
+        3.5f,
+        dimMinusThree,
+        topLeft.getX(),
+        topLeft.getY(),
+        topRight.getX(),
+        topRight.getY(),
+        bottomRightX,
+        bottomRightY,
+        bottomLeft.getX(),
+        bottomLeft.getY());
   }
 
   /**
