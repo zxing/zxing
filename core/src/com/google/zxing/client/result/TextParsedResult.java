@@ -16,6 +16,8 @@
 
 package com.google.zxing.client.result;
 
+import com.google.zxing.Result;
+
 /**
  * @author srowen@google.com (Sean Owen)
  */
@@ -28,8 +30,8 @@ public final class TextParsedResult extends ParsedReaderResult {
     this.text = text;
   }
 
-  public static TextParsedResult parse(String rawText) {
-    return new TextParsedResult(rawText);
+  public static TextParsedResult parse(Result result) {
+    return new TextParsedResult(result.getText());
   }
 
   public String getText() {

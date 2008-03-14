@@ -16,6 +16,8 @@
 
 package com.google.zxing.client.result;
 
+import com.google.zxing.Result;
+
 import java.util.Vector;
 
 /**
@@ -43,7 +45,8 @@ public final class AddressBookAUResult extends ParsedReaderResult {
     this.address = address;
   }
 
-  public static AddressBookAUResult parse(String rawText) {
+  public static AddressBookAUResult parse(Result result) {
+    String rawText = result.getText();
     // MEMORY is mandatory; seems like a decent indicator, as does end-of-record separator CR/LF
     if (rawText.indexOf("MEMORY") < 0 || rawText.indexOf("\r\n") < 0) {
       return null;

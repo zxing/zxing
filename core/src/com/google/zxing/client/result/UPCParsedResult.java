@@ -16,6 +16,8 @@
 
 package com.google.zxing.client.result;
 
+import com.google.zxing.Result;
+
 /**
  * @author dswitkin@google.com (Daniel Switkin)
  */
@@ -28,7 +30,8 @@ public final class UPCParsedResult extends ParsedReaderResult {
     this.upc = upc;
   }
 
-  public static UPCParsedResult parse(String rawText) {
+  public static UPCParsedResult parse(Result result) {
+    String rawText = result.getText();
     int length = rawText.length();
     if (length != 12 && length != 13) {
       return null;

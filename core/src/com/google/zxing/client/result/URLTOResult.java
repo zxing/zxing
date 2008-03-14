@@ -16,6 +16,8 @@
 
 package com.google.zxing.client.result;
 
+import com.google.zxing.Result;
+
 /**
  * "URLTO" result format, which is of the form "URLTO:[title]:[url]".
  * This seems to be used sometimes, but I am not able to find documentation
@@ -34,7 +36,8 @@ public final class URLTOResult extends ParsedReaderResult {
     this.uri = uri;
   }
 
-  public static URLTOResult parse(String rawText) {
+  public static URLTOResult parse(Result result) {
+    String rawText = result.getText();
     if (!rawText.startsWith("URLTO:")) {
       return null;
     }

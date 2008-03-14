@@ -16,6 +16,8 @@
 
 package com.google.zxing.client.result;
 
+import com.google.zxing.Result;
+
 /**
  * Implements the "MECARD" address book entry format.
  *
@@ -43,7 +45,8 @@ public final class AddressBookDoCoMoResult extends AbstractDoCoMoResult {
     this.address = address;
   }
 
-  public static AddressBookDoCoMoResult parse(String rawText) {
+  public static AddressBookDoCoMoResult parse(Result result) {
+    String rawText = result.getText();
     if (!rawText.startsWith("MECARD:")) {
       return null;
     }

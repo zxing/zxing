@@ -47,26 +47,25 @@ public abstract class ParsedReaderResult {
     // This is a bit messy, but given limited options in MIDP / CLDC, this may well be the simplest
     // way to go about this. For example, we have no reflection available, really.
     // Order is important here.
-    String rawText = theResult.getText();
     ParsedReaderResult result;
-    if ((result = BookmarkDoCoMoResult.parse(rawText)) != null) {
+    if ((result = BookmarkDoCoMoResult.parse(theResult)) != null) {
       return result;
-    } else if ((result = AddressBookDoCoMoResult.parse(rawText)) != null) {
+    } else if ((result = AddressBookDoCoMoResult.parse(theResult)) != null) {
       return result;
-    } else if ((result = EmailDoCoMoResult.parse(rawText)) != null) {
+    } else if ((result = EmailDoCoMoResult.parse(theResult)) != null) {
       return result;
-    } else if ((result = EmailAddressResult.parse(rawText)) != null) {
+    } else if ((result = EmailAddressResult.parse(theResult)) != null) {
       return result;
-    } else if ((result = AddressBookAUResult.parse(rawText)) != null) {
+    } else if ((result = AddressBookAUResult.parse(theResult)) != null) {
       return result;
-    } else if ((result = URLTOResult.parse(rawText)) != null) {
+    } else if ((result = URLTOResult.parse(theResult)) != null) {
       return result;
-    } else if ((result = URIParsedResult.parse(rawText)) != null) {
+    } else if ((result = URIParsedResult.parse(theResult)) != null) {
       return result;
-    } else if ((result = UPCParsedResult.parse(rawText)) != null) {
+    } else if ((result = UPCParsedResult.parse(theResult)) != null) {
       return result;
     }
-    return TextParsedResult.parse(rawText);
+    return TextParsedResult.parse(theResult);
   }
 
   public String toString() {

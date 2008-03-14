@@ -16,6 +16,8 @@
 
 package com.google.zxing.client.result;
 
+import com.google.zxing.Result;
+
 /**
  * Implements the "MATMSG" email message entry format.
  *
@@ -36,7 +38,8 @@ public final class EmailDoCoMoResult extends AbstractDoCoMoResult {
     this.body = body;
   }
 
-  public static EmailDoCoMoResult parse(String rawText) {
+  public static EmailDoCoMoResult parse(Result result) {
+    String rawText = result.getText();
     if (!rawText.startsWith("MATMSG:")) {
       return null;
     }
