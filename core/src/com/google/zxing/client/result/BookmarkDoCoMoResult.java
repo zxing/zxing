@@ -16,6 +16,8 @@
 
 package com.google.zxing.client.result;
 
+import com.google.zxing.Result;
+
 /**
  * @author srowen@google.com (Sean Owen)
  */
@@ -30,7 +32,8 @@ public final class BookmarkDoCoMoResult extends AbstractDoCoMoResult {
     this.uri = uri;
   }
 
-  public static BookmarkDoCoMoResult parse(String rawText) {
+  public static BookmarkDoCoMoResult parse(Result result) {
+    String rawText = result.getText();
     if (!rawText.startsWith("MEBKM:")) {
       return null;
     }

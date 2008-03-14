@@ -16,6 +16,8 @@
 
 package com.google.zxing.client.result;
 
+import com.google.zxing.Result;
+
 /**
  * @author srowen@google.com (Sean Owen)
  */
@@ -28,7 +30,8 @@ public final class URIParsedResult extends ParsedReaderResult {
     this.uri = uri;
   }
 
-  public static URIParsedResult parse(String rawText) {
+  public static URIParsedResult parse(Result result) {
+    String rawText = result.getText();
     if (!isBasicallyValidURI(rawText)) {
       return null;
     }

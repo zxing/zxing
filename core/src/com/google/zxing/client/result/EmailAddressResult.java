@@ -16,6 +16,8 @@
 
 package com.google.zxing.client.result;
 
+import com.google.zxing.Result;
+
 /**
  * Represents a result that encodes an e-mail address, either as a plain address
  * like "joe@example.org" or a mailto: URL like "mailto:joe@example.org".
@@ -31,7 +33,8 @@ public final class EmailAddressResult extends AbstractDoCoMoResult {
     this.emailAddress = emailAddress;
   }
 
-  public static EmailAddressResult parse(String rawText) {
+  public static EmailAddressResult parse(Result result) {
+    String rawText = result.getText();
     String emailAddress;
     if (rawText.startsWith("mailto:")) {
       // If it starts with mailto:, assume it is definitely trying to be an email address
