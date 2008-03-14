@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+package com.google.zxing.common;
+
 /**
  * <p>This class implements a perspective transform in two dimensions. Given four source and four destination
  * points, it will compute the transformation implied between them. The code is based directly upon section
@@ -21,8 +23,6 @@
  *
  * @author srowen@google.com (Sean Owen)
  */
-package com.google.zxing.qrcode.detector;
-
 final class PerspectiveTransform {
 
   private final float a11, a12, a13, a21, a22, a23, a31, a32, a33;
