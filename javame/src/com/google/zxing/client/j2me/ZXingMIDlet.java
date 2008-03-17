@@ -22,6 +22,7 @@ import com.google.zxing.client.result.EmailAddressParsedResult;
 import com.google.zxing.client.result.EmailDoCoMoParsedResult;
 import com.google.zxing.client.result.ParsedReaderResult;
 import com.google.zxing.client.result.ParsedReaderResultType;
+import com.google.zxing.client.result.TelParsedResult;
 import com.google.zxing.client.result.UPCParsedResult;
 import com.google.zxing.client.result.URIParsedResult;
 import com.google.zxing.client.result.URLTOParsedResult;
@@ -214,6 +215,9 @@ public final class ZXingMIDlet extends MIDlet {
       String upc = ((UPCParsedResult) result).getUPC();
       String uri = "http://www.upcdatabase.com/item.asp?upc=" + upc;
       showOpenURL("Look Up Barcode Online?", upc, uri);
+    } else if (type.equals(ParsedReaderResultType.TEL)) {
+      String number = ((TelParsedResult) result).getNumber();
+      showOpenURL("Dial Number?", number, "tel:" + number);
     } else {
       showAlert("Barcode Detected", result.getDisplayResult());
     }

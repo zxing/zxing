@@ -205,6 +205,8 @@ public final class BarcodeReaderCaptureActivity extends Activity {
       return R.string.title_compose_email;
     } else if (type.equals(ParsedReaderResultType.UPC)) {
       return R.string.title_lookup_barcode;
+    } else if (type.equals(ParsedReaderResultType.TEL)) {
+      return R.string.title_dial;
     } else {
       return R.string.title_barcode_detected;
     }
