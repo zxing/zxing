@@ -20,7 +20,6 @@ import com.google.zxing.Result;
 import com.google.zxing.client.result.BookmarkDoCoMoResult;
 import com.google.zxing.client.result.EmailAddressResult;
 import com.google.zxing.client.result.EmailDoCoMoResult;
-import com.google.zxing.client.result.GeoParsedResult;
 import com.google.zxing.client.result.ParsedReaderResult;
 import com.google.zxing.client.result.ParsedReaderResultType;
 import com.google.zxing.client.result.UPCParsedResult;
@@ -208,9 +207,9 @@ public final class ZXingMIDlet extends MIDlet {
     } else if (type.equals(ParsedReaderResultType.EMAIL_ADDRESS)) {
       String email = ((EmailAddressResult) result).getEmailAddress();
       showOpenURL("Compose E-mail?", email, "mailto:" + email);
-    } else if (type.equals(ParsedReaderResultType.GEO)) {
-      GeoParsedResult geoResult = (GeoParsedResult) result;
-      showOpenURL("Open In Google Maps?", geoResult.getDisplayResult(), geoResult.getGoogleMapsURI());
+    //} else if (type.equals(ParsedReaderResultType.GEO)) {
+    //  GeoParsedResult geoResult = (GeoParsedResult) result;
+    //  showOpenURL("Open In Google Maps?", geoResult.getDisplayResult(), geoResult.getGoogleMapsURI());
     } else if (type.equals(ParsedReaderResultType.UPC)) {
       String upc = ((UPCParsedResult) result).getUPC();
       String uri = "http://www.upcdatabase.com/item.asp?upc=" + upc;
