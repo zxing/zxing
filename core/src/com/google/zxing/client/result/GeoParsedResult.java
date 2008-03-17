@@ -19,7 +19,8 @@ package com.google.zxing.client.result;
 import com.google.zxing.Result;
 
 /**
- * Represents a "geo:" URI result. See
+ * Represents a "geo:" URI result, which specifices a location on the surface of
+ * the Earth as well as an optional altitude above the surface. See
  * <a href="http://tools.ietf.org/html/draft-mayrhofer-geo-uri-00">
  * http://tools.ietf.org/html/draft-mayrhofer-geo-uri-00</a>.
  *
@@ -57,7 +58,7 @@ public final class GeoParsedResult extends ParsedReaderResult {
     float latitude = Float.parseFloat(rawText.substring(0, latitudeEnd));
     int longitudeEnd = rawText.indexOf(',', latitudeEnd + 1);
     float longitude;
-    float altitude;
+    float altitude; // in meters
     if (longitudeEnd < 0) {
       longitude = Float.parseFloat(rawText.substring(latitudeEnd + 1));
       altitude = 0.0f;
@@ -94,9 +95,42 @@ public final class GeoParsedResult extends ParsedReaderResult {
     result.append(latitude);
     result.append("deg N, ");
     result.append(longitude);
-    result.append("deg E, ");
-    result.append(altitude);
-    result.append('m');
+    result.append("deg E");
+    if (altitude > 0.0f) {
+      result.append(", ");
+      result.append(altitude);
+      result.append('m');
+    }
+    return result.toString();
+  }
+
+  /**
+   * @return a URI link to Google Maps which display the point on the Earth described
+   *  by this instance, and sets the zoom level in a way that roughly reflects the
+   *  altitude, if specified
+   */
+  public String getGoogleMapsURI() {
+    StringBuffer result = new StringBuffer(50);
+    result.append("http://maps.google.com/?ll=");
+    result.append(latitude);
+    result.append(',');
+    result.append(longitude);
+    if (altitude > 0.0f) {
+      // Map altitude to zoom level, cleverly. Roughly, zoom level 19 is like a
+      // view from 1000ft, 18 is like 2000ft, 17 like 4000ft, and so on.
+      float altitudeInFeet = altitude * 3.28f;
+      int altitudeInKFeet = (int) (altitudeInFeet / 1000.0f);
+      // No Math.log() available here, so compute log base 2 the old fashioned way
+      // Here logBaseTwo will take on a value between 0 and 18 actually
+      int logBaseTwo = 0;
+      while (altitudeInKFeet > 1 && logBaseTwo < 18) {
+        altitudeInKFeet >>= 1;
+        logBaseTwo++;
+      }
+      int zoom = 19 - logBaseTwo;
+      result.append("&z=");
+      result.append(zoom);
+    }
     return result.toString();
   }
 

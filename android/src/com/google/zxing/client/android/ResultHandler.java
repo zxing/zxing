@@ -26,6 +26,7 @@ import com.google.zxing.client.result.AddressBookDoCoMoResult;
 import com.google.zxing.client.result.BookmarkDoCoMoResult;
 import com.google.zxing.client.result.EmailAddressResult;
 import com.google.zxing.client.result.EmailDoCoMoResult;
+import com.google.zxing.client.result.GeoParsedResult;
 import com.google.zxing.client.result.ParsedReaderResult;
 import com.google.zxing.client.result.ParsedReaderResultType;
 import com.google.zxing.client.result.UPCParsedResult;
@@ -100,6 +101,13 @@ final class ResultHandler extends Handler {
         EmailAddressResult emailResult = (EmailAddressResult) result;
         try {
           intent = new Intent(Intent.SENDTO_ACTION, new ContentURI(emailResult.getEmailAddress()));
+        } catch (URISyntaxException e) {
+          return;
+        }
+      } else if (type.equals(ParsedReaderResultType.GEO)) {
+        GeoParsedResult geoResult = (GeoParsedResult) result;
+        try {
+          intent = new Intent(Intent.SENDTO_ACTION, new ContentURI(geoResult.getGoogleMapsURI()));
         } catch (URISyntaxException e) {
           return;
         }
