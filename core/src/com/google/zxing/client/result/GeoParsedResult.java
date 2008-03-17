@@ -28,12 +28,14 @@ import com.google.zxing.Result;
  */
 public final class GeoParsedResult extends ParsedReaderResult {
 
+  private final String geoURI;
   private final float latitude;
   private final float longitude;
   private final float altitude;
 
-  private GeoParsedResult(float latitude, float longitude, float altitude) {
+  private GeoParsedResult(String geoURI, float latitude, float longitude, float altitude) {
     super(ParsedReaderResultType.GEO);
+    this.geoURI = geoURI;
     this.latitude = latitude;
     this.longitude = longitude;
     this.altitude = altitude;
@@ -66,7 +68,11 @@ public final class GeoParsedResult extends ParsedReaderResult {
       longitude = Float.parseFloat(rawText.substring(latitudeEnd + 1, longitudeEnd));
       altitude = Float.parseFloat(rawText.substring(longitudeEnd + 1));
     }
-    return new GeoParsedResult(latitude, longitude, altitude);
+    return new GeoParsedResult(rawText, latitude, longitude, altitude);
+  }
+
+  public String getGeoURI() {
+    return geoURI;
   }
 
   /**
@@ -93,9 +99,9 @@ public final class GeoParsedResult extends ParsedReaderResult {
   public String getDisplayResult() {
     StringBuffer result = new StringBuffer(50);
     result.append(latitude);
-    result.append("deg N, ");
+    result.append(" deg N, ");
     result.append(longitude);
-    result.append("deg E");
+    result.append(" deg E");
     if (altitude > 0.0f) {
       result.append(", ");
       result.append(altitude);
