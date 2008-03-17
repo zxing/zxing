@@ -35,6 +35,9 @@ public final class ParsedReaderResultType {
   public static final ParsedReaderResultType TEXT = new ParsedReaderResultType("TEXT");
   public static final ParsedReaderResultType ANDROID_INTENT = new ParsedReaderResultType("ANDROID_INTENT"); 
   public static final ParsedReaderResultType GEO = new ParsedReaderResultType("GEO");
+  // TODO later, add the NDEF types to those actually processed by the clients
+  public static final ParsedReaderResultType NDEF_TEXT = new ParsedReaderResultType("NDEF_TEXT");
+  public static final ParsedReaderResultType NDEF_URI = new ParsedReaderResultType("NDEF_URI");
 
   private final String name;
 
