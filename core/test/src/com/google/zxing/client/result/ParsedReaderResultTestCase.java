@@ -91,6 +91,12 @@ public final class ParsedReaderResultTestCase extends TestCase {
     doTestResult("google.com:443/foobar", ParsedReaderResultType.URI);
   }
 
+  public void testGeo() {
+    doTestResult("geo:1,2", ParsedReaderResultType.GEO);
+    doTestResult("geo:1,2,3", ParsedReaderResultType.GEO);
+    doTestResult("geo:100.33,-32.3344,3.35", ParsedReaderResultType.GEO);    
+  }
+
   private static void doTestResult(String text, ParsedReaderResultType type) {
     Result fakeResult = new Result(text, null, null, null);
     ParsedReaderResult result = ParsedReaderResult.parseReaderResult(fakeResult);
