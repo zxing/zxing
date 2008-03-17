@@ -16,6 +16,7 @@
 
 package com.google.zxing.client.result;
 
+import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
 
 /**
@@ -31,6 +32,10 @@ public final class UPCParsedResult extends ParsedReaderResult {
   }
 
   public static UPCParsedResult parse(Result result) {
+    BarcodeFormat format = result.getBarcodeFormat();
+    if (!BarcodeFormat.UPC_A.equals(format) && !BarcodeFormat.UPC_E.equals(format)) {
+      return null;
+    }
     String rawText = result.getText();
     int length = rawText.length();
     if (length != 12 && length != 13) {
