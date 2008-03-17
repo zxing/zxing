@@ -48,19 +48,19 @@ public abstract class ParsedReaderResult {
     // way to go about this. For example, we have no reflection available, really.
     // Order is important here.
     ParsedReaderResult result;
-    if ((result = BookmarkDoCoMoResult.parse(theResult)) != null) {
+    if ((result = BookmarkDoCoMoParsedResult.parse(theResult)) != null) {
       return result;
-    } else if ((result = AddressBookDoCoMoResult.parse(theResult)) != null) {
+    } else if ((result = AddressBookDoCoMoParsedResult.parse(theResult)) != null) {
       return result;
-    } else if ((result = EmailDoCoMoResult.parse(theResult)) != null) {
+    } else if ((result = EmailDoCoMoParsedResult.parse(theResult)) != null) {
       return result;
-    } else if ((result = EmailAddressResult.parse(theResult)) != null) {
+    } else if ((result = EmailAddressParsedResult.parse(theResult)) != null) {
       return result;
-    } else if ((result = AddressBookAUResult.parse(theResult)) != null) {
+    } else if ((result = AddressBookAUParsedResult.parse(theResult)) != null) {
       return result;
     } else if ((result = GeoParsedResult.parse(theResult)) != null) {
       return result;
-    } else if ((result = URLTOResult.parse(theResult)) != null) {
+    } else if ((result = URLTOParsedResult.parse(theResult)) != null) {
       return result;
     } else if ((result = URIParsedResult.parse(theResult)) != null) {
       return result;

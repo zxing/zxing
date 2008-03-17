@@ -21,16 +21,16 @@ import android.net.ContentURI;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Contacts;
-import com.google.zxing.client.result.AddressBookAUResult;
-import com.google.zxing.client.result.AddressBookDoCoMoResult;
-import com.google.zxing.client.result.BookmarkDoCoMoResult;
-import com.google.zxing.client.result.EmailAddressResult;
-import com.google.zxing.client.result.EmailDoCoMoResult;
+import com.google.zxing.client.result.AddressBookAUParsedResult;
+import com.google.zxing.client.result.AddressBookDoCoMoParsedResult;
+import com.google.zxing.client.result.BookmarkDoCoMoParsedResult;
+import com.google.zxing.client.result.EmailAddressParsedResult;
+import com.google.zxing.client.result.EmailDoCoMoParsedResult;
 import com.google.zxing.client.result.ParsedReaderResult;
 import com.google.zxing.client.result.ParsedReaderResultType;
 import com.google.zxing.client.result.UPCParsedResult;
 import com.google.zxing.client.result.URIParsedResult;
-import com.google.zxing.client.result.URLTOResult;
+import com.google.zxing.client.result.URLTOParsedResult;
 
 import java.net.URISyntaxException;
 
@@ -55,7 +55,7 @@ final class ResultHandler extends Handler {
     Intent intent = null;
     ParsedReaderResultType type = result.getType();
     if (type.equals(ParsedReaderResultType.ADDRESSBOOK)) {
-      AddressBookDoCoMoResult addressResult = (AddressBookDoCoMoResult) result;
+      AddressBookDoCoMoParsedResult addressResult = (AddressBookDoCoMoParsedResult) result;
       intent = new Intent(Contacts.Intents.Insert.ACTION, Contacts.People.CONTENT_URI);
       putExtra(intent, Contacts.Intents.Insert.NAME, addressResult.getName());
       putExtra(intent, Contacts.Intents.Insert.PHONE, addressResult.getPhoneNumbers());
@@ -63,7 +63,7 @@ final class ResultHandler extends Handler {
       putExtra(intent, Contacts.Intents.Insert.NOTES, addressResult.getNote());
       putExtra(intent, Contacts.Intents.Insert.POSTAL, addressResult.getAddress());
     } else if (type.equals(ParsedReaderResultType.ADDRESSBOOK_AU)) {
-      AddressBookAUResult addressResult = (AddressBookAUResult) result;
+      AddressBookAUParsedResult addressResult = (AddressBookAUParsedResult) result;
       intent = new Intent(Contacts.Intents.Insert.ACTION, Contacts.People.CONTENT_URI);
       putExtra(intent, Contacts.Intents.Insert.NAME, addressResult.getNames());
       putExtra(intent, Contacts.Intents.Insert.PHONE, addressResult.getPhoneNumbers());
@@ -73,16 +73,16 @@ final class ResultHandler extends Handler {
     } else if (type.equals(ParsedReaderResultType.BOOKMARK)) {
       // For now, we can only open the browser, and not actually add a bookmark
       try {
-        intent = new Intent(Intent.VIEW_ACTION, new ContentURI(((BookmarkDoCoMoResult) result).getURI()));
+        intent = new Intent(Intent.VIEW_ACTION, new ContentURI(((BookmarkDoCoMoParsedResult) result).getURI()));
       } catch (URISyntaxException e) {
       }
     } else if (type.equals(ParsedReaderResultType.URLTO)) {
       try {
-        intent = new Intent(Intent.VIEW_ACTION, new ContentURI(((URLTOResult) result).getURI()));
+        intent = new Intent(Intent.VIEW_ACTION, new ContentURI(((URLTOParsedResult) result).getURI()));
       } catch (URISyntaxException e) {
       }
     } else if (type.equals(ParsedReaderResultType.EMAIL)) {
-      EmailDoCoMoResult emailResult = (EmailDoCoMoResult) result;
+      EmailDoCoMoParsedResult emailResult = (EmailDoCoMoParsedResult) result;
       try {
         intent = new Intent(Intent.SENDTO_ACTION, new ContentURI(emailResult.getTo()));
       } catch (URISyntaxException e) {
@@ -90,7 +90,7 @@ final class ResultHandler extends Handler {
       putExtra(intent, "subject", emailResult.getSubject());
       putExtra(intent, "body", emailResult.getBody());
     } else if (type.equals(ParsedReaderResultType.EMAIL_ADDRESS)) {
-      EmailAddressResult emailResult = (EmailAddressResult) result;
+      EmailAddressParsedResult emailResult = (EmailAddressParsedResult) result;
       try {
         intent = new Intent(Intent.SENDTO_ACTION, new ContentURI(emailResult.getEmailAddress()));
       } catch (URISyntaxException e) {

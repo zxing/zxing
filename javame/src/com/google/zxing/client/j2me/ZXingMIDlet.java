@@ -17,14 +17,14 @@
 package com.google.zxing.client.j2me;
 
 import com.google.zxing.Result;
-import com.google.zxing.client.result.BookmarkDoCoMoResult;
-import com.google.zxing.client.result.EmailAddressResult;
-import com.google.zxing.client.result.EmailDoCoMoResult;
+import com.google.zxing.client.result.BookmarkDoCoMoParsedResult;
+import com.google.zxing.client.result.EmailAddressParsedResult;
+import com.google.zxing.client.result.EmailDoCoMoParsedResult;
 import com.google.zxing.client.result.ParsedReaderResult;
 import com.google.zxing.client.result.ParsedReaderResultType;
 import com.google.zxing.client.result.UPCParsedResult;
 import com.google.zxing.client.result.URIParsedResult;
-import com.google.zxing.client.result.URLTOResult;
+import com.google.zxing.client.result.URLTOParsedResult;
 
 import javax.microedition.io.ConnectionNotFoundException;
 import javax.microedition.lcdui.Alert;
@@ -196,16 +196,16 @@ public final class ZXingMIDlet extends MIDlet {
       String uri = ((URIParsedResult) result).getURI();
       showOpenURL("Open Web Page?", uri, uri);
     } else if (type.equals(ParsedReaderResultType.BOOKMARK)) {
-      String uri = ((BookmarkDoCoMoResult) result).getURI();
+      String uri = ((BookmarkDoCoMoParsedResult) result).getURI();
       showOpenURL("Open Web Page?", uri, uri);      
     } else if (type.equals(ParsedReaderResultType.URLTO)) {
-      String uri = ((URLTOResult) result).getURI();
+      String uri = ((URLTOParsedResult) result).getURI();
       showOpenURL("Open Web Page?", uri, uri);
     } else if (type.equals(ParsedReaderResultType.EMAIL)) {
-      String email = ((EmailDoCoMoResult) result).getTo();
+      String email = ((EmailDoCoMoParsedResult) result).getTo();
       showOpenURL("Compose E-mail?", email, "mailto:" + email);
     } else if (type.equals(ParsedReaderResultType.EMAIL_ADDRESS)) {
-      String email = ((EmailAddressResult) result).getEmailAddress();
+      String email = ((EmailAddressParsedResult) result).getEmailAddress();
       showOpenURL("Compose E-mail?", email, "mailto:" + email);
     //} else if (type.equals(ParsedReaderResultType.GEO)) {
     //  GeoParsedResult geoResult = (GeoParsedResult) result;
