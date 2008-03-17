@@ -43,100 +43,99 @@ import java.net.URISyntaxException;
  */
 final class ResultHandler extends Handler {
 
-  private final ParsedReaderResult result;
+  private final Intent intent;
   private final BarcodeReaderCaptureActivity captureActivity;
 
   ResultHandler(BarcodeReaderCaptureActivity captureActivity, ParsedReaderResult result) {
     this.captureActivity = captureActivity;
-    this.result = result;
+    this.intent = resultToIntent(result);
+  }
+
+  private static Intent resultToIntent(ParsedReaderResult result) {
+    Intent intent = null;
+    ParsedReaderResultType type = result.getType();
+    if (type.equals(ParsedReaderResultType.ADDRESSBOOK)) {
+      AddressBookDoCoMoResult addressResult = (AddressBookDoCoMoResult) result;
+      intent = new Intent(Contacts.Intents.Insert.ACTION, Contacts.People.CONTENT_URI);
+      putExtra(intent, Contacts.Intents.Insert.NAME, addressResult.getName());
+      putExtra(intent, Contacts.Intents.Insert.PHONE, addressResult.getPhoneNumbers());
+      putExtra(intent, Contacts.Intents.Insert.EMAIL, addressResult.getEmail());
+      putExtra(intent, Contacts.Intents.Insert.NOTES, addressResult.getNote());
+      putExtra(intent, Contacts.Intents.Insert.POSTAL, addressResult.getAddress());
+    } else if (type.equals(ParsedReaderResultType.ADDRESSBOOK_AU)) {
+      AddressBookAUResult addressResult = (AddressBookAUResult) result;
+      intent = new Intent(Contacts.Intents.Insert.ACTION, Contacts.People.CONTENT_URI);
+      putExtra(intent, Contacts.Intents.Insert.NAME, addressResult.getNames());
+      putExtra(intent, Contacts.Intents.Insert.PHONE, addressResult.getPhoneNumbers());
+      putExtra(intent, Contacts.Intents.Insert.EMAIL, addressResult.getEmails());
+      putExtra(intent, Contacts.Intents.Insert.NOTES, addressResult.getNote());
+      putExtra(intent, Contacts.Intents.Insert.POSTAL, addressResult.getAddress());
+    } else if (type.equals(ParsedReaderResultType.BOOKMARK)) {
+      // For now, we can only open the browser, and not actually add a bookmark
+      try {
+        intent = new Intent(Intent.VIEW_ACTION, new ContentURI(((BookmarkDoCoMoResult) result).getURI()));
+      } catch (URISyntaxException e) {
+      }
+    } else if (type.equals(ParsedReaderResultType.URLTO)) {
+      try {
+        intent = new Intent(Intent.VIEW_ACTION, new ContentURI(((URLTOResult) result).getURI()));
+      } catch (URISyntaxException e) {
+      }
+    } else if (type.equals(ParsedReaderResultType.EMAIL)) {
+      EmailDoCoMoResult emailResult = (EmailDoCoMoResult) result;
+      try {
+        intent = new Intent(Intent.SENDTO_ACTION, new ContentURI(emailResult.getTo()));
+      } catch (URISyntaxException e) {
+      }
+      putExtra(intent, "subject", emailResult.getSubject());
+      putExtra(intent, "body", emailResult.getBody());
+    } else if (type.equals(ParsedReaderResultType.EMAIL_ADDRESS)) {
+      EmailAddressResult emailResult = (EmailAddressResult) result;
+      try {
+        intent = new Intent(Intent.SENDTO_ACTION, new ContentURI(emailResult.getEmailAddress()));
+      } catch (URISyntaxException e) {
+      }
+    //} else if (type.equals(ParsedReaderResultType.GEO)) {
+    //  GeoParsedResult geoResult = (GeoParsedResult) result;
+    //  try {
+    //    intent = new Intent(Intent.VIEW_ACTION, new ContentURI(geoResult.getGoogleMapsURI()));
+    //    // or can we send the raw geo: URI to Android? maybe it'll open Maps?
+    //    // or just open a MapView
+    //  } catch (URISyntaxException e) {
+    //    return;
+    //  }
+    } else if (type.equals(ParsedReaderResultType.UPC)) {
+      UPCParsedResult upcResult = (UPCParsedResult) result;
+      try {
+        ContentURI uri = new ContentURI("http://www.upcdatabase.com/item.asp?upc=" + upcResult.getUPC());
+        intent = new Intent(Intent.VIEW_ACTION, uri);
+      } catch (URISyntaxException e) {
+      }
+    } else if (type.equals(ParsedReaderResultType.URI)) {
+      URIParsedResult uriResult = (URIParsedResult) result;
+      try {
+        intent = new Intent(Intent.VIEW_ACTION, new ContentURI(uriResult.getURI()));
+      } catch (URISyntaxException e) {
+      }
+    } else if (type.equals(ParsedReaderResultType.ANDROID_INTENT)) {
+      intent = ((AndroidIntentParsedResult) result).getIntent();
+    }
+    return intent;
   }
 
   @Override
   public void handleMessage(Message message) {
     if (message.what == R.string.button_yes) {
-      Intent intent = null;
-      ParsedReaderResultType type = result.getType();
-      if (type.equals(ParsedReaderResultType.ADDRESSBOOK)) {
-        AddressBookDoCoMoResult addressResult = (AddressBookDoCoMoResult) result;
-        intent = new Intent(Contacts.Intents.Insert.ACTION, Contacts.People.CONTENT_URI);
-        putExtra(intent, Contacts.Intents.Insert.NAME, addressResult.getName());
-        putExtra(intent, Contacts.Intents.Insert.PHONE, addressResult.getPhoneNumbers());
-        putExtra(intent, Contacts.Intents.Insert.EMAIL, addressResult.getEmail());
-        putExtra(intent, Contacts.Intents.Insert.NOTES, addressResult.getNote());
-        putExtra(intent, Contacts.Intents.Insert.POSTAL, addressResult.getAddress());
-      } else if (type.equals(ParsedReaderResultType.ADDRESSBOOK_AU)) {
-        AddressBookAUResult addressResult = (AddressBookAUResult) result;
-        intent = new Intent(Contacts.Intents.Insert.ACTION, Contacts.People.CONTENT_URI);
-        putExtra(intent, Contacts.Intents.Insert.NAME, addressResult.getNames());
-        putExtra(intent, Contacts.Intents.Insert.PHONE, addressResult.getPhoneNumbers());
-        putExtra(intent, Contacts.Intents.Insert.EMAIL, addressResult.getEmails());
-        putExtra(intent, Contacts.Intents.Insert.NOTES, addressResult.getNote());
-        putExtra(intent, Contacts.Intents.Insert.POSTAL, addressResult.getAddress());
-      } else if (type.equals(ParsedReaderResultType.BOOKMARK)) {
-        // For now, we can only open the browser, and not actually add a bookmark
-        try {
-          intent = new Intent(Intent.VIEW_ACTION,
-              new ContentURI(((BookmarkDoCoMoResult) result).getURI()));
-        } catch (URISyntaxException e) {
-          return;
-        }
-      } else if (type.equals(ParsedReaderResultType.URLTO)) {
-        try {
-          intent = new Intent(Intent.VIEW_ACTION,
-              new ContentURI(((URLTOResult) result).getURI()));
-        } catch (URISyntaxException e) {
-          return;
-        }
-      } else if (type.equals(ParsedReaderResultType.EMAIL)) {
-        EmailDoCoMoResult emailResult = (EmailDoCoMoResult) result;
-        try {
-          intent = new Intent(Intent.SENDTO_ACTION, new ContentURI(emailResult.getTo()));
-        } catch (URISyntaxException e) {
-          return;
-        }
-        putExtra(intent, "subject", emailResult.getSubject());
-        putExtra(intent, "body", emailResult.getBody());
-      } else if (type.equals(ParsedReaderResultType.EMAIL_ADDRESS)) {
-        EmailAddressResult emailResult = (EmailAddressResult) result;
-        try {
-          intent = new Intent(Intent.SENDTO_ACTION, new ContentURI(emailResult.getEmailAddress()));
-        } catch (URISyntaxException e) {
-          return;
-        }
-      //} else if (type.equals(ParsedReaderResultType.GEO)) {
-      //  GeoParsedResult geoResult = (GeoParsedResult) result;
-      //  try {
-      //    intent = new Intent(Intent.VIEW_ACTION, new ContentURI(geoResult.getGoogleMapsURI()));
-      //    // or can we send the raw geo: URI to Android? maybe it'll open Maps?
-      //    // or just open a MapView
-      //  } catch (URISyntaxException e) {
-      //    return;
-      //  }
-      } else if (type.equals(ParsedReaderResultType.UPC)) {
-        UPCParsedResult upcResult = (UPCParsedResult) result;
-        try {
-          ContentURI uri = new ContentURI("http://www.upcdatabase.com/item.asp?upc=" +
-              upcResult.getUPC());
-          intent = new Intent(Intent.VIEW_ACTION, uri);
-        } catch (URISyntaxException e) {
-          return;
-        }
-      } else if (type.equals(ParsedReaderResultType.URI)) {
-        URIParsedResult uriResult = (URIParsedResult) result;
-        try {
-          intent = new Intent(Intent.VIEW_ACTION, new ContentURI(uriResult.getURI()));
-        } catch (URISyntaxException e) {
-          return;
-        }
-      } else if (type.equals(ParsedReaderResultType.ANDROID_INTENT)) {
-        intent = ((AndroidIntentParsedResult) result).getIntent();
-      }
       if (intent != null) {
         captureActivity.startActivity(intent);
       }
     } else {
       captureActivity.restartPreview();
     }
+  }
+
+  Intent getIntent() {
+    return intent;
   }
 
   private static void putExtra(Intent intent, String key, String value) {

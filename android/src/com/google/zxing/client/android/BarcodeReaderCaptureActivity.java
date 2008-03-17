@@ -158,8 +158,8 @@ public final class BarcodeReaderCaptureActivity extends Activity {
 
     Context context = getApplication();
     ParsedReaderResult readerResult = parseReaderResult(rawResult);
-    Handler handler = new ResultHandler(this, readerResult);
-    if (canBeHandled(readerResult.getType())) {
+    ResultHandler handler = new ResultHandler(this, readerResult);
+    if (handler.getIntent() != null) {
       // Can be handled by some external app; ask if the user wants to
       // proceed first though
       Message yesMessage = handler.obtainMessage(R.string.button_yes);
@@ -191,10 +191,6 @@ public final class BarcodeReaderCaptureActivity extends Activity {
       }
     }
     return readerResult;
-  }
-
-  private static boolean canBeHandled(ParsedReaderResultType type) {
-    return !type.equals(ParsedReaderResultType.TEXT);
   }
 
   private static int getDialogTitleID(ParsedReaderResultType type) {
