@@ -58,6 +58,8 @@ public abstract class ParsedReaderResult {
       return result;
     } else if ((result = AddressBookAUResult.parse(theResult)) != null) {
       return result;
+    } else if ((result = GeoParsedResult.parse(theResult)) != null) {
+      return result;
     } else if ((result = URLTOResult.parse(theResult)) != null) {
       return result;
     } else if ((result = URIParsedResult.parse(theResult)) != null) {
