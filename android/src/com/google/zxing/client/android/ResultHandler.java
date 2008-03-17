@@ -28,6 +28,7 @@ import com.google.zxing.client.result.EmailAddressParsedResult;
 import com.google.zxing.client.result.EmailDoCoMoParsedResult;
 import com.google.zxing.client.result.ParsedReaderResult;
 import com.google.zxing.client.result.ParsedReaderResultType;
+import com.google.zxing.client.result.TelParsedResult;
 import com.google.zxing.client.result.UPCParsedResult;
 import com.google.zxing.client.result.URIParsedResult;
 import com.google.zxing.client.result.URLTOParsedResult;
@@ -93,6 +94,12 @@ final class ResultHandler extends Handler {
       EmailAddressParsedResult emailResult = (EmailAddressParsedResult) result;
       try {
         intent = new Intent(Intent.SENDTO_ACTION, new ContentURI(emailResult.getEmailAddress()));
+      } catch (URISyntaxException e) {
+      }
+    } else if (type.equals(ParsedReaderResultType.TEL)) {
+      TelParsedResult telResult = (TelParsedResult) result;
+      try {
+        intent = new Intent(Intent.DIAL_ACTION, new ContentURI("tel:" + telResult.getNumber()));
       } catch (URISyntaxException e) {
       }
     //} else if (type.equals(ParsedReaderResultType.GEO)) {

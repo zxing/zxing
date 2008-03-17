@@ -30,4 +30,5 @@
   <string name="title_add_contact">Add Contact?</string>
   <string name="title_compose_email">Compose E-mail?</string>
   <string name="title_lookup_barcode">Look Up Barcode Online?</string>
+  <string name="title_dial">Dial Number?</string>  
 </resources>

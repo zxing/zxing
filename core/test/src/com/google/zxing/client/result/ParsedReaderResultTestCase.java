@@ -16,6 +16,7 @@
 
 package com.google.zxing.client.result;
 
+import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
 import junit.framework.TestCase;
 
@@ -76,8 +77,8 @@ public final class ParsedReaderResultTestCase extends TestCase {
   }
 
   public void testUPC() {
-    doTestResult("123456789012", ParsedReaderResultType.UPC);
-    doTestResult("1234567890123", ParsedReaderResultType.UPC);
+    doTestResult("123456789012", ParsedReaderResultType.UPC, BarcodeFormat.UPC_A);
+    doTestResult("1234567890123", ParsedReaderResultType.UPC, BarcodeFormat.UPC_A);
     doTestResult("12345678901", ParsedReaderResultType.TEXT);
   }
 
@@ -94,11 +95,23 @@ public final class ParsedReaderResultTestCase extends TestCase {
   public void testGeo() {
     doTestResult("geo:1,2", ParsedReaderResultType.GEO);
     doTestResult("geo:1,2,3", ParsedReaderResultType.GEO);
-    doTestResult("geo:100.33,-32.3344,3.35", ParsedReaderResultType.GEO);    
+    doTestResult("geo:100.33,-32.3344,3.35", ParsedReaderResultType.GEO);
+    doTestResult("geography", ParsedReaderResultType.TEXT);        
+  }
+
+  public void testTel() {
+    doTestResult("tel:+15551212", ParsedReaderResultType.TEL);
+    doTestResult("tel:212 555 1212", ParsedReaderResultType.TEL);
+    doTestResult("tel:2125551212", ParsedReaderResultType.TEL);
+    doTestResult("telephone", ParsedReaderResultType.TEXT);
   }
 
   private static void doTestResult(String text, ParsedReaderResultType type) {
-    Result fakeResult = new Result(text, null, null, null);
+    doTestResult(text, type, null);
+  }
+
+  private static void doTestResult(String text, ParsedReaderResultType type, BarcodeFormat format) {
+    Result fakeResult = new Result(text, null, null, format);
     ParsedReaderResult result = ParsedReaderResult.parseReaderResult(fakeResult);
     assertNotNull(result);
     assertEquals(type, result.getType());
