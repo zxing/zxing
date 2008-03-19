@@ -82,20 +82,19 @@ public abstract class AbstractOneDReader implements OneDReader {
     // the middle. So we'd scan row middle, then middle - rowStep, then middle + rowStep,
     // then middle - 2*rowStep, etc.
     // rowStep is bigger as the image is taller, but is always at least 1. We've somewhat arbitrarily decided
-    // that moving up and down by about 1/16 of the image is pretty good.
+    // that moving up and down by about 1/16 of the image is pretty good; we try more of the image if
+    // "trying harder"
     int middle = height >> 1;
-    int rowStep;
-    if (tryHarder) {
-      rowStep = 2; // Look at every other line if "trying harder"
-    } else {
-      rowStep = Math.max(1, height >> 4);
-    }
+    int rowStep = Math.max(1, height >> (tryHarder ? 7 : 4));
     int maxLines;
     if (tryHarder || barcodesToSkip > 0) {
       maxLines = height; // Look at the whole image; looking for more than one barcode
     } else {
       maxLines = 7;
     }
+
+    Result lastResult = null;
+
     for (int x = 0; x < maxLines; x++) {
 
       int rowStepsAboveOrBelow = (x + 1) >> 1;
@@ -105,34 +104,40 @@ public abstract class AbstractOneDReader implements OneDReader {
         break;
       }
 
-      image.estimateBlackPoint(BlackPointEstimationMethod.ROW_SAMPLING, rowNumber);
+      try {
+        image.estimateBlackPoint(BlackPointEstimationMethod.ROW_SAMPLING, rowNumber);
+      } catch (ReaderException re) {
+        continue;
+      }
       image.getBlackRow(rowNumber, row, 0, width);
 
-      try {
-        Result result = decodeRow(rowNumber, row, hints);
-        if (barcodesToSkip > 0) { // See if we should skip and keep looking
-          barcodesToSkip--;
-        } else {
-          return result;
-        }
-      } catch (ReaderException re) {
-        if (tryHarder) {
-          row.reverse(); // try scanning the row backwards
-          try {
-            Result result = decodeRow(rowNumber, row, hints);
-            if (barcodesToSkip > 0) { // See if we should skip and keep looking
-              barcodesToSkip--;
-            } else {
-              // Found it, but upside-down:
-              result.putMetadata(ResultMetadataType.ORIENTATION, new Integer(180));
-              return result;
-            }
-          } catch (ReaderException re2) {
-            // continue
+      for (int attempt = 0; attempt < 2; attempt++) {
+        if (attempt == 1) { // trying again?
+          if (tryHarder) { // only if "trying harder"
+            row.reverse(); // reverse the row and continue
+          } else {
+            break;
           }
         }
+        try {
+          Result result = decodeRow(rowNumber, row, hints);
+          if (lastResult == null || !lastResult.getText().equals(result.getText())) {
+            // Found new barcode, not just the last one again
+            if (barcodesToSkip > 0) { // See if we should skip and keep looking
+              barcodesToSkip--;
+              lastResult = result; // Remember what we just saw
+            } else {
+              if (attempt == 1) {
+                // Found it, but upside-down:
+                result.putMetadata(ResultMetadataType.ORIENTATION, new Integer(180));
+              }
+              return result;
+            }
+          }
+        } catch (ReaderException re) {
+          // continue
+        }
       }
-
     }
 
     throw new ReaderException("No barcode found");
