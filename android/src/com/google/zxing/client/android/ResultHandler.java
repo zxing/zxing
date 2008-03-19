@@ -26,6 +26,7 @@ import com.google.zxing.client.result.AddressBookDoCoMoParsedResult;
 import com.google.zxing.client.result.BookmarkDoCoMoParsedResult;
 import com.google.zxing.client.result.EmailAddressParsedResult;
 import com.google.zxing.client.result.EmailDoCoMoParsedResult;
+import com.google.zxing.client.result.GeoParsedResult;
 import com.google.zxing.client.result.ParsedReaderResult;
 import com.google.zxing.client.result.ParsedReaderResultType;
 import com.google.zxing.client.result.TelParsedResult;
@@ -102,15 +103,12 @@ final class ResultHandler extends Handler {
         intent = new Intent(Intent.DIAL_ACTION, new ContentURI("tel:" + telResult.getNumber()));
       } catch (URISyntaxException e) {
       }
-    //} else if (type.equals(ParsedReaderResultType.GEO)) {
-    //  GeoParsedResult geoResult = (GeoParsedResult) result;
-    //  try {
-    //    intent = new Intent(Intent.VIEW_ACTION, new ContentURI(geoResult.getGoogleMapsURI()));
-    //    // or can we send the raw geo: URI to Android? maybe it'll open Maps?
-    //    // or just open a MapView
-    //  } catch (URISyntaxException e) {
-    //    return;
-    //  }
+    } else if (type.equals(ParsedReaderResultType.GEO)) {
+      GeoParsedResult geoResult = (GeoParsedResult) result;
+      try {
+        intent = new Intent(Intent.VIEW_ACTION, new ContentURI(geoResult.getGeoURI()));
+      } catch (URISyntaxException e) {
+      }
     } else if (type.equals(ParsedReaderResultType.UPC)) {
       UPCParsedResult upcResult = (UPCParsedResult) result;
       try {

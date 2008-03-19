@@ -115,6 +115,7 @@ public final class GeoParsedResult extends ParsedReaderResult {
    *  by this instance, and sets the zoom level in a way that roughly reflects the
    *  altitude, if specified
    */
+  /*
   public String getGoogleMapsURI() {
     StringBuffer result = new StringBuffer(50);
     result.append("http://maps.google.com/?ll=");
@@ -139,5 +140,6 @@ public final class GeoParsedResult extends ParsedReaderResult {
     }
     return result.toString();
   }
+   */
 
 }
