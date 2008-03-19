@@ -16,6 +16,8 @@
 
 package com.google.zxing.common;
 
+import com.google.zxing.ReaderException;
+
 /**
  * <p>Encapsulates logic that estimates the optimal "black point", the luminance value
  * which is the best line between "white" and "black" in a grayscale image.</p>
@@ -43,8 +45,9 @@ public final class BlackPointEstimator {
    * than 0.0; 1.0 is a good "default"
    * @return index within argument of bucket corresponding to brightest values which should be
    *         considered "black"
+   * @throws ReaderException if "black" and "white" appear to be very close in luminance in the image
    */
-  public static int estimate(int[] histogram, float biasTowardsWhite) {
+  public static int estimate(int[] histogram, float biasTowardsWhite) throws ReaderException{
 
     if (Float.isNaN(biasTowardsWhite) || biasTowardsWhite <= 0.0f) {
       throw new IllegalArgumentException("Illegal biasTowardsWhite: " + biasTowardsWhite);
@@ -81,6 +84,15 @@ public final class BlackPointEstimator {
       int temp = firstPeak;
       firstPeak = secondPeak;
       secondPeak = temp;
+    }
+
+    // Kind of aribtrary; if the two peaks are very close, then we figure there is so little
+    // dynamic range in the image, that discriminating black and white is too error-prone.
+    // Decoding the image/line is either pointless, or may in some cases lead to a false positive
+    // for 1D formats, which are relatively lenient.
+    // We arbitrarily say "close" is "fewer than 1/8 of the total histogram buckets apart"
+    if (secondPeak - firstPeak < histogram.length >> 3) {
+      throw new ReaderException("Too little dynamic range in luminance");
     }
 
     // Find a valley between them that is low and closer to the white peak

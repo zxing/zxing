@@ -18,6 +18,7 @@ package com.google.zxing.client.j2se;
 
 import com.google.zxing.BlackPointEstimationMethod;
 import com.google.zxing.MonochromeBitmapSource;
+import com.google.zxing.ReaderException;
 import com.google.zxing.common.BitArray;
 import com.google.zxing.common.BlackPointEstimator;
 
@@ -51,6 +52,10 @@ public final class BufferedImageMonochromeBitmapSource implements MonochromeBitm
     lastArgument = 0;
   }
 
+  public BufferedImage getImage() {
+    return image;
+  }
+
   public boolean isBlack(int x, int y) {
     return computeRGBLuminance(image.getRGB(x, y)) < blackPoint;
   }
@@ -78,7 +83,7 @@ public final class BufferedImageMonochromeBitmapSource implements MonochromeBitm
     return image.getWidth();
   }
 
-  public void estimateBlackPoint(BlackPointEstimationMethod method, int argument) {
+  public void estimateBlackPoint(BlackPointEstimationMethod method, int argument) throws ReaderException {
     if (!method.equals(lastMethod) || argument != lastArgument) {
       int width = image.getWidth();
       int height = image.getHeight();
@@ -120,8 +125,9 @@ public final class BufferedImageMonochromeBitmapSource implements MonochromeBitm
       throw new IllegalStateException("Rotate not supported");
     }
     // 90 degrees counterclockwise:
-    AffineTransform transform = new AffineTransform(0.0, -1.0, 1.0, 0.0, 0.0, image.getHeight());
+    AffineTransform transform = new AffineTransform(0.0, -1.0, 1.0, 0.0, 0.0, image.getWidth());
     BufferedImageOp op = new AffineTransformOp(transform, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+    // Note width/height are flipped since we are rotating 90 degrees:
     BufferedImage rotatedImage = new BufferedImage(image.getHeight(), image.getWidth(), image.getType());
     op.filter(image, rotatedImage);
     return new BufferedImageMonochromeBitmapSource(rotatedImage);

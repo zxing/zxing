@@ -19,6 +19,7 @@ package com.google.zxing.client.android;
 import android.graphics.Bitmap;
 import com.google.zxing.BlackPointEstimationMethod;
 import com.google.zxing.MonochromeBitmapSource;
+import com.google.zxing.ReaderException;
 import com.google.zxing.common.BitArray;
 import com.google.zxing.common.BlackPointEstimator;
 
@@ -77,7 +78,7 @@ final class RGBMonochromeBitmapSource implements MonochromeBitmapSource {
     return image.width();
   }
 
-  public void estimateBlackPoint(BlackPointEstimationMethod method, int argument) {
+  public void estimateBlackPoint(BlackPointEstimationMethod method, int argument) throws ReaderException {
     if (!method.equals(lastMethod) || argument != lastArgument) {
       int width = image.width();
       int height = image.height();
