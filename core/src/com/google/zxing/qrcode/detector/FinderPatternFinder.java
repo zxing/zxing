@@ -16,6 +16,7 @@
 
 package com.google.zxing.qrcode.detector;
 
+import com.google.zxing.DecodeHintType;
 import com.google.zxing.MonochromeBitmapSource;
 import com.google.zxing.ReaderException;
 import com.google.zxing.ResultPoint;
@@ -23,6 +24,7 @@ import com.google.zxing.common.BitArray;
 import com.google.zxing.common.Collections;
 import com.google.zxing.common.Comparator;
 
+import java.util.Hashtable;
 import java.util.Vector;
 
 /**
@@ -52,7 +54,8 @@ final class FinderPatternFinder {
     this.possibleCenters = new Vector();
   }
 
-  FinderPatternInfo find() throws ReaderException {
+  FinderPatternInfo find(Hashtable hints) throws ReaderException {
+    boolean tryHarder = hints != null && hints.containsKey(DecodeHintType.TRY_HARDER);
     int maxI = image.getHeight();
     int maxJ = image.getWidth();
     // We are looking for black/white/black/white/black modules in
@@ -61,7 +64,7 @@ final class FinderPatternFinder {
     boolean done = false;
     // We can afford to examine every few lines until we've started finding
     // the patterns
-    int iSkip = BIG_SKIP;
+    int iSkip = tryHarder ? 1 : BIG_SKIP;
     for (int i = iSkip - 1; i < maxI && !done; i += iSkip) {
       // Get a row of black/white values
       BitArray blackRow = image.getBlackRow(i, null, 0, maxJ);

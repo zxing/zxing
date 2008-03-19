@@ -25,6 +25,8 @@ import com.google.zxing.common.DetectorResult;
 import com.google.zxing.common.GridSampler;
 import com.google.zxing.qrcode.decoder.Version;
 
+import java.util.Hashtable;
+
 /**
  * <p>Encapsulates logic that can detect a QR Code in an image, even if the QR Code
  * is rotated or skewed, or partially obscured.</p>
@@ -46,6 +48,17 @@ public final class Detector {
    * @throws ReaderException if no QR Code can be found
    */
   public DetectorResult detect() throws ReaderException {
+    return detect(null);
+  }
+
+  /**
+   * <p>Detects a QR Code in an image, simply.</p>
+   *
+   * @param hints optional hints to detector
+   * @return {@link DetectorResult} encapsulating results of detecting a QR Code
+   * @throws ReaderException if no QR Code can be found
+   */
+  public DetectorResult detect(Hashtable hints) throws ReaderException {
 
     MonochromeBitmapSource image = this.image;
     if (!BlackPointEstimationMethod.TWO_D_SAMPLING.equals(image.getLastEstimationMethod())) {
@@ -53,7 +66,7 @@ public final class Detector {
     }
 
     FinderPatternFinder finder = new FinderPatternFinder(image);
-    FinderPatternInfo info = finder.find();
+    FinderPatternInfo info = finder.find(hints);
 
     FinderPattern topLeft = info.getTopLeft();
     FinderPattern topRight = info.getTopRight();

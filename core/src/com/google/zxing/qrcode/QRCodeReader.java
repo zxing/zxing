@@ -61,7 +61,7 @@ public final class QRCodeReader implements Reader {
       decoderResult = decoder.decode(bits);
       points = NO_POINTS;
     } else {
-      DetectorResult result = new Detector(image).detect();
+      DetectorResult result = new Detector(image).detect(hints);
       decoderResult = decoder.decode(result.getBits());
       points = result.getPoints();
     }
