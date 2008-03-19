@@ -113,25 +113,25 @@ public abstract class GridSampler {
   protected static void checkEndpoint(MonochromeBitmapSource image, float[] points) throws ReaderException {
     int width = image.getWidth();
     int height = image.getHeight();
-    checkOneEndpoint(points, (int) points[0], (int) points[1], width, height);
-    checkOneEndpoint(points, (int) points[points.length - 2], (int) points[points.length - 1], width, height);
+    checkOneEndpoint(points, 0, width, height);
+    checkOneEndpoint(points, points.length - 2, width, height);
   }
 
-  private static void checkOneEndpoint(float[] points, int x, int y, int width, int height) throws ReaderException {
+  private static void checkOneEndpoint(float[] points, int offset, int width, int height) throws ReaderException {
+    int x = (int) points[offset];
+    int y = (int) points[offset + 1];
     if (x < -1 || x > width || y < -1 || y > height) {
       throw new ReaderException("Transformed point out of bounds at " + x + ',' + y);
     }
     if (x == -1) {
-      points[0] = 0.0f;
+      points[offset] = 0.0f;
+    } else if (x == width) {
+      points[offset] = width - 1;
     }
     if (y == -1) {
-      points[1] = 0.0f;
-    }
-    if (x == width) {
-      points[0] = width - 1;
-    }
-    if (y == height) {
-      points[1] = height - 1;
+      points[offset + 1] = 0.0f;
+    } else if (y == height) {
+      points[offset + 1] = height - 1;
     }
   }
 
