@@ -207,6 +207,8 @@ public final class BarcodeReaderCaptureActivity extends Activity {
       return R.string.title_lookup_barcode;
     } else if (type.equals(ParsedReaderResultType.TEL)) {
       return R.string.title_dial;
+    } else if (type.equals(ParsedReaderResultType.GEO)) {
+      return R.string.title_view_maps;
     } else {
       return R.string.title_barcode_detected;
     }
