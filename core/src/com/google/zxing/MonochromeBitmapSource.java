@@ -69,7 +69,7 @@ public interface MonochromeBitmapSource {
    * @param method black point estimation method
    * @param argument method-specific argument
    */
-  void estimateBlackPoint(BlackPointEstimationMethod method, int argument);
+  void estimateBlackPoint(BlackPointEstimationMethod method, int argument) throws ReaderException;
 
   /**
    * @return {@link BlackPointEstimationMethod} representing last sampling method used
