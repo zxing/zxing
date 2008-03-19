@@ -94,6 +94,13 @@
 
   <!-- Generate the R.java file for this project's resources. -->
   <target name="resource-src" depends="dirs">
+
+    <copy file="strings.xml.template" tofile="res/values/strings.xml" overwrite="true">
+      <filterset>
+        <filter token="VERSION" value="${version}"/>
+      </filterset>
+    </copy>
+
     <echo>Generating R.java...</echo>
     <exec executable="${aapt}" failonerror="true">
       <arg value="compile"/>
