@@ -90,8 +90,8 @@ public final class BlackPointEstimator {
     // dynamic range in the image, that discriminating black and white is too error-prone.
     // Decoding the image/line is either pointless, or may in some cases lead to a false positive
     // for 1D formats, which are relatively lenient.
-    // We arbitrarily say "close" is "fewer than 1/8 of the total histogram buckets apart"
-    if (secondPeak - firstPeak < histogram.length >> 3) {
+    // We arbitrarily say "close" is "<= 1/16 of the total histogram buckets apart"
+    if (secondPeak - firstPeak <= histogram.length >> 4) {
       throw new ReaderException("Too little dynamic range in luminance");
     }
 

@@ -38,15 +38,19 @@ public final class MultiFormatReader implements Reader {
 
   public Result decode(MonochromeBitmapSource image, Hashtable hints) throws ReaderException {
 
+    boolean tryHarder = hints != null && hints.containsKey(DecodeHintType.TRY_HARDER);
     Vector possibleFormats = hints == null ? null : (Vector) hints.get(DecodeHintType.POSSIBLE_FORMATS);
     Vector readers = new Vector();
     if (possibleFormats != null) {
-      if (possibleFormats.contains(BarcodeFormat.UPC_A) ||
+      boolean addOneDReader =
+          possibleFormats.contains(BarcodeFormat.UPC_A) ||
           possibleFormats.contains(BarcodeFormat.UPC_E) ||
           possibleFormats.contains(BarcodeFormat.EAN_13) ||
           possibleFormats.contains(BarcodeFormat.EAN_8) ||
           possibleFormats.contains(BarcodeFormat.CODE_39) ||
-          possibleFormats.contains(BarcodeFormat.CODE_128)) {
+          possibleFormats.contains(BarcodeFormat.CODE_128);
+      // Put 1D readers upfront in "normal" mode
+      if (addOneDReader && !tryHarder) {
         readers.addElement(new MultiFormatOneDReader());
       }
       if (possibleFormats.contains(BarcodeFormat.QR_CODE)) {
@@ -55,12 +59,21 @@ public final class MultiFormatReader implements Reader {
       if (possibleFormats.contains(BarcodeFormat.DATAMATRIX)) {
         readers.addElement(new DataMatrixReader());
       }
+      // At end in "try harder" mode
+      if (addOneDReader && tryHarder) {
+        readers.addElement(new MultiFormatOneDReader());
+      }
     }
     if (readers.isEmpty()) {
-      readers.addElement(new MultiFormatOneDReader());
+      if (!tryHarder) {
+        readers.addElement(new MultiFormatOneDReader());
+      }
       readers.addElement(new QRCodeReader());
       // TODO re-enable once Data Matrix is ready
       // readers.addElement(new DataMatrixReader());
+      if (tryHarder) {
+        readers.addElement(new MultiFormatOneDReader());
+      }
     }
 
     for (int i = 0; i < readers.size(); i++) {
