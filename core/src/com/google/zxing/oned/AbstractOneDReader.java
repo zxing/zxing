@@ -69,13 +69,13 @@ public abstract class AbstractOneDReader implements OneDReader {
 
     BitArray row = new BitArray(width);
 
-    //int barcodesToSkip = 0;
-    //if (hints != null) {
-    //  Integer number = (Integer) hints.get(DecodeHintType.SKIP_N_BARCODES);
-    //  if (number != null) {
-    //    barcodesToSkip = number.intValue();
-    //  }
-    //}
+    int barcodesToSkip = 0;
+    if (hints != null) {
+      Integer number = (Integer) hints.get(DecodeHintType.SKIP_N_BARCODES);
+      if (number != null) {
+        barcodesToSkip = number.intValue();
+      }
+    }
 
     // We're going to examine rows from the middle outward, searching alternately above and below the middle,
     // and farther out each time. rowStep is the number of rows between each successive attempt above and below
@@ -94,7 +94,7 @@ public abstract class AbstractOneDReader implements OneDReader {
       maxLines = 7;
     }
 
-    //Result lastResult = null;
+    Hashtable lastResults = null;
 
     for (int x = 0; x < maxLines; x++) {
 
@@ -131,22 +131,25 @@ public abstract class AbstractOneDReader implements OneDReader {
           // Look for a barcode
           Result result = decodeRow(rowNumber, row, hints);
 
-          //if (lastResult != null && lastResult.getText().equals(result.getText())) {
+          if (lastResults != null && lastResults.containsKey(result.getText())) {
             // Just saw the last barcode again, proceed
-            //continue;
-          //}
+            continue;
+          }
 
-          //if (barcodesToSkip > 0) { // See if we should skip and keep looking
-          //  barcodesToSkip--;
-          //  lastResult = result; // Remember what we just saw
-          //} else {
+          if (barcodesToSkip > 0) { // See if we should skip and keep looking
+            barcodesToSkip--;
+            if (lastResults == null) {
+              lastResults = new Hashtable(3);
+            }
+            lastResults.put(result.getText(), Boolean.TRUE); // Remember what we just saw
+          } else {
             // We found our barcode
             if (attempt == 1) {
               // But it was upside down, so note that
               result.putMetadata(ResultMetadataType.ORIENTATION, new Integer(180));
             }
             return result;
-          //}
+          }
 
         } catch (ReaderException re) {
           // continue -- just couldn't decode this row

@@ -56,7 +56,6 @@ public final class DecodeHintType {
    * Skip the first n barcodes found. Currently applies only to 1D formats. This
    * enables a caller to repeatedly decode and find multiple barcodes. Maps
    * to an {@link Integer}.
-   * @deprecated
    */
   public static final DecodeHintType SKIP_N_BARCODES = new DecodeHintType();
 
