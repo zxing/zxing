@@ -69,14 +69,6 @@ public abstract class AbstractOneDReader implements OneDReader {
 
     BitArray row = new BitArray(width);
 
-    int barcodesToSkip = 0;
-    if (hints != null) {
-      Integer number = (Integer) hints.get(DecodeHintType.SKIP_N_BARCODES);
-      if (number != null) {
-        barcodesToSkip = number.intValue();
-      }
-    }
-
     // We're going to examine rows from the middle outward, searching alternately above and below the middle,
     // and farther out each time. rowStep is the number of rows between each successive attempt above and below
     // the middle. So we'd scan row middle, then middle - rowStep, then middle + rowStep,
@@ -95,6 +87,7 @@ public abstract class AbstractOneDReader implements OneDReader {
     }
 
     Hashtable lastResults = null;
+    boolean skippingSomeBarcodes = hints != null && hints.containsKey(DecodeHintType.SKIP_N_BARCODES);
 
     for (int x = 0; x < maxLines; x++) {
 
@@ -136,8 +129,14 @@ public abstract class AbstractOneDReader implements OneDReader {
             continue;
           }
 
-          if (barcodesToSkip > 0) { // See if we should skip and keep looking
-            barcodesToSkip--;
+          if (skippingSomeBarcodes) { // See if we should skip and keep looking
+            int oldValue = ((Integer) hints.get(DecodeHintType.SKIP_N_BARCODES)).intValue();
+            if (oldValue > 1) {
+              hints.put(DecodeHintType.SKIP_N_BARCODES, new Integer(oldValue - 1));
+            } else {
+              hints.remove(DecodeHintType.SKIP_N_BARCODES);
+              skippingSomeBarcodes = false;
+            }
             if (lastResults == null) {
               lastResults = new Hashtable(3);
             }
