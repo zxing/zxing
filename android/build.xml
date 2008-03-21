@@ -147,7 +147,8 @@
      <arg value="-dontpreverify"/>
      <arg value="-dontobfuscate"/>
      <arg value="-keep public class com.google.zxing.client.android.BarcodeReaderCaptureActivity"/>
-     <arg value="-optimizationpasses 5"/>
+     <arg value="-optimizationpasses 7"/>
+     <arg value="-overloadaggressively"/>
      <arg value="-verbose"/>
    </java>
    <delete file="temp.jar"/>
