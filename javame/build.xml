@@ -147,7 +147,9 @@
       <arg value="-libraryjars ../core/core.jar"/>
       <arg value="-microedition"/>
       <arg value="-keep public class com.google.zxing.client.j2me.ZXingMIDlet"/>
-      <arg value="-optimizationpasses 5"/>
+      <arg value="-optimizationpasses 7"/>
+      <arg value="-overloadaggressively"/>
+      <arg value="-allowaccessmodification"/>
       <arg value="-verbose"/>
     </java>
     <delete file="temp.jar"/>
