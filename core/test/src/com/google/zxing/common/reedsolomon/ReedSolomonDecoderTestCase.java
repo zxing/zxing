@@ -45,6 +45,16 @@ public final class ReedSolomonDecoderTestCase extends TestCase {
     checkQRRSDecode(received);
   }
 
+  public void testOneError() throws ReedSolomonException {
+    int[] received = new int[QR_CODE_TEST_WITH_EC.length];
+    Random random = new Random(0xDEADBEEFL);
+    for (int i = 0; i < received.length; i++) {
+      System.arraycopy(QR_CODE_TEST_WITH_EC, 0, received, 0, received.length);
+      received[i] = random.nextInt(256);
+      checkQRRSDecode(received);
+    }
+  }
+
   public void testMaxErrors() throws ReedSolomonException {
     int[] received = new int[QR_CODE_TEST_WITH_EC.length];
     Random random = new Random(0xDEADBEEFL);
