@@ -16,8 +16,6 @@
 
 package com.google.zxing.common.reedsolomon;
 
-import java.util.Vector;
-
 /**
  * <p>Implements Reed-Solomon decoding, as the name implies.</p>
  *
@@ -59,19 +57,25 @@ public final class ReedSolomonDecoder {
   public void decode(int[] received, int twoS) throws ReedSolomonException {
     GF256Poly poly = new GF256Poly(field, received);
     int[] syndromeCoefficients = new int[twoS];
+    boolean noError = true;
     for (int i = 0; i < twoS; i++) {
-      syndromeCoefficients[syndromeCoefficients.length - 1 - i] = poly.evaluateAt(field.exp(i));
+      int eval =  poly.evaluateAt(field.exp(i));
+      syndromeCoefficients[syndromeCoefficients.length - 1 - i] = eval;
+      if (eval != 0) {
+        noError = false;
+      }
+    }
+    if (noError) {
+      return;
     }
     GF256Poly syndrome = new GF256Poly(field, syndromeCoefficients);
-    if (!syndrome.isZero()) { // Error
-      GF256Poly[] sigmaOmega =
-          runEuclideanAlgorithm(field.buildMonomial(twoS, 1), syndrome, twoS);
-      int[] errorLocations = findErrorLocations(sigmaOmega[0]);
-      int[] errorMagnitudes = findErrorMagnitudes(sigmaOmega[1], errorLocations);
-      for (int i = 0; i < errorLocations.length; i++) {
-        int position = received.length - 1 - field.log(errorLocations[i]);
-        received[position] = GF256.addOrSubtract(received[position], errorMagnitudes[i]);
-      }
+    GF256Poly[] sigmaOmega =
+        runEuclideanAlgorithm(field.buildMonomial(twoS, 1), syndrome, twoS);
+    int[] errorLocations = findErrorLocations(sigmaOmega[0]);
+    int[] errorMagnitudes = findErrorMagnitudes(sigmaOmega[1], errorLocations);
+    for (int i = 0; i < errorLocations.length; i++) {
+      int position = received.length - 1 - field.log(errorLocations[i]);
+      received[position] = GF256.addOrSubtract(received[position], errorMagnitudes[i]);
     }
   }
 
@@ -131,31 +135,34 @@ public final class ReedSolomonDecoder {
     return new GF256Poly[]{sigma, omega};
   }
 
-  private int[] findErrorLocations(GF256Poly errorLocator)
-      throws ReedSolomonException {
+  private int[] findErrorLocations(GF256Poly errorLocator) throws ReedSolomonException {
     // This is a direct application of Chien's search
-    Vector errorLocations = new Vector(3);
-    for (int i = 1; i < 256; i++) {
+    int numErrors = errorLocator.getDegree();
+    if (numErrors == 1) { // shortcut
+      return new int[] { errorLocator.getCoefficient(1) };
+    }
+    int[] result = new int[numErrors];
+    int e = 0;
+    for (int i = 1; i < 256 && e < numErrors; i++) {
       if (errorLocator.evaluateAt(i) == 0) {
-        errorLocations.addElement(new Integer(field.inverse(i)));
+        result[e] = field.inverse(i);
+        e++;
       }
     }
-    if (errorLocations.size() != errorLocator.getDegree()) {
+    if (e != numErrors) {
       throw new ReedSolomonException("Error locator degree does not match number of roots");
-    }
-    int[] result = new int[errorLocations.size()]; // Can't use toArray() here
-    for (int i = 0; i < result.length; i++) {
-      result[i] = ((Integer) errorLocations.elementAt(i)).intValue();
     }
     return result;
   }
 
-  private int[] findErrorMagnitudes(GF256Poly errorEvaluator,
-                                           int[] errorLocations) {
+  private int[] findErrorMagnitudes(GF256Poly errorEvaluator, int[] errorLocations) {
     // This is directly applying Forney's Formula
     int s = errorLocations.length;
+    if (s == 1) { // shortcut
+      return new int[] { errorEvaluator.getCoefficient(0) };
+    }
     int[] result = new int[s];
-    for (int i = 0; i < errorLocations.length; i++) {
+    for (int i = 0; i < s; i++) {
       int xiInverse = field.inverse(errorLocations[i]);
       int denominator = 1;
       for (int j = 0; j < s; j++) {
