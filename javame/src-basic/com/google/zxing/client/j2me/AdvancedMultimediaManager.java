@@ -17,7 +17,6 @@
 package com.google.zxing.client.j2me;
 
 import javax.microedition.media.Controllable;
-import javax.microedition.media.MediaException;
 
 /**
  * <p>See this exact same class under the "src" source root for a full explanation.
@@ -34,11 +33,15 @@ final class AdvancedMultimediaManager {
 
   // These signatures must match those in the other class exactly
 
-  static void setFocus(Controllable player) throws MediaException {
+  static void setFocus(Controllable player) {
     // do nothing
   }
 
   static void setZoom(Controllable player) {
+    // do nothing
+  }
+
+  static void setExposure(Controllable player) {
     // do nothing
   }
 
