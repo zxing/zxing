@@ -141,6 +141,7 @@
   <target name="optimize" depends="compile" unless="debug">
     <jar basedir="${outdir-classes}" destfile="temp.jar"/>
     <java jar="${WTK-home}/bin/proguard.jar" fork="true" failonerror="true">
+     <jvmarg value="-Dmaximum.inlined.code.length=32"/>
      <arg value="-injars temp.jar"/>
      <arg value="-outjars optimized.jar"/>
      <arg value="-libraryjars ${android-jar}"/>
