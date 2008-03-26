@@ -51,7 +51,7 @@ public final class DefaultGridSampler extends GridSampler {
       transform.transformPoints(points);
       // Quick check to see if points transformed to something inside the image;
       // sufficent to check the endpoints
-      checkEndpoint(image, points);
+      checkAndNudgePoints(image, points);
       for (int j = 0; j < max; j += 2) {
         if (image.isBlack((int) points[j], (int) points[j + 1])) {
           // Black(-ish) pixel

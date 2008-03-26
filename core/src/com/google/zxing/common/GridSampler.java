@@ -98,40 +98,69 @@ public abstract class GridSampler {
 
   /**
    * <p>Checks a set of points that have been transformed to sample points on an image against
-   * the image's dimensions to see if the endpoints are even within the image.
-   * This method actually only checks the endpoints since the points are assumed to lie
-   * on a line.</p>
+   * the image's dimensions to see if the point are even within the image.</p>
    *
    * <p>This method will actually "nudge" the endpoints back onto the image if they are found to be barely
    * (less than 1 pixel) off the image. This accounts for imperfect detection of finder patterns in an image
    * where the QR Code runs all the way to the image border.</p>
    *
+   * <p>For efficiency, the method will check points from either end of the line until one is found
+   * to be within the image. Because the set of points are assumed to be linear, this is valid.</p>
+   *
    * @param image image into which the points should map
    * @param points actual points in x1,y1,...,xn,yn form
    * @throws ReaderException if an endpoint is lies outside the image boundaries
    */
-  protected static void checkEndpoint(MonochromeBitmapSource image, float[] points) throws ReaderException {
+  protected static void checkAndNudgePoints(MonochromeBitmapSource image, float[] points) throws ReaderException {
     int width = image.getWidth();
     int height = image.getHeight();
-    checkOneEndpoint(points, 0, width, height);
-    checkOneEndpoint(points, points.length - 2, width, height);
-  }
-
-  private static void checkOneEndpoint(float[] points, int offset, int width, int height) throws ReaderException {
-    int x = (int) points[offset];
-    int y = (int) points[offset + 1];
-    if (x < -1 || x > width || y < -1 || y > height) {
-      throw new ReaderException("Transformed point out of bounds at " + x + ',' + y);
+    // Check and nudge points from start until we see some that are OK:
+    boolean nudged = true;
+    for (int offset = 0; offset < points.length && nudged; offset += 2) {
+      int x = (int) points[offset];
+      int y = (int) points[offset + 1];
+      if (x < -1 || x > width || y < -1 || y > height) {
+        throw new ReaderException("Transformed point out of bounds at " + x + ',' + y);
+      }
+      nudged = false;
+      if (x == -1) {
+        points[offset] = 0.0f;
+        nudged = true;
+      } else if (x == width) {
+        points[offset] = width - 1;
+        nudged = true;
+      }
+      if (y == -1) {
+        points[offset + 1] = 0.0f;
+        nudged = true;
+      } else if (y == height) {
+        points[offset + 1] = height - 1;
+        nudged = true;
+      }
     }
-    if (x == -1) {
-      points[offset] = 0.0f;
-    } else if (x == width) {
-      points[offset] = width - 1;
-    }
-    if (y == -1) {
-      points[offset + 1] = 0.0f;
-    } else if (y == height) {
-      points[offset + 1] = height - 1;
+    // Check and nudge points from end:
+    nudged = true;
+    for (int offset = points.length - 2; offset >= 0 && nudged; offset -= 2) {
+      int x = (int) points[offset];
+      int y = (int) points[offset + 1];
+      if (x < -1 || x > width || y < -1 || y > height) {
+        throw new ReaderException("Transformed point out of bounds at " + x + ',' + y);
+      }
+      nudged = false;
+      if (x == -1) {
+        points[offset] = 0.0f;
+        nudged = true;
+      } else if (x == width) {
+        points[offset] = width - 1;
+        nudged = true;
+      }
+      if (y == -1) {
+        points[offset + 1] = 0.0f;
+        nudged = true;
+      } else if (y == height) {
+        points[offset + 1] = height - 1;
+        nudged = true;
+      }
     }
   }
 
