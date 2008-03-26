@@ -67,7 +67,7 @@ abstract class AbstractDoCoMoParsedResult extends ParsedReaderResult {
           if (matches == null) {
             matches = new Vector(3); // lazy init
           }
-          matches.addElement(unescape(rawText.substring(start, i)));
+          matches.addElement(unescapeBackslash(rawText.substring(start, i)));
           i++;
           done = true;
         }
@@ -91,29 +91,6 @@ abstract class AbstractDoCoMoParsedResult extends ParsedReaderResult {
   static String matchSinglePrefixedField(String prefix, String rawText, char endChar) {
     String[] matches = matchPrefixedField(prefix, rawText, endChar);
     return matches == null ? null : matches[0];
-  }
-
-  private static String unescape(String escaped) {
-    if (escaped != null) {
-      int backslash = escaped.indexOf((int) '\\');
-      if (backslash >= 0) {
-        int max = escaped.length();
-        StringBuffer unescaped = new StringBuffer(max - 1);
-        unescaped.append(escaped.toCharArray(), 0, backslash);
-        boolean nextIsEscaped = false;
-        for (int i = backslash; i < max; i++) {
-          char c = escaped.charAt(i);
-          if (nextIsEscaped || c != '\\') {
-            unescaped.append(c);
-            nextIsEscaped = false;
-          } else {
-            nextIsEscaped = true;
-          }
-        }
-        return unescaped.toString();
-      }
-    }
-    return escaped;
   }
 
   static void maybeAppend(String value, StringBuffer result) {

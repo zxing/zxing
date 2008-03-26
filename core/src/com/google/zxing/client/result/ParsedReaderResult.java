@@ -76,4 +76,27 @@ public abstract class ParsedReaderResult {
     return getDisplayResult();
   }
 
+  static String unescapeBackslash(String escaped) {
+    if (escaped != null) {
+      int backslash = escaped.indexOf((int) '\\');
+      if (backslash >= 0) {
+        int max = escaped.length();
+        StringBuffer unescaped = new StringBuffer(max - 1);
+        unescaped.append(escaped.toCharArray(), 0, backslash);
+        boolean nextIsEscaped = false;
+        for (int i = backslash; i < max; i++) {
+          char c = escaped.charAt(i);
+          if (nextIsEscaped || c != '\\') {
+            unescaped.append(c);
+            nextIsEscaped = false;
+          } else {
+            nextIsEscaped = true;
+          }
+        }
+        return unescaped.toString();
+      }
+    }
+    return escaped;
+  }
+
 }
