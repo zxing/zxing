@@ -138,9 +138,9 @@ public final class ReedSolomonDecoder {
   private int[] findErrorLocations(GF256Poly errorLocator) throws ReedSolomonException {
     // This is a direct application of Chien's search
     int numErrors = errorLocator.getDegree();
-    if (numErrors == 1) { // shortcut
-      return new int[] { errorLocator.getCoefficient(1) };
-    }
+    //if (numErrors == 1) { // shortcut
+    //  return new int[] { errorLocator.getCoefficient(1) };
+    //}
     int[] result = new int[numErrors];
     int e = 0;
     for (int i = 1; i < 256 && e < numErrors; i++) {
@@ -158,9 +158,9 @@ public final class ReedSolomonDecoder {
   private int[] findErrorMagnitudes(GF256Poly errorEvaluator, int[] errorLocations) {
     // This is directly applying Forney's Formula
     int s = errorLocations.length;
-    if (s == 1) { // shortcut
-      return new int[] { errorEvaluator.getCoefficient(0) };
-    }
+    //if (s == 1) { // shortcut
+    //  return new int[] { errorEvaluator.getCoefficient(0) };
+    //}
     int[] result = new int[s];
     for (int i = 0; i < s; i++) {
       int xiInverse = field.inverse(errorLocations[i]);
