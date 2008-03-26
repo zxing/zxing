@@ -108,7 +108,7 @@ public abstract class AbstractBlackBoxTestCase extends TestCase {
       if (passed) {
         passedCount++;
       } else {
-        System.out.println("Mismatch: expected '" + expectedText + "' but got '" + resultText + '\'');
+        fail("Mismatch: expected '" + expectedText + "' but got '" + resultText + '\'');
       }
 
       // Try "try harder" mode
