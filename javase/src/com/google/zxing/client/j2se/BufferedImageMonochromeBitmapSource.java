@@ -88,7 +88,6 @@ public final class BufferedImageMonochromeBitmapSource implements MonochromeBitm
       int width = image.getWidth();
       int height = image.getHeight();
       int[] histogram = new int[LUMINANCE_BUCKETS];
-      float biasTowardsWhite = 1.0f;
       if (method.equals(BlackPointEstimationMethod.TWO_D_SAMPLING)) {
         int minDimension = width < height ? width : height;
         int startI = height == minDimension ? 0 : (height - width) >> 1;
@@ -101,7 +100,6 @@ public final class BufferedImageMonochromeBitmapSource implements MonochromeBitm
         if (argument < 0 || argument >= height) {
           throw new IllegalArgumentException("Row is not within the image: " + argument);
         }
-        biasTowardsWhite = 2.0f;
         int[] rgbArray = new int[width];
         image.getRGB(0, argument, width, 1, rgbArray, 0, width);
         for (int x = 0; x < width; x++) {
@@ -110,7 +108,7 @@ public final class BufferedImageMonochromeBitmapSource implements MonochromeBitm
       } else {
         throw new IllegalArgumentException("Unknown method: " + method);
       }
-      blackPoint = BlackPointEstimator.estimate(histogram, biasTowardsWhite) << LUMINANCE_SHIFT;
+      blackPoint = BlackPointEstimator.estimate(histogram) << LUMINANCE_SHIFT;
       lastMethod = method;
       lastArgument = argument;
     }
