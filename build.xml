@@ -40,6 +40,7 @@
     <ant dir="javase" target="clean"/>
     <ant dir="android" target="clean"/>
     <ant dir="rim" target="clean"/>
+    <delete dir="docs/javadoc"/>
   </target>
 
   <target name="test">
