@@ -103,3 +103,22 @@
     applications.
   - "Result" object now returns raw bytes decoded; maybe useful in some cases
   - More unit tests for common code, EAN-8, UPC-E
+
+0.6 (28 Mar 2008)
+  - Updated android client to work on latest M5 SDK; M3-compatiable version
+    preserved in android-m3
+  - Added tel: URL support to clients
+  - Added geo: URL support; only enabled for Android client so far
+  - Added initial support for short NDEF messages, but not yet enabled
+  - Bug fix to corner-case of perspective transformation code
+  - Now attempts to configure camera's exposure controls if available
+  - Fixed rotation transform used in "try harder" mode; result did not
+    contain the whole image
+  - "Try harder" mode tries 2D formats first to avoid false positives
+    in detailed search for 1D codes, in some cases
+  - More aggressive inlining by ProGuard, notable performance boost
+  - Small Reed-Solomon optimizations for 0- and 1-error case
+  - Refactored GridSampler out into common package for use by Data Matrix
+  - GridSampler now smarter about bounds checking and point nudging;
+    should avoid some ArrayIndexOutOfBoundsException issues
+  - More unit tests

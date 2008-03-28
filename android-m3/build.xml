@@ -20,7 +20,7 @@
      build.xml file. -->
 <project name="BarcodeReader" default="package">
   <property file="../build.properties"/>
-  <property name="sdk-folder" value="${android-home}"/>
+  <property name="sdk-folder" value="${android-m3-home}"/>
   <property name="android-tools" value="${sdk-folder}/tools"/>
 
   <!-- The intermediates directory -->
@@ -58,10 +58,10 @@
 
   <target name="init">
     <tstamp/>
-    <fail message="Please set 'android-home' in build.properties">
+    <fail message="Please set 'android-m3-home' in build.properties">
       <condition>
         <not>
-          <available file="${android-home}" type="dir"/>
+          <available file="${android-m3-home}" type="dir"/>
         </not>
       </condition>
     </fail>
