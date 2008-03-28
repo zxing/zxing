@@ -16,10 +16,9 @@
 
 package com.google.zxing.client.android;
 
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.ContentURI;
-import android.os.Handler;
-import android.os.Message;
+import android.net.Uri;
 import android.provider.Contacts;
 import com.google.zxing.client.result.AddressBookAUParsedResult;
 import com.google.zxing.client.result.AddressBookDoCoMoParsedResult;
@@ -34,8 +33,6 @@ import com.google.zxing.client.result.UPCParsedResult;
 import com.google.zxing.client.result.URIParsedResult;
 import com.google.zxing.client.result.URLTOParsedResult;
 
-import java.net.URISyntaxException;
-
 /**
  * Handles the result of barcode decoding in the context of the Android platform,
  * by dispatching the proper intents and so on.
@@ -43,7 +40,7 @@ import java.net.URISyntaxException;
  * @author srowen@google.com (Sean Owen)
  * @author dswitkin@google.com (Daniel Switkin)
  */
-final class ResultHandler extends Handler {
+final class ResultHandler implements DialogInterface.OnClickListener {
 
   private final Intent intent;
   private final BarcodeReaderCaptureActivity captureActivity;
@@ -74,63 +71,38 @@ final class ResultHandler extends Handler {
       putExtra(intent, Contacts.Intents.Insert.POSTAL, addressResult.getAddress());
     } else if (type.equals(ParsedReaderResultType.BOOKMARK)) {
       // For now, we can only open the browser, and not actually add a bookmark
-      try {
-        intent = new Intent(Intent.VIEW_ACTION, new ContentURI(((BookmarkDoCoMoParsedResult) result).getURI()));
-      } catch (URISyntaxException e) {
-      }
+      intent = new Intent(Intent.VIEW_ACTION, Uri.parse(((BookmarkDoCoMoParsedResult) result).getURI()));
     } else if (type.equals(ParsedReaderResultType.URLTO)) {
-      try {
-        intent = new Intent(Intent.VIEW_ACTION, new ContentURI(((URLTOParsedResult) result).getURI()));
-      } catch (URISyntaxException e) {
-      }
+      intent = new Intent(Intent.VIEW_ACTION, Uri.parse(((URLTOParsedResult) result).getURI()));
     } else if (type.equals(ParsedReaderResultType.EMAIL)) {
       EmailDoCoMoParsedResult emailResult = (EmailDoCoMoParsedResult) result;
-      try {
-        intent = new Intent(Intent.SENDTO_ACTION, new ContentURI(emailResult.getTo()));
-      } catch (URISyntaxException e) {
-      }
+      intent = new Intent(Intent.SENDTO_ACTION, Uri.parse(emailResult.getTo()));
       putExtra(intent, "subject", emailResult.getSubject());
       putExtra(intent, "body", emailResult.getBody());
     } else if (type.equals(ParsedReaderResultType.EMAIL_ADDRESS)) {
       EmailAddressParsedResult emailResult = (EmailAddressParsedResult) result;
-      try {
-        intent = new Intent(Intent.SENDTO_ACTION, new ContentURI(emailResult.getEmailAddress()));
-      } catch (URISyntaxException e) {
-      }
+      intent = new Intent(Intent.SENDTO_ACTION, Uri.parse(emailResult.getEmailAddress()));
     } else if (type.equals(ParsedReaderResultType.TEL)) {
       TelParsedResult telResult = (TelParsedResult) result;
-      try {
-        intent = new Intent(Intent.DIAL_ACTION, new ContentURI("tel:" + telResult.getNumber()));
-      } catch (URISyntaxException e) {
-      }
+      intent = new Intent(Intent.DIAL_ACTION, Uri.parse("tel:" + telResult.getNumber()));
     } else if (type.equals(ParsedReaderResultType.GEO)) {
       GeoParsedResult geoResult = (GeoParsedResult) result;
-      try {
-        intent = new Intent(Intent.VIEW_ACTION, new ContentURI(geoResult.getGeoURI()));
-      } catch (URISyntaxException e) {
-      }
+      intent = new Intent(Intent.VIEW_ACTION, Uri.parse(geoResult.getGeoURI()));
     } else if (type.equals(ParsedReaderResultType.UPC)) {
       UPCParsedResult upcResult = (UPCParsedResult) result;
-      try {
-        ContentURI uri = new ContentURI("http://www.upcdatabase.com/item.asp?upc=" + upcResult.getUPC());
-        intent = new Intent(Intent.VIEW_ACTION, uri);
-      } catch (URISyntaxException e) {
-      }
+      Uri uri = Uri.parse("http://www.upcdatabase.com/item.asp?upc=" + upcResult.getUPC());
+      intent = new Intent(Intent.VIEW_ACTION, uri);
     } else if (type.equals(ParsedReaderResultType.URI)) {
       URIParsedResult uriResult = (URIParsedResult) result;
-      try {
-        intent = new Intent(Intent.VIEW_ACTION, new ContentURI(uriResult.getURI()));
-      } catch (URISyntaxException e) {
-      }
+      intent = new Intent(Intent.VIEW_ACTION, Uri.parse(uriResult.getURI()));
     } else if (type.equals(ParsedReaderResultType.ANDROID_INTENT)) {
       intent = ((AndroidIntentParsedResult) result).getIntent();
     }
     return intent;
   }
 
-  @Override
-  public void handleMessage(Message message) {
-    if (message.what == R.string.button_yes) {
+  public void onClick(DialogInterface dialogInterface, int i) {
+    if (i == DialogInterface.BUTTON1) {
       if (intent != null) {
         captureActivity.startActivity(intent);
       }

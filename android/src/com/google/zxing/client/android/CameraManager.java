@@ -18,6 +18,7 @@ package com.google.zxing.client.android;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Point;
 import android.graphics.Rect;
@@ -26,6 +27,8 @@ import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
 import com.google.zxing.ResultPoint;
+import com.tomgibara.android.camera.BitmapCamera;
+import com.tomgibara.android.camera.CameraSource;
 
 /**
  * This object wraps the CameraDevice and expects to be the only one talking to it. The
@@ -45,7 +48,10 @@ final class CameraManager {
   private Point screenResolution;
   private Rect framingRect;
   private final Bitmap bitmap;
-  private CameraDevice camera;
+  // TODO switch back to CameraDevice later
+  // private CameraDevice camera;
+  private CameraSource cameraSource;
+  // end TODO
   private final CameraDevice.CaptureParams params;
   private boolean previewMode;
 
@@ -54,34 +60,51 @@ final class CameraManager {
     calculateStillResolution();
     getScreenResolution();
     bitmap = Bitmap.createBitmap(stillResolution.x, stillResolution.y, false);
-    camera = CameraDevice.open();
+    // TODO switch back to CameraDevice later
+    // camera = CameraDevice.open();
+    Bitmap fakeBitmap = BitmapFactory.decodeFile("/tmp/barcode.jpg");
+    if (fakeBitmap == null) {
+      throw new RuntimeException("/tmp/barcode.jpg was not found");
+    }
+    cameraSource = new BitmapCamera(fakeBitmap, stillResolution.x, stillResolution.y);
+    // end TODO
     params = new CameraDevice.CaptureParams();
     previewMode = false;
     setPreviewMode(true);
   }
 
   public void openDriver() {
-    if (camera == null) {
-      camera = CameraDevice.open();
-    }
+    // TODO switch back to CameraDevice later
+    // if (camera == null) {
+    //  camera = CameraDevice.open();
+    // }
+    // end TODO
   }
 
   public void closeDriver() {
-    if (camera != null) {
-      camera.close();
-      camera = null;
-    }
+    // TODO switch back to CameraDevice later
+    // if (camera != null) {
+    //   camera.close();
+    //   camera = null;
+    // }
+    // end TODO
   }
 
   public void capturePreview(Canvas canvas) {
     setPreviewMode(true);
-    camera.capture(canvas);
+    // TODO switch back to CameraDevice later
+    // camera.capture(canvas);
+    cameraSource.capture(canvas);
+    // end TODO
   }
 
   public Bitmap captureStill() {
     setPreviewMode(false);
     Canvas canvas = new Canvas(bitmap);
-    camera.capture(canvas);
+    // TODO switch back to CameraDevice later
+    // camera.capture(canvas);
+    cameraSource.capture(canvas);
+    // end TODO
     return bitmap;
   }
 
@@ -124,8 +147,7 @@ final class CameraManager {
   }
 
   /**
-   * Images for the live preview are taken at low resolution in RGB. The final stills for the
-   * decoding step are taken in YUV, since we only need the luminance channel. Other code depends
+   * Images for the live preview are taken at low resolution in RGB. Other code depends
    * on the ability to call this method for free if the correct mode is already set.
    *
    * @param on Setting on true will engage preview mode, setting it false will request still mode.
@@ -164,7 +186,9 @@ final class CameraManager {
           " srcHeight " + params.srcHeight + " leftPixel " + params.leftPixel + " topPixel " +
           params.topPixel + " outputWidth " + params.outputWidth + " outputHeight " +
           params.outputHeight);
-      camera.setCaptureParams(params);
+      // TODO switch back to CameraDevice later
+      // camera.setCaptureParams(params);
+      // end TODO
       previewMode = on;
     }
   }
@@ -231,7 +255,7 @@ final class CameraManager {
 
   // Temporary: the minimum focus distance in inches.
   private static float getMinimumFocusDistance() {
-    return 12.0f;
+    return 6.0f;
   }
 
   private Point getScreenResolution() {

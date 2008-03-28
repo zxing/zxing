@@ -45,19 +45,14 @@ final class CameraSurfaceView extends SurfaceView implements SurfaceHolder.Callb
     // Install a SurfaceHolder.Callback so we get notified when the underlying surface is created
     // and destroyed.
     surfaceHolder = getHolder();
-    surfaceHolder.setCallback(this);
+    surfaceHolder.addCallback(this);
     hasSurface = false;
     scannerAlpha = 0;
     surfaceHolder.setSizeFromLayout();
   }
 
-  public boolean surfaceCreated(SurfaceHolder holder) {
+  public void surfaceCreated(SurfaceHolder holder) {
     hasSurface = true;
-
-    // Tell the system that we filled the surface in this call. This is a lie to prevent the system
-    // from filling the surface for us automatically. THIS IS REQUIRED because otherwise we'll
-    // access the Surface object from 2 different threads which is not allowed.
-    return true;
   }
 
   public void surfaceDestroyed(SurfaceHolder holder) {
@@ -150,6 +145,6 @@ final class CameraSurfaceView extends SurfaceView implements SurfaceHolder.Callb
 
       surfaceHolder.unlockCanvasAndPost(canvas);
     }
-	}
+  }
 	
 }
