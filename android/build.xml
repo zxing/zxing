@@ -1,5 +1,4 @@
-<?xml version="1.0" ?>
-
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
  Copyright (C) 2008 Google Inc.
 
@@ -22,6 +21,7 @@
   <property file="../build.properties"/>
   <property name="sdk-folder" value="${android-home}"/>
   <property name="android-tools" value="${sdk-folder}/tools"/>
+  <property name="android-framework" value="${android-tools}/lib/framework.aidl"/>
 
   <!-- The intermediates directory -->
   <!-- Eclipse uses "bin" for its own output, so we do the same. -->
@@ -51,8 +51,9 @@
   <property name="aapt" value="${android-tools}/aapt"/>
   <property name="aidl" value="${android-tools}/aidl"/>
   <property name="dx" value="${android-tools}/dx"/>
+  <property name="adb" value="${android-tools}/adb" />
+  <property name="android-jar" value="${sdk-folder}/android.jar" />
   <property name="zip" value="zip"/>
-  <property name="android-jar" value="${sdk-folder}/android.jar"/>
 
   <!-- Rules -->
 
@@ -119,6 +120,8 @@
   <!-- Generate java classes from .aidl files. -->
   <target name="aidl" depends="dirs">
     <apply executable="${aidl}" failonerror="true">
+      <arg value="-p${android-framework}"/>
+      <arg value="-I${srcdir}"/>
       <fileset dir="${srcdir}">
         <include name="**/*.aidl"/>
       </fileset>
@@ -185,7 +188,7 @@
       <arg value="--output=${intermediate-dex}"/>
       <arg value="--locals=${locals}"/>
       <arg value="--positions=${positions}"/>
-      <arg path="${outdir-classes}"/>
+      <arg path="${basedir}/${outdir-classes}"/>
     </exec>
   </target>
 
@@ -245,7 +248,11 @@ only when the assets dir exists. -->
          update="true"/>
   </target>
 
-  <!-- Put the project's .dex files into the output package file. -->
+  <!-- Put the project's .dex files into the output package file.
+       Use the "zip" command, available on most un*x/Linux/MacOS systems,
+       to create the new package (Ant 1.7 has an internal 'zip' command,
+       however Ant 1.6.5 lacks it and is still widely installed.)
+  -->
   <target name="package-dex" depends="dex, package-res">
     <echo>Packaging dex...</echo>
     <exec executable="${zip}" failonerror="true">
@@ -257,6 +264,15 @@ only when the assets dir exists. -->
 
   <!-- Create the package file for this project from the sources. -->
   <target name="package" depends="package-dex"/>
+
+  <!-- Install package on the default emulator -->
+  <target name="install">
+    <echo>Sending package to default emulator...</echo>
+    <exec executable="${adb}" failonerror="true">
+      <arg value="install" />
+      <arg value="${out-package}" />
+    </exec>
+  </target>
 
   <target name="clean">
     <delete dir="${outdir}"/>

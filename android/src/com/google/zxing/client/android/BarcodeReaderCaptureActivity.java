@@ -19,14 +19,12 @@ package com.google.zxing.client.android;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.Window;
-import android.view.WindowManager.LayoutParams;
 import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.client.result.ParsedReaderResult;
@@ -52,12 +50,6 @@ public final class BarcodeReaderCaptureActivity extends Activity {
     super.onCreate(icicle);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-    // Make sure to create a TRANSLUCENT window. This is required for SurfaceView to work.
-    // Eventually this'll be done by the system automatically.
-    getWindow().setAttributes(new LayoutParams(LayoutParams.APPLICATION_TYPE,
-        LayoutParams.NO_STATUS_BAR_FLAG));
-    getWindow().setFormat(PixelFormat.TRANSLUCENT);
-
     cameraManager = new CameraManager(getApplication());
     surfaceView = new CameraSurfaceView(getApplication(), cameraManager);
     setContentView(surfaceView);
@@ -67,14 +59,6 @@ public final class BarcodeReaderCaptureActivity extends Activity {
 
     // TODO re-enable this when issues with Matrix.setPolyToPoly() are resolved
     //GridSampler.setGridSampler(new AndroidGraphicsGridSampler());
-  }
-
-  @Override
-  protected boolean isFullscreenOpaque() {
-    // Our main window is set to translucent, but we know that we will
-    // fill it with opaque data. Tell the system that so it can perform
-    // some important optimizations.
-    return true;
   }
 
   @Override
@@ -120,9 +104,12 @@ public final class BarcodeReaderCaptureActivity extends Activity {
     switch (item.getId()) {
       case ABOUT_ID:
         Context context = getApplication();
-        showAlert(context.getString(R.string.title_about),
-            context.getString(R.string.msg_about),
-            context.getString(R.string.button_ok), null, true, null);
+        showAlert(
+          context.getString(R.string.title_about),
+          0,
+          context.getString(R.string.msg_about),
+          context.getString(R.string.button_ok),
+          true);
         break;
     }
     return super.onOptionsItemSelected(item);
@@ -137,9 +124,12 @@ public final class BarcodeReaderCaptureActivity extends Activity {
           break;
         case R.id.decoding_failed_message:
           Context context = getApplication();
-          showAlert(context.getString(R.string.title_no_barcode_detected),
-              context.getString(R.string.msg_no_barcode_detected),
-              context.getString(R.string.button_ok), null, true, null);
+          showAlert(
+            context.getString(R.string.title_no_barcode_detected),
+            0,
+            context.getString(R.string.msg_no_barcode_detected),
+            context.getString(R.string.button_ok),
+            true);
           break;
       }
     }
@@ -149,7 +139,6 @@ public final class BarcodeReaderCaptureActivity extends Activity {
     workerThread.requestPreviewLoop();
   }
 
-  // TODO(dswitkin): These deprecated showAlert calls need to be updated.
   private void handleDecode(Result rawResult) {
     ResultPoint[] points = rawResult.getResultPoints();
     if (points != null && points.length > 0) {
@@ -162,17 +151,26 @@ public final class BarcodeReaderCaptureActivity extends Activity {
     if (handler.getIntent() != null) {
       // Can be handled by some external app; ask if the user wants to
       // proceed first though
-      Message yesMessage = handler.obtainMessage(R.string.button_yes);
-      Message noMessage = handler.obtainMessage(R.string.button_no);
-      showAlert(context.getString(getDialogTitleID(readerResult.getType())),
-          readerResult.getDisplayResult(), context.getString(R.string.button_yes),
-          yesMessage, context.getString(R.string.button_no), noMessage, true, noMessage);
+      showAlert(
+        context.getString(getDialogTitleID(readerResult.getType())),
+        0,
+        readerResult.getDisplayResult(),
+        context.getString(R.string.button_yes),
+        handler,
+        context.getString(R.string.button_no),
+        null,
+        true,
+        null
+      );
+
     } else {
       // Just show information to user
-      Message okMessage = handler.obtainMessage(R.string.button_ok);
-      showAlert(context.getString(R.string.title_barcode_detected),
-          readerResult.getDisplayResult(), context.getString(R.string.button_ok), okMessage, null,
-          null, true, okMessage);
+      showAlert(
+        context.getString(R.string.title_barcode_detected),
+        0,
+        readerResult.getDisplayResult(),
+        context.getString(R.string.button_ok),
+        true);
     }
   }
 
