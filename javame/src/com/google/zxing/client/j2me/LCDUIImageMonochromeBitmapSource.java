@@ -134,9 +134,9 @@ public final class LCDUIImageMonochromeBitmapSource implements MonochromeBitmapS
     // corrupts the conversion. Not significant for our purposes.
     //
     // But we can get even cleverer and eliminate a few shifts:
-    return (((pixel & 0x00FF0000) >> 8)  +
-            ((pixel & 0x0000FF00) << 1) +
-            ((pixel & 0x000000FF) << 8)) >> 10;
+    return (((pixel & 0x00FF0000) >> 16)  +
+            ((pixel & 0x0000FF00) >>  7) +
+            ( pixel & 0x000000FF       )) >> 2;
   }
 
 }
