@@ -37,6 +37,9 @@ public final class UPCParsedResult extends ParsedReaderResult {
       return null;
     }
     String rawText = result.getText();
+    if (rawText == null) {
+      return null;
+    }
     int length = rawText.length();
     if (length != 12 && length != 13) {
       return null;

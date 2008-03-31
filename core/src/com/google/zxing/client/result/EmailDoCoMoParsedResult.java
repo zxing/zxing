@@ -40,7 +40,7 @@ public final class EmailDoCoMoParsedResult extends AbstractDoCoMoParsedResult {
 
   public static EmailDoCoMoParsedResult parse(Result result) {
     String rawText = result.getText();
-    if (!rawText.startsWith("MATMSG:")) {
+    if (rawText == null || !rawText.startsWith("MATMSG:")) {
       return null;
     }
     String[] rawTo = matchPrefixedField("TO:", rawText);
@@ -82,6 +82,9 @@ public final class EmailDoCoMoParsedResult extends AbstractDoCoMoParsedResult {
    * in a barcode, not "judge" it.
    */
   static boolean isBasicallyValidEmailAddress(String email) {
+    if (email == null) {
+      return false;
+    }
     int atIndex = email.indexOf('@');
     return atIndex >= 0 && email.indexOf('.') > atIndex && email.indexOf(' ') < 0;
   }

@@ -106,12 +106,52 @@ public final class ParsedReaderResultTestCase extends TestCase {
     doTestResult("telephone", ParsedReaderResultType.TEXT);
   }
 
+  /*
+  public void testNDEFText() {
+    doTestResult(new byte[] {(byte)0xD1,(byte)0x01,(byte)0x05,(byte)0x54,
+                             (byte)0x02,(byte)0x65,(byte)0x6E,(byte)0x68,
+                             (byte)0x69},
+                 ParsedReaderResultType.NDEF_TEXT);
+  }
+
+  public void testNDEFURI() {
+    doTestResult(new byte[] {(byte)0xD1,(byte)0x01,(byte)0x08,(byte)0x55,
+                             (byte)0x01,(byte)0x6E,(byte)0x66,(byte)0x63,
+                             (byte)0x2E,(byte)0x63,(byte)0x6F,(byte)0x6D},
+                 ParsedReaderResultType.NDEF_URI);
+  }
+
+  public void testNDEFSmartPoster() {
+    doTestResult(new byte[] {(byte)0xD1,(byte)0x02,(byte)0x2F,(byte)0x53,
+                             (byte)0x70,(byte)0x91,(byte)0x01,(byte)0x0E,
+                             (byte)0x55,(byte)0x01,(byte)0x6E,(byte)0x66,
+                             (byte)0x63,(byte)0x2D,(byte)0x66,(byte)0x6F,
+                             (byte)0x72,(byte)0x75,(byte)0x6D,(byte)0x2E,
+                             (byte)0x6F,(byte)0x72,(byte)0x67,(byte)0x11,
+                             (byte)0x03,(byte)0x01,(byte)0x61,(byte)0x63,
+                             (byte)0x74,(byte)0x00,(byte)0x51,(byte)0x01,
+                             (byte)0x12,(byte)0x54,(byte)0x05,(byte)0x65,
+                             (byte)0x6E,(byte)0x2D,(byte)0x55,(byte)0x53,
+                             (byte)0x48,(byte)0x65,(byte)0x6C,(byte)0x6C,
+                             (byte)0x6F,(byte)0x2C,(byte)0x20,(byte)0x77,
+                             (byte)0x6F,(byte)0x72,(byte)0x6C,(byte)0x64},
+                 ParsedReaderResultType.NDEF_SMART_POSTER);
+  }
+   */
+
   private static void doTestResult(String text, ParsedReaderResultType type) {
     doTestResult(text, type, null);
   }
 
   private static void doTestResult(String text, ParsedReaderResultType type, BarcodeFormat format) {
     Result fakeResult = new Result(text, null, null, format);
+    ParsedReaderResult result = ParsedReaderResult.parseReaderResult(fakeResult);
+    assertNotNull(result);
+    assertEquals(type, result.getType());
+  }
+
+  private static void doTestResult(byte[] rawBytes, ParsedReaderResultType type) {
+    Result fakeResult = new Result(null, rawBytes, null, null);
     ParsedReaderResult result = ParsedReaderResult.parseReaderResult(fakeResult);
     assertNotNull(result);
     assertEquals(type, result.getType());

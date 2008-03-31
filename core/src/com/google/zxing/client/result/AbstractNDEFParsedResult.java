@@ -30,35 +30,16 @@ import java.io.UnsupportedEncodingException;
  */
 abstract class AbstractNDEFParsedResult extends ParsedReaderResult {
 
-  /**
-   * MB  = 1 (start of record)
-   * ME  = 1 (also end of record)
-   * CF  = 0 (not a chunk)
-   * SR  = 1 (assume short record)
-   * ID  = 0 (ID length field omitted)
-   * TNF = 0 (= 1, well-known type)
-   *       0
-   *       1
-   */
-  private static final int HEADER_VALUE = 0xD1;
-  private static final int MASK = 0xFF;
-
   AbstractNDEFParsedResult(ParsedReaderResultType type) {
     super(type);
-  }
-
-  static boolean isMaybeNDEF(byte[] bytes) {
-    return
-        bytes != null &&
-        bytes.length >= 4 &&
-        ((bytes[0] & MASK) == HEADER_VALUE) && 
-        ((bytes[1] & 0xFF) == 1);
   }
 
   static String bytesToString(byte[] bytes, int offset, int length, String encoding) {
     try {
       return new String(bytes, offset, length, encoding);
     } catch (UnsupportedEncodingException uee) {
+      // This should only be used when 'encoding' is an encoding that must necessarily
+      // be supported by the JVM, like UTF-8
       throw new RuntimeException("Platform does not support required encoding: " + uee);
     }
   }
