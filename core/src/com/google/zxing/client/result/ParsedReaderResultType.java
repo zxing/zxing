@@ -39,6 +39,7 @@ public final class ParsedReaderResultType {
   // TODO later, add the NDEF types to those actually processed by the clients
   public static final ParsedReaderResultType NDEF_TEXT = new ParsedReaderResultType("NDEF_TEXT");
   public static final ParsedReaderResultType NDEF_URI = new ParsedReaderResultType("NDEF_URI");
+  public static final ParsedReaderResultType NDEF_SMART_POSTER = new ParsedReaderResultType("NDEF_SMART_POSTER");
 
   private final String name;
 

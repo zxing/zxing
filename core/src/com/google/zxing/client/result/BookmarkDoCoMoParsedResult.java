@@ -34,7 +34,7 @@ public final class BookmarkDoCoMoParsedResult extends AbstractDoCoMoParsedResult
 
   public static BookmarkDoCoMoParsedResult parse(Result result) {
     String rawText = result.getText();
-    if (!rawText.startsWith("MEBKM:")) {
+    if (rawText == null || !rawText.startsWith("MEBKM:")) {
       return null;
     }
     String title = matchSinglePrefixedField("TITLE:", rawText);

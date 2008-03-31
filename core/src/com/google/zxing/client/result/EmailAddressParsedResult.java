@@ -36,7 +36,7 @@ public final class EmailAddressParsedResult extends AbstractDoCoMoParsedResult {
   public static EmailAddressParsedResult parse(Result result) {
     String rawText = result.getText();
     String emailAddress;
-    if (rawText.startsWith("mailto:")) {
+    if (rawText != null && rawText.startsWith("mailto:")) {
       // If it starts with mailto:, assume it is definitely trying to be an email address
       emailAddress = rawText.substring(7);
     } else {

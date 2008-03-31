@@ -26,8 +26,6 @@ import com.google.zxing.Result;
  */
 public final class NDEFURIParsedResult extends AbstractNDEFParsedResult {
 
-  private static final byte URI_WELL_KNOWN_TYPE = (byte) 0x55;
-
   private static final String[] URI_PREFIXES = new String[] {
       null,
       "http://www.",
@@ -70,32 +68,34 @@ public final class NDEFURIParsedResult extends AbstractNDEFParsedResult {
   private final String uri;
 
   private NDEFURIParsedResult(String uri) {
-    super(ParsedReaderResultType.NDEF_TEXT);
+    super(ParsedReaderResultType.NDEF_URI);
     this.uri = uri;
   }
 
   public static NDEFURIParsedResult parse(Result result) {
     byte[] bytes = result.getRawBytes();
-    if (!isMaybeNDEF(bytes)) {
+    if (bytes == null) {
       return null;
     }
-
-    int payloadLength = bytes[2] & 0xFF;
-
-    // Next 1 byte is type
-    if (bytes[3] != URI_WELL_KNOWN_TYPE) {
+    NDEFRecord ndefRecord = NDEFRecord.readRecord(bytes, 0);
+    if (ndefRecord == null || !ndefRecord.isMessageBegin() || !ndefRecord.isMessageEnd()) {
       return null;
     }
+    if (!ndefRecord.getType().equals(NDEFRecord.URI_WELL_KNOWN_TYPE)) {
+      return null;
+    }
+    String fullURI = decodeURIPayload(ndefRecord.getPayload());
+    return new NDEFURIParsedResult(fullURI);
+  }
 
-    int identifierCode = bytes[4] & 0xFF;
+  static String decodeURIPayload(byte[] payload) {
+    int identifierCode = payload[0] & 0xFF;
     String prefix = null;
     if (identifierCode < URI_PREFIXES.length) {
       prefix = URI_PREFIXES[identifierCode];
     }
-
-    String restOfURI = bytesToString(bytes, 5, payloadLength - 1, "UTF-8");
-    String fullURI = prefix == null ? restOfURI : prefix + restOfURI;
-    return new NDEFURIParsedResult(fullURI);
+    String restOfURI = bytesToString(payload, 1, payload.length - 1, "UTF-8");
+    return prefix == null ? restOfURI : prefix + restOfURI;
   }
 
   public String getURI() {

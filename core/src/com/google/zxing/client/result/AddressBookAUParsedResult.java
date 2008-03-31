@@ -48,7 +48,7 @@ public final class AddressBookAUParsedResult extends ParsedReaderResult {
   public static AddressBookAUParsedResult parse(Result result) {
     String rawText = result.getText();
     // MEMORY is mandatory; seems like a decent indicator, as does end-of-record separator CR/LF
-    if (rawText.indexOf("MEMORY") < 0 || rawText.indexOf("\r\n") < 0) {
+    if (rawText == null || rawText.indexOf("MEMORY") < 0 || rawText.indexOf("\r\n") < 0) {
       return null;
     }
     String[] names = matchMultipleValuePrefix("NAME", 2, rawText);

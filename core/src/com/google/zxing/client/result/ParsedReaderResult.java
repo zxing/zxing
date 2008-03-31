@@ -68,6 +68,12 @@ public abstract class ParsedReaderResult {
       return result;
     } else if ((result = UPCParsedResult.parse(theResult)) != null) {
       return result;
+    //} else if ((result = NDEFTextParsedResult.parse(theResult)) != null) {
+    //  return result;
+    //} else if ((result = NDEFURIParsedResult.parse(theResult)) != null) {
+    //  return result;
+    //} else if ((result = NDEFSmartPosterParsedResult.parse(theResult)) != null) {
+    //  return result;
     }
     return TextParsedResult.parse(theResult);
   }

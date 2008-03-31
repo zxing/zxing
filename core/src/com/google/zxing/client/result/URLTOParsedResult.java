@@ -38,7 +38,7 @@ public final class URLTOParsedResult extends ParsedReaderResult {
 
   public static URLTOParsedResult parse(Result result) {
     String rawText = result.getText();
-    if (!rawText.startsWith("URLTO:")) {
+    if (rawText == null || !rawText.startsWith("URLTO:")) {
       return null;
     }
     int titleEnd = rawText.indexOf(':', 6);

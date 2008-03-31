@@ -34,7 +34,7 @@ public final class TelParsedResult extends ParsedReaderResult {
 
   public static TelParsedResult parse(Result result) {
     String rawText = result.getText();
-    if (!rawText.startsWith("tel:")) {
+    if (rawText == null || !rawText.startsWith("tel:")) {
       return null;
     }
     // Drop tel, query portion

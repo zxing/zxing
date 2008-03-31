@@ -74,7 +74,7 @@ public final class URIParsedResult extends ParsedReaderResult {
    * need to know when a string is obviously not a URI.
    */
   static boolean isBasicallyValidURI(String uri) {
-    return uri.indexOf(' ') < 0 && (uri.indexOf(':') >= 0 || uri.indexOf('.') >= 0);
+    return uri != null && uri.indexOf(' ') < 0 && (uri.indexOf(':') >= 0 || uri.indexOf('.') >= 0);
   }
 
 }

@@ -26,7 +26,6 @@ import com.google.zxing.Result;
  */
 public final class NDEFTextParsedResult extends AbstractNDEFParsedResult {
 
-  private static final byte TEXT_WELL_KNOWN_TYPE = (byte) 0x54;
 
   private final String language;
   private final String text;
@@ -39,27 +38,29 @@ public final class NDEFTextParsedResult extends AbstractNDEFParsedResult {
 
   public static NDEFTextParsedResult parse(Result result) {
     byte[] bytes = result.getRawBytes();
-    if (!isMaybeNDEF(bytes)) {
+    if (bytes == null) {
       return null;
     }
-
-    int payloadLength = bytes[2] & 0xFF;
-
-    // Next 1 byte is type
-    if (bytes[3] != TEXT_WELL_KNOWN_TYPE) {
+    NDEFRecord ndefRecord = NDEFRecord.readRecord(bytes, 0);
+    if (ndefRecord == null || !ndefRecord.isMessageBegin() || !ndefRecord.isMessageEnd()) {
       return null;
     }
+    if (!ndefRecord.getType().equals(NDEFRecord.TEXT_WELL_KNOWN_TYPE)) {
+      return null;
+    }
+    String[] languageText = decodeTextPayload(ndefRecord.getPayload());
+    return new NDEFTextParsedResult(languageText[0], languageText[1]);
+  }
 
-    // Text record
-    byte statusByte = bytes[4];
+  static String[] decodeTextPayload(byte[] payload) {
+    byte statusByte = payload[0];
     boolean isUTF16 = (statusByte & 0x80) != 0;
     int languageLength = statusByte & 0x1F;
-
     // language is always ASCII-encoded:
-    String language = bytesToString(bytes, 5, languageLength, "US-ASCII");
+    String language = bytesToString(payload, 1, languageLength, "US-ASCII");
     String encoding = isUTF16 ? "UTF-16" : "UTF-8";
-    String text = bytesToString(bytes, 5 + languageLength, payloadLength - languageLength - 1, encoding);
-    return new NDEFTextParsedResult(language, text);
+    String text = bytesToString(payload, 1 + languageLength, payload.length - languageLength - 1, encoding);
+    return new String[] { language, text };
   }
 
   public String getLanguage() {
