@@ -17,7 +17,7 @@
 
 <!-- This is a mildly hacked version of the auto-generated project
      build.xml file. -->
-<project name="BarcodeReader" default="package">
+<project name="BarcodeReaderM5" default="package">
   <property file="../build.properties"/>
   <property name="sdk-folder" value="${android-home}"/>
   <property name="android-tools" value="${sdk-folder}/tools"/>
@@ -45,7 +45,7 @@
   <property name="intermediate-dex" value="${outdir}/${dex-file}"/>
 
   <!-- The final package file to generate -->
-  <property name="out-package" value="${outdir}/${ant.project.name}.apk"/>
+  <property name="out-package" value="${outdir}/BarcodeReader.apk"/>
 
   <!-- Tools -->
   <property name="aapt" value="${android-tools}/aapt"/>
