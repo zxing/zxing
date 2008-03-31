@@ -29,22 +29,18 @@ public class BitmapCamera implements CameraSource {
 		paint.setAntiAlias(true);
 	}
 	
-	@Override
 	public int getWidth() {
 		return bounds.right;
 	}
 	
-	@Override
 	public int getHeight() {
 		return bounds.bottom;
 	}
 	
-	@Override
 	public boolean open() {
 		return true;
 	}
 	
-	@Override
 	public boolean capture(Canvas canvas) {
 		if (
 				bounds.right == bitmap.width() &&
@@ -56,7 +52,6 @@ public class BitmapCamera implements CameraSource {
 		return true;
 	}
 	
-	@Override
 	public void close() {
 		/* nothing to do */
 	}
