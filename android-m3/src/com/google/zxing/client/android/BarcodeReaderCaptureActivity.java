@@ -61,7 +61,7 @@ public final class BarcodeReaderCaptureActivity extends Activity {
     cameraManager = new CameraManager(getApplication());
     surfaceView = new CameraSurfaceView(getApplication(), cameraManager);
     setContentView(surfaceView);
-    workerThread = new WorkerThread(surfaceView, cameraManager, messageHandler);
+    workerThread = new WorkerThread(this, surfaceView, cameraManager, messageHandler);
     workerThread.requestPreviewLoop();
     workerThread.start();
 
@@ -82,7 +82,7 @@ public final class BarcodeReaderCaptureActivity extends Activity {
     super.onResume();
     cameraManager.openDriver();
     if (workerThread == null) {
-      workerThread = new WorkerThread(surfaceView, cameraManager, messageHandler);
+      workerThread = new WorkerThread(this, surfaceView, cameraManager, messageHandler);
       workerThread.requestPreviewLoop();
       workerThread.start();
     }
@@ -102,10 +102,16 @@ public final class BarcodeReaderCaptureActivity extends Activity {
   public boolean onKeyDown(int keyCode, KeyEvent event) {
     if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER) {
       workerThread.requestStillAndDecode();
-      return true;
+    } else if (keyCode == KeyEvent.KEYCODE_Q) {
+      workerThread.requestStillAndDecodeQR();
+    } else if (keyCode == KeyEvent.KEYCODE_U) {
+      workerThread.requestStillAndDecode1D();
+    } else if (keyCode == KeyEvent.KEYCODE_C) {
+      workerThread.requestStillAndSave();
     } else {
       return super.onKeyDown(keyCode, event);
     }
+    return true;
   }
 
   @Override
