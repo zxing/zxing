@@ -44,12 +44,15 @@ public final class CommandLineRunner {
     if (inputFile.exists()) {
       if (inputFile.isDirectory()) {
         int successful = 0;
+        int total = 0;
         for (File input : inputFile.listFiles()) {
           if (decode(input.toURI())) {
             successful++;
           }
+          total++;
         }
-        System.out.println("Decoded " + successful + " files successfully");
+        System.out.println("\nDecoded " + successful + " files out of " + total +
+            " successfully (" + (successful * 100 / total) + "%)");
       } else {
         decode(inputFile.toURI());
       }
@@ -76,17 +79,5 @@ public final class CommandLineRunner {
       return false;
     }
   }
-
-  /*
-  public BufferedImage toBufferedImage() {
-    BufferedImage image = new BufferedImage(dimension, dimension, BufferedImage.TYPE_BYTE_BINARY);
-    for (int j = 0; j < dimension; j++) {
-      for (int i = 0; i < dimension; i++) {
-        image.setRGB(j, i, get(i, j) ? 0x00000000 : 0x00FFFFFF);
-      }
-    }
-    return image;
-  }
-   */
 
 }
