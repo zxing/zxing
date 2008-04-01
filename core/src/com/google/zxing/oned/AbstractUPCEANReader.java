@@ -102,12 +102,10 @@ public abstract class AbstractUPCEANReader extends AbstractOneDReader implements
     return decodeRow(rowNumber, row, findStartGuardPattern(row));
   }
 
-  public final Result decodeRow(int rowNumber, BitArray row, int[] startGuardRange) throws ReaderException {
-
+  public final Result decodeRow(int rowNumber, BitArray row, int[] startGuardRange)
+      throws ReaderException {
     StringBuffer result = new StringBuffer();
-
     int endStart = decodeMiddle(row, startGuardRange, result);
-
     int[] endRange = decodeEnd(row, endStart);
 
     // Check for whitespace after the pattern
@@ -121,12 +119,13 @@ public abstract class AbstractUPCEANReader extends AbstractOneDReader implements
       throw new ReaderException("Checksum failed");
     }
 
-    return new Result(
-        resultString,
+    float left = (float) (startGuardRange[1] + startGuardRange[0]) / 2.0f;
+    float right = (float) (endRange[1] + endRange[0]) / 2.0f;
+    return new Result(resultString,
         null, // no natural byte representation for these barcodes
         new ResultPoint[]{
-            new GenericResultPoint((float) (startGuardRange[1] - startGuardRange[0]) / 2.0f, (float) rowNumber),
-            new GenericResultPoint((float) (endRange[1] - endRange[0]) / 2.0f, (float) rowNumber)},
+            new GenericResultPoint(left, (float) rowNumber),
+            new GenericResultPoint(right, (float) rowNumber)},
         getBarcodeFormat());
   }
 
@@ -241,10 +240,8 @@ public abstract class AbstractUPCEANReader extends AbstractOneDReader implements
    * @return horizontal offset of first pixel beyond the decoded digit
    * @throws ReaderException if digit cannot be decoded
    */
-  static int decodeDigit(BitArray row,
-                                   int[] counters,
-                                   int rowOffset,
-                                   int[][] patterns) throws ReaderException {
+  static int decodeDigit(BitArray row, int[] counters, int rowOffset, int[][] patterns)
+      throws ReaderException {
     recordPattern(row, rowOffset, counters);
     float bestVariance = MAX_VARIANCE; // worst variance we'll accept
     int bestMatch = -1;
