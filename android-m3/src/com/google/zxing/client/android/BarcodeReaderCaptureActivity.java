@@ -32,6 +32,8 @@ import com.google.zxing.ResultPoint;
 import com.google.zxing.client.result.ParsedReaderResult;
 import com.google.zxing.client.result.ParsedReaderResultType;
 
+import java.util.Date;
+
 /**
  * The barcode reader activity itself. This is loosely based on the CameraPreview
  * example included in the Android SDK.
@@ -44,6 +46,7 @@ public final class BarcodeReaderCaptureActivity extends Activity {
   private CameraManager cameraManager;
   private CameraSurfaceView surfaceView;
   private WorkerThread workerThread;
+  private Date decodeStart;
 
   private static final int ABOUT_ID = Menu.FIRST;
 
@@ -101,10 +104,13 @@ public final class BarcodeReaderCaptureActivity extends Activity {
   @Override
   public boolean onKeyDown(int keyCode, KeyEvent event) {
     if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER) {
+      decodeStart = new Date();
       workerThread.requestStillAndDecode();
     } else if (keyCode == KeyEvent.KEYCODE_Q) {
+      decodeStart = new Date();
       workerThread.requestStillAndDecodeQR();
     } else if (keyCode == KeyEvent.KEYCODE_U) {
+      decodeStart = new Date();
       workerThread.requestStillAndDecode1D();
     } else if (keyCode == KeyEvent.KEYCODE_C) {
       workerThread.requestStillAndSave();
@@ -137,14 +143,17 @@ public final class BarcodeReaderCaptureActivity extends Activity {
   private final Handler messageHandler = new Handler() {
     @Override
     public void handleMessage(Message message) {
+      Date now = new Date();
+      long duration = now.getTime() - decodeStart.getTime();
       switch (message.what) {
         case R.id.decoding_succeeded_message:
-          handleDecode((Result) message.obj);
+          handleDecode((Result) message.obj, duration);
           break;
         case R.id.decoding_failed_message:
           Context context = getApplication();
-          showAlert(context.getString(R.string.title_no_barcode_detected),
-              context.getString(R.string.msg_no_barcode_detected),
+          String title = context.getString(R.string.title_no_barcode_detected) +
+              " (" + duration + " ms)";
+          showAlert(title, context.getString(R.string.msg_no_barcode_detected),
               context.getString(R.string.button_ok), null, true, null);
           break;
       }
@@ -156,7 +165,7 @@ public final class BarcodeReaderCaptureActivity extends Activity {
   }
 
   // TODO(dswitkin): These deprecated showAlert calls need to be updated.
-  private void handleDecode(Result rawResult) {
+  private void handleDecode(Result rawResult, long duration) {
     ResultPoint[] points = rawResult.getResultPoints();
     if (points != null && points.length > 0) {
       surfaceView.drawResultPoints(points);
@@ -170,15 +179,17 @@ public final class BarcodeReaderCaptureActivity extends Activity {
       // proceed first though
       Message yesMessage = handler.obtainMessage(R.string.button_yes);
       Message noMessage = handler.obtainMessage(R.string.button_no);
-      showAlert(context.getString(getDialogTitleID(readerResult.getType())),
-          readerResult.getDisplayResult(), context.getString(R.string.button_yes),
+      String title = context.getString(getDialogTitleID(readerResult.getType())) +
+          " (" + duration + " ms)";
+      showAlert(title, readerResult.getDisplayResult(), context.getString(R.string.button_yes),
           yesMessage, context.getString(R.string.button_no), noMessage, true, noMessage);
     } else {
       // Just show information to user
       Message okMessage = handler.obtainMessage(R.string.button_ok);
-      showAlert(context.getString(R.string.title_barcode_detected),
-          readerResult.getDisplayResult(), context.getString(R.string.button_ok), okMessage, null,
-          null, true, okMessage);
+      String title = context.getString(R.string.title_barcode_detected) +
+          " (" + duration + " ms)";
+      showAlert(title, readerResult.getDisplayResult(), context.getString(R.string.button_ok),
+          okMessage, null, null, true, okMessage);
     }
   }
 
