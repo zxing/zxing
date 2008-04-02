@@ -42,4 +42,14 @@ public final class GenericResultPoint implements ResultPoint {
     return posY;
   }
 
+  public String toString() {
+    StringBuffer result = new StringBuffer();
+    result.append('(');
+    result.append(posX);
+    result.append(',');
+    result.append(posY);
+    result.append(')');
+    return result.toString();
+  }
+
 }
