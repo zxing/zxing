@@ -87,7 +87,10 @@ public abstract class AbstractOneDReader implements OneDReader {
     }
 
     Hashtable lastResults = null;
-    boolean skippingSomeBarcodes = hints != null && hints.containsKey(DecodeHintType.SKIP_N_BARCODES);
+    boolean skippingSomeBarcodes =
+      hints != null &&
+      hints.containsKey(DecodeHintType.SKIP_N_BARCODES) &&
+      ((Integer) hints.get(DecodeHintType.SKIP_N_BARCODES)).intValue() > 0;
 
     for (int x = 0; x < maxLines; x++) {
 
