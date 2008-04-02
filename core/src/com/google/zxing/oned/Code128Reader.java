@@ -405,12 +405,14 @@ public final class Code128Reader extends AbstractOneDReader {
     }
 
     String resultString = result.toString();
+    float left = (float) (startPatternInfo[1] + startPatternInfo[0]) / 2.0f;
+    float right = (float) (nextStart + lastStart) / 2.0f;
     return new Result(
         resultString,
         null,
         new ResultPoint[]{
-            new GenericResultPoint((float) (startPatternInfo[1] - startPatternInfo[0]) / 2.0f, (float) rowNumber),
-            new GenericResultPoint((float) (nextStart - lastStart) / 2.0f, (float) rowNumber)},
+            new GenericResultPoint(left, (float) rowNumber),
+            new GenericResultPoint(right, (float) rowNumber)},
         BarcodeFormat.CODE_128);
 
   }

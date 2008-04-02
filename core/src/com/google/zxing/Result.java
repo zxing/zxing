@@ -35,6 +35,9 @@ public final class Result {
                 byte[] rawBytes,
                 ResultPoint[] resultPoints,
                 BarcodeFormat format) {
+    if (text == null && rawBytes == null) {
+      throw new IllegalArgumentException("Text and bytes are null");
+    }
     this.text = text;
     this.rawBytes = rawBytes;
     this.resultPoints = resultPoints;
@@ -85,6 +88,14 @@ public final class Result {
       resultMetadata = new Hashtable(3);
     }
     resultMetadata.put(type, value);
+  }
+
+  public String toString() {
+    if (text == null) {
+      return "[" + rawBytes.length + " bytes]";
+    } else {
+      return text;
+    }
   }
 
 }

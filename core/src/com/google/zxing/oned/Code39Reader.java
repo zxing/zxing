@@ -138,12 +138,14 @@ public final class Code39Reader extends AbstractOneDReader {
     if (extendedMode) {
       resultString = decodeExtended(resultString);
     }
+    float left = (float) (start[1] + start[0]) / 2.0f;
+    float right = (float) (nextStart + lastStart) / 2.0f;
     return new Result(
         resultString,
         null,
         new ResultPoint[]{
-            new GenericResultPoint((float) (start[1] - start[0]) / 2.0f, (float) rowNumber),
-            new GenericResultPoint((float) (nextStart - lastStart) / 2.0f, (float) rowNumber)},
+            new GenericResultPoint(left, (float) rowNumber),
+            new GenericResultPoint(right, (float) rowNumber)},
         BarcodeFormat.CODE_39);
 
   }
