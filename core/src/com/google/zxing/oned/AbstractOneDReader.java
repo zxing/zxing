@@ -86,7 +86,11 @@ public abstract class AbstractOneDReader implements OneDReader {
       maxLines = 7;
     }
 
-    Hashtable lastResults = null;
+    // Remember last barcode to avoid thinking we've found a new barcode when
+    // we just rescanned the last one. Actually remember two, the last one
+    // found above and below.
+    String lastResultAboveText = null;
+    String lastResultBelowText = null;
     boolean skippingSomeBarcodes =
       hints != null &&
       hints.containsKey(DecodeHintType.SKIP_N_BARCODES) &&
@@ -126,13 +130,18 @@ public abstract class AbstractOneDReader implements OneDReader {
 
           // Look for a barcode
           Result result = decodeRow(rowNumber, row, hints);
+          String resultText = result.getText();
 
-          if (lastResults != null && lastResults.containsKey(result.getText())) {
+          // make sure we terminate inner loop after this because we found something
+          attempt = 1;
+          // See if we should skip and keep looking
+          if (( isAbove && resultText.equals(lastResultAboveText)) ||
+              (!isAbove && resultText.equals(lastResultBelowText))) {
             // Just saw the last barcode again, proceed
             continue;
           }
 
-          if (skippingSomeBarcodes) { // See if we should skip and keep looking
+          if (skippingSomeBarcodes) {
             int oldValue = ((Integer) hints.get(DecodeHintType.SKIP_N_BARCODES)).intValue();
             if (oldValue > 1) {
               hints.put(DecodeHintType.SKIP_N_BARCODES, new Integer(oldValue - 1));
@@ -140,10 +149,11 @@ public abstract class AbstractOneDReader implements OneDReader {
               hints.remove(DecodeHintType.SKIP_N_BARCODES);
               skippingSomeBarcodes = false;
             }
-            if (lastResults == null) {
-              lastResults = new Hashtable(3);
+            if (isAbove) {
+              lastResultAboveText = resultText;
+            } else {
+              lastResultBelowText = resultText;
             }
-            lastResults.put(result.getText(), Boolean.TRUE); // Remember what we just saw
           } else {
             // We found our barcode
             if (attempt == 1) {
@@ -155,6 +165,13 @@ public abstract class AbstractOneDReader implements OneDReader {
 
         } catch (ReaderException re) {
           // continue -- just couldn't decode this row
+          if (skippingSomeBarcodes) {
+            if (isAbove) {
+              lastResultAboveText = null;
+            } else {
+              lastResultBelowText = null;
+            }
+          }
         }
 
       }
