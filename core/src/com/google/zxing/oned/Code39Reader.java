@@ -67,7 +67,7 @@ public final class Code39Reader extends AbstractOneDReader {
    * It will not decoded "extended Code 39" sequences.
    *
    * @param usingCheckDigit if true, treat the last data character as a check digit, not
-   * data, and verify that the checksum passes
+   * data, and verify that the checksum passes.
    */
   public Code39Reader(boolean usingCheckDigit) {
     this.usingCheckDigit = usingCheckDigit;
@@ -80,9 +80,9 @@ public final class Code39Reader extends AbstractOneDReader {
    * the full ASCII character set.
    *
    * @param usingCheckDigit if true, treat the last data character as a check digit, not
-   * data, and verify that the checksum passes
-   * @param extendedMode if true, willa tetmpt to decode extended Code 39 sequences in the
-   * text
+   * data, and verify that the checksum passes.
+   * @param extendedMode if true, will attempt to decode extended Code 39 sequences in the
+   * text.
    */
   public Code39Reader(boolean usingCheckDigit, boolean extendedMode) {
     this.usingCheckDigit = usingCheckDigit;
