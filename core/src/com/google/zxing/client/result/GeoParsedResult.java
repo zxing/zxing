@@ -68,7 +68,7 @@ public final class GeoParsedResult extends ParsedReaderResult {
       longitude = Float.parseFloat(rawText.substring(latitudeEnd + 1, longitudeEnd));
       altitude = Float.parseFloat(rawText.substring(longitudeEnd + 1));
     }
-    return new GeoParsedResult(rawText, latitude, longitude, altitude);
+    return new GeoParsedResult("geo:" + rawText, latitude, longitude, altitude);
   }
 
   public String getGeoURI() {
