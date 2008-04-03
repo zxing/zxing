@@ -79,22 +79,11 @@ public abstract class AbstractOneDReader implements OneDReader {
     int middle = height >> 1;
     int rowStep = Math.max(1, height >> (tryHarder ? 7 : 4));
     int maxLines;
-    //if (tryHarder || barcodesToSkip > 0) {
     if (tryHarder) {
       maxLines = height; // Look at the whole image; looking for more than one barcode
     } else {
       maxLines = 7;
     }
-
-    // Remember last barcode to avoid thinking we've found a new barcode when
-    // we just rescanned the last one. Actually remember two, the last one
-    // found above and below.
-    String lastResultAboveText = null;
-    String lastResultBelowText = null;
-    boolean skippingSomeBarcodes =
-      hints != null &&
-      hints.containsKey(DecodeHintType.SKIP_N_BARCODES) &&
-      ((Integer) hints.get(DecodeHintType.SKIP_N_BARCODES)).intValue() > 0;
 
     for (int x = 0; x < maxLines; x++) {
 
@@ -117,7 +106,6 @@ public abstract class AbstractOneDReader implements OneDReader {
 
       // We may try twice for each row, if "trying harder":
       for (int attempt = 0; attempt < 2; attempt++) {
-
         if (attempt == 1) { // trying again?
           if (tryHarder) { // only if "trying harder"
             row.reverse(); // reverse the row and continue
@@ -125,55 +113,18 @@ public abstract class AbstractOneDReader implements OneDReader {
             break;
           }
         }
-
         try {
-
           // Look for a barcode
           Result result = decodeRow(rowNumber, row, hints);
-          String resultText = result.getText();
-
-          // make sure we terminate inner loop after this because we found something
-          attempt = 1;
-          // See if we should skip and keep looking
-          if (( isAbove && resultText.equals(lastResultAboveText)) ||
-              (!isAbove && resultText.equals(lastResultBelowText))) {
-            // Just saw the last barcode again, proceed
-            continue;
+          // We found our barcode
+          if (attempt == 1) {
+            // But it was upside down, so note that
+            result.putMetadata(ResultMetadataType.ORIENTATION, new Integer(180));
           }
-
-          if (skippingSomeBarcodes) {
-            int oldValue = ((Integer) hints.get(DecodeHintType.SKIP_N_BARCODES)).intValue();
-            if (oldValue > 1) {
-              hints.put(DecodeHintType.SKIP_N_BARCODES, new Integer(oldValue - 1));
-            } else {
-              hints.remove(DecodeHintType.SKIP_N_BARCODES);
-              skippingSomeBarcodes = false;
-            }
-            if (isAbove) {
-              lastResultAboveText = resultText;
-            } else {
-              lastResultBelowText = resultText;
-            }
-          } else {
-            // We found our barcode
-            if (attempt == 1) {
-              // But it was upside down, so note that
-              result.putMetadata(ResultMetadataType.ORIENTATION, new Integer(180));
-            }
-            return result;
-          }
-
+          return result;
         } catch (ReaderException re) {
           // continue -- just couldn't decode this row
-          if (skippingSomeBarcodes) {
-            if (isAbove) {
-              lastResultAboveText = null;
-            } else {
-              lastResultBelowText = null;
-            }
-          }
         }
-
       }
     }
 
