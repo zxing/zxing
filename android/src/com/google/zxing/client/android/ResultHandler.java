@@ -81,7 +81,7 @@ final class ResultHandler implements DialogInterface.OnClickListener {
       putExtra(intent, "body", emailResult.getBody());
     } else if (type.equals(ParsedReaderResultType.EMAIL_ADDRESS)) {
       EmailAddressParsedResult emailResult = (EmailAddressParsedResult) result;
-      intent = new Intent(Intent.SENDTO_ACTION, Uri.parse(emailResult.getEmailAddress()));
+      intent = new Intent(Intent.SENDTO_ACTION, Uri.parse("mailto:" + emailResult.getEmailAddress()));
     } else if (type.equals(ParsedReaderResultType.TEL)) {
       TelParsedResult telResult = (TelParsedResult) result;
       intent = new Intent(Intent.DIAL_ACTION, Uri.parse("tel:" + telResult.getNumber()));
