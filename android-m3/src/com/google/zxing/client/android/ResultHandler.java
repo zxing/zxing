@@ -21,6 +21,7 @@ import android.net.ContentURI;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Contacts;
+import android.util.Log;
 import com.google.zxing.client.result.AddressBookAUParsedResult;
 import com.google.zxing.client.result.AddressBookDoCoMoParsedResult;
 import com.google.zxing.client.result.BookmarkDoCoMoParsedResult;
@@ -44,6 +45,8 @@ import java.net.URISyntaxException;
  * @author dswitkin@google.com (Daniel Switkin)
  */
 final class ResultHandler extends Handler {
+
+  private static final String TAG = "ResultHandler";
 
   private final Intent intent;
   private final BarcodeReaderCaptureActivity captureActivity;
@@ -94,7 +97,7 @@ final class ResultHandler extends Handler {
     } else if (type.equals(ParsedReaderResultType.EMAIL_ADDRESS)) {
       EmailAddressParsedResult emailResult = (EmailAddressParsedResult) result;
       try {
-        intent = new Intent(Intent.SENDTO_ACTION, new ContentURI(emailResult.getEmailAddress()));
+        intent = new Intent(Intent.SENDTO_ACTION, new ContentURI("mailto:" + emailResult.getEmailAddress()));
       } catch (URISyntaxException e) {
       }
     } else if (type.equals(ParsedReaderResultType.TEL)) {
@@ -106,7 +109,9 @@ final class ResultHandler extends Handler {
     } else if (type.equals(ParsedReaderResultType.GEO)) {
       GeoParsedResult geoResult = (GeoParsedResult) result;
       try {
-        intent = new Intent(Intent.VIEW_ACTION, new ContentURI(geoResult.getGeoURI()));
+        ContentURI geoURI = new ContentURI("geo:" + geoResult.getGeoURI());
+        Log.v(TAG, "Created geo URI: " + geoURI.toString());
+        intent = new Intent(Intent.VIEW_ACTION, geoURI);
       } catch (URISyntaxException e) {
       }
     } else if (type.equals(ParsedReaderResultType.UPC)) {
