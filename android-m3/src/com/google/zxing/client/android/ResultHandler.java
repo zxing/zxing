@@ -109,7 +109,7 @@ final class ResultHandler extends Handler {
     } else if (type.equals(ParsedReaderResultType.GEO)) {
       GeoParsedResult geoResult = (GeoParsedResult) result;
       try {
-        ContentURI geoURI = new ContentURI("geo:" + geoResult.getGeoURI());
+        ContentURI geoURI = new ContentURI(geoResult.getGeoURI());
         Log.v(TAG, "Created geo URI: " + geoURI.toString());
         intent = new Intent(Intent.VIEW_ACTION, geoURI);
       } catch (URISyntaxException e) {
