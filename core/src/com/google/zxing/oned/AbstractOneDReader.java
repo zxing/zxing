@@ -131,7 +131,19 @@ public abstract class AbstractOneDReader implements OneDReader {
     throw new ReaderException("No barcode found");
   }
 
-  static void recordPattern(BitArray row, int start, int[] counters) throws ReaderException {
+  /**
+   * Records the size of successive runs of white and black pixels in a row, starting at a given point.
+   * The values are recorded in the given array, and the number of runs recorded is equal to the size
+   * of the array. If the row starts on a white pixel at the given start point, then the first count
+   * recorded is the run of white pixels starting from that point; likewise it is the count of a run
+   * of black pixels if the row begin on a black pixels at that point.
+   *
+   * @param row row to count from
+   * @param start offset into row to start at
+   * @param counters array into which to record counts
+   * @throws ReaderException if counters cannot be filled entirely from row before running out of pixels
+   */
+  public static void recordPattern(BitArray row, int start, int[] counters) throws ReaderException {
     int numCounters = counters.length;
     for (int i = 0; i < numCounters; i++) {
       counters[i] = 0;
@@ -174,7 +186,7 @@ public abstract class AbstractOneDReader implements OneDReader {
    * @param pattern expected pattern
    * @return average variance between counters and pattern
    */
-  static float patternMatchVariance(int[] counters, int[] pattern) {
+  public static float patternMatchVariance(int[] counters, int[] pattern) {
     int total = 0;
     int numCounters = counters.length;
     int patternLength = 0;
