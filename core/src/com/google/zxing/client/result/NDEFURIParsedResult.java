@@ -26,7 +26,7 @@ import com.google.zxing.Result;
  */
 public final class NDEFURIParsedResult extends AbstractNDEFParsedResult {
 
-  private static final String[] URI_PREFIXES = new String[] {
+  private static final String[] URI_PREFIXES = {
       null,
       "http://www.",
       "https://www.",

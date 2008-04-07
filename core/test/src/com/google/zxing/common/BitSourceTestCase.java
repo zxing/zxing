@@ -24,7 +24,7 @@ import junit.framework.TestCase;
 public final class BitSourceTestCase extends TestCase {
 
   public void testSource() {
-    byte[] bytes = new byte[]{(byte) 1, (byte) 2, (byte) 3, (byte) 4, (byte) 5};
+    byte[] bytes = {(byte) 1, (byte) 2, (byte) 3, (byte) 4, (byte) 5};
     BitSource source = new BitSource(bytes);
     assertEquals(40, source.available());
     assertEquals(0, source.readBits(1));

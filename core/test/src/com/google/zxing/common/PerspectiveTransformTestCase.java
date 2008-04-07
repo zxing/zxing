@@ -49,7 +49,7 @@ public final class PerspectiveTransformTestCase extends TestCase {
   }
 
   private static void assertPointEquals(float expectedX, float expectedY, float sourceX, float sourceY, PerspectiveTransform pt) {
-    float[] points = new float[]{sourceX, sourceY};
+    float[] points = {sourceX, sourceY};
     pt.transformPoints(points);
     assertEquals(expectedX, points[0], EPSILON);
     assertEquals(expectedY, points[1], EPSILON);

@@ -30,7 +30,7 @@ public final class Version {
    * See ISO 18004:2006 Annex D.
    * Element i represents the raw version bits that specify version i + 7
    */
-  private static final int[] VERSION_DECODE_INFO = new int[]{
+  private static final int[] VERSION_DECODE_INFO = {
       0x07C94, 0x085BC, 0x09A99, 0x0A4D3, 0x0BBF6,
       0x0C762, 0x0D847, 0x0E60D, 0x0F928, 0x10B78,
       0x1145D, 0x12A17, 0x13532, 0x149A6, 0x15683,

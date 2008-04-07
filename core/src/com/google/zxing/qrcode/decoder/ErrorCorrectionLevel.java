@@ -45,7 +45,7 @@ final class ErrorCorrectionLevel {
    */
   static final ErrorCorrectionLevel H = new ErrorCorrectionLevel(3);
 
-  private static final ErrorCorrectionLevel[] FOR_BITS = new ErrorCorrectionLevel[]{M, L, H, Q};
+  private static final ErrorCorrectionLevel[] FOR_BITS = {M, L, H, Q};
 
   private final int ordinal;
 

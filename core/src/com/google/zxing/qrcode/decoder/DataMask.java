@@ -32,7 +32,7 @@ abstract class DataMask {
   /**
    * See ISO 18004:2006 6.8.1
    */
-  private static final DataMask[] DATA_MASKS = new DataMask[]{
+  private static final DataMask[] DATA_MASKS = {
       new DataMask000(),
       new DataMask001(),
       new DataMask010(),
