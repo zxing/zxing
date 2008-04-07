@@ -33,7 +33,7 @@ final class FormatInformation {
   /**
    * See ISO 18004:2006, Annex C, Table C.1
    */
-  private static final int[][] FORMAT_INFO_DECODE_LOOKUP = new int[][]{
+  private static final int[][] FORMAT_INFO_DECODE_LOOKUP = {
       {0x5412, 0x00},
       {0x5125, 0x01},
       {0x5E7C, 0x02},
