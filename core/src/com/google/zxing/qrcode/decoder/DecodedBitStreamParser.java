@@ -60,7 +60,12 @@ final class DecodedBitStreamParser {
     Mode mode;
     do {
       // While still another segment to read...
-      mode = Mode.forBits(bits.readBits(4)); // mode is encoded by 4 bits
+      if (bits.available() == 0) {
+        // OK, assume we're done. Really, a TERMINATOR mode should have been recorded here
+        mode = Mode.TERMINATOR;
+      } else {
+        mode = Mode.forBits(bits.readBits(4)); // mode is encoded by 4 bits
+      }
       if (!mode.equals(Mode.TERMINATOR)) {
         // How many characters will follow, encoded in this mode?
         int count = bits.readBits(mode.getCharacterCountBits(version));
