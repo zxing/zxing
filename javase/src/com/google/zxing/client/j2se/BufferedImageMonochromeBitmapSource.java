@@ -32,11 +32,19 @@ import java.awt.image.BufferedImageOp;
  * underlying image as if it were a monochrome image. Behind the scenes, it is evaluating
  * the luminance of the underlying image by retrieving its pixels' RGB values.</p>
  *
+ * <p>This may also be used to construct a {@link MonochromeBitmapSource}
+ * based on a region of a {@link BufferedImage}; see
+ * {@link #BufferedImageMonochromeBitmapSource(BufferedImage, int, int, int, int)}.</p>
+ *
  * @author srowen@google.com (Sean Owen), Daniel Switkin (dswitkin@google.com)
  */
 public final class BufferedImageMonochromeBitmapSource implements MonochromeBitmapSource {
 
   private final BufferedImage image;
+  private final int left;
+  private final int top;
+  private final int width;
+  private final int height;
   private int blackPoint;
   private BlackPointEstimationMethod lastMethod;
   private int lastArgument;
@@ -46,18 +54,43 @@ public final class BufferedImageMonochromeBitmapSource implements MonochromeBitm
   private static final int LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
 
   public BufferedImageMonochromeBitmapSource(BufferedImage image) {
+    this(image, 0, 0, image.getWidth(), image.getHeight());
+  }
+
+  public BufferedImageMonochromeBitmapSource(BufferedImage image, int left, int top, int right, int bottom) {
     this.image = image;
     blackPoint = 0x7F;
     lastMethod = null;
     lastArgument = 0;
+    int sourceHeight = image.getHeight();
+    int sourceWidth = image.getWidth();
+    if (left < 0 || top < 0 || right >= sourceWidth || bottom >= sourceHeight || right <= left || bottom <= top) {
+      throw new IllegalArgumentException("Invalid bounds: (" + top + ',' + left + ") (" + right + ',' + bottom + ')');
+    }
+    this.left = left;
+    this.top = top;
+    this.width = right - left;
+    this.height = bottom - top;
   }
 
+  /**
+   * @return underlying {@link BufferedImage} behind this instance. Note that even if this instance
+   *  only uses a subset of the full image, the returned value here represents the entire backing image.
+   */
   public BufferedImage getImage() {
     return image;
   }
 
+  private int getRGB(int x, int y) {
+    return image.getRGB(left + x, top + y);
+  }
+
+  private void getRGBRow(int startX, int startY, int[] result) {
+    image.getRGB(left + startX, top + startY, result.length, 1, result, 0, result.length);
+  }
+
   public boolean isBlack(int x, int y) {
-    return computeRGBLuminance(image.getRGB(x, y)) < blackPoint;
+    return computeRGBLuminance(getRGB(x, y)) < blackPoint;
   }
 
   public BitArray getBlackRow(int y, BitArray row, int startX, int getWidth) {
@@ -66,7 +99,8 @@ public final class BufferedImageMonochromeBitmapSource implements MonochromeBitm
     } else {
       row.clear();
     }
-    int[] pixelRow = image.getRGB(startX, y, getWidth, 1, null, 0, getWidth);
+    int[] pixelRow = new int[getWidth];
+    getRGBRow(startX, y, pixelRow);
     for (int i = 0; i < getWidth; i++) {
       if (computeRGBLuminance(pixelRow[i]) < blackPoint) {
         row.set(i);
@@ -76,24 +110,22 @@ public final class BufferedImageMonochromeBitmapSource implements MonochromeBitm
   }
 
   public int getHeight() {
-    return image.getHeight();
+    return height;
   }
 
   public int getWidth() {
-    return image.getWidth();
+    return width;
   }
 
   public void estimateBlackPoint(BlackPointEstimationMethod method, int argument) throws ReaderException {
     if (!method.equals(lastMethod) || argument != lastArgument) {
-      int width = image.getWidth();
-      int height = image.getHeight();
       int[] histogram = new int[LUMINANCE_BUCKETS];
       if (method.equals(BlackPointEstimationMethod.TWO_D_SAMPLING)) {
         int minDimension = width < height ? width : height;
         int startI = height == minDimension ? 0 : (height - width) >> 1;
         int startJ = width == minDimension ? 0 : (width - height) >> 1;
         for (int n = 0; n < minDimension; n++) {
-          int pixel = image.getRGB(startJ + n, startI + n);
+          int pixel = getRGB(startJ + n, startI + n);
           histogram[computeRGBLuminance(pixel) >> LUMINANCE_SHIFT]++;
         }
       } else if (method.equals(BlackPointEstimationMethod.ROW_SAMPLING)) {
@@ -101,7 +133,7 @@ public final class BufferedImageMonochromeBitmapSource implements MonochromeBitm
           throw new IllegalArgumentException("Row is not within the image: " + argument);
         }
         int[] rgbArray = new int[width];
-        image.getRGB(0, argument, width, 1, rgbArray, 0, width);
+        getRGBRow(0, argument, rgbArray);
         for (int x = 0; x < width; x++) {
           histogram[computeRGBLuminance(rgbArray[x]) >> LUMINANCE_SHIFT]++;
         }
@@ -122,13 +154,19 @@ public final class BufferedImageMonochromeBitmapSource implements MonochromeBitm
     if (!isRotateSupported()) {
       throw new IllegalStateException("Rotate not supported");
     }
+    int sourceWidth = image.getWidth();
+    int sourceHeight = image.getHeight();
     // 90 degrees counterclockwise:
-    AffineTransform transform = new AffineTransform(0.0, -1.0, 1.0, 0.0, 0.0, image.getWidth());
+    AffineTransform transform = new AffineTransform(0.0, -1.0, 1.0, 0.0, 0.0, sourceWidth);
     BufferedImageOp op = new AffineTransformOp(transform, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
     // Note width/height are flipped since we are rotating 90 degrees:
-    BufferedImage rotatedImage = new BufferedImage(image.getHeight(), image.getWidth(), image.getType());
+    BufferedImage rotatedImage = new BufferedImage(sourceHeight, sourceWidth, image.getType());
     op.filter(image, rotatedImage);
-    return new BufferedImageMonochromeBitmapSource(rotatedImage);
+    return new BufferedImageMonochromeBitmapSource(rotatedImage,
+                                                   top,
+                                                   sourceWidth - (left + width),
+                                                   top + height,
+                                                   sourceWidth - left);
   }
 
   public boolean isRotateSupported() {
