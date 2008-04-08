@@ -34,8 +34,14 @@ final class CameraThread extends Thread {
   private final CameraSurfaceView surfaceView;
   private final Handler activityHandler;
   private final DecodeThread decodeThread;
-  private boolean requestDecode;
-  private boolean suspendPreview;
+  private State state;
+
+  private enum State {
+    PREVIEW,
+    DECODE,
+    SAVE,
+    DONE
+  }
 
   CameraThread(BarcodeReaderCaptureActivity activity, CameraSurfaceView surfaceView,
                CameraManager cameraManager, Handler activityHandler) {
@@ -44,8 +50,7 @@ final class CameraThread extends Thread {
 
     decodeThread = new DecodeThread(activity, cameraManager);
     decodeThread.start();
-    requestDecode = true;
-    suspendPreview = false;
+    state = State.DONE;
   }
 
   @Override
@@ -55,37 +60,38 @@ final class CameraThread extends Thread {
       public void handleMessage(Message message) {
         switch (message.what) {
           case R.id.preview:
-            if (!suspendPreview) {
+            if (state == State.PREVIEW) {
               surfaceView.capturePreviewAndDraw();
             }
             break;
           case R.id.save:
-            suspendPreview = true;
+            state = State.SAVE;
             Message save = Message.obtain(decodeThread.handler, R.id.save);
             save.sendToTarget();
             break;
           case R.id.restart_preview:
             restartPreviewAndDecode();
-            return;
+            break;
           case R.id.quit:
+            state = State.DONE;
             Message quit = Message.obtain(decodeThread.handler, R.id.quit);
             quit.sendToTarget();
             Looper.myLooper().quit();
             break;
           case R.id.decode_started:
             // Since the decoder is done with the camera, continue fetching preview frames.
-            suspendPreview = false;
+            state = State.PREVIEW;
             break;
           case R.id.decode_succeeded:
+            state = State.DONE;
             // Message.copyFrom() did not work as expected, hence this workaround.
             Message success = Message.obtain(activityHandler, R.id.decode_succeeded, message.obj);
             success.arg1 = message.arg1;
             success.sendToTarget();
-            suspendPreview = true;
             break;
           case R.id.decode_failed:
             // We're decoding as fast as possible, so when one fails, start another.
-            requestDecode = true;
+            startDecode();
             break;
           case R.id.save_succeeded:
             // TODO: Put up a non-blocking status message
@@ -94,15 +100,10 @@ final class CameraThread extends Thread {
           case R.id.save_failed:
             // TODO: Put up a blocking error message
             restartPreviewAndDecode();
-            return;
+            break;
         }
 
-        if (requestDecode) {
-          requestDecode = false;
-          suspendPreview = true;
-          Message decode = Message.obtain(decodeThread.handler, R.id.decode);
-          decode.sendToTarget();
-        } else if (!suspendPreview) {
+        if (state == State.PREVIEW) {
           Message preview = Message.obtain(handler, R.id.preview);
           preview.sendToTarget();
         }
@@ -111,8 +112,7 @@ final class CameraThread extends Thread {
     decodeThread.setCameraThreadHandler(handler);
 
     // Start ourselves capturing previews
-    Message preview = Message.obtain(handler, R.id.preview);
-    preview.sendToTarget();
+    restartPreviewAndDecode();
     Looper.loop();
   }
 
@@ -132,13 +132,23 @@ final class CameraThread extends Thread {
   }
 
   /**
+   * Start a decode if possible, but not now if the DecodeThread is in the middle of saving.
+   */
+  private void startDecode() {
+    if (state != State.SAVE) {
+      state = State.DECODE;
+      Message decode = Message.obtain(decodeThread.handler, R.id.decode);
+      decode.sendToTarget();
+    }
+  }
+
+  /**
    * Take one preview to update the screen, then do a decode and continue previews.
    */
   private void restartPreviewAndDecode() {
-    requestDecode = true;
-    suspendPreview = false;
-    Message preview = Message.obtain(handler, R.id.preview);
-    preview.sendToTarget();
+    state = State.PREVIEW;
+    surfaceView.capturePreviewAndDraw();
+    startDecode();
   }
 
 }
