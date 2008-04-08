@@ -45,17 +45,21 @@ final class CameraManager {
   private int stillMultiplier;
   private Point screenResolution;
   private Rect framingRect;
-  private final Bitmap bitmap;
+  private Bitmap bitmap;
   private CameraDevice camera;
   private final CameraDevice.CaptureParams params;
   private boolean previewMode;
+  private boolean usePreviewForDecode;
 
   CameraManager(Context context) {
     this.context = context;
     getScreenResolution();
     calculateStillResolution();
     calculatePreviewResolution();
-    bitmap = Bitmap.createBitmap(stillResolution.x, stillResolution.y, false);
+
+    usePreviewForDecode = true;
+    setUsePreviewForDecode(false);
+
     camera = CameraDevice.open();
     params = new CameraDevice.CaptureParams();
     previewMode = false;
@@ -84,10 +88,29 @@ final class CameraManager {
   }
 
   public Bitmap captureStill() {
-    setPreviewMode(false);
+    setPreviewMode(usePreviewForDecode);
     Canvas canvas = new Canvas(bitmap);
     camera.capture(canvas);
     return bitmap;
+  }
+
+  /**
+   * This method exists to help us evaluate how to best set up and use the camera.
+   * @param usePreview Decode at preview resolution if true, else use still resolution.
+   */
+  public void setUsePreviewForDecode(boolean usePreview) {
+    if (usePreviewForDecode != usePreview) {
+      usePreviewForDecode = usePreview;
+      if (usePreview) {
+        Log.v(TAG, "Creating bitmap at screen resolution: " + screenResolution.x + "," +
+            screenResolution.y);
+        bitmap = Bitmap.createBitmap(screenResolution.x, screenResolution.y, false);
+      } else {
+        Log.v(TAG, "Creating bitmap at still resolution: " + screenResolution.x + "," +
+            screenResolution.y);
+        bitmap = Bitmap.createBitmap(stillResolution.x, stillResolution.y, false);
+      }
+    }
   }
 
   /**
@@ -104,6 +127,7 @@ final class CameraManager {
       int leftOffset = (screenResolution.x - size) / 2;
       int topOffset = (screenResolution.y - size) / 2;
       framingRect = new Rect(leftOffset, topOffset, leftOffset + size, topOffset + size);
+      Log.v(TAG, "Calculated framing rect: " + framingRect);
     }
     return framingRect;
   }
@@ -122,8 +146,13 @@ final class CameraManager {
     Point[] output = new Point[count];
     for (int x = 0; x < count; x++) {
       output[x] = new Point();
-      output[x].x = frame.left + (int) (points[x].getX() * frameSize / stillResolution.x + 0.5f);
-      output[x].y = frame.top + (int) (points[x].getY() * frameSize / stillResolution.y + 0.5f);
+      if (usePreviewForDecode) {
+        output[x].x = (int) (points[x].getX() + 0.5f);
+        output[x].y = (int) (points[x].getY() + 0.5f);
+      } else {
+        output[x].x = frame.left + (int) (points[x].getX() * frameSize / stillResolution.x + 0.5f);
+        output[x].y = frame.top + (int) (points[x].getY() * frameSize / stillResolution.y + 0.5f);
+      }
     }
     return output;
   }

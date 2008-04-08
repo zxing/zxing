@@ -24,10 +24,7 @@ import com.google.zxing.common.BitArray;
 import com.google.zxing.common.BlackPointEstimator;
 
 /**
- * This object implements MonochromeBitmapSource around an Android Bitmap. Rather than capturing an
- * RGB image and calculating the grey value at each pixel, we ask the camera driver for YUV data and
- * strip out the luminance channel directly. This should be faster but provides fewer bits, i.e.
- * fewer grey levels.
+ * This object implements MonochromeBitmapSource around an Android Bitmap.
  *
  * @author dswitkin@google.com (Daniel Switkin)
  * @author srowen@google.com (Sean Owen)
@@ -61,7 +58,7 @@ final class RGBMonochromeBitmapSource implements MonochromeBitmapSource {
       row.clear();
     }
     int[] pixelRow = new int[getWidth];
-     image.getPixels(pixelRow, 0, getWidth, startX, y, getWidth, 1);
+    image.getPixels(pixelRow, 0, getWidth, startX, y, getWidth, 1);
     for (int i = 0; i < getWidth; i++) {
       if (computeRGBLuminance(pixelRow[i]) < blackPoint) {
         row.set(i);
@@ -124,6 +121,9 @@ final class RGBMonochromeBitmapSource implements MonochromeBitmapSource {
   /**
    * An optimized approximation of a more proper conversion from RGB to luminance which
    * only uses shifts. See BufferedImageMonochromeBitmapSource for an original version.
+   *
+   * @param pixel An ARGB input pixel
+   * @return An eight bit luminance value
    */
   private static int computeRGBLuminance(int pixel) {
     // Instead of multiplying by 306, 601, 117, we multiply by 256, 512, 256, so that

@@ -32,8 +32,6 @@ import com.google.zxing.ResultPoint;
 import com.google.zxing.client.result.ParsedReaderResult;
 import com.google.zxing.client.result.ParsedReaderResultType;
 
-import java.util.Date;
-
 /**
  * The barcode reader activity itself. This is loosely based on the CameraPreview
  * example included in the Android SDK.
@@ -45,10 +43,10 @@ public final class BarcodeReaderCaptureActivity extends Activity {
 
   private CameraManager cameraManager;
   private CameraSurfaceView surfaceView;
-  private WorkerThread workerThread;
-  private Date decodeStart;
+  private CameraThread cameraThread;
 
   private static final int ABOUT_ID = Menu.FIRST;
+  private static final int HELP_ID = Menu.FIRST + 1;
 
   @Override
   public void onCreate(Bundle icicle) {
@@ -64,9 +62,8 @@ public final class BarcodeReaderCaptureActivity extends Activity {
     cameraManager = new CameraManager(getApplication());
     surfaceView = new CameraSurfaceView(getApplication(), cameraManager);
     setContentView(surfaceView);
-    workerThread = new WorkerThread(this, surfaceView, cameraManager, messageHandler);
-    workerThread.requestPreviewLoop();
-    workerThread.start();
+    cameraThread = new CameraThread(this, surfaceView, cameraManager, messageHandler);
+    cameraThread.start();
 
     // TODO re-enable this when issues with Matrix.setPolyToPoly() are resolved
     //GridSampler.setGridSampler(new AndroidGraphicsGridSampler());
@@ -84,36 +81,38 @@ public final class BarcodeReaderCaptureActivity extends Activity {
   protected void onResume() {
     super.onResume();
     cameraManager.openDriver();
-    if (workerThread == null) {
-      workerThread = new WorkerThread(this, surfaceView, cameraManager, messageHandler);
-      workerThread.requestPreviewLoop();
-      workerThread.start();
+    if (cameraThread == null) {
+      cameraThread = new CameraThread(this, surfaceView, cameraManager, messageHandler);
+      cameraThread.start();
     }
   }
 
   @Override
   protected void onPause() {
     super.onPause();
-    if (workerThread != null) {
-      workerThread.requestExitAndWait();
-      workerThread = null;
+    if (cameraThread != null) {
+      Message quit = Message.obtain(cameraThread.handler, R.id.quit);
+      quit.sendToTarget();
+      cameraThread = null;
     }
     cameraManager.closeDriver();
   }
 
   @Override
   public boolean onKeyDown(int keyCode, KeyEvent event) {
-    if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER) {
-      decodeStart = new Date();
-      workerThread.requestStillAndDecode();
-    } else if (keyCode == KeyEvent.KEYCODE_Q) {
-      decodeStart = new Date();
-      workerThread.requestStillAndDecodeQR();
-    } else if (keyCode == KeyEvent.KEYCODE_U) {
-      decodeStart = new Date();
-      workerThread.requestStillAndDecode1D();
+    if (keyCode == KeyEvent.KEYCODE_A) {
+      cameraThread.setDecodeAllMode();
     } else if (keyCode == KeyEvent.KEYCODE_C) {
-      workerThread.requestStillAndSave();
+      Message save = Message.obtain(cameraThread.handler, R.id.save);
+      save.sendToTarget();
+    } else if (keyCode == KeyEvent.KEYCODE_P) {
+      cameraManager.setUsePreviewForDecode(true);
+    } else if (keyCode == KeyEvent.KEYCODE_Q) {
+      cameraThread.setDecodeQRMode();
+    } else if (keyCode == KeyEvent.KEYCODE_S) {
+      cameraManager.setUsePreviewForDecode(false);
+    } else if (keyCode == KeyEvent.KEYCODE_U) {
+      cameraThread.setDecode1DMode();
     } else {
       return super.onKeyDown(keyCode, event);
     }
@@ -124,16 +123,22 @@ public final class BarcodeReaderCaptureActivity extends Activity {
   public boolean onCreateOptionsMenu(Menu menu) {
     super.onCreateOptionsMenu(menu);
     menu.add(0, ABOUT_ID, R.string.menu_about);
+    menu.add(0, HELP_ID, R.string.menu_help);
     return true;
   }
 
   @Override
   public boolean onOptionsItemSelected(Menu.Item item) {
+    Context context = getApplication();
     switch (item.getId()) {
       case ABOUT_ID:
-        Context context = getApplication();
         showAlert(context.getString(R.string.title_about),
             context.getString(R.string.msg_about),
+            context.getString(R.string.button_ok), null, true, null);
+        break;
+      case HELP_ID:
+        showAlert(context.getString(R.string.title_help),
+            context.getString(R.string.msg_help),
             context.getString(R.string.button_ok), null, true, null);
         break;
     }
@@ -143,29 +148,22 @@ public final class BarcodeReaderCaptureActivity extends Activity {
   private final Handler messageHandler = new Handler() {
     @Override
     public void handleMessage(Message message) {
-      Date now = new Date();
-      long duration = now.getTime() - decodeStart.getTime();
       switch (message.what) {
-        case R.id.decoding_succeeded_message:
+        case R.id.decode_succeeded:
+          int duration = message.arg1;
           handleDecode((Result) message.obj, duration);
-          break;
-        case R.id.decoding_failed_message:
-          Context context = getApplication();
-          String title = context.getString(R.string.title_no_barcode_detected) +
-              " (" + duration + " ms)";
-          showAlert(title, context.getString(R.string.msg_no_barcode_detected),
-              context.getString(R.string.button_ok), null, true, null);
           break;
       }
     }
   };
 
   public void restartPreview() {
-    workerThread.requestPreviewLoop();
+    Message restart = Message.obtain(cameraThread.handler, R.id.restart_preview);
+    restart.sendToTarget();
   }
 
   // TODO(dswitkin): These deprecated showAlert calls need to be updated.
-  private void handleDecode(Result rawResult, long duration) {
+  private void handleDecode(Result rawResult, int duration) {
     ResultPoint[] points = rawResult.getResultPoints();
     if (points != null && points.length > 0) {
       surfaceView.drawResultPoints(points);
