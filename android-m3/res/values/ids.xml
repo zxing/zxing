@@ -15,6 +15,17 @@
  limitations under the License.
  -->
 <resources>
-  <item type="id" name="decoding_succeeded_message"/>
-  <item type="id" name="decoding_failed_message"/>
+  <item type="id" name="preview"/>
+  <item type="id" name="decode"/>
+  <item type="id" name="save"/>
+  <item type="id" name="restart_preview"/>
+  <item type="id" name="quit"/>
+  <item type="id" name="set_decode_all_mode"/>
+  <item type="id" name="set_decode_1D_mode"/>
+  <item type="id" name="set_decode_QR_mode"/>
+  <item type="id" name="decode_started"/>
+  <item type="id" name="decode_succeeded"/>
+  <item type="id" name="decode_failed"/>
+  <item type="id" name="save_succeeded"/>
+  <item type="id" name="save_failed"/>
 </resources>
