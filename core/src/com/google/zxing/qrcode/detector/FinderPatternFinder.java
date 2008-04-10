@@ -38,7 +38,8 @@ import java.util.Vector;
 final class FinderPatternFinder {
 
   private static final int CENTER_QUORUM = 2;
-  private static final int BIG_SKIP = 3;
+  private static final int MIN_SKIP = 3; // 1 pixel/module times 3 modules/center
+  private static final int MAX_MODULES = 57; // support up to version 10 for mobile clients
 
   private final MonochromeBitmapSource image;
   private final Vector possibleCenters;
@@ -62,9 +63,16 @@ final class FinderPatternFinder {
     // 1:1:3:1:1 ratio; this tracks the number of such modules seen so far
     int[] stateCount = new int[5];
     boolean done = false;
-    // We can afford to examine every few lines until we've started finding
-    // the patterns
-    int iSkip = tryHarder ? 1 : BIG_SKIP;
+
+    // Let's assume that the maximum version QR Code we support takes up 1/4 the height of the
+    // image, and then account for the center being 3 modules in size. This gives the smallest
+    // number of pixels the center could be, so skip this often. When trying harder, look for all
+    // QR versions regardless of how dense they are.
+    int iSkip = (int) (maxI / (MAX_MODULES * 4.0f) * 3);
+    if (iSkip < MIN_SKIP || tryHarder) {
+      iSkip = MIN_SKIP;
+    }
+
     for (int i = iSkip - 1; i < maxI && !done; i += iSkip) {
       // Get a row of black/white values
       BitArray blackRow = image.getBlackRow(i, null, 0, maxJ);
