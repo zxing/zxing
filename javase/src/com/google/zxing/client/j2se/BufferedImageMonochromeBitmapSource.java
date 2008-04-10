@@ -109,7 +109,7 @@ public final class BufferedImageMonochromeBitmapSource implements MonochromeBitm
   }
 
   public BitArray getBlackRow(int y, BitArray row, int startX, int getWidth) {
-    if (row == null) {
+    if (row == null || row.getSize() < getWidth) {
       row = new BitArray(getWidth);
     } else {
       row.clear();
