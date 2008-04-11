@@ -76,6 +76,10 @@ final class CameraThread extends Thread {
             state = State.DONE;
             Message quit = Message.obtain(decodeThread.handler, R.id.quit);
             quit.sendToTarget();
+            try {
+              decodeThread.join();
+            } catch (InterruptedException e) {
+            }
             Looper.myLooper().quit();
             break;
           case R.id.decode_started:
@@ -114,6 +118,15 @@ final class CameraThread extends Thread {
     // Start ourselves capturing previews
     restartPreviewAndDecode();
     Looper.loop();
+  }
+
+  public void quitSynchronously() {
+    Message quit = Message.obtain(handler, R.id.quit);
+    quit.sendToTarget();
+    try {
+      join();
+    } catch (InterruptedException e) {
+    }
   }
 
   public void setDecodeAllMode() {

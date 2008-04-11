@@ -91,8 +91,7 @@ public final class BarcodeReaderCaptureActivity extends Activity {
   protected void onPause() {
     super.onPause();
     if (cameraThread != null) {
-      Message quit = Message.obtain(cameraThread.handler, R.id.quit);
-      quit.sendToTarget();
+      cameraThread.quitSynchronously();
       cameraThread = null;
     }
     cameraManager.closeDriver();
