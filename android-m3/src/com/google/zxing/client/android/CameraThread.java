@@ -144,6 +144,11 @@ final class CameraThread extends Thread {
     message.sendToTarget();
   }
 
+  public void toggleTracing() {
+    Message message = Message.obtain(decodeThread.handler, R.id.toggle_tracing);
+    message.sendToTarget();
+  }
+
   /**
    * Start a decode if possible, but not now if the DecodeThread is in the middle of saving.
    */

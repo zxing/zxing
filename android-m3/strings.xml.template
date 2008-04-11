@@ -22,7 +22,7 @@
   <string name="menu_about">About...</string>
   <string name="menu_help">Help...</string>
   <string name="msg_about">ZXing Barcode Reader v@VERSION@\nhttp://code.google.com/p/zxing</string>
-  <string name="msg_help">A: Decode all barcodes\nC: Capture and save a JPEG\nP: Use the preview image for decoding\nQ: Decode only QR Codes\nS: Use a still image for decoding\nU: Decode only UPC/1D barcodes</string>
+  <string name="msg_help">A: Decode all barcodes\nC: Capture and save a JPEG\nP: Use the preview image for decoding\nQ: Decode only QR Codes\nS: Use a still image for decoding\nT: Toggle debug method tracing\nU: Decode only UPC/1D barcodes</string>
   <string name="title_about">About</string>
   <string name="title_add_contact">Add Contact?</string>
   <string name="title_barcode_detected">Barcode Detected</string>
