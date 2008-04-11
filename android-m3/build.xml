@@ -141,22 +141,27 @@
   <target name="optimize" depends="compile" unless="debug">
     <jar basedir="${outdir-classes}" destfile="temp.jar"/>
     <java jar="${WTK-home}/bin/proguard.jar" fork="true" failonerror="true">
-     <jvmarg value="-Dmaximum.inlined.code.length=32"/>
-     <arg value="-injars temp.jar"/>
-     <arg value="-outjars optimized.jar"/>
-     <arg value="-libraryjars ${android-jar}"/>
-     <arg value="-dontpreverify"/>
-     <arg value="-dontobfuscate"/>
-     <arg value="-keep public class com.google.zxing.client.android.BarcodeReaderCaptureActivity"/>
-     <arg value="-optimizationpasses 7"/>
-     <arg value="-overloadaggressively"/>
-     <arg value="-verbose"/>
-   </java>
-   <delete file="temp.jar"/>
-   <delete dir="${outdir-classes}"/>
-   <mkdir dir="${outdir-classes}"/>
-   <unzip src="optimized.jar" dest="${outdir-classes}"/>
-   <delete file="optimized.jar"/>
+      <jvmarg value="-Dmaximum.inlined.code.length=32"/>
+      <arg value="-injars temp.jar"/>
+      <arg value="-outjars optimized.jar"/>
+      <arg value="-libraryjars ${android-jar}"/>
+      <arg value="-dontpreverify"/>
+      <arg value="-dontobfuscate"/>
+      <!-- Temporary workaround to keep important stuff in the client, while inlining core. -->
+      <arg value="-keep class com.google.zxing.client.android.BarcodeReaderCaptureActivity { *; }"/>
+      <arg value="-keep class com.google.zxing.client.android.CameraManager { *; }"/>
+      <arg value="-keep class com.google.zxing.client.android.CameraThread { *; }"/>
+      <arg value="-optimizationpasses 7"/>
+      <arg value="-overloadaggressively"/>
+      <arg value="-verbose"/>
+      <!-- Needed to allow getters which refer to private members to be inlined. -->
+      <arg value="-allowaccessmodification"/>
+    </java>
+    <delete file="temp.jar"/>
+    <delete dir="${outdir-classes}"/>
+    <mkdir dir="${outdir-classes}"/>
+    <unzip src="optimized.jar" dest="${outdir-classes}"/>
+    <delete file="optimized.jar"/>
   </target>
 
   <!-- Convert this project's .class files into .dex files. -->
@@ -182,6 +187,7 @@
     <exec executable="${dx}" failonerror="true">
       <arg value="-JXmx384M"/>
       <arg value="--dex"/>
+      <arg value="--optimize"/>
       <arg value="--output=${intermediate-dex}"/>
       <arg value="--locals=${locals}"/>
       <arg value="--positions=${positions}"/>
