@@ -18,6 +18,7 @@ package com.google.zxing.client.android;
 
 import android.app.Application;
 import android.graphics.Bitmap;
+import android.os.Debug;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -51,10 +52,14 @@ final class DecodeThread extends Thread {
   private final CameraManager cameraManager;
   private Hashtable<DecodeHintType, Object> hints;
   private Handler cameraThreadHandler;
+  private int methodTraceCount;
+  private boolean tracing;
 
   DecodeThread(BarcodeReaderCaptureActivity activity, CameraManager cameraManager) {
     this.activity = activity;
     this.cameraManager = cameraManager;
+    methodTraceCount = 0;
+    tracing = false;
   }
 
   @Override
@@ -80,6 +85,9 @@ final class DecodeThread extends Thread {
             break;
           case R.id.set_decode_QR_mode:
             setDecodeQRMode();
+            break;
+          case R.id.toggle_tracing:
+            tracing = !tracing;
             break;
         }
       }
@@ -123,19 +131,32 @@ final class DecodeThread extends Thread {
     Message restart = Message.obtain(cameraThreadHandler, R.id.decode_started);
     restart.sendToTarget();
 
-    Result rawResult;
+    if (tracing) {
+      Debug.startMethodTracing("/sdcard/ZXingDecodeThread" + methodTraceCount);
+      methodTraceCount++;
+    }
+    boolean success;
+    Result rawResult = null;
     try {
       MonochromeBitmapSource source = new RGBMonochromeBitmapSource(bitmap);
       rawResult = new MultiFormatReader().decode(source, hints);
+      success = true;
     } catch (ReaderException e) {
-      Message failure = Message.obtain(cameraThreadHandler, R.id.decode_failed);
-      failure.sendToTarget();
-      return;
+      success = false;
+    }
+    if (tracing) {
+      Debug.stopMethodTracing();
     }
     Date endDate = new Date();
-    Message success = Message.obtain(cameraThreadHandler, R.id.decode_succeeded, rawResult);
-    success.arg1 = (int) (endDate.getTime() - startDate.getTime());
-    success.sendToTarget();
+
+    if (success) {
+      Message message = Message.obtain(cameraThreadHandler, R.id.decode_succeeded, rawResult);
+      message.arg1 = (int) (endDate.getTime() - startDate.getTime());
+      message.sendToTarget();
+    } else {
+      Message message = Message.obtain(cameraThreadHandler, R.id.decode_failed);
+      message.sendToTarget();
+    }
   }
 
   /**

@@ -110,6 +110,8 @@ public final class BarcodeReaderCaptureActivity extends Activity {
       cameraThread.setDecodeQRMode();
     } else if (keyCode == KeyEvent.KEYCODE_S) {
       cameraManager.setUsePreviewForDecode(false);
+    } else if (keyCode == KeyEvent.KEYCODE_T) {
+      cameraThread.toggleTracing();
     } else if (keyCode == KeyEvent.KEYCODE_U) {
       cameraThread.setDecode1DMode();
     } else {

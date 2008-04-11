@@ -23,6 +23,7 @@
   <item type="id" name="set_decode_all_mode"/>
   <item type="id" name="set_decode_1D_mode"/>
   <item type="id" name="set_decode_QR_mode"/>
+  <item type="id" name="toggle_tracing"/>
   <item type="id" name="decode_started"/>
   <item type="id" name="decode_succeeded"/>
   <item type="id" name="decode_failed"/>
