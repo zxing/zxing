@@ -60,10 +60,8 @@ final class CameraManager {
     usePreviewForDecode = true;
     setUsePreviewForDecode(false);
 
-    camera = CameraDevice.open();
+    camera = null;
     params = new CameraDevice.CaptureParams();
-    previewMode = false;
-    setPreviewMode(true);
   }
 
   public void openDriver() {
@@ -106,8 +104,8 @@ final class CameraManager {
             screenResolution.y);
         bitmap = Bitmap.createBitmap(screenResolution.x, screenResolution.y, false);
       } else {
-        Log.v(TAG, "Creating bitmap at still resolution: " + screenResolution.x + "," +
-            screenResolution.y);
+        Log.v(TAG, "Creating bitmap at still resolution: " + stillResolution.x + "," +
+            stillResolution.y);
         bitmap = Bitmap.createBitmap(stillResolution.x, stillResolution.y, false);
       }
     }
@@ -244,13 +242,15 @@ final class CameraManager {
   }
 
   private void calculatePreviewResolution() {
-    int previewHeight = (int) (stillResolution.x * stillMultiplier * 1.4f);
-    int previewWidth = previewHeight * screenResolution.x / screenResolution.y;
-    previewWidth = ((previewWidth + 7) >> 3) << 3;
-    if (previewWidth > cameraResolution.x) previewWidth = cameraResolution.x;
-    previewHeight = previewWidth * screenResolution.y / screenResolution.x;
-    previewResolution = new Point(previewWidth, previewHeight);
-    Log.v(TAG, "previewWidth " + previewWidth + " previewHeight " + previewHeight);
+    if (previewResolution == null) {
+      int previewHeight = (int) (stillResolution.x * stillMultiplier * 1.4f);
+      int previewWidth = previewHeight * screenResolution.x / screenResolution.y;
+      previewWidth = ((previewWidth + 7) >> 3) << 3;
+      if (previewWidth > cameraResolution.x) previewWidth = cameraResolution.x;
+      previewHeight = previewWidth * screenResolution.y / screenResolution.x;
+      previewResolution = new Point(previewWidth, previewHeight);
+      Log.v(TAG, "previewWidth " + previewWidth + " previewHeight " + previewHeight);
+    }
   }
 
   // FIXME(dswitkin): These three methods have temporary constants until the new Camera API can
