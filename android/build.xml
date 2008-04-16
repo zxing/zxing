@@ -42,7 +42,7 @@
 
   <!-- Intermediate files -->
   <property name="dex-file" value="classes.dex"/>
-  <property name="intermediate-dex" value="${outdir}/${dex-file}"/>
+  <property name="intermediate-dex" location="${outdir}/${dex-file}"/>
 
   <!-- The final package file to generate -->
   <property name="out-package" value="${outdir}/BarcodeReader.apk"/>
@@ -50,7 +50,10 @@
   <!-- Tools -->
   <property name="aapt" value="${android-tools}/aapt"/>
   <property name="aidl" value="${android-tools}/aidl"/>
-  <property name="dx" value="${android-tools}/dx"/>
+  <!-- dx is a special case as it is a .bat file on Windows -->
+  <condition property="dx" value="${android-tools}/dx.bat" else="${android-tools}/dx">
+    <os family="windows"/>
+  </condition>
   <property name="adb" value="${android-tools}/adb" />
   <property name="android-jar" value="${sdk-folder}/android.jar" />
   <property name="zip" value="zip"/>
@@ -173,7 +176,6 @@
     </condition>
 
     <exec executable="${dx}" failonerror="true">
-      <arg value="-JXmx384M"/>
       <arg value="--dex"/>
       <arg value="--output=${intermediate-dex}"/>
       <arg value="--locals=${locals}"/>
