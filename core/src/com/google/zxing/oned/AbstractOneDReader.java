@@ -206,4 +206,11 @@ public abstract class AbstractOneDReader implements OneDReader {
     return totalVariance / (float) patternLength;
   }
 
+  // This declaration should not be necessary, since this class is
+  // abstract and so does not have to provide an implementation for every
+  // method of an interface it implements, but it is causing NoSuchMethodError
+  // issues on some Nokia JVMs. So we add this superfluous declaration:
+
+  public abstract Result decodeRow(int rowNumber, BitArray row, Hashtable hints) throws ReaderException;
+
 }
