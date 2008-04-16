@@ -165,21 +165,11 @@
   <!-- Convert this project's .class files into .dex files. -->
   <target name="dex" depends="compile, optimize">
 
-    <condition property="locals" value="full">
+    <condition property="locals" value="full" else="none">
       <isset property="debug"/>
     </condition>
-    <condition property="locals" value="none">
-      <not>
-        <isset property="debug"/>
-      </not>
-    </condition>
-    <condition property="positions" value="lines">
+    <condition property="positions" value="lines" else="none">
       <isset property="debug"/>
-    </condition>
-    <condition property="positions" value="none">
-      <not>
-        <isset property="debug"/>
-      </not>
     </condition>
 
     <exec executable="${dx}" failonerror="true">
