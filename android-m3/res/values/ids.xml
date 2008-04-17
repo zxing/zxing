@@ -15,6 +15,7 @@
  limitations under the License.
  -->
 <resources>
+  <!-- Messages IDs -->
   <item type="id" name="preview"/>
   <item type="id" name="decode"/>
   <item type="id" name="save"/>
@@ -29,4 +30,10 @@
   <item type="id" name="decode_failed"/>
   <item type="id" name="save_succeeded"/>
   <item type="id" name="save_failed"/>
+
+  <!-- Objects in the view hierarchy -->
+  <item type="id" name="preview_view"/>
+  <item type="id" name="status_action_button"/>
+  <item type="id" name="status_text_view"/>
+  <item type="id" name="status_view"/>
 </resources>
