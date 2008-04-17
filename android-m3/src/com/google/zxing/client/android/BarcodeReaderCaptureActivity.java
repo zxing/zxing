@@ -25,8 +25,12 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.KeyEvent;
 import android.view.Menu;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager.LayoutParams;
+import android.widget.Button;
+import android.widget.TextView;
 import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.client.result.ParsedReaderResult;
@@ -44,6 +48,7 @@ public final class BarcodeReaderCaptureActivity extends Activity {
   private CameraManager cameraManager;
   private CameraSurfaceView surfaceView;
   private CameraThread cameraThread;
+  private String lastResult;
 
   private static final int ABOUT_ID = Menu.FIRST;
   private static final int HELP_ID = Menu.FIRST + 1;
@@ -59,11 +64,16 @@ public final class BarcodeReaderCaptureActivity extends Activity {
         LayoutParams.NO_STATUS_BAR_FLAG));
     getWindow().setFormat(PixelFormat.TRANSLUCENT);
 
+    setContentView(R.layout.main);
+
     cameraManager = new CameraManager(getApplication());
     surfaceView = new CameraSurfaceView(getApplication(), cameraManager);
-    setContentView(surfaceView);
-    cameraThread = new CameraThread(this, surfaceView, cameraManager, messageHandler);
-    cameraThread.start();
+    surfaceView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
+        LayoutParams.FILL_PARENT));
+
+    ViewGroup previewView = (ViewGroup) findViewById(R.id.preview_view);
+    previewView.addView(surfaceView);
+    cameraThread = null;
 
     // TODO re-enable this when issues with Matrix.setPolyToPoly() are resolved
     //GridSampler.setGridSampler(new AndroidGraphicsGridSampler());
@@ -80,6 +90,7 @@ public final class BarcodeReaderCaptureActivity extends Activity {
   @Override
   protected void onResume() {
     super.onResume();
+    resetStatusView();
     cameraManager.openDriver();
     if (cameraThread == null) {
       cameraThread = new CameraThread(this, surfaceView, cameraManager, messageHandler);
@@ -154,6 +165,9 @@ public final class BarcodeReaderCaptureActivity extends Activity {
           int duration = message.arg1;
           handleDecode((Result) message.obj, duration);
           break;
+        case R.id.restart_preview:
+          restartPreview();
+          break;
       }
     }
   };
@@ -163,33 +177,45 @@ public final class BarcodeReaderCaptureActivity extends Activity {
     restart.sendToTarget();
   }
 
-  // TODO(dswitkin): These deprecated showAlert calls need to be updated.
   private void handleDecode(Result rawResult, int duration) {
-    ResultPoint[] points = rawResult.getResultPoints();
-    if (points != null && points.length > 0) {
-      surfaceView.drawResultPoints(points);
-    }
+    if (!rawResult.toString().equals(lastResult)) {
+      lastResult = rawResult.toString();
 
-    Context context = getApplication();
-    ParsedReaderResult readerResult = parseReaderResult(rawResult);
-    ResultHandler handler = new ResultHandler(this, readerResult);
-    if (handler.getIntent() != null) {
-      // Can be handled by some external app; ask if the user wants to
-      // proceed first though
-      Message yesMessage = handler.obtainMessage(R.string.button_yes);
-      Message noMessage = handler.obtainMessage(R.string.button_no);
-      String title = context.getString(getDialogTitleID(readerResult.getType())) +
-          " (" + duration + " ms)";
-      showAlert(title, readerResult.getDisplayResult(), context.getString(R.string.button_yes),
-          yesMessage, context.getString(R.string.button_no), noMessage, true, noMessage);
+      ResultPoint[] points = rawResult.getResultPoints();
+      if (points != null && points.length > 0) {
+        surfaceView.drawResultPoints(points);
+      }
+
+      TextView textView = (TextView) findViewById(R.id.status_text_view);
+      ParsedReaderResult readerResult = parseReaderResult(rawResult);
+      textView.setText(readerResult.getDisplayResult() + " (" + duration + " ms)");
+
+      Button actionButton = (Button) findViewById(R.id.status_action_button);
+      int buttonText = getActionButtonText(readerResult.getType());
+      if (buttonText != 0) {
+        actionButton.setVisibility(View.VISIBLE);
+        actionButton.setText(buttonText);
+        ResultHandler handler = new ResultHandler(this, readerResult);
+        actionButton.setOnClickListener(handler);
+        actionButton.requestFocus();
+      } else {
+        actionButton.setVisibility(View.GONE);
+      }
+
+      // Show the green finder patterns for one second, then restart the preview
+      Message message = Message.obtain(messageHandler, R.id.restart_preview);
+      messageHandler.sendMessageDelayed(message, 1000);
     } else {
-      // Just show information to user
-      Message okMessage = handler.obtainMessage(R.string.button_ok);
-      String title = context.getString(R.string.title_barcode_detected) +
-          " (" + duration + " ms)";
-      showAlert(title, readerResult.getDisplayResult(), context.getString(R.string.button_ok),
-          okMessage, null, null, true, okMessage);
+      restartPreview();
     }
+  }
+
+  private void resetStatusView() {
+    TextView textView = (TextView) findViewById(R.id.status_text_view);
+    textView.setText(R.string.msg_default_status);
+    Button actionButton = (Button) findViewById(R.id.status_action_button);
+    actionButton.setVisibility(View.GONE);
+    lastResult = "";
   }
 
   private static ParsedReaderResult parseReaderResult(Result rawResult) {
@@ -209,25 +235,27 @@ public final class BarcodeReaderCaptureActivity extends Activity {
     return readerResult;
   }
 
-  private static int getDialogTitleID(ParsedReaderResultType type) {
+  private static int getActionButtonText(ParsedReaderResultType type) {
+    int buttonText;
     if (type.equals(ParsedReaderResultType.ADDRESSBOOK)) {
-      return R.string.title_add_contact;
+      buttonText = R.string.button_add_contact;
     } else if (type.equals(ParsedReaderResultType.URI) ||
                type.equals(ParsedReaderResultType.BOOKMARK) ||
                type.equals(ParsedReaderResultType.URLTO)) {
-      return R.string.title_open_url;
+      buttonText = R.string.button_open_browser;
     } else if (type.equals(ParsedReaderResultType.EMAIL) ||
                type.equals(ParsedReaderResultType.EMAIL_ADDRESS)) {
-      return R.string.title_compose_email;
+      buttonText = R.string.button_email;
     } else if (type.equals(ParsedReaderResultType.UPC)) {
-      return R.string.title_lookup_barcode;
+      buttonText = R.string.button_lookup_product;
     } else if (type.equals(ParsedReaderResultType.TEL)) {
-      return R.string.title_dial;
+      buttonText = R.string.button_dial;
     } else if (type.equals(ParsedReaderResultType.GEO)) {
-      return R.string.title_view_maps;
+      buttonText = R.string.button_show_map;
     } else {
-      return R.string.title_barcode_detected;
+      buttonText = 0;
     }
+    return buttonText;
   }
 
 }

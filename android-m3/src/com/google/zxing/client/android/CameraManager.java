@@ -241,9 +241,13 @@ final class CameraManager {
         " nativeResolution " + nativeResolution + " stillMultiplier " + stillMultiplier);
   }
 
+  /**
+   * The goal of the preview resolution is to show a little context around the framing rectangle
+   * which is the actual captured area in still mode.
+   */
   private void calculatePreviewResolution() {
     if (previewResolution == null) {
-      int previewHeight = (int) (stillResolution.x * stillMultiplier * 1.4f);
+      int previewHeight = (int) (stillResolution.x * stillMultiplier * 1.8f);
       int previewWidth = previewHeight * screenResolution.x / screenResolution.y;
       previewWidth = ((previewWidth + 7) >> 3) << 3;
       if (previewWidth > cameraResolution.x) previewWidth = cameraResolution.x;
