@@ -49,8 +49,7 @@ public abstract class AbstractBlackBoxTestCase extends TestCase {
   private static final FilenameFilter IMAGE_NAME_FILTER = new FilenameFilter() {
     public boolean accept(File dir, String name) {
       String lowerCase = name.toLowerCase();
-      return
-          lowerCase.endsWith(".jpg") || lowerCase.endsWith(".jpeg") ||
+      return lowerCase.endsWith(".jpg") || lowerCase.endsWith(".jpeg") ||
               lowerCase.endsWith(".gif") || lowerCase.endsWith(".png") ||
               lowerCase.endsWith(".url");
     }
@@ -58,16 +57,16 @@ public abstract class AbstractBlackBoxTestCase extends TestCase {
 
   private final File testBase;
   private final Reader barcodeReader;
-  private final double passPercent;
+  private final int mustPassCount;
   private final BarcodeFormat expectedFormat;
 
   protected AbstractBlackBoxTestCase(File testBase,
                                      Reader barcodeReader,
-                                     double passPercent,
+                                     int mustPassCount,
                                      BarcodeFormat expectedFormat) {
     this.testBase = testBase;
     this.barcodeReader = barcodeReader;
-    this.passPercent = passPercent;
+    this.mustPassCount = mustPassCount;
     this.expectedFormat = expectedFormat;
   }
 
@@ -99,8 +98,8 @@ public abstract class AbstractBlackBoxTestCase extends TestCase {
       assertEquals(expectedFormat, result.getBarcodeFormat());
 
       String testImageFileName = testImage.getName();
-      File expectedTextFile =
-          new File(testBase, testImageFileName.substring(0, testImageFileName.indexOf('.')) + ".txt");
+      File expectedTextFile = new File(testBase,
+          testImageFileName.substring(0, testImageFileName.indexOf('.')) + ".txt");
       String expectedText = readFileAsString(expectedTextFile);
       String resultText = result.getText();
 
@@ -116,16 +115,19 @@ public abstract class AbstractBlackBoxTestCase extends TestCase {
         result = barcodeReader.decode(source, TRY_HARDER_HINT);
       } catch (ReaderException re) {
         if (passed) {
-          fail("Normal mode succeed but \"try harder\" failed");
+          fail("Normal mode succeeded but \"try harder\" failed");
         }
         continue;
       }
-      assertEquals("Normal mode succeed but \"try harder\" failed", expectedFormat, result.getBarcodeFormat());
-      assertEquals("Normal mode succeed but \"try harder\" failed", expectedText, result.getText());
+      assertEquals("Normal mode succeeded but \"try harder\" failed", expectedFormat,
+          result.getBarcodeFormat());
+      assertEquals("Normal mode succeeded but \"try harder\" failed", expectedText,
+          result.getText());
     }
 
-    System.out.println(passedCount + " of " + imageFiles.length + " images passed");
-    assertTrue("Too many images failed", passedCount >= (int) (imageFiles.length * passPercent));
+    System.out.println(passedCount + " of " + imageFiles.length + " images passed (" +
+        mustPassCount + " required)");
+    assertTrue("Too many images failed", passedCount >= mustPassCount);
   }
 
   private static String readFileAsString(File file) throws IOException {
