@@ -46,7 +46,7 @@
     <jar jarfile="core.jar" basedir="build" level="9"/>
   </target>
 
-  <target name="test" depends="init,build">
+  <target name="build-test" depends="init,build">
     <fail message="Please build 'javase' first">
       <condition>
         <not>
@@ -65,6 +65,9 @@
         <pathelement location="lib/junit.jar"/>
       </classpath>
     </javac>
+  </target>
+
+  <target name="test-blackbox" depends="build-test">
     <junit printsummary="on" haltonfailure="on" haltonerror="on" fork="true" dir=".">
       <formatter type="plain" usefile="false"/>
       <classpath>
@@ -78,12 +81,34 @@
       </assertions>
       <batchtest>
         <fileset dir="test/src">
-          <include name="**/*TestCase.java"/>
+          <include name="**/*BlackBox*TestCase.java"/>
           <exclude name="com/google/zxing/common/AbstractBlackBoxTestCase.java"/>
         </fileset>
       </batchtest>
     </junit>
   </target>
+
+  <target name="test-unit" depends="build-test">
+    <junit printsummary="on" haltonfailure="on" haltonerror="on" fork="true" dir=".">
+      <formatter type="plain" usefile="false"/>
+      <classpath>
+        <pathelement location="build"/>
+        <pathelement location="build-test"/>
+        <pathelement location="../javase/javase.jar"/>
+        <pathelement location="lib/junit.jar"/>
+      </classpath>
+      <assertions>
+        <enable/>
+      </assertions>
+      <batchtest>
+        <fileset dir="test/src">
+          <exclude name="**/*BlackBox*TestCase.java"/>
+        </fileset>
+      </batchtest>
+    </junit>
+  </target>
+
+  <target name="test" depends="test-unit,test-blackbox"/>
 
   <target name="clean">
     <delete dir="build"/>
