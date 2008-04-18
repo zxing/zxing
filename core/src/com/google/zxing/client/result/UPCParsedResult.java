@@ -31,9 +31,11 @@ public final class UPCParsedResult extends ParsedReaderResult {
     this.upc = upc;
   }
 
+  // Treat all UPC and EAN variants as UPCs, in the sense that they are all product barcodes.
   public static UPCParsedResult parse(Result result) {
     BarcodeFormat format = result.getBarcodeFormat();
-    if (!BarcodeFormat.UPC_A.equals(format) && !BarcodeFormat.UPC_E.equals(format)) {
+    if (!BarcodeFormat.UPC_A.equals(format) && !BarcodeFormat.UPC_E.equals(format) &&
+        !BarcodeFormat.EAN_8.equals(format) && !BarcodeFormat.EAN_13.equals(format)) {
       return null;
     }
     String rawText = result.getText();
