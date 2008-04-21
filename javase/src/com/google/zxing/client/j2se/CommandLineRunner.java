@@ -29,35 +29,61 @@ import java.net.URI;
 import java.util.Hashtable;
 
 /**
- * <p>Simply attempts to decode the barcode in the image indicated by the single argument
- * to this program, which may be file or a URI. The raw text is printed.</p>
+ * <p>This simple command line utility decodes files, directories of files, or URIs which are passed
+ * as arguments. By default it uses the normal decoding algorithms, but you can pass --try_harder to
+ * request that hint. The raw text of each barcode is printed, and when running against directories,
+ * summary statistics are also displayed.</p>
  *
  * @author srowen@google.com (Sean Owen), dswitkin@google.com (Daniel Switkin)
  */
 public final class CommandLineRunner {
 
+  private static Hashtable<DecodeHintType, Object> hints = null;
+
   private CommandLineRunner() {
   }
 
   public static void main(String[] args) throws Exception {
-    File inputFile = new File(args[0]);
+    for (int x = 0; x < args.length; x++) {
+      if (args[x].equals("--try_harder")) {
+        hints = new Hashtable<DecodeHintType, Object>(3);
+        hints.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
+      } else if (args[x].startsWith("--")) {
+        System.out.println("Unknown command line option " + args[x]);
+        return;
+      }
+    }
+    for (int x = 0; x < args.length; x++) {
+      if (!args[x].startsWith("--")) {
+        decodeOneArgument(args[x]);
+      }
+    }
+  }
+
+  private static void decodeOneArgument(String argument) throws Exception {
+    File inputFile = new File(argument);
     if (inputFile.exists()) {
       if (inputFile.isDirectory()) {
         int successful = 0;
         int total = 0;
         for (File input : inputFile.listFiles()) {
+          String filename = input.getName().toLowerCase();
+          // Skip hidden files and text files (the latter is found in the blackbox tests).
+          if (filename.startsWith(".") || filename.endsWith(".txt")) {
+            continue;
+          }
           if (decode(input.toURI())) {
             successful++;
           }
           total++;
         }
         System.out.println("\nDecoded " + successful + " files out of " + total +
-            " successfully (" + (successful * 100 / total) + "%)");
+            " successfully (" + (successful * 100 / total) + "%)\n");
       } else {
         decode(inputFile.toURI());
       }
     } else {
-      decode(new URI(args[0]));
+      decode(new URI(argument));
     }
   }
 
@@ -68,8 +94,6 @@ public final class CommandLineRunner {
       return false;
     }
     try {
-      Hashtable<DecodeHintType, Object> hints = new Hashtable<DecodeHintType, Object>(3);
-      hints.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
       MonochromeBitmapSource source = new BufferedImageMonochromeBitmapSource(image);
       String result = new MultiFormatReader().decode(source, hints).getText();
       System.out.println(uri.toString() + ": " + result);
