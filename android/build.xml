@@ -62,7 +62,7 @@
 
   <target name="init">
     <tstamp/>
-    <fail message="Please set 'android-m5-home' in build.properties">
+    <fail message="Please set 'android-home' in build.properties">
       <condition>
         <not>
           <available file="${android-home}" type="dir"/>
