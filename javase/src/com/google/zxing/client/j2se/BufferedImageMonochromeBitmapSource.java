@@ -116,9 +116,28 @@ public final class BufferedImageMonochromeBitmapSource implements MonochromeBitm
     }
     int[] pixelRow = new int[getWidth];
     getRGBRow(startX, y, pixelRow);
-    for (int i = 0; i < getWidth; i++) {
-      if (computeRGBLuminance(pixelRow[i]) < blackPoint) {
-        row.set(i);
+
+    // If the current decoder calculated the blackPoint based on one row, assume we're trying to
+    // decode a 1D barcode, and apply some sharpening.
+    // TODO: We may want to add a fifth parameter to request the amount of shapening to be done.
+    if (lastMethod == BlackPointEstimationMethod.ROW_SAMPLING) {
+      int left = computeRGBLuminance(pixelRow[0]);
+      int center = computeRGBLuminance(pixelRow[1]);
+      for (int i = 1; i < getWidth - 1; i++) {
+        int right = computeRGBLuminance(pixelRow[i + 1]);
+        // Simple -1 4 -1 box filter with a weight of 2
+        int luminance = ((center << 2) - left - right) >> 1;
+        if (luminance < blackPoint) {
+          row.set(i);
+        }
+        left = center;
+        center = right;
+      }
+    } else {
+      for (int i = 0; i < getWidth; i++) {
+        if (computeRGBLuminance(pixelRow[i]) < blackPoint) {
+          row.set(i);
+        }
       }
     }
     return row;

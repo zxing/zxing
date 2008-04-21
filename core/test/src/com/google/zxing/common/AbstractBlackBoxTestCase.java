@@ -95,7 +95,11 @@ public abstract class AbstractBlackBoxTestCase extends TestCase {
         continue;
       }
 
-      assertEquals(expectedFormat, result.getBarcodeFormat());
+      if (expectedFormat != result.getBarcodeFormat()) {
+        System.out.println("Format mismatch: expected '" + expectedFormat + "' but got '" +
+            result.getBarcodeFormat() + '\'');
+        continue;
+      }
 
       String testImageFileName = testImage.getName();
       File expectedTextFile = new File(testBase,
@@ -107,7 +111,8 @@ public abstract class AbstractBlackBoxTestCase extends TestCase {
       if (passed) {
         passedCount++;
       } else {
-        fail("Mismatch: expected '" + expectedText + "' but got '" + resultText + '\'');
+        System.out.println("Mismatch: expected '" + expectedText + "' but got '" + resultText + '\'');
+        continue;
       }
 
       // Try "try harder" mode
@@ -119,10 +124,13 @@ public abstract class AbstractBlackBoxTestCase extends TestCase {
         }
         continue;
       }
-      assertEquals("Normal mode succeeded but \"try harder\" failed", expectedFormat,
-          result.getBarcodeFormat());
-      assertEquals("Normal mode succeeded but \"try harder\" failed", expectedText,
-          result.getText());
+      if (expectedFormat != result.getBarcodeFormat()) {
+        System.out.println("Try Harder Format mismatch: expected '" + expectedFormat + "' but got '" +
+            result.getBarcodeFormat() + '\'');
+      } else if (!expectedText.equals(resultText)) {
+        System.out.println("Try Harder Mismatch: expected '" + expectedText + "' but got '" +
+            resultText + '\'');
+      }
     }
 
     System.out.println(passedCount + " of " + imageFiles.length + " images passed (" +
