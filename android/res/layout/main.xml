@@ -14,8 +14,51 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="fill_parent"
-              android:layout_height="fill_parent"/>
+              android:layout_height="fill_parent">
 
+  <FrameLayout android:id="@+id/preview_view"
+             android:layout_width="fill_parent"
+             android:layout_height="fill_parent"/>
+
+  <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="#00000000">
+
+    <FrameLayout
+                 android:layout_width="fill_parent"
+                 android:layout_height="fill_parent"
+                 android:layout_weight="1"
+                 android:background="#00000000"/>
+
+    <LinearLayout android:id="@+id/status_view"
+                  android:orientation="horizontal"
+                  android:layout_width="fill_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_weight="0"
+                  android:background="#55000000"
+                  android:baselineAligned="false"
+                  android:padding="4px">
+
+      <TextView android:id="@+id/status_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center_vertical"
+                android:layout_weight="1"
+                android:text="@string/msg_default_status"
+                android:textColor="#ffffff"/>
+
+      <Button android:id="@+id/status_action_button"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center|fill_horizontal"
+              android:visibility="gone"/>
+
+    </LinearLayout>
+
+  </LinearLayout>
+
+</FrameLayout>

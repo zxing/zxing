@@ -16,20 +16,18 @@
  -->
 <resources>
   <string name="app_name">Barcode Reader</string>
-  <string name="button_no">No</string>
+  <string name="button_add_contact">Add Contact</string>
+  <string name="button_dial">Dial</string>
+  <string name="button_email">Email</string>
+  <string name="button_lookup_product">Lookup Product</string>
   <string name="button_ok">OK</string>
-  <string name="button_yes">Yes</string>
+  <string name="button_open_browser">Open Browser</string>
+  <string name="button_show_map">Show Map</string>
   <string name="menu_about">About...</string>
+  <string name="menu_help">Help...</string>
   <string name="msg_about">ZXing Barcode Reader v@VERSION@\nhttp://code.google.com/p/zxing</string>
-  <string name="msg_no_barcode_detected">Sorry, no barcode was found.</string>
+  <string name="msg_help">A: Decode all barcodes\nC: Capture and save a JPEG\nP: Use the preview image for decoding\nQ: Decode only QR Codes\nS: Use a still image for decoding\nT: Toggle debug method tracing\nU: Decode only UPC/1D barcodes</string>
+  <string name="msg_default_status">Place a barcode inside the viewfinder rectangle to read it.</string>
   <string name="title_about">About</string>
-  <string name="title_barcode_detected">Barcode Detected</string>
-  <string name="title_no_barcode_detected">No Barcode Detected</string>
-  <string name="title_error">Error</string>
-  <string name="title_open_url">Open Web Page?</string>
-  <string name="title_add_contact">Add Contact?</string>
-  <string name="title_compose_email">Compose E-mail?</string>
-  <string name="title_lookup_barcode">Look Up Barcode Online?</string>
-  <string name="title_dial">Dial Number?</string>
-  <string name="title_view_maps">View In Google Maps?</string>    
+  <string name="title_help">Keyboard Shortcut Help</string>
 </resources>
