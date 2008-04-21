@@ -16,31 +16,24 @@
 
 package com.google.zxing.client.android;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.Contacts;
-import com.google.zxing.client.result.AddressBookAUParsedResult;
-import com.google.zxing.client.result.AddressBookDoCoMoParsedResult;
-import com.google.zxing.client.result.BookmarkDoCoMoParsedResult;
-import com.google.zxing.client.result.EmailAddressParsedResult;
-import com.google.zxing.client.result.EmailDoCoMoParsedResult;
-import com.google.zxing.client.result.GeoParsedResult;
-import com.google.zxing.client.result.ParsedReaderResult;
-import com.google.zxing.client.result.ParsedReaderResultType;
-import com.google.zxing.client.result.TelParsedResult;
-import com.google.zxing.client.result.UPCParsedResult;
-import com.google.zxing.client.result.URIParsedResult;
-import com.google.zxing.client.result.URLTOParsedResult;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import com.google.zxing.client.result.*;
 
 /**
  * Handles the result of barcode decoding in the context of the Android platform,
- * by dispatching the proper intents and so on.
+ * by dispatching the proper intents to open other activities like GMail, Maps, etc.
  *
  * @author srowen@google.com (Sean Owen)
  * @author dswitkin@google.com (Daniel Switkin)
  */
-final class ResultHandler implements DialogInterface.OnClickListener {
+final class ResultHandler implements Button.OnClickListener {
+
+  private static final String TAG = "ResultHandler";
 
   private final Intent intent;
   private final BarcodeReaderCaptureActivity captureActivity;
@@ -101,13 +94,9 @@ final class ResultHandler implements DialogInterface.OnClickListener {
     return intent;
   }
 
-  public void onClick(DialogInterface dialogInterface, int i) {
-    if (i == DialogInterface.BUTTON1) {
-      if (intent != null) {
-        captureActivity.startActivity(intent);
-      }
-    } else {
-      captureActivity.restartPreview();
+  public void onClick(View view) {
+    if (intent != null) {
+      captureActivity.startActivity(intent);
     }
   }
 

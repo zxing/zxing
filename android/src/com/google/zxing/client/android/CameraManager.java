@@ -44,41 +44,49 @@ final class CameraManager {
   private final Context context;
   private Point cameraResolution;
   private Point stillResolution;
+  private Point previewResolution;
   private int stillMultiplier;
   private Point screenResolution;
   private Rect framingRect;
-  private final Bitmap bitmap;
+  private Bitmap bitmap;
   // TODO switch back to CameraDevice later
   // private CameraDevice camera;
   private CameraSource cameraSource;
   // end TODO
   private final CameraDevice.CaptureParams params;
   private boolean previewMode;
+  private boolean usePreviewForDecode;
 
   CameraManager(Context context) {
     this.context = context;
-    calculateStillResolution();
     getScreenResolution();
-    bitmap = Bitmap.createBitmap(stillResolution.x, stillResolution.y, false);
+    calculateStillResolution();
+    calculatePreviewResolution();
+
+    usePreviewForDecode = true;
+    setUsePreviewForDecode(false);
+
     // TODO switch back to CameraDevice later
-    // camera = CameraDevice.open();
+    // camera = null;
     Bitmap fakeBitmap = BitmapFactory.decodeFile("/tmp/barcode.jpg");
     if (fakeBitmap == null) {
       throw new RuntimeException("/tmp/barcode.jpg was not found");
     }
     cameraSource = new BitmapCamera(fakeBitmap, stillResolution.x, stillResolution.y);
     // end TODO
+
     params = new CameraDevice.CaptureParams();
-    previewMode = false;
-    setPreviewMode(true);
   }
 
   public void openDriver() {
-    // TODO switch back to CameraDevice later
-    // if (camera == null) {
-    //  camera = CameraDevice.open();
-    // }
-    // end TODO
+//    TODO switch back to CameraDevice later
+//    if (camera == null) {
+//      camera = CameraDevice.open();
+//      // If we're reopening the camera, we need to reset the capture params.
+//      previewMode = false;
+//      setPreviewMode(true);
+//    }
+//    end TODO
   }
 
   public void closeDriver() {
@@ -99,13 +107,32 @@ final class CameraManager {
   }
 
   public Bitmap captureStill() {
-    setPreviewMode(false);
+    setPreviewMode(usePreviewForDecode);
     Canvas canvas = new Canvas(bitmap);
     // TODO switch back to CameraDevice later
     // camera.capture(canvas);
     cameraSource.capture(canvas);
     // end TODO
     return bitmap;
+  }
+
+  /**
+   * This method exists to help us evaluate how to best set up and use the camera.
+   * @param usePreview Decode at preview resolution if true, else use still resolution.
+   */
+  public void setUsePreviewForDecode(boolean usePreview) {
+    if (usePreviewForDecode != usePreview) {
+      usePreviewForDecode = usePreview;
+      if (usePreview) {
+        Log.v(TAG, "Creating bitmap at screen resolution: " + screenResolution.x + "," +
+            screenResolution.y);
+        bitmap = Bitmap.createBitmap(screenResolution.x, screenResolution.y, false);
+      } else {
+        Log.v(TAG, "Creating bitmap at still resolution: " + stillResolution.x + "," +
+            stillResolution.y);
+        bitmap = Bitmap.createBitmap(stillResolution.x, stillResolution.y, false);
+      }
+    }
   }
 
   /**
@@ -118,10 +145,11 @@ final class CameraManager {
    */
   public Rect getFramingRect() {
     if (framingRect == null) {
-      int size = stillResolution.x * screenResolution.x / cameraResolution.x;
+      int size = stillResolution.x * screenResolution.x / previewResolution.x;
       int leftOffset = (screenResolution.x - size) / 2;
       int topOffset = (screenResolution.y - size) / 2;
       framingRect = new Rect(leftOffset, topOffset, leftOffset + size, topOffset + size);
+      Log.v(TAG, "Calculated framing rect: " + framingRect);
     }
     return framingRect;
   }
@@ -140,8 +168,13 @@ final class CameraManager {
     Point[] output = new Point[count];
     for (int x = 0; x < count; x++) {
       output[x] = new Point();
-      output[x].x = frame.left + (int) (points[x].getX() * frameSize / stillResolution.x + 0.5f);
-      output[x].y = frame.top + (int) (points[x].getY() * frameSize / stillResolution.y + 0.5f);
+      if (usePreviewForDecode) {
+        output[x].x = (int) (points[x].getX() + 0.5f);
+        output[x].y = (int) (points[x].getY() + 0.5f);
+      } else {
+        output[x].x = frame.left + (int) (points[x].getX() * frameSize / stillResolution.x + 0.5f);
+        output[x].y = frame.top + (int) (points[x].getY() * frameSize / stillResolution.y + 0.5f);
+      }
     }
     return output;
   }
@@ -156,18 +189,10 @@ final class CameraManager {
     if (on != previewMode) {
       if (on) {
         params.type = 1; // preview
-        if (cameraResolution.x / (float) cameraResolution.y <
-            screenResolution.x / (float) screenResolution.y) {
-          params.srcWidth = cameraResolution.x;
-          params.srcHeight = cameraResolution.x * screenResolution.y / screenResolution.x;
-          params.leftPixel = 0;
-          params.topPixel = (cameraResolution.y - params.srcHeight) / 2;
-        } else {
-          params.srcWidth = cameraResolution.y * screenResolution.x / screenResolution.y;
-          params.srcHeight = cameraResolution.y;
-          params.leftPixel = (cameraResolution.x - params.srcWidth) / 2;
-          params.topPixel = 0;
-        }
+        params.srcWidth = previewResolution.x;
+        params.srcHeight = previewResolution.y;
+        params.leftPixel = (cameraResolution.x - params.srcWidth) / 2;
+        params.topPixel = (cameraResolution.y - params.srcHeight) / 2;
         params.outputWidth = screenResolution.x;
         params.outputHeight = screenResolution.y;
         params.dataFormat = 2; // RGB565
@@ -239,6 +264,22 @@ final class CameraManager {
     stillResolution = new Point(nativeResolution, nativeResolution);
     Log.v(TAG, "FOV " + fov + " objectSize " + objectSize + " crop " + crop + " dpi " + dpi +
         " nativeResolution " + nativeResolution + " stillMultiplier " + stillMultiplier);
+  }
+
+  /**
+   * The goal of the preview resolution is to show a little context around the framing rectangle
+   * which is the actual captured area in still mode.
+   */
+  private void calculatePreviewResolution() {
+    if (previewResolution == null) {
+      int previewHeight = (int) (stillResolution.x * stillMultiplier * 1.8f);
+      int previewWidth = previewHeight * screenResolution.x / screenResolution.y;
+      previewWidth = ((previewWidth + 7) >> 3) << 3;
+      if (previewWidth > cameraResolution.x) previewWidth = cameraResolution.x;
+      previewHeight = previewWidth * screenResolution.y / screenResolution.x;
+      previewResolution = new Point(previewWidth, previewHeight);
+      Log.v(TAG, "previewWidth " + previewWidth + " previewHeight " + previewHeight);
+    }
   }
 
   // FIXME(dswitkin): These three methods have temporary constants until the new Camera API can
