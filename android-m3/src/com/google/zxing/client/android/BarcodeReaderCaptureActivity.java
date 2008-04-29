@@ -20,6 +20,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -173,6 +174,7 @@ public final class BarcodeReaderCaptureActivity extends Activity {
   };
 
   public void restartPreview() {
+    resetStatusViewColor();
     Message restart = Message.obtain(cameraThread.handler, R.id.restart_preview);
     restart.sendToTarget();
   }
@@ -180,6 +182,7 @@ public final class BarcodeReaderCaptureActivity extends Activity {
   private void handleDecode(Result rawResult, int duration) {
     if (!rawResult.toString().equals(lastResult)) {
       lastResult = rawResult.toString();
+      playBeepSound();
 
       ResultPoint[] points = rawResult.getResultPoints();
       if (points != null && points.length > 0) {
@@ -202,6 +205,9 @@ public final class BarcodeReaderCaptureActivity extends Activity {
         actionButton.setVisibility(View.GONE);
       }
 
+      View statusView = findViewById(R.id.status_view);
+      statusView.setBackgroundColor(0xc000ff00);
+
       // Show the green finder patterns for one second, then restart the preview
       Message message = Message.obtain(messageHandler, R.id.restart_preview);
       messageHandler.sendMessageDelayed(message, 1000);
@@ -210,12 +216,24 @@ public final class BarcodeReaderCaptureActivity extends Activity {
     }
   }
 
+  private void playBeepSound() {
+    MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.beep);
+    mediaPlayer.prepare();
+    mediaPlayer.start();
+  }
+
   private void resetStatusView() {
+    resetStatusViewColor();
     TextView textView = (TextView) findViewById(R.id.status_text_view);
     textView.setText(R.string.msg_default_status);
     Button actionButton = (Button) findViewById(R.id.status_action_button);
     actionButton.setVisibility(View.GONE);
     lastResult = "";
+  }
+
+  private void resetStatusViewColor() {
+    View statusView = findViewById(R.id.status_view);
+    statusView.setBackgroundColor(0x50000000);
   }
 
   private static ParsedReaderResult parseReaderResult(Result rawResult) {
