@@ -49,6 +49,7 @@
 
   <!-- Tools -->
   <property name="aapt" value="${android-tools}/aapt"/>
+  <property name="adb" value="${android-tools}/adb"/>
   <property name="aidl" value="${android-tools}/aidl"/>
   <!-- dx is a special case as it is a .bat file on Windows -->
   <condition property="dx" value="${android-tools}/dx.bat" else="${android-tools}/dx">
@@ -256,6 +257,15 @@ only when the assets dir exists. -->
 
   <!-- Create the package file for this project from the sources. -->
   <target name="package" depends="package-dex"/>
+
+  <!-- Install package on the default emulator -->
+  <target name="install">
+    <echo>Sending package to default emulator...</echo>
+    <exec executable="${adb}" failonerror="true">
+      <arg value="install" />
+      <arg value="${out-package}" />
+    </exec>
+  </target>
 
   <target name="clean">
     <delete dir="${outdir}"/>
