@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package com.google.zxing.client.result;
+package com.google.zxing.client.result.optional;
 
 import com.google.zxing.Result;
+import com.google.zxing.client.result.ParsedReaderResultType;
 
 /**
  * Recognizes an NDEF message that encodes text according to the
@@ -25,7 +26,6 @@ import com.google.zxing.Result;
  * @author srowen@google.com (Sean Owen)
  */
 public final class NDEFTextParsedResult extends AbstractNDEFParsedResult {
-
 
   private final String language;
   private final String text;

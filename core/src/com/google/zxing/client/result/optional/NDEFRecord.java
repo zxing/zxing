@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.zxing.client.result;
+package com.google.zxing.client.result.optional;
 
 /**
  * <p>Represents a record in an NDEF message. This class only supports certain types

@@ -93,13 +93,6 @@ abstract class AbstractDoCoMoParsedResult extends ParsedReaderResult {
     return matches == null ? null : matches[0];
   }
 
-  static void maybeAppend(String value, StringBuffer result) {
-    if (value != null) {
-      result.append('\n');
-      result.append(value);
-    }
-  }
-
   static void maybeAppend(String[] value, StringBuffer result) {
     if (value != null) {
       for (int i = 0; i < value.length; i++) {

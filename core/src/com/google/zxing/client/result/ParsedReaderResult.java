@@ -60,6 +60,8 @@ public abstract class ParsedReaderResult {
       return result;
     } else if ((result = TelParsedResult.parse(theResult)) != null) {
       return result;
+    } else if ((result = SMSParsedResult.parse(theResult)) != null) {
+      return result;
     } else if ((result = GeoParsedResult.parse(theResult)) != null) {
       return result;
     } else if ((result = URLTOParsedResult.parse(theResult)) != null) {
@@ -82,7 +84,14 @@ public abstract class ParsedReaderResult {
     return getDisplayResult();
   }
 
-  static String unescapeBackslash(String escaped) {
+  protected static void maybeAppend(String value, StringBuffer result) {
+    if (value != null) {
+      result.append('\n');
+      result.append(value);
+    }
+  }
+
+  protected static String unescapeBackslash(String escaped) {
     if (escaped != null) {
       int backslash = escaped.indexOf((int) '\\');
       if (backslash >= 0) {

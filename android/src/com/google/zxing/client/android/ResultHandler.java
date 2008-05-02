@@ -19,10 +19,21 @@ package com.google.zxing.client.android;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.Contacts;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import com.google.zxing.client.result.*;
+import com.google.zxing.client.result.AddressBookAUParsedResult;
+import com.google.zxing.client.result.AddressBookDoCoMoParsedResult;
+import com.google.zxing.client.result.BookmarkDoCoMoParsedResult;
+import com.google.zxing.client.result.EmailAddressParsedResult;
+import com.google.zxing.client.result.EmailDoCoMoParsedResult;
+import com.google.zxing.client.result.GeoParsedResult;
+import com.google.zxing.client.result.ParsedReaderResult;
+import com.google.zxing.client.result.ParsedReaderResultType;
+import com.google.zxing.client.result.SMSParsedResult;
+import com.google.zxing.client.result.TelParsedResult;
+import com.google.zxing.client.result.UPCParsedResult;
+import com.google.zxing.client.result.URIParsedResult;
+import com.google.zxing.client.result.URLTOParsedResult;
 
 /**
  * Handles the result of barcode decoding in the context of the Android platform,
@@ -31,7 +42,7 @@ import com.google.zxing.client.result.*;
  * @author srowen@google.com (Sean Owen)
  * @author dswitkin@google.com (Daniel Switkin)
  */
-final class ResultHandler implements Button.OnClickListener {
+final class ResultHandler implements Button.OnClickListenear {
 
   private static final String TAG = "ResultHandler";
 
@@ -75,6 +86,9 @@ final class ResultHandler implements Button.OnClickListener {
     } else if (type.equals(ParsedReaderResultType.EMAIL_ADDRESS)) {
       EmailAddressParsedResult emailResult = (EmailAddressParsedResult) result;
       intent = new Intent(Intent.SENDTO_ACTION, Uri.parse("mailto:" + emailResult.getEmailAddress()));
+    } else if (type.equals(ParsedReaderResultType.SMS)) {
+      SMSParsedResult smsResult = (SMSParsedResult) result;
+      intent = new Intent(Intent.SENDTO_ACTION, Uri.parse(smsResult.getSMSURI()));
     } else if (type.equals(ParsedReaderResultType.TEL)) {
       TelParsedResult telResult = (TelParsedResult) result;
       intent = new Intent(Intent.DIAL_ACTION, Uri.parse("tel:" + telResult.getNumber()));
