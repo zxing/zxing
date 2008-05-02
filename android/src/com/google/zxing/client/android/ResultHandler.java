@@ -42,7 +42,7 @@ import com.google.zxing.client.result.URLTOParsedResult;
  * @author srowen@google.com (Sean Owen)
  * @author dswitkin@google.com (Daniel Switkin)
  */
-final class ResultHandler implements Button.OnClickListenear {
+final class ResultHandler implements Button.OnClickListener {
 
   private static final String TAG = "ResultHandler";
 
