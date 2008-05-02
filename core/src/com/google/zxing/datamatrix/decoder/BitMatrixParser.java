@@ -40,7 +40,7 @@ final class BitMatrixParser {
     }
     
     version = readVersion(bitMatrix);
-    this.mappingBitMatrix = extractDataRegion(bitMatrix, version);
+    this.mappingBitMatrix = extractDataRegion(bitMatrix);
     // TODO(bbrown): Make this work for rectangular symbols
     this.readMappingMatrix = new BitMatrix(this.mappingBitMatrix.getDimension());
   }
@@ -394,10 +394,9 @@ final class BitMatrixParser {
    * alignment patterns.</p>
    * 
    * @param bitMatrix Original {@link BitMatrix} with alignment patterns
-   * @param version {@link Version} information corresponding with the bitMatrix
    * @return BitMatrix that has the alignment patterns removed
    */
-  BitMatrix extractDataRegion(BitMatrix bitMatrix, Version version) {
+  BitMatrix extractDataRegion(BitMatrix bitMatrix) {
     int symbolSizeRows = version.getSymbolSizeRows();
     int symbolSizeColumns = version.getSymbolSizeColumns();
     
@@ -413,32 +412,28 @@ final class BitMatrixParser {
     int numDataRegionsColumn = symbolSizeColumns / dataRegionSizeColumns;
     
     int sizeDataRegionRow = numDataRegionsRow * dataRegionSizeRows;
-    int sizeDataRegionColumn = numDataRegionsColumn * dataRegionSizeColumns;
+    //int sizeDataRegionColumn = numDataRegionsColumn * dataRegionSizeColumns;
     
     // TODO(bbrown): Make this work with rectangular codes
-    BitMatrix mappingBitMatrix = new BitMatrix(sizeDataRegionRow);
-    int readRowOffset = 0;
-    int readColumnOffset = 0;
-    int writeRowOffset = 0;
-    int writeColumnOffset = 0;
+    BitMatrix bitMatrixWithoutAlignment = new BitMatrix(sizeDataRegionRow);
     for (int dataRegionRow = 0; dataRegionRow < numDataRegionsRow; ++dataRegionRow) {
       for (int dataRegionColumn = 0; dataRegionColumn < numDataRegionsColumn; ++dataRegionColumn) {
         for (int i = 0; i < dataRegionSizeRows; ++i) {
           for (int j = 0; j < dataRegionSizeColumns; ++j) {
-            readRowOffset = dataRegionRow * (dataRegionSizeRows + 2) + 1 + i;
-            readColumnOffset = dataRegionColumn * (dataRegionSizeColumns + 2) + 1 + j;
-            writeRowOffset = dataRegionRow * dataRegionSizeRows + i;
-            writeColumnOffset = dataRegionColumn * dataRegionSizeColumns + j;
-            
+            int readRowOffset = dataRegionRow * (dataRegionSizeRows + 2) + 1 + i;
+            int readColumnOffset = dataRegionColumn * (dataRegionSizeColumns + 2) + 1 + j;
+            int writeRowOffset = dataRegionRow * dataRegionSizeRows + i;
+            int writeColumnOffset = dataRegionColumn * dataRegionSizeColumns + j;
+
             if (bitMatrix.get(readRowOffset, readColumnOffset)) {
-              mappingBitMatrix.set(writeRowOffset, writeColumnOffset);
+              bitMatrixWithoutAlignment.set(writeRowOffset, writeColumnOffset);
             }
           }
         }
       }
     }
     
-    return mappingBitMatrix;
+    return bitMatrixWithoutAlignment;
   }
 
 }

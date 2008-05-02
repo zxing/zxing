@@ -41,7 +41,7 @@ abstract class AbstractDoCoMoParsedResult extends ParsedReaderResult {
     return matchPrefixedField(prefix, rawText, ';');
   }
 
-  static String[] matchPrefixedField(String prefix, String rawText, char endChar) {
+  private static String[] matchPrefixedField(String prefix, String rawText, char endChar) {
     Vector matches = null;
     int i = 0;
     int max = rawText.length();

@@ -16,7 +16,7 @@ import android.graphics.Canvas;
 
 public interface CameraSource {
 
-	static final String LOG_TAG = "camera";
+	String LOG_TAG = "camera";
 	
 	/**
 	 * Open the camera source for subsequent use via calls to capture().

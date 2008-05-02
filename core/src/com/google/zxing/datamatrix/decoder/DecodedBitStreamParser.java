@@ -59,13 +59,13 @@ final class DecodedBitStreamParser {
     'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '{', '|', '}', '~', 127
   };
   
-  static final int PAD_ENCODE = 0;  // Not really an encoding
-  static final int ASCII_ENCODE = 1;
-  static final int C40_ENCODE = 2;
-  static final int TEXT_ENCODE = 3;
-  static final int ANSIX12_ENCODE = 4;
-  static final int EDIFACT_ENCODE = 5;
-  static final int BASE256_ENCODE = 6;
+  private static final int PAD_ENCODE = 0;  // Not really an encoding
+  private static final int ASCII_ENCODE = 1;
+  private static final int C40_ENCODE = 2;
+  private static final int TEXT_ENCODE = 3;
+  private static final int ANSIX12_ENCODE = 4;
+  private static final int EDIFACT_ENCODE = 5;
+  private static final int BASE256_ENCODE = 6;
 
   private DecodedBitStreamParser() {
   }
@@ -384,8 +384,7 @@ final class DecodedBitStreamParser {
   /**
   * See ISO 16022:2006, 5.2.8 and Annex C Table C.3
   */
-  private static int decodeEdifactSegment(BitSource bits,
-                                          StringBuffer result) throws ReaderException {
+  private static int decodeEdifactSegment(BitSource bits, StringBuffer result) {
     boolean unlatch = false;
     do {
       // If there is only two or less bytes left then it will be encoded as ASCII
@@ -418,8 +417,7 @@ final class DecodedBitStreamParser {
   /**
   * See ISO 16022:2006, 5.2.9 and Annex B, B.2
   */
-  private static int decodeBase256Segment(BitSource bits,
-                                          StringBuffer result) throws ReaderException {
+  private static int decodeBase256Segment(BitSource bits, StringBuffer result) {
     // Figure out how long the Base 256 Segment is.
     char d1 = (char) bits.readBits(8);
     int count;

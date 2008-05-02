@@ -122,8 +122,8 @@ public final class Version {
    * will be the same across all blocks within one version.</p>
    */
   static final class ECBlocks {
-    private int ecCodewords;
-    private ECB[] ecBlocks;
+    private final int ecCodewords;
+    private final ECB[] ecBlocks;
 
     private ECBlocks(int ecCodewords, ECB ecBlocks) {
       this.ecCodewords = ecCodewords;
@@ -150,8 +150,8 @@ public final class Version {
    * parameters is used consecutively in the Data Matrix code version's format.</p>
    */
   static final class ECB {
-    private int count;
-    private int dataCodewords;
+    private final int count;
+    private final int dataCodewords;
 
     private ECB(int count, int dataCodewords) {
       this.count = count;

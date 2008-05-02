@@ -40,7 +40,8 @@ public final class Detector {
    * @return {@link DetectorResult} encapsulating results of detecting a QR Code
    * @throws ReaderException if no Data Matrix Code can be found
    */
-  public DetectorResult detect() throws ReaderException {
+  public DetectorResult detect() {
+    // TODO
     return new DetectorResult(null, null);
   }
 

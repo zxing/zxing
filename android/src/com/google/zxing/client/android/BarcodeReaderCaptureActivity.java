@@ -27,7 +27,6 @@ import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.Button;
 import android.widget.TextView;
 import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
@@ -94,23 +93,31 @@ public final class BarcodeReaderCaptureActivity extends Activity {
 
   @Override
   public boolean onKeyDown(int keyCode, KeyEvent event) {
-    if (keyCode == KeyEvent.KEYCODE_A) {
-      cameraThread.setDecodeAllMode();
-    } else if (keyCode == KeyEvent.KEYCODE_C) {
-      Message save = Message.obtain(cameraThread.handler, R.id.save);
-      save.sendToTarget();
-    } else if (keyCode == KeyEvent.KEYCODE_P) {
-      cameraManager.setUsePreviewForDecode(true);
-    } else if (keyCode == KeyEvent.KEYCODE_Q) {
-      cameraThread.setDecodeQRMode();
-    } else if (keyCode == KeyEvent.KEYCODE_S) {
-      cameraManager.setUsePreviewForDecode(false);
-    } else if (keyCode == KeyEvent.KEYCODE_T) {
-      cameraThread.toggleTracing();
-    } else if (keyCode == KeyEvent.KEYCODE_U) {
-      cameraThread.setDecode1DMode();
-    } else {
-      return super.onKeyDown(keyCode, event);
+    switch (keyCode) {
+      case KeyEvent.KEYCODE_A:
+        cameraThread.setDecodeAllMode();
+        break;
+      case KeyEvent.KEYCODE_C:
+        Message save = Message.obtain(cameraThread.handler, R.id.save);
+        save.sendToTarget();
+        break;
+      case KeyEvent.KEYCODE_P:
+        cameraManager.setUsePreviewForDecode(true);
+        break;
+      case KeyEvent.KEYCODE_Q:
+        cameraThread.setDecodeQRMode();
+        break;
+      case KeyEvent.KEYCODE_S:
+        cameraManager.setUsePreviewForDecode(false);
+        break;
+      case KeyEvent.KEYCODE_T:
+        cameraThread.toggleTracing();
+        break;
+      case KeyEvent.KEYCODE_U:
+        cameraThread.setDecode1DMode();
+        break;
+      default:
+        return super.onKeyDown(keyCode, event);
     }
     return true;
   }
@@ -157,7 +164,7 @@ public final class BarcodeReaderCaptureActivity extends Activity {
     }
   };
 
-  public void restartPreview() {
+  void restartPreview() {
     Message restart = Message.obtain(cameraThread.handler, R.id.restart_preview);
     restart.sendToTarget();
   }
@@ -175,12 +182,12 @@ public final class BarcodeReaderCaptureActivity extends Activity {
       ParsedReaderResult readerResult = parseReaderResult(rawResult);
       textView.setText(readerResult.getDisplayResult() + " (" + duration + " ms)");
 
-      Button actionButton = (Button) findViewById(R.id.status_action_button);
+      TextView actionButton = (TextView) findViewById(R.id.status_action_button);
       int buttonText = getActionButtonText(readerResult.getType());
       if (buttonText != 0) {
         actionButton.setVisibility(View.VISIBLE);
         actionButton.setText(buttonText);
-        ResultHandler handler = new ResultHandler(this, readerResult);
+        View.OnClickListener handler = new ResultHandler(this, readerResult);
         actionButton.setOnClickListener(handler);
         actionButton.requestFocus();
       } else {
@@ -198,7 +205,7 @@ public final class BarcodeReaderCaptureActivity extends Activity {
   private void resetStatusView() {
     TextView textView = (TextView) findViewById(R.id.status_text_view);
     textView.setText(R.string.msg_default_status);
-    Button actionButton = (Button) findViewById(R.id.status_action_button);
+    View actionButton = findViewById(R.id.status_action_button);
     actionButton.setVisibility(View.GONE);
     lastResult = "";
   }

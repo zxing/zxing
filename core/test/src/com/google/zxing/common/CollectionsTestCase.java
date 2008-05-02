@@ -28,18 +28,17 @@ public final class CollectionsTestCase extends TestCase {
 
   public void testSort() {
     Random r = new Random(0xDEADBEEFL);
-    Vector v = new Vector();
+    Vector<Integer> v = new Vector<Integer>(100);
     for (int i = 0; i < 100; i++) {
-      v.addElement(new Integer(r.nextInt(1000)));
+      v.addElement(r.nextInt(1000));
     }
     Collections.insertionSort(v, new Comparator() {
       public int compare(Object o1, Object o2) {
-        return ((Integer) o1).intValue() - ((Integer) o2).intValue();
+        return (Integer) o1 - (Integer) o2;
       }
     });
     for (int i = 1; i < 100; i++) {
-      assertTrue("Element " + i, ((Integer) v.elementAt(i - 1)).intValue() <=
-          ((Integer) v.elementAt(i)).intValue());
+      assertTrue("Element " + i, v.elementAt(i - 1) <= v.elementAt(i));
     }
   }
 
