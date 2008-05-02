@@ -36,10 +36,21 @@ public final class ParsedReaderResultType {
   public static final ParsedReaderResultType ANDROID_INTENT = new ParsedReaderResultType("ANDROID_INTENT"); 
   public static final ParsedReaderResultType GEO = new ParsedReaderResultType("GEO");
   public static final ParsedReaderResultType TEL = new ParsedReaderResultType("TEL");
-  // TODO later, add the NDEF types to those actually processed by the clients
+  public static final ParsedReaderResultType SMS = new ParsedReaderResultType("SMS");
+  
+  // "optional" types
   public static final ParsedReaderResultType NDEF_TEXT = new ParsedReaderResultType("NDEF_TEXT");
   public static final ParsedReaderResultType NDEF_URI = new ParsedReaderResultType("NDEF_URI");
   public static final ParsedReaderResultType NDEF_SMART_POSTER = new ParsedReaderResultType("NDEF_SMART_POSTER");
+  public static final ParsedReaderResultType MOBILETAG_TEL = new ParsedReaderResultType("MOBILETAG_TEL");
+  public static final ParsedReaderResultType MOBILETAG_SMS = new ParsedReaderResultType("MOBILETAG_SMS");
+  public static final ParsedReaderResultType MOBILETAG_MMS = new ParsedReaderResultType("MOBILETAG_MMS");    
+  public static final ParsedReaderResultType MOBILETAG_SIMPLE_WEB = new ParsedReaderResultType("MOBILETAG_SIMPLE_WEB");  
+  public static final ParsedReaderResultType MOBILETAG_SIMPLE_CONTACT =
+      new ParsedReaderResultType("MOBILETAG_SIMPLE_CONTACT");
+  public static final ParsedReaderResultType MOBILETAG_SIMPLE_CALENDAR =
+      new ParsedReaderResultType("MOBILETAG_SIMPLE_CALENDAR");
+  public static final ParsedReaderResultType MOBILETAG_RICH_WEB = new ParsedReaderResultType("MOBILETAG_RICH_WEB");
 
   private final String name;
 

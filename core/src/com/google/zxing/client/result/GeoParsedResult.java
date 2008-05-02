@@ -48,27 +48,28 @@ public final class GeoParsedResult extends ParsedReaderResult {
     }
     // Drop geo, query portion
     int queryStart = rawText.indexOf('?', 4);
+    String geoURIWithoutQuery;
     if (queryStart < 0) {
-      rawText = rawText.substring(4);
+      geoURIWithoutQuery = rawText.substring(4);
     } else {
-      rawText = rawText.substring(4, queryStart);
+      geoURIWithoutQuery = rawText.substring(4, queryStart);
     }
-    int latitudeEnd = rawText.indexOf(',');
+    int latitudeEnd = geoURIWithoutQuery.indexOf(',');
     if (latitudeEnd < 0) {
       return null;
     }
-    float latitude = Float.parseFloat(rawText.substring(0, latitudeEnd));
-    int longitudeEnd = rawText.indexOf(',', latitudeEnd + 1);
+    float latitude = Float.parseFloat(geoURIWithoutQuery.substring(0, latitudeEnd));
+    int longitudeEnd = geoURIWithoutQuery.indexOf(',', latitudeEnd + 1);
     float longitude;
     float altitude; // in meters
     if (longitudeEnd < 0) {
-      longitude = Float.parseFloat(rawText.substring(latitudeEnd + 1));
+      longitude = Float.parseFloat(geoURIWithoutQuery.substring(latitudeEnd + 1));
       altitude = 0.0f;
     } else {
-      longitude = Float.parseFloat(rawText.substring(latitudeEnd + 1, longitudeEnd));
-      altitude = Float.parseFloat(rawText.substring(longitudeEnd + 1));
+      longitude = Float.parseFloat(geoURIWithoutQuery.substring(latitudeEnd + 1, longitudeEnd));
+      altitude = Float.parseFloat(geoURIWithoutQuery.substring(longitudeEnd + 1));
     }
-    return new GeoParsedResult("geo:" + rawText, latitude, longitude, altitude);
+    return new GeoParsedResult(rawText, latitude, longitude, altitude);
   }
 
   public String getGeoURI() {

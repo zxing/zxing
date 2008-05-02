@@ -22,7 +22,19 @@ import android.provider.Contacts;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import com.google.zxing.client.result.*;
+import com.google.zxing.client.result.AddressBookAUParsedResult;
+import com.google.zxing.client.result.AddressBookDoCoMoParsedResult;
+import com.google.zxing.client.result.BookmarkDoCoMoParsedResult;
+import com.google.zxing.client.result.EmailAddressParsedResult;
+import com.google.zxing.client.result.EmailDoCoMoParsedResult;
+import com.google.zxing.client.result.GeoParsedResult;
+import com.google.zxing.client.result.ParsedReaderResult;
+import com.google.zxing.client.result.ParsedReaderResultType;
+import com.google.zxing.client.result.SMSParsedResult;
+import com.google.zxing.client.result.TelParsedResult;
+import com.google.zxing.client.result.UPCParsedResult;
+import com.google.zxing.client.result.URIParsedResult;
+import com.google.zxing.client.result.URLTOParsedResult;
 
 import java.net.URISyntaxException;
 
@@ -87,6 +99,12 @@ final class ResultHandler implements Button.OnClickListener {
       EmailAddressParsedResult emailResult = (EmailAddressParsedResult) result;
       try {
         intent = new Intent(Intent.SENDTO_ACTION, new ContentURI("mailto:" + emailResult.getEmailAddress()));
+      } catch (URISyntaxException e) {
+      }
+    } else if (type.equals(ParsedReaderResultType.SMS)) {
+      SMSParsedResult smsResult = (SMSParsedResult) result;
+      try {
+        intent = new Intent(Intent.SENDTO_ACTION, new ContentURI(smsResult.getSMSURI()));
       } catch (URISyntaxException e) {
       }
     } else if (type.equals(ParsedReaderResultType.TEL)) {
