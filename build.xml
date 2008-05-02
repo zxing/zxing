@@ -57,6 +57,7 @@
         <include name="build.xml"/>
         <include name="build.properties"/>
         <include name="android/**"/>
+        <include name="android-m3/**"/>
         <include name="core/**"/>
         <include name="javame/**"/>
         <include name="javase/**"/>
@@ -65,6 +66,8 @@
         <include name="rim/res/**"/>
         <include name="rim/BarcodeReader.jad.template"/>
         <include name="docs/**"/>
+        <include name="zxingorg/**"/>
+        <exclude name="zxingorg/secrets.properties"/>
       </zipfileset>
     </zip>
   </target>
