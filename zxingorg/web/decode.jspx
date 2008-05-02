@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (C) 2008 Google Inc.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" xmlns="http://www.w3.org/1999/xhtml" version="2.1">
+<jsp:output
+	omit-xml-declaration="false" doctype-root-element="html"
+	doctype-public="-//W3C//DTD XHTML 1.1//EN"
+	doctype-system="http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"/>
+<jsp:directive.page contentType="text/html" session="false"/>
+<jsp:scriptlet>response.setHeader("Cache-Control", "public");</jsp:scriptlet>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head><title>ZXing Decoder Online</title></head>
+<body>
+
+<h1>ZXing Decoder Online</h1>
+
+<p><b>Under Construction</b>: This is a simple page that will let you decode a 1D or 2D barcode found
+in an image online. Enter a URL below.</p>
+
+<form action="decode" method="get">
+<p><input type="text" size="50" name="u"/><input type="submit"/></p>
+</form>
+
+<p>Or try uploading a file:</p>
+
+<form action="decode" method="post" enctype="multipart/form-data" >
+<p><input type="file" size="50" name="f"/><input type="submit"/></p>
+</form>
+
+<p>See the <a href="http://code.google.com/p/zxing">project page</a> for details.</p>
+
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+_uacct = "UA-788492-5";
+urchinTracker();
+</script>
+
+</body>
+</html>
+</jsp:root>

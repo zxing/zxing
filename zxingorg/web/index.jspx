@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (C) 2008 Google Inc.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" xmlns="http://www.w3.org/1999/xhtml" version="2.1">
+<jsp:output
+	omit-xml-declaration="false" doctype-root-element="html"
+	doctype-public="-//WAPFORUM//DTD XHTML Mobile 1.1//EN"
+	doctype-system="http://www.openmobilealliance.org/tech/DTD/xhtml-mobile11.dtd"/>
+<jsp:directive.page contentType="application/xhtml+xml" session="false"/>
+<jsp:scriptlet>response.setHeader("Cache-Control", "public");</jsp:scriptlet>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head><title>Download ZXing Reader</title></head>
+<body>
+<p><strong>Welcome to zxing!</strong></p>
+<p><a href="BarcodeReader.jad">Download</a> the ZXing Barcode Reader.</p>
+<p><strong>Having problems with the regular version?</strong></p>
+<p><a href="BarcodeReaderBasic.jad">Download</a> the ZXing Barcode Reader Basic version.</p>
+<p><strong>An Android client is available for the curious:</strong></p>
+<p><a href="BarcodeReader.apk">Download</a> the Android client.</p>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+_uacct = "UA-788492-5";
+urchinTracker();
+</script>
+</body>
+</html>
+</jsp:root>
