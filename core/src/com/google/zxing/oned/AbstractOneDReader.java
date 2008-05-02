@@ -143,7 +143,7 @@ public abstract class AbstractOneDReader implements OneDReader {
    * @param counters array into which to record counts
    * @throws ReaderException if counters cannot be filled entirely from row before running out of pixels
    */
-  public static void recordPattern(BitArray row, int start, int[] counters) throws ReaderException {
+  static void recordPattern(BitArray row, int start, int[] counters) throws ReaderException {
     int numCounters = counters.length;
     for (int i = 0; i < numCounters; i++) {
       counters[i] = 0;
@@ -186,7 +186,7 @@ public abstract class AbstractOneDReader implements OneDReader {
    * @param pattern expected pattern
    * @return average variance between counters and pattern
    */
-  public static float patternMatchVariance(int[] counters, int[] pattern) {
+  static float patternMatchVariance(int[] counters, int[] pattern) {
     int total = 0;
     int numCounters = counters.length;
     int patternLength = 0;

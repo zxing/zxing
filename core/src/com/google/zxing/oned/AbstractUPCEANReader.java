@@ -83,7 +83,7 @@ public abstract class AbstractUPCEANReader extends AbstractOneDReader implements
     }
   }
 
-  static int[] findStartGuardPattern(final BitArray row) throws ReaderException {
+  static int[] findStartGuardPattern(BitArray row) throws ReaderException {
     boolean foundStart = false;
     int[] startRange = null;
     int nextStart = 0;

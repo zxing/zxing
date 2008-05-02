@@ -33,7 +33,7 @@ public abstract class ParsedReaderResult {
 
   private final ParsedReaderResultType type;
 
-  public ParsedReaderResult(ParsedReaderResultType type) {
+  protected ParsedReaderResult(ParsedReaderResultType type) {
     this.type = type;
   }
 

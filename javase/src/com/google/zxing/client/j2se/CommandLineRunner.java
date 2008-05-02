@@ -38,29 +38,28 @@ import java.util.Hashtable;
  */
 public final class CommandLineRunner {
 
-  private static Hashtable<DecodeHintType, Object> hints = null;
-
   private CommandLineRunner() {
   }
 
   public static void main(String[] args) throws Exception {
-    for (int x = 0; x < args.length; x++) {
-      if (args[x].equals("--try_harder")) {
+    Hashtable<DecodeHintType, Object> hints = null;
+    for (String arg : args) {
+      if ("--try_harder".equals(arg)) {
         hints = new Hashtable<DecodeHintType, Object>(3);
         hints.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
-      } else if (args[x].startsWith("--")) {
-        System.out.println("Unknown command line option " + args[x]);
+      } else if (arg.startsWith("--")) {
+        System.out.println("Unknown command line option " + arg);
         return;
       }
     }
-    for (int x = 0; x < args.length; x++) {
-      if (!args[x].startsWith("--")) {
-        decodeOneArgument(args[x]);
+    for (String arg : args) {
+      if (!arg.startsWith("--")) {
+        decodeOneArgument(arg, hints);
       }
     }
   }
 
-  private static void decodeOneArgument(String argument) throws Exception {
+  private static void decodeOneArgument(String argument, Hashtable<DecodeHintType, Object> hints) throws Exception {
     File inputFile = new File(argument);
     if (inputFile.exists()) {
       if (inputFile.isDirectory()) {
@@ -72,7 +71,7 @@ public final class CommandLineRunner {
           if (filename.startsWith(".") || filename.endsWith(".txt")) {
             continue;
           }
-          if (decode(input.toURI())) {
+          if (decode(input.toURI(), hints)) {
             successful++;
           }
           total++;
@@ -80,14 +79,14 @@ public final class CommandLineRunner {
         System.out.println("\nDecoded " + successful + " files out of " + total +
             " successfully (" + (successful * 100 / total) + "%)\n");
       } else {
-        decode(inputFile.toURI());
+        decode(inputFile.toURI(), hints);
       }
     } else {
-      decode(new URI(argument));
+      decode(new URI(argument), hints);
     }
   }
 
-  private static boolean decode(URI uri) throws IOException {
+  private static boolean decode(URI uri, Hashtable<DecodeHintType, Object> hints) throws IOException {
     BufferedImage image = ImageIO.read(uri.toURL());
     if (image == null) {
       System.err.println(uri.toString() + ": Could not load image");

@@ -44,8 +44,6 @@ import com.google.zxing.client.result.URLTOParsedResult;
  */
 final class ResultHandler implements Button.OnClickListener {
 
-  private static final String TAG = "ResultHandler";
-
   private final Intent intent;
   private final BarcodeReaderCaptureActivity captureActivity;
 

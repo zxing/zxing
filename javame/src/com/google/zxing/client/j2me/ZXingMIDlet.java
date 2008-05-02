@@ -55,7 +55,7 @@ public final class ZXingMIDlet extends MIDlet {
   private Player player;
   private VideoControl videoControl;
 
-  Canvas getCanvas() {
+  Displayable getCanvas() {
     return canvas;
   }
 
@@ -141,7 +141,7 @@ public final class ZXingMIDlet extends MIDlet {
 
   // Convenience methods to show dialogs
 
-  private void showOpenURL(String title, final String display, final String uri) {
+  private void showOpenURL(String title, String display, final String uri) {
     Alert alert = new Alert(title, display, null, AlertType.CONFIRMATION);
     alert.setTimeout(Alert.FOREVER);
     Command yes = new Command("Yes", Command.OK, 1);
