@@ -87,6 +87,9 @@ final class ResultHandler implements Button.OnClickListener {
     } else if (type.equals(ParsedReaderResultType.SMS)) {
       SMSParsedResult smsResult = (SMSParsedResult) result;
       intent = new Intent(Intent.SENDTO_ACTION, Uri.parse(smsResult.getSMSURI()));
+    } else if (type.equals(ParsedReaderResultType.SMS)) {
+      SMSParsedResult smsResult = (SMSParsedResult) result;
+      intent = new Intent(Intent.SENDTO_ACTION, Uri.parse(smsResult.getSMSURI()));
     } else if (type.equals(ParsedReaderResultType.TEL)) {
       TelParsedResult telResult = (TelParsedResult) result;
       intent = new Intent(Intent.DIAL_ACTION, Uri.parse("tel:" + telResult.getNumber()));

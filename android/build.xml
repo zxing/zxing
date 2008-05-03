@@ -49,6 +49,7 @@
 
   <!-- Tools -->
   <property name="aapt" value="${android-tools}/aapt"/>
+  <property name="adb" value="${android-tools}/adb"/>
   <property name="aidl" value="${android-tools}/aidl"/>
   <!-- dx is a special case as it is a .bat file on Windows -->
   <condition property="dx" value="${android-tools}/dx.bat" else="${android-tools}/dx">
