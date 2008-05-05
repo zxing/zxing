@@ -15,23 +15,35 @@
  limitations under the License.
  -->
 <jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" xmlns="http://www.w3.org/1999/xhtml" version="2.1">
-<jsp:output
-	omit-xml-declaration="false" doctype-root-element="html"
-	doctype-public="-//WAPFORUM//DTD XHTML Mobile 1.1//EN"
-	doctype-system="http://www.openmobilealliance.org/tech/DTD/xhtml-mobile11.dtd"/>
-<jsp:directive.page contentType="application/xhtml+xml" session="false"/>
-<jsp:scriptlet>response.setHeader("Cache-Control", "public");</jsp:scriptlet>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
-<head><title>No Barcode Found</title></head>
-<body>
-<p><b>Bad URL</b></p>
-<p>You didn't specify a URL, or the URL was not valid, or did not return an image. Go "Back" in your browser and try again.</p>
-<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
-</script>
-<script type="text/javascript">
-_uacct = "UA-788492-5";
-urchinTracker();
-</script>
-</body>
-</html>
+  <jsp:output
+          omit-xml-declaration="false" doctype-root-element="html"
+          doctype-public="-//WAPFORUM//DTD XHTML Mobile 1.1//EN"
+          doctype-system="http://www.openmobilealliance.org/tech/DTD/xhtml-mobile11.dtd"/>
+  <jsp:directive.page contentType="application/xhtml+xml" session="false"/>
+  <jsp:scriptlet>response.setHeader("Cache-Control", "public");</jsp:scriptlet>
+  <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+    <head>
+      <title>No Barcode Found</title>
+    </head>
+    <body>
+      <p>
+        <b>Bad URL</b>
+      </p>
+      <p>You didn't specify a URL, or the URL was not valid, or did not return an image. Go "Back" in your browser and
+        try again.
+      </p>
+      <script type="text/javascript">
+        var gaJsHost = (("https:" == document.location.protocol) ?
+        "https://ssl." : "http://www.");
+        document.write(unescape("%3Cscript src='" + gaJsHost +
+        "google-analytics.com/ga.js'
+        type='text/javascript'%3E%3C/script%3E"));
+      </script>
+      <script type="text/javascript">
+        var pageTracker = _gat._getTracker("UA-788492-5");
+        pageTracker._initData();
+        pageTracker._trackPageview();
+      </script>
+    </body>
+  </html>
 </jsp:root>

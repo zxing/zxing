@@ -67,23 +67,24 @@ import java.util.logging.Logger;
  */
 public final class DecodeServlet extends HttpServlet {
 
-	private static final long MAX_IMAGE_SIZE = 500000L;
+  private static final long MAX_IMAGE_SIZE = 500000L;
   private static final long EMAIL_CHECK_INTERVAL = 60000L;
 
   private static final Logger log = Logger.getLogger(DecodeServlet.class.getName());
 
   static final Hashtable<DecodeHintType, Object> HINTS;
+
   static {
     HINTS = new Hashtable<DecodeHintType, Object>(3);
     HINTS.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
   }
 
   private HttpClient client;
-	private DiskFileItemFactory diskFileItemFactory;
+  private DiskFileItemFactory diskFileItemFactory;
   private Timer emailTimer;
 
   @Override
-	public void init(ServletConfig servletConfig) throws ServletException {
+  public void init(ServletConfig servletConfig) throws ServletException {
 
     Logger logger = Logger.getLogger("com.google.zxing");
     logger.addHandler(new ServletContextLogHandler(servletConfig.getServletContext()));
@@ -107,138 +108,138 @@ public final class DecodeServlet extends HttpServlet {
 
     Authenticator emailAuthenticator = new EmailAuthenticator(emailAddress, emailPassword);
     emailTimer = new Timer("Email decoder timer", true);
-    emailTimer.schedule(new DecodeEmailTask(emailAuthenticator), 0L, EMAIL_CHECK_INTERVAL);
+    emailTimer.schedule(new DecodeEmailTask(emailAddress, emailAuthenticator), 0L, EMAIL_CHECK_INTERVAL);
 
     log.info("DecodeServlet configured");
   }
 
-	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+  @Override
+  protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-		String imageURIString = request.getParameter("u");
-		if (imageURIString == null || imageURIString.length() == 0) {
-			response.sendRedirect("badurl.jspx");
-			return;
-		}
+    String imageURIString = request.getParameter("u");
+    if (imageURIString == null || imageURIString.length() == 0) {
+      response.sendRedirect("badurl.jspx");
+      return;
+    }
 
-		if (!(imageURIString.startsWith("http://") || imageURIString.startsWith("https://"))) {
-			imageURIString = "http://" + imageURIString;
-		}
+    if (!(imageURIString.startsWith("http://") || imageURIString.startsWith("https://"))) {
+      imageURIString = "http://" + imageURIString;
+    }
 
-		URI imageURI;
-		try {
-			imageURI = new URI(imageURIString);
-		} catch (URISyntaxException urise) {
-			response.sendRedirect("badurl.jspx");
-			return;
-		}
+    URI imageURI;
+    try {
+      imageURI = new URI(imageURIString);
+    } catch (URISyntaxException urise) {
+      response.sendRedirect("badurl.jspx");
+      return;
+    }
 
     HttpGet getRequest = new HttpGet(imageURI);
 
-		try {
+    try {
       HttpResponse getResponse = client.execute(getRequest);
       if (getResponse.getStatusLine().getStatusCode() != HttpServletResponse.SC_OK) {
-				response.sendRedirect("badurl.jspx");
-				return;
-			}
-			if (!isSizeOK(getResponse)) {
-				response.sendRedirect("badimage.jspx");
-				return;
-			}
+        response.sendRedirect("badurl.jspx");
+        return;
+      }
+      if (!isSizeOK(getResponse)) {
+        response.sendRedirect("badimage.jspx");
+        return;
+      }
       log.info("Decoding " + imageURI);
       InputStream is = getResponse.getEntity().getContent();
-			try {
-				processStream(is, response);
-			} finally {
-				is.close();
-			}
+      try {
+        processStream(is, response);
+      } finally {
+        is.close();
+      }
     } catch (InterruptedException ie) {
       getRequest.abort();
       response.sendRedirect("badurl.jspx");
     } catch (HttpException he) {
       getRequest.abort();
       response.sendRedirect("badurl.jspx");
-		}
+    }
 
-	}
+  }
 
-	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-		throws ServletException, IOException {
+  @Override
+  protected void doPost(HttpServletRequest request, HttpServletResponse response)
+          throws ServletException, IOException {
 
-		if (!ServletFileUpload.isMultipartContent(request)) {
-			response.sendRedirect("badimage.jspx");
-			return;
-		}
+    if (!ServletFileUpload.isMultipartContent(request)) {
+      response.sendRedirect("badimage.jspx");
+      return;
+    }
 
-		ServletFileUpload upload = new ServletFileUpload(diskFileItemFactory);
-		upload.setFileSizeMax(MAX_IMAGE_SIZE);
+    ServletFileUpload upload = new ServletFileUpload(diskFileItemFactory);
+    upload.setFileSizeMax(MAX_IMAGE_SIZE);
 
-		// Parse the request
-		try {
-			for (FileItem item : (List<FileItem>) upload.parseRequest(request)) {
-				if (!item.isFormField()) {
-					if (item.getSize() <= MAX_IMAGE_SIZE) {
+    // Parse the request
+    try {
+      for (FileItem item : (List<FileItem>) upload.parseRequest(request)) {
+        if (!item.isFormField()) {
+          if (item.getSize() <= MAX_IMAGE_SIZE) {
             log.info("Decoding uploaded file");
-						InputStream is = item.getInputStream();
-						try {
-							processStream(is, response);
-						} finally {
-							is.close();
-						}
-					} else {
-						throw new ServletException("File is too large: " + item.getSize());
-					}
-					break;
-				}
-			}
-		} catch (FileUploadException fue) {
-			response.sendRedirect("badimage.jspx");
-		}
-		
-	}
+            InputStream is = item.getInputStream();
+            try {
+              processStream(is, response);
+            } finally {
+              is.close();
+            }
+          } else {
+            throw new ServletException("File is too large: " + item.getSize());
+          }
+          break;
+        }
+      }
+    } catch (FileUploadException fue) {
+      response.sendRedirect("badimage.jspx");
+    }
 
-	private static void processStream(InputStream is, HttpServletResponse response) throws IOException {
-		BufferedImage image = ImageIO.read(is);
-		if (image == null) {
-			response.sendRedirect("badimage.jspx");
-			return;
-		}
+  }
 
-		Reader reader = new MultiFormatReader();
-		Result result;
-		try {
-			result = reader.decode(new BufferedImageMonochromeBitmapSource(image), HINTS);
-		} catch (ReaderException re) {
-			log.info("DECODE FAILED: " + re.toString());
-			response.sendRedirect("notfound.jspx");
-			return;
-		}
+  private static void processStream(InputStream is, HttpServletResponse response) throws IOException {
+    BufferedImage image = ImageIO.read(is);
+    if (image == null) {
+      response.sendRedirect("badimage.jspx");
+      return;
+    }
 
-		response.setContentType("text/plain");
-		response.setCharacterEncoding("UTF-8");
-		Writer out = new OutputStreamWriter(response.getOutputStream(), "UTF-8");
-		try {
-			out.write(result.getText());
-		} finally {
-			out.close();
-		}
-	}
+    Reader reader = new MultiFormatReader();
+    Result result;
+    try {
+      result = reader.decode(new BufferedImageMonochromeBitmapSource(image), HINTS);
+    } catch (ReaderException re) {
+      log.info("DECODE FAILED: " + re.toString());
+      response.sendRedirect("notfound.jspx");
+      return;
+    }
 
-	private static boolean isSizeOK(HttpMessage getResponse) {
+    response.setContentType("text/plain");
+    response.setCharacterEncoding("UTF-8");
+    Writer out = new OutputStreamWriter(response.getOutputStream(), "UTF-8");
+    try {
+      out.write(result.getText());
+    } finally {
+      out.close();
+    }
+  }
+
+  private static boolean isSizeOK(HttpMessage getResponse) {
     Header lengthHeader = getResponse.getLastHeader("Content-Length");
-		if (lengthHeader != null) {
-			long length = Long.parseLong(lengthHeader.getValue());
-			if (length > MAX_IMAGE_SIZE) {
-				return false;
-			}
-		}
-		return true;
-	}
+    if (lengthHeader != null) {
+      long length = Long.parseLong(lengthHeader.getValue());
+      if (length > MAX_IMAGE_SIZE) {
+        return false;
+      }
+    }
+    return true;
+  }
 
-	@Override
-	public void destroy() {
-    log.config("DecodeServlet shutting down...");    
+  @Override
+  public void destroy() {
+    log.config("DecodeServlet shutting down...");
     emailTimer.cancel();
   }
 

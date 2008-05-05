@@ -24,50 +24,51 @@ import java.util.Arrays;
  */
 final class IPTrie {
 
-	private final IPTrieNode root;
+  private final IPTrieNode root;
 
-	IPTrie() {
-		root = new IPTrieNode(false);
-	}
+  IPTrie() {
+    root = new IPTrieNode(false);
+  }
 
-	int incrementAndGet(InetAddress ipAddress) {
-		byte[] octets = ipAddress.getAddress();
-		synchronized (root) {
-			IPTrieNode current = root;
-			int max = octets.length - 1;
-			for (int offset = 0; offset < max; offset++) {
-				int index = 0xFF & octets[offset];
-				IPTrieNode child = current.children[index];
-				if (child == null) {
-					child = new IPTrieNode(offset == max - 1);
-					current.children[index] = child;
-				}
-				current = child;
-			}
-			int index = 0xFF & octets[max];
-			current.values[index]++;
-			return current.values[index];
-		}
-	}
+  int incrementAndGet(InetAddress ipAddress) {
+    byte[] octets = ipAddress.getAddress();
+    synchronized (root) {
+      IPTrieNode current = root;
+      int max = octets.length - 1;
+      for (int offset = 0; offset < max; offset++) {
+        int index = 0xFF & octets[offset];
+        IPTrieNode child = current.children[index];
+        if (child == null) {
+          child = new IPTrieNode(offset == max - 1);
+          current.children[index] = child;
+        }
+        current = child;
+      }
+      int index = 0xFF & octets[max];
+      current.values[index]++;
+      return current.values[index];
+    }
+  }
 
-	void clear() {
-		synchronized (root) {
-			Arrays.fill(root.children, null);
-		}
-	}
+  void clear() {
+    synchronized (root) {
+      Arrays.fill(root.children, null);
+    }
+  }
 
-	private static final class IPTrieNode {
-		final IPTrieNode[] children;
-		final int[] values;
-		private IPTrieNode(boolean terminal) {
-			if (terminal) {
-				children = null;
-				values = new int[256];
-			} else {
-				children = new IPTrieNode[256];
-				values = null;
-			}
-		}
-	}
+  private static final class IPTrieNode {
+    final IPTrieNode[] children;
+    final int[] values;
+
+    private IPTrieNode(boolean terminal) {
+      if (terminal) {
+        children = null;
+        values = new int[256];
+      } else {
+        children = new IPTrieNode[256];
+        values = null;
+      }
+    }
+  }
 
 }
