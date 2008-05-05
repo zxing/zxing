@@ -122,3 +122,18 @@
   - GridSampler now smarter about bounds checking and point nudging;
     should avoid some ArrayIndexOutOfBoundsException issues
   - More unit tests
+
+0.7 (5 May 2008)
+  - Added support for MobileTag message formats
+  - Added source to zxing.org
+  - Significant work on Android clients, including UI overhaul and
+    continuous scan mode
+  - Bug fix: ResultPoints from 1D barcodes were wrong
+  - SKIP_N_BARCODES hint now gone, and associated logic has been transferred
+    to individual project users, as it is fairly app-specific at this point
+    and is beginning to complicate the core library. We can help other users
+    who need this functionality on a case-by-case basis.
+  - Bug fix in AddressBookAUParsedResult parsing
+  - Possible workaround for NoSuchMethodError on Nokias
+  - New shell of an iPhone client committed
+  - ... and other assorted small improvements and fixes
