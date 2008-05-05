@@ -92,7 +92,7 @@ public final class Version {
    * <p>Deduces version information from Data Matrix dimensions.</p>
    *
    * @param numRows Number of rows in modules
-   * @param numRows Number of columns in modules
+   * @param numColumns Number of columns in modules
    * @return {@link Version} for a Data Matrix Code of those dimensions
    * @throws ReaderException if dimensions do correspond to a valid Data Matrix size
    */
