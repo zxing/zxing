@@ -162,8 +162,10 @@ final class DecodeEmailTask extends TimerTask {
   }
 
   public static void main(String[] args) {
-    Authenticator emailAuthenticator = new EmailAuthenticator(args[0], args[1]);
-    new DecodeEmailTask(emailAuthenticator).run();
+    String emailAddress = args[0];
+    String emailPassword = args[1];
+    Authenticator emailAuthenticator = new EmailAuthenticator(emailAddress, emailPassword);
+    new DecodeEmailTask(emailAddress, emailAuthenticator).run();
   }
 
 }
