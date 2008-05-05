@@ -55,14 +55,8 @@ final class DecodeEmailTask extends TimerTask {
   private static final String SMTP_PORT = "465";
   private static final String POP_PORT = "995";
   private static final String SSL_FACTORY = "javax.net.ssl.SSLSocketFactory";
-  private static final Address fromAddress;
   private static final Properties sessionProperties = new Properties();
   static {
-    try {
-      fromAddress = new InternetAddress("w@zxing.org", "ZXing By Email");
-    } catch (UnsupportedEncodingException uee) {
-      throw new RuntimeException(uee);
-    }
     sessionProperties.setProperty("mail.transport.protocol", "smtp");
     sessionProperties.setProperty("mail.smtp.host", SMTP_HOST);
     sessionProperties.setProperty("mail.smtp.auth", "true");
@@ -80,9 +74,16 @@ final class DecodeEmailTask extends TimerTask {
   }
 
   private final Authenticator emailAuthenticator;
+  private final Address fromAddress;
 
-  DecodeEmailTask(Authenticator emailAuthenticator) {
+  DecodeEmailTask(String emailAddress, Authenticator emailAuthenticator) {
     this.emailAuthenticator = emailAuthenticator;
+    try {
+      fromAddress = new InternetAddress(emailAddress, "ZXing By Email");
+    } catch (UnsupportedEncodingException uee) {
+      // Can't happen?
+      throw new RuntimeException(uee);
+    }
   }
 
   @Override

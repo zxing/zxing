@@ -17,6 +17,7 @@
 package com.google.zxing.web;
 
 import javax.mail.Authenticator;
+import javax.mail.PasswordAuthentication;
 
 final class EmailAuthenticator extends Authenticator {
 
@@ -26,6 +27,11 @@ final class EmailAuthenticator extends Authenticator {
   EmailAuthenticator(String emailUsername, String emailPassword) {
     this.emailUsername = emailUsername;
     this.emailPassword = emailPassword;
+  }
+
+  @Override
+  protected PasswordAuthentication getPasswordAuthentication() {
+    return new PasswordAuthentication(emailUsername, emailPassword);
   }
 
 }
