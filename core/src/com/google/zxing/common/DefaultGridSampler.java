@@ -52,11 +52,22 @@ public final class DefaultGridSampler extends GridSampler {
       // Quick check to see if points transformed to something inside the image;
       // sufficent to check the endpoints
       checkAndNudgePoints(image, points);
-      for (int j = 0; j < max; j += 2) {
-        if (image.isBlack((int) points[j], (int) points[j + 1])) {
-          // Black(-ish) pixel
-          bits.set(i, j >> 1);
+      try {
+        for (int j = 0; j < max; j += 2) {
+          if (image.isBlack((int) points[j], (int) points[j + 1])) {
+            // Black(-ish) pixel
+            bits.set(i, j >> 1);
+          }
         }
+      } catch (ArrayIndexOutOfBoundsException aioobe) {
+        // This feels wrong, but, sometimes if the finder patterns are misidentified, the resulting
+        // transform gets "twisted" such that it maps a straight line of points to a set of points
+        // whose endpoints are in bounds, but others are not. There is probably some mathematical
+        // way to detect this about the transformation that I don't know yet.
+        // This results in an ugly runtime exception despite our clever checks above -- can't have that.
+        // We could check each point's coordinates but that feels duplicative. We settle for
+        // catching and wrapping ArrayIndexOutOfBoundsException.
+        throw new ReaderException(aioobe.toString());
       }
     }
     return bits;
