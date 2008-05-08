@@ -419,19 +419,34 @@ final class FinderPatternFinder {
 
   /**
    * @return true iff we have found at least 3 finder patterns that have been detected
-   *         at least {@link #CENTER_QUORUM} times each
+   *         at least {@link #CENTER_QUORUM} times each, and, the estimated module size of the
+   *         candidates is "pretty similar"
    */
   private boolean haveMulitplyConfirmedCenters() {
-    int count = 0;
+    int confirmedCount = 0;
+    float totalModuleSize = 0.0f;
     int max = possibleCenters.size();
     for (int i = 0; i < max; i++) {
-      if (((FinderPattern) possibleCenters.elementAt(i)).getCount() >= CENTER_QUORUM) {
-        if (++count == 3) {
-          return true;
-        }
+      FinderPattern pattern = (FinderPattern) possibleCenters.elementAt(i);
+      if (pattern.getCount() >= CENTER_QUORUM) {
+        confirmedCount++;
+        totalModuleSize += pattern.getEstimatedModuleSize();
       }
     }
-    return false;
+    if (confirmedCount < 3) {
+      return false;
+    }
+    // OK, we have at least 3 confirmed centers, but, it's possible that one is a "false positive"
+    // and that we need to keep looking. We detect this by asking if the estimated module sizes
+    // vary too much. We arbitrarily say that when the total deviation from average exceeds
+    // 15% of the total module size estimates, it's too much.
+    float average = totalModuleSize / max;
+    float totalDeviation = 0.0f;
+    for (int i = 0; i < max; i++) {
+      FinderPattern pattern = (FinderPattern) possibleCenters.elementAt(i);
+      totalDeviation += Math.abs(pattern.getEstimatedModuleSize() - average);
+    }
+    return totalDeviation <= 0.15f * totalModuleSize;
   }
 
   /**
