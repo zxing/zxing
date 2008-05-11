@@ -19,6 +19,11 @@ package com.google.zxing.web;
 import javax.mail.Authenticator;
 import javax.mail.PasswordAuthentication;
 
+/**
+ * A simple {@link Authenticator} which replies with a fixed username and password.
+ * 
+ * @author Sean Owen (srowen@google.com)
+ */
 final class EmailAuthenticator extends Authenticator {
 
   private final String emailUsername;

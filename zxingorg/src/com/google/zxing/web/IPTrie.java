@@ -20,7 +20,9 @@ import java.net.InetAddress;
 import java.util.Arrays;
 
 /**
- * @author Sean Owen
+ * A trie data structure for storing a set of IP addresses efficiently.
+ * 
+ * @author Sean Owen (srowen@google.com)
  */
 final class IPTrie {
 

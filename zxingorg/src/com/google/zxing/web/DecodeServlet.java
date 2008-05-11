@@ -22,6 +22,7 @@ import com.google.zxing.Reader;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 import com.google.zxing.client.j2se.BufferedImageMonochromeBitmapSource;
+import com.google.zxing.client.result.ParsedReaderResult;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -63,7 +64,10 @@ import java.util.Timer;
 import java.util.logging.Logger;
 
 /**
- * @author Sean Owen
+ * {@link HttpServlet} which decodes images containing barcodes. Given a URL, it will
+ * retrieve the image and decode it. It can also process image files uploaded via POST.
+ * 
+ * @author Sean Owen (srowen@google.com)
  */
 public final class DecodeServlet extends HttpServlet {
 
@@ -114,7 +118,7 @@ public final class DecodeServlet extends HttpServlet {
   }
 
   @Override
-  protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+  protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     String imageURIString = request.getParameter("u");
     if (imageURIString == null || imageURIString.length() == 0) {
@@ -149,7 +153,7 @@ public final class DecodeServlet extends HttpServlet {
       log.info("Decoding " + imageURI);
       InputStream is = getResponse.getEntity().getContent();
       try {
-        processStream(is, response);
+        processStream(is, request, response);
       } finally {
         is.close();
       }
@@ -183,12 +187,12 @@ public final class DecodeServlet extends HttpServlet {
             log.info("Decoding uploaded file");
             InputStream is = item.getInputStream();
             try {
-              processStream(is, response);
+              processStream(is, request, response);
             } finally {
               is.close();
             }
           } else {
-            throw new ServletException("File is too large: " + item.getSize());
+            response.sendRedirect("badimage.jspx");
           }
           break;
         }
@@ -199,7 +203,8 @@ public final class DecodeServlet extends HttpServlet {
 
   }
 
-  private static void processStream(InputStream is, HttpServletResponse response) throws IOException {
+  private static void processStream(InputStream is, HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException {
     BufferedImage image = ImageIO.read(is);
     if (image == null) {
       response.sendRedirect("badimage.jspx");
@@ -216,13 +221,20 @@ public final class DecodeServlet extends HttpServlet {
       return;
     }
 
-    response.setContentType("text/plain");
-    response.setCharacterEncoding("UTF-8");
-    Writer out = new OutputStreamWriter(response.getOutputStream(), "UTF-8");
-    try {
-      out.write(result.getText());
-    } finally {
-      out.close();
+    if (request.getParameter("full") == null) {
+      response.setContentType("text/plain");
+      response.setCharacterEncoding("UTF-8");
+      Writer out = new OutputStreamWriter(response.getOutputStream(), "UTF-8");
+      try {
+        out.write(result.getText());
+      } finally {
+        out.close();
+      }
+    } else {
+      request.setAttribute("result", result);
+      ParsedReaderResult parsedReaderResult = ParsedReaderResult.parseReaderResult(result);
+      request.setAttribute("parsedReaderResult", parsedReaderResult);
+      request.getRequestDispatcher("decoderesult.jspx").forward(request, response);
     }
   }
 
