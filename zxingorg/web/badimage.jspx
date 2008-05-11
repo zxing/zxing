@@ -14,6 +14,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  -->
+<!-- Author: Sean Owen (srowen@google.com) -->
 <jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" xmlns="http://www.w3.org/1999/xhtml" version="2.1">
   <jsp:output
           omit-xml-declaration="false" doctype-root-element="html"
@@ -23,27 +24,14 @@
   <jsp:scriptlet>response.setHeader("Cache-Control", "public");</jsp:scriptlet>
   <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
     <head>
-      <title>No Barcode Found</title>
+      <title>Bad Image</title>
     </head>
     <body>
-      <p>
-        <b>Bad URL</b>
-      </p>
+      <h1><img src="zxing-icon.png" height="32" width="32" alt=""/> Bad Image</h1>
       <p>The image you uploaded could not be decoded, or was too large. Go "Back" in your browser and try another
         image.
       </p>
-      <script type="text/javascript">
-        var gaJsHost = (("https:" == document.location.protocol) ?
-        "https://ssl." : "http://www.");
-        document.write(unescape("%3Cscript src='" + gaJsHost +
-        "google-analytics.com/ga.js'
-        type='text/javascript'%3E%3C/script%3E"));
-      </script>
-      <script type="text/javascript">
-        var pageTracker = _gat._getTracker("UA-788492-5");
-        pageTracker._initData();
-        pageTracker._trackPageview();
-      </script>
+      <jsp:include page="analytics.jspx"/>
     </body>
   </html>
 </jsp:root>

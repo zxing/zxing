@@ -67,14 +67,16 @@
       <classes dir="web/WEB-INF/classes"/>
       <fileset dir="web">
         <include name="*.jspx"/>
+        <include name="*.png"/>
       </fileset>
     </war>
   </target>
 
 	<target name="clean">
 		<delete dir="web/WEB-INF/classes"/>
-    <delete file="../core/core.jar"/>
-    <delete file="../javase/javase.jar"/>
+    <delete file="web/WEB-INF/lib/core.jar"/>
+    <delete file="web/WEB-INF/lib/javase.jar"/>
+    <delete file="zxingorg.war"/>
   </target>
 
 </project>

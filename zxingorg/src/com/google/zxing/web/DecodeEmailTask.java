@@ -38,13 +38,18 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import java.awt.image.BufferedImage;
 import java.io.UnsupportedEncodingException;
+import java.io.IOException;
 import java.util.Properties;
 import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * @author Sean Owen
+ * A {@link TimerTask} which repeatedly checks an e-mail account for messages with an attached
+ * image. When one is found it attempts to decode the image and replies with the decoded messages
+ * by e-mail.
+ *
+ * @author Sean Owen (srowen@google.com)
  */
 final class DecodeEmailTask extends TimerTask {
 
@@ -89,75 +94,85 @@ final class DecodeEmailTask extends TimerTask {
   @Override
   public void run() {
     log.info("Checking email...");
+    Session session = Session.getInstance(sessionProperties, emailAuthenticator);
+    Store store = null;
+    Folder inbox = null;
     try {
-      Session session = Session.getInstance(sessionProperties, emailAuthenticator);
-      Store store = null;
-      Folder inbox = null;
-      try {
-        store = session.getStore("pop3");
-        store.connect();
-        inbox = store.getFolder("INBOX");
-        inbox.open(Folder.READ_WRITE);
-        int count = inbox.getMessageCount();
-        if (count > 0) {
-          log.info("Found " + count + " messages");
-        }
-        for (int i = 1; i <= count; i++) {
-          log.info("Processing message " + i);
-          Message message = inbox.getMessage(i);
-          Object content = message.getContent();
-          if (content instanceof MimeMultipart) {
-            MimeMultipart mimeContent = (MimeMultipart) content;
-            int numParts = mimeContent.getCount();
-            for (int j = 0; j < numParts; j++) {
-              MimeBodyPart part = (MimeBodyPart) mimeContent.getBodyPart(j);
-              String contentType = part.getContentType();
-              if (!contentType.startsWith("image/")) {
-                continue;
-              }
-              BufferedImage image = ImageIO.read(part.getInputStream());
-              if (image != null) {
-                Reader reader = new MultiFormatReader();
-                Result result = null;
-                try {
-                  result = reader.decode(new BufferedImageMonochromeBitmapSource(image), DecodeServlet.HINTS);
-                } catch (ReaderException re) {
-                  log.info("Decoding FAILED");
-                }
-
-                Message reply = new MimeMessage(session);
-                Address sender = message.getFrom()[0];
-                reply.setRecipient(Message.RecipientType.TO, sender);
-                reply.setFrom(fromAddress);
-                if (result == null) {
-                  reply.setSubject("Decode failed");
-                  reply.setContent("Sorry, we could not decode that image.", "text/plain");
-                } else {
-                  String text = result.getText();
-                  reply.setSubject("Decode succeeded");
-                  reply.setContent(text, "text/plain");
-                }
-                log.info("Sending reply");
-                Transport.send(reply);
-              }
-            }
-          }
-          message.setFlag(Flags.Flag.DELETED, true);
-        }
-      } finally {
-        try {
-          if (inbox != null) {
-            inbox.close(true);
-          }
-          if (store != null) {
-            store.close();
-          }
-        } catch (MessagingException me) {
-          // continue
-        }
+      store = session.getStore("pop3");
+      store.connect();
+      inbox = store.getFolder("INBOX");
+      inbox.open(Folder.READ_WRITE);
+      int count = inbox.getMessageCount();
+      if (count > 0) {
+        log.info("Found " + count + " messages");
+      }
+      for (int i = 1; i <= count; i++) {
+        log.info("Processing message " + i);
+        Message message = inbox.getMessage(i);
+        processMessage(session, message);
       }
     } catch (Throwable t) {
       log.log(Level.WARNING, "Unexpected error", t);
+    } finally {
+      closeResources(store, inbox);
+    }
+  }
+
+  private void processMessage(Session session, Message message) throws MessagingException, IOException {
+    Object content = message.getContent();
+    if (content instanceof MimeMultipart) {
+      MimeMultipart mimeContent = (MimeMultipart) content;
+      int numParts = mimeContent.getCount();
+      for (int j = 0; j < numParts; j++) {
+        MimeBodyPart part = (MimeBodyPart) mimeContent.getBodyPart(j);
+        processMessagePart(session, message, part);
+      }
+    }
+    message.setFlag(Flags.Flag.DELETED, true);
+  }
+
+  private void processMessagePart(Session session, Message message, MimeBodyPart part)
+      throws MessagingException, IOException {
+    String contentType = part.getContentType();
+    if (contentType.startsWith("image/")) {
+      BufferedImage image = ImageIO.read(part.getInputStream());
+      if (image != null) {
+        Reader reader = new MultiFormatReader();
+        Result result = null;
+        try {
+          result = reader.decode(new BufferedImageMonochromeBitmapSource(image), DecodeServlet.HINTS);
+        } catch (ReaderException re) {
+          log.info("Decoding FAILED");
+        }
+
+        Message reply = new MimeMessage(session);
+        Address sender = message.getFrom()[0];
+        reply.setRecipient(Message.RecipientType.TO, sender);
+        reply.setFrom(fromAddress);
+        if (result == null) {
+          reply.setSubject("Decode failed");
+          reply.setContent("Sorry, we could not decode that image.", "text/plain");
+        } else {
+          String text = result.getText();
+          reply.setSubject("Decode succeeded");
+          reply.setContent(text, "text/plain");
+        }
+        log.info("Sending reply");
+        Transport.send(reply);
+      }
+    }
+  }
+
+  private void closeResources(Store store, Folder inbox) {
+    try {
+      if (inbox != null) {
+        inbox.close(true);
+      }
+      if (store != null) {
+        store.close();
+      }
+    } catch (MessagingException me) {
+      // continue
     }
   }
 

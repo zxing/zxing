@@ -14,6 +14,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  -->
+<!-- Author: Sean Owen (srowen@google.com) -->
 <jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" xmlns="http://www.w3.org/1999/xhtml" version="2.1">
   <jsp:output
           omit-xml-declaration="false" doctype-root-element="html"
@@ -26,24 +27,11 @@
       <title>No Barcode Found</title>
     </head>
     <body>
-      <p>
-        <b>No Barcode Found</b>
-      </p>
+      <h1><img src="zxing-icon.png" height="32" width="32" alt=""/> No Barcode Found</h1>
       <p>No barcode was found in this image. Either it did not contain a barcode, or did not contain one in a
         supported format, or the software was simply unable to find it. Go "Back" in your browser and try another image.
       </p>
-      <script type="text/javascript">
-        var gaJsHost = (("https:" == document.location.protocol) ?
-        "https://ssl." : "http://www.");
-        document.write(unescape("%3Cscript src='" + gaJsHost +
-        "google-analytics.com/ga.js'
-        type='text/javascript'%3E%3C/script%3E"));
-      </script>
-      <script type="text/javascript">
-        var pageTracker = _gat._getTracker("UA-788492-5");
-        pageTracker._initData();
-        pageTracker._trackPageview();
-      </script>
+      <jsp:include page="analytics.jspx"/>      
     </body>
   </html>
 </jsp:root>
