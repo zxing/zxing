@@ -153,5 +153,16 @@ public final class BitArray {
     }
     return new int[arraySize];
   }
+  
+  public String toString() {
+    StringBuffer result = new StringBuffer(size);
+    for (int i = 0; i < size; i++) {
+      if (i % 8 == 0) {
+        result.append(' ');
+      }
+      result.append(get(i) ? 'X' : '.');
+    }
+    return result.toString();
+  }
 
 }
