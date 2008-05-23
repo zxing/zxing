@@ -19,7 +19,6 @@ package com.google.zxing.client.android;
 import android.content.Intent;
 import android.net.ContentURI;
 import android.provider.Contacts;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import com.google.zxing.client.result.AddressBookAUParsedResult;
@@ -31,6 +30,7 @@ import com.google.zxing.client.result.GeoParsedResult;
 import com.google.zxing.client.result.ParsedReaderResult;
 import com.google.zxing.client.result.ParsedReaderResultType;
 import com.google.zxing.client.result.SMSParsedResult;
+import com.google.zxing.client.result.SMSTOParsedResult;
 import com.google.zxing.client.result.TelParsedResult;
 import com.google.zxing.client.result.UPCParsedResult;
 import com.google.zxing.client.result.URIParsedResult;
@@ -46,8 +46,6 @@ import java.net.URISyntaxException;
  * @author dswitkin@google.com (Daniel Switkin)
  */
 final class ResultHandler implements Button.OnClickListener {
-
-  private static final String TAG = "ResultHandler";
 
   private final Intent intent;
   private final BarcodeReaderCaptureActivity captureActivity;
@@ -90,7 +88,7 @@ final class ResultHandler implements Button.OnClickListener {
     } else if (type.equals(ParsedReaderResultType.EMAIL)) {
       EmailDoCoMoParsedResult emailResult = (EmailDoCoMoParsedResult) result;
       try {
-        intent = new Intent(Intent.SENDTO_ACTION, new ContentURI(emailResult.getTo()));
+        intent = new Intent(Intent.SENDTO_ACTION, new ContentURI(emailResult.getMailtoURI()));
       } catch (URISyntaxException e) {
       }
       putExtra(intent, "subject", emailResult.getSubject());
@@ -98,26 +96,33 @@ final class ResultHandler implements Button.OnClickListener {
     } else if (type.equals(ParsedReaderResultType.EMAIL_ADDRESS)) {
       EmailAddressParsedResult emailResult = (EmailAddressParsedResult) result;
       try {
-        intent = new Intent(Intent.SENDTO_ACTION, new ContentURI("mailto:" + emailResult.getEmailAddress()));
+        intent = new Intent(Intent.SENDTO_ACTION, new ContentURI(emailResult.getMailtoURI()));
       } catch (URISyntaxException e) {
       }
+      putExtra(intent, "subject", emailResult.getSubject());
+      putExtra(intent, "body", emailResult.getBody());
     } else if (type.equals(ParsedReaderResultType.SMS)) {
       SMSParsedResult smsResult = (SMSParsedResult) result;
       try {
         intent = new Intent(Intent.SENDTO_ACTION, new ContentURI(smsResult.getSMSURI()));
       } catch (URISyntaxException e) {
       }
+    } else if (type.equals(ParsedReaderResultType.SMSTO)) {
+      SMSTOParsedResult smsToResult = (SMSTOParsedResult) result;
+      try {
+        intent = new Intent(Intent.SENDTO_ACTION, new ContentURI(smsToResult.getSMSURI()));
+      } catch (URISyntaxException e) {
+      }
     } else if (type.equals(ParsedReaderResultType.TEL)) {
       TelParsedResult telResult = (TelParsedResult) result;
       try {
-        intent = new Intent(Intent.DIAL_ACTION, new ContentURI("tel:" + telResult.getNumber()));
+        intent = new Intent(Intent.DIAL_ACTION, new ContentURI(telResult.getTelURI()));
       } catch (URISyntaxException e) {
       }
     } else if (type.equals(ParsedReaderResultType.GEO)) {
       GeoParsedResult geoResult = (GeoParsedResult) result;
       try {
         ContentURI geoURI = new ContentURI(geoResult.getGeoURI());
-        Log.v(TAG, "Created geo URI: " + geoURI.toString());
         intent = new Intent(Intent.VIEW_ACTION, geoURI);
       } catch (URISyntaxException e) {
       }

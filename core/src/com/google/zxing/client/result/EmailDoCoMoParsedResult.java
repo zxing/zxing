@@ -68,6 +68,26 @@ public final class EmailDoCoMoParsedResult extends AbstractDoCoMoParsedResult {
     return body;
   }
 
+  public String getMailtoURI() {
+    StringBuffer result = new StringBuffer(to);
+    boolean hasParams = false;
+    if (subject != null) {
+      result.append(hasParams ? '&' : '?');
+      hasParams = true;
+      result.append("subject=");
+      result.append(subject);
+      // TODO we need to escape this?
+    }
+    if (body != null) {
+      result.append(hasParams ? '&' : '?');
+      hasParams = true;
+      result.append("body=");
+      result.append(body);
+      // TODO we need to escape this?
+    }
+    return result.toString();
+  }
+
   public String getDisplayResult() {
     StringBuffer result = new StringBuffer(to);
     maybeAppend(subject, result);

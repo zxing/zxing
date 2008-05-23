@@ -30,6 +30,7 @@ import com.google.zxing.client.result.GeoParsedResult;
 import com.google.zxing.client.result.ParsedReaderResult;
 import com.google.zxing.client.result.ParsedReaderResultType;
 import com.google.zxing.client.result.SMSParsedResult;
+import com.google.zxing.client.result.SMSTOParsedResult;
 import com.google.zxing.client.result.TelParsedResult;
 import com.google.zxing.client.result.UPCParsedResult;
 import com.google.zxing.client.result.URIParsedResult;
@@ -78,21 +79,23 @@ final class ResultHandler implements Button.OnClickListener {
       intent = new Intent(Intent.VIEW_ACTION, Uri.parse(((URLTOParsedResult) result).getURI()));
     } else if (type.equals(ParsedReaderResultType.EMAIL)) {
       EmailDoCoMoParsedResult emailResult = (EmailDoCoMoParsedResult) result;
-      intent = new Intent(Intent.SENDTO_ACTION, Uri.parse(emailResult.getTo()));
+      intent = new Intent(Intent.SENDTO_ACTION, Uri.parse(emailResult.getMailtoURI()));
       putExtra(intent, "subject", emailResult.getSubject());
       putExtra(intent, "body", emailResult.getBody());
     } else if (type.equals(ParsedReaderResultType.EMAIL_ADDRESS)) {
       EmailAddressParsedResult emailResult = (EmailAddressParsedResult) result;
-      intent = new Intent(Intent.SENDTO_ACTION, Uri.parse("mailto:" + emailResult.getEmailAddress()));
+      intent = new Intent(Intent.SENDTO_ACTION, Uri.parse(emailResult.getMailtoURI()));
+      putExtra(intent, "subject", emailResult.getSubject());
+      putExtra(intent, "body", emailResult.getBody());
     } else if (type.equals(ParsedReaderResultType.SMS)) {
       SMSParsedResult smsResult = (SMSParsedResult) result;
       intent = new Intent(Intent.SENDTO_ACTION, Uri.parse(smsResult.getSMSURI()));
-    } else if (type.equals(ParsedReaderResultType.SMS)) {
-      SMSParsedResult smsResult = (SMSParsedResult) result;
-      intent = new Intent(Intent.SENDTO_ACTION, Uri.parse(smsResult.getSMSURI()));
+    } else if (type.equals(ParsedReaderResultType.SMSTO)) {
+      SMSTOParsedResult smsToResult = (SMSTOParsedResult) result;
+      intent = new Intent(Intent.SENDTO_ACTION, Uri.parse(smsToResult.getSMSURI()));
     } else if (type.equals(ParsedReaderResultType.TEL)) {
       TelParsedResult telResult = (TelParsedResult) result;
-      intent = new Intent(Intent.DIAL_ACTION, Uri.parse("tel:" + telResult.getNumber()));
+      intent = new Intent(Intent.DIAL_ACTION, Uri.parse(telResult.getTelURI()));
     } else if (type.equals(ParsedReaderResultType.GEO)) {
       GeoParsedResult geoResult = (GeoParsedResult) result;
       intent = new Intent(Intent.VIEW_ACTION, Uri.parse(geoResult.getGeoURI()));
