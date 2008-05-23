@@ -37,6 +37,7 @@ public final class ParsedReaderResultType {
   public static final ParsedReaderResultType GEO = new ParsedReaderResultType("GEO");
   public static final ParsedReaderResultType TEL = new ParsedReaderResultType("TEL");
   public static final ParsedReaderResultType SMS = new ParsedReaderResultType("SMS");
+  public static final ParsedReaderResultType SMSTO = new ParsedReaderResultType("SMSTO");
   
   // "optional" types
   public static final ParsedReaderResultType NDEF_TEXT = new ParsedReaderResultType("NDEF_TEXT");

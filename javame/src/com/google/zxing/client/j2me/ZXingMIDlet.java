@@ -23,6 +23,7 @@ import com.google.zxing.client.result.EmailDoCoMoParsedResult;
 import com.google.zxing.client.result.ParsedReaderResult;
 import com.google.zxing.client.result.ParsedReaderResultType;
 import com.google.zxing.client.result.SMSParsedResult;
+import com.google.zxing.client.result.SMSTOParsedResult;
 import com.google.zxing.client.result.TelParsedResult;
 import com.google.zxing.client.result.UPCParsedResult;
 import com.google.zxing.client.result.URIParsedResult;
@@ -205,21 +206,24 @@ public final class ZXingMIDlet extends MIDlet {
       String uri = ((URLTOParsedResult) result).getURI();
       showOpenURL("Open Web Page?", uri, uri);
     } else if (type.equals(ParsedReaderResultType.EMAIL)) {
-      String email = ((EmailDoCoMoParsedResult) result).getTo();
-      showOpenURL("Compose E-mail?", email, "mailto:" + email);
+      EmailDoCoMoParsedResult emailResult = (EmailDoCoMoParsedResult) result;
+      showOpenURL("Compose E-mail?", emailResult.getTo(), emailResult.getMailtoURI());
     } else if (type.equals(ParsedReaderResultType.EMAIL_ADDRESS)) {
-      String email = ((EmailAddressParsedResult) result).getEmailAddress();
-      showOpenURL("Compose E-mail?", email, "mailto:" + email);
+      EmailAddressParsedResult emailResult = (EmailAddressParsedResult) result;
+      showOpenURL("Compose E-mail?", emailResult.getEmailAddress(), emailResult.getMailtoURI());
     } else if (type.equals(ParsedReaderResultType.SMS)) {
       SMSParsedResult smsResult = (SMSParsedResult) result;
       showOpenURL("Compose SMS?", smsResult.getNumber(), smsResult.getSMSURI());
+    } else if (type.equals(ParsedReaderResultType.SMSTO)) {
+      SMSTOParsedResult smsToResult = (SMSTOParsedResult) result;
+      showOpenURL("Compose SMS?", smsToResult.getNumber(), smsToResult.getSMSURI());
     } else if (type.equals(ParsedReaderResultType.UPC)) {
       String upc = ((UPCParsedResult) result).getUPC();
       String uri = "http://www.upcdatabase.com/item.asp?upc=" + upc;
       showOpenURL("Look Up Barcode Online?", upc, uri);
     } else if (type.equals(ParsedReaderResultType.TEL)) {
-      String number = ((TelParsedResult) result).getNumber();
-      showOpenURL("Dial Number?", number, "tel:" + number);
+      TelParsedResult telResult = (TelParsedResult) result;
+      showOpenURL("Dial Number?", telResult.getNumber(), telResult.getTelURI());
     } else {
       showAlert("Barcode Detected", result.getDisplayResult());
     }
