@@ -40,7 +40,7 @@ final class VideoCanvas extends Canvas implements CommandListener {
     addCommand(exit);
     setCommandListener(this);
     snapshotThread = new SnapshotThread(zXingMIDlet);
-    snapshotThread.start();
+    new Thread(snapshotThread).start();
   }
 
   protected void paint(Graphics graphics) {

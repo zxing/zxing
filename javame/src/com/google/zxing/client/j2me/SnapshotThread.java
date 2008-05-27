@@ -32,7 +32,7 @@ import javax.microedition.media.control.VideoControl;
  *
  * @author Sean Owen (srowen@google.com)
  */
-final class SnapshotThread extends Thread {
+final class SnapshotThread implements Runnable {
 
   private final ZXingMIDlet zXingMIDlet;
   private final Object waitLock;
