@@ -58,6 +58,7 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.UnknownHostException;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Timer;
@@ -72,7 +73,7 @@ import java.util.logging.Logger;
 public final class DecodeServlet extends HttpServlet {
 
   private static final long MAX_IMAGE_SIZE = 500000L;
-  private static final long EMAIL_CHECK_INTERVAL = 60000L;
+  private static final long EMAIL_CHECK_INTERVAL = 2L * 60 * 1000;
 
   private static final Logger log = Logger.getLogger(DecodeServlet.class.getName());
 
@@ -161,6 +162,9 @@ public final class DecodeServlet extends HttpServlet {
       getRequest.abort();
       response.sendRedirect("badurl.jspx");
     } catch (HttpException he) {
+      getRequest.abort();
+      response.sendRedirect("badurl.jspx");
+    } catch (UnknownHostException uhe) {
       getRequest.abort();
       response.sendRedirect("badurl.jspx");
     }
