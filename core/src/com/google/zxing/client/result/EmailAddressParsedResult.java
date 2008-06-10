@@ -55,11 +55,15 @@ public final class EmailAddressParsedResult extends AbstractDoCoMoParsedResult {
         emailAddress = emailAddress.substring(0, queryStart);
       }
       Hashtable nameValues = parseNameValuePairs(rawText);
-      if (emailAddress.length() == 0) {
-        emailAddress = (String) nameValues.get("to");
+      String subject = null;
+      String body = null;
+      if (nameValues != null) {
+        if (emailAddress.length() == 0) {
+          emailAddress = (String) nameValues.get("to");
+        }
+        subject = (String) nameValues.get("subject");
+        body = (String) nameValues.get("body");
       }
-      String subject = (String) nameValues.get("subject");
-      String body = (String) nameValues.get("body");
       return new EmailAddressParsedResult(emailAddress, subject, body, rawText);
     } else {
       if (!EmailDoCoMoParsedResult.isBasicallyValidEmailAddress(rawText)) {
