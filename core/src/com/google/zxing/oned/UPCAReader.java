@@ -16,9 +16,13 @@
 
 package com.google.zxing.oned;
 
-import com.google.zxing.ReaderException;
 import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MonochromeBitmapSource;
+import com.google.zxing.ReaderException;
+import com.google.zxing.Result;
 import com.google.zxing.common.BitArray;
+
+import java.util.Hashtable;
 
 /**
  * <p>Implements decoding of the UPC-A format.</p>
@@ -26,37 +30,33 @@ import com.google.zxing.common.BitArray;
  * @author dswitkin@google.com (Daniel Switkin)
  * @author srowen@google.com (Sean Owen)
  */
-public final class UPCAReader extends AbstractUPCEANReader {
+public final class UPCAReader implements UPCEANReader {
 
-  protected int decodeMiddle(BitArray row, int[] startRange, StringBuffer resultString) throws ReaderException {
-    int middleStart = decodeDigits(row, startRange[1], resultString);
-    int[] middleRange = findGuardPattern(row, middleStart, true, MIDDLE_PATTERN);
-    return decodeDigits(row, middleRange[1], resultString);
+  private final UPCEANReader ean13Reader = new EAN13Reader();
+
+  public Result decodeRow(int rowNumber, BitArray row, int[] startGuardRange) throws ReaderException {
+    return maybeReturnResult(ean13Reader.decodeRow(rowNumber, row, startGuardRange));
   }
 
-  /**
-   * @param row row of black/white values to decode
-   * @param start horizontal offset from which decoding starts
-   * @param result {@link StringBuffer} to append decoded digits to
-   * @return horizontal offset of first pixel after the six decoded digits
-   * @throws ReaderException if six digits could not be decoded from the row
-   */
-  private static int decodeDigits(BitArray row, int start, StringBuffer result) throws ReaderException {
-    int[] counters = new int[4];
-    int end = row.getSize();
-    int rowOffset = start;
-    for (int x = 0; x < 6 && rowOffset < end; x++) {
-      int bestMatch = decodeDigit(row, counters, rowOffset, L_PATTERNS);
-      result.append((char) ('0' + bestMatch));
-      for (int i = 0; i < counters.length; i++) {
-        rowOffset += counters[i];
-      }
+  public Result decodeRow(int rowNumber, BitArray row, Hashtable hints) throws ReaderException {
+    return maybeReturnResult(ean13Reader.decodeRow(rowNumber, row, hints));
+  }
+
+  public Result decode(MonochromeBitmapSource image) throws ReaderException {
+    return maybeReturnResult(ean13Reader.decode(image));
+  }
+
+  public Result decode(MonochromeBitmapSource image, Hashtable hints) throws ReaderException {
+    return maybeReturnResult(ean13Reader.decode(image, hints));
+  }
+
+  private static Result maybeReturnResult(Result result) throws ReaderException {
+    String text = result.getText();
+    if (text.charAt(0) == '0') {
+      return new Result(text.substring(1), null, result.getResultPoints(), BarcodeFormat.UPC_A);
+    } else {
+      throw new ReaderException("Found EAN-13 code but was not a UPC-A code");
     }
-    return rowOffset;
-  }
-
-  BarcodeFormat getBarcodeFormat() {
-    return BarcodeFormat.UPC_A;  
   }
 
 }
