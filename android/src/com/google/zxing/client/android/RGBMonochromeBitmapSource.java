@@ -17,11 +17,7 @@
 package com.google.zxing.client.android;
 
 import android.graphics.Bitmap;
-import com.google.zxing.BlackPointEstimationMethod;
-import com.google.zxing.MonochromeBitmapSource;
-import com.google.zxing.ReaderException;
-import com.google.zxing.common.BitArray;
-import com.google.zxing.common.BlackPointEstimator;
+import com.google.zxing.common.BaseMonochromeBitmapSource;
 
 /**
  * This object implements MonochromeBitmapSource around an Android Bitmap.
@@ -29,61 +25,16 @@ import com.google.zxing.common.BlackPointEstimator;
  * @author dswitkin@google.com (Daniel Switkin)
  * @author srowen@google.com (Sean Owen)
  */
-final class RGBMonochromeBitmapSource implements MonochromeBitmapSource {
+final class RGBMonochromeBitmapSource extends BaseMonochromeBitmapSource {
 
   private final Bitmap image;
-  private int blackPoint;
-  private BlackPointEstimationMethod lastMethod;
-  private int lastArgument;
-
-  private static final int LUMINANCE_BITS = 5;
-  private static final int LUMINANCE_SHIFT = 8 - LUMINANCE_BITS;
-  private static final int LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
+  private final int[] rgbRow;
+  private int cachedRow;
 
   RGBMonochromeBitmapSource(Bitmap image) {
     this.image = image;
-    blackPoint = 0x7F;
-    lastMethod = null;
-    lastArgument = 0;
-  }
-
-  public boolean isBlack(int x, int y) {
-    return computeRGBLuminance(image.getPixel(x, y)) < blackPoint;
-  }
-
-  public BitArray getBlackRow(int y, BitArray row, int startX, int getWidth) {
-    if (row == null || row.getSize() < getWidth) {
-      row = new BitArray(getWidth);
-    } else {
-      row.clear();
-    }
-    int[] pixelRow = new int[getWidth];
-    image.getPixels(pixelRow, 0, getWidth, startX, y, getWidth, 1);
-
-    // If the current decoder calculated the blackPoint based on one row, assume we're trying to
-    // decode a 1D barcode, and apply some sharpening.
-    // TODO: We may want to add a fifth parameter to request the amount of shapening to be done.
-    if (lastMethod.equals(BlackPointEstimationMethod.ROW_SAMPLING)) {
-      int left = computeRGBLuminance(pixelRow[0]);
-      int center = computeRGBLuminance(pixelRow[1]);
-      for (int i = 1; i < getWidth - 1; i++) {
-        int right = computeRGBLuminance(pixelRow[i + 1]);
-        // Simple -1 4 -1 box filter with a weight of 2
-        int luminance = ((center << 2) - left - right) >> 1;
-        if (luminance < blackPoint) {
-          row.set(i);
-        }
-        left = center;
-        center = right;
-      }
-    } else {
-      for (int i = 0; i < getWidth; i++) {
-        if (computeRGBLuminance(pixelRow[i]) < blackPoint) {
-          row.set(i);
-        }
-      }
-    }
-    return row;
+    rgbRow = new int[image.getWidth()];
+    cachedRow = -1;
   }
 
   public int getHeight() {
@@ -94,57 +45,18 @@ final class RGBMonochromeBitmapSource implements MonochromeBitmapSource {
     return image.width();
   }
 
-  public void estimateBlackPoint(BlackPointEstimationMethod method, int argument) throws ReaderException {
-    if (!method.equals(lastMethod) || argument != lastArgument) {
-      int width = image.width();
-      int height = image.height();
-      int[] histogram = new int[LUMINANCE_BUCKETS];
-      if (method.equals(BlackPointEstimationMethod.TWO_D_SAMPLING)) {
-        int minDimension = width < height ? width : height;
-        int startI = height == minDimension ? 0 : (height - width) >> 1;
-        int startJ = width == minDimension ? 0 : (width - height) >> 1;
-        for (int n = 0; n < minDimension; n++) {
-          int pixel = image.getPixel(startJ + n, startI + n);
-          histogram[computeRGBLuminance(pixel) >> LUMINANCE_SHIFT]++;
-        }
-      } else if (method.equals(BlackPointEstimationMethod.ROW_SAMPLING)) {
-        if (argument < 0 || argument >= height) {
-          throw new IllegalArgumentException("Row is not within the image: " + argument);
-        }
-        int[] pixelRow = new int[width];
-        image.getPixels(pixelRow, 0, width, 0, argument, width, 1);
-        for (int x = 0; x < width; x++) {
-          histogram[computeRGBLuminance(pixelRow[x]) >> LUMINANCE_SHIFT]++;
-        }
-      } else {
-        throw new IllegalArgumentException("Unknown method: " + method);
-      }
-      blackPoint = BlackPointEstimator.estimate(histogram) << LUMINANCE_SHIFT;
-      lastMethod = method;
-      lastArgument = argument;
-    }
-  }
-
-  public BlackPointEstimationMethod getLastEstimationMethod() {
-    return lastMethod;
-  }
-
-  public MonochromeBitmapSource rotateCounterClockwise() {
-    throw new IllegalStateException("Rotate not supported");
-  }
-
-  public boolean isRotateSupported() {
-    return false;
-  }
-
   /**
    * An optimized approximation of a more proper conversion from RGB to luminance which
-   * only uses shifts. See BufferedImageMonochromeBitmapSource for an original version.
-   *
-   * @param pixel An ARGB input pixel
-   * @return An eight bit luminance value
+   * only uses shifts.
    */
-  private static int computeRGBLuminance(int pixel) {
+  public int getLuminance(int x, int y) {
+    int pixel;
+    if (cachedRow == y) {
+      pixel = rgbRow[x];
+    } else {
+      pixel = image.getPixel(x, y);
+    }
+
     // Instead of multiplying by 306, 601, 117, we multiply by 256, 512, 256, so that
     // the multiplies can be implemented as shifts.
     //
@@ -157,11 +69,17 @@ final class RGBMonochromeBitmapSource implements MonochromeBitmapSource {
     // That is, we're replacing the coefficients in the original with powers of two,
     // which can be implemented as shifts, even though changing the coefficients slightly
     // corrupts the conversion. Not significant for our purposes.
-    //
-    // But we can get even cleverer and eliminate a few shifts:
-    return (((pixel & 0x00FF0000) >> 16)  +
+    return (((pixel & 0x00FF0000) >> 16) +
             ((pixel & 0x0000FF00) >>  7) +
-            ( pixel & 0x000000FF       )) >> 2;
+             (pixel & 0x000000FF       )) >> 2;
+  }
+
+  public void cacheRowForLuminance(int y) {
+    if (y != cachedRow) {
+      int width = image.width();
+      image.getPixels(rgbRow, 0, width, 0, y, width, 1);
+      cachedRow = y;
+    }
   }
 
 }
