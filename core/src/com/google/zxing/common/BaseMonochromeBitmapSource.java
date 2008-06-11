@@ -98,6 +98,7 @@ public abstract class BaseMonochromeBitmapSource implements MonochromeBitmapSour
         if (argument < 0 || argument >= height) {
           throw new IllegalArgumentException("Row is not within the image: " + argument);
         }
+        cacheRowForLuminance(argument);
         for (int x = 0; x < width; x++) {
           int luminance = getLuminance(x, argument);
           histogram[luminance >> LUMINANCE_SHIFT]++;
