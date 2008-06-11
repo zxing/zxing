@@ -28,7 +28,9 @@ import java.io.File;
 public final class Code39BlackBox1TestCase extends AbstractBlackBoxTestCase {
 
   public Code39BlackBox1TestCase() {
-    super(new File("test/data/blackbox/code39-1"), new MultiFormatReader(), 4, BarcodeFormat.CODE_39);
+    super(new File("test/data/blackbox/code39-1"), new MultiFormatReader(), BarcodeFormat.CODE_39);
+    addTest(4, 0.0f);
+    addTest(4, 180.0f);
   }
 
 }

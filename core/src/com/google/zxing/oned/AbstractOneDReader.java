@@ -104,14 +104,11 @@ public abstract class AbstractOneDReader implements OneDReader {
       }
       image.getBlackRow(rowNumber, row, 0, width);
 
-      // We may try twice for each row, if "trying harder":
+      // While we have the image data in a BitArray, it's fairly cheap to reverse it in place to
+      // handle decoding upside down barcodes.
       for (int attempt = 0; attempt < 2; attempt++) {
         if (attempt == 1) { // trying again?
-          if (tryHarder) { // only if "trying harder"
-            row.reverse(); // reverse the row and continue
-          } else {
-            break;
-          }
+          row.reverse(); // reverse the row and continue
         }
         try {
           // Look for a barcode

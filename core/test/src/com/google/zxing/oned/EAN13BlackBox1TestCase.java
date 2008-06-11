@@ -28,7 +28,9 @@ import java.io.File;
 public final class EAN13BlackBox1TestCase extends AbstractBlackBoxTestCase {
 
   public EAN13BlackBox1TestCase() {
-    super(new File("test/data/blackbox/ean13-1"), new MultiFormatReader(), 25, BarcodeFormat.EAN_13);
+    super(new File("test/data/blackbox/ean13-1"), new MultiFormatReader(), BarcodeFormat.EAN_13);
+    addTest(25, 0.0f);
+    addTest(18, 180.0f);
   }
 
 }

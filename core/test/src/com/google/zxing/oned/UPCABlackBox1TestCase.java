@@ -28,7 +28,9 @@ import java.io.File;
 public final class UPCABlackBox1TestCase extends AbstractBlackBoxTestCase {
 
   public UPCABlackBox1TestCase() {
-    super(new File("test/data/blackbox/upca-1"), new MultiFormatReader(), 15, BarcodeFormat.UPC_A);
+    super(new File("test/data/blackbox/upca-1"), new MultiFormatReader(), BarcodeFormat.UPC_A);
+    addTest(15, 0.0f);
+    addTest(16, 180.0f);
   }
 
 }

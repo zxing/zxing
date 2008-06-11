@@ -28,7 +28,11 @@ import java.io.File;
 public final class QRCodeBlackBox1TestCase extends AbstractBlackBoxTestCase {
 
   public QRCodeBlackBox1TestCase() {
-    super(new File("test/data/blackbox/qrcode-1"), new MultiFormatReader(), 16, BarcodeFormat.QR_CODE);
+    super(new File("test/data/blackbox/qrcode-1"), new MultiFormatReader(), BarcodeFormat.QR_CODE);
+    addTest(16, 0.0f);
+    addTest(12, 90.0f);
+    addTest(12, 180.0f);
+    addTest(7, 270.0f);
   }
 
 }
