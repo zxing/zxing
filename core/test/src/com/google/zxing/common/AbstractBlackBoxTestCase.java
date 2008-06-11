@@ -26,6 +26,8 @@ import com.google.zxing.client.j2se.BufferedImageMonochromeBitmapSource;
 import junit.framework.TestCase;
 
 import javax.imageio.ImageIO;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
@@ -34,9 +36,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.Hashtable;
+import java.util.Vector;
 
 /**
  * @author srowen@google.com (Sean Owen)
+ * @author dswitkin@google.com (Daniel Switkin)
  */
 public abstract class AbstractBlackBoxTestCase extends TestCase {
 
@@ -55,27 +59,46 @@ public abstract class AbstractBlackBoxTestCase extends TestCase {
     }
   };
 
+  private class TestResult {
+    public int mustPassCount;
+    public float rotation;
+
+    TestResult(int mustPassCount, float rotation) {
+      this.mustPassCount = mustPassCount;
+      this.rotation = rotation;
+    }
+  }
+
   private final File testBase;
   private final Reader barcodeReader;
-  private final int mustPassCount;
   private final BarcodeFormat expectedFormat;
+  private Vector<TestResult> testResults;
 
   protected AbstractBlackBoxTestCase(File testBase,
                                      Reader barcodeReader,
-                                     int mustPassCount,
                                      BarcodeFormat expectedFormat) {
     this.testBase = testBase;
     this.barcodeReader = barcodeReader;
-    this.mustPassCount = mustPassCount;
     this.expectedFormat = expectedFormat;
+    testResults = new Vector<TestResult>();
+  }
+
+  /**
+   * Adds a new test for the current directory of images.
+   *
+   * @param mustPassCount The number of images which must decode for the test to pass.
+   * @param rotation The rotation in degrees clockwise to use for this test.
+   */
+  protected void addTest(int mustPassCount, float rotation) {
+    testResults.add(new TestResult(mustPassCount, rotation));
   }
 
   public void testBlackBox() throws IOException {
-
+    assertTrue(testResults.size() > 0);
     assertTrue("Please run from the 'core' directory", testBase.exists());
 
     File[] imageFiles = testBase.listFiles(IMAGE_NAME_FILTER);
-    int passedCount = 0;
+    int[] passedCounts = new int[testResults.size()];
     for (File testImage : imageFiles) {
       System.out.println("Starting " + testImage.getAbsolutePath());
 
@@ -86,56 +109,67 @@ public abstract class AbstractBlackBoxTestCase extends TestCase {
       } else {
         image = ImageIO.read(testImage);
       }
-      MonochromeBitmapSource source = new BufferedImageMonochromeBitmapSource(image);
-      Result result;
-      try {
-        result = barcodeReader.decode(source);
-      } catch (ReaderException re) {
-        System.out.println(re);
-        continue;
-      }
-
-      if (expectedFormat != result.getBarcodeFormat()) {
-        System.out.println("Format mismatch: expected '" + expectedFormat + "' but got '" +
-            result.getBarcodeFormat() + '\'');
-        continue;
-      }
 
       String testImageFileName = testImage.getName();
       File expectedTextFile = new File(testBase,
           testImageFileName.substring(0, testImageFileName.indexOf('.')) + ".txt");
       String expectedText = readFileAsString(expectedTextFile);
-      String resultText = result.getText();
 
-      boolean passed = expectedText.equals(resultText);
-      if (passed) {
-        passedCount++;
-      } else {
-        System.out.println("Mismatch: expected '" + expectedText + "' but got '" + resultText + '\'');
-        continue;
-      }
-
-      // Try "try harder" mode
-      try {
-        result = barcodeReader.decode(source, TRY_HARDER_HINT);
-      } catch (ReaderException re) {
-        if (passed) {
-          fail("Normal mode succeeded but \"try harder\" failed");
+      for (int x = 0; x < testResults.size(); x++) {
+        if (testOneImage(image, testResults.get(x).rotation, expectedText)) {
+          passedCounts[x]++;
         }
-        continue;
-      }
-      if (expectedFormat != result.getBarcodeFormat()) {
-        System.out.println("Try Harder Format mismatch: expected '" + expectedFormat + "' but got '" +
-            result.getBarcodeFormat() + '\'');
-      } else if (!expectedText.equals(resultText)) {
-        System.out.println("Try Harder Mismatch: expected '" + expectedText + "' but got '" +
-            resultText + '\'');
       }
     }
 
-    System.out.println(passedCount + " of " + imageFiles.length + " images passed (" +
-        mustPassCount + " required)");
-    assertTrue("Too many images failed", passedCount >= mustPassCount);
+    for (int x = 0; x < testResults.size(); x++) {
+      System.out.println("Rotation " + testResults.get(x).rotation + " degrees: " + passedCounts[x] +
+          " of " + imageFiles.length + " images passed (" + testResults.get(x).mustPassCount +
+          " required)");
+      assertTrue("Rotation " + testResults.get(x).rotation + " degrees: Too many images failed",
+          passedCounts[x] >= testResults.get(x).mustPassCount);
+    }
+  }
+
+  private boolean testOneImage(BufferedImage image, float rotationInDegrees, String expectedText) {
+    BufferedImage rotatedImage = rotateImage(image, rotationInDegrees);
+    MonochromeBitmapSource source = new BufferedImageMonochromeBitmapSource(rotatedImage);
+    Result result;
+    try {
+      result = barcodeReader.decode(source);
+    } catch (ReaderException re) {
+      System.out.println(re);
+      return false;
+    }
+
+    if (expectedFormat != result.getBarcodeFormat()) {
+      System.out.println("Format mismatch: expected '" + expectedFormat + "' but got '" +
+          result.getBarcodeFormat() + "' (rotation: " + rotationInDegrees + ")");
+      return false;
+    }
+
+    String resultText = result.getText();
+    if (!expectedText.equals(resultText)) {
+      System.out.println("Mismatch: expected '" + expectedText + "' but got '" + resultText +
+          "' (rotation: " + rotationInDegrees + ")");
+      return false;
+    }
+
+    // Try "try harder" mode
+    try {
+      result = barcodeReader.decode(source, TRY_HARDER_HINT);
+    } catch (ReaderException re) {
+      fail("Normal mode succeeded but \"try harder\" failed");
+      return false;
+    }
+    if (expectedFormat != result.getBarcodeFormat()) {
+      System.out.println("Try Harder Format mismatch: expected '" + expectedFormat + "' but got '" +
+          result.getBarcodeFormat() + "' (rotation: " + rotationInDegrees + ")");
+    } else if (!expectedText.equals(resultText)) {
+      System.out.println("Try Harder Mismatch: expected '" + expectedText + "' but got '" +
+          resultText + "' (rotation: " + rotationInDegrees + ")");
+    }
+    return true;
   }
 
   private static String readFileAsString(File file) throws IOException {
@@ -151,6 +185,17 @@ public abstract class AbstractBlackBoxTestCase extends TestCase {
       reader.close();
     }
     return result.toString();
+  }
+
+  private static BufferedImage rotateImage(BufferedImage original, float degrees) {
+    if (degrees != 0.0f) {
+      AffineTransform at = new AffineTransform();
+      at.rotate(Math.toRadians(degrees), original.getWidth() / 2, original.getHeight() / 2);
+      AffineTransformOp op = new AffineTransformOp(at, AffineTransformOp.TYPE_BICUBIC);
+      return op.filter(original, null);
+    } else {
+      return original;
+    }
   }
 
 }
