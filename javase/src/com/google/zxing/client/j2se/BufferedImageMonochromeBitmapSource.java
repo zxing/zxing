@@ -120,7 +120,7 @@ public final class BufferedImageMonochromeBitmapSource implements MonochromeBitm
     // If the current decoder calculated the blackPoint based on one row, assume we're trying to
     // decode a 1D barcode, and apply some sharpening.
     // TODO: We may want to add a fifth parameter to request the amount of shapening to be done.
-    if (lastMethod == BlackPointEstimationMethod.ROW_SAMPLING) {
+    if (lastMethod.equals(BlackPointEstimationMethod.ROW_SAMPLING)) {
       int left = computeRGBLuminance(pixelRow[0]);
       int center = computeRGBLuminance(pixelRow[1]);
       for (int i = 1; i < getWidth - 1; i++) {
