@@ -47,7 +47,7 @@ public final class BlackPointEstimator {
   public static int estimate(int[] histogram) throws ReaderException{
 
     int numBuckets = histogram.length;
-
+    int maxBucketCount = 0;
     // Find tallest peak in histogram
     int firstPeak = 0;
     int firstPeakSize = 0;
@@ -55,6 +55,9 @@ public final class BlackPointEstimator {
       if (histogram[i] > firstPeakSize) {
         firstPeak = i;
         firstPeakSize = histogram[i];
+      }
+      if (histogram[i] > maxBucketCount) {
+        maxBucketCount = histogram[i];
       }
     }
 
@@ -84,7 +87,7 @@ public final class BlackPointEstimator {
     // Decoding the image/line is either pointless, or may in some cases lead to a false positive
     // for 1D formats, which are relatively lenient.
     // We arbitrarily say "close" is "<= 1/16 of the total histogram buckets apart"
-    if (secondPeak - firstPeak <= histogram.length >> 4) {
+    if (secondPeak - firstPeak <= numBuckets >> 4) {
       throw new ReaderException("Too little dynamic range in luminance");
     }
 
@@ -95,7 +98,7 @@ public final class BlackPointEstimator {
       int fromFirst = i - firstPeak;
       // Favor a "valley" that is not too close to either peak -- especially not the black peak --
       // and that has a low value of course
-      int score = fromFirst * fromFirst * (secondPeak - i) * (256 - histogram[i]);
+      int score = fromFirst * fromFirst * (secondPeak - i) * (maxBucketCount - histogram[i]);
       if (score > bestValleyScore) {
         bestValley = i;
         bestValleyScore = score;
