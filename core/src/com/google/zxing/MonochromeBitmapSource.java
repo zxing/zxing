@@ -59,6 +59,24 @@ public interface MonochromeBitmapSource {
   int getWidth();
 
   /**
+   * Retrieves the luminance at the pixel x,y in the bitmap. This method is only used for estimating
+   * the black point and implementing getBlackRow() - it is not meant for decoding.
+   *
+   * @param x The x coordinate in the image.
+   * @param y The y coordinate in the image.
+   * @return The luminance value between 0 and 255.
+   */
+  int getLuminance(int x, int y);
+
+  /**
+   * Some implementations can be much more efficient by fetching an entire row of luminance data at
+   * a time. This method should be called once per row before calling getLuminance().
+   *
+   * @param y The row to cache.
+   */
+  void cacheRowForLuminance(int y);
+
+  /**
    * <p>Estimates black point according to the given method, which is optionally parameterized by
    * a single int argument. For {@link BlackPointEstimationMethod#ROW_SAMPLING}, this
    * specifies the row to sample.</p>

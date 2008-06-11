@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 Google Inc.
+ * Copyright 2008 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,8 @@
 
 package com.google.zxing.client.j2se;
 
-import com.google.zxing.BlackPointEstimationMethod;
 import com.google.zxing.MonochromeBitmapSource;
-import com.google.zxing.ReaderException;
-import com.google.zxing.common.BitArray;
-import com.google.zxing.common.BlackPointEstimator;
+import com.google.zxing.common.BaseMonochromeBitmapSource;
 
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
@@ -38,20 +35,15 @@ import java.awt.image.BufferedImageOp;
  *
  * @author srowen@google.com (Sean Owen), Daniel Switkin (dswitkin@google.com)
  */
-public final class BufferedImageMonochromeBitmapSource implements MonochromeBitmapSource {
+public final class BufferedImageMonochromeBitmapSource extends BaseMonochromeBitmapSource {
 
   private final BufferedImage image;
   private final int left;
   private final int top;
   private final int width;
   private final int height;
-  private int blackPoint;
-  private BlackPointEstimationMethod lastMethod;
-  private int lastArgument;
-
-  private static final int LUMINANCE_BITS = 5;
-  private static final int LUMINANCE_SHIFT = 8 - LUMINANCE_BITS;
-  private static final int LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
+  private int[] rgbRow;
+  private int cachedRow;
 
   /**
    * Creates an instance that uses the entire given image as a source of pixels to decode.
@@ -60,6 +52,8 @@ public final class BufferedImageMonochromeBitmapSource implements MonochromeBitm
    */
   public BufferedImageMonochromeBitmapSource(BufferedImage image) {
     this(image, 0, 0, image.getWidth(), image.getHeight());
+    rgbRow = new int[image.getWidth()];
+    cachedRow = -1;
   }
 
   /**
@@ -74,9 +68,6 @@ public final class BufferedImageMonochromeBitmapSource implements MonochromeBitm
    */
   public BufferedImageMonochromeBitmapSource(BufferedImage image, int left, int top, int right, int bottom) {
     this.image = image;
-    blackPoint = 0x7F;
-    lastMethod = null;
-    lastArgument = 0;
     int sourceHeight = image.getHeight();
     int sourceWidth = image.getWidth();
     if (left < 0 || top < 0 || right > sourceWidth || bottom > sourceHeight || right <= left || bottom <= top) {
@@ -86,6 +77,8 @@ public final class BufferedImageMonochromeBitmapSource implements MonochromeBitm
     this.top = top;
     this.width = right - left;
     this.height = bottom - top;
+    rgbRow = new int[width];
+    cachedRow = -1;
   }
 
   /**
@@ -96,92 +89,12 @@ public final class BufferedImageMonochromeBitmapSource implements MonochromeBitm
     return image;
   }
 
-  private int getRGB(int x, int y) {
-    return image.getRGB(left + x, top + y);
-  }
-
-  private void getRGBRow(int startX, int startY, int[] result) {
-    image.getRGB(left + startX, top + startY, result.length, 1, result, 0, result.length);
-  }
-
-  public boolean isBlack(int x, int y) {
-    return computeRGBLuminance(getRGB(x, y)) < blackPoint;
-  }
-
-  public BitArray getBlackRow(int y, BitArray row, int startX, int getWidth) {
-    if (row == null || row.getSize() < getWidth) {
-      row = new BitArray(getWidth);
-    } else {
-      row.clear();
-    }
-    int[] pixelRow = new int[getWidth];
-    getRGBRow(startX, y, pixelRow);
-
-    // If the current decoder calculated the blackPoint based on one row, assume we're trying to
-    // decode a 1D barcode, and apply some sharpening.
-    // TODO: We may want to add a fifth parameter to request the amount of shapening to be done.
-    if (lastMethod.equals(BlackPointEstimationMethod.ROW_SAMPLING)) {
-      int left = computeRGBLuminance(pixelRow[0]);
-      int center = computeRGBLuminance(pixelRow[1]);
-      for (int i = 1; i < getWidth - 1; i++) {
-        int right = computeRGBLuminance(pixelRow[i + 1]);
-        // Simple -1 4 -1 box filter with a weight of 2
-        int luminance = ((center << 2) - left - right) >> 1;
-        if (luminance < blackPoint) {
-          row.set(i);
-        }
-        left = center;
-        center = right;
-      }
-    } else {
-      for (int i = 0; i < getWidth; i++) {
-        if (computeRGBLuminance(pixelRow[i]) < blackPoint) {
-          row.set(i);
-        }
-      }
-    }
-    return row;
-  }
-
   public int getHeight() {
     return height;
   }
 
   public int getWidth() {
     return width;
-  }
-
-  public void estimateBlackPoint(BlackPointEstimationMethod method, int argument) throws ReaderException {
-    if (!method.equals(lastMethod) || argument != lastArgument) {
-      int[] histogram = new int[LUMINANCE_BUCKETS];
-      if (method.equals(BlackPointEstimationMethod.TWO_D_SAMPLING)) {
-        int minDimension = width < height ? width : height;
-        int startI = height == minDimension ? 0 : (height - width) >> 1;
-        int startJ = width == minDimension ? 0 : (width - height) >> 1;
-        for (int n = 0; n < minDimension; n++) {
-          int pixel = getRGB(startJ + n, startI + n);
-          histogram[computeRGBLuminance(pixel) >> LUMINANCE_SHIFT]++;
-        }
-      } else if (method.equals(BlackPointEstimationMethod.ROW_SAMPLING)) {
-        if (argument < 0 || argument >= height) {
-          throw new IllegalArgumentException("Row is not within the image: " + argument);
-        }
-        int[] rgbArray = new int[width];
-        getRGBRow(0, argument, rgbArray);
-        for (int x = 0; x < width; x++) {
-          histogram[computeRGBLuminance(rgbArray[x]) >> LUMINANCE_SHIFT]++;
-        }
-      } else {
-        throw new IllegalArgumentException("Unknown method: " + method);
-      }
-      blackPoint = BlackPointEstimator.estimate(histogram) << LUMINANCE_SHIFT;
-      lastMethod = method;
-      lastArgument = argument;
-    }
-  }
-
-  public BlackPointEstimationMethod getLastEstimationMethod() {
-    return lastMethod;
   }
 
   public MonochromeBitmapSource rotateCounterClockwise() {
@@ -217,11 +130,25 @@ public final class BufferedImageMonochromeBitmapSource implements MonochromeBitm
    *
    * where R, G, and B are values in [0,1].
    */
-  private static int computeRGBLuminance(int pixel) {
+  public int getLuminance(int x, int y) {
+    int pixel;
+    if (cachedRow == y) {
+      pixel = rgbRow[x];
+    } else {
+      pixel = image.getRGB(left + x, top + y);
+    }
+
     // Coefficients add up to 1024 to make the divide into a fast shift
     return (306 * ((pixel >> 16) & 0xFF) +
         601 * ((pixel >> 8) & 0xFF) +
         117 * (pixel & 0xFF)) >> 10;
+  }
+
+  public void cacheRowForLuminance(int y) {
+    if (y != cachedRow) {
+      image.getRGB(left, top + y, width, 1, rgbRow, 0, width);
+      cachedRow = y;
+    }
   }
 
 }
