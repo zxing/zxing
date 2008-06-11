@@ -22,6 +22,7 @@ import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 
 import javax.imageio.ImageIO;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -58,27 +59,22 @@ public final class GUIRunner extends JFrame {
     panel.add(textArea);
     setTitle("ZXing");
     setSize(400, 400);
-    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    setDefaultCloseOperation(EXIT_ON_CLOSE);
     setContentPane(panel);
     setLocationRelativeTo(null);
   }
 
-  public static void main(String[] args) throws Exception {
+  public static void main(String[] args) throws MalformedURLException {
     GUIRunner runner = new GUIRunner();
     runner.setVisible(true);
     runner.chooseImage();
   }
 
-  private void chooseImage() {
+  private void chooseImage() throws MalformedURLException {
     JFileChooser fileChooser = new JFileChooser();
-    fileChooser.showOpenDialog(GUIRunner.this);
+    fileChooser.showOpenDialog(this);
     File file = fileChooser.getSelectedFile();
-    ImageIcon imageIcon;
-    try {
-      imageIcon = new ImageIcon(file.toURI().toURL());
-    } catch (MalformedURLException mue) {
-      throw new RuntimeException(mue);
-    }
+    Icon imageIcon = new ImageIcon(file.toURI().toURL());
     setSize(imageIcon.getIconWidth(), imageIcon.getIconHeight() + 100);
     imageLabel.setIcon(imageIcon);
     String decodeText = getDecodeText(file);
