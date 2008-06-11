@@ -75,7 +75,7 @@ public final class GUIRunner extends JFrame {
     File file = fileChooser.getSelectedFile();
     ImageIcon imageIcon;
     try {
-      imageIcon = new ImageIcon(file.toURL());
+      imageIcon = new ImageIcon(file.toURI().toURL());
     } catch (MalformedURLException mue) {
       throw new RuntimeException(mue);
     }
