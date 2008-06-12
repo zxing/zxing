@@ -27,15 +27,20 @@ import javax.microedition.lcdui.Image;
  */
 public final class LCDUIImageMonochromeBitmapSource extends BaseMonochromeBitmapSource {
 
-  private final int[] rgbPixels;
-  private final int width;
+  private final Image image;
   private final int height;
+  private final int width;
+  private final int[] rgbRow;
+  private final int[] pixelHolder;
+  private int cachedRow;
 
   public LCDUIImageMonochromeBitmapSource(Image image) {
-    width = image.getWidth();
+    this.image = image;
     height = image.getHeight();
-    rgbPixels = new int[width * height];
-    image.getRGB(rgbPixels, 0, width, 0, 0, width, height);
+    width = image.getWidth();
+    rgbRow = new int[width];
+    pixelHolder = new int[1];
+    cachedRow = -1;
   }
 
   public int getHeight() {
@@ -47,7 +52,13 @@ public final class LCDUIImageMonochromeBitmapSource extends BaseMonochromeBitmap
   }
 
   public int getLuminance(int x, int y) {
-    int pixel = rgbPixels[y * width + x];
+    int pixel;
+    if (cachedRow == y) {
+      pixel = rgbRow[x];
+    } else {
+      image.getRGB(pixelHolder, 0, width, x, y, 1, 1);
+      pixel = pixelHolder[0];
+    }
 
     // Instead of multiplying by 306, 601, 117, we multiply by 256, 512, 256, so that
     // the multiplies can be implemented as shifts.
@@ -66,9 +77,11 @@ public final class LCDUIImageMonochromeBitmapSource extends BaseMonochromeBitmap
              (pixel & 0x000000FF       )) >> 2;
   }
 
-  // Nothing to do, since we have direct access to the image data.
   public void cacheRowForLuminance(int y) {
-
+    if (y != cachedRow) {
+      image.getRGB(rgbRow, 0, width, 0, y, width, 1);
+      cachedRow = y;
+    }
   }
 
 }
