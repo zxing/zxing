@@ -97,6 +97,7 @@ public final class BufferedImageMonochromeBitmapSource extends BaseMonochromeBit
     return width;
   }
 
+  @Override
   public MonochromeBitmapSource rotateCounterClockwise() {
     if (!isRotateSupported()) {
       throw new IllegalStateException("Rotate not supported");
@@ -116,6 +117,7 @@ public final class BufferedImageMonochromeBitmapSource extends BaseMonochromeBit
                                                    sourceWidth - left);
   }
 
+  @Override
   public boolean isRotateSupported() {
     // Can't run AffineTransforms on images of unknown format
     return image.getType() != BufferedImage.TYPE_CUSTOM;

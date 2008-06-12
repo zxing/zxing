@@ -32,7 +32,7 @@ public abstract class BaseMonochromeBitmapSource implements MonochromeBitmapSour
   private static final int LUMINANCE_SHIFT = 8 - LUMINANCE_BITS;
   private static final int LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
 
-  public BaseMonochromeBitmapSource() {
+  protected BaseMonochromeBitmapSource() {
     blackPoint = 0x7F;
     lastMethod = null;
     lastArgument = 0;
@@ -75,11 +75,6 @@ public abstract class BaseMonochromeBitmapSource implements MonochromeBitmapSour
     }
     return row;
   }
-
-  public abstract int getHeight();
-  public abstract int getWidth();
-  public abstract int getLuminance(int x, int y);
-  public abstract void cacheRowForLuminance(int y);
 
   public void estimateBlackPoint(BlackPointEstimationMethod method, int argument) throws ReaderException {
     if (!method.equals(lastMethod) || argument != lastArgument) {

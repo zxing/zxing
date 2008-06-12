@@ -21,7 +21,7 @@ import com.google.zxing.common.BaseMonochromeBitmapSource;
 import javax.microedition.lcdui.Image;
 
 /**
- * <p>An implementation based on Java ME's {@link java.awt.Image} representation.</p>
+ * <p>An implementation based on Java ME's {@link Image} representation.</p>
  *
  * @author Sean Owen (srowen@google.com), Daniel Switkin (dswitkin@google.com)
  */
