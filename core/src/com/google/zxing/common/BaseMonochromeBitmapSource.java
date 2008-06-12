@@ -112,7 +112,7 @@ public abstract class BaseMonochromeBitmapSource implements MonochromeBitmapSour
   }
 
   public MonochromeBitmapSource rotateCounterClockwise() {
-    throw new IllegalStateException("Rotate not supported");
+    throw new IllegalArgumentException("Rotate not supported");
   }
 
   public boolean isRotateSupported() {

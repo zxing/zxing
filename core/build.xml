@@ -23,7 +23,6 @@
   <path id="javame-compile-bootclasspath">
     <fileset dir="${WTK-home}/lib">
       <include name="cldcapi11.jar"/>
-      <include name="midpapi20.jar"/>
     </fileset>
   </path>
   <property name="javame-compile-bootclasspath-path" refid="javame-compile-bootclasspath"/>
@@ -46,7 +45,25 @@
     <jar jarfile="core.jar" basedir="build" level="9"/>
   </target>
 
-  <target name="build-test" depends="init,build">
+  <target name="build-optimized" depends="build">
+    <move file="core.jar" tofile="temp.jar"/>
+    <java jar="${WTK-home}/bin/proguard.jar" fork="true" failonerror="true">
+      <jvmarg value="-Dmaximum.inlined.code.length=32"/>
+      <arg value="-injars temp.jar"/>
+      <arg value="-outjars core.jar"/>
+      <arg value="-libraryjars ${WTK-home}/lib/cldcapi11.jar"/>
+      <arg value="-renamesourcefileattribute SourceFile"/>
+      <arg value="-keepattributes Exceptions,InnerClasses,Signature,Deprecated,SourceFile,LineNumberTable,*Annotation*,EnclosingMethod"/>
+      <arg value="-keep class * { !private *; }"/>
+      <arg value="-optimizationpasses 7"/>
+      <arg value="-overloadaggressively"/>
+      <arg value="-allowaccessmodification"/>
+      <arg value="-verbose"/>
+    </java>
+    <delete file="temp.jar"/>
+  </target>
+
+  <target name="build-test" depends="init,build-optimized">
     <fail message="Please build 'javase' first">
       <condition>
         <not>
@@ -60,7 +77,7 @@
            debug="true"
            deprecation="true">
       <classpath>
-        <pathelement location="build"/>
+        <pathelement location="core.jar"/>
         <pathelement location="../javase/javase.jar"/>
         <pathelement location="lib/junit.jar"/>
       </classpath>
@@ -71,7 +88,7 @@
     <junit printsummary="on" haltonfailure="on" haltonerror="on" fork="true" dir=".">
       <formatter type="plain" usefile="false"/>
       <classpath>
-        <pathelement location="build"/>
+        <pathelement location="core.jar"/>
         <pathelement location="build-test"/>
         <pathelement location="../javase/javase.jar"/>
         <pathelement location="lib/junit.jar"/>
@@ -92,7 +109,7 @@
     <junit printsummary="on" haltonfailure="on" haltonerror="on" fork="true" dir=".">
       <formatter type="plain" usefile="false"/>
       <classpath>
-        <pathelement location="build"/>
+        <pathelement location="core.jar"/>
         <pathelement location="build-test"/>
         <pathelement location="../javase/javase.jar"/>
         <pathelement location="lib/junit.jar"/>

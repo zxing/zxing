@@ -80,7 +80,7 @@ final class DataBlock {
         break;
       }
       if (numCodewords != shorterBlocksTotalCodewords + 1) {
-        throw new IllegalStateException("Data block sizes differ by more than 1");
+        throw new IllegalArgumentException("Data block sizes differ by more than 1");
       }
       longerBlocksStartAt--;
     }
@@ -109,7 +109,7 @@ final class DataBlock {
     }
 
     if (rawCodewordsOffset != rawCodewords.length) {
-      throw new IllegalStateException();
+      throw new IllegalArgumentException();
     }
 
     return result;
