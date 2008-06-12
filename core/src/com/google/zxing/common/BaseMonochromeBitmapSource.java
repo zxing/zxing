@@ -24,13 +24,13 @@ import com.google.zxing.ReaderException;
  */
 public abstract class BaseMonochromeBitmapSource implements MonochromeBitmapSource {
 
-  private int blackPoint;
-  private BlackPointEstimationMethod lastMethod;
-  private int lastArgument;
-
   private static final int LUMINANCE_BITS = 5;
   private static final int LUMINANCE_SHIFT = 8 - LUMINANCE_BITS;
   private static final int LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
+
+  private int blackPoint;
+  private BlackPointEstimationMethod lastMethod;
+  private int lastArgument;
 
   protected BaseMonochromeBitmapSource() {
     blackPoint = 0x7F;
@@ -53,7 +53,7 @@ public abstract class BaseMonochromeBitmapSource implements MonochromeBitmapSour
     // decode a 1D barcode, and apply some sharpening.
     // TODO: We may want to add a fifth parameter to request the amount of shapening to be done.
     cacheRowForLuminance(y);
-    if (lastMethod == BlackPointEstimationMethod.ROW_SAMPLING) {
+    if (lastMethod.equals(BlackPointEstimationMethod.ROW_SAMPLING)) {
       int left = getLuminance(startX, y);
       int center = getLuminance(startX + 1, y);
       for (int x = 1; x < getWidth - 1; x++) {
@@ -118,6 +118,5 @@ public abstract class BaseMonochromeBitmapSource implements MonochromeBitmapSour
   public boolean isRotateSupported() {
     return false;
   }
-
 
 }
