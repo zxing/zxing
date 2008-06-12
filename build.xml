@@ -57,7 +57,6 @@
         <include name="build.xml"/>
         <include name="build.properties"/>
         <include name="android/**"/>
-        <include name="android-m3/**"/>
         <include name="core/**"/>
         <include name="javame/**"/>
         <include name="javase/**"/>
