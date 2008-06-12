@@ -103,7 +103,7 @@ public interface MonochromeBitmapSource {
    * of this class which are only used in resource-constrained mobile environments
    * don't have a need to implement this.</p>
    *
-   * @throws IllegalStateException if not supported
+   * @throws IllegalArgumentException if not supported
    */
   MonochromeBitmapSource rotateCounterClockwise();
 

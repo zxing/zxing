@@ -101,7 +101,7 @@ final class DataBlock {
     }
 
     if (rawCodewordsOffset != rawCodewords.length) {
-      throw new IllegalStateException();
+      throw new IllegalArgumentException();
     }
 
     return result;
