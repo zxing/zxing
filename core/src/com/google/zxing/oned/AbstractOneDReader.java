@@ -35,6 +35,8 @@ import java.util.Hashtable;
  */
 public abstract class AbstractOneDReader implements OneDReader {
 
+  private static final int INTEGER_MATH_SHIFT = 8;
+
   public final Result decode(MonochromeBitmapSource image) throws ReaderException {
     return decode(image, null);
   }
@@ -181,26 +183,37 @@ public abstract class AbstractOneDReader implements OneDReader {
    *
    * @param counters observed counters
    * @param pattern expected pattern
-   * @return average variance between counters and pattern
+   * @return ratio of total variance between counters and pattern compared to total pattern size,
+   *  where the ratio has been multiplied by 256. So, 0 means no variance (perfect match); 256 means
+   *  the total variance between counters and patterns equals the pattern length, higher values mean
+   *  even more variance
    */
-  static float patternMatchVariance(int[] counters, int[] pattern) {
-    int total = 0;
+  static int patternMatchVariance(int[] counters, int[] pattern) {
     int numCounters = counters.length;
+    int total = 0;
     int patternLength = 0;
     for (int i = 0; i < numCounters; i++) {
       total += counters[i];
       patternLength += pattern[i];
     }
-    float unitBarWidth = (float) total / (float) patternLength;
-
-    float totalVariance = 0.0f;
-    for (int x = 0; x < numCounters; x++) {
-      float scaledCounter = (float) counters[x] / unitBarWidth;
-      float width = pattern[x];
-      float abs = scaledCounter > width ? scaledCounter - width : width - scaledCounter;
-      totalVariance += abs;
+    if (total < patternLength) {
+      // If we don't even have one pixel per unit of bar width, assume this is too small
+      // to reliably match, so fail:
+      return Integer.MAX_VALUE;
     }
-    return totalVariance / (float) patternLength;
+    // We're going to fake floating-point math in integers. We just need to use more bits.
+    // Scale up patternLength so that intermediate values below like scaledCounter will have
+    // more "significant digits"
+    patternLength <<= INTEGER_MATH_SHIFT;
+    int patternRatio = patternLength / total;
+
+    int totalVariance = 0;
+    for (int x = 0; x < numCounters; x++) {
+      int scaledCounter = counters[x] * patternRatio;
+      int width = pattern[x] << INTEGER_MATH_SHIFT;
+      totalVariance += scaledCounter > width ? scaledCounter - width : width - scaledCounter;
+    }
+    return (totalVariance << 8) / patternLength;
   }
 
   // This declaration should not be necessary, since this class is
