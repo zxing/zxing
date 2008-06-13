@@ -29,6 +29,7 @@ import javax.imageio.ImageIO;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
+import java.awt.image.BufferedImageOp;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FilenameFilter;
@@ -44,9 +45,9 @@ import java.util.Vector;
  */
 public abstract class AbstractBlackBoxTestCase extends TestCase {
 
-  private static final Hashtable TRY_HARDER_HINT;
+  private static final Hashtable<DecodeHintType, Object> TRY_HARDER_HINT;
   static {
-    TRY_HARDER_HINT = new Hashtable();
+    TRY_HARDER_HINT = new Hashtable<DecodeHintType, Object>();
     TRY_HARDER_HINT.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
   }
 
@@ -54,18 +55,23 @@ public abstract class AbstractBlackBoxTestCase extends TestCase {
     public boolean accept(File dir, String name) {
       String lowerCase = name.toLowerCase();
       return lowerCase.endsWith(".jpg") || lowerCase.endsWith(".jpeg") ||
-              lowerCase.endsWith(".gif") || lowerCase.endsWith(".png") ||
-              lowerCase.endsWith(".url");
+             lowerCase.endsWith(".gif") || lowerCase.endsWith(".png") ||
+             lowerCase.endsWith(".url");
     }
   };
 
-  private class TestResult {
-    public int mustPassCount;
-    public float rotation;
-
+  private static class TestResult {
+    private final int mustPassCount;
+    private final float rotation;
     TestResult(int mustPassCount, float rotation) {
       this.mustPassCount = mustPassCount;
       this.rotation = rotation;
+    }
+    public int getMustPassCount() {
+      return mustPassCount;
+    }
+    public float getRotation() {
+      return rotation;
     }
   }
 
@@ -94,7 +100,7 @@ public abstract class AbstractBlackBoxTestCase extends TestCase {
   }
 
   public void testBlackBox() throws IOException {
-    assertTrue(testResults.size() > 0);
+    assertFalse(testResults.isEmpty());
     assertTrue("Please run from the 'core' directory", testBase.exists());
 
     File[] imageFiles = testBase.listFiles(IMAGE_NAME_FILTER);
@@ -116,22 +122,22 @@ public abstract class AbstractBlackBoxTestCase extends TestCase {
       String expectedText = readFileAsString(expectedTextFile);
 
       for (int x = 0; x < testResults.size(); x++) {
-        if (testOneImage(image, testResults.get(x).rotation, expectedText)) {
+        if (doTestOneImage(image, testResults.get(x).getRotation(), expectedText)) {
           passedCounts[x]++;
         }
       }
     }
 
     for (int x = 0; x < testResults.size(); x++) {
-      System.out.println("Rotation " + testResults.get(x).rotation + " degrees: " + passedCounts[x] +
-          " of " + imageFiles.length + " images passed (" + testResults.get(x).mustPassCount +
+      System.out.println("Rotation " + testResults.get(x).getRotation() + " degrees: " + passedCounts[x] +
+          " of " + imageFiles.length + " images passed (" + testResults.get(x).getMustPassCount() +
           " required)");
-      assertTrue("Rotation " + testResults.get(x).rotation + " degrees: Too many images failed",
-          passedCounts[x] >= testResults.get(x).mustPassCount);
+      assertTrue("Rotation " + testResults.get(x).getRotation() + " degrees: Too many images failed",
+          passedCounts[x] >= testResults.get(x).getMustPassCount());
     }
   }
 
-  private boolean testOneImage(BufferedImage image, float rotationInDegrees, String expectedText) {
+  private boolean doTestOneImage(BufferedImage image, float rotationInDegrees, String expectedText) {
     BufferedImage rotatedImage = rotateImage(image, rotationInDegrees);
     MonochromeBitmapSource source = new BufferedImageMonochromeBitmapSource(rotatedImage);
     Result result;
@@ -142,16 +148,16 @@ public abstract class AbstractBlackBoxTestCase extends TestCase {
       return false;
     }
 
-    if (expectedFormat != result.getBarcodeFormat()) {
+    if (!expectedFormat.equals(result.getBarcodeFormat())) {
       System.out.println("Format mismatch: expected '" + expectedFormat + "' but got '" +
-          result.getBarcodeFormat() + "' (rotation: " + rotationInDegrees + ")");
+          result.getBarcodeFormat() + "' (rotation: " + rotationInDegrees + ')');
       return false;
     }
 
     String resultText = result.getText();
     if (!expectedText.equals(resultText)) {
       System.out.println("Mismatch: expected '" + expectedText + "' but got '" + resultText +
-          "' (rotation: " + rotationInDegrees + ")");
+          "' (rotation: " + rotationInDegrees + ')');
       return false;
     }
 
@@ -162,18 +168,18 @@ public abstract class AbstractBlackBoxTestCase extends TestCase {
       fail("Normal mode succeeded but \"try harder\" failed");
       return false;
     }
-    if (expectedFormat != result.getBarcodeFormat()) {
+    if (!expectedFormat.equals(result.getBarcodeFormat())) {
       System.out.println("Try Harder Format mismatch: expected '" + expectedFormat + "' but got '" +
-          result.getBarcodeFormat() + "' (rotation: " + rotationInDegrees + ")");
+          result.getBarcodeFormat() + "' (rotation: " + rotationInDegrees + ')');
     } else if (!expectedText.equals(resultText)) {
       System.out.println("Try Harder Mismatch: expected '" + expectedText + "' but got '" +
-          resultText + "' (rotation: " + rotationInDegrees + ")");
+          resultText + "' (rotation: " + rotationInDegrees + ')');
     }
     return true;
   }
 
   private static String readFileAsString(File file) throws IOException {
-    StringBuilder result = new StringBuilder();
+    StringBuilder result = new StringBuilder((int) file.length());
     InputStreamReader reader = new InputStreamReader(new FileInputStream(file), "UTF-8");
     try {
       char[] buffer = new char[256];
@@ -188,13 +194,13 @@ public abstract class AbstractBlackBoxTestCase extends TestCase {
   }
 
   private static BufferedImage rotateImage(BufferedImage original, float degrees) {
-    if (degrees != 0.0f) {
-      AffineTransform at = new AffineTransform();
-      at.rotate(Math.toRadians(degrees), original.getWidth() / 2, original.getHeight() / 2);
-      AffineTransformOp op = new AffineTransformOp(at, AffineTransformOp.TYPE_BICUBIC);
-      return op.filter(original, null);
-    } else {
+    if (degrees == 0.0f) {
       return original;
+    } else {
+      AffineTransform at = new AffineTransform();
+      at.rotate(Math.toRadians(degrees), original.getWidth() / 2.0f, original.getHeight() / 2.0f);
+      BufferedImageOp op = new AffineTransformOp(at, AffineTransformOp.TYPE_BICUBIC);
+      return op.filter(original, null);
     }
   }
 
