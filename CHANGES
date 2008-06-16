@@ -137,3 +137,22 @@
   - Possible workaround for NoSuchMethodError on Nokias
   - New shell of an iPhone client committed
   - ... and other assorted small improvements and fixes
+
+0.8 (16 Jun 2008)
+  - FinderPatternFinder now isn't fooled by false-positive finder patterns
+    in some rare cases
+  - Added SMSTO: support, expanded mailto: support to include subject and body
+    params
+  - Now should properly unescape URLs in appropriate cases; better handling of
+    mailto: and tel: URIs (won't get modified by the library)
+  - Optimized 1D decoding to use integer math
+  - Small bug fix / improvement in BlackPointEstimator's estimates
+  - 1D decoding now applies a light sharpening filter
+  - Refactored and simplified MonochromeBitmapSource implementations
+  - Removed android-m3/ directory, no longer in active development. The current
+    Android client remains in android/ (M5 SDK)
+  - Restored ability to read upside-down 1D codes without try-harder mode
+  - Added a crude GUI-based decoder to javase/, for the interested
+  - core/ is now independent of MIDP; only requires CLDC 1.1
+  - Added optimized build of core library
+  - Unit tests now use local copies of images
