@@ -73,7 +73,8 @@
   </target>
 
 	<target name="clean">
-		<delete dir="web/WEB-INF/classes"/>
+    <delete dir="web/WEB-INF/web.xml"/>
+    <delete dir="web/WEB-INF/classes"/>
     <delete file="web/WEB-INF/lib/core.jar"/>
     <delete file="web/WEB-INF/lib/javase.jar"/>
     <delete file="zxingorg.war"/>
