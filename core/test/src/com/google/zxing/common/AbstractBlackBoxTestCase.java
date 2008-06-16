@@ -35,7 +35,6 @@ import java.io.FileInputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.URL;
 import java.util.Hashtable;
 import java.util.Vector;
 
@@ -55,8 +54,7 @@ public abstract class AbstractBlackBoxTestCase extends TestCase {
     public boolean accept(File dir, String name) {
       String lowerCase = name.toLowerCase();
       return lowerCase.endsWith(".jpg") || lowerCase.endsWith(".jpeg") ||
-             lowerCase.endsWith(".gif") || lowerCase.endsWith(".png") ||
-             lowerCase.endsWith(".url");
+             lowerCase.endsWith(".gif") || lowerCase.endsWith(".png");
     }
   };
 
@@ -108,13 +106,7 @@ public abstract class AbstractBlackBoxTestCase extends TestCase {
     for (File testImage : imageFiles) {
       System.out.println("Starting " + testImage.getAbsolutePath());
 
-      BufferedImage image;
-      if (testImage.getName().endsWith(".url")) {
-        String urlString = readFileAsString(testImage);
-        image = ImageIO.read(new URL(urlString));
-      } else {
-        image = ImageIO.read(testImage);
-      }
+      BufferedImage image = ImageIO.read(testImage);
 
       String testImageFileName = testImage.getName();
       File expectedTextFile = new File(testBase,
