@@ -44,7 +44,7 @@ import java.util.Vector;
  */
 public abstract class AbstractBlackBoxTestCase extends TestCase {
 
-  private static final Hashtable<DecodeHintType, Object> TRY_HARDER_HINT;
+  protected static final Hashtable<DecodeHintType, Object> TRY_HARDER_HINT;
   static {
     TRY_HARDER_HINT = new Hashtable<DecodeHintType, Object>();
     TRY_HARDER_HINT.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
@@ -97,11 +97,19 @@ public abstract class AbstractBlackBoxTestCase extends TestCase {
     testResults.add(new TestResult(mustPassCount, rotation));
   }
 
+  protected File[] getImageFiles() {
+    assertTrue("Please run from the 'core' directory", testBase.exists());
+    return testBase.listFiles(IMAGE_NAME_FILTER);
+  }
+
+  protected Reader getReader() {
+    return barcodeReader;
+  }
+
   public void testBlackBox() throws IOException {
     assertFalse(testResults.isEmpty());
-    assertTrue("Please run from the 'core' directory", testBase.exists());
 
-    File[] imageFiles = testBase.listFiles(IMAGE_NAME_FILTER);
+    File[] imageFiles = getImageFiles();
     int[] passedCounts = new int[testResults.size()];
     for (File testImage : imageFiles) {
       System.out.println("Starting " + testImage.getAbsolutePath());
@@ -185,7 +193,7 @@ public abstract class AbstractBlackBoxTestCase extends TestCase {
     return result.toString();
   }
 
-  private static BufferedImage rotateImage(BufferedImage original, float degrees) {
+  protected static BufferedImage rotateImage(BufferedImage original, float degrees) {
     if (degrees == 0.0f) {
       return original;
     } else {
