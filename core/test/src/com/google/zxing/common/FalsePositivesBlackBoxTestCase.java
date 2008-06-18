@@ -35,7 +35,7 @@ import java.io.IOException;
 public final class FalsePositivesBlackBoxTestCase extends AbstractBlackBoxTestCase {
 
   // This number should be reduced as we get better at rejecting false positives.
-  private static final int FALSE_POSITIVES_ALLOWED = 23;
+  private static final int FALSE_POSITIVES_ALLOWED = 15;
 
   // Use the multiformat reader to evaluate all decoders in the system.
   public FalsePositivesBlackBoxTestCase() {
