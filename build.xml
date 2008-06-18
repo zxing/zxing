@@ -48,7 +48,7 @@
   </target>
 
   <target name="release" depends="build,clean,javadoc">
-    <zip file="ZXing-${version}.zip" level="9">
+    <zip file="ZXing-${version}.zip">
       <zipfileset dir="." prefix="zxing-${version}">
         <exclude name="**/.*"/> <!-- exclude hidden files -->
         <include name="COPYING"/>

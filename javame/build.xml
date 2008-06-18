@@ -78,7 +78,7 @@
            fork="true">
       <classpath refid="wtk-build-path"/>
     </javac>
-    <jar jarfile="javame.jar" basedir="build" level="9"/>
+    <jar jarfile="javame.jar" basedir="build"/>
   </target>
 
   <target name="compile-basic" depends="init">
