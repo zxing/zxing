@@ -59,6 +59,7 @@ import java.io.Writer;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
+import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Timer;
@@ -236,6 +237,12 @@ public final class DecodeServlet extends HttpServlet {
       }
     } else {
       request.setAttribute("result", result);
+      byte[] rawBytes = result.getRawBytes();
+      if (rawBytes != null) {
+        request.setAttribute("rawBytesString", Arrays.toString(rawBytes));
+      } else {
+        request.setAttribute("rawBytesString", "(Not applicable)");
+      }
       ParsedReaderResult parsedReaderResult = ParsedReaderResult.parseReaderResult(result);
       request.setAttribute("parsedReaderResult", parsedReaderResult);
       request.getRequestDispatcher("decoderesult.jspx").forward(request, response);

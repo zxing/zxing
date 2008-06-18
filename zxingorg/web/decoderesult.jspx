@@ -24,6 +24,7 @@
   <jsp:scriptlet>response.setHeader("Cache-Control", "no-cache");</jsp:scriptlet>
   <jsp:useBean id="result" scope="request" type="com.google.zxing.Result"/>
   <jsp:useBean id="parsedReaderResult" scope="request" type="com.google.zxing.client.result.ParsedReaderResult"/>
+  <jsp:useBean id="rawBytesString" scope="request" type="java.lang.String"/>
   <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
     <head>
       <title>Decode Succeeded</title>
@@ -37,6 +38,10 @@
         <tr>
           <td>Raw text</td>
           <td>${result.text}</td>
+        </tr>
+        <tr>
+          <td>Raw bytes</td>
+          <td>${rawBytesString}</td>
         </tr>
         <tr>
           <td>Barcode format</td>
