@@ -42,7 +42,7 @@
         <pathelement location="../core/core.jar"/>
       </classpath>
     </javac>
-    <jar jarfile="javase.jar" basedir="build" level="9"/>
+    <jar jarfile="javase.jar" basedir="build"/>
   </target>
 
   <target name="clean">
