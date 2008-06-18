@@ -42,6 +42,7 @@ public final class FalsePositivesBlackBoxTestCase extends AbstractBlackBoxTestCa
     super(new File("test/data/blackbox/falsepositives"), new MultiFormatReader(), null);
   }
 
+  @Override
   public void testBlackBox() throws IOException {
     File[] imageFiles = getImageFiles();
     int falsePositives = 0;
@@ -51,6 +52,9 @@ public final class FalsePositivesBlackBoxTestCase extends AbstractBlackBoxTestCa
       // Try all four rotations, since many of the test images don't have a notion of up, and we
       // want to be as robust as possible.
       BufferedImage image = ImageIO.read(testImage);
+      if (image == null) {
+        throw new IOException("Could not read image: " + testImage);
+      }
       for (int x = 0; x < 4; x++) {
         if (!checkForFalsePositives(image, x * 90.0f)) {
           falsePositives++;
