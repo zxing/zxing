@@ -35,7 +35,8 @@ import java.util.Hashtable;
  */
 public abstract class AbstractUPCEANReader extends AbstractOneDReader implements UPCEANReader {
 
-  private static final int MAX_VARIANCE = 104;
+  private static final int MAX_AVG_VARIANCE = (int) (PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.40625f);
+  private static final int MAX_INDIVIDUAL_VARIANCE = (int) (PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.5f);
 
   /**
    * Start/end guard pattern.
@@ -207,7 +208,7 @@ public abstract class AbstractUPCEANReader extends AbstractOneDReader implements
         counters[counterPosition]++;
       } else {
         if (counterPosition == patternLength - 1) {
-          if (patternMatchVariance(counters, pattern) < MAX_VARIANCE) {
+          if (patternMatchVariance(counters, pattern, MAX_INDIVIDUAL_VARIANCE) < MAX_AVG_VARIANCE) {
             return new int[]{patternStart, x};
           }
           patternStart += counters[0] + counters[1];
@@ -242,12 +243,12 @@ public abstract class AbstractUPCEANReader extends AbstractOneDReader implements
   static int decodeDigit(BitArray row, int[] counters, int rowOffset, int[][] patterns)
       throws ReaderException {
     recordPattern(row, rowOffset, counters);
-    int bestVariance = MAX_VARIANCE; // worst variance we'll accept
+    int bestVariance = MAX_AVG_VARIANCE; // worst variance we'll accept
     int bestMatch = -1;
     int max = patterns.length;
     for (int i = 0; i < max; i++) {
       int[] pattern = patterns[i];
-      int variance = patternMatchVariance(counters, pattern);
+      int variance = patternMatchVariance(counters, pattern, MAX_INDIVIDUAL_VARIANCE);
       if (variance < bestVariance) {
         bestVariance = variance;
         bestMatch = i;
