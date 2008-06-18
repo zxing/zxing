@@ -138,6 +138,12 @@ public final class Code39Reader extends AbstractOneDReader {
     if (extendedMode) {
       resultString = decodeExtended(resultString);
     }
+
+    if (resultString.length() == 0) {
+      // Almost surely a false positive
+      throw new ReaderException("Empty barcode found; assuming a false positive");
+    }
+
     float left = (float) (start[1] + start[0]) / 2.0f;
     float right = (float) (nextStart + lastStart) / 2.0f;
     return new Result(

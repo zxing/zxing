@@ -405,6 +405,12 @@ public final class Code128Reader extends AbstractOneDReader {
     }
 
     String resultString = result.toString();
+
+    if (resultString.length() == 0) {
+      // Almost surely a false positive
+      throw new ReaderException("Empty barcode found; assuming a false positive");
+    }
+
     float left = (float) (startPatternInfo[1] + startPatternInfo[0]) / 2.0f;
     float right = (float) (nextStart + lastStart) / 2.0f;
     return new Result(
