@@ -6,7 +6,7 @@
 //  Copyright Google Inc 2008. All rights reserved.
 //
 /*
- * Copyright 2008 Google Inc.
+ * Copyright 2008 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
