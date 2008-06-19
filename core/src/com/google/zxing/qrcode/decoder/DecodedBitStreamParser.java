@@ -106,19 +106,21 @@ final class DecodedBitStreamParser {
 
   private static int parseECI(BitSource bits) {
     int firstByte = bits.readBits(8);
-    if (firstByte & 0x80 == 0) {
+    if ((firstByte & 0x80) == 0) {
       // just one byte
       return firstByte & 0x7F;
-    } else if (firstByte & 0xC0 == 0x80) {
+    } else if ((firstByte & 0xC0) == 0x80) {
       // two bytes
       int secondByte = bits.readBits(8);
       return ((firstByte & 0x3F) << 8) | secondByte;
-    } else if (firstByte & 0xE0 == 0xC0) {
+    } else if ((firstByte & 0xE0) == 0xC0) {
       // three bytes
       int secondByte = bits.readBits(8);
       int thirdByte = bits.readBits(8);
       return ((firstByte & 0x1F) << 16) | (secondByte << 8) | thirdByte;
     }
+    // FIXME: What should we return here?
+    return 0;
   }
 
   private static void decodeKanjiSegment(BitSource bits,
