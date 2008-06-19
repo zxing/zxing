@@ -36,7 +36,7 @@ import java.util.Hashtable;
 public abstract class AbstractUPCEANReader extends AbstractOneDReader implements UPCEANReader {
 
   private static final int MAX_AVG_VARIANCE = (int) (PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.40625f);
-  private static final int MAX_INDIVIDUAL_VARIANCE = (int) (PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.5f);
+  private static final int MAX_INDIVIDUAL_VARIANCE = (int) (PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.7f);
 
   /**
    * Start/end guard pattern.
@@ -140,8 +140,10 @@ public abstract class AbstractUPCEANReader extends AbstractOneDReader implements
    * @throws ReaderException if the string does not contain only digits
    */
   boolean checkChecksum(String s) throws ReaderException {
-    int sum = 0;
     int length = s.length();
+    if (length == 0) return false;
+
+    int sum = 0;
     for (int i = length - 2; i >= 0; i -= 2) {
       int digit = (int) s.charAt(i) - (int) '0';
       if (digit < 0 || digit > 9) {
