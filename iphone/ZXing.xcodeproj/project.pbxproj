@@ -58,12 +58,12 @@
 		852683A20DF851ED005DD4C0 /* GeoParsedResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 852683A10DF851ED005DD4C0 /* GeoParsedResult.m */; };
 		852683C20DF8562B005DD4C0 /* ShowMapAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 852683C10DF8562B005DD4C0 /* ShowMapAction.m */; };
 		854BE3010E06A56C00CB4A20 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 854BE3000E06A56C00CB4A20 /* AddressBookUI.framework */; };
+		8552C4980E0A61D6000CC4F0 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 8552C4970E0A61D6000CC4F0 /* Default.png */; };
 		855A66800DF5E757007B394F /* ArchiveController.m in Sources */ = {isa = PBXBuildFile; fileRef = 855A66510DF5E757007B394F /* ArchiveController.m */; };
 		855A66810DF5E757007B394F /* Database.m in Sources */ = {isa = PBXBuildFile; fileRef = 855A66540DF5E757007B394F /* Database.m */; };
 		855A66820DF5E757007B394F /* AddressBookAUParsedResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 855A66560DF5E757007B394F /* AddressBookAUParsedResult.m */; };
 		855A66830DF5E757007B394F /* AddContactAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 855A66580DF5E757007B394F /* AddContactAction.m */; };
 		855A66840DF5E757007B394F /* AddressBookDoCoMoParsedResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 855A665A0DF5E757007B394F /* AddressBookDoCoMoParsedResult.m */; };
-		855A66850DF5E757007B394F /* RotatingNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 855A665C0DF5E757007B394F /* RotatingNavigationController.m */; };
 		855A66860DF5E757007B394F /* EmailAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 855A665E0DF5E757007B394F /* EmailAction.m */; };
 		855A66870DF5E757007B394F /* EmailDoCoMoParsedResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 855A66600DF5E757007B394F /* EmailDoCoMoParsedResult.m */; };
 		855A66880DF5E757007B394F /* DoCoMoParsedResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 855A66620DF5E757007B394F /* DoCoMoParsedResult.m */; };
@@ -145,6 +145,7 @@
 		852683C00DF8562B005DD4C0 /* ShowMapAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShowMapAction.h; sourceTree = "<group>"; };
 		852683C10DF8562B005DD4C0 /* ShowMapAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShowMapAction.m; sourceTree = "<group>"; };
 		854BE3000E06A56C00CB4A20 /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
+		8552C4970E0A61D6000CC4F0 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		855A65D70DF5E739007B394F /* BarcodeFormat.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BarcodeFormat.cpp; sourceTree = "<group>"; };
 		855A65D80DF5E739007B394F /* BarcodeFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BarcodeFormat.h; sourceTree = "<group>"; };
 		855A65D90DF5E739007B394F /* BlackPointEstimationMethod.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BlackPointEstimationMethod.cpp; sourceTree = "<group>"; };
@@ -233,8 +234,6 @@
 		855A66580DF5E757007B394F /* AddContactAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddContactAction.m; sourceTree = "<group>"; };
 		855A66590DF5E757007B394F /* AddressBookDoCoMoParsedResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddressBookDoCoMoParsedResult.h; sourceTree = "<group>"; };
 		855A665A0DF5E757007B394F /* AddressBookDoCoMoParsedResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddressBookDoCoMoParsedResult.m; sourceTree = "<group>"; };
-		855A665B0DF5E757007B394F /* RotatingNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RotatingNavigationController.h; sourceTree = "<group>"; };
-		855A665C0DF5E757007B394F /* RotatingNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RotatingNavigationController.m; sourceTree = "<group>"; };
 		855A665D0DF5E757007B394F /* EmailAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmailAction.h; sourceTree = "<group>"; };
 		855A665E0DF5E757007B394F /* EmailAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmailAction.m; sourceTree = "<group>"; };
 		855A665F0DF5E757007B394F /* EmailDoCoMoParsedResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmailDoCoMoParsedResult.h; sourceTree = "<group>"; };
@@ -331,8 +330,6 @@
 				855A66580DF5E757007B394F /* AddContactAction.m */,
 				855A66590DF5E757007B394F /* AddressBookDoCoMoParsedResult.h */,
 				855A665A0DF5E757007B394F /* AddressBookDoCoMoParsedResult.m */,
-				855A665B0DF5E757007B394F /* RotatingNavigationController.h */,
-				855A665C0DF5E757007B394F /* RotatingNavigationController.m */,
 				855A665D0DF5E757007B394F /* EmailAction.h */,
 				855A665E0DF5E757007B394F /* EmailAction.m */,
 				855A665F0DF5E757007B394F /* EmailDoCoMoParsedResult.h */,
@@ -415,6 +412,7 @@
 				855A66A30DF5E7B4007B394F /* DecoderView.xib */,
 				855A66A40DF5E7B4007B394F /* MainWindow.xib */,
 				8D1107310486CEB800E47090 /* Info.plist */,
+				8552C4970E0A61D6000CC4F0 /* Default.png */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -707,6 +705,7 @@
 				855A66A70DF5E7B4007B394F /* zxing-icon-128.png in Resources */,
 				855A66A80DF5E7B4007B394F /* DecoderView.xib in Resources */,
 				855A66A90DF5E7B4007B394F /* MainWindow.xib in Resources */,
+				8552C4980E0A61D6000CC4F0 /* Default.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -723,7 +722,6 @@
 				855A66820DF5E757007B394F /* AddressBookAUParsedResult.m in Sources */,
 				855A66830DF5E757007B394F /* AddContactAction.m in Sources */,
 				855A66840DF5E757007B394F /* AddressBookDoCoMoParsedResult.m in Sources */,
-				855A66850DF5E757007B394F /* RotatingNavigationController.m in Sources */,
 				855A66860DF5E757007B394F /* EmailAction.m in Sources */,
 				855A66870DF5E757007B394F /* EmailDoCoMoParsedResult.m in Sources */,
 				855A66880DF5E757007B394F /* DoCoMoParsedResult.m in Sources */,
