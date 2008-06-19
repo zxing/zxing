@@ -23,7 +23,6 @@
 
 #import "ZXingAppDelegate.h"
 #import "DecoderViewController.h"
-#import "RotatingNavigationController.h"
 
 @implementation ZXingAppDelegate
 
@@ -35,11 +34,11 @@
   /* create the view controller */
   DecoderViewController *vc = 
     [[DecoderViewController alloc] initWithNibName:@"DecoderView" 
-                                         bundle:[NSBundle mainBundle]];
+                                            bundle:[NSBundle mainBundle]];
   self.viewController = vc;
   [vc release];
   
-  navigationController = [[RotatingNavigationController alloc] 
+  navigationController = [[UINavigationController alloc] 
                           initWithRootViewController:viewController];
   
   // hook up the view controller's view to be in the window
