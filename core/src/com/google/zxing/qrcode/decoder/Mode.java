@@ -32,6 +32,7 @@ final class Mode {
   static final Mode NUMERIC = new Mode(new int[]{10, 12, 14});
   static final Mode ALPHANUMERIC = new Mode(new int[]{9, 11, 13});
   static final Mode BYTE = new Mode(new int[]{8, 16, 16});
+  static final Mode ECI = new Mode(null); // character counts don't apply
   static final Mode KANJI = new Mode(new int[]{8, 10, 12});
 
   private final int[] characterCountBitsForVersions;
@@ -55,6 +56,8 @@ final class Mode {
         return ALPHANUMERIC;
       case 0x4:
         return BYTE;
+      case 0x7:
+        return ECI;
       case 0x8:
         return KANJI;
       default:
@@ -68,6 +71,9 @@ final class Mode {
    *         count of characters that will follow encoded in this {@link Mode}
    */
   int getCharacterCountBits(Version version) {
+    if (this == ECI) {
+      throw new UnsupportedOperationException("Character count doesn't apply to ECI mode");
+    }
     int number = version.getVersionNumber();
     int offset;
     if (number <= 9) {

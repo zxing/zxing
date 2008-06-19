@@ -67,18 +67,27 @@ final class DecodedBitStreamParser {
         mode = Mode.forBits(bits.readBits(4)); // mode is encoded by 4 bits
       }
       if (!mode.equals(Mode.TERMINATOR)) {
-        // How many characters will follow, encoded in this mode?
-        int count = bits.readBits(mode.getCharacterCountBits(version));
-        if (mode.equals(Mode.NUMERIC)) {
-          decodeNumericSegment(bits, result, count);
-        } else if (mode.equals(Mode.ALPHANUMERIC)) {
-          decodeAlphanumericSegment(bits, result, count);
-        } else if (mode.equals(Mode.BYTE)) {
-          decodeByteSegment(bits, result, count);
-        } else if (mode.equals(Mode.KANJI)) {
-          decodeKanjiSegment(bits, result, count);
+        if (mode.equals(Mode.ECI)) {
+          // Count doesn't apply to ECI
+          parseECI(bits);
+          // We don't currently do anything with ECI, since there seems to be no reference
+          // defining what each value means. AIM's "Extended Channel Interpretations" does
+          // not define it. I have never observed a QR Code using it. So for now, we at least
+          // parse it but don't know how to take action on it.
         } else {
-          throw new ReaderException("Unsupported mode indicator");
+          // How many characters will follow, encoded in this mode?
+         int count = bits.readBits(mode.getCharacterCountBits(version));
+          if (mode.equals(Mode.NUMERIC)) {
+            decodeNumericSegment(bits, result, count);
+          } else if (mode.equals(Mode.ALPHANUMERIC)) {
+            decodeAlphanumericSegment(bits, result, count);
+          } else if (mode.equals(Mode.BYTE)) {
+            decodeByteSegment(bits, result, count);
+          } else if (mode.equals(Mode.KANJI)) {
+            decodeKanjiSegment(bits, result, count);
+          } else {
+            throw new ReaderException("Unsupported mode indicator");
+          }
         }
       }
     } while (!mode.equals(Mode.TERMINATOR));
@@ -93,6 +102,23 @@ final class DecodedBitStreamParser {
     }
      */
     return result.toString();
+  }
+
+  private static int parseECI(BitSource bits) {
+    int firstByte = bits.readBits(8);
+    if (firstByte & 0x80 == 0) {
+      // just one byte
+      return firstByte & 0x7F;
+    } else if (firstByte & 0xC0 == 0x80) {
+      // two bytes
+      int secondByte = bits.readBits(8);
+      return ((firstByte & 0x3F) << 8) | secondByte;
+    } else if (firstByte & 0xE0 == 0xC0) {
+      // three bytes
+      int secondByte = bits.readBits(8);
+      int thirdByte = bits.readBits(8);
+      return ((firstByte & 0x1F) << 16) | (secondByte << 8) | thirdByte;
+    }
   }
 
   private static void decodeKanjiSegment(BitSource bits,
