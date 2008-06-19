@@ -144,7 +144,7 @@ public abstract class AbstractBlackBoxTestCase extends TestCase {
     try {
       result = barcodeReader.decode(source);
     } catch (ReaderException re) {
-      System.out.println(re);
+      System.out.println(re + " (rotation: " + rotationInDegrees + ')');
       return false;
     }
 
@@ -165,7 +165,7 @@ public abstract class AbstractBlackBoxTestCase extends TestCase {
     try {
       result = barcodeReader.decode(source, TRY_HARDER_HINT);
     } catch (ReaderException re) {
-      fail("Normal mode succeeded but \"try harder\" failed");
+      fail("Normal mode succeeded but \"try harder\" failed (rotation: " + rotationInDegrees + ')');
       return false;
     }
     if (!expectedFormat.equals(result.getBarcodeFormat())) {
