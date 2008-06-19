@@ -1,0 +1,61 @@
+//
+//  TelParsedResult.m
+//  ZXing
+//
+//  Created by Christian Brunschen on 23/05/2008.
+/*
+ * Copyright 2008 Google Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#import "TelParsedResult.h"
+#import "CallAction.h"
+
+#define PREFIX @"tel:"
+
+@implementation TelParsedResult
+
+@synthesize number;
+
+- initWithNumber:(NSString *)n {
+  if ((self = [super init]) != nil) {
+    self.number = n;
+  }
+  return self;
+}
+
++ parsedResultForString:(NSString *)s {
+  NSRange telRange = [s rangeOfString:PREFIX options:NSCaseInsensitiveSearch];
+  if (telRange.location == 0) {
+    int restStart = telRange.location + telRange.length;
+    return [[[self alloc] initWithNumber:[s substringFromIndex:restStart]]
+            autorelease];
+  }
+  return nil;
+}
+
+- (NSString *)stringForDisplay {
+  return self.number;
+}
+
+- (NSArray *)actions { 
+  return [NSArray arrayWithObject:[CallAction actionWithNumber:self.number]];
+}
+
+- (void) dealloc {
+  [number release];
+  [super dealloc];
+}
+
+@end
