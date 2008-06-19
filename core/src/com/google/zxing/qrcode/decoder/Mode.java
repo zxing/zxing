@@ -71,8 +71,8 @@ final class Mode {
    *         count of characters that will follow encoded in this {@link Mode}
    */
   int getCharacterCountBits(Version version) {
-    if (this == ECI) {
-      throw new UnsupportedOperationException("Character count doesn't apply to ECI mode");
+    if (this.equals(ECI)) {
+      throw new IllegalArgumentException("Character count doesn't apply to ECI mode");
     }
     int number = version.getVersionNumber();
     int offset;

@@ -115,12 +115,10 @@ final class DecodedBitStreamParser {
       return ((firstByte & 0x3F) << 8) | secondByte;
     } else if ((firstByte & 0xE0) == 0xC0) {
       // three bytes
-      int secondByte = bits.readBits(8);
-      int thirdByte = bits.readBits(8);
-      return ((firstByte & 0x1F) << 16) | (secondByte << 8) | thirdByte;
+      int secondThirdBytes = bits.readBits(16);
+      return ((firstByte & 0x1F) << 16) | secondThirdBytes;
     }
-    // FIXME: What should we return here?
-    return 0;
+    throw new IllegalArgumentException("Bad ECI bits starting with byte " + firstByte);
   }
 
   private static void decodeKanjiSegment(BitSource bits,
