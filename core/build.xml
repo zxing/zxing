@@ -65,7 +65,7 @@
       <arg value="-outjars core.jar"/>
       <arg value="-libraryjars ${WTK-home}/lib/cldcapi11.jar"/>
       <arg value="-renamesourcefileattribute SourceFile"/>
-      <arg value="-keepattributes Exceptions,InnerClasses,Signature,Deprecated,SourceFile,LineNumberTable,*Annotation*,EnclosingMethod"/>
+      <arg value="-keepattributes Exceptions,InnerClasses,Signature,!LocalVariableTable"/>
       <arg value="-keep public class com.google.zxing.* { public protected *; }"/>
       <arg value="-keep public class com.google.zxing.client.result.* { public protected *; }"/>
       <arg value="-keep public class com.google.zxing.common.* { public protected *; }"/>
