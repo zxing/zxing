@@ -36,20 +36,20 @@ import java.util.Hashtable;
 public abstract class AbstractOneDReader implements OneDReader {
 
   private static final int INTEGER_MATH_SHIFT = 8;
-  public static final int PATTERN_MATCH_RESULT_SCALE_FACTOR = 256;
+  public static final int PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
 
   public final Result decode(MonochromeBitmapSource image) throws ReaderException {
     return decode(image, null);
   }
 
   public final Result decode(MonochromeBitmapSource image, Hashtable hints) throws ReaderException {
-    boolean tryHarder = hints != null && hints.containsKey(DecodeHintType.TRY_HARDER);
     try {
-      return doDecode(image, hints, tryHarder);
+      return doDecode(image, hints);
     } catch (ReaderException re) {
+      boolean tryHarder = hints != null && hints.containsKey(DecodeHintType.TRY_HARDER);
       if (tryHarder && image.isRotateSupported()) {
         MonochromeBitmapSource rotatedImage = image.rotateCounterClockwise();
-        Result result = doDecode(rotatedImage, hints, tryHarder);
+        Result result = doDecode(rotatedImage, hints);
         // Record that we found it rotated 90 degrees CCW / 270 degrees CW
         Hashtable metadata = result.getResultMetadata();
         int orientation = 270;
@@ -65,27 +65,33 @@ public abstract class AbstractOneDReader implements OneDReader {
     }
   }
 
-  private Result doDecode(MonochromeBitmapSource image, Hashtable hints, boolean tryHarder) throws ReaderException {
-
+  /**
+   * We're going to examine rows from the middle outward, searching alternately above and below the
+   * middle, and farther out each time. rowStep is the number of rows between each successive
+   * attempt above and below the middle. So we'd scan row middle, then middle - rowStep, then
+   * middle + rowStep, then middle - (2 * rowStep), etc.
+   * rowStep is bigger as the image is taller, but is always at least 1. We've somewhat arbitrarily
+   * decided that moving up and down by about 1/16 of the image is pretty good; we try more of the
+   * image if "trying harder".
+   *
+   * @param image The image to decode
+   * @param hints Any hints that were requested
+   * @return The contents of the decoded barcode
+   * @throws ReaderException Any spontaneous errors which occur
+   */
+  private Result doDecode(MonochromeBitmapSource image, Hashtable hints) throws ReaderException {
     int width = image.getWidth();
     int height = image.getHeight();
-
     BitArray row = new BitArray(width);
 
-    // We're going to examine rows from the middle outward, searching alternately above and below the middle,
-    // and farther out each time. rowStep is the number of rows between each successive attempt above and below
-    // the middle. So we'd scan row middle, then middle - rowStep, then middle + rowStep,
-    // then middle - 2*rowStep, etc.
-    // rowStep is bigger as the image is taller, but is always at least 1. We've somewhat arbitrarily decided
-    // that moving up and down by about 1/16 of the image is pretty good; we try more of the image if
-    // "trying harder"
     int middle = height >> 1;
+    boolean tryHarder = hints != null && hints.containsKey(DecodeHintType.TRY_HARDER);
     int rowStep = Math.max(1, height >> (tryHarder ? 7 : 4));
     int maxLines;
     if (tryHarder) {
-      maxLines = height; // Look at the whole image; looking for more than one barcode
+      maxLines = height; // Look at the whole image, not just the center
     } else {
-      maxLines = 7;
+      maxLines = 9; // Nine rows spaced 1/16 apart is roughly the middle half of the image
     }
 
     for (int x = 0; x < maxLines; x++) {
@@ -179,12 +185,12 @@ public abstract class AbstractOneDReader implements OneDReader {
 
   /**
    * Determines how closely a set of observed counts of runs of black/white values matches a given
-   * target pattern. This is reported as the ratio of the total variance from the expected pattern proportions
-   * across all pattern elements, to the length of the pattern.
+   * target pattern. This is reported as the ratio of the total variance from the expected pattern
+   * proportions across all pattern elements, to the length of the pattern.
    *
    * @param counters observed counters
    * @param pattern expected pattern
-   * @param maxIndividualVariance
+   * @param maxIndividualVariance The most any counter can differ before we give up
    * @return ratio of total variance between counters and pattern compared to total pattern size,
    *  where the ratio has been multiplied by 256. So, 0 means no variance (perfect match); 256 means
    *  the total variance between counters and patterns equals the pattern length, higher values mean
@@ -207,7 +213,7 @@ public abstract class AbstractOneDReader implements OneDReader {
     // Scale up patternLength so that intermediate values below like scaledCounter will have
     // more "significant digits"
     int unitBarWidth = (total << INTEGER_MATH_SHIFT) / patternLength;
-    maxIndividualVariance *= unitBarWidth;
+    maxIndividualVariance = (maxIndividualVariance * unitBarWidth) >> INTEGER_MATH_SHIFT;
 
     int totalVariance = 0;
     for (int x = 0; x < numCounters; x++) {
