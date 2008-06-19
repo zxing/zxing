@@ -6,7 +6,7 @@
  *  zxing
  *
  *  Created by Christian Brunschen on 14/05/2008.
- *  Copyright 2008 Google Inc. All rights reserved.
+ *  Copyright 2008 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright (C) 2008 Google Inc.
+ Copyright 2008 ZXing authors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -46,7 +46,7 @@
         <a href="BarcodeReader.apk">Download</a>
         the Android client.
       </p>
-      <p>Copyright (C) 2008 Google Inc.</p>
+      <p>Copyright 2008 ZXing authors</p>
       <jsp:include page="analytics.jspx"/>      
     </body>
   </html>
