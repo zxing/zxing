@@ -31,7 +31,7 @@
     <tstamp/>
   </target>
 
-  <target name="build" depends="init">
+  <target name="compile" depends="init">
     <mkdir dir="build"/>
     <javac srcdir="src"
            destdir="build"
@@ -39,7 +39,7 @@
            target="1.2"
            bootclasspath="${javame-compile-bootclasspath-path}"
            optimize="true"
-           debug="true"
+           debug="${generate-debug}"
            deprecation="true"
            fork="true"/>
     <jar jarfile="core.jar" basedir="build">
@@ -57,15 +57,29 @@
     </jar>
   </target>
 
-  <target name="build-optimized" depends="build">
+  <target name="build">
+    <antcall target="compile">
+      <param name="generate-debug" value="true"/>
+    </antcall>
+  </target>
+
+  <target name="build-no-debug">
+    <antcall target="compile">
+      <param name="generate-debug" value="false"/>
+    </antcall>
+  </target>
+
+  <!-- This target really supports the Android client, where we can't as easily build
+       an optimized .apk directly, and need an optimized library. We have to strip debug info
+       above to appease dex -->
+  <target name="build-optimized" depends="build-no-debug">
     <move file="core.jar" tofile="temp.jar"/>
     <java jar="${WTK-home}/bin/proguard.jar" fork="true" failonerror="true">
       <jvmarg value="-Dmaximum.inlined.code.length=32"/>
       <arg value="-injars temp.jar"/>
       <arg value="-outjars core.jar"/>
       <arg value="-libraryjars ${WTK-home}/lib/cldcapi11.jar"/>
-      <arg value="-renamesourcefileattribute SourceFile"/>
-      <arg value="-keepattributes Exceptions,InnerClasses,Signature,!LocalVariableTable"/>
+      <arg value="-keepattributes Exceptions,InnerClasses,Signature,!LocalVariableTable,!LocalVariableTypeTable"/>
       <arg value="-keep public class com.google.zxing.* { public protected *; }"/>
       <arg value="-keep public class com.google.zxing.client.result.* { public protected *; }"/>
       <arg value="-keep public class com.google.zxing.common.* { public protected *; }"/>
@@ -75,6 +89,17 @@
       <arg value="-verbose"/>
     </java>
     <delete file="temp.jar"/>
+  </target>
+
+  <target name="dump">
+    <java jar="${WTK-home}/bin/proguard.jar" fork="true">
+      <arg value="-injars core.jar"/>
+      <arg value="-libraryjars ${WTK-home}/lib/cldcapi11.jar"/>
+      <arg value="-dontshrink"/>
+      <arg value="-dontobfuscate"/>
+      <arg value="-dontoptimize"/>
+      <arg value="-dump dump.txt"/>
+    </java>
   </target>
 
   <target name="build-test" depends="init,build">
