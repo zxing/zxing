@@ -49,7 +49,7 @@
 }
 
 - (NSString *)title {
-  return @"Add Contact";
+  return NSLocalizedString(@"Add Contact", @"Add Contact");
 }
 
 - (void)performActionWithController:(UIViewController *)controller {

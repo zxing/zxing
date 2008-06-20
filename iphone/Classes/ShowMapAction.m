@@ -44,19 +44,19 @@ static NSURL * URLForLocation(NSString *location) {
 }
 
 - (NSString *)title {
-  return @"Show On Map";
+  return NSLocalizedString(@"Show on Map", @"action title");
 }
 
 - (NSString *)alertTitle {
-  return @"Show on Map";
+  return NSLocalizedString(@"Show on Map", @"alert title");
 }
 
 - (NSString *)alertMessage {
-  return [NSString stringWithFormat:@"Show location %@ on Map ?", self.location];
+  return [NSString stringWithFormat:NSLocalizedString(@"Show location %@ on Map ?", @"alert message"), self.location];
 }
 
 - (NSString *)alertButtonTitle {
-  return @"Show";
+  return NSLocalizedString(@"Show", @"alert button title");
 }
 
 

@@ -57,6 +57,9 @@
 		851B4BF60DF6C64A00C8958F /* TwoDDecoderResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 851B4BF50DF6C64A00C8958F /* TwoDDecoderResult.m */; };
 		852683A20DF851ED005DD4C0 /* GeoParsedResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 852683A10DF851ED005DD4C0 /* GeoParsedResult.m */; };
 		852683C20DF8562B005DD4C0 /* ShowMapAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 852683C10DF8562B005DD4C0 /* ShowMapAction.m */; };
+		852A998F0E0BC433003E6D6D /* DecoderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 852A998E0E0BC433003E6D6D /* DecoderView.xib */; };
+		852A99910E0BC43C003E6D6D /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 852A99900E0BC43C003E6D6D /* MainWindow.xib */; };
+		852A99970E0BC49E003E6D6D /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 852A99960E0BC49E003E6D6D /* Localizable.strings */; };
 		854BE3010E06A56C00CB4A20 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 854BE3000E06A56C00CB4A20 /* AddressBookUI.framework */; };
 		8552C4980E0A61D6000CC4F0 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 8552C4970E0A61D6000CC4F0 /* Default.png */; };
 		855A66800DF5E757007B394F /* ArchiveController.m in Sources */ = {isa = PBXBuildFile; fileRef = 855A66510DF5E757007B394F /* ArchiveController.m */; };
@@ -84,8 +87,6 @@
 		855A66A50DF5E7B4007B394F /* scans.db in Resources */ = {isa = PBXBuildFile; fileRef = 855A66A00DF5E7B4007B394F /* scans.db */; };
 		855A66A60DF5E7B4007B394F /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 855A66A10DF5E7B4007B394F /* Settings.bundle */; };
 		855A66A70DF5E7B4007B394F /* zxing-icon-128.png in Resources */ = {isa = PBXBuildFile; fileRef = 855A66A20DF5E7B4007B394F /* zxing-icon-128.png */; };
-		855A66A80DF5E7B4007B394F /* DecoderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 855A66A30DF5E7B4007B394F /* DecoderView.xib */; };
-		855A66A90DF5E7B4007B394F /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 855A66A40DF5E7B4007B394F /* MainWindow.xib */; };
 		855A66B40DF5E884007B394F /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 855A66B30DF5E884007B394F /* AddressBook.framework */; };
 		855A66BD0DF5E8D6007B394F /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 855A66BC0DF5E8D6007B394F /* libsqlite3.0.dylib */; };
 		855A66BF0DF5E8F8007B394F /* libiconv.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 855A66BE0DF5E8F8007B394F /* libiconv.2.dylib */; };
@@ -144,6 +145,15 @@
 		852683A10DF851ED005DD4C0 /* GeoParsedResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeoParsedResult.m; sourceTree = "<group>"; };
 		852683C00DF8562B005DD4C0 /* ShowMapAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShowMapAction.h; sourceTree = "<group>"; };
 		852683C10DF8562B005DD4C0 /* ShowMapAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShowMapAction.m; sourceTree = "<group>"; };
+		852A99C90E0BC7D1003E6D6D /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/DecoderView.xib; sourceTree = "<group>"; };
+		852A99CA0E0BC7D6003E6D6D /* de */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = de; path = de.lproj/DecoderView.xib; sourceTree = "<group>"; };
+		852A99CB0E0BC7E0003E6D6D /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainWindow.xib; sourceTree = "<group>"; };
+		852A99CC0E0BC7E2003E6D6D /* de */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = de; path = de.lproj/MainWindow.xib; sourceTree = "<group>"; };
+		852A99CD0E0BC7EE003E6D6D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		852A99CE0E0BC7F3003E6D6D /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
+		852A99D00E0BC8E8003E6D6D /* sv */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = sv; path = sv.lproj/DecoderView.xib; sourceTree = "<group>"; };
+		852A99D10E0BC8E8003E6D6D /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Localizable.strings; sourceTree = "<group>"; };
+		852A99D20E0BC8E8003E6D6D /* sv */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = sv; path = sv.lproj/MainWindow.xib; sourceTree = "<group>"; };
 		854BE3000E06A56C00CB4A20 /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
 		8552C4970E0A61D6000CC4F0 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		855A65D70DF5E739007B394F /* BarcodeFormat.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BarcodeFormat.cpp; sourceTree = "<group>"; };
@@ -272,8 +282,6 @@
 		855A66A00DF5E7B4007B394F /* scans.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = scans.db; sourceTree = "<group>"; };
 		855A66A10DF5E7B4007B394F /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		855A66A20DF5E7B4007B394F /* zxing-icon-128.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "zxing-icon-128.png"; sourceTree = "<group>"; };
-		855A66A30DF5E7B4007B394F /* DecoderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DecoderView.xib; sourceTree = "<group>"; };
-		855A66A40DF5E7B4007B394F /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
 		855A66B30DF5E884007B394F /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		855A66BC0DF5E8D6007B394F /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
 		855A66BE0DF5E8F8007B394F /* libiconv.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.2.dylib; path = usr/lib/libiconv.2.dylib; sourceTree = SDKROOT; };
@@ -406,11 +414,12 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				852A99960E0BC49E003E6D6D /* Localizable.strings */,
 				855A66A00DF5E7B4007B394F /* scans.db */,
 				855A66A10DF5E7B4007B394F /* Settings.bundle */,
 				855A66A20DF5E7B4007B394F /* zxing-icon-128.png */,
-				855A66A30DF5E7B4007B394F /* DecoderView.xib */,
-				855A66A40DF5E7B4007B394F /* MainWindow.xib */,
+				852A998E0E0BC433003E6D6D /* DecoderView.xib */,
+				852A99900E0BC43C003E6D6D /* MainWindow.xib */,
 				8D1107310486CEB800E47090 /* Info.plist */,
 				8552C4970E0A61D6000CC4F0 /* Default.png */,
 			);
@@ -685,6 +694,17 @@
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "ZXing" */;
 			compatibilityVersion = "Xcode 3.1";
 			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+				Swedish,
+				sv,
+				en,
+				de,
+				se,
+			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -703,9 +723,10 @@
 				855A66A50DF5E7B4007B394F /* scans.db in Resources */,
 				855A66A60DF5E7B4007B394F /* Settings.bundle in Resources */,
 				855A66A70DF5E7B4007B394F /* zxing-icon-128.png in Resources */,
-				855A66A80DF5E7B4007B394F /* DecoderView.xib in Resources */,
-				855A66A90DF5E7B4007B394F /* MainWindow.xib in Resources */,
+				852A998F0E0BC433003E6D6D /* DecoderView.xib in Resources */,
+				852A99910E0BC43C003E6D6D /* MainWindow.xib in Resources */,
 				8552C4980E0A61D6000CC4F0 /* Default.png in Resources */,
+				852A99970E0BC49E003E6D6D /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -804,6 +825,39 @@
 			targetProxy = 8514EB170DF8A50900EE78D3 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		852A998E0E0BC433003E6D6D /* DecoderView.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				852A99C90E0BC7D1003E6D6D /* en */,
+				852A99CA0E0BC7D6003E6D6D /* de */,
+				852A99D00E0BC8E8003E6D6D /* sv */,
+			);
+			name = DecoderView.xib;
+			sourceTree = "<group>";
+		};
+		852A99900E0BC43C003E6D6D /* MainWindow.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				852A99CB0E0BC7E0003E6D6D /* en */,
+				852A99CC0E0BC7E2003E6D6D /* de */,
+				852A99D20E0BC8E8003E6D6D /* sv */,
+			);
+			name = MainWindow.xib;
+			sourceTree = "<group>";
+		};
+		852A99960E0BC49E003E6D6D /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				852A99CD0E0BC7EE003E6D6D /* en */,
+				852A99CE0E0BC7F3003E6D6D /* de */,
+				852A99D10E0BC8E8003E6D6D /* sv */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		1D6058940D05DD3E006BFB54 /* Debug */ = {

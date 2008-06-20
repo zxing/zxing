@@ -39,26 +39,26 @@
 }
 
 - (NSString *)title {
-  return [NSString stringWithFormat:@"Open %@", self.URL];
+  return [NSString localizedStringWithFormat:NSLocalizedString(@"Open %@", @"action title"), self.URL];
 }
 
 - (NSString *)alertTitle {
-  return @"Open URL";
+  return NSLocalizedString(@"Open URL", @"alert title");
 }
 
 - (NSString *)alertMessage {
-  return [NSString stringWithFormat:@"Open URL <%@>?", self.URL];
+  return [NSString localizedStringWithFormat:NSLocalizedString(@"Open URL <%@>?", @"alert message"), self.URL];
 }
 
 - (NSString *)alertButtonTitle {
-  return @"Open";
+  return NSLocalizedString(@"Open", @"alert button title");
 }
 
 - (void)performActionWithController:(UIViewController *)controller {
   UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil 
                                                       message:[self alertMessage] 
                                                      delegate:self 
-                                            cancelButtonTitle:@"Cancel" 
+                                            cancelButtonTitle:NSLocalizedString(@"Cancel", @"cancel button title") 
                                             otherButtonTitles:[self alertButtonTitle], nil];
   [alertView show];
   [alertView release];

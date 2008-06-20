@@ -1,0 +1,65 @@
+﻿/* Add Contact */
+"Add Contact" = "Add Contact";
+
+/* alert title
+   alert button title */
+"Call" = "Call";
+
+/* action title */
+"Call %@" = "Call %@";
+
+/* alert message */
+"Call %@?" = "Call %@?";
+
+/* cancel button title */
+"Cancel" = "Cancel";
+
+/* alert title
+   alert button title */
+"Compose" = "Compose";
+
+/* alert title */
+"Compose Email" = "Compose Email";
+
+/* alert message */
+"Compose Email to %@?" = "Compose Email to %@?";
+
+/* action title */
+"Compose SMS to %@" = "Compose SMS to %@";
+
+/* alert message */
+"Compose SMS to %@?" = "Compose SMS to %@?";
+
+/* shown while image is decoding */
+"Decoding image (%.0fx%.0f) ..." = "Decoding image (%1$.0fx%2$.0f) ...";
+
+/* action title */
+"Email %@" = "Email %@";
+
+/* alert button title */
+"Open" = "Open";
+
+/* action title */
+"Open %@" = "Open %@";
+
+/* alert title */
+"Open URL" = "Open URL";
+
+/* alert message */
+"Open URL <%@>?" = "Open URL <%@>?";
+
+/* No comment provided by engineer. */
+"Please take or choose a picture containing a barcode" = "Please take or choose a picture containing a barcode";
+
+/* alert button title */
+"Show" = "Show";
+
+/* alert message */
+"Show location %@ on Map ?" = "Show location %@ on Map ?";
+
+/* action title
+   alert title */
+"Show on Map" = "Show on Map";
+
+/* No barcode detected */
+"No barcode detected." = "No barcode detected.";
