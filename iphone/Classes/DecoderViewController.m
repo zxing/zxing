@@ -83,7 +83,7 @@
   
   [self.resultView addSubview:self.messageView];
   [self updateToolbar];
-  [self showMessage:@"Please take or choose a picture containing a barcode"];
+  [self showMessage:NSLocalizedString(@"Please take or choose a picture containing a barcode", @"")];
 }
 
 - (void) updateToolbar {
@@ -167,7 +167,7 @@
 
 - (void)decoder:(Decoder *)decoder willDecodeImage:(UIImage *)image {
   [self.imageView setImage:image];
-  [self showMessage:[NSString stringWithFormat:@"Decoding image (%.0fx%.0f) ...", image.size.width, image.size.height]];
+  [self showMessage:[NSString stringWithFormat:NSLocalizedString(@"Decoding image (%.0fx%.0f) ...", @"shown while image is decoding"), image.size.width, image.size.height]];
 }
 
 - (void)decoder:(Decoder *)decoder 
@@ -274,7 +274,7 @@
       [actionSheet addButtonWithTitle:[action title]];
     }
     
-    int cancelIndex = [actionSheet addButtonWithTitle:@"Cancel"];
+    int cancelIndex = [actionSheet addButtonWithTitle:NSLocalizedString(@"Cancel", @"")];
     actionSheet.cancelButtonIndex = cancelIndex;
     
     actionSheet.delegate = self;

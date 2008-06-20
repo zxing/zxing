@@ -1,0 +1,65 @@
+﻿/* Add Contact */
+"Add Contact" = "Kontakt Dazulegen";
+
+/* alert title
+   alert button title */
+"Call" = "Anrufen";
+
+/* action title */
+"Call %@" = "%@ Anrufen";
+
+/* alert message */
+"Call %@?" = "%@ Anrufen?";
+
+/* cancel button title */
+"Cancel" = "Abbrechen";
+
+/* alert title
+   alert button title */
+"Compose" = "Schreiben";
+
+/* alert title */
+"Compose Email" = "Email Schreiben";
+
+/* alert message */
+"Compose Email to %@?" = "Email an %@ Schreiben?";
+
+/* action title */
+"Compose SMS to %@" = "SMS an %@";
+
+/* alert message */
+"Compose SMS to %@?" = "SMS an %@ Schreiben?";
+
+/* shown while image is decoding */
+"Decoding image (%.0fx%.0f) ..." = "Dekodiert Bild (%1$.0fx%2$.0f) ...";
+
+/* action title */
+"Email %@" = "Email an %@";
+
+/* alert button title */
+"Open" = "Öffnen";
+
+/* action title */
+"Open %@" = "%@ Öffnen";
+
+/* alert title */
+"Open URL" = "Webseite Öffnen";
+
+/* alert message */
+"Open URL <%@>?" = "Webseite <%@> Öffnen?";
+
+/* No comment provided by engineer. */
+"Please take or choose a picture containing a barcode" = "Bitte nehmen oder wählen Sie ein Bild mit Strichkod";
+
+/* alert button title */
+"Show" = "Zeigen";
+
+/* alert message */
+"Show location %@ on Map ?" = "Platz %@ auf der Karte Zeigen?";
+
+/* action title
+   alert title */
+"Show on Map" = "Auf Karte Zeigen";
+
+/* No barcode detected */
+"No barcode detected." = "Kein Strichkod gefunden.";

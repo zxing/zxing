@@ -170,7 +170,7 @@ using namespace qrcode;
                           waitUntilDone:NO];
     } else {
       [self performSelectorOnMainThread:@selector(failedToDecodeImage:)
-                             withObject:@"No barcode detected."
+                             withObject:NSLocalizedString(@"No barcode detected.", @"No barcode detected.")
                           waitUntilDone:NO];
     }
 

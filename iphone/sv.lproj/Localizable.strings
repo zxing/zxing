@@ -1,0 +1,65 @@
+﻿/* Add Contact */
+"Add Contact" = "Lägg till Kontakt";
+
+/* alert title
+   alert button title */
+"Call" = "Ring";
+
+/* action title */
+"Call %@" = "Ring %@";
+
+/* alert message */
+"Call %@?" = "Ring %@?";
+
+/* cancel button title */
+"Cancel" = "Avbryt";
+
+/* alert title
+   alert button title */
+"Compose" = "Skriv";
+
+/* alert title */
+"Compose Email" = "Skriv Epost";
+
+/* alert message */
+"Compose Email to %@?" = "Skriv Epost to %@?";
+
+/* action title */
+"Compose SMS to %@" = "Skriv SMS to %@";
+
+/* alert message */
+"Compose SMS to %@?" = "Skriv SMS to %@?";
+
+/* shown while image is decoding */
+"Decoding image (%.0fx%.0f) ..." = "Avkodar bild (%1$.0fx%2$.0f) ...";
+
+/* action title */
+"Email %@" = "Epost till %@";
+
+/* alert button title */
+"Open" = "Öppna";
+
+/* action title */
+"Open %@" = "Öppna %@";
+
+/* alert title */
+"Open URL" = "Öppna Länk";
+
+/* alert message */
+"Open URL <%@>?" = "Öppna Länk <%@>?";
+
+/* No comment provided by engineer. */
+"Please take or choose a picture containing a barcode" = "Tag eller välj en bild med streckkod";
+
+/* alert button title */
+"Show" = "Visa";
+
+/* alert message */
+"Show location %@ on Map ?" = "Visa plats %@ på Karta?";
+
+/* action title
+   alert title */
+"Show on Map" = "Visa på Karta";
+
+/* No barcode detected */
+"No barcode detected." = "Hittade ingen streckkod.";

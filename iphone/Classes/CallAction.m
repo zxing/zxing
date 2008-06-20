@@ -43,19 +43,19 @@
 }
 
 - (NSString *)title {
-  return [NSString stringWithFormat:@"Call %@", self.number];
+  return [NSString localizedStringWithFormat:NSLocalizedString(@"Call %@", @"action title"), self.number];
 }
 
 - (NSString *)alertTitle {
-  return @"Call";
+  return NSLocalizedString(@"Call", @"alert title");
 }
 
 - (NSString *)alertMessage {
-  return [NSString stringWithFormat:@"Call %@?", self.number];
+  return [NSString localizedStringWithFormat:NSLocalizedString(@"Call %@?", @"alert message"), self.number];
 }
 
 - (NSString *)alertButtonTitle {
-  return @"Call";
+  return NSLocalizedString(@"Call", @"alert button title");
 }
 
 
