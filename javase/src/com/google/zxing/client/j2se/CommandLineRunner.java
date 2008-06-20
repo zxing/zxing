@@ -17,9 +17,10 @@
 package com.google.zxing.client.j2se;
 
 import com.google.zxing.DecodeHintType;
+import com.google.zxing.MonochromeBitmapSource;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.ReaderException;
-import com.google.zxing.MonochromeBitmapSource;
+import com.google.zxing.Result;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -59,7 +60,8 @@ public final class CommandLineRunner {
     }
   }
 
-  private static void decodeOneArgument(String argument, Hashtable<DecodeHintType, Object> hints) throws Exception {
+  private static void decodeOneArgument(String argument, Hashtable<DecodeHintType, Object> hints)
+      throws Exception {
     File inputFile = new File(argument);
     if (inputFile.exists()) {
       if (inputFile.isDirectory()) {
@@ -94,8 +96,9 @@ public final class CommandLineRunner {
     }
     try {
       MonochromeBitmapSource source = new BufferedImageMonochromeBitmapSource(image);
-      String result = new MultiFormatReader().decode(source, hints).getText();
-      System.out.println(uri.toString() + ": " + result);
+      Result result = new MultiFormatReader().decode(source, hints);
+      System.out.println(uri.toString() + ": " + result.getText() + " format: " +
+          result.getBarcodeFormat());
       return true;
     } catch (ReaderException e) {
       System.out.println(uri.toString() + ": No barcode found");
