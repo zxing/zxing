@@ -29,8 +29,8 @@ public final class Code128BlackBox2TestCase extends AbstractBlackBoxTestCase {
 
   public Code128BlackBox2TestCase() {
     super(new File("test/data/blackbox/code128-2"), new MultiFormatReader(), BarcodeFormat.CODE_128);
-    addTest(9, 0.0f);
-    addTest(8, 180.0f);
+    addTest(33, 0.0f);
+    addTest(34, 180.0f);
   }
 
 }
