@@ -57,13 +57,13 @@
     </jar>
   </target>
 
-  <target name="build">
+  <target name="build" depends="clean">
     <antcall target="compile">
       <param name="generate-debug" value="true"/>
     </antcall>
   </target>
 
-  <target name="build-no-debug">
+  <target name="build-no-debug" depends="clean">
     <antcall target="compile">
       <param name="generate-debug" value="false"/>
     </antcall>
