@@ -57,6 +57,7 @@ final class DecodedBitStreamParser {
   static String decode(byte[] bytes, Version version) throws ReaderException {
     BitSource bits = new BitSource(bytes);
     StringBuffer result = new StringBuffer();
+    CharacterSetECI currentCharacterSetECI = null;
     Mode mode;
     do {
       // While still another segment to read...
@@ -69,11 +70,12 @@ final class DecodedBitStreamParser {
       if (!mode.equals(Mode.TERMINATOR)) {
         if (mode.equals(Mode.ECI)) {
           // Count doesn't apply to ECI
-          parseECI(bits);
-          // We don't currently do anything with ECI, since there seems to be no reference
-          // defining what each value means. AIM's "Extended Channel Interpretations" does
-          // not define it. I have never observed a QR Code using it. So for now, we at least
-          // parse it but don't know how to take action on it.
+          int value = ECI.parseECI(bits);
+          try {
+            currentCharacterSetECI = CharacterSetECI.getCharacterSetECIByValue(value);
+          } catch (IllegalArgumentException iae) {
+            // unsupported... just continue?
+          }
         } else {
           // How many characters will follow, encoded in this mode?
          int count = bits.readBits(mode.getCharacterCountBits(version));
@@ -82,7 +84,7 @@ final class DecodedBitStreamParser {
           } else if (mode.equals(Mode.ALPHANUMERIC)) {
             decodeAlphanumericSegment(bits, result, count);
           } else if (mode.equals(Mode.BYTE)) {
-            decodeByteSegment(bits, result, count);
+            decodeByteSegment(bits, result, count, currentCharacterSetECI);
           } else if (mode.equals(Mode.KANJI)) {
             decodeKanjiSegment(bits, result, count);
           } else {
@@ -102,23 +104,6 @@ final class DecodedBitStreamParser {
     }
      */
     return result.toString();
-  }
-
-  private static int parseECI(BitSource bits) {
-    int firstByte = bits.readBits(8);
-    if ((firstByte & 0x80) == 0) {
-      // just one byte
-      return firstByte & 0x7F;
-    } else if ((firstByte & 0xC0) == 0x80) {
-      // two bytes
-      int secondByte = bits.readBits(8);
-      return ((firstByte & 0x3F) << 8) | secondByte;
-    } else if ((firstByte & 0xE0) == 0xC0) {
-      // three bytes
-      int secondThirdBytes = bits.readBits(16);
-      return ((firstByte & 0x1F) << 16) | secondThirdBytes;
-    }
-    throw new IllegalArgumentException("Bad ECI bits starting with byte " + firstByte);
   }
 
   private static void decodeKanjiSegment(BitSource bits,
@@ -154,7 +139,8 @@ final class DecodedBitStreamParser {
 
   private static void decodeByteSegment(BitSource bits,
                                         StringBuffer result,
-                                        int count) throws ReaderException {
+                                        int count,
+                                        CharacterSetECI currentCharacterSetECI) throws ReaderException {
     byte[] readBytes = new byte[count];
     if (count << 3 > bits.available()) {
       throw new ReaderException("Count too large: " + count);
@@ -162,12 +148,17 @@ final class DecodedBitStreamParser {
     for (int i = 0; i < count; i++) {
       readBytes[i] = (byte) bits.readBits(8);
     }
+    String encoding;
+    if (currentCharacterSetECI == null) {
     // The spec isn't clear on this mode; see
     // section 6.4.5: t does not say which encoding to assuming
     // upon decoding. I have seen ISO-8859-1 used as well as
     // Shift_JIS -- without anything like an ECI designator to
     // give a hint.
-    String encoding = guessEncoding(readBytes);
+      encoding = guessEncoding(readBytes);
+    } else {
+      encoding = currentCharacterSetECI.getEncodingName();
+    }
     try {
       result.append(new String(readBytes, encoding));
     } catch (UnsupportedEncodingException uce) {
