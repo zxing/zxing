@@ -29,6 +29,9 @@ final class CharacterSetECI extends ECI {
   static {
     VALUE_TO_ECI = new Hashtable(29);
     // TODO figure out if these values are even right!
+    addCharacterSet(0, "Cp437");
+    addCharacterSet(1, "ISO8859_1");
+    addCharacterSet(2, "Cp437");
     addCharacterSet(3, "ISO8859_1");
     addCharacterSet(4, "ISO8859_2");
     addCharacterSet(5, "ISO8859_3");
@@ -44,7 +47,7 @@ final class CharacterSetECI extends ECI {
     addCharacterSet(16, "ISO8859_14");
     addCharacterSet(17, "ISO8859_15");
     addCharacterSet(18, "ISO8859_16");
-    addCharacterSet(20, "Shift_JIS");
+    addCharacterSet(20, "SJIS");
   }
 
   private final String encodingName;

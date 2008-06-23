@@ -180,7 +180,7 @@ public abstract class AbstractBlackBoxTestCase extends TestCase {
 
   private static String readFileAsString(File file) throws IOException {
     StringBuilder result = new StringBuilder((int) file.length());
-    InputStreamReader reader = new InputStreamReader(new FileInputStream(file), "UTF-8");
+    InputStreamReader reader = new InputStreamReader(new FileInputStream(file), "UTF8");
     try {
       char[] buffer = new char[256];
       int charsRead;

@@ -95,7 +95,7 @@ public final class NDEFURIParsedResult extends AbstractNDEFParsedResult {
     if (identifierCode < URI_PREFIXES.length) {
       prefix = URI_PREFIXES[identifierCode];
     }
-    String restOfURI = bytesToString(payload, 1, payload.length - 1, "UTF-8");
+    String restOfURI = bytesToString(payload, 1, payload.length - 1, "UTF8");
     return prefix == null ? restOfURI : prefix + restOfURI;
   }
 
