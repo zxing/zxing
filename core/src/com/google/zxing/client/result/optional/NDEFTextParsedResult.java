@@ -58,7 +58,7 @@ public final class NDEFTextParsedResult extends AbstractNDEFParsedResult {
     int languageLength = statusByte & 0x1F;
     // language is always ASCII-encoded:
     String language = bytesToString(payload, 1, languageLength, "US-ASCII");
-    String encoding = isUTF16 ? "UTF-16" : "UTF-8";
+    String encoding = isUTF16 ? "UTF-16" : "UTF8";
     String text = bytesToString(payload, 1 + languageLength, payload.length - languageLength - 1, encoding);
     return new String[] { language, text };
   }

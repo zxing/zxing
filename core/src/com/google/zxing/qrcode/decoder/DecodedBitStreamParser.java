@@ -40,11 +40,11 @@ final class DecodedBitStreamParser {
       'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
       ' ', '$', '%', '*', '+', '-', '.', '/', ':'
   };
-  private static final String SHIFT_JIS = "Shift_JIS";
-  private static final String EUC_JP = "EUC-JP";
+  private static final String SHIFT_JIS = "SJIS";
+  private static final String EUC_JP = "EUC_JP";
   private static final boolean ASSUME_SHIFT_JIS;
-  private static final String UTF8 = "UTF-8";
-  private static final String ISO88591 = "ISO-8859-1";
+  private static final String UTF8 = "UTF8";
+  private static final String ISO88591 = "ISO8859_1";
 
   static {
     String platformDefault = System.getProperty("file.encoding");
