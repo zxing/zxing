@@ -166,8 +166,10 @@ namespace qrcode {
         functionPattern->setRegion(dimension - 11, 0, 3, 6);
       }
       
+#ifdef DEBUG
       cout << "version " << versionNumber_ << " built function pattern:\n";
       cout << *functionPattern;
+#endif
       
       return functionPattern;
     }

@@ -28,6 +28,7 @@ namespace common {
   size_t BlackPointEstimator::estimate(valarray<int> &histogram) {
     
     size_t numBuckets = histogram.size();
+    int maxBucketCount = 0;
     
     // Find tallest peak in histogram
     size_t firstPeak = 0;
@@ -36,6 +37,9 @@ namespace common {
       if (histogram[i] > firstPeakSize) {
         firstPeak = i;
         firstPeakSize = histogram[i];
+      }
+      if (histogram[i] > maxBucketCount) {
+        maxBucketCount = histogram[i];
       }
     }
     
@@ -65,7 +69,7 @@ namespace common {
     // Decoding the image/line is either pointless, or may in some cases lead to a false positive
     // for 1D formats, which are relatively lenient.
     // We arbitrarily say "close" is "<= 1/16 of the total histogram buckets apart"
-    if (secondPeak - firstPeak <= histogram.size() >> 4) {
+    if (secondPeak - firstPeak <= numBuckets >> 4) {
       throw new IllegalArgumentException
         ("Too little dynamic range in luminance");
     }
@@ -77,7 +81,7 @@ namespace common {
       int fromFirst = i - firstPeak;
       // Favor a "valley" that is not too close to either peak -- especially not the black peak --
       // and that has a low value of course
-      int score = fromFirst * fromFirst * (secondPeak - i) * (256 - histogram[i]);
+      int score = fromFirst * fromFirst * (secondPeak - i) * (maxBucketCount - histogram[i]);
       if (score > bestValleyScore) {
         bestValley = i;
         bestValleyScore = score;
