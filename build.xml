@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
- Copyright 2007 Google Inc.
+ Copyright 2007 ZXing authors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -21,12 +21,14 @@
   <property file="build.properties"/>
 
   <target name="build">
+    <ant dir="bug" target="build"/>
     <ant dir="core" target="build"/>
     <ant dir="javame" target="build"/>
     <ant dir="javase" target="build"/>
     <ant dir="android" target="package"/>
     <ant dir="javame" target="build-basic"/>
     <ant dir="rim" target="build"/>
+    <ant dir="zxingorg" target="build"/>
   </target>
 
   <target name="buildwithoutj2me">
@@ -35,11 +37,13 @@
   </target>
 
   <target name="clean">
+    <ant dir="bug" target="clean"/>
     <ant dir="core" target="clean"/>
     <ant dir="javame" target="clean"/>
     <ant dir="javase" target="clean"/>
     <ant dir="android" target="clean"/>
     <ant dir="rim" target="clean"/>
+    <ant dir="zxingorg" target="clean"/>
     <delete dir="docs/javadoc"/>
   </target>
 
@@ -51,13 +55,17 @@
     <zip file="ZXing-${version}.zip">
       <zipfileset dir="." prefix="zxing-${version}">
         <exclude name="**/.*"/> <!-- exclude hidden files -->
+        <include name="AUTHORS"/>
         <include name="COPYING"/>
         <include name="README"/>
         <include name="CHANGES"/>
         <include name="build.xml"/>
         <include name="build.properties"/>
         <include name="android/**"/>
+        <include name="bug/**"/>
+        <exclude name="bug/lib/com.buglabs*"/> <!-- Cannot distributed GPLed libraries -->
         <include name="core/**"/>
+        <include name="cpp/**"/>
         <include name="javame/**"/>
         <include name="javase/**"/>
         <include name="rim/build.xml"/>
@@ -77,10 +85,12 @@
              footer="&lt;script type=&quot;text/javascript&quot;&gt; var gaJsHost = ((&quot;https:&quot; == document.location.protocol) ?  &quot;https://ssl.&quot; : &quot;http://www.&quot;); document.write(unescape(&quot;%3Cscript src='&quot; + gaJsHost + &quot;google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E&quot;)); &lt;/script&gt; &lt;script type=&quot;text/javascript&quot;&gt; var pageTracker = _gat._getTracker(&quot;UA-788492-5&quot;); pageTracker._initData(); pageTracker._trackPageview(); &lt;/script&gt;">
       <sourcepath>
         <pathelement location="android/src"/>
+        <pathelement location="bug/src"/>
         <pathelement location="core/src"/>
         <pathelement location="javame/src"/>
         <pathelement location="javase/src"/>
         <pathelement location="rim/src"/>
+        <pathelement location="zxingorg/src"/>
       </sourcepath>
       <classpath>
         <pathelement location="${WTK-home}/lib/cldcapi11.jar"/>
