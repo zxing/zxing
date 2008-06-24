@@ -87,14 +87,14 @@ estimateBlackPoint(BlackPointEstimationMethod method, int arg) {
     valarray<int> histogram(LUMINANCE_BUCKETS);
     if (method == BlackPointEstimationMethod_2D) {
       size_t minDimension = width < height ? width : height;
-      size_t yOffset = height == minDimension ? 0 : (height - width) >> 1;
-      size_t xOffset = width == minDimension ? 0 : (width - height) >> 1;
+      size_t startX = (width - minDimension) >> 1;
+      size_t startY = (height - minDimension) >> 1;
       for (size_t n = 0; n < minDimension; n++) {
-        unsigned char pixel = getPixel(xOffset + n, yOffset + n);
+        unsigned char pixel = getPixel(startX + n, startY + n);
         histogram[pixel >> LUMINANCE_SHIFT]++;
       }
     } else if (method == BlackPointEstimationMethod_RowSampling) {
-      if (arg < 0 || arg > (int)height) {
+      if (arg < 0 || arg >= (int)height) {
         throw new IllegalArgumentException
         ("black point estimation argument out of range");
       }
@@ -114,6 +114,6 @@ estimateBlackPoint(BlackPointEstimationMethod method, int arg) {
 }
 
 BlackPointEstimationMethod MonochromeBitmapSource::getLastEstimationMethod() {
-  return BlackPointEstimationMethod_None;
+  return lastEstimationMethod_;
 }
 

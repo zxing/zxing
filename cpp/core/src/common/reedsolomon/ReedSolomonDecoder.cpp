@@ -40,13 +40,20 @@ namespace reedsolomon {
     cout << "decode(): received = " << &received << ", array = " <<
       received.array_ << " (" << received.array_->count_ << ")\n";
 #endif
+    
     Ref<GF256Poly> poly(new GF256Poly(field, received));
+    
+#ifdef DEBUG
     cout << "decoding with poly " << *poly << "\n";
+#endif
+    
     ArrayRef<int> syndromeCoefficients(new Array<int>(twoS));
+    
 #ifdef DEBUG
     cout << "syndromeCoefficients array = " << 
       syndromeCoefficients.array_ << "\n";
 #endif
+    
     bool noError = true;
     for (int i = 0; i < twoS; i++) {
       int eval = poly->evaluateAt(field.exp(i));
@@ -56,10 +63,12 @@ namespace reedsolomon {
       }
     }
     if (noError) {
+      
 #ifdef DEBUG
       cout << "before returning: syndromeCoefficients rc = " << 
         syndromeCoefficients.array_->count_ << "\n";
 #endif
+      
       return;
     }
     
@@ -149,10 +158,12 @@ namespace reedsolomon {
     Ref<GF256Poly> sigma(t->multiply(inverse));
     Ref<GF256Poly> omega(r->multiply(inverse));
     
+#ifdef DEBUG
     cout << "t = " << *t << "\n";
     cout << "r = " << *r << "\n";
     cout << "sigma = " << *sigma << "\n";
     cout << "omega = " << *omega << "\n";
+#endif
     
     vector<Ref<GF256Poly> > result(2);
     result[0] = sigma;
