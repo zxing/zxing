@@ -31,13 +31,14 @@
 #define TEXT_VIEW_TAG 0x19
 
 #define VIEW_PADDING 2
-#define IMAGE_VIEW_SIDE 50
+#define IMAGE_VIEW_SIDE 40
 #define CONTENT_HEIGHT IMAGE_VIEW_SIDE
-#define DATE_VIEW_WIDTH 70
+#define DATE_VIEW_WIDTH 50
 
 @implementation ArchiveController
 
 @synthesize scans;
+@synthesize results;
 @synthesize decoderViewController;
 @synthesize dateFormatter;
 
@@ -45,6 +46,7 @@
 	if (self = [super initWithStyle:UITableViewStylePlain]) {
     decoderViewController = [dc retain];
     scans = [[NSMutableArray alloc] init];
+    results = [[NSMutableArray alloc] init];
     dateFormatter = [[NSDateFormatter alloc] init];
 	}
 	return self;
@@ -106,8 +108,9 @@
   UILabel *textView = (UILabel *)[cell.contentView viewWithTag:TEXT_VIEW_TAG];
   UITextView *dateView = (UITextView *)[cell.contentView viewWithTag:DATE_VIEW_TAG];
 	// Configure the cell
-  Scan *scan = [scans objectAtIndex:[self scanIndexForRow:indexPath.row]];
-  ParsedResult *result = [ParsedResult parsedResultForString:scan.text];
+  int index = [self scanIndexForRow:indexPath.row];
+  Scan *scan = [scans objectAtIndex:index];
+  ParsedResult *result = [results objectAtIndex:index];
   imageView.image = nil;
   NSDate *stamp = [scan stamp];
   NSTimeInterval interval = -[stamp timeIntervalSinceNow];
@@ -130,8 +133,9 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
   //[decoderViewController showScan:[scans objectAtIndex:[self scanIndexForRow:indexPath.row]]];
-  Scan *scan = [scans objectAtIndex:[self scanIndexForRow:indexPath.row]];
-  ParsedResult *result = [ParsedResult parsedResultForString:scan.text];
+  int index = [self scanIndexForRow:indexPath.row];
+  Scan *scan = [scans objectAtIndex:index];
+  ParsedResult *result = [results objectAtIndex:index];
   ScanViewController *scanViewController = [[ScanViewController alloc] initWithResult:result forScan:scan];
   [self.navigationController pushViewController:scanViewController animated:YES];
   [scanViewController release];
@@ -144,7 +148,9 @@
     // delete the scan from the database ...
     [[Database sharedDatabase] deleteScan:scan];
     // ... delete the scan from our in-memory cache of the database ...
-    [self.scans removeObjectAtIndex:index];
+    [scans removeObjectAtIndex:index];
+    // ... delete the corresponding result from our in-memory cache  ...
+    [results removeObjectAtIndex:index];
     // ... and remove the row from the table view.
     [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
     // [tableView reloadData];
@@ -167,6 +173,7 @@
 
 - (void)dealloc {
   [scans release];
+  [results release];
   [decoderViewController release];
   [dateFormatter release];
 	[super dealloc];
@@ -183,6 +190,10 @@
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
   self.scans = [NSMutableArray arrayWithArray:[[Database sharedDatabase] scans]];
+  self.results = [NSMutableArray arrayWithCapacity:self.scans.count];
+  for (Scan *scan in scans) {
+    [results addObject:[ParsedResult parsedResultForString:scan.text]];
+  }
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -190,6 +201,8 @@
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
+  self.scans = nil;
+  self.results = nil;
 }
 
 - (void)viewDidDisappear:(BOOL)animated {

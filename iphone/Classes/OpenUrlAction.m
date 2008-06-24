@@ -28,7 +28,6 @@
 
 - initWithURL:(NSURL *)url {
   if ((self = [super init]) != nil) {
-    NSLog(@"initialising with URL with retain count %d", [url retainCount]);
     self.URL = url;
   }
   return self;

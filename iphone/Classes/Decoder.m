@@ -62,16 +62,22 @@ using namespace qrcode;
 - (void) prepareSubset {
   CGImageRef cgImage = self.image.CGImage;
   CGSize size = CGSizeMake(CGImageGetWidth(cgImage), CGImageGetHeight(cgImage));
+#ifdef DEBUG
   NSLog(@"decoding: image is (%.1f x %.1f)", size.width, size.height);
+#endif
   float scale = min(1.0f, max(0.25f, (float)max(400.0f / size.width, 400.0f / size.height)));
   subsetWidth = size.width * scale;
   subsetHeight = size.height * scale;
   
   subsetBytesPerRow = ((subsetWidth + 0xf) >> 4) << 4;
+#ifdef DEBUG
   NSLog(@"decoding: image to decode is (%d x %d) (%d bytes/row)", subsetWidth, subsetHeight, subsetBytesPerRow);
+#endif
   
   subsetData = (unsigned char *)malloc(subsetBytesPerRow * subsetHeight);
+#ifdef DEBUG
   NSLog(@"allocated %d bytes of memory", subsetBytesPerRow * subsetHeight);
+#endif
   
   CGColorSpaceRef grayColorSpace = CGColorSpaceCreateDeviceGray();
   
@@ -83,37 +89,48 @@ using namespace qrcode;
   CGContextSetInterpolationQuality(ctx, kCGInterpolationNone);
   CGContextSetAllowsAntialiasing(ctx, false);
   
+#ifdef DEBUG
   NSLog(@"created %dx%d bitmap context", subsetWidth, subsetHeight);
+#endif
   CGRect rect = CGRectMake(0, 0, subsetWidth, subsetHeight);
   
   CGContextDrawImage(ctx, rect, cgImage);
+#ifdef DEBUG
   NSLog(@"drew image into %d(%d)x%d  bitmap context", subsetWidth, subsetBytesPerRow, subsetHeight);
+#endif
   CGContextFlush(ctx);
+#ifdef DEBUG
   NSLog(@"flushed context");
+#endif
     
   CGImageRef subsetImageRef = CGBitmapContextCreateImage(ctx);
+#ifdef DEBUG
   NSLog(@"created CGImage from context");
+#endif
         
   self.subsetImage = [UIImage imageWithCGImage:subsetImageRef];
   CGImageRelease(subsetImageRef);
   
   CGContextRelease(ctx);
-  
+#ifdef DEBUG
   NSLog(@"released context");  
+#endif
 }  
 
 - (void)decode:(id)arg {
   NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
   { 
     QRCodeReader reader;
+#ifdef DEBUG
+    NSLog(@"created QRCoreReader");
+#endif
     
     Ref<MonochromeBitmapSource> grayImage
     (new GrayBytesMonochromeBitmapSource(subsetData, subsetWidth, subsetHeight, subsetBytesPerRow));
-    NSLog(@"grayImage count = %d", grayImage->count());
-    
+#ifdef DEBUG
     NSLog(@"created GrayBytesMonochromeBitmapSource", subsetWidth, subsetHeight);
-    
-    NSLog(@"created QRCoreReader");
+    NSLog(@"grayImage count = %d", grayImage->count());
+#endif
     
     TwoDDecoderResult *decoderResult = nil;
     
@@ -122,9 +139,13 @@ using namespace qrcode;
 #endif
 
     try {
+#ifdef DEBUG
       NSLog(@"decoding gray image");
+#endif
       Ref<Result> result(reader.decode(grayImage));
-      NSLog(@"gray image decoed");
+#ifdef DEBUG
+      NSLog(@"gray image decoded");
+#endif
       
       Ref<String> resultText(result->getText());
       const char *cString = resultText->getText().c_str();
@@ -152,14 +173,18 @@ using namespace qrcode;
             iex->what());
       delete iex;
     } catch (...) {
-      NSLog(@"Caught unknown exception, trying again");
+      NSLog(@"Caught unknown exception!");
     }
 
 #ifdef TRY_ROTATIONS
       if (!decoderResult) {
+#ifdef DEBUG
         NSLog(@"rotating gray image");
+#endif
         grayImage = grayImage->rotateCounterClockwise();
+#ifdef DEBUG
         NSLog(@"gray image rotated");
+#endif
       }
     }
 #endif
@@ -178,7 +203,9 @@ using namespace qrcode;
     self.subsetData = NULL;
   }
   [pool release];
+#ifdef DEBUG
   NSLog(@"finished decoding.");
+#endif
   
   // if this is not the main thread, then we end it
   if (![NSThread isMainThread]) {

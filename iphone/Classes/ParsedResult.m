@@ -56,7 +56,9 @@ static NSMutableDictionary *iconsByClass = nil;
 }
 
 + parsedResultForString:(NSString *)s {
+#ifdef DEBUG
   NSLog(@"parsing result:\n<<<\n%@\n>>>\n", s);
+#endif
   for (Class c in [self parsedResultTypes]) {
     ParsedResult *result = [c parsedResultForString:s];
     if (result != nil) {
@@ -74,26 +76,29 @@ static NSMutableDictionary *iconsByClass = nil;
   return @"{none}";
 }
 
+#define ICON_SIZE 40
+#define ICON_INSIDE 36
+
 + (UIImage *)icon {
   if (iconsByClass == nil) {
     iconsByClass = [[NSMutableDictionary alloc] initWithCapacity:16];
   }
   UIImage *icon = [iconsByClass objectForKey:[self class]];
   if (icon == nil) {
-    UIGraphicsBeginImageContext(CGSizeMake(60, 60));
+    UIGraphicsBeginImageContext(CGSizeMake(ICON_SIZE, ICON_SIZE));
     CGContextRef ctx = UIGraphicsGetCurrentContext();
     
     [[UIColor lightGrayColor] set];
-    UIRectFill(CGRectMake(0, 0, 60, 60));
+    UIRectFill(CGRectMake(0, 0, ICON_SIZE, ICON_SIZE));
     
     [[UIColor blackColor] set];
     NSString *s = [[self class] typeName];
     UIFont *font = [UIFont systemFontOfSize:16];
     CGSize stringSize = [s sizeWithFont:font];
-    float xScale = fminf(1.0, 54.0 / stringSize.width);
-    float yScale = fminf(1.0, 54.0 / stringSize.height);
+    float xScale = fminf(1.0, ICON_INSIDE / stringSize.width);
+    float yScale = fminf(1.0, ICON_INSIDE / stringSize.height);
     
-    CGContextTranslateCTM(ctx, 30, 30);
+    CGContextTranslateCTM(ctx, (ICON_SIZE / 2), (ICON_SIZE / 2));
     CGContextRotateCTM(ctx, -M_PI / 6.0);
     CGContextScaleCTM(ctx, xScale, yScale);
     CGContextTranslateCTM(ctx, 

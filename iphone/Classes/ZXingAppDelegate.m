@@ -64,8 +64,6 @@
     }
 #undef N_SOURCE_TYPES
   }
-  
-  NSLog(@"current locale is %@", [NSLocale currentLocale]);
 }
 
 - (void)dealloc {
