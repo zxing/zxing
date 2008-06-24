@@ -49,4 +49,10 @@
   }
 }
 
+
++ (NSString *)typeName {
+  return @"Bookmark";
+}
+
+
 @end

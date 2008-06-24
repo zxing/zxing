@@ -25,7 +25,7 @@
 		8514EAF70DF88F0500EE78D3 /* Counted.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 855A65E60DF5E739007B394F /* Counted.cpp */; };
 		8514EAF80DF88F0500EE78D3 /* DecoderResult.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 855A65E80DF5E739007B394F /* DecoderResult.cpp */; };
 		8514EAF90DF88F0500EE78D3 /* DetectorResult.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 855A65EA0DF5E739007B394F /* DetectorResult.cpp */; };
-		8514EAFA0DF88F0500EE78D3 /* GridSampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 855A65EC0DF5E739007B394F /* GridSampler.cpp */; };
+		8514EAFA0DF88F0500EE78D3 /* GridSampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 855A65EC0DF5E739007B394F /* GridSampler.cpp */; settings = {COMPILER_FLAGS = "-mno-thumb"; }; };
 		8514EAFB0DF88F0500EE78D3 /* IllegalArgumentException.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 855A65EE0DF5E739007B394F /* IllegalArgumentException.cpp */; };
 		8514EAFC0DF88F0500EE78D3 /* PerspectiveTransform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 855A65F00DF5E739007B394F /* PerspectiveTransform.cpp */; };
 		8514EAFD0DF88F0500EE78D3 /* GF256.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 855A65F30DF5E739007B394F /* GF256.cpp */; };
@@ -176,7 +176,7 @@
 		855A65E90DF5E739007B394F /* DecoderResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DecoderResult.h; sourceTree = "<group>"; };
 		855A65EA0DF5E739007B394F /* DetectorResult.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DetectorResult.cpp; sourceTree = "<group>"; };
 		855A65EB0DF5E739007B394F /* DetectorResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetectorResult.h; sourceTree = "<group>"; };
-		855A65EC0DF5E739007B394F /* GridSampler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GridSampler.cpp; sourceTree = "<group>"; };
+		855A65EC0DF5E739007B394F /* GridSampler.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; path = GridSampler.cpp; sourceTree = "<group>"; };
 		855A65ED0DF5E739007B394F /* GridSampler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GridSampler.h; sourceTree = "<group>"; };
 		855A65EE0DF5E739007B394F /* IllegalArgumentException.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IllegalArgumentException.cpp; sourceTree = "<group>"; };
 		855A65EF0DF5E739007B394F /* IllegalArgumentException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IllegalArgumentException.h; sourceTree = "<group>"; };
@@ -893,6 +893,7 @@
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_THUMB_SUPPORT = NO;
 				PREBINDING = NO;
 				PRODUCT_NAME = zxingcore;
 			};

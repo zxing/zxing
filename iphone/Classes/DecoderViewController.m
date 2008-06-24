@@ -300,8 +300,9 @@
 }
 
 - (void)showScan:(Scan *)scan {
-  [[self navigationController] popToViewController:self animated:YES];
+  [self.imageView setImage:nil];
   [self presentResultForString:scan.text];
+  [[self navigationController] popToViewController:self animated:YES];
 }
 
 @end

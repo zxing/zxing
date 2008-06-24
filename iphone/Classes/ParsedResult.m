@@ -30,9 +30,13 @@
 #import "BookmarkDoCoMoParsedResult.h"
 #import "GeoParsedResult.h"
 
+#import "UIKit/UIStringDrawing.h"
+#import <math.h>
+
 @implementation ParsedResult
 
 static NSArray *parsedResultTypes = nil;
+static NSMutableDictionary *iconsByClass = nil;
 
 + (NSArray *)parsedResultTypes {
   if (parsedResultTypes == nil) {
@@ -63,11 +67,50 @@ static NSArray *parsedResultTypes = nil;
 }
 
 + (NSString *)typeName {
-  return @"ABSTRACT";
+  return NSStringFromClass(self);
 }
 
 - (NSString *)stringForDisplay {
   return @"{none}";
+}
+
++ (UIImage *)icon {
+  if (iconsByClass == nil) {
+    iconsByClass = [[NSMutableDictionary alloc] initWithCapacity:16];
+  }
+  UIImage *icon = [iconsByClass objectForKey:[self class]];
+  if (icon == nil) {
+    UIGraphicsBeginImageContext(CGSizeMake(60, 60));
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    
+    [[UIColor lightGrayColor] set];
+    UIRectFill(CGRectMake(0, 0, 60, 60));
+    
+    [[UIColor blackColor] set];
+    NSString *s = [[self class] typeName];
+    UIFont *font = [UIFont systemFontOfSize:16];
+    CGSize stringSize = [s sizeWithFont:font];
+    float xScale = fminf(1.0, 54.0 / stringSize.width);
+    float yScale = fminf(1.0, 54.0 / stringSize.height);
+    
+    CGContextTranslateCTM(ctx, 30, 30);
+    CGContextRotateCTM(ctx, -M_PI / 6.0);
+    CGContextScaleCTM(ctx, xScale, yScale);
+    CGContextTranslateCTM(ctx, 
+                          -(stringSize.width)/2.0, 
+                          -(stringSize.height)/2.0);
+    
+    [s drawAtPoint:CGPointMake(0, 0) withFont:font];
+    
+    icon = [UIGraphicsGetImageFromCurrentImageContext() retain];
+    [iconsByClass setObject:icon forKey:[self class]];
+    UIGraphicsEndImageContext();
+  }
+  return icon;
+}
+
+- (UIImage *)icon {
+  return [[self class] icon];
 }
 
 - (NSArray *)actions {
