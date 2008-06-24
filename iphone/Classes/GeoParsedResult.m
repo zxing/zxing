@@ -44,12 +44,10 @@
             autorelease];
   }
   return nil;
-  
-  
 }
 
 + (NSString *)typeName {
-  return @"Geographic Location";
+  return @"GeoLoc";
 }
 
 - (NSString *)stringForDisplay {

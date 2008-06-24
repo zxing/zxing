@@ -49,6 +49,12 @@
   return self.number;
 }
 
+
++ (NSString *)typeName {
+  return @"Tel";
+}
+
+
 - (NSArray *)actions { 
   return [NSArray arrayWithObject:[CallAction actionWithNumber:self.number]];
 }

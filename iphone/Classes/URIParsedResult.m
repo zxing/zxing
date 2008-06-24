@@ -106,6 +106,12 @@
   return self.urlString;
 }
 
+
++ (NSString *)typeName {
+  return @"URI";
+}
+
+
 - (void)populateActions { 
   NSLog(@"creating action to open URL '%@'", self.urlString);
   [actions addObject:[self createAction]];

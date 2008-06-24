@@ -59,4 +59,9 @@
 }
 
 
++ (NSString *)typeName {
+  return @"UrlTo";
+}
+
+
 @end

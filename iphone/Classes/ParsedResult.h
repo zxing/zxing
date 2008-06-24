@@ -30,6 +30,7 @@
 + (NSString *)typeName;
 
 - (NSString *)stringForDisplay;
+- (UIImage *)icon;
 - (NSArray *)actions;
 - (void)populateActions;
 

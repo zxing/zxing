@@ -38,7 +38,7 @@
 }
 
 + (NSString *)typeName {
-  return @"TEXT";
+  return @"Text";
 }
 
 - (NSString *)stringForDisplay {

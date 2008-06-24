@@ -76,10 +76,6 @@
   return [NSString stringWithString:result];
 }
 
-- (NSString *)typeName {
-  return @"DoCoMo MeCard";
-}
-
 - (void)populateActions {
   [actions addObject:[AddContactAction actionWithName:self.name
                                          phoneNumbers:self.phoneNumbers 
@@ -97,6 +93,10 @@
   [address release];
   [note release];
   [super dealloc];
+}
+
++ (NSString *)typeName {
+  return @"MeCard";
 }
 
 @end

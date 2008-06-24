@@ -72,8 +72,8 @@ bool LooksLikeAnEmailAddress(NSString *s) {
   return [NSString stringWithString:result];
 }
 
-- (NSString *)typeName {
-  return @"DoCoMo Email";
++ (NSString *)typeName {
+  return @"Email";
 }
 
 - (NSArray *)actions {
