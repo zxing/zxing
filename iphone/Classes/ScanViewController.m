@@ -11,8 +11,8 @@
 
 
 #define TEXT_VIEW_TAG 0x17
-#define TITLE_HEIGHT 60
-#define BODY_HEIGHT 100
+#define TITLE_HEIGHT 44
+#define BODY_HEIGHT 88
 
 @implementation ScanViewController
 
@@ -75,7 +75,10 @@
 
 - (UITableViewCell *)buttonCellInTableView:(UITableView *)tableView {
 	static NSString *ButtonIdentifier = @"ScanViewButtonIdentifier";
-  return [self cellWithIdentifier:ButtonIdentifier inTableView:tableView];
+  UITableViewCell *cell = [self cellWithIdentifier:ButtonIdentifier inTableView:tableView];
+  cell.textAlignment = UITextAlignmentCenter;
+  cell.textColor = [UIColor grayColor];
+  return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {

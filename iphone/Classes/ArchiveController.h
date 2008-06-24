@@ -25,11 +25,13 @@
 
 @interface ArchiveController : UITableViewController {
   NSMutableArray *scans;
+  NSMutableArray *results;
   DecoderViewController *decoderViewController;
   NSDateFormatter *dateFormatter;
 }
 
 @property (nonatomic, retain) NSMutableArray *scans;
+@property (nonatomic, retain) NSMutableArray *results;
 @property (nonatomic, retain) DecoderViewController *decoderViewController;
 @property (nonatomic, retain) NSDateFormatter *dateFormatter;
 

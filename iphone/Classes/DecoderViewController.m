@@ -158,7 +158,9 @@
 }
 
 - (void)showMessage:(NSString *)message {
-  NSLog(message);
+#ifdef DEBUG
+  NSLog(@"Showing message '%@'", message);
+#endif
   self.messageView.text = message;
   [self.messageView sizeToFit];
 }
@@ -182,7 +184,9 @@
   self.result = [ParsedResult parsedResultForString:resultString];
   [self showMessage:[self.result stringForDisplay]];
   self.actions = self.result.actions;
+#ifdef DEBUG
   NSLog(@"result has %d actions", actions ? 0 : actions.count);
+#endif
   [self updateToolbar];
 }  
 
@@ -207,6 +211,7 @@
         didFinishPickingImage:(UIImage *)image
                   editingInfo:(NSDictionary *)editingInfo
 {
+#ifdef DEBUG
   NSLog(@"picked image size = (%f, %f)", image.size.width, image.size.height);
   if (editingInfo) {
     UIImage *originalImage = [editingInfo objectForKey:UIImagePickerControllerOriginalImage];
@@ -219,6 +224,7 @@
       NSLog(@"crop rect = (%f, %f) x (%f, %f)", CGRectGetMinX(cropRect), CGRectGetMinY(cropRect), CGRectGetWidth(cropRect), CGRectGetHeight(cropRect));
     }
   }
+#endif
   
   [[picker parentViewController] dismissModalViewControllerAnimated:YES];
   [image retain];
@@ -269,13 +275,17 @@
   
   if (self.actions.count == 1) {
     ResultAction *action = [self.actions lastObject];
+#ifdef DEBUG
     NSLog(@"Result has the single action, (%@)  '%@', performing it",
           NSStringFromClass([action class]), [action title]);
+#endif
     [self performSelector:@selector(confirmAndPerformAction:) 
                  withObject:action 
                  afterDelay:0.0];
   } else {
+#ifdef DEBUG
     NSLog(@"Result has multiple actions, popping up an action sheet");
+#endif
     UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithFrame:self.view.bounds];
         
     for (ResultAction *action in self.actions) {

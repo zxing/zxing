@@ -113,7 +113,10 @@
 
 
 - (void)populateActions { 
+#ifdef DEBUG
   NSLog(@"creating action to open URL '%@'", self.urlString);
+#endif
+  
   [actions addObject:[self createAction]];
 }
 
