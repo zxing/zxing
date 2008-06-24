@@ -26,6 +26,7 @@
 }
 
 - (NSString *)title;
-- (void)performActionWithController:(UIViewController *)controller;
+- (void)performActionWithController:(UIViewController *)controller
+                      shouldConfirm:(bool)confirm;
 
 @end

@@ -54,14 +54,19 @@
   return NSLocalizedString(@"Open", @"alert button title");
 }
 
-- (void)performActionWithController:(UIViewController *)controller {
-  UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil 
-                                                      message:[self alertMessage] 
-                                                     delegate:self 
-                                            cancelButtonTitle:NSLocalizedString(@"Cancel", @"cancel button title") 
-                                            otherButtonTitles:[self alertButtonTitle], nil];
-  [alertView show];
-  [alertView release];
+- (void)performActionWithController:(UIViewController *)controller 
+                      shouldConfirm:(bool)shouldConfirm {
+  if (shouldConfirm) {
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil 
+                                                        message:[self alertMessage] 
+                                                       delegate:self 
+                                              cancelButtonTitle:NSLocalizedString(@"Cancel", @"cancel button title") 
+                                              otherButtonTitles:[self alertButtonTitle], nil];
+    [alertView show];
+    [alertView release];
+  } else {
+    [self openURL];
+  }
 }
 
 - (void)openURL {

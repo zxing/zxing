@@ -247,6 +247,14 @@
   // no-op
 }
 
+- (void)performAction:(ResultAction *)action {
+  [action performActionWithController:self shouldConfirm:NO];
+}
+
+- (void)confirmAndPerformAction:(ResultAction *)action {
+  [action performActionWithController:self shouldConfirm:YES];
+}
+
 
 - (IBAction)performResultAction:(id)sender {
   if (self.result == nil) {
@@ -263,8 +271,8 @@
     ResultAction *action = [self.actions lastObject];
     NSLog(@"Result has the single action, (%@)  '%@', performing it",
           NSStringFromClass([action class]), [action title]);
-    [action performSelector:@selector(performActionWithController:) 
-                 withObject:self 
+    [self performSelector:@selector(confirmAndPerformAction:) 
+                 withObject:action 
                  afterDelay:0.0];
   } else {
     NSLog(@"Result has multiple actions, popping up an action sheet");
@@ -287,8 +295,8 @@
   if (buttonIndex < self.actions.count) {
     int actionIndex = buttonIndex;
     ResultAction *action = [self.actions objectAtIndex:actionIndex];
-    [action performSelector:@selector(performActionWithController:) 
-                 withObject:self 
+    [self performSelector:@selector(performAction:) 
+                 withObject:action 
                  afterDelay:0.0];
   }
 }
