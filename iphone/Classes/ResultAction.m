@@ -28,7 +28,8 @@
   return @"Abstract Action";
 }
 
-- (void)performActionWithController:(UIViewController *)controller {
+- (void)performActionWithController:(UIViewController *)controller
+                      shouldConfirm:(bool)confirm {
   NSLog(@"Abstract Action performed");
 }
 

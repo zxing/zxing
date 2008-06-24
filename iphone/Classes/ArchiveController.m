@@ -24,6 +24,7 @@
 #import "Scan.h"
 #import "ParsedResult.h"
 #import "DecoderViewController.h"
+#import "ScanViewController.h"
 
 #define IMAGE_VIEW_TAG 0x17
 #define DATE_VIEW_TAG 0x18
@@ -128,7 +129,12 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-  [decoderViewController showScan:[scans objectAtIndex:[self scanIndexForRow:indexPath.row]]];
+  //[decoderViewController showScan:[scans objectAtIndex:[self scanIndexForRow:indexPath.row]]];
+  Scan *scan = [scans objectAtIndex:[self scanIndexForRow:indexPath.row]];
+  ParsedResult *result = [ParsedResult parsedResultForString:scan.text];
+  ScanViewController *scanViewController = [[ScanViewController alloc] initWithResult:result forScan:scan];
+  [self.navigationController pushViewController:scanViewController animated:YES];
+  [scanViewController release];
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -169,7 +175,7 @@
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
-  self.title = @"Scan Archive";
+  self.title = NSLocalizedString(@"Scan Archive", "scan archive title");
   self.navigationItem.rightBarButtonItem = [self editButtonItem];
 }
 

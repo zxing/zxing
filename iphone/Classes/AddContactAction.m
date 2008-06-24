@@ -52,7 +52,8 @@
   return NSLocalizedString(@"Add Contact", @"Add Contact");
 }
 
-- (void)performActionWithController:(UIViewController *)controller {
+- (void)performActionWithController:(UIViewController *)controller 
+                      shouldConfirm:(bool)confirm {
   CFErrorRef *error = NULL;
   NSCharacterSet *whitespaceSet = [NSCharacterSet whitespaceCharacterSet];
   
