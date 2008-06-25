@@ -108,7 +108,7 @@
       <classpath refid="wtk-build-path"/>
       <exclude name="com/google/zxing/client/j2me/AdvancedMultimediaManager.java"/>
     </javac>
-    <jar jarfile="javame-basic.jar" basedir="build" level="9"/>    
+    <jar jarfile="javame-basic.jar" basedir="build"/>
   </target>
 
   <target name="package">
@@ -133,8 +133,7 @@
       </filterset>
     </copy>
 
-    <jar jarfile="${jar-name}.jar" basedir="build-j2me" manifest="src/com/google/zxing/client/j2me/MANIFEST.MF"
-         level="9"/>
+    <jar jarfile="${jar-name}.jar" basedir="build-j2me" manifest="src/com/google/zxing/client/j2me/MANIFEST.MF"/>
 
     <move file="${jar-name}.jar" tofile="temp.jar"/>
     <java jar="${WTK-home}/bin/proguard.jar" fork="true" failonerror="true">
@@ -181,6 +180,20 @@
     <antcall target="clean"/>
     <antcall target="compile-basic"/>
     <antcall target="package"/>
+  </target>
+
+  <target name="dump">
+    <java jar="${WTK-home}/bin/proguard.jar" fork="true">
+      <arg value="-injars BarcodeReader.jar"/>
+      <arg value="-libraryjars ${WTK-home}/lib/cldcapi11.jar"/>
+      <arg value="-libraryjars ${WTK-home}/lib/midpapi20.jar"/>
+      <arg value="-libraryjars ${WTK-home}/lib/mmapi.jar"/>
+      <arg value="-libraryjars ${WTK-home}/lib/jsr234.jar"/>
+      <arg value="-dontshrink"/>
+      <arg value="-dontobfuscate"/>
+      <arg value="-dontoptimize"/>
+      <arg value="-dump dump.txt"/>
+    </java>
   </target>
 
   <target name="clean">
