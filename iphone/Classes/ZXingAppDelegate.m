@@ -31,6 +31,14 @@
 @synthesize navigationController;
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application {
+  
+  for (NSString *familyName in [UIFont familyNames]) {
+    NSLog(@"family name: '%@'", familyName);
+    for (NSString *fontName in [UIFont fontNamesForFamilyName:familyName]) {
+      NSLog(@"  font name: '%@'", fontName);
+    }
+  }
+  
   /* create the view controller */
   DecoderViewController *vc = 
     [[DecoderViewController alloc] initWithNibName:@"DecoderView" 

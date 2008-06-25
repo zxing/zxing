@@ -24,93 +24,51 @@
 #import "EmailAction.h"
 #import "SMSAction.h"
 
-@implementation NSString (ZXingURLExtensions)
-
-- (bool)looksLikeAURI {
-  if ([self rangeOfCharacterFromSet:[NSCharacterSet whitespaceCharacterSet]].location != NSNotFound) {
-    return false;
-  }
-  if ([self rangeOfString:@":"].location == NSNotFound) {
-    return false;
-  }
-  return true;
-}
-
-- (NSString *)massagedURLString {
-  NSRange colonRange = [self rangeOfString:@":"];
-  if (colonRange.location == NSNotFound) {
-    return [NSString stringWithFormat:@"http://%@", self];
-  } else {
-    return [NSString stringWithFormat:@"%@%@",
-            [[self substringToIndex:colonRange.location] lowercaseString],
-            [self substringFromIndex:colonRange.location]
-            ];
-  }
-}
-
-@end
 
 @implementation URIParsedResult
 
-#define PREFIX @"URL:"
-
 @synthesize urlString;
+@synthesize title;
 @synthesize URL;
 
 - (ResultAction *)createAction {
-  NSString *scheme = [self.URL scheme];
-  if (scheme) {
-    if ([@"mailto" isEqualToString:scheme]) {
-      return [EmailAction actionWithRecipient:[urlString substringFromIndex:7] 
-                                      subject:nil 
-                                         body:nil];
-    } else if ([@"sms" isEqualToString:scheme]) {
-      return [SMSAction actionWithNumber:[urlString substringFromIndex:4]];
-    }
-  }
   return [OpenUrlAction actionWithURL:self.URL];
 }
 
-- initWithURLString:(NSString *)s URL:(NSURL *)url {
+- initWithURLString:(NSString *)s title:(NSString *)t URL:(NSURL *)url {
   if ((self = [super init]) != nil) {
     self.urlString = s;
+    self.title = t;
     self.URL = url;
   }
   return self;
 }
 
-- initWithURLString:(NSString *)s {
-  return [self initWithURLString:s URL:[NSURL URLWithString:s]];
+- initWithURLString:(NSString *)s URL:(NSURL *)url {
+  return [self initWithURLString:s title:nil URL:url];
 }
 
-+ parsedResultForString:(NSString *)s {
-  NSRange prefixRange = [s rangeOfString:PREFIX options:NSCaseInsensitiveSearch];
-  if (prefixRange.location == 0) {
-    int restStart = prefixRange.location + prefixRange.length;
-    return [[[self alloc] initWithURLString:[[s substringFromIndex:restStart] massagedURLString]]
-            autorelease];
-  }
-  
-  if ([s looksLikeAURI]) {
-    NSString *massaged = [s massagedURLString];
-    NSURL *url = [NSURL URLWithString:massaged];
-    if (url != nil) {
-      return [[[self alloc] initWithURLString:massaged URL:url] autorelease];
-    }
-  }
-  
-  return nil;
+- initWithURLString:(NSString *)s title:(NSString *)t {
+  return [self initWithURLString:s title:t URL:[NSURL URLWithString:s]];
+}
+
+- initWithURLString:(NSString *)s {
+  return [self initWithURLString:s title:nil URL:[NSURL URLWithString:s]];
 }
 
 - (NSString *)stringForDisplay {
-  return self.urlString;
+  return self.title ? 
+  [NSString stringWithFormat:@"%@ <%@>", self.title, self.urlString] :
+  self.urlString;
 }
-
 
 + (NSString *)typeName {
   return @"URI";
 }
 
+- (UIImage *)icon {
+  return [UIImage imageNamed:@"link2.png"];
+}
 
 - (void)populateActions { 
 #ifdef DEBUG

@@ -64,12 +64,10 @@
 		8552C4980E0A61D6000CC4F0 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 8552C4970E0A61D6000CC4F0 /* Default.png */; };
 		855A66800DF5E757007B394F /* ArchiveController.m in Sources */ = {isa = PBXBuildFile; fileRef = 855A66510DF5E757007B394F /* ArchiveController.m */; };
 		855A66810DF5E757007B394F /* Database.m in Sources */ = {isa = PBXBuildFile; fileRef = 855A66540DF5E757007B394F /* Database.m */; };
-		855A66820DF5E757007B394F /* AddressBookAUParsedResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 855A66560DF5E757007B394F /* AddressBookAUParsedResult.m */; };
 		855A66830DF5E757007B394F /* AddContactAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 855A66580DF5E757007B394F /* AddContactAction.m */; };
-		855A66840DF5E757007B394F /* AddressBookDoCoMoParsedResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 855A665A0DF5E757007B394F /* AddressBookDoCoMoParsedResult.m */; };
+		855A66840DF5E757007B394F /* BusinessCardParsedResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 855A665A0DF5E757007B394F /* BusinessCardParsedResult.m */; };
 		855A66860DF5E757007B394F /* EmailAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 855A665E0DF5E757007B394F /* EmailAction.m */; };
-		855A66870DF5E757007B394F /* EmailDoCoMoParsedResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 855A66600DF5E757007B394F /* EmailDoCoMoParsedResult.m */; };
-		855A66880DF5E757007B394F /* DoCoMoParsedResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 855A66620DF5E757007B394F /* DoCoMoParsedResult.m */; };
+		855A66870DF5E757007B394F /* EmailParsedResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 855A66600DF5E757007B394F /* EmailParsedResult.m */; };
 		855A66890DF5E757007B394F /* CallAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 855A66640DF5E757007B394F /* CallAction.m */; };
 		855A668A0DF5E757007B394F /* OpenUrlAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 855A66660DF5E757007B394F /* OpenUrlAction.m */; };
 		855A668B0DF5E757007B394F /* ResultAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 855A66680DF5E757007B394F /* ResultAction.m */; };
@@ -81,8 +79,6 @@
 		855A66910DF5E757007B394F /* ParsedResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 855A66750DF5E757007B394F /* ParsedResult.m */; };
 		855A66920DF5E757007B394F /* NSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = 855A66770DF5E757007B394F /* NSString+HTML.m */; };
 		855A66930DF5E757007B394F /* URIParsedResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 855A66790DF5E757007B394F /* URIParsedResult.m */; };
-		855A66940DF5E757007B394F /* URLTOParsedResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 855A667B0DF5E757007B394F /* URLTOParsedResult.m */; };
-		855A66950DF5E757007B394F /* BookmarkDoCoMoParsedResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 855A667D0DF5E757007B394F /* BookmarkDoCoMoParsedResult.m */; };
 		855A66960DF5E757007B394F /* Scan.m in Sources */ = {isa = PBXBuildFile; fileRef = 855A667F0DF5E757007B394F /* Scan.m */; };
 		855A66A50DF5E7B4007B394F /* scans.db in Resources */ = {isa = PBXBuildFile; fileRef = 855A66A00DF5E7B4007B394F /* scans.db */; };
 		855A66A60DF5E7B4007B394F /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 855A66A10DF5E7B4007B394F /* Settings.bundle */; };
@@ -91,6 +87,27 @@
 		855A66BD0DF5E8D6007B394F /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 855A66BC0DF5E8D6007B394F /* libsqlite3.0.dylib */; };
 		855A66BF0DF5E8F8007B394F /* libiconv.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 855A66BE0DF5E8F8007B394F /* libiconv.2.dylib */; };
 		855A66D20DF5E954007B394F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 855A66D10DF5E954007B394F /* CoreGraphics.framework */; };
+		85C0B9140E123AFC005EED58 /* ResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 85C0B9130E123AFC005EED58 /* ResultParser.m */; };
+		85C0B91A0E123BD2005EED58 /* DoCoMoResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 85C0B9190E123BD2005EED58 /* DoCoMoResultParser.m */; };
+		85C0B9220E123C93005EED58 /* MeCardParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 85C0B9210E123C93005EED58 /* MeCardParser.m */; };
+		85C0B9AB0E123DB6005EED58 /* EmailDoCoMoResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 85C0B9AA0E123DB6005EED58 /* EmailDoCoMoResultParser.m */; };
+		85C0B9BA0E123E99005EED58 /* TelResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 85C0B9B90E123E99005EED58 /* TelResultParser.m */; };
+		85C0BA020E123F30005EED58 /* TextResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 85C0BA010E123F30005EED58 /* TextResultParser.m */; };
+		85C0BA5A0E124497005EED58 /* URLTOResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 85C0BA590E124497005EED58 /* URLTOResultParser.m */; };
+		85C0BA640E124AC7005EED58 /* URLResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 85C0BA630E124AC7005EED58 /* URLResultParser.m */; };
+		85C0BAFA0E1250E4005EED58 /* BookmarkDoCoMoResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 85C0BAF90E1250E4005EED58 /* BookmarkDoCoMoResultParser.m */; };
+		85C0BAFD0E12515D005EED58 /* GeoResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 85C0BAFC0E12515D005EED58 /* GeoResultParser.m */; };
+		85C0BC100E12548D005EED58 /* SMSTOResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 85C0BC0F0E12548D005EED58 /* SMSTOResultParser.m */; };
+		85C0BC140E1254C0005EED58 /* SMSParsedResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 85C0BC130E1254C0005EED58 /* SMSParsedResult.m */; };
+		85C0BC1C0E125842005EED58 /* SMSResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 85C0BC1B0E125842005EED58 /* SMSResultParser.m */; };
+		85C3CC350E119E1700A01C6A /* business-card.png in Resources */ = {isa = PBXBuildFile; fileRef = 85C3CC2D0E119E1600A01C6A /* business-card.png */; };
+		85C3CC360E119E1700A01C6A /* email.png in Resources */ = {isa = PBXBuildFile; fileRef = 85C3CC2E0E119E1700A01C6A /* email.png */; };
+		85C3CC370E119E1700A01C6A /* link1.png in Resources */ = {isa = PBXBuildFile; fileRef = 85C3CC2F0E119E1700A01C6A /* link1.png */; };
+		85C3CC380E119E1700A01C6A /* link2.png in Resources */ = {isa = PBXBuildFile; fileRef = 85C3CC300E119E1700A01C6A /* link2.png */; };
+		85C3CC390E119E1700A01C6A /* map-pin.png in Resources */ = {isa = PBXBuildFile; fileRef = 85C3CC310E119E1700A01C6A /* map-pin.png */; };
+		85C3CC3A0E119E1700A01C6A /* phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 85C3CC320E119E1700A01C6A /* phone.png */; };
+		85C3CC3B0E119E1700A01C6A /* sms.png in Resources */ = {isa = PBXBuildFile; fileRef = 85C3CC330E119E1700A01C6A /* sms.png */; };
+		85C3CC3C0E119E1700A01C6A /* text.png in Resources */ = {isa = PBXBuildFile; fileRef = 85C3CC340E119E1700A01C6A /* text.png */; };
 		85D937270E11064700B785E0 /* ScanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 85D937260E11064700B785E0 /* ScanViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -239,18 +256,14 @@
 		855A66520DF5E757007B394F /* ArchiveController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArchiveController.h; sourceTree = "<group>"; };
 		855A66530DF5E757007B394F /* Database.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Database.h; sourceTree = "<group>"; };
 		855A66540DF5E757007B394F /* Database.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Database.m; sourceTree = "<group>"; };
-		855A66550DF5E757007B394F /* AddressBookAUParsedResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddressBookAUParsedResult.h; sourceTree = "<group>"; };
-		855A66560DF5E757007B394F /* AddressBookAUParsedResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddressBookAUParsedResult.m; sourceTree = "<group>"; };
 		855A66570DF5E757007B394F /* AddContactAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddContactAction.h; sourceTree = "<group>"; };
 		855A66580DF5E757007B394F /* AddContactAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddContactAction.m; sourceTree = "<group>"; };
-		855A66590DF5E757007B394F /* AddressBookDoCoMoParsedResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddressBookDoCoMoParsedResult.h; sourceTree = "<group>"; };
-		855A665A0DF5E757007B394F /* AddressBookDoCoMoParsedResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddressBookDoCoMoParsedResult.m; sourceTree = "<group>"; };
+		855A66590DF5E757007B394F /* BusinessCardParsedResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BusinessCardParsedResult.h; sourceTree = "<group>"; };
+		855A665A0DF5E757007B394F /* BusinessCardParsedResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BusinessCardParsedResult.m; sourceTree = "<group>"; };
 		855A665D0DF5E757007B394F /* EmailAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmailAction.h; sourceTree = "<group>"; };
 		855A665E0DF5E757007B394F /* EmailAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmailAction.m; sourceTree = "<group>"; };
-		855A665F0DF5E757007B394F /* EmailDoCoMoParsedResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmailDoCoMoParsedResult.h; sourceTree = "<group>"; };
-		855A66600DF5E757007B394F /* EmailDoCoMoParsedResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmailDoCoMoParsedResult.m; sourceTree = "<group>"; };
-		855A66610DF5E757007B394F /* DoCoMoParsedResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DoCoMoParsedResult.h; sourceTree = "<group>"; };
-		855A66620DF5E757007B394F /* DoCoMoParsedResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DoCoMoParsedResult.m; sourceTree = "<group>"; };
+		855A665F0DF5E757007B394F /* EmailParsedResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmailParsedResult.h; sourceTree = "<group>"; };
+		855A66600DF5E757007B394F /* EmailParsedResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmailParsedResult.m; sourceTree = "<group>"; };
 		855A66630DF5E757007B394F /* CallAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CallAction.h; sourceTree = "<group>"; };
 		855A66640DF5E757007B394F /* CallAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CallAction.m; sourceTree = "<group>"; };
 		855A66650DF5E757007B394F /* OpenUrlAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenUrlAction.h; sourceTree = "<group>"; };
@@ -274,10 +287,6 @@
 		855A66770DF5E757007B394F /* NSString+HTML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+HTML.m"; sourceTree = "<group>"; };
 		855A66780DF5E757007B394F /* URIParsedResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = URIParsedResult.h; sourceTree = "<group>"; };
 		855A66790DF5E757007B394F /* URIParsedResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = URIParsedResult.m; sourceTree = "<group>"; };
-		855A667A0DF5E757007B394F /* URLTOParsedResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = URLTOParsedResult.h; sourceTree = "<group>"; };
-		855A667B0DF5E757007B394F /* URLTOParsedResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = URLTOParsedResult.m; sourceTree = "<group>"; };
-		855A667C0DF5E757007B394F /* BookmarkDoCoMoParsedResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BookmarkDoCoMoParsedResult.h; sourceTree = "<group>"; };
-		855A667D0DF5E757007B394F /* BookmarkDoCoMoParsedResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BookmarkDoCoMoParsedResult.m; sourceTree = "<group>"; };
 		855A667E0DF5E757007B394F /* Scan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Scan.h; sourceTree = "<group>"; };
 		855A667F0DF5E757007B394F /* Scan.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Scan.m; sourceTree = "<group>"; };
 		855A66A00DF5E7B4007B394F /* scans.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = scans.db; sourceTree = "<group>"; };
@@ -291,6 +300,40 @@
 		857D36400DF60E37000E0C89 /* Exception.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Exception.cpp; sourceTree = "<group>"; };
 		857D368E0DF613F3000E0C89 /* GrayBytesMonochromeBitmapSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GrayBytesMonochromeBitmapSource.h; sourceTree = "<group>"; };
 		857D368F0DF613F3000E0C89 /* GrayBytesMonochromeBitmapSource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GrayBytesMonochromeBitmapSource.cpp; sourceTree = "<group>"; };
+		85C0B9120E123AFC005EED58 /* ResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ResultParser.h; sourceTree = "<group>"; };
+		85C0B9130E123AFC005EED58 /* ResultParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ResultParser.m; sourceTree = "<group>"; };
+		85C0B9180E123BD2005EED58 /* DoCoMoResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DoCoMoResultParser.h; sourceTree = "<group>"; };
+		85C0B9190E123BD2005EED58 /* DoCoMoResultParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DoCoMoResultParser.m; sourceTree = "<group>"; };
+		85C0B9200E123C93005EED58 /* MeCardParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeCardParser.h; sourceTree = "<group>"; };
+		85C0B9210E123C93005EED58 /* MeCardParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MeCardParser.m; sourceTree = "<group>"; };
+		85C0B9A90E123DB6005EED58 /* EmailDoCoMoResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmailDoCoMoResultParser.h; sourceTree = "<group>"; };
+		85C0B9AA0E123DB6005EED58 /* EmailDoCoMoResultParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmailDoCoMoResultParser.m; sourceTree = "<group>"; };
+		85C0B9B80E123E99005EED58 /* TelResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TelResultParser.h; sourceTree = "<group>"; };
+		85C0B9B90E123E99005EED58 /* TelResultParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TelResultParser.m; sourceTree = "<group>"; };
+		85C0BA000E123F30005EED58 /* TextResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextResultParser.h; sourceTree = "<group>"; };
+		85C0BA010E123F30005EED58 /* TextResultParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextResultParser.m; sourceTree = "<group>"; };
+		85C0BA580E124497005EED58 /* URLTOResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = URLTOResultParser.h; sourceTree = "<group>"; };
+		85C0BA590E124497005EED58 /* URLTOResultParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = URLTOResultParser.m; sourceTree = "<group>"; };
+		85C0BA620E124AC7005EED58 /* URLResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = URLResultParser.h; sourceTree = "<group>"; };
+		85C0BA630E124AC7005EED58 /* URLResultParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = URLResultParser.m; sourceTree = "<group>"; };
+		85C0BAF80E1250E4005EED58 /* BookmarkDoCoMoResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BookmarkDoCoMoResultParser.h; sourceTree = "<group>"; };
+		85C0BAF90E1250E4005EED58 /* BookmarkDoCoMoResultParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BookmarkDoCoMoResultParser.m; sourceTree = "<group>"; };
+		85C0BAFB0E12515D005EED58 /* GeoResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeoResultParser.h; sourceTree = "<group>"; };
+		85C0BAFC0E12515D005EED58 /* GeoResultParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeoResultParser.m; sourceTree = "<group>"; };
+		85C0BC0E0E12548D005EED58 /* SMSTOResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMSTOResultParser.h; sourceTree = "<group>"; };
+		85C0BC0F0E12548D005EED58 /* SMSTOResultParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SMSTOResultParser.m; sourceTree = "<group>"; };
+		85C0BC120E1254C0005EED58 /* SMSParsedResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMSParsedResult.h; sourceTree = "<group>"; };
+		85C0BC130E1254C0005EED58 /* SMSParsedResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SMSParsedResult.m; sourceTree = "<group>"; };
+		85C0BC1A0E125842005EED58 /* SMSResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMSResultParser.h; sourceTree = "<group>"; };
+		85C0BC1B0E125842005EED58 /* SMSResultParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SMSResultParser.m; sourceTree = "<group>"; };
+		85C3CC2D0E119E1600A01C6A /* business-card.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "business-card.png"; sourceTree = "<group>"; };
+		85C3CC2E0E119E1700A01C6A /* email.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = email.png; sourceTree = "<group>"; };
+		85C3CC2F0E119E1700A01C6A /* link1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = link1.png; sourceTree = "<group>"; };
+		85C3CC300E119E1700A01C6A /* link2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = link2.png; sourceTree = "<group>"; };
+		85C3CC310E119E1700A01C6A /* map-pin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map-pin.png"; sourceTree = "<group>"; };
+		85C3CC320E119E1700A01C6A /* phone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = phone.png; sourceTree = "<group>"; };
+		85C3CC330E119E1700A01C6A /* sms.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sms.png; sourceTree = "<group>"; };
+		85C3CC340E119E1700A01C6A /* text.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = text.png; sourceTree = "<group>"; };
 		85D937250E11064700B785E0 /* ScanViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScanViewController.h; sourceTree = "<group>"; };
 		85D937260E11064700B785E0 /* ScanViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScanViewController.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -325,40 +368,17 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				85D937250E11064700B785E0 /* ScanViewController.h */,
-				85D937260E11064700B785E0 /* ScanViewController.m */,
-				85096CCE0E06D45400D660F9 /* SMSAction.h */,
-				85096CCF0E06D45400D660F9 /* SMSAction.m */,
-				852683C00DF8562B005DD4C0 /* ShowMapAction.h */,
-				852683C10DF8562B005DD4C0 /* ShowMapAction.m */,
+				85C0B9100E123AC4005EED58 /* ResultParsers */,
+				85C0B8E70E1238FD005EED58 /* ParsedResults */,
+				85C0B8E80E123929005EED58 /* Actions */,
 				851B4BF40DF6C64A00C8958F /* TwoDDecoderResult.h */,
 				851B4BF50DF6C64A00C8958F /* TwoDDecoderResult.m */,
+				85D937250E11064700B785E0 /* ScanViewController.h */,
+				85D937260E11064700B785E0 /* ScanViewController.m */,
 				855A66510DF5E757007B394F /* ArchiveController.m */,
 				855A66520DF5E757007B394F /* ArchiveController.h */,
 				855A66530DF5E757007B394F /* Database.h */,
 				855A66540DF5E757007B394F /* Database.m */,
-				855A66550DF5E757007B394F /* AddressBookAUParsedResult.h */,
-				855A66560DF5E757007B394F /* AddressBookAUParsedResult.m */,
-				855A66570DF5E757007B394F /* AddContactAction.h */,
-				855A66580DF5E757007B394F /* AddContactAction.m */,
-				855A66590DF5E757007B394F /* AddressBookDoCoMoParsedResult.h */,
-				855A665A0DF5E757007B394F /* AddressBookDoCoMoParsedResult.m */,
-				855A665D0DF5E757007B394F /* EmailAction.h */,
-				855A665E0DF5E757007B394F /* EmailAction.m */,
-				855A665F0DF5E757007B394F /* EmailDoCoMoParsedResult.h */,
-				855A66600DF5E757007B394F /* EmailDoCoMoParsedResult.m */,
-				855A66610DF5E757007B394F /* DoCoMoParsedResult.h */,
-				855A66620DF5E757007B394F /* DoCoMoParsedResult.m */,
-				855A66630DF5E757007B394F /* CallAction.h */,
-				855A66640DF5E757007B394F /* CallAction.m */,
-				855A66650DF5E757007B394F /* OpenUrlAction.h */,
-				855A66660DF5E757007B394F /* OpenUrlAction.m */,
-				855A66670DF5E757007B394F /* ResultAction.h */,
-				855A66680DF5E757007B394F /* ResultAction.m */,
-				855A66690DF5E757007B394F /* TelParsedResult.h */,
-				855A666A0DF5E757007B394F /* TelParsedResult.m */,
-				855A666B0DF5E757007B394F /* TextParsedResult.h */,
-				855A666C0DF5E757007B394F /* TextParsedResult.m */,
 				855A666D0DF5E757007B394F /* DecoderViewController.h */,
 				855A666E0DF5E757007B394F /* DecoderViewController.m */,
 				855A666F0DF5E757007B394F /* DecoderDelegate.h */,
@@ -366,20 +386,10 @@
 				855A66710DF5E757007B394F /* Decoder.m */,
 				855A66720DF5E757007B394F /* ZXingAppDelegate.h */,
 				855A66730DF5E757007B394F /* ZXingAppDelegate.m */,
-				855A66740DF5E757007B394F /* ParsedResult.h */,
-				855A66750DF5E757007B394F /* ParsedResult.m */,
 				855A66760DF5E757007B394F /* NSString+HTML.h */,
 				855A66770DF5E757007B394F /* NSString+HTML.m */,
-				855A66780DF5E757007B394F /* URIParsedResult.h */,
-				855A66790DF5E757007B394F /* URIParsedResult.m */,
-				855A667A0DF5E757007B394F /* URLTOParsedResult.h */,
-				855A667B0DF5E757007B394F /* URLTOParsedResult.m */,
-				855A667C0DF5E757007B394F /* BookmarkDoCoMoParsedResult.h */,
-				855A667D0DF5E757007B394F /* BookmarkDoCoMoParsedResult.m */,
 				855A667E0DF5E757007B394F /* Scan.h */,
 				855A667F0DF5E757007B394F /* Scan.m */,
-				852683A00DF851ED005DD4C0 /* GeoParsedResult.h */,
-				852683A10DF851ED005DD4C0 /* GeoParsedResult.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -419,6 +429,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				85C3CC0F0E119E0500A01C6A /* Images */,
 				852A99960E0BC49E003E6D6D /* Localizable.strings */,
 				855A66A00DF5E7B4007B394F /* scans.db */,
 				855A66A10DF5E7B4007B394F /* Settings.bundle */,
@@ -642,6 +653,96 @@
 			path = detector;
 			sourceTree = "<group>";
 		};
+		85C0B8E70E1238FD005EED58 /* ParsedResults */ = {
+			isa = PBXGroup;
+			children = (
+				855A66590DF5E757007B394F /* BusinessCardParsedResult.h */,
+				855A665A0DF5E757007B394F /* BusinessCardParsedResult.m */,
+				855A665F0DF5E757007B394F /* EmailParsedResult.h */,
+				855A66600DF5E757007B394F /* EmailParsedResult.m */,
+				855A66690DF5E757007B394F /* TelParsedResult.h */,
+				855A666A0DF5E757007B394F /* TelParsedResult.m */,
+				855A666B0DF5E757007B394F /* TextParsedResult.h */,
+				855A666C0DF5E757007B394F /* TextParsedResult.m */,
+				855A66740DF5E757007B394F /* ParsedResult.h */,
+				855A66750DF5E757007B394F /* ParsedResult.m */,
+				855A66780DF5E757007B394F /* URIParsedResult.h */,
+				855A66790DF5E757007B394F /* URIParsedResult.m */,
+				852683A00DF851ED005DD4C0 /* GeoParsedResult.h */,
+				852683A10DF851ED005DD4C0 /* GeoParsedResult.m */,
+				85C0BC120E1254C0005EED58 /* SMSParsedResult.h */,
+				85C0BC130E1254C0005EED58 /* SMSParsedResult.m */,
+			);
+			name = ParsedResults;
+			sourceTree = "<group>";
+		};
+		85C0B8E80E123929005EED58 /* Actions */ = {
+			isa = PBXGroup;
+			children = (
+				85096CCE0E06D45400D660F9 /* SMSAction.h */,
+				85096CCF0E06D45400D660F9 /* SMSAction.m */,
+				852683C00DF8562B005DD4C0 /* ShowMapAction.h */,
+				852683C10DF8562B005DD4C0 /* ShowMapAction.m */,
+				855A66570DF5E757007B394F /* AddContactAction.h */,
+				855A66580DF5E757007B394F /* AddContactAction.m */,
+				855A665D0DF5E757007B394F /* EmailAction.h */,
+				855A665E0DF5E757007B394F /* EmailAction.m */,
+				855A66630DF5E757007B394F /* CallAction.h */,
+				855A66640DF5E757007B394F /* CallAction.m */,
+				855A66650DF5E757007B394F /* OpenUrlAction.h */,
+				855A66660DF5E757007B394F /* OpenUrlAction.m */,
+				855A66670DF5E757007B394F /* ResultAction.h */,
+				855A66680DF5E757007B394F /* ResultAction.m */,
+			);
+			name = Actions;
+			sourceTree = "<group>";
+		};
+		85C0B9100E123AC4005EED58 /* ResultParsers */ = {
+			isa = PBXGroup;
+			children = (
+				85C0B9120E123AFC005EED58 /* ResultParser.h */,
+				85C0B9130E123AFC005EED58 /* ResultParser.m */,
+				85C0B9180E123BD2005EED58 /* DoCoMoResultParser.h */,
+				85C0B9190E123BD2005EED58 /* DoCoMoResultParser.m */,
+				85C0B9200E123C93005EED58 /* MeCardParser.h */,
+				85C0B9210E123C93005EED58 /* MeCardParser.m */,
+				85C0B9A90E123DB6005EED58 /* EmailDoCoMoResultParser.h */,
+				85C0B9AA0E123DB6005EED58 /* EmailDoCoMoResultParser.m */,
+				85C0BAF80E1250E4005EED58 /* BookmarkDoCoMoResultParser.h */,
+				85C0BAF90E1250E4005EED58 /* BookmarkDoCoMoResultParser.m */,
+				85C0B9B80E123E99005EED58 /* TelResultParser.h */,
+				85C0B9B90E123E99005EED58 /* TelResultParser.m */,
+				85C0BA000E123F30005EED58 /* TextResultParser.h */,
+				85C0BA010E123F30005EED58 /* TextResultParser.m */,
+				85C0BA620E124AC7005EED58 /* URLResultParser.h */,
+				85C0BA630E124AC7005EED58 /* URLResultParser.m */,
+				85C0BA580E124497005EED58 /* URLTOResultParser.h */,
+				85C0BA590E124497005EED58 /* URLTOResultParser.m */,
+				85C0BC1A0E125842005EED58 /* SMSResultParser.h */,
+				85C0BC1B0E125842005EED58 /* SMSResultParser.m */,
+				85C0BAFB0E12515D005EED58 /* GeoResultParser.h */,
+				85C0BAFC0E12515D005EED58 /* GeoResultParser.m */,
+				85C0BC0E0E12548D005EED58 /* SMSTOResultParser.h */,
+				85C0BC0F0E12548D005EED58 /* SMSTOResultParser.m */,
+			);
+			name = ResultParsers;
+			sourceTree = "<group>";
+		};
+		85C3CC0F0E119E0500A01C6A /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				85C3CC2D0E119E1600A01C6A /* business-card.png */,
+				85C3CC2E0E119E1700A01C6A /* email.png */,
+				85C3CC2F0E119E1700A01C6A /* link1.png */,
+				85C3CC300E119E1700A01C6A /* link2.png */,
+				85C3CC310E119E1700A01C6A /* map-pin.png */,
+				85C3CC320E119E1700A01C6A /* phone.png */,
+				85C3CC330E119E1700A01C6A /* sms.png */,
+				85C3CC340E119E1700A01C6A /* text.png */,
+			);
+			name = Images;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -732,6 +833,14 @@
 				852A99910E0BC43C003E6D6D /* MainWindow.xib in Resources */,
 				8552C4980E0A61D6000CC4F0 /* Default.png in Resources */,
 				852A99970E0BC49E003E6D6D /* Localizable.strings in Resources */,
+				85C3CC350E119E1700A01C6A /* business-card.png in Resources */,
+				85C3CC360E119E1700A01C6A /* email.png in Resources */,
+				85C3CC370E119E1700A01C6A /* link1.png in Resources */,
+				85C3CC380E119E1700A01C6A /* link2.png in Resources */,
+				85C3CC390E119E1700A01C6A /* map-pin.png in Resources */,
+				85C3CC3A0E119E1700A01C6A /* phone.png in Resources */,
+				85C3CC3B0E119E1700A01C6A /* sms.png in Resources */,
+				85C3CC3C0E119E1700A01C6A /* text.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -745,12 +854,10 @@
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
 				855A66800DF5E757007B394F /* ArchiveController.m in Sources */,
 				855A66810DF5E757007B394F /* Database.m in Sources */,
-				855A66820DF5E757007B394F /* AddressBookAUParsedResult.m in Sources */,
 				855A66830DF5E757007B394F /* AddContactAction.m in Sources */,
-				855A66840DF5E757007B394F /* AddressBookDoCoMoParsedResult.m in Sources */,
+				855A66840DF5E757007B394F /* BusinessCardParsedResult.m in Sources */,
 				855A66860DF5E757007B394F /* EmailAction.m in Sources */,
-				855A66870DF5E757007B394F /* EmailDoCoMoParsedResult.m in Sources */,
-				855A66880DF5E757007B394F /* DoCoMoParsedResult.m in Sources */,
+				855A66870DF5E757007B394F /* EmailParsedResult.m in Sources */,
 				855A66890DF5E757007B394F /* CallAction.m in Sources */,
 				855A668A0DF5E757007B394F /* OpenUrlAction.m in Sources */,
 				855A668B0DF5E757007B394F /* ResultAction.m in Sources */,
@@ -762,14 +869,25 @@
 				855A66910DF5E757007B394F /* ParsedResult.m in Sources */,
 				855A66920DF5E757007B394F /* NSString+HTML.m in Sources */,
 				855A66930DF5E757007B394F /* URIParsedResult.m in Sources */,
-				855A66940DF5E757007B394F /* URLTOParsedResult.m in Sources */,
-				855A66950DF5E757007B394F /* BookmarkDoCoMoParsedResult.m in Sources */,
 				855A66960DF5E757007B394F /* Scan.m in Sources */,
 				851B4BF60DF6C64A00C8958F /* TwoDDecoderResult.m in Sources */,
 				852683A20DF851ED005DD4C0 /* GeoParsedResult.m in Sources */,
 				852683C20DF8562B005DD4C0 /* ShowMapAction.m in Sources */,
 				85096CD00E06D45400D660F9 /* SMSAction.m in Sources */,
 				85D937270E11064700B785E0 /* ScanViewController.m in Sources */,
+				85C0B9140E123AFC005EED58 /* ResultParser.m in Sources */,
+				85C0B91A0E123BD2005EED58 /* DoCoMoResultParser.m in Sources */,
+				85C0B9220E123C93005EED58 /* MeCardParser.m in Sources */,
+				85C0B9AB0E123DB6005EED58 /* EmailDoCoMoResultParser.m in Sources */,
+				85C0B9BA0E123E99005EED58 /* TelResultParser.m in Sources */,
+				85C0BA020E123F30005EED58 /* TextResultParser.m in Sources */,
+				85C0BA5A0E124497005EED58 /* URLTOResultParser.m in Sources */,
+				85C0BA640E124AC7005EED58 /* URLResultParser.m in Sources */,
+				85C0BAFA0E1250E4005EED58 /* BookmarkDoCoMoResultParser.m in Sources */,
+				85C0BAFD0E12515D005EED58 /* GeoResultParser.m in Sources */,
+				85C0BC100E12548D005EED58 /* SMSTOResultParser.m in Sources */,
+				85C0BC140E1254C0005EED58 /* SMSParsedResult.m in Sources */,
+				85C0BC1C0E125842005EED58 /* SMSResultParser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -875,6 +993,7 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = ZXing_Prefix.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
 				INFOPLIST_FILE = Info.plist;
 				PRODUCT_NAME = ZXing;
 			};

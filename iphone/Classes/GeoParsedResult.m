@@ -22,8 +22,6 @@
 #import "GeoParsedResult.h"
 #import "ShowMapAction.h"
 
-#define PREFIX @"geo:"
-
 @implementation GeoParsedResult
 
 @synthesize location;
@@ -36,19 +34,14 @@
 }
 
 
-+ parsedResultForString:(NSString *)s {
-  NSRange prefixRange = [s rangeOfString:PREFIX options:NSCaseInsensitiveSearch];
-  if (prefixRange.location == 0) {
-    int restStart = prefixRange.location + prefixRange.length;
-    return [[[self alloc] initWithLocation:[s substringFromIndex:restStart]]
-            autorelease];
-  }
-  return nil;
++ (NSString *)typeName {
+  return @"Geolocation";
 }
 
-+ (NSString *)typeName {
-  return @"GeoLoc";
+- (UIImage *)icon {
+  return [UIImage imageNamed:@"map-pin.png"];
 }
+
 
 - (NSString *)stringForDisplay {
   return [NSString stringWithFormat:@"Geo: %@", self.location];

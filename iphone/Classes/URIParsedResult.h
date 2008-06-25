@@ -29,13 +29,17 @@
 
 @interface URIParsedResult : ParsedResult {
   NSString *urlString;
+  NSString *title;
   NSURL *URL;
 }
 
+- initWithURLString:(NSString *)s title:(NSString *)t URL:(NSURL *)ur;
+- initWithURLString:(NSString *)s title:(NSString *)t;
 - initWithURLString:(NSString *)s URL:(NSURL *)ur;
 - initWithURLString:(NSString *)s;
 
 @property (nonatomic, retain) NSString *urlString;
+@property (nonatomic, retain) NSString *title;
 @property (nonatomic, retain) NSURL *URL;
 
 @end

@@ -38,7 +38,7 @@
 }
 
 - (NSString *)title {
-  return [NSString localizedStringWithFormat:NSLocalizedString(@"Open %@", @"action title"), self.URL];
+  return [NSString localizedStringWithFormat:NSLocalizedString(@"Open URL", @"action title"), self.URL];
 }
 
 - (NSString *)alertTitle {

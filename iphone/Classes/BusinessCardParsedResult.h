@@ -1,8 +1,8 @@
 //
-//  DoCoMoParsedResult.h
+//  AddressBookDoCoMoParsedResult.h
 //  ZXing
 //
-//  Created by Christian Brunschen on 28/05/2008.
+//  Created by Christian Brunschen on 29/05/2008.
 /*
  * Copyright 2008 ZXing authors
  *
@@ -22,16 +22,20 @@
 #import <UIKit/UIKit.h>
 #import "ParsedResult.h"
 
-@interface NSString (DoCoMoFieldParsing) 
-- (NSString *)backslashUnescaped;
-- (NSArray *)fieldsWithPrefix:(NSString *)prefix;
-- (NSArray *)fieldsWithPrefix:(NSString *)prefix terminator:(NSString *)term;
-- (NSString *)fieldWithPrefix:(NSString *)prefix;
-- (NSString *)fieldWithPrefix:(NSString *)prefix terminator:(NSString *)term;
-@end
-
-@interface DoCoMoParsedResult : ParsedResult {
-
+@interface BusinessCardParsedResult : ParsedResult {
+  NSString *name;
+  NSArray *phoneNumbers;
+  NSString *note;
+  NSString *email;
+  NSString *urlString;
+  NSString *address;
 }
+
+@property (nonatomic, copy) NSString *name;
+@property (nonatomic, retain) NSArray *phoneNumbers;
+@property (nonatomic, copy) NSString *note;
+@property (nonatomic, copy) NSString *email;
+@property (nonatomic, copy) NSString *urlString;
+@property (nonatomic, copy) NSString *address;
 
 @end

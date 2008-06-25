@@ -13,6 +13,7 @@
 @interface ScanViewController : UITableViewController {
   IBOutlet ParsedResult *result;
   IBOutlet Scan *scan;
+  UIFont *bodyFont;
 }
 
 @property (nonatomic, retain) ParsedResult *result;

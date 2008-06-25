@@ -23,11 +23,9 @@
 
 #import "TextParsedResult.h"
 #import "TelParsedResult.h"
-#import "EmailDoCoMoParsedResult.h"
-#import "AddressBookDoCoMoParsedResult.h"
+#import "EmailParsedResult.h"
+#import "BusinessCardParsedResult.h"
 #import "URIParsedResult.h"
-#import "URLTOParsedResult.h"
-#import "BookmarkDoCoMoParsedResult.h"
 #import "GeoParsedResult.h"
 
 #import "UIKit/UIStringDrawing.h"
@@ -35,38 +33,7 @@
 
 @implementation ParsedResult
 
-static NSArray *parsedResultTypes = nil;
 static NSMutableDictionary *iconsByClass = nil;
-
-+ (NSArray *)parsedResultTypes {
-  if (parsedResultTypes == nil) {
-    parsedResultTypes = 
-    [[NSArray alloc] initWithObjects:
-     [AddressBookDoCoMoParsedResult class],
-     [EmailDoCoMoParsedResult class],
-     [BookmarkDoCoMoParsedResult class],
-     [URLTOParsedResult class],
-     [TelParsedResult class],
-     [GeoParsedResult class],
-     [URIParsedResult class],
-     [TextParsedResult class], 
-     nil];
-  }
-  return parsedResultTypes;
-}
-
-+ parsedResultForString:(NSString *)s {
-#ifdef DEBUG
-  NSLog(@"parsing result:\n<<<\n%@\n>>>\n", s);
-#endif
-  for (Class c in [self parsedResultTypes]) {
-    ParsedResult *result = [c parsedResultForString:s];
-    if (result != nil) {
-      return result;
-    }
-  }
-  return nil;
-}
 
 + (NSString *)typeName {
   return NSStringFromClass(self);

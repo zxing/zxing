@@ -19,46 +19,14 @@
  * limitations under the License.
  */
 
-#import "EmailDoCoMoParsedResult.h"
+#import "EmailParsedResult.h"
 #import "EmailAction.h"
 
-bool LooksLikeAnEmailAddress(NSString *s) {
-  if ([s rangeOfString:@"@"].location == NSNotFound) {
-    return false;
-  }
-  if ([s rangeOfString:@"."].location == NSNotFound) {
-    return false;
-  }
-  if ([s rangeOfCharacterFromSet:[NSCharacterSet whitespaceCharacterSet]].location != NSNotFound) {
-    return false;
-  }
-  return true;
-}
-
-@implementation EmailDoCoMoParsedResult
+@implementation EmailParsedResult
 
 @synthesize to;
 @synthesize subject;
 @synthesize body;
-
-+ parsedResultForString:(NSString *)s {
-  NSRange foundRange = [s rangeOfString:@"MATMSG:"];
-  if (foundRange.location == NSNotFound) {
-    return nil;
-  }
-  
-  NSString *to = [s fieldWithPrefix:@"TO:"];
-  if (to == nil) {
-    return nil;
-  }
-  
-  EmailDoCoMoParsedResult *result = [[self alloc] init];
-  result.to = to;
-  result.subject = [s fieldWithPrefix:@"SUB:"];
-  result.body = [s fieldWithPrefix:@"BODY:"];
-  
-  return [result autorelease];
-}
 
 - (NSString *)stringForDisplay {
   NSMutableString *result = [NSMutableString string];
@@ -81,5 +49,10 @@ bool LooksLikeAnEmailAddress(NSString *s) {
                                                            subject:self.subject
                                                               body:self.body]];
 }
+
+- (UIImage *)icon {
+  return [UIImage imageNamed:@"email.png"];
+}
+
 
 @end

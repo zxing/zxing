@@ -11,6 +11,7 @@
 
 
 #define TEXT_VIEW_TAG 0x17
+#define BUTTON_LABEL_TAG 0x17
 #define TITLE_HEIGHT 44
 #define BODY_HEIGHT 88
 
@@ -19,11 +20,15 @@
 @synthesize result;
 @synthesize scan;
 
+#define FONT_NAME @"TimesNewRomanPSMT"
+#define FONT_SIZE 16
+
 - (id)initWithResult:(ParsedResult *)r forScan:(Scan *)s {
 	if (self = [super initWithStyle:UITableViewStyleGrouped]) {
     self.result = r;
     self.scan = s;
     self.title = NSLocalizedString(@"Scan", @"scan view controller title");
+    bodyFont = [[UIFont fontWithName:FONT_NAME size:FONT_SIZE] retain];
 	}
 	return self;
 }
@@ -64,6 +69,7 @@
 	if (cell == nil) {
 		cell = [[[UITableViewCell alloc] initWithFrame:CGRectMake(0, 0, 320, BODY_HEIGHT) reuseIdentifier:BodyIdentifier] autorelease];
     UITextView *textView = [[UITextView alloc] initWithFrame:CGRectInset(cell.contentView.bounds, 6, 6)];
+    textView.font = bodyFont;
     [textView setTag:TEXT_VIEW_TAG];
     textView.editable = NO;
     [textView setAutoresizingMask:(UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight)];
@@ -75,9 +81,19 @@
 
 - (UITableViewCell *)buttonCellInTableView:(UITableView *)tableView {
 	static NSString *ButtonIdentifier = @"ScanViewButtonIdentifier";
-  UITableViewCell *cell = [self cellWithIdentifier:ButtonIdentifier inTableView:tableView];
-  cell.textAlignment = UITextAlignmentCenter;
-  cell.textColor = [UIColor grayColor];
+	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ButtonIdentifier];
+	if (cell == nil) {
+		cell = [[[UITableViewCell alloc] initWithFrame:CGRectMake(0, 0, 320, 44) reuseIdentifier:ButtonIdentifier] autorelease];
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectInset(cell.contentView.bounds, 6, 6)];
+    label.font = [UIFont boldSystemFontOfSize:[UIFont systemFontSize]];
+    [label setTag:BUTTON_LABEL_TAG];
+    label.lineBreakMode = UILineBreakModeMiddleTruncation;
+    label.textColor = [UIColor grayColor];
+    label.textAlignment = UITextAlignmentCenter;
+    [label setAutoresizingMask:(UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight)];
+    [cell.contentView addSubview:label];
+    [label release];
+	}
   return cell;
 }
 
@@ -86,7 +102,11 @@
     if (indexPath.row == 0) {
       return TITLE_HEIGHT;
     } else if (indexPath.row == 1) {
-      return BODY_HEIGHT;
+      CGSize size = [[result stringForDisplay] sizeWithFont:bodyFont constrainedToSize:CGSizeMake(280.0, 200.0) lineBreakMode:UILineBreakModeWordWrap];
+#ifdef DEBUG
+      NSLog(@"text size = %f", size.height);
+#endif
+      return fminf(200, fmaxf(44, size.height + 24));
     }
   }
   return tableView.rowHeight;
@@ -109,7 +129,8 @@
   } else if (indexPath.section == 1) {
     cell = [self buttonCellInTableView:tableView];
     ResultAction *action = [[result actions] objectAtIndex:indexPath.row];
-    cell.text = [action title];
+    UILabel *label = (UILabel *)[cell viewWithTag:BUTTON_LABEL_TAG];
+    label.text = [action title];
   }
 	
 	return cell;
@@ -160,6 +181,7 @@
 - (void)dealloc {
   [result release];
   [scan release];
+  [bodyFont release];
 	[super dealloc];
 }
 

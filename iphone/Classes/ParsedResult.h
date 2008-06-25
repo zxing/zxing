@@ -25,8 +25,6 @@
   NSMutableArray *actions;
 }
 
-+ (NSArray *)parsedResultTypes;
-+ parsedResultForString:(NSString *)s;
 + (NSString *)typeName;
 
 - (NSString *)stringForDisplay;

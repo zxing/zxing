@@ -22,8 +22,6 @@
 #import "TelParsedResult.h"
 #import "CallAction.h"
 
-#define PREFIX @"tel:"
-
 @implementation TelParsedResult
 
 @synthesize number;
@@ -35,16 +33,6 @@
   return self;
 }
 
-+ parsedResultForString:(NSString *)s {
-  NSRange telRange = [s rangeOfString:PREFIX options:NSCaseInsensitiveSearch];
-  if (telRange.location == 0) {
-    int restStart = telRange.location + telRange.length;
-    return [[[self alloc] initWithNumber:[s substringFromIndex:restStart]]
-            autorelease];
-  }
-  return nil;
-}
-
 - (NSString *)stringForDisplay {
   return self.number;
 }
@@ -54,9 +42,12 @@
   return @"Tel";
 }
 
+- (UIImage *)icon {
+  return [UIImage imageNamed:@"phone.png"];
+}
 
-- (NSArray *)actions { 
-  return [NSArray arrayWithObject:[CallAction actionWithNumber:self.number]];
+- (void)populateActions { 
+  [actions addObject:[CallAction actionWithNumber:self.number]];
 }
 
 - (void) dealloc {
