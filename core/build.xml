@@ -139,6 +139,7 @@
         <fileset dir="test/src">
           <include name="**/*BlackBox*TestCase.java"/>
           <exclude name="com/google/zxing/common/AbstractBlackBoxTestCase.java"/>
+          <exclude name="com/google/zxing/common/AbstractNegativeBlackBoxTestCase.java"/>
         </fileset>
       </batchtest>
     </junit>
