@@ -21,16 +21,16 @@ import com.google.zxing.common.AbstractNegativeBlackBoxTestCase;
 import java.io.File;
 
 /**
- * This test ensures that partial barcodes do not decode.
+ * This test ensures that unsupported barcodes do not decode.
  *
  * @author dswitkin@google.com (Daniel Switkin)
  */
-public final class PartialBlackBoxTestCase extends AbstractNegativeBlackBoxTestCase {
+public final class UnsupportedBlackBoxTestCase extends AbstractNegativeBlackBoxTestCase {
 
-  public PartialBlackBoxTestCase() {
-    super(new File("test/data/blackbox/partial"));
+  public UnsupportedBlackBoxTestCase() {
+    super(new File("test/data/blackbox/unsupported"));
     addTest(0, 0.0f);
-    addTest(1, 90.0f);
+    addTest(0, 90.0f);
     addTest(1, 180.0f);
     addTest(0, 270.0f);
   }
