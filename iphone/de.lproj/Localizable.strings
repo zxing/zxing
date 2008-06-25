@@ -43,10 +43,10 @@
 "Open %@" = "%@ Öffnen";
 
 /* alert title */
-"Open URL" = "Webseite Öffnen";
+"Open URL" = "Link Öffnen";
 
 /* alert message */
-"Open URL <%@>?" = "Webseite <%@> Öffnen?";
+"Open URL <%@>?" = "Link <%@> Öffnen?";
 
 /* No comment provided by engineer. */
 "Please take or choose a picture containing a barcode" = "Bitte nehmen oder wählen Sie ein Bild mit Strichkod";

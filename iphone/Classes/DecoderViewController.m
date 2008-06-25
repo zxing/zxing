@@ -22,6 +22,7 @@
 #import "DecoderViewController.h"
 #import "Decoder.h"
 #import "NSString+HTML.h"
+#import "ResultParser.h"
 #import "ParsedResult.h"
 #import "ResultAction.h"
 
@@ -101,8 +102,18 @@
 }
 
 
+- (void)clearImageView {
+  imageView.image = nil;
+  NSArray *subviews = [imageView.subviews copy];
+  for (UIView *view in subviews) {
+    [view removeFromSuperview];
+  }
+  [subviews release];
+}
+
 - (void)pickAndDecodeFromSource:(UIImagePickerControllerSourceType) sourceType {
   self.result = nil;
+  [self clearImageView];
   // Create the Image Picker
   if ([UIImagePickerController isSourceTypeAvailable:sourceType]) {
     UIImagePickerController* picker = [[UIImagePickerController alloc] init];
@@ -146,6 +157,7 @@
 
 - (void)dealloc {
   [decoder release];
+  [self clearImageView];
   [imageView release];
   [actionBarItem release];
   [cameraBarItem release];
@@ -168,6 +180,7 @@
 // DecoderDelegate methods
 
 - (void)decoder:(Decoder *)decoder willDecodeImage:(UIImage *)image {
+  [self clearImageView];
   [self.imageView setImage:image];
   [self showMessage:[NSString stringWithFormat:NSLocalizedString(@"Decoding image (%.0fx%.0f) ...", @"shown while image is decoding"), image.size.width, image.size.height]];
 }
@@ -176,22 +189,58 @@
   decodingImage:(UIImage *)image 
     usingSubset:(UIImage *)subset
        progress:(NSString *)message {
+  [self clearImageView];
   [self.imageView setImage:subset];
   [self showMessage:message];
 }
 
 - (void)presentResultForString:(NSString *)resultString {
-  self.result = [ParsedResult parsedResultForString:resultString];
+  self.result = [ResultParser parsedResultForString:resultString];
   [self showMessage:[self.result stringForDisplay]];
   self.actions = self.result.actions;
 #ifdef DEBUG
   NSLog(@"result has %d actions", actions ? 0 : actions.count);
 #endif
   [self updateToolbar];
-}  
+} 
 
-- (void)decoder:(Decoder *)decoder didDecodeImage:(UIImage *)image withResult:(TwoDDecoderResult *)twoDResult {
+- (void)presentResultPoints:(NSArray *)resultPoints 
+                   forImage:(UIImage *)image
+                usingSubset:(UIImage *)subset {
+  // CGSize imageSize = image.size;
+  CGSize subsetSize = subset.size;
+  CGRect viewBounds = imageView.bounds;
+  
+  float scale = fmin(viewBounds.size.width / subsetSize.width,
+                     viewBounds.size.height / subsetSize.height);
+  float xOffset = (viewBounds.size.width - scale * subsetSize.width) / 2.0;
+  float yOffset = (viewBounds.size.height - scale * subsetSize.height) / 2.0;
+
+  NSLog(@"(%f, %f) image in view with bounds (%f, %f) x (%f, %f)", 
+        subsetSize.width, subsetSize.height,
+        viewBounds.origin.x, viewBounds.origin.y,
+        viewBounds.size.width, viewBounds.size.height);
+  NSLog(@"xOffset = %f, yOffset = %f, scale = %f", xOffset, yOffset, scale);
+
+  for (NSValue *pointValue in resultPoints) {
+    CGPoint point = [pointValue CGPointValue];
+    float x = xOffset + scale * point.x;
+    float y = yOffset + scale * point.y;
+    NSLog(@"have result point @ (%f, %f), imageView point (%f, %f)", point.x, point.y, x, y);    
+    CGRect frame = CGRectMake(x - 3, y - 3, 7, 7);
+    UIView *pointView = [[UIView alloc] initWithFrame:frame];
+    pointView.opaque = YES;
+    pointView.backgroundColor = [UIColor greenColor];
+    pointView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    [imageView addSubview:pointView];
+    [pointView release];
+  }
+}
+
+- (void)decoder:(Decoder *)decoder didDecodeImage:(UIImage *)image usingSubset:(UIImage *)subset withResult:(TwoDDecoderResult *)twoDResult {
   [self presentResultForString:twoDResult.text];
+  
+  [self presentResultPoints:twoDResult.points forImage:image usingSubset:subset];
   
   // save the scan to the shared database
   [[Database sharedDatabase] addScanWithText:twoDResult.text];
@@ -199,7 +248,7 @@
   [self performResultAction:self];
 }
 
-- (void)decoder:(Decoder *)decoder failedToDecodeImage:(UIImage *)image reason:(NSString *)reason {
+- (void)decoder:(Decoder *)decoder failedToDecodeImage:(UIImage *)image usingSubset:(UIImage *)subset reason:(NSString *)reason {
   [self showMessage:reason];
   [self updateToolbar];
 }
@@ -211,26 +260,38 @@
         didFinishPickingImage:(UIImage *)image
                   editingInfo:(NSDictionary *)editingInfo
 {
+  UIImage *imageToDecode = image;
 #ifdef DEBUG
   NSLog(@"picked image size = (%f, %f)", image.size.width, image.size.height);
+#endif
   if (editingInfo) {
     UIImage *originalImage = [editingInfo objectForKey:UIImagePickerControllerOriginalImage];
     if (originalImage) {
+#ifdef DEBUG
       NSLog(@"original image size = (%f, %f)", originalImage.size.width, originalImage.size.height);
-    }
-    NSValue *cropRectValue = [editingInfo objectForKey:UIImagePickerControllerCropRect];
-    if (cropRectValue) {
-      CGRect cropRect = [cropRectValue CGRectValue];
-      NSLog(@"crop rect = (%f, %f) x (%f, %f)", CGRectGetMinX(cropRect), CGRectGetMinY(cropRect), CGRectGetWidth(cropRect), CGRectGetHeight(cropRect));
+#endif
+      NSValue *cropRectValue = [editingInfo objectForKey:UIImagePickerControllerCropRect];
+      if (cropRectValue) {
+        CGRect cropRect = [cropRectValue CGRectValue];
+#ifdef DEBUG
+        NSLog(@"crop rect = (%f, %f) x (%f, %f)", CGRectGetMinX(cropRect), CGRectGetMinY(cropRect), CGRectGetWidth(cropRect), CGRectGetHeight(cropRect));
+#endif
+        UIGraphicsBeginImageContext(cropRect.size);
+        
+        [originalImage drawAtPoint:CGPointMake(-CGRectGetMinX(cropRect),
+                                               -CGRectGetMinY(cropRect))];
+        
+        imageToDecode = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+      }
     }
   }
-#endif
   
   [[picker parentViewController] dismissModalViewControllerAnimated:YES];
-  [image retain];
+  [imageToDecode retain];
   [picker release];
-  [self.decoder decodeImage:image];
-  [image release];
+  [self.decoder decodeImage:imageToDecode];
+  [imageToDecode release];
   [self updateToolbar];
 }
 
@@ -318,7 +379,7 @@
 }
 
 - (void)showScan:(Scan *)scan {
-  [self.imageView setImage:nil];
+  [self clearImageView];
   [self presentResultForString:scan.text];
   [[self navigationController] popToViewController:self animated:YES];
 }

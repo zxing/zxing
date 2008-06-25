@@ -33,12 +33,12 @@
   return self;
 }
 
-+ parsedResultForString:(NSString *)s {
-  return [[[self alloc] initWithString:s] autorelease];
-}
-
 + (NSString *)typeName {
   return @"Text";
+}
+
+- (UIImage *)icon {
+  return [UIImage imageNamed:@"text.png"];
 }
 
 - (NSString *)stringForDisplay {

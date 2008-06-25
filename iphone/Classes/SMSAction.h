@@ -23,7 +23,12 @@
 #import "CallAction.h"
 
 @interface SMSAction : CallAction {
-
+  NSString *body;
 }
+
+@property (nonatomic, copy) NSString *body;
+
++ actionWithNumber:(NSString *)number body:(NSString *)body;
++ actionWithNumber:(NSString *)number;
 
 @end

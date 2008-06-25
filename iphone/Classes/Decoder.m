@@ -52,11 +52,11 @@ using namespace qrcode;
 }
 
 - (void)didDecodeImage:(TwoDDecoderResult *)result {
-  [self.delegate decoder:self didDecodeImage:self.image withResult:result];
+  [self.delegate decoder:self didDecodeImage:self.image usingSubset:self.subsetImage withResult:result];
 }
 
 - (void)failedToDecodeImage:(NSString *)reason {
-  [self.delegate decoder:self failedToDecodeImage:self.image reason:reason];
+  [self.delegate decoder:self failedToDecodeImage:self.image usingSubset:self.subsetImage reason:reason];
 }
 
 - (void) prepareSubset {

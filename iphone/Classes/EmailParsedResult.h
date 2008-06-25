@@ -1,8 +1,8 @@
 //
-//  URLTOParsedResult.h
+//  EmailDoCoMoParsedResult.h
 //  ZXing
 //
-//  Created by Christian Brunschen on 29/05/2008.
+//  Created by Christian Brunschen on 28/05/2008.
 /*
  * Copyright 2008 ZXing authors
  *
@@ -20,15 +20,16 @@
  */
 
 #import <UIKit/UIKit.h>
-#import "URIParsedResult.h"
+#import "ParsedResult.h"
 
-
-@interface URLTOParsedResult : URIParsedResult {
-  NSString *title;
+@interface EmailParsedResult : ParsedResult {
+  NSString *to;
+  NSString *subject;
+  NSString *body;
 }
 
-@property (nonatomic, copy) NSString *title;
-
-- initWithURLString:(NSString *)s title:(NSString *)t;
+@property (nonatomic, copy) NSString *to;
+@property (nonatomic, copy) NSString *subject;
+@property (nonatomic, copy) NSString *body;
 
 @end

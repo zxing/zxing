@@ -19,10 +19,10 @@
  * limitations under the License.
  */
 
-#import "AddressBookDoCoMoParsedResult.h"
+#import "BusinessCardParsedResult.h"
 #import "AddContactAction.h"
 
-@implementation AddressBookDoCoMoParsedResult
+@implementation BusinessCardParsedResult
 
 @synthesize name;
 @synthesize phoneNumbers;
@@ -30,28 +30,6 @@
 @synthesize email;
 @synthesize urlString;
 @synthesize address;
-
-+ parsedResultForString:(NSString *)s {
-  NSRange foundRange = [s rangeOfString:@"MECARD:"];
-  if (foundRange.location == NSNotFound) {
-    return nil;
-  }
-  
-  NSString *name = [s fieldWithPrefix:@"N:"];
-  if (name == nil) {
-    return nil;
-  }
-  
-  AddressBookDoCoMoParsedResult *result = [[self alloc] init];
-  result.name = name;
-  result.phoneNumbers = [s fieldsWithPrefix:@"TEL:"];
-  result.email = [s fieldWithPrefix:@"EMAIL:"];
-  result.note = [s fieldWithPrefix:@"NOTE:"];
-  result.urlString = [s fieldWithPrefix:@"URL:"];
-  result.address = [s fieldWithPrefix:@"ADR:"];
-  
-  return [result autorelease];
-}
 
 - (NSString *)stringForDisplay {
   NSMutableString *result = [NSMutableString stringWithString:self.name];
@@ -96,7 +74,11 @@
 }
 
 + (NSString *)typeName {
-  return @"MeCard";
+  return @"Contact";
+}
+
+- (UIImage *)icon {
+  return [UIImage imageNamed:@"business-card.png"];
 }
 
 @end

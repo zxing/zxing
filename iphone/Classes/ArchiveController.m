@@ -22,6 +22,7 @@
 #import "ArchiveController.h"
 #import "Database.h"
 #import "Scan.h"
+#import "ResultParser.h"
 #import "ParsedResult.h"
 #import "DecoderViewController.h"
 #import "ScanViewController.h"
@@ -84,6 +85,7 @@
     UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(VIEW_PADDING, VIEW_PADDING, IMAGE_VIEW_SIDE, CONTENT_HEIGHT)];
     [imageView setTag:IMAGE_VIEW_TAG];
     [imageView setAutoresizingMask:UIViewAutoresizingFlexibleRightMargin];
+    [imageView setContentMode:UIViewContentModeCenter];
     [cell.contentView addSubview:imageView];
     [imageView release];
     
@@ -192,7 +194,7 @@
   self.scans = [NSMutableArray arrayWithArray:[[Database sharedDatabase] scans]];
   self.results = [NSMutableArray arrayWithCapacity:self.scans.count];
   for (Scan *scan in scans) {
-    [results addObject:[ParsedResult parsedResultForString:scan.text]];
+    [results addObject:[ResultParser parsedResultForString:scan.text]];
   }
 }
 

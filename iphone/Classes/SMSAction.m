@@ -24,9 +24,33 @@
 
 @implementation SMSAction
 
-+ (NSURL *)urlForNumber:(NSString *)number {
-  NSString *urlString = [NSString stringWithFormat:@"sms:%@", number];
+@synthesize body;
+
++ (NSURL *)urlForNumber:(NSString *)number withBody:(NSString *)body {
+  NSString *urlString = body ?
+  [NSString stringWithFormat:@"sms:%@?body=%@", number, [body stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] :
+  [NSString stringWithFormat:@"sms:%@", number];
   return [NSURL URLWithString:urlString];
+}
+
+- initWithNumber:(NSString *)n body:(NSString *)b {
+  if ((self = [super initWithURL:[[self class] urlForNumber:n withBody:b]]) != nil) {
+    self.number = n;
+    self.body = b;
+  }
+  return self;
+}
+
+- initWithNumber:(NSString *)n {
+  return [self initWithNumber:n body:nil];
+}
+
++ actionWithNumber:(NSString *)number body:(NSString *)body {
+  return [[[self alloc] initWithNumber:number body:body] autorelease];
+}
+
++ actionWithNumber:(NSString *)number {
+  return [self actionWithNumber:number body:nil];
 }
 
 - (NSString *)title {
@@ -45,8 +69,8 @@
   return NSLocalizedString(@"Compose", @"alert button title");
 }
 
-
 - (void) dealloc {
+  [body release];
   [super dealloc];
 }
 
