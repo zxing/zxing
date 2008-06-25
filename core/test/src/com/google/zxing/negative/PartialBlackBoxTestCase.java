@@ -14,20 +14,22 @@
  * limitations under the License.
  */
 
-package com.google.zxing.common;
+package com.google.zxing.negative;
+
+import com.google.zxing.common.AbstractNegativeBlackBoxTestCase;
 
 import java.io.File;
 
 /**
- * This test ensures that random images with high contrast patterns do not decode as barcodes.
+ * This test ensures that partial barcodes do not decode.
  *
  * @author dswitkin@google.com (Daniel Switkin)
  */
-public final class FalsePositivesBlackBoxTestCase extends AbstractNegativeBlackBoxTestCase {
+public final class PartialBlackBoxTestCase extends AbstractNegativeBlackBoxTestCase {
 
-  public FalsePositivesBlackBoxTestCase() {
-    super(new File("test/data/blackbox/falsepositives"));
-    addTest(1, 0.0f);
+  public PartialBlackBoxTestCase() {
+    super(new File("test/data/blackbox/partial"));
+    addTest(0, 0.0f);
     addTest(1, 90.0f);
     addTest(1, 180.0f);
     addTest(0, 270.0f);
