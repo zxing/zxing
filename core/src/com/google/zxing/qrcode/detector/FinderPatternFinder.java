@@ -411,7 +411,7 @@ final class FinderPatternFinder {
           // difference in the x / y coordinates of the two centers.
           // This is the case where you find top left first. Draw it out.
           hasSkipped = true;
-          return (int) Math.abs(Math.abs(firstConfirmedCenter.getX() - center.getX()) -
+          return (int) (Math.abs(firstConfirmedCenter.getX() - center.getX()) -
               Math.abs(firstConfirmedCenter.getY() - center.getY()));
         }
       }
