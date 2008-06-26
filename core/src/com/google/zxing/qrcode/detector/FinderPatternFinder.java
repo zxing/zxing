@@ -40,6 +40,7 @@ final class FinderPatternFinder {
   private static final int CENTER_QUORUM = 2;
   private static final int MIN_SKIP = 3; // 1 pixel/module times 3 modules/center
   private static final int MAX_MODULES = 57; // support up to version 10 for mobile clients
+  private static final int INTEGER_MATH_SHIFT = 8;
 
   private final MonochromeBitmapSource image;
   private final Vector possibleCenters;
@@ -61,8 +62,6 @@ final class FinderPatternFinder {
     int maxJ = image.getWidth();
     // We are looking for black/white/black/white/black modules in
     // 1:1:3:1:1 ratio; this tracks the number of such modules seen so far
-    int[] stateCount = new int[5];
-    boolean done = false;
 
     // Let's assume that the maximum version QR Code we support takes up 1/4 the height of the
     // image, and then account for the center being 3 modules in size. This gives the smallest
@@ -73,6 +72,8 @@ final class FinderPatternFinder {
       iSkip = MIN_SKIP;
     }
 
+    boolean done = false;
+    int[] stateCount = new int[5];
     for (int i = iSkip - 1; i < maxI && !done; i += iSkip) {
       // Get a row of black/white values
       BitArray blackRow = image.getBlackRow(i, null, 0, maxJ);
@@ -171,28 +172,29 @@ final class FinderPatternFinder {
 
   /**
    * @param stateCount count of black/white/black/white/black pixels just read
-   * @return true iff the proportions of the counts is close enough to the 1/13/1/1 ratios
+   * @return true iff the proportions of the counts is close enough to the 1/1/3/1/1 ratios
    *         used by finder patterns to be considered a match
    */
   private static boolean foundPatternCross(int[] stateCount) {
     int totalModuleSize = 0;
     for (int i = 0; i < 5; i++) {
-      if (stateCount[i] == 0) {
+      int count = stateCount[i];
+      if (count == 0) {
         return false;
       }
-      totalModuleSize += stateCount[i];
+      totalModuleSize += count;
     }
     if (totalModuleSize < 7) {
       return false;
     }
-    float moduleSize = (float) totalModuleSize / 7.0f;
-    float maxVariance = moduleSize / 2.0f;
+    int moduleSize = (totalModuleSize << INTEGER_MATH_SHIFT) / 7;
+    int maxVariance = moduleSize / 2;
     // Allow less than 50% variance from 1-1-3-1-1 proportions
-    return Math.abs(moduleSize - stateCount[0]) < maxVariance &&
-        Math.abs(moduleSize - stateCount[1]) < maxVariance &&
-        Math.abs(3.0f * moduleSize - stateCount[2]) < 3.0f * maxVariance &&
-        Math.abs(moduleSize - stateCount[3]) < maxVariance &&
-        Math.abs(moduleSize - stateCount[4]) < maxVariance;
+    return Math.abs(moduleSize - (stateCount[0] << INTEGER_MATH_SHIFT)) < maxVariance &&
+        Math.abs(moduleSize - (stateCount[1] << INTEGER_MATH_SHIFT)) < maxVariance &&
+        Math.abs(3 * moduleSize - (stateCount[2] << INTEGER_MATH_SHIFT)) < 3 * maxVariance &&
+        Math.abs(moduleSize - (stateCount[3] << INTEGER_MATH_SHIFT)) < maxVariance &&
+        Math.abs(moduleSize - (stateCount[4] << INTEGER_MATH_SHIFT)) < maxVariance;
   }
 
   /**
