@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 ZXing authors
+ * Copyright 2008 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,30 +19,19 @@ package com.google.zxing.client.j2me;
 import javax.microedition.media.Controllable;
 
 /**
- * <p>See this exact same class under the "src" source root for a full explanation.
- * This is a "no-op" version of the class that gets built into the .jar file
- * which is suitable for non-JSR-234 devices.</p>
- * 
+ * <p>Implemented by {@link com.google.zxing.client.j2me.DefaultMultimediaManager} and
+ * {@link com.google.zxing.client.j2me.AdvancedMultimediaManager} in order to dynamically
+ * load support for JSR-234 APIs where possible.</p>
+ *
  * @author Sean Owen (srowen@google.com)
+ * @author Paul Hackenberger
  */
-final class AdvancedMultimediaManager {
+interface MultimediaManager {
 
-  private AdvancedMultimediaManager() {
-    // do nothing
-  }
+  void setFocus(Controllable player);
 
-  // These signatures must match those in the other class exactly
+  void setZoom(Controllable player);
 
-  static void setFocus(Controllable player) {
-    // do nothing
-  }
-
-  static void setZoom(Controllable player) {
-    // do nothing
-  }
-
-  static void setExposure(Controllable player) {
-    // do nothing
-  }
+  void setExposure(Controllable player);
 
 }

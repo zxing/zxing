@@ -26,7 +26,6 @@
     <ant dir="javame" target="build"/>
     <ant dir="javase" target="build"/>
     <ant dir="android" target="package"/>
-    <ant dir="javame" target="build-basic"/>
     <ant dir="rim" target="build"/>
     <ant dir="zxingorg" target="build"/>
   </target>

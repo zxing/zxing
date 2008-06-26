@@ -37,11 +37,13 @@ final class SnapshotThread implements Runnable {
   private final ZXingMIDlet zXingMIDlet;
   private final Object waitLock;
   private boolean done;
+  private final MultimediaManager multimediaManager;
 
   SnapshotThread(ZXingMIDlet zXingMIDlet) {
     this.zXingMIDlet = zXingMIDlet;
     waitLock = new Object();
     done = false;
+    multimediaManager = new DefaultMultimediaManager();
   }
 
   void continueRun() {
@@ -70,7 +72,7 @@ final class SnapshotThread implements Runnable {
     do {
       waitForSignal();
       try {
-        AdvancedMultimediaManager.setFocus(player);
+        multimediaManager.setFocus(player);
         byte[] snapshot = takeSnapshot();
         Image capturedImage = Image.createImage(snapshot, 0, snapshot.length);
         MonochromeBitmapSource source = new LCDUIImageMonochromeBitmapSource(capturedImage);
