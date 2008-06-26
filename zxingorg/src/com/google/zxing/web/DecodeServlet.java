@@ -229,8 +229,8 @@ public final class DecodeServlet extends HttpServlet {
 
     if (request.getParameter("full") == null) {
       response.setContentType("text/plain");
-      response.setCharacterEncoding("UTF-8");
-      Writer out = new OutputStreamWriter(response.getOutputStream(), "UTF-8");
+      response.setCharacterEncoding("UTF8");
+      Writer out = new OutputStreamWriter(response.getOutputStream(), "UTF8");
       try {
         out.write(result.getText());
       } finally {
