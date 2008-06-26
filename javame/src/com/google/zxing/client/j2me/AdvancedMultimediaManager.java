@@ -23,29 +23,20 @@ import javax.microedition.media.Controllable;
 import javax.microedition.media.MediaException;
 
 /**
- * <p>This odd class encapsulates all access to functionality exposed by JSR-234,
- * which provides access to things like focus and zoom. Not all phones support this though.
- * Normally we might handle loading of code like this via reflection but this is
- * not available to us in Java ME. So, we create two implementations of the same class --
- * this one, and another found under source root "src-basic". This one actually calls
- * JSR-234 methods. The other does nothing. The build script creates two build products then
- * one compiled with this class and one with other, to create both the JSR-234 version
- * and the "basic" non-JSR-234 version.</p>
+ * <p>See {@link DefaultMultimediaManager} documentation for details.</p>
+ *
+ * <p>This class should never be directly imported or reference in the code.</p>
  *
  * @author Sean Owen (srowen@google.com)
  */
-final class AdvancedMultimediaManager {
+final class AdvancedMultimediaManager implements MultimediaManager {
 
   private static final int NO_ZOOM = 100;
   private static final int MAX_ZOOM = 200;
   private static final long FOCUS_TIME_MS = 750L;
   private static final String DESIRED_METERING = "center-weighted";
 
-  private AdvancedMultimediaManager() {
-    // do nothing
-  }
-
-  static void setFocus(Controllable player) {
+  public void setFocus(Controllable player) {
     FocusControl focusControl = (FocusControl)
         player.getControl("javax.microedition.amms.control.camera.FocusControl");
     if (focusControl != null) {
@@ -68,7 +59,7 @@ final class AdvancedMultimediaManager {
     }
   }
 
-  static void setZoom(Controllable player) {
+  public void setZoom(Controllable player) {
     ZoomControl zoomControl = (ZoomControl) player.getControl("javax.microedition.amms.control.camera.ZoomControl");
     if (zoomControl != null) {
       // We zoom in if possible to encourage the viewer to take a snapshot from a greater distance.
@@ -86,7 +77,7 @@ final class AdvancedMultimediaManager {
     }
   }
 
-  static void setExposure(Controllable player) {
+  public void setExposure(Controllable player) {
     ExposureControl exposureControl =
         (ExposureControl) player.getControl("javax.microedition.amms.control.camera.ExposureControl");
     if (exposureControl != null) {
