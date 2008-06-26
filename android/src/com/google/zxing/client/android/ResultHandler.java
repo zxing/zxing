@@ -59,6 +59,8 @@ final class ResultHandler implements Button.OnClickListener {
       putExtra(intent, Contacts.Intents.Insert.EMAIL, addressResult.getEmails());
       putExtra(intent, Contacts.Intents.Insert.NOTES, addressResult.getNote());
       putExtra(intent, Contacts.Intents.Insert.POSTAL, addressResult.getAddress());
+      putExtra(intent, Contacts.Intents.Insert.COMPANY, addressResult.getOrg());
+      putExtra(intent, Contacts.Intents.Insert.JOB_TITLE, addressResult.getTitle());
     } else if (type.equals(ParsedResultType.EMAIL_ADDRESS)) {
       EmailAddressParsedResult emailResult = (EmailAddressParsedResult) result;
       intent = new Intent(Intent.SENDTO_ACTION, Uri.parse(emailResult.getMailtoURI()));
@@ -67,6 +69,8 @@ final class ResultHandler implements Button.OnClickListener {
     } else if (type.equals(ParsedResultType.SMS)) {
       SMSParsedResult smsResult = (SMSParsedResult) result;
       intent = new Intent(Intent.SENDTO_ACTION, Uri.parse(smsResult.getSMSURI()));
+      putExtra(intent, "subject", smsResult.getSubject());
+      putExtra(intent, "body", smsResult.getBody());
     } else if (type.equals(ParsedResultType.TEL)) {
       TelParsedResult telResult = (TelParsedResult) result;
       intent = new Intent(Intent.DIAL_ACTION, Uri.parse(telResult.getTelURI()));
