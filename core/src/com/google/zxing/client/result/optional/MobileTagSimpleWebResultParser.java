@@ -18,7 +18,7 @@ package com.google.zxing.client.result.optional;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
-import com.google.zxing.client.result.ParsedReaderResultType;
+import com.google.zxing.client.result.URIParsedResult;
 
 /**
  * <p>Represents a "simple web" result encoded according to section 4.11 of the
@@ -26,7 +26,7 @@ import com.google.zxing.client.result.ParsedReaderResultType;
  *
  * @author srowen@google.com (Sean Owen)
  */
-public final class MobileTagSimpleWebParsedResult extends AbstractMobileTagParsedResult {
+public final class MobileTagSimpleWebResultParser extends AbstractMobileTagResultParser {
 
   public static final String SERVICE_TYPE = "04";
   private static final String[] URI_PREFIXES = {
@@ -38,16 +38,7 @@ public final class MobileTagSimpleWebParsedResult extends AbstractMobileTagParse
       "rtsp://",
   };
 
-  private final String title;
-  private final String uri;
-
-  private MobileTagSimpleWebParsedResult(String title, String uri) {
-    super(ParsedReaderResultType.MOBILETAG_SIMPLE_WEB);
-    this.title = title;
-    this.uri = uri;
-  }
-
-  public static MobileTagSimpleWebParsedResult parse(Result result) {
+  public static URIParsedResult parse(Result result) {
     if (!result.getBarcodeFormat().equals(BarcodeFormat.DATAMATRIX)) {
       return null;
     }
@@ -74,23 +65,7 @@ public final class MobileTagSimpleWebParsedResult extends AbstractMobileTagParse
       }
     }
 
-    return new MobileTagSimpleWebParsedResult(title, uri);
-  }
-
-  public String getTitle() {
-    return title;
-  }
-
-  public String getURI() {
-    return uri;
-  }
-
-  public String getDisplayResult() {
-    if (title == null) {
-      return uri;
-    } else {
-      return title + '\n' + uri;
-    }
+    return new URIParsedResult(uri, title);
   }
 
 }

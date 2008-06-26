@@ -31,8 +31,9 @@ import android.view.Window;
 import android.widget.TextView;
 import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
-import com.google.zxing.client.result.ParsedReaderResult;
-import com.google.zxing.client.result.ParsedReaderResultType;
+import com.google.zxing.client.result.ParsedResult;
+import com.google.zxing.client.result.ParsedResultType;
+import com.google.zxing.client.result.ResultParser;
 
 /**
  * The barcode reader activity itself. This is loosely based on the CameraPreview
@@ -182,15 +183,15 @@ public final class BarcodeReaderCaptureActivity extends Activity {
       }
 
       TextView textView = (TextView) findViewById(R.id.status_text_view);
-      ParsedReaderResult readerResult = parseReaderResult(rawResult);
-      textView.setText(readerResult.getDisplayResult() + " (" + duration + " ms)");
+      ParsedResult result = parseReaderResult(rawResult);
+      textView.setText(result.getDisplayResult() + " (" + duration + " ms)");
 
       TextView actionButton = (TextView) findViewById(R.id.status_action_button);
-      int buttonText = getActionButtonText(readerResult.getType());
+      int buttonText = getActionButtonText(result.getType());
       if (buttonText != 0) {
         actionButton.setVisibility(View.VISIBLE);
         actionButton.setText(buttonText);
-        View.OnClickListener handler = new ResultHandler(this, readerResult);
+        View.OnClickListener handler = new ResultHandler(this, result);
         actionButton.setOnClickListener(handler);
         actionButton.requestFocus();
       } else {
@@ -227,9 +228,9 @@ public final class BarcodeReaderCaptureActivity extends Activity {
     statusView.setBackgroundColor(0x50000000);
   }
 
-  private static ParsedReaderResult parseReaderResult(Result rawResult) {
-    ParsedReaderResult readerResult = ParsedReaderResult.parseReaderResult(rawResult);
-    if (readerResult.getType().equals(ParsedReaderResultType.TEXT)) {
+  private static ParsedResult parseReaderResult(Result rawResult) {
+    ParsedResult result = ResultParser.parseReaderResult(rawResult);
+    if (result.getType().equals(ParsedResultType.TEXT)) {
       String rawText = rawResult.getText();
       AndroidIntentParsedResult androidResult = AndroidIntentParsedResult.parse(rawText);
       if (androidResult != null) {
@@ -237,29 +238,26 @@ public final class BarcodeReaderCaptureActivity extends Activity {
         if (!Intent.VIEW_ACTION.equals(intent.getAction())) {
           // For now, don't take anything that just parses as a View action. A lot
           // of things are accepted as a View action by default.
-          readerResult = androidResult;          
+          result = androidResult;
         }
       }
     }
-    return readerResult;
+    return result;
   }
 
-  private static int getActionButtonText(ParsedReaderResultType type) {
+  private static int getActionButtonText(ParsedResultType type) {
     int buttonText;
-    if (type.equals(ParsedReaderResultType.ADDRESSBOOK)) {
+    if (type.equals(ParsedResultType.ADDRESSBOOK)) {
       buttonText = R.string.button_add_contact;
-    } else if (type.equals(ParsedReaderResultType.URI) ||
-               type.equals(ParsedReaderResultType.BOOKMARK) ||
-               type.equals(ParsedReaderResultType.URLTO)) {
+    } else if (type.equals(ParsedResultType.URI)) {
       buttonText = R.string.button_open_browser;
-    } else if (type.equals(ParsedReaderResultType.EMAIL) ||
-               type.equals(ParsedReaderResultType.EMAIL_ADDRESS)) {
+    } else if (type.equals(ParsedResultType.EMAIL_ADDRESS)) {
       buttonText = R.string.button_email;
-    } else if (type.equals(ParsedReaderResultType.UPC)) {
+    } else if (type.equals(ParsedResultType.UPC)) {
       buttonText = R.string.button_lookup_product;
-    } else if (type.equals(ParsedReaderResultType.TEL)) {
+    } else if (type.equals(ParsedResultType.TEL)) {
       buttonText = R.string.button_dial;
-    } else if (type.equals(ParsedReaderResultType.GEO)) {
+    } else if (type.equals(ParsedResultType.GEO)) {
       buttonText = R.string.button_show_map;
     } else {
       buttonText = 0;

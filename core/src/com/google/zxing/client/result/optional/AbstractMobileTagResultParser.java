@@ -16,8 +16,7 @@
 
 package com.google.zxing.client.result.optional;
 
-import com.google.zxing.client.result.ParsedReaderResult;
-import com.google.zxing.client.result.ParsedReaderResultType;
+import com.google.zxing.client.result.ResultParser;
 
 /**
  * <p>Superclass for classes encapsulating reader results encoded according
@@ -25,15 +24,11 @@ import com.google.zxing.client.result.ParsedReaderResultType;
  * 
  * @author srowen@google.com (Sean Owen)
  */
-abstract class AbstractMobileTagParsedResult extends ParsedReaderResult {
+abstract class AbstractMobileTagResultParser extends ResultParser {
 
   public static final int ACTION_DO = 1;
   public static final int ACTION_EDIT = 2;
   public static final int ACTION_SAVE = 4;
-
-  AbstractMobileTagParsedResult(ParsedReaderResultType type) {
-    super(type);
-  }
 
   static String[] matchDelimitedFields(String rawText, int maxItems) {
     String[] result = new String[maxItems];

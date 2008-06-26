@@ -21,18 +21,12 @@ import com.google.zxing.Result;
 /**
  * @author srowen@google.com (Sean Owen)
  */
-public final class BookmarkDoCoMoParsedResult extends AbstractDoCoMoParsedResult {
+public final class BookmarkDoCoMoResultParser extends AbstractDoCoMoResultParser {
 
-  private final String title;
-  private final String uri;
-
-  private BookmarkDoCoMoParsedResult(String title, String uri) {
-    super(ParsedReaderResultType.BOOKMARK);
-    this.title = title;
-    this.uri = uri;
+  private BookmarkDoCoMoResultParser() {
   }
 
-  public static BookmarkDoCoMoParsedResult parse(Result result) {
+  public static URIParsedResult parse(Result result) {
     String rawText = result.getText();
     if (rawText == null || !rawText.startsWith("MEBKM:")) {
       return null;
@@ -43,26 +37,10 @@ public final class BookmarkDoCoMoParsedResult extends AbstractDoCoMoParsedResult
       return null;
     }
     String uri = rawUri[0];
-    if (!URIParsedResult.isBasicallyValidURI(uri)) {
+    if (!URIResultParser.isBasicallyValidURI(uri)) {
       return null;
     }
-    return new BookmarkDoCoMoParsedResult(title, uri);
-  }
-
-  public String getTitle() {
-    return title;
-  }
-
-  public String getURI() {
-    return uri;
-  }
-
-  public String getDisplayResult() {
-    if (title == null) {
-      return uri;
-    } else {
-      return title + '\n' + uri;
-    }
+    return new URIParsedResult(uri, title);
   }
 
 }

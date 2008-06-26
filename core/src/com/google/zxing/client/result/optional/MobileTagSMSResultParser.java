@@ -18,7 +18,7 @@ package com.google.zxing.client.result.optional;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
-import com.google.zxing.client.result.ParsedReaderResultType;
+import com.google.zxing.client.result.SMSParsedResult;
 
 /**
  * <p>Represents a "SMS" result encoded according to section 4.6 of the
@@ -26,22 +26,11 @@ import com.google.zxing.client.result.ParsedReaderResultType;
  *
  * @author srowen@google.com (Sean Owen)
  */
-public final class MobileTagSMSParsedResult extends AbstractMobileTagParsedResult {
+public final class MobileTagSMSResultParser extends AbstractMobileTagResultParser {
 
   public static final String SERVICE_TYPE = "03";
 
-  private final String to;
-  private final String body;
-  private final String title;
-
-  private MobileTagSMSParsedResult(String to, String body, String title) {
-    super(ParsedReaderResultType.MOBILETAG_SMS);
-    this.to = to;
-    this.body = body;
-    this.title = title;
-  }
-
-  public static MobileTagSMSParsedResult parse(Result result) {
+  public static SMSParsedResult parse(Result result) {
     if (!result.getBarcodeFormat().equals(BarcodeFormat.DATAMATRIX)) {
       return null;
     }
@@ -58,26 +47,7 @@ public final class MobileTagSMSParsedResult extends AbstractMobileTagParsedResul
     String body = matches[1];
     String title = matches[2];
 
-    return new MobileTagSMSParsedResult(to, body, title);
-  }
-
-  public String getTo() {
-    return to;
-  }
-
-  public String getBody() {
-    return body;
-  }
-
-  public String getTitle() {
-    return title;
-  }
-
-  public String getDisplayResult() {
-    StringBuffer result = new StringBuffer(to);
-    maybeAppend(title, result);
-    maybeAppend(body, result);
-    return result.toString();
+    return new SMSParsedResult("sms:" + to, to, null, null, body, title);
   }
 
 }

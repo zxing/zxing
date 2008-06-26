@@ -16,21 +16,13 @@
 
 package com.google.zxing.client.result.optional;
 
-import com.google.zxing.Result;
-import com.google.zxing.client.result.ParsedReaderResultType;
+import com.google.zxing.client.result.ParsedResult;
+import com.google.zxing.client.result.ParsedResultType;
 
 /**
- * <p>Recognizes an NDEF message that encodes information according to the
- * "Smart Poster Record Type Definition" specification.</p>
- *
- * <p>This actually only supports some parts of the Smart Poster format: title,
- * URI, and action records. Icon records are not supported because the size
- * of these records are infeasibly large for barcodes. Size and type records
- * are not supported. Multiple titles are not supported.</p>
- *
  * @author srowen@google.com (Sean Owen)
  */
-public final class NDEFSmartPosterParsedResult extends AbstractNDEFParsedResult {
+public final class NDEFSmartPosterParsedResult extends ParsedResult {
 
   public static final int ACTION_UNSPECIFIED = -1;
   public static final int ACTION_DO = 0;
@@ -41,53 +33,11 @@ public final class NDEFSmartPosterParsedResult extends AbstractNDEFParsedResult 
   private String uri;
   private int action;
 
-  private NDEFSmartPosterParsedResult() {
-    super(ParsedReaderResultType.NDEF_SMART_POSTER);
-    action = ACTION_UNSPECIFIED;
-  }
-
-  public static NDEFSmartPosterParsedResult parse(Result result) {
-    byte[] bytes = result.getRawBytes();
-    if (bytes == null) {
-      return null;
-    }
-    NDEFRecord headerRecord = NDEFRecord.readRecord(bytes, 0);
-    // Yes, header record starts and ends a message
-    if (headerRecord == null || !headerRecord.isMessageBegin() || !headerRecord.isMessageEnd()) {
-      return null;
-    }
-    if (!headerRecord.getType().equals(NDEFRecord.SMART_POSTER_WELL_KNOWN_TYPE)) {
-      return null;
-    }
-
-    int offset = 0;
-    int recordNumber = 0;
-    NDEFRecord ndefRecord = null;
-    byte[] payload = headerRecord.getPayload();
-    NDEFSmartPosterParsedResult smartPosterParsedResult = new NDEFSmartPosterParsedResult();
-
-    while (offset < payload.length && (ndefRecord = NDEFRecord.readRecord(payload, offset)) != null) {
-      if (recordNumber == 0 && !ndefRecord.isMessageBegin()) {
-        return null;
-      }
-      String type = ndefRecord.getType();
-      if (NDEFRecord.TEXT_WELL_KNOWN_TYPE.equals(type)) {
-        String[] languageText = NDEFTextParsedResult.decodeTextPayload(ndefRecord.getPayload());
-        smartPosterParsedResult.title = languageText[1];
-      } else if (NDEFRecord.URI_WELL_KNOWN_TYPE.equals(type)) {
-        smartPosterParsedResult.uri = NDEFURIParsedResult.decodeURIPayload(ndefRecord.getPayload());
-      } else if (NDEFRecord.ACTION_WELL_KNOWN_TYPE.equals(type)) {
-        smartPosterParsedResult.action = ndefRecord.getPayload()[0];
-      }
-      recordNumber++;
-      offset += ndefRecord.getTotalRecordLength();
-    }
-    
-    if (recordNumber == 0 || (ndefRecord != null && !ndefRecord.isMessageEnd())) {
-      return null;
-    }
-
-    return smartPosterParsedResult;
+  NDEFSmartPosterParsedResult(int action, String uri, String title) {
+    super(ParsedResultType.NDEF_SMART_POSTER);
+    this.action = action;
+    this.uri = uri;
+    this.title = title;
   }
 
   public String getTitle() {

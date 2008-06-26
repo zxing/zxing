@@ -17,15 +17,15 @@
 package com.google.zxing.client.result.optional;
 
 import com.google.zxing.Result;
-import com.google.zxing.client.result.ParsedReaderResultType;
+import com.google.zxing.client.result.URIParsedResult;
 
 /**
  * Recognizes an NDEF message that encodes a URI according to the
  * "URI Record Type Definition" specification.
- * 
+ *
  * @author srowen@google.com (Sean Owen)
  */
-public final class NDEFURIParsedResult extends AbstractNDEFParsedResult {
+public final class NDEFURIResultParser extends AbstractNDEFResultParser {
 
   private static final String[] URI_PREFIXES = {
       null,
@@ -66,14 +66,7 @@ public final class NDEFURIParsedResult extends AbstractNDEFParsedResult {
       "urn:nfc:",
   };
 
-  private final String uri;
-
-  private NDEFURIParsedResult(String uri) {
-    super(ParsedReaderResultType.NDEF_URI);
-    this.uri = uri;
-  }
-
-  public static NDEFURIParsedResult parse(Result result) {
+  public static URIParsedResult parse(Result result) {
     byte[] bytes = result.getRawBytes();
     if (bytes == null) {
       return null;
@@ -86,7 +79,7 @@ public final class NDEFURIParsedResult extends AbstractNDEFParsedResult {
       return null;
     }
     String fullURI = decodeURIPayload(ndefRecord.getPayload());
-    return new NDEFURIParsedResult(fullURI);
+    return new URIParsedResult(fullURI, null);
   }
 
   static String decodeURIPayload(byte[] payload) {
@@ -97,14 +90,6 @@ public final class NDEFURIParsedResult extends AbstractNDEFParsedResult {
     }
     String restOfURI = bytesToString(payload, 1, payload.length - 1, "UTF8");
     return prefix == null ? restOfURI : prefix + restOfURI;
-  }
-
-  public String getURI() {
-    return uri;
-  }
-
-  public String getDisplayResult() {
-    return uri;
   }
 
 }

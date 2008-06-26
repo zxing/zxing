@@ -16,8 +16,7 @@
 
 package com.google.zxing.client.result.optional;
 
-import com.google.zxing.client.result.ParsedReaderResult;
-import com.google.zxing.client.result.ParsedReaderResultType;
+import com.google.zxing.client.result.ResultParser;
 
 import java.io.UnsupportedEncodingException;
 
@@ -31,11 +30,7 @@ import java.io.UnsupportedEncodingException;
  *
  * @author srowen@google.com (Sean Owen)
  */
-abstract class AbstractNDEFParsedResult extends ParsedReaderResult {
-
-  AbstractNDEFParsedResult(ParsedReaderResultType type) {
-    super(type);
-  }
+abstract class AbstractNDEFResultParser extends ResultParser {
 
   static String bytesToString(byte[] bytes, int offset, int length, String encoding) {
     try {

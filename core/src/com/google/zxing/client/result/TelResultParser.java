@@ -19,38 +19,29 @@ package com.google.zxing.client.result;
 import com.google.zxing.Result;
 
 /**
- * Represents a "SMSTO:" result, which specifies a number to SMS.
+ * Parses a "tel:" URI result, which specifies a phone number.
  *
  * @author srowen@google.com (Sean Owen)
  */
-public final class SMSTOParsedResult extends ParsedReaderResult {
+public final class TelResultParser extends ResultParser {
 
-  private final String number;
-
-  private SMSTOParsedResult(String number) {
-    super(ParsedReaderResultType.SMSTO);
-    this.number = number;
+  private TelResultParser() {
   }
 
-  public static SMSTOParsedResult parse(Result result) {
+  public static TelParsedResult parse(Result result) {
     String rawText = result.getText();
-    if (rawText == null || !rawText.startsWith("SMSTO:")) {
+    if (rawText == null || !rawText.startsWith("tel:")) {
       return null;
     }
-    String number = rawText.substring(6);
-    return new SMSTOParsedResult(number);
-  }
-
-  public String getNumber() {
-    return number;
-  }
-
-  public String getDisplayResult() {
-    return number;
-  }
-
-  public String getSMSURI() {
-    return "sms:" + number;
+    String telURI = rawText;
+    // Drop tel, query portion
+    int queryStart = rawText.indexOf('?', 4);
+    if (queryStart < 0) {
+      rawText = rawText.substring(4);
+    } else {
+      rawText = rawText.substring(4, queryStart);
+    }
+    return new TelParsedResult(rawText, telURI, null);
   }
 
 }

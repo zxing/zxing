@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 ZXing authors
+ * Copyright 2008 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,33 +16,25 @@
 
 package com.google.zxing.client.result;
 
+import com.google.zxing.Result;
+
 /**
- * A simple result type encapsulating a string that has no further
- * interpretation.
- * 
+ * Parses an "SMSTO:" result, which specifies a number to SMS.
+ *
  * @author srowen@google.com (Sean Owen)
  */
-public final class TextParsedResult extends ParsedResult {
+public final class SMSTOResultParser extends ResultParser {
 
-  private final String text;
-  private final String language;
-
-  public TextParsedResult(String text, String language) {
-    super(ParsedResultType.TEXT);
-    this.text = text;
-    this.language = language;
+  private SMSTOResultParser() {
   }
 
-  public String getText() {
-    return text;
-  }
-
-  public String getLanguage() {
-    return language;
-  }
-
-  public String getDisplayResult() {
-    return text;
+  public static SMSParsedResult parse(Result result) {
+    String rawText = result.getText();
+    if (rawText == null || !rawText.startsWith("SMSTO:")) {
+      return null;
+    }
+    String number = rawText.substring(6);
+    return new SMSParsedResult("sms:" + number, number, null, null, null, null);
   }
 
 }

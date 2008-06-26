@@ -21,20 +21,15 @@ import android.net.Uri;
 import android.provider.Contacts;
 import android.view.View;
 import android.widget.Button;
-import com.google.zxing.client.result.AddressBookAUParsedResult;
-import com.google.zxing.client.result.AddressBookDoCoMoParsedResult;
-import com.google.zxing.client.result.BookmarkDoCoMoParsedResult;
+import com.google.zxing.client.result.AddressBookParsedResult;
 import com.google.zxing.client.result.EmailAddressParsedResult;
-import com.google.zxing.client.result.EmailDoCoMoParsedResult;
 import com.google.zxing.client.result.GeoParsedResult;
-import com.google.zxing.client.result.ParsedReaderResult;
-import com.google.zxing.client.result.ParsedReaderResultType;
+import com.google.zxing.client.result.ParsedResult;
+import com.google.zxing.client.result.ParsedResultType;
 import com.google.zxing.client.result.SMSParsedResult;
-import com.google.zxing.client.result.SMSTOParsedResult;
 import com.google.zxing.client.result.TelParsedResult;
 import com.google.zxing.client.result.UPCParsedResult;
 import com.google.zxing.client.result.URIParsedResult;
-import com.google.zxing.client.result.URLTOParsedResult;
 
 /**
  * Handles the result of barcode decoding in the context of the Android platform,
@@ -48,65 +43,44 @@ final class ResultHandler implements Button.OnClickListener {
   private final Intent intent;
   private final BarcodeReaderCaptureActivity captureActivity;
 
-  ResultHandler(BarcodeReaderCaptureActivity captureActivity, ParsedReaderResult result) {
+  ResultHandler(BarcodeReaderCaptureActivity captureActivity, ParsedResult result) {
     this.captureActivity = captureActivity;
     this.intent = resultToIntent(result);
   }
 
-  private static Intent resultToIntent(ParsedReaderResult result) {
+  private static Intent resultToIntent(ParsedResult result) {
     Intent intent = null;
-    ParsedReaderResultType type = result.getType();
-    if (type.equals(ParsedReaderResultType.ADDRESSBOOK)) {
-      AddressBookDoCoMoParsedResult addressResult = (AddressBookDoCoMoParsedResult) result;
-      intent = new Intent(Contacts.Intents.Insert.ACTION, Contacts.People.CONTENT_URI);
-      putExtra(intent, Contacts.Intents.Insert.NAME, addressResult.getName());
-      putExtra(intent, Contacts.Intents.Insert.PHONE, addressResult.getPhoneNumbers());
-      putExtra(intent, Contacts.Intents.Insert.EMAIL, addressResult.getEmail());
-      putExtra(intent, Contacts.Intents.Insert.NOTES, addressResult.getNote());
-      putExtra(intent, Contacts.Intents.Insert.POSTAL, addressResult.getAddress());
-    } else if (type.equals(ParsedReaderResultType.ADDRESSBOOK_AU)) {
-      AddressBookAUParsedResult addressResult = (AddressBookAUParsedResult) result;
+    ParsedResultType type = result.getType();
+    if (type.equals(ParsedResultType.ADDRESSBOOK)) {
+      AddressBookParsedResult addressResult = (AddressBookParsedResult) result;
       intent = new Intent(Contacts.Intents.Insert.ACTION, Contacts.People.CONTENT_URI);
       putExtra(intent, Contacts.Intents.Insert.NAME, addressResult.getNames());
       putExtra(intent, Contacts.Intents.Insert.PHONE, addressResult.getPhoneNumbers());
       putExtra(intent, Contacts.Intents.Insert.EMAIL, addressResult.getEmails());
       putExtra(intent, Contacts.Intents.Insert.NOTES, addressResult.getNote());
       putExtra(intent, Contacts.Intents.Insert.POSTAL, addressResult.getAddress());
-    } else if (type.equals(ParsedReaderResultType.BOOKMARK)) {
-      // For now, we can only open the browser, and not actually add a bookmark
-      intent = new Intent(Intent.VIEW_ACTION, Uri.parse(((BookmarkDoCoMoParsedResult) result).getURI()));
-    } else if (type.equals(ParsedReaderResultType.URLTO)) {
-      intent = new Intent(Intent.VIEW_ACTION, Uri.parse(((URLTOParsedResult) result).getURI()));
-    } else if (type.equals(ParsedReaderResultType.EMAIL)) {
-      EmailDoCoMoParsedResult emailResult = (EmailDoCoMoParsedResult) result;
-      intent = new Intent(Intent.SENDTO_ACTION, Uri.parse(emailResult.getMailtoURI()));
-      putExtra(intent, "subject", emailResult.getSubject());
-      putExtra(intent, "body", emailResult.getBody());
-    } else if (type.equals(ParsedReaderResultType.EMAIL_ADDRESS)) {
+    } else if (type.equals(ParsedResultType.EMAIL_ADDRESS)) {
       EmailAddressParsedResult emailResult = (EmailAddressParsedResult) result;
       intent = new Intent(Intent.SENDTO_ACTION, Uri.parse(emailResult.getMailtoURI()));
       putExtra(intent, "subject", emailResult.getSubject());
       putExtra(intent, "body", emailResult.getBody());
-    } else if (type.equals(ParsedReaderResultType.SMS)) {
+    } else if (type.equals(ParsedResultType.SMS)) {
       SMSParsedResult smsResult = (SMSParsedResult) result;
       intent = new Intent(Intent.SENDTO_ACTION, Uri.parse(smsResult.getSMSURI()));
-    } else if (type.equals(ParsedReaderResultType.SMSTO)) {
-      SMSTOParsedResult smsToResult = (SMSTOParsedResult) result;
-      intent = new Intent(Intent.SENDTO_ACTION, Uri.parse(smsToResult.getSMSURI()));
-    } else if (type.equals(ParsedReaderResultType.TEL)) {
+    } else if (type.equals(ParsedResultType.TEL)) {
       TelParsedResult telResult = (TelParsedResult) result;
       intent = new Intent(Intent.DIAL_ACTION, Uri.parse(telResult.getTelURI()));
-    } else if (type.equals(ParsedReaderResultType.GEO)) {
+    } else if (type.equals(ParsedResultType.GEO)) {
       GeoParsedResult geoResult = (GeoParsedResult) result;
       intent = new Intent(Intent.VIEW_ACTION, Uri.parse(geoResult.getGeoURI()));
-    } else if (type.equals(ParsedReaderResultType.UPC)) {
+    } else if (type.equals(ParsedResultType.UPC)) {
       UPCParsedResult upcResult = (UPCParsedResult) result;
       Uri uri = Uri.parse("http://www.upcdatabase.com/item.asp?upc=" + upcResult.getUPC());
       intent = new Intent(Intent.VIEW_ACTION, uri);
-    } else if (type.equals(ParsedReaderResultType.URI)) {
+    } else if (type.equals(ParsedResultType.URI)) {
       URIParsedResult uriResult = (URIParsedResult) result;
       intent = new Intent(Intent.VIEW_ACTION, Uri.parse(uriResult.getURI()));
-    } else if (type.equals(ParsedReaderResultType.ANDROID_INTENT)) {
+    } else if (type.equals(ParsedResultType.ANDROID_INTENT)) {
       intent = ((AndroidIntentParsedResult) result).getIntent();
     }
     return intent;

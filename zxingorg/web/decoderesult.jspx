@@ -23,7 +23,7 @@
   <jsp:directive.page contentType="application/xhtml+xml" session="false"/>
   <jsp:scriptlet>response.setHeader("Cache-Control", "no-cache");</jsp:scriptlet>
   <jsp:useBean id="result" scope="request" type="com.google.zxing.Result"/>
-  <jsp:useBean id="parsedReaderResult" scope="request" type="com.google.zxing.client.result.ParsedReaderResult"/>
+  <jsp:useBean id="parsedResult" scope="request" type="com.google.zxing.client.result.ParsedResult"/>
   <jsp:useBean id="rawBytesString" scope="request" type="java.lang.String"/>
   <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
     <head>

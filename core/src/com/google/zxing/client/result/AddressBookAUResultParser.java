@@ -28,24 +28,9 @@ import java.util.Vector;
  *
  * @author srowen@google.com (Sean Owen)
  */
-public final class AddressBookAUParsedResult extends ParsedReaderResult {
+public final class AddressBookAUResultParser extends ResultParser {
 
-  private final String[] names;
-  private final String[] phoneNumbers;
-  private final String[] emails;
-  private final String note;
-  private final String address;
-
-  private AddressBookAUParsedResult(String[] names, String[] phoneNumbers, String[] emails, String note, String address) {
-    super(ParsedReaderResultType.ADDRESSBOOK_AU);
-    this.names = names;
-    this.phoneNumbers = phoneNumbers;
-    this.emails = emails;
-    this.note = note;
-    this.address = address;
-  }
-
-  public static AddressBookAUParsedResult parse(Result result) {
+  public static AddressBookParsedResult parse(Result result) {
     String rawText = result.getText();
     // MEMORY is mandatory; seems like a decent indicator, as does end-of-record separator CR/LF
     if (rawText == null || rawText.indexOf("MEMORY") < 0 || rawText.indexOf("\r\n") < 0) {
@@ -54,15 +39,15 @@ public final class AddressBookAUParsedResult extends ParsedReaderResult {
     String[] names = matchMultipleValuePrefix("NAME", 2, rawText);
     String[] phoneNumbers = matchMultipleValuePrefix("TEL", 3, rawText);
     String[] emails = matchMultipleValuePrefix("MAIL", 3, rawText);
-    String note = AbstractDoCoMoParsedResult.matchSinglePrefixedField("MEMORY:", rawText, '\r');
-    String address = AbstractDoCoMoParsedResult.matchSinglePrefixedField("ADD:", rawText, '\r');
-    return new AddressBookAUParsedResult(names, phoneNumbers, emails, note, address);
+    String note = AbstractDoCoMoResultParser.matchSinglePrefixedField("MEMORY:", rawText, '\r');
+    String address = AbstractDoCoMoResultParser.matchSinglePrefixedField("ADD:", rawText, '\r');
+    return new AddressBookParsedResult(names, phoneNumbers, emails, note, address, null, null, null);
   }
 
   private static String[] matchMultipleValuePrefix(String prefix, int max, String rawText) {
     Vector values = null;
     for (int i = 1; i <= max; i++) {
-      String value = AbstractDoCoMoParsedResult.matchSinglePrefixedField(prefix + i + ':', rawText, '\r');
+      String value = AbstractDoCoMoResultParser.matchSinglePrefixedField(prefix + i + ':', rawText, '\r');
       if (value == null) {
         break;
       }
@@ -81,34 +66,5 @@ public final class AddressBookAUParsedResult extends ParsedReaderResult {
     return result;
   }
 
-  public String[] getNames() {
-    return names;
-  }
-
-  public String[] getPhoneNumbers() {
-    return phoneNumbers;
-  }
-
-  public String[] getEmails() {
-    return emails;
-  }
-
-  public String getNote() {
-    return note;
-  }
-
-  public String getAddress() {
-    return address;
-  }
-
-  public String getDisplayResult() {
-    StringBuffer result = new StringBuffer();
-    AbstractDoCoMoParsedResult.maybeAppend(names, result);
-    AbstractDoCoMoParsedResult.maybeAppend(emails, result);
-    AbstractDoCoMoParsedResult.maybeAppend(address, result);
-    AbstractDoCoMoParsedResult.maybeAppend(phoneNumbers, result);
-    AbstractDoCoMoParsedResult.maybeAppend(note, result);
-    return result.toString();
-  }
 
 }

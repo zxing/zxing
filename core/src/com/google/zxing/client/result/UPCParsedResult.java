@@ -16,44 +16,16 @@
 
 package com.google.zxing.client.result;
 
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.Result;
-
 /**
  * @author dswitkin@google.com (Daniel Switkin)
  */
-public final class UPCParsedResult extends ParsedReaderResult {
+public final class UPCParsedResult extends ParsedResult {
 
   private final String upc;
 
-  private UPCParsedResult(String upc) {
-    super(ParsedReaderResultType.UPC);
+  UPCParsedResult(String upc) {
+    super(ParsedResultType.UPC);
     this.upc = upc;
-  }
-
-  // Treat all UPC and EAN variants as UPCs, in the sense that they are all product barcodes.
-  public static UPCParsedResult parse(Result result) {
-    BarcodeFormat format = result.getBarcodeFormat();
-    if (!BarcodeFormat.UPC_A.equals(format) && !BarcodeFormat.UPC_E.equals(format) &&
-        !BarcodeFormat.EAN_8.equals(format) && !BarcodeFormat.EAN_13.equals(format)) {
-      return null;
-    }
-    String rawText = result.getText();
-    if (rawText == null) {
-      return null;
-    }
-    int length = rawText.length();
-    if (length != 12 && length != 13) {
-      return null;
-    }
-    for (int x = 0; x < length; x++) {
-      char c = rawText.charAt(x);
-      if (c < '0' || c > '9') {
-        return null;
-      }
-    }
-    // Not actually checking the checkusm again here
-    return new UPCParsedResult(rawText);
   }
 
   public String getUPC() {

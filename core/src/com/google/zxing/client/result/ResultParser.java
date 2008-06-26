@@ -23,7 +23,7 @@ import java.util.Hashtable;
 /**
  * <p>Abstract class representing the result of decoding a barcode, as more than
  * a String -- as some type of structured data. This might be a subclass which represents
- * a URL, or an e-mail address. {@link #parseReaderResult(Result)} will turn a raw
+ * a URL, or an e-mail address. {@link #parseReaderResult(com.google.zxing.Result)} will turn a raw
  * decoded string into the most appropriate type of structured representation.</p>
  *
  * <p>Thanks to Jeff Griffin for proposing rewrite of these classes that relies less
@@ -31,61 +31,54 @@ import java.util.Hashtable;
  *
  * @author srowen@google.com (Sean Owen)
  */
-public abstract class ParsedReaderResult {
+public abstract class ResultParser {
 
-  private final ParsedReaderResultType type;
-
-  protected ParsedReaderResult(ParsedReaderResultType type) {
-    this.type = type;
-  }
-
-  public ParsedReaderResultType getType() {
-    return type;
-  }
-
-  public abstract String getDisplayResult();
-
-  public static ParsedReaderResult parseReaderResult(Result theResult) {
+  public static ParsedResult parseReaderResult(Result theResult) {
     // This is a bit messy, but given limited options in MIDP / CLDC, this may well be the simplest
     // way to go about this. For example, we have no reflection available, really.
     // Order is important here.
-    ParsedReaderResult result;
-    if ((result = BookmarkDoCoMoParsedResult.parse(theResult)) != null) {
+    ParsedResult result;
+    if ((result = BookmarkDoCoMoResultParser.parse(theResult)) != null) {
       return result;
-    } else if ((result = AddressBookDoCoMoParsedResult.parse(theResult)) != null) {
+    } else if ((result = AddressBookDoCoMoResultParser.parse(theResult)) != null) {
       return result;
-    } else if ((result = EmailDoCoMoParsedResult.parse(theResult)) != null) {
+    } else if ((result = EmailDoCoMoResultParser.parse(theResult)) != null) {
       return result;
-    } else if ((result = EmailAddressParsedResult.parse(theResult)) != null) {
+    } else if ((result = EmailAddressResultParser.parse(theResult)) != null) {
       return result;
-    } else if ((result = AddressBookAUParsedResult.parse(theResult)) != null) {
+    } else if ((result = AddressBookAUResultParser.parse(theResult)) != null) {
       return result;
-    } else if ((result = TelParsedResult.parse(theResult)) != null) {
+    } else if ((result = TelResultParser.parse(theResult)) != null) {
       return result;
-    } else if ((result = SMSParsedResult.parse(theResult)) != null) {
+    } else if ((result = SMSResultParser.parse(theResult)) != null) {
       return result;
-    } else if ((result = SMSTOParsedResult.parse(theResult)) != null) {
+    } else if ((result = SMSTOResultParser.parse(theResult)) != null) {
       return result;
-    } else if ((result = GeoParsedResult.parse(theResult)) != null) {
+    } else if ((result = GeoResultParser.parse(theResult)) != null) {
       return result;
-    } else if ((result = URLTOParsedResult.parse(theResult)) != null) {
+    } else if ((result = URLTOResultParser.parse(theResult)) != null) {
       return result;
-    } else if ((result = URIParsedResult.parse(theResult)) != null) {
+    } else if ((result = URIResultParser.parse(theResult)) != null) {
       return result;
-    } else if ((result = UPCParsedResult.parse(theResult)) != null) {
+    } else if ((result = UPCResultParser.parse(theResult)) != null) {
       return result;
     }
-    return TextParsedResult.parse(theResult);
-  }
-
-  public String toString() {
-    return getDisplayResult();
+    return new TextParsedResult(theResult.getText(), null);
   }
 
   protected static void maybeAppend(String value, StringBuffer result) {
     if (value != null) {
       result.append('\n');
       result.append(value);
+    }
+  }
+
+  protected static void maybeAppend(String[] value, StringBuffer result) {
+    if (value != null) {
+      for (int i = 0; i < value.length; i++) {
+        result.append('\n');
+        result.append(value[i]);
+      }
     }
   }
 

@@ -16,38 +16,20 @@
 
 package com.google.zxing.client.result;
 
-import com.google.zxing.Result;
-
 /**
- * Represents a "tel:" URI result, which specifies a phone number.
- *
  * @author srowen@google.com (Sean Owen)
  */
-public final class TelParsedResult extends ParsedReaderResult {
+public final class TelParsedResult extends ParsedResult {
 
   private final String number;
   private final String telURI;
+  private final String title;
 
-  private TelParsedResult(String number, String telURI) {
-    super(ParsedReaderResultType.TEL);
+  public TelParsedResult(String number, String telURI, String title) {
+    super(ParsedResultType.TEL);
     this.number = number;
     this.telURI = telURI;
-  }
-
-  public static TelParsedResult parse(Result result) {
-    String rawText = result.getText();
-    if (rawText == null || !rawText.startsWith("tel:")) {
-      return null;
-    }
-    String telURI = rawText;
-    // Drop tel, query portion
-    int queryStart = rawText.indexOf('?', 4);
-    if (queryStart < 0) {
-      rawText = rawText.substring(4);
-    } else {
-      rawText = rawText.substring(4, queryStart);
-    }
-    return new TelParsedResult(rawText, telURI);
+    this.title = title;
   }
 
   public String getNumber() {
@@ -56,6 +38,10 @@ public final class TelParsedResult extends ParsedReaderResult {
 
   public String getTelURI() {
     return telURI;
+  }
+
+  public String getTitle() {
+    return title;
   }
 
   public String getDisplayResult() {
