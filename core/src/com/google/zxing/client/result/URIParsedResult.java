@@ -16,65 +16,35 @@
 
 package com.google.zxing.client.result;
 
-import com.google.zxing.Result;
-
 /**
  * @author srowen@google.com (Sean Owen)
  */
-public final class URIParsedResult extends ParsedReaderResult {
+public final class URIParsedResult extends ParsedResult {
 
   private final String uri;
+  private final String title;
 
-  private URIParsedResult(String uri) {
-    super(ParsedReaderResultType.URI);
+  public URIParsedResult(String uri, String title) {
+    super(ParsedResultType.URI);
     this.uri = uri;
-  }
-
-  public static URIParsedResult parse(Result result) {
-    String rawText = result.getText();
-    if (!isBasicallyValidURI(rawText)) {
-      return null;
-    }
-    String uri = massagePossibleURI(rawText);
-    return new URIParsedResult(uri);
+    this.title = title;
   }
 
   public String getURI() {
     return uri;
   }
 
+  public String getTitle() {
+    return title;
+  }
+
   public String getDisplayResult() {
-    return uri;
-  }
-
-  /**
-   * Transforms a string that possibly represents a URI into something more proper, by adding or canonicalizing
-   * the protocol.
-   */
-  private static String massagePossibleURI(String uri) {
-    // Take off leading "URL:" if present
-    if (uri.startsWith("URL:")) {
-      uri = uri.substring(4);
-    }
-    int protocolEnd = uri.indexOf(':');
-    if (protocolEnd < 0) {
-      // No protocol, assume http
-      uri = "http://" + uri;
+    if (title == null) {
+      return uri;
     } else {
-      // Lowercase protocol to avoid problems
-      uri = uri.substring(0, protocolEnd).toLowerCase() + uri.substring(protocolEnd);
-      // TODO this logic isn't quite right for URIs like "example.org:443/foo"
+      return title + '\n' + uri;
     }
-    return uri;
   }
 
-  /**
-   * Determines whether a string is not obviously not a URI. This implements crude checks; this class does not
-   * intend to strictly check URIs as its only function is to represent what is in a barcode, but, it does
-   * need to know when a string is obviously not a URI.
-   */
-  static boolean isBasicallyValidURI(String uri) {
-    return uri != null && uri.indexOf(' ') < 0 && (uri.indexOf(':') >= 0 || uri.indexOf('.') >= 0);
-  }
 
 }

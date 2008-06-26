@@ -56,7 +56,7 @@ final class NDEFRecord {
 
     int payloadLength = bytes[offset + 2] & 0xFF;
 
-    String type = AbstractNDEFParsedResult.bytesToString(bytes, offset + 3, typeLength, "US-ASCII");
+    String type = AbstractNDEFResultParser.bytesToString(bytes, offset + 3, typeLength, "US-ASCII");
 
     byte[] payload = new byte[payloadLength];
     System.arraycopy(bytes, offset + 3 + typeLength, payload, 0, payloadLength);

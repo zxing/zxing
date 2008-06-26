@@ -21,89 +21,89 @@ import com.google.zxing.Result;
 import junit.framework.TestCase;
 
 /**
- * Tests {@link ParsedReaderResult}.
+ * Tests {@link ParsedResult}.
  *
  * @author srowen@google.com (Sean Owen)
  */
 public final class ParsedReaderResultTestCase extends TestCase {
 
   public void testTextType() {
-    doTestResult("foo", ParsedReaderResultType.TEXT);
-    doTestResult("", ParsedReaderResultType.TEXT);
-    doTestResult("This is a test", ParsedReaderResultType.TEXT);
+    doTestResult("foo", ParsedResultType.TEXT);
+    doTestResult("", ParsedResultType.TEXT);
+    doTestResult("This is a test", ParsedResultType.TEXT);
   }
 
   public void testBookmarkType() {
-    doTestResult("MEBKM:URL:google.com;;", ParsedReaderResultType.BOOKMARK);
-    doTestResult("MEBKM:URL:google.com;TITLE:Google;;", ParsedReaderResultType.BOOKMARK);
-    doTestResult("MEBKM:TITLE:Google;URL:google.com;;", ParsedReaderResultType.BOOKMARK);
-    doTestResult("MEBKM:URL:http://google.com;;", ParsedReaderResultType.BOOKMARK);
-    doTestResult("MEBKM:URL:HTTPS://google.com;;", ParsedReaderResultType.BOOKMARK);
+    doTestResult("MEBKM:URL:google.com;;", ParsedResultType.URI);
+    doTestResult("MEBKM:URL:google.com;TITLE:Google;;", ParsedResultType.URI);
+    doTestResult("MEBKM:TITLE:Google;URL:google.com;;", ParsedResultType.URI);
+    doTestResult("MEBKM:URL:http://google.com;;", ParsedResultType.URI);
+    doTestResult("MEBKM:URL:HTTPS://google.com;;", ParsedResultType.URI);
   }
 
   public void testURLTOType() {
-    doTestResult("URLTO:foo:bar.com", ParsedReaderResultType.URLTO);
-    doTestResult("URLTO::bar.com", ParsedReaderResultType.URLTO);
-    doTestResult("URLTO::http://bar.com", ParsedReaderResultType.URLTO);
+    doTestResult("URLTO:foo:bar.com", ParsedResultType.URI);
+    doTestResult("URLTO::bar.com", ParsedResultType.URI);
+    doTestResult("URLTO::http://bar.com", ParsedResultType.URI);
   }
 
   public void testEmailType() {
-    doTestResult("MATMSG:TO:srowen@example.org;;", ParsedReaderResultType.EMAIL);
-    doTestResult("MATMSG:TO:srowen@example.org;SUB:Stuff;;", ParsedReaderResultType.EMAIL);
-    doTestResult("MATMSG:TO:srowen@example.org;SUB:Stuff;BODY:This is some text;;", ParsedReaderResultType.EMAIL);
-    doTestResult("MATMSG:SUB:Stuff;BODY:This is some text;TO:srowen@example.org;;", ParsedReaderResultType.EMAIL);
-    doTestResult("TO:srowen@example.org;SUB:Stuff;BODY:This is some text;;", ParsedReaderResultType.TEXT);
+    doTestResult("MATMSG:TO:srowen@example.org;;", ParsedResultType.EMAIL_ADDRESS);
+    doTestResult("MATMSG:TO:srowen@example.org;SUB:Stuff;;", ParsedResultType.EMAIL_ADDRESS);
+    doTestResult("MATMSG:TO:srowen@example.org;SUB:Stuff;BODY:This is some text;;", ParsedResultType.EMAIL_ADDRESS);
+    doTestResult("MATMSG:SUB:Stuff;BODY:This is some text;TO:srowen@example.org;;", ParsedResultType.EMAIL_ADDRESS);
+    doTestResult("TO:srowen@example.org;SUB:Stuff;BODY:This is some text;;", ParsedResultType.TEXT);
   }
 
   public void testEmailAddressType() {
-    doTestResult("srowen@example.org", ParsedReaderResultType.EMAIL_ADDRESS);
-    doTestResult("mailto:srowen@example.org", ParsedReaderResultType.EMAIL_ADDRESS);
-    doTestResult("srowen@example", ParsedReaderResultType.TEXT);
-    doTestResult("srowen", ParsedReaderResultType.TEXT);
-    doTestResult("Let's meet @ 2", ParsedReaderResultType.TEXT);
+    doTestResult("srowen@example.org", ParsedResultType.EMAIL_ADDRESS);
+    doTestResult("mailto:srowen@example.org", ParsedResultType.EMAIL_ADDRESS);
+    doTestResult("srowen@example", ParsedResultType.TEXT);
+    doTestResult("srowen", ParsedResultType.TEXT);
+    doTestResult("Let's meet @ 2", ParsedResultType.TEXT);
   }
 
   public void testAddressBookType() {
-    doTestResult("MECARD:N:Sean Owen;;", ParsedReaderResultType.ADDRESSBOOK);
-    doTestResult("MECARD:TEL:+12125551212;N:Sean Owen;;", ParsedReaderResultType.ADDRESSBOOK);
-    doTestResult("MECARD:TEL:+12125551212;N:Sean Owen;URL:google.com;;", ParsedReaderResultType.ADDRESSBOOK);
-    doTestResult("TEL:+12125551212;N:Sean Owen;;", ParsedReaderResultType.TEXT);
+    doTestResult("MECARD:N:Sean Owen;;", ParsedResultType.ADDRESSBOOK);
+    doTestResult("MECARD:TEL:+12125551212;N:Sean Owen;;", ParsedResultType.ADDRESSBOOK);
+    doTestResult("MECARD:TEL:+12125551212;N:Sean Owen;URL:google.com;;", ParsedResultType.ADDRESSBOOK);
+    doTestResult("TEL:+12125551212;N:Sean Owen;;", ParsedResultType.TEXT);
   }
 
   public void testAddressBookAUType() {
-    doTestResult("MEMORY:\r\n", ParsedReaderResultType.ADDRESSBOOK_AU);
-    doTestResult("MEMORY:foo\r\nNAME1:Sean\r\n", ParsedReaderResultType.ADDRESSBOOK_AU);
-    doTestResult("TEL1:+12125551212\r\nMEMORY:\r\n", ParsedReaderResultType.ADDRESSBOOK_AU);
+    doTestResult("MEMORY:\r\n", ParsedResultType.ADDRESSBOOK);
+    doTestResult("MEMORY:foo\r\nNAME1:Sean\r\n", ParsedResultType.ADDRESSBOOK);
+    doTestResult("TEL1:+12125551212\r\nMEMORY:\r\n", ParsedResultType.ADDRESSBOOK);
   }
 
   public void testUPC() {
-    doTestResult("123456789012", ParsedReaderResultType.UPC, BarcodeFormat.UPC_A);
-    doTestResult("1234567890123", ParsedReaderResultType.UPC, BarcodeFormat.UPC_A);
-    doTestResult("12345678901", ParsedReaderResultType.TEXT);
+    doTestResult("123456789012", ParsedResultType.UPC, BarcodeFormat.UPC_A);
+    doTestResult("1234567890123", ParsedResultType.UPC, BarcodeFormat.UPC_A);
+    doTestResult("12345678901", ParsedResultType.TEXT);
   }
 
   public void testURI() {
-    doTestResult("http://google.com", ParsedReaderResultType.URI);
-    doTestResult("google.com", ParsedReaderResultType.URI);
-    doTestResult("https://google.com", ParsedReaderResultType.URI);
-    doTestResult("HTTP://google.com", ParsedReaderResultType.URI);
-    doTestResult("http://google.com/foobar", ParsedReaderResultType.URI);
-    doTestResult("https://google.com:443/foobar", ParsedReaderResultType.URI);
-    doTestResult("google.com:443/foobar", ParsedReaderResultType.URI);
+    doTestResult("http://google.com", ParsedResultType.URI);
+    doTestResult("google.com", ParsedResultType.URI);
+    doTestResult("https://google.com", ParsedResultType.URI);
+    doTestResult("HTTP://google.com", ParsedResultType.URI);
+    doTestResult("http://google.com/foobar", ParsedResultType.URI);
+    doTestResult("https://google.com:443/foobar", ParsedResultType.URI);
+    doTestResult("google.com:443/foobar", ParsedResultType.URI);
   }
 
   public void testGeo() {
-    doTestResult("geo:1,2", ParsedReaderResultType.GEO);
-    doTestResult("geo:1,2,3", ParsedReaderResultType.GEO);
-    doTestResult("geo:100.33,-32.3344,3.35", ParsedReaderResultType.GEO);
-    doTestResult("geography", ParsedReaderResultType.TEXT);        
+    doTestResult("geo:1,2", ParsedResultType.GEO);
+    doTestResult("geo:1,2,3", ParsedResultType.GEO);
+    doTestResult("geo:100.33,-32.3344,3.35", ParsedResultType.GEO);
+    doTestResult("geography", ParsedResultType.TEXT);
   }
 
   public void testTel() {
-    doTestResult("tel:+15551212", ParsedReaderResultType.TEL);
-    doTestResult("tel:212 555 1212", ParsedReaderResultType.TEL);
-    doTestResult("tel:2125551212", ParsedReaderResultType.TEL);
-    doTestResult("telephone", ParsedReaderResultType.TEXT);
+    doTestResult("tel:+15551212", ParsedResultType.TEL);
+    doTestResult("tel:212 555 1212", ParsedResultType.TEL);
+    doTestResult("tel:2125551212", ParsedResultType.TEL);
+    doTestResult("telephone", ParsedResultType.TEXT);
   }
 
   /*
@@ -111,14 +111,14 @@ public final class ParsedReaderResultTestCase extends TestCase {
     doTestResult(new byte[] {(byte)0xD1,(byte)0x01,(byte)0x05,(byte)0x54,
                              (byte)0x02,(byte)0x65,(byte)0x6E,(byte)0x68,
                              (byte)0x69},
-                 ParsedReaderResultType.NDEF_TEXT);
+                 ParsedResultType.NDEF_TEXT);
   }
 
   public void testNDEFURI() {
     doTestResult(new byte[] {(byte)0xD1,(byte)0x01,(byte)0x08,(byte)0x55,
                              (byte)0x01,(byte)0x6E,(byte)0x66,(byte)0x63,
                              (byte)0x2E,(byte)0x63,(byte)0x6F,(byte)0x6D},
-                 ParsedReaderResultType.NDEF_URI);
+                 ParsedResultType.NDEF_URI);
   }
 
   public void testNDEFSmartPoster() {
@@ -135,24 +135,24 @@ public final class ParsedReaderResultTestCase extends TestCase {
                              (byte)0x48,(byte)0x65,(byte)0x6C,(byte)0x6C,
                              (byte)0x6F,(byte)0x2C,(byte)0x20,(byte)0x77,
                              (byte)0x6F,(byte)0x72,(byte)0x6C,(byte)0x64},
-                 ParsedReaderResultType.NDEF_SMART_POSTER);
+                 ParsedResultType.NDEF_SMART_POSTER);
   }
    */
 
-  private static void doTestResult(String text, ParsedReaderResultType type) {
+  private static void doTestResult(String text, ParsedResultType type) {
     doTestResult(text, type, null);
   }
 
-  private static void doTestResult(String text, ParsedReaderResultType type, BarcodeFormat format) {
+  private static void doTestResult(String text, ParsedResultType type, BarcodeFormat format) {
     Result fakeResult = new Result(text, null, null, format);
-    ParsedReaderResult result = ParsedReaderResult.parseReaderResult(fakeResult);
+    ParsedResult result = ResultParser.parseReaderResult(fakeResult);
     assertNotNull(result);
     assertEquals(type, result.getType());
   }
 
-  private static void doTestResult(byte[] rawBytes, ParsedReaderResultType type) {
+  private static void doTestResult(byte[] rawBytes, ParsedResultType type) {
     Result fakeResult = new Result(null, rawBytes, null, null);
-    ParsedReaderResult result = ParsedReaderResult.parseReaderResult(fakeResult);
+    ParsedResult result = ResultParser.parseReaderResult(fakeResult);
     assertNotNull(result);
     assertEquals(type, result.getType());
   }

@@ -17,23 +17,23 @@
 package com.google.zxing.client.android;
 
 import android.content.Intent;
-import com.google.zxing.client.result.ParsedReaderResult;
-import com.google.zxing.client.result.ParsedReaderResultType;
+import com.google.zxing.client.result.ParsedResult;
+import com.google.zxing.client.result.ParsedResultType;
 
 import java.net.URISyntaxException;
 
 /**
- * A {@link ParsedReaderResult} derived from a URI that encodes an Android
+ * A {@link com.google.zxing.client.result.ParsedResult} derived from a URI that encodes an Android
  * {@link Intent}, and which should presumably trigger that intent on Android.
  *
  * @author srowen@google.com (Sean Owen)
  */
-public final class AndroidIntentParsedResult extends ParsedReaderResult {
+public final class AndroidIntentParsedResult extends ParsedResult {
 
   private final Intent intent;
 
   private AndroidIntentParsedResult(Intent intent) {
-    super(ParsedReaderResultType.ANDROID_INTENT);
+    super(ParsedResultType.ANDROID_INTENT);
     this.intent = intent;
   }
 

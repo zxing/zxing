@@ -16,57 +16,26 @@
 
 package com.google.zxing.client.result;
 
-import com.google.zxing.Result;
-
 /**
- * Represents a "sms:" URI result, which specifies a number to SMS and optional
- * "via" number. See <a href="http://gbiv.com/protocols/uri/drafts/draft-antti-gsm-sms-url-04.txt">
- * the IETF draft</a> on this.
- *
  * @author srowen@google.com (Sean Owen)
  */
-public final class SMSParsedResult extends ParsedReaderResult {
+public final class SMSParsedResult extends ParsedResult {
 
   private final String smsURI;
   private final String number;
   private final String via;
+  private final String subject;
+  private final String body;
+  private final String title;
 
-  private SMSParsedResult(String smsURI, String number, String via) {
-    super(ParsedReaderResultType.SMS);
+  public SMSParsedResult(String smsURI, String number, String via, String subject, String body, String title) {
+    super(ParsedResultType.SMS);
     this.smsURI = smsURI;
     this.number = number;
     this.via = via;
-  }
-
-  public static SMSParsedResult parse(Result result) {
-    String rawText = result.getText();
-    if (rawText == null || !rawText.startsWith("sms:")) {
-      return null;
-    }
-    // Drop sms, query portion
-    int queryStart = rawText.indexOf('?', 4);
-    String smsURIWithoutQuery;
-    if (queryStart < 0) {
-      smsURIWithoutQuery = rawText.substring(4);
-    } else {
-      smsURIWithoutQuery = rawText.substring(4, queryStart);
-    }
-    int numberEnd = smsURIWithoutQuery.indexOf(';');
-    String number;
-    String via;
-    if (numberEnd < 0) {
-      number = smsURIWithoutQuery;
-      via = null;
-    } else {
-      number = smsURIWithoutQuery.substring(0, numberEnd);
-      String maybeVia = smsURIWithoutQuery.substring(numberEnd + 1);
-      if (maybeVia.startsWith("via=")) {
-        via = maybeVia.substring(4);
-      } else {
-        via = null;
-      }
-    }
-    return new SMSParsedResult(rawText, number, via);
+    this.subject = subject;
+    this.body = body;
+    this.title = title;
   }
 
   public String getSMSURI() {
@@ -79,6 +48,18 @@ public final class SMSParsedResult extends ParsedReaderResult {
 
   public String getVia() {
     return via;
+  }
+
+  public String getSubject() {
+    return subject;
+  }
+
+  public String getBody() {
+    return body;
+  }
+
+  public String getTitle() {
+    return title;
   }
 
   public String getDisplayResult() {

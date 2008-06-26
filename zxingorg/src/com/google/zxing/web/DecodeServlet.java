@@ -22,7 +22,8 @@ import com.google.zxing.Reader;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 import com.google.zxing.client.j2se.BufferedImageMonochromeBitmapSource;
-import com.google.zxing.client.result.ParsedReaderResult;
+import com.google.zxing.client.result.ParsedResult;
+import com.google.zxing.client.result.ResultParser;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -243,8 +244,8 @@ public final class DecodeServlet extends HttpServlet {
       } else {
         request.setAttribute("rawBytesString", "(Not applicable)");
       }
-      ParsedReaderResult parsedReaderResult = ParsedReaderResult.parseReaderResult(result);
-      request.setAttribute("parsedReaderResult", parsedReaderResult);
+      ParsedResult parsedResult = ResultParser.parseReaderResult(result);
+      request.setAttribute("parsedResult", parsedResult);
       request.getRequestDispatcher("decoderesult.jspx").forward(request, response);
     }
   }

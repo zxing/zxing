@@ -18,28 +18,19 @@ package com.google.zxing.client.result.optional;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
-import com.google.zxing.client.result.ParsedReaderResultType;
+import com.google.zxing.client.result.TelParsedResult;
 
 /**
  * <p>Represents a "TEL" result encoded according to section 4.4 of the
  * MobileTag Reader International Specification.</p>
- * 
+ *
  * @author srowen@google.com (Sean Owen)
  */
-public final class MobileTagTelParsedResult extends AbstractMobileTagParsedResult {
+public final class MobileTagTelResultParser extends AbstractMobileTagResultParser {
 
   public static final String SERVICE_TYPE = "01";
 
-  private final String number;
-  private final String title;
-
-  private MobileTagTelParsedResult(String number, String title) {
-    super(ParsedReaderResultType.MOBILETAG_TEL);
-    this.number = number;
-    this.title = title;
-  }
-
-  public static MobileTagTelParsedResult parse(Result result) {
+  public static TelParsedResult parse(Result result) {
     if (!result.getBarcodeFormat().equals(BarcodeFormat.DATAMATRIX)) {
       return null;
     }
@@ -55,23 +46,7 @@ public final class MobileTagTelParsedResult extends AbstractMobileTagParsedResul
     String number = matches[0];
     String title = matches[1];
 
-    return new MobileTagTelParsedResult(number, title);
-  }
-
-  public String getNumber() {
-    return number;
-  }
-
-  public String getTitle() {
-    return title;
-  }
-
-  public String getDisplayResult() {
-    if (title == null) {
-      return number;
-    } else {
-      return title + '\n' + number;
-    }
+    return new TelParsedResult(number, "tel:" + number, title);
   }
 
 }

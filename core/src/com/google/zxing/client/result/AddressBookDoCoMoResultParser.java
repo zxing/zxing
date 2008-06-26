@@ -28,24 +28,9 @@ import com.google.zxing.Result;
  *
  * @author srowen@google.com (Sean Owen)
  */
-public final class AddressBookDoCoMoParsedResult extends AbstractDoCoMoParsedResult {
+public final class AddressBookDoCoMoResultParser extends AbstractDoCoMoResultParser {
 
-  private final String name;
-  private final String[] phoneNumbers;
-  private final String email;
-  private final String note;
-  private final String address;
-
-  private AddressBookDoCoMoParsedResult(String name, String[] phoneNumbers, String email, String note, String address) {
-    super(ParsedReaderResultType.ADDRESSBOOK);
-    this.name = name;
-    this.phoneNumbers = phoneNumbers;
-    this.email = email;
-    this.note = note;
-    this.address = address;
-  }
-
-  public static AddressBookDoCoMoParsedResult parse(Result result) {
+  public static AddressBookParsedResult parse(Result result) {
     String rawText = result.getText();
     if (rawText == null || !rawText.startsWith("MECARD:")) {
       return null;
@@ -59,36 +44,14 @@ public final class AddressBookDoCoMoParsedResult extends AbstractDoCoMoParsedRes
     String email = matchSinglePrefixedField("EMAIL:", rawText);
     String note = matchSinglePrefixedField("NOTE:", rawText);
     String address = matchSinglePrefixedField("ADR:", rawText);
-    return new AddressBookDoCoMoParsedResult(name, phoneNumbers, email, note, address);
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public String[] getPhoneNumbers() {
-    return phoneNumbers;
-  }
-
-  public String getEmail() {
-    return email;
-  }
-
-  public String getNote() {
-    return note;
-  }
-
-  public String getAddress() {
-    return address;
-  }
-
-  public String getDisplayResult() {
-    StringBuffer result = new StringBuffer(name);
-    maybeAppend(email, result);
-    maybeAppend(address, result);
-    maybeAppend(phoneNumbers, result);
-    maybeAppend(note, result);
-    return result.toString();
+    return new AddressBookParsedResult(new String[] {name},
+                                       phoneNumbers,
+                                       new String[] {email},
+                                       note,
+                                       address,
+                                       null,
+                                       null,
+                                       null);
   }
 
   private static String parseName(String name) {

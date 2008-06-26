@@ -17,7 +17,7 @@
 package com.google.zxing.client.result.optional;
 
 import com.google.zxing.Result;
-import com.google.zxing.client.result.ParsedReaderResultType;
+import com.google.zxing.client.result.TextParsedResult;
 
 /**
  * Recognizes an NDEF message that encodes text according to the
@@ -25,18 +25,9 @@ import com.google.zxing.client.result.ParsedReaderResultType;
  *
  * @author srowen@google.com (Sean Owen)
  */
-public final class NDEFTextParsedResult extends AbstractNDEFParsedResult {
+public final class NDEFTextResultParser extends AbstractNDEFResultParser {
 
-  private final String language;
-  private final String text;
-
-  private NDEFTextParsedResult(String language, String text) {
-    super(ParsedReaderResultType.NDEF_TEXT);
-    this.language = language;
-    this.text = text;
-  }
-
-  public static NDEFTextParsedResult parse(Result result) {
+  public static TextParsedResult parse(Result result) {
     byte[] bytes = result.getRawBytes();
     if (bytes == null) {
       return null;
@@ -49,7 +40,7 @@ public final class NDEFTextParsedResult extends AbstractNDEFParsedResult {
       return null;
     }
     String[] languageText = decodeTextPayload(ndefRecord.getPayload());
-    return new NDEFTextParsedResult(languageText[0], languageText[1]);
+    return new TextParsedResult(languageText[0], languageText[1]);
   }
 
   static String[] decodeTextPayload(byte[] payload) {
@@ -61,18 +52,6 @@ public final class NDEFTextParsedResult extends AbstractNDEFParsedResult {
     String encoding = isUTF16 ? "UTF-16" : "UTF8";
     String text = bytesToString(payload, 1 + languageLength, payload.length - languageLength - 1, encoding);
     return new String[] { language, text };
-  }
-
-  public String getLanguage() {
-    return language;
-  }
-
-  public String getText() {
-    return text;
-  }
-
-  public String getDisplayResult() {
-    return text;
   }
 
 }

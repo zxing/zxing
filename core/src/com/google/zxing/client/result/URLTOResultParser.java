@@ -19,24 +19,18 @@ package com.google.zxing.client.result;
 import com.google.zxing.Result;
 
 /**
- * "URLTO" result format, which is of the form "URLTO:[title]:[url]".
+ * Parses the "URLTO" result format, which is of the form "URLTO:[title]:[url]".
  * This seems to be used sometimes, but I am not able to find documentation
  * on its origin or official format?
  *
  * @author srowen@google.com (Sean Owen)
  */
-public final class URLTOParsedResult extends ParsedReaderResult {
+public final class URLTOResultParser {
 
-  private final String title;
-  private final String uri;
-
-  private URLTOParsedResult(String title, String uri) {
-    super(ParsedReaderResultType.URLTO);
-    this.title = title;
-    this.uri = uri;
+  private URLTOResultParser() {
   }
 
-  public static URLTOParsedResult parse(Result result) {
+  public static URIParsedResult parse(Result result) {
     String rawText = result.getText();
     if (rawText == null || !rawText.startsWith("URLTO:")) {
       return null;
@@ -47,23 +41,7 @@ public final class URLTOParsedResult extends ParsedReaderResult {
     }
     String title = rawText.substring(6, titleEnd);
     String uri = rawText.substring(titleEnd + 1);
-    return new URLTOParsedResult(title, uri);
-  }
-
-  public String getTitle() {
-    return title;
-  }
-
-  public String getURI() {
-    return uri;
-  }
-
-  public String getDisplayResult() {
-    if (title == null) {
-      return uri;
-    } else {
-      return title + '\n' + uri;
-    }
+    return new URIParsedResult(uri, title);
   }
 
 }

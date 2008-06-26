@@ -25,20 +25,9 @@ import com.google.zxing.Result;
  *
  * @author srowen@google.com (Sean Owen)
  */
-public final class EmailDoCoMoParsedResult extends AbstractDoCoMoParsedResult {
+public final class EmailDoCoMoResultParser extends AbstractDoCoMoResultParser {
 
-  private final String to;
-  private final String subject;
-  private final String body;
-
-  private EmailDoCoMoParsedResult(String to, String subject, String body) {
-    super(ParsedReaderResultType.EMAIL);
-    this.to = to;
-    this.subject = subject;
-    this.body = body;
-  }
-
-  public static EmailDoCoMoParsedResult parse(Result result) {
+  public static EmailAddressParsedResult parse(Result result) {
     String rawText = result.getText();
     if (rawText == null || !rawText.startsWith("MATMSG:")) {
       return null;
@@ -53,46 +42,7 @@ public final class EmailDoCoMoParsedResult extends AbstractDoCoMoParsedResult {
     }
     String subject = matchSinglePrefixedField("SUB:", rawText);
     String body = matchSinglePrefixedField("BODY:", rawText);
-    return new EmailDoCoMoParsedResult(to, subject, body);
-  }
-
-  public String getTo() {
-    return to;
-  }
-
-  public String getSubject() {
-    return subject;
-  }
-
-  public String getBody() {
-    return body;
-  }
-
-  public String getMailtoURI() {
-    StringBuffer result = new StringBuffer(to);
-    boolean hasParams = false;
-    if (subject != null) {
-      result.append(hasParams ? '&' : '?');
-      hasParams = true;
-      result.append("subject=");
-      result.append(subject);
-      // TODO we need to escape this?
-    }
-    if (body != null) {
-      result.append(hasParams ? '&' : '?');
-      hasParams = true;
-      result.append("body=");
-      result.append(body);
-      // TODO we need to escape this?
-    }
-    return result.toString();
-  }
-
-  public String getDisplayResult() {
-    StringBuffer result = new StringBuffer(to);
-    maybeAppend(subject, result);
-    maybeAppend(body, result);
-    return result.toString();
+    return new EmailAddressParsedResult(to, subject, body, "mailto:" + to);
   }
 
   /**

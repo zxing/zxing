@@ -16,60 +16,22 @@
 
 package com.google.zxing.client.result;
 
-import com.google.zxing.Result;
-
 /**
- * Represents a "geo:" URI result, which specifices a location on the surface of
- * the Earth as well as an optional altitude above the surface. See
- * <a href="http://tools.ietf.org/html/draft-mayrhofer-geo-uri-00">
- * http://tools.ietf.org/html/draft-mayrhofer-geo-uri-00</a>.
- *
  * @author srowen@google.com (Sean Owen)
  */
-public final class GeoParsedResult extends ParsedReaderResult {
+public final class GeoParsedResult extends ParsedResult {
 
   private final String geoURI;
   private final float latitude;
   private final float longitude;
   private final float altitude;
 
-  private GeoParsedResult(String geoURI, float latitude, float longitude, float altitude) {
-    super(ParsedReaderResultType.GEO);
+  GeoParsedResult(String geoURI, float latitude, float longitude, float altitude) {
+    super(ParsedResultType.GEO);
     this.geoURI = geoURI;
     this.latitude = latitude;
     this.longitude = longitude;
     this.altitude = altitude;
-  }
-
-  public static GeoParsedResult parse(Result result) {
-    String rawText = result.getText();
-    if (rawText == null || !rawText.startsWith("geo:")) {
-      return null;
-    }
-    // Drop geo, query portion
-    int queryStart = rawText.indexOf('?', 4);
-    String geoURIWithoutQuery;
-    if (queryStart < 0) {
-      geoURIWithoutQuery = rawText.substring(4);
-    } else {
-      geoURIWithoutQuery = rawText.substring(4, queryStart);
-    }
-    int latitudeEnd = geoURIWithoutQuery.indexOf(',');
-    if (latitudeEnd < 0) {
-      return null;
-    }
-    float latitude = Float.parseFloat(geoURIWithoutQuery.substring(0, latitudeEnd));
-    int longitudeEnd = geoURIWithoutQuery.indexOf(',', latitudeEnd + 1);
-    float longitude;
-    float altitude; // in meters
-    if (longitudeEnd < 0) {
-      longitude = Float.parseFloat(geoURIWithoutQuery.substring(latitudeEnd + 1));
-      altitude = 0.0f;
-    } else {
-      longitude = Float.parseFloat(geoURIWithoutQuery.substring(latitudeEnd + 1, longitudeEnd));
-      altitude = Float.parseFloat(geoURIWithoutQuery.substring(longitudeEnd + 1));
-    }
-    return new GeoParsedResult(rawText, latitude, longitude, altitude);
   }
 
   public String getGeoURI() {

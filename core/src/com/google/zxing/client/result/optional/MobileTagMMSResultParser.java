@@ -18,7 +18,7 @@ package com.google.zxing.client.result.optional;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
-import com.google.zxing.client.result.ParsedReaderResultType;
+import com.google.zxing.client.result.SMSParsedResult;
 
 /**
  * <p>Represents a "MMS" result encoded according to section 4.7 of the
@@ -26,24 +26,11 @@ import com.google.zxing.client.result.ParsedReaderResultType;
  *
  * @author srowen@google.com (Sean Owen)
  */
-public final class MobileTagMMSParsedResult extends AbstractMobileTagParsedResult {
+public final class MobileTagMMSResultParser extends AbstractMobileTagResultParser {
 
   public static final String SERVICE_TYPE = "05";
 
-  private final String to;
-  private final String subject;
-  private final String body;
-  private final String title;
-
-  private MobileTagMMSParsedResult(String to, String subject, String body, String title) {
-    super(ParsedReaderResultType.MOBILETAG_MMS);
-    this.to = to;
-    this.subject = subject;
-    this.body = body;
-    this.title = title;
-  }
-
-  public static MobileTagMMSParsedResult parse(Result result) {
+  public static SMSParsedResult parse(Result result) {
     if (!result.getBarcodeFormat().equals(BarcodeFormat.DATAMATRIX)) {
       return null;
     }
@@ -61,31 +48,7 @@ public final class MobileTagMMSParsedResult extends AbstractMobileTagParsedResul
     String body = matches[2];
     String title = matches[3];
 
-    return new MobileTagMMSParsedResult(to, subject, body, title);
-  }
-
-  public String getTo() {
-    return to;
-  }
-
-  public String getSubject() {
-    return subject;
-  }
-
-  public String getBody() {
-    return body;
-  }
-
-  public String getTitle() {
-    return title;
-  }
-
-  public String getDisplayResult() {
-    StringBuffer result = new StringBuffer(to);
-    maybeAppend(subject, result);
-    maybeAppend(title, result);
-    maybeAppend(body, result);
-    return result.toString();
+    return new SMSParsedResult("sms:" + to, to, null, subject, body, title);
   }
 
 }
