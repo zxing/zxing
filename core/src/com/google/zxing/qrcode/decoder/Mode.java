@@ -34,6 +34,8 @@ final class Mode {
   static final Mode BYTE = new Mode(new int[]{8, 16, 16});
   static final Mode ECI = new Mode(null); // character counts don't apply
   static final Mode KANJI = new Mode(new int[]{8, 10, 12});
+  static final Mode FNC1_FIRST_POSITION = new Mode(null);
+  static final Mode FNC1_SECOND_POSITION = new Mode(null);
 
   private final int[] characterCountBitsForVersions;
 
@@ -56,12 +58,16 @@ final class Mode {
         return ALPHANUMERIC;
       case 0x4:
         return BYTE;
+      case 0x5:
+        return FNC1_FIRST_POSITION;
       case 0x7:
         return ECI;
       case 0x8:
         return KANJI;
+      case 0x9:
+        return FNC1_SECOND_POSITION;
       default:
-        throw new ReaderException("Illegal mode bits: " + bits);
+        throw new ReaderException("Unsupported mode bits: " + bits);
     }
   }
 
@@ -71,8 +77,8 @@ final class Mode {
    *         count of characters that will follow encoded in this {@link Mode}
    */
   int getCharacterCountBits(Version version) {
-    if (this.equals(ECI)) {
-      throw new IllegalArgumentException("Character count doesn't apply to ECI mode");
+    if (characterCountBitsForVersions == null) {
+      throw new IllegalArgumentException("Character count doesn't apply to this mode");
     }
     int number = version.getVersionNumber();
     int offset;
