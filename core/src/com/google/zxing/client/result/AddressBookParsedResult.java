@@ -19,7 +19,7 @@ package com.google.zxing.client.result;
 /**
  * @author srowen@google.com (Sean Owen)
  */
-public final class AddressBookParsedResult extends AbstractDoCoMoParsedResult {
+public final class AddressBookParsedResult extends ParsedResult {
 
   private final String[] names;
   private final String[] phoneNumbers;
@@ -77,6 +77,9 @@ public final class AddressBookParsedResult extends AbstractDoCoMoParsedResult {
     return org;
   }
 
+  /**
+   * @return birthday formatted as yyyyMMdd (e.g. 19780917)
+   */
   public String getBirthday() {
     return birthday;
   }

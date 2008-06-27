@@ -39,15 +39,15 @@ public final class AddressBookAUResultParser extends ResultParser {
     String[] names = matchMultipleValuePrefix("NAME", 2, rawText);
     String[] phoneNumbers = matchMultipleValuePrefix("TEL", 3, rawText);
     String[] emails = matchMultipleValuePrefix("MAIL", 3, rawText);
-    String note = AbstractDoCoMoResultParser.matchSinglePrefixedField("MEMORY:", rawText, '\r');
-    String address = AbstractDoCoMoResultParser.matchSinglePrefixedField("ADD:", rawText, '\r');
+    String note = matchSinglePrefixedField("MEMORY:", rawText, '\r');
+    String address = matchSinglePrefixedField("ADD:", rawText, '\r');
     return new AddressBookParsedResult(names, phoneNumbers, emails, note, address, null, null, null);
   }
 
   private static String[] matchMultipleValuePrefix(String prefix, int max, String rawText) {
     Vector values = null;
     for (int i = 1; i <= max; i++) {
-      String value = AbstractDoCoMoResultParser.matchSinglePrefixedField(prefix + i + ':', rawText, '\r');
+      String value = matchSinglePrefixedField(prefix + i + ':', rawText, '\r');
       if (value == null) {
         break;
       }
@@ -59,11 +59,7 @@ public final class AddressBookAUResultParser extends ResultParser {
     if (values == null) {
       return null;
     }
-    String[] result = new String[values.size()];
-    for (int i = 0; i < result.length; i++) {
-      result[i] = (String) values.elementAt(i);
-    }
-    return result;
+    return toStringArray(values);
   }
 
 

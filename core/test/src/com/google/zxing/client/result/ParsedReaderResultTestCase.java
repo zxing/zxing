@@ -145,14 +145,14 @@ public final class ParsedReaderResultTestCase extends TestCase {
 
   private static void doTestResult(String text, ParsedResultType type, BarcodeFormat format) {
     Result fakeResult = new Result(text, null, null, format);
-    ParsedResult result = ResultParser.parseReaderResult(fakeResult);
+    ParsedResult result = ResultParser.parseResult(fakeResult);
     assertNotNull(result);
     assertEquals(type, result.getType());
   }
 
   private static void doTestResult(byte[] rawBytes, ParsedResultType type) {
     Result fakeResult = new Result(null, rawBytes, null, null);
-    ParsedResult result = ResultParser.parseReaderResult(fakeResult);
+    ParsedResult result = ResultParser.parseResult(fakeResult);
     assertNotNull(result);
     assertEquals(type, result.getType());
   }

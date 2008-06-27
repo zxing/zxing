@@ -192,7 +192,7 @@ public final class ZXingMIDlet extends MIDlet {
   }
 
   void handleDecodedText(Result theResult) {
-    ParsedResult result = ResultParser.parseReaderResult(theResult);
+    ParsedResult result = ResultParser.parseResult(theResult);
     ParsedResultType type = result.getType();
     if (type.equals(ParsedResultType.URI)) {
       String uri = ((URIParsedResult) result).getURI();

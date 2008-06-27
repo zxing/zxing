@@ -52,7 +52,7 @@ public final class CalendarParsedResult extends ParsedResult {
    * needs to work under JavaME / MIDP and there is no date parsing library available there, such
    * as <code>java.text.SimpleDateFormat</code>.</p>
    *
-   * <p>Instead this is a String formatted as YYYYMMdd'T'HHmmss'Z'.</p>
+   * @return start time formatted as yyyyMMdd'T'HHmmss'Z'.</p>
    */
   public String getStart() {
     return start;
