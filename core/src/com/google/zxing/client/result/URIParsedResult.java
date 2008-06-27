@@ -39,11 +39,10 @@ public final class URIParsedResult extends ParsedResult {
   }
 
   public String getDisplayResult() {
-    if (title == null) {
-      return uri;
-    } else {
-      return title + '\n' + uri;
-    }
+    StringBuffer result = new StringBuffer();
+    maybeAppend(uri, result);
+    maybeAppend(title, result);
+    return result.toString();
   }
 
 

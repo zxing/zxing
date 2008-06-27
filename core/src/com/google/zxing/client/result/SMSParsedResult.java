@@ -63,7 +63,13 @@ public final class SMSParsedResult extends ParsedResult {
   }
 
   public String getDisplayResult() {
-    return number;
+    StringBuffer result = new StringBuffer();
+    maybeAppend(number, result);
+    maybeAppend(via, result);
+    maybeAppend(subject, result);
+    maybeAppend(body, result);
+    maybeAppend(title, result);
+    return result.toString();
   }
 
 }

@@ -51,7 +51,11 @@ public final class EmailAddressParsedResult extends ParsedResult {
   }
 
   public String getDisplayResult() {
-    return emailAddress;
+    StringBuffer result = new StringBuffer();
+    maybeAppend(emailAddress, result);
+    maybeAppend(subject, result);
+    maybeAppend(body, result);
+    return result.toString();
   }
 
 }
