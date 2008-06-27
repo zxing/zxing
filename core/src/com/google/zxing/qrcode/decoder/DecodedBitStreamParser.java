@@ -58,6 +58,7 @@ final class DecodedBitStreamParser {
     BitSource bits = new BitSource(bytes);
     StringBuffer result = new StringBuffer();
     CharacterSetECI currentCharacterSetECI = null;
+    boolean fc1InEffect = false;
     Mode mode;
     do {
       // While still another segment to read...
@@ -68,7 +69,10 @@ final class DecodedBitStreamParser {
         mode = Mode.forBits(bits.readBits(4)); // mode is encoded by 4 bits
       }
       if (!mode.equals(Mode.TERMINATOR)) {
-        if (mode.equals(Mode.ECI)) {
+        if (mode.equals(Mode.FNC1_FIRST_POSITION) || mode.equals(Mode.FNC1_SECOND_POSITION)) {
+          // We do little with FNC1 except alter the parsed result a bit according to the spec
+          fc1InEffect = true;
+        } else if (mode.equals(Mode.ECI)) {
           // Count doesn't apply to ECI
           int value = ECI.parseECI(bits);
           try {
@@ -82,7 +86,7 @@ final class DecodedBitStreamParser {
           if (mode.equals(Mode.NUMERIC)) {
             decodeNumericSegment(bits, result, count);
           } else if (mode.equals(Mode.ALPHANUMERIC)) {
-            decodeAlphanumericSegment(bits, result, count);
+            decodeAlphanumericSegment(bits, result, count, fc1InEffect);
           } else if (mode.equals(Mode.BYTE)) {
             decodeByteSegment(bits, result, count, currentCharacterSetECI);
           } else if (mode.equals(Mode.KANJI)) {
@@ -168,8 +172,10 @@ final class DecodedBitStreamParser {
 
   private static void decodeAlphanumericSegment(BitSource bits,
                                                 StringBuffer result,
-                                                int count) {
+                                                int count,
+                                                boolean fc1InEffect) {
     // Read two characters at a time
+    int start = result.length();
     while (count > 1) {
       int nextTwoCharsBits = bits.readBits(11);
       result.append(ALPHANUMERIC_CHARS[nextTwoCharsBits / 45]);
@@ -179,6 +185,21 @@ final class DecodedBitStreamParser {
     if (count == 1) {
       // special case: one character left
       result.append(ALPHANUMERIC_CHARS[bits.readBits(6)]);
+    }
+    // See section 6.4.8.1, 6.4.8.2
+    if (fc1InEffect) {
+      // We need to massage the result a bit if in an FNC1 mode:
+      for (int i = start; i < result.length(); i++) {
+        if (result.charAt(i) == '%') {
+          if (i < result.length() - 1 && result.charAt(i + 1) == '%') {
+            // %% is rendered as %
+            result.deleteCharAt(i + 1);
+          } else {
+            // In alpha mode, % should be converted to FNC1 separator 0x1D
+            result.setCharAt(i, (char) 0x1D);
+          }
+        }
+      }
     }
   }
 
