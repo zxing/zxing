@@ -60,7 +60,6 @@ import java.io.Writer;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
-import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Timer;
@@ -240,7 +239,7 @@ public final class DecodeServlet extends HttpServlet {
       request.setAttribute("result", result);
       byte[] rawBytes = result.getRawBytes();
       if (rawBytes != null) {
-        request.setAttribute("rawBytesString", Arrays.toString(rawBytes));
+        request.setAttribute("rawBytesString", arrayToString(rawBytes));
       } else {
         request.setAttribute("rawBytesString", "(Not applicable)");
       }
@@ -259,6 +258,28 @@ public final class DecodeServlet extends HttpServlet {
       }
     }
     return true;
+  }
+
+  private static String arrayToString(byte[] bytes) {
+    int length = bytes.length;
+    StringBuilder result = new StringBuilder(length << 2);
+    int i = 0;
+    while (i < length) {
+      int max = Math.min(i + 8, length);
+      for (int j = i; j < max; j++) {
+        int value = bytes[j] & 0xFF;
+        result.append(Integer.toHexString(value / 16));
+        result.append(Integer.toHexString(value % 16));
+        result.append(' ');
+      }
+      result.append('\n');
+      i += 8;
+    }
+    for (int j = i - 8; j < length; j++) {
+      result.append(Integer.toHexString(bytes[j] & 0xFF));
+      result.append(' ');
+    }
+    return result.toString();
   }
 
   @Override
