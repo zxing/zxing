@@ -106,19 +106,43 @@ public final class ParsedReaderResultTestCase extends TestCase {
     doTestResult("telephone", ParsedResultType.TEXT);
   }
 
+  public void testVCard() {
+    doTestResult("BEGIN:VCARD\r\nEND:VCARD", ParsedResultType.ADDRESSBOOK);
+    doTestResult("BEGIN:VCARD\r\nN:Owen;Sean\r\nEND:VCARD", ParsedResultType.ADDRESSBOOK);
+    doTestResult("BEGIN:VCARD\r\nVERSION:2.1\r\nN:Owen;Sean\r\nEND:VCARD", ParsedResultType.ADDRESSBOOK);
+    doTestResult("BEGIN:VCARD\r\nADR;HOME:123 Main St\r\nVERSION:2.1\r\nN:Owen;Sean\r\nEND:VCARD", ParsedResultType.ADDRESSBOOK);    
+    doTestResult("BEGIN:VCARD", ParsedResultType.URI);
+  }
+
+  public void testSMS() {
+    doTestResult("sms:+15551212", ParsedResultType.SMS);
+    doTestResult("SMSTO:+15551212", ParsedResultType.SMS);
+    doTestResult("smsto:+15551212", ParsedResultType.SMS);
+    doTestResult("sms:+15551212;via=999333", ParsedResultType.SMS);
+    doTestResult("sms:+15551212?subject=foo&body=bar", ParsedResultType.SMS);
+  }
+
+  public void testMMS() {
+    doTestResult("mms:+15551212", ParsedResultType.SMS);
+    doTestResult("MMSTO:+15551212", ParsedResultType.SMS);
+    doTestResult("mmsto:+15551212", ParsedResultType.SMS);
+    doTestResult("mms:+15551212;via=999333", ParsedResultType.SMS);
+    doTestResult("mms:+15551212?subject=foo&body=bar", ParsedResultType.SMS);
+  }
+
   /*
   public void testNDEFText() {
     doTestResult(new byte[] {(byte)0xD1,(byte)0x01,(byte)0x05,(byte)0x54,
                              (byte)0x02,(byte)0x65,(byte)0x6E,(byte)0x68,
                              (byte)0x69},
-                 ParsedResultType.NDEF_TEXT);
+                 ParsedResultType.TEXT);
   }
 
   public void testNDEFURI() {
     doTestResult(new byte[] {(byte)0xD1,(byte)0x01,(byte)0x08,(byte)0x55,
                              (byte)0x01,(byte)0x6E,(byte)0x66,(byte)0x63,
                              (byte)0x2E,(byte)0x63,(byte)0x6F,(byte)0x6D},
-                 ParsedResultType.NDEF_URI);
+                 ParsedResultType.URI);
   }
 
   public void testNDEFSmartPoster() {
