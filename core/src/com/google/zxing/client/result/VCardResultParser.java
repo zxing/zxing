@@ -49,7 +49,7 @@ public final class VCardResultParser extends ResultParser {
     address = formatAddress(address);
     String org = matchSingleVCardPrefixedField("ORG", rawText);
     String birthday = matchSingleVCardPrefixedField("BDAY", rawText);
-    if (!isStringOfDigits(birthday, 8)) {
+    if (birthday != null && !isStringOfDigits(birthday, 8)) {
       return null;
     }
     String title = matchSingleVCardPrefixedField("TITLE", rawText);
@@ -109,6 +109,9 @@ public final class VCardResultParser extends ResultParser {
   }
 
   private static String formatAddress(String address) {
+    if (address == null) {
+      return null;
+    }
     int length = address.length();
     StringBuffer newAddress = new StringBuffer(length);
     for (int j = 0; j < length; j++) {
@@ -129,25 +132,27 @@ public final class VCardResultParser extends ResultParser {
    * @param names name values to format, in place
    */
   private static void formatNames(String[] names) {
-    for (int i = 0; i < names.length; i++) {
-      String name = names[i];
-      String[] components = new String[5];
-      int start = 0;
-      int end;
-      int componentIndex = 0;
-      while ((end = name.indexOf(';', start)) > 0) {
-        components[componentIndex] = name.substring(start, end);
-        componentIndex++;
-        start = end + 1;
+    if (names != null) {
+      for (int i = 0; i < names.length; i++) {
+        String name = names[i];
+        String[] components = new String[5];
+        int start = 0;
+        int end;
+        int componentIndex = 0;
+        while ((end = name.indexOf(';', start)) > 0) {
+          components[componentIndex] = name.substring(start, end);
+          componentIndex++;
+          start = end + 1;
+        }
+        components[componentIndex] = name.substring(start);
+        StringBuffer newName = new StringBuffer();
+        maybeAppendComponent(components, 3, newName);
+        maybeAppendComponent(components, 1, newName);
+        maybeAppendComponent(components, 2, newName);
+        maybeAppendComponent(components, 0, newName);
+        maybeAppendComponent(components, 4, newName);
+        names[i] = newName.toString().trim();
       }
-      components[componentIndex] = name.substring(start);      
-      StringBuffer newName = new StringBuffer();
-      maybeAppendComponent(components, 3, newName);
-      maybeAppendComponent(components, 1, newName);
-      maybeAppendComponent(components, 2, newName);
-      maybeAppendComponent(components, 0, newName);
-      maybeAppendComponent(components, 4, newName);
-      names[i] = newName.toString().trim();
     }
   }
 

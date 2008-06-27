@@ -53,9 +53,7 @@ public abstract class ResultParser {
       return result;
     } else if ((result = TelResultParser.parse(theResult)) != null) {
       return result;
-    } else if ((result = SMSResultParser.parse(theResult)) != null) {
-      return result;
-    } else if ((result = SMSTOResultParser.parse(theResult)) != null) {
+    } else if ((result = SMSMMSResultParser.parse(theResult)) != null) {
       return result;
     } else if ((result = GeoResultParser.parse(theResult)) != null) {
       return result;
@@ -183,6 +181,9 @@ public abstract class ResultParser {
   }
 
   protected static boolean isStringOfDigits(String value, int length) {
+    if (value == null) {
+      return false;
+    }
     int stringLength = value.length();
     if (length != stringLength) {
       return false;
