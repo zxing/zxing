@@ -44,13 +44,17 @@ public final class AddressBookDoCoMoResultParser extends AbstractDoCoMoResultPar
     String email = matchSinglePrefixedField("EMAIL:", rawText);
     String note = matchSinglePrefixedField("NOTE:", rawText);
     String address = matchSinglePrefixedField("ADR:", rawText);
+    String birthday = matchSinglePrefixedField("BDAY:", rawText);
+    if (birthday != null && !isStringOfDigits(birthday, 8)) {
+      return null;
+    }
     return new AddressBookParsedResult(new String[] {name},
                                        phoneNumbers,
                                        new String[] {email},
                                        note,
                                        address,
                                        null,
-                                       null,
+                                       birthday,
                                        null);
   }
 
