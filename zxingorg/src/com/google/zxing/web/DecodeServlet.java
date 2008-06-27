@@ -244,7 +244,7 @@ public final class DecodeServlet extends HttpServlet {
       } else {
         request.setAttribute("rawBytesString", "(Not applicable)");
       }
-      ParsedResult parsedResult = ResultParser.parseReaderResult(result);
+      ParsedResult parsedResult = ResultParser.parseResult(result);
       request.setAttribute("parsedResult", parsedResult);
       request.getRequestDispatcher("decoderesult.jspx").forward(request, response);
     }

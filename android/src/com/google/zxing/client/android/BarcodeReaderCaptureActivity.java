@@ -229,7 +229,7 @@ public final class BarcodeReaderCaptureActivity extends Activity {
   }
 
   private static ParsedResult parseReaderResult(Result rawResult) {
-    ParsedResult result = ResultParser.parseReaderResult(rawResult);
+    ParsedResult result = ResultParser.parseResult(rawResult);
     if (result.getType().equals(ParsedResultType.TEXT)) {
       String rawText = rawResult.getText();
       AndroidIntentParsedResult androidResult = AndroidIntentParsedResult.parse(rawText);

@@ -16,8 +16,6 @@
 
 package com.google.zxing.client.result;
 
-import java.util.Vector;
-
 /**
  * <p>See
  * <a href="http://www.nttdocomo.co.jp/english/service/imode/make/content/barcode/about/s2.html">
@@ -37,57 +35,8 @@ abstract class AbstractDoCoMoResultParser extends ResultParser {
     return matchPrefixedField(prefix, rawText, ';');
   }
 
-  static String[] matchPrefixedField(String prefix, String rawText, char endChar) {
-    Vector matches = null;
-    int i = 0;
-    int max = rawText.length();
-    while (i < max) {
-      i = rawText.indexOf(prefix, i);
-      if (i < 0) {
-        break;
-      }
-      i += prefix.length(); // Skip past this prefix we found to start
-      int start = i; // Found the start of a match here
-      boolean done = false;
-      while (!done) {
-        i = rawText.indexOf((int) endChar, i);
-        if (i < 0) {
-          // No terminating end character? uh, done. Set i such that loop terminates and break
-          i = rawText.length();
-          done = true;
-        } else if (rawText.charAt(i - 1) == '\\') {
-          // semicolon was escaped so continue
-          i++;
-        } else {
-          // found a match
-          if (matches == null) {
-            matches = new Vector(3); // lazy init
-          }
-          matches.addElement(unescapeBackslash(rawText.substring(start, i)));
-          i++;
-          done = true;
-        }
-      }
-    }
-    if (matches == null || matches.isEmpty()) {
-      return null;
-    }
-    int size = matches.size();
-    String[] result = new String[size];
-    for (int j = 0; j < size; j++) {
-      result[j] = (String) matches.elementAt(j);
-    }
-    return result;
-  }
-
   static String matchSinglePrefixedField(String prefix, String rawText) {
     return matchSinglePrefixedField(prefix, rawText, ';');
   }
-
-  static String matchSinglePrefixedField(String prefix, String rawText, char endChar) {
-    String[] matches = matchPrefixedField(prefix, rawText, endChar);
-    return matches == null ? null : matches[0];
-  }
-
 
 }

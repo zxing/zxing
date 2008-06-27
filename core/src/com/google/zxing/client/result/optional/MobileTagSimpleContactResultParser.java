@@ -51,6 +51,9 @@ public final class MobileTagSimpleContactResultParser extends AbstractMobileTagR
     String address = matches[5];
     String org = matches[6];
     String birthday = matches[7];
+    if (!isStringOfDigits(birthday, 8)) {
+      return null;
+    }
     String title = matches[8];
 
     return new AddressBookParsedResult(new String[] {fullName},

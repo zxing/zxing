@@ -19,7 +19,7 @@ package com.google.zxing.client.result;
 /**
  * @author srowen@google.com (Sean Owen)
  */
-public final class EmailAddressParsedResult extends AbstractDoCoMoParsedResult {
+public final class EmailAddressParsedResult extends ParsedResult {
 
   private final String emailAddress;
   private final String subject;

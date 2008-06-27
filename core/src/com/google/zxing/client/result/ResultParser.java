@@ -19,11 +19,12 @@ package com.google.zxing.client.result;
 import com.google.zxing.Result;
 
 import java.util.Hashtable;
+import java.util.Vector;
 
 /**
  * <p>Abstract class representing the result of decoding a barcode, as more than
  * a String -- as some type of structured data. This might be a subclass which represents
- * a URL, or an e-mail address. {@link #parseReaderResult(com.google.zxing.Result)} will turn a raw
+ * a URL, or an e-mail address. {@link #parseResult(com.google.zxing.Result)} will turn a raw
  * decoded string into the most appropriate type of structured representation.</p>
  *
  * <p>Thanks to Jeff Griffin for proposing rewrite of these classes that relies less
@@ -33,7 +34,7 @@ import java.util.Hashtable;
  */
 public abstract class ResultParser {
 
-  public static ParsedResult parseReaderResult(Result theResult) {
+  public static ParsedResult parseResult(Result theResult) {
     // This is a bit messy, but given limited options in MIDP / CLDC, this may well be the simplest
     // way to go about this. For example, we have no reflection available, really.
     // Order is important here.
@@ -47,6 +48,8 @@ public abstract class ResultParser {
     } else if ((result = EmailAddressResultParser.parse(theResult)) != null) {
       return result;
     } else if ((result = AddressBookAUResultParser.parse(theResult)) != null) {
+      return result;
+    } else if ((result = VCardResultParser.parse(theResult)) != null) {
       return result;
     } else if ((result = TelResultParser.parse(theResult)) != null) {
       return result;
@@ -179,6 +182,20 @@ public abstract class ResultParser {
     return -1;
   }
 
+  protected static boolean isStringOfDigits(String value, int length) {
+    int stringLength = value.length();
+    if (length != stringLength) {
+      return false;
+    }
+    for (int i = 0; i < length; i++) {
+      char c = value.charAt(i);
+      if (c < '0' || c > '9') {
+        return false;
+      }
+    }
+    return true;
+  }
+
   protected static Hashtable parseNameValuePairs(String uri) {
     int paramStart = uri.indexOf('?');
     if (paramStart < 0) {
@@ -208,6 +225,58 @@ public abstract class ResultParser {
       String key = uri.substring(paramStart, paramEnd);
       result.put(key, null);
     }
+  }
+
+  static String[] matchPrefixedField(String prefix, String rawText, char endChar) {
+    Vector matches = null;
+    int i = 0;
+    int max = rawText.length();
+    while (i < max) {
+      i = rawText.indexOf(prefix, i);
+      if (i < 0) {
+        break;
+      }
+      i += prefix.length(); // Skip past this prefix we found to start
+      int start = i; // Found the start of a match here
+      boolean done = false;
+      while (!done) {
+        i = rawText.indexOf((int) endChar, i);
+        if (i < 0) {
+          // No terminating end character? uh, done. Set i such that loop terminates and break
+          i = rawText.length();
+          done = true;
+        } else if (rawText.charAt(i - 1) == '\\') {
+          // semicolon was escaped so continue
+          i++;
+        } else {
+          // found a match
+          if (matches == null) {
+            matches = new Vector(3); // lazy init
+          }
+          matches.addElement(unescapeBackslash(rawText.substring(start, i)));
+          i++;
+          done = true;
+        }
+      }
+    }
+    if (matches == null || matches.isEmpty()) {
+      return null;
+    }
+    return toStringArray(matches);
+  }
+
+  static String matchSinglePrefixedField(String prefix, String rawText, char endChar) {
+    String[] matches = matchPrefixedField(prefix, rawText, endChar);
+    return matches == null ? null : matches[0];
+  }
+
+  static String[] toStringArray(Vector strings) {
+    int size = strings.size();
+    String[] result = new String[size];
+    for (int j = 0; j < size; j++) {
+      result[j] = (String) strings.elementAt(j);
+    }
+    return result;
   }
 
 }
