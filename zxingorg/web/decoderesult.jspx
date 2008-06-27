@@ -25,6 +25,8 @@
   <jsp:useBean id="result" scope="request" type="com.google.zxing.Result"/>
   <jsp:useBean id="parsedResult" scope="request" type="com.google.zxing.client.result.ParsedResult"/>
   <jsp:useBean id="rawBytesString" scope="request" type="java.lang.String"/>
+  <jsp:useBean id="text" scope="request" type="java.lang.String"/>
+  <jsp:useBean id="displayResult" scope="request" type="java.lang.String"/>  
   <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
     <head>
       <title>Decode Succeeded</title>
@@ -37,7 +39,7 @@
       <table>
         <tr>
           <td>Raw text</td>
-          <td>${result.text}</td>
+          <td>${text}</td>
         </tr>
         <tr>
           <td>Raw bytes</td>
@@ -53,7 +55,7 @@
         </tr>
         <tr>
           <td>Parsed Result</td>
-          <td>${parsedReaderResult.displayResult}</td>
+          <td>${displayResult}</td>
         </tr>
       </table>
       <p>Copyright 2008 ZXing authors</p>

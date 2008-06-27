@@ -28,6 +28,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpException;
 import org.apache.http.HttpMessage;
@@ -243,8 +244,20 @@ public final class DecodeServlet extends HttpServlet {
       } else {
         request.setAttribute("rawBytesString", "(Not applicable)");
       }
+      String text = result.getText();
+      if (text != null) {
+        request.setAttribute("text", StringEscapeUtils.escapeXml(text));
+      } else {
+        request.setAttribute("text", "(Not applicable)");
+      }
       ParsedResult parsedResult = ResultParser.parseResult(result);
       request.setAttribute("parsedResult", parsedResult);
+      String displayResult = parsedResult.getDisplayResult();
+      if (displayResult != null) {
+        request.setAttribute("displayResult", StringEscapeUtils.escapeXml(displayResult));
+      } else {
+        request.setAttribute("displayResult", "(Not applicable)");
+      }
       request.getRequestDispatcher("decoderesult.jspx").forward(request, response);
     }
   }
