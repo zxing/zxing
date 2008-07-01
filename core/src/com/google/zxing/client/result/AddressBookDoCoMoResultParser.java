@@ -48,9 +48,9 @@ public final class AddressBookDoCoMoResultParser extends AbstractDoCoMoResultPar
     if (birthday != null && !isStringOfDigits(birthday, 8)) {
       return null;
     }
-    return new AddressBookParsedResult(new String[] {name},
+    return new AddressBookParsedResult(maybeWrap(name),
                                        phoneNumbers,
-                                       new String[] {email},
+                                       maybeWrap(email),
                                        note,
                                        address,
                                        null,

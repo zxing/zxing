@@ -28,15 +28,16 @@ package com.google.zxing.client.result;
  */
 abstract class AbstractDoCoMoResultParser extends ResultParser {
 
-  // This could as well be implemented with java.util.regex. It was already implemented partially
-  // to run in a J2ME enviroment, where this unavailable.
-
   static String[] matchPrefixedField(String prefix, String rawText) {
     return matchPrefixedField(prefix, rawText, ';');
   }
 
   static String matchSinglePrefixedField(String prefix, String rawText) {
     return matchSinglePrefixedField(prefix, rawText, ';');
+  }
+
+  static String[] maybeWrap(String value) {
+    return value == null ? null : new String[] { value };
   }
 
 }

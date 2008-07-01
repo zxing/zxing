@@ -51,6 +51,8 @@ public abstract class ResultParser {
       return result;
     } else if ((result = VCardResultParser.parse(theResult)) != null) {
       return result;
+    } else if ((result = BizcardResultParser.parse(theResult)) != null) {
+      return result;
     } else if ((result = TelResultParser.parse(theResult)) != null) {
       return result;
     } else if ((result = SMSMMSResultParser.parse(theResult)) != null) {
