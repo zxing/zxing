@@ -41,13 +41,14 @@
 @synthesize actionBarItem;
 
 @synthesize messageView;
-@synthesize resultView;
 @synthesize imageView;
 @synthesize toolbar;
 
 @synthesize decoder;
 @synthesize result;
 @synthesize actions;
+
+@synthesize resultPointViews;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
 	if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
@@ -58,31 +59,34 @@
     self.decoder = d;
     d.delegate = self;
     [d release];
+    resultPointViews = [[NSMutableArray alloc] init];
 	}
 	return self;
 }
 
+#define FONT_NAME @"TimesNewRomanPSMT"
+#define FONT_SIZE 16.0
 
 // Implement loadView if you want to create a view hierarchy programmatically
 - (void)loadView {
   [super loadView];
   
-  CGRect mViewFrame = self.resultView.bounds;
-  UITextView *mView = [[UITextView alloc] initWithFrame:mViewFrame];
-  mView.backgroundColor = [UIColor yellowColor];
-  mView.alpha = 0.95;
+  CGRect messageViewFrame = imageView.frame;
+  UITextView *mView = [[UITextView alloc] initWithFrame:messageViewFrame];
+  mView.backgroundColor = [UIColor darkGrayColor];
+  mView.alpha = 0.9;
   mView.editable = false;
   mView.scrollEnabled = true;
+  mView.font = [UIFont fontWithName:FONT_NAME size:FONT_SIZE];
   mView.autoresizingMask = UIViewAutoresizingFlexibleHeight | 
                            UIViewAutoresizingFlexibleWidth |
-                           UIViewAutoresizingFlexibleLeftMargin |
-                           UIViewAutoresizingFlexibleRightMargin |
-                           UIViewAutoresizingFlexibleTopMargin |
-                           UIViewAutoresizingFlexibleBottomMargin;
+                           UIViewAutoresizingFlexibleTopMargin;
+  mView.textColor = [UIColor whiteColor];
+  mView.textAlignment = UITextAlignmentLeft;
   self.messageView = mView;
   [mView release];
   
-  [self.resultView addSubview:self.messageView];
+  [self.view addSubview:self.messageView];
   [self updateToolbar];
   [self showMessage:NSLocalizedString(@"Please take or choose a picture containing a barcode", @"")];
 }
@@ -104,11 +108,10 @@
 
 - (void)clearImageView {
   imageView.image = nil;
-  NSArray *subviews = [imageView.subviews copy];
-  for (UIView *view in subviews) {
+  for (UIView *view in resultPointViews) {
     [view removeFromSuperview];
   }
-  [subviews release];
+  [resultPointViews removeAllObjects];
 }
 
 - (void)pickAndDecodeFromSource:(UIImagePickerControllerSourceType) sourceType {
@@ -119,8 +122,7 @@
     UIImagePickerController* picker = [[UIImagePickerController alloc] init];
     picker.sourceType = sourceType;
     picker.delegate = self;
-    picker.allowsImageEditing = [[NSUserDefaults standardUserDefaults] 
-                                 boolForKey:@"allowEditing"];
+    picker.allowsImageEditing = YES; // [[NSUserDefaults standardUserDefaults] boolForKey:@"allowEditing"];
     
     // Picker is displayed asynchronously.
     [self presentModalViewController:picker animated:YES];
@@ -154,7 +156,6 @@
 	// Release anything that's not essential, such as cached data
 }
 
-
 - (void)dealloc {
   [decoder release];
   [self clearImageView];
@@ -165,6 +166,8 @@
   [savedPhotosBarItem release];
   [archiveBarItem release];
   [toolbar release];
+  [actions dealloc];
+  [resultPointViews dealloc];
   
 	[super dealloc];
 }
@@ -173,8 +176,16 @@
 #ifdef DEBUG
   NSLog(@"Showing message '%@'", message);
 #endif
+  
+  CGSize maxSize = imageView.bounds.size;
+  CGSize size = [message sizeWithFont:messageView.font constrainedToSize:maxSize lineBreakMode:UILineBreakModeWordWrap];
+  float height = 20.0 + fmin(100.0, size.height);
+
+  CGRect messageFrame = imageView.bounds;
+  messageFrame.origin.y = CGRectGetMaxY(messageFrame) - height;
+  messageFrame.size.height = height;
   self.messageView.text = message;
-  [self.messageView sizeToFit];
+  [self.messageView setFrame:messageFrame];
 }
 
 // DecoderDelegate methods
@@ -207,33 +218,10 @@
 - (void)presentResultPoints:(NSArray *)resultPoints 
                    forImage:(UIImage *)image
                 usingSubset:(UIImage *)subset {
-  // CGSize imageSize = image.size;
-  CGSize subsetSize = subset.size;
-  CGRect viewBounds = imageView.bounds;
-  
-  float scale = fmin(viewBounds.size.width / subsetSize.width,
-                     viewBounds.size.height / subsetSize.height);
-  float xOffset = (viewBounds.size.width - scale * subsetSize.width) / 2.0;
-  float yOffset = (viewBounds.size.height - scale * subsetSize.height) / 2.0;
-
-  NSLog(@"(%f, %f) image in view with bounds (%f, %f) x (%f, %f)", 
-        subsetSize.width, subsetSize.height,
-        viewBounds.origin.x, viewBounds.origin.y,
-        viewBounds.size.width, viewBounds.size.height);
-  NSLog(@"xOffset = %f, yOffset = %f, scale = %f", xOffset, yOffset, scale);
-
+  // simply add the points to the image view
+  imageView.image = subset;
   for (NSValue *pointValue in resultPoints) {
-    CGPoint point = [pointValue CGPointValue];
-    float x = xOffset + scale * point.x;
-    float y = yOffset + scale * point.y;
-    NSLog(@"have result point @ (%f, %f), imageView point (%f, %f)", point.x, point.y, x, y);    
-    CGRect frame = CGRectMake(x - 3, y - 3, 7, 7);
-    UIView *pointView = [[UIView alloc] initWithFrame:frame];
-    pointView.opaque = YES;
-    pointView.backgroundColor = [UIColor greenColor];
-    pointView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    [imageView addSubview:pointView];
-    [pointView release];
+    [imageView addResultPoint:[pointValue CGPointValue]];
   }
 }
 
@@ -253,6 +241,44 @@
   [self updateToolbar];
 }
 
+
+- (void)willAnimateFirstHalfOfRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+  [super willAnimateFirstHalfOfRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
+  
+  if (imageView.image) {
+    /*
+    CGRect viewBounds = imageView.bounds;
+    CGSize imageSize = imageView.image.size;
+    float scale = fmin(viewBounds.size.width / imageSize.width,
+                       viewBounds.size.height / imageSize.height);
+    float xOffset = (viewBounds.size.width - scale * imageSize.width) / 2.0;
+    float yOffset = (viewBounds.size.height - scale * imageSize.height) / 2.0;
+     */
+    
+    for (UIView *view in resultPointViews) {
+      view.alpha = 0.0;
+    }
+  }  
+}
+
+- (void)willAnimateSecondHalfOfRotationFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation duration:(NSTimeInterval)duration {
+  [super willAnimateSecondHalfOfRotationFromInterfaceOrientation:fromInterfaceOrientation duration:duration];
+
+  if (imageView.image) {
+    /*
+    CGRect viewBounds = imageView.bounds;
+    CGSize imageSize = imageView.image.size;
+    float scale = fmin(viewBounds.size.width / imageSize.width,
+                       viewBounds.size.height / imageSize.height);
+    float xOffset = (viewBounds.size.width - scale * imageSize.width) / 2.0;
+    float yOffset = (viewBounds.size.height - scale * imageSize.height) / 2.0;
+     */
+    
+    for (UIView *view in resultPointViews) {
+      view.alpha = 1.0;
+    }
+  }  
+}
 
 // UIImagePickerControllerDelegate methods
 

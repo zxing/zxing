@@ -22,6 +22,7 @@
 #import <UIKit/UIKit.h>
 #import "Decoder.h"
 #import "DecoderDelegate.h"
+#import "ScannedImageView.h"
 
 @class ParsedResult;
 @class Scan;
@@ -37,13 +38,14 @@
   IBOutlet UIBarItem *actionBarItem;
   
   IBOutlet UITextView *messageView;
-  IBOutlet UIView *resultView;
-  IBOutlet UIImageView *imageView;
+  IBOutlet ScannedImageView *imageView;
   IBOutlet UIToolbar *toolbar;
   
   Decoder *decoder;
   ParsedResult *result;
   NSArray *actions;
+  
+  NSMutableArray *resultPointViews;
 }
 
 @property (nonatomic, retain) UIBarItem *cameraBarItem;
@@ -53,13 +55,14 @@
 @property (nonatomic, retain) UIBarItem *actionBarItem;
 
 @property (nonatomic, retain) UITextView *messageView;
-@property (nonatomic, retain) UIView *resultView;
-@property (nonatomic, retain) UIImageView *imageView;
+@property (nonatomic, retain) ScannedImageView *imageView;
 @property (nonatomic, retain) UIToolbar *toolbar;
 
 @property (nonatomic, retain) Decoder *decoder;
 @property (nonatomic, retain) ParsedResult *result;
 @property (nonatomic, retain) NSArray *actions;
+
+@property (nonatomic, retain) NSMutableArray *resultPointViews;
 
 - (void)updateToolbar;
 - (void)pickAndDecodeFromSource:(UIImagePickerControllerSourceType) sourceType;
