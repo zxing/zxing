@@ -11,7 +11,8 @@
 
 
 #define TEXT_VIEW_TAG 0x17
-#define BUTTON_LABEL_TAG 0x17
+#define DATETIME_VIEW_TAG 0x18
+#define BUTTON_LABEL_TAG 0x19
 #define TITLE_HEIGHT 44
 #define BODY_HEIGHT 88
 
@@ -19,6 +20,7 @@
 
 @synthesize result;
 @synthesize scan;
+@synthesize dateFormatter;
 
 #define FONT_NAME @"TimesNewRomanPSMT"
 #define FONT_SIZE 16
@@ -28,6 +30,9 @@
     self.result = r;
     self.scan = s;
     self.title = NSLocalizedString(@"Scan", @"scan view controller title");
+    dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateStyle:NSDateFormatterLongStyle];
+    [dateFormatter setTimeStyle:NSDateFormatterLongStyle];
     bodyFont = [[UIFont fontWithName:FONT_NAME size:FONT_SIZE] retain];
 	}
 	return self;
@@ -42,7 +47,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
   switch (section) {
     case 0:
-      return 2;
+      return 3;
     case 1:
       return [[result actions] count];
     default:
@@ -61,6 +66,18 @@
 - (UITableViewCell *)titleCellInTableView:(UITableView *)tableView {
 	static NSString *TitleIdentifier = @"ScanViewTitleIdentifier";
   return [self cellWithIdentifier:TitleIdentifier inTableView:tableView];
+}
+
+- (UITableViewCell *)datetimeCellInTableView:(UITableView *)tableView {
+	static NSString *DatetimeIdentifier = @"ScanViewDatetimeIdentifier";
+	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:DatetimeIdentifier];
+	if (cell == nil) {
+		cell = [[[UITableViewCell alloc] initWithFrame:CGRectMake(0, 0, 320, 34) reuseIdentifier:DatetimeIdentifier] autorelease];
+    cell.font = [UIFont systemFontOfSize:[UIFont systemFontSize] * 2.0 / 3.0];
+    cell.textColor = [UIColor grayColor];
+    cell.textAlignment = UITextAlignmentCenter;
+	}
+  return cell;
 }
 
 - (UITableViewCell *)bodyCellInTableView:(UITableView *)tableView {
@@ -97,23 +114,26 @@
   return cell;
 }
 
+#define TEXT_VIEW_HEIGHT 330.0
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
   if (indexPath.section == 0) {
     if (indexPath.row == 0) {
       return TITLE_HEIGHT;
     } else if (indexPath.row == 1) {
-      CGSize size = [[result stringForDisplay] sizeWithFont:bodyFont constrainedToSize:CGSizeMake(280.0, 200.0) lineBreakMode:UILineBreakModeWordWrap];
+      CGSize size = [[result stringForDisplay] sizeWithFont:bodyFont constrainedToSize:CGSizeMake(280.0, TEXT_VIEW_HEIGHT) lineBreakMode:UILineBreakModeWordWrap];
 #ifdef DEBUG
       NSLog(@"text size = %f", size.height);
 #endif
-      return fminf(200, fmaxf(44, size.height + 24));
+      return fminf(TEXT_VIEW_HEIGHT, fmaxf(44, size.height + 24));
+    } else if (indexPath.row == 2) {
+      return 24.0;
     }
   }
   return tableView.rowHeight;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	
   UITableViewCell *cell;
   
   if (indexPath.section == 0) {
@@ -125,6 +145,9 @@
       cell = [self bodyCellInTableView:tableView];
       UITextView *textView = (UITextView *)[cell viewWithTag:TEXT_VIEW_TAG];
       textView.text = [result stringForDisplay];
+    } else if (indexPath.row == 2) {
+      cell = [self datetimeCellInTableView:tableView];
+      cell.text = [dateFormatter stringFromDate:[scan stamp]];
     }
   } else if (indexPath.section == 1) {
     cell = [self buttonCellInTableView:tableView];
@@ -182,6 +205,7 @@
   [result release];
   [scan release];
   [bodyFont release];
+  [dateFormatter release];
 	[super dealloc];
 }
 

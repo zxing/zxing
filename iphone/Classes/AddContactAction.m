@@ -52,13 +52,12 @@
   return NSLocalizedString(@"Add Contact", @"Add Contact");
 }
 
-- (void)performActionWithController:(UIViewController *)controller 
-                      shouldConfirm:(bool)confirm {
+- (void) addContactWithController:(UIViewController *)controller {
   CFErrorRef *error = NULL;
   NSCharacterSet *whitespaceSet = [NSCharacterSet whitespaceCharacterSet];
   
   ABRecordRef person = ABPersonCreate();
-    
+  
   NSRange commaRange = [name rangeOfString:@","];
   if (commaRange.location != NSNotFound) {
     NSString *lastName = [[name substringToIndex:commaRange.location] 
@@ -127,10 +126,40 @@
   unknownPersonViewController.allowsAddingToAddressBook = true;
   unknownPersonViewController.unknownPersonViewDelegate = self;
   CFRelease(person);
-
+  
   viewController = [controller retain];
   [[viewController navigationController] pushViewController:unknownPersonViewController animated:YES];
   [unknownPersonViewController release];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+  if (buttonIndex != [alertView cancelButtonIndex]) {
+    // perform the action
+    [self addContactWithController:viewController];
+  }
+}
+
+#ifdef CONFIRM_ADDING_CONTACT
+#undef CONFIRM_ADDING_CONTACT
+#endif
+- (void)performActionWithController:(UIViewController *)controller 
+                      shouldConfirm:(bool)confirm {
+#ifdef CONFIRM_ADDING_CONTACT 
+  if (confirm) {
+    viewController = controller;
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil 
+                                                        message:NSLocalizedString(@"Add Contact?", @"add contact") 
+                                                       delegate:self 
+                                              cancelButtonTitle:NSLocalizedString(@"Cancel", @"cancel button title") 
+                                              otherButtonTitles:NSLocalizedString(@"Add Contact", @"add contact"), nil];
+    [alertView show];
+    [alertView release];
+  } else {
+#endif
+    [self addContactWithController:controller];
+#ifdef CONFIRM_ADDING_CONTACT    
+  }
+#endif
 }
 
 - (void)dismissUnknownPersonViewController:(ABUnknownPersonViewController *)unknownPersonViewController {

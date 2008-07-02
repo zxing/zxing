@@ -59,13 +59,14 @@ using namespace qrcode;
   [self.delegate decoder:self failedToDecodeImage:self.image usingSubset:self.subsetImage reason:reason];
 }
 
+#define SUBSET_SIZE 320.0
 - (void) prepareSubset {
   CGImageRef cgImage = self.image.CGImage;
   CGSize size = CGSizeMake(CGImageGetWidth(cgImage), CGImageGetHeight(cgImage));
 #ifdef DEBUG
   NSLog(@"decoding: image is (%.1f x %.1f)", size.width, size.height);
 #endif
-  float scale = min(1.0f, max(0.25f, (float)max(400.0f / size.width, 400.0f / size.height)));
+  float scale = fminf(1.0f, fmaxf(SUBSET_SIZE / size.width, SUBSET_SIZE / size.height));
   subsetWidth = size.width * scale;
   subsetHeight = size.height * scale;
   

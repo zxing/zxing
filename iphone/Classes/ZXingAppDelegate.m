@@ -31,14 +31,6 @@
 @synthesize navigationController;
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application {
-  
-  for (NSString *familyName in [UIFont familyNames]) {
-    NSLog(@"family name: '%@'", familyName);
-    for (NSString *fontName in [UIFont fontNamesForFamilyName:familyName]) {
-      NSLog(@"  font name: '%@'", fontName);
-    }
-  }
-  
   /* create the view controller */
   DecoderViewController *vc = 
     [[DecoderViewController alloc] initWithNibName:@"DecoderView" 
@@ -55,23 +47,21 @@
   // show the window
   [window makeKeyAndVisible];
   
-  if ([[NSUserDefaults standardUserDefaults] boolForKey:@"autoChoosePicture"]) {    
-    // pick and decode using the first available source type in priority order
+  // pick and decode using the first available source type in priority order
 #define N_SOURCE_TYPES 3
-    UIImagePickerControllerSourceType sourceTypes[N_SOURCE_TYPES] = {
-      UIImagePickerControllerSourceTypeCamera,
-      UIImagePickerControllerSourceTypeSavedPhotosAlbum,
-      UIImagePickerControllerSourceTypePhotoLibrary
-    };
+  UIImagePickerControllerSourceType sourceTypes[N_SOURCE_TYPES] = {
+    UIImagePickerControllerSourceTypeCamera,
+    UIImagePickerControllerSourceTypeSavedPhotosAlbum,
+    UIImagePickerControllerSourceTypePhotoLibrary
+  };
 
-    for (int i = 0; i < N_SOURCE_TYPES; i++) {
-      if ([UIImagePickerController isSourceTypeAvailable:sourceTypes[i]]) {
-        [viewController pickAndDecodeFromSource:sourceTypes[i]];
-        break;
-      }
+  for (int i = 0; i < N_SOURCE_TYPES; i++) {
+    if ([UIImagePickerController isSourceTypeAvailable:sourceTypes[i]]) {
+      [viewController pickAndDecodeFromSource:sourceTypes[i]];
+      break;
     }
-#undef N_SOURCE_TYPES
   }
+#undef N_SOURCE_TYPES
 }
 
 - (void)dealloc {

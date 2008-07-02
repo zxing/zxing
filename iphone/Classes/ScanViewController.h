@@ -14,10 +14,12 @@
   IBOutlet ParsedResult *result;
   IBOutlet Scan *scan;
   UIFont *bodyFont;
+  NSDateFormatter *dateFormatter;
 }
 
 @property (nonatomic, retain) ParsedResult *result;
 @property (nonatomic, retain) Scan *scan;
+@property (nonatomic, retain) NSDateFormatter *dateFormatter;
 
 - (id)initWithResult:(ParsedResult *)r forScan:(Scan *)s;
 

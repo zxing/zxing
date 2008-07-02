@@ -21,15 +21,23 @@
 
 #import "SMSAction.h"
 
+// currently, including a message body makes the iPhone not actually
+// go to compose an SMS at all, just start the SMS app. Bummer.
+#ifdef SMS_URL_INCLUDE_BODY
+#undef SMS_URL_INCLUDE_BODY
+#endif
 
 @implementation SMSAction
 
 @synthesize body;
 
 + (NSURL *)urlForNumber:(NSString *)number withBody:(NSString *)body {
-  NSString *urlString = body ?
-  [NSString stringWithFormat:@"sms:%@?body=%@", number, [body stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] :
-  [NSString stringWithFormat:@"sms:%@", number];
+  NSString *urlString = 
+#ifdef SMS_URL_INCLUDE_BODY
+    (body && [body length]) ?
+    [NSString stringWithFormat:@"sms:%@?body=%@", number, [body stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] :
+#endif
+    [NSString stringWithFormat:@"sms:%@", number];
   return [NSURL URLWithString:urlString];
 }
 
