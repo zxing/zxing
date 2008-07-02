@@ -6,6 +6,30 @@
 	objectVersion = 45;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		856C25780E1BC767006ABF00 /* Build All */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 856C25830E1BC77E006ABF00 /* Build configuration list for PBXAggregateTarget "Build All" */;
+			buildPhases = (
+			);
+			dependencies = (
+				856C257C0E1BC76C006ABF00 /* PBXTargetDependency */,
+			);
+			name = "Build All";
+			productName = "Build All";
+		};
+		856C257D0E1BC779006ABF00 /* Test All */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 856C25840E1BC77E006ABF00 /* Build configuration list for PBXAggregateTarget "Test All" */;
+			buildPhases = (
+			);
+			dependencies = (
+			);
+			name = "Test All";
+			productName = "Test All";
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
@@ -119,6 +143,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 8514EAE70DF88E5200EE78D3;
 			remoteInfo = zxingcore;
+		};
+		856C257B0E1BC76C006ABF00 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1D6058900D05DD3D006BFB54 /* ZXing */;
+			remoteInfo = ZXing;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -824,6 +855,8 @@
 			targets = (
 				1D6058900D05DD3D006BFB54 /* ZXing */,
 				8514EAE70DF88E5200EE78D3 /* zxingcore */,
+				856C25780E1BC767006ABF00 /* Build All */,
+				856C257D0E1BC779006ABF00 /* Test All */,
 			);
 		};
 /* End PBXProject section */
@@ -956,6 +989,11 @@
 			target = 8514EAE70DF88E5200EE78D3 /* zxingcore */;
 			targetProxy = 8514EB170DF8A50900EE78D3 /* PBXContainerItemProxy */;
 		};
+		856C257C0E1BC76C006ABF00 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1D6058900D05DD3D006BFB54 /* ZXing */;
+			targetProxy = 856C257B0E1BC76C006ABF00 /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
@@ -1045,6 +1083,48 @@
 			};
 			name = Release;
 		};
+		856C25790E1BC768006ABF00 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = "Build All";
+			};
+			name = Debug;
+		};
+		856C257A0E1BC768006ABF00 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = "Build All";
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		856C257E0E1BC779006ABF00 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = "Test All";
+			};
+			name = Debug;
+		};
+		856C257F0E1BC779006ABF00 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = "Test All";
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
 		C01FCF4F08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1089,6 +1169,24 @@
 			buildConfigurations = (
 				8514EAE90DF88E5300EE78D3 /* Debug */,
 				8514EAEA0DF88E5300EE78D3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		856C25830E1BC77E006ABF00 /* Build configuration list for PBXAggregateTarget "Build All" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				856C25790E1BC768006ABF00 /* Debug */,
+				856C257A0E1BC768006ABF00 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		856C25840E1BC77E006ABF00 /* Build configuration list for PBXAggregateTarget "Test All" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				856C257E0E1BC779006ABF00 /* Debug */,
+				856C257F0E1BC779006ABF00 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
