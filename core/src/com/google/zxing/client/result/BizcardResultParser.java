@@ -18,6 +18,8 @@ package com.google.zxing.client.result;
 
 import com.google.zxing.Result;
 
+import java.util.Vector;
+
 /**
  * Implements the "BIZCARD" address book entry format, though this has been
  * largely reverse-engineered from examples observed in the wild -- still
@@ -43,11 +45,12 @@ public final class BizcardResultParser extends AbstractDoCoMoResultParser {
     String org = matchSinglePrefixedField("C:", rawText);
     String address = matchSinglePrefixedField("A:", rawText);
     String phoneNumber1 = matchSinglePrefixedField("B:", rawText);
-    String phoneNumber2 = matchSinglePrefixedField("F:", rawText);
+    String phoneNumber2 = matchSinglePrefixedField("M:", rawText);
+    String phoneNumber3 = matchSinglePrefixedField("F:", rawText);
     String email = matchSinglePrefixedField("E:", rawText);
 
     return new AddressBookParsedResult(maybeWrap(fullName),
-                                       buildPhoneNumbers(phoneNumber1, phoneNumber2),
+                                       buildPhoneNumbers(phoneNumber1, phoneNumber2, phoneNumber3),
                                        maybeWrap(email),
                                        null,
                                        address,
@@ -56,12 +59,26 @@ public final class BizcardResultParser extends AbstractDoCoMoResultParser {
                                        title);
   }
 
-  private static String[] buildPhoneNumbers(String number1, String number2) {
-    if (number1 == null) {
-      return maybeWrap(number2);
-    } else {
-      return number2 == null ? new String[] { number1 } : new String[] { number1, number2 };
+  private static String[] buildPhoneNumbers(String number1, String number2, String number3) {
+    Vector numbers = new Vector(3);
+    if (number1 != null) {
+      numbers.addElement(number1);
     }
+    if (number2 != null) {
+      numbers.addElement(number2);
+    }
+    if (number3 != null) {
+      numbers.addElement(number3);
+    }
+    int size = numbers.size();
+    if (size == 0) {
+      return null;
+    }
+    String[] result = new String[size];
+    for (int i = 0; i < size; i++) {
+      result[i] = (String) numbers.elementAt(i);
+    }
+    return result;
   }
 
   private static String buildName(String firstName, String lastName) {
