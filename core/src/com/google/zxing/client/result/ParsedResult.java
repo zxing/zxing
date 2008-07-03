@@ -50,7 +50,10 @@ public abstract class ParsedResult {
 
   protected static void maybeAppend(String value, StringBuffer result) {
     if (value != null) {
-      result.append('\n');
+      // Don't add a newline before the first value
+      if (result.length() > 0) {
+        result.append('\n');
+      }
       result.append(value);
     }
   }
@@ -58,7 +61,9 @@ public abstract class ParsedResult {
   protected static void maybeAppend(String[] value, StringBuffer result) {
     if (value != null) {
       for (int i = 0; i < value.length; i++) {
-        result.append('\n');
+        if (result.length() > 0) {
+          result.append('\n');
+        }
         result.append(value[i]);
       }
     }
