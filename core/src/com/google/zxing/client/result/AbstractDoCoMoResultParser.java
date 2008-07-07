@@ -28,11 +28,11 @@ package com.google.zxing.client.result;
  */
 abstract class AbstractDoCoMoResultParser extends ResultParser {
 
-  static String[] matchPrefixedField(String prefix, String rawText) {
+  static String[] matchDoCoMoPrefixedField(String prefix, String rawText) {
     return matchPrefixedField(prefix, rawText, ';');
   }
 
-  static String matchSinglePrefixedField(String prefix, String rawText) {
+  static String matchSingleDoCoMoPrefixedField(String prefix, String rawText) {
     return matchSinglePrefixedField(prefix, rawText, ';');
   }
 
