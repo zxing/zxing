@@ -35,16 +35,16 @@ public final class AddressBookDoCoMoResultParser extends AbstractDoCoMoResultPar
     if (rawText == null || !rawText.startsWith("MECARD:")) {
       return null;
     }
-    String[] rawName = matchPrefixedField("N:", rawText);
+    String[] rawName = matchDoCoMoPrefixedField("N:", rawText);
     if (rawName == null) {
       return null;
     }
     String name = parseName(rawName[0]);
-    String[] phoneNumbers = matchPrefixedField("TEL:", rawText);
-    String email = matchSinglePrefixedField("EMAIL:", rawText);
-    String note = matchSinglePrefixedField("NOTE:", rawText);
-    String address = matchSinglePrefixedField("ADR:", rawText);
-    String birthday = matchSinglePrefixedField("BDAY:", rawText);
+    String[] phoneNumbers = matchDoCoMoPrefixedField("TEL:", rawText);
+    String email = matchSingleDoCoMoPrefixedField("EMAIL:", rawText);
+    String note = matchSingleDoCoMoPrefixedField("NOTE:", rawText);
+    String address = matchSingleDoCoMoPrefixedField("ADR:", rawText);
+    String birthday = matchSingleDoCoMoPrefixedField("BDAY:", rawText);
     if (birthday != null && !isStringOfDigits(birthday, 8)) {
       return null;
     }

@@ -38,16 +38,16 @@ public final class BizcardResultParser extends AbstractDoCoMoResultParser {
     if (rawText == null || !rawText.startsWith("BIZCARD:")) {
       return null;
     }
-    String firstName = matchSinglePrefixedField("N:", rawText);
-    String lastName = matchSinglePrefixedField("X:", rawText);
+    String firstName = matchSingleDoCoMoPrefixedField("N:", rawText);
+    String lastName = matchSingleDoCoMoPrefixedField("X:", rawText);
     String fullName = buildName(firstName, lastName);
-    String title = matchSinglePrefixedField("T:", rawText);
-    String org = matchSinglePrefixedField("C:", rawText);
-    String address = matchSinglePrefixedField("A:", rawText);
-    String phoneNumber1 = matchSinglePrefixedField("B:", rawText);
-    String phoneNumber2 = matchSinglePrefixedField("M:", rawText);
-    String phoneNumber3 = matchSinglePrefixedField("F:", rawText);
-    String email = matchSinglePrefixedField("E:", rawText);
+    String title = matchSingleDoCoMoPrefixedField("T:", rawText);
+    String org = matchSingleDoCoMoPrefixedField("C:", rawText);
+    String address = matchSingleDoCoMoPrefixedField("A:", rawText);
+    String phoneNumber1 = matchSingleDoCoMoPrefixedField("B:", rawText);
+    String phoneNumber2 = matchSingleDoCoMoPrefixedField("M:", rawText);
+    String phoneNumber3 = matchSingleDoCoMoPrefixedField("F:", rawText);
+    String email = matchSingleDoCoMoPrefixedField("E:", rawText);
 
     return new AddressBookParsedResult(maybeWrap(fullName),
                                        buildPhoneNumbers(phoneNumber1, phoneNumber2, phoneNumber3),
