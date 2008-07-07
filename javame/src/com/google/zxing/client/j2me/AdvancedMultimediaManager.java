@@ -39,6 +39,9 @@ final class AdvancedMultimediaManager implements MultimediaManager {
   public void setFocus(Controllable player) {
     FocusControl focusControl = (FocusControl)
         player.getControl("javax.microedition.amms.control.camera.FocusControl");
+    if (focusControl == null) {
+      focusControl = (FocusControl) player.getControl("FocusControl");
+    }
     if (focusControl != null) {
       try {
         if (focusControl.isMacroSupported() && !focusControl.getMacro()) {
@@ -61,6 +64,9 @@ final class AdvancedMultimediaManager implements MultimediaManager {
 
   public void setZoom(Controllable player) {
     ZoomControl zoomControl = (ZoomControl) player.getControl("javax.microedition.amms.control.camera.ZoomControl");
+    if (zoomControl == null) {
+      zoomControl = (ZoomControl) player.getControl("ZoomControl");
+    }
     if (zoomControl != null) {
       // We zoom in if possible to encourage the viewer to take a snapshot from a greater distance.
       // This is a crude way of dealing with the fact that many phone cameras will not focus at a
@@ -80,6 +86,9 @@ final class AdvancedMultimediaManager implements MultimediaManager {
   public void setExposure(Controllable player) {
     ExposureControl exposureControl =
         (ExposureControl) player.getControl("javax.microedition.amms.control.camera.ExposureControl");
+    if (exposureControl == null) {
+      exposureControl = (ExposureControl) player.getControl("ExposureControl");
+    }
     if (exposureControl != null) {
 
       int[] supportedISOs = exposureControl.getSupportedISOs();
