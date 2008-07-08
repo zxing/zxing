@@ -231,7 +231,7 @@ final class DecodedBitStreamParser {
             result.append((char) (cValues[i] + 224));
             upperShift = false;
           } else {
-            result.append((char) cValues[i] + 96);
+            result.append((char) (cValues[i] + 96));
           }
         } else {
           throw new ReaderException("Invalid shift value");
@@ -296,7 +296,7 @@ final class DecodedBitStreamParser {
             result.append((char) (cValues[i] + 128));
             upperShift = false;
           } else {
-            result.append((char) cValues[i]);
+            result.append(cValues[i]);
           }
         } else if (shift == 2) {
           // Shift 2 for Text is the same encoding as C40
@@ -406,7 +406,7 @@ final class DecodedBitStreamParser {
           if ((edifactValue & 32) == 0) {  // no 1 in the leading (6th) bit
             edifactValue |= 64;  // Add a leading 01 to the 6 bit binary value
           }
-          result.append((char) edifactValue);
+          result.append(edifactValue);
         }
       }
     } while (!unlatch && bits.available() > 0);
@@ -428,7 +428,6 @@ final class DecodedBitStreamParser {
     } else {
       count = 250 * (d1 - 249) + bits.readBits(8);
     }
-    char[] readBytes = new char[count];
     for (int i = 0; i < count; i++) {
       result.append(unrandomize255State((char) bits.readBits(8), count));
     }

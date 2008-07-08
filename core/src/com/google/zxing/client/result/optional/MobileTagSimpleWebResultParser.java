@@ -26,7 +26,7 @@ import com.google.zxing.client.result.URIParsedResult;
  *
  * @author srowen@google.com (Sean Owen)
  */
-public final class MobileTagSimpleWebResultParser extends AbstractMobileTagResultParser {
+final class MobileTagSimpleWebResultParser extends AbstractMobileTagResultParser {
 
   public static final String SERVICE_TYPE = "04";
   private static final String[] URI_PREFIXES = {

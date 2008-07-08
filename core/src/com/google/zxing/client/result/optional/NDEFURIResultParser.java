@@ -25,7 +25,7 @@ import com.google.zxing.client.result.URIParsedResult;
  *
  * @author srowen@google.com (Sean Owen)
  */
-public final class NDEFURIResultParser extends AbstractNDEFResultParser {
+final class NDEFURIResultParser extends AbstractNDEFResultParser {
 
   private static final String[] URI_PREFIXES = {
       null,

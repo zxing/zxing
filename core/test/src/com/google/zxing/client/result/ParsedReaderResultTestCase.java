@@ -111,7 +111,14 @@ public final class ParsedReaderResultTestCase extends TestCase {
     doTestResult("BEGIN:VCARD\r\nN:Owen;Sean\r\nEND:VCARD", ParsedResultType.ADDRESSBOOK);
     doTestResult("BEGIN:VCARD\r\nVERSION:2.1\r\nN:Owen;Sean\r\nEND:VCARD", ParsedResultType.ADDRESSBOOK);
     doTestResult("BEGIN:VCARD\r\nADR;HOME:123 Main St\r\nVERSION:2.1\r\nN:Owen;Sean\r\nEND:VCARD", ParsedResultType.ADDRESSBOOK);    
-    doTestResult("BEGIN:VCARD", ParsedResultType.URI);
+    doTestResult("BEGIN:VCARD", ParsedResultType.URI); // yeah we end up guessing "URI" here
+  }
+
+  public void testVEvent() {
+    doTestResult("BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456Z\r\nDTEND:20080505T234555Z\r\nEND:VEVENT\r\nEND:VCALENDAR", ParsedResultType.CALENDAR);
+    doTestResult("BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456Z\r\nDTEND:20080505T234555Z\r\nEND:VEVENT", ParsedResultType.CALENDAR);
+    doTestResult("BEGIN:VEVENT\r\nDTEND:20080505T\r\nEND:VEVENT", ParsedResultType.TEXT);
+    doTestResult("BEGIN:VEVENT", ParsedResultType.URI); // See above note on why this is URI
   }
 
   public void testSMS() {
@@ -174,11 +181,13 @@ public final class ParsedReaderResultTestCase extends TestCase {
     assertEquals(type, result.getType());
   }
 
+  /*
   private static void doTestResult(byte[] rawBytes, ParsedResultType type) {
     Result fakeResult = new Result(null, rawBytes, null, null);
     ParsedResult result = ResultParser.parseResult(fakeResult);
     assertNotNull(result);
     assertEquals(type, result.getType());
   }
+   */
 
 }

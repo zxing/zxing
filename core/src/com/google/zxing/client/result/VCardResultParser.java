@@ -26,7 +26,7 @@ import java.util.Vector;
  *
  * @author srowen@google.com (Sean Owen)
  */
-public final class VCardResultParser extends ResultParser {
+final class VCardResultParser extends ResultParser {
 
   private VCardResultParser() {
   }
@@ -65,7 +65,7 @@ public final class VCardResultParser extends ResultParser {
       if (i < 0) {
         break;
       }
-      if (rawText.charAt(i - 1) != '\n') {
+      if (i > 0 && rawText.charAt(i - 1) != '\n') {
         // then this didn't start a new token, we matched in the middle of something
         i++;
         continue;
@@ -103,7 +103,7 @@ public final class VCardResultParser extends ResultParser {
     return toStringArray(matches);
   }
 
-  private static String matchSingleVCardPrefixedField(String prefix, String rawText) {
+  static String matchSingleVCardPrefixedField(String prefix, String rawText) {
     String[] values = matchVCardPrefixedField(prefix, rawText);
     return values == null ? null : values[0];
   }

@@ -24,7 +24,7 @@ import com.google.zxing.Result;
  * 
  * @author dswitkin@google.com (Daniel Switkin)
  */
-public final class UPCResultParser extends ResultParser {
+final class UPCResultParser extends ResultParser {
 
   private UPCResultParser() {
   }

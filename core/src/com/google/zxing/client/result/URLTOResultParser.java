@@ -25,7 +25,7 @@ import com.google.zxing.Result;
  *
  * @author srowen@google.com (Sean Owen)
  */
-public final class URLTOResultParser {
+final class URLTOResultParser {
 
   private URLTOResultParser() {
   }

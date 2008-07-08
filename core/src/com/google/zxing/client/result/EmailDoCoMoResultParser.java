@@ -25,7 +25,7 @@ import com.google.zxing.Result;
  *
  * @author srowen@google.com (Sean Owen)
  */
-public final class EmailDoCoMoResultParser extends AbstractDoCoMoResultParser {
+final class EmailDoCoMoResultParser extends AbstractDoCoMoResultParser {
 
   public static EmailAddressParsedResult parse(Result result) {
     String rawText = result.getText();

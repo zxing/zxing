@@ -26,7 +26,7 @@ import com.google.zxing.client.result.TelParsedResult;
  *
  * @author srowen@google.com (Sean Owen)
  */
-public final class MobileTagTelResultParser extends AbstractMobileTagResultParser {
+final class MobileTagTelResultParser extends AbstractMobileTagResultParser {
 
   public static final String SERVICE_TYPE = "01";
 

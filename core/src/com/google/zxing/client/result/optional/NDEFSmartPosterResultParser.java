@@ -29,7 +29,7 @@ import com.google.zxing.Result;
  *
  * @author srowen@google.com (Sean Owen)
  */
-public final class NDEFSmartPosterResultParser extends AbstractNDEFResultParser {
+final class NDEFSmartPosterResultParser extends AbstractNDEFResultParser {
 
   public static NDEFSmartPosterParsedResult parse(Result result) {
     byte[] bytes = result.getRawBytes();

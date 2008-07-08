@@ -23,7 +23,7 @@ import com.google.zxing.Result;
  *
  * @author srowen@google.com (Sean Owen)
  */
-public final class TelResultParser extends ResultParser {
+final class TelResultParser extends ResultParser {
 
   private TelResultParser() {
   }

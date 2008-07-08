@@ -21,7 +21,7 @@ import com.google.zxing.Result;
 /**
  * @author srowen@google.com (Sean Owen)
  */
-public final class BookmarkDoCoMoResultParser extends AbstractDoCoMoResultParser {
+final class BookmarkDoCoMoResultParser extends AbstractDoCoMoResultParser {
 
   private BookmarkDoCoMoResultParser() {
   }

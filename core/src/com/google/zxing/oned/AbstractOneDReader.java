@@ -36,7 +36,7 @@ import java.util.Hashtable;
 public abstract class AbstractOneDReader implements OneDReader {
 
   private static final int INTEGER_MATH_SHIFT = 8;
-  public static final int PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
+  static final int PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
 
   public final Result decode(MonochromeBitmapSource image) throws ReaderException {
     return decode(image, null);

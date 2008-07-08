@@ -26,7 +26,7 @@ import com.google.zxing.client.result.CalendarParsedResult;
  *
  * @author srowen@google.com (Sean Owen)
  */
-public final class MobileTagSimpleCalendarResultParser extends AbstractMobileTagResultParser {
+final class MobileTagSimpleCalendarResultParser extends AbstractMobileTagResultParser {
 
   public static final String SERVICE_TYPE = "07";
 
@@ -50,7 +50,11 @@ public final class MobileTagSimpleCalendarResultParser extends AbstractMobileTag
     String attendee = matches[4];
     String title = matches[5];
 
-    return new CalendarParsedResult(summary, start, end, location, attendee, title);
+    try {
+      return new CalendarParsedResult(summary, start, end, location, attendee, title);
+    } catch (IllegalArgumentException iae) {
+      return null;
+    }
   }
 
   private static String expandDateString(String date) {
