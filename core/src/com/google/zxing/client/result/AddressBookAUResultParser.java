@@ -28,7 +28,7 @@ import java.util.Vector;
  *
  * @author srowen@google.com (Sean Owen)
  */
-public final class AddressBookAUResultParser extends ResultParser {
+final class AddressBookAUResultParser extends ResultParser {
 
   public static AddressBookParsedResult parse(Result result) {
     String rawText = result.getText();

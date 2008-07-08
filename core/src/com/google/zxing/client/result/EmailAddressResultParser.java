@@ -26,7 +26,7 @@ import java.util.Hashtable;
  *
  * @author srowen@google.com (Sean Owen)
  */
-public final class EmailAddressResultParser extends ResultParser {
+final class EmailAddressResultParser extends ResultParser {
 
   public static EmailAddressParsedResult parse(Result result) {
     String rawText = result.getText();

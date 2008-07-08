@@ -27,7 +27,7 @@ import java.util.Vector;
  *
  * @author srowen@google.com (Sean Owen)
  */
-public final class BizcardResultParser extends AbstractDoCoMoResultParser {
+final class BizcardResultParser extends AbstractDoCoMoResultParser {
 
   // Yes, we extend AbstractDoCoMoResultParser since the format is very much
   // like the DoCoMo MECARD format, but this is not technically one of 

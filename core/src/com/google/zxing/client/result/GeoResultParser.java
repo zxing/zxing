@@ -26,7 +26,7 @@ import com.google.zxing.Result;
  *
  * @author srowen@google.com (Sean Owen)
  */
-public final class GeoResultParser extends ResultParser {
+final class GeoResultParser extends ResultParser {
 
   private GeoResultParser() {
   }

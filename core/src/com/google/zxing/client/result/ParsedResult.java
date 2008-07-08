@@ -21,7 +21,7 @@ import com.google.zxing.Result;
 /**
  * <p>Abstract class representing the result of decoding a barcode, as more than
  * a String -- as some type of structured data. This might be a subclass which represents
- * a URL, or an e-mail address. {@link #parseReaderResult(Result)} will turn a raw
+ * a URL, or an e-mail address. {@link ResultParser#parseResult(Result)} will turn a raw
  * decoded string into the most appropriate type of structured representation.</p>
  *
  * <p>Thanks to Jeff Griffin for proposing rewrite of these classes that relies less
@@ -43,12 +43,11 @@ public abstract class ParsedResult {
 
   public abstract String getDisplayResult();
 
-
   public String toString() {
     return getDisplayResult();
   }
 
-  protected static void maybeAppend(String value, StringBuffer result) {
+  static void maybeAppend(String value, StringBuffer result) {
     if (value != null) {
       // Don't add a newline before the first value
       if (result.length() > 0) {
@@ -58,7 +57,7 @@ public abstract class ParsedResult {
     }
   }
 
-  protected static void maybeAppend(String[] value, StringBuffer result) {
+  static void maybeAppend(String[] value, StringBuffer result) {
     if (value != null) {
       for (int i = 0; i < value.length; i++) {
         if (result.length() > 0) {

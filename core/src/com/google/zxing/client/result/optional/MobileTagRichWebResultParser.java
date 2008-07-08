@@ -25,7 +25,7 @@ import com.google.zxing.Result;
  *
  * @author srowen@google.com (Sean Owen)
  */
-public final class MobileTagRichWebResultParser extends AbstractMobileTagResultParser {
+final class MobileTagRichWebResultParser extends AbstractMobileTagResultParser {
 
   public static final String SERVICE_TYPE = "54";
 

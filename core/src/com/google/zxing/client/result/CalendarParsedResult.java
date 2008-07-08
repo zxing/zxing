@@ -35,6 +35,8 @@ public final class CalendarParsedResult extends ParsedResult {
                               String attendee,
                               String title) {
     super(ParsedResultType.CALENDAR);
+    validateDate(start);
+    validateDate(end);
     this.summary = summary;
     this.start = start;
     this.end = end;
@@ -86,6 +88,30 @@ public final class CalendarParsedResult extends ParsedResult {
     maybeAppend(attendee, result);
     maybeAppend(title, result);
     return result.toString();
+  }
+
+  private static void validateDate(String date) {
+    if (date != null) {
+      if (date.length() != 16) {
+        throw new IllegalArgumentException();
+      }
+      for (int i = 0; i < 8; i++) {
+        if (!Character.isDigit(date.charAt(i))) {
+          throw new IllegalArgumentException();
+        }
+      }
+      if (date.charAt(8) != 'T') {
+        throw new IllegalArgumentException();
+      }
+      for (int i = 9; i < 15; i++) {
+        if (!Character.isDigit(date.charAt(i))) {
+          throw new IllegalArgumentException();
+        }
+      }
+      if (date.charAt(15) != 'Z') {
+        throw new IllegalArgumentException();
+      }
+    }
   }
 
 }

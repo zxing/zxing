@@ -28,7 +28,7 @@ import com.google.zxing.Result;
  *
  * @author srowen@google.com (Sean Owen)
  */
-public final class AddressBookDoCoMoResultParser extends AbstractDoCoMoResultParser {
+final class AddressBookDoCoMoResultParser extends AbstractDoCoMoResultParser {
 
   public static AddressBookParsedResult parse(Result result) {
     String rawText = result.getText();

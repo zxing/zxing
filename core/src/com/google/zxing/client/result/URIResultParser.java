@@ -23,7 +23,7 @@ import com.google.zxing.Result;
  * 
  * @author srowen@google.com (Sean Owen)
  */
-public final class URIResultParser extends ResultParser {
+final class URIResultParser extends ResultParser {
 
   private URIResultParser() {
   }
@@ -64,7 +64,8 @@ public final class URIResultParser extends ResultParser {
    * need to know when a string is obviously not a URI.
    */
   static boolean isBasicallyValidURI(String uri) {
-    return uri != null && uri.indexOf(' ') < 0 && (uri.indexOf(':') >= 0 || uri.indexOf('.') >= 0);
+    return uri != null && uri.indexOf(' ') < 0 && uri.indexOf('\n') < 0 &&
+           (uri.indexOf(':') >= 0 || uri.indexOf('.') >= 0);
   }
 
 }

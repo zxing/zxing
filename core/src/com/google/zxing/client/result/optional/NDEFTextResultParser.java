@@ -25,7 +25,7 @@ import com.google.zxing.client.result.TextParsedResult;
  *
  * @author srowen@google.com (Sean Owen)
  */
-public final class NDEFTextResultParser extends AbstractNDEFResultParser {
+final class NDEFTextResultParser extends AbstractNDEFResultParser {
 
   public static TextParsedResult parse(Result result) {
     byte[] bytes = result.getRawBytes();

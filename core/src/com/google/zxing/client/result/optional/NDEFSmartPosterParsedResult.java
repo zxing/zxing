@@ -29,9 +29,9 @@ public final class NDEFSmartPosterParsedResult extends ParsedResult {
   public static final int ACTION_SAVE = 1;
   public static final int ACTION_OPEN = 2;
 
-  private String title;
-  private String uri;
-  private int action;
+  private final String title;
+  private final String uri;
+  private final int action;
 
   NDEFSmartPosterParsedResult(int action, String uri, String title) {
     super(ParsedResultType.NDEF_SMART_POSTER);

@@ -53,6 +53,8 @@ public abstract class ResultParser {
       return result;
     } else if ((result = BizcardResultParser.parse(theResult)) != null) {
       return result;
+    } else if ((result = VEventResultParser.parse(theResult)) != null) {
+      return result;
     } else if ((result = TelResultParser.parse(theResult)) != null) {
       return result;
     } else if ((result = SMSMMSResultParser.parse(theResult)) != null) {
@@ -108,7 +110,7 @@ public abstract class ResultParser {
     return escaped;
   }
 
-  protected static String urlDecode(String escaped) {
+  static String urlDecode(String escaped) {
 
     // No we can't use java.net.URLDecoder here. JavaME doesn't have it.
     if (escaped == null) {
@@ -199,7 +201,7 @@ public abstract class ResultParser {
     return true;
   }
 
-  protected static Hashtable parseNameValuePairs(String uri) {
+  static Hashtable parseNameValuePairs(String uri) {
     int paramStart = uri.indexOf('?');
     if (paramStart < 0) {
       return null;

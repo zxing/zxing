@@ -31,7 +31,7 @@ import java.util.Hashtable;
  *
  * @author srowen@google.com (Sean Owen)
  */
-public final class SMSMMSResultParser extends ResultParser {
+final class SMSMMSResultParser extends ResultParser {
 
   private SMSMMSResultParser() {
   }

@@ -26,7 +26,7 @@ import com.google.zxing.client.result.SMSParsedResult;
  *
  * @author srowen@google.com (Sean Owen)
  */
-public final class MobileTagSMSResultParser extends AbstractMobileTagResultParser {
+final class MobileTagSMSResultParser extends AbstractMobileTagResultParser {
 
   public static final String SERVICE_TYPE = "03";
 

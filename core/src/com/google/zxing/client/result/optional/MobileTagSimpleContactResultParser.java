@@ -26,7 +26,7 @@ import com.google.zxing.client.result.AddressBookParsedResult;
  *
  * @author srowen@google.com (Sean Owen)
  */
-public final class MobileTagSimpleContactResultParser extends AbstractMobileTagResultParser {
+final class MobileTagSimpleContactResultParser extends AbstractMobileTagResultParser {
 
   public static final String SERVICE_TYPE = "02";
 
