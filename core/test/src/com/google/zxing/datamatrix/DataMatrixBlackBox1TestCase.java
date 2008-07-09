@@ -30,7 +30,7 @@ public final class DataMatrixBlackBox1TestCase extends AbstractBlackBoxTestCase 
   public DataMatrixBlackBox1TestCase() {
     // TODO use MultiFormatReader here once Data Matrix decoder is done
     super(new File("test/data/blackbox/datamatrix-1"), new DataMatrixReader(), BarcodeFormat.DATAMATRIX);
-    addTest(7, 0.0f);
+    addTest(7, 7, 0.0f);
   }
 
 }
