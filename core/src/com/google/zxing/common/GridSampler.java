@@ -34,7 +34,7 @@ import com.google.zxing.ReaderException;
  */
 public abstract class GridSampler {
 
-  private static GridSampler gridSampler;
+  private static GridSampler gridSampler = null;
 
   /**
    * Sets the implementation of {@link GridSampler} used by the library. One global
@@ -56,6 +56,8 @@ public abstract class GridSampler {
    * @return the current implementation of {@link GridSampler}
    */
   public static GridSampler getInstance() {
+    // No real point in trying to make this thread-safe;
+    // doesn't matter if a second instance is created
     if (gridSampler == null) {
       gridSampler = new DefaultGridSampler();
     }
