@@ -28,8 +28,8 @@ public final class Code39ExtendedBlackBox2TestCase extends AbstractBlackBoxTestC
 
   public Code39ExtendedBlackBox2TestCase() {
     super(new File("test/data/blackbox/code39-2"), new Code39Reader(false, true), BarcodeFormat.CODE_39);
-    addTest(2, 0.0f);
-    addTest(2, 180.0f);
+    addTest(2, 2, 0.0f);
+    addTest(2, 2, 180.0f);
   }
 
 }

@@ -60,13 +60,19 @@ public abstract class AbstractBlackBoxTestCase extends TestCase {
 
   private static class TestResult {
     private final int mustPassCount;
+    private final int tryHarderCount;
     private final float rotation;
-    TestResult(int mustPassCount, float rotation) {
+
+    TestResult(int mustPassCount, int tryHarderCount, float rotation) {
       this.mustPassCount = mustPassCount;
+      this.tryHarderCount = tryHarderCount;
       this.rotation = rotation;
     }
     public int getMustPassCount() {
       return mustPassCount;
+    }
+    public int getTryHarderCount() {
+      return tryHarderCount;
     }
     public float getRotation() {
       return rotation;
@@ -91,10 +97,11 @@ public abstract class AbstractBlackBoxTestCase extends TestCase {
    * Adds a new test for the current directory of images.
    *
    * @param mustPassCount The number of images which must decode for the test to pass.
+   * @param tryHarderCount The number of images which must pass using the try harder flag.
    * @param rotation The rotation in degrees clockwise to use for this test.
    */
-  protected void addTest(int mustPassCount, float rotation) {
-    testResults.add(new TestResult(mustPassCount, rotation));
+  protected void addTest(int mustPassCount, int tryHarderCount, float rotation) {
+    testResults.add(new TestResult(mustPassCount, tryHarderCount, rotation));
   }
 
   protected File[] getImageFiles() {
@@ -110,7 +117,9 @@ public abstract class AbstractBlackBoxTestCase extends TestCase {
     assertFalse(testResults.isEmpty());
 
     File[] imageFiles = getImageFiles();
-    int[] passedCounts = new int[testResults.size()];
+    int testCount = testResults.size();
+    int[] passedCounts = new int[testCount];
+    int[] tryHarderCounts = new int[testCount];
     for (File testImage : imageFiles) {
       System.out.println("Starting " + testImage.getAbsolutePath());
 
@@ -121,59 +130,58 @@ public abstract class AbstractBlackBoxTestCase extends TestCase {
           testImageFileName.substring(0, testImageFileName.indexOf('.')) + ".txt");
       String expectedText = readFileAsString(expectedTextFile);
 
-      for (int x = 0; x < testResults.size(); x++) {
-        if (doTestOneImage(image, testResults.get(x).getRotation(), expectedText)) {
+      for (int x = 0; x < testCount; x++) {
+        float rotation = testResults.get(x).getRotation();
+        BufferedImage rotatedImage = rotateImage(image, rotation);
+        MonochromeBitmapSource source = new BufferedImageMonochromeBitmapSource(rotatedImage);
+        if (decode(source, rotation, expectedText, false)) {
           passedCounts[x]++;
+        }
+        if (decode(source, rotation, expectedText, true)) {
+          tryHarderCounts[x]++;
         }
       }
     }
 
-    for (int x = 0; x < testResults.size(); x++) {
-      System.out.println("Rotation " + testResults.get(x).getRotation() + " degrees: " + passedCounts[x] +
-          " of " + imageFiles.length + " images passed (" + testResults.get(x).getMustPassCount() +
+    for (int x = 0; x < testCount; x++) {
+      System.out.println("Rotation " + testResults.get(x).getRotation() + " degrees:");
+      System.out.println("  " + passedCounts[x] + " of " + imageFiles.length + " images passed ("
+          + testResults.get(x).getMustPassCount() + " required)");
+      System.out.println("  " + tryHarderCounts[x] + " of " + imageFiles.length +
+          " images passed with try harder (" + testResults.get(x).getTryHarderCount() +
           " required)");
-      assertTrue("Rotation " + testResults.get(x).getRotation() + " degrees: Too many images failed",
+      assertTrue("Rotation " + testResults.get(x).getRotation() +
+          " degrees: Too many images failed",
           passedCounts[x] >= testResults.get(x).getMustPassCount());
+      assertTrue("Try harder, Rotation " + testResults.get(x).getRotation() +
+          " degrees: Too many images failed",
+          tryHarderCounts[x] >= testResults.get(x).getTryHarderCount());
     }
   }
 
-  private boolean doTestOneImage(BufferedImage image, float rotationInDegrees, String expectedText) {
-    BufferedImage rotatedImage = rotateImage(image, rotationInDegrees);
-    MonochromeBitmapSource source = new BufferedImageMonochromeBitmapSource(rotatedImage);
+  private boolean decode(MonochromeBitmapSource source, float rotation, String expectedText,
+                         boolean tryHarder) {
     Result result;
+    String suffix = " (" + (tryHarder ? "try harder, " : "") + "rotation: " + rotation + ')';
+
     try {
-      result = barcodeReader.decode(source);
+      result = barcodeReader.decode(source, tryHarder ? TRY_HARDER_HINT : null);
     } catch (ReaderException re) {
-      System.out.println(re + " (rotation: " + rotationInDegrees + ')');
+      System.out.println(re + suffix);
       return false;
     }
 
     if (!expectedFormat.equals(result.getBarcodeFormat())) {
       System.out.println("Format mismatch: expected '" + expectedFormat + "' but got '" +
-          result.getBarcodeFormat() + "' (rotation: " + rotationInDegrees + ')');
+          result.getBarcodeFormat() + "'" + suffix);
       return false;
     }
 
     String resultText = result.getText();
     if (!expectedText.equals(resultText)) {
       System.out.println("Mismatch: expected '" + expectedText + "' but got '" + resultText +
-          "' (rotation: " + rotationInDegrees + ')');
+          "'" +  suffix);
       return false;
-    }
-
-    // Try "try harder" mode
-    try {
-      result = barcodeReader.decode(source, TRY_HARDER_HINT);
-    } catch (ReaderException re) {
-      fail("Normal mode succeeded but \"try harder\" failed (rotation: " + rotationInDegrees + ')');
-      return false;
-    }
-    if (!expectedFormat.equals(result.getBarcodeFormat())) {
-      System.out.println("Try Harder Format mismatch: expected '" + expectedFormat + "' but got '" +
-          result.getBarcodeFormat() + "' (rotation: " + rotationInDegrees + ')');
-    } else if (!expectedText.equals(resultText)) {
-      System.out.println("Try Harder Mismatch: expected '" + expectedText + "' but got '" +
-          resultText + "' (rotation: " + rotationInDegrees + ')');
     }
     return true;
   }
