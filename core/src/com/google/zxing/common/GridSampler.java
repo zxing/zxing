@@ -113,7 +113,7 @@ public abstract class GridSampler {
    * @param points actual points in x1,y1,...,xn,yn form
    * @throws ReaderException if an endpoint is lies outside the image boundaries
    */
-  static void checkAndNudgePoints(MonochromeBitmapSource image, float[] points) throws ReaderException {
+  protected static void checkAndNudgePoints(MonochromeBitmapSource image, float[] points) throws ReaderException {
     int width = image.getWidth();
     int height = image.getHeight();
     // Check and nudge points from start until we see some that are OK:
