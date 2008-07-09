@@ -43,9 +43,9 @@ import java.io.IOException;
  */
 public final class BugBarcodeApp implements IButtonEventListener, ImageObserver {
 
-	private ICameraDevice camera;
-  private ICameraModuleControl cameraControl;
-	private Frame frame;
+	private final ICameraDevice camera;
+  private final ICameraModuleControl cameraControl;
+	private final Frame frame;
 	private Image image;
 	private ImageCanvas imageCanvas;
 	private Label barcodeLabel;

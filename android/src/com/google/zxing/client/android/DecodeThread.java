@@ -214,9 +214,8 @@ final class DecodeThread extends Thread {
     return null;
   }
 
-  private String getNewPhotoName() {
-    Date now = new Date();
-    return "capture" + now.getTime() + ".jpg";
+  private static String getNewPhotoName() {
+    return "capture" + System.currentTimeMillis() + ".jpg";
   }
 
 }

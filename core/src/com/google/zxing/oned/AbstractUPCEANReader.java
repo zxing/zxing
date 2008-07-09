@@ -141,7 +141,9 @@ public abstract class AbstractUPCEANReader extends AbstractOneDReader implements
    */
   boolean checkChecksum(String s) throws ReaderException {
     int length = s.length();
-    if (length == 0) return false;
+    if (length == 0) {
+      return false;
+    }
 
     int sum = 0;
     for (int i = length - 2; i >= 0; i -= 2) {

@@ -275,7 +275,9 @@ final class CameraManager {
       int previewHeight = (int) (stillResolution.x * stillMultiplier * 1.5f);
       int previewWidth = previewHeight * screenResolution.x / screenResolution.y;
       previewWidth = ((previewWidth + 7) >> 3) << 3;
-      if (previewWidth > cameraResolution.x) previewWidth = cameraResolution.x;
+      if (previewWidth > cameraResolution.x) {
+        previewWidth = cameraResolution.x;
+      }
       previewHeight = previewWidth * screenResolution.y / screenResolution.x;
       previewResolution = new Point(previewWidth, previewHeight);
       Log.v(TAG, "previewWidth " + previewWidth + " previewHeight " + previewHeight);

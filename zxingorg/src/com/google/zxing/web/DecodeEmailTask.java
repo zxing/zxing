@@ -163,7 +163,7 @@ final class DecodeEmailTask extends TimerTask {
     }
   }
 
-  private void closeResources(Store store, Folder inbox) {
+  private static void closeResources(Store store, Folder inbox) {
     try {
       if (inbox != null) {
         inbox.close(true);
