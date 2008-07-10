@@ -143,6 +143,7 @@ public abstract class AbstractBlackBoxTestCase extends TestCase {
       }
     }
 
+    // Print the results of all tests first
     for (int x = 0; x < testCount; x++) {
       System.out.println("Rotation " + testResults.get(x).getRotation() + " degrees:");
       System.out.println("  " + passedCounts[x] + " of " + imageFiles.length + " images passed ("
@@ -150,6 +151,10 @@ public abstract class AbstractBlackBoxTestCase extends TestCase {
       System.out.println("  " + tryHarderCounts[x] + " of " + imageFiles.length +
           " images passed with try harder (" + testResults.get(x).getTryHarderCount() +
           " required)");
+    }
+
+    // Then run through again and assert if any failed
+    for (int x = 0; x < testCount; x++) {
       assertTrue("Rotation " + testResults.get(x).getRotation() +
           " degrees: Too many images failed",
           passedCounts[x] >= testResults.get(x).getMustPassCount());
