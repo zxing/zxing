@@ -44,10 +44,10 @@
         </not>
       </condition>
     </fail>
-    <fail message="Please build 'build-basic' in 'javame' first">
+    <fail message="Please build 'javame' first">
       <condition>
         <not>
-          <available file="../javame/javame-basic.jar" type="file"/>
+          <available file="../javame/javame.jar" type="file"/>
         </not>
       </condition>
     </fail>
@@ -67,12 +67,12 @@
            fork="true">
       <classpath>
         <pathelement location="../core/core.jar"/>
-        <pathelement location="../javame/javame-basic.jar"/>        
+        <pathelement location="../javame/javame.jar"/>
       </classpath>
     </javac>
 
     <unzip src="../core/core.jar" dest="build"/>
-    <unzip src="../javame/javame-basic.jar" dest="build"/>
+    <unzip src="../javame/javame.jar" dest="build"/>
 
     <mkdir dir="build-j2me"/>
     <exec executable="${WTK-home}/bin/preverify1.1" failonerror="true">
