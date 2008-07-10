@@ -36,7 +36,7 @@ final class SnapshotThread implements Runnable {
 
   private final ZXingMIDlet zXingMIDlet;
   private final Object waitLock;
-  private boolean done;
+  private volatile boolean done;
   private final MultimediaManager multimediaManager;
 
   SnapshotThread(ZXingMIDlet zXingMIDlet) {
