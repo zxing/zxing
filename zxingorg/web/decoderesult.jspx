@@ -51,7 +51,7 @@
         </tr>
         <tr>
           <td>Parsed Result Type</td>
-          <td>${parsedReaderResult.type}</td>
+          <td>${parsedResult.type}</td>
         </tr>
         <tr>
           <td>Parsed Result</td>
