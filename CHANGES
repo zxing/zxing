@@ -156,3 +156,24 @@
   - core/ is now independent of MIDP; only requires CLDC 1.1
   - Added optimized build of core library
   - Unit tests now use local copies of images
+
+0.9 (11 July 2008)
+  - First draft of iPhone client committed
+  - core module now built in a way that makes it function as an OSGi bundle,
+    and also supports deployment in BugLabs's BUG platform.
+  - Added client for BUG platform courtesy of buglabs.net
+  - Big refactoring of com.google.zxing.client.result to separate idea of result
+    parser from result value objects
+  - Added basic vCard 2.1 support
+  - Added basic BIZCARD format support
+  - Added basic iCal format support
+  - Added new calendar event parsed result type
+  - Fewer false positives in 1D detectors, notably Code 39 and Code 128;
+    new unit tests for false positives
+  - Now parses and tries to act on ECI designators in QR Codes
+  - Merged "basic" and "regular" J2ME readers into one unified app that should
+    work on platforms with and without JSR-234 support
+  - Removed dependence on Ant 1.7 (1.6 needed now)
+  - Web application at zxing.org now shows raw bytes
+  - Far more black box tests
+  - Assorted small bug fixes
