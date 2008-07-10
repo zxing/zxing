@@ -70,6 +70,7 @@
 
   <target name="clean">
     <delete dir="build"/>
+    <delete file="bug.jar"/>
   </target>
 
 </project>

@@ -171,6 +171,7 @@
     <delete dir="build"/>
     <delete dir="build-test"/>
     <delete file="core.jar"/>
+    <delete file="ZXingReader.*"/>
   </target>
 
 </project>
