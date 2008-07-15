@@ -20,7 +20,7 @@
   <property file="secrets.properties"/>
 
   <target name="init">
-		<tstamp/>
+    <tstamp/>
     <fail message="Please build 'core' first">
       <condition>
         <not>
@@ -35,10 +35,17 @@
         </not>
       </condition>
     </fail>
+    <fail message="Please set 'tomcat-home' in build.properties">
+      <condition>
+        <not>
+          <available file="${tomcat-home}" type="dir"/>
+        </not>
+      </condition>
+    </fail>
   </target>
 
-	<target name="build" depends="init">
-		<mkdir dir="web/WEB-INF/classes"/>
+  <target name="build" depends="init">
+    <mkdir dir="web/WEB-INF/classes"/>
     <copy file="../core/core.jar" todir="web/WEB-INF/lib" overwrite="true"/>
     <copy file="../javase/javase.jar" todir="web/WEB-INF/lib" overwrite="true"/>
     <javac srcdir="src"
@@ -48,13 +55,13 @@
            optimize="true"
            debug="true"
            deprecation="true">
-			<classpath>
-				<fileset dir="web/WEB-INF/lib">
-					<include name="*.jar"/>
-				</fileset>
-				<pathelement location="${tomcat-home}/lib/servlet-api.jar"/>
-			</classpath>
-		</javac>
+      <classpath>
+        <fileset dir="web/WEB-INF/lib">
+          <include name="*.jar"/>
+        </fileset>
+        <pathelement location="${tomcat-home}/lib/servlet-api.jar"/>
+      </classpath>
+    </javac>
     <copy file="web/WEB-INF/web.xml.template" tofile="web/WEB-INF/web.xml" overwrite="true">
       <filterset>
         <filter token="EMAIL_PASSWORD" value="${emailPassword}"/>
@@ -72,7 +79,7 @@
     </war>
   </target>
 
-	<target name="clean">
+  <target name="clean">
     <delete dir="web/WEB-INF/web.xml"/>
     <delete dir="web/WEB-INF/classes"/>
     <delete file="web/WEB-INF/lib/core.jar"/>
