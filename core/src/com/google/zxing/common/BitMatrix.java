@@ -119,7 +119,7 @@ public final class BitMatrix {
     StringBuffer result = new StringBuffer(dimension * (dimension + 1));
     for (int i = 0; i < dimension; i++) {
       for (int j = 0; j < dimension; j++) {
-        result.append(get(i, j) ? 'X' : ' ');
+        result.append(get(i, j) ? "X " : "  ");
       }
       result.append('\n');
     }
