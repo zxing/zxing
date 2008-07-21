@@ -22,6 +22,7 @@ import com.google.zxing.ReaderException;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.DetectorResult;
+import com.google.zxing.common.GenericResultPoint;
 import com.google.zxing.common.GridSampler;
 import com.google.zxing.qrcode.decoder.Version;
 
@@ -172,8 +173,8 @@ public final class Detector {
                                       ResultPoint topRight,
                                       ResultPoint bottomLeft,
                                       float moduleSize) throws ReaderException {
-    int tltrCentersDimension = round(FinderPatternFinder.distance(topLeft, topRight) / moduleSize);
-    int tlblCentersDimension = round(FinderPatternFinder.distance(topLeft, bottomLeft) / moduleSize);
+    int tltrCentersDimension = round(GenericResultPoint.distance(topLeft, topRight) / moduleSize);
+    int tlblCentersDimension = round(GenericResultPoint.distance(topLeft, bottomLeft) / moduleSize);
     int dimension = ((tltrCentersDimension + tlblCentersDimension) >> 1) + 7;
     switch (dimension & 0x03) { // mod 4
       case 0:

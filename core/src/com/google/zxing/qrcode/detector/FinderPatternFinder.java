@@ -19,10 +19,10 @@ package com.google.zxing.qrcode.detector;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.MonochromeBitmapSource;
 import com.google.zxing.ReaderException;
-import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitArray;
 import com.google.zxing.common.Collections;
 import com.google.zxing.common.Comparator;
+import com.google.zxing.common.GenericResultPoint;
 
 import java.util.Hashtable;
 import java.util.Vector;
@@ -157,7 +157,7 @@ final class FinderPatternFinder {
     }
 
     FinderPattern[] patternInfo = selectBestPatterns();
-    patternInfo = orderBestPatterns(patternInfo);
+    GenericResultPoint.orderBestPatterns(patternInfo);
 
     return new FinderPatternInfo(patternInfo);
   }
@@ -501,63 +501,6 @@ final class FinderPatternFinder {
         (FinderPattern) possibleCenters.elementAt(1),
         (FinderPattern) possibleCenters.elementAt(2)
     };
-  }
-
-  /**
-   * <p>Having found three "best" finder patterns we need to decide which is the top-left, top-right,
-   * bottom-left. We assume that the one closest to the other two is the top-left one; this is not
-   * strictly true (imagine extreme perspective distortion) but for the moment is a serviceable assumption.
-   * Lastly we sort top-right from bottom-left by figuring out orientation from vector cross products.</p>
-   *
-   * @param patterns three best {@link FinderPattern}s
-   * @return same {@link FinderPattern}s ordered bottom-left, top-left, top-right
-   */
-  private static FinderPattern[] orderBestPatterns(FinderPattern[] patterns) {
-
-    // Find distances between pattern centers
-    float abDistance = distance(patterns[0], patterns[1]);
-    float bcDistance = distance(patterns[1], patterns[2]);
-    float acDistance = distance(patterns[0], patterns[2]);
-
-    FinderPattern topLeft;
-    FinderPattern topRight;
-    FinderPattern bottomLeft;
-    // Assume one closest to other two is top left;
-    // topRight and bottomLeft will just be guesses below at first
-    if (bcDistance >= abDistance && bcDistance >= acDistance) {
-      topLeft = patterns[0];
-      topRight = patterns[1];
-      bottomLeft = patterns[2];
-    } else if (acDistance >= bcDistance && acDistance >= abDistance) {
-      topLeft = patterns[1];
-      topRight = patterns[0];
-      bottomLeft = patterns[2];
-    } else {
-      topLeft = patterns[2];
-      topRight = patterns[0];
-      bottomLeft = patterns[1];
-    }
-
-    // Use cross product to figure out which of other1/2 is the bottom left
-    // pattern. The vector "top-left -> bottom-left" x "top-left -> top-right"
-    // should yield a vector with positive z component
-    if ((bottomLeft.getY() - topLeft.getY()) * (topRight.getX() - topLeft.getX()) <
-        (bottomLeft.getX() - topLeft.getX()) * (topRight.getY() - topLeft.getY())) {
-      FinderPattern temp = topRight;
-      topRight = bottomLeft;
-      bottomLeft = temp;
-    }
-
-    return new FinderPattern[]{bottomLeft, topLeft, topRight};
-  }
-
-  /**
-   * @return distance between two points
-   */
-  static float distance(ResultPoint pattern1, ResultPoint pattern2) {
-    float xDiff = pattern1.getX() - pattern2.getX();
-    float yDiff = pattern1.getY() - pattern2.getY();
-    return (float) Math.sqrt((double) (xDiff * xDiff + yDiff * yDiff));
   }
 
   /**
