@@ -43,13 +43,75 @@ public final class GenericResultPoint implements ResultPoint {
   }
 
   public String toString() {
-    StringBuffer result = new StringBuffer();
+    StringBuffer result = new StringBuffer(25);
     result.append('(');
     result.append(posX);
     result.append(',');
     result.append(posY);
     result.append(')');
     return result.toString();
+  }
+
+  public boolean equals(Object other) {
+    if (other instanceof GenericResultPoint) {
+      GenericResultPoint otherPoint = (GenericResultPoint) other;
+      return posX == otherPoint.posX && posY == otherPoint.posY;
+    }
+    return false;
+  }
+
+  public int hashCode() {
+    return 31 * Float.floatToIntBits(posX) + Float.floatToIntBits(posY);
+  }
+
+    /**
+   * <p>Orders an array of three ResultPoints in an order [A,B,C] such that AB < AC and
+   * BC < AC and the angle between BC and BA is less than 180 degrees.
+   */
+  public static void orderBestPatterns(ResultPoint[] patterns) {
+
+    // Find distances between pattern centers
+    float zeroOneDistance = distance(patterns[0], patterns[1]);
+    float oneTwoDistance = distance(patterns[1], patterns[2]);
+    float zeroTwoDistance = distance(patterns[0], patterns[2]);
+
+    ResultPoint pointA, pointB, pointC;
+    // Assume one closest to other two is B; A and C will just be guesses at first
+    if (oneTwoDistance >= zeroOneDistance && oneTwoDistance >= zeroTwoDistance) {
+      pointB = patterns[0];
+      pointA = patterns[1];
+      pointC = patterns[2];
+    } else if (zeroTwoDistance >= oneTwoDistance && zeroTwoDistance >= zeroOneDistance) {
+      pointB = patterns[1];
+      pointA = patterns[0];
+      pointC = patterns[2];
+    } else {
+      pointB = patterns[2];
+      pointA = patterns[0];
+      pointC = patterns[1];
+    }
+
+    // Use cross product to figure out whether A and C are correct or flipped.
+    if ((pointC.getY() - pointB.getY()) * (pointA.getX() - pointB.getX()) >
+        (pointC.getX() - pointB.getX()) * (pointA.getY() - pointB.getY())) {
+      ResultPoint temp = pointA;
+      pointA = pointC;
+      pointC = temp;
+    }
+
+    patterns[0] = pointA;
+    patterns[1] = pointB;
+    patterns[2] = pointC;
+  }
+
+
+  /**
+   * @return distance between two points
+   */
+  public static float distance(ResultPoint pattern1, ResultPoint pattern2) {
+    float xDiff = pattern1.getX() - pattern2.getX();
+    float yDiff = pattern1.getY() - pattern2.getY();
+    return (float) Math.sqrt((double) (xDiff * xDiff + yDiff * yDiff));
   }
 
 }
