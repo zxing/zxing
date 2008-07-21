@@ -26,6 +26,7 @@ import com.google.zxing.common.BitSource;
  * <p>See ISO 16022:2006, 5.2.1 - 5.2.9.2</p>
  *
  * @author bbrown@google.com (Brian Brown)
+ * @author srowen@google.com (Sean Owen)
  */
 final class DecodedBitStreamParser {
 
@@ -56,7 +57,7 @@ final class DecodedBitStreamParser {
   
   private static final char[] TEXT_SHIFT3_SET_CHARS = {
     '\'', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
-    'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '{', '|', '}', '~', 127
+    'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '{', '|', '}', '~', (char) 127
   };
   
   private static final int PAD_ENCODE = 0;  // Not really an encoding
@@ -73,28 +74,33 @@ final class DecodedBitStreamParser {
   static String decode(byte[] bytes) throws ReaderException {
     BitSource bits = new BitSource(bytes);
     StringBuffer result = new StringBuffer();
-    
     int mode = ASCII_ENCODE;
     do {
-      if (mode != PAD_ENCODE) {
-        if (mode == ASCII_ENCODE) {
-          mode = decodeAsciiSegment(bits, result);
-        } else if (mode == C40_ENCODE) {
-          mode = decodeC40Segment(bits, result);
-        } else if (mode == TEXT_ENCODE) {
-          mode = decodeTextSegment(bits, result);
-        } else if (mode == ANSIX12_ENCODE) {
-          mode = decodeAnsiX12Segment(bits, result);
-        } else if (mode == EDIFACT_ENCODE) {
-          mode = decodeEdifactSegment(bits, result);
-        } else if (mode == BASE256_ENCODE) {
-          mode = decodeBase256Segment(bits, result);
-        } else {
-          throw new ReaderException("Unsupported mode indicator");
+      if (mode == ASCII_ENCODE) {
+        mode = decodeAsciiSegment(bits, result);
+      } else {
+        switch (mode) {
+          case C40_ENCODE:
+            decodeC40Segment(bits, result);
+            break;
+          case TEXT_ENCODE:
+            decodeTextSegment(bits, result);
+            break;
+          case ANSIX12_ENCODE:
+            decodeAnsiX12Segment(bits, result);
+            break;
+          case EDIFACT_ENCODE:
+            decodeEdifactSegment(bits, result);
+            break;
+          case BASE256_ENCODE:
+            decodeBase256Segment(bits, result);
+            break;
+          default:
+            throw new ReaderException("Unsupported mode indicator");
         }
+        mode = ASCII_ENCODE;
       }
     } while (mode != PAD_ENCODE && bits.available() > 0);
-
     return result.toString();
   }
   
@@ -107,7 +113,6 @@ final class DecodedBitStreamParser {
     do {
       int oneByte = bits.readBits(8);
       if (oneByte == 0) {
-	    	// TODO(bbrown): I think this would be a bug, not sure
 	    	throw new ReaderException("0 is an invalid ASCII codeword");
 	    } else if (oneByte <= 128) {  // ASCII data (ASCII value + 1)
 	    	oneByte = upperShift ? (oneByte + 128) : oneByte;
@@ -117,11 +122,11 @@ final class DecodedBitStreamParser {
 	    } else if (oneByte == 129) {  // Pad
 	    	return PAD_ENCODE;
 	    } else if (oneByte <= 229) {  // 2-digit data 00-99 (Numeric Value + 130)
-	      // TODO(bbrown): Iassume there is some easier way to do this:
-	      if (oneByte - 130 < 10) {
+	      int value = oneByte - 130;
+	      if (value < 10) { // padd with '0' for single digit values
 	        result.append('0');
 	      }
-	    	result.append(Integer.toString(oneByte - 130));
+	    	result.append(value);
 	    } else if (oneByte == 230) {  // Latch to C40 encodation
 	    	return C40_ENCODE;
 	    } else if (oneByte == 231) {  // Latch to Base 256 encodation
@@ -148,7 +153,7 @@ final class DecodedBitStreamParser {
 	    	// TODO(bbrown): I think we need to support ECI
 	    	throw new ReaderException("Currently not supporting ECI Character");
 	    } else if (oneByte >= 242) {  // Not to be used in ASCII encodation
-	    	throw new ReaderException(Integer.toString(oneByte) + " should not be used in ASCII encodation");
+	    	throw new ReaderException(oneByte + " should not be used in ASCII encodation");
 	    }
     } while (bits.available() > 0);
     return ASCII_ENCODE;
@@ -157,220 +162,188 @@ final class DecodedBitStreamParser {
   /**
    * See ISO 16022:2006, 5.2.5 and Annex C, Table C.1
    */
-  private static int decodeC40Segment(BitSource bits,
-                                      StringBuffer result) throws ReaderException {
+  private static void decodeC40Segment(BitSource bits, StringBuffer result) throws ReaderException {
     // Three C40 values are encoded in a 16-bit value as
     // (1600 * C1) + (40 * C2) + C3 + 1
-    int shift = 0;
     // TODO(bbrown): The Upper Shift with C40 doesn't work in the 4 value scenario all the time
     boolean upperShift = false;
 
+    int[] cValues = new int[3];
     do {
       // If there is only one byte left then it will be encoded as ASCII
       if (bits.available() == 8) {
-        return ASCII_ENCODE;
+        return;
       }
-
       int firstByte = bits.readBits(8);
-
       if (firstByte == 254) {  // Unlatch codeword
-        return ASCII_ENCODE;
+        return;
       }
 
-      int fullBitValue = (firstByte << 8) + bits.readBits(8) - 1;
+      parseTwoBytes(firstByte, bits.readBits(8), cValues);
 
-      int[] cValues = new int[3];
-      cValues[0] = fullBitValue / 1600;
-      fullBitValue -= cValues[0] * 1600;
-      cValues[1] = fullBitValue / 40;
-      fullBitValue -= cValues[1] * 40;
-      cValues[2] = fullBitValue;
-
+      int shift = 0;
       for (int i = 0; i < 3; i++) {
         int cValue = cValues[i];
-        if (shift == 0) {
-          if (cValue == 0) {  // Shift 1
-            shift = 1;
-            continue;
-          } else if (cValue == 1) {  // Shift 2
-            shift = 2;
-            continue;
-          } else if (cValue == 2) {  // Shift 3
-            shift = 3;
-            continue;
-          }
-          if (upperShift) {
-            result.append((char) (C40_BASIC_SET_CHARS[cValue] + 128));
-            upperShift = false;
-          } else {
-            result.append(C40_BASIC_SET_CHARS[cValue]);
-          }
-        } else if (shift == 1) {
-          if (upperShift) {
-            result.append((char) (cValue + 128));
-            upperShift = false;
-          } else {
-            result.append(cValue);
-          }
-          shift = 0;
-        } else if (shift == 2) {
-          if (cValue < 27) {
-            if(upperShift) {
-              result.append((char) (C40_SHIFT2_SET_CHARS[cValue] + 128));
+        switch (shift) {
+          case 0:
+            if (cValue < 3) {
+              shift = cValue + 1;
+            } else {
+              if (upperShift) {
+                result.append((char) (C40_BASIC_SET_CHARS[cValue] + 128));
+                upperShift = false;
+              } else {
+                result.append(C40_BASIC_SET_CHARS[cValue]);
+              }
+            }
+            break;
+          case 1:
+            if (upperShift) {
+              result.append((char) (cValue + 128));
               upperShift = false;
             } else {
-              result.append(C40_SHIFT2_SET_CHARS[cValue]);
+              result.append(cValue);
             }
-          } else if (cValue == 27) {  // FNC1
-            throw new ReaderException("Currently not supporting FNC1");
-          } else if (cValue == 30) {  // Upper Shift
-            upperShift = true;
-          } else {
-            throw new ReaderException(Integer.toString(cValue) + " is not valid in the C40 Shift 2 set");
-          }
-          shift = 0;
-        } else if (shift == 3) {
-          if (upperShift) {
-            result.append((char) (cValue + 224));
-            upperShift = false;
-          } else {
-            result.append((char) (cValue + 96));
-          }
-          shift = 0;
-        } else {
-          throw new ReaderException("Invalid shift value");
+            shift = 0;
+            break;
+          case 2:
+            if (cValue < 27) {
+              if (upperShift) {
+                result.append((char) (C40_SHIFT2_SET_CHARS[cValue] + 128));
+                upperShift = false;
+              } else {
+                result.append(C40_SHIFT2_SET_CHARS[cValue]);
+              }
+            } else if (cValue == 27) {  // FNC1
+              throw new ReaderException("Currently not supporting FNC1");
+            } else if (cValue == 30) {  // Upper Shift
+              upperShift = true;
+            } else {
+              throw new ReaderException(cValue + " is not valid in the C40 Shift 2 set");
+            }
+            shift = 0;
+            break;
+          case 3:
+            if (upperShift) {
+              result.append((char) (cValue + 224));
+              upperShift = false;
+            } else {
+              result.append((char) (cValue + 96));
+            }
+            shift = 0;
+            break;
+          default:
+            throw new ReaderException("Invalid shift value");
         }
       }
     } while (bits.available() > 0);
-    return ASCII_ENCODE;
   }
   
   /**
    * See ISO 16022:2006, 5.2.6 and Annex C, Table C.2
    */
-  private static int decodeTextSegment(BitSource bits,
-                                       StringBuffer result) throws ReaderException {
+  private static void decodeTextSegment(BitSource bits, StringBuffer result) throws ReaderException {
     // Three Text values are encoded in a 16-bit value as
     // (1600 * C1) + (40 * C2) + C3 + 1
-    int shift = 0;
     // TODO(bbrown): The Upper Shift with Text doesn't work in the 4 value scenario all the time
     boolean upperShift = false;
 
+    int[] cValues = new int[3];
     do {
       // If there is only one byte left then it will be encoded as ASCII
       if (bits.available() == 8) {
-        return ASCII_ENCODE;
+        return;
       }
-
       int firstByte = bits.readBits(8);
-
       if (firstByte == 254) {  // Unlatch codeword
-        return ASCII_ENCODE;
+        return;
       }
 
-      int fullBitValue = (firstByte << 8) + bits.readBits(8) - 1;
+      parseTwoBytes(firstByte, bits.readBits(8), cValues);
 
-      int[] cValues = new int[3];
-      cValues[0] = fullBitValue / 1600;
-      fullBitValue -= cValues[0] * 1600;
-      cValues[1] = fullBitValue / 40;
-      fullBitValue -= cValues[1] * 40;
-      cValues[2] = fullBitValue;
-
+      int shift = 0;
       for (int i = 0; i < 3; i++) {
         int cValue = cValues[i];
-        if (shift == 0) {
-          if (cValue == 0) {  // Shift 1
-            shift = 1;
-            continue;
-          } else if (cValue == 1) {  // Shift 2
-            shift = 2;
-            continue;
-          } else if (cValue == 2) {  // Shift 3
-            shift = 3;
-            continue;
-          }
-          if (upperShift) {
-            result.append((char) (TEXT_BASIC_SET_CHARS[cValue] + 128));
-            upperShift = false;
-          } else {
-            result.append(TEXT_BASIC_SET_CHARS[cValue]);
-          }
-        } else if (shift == 1) {
-          if (upperShift) {
-            result.append((char) (cValue + 128));
-            upperShift = false;
-          } else {
-            result.append(cValue);
-          }
-          shift = 0;
-        } else if (shift == 2) {
-          // Shift 2 for Text is the same encoding as C40
-          if (cValue < 27) {
-            if(upperShift) {
-              result.append((char) (C40_SHIFT2_SET_CHARS[cValue] + 128));
+        switch (shift) {
+          case 0:
+            if (cValue < 3) {
+              shift = cValue + 1;
+            } else {
+              if (upperShift) {
+                result.append((char) (TEXT_BASIC_SET_CHARS[cValue] + 128));
+                upperShift = false;
+              } else {
+                result.append(TEXT_BASIC_SET_CHARS[cValue]);
+              }
+            }
+            break;
+          case 1:
+            if (upperShift) {
+              result.append((char) (cValue + 128));
               upperShift = false;
             } else {
-              result.append(C40_SHIFT2_SET_CHARS[cValue]);
+              result.append(cValue);
             }
-          } else if (cValue == 27) {  // FNC1
-            throw new ReaderException("Currently not supporting FNC1");
-          } else if (cValue == 30) {  // Upper Shirt
-            upperShift = true;
-          } else {
-            throw new ReaderException(Integer.toString(cValue) + " is not valid in the C40 Shift 2 set");
-          }
-          shift = 0;
-        } else if (shift == 3) {
-          if (upperShift) {
-            result.append((char) (TEXT_SHIFT3_SET_CHARS[cValue] + 128));
-            upperShift = false;
-          } else {
-            result.append(TEXT_SHIFT3_SET_CHARS[cValue]);
-          }
-          shift = 0;
-        } else {
-          throw new ReaderException("Invalid shift value");
+            shift = 0;
+            break;
+          case 2:
+            // Shift 2 for Text is the same encoding as C40
+            if (cValue < 27) {
+              if (upperShift) {
+                result.append((char) (C40_SHIFT2_SET_CHARS[cValue] + 128));
+                upperShift = false;
+              } else {
+                result.append(C40_SHIFT2_SET_CHARS[cValue]);
+              }
+            } else if (cValue == 27) {  // FNC1
+              throw new ReaderException("Currently not supporting FNC1");
+            } else if (cValue == 30) {  // Upper Shift
+              upperShift = true;
+            } else {
+              throw new ReaderException(cValue + " is not valid in the C40 Shift 2 set");
+            }
+            shift = 0;
+            break;
+          case 3:
+            if (upperShift) {
+              result.append((char) (TEXT_SHIFT3_SET_CHARS[cValue] + 128));
+              upperShift = false;
+            } else {
+              result.append(TEXT_SHIFT3_SET_CHARS[cValue]);
+            }
+            shift = 0;
+            break;
+          default:
+            throw new ReaderException("Invalid shift value");
         }
       }
     } while (bits.available() > 0);
-    return ASCII_ENCODE;
   }
   
   /**
    * See ISO 16022:2006, 5.2.7
    */
-  private static int decodeAnsiX12Segment(BitSource bits,
-                                          StringBuffer result) throws ReaderException {
+  private static void decodeAnsiX12Segment(BitSource bits, StringBuffer result) throws ReaderException {
     // Three ANSI X12 values are encoded in a 16-bit value as
     // (1600 * C1) + (40 * C2) + C3 + 1
 
+    int[] cValues = new int[3];
     do {
       // If there is only one byte left then it will be encoded as ASCII
       if (bits.available() == 8) {
-        return ASCII_ENCODE;
+        return;
       }
-
       int firstByte = bits.readBits(8);
-
       if (firstByte == 254) {  // Unlatch codeword
-        return ASCII_ENCODE;
+        return;
       }
 
-      int fullBitValue = (firstByte << 8) + bits.readBits(8) - 1;
-
-      int[] cValues = new int[3];
-      cValues[0] = fullBitValue / 1600;
-      fullBitValue -= cValues[0] * 1600;
-      cValues[1] = fullBitValue / 40;
-      fullBitValue -= cValues[1] * 40;
-      cValues[2] = fullBitValue;
+      parseTwoBytes(firstByte, bits.readBits(8), cValues);
 
       for (int i = 0; i < 3; i++) {
-        // TODO(bbrown): These really aren't X12 symbols, we are converting to ASCII chars
         int cValue = cValues[i];
         if (cValue == 0) {  // X12 segment terminator <CR>
-          result.append("<CR>");
+          result.append('\r');
         } else if (cValue == 1) {  // X12 segment separator *
           result.append('*');
         } else if (cValue == 2) {  // X12 sub-element separator >
@@ -382,23 +355,31 @@ final class DecodedBitStreamParser {
         } else if (cValue < 40) {  // A - Z
           result.append((char) (cValue + 51));
         } else {
-          throw new ReaderException(Integer.toString(cValue) + " is not valid in the ANSI X12 set");
+          throw new ReaderException(cValue + " is not valid in the ANSI X12 set");
         }
       }
     } while (bits.available() > 0);
-    
-    return ASCII_ENCODE;
+  }
+
+  private static void parseTwoBytes(int firstByte, int secondByte, int[] result) {
+    int fullBitValue = (firstByte << 8) + secondByte - 1;
+    int temp = fullBitValue / 1600;
+    result[0] = temp;
+    fullBitValue -= temp * 1600;
+    temp = fullBitValue / 40;
+    result[1] = temp;
+    result[2] = fullBitValue - temp * 40;
   }
   
   /**
    * See ISO 16022:2006, 5.2.8 and Annex C Table C.3
    */
-  private static int decodeEdifactSegment(BitSource bits, StringBuffer result) {
+  private static void decodeEdifactSegment(BitSource bits, StringBuffer result) {
     boolean unlatch = false;
     do {
       // If there is only two or less bytes left then it will be encoded as ASCII
       if (bits.available() <= 16) {
-        return ASCII_ENCODE;
+        return;
       }
 
       for (int i = 0; i < 4; i++) {
@@ -419,14 +400,12 @@ final class DecodedBitStreamParser {
         }
       }
     } while (!unlatch && bits.available() > 0);
-
-    return ASCII_ENCODE;
   }
   
   /**
    * See ISO 16022:2006, 5.2.9 and Annex B, B.2
    */
-  private static int decodeBase256Segment(BitSource bits, StringBuffer result) {
+  private static void decodeBase256Segment(BitSource bits, StringBuffer result) {
     // Figure out how long the Base 256 Segment is.
     int d1 = bits.readBits(8);
     int count;
@@ -440,8 +419,6 @@ final class DecodedBitStreamParser {
     for (int i = 0; i < count; i++) {
       result.append(unrandomize255State(bits.readBits(8), count));
     }
-    
-    return ASCII_ENCODE;
   }
   
   /**
