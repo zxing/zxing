@@ -473,28 +473,19 @@ final class FinderPatternFinder {
       throw new ReaderException("Could not find three finder patterns");
     }
 
-    if (size == 3) {
-      // Found just enough -- hope these are good!
-      return new FinderPattern[]{
-          (FinderPattern) possibleCenters.elementAt(0),
-          (FinderPattern) possibleCenters.elementAt(1),
-          (FinderPattern) possibleCenters.elementAt(2)
-      };
+    if (size > 3) {
+      // Throw away all but those first size candidate points we found.
+      possibleCenters.setSize(size);
+      //  We need to pick the best three. Find the most
+      // popular ones whose module size is nearest the average
+      float averageModuleSize = 0.0f;
+      for (int i = 0; i < size; i++) {
+        averageModuleSize += ((FinderPattern) possibleCenters.elementAt(i)).getEstimatedModuleSize();
+      }
+      averageModuleSize /= (float) size;
+      // We don't have java.util.Collections in J2ME
+      Collections.insertionSort(possibleCenters, new ClosestToAverageComparator(averageModuleSize));
     }
-
-    possibleCenters.setSize(size);
-
-    // Hmm, multiple found. We need to pick the best three. Find the most
-    // popular ones whose module size is nearest the average
-
-    float averageModuleSize = 0.0f;
-    for (int i = 0; i < size; i++) {
-      averageModuleSize += ((FinderPattern) possibleCenters.elementAt(i)).getEstimatedModuleSize();
-    }
-    averageModuleSize /= (float) size;
-
-    // We don't have java.util.Collections in J2ME
-    Collections.insertionSort(possibleCenters, new ClosestToAverageComparator(averageModuleSize));
 
     return new FinderPattern[]{
         (FinderPattern) possibleCenters.elementAt(0),
