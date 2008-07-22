@@ -23,31 +23,80 @@ import java.util.Hashtable;
 import java.util.Vector;
 
 /**
- * <p>This implementation can detect barcodes in one of several formats within
- * an image, and then decode what it finds. This implementation supports all
- * barcode formats that this library supports.</p>
+ * MultiFormatReader is a convenience class and the main entry point into the library for most uses.
+ * By default it attempts to decode all barcode formats that the library supports. Optionally, you
+ * can provide a hints object to request different behavior, for example only decoding QR codes.
  *
  * @author srowen@google.com (Sean Owen), dswitkin@google.com (Daniel Switkin)
  */
 public final class MultiFormatReader implements Reader {
 
+  private Hashtable hints;
+  private Vector readers;
+
+  /**
+   * This version of decode honors the intent of Reader.decode(MonochromeBitmapSource) in that it
+   * passes null as a hint to the decoders. However, that makes it inefficient to call repeatedly.
+   * Use setHints() followed by decodeWithState() for continuous scan applications.
+   *
+   * @param image The pixel data to decode
+   * @return The contents of the image
+   * @throws ReaderException Any errors which occurred
+   */
   public Result decode(MonochromeBitmapSource image) throws ReaderException {
-    return decode(image, null);
+    setHints(null);
+    return decodeInternal(image);
   }
 
+  /**
+   * Decode an image using the hints provided. Does not honor existing state.
+   *
+   * @param image The pixel data to decode
+   * @param hints The hints to use, clearing the previous state.
+   * @return The contents of the image
+   * @throws ReaderException Any errors which occurred
+   */
   public Result decode(MonochromeBitmapSource image, Hashtable hints) throws ReaderException {
+    setHints(hints);
+    return decodeInternal(image);
+  }
+
+  /**
+   * Decode an image using the state set up by calling setHints() previously.
+   *
+   * @param image The pixel data to decode
+   * @return The contents of the image
+   * @throws ReaderException Any errors which occurred
+   */
+  public Result decodeWithState(MonochromeBitmapSource image) throws ReaderException {
+    // Make sure to set up the default state so we don't crash
+    if (readers == null) {
+      setHints(null);
+    }
+    return decodeInternal(image);
+  }
+
+  /**
+   * This method adds state to the MultiFormatReader. By setting the hints once, subsequent calls
+   * to decodeWithState(image) can reuse the same set of readers without reallocating memory. This
+   * is important for performance in continuous scan clients.
+   *
+   * @param hints The set of hints to use for subsequent calls to decode(image)
+   */
+  public void setHints(Hashtable hints) {
+    this.hints = hints;
 
     boolean tryHarder = hints != null && hints.containsKey(DecodeHintType.TRY_HARDER);
     Vector possibleFormats = hints == null ? null : (Vector) hints.get(DecodeHintType.POSSIBLE_FORMATS);
-    Vector readers = new Vector();
+    readers = new Vector();
     if (possibleFormats != null) {
       boolean addOneDReader =
           possibleFormats.contains(BarcodeFormat.UPC_A) ||
-          possibleFormats.contains(BarcodeFormat.UPC_E) ||
-          possibleFormats.contains(BarcodeFormat.EAN_13) ||
-          possibleFormats.contains(BarcodeFormat.EAN_8) ||
-          possibleFormats.contains(BarcodeFormat.CODE_39) ||
-          possibleFormats.contains(BarcodeFormat.CODE_128);
+              possibleFormats.contains(BarcodeFormat.UPC_E) ||
+              possibleFormats.contains(BarcodeFormat.EAN_13) ||
+              possibleFormats.contains(BarcodeFormat.EAN_8) ||
+              possibleFormats.contains(BarcodeFormat.CODE_39) ||
+              possibleFormats.contains(BarcodeFormat.CODE_128);
       // Put 1D readers upfront in "normal" mode
       if (addOneDReader && !tryHarder) {
         readers.addElement(new MultiFormatOneDReader());
@@ -75,7 +124,9 @@ public final class MultiFormatReader implements Reader {
         readers.addElement(new MultiFormatOneDReader());
       }
     }
+  }
 
+  private Result decodeInternal(MonochromeBitmapSource image) throws ReaderException {
     for (int i = 0; i < readers.size(); i++) {
       Reader reader = (Reader) readers.elementAt(i);
       try {
