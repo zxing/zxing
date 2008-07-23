@@ -92,8 +92,10 @@ public final class GenericResultPoint implements ResultPoint {
     }
 
     // Use cross product to figure out whether A and C are correct or flipped.
-    if ((pointC.getY() - pointB.getY()) * (pointA.getX() - pointB.getX()) >
-        (pointC.getX() - pointB.getX()) * (pointA.getY() - pointB.getY())) {
+    // This asks whether BC x BA has a positive z component, which is the arrangement
+    // we want for A, B, C. If it's negative, then we've got it flipped around and
+    // should swap A and C.
+    if (crossProductZ(pointA, pointB, pointC) < 0.0f) {
       ResultPoint temp = pointA;
       pointA = pointC;
       pointC = temp;
@@ -112,6 +114,15 @@ public final class GenericResultPoint implements ResultPoint {
     float xDiff = pattern1.getX() - pattern2.getX();
     float yDiff = pattern1.getY() - pattern2.getY();
     return (float) Math.sqrt((double) (xDiff * xDiff + yDiff * yDiff));
+  }
+
+  /**
+   * Returns the z component of the cross product between vectors BC and BA.
+   */
+  public static float crossProductZ(ResultPoint pointA, ResultPoint pointB, ResultPoint pointC) {
+    float bX = pointB.getX();
+    float bY = pointB.getY();
+    return ((pointC.getX() - bX) * (pointA.getY() - bY)) - ((pointC.getY() - bY) * (pointA.getX() - bX));
   }
 
 }
