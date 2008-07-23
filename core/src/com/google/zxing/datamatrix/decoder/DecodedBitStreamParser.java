@@ -74,10 +74,11 @@ final class DecodedBitStreamParser {
   static String decode(byte[] bytes) throws ReaderException {
     BitSource bits = new BitSource(bytes);
     StringBuffer result = new StringBuffer();
+    StringBuffer resultTrailer = new StringBuffer(0);
     int mode = ASCII_ENCODE;
     do {
       if (mode == ASCII_ENCODE) {
-        mode = decodeAsciiSegment(bits, result);
+        mode = decodeAsciiSegment(bits, result, resultTrailer);
       } else {
         switch (mode) {
           case C40_ENCODE:
@@ -101,14 +102,17 @@ final class DecodedBitStreamParser {
         mode = ASCII_ENCODE;
       }
     } while (mode != PAD_ENCODE && bits.available() > 0);
+    if (resultTrailer.length() > 0) {
+      result.append(resultTrailer);
+    }
     return result.toString();
   }
   
   /**
    * See ISO 16022:2006, 5.2.3 and Annex C, Table C.2
    */
-  private static int decodeAsciiSegment(BitSource bits,
-                                        StringBuffer result) throws ReaderException {
+  private static int decodeAsciiSegment(BitSource bits, StringBuffer result, StringBuffer resultTrailer)
+      throws ReaderException {
     boolean upperShift = false;
     do {
       int oneByte = bits.readBits(8);
@@ -140,9 +144,11 @@ final class DecodedBitStreamParser {
 	    } else if (oneByte == 235) {  // Upper Shift (shift to Extended ASCII)
 	    	upperShift = true;
 	    } else if (oneByte == 236) {  // 05 Macro
-	    	throw new ReaderException("Currently not supporting 05 Macro");
-	    } else if (oneByte == 237) {  // 06 Macro
-	    	throw new ReaderException("Currently not supporting 06 Macro");
+        result.append("[)>\u001E05\u001D");
+        resultTrailer.insert(0, "\u001E\u0004");
+      } else if (oneByte == 237) {  // 06 Macro
+	    	result.append("[)>\u001E06\u001D");
+        resultTrailer.insert(0, "\u001E\u0004");
 	    } else if (oneByte == 238) {  // Latch to ANSI X12 encodation
 	    	return ANSIX12_ENCODE;
 	    } else if (oneByte == 239) {  // Latch to Text encodation
