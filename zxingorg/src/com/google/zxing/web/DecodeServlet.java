@@ -58,6 +58,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.net.SocketException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
@@ -160,6 +161,14 @@ public final class DecodeServlet extends HttpServlet {
       } finally {
         is.close();
       }
+    } catch (IllegalArgumentException iae) {
+      // Thrown if hostname is bad or null
+      getRequest.abort();
+      response.sendRedirect("badurl.jspx");
+    } catch (SocketException se) {
+      // Thrown if hostname is bad or null
+      getRequest.abort();
+      response.sendRedirect("badurl.jspx");
     } catch (HttpException he) {
       getRequest.abort();
       response.sendRedirect("badurl.jspx");
