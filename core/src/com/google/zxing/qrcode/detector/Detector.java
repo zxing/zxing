@@ -74,6 +74,9 @@ public final class Detector {
     FinderPattern bottomLeft = info.getBottomLeft();
 
     float moduleSize = calculateModuleSize(topLeft, topRight, bottomLeft);
+    if (moduleSize < 1.0f) {
+      throw new ReaderException("Module size too small");
+    }
     int dimension = computeDimension(topLeft, topRight, bottomLeft, moduleSize);
     Version provisionalVersion = Version.getProvisionalVersionForDimension(dimension);
     int modulesBetweenFPCenters = provisionalVersion.getDimensionForVersion() - 7;
