@@ -19,6 +19,7 @@ package com.google.zxing.client.j2me;
 import javax.microedition.amms.control.camera.ExposureControl;
 import javax.microedition.amms.control.camera.FocusControl;
 import javax.microedition.amms.control.camera.ZoomControl;
+import javax.microedition.media.Control;
 import javax.microedition.media.Controllable;
 import javax.microedition.media.MediaException;
 
@@ -35,6 +36,21 @@ final class AdvancedMultimediaManager implements MultimediaManager {
   private static final int MAX_ZOOM = 200;
   private static final long FOCUS_TIME_MS = 750L;
   private static final String DESIRED_METERING = "center-weighted";
+
+  AdvancedMultimediaManager() {
+    // Another try at fixing Issue 70. Seems like FocusControl et al. are sometimes not
+    // loaded until first use in the setFocus() method. This is too late for our
+    // mechanism to handle, since it is trying to detect this API is not available
+    // at the time this class is instantiated. We can't move the player.getControl() calls
+    // into here since we don't have a Controllable to call on, since we can't pass an
+    // arg into the constructor, since we can't do that in J2ME when instantiating via
+    // newInstance(). So we just try writing some dead code here to induce the VM to
+    // definitely load the classes now:
+    Control dummy = null;
+    ExposureControl dummy1 = (ExposureControl) dummy;
+    FocusControl dummy2 = (FocusControl) dummy;
+    ZoomControl dummy3 = (ZoomControl) dummy;
+  }
 
   public void setFocus(Controllable player) {
     FocusControl focusControl = (FocusControl)
