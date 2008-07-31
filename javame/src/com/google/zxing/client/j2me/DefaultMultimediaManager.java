@@ -45,6 +45,8 @@ class DefaultMultimediaManager implements MultimediaManager {
       // continue
     } catch (InstantiationException ie) {
       // continue
+    } catch (NoClassDefFoundError ncdfe) {
+      // continue
     }
   }
 
