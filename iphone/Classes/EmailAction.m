@@ -49,19 +49,19 @@ static NSURL *MailtoURL(NSString *to, NSString *sub, NSString *body) {
 }
 
 - (NSString *)title {
-  return [NSString localizedStringWithFormat:NSLocalizedString(@"Email %@", @"action title"), self.recipient];
+  return [NSString localizedStringWithFormat:NSLocalizedString(@"EmailAction action title", @"Email %@"), self.recipient];
 }
 
 - (NSString *)alertTitle {
-  return NSLocalizedString(@"Compose Email", @"alert title");
+  return NSLocalizedString(@"EmailAction alert title", @"Compose Email");
 }
 
 - (NSString *)alertMessage {
-  return [NSString localizedStringWithFormat:NSLocalizedString(@"Compose Email to %@?", @"alert message"), self.recipient];
+  return [NSString localizedStringWithFormat:NSLocalizedString(@"EmailAction alert message", @"Compose Email to %@?"), self.recipient];
 }
 
 - (NSString *)alertButtonTitle {
-  return NSLocalizedString(@"Compose", @"alert button title");
+  return NSLocalizedString(@"EmailAction alert button title", @"Compose");
 }
 
 

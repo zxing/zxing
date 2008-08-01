@@ -63,7 +63,7 @@
 }
 
 + (NSString *)typeName {
-  return @"URI";
+  return NSLocalizedString(@"URIParsedResult type name", @"URI");
 }
 
 - (UIImage *)icon {

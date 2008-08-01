@@ -1,8 +1,8 @@
 //
-//  BookmarkDoCoMoResultParser.h
+//  PlainEmailResultParser.m
 //  ZXing
 //
-//  Created by Christian Brunschen on 25/06/2008.
+//  Created by Christian Brunschen on 28/07/2008.
 /*
  * Copyright 2008 ZXing authors
  *
@@ -19,11 +19,18 @@
  * limitations under the License.
  */
 
-#import <UIKit/UIKit.h>
-#import "DoCoMoResultParser.h"
+#import "PlainEmailResultParser.h"
+#import "EmailParsedResult.h"
 
-@interface BookmarkDoCoMoResultParser : DoCoMoResultParser {
+@implementation PlainEmailResultParser
 
++ (ParsedResult *)parsedResultForString:(NSString *)s {
+  if ([EmailParsedResult looksLikeAnEmailAddress:s]) {
+    EmailParsedResult *result = [[[EmailParsedResult alloc] init] autorelease];
+    [result setTo:s];
+    return result;
+  }
+  return nil;
 }
 
 @end

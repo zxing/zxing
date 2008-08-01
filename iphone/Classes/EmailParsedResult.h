@@ -32,4 +32,6 @@
 @property (nonatomic, copy) NSString *subject;
 @property (nonatomic, copy) NSString *body;
 
++ (bool) looksLikeAnEmailAddress:(NSString *)s;
+
 @end

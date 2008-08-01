@@ -49,7 +49,7 @@
 }
 
 - (NSString *)title {
-  return NSLocalizedString(@"Add Contact", @"Add Contact");
+  return NSLocalizedString(@"AddContactAction title", @"Add Contact");
 }
 
 - (void) addContactWithController:(UIViewController *)controller {
@@ -119,6 +119,16 @@
     ABRecordSetValue(person, kABPersonURLProperty, urlMultiValue, error);
   }
   
+  if (self.address) {
+    /*
+    ABMutableMultiValueRef addressMultiValue = 
+    ABMultiValueCreateMutable(kABStringPropertyType);
+    ABMultiValueAddValueAndLabel(addressMultiValue, 
+                                 NULL, NULL, 
+                                 NULL);
+     */
+  }
+  
   ABUnknownPersonViewController *unknownPersonViewController = 
   [[ABUnknownPersonViewController alloc] init];
   unknownPersonViewController.displayedPerson = person;
@@ -148,10 +158,10 @@
   if (confirm) {
     viewController = controller;
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil 
-                                                        message:NSLocalizedString(@"Add Contact?", @"add contact") 
+                                                        message:NSLocalizedString(@"AddContactAction alert message", @"Add Contact?") 
                                                        delegate:self 
-                                              cancelButtonTitle:NSLocalizedString(@"Cancel", @"cancel button title") 
-                                              otherButtonTitles:NSLocalizedString(@"Add Contact", @"add contact"), nil];
+                                              cancelButtonTitle:NSLocalizedString(@"AddContactAction cancel button title", @"Cancel") 
+                                              otherButtonTitles:NSLocalizedString(@"AddContactAction confirm button title", @"Add Contact"), nil];
     [alertView show];
     [alertView release];
   } else {

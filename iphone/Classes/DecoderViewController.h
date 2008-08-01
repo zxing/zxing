@@ -37,7 +37,9 @@
   IBOutlet UIBarItem *archiveBarItem;
   IBOutlet UIBarItem *actionBarItem;
   
-  IBOutlet UITextView *messageView;
+  IBOutlet UIView *messageView;
+  IBOutlet UITextView *messageTextView;
+  IBOutlet UIButton *messageHelpButton;
   IBOutlet ScannedImageView *imageView;
   IBOutlet UIToolbar *toolbar;
   
@@ -54,7 +56,9 @@
 @property (nonatomic, retain) UIBarItem *archiveBarItem;
 @property (nonatomic, retain) UIBarItem *actionBarItem;
 
-@property (nonatomic, retain) UITextView *messageView;
+@property (nonatomic, retain) UIView *messageView;
+@property (nonatomic, retain) UITextView *messageTextView;
+@property (nonatomic, retain) UIButton *messageHelpButton;
 @property (nonatomic, retain) ScannedImageView *imageView;
 @property (nonatomic, retain) UIToolbar *toolbar;
 
@@ -64,10 +68,11 @@
 
 @property (nonatomic, retain) NSMutableArray *resultPointViews;
 
+- (void)clearImageView;
 - (void)updateToolbar;
 - (void)pickAndDecodeFromSource:(UIImagePickerControllerSourceType) sourceType;
 - (IBAction)pickAndDecode:(id)sender;
-- (void)showMessage:(NSString *)message;
+- (void)showMessage:(NSString *)message helpButton:(BOOL)showHelpButton;
 - (IBAction)performResultAction:(id)sender;
 - (IBAction)showArchive:(id)sender;
 - (void)showScan:(Scan *)scan;

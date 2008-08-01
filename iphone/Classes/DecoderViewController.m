@@ -28,9 +28,9 @@
 
 #import "Database.h"
 #import "ArchiveController.h"
+#import "HintsViewController.h"
 #import "Scan.h"
 #import "TwoDDecoderResult.h"
-
 
 @implementation DecoderViewController
 
@@ -41,6 +41,8 @@
 @synthesize actionBarItem;
 
 @synthesize messageView;
+@synthesize messageTextView;
+@synthesize messageHelpButton;
 @synthesize imageView;
 @synthesize toolbar;
 
@@ -53,7 +55,7 @@
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
 	if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
 		// Initialization code
-    self.title = @"ZXing";
+    self.title = NSLocalizedString(@"DecoderViewController AppTitle", @"Barcode Scanner   ");
     
     Decoder *d = [[Decoder alloc] init];
     self.decoder = d;
@@ -64,31 +66,84 @@
 	return self;
 }
 
+- (void) hintsReady:(id)sender {
+  HintsViewController *hintsController = sender;
+  [[self navigationController] pushViewController:hintsController animated:true];
+  [hintsController release];
+}
+
+- (void) hintsFailed:(id)sender {
+  HintsViewController *hintsController = sender;
+  NSLog(@"Failed to load hints!");
+  [hintsController release];
+}
+
+- (void) showHints:(id)sender {
+  NSLog(@"Showing Hints!");
+  
+  HintsViewController *hintsController = [[HintsViewController alloc] initWithTarget:self onSuccess:@selector(hintsReady:) onFailure:@selector(hintsFailed:)];
+  hintsController.title = NSLocalizedString(@"DecoderViewController HintsViewController title", @"Hints");
+  hintsController.view;
+}
+
+  
+#define HELP_BUTTON_WIDTH (44.0)
+#define HELP_BUTTON_HEIGHT (55.0)
+
+
 #define FONT_NAME @"TimesNewRomanPSMT"
 #define FONT_SIZE 16.0
+
+- (void) reset {
+  self.result = nil;
+  [self clearImageView];
+  [self updateToolbar];
+  [self showMessage:NSLocalizedString(@"DecoderViewController take or choose picture", @"Please take or choose a picture containing a barcode") helpButton:YES];
+}
 
 // Implement loadView if you want to create a view hierarchy programmatically
 - (void)loadView {
   [super loadView];
   
   CGRect messageViewFrame = imageView.frame;
-  UITextView *mView = [[UITextView alloc] initWithFrame:messageViewFrame];
+  UIView *mView = [[UIView alloc] initWithFrame:messageViewFrame];
   mView.backgroundColor = [UIColor darkGrayColor];
   mView.alpha = 0.9;
-  mView.editable = false;
-  mView.scrollEnabled = true;
-  mView.font = [UIFont fontWithName:FONT_NAME size:FONT_SIZE];
   mView.autoresizingMask = UIViewAutoresizingFlexibleHeight | 
-                           UIViewAutoresizingFlexibleWidth |
-                           UIViewAutoresizingFlexibleTopMargin;
-  mView.textColor = [UIColor whiteColor];
-  mView.textAlignment = UITextAlignmentLeft;
+  UIViewAutoresizingFlexibleWidth |
+  UIViewAutoresizingFlexibleTopMargin;
+  
+  UITextView *mTextView = [[UITextView alloc] initWithFrame:messageViewFrame];
+  mTextView.autoresizingMask = UIViewAutoresizingFlexibleHeight | 
+  UIViewAutoresizingFlexibleWidth;
+  mTextView.editable = false;
+  mTextView.scrollEnabled = true;
+  mTextView.font = [UIFont fontWithName:FONT_NAME size:FONT_SIZE];
+  mTextView.textColor = [UIColor whiteColor];
+  mTextView.backgroundColor = [[UIColor lightGrayColor] colorWithAlphaComponent:0.0];
+  mTextView.textAlignment = UITextAlignmentLeft;
+  mTextView.alpha = 1.0;
+  [mView addSubview:mTextView];
+
+  UIButton *mHelpButton = [[UIButton buttonWithType:UIButtonTypeInfoLight] retain];
+  mHelpButton.frame = CGRectMake(messageViewFrame.size.width - HELP_BUTTON_WIDTH, 0.0, HELP_BUTTON_WIDTH, HELP_BUTTON_HEIGHT);
+  
+  mHelpButton.backgroundColor = [UIColor clearColor];
+  [mHelpButton setUserInteractionEnabled:YES];
+  [mHelpButton addTarget:self action:@selector(showHints:) forControlEvents:UIControlEventTouchUpInside];
+
+  self.messageHelpButton = mHelpButton;
+  [mHelpButton release];
+  
+  self.messageTextView = mTextView;
+  [mTextView release];
+  
   self.messageView = mView;
   [mView release];
   
   [self.view addSubview:self.messageView];
-  [self updateToolbar];
-  [self showMessage:NSLocalizedString(@"Please take or choose a picture containing a barcode", @"")];
+  
+  [self reset];
 }
 
 - (void) updateToolbar {
@@ -115,8 +170,8 @@
 }
 
 - (void)pickAndDecodeFromSource:(UIImagePickerControllerSourceType) sourceType {
-  self.result = nil;
-  [self clearImageView];
+  [self reset];
+  \
   // Create the Image Picker
   if ([UIImagePickerController isSourceTypeAvailable:sourceType]) {
     UIImagePickerController* picker = [[UIImagePickerController alloc] init];
@@ -172,20 +227,46 @@
 	[super dealloc];
 }
 
-- (void)showMessage:(NSString *)message {
+- (void)showMessage:(NSString *)message helpButton:(BOOL)showHelpButton {
 #ifdef DEBUG
-  NSLog(@"Showing message '%@'", message);
+  NSLog(@"Showing message '%@' %@ help Button", message, showHelpButton ? @"with" : @"without");
 #endif
   
   CGSize maxSize = imageView.bounds.size;
-  CGSize size = [message sizeWithFont:messageView.font constrainedToSize:maxSize lineBreakMode:UILineBreakModeWordWrap];
+  if (showHelpButton) {
+    maxSize.width -= messageHelpButton.frame.size.width;
+  }
+  CGSize size = [message sizeWithFont:messageTextView.font constrainedToSize:maxSize lineBreakMode:UILineBreakModeWordWrap];
   float height = 20.0 + fmin(100.0, size.height);
+  if (showHelpButton) {
+    height = fmax(HELP_BUTTON_HEIGHT, height);
+  }
 
   CGRect messageFrame = imageView.bounds;
   messageFrame.origin.y = CGRectGetMaxY(messageFrame) - height;
   messageFrame.size.height = height;
-  self.messageView.text = message;
   [self.messageView setFrame:messageFrame];
+  CGRect messageViewBounds = [messageView bounds];
+
+  self.messageTextView.text = message;
+  if (showHelpButton) {
+    CGRect textViewFrame;
+    CGRect helpButtonFrame;
+    
+    CGRectDivide(messageViewBounds, &helpButtonFrame, &textViewFrame, HELP_BUTTON_WIDTH, CGRectMaxXEdge);
+    [self.messageTextView setFrame:textViewFrame];
+    
+    [messageHelpButton setFrame:helpButtonFrame];
+    messageHelpButton.alpha = 1.0;
+    messageHelpButton.enabled = YES;
+    [messageView addSubview:messageHelpButton];
+  } else {
+    [messageHelpButton removeFromSuperview];
+    messageHelpButton.alpha = 0.0;
+    messageHelpButton.enabled = NO;
+
+    [self.messageTextView setFrame:messageViewBounds];
+  }
 }
 
 // DecoderDelegate methods
@@ -193,7 +274,8 @@
 - (void)decoder:(Decoder *)decoder willDecodeImage:(UIImage *)image {
   [self clearImageView];
   [self.imageView setImage:image];
-  [self showMessage:[NSString stringWithFormat:NSLocalizedString(@"Decoding image (%.0fx%.0f) ...", @"shown while image is decoding"), image.size.width, image.size.height]];
+  [self showMessage:[NSString stringWithFormat:NSLocalizedString(@"DecoderViewController MessageWhileDecodingWithDimensions", @"Decoding image (%.0fx%.0f) ..."), image.size.width, image.size.height]
+     helpButton:NO];
 }
 
 - (void)decoder:(Decoder *)decoder 
@@ -202,12 +284,12 @@
        progress:(NSString *)message {
   [self clearImageView];
   [self.imageView setImage:subset];
-  [self showMessage:message];
+  [self showMessage:message helpButton:NO];
 }
 
 - (void)presentResultForString:(NSString *)resultString {
   self.result = [ResultParser parsedResultForString:resultString];
-  [self showMessage:[self.result stringForDisplay]];
+  [self showMessage:[self.result stringForDisplay] helpButton:NO];
   self.actions = self.result.actions;
 #ifdef DEBUG
   NSLog(@"result has %d actions", actions ? 0 : actions.count);
@@ -237,7 +319,7 @@
 }
 
 - (void)decoder:(Decoder *)decoder failedToDecodeImage:(UIImage *)image usingSubset:(UIImage *)subset reason:(NSString *)reason {
-  [self showMessage:reason];
+  [self showMessage:reason helpButton:YES];
   [self updateToolbar];
 }
 
@@ -379,7 +461,7 @@
       [actionSheet addButtonWithTitle:[action title]];
     }
     
-    int cancelIndex = [actionSheet addButtonWithTitle:NSLocalizedString(@"Cancel", @"")];
+    int cancelIndex = [actionSheet addButtonWithTitle:NSLocalizedString(@"DecoderViewController cancel button title", @"Cancel")];
     actionSheet.cancelButtonIndex = cancelIndex;
     
     actionSheet.delegate = self;

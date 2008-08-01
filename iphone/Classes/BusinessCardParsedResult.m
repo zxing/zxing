@@ -74,7 +74,7 @@
 }
 
 + (NSString *)typeName {
-  return @"Contact";
+  return NSLocalizedString(@"Contact Result Type Name", @"Contact");
 }
 
 - (UIImage *)icon {

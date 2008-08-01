@@ -123,7 +123,7 @@
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
-  self.title = NSLocalizedString(@"Scan Archive", "scan archive title");
+  self.title = NSLocalizedString(@"ScanArchiveTitle", @"Scan Archive");
   self.navigationItem.rightBarButtonItem = [self editButtonItem];
 }
 

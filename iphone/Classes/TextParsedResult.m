@@ -20,6 +20,7 @@
  */
 
 #import "TextParsedResult.h"
+#import "EmailAction.h"
 
 
 @implementation TextParsedResult
@@ -34,7 +35,7 @@
 }
 
 + (NSString *)typeName {
-  return @"Text";
+  return NSLocalizedString(@"TextParsedResult type name", @"Text");
 }
 
 - (UIImage *)icon {
@@ -46,6 +47,7 @@
 }
 
 - (void) populateActions {
+  //[actions addObject:[EmailAction actionWithRecipient:@"recipient@domain" subject:@"QR Code Contents" body:text]];
 }
 
 - (void)dealloc {
