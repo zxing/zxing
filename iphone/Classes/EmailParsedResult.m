@@ -22,26 +22,42 @@
 #import "EmailParsedResult.h"
 #import "EmailAction.h"
 
+
 @implementation EmailParsedResult
 
 @synthesize to;
 @synthesize subject;
 @synthesize body;
 
++ (bool) looksLikeAnEmailAddress:(NSString *)s {
+  if ([s rangeOfString:@"@"].location == NSNotFound) {
+    return false;
+  }
+  if ([s rangeOfString:@"."].location == NSNotFound) {
+    return false;
+  }
+  if ([s rangeOfCharacterFromSet:[NSCharacterSet whitespaceCharacterSet]].location != NSNotFound) {
+    return false;
+  }
+  return true;
+}
+
+
 - (NSString *)stringForDisplay {
-  NSMutableString *result = [NSMutableString string];
-  [result appendFormat:@"To: %@", self.to];
+  NSMutableArray *parts = [[NSMutableArray alloc] initWithCapacity:10];
+  [parts addObject:[NSString stringWithFormat:NSLocalizedString(@"EmailParsedResult Display: Recipient", @"To: %@"), self.to]];
   if (self.subject) {
-    [result appendFormat:@"\nSubject: %@", self.subject];
+    [parts addObject:[NSString stringWithFormat:NSLocalizedString(@"EmailParsedResult Display: Subject", @"Subject: %@"), self.subject]];
   }
   if (self.body) {
-    [result appendFormat:@"\n\n%@", self.body];
+    [parts addObject:@""];
+    [parts addObject:[NSString stringWithFormat:NSLocalizedString(@"EmailParsedResult Display: Body", @"%@"), self.body]];
   }
-  return [NSString stringWithString:result];
+  return [parts componentsJoinedByString:@"\n"];
 }
 
 + (NSString *)typeName {
-  return @"Email";
+    return NSLocalizedString(@"EmailParsedResult type name", @"Email");
 }
 
 - (NSArray *)actions {

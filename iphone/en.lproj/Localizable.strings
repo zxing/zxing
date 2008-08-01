@@ -1,65 +1,135 @@
-﻿/* Add Contact */
-"Add Contact" = "Add Contact";
+﻿/* Add Contact? */
+"AddContactAction alert message" = "Add Contact?";
 
-/* alert title
-   alert button title */
-"Call" = "Call";
+/* Cancel */
+"AddContactAction cancel button title" = "Cancel";
 
-/* action title */
-"Call %@" = "Call %@";
+/* Add Contact */
+"AddContactAction confirm button title" = "Add Contact";
 
-/* alert message */
-"Call %@?" = "Call %@?";
+/* Add Contact */
+"AddContactAction title" = "Add Contact";
 
-/* cancel button title */
-"Cancel" = "Cancel";
+/* Call %@ */
+"CallAction action title" = "Call %@";
 
-/* alert title
-   alert button title */
-"Compose" = "Compose";
+/* Call */
+"CallAction alert button title" = "Call";
 
-/* alert title */
-"Compose Email" = "Compose Email";
+/* Call %@? */
+"CallAction alert message" = "Call %@?";
 
-/* alert message */
-"Compose Email to %@?" = "Compose Email to %@?";
+/* Call */
+"CallAction alert title" = "Call";
 
-/* action title */
-"Compose SMS to %@" = "Compose SMS to %@";
+/* Compose */
+"SMSAction alert title" = "Compose";
 
-/* alert message */
-"Compose SMS to %@?" = "Compose SMS to %@?";
+/* Contact */
+"Contact Result Type Name" = "Contact";
 
-/* shown while image is decoding */
-"Decoding image (%.0fx%.0f) ..." = "Decoding image (%1$.0fx%2$.0f) ...";
+/* No barcode detected. */
+"Decoder BarcodeDetectionFailure" = "No barcode detected.";
 
-/* action title */
-"Email %@" = "Email %@";
+/* Decoding ... */
+"Decoder MessageWhileDecoding" = "Decoding ...";
 
-/* alert button title */
-"Open" = "Open";
+/* ZXing */
+"DecoderViewController AppTitle" = "Scanner";
 
-/* action title */
-"Open %@" = "Open %@";
+/* Cancel */
+"DecoderViewController cancel button title" = "Cancel";
 
-/* alert title */
-"Open URL" = "Open URL";
+/* Hints */
+"DecoderViewController HintsViewController title" = "Hints";
 
-/* alert message */
-"Open URL <%@>?" = "Open URL <%@>?";
+/* Decoding image (%.0fx%.0f) ... */
+"DecoderViewController MessageWhileDecodingWithDimensions" = "Decoding image (%.0fx%.0f) ...";
 
-/* No comment provided by engineer. */
-"Please take or choose a picture containing a barcode" = "Please take or choose a picture containing a barcode";
+/* Please take or choose a picture containing a barcode */
+"DecoderViewController take or choose picture" = "Please take or choose a picture containing a barcode";
 
-/* alert button title */
-"Show" = "Show";
+/* Email %@ */
+"EmailAction action title" = "Email %@";
 
-/* alert message */
-"Show location %@ on Map ?" = "Show location %@ on Map ?";
+/* Compose */
+"EmailAction alert button title" = "Compose";
 
-/* action title
-   alert title */
-"Show on Map" = "Show on Map";
+/* Compose Email to %@? */
+"EmailAction alert message" = "Compose Email to %@?";
 
-/* No barcode detected */
-"No barcode detected." = "No barcode detected.";
+/* Compose Email */
+"EmailAction alert title" = "Compose Email";
+
+/* %@ */
+"EmailParsedResult Display: Body" = "%@";
+
+/* To: %@ */
+"EmailParsedResult Display: Recipient" = "To: %@";
+
+/* Subject: %@ */
+"EmailParsedResult Display: Subject" = "Subject: %@";
+
+/* Email */
+"EmailParsedResult type name" = "Email";
+
+/* Geo: %@ */
+"GeoParsedResult display" = "Geo: %@";
+
+/* Geolocation */
+"GeoParsedResult type name" = "Geolocation";
+
+/* Open URL */
+"OpenURLAction action title" = "Open URL";
+
+/* Open */
+"OpenURLAction alert button title" = "Open";
+
+/* Open URL <%@>? */
+"OpenURLAction alert message" = "Open URL <%@>?";
+
+/* Open URL */
+"OpenURLAction alert title" = "Open URL";
+
+/* Cancel */
+"OpenURLAction cancel button title" = "Cancel";
+
+/* Scan Archive */
+"ScanArchiveTitle" = "Scan Archive";
+
+/* Scan */
+"ScanViewController title" = "Scan";
+
+/* Show on Map */
+"ShowMapAction action title" = "Show on Map";
+
+/* Show */
+"ShowMapAction alert button title" = "Show";
+
+/* Show location %@ on Map ? */
+"ShowMapAction alert message" = "Show location %@ on Map?";
+
+/* Show on Map */
+"ShowMapAction alert title" = "Show on Map";
+
+/* Compose SMS to %@ */
+"SMSAction action title" = "Compose SMS to %@";
+
+/* Compose */
+"SMSAction alert button title" = "Compose";
+
+/* Compose SMS to %@? */
+"SMSAction alert message" = "Compose SMS to %@?";
+
+/* SMS */
+"SMSParsedResult type name" = "SMS";
+
+/* Tel */
+"TelParsedResult type name" = "Tel";
+
+/* Text */
+"TextParsedResult type name" = "Text";
+
+/* URI */
+"URIParsedResult type name" = "URI";
+

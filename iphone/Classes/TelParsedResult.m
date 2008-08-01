@@ -39,7 +39,7 @@
 
 
 + (NSString *)typeName {
-  return @"Tel";
+  return NSLocalizedString(@"TelParsedResult type name", @"Tel");
 }
 
 - (UIImage *)icon {

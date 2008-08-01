@@ -35,7 +35,7 @@
 
 
 + (NSString *)typeName {
-  return @"Geolocation";
+  return NSLocalizedString(@"GeoParsedResult type name", @"Geolocation");
 }
 
 - (UIImage *)icon {
@@ -44,7 +44,7 @@
 
 
 - (NSString *)stringForDisplay {
-  return [NSString stringWithFormat:@"Geo: %@", self.location];
+  return [NSString stringWithFormat:NSLocalizedString(@"GeoParsedResult display", @"Geo: %@"), self.location];
 }
 
 - (void)populateActions {

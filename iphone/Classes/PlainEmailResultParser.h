@@ -1,8 +1,8 @@
 //
-//  BookmarkDoCoMoResultParser.h
+//  PlainEmailResultParser.h
 //  ZXing
 //
-//  Created by Christian Brunschen on 25/06/2008.
+//  Created by Christian Brunschen on 28/07/2008.
 /*
  * Copyright 2008 ZXing authors
  *
@@ -20,9 +20,10 @@
  */
 
 #import <UIKit/UIKit.h>
-#import "DoCoMoResultParser.h"
+#import "ResultParser.h"
 
-@interface BookmarkDoCoMoResultParser : DoCoMoResultParser {
+
+@interface PlainEmailResultParser : ResultParser {
 
 }
 

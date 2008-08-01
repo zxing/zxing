@@ -196,7 +196,7 @@ using namespace qrcode;
                           waitUntilDone:NO];
     } else {
       [self performSelectorOnMainThread:@selector(failedToDecodeImage:)
-                             withObject:NSLocalizedString(@"No barcode detected.", @"No barcode detected.")
+                             withObject:NSLocalizedString(@"Decoder BarcodeDetectionFailure", @"No barcode detected.")
                           waitUntilDone:NO];
     }
 
@@ -226,7 +226,7 @@ using namespace qrcode;
   [self prepareSubset];
   
   [self performSelectorOnMainThread:@selector(progressDecodingImage:)
-                         withObject:@"Decoding ..."
+                         withObject:NSLocalizedString(@"Decoder MessageWhileDecoding", @"Decoding ...")
                       waitUntilDone:NO];  
   
 	[NSThread detachNewThreadSelector:@selector(decode:) 

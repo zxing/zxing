@@ -1,65 +1,135 @@
-﻿/* Add Contact */
-"Add Contact" = "Lägg till Kontakt";
+﻿/* Add Contact? */
+"AddContactAction alert message" = "Lägg till kontakt?";
 
-/* alert title
-   alert button title */
-"Call" = "Ring";
+/* Cancel */
+"AddContactAction cancel button title" = "Avbryt";
 
-/* action title */
-"Call %@" = "Ring %@";
+/* Add Contact */
+"AddContactAction confirm button title" = "Lägg till kontakt";
 
-/* alert message */
-"Call %@?" = "Ring %@?";
+/* Add Contact */
+"AddContactAction title" = "Lägg till kontakt";
 
-/* cancel button title */
-"Cancel" = "Avbryt";
+/* Call %@ */
+"CallAction action title" = "Ring %@";
 
-/* alert title
-   alert button title */
-"Compose" = "Skriv";
+/* Call */
+"CallAction alert button title" = "Ring";
 
-/* alert title */
-"Compose Email" = "Skriv Epost";
+/* Call %@? */
+"CallAction alert message" = "Ring %@?";
 
-/* alert message */
-"Compose Email to %@?" = "Skriv Epost to %@?";
+/* Call */
+"CallAction alert title" = "Ring";
 
-/* action title */
-"Compose SMS to %@" = "Skriv SMS to %@";
+/* Compose */
+"SMSAction alert title" = "Skriv";
 
-/* alert message */
-"Compose SMS to %@?" = "Skriv SMS to %@?";
+/* Contact */
+"Contact Result Type Name" = "Kontakt";
 
-/* shown while image is decoding */
-"Decoding image (%.0fx%.0f) ..." = "Avkodar bild (%1$.0fx%2$.0f) ...";
+/* No barcode detected. */
+"Decoder BarcodeDetectionFailure" = "Ingen streckkod hittades.";
 
-/* action title */
-"Email %@" = "Epost till %@";
+/* Decoding ... */
+"Decoder MessageWhileDecoding" = "Avkodar ...";
 
-/* alert button title */
-"Open" = "Öppna";
+/* ZXing */
+"DecoderViewController AppTitle" = "Scanner";
 
-/* action title */
-"Open %@" = "Öppna %@";
+/* Cancel */
+"DecoderViewController cancel button title" = "Avbryt";
 
-/* alert title */
-"Open URL" = "Öppna Länk";
+/* Hints */
+"DecoderViewController HintsViewController title" = "Tips";
 
-/* alert message */
-"Open URL <%@>?" = "Öppna Länk <%@>?";
+/* Decoding image (%.0fx%.0f) ... */
+"DecoderViewController MessageWhileDecodingWithDimensions" = "Avkodar bild (%.0fx%.0f) ...";
 
-/* No comment provided by engineer. */
-"Please take or choose a picture containing a barcode" = "Tag eller välj en bild med streckkod";
+/* Please take or choose a picture containing a barcode */
+"DecoderViewController take or choose picture" = "Tag eller välj en bild som innehåller en streckkod";
 
-/* alert button title */
-"Show" = "Visa";
+/* Email %@ */
+"EmailAction action title" = "Mejla %@";
 
-/* alert message */
-"Show location %@ on Map ?" = "Visa plats %@ på Karta?";
+/* Compose */
+"EmailAction alert button title" = "Skriv";
 
-/* action title
-   alert title */
-"Show on Map" = "Visa på Karta";
+/* Compose Email to %@? */
+"EmailAction alert message" = "Skriv mejl till %@?";
 
-/* No barcode detected */
-"No barcode detected." = "Hittade ingen streckkod.";
+/* Compose Email */
+"EmailAction alert title" = "Skriv mejl";
+
+/* %@ */
+"EmailParsedResult Display: Body" = "%@";
+
+/* To: %@ */
+"EmailParsedResult Display: Recipient" = "Till: %@";
+
+/* Subject: %@ */
+"EmailParsedResult Display: Subject" = "Angående: %@";
+
+/* Email */
+"EmailParsedResult type name" = "Mejl";
+
+/* Geo: %@ */
+"GeoParsedResult display" = "Plats: %@";
+
+/* Geolocation */
+"GeoParsedResult type name" = "Geografisk plats";
+
+/* Open URL */
+"OpenURLAction action title" = "Öppna länk";
+
+/* Open */
+"OpenURLAction alert button title" = "Öppna";
+
+/* Open URL <%@>? */
+"OpenURLAction alert message" = "Öppna länk <%@>?";
+
+/* Open URL */
+"OpenURLAction alert title" = "Öppna länk";
+
+/* Cancel */
+"OpenURLAction cancel button title" = "Avbryt";
+
+/* Scan Archive */
+"ScanArchiveTitle" = "Tidigare Streckkoder";
+
+/* Scan */
+"ScanViewController title" = "Streckkod";
+
+/* Show on Map */
+"ShowMapAction action title" = "Visa på karta";
+
+/* Show */
+"ShowMapAction alert button title" = "Visa";
+
+/* Show location %@ on Map ? */
+"ShowMapAction alert message" = "Visa plats %@ på karta?";
+
+/* Show on Map */
+"ShowMapAction alert title" = "Visa på karta";
+
+/* Compose SMS to %@ */
+"SMSAction action title" = "Skriv SMS till %@";
+
+/* Compose */
+"SMSAction alert button title" = "Skriv";
+
+/* Compose SMS to %@? */
+"SMSAction alert message" = "Skriv SMS till %@?";
+
+/* SMS */
+"SMSParsedResult type name" = "SMS";
+
+/* Tel */
+"TelParsedResult type name" = "Telefon";
+
+/* Text */
+"TextParsedResult type name" = "Text";
+
+/* URI */
+"URIParsedResult type name" = "Länk";
+

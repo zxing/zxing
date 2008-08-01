@@ -62,19 +62,19 @@
 }
 
 - (NSString *)title {
-  return [NSString localizedStringWithFormat:NSLocalizedString(@"Compose SMS to %@", @"action title"), self.number];
+  return [NSString localizedStringWithFormat:NSLocalizedString(@"SMSAction action title", @"Compose SMS to %@"), self.number];
 }
 
 - (NSString *)alertTitle {
-  return NSLocalizedString(@"Compose", @"alert title");
+  return NSLocalizedString(@"SMSAction alert title", @"Compose");
 }
 
 - (NSString *)alertMessage {
-  return [NSString localizedStringWithFormat:NSLocalizedString(@"Compose SMS to %@?", @"alert message"), self.number];
+  return [NSString localizedStringWithFormat:NSLocalizedString(@"SMSAction alert message", @"Compose SMS to %@?"), self.number];
 }
 
 - (NSString *)alertButtonTitle {
-  return NSLocalizedString(@"Compose", @"alert button title");
+  return NSLocalizedString(@"SMSAction alert button title", @"Compose");
 }
 
 - (void) dealloc {
