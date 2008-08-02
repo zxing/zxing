@@ -39,14 +39,14 @@ namespace common {
   
   void CountedTest::test() {
     Foo foo;
-    CPPUNIT_ASSERT_EQUAL(0U, foo.count_);
+    CPPUNIT_ASSERT_EQUAL(0, foo.count());
     foo.retain();
-    CPPUNIT_ASSERT_EQUAL(1U, foo.count_);
+    CPPUNIT_ASSERT_EQUAL(1, foo.count());
     {
       Ref<Foo> fooRef(foo);
-      CPPUNIT_ASSERT_EQUAL(2U, foo.count_);
+      CPPUNIT_ASSERT_EQUAL(2, foo.count());
     }
-    CPPUNIT_ASSERT_EQUAL(1U, foo.count_);
+    CPPUNIT_ASSERT_EQUAL(1, foo.count());
   }
 
 }
