@@ -16,35 +16,36 @@
 
 package com.google.zxing.client.rim;
 
+import com.google.zxing.client.rim.util.Log;
 import net.rim.device.api.io.file.FileSystemJournal;
 import net.rim.device.api.io.file.FileSystemJournalEntry;
 import net.rim.device.api.io.file.FileSystemJournalListener;
 
+import java.util.Date;
+
 /**
- * @author Sean Owen (srowen@google.com)
+ * The listener that is fired when an image file is added to the file system.
+ *
+ * This code was contributed by LifeMarks.
+ *
+ * @author Matt York (matt@lifemarks.mobi)
  */
-final class ImageCapturedJournalListener implements FileSystemJournalListener {
+final class QRCapturedJournalListener implements FileSystemJournalListener {
 
-  private final ZXingMainScreen screen;
-  private long lastUSN;
+  private final ZXingLMMainScreen screen;
 
-  ImageCapturedJournalListener(ZXingMainScreen screen) {
+  QRCapturedJournalListener(ZXingLMMainScreen screen) {
     this.screen = screen;
   }
 
   public void fileJournalChanged() {
-    long nextUSN = FileSystemJournal.getNextUSN();
-    for (long lookUSN = nextUSN - 1; lookUSN >= lastUSN; --lookUSN) {
-      FileSystemJournalEntry entry = FileSystemJournal.getEntry(lookUSN);
-      if (entry == null) {
-        break;
-      }
-      if (entry.getEvent() == FileSystemJournalEntry.FILE_ADDED) {
-        screen.handleFile(entry.getPath());
-      }
+    long lookUSN = FileSystemJournal.getNextUSN() - 1; // the last file added to the filesystem
+    Log.debug("lookUSN: " + lookUSN);
+    FileSystemJournalEntry entry = FileSystemJournal.getEntry(lookUSN);
+    if (entry != null && entry.getEvent() == FileSystemJournalEntry.FILE_ADDED) {
+      Log.info("Got file: " + entry.getPath() + " @: " + new Date());
+      screen.imageSaved(entry.getPath());
     }
-    lastUSN = nextUSN;
   }
-
 
 }
