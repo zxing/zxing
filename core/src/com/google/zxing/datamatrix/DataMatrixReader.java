@@ -17,6 +17,7 @@
 package com.google.zxing.datamatrix;
 
 import com.google.zxing.BarcodeFormat;
+import com.google.zxing.DecodeHintType;
 import com.google.zxing.MonochromeBitmapSource;
 import com.google.zxing.Reader;
 import com.google.zxing.ReaderException;
@@ -24,7 +25,9 @@ import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.DecoderResult;
+import com.google.zxing.common.DetectorResult;
 import com.google.zxing.datamatrix.decoder.Decoder;
+import com.google.zxing.datamatrix.detector.Detector;
 
 import java.util.Hashtable;
 
@@ -53,15 +56,15 @@ public final class DataMatrixReader implements Reader {
       throws ReaderException {
     DecoderResult decoderResult;
     ResultPoint[] points;
-    //if (hints != null && hints.containsKey(DecodeHintType.PURE_BARCODE)) {
+    if (hints != null && hints.containsKey(DecodeHintType.PURE_BARCODE)) {
       BitMatrix bits = extractPureBits(image);
       decoderResult = decoder.decode(bits);
       points = NO_POINTS;
-    //} else {
-    //  DetectorResult result = new Detector(image).detect();
-    //  decoderResult = decoder.decode(result.getBits());
-    //  points = result.getPoints();
-    //}
+    } else {
+      DetectorResult result = new Detector(image).detect();
+      decoderResult = decoder.decode(result.getBits());
+      points = result.getPoints();
+    }
     return new Result(decoderResult.getText(), decoderResult.getRawBytes(), points, BarcodeFormat.DATAMATRIX);
   }
 
