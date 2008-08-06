@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 ZXing authors
+ * Copyright 2008 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,9 @@
 package com.google.zxing.client.j2se;
 
 import com.google.zxing.MonochromeBitmapSource;
+import com.google.zxing.BlackPointEstimationMethod;
+import com.google.zxing.ReaderException;
+import com.google.zxing.common.BitArray;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -25,24 +28,37 @@ import java.io.IOException;
 import java.net.URI;
 
 /**
- * Utility application for evaluating the effectiveness of the
- * MonochromeBitmapSource. Given a set of images on the command line,
- * converts each to a black-and-white GIF. The result is placed in
- * a file based on the input name, with "_converted" appended.
+ * Utility application for evaluating the effectiveness of the BlackPointEstimator used by
+ * MonochromeBitmapSource. Given a set of images on the command line, it converts each to a
+ * black-and-white PNG. The result is placed in a file based on the input name, with either
+ * "_converted_row" or "_converted_2d" appended.
  *
  * @author alasdair@google.com (Alasdair Mackintosh)
+ * @author dswitkin@google.com (Daniel Switkin)
  */
 public final class ImageConverter {
 
-  private static final String FORMAT = "gif";
+  private static final String FORMAT = "png";
   private static final int WHITE = 0xFFFFFFFF;
-  private static final int BLACK = 0x000000FF;
+  private static final int BLACK = 0xFF000000;
+  private static final int RED = 0xFFFF0000;
+  private static BlackPointEstimationMethod sMethod = BlackPointEstimationMethod.ROW_SAMPLING;
 
   private ImageConverter() {
   }
 
   public static void main(String[] args) throws Exception {
     for (String arg : args) {
+      if (arg.equals("-row")) {
+        sMethod = BlackPointEstimationMethod.ROW_SAMPLING;
+      } else if (arg.equals("-2d")) {
+        sMethod = BlackPointEstimationMethod.TWO_D_SAMPLING;
+      } else if (arg.startsWith("-")) {
+        System.out.println("Ignoring unrecognized option: " + arg);
+      }
+    }
+    for (String arg : args) {
+      if (arg.startsWith("-")) continue;
       File inputFile = new File(arg);
       if (inputFile.exists()) {
         if (inputFile.isDirectory()) {
@@ -65,12 +81,40 @@ public final class ImageConverter {
     int width = src.getWidth();
     int height = src.getHeight();
 
-    BufferedImage result = new BufferedImage(width, height, BufferedImage.TYPE_BYTE_BINARY);
-    for (int i = 0; i < width; i++) {
-      for (int j = 0; j < height; j++) {
-        result.setRGB(i, j, src.isBlack(i, j) ? BLACK : WHITE);
+    BufferedImage result = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+    BitArray array = new BitArray(width);
+
+    try {
+      // Run the 2D sampling once up front
+      if (sMethod == BlackPointEstimationMethod.TWO_D_SAMPLING) {
+        src.estimateBlackPoint(sMethod, 0);
       }
+    } catch (ReaderException e) {
+      System.out.println(e.toString());
+      return;
     }
+
+      for (int y = 0; y < height; y++) {
+        // Run the 1D sampling once per row
+        if (sMethod == BlackPointEstimationMethod.ROW_SAMPLING) {
+          try {
+              src.estimateBlackPoint(sMethod, y);
+          } catch (ReaderException e) {
+            // Draw rows with insufficient dynamic range in red
+            for (int x = 0; x < width; x++) {
+              result.setRGB(x, y, RED);
+            }
+            continue;
+          }
+        }
+
+        // Fetch the entire row at once, then fill out the result image
+        src.getBlackRow(y, array, 0, width);
+        for (int x = 0; x < width; x++) {
+          result.setRGB(x, y, array.get(x) ? BLACK : WHITE);
+        }
+      }
+
 
     File output = getOutput(uri);
     System.out.printf("Writing output to %s\n", output);
@@ -111,7 +155,8 @@ public final class ImageConverter {
       if (dotpos != -1) {
         name = name.substring(0, dotpos);
       }
-      result = new File(name + "_converted." + FORMAT);
+      String suffix = (sMethod == BlackPointEstimationMethod.ROW_SAMPLING) ? "row" : "2d";
+      result = new File(name + "_converted_" + suffix + "." + FORMAT);
     }
     return result;
   }
