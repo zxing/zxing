@@ -35,7 +35,7 @@ public final class DecodedBitStreamParserTestCase extends TestCase {
     builder.write(0xA2, 8);
     builder.write(0xA3, 8);
     String result = DecodedBitStreamParser.decode(builder.toByteArray(), Version.getVersionForNumber(1));
-    assertEquals("¡¢£", result);
+    assertEquals("\u00a1\u00a2\u00a3", result); // this should be "¡¢£" if your editor character encoding matches mine!
   }
 
   public void testECI() throws ReaderException {
@@ -48,7 +48,7 @@ public final class DecodedBitStreamParserTestCase extends TestCase {
     builder.write(0xA2, 8);
     builder.write(0xA3, 8);
     String result = DecodedBitStreamParser.decode(builder.toByteArray(), Version.getVersionForNumber(1));
-    assertEquals("íóú", result);
+    assertEquals("\u00ed\u00f3\u00fa", result); // should be like "íóú"
   }
 
   // TODO definitely need more tests here
