@@ -68,20 +68,20 @@ public final class Detector {
     int width = image.getWidth();
     int halfHeight = height >> 1;
     int halfWidth = width >> 1;
-    int iSkip = Math.max(1, height / (MAX_MODULES << 2));
-    int jSkip = Math.max(1, width / (MAX_MODULES << 2));
+    int iSkip = Math.max(1, height / (MAX_MODULES << 3));
+    int jSkip = Math.max(1, width / (MAX_MODULES << 3));
 
     int minI = 0;
     int maxI = height;
     int minJ = 0;
     int maxJ = width;
-    ResultPoint pointA = findCornerFromCenter(halfHeight, -iSkip, minI, maxI, halfWidth,      0, minJ, maxJ, halfWidth >> 2);
+    ResultPoint pointA = findCornerFromCenter(halfHeight, -iSkip, minI, maxI, halfWidth,      0, minJ, maxJ, halfWidth >> 1);
     minI = (int) pointA.getY() - 1;
-    ResultPoint pointB = findCornerFromCenter(halfHeight, 0,      minI, maxI, halfWidth, -jSkip, minJ, maxJ, halfHeight >> 2);
+    ResultPoint pointB = findCornerFromCenter(halfHeight, 0,      minI, maxI, halfWidth, -jSkip, minJ, maxJ, halfHeight >> 1);
     minJ = (int) pointB.getX() - 1;
-    ResultPoint pointC = findCornerFromCenter(halfHeight, 0,      minI, maxI, halfWidth,  jSkip, minJ, maxJ, halfHeight >> 2);
+    ResultPoint pointC = findCornerFromCenter(halfHeight, 0,      minI, maxI, halfWidth,  jSkip, minJ, maxJ, halfHeight >> 1);
     maxJ = (int) pointC.getX() + 1;
-    ResultPoint pointD = findCornerFromCenter(halfHeight,  iSkip, minI, maxI, halfWidth,      0, minJ, maxJ, halfWidth >> 2);
+    ResultPoint pointD = findCornerFromCenter(halfHeight,  iSkip, minI, maxI, halfWidth,      0, minJ, maxJ, halfWidth >> 1);
     maxI = (int) pointD.getY() + 1;
     // Go try to find point A again with better information -- might have been off at first.
     pointA = findCornerFromCenter(halfHeight, -iSkip, minI, maxI, halfWidth,      0, minJ, maxJ, halfWidth >> 2);
