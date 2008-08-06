@@ -159,6 +159,7 @@
       </assertions>
       <batchtest>
         <fileset dir="test/src">
+          <include name="**/*TestCase.java"/>          
           <exclude name="**/*BlackBox*TestCase.java"/>
         </fileset>
       </batchtest>
