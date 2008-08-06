@@ -124,6 +124,23 @@
   </target>
 
   <target name="test-blackbox" depends="build-test">
+    <parallel failonany="true">
+      <antcall target="test-blackbox-subset">
+        <param name="subdir" value="datamatrix"/>
+      </antcall>
+      <antcall target="test-blackbox-subset">
+        <param name="subdir" value="negative"/>
+      </antcall>
+      <antcall target="test-blackbox-subset">
+        <param name="subdir" value="oned"/>
+      </antcall>
+      <antcall target="test-blackbox-subset">
+        <param name="subdir" value="qrcode"/>
+      </antcall>
+    </parallel>
+  </target>
+
+  <target name="test-blackbox-subset">
     <junit printsummary="on" haltonfailure="on" haltonerror="on" fork="true" dir=".">
       <formatter type="plain" usefile="false"/>
       <classpath>
@@ -137,9 +154,7 @@
       </assertions>
       <batchtest>
         <fileset dir="test/src">
-          <include name="**/*BlackBox*TestCase.java"/>
-          <exclude name="com/google/zxing/common/AbstractBlackBoxTestCase.java"/>
-          <exclude name="com/google/zxing/common/AbstractNegativeBlackBoxTestCase.java"/>
+          <include name="**/${subdir}/*BlackBox*TestCase.java"/>
         </fileset>
       </batchtest>
     </junit>
