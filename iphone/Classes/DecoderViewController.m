@@ -246,9 +246,11 @@
   messageFrame.origin.y = CGRectGetMaxY(messageFrame) - height;
   messageFrame.size.height = height;
   [self.messageView setFrame:messageFrame];
+  messageView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth;
   CGRect messageViewBounds = [messageView bounds];
 
   self.messageTextView.text = message;
+  messageTextView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
   if (showHelpButton) {
     CGRect textViewFrame;
     CGRect helpButtonFrame;
@@ -259,6 +261,9 @@
     [messageHelpButton setFrame:helpButtonFrame];
     messageHelpButton.alpha = 1.0;
     messageHelpButton.enabled = YES;
+    messageHelpButton.autoresizingMask = 
+      UIViewAutoresizingFlexibleLeftMargin | 
+      UIViewAutoresizingFlexibleTopMargin;
     [messageView addSubview:messageHelpButton];
   } else {
     [messageHelpButton removeFromSuperview];

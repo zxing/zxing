@@ -202,6 +202,7 @@
 		85C3CC3A0E119E1700A01C6A /* phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 85C3CC320E119E1700A01C6A /* phone.png */; };
 		85C3CC3B0E119E1700A01C6A /* sms.png in Resources */ = {isa = PBXBuildFile; fileRef = 85C3CC330E119E1700A01C6A /* sms.png */; };
 		85C3CC3C0E119E1700A01C6A /* text.png in Resources */ = {isa = PBXBuildFile; fileRef = 85C3CC340E119E1700A01C6A /* text.png */; };
+		85C4969C0E4A3E87003DB029 /* filmroll-2.png in Resources */ = {isa = PBXBuildFile; fileRef = 85C4969B0E4A3E87003DB029 /* filmroll-2.png */; };
 		85D937270E11064700B785E0 /* ScanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 85D937260E11064700B785E0 /* ScanViewController.m */; };
 		85E883980E1A34D2004C4547 /* ScannedImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 85E883970E1A34D2004C4547 /* ScannedImageView.m */; };
 /* End PBXBuildFile section */
@@ -246,7 +247,7 @@
 
 /* Begin PBXFileReference section */
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		1D6058910D05DD3D006BFB54 /* Scanner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Scanner.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1D6058910D05DD3D006BFB54 /* Barcodes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Barcodes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = main.m; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* ZXing_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXing_Prefix.pch; sourceTree = "<group>"; };
@@ -632,6 +633,7 @@
 		85C3CC320E119E1700A01C6A /* phone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = phone.png; sourceTree = "<group>"; };
 		85C3CC330E119E1700A01C6A /* sms.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sms.png; sourceTree = "<group>"; };
 		85C3CC340E119E1700A01C6A /* text.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = text.png; sourceTree = "<group>"; };
+		85C4969B0E4A3E87003DB029 /* filmroll-2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "filmroll-2.png"; sourceTree = "<group>"; };
 		85D937250E11064700B785E0 /* ScanViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScanViewController.h; sourceTree = "<group>"; };
 		85D937260E11064700B785E0 /* ScanViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScanViewController.m; sourceTree = "<group>"; };
 		85E883960E1A34D2004C4547 /* ScannedImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScannedImageView.h; sourceTree = "<group>"; };
@@ -723,7 +725,7 @@
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				1D6058910D05DD3D006BFB54 /* Scanner.app */,
+				1D6058910D05DD3D006BFB54 /* Barcodes.app */,
 				8514EB190DF8A52700EE78D3 /* libzxingcore.a */,
 				856EAB150E1CE6E000B2E1C7 /* libCppUnit.a */,
 			);
@@ -1358,6 +1360,7 @@
 		85C3CC0F0E119E0500A01C6A /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				85C4969B0E4A3E87003DB029 /* filmroll-2.png */,
 				85C3CC2D0E119E1600A01C6A /* business-card.png */,
 				85C3CC2E0E119E1700A01C6A /* email.png */,
 				85C3CC2F0E119E1700A01C6A /* link1.png */,
@@ -1406,7 +1409,7 @@
 			);
 			name = Scanner;
 			productName = ZXing;
-			productReference = 1D6058910D05DD3D006BFB54 /* Scanner.app */;
+			productReference = 1D6058910D05DD3D006BFB54 /* Barcodes.app */;
 			productType = "com.apple.product-type.application";
 		};
 		8514EAE70DF88E5200EE78D3 /* zxingcore */ = {
@@ -1514,6 +1517,7 @@
 				85B1D8850E190E3A00514A6A /* Default.png in Resources */,
 				85764F6A0E3E22FC00A61BF5 /* Hints.html in Resources */,
 				85C37A410E4076BB0052209B /* Hints.xib in Resources */,
+				85C4969C0E4A3E87003DB029 /* filmroll-2.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1805,7 +1809,7 @@
 				GCC_PREFIX_HEADER = ZXing_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
 				INFOPLIST_FILE = Info.plist;
-				PRODUCT_NAME = Scanner;
+				PRODUCT_NAME = Barcodes;
 			};
 			name = Debug;
 		};
