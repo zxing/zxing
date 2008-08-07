@@ -2,13 +2,13 @@
 <archive type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="7.02">
 	<data>
 		<int key="IBDocument.SystemTarget">512</int>
-		<string key="IBDocument.SystemVersion">9D34</string>
+		<string key="IBDocument.SystemVersion">9E17</string>
 		<string key="IBDocument.InterfaceBuilderVersion">670</string>
 		<string key="IBDocument.AppKitVersion">949.33</string>
 		<string key="IBDocument.HIToolboxVersion">352.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="70"/>
+			<integer value="1"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -47,7 +47,10 @@
 							</object>
 							<object class="IBUIBarButtonItem" id="463045255">
 								<int key="IBUITag">1</int>
-								<int key="IBUISystemItemIdentifier">12</int>
+								<object class="NSCustomResource" key="IBUIImage">
+									<string key="NSClassName">NSImage</string>
+									<string key="NSResourceName">filmroll-2.png</string>
+								</object>
 								<reference key="IBUIToolbar" ref="17982920"/>
 							</object>
 							<object class="IBUIBarButtonItem" id="202327917">
@@ -402,6 +405,8 @@
 							<string>cameraBarItem</string>
 							<string>imageView</string>
 							<string>libraryBarItem</string>
+							<string>messageHelpButton</string>
+							<string>messageTextView</string>
 							<string>messageView</string>
 							<string>savedPhotosBarItem</string>
 							<string>toolbar</string>
@@ -413,7 +418,9 @@
 							<string>UIBarItem</string>
 							<string>ScannedImageView</string>
 							<string>UIBarItem</string>
+							<string>UIButton</string>
 							<string>UITextView</string>
+							<string>UIView</string>
 							<string>UIBarItem</string>
 							<string>UIToolbar</string>
 						</object>

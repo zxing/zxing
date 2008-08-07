@@ -35,7 +35,7 @@
 "Decoder MessageWhileDecoding" = "Decoding ...";
 
 /* ZXing */
-"DecoderViewController AppTitle" = "Scanner";
+"DecoderViewController AppTitle" = "Barcodes";
 
 /* Cancel */
 "DecoderViewController cancel button title" = "Cancel";
