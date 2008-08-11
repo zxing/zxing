@@ -25,7 +25,6 @@ import net.rim.device.api.ui.DrawStyle;
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.FieldChangeListener;
 import net.rim.device.api.ui.Manager;
-import net.rim.device.api.ui.FieldLabelProvider;
 import net.rim.device.api.ui.component.ButtonField;
 import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.container.MainScreen;
@@ -65,7 +64,8 @@ final class HistoryScreen extends MainScreen {
     public void fieldChanged(Field field, int context) {
       if (field instanceof ButtonField) {
         BrowserSession browserSession = Browser.getDefaultSession();
-        browserSession.displayPage(((FieldLabelProvider) field).getLabel());
+        // This cannot be weakened to FieldLabelProvider -- not a public API
+        browserSession.displayPage(((ButtonField) field).getLabel());
       }
     }
   }
