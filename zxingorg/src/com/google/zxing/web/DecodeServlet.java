@@ -47,7 +47,6 @@ import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
 
 import javax.imageio.ImageIO;
-import javax.mail.Authenticator;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -64,7 +63,6 @@ import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.util.Hashtable;
 import java.util.List;
-import java.util.Timer;
 import java.util.logging.Logger;
 
 /**
@@ -76,7 +74,6 @@ import java.util.logging.Logger;
 public final class DecodeServlet extends HttpServlet {
 
   private static final long MAX_IMAGE_SIZE = 500000L;
-  private static final long EMAIL_CHECK_INTERVAL = 2L * 60 * 1000;
 
   private static final Logger log = Logger.getLogger(DecodeServlet.class.getName());
 
@@ -89,19 +86,12 @@ public final class DecodeServlet extends HttpServlet {
 
   private HttpClient client;
   private DiskFileItemFactory diskFileItemFactory;
-  private Timer emailTimer;
 
   @Override
-  public void init(ServletConfig servletConfig) throws ServletException {
+  public void init(ServletConfig servletConfig) {
 
     Logger logger = Logger.getLogger("com.google.zxing");
     logger.addHandler(new ServletContextLogHandler(servletConfig.getServletContext()));
-
-    String emailAddress = servletConfig.getInitParameter("emailAddress");
-    String emailPassword = servletConfig.getInitParameter("emailPassword");
-    if (emailAddress == null || emailPassword == null) {
-      throw new ServletException("emailAddress or emailPassword not specified");
-    }
 
     HttpParams params = new BasicHttpParams();
     HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
@@ -113,10 +103,6 @@ public final class DecodeServlet extends HttpServlet {
     client = new DefaultHttpClient(new ThreadSafeClientConnManager(params, registry), params);
 
     diskFileItemFactory = new DiskFileItemFactory();
-
-    Authenticator emailAuthenticator = new EmailAuthenticator(emailAddress, emailPassword);
-    emailTimer = new Timer("Email decoder timer", true);
-    emailTimer.schedule(new DecodeEmailTask(emailAddress, emailAuthenticator), 0L, EMAIL_CHECK_INTERVAL);
 
     log.info("DecodeServlet configured");
   }
@@ -304,7 +290,6 @@ public final class DecodeServlet extends HttpServlet {
   @Override
   public void destroy() {
     log.config("DecodeServlet shutting down...");
-    emailTimer.cancel();
   }
 
 }
