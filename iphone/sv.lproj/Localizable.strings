@@ -35,13 +35,19 @@
 "Decoder MessageWhileDecoding" = "Avkodar ...";
 
 /* ZXing */
-"DecoderViewController AppTitle" = "Barcodes";
+"DecoderViewController AppTitle" = "Streckkoder";
 
 /* Cancel */
 "DecoderViewController cancel button title" = "Avbryt";
 
+/* About */
+"DecoderViewController about button title" = "Info";
+
 /* Hints */
-"DecoderViewController HintsViewController title" = "Tips";
+"DecoderViewController Hints MessageViewController title" = "Tips";
+
+/* About */
+"DecoderViewController About MessageViewController title" = "Info";
 
 /* Decoding image (%.0fx%.0f) ... */
 "DecoderViewController MessageWhileDecodingWithDimensions" = "Avkodar bild (%.0fx%.0f) ...";

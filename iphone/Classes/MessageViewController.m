@@ -1,5 +1,5 @@
 //
-//  HintsViewController.m
+//  MessageViewController.m
 //  ZXing
 //
 //  Created by Christian Brunschen on 30/07/2008.
@@ -19,10 +19,10 @@
  * limitations under the License.
  */
 
-#import "HintsViewController.h"
+#import "MessageViewController.h"
 
 
-@implementation HintsViewController
+@implementation MessageViewController
 
 @synthesize callbackTarget;
 @synthesize callbackSelectorSuccess;
@@ -35,14 +35,18 @@
   return (UIWebView *)self.view;
 }
 
-- (id)initWithTarget:(id)cbt onSuccess:(SEL)ss onFailure:(SEL)fs  {
-	if (self = [super initWithNibName:@"Hints" bundle:nil]) {
+- (id)initWithMessageFilename:(NSString *)filename 
+                      target:(id)cbt onSuccess:(SEL)ss onFailure:(SEL)fs  {
+	if (self = [super initWithNibName:@"Message" bundle:nil]) {
     self.callbackTarget = cbt;
     self.callbackSelectorSuccess = ss;
     self.callbackSelectorFailure = fs;
-    self.contentPath = [[NSBundle mainBundle] pathForResource:@"Hints" ofType:@"html"];
+    self.contentPath = [[NSBundle mainBundle] pathForResource:filename 
+                                                       ofType:@"html"];
     self.contentURL = [NSURL fileURLWithPath:self.contentPath];
-    self.content = [NSString stringWithContentsOfFile:self.contentPath];
+    self.content = [NSString stringWithContentsOfFile:self.contentPath
+                                             encoding:NSUTF8StringEncoding 
+                                                error:NULL];
 	}
 	return self;
 }
@@ -73,8 +77,26 @@
 	[super dealloc];
 }
 
+// open a URL, asynchronously
+- (void) openURL:(NSURL *)url {
+  [url autorelease];
+  [[UIApplication sharedApplication] openURL:url];
+}
+
 
 // UIWebViewDelegate methods
+
+- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
+  if ([[request URL] isFileURL]) {
+    // only load 'file' URL requests ourselves
+    return true;
+  } else {
+    // any other url:s are handed off to the system
+    NSURL *url = [[request URL] retain];
+    [self performSelectorOnMainThread:@selector(openURL:) withObject:url waitUntilDone:false];
+    return false;
+  }
+}
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
   NSLog(@"failed to load content, performing failure callback");

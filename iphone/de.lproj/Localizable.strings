@@ -29,25 +29,31 @@
 "Contact Result Type Name" = "Kontakt";
 
 /* No barcode detected. */
-"Decoder BarcodeDetectionFailure" = "Kein Strichkod gefunden.";
+"Decoder BarcodeDetectionFailure" = "Kein Strichcode gefunden.";
 
 /* Decoding ... */
 "Decoder MessageWhileDecoding" = "Dekodiert ...";
 
 /* ZXing */
-"DecoderViewController AppTitle" = "Barcodes";
+"DecoderViewController AppTitle" = "Strichcodes";
 
 /* Cancel */
 "DecoderViewController cancel button title" = "Abbrechen";
 
+/* About */
+"DecoderViewController about button title" = "Info";
+
 /* Hints */
-"DecoderViewController HintsViewController title" = "Tips";
+"DecoderViewController Hints MessageViewController title" = "Tips";
+
+/* About */
+"DecoderViewController About MessageViewController title" = "Info";
 
 /* Decoding image (%.0fx%.0f) ... */
 "DecoderViewController MessageWhileDecodingWithDimensions" = "Dekodiert Bild (%.0fx%.0f) ...";
 
 /* Please take or choose a picture containing a barcode */
-"DecoderViewController take or choose picture" = "Bitte nehmen oder wählen Sie ein Bild mit Strichkod";
+"DecoderViewController take or choose picture" = "Bitte nehmen oder wählen Sie ein Bild mit Strichcode";
 
 /* Email %@ */
 "EmailAction action title" = "Email an %@";

@@ -28,7 +28,7 @@
 
 #import "Database.h"
 #import "ArchiveController.h"
-#import "HintsViewController.h"
+#import "MessageViewController.h"
 #import "Scan.h"
 #import "TwoDDecoderResult.h"
 
@@ -55,7 +55,7 @@
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
 	if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
 		// Initialization code
-    self.title = NSLocalizedString(@"DecoderViewController AppTitle", @"Barcode Scanner   ");
+    self.title = NSLocalizedString(@"DecoderViewController AppTitle", @"Barcode Scanner");
     
     Decoder *d = [[Decoder alloc] init];
     self.decoder = d;
@@ -66,24 +66,40 @@
 	return self;
 }
 
-- (void) hintsReady:(id)sender {
-  HintsViewController *hintsController = sender;
-  [[self navigationController] pushViewController:hintsController animated:true];
-  [hintsController release];
+- (void) messageReady:(id)sender {
+  MessageViewController *messageController = sender;
+  [[self navigationController] pushViewController:messageController animated:true];
+  [messageController release];
 }
 
-- (void) hintsFailed:(id)sender {
-  HintsViewController *hintsController = sender;
-  NSLog(@"Failed to load hints!");
-  [hintsController release];
+- (void) messageFailed:(id)sender {
+  MessageViewController *messageController = sender;
+  NSLog(@"Failed to load message!");
+  [messageController release];
 }
 
 - (void) showHints:(id)sender {
   NSLog(@"Showing Hints!");
   
-  HintsViewController *hintsController = [[HintsViewController alloc] initWithTarget:self onSuccess:@selector(hintsReady:) onFailure:@selector(hintsFailed:)];
-  hintsController.title = NSLocalizedString(@"DecoderViewController HintsViewController title", @"Hints");
+  MessageViewController *hintsController = 
+  [[MessageViewController alloc] initWithMessageFilename:@"Hints"
+                                                  target:self 
+                                               onSuccess:@selector(messageReady:) 
+                                               onFailure:@selector(messageFailed:)];
+  hintsController.title = NSLocalizedString(@"DecoderViewController Hints MessageViewController title", @"Hints");
   hintsController.view;
+}
+
+- (void) showAbout:(id)sender {
+  NSLog(@"Showing About!");
+  
+  MessageViewController *aboutController = 
+  [[MessageViewController alloc] initWithMessageFilename:@"About"
+                                                  target:self 
+                                               onSuccess:@selector(messageReady:) 
+                                               onFailure:@selector(messageFailed:)];
+  aboutController.title = NSLocalizedString(@"DecoderViewController About MessageViewController title", @"About");
+  aboutController.view;
 }
 
   
@@ -142,6 +158,15 @@
   [mView release];
   
   [self.view addSubview:self.messageView];
+  
+  // add the 'About' button at the top-right of the navigation bar
+  UIBarButtonItem *aboutButton = 
+  [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"DecoderViewController about button title", @"About") 
+                                   style:UIBarButtonItemStyleBordered
+                                  target:self 
+                                  action:@selector(showAbout:)];
+  self.navigationItem.rightBarButtonItem = aboutButton;
+  [aboutButton release];
   
   [self reset];
 }

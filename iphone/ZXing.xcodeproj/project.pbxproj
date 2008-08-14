@@ -86,6 +86,8 @@
 		852A998F0E0BC433003E6D6D /* DecoderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 852A998E0E0BC433003E6D6D /* DecoderView.xib */; };
 		852A99910E0BC43C003E6D6D /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 852A99900E0BC43C003E6D6D /* MainWindow.xib */; };
 		852A99970E0BC49E003E6D6D /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 852A99960E0BC49E003E6D6D /* Localizable.strings */; };
+		853678530E538F9E0054126A /* MessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 853678520E538F9E0054126A /* MessageViewController.m */; };
+		853678830E5394D70054126A /* About.html in Resources */ = {isa = PBXBuildFile; fileRef = 853678820E5394D70054126A /* About.html */; };
 		854BE3010E06A56C00CB4A20 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 854BE3000E06A56C00CB4A20 /* AddressBookUI.framework */; };
 		855A66800DF5E757007B394F /* ArchiveController.m in Sources */ = {isa = PBXBuildFile; fileRef = 855A66510DF5E757007B394F /* ArchiveController.m */; };
 		855A66810DF5E757007B394F /* Database.m in Sources */ = {isa = PBXBuildFile; fileRef = 855A66540DF5E757007B394F /* Database.m */; };
@@ -192,8 +194,7 @@
 		85C0BC100E12548D005EED58 /* SMSTOResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 85C0BC0F0E12548D005EED58 /* SMSTOResultParser.m */; };
 		85C0BC140E1254C0005EED58 /* SMSParsedResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 85C0BC130E1254C0005EED58 /* SMSParsedResult.m */; };
 		85C0BC1C0E125842005EED58 /* SMSResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 85C0BC1B0E125842005EED58 /* SMSResultParser.m */; };
-		85C37A3B0E406BD70052209B /* HintsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 85C37A3A0E406BD70052209B /* HintsViewController.m */; };
-		85C37A410E4076BB0052209B /* Hints.xib in Resources */ = {isa = PBXBuildFile; fileRef = 85C37A3F0E4076BB0052209B /* Hints.xib */; };
+		85C37A410E4076BB0052209B /* Message.xib in Resources */ = {isa = PBXBuildFile; fileRef = 85C37A3F0E4076BB0052209B /* Message.xib */; };
 		85C3CC350E119E1700A01C6A /* business-card.png in Resources */ = {isa = PBXBuildFile; fileRef = 85C3CC2D0E119E1600A01C6A /* business-card.png */; };
 		85C3CC360E119E1700A01C6A /* email.png in Resources */ = {isa = PBXBuildFile; fileRef = 85C3CC2E0E119E1700A01C6A /* email.png */; };
 		85C3CC370E119E1700A01C6A /* link1.png in Resources */ = {isa = PBXBuildFile; fileRef = 85C3CC2F0E119E1700A01C6A /* link1.png */; };
@@ -205,6 +206,7 @@
 		85C4969C0E4A3E87003DB029 /* filmroll-2.png in Resources */ = {isa = PBXBuildFile; fileRef = 85C4969B0E4A3E87003DB029 /* filmroll-2.png */; };
 		85D937270E11064700B785E0 /* ScanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 85D937260E11064700B785E0 /* ScanViewController.m */; };
 		85E883980E1A34D2004C4547 /* ScannedImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 85E883970E1A34D2004C4547 /* ScannedImageView.m */; };
+		85F895030E543EE100C0A666 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 85F895020E543EE100C0A666 /* InfoPlist.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -296,6 +298,13 @@
 		852A99D00E0BC8E8003E6D6D /* sv */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = sv; path = sv.lproj/DecoderView.xib; sourceTree = "<group>"; };
 		852A99D10E0BC8E8003E6D6D /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Localizable.strings; sourceTree = "<group>"; };
 		852A99D20E0BC8E8003E6D6D /* sv */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = sv; path = sv.lproj/MainWindow.xib; sourceTree = "<group>"; };
+		853678510E538F9E0054126A /* MessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageViewController.h; sourceTree = "<group>"; };
+		853678520E538F9E0054126A /* MessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageViewController.m; sourceTree = "<group>"; };
+		853678840E5394E40054126A /* en */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = en; path = en.lproj/About.html; sourceTree = "<group>"; };
+		853678850E5394E70054126A /* de */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = de; path = de.lproj/About.html; sourceTree = "<group>"; };
+		853678860E5394EA0054126A /* sv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = sv; path = sv.lproj/About.html; sourceTree = "<group>"; };
+		8539502B0E5442AA00D081D6 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		8539502C0E5442B500D081D6 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		854BE3000E06A56C00CB4A20 /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
 		855A65D70DF5E739007B394F /* BarcodeFormat.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BarcodeFormat.cpp; sourceTree = "<group>"; };
 		855A65D80DF5E739007B394F /* BarcodeFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BarcodeFormat.h; sourceTree = "<group>"; };
@@ -622,9 +631,7 @@
 		85C0BC130E1254C0005EED58 /* SMSParsedResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SMSParsedResult.m; sourceTree = "<group>"; };
 		85C0BC1A0E125842005EED58 /* SMSResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMSResultParser.h; sourceTree = "<group>"; };
 		85C0BC1B0E125842005EED58 /* SMSResultParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SMSResultParser.m; sourceTree = "<group>"; };
-		85C37A390E406BD70052209B /* HintsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HintsViewController.h; sourceTree = "<group>"; };
-		85C37A3A0E406BD70052209B /* HintsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HintsViewController.m; sourceTree = "<group>"; };
-		85C37A400E4076BB0052209B /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/Hints.xib; sourceTree = "<group>"; };
+		85C37A400E4076BB0052209B /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/Message.xib; sourceTree = "<group>"; };
 		85C3CC2D0E119E1600A01C6A /* business-card.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "business-card.png"; sourceTree = "<group>"; };
 		85C3CC2E0E119E1700A01C6A /* email.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = email.png; sourceTree = "<group>"; };
 		85C3CC2F0E119E1700A01C6A /* link1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = link1.png; sourceTree = "<group>"; };
@@ -638,10 +645,11 @@
 		85D937260E11064700B785E0 /* ScanViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScanViewController.m; sourceTree = "<group>"; };
 		85E883960E1A34D2004C4547 /* ScannedImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScannedImageView.h; sourceTree = "<group>"; };
 		85E883970E1A34D2004C4547 /* ScannedImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScannedImageView.m; sourceTree = "<group>"; };
-		85F7D20E0E41D4A700FDC34E /* de */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = de; path = de.lproj/Hints.xib; sourceTree = "<group>"; };
-		85F7D20F0E41D4A700FDC34E /* de */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.html; name = de; path = de.lproj/Hints.html; sourceTree = "<group>"; };
-		85F7D2100E41D4B300FDC34E /* sv */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = sv; path = sv.lproj/Hints.xib; sourceTree = "<group>"; };
-		85F7D2110E41D4B300FDC34E /* sv */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.html; name = sv; path = sv.lproj/Hints.html; sourceTree = "<group>"; };
+		85F7D20E0E41D4A700FDC34E /* de */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = de; path = de.lproj/Message.xib; sourceTree = "<group>"; };
+		85F7D20F0E41D4A700FDC34E /* de */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = de; path = de.lproj/Hints.html; sourceTree = "<group>"; };
+		85F7D2100E41D4B300FDC34E /* sv */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = sv; path = sv.lproj/Message.xib; sourceTree = "<group>"; };
+		85F7D2110E41D4B300FDC34E /* sv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = sv; path = sv.lproj/Hints.html; sourceTree = "<group>"; };
+		85F895040E543F0400C0A666 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -716,8 +724,8 @@
 				855A667F0DF5E757007B394F /* Scan.m */,
 				85E883960E1A34D2004C4547 /* ScannedImageView.h */,
 				85E883970E1A34D2004C4547 /* ScannedImageView.m */,
-				85C37A390E406BD70052209B /* HintsViewController.h */,
-				85C37A3A0E406BD70052209B /* HintsViewController.m */,
+				853678510E538F9E0054126A /* MessageViewController.h */,
+				853678520E538F9E0054126A /* MessageViewController.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -759,7 +767,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				85C37A3F0E4076BB0052209B /* Hints.xib */,
+				85C37A3F0E4076BB0052209B /* Message.xib */,
 				85764F680E3E22FC00A61BF5 /* Hints.html */,
 				85B1D8840E190E3A00514A6A /* Default.png */,
 				85C3CC0F0E119E0500A01C6A /* Images */,
@@ -769,6 +777,8 @@
 				852A998E0E0BC433003E6D6D /* DecoderView.xib */,
 				852A99900E0BC43C003E6D6D /* MainWindow.xib */,
 				8D1107310486CEB800E47090 /* Info.plist */,
+				853678820E5394D70054126A /* About.html */,
+				85F895020E543EE100C0A666 /* InfoPlist.strings */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1393,9 +1403,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		1D6058900D05DD3D006BFB54 /* Scanner */ = {
+		1D6058900D05DD3D006BFB54 /* Barcodes */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "Scanner" */;
+			buildConfigurationList = 1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "Barcodes" */;
 			buildPhases = (
 				1D60588D0D05DD3D006BFB54 /* Resources */,
 				1D60588E0D05DD3D006BFB54 /* Sources */,
@@ -1407,7 +1417,7 @@
 			dependencies = (
 				8514EB180DF8A50900EE78D3 /* PBXTargetDependency */,
 			);
-			name = Scanner;
+			name = Barcodes;
 			productName = ZXing;
 			productReference = 1D6058910D05DD3D006BFB54 /* Barcodes.app */;
 			productType = "com.apple.product-type.application";
@@ -1486,7 +1496,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				1D6058900D05DD3D006BFB54 /* Scanner */,
+				1D6058900D05DD3D006BFB54 /* Barcodes */,
 				8514EAE70DF88E5200EE78D3 /* zxingcore */,
 				856C25780E1BC767006ABF00 /* Build All */,
 				856C257D0E1BC779006ABF00 /* Test All */,
@@ -1516,8 +1526,10 @@
 				85C3CC3C0E119E1700A01C6A /* text.png in Resources */,
 				85B1D8850E190E3A00514A6A /* Default.png in Resources */,
 				85764F6A0E3E22FC00A61BF5 /* Hints.html in Resources */,
-				85C37A410E4076BB0052209B /* Hints.xib in Resources */,
+				85C37A410E4076BB0052209B /* Message.xib in Resources */,
 				85C4969C0E4A3E87003DB029 /* filmroll-2.png in Resources */,
+				853678830E5394D70054126A /* About.html in Resources */,
+				85F895030E543EE100C0A666 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1585,7 +1597,7 @@
 				85B1D7EF0E18EB6800514A6A /* ScanCell.m in Sources */,
 				85E883980E1A34D2004C4547 /* ScannedImageView.m in Sources */,
 				85764F2E0E3DE75700A61BF5 /* PlainEmailResultParser.m in Sources */,
-				85C37A3B0E406BD70052209B /* HintsViewController.m in Sources */,
+				853678530E538F9E0054126A /* MessageViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1724,7 +1736,7 @@
 		};
 		856C257C0E1BC76C006ABF00 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 1D6058900D05DD3D006BFB54 /* Scanner */;
+			target = 1D6058900D05DD3D006BFB54 /* Barcodes */;
 			targetProxy = 856C257B0E1BC76C006ABF00 /* PBXContainerItemProxy */;
 		};
 		856EABB10E1CE97800B2E1C7 /* PBXTargetDependency */ = {
@@ -1775,6 +1787,16 @@
 			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
+		853678820E5394D70054126A /* About.html */ = {
+			isa = PBXVariantGroup;
+			children = (
+				853678840E5394E40054126A /* en */,
+				853678850E5394E70054126A /* de */,
+				853678860E5394EA0054126A /* sv */,
+			);
+			name = About.html;
+			sourceTree = "<group>";
+		};
 		85764F680E3E22FC00A61BF5 /* Hints.html */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -1785,14 +1807,24 @@
 			name = Hints.html;
 			sourceTree = "<group>";
 		};
-		85C37A3F0E4076BB0052209B /* Hints.xib */ = {
+		85C37A3F0E4076BB0052209B /* Message.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
 				85C37A400E4076BB0052209B /* en */,
 				85F7D20E0E41D4A700FDC34E /* de */,
 				85F7D2100E41D4B300FDC34E /* sv */,
 			);
-			name = Hints.xib;
+			name = Message.xib;
+			sourceTree = "<group>";
+		};
+		85F895020E543EE100C0A666 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				85F895040E543F0400C0A666 /* en */,
+				8539502B0E5442AA00D081D6 /* de */,
+				8539502C0E5442B500D081D6 /* sv */,
+			);
+			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -1821,7 +1853,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = ZXing_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
-				PRODUCT_NAME = ZXing;
+				PRODUCT_NAME = Barcodes;
 			};
 			name = Release;
 		};
@@ -1846,7 +1878,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				PREBINDING = NO;
-				PRODUCT_NAME = libzxing;
+				PRODUCT_NAME = zxingcore;
 				ZERO_LINK = NO;
 			};
 			name = Release;
@@ -1986,7 +2018,7 @@
 				GCC_PREFIX_HEADER = ZXing_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
 				INFOPLIST_FILE = Info.plist;
-				PRODUCT_NAME = ZXing;
+				PRODUCT_NAME = Barcodes;
 			};
 			name = Test;
 		};
@@ -2088,7 +2120,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "Scanner" */ = {
+		1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "Barcodes" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1D6058940D05DD3E006BFB54 /* Debug */,

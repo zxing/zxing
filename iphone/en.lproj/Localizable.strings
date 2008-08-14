@@ -40,8 +40,14 @@
 /* Cancel */
 "DecoderViewController cancel button title" = "Cancel";
 
+/* About */
+"DecoderViewController about button title" = "About";
+
 /* Hints */
-"DecoderViewController HintsViewController title" = "Hints";
+"DecoderViewController Hints MessageViewController title" = "Hints";
+
+/* About */
+"DecoderViewController About MessageViewController title" = "About";
 
 /* Decoding image (%.0fx%.0f) ... */
 "DecoderViewController MessageWhileDecodingWithDimensions" = "Decoding image (%.0fx%.0f) ...";
