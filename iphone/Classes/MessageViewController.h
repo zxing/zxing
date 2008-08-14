@@ -25,9 +25,7 @@
   id callbackTarget;
   SEL callbackSelectorSuccess;
   SEL callbackSelectorFailure;
-  NSString *contentPath;
   NSURL *contentURL;
-  NSString *content;
 }
 
 @property (nonatomic, retain) id callbackTarget;
@@ -36,9 +34,7 @@
 
 @property (nonatomic, readonly) UIWebView *webView;
 
-@property (nonatomic, copy) NSString *contentPath;
 @property (nonatomic, retain) NSURL *contentURL;
-@property (nonatomic, copy) NSString *content;
 
 - (id)initWithMessageFilename:(NSString *)filename target:(id)cbt onSuccess:(SEL)ss onFailure:(SEL)fs;
 
