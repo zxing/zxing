@@ -1,5 +1,5 @@
 //
-//  HintsViewController.h
+//  MessageViewController.h
 //  ZXing
 //
 //  Created by Christian Brunschen on 30/07/2008.
@@ -21,7 +21,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface HintsViewController : UIViewController <UIWebViewDelegate> {
+@interface MessageViewController : UIViewController <UIWebViewDelegate> {
   id callbackTarget;
   SEL callbackSelectorSuccess;
   SEL callbackSelectorFailure;
@@ -40,6 +40,6 @@
 @property (nonatomic, retain) NSURL *contentURL;
 @property (nonatomic, copy) NSString *content;
 
-- (id)initWithTarget:(id)cbt onSuccess:(SEL)ss onFailure:(SEL)fs;
+- (id)initWithMessageFilename:(NSString *)filename target:(id)cbt onSuccess:(SEL)ss onFailure:(SEL)fs;
 
 @end

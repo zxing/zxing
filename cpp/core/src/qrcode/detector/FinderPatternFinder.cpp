@@ -269,8 +269,8 @@ namespace qrcode {
             // difference in the x / y coordinates of the two centers.
             // This is the case where you find top left first. Draw it out.
             hasSkipped_ = true;
-            return (int) abs(abs(firstConfirmedCenter->getX() - center->getX()) -
-                             abs(firstConfirmedCenter->getY() - center->getY()));
+            return (int) (abs(firstConfirmedCenter->getX() - center->getX()) -
+                          abs(firstConfirmedCenter->getY() - center->getY()));
           }
         }
       }
