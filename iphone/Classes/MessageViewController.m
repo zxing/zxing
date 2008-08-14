@@ -27,26 +27,22 @@
 @synthesize callbackTarget;
 @synthesize callbackSelectorSuccess;
 @synthesize callbackSelectorFailure;
-@synthesize contentPath;
 @synthesize contentURL;
-@synthesize content;
 
 - (UIWebView *)webView {
   return (UIWebView *)self.view;
 }
 
 - (id)initWithMessageFilename:(NSString *)filename 
-                      target:(id)cbt onSuccess:(SEL)ss onFailure:(SEL)fs  {
+                       target:(id)cbt
+                    onSuccess:(SEL)ss 
+                    onFailure:(SEL)fs  {
 	if (self = [super initWithNibName:@"Message" bundle:nil]) {
     self.callbackTarget = cbt;
     self.callbackSelectorSuccess = ss;
     self.callbackSelectorFailure = fs;
-    self.contentPath = [[NSBundle mainBundle] pathForResource:filename 
-                                                       ofType:@"html"];
-    self.contentURL = [NSURL fileURLWithPath:self.contentPath];
-    self.content = [NSString stringWithContentsOfFile:self.contentPath
-                                             encoding:NSUTF8StringEncoding 
-                                                error:NULL];
+    self.contentURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:filename 
+                                                                             ofType:@"html"]];
 	}
 	return self;
 }
@@ -54,7 +50,7 @@
 - (void)loadView {
   [super loadView];
   self.webView.delegate = self;
-  [self.webView loadHTMLString:self.content baseURL:self.contentURL];
+  [self.webView loadRequest:[NSURLRequest requestWithURL:self.contentURL]];
 }
 
 - (void)viewDidLoad {
