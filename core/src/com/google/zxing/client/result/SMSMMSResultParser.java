@@ -80,6 +80,15 @@ final class SMSMMSResultParser extends ResultParser {
       subject = (String) nameValuePairs.get("subject");
       body = (String) nameValuePairs.get("body");
     }
+    // Thanks to dominik.wild for suggesting this enhancement to support
+    // smsto:number:body URIs
+    if (body == null) {
+      int bodyStart = number.indexOf(':');
+      if (bodyStart >= 0) {
+        body = number.substring(bodyStart + 1);
+        number = number.substring(0, bodyStart);
+      }
+    }
     return new SMSParsedResult("sms:" + number, number, via, subject, body, null);
   }
 
