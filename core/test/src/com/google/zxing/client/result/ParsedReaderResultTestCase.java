@@ -110,13 +110,16 @@ public final class ParsedReaderResultTestCase extends TestCase {
     doTestResult("BEGIN:VCARD\r\nEND:VCARD", ParsedResultType.ADDRESSBOOK);
     doTestResult("BEGIN:VCARD\r\nN:Owen;Sean\r\nEND:VCARD", ParsedResultType.ADDRESSBOOK);
     doTestResult("BEGIN:VCARD\r\nVERSION:2.1\r\nN:Owen;Sean\r\nEND:VCARD", ParsedResultType.ADDRESSBOOK);
-    doTestResult("BEGIN:VCARD\r\nADR;HOME:123 Main St\r\nVERSION:2.1\r\nN:Owen;Sean\r\nEND:VCARD", ParsedResultType.ADDRESSBOOK);    
+    doTestResult("BEGIN:VCARD\r\nADR;HOME:123 Main St\r\nVERSION:2.1\r\nN:Owen;Sean\r\n" +
+                 "END:VCARD", ParsedResultType.ADDRESSBOOK);    
     doTestResult("BEGIN:VCARD", ParsedResultType.URI); // yeah we end up guessing "URI" here
   }
 
   public void testVEvent() {
-    doTestResult("BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456Z\r\nDTEND:20080505T234555Z\r\nEND:VEVENT\r\nEND:VCALENDAR", ParsedResultType.CALENDAR);
-    doTestResult("BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456Z\r\nDTEND:20080505T234555Z\r\nEND:VEVENT", ParsedResultType.CALENDAR);
+    doTestResult("BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456Z\r\n" +
+                 "DTEND:20080505T234555Z\r\nEND:VEVENT\r\nEND:VCALENDAR", ParsedResultType.CALENDAR);
+    doTestResult("BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456Z\r\n" +
+                 "DTEND:20080505T234555Z\r\nEND:VEVENT", ParsedResultType.CALENDAR);
     doTestResult("BEGIN:VEVENT\r\nDTEND:20080505T\r\nEND:VEVENT", ParsedResultType.TEXT);
     doTestResult("BEGIN:VEVENT", ParsedResultType.URI); // See above note on why this is URI
   }
@@ -127,6 +130,7 @@ public final class ParsedReaderResultTestCase extends TestCase {
     doTestResult("smsto:+15551212", ParsedResultType.SMS);
     doTestResult("sms:+15551212;via=999333", ParsedResultType.SMS);
     doTestResult("sms:+15551212?subject=foo&body=bar", ParsedResultType.SMS);
+    doTestResult("sms:+15551212:subject", ParsedResultType.SMS);
   }
 
   public void testMMS() {
@@ -135,6 +139,7 @@ public final class ParsedReaderResultTestCase extends TestCase {
     doTestResult("mmsto:+15551212", ParsedResultType.SMS);
     doTestResult("mms:+15551212;via=999333", ParsedResultType.SMS);
     doTestResult("mms:+15551212?subject=foo&body=bar", ParsedResultType.SMS);
+    doTestResult("mms:+15551212:subject", ParsedResultType.SMS);
   }
 
   /*
