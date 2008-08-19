@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (C) 2008 Google Inc.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<resources>
+    <string name="app_name">Barcode Scanner</string>
+
+    <string name="button_add_contact">Add contact</string>
+    <string name="button_cancel">Cancel</string>
+    <string name="button_dial">Dial</string>
+    <string name="button_email">Email</string>
+    <string name="button_lookup_product">Look up product</string>
+    <string name="button_ok">OK</string>
+    <string name="button_open_browser">Open browser</string>
+    <string name="button_show_map">Show map</string>
+
+    <string name="contents_contact">Contact info</string>
+    <string name="contents_email">Email address</string>
+    <string name="contents_location">Geographic coordinates</string>
+    <string name="contents_phone">Phone number</string>
+    <string name="contents_sms">SMS address</string>
+    <string name="contents_text">Plain text</string>
+
+    <string name="menu_about">About</string>
+    <string name="menu_help">Help</string>
+    <string name="menu_settings">Settings</string>
+
+    <string name="msg_about">Based on the ZXing Barcode Library</string>
+    <string name="msg_encode_barcode_failed">Could not retrieve a barcode from the network.</string>
+    <string name="msg_encode_contents_failed">Could not encode a barcode from the data provided.</string>
+    <string name="msg_encode_in_progress">Generating a barcode\u2026</string>
+    <string name="msg_help">Barcode Scanner continuously scans the viewfinder rectangle, so there\'s no need to press the shutter button. If you\'re having trouble, make sure to hold the phone steady. If the camera is unable to focus, try moving further back from the barcode.</string>
+    <string name="msg_default_status">Place a barcode inside the viewfinder rectangle to read it.</string>
+
+    <string name="preferences_decode_1D_title">Decode 1D barcodes</string>
+    <string name="preferences_decode_QR_title">Decode QR Codes</string>
+    <string name="preferences_general_title">General settings</string>
+    <string name="preferences_name">Settings</string>
+    <string name="preferences_play_beep_title">Beep when a barcode is found</string>
+    <string name="preferences_sounds_title">Sounds</string>
+
+    <string name="title_about">About Barcode Scanner</string>
+    <string name="title_help">Help</string>
+
+    <string name="zxing_url">http://code.google.com/p/zxing</string>
+</resources>
