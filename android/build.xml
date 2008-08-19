@@ -1,0 +1,274 @@
+<?xml version="1.0" ?>
+<project name="BarcodeScanner" default="debug">
+  <!-- SDK Locations -->
+  <property file="../build.properties"/>
+  <property name="sdk-folder" value="${android-home}"/>
+  <property name="android-tools" value="${sdk-folder}/tools"/>
+
+  <!-- Application Package Name -->
+  <property name="application-package" value="com.android.barcodes" />
+
+  <!-- The intermediates directory -->
+  <!-- Eclipse uses "bin" for its own output, so we do the same. -->
+  <property name="outdir" value="bin" />
+
+  <!-- ************************************************************************************* -->
+  <!-- No user servicable parts below. -->
+
+  <property name="android-framework" value="${android-tools}/lib/framework.aidl" />
+
+  <!-- Input directories -->
+  <property name="resource-dir" value="res" />
+  <property name="asset-dir" value="assets" />
+  <property name="srcdir" value="src" />
+  <condition property="srcdir-ospath"
+             value="${basedir}\${srcdir}"
+             else="${basedir}/${srcdir}" >
+    <os family="windows"/>
+  </condition>
+
+  <property name="external-libs" value="../core" />
+  <condition property="external-libs-ospath"
+             value="${basedir}\${external-libs}"
+             else="${basedir}/${external-libs}" >
+    <os family="windows"/>
+  </condition>
+
+  <!-- Output directories -->
+  <property name="outdir-classes" value="${outdir}/classes" />
+  <condition property="outdir-classes-ospath"
+             value="${basedir}\${outdir-classes}"
+             else="${basedir}/${outdir-classes}" >
+    <os family="windows"/>
+  </condition>
+
+  <!-- Create R.java in the source directory -->
+  <property name="outdir-r" value="src" />
+
+  <!-- Intermediate files -->
+  <property name="dex-file" value="classes.dex" />
+  <property name="intermediate-dex" value="${outdir}/${dex-file}" />
+  <condition property="intermediate-dex-ospath"
+             value="${basedir}\${intermediate-dex}"
+             else="${basedir}/${intermediate-dex}" >
+    <os family="windows"/>
+  </condition>
+
+  <!-- The final package file to generate -->
+  <property name="resources-package" value="${outdir}/${ant.project.name}.ap_" />
+  <condition property="resources-package-ospath"
+             value="${basedir}\${resources-package}"
+             else="${basedir}/${resources-package}" >
+    <os family="windows"/>
+  </condition>
+
+  <property name="out-debug-package" value="${outdir}/${ant.project.name}-debug.apk" />
+  <condition property="out-debug-package-ospath"
+             value="${basedir}\${out-debug-package}"
+             else="${basedir}/${out-debug-package}" >
+    <os family="windows"/>
+  </condition>
+
+  <property name="out-unsigned-package" value="${outdir}/${ant.project.name}-unsigned.apk" />
+  <condition property="out-unsigned-package-ospath"
+             value="${basedir}\${out-unsigned-package}"
+             else="${basedir}/${out-unsigned-package}" >
+    <os family="windows"/>
+  </condition>
+
+  <!-- Tools -->
+  <condition property="aapt" value="${android-tools}/aapt.exe" else="${android-tools}/aapt" >
+    <os family="windows"/>
+  </condition>
+  <condition property="aidl" value="${android-tools}/aidl.exe" else="${android-tools}/aidl" >
+    <os family="windows"/>
+  </condition>
+  <condition property="adb" value="${android-tools}/adb.exe" else="${android-tools}/adb" >
+    <os family="windows"/>
+  </condition>
+  <condition property="dx" value="${android-tools}/dx.bat" else="${android-tools}/dx" >
+    <os family="windows"/>
+  </condition>
+  <condition property="apk-builder" value="${android-tools}/apkbuilder.bat" else="${android-tools}/apkbuilder" >
+    <os family="windows"/>
+  </condition>
+
+  <property name="android-jar" value="${sdk-folder}/android.jar" />
+
+  <!-- Rules -->
+
+  <!-- Create the output directories if they don't exist yet. -->
+  <target name="dirs">
+    <echo>Creating output directories if needed...</echo>
+    <mkdir dir="${outdir}" />
+    <mkdir dir="${outdir-classes}" />
+  </target>
+
+  <!-- Generate the R.java file for this project's resources. -->
+  <target name="resource-src" depends="dirs">
+    <echo>Generating R.java / Manifest.java from the resources...</echo>
+    <exec executable="${aapt}" failonerror="true">
+      <arg value="package" />
+      <arg value="-m" />
+      <arg value="-J" />
+      <arg value="${outdir-r}" />
+      <arg value="-M" />
+      <arg value="AndroidManifest.xml" />
+      <arg value="-S" />
+      <arg value="${resource-dir}" />
+      <arg value="-I" />
+      <arg value="${android-jar}" />
+    </exec>
+  </target>
+
+  <!-- Generate java classes from .aidl files. -->
+  <target name="aidl" depends="dirs">
+    <echo>Compiling aidl files into Java classes...</echo>
+    <apply executable="${aidl}" failonerror="true">
+      <arg value="-p${android-framework}" />
+      <arg value="-I${srcdir}" />
+      <fileset dir="${srcdir}">
+        <include name="**/*.aidl"/>
+      </fileset>
+    </apply>
+  </target>
+
+  <!-- Compile this project's .java files into .class files. -->
+  <target name="compile" depends="dirs, resource-src, aidl">
+    <javac encoding="ascii" target="1.5" debug="true" extdirs=""
+           srcdir="."
+           destdir="${outdir-classes}"
+           bootclasspath="${android-jar}">
+      <classpath>
+        <fileset dir="${external-libs}" includes="*.jar"/>
+      </classpath>
+    </javac>
+  </target>
+
+  <!-- Convert this project's .class files into .dex files. -->
+  <target name="dex" depends="compile">
+    <echo>Converting compiled files and external libraries into ${outdir}/${dex-file}...</echo>
+    <apply executable="${dx}" failonerror="true" parallel="true">
+      <arg value="--dex" />
+      <arg value="--output=${intermediate-dex-ospath}" />
+      <arg path="${outdir-classes-ospath}" />
+      <fileset dir="${external-libs}" includes="*.jar"/>
+    </apply>
+  </target>
+
+  <!-- Put the project's resources into the output package file. -->
+  <target name="package-res-and-assets">
+    <echo>Packaging resources and assets...</echo>
+    <exec executable="${aapt}" failonerror="true">
+      <arg value="package" />
+      <arg value="-f" />
+      <arg value="-M" />
+      <arg value="AndroidManifest.xml" />
+      <arg value="-S" />
+      <arg value="${resource-dir}" />
+      <arg value="-A" />
+      <arg value="${asset-dir}" />
+      <arg value="-I" />
+      <arg value="${android-jar}" />
+      <arg value="-F" />
+      <arg value="${resources-package}" />
+    </exec>
+  </target>
+
+  <!-- Same as package-res-and-assets, but without "-A ${asset-dir}" -->
+  <target name="package-res-no-assets">
+    <echo>Packaging resources...</echo>
+    <exec executable="${aapt}" failonerror="true">
+      <arg value="package" />
+      <arg value="-f" />
+      <arg value="-M" />
+      <arg value="AndroidManifest.xml" />
+      <arg value="-S" />
+      <arg value="${resource-dir}" />
+      <!-- No assets directory -->
+      <arg value="-I" />
+      <arg value="${android-jar}" />
+      <arg value="-F" />
+      <arg value="${resources-package}" />
+    </exec>
+  </target>
+
+  <!-- Invoke the proper target depending on whether or not
+an assets directory is present. -->
+  <!-- TODO: find a nicer way to include the "-A ${asset-dir}" argument
+only when the assets dir exists. -->
+  <target name="package-res">
+    <available file="${asset-dir}" type="dir"
+               property="res-target" value="and-assets" />
+    <property name="res-target" value="no-assets" />
+    <antcall target="package-res-${res-target}" />
+  </target>
+
+  <!-- Package the application and sign it with a debug key.
+      This is the default target when building. It is used for debug. -->
+  <target name="debug" depends="dex, package-res">
+    <echo>Packaging ${out-debug-package}, and signing it with a debug key...</echo>
+    <exec executable="${apk-builder}" failonerror="true">
+      <arg value="${out-debug-package-ospath}" />
+      <arg value="-z" />
+      <arg value="${resources-package-ospath}" />
+      <arg value="-f" />
+      <arg value="${intermediate-dex-ospath}" />
+      <arg value="-rf" />
+      <arg value="${srcdir-ospath}" />
+      <arg value="-rj" />
+      <arg value="${external-libs-ospath}" />
+    </exec>
+  </target>
+
+  <!-- Package the application without signing it.
+        This allows for the application to be signed later with an official publishing key. -->
+  <target name="release" depends="dex, package-res">
+    <echo>Packaging ${out-unsigned-package} for release...</echo>
+    <exec executable="${apk-builder}" failonerror="true">
+      <arg value="${out-unsigned-package-ospath}" />
+      <arg value="-u" />
+      <arg value="-z" />
+      <arg value="${resources-package-ospath}" />
+      <arg value="-f" />
+      <arg value="${intermediate-dex-ospath}" />
+      <arg value="-rf" />
+      <arg value="${srcdir-ospath}" />
+      <arg value="-rj" />
+      <arg value="${external-libs-ospath}" />
+    </exec>
+    <echo>It will need to be signed with jarsigner before being published.</echo>
+  </target>
+
+  <!-- Install the package on the default emulator -->
+  <target name="install" depends="debug">
+    <echo>Installing ${out-debug-package} onto default emulator...</echo>
+    <exec executable="${adb}" failonerror="true">
+      <arg value="install" />
+      <arg value="${out-debug-package}" />
+    </exec>
+  </target>
+
+  <target name="reinstall" depends="debug">
+    <echo>Installing ${out-debug-package} onto default emulator...</echo>
+    <exec executable="${adb}" failonerror="true">
+      <arg value="install" />
+      <arg value="-r" />
+      <arg value="${out-debug-package}" />
+    </exec>
+  </target>
+
+  <!-- Uinstall the package from the default emulator -->
+  <target name="uninstall">
+    <echo>Uninstalling ${application-package} from the default emulator...</echo>
+    <exec executable="${adb}" failonerror="true">
+      <arg value="uninstall" />
+      <arg value="${application-package}" />
+    </exec>
+  </target>
+
+  <target name="clean">
+    <delete dir="${outdir}"/>
+  </target>
+
+</project>
