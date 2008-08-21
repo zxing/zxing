@@ -26,7 +26,7 @@ public final class URIParsedResult extends ParsedResult {
 
   public URIParsedResult(String uri, String title) {
     super(ParsedResultType.URI);
-    this.uri = uri;
+    this.uri = massageURI(uri);
     this.title = title;
   }
 
@@ -38,11 +38,56 @@ public final class URIParsedResult extends ParsedResult {
     return title;
   }
 
+  /**
+   * @return true if the URI contains suspicious patterns that may suggest it intends to
+   *  mislead the user about its true nature. At the moment this looks for the presence
+   *  of user/password syntax in the host/authority portion of a URI which may be used
+   *  in attempts to make the URI's host appear to be other than it is. Example:
+   *  http://yourbank.com@phisher.com  This URI connects to phisher.com but may appear
+   *  to connect to yourbank.com at first glance.
+   */
+  public boolean isPossiblyMaliciousURI() {
+    return containsUser();
+  }
+
+  private boolean containsUser() {
+    // This method is likely not 100% RFC compliant yet
+    int hostStart = uri.indexOf(':'); // we should always have scheme at this point
+    hostStart++;
+    // Skip slashes preceding host
+    int uriLength = uri.length();
+    while (hostStart < uriLength && uri.charAt(hostStart) == '/') {
+      hostStart++;
+    }
+    int hostEnd = uri.indexOf('/', hostStart);
+    if (hostEnd < 0) {
+      hostEnd = uriLength;
+    }
+    int at = uri.indexOf('@', hostStart);
+    return at >= hostStart && at < hostEnd;
+  }
+
   public String getDisplayResult() {
     StringBuffer result = new StringBuffer();
     maybeAppend(uri, result);
     maybeAppend(title, result);
     return result.toString();
+  }
+
+  /**
+   * Transforms a string that represents a URI into something more proper, by adding or canonicalizing
+   * the protocol.
+   */
+  private static String massageURI(String uri) {
+    int protocolEnd = uri.indexOf(':');
+    if (protocolEnd < 0) {
+      // No protocol, assume http
+      uri = "http://" + uri;
+    } else {
+      // Lowercase protocol to avoid problems
+      uri = uri.substring(0, protocolEnd).toLowerCase() + uri.substring(protocolEnd);
+    }
+    return uri;
   }
 
 
