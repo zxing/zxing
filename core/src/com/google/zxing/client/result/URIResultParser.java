@@ -33,29 +33,11 @@ final class URIResultParser extends ResultParser {
     if (!isBasicallyValidURI(rawText)) {
       return null;
     }
-    String uri = massagePossibleURI(rawText);
-    return new URIParsedResult(uri, null);
-  }
-
-  /**
-   * Transforms a string that possibly represents a URI into something more proper, by adding or canonicalizing
-   * the protocol.
-   */
-  private static String massagePossibleURI(String uri) {
-    // Take off leading "URL:" if present
-    if (uri.startsWith("URL:")) {
-      uri = uri.substring(4);
+    // We specifically handle the odd "URL" scheme here for simplicity
+    if (rawText.startsWith("URL:")) {
+      rawText = rawText.substring(4);
     }
-    int protocolEnd = uri.indexOf(':');
-    if (protocolEnd < 0) {
-      // No protocol, assume http
-      uri = "http://" + uri;
-    } else {
-      // Lowercase protocol to avoid problems
-      uri = uri.substring(0, protocolEnd).toLowerCase() + uri.substring(protocolEnd);
-      // TODO this logic isn't quite right for URIs like "example.org:443/foo"
-    }
-    return uri;
+    return new URIParsedResult(rawText, null);
   }
 
   /**
