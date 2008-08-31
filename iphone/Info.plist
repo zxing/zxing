@@ -9,9 +9,9 @@
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
 	<key>CFBundleIconFile</key>
-	<string>zxing-icon-128</string>
+	<string>zxing-57</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.google.${PRODUCT_NAME:identifier}</string>
+	<string>com.googlecode.zxing.${PRODUCT_NAME:identifier}</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>

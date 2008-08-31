@@ -89,6 +89,8 @@
 		853678530E538F9E0054126A /* MessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 853678520E538F9E0054126A /* MessageViewController.m */; };
 		853678830E5394D70054126A /* About.html in Resources */ = {isa = PBXBuildFile; fileRef = 853678820E5394D70054126A /* About.html */; };
 		854BE3010E06A56C00CB4A20 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 854BE3000E06A56C00CB4A20 /* AddressBookUI.framework */; };
+		8555304E0E643BA800C7B5DE /* Entitlements.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8555304D0E643BA800C7B5DE /* Entitlements.plist */; };
+		8555307B0E64504300C7B5DE /* zxing-57.png in Resources */ = {isa = PBXBuildFile; fileRef = 8555307A0E64504300C7B5DE /* zxing-57.png */; };
 		855A66800DF5E757007B394F /* ArchiveController.m in Sources */ = {isa = PBXBuildFile; fileRef = 855A66510DF5E757007B394F /* ArchiveController.m */; };
 		855A66810DF5E757007B394F /* Database.m in Sources */ = {isa = PBXBuildFile; fileRef = 855A66540DF5E757007B394F /* Database.m */; };
 		855A66830DF5E757007B394F /* AddContactAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 855A66580DF5E757007B394F /* AddContactAction.m */; };
@@ -108,7 +110,6 @@
 		855A66930DF5E757007B394F /* URIParsedResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 855A66790DF5E757007B394F /* URIParsedResult.m */; };
 		855A66960DF5E757007B394F /* Scan.m in Sources */ = {isa = PBXBuildFile; fileRef = 855A667F0DF5E757007B394F /* Scan.m */; };
 		855A66A50DF5E7B4007B394F /* scans.db in Resources */ = {isa = PBXBuildFile; fileRef = 855A66A00DF5E7B4007B394F /* scans.db */; };
-		855A66A70DF5E7B4007B394F /* zxing-icon-128.png in Resources */ = {isa = PBXBuildFile; fileRef = 855A66A20DF5E7B4007B394F /* zxing-icon-128.png */; };
 		855A66B40DF5E884007B394F /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 855A66B30DF5E884007B394F /* AddressBook.framework */; };
 		855A66BD0DF5E8D6007B394F /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 855A66BC0DF5E8D6007B394F /* libsqlite3.0.dylib */; };
 		855A66BF0DF5E8F8007B394F /* libiconv.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 855A66BE0DF5E8F8007B394F /* libiconv.2.dylib */; };
@@ -181,6 +182,7 @@
 		85764F6A0E3E22FC00A61BF5 /* Hints.html in Resources */ = {isa = PBXBuildFile; fileRef = 85764F680E3E22FC00A61BF5 /* Hints.html */; };
 		85B1D7EF0E18EB6800514A6A /* ScanCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 85B1D7EE0E18EB6700514A6A /* ScanCell.m */; };
 		85B1D8850E190E3A00514A6A /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 85B1D8840E190E3A00514A6A /* Default.png */; };
+		85B8F52C0E6AD33200510402 /* photolib.png in Resources */ = {isa = PBXBuildFile; fileRef = 85B8F52B0E6AD33200510402 /* photolib.png */; };
 		85C0B9140E123AFC005EED58 /* ResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 85C0B9130E123AFC005EED58 /* ResultParser.m */; };
 		85C0B91A0E123BD2005EED58 /* DoCoMoResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 85C0B9190E123BD2005EED58 /* DoCoMoResultParser.m */; };
 		85C0B9220E123C93005EED58 /* MeCardParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 85C0B9210E123C93005EED58 /* MeCardParser.m */; };
@@ -204,6 +206,10 @@
 		85C3CC3B0E119E1700A01C6A /* sms.png in Resources */ = {isa = PBXBuildFile; fileRef = 85C3CC330E119E1700A01C6A /* sms.png */; };
 		85C3CC3C0E119E1700A01C6A /* text.png in Resources */ = {isa = PBXBuildFile; fileRef = 85C3CC340E119E1700A01C6A /* text.png */; };
 		85C4969C0E4A3E87003DB029 /* filmroll-2.png in Resources */ = {isa = PBXBuildFile; fileRef = 85C4969B0E4A3E87003DB029 /* filmroll-2.png */; };
+		85CC331E0E583DDB0053F819 /* OneDReader.h in Headers */ = {isa = PBXBuildFile; fileRef = 85CC33140E574B1B0053F819 /* OneDReader.h */; };
+		85CC33200E583DEB0053F819 /* OneDReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85CC33150E574B1B0053F819 /* OneDReader.cpp */; };
+		85CC33420E5861DD0053F819 /* AbstractOneDReader.h in Headers */ = {isa = PBXBuildFile; fileRef = 85CC33400E5861DD0053F819 /* AbstractOneDReader.h */; };
+		85CC33430E5861DD0053F819 /* AbstractOneDReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85CC33410E5861DD0053F819 /* AbstractOneDReader.cpp */; };
 		85D937270E11064700B785E0 /* ScanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 85D937260E11064700B785E0 /* ScanViewController.m */; };
 		85E883980E1A34D2004C4547 /* ScannedImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 85E883970E1A34D2004C4547 /* ScannedImageView.m */; };
 		85F895030E543EE100C0A666 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 85F895020E543EE100C0A666 /* InfoPlist.strings */; };
@@ -306,6 +312,8 @@
 		8539502B0E5442AA00D081D6 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		8539502C0E5442B500D081D6 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		854BE3000E06A56C00CB4A20 /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
+		8555304D0E643BA800C7B5DE /* Entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Entitlements.plist; sourceTree = "<group>"; };
+		8555307A0E64504300C7B5DE /* zxing-57.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "zxing-57.png"; sourceTree = "<group>"; };
 		855A65D70DF5E739007B394F /* BarcodeFormat.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BarcodeFormat.cpp; sourceTree = "<group>"; };
 		855A65D80DF5E739007B394F /* BarcodeFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BarcodeFormat.h; sourceTree = "<group>"; };
 		855A65D90DF5E739007B394F /* BlackPointEstimationMethod.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BlackPointEstimationMethod.cpp; sourceTree = "<group>"; };
@@ -422,7 +430,6 @@
 		855A667E0DF5E757007B394F /* Scan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Scan.h; sourceTree = "<group>"; };
 		855A667F0DF5E757007B394F /* Scan.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Scan.m; sourceTree = "<group>"; };
 		855A66A00DF5E7B4007B394F /* scans.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = scans.db; sourceTree = "<group>"; };
-		855A66A20DF5E7B4007B394F /* zxing-icon-128.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "zxing-icon-128.png"; sourceTree = "<group>"; };
 		855A66B30DF5E884007B394F /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		855A66BC0DF5E8D6007B394F /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
 		855A66BE0DF5E8F8007B394F /* libiconv.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.2.dylib; path = usr/lib/libiconv.2.dylib; sourceTree = SDKROOT; };
@@ -605,6 +612,7 @@
 		85B1D7ED0E18EB6700514A6A /* ScanCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScanCell.h; sourceTree = "<group>"; };
 		85B1D7EE0E18EB6700514A6A /* ScanCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScanCell.m; sourceTree = "<group>"; };
 		85B1D8840E190E3A00514A6A /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
+		85B8F52B0E6AD33200510402 /* photolib.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = photolib.png; sourceTree = "<group>"; };
 		85C0B9120E123AFC005EED58 /* ResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ResultParser.h; sourceTree = "<group>"; };
 		85C0B9130E123AFC005EED58 /* ResultParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ResultParser.m; sourceTree = "<group>"; };
 		85C0B9180E123BD2005EED58 /* DoCoMoResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DoCoMoResultParser.h; sourceTree = "<group>"; };
@@ -641,6 +649,10 @@
 		85C3CC330E119E1700A01C6A /* sms.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sms.png; sourceTree = "<group>"; };
 		85C3CC340E119E1700A01C6A /* text.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = text.png; sourceTree = "<group>"; };
 		85C4969B0E4A3E87003DB029 /* filmroll-2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "filmroll-2.png"; sourceTree = "<group>"; };
+		85CC33140E574B1B0053F819 /* OneDReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OneDReader.h; sourceTree = "<group>"; };
+		85CC33150E574B1B0053F819 /* OneDReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OneDReader.cpp; sourceTree = "<group>"; };
+		85CC33400E5861DD0053F819 /* AbstractOneDReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AbstractOneDReader.h; sourceTree = "<group>"; };
+		85CC33410E5861DD0053F819 /* AbstractOneDReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AbstractOneDReader.cpp; sourceTree = "<group>"; };
 		85D937250E11064700B785E0 /* ScanViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScanViewController.h; sourceTree = "<group>"; };
 		85D937260E11064700B785E0 /* ScanViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScanViewController.m; sourceTree = "<group>"; };
 		85E883960E1A34D2004C4547 /* ScannedImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScannedImageView.h; sourceTree = "<group>"; };
@@ -705,10 +717,10 @@
 				851B4BF50DF6C64A00C8958F /* TwoDDecoderResult.m */,
 				85D937250E11064700B785E0 /* ScanViewController.h */,
 				85D937260E11064700B785E0 /* ScanViewController.m */,
-				855A66510DF5E757007B394F /* ArchiveController.m */,
 				85B1D7ED0E18EB6700514A6A /* ScanCell.h */,
 				85B1D7EE0E18EB6700514A6A /* ScanCell.m */,
 				855A66520DF5E757007B394F /* ArchiveController.h */,
+				855A66510DF5E757007B394F /* ArchiveController.m */,
 				855A66530DF5E757007B394F /* Database.h */,
 				855A66540DF5E757007B394F /* Database.m */,
 				855A666D0DF5E757007B394F /* DecoderViewController.h */,
@@ -743,6 +755,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				8555304D0E643BA800C7B5DE /* Entitlements.plist */,
 				856EA9470E1CE61500B2E1C7 /* CppUnit */,
 				8514EA5F0DF88C9E00EE78D3 /* CoreTestSrc */,
 				855A65D60DF5E739007B394F /* CoreSrc */,
@@ -773,7 +786,6 @@
 				85C3CC0F0E119E0500A01C6A /* Images */,
 				852A99960E0BC49E003E6D6D /* Localizable.strings */,
 				855A66A00DF5E7B4007B394F /* scans.db */,
-				855A66A20DF5E7B4007B394F /* zxing-icon-128.png */,
 				852A998E0E0BC433003E6D6D /* DecoderView.xib */,
 				852A99900E0BC43C003E6D6D /* MainWindow.xib */,
 				8D1107310486CEB800E47090 /* Info.plist */,
@@ -865,6 +877,7 @@
 		855A65D60DF5E739007B394F /* CoreSrc */ = {
 			isa = PBXGroup;
 			children = (
+				85CC33130E574AD50053F819 /* oned */,
 				857D363F0DF60E37000E0C89 /* Exception.h */,
 				857D36400DF60E37000E0C89 /* Exception.cpp */,
 				851B4AA60DF631EB00C8958F /* TransformingMonochromeBitmapSource.h */,
@@ -1370,6 +1383,8 @@
 		85C3CC0F0E119E0500A01C6A /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				85B8F52B0E6AD33200510402 /* photolib.png */,
+				8555307A0E64504300C7B5DE /* zxing-57.png */,
 				85C4969B0E4A3E87003DB029 /* filmroll-2.png */,
 				85C3CC2D0E119E1600A01C6A /* business-card.png */,
 				85C3CC2E0E119E1700A01C6A /* email.png */,
@@ -1383,6 +1398,17 @@
 			name = Images;
 			sourceTree = "<group>";
 		};
+		85CC33130E574AD50053F819 /* oned */ = {
+			isa = PBXGroup;
+			children = (
+				85CC33400E5861DD0053F819 /* AbstractOneDReader.h */,
+				85CC33410E5861DD0053F819 /* AbstractOneDReader.cpp */,
+				85CC33140E574B1B0053F819 /* OneDReader.h */,
+				85CC33150E574B1B0053F819 /* OneDReader.cpp */,
+			);
+			path = oned;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -1390,6 +1416,8 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				85CC331E0E583DDB0053F819 /* OneDReader.h in Headers */,
+				85CC33420E5861DD0053F819 /* AbstractOneDReader.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1512,7 +1540,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				855A66A50DF5E7B4007B394F /* scans.db in Resources */,
-				855A66A70DF5E7B4007B394F /* zxing-icon-128.png in Resources */,
 				852A998F0E0BC433003E6D6D /* DecoderView.xib in Resources */,
 				852A99910E0BC43C003E6D6D /* MainWindow.xib in Resources */,
 				852A99970E0BC49E003E6D6D /* Localizable.strings in Resources */,
@@ -1530,6 +1557,9 @@
 				85C4969C0E4A3E87003DB029 /* filmroll-2.png in Resources */,
 				853678830E5394D70054126A /* About.html in Resources */,
 				85F895030E543EE100C0A666 /* InfoPlist.strings in Resources */,
+				8555304E0E643BA800C7B5DE /* Entitlements.plist in Resources */,
+				8555307B0E64504300C7B5DE /* zxing-57.png in Resources */,
+				85B8F52C0E6AD33200510402 /* photolib.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1647,6 +1677,8 @@
 				8514EB130DF88F0500EE78D3 /* ReaderException.cpp in Sources */,
 				8514EB140DF88F0500EE78D3 /* Result.cpp in Sources */,
 				8514EB150DF88F0500EE78D3 /* ResultPoint.cpp in Sources */,
+				85CC33200E583DEB0053F819 /* OneDReader.cpp in Sources */,
+				85CC33430E5861DD0053F819 /* AbstractOneDReader.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1849,11 +1881,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Christian Brunschen";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = ZXing_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
 				PRODUCT_NAME = Barcodes;
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "6827259A-0073-4678-82F6-329E230F6801";
 			};
 			name = Release;
 		};
@@ -1882,6 +1916,102 @@
 				ZERO_LINK = NO;
 			};
 			name = Release;
+		};
+		855530180E64248400C7B5DE /* AdHoc Distribution */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Christian Brunschen";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				PREBINDING = NO;
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "3A1B16DE-FE88-44B7-B4AD-D409BB8F7DDD";
+				SDKROOT = iphoneos2.0;
+			};
+			name = "AdHoc Distribution";
+		};
+		855530190E64248400C7B5DE /* AdHoc Distribution */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_ENTITLEMENTS = Entitlements.plist;
+				COPY_PHASE_STRIP = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = ZXing_Prefix.pch;
+				INFOPLIST_FILE = Info.plist;
+				PRODUCT_NAME = Barcodes;
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "6CDE626B-71E0-4E2A-BED0-DDE5BE24A701";
+			};
+			name = "AdHoc Distribution";
+		};
+		8555301A0E64248400C7B5DE /* AdHoc Distribution */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PREBINDING = NO;
+				PRODUCT_NAME = zxingcore;
+				ZERO_LINK = NO;
+			};
+			name = "AdHoc Distribution";
+		};
+		8555301B0E64248400C7B5DE /* AdHoc Distribution */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = "Build All";
+				ZERO_LINK = NO;
+			};
+			name = "AdHoc Distribution";
+		};
+		8555301C0E64248400C7B5DE /* AdHoc Distribution */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = "Test All";
+				ZERO_LINK = NO;
+			};
+			name = "AdHoc Distribution";
+		};
+		8555301D0E64248400C7B5DE /* AdHoc Distribution */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = /usr/local/lib;
+				PREBINDING = NO;
+				PRODUCT_NAME = CppUnit;
+				ZERO_LINK = NO;
+			};
+			name = "AdHoc Distribution";
+		};
+		8555301E0E64248400C7B5DE /* AdHoc Distribution */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(NATIVE_ARCH)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = /usr/local/bin;
+				ONLY_ACTIVE_ARCH = YES;
+				PREBINDING = NO;
+				PRODUCT_NAME = "zxingcore-tests";
+				SDKROOT = macosx10.5;
+				ZERO_LINK = NO;
+			};
+			name = "AdHoc Distribution";
 		};
 		856C25790E1BC768006ABF00 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -2003,6 +2133,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PREBINDING = NO;
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "F7E3CE9A-42BC-4860-A74F-B4D05A088442";
 				SDKROOT = macosx10.5;
 			};
 			name = Test;
@@ -2090,6 +2221,102 @@
 			};
 			name = Test;
 		};
+		8584596E0E64181200211F1B /* Distribution */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Christian Brunschen";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				PREBINDING = NO;
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "6CDE626B-71E0-4E2A-BED0-DDE5BE24A701";
+				SDKROOT = iphoneos2.0;
+			};
+			name = Distribution;
+		};
+		8584596F0E64181200211F1B /* Distribution */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_ENTITLEMENTS = "";
+				COPY_PHASE_STRIP = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = ZXing_Prefix.pch;
+				INFOPLIST_FILE = Info.plist;
+				PRODUCT_NAME = Barcodes;
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "3A1B16DE-FE88-44B7-B4AD-D409BB8F7DDD";
+			};
+			name = Distribution;
+		};
+		858459700E64181200211F1B /* Distribution */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PREBINDING = NO;
+				PRODUCT_NAME = zxingcore;
+				ZERO_LINK = NO;
+			};
+			name = Distribution;
+		};
+		858459710E64181200211F1B /* Distribution */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = "Build All";
+				ZERO_LINK = NO;
+			};
+			name = Distribution;
+		};
+		858459720E64181200211F1B /* Distribution */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = "Test All";
+				ZERO_LINK = NO;
+			};
+			name = Distribution;
+		};
+		858459730E64181200211F1B /* Distribution */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = /usr/local/lib;
+				PREBINDING = NO;
+				PRODUCT_NAME = CppUnit;
+				ZERO_LINK = NO;
+			};
+			name = Distribution;
+		};
+		858459740E64181200211F1B /* Distribution */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(NATIVE_ARCH)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = /usr/local/bin;
+				ONLY_ACTIVE_ARCH = YES;
+				PREBINDING = NO;
+				PRODUCT_NAME = "zxingcore-tests";
+				SDKROOT = macosx10.5;
+				ZERO_LINK = NO;
+			};
+			name = Distribution;
+		};
 		C01FCF4F08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2100,6 +2327,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PREBINDING = NO;
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "F7E3CE9A-42BC-4860-A74F-B4D05A088442";
 				SDKROOT = iphoneos2.0;
 			};
 			name = Debug;
@@ -2113,6 +2341,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				PREBINDING = NO;
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = DefaultProfileUuid;
 				SDKROOT = iphoneos2.0;
 			};
 			name = Release;
@@ -2126,6 +2355,8 @@
 				1D6058940D05DD3E006BFB54 /* Debug */,
 				856EABFB0E1CF73600B2E1C7 /* Test */,
 				1D6058950D05DD3E006BFB54 /* Release */,
+				8584596F0E64181200211F1B /* Distribution */,
+				855530190E64248400C7B5DE /* AdHoc Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -2136,6 +2367,8 @@
 				8514EAE90DF88E5300EE78D3 /* Debug */,
 				856EABFC0E1CF73600B2E1C7 /* Test */,
 				8514EAEA0DF88E5300EE78D3 /* Release */,
+				858459700E64181200211F1B /* Distribution */,
+				8555301A0E64248400C7B5DE /* AdHoc Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -2146,6 +2379,8 @@
 				856C25790E1BC768006ABF00 /* Debug */,
 				856EABFD0E1CF73600B2E1C7 /* Test */,
 				856C257A0E1BC768006ABF00 /* Release */,
+				858459710E64181200211F1B /* Distribution */,
+				8555301B0E64248400C7B5DE /* AdHoc Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -2156,6 +2391,8 @@
 				856C257E0E1BC779006ABF00 /* Debug */,
 				856EABFE0E1CF73600B2E1C7 /* Test */,
 				856C257F0E1BC779006ABF00 /* Release */,
+				858459720E64181200211F1B /* Distribution */,
+				8555301C0E64248400C7B5DE /* AdHoc Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -2166,6 +2403,8 @@
 				856EAB160E1CE6E000B2E1C7 /* Debug */,
 				856EABFF0E1CF73600B2E1C7 /* Test */,
 				856EAB170E1CE6E000B2E1C7 /* Release */,
+				858459730E64181200211F1B /* Distribution */,
+				8555301D0E64248400C7B5DE /* AdHoc Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -2176,6 +2415,8 @@
 				856EAB7B0E1CE8AA00B2E1C7 /* Debug */,
 				856EAC000E1CF73600B2E1C7 /* Test */,
 				856EAB7C0E1CE8AA00B2E1C7 /* Release */,
+				858459740E64181200211F1B /* Distribution */,
+				8555301E0E64248400C7B5DE /* AdHoc Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -2186,6 +2427,8 @@
 				C01FCF4F08A954540054247B /* Debug */,
 				856EABFA0E1CF73600B2E1C7 /* Test */,
 				C01FCF5008A954540054247B /* Release */,
+				8584596E0E64181200211F1B /* Distribution */,
+				855530180E64248400C7B5DE /* AdHoc Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -8,7 +8,7 @@
 		<string key="IBDocument.HIToolboxVersion">352.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="58"/>
+			<integer value="34"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -59,7 +59,10 @@
 							</object>
 							<object class="IBUIBarButtonItem" id="953226107">
 								<int key="IBUITag">2</int>
-								<int key="IBUISystemItemIdentifier">11</int>
+								<object class="NSCustomResource" key="IBUIImage">
+									<string key="NSClassName">NSImage</string>
+									<string key="NSResourceName">photolib.png</string>
+								</object>
 								<reference key="IBUIToolbar" ref="17982920"/>
 							</object>
 							<object class="IBUIBarButtonItem" id="466815205">
