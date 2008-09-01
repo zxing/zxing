@@ -26,7 +26,8 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Vector;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * This abstract class looks for negative results, i.e. it only allows a certain number of false
@@ -54,12 +55,12 @@ public abstract class AbstractNegativeBlackBoxTestCase extends AbstractBlackBoxT
     }
   }
 
-  private Vector<TestResult> testResults;
+  private final List<TestResult> testResults;
 
   // Use the multiformat reader to evaluate all decoders in the system.
   protected AbstractNegativeBlackBoxTestCase(File testBase) {
     super(testBase, new MultiFormatReader(), null);
-    testResults = new Vector<TestResult>();
+    testResults = new ArrayList<TestResult>();
   }
 
   protected void addTest(int falsePositivesAllowed, float rotation) {

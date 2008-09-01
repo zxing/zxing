@@ -36,7 +36,8 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Hashtable;
-import java.util.Vector;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * @author srowen@google.com (Sean Owen)
@@ -82,7 +83,7 @@ public abstract class AbstractBlackBoxTestCase extends TestCase {
   private final File testBase;
   private final Reader barcodeReader;
   private final BarcodeFormat expectedFormat;
-  private Vector<TestResult> testResults;
+  private final List<TestResult> testResults;
 
   protected AbstractBlackBoxTestCase(File testBase,
                                      Reader barcodeReader,
@@ -90,7 +91,7 @@ public abstract class AbstractBlackBoxTestCase extends TestCase {
     this.testBase = testBase;
     this.barcodeReader = barcodeReader;
     this.expectedFormat = expectedFormat;
-    testResults = new Vector<TestResult>();
+    testResults = new ArrayList<TestResult>();
   }
 
   /**
