@@ -32,6 +32,7 @@ import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Store;
 import javax.mail.Transport;
+import javax.mail.Service;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
@@ -163,13 +164,13 @@ final class DecodeEmailTask extends TimerTask {
     }
   }
 
-  private static void closeResources(Store store, Folder inbox) {
+  private static void closeResources(Service service, Folder inbox) {
     try {
       if (inbox != null) {
         inbox.close(true);
       }
-      if (store != null) {
-        store.close();
+      if (service != null) {
+        service.close();
       }
     } catch (MessagingException me) {
       // continue
