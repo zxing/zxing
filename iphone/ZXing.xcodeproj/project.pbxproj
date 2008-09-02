@@ -206,10 +206,6 @@
 		85C3CC3B0E119E1700A01C6A /* sms.png in Resources */ = {isa = PBXBuildFile; fileRef = 85C3CC330E119E1700A01C6A /* sms.png */; };
 		85C3CC3C0E119E1700A01C6A /* text.png in Resources */ = {isa = PBXBuildFile; fileRef = 85C3CC340E119E1700A01C6A /* text.png */; };
 		85C4969C0E4A3E87003DB029 /* filmroll-2.png in Resources */ = {isa = PBXBuildFile; fileRef = 85C4969B0E4A3E87003DB029 /* filmroll-2.png */; };
-		85CC331E0E583DDB0053F819 /* OneDReader.h in Headers */ = {isa = PBXBuildFile; fileRef = 85CC33140E574B1B0053F819 /* OneDReader.h */; };
-		85CC33200E583DEB0053F819 /* OneDReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85CC33150E574B1B0053F819 /* OneDReader.cpp */; };
-		85CC33420E5861DD0053F819 /* AbstractOneDReader.h in Headers */ = {isa = PBXBuildFile; fileRef = 85CC33400E5861DD0053F819 /* AbstractOneDReader.h */; };
-		85CC33430E5861DD0053F819 /* AbstractOneDReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85CC33410E5861DD0053F819 /* AbstractOneDReader.cpp */; };
 		85D937270E11064700B785E0 /* ScanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 85D937260E11064700B785E0 /* ScanViewController.m */; };
 		85E883980E1A34D2004C4547 /* ScannedImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 85E883970E1A34D2004C4547 /* ScannedImageView.m */; };
 		85F895030E543EE100C0A666 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 85F895020E543EE100C0A666 /* InfoPlist.strings */; };
@@ -649,10 +645,6 @@
 		85C3CC330E119E1700A01C6A /* sms.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sms.png; sourceTree = "<group>"; };
 		85C3CC340E119E1700A01C6A /* text.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = text.png; sourceTree = "<group>"; };
 		85C4969B0E4A3E87003DB029 /* filmroll-2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "filmroll-2.png"; sourceTree = "<group>"; };
-		85CC33140E574B1B0053F819 /* OneDReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OneDReader.h; sourceTree = "<group>"; };
-		85CC33150E574B1B0053F819 /* OneDReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OneDReader.cpp; sourceTree = "<group>"; };
-		85CC33400E5861DD0053F819 /* AbstractOneDReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AbstractOneDReader.h; sourceTree = "<group>"; };
-		85CC33410E5861DD0053F819 /* AbstractOneDReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AbstractOneDReader.cpp; sourceTree = "<group>"; };
 		85D937250E11064700B785E0 /* ScanViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScanViewController.h; sourceTree = "<group>"; };
 		85D937260E11064700B785E0 /* ScanViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScanViewController.m; sourceTree = "<group>"; };
 		85E883960E1A34D2004C4547 /* ScannedImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScannedImageView.h; sourceTree = "<group>"; };
@@ -877,7 +869,6 @@
 		855A65D60DF5E739007B394F /* CoreSrc */ = {
 			isa = PBXGroup;
 			children = (
-				85CC33130E574AD50053F819 /* oned */,
 				857D363F0DF60E37000E0C89 /* Exception.h */,
 				857D36400DF60E37000E0C89 /* Exception.cpp */,
 				851B4AA60DF631EB00C8958F /* TransformingMonochromeBitmapSource.h */,
@@ -1398,17 +1389,6 @@
 			name = Images;
 			sourceTree = "<group>";
 		};
-		85CC33130E574AD50053F819 /* oned */ = {
-			isa = PBXGroup;
-			children = (
-				85CC33400E5861DD0053F819 /* AbstractOneDReader.h */,
-				85CC33410E5861DD0053F819 /* AbstractOneDReader.cpp */,
-				85CC33140E574B1B0053F819 /* OneDReader.h */,
-				85CC33150E574B1B0053F819 /* OneDReader.cpp */,
-			);
-			path = oned;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -1416,8 +1396,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				85CC331E0E583DDB0053F819 /* OneDReader.h in Headers */,
-				85CC33420E5861DD0053F819 /* AbstractOneDReader.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1677,8 +1655,6 @@
 				8514EB130DF88F0500EE78D3 /* ReaderException.cpp in Sources */,
 				8514EB140DF88F0500EE78D3 /* Result.cpp in Sources */,
 				8514EB150DF88F0500EE78D3 /* ResultPoint.cpp in Sources */,
-				85CC33200E583DEB0053F819 /* OneDReader.cpp in Sources */,
-				85CC33430E5861DD0053F819 /* AbstractOneDReader.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
