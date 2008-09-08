@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 ZXing authors
+ * Copyright 2008 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,23 +20,20 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
 
 /**
- * Parses strings of digits that repesent a UPC code.
+ * Parses strings of digits that represent a ISBN.
  * 
- * @author dswitkin@google.com (Daniel Switkin)
+ * @author jbreiden@google.com (Jeff Breidenbach)
  */
-final class UPCResultParser extends ResultParser {
+public class ISBNResultParser extends ResultParser {
 
-  private UPCResultParser() {
+  private ISBNResultParser() {
   }
 
-  // Treat all UPC and EAN variants as UPCs, in the sense that they are all product barcodes.
-  public static UPCParsedResult parse(Result result) {
+  // ISBN-13 For Dummies 
+  // http://www.bisg.org/isbn-13/for.dummies.html
+  public static ISBNParsedResult parse(Result result) {
     BarcodeFormat format = result.getBarcodeFormat();
-    if (!BarcodeFormat.UPC_A.equals(format) && !BarcodeFormat.UPC_E.equals(format) &&
-        !BarcodeFormat.EAN_8.equals(format) && !BarcodeFormat.EAN_13.equals(format)) {
-      return null;
-    }
-    if (ISBNResultParser.parse(result) != null) {
+    if (!BarcodeFormat.EAN_13.equals(format)) {
       return null;
     }
     String rawText = result.getText();
@@ -44,17 +41,14 @@ final class UPCResultParser extends ResultParser {
       return null;
     }
     int length = rawText.length();
-    if (length != 12 && length != 13) {
+    if (length != 13) {
       return null;
     }
-    for (int x = 0; x < length; x++) {
-      char c = rawText.charAt(x);
-      if (c < '0' || c > '9') {
-        return null;
-      }
+    if (!rawText.startsWith("978") && !rawText.startsWith("979")) {
+      return null;
     }
-    // Not actually checking the checksum again here
-    return new UPCParsedResult(rawText);
+   
+    return new ISBNParsedResult(rawText);
   }
 
 }
