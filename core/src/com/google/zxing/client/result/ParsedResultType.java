@@ -37,6 +37,7 @@ public final class ParsedResultType {
   // "optional" types
   public static final ParsedResultType NDEF_SMART_POSTER = new ParsedResultType("NDEF_SMART_POSTER");
   public static final ParsedResultType MOBILETAG_RICH_WEB = new ParsedResultType("MOBILETAG_RICH_WEB");
+  public static final ParsedResultType ISBN = new ParsedResultType("ISBN");
 
   private final String name;
 

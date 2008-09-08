@@ -65,6 +65,8 @@ public abstract class ResultParser {
       return result;
     } else if ((result = URIResultParser.parse(theResult)) != null) {
       return result;
+    } else if ((result = ISBNResultParser.parse(theResult)) != null) {
+      return result;
     } else if ((result = UPCResultParser.parse(theResult)) != null) {
       return result;
     }
