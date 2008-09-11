@@ -178,9 +178,11 @@
   - Far more black box tests
   - Assorted small bug fixes
 
-1.0 (? September 2008)
+1.0 (12 September 2008)
   - All new RIM client from LifeMarks
   - Initial Data Matrix detector included
   - New and much improved Android 0.9-SDK compatible Android client
   - Better 1D detection, especially UPC-E, due to loosened quite zone checks
   - URIParsedResult now tries to warn about malicious URIs
+  - New parser for ISBNs
+  - New QR code blackbox images
