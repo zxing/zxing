@@ -25,6 +25,7 @@ import com.google.zxing.Result;
 import com.google.zxing.client.result.AddressBookParsedResult;
 import com.google.zxing.client.result.EmailAddressParsedResult;
 import com.google.zxing.client.result.GeoParsedResult;
+import com.google.zxing.client.result.ISBNParsedResult;
 import com.google.zxing.client.result.ParsedResult;
 import com.google.zxing.client.result.ParsedResultType;
 import com.google.zxing.client.result.ResultParser;
@@ -90,6 +91,8 @@ final class ResultHandler implements Button.OnClickListener {
             buttonText = R.string.button_dial;
         } else if (type.equals(ParsedResultType.GEO)) {
             buttonText = R.string.button_show_map;
+        } else if (type.equals(ParsedResultType.ISBN)) {
+            buttonText = R.string.button_lookup_book;
         } else {
             buttonText = 0;
         }
@@ -127,9 +130,11 @@ final class ResultHandler implements Button.OnClickListener {
             intent = new Intent(Intent.ACTION_VIEW, Uri.parse(geoResult.getGeoURI()));
         } else if (type.equals(ParsedResultType.UPC)) {
             UPCParsedResult upcResult = (UPCParsedResult) result;
-            // TODO: Add some UI to choose which product search to do
-            //Uri uri = Uri.parse("http://www.upcdatabase.com/item.asp?upc=" + upcResult.getUPC());
             Uri uri = Uri.parse("http://www.google.com/products?q=" + upcResult.getUPC());
+            intent = new Intent(Intent.ACTION_VIEW, uri);
+        } else if (type.equals(ParsedResultType.ISBN)) {
+            ISBNParsedResult isbnResult = (ISBNParsedResult) result;
+            Uri uri = Uri.parse("http://www.google.com/products?q=" + isbnResult.getISBN());
             intent = new Intent(Intent.ACTION_VIEW, uri);
         } else if (type.equals(ParsedResultType.URI)) {
             URIParsedResult uriResult = (URIParsedResult) result;
