@@ -26,6 +26,7 @@
     <string name="button_ok">OK</string>
     <string name="button_open_browser">Open browser</string>
     <string name="button_show_map">Show map</string>
+    <string name="button_sms">Send SMS</string>
 
     <string name="contents_contact">Contact info</string>
     <string name="contents_email">Email address</string>

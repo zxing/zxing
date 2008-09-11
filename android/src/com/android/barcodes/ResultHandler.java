@@ -85,6 +85,8 @@ final class ResultHandler implements Button.OnClickListener {
             buttonText = R.string.button_open_browser;
         } else if (type.equals(ParsedResultType.EMAIL_ADDRESS)) {
             buttonText = R.string.button_email;
+        } else if (type.equals(ParsedResultType.SMS)) {
+          buttonText = R.string.button_sms;
         } else if (type.equals(ParsedResultType.UPC)) {
             buttonText = R.string.button_lookup_product;
         } else if (type.equals(ParsedResultType.TEL)) {
