@@ -21,6 +21,7 @@
     <string name="button_cancel">Cancel</string>
     <string name="button_dial">Dial</string>
     <string name="button_email">Email</string>
+    <string name="button_lookup_book">Look up book</string>
     <string name="button_lookup_product">Look up product</string>
     <string name="button_ok">OK</string>
     <string name="button_open_browser">Open browser</string>

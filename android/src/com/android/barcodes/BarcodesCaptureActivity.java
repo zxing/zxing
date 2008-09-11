@@ -22,6 +22,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetFileDescriptor;
+import android.content.res.Configuration;
 import android.media.MediaPlayer;
 import android.media.AudioManager;
 import android.media.MediaPlayer.OnCompletionListener;
@@ -167,6 +168,12 @@ public final class BarcodesCaptureActivity extends Activity implements SurfaceHo
             }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration config) {
+        // Do nothing, this is to prevent the activity from being restarted when the keyboard opens.
+        super.onConfigurationChanged(config);
     }
 
     private final DialogInterface.OnClickListener mAboutListener = new DialogInterface.OnClickListener() {

@@ -35,6 +35,7 @@ import java.net.URI;
 public class QRCodeEncoder {
 
     private static final String TAG = "QRCodeEncoder";
+    private static final String CHART_SERVER_URL = "//chart.apis.google.com/chart?cht=qr&chs=";
 
     private Activity mActivity;
     private String mContents;
@@ -151,12 +152,12 @@ public class QRCodeEncoder {
         }
 
         public void run() {
-            String url = "//chartserver.apis.google.com/chart?cht=qr&chs=";
-            url += mPixelResolution + "x" + mPixelResolution + "&chl=" + mContents;
+            String url = CHART_SERVER_URL + mPixelResolution + "x" + mPixelResolution + "&chl=" +
+                    mContents;
             try {
                 URI uri = new URI("http", url, null);
                 HttpGet get = new HttpGet(uri);
-                AndroidHttpClient client = AndroidHttpClient.newInstance("Android-BarcodeScanner/0.1");
+                AndroidHttpClient client = AndroidHttpClient.newInstance("Android-Barcodes/0.1");
                 HttpResponse response = client.execute(get);
                 HttpEntity entity = response.getEntity();
                 Bitmap image = BitmapFactory.decodeStream(entity.getContent());
