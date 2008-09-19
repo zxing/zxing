@@ -47,7 +47,7 @@ public abstract class ParsedResult {
     return getDisplayResult();
   }
 
-  static void maybeAppend(String value, StringBuffer result) {
+  public static void maybeAppend(String value, StringBuffer result) {
     if (value != null) {
       // Don't add a newline before the first value
       if (result.length() > 0) {
@@ -57,7 +57,7 @@ public abstract class ParsedResult {
     }
   }
 
-  static void maybeAppend(String[] value, StringBuffer result) {
+  public static void maybeAppend(String[] value, StringBuffer result) {
     if (value != null) {
       for (int i = 0; i < value.length; i++) {
         if (result.length() > 0) {
