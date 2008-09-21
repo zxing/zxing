@@ -90,6 +90,11 @@
         <filter token="VERSION" value="${version}"/>
       </filterset>
     </copy>
+    <copy file="BarcodeReader.alx.template" tofile="BarcodeReader.alx" overwrite="true">
+      <filterset>
+        <filter token="VERSION" value="${version}"/>
+      </filterset>
+    </copy>
 
     <jar jarfile="temp.jar" basedir="build-j2me"/>
     <java jar="${BB-JDK-home}/bin/rapc.jar" fork="true">
