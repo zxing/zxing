@@ -264,8 +264,11 @@ public final class Code128Reader extends AbstractOneDReader {
     int code = 0;
     int checksumTotal = startCode;
     int multiplier = 0;
+    boolean lastCharacterWasPrintable = true;
 
     while (!done) {
+
+      lastCharacterWasPrintable = true;
 
       boolean unshift = isNextShifted;
       isNextShifted = false;
@@ -298,6 +301,7 @@ public final class Code128Reader extends AbstractOneDReader {
           } else if (code < 96) {
             result.append((char) (code - 64));
           } else {
+            lastCharacterWasPrintable = false;
             switch (code) {
               case CODE_FNC_1:
               case CODE_FNC_2:
@@ -325,6 +329,7 @@ public final class Code128Reader extends AbstractOneDReader {
           if (code < 96) {
             result.append((char) (' ' + code));
           } else {
+            lastCharacterWasPrintable = false;
             switch (code) {
               case CODE_FNC_1:
               case CODE_FNC_2:
@@ -355,6 +360,7 @@ public final class Code128Reader extends AbstractOneDReader {
             }
             result.append(code);
           } else {
+            lastCharacterWasPrintable = false;
             switch (code) {
               case CODE_FNC_1:
                 // do nothing?
@@ -397,7 +403,7 @@ public final class Code128Reader extends AbstractOneDReader {
 
     // Need to pull out the check digits from string
     int resultLength = result.length();
-    if (resultLength > 0) {
+    if (resultLength > 0 && lastCharacterWasPrintable) {
       if (codeSet == CODE_CODE_C) {
         result.delete(resultLength - 2, resultLength);
       } else {
