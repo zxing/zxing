@@ -268,18 +268,25 @@ public final class Code128Reader extends AbstractOneDReader {
 
     while (!done) {
 
+      // Remember whether the last code was printable or not (excluding CODE_STOP)
       lastCharacterWasPrintable = true;
 
       boolean unshift = isNextShifted;
       isNextShifted = false;
 
+      // Save off last code
       lastCode = code;
+
+      // Decode another code from image
       code = decodeCode(row, counters, nextStart);
+
+      // Add to checksum computation (if not CODE_STOP of course)
       if (code != CODE_STOP) {
         multiplier++;
         checksumTotal += multiplier * code;
       }
 
+      // Advance to where the next code will to start
       lastStart = nextStart;
       for (int i = 0; i < counters.length; i++) {
         nextStart += counters[i];
@@ -301,7 +308,11 @@ public final class Code128Reader extends AbstractOneDReader {
           } else if (code < 96) {
             result.append((char) (code - 64));
           } else {
-            lastCharacterWasPrintable = false;
+            // Don't let CODE_STOP, which always appears, affect whether whether we think the last code
+            // was printable or not
+            if (code != CODE_STOP) {
+              lastCharacterWasPrintable = false;
+            }
             switch (code) {
               case CODE_FNC_1:
               case CODE_FNC_2:
@@ -329,7 +340,9 @@ public final class Code128Reader extends AbstractOneDReader {
           if (code < 96) {
             result.append((char) (' ' + code));
           } else {
-            lastCharacterWasPrintable = false;
+            if (code != CODE_STOP) {
+              lastCharacterWasPrintable = false;
+            }
             switch (code) {
               case CODE_FNC_1:
               case CODE_FNC_2:
@@ -360,7 +373,9 @@ public final class Code128Reader extends AbstractOneDReader {
             }
             result.append(code);
           } else {
-            lastCharacterWasPrintable = false;
+            if (code != CODE_STOP) {
+              lastCharacterWasPrintable = false;
+            }
             switch (code) {
               case CODE_FNC_1:
                 // do nothing?
@@ -379,6 +394,7 @@ public final class Code128Reader extends AbstractOneDReader {
           break;
       }
 
+      // Unshift back to another code set if we were shifted
       if (unshift) {
         switch (codeSet) {
           case CODE_CODE_A:
@@ -397,12 +413,15 @@ public final class Code128Reader extends AbstractOneDReader {
 
     // Pull out from sum the value of the penultimate check code
     checksumTotal -= multiplier * lastCode;
+    // lastCode is the checksum then:
     if (checksumTotal % 103 != lastCode) {
       throw new ReaderException("Checksum failed");
     }
 
     // Need to pull out the check digits from string
     int resultLength = result.length();
+    // Only bother if, well, the result had at least one character, and if the checksum digit happened
+    // to be a printable character. If it was just interpreted as a control code, nothing to remove
     if (resultLength > 0 && lastCharacterWasPrintable) {
       if (codeSet == CODE_CODE_C) {
         result.delete(resultLength - 2, resultLength);
