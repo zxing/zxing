@@ -120,13 +120,45 @@
   }
   
   if (self.address) {
-    /*
+    // we can't parse all the possible address formats, alas, so we punt by putting
+    // the entire thing into a multi-line 'street' address.
+    // This won't look great on the phone, but at least the info will be there, 
+    // and can be syned to a desktop computer, adjusted as necessary, and so on.
+    
+    // split the address into parts at each comma or return
+    NSArray *parts =
+        [self.address componentsSeparatedByCharactersInSet:
+         [NSCharacterSet characterSetWithCharactersInString:@",;\r\n"]];
+    NSMutableArray *strippedParts = [NSMutableArray arrayWithCapacity:[parts count]];
+    // for each part:
+    for (NSString *part in parts) {
+      // strip the part of whitespace
+      NSString *strippedPart =
+          [part stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+      if ([strippedPart length] > 0) {
+        // if there is anything in this address part, add it to the list of stripped parts
+        [strippedParts addObject:strippedPart];
+      }
+    }
+    // finally, create a 'street' address by concatenating all the stripped parts, separated by linefeeds
+    NSString *street = [strippedParts componentsJoinedByString:@"\n"];
+
+    CFMutableDictionaryRef addressDict =
+        CFDictionaryCreateMutable(NULL, 
+                                  1, 
+                                  &kCFTypeDictionaryKeyCallBacks, 
+                                  &kCFTypeDictionaryValueCallBacks);
+    CFDictionarySetValue(addressDict, kABPersonAddressStreetKey, street);
+    
     ABMutableMultiValueRef addressMultiValue = 
-    ABMultiValueCreateMutable(kABStringPropertyType);
+        ABMultiValueCreateMutable(kABStringPropertyType);
     ABMultiValueAddValueAndLabel(addressMultiValue, 
-                                 NULL, NULL, 
+                                 addressDict, 
+                                 kABHomeLabel, 
                                  NULL);
-     */
+    ABRecordSetValue(person, kABPersonAddressProperty, addressMultiValue, error);
+    CFRelease(addressMultiValue);
+    CFRelease(addressDict);
   }
   
   ABUnknownPersonViewController *unknownPersonViewController = 
