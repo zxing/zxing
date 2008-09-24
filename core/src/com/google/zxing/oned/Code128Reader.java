@@ -268,9 +268,6 @@ public final class Code128Reader extends AbstractOneDReader {
 
     while (!done) {
 
-      // Remember whether the last code was printable or not (excluding CODE_STOP)
-      lastCharacterWasPrintable = true;
-
       boolean unshift = isNextShifted;
       isNextShifted = false;
 
@@ -279,6 +276,11 @@ public final class Code128Reader extends AbstractOneDReader {
 
       // Decode another code from image
       code = decodeCode(row, counters, nextStart);
+
+      // Remember whether the last code was printable or not (excluding CODE_STOP)
+      if (code != CODE_STOP) {
+        lastCharacterWasPrintable = true;
+      }
 
       // Add to checksum computation (if not CODE_STOP of course)
       if (code != CODE_STOP) {
