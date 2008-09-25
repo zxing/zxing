@@ -90,7 +90,7 @@
 		853678830E5394D70054126A /* About.html in Resources */ = {isa = PBXBuildFile; fileRef = 853678820E5394D70054126A /* About.html */; };
 		854BE3010E06A56C00CB4A20 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 854BE3000E06A56C00CB4A20 /* AddressBookUI.framework */; };
 		8555304E0E643BA800C7B5DE /* Entitlements.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8555304D0E643BA800C7B5DE /* Entitlements.plist */; };
-		8555307B0E64504300C7B5DE /* zxing-57.png in Resources */ = {isa = PBXBuildFile; fileRef = 8555307A0E64504300C7B5DE /* zxing-57.png */; };
+		8555307B0E64504300C7B5DE /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 8555307A0E64504300C7B5DE /* icon.png */; };
 		855A66800DF5E757007B394F /* ArchiveController.m in Sources */ = {isa = PBXBuildFile; fileRef = 855A66510DF5E757007B394F /* ArchiveController.m */; };
 		855A66810DF5E757007B394F /* Database.m in Sources */ = {isa = PBXBuildFile; fileRef = 855A66540DF5E757007B394F /* Database.m */; };
 		855A66830DF5E757007B394F /* AddContactAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 855A66580DF5E757007B394F /* AddContactAction.m */; };
@@ -309,7 +309,7 @@
 		8539502C0E5442B500D081D6 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		854BE3000E06A56C00CB4A20 /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
 		8555304D0E643BA800C7B5DE /* Entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Entitlements.plist; sourceTree = "<group>"; };
-		8555307A0E64504300C7B5DE /* zxing-57.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "zxing-57.png"; sourceTree = "<group>"; };
+		8555307A0E64504300C7B5DE /* icon.png */ = {isa = PBXFileReference; explicitFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		855A65D70DF5E739007B394F /* BarcodeFormat.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BarcodeFormat.cpp; sourceTree = "<group>"; };
 		855A65D80DF5E739007B394F /* BarcodeFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BarcodeFormat.h; sourceTree = "<group>"; };
 		855A65D90DF5E739007B394F /* BlackPointEstimationMethod.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BlackPointEstimationMethod.cpp; sourceTree = "<group>"; };
@@ -1375,7 +1375,7 @@
 			isa = PBXGroup;
 			children = (
 				85B8F52B0E6AD33200510402 /* photolib.png */,
-				8555307A0E64504300C7B5DE /* zxing-57.png */,
+				8555307A0E64504300C7B5DE /* icon.png */,
 				85C4969B0E4A3E87003DB029 /* filmroll-2.png */,
 				85C3CC2D0E119E1600A01C6A /* business-card.png */,
 				85C3CC2E0E119E1700A01C6A /* email.png */,
@@ -1536,7 +1536,7 @@
 				853678830E5394D70054126A /* About.html in Resources */,
 				85F895030E543EE100C0A666 /* InfoPlist.strings in Resources */,
 				8555304E0E643BA800C7B5DE /* Entitlements.plist in Resources */,
-				8555307B0E64504300C7B5DE /* zxing-57.png in Resources */,
+				8555307B0E64504300C7B5DE /* icon.png in Resources */,
 				85B8F52C0E6AD33200510402 /* photolib.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2201,12 +2201,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Christian Brunschen";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				PREBINDING = NO;
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "6CDE626B-71E0-4E2A-BED0-DDE5BE24A701";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = DefaultProfileUuid;
 				SDKROOT = iphoneos2.0;
 			};
 			name = Distribution;
@@ -2216,6 +2216,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CODE_SIGN_ENTITLEMENTS = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Christian Brunschen";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = ZXing_Prefix.pch;

@@ -99,6 +99,7 @@
     }
     ABRecordSetValue(person, kABPersonPhoneProperty,
                      phoneNumberMultiValue, error);
+    CFRelease(phoneNumberMultiValue);
   }
   
   if (self.email) {
@@ -108,6 +109,7 @@
     ABMultiValueAddValueAndLabel(emailMultiValue, self.email, 
                                  kABHomeLabel, NULL);
     ABRecordSetValue(person, kABPersonEmailProperty, emailMultiValue, error);
+    CFRelease(emailMultiValue);
   }
   
   if (self.urlString) {
@@ -117,6 +119,7 @@
     ABMultiValueAddValueAndLabel(urlMultiValue, self.urlString,
                                  kABPersonHomePageLabel, NULL);
     ABRecordSetValue(person, kABPersonURLProperty, urlMultiValue, error);
+    CFRelease(urlMultiValue);
   }
   
   if (self.address) {
