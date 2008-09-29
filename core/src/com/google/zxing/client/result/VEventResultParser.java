@@ -41,9 +41,9 @@ final class VEventResultParser extends ResultParser {
     }
     rawText = rawText.substring(vEventStart + 14, vEventEnd); // skip over BEGIN:VEVENT\r\n at start
 
-    String summary = VCardResultParser.matchSingleVCardPrefixedField("SUMMARY", rawText);
-    String start = VCardResultParser.matchSingleVCardPrefixedField("DTSTART", rawText);
-    String end = VCardResultParser.matchSingleVCardPrefixedField("DTEND", rawText);
+    String summary = VCardResultParser.matchSingleVCardPrefixedField("SUMMARY", rawText, true);
+    String start = VCardResultParser.matchSingleVCardPrefixedField("DTSTART", rawText, true);
+    String end = VCardResultParser.matchSingleVCardPrefixedField("DTEND", rawText, true);
     try {
       return new CalendarParsedResult(summary, start, end, null, null, null);
     } catch (IllegalArgumentException iae) {

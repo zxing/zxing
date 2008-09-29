@@ -22,7 +22,9 @@ import com.google.zxing.MonochromeBitmapSource;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 import com.google.zxing.ResultMetadataType;
+import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitArray;
+import com.google.zxing.common.GenericResultPoint;
 
 import java.util.Hashtable;
 
@@ -126,6 +128,10 @@ public abstract class AbstractOneDReader implements OneDReader {
           if (attempt == 1) {
             // But it was upside down, so note that
             result.putMetadata(ResultMetadataType.ORIENTATION, new Integer(180));
+            // And remember to flip the result points horizontally.
+            ResultPoint[] points = result.getResultPoints();
+            points[0] = new GenericResultPoint(width - points[0].getX() - 1, points[0].getY());
+            points[1] = new GenericResultPoint(width - points[1].getX() - 1, points[1].getY());
           }
           return result;
         } catch (ReaderException re) {

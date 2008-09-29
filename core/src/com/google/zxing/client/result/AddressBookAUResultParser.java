@@ -36,18 +36,18 @@ final class AddressBookAUResultParser extends ResultParser {
     if (rawText == null || rawText.indexOf("MEMORY") < 0 || rawText.indexOf("\r\n") < 0) {
       return null;
     }
-    String[] names = matchMultipleValuePrefix("NAME", 2, rawText);
-    String[] phoneNumbers = matchMultipleValuePrefix("TEL", 3, rawText);
-    String[] emails = matchMultipleValuePrefix("MAIL", 3, rawText);
-    String note = matchSinglePrefixedField("MEMORY:", rawText, '\r');
-    String address = matchSinglePrefixedField("ADD:", rawText, '\r');
+    String[] names = matchMultipleValuePrefix("NAME", 2, rawText, true);
+    String[] phoneNumbers = matchMultipleValuePrefix("TEL", 3, rawText, true);
+    String[] emails = matchMultipleValuePrefix("MAIL", 3, rawText, true);
+    String note = matchSinglePrefixedField("MEMORY:", rawText, '\r', false);
+    String address = matchSinglePrefixedField("ADD:", rawText, '\r', true);
     return new AddressBookParsedResult(names, phoneNumbers, emails, note, address, null, null, null);
   }
 
-  private static String[] matchMultipleValuePrefix(String prefix, int max, String rawText) {
+  private static String[] matchMultipleValuePrefix(String prefix, int max, String rawText, boolean trim) {
     Vector values = null;
     for (int i = 1; i <= max; i++) {
-      String value = matchSinglePrefixedField(prefix + i + ':', rawText, '\r');
+      String value = matchSinglePrefixedField(prefix + i + ':', rawText, '\r', trim);
       if (value == null) {
         break;
       }

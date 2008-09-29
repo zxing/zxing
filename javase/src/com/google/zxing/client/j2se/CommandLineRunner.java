@@ -97,8 +97,8 @@ public final class CommandLineRunner {
     try {
       MonochromeBitmapSource source = new BufferedImageMonochromeBitmapSource(image);
       Result result = new MultiFormatReader().decode(source, hints);
-      System.out.println(uri.toString() + ": " + result.getText() + " format: " +
-          result.getBarcodeFormat());
+      System.out.println(uri.toString() + " (format: " + result.getBarcodeFormat() + "):\n" +
+          result.getText());
       return true;
     } catch (ReaderException e) {
       System.out.println(uri.toString() + ": No barcode found");
