@@ -36,30 +36,30 @@ final class VCardResultParser extends ResultParser {
     if (rawText == null || !rawText.startsWith("BEGIN:VCARD") || !rawText.endsWith("END:VCARD")) {
       return null;
     }
-    String[] names = matchVCardPrefixedField("FN", rawText);
+    String[] names = matchVCardPrefixedField("FN", rawText, true);
     if (names == null) {
       // If no display names found, look for regular name fields and format them
-      names = matchVCardPrefixedField("N", rawText);
+      names = matchVCardPrefixedField("N", rawText, true);
       formatNames(names);
     }
-    String[] phoneNumbers = matchVCardPrefixedField("TEL", rawText);
-    String[] emails = matchVCardPrefixedField("EMAIL", rawText);
-    String note = matchSingleVCardPrefixedField("NOTE", rawText);
-    String address = matchSingleVCardPrefixedField("ADR", rawText);
+    String[] phoneNumbers = matchVCardPrefixedField("TEL", rawText, true);
+    String[] emails = matchVCardPrefixedField("EMAIL", rawText, true);
+    String note = matchSingleVCardPrefixedField("NOTE", rawText, false);
+    String address = matchSingleVCardPrefixedField("ADR", rawText, true);
     address = formatAddress(address);
-    String org = matchSingleVCardPrefixedField("ORG", rawText);
-    String birthday = matchSingleVCardPrefixedField("BDAY", rawText);
+    String org = matchSingleVCardPrefixedField("ORG", rawText, true);
+    String birthday = matchSingleVCardPrefixedField("BDAY", rawText, true);
     if (birthday != null && !isStringOfDigits(birthday, 8)) {
       return null;
     }
-    String title = matchSingleVCardPrefixedField("TITLE", rawText);
+    String title = matchSingleVCardPrefixedField("TITLE", rawText, true);
     return new AddressBookParsedResult(names, phoneNumbers, emails, note, address, org, birthday, title); 
   }
 
-  private static String[] matchVCardPrefixedField(String prefix, String rawText) {
+  private static String[] matchVCardPrefixedField(String prefix, String rawText, boolean trim) {
     Vector matches = null;
     int i = 0;
-    int max = rawText.length();
+    final int max = rawText.length();
     while (i < max) {
       i = rawText.indexOf(prefix, i);
       if (i < 0) {
@@ -79,22 +79,23 @@ final class VCardResultParser extends ResultParser {
       }
       i++; // skip colon
       int start = i; // Found the start of a match here
-      boolean done = false;
-      while (!done) {
-        i = rawText.indexOf((int) '\n', i); // Really, ends in \r\n
-        if (i < 0) {
-          // No terminating end character? uh, done. Set i such that loop terminates and break
-          i = rawText.length();
-          done = true;
-        } else {
-          // found a match
-          if (matches == null) {
-            matches = new Vector(3); // lazy init
-          }
-          matches.addElement(rawText.substring(start, i - 1)); // i - 1 to strip off the \r too
-          i++;
-          done = true;
+      i = rawText.indexOf((int) '\n', i); // Really, ends in \r\n
+      if (i < 0) {
+        // No terminating end character? uh, done. Set i such that loop terminates and break
+        i = max;
+      } else if (i > start) {
+        // found a match
+        if (matches == null) {
+          matches = new Vector(3); // lazy init
         }
+        String element = rawText.substring(start, i);
+        if (trim) {
+          element = element.trim();
+        }
+        matches.addElement(element);
+        i++;
+      } else {
+        i++;
       }
     }
     if (matches == null || matches.isEmpty()) {
@@ -103,8 +104,8 @@ final class VCardResultParser extends ResultParser {
     return toStringArray(matches);
   }
 
-  static String matchSingleVCardPrefixedField(String prefix, String rawText) {
-    String[] values = matchVCardPrefixedField(prefix, rawText);
+  static String matchSingleVCardPrefixedField(String prefix, String rawText, boolean trim) {
+    String[] values = matchVCardPrefixedField(prefix, rawText, trim);
     return values == null ? null : values[0];
   }
 

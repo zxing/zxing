@@ -234,7 +234,7 @@ public abstract class ResultParser {
     }
   }
 
-  static String[] matchPrefixedField(String prefix, String rawText, char endChar) {
+  static String[] matchPrefixedField(String prefix, String rawText, char endChar, boolean trim) {
     Vector matches = null;
     int i = 0;
     int max = rawText.length();
@@ -260,7 +260,11 @@ public abstract class ResultParser {
           if (matches == null) {
             matches = new Vector(3); // lazy init
           }
-          matches.addElement(unescapeBackslash(rawText.substring(start, i)));
+          String element = unescapeBackslash(rawText.substring(start, i));
+          if (trim) {
+            element = element.trim();
+          }
+          matches.addElement(element);
           i++;
           done = true;
         }
@@ -272,8 +276,8 @@ public abstract class ResultParser {
     return toStringArray(matches);
   }
 
-  static String matchSinglePrefixedField(String prefix, String rawText, char endChar) {
-    String[] matches = matchPrefixedField(prefix, rawText, endChar);
+  static String matchSinglePrefixedField(String prefix, String rawText, char endChar, boolean trim) {
+    String[] matches = matchPrefixedField(prefix, rawText, endChar, trim);
     return matches == null ? null : matches[0];
   }
 
