@@ -208,6 +208,7 @@
 		85C4969C0E4A3E87003DB029 /* filmroll-2.png in Resources */ = {isa = PBXBuildFile; fileRef = 85C4969B0E4A3E87003DB029 /* filmroll-2.png */; };
 		85D937270E11064700B785E0 /* ScanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 85D937260E11064700B785E0 /* ScanViewController.m */; };
 		85E883980E1A34D2004C4547 /* ScannedImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 85E883970E1A34D2004C4547 /* ScannedImageView.m */; };
+		85E945270E9410EF0052CC40 /* zxing-icon-128.png in Resources */ = {isa = PBXBuildFile; fileRef = 85E945260E9410EF0052CC40 /* zxing-icon-128.png */; };
 		85F895030E543EE100C0A666 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 85F895020E543EE100C0A666 /* InfoPlist.strings */; };
 /* End PBXBuildFile section */
 
@@ -649,6 +650,7 @@
 		85D937260E11064700B785E0 /* ScanViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScanViewController.m; sourceTree = "<group>"; };
 		85E883960E1A34D2004C4547 /* ScannedImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScannedImageView.h; sourceTree = "<group>"; };
 		85E883970E1A34D2004C4547 /* ScannedImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScannedImageView.m; sourceTree = "<group>"; };
+		85E945260E9410EF0052CC40 /* zxing-icon-128.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "zxing-icon-128.png"; sourceTree = "<group>"; };
 		85F7D20E0E41D4A700FDC34E /* de */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = de; path = de.lproj/Message.xib; sourceTree = "<group>"; };
 		85F7D20F0E41D4A700FDC34E /* de */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = de; path = de.lproj/Hints.html; sourceTree = "<group>"; };
 		85F7D2100E41D4B300FDC34E /* sv */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = sv; path = sv.lproj/Message.xib; sourceTree = "<group>"; };
@@ -772,6 +774,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				85E945260E9410EF0052CC40 /* zxing-icon-128.png */,
 				85C37A3F0E4076BB0052209B /* Message.xib */,
 				85764F680E3E22FC00A61BF5 /* Hints.html */,
 				85B1D8840E190E3A00514A6A /* Default.png */,
@@ -1538,6 +1541,7 @@
 				8555304E0E643BA800C7B5DE /* Entitlements.plist in Resources */,
 				8555307B0E64504300C7B5DE /* icon.png in Resources */,
 				85B8F52C0E6AD33200510402 /* photolib.png in Resources */,
+				85E945270E9410EF0052CC40 /* zxing-icon-128.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
