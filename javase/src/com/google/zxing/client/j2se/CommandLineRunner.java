@@ -26,6 +26,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.net.URI;
 import java.util.Hashtable;
 
@@ -89,7 +90,12 @@ public final class CommandLineRunner {
   }
 
   private static boolean decode(URI uri, Hashtable<DecodeHintType, Object> hints) throws IOException {
-    BufferedImage image = ImageIO.read(uri.toURL());
+    BufferedImage image;
+    try {
+      image = ImageIO.read(uri.toURL());
+    } catch (IllegalArgumentException iae) {
+      throw new FileNotFoundException("Resource not found: " + uri);
+    }
     if (image == null) {
       System.err.println(uri.toString() + ": Could not load image");
       return false;
