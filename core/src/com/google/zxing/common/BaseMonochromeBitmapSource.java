@@ -119,4 +119,12 @@ public abstract class BaseMonochromeBitmapSource implements MonochromeBitmapSour
     return false;
   }
 
+  // These two methods should not need to exist because they are defined in the interface that
+  // this abstract class implements. However this seems to cause problems on some Nokias. 
+  // So we write these redundant declarations.
+
+  public abstract int getHeight();
+
+  public abstract int getWidth();
+
 }
