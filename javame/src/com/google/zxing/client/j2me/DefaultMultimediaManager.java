@@ -36,6 +36,7 @@ class DefaultMultimediaManager implements MultimediaManager {
   private MultimediaManager advancedMultimediaManager;
 
   DefaultMultimediaManager() {
+    // Having issues with non-JSR-234 phones not accepting the build? then try commenting out from here:
     try {
       advancedMultimediaManager = (MultimediaManager)
           Class.forName("com.google.zxing.client.j2me.AdvancedMultimediaManager").newInstance();
@@ -48,6 +49,10 @@ class DefaultMultimediaManager implements MultimediaManager {
     } catch (NoClassDefFoundError ncdfe) {
       // continue
     }
+    // to here. Then add this line:
+    // advancedMultimediaManager = null;
+    // You may also need to delete the class AdvancedMultimediaManager in this package to be completely free
+    // of JSR-234 references.
   }
 
   public void setFocus(Controllable player) {
