@@ -127,4 +127,8 @@ public abstract class BaseMonochromeBitmapSource implements MonochromeBitmapSour
 
   public abstract int getWidth();
 
+  public abstract int getLuminance(int x, int y);
+
+  public abstract void cacheRowForLuminance(int y);
+
 }
