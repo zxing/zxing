@@ -26,7 +26,7 @@ import com.google.zxing.common.GenericResultPoint;
 import java.util.Hashtable;
 
 /**
- * <p>Decodes Code 39 barcodes. This does not supported "Full ASCII Code 39" yet.</p>
+ * <p>Decodes Code 39 barcodes. This does not support "Full ASCII Code 39" yet.</p>
  *
  * @author srowen@google.com (Sean Owen)
  */
@@ -122,6 +122,18 @@ public final class Code39Reader extends AbstractOneDReader {
     } while (decodedChar != '*');
     result.deleteCharAt(result.length() - 1); // remove asterisk
 
+    // Look for whitespace after pattern:
+    int lastPatternSize = 0;
+    for (int i = 0; i < counters.length; i++) {
+      lastPatternSize += counters[i];
+    }
+    int whiteSpaceAfterEnd = nextStart - lastStart - lastPatternSize;
+    // If 50% of last pattern size, following last pattern, is not whitespace, fail
+    // (but if it's whitespace to the very end of the image, that's OK)
+    if (nextStart != end && whiteSpaceAfterEnd / 2 < lastPatternSize) {
+      throw new ReaderException("Pattern not followed by whitespace");
+    }
+
     if (usingCheckDigit) {
       int max = result.length() - 1;
       int total = 0;
@@ -180,7 +192,10 @@ public final class Code39Reader extends AbstractOneDReader {
         if (counterPosition == patternLength - 1) {
           try {
             if (toNarrowWidePattern(counters) == ASTERISK_ENCODING) {
-              return new int[]{patternStart, i};
+              // Look for whitespace before start pattern, >= 50% of width of start pattern
+              if (row.isRange(Math.max(0, patternStart - (i - patternStart) / 2), patternStart, false)) {
+                return new int[]{patternStart, i};
+              }
             }
           } catch (ReaderException re) {
             // no match, continue

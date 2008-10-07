@@ -93,8 +93,8 @@ public abstract class AbstractUPCEANReader extends AbstractOneDReader implements
       int start = startRange[0];
       nextStart = startRange[1];
       // As a check, we want to see some white in front of this "start pattern",
-      // maybe as wide as the start pattern itself?
-      foundStart = row.isRange(Math.max(0, start - (3 * (startRange[1] - start)) / 2), start, false);
+      // maybe as wide as the 150% of the start pattern itself?
+      foundStart = row.isRange(Math.max(0, start - (3 * (nextStart - start)) / 2), start, false);
     }
     return startRange;
   }
@@ -108,7 +108,7 @@ public abstract class AbstractUPCEANReader extends AbstractOneDReader implements
     int endStart = decodeMiddle(row, startGuardRange, result);
     int[] endRange = decodeEnd(row, endStart);
 
-    // Check for whitespace after the pattern
+    // Check for whitespace after the pattern -- 150% of size of end pattern
     int end = endRange[1];
     if (!row.isRange(end, Math.min(row.getSize(), end + (3 * (end - endRange[0])) / 2), false)) {
       throw new ReaderException("Pattern not followed by whitespace");
