@@ -107,14 +107,11 @@ public final class BitArray {
           mask |= 1 << j;
         }
       }
-      if (value) {
-        if ((bits[i] & mask) != mask) {
-          return false;
-        }
-      } else {
-        if ((bits[i] & mask) != 0) {
-          return false;
-        }
+
+      // Return false if we're looking for 1s and the masked bits[i] isn't all 1s (that is,
+      // equals the mask, or we're looking for 0s and the masked portion is not all 0s
+      if ((bits[i] & mask) != (value ? mask : 0)) {
+        return false;
       }
     }
     return true;

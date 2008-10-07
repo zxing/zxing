@@ -194,7 +194,10 @@ public final class Code128Reader extends AbstractOneDReader {
             }
           }
           if (bestMatch >= 0) {
-            return new int[]{patternStart, i, bestMatch};
+            // Look for whitespace before start pattern, >= 50% of width of start pattern            
+            if (row.isRange(Math.max(0, patternStart - (i - patternStart) / 2), patternStart, false)) {
+              return new int[]{patternStart, i, bestMatch};
+            }
           }
           patternStart += counters[0] + counters[1];
           for (int y = 2; y < patternLength; y++) {
@@ -411,6 +414,16 @@ public final class Code128Reader extends AbstractOneDReader {
         }
       }
 
+    }
+
+    // Check for ample whitespice following pattern, but, to do this we first need to remember that we
+    // fudged decoding CODE_STOP since it actually has 7 bars, not 6. There is a black bar left to read off.
+    // Would be slightly better to properly read. Here we just skip it:
+    while (row.get(nextStart)) {
+      nextStart++;
+    }
+    if (!row.isRange(nextStart, Math.min(row.getSize(), nextStart + (nextStart - lastStart) / 2), false)) {
+      throw new ReaderException("Pattern not followed by whitespace");
     }
 
     // Pull out from sum the value of the penultimate check code
