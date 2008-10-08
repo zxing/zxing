@@ -57,7 +57,7 @@ public final class GF256 {
     for (int i = 0; i < 255; i++) {
       log_table[exp_table[i]] = i;
     }
-    // log[0] == 0 but this should never be used
+    // log_table[0] == 0 but this should never be used
     zero = new GF256Poly(this, new int[]{0});
     one = new GF256Poly(this, new int[]{1});
   }
