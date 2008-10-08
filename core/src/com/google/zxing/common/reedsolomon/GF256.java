@@ -31,8 +31,8 @@ public final class GF256 {
   public static final GF256 QR_CODE_FIELD = new GF256(0x011D); // x^8 + x^4 + x^3 + x^2 + 1
   public static final GF256 DATA_MATRIX_FIELD = new GF256(0x012D); // x^8 + x^5 + x^3 + x^2 + 1
 
-  private final int[] exp;
-  private final int[] log;
+  private final int[] exp_table;
+  private final int[] log_table;
   private final GF256Poly zero;
   private final GF256Poly one;
 
@@ -44,18 +44,18 @@ public final class GF256 {
    *  coefficient
    */
   private GF256(int primitive) {
-    exp = new int[256];
-    log = new int[256];
+    exp_table = new int[256];
+    log_table = new int[256];
     int x = 1;
     for (int i = 0; i < 256; i++) {
-      exp[i] = x;
+      exp_table[i] = x;
       x <<= 1; // x = x * 2; we're assuming the generator alpha is 2
       if (x >= 0x100) {
         x ^= primitive;
       }
     }
     for (int i = 0; i < 255; i++) {
-      log[exp[i]] = i;
+      log_table[exp_table[i]] = i;
     }
     // log[0] == 0 but this should never be used
     zero = new GF256Poly(this, new int[]{0});
@@ -98,7 +98,7 @@ public final class GF256 {
    * @return 2 to the power of a in GF(256)
    */
   int exp(int a) {
-    return exp[a];
+    return exp_table[a];
   }
 
   /**
@@ -108,7 +108,7 @@ public final class GF256 {
     if (a == 0) {
       throw new IllegalArgumentException();
     }
-    return log[a];
+    return log_table[a];
   }
 
   /**
@@ -118,7 +118,7 @@ public final class GF256 {
     if (a == 0) {
       throw new ArithmeticException();
     }
-    return exp[255 - log[a]];
+    return exp_table[255 - log_table[a]];
   }
 
   /**
@@ -136,7 +136,7 @@ public final class GF256 {
     if (b == 1) {
       return a;
     }
-    return exp[(log[a] + log[b]) % 255];
+    return exp_table[(log_table[a] + log_table[b]) % 255];
   }
 
 }
