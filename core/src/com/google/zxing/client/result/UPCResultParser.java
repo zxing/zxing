@@ -36,9 +36,6 @@ final class UPCResultParser extends ResultParser {
         !BarcodeFormat.EAN_8.equals(format) && !BarcodeFormat.EAN_13.equals(format)) {
       return null;
     }
-    if (ISBNResultParser.parse(result) != null) {
-      return null;
-    }
     String rawText = result.getText();
     if (rawText == null) {
       return null;
