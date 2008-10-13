@@ -33,6 +33,7 @@ using namespace qrcode;
 @implementation Decoder
 
 @synthesize image;
+@synthesize cropRect;
 @synthesize subsetImage;
 @synthesize subsetData;
 @synthesize subsetWidth;
@@ -41,7 +42,7 @@ using namespace qrcode;
 @synthesize delegate;
 
 - (void)willDecodeImage {
-  [self.delegate decoder:self willDecodeImage:self.image];
+  [self.delegate decoder:self willDecodeImage:self.image usingSubset:self.subsetImage];
 }
 
 - (void)progressDecodingImage:(NSString *)progress {
@@ -61,14 +62,19 @@ using namespace qrcode;
 
 #define SUBSET_SIZE 320.0
 - (void) prepareSubset {
-  CGImageRef cgImage = self.image.CGImage;
-  CGSize size = CGSizeMake(CGImageGetWidth(cgImage), CGImageGetHeight(cgImage));
+  CGSize size = [image size];
 #ifdef DEBUG
-  NSLog(@"decoding: image is (%.1f x %.1f)", size.width, size.height);
+  NSLog(@"decoding: image is (%.1f x %.1f), cropRect is (%.1f,%.1f)x(%.1f,%.1f)", size.width, size.height,
+				cropRect.origin.x, cropRect.origin.y, cropRect.size.width, cropRect.size.height);
 #endif
-  float scale = fminf(1.0f, fmaxf(SUBSET_SIZE / size.width, SUBSET_SIZE / size.height));
-  subsetWidth = size.width * scale;
-  subsetHeight = size.height * scale;
+  float scale = fminf(1.0f, fmaxf(SUBSET_SIZE / cropRect.size.width, SUBSET_SIZE / cropRect.size.height));
+	CGPoint offset = CGPointMake(-cropRect.origin.x, -cropRect.origin.y);
+#ifdef DEBUG
+	NSLog(@"  offset = (%.1f, %.1f), scale = %.3f", offset.x, offset.y, scale);
+#endif
+	
+  subsetWidth = cropRect.size.width * scale;
+  subsetHeight = cropRect.size.height * scale;
   
   subsetBytesPerRow = ((subsetWidth + 0xf) >> 4) << 4;
 #ifdef DEBUG
@@ -89,13 +95,22 @@ using namespace qrcode;
   CGColorSpaceRelease(grayColorSpace);
   CGContextSetInterpolationQuality(ctx, kCGInterpolationNone);
   CGContextSetAllowsAntialiasing(ctx, false);
+	// adjust the coordinate system
+	CGContextTranslateCTM(ctx, 0.0, subsetHeight);
+	CGContextScaleCTM(ctx, 1.0, -1.0);	
   
 #ifdef DEBUG
   NSLog(@"created %dx%d bitmap context", subsetWidth, subsetHeight);
 #endif
-  CGRect rect = CGRectMake(0, 0, subsetWidth, subsetHeight);
+	
+	UIGraphicsPushContext(ctx);
+	CGRect rect = CGRectMake(offset.x * scale, offset.y * scale, scale * size.width, scale * size.height);
+#ifdef DEBUG
+	NSLog(@"rect for image = (%.1f,%.1f)x(%.1f,%.1f)", rect.origin.x, rect.origin.y, rect.size.width, rect.size.height);
+#endif
+	[image drawInRect:rect];
+	UIGraphicsPopContext();
   
-  CGContextDrawImage(ctx, rect, cgImage);
 #ifdef DEBUG
   NSLog(@"drew image into %d(%d)x%d  bitmap context", subsetWidth, subsetBytesPerRow, subsetHeight);
 #endif
@@ -215,15 +230,16 @@ using namespace qrcode;
 }
 
 - (void) decodeImage:(UIImage *)i {
-  CGRect rect = CGRectMake(0.0f, 0.0f, image.size.width, image.size.height);
-  [self decodeImage:i cropRectangle:rect];
+  [self decodeImage:i cropRect:CGRectMake(0.0f, 0.0f, image.size.width, image.size.height)];
 }
 
-- (void) decodeImage:(UIImage *)i cropRectangle:(CGRect)cropRect {
+- (void) decodeImage:(UIImage *)i cropRect:(CGRect)cr {
 	self.image = i;
-	[self.delegate decoder:self willDecodeImage:i];
+	self.cropRect = cr;
   
   [self prepareSubset];
+	[self.delegate decoder:self willDecodeImage:i usingSubset:self.subsetImage];
+
   
   [self performSelectorOnMainThread:@selector(progressDecodingImage:)
                          withObject:NSLocalizedString(@"Decoder MessageWhileDecoding", @"Decoding ...")

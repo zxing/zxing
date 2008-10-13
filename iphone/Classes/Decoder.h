@@ -25,6 +25,7 @@
 
 @interface Decoder : NSObject {
 	UIImage *image;
+	CGRect cropRect;
   UIImage *subsetImage;
   unsigned char *subsetData;
   size_t subsetWidth;
@@ -34,6 +35,7 @@
 }
 
 @property(nonatomic, retain) UIImage *image;
+@property(nonatomic, assign) CGRect cropRect;
 @property(nonatomic, retain) UIImage *subsetImage;
 @property(nonatomic, assign) unsigned char *subsetData;
 @property(assign) size_t subsetWidth;
@@ -42,6 +44,6 @@
 @property(nonatomic, assign) id<DecoderDelegate> delegate;
 
 - (void) decodeImage:(UIImage *)image;
-- (void) decodeImage:(UIImage *)image cropRectangle:(CGRect)cropRect;
+- (void) decodeImage:(UIImage *)image cropRect:(CGRect)cropRect;
 
 @end
