@@ -196,7 +196,7 @@
 
 - (void)pickAndDecodeFromSource:(UIImagePickerControllerSourceType) sourceType {
   [self reset];
-  \
+
   // Create the Image Picker
   if ([UIImagePickerController isSourceTypeAvailable:sourceType]) {
     UIImagePickerController* picker = [[UIImagePickerController alloc] init];
@@ -301,9 +301,9 @@
 
 // DecoderDelegate methods
 
-- (void)decoder:(Decoder *)decoder willDecodeImage:(UIImage *)image {
+- (void)decoder:(Decoder *)decoder willDecodeImage:(UIImage *)image usingSubset:(UIImage *)subset{
   [self clearImageView];
-  [self.imageView setImage:image];
+  [self.imageView setImage:subset];
   [self showMessage:[NSString stringWithFormat:NSLocalizedString(@"DecoderViewController MessageWhileDecodingWithDimensions", @"Decoding image (%.0fx%.0f) ..."), image.size.width, image.size.height]
      helpButton:NO];
 }
@@ -399,9 +399,14 @@
                   editingInfo:(NSDictionary *)editingInfo
 {
   UIImage *imageToDecode = image;
+	CGSize size = [image size];
+	CGRect cropRect = CGRectMake(0.0, 0.0, size.width, size.height);
+	
 #ifdef DEBUG
-  NSLog(@"picked image size = (%f, %f)", image.size.width, image.size.height);
+  NSLog(@"picked image size = (%f, %f)", size.width, size.height);
 #endif
+  NSString *systemVersion = [[UIDevice currentDevice] systemVersion];
+  
   if (editingInfo) {
     UIImage *originalImage = [editingInfo objectForKey:UIImagePickerControllerOriginalImage];
     if (originalImage) {
@@ -410,17 +415,23 @@
 #endif
       NSValue *cropRectValue = [editingInfo objectForKey:UIImagePickerControllerCropRect];
       if (cropRectValue) {
-        CGRect cropRect = [cropRectValue CGRectValue];
+        cropRect = [cropRectValue CGRectValue];
 #ifdef DEBUG
         NSLog(@"crop rect = (%f, %f) x (%f, %f)", CGRectGetMinX(cropRect), CGRectGetMinY(cropRect), CGRectGetWidth(cropRect), CGRectGetHeight(cropRect));
 #endif
-        UIGraphicsBeginImageContext(cropRect.size);
-        
-        [originalImage drawAtPoint:CGPointMake(-CGRectGetMinX(cropRect),
-                                               -CGRectGetMinY(cropRect))];
-        
-        imageToDecode = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
+        if (([picker sourceType] == UIImagePickerControllerSourceTypeSavedPhotosAlbum) &&
+						[@"2.1" isEqualToString:systemVersion]) {
+          // adjust crop rect to work around bug in iPhone OS 2.1 when selecting from the photo roll
+          cropRect.origin.x *= 2.5;
+          cropRect.origin.y *= 2.5;
+          cropRect.size.width *= 2.5;
+          cropRect.size.height *= 2.5;
+#ifdef DEBUG
+          NSLog(@"2.1-adjusted crop rect = (%f, %f) x (%f, %f)", CGRectGetMinX(cropRect), CGRectGetMinY(cropRect), CGRectGetWidth(cropRect), CGRectGetHeight(cropRect));
+#endif
+        }
+				
+				imageToDecode = originalImage;
       }
     }
   }
@@ -428,7 +439,7 @@
   [[picker parentViewController] dismissModalViewControllerAnimated:YES];
   [imageToDecode retain];
   [picker release];
-  [self.decoder decodeImage:imageToDecode];
+  [self.decoder decodeImage:imageToDecode cropRect:cropRect];
   [imageToDecode release];
   [self updateToolbar];
 }
