@@ -52,16 +52,16 @@ public final class CalendarParsedResult extends ParsedResult {
   /**
    * <p>We would return the start and end date as a {@link java.util.Date} except that this code
    * needs to work under JavaME / MIDP and there is no date parsing library available there, such
-   * as <code>java.text.SimpleDateFormat</code>.</p>
+   * as <code>java.text.SimpleDateFormat</code>.</p> See validateDate() for the return format.
    *
-   * @return start time formatted as yyyyMMdd'T'HHmmss'Z'.</p>
+   * @return start time formatted as a RFC 2445 DATE or DATE-TIME.</p>
    */
   public String getStart() {
     return start;
   }
 
   /**
-   * @see #getStart()
+   * @see #getStart(). May return null if the event has no duration.
    */
   public String getEnd() {
     return end;
@@ -90,9 +90,16 @@ public final class CalendarParsedResult extends ParsedResult {
     return result.toString();
   }
 
+  /**
+   * RFC 2445 allows the start and end fields to be of type DATE (e.g. 20081021) or DATE-TIME
+   * (e.g. 20081021T123000 for local time, or 20081021T123000Z for UTC).
+   *
+   * @param date The string to validate
+   */
   private static void validateDate(String date) {
     if (date != null) {
-      if (date.length() != 16) {
+      int length = date.length();
+      if (length != 8 && length != 15 && length != 16) {
         throw new IllegalArgumentException();
       }
       for (int i = 0; i < 8; i++) {
@@ -100,16 +107,18 @@ public final class CalendarParsedResult extends ParsedResult {
           throw new IllegalArgumentException();
         }
       }
-      if (date.charAt(8) != 'T') {
-        throw new IllegalArgumentException();
-      }
-      for (int i = 9; i < 15; i++) {
-        if (!Character.isDigit(date.charAt(i))) {
+      if (length > 8) {
+        if (date.charAt(8) != 'T') {
           throw new IllegalArgumentException();
         }
-      }
-      if (date.charAt(15) != 'Z') {
-        throw new IllegalArgumentException();
+        for (int i = 9; i < 15; i++) {
+          if (!Character.isDigit(date.charAt(i))) {
+            throw new IllegalArgumentException();
+          }
+        }
+        if (length == 16 && date.charAt(15) != 'Z') {
+          throw new IllegalArgumentException();
+        }
       }
     }
   }
