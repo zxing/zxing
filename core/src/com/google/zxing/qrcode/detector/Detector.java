@@ -334,6 +334,10 @@ public final class Detector {
     int allowance = (int) (allowanceFactor * overallEstModuleSize);
     int alignmentAreaLeftX = Math.max(0, estAlignmentX - allowance);
     int alignmentAreaRightX = Math.min(image.getWidth() - 1, estAlignmentX + allowance);
+    if (alignmentAreaRightX - alignmentAreaLeftX < overallEstModuleSize * 3) {
+      throw new ReaderException("Alignment pattern is too small to search");
+    }
+
     int alignmentAreaTopY = Math.max(0, estAlignmentY - allowance);
     int alignmentAreaBottomY = Math.min(image.getHeight() - 1, estAlignmentY + allowance);
 
