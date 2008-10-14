@@ -82,6 +82,13 @@ public final class ParsedReaderResultTestCase extends TestCase {
     doTestResult("12345678901", ParsedResultType.TEXT);
   }
 
+  public void testISBN() {
+    doTestResult("9784567890123", ParsedResultType.ISBN, BarcodeFormat.EAN_13);
+    doTestResult("9794567890123", ParsedResultType.ISBN, BarcodeFormat.EAN_13);
+    doTestResult("97845678901", ParsedResultType.TEXT);
+    doTestResult("97945678901", ParsedResultType.TEXT);
+  }
+
   public void testURI() {
     doTestResult("http://google.com", ParsedResultType.URI);
     doTestResult("google.com", ParsedResultType.URI);
@@ -116,10 +123,24 @@ public final class ParsedReaderResultTestCase extends TestCase {
   }
 
   public void testVEvent() {
+    // UTC times
     doTestResult("BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456Z\r\n" +
                  "DTEND:20080505T234555Z\r\nEND:VEVENT\r\nEND:VCALENDAR", ParsedResultType.CALENDAR);
     doTestResult("BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456Z\r\n" +
                  "DTEND:20080505T234555Z\r\nEND:VEVENT", ParsedResultType.CALENDAR);
+    // Local times
+    doTestResult("BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456\r\n" +
+        "DTEND:20080505T234555\r\nEND:VEVENT", ParsedResultType.CALENDAR);
+    // Date only (all day event)
+    doTestResult("BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504\r\n" +
+        "DTEND:20080505\r\nEND:VEVENT", ParsedResultType.CALENDAR);
+    // Start time only
+    doTestResult("BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456Z\r\nEND:VEVENT",
+        ParsedResultType.CALENDAR);
+    doTestResult("BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456\r\nEND:VEVENT",
+        ParsedResultType.CALENDAR);
+    doTestResult("BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504\r\nEND:VEVENT",
+        ParsedResultType.CALENDAR);
     doTestResult("BEGIN:VEVENT\r\nDTEND:20080505T\r\nEND:VEVENT", ParsedResultType.TEXT);
     doTestResult("BEGIN:VEVENT", ParsedResultType.URI); // See above note on why this is URI
   }
