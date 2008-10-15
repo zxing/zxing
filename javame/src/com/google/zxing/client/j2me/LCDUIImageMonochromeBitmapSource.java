@@ -30,7 +30,8 @@ public final class LCDUIImageMonochromeBitmapSource extends BaseMonochromeBitmap
   private final Image image;
   private final int height;
   private final int width;
-  private final int[] rgbRow;
+  // For why this isn't final, see below
+  private int[] rgbRow;
   private final int[] pixelHolder;
   private int cachedRow;
 
@@ -52,8 +53,13 @@ public final class LCDUIImageMonochromeBitmapSource extends BaseMonochromeBitmap
   }
 
   public int getLuminance(int x, int y) {
+
+    // Below, why the check for rgbRow being the right size? it should never change size
+    // or need to be reallocated. But bizarrely we have seen a but on Sun's WTK, and on
+    // some phones, where the array becomes zero-sized somehow. So we keep making sure the
+    // array is OK.
     int pixel;
-    if (cachedRow == y) {
+    if (cachedRow == y && rgbRow.length == width) {
       pixel = rgbRow[x];
     } else {
       image.getRGB(pixelHolder, 0, width, x, y, 1, 1);
@@ -79,6 +85,10 @@ public final class LCDUIImageMonochromeBitmapSource extends BaseMonochromeBitmap
 
   public void cacheRowForLuminance(int y) {
     if (y != cachedRow) {
+      // See explanation above
+      if (rgbRow.length != width) {
+        rgbRow = new int[width];
+      }
       image.getRGB(rgbRow, 0, width, 0, y, width, 1);
       cachedRow = y;
     }
