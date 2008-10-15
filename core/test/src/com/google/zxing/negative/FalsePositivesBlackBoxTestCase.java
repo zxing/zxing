@@ -29,9 +29,9 @@ public final class FalsePositivesBlackBoxTestCase extends AbstractNegativeBlackB
 
   public FalsePositivesBlackBoxTestCase() {
     super(new File("test/data/blackbox/falsepositives"));
-    addTest(1, 0.0f);
-    addTest(1, 90.0f);
-    addTest(2, 180.0f);
+    addTest(2, 0.0f);
+    addTest(0, 90.0f);
+    addTest(0, 180.0f);
     addTest(0, 270.0f);
   }
 

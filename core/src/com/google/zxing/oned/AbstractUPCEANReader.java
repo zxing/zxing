@@ -35,7 +35,7 @@ import java.util.Hashtable;
  */
 public abstract class AbstractUPCEANReader extends AbstractOneDReader implements UPCEANReader {
 
-  private static final int MAX_AVG_VARIANCE = (int) (PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.40625f);
+  private static final int MAX_AVG_VARIANCE = (int) (PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.42f);
   private static final int MAX_INDIVIDUAL_VARIANCE = (int) (PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.7f);
 
   /**
@@ -92,9 +92,13 @@ public abstract class AbstractUPCEANReader extends AbstractOneDReader implements
       startRange = findGuardPattern(row, nextStart, false, START_END_PATTERN);
       int start = startRange[0];
       nextStart = startRange[1];
-      // As a check, we want to see some white in front of this "start pattern",
-      // maybe as wide as the 150% of the start pattern itself?
-      foundStart = row.isRange(Math.max(0, start - (3 * (nextStart - start)) / 2), start, false);
+      // Make sure there is a quiet zone at least as big as the start pattern before the barcode. If
+      // this check would run off the left edge of the image, do not accept this barcode, as it is
+      // very likely to be a false positive.
+      int quietStart = start - (nextStart - start);
+      if (quietStart >= 0) {
+        foundStart = row.isRange(quietStart, start, false);
+      }
     }
     return startRange;
   }
@@ -108,9 +112,11 @@ public abstract class AbstractUPCEANReader extends AbstractOneDReader implements
     int endStart = decodeMiddle(row, startGuardRange, result);
     int[] endRange = decodeEnd(row, endStart);
 
-    // Check for whitespace after the pattern -- 150% of size of end pattern
+    // Make sure there is a quiet zone at least as big as the end pattern after the barcode. The
+    // spec might want more whitespace, but in practice this is the maximum we can count on.
     int end = endRange[1];
-    if (!row.isRange(end, Math.min(row.getSize(), end + (3 * (end - endRange[0])) / 2), false)) {
+    int quietEnd = end + (end - endRange[0]);
+    if (quietEnd >= row.getSize() || !row.isRange(end, quietEnd, false)) {
       throw new ReaderException("Pattern not followed by whitespace");
     }
 

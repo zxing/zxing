@@ -30,7 +30,7 @@ public final class EAN13BlackBox1TestCase extends AbstractBlackBoxTestCase {
   public EAN13BlackBox1TestCase() {
     super(new File("test/data/blackbox/ean13-1"), new MultiFormatReader(), BarcodeFormat.EAN_13);
     addTest(28, 31, 0.0f);
-    addTest(25, 31, 180.0f);
+    addTest(27, 31, 180.0f);
   }
 
 }
