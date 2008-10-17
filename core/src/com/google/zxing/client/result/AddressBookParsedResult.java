@@ -94,14 +94,14 @@ public final class AddressBookParsedResult extends ParsedResult {
   public String getDisplayResult() {
     StringBuffer result = new StringBuffer();
     maybeAppend(names, result);
-    maybeAppend(emails, result);
+    maybeAppend(title, result);
+    maybeAppend(org, result);
     maybeAppend(address, result);
     maybeAppend(phoneNumbers, result);
-    maybeAppend(note, result);
-    maybeAppend(org, result);
-    maybeAppend(birthday, result);
-    maybeAppend(title, result);
+    maybeAppend(emails, result);
     maybeAppend(url, result);
+    maybeAppend(birthday, result);
+    maybeAppend(note, result);
     return result.toString();
   }
 
