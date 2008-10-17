@@ -63,7 +63,8 @@ final class MobileTagSimpleContactResultParser extends AbstractMobileTagResultPa
                                        address,
                                        org,
                                        birthday,
-                                       title);
+                                       title,
+                                       null);
   }
 
 }
