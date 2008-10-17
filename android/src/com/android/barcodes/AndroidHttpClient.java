@@ -16,7 +16,6 @@
 
 package com.android.barcodes;
 
-import android.content.ContentResolver;
 import android.util.Log;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -26,7 +25,7 @@ import org.apache.http.HttpHost;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpRequestInterceptor;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
+import org.apache.http.HttpMessage;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -59,377 +58,375 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 /**
- * Subclass of the Apache {@link DefaultHttpClient} that is configured with
+ * <p>Subclass of the Apache {@link DefaultHttpClient} that is configured with
  * reasonable default settings and registered schemes for Android, and
  * also lets the user add {@link HttpRequestInterceptor} classes.
- * Don't create this directly, use the {@link #newInstance} factory method.
+ * Don't create this directly, use the {@link #newInstance} factory method.</p>
  *
  * <p>This client processes cookies but does not retain them by default.
- * To retain cookies, simply add a cookie store to the HttpContext:</p>
- *
+ * To retain cookies, simply add a cookie store to the HttpContext:
  * <pre>context.setAttribute(ClientContext.COOKIE_STORE, cookieStore);</pre>
- * 
- * {@hide}
+ * </p>
  */
 public final class AndroidHttpClient implements HttpClient {
-        
-    // Gzip of data shorter than this probably won't be worthwhile
-    public static long DEFAULT_SYNC_MIN_GZIP_BYTES = 256;
 
-    private static final String TAG = "AndroidHttpClient";
+  // Gzip of data shorter than this probably won't be worthwhile
+  public static final long DEFAULT_SYNC_MIN_GZIP_BYTES = 256;
+
+  private static final String TAG = "AndroidHttpClient";
 
 
-    /** Set if HTTP requests are blocked from being executed on this thread */
-    private static final ThreadLocal<Boolean> sThreadBlocked =
-            new ThreadLocal<Boolean>();
+  /**
+   * Set if HTTP requests are blocked from being executed on this thread
+   */
+  private static final ThreadLocal<Boolean> sThreadBlocked =
+      new ThreadLocal<Boolean>();
 
-    /** Interceptor throws an exception if the executing thread is blocked */
-    private static final HttpRequestInterceptor sThreadCheckInterceptor =
-            new HttpRequestInterceptor() {
+  /**
+   * Interceptor throws an exception if the executing thread is blocked
+   */
+  private static final HttpRequestInterceptor sThreadCheckInterceptor =
+      new HttpRequestInterceptor() {
         public void process(HttpRequest request, HttpContext context) {
-            if (sThreadBlocked.get() != null && sThreadBlocked.get()) {
-                throw new RuntimeException("This thread forbids HTTP requests");
-            }
+          if (sThreadBlocked.get() != null && sThreadBlocked.get()) {
+            throw new RuntimeException("This thread forbids HTTP requests");
+          }
         }
+      };
+
+  /**
+   * Create a new HttpClient with reasonable defaults (which you can update).
+   *
+   * @param userAgent to report in your HTTP requests.
+   * @return AndroidHttpClient for you to use for all your requests.
+   */
+  public static AndroidHttpClient newInstance(String userAgent) {
+    HttpParams params = new BasicHttpParams();
+
+    // Turn off stale checking.  Our connections break all the time anyway,
+    // and it's not worth it to pay the penalty of checking every time.
+    HttpConnectionParams.setStaleCheckingEnabled(params, false);
+
+    // Default connection and socket timeout of 20 seconds.  Tweak to taste.
+    HttpConnectionParams.setConnectionTimeout(params, 20 * 1000);
+    HttpConnectionParams.setSoTimeout(params, 20 * 1000);
+    HttpConnectionParams.setSocketBufferSize(params, 8192);
+
+    // Don't handle redirects -- return them to the caller.  Our code
+    // often wants to re-POST after a redirect, which we must do ourselves.
+    HttpClientParams.setRedirecting(params, false);
+
+    // Set the specified user agent and register standard protocols.
+    HttpProtocolParams.setUserAgent(params, userAgent);
+    SchemeRegistry schemeRegistry = new SchemeRegistry();
+    schemeRegistry.register(new Scheme("http",
+        PlainSocketFactory.getSocketFactory(), 80));
+    schemeRegistry.register(new Scheme("https",
+        SSLSocketFactory.getSocketFactory(), 443));
+    ClientConnectionManager manager =
+        new ThreadSafeClientConnManager(params, schemeRegistry);
+
+    // We use a factory method to modify superclass initialization
+    // parameters without the funny call-a-static-method dance.
+    return new AndroidHttpClient(manager, params);
+  }
+
+  private final HttpClient delegate;
+
+  private RuntimeException mLeakedException = new IllegalStateException(
+      "AndroidHttpClient created and never closed");
+
+  private AndroidHttpClient(ClientConnectionManager ccm, HttpParams params) {
+    this.delegate = new DefaultHttpClient(ccm, params) {
+      @Override
+      protected BasicHttpProcessor createHttpProcessor() {
+        // Add interceptor to prevent making requests from main thread.
+        BasicHttpProcessor processor = super.createHttpProcessor();
+        processor.addRequestInterceptor(sThreadCheckInterceptor);
+        processor.addRequestInterceptor(new CurlLogger());
+
+        return processor;
+      }
+
+      @Override
+      protected HttpContext createHttpContext() {
+        // Same as DefaultHttpClient.createHttpContext() minus the
+        // cookie store.
+        HttpContext context = new BasicHttpContext();
+        context.setAttribute(ClientContext.AUTHSCHEME_REGISTRY, getAuthSchemes());
+        context.setAttribute(ClientContext.COOKIESPEC_REGISTRY, getCookieSpecs());
+        context.setAttribute(ClientContext.CREDS_PROVIDER, getCredentialsProvider());
+        return context;
+      }
     };
+  }
 
-    /**
-     * Create a new HttpClient with reasonable defaults (which you can update).
-     * @param userAgent to report in your HTTP requests.
-     * @return AndroidHttpClient for you to use for all your requests.
-     */
-    public static AndroidHttpClient newInstance(String userAgent) {
-        HttpParams params = new BasicHttpParams();
-
-        // Turn off stale checking.  Our connections break all the time anyway,
-        // and it's not worth it to pay the penalty of checking every time.
-        HttpConnectionParams.setStaleCheckingEnabled(params, false);
-
-        // Default connection and socket timeout of 20 seconds.  Tweak to taste.
-        HttpConnectionParams.setConnectionTimeout(params, 20 * 1000);
-        HttpConnectionParams.setSoTimeout(params, 20 * 1000);
-        HttpConnectionParams.setSocketBufferSize(params, 8192);
-
-        // Don't handle redirects -- return them to the caller.  Our code
-        // often wants to re-POST after a redirect, which we must do ourselves.
-        HttpClientParams.setRedirecting(params, false);
-
-        // Set the specified user agent and register standard protocols.
-        HttpProtocolParams.setUserAgent(params, userAgent);
-        SchemeRegistry schemeRegistry = new SchemeRegistry();
-        schemeRegistry.register(new Scheme("http",
-                PlainSocketFactory.getSocketFactory(), 80));
-        schemeRegistry.register(new Scheme("https",
-                SSLSocketFactory.getSocketFactory(), 443));
-        ClientConnectionManager manager =
-                new ThreadSafeClientConnManager(params, schemeRegistry);
-
-        // We use a factory method to modify superclass initialization
-        // parameters without the funny call-a-static-method dance.
-        return new AndroidHttpClient(manager, params);
+  @Override
+  protected void finalize() throws Throwable {
+    super.finalize();
+    if (mLeakedException != null) {
+      Log.e(TAG, "Leak found", mLeakedException);
+      mLeakedException = null;
     }
+  }
 
-    private final HttpClient delegate;
+  /**
+   * Block this thread from executing HTTP requests.
+   * Used to guard against HTTP requests blocking the main application thread.
+   *
+   * @param blocked if HTTP requests run on this thread should be denied
+   */
+  public static void setThreadBlocked(boolean blocked) {
+    sThreadBlocked.set(blocked);
+  }
 
-    private RuntimeException mLeakedException = new IllegalStateException(
-            "AndroidHttpClient created and never closed");
+  /**
+   * Modifies a request to indicate to the server that we would like a
+   * gzipped response.  (Uses the "Accept-Encoding" HTTP header.)
+   *
+   * @param request the request to modify
+   * @see #getUngzippedContent
+   */
+  public static void modifyRequestToAcceptGzipResponse(HttpMessage request) {
+    request.addHeader("Accept-Encoding", "gzip");
+  }
 
-    private AndroidHttpClient(ClientConnectionManager ccm, HttpParams params) {
-        this.delegate = new DefaultHttpClient(ccm, params) {
-            @Override
-            protected BasicHttpProcessor createHttpProcessor() {
-                // Add interceptor to prevent making requests from main thread.
-                BasicHttpProcessor processor = super.createHttpProcessor();
-                processor.addRequestInterceptor(sThreadCheckInterceptor);
-                processor.addRequestInterceptor(new CurlLogger());
-
-                return processor;
-            }
-
-            @Override
-            protected HttpContext createHttpContext() {
-                // Same as DefaultHttpClient.createHttpContext() minus the
-                // cookie store.
-                HttpContext context = new BasicHttpContext();
-                context.setAttribute(
-                        ClientContext.AUTHSCHEME_REGISTRY,
-                        getAuthSchemes());
-                context.setAttribute(
-                        ClientContext.COOKIESPEC_REGISTRY,
-                        getCookieSpecs());
-                context.setAttribute(
-                        ClientContext.CREDS_PROVIDER,
-                        getCredentialsProvider());
-                return context;
-            }
-        };
+  /**
+   * Gets the input stream from a response entity.  If the entity is gzipped
+   * then this will get a stream over the uncompressed data.
+   *
+   * @param entity the entity whose content should be read
+   * @return the input stream to read from
+   * @throws IOException
+   */
+  public static InputStream getUngzippedContent(HttpEntity entity) throws IOException {
+    InputStream responseStream = entity.getContent();
+    if (responseStream == null) {
+      return responseStream;
     }
-
-    @Override
-    protected void finalize() throws Throwable {
-        super.finalize();
-        if (mLeakedException != null) {
-            Log.e(TAG, "Leak found", mLeakedException);
-            mLeakedException = null;
-        }
+    Header header = entity.getContentEncoding();
+    if (header == null) {
+      return responseStream;
     }
-
-    /**
-     * Block this thread from executing HTTP requests.
-     * Used to guard against HTTP requests blocking the main application thread.
-     * @param blocked if HTTP requests run on this thread should be denied
-     */
-    public static void setThreadBlocked(boolean blocked) {
-        sThreadBlocked.set(blocked);
+    String contentEncoding = header.getValue();
+    if (contentEncoding == null) {
+      return responseStream;
     }
+    if (contentEncoding.contains("gzip")) responseStream = new GZIPInputStream(responseStream);
+    return responseStream;
+  }
 
-    /**
-     * Modifies a request to indicate to the server that we would like a
-     * gzipped response.  (Uses the "Accept-Encoding" HTTP header.)
-     * @param request the request to modify
-     * @see #getUngzippedContent
-     */
-    public static void modifyRequestToAcceptGzipResponse(HttpRequest request) {
-        request.addHeader("Accept-Encoding", "gzip");
+  /**
+   * Release resources associated with this client.  You must call this,
+   * or significant resources (sockets and memory) may be leaked.
+   */
+  public void close() {
+    if (mLeakedException != null) {
+      getConnectionManager().shutdown();
+      mLeakedException = null;
     }
+  }
 
-    /**
-     * Gets the input stream from a response entity.  If the entity is gzipped
-     * then this will get a stream over the uncompressed data.
-     *
-     * @param entity the entity whose content should be read
-     * @return the input stream to read from
-     * @throws IOException
-     */
-    public static InputStream getUngzippedContent(HttpEntity entity)
-            throws IOException {
-        InputStream responseStream = entity.getContent();
-        if (responseStream == null) return responseStream;
-        Header header = entity.getContentEncoding();
-        if (header == null) return responseStream;
-        String contentEncoding = header.getValue();
-        if (contentEncoding == null) return responseStream;
-        if (contentEncoding.contains("gzip")) responseStream
-                = new GZIPInputStream(responseStream);
-        return responseStream;
+  public HttpParams getParams() {
+    return delegate.getParams();
+  }
+
+  public ClientConnectionManager getConnectionManager() {
+    return delegate.getConnectionManager();
+  }
+
+  public HttpResponse execute(HttpUriRequest request) throws IOException {
+    return delegate.execute(request);
+  }
+
+  public HttpResponse execute(HttpUriRequest request, HttpContext context) throws IOException {
+    return delegate.execute(request, context);
+  }
+
+  public HttpResponse execute(HttpHost target, HttpRequest request) throws IOException {
+    return delegate.execute(target, request);
+  }
+
+  public HttpResponse execute(HttpHost target, HttpRequest request,
+                              HttpContext context) throws IOException {
+    return delegate.execute(target, request, context);
+  }
+
+  public <T> T execute(HttpUriRequest request, ResponseHandler<? extends T> responseHandler) throws IOException {
+    return delegate.execute(request, responseHandler);
+  }
+
+  public <T> T execute(HttpUriRequest request, ResponseHandler<? extends T> responseHandler, HttpContext context)
+      throws IOException {
+    return delegate.execute(request, responseHandler, context);
+  }
+
+  public <T> T execute(HttpHost target, HttpRequest request, ResponseHandler<? extends T> responseHandler)
+      throws IOException {
+    return delegate.execute(target, request, responseHandler);
+  }
+
+  public <T> T execute(HttpHost target, HttpRequest request,
+                       ResponseHandler<? extends T> responseHandler,
+                       HttpContext context)
+      throws IOException {
+    return delegate.execute(target, request, responseHandler, context);
+  }
+
+  /**
+   * Compress data to send to server.
+   * Creates a Http Entity holding the gzipped data.
+   * The data will not be compressed if it is too short.
+   *
+   * @param data The bytes to compress
+   * @return Entity holding the data
+   */
+  public static AbstractHttpEntity getCompressedEntity(byte data[]) throws IOException {
+    AbstractHttpEntity entity;
+    if (data.length < getMinGzipSize()) {
+      entity = new ByteArrayEntity(data);
+    } else {
+      ByteArrayOutputStream arr = new ByteArrayOutputStream();
+      OutputStream zipper = new GZIPOutputStream(arr);
+      zipper.write(data);
+      zipper.close();
+      entity = new ByteArrayEntity(arr.toByteArray());
+      entity.setContentEncoding("gzip");
     }
+    return entity;
+  }
 
-    /**
-     * Release resources associated with this client.  You must call this,
-     * or significant resources (sockets and memory) may be leaked.
-     */
-    public void close() {
-        if (mLeakedException != null) {
-            getConnectionManager().shutdown();
-            mLeakedException = null;
-        }
-    }
+  /**
+   * Retrieves the minimum size for compressing data.
+   * Shorter data will not be compressed.
+   */
+  public static long getMinGzipSize() {
+    return DEFAULT_SYNC_MIN_GZIP_BYTES;
+  }
 
-    public HttpParams getParams() {
-        return delegate.getParams();
-    }
+  /* cURL logging support. */
 
-    public ClientConnectionManager getConnectionManager() {
-        return delegate.getConnectionManager();
-    }
+  /**
+   * Logging tag and level.
+   */
+  private static class LoggingConfiguration {
 
-    public HttpResponse execute(HttpUriRequest request) throws IOException {
-        return delegate.execute(request);
-    }
+    private final String tag;
+    private final int level;
 
-    public HttpResponse execute(HttpUriRequest request, HttpContext context)
-            throws IOException {
-        return delegate.execute(request, context);
-    }
-
-    public HttpResponse execute(HttpHost target, HttpRequest request)
-            throws IOException {
-        return delegate.execute(target, request);
-    }
-
-    public HttpResponse execute(HttpHost target, HttpRequest request,
-            HttpContext context) throws IOException {
-        return delegate.execute(target, request, context);
-    }
-
-    public <T> T execute(HttpUriRequest request, 
-            ResponseHandler<? extends T> responseHandler)
-            throws IOException, ClientProtocolException {
-        return delegate.execute(request, responseHandler);
-    }
-
-    public <T> T execute(HttpUriRequest request,
-            ResponseHandler<? extends T> responseHandler, HttpContext context)
-            throws IOException, ClientProtocolException {
-        return delegate.execute(request, responseHandler, context);
-    }
-
-    public <T> T execute(HttpHost target, HttpRequest request,
-            ResponseHandler<? extends T> responseHandler) throws IOException,
-            ClientProtocolException {
-        return delegate.execute(target, request, responseHandler);
-    }
-
-    public <T> T execute(HttpHost target, HttpRequest request,
-            ResponseHandler<? extends T> responseHandler, HttpContext context)
-            throws IOException, ClientProtocolException {
-        return delegate.execute(target, request, responseHandler, context);
+    private LoggingConfiguration(String tag, int level) {
+      this.tag = tag;
+      this.level = level;
     }
 
     /**
-     * Compress data to send to server.
-     * Creates a Http Entity holding the gzipped data.
-     * The data will not be compressed if it is too short.
-     * @param data The bytes to compress
-     * @return Entity holding the data
+     * Returns true if logging is turned on for this configuration.
      */
-    public static AbstractHttpEntity getCompressedEntity(byte data[], ContentResolver resolver)
-            throws IOException {
-        AbstractHttpEntity entity;
-        if (data.length < getMinGzipSize(resolver)) {
-            entity = new ByteArrayEntity(data);
-        } else {
-            ByteArrayOutputStream arr = new ByteArrayOutputStream();
-            OutputStream zipper = new GZIPOutputStream(arr);
-            zipper.write(data);
-            zipper.close();
-            entity = new ByteArrayEntity(arr.toByteArray());
-            entity.setContentEncoding("gzip");
-        }
-        return entity;
+    private boolean isLoggable() {
+      return Log.isLoggable(tag, level);
     }
 
     /**
-     * Retrieves the minimum size for compressing data.
-     * Shorter data will not be compressed.
+     * Prints a message using this configuration.
      */
-    public static long getMinGzipSize(ContentResolver resolver) {
-        return DEFAULT_SYNC_MIN_GZIP_BYTES;
+    private void println(String message) {
+      Log.println(level, tag, message);
+    }
+  }
+
+  /**
+   * cURL logging configuration.
+   */
+  private volatile LoggingConfiguration curlConfiguration;
+
+  /**
+   * Enables cURL request logging for this client.
+   *
+   * @param name  to log messages with
+   * @param level at which to log messages (see {@link android.util.Log})
+   */
+  public void enableCurlLogging(String name, int level) {
+    if (name == null) {
+      throw new NullPointerException("name");
+    }
+    if (level < Log.VERBOSE || level > Log.ASSERT) {
+      throw new IllegalArgumentException("Level is out of range ["
+          + Log.VERBOSE + ".." + Log.ASSERT + "]");
     }
 
-    /* cURL logging support. */
+    curlConfiguration = new LoggingConfiguration(name, level);
+  }
 
-    /**
-     * Logging tag and level.
-     */
-    private static class LoggingConfiguration {
+  /**
+   * Disables cURL logging for this client.
+   */
+  public void disableCurlLogging() {
+    curlConfiguration = null;
+  }
 
-        private final String tag;
-        private final int level;
-
-        private LoggingConfiguration(String tag, int level) {
-            this.tag = tag;
-            this.level = level;
-        }
-
-        /**
-         * Returns true if logging is turned on for this configuration.
-         */
-        private boolean isLoggable() {
-            return Log.isLoggable(tag, level);
-        }
-
-        /**
-         * Prints a message using this configuration.
-         */
-        private void println(String message) {
-            Log.println(level, tag, message);
-        }
-    }
-
-    /** cURL logging configuration. */
-    private volatile LoggingConfiguration curlConfiguration;
-
-    /**
-     * Enables cURL request logging for this client.
-     *
-     * @param name to log messages with
-     * @param level at which to log messages (see {@link android.util.Log})
-     */
-    public void enableCurlLogging(String name, int level) {
-        if (name == null) {
-            throw new NullPointerException("name");
-        }
-        if (level < Log.VERBOSE || level > Log.ASSERT) {
-            throw new IllegalArgumentException("Level is out of range ["
-                + Log.VERBOSE + ".." + Log.ASSERT + "]");    
-        }
-
-        curlConfiguration = new LoggingConfiguration(name, level);
-    }
-
-    /**
-     * Disables cURL logging for this client.
-     */
-    public void disableCurlLogging() {
-        curlConfiguration = null;
-    }
-
-    /**
-     * Logs cURL commands equivalent to requests.
-     */
-    private class CurlLogger implements HttpRequestInterceptor {
-        public void process(HttpRequest request, HttpContext context)
-                throws HttpException, IOException {
-            LoggingConfiguration configuration = curlConfiguration;
-            if (configuration != null
-                    && configuration.isLoggable()
-                    && request instanceof HttpUriRequest) {
-                configuration.println(toCurl((HttpUriRequest) request));
-            }
-        }
+  /**
+   * Logs cURL commands equivalent to requests.
+   */
+  private class CurlLogger implements HttpRequestInterceptor {
+    public void process(HttpRequest request, HttpContext context)
+        throws HttpException, IOException {
+      LoggingConfiguration configuration = curlConfiguration;
+      if (configuration != null
+          && configuration.isLoggable()
+          && request instanceof HttpUriRequest) {
+        configuration.println(toCurl((HttpUriRequest) request));
+      }
     }
 
     /**
      * Generates a cURL command equivalent to the given request.
      */
-    private static String toCurl(HttpUriRequest request) throws IOException {
-        StringBuilder builder = new StringBuilder();
+    private String toCurl(HttpUriRequest request) throws IOException {
+      StringBuilder builder = new StringBuilder();
 
-        builder.append("curl ");
+      builder.append("curl ");
 
-        for (Header header: request.getAllHeaders()) {
-            builder.append("--header \"");
-            builder.append(header.toString().trim());
-            builder.append("\" ");
+      for (Header header : request.getAllHeaders()) {
+        builder.append("--header \"");
+        builder.append(header.toString().trim());
+        builder.append("\" ");
+      }
+
+      URI uri = request.getURI();
+
+      // If this is a wrapped request, use the URI from the original
+      // request instead. getURI() on the wrapper seems to return a
+      // relative URI. We want an absolute URI.
+      if (request instanceof RequestWrapper) {
+        HttpRequest original = ((RequestWrapper) request).getOriginal();
+        if (original instanceof HttpUriRequest) {
+          uri = ((HttpUriRequest) original).getURI();
         }
+      }
 
-        URI uri = request.getURI();
+      builder.append('"');
+      builder.append(uri);
+      builder.append('"');
 
-        // If this is a wrapped request, use the URI from the original
-        // request instead. getURI() on the wrapper seems to return a
-        // relative URI. We want an absolute URI.
-        if (request instanceof RequestWrapper) {
-            HttpRequest original = ((RequestWrapper) request).getOriginal();
-            if (original instanceof HttpUriRequest) {
-                uri = ((HttpUriRequest) original).getURI();
-            }
+      if (request instanceof HttpEntityEnclosingRequest) {
+        HttpEntityEnclosingRequest entityRequest =
+            (HttpEntityEnclosingRequest) request;
+        HttpEntity entity = entityRequest.getEntity();
+        if (entity != null && entity.isRepeatable()) {
+          if (entity.getContentLength() < 1024) {
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            entity.writeTo(stream);
+            String entityString = stream.toString();
+            // TODO: Check the content type, too.
+            builder.append(" --data-ascii \"").append(entityString).append('"');
+          } else {
+            builder.append(" [TOO MUCH DATA TO INCLUDE]");
+          }
         }
+      }
 
-        builder.append("\"");
-        builder.append(uri);
-        builder.append("\"");
-
-        if (request instanceof HttpEntityEnclosingRequest) {
-            HttpEntityEnclosingRequest entityRequest =
-                    (HttpEntityEnclosingRequest) request;
-            HttpEntity entity = entityRequest.getEntity();
-            if (entity != null && entity.isRepeatable()) {
-                if (entity.getContentLength() < 1024) {
-                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    entity.writeTo(stream);
-                    String entityString = stream.toString();
-
-                    // TODO: Check the content type, too.
-                    builder.append(" --data-ascii \"")
-                            .append(entityString)
-                            .append("\"");
-                } else {
-                    builder.append(" [TOO MUCH DATA TO INCLUDE]");
-                }
-            }
-        }
-
-        return builder.toString();
+      return builder.toString();
     }
+  }
+
 }
