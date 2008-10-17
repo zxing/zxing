@@ -21,10 +21,15 @@ import com.google.zxing.Result;
 /**
  * Implements the "MECARD" address book entry format.
  *
- * Supported keys: N, TEL, EMAIL, NOTE, ADR Unsupported keys: SOUND, TEL-AV, BDAY, URL, NICKNAME
+ * Supported keys: N, TEL, EMAIL, NOTE, ADR, BDAY, URL, plus ORG
+ * Unsupported keys: SOUND, TEL-AV, NICKNAME
  *
  * Except for TEL, multiple values for keys are also not supported;
  * the first one found takes precedence.
+ *
+ * Our understanding of the MECARD format is based on this document:
+ *
+ * http://www.mobicode.org.tw/files/OMIA%20Mobile%20Bar%20Code%20Standard%20v3.2.1.doc 
  *
  * @author srowen@google.com (Sean Owen)
  */
@@ -46,16 +51,24 @@ final class AddressBookDoCoMoResultParser extends AbstractDoCoMoResultParser {
     String address = matchSingleDoCoMoPrefixedField("ADR:", rawText, true);
     String birthday = matchSingleDoCoMoPrefixedField("BDAY:", rawText, true);
     if (birthday != null && !isStringOfDigits(birthday, 8)) {
-      return null;
+      // No reason to throw out the whole card because the birthday is formatted wrong.
+      birthday = null;
     }
+    String url = matchSingleDoCoMoPrefixedField("URL:", rawText, true);
+
+    // Although ORG may not be strictly legal in MECARD, it does exist in VCARD and we might as well
+    // honor it when found in the wild.
+    String org = matchSingleDoCoMoPrefixedField("ORG:", rawText, true);
+
     return new AddressBookParsedResult(maybeWrap(name),
                                        phoneNumbers,
                                        maybeWrap(email),
                                        note,
                                        address,
-                                       null,
+                                       org,
                                        birthday,
-                                       null);
+                                       null,
+                                       url);
   }
 
   private static String parseName(String name) {

@@ -29,6 +29,7 @@ public final class AddressBookParsedResult extends ParsedResult {
   private final String org;
   private final String birthday;
   private final String title;
+  private final String url;
 
   public AddressBookParsedResult(String[] names,
                                  String[] phoneNumbers,
@@ -37,7 +38,8 @@ public final class AddressBookParsedResult extends ParsedResult {
                                  String address,
                                  String org,
                                  String birthday,
-                                 String title) {
+                                 String title,
+                                 String url) {
     super(ParsedResultType.ADDRESSBOOK);
     this.names = names;
     this.phoneNumbers = phoneNumbers;
@@ -47,6 +49,7 @@ public final class AddressBookParsedResult extends ParsedResult {
     this.org = org;
     this.birthday = birthday;
     this.title = title;
+    this.url = url;
   }
 
   public String[] getNames() {
@@ -77,6 +80,10 @@ public final class AddressBookParsedResult extends ParsedResult {
     return org;
   }
 
+  public String getURL() {
+    return url;
+  }
+
   /**
    * @return birthday formatted as yyyyMMdd (e.g. 19780917)
    */
@@ -94,6 +101,7 @@ public final class AddressBookParsedResult extends ParsedResult {
     maybeAppend(org, result);
     maybeAppend(birthday, result);
     maybeAppend(title, result);
+    maybeAppend(url, result);
     return result.toString();
   }
 

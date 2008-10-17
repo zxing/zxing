@@ -56,7 +56,8 @@ final class BizcardResultParser extends AbstractDoCoMoResultParser {
                                        address,
                                        org,
                                        null,
-                                       title);
+                                       title,
+                                       null);
   }
 
   private static String[] buildPhoneNumbers(String number1, String number2, String number3) {
