@@ -14,8 +14,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  -->
+
+<!-- versionCode is a monotonically increasing integer. I'm starting it at 6 because v2.3 is the 6th
+version to be published. The next versionCode will be 7, regardless of whether the user-visible
+versionName is 2.31, 2.4, or 3.0. -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.google.zxing.client.android">
+          package="com.google.zxing.client.android"
+          android:versionName="2.3"
+          android:versionCode="6">
   <application android:icon="@drawable/ic_launcher_barcodes"
                android:label="@string/app_name">
     <activity android:name=".BarcodesCaptureActivity"
