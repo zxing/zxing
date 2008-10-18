@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright (C) 2008 Google Inc.
+ Copyright (C) 2008 ZXing authors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -23,23 +23,115 @@
                android:layout_height="fill_parent"
                android:layout_centerInParent="true"/>
 
-  <com.android.barcodes.ViewfinderView
-                  android:id="@+id/viewfinder_view"
-                  android:layout_width="fill_parent"
-                  android:layout_height="fill_parent"
-                  android:background="@color/transparent"/>
+  <com.google.zxing.client.android.ViewfinderView
+      android:id="@+id/viewfinder_view"
+      android:layout_width="fill_parent"
+      android:layout_height="fill_parent"
+      android:background="@color/transparent"/>
 
-  <LinearLayout
+  <LinearLayout android:id="@+id/result_view"
                 android:orientation="vertical"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:background="@color/transparent">
+                android:background="@color/result_view"
+                android:visibility="gone"
+                android:padding="4px">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="top"
+        android:padding="12px">
+
+      <LinearLayout
+          android:orientation="vertical"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:gravity="left|top">
+
+        <ImageView android:id="@+id/barcode_image_view"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_marginBottom="4px"
+                   android:adjustViewBounds="true"
+                   android:scaleType="centerInside"/>
+
+        <TextView android:id="@+id/format_text_view"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_gravity="left"
+                  android:text="@string/msg_default_format"
+                  android:textColor="@color/result_minor_text"
+                  android:textSize="14sp"/>
+
+        <TextView android:id="@+id/type_text_view"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_gravity="left"
+                  android:text="@string/msg_default_type"
+                  android:textColor="@color/result_minor_text"
+                  android:textSize="14sp"/>
+
+      </LinearLayout>
+
+      <ScrollView
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:layout_weight="1">
+
+        <TextView android:id="@+id/contents_text_view"
+                  android:layout_width="fill_parent"
+                  android:layout_height="fill_parent"
+                  android:gravity="left|top"
+                  android:text="@string/msg_default_contents"
+                  android:textColor="@color/result_text"
+                  android:textSize="22sp"
+                  android:paddingLeft="12px"
+                  android:autoLink="web"/>
+
+      </ScrollView>
+
+    </LinearLayout>
+
+    <LinearLayout android:id="@+id/result_button_view"
+                  android:orientation="horizontal"
+                  android:layout_width="fill_parent"
+                  android:layout_height="wrap_content"
+                  android:gravity="center">
+
+      <Button android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:visibility="gone"/>
+
+      <Button android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:visibility="gone"/>
+
+      <Button android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:visibility="gone"/>
+
+      <Button android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:visibility="gone"/>
+
+    </LinearLayout>
+
+  </LinearLayout>
+
+  <LinearLayout
+      android:orientation="vertical"
+      android:layout_width="fill_parent"
+      android:layout_height="fill_parent"
+      android:background="@color/transparent">
 
     <FrameLayout
-                 android:layout_width="fill_parent"
-                 android:layout_height="fill_parent"
-                 android:layout_weight="1"
-                 android:background="@color/transparent"/>
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+        android:background="@color/transparent"/>
 
     <LinearLayout android:id="@+id/status_view"
                   android:orientation="horizontal"
@@ -56,13 +148,8 @@
                 android:layout_gravity="left|center_vertical"
                 android:layout_weight="1"
                 android:text="@string/msg_default_status"
-                android:textColor="@color/status_text"/>
-
-      <Button android:id="@+id/status_action_button"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_gravity="center|fill_horizontal"
-              android:visibility="gone"/>
+                android:textColor="@color/status_text"
+                android.textSize="14sp"/>
 
     </LinearLayout>
 

@@ -14,17 +14,12 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  -->
-<resources>
-  <!-- Messages IDs -->
-  <item type="id" name="auto_focus"/>
-  <item type="id" name="decode"/>
-  <item type="id" name="decode_failed"/>
-  <item type="id" name="decode_succeeded"/>
-  <item type="id" name="encode_failed"/>
-  <item type="id" name="encode_succeeded"/>
-  <item type="id" name="quit"/>
-  <item type="id" name="restart_preview"/>
-  <item type="id" name="return_scan_result"/>
-  <item type="id" name="search_book_contents_failed"/>
-  <item type="id" name="search_book_contents_succeeded"/>
-</resources>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:background="@color/sbc_header_view"
+          android:paddingLeft="8px"
+          android:enabled="false"
+          android:textColor="@color/sbc_header_text"
+          android:singleLine="true"
+          android:textSize="16sp"/>

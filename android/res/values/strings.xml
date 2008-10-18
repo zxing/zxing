@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright (C) 2008 Google Inc.
+ Copyright (C) 2008 ZXing authors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -15,46 +15,83 @@
  limitations under the License.
  -->
 <resources>
-    <string name="app_name">Barcode Scanner</string>
+  <string name="app_name">Barcode Scanner</string>
 
-    <string name="button_add_contact">Add contact</string>
-    <string name="button_cancel">Cancel</string>
-    <string name="button_dial">Dial</string>
-    <string name="button_email">Email</string>
-    <string name="button_lookup_book">Look up book</string>
-    <string name="button_lookup_product">Look up product</string>
-    <string name="button_ok">OK</string>
-    <string name="button_open_browser">Open browser</string>
-    <string name="button_show_map">Show map</string>
-    <string name="button_sms">Send SMS</string>
+  <string name="button_add_calendar">Add event to calendar</string>
+  <string name="button_add_contact">Add contact</string>
+  <string name="button_book_search">Open Book Search</string>
+  <string name="button_cancel">Cancel</string>
+  <string name="button_dial">Dial number</string>
+  <string name="button_email">Send email</string>
+  <string name="button_get_directions">Get directions</string>
+  <string name="button_mms">Send MMS</string>
+  <string name="button_ok">OK</string>
+  <string name="button_open_browser">Open browser</string>
+  <string name="button_product_search">Open Product Search</string>
+  <string name="button_search_book_contents">Search book contents</string>
+  <string name="button_share_by_email">Share via email</string>
+  <string name="button_share_by_sms">Share via SMS</string>
+  <string name="button_show_map">Show map</string>
+  <string name="button_sms">Send SMS</string>
+  <string name="button_web_search">Web search</string>
 
-    <string name="contents_contact">Contact info</string>
-    <string name="contents_email">Email address</string>
-    <string name="contents_location">Geographic coordinates</string>
-    <string name="contents_phone">Phone number</string>
-    <string name="contents_sms">SMS address</string>
-    <string name="contents_text">Plain text</string>
+  <string name="contents_contact">Contact info</string>
+  <string name="contents_email">Email address</string>
+  <string name="contents_location">Geographic coordinates</string>
+  <string name="contents_phone">Phone number</string>
+  <string name="contents_sms">SMS address</string>
+  <string name="contents_text">Plain text</string>
 
-    <string name="menu_about">About</string>
-    <string name="menu_help">Help</string>
-    <string name="menu_settings">Settings</string>
+  <string name="menu_about">About</string>
+  <string name="menu_help">Help</string>
+  <string name="menu_settings">Settings</string>
 
-    <string name="msg_about">Based on the ZXing Barcode Library</string>
-    <string name="msg_encode_barcode_failed">Could not retrieve a barcode from the network.</string>
-    <string name="msg_encode_contents_failed">Could not encode a barcode from the data provided.</string>
-    <string name="msg_encode_in_progress">Generating a barcode\u2026</string>
-    <string name="msg_help">Barcode Scanner continuously scans the viewfinder rectangle, so there\'s no need to press the shutter button. If you\'re having trouble, make sure to hold the phone steady. If the camera is unable to focus, try moving further back from the barcode.</string>
-    <string name="msg_default_status">Place a barcode inside the viewfinder rectangle to read it.</string>
+  <string name="msg_about">Based on the open source ZXing Barcode Library</string>
+  <string name="msg_default_contents">Contents</string>
+  <string name="msg_default_format">Format</string>
+  <string name="msg_default_mms_subject">Hi</string>
+  <string name="msg_default_status">Place a barcode inside the viewfinder rectangle to read it.
+  </string>
+  <string name="msg_default_type">Type</string>
+  <string name="msg_encode_barcode_failed">Could not retrieve a barcode from the network.</string>
+  <string name="msg_encode_contents_failed">Could not encode a barcode from the data provided.
+  </string>
+  <string name="msg_encode_in_progress">Generating a barcode\u2026</string>
+  <string name="msg_help">Barcode Scanner continuously scans the viewfinder rectangle, so there\'s
+    no need to press the shutter button. If you\'re having trouble, make sure to hold the phone
+    steady. If the camera is unable to focus, try moving further back from the barcode.
+  </string>
+  <string name="msg_sbc_failed">Sorry, the search encountered a problem.</string>
+  <string name="msg_sbc_no_page_returned">No page returned</string>
+  <string name="msg_sbc_page">Page</string>
+  <string name="msg_sbc_snippet_unavailable">Snippets not available</string>
+  <string name="msg_sbc_unknown_page">Unknown page</string>
+  <string name="msg_searching_book">Searching book\u2026</string>
+  <string name="msg_share_barcode">Here\'s the contents of a barcode I scanned</string>
 
-    <string name="preferences_decode_1D_title">Decode 1D barcodes</string>
-    <string name="preferences_decode_QR_title">Decode QR Codes</string>
-    <string name="preferences_general_title">General settings</string>
-    <string name="preferences_name">Settings</string>
-    <string name="preferences_play_beep_title">Beep when a barcode is found</string>
-    <string name="preferences_sounds_title">Sounds</string>
+  <string name="preferences_decode_1D_title">Decode 1D barcodes</string>
+  <string name="preferences_decode_QR_title">Decode QR Codes</string>
+  <string name="preferences_general_title">General settings</string>
+  <string name="preferences_name">Settings</string>
+  <string name="preferences_play_beep_title">Beep when a barcode is found</string>
+  <string name="preferences_sounds_title">Sounds</string>
 
-    <string name="title_about">About Barcode Scanner</string>
-    <string name="title_help">Help</string>
+  <string name="result_address_book">Found contact info</string>
+  <string name="result_calendar">Found calendar event</string>
+  <string name="result_email_address">Found email address</string>
+  <string name="result_geo">Found geographic coordinates</string>
+  <string name="result_isbn">Found book</string>
+  <string name="result_sms">Found SMS address</string>
+  <string name="result_tel">Found phone number</string>
+  <string name="result_text">Found plain text</string>
+  <string name="result_upc">Found product</string>
+  <string name="result_uri">Found URL</string>
 
-    <string name="zxing_url">http://code.google.com/p/zxing</string>
+  <string name="sbc_name">Google Book Search</string>
+
+  <string name="title_about">About Barcode Scanner</string>
+  <string name="title_help">Help</string>
+
+  <string name="zxing_url">http://code.google.com/p/zxing</string>
+  <string name="zxing_user_agent">ZXing-Android/1.0</string>
 </resources>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (C) 2008 ZXing authors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<com.google.zxing.client.android.SearchBookContentsListItem
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/sbc_list_item"
+    android:padding="8px">
+
+
+  <TextView android:id="@+id/page_number_view"
+            android:layout_width="75px"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|top"
+            android:layout_marginRight="8px"
+            android:textColor="@color/sbc_page_number_text"
+            android:singleLine="false"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+
+  <TextView android:id="@+id/snippet_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|top"
+            android:textColor="@color/sbc_snippet_text"
+            android:singleLine="false"
+            android:textSize="16sp"
+            android:typeface="serif"/>
+
+</com.google.zxing.client.android.SearchBookContentsListItem>
