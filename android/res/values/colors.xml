@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright (C) 2008 Google Inc.
+ Copyright (C) 2008 ZXing authors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -15,13 +15,23 @@
  limitations under the License.
  -->
 <resources>
-    <color name="contents_text">#000000</color>
-    <color name="encode_view">#ffffff</color>
-    <color name="result_points">#c000ff00</color>
-    <color name="status_view">#50000000</color>
-    <color name="status_text">#ffffffff</color>
-    <color name="transparent">#00000000</color>
-    <color name="viewfinder_frame">#ff000000</color>
-    <color name="viewfinder_laser">#ff0000</color>
-    <color name="viewfinder_mask">#60000000</color>
+  <color name="contents_text">#ff000000</color>
+  <color name="encode_view">#ffffffff</color>
+  <color name="result_image_border">#ffffffff</color>
+  <color name="result_minor_text">#ffc0c0c0</color>
+  <color name="result_points">#c000ff00</color>
+  <color name="result_text">#ffffffff</color>
+  <color name="result_view">#b0000000</color>
+  <color name="sbc_header_text">#ff808080</color>
+  <color name="sbc_header_view">#ffffffff</color>
+  <color name="sbc_list_item">#fffff0e0</color>
+  <color name="sbc_layout_view">#ffffffff</color>
+  <color name="sbc_page_number_text">#ff000000</color>
+  <color name="sbc_snippet_text">#ff4b4b4b</color>
+  <color name="status_view">#50000000</color>
+  <color name="status_text">#ffffffff</color>
+  <color name="transparent">#00000000</color>
+  <color name="viewfinder_frame">#ff000000</color>
+  <color name="viewfinder_laser">#ffff0000</color>
+  <color name="viewfinder_mask">#60000000</color>
 </resources>
