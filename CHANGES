@@ -186,3 +186,14 @@
   - URIParsedResult now tries to warn about malicious URIs
   - New parser for ISBNs
   - New QR code blackbox images
+
+1.1 (? October 2008)
+  - First public release of iPhone client called Barcodes
+  - Completely new multi-action Android client UI, released as Barcode Scanner v2.3
+  - Code 128 parsing fixes
+  - Dozens of new blackbox test images
+  - Many small core library parsing improvements and bug fixes
+  - Improved quiet zone enforcement which reduces false positives significantly
+  - Better calendar event and MECARD support
+  - Compatibility with the Android 1.0 SDK
+  
