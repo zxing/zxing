@@ -187,7 +187,7 @@
   - New parser for ISBNs
   - New QR code blackbox images
 
-1.1 (? October 2008)
+1.1 (22 October 2008)
   - First public release of iPhone client called Barcodes
   - Completely new multi-action Android client UI, released as Barcode Scanner v2.3
   - Code 128 parsing fixes
@@ -196,4 +196,5 @@
   - Improved quiet zone enforcement which reduces false positives significantly
   - Better calendar event and MECARD support
   - Compatibility with the Android 1.0 SDK
+  - Added androidtest app for testing intents and capturing blackbox test images
   
