@@ -32,16 +32,20 @@ public final class LCDUIImageMonochromeBitmapSource extends BaseMonochromeBitmap
   private final int width;
   // For why this isn't final, see below
   private int[] rgbRow;
+  private int[] rgbColumn;
   private final int[] pixelHolder;
   private int cachedRow;
+  private int cachedColumn;
 
   public LCDUIImageMonochromeBitmapSource(Image image) {
     this.image = image;
     height = image.getHeight();
     width = image.getWidth();
     rgbRow = new int[width];
+    rgbColumn = new int[height];
     pixelHolder = new int[1];
     cachedRow = -1;
+    cachedColumn = -1;
   }
 
   public int getHeight() {
@@ -61,6 +65,8 @@ public final class LCDUIImageMonochromeBitmapSource extends BaseMonochromeBitmap
     int pixel;
     if (cachedRow == y && rgbRow.length == width) {
       pixel = rgbRow[x];
+    } else if (cachedColumn == x && rgbColumn.length == height) {
+      pixel = rgbColumn[y];
     } else {
       image.getRGB(pixelHolder, 0, width, x, y, 1, 1);
       pixel = pixelHolder[0];
@@ -91,6 +97,16 @@ public final class LCDUIImageMonochromeBitmapSource extends BaseMonochromeBitmap
       }
       image.getRGB(rgbRow, 0, width, 0, y, width, 1);
       cachedRow = y;
+    }
+  }
+
+  public void cacheColumnForLuminance(int x) {
+    if (x != cachedColumn) {
+      if (rgbColumn.length != height) {
+        rgbColumn = new int[height];
+      }
+      image.getRGB(rgbColumn, 0, 1, x, 0, 1, height);
+      cachedColumn = x;
     }
   }
 

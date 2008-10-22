@@ -43,7 +43,9 @@ public final class BufferedImageMonochromeBitmapSource extends BaseMonochromeBit
   private final int width;
   private final int height;
   private int[] rgbRow;
+  private int[] rgbColumn;
   private int cachedRow;
+  private int cachedColumn;
 
   /**
    * Creates an instance that uses the entire given image as a source of pixels to decode.
@@ -78,7 +80,9 @@ public final class BufferedImageMonochromeBitmapSource extends BaseMonochromeBit
     this.width = right - left;
     this.height = bottom - top;
     rgbRow = new int[width];
+    rgbColumn = new int[height];
     cachedRow = -1;
+    cachedColumn = -1;
   }
 
   /**
@@ -136,6 +140,8 @@ public final class BufferedImageMonochromeBitmapSource extends BaseMonochromeBit
     int pixel;
     if (cachedRow == y) {
       pixel = rgbRow[x];
+    } else if (cachedColumn == x) {
+      pixel = rgbColumn[y];
     } else {
       pixel = image.getRGB(left + x, top + y);
     }
@@ -150,6 +156,13 @@ public final class BufferedImageMonochromeBitmapSource extends BaseMonochromeBit
     if (y != cachedRow) {
       image.getRGB(left, top + y, width, 1, rgbRow, 0, width);
       cachedRow = y;
+    }
+  }
+
+  public void cacheColumnForLuminance(int x) {
+    if (x != cachedColumn) {
+      image.getRGB(left + x, top, 1, height, rgbColumn, 0, 1);
+      cachedColumn = x;
     }
   }
 

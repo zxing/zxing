@@ -20,6 +20,7 @@ import com.google.zxing.MonochromeBitmapSource;
 import com.google.zxing.ReaderException;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.BlackPointEstimationMethod;
+import com.google.zxing.common.BitArray;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.Collections;
 import com.google.zxing.common.Comparator;
@@ -262,17 +263,19 @@ public final class Detector {
 
     int center = (minDim + maxDim) / 2;
 
+    BitArray rowOrColumn = horizontal ? image.getBlackRow(fixedDimension, null, 0, image.getWidth())
+                                      : image.getBlackColumn(fixedDimension, null, 0, image.getHeight());
+
     // Scan left/up first
     int start = center;
     while (start >= minDim) {
-      if (horizontal ? image.isBlack(start, fixedDimension) : image.isBlack(fixedDimension, start)) {
+      if (rowOrColumn.get(start)) {
         start--;
       } else {
         int whiteRunStart = start;
         do {
           start--;
-        } while (start >= minDim &&
-                 !(horizontal ? image.isBlack(start, fixedDimension) : image.isBlack(fixedDimension, start)));
+        } while (start >= minDim && !rowOrColumn.get(start));
         int whiteRunSize = whiteRunStart - start;
         if (start < minDim || whiteRunSize > maxWhiteRun) {
           start = whiteRunStart + 1; // back up
@@ -284,14 +287,13 @@ public final class Detector {
     // Then try right/down
     int end = center;
     while (end < maxDim) {
-      if (horizontal ? image.isBlack(end, fixedDimension) : image.isBlack(fixedDimension, end)) {
+      if (rowOrColumn.get(end)) {
         end++;
       } else {
         int whiteRunStart = end;
         do {
           end++;
-        } while (end < maxDim &&
-                 !(horizontal ? image.isBlack(end, fixedDimension) : image.isBlack(fixedDimension, end)));
+        } while (end < maxDim && !rowOrColumn.get(end));
         int whiteRunSize = end - whiteRunStart;
         if (end >= maxDim || whiteRunSize > maxWhiteRun) {
           end = whiteRunStart - 1;

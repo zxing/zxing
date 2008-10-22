@@ -49,6 +49,11 @@ public interface MonochromeBitmapSource {
   BitArray getBlackRow(int y, BitArray row, int startX, int getWidth);
 
   /**
+   * Entirely analogous to {@link #getBlackRow(int, BitArray, int, int)} but gets a column.
+   */
+  BitArray getBlackColumn(int x, BitArray column, int startY, int getHeight);
+
+  /**
    * @return height of underlying image
    */
   int getHeight();
@@ -75,6 +80,11 @@ public interface MonochromeBitmapSource {
    * @param y The row to cache.
    */
   void cacheRowForLuminance(int y);
+
+  /**
+   * Entirely analogous to {@link #cacheRowForLuminance(int)} but caches a column.
+   */
+  void cacheColumnForLuminance(int x);
 
   /**
    * <p>Estimates black point according to the given method, which is optionally parameterized by
