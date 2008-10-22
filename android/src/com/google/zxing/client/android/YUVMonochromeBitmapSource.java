@@ -72,6 +72,10 @@ final class YUVMonochromeBitmapSource extends BaseMonochromeBitmapSource {
 
   }
 
+  public void cacheColumnForLuminance(int x) {
+
+  }
+
   /**
    * Create a greyscale Android Bitmap from the YUV data based on the crop rectangle.
    *

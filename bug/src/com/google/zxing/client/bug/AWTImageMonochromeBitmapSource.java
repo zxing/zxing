@@ -74,4 +74,8 @@ public final class AWTImageMonochromeBitmapSource extends BaseMonochromeBitmapSo
     // do nothing; we are already forced to cache all pixels
   }
 
+  public void cacheColumnForLuminance(int x) {
+    // do nothing
+  }
+
 }

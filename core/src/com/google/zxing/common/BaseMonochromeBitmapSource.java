@@ -76,6 +76,23 @@ public abstract class BaseMonochromeBitmapSource implements MonochromeBitmapSour
     return row;
   }
 
+  public BitArray getBlackColumn(int x, BitArray column, int startY, int getHeight) {
+    if (column == null || column.getSize() < getHeight) {
+      column = new BitArray(getHeight);
+    } else {
+      column.clear();
+    }
+
+    cacheColumnForLuminance(x);
+    // We don't handle "row sampling" specially here
+    for (int y = 0; y < getHeight; y++) {
+      if (getLuminance(x, startY + y) < blackPoint) {
+        column.set(y);
+      }
+    }
+    return column;
+  }
+
   public void estimateBlackPoint(BlackPointEstimationMethod method, int argument) throws ReaderException {
     if (!method.equals(lastMethod) || argument != lastArgument) {
       int width = getWidth();
@@ -130,5 +147,7 @@ public abstract class BaseMonochromeBitmapSource implements MonochromeBitmapSour
   public abstract int getLuminance(int x, int y);
 
   public abstract void cacheRowForLuminance(int y);
+
+  public abstract void cacheColumnForLuminance(int x);
 
 }
