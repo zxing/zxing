@@ -207,8 +207,18 @@ public abstract class ResultHandler {
     launchIntent(new Intent(Intent.ACTION_VIEW, Uri.parse(geoURI)));
   }
 
-  public void searchMap(String address) {
-    launchIntent(new Intent(Intent.ACTION_VIEW, Uri.parse("geo:0,0?q=" + Uri.encode(address))));
+  /**
+   * Do a geo search using the address as the query.
+   *
+   * @param address The address to find
+   * @param title An optional title, e.g. the name of the business at this address
+   */
+  public void searchMap(String address, String title) {
+    String query = address;
+    if (title != null && title.length() > 0) {
+      query = query + " (" + title + ")";
+    }
+    launchIntent(new Intent(Intent.ACTION_VIEW, Uri.parse("geo:0,0?q=" + Uri.encode(query))));
   }
 
   public void getDirections(float latitude, float longitude) {
@@ -255,6 +265,8 @@ public abstract class ResultHandler {
     }
   }
 
+  // TODO: The current Contacts Intent API can only accept one value for each field, so we pick the
+  // first element in the array for names, phone numbers, and emails. It would be great to fix this.
   private static void putExtra(Intent intent, String key, String[] value) {
     if (value != null && value.length > 0) {
       putExtra(intent, key, value[0]);
