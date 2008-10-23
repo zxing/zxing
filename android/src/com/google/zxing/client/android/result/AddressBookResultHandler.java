@@ -100,7 +100,9 @@ public class AddressBookResultHandler extends ResultHandler {
             addressResult.getTitle());
         break;
       case 1:
-        searchMap(addressResult.getAddress());
+        String[] names = addressResult.getNames();
+        String title = names != null ? names[0] : null;
+        searchMap(addressResult.getAddress(), title);
         break;
       case 2:
         dialPhone(addressResult.getPhoneNumbers()[0]);
