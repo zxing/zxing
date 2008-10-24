@@ -16,6 +16,7 @@
  -->
 <resources>
   <string name="app_name">ZXing Test</string>
+  <string name="scan_anything">Scan anything</string>
   <string name="scan_product">Scan product</string>
   <string name="scan_qr_code">Scan QR Code</string>
   <string name="search_book_contents">Search Book Contents</string>
@@ -33,4 +34,9 @@
   <string name="status_message">Press the shutter button to save images to the SD card for testing purposes. Press DPAD_CENTER to trigger autofocus.</string>
   <string name="save_succeeded">Save succeeded</string>
   <string name="save_failed">Save failed - is the SD card installed?</string>
+
+  <string name="benchmark_name">ZXing Benchmark</string>
+  <string name="benchmark_help">Place images in /sdcard/zxingbenchmark, then check \"adb logcat\" for results. Turn on Airplane Mode first for more reliable results.</string>
+  <string name="benchmark_run">Run benchmark</string>
+  <string name="benchmark_running">Benchmark running...\u2026</string>
 </resources>

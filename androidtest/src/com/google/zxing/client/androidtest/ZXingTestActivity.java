@@ -32,14 +32,20 @@ public class ZXingTestActivity extends Activity {
 
     setContentView(R.layout.test);
 
+    Button test_camera = (Button) findViewById(R.id.test_camera);
+    test_camera.setOnClickListener(mTestCamera);
+
+    Button run_benchmark = (Button) findViewById(R.id.run_benchmark);
+    run_benchmark.setOnClickListener(mRunBenchmark);
+
     Button scan_product = (Button) findViewById(R.id.scan_product);
     scan_product.setOnClickListener(mScanProduct);
 
     Button scan_qr_code = (Button) findViewById(R.id.scan_qr_code);
     scan_qr_code.setOnClickListener(mScanQRCode);
 
-    Button test_camera = (Button) findViewById(R.id.test_camera);
-    test_camera.setOnClickListener(mTestCamera);
+    Button scan_anything = (Button) findViewById(R.id.scan_anything);
+    scan_anything.setOnClickListener(mScanAnything);
 
     Button search_book_contents = (Button) findViewById(R.id.search_book_contents);
     search_book_contents.setOnClickListener(mSearchBookContents);
@@ -66,6 +72,22 @@ public class ZXingTestActivity extends Activity {
     encode_bad_data.setOnClickListener(mEncodeBadData);
   }
 
+  public Button.OnClickListener mTestCamera = new Button.OnClickListener() {
+    public void onClick(View v) {
+      Intent intent = new Intent(Intent.ACTION_VIEW);
+      intent.setClassName(ZXingTestActivity.this, CameraTestActivity.class.getName());
+      startActivity(intent);
+    }
+  };
+
+  public Button.OnClickListener mRunBenchmark = new Button.OnClickListener() {
+    public void onClick(View v) {
+      Intent intent = new Intent(Intent.ACTION_VIEW);
+      intent.setClassName(ZXingTestActivity.this, BenchmarkActivity.class.getName());
+      startActivity(intent);
+    }
+  };
+
   public Button.OnClickListener mScanProduct = new Button.OnClickListener() {
     public void onClick(View v) {
       Intent intent = new Intent("com.google.zxing.client.android.SCAN");
@@ -82,11 +104,10 @@ public class ZXingTestActivity extends Activity {
     }
   };
 
-  public Button.OnClickListener mTestCamera = new Button.OnClickListener() {
+  public Button.OnClickListener mScanAnything = new Button.OnClickListener() {
     public void onClick(View v) {
-      Intent intent = new Intent(Intent.ACTION_VIEW);
-      intent.setClassName(ZXingTestActivity.this, CameraTestActivity.class.getName());
-      startActivity(intent);
+      Intent intent = new Intent("com.google.zxing.client.android.SCAN");
+      startActivityForResult(intent, 0);
     }
   };
 
