@@ -21,7 +21,7 @@
 	<key>CFBundleSignature</key>
 	<string>CBRU</string>
 	<key>CFBundleVersion</key>
-	<string>1.0</string>
+	<string>1.0.1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSMainNibFile</key>
