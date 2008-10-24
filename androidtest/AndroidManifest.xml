@@ -28,6 +28,8 @@
     <activity android:name="CameraTestActivity"
               android:screenOrientation="landscape">
     </activity>
+    <activity android:name="BenchmarkActivity"
+              android:label="@string/benchmark_name"/>
   </application>
   <uses-permission android:name="android.permission.CAMERA"/>
 </manifest>

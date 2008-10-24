@@ -20,6 +20,16 @@
              android:gravity="center_horizontal"
              android:padding="10px">
   <TableRow>
+    <Button android:id="@+id/test_camera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/test_camera"/>
+    <Button android:id="@+id/run_benchmark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/benchmark_run"/>
+  </TableRow>
+  <TableRow>
     <Button android:id="@+id/scan_product"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -30,10 +40,10 @@
             android:text="@string/scan_qr_code"/>
   </TableRow>
   <TableRow>
-    <Button android:id="@+id/test_camera"
+    <Button android:id="@+id/scan_anything"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/test_camera"/>
+            android:text="@string/scan_anything"/>
     <Button android:id="@+id/search_book_contents"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

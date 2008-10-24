@@ -15,8 +15,8 @@
  limitations under the License.
  -->
 <resources>
-  <!-- Messages IDs -->
   <item type="id" name="auto_focus"/>
+  <item type="id" name="benchmark_done"/>
   <item type="id" name="quit"/>
   <item type="id" name="save"/>
   <item type="id" name="save_succeeded"/>
