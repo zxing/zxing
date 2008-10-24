@@ -42,8 +42,8 @@ namespace reedsolomon {
   }
   
   GF256::GF256(int primitive) : 
-  exp_(256),
-  log_(256),
+  exp_((const int)0, 256),
+  log_((const int)0, 256),
   zero_(refPoly(*this, 0)),
   one_(refPoly(*this, 1)) {
     int x = 1;
