@@ -85,7 +85,7 @@ namespace qrcode {
                                                   int originalStateCountTotal) {
       
       int maxI = image_->getHeight();
-      valarray<int> stateCount(5);
+      valarray<int> stateCount((const int)0, 5);
       
       // Start counting up from center
       int i = startI;
@@ -152,7 +152,7 @@ namespace qrcode {
     {
       
       int maxJ = image_->getWidth();
-      valarray<int> stateCount(5);
+      valarray<int> stateCount((const int)0, 5);
       
       int j = startJ;
       while (j >= 0 && image_->isBlack(j, centerI)) {

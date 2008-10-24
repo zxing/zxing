@@ -48,7 +48,8 @@ namespace common {
     cout << "hey! don't use this BitArrayConstructor!\n";
   }
   
-  BitArray::BitArray(size_t size) : size_(size), bits_(wordsForBits(size)) { 
+  BitArray::BitArray(size_t size) :
+  size_(size), bits_((const unsigned int)0, wordsForBits(size)) { 
   }
   BitArray::~BitArray() { }
   size_t BitArray::getSize() { 

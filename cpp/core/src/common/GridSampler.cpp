@@ -45,7 +45,7 @@ namespace common {
       p1FromX, p1FromY, p2FromX, p2FromY, p3FromX, p3FromY, p4FromX, p4FromY));
     
     Ref<BitMatrix> bits(new BitMatrix(dimension));
-    valarray<float> points(dimension << 1);
+    valarray<float> points((const float)0.0f, dimension << 1);
     for (int i = 0; i < dimension; i++) {
       int max = points.size();
       float iValue = (float) i + 0.5f;

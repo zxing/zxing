@@ -50,7 +50,8 @@ namespace common {
   }
   
   BitMatrix::BitMatrix(size_t dimension) : 
-  dimension_(dimension), bits_(wordsForDimension(dimension)) { 
+  dimension_(dimension),
+  bits_((const unsigned int)0, wordsForDimension(dimension)) { 
   }
   
   BitMatrix::~BitMatrix() {
