@@ -19,58 +19,22 @@ package com.google.zxing.client.j2me;
 import javax.microedition.media.Controllable;
 
 /**
- * <p>This class encapsulates optional multimedia-related operations that the device
- * may support, like setting focus and zoom. This implementation itself will do nothing.
- * It will attempt to dynamically instantiate {@link com.google.zxing.client.j2me.AdvancedMultimediaManager}
- * which has methods that call JSR-234 APIs to actually set focus, zoom, etc. If successful,
- * this class will delegate to that implementation. But if the phone does not support these
- * APIs, instantiation will simply fail and this implementation will do nothing.</p>
- *
- * <p>Credit to Paul Hackenberger for the nice workaround</p>
+ * <p>Dummy implemenation which does nothing. This is suitable for non-JSR-234 phones.</p>
  *
  * @author Sean Owen (srowen@google.com)
- * @author Paul Hackenberger
  */
-class DefaultMultimediaManager implements MultimediaManager {
-
-  private MultimediaManager advancedMultimediaManager;
+final class DefaultMultimediaManager implements MultimediaManager {
 
   DefaultMultimediaManager() {
-    // Having issues with non-JSR-234 phones not accepting the build? then try commenting out from here:
-    try {
-      advancedMultimediaManager = (MultimediaManager)
-          Class.forName("com.google.zxing.client.j2me.AdvancedMultimediaManager").newInstance();
-    } catch (ClassNotFoundException cnfe) {
-      // continue
-    } catch (IllegalAccessException iae) {
-      // continue
-    } catch (InstantiationException ie) {
-      // continue
-    } catch (NoClassDefFoundError ncdfe) {
-      // continue
-    }
-    // to here. Then add this line:
-    // advancedMultimediaManager = null;
-    // You may also need to delete the class AdvancedMultimediaManager in this package to be completely free
-    // of JSR-234 references.
   }
 
   public void setFocus(Controllable player) {
-    if (advancedMultimediaManager != null) {
-      advancedMultimediaManager.setFocus(player);
-    }
   }
 
   public void setZoom(Controllable player) {
-    if (advancedMultimediaManager != null) {
-      advancedMultimediaManager.setZoom(player);
-    }
   }
 
   public void setExposure(Controllable player) {
-    if (advancedMultimediaManager != null) {
-      advancedMultimediaManager.setExposure(player);
-    }
   }
 
 }

@@ -69,7 +69,9 @@ public final class ZXingMIDlet extends MIDlet {
     try {
       player = createPlayer();
       player.realize();
-      MultimediaManager multimediaManager = new DefaultMultimediaManager();
+      MultimediaManager multimediaManager = new AdvancedMultimediaManager();
+      // Comment line above / uncomment below to make the basic version
+      //MultimediaManager multimediaManager = new DefaultMultimediaManager();
       multimediaManager.setZoom(player);
       multimediaManager.setExposure(player);
       videoControl = (VideoControl) player.getControl("VideoControl");
