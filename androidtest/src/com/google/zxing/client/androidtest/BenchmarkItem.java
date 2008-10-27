@@ -28,14 +28,13 @@ public class BenchmarkItem {
 
   public BenchmarkItem(String path, int runs) {
     mPath = path;
+    assert(runs > 0);
     mTimes = new int[runs];
     mPosition = 0;
     mDecoded = false;
     mFormat = null;
   }
 
-  // I'm storing these separately instead of as a running total so I can add features like
-  // calculating the min and max later, or ignoring outliers.
   public void addResult(int milliseconds) {
     mTimes[mPosition] = milliseconds;
     mPosition++;
@@ -49,33 +48,45 @@ public class BenchmarkItem {
     mFormat = format;
   }
 
-  public String getPath() {
-    return mPath;
+  @Override
+  public String toString() {
+    StringBuffer result = new StringBuffer();
+    result.append(mDecoded ? ("DECODED " + mFormat.toString() + ": ") : "FAILED: ");
+    result.append(mPath);
+    result.append(" (");
+    result.append(getAverageTime());
+    result.append(" ms average)\n  ");
+    int size = mTimes.length;
+    for (int x = 0; x < size; x++) {
+      result.append(mTimes[x]);
+      result.append(" ");
+    }
+    return result.toString();
   }
 
-  public int getAverageMilliseconds() {
+  /**
+   * Calculates the average time but throws out the maximum as an outlier first.
+   *
+   * @return The average decoding time in milliseconds.
+   */
+  private int getAverageTime() {
     int size = mTimes.length;
     int total = 0;
+    int max = mTimes[0];
     for (int x = 0; x < size; x++) {
-      total += mTimes[x];
+      int time = mTimes[x];
+      total += time;
+      if (time > max) {
+        max = time;
+      }
     }
+    total -= max;
+    size--;
     if (size > 0) {
       return total / size;
     } else {
       return 0;
     }
-  }
-
-  public int getCount() {
-    return mTimes.length;
-  }
-
-  public boolean getDecoded() {
-    return mDecoded;
-  }
-
-  public BarcodeFormat getFormat() {
-    return mFormat;
   }
 
 }

@@ -16,6 +16,7 @@
 
 package com.google.zxing.client.androidtest;
 
+import android.os.Debug;
 import android.os.Message;
 import android.util.Log;
 import com.google.zxing.MultiFormatReader;
@@ -24,7 +25,7 @@ import com.google.zxing.Result;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Date;
+import java.util.Arrays;
 import java.util.Vector;
 
 final class BenchmarkThread extends Thread {
@@ -45,6 +46,8 @@ final class BenchmarkThread extends Thread {
   public void run() {
     mMultiFormatReader = new MultiFormatReader();
     mMultiFormatReader.setHints(null);
+    // Try to get in a known state before starting the benchmark
+    System.gc();
 
     Vector<BenchmarkItem> items = new Vector<BenchmarkItem>();
     walkTree(mPath, items);
@@ -58,6 +61,7 @@ final class BenchmarkThread extends Thread {
     File file = new File(path);
     if (file.isDirectory()) {
       String[] files = file.list();
+      Arrays.sort(files);
       for (int x = 0; x < files.length; x++) {
         walkTree(file.getAbsolutePath() + "/" + files[x], items);
       }
@@ -80,21 +84,23 @@ final class BenchmarkThread extends Thread {
 
     BenchmarkItem item = new BenchmarkItem(path, RUNS);
     for (int x = 0; x < RUNS; x++) {
-      Date startDate = new Date();
       boolean success;
       Result result = null;
+      // Using this call instead of getting the time should eliminate a lot of variability due to
+      // scheduling and what else is happening in the system.
+      long now = Debug.threadCpuTimeNanos();
       try {
         result = mMultiFormatReader.decodeWithState(source);
         success = true;
       } catch (ReaderException e) {
         success = false;
       }
-      Date endDate = new Date();
+      now = Debug.threadCpuTimeNanos() - now;
       if (x == 0) {
         item.setDecoded(success);
         item.setFormat(result != null ? result.getBarcodeFormat() : null);
       }
-      item.addResult((int) (endDate.getTime() - startDate.getTime()));
+      item.addResult((int) (now / 1000));
     }
     return item;
   }
