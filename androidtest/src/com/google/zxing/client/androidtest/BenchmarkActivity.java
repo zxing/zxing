@@ -24,7 +24,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import com.google.zxing.BarcodeFormat;
 
 import java.util.Vector;
 
@@ -82,11 +81,7 @@ public class BenchmarkActivity extends Activity {
     for (int x = 0; x < items.size(); x++) {
       BenchmarkItem item = items.get(x);
       if (item != null) {
-        BarcodeFormat format = item.getFormat();
-        Log.v(TAG, (item.getDecoded() ? "DECODED: " : "FAILED: ") + item.getPath());
-        Log.v(TAG, "  Ran " + item.getCount() + " tests on " +
-            (format != null ? format.toString() : "unknown") + " format with an average of " +
-            item.getAverageMilliseconds() + " ms");
+        Log.v(TAG, item.toString());
         count++;
       }
     }
