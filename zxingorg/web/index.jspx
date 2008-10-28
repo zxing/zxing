@@ -32,6 +32,9 @@
         <a href="BarcodeReader.jad">Download</a> the ZXing Barcode Reader for J2ME.
       </p>
       <p>
+        (<a href="basic/BarcodeReader.jad">Download</a> the alternate "basic" version for J2ME.)
+      </p>
+      <p>
         <a href="BarcodeScanner.apk">Download</a> the Android client.
       </p>
       <p>Copyright 2008 ZXing authors</p>
