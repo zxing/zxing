@@ -209,10 +209,10 @@ public final class Version {
    * parameters is used consecutively in the QR code version's format.</p>
    */
   static final class ECB {
-    private final int count;
-    private final int dataCodewords;
+    final int count;
+    final int dataCodewords;
 
-    private ECB(int count, int dataCodewords) {
+    ECB(int count, int dataCodewords) {
       this.count = count;
       this.dataCodewords = dataCodewords;
     }
