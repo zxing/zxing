@@ -121,6 +121,7 @@
       <arg value="-overloadaggressively"/>
       <arg value="-allowaccessmodification"/>
       <arg value="-verbose"/>
+      <arg value="-dump proguard-dump.txt"/>
     </java>
     <delete file="temp.jar"/>
 
@@ -157,6 +158,7 @@
     <delete dir="." includes="*.jar"/>
     <delete dir="." includes="*.jad"/>
     <delete file="src/com/google/zxing/client/j2me/MANIFEST.MF"/>
+    <delete file="proguard-dump.txt"/>
   </target>
 
 </project>
