@@ -23,8 +23,12 @@ package com.google.zxing.common;
  */
 public final class BitArray {
 
-  private int[] bits;
-  private final int size;
+  // TODO: I have changed these members to be public so ProGuard can inline get() and set(). Ideally
+  // they'd be private and we'd use the -allowaccessmodification flag, but Dalvik rejects the
+  // resulting binary at runtime on Android. If we find a solution to this, these should be changed
+  // back to private.
+  public int[] bits;
+  public final int size;
 
   public BitArray(int size) {
     if (size < 1) {
