@@ -192,7 +192,6 @@ limitations under the License.
       <arg value="-keep class com.google.zxing.client.android.*Activity"/>
       <arg value="-target 5"/>
       <arg value="-optimizationpasses 7"/>
-      <arg value="-allowaccessmodification"/>
       <arg value="-dontshrink"/>
       <arg value="-dontobfuscate"/>
       <arg value="-dontskipnonpubliclibraryclasses"/>
