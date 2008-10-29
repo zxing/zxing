@@ -1,4 +1,4 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 Copyright (C) 2008 ZXing authors
 
@@ -160,6 +160,50 @@ limitations under the License.
     </javac>
   </target>
 
+  <target name="compile-release" depends="dirs, resource-src, aidl">
+    <javac encoding="ascii" target="1.5" debug="off" extdirs=""
+           srcdir="."
+           destdir="${outdir-classes}"
+           bootclasspath="${android-jar}">
+      <classpath>
+        <fileset dir="${external-libs}" includes="*.jar"/>
+      </classpath>
+    </javac>
+  </target>
+
+  <target name="optimize" depends="compile-release">
+    <fail message="Please put proguard.jar in 'bin' under the WTK install directory">
+      <condition>
+        <not>
+          <available file="${WTK-home}/bin/proguard.jar" type="file"/>
+        </not>
+      </condition>
+    </fail>
+    <unzip src="../core/core.jar" dest="${outdir-classes}" overwrite="true"/>
+    <jar jarfile="temp.jar" basedir="${outdir-classes}"/>
+    <delete dir="${outdir-classes}"/>
+    <mkdir dir="${outdir-classes}"/>
+    <java jar="${WTK-home}/bin/proguard.jar" fork="true" failonerror="true">
+      <jvmarg value="-Dmaximum.inlined.code.length=32"/>
+      <arg value="-injars temp.jar"/>
+      <arg value="-outjars temp-optimized.jar"/>
+      <arg value="-libraryjars ${android-jar}"/>
+      <arg value="-keepattributes Exceptions,InnerClasses,Signature,!LocalVariableTable,!LocalVariableTypeTable"/>
+      <arg value="-keep class com.google.zxing.client.android.*Activity"/>
+      <arg value="-target 5"/>
+      <arg value="-optimizationpasses 7"/>
+      <arg value="-allowaccessmodification"/>
+      <arg value="-dontshrink"/>
+      <arg value="-dontobfuscate"/>
+      <arg value="-dontskipnonpubliclibraryclasses"/>
+      <arg value="-verbose"/>
+      <arg value="-dump proguard-dump.txt"/>
+    </java>
+    <delete file="temp.jar"/>
+    <unzip src="temp-optimized.jar" dest="${outdir-classes}" overwrite="true"/>
+    <delete file="temp-optimized.jar"/>
+  </target>
+
   <!-- Convert this project's .class files into .dex files. -->
   <target name="dex" depends="compile">
     <echo>Converting compiled files and external libraries into ${outdir}/${dex-file}...</echo>
@@ -168,6 +212,17 @@ limitations under the License.
       <arg value="--output=${intermediate-dex-ospath}" />
       <arg path="${outdir-classes-ospath}" />
       <fileset dir="${external-libs}" includes="*.jar"/>
+    </apply>
+  </target>
+
+  <target name="dex-optimized" depends="compile-release,optimize">
+    <echo>Converting compiled files and external libraries into ${outdir}/${dex-file}...</echo>
+    <apply executable="${dx}" failonerror="true" parallel="true">
+      <arg value="--dex" />
+      <arg value="--output=${intermediate-dex-ospath}" />
+      <arg path="${outdir-classes-ospath}" />
+      <!-- workaround to appease 'apply'. Not really the right Ant task to use here. -->
+      <fileset dir="." includes="nosuchfile.jar"/>
     </apply>
   </target>
 
@@ -238,7 +293,7 @@ only when the assets dir exists. -->
 
   <!-- Package the application without signing it.
         This allows for the application to be signed later with an official publishing key. -->
-  <target name="release" depends="dex, package-res">
+  <target name="release" depends="dex-optimized, package-res">
     <echo>Packaging ${out-unsigned-package} for release...</echo>
     <exec executable="${apk-builder}" failonerror="true">
       <arg value="${out-unsigned-package-ospath}" />
@@ -249,8 +304,6 @@ only when the assets dir exists. -->
       <arg value="${intermediate-dex-ospath}" />
       <arg value="-rf" />
       <arg value="${srcdir-ospath}" />
-      <arg value="-rj" />
-      <arg value="${external-libs-ospath}" />
     </exec>
     <echo>It will need to be signed with jarsigner before being published.</echo>
   </target>
@@ -284,6 +337,7 @@ only when the assets dir exists. -->
 
   <target name="clean">
     <delete dir="${outdir}"/>
+    <delete file="proguard-dump.txt"/>
   </target>
 
 </project>

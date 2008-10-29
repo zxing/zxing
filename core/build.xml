@@ -87,19 +87,9 @@
       <arg value="-dontobfuscate"/>
       <arg value="-optimizationpasses 7"/>
       <arg value="-verbose"/>
+      <arg value="-dump proguard-dump.txt"/>        
     </java>
     <delete file="temp.jar"/>
-  </target>
-
-  <target name="dump">
-    <java jar="${WTK-home}/bin/proguard.jar" fork="true">
-      <arg value="-injars core.jar"/>
-      <arg value="-libraryjars ${WTK-home}/lib/cldcapi11.jar"/>
-      <arg value="-dontshrink"/>
-      <arg value="-dontobfuscate"/>
-      <arg value="-dontoptimize"/>
-      <arg value="-dump dump.txt"/>
-    </java>
   </target>
 
   <target name="build-test" depends="init,build">
@@ -188,6 +178,7 @@
     <delete dir="build-test"/>
     <delete file="core.jar"/>
     <delete file="ZXingReader.*"/>
+    <delete file="proguard-dump.txt"/>
   </target>
 
 </project>
