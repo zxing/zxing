@@ -149,7 +149,7 @@ limitations under the License.
   </target>
 
   <!-- Compile this project's .java files into .class files. -->
-  <target name="compile" depends="dirs, resource-src, aidl">
+  <target name="compile" depends="clean, dirs, resource-src, aidl">
     <javac encoding="ascii" target="1.5" debug="true" extdirs=""
            srcdir="."
            destdir="${outdir-classes}"
@@ -160,7 +160,7 @@ limitations under the License.
     </javac>
   </target>
 
-  <target name="compile-release" depends="dirs, resource-src, aidl">
+  <target name="compile-release" depends="clean, dirs, resource-src, aidl">
     <javac encoding="ascii" target="1.5" debug="off" extdirs=""
            srcdir="."
            destdir="${outdir-classes}"
@@ -325,7 +325,7 @@ only when the assets dir exists. -->
   </target>
 
   <!-- Install the package on the default emulator -->
-  <target name="install" depends="debug">
+  <target name="install">
     <echo>Installing ${out-debug-package} onto default emulator...</echo>
     <exec executable="${adb}" failonerror="true">
       <arg value="install" />
@@ -333,7 +333,7 @@ only when the assets dir exists. -->
     </exec>
   </target>
 
-  <target name="reinstall" depends="debug">
+  <target name="reinstall">
     <echo>Installing ${out-debug-package} onto default emulator...</echo>
     <exec executable="${adb}" failonerror="true">
       <arg value="install" />

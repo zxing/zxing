@@ -41,6 +41,7 @@
     <ant dir="javase" target="clean"/>
     <ant dir="bug" target="clean"/>    
     <ant dir="android" target="clean"/>
+    <ant dir="androidtest" target="clean"/>
     <ant dir="rim" target="clean"/>
     <ant dir="zxingorg" target="clean"/>
     <delete dir="docs/javadoc"/>
