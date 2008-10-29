@@ -291,6 +291,22 @@ only when the assets dir exists. -->
     </exec>
   </target>
 
+  <!-- Package the optimized application and sign it with a debug key. -->
+  <target name="debug-optimized" depends="dex-optimized, package-res">
+    <echo>Packaging ${out-debug-package}, and signing it with a debug key...</echo>
+    <exec executable="${apk-builder}" failonerror="true">
+      <arg value="${out-debug-package-ospath}" />
+      <arg value="-z" />
+      <arg value="${resources-package-ospath}" />
+      <arg value="-f" />
+      <arg value="${intermediate-dex-ospath}" />
+      <arg value="-rf" />
+      <arg value="${srcdir-ospath}" />
+      <arg value="-rj" />
+      <arg value="${external-libs-ospath}" />
+    </exec>
+  </target>
+
   <!-- Package the application without signing it.
         This allows for the application to be signed later with an official publishing key. -->
   <target name="release" depends="dex-optimized, package-res">

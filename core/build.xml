@@ -63,33 +63,12 @@
     </antcall>
   </target>
 
+  <!-- This target is needed for building a core.jar which the Android client can use and run
+       ProGuard on successfully, because dx doesn't like debugging info. -->
   <target name="build-no-debug" depends="clean">
     <antcall target="compile">
       <param name="generate-debug" value="false"/>
     </antcall>
-  </target>
-
-  <!-- This target really supports the Android client, where we can't as easily build
-       an optimized .apk directly, and need an optimized library. We have to strip debug info
-       above to appease dex -->
-  <target name="build-optimized" depends="build-no-debug">
-    <move file="core.jar" tofile="temp.jar"/>
-    <java jar="${WTK-home}/bin/proguard.jar" fork="true" failonerror="true">
-      <jvmarg value="-Dmaximum.inlined.code.length=32"/>
-      <arg value="-injars temp.jar"/>
-      <arg value="-outjars core.jar"/>
-      <arg value="-libraryjars ${WTK-home}/lib/cldcapi11.jar"/>
-      <arg value="-keepattributes Exceptions,InnerClasses,Signature,!LocalVariableTable,!LocalVariableTypeTable"/>
-      <arg value="-keep public class com.google.zxing.* { public protected *; }"/>
-      <arg value="-keep public class com.google.zxing.client.result.* { public protected *; }"/>
-      <arg value="-keep public class com.google.zxing.common.* { public protected *; }"/>
-      <arg value="-dontshrink"/>
-      <arg value="-dontobfuscate"/>
-      <arg value="-optimizationpasses 7"/>
-      <arg value="-verbose"/>
-      <arg value="-dump proguard-dump.txt"/>        
-    </java>
-    <delete file="temp.jar"/>
   </target>
 
   <target name="build-test" depends="init,build">
