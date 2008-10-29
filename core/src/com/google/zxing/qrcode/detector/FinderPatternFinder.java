@@ -96,7 +96,9 @@ final class FinderPatternFinder {
               if (foundPatternCross(stateCount)) { // Yes
                 boolean confirmed = handlePossibleCenter(stateCount, i, j);
                 if (confirmed) {
-                  iSkip = 1; // Go back to examining each line
+                  // Start examining every other line. Checking each line turned out to be too
+                  // expensive and didn't improve performance.
+                  iSkip = 2;
                   if (hasSkipped) {
                     done = haveMulitplyConfirmedCenters();
                   } else {
