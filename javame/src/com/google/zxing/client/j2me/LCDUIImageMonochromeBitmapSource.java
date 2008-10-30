@@ -30,22 +30,13 @@ public final class LCDUIImageMonochromeBitmapSource extends BaseMonochromeBitmap
   private final Image image;
   private final int height;
   private final int width;
-  // For why this isn't final, see below
-  private int[] rgbRow;
-  private int[] rgbColumn;
   private final int[] pixelHolder;
-  private int cachedRow;
-  private int cachedColumn;
 
   public LCDUIImageMonochromeBitmapSource(Image image) {
     this.image = image;
     height = image.getHeight();
     width = image.getWidth();
-    rgbRow = new int[width];
-    rgbColumn = new int[height];
     pixelHolder = new int[1];
-    cachedRow = -1;
-    cachedColumn = -1;
   }
 
   public int getHeight() {
@@ -56,21 +47,10 @@ public final class LCDUIImageMonochromeBitmapSource extends BaseMonochromeBitmap
     return width;
   }
 
-  public int getLuminance(int x, int y) {
-
-    // Below, why the check for rgbRow being the right size? it should never change size
-    // or need to be reallocated. But bizarrely we have seen a but on Sun's WTK, and on
-    // some phones, where the array becomes zero-sized somehow. So we keep making sure the
-    // array is OK.
-    int pixel;
-    if (cachedRow == y && rgbRow.length == width) {
-      pixel = rgbRow[x];
-    } else if (cachedColumn == x && rgbColumn.length == height) {
-      pixel = rgbColumn[y];
-    } else {
-      image.getRGB(pixelHolder, 0, width, x, y, 1, 1);
-      pixel = pixelHolder[0];
-    }
+  // This is expensive and should be used very sparingly.
+  protected int getLuminance(int x, int y) {
+    image.getRGB(pixelHolder, 0, width, x, y, 1, 1);
+    int pixel = pixelHolder[0];
 
     // Instead of multiplying by 306, 601, 117, we multiply by 256, 512, 256, so that
     // the multiplies can be implemented as shifts.
@@ -89,25 +69,33 @@ public final class LCDUIImageMonochromeBitmapSource extends BaseMonochromeBitmap
              (pixel & 0x000000FF       )) >> 2;
   }
 
-  public void cacheRowForLuminance(int y) {
-    if (y != cachedRow) {
-      // See explanation above
-      if (rgbRow.length != width) {
-        rgbRow = new int[width];
-      }
-      image.getRGB(rgbRow, 0, width, 0, y, width, 1);
-      cachedRow = y;
+  // For efficiency, the RGB data and the luminance data share the same array.
+  protected int[] getLuminanceRow(int y, int[] row) {
+    if (row == null || row.length < width) {
+      row = new int[width];
     }
+    image.getRGB(row, 0, width, 0, y, width, 1);
+    for (int x = 0; x < width; x++) {
+      int pixel = row[x];
+      row[x] = (((pixel & 0x00FF0000) >> 16) +
+                ((pixel & 0x0000FF00) >>  7) +
+                 (pixel & 0x000000FF       )) >> 2;
+    }
+    return row;
   }
 
-  public void cacheColumnForLuminance(int x) {
-    if (x != cachedColumn) {
-      if (rgbColumn.length != height) {
-        rgbColumn = new int[height];
-      }
-      image.getRGB(rgbColumn, 0, 1, x, 0, 1, height);
-      cachedColumn = x;
+  protected int[] getLuminanceColumn(int x, int[] column) {
+    if (column == null || column.length < height) {
+      column = new int[height];
     }
+    image.getRGB(column, 0, 1, x, 0, 1, height);
+    for (int y = 0; y < height; y++) {
+      int pixel = column[y];
+      column[y] = (((pixel & 0x00FF0000) >> 16) +
+                   ((pixel & 0x0000FF00) >>  7) +
+                    (pixel & 0x000000FF       )) >> 2;
+    }
+    return column;
   }
 
 }

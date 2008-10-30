@@ -63,19 +63,40 @@ public final class AWTImageMonochromeBitmapSource extends BaseMonochromeBitmapSo
    * See <code>com.google.zxing.client.j2me.LCDUIImageMonochromeBitmapSource</code> for more explanation
    * of the computation used in this method.
    */
-  public int getLuminance(int x, int y) {
-    int pixel = pixels[x * width + y];
+  protected int getLuminance(int x, int y) {
+    int pixel = pixels[y * width + x];
     return (((pixel & 0x00FF0000) >> 16) +
             ((pixel & 0x0000FF00) >>  7) +
              (pixel & 0x000000FF       )) >> 2;
   }
 
-  public void cacheRowForLuminance(int y) {
-    // do nothing; we are already forced to cache all pixels
+  protected int[] getLuminanceRow(int y, int[] row) {
+    if (row == null || row.length < width) {
+      row = new int[width];
+    }
+    int offset = y * width;
+    for (int x = 0; x < width; x++) {
+      int pixel = pixels[offset + x];
+      row[x] = (((pixel & 0x00FF0000) >> 16) +
+                ((pixel & 0x0000FF00) >>  7) +
+                 (pixel & 0x000000FF       )) >> 2;
+    }
+    return row;
   }
 
-  public void cacheColumnForLuminance(int x) {
-    // do nothing
+  protected int[] getLuminanceColumn(int x, int[] column) {
+    if (column == null || column.length < height) {
+      column = new int[height];
+    }
+    int offset = x;
+    for (int y = 0; y < height; y++) {
+      int pixel = pixels[offset];
+      column[y] = (((pixel & 0x00FF0000) >> 16) +
+                   ((pixel & 0x0000FF00) >>  7) +
+                    (pixel & 0x000000FF       )) >> 2;
+      offset += width;
+    }
+    return column;
   }
 
 }
