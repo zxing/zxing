@@ -35,6 +35,10 @@ public final class CalendarParsedResult extends ParsedResult {
                               String attendee,
                               String title) {
     super(ParsedResultType.CALENDAR);
+    // Start is required, end is not
+    if (start == null) {
+      throw new IllegalArgumentException();
+    }
     validateDate(start);
     validateDate(end);
     this.summary = summary;
