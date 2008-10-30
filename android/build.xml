@@ -14,7 +14,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<project name="BarcodeScanner" default="debug">
+<project name="BarcodeScanner" default="debug-optimized">
   <!-- SDK Locations -->
   <property file="../build.properties"/>
   <property name="sdk-folder" value="${android-home}"/>
@@ -188,8 +188,8 @@ limitations under the License.
       <arg value="-injars temp.jar"/>
       <arg value="-outjars temp-optimized.jar"/>
       <arg value="-libraryjars ${android-jar}"/>
-      <arg value="-keepattributes Exceptions,InnerClasses,Signature,!LocalVariableTable,!LocalVariableTypeTable"/>
       <arg value="-keep class com.google.zxing.client.android.*Activity"/>
+      <arg value="-keep class com.google.zxing.client.android.ViewfinderView { public * ; }"/>
       <arg value="-target 5"/>
       <arg value="-optimizationpasses 7"/>
       <arg value="-dontshrink"/>
