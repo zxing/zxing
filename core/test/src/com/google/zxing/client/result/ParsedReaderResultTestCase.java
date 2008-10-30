@@ -142,6 +142,9 @@ public final class ParsedReaderResultTestCase extends TestCase {
     doTestResult("BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504\r\nEND:VEVENT",
         ParsedResultType.CALENDAR);
     doTestResult("BEGIN:VEVENT\r\nDTEND:20080505T\r\nEND:VEVENT", ParsedResultType.TEXT);
+    // Make sure illegal entries without newlines don't crash
+    doTestResult("BEGIN:VEVENTSUMMARY:EventDTSTART:20081030T122030ZDTEND:20081030T132030ZEND:VEVENT",
+        ParsedResultType.URI);
     doTestResult("BEGIN:VEVENT", ParsedResultType.URI); // See above note on why this is URI
   }
 
