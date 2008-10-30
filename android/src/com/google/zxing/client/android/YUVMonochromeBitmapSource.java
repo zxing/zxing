@@ -63,17 +63,33 @@ final class YUVMonochromeBitmapSource extends BaseMonochromeBitmapSource {
    * @param y The y coordinate to fetch within crop
    * @return The luminance as an int, from 0-255
    */
-  public int getLuminance(int x, int y) {
+  protected int getLuminance(int x, int y) {
     return mYUVData[(y + mCrop.top) * mDataWidth + x + mCrop.left] & 0xff;
   }
 
-  // Nothing to do, since we have direct access to the mYUVData array.
-  public void cacheRowForLuminance(int y) {
-
+  protected int[] getLuminanceRow(int y, int[] row) {
+    int width = getWidth();
+    if (row == null || row.length < width) {
+      row = new int[width];
+    }
+    int offset = (y + mCrop.top) * mDataWidth + mCrop.left;
+    for (int x = 0; x < width; x++) {
+      row[x] = mYUVData[offset + x] & 0xff;
+    }
+    return row;
   }
 
-  public void cacheColumnForLuminance(int x) {
-
+  protected int[] getLuminanceColumn(int x, int[] column) {
+    int height = getHeight();
+    if (column == null || column.length < height) {
+      column = new int[height];
+    }
+    int offset = mCrop.top * mDataWidth + mCrop.left + x;
+    for (int y = 0; y < height; y++) {
+      column[y] = mYUVData[offset] & 0xff;
+      offset += mDataWidth;
+    }
+    return column;
   }
 
   /**

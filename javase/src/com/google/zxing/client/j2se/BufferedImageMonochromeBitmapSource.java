@@ -42,10 +42,6 @@ public final class BufferedImageMonochromeBitmapSource extends BaseMonochromeBit
   private final int top;
   private final int width;
   private final int height;
-  private int[] rgbRow;
-  private int[] rgbColumn;
-  private int cachedRow;
-  private int cachedColumn;
 
   /**
    * Creates an instance that uses the entire given image as a source of pixels to decode.
@@ -54,8 +50,6 @@ public final class BufferedImageMonochromeBitmapSource extends BaseMonochromeBit
    */
   public BufferedImageMonochromeBitmapSource(BufferedImage image) {
     this(image, 0, 0, image.getWidth(), image.getHeight());
-    rgbRow = new int[image.getWidth()];
-    cachedRow = -1;
   }
 
   /**
@@ -79,10 +73,6 @@ public final class BufferedImageMonochromeBitmapSource extends BaseMonochromeBit
     this.top = top;
     this.width = right - left;
     this.height = bottom - top;
-    rgbRow = new int[width];
-    rgbColumn = new int[height];
-    cachedRow = -1;
-    cachedColumn = -1;
   }
 
   /**
@@ -136,34 +126,40 @@ public final class BufferedImageMonochromeBitmapSource extends BaseMonochromeBit
    *
    * where R, G, and B are values in [0,1].
    */
-  public int getLuminance(int x, int y) {
-    int pixel;
-    if (cachedRow == y) {
-      pixel = rgbRow[x];
-    } else if (cachedColumn == x) {
-      pixel = rgbColumn[y];
-    } else {
-      pixel = image.getRGB(left + x, top + y);
-    }
-
+  protected int getLuminance(int x, int y) {
+    int pixel = image.getRGB(left + x, top + y);
     // Coefficients add up to 1024 to make the divide into a fast shift
     return (306 * ((pixel >> 16) & 0xFF) +
         601 * ((pixel >> 8) & 0xFF) +
         117 * (pixel & 0xFF)) >> 10;
   }
 
-  public void cacheRowForLuminance(int y) {
-    if (y != cachedRow) {
-      image.getRGB(left, top + y, width, 1, rgbRow, 0, width);
-      cachedRow = y;
+  protected int[] getLuminanceRow(int y, int[] row) {
+    if (row == null || row.length < width) {
+      row = new int[width];
     }
+    image.getRGB(left, top + y, width, 1, row, 0, width);
+    for (int x = 0; x < width; x++) {
+      int pixel = row[x];
+      row[x] = (306 * ((pixel >> 16) & 0xFF) +
+          601 * ((pixel >> 8) & 0xFF) +
+          117 * (pixel & 0xFF)) >> 10;
+    }
+    return row;
   }
 
-  public void cacheColumnForLuminance(int x) {
-    if (x != cachedColumn) {
-      image.getRGB(left + x, top, 1, height, rgbColumn, 0, 1);
-      cachedColumn = x;
+  protected int[] getLuminanceColumn(int x, int[] column) {
+    if (column == null || column.length < height) {
+      column = new int[height];
     }
+    image.getRGB(left + x, top, 1, height, column, 0, 1);
+    for (int y = 0; y < height; y++) {
+      int pixel = column[y];
+      column[y] = (306 * ((pixel >> 16) & 0xFF) +
+          601 * ((pixel >> 8) & 0xFF) +
+          117 * (pixel & 0xFF)) >> 10;
+    }
+    return column;
   }
 
 }

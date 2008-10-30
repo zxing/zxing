@@ -70,16 +70,34 @@ public class RGBMonochromeBitmapSource extends BaseMonochromeBitmapSource {
     return mWidth;
   }
 
-  public int getLuminance(int x, int y) {
+  protected int getLuminance(int x, int y) {
     return mLuminances[y * mWidth + x] & 0xff;
   }
 
-  public void cacheRowForLuminance(int y) {
-
+  protected int[] getLuminanceRow(int y, int[] row) {
+    int width = mWidth;
+    if (row == null || row.length < width) {
+      row = new int[width];
+    }
+    int offset = y * width;
+    for (int x = 0; x < width; x++) {
+      row[x] = mLuminances[offset + x] & 0xff;
+    }
+    return row;
   }
 
-  public void cacheColumnForLuminance(int x) {
-
+  protected int[] getLuminanceColumn(int x, int[] column) {
+    int width = mWidth;
+    int height = mHeight;
+    if (column == null || column.length < height) {
+      column = new int[height];
+    }
+    int offset = x;
+    for (int y = 0; y < height; y++) {
+      column[y] = mLuminances[offset] & 0xff;
+      offset += width;
+    }
+    return column;
   }
 
 }
