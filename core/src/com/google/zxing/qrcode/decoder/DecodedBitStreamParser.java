@@ -63,7 +63,7 @@ final class DecodedBitStreamParser {
     Mode mode;
     do {
       // While still another segment to read...
-      if (bits.available() == 0) {
+      if (bits.available() < 4) {
         // OK, assume we're done. Really, a TERMINATOR mode should have been recorded here
         mode = Mode.TERMINATOR;
       } else {
