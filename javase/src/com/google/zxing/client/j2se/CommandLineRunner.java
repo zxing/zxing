@@ -25,8 +25,9 @@ import com.google.zxing.Result;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.URI;
 import java.util.Hashtable;
 
@@ -45,10 +46,13 @@ public final class CommandLineRunner {
 
   public static void main(String[] args) throws Exception {
     Hashtable<DecodeHintType, Object> hints = null;
+    boolean dumpResults = false;
     for (String arg : args) {
       if ("--try_harder".equals(arg)) {
         hints = new Hashtable<DecodeHintType, Object>(3);
         hints.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
+      } else if ("--dump_results".equals(arg)) {
+        dumpResults = true;
       } else if (arg.startsWith("--")) {
         System.out.println("Unknown command line option " + arg);
         return;
@@ -56,13 +60,14 @@ public final class CommandLineRunner {
     }
     for (String arg : args) {
       if (!arg.startsWith("--")) {
-        decodeOneArgument(arg, hints);
+        decodeOneArgument(arg, hints, dumpResults);
       }
     }
   }
 
-  private static void decodeOneArgument(String argument, Hashtable<DecodeHintType, Object> hints)
-      throws Exception {
+  private static void decodeOneArgument(String argument, Hashtable<DecodeHintType, Object> hints,
+      boolean dumpResults) throws Exception {
+
     File inputFile = new File(argument);
     if (inputFile.exists()) {
       if (inputFile.isDirectory()) {
@@ -74,8 +79,21 @@ public final class CommandLineRunner {
           if (filename.startsWith(".") || filename.endsWith(".txt")) {
             continue;
           }
-          if (decode(input.toURI(), hints)) {
+          Result result = decode(input.toURI(), hints);
+          if (result != null) {
             successful++;
+            if (dumpResults) {
+              String name = input.getAbsolutePath();
+              int pos = name.lastIndexOf('.');
+              if (pos > 0) {
+                name = name.substring(0, pos);
+              }
+              File dump = new File(name + ".txt");
+              dump.createNewFile();
+              FileOutputStream stream = new FileOutputStream(dump);
+              stream.write(result.getText().getBytes());
+              stream.close();
+            }
           }
           total++;
         }
@@ -89,7 +107,7 @@ public final class CommandLineRunner {
     }
   }
 
-  private static boolean decode(URI uri, Hashtable<DecodeHintType, Object> hints) throws IOException {
+  private static Result decode(URI uri, Hashtable<DecodeHintType, Object> hints) throws IOException {
     BufferedImage image;
     try {
       image = ImageIO.read(uri.toURL());
@@ -98,17 +116,17 @@ public final class CommandLineRunner {
     }
     if (image == null) {
       System.err.println(uri.toString() + ": Could not load image");
-      return false;
+      return null;
     }
     try {
       MonochromeBitmapSource source = new BufferedImageMonochromeBitmapSource(image);
       Result result = new MultiFormatReader().decode(source, hints);
       System.out.println(uri.toString() + " (format: " + result.getBarcodeFormat() + "):\n" +
           result.getText());
-      return true;
+      return result;
     } catch (ReaderException e) {
       System.out.println(uri.toString() + ": No barcode found");
-      return false;
+      return null;
     }
   }
 
