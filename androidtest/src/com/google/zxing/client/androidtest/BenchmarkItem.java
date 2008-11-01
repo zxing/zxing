@@ -35,8 +35,8 @@ public class BenchmarkItem {
     mFormat = null;
   }
 
-  public void addResult(int milliseconds) {
-    mTimes[mPosition] = milliseconds;
+  public void addResult(int microseconds) {
+    mTimes[mPosition] = microseconds;
     mPosition++;
   }
 
@@ -55,19 +55,19 @@ public class BenchmarkItem {
     result.append(mPath);
     result.append(" (");
     result.append(getAverageTime());
-    result.append(" ms average)\n  ");
-    int size = mTimes.length;
-    for (int x = 0; x < size; x++) {
-      result.append(mTimes[x]);
-      result.append(" ");
-    }
+    result.append(" us average)");
+//    int size = mTimes.length;
+//    for (int x = 0; x < size; x++) {
+//      result.append(mTimes[x]);
+//      result.append(" ");
+//    }
     return result.toString();
   }
 
   /**
    * Calculates the average time but throws out the maximum as an outlier first.
    *
-   * @return The average decoding time in milliseconds.
+   * @return The average decoding time in microseconds.
    */
   private int getAverageTime() {
     int size = mTimes.length;
