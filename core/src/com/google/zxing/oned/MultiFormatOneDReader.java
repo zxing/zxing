@@ -31,16 +31,17 @@ import java.util.Vector;
  */
 public final class MultiFormatOneDReader extends AbstractOneDReader {
 
-  public Result decodeRow(int rowNumber, BitArray row, Hashtable hints) throws ReaderException {
+  private Vector readers;
 
+  public MultiFormatOneDReader(Hashtable hints) {
     Vector possibleFormats = hints == null ? null : (Vector) hints.get(DecodeHintType.POSSIBLE_FORMATS);
-    Vector readers = new Vector();
+    readers = new Vector();
     if (possibleFormats != null) {
       if (possibleFormats.contains(BarcodeFormat.EAN_13) ||
           possibleFormats.contains(BarcodeFormat.UPC_A) ||
           possibleFormats.contains(BarcodeFormat.EAN_8) ||
           possibleFormats.contains(BarcodeFormat.UPC_E)) {
-        readers.addElement(new MultiFormatUPCEANReader());
+        readers.addElement(new MultiFormatUPCEANReader(hints));
       }
       if (possibleFormats.contains(BarcodeFormat.CODE_39)) {
         readers.addElement(new Code39Reader());
@@ -50,12 +51,15 @@ public final class MultiFormatOneDReader extends AbstractOneDReader {
       }
     }
     if (readers.isEmpty()) {
-      readers.addElement(new MultiFormatUPCEANReader());
+      readers.addElement(new MultiFormatUPCEANReader(hints));
       readers.addElement(new Code39Reader());
       readers.addElement(new Code128Reader());
     }
+  }
 
-    for (int i = 0; i < readers.size(); i++) {
+  public Result decodeRow(int rowNumber, BitArray row, Hashtable hints) throws ReaderException {
+    int size = readers.size();
+    for (int i = 0; i < size; i++) {
       OneDReader reader = (OneDReader) readers.elementAt(i);
       try {
         return reader.decodeRow(rowNumber, row, hints);
