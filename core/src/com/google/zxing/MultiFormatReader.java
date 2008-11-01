@@ -62,7 +62,8 @@ public final class MultiFormatReader implements Reader {
   }
 
   /**
-   * Decode an image using the state set up by calling setHints() previously.
+   * Decode an image using the state set up by calling setHints() previously. Continuous scan
+   * clients will get a <b>large</b> speed increase by using this instead of decode().
    *
    * @param image The pixel data to decode
    * @return The contents of the image
@@ -99,7 +100,7 @@ public final class MultiFormatReader implements Reader {
               possibleFormats.contains(BarcodeFormat.CODE_128);
       // Put 1D readers upfront in "normal" mode
       if (addOneDReader && !tryHarder) {
-        readers.addElement(new MultiFormatOneDReader());
+        readers.addElement(new MultiFormatOneDReader(hints));
       }
       if (possibleFormats.contains(BarcodeFormat.QR_CODE)) {
         readers.addElement(new QRCodeReader());
@@ -110,24 +111,25 @@ public final class MultiFormatReader implements Reader {
       //}
       // At end in "try harder" mode
       if (addOneDReader && tryHarder) {
-        readers.addElement(new MultiFormatOneDReader());
+        readers.addElement(new MultiFormatOneDReader(hints));
       }
     }
     if (readers.isEmpty()) {
       if (!tryHarder) {
-        readers.addElement(new MultiFormatOneDReader());
+        readers.addElement(new MultiFormatOneDReader(hints));
       }
       readers.addElement(new QRCodeReader());
       // TODO re-enable once Data Matrix is ready
       // readers.addElement(new DataMatrixReader());
       if (tryHarder) {
-        readers.addElement(new MultiFormatOneDReader());
+        readers.addElement(new MultiFormatOneDReader(hints));
       }
     }
   }
 
   private Result decodeInternal(MonochromeBitmapSource image) throws ReaderException {
-    for (int i = 0; i < readers.size(); i++) {
+    int size = readers.size();
+    for (int i = 0; i < size; i++) {
       Reader reader = (Reader) readers.elementAt(i);
       try {
         return reader.decode(image, hints);

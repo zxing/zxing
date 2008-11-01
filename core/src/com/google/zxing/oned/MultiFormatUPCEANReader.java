@@ -34,9 +34,11 @@ import java.util.Vector;
  */
 public final class MultiFormatUPCEANReader extends AbstractOneDReader {
 
-  public Result decodeRow(int rowNumber, BitArray row, Hashtable hints) throws ReaderException {
+  private Vector readers;
+
+  public MultiFormatUPCEANReader(Hashtable hints) {
     Vector possibleFormats = hints == null ? null : (Vector) hints.get(DecodeHintType.POSSIBLE_FORMATS);
-    Vector readers = new Vector();
+    readers = new Vector();
     if (possibleFormats != null) {
       if (possibleFormats.contains(BarcodeFormat.EAN_13)) {
         readers.addElement(new EAN13Reader());
@@ -56,10 +58,13 @@ public final class MultiFormatUPCEANReader extends AbstractOneDReader {
       readers.addElement(new EAN8Reader());
       readers.addElement(new UPCEReader());
     }
+  }
 
+  public Result decodeRow(int rowNumber, BitArray row, Hashtable hints) throws ReaderException {
     // Compute this location once and reuse it on multiple implementations
     int[] startGuardPattern = AbstractUPCEANReader.findStartGuardPattern(row);
-    for (int i = 0; i < readers.size(); i++) {
+    int size = readers.size();
+    for (int i = 0; i < size; i++) {
       UPCEANReader reader = (UPCEANReader) readers.elementAt(i);
       Result result;
       try {
