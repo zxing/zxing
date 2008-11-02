@@ -38,6 +38,7 @@ import java.io.InputStreamReader;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.ArrayList;
+import java.nio.charset.Charset;
 
 /**
  * @author srowen@google.com (Sean Owen)
@@ -194,7 +195,7 @@ public abstract class AbstractBlackBoxTestCase extends TestCase {
 
   private static String readFileAsString(File file) throws IOException {
     StringBuilder result = new StringBuilder((int) file.length());
-    InputStreamReader reader = new InputStreamReader(new FileInputStream(file), "UTF8");
+    InputStreamReader reader = new InputStreamReader(new FileInputStream(file), Charset.forName("UTF8"));
     try {
       char[] buffer = new char[256];
       int charsRead;

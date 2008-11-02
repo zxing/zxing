@@ -28,8 +28,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.net.URI;
 import java.util.Hashtable;
+import java.nio.charset.Charset;
 
 /**
  * <p>This simple command line utility decodes files, directories of files, or URIs which are passed
@@ -83,16 +86,7 @@ public final class CommandLineRunner {
           if (result != null) {
             successful++;
             if (dumpResults) {
-              String name = input.getAbsolutePath();
-              int pos = name.lastIndexOf('.');
-              if (pos > 0) {
-                name = name.substring(0, pos);
-              }
-              File dump = new File(name + ".txt");
-              dump.createNewFile();
-              FileOutputStream stream = new FileOutputStream(dump);
-              stream.write(result.getText().getBytes());
-              stream.close();
+              dumpResult(input, result);
             }
           }
           total++;
@@ -100,10 +94,32 @@ public final class CommandLineRunner {
         System.out.println("\nDecoded " + successful + " files out of " + total +
             " successfully (" + (successful * 100 / total) + "%)\n");
       } else {
-        decode(inputFile.toURI(), hints);
+        Result result = decode(inputFile.toURI(), hints);
+        if (dumpResults) {
+          dumpResult(inputFile, result);
+        }
       }
     } else {
       decode(new URI(argument), hints);
+    }
+  }
+
+  private static void dumpResult(File input, Result result) throws IOException {
+    String name = input.getAbsolutePath();
+    int pos = name.lastIndexOf('.');
+    if (pos > 0) {
+      name = name.substring(0, pos);
+    }
+    File dump = new File(name + ".txt");
+    writeStringToFile(result.getText(), dump);
+  }
+
+  private static void writeStringToFile(String value, File file) throws IOException {
+    Writer out = new OutputStreamWriter(new FileOutputStream(file), Charset.forName("UTF8"));
+    try {
+      out.write(value);
+    } finally {
+      out.close();
     }
   }
 
