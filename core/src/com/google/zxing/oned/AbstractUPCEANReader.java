@@ -84,6 +84,12 @@ public abstract class AbstractUPCEANReader extends AbstractOneDReader implements
     }
   }
 
+  private StringBuffer decodeRowStringBuffer;
+
+  public AbstractUPCEANReader() {
+    decodeRowStringBuffer = new StringBuffer(20);
+  }
+
   static int[] findStartGuardPattern(BitArray row) throws ReaderException {
     boolean foundStart = false;
     int[] startRange = null;
@@ -108,7 +114,8 @@ public abstract class AbstractUPCEANReader extends AbstractOneDReader implements
   }
 
   public final Result decodeRow(int rowNumber, BitArray row, int[] startGuardRange) throws ReaderException {
-    StringBuffer result = new StringBuffer(20);
+    StringBuffer result = decodeRowStringBuffer;
+    result.setLength(0);
     int endStart = decodeMiddle(row, startGuardRange, result);
     int[] endRange = decodeEnd(row, endStart);
 

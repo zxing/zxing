@@ -45,6 +45,7 @@ final class FinderPatternFinder {
   private final MonochromeBitmapSource image;
   private final Vector possibleCenters;
   private boolean hasSkipped;
+  private final int[] crossCheckStateCount;
 
   /**
    * <p>Creates a finder that will search the image for three finder patterns.</p>
@@ -54,6 +55,7 @@ final class FinderPatternFinder {
   FinderPatternFinder(MonochromeBitmapSource image) {
     this.image = image;
     this.possibleCenters = new Vector();
+    this.crossCheckStateCount = new int[5];
   }
 
   FinderPatternInfo find(Hashtable hints) throws ReaderException {
@@ -74,9 +76,10 @@ final class FinderPatternFinder {
 
     boolean done = false;
     int[] stateCount = new int[5];
+    BitArray blackRow = new BitArray(maxJ);
     for (int i = iSkip - 1; i < maxI && !done; i += iSkip) {
       // Get a row of black/white values
-      BitArray blackRow = image.getBlackRow(i, null, 0, maxJ);
+      blackRow = image.getBlackRow(i, blackRow, 0, maxJ);
       stateCount[0] = 0;
       stateCount[1] = 0;
       stateCount[2] = 0;
@@ -199,6 +202,15 @@ final class FinderPatternFinder {
         Math.abs(moduleSize - (stateCount[4] << INTEGER_MATH_SHIFT)) < maxVariance;
   }
 
+  private int[] getCrossCheckStateCount() {
+    crossCheckStateCount[0] = 0;
+    crossCheckStateCount[1] = 0;
+    crossCheckStateCount[2] = 0;
+    crossCheckStateCount[3] = 0;
+    crossCheckStateCount[4] = 0;
+    return crossCheckStateCount;
+  }
+
   /**
    * <p>After a horizontal scan finds a potential finder pattern, this method
    * "cross-checks" by scanning down vertically through the center of the possible
@@ -214,7 +226,7 @@ final class FinderPatternFinder {
     MonochromeBitmapSource image = this.image;
 
     int maxI = image.getHeight();
-    int[] stateCount = new int[5];
+    int[] stateCount = getCrossCheckStateCount();
 
     // Start counting up from center
     int i = startI;
@@ -284,7 +296,7 @@ final class FinderPatternFinder {
     MonochromeBitmapSource image = this.image;
 
     int maxJ = image.getWidth();
-    int[] stateCount = new int[5];
+    int[] stateCount = getCrossCheckStateCount();
 
     int j = startJ;
     while (j >= 0 && image.isBlack(j, centerI)) {
