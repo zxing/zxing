@@ -254,14 +254,23 @@ final class DecodedBitStreamParser {
     // that it's UTF-8.
     int length = bytes.length;
     boolean canBeISO88591 = true;
+    boolean canBeShiftJIS = true;
+    boolean sawDoubleByteStart = false;
+    int maybeSingleByteKatakanaCount = 0;
     boolean lastWasPossibleDoubleByteStart = false;
-    for (int i = 0; i < length; i++) {
+    for (int i = 0; i < length && (canBeISO88591 || canBeShiftJIS); i++) {
       int value = bytes[i] & 0xFF;
-      if (value >= 0x80 && value <= 0x9F && i < length - 1) {
+      if (value >= 0x7F && value <= 0x9F) {
         canBeISO88591 = false;
-        // ISO-8859-1 shouldn't use this, but before we decide it is Shift_JIS,
-        // just double check that it is followed by a byte that's valid in
-        // the Shift_JIS encoding
+      }
+      if (value >= 0xA1 && value <= 0xDF) {
+        // count the number of characters that might be a Shift_JIS single-byte Katakana character
+        maybeSingleByteKatakanaCount++;
+      }
+      if (((value >= 0x81 && value <= 0x9F) || (value >= 0xE0 && value <= 0xEF)) && i < length - 1) {
+        // These start double-byte characters in Shift_JIS. Let's see if it's followed by a valid
+        // second byte.
+        sawDoubleByteStart = true;
         if (lastWasPossibleDoubleByteStart) {
           // If we just checked this and the last byte for being a valid double-byte
           // char, don't check starting on this byte. If this and the last byte
@@ -274,30 +283,27 @@ final class DecodedBitStreamParser {
           lastWasPossibleDoubleByteStart = true;
           int nextValue = bytes[i + 1] & 0xFF;
           if (nextValue < 0x40 || nextValue > 0xFC) {
-            return UTF8;
+            canBeShiftJIS = false;
           }
           // There is some conflicting information out there about which bytes can follow which in
           // double-byte Shift_JIS characters. The rule above seems to be the one that matches practice.
-          // The stricter rule below, however, is given by other resources.
-          /*
-          if ((value & 0x1) == 0) {
-            // if even, next value should be in [0x9F,0xFC]
-            // if not, we'll guess UTF-8
-            if (nextValue < 0x9F || nextValue > 0xFC) {
-              return UTF8;
-            }
-          } else {
-            // if odd, next value should be in [0x40,0x9E]
-            // if not, we'll guess UTF-8
-            if (nextValue < 0x40 || nextValue > 0x9E) {
-              return UTF8;
-            }
-          }
-           */
         }
       }
     }
-    return canBeISO88591 ? ISO88591 : SHIFT_JIS;
+    // Distinguishing Shift_JIS and ISO-8859-1 can be a little tough. The crude heuristic is:
+    // - If we saw
+    //   - at least one byte that starts a double-byte value (bytes that are rare in ISO-8859-1), or
+    //   - over 5% of bytes that could be single-byte Katakana (also rare in ISO-8859-1),
+    // - and, saw no sequences that are invalid in Shift_JIS, then we conclude Shift_JIS
+    if ((sawDoubleByteStart || 20 * maybeSingleByteKatakanaCount > length) && canBeShiftJIS) {
+      return SHIFT_JIS;
+    }
+    // Otherwise, we default to ISO-8859-1 unless we know it can't be
+    if (canBeISO88591) {
+      return ISO88591;
+    }
+    // Otherwise, we take a wild guess with UTF-8
+    return UTF8;
   }
   
   private static int parseECIValue(BitSource bits) {
