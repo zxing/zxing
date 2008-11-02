@@ -189,7 +189,8 @@ limitations under the License.
       <arg value="-outjars temp-optimized.jar"/>
       <arg value="-libraryjars ${android-jar}"/>
       <arg value="-keepattributes Exceptions,InnerClasses,Signature,!LocalVariableTable,!LocalVariableTypeTable"/>
-      <arg value="-keep class com.google.zxing.client.android.*Activity"/>
+      <arg value="-keep class com.google.zxing.client.androidtest.*Activity"/>
+      <arg value="-keep class com.google.zxing.client.androidtest.ViewfinderView { public * ; }"/>
       <arg value="-target 5"/>
       <arg value="-optimizationpasses 7"/>
       <arg value="-dontshrink"/>
