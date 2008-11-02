@@ -92,9 +92,7 @@ public final class Code39Reader extends AbstractOneDReader {
   public Result decodeRow(int rowNumber, BitArray row, Hashtable hints) throws ReaderException {
 
     int[] start = findAsteriskPattern(row);
-
     int nextStart = start[1];
-
     int end = row.getSize();
 
     // Read off white space

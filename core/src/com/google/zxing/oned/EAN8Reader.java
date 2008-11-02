@@ -27,9 +27,18 @@ import com.google.zxing.common.BitArray;
  */
 public final class EAN8Reader extends AbstractUPCEANReader {
 
-  protected int decodeMiddle(BitArray row, int[] startRange, StringBuffer result) throws ReaderException {
+  private int[] decodeMiddleCounters;
 
-    int[] counters = new int[4];
+  public EAN8Reader() {
+    decodeMiddleCounters = new int[4];
+  }
+
+  protected int decodeMiddle(BitArray row, int[] startRange, StringBuffer result) throws ReaderException {
+    int[] counters = decodeMiddleCounters;
+    counters[0] = 0;
+    counters[1] = 0;
+    counters[2] = 0;
+    counters[3] = 0;
     int end = row.getSize();
     int rowOffset = startRange[1];
 

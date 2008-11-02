@@ -45,6 +45,7 @@ final class AlignmentPatternFinder {
   private final int width;
   private final int height;
   private final float moduleSize;
+  private final int[] crossCheckStateCount;
 
   /**
    * <p>Creates a finder that will look in a portion of the whole image.</p>
@@ -69,6 +70,7 @@ final class AlignmentPatternFinder {
     this.width = width;
     this.height = height;
     this.moduleSize = moduleSize;
+    this.crossCheckStateCount = new int[3];
   }
 
   /**
@@ -188,7 +190,10 @@ final class AlignmentPatternFinder {
     MonochromeBitmapSource image = this.image;
 
     int maxI = image.getHeight();
-    int[] stateCount = new int[3];
+    int[] stateCount = crossCheckStateCount;
+    stateCount[0] = 0;
+    stateCount[1] = 0;
+    stateCount[2] = 0;
 
     // Start counting up from center
     int i = startI;

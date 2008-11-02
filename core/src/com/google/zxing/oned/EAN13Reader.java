@@ -62,9 +62,18 @@ public final class EAN13Reader extends AbstractUPCEANReader {
       0x00, 0x0B, 0x0D, 0xE, 0x13, 0x19, 0x1C, 0x15, 0x16, 0x1A
   };
 
-  protected int decodeMiddle(BitArray row, int[] startRange, StringBuffer resultString) throws ReaderException {
+  private int[] decodeMiddleCounters;
 
-    int[] counters = new int[4];
+  public EAN13Reader() {
+    decodeMiddleCounters = new int[4];
+  }
+
+  protected int decodeMiddle(BitArray row, int[] startRange, StringBuffer resultString) throws ReaderException {
+    int[] counters = decodeMiddleCounters;
+    counters[0] = 0;
+    counters[1] = 0;
+    counters[2] = 0;
+    counters[3] = 0;
     int end = row.getSize();
     int rowOffset = startRange[1];
 
