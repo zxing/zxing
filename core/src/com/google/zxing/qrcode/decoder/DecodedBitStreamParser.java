@@ -83,7 +83,7 @@ final class DecodedBitStreamParser {
           }
         } else {
           // How many characters will follow, encoded in this mode?
-         int count = bits.readBits(mode.getCharacterCountBits(version));
+          int count = bits.readBits(mode.getCharacterCountBits(version));
           if (mode.equals(Mode.NUMERIC)) {
             decodeNumericSegment(bits, result, count);
           } else if (mode.equals(Mode.ALPHANUMERIC)) {
@@ -264,7 +264,7 @@ final class DecodedBitStreamParser {
         // the Shift_JIS encoding
         if (lastWasPossibleDoubleByteStart) {
           // If we just checked this and the last byte for being a valid double-byte
-          // char, don't check starting on this byte. If the this and the last byte
+          // char, don't check starting on this byte. If this and the last byte
           // formed a valid pair, then this shouldn't be checked to see if it starts
           // a double byte pair of course.
           lastWasPossibleDoubleByteStart = false;
@@ -273,6 +273,13 @@ final class DecodedBitStreamParser {
           // double byte pair encoding a character.
           lastWasPossibleDoubleByteStart = true;
           int nextValue = bytes[i + 1] & 0xFF;
+          if (nextValue < 0x40 || nextValue > 0xFC) {
+            return UTF8;
+          }
+          // There is some conflicting information out there about which bytes can follow which in
+          // double-byte Shift_JIS characters. The rule above seems to be the one that matches practice.
+          // The stricter rule below, however, is given by other resources.
+          /*
           if ((value & 0x1) == 0) {
             // if even, next value should be in [0x9F,0xFC]
             // if not, we'll guess UTF-8
@@ -286,6 +293,7 @@ final class DecodedBitStreamParser {
               return UTF8;
             }
           }
+           */
         }
       }
     }
