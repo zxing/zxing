@@ -19,7 +19,7 @@ package com.google.zxing.client.android.result;
 import android.app.Activity;
 import com.google.zxing.client.android.R;
 import com.google.zxing.client.result.ParsedResult;
-import com.google.zxing.client.result.UPCParsedResult;
+import com.google.zxing.client.result.ProductParsedResult;
 
 public class UPCResultHandler extends ResultHandler {
 
@@ -41,13 +41,13 @@ public class UPCResultHandler extends ResultHandler {
   }
 
   public void handleButtonPress(int index) {
-    UPCParsedResult upcResult = (UPCParsedResult) mResult;
+    ProductParsedResult upcResult = (ProductParsedResult) mResult;
     switch (index) {
       case 0:
-        openProductSearch(upcResult.getUPC());
+        openProductSearch(upcResult.getNormalizedProductID());
         break;
       case 1:
-        webSearch(upcResult.getUPC());
+        webSearch(upcResult.getNormalizedProductID());
         break;
     }
   }

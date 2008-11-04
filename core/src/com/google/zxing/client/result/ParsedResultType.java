@@ -26,7 +26,7 @@ public final class ParsedResultType {
 
   public static final ParsedResultType ADDRESSBOOK = new ParsedResultType("ADDRESSBOOK");
   public static final ParsedResultType EMAIL_ADDRESS = new ParsedResultType("EMAIL_ADDRESS");
-  public static final ParsedResultType UPC = new ParsedResultType("UPC");
+  public static final ParsedResultType PRODUCT = new ParsedResultType("PRODUCT");
   public static final ParsedResultType URI = new ParsedResultType("URI");
   public static final ParsedResultType TEXT = new ParsedResultType("TEXT");
   public static final ParsedResultType ANDROID_INTENT = new ParsedResultType("ANDROID_INTENT");

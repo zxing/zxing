@@ -31,7 +31,7 @@ public class ResultHandlerFactory {
       return new AddressBookResultHandler(activity, result);
     } else if (type.equals(ParsedResultType.EMAIL_ADDRESS)) {
       return new EmailAddressResultHandler(activity, result);
-    } else if (type.equals(ParsedResultType.UPC)) {
+    } else if (type.equals(ParsedResultType.PRODUCT)) {
       return new UPCResultHandler(activity, result);
     } else if (type.equals(ParsedResultType.URI)) {
       return new URIResultHandler(activity, result);

@@ -112,7 +112,7 @@ public final class UPCEReader extends AbstractUPCEANReader {
    * @param upce UPC-E code as string of digits
    * @return equivalent UPC-A code as string of digits
    */
-  private static String convertUPCEtoUPCA(String upce) {
+  public static String convertUPCEtoUPCA(String upce) {
     char[] upceChars = new char[6];
     upce.getChars(1, 7, upceChars, 0);
     StringBuffer result = new StringBuffer(12);

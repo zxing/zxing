@@ -23,7 +23,7 @@ import com.google.zxing.client.result.ParsedResultType;
 import com.google.zxing.client.result.ResultParser;
 import com.google.zxing.client.result.SMSParsedResult;
 import com.google.zxing.client.result.TelParsedResult;
-import com.google.zxing.client.result.UPCParsedResult;
+import com.google.zxing.client.result.ProductParsedResult;
 import com.google.zxing.client.result.URIParsedResult;
 
 import javax.microedition.io.ConnectionNotFoundException;
@@ -205,10 +205,10 @@ public final class ZXingMIDlet extends MIDlet {
     } else if (type.equals(ParsedResultType.SMS)) {
       SMSParsedResult smsResult = (SMSParsedResult) result;
       showOpenURL("Compose SMS?", smsResult.getNumber(), smsResult.getSMSURI());
-    } else if (type.equals(ParsedResultType.UPC)) {
-      String upc = ((UPCParsedResult) result).getUPC();
-      String uri = "http://www.upcdatabase.com/item.asp?upc=" + upc;
-      showOpenURL("Look Up Barcode Online?", upc, uri);
+    } else if (type.equals(ParsedResultType.PRODUCT)) {
+      ProductParsedResult productResult = (ProductParsedResult) result;
+      String uri = "http://www.upcdatabase.com/item.asp?upc=" + productResult.getNormalizedProductID();
+      showOpenURL("Look Up Barcode Online?", productResult.getProductID(), uri);
     } else if (type.equals(ParsedResultType.TEL)) {
       TelParsedResult telResult = (TelParsedResult) result;
       showOpenURL("Dial Number?", telResult.getNumber(), telResult.getTelURI());
