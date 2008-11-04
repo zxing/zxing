@@ -77,9 +77,16 @@ public final class ParsedReaderResultTestCase extends TestCase {
   }
 
   public void testUPC() {
-    doTestResult("123456789012", ParsedResultType.UPC, BarcodeFormat.UPC_A);
-    doTestResult("1234567890123", ParsedResultType.UPC, BarcodeFormat.UPC_A);
+    doTestResult("123456789012", ParsedResultType.PRODUCT, BarcodeFormat.UPC_A);
+    doTestResult("1234567890123", ParsedResultType.PRODUCT, BarcodeFormat.UPC_A);
     doTestResult("12345678901", ParsedResultType.TEXT);
+  }
+
+  public void testEAN() {
+    doTestResult("00393157", ParsedResultType.PRODUCT, BarcodeFormat.EAN_8);
+    doTestResult("00393158", ParsedResultType.TEXT);
+    doTestResult("5051140178499", ParsedResultType.PRODUCT, BarcodeFormat.EAN_13);
+    doTestResult("5051140178490", ParsedResultType.TEXT);
   }
 
   public void testISBN() {

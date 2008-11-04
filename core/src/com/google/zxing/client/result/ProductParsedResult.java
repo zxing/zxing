@@ -19,21 +19,31 @@ package com.google.zxing.client.result;
 /**
  * @author dswitkin@google.com (Daniel Switkin)
  */
-public final class UPCParsedResult extends ParsedResult {
+public final class ProductParsedResult extends ParsedResult {
 
-  private final String upc;
+  private final String productID;
+  private final String normalizedProductID;
 
-  UPCParsedResult(String upc) {
-    super(ParsedResultType.UPC);
-    this.upc = upc;
+  ProductParsedResult(String productID) {
+    this(productID, productID);
   }
 
-  public String getUPC() {
-    return upc;
+  ProductParsedResult(String productID, String normalizedProductID) {
+    super(ParsedResultType.PRODUCT);
+    this.productID = productID;
+    this.normalizedProductID = normalizedProductID;
+  }
+
+  public String getProductID() {
+    return productID;
+  }
+
+  public String getNormalizedProductID() {
+    return normalizedProductID;
   }
 
   public String getDisplayResult() {
-    return upc;
+    return productID;
   }
 
 }
