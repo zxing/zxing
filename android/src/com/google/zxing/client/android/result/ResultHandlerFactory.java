@@ -32,7 +32,7 @@ public class ResultHandlerFactory {
     } else if (type.equals(ParsedResultType.EMAIL_ADDRESS)) {
       return new EmailAddressResultHandler(activity, result);
     } else if (type.equals(ParsedResultType.PRODUCT)) {
-      return new UPCResultHandler(activity, result);
+      return new ProductResultHandler(activity, result);
     } else if (type.equals(ParsedResultType.URI)) {
       return new URIResultHandler(activity, result);
     } else if (type.equals(ParsedResultType.TEXT)) {
