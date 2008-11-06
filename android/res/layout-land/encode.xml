@@ -19,21 +19,21 @@
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
               android:background="@color/encode_view"
-              android:orientation="vertical"
+              android:orientation="horizontal"
               android:gravity="center">
 
   <ImageView android:id="@+id/image_view"
-             android:layout_width="fill_parent"
-             android:layout_height="wrap_content"
-             android:layout_gravity="center_horizontal"
+             android:layout_width="wrap_content"
+             android:layout_height="fill_parent"
+             android:layout_gravity="center_vertical"
              android:scaleType="center"/>
 
   <TextView android:id="@+id/contents_text_view"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_vertical"
             android:gravity="center"
             android:textColor="@color/contents_text"
             android:textSize="20.0sp"
-            android:paddingBottom="8px"/>
+            android:paddingRight="8px"/>
 </LinearLayout>

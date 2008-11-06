@@ -45,8 +45,7 @@ versionName is 2.31, 2.4, or 3.0. -->
     <activity android:name="BarcodesPreferenceActivity"
               android:label="@string/preferences_name">
     </activity>
-    <activity android:name="BarcodesEncodeActivity"
-              android:screenOrientation="portrait">
+    <activity android:name="BarcodesEncodeActivity">
       <intent-filter>
         <action android:name="com.google.zxing.client.android.ENCODE"/>
         <category android:name="android.intent.category.DEFAULT"/>
