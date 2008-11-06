@@ -75,6 +75,7 @@ public class BarcodesEncodeActivity extends Activity {
         int width = layout.getWidth();
         int height = layout.getHeight();
         int smallerDimension = (width < height) ? width : height;
+        smallerDimension = smallerDimension * 7 / 8;
 
         Intent intent = getIntent();
         try {
