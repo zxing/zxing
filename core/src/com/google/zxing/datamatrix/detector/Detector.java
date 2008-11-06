@@ -129,6 +129,10 @@ public final class Detector {
       }
     }
 
+    if (maybeTopLeft == null || bottomLeft == null || maybeBottomRight == null) {
+      throw new ReaderException("Could not find three corners");
+    }
+
     // Bottom left is correct but top left and bottom right might be switched
     ResultPoint[] corners = new ResultPoint[] { maybeTopLeft, bottomLeft, maybeBottomRight };
     // Use the dot product trick to sort them out
