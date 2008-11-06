@@ -163,6 +163,7 @@ public class ZXingTestActivity extends Activity {
       bundle.putString(Contacts.Intents.Insert.NAME, "Jenny");
       bundle.putString(Contacts.Intents.Insert.PHONE, "8675309");
       bundle.putString(Contacts.Intents.Insert.EMAIL, "jenny@the80s.com");
+      bundle.putString(Contacts.Intents.Insert.POSTAL, "123 Fake St. San Francisco, CA 94102");
       encodeBarcode("CONTACT_TYPE", bundle);
     }
   };

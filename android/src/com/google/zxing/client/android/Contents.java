@@ -65,6 +65,7 @@ public final class Contents {
      * bundle.putString(Contacts.Intents.Insert.NAME, "Jenny");
      * bundle.putString(Contacts.Intents.Insert.PHONE, "8675309");
      * bundle.putString(Contacts.Intents.Insert.EMAIL, "jenny@the80s.com");
+     * bundle.putString(Contacts.Intents.Insert.POSTAL, "123 Fake St. San Francisco, CA 94102");
      * intent.putExtra(Intents.Encode.DATA, bundle);
      */
     public static final String CONTACT = "CONTACT_TYPE";
