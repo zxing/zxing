@@ -21,14 +21,14 @@ import com.google.zxing.client.android.R;
 import com.google.zxing.client.result.ParsedResult;
 import com.google.zxing.client.result.ProductParsedResult;
 
-public class UPCResultHandler extends ResultHandler {
+public class ProductResultHandler extends ResultHandler {
 
   private static final int[] mButtons = {
       R.string.button_product_search,
       R.string.button_web_search
   };
 
-  public UPCResultHandler(Activity activity, ParsedResult result) {
+  public ProductResultHandler(Activity activity, ParsedResult result) {
     super(activity, result);
   }
 
@@ -41,19 +41,19 @@ public class UPCResultHandler extends ResultHandler {
   }
 
   public void handleButtonPress(int index) {
-    ProductParsedResult upcResult = (ProductParsedResult) mResult;
+    ProductParsedResult productResult = (ProductParsedResult) mResult;
     switch (index) {
       case 0:
-        openProductSearch(upcResult.getNormalizedProductID());
+        openProductSearch(productResult.getNormalizedProductID());
         break;
       case 1:
-        webSearch(upcResult.getNormalizedProductID());
+        webSearch(productResult.getNormalizedProductID());
         break;
     }
   }
 
   public int getDisplayTitle() {
-    return R.string.result_upc;
+    return R.string.result_product;
   }
 
 }

@@ -81,10 +81,10 @@
   <string name="result_email_address">Found email address</string>
   <string name="result_geo">Found geographic coordinates</string>
   <string name="result_isbn">Found book</string>
+  <string name="result_product">Found product</string>
   <string name="result_sms">Found SMS address</string>
   <string name="result_tel">Found phone number</string>
   <string name="result_text">Found plain text</string>
-  <string name="result_upc">Found product</string>
   <string name="result_uri">Found URL</string>
 
   <string name="sbc_name">Google Book Search</string>
@@ -93,5 +93,5 @@
   <string name="title_help">Help</string>
 
   <string name="zxing_url">http://code.google.com/p/zxing</string>
-  <string name="zxing_user_agent">ZXing-Android/1.0</string>
+  <string name="zxing_user_agent">ZXing-Android/1.1</string>
 </resources>
