@@ -108,16 +108,21 @@ public class QRCodeEncoder {
       Bundle bundle = intent.getBundleExtra(Intents.Encode.DATA);
       if (bundle != null) {
         String name = bundle.getString(Contacts.Intents.Insert.NAME);
-        if (name != null && !name.equals("")) {
+        if (name != null && name.length() > 0) {
           mContents = "MECARD:N:" + name + ";";
           mDisplayContents = name;
+          String address = bundle.getString(Contacts.Intents.Insert.POSTAL);
+          if (address != null && address.length() > 0) {
+            mContents += "ADR:" + address + ";";
+            mDisplayContents += "\n" + address;
+          }
           String phone = bundle.getString(Contacts.Intents.Insert.PHONE);
-          if (phone != null && !phone.equals("")) {
+          if (phone != null && phone.length() > 0) {
             mContents += "TEL:" + phone + ";";
             mDisplayContents += "\n" + phone;
           }
           String email = bundle.getString(Contacts.Intents.Insert.EMAIL);
-          if (email != null && !email.equals("")) {
+          if (email != null && email.length() > 0) {
             mContents += "EMAIL:" + email + ";";
             mDisplayContents += "\n" + email;
           }
