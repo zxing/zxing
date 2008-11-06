@@ -294,6 +294,7 @@ public class SearchBookContentsActivity extends Activity {
         } catch (IOException e) {
           Log.e(TAG, e.toString());
         }
+        client.close();
       }
       return cookie;
     }

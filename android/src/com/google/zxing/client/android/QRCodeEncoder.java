@@ -160,10 +160,11 @@ public class QRCodeEncoder {
     public void run() {
       String url = CHART_SERVER_URL + mPixelResolution + "x" + mPixelResolution + "&chl=" +
           mContents;
+      AndroidHttpClient client = null;
       try {
         URI uri = new URI("http", url, null);
         HttpGet get = new HttpGet(uri);
-        AndroidHttpClient client = AndroidHttpClient.newInstance(mUserAgent);
+        client = AndroidHttpClient.newInstance(mUserAgent);
         HttpResponse response = client.execute(get);
         HttpEntity entity = response.getEntity();
         Bitmap image = BitmapFactory.decodeStream(entity.getContent());
@@ -180,6 +181,10 @@ public class QRCodeEncoder {
         Log.e(TAG, e.toString());
         Message message = Message.obtain(mHandler, R.id.encode_failed);
         message.sendToTarget();
+      } finally {
+        if (client != null) {
+          client.close();
+        }
       }
     }
   }
