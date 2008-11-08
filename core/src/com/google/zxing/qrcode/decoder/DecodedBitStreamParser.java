@@ -265,7 +265,12 @@ final class DecodedBitStreamParser {
       }
       if (value >= 0xA1 && value <= 0xDF) {
         // count the number of characters that might be a Shift_JIS single-byte Katakana character
-        maybeSingleByteKatakanaCount++;
+        if (!lastWasPossibleDoubleByteStart) {
+          maybeSingleByteKatakanaCount++;
+        }
+      }
+      if (!lastWasPossibleDoubleByteStart && ((value >= 0xF0 && value <= 0xFF) || value == 0x80 || value == 0xA0)) {
+        canBeShiftJIS = false;
       }
       if (((value >= 0x81 && value <= 0x9F) || (value >= 0xE0 && value <= 0xEF)) && i < length - 1) {
         // These start double-byte characters in Shift_JIS. Let's see if it's followed by a valid
@@ -288,6 +293,8 @@ final class DecodedBitStreamParser {
           // There is some conflicting information out there about which bytes can follow which in
           // double-byte Shift_JIS characters. The rule above seems to be the one that matches practice.
         }
+      } else {
+        lastWasPossibleDoubleByteStart = false;
       }
     }
     // Distinguishing Shift_JIS and ISO-8859-1 can be a little tough. The crude heuristic is:
