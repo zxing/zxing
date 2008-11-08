@@ -287,6 +287,7 @@ public final class Detector {
         }
       }
     }
+    start++;
 
     // Then try right/down
     int end = center;
@@ -305,6 +306,7 @@ public final class Detector {
         }
       }
     }
+    end--;
 
     if (end > start) {
       return new int[] { start, end };
