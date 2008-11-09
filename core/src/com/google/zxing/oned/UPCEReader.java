@@ -46,7 +46,7 @@ public final class UPCEReader extends AbstractUPCEANReader {
       {0x07, 0x0B, 0x0D, 0x0E, 0x13, 0x19, 0x1C, 0x15, 0x16, 0x1A}
   };
 
-  private int[] decodeMiddleCounters;
+  private final int[] decodeMiddleCounters;
 
   public UPCEReader() {
     decodeMiddleCounters = new int[4];

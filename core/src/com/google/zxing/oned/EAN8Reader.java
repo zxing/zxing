@@ -27,7 +27,7 @@ import com.google.zxing.common.BitArray;
  */
 public final class EAN8Reader extends AbstractUPCEANReader {
 
-  private int[] decodeMiddleCounters;
+  private final int[] decodeMiddleCounters;
 
   public EAN8Reader() {
     decodeMiddleCounters = new int[4];

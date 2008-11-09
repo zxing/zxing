@@ -31,7 +31,7 @@ import java.util.Vector;
  */
 public final class MultiFormatOneDReader extends AbstractOneDReader {
 
-  private Vector readers;
+  private final Vector readers;
 
   public MultiFormatOneDReader(Hashtable hints) {
     Vector possibleFormats = hints == null ? null : (Vector) hints.get(DecodeHintType.POSSIBLE_FORMATS);
