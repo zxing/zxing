@@ -34,7 +34,7 @@ import java.util.Vector;
  */
 public final class MultiFormatUPCEANReader extends AbstractOneDReader {
 
-  private Vector readers;
+  private final Vector readers;
 
   public MultiFormatUPCEANReader(Hashtable hints) {
     Vector possibleFormats = hints == null ? null : (Vector) hints.get(DecodeHintType.POSSIBLE_FORMATS);

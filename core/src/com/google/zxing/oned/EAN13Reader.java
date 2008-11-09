@@ -62,7 +62,7 @@ public final class EAN13Reader extends AbstractUPCEANReader {
       0x00, 0x0B, 0x0D, 0xE, 0x13, 0x19, 0x1C, 0x15, 0x16, 0x1A
   };
 
-  private int[] decodeMiddleCounters;
+  private final int[] decodeMiddleCounters;
 
   public EAN13Reader() {
     decodeMiddleCounters = new int[4];
