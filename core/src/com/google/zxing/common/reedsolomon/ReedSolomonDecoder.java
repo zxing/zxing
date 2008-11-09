@@ -52,14 +52,17 @@ public final class ReedSolomonDecoder {
    *
    * @param received data and error-correction codewords
    * @param twoS number of error-correction codewords available
-   * @throws ReedSolomonException if decoding fails for any reaosn
+   * @param dataMatrix if true, then uses a calculation that matches the Data Matrix
+   *  standard rather than the one used in QR Code
+   * @throws ReedSolomonException if decoding fails for any reason
    */
-  public void decode(int[] received, int twoS) throws ReedSolomonException {
+  public void decode(int[] received, int twoS, boolean dataMatrix) throws ReedSolomonException {
     GF256Poly poly = new GF256Poly(field, received);
     int[] syndromeCoefficients = new int[twoS];
     boolean noError = true;
     for (int i = 0; i < twoS; i++) {
-      int eval =  poly.evaluateAt(field.exp(i));
+      // This difference in syndrome calculation appears to be correct, but then causes issues below
+      int eval = poly.evaluateAt(field.exp(dataMatrix ? i + 1 : i));
       syndromeCoefficients[syndromeCoefficients.length - 1 - i] = eval;
       if (eval != 0) {
         noError = false;
@@ -69,10 +72,17 @@ public final class ReedSolomonDecoder {
       return;
     }
     GF256Poly syndrome = new GF256Poly(field, syndromeCoefficients);
+    if (dataMatrix) {
+      // TODO Not clear this is correct for DataMatrix, but it gives almost-correct behavior;
+      // works except when number of errors is the maximum allowable.
+      syndrome = syndrome.multiply(field.buildMonomial(1, 1));
+    }
     GF256Poly[] sigmaOmega =
         runEuclideanAlgorithm(field.buildMonomial(twoS, 1), syndrome, twoS);
-    int[] errorLocations = findErrorLocations(sigmaOmega[0]);
-    int[] errorMagnitudes = findErrorMagnitudes(sigmaOmega[1], errorLocations);
+    GF256Poly sigma = sigmaOmega[0];
+    GF256Poly omega = sigmaOmega[1];
+    int[] errorLocations = findErrorLocations(sigma);
+    int[] errorMagnitudes = findErrorMagnitudes(omega, errorLocations);
     for (int i = 0; i < errorLocations.length; i++) {
       int position = received.length - 1 - field.log(errorLocations[i]);
       received[position] = GF256.addOrSubtract(received[position], errorMagnitudes[i]);

@@ -24,7 +24,7 @@ import java.util.Random;
 /**
  * @author srowen@google.com (Sean Owen)
  */
-public final class ReedSolomonDecoderTestCase extends TestCase {
+public final class ReedSolomonDecoderQRCodeTestCase extends TestCase {
 
   /** See ISO 18004, Appendix I, from which this example is taken. */
   private static final int[] QR_CODE_TEST =
@@ -79,7 +79,7 @@ public final class ReedSolomonDecoderTestCase extends TestCase {
   }
 
   private void checkQRRSDecode(int[] received) throws ReedSolomonException {
-    qrRSDecoder.decode(received, 2*QR_CODE_CORRECTABLE);
+    qrRSDecoder.decode(received, 2*QR_CODE_CORRECTABLE, false);
     for (int i = 0; i < QR_CODE_TEST.length; i++) {
       assertEquals(received[i], QR_CODE_TEST[i]);
     }

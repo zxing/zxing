@@ -118,7 +118,7 @@ public final class Decoder {
     }
     int numECCodewords = codewordBytes.length - numDataCodewords;
     try {
-      rsDecoder.decode(codewordsInts, numECCodewords);
+      rsDecoder.decode(codewordsInts, numECCodewords, false);
     } catch (ReedSolomonException rse) {
       throw new ReaderException(rse.toString());
     }
