@@ -40,18 +40,18 @@ final class DecodeThread extends Thread {
   public static final String BARCODE_BITMAP = "barcode_bitmap";
 
   public Handler mHandler;
-  private BarcodesCaptureActivity mActivity;
+  private CaptureActivity mActivity;
   private MultiFormatReader mMultiFormatReader;
 
-  DecodeThread(BarcodesCaptureActivity activity, String mode) {
+  DecodeThread(CaptureActivity activity, String mode) {
     mActivity = activity;
     mMultiFormatReader = new MultiFormatReader();
 
     // The prefs can't change while the thread is running, so pick them up once here.
     if (mode == null || mode.length() == 0) {
       SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
-      boolean decode1D = prefs.getBoolean(BarcodesPreferenceActivity.KEY_DECODE_1D, true);
-      boolean decodeQR = prefs.getBoolean(BarcodesPreferenceActivity.KEY_DECODE_QR, true);
+      boolean decode1D = prefs.getBoolean(PreferencesActivity.KEY_DECODE_1D, true);
+      boolean decodeQR = prefs.getBoolean(PreferencesActivity.KEY_DECODE_QR, true);
       if (decode1D && decodeQR) {
         setDecodeAllMode();
       } else if (decode1D) {

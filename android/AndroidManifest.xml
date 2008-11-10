@@ -24,7 +24,7 @@ versionName is 2.31, 2.4, or 3.0. -->
           android:versionCode="6">
   <application android:icon="@drawable/launcher_icon"
                android:label="@string/app_name">
-    <activity android:name=".BarcodesCaptureActivity"
+    <activity android:name=".CaptureActivity"
               android:screenOrientation="landscape"
               android:configChanges="orientation|keyboardHidden"
               android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
@@ -42,10 +42,10 @@ versionName is 2.31, 2.4, or 3.0. -->
         <category android:name="android.intent.category.DEFAULT"/>
       </intent-filter>
     </activity>
-    <activity android:name="BarcodesPreferenceActivity"
+    <activity android:name="PreferencesActivity"
               android:label="@string/preferences_name">
     </activity>
-    <activity android:name="BarcodesEncodeActivity">
+    <activity android:name="EncodeActivity">
       <intent-filter>
         <action android:name="com.google.zxing.client.android.ENCODE"/>
         <category android:name="android.intent.category.DEFAULT"/>
