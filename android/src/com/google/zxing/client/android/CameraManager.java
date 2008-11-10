@@ -187,8 +187,8 @@ final class CameraManager {
     public void onAutoFocus(boolean success, Camera camera) {
       if (mAutoFocusHandler != null) {
         Message message = mAutoFocusHandler.obtainMessage(mAutoFocusMessage, success);
-        // Simulate continuous autofocus by sending a focus request every second.
-        mAutoFocusHandler.sendMessageDelayed(message, 1000);
+        // Simulate continuous autofocus by sending a focus request every 1.5 seconds.
+        mAutoFocusHandler.sendMessageDelayed(message, 1500);
         mAutoFocusHandler = null;
       }
     }

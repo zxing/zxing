@@ -178,6 +178,14 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     return true;
   }
 
+  // Don't display the share menu item if the result overlay is showing.
+  @Override
+  public boolean onPrepareOptionsMenu(Menu menu) {
+    super.onPrepareOptionsMenu(menu);
+    menu.findItem(SHARE_ID).setVisible(mLastResult == null);
+    return true;
+  }
+
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
