@@ -70,6 +70,9 @@ public class ZXingTestActivity extends Activity {
 
     Button encode_bad_data = (Button) findViewById(R.id.encode_bad_data);
     encode_bad_data.setOnClickListener(mEncodeBadData);
+
+    Button share_via_barcode = (Button) findViewById(R.id.share_via_barcode);
+    share_via_barcode.setOnClickListener(mShareViaBarcode);
   }
 
   public Button.OnClickListener mTestCamera = new Button.OnClickListener() {
@@ -180,6 +183,12 @@ public class ZXingTestActivity extends Activity {
   public Button.OnClickListener mEncodeBadData = new Button.OnClickListener() {
     public void onClick(View v) {
       encodeBarcode(null, "bar");
+    }
+  };
+
+  public Button.OnClickListener mShareViaBarcode = new Button.OnClickListener() {
+    public void onClick(View v) {
+      startActivity(new Intent("com.google.zxing.client.android.SHARE"));
     }
   };
 

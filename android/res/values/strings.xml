@@ -21,6 +21,7 @@
   <string name="button_add_contact">Add contact</string>
   <string name="button_book_search">Open Book Search</string>
   <string name="button_cancel">Cancel</string>
+  <string name="button_clipboard_empty">Clipboard empty</string>
   <string name="button_dial">Dial number</string>
   <string name="button_email">Send email</string>
   <string name="button_get_directions">Get directions</string>
@@ -29,8 +30,11 @@
   <string name="button_open_browser">Open browser</string>
   <string name="button_product_search">Open Product Search</string>
   <string name="button_search_book_contents">Search book contents</string>
+  <string name="button_share_bookmark">Share bookmark</string>
   <string name="button_share_by_email">Share via email</string>
   <string name="button_share_by_sms">Share via SMS</string>
+  <string name="button_share_clipboard">Share clipboard</string>
+  <string name="button_share_contact">Share contact</string>
   <string name="button_show_map">Show map</string>
   <string name="button_sms">Send SMS</string>
   <string name="button_web_search">Web search</string>
@@ -45,6 +49,7 @@
   <string name="menu_about">About</string>
   <string name="menu_help">Help</string>
   <string name="menu_settings">Settings</string>
+  <string name="menu_share">Share</string>
 
   <string name="msg_about">Based on the open source ZXing Barcode Library</string>
   <string name="msg_default_contents">Contents</string>
@@ -66,8 +71,10 @@
   <string name="msg_sbc_page">Page</string>
   <string name="msg_sbc_snippet_unavailable">Snippet not available</string>
   <string name="msg_sbc_unknown_page">Unknown page</string>
-  <string name="msg_searching_book">Searching book\u2026</string>
-  <string name="msg_share_barcode">Here\'s the contents of a barcode I scanned</string>
+  <string name="msg_sbc_searching_book">Searching book\u2026</string>
+  <string name="msg_share_explanation">You can share data with a friend by displaying a barcode on
+    your screen, and letting them scan it with their phone.</string>
+  <string name="msg_share_subject_line">Here\'s the contents of a barcode I scanned</string>
 
   <string name="preferences_decode_1D_title">Decode 1D barcodes</string>
   <string name="preferences_decode_QR_title">Decode QR Codes</string>
@@ -88,6 +95,7 @@
   <string name="result_uri">Found URL</string>
 
   <string name="sbc_name">Google Book Search</string>
+  <string name="share_name">Share via barcode</string>
 
   <string name="title_about">About Barcode Scanner</string>
   <string name="title_help">Help</string>

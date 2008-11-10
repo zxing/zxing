@@ -84,5 +84,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/encode_bad_data"/>
+    <Button android:id="@+id/share_via_barcode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/share_via_barcode"/>
   </TableRow>
 </TableLayout>
