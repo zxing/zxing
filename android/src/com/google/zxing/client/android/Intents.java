@@ -109,4 +109,12 @@ public final class Intents {
     public static final String QUERY = "QUERY";
   }
 
+  public static final class Share {
+    /**
+     * Give the user a choice of items to encode as a barcode, then render it as a QR Code and
+     * display onscreen for a friend to scan with their phone.
+     */
+    public static final String ACTION = "com.google.zxing.client.android.SHARE";
+  }
+
 }

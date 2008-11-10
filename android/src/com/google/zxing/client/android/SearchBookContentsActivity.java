@@ -160,7 +160,7 @@ public class SearchBookContentsActivity extends Activity {
       if (query != null && query.length() > 0) {
         mNetworkThread = new NetworkThread(mISBN, query, mHandler);
         mNetworkThread.start();
-        mHeaderView.setText(R.string.msg_searching_book);
+        mHeaderView.setText(R.string.msg_sbc_searching_book);
         mResultListView.setAdapter(null);
         mQueryTextView.setEnabled(false);
         mQueryButton.setEnabled(false);

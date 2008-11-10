@@ -148,7 +148,7 @@ public abstract class ResultHandler {
   }
 
   public void shareByEmail(String contents) {
-    sendEmailFromUri("mailto:", mActivity.getString(R.string.msg_share_barcode), contents);
+    sendEmailFromUri("mailto:", mActivity.getString(R.string.msg_share_subject_line), contents);
   }
 
   public void sendEmail(String address, String subject, String body) {
@@ -163,7 +163,7 @@ public abstract class ResultHandler {
   }
 
   public void shareBySMS(String contents) {
-    sendSMSFromUri("smsto:", mActivity.getString(R.string.msg_share_barcode) + ":\n" + contents);
+    sendSMSFromUri("smsto:", mActivity.getString(R.string.msg_share_subject_line) + ":\n" + contents);
   }
 
   public void sendSMS(String phoneNumber, String body) {
