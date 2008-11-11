@@ -41,10 +41,12 @@ final class AddressBookAUResultParser extends ResultParser {
     String[] emails = matchMultipleValuePrefix("MAIL", 3, rawText, true);
     String note = matchSinglePrefixedField("MEMORY:", rawText, '\r', false);
     String address = matchSinglePrefixedField("ADD:", rawText, '\r', true);
-    return new AddressBookParsedResult(names, phoneNumbers, emails, note, address, null, null, null, null);
+    return new AddressBookParsedResult(names, null, phoneNumbers, emails, note, address, null, null,
+        null, null);
   }
 
-  private static String[] matchMultipleValuePrefix(String prefix, int max, String rawText, boolean trim) {
+  private static String[] matchMultipleValuePrefix(String prefix, int max, String rawText,
+      boolean trim) {
     Vector values = null;
     for (int i = 1; i <= max; i++) {
       String value = matchSinglePrefixedField(prefix + i + ':', rawText, '\r', trim);
@@ -61,6 +63,5 @@ final class AddressBookAUResultParser extends ResultParser {
     }
     return toStringArray(values);
   }
-
 
 }
