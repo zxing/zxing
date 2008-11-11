@@ -44,16 +44,17 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchBookContentsActivity extends Activity {
+public final class SearchBookContentsActivity extends Activity {
 
   private static final String TAG = "SearchBookContents";
 
   // These return a JSON result which describes if and where the query was found. This API may
   // break or disappear at any time in the future.
-  private static final String BOOK_SEARCH_URL = "//www.google.com/books?vid=isbn";
+  private static final String BOOK_SEARCH_URL = "//www.google." + LocaleManager.getCountryTLD() + "/books?vid=isbn";
   private static final String BOOK_SEARCH_COMMAND = "&jscmd=SearchWithinVolume2&q=";
 
   private NetworkThread mNetworkThread;
@@ -116,7 +117,7 @@ public class SearchBookContentsActivity extends Activity {
     super.onConfigurationChanged(config);
   }
 
-  public Handler mHandler = new Handler() {
+  public final Handler mHandler = new Handler() {
     public void handleMessage(Message message) {
       switch (message.what) {
         case R.id.search_book_contents_succeeded:
@@ -138,13 +139,13 @@ public class SearchBookContentsActivity extends Activity {
     mQueryButton.setEnabled(true);
   }
 
-  private Button.OnClickListener mButtonListener = new Button.OnClickListener() {
+  private final Button.OnClickListener mButtonListener = new Button.OnClickListener() {
     public void onClick(View view) {
       launchSearch();
     }
   };
 
-  private View.OnKeyListener mKeyListener = new View.OnKeyListener() {
+  private final View.OnKeyListener mKeyListener = new View.OnKeyListener() {
     public boolean onKey(View view, int keyCode, KeyEvent event) {
       if (keyCode == KeyEvent.KEYCODE_ENTER) {
         launchSearch();
@@ -158,7 +159,7 @@ public class SearchBookContentsActivity extends Activity {
     if (mNetworkThread == null) {
       String query = mQueryTextView.getText().toString();
       if (query != null && query.length() > 0) {
-        mNetworkThread = new NetworkThread(mISBN, query, mHandler);
+        mNetworkThread = new NetworkThread(mISBN, query, mHandler, mUserAgent);
         mNetworkThread.start();
         mHeaderView.setText(R.string.msg_sbc_searching_book);
         mResultListView.setAdapter(null);
@@ -223,22 +224,24 @@ public class SearchBookContentsActivity extends Activity {
     }
   }
 
-  private class NetworkThread extends Thread {
+  private static class NetworkThread extends Thread {
 
-    private String mISBN;
-    private String mQuery;
-    private Handler mHandler;
+    private final String mISBN;
+    private final String mQuery;
+    private final Handler mHandler;
+    private String mUserAgent;
 
-    public NetworkThread(String isbn, String query, Handler handler) {
+    public NetworkThread(String isbn, String query, Handler handler, String userAgent) {
       mISBN = isbn;
       mQuery = query;
       mHandler = handler;
+      mUserAgent = userAgent;
     }
 
     public void run() {
-      String url = BOOK_SEARCH_URL + mISBN + BOOK_SEARCH_COMMAND + mQuery;
       AndroidHttpClient client = null;
       try {
+        String url = BOOK_SEARCH_URL + mISBN + BOOK_SEARCH_COMMAND + URLEncoder.encode(mQuery, "UTF8");
         URI uri = new URI("http", url, null);
         HttpGet get = new HttpGet(uri);
         get.setHeader("cookie", getCookie("http:" + url));

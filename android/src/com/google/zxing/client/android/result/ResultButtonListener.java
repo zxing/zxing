@@ -25,8 +25,8 @@ import android.widget.Button;
  */
 public final class ResultButtonListener implements Button.OnClickListener {
 
-  ResultHandler mResultHandler;
-  int mIndex;
+  final ResultHandler mResultHandler;
+  final int mIndex;
 
   public ResultButtonListener(ResultHandler resultHandler, int index) {
     mResultHandler = resultHandler;

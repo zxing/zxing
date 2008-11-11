@@ -23,6 +23,7 @@ import android.provider.Contacts;
 import com.google.zxing.client.android.Intents;
 import com.google.zxing.client.android.R;
 import com.google.zxing.client.android.SearchBookContentsActivity;
+import com.google.zxing.client.android.LocaleManager;
 import com.google.zxing.client.result.ParsedResult;
 import com.google.zxing.client.result.ParsedResultType;
 
@@ -35,8 +36,8 @@ public abstract class ResultHandler {
 
   public static final int MAX_BUTTON_COUNT = 4;
 
-  protected ParsedResult mResult;
-  private Activity mActivity;
+  protected final ParsedResult mResult;
+  private final Activity mActivity;
 
   public ResultHandler(Activity activity, ParsedResult result) {
     mResult = result;
@@ -223,16 +224,16 @@ public abstract class ResultHandler {
 
   public void getDirections(float latitude, float longitude) {
     launchIntent(new Intent(Intent.ACTION_VIEW,
-        Uri.parse("http://maps.google.com/maps?f=d&daddr=" + latitude + "," + longitude)));
+        Uri.parse("http://maps.google." + LocaleManager.getCountryTLD() + "/maps?f=d&daddr=" + latitude + "," + longitude)));
   }
 
   public void openProductSearch(String upc) {
-    Uri uri = Uri.parse("http://www.google.com/products?q=" + upc);
+    Uri uri = Uri.parse("http://www.google." + LocaleManager.getCountryTLD() + "/products?q=" + upc);
     launchIntent(new Intent(Intent.ACTION_VIEW, uri));
   }
 
   public void openBookSearch(String isbn) {
-    Uri uri = Uri.parse("http://books.google.com/books?vid=isbn" + isbn);
+    Uri uri = Uri.parse("http://books.google." + LocaleManager.getCountryTLD() + "/books?vid=isbn" + isbn);
     launchIntent(new Intent(Intent.ACTION_VIEW, uri));
   }
 

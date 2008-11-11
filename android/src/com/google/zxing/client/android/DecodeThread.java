@@ -40,8 +40,8 @@ final class DecodeThread extends Thread {
   public static final String BARCODE_BITMAP = "barcode_bitmap";
 
   public Handler mHandler;
-  private CaptureActivity mActivity;
-  private MultiFormatReader mMultiFormatReader;
+  private final CaptureActivity mActivity;
+  private final MultiFormatReader mMultiFormatReader;
 
   DecodeThread(CaptureActivity activity, String mode) {
     mActivity = activity;

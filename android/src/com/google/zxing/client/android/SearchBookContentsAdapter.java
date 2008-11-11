@@ -24,7 +24,7 @@ import android.widget.ArrayAdapter;
 
 import java.util.List;
 
-public class SearchBookContentsAdapter extends ArrayAdapter<SearchBookContentsResult> {
+public final class SearchBookContentsAdapter extends ArrayAdapter<SearchBookContentsResult> {
 
   public SearchBookContentsAdapter(Context context, List<SearchBookContentsResult> items) {
     super(context, R.layout.search_book_contents_list_item, 0, items);

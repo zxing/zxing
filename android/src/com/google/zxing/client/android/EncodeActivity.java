@@ -36,7 +36,7 @@ import android.widget.TextView;
  * This class encodes data from an Intent into a QR code, and then displays it full screen so that
  * another person can scan it with their device.
  */
-public class EncodeActivity extends Activity {
+public final class EncodeActivity extends Activity {
 
   private QRCodeEncoder mQRCodeEncoder;
   private ProgressDialog mProgressDialog;

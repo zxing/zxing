@@ -31,7 +31,7 @@ import java.util.Date;
 
 public class AddressBookResultHandler extends ResultHandler {
 
-  private boolean mFields[];
+  private final boolean[] mFields;
   private int mButtonCount;
 
   // This takes all the work out of figuring out which buttons/actions should be in which

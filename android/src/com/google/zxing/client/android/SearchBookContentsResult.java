@@ -16,13 +16,13 @@
 
 package com.google.zxing.client.android;
 
-public class SearchBookContentsResult {
+public final class SearchBookContentsResult {
 
   static private String sQuery;
 
-  private String mPageNumber;
-  private String mSnippet;
-  private boolean mValidSnippet;
+  private final String mPageNumber;
+  private final String mSnippet;
+  private final boolean mValidSnippet;
 
   public SearchBookContentsResult(String pageNumber, String snippet, boolean validSnippet) {
     mPageNumber = pageNumber;

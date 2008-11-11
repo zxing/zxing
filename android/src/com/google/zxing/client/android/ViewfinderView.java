@@ -29,18 +29,18 @@ import android.view.View;
  * This view is overlaid on top of the camera preview. It adds the viewfinder rectangle and partial
  * transparency outside it, as well as the laser scanner animation and result points.
  */
-public class ViewfinderView extends View {
+public final class ViewfinderView extends View {
 
   private static final int[] SCANNER_ALPHA = {0, 64, 128, 192, 255, 192, 128, 64};
   private static final int ANIMATION_DELAY = 100;
 
-  private Paint mPaint;
-  private Rect mBox;
+  private final Paint mPaint;
+  private final Rect mBox;
   private Bitmap mResultBitmap;
-  private int mMaskColor;
-  private int mResultColor;
-  private int mFrameColor;
-  private int mLaserColor;
+  private final int mMaskColor;
+  private final int mResultColor;
+  private final int mFrameColor;
+  private final int mLaserColor;
   private int mScannerAlpha;
 
   // This constructor is used when the class is built from an XML resource.

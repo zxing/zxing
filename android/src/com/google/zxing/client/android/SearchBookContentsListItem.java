@@ -23,7 +23,7 @@ import android.util.AttributeSet;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class SearchBookContentsListItem extends LinearLayout {
+public final class SearchBookContentsListItem extends LinearLayout {
 
   private TextView mPageNumberView;
   private TextView mSnippetView;

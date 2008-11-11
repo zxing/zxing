@@ -71,7 +71,7 @@ import java.util.zip.GZIPOutputStream;
 public final class AndroidHttpClient implements HttpClient {
 
   // Gzip of data shorter than this probably won't be worthwhile
-  public static final long DEFAULT_SYNC_MIN_GZIP_BYTES = 256;
+  private static final long DEFAULT_SYNC_MIN_GZIP_BYTES = 256;
 
   private static final String TAG = "AndroidHttpClient";
 
@@ -300,7 +300,7 @@ public final class AndroidHttpClient implements HttpClient {
    * Retrieves the minimum size for compressing data.
    * Shorter data will not be compressed.
    */
-  public static long getMinGzipSize() {
+  private static long getMinGzipSize() {
     return DEFAULT_SYNC_MIN_GZIP_BYTES;
   }
 
