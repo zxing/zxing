@@ -30,17 +30,18 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 
 import java.net.URI;
+import java.net.URLEncoder;
 
-public class QRCodeEncoder {
+public final class QRCodeEncoder {
 
   private static final String TAG = "QRCodeEncoder";
-  private static final String CHART_SERVER_URL = "//chart.apis.google.com/chart?cht=qr&chs=";
+  private static final String CHART_SERVER_URL = 
+      "//chart.apis.google." + LocaleManager.getCountryTLD() + "/chart?cht=qr&chs=";
 
-  private Activity mActivity;
+  private final Activity mActivity;
   private String mContents;
   private String mDisplayContents;
   private String mTitle;
-  private NetworkThread mNetworkThread;
   private String mUserAgent;
 
   public QRCodeEncoder(Activity activity, Intent intent) {
@@ -54,7 +55,7 @@ public class QRCodeEncoder {
   // Once the core ZXing library supports encoding, we'll be able to generate the bitmap
   // synchronously. For now, it's a network request, so it's handled on a thread.
   public void requestBarcode(Handler handler, int pixelResolution) {
-    mNetworkThread = new NetworkThread(mContents, handler, pixelResolution);
+    Thread mNetworkThread = new NetworkThread(mContents, handler, pixelResolution);
     mNetworkThread.start();
   }
 
@@ -147,9 +148,9 @@ public class QRCodeEncoder {
 
   private class NetworkThread extends Thread {
 
-    private String mContents;
-    private Handler mHandler;
-    private int mPixelResolution;
+    private final String mContents;
+    private final Handler mHandler;
+    private final int mPixelResolution;
 
     public NetworkThread(String contents, Handler handler, int pixelResolution) {
       mContents = contents;
@@ -158,10 +159,10 @@ public class QRCodeEncoder {
     }
 
     public void run() {
-      String url = CHART_SERVER_URL + mPixelResolution + "x" + mPixelResolution + "&chl=" +
-          mContents;
       AndroidHttpClient client = null;
       try {
+        String url = CHART_SERVER_URL + mPixelResolution + "x" + mPixelResolution + "&chl=" +
+          URLEncoder.encode(mContents, "UTF8");
         URI uri = new URI("http", url, null);
         HttpGet get = new HttpGet(uri);
         client = AndroidHttpClient.newInstance(mUserAgent);

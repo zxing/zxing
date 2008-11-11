@@ -22,7 +22,7 @@ import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.PreferenceScreen;
 
-public class PreferencesActivity extends android.preference.PreferenceActivity
+public final class PreferencesActivity extends android.preference.PreferenceActivity
     implements OnSharedPreferenceChangeListener {
 
   static final String KEY_DECODE_1D = "preferences_decode_1D";

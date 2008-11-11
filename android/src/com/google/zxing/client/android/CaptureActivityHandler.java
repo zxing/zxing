@@ -27,7 +27,7 @@ import com.google.zxing.Result;
 /**
  * This class handles all the messaging which comprises the state machine for capture.
  */
-public class CaptureActivityHandler extends Handler {
+public final class CaptureActivityHandler extends Handler {
 
   private final CaptureActivity mActivity;
   private final DecodeThread mDecodeThread;
