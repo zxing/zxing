@@ -35,8 +35,9 @@ import java.net.URLEncoder;
 public final class QRCodeEncoder {
 
   private static final String TAG = "QRCodeEncoder";
-  private static final String CHART_SERVER_URL = 
-      "//chart.apis.google." + LocaleManager.getCountryTLD() + "/chart?cht=qr&chs=";
+
+  // Since this is an API call rather than a website, we don't use LocaleManager to change the TLD.
+  private static final String CHART_SERVER_URL = "//chart.apis.google.com/chart?cht=qr&chs=";
 
   private final Activity mActivity;
   private String mContents;
