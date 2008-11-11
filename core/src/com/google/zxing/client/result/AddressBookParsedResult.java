@@ -22,6 +22,7 @@ package com.google.zxing.client.result;
 public final class AddressBookParsedResult extends ParsedResult {
 
   private final String[] names;
+  private final String pronunciation;
   private final String[] phoneNumbers;
   private final String[] emails;
   private final String note;
@@ -32,6 +33,7 @@ public final class AddressBookParsedResult extends ParsedResult {
   private final String url;
 
   public AddressBookParsedResult(String[] names,
+                                 String pronunciation,
                                  String[] phoneNumbers,
                                  String[] emails,
                                  String note,
@@ -42,6 +44,7 @@ public final class AddressBookParsedResult extends ParsedResult {
                                  String url) {
     super(ParsedResultType.ADDRESSBOOK);
     this.names = names;
+    this.pronunciation = pronunciation;
     this.phoneNumbers = phoneNumbers;
     this.emails = emails;
     this.note = note;
@@ -54,6 +57,16 @@ public final class AddressBookParsedResult extends ParsedResult {
 
   public String[] getNames() {
     return names;
+  }
+
+  /**
+   * In Japanese, the name is written in kanji, which can have multiple readings. Therefore a hint
+   * is often provided, called furigana, which spells the name phonetically.
+   *
+   * @return The pronunciation of the getNames() field, often in hiragana or katakana.
+   */
+  public String getPronunciation() {
+    return pronunciation;
   }
 
   public String[] getPhoneNumbers() {
@@ -94,6 +107,7 @@ public final class AddressBookParsedResult extends ParsedResult {
   public String getDisplayResult() {
     StringBuffer result = new StringBuffer();
     maybeAppend(names, result);
+    maybeAppend(pronunciation, result);
     maybeAppend(title, result);
     maybeAppend(org, result);
     maybeAppend(address, result);

@@ -123,6 +123,13 @@ public class AddressBookResultHandler extends ResultHandler {
     ParsedResult.maybeAppend(result.getNames(), contents);
     int namesLength = contents.length();
 
+    String pronunciation = result.getPronunciation();
+    if (pronunciation != null && pronunciation.length() > 0) {
+      contents.append("\n(");
+      contents.append(pronunciation);
+      contents.append(")");
+    }
+
     ParsedResult.maybeAppend(result.getTitle(), contents);
     ParsedResult.maybeAppend(result.getOrg(), contents);
     ParsedResult.maybeAppend(result.getAddress(), contents);

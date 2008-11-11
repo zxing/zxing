@@ -54,8 +54,8 @@ final class VCardResultParser extends ResultParser {
     }
     String title = matchSingleVCardPrefixedField("TITLE", rawText, true);
     String url = matchSingleVCardPrefixedField("URL", rawText, true);
-    return new AddressBookParsedResult(names, phoneNumbers, emails, note, address, org, birthday,
-        title, url);
+    return new AddressBookParsedResult(names, null, phoneNumbers, emails, note, address, org,
+        birthday, title, url);
   }
 
   private static String[] matchVCardPrefixedField(String prefix, String rawText, boolean trim) {

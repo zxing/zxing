@@ -57,6 +57,7 @@ final class MobileTagSimpleContactResultParser extends AbstractMobileTagResultPa
     String title = matches[8];
 
     return new AddressBookParsedResult(new String[] {fullName},
+                                       null,
                                        new String[] {telephoneCell, telephone},
                                        new String[] {email1, email2},
                                        null,
