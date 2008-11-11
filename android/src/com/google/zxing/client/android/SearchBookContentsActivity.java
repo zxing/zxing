@@ -53,8 +53,9 @@ public final class SearchBookContentsActivity extends Activity {
   private static final String TAG = "SearchBookContents";
 
   // These return a JSON result which describes if and where the query was found. This API may
-  // break or disappear at any time in the future.
-  private static final String BOOK_SEARCH_URL = "//www.google." + LocaleManager.getCountryTLD() + "/books?vid=isbn";
+  // break or disappear at any time in the future. Since this is an API call rather than a website,
+  // we don't use LocaleManager to change the TLD.
+  private static final String BOOK_SEARCH_URL = "//www.google.com/books?vid=isbn";
   private static final String BOOK_SEARCH_COMMAND = "&jscmd=SearchWithinVolume2&q=";
 
   private NetworkThread mNetworkThread;
