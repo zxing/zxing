@@ -36,8 +36,4 @@ abstract class AbstractDoCoMoResultParser extends ResultParser {
     return matchSinglePrefixedField(prefix, rawText, ';', trim);
   }
 
-  static String[] maybeWrap(String value) {
-    return value == null ? null : new String[] { value };
-  }
-
 }

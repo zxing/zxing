@@ -36,13 +36,18 @@ final class AddressBookAUResultParser extends ResultParser {
     if (rawText == null || rawText.indexOf("MEMORY") < 0 || rawText.indexOf("\r\n") < 0) {
       return null;
     }
-    String[] names = matchMultipleValuePrefix("NAME", 2, rawText, true);
+
+    // NAME1 and NAME2 have specific uses, namely written name and pronunciation, respectively.
+    // Therefore we treat them specially instead of as an array of names.
+    String name = matchSinglePrefixedField("NAME1:", rawText, '\r', true);
+    String pronunciation = matchSinglePrefixedField("NAME2:", rawText, '\r', true);
+
     String[] phoneNumbers = matchMultipleValuePrefix("TEL", 3, rawText, true);
     String[] emails = matchMultipleValuePrefix("MAIL", 3, rawText, true);
     String note = matchSinglePrefixedField("MEMORY:", rawText, '\r', false);
     String address = matchSinglePrefixedField("ADD:", rawText, '\r', true);
-    return new AddressBookParsedResult(names, null, phoneNumbers, emails, note, address, null, null,
-        null, null);
+    return new AddressBookParsedResult(maybeWrap(name), pronunciation, phoneNumbers, emails, note,
+        address, null, null, null, null);
   }
 
   private static String[] matchMultipleValuePrefix(String prefix, int max, String rawText,

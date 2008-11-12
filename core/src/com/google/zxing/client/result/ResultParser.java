@@ -90,6 +90,10 @@ public abstract class ResultParser {
     }
   }
 
+  protected static String[] maybeWrap(String value) {
+    return value == null ? null : new String[] { value };
+  }
+
   protected static String unescapeBackslash(String escaped) {
     if (escaped != null) {
       int backslash = escaped.indexOf((int) '\\');
