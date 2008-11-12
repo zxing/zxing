@@ -16,15 +16,12 @@
 
 package com.google.zxing.common.reedsolomon;
 
-import junit.framework.TestCase;
-
-import java.util.BitSet;
 import java.util.Random;
 
 /**
  * @author srowen@google.com (Sean Owen)
  */
-public final class ReedSolomonDecoderQRCodeTestCase extends TestCase {
+public final class ReedSolomonDecoderQRCodeTestCase extends AbstractReedSolomonTestCase {
 
   /** See ISO 18004, Appendix I, from which this example is taken. */
   private static final int[] QR_CODE_TEST =
@@ -79,23 +76,10 @@ public final class ReedSolomonDecoderQRCodeTestCase extends TestCase {
   }
 
   private void checkQRRSDecode(int[] received) throws ReedSolomonException {
-    qrRSDecoder.decode(received, 2*QR_CODE_CORRECTABLE, false);
+    qrRSDecoder.decode(received, 2*QR_CODE_CORRECTABLE);
     for (int i = 0; i < QR_CODE_TEST.length; i++) {
       assertEquals(received[i], QR_CODE_TEST[i]);
     }
   }
 
-  private static void corrupt(int[] received, int howMany, Random random) {
-    BitSet corrupted = new BitSet(received.length);
-    for (int j = 0; j < howMany; j++) {
-      int location = random.nextInt(received.length);
-      if (corrupted.get(location)) {
-        j--;
-      } else {
-        corrupted.set(location);
-        int newByte = random.nextInt(256);
-        received[location] = newByte;
-      }
-    }
-  }
 }

@@ -36,6 +36,7 @@ package com.google.zxing.common.reedsolomon;
  *
  * @author srowen@google.com (Sean Owen)
  * @author William Rucklidge
+ * @author sanfordsquires
  */
 public final class ReedSolomonDecoder {
 
@@ -52,16 +53,15 @@ public final class ReedSolomonDecoder {
    *
    * @param received data and error-correction codewords
    * @param twoS number of error-correction codewords available
-   * @param dataMatrix if true, then uses a calculation that matches the Data Matrix
-   *  standard rather than the one used in QR Code
    * @throws ReedSolomonException if decoding fails for any reason
    */
-  public void decode(int[] received, int twoS, boolean dataMatrix) throws ReedSolomonException {
+  public void decode(int[] received, int twoS) throws ReedSolomonException {
     GF256Poly poly = new GF256Poly(field, received);
     int[] syndromeCoefficients = new int[twoS];
+    boolean dataMatrix = field.equals(GF256.DATA_MATRIX_FIELD);
     boolean noError = true;
     for (int i = 0; i < twoS; i++) {
-      // This difference in syndrome calculation appears to be correct, but then causes issues below
+      // Thanks to sanfordsquires for this fix:
       int eval = poly.evaluateAt(field.exp(dataMatrix ? i + 1 : i));
       syndromeCoefficients[syndromeCoefficients.length - 1 - i] = eval;
       if (eval != 0) {
@@ -72,19 +72,17 @@ public final class ReedSolomonDecoder {
       return;
     }
     GF256Poly syndrome = new GF256Poly(field, syndromeCoefficients);
-    if (dataMatrix) {
-      // TODO Not clear this is correct for DataMatrix, but it gives almost-correct behavior;
-      // works except when number of errors is the maximum allowable.
-      syndrome = syndrome.multiply(field.buildMonomial(1, 1));
-    }
     GF256Poly[] sigmaOmega =
         runEuclideanAlgorithm(field.buildMonomial(twoS, 1), syndrome, twoS);
     GF256Poly sigma = sigmaOmega[0];
     GF256Poly omega = sigmaOmega[1];
     int[] errorLocations = findErrorLocations(sigma);
-    int[] errorMagnitudes = findErrorMagnitudes(omega, errorLocations);
+    int[] errorMagnitudes = findErrorMagnitudes(omega, errorLocations, dataMatrix);
     for (int i = 0; i < errorLocations.length; i++) {
       int position = received.length - 1 - field.log(errorLocations[i]);
+      if (position < 0) {
+        throw new ReedSolomonException("Bad error location");
+      }
       received[position] = GF256.addOrSubtract(received[position], errorMagnitudes[i]);
     }
   }
@@ -165,7 +163,7 @@ public final class ReedSolomonDecoder {
     return result;
   }
 
-  private int[] findErrorMagnitudes(GF256Poly errorEvaluator, int[] errorLocations) {
+  private int[] findErrorMagnitudes(GF256Poly errorEvaluator, int[] errorLocations, boolean dataMatrix) {
     // This is directly applying Forney's Formula
     int s = errorLocations.length;
     int[] result = new int[s];
@@ -180,6 +178,10 @@ public final class ReedSolomonDecoder {
       }
       result[i] = field.multiply(errorEvaluator.evaluateAt(xiInverse),
           field.inverse(denominator));
+      // Thanks to sanfordsquires for this fix:
+      if (dataMatrix) {
+        result[i] = field.multiply(result[i], xiInverse);
+      }
     }
     return result;
   }
