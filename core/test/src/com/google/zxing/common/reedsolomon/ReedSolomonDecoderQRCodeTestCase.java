@@ -31,7 +31,8 @@ public final class ReedSolomonDecoderQRCodeTestCase extends AbstractReedSolomonT
       { 0x10, 0x20, 0x0C, 0x56, 0x61, 0x80, 0xEC, 0x11, 0xEC,
         0x11, 0xEC, 0x11, 0xEC, 0x11, 0xEC, 0x11, 0xA5, 0x24,
         0xD4, 0xC1, 0xED, 0x36, 0xC7, 0x87, 0x2C, 0x55 };
-  private static final int QR_CODE_CORRECTABLE = (QR_CODE_TEST_WITH_EC.length - QR_CODE_TEST.length) / 2;
+  private static final int QR_CODE_ECC_BYTES = QR_CODE_TEST_WITH_EC.length - QR_CODE_TEST.length;
+  private static final int QR_CODE_CORRECTABLE = QR_CODE_ECC_BYTES / 2;
 
   private final ReedSolomonDecoder qrRSDecoder = new ReedSolomonDecoder(GF256.QR_CODE_FIELD);
 
@@ -76,7 +77,7 @@ public final class ReedSolomonDecoderQRCodeTestCase extends AbstractReedSolomonT
   }
 
   private void checkQRRSDecode(int[] received) throws ReedSolomonException {
-    qrRSDecoder.decode(received, 2*QR_CODE_CORRECTABLE);
+    qrRSDecoder.decode(received, QR_CODE_ECC_BYTES);
     for (int i = 0; i < QR_CODE_TEST.length; i++) {
       assertEquals(received[i], QR_CODE_TEST[i]);
     }

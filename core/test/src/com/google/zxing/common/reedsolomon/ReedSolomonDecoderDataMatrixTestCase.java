@@ -26,7 +26,8 @@ public final class ReedSolomonDecoderDataMatrixTestCase extends AbstractReedSolo
 
   private static final int[] DM_CODE_TEST = { 142, 164, 186 };
   private static final int[] DM_CODE_TEST_WITH_EC = { 142, 164, 186, 114, 25, 5, 88, 102 };
-  private static final int DM_CODE_CORRECTABLE = (DM_CODE_TEST_WITH_EC.length - DM_CODE_TEST.length) / 2;
+  private static final int DM_CODE_ECC_BYTES = DM_CODE_TEST_WITH_EC.length - DM_CODE_TEST.length;
+  private static final int DM_CODE_CORRECTABLE = DM_CODE_ECC_BYTES / 2;
 
   private final ReedSolomonDecoder dmRSDecoder = new ReedSolomonDecoder(GF256.DATA_MATRIX_FIELD);
 
@@ -71,7 +72,7 @@ public final class ReedSolomonDecoderDataMatrixTestCase extends AbstractReedSolo
   }
 
   private void checkQRRSDecode(int[] received) throws ReedSolomonException {
-    dmRSDecoder.decode(received, 2 * DM_CODE_CORRECTABLE);
+    dmRSDecoder.decode(received, DM_CODE_ECC_BYTES);
     for (int i = 0; i < DM_CODE_TEST.length; i++) {
       assertEquals(received[i], DM_CODE_TEST[i]);
     }
