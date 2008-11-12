@@ -17,16 +17,15 @@
 package com.google.zxing.client.android;
 
 import android.app.Activity;
-import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Browser;
 import android.provider.Contacts;
 import android.text.ClipboardManager;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -90,10 +89,8 @@ public final class ShareActivity extends Activity {
 
   private final Button.OnClickListener mBookmarkListener = new Button.OnClickListener() {
     public void onClick(View v) {
-      // FIXME: Not working yet
-      Intent intent = new Intent();
-      intent.setComponent(new ComponentName("com.android.browser",
-          "com.android.browser.BrowserBookmarksPage"));
+      Intent intent = new Intent(Intent.ACTION_PICK);
+      intent.setClassName(ShareActivity.this, BookmarkPickerActivity.class.getName());
       startActivityForResult(intent, PICK_BOOKMARK);
     }
   };
@@ -116,8 +113,7 @@ public final class ShareActivity extends Activity {
     if (resultCode == RESULT_OK) {
       switch (requestCode) {
         case PICK_BOOKMARK:
-          // FIXME: Implement
-          Log.v("BOOKMARK", intent.toString());
+          showTextAsBarcode(intent.getStringExtra(Browser.BookmarkColumns.URL));
           break;
         case PICK_CONTACT:
           // Data field is content://contacts/people/984
@@ -125,6 +121,13 @@ public final class ShareActivity extends Activity {
           break;
       }
     }
+  }
+
+  private void showTextAsBarcode(String text) {
+    Intent intent = new Intent(Intents.Encode.ACTION);
+    intent.putExtra(Intents.Encode.TYPE, Contents.Type.TEXT);
+    intent.putExtra(Intents.Encode.DATA, text);
+    startActivity(intent);
   }
 
   /**

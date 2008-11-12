@@ -16,6 +16,7 @@
  -->
 <resources>
   <string name="app_name">Barcode Scanner</string>
+  <string name="bookmark_picker_name">Bookmarks</string>
 
   <string name="button_add_calendar">Add event to calendar</string>
   <string name="button_add_contact">Add contact</string>
