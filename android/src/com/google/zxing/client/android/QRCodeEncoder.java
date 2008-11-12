@@ -30,7 +30,6 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 
 import java.net.URI;
-import java.net.URLEncoder;
 
 public final class QRCodeEncoder {
 
@@ -163,7 +162,7 @@ public final class QRCodeEncoder {
       AndroidHttpClient client = null;
       try {
         String url = CHART_SERVER_URL + mPixelResolution + "x" + mPixelResolution + "&chl=" +
-          URLEncoder.encode(mContents, "UTF8");
+          mContents;
         URI uri = new URI("http", url, null);
         HttpGet get = new HttpGet(uri);
         client = AndroidHttpClient.newInstance(mUserAgent);
