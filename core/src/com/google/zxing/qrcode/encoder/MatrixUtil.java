@@ -157,7 +157,7 @@ public final class MatrixUtil {
   // "version" and "mask_pattern".  On success, store the result in
   // "matrix" and return true.  On error, return false.
   public static boolean BuildMatrix(final BitVector &data_bits,
-                                    QRCode.ECLevel ec_level,
+                                    int ec_level,
                                     int version,
                                     int mask_pattern,
                                     QRCodeMatrix *matrix) {
@@ -199,9 +199,7 @@ public final class MatrixUtil {
 
   // Embed type information.  On success, modify the matrix and return
   // true.  On error, return false.
-  public static boolean EmbedTypeInfo(QRCode.ECLevel ec_level,
-                                      int mask_pattern,
-                                      QRCodeMatrix *matrix) {
+  public static boolean EmbedTypeInfo(int ec_level, int mask_pattern, QRCodeMatrix *matrix) {
     BitVector type_info_bits;
     if (!MakeTypeInfoBits(ec_level, mask_pattern, &type_info_bits)) {
       return false;
@@ -382,9 +380,7 @@ public final class MatrixUtil {
   // result in "bits" and return true.  On error, return false.
   // Encode error correction level and mask pattern.  See 8.9 of
   // JISX0510:2004 (p.45) for details.
-  public static boolean MakeTypeInfoBits(QRCode.ECLevel ec_level,
-                                         final int mask_pattern,
-                                         BitVector *bits) {
+  public static boolean MakeTypeInfoBits(int ec_level, final int mask_pattern, BitVector *bits) {
     final int ec_code = QRCode.GetECLevelCode(ec_level);
     if (ec_code == -1) {
       return false;

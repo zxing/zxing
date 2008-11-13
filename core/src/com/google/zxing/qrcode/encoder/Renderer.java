@@ -119,10 +119,8 @@ public final class Renderer {
   // Similar to RenderAsPNG but it renders QR code from data in
   // "bytes" with error correction level "ec_level".  This is the
   // friendliest function in the QR code library.
-  public static boolean RenderAsPNGFromData(final StringPiece& bytes,
-                                            QRCode.ECLevel ec_level,
-                                            int cell_size,
-                                            String *result) {
+  public static boolean RenderAsPNGFromData(final StringPiece& bytes, int ec_level, int cell_size,
+      String *result) {
     QRCode qr_code;
     if (!Encoder.Encode(bytes, ec_level, &qr_code)) {
     return false;

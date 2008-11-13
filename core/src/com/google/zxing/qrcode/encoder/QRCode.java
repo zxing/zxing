@@ -46,8 +46,8 @@ public final class QRCode {
 
   // JAVAPORT: Do not remove trailing slashes yet. There are very likely conflicts with local
   // variables and parameters which will introduce insidious bugs.
-  private Mode mode_;
-  private ECLevel ec_level_;
+  private int mode_;
+  private int ec_level_;
   private int version_;
   private int matrix_width_;
   private int mask_pattern_;
@@ -58,39 +58,40 @@ public final class QRCode {
   private QRCodeMatrix *matrix_;
 
 
-  // They call encoding "mode".  The modes are defined in 8.3 of
-  // JISX0510:2004 (p.14).  It's unlikely (probably we will not
-  // support complicated modes) but if you add an item to this, please
-  // also add it to ModeToString(), GetModeCode(),
-  // GetNumBitsForLength(), Encoder.AppendBytes(),
+  // They call encoding "mode".  The modes are defined in 8.3 of JISX0510:2004 (p.14). It's unlikely
+  // (probably we will not support complicated modes) but if you add an item to this, please also
+  // add it to ModeToString(), GetModeCode(), GetNumBitsForLength(), Encoder.AppendBytes(), and
   // Encoder.ChooseMode().
-  public enum Mode {
-    MODE_UNDEFINED = -1,
-    MODE_NUMERIC,
-    MODE_ALPHANUMERIC,
-    MODE_8BIT_BYTE,
-    MODE_KANJI,  // Shift_JIS
-    // The following modes are unimplemented.
-    // MODE_ECI,
-    // MODE_MIXED,
-    // MODE_CONCATENATED,
-    // MODE_FNC1,
-    NUM_MODES,  // Always keep this at the end.
-  };
+  //
+  // JAVAPORT: These used to be C++ enums, but the code evaluates them as integers, and requires
+  // negative values. I don't want to take the ParsedResultType approach of a class full of statics
+  // of that class's type. The best compromise here is integer constants.
+  //
+  // Formerly enum Mode
+  public static final int MODE_UNDEFINED = -1;
+  public static final int MODE_NUMERIC = 0;
+  public static final int MODE_ALPHANUMERIC = 1;
+  public static final int MODE_8BIT_BYTE = 2;
+  public static final int MODE_KANJI = 3;  // Shift_JIS
+  // The following modes are unimplemented.
+  // MODE_ECI,
+  // MODE_MIXED,
+  // MODE_CONCATENATED,
+  // MODE_FNC1,
+  public static final int NUM_MODES = 4;
 
-  // The error correction levels are defined in the table 22 of
-  // JISX0510:2004 (p.45).  It's very unlikely (we've already covered
-  // all of them!)  but if you add an item to this, please also add it
-  // to ECLevelToString() and GetECLevelCode().
-  public enum ECLevel {
-    EC_LEVEL_UNDEFINED  = -1,
-    // They don't have names in the standard!
-    EC_LEVEL_L,  //  7% of corruption can be recovered.
-    EC_LEVEL_M,  // 15%
-    EC_LEVEL_Q,  // 25%
-    EC_LEVEL_H,  // 30%
-    NUM_EC_LEVELS,  // Always keep this at the end.
-  };
+  // The error correction levels are defined in the table 22 of JISX0510:2004 (p.45). It's very
+  // unlikely (we've already covered all of them!)  but if you add an item to this, please also add
+  // it to ECLevelToString() and GetECLevelCode().
+  //
+  // Formerly enum ECLevel
+  public static final int EC_LEVEL_UNDEFINED  = -1;
+  // They don't have names in the standard!
+  public static final int EC_LEVEL_L = 0;  //  7% of corruption can be recovered.
+  public static final int EC_LEVEL_M = 1;  // 15%
+  public static final int EC_LEVEL_Q = 2;  // 25%
+  public static final int EC_LEVEL_H = 3;  // 30%
+  public static final int NUM_EC_LEVELS = 4;
 
   public QRCode() {
     mode_ = MODE_UNDEFINED;
@@ -106,9 +107,9 @@ public final class QRCode {
   }
 
   // Mode of the QR Code.
-  public Mode mode() { return mode_; }
+  public int mode() { return mode_; }
   // Error correction level of the QR Code.
-  public ECLevel ec_level() { return ec_level_; }
+  public int ec_level() { return ec_level_; }
   // Version of the QR Code.  The bigger size, the bigger version.
   public int version() { return version_; }
   // Matrix width of the QR Code.
@@ -199,8 +200,8 @@ public final class QRCode {
     return result;
   }
 
-  public void set_mode(Mode value) { mode_ = value; }
-  public void set_ec_level(ECLevel value) { ec_level_ = value; }
+  public void set_mode(int value) { mode_ = value; }
+  public void set_ec_level(int value) { ec_level_ = value; }
   public void set_version(int value) { version_ = value; }
   public void set_matrix_width(int value) { matrix_width_ = value; }
   public void set_mask_pattern(int value) { mask_pattern_ = value; }
@@ -218,11 +219,11 @@ public final class QRCode {
     return version >= kMinVersion && version <= kMaxVersion;
   }
   // Check if "mask_pattern" is valid.
-  public static boolean IsValidECLevel(ECLevel ec_level) {
+  public static boolean IsValidECLevel(int ec_level) {
     return ec_level >= 0 && ec_level < NUM_EC_LEVELS;
   }
   // Check if "mode" is valid.
-  public static boolean IsValidMode(final QRCode.Mode mode) {
+  public static boolean IsValidMode(final int mode) {
     return mode >= 0 && mode < NUM_MODES;
   }
   // Check if "width" is valid.
@@ -235,47 +236,47 @@ public final class QRCode {
   }
 
   // Convert "ec_level" to String for debugging.
-  public static final char *ECLevelToString(QRCode.ECLevel ec_level) {
-  switch (ec_level) {
-    case QRCode.EC_LEVEL_UNDEFINED:
-      return "UNDEFINED";
-    case QRCode.EC_LEVEL_L:
-      return "L";
-    case QRCode.EC_LEVEL_M:
-      return "M";
-    case QRCode.EC_LEVEL_Q:
-      return "Q";
-    case QRCode.EC_LEVEL_H:
-      return "H";
-    default:
-      break;
+  public static final String ECLevelToString(int ec_level) {
+    switch (ec_level) {
+      case QRCode.EC_LEVEL_UNDEFINED:
+        return "UNDEFINED";
+      case QRCode.EC_LEVEL_L:
+        return "L";
+      case QRCode.EC_LEVEL_M:
+        return "M";
+      case QRCode.EC_LEVEL_Q:
+        return "Q";
+      case QRCode.EC_LEVEL_H:
+        return "H";
+      default:
+        break;
+    }
+    return "UNKNOWN";
   }
-  return "UNKNOWN";
-}
 
   // Convert "mode" to String for debugging.
-  public static final char *ModeToString(QRCode.Mode mode) {
-  switch (mode) {
-    case QRCode.MODE_UNDEFINED:
-      return "UNDEFINED";
-    case QRCode.MODE_NUMERIC:
-      return "NUMERIC";
-    case QRCode.MODE_ALPHANUMERIC:
-      return "ALPHANUMERIC";
-    case QRCode.MODE_8BIT_BYTE:
-      return "8BIT_BYTE";
-    case QRCode.MODE_KANJI:
-      return "KANJI";
-    default:
-      break;
+  public static final String ModeToString(int mode) {
+    switch (mode) {
+      case QRCode.MODE_UNDEFINED:
+        return "UNDEFINED";
+      case QRCode.MODE_NUMERIC:
+        return "NUMERIC";
+      case QRCode.MODE_ALPHANUMERIC:
+        return "ALPHANUMERIC";
+      case QRCode.MODE_8BIT_BYTE:
+        return "8BIT_BYTE";
+      case QRCode.MODE_KANJI:
+        return "KANJI";
+      default:
+        break;
+    }
+    return "UNKNOWN";
   }
-  return "UNKNOWN";
-}
 
   // Return the code of error correction level.  On error, return -1.
   // The codes of error correction levels are defined in the table 22
   // of JISX0510:2004 (p.45).
-  public static int GetECLevelCode(final QRCode.ECLevel ec_level) {
+  public static int GetECLevelCode(final int ec_level) {
     switch (ec_level) {
       case QRCode.EC_LEVEL_L:
         return 1;
@@ -294,7 +295,7 @@ public final class QRCode {
   // Return the code of mode.  On error, return -1.
   // The codes of modes are defined in the table 2 of JISX0510:2004
   // (p.16).
-  public static int GetModeCode(final QRCode.Mode mode) {
+  public static int GetModeCode(final int mode) {
     switch (mode) {
       case QRCode.MODE_NUMERIC:
         return 1;
@@ -312,7 +313,7 @@ public final class QRCode {
 
   // Return the number of bits needed for representing the length info
   // of QR Code with "version" and "mode".  On error, return -1.
-  public static int GetNumBitsForLength(int version, QRCode.Mode mode) {
+  public static int GetNumBitsForLength(int version, int mode) {
     if (!IsValidVersion(version)) {
       Debug.LOG_ERROR("Invalid version: " + version);
       return -1;
