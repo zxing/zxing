@@ -285,10 +285,9 @@ public final class Encoder {
   // Note that there is no way to encode bytes in MODE_KANJI.  We might
   // want to add EncodeWithMode() with which clients can specify the
   // encoding mode.  For now, we don't need the functionality.
-  static boolean Encode(final StringPiece& bytes, QRCode.ECLevel ec_level,
-                        QRCode *qr_code) {
+  static boolean Encode(final StringPiece& bytes, int ec_level, QRCode *qr_code) {
     // Step 1: Choose the mode (encoding).
-    final QRCode.Mode mode = ChooseMode(bytes);
+    final int mode = ChooseMode(bytes);
 
     // Step 2: Append "bytes" into "data_bits" in appropriate encoding.
     BitVector data_bits;
@@ -372,36 +371,34 @@ public final class Encoder {
   // distinguish Shift_JIS from other encodings such as ISO-8859-1, from
   // data bytes alone.  For example "\xE0\xE0" can be interpreted as one
   // character in Shift_JIS, but also two characters in ISO-8859-1.
-  static QRCode.Mode ChooseMode(final StringPiece &bytes) {
-  boolean has_numeric = false;
-  boolean has_alphanumeric = false;
-  boolean has_other = false;
-  for (int i = 0; i < bytes.size(); ++i) {
-    final int byte = bytes[i];
-    if (byte >= '0' && byte <= '9') {
-    has_numeric = true;
-  } else if (GetAlphanumericCode(byte) != -1) {
-    has_alphanumeric = true;
-  } else {
-    has_other = true;
-  }
-  }
-  if (has_other) {
+  static int ChooseMode(final StringPiece &bytes) {
+    boolean has_numeric = false;
+    boolean has_alphanumeric = false;
+    boolean has_other = false;
+    for (int i = 0; i < bytes.size(); ++i) {
+      final int byte = bytes[i];
+      if (byte >= '0' && byte <= '9') {
+      has_numeric = true;
+    } else if (GetAlphanumericCode(byte) != -1) {
+      has_alphanumeric = true;
+    } else {
+      has_other = true;
+    }
+    }
+    if (has_other) {
+      return QRCode.MODE_8BIT_BYTE;
+    } else if (has_alphanumeric) {
+      return QRCode.MODE_ALPHANUMERIC;
+    } else if (has_numeric) {
+      return QRCode.MODE_NUMERIC;
+    }
+    // "bytes" must be empty to reach here.
+    Debug.DCHECK(bytes.empty());
     return QRCode.MODE_8BIT_BYTE;
-  } else if (has_alphanumeric) {
-    return QRCode.MODE_ALPHANUMERIC;
-  } else if (has_numeric) {
-    return QRCode.MODE_NUMERIC;
   }
-  // "bytes" must be empty to reach here.
-  Debug.DCHECK(bytes.empty());
-  return QRCode.MODE_8BIT_BYTE;
-}
 
-  private static int ChooseMaskPattern(final BitVector &bits,
-                                       QRCode.ECLevel ec_level,
-                                       int version,
-                                       QRCodeMatrix *matrix) {
+  private static int ChooseMaskPattern(final BitVector &bits, int ec_level, int version,
+      QRCodeMatrix *matrix) {
     if (!QRCode.IsValidMatrixWidth(matrix.width())) {
     Debug.LOG_ERROR("Invalid matrix width: " + matrix.width());
     return -1;
@@ -429,8 +426,7 @@ public final class Encoder {
   // Initialize "qr_code" according to "num_input_bytes", "ec_level",
   // and "mode".  On success, modify "qr_code" and return true.  On
   // error, return false.
-  static boolean InitQRCode(int num_input_bytes, QRCode.ECLevel ec_level,
-                            QRCode.Mode mode, QRCode *qr_code) {
+  static boolean InitQRCode(int num_input_bytes, int ec_level, int mode, QRCode *qr_code) {
     qr_code.set_ec_level(ec_level);
     qr_code.set_mode(mode);
 
@@ -634,7 +630,7 @@ public final class Encoder {
 
   // Append mode info.  On success, store the result in "bits" and
   // return true.  On error, return false.
-  static boolean AppendModeInfo(QRCode.Mode mode, BitVector *bits) {
+  static boolean AppendModeInfo(int mode, BitVector *bits) {
     final int code = QRCode.GetModeCode(mode);
     if (code == -1) {
       Debug.LOG_ERROR("Invalid mode: " + mode);
@@ -647,10 +643,7 @@ public final class Encoder {
 
   // Append length info.  On success, store the result in "bits" and
   // return true.  On error, return false.
-  static boolean AppendLengthInfo(int num_bytes,
-                                  int version,
-                                  QRCode.Mode mode,
-                                  BitVector *bits) {
+  static boolean AppendLengthInfo(int num_bytes, int version, int mode, BitVector *bits) {
     int num_letters = num_bytes;
     // In Kanji mode, a letter is represented in two bytes.
     if (mode == QRCode.MODE_KANJI) {
@@ -671,11 +664,9 @@ public final class Encoder {
     return true;
   }
 
-  // Append "bytes" in "mode" mode (encoding) into "bits".  On
-  // success, store the result in "bits" and return true.  On error,
-  // return false.
-  static boolean AppendBytes(final StringPiece &bytes,
-                             QRCode.Mode mode, BitVector *bits) {
+  // Append "bytes" in "mode" mode (encoding) into "bits". On success, store the result in "bits"
+  // and return true. On error, return false.
+  static boolean AppendBytes(final StringPiece &bytes, int mode, BitVector *bits) {
     switch (mode) {
       case QRCode.MODE_NUMERIC:
       return AppendNumericBytes(bytes, bits);
@@ -692,9 +683,8 @@ public final class Encoder {
     return false;
   }
 
-  // Append "bytes" to "bits" using QRCode.MODE_NUMERIC mode.
-  // On success, store the result in "bits" and return true.  On error,
-  // return false.
+  // Append "bytes" to "bits" using QRCode.MODE_NUMERIC mode. On success, store the result in "bits"
+  // and return true. On error, return false.
   static boolean AppendNumericBytes(final StringPiece &bytes, BitVector *bits) {
     // Validate all the bytes first.
     for (int i = 0; i < bytes.size(); ++i) {
