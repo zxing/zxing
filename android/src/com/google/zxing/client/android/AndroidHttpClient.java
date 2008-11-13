@@ -288,8 +288,11 @@ public final class AndroidHttpClient implements HttpClient {
     } else {
       ByteArrayOutputStream arr = new ByteArrayOutputStream();
       OutputStream zipper = new GZIPOutputStream(arr);
-      zipper.write(data);
-      zipper.close();
+      try {
+        zipper.write(data);
+      } finally {
+        zipper.close();
+      }
       entity = new ByteArrayEntity(arr.toByteArray());
       entity.setContentEncoding("gzip");
     }
@@ -309,7 +312,7 @@ public final class AndroidHttpClient implements HttpClient {
   /**
    * Logging tag and level.
    */
-  private static class LoggingConfiguration {
+  private static final class LoggingConfiguration {
 
     private final String tag;
     private final int level;
@@ -367,9 +370,9 @@ public final class AndroidHttpClient implements HttpClient {
   /**
    * Logs cURL commands equivalent to requests.
    */
-  private class CurlLogger implements HttpRequestInterceptor {
-    public void process(HttpRequest request, HttpContext context)
-        throws HttpException, IOException {
+  private final class CurlLogger implements HttpRequestInterceptor {
+    public final void process(HttpRequest request, HttpContext context)
+        throws IOException {
       LoggingConfiguration configuration = curlConfiguration;
       if (configuration != null
           && configuration.isLoggable()
@@ -414,7 +417,7 @@ public final class AndroidHttpClient implements HttpClient {
         HttpEntity entity = entityRequest.getEntity();
         if (entity != null && entity.isRepeatable()) {
           if (entity.getContentLength() < 1024) {
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            OutputStream stream = new ByteArrayOutputStream();
             entity.writeTo(stream);
             String entityString = stream.toString();
             // TODO: Check the content type, too.

@@ -21,7 +21,7 @@ import com.google.zxing.client.android.R;
 import com.google.zxing.client.result.ISBNParsedResult;
 import com.google.zxing.client.result.ParsedResult;
 
-public class ISBNResultHandler extends ResultHandler {
+public final class ISBNResultHandler extends ResultHandler {
 
   private static final int[] mButtons = {
       R.string.button_product_search,

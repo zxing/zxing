@@ -21,7 +21,7 @@ import com.google.zxing.client.android.R;
 import com.google.zxing.client.result.EmailAddressParsedResult;
 import com.google.zxing.client.result.ParsedResult;
 
-public class EmailAddressResultHandler extends ResultHandler {
+public final class EmailAddressResultHandler extends ResultHandler {
 
   private static final int[] mButtons = {
       R.string.button_email,

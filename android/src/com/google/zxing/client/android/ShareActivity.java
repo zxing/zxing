@@ -44,8 +44,6 @@ public final class ShareActivity extends Activity {
     Contacts.People.ContactMethods.DATA, // 2
   };
 
-  private Button mContactButton;
-  private Button mBookmarkButton;
   private Button mClipboardButton;
 
   @Override
@@ -53,9 +51,9 @@ public final class ShareActivity extends Activity {
     super.onCreate(icicle);
     setContentView(R.layout.share);
 
-    mContactButton = (Button) findViewById(R.id.contact_button);
+    Button mContactButton = (Button) findViewById(R.id.contact_button);
     mContactButton.setOnClickListener(mContactListener);
-    mBookmarkButton = (Button) findViewById(R.id.bookmark_button);
+    Button mBookmarkButton = (Button) findViewById(R.id.bookmark_button);
     mBookmarkButton.setOnClickListener(mBookmarkListener);
     mClipboardButton = (Button) findViewById(R.id.clipboard_button);
     mClipboardButton.setOnClickListener(mClipboardListener);

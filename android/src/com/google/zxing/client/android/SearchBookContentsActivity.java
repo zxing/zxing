@@ -37,6 +37,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpHead;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -225,12 +226,12 @@ public final class SearchBookContentsActivity extends Activity {
     }
   }
 
-  private static class NetworkThread extends Thread {
+  private static final class NetworkThread extends Thread {
 
     private final String mISBN;
     private final String mQuery;
     private final Handler mHandler;
-    private String mUserAgent;
+    private final String mUserAgent;
 
     public NetworkThread(String isbn, String query, Handler handler, String userAgent) {
       mISBN = isbn;
@@ -239,12 +240,12 @@ public final class SearchBookContentsActivity extends Activity {
       mUserAgent = userAgent;
     }
 
-    public void run() {
+    public final void run() {
       AndroidHttpClient client = null;
       try {
         String url = BOOK_SEARCH_URL + mISBN + BOOK_SEARCH_COMMAND + URLEncoder.encode(mQuery, "UTF8");
         URI uri = new URI("http", url, null);
-        HttpGet get = new HttpGet(uri);
+        HttpUriRequest get = new HttpGet(uri);
         get.setHeader("cookie", getCookie("http:" + url));
         client = AndroidHttpClient.newInstance(mUserAgent);
         HttpResponse response = client.execute(get);
@@ -283,7 +284,7 @@ public final class SearchBookContentsActivity extends Activity {
       String cookie = CookieManager.getInstance().getCookie(url);
       if (cookie == null || cookie.length() == 0) {
         Log.v(TAG, "Book Search cookie was missing or expired");
-        HttpHead head = new HttpHead(url);
+        HttpUriRequest head = new HttpHead(url);
         AndroidHttpClient client = AndroidHttpClient.newInstance(mUserAgent);
         try {
           HttpResponse response = client.execute(head);

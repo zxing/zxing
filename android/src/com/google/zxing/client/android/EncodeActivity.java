@@ -28,6 +28,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -59,7 +60,7 @@ public final class EncodeActivity extends Activity {
   protected void onResume() {
     super.onResume();
 
-    LinearLayout layout = (LinearLayout) findViewById(R.id.encode_view);
+    View layout = findViewById(R.id.encode_view);
     layout.getViewTreeObserver().addOnGlobalLayoutListener(mLayoutListener);
     mFirstLayout = true;
   }
@@ -68,7 +69,7 @@ public final class EncodeActivity extends Activity {
    * This needs to be delayed until after the first layout so that the view dimensions will be
    * available.
    */
-  public OnGlobalLayoutListener mLayoutListener = new OnGlobalLayoutListener() {
+  public final OnGlobalLayoutListener mLayoutListener = new OnGlobalLayoutListener() {
     public void onGlobalLayout() {
       if (mFirstLayout) {
         LinearLayout layout = (LinearLayout) findViewById(R.id.encode_view);
@@ -92,7 +93,7 @@ public final class EncodeActivity extends Activity {
     }
   };
 
-  public Handler mHandler = new Handler() {
+  public final Handler mHandler = new Handler() {
     public void handleMessage(Message message) {
       switch (message.what) {
         case R.id.encode_succeeded:
@@ -124,13 +125,13 @@ public final class EncodeActivity extends Activity {
     builder.show();
   }
 
-  private OnClickListener mClickListener = new OnClickListener() {
+  private final OnClickListener mClickListener = new OnClickListener() {
     public void onClick(DialogInterface dialog, int which) {
       finish();
     }
   };
 
-  private OnCancelListener mCancelListener = new OnCancelListener() {
+  private final OnCancelListener mCancelListener = new OnCancelListener() {
     public void onCancel(DialogInterface dialog) {
       finish();
     }

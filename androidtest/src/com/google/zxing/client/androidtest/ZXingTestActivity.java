@@ -24,58 +24,58 @@ import android.provider.Contacts;
 import android.view.View;
 import android.widget.Button;
 
-public class ZXingTestActivity extends Activity {
+public final class ZXingTestActivity extends Activity {
 
   @Override
-  public void onCreate(Bundle icicle) {
+  public final void onCreate(Bundle icicle) {
     super.onCreate(icicle);
 
     setContentView(R.layout.test);
 
-    Button test_camera = (Button) findViewById(R.id.test_camera);
+    View test_camera = findViewById(R.id.test_camera);
     test_camera.setOnClickListener(mTestCamera);
 
-    Button run_benchmark = (Button) findViewById(R.id.run_benchmark);
+    View run_benchmark = findViewById(R.id.run_benchmark);
     run_benchmark.setOnClickListener(mRunBenchmark);
 
-    Button scan_product = (Button) findViewById(R.id.scan_product);
+    View scan_product = findViewById(R.id.scan_product);
     scan_product.setOnClickListener(mScanProduct);
 
-    Button scan_qr_code = (Button) findViewById(R.id.scan_qr_code);
+    View scan_qr_code = findViewById(R.id.scan_qr_code);
     scan_qr_code.setOnClickListener(mScanQRCode);
 
-    Button scan_anything = (Button) findViewById(R.id.scan_anything);
+    View scan_anything = findViewById(R.id.scan_anything);
     scan_anything.setOnClickListener(mScanAnything);
 
-    Button search_book_contents = (Button) findViewById(R.id.search_book_contents);
+    View search_book_contents = findViewById(R.id.search_book_contents);
     search_book_contents.setOnClickListener(mSearchBookContents);
 
-    Button encode_url = (Button) findViewById(R.id.encode_url);
+    View encode_url = findViewById(R.id.encode_url);
     encode_url.setOnClickListener(mEncodeURL);
 
-    Button encode_email = (Button) findViewById(R.id.encode_email);
+    View encode_email = findViewById(R.id.encode_email);
     encode_email.setOnClickListener(mEncodeEmail);
 
-    Button encode_phone = (Button) findViewById(R.id.encode_phone);
+    View encode_phone = findViewById(R.id.encode_phone);
     encode_phone.setOnClickListener(mEncodePhone);
 
-    Button encode_sms = (Button) findViewById(R.id.encode_sms);
+    View encode_sms = findViewById(R.id.encode_sms);
     encode_sms.setOnClickListener(mEncodeSMS);
 
-    Button encode_contact = (Button) findViewById(R.id.encode_contact);
+    View encode_contact = findViewById(R.id.encode_contact);
     encode_contact.setOnClickListener(mEncodeContact);
 
-    Button encode_location = (Button) findViewById(R.id.encode_location);
+    View encode_location = findViewById(R.id.encode_location);
     encode_location.setOnClickListener(mEncodeLocation);
 
-    Button encode_bad_data = (Button) findViewById(R.id.encode_bad_data);
+    View encode_bad_data = findViewById(R.id.encode_bad_data);
     encode_bad_data.setOnClickListener(mEncodeBadData);
 
-    Button share_via_barcode = (Button) findViewById(R.id.share_via_barcode);
+    View share_via_barcode = findViewById(R.id.share_via_barcode);
     share_via_barcode.setOnClickListener(mShareViaBarcode);
   }
 
-  public Button.OnClickListener mTestCamera = new Button.OnClickListener() {
+  public final Button.OnClickListener mTestCamera = new Button.OnClickListener() {
     public void onClick(View v) {
       Intent intent = new Intent(Intent.ACTION_VIEW);
       intent.setClassName(ZXingTestActivity.this, CameraTestActivity.class.getName());
@@ -83,7 +83,7 @@ public class ZXingTestActivity extends Activity {
     }
   };
 
-  public Button.OnClickListener mRunBenchmark = new Button.OnClickListener() {
+  public final Button.OnClickListener mRunBenchmark = new Button.OnClickListener() {
     public void onClick(View v) {
       Intent intent = new Intent(Intent.ACTION_VIEW);
       intent.setClassName(ZXingTestActivity.this, BenchmarkActivity.class.getName());
@@ -91,7 +91,7 @@ public class ZXingTestActivity extends Activity {
     }
   };
 
-  public Button.OnClickListener mScanProduct = new Button.OnClickListener() {
+  public final Button.OnClickListener mScanProduct = new Button.OnClickListener() {
     public void onClick(View v) {
       Intent intent = new Intent("com.google.zxing.client.android.SCAN");
       intent.putExtra("SCAN_MODE", "PRODUCT_MODE");
@@ -99,7 +99,7 @@ public class ZXingTestActivity extends Activity {
     }
   };
 
-  public Button.OnClickListener mScanQRCode = new Button.OnClickListener() {
+  public final Button.OnClickListener mScanQRCode = new Button.OnClickListener() {
     public void onClick(View v) {
       Intent intent = new Intent("com.google.zxing.client.android.SCAN");
       intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
@@ -107,14 +107,14 @@ public class ZXingTestActivity extends Activity {
     }
   };
 
-  public Button.OnClickListener mScanAnything = new Button.OnClickListener() {
+  public final Button.OnClickListener mScanAnything = new Button.OnClickListener() {
     public void onClick(View v) {
       Intent intent = new Intent("com.google.zxing.client.android.SCAN");
       startActivityForResult(intent, 0);
     }
   };
 
-  public Button.OnClickListener mSearchBookContents = new Button.OnClickListener() {
+  public final Button.OnClickListener mSearchBookContents = new Button.OnClickListener() {
     public void onClick(View v) {
       Intent intent = new Intent("com.google.zxing.client.android.SEARCH_BOOK_CONTENTS");
       intent.putExtra("ISBN", "9780441014989");
@@ -124,7 +124,7 @@ public class ZXingTestActivity extends Activity {
   };
 
   @Override
-  public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+  public final void onActivityResult(int requestCode, int resultCode, Intent intent) {
     if (requestCode == 0) {
       if (resultCode == RESULT_OK) {
         String contents = intent.getStringExtra("SCAN_RESULT");
@@ -136,31 +136,31 @@ public class ZXingTestActivity extends Activity {
     }
   }
 
-  public Button.OnClickListener mEncodeURL = new Button.OnClickListener() {
+  public final Button.OnClickListener mEncodeURL = new Button.OnClickListener() {
     public void onClick(View v) {
       encodeBarcode("TEXT_TYPE", "http://www.nytimes.com");
     }
   };
 
-  public Button.OnClickListener mEncodeEmail = new Button.OnClickListener() {
+  public final Button.OnClickListener mEncodeEmail = new Button.OnClickListener() {
     public void onClick(View v) {
       encodeBarcode("EMAIL_TYPE", "foo@example.com");
     }
   };
 
-  public Button.OnClickListener mEncodePhone = new Button.OnClickListener() {
+  public final Button.OnClickListener mEncodePhone = new Button.OnClickListener() {
     public void onClick(View v) {
       encodeBarcode("PHONE_TYPE", "2125551212");
     }
   };
 
-  public Button.OnClickListener mEncodeSMS = new Button.OnClickListener() {
+  public final Button.OnClickListener mEncodeSMS = new Button.OnClickListener() {
     public void onClick(View v) {
       encodeBarcode("SMS_TYPE", "2125551212");
     }
   };
 
-  public Button.OnClickListener mEncodeContact = new Button.OnClickListener() {
+  public final Button.OnClickListener mEncodeContact = new Button.OnClickListener() {
     public void onClick(View v) {
       Bundle bundle = new Bundle();
       bundle.putString(Contacts.Intents.Insert.NAME, "Jenny");
@@ -171,7 +171,7 @@ public class ZXingTestActivity extends Activity {
     }
   };
 
-  public Button.OnClickListener mEncodeLocation = new Button.OnClickListener() {
+  public final Button.OnClickListener mEncodeLocation = new Button.OnClickListener() {
     public void onClick(View v) {
       Bundle bundle = new Bundle();
       bundle.putFloat("LAT", 40.829208f);
@@ -180,13 +180,13 @@ public class ZXingTestActivity extends Activity {
     }
   };
 
-  public Button.OnClickListener mEncodeBadData = new Button.OnClickListener() {
+  public final Button.OnClickListener mEncodeBadData = new Button.OnClickListener() {
     public void onClick(View v) {
       encodeBarcode(null, "bar");
     }
   };
 
-  public Button.OnClickListener mShareViaBarcode = new Button.OnClickListener() {
+  public final Button.OnClickListener mShareViaBarcode = new Button.OnClickListener() {
     public void onClick(View v) {
       startActivity(new Intent("com.google.zxing.client.android.SHARE"));
     }

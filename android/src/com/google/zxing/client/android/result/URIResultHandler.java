@@ -21,7 +21,7 @@ import com.google.zxing.client.android.R;
 import com.google.zxing.client.result.ParsedResult;
 import com.google.zxing.client.result.URIParsedResult;
 
-public class URIResultHandler extends ResultHandler {
+public final class URIResultHandler extends ResultHandler {
 
   private static final int[] mButtons = {
       R.string.button_open_browser,

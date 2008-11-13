@@ -22,7 +22,7 @@ import com.google.zxing.client.result.ParsedResult;
 import com.google.zxing.client.result.ParsedResultType;
 import com.google.zxing.client.result.ResultParser;
 
-public class ResultHandlerFactory {
+public final class ResultHandlerFactory {
 
   public static ResultHandler makeResultHandler(Activity activity, Result rawResult) {
     ParsedResult result = parseResult(rawResult);

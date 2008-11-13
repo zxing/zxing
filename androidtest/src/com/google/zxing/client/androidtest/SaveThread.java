@@ -36,8 +36,8 @@ final class SaveThread extends Thread {
 
   public Handler mHandler;
 
-  private CameraTestActivity mActivity;
-  private Rect mFramingRect;
+  private final CameraTestActivity mActivity;
+  private final Rect mFramingRect;
 
   SaveThread(CameraTestActivity activity, Rect framingRect) {
     mActivity = activity;

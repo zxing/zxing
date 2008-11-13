@@ -18,6 +18,7 @@ package com.google.zxing.client.android;
 
 import android.content.Context;
 import android.text.SpannableString;
+import android.text.Spannable;
 import android.text.style.StyleSpan;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
@@ -50,7 +51,7 @@ public final class SearchBookContentsListItem extends LinearLayout {
       if (result.getValidSnippet()) {
         String lowerQuery = SearchBookContentsResult.getQuery().toLowerCase();
         String lowerSnippet = snippet.toLowerCase();
-        SpannableString styledSnippet = new SpannableString(snippet);
+        Spannable styledSnippet = new SpannableString(snippet);
         StyleSpan boldSpan = new StyleSpan(android.graphics.Typeface.BOLD);
         int queryLength = lowerQuery.length();
         int offset = 0;

@@ -18,9 +18,9 @@ package com.google.zxing.client.androidtest;
 
 import com.google.zxing.BarcodeFormat;
 
-public class BenchmarkItem {
+public final class BenchmarkItem {
 
-  private String mPath;
+  private final String mPath;
   private int[] mTimes;
   private int mPosition;
   private boolean mDecoded;
@@ -35,21 +35,21 @@ public class BenchmarkItem {
     mFormat = null;
   }
 
-  public void addResult(int microseconds) {
+  public final void addResult(int microseconds) {
     mTimes[mPosition] = microseconds;
     mPosition++;
   }
 
-  public void setDecoded(boolean decoded) {
+  public final void setDecoded(boolean decoded) {
     mDecoded = decoded;
   }
 
-  public void setFormat(BarcodeFormat format) {
+  public final void setFormat(BarcodeFormat format) {
     mFormat = format;
   }
 
   @Override
-  public String toString() {
+  public final String toString() {
     StringBuffer result = new StringBuffer();
     result.append(mDecoded ? ("DECODED " + mFormat.toString() + ": ") : "FAILED: ");
     result.append(mPath);

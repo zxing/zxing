@@ -19,6 +19,7 @@ package com.google.zxing.client.android.result;
 import android.app.Activity;
 import android.telephony.PhoneNumberUtils;
 import android.text.SpannableString;
+import android.text.Spannable;
 import android.text.style.StyleSpan;
 import com.google.zxing.client.android.R;
 import com.google.zxing.client.result.AddressBookParsedResult;
@@ -29,7 +30,7 @@ import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class AddressBookResultHandler extends ResultHandler {
+public final class AddressBookResultHandler extends ResultHandler {
 
   private final boolean[] mFields;
   private int mButtonCount;
@@ -144,7 +145,7 @@ public class AddressBookResultHandler extends ResultHandler {
 
     String birthday = result.getBirthday();
     if (birthday != null && birthday.length() > 0) {
-      SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+      DateFormat format = new SimpleDateFormat("yyyyMMdd");
       Date date = format.parse(birthday, new ParsePosition(0));
       ParsedResult.maybeAppend(DateFormat.getDateInstance().format(date.getTime()), contents);
     }
@@ -152,7 +153,7 @@ public class AddressBookResultHandler extends ResultHandler {
 
     if (namesLength > 0) {
       // Bold the full name to make it stand out a bit.
-      SpannableString styled = new SpannableString(contents.toString());
+      Spannable styled = new SpannableString(contents.toString());
       styled.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, namesLength, 0);
       return styled;
     } else {
