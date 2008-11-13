@@ -75,7 +75,7 @@ public final class CameraTestActivity extends Activity implements SurfaceHolder.
     CameraManager.get().closeDriver();
   }
 
-  public Handler mHandler = new Handler() {
+  public final Handler mHandler = new Handler() {
     public void handleMessage(Message message) {
       switch (message.what) {
         case R.id.auto_focus:

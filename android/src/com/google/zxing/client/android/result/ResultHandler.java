@@ -29,6 +29,8 @@ import com.google.zxing.client.result.ParsedResultType;
 
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.text.DateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
@@ -101,7 +103,7 @@ public abstract class ResultHandler {
    * @param start   The start time as yyyyMMdd or yyyyMMdd'T'HHmmss or yyyyMMdd'T'HHmmss'Z'
    * @param end     The end time as yyyyMMdd or yyyyMMdd'T'HHmmss or yyyyMMdd'T'HHmmss'Z'
    */
-  public void addCalendarEvent(String summary, String start, String end) {
+  public final void addCalendarEvent(String summary, String start, String end) {
     Intent intent = new Intent(Intent.ACTION_EDIT);
     intent.setType("vnd.android.cursor.item/event");
     intent.putExtra("beginTime", calculateMilliseconds(start));
@@ -116,16 +118,16 @@ public abstract class ResultHandler {
   private long calculateMilliseconds(String when) {
     if (when.length() == 8) {
       // Only contains year/month/day
-      SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+      DateFormat format = new SimpleDateFormat("yyyyMMdd");
       Date date = format.parse(when, new ParsePosition(0));
       return date.getTime();
     } else {
       // The when string can be local time, or UTC if it ends with a Z
-      SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd'T'HHmmss");
+      DateFormat format = new SimpleDateFormat("yyyyMMdd'T'HHmmss");
       Date date = format.parse(when.substring(0, 15), new ParsePosition(0));
       long milliseconds = date.getTime();
       if (when.length() == 16 && when.charAt(15) == 'Z') {
-        GregorianCalendar calendar = new GregorianCalendar();
+        Calendar calendar = new GregorianCalendar();
         int offset = (calendar.get(java.util.Calendar.ZONE_OFFSET) +
             calendar.get(java.util.Calendar.DST_OFFSET));
         milliseconds += offset;
@@ -134,7 +136,7 @@ public abstract class ResultHandler {
     }
   }
 
-  public void addContact(String[] names, String[] phoneNumbers, String[] emails, String note,
+  public final void addContact(String[] names, String[] phoneNumbers, String[] emails, String note,
                          String address, String org, String title) {
 
     Intent intent = new Intent(Contacts.Intents.Insert.ACTION, Contacts.People.CONTENT_URI);
@@ -148,30 +150,30 @@ public abstract class ResultHandler {
     launchIntent(intent);
   }
 
-  public void shareByEmail(String contents) {
+  public final void shareByEmail(String contents) {
     sendEmailFromUri("mailto:", mActivity.getString(R.string.msg_share_subject_line), contents);
   }
 
-  public void sendEmail(String address, String subject, String body) {
+  public final void sendEmail(String address, String subject, String body) {
     sendEmailFromUri("mailto:" + address, subject, body);
   }
 
-  public void sendEmailFromUri(String uri, String subject, String body) {
+  public final void sendEmailFromUri(String uri, String subject, String body) {
     Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse(uri));
     putExtra(intent, "subject", subject);
     putExtra(intent, "body", body);
     launchIntent(intent);
   }
 
-  public void shareBySMS(String contents) {
+  public final void shareBySMS(String contents) {
     sendSMSFromUri("smsto:", mActivity.getString(R.string.msg_share_subject_line) + ":\n" + contents);
   }
 
-  public void sendSMS(String phoneNumber, String body) {
+  public final void sendSMS(String phoneNumber, String body) {
     sendSMSFromUri("smsto:" + phoneNumber, body);
   }
 
-  public void sendSMSFromUri(String uri, String body) {
+  public final void sendSMSFromUri(String uri, String body) {
     Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse(uri));
     putExtra(intent, "sms_body", body);
     // Exit the app once the SMS is sent
@@ -179,11 +181,11 @@ public abstract class ResultHandler {
     launchIntent(intent);
   }
 
-  public void sendMMS(String phoneNumber, String subject, String body) {
+  public final void sendMMS(String phoneNumber, String subject, String body) {
     sendMMSFromUri("mmsto:" + phoneNumber, subject, body);
   }
 
-  public void sendMMSFromUri(String uri, String subject, String body) {
+  public final void sendMMSFromUri(String uri, String subject, String body) {
     Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse(uri));
     // The Messaging app needs to see a valid subject or else it will treat this an an SMS.
     if (subject == null || subject.length() == 0) {
@@ -196,15 +198,15 @@ public abstract class ResultHandler {
     launchIntent(intent);
   }
 
-  public void dialPhone(String phoneNumber) {
+  public final void dialPhone(String phoneNumber) {
     launchIntent(new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + phoneNumber)));
   }
 
-  public void dialPhoneFromUri(String uri) {
+  public final void dialPhoneFromUri(String uri) {
     launchIntent(new Intent(Intent.ACTION_DIAL, Uri.parse(uri)));
   }
 
-  public void openMap(String geoURI) {
+  public final void openMap(String geoURI) {
     launchIntent(new Intent(Intent.ACTION_VIEW, Uri.parse(geoURI)));
   }
 
@@ -214,7 +216,7 @@ public abstract class ResultHandler {
    * @param address The address to find
    * @param title An optional title, e.g. the name of the business at this address
    */
-  public void searchMap(String address, String title) {
+  public final void searchMap(String address, String title) {
     String query = address;
     if (title != null && title.length() > 0) {
       query = query + " (" + title + ")";
@@ -222,33 +224,33 @@ public abstract class ResultHandler {
     launchIntent(new Intent(Intent.ACTION_VIEW, Uri.parse("geo:0,0?q=" + Uri.encode(query))));
   }
 
-  public void getDirections(float latitude, float longitude) {
+  public final void getDirections(float latitude, float longitude) {
     launchIntent(new Intent(Intent.ACTION_VIEW,
         Uri.parse("http://maps.google." + LocaleManager.getCountryTLD() + "/maps?f=d&daddr=" + latitude + "," + longitude)));
   }
 
-  public void openProductSearch(String upc) {
+  public final void openProductSearch(String upc) {
     Uri uri = Uri.parse("http://www.google." + LocaleManager.getCountryTLD() + "/products?q=" + upc);
     launchIntent(new Intent(Intent.ACTION_VIEW, uri));
   }
 
-  public void openBookSearch(String isbn) {
+  public final void openBookSearch(String isbn) {
     Uri uri = Uri.parse("http://books.google." + LocaleManager.getCountryTLD() + "/books?vid=isbn" + isbn);
     launchIntent(new Intent(Intent.ACTION_VIEW, uri));
   }
 
-  public void searchBookContents(String isbn) {
+  public final void searchBookContents(String isbn) {
     Intent intent = new Intent(Intents.SearchBookContents.ACTION);
     intent.setClassName(mActivity, SearchBookContentsActivity.class.getName());
     putExtra(intent, Intents.SearchBookContents.ISBN, isbn);
     launchIntent(intent);
   }
 
-  public void openURL(String url) {
+  public final void openURL(String url) {
     launchIntent(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
   }
 
-  public void webSearch(String query) {
+  public final void webSearch(String query) {
     Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
     intent.putExtra("query", query);
     launchIntent(intent);

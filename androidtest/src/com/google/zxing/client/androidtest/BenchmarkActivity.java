@@ -27,7 +27,7 @@ import android.widget.TextView;
 
 import java.util.Vector;
 
-public class BenchmarkActivity extends Activity {
+public final class BenchmarkActivity extends Activity {
 
   private static final String PATH = "/sdcard/zxingbenchmark";
   private static final String TAG = "ZXingBenchmark";
@@ -37,7 +37,7 @@ public class BenchmarkActivity extends Activity {
   private BenchmarkThread mBenchmarkThread;
 
   @Override
-  public void onCreate(Bundle icicle) {
+  public final void onCreate(Bundle icicle) {
     super.onCreate(icicle);
 
     setContentView(R.layout.benchmark);
@@ -49,7 +49,7 @@ public class BenchmarkActivity extends Activity {
     mBenchmarkThread = null;
   }
 
-  public Button.OnClickListener mRunBenchmark = new Button.OnClickListener() {
+  public final Button.OnClickListener mRunBenchmark = new Button.OnClickListener() {
     public void onClick(View v) {
       if (mBenchmarkThread == null) {
         mRunBenchmarkButton.setEnabled(false);
@@ -60,7 +60,7 @@ public class BenchmarkActivity extends Activity {
     }
   };
 
-  public Handler mHandler = new Handler() {
+  public final Handler mHandler = new Handler() {
     public void handleMessage(Message message) {
       switch (message.what) {
         case R.id.benchmark_done:

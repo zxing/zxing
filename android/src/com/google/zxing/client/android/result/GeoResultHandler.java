@@ -21,7 +21,7 @@ import com.google.zxing.client.android.R;
 import com.google.zxing.client.result.GeoParsedResult;
 import com.google.zxing.client.result.ParsedResult;
 
-public class GeoResultHandler extends ResultHandler {
+public final class GeoResultHandler extends ResultHandler {
 
   private static final int[] mButtons = {
       R.string.button_show_map,

@@ -26,15 +26,16 @@ import com.google.zxing.Result;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 final class BenchmarkThread extends Thread {
 
   private static final String TAG = "BenchmarkThread";
   private static final int RUNS = 10;
 
-  private BenchmarkActivity mActivity;
-  private String mPath;
+  private final BenchmarkActivity mActivity;
+  private final String mPath;
   private MultiFormatReader mMultiFormatReader;
 
   BenchmarkThread(BenchmarkActivity activity, String path) {
@@ -49,7 +50,7 @@ final class BenchmarkThread extends Thread {
     // Try to get in a known state before starting the benchmark
     System.gc();
 
-    Vector<BenchmarkItem> items = new Vector<BenchmarkItem>();
+    List<BenchmarkItem> items = new ArrayList<BenchmarkItem>();
     walkTree(mPath, items);
     Message message = Message.obtain(mActivity.mHandler, R.id.benchmark_done);
     message.obj = items;
@@ -57,7 +58,7 @@ final class BenchmarkThread extends Thread {
   }
 
   // Recurse to allow subdirectories
-  private void walkTree(String path, Vector<BenchmarkItem> items) {
+  private void walkTree(String path, List<BenchmarkItem> items) {
     File file = new File(path);
     if (file.isDirectory()) {
       String[] files = file.list();
@@ -68,13 +69,13 @@ final class BenchmarkThread extends Thread {
     } else {
       BenchmarkItem item = decode(path);
       if (item != null) {
-        items.addElement(item);
+        items.add(item);
       }
     }
   }
 
   private BenchmarkItem decode(String path) {
-    RGBMonochromeBitmapSource source = null;
+    RGBMonochromeBitmapSource source;
     try {
       source = new RGBMonochromeBitmapSource(path);
     } catch (FileNotFoundException e) {

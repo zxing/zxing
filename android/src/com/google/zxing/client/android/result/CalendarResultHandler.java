@@ -28,7 +28,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-public class CalendarResultHandler extends ResultHandler {
+public final class CalendarResultHandler extends ResultHandler {
 
   private static final int[] mButtons = {
       R.string.button_add_calendar
@@ -77,16 +77,16 @@ public class CalendarResultHandler extends ResultHandler {
   private void appendTime(String when, StringBuffer result) {
     if (when.length() == 8) {
       // Show only year/month/day
-      SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+      DateFormat format = new SimpleDateFormat("yyyyMMdd");
       Date date = format.parse(when, new ParsePosition(0));
       ParsedResult.maybeAppend(DateFormat.getDateInstance().format(date.getTime()), result);
     } else {
       // The when string can be local time, or UTC if it ends with a Z
-      SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd'T'HHmmss");
+      DateFormat format = new SimpleDateFormat("yyyyMMdd'T'HHmmss");
       Date date = format.parse(when.substring(0, 15), new ParsePosition(0));
       long milliseconds = date.getTime();
       if (when.length() == 16 && when.charAt(15) == 'Z') {
-        GregorianCalendar calendar = new GregorianCalendar();
+        Calendar calendar = new GregorianCalendar();
         int offset = (calendar.get(Calendar.ZONE_OFFSET) + calendar.get(Calendar.DST_OFFSET));
         milliseconds += offset;
       }

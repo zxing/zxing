@@ -28,6 +28,7 @@ import android.util.Log;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpUriRequest;
 
 import java.net.URI;
 
@@ -146,7 +147,7 @@ public final class QRCodeEncoder {
     return mContents != null && mContents.length() > 0;
   }
 
-  private class NetworkThread extends Thread {
+  private final class NetworkThread extends Thread {
 
     private final String mContents;
     private final Handler mHandler;
@@ -158,13 +159,13 @@ public final class QRCodeEncoder {
       mPixelResolution = pixelResolution;
     }
 
-    public void run() {
+    public final void run() {
       AndroidHttpClient client = null;
       try {
         String url = CHART_SERVER_URL + mPixelResolution + "x" + mPixelResolution + "&chl=" +
           mContents;
         URI uri = new URI("http", url, null);
-        HttpGet get = new HttpGet(uri);
+        HttpUriRequest get = new HttpGet(uri);
         client = AndroidHttpClient.newInstance(mUserAgent);
         HttpResponse response = client.execute(get);
         HttpEntity entity = response.getEntity();

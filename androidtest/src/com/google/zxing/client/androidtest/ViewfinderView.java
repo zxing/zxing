@@ -24,12 +24,12 @@ import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.View;
 
-public class ViewfinderView extends View {
+public final class ViewfinderView extends View {
 
-  private Paint mPaint;
-  private Rect mBox;
-  private int mMaskColor;
-  private int mFrameColor;
+  private final Paint mPaint;
+  private final Rect mBox;
+  private final int mMaskColor;
+  private final int mFrameColor;
 
   // This constructor is used when the class is built from an XML resource.
   public ViewfinderView(Context context, AttributeSet attrs) {
@@ -44,7 +44,7 @@ public class ViewfinderView extends View {
   }
 
   @Override
-  public void onDraw(Canvas canvas) {
+  public final void onDraw(Canvas canvas) {
     Rect frame = CameraManager.get().getFramingRect();
     int width = canvas.getWidth();
     int height = canvas.getHeight();

@@ -83,6 +83,10 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private boolean mPlayBeep;
   private boolean mScanIntent;
   private String mDecodeMode;
+  /**
+   * When the beep has finished playing, rewind to queue up another one.
+   */
+  private final OnCompletionListener mBeepListener = new BeepListener();
 
   @Override
   public void onCreate(Bundle icicle) {
@@ -399,15 +403,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     }
   }
 
-  /**
-   * When the beep has finished playing, rewind to queue up another one.
-   */
-  private final OnCompletionListener mBeepListener = new OnCompletionListener() {
-    public void onCompletion(MediaPlayer mediaPlayer) {
-      mediaPlayer.seekTo(0);
-    }
-  };
-
   private void resetStatusView() {
     mResultView.setVisibility(View.GONE);
     mStatusView.setVisibility(View.VISIBLE);
@@ -425,4 +420,9 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     mViewfinderView.drawViewfinder();
   }
 
+  private static class BeepListener implements OnCompletionListener {
+    public void onCompletion(MediaPlayer mediaPlayer) {
+      mediaPlayer.seekTo(0);
+    }
+  }
 }

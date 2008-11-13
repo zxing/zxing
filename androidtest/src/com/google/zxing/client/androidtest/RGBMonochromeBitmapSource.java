@@ -22,7 +22,7 @@ import com.google.zxing.common.BaseMonochromeBitmapSource;
 
 import java.io.FileNotFoundException;
 
-public class RGBMonochromeBitmapSource extends BaseMonochromeBitmapSource {
+public final class RGBMonochromeBitmapSource extends BaseMonochromeBitmapSource {
 
   private int mWidth;
   private int mHeight;
@@ -62,19 +62,19 @@ public class RGBMonochromeBitmapSource extends BaseMonochromeBitmapSource {
     }
   }
 
-  public int getHeight() {
+  public final int getHeight() {
     return mHeight;
   }
 
-  public int getWidth() {
+  public final int getWidth() {
     return mWidth;
   }
 
-  protected int getLuminance(int x, int y) {
+  protected final int getLuminance(int x, int y) {
     return mLuminances[y * mWidth + x] & 0xff;
   }
 
-  protected int[] getLuminanceRow(int y, int[] row) {
+  protected final int[] getLuminanceRow(int y, int[] row) {
     int width = mWidth;
     if (row == null || row.length < width) {
       row = new int[width];
@@ -86,7 +86,7 @@ public class RGBMonochromeBitmapSource extends BaseMonochromeBitmapSource {
     return row;
   }
 
-  protected int[] getLuminanceColumn(int x, int[] column) {
+  protected final int[] getLuminanceColumn(int x, int[] column) {
     int width = mWidth;
     int height = mHeight;
     if (column == null || column.length < height) {

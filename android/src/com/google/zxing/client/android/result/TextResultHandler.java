@@ -23,7 +23,7 @@ import com.google.zxing.client.result.ParsedResult;
 /**
  * This class handles TextParsedResult as well as unknown formats.
  */
-public class TextResultHandler extends ResultHandler {
+public final class TextResultHandler extends ResultHandler {
 
   private static final int[] mButtons = {
       R.string.button_web_search,

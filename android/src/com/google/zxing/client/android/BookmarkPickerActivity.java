@@ -30,7 +30,7 @@ import android.widget.SimpleCursorAdapter;
  * This class is only needed because I can't successfully send an ACTION_PICK intent to
  * com.android.browser.BrowserBookmarksPage. It can go away if that starts working in the future.
  */
-public class BookmarkPickerActivity extends ListActivity {
+public final class BookmarkPickerActivity extends ListActivity {
 
   private static final String[] BOOKMARK_PROJECTION = {
       Browser.BookmarkColumns.TITLE,
@@ -51,7 +51,7 @@ public class BookmarkPickerActivity extends ListActivity {
   private Cursor mCursor;
 
   @Override
-  protected void onCreate(Bundle icicle) {
+  protected final void onCreate(Bundle icicle) {
     super.onCreate(icicle);
 
     mCursor = getContentResolver().query(Browser.BOOKMARKS_URI, BOOKMARK_PROJECTION,
@@ -64,7 +64,7 @@ public class BookmarkPickerActivity extends ListActivity {
   }
 
   @Override
-  protected void onListItemClick(ListView l, View view, int position, long id) {
+  protected final void onListItemClick(ListView l, View view, int position, long id) {
     if (mCursor.moveToPosition(position)) {
       Intent intent = new Intent();
       intent.putExtra(Browser.BookmarkColumns.TITLE, mCursor.getString(TITLE_COLUMN));
