@@ -1,0 +1,5 @@
+This package is a work in progress, porting a C++ library to Java. At the moment, it does not
+remotely compile or work. It is only checked in so we can collaborate on it. This README will be
+removed when the port is finished.
+
+-- dswitkin 11/13/2008
