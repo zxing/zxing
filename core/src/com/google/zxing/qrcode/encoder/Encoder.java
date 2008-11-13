@@ -325,8 +325,7 @@ public final class Encoder {
         &final_bits);
 
     // Step 7: Choose the mask pattern and set to "qr_code".
-    QRCodeMatrix* matrix = new QRCodeMatrix(qr_code.matrix_width(),
-        qr_code.matrix_width());
+    Matrix matrix = new Matrix(qr_code.matrix_width(), qr_code.matrix_width());
     qr_code.set_mask_pattern(ChooseMaskPattern(final_bits,
         qr_code.ec_level(),
         qr_code.version(),
@@ -398,22 +397,22 @@ public final class Encoder {
   }
 
   private static int ChooseMaskPattern(final BitVector &bits, int ec_level, int version,
-      QRCodeMatrix *matrix) {
+      Matrix matrix) {
     if (!QRCode.IsValidMatrixWidth(matrix.width())) {
-    Debug.LOG_ERROR("Invalid matrix width: " + matrix.width());
-    return -1;
-  }
+      Debug.LOG_ERROR("Invalid matrix width: " + matrix.width());
+      return -1;
+    }
 
-    int min_penalty = INT_MAX;  // Lower penalty is better.
+    int min_penalty = Integer.MAX_VALUE;  // Lower penalty is better.
     int best_mask_pattern = -1;
     // We try all mask patterns to choose the best one.
     for (int i = 0; i < kNumMaskPatterns; ++i) {
       final int mask_pattern = i;
       if (!MatrixUtil.BuildMatrix(bits, ec_level, version,
-        mask_pattern, matrix)) {
-      return -1;
-    }
-      final int penalty = MaskUtil.CalculateMaskPenalty(*matrix);
+          mask_pattern, matrix)) {
+        return -1;
+      }
+      final int penalty = MaskUtil.CalculateMaskPenalty(matrix);
       Debug.LOG_INFO("mask_pattern: " + mask_pattern + ", " + "penalty: " + penalty);
       if (penalty < min_penalty) {
         min_penalty = penalty;

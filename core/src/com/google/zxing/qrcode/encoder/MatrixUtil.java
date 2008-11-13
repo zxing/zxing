@@ -123,20 +123,20 @@ public final class MatrixUtil {
 
   // Set all cells to -1.  -1 means that the cell is empty (not set
   // yet).
-  public static void ClearMatrix(QRCodeMatrix *matrix) {
+  public static void ClearMatrix(Matrix matrix) {
     for (int y = 0; y < matrix.height(); ++y) {
       for (int x = 0; x < matrix.width(); ++x) {
-        (*matrix)(y, x) = -1;
+        matrix.set(y, x, -1);
       }
     }
   }
 
   // Convert "matrix" to ASCII String for debugging.
-  public static String ToASCII(final QRCodeMatrix &matrix) {
-    String result;
+  public static String ToASCII(final Matrix matrix) {
+    StringBuffer result = new StringBuffer();
     for (int y = 0; y < matrix.height(); ++y) {
       for (int x = 0; x < matrix.width(); ++x) {
-        switch (matrix(y, x)) {
+        switch (matrix.get(y, x)) {
           case 0:
             result.append(" 0");
             break;
@@ -150,7 +150,7 @@ public final class MatrixUtil {
       }
       result.append("\n");
     }
-    return result;
+    return result.toString();
   }
 
   // Build 2D matrix of QR Code from "data_bits" with "ec_level",
@@ -160,7 +160,7 @@ public final class MatrixUtil {
                                     int ec_level,
                                     int version,
                                     int mask_pattern,
-                                    QRCodeMatrix *matrix) {
+                                    Matrix matrix) {
     MatrixUtil.ClearMatrix(matrix);
     if (!EmbedBasicPatterns(version, matrix)) {
       return false;
@@ -183,8 +183,7 @@ public final class MatrixUtil {
   // - Timing patterns
   // - Dark dot at the left bottom corner
   // - Position adjustment patterns, if need be
-  public static boolean EmbedBasicPatterns(int version,
-                                           QRCodeMatrix *matrix) {
+  public static boolean EmbedBasicPatterns(int version, Matrix matrix) {
     // Let's get started with embedding big squares at corners.
     EmbedPositionDetectionPatternsAndSeparators(matrix);
     // Then, embed the dark dot at the left bottom corner.
@@ -199,7 +198,7 @@ public final class MatrixUtil {
 
   // Embed type information.  On success, modify the matrix and return
   // true.  On error, return false.
-  public static boolean EmbedTypeInfo(int ec_level, int mask_pattern, QRCodeMatrix *matrix) {
+  public static boolean EmbedTypeInfo(int ec_level, int mask_pattern, Matrix matrix) {
     BitVector type_info_bits;
     if (!MakeTypeInfoBits(ec_level, mask_pattern, &type_info_bits)) {
       return false;
@@ -215,18 +214,18 @@ public final class MatrixUtil {
       // See 8.9 of JISX0510:2004 (p.46).
       final int x1 = kTypeInfoCoordinates[i][0];
       final int y1 = kTypeInfoCoordinates[i][1];
-      (*matrix)(y1, x1) = bit;
+      matrix.set(y1, x1, bit);
 
       if (i < 8) {
         // Right top corner.
         final int x2 = matrix.width() - i - 1;
         final int y2 = 8;
-        (*matrix)(y2, x2) = bit;
+        matrix.set(y2, x2, bit);
       } else {
         // Left bottom corner.
         final int x2 = 8;
         final int y2 = matrix.height() - 7 + (i - 8);
-        (*matrix)(y2, x2) = bit;
+        matrix.set(y2, x2, bit);
       }
     }
     return true;
@@ -236,8 +235,7 @@ public final class MatrixUtil {
   // matrix and return true.  On error, return false.
   // See 8.10 of JISX0510:2004 (p.47) for how to embed version
   // information.  Return true on success.  Return false otherwise.
-  public static boolean MaybeEmbedVersionInfo(int version,
-                                              QRCodeMatrix *matrix) {
+  public static boolean MaybeEmbedVersionInfo(int version, Matrix matrix) {
     if (version < 7) {  // Version info is necessary if version >= 7.
       return true;  // Don't need version info.
     }
@@ -253,9 +251,9 @@ public final class MatrixUtil {
         // Place bits in LSB (least significant bit) to MSB order.
         final int bit = version_info_bits.at(bit_index--);
         // Left bottom corner.
-        (*matrix)(matrix.height() - 11 + j, i) = bit;
+        matrix.set(matrix.height() - 11 + j, i, bit);
         // Right bottom corner.
-        (*matrix)(i, matrix.height() - 11 + j) = bit;
+        matrix.set(i, matrix.height() - 11 + j, bit);
       }
     }
     return true;
@@ -265,9 +263,7 @@ public final class MatrixUtil {
   // matrix and return true.  On error, return false.  For debugging
   // purpose, it skips masking process if "mask_pattern" is -1.
   // See 8.7 of JISX0510:2004 (p.38) for how to embed data bits.
-  public static boolean EmbedDataBits(final BitVector &data_bits,
-                                      int mask_pattern,
-                                      QRCodeMatrix *matrix) {
+  public static boolean EmbedDataBits(final BitVector &data_bits, int mask_pattern, Matrix matrix) {
     int bit_index = 0;
     int direction = -1;
     // Start from the right bottom cell.
@@ -282,7 +278,7 @@ public final class MatrixUtil {
         for (int i = 0; i < 2; ++i) {
           final int xx = x - i;
           // Skip the cell if it's not empty.
-          if (!IsEmpty((*matrix)(y, xx))) {
+          if (!IsEmpty(matrix.get(y, xx))) {
           continue;
         }
           int bit = -1;
@@ -303,7 +299,7 @@ public final class MatrixUtil {
             Debug.DCHECK(mask == 0 || mask == 1);
             bit ^= mask;
           }
-          (*matrix)(y, xx) = bit;
+          matrix.set(y, xx, bit);
         }
         y += direction;
       }
@@ -434,94 +430,86 @@ public final class MatrixUtil {
         value == 1);  // Dark (black).
   }
 
-  private static void EmbedTimingPatterns(QRCodeMatrix *matrix) {
+  private static void EmbedTimingPatterns(Matrix matrix) {
     // -8 is for skipping position detection patterns (size 7), and
     // two horizontal/vertical separation patterns (size 1).
     // Thus, 8 = 7 + 1.
     for (int i = 8; i < matrix.width() - 8; ++i) {
       final int bit = (i + 1) % 2;
       // Horizontal line.
-      Debug.DCHECK(IsValidValue((*matrix)(6, i)));
-      if (IsEmpty((*matrix)(6, i))) {
-      (*matrix)(6, i) = bit;
-    }
+      Debug.DCHECK(IsValidValue(matrix.get(6, i)));
+      if (IsEmpty(matrix.get(6, i))) {
+        matrix.set(6, i, bit);
+      }
       // Vertical line.
-      Debug.DCHECK(IsValidValue((*matrix)(i, 6)));
-      if (IsEmpty((*matrix)(i, 6))) {
-      (*matrix)(i, 6) = bit;
-    }
+      Debug.DCHECK(IsValidValue(matrix.get(i, 6)));
+      if (IsEmpty(matrix.get(i, 6))) {
+        matrix.set(i, 6, bit);
+      }
     }
   }
 
   // Embed the lonely dark dot at left bottom corner.
   // JISX0510:2004 (p.46)
-  private static void EmbedDarkDotAtLeftBottomCorner(
-      QRCodeMatrix *matrix) {
-    Debug.DCHECK((*matrix)(matrix.height() - 8, 8));
-    (*matrix)(matrix.height() - 8, 8) = 1;
+  private static void EmbedDarkDotAtLeftBottomCorner(Matrix matrix) {
+    Debug.DCHECK(matrix.get(matrix.height() - 8, 8) != 0);
+    matrix.set(matrix.height() - 8, 8, 1);
   }
 
-  private static void EmbedHorizontalSeparationPattern(final int x_start,
-                                                       final int y_start,
-                                                       QRCodeMatrix *matrix) {
+  private static void EmbedHorizontalSeparationPattern(final int x_start, final int y_start,
+      Matrix matrix) {
     // We know the width and height.
     Debug.DCHECK_EQ(8, arraysize(kHorizontalSeparationPattern[0]));
     Debug.DCHECK_EQ(1, arraysize(kHorizontalSeparationPattern));
     for (int x = 0; x < 8; ++x) {
-      Debug.DCHECK(IsEmpty((*matrix)(y_start, x_start + x)));
-      (*matrix)(y_start, x_start + x) = kHorizontalSeparationPattern[0][x];
+      Debug.DCHECK(IsEmpty(matrix.get(y_start, x_start + x)));
+      matrix.set(y_start, x_start + x, kHorizontalSeparationPattern[0][x]);
     }
   }
 
-  private static void EmbedVerticalSeparationPattern(final int x_start,
-                                                     final int y_start,
-                                                     QRCodeMatrix *matrix) {
+  private static void EmbedVerticalSeparationPattern(final int x_start, final int y_start,
+      Matrix matrix) {
     // We know the width and height.
     Debug.DCHECK_EQ(1, arraysize(kVerticalSeparationPattern[0]));
     Debug.DCHECK_EQ(7, arraysize(kVerticalSeparationPattern));
     for (int y = 0; y < 7; ++y) {
-      Debug.DCHECK(IsEmpty((*matrix)(y_start + y, x_start)));
-      (*matrix)(y_start + y, x_start) = kVerticalSeparationPattern[y][0];
+      Debug.DCHECK(IsEmpty(matrix.get(y_start + y, x_start)));
+      matrix.set(y_start + y, x_start, kVerticalSeparationPattern[y][0]);
     }
   }
 
-// Note that we cannot unify the function with
-  // EmbedPositionDetectionPattern() despite they are almost
-  // identical, since we cannot write a function that takes 2D arrays
-  // in different sizes in C/C++.  We should live with the fact.
-  private static void EmbedPositionAdjustmentPattern(final int x_start,
-                                                     final int y_start,
-                                                     QRCodeMatrix *matrix) {
+  // Note that we cannot unify the function with EmbedPositionDetectionPattern() despite they are
+  // almost identical, since we cannot write a function that takes 2D arrays in different sizes in
+  // C/C++.  We should live with the fact.
+  private static void EmbedPositionAdjustmentPattern(final int x_start, final int y_start,
+      Matrix matrix) {
     // We know the width and height.
     Debug.DCHECK_EQ(5, arraysize(kPositionAdjustmentPattern[0]));
     Debug.DCHECK_EQ(5, arraysize(kPositionAdjustmentPattern));
     for (int y = 0; y < 5; ++y) {
       for (int x = 0; x < 5; ++x) {
-        Debug.DCHECK(IsEmpty((*matrix)(y_start + y, x_start + x)));
-        (*matrix)(y_start + y, x_start + x) =
-        kPositionAdjustmentPattern[y][x];
+        Debug.DCHECK(IsEmpty(matrix.get(y_start + y, x_start + x)));
+        matrix.set(y_start + y, x_start + x, kPositionAdjustmentPattern[y][x]);
       }
     }
   }
 
-  private static void EmbedPositionDetectionPattern(final int x_start,
-                                                    final int y_start,
-                                                    QRCodeMatrix *matrix) {
+  private static void EmbedPositionDetectionPattern(final int x_start, final int y_start,
+      Matrix matrix) {
     // We know the width and height.
     Debug.DCHECK_EQ(7, arraysize(kPositionDetectionPattern[0]));
     Debug.DCHECK_EQ(7, arraysize(kPositionDetectionPattern));
     for (int y = 0; y < 7; ++y) {
       for (int x = 0; x < 7; ++x) {
-        Debug.DCHECK(IsEmpty((*matrix)(y_start + y, x_start + x)));
-        (*matrix)(y_start + y, x_start + x) =
-        kPositionDetectionPattern[y][x];
+        Debug.DCHECK(IsEmpty(matrix.get(y_start + y, x_start + x)));
+        matrix.set(y_start + y, x_start + x, kPositionDetectionPattern[y][x]);
       }
     }
   }
 
   // Embed position detection patterns and surrounding
   // vertical/horizontal separators.
-  private static void EmbedPositionDetectionPatternsAndSeparators(QRCodeMatrix *matrix) {
+  private static void EmbedPositionDetectionPatternsAndSeparators(Matrix matrix) {
     // Embed three big squares at corners.
     final int pdp_width = arraysize(kPositionDetectionPattern[0]);
     // Left top corner.
@@ -553,8 +541,7 @@ public final class MatrixUtil {
   }
 
   // Embed position adjustment patterns if need be.
-  private static void MaybeEmbedPositionAdjustmentPatterns(final int version,
-                                                           QRCodeMatrix *matrix) {
+  private static void MaybeEmbedPositionAdjustmentPatterns(final int version, Matrix matrix) {
     if (version < 2) {  // The patterns appear if version >= 2
       return;
     }
@@ -572,11 +559,11 @@ public final class MatrixUtil {
         }
         // If the cell is unset, we embed the position adjustment
         // pattern here.
-        if (IsEmpty((*matrix)(y, x))) {
-        // -2 is necessary since the x/y coordinates point to the
-        // center of the pattern, not the left top corner.
-        EmbedPositionAdjustmentPattern(x - 2, y - 2, matrix);
-      }
+        if (IsEmpty(matrix.get(y, x))) {
+          // -2 is necessary since the x/y coordinates point to the
+          // center of the pattern, not the left top corner.
+          EmbedPositionAdjustmentPattern(x - 2, y - 2, matrix);
+        }
       }
     }
   }

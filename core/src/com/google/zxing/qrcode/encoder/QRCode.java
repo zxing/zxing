@@ -16,12 +16,6 @@
 
 package com.google.zxing.qrcode.encoder;
 
-// JAVAPORT: QRCodeMatrix needs to be renamed Matrix and built as a new class.
-//
-// template <typename T> class Array2D;
-// typedef Array2D<int> QRCodeMatrix;
-// #include "util/array/array2d-inl.h"
-
 /**
  * @author satorux@google.com (Satoru Takabayashi) - creator
  * @author dswitkin@google.com (Daniel Switkin) - ported from C++
@@ -55,7 +49,7 @@ public final class QRCode {
   private int num_data_bytes_;
   private int num_ec_bytes_;
   private int num_rs_blocks_;
-  private QRCodeMatrix *matrix_;
+  private Matrix matrix_;
 
 
   // They call encoding "mode".  The modes are defined in 8.3 of JISX0510:2004 (p.14). It's unlikely
@@ -125,7 +119,7 @@ public final class QRCode {
   // Number of Reedsolomon blocks in the QR Code.
   public int num_rs_blocks() { return num_rs_blocks_; }
   // Matrix data of the QR Code.
-  public final QRCodeMatrix* matrix() { return matrix_; }
+  public final Matrix matrix() { return matrix_; }
 
   // Return the value of the module (cell) pointed by "x" and "y" in
   // the matrix of the QR Code.  They call cells in the matrix
@@ -143,12 +137,14 @@ public final class QRCode {
   //
   public int at(int x, int y) {
     // The value must be zero or one.
-    Debug.DCHECK((*matrix_)(y, x) == 0 || (*matrix_)(y, x) == 1);
-    return (*matrix_)(y, x);
+    int value = matrix_.get(y, x);
+    Debug.DCHECK(value == 0 || value == 1);
+    return value;
   }
 
-  // Checks all the member variables are set properly.  Returns true
-  // on success.  Otherwise, returns false.
+  // Checks all the member variables are set properly.  Returns true on success.  Otherwise, returns
+  // false.
+  // JAVAPORT: Do not call EverythingIsBinary(matrix_) here as it is very expensive.
   public boolean IsValid() {
     return (
         // First check if all version are not uninitialized.
@@ -173,31 +169,39 @@ public final class QRCode {
             matrix_width_ == matrix_.width() &&
             // See 7.3.1 of JISX0510:2004 (p.5).
             matrix_width_ == kMinMatrixWidth + (version_ - 1) * 4 &&
-            matrix_.width() == matrix_.height() &&  // Must be square.
-            EverythingIsBinary(*matrix_));
+            matrix_.width() == matrix_.height()); // Must be square.
   }
 
   // Return debug String.
   public String DebugString() {
-    String result;
-    StringAppendF(&result, "<<QRCode\n");
-    StringAppendF(&result, " mode: %s\n", ModeToString(mode_));
-    StringAppendF(&result, " ec_level: %s\n", ECLevelToString(ec_level_));
-    StringAppendF(&result, " version: %d\n", version_);
-    StringAppendF(&result, " matrix_width: %d\n", matrix_width_);
-    StringAppendF(&result, " mask_pattern: %d\n", mask_pattern_);
-    StringAppendF(&result, " num_total_bytes_: %d\n", num_total_bytes_);
-    StringAppendF(&result, " num_data_bytes: %d\n", num_data_bytes_);
-    StringAppendF(&result, " num_ec_bytes: %d\n", num_ec_bytes_);
-    StringAppendF(&result, " num_rs_blocks: %d\n", num_rs_blocks_);
+    StringBuffer result = new StringBuffer();
+    result.append("<<QRCode\n");
+    result.append(" mode: ");
+    result.append(ModeToString(mode_));
+    result.append("\n ec_level: ");
+    result.append(ECLevelToString(ec_level_));
+    result.append("\n version: ");
+    result.append(version_);
+    result.append("\n matrix_width: ");
+    result.append(matrix_width_);
+    result.append("\n mask_pattern: ");
+    result.append(mask_pattern_);
+    result.append("\n num_total_bytes_: ");
+    result.append(num_total_bytes_);
+    result.append("\n num_data_bytes: ");
+    result.append(num_data_bytes_);
+    result.append("\n num_ec_bytes: ");
+    result.append(num_ec_bytes_);
+    result.append("\n num_rs_blocks: ");
+    result.append(num_rs_blocks_);
     if (matrix_ == null) {
-      StringAppendF(&result, " matrix: null\n");
+      result.append("\n matrix: null");
     } else {
-      StringAppendF(&result, " matrix:\n%s",
-          MatrixUtil.ToASCII(*matrix_).c_str());
+      result.append("\n matrix:");
+      result.append(MatrixUtil.ToASCII(matrix_));
     }
-    StringAppendF(&result, ">>\n");
-    return result;
+    result.append("\n>>\n");
+    return result.toString();
   }
 
   public void set_mode(int value) { mode_ = value; }
@@ -211,7 +215,7 @@ public final class QRCode {
   public void set_num_rs_blocks(int value) { num_rs_blocks_ = value; }
   // This takes ownership of the 2D array.  The 2D array will be
   // deleted in the destructor of the class.
-  public void set_matrix(QRCodeMatrix *value) { matrix_ = value; }
+  public void set_matrix(Matrix value) { matrix_ = value; }
 
 
   // Check if "version" is valid.
@@ -334,12 +338,14 @@ public final class QRCode {
     return -1;
   }
 
-  // Return true if the all values in the matrix are binary numbers.
-  // Otherwise, return false.
-  private static boolean EverythingIsBinary(final Array2D<int> &matrix) {
+  // Return true if the all values in the matrix are binary numbers. Otherwise, return false.
+  // JAVAPORT: This is going to be super expensive and unnecessary, we should not call this in
+  // production. I'm leaving it because it may be useful for testing.
+  private static boolean EverythingIsBinary(final Matrix matrix) {
     for (int y = 0; y < matrix.height(); ++y) {
       for (int x = 0; x < matrix.width(); ++x) {
-        if (!(matrix(y, x) == 0 || matrix(y, x) == 1)) {
+        int value = matrix.get(y, x);
+        if (!(value == 0 || value == 1)) {
           // Found non zero/one value.
           return false;
         }
