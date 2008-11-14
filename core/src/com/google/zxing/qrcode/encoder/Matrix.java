@@ -21,8 +21,8 @@ package com.google.zxing.qrcode.encoder;
  *
  * JAVAPORT: I'm not happy about the argument ordering throughout the file, as I always like to have
  * the horizontal component first, but this is for compatibility with the C++ code. The original
- * code was a 2D array of ints, but since it only ever gets assigned zeros and ones, I'm going to
- * use less memory and go with bytes.
+ * code was a 2D array of ints, but since it only ever gets assigned -1, 0, and 1, I'm going to use
+ * less memory and go with bytes.
  *
  * @author dswitkin@google.com (Daniel Switkin)
  */
