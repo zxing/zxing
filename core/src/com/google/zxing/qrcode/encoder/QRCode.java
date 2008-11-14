@@ -52,7 +52,7 @@ public final class QRCode {
   private Matrix matrix_;
 
 
-  // They call encoding "mode".  The modes are defined in 8.3 of JISX0510:2004 (p.14). It's unlikely
+  // They call encoding "mode". The modes are defined in 8.3 of JISX0510:2004 (p.14). It's unlikely
   // (probably we will not support complicated modes) but if you add an item to this, please also
   // add it to ModeToString(), GetModeCode(), GetNumBitsForLength(), Encoder.AppendBytes(), and
   // Encoder.ChooseMode().
@@ -121,20 +121,8 @@ public final class QRCode {
   // Matrix data of the QR Code.
   public final Matrix matrix() { return matrix_; }
 
-  // Return the value of the module (cell) pointed by "x" and "y" in
-  // the matrix of the QR Code.  They call cells in the matrix
-  // "modules".  1 represents a black cell, and 0 represents a white
-  // cell.
-  //
-  // Note that the class internally used Array2D.  You should access
-  // cells in row-major order for cache efficiency.  Example:
-  //
-  //   for (int y = 0; y < qrcode.matrix_width(); ++y) {
-  //     for (int x = 0; x < qrcode.matrix_width(); ++x) {
-  //       DoSomething(qrcode.at(x, y));
-  //     }
-  //   }
-  //
+  // Return the value of the module (cell) pointed by "x" and "y" in the matrix of the QR Code. They
+  // call cells in the matrix "modules". 1 represents a black cell, and 0 represents a white cell.
   public int at(int x, int y) {
     // The value must be zero or one.
     int value = matrix_.get(y, x);
@@ -142,7 +130,7 @@ public final class QRCode {
     return value;
   }
 
-  // Checks all the member variables are set properly.  Returns true on success.  Otherwise, returns
+  // Checks all the member variables are set properly. Returns true on success. Otherwise, returns
   // false.
   // JAVAPORT: Do not call EverythingIsBinary(matrix_) here as it is very expensive.
   public boolean IsValid() {
@@ -204,36 +192,68 @@ public final class QRCode {
     return result.toString();
   }
 
-  public void set_mode(int value) { mode_ = value; }
-  public void set_ec_level(int value) { ec_level_ = value; }
-  public void set_version(int value) { version_ = value; }
-  public void set_matrix_width(int value) { matrix_width_ = value; }
-  public void set_mask_pattern(int value) { mask_pattern_ = value; }
-  public void set_num_total_bytes(int value) { num_total_bytes_ = value; }
-  public void set_num_data_bytes(int value) { num_data_bytes_ = value; }
-  public void set_num_ec_bytes(int value) { num_ec_bytes_ = value; }
-  public void set_num_rs_blocks(int value) { num_rs_blocks_ = value; }
+  public void set_mode(int value) {
+    mode_ = value;
+  }
+
+  public void set_ec_level(int value) {
+    ec_level_ = value;
+  }
+
+  public void set_version(int value) {
+    version_ = value;
+  }
+
+  public void set_matrix_width(int value) {
+    matrix_width_ = value;
+  }
+
+  public void set_mask_pattern(int value) {
+    mask_pattern_ = value;
+  }
+
+  public void set_num_total_bytes(int value) {
+    num_total_bytes_ = value;
+  }
+
+  public void set_num_data_bytes(int value) {
+    num_data_bytes_ = value;
+  }
+
+  public void set_num_ec_bytes(int value) {
+    num_ec_bytes_ = value;
+  }
+
+  public void set_num_rs_blocks(int value) {
+    num_rs_blocks_ = value;
+  }
+
   // This takes ownership of the 2D array.  The 2D array will be
   // deleted in the destructor of the class.
-  public void set_matrix(Matrix value) { matrix_ = value; }
-
+  public void set_matrix(Matrix value) {
+    matrix_ = value;
+  }
 
   // Check if "version" is valid.
   public static boolean IsValidVersion(final int version) {
     return version >= kMinVersion && version <= kMaxVersion;
   }
+
   // Check if "mask_pattern" is valid.
   public static boolean IsValidECLevel(int ec_level) {
     return ec_level >= 0 && ec_level < NUM_EC_LEVELS;
   }
+
   // Check if "mode" is valid.
   public static boolean IsValidMode(final int mode) {
     return mode >= 0 && mode < NUM_MODES;
   }
+
   // Check if "width" is valid.
   public static boolean IsValidMatrixWidth(int width) {
     return width >= kMinMatrixWidth && width <= kMaxMatrixWidth;
   }
+
   // Check if "mask_pattern" is valid.
   public static boolean IsValidMaskPattern(int mask_pattern) {
     return mask_pattern >= 0 && mask_pattern < kNumMaskPatterns;
@@ -277,9 +297,8 @@ public final class QRCode {
     return "UNKNOWN";
   }
 
-  // Return the code of error correction level.  On error, return -1.
-  // The codes of error correction levels are defined in the table 22
-  // of JISX0510:2004 (p.45).
+  // Return the code of error correction level. On error, return -1. The codes of error correction
+  // levels are defined in the table 22 of JISX0510:2004 (p.45).
   public static int GetECLevelCode(final int ec_level) {
     switch (ec_level) {
       case QRCode.EC_LEVEL_L:
@@ -296,9 +315,8 @@ public final class QRCode {
     return -1;  // Unknown error correction level.
   }
 
-  // Return the code of mode.  On error, return -1.
-  // The codes of modes are defined in the table 2 of JISX0510:2004
-  // (p.16).
+  // Return the code of mode. On error, return -1. The codes of modes are defined in the table 2 of
+  // JISX0510:2004 (p.16).
   public static int GetModeCode(final int mode) {
     switch (mode) {
       case QRCode.MODE_NUMERIC:
@@ -315,8 +333,8 @@ public final class QRCode {
     return -1;  // Unknown mode.
   }
 
-  // Return the number of bits needed for representing the length info
-  // of QR Code with "version" and "mode".  On error, return -1.
+  // Return the number of bits needed for representing the length info of QR Code with "version" and
+  // "mode". On error, return -1.
   public static int GetNumBitsForLength(int version, int mode) {
     if (!IsValidVersion(version)) {
       Debug.LOG_ERROR("Invalid version: " + version);
