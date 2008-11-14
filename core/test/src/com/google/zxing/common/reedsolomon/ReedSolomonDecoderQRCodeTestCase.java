@@ -45,7 +45,7 @@ public final class ReedSolomonDecoderQRCodeTestCase extends AbstractReedSolomonT
 
   public void testOneError() throws ReedSolomonException {
     int[] received = new int[QR_CODE_TEST_WITH_EC.length];
-    Random random = new Random(0xDEADBEEFL);
+    Random random = getRandom();
     for (int i = 0; i < received.length; i++) {
       System.arraycopy(QR_CODE_TEST_WITH_EC, 0, received, 0, received.length);
       received[i] = random.nextInt(256);
@@ -55,7 +55,7 @@ public final class ReedSolomonDecoderQRCodeTestCase extends AbstractReedSolomonT
 
   public void testMaxErrors() throws ReedSolomonException {
     int[] received = new int[QR_CODE_TEST_WITH_EC.length];
-    Random random = new Random(0xDEADBEEFL);
+    Random random = getRandom();
     for (int i = 0; i < QR_CODE_TEST.length; i++) { // # iterations is kind of arbitrary
       System.arraycopy(QR_CODE_TEST_WITH_EC, 0, received, 0, received.length);
       corrupt(received, QR_CODE_CORRECTABLE, random);
@@ -66,7 +66,7 @@ public final class ReedSolomonDecoderQRCodeTestCase extends AbstractReedSolomonT
   public void testTooManyErrors() {
     int[] received = new int[QR_CODE_TEST_WITH_EC.length];
     System.arraycopy(QR_CODE_TEST_WITH_EC, 0, received, 0, received.length);
-    Random random = new Random(0xDEADBEEFL);
+    Random random = getRandom();
     corrupt(received, QR_CODE_CORRECTABLE + 1, random);
     try {
       checkQRRSDecode(received);

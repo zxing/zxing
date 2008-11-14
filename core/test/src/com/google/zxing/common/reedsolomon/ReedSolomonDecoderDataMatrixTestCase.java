@@ -40,7 +40,7 @@ public final class ReedSolomonDecoderDataMatrixTestCase extends AbstractReedSolo
 
   public void testOneError() throws ReedSolomonException {
     int[] received = new int[DM_CODE_TEST_WITH_EC.length];
-    Random random = new Random(0xDEADBEEFL);
+    Random random = getRandom();
     for (int i = 0; i < received.length; i++) {
       System.arraycopy(DM_CODE_TEST_WITH_EC, 0, received, 0, received.length);
       received[i] = random.nextInt(256);
@@ -50,7 +50,7 @@ public final class ReedSolomonDecoderDataMatrixTestCase extends AbstractReedSolo
 
   public void testMaxErrors() throws ReedSolomonException {
     int[] received = new int[DM_CODE_TEST_WITH_EC.length];
-    Random random = new Random(0xDEADBEEFL);
+    Random random = getRandom();
     for (int i = 0; i < DM_CODE_TEST.length; i++) { // # iterations is kind of arbitrary
       System.arraycopy(DM_CODE_TEST_WITH_EC, 0, received, 0, received.length);
       corrupt(received, DM_CODE_CORRECTABLE, random);
@@ -61,7 +61,7 @@ public final class ReedSolomonDecoderDataMatrixTestCase extends AbstractReedSolo
   public void testTooManyErrors() {
     int[] received = new int[DM_CODE_TEST_WITH_EC.length];
     System.arraycopy(DM_CODE_TEST_WITH_EC, 0, received, 0, received.length);
-    Random random = new Random(0xDEADBEEFL);
+    Random random = getRandom();
     corrupt(received, DM_CODE_CORRECTABLE + 1, random);
     try {
       checkQRRSDecode(received);
