@@ -50,8 +50,7 @@ public final class MatrixUtil {
       {1, 1, 1, 1, 1},
   };
 
-  // From Appendix E. Table 1, JIS0510X:2004 (p 71).
-  // The table was double-checked by komatsu.
+  // From Appendix E. Table 1, JIS0510X:2004 (p 71). The table was double-checked by komatsu.
   private static final int kPositionAdjustmentPatternCoordinateTable[][] = {
       {-1, -1, -1, -1,  -1,  -1,  -1},  // Version 1
       { 6, 18, -1, -1,  -1,  -1,  -1},  // Version 2
@@ -121,8 +120,7 @@ public final class MatrixUtil {
   private static final uint32 kTypeInfoPoly = 0x537;
   private static final uint32 kTypeInfoMaskPattern = 0x5412;
 
-  // Set all cells to -1.  -1 means that the cell is empty (not set
-  // yet).
+  // Set all cells to -1.  -1 means that the cell is empty (not set yet).
   public static void ClearMatrix(Matrix matrix) {
     for (int y = 0; y < matrix.height(); ++y) {
       for (int x = 0; x < matrix.width(); ++x) {
@@ -153,9 +151,8 @@ public final class MatrixUtil {
     return result.toString();
   }
 
-  // Build 2D matrix of QR Code from "data_bits" with "ec_level",
-  // "version" and "mask_pattern".  On success, store the result in
-  // "matrix" and return true.  On error, return false.
+  // Build 2D matrix of QR Code from "data_bits" with "ec_level", "version" and "mask_pattern". On
+  // success, store the result in "matrix" and return true.  On error, return false.
   public static boolean BuildMatrix(final BitVector &data_bits,
                                     int ec_level,
                                     int version,
@@ -177,8 +174,8 @@ public final class MatrixUtil {
     return EmbedDataBits(data_bits,  mask_pattern, matrix);
   }
 
-  // Embed basic patterns.  On success, modify the matrix and return
-  // true.  On error, return false.  The basic patterns are:
+  // Embed basic patterns. On success, modify the matrix and return true. On error, return false.
+  // The basic patterns are:
   // - Position detection patterns
   // - Timing patterns
   // - Dark dot at the left bottom corner
@@ -196,8 +193,7 @@ public final class MatrixUtil {
     return true;
   }
 
-  // Embed type information.  On success, modify the matrix and return
-  // true.  On error, return false.
+  // Embed type information. On success, modify the matrix and return true. On error, return false.
   public static boolean EmbedTypeInfo(int ec_level, int mask_pattern, Matrix matrix) {
     BitVector type_info_bits;
     if (!MakeTypeInfoBits(ec_level, mask_pattern, &type_info_bits)) {
@@ -206,12 +202,11 @@ public final class MatrixUtil {
     Debug.DCHECK_EQ(15, type_info_bits.size());
 
     for (int i = 0; i < type_info_bits.size(); ++i) {
-      // Place bits in LSB to MSB order.  LSB (least significant bit)
-      // is the last value in "type_info_bits".
+      // Place bits in LSB to MSB order.  LSB (least significant bit) is the last value in
+      // "type_info_bits".
       final int bit = type_info_bits.at(type_info_bits.size() - 1 - i);
 
-      // Type info bits at the left top corner.
-      // See 8.9 of JISX0510:2004 (p.46).
+      // Type info bits at the left top corner. See 8.9 of JISX0510:2004 (p.46).
       final int x1 = kTypeInfoCoordinates[i][0];
       final int y1 = kTypeInfoCoordinates[i][1];
       matrix.set(y1, x1, bit);
@@ -231,10 +226,9 @@ public final class MatrixUtil {
     return true;
   }
 
-  // Embed version information if need be.  On success, modify the
-  // matrix and return true.  On error, return false.
-  // See 8.10 of JISX0510:2004 (p.47) for how to embed version
-  // information.  Return true on success.  Return false otherwise.
+  // Embed version information if need be. On success, modify the matrix and return true. On error,
+  // return false. See 8.10 of JISX0510:2004 (p.47) for how to embed version information. Return
+  // true on success, otherwise return false.
   public static boolean MaybeEmbedVersionInfo(int version, Matrix matrix) {
     if (version < 7) {  // Version info is necessary if version >= 7.
       return true;  // Don't need version info.
@@ -259,9 +253,8 @@ public final class MatrixUtil {
     return true;
   }
 
-  // Embed "data_bits" using "mask_pattern".  On success, modify the
-  // matrix and return true.  On error, return false.  For debugging
-  // purpose, it skips masking process if "mask_pattern" is -1.
+  // Embed "data_bits" using "mask_pattern". On success, modify the matrix and return true. On
+  // error, return false. For debugging purposes, it skips masking process if "mask_pattern" is -1.
   // See 8.7 of JISX0510:2004 (p.38) for how to embed data bits.
   public static boolean EmbedDataBits(final BitVector &data_bits, int mask_pattern, Matrix matrix) {
     int bit_index = 0;
@@ -286,9 +279,8 @@ public final class MatrixUtil {
             bit = data_bits.at(bit_index);
             ++bit_index;
           } else {
-            // Padding bit.  If there is no bit left, we'll fill the
-            // left cells with 0, as described in 8.4.9 of
-            // JISX0510:2004 (p. 24).
+            // Padding bit. If there is no bit left, we'll fill the left cells with 0, as described
+            // in 8.4.9 of JISX0510:2004 (p. 24).
             bit = 0;
           }
           Debug.DCHECK(IsValidValue(bit));
@@ -316,10 +308,8 @@ public final class MatrixUtil {
     return true;
   }
 
-  // Return the position of the most significant bit set (to one) in
-  // the "value".  The most significant bit is position 32.  If there
-  // is no bit set, return 0.
-  // Examples:
+  // Return the position of the most significant bit set (to one) in the "value". The most
+  // significant bit is position 32. If there is no bit set, return 0. Examples:
   // - FindMSBSet(0) => 0
   // - FindMSBSet(1) => 1
   // - FindMSBSet(255) => 8
@@ -332,9 +322,8 @@ public final class MatrixUtil {
     return num_digits;
   }
 
-  // Calculate BCH (Bose-Chaudhuri-Hocquenghem) code for "value" using
-  // polynomial "poly".  The BCH code is used for encoding type
-  // information and version information.
+  // Calculate BCH (Bose-Chaudhuri-Hocquenghem) code for "value" using polynomial "poly". The BCH
+  // code is used for encoding type information and version information.
   // Example: Calculation of version information of 7.
   // f(x) is created from 7.
   //   - 7 = 000111 in 6 bits
@@ -356,12 +345,11 @@ public final class MatrixUtil {
   // Encode it in binary: 110010010100
   // The return value is 0xc94 (1100 1001 0100)
   //
-  // Since all coefficients in the polynomials are 1 or 0, we can do the
-  // calculation by bit operations.  We don't care if cofficients are
-  // positive or nagative.
+  // Since all coefficients in the polynomials are 1 or 0, we can do the calculation by bit
+  // operations. We don't care if cofficients are positive or negative.
   public static uint32 CalculateBCHCode(uint32 value, uint32 poly) {
-    // If poly is "1 1111 0010 0101" (version info poly),
-    // msb_set_in_poly is 13.  We'll subtract 1 from 13 to make it 12.
+    // If poly is "1 1111 0010 0101" (version info poly), msb_set_in_poly is 13. We'll subtract 1
+    // from 13 to make it 12.
     final int msb_set_in_poly = FindMSBSet(poly);
     value <<= msb_set_in_poly - 1;
     // Do the division business using exclusive-or operations.
@@ -372,9 +360,8 @@ public final class MatrixUtil {
     return value;
   }
 
-  // Make bit vector of type information.  On success, store the
-  // result in "bits" and return true.  On error, return false.
-  // Encode error correction level and mask pattern.  See 8.9 of
+  // Make bit vector of type information. On success, store the result in "bits" and return true.
+  // On error, return false. Encode error correction level and mask pattern. See 8.9 of
   // JISX0510:2004 (p.45) for details.
   public static boolean MakeTypeInfoBits(int ec_level, final int mask_pattern, BitVector *bits) {
     final int ec_code = QRCode.GetECLevelCode(ec_level);
@@ -402,10 +389,8 @@ public final class MatrixUtil {
     return true;
   }
 
-  // Make bit vector of version information.  On success, store the
-  // result in "bits" and return true.  On error, return false.
-  // Encode version information.  See 8.10 of JISX0510:2004 (p.45) for
-  // details.
+  // Make bit vector of version information. On success, store the result in "bits" and return true.
+  // On error, return false. See 8.10 of JISX0510:2004 (p.45) for details.
   public static boolean MakeVersionInfoBits(int version, BitVector *bits) {
     bits.AppendBits(version, 6);
     final uint32 bch_code = MatrixUtil.CalculateBCHCode(version,
@@ -431,9 +416,8 @@ public final class MatrixUtil {
   }
 
   private static void EmbedTimingPatterns(Matrix matrix) {
-    // -8 is for skipping position detection patterns (size 7), and
-    // two horizontal/vertical separation patterns (size 1).
-    // Thus, 8 = 7 + 1.
+    // -8 is for skipping position detection patterns (size 7), and two horizontal/vertical
+    // separation patterns (size 1). Thus, 8 = 7 + 1.
     for (int i = 8; i < matrix.width() - 8; ++i) {
       final int bit = (i + 1) % 2;
       // Horizontal line.
@@ -449,8 +433,7 @@ public final class MatrixUtil {
     }
   }
 
-  // Embed the lonely dark dot at left bottom corner.
-  // JISX0510:2004 (p.46)
+  // Embed the lonely dark dot at left bottom corner. JISX0510:2004 (p.46)
   private static void EmbedDarkDotAtLeftBottomCorner(Matrix matrix) {
     Debug.DCHECK(matrix.get(matrix.height() - 8, 8) != 0);
     matrix.set(matrix.height() - 8, 8, 1);
@@ -480,7 +463,7 @@ public final class MatrixUtil {
 
   // Note that we cannot unify the function with EmbedPositionDetectionPattern() despite they are
   // almost identical, since we cannot write a function that takes 2D arrays in different sizes in
-  // C/C++.  We should live with the fact.
+  // C/C++. We should live with the fact.
   private static void EmbedPositionAdjustmentPattern(final int x_start, final int y_start,
       Matrix matrix) {
     // We know the width and height.
@@ -507,8 +490,7 @@ public final class MatrixUtil {
     }
   }
 
-  // Embed position detection patterns and surrounding
-  // vertical/horizontal separators.
+  // Embed position detection patterns and surrounding vertical/horizontal separators.
   private static void EmbedPositionDetectionPatternsAndSeparators(Matrix matrix) {
     // Embed three big squares at corners.
     final int pdp_width = arraysize(kPositionDetectionPattern[0]);
@@ -557,11 +539,10 @@ public final class MatrixUtil {
         if (x == -1 || y == -1) {
           continue;
         }
-        // If the cell is unset, we embed the position adjustment
-        // pattern here.
+        // If the cell is unset, we embed the position adjustment pattern here.
         if (IsEmpty(matrix.get(y, x))) {
-          // -2 is necessary since the x/y coordinates point to the
-          // center of the pattern, not the left top corner.
+          // -2 is necessary since the x/y coordinates point to the center of the pattern, not the
+          // left top corner.
           EmbedPositionAdjustmentPattern(x - 2, y - 2, matrix);
         }
       }

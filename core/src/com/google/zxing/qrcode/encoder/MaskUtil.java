@@ -22,9 +22,8 @@ package com.google.zxing.qrcode.encoder;
  */
 public final class MaskUtil {
 
-  // The mask penalty calculation is complicated.  See Table 21 of
-  // JISX0510:2004 (p.45) for details.  Basically it applies four
-  // rules and summate all penalties.
+  // The mask penalty calculation is complicated.  See Table 21 of JISX0510:2004 (p.45) for details.
+  // Basically it applies four rules and summate all penalties.
   public static int CalculateMaskPenalty(final Matrix matrix) {
     int penalty = 0;
     penalty += ApplyMaskPenaltyRule1(matrix);
@@ -34,9 +33,8 @@ public final class MaskUtil {
     return penalty;
   }
 
-  // Apply mask penalty rule 1 and return the penalty.
-  // Find repetitive cells with the same color and give penalty to
-  // them.  Example: 00000 or 11111.
+  // Apply mask penalty rule 1 and return the penalty. Find repetitive cells with the same color and
+  // give penalty to them. Example: 00000 or 11111.
   public static int ApplyMaskPenaltyRule1(final Matrix matrix) {
     final int penalty = (ApplyMaskPenaltyRule1Internal(matrix, true) +
         ApplyMaskPenaltyRule1Internal(matrix, false));
@@ -44,8 +42,8 @@ public final class MaskUtil {
     return penalty;
   }
 
-  // Apply mask penalty rule 2 and return the penalty.
-  // Find 2x2 blocks with the same color and give penalty to them.
+  // Apply mask penalty rule 2 and return the penalty. Find 2x2 blocks with the same color and give
+  // penalty to them.
   //
   // JAVAPORT: Consider using Matrix.getArray() instead.
   public static int ApplyMaskPenaltyRule2(final Matrix matrix) {
@@ -64,9 +62,8 @@ public final class MaskUtil {
     return penalty;
   }
 
-  // Apply mask penalty rule 3 and return the penalty.
-  // Find consecutive cells of 00001011101 or 10111010000, and give
-  // penalty to them.  If we find patterns like 000010111010000, we give
+  // Apply mask penalty rule 3 and return the penalty. Find consecutive cells of 00001011101 or
+  // 10111010000, and give penalty to them.  If we find patterns like 000010111010000, we give
   // penalties twice (i.e. 40 * 2).
   //
   // JAVAPORT: This many calls to Matrix.get() looks expensive. We should profile and consider
@@ -122,10 +119,8 @@ public final class MaskUtil {
     return penalty;
   }
 
-  // Apply mask penalty rule 4 and return the penalty.
-  // Calculate the ratio of dark cells and give penalty if the ratio
-  // is far from 50%.  It gives 10 penalty for 5% distance.
-  // Examples:
+  // Apply mask penalty rule 4 and return the penalty. Calculate the ratio of dark cells and give
+  // penalty if the ratio is far from 50%. It gives 10 penalty for 5% distance. Examples:
   // -   0% => 100
   // -  40% =>  20
   // -  45% =>  10
@@ -149,8 +144,8 @@ public final class MaskUtil {
     return penalty;
   }
 
-  // Return the mask bit for "mask_pattern" at "x" and "y".
-  // See 8.8 of JISX0510:2004 for mask pattern conditions.
+  // Return the mask bit for "mask_pattern" at "x" and "y". See 8.8 of JISX0510:2004 for mask
+  // pattern conditions.
   public static int GetDataMaskBit(final int mask_pattern, final int x, final int y) {
     Debug.DCHECK(QRCode.IsValidMaskPattern(mask_pattern));
     switch (mask_pattern) {
@@ -177,9 +172,8 @@ public final class MaskUtil {
     return -1;
   }
 
-  // Helper function for ApplyMaskPenaltyRule1.  We need this for doing
-  // this calculation in both vertical and horizontal orders
-  // respectively.
+  // Helper function for ApplyMaskPenaltyRule1. We need this for doing this calculation in both
+  // vertical and horizontal orders respectively.
   private static int ApplyMaskPenaltyRule1Internal(final Matrix matrix, boolean is_horizontal) {
     int penalty = 0;
     int num_same_bit_cells = 0;

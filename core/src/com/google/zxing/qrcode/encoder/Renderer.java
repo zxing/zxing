@@ -31,11 +31,11 @@ public final class Renderer {
   // See 7.3.7 of JISX0510:2004 (p. 11).
   private static final int kQuietZoneSize = 4;
 
-  // Render QR Code as PNG image with "cell_size".  On success, store
+  // Render QR Code as PNG image with "cell_size". On success, store
   // the result in "result" and return true.  On error, return false.
   // The recommended cell size for desktop screens is 3.  This
   // setting generates 87x87 pixels PNG image for version 1 QR Code
-  // (21x21).  87 = (21 + 4 + 4) * 3.  4 is for surrounding white
+  // (21x21). 87 = (21 + 4 + 4) * 3.  4 is for surrounding white
   // space (they call it quiet zone).
   // Sorry for the long function but libpng's API is a bit complecated.
 // See http://www.libpng.org/pub/png/libpng-1.2.5-manual.html for
@@ -117,7 +117,7 @@ public final class Renderer {
   }
 
   // Similar to RenderAsPNG but it renders QR code from data in
-  // "bytes" with error correction level "ec_level".  This is the
+  // "bytes" with error correction level "ec_level". This is the
   // friendliest function in the QR code library.
   public static boolean RenderAsPNGFromData(final StringPiece& bytes, int ec_level, int cell_size,
       String *result) {
