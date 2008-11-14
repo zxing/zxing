@@ -58,4 +58,33 @@ public final class Matrix {
     bytes[y][x] = (byte) value;
   }
 
+  public final void clear(byte value) {
+    for (int y = 0; y < height; ++y) {
+      for (int x = 0; x < width; ++x) {
+        bytes[y][x] = value;
+      }
+    }
+  }
+
+  public final String toString() {
+    StringBuffer result = new StringBuffer();
+    for (int y = 0; y < height; ++y) {
+      for (int x = 0; x < width; ++x) {
+        switch (bytes[y][x]) {
+          case 0:
+            result.append(" 0");
+            break;
+          case 1:
+            result.append(" 1");
+            break;
+          default:
+            result.append("  ");
+            break;
+        }
+      }
+      result.append("\n");
+    }
+    return result.toString();
+  }
+
 }

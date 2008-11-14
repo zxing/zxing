@@ -186,7 +186,7 @@ public final class QRCode {
       result.append("\n matrix: null");
     } else {
       result.append("\n matrix:");
-      result.append(MatrixUtil.ToASCII(matrix_));
+      result.append(matrix_.toString());
     }
     result.append("\n>>\n");
     return result.toString();
@@ -357,8 +357,10 @@ public final class QRCode {
   }
 
   // Return true if the all values in the matrix are binary numbers. Otherwise, return false.
+  //
   // JAVAPORT: This is going to be super expensive and unnecessary, we should not call this in
-  // production. I'm leaving it because it may be useful for testing.
+  // production. I'm leaving it because it may be useful for testing. It should be removed entirely
+  // if Matrix is changed never to contain a -1.
   private static boolean EverythingIsBinary(final Matrix matrix) {
     for (int y = 0; y < matrix.height(); ++y) {
       for (int x = 0; x < matrix.width(); ++x) {

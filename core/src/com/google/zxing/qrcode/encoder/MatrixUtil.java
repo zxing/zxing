@@ -16,8 +16,6 @@
 
 package com.google.zxing.qrcode.encoder;
 
-// #include "util/array/array2d-inl.h"
-
 /**
  * @author satorux@google.com (Satoru Takabayashi) - creator
  * @author dswitkin@google.com (Daniel Switkin) - ported from C++
@@ -114,50 +112,24 @@ public final class MatrixUtil {
   };
 
   // From Appendix D in JISX0510:2004 (p. 67)
-  private static final uint32 kVersionInfoPoly = 0x1f25;  // 1 1111 0010 0101
+  private static final int kVersionInfoPoly = 0x1f25;  // 1 1111 0010 0101
 
   // From Appendix C in JISX0510:2004 (p.65).
-  private static final uint32 kTypeInfoPoly = 0x537;
-  private static final uint32 kTypeInfoMaskPattern = 0x5412;
+  private static final int kTypeInfoPoly = 0x537;
+  private static final int kTypeInfoMaskPattern = 0x5412;
 
   // Set all cells to -1.  -1 means that the cell is empty (not set yet).
+  //
+  // JAVAPORT: We shouldn't need to do this at all. The code should be rewritten to begin encoding
+  // with the Matrix initialized all to zero.
   public static void ClearMatrix(Matrix matrix) {
-    for (int y = 0; y < matrix.height(); ++y) {
-      for (int x = 0; x < matrix.width(); ++x) {
-        matrix.set(y, x, -1);
-      }
-    }
-  }
-
-  // Convert "matrix" to ASCII String for debugging.
-  public static String ToASCII(final Matrix matrix) {
-    StringBuffer result = new StringBuffer();
-    for (int y = 0; y < matrix.height(); ++y) {
-      for (int x = 0; x < matrix.width(); ++x) {
-        switch (matrix.get(y, x)) {
-          case 0:
-            result.append(" 0");
-            break;
-          case 1:
-            result.append(" 1");
-            break;
-          default:
-            result.append("  ");
-            break;
-        }
-      }
-      result.append("\n");
-    }
-    return result.toString();
+    matrix.clear((byte) -1);
   }
 
   // Build 2D matrix of QR Code from "data_bits" with "ec_level", "version" and "mask_pattern". On
   // success, store the result in "matrix" and return true.  On error, return false.
-  public static boolean BuildMatrix(final BitVector &data_bits,
-                                    int ec_level,
-                                    int version,
-                                    int mask_pattern,
-                                    Matrix matrix) {
+  public static boolean BuildMatrix(final BitVector data_bits, int ec_level, int version,
+      int mask_pattern, Matrix matrix) {
     MatrixUtil.ClearMatrix(matrix);
     if (!EmbedBasicPatterns(version, matrix)) {
       return false;
@@ -171,7 +143,7 @@ public final class MatrixUtil {
       return false;
     }
     // Data should be embedded at end.
-    return EmbedDataBits(data_bits,  mask_pattern, matrix);
+    return EmbedDataBits(data_bits, mask_pattern, matrix);
   }
 
   // Embed basic patterns. On success, modify the matrix and return true. On error, return false.
@@ -195,8 +167,8 @@ public final class MatrixUtil {
 
   // Embed type information. On success, modify the matrix and return true. On error, return false.
   public static boolean EmbedTypeInfo(int ec_level, int mask_pattern, Matrix matrix) {
-    BitVector type_info_bits;
-    if (!MakeTypeInfoBits(ec_level, mask_pattern, &type_info_bits)) {
+    BitVector type_info_bits = new BitVector();
+    if (!MakeTypeInfoBits(ec_level, mask_pattern, type_info_bits)) {
       return false;
     }
     Debug.DCHECK_EQ(15, type_info_bits.size());
@@ -233,8 +205,8 @@ public final class MatrixUtil {
     if (version < 7) {  // Version info is necessary if version >= 7.
       return true;  // Don't need version info.
     }
-    BitVector version_info_bits;
-    if (!MakeVersionInfoBits(version, &version_info_bits)) {
+    BitVector version_info_bits = new BitVector();
+    if (!MakeVersionInfoBits(version, version_info_bits)) {
     return false;
   }
 
@@ -243,7 +215,8 @@ public final class MatrixUtil {
     for (int i = 0; i < 6; ++i) {
       for (int j = 0; j < 3; ++j) {
         // Place bits in LSB (least significant bit) to MSB order.
-        final int bit = version_info_bits.at(bit_index--);
+        final int bit = version_info_bits.at(bit_index);
+        bit_index--;
         // Left bottom corner.
         matrix.set(matrix.height() - 11 + j, i, bit);
         // Right bottom corner.
@@ -256,7 +229,7 @@ public final class MatrixUtil {
   // Embed "data_bits" using "mask_pattern". On success, modify the matrix and return true. On
   // error, return false. For debugging purposes, it skips masking process if "mask_pattern" is -1.
   // See 8.7 of JISX0510:2004 (p.38) for how to embed data bits.
-  public static boolean EmbedDataBits(final BitVector &data_bits, int mask_pattern, Matrix matrix) {
+  public static boolean EmbedDataBits(final BitVector data_bits, int mask_pattern, Matrix matrix) {
     int bit_index = 0;
     int direction = -1;
     // Start from the right bottom cell.
@@ -272,8 +245,8 @@ public final class MatrixUtil {
           final int xx = x - i;
           // Skip the cell if it's not empty.
           if (!IsEmpty(matrix.get(y, xx))) {
-          continue;
-        }
+            continue;
+          }
           int bit = -1;
           if (bit_index < data_bits.size()) {
             bit = data_bits.at(bit_index);
@@ -313,7 +286,7 @@ public final class MatrixUtil {
   // - FindMSBSet(0) => 0
   // - FindMSBSet(1) => 1
   // - FindMSBSet(255) => 8
-  public static int FindMSBSet(uint32 value) {
+  public static int FindMSBSet(int value) {
     int num_digits = 0;
     while (value != 0) {
       value >>= 1;
@@ -347,7 +320,7 @@ public final class MatrixUtil {
   //
   // Since all coefficients in the polynomials are 1 or 0, we can do the calculation by bit
   // operations. We don't care if cofficients are positive or negative.
-  public static uint32 CalculateBCHCode(uint32 value, uint32 poly) {
+  public static int CalculateBCHCode(int value, int poly) {
     // If poly is "1 1111 0010 0101" (version info poly), msb_set_in_poly is 13. We'll subtract 1
     // from 13 to make it 12.
     final int msb_set_in_poly = FindMSBSet(poly);
@@ -363,7 +336,7 @@ public final class MatrixUtil {
   // Make bit vector of type information. On success, store the result in "bits" and return true.
   // On error, return false. Encode error correction level and mask pattern. See 8.9 of
   // JISX0510:2004 (p.45) for details.
-  public static boolean MakeTypeInfoBits(int ec_level, final int mask_pattern, BitVector *bits) {
+  public static boolean MakeTypeInfoBits(int ec_level, final int mask_pattern, BitVector bits) {
     final int ec_code = QRCode.GetECLevelCode(ec_level);
     if (ec_code == -1) {
       return false;
@@ -371,14 +344,13 @@ public final class MatrixUtil {
     if (!QRCode.IsValidMaskPattern(mask_pattern)) {
       return false;
     }
-    final uint32 type_info = (ec_code << 3) | mask_pattern;
+    final int type_info = (ec_code << 3) | mask_pattern;
     bits.AppendBits(type_info, 5);
 
-    final uint32 bch_code = MatrixUtil.CalculateBCHCode(type_info,
-        kTypeInfoPoly);
+    final int bch_code = MatrixUtil.CalculateBCHCode(type_info, kTypeInfoPoly);
     bits.AppendBits(bch_code, 10);
 
-    BitVector mask_bits;
+    BitVector mask_bits = new BitVector();
     mask_bits.AppendBits(kTypeInfoMaskPattern, 15);
     bits.XOR(mask_bits);
 
@@ -391,11 +363,11 @@ public final class MatrixUtil {
 
   // Make bit vector of version information. On success, store the result in "bits" and return true.
   // On error, return false. See 8.10 of JISX0510:2004 (p.45) for details.
-  public static boolean MakeVersionInfoBits(int version, BitVector *bits) {
+  public static boolean MakeVersionInfoBits(int version, BitVector bits) {
     bits.AppendBits(version, 6);
-    final uint32 bch_code = MatrixUtil.CalculateBCHCode(version,
-        kVersionInfoPoly);
+    final int bch_code = MatrixUtil.CalculateBCHCode(version, kVersionInfoPoly);
     bits.AppendBits(bch_code, 12);
+
     if (bits.size() != 18) {  // Just in case.
       Debug.LOG_ERROR("should not happen but we got: " + bits.size());
       return false;
@@ -442,8 +414,8 @@ public final class MatrixUtil {
   private static void EmbedHorizontalSeparationPattern(final int x_start, final int y_start,
       Matrix matrix) {
     // We know the width and height.
-    Debug.DCHECK_EQ(8, arraysize(kHorizontalSeparationPattern[0]));
-    Debug.DCHECK_EQ(1, arraysize(kHorizontalSeparationPattern));
+    Debug.DCHECK_EQ(8, kHorizontalSeparationPattern[0].length);
+    Debug.DCHECK_EQ(1, kHorizontalSeparationPattern.length);
     for (int x = 0; x < 8; ++x) {
       Debug.DCHECK(IsEmpty(matrix.get(y_start, x_start + x)));
       matrix.set(y_start, x_start + x, kHorizontalSeparationPattern[0][x]);
@@ -453,8 +425,8 @@ public final class MatrixUtil {
   private static void EmbedVerticalSeparationPattern(final int x_start, final int y_start,
       Matrix matrix) {
     // We know the width and height.
-    Debug.DCHECK_EQ(1, arraysize(kVerticalSeparationPattern[0]));
-    Debug.DCHECK_EQ(7, arraysize(kVerticalSeparationPattern));
+    Debug.DCHECK_EQ(1, kVerticalSeparationPattern[0].length);
+    Debug.DCHECK_EQ(7, kVerticalSeparationPattern.length);
     for (int y = 0; y < 7; ++y) {
       Debug.DCHECK(IsEmpty(matrix.get(y_start + y, x_start)));
       matrix.set(y_start + y, x_start, kVerticalSeparationPattern[y][0]);
@@ -467,8 +439,8 @@ public final class MatrixUtil {
   private static void EmbedPositionAdjustmentPattern(final int x_start, final int y_start,
       Matrix matrix) {
     // We know the width and height.
-    Debug.DCHECK_EQ(5, arraysize(kPositionAdjustmentPattern[0]));
-    Debug.DCHECK_EQ(5, arraysize(kPositionAdjustmentPattern));
+    Debug.DCHECK_EQ(5, kPositionAdjustmentPattern[0].length);
+    Debug.DCHECK_EQ(5, kPositionAdjustmentPattern.length);
     for (int y = 0; y < 5; ++y) {
       for (int x = 0; x < 5; ++x) {
         Debug.DCHECK(IsEmpty(matrix.get(y_start + y, x_start + x)));
@@ -480,8 +452,8 @@ public final class MatrixUtil {
   private static void EmbedPositionDetectionPattern(final int x_start, final int y_start,
       Matrix matrix) {
     // We know the width and height.
-    Debug.DCHECK_EQ(7, arraysize(kPositionDetectionPattern[0]));
-    Debug.DCHECK_EQ(7, arraysize(kPositionDetectionPattern));
+    Debug.DCHECK_EQ(7, kPositionDetectionPattern[0].length);
+    Debug.DCHECK_EQ(7, kPositionDetectionPattern.length);
     for (int y = 0; y < 7; ++y) {
       for (int x = 0; x < 7; ++x) {
         Debug.DCHECK(IsEmpty(matrix.get(y_start + y, x_start + x)));
@@ -493,7 +465,7 @@ public final class MatrixUtil {
   // Embed position detection patterns and surrounding vertical/horizontal separators.
   private static void EmbedPositionDetectionPatternsAndSeparators(Matrix matrix) {
     // Embed three big squares at corners.
-    final int pdp_width = arraysize(kPositionDetectionPattern[0]);
+    final int pdp_width = kPositionDetectionPattern[0].length;
     // Left top corner.
     EmbedPositionDetectionPattern(0, 0, matrix);
     // Right top corner.
@@ -502,7 +474,7 @@ public final class MatrixUtil {
     EmbedPositionDetectionPattern(0, matrix.width() - pdp_width, matrix);
 
     // Embed horizontal separation patterns around the squares.
-    final int hsp_width = arraysize(kHorizontalSeparationPattern[0]);
+    final int hsp_width = kHorizontalSeparationPattern[0].length;
     // Left top corner.
     EmbedHorizontalSeparationPattern(0, hsp_width - 1, matrix);
     // Right top corner.
@@ -512,13 +484,13 @@ public final class MatrixUtil {
     EmbedHorizontalSeparationPattern(0, matrix.width() - hsp_width, matrix);
 
     // Embed vertical separation patterns around the squares.
-    final int vsp_height = arraysize(kVerticalSeparationPattern);
+    final int vsp_size = kVerticalSeparationPattern.length;
     // Left top corner.
-    EmbedVerticalSeparationPattern(vsp_height, 0, matrix);
+    EmbedVerticalSeparationPattern(vsp_size, 0, matrix);
     // Right top corner.
-    EmbedVerticalSeparationPattern(matrix.height() - vsp_height - 1, 0, matrix);
+    EmbedVerticalSeparationPattern(matrix.height() - vsp_size - 1, 0, matrix);
     // Left bottom corner.
-    EmbedVerticalSeparationPattern(vsp_height, matrix.height() - vsp_height,
+    EmbedVerticalSeparationPattern(vsp_size, matrix.height() - vsp_size,
         matrix);
   }
 
@@ -528,10 +500,8 @@ public final class MatrixUtil {
       return;
     }
     final int index = version - 1;
-    final int *coordinates =
-      kPositionAdjustmentPatternCoordinateTable[index];
-    final int num_coordinates =
-        arraysize(kPositionAdjustmentPatternCoordinateTable[index]);
+    final int[] coordinates = kPositionAdjustmentPatternCoordinateTable[index];
+    final int num_coordinates = kPositionAdjustmentPatternCoordinateTable[index].length;
     for (int i = 0; i < num_coordinates; ++i) {
       for (int j = 0; j < num_coordinates; ++j) {
         final int y = coordinates[i];
