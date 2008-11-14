@@ -47,7 +47,11 @@ abstract class AbstractReedSolomonTestCase extends TestCase {
     assertArraysEqual(expectedECBytes, 0, toEncode, dataBytes.length, expectedECBytes.length);
   }
 
-  private static void assertArraysEqual(int[] expected, int expectedOffset, int[] actual, int actualOffset, int length) {
+  static Random getRandom() {
+    return new Random(0xDEADBEEF);
+  }
+
+  static void assertArraysEqual(int[] expected, int expectedOffset, int[] actual, int actualOffset, int length) {
     for (int i = 0; i < length; i++) {
       assertEquals(expected[expectedOffset + i], actual[actualOffset + i]);
     }

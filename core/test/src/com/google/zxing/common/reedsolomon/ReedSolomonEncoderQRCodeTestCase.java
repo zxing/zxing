@@ -16,6 +16,8 @@
 
 package com.google.zxing.common.reedsolomon;
 
+import java.util.Random;
+
 /**
  * @author srowen@google.com (Sean Owen)
  */
@@ -32,6 +34,26 @@ public final class ReedSolomonEncoderQRCodeTestCase extends AbstractReedSolomonT
       0xA5, 0x24, 0xD4, 0xC1, 0xED, 0x36, 0xC7, 0x87,
       0x2C, 0x55 };
     doTestQRCodeEncoding(dataBytes, expectedECBytes);
+  }
+
+  public void testQRCodeVersusDecoder() throws Exception {
+    Random random = getRandom();
+    ReedSolomonEncoder encoder = new ReedSolomonEncoder(GF256.QR_CODE_FIELD);
+    ReedSolomonDecoder decoder = new ReedSolomonDecoder(GF256.QR_CODE_FIELD);
+    for (int i = 0; i < 100; i++) {
+      int size = random.nextInt(1000);
+      int[] toEncode = new int[size];
+      int ecBytes = random.nextInt(2 * (1 + size / 8));
+      int dataBytes = size - ecBytes;
+      for (int j = 0; j < dataBytes; j++) {
+        toEncode[j] = random.nextInt(256);
+      }
+      int[] original = new int[dataBytes];
+      System.arraycopy(toEncode, 0, original, 0, dataBytes);
+      encoder.encode(toEncode, ecBytes);
+      decoder.decode(toEncode, ecBytes);
+      assertArraysEqual(original, 0, toEncode, 0, dataBytes);
+    }
   }
 
   // Need more tests I am sure
