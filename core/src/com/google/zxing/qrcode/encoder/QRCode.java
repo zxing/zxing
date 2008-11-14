@@ -161,7 +161,7 @@ public final class QRCode {
   }
 
   // Return debug String.
-  public String DebugString() {
+  public String toString() {
     StringBuffer result = new StringBuffer();
     result.append("<<QRCode\n");
     result.append(" mode: ");

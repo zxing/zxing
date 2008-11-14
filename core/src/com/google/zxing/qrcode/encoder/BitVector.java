@@ -95,15 +95,6 @@ public final class BitVector {
     }
   }
 
-  // Append "bytes".
-  //
-  // JAVAPORT: Uncomment and implement when a substitute for StringPiece is chosen.
-//  public void AppendBytes(final StringPiece stringPiece) {
-//    for (int i = 0; i < stringPiece.size(); ++i) {
-//      AppendBits(stringPiece[i], 8);
-//    }
-//  }
-
   // Append "bits".
   public void AppendBitVector(final BitVector bits) {
     int size = bits.size();

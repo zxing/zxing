@@ -16,8 +16,9 @@
 
 package com.google.zxing.qrcode.encoder;
 
+import java.util.Vector;
+
 // class GF_Poly;
-// #include "strings/stringpiece.h"
 // #include "util/reedsolomon/galois_field.h"
 // #include "util/reedsolomon/galois_poly.h"
 
@@ -280,18 +281,35 @@ private static final ECPolyInfo kECPolynomials[] = {
   private static final int kFieldSize = 8;
   private static GF_Poly[] g_ec_polynomials = new GF_Poly[kMaxNumECBytes + 1];
 
-  // Encode "bytes" with the error correction level "ec_level". The
-  // encoding mode will be chosen internally by ChooseMode().
-  // On success, store the result in "qr_code" and return true.  On
-  // error, return false.  We recommend you to use QRCode.EC_LEVEL_L
-  // (the lowest level) for "ec_level" since our primary use is to
-  // show QR code on desktop screens.  We don't need very strong error
-  // correction for this purpose.
+  private static final class BlockPair {
+
+    private ByteArray dataBytes;
+    private ByteArray errorCorrectionBytes;
+
+    public BlockPair(ByteArray data, ByteArray errorCorrection) {
+      dataBytes = data;
+      errorCorrectionBytes = errorCorrection;
+    }
+
+    public ByteArray getDataBytes() {
+      return dataBytes;
+    }
+
+    public ByteArray getErrorCorrectionBytes() {
+      return errorCorrectionBytes;
+    }
+
+  }
+
+  // Encode "bytes" with the error correction level "ec_level". The encoding mode will be chosen
+  // internally by ChooseMode(). On success, store the result in "qr_code" and return true. On
+  // error, return false. We recommend you to use QRCode.EC_LEVEL_L (the lowest level) for
+  // "ec_level" since our primary use is to show QR code on desktop screens. We don't need very
+  // strong error correction for this purpose.
   //
-  // Note that there is no way to encode bytes in MODE_KANJI.  We might
-  // want to add EncodeWithMode() with which clients can specify the
-  // encoding mode.  For now, we don't need the functionality.
-  public static boolean Encode(final StringPiece bytes, int ec_level, QRCode qr_code) {
+  // Note that there is no way to encode bytes in MODE_KANJI. We might want to add EncodeWithMode()
+  // with which clients can specify the encoding mode. For now, we don't need the functionality.
+  public static boolean Encode(final ByteArray bytes, int ec_level, QRCode qr_code) {
     // Step 1: Choose the mode (encoding).
     final int mode = ChooseMode(bytes);
 
@@ -311,8 +329,7 @@ private static final ECPolyInfo kECPolynomials[] = {
     if (!AppendModeInfo(qr_code.mode(), header_and_data_bits)) {
       return false;
     }
-    if (!AppendLengthInfo(bytes.size(), qr_code.version(), qr_code.mode(),
-        header_and_data_bits)) {
+    if (!AppendLengthInfo(bytes.size(), qr_code.version(), qr_code.mode(), header_and_data_bits)) {
       return false;
     }
     header_and_data_bits.AppendBitVector(data_bits);
@@ -324,17 +341,12 @@ private static final ECPolyInfo kECPolynomials[] = {
 
     // Step 6: Interleave data bits with error correction code.
     BitVector final_bits = new BitVector();
-    InterleaveWithECBytes(header_and_data_bits,
-        qr_code.num_total_bytes(),
-        qr_code.num_data_bytes(),
-        qr_code.num_rs_blocks(),
-        final_bits);
+    InterleaveWithECBytes(header_and_data_bits, qr_code.num_total_bytes(), qr_code.num_data_bytes(),
+        qr_code.num_rs_blocks(), final_bits);
 
     // Step 7: Choose the mask pattern and set to "qr_code".
     Matrix matrix = new Matrix(qr_code.matrix_width(), qr_code.matrix_width());
-    qr_code.set_mask_pattern(ChooseMaskPattern(final_bits,
-        qr_code.ec_level(),
-        qr_code.version(),
+    qr_code.set_mask_pattern(ChooseMaskPattern(final_bits, qr_code.ec_level(), qr_code.version(),
         matrix));
     if (qr_code.mask_pattern() == -1) {
       // There was an error.
@@ -342,14 +354,12 @@ private static final ECPolyInfo kECPolynomials[] = {
     }
 
     // Step 8.  Build the matrix and set it to "qr_code".
-    MatrixUtil.BuildMatrix(final_bits,
-        qr_code.ec_level(),
-        qr_code.version(),
+    MatrixUtil.BuildMatrix(final_bits, qr_code.ec_level(), qr_code.version(),
         qr_code.mask_pattern(), matrix);
     qr_code.set_matrix(matrix);
     // Step 9.  Make sure we have a valid QR Code.
     if (!qr_code.IsValid()) {
-      Debug.LOG_ERROR("Invalid QR code: " + qr_code.DebugString());
+      Debug.LOG_ERROR("Invalid QR code: " + qr_code.toString());
       return false;
     }
     return true;
@@ -364,26 +374,27 @@ private static final ECPolyInfo kECPolynomials[] = {
     return -1;
   }
 
-  // Choose the best mode from the content of "bytes".
-  // The function is guaranteed to return valid mode.
+  // Choose the best mode by examining the content of "bytes". The function is guaranteed to return
+  // a valid mode.
   //
-  // Note that the function does not return MODE_KANJI, as we cannot
-  // distinguish Shift_JIS from other encodings such as ISO-8859-1, from
-  // data bytes alone.  For example "\xE0\xE0" can be interpreted as one
-  // character in Shift_JIS, but also two characters in ISO-8859-1.
-  public static int ChooseMode(final StringPiece bytes) {
+  // Note that this function does not return MODE_KANJI, as we cannot distinguish Shift_JIS from
+  // other encodings such as ISO-8859-1, from data bytes alone. For example "\xE0\xE0" can be
+  // interpreted as one character in Shift_JIS, but also two characters in ISO-8859-1.
+  //
+  // JAVAPORT: This MODE_KANJI limitation sounds like a problem for us.
+  public static int ChooseMode(final ByteArray bytes) {
     boolean has_numeric = false;
     boolean has_alphanumeric = false;
     boolean has_other = false;
     for (int i = 0; i < bytes.size(); ++i) {
-      final int byte = bytes[i];
-      if (byte >= '0' && byte <= '9') {
-      has_numeric = true;
-    } else if (GetAlphanumericCode(byte) != -1) {
-      has_alphanumeric = true;
-    } else {
-      has_other = true;
-    }
+      final int oneByte = bytes.at(i);
+      if (oneByte >= '0' && oneByte <= '9') {
+        has_numeric = true;
+      } else if (GetAlphanumericCode(oneByte) != -1) {
+        has_alphanumeric = true;
+      } else {
+        has_other = true;
+      }
     }
     if (has_other) {
       return QRCode.MODE_8BIT_BYTE;
@@ -430,9 +441,9 @@ private static final ECPolyInfo kECPolynomials[] = {
     qr_code.set_mode(mode);
 
     if (!QRCode.IsValidECLevel(ec_level)) {
-    Debug.LOG_ERROR("Invalid EC level: " + ec_level);
-    return false;
-  }
+      Debug.LOG_ERROR("Invalid EC level: " + ec_level);
+      return false;
+    }
 
     // In the following comments, we use numbers of Version 7-H.
     for (int i = 0; i < kRSBlockTable.length; ++i) {
@@ -445,10 +456,9 @@ private static final ECPolyInfo kECPolynomials[] = {
       final int num_rs_blocks = row.block_info[ec_level][1];
       // num_data_bytes = 196 - 130 = 66
       final int num_data_bytes = num_bytes - num_ec_bytes;
-      // We want to choose the smallest version which can contain data
-      // of "num_input_bytes" + some extra bits for the header (mode
-      // info and length info). The header can be three bytes
-      // (precisely 4 + 16 bits) at most.  Hence we do +3 here.
+      // We want to choose the smallest version which can contain data of "num_input_bytes" + some
+      // extra bits for the header (mode info and length info). The header can be three bytes
+      // (precisely 4 + 16 bits) at most. Hence we do +3 here.
       if (num_data_bytes >= num_input_bytes + 3) {
         // Yay, we found the proper rs block info!
         qr_code.set_version(i + 1);
@@ -546,50 +556,40 @@ private static final ECPolyInfo kECPolynomials[] = {
     }
   }
 
-  // Interleave "bits" with corresponding error correction bytes.  On
-  // success, store the result in "result" and return true.  On error,
-  // return false.
-  // The interleave rule is complicated.  See 8.6 of JISX0510:2004
-  // (p.37) for details.
-  static boolean InterleaveWithECBytes(final BitVector bits,
-                                       int num_total_bytes,
-                                       int num_data_bytes,
-                                       int num_rc_blocks,
-                                       BitVector result) {
+  // Interleave "bits" with corresponding error correction bytes. On success, store the result in
+  // "result" and return true. On error, return false. The interleave rule is complicated. See 8.6
+  // of JISX0510:2004 (p.37) for details.
+  static boolean InterleaveWithECBytes(final BitVector bits, int num_total_bytes,
+      int num_data_bytes, int num_rs_blocks, BitVector result) {
+
     // "bits" must have "num_data_bytes" bytes of data.
     Debug.DCHECK(bits.num_bytes() == num_data_bytes);
 
-    // Step 1.  Divide data bytes into blocks and generate error
-    // correction bytes for them.  We'll store the divided data bytes
-    // blocks and error correction bytes blocks into "blocks".
-    typedef pair<StringPiece, String> BlockPair;
+    // Step 1.  Divide data bytes into blocks and generate error correction bytes for them. We'll
+    // store the divided data bytes blocks and error correction bytes blocks into "blocks".
     int data_bytes_offset = 0;
-    // JAVAPORT: This is not a String, it's really a byte[]
-    final String &encoded_bytes = bits.ToString();
-    int max_num_data_bytes = 0;  // StringPiece's size is "int".
-    size_t max_num_ec_bytes = 0;  // STL String's size is "size_t".
-    vector<BlockPair> blocks;
-    // Since, we know the number of reedsolmon blocks, we can initialize
-    // the vector with the number.
-    blocks.resize(num_rs_blocks);
+    int max_num_data_bytes = 0;
+    int max_num_ec_bytes = 0;
+
+    // Since, we know the number of reedsolmon blocks, we can initialize the vector with the number.
+    Vector<BlockPair> blocks = new Vector<BlockPair>(num_rs_blocks);
 
     for (int i = 0; i < num_rs_blocks; ++i) {
-      int num_data_bytes_in_block, num_ec_bytes_in_block;
+      Integer num_data_bytes_in_block = new Integer(0);
+      Integer num_ec_bytes_in_block = new Integer(0);
       GetNumDataBytesAndNumECBytesForBlockID(
           num_total_bytes, num_data_bytes, num_rs_blocks, i,
-          &num_data_bytes_in_block, &num_ec_bytes_in_block);
-      // We modify the objects in the vector instead of copying new
-      // objects to the vector.  In particular, we want to avoid String
-      // copies.
-      StringPiece *data_bytes = &(blocks[i].first);
-      String *ec_bytes = &(blocks[i].second);
+          num_data_bytes_in_block, num_ec_bytes_in_block);
 
-      data_bytes.set(encoded_bytes.data() + data_bytes_offset,
-          num_data_bytes_in_block);
-      GenerateECBytes(*data_bytes, num_ec_bytes_in_block, ec_bytes);
+      ByteArray data_bytes = new ByteArray();
+      ByteArray ec_bytes = new ByteArray();
+      blocks.addElement(new BlockPair(data_bytes, ec_bytes));
 
-      max_num_data_bytes = max(max_num_data_bytes, data_bytes.size());
-      max_num_ec_bytes = max(max_num_ec_bytes, ec_bytes.size());
+      data_bytes.set(bits, data_bytes_offset, num_data_bytes_in_block);
+      GenerateECBytes(data_bytes, num_ec_bytes_in_block, ec_bytes);
+
+      max_num_data_bytes = Math.max(max_num_data_bytes, data_bytes.size());
+      max_num_ec_bytes = Math.max(max_num_ec_bytes, ec_bytes.size());
       data_bytes_offset += num_data_bytes_in_block;
     }
     Debug.DCHECK_EQ(num_data_bytes, data_bytes_offset);
@@ -597,18 +597,18 @@ private static final ECPolyInfo kECPolynomials[] = {
     // First, place data blocks.
     for (int i = 0; i < max_num_data_bytes; ++i) {
       for (int j = 0; j < blocks.size(); ++j) {
-        final StringPiece &data_bytes = blocks[j].first;
+        final ByteArray data_bytes = blocks.elementAt(j).getDataBytes();
         if (i < data_bytes.size()) {
-          result.AppendBits(data_bytes[i], 8);
+          result.AppendBits(data_bytes.at(i), 8);
         }
       }
     }
     // Then, place error correction blocks.
     for (int i = 0; i < max_num_ec_bytes; ++i) {
       for (int j = 0; j < blocks.size(); ++j) {
-        final String &ec_bytes = blocks[j].second;
+        final ByteArray ec_bytes = blocks.elementAt(j).getErrorCorrectionBytes();
         if (i < ec_bytes.size()) {
-          result.AppendBits(ec_bytes[i], 8);
+          result.AppendBits(ec_bytes.at(i), 8);
         }
       }
     }
@@ -620,8 +620,8 @@ private static final ECPolyInfo kECPolynomials[] = {
     return false;
   }
 
-  // Append mode info.  On success, store the result in "bits" and
-  // return true.  On error, return false.
+  // Append mode info. On success, store the result in "bits" and return true. On error, return
+  // false.
   static boolean AppendModeInfo(int mode, BitVector bits) {
     final int code = QRCode.GetModeCode(mode);
     if (code == -1) {
@@ -633,8 +633,8 @@ private static final ECPolyInfo kECPolynomials[] = {
   }
 
 
-  // Append length info.  On success, store the result in "bits" and
-  // return true.  On error, return false.
+  // Append length info. On success, store the result in "bits" and return true. On error, return
+  // false.
   static boolean AppendLengthInfo(int num_bytes, int version, int mode, BitVector bits) {
     int num_letters = num_bytes;
     // In Kanji mode, a letter is represented in two bytes.
@@ -658,16 +658,16 @@ private static final ECPolyInfo kECPolynomials[] = {
 
   // Append "bytes" in "mode" mode (encoding) into "bits". On success, store the result in "bits"
   // and return true. On error, return false.
-  static boolean AppendBytes(final StringPiece bytes, int mode, BitVector bits) {
+  static boolean AppendBytes(final ByteArray bytes, int mode, BitVector bits) {
     switch (mode) {
       case QRCode.MODE_NUMERIC:
-      return AppendNumericBytes(bytes, bits);
+        return AppendNumericBytes(bytes, bits);
       case QRCode.MODE_ALPHANUMERIC:
-      return AppendAlphanumericBytes(bytes, bits);
+        return AppendAlphanumericBytes(bytes, bits);
       case QRCode.MODE_8BIT_BYTE:
-      return Append8BitBytes(bytes, bits);
+        return Append8BitBytes(bytes, bits);
       case QRCode.MODE_KANJI:
-      return AppendKanjiBytes(bytes, bits);
+        return AppendKanjiBytes(bytes, bits);
       default:
         break;
     }
@@ -677,24 +677,25 @@ private static final ECPolyInfo kECPolynomials[] = {
 
   // Append "bytes" to "bits" using QRCode.MODE_NUMERIC mode. On success, store the result in "bits"
   // and return true. On error, return false.
-  static boolean AppendNumericBytes(final StringPiece bytes, BitVector bits) {
+  static boolean AppendNumericBytes(final ByteArray bytes, BitVector bits) {
     // Validate all the bytes first.
     for (int i = 0; i < bytes.size(); ++i) {
-      if (!isdigit(bytes[i])) {
+      int oneByte = bytes.at(i);
+      if (oneByte < '0' || oneByte > '9') {
         return false;
       }
     }
     for (int i = 0; i < bytes.size();) {
-      final int num1 = bytes[i] - '0';
+      final int num1 = bytes.at(i) - '0';
       if (i + 2 < bytes.size()) {
         // Encode three numeric letters in ten bits.
-        final int num2 = bytes[i + 1] - '0';
-        final int num3 = bytes[i + 2] - '0';
+        final int num2 = bytes.at(i + 1) - '0';
+        final int num3 = bytes.at(i + 2) - '0';
         bits.AppendBits(num1 * 100 + num2 * 10 + num3, 10);
         i += 3;
       } else if (i + 1 < bytes.size()) {
         // Encode two numeric letters in seven bits.
-        final int num2 = bytes[i + 1] - '0';
+        final int num2 = bytes.at(i + 1) - '0';
         bits.AppendBits(num1 * 10 + num2, 7);
         i += 2;
       } else {
@@ -706,17 +707,16 @@ private static final ECPolyInfo kECPolynomials[] = {
     return true;
   }
 
-  // Append "bytes" to "bits" using QRCode.MODE_ALPHANUMERIC mode.
-  // On success, store the result in "bits" and return true.  On error,
-  // return false.
-  static boolean AppendAlphanumericBytes(final StringPiece bytes, BitVector bits) {
+  // Append "bytes" to "bits" using QRCode.MODE_ALPHANUMERIC mode. On success, store the result in
+  // "bits" and return true. On error, return false.
+  static boolean AppendAlphanumericBytes(final ByteArray bytes, BitVector bits) {
     for (int i = 0; i < bytes.size();) {
-      final int code1 = GetAlphanumericCode(bytes[i]);
+      final int code1 = GetAlphanumericCode(bytes.at(i));
       if (code1 == -1) {
         return false;
       }
       if (i + 1 < bytes.size()) {
-        final int code2 = GetAlphanumericCode(bytes[i + 1]);
+        final int code2 = GetAlphanumericCode(bytes.at(i + 1));
         if (code2 == -1) {
           return false;
         }
@@ -732,28 +732,26 @@ private static final ECPolyInfo kECPolynomials[] = {
     return true;
   }
 
-  // Append "bytes" to "bits" using QRCode.MODE_8BIT_BYTE mode.
-  // On success, store the result in "bits" and return true.  On error,
-  // return false.
-  static boolean Append8BitBytes(final StringPiece bytes, BitVector bits) {
+  // Append "bytes" to "bits" using QRCode.MODE_8BIT_BYTE mode. On success, store the result in
+  // "bits" and return true. On error, return false.
+  static boolean Append8BitBytes(final ByteArray bytes, BitVector bits) {
     for (int i = 0; i < bytes.size(); ++i) {
-      bits.AppendBits(bytes[i], 8);
+      bits.AppendBits(bytes.at(i), 8);
     }
     return true;
   }
 
-  // Append "bytes" to "bits" using QRCode.MODE_KANJI mode.
-  // On success, store the result in "bits" and return true.  On error,
-  // return false.
-  // See 8.4.5 of JISX0510:2004 (p.21) for how to encode Kanji bytes.
-  static boolean AppendKanjiBytes(final StringPiece bytes, BitVector bits) {
+  // Append "bytes" to "bits" using QRCode.MODE_KANJI mode. On success, store the result in "bits"
+  // and return true. On error, return false. See 8.4.5 of JISX0510:2004 (p.21) for how to encode
+  // Kanji bytes.
+  static boolean AppendKanjiBytes(final ByteArray bytes, BitVector bits) {
     if (bytes.size() % 2 != 0) {
       Debug.LOG_ERROR("Invalid byte sequence: " + bytes);
       return false;
     }
     for (int i = 0; i < bytes.size(); i += 2) {
-      Debug.DCHECK(IsValidKanji(bytes[i], bytes[i + 1]));
-      final int code = (static_cast<int>(bytes[i]) << 8 | bytes[i + 1]);
+      Debug.DCHECK(IsValidKanji(bytes.at(i), bytes.at(i + 1)));
+      final int code = (bytes.at(i) << 8) | bytes.at(i + 1);
       int subtracted = -1;
       if (code >= 0x8140 && code <= 0x9ffc) {
         subtracted = code - 0x8140;
@@ -777,32 +775,31 @@ private static final ECPolyInfo kECPolynomials[] = {
 
   // Initialize "g_ec_polynomials" with numbers in kECPolynomials.
   private static void InitECPolynomials() {
-    final GaloisField &field = GaloisField.GetField(kFieldSize);
-    for (int i = 0; i < arraysize(kECPolynomials); ++i) {
-      final ECPolyInfo& ec_poly_info = kECPolynomials[i];
+    final GaloisField field = GaloisField.GetField(kFieldSize);
+    for (int i = 0; i < kECPolynomials.length; ++i) {
+      final ECPolyInfo ec_poly_info = kECPolynomials[i];
       final int ec_length = ec_poly_info.ec_length;
       vector<GF_Element> *coeffs = new vector<GF_Element>;
-      // The number of coefficients is one more than "ec_length".
-      // That's why the termination condition is <= instead of <.
+      // The number of coefficients is one more than "ec_length". That's why the termination
+      // condition is <= instead of <.
       for (int j = 0; j <= ec_length; ++j) {
         // We need exp'ed numbers for later use.
         final int coeff = field.Exp(ec_poly_info.coeffs[j]);
         coeffs.push_back(coeff);
       }
-      // Reverse the coefficients since the numbers in kECPolynomials
-      // are ordered in reverse order to the order GF_Poly expects.
+      // Reverse the coefficients since the numbers in kECPolynomials are ordered in reverse order
+      // to the order GF_Poly expects.
       reverse(coeffs.begin(), coeffs.end());
 
-      GF_Poly *ec_poly = new GF_Poly(coeffs, GaloisField.GetField(kFieldSize));
+      GF_Poly ec_poly = new GF_Poly(coeffs, GaloisField.GetField(kFieldSize));
       g_ec_polynomials[ec_length] = ec_poly;
     }
   }
 
-  // Get error correction polynomials.  The polynomials are
-  // defined in Appendix A of JISX0510 2004 (p. 59). In the appendix,
-  // they use exponential notations for the polynomials.  We need to
-  // apply GaloisField.Log() to all coefficients generated by the
-  // function to compare numbers with the ones in the appendix.
+  // Get error correction polynomials. The polynomials are defined in Appendix A of JISX0510 2004
+  // (p. 59). In the appendix, they use exponential notations for the polynomials. We need to apply
+  // GaloisField.Log() to all coefficients generated by the function to compare numbers with the
+  // ones in the appendix.
   //
   // Example:
   // - Input: 17
@@ -822,9 +819,8 @@ private static final ECPolyInfo kECPolynomials[] = {
   // Example:
   // - Input:  {32,65,205,69,41,220,46,128,236}, ec_length = 17
   // - Output: {42,159,74,221,244,169,239,150,138,70,237,85,224,96,74,219,61}
-  private static void GenerateECBytes(final StringPiece data_bytes, int ec_length, String ec_bytes) {
-    // First, fill the vector with "ec_length" copies of 0.
-    // They are low-order zero coefficients.
+  private static void GenerateECBytes(final ByteArray data_bytes, int ec_length, ByteArray ec_bytes) {
+    // First, fill the vector with "ec_length" copies of 0. They are low-order zero coefficients.
     vector<GF_Element> *coeffs = new vector<GF_Element>(ec_length, 0);
     // Then copy data_bytes backward.
     copy(data_bytes.rbegin(), data_bytes.rend(), back_inserter(*coeffs));
@@ -835,27 +831,25 @@ private static final ECPolyInfo kECPolynomials[] = {
     final GF_Poly &ec_poly = GetECPoly(ec_length);
     pair<GF_Poly*, GF_Poly*> divrem = GF_Poly.DivRem(data_poly, ec_poly);
 
-    // Basically, the coefficients in the remainder polynomial are the
-    // error correction bytes.
+    // Basically, the coefficients in the remainder polynomial are the error correction bytes.
     GF_Poly *remainder = divrem.second;
     ec_bytes.reserve(ec_length);
-    // However, high-order zero cofficients in the remainder polynomial
-    // are ommited.  We should add zero by ourselvs.
+    // However, high-order zero cofficients in the remainder polynomial are ommited. We should add
+    // zero by ourselvs.
     final int num_pruned_zero_coeffs = ec_length - (remainder.degree() + 1);
     for (int i = 0; i < num_pruned_zero_coeffs; ++i) {
-      ec_bytes.push_back(0);
+      ec_bytes.appendByte(0);
     }
     // Copy the remainder numbers to "ec_bytes".
     for (int i = remainder.degree(); i >= 0; --i) {
-      ec_bytes.push_back(remainder.coeff(i));
+      ec_bytes.appendByte(remainder.coeff(i));
     }
     Debug.DCHECK_EQ(ec_length, ec_bytes.size());
   }
 
-  // Check if "byte1" and "byte2" can compose a valid Kanji letter
-  // (2-byte Shift_JIS letter).
-  // The numbers are from http://ja.wikipedia.org/wiki/Shift_JIS.
-  private static boolean IsValidKanji(final char byte1, final char byte2) {
+  // Check if "byte1" and "byte2" can compose a valid Kanji letter (2-byte Shift_JIS letter). The
+  // numbers are from http://ja.wikipedia.org/wiki/Shift_JIS.
+  private static boolean IsValidKanji(final int byte1, final int byte2) {
     return (byte2 != 0x7f &&
         ((byte1 >= 0x81 && byte1 <= 0x9f &&
             byte2 >= 0x40 && byte2 <= 0xfc) ||
@@ -864,13 +858,15 @@ private static final ECPolyInfo kECPolynomials[] = {
   }
 
   // Check if "bytes" is a valid Kanji sequence.
-  private static boolean IsValidKanjiSequence(final StringPiece bytes) {
+  //
+  // JAVAPORT - Remove if not used by the unit tests.
+  private static boolean IsValidKanjiSequence(final ByteArray bytes) {
     if (bytes.size() % 2 != 0) {
       return false;
     }
     int i = 0;
     for (; i < bytes.size(); i += 2) {
-      if (!IsValidKanji(bytes[i], bytes[i + 1])) {
+      if (!IsValidKanji(bytes.at(i), bytes.at(i + 1))) {
         break;
       }
     }
