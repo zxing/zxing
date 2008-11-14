@@ -66,6 +66,10 @@ final class GF256Poly {
     }
   }
 
+  int[] getCoefficients() {
+    return coefficients;
+  }
+
   /**
    * @return degree of this polynomial
    */
@@ -110,25 +114,6 @@ final class GF256Poly {
     }
     return result;
   }
-
-  /*
-  int evaluateFormatDerivativeAt(int a) {
-    int degree = getDegree();
-    if (degree == 0) {
-      // Derivative of a constant is zero.
-      return 0;
-    }
-
-    int aToTheI = 1;
-    int sum = getCoefficient(1);
-    int aSquared = field.multiply(a, a);
-    for (int i = 2; i < degree; i += 2) {
-      aToTheI = field.multiply(aSquared, aToTheI);
-      sum = field.addOrSubtract(sum, field.multiply(aToTheI, getCoefficient(i + 1)));
-    }
-    return sum;
-  }
-   */
 
   GF256Poly addOrSubtract(GF256Poly other) {
     if (!field.equals(other.field)) {
@@ -210,6 +195,69 @@ final class GF256Poly {
       product[i] = field.multiply(coefficients[i], coefficient);
     }
     return new GF256Poly(field, product);
+  }
+
+  GF256Poly[] divide(GF256Poly other) {
+    if (!field.equals(other.field)) {
+      throw new IllegalArgumentException("GF256Polys do not have same GF256 field");
+    }
+    if (other.isZero()) {
+      throw new IllegalArgumentException("Divide by 0");
+    }
+
+    GF256Poly quotient = field.getZero();
+    GF256Poly remainder = this;
+
+    int denominatorLeadingTerm = other.getCoefficient(other.getDegree());
+    int inverseDenominatorLeadingTerm = field.inverse(denominatorLeadingTerm);
+
+    while (remainder.getDegree() >= other.getDegree() && !remainder.isZero()) {
+      int degreeDifference = remainder.getDegree() - other.getDegree();
+      int scale = field.multiply(remainder.getCoefficient(remainder.getDegree()), inverseDenominatorLeadingTerm);
+      GF256Poly term = other.multiplyByMonomial(degreeDifference, scale);
+      GF256Poly iterationQuotient = field.buildMonomial(degreeDifference, scale);
+      quotient = quotient.addOrSubtract(iterationQuotient);
+      remainder = remainder.addOrSubtract(term);
+    }
+
+    return new GF256Poly[] { quotient, remainder };
+  }
+
+  public String toString() {
+    StringBuffer result = new StringBuffer(8 * getDegree());
+    for (int degree = getDegree(); degree >= 0; degree--) {
+      int coefficient = getCoefficient(degree);
+      if (coefficient != 0) {
+        if (coefficient < 0) {
+          result.append(" - ");
+          coefficient = -coefficient;
+        } else {
+          if (result.length() > 0) {
+            result.append(" + ");
+          }
+        }
+        if (degree == 0 || coefficient != 1) {
+          int alphaPower = field.log(coefficient);
+          if (alphaPower == 0) {
+            result.append('1');
+          } else if (alphaPower == 1) {
+            result.append('a');
+          } else {
+            result.append("a^");
+            result.append(alphaPower);
+          }
+        }
+        if (degree != 0) {
+          if (degree == 1) {
+            result.append('x');
+          } else {
+            result.append("x^");
+            result.append(degree);
+          }
+        }
+      }
+    }
+    return result.toString();
   }
 
 }
