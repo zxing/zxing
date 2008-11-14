@@ -39,4 +39,18 @@ abstract class AbstractReedSolomonTestCase extends TestCase {
     }
   }
 
+  static void doTestQRCodeEncoding(int[] dataBytes, int[] expectedECBytes) {
+    int[] toEncode = new int[dataBytes.length + expectedECBytes.length];
+    System.arraycopy(dataBytes, 0, toEncode, 0, dataBytes.length);
+    new ReedSolomonEncoder(GF256.QR_CODE_FIELD).encode(toEncode, expectedECBytes.length);
+    assertArraysEqual(dataBytes, 0, toEncode, 0, dataBytes.length);
+    assertArraysEqual(expectedECBytes, 0, toEncode, dataBytes.length, expectedECBytes.length);
+  }
+
+  private static void assertArraysEqual(int[] expected, int expectedOffset, int[] actual, int actualOffset, int length) {
+    for (int i = 0; i < length; i++) {
+      assertEquals(expected[expectedOffset + i], actual[actualOffset + i]);
+    }
+  }
+
 }
