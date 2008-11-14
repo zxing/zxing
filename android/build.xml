@@ -171,6 +171,19 @@ limitations under the License.
     </javac>
   </target>
 
+  <!--
+  Getting an error like this?
+
+   [apply] UNEXPECTED TOP-LEVEL EXCEPTION:
+   [apply] com.android.dx.cf.code.SimException: local variable type
+   mismatch: attempt to set or access a value of type int using a local
+   variable of type com.google.zxing.qrcode.decoder.Version. This is
+   symptomatic of .class transformation tools that ignore local variable
+   information.
+
+  Build core/ with the 'build-no-debug' target. It's a long story.
+  -->
+
   <target name="optimize" depends="compile-release">
     <fail message="Please put proguard.jar in 'bin' under the WTK install directory">
       <condition>
