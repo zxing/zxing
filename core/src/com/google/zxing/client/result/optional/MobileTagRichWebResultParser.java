@@ -23,7 +23,7 @@ import com.google.zxing.Result;
  * <p>Represents a "rich web" result encoded according to section 5 of the
  * MobileTag Reader International Specification.</p>
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 final class MobileTagRichWebResultParser extends AbstractMobileTagResultParser {
 

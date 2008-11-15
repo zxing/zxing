@@ -33,7 +33,8 @@ import java.awt.image.BufferedImageOp;
  * based on a region of a {@link BufferedImage}; see
  * {@link #BufferedImageMonochromeBitmapSource(BufferedImage, int, int, int, int)}.</p>
  *
- * @author srowen@google.com (Sean Owen), Daniel Switkin (dswitkin@google.com)
+ * @author Sean Owen
+ * @author Daniel Switkin (dswitkin@google.com)
  */
 public final class BufferedImageMonochromeBitmapSource extends BaseMonochromeBitmapSource {
 

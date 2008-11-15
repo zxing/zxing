@@ -21,7 +21,7 @@ import junit.framework.TestCase;
 /**
  * Tests {@link com.google.zxing.client.result.URIParsedResult}.
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 public final class URIParsedResultTestCase extends TestCase {
 

@@ -24,7 +24,7 @@ import java.util.Vector;
  * Parses contact information formatted according to the VCard (2.1) format. This is not a complete
  * implementation but should parse information as commonly encoded in 2D barcodes.
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 final class VCardResultParser extends ResultParser {
 

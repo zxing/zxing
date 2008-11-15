@@ -21,7 +21,7 @@ package com.google.zxing.client.result.optional;
  * of records -- namely, non-chunked records, where ID length is omitted, and only
  * "short records".</p>
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 final class NDEFRecord {
 

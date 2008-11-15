@@ -23,7 +23,7 @@ import javax.servlet.ServletContextListener;
 import java.util.Timer;
 
 /**
- * @author Sean Owen (srowen@google.com)
+ * @author Sean Owen
  */
 public final class DecodeEmailListener implements ServletContextListener {
 

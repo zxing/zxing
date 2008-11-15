@@ -17,7 +17,7 @@
 package com.google.zxing.client.result;
 
 /**
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 public final class SMSParsedResult extends ParsedResult {
 

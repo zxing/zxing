@@ -30,7 +30,7 @@ package com.google.zxing.common;
  * <p>This class is a convenient wrapper around this representation, but also exposes the internal
  * array for efficient access and manipulation.</p>
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 public final class BitMatrix {
 

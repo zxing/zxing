@@ -20,7 +20,7 @@ package com.google.zxing;
  * Represents some type of metadata about the result of the decoding that the decoder
  * wishes to communicate back to the caller.
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 public final class ResultMetadataType {
 

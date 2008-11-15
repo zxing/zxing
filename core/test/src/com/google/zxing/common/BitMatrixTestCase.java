@@ -19,7 +19,7 @@ package com.google.zxing.common;
 import junit.framework.TestCase;
 
 /**
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 public final class BitMatrixTestCase extends TestCase {
 

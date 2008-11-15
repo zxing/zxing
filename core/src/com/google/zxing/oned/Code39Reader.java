@@ -28,7 +28,7 @@ import java.util.Hashtable;
 /**
  * <p>Decodes Code 39 barcodes. This does not support "Full ASCII Code 39" yet.</p>
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 public final class Code39Reader extends AbstractOneDReader {
 

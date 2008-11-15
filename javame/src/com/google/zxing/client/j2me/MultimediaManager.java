@@ -23,7 +23,7 @@ import javax.microedition.media.Controllable;
  * {@link com.google.zxing.client.j2me.AdvancedMultimediaManager} in order to dynamically
  * load support for JSR-234 APIs where possible.</p>
  *
- * @author Sean Owen (srowen@google.com)
+ * @author Sean Owen
  * @author Paul Hackenberger
  */
 interface MultimediaManager {

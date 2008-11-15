@@ -24,7 +24,7 @@ import com.google.zxing.Result;
  * <a href="http://tools.ietf.org/html/draft-mayrhofer-geo-uri-00">
  * http://tools.ietf.org/html/draft-mayrhofer-geo-uri-00</a>.
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 final class GeoResultParser extends ResultParser {
 

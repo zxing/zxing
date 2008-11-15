@@ -27,7 +27,7 @@ import java.util.Vector;
 
 /**
  * @author dswitkin@google.com (Daniel Switkin)
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 public final class MultiFormatOneDReader extends AbstractOneDReader {
 

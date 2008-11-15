@@ -28,7 +28,7 @@ import java.util.Hashtable;
  * <p>Implements decoding of the UPC-A format.</p>
  *
  * @author dswitkin@google.com (Daniel Switkin)
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 public final class UPCAReader implements UPCEANReader {
 

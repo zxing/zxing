@@ -19,7 +19,7 @@ package com.google.zxing.client.result;
 import com.google.zxing.Result;
 
 /**
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 final class BookmarkDoCoMoResultParser extends AbstractDoCoMoResultParser {
 

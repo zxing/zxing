@@ -21,7 +21,7 @@ import com.google.zxing.Result;
 /**
  * Parses a "tel:" URI result, which specifies a phone number.
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 final class TelResultParser extends ResultParser {
 

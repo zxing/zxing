@@ -25,7 +25,7 @@ import java.util.Vector;
  * largely reverse-engineered from examples observed in the wild -- still
  * looking for a definitive reference.
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 final class BizcardResultParser extends AbstractDoCoMoResultParser {
 

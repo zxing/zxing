@@ -23,7 +23,8 @@ import javax.microedition.lcdui.Image;
 /**
  * <p>An implementation based on Java ME's {@link Image} representation.</p>
  *
- * @author Sean Owen (srowen@google.com), Daniel Switkin (dswitkin@google.com)
+ * @author Sean Owen
+ * @author Daniel Switkin (dswitkin@google.com)
  */
 public final class LCDUIImageMonochromeBitmapSource extends BaseMonochromeBitmapSource {
 

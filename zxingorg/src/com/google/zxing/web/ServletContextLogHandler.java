@@ -24,7 +24,7 @@ import java.util.logging.LogRecord;
 /**
  * A {@link Handler} that redirects log messages to the servlet container log.
  * 
- * @author Sean Owen (srowen@google.com)
+ * @author Sean Owen
  */
 final class ServletContextLogHandler extends Handler {
 

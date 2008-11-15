@@ -38,7 +38,7 @@ import java.util.TimerTask;
  * A {@link Filter} that rejects requests from hosts that are sending too many
  * requests in too short a time.
  * 
- * @author Sean Owen (srowen@google.com)
+ * @author Sean Owen
  */
 public final class DoSFilter implements Filter {
 

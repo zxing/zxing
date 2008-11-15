@@ -23,7 +23,7 @@ import junit.framework.TestCase;
 /**
  * Tests {@link ParsedResult}.
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 public final class ParsedReaderResultTestCase extends TestCase {
 

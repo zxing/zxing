@@ -27,7 +27,7 @@ import com.google.zxing.common.reedsolomon.ReedSolomonException;
  * <p>The main class which implements QR Code decoding -- as opposed to locating and extracting
  * the QR Code from an image.</p>
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 public final class Decoder {
 

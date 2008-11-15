@@ -69,7 +69,7 @@ import java.util.logging.Logger;
  * {@link HttpServlet} which decodes images containing barcodes. Given a URL, it will
  * retrieve the image and decode it. It can also process image files uploaded via POST.
  * 
- * @author Sean Owen (srowen@google.com)
+ * @author Sean Owen
  */
 public final class DecodeServlet extends HttpServlet {
 

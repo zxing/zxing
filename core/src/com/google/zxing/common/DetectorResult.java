@@ -23,7 +23,7 @@ import com.google.zxing.ResultPoint;
  * matrix of black/white pixels corresponding to the barcode, and possibly points of interest
  * in the image, like the location of finder patterns or corners of the barcode in the image.</p>
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 public final class DetectorResult {
 

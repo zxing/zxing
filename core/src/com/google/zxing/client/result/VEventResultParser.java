@@ -22,7 +22,7 @@ import com.google.zxing.Result;
  * Partially implements the iCalendar format's "VEVENT" format for specifying a
  * calendar event. See RFC 2445. This supports SUMMARY, DTSTART and DTEND fields.
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 final class VEventResultParser extends ResultParser {
 

@@ -45,7 +45,7 @@ import java.io.IOException;
 /**
  * <p>The actual reader application {@link MIDlet}.</p>
  *
- * @author Sean Owen (srowen@google.com)
+ * @author Sean Owen
  */
 public final class ZXingMIDlet extends MIDlet {
 

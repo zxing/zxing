@@ -21,7 +21,7 @@ package com.google.zxing.qrcode.decoder;
  * multiple blocks, each of which is a unit of data and error-correction codewords. Each
  * is represented by an instance of this class.</p>
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 final class DataBlock {
 

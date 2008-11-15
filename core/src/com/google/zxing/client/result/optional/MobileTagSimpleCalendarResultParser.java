@@ -24,7 +24,7 @@ import com.google.zxing.client.result.CalendarParsedResult;
  * <p>Represents a "simple calendar" result encoded according to section 4.9 of the
  * MobileTag Reader International Specification.</p>
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 final class MobileTagSimpleCalendarResultParser extends AbstractMobileTagResultParser {
 

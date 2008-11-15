@@ -22,7 +22,7 @@ import com.google.zxing.BarcodeFormat;
 import java.io.File;
 
 /**
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 public final class Code39ExtendedBlackBox2TestCase extends AbstractBlackBoxTestCase {
 

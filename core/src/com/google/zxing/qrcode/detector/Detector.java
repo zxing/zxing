@@ -32,7 +32,7 @@ import java.util.Hashtable;
  * <p>Encapsulates logic that can detect a QR Code in an image, even if the QR Code
  * is rotated or skewed, or partially obscured.</p>
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 public final class Detector {
 

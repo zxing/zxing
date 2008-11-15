@@ -21,7 +21,7 @@ package com.google.zxing.common;
  * points, it will compute the transformation implied between them. The code is based directly upon section
  * 3.4.2 of George Wolberg's "Digital Image Warping"; see pages 54-56.</p>
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 final class PerspectiveTransform {
 

@@ -21,7 +21,7 @@ import javax.microedition.media.Controllable;
 /**
  * <p>Dummy implemenation which does nothing. This is suitable for non-JSR-234 phones.</p>
  *
- * @author Sean Owen (srowen@google.com)
+ * @author Sean Owen
  */
 final class DefaultMultimediaManager implements MultimediaManager {
 

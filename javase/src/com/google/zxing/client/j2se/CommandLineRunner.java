@@ -40,7 +40,8 @@ import java.nio.charset.Charset;
  * request that hint. The raw text of each barcode is printed, and when running against directories,
  * summary statistics are also displayed.</p>
  *
- * @author srowen@google.com (Sean Owen), dswitkin@google.com (Daniel Switkin)
+ * @author Sean Owen
+ * @author dswitkin@google.com (Daniel Switkin)
  */
 public final class CommandLineRunner {
 

@@ -23,7 +23,7 @@ import com.google.zxing.client.result.TextParsedResult;
  * Recognizes an NDEF message that encodes text according to the
  * "Text Record Type Definition" specification.
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 final class NDEFTextResultParser extends AbstractNDEFResultParser {
 

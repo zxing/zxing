@@ -24,7 +24,7 @@ import com.google.zxing.client.result.SMSParsedResult;
  * <p>Represents a "SMS" result encoded according to section 4.6 of the
  * MobileTag Reader International Specification.</p>
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 final class MobileTagSMSResultParser extends AbstractMobileTagResultParser {
 

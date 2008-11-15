@@ -22,7 +22,7 @@ import java.util.Random;
 import java.util.Vector;
 
 /**
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 public final class CollectionsTestCase extends TestCase {
 

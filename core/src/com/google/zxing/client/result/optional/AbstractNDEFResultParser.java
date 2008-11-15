@@ -28,7 +28,7 @@ import java.io.UnsupportedEncodingException;
  * useful in 2D barcode formats. This generally includes 1-record messages, no chunking,
  * "short record" syntax, no ID field.</p>
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 abstract class AbstractNDEFResultParser extends ResultParser {
 

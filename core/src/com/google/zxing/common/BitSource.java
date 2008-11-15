@@ -22,7 +22,7 @@ package com.google.zxing.common;
  *
  * <p>This class is not thread-safe.</p>
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 public final class BitSource {
 

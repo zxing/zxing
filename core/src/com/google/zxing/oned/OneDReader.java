@@ -27,7 +27,7 @@ import java.util.Hashtable;
  * <p>{@link Reader}s which also implement this interface read one-dimensional barcode
  * formats, and expose additional functionality that is specific to this type of barcode.</p>
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 public interface OneDReader extends Reader {
 

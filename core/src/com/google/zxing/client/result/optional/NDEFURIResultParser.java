@@ -23,7 +23,7 @@ import com.google.zxing.client.result.URIParsedResult;
  * Recognizes an NDEF message that encodes a URI according to the
  * "URI Record Type Definition" specification.
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 final class NDEFURIResultParser extends AbstractNDEFResultParser {
 

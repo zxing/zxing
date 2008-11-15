@@ -24,7 +24,7 @@ import com.google.zxing.client.result.AddressBookParsedResult;
  * <p>Represents a "simple contact" result encoded according to section 4.8 of the
  * MobileTag Reader International Specification.</p>
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 final class MobileTagSimpleContactResultParser extends AbstractMobileTagResultParser {
 

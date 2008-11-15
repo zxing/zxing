@@ -20,7 +20,7 @@ import com.google.zxing.ReaderException;
 import junit.framework.TestCase;
 
 /**
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 public final class FormatInformationTestCase extends TestCase {
 

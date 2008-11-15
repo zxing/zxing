@@ -30,7 +30,7 @@ import java.util.Hashtable;
  * of one-dimensional barcodes.</p>
  *
  * @author dswitkin@google.com (Daniel Switkin)
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  * @author alasdair@google.com (Alasdair Mackintosh)
  */
 public abstract class AbstractUPCEANReader extends AbstractOneDReader implements UPCEANReader {

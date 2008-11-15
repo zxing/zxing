@@ -21,7 +21,7 @@ package com.google.zxing;
  * more quickly or accurately decode it. It is up to implementations to decide what,
  * if anything, to do with the information that is supplied.
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  * @author dswitkin@google.com (Daniel Switkin)
  * @see Reader#decode(MonochromeBitmapSource, java.util.Hashtable)
  */

@@ -41,7 +41,7 @@ import java.util.ArrayList;
 import java.nio.charset.Charset;
 
 /**
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  * @author dswitkin@google.com (Daniel Switkin)
  */
 public abstract class AbstractBlackBoxTestCase extends TestCase {

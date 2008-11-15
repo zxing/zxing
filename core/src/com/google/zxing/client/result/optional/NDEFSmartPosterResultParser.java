@@ -27,7 +27,7 @@ import com.google.zxing.Result;
  * of these records are infeasibly large for barcodes. Size and type records
  * are not supported. Multiple titles are not supported.</p>
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 final class NDEFSmartPosterResultParser extends AbstractNDEFResultParser {
 

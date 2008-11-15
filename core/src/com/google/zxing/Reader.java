@@ -27,7 +27,8 @@ import java.util.Hashtable;
  * See {@link com.google.zxing.MultiFormatReader}, which attempts to determine what barcode
  * format is present within the image as well, and then decodes it accordingly.
  *
- * @author srowen@google.com (Sean Owen), dswitkin@google.com (Daniel Switkin)
+ * @author Sean Owen
+ * @author dswitkin@google.com (Daniel Switkin)
  */
 public interface Reader {
 

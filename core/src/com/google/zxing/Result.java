@@ -21,7 +21,7 @@ import java.util.Hashtable;
 /**
  * <p>Encapsulates the result of decoding a barcode within an image.</p>
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 public final class Result {
 

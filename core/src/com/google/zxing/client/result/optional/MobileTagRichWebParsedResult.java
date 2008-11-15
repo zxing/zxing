@@ -20,7 +20,7 @@ import com.google.zxing.client.result.ParsedResult;
 import com.google.zxing.client.result.ParsedResultType;
 
 /**
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 public final class MobileTagRichWebParsedResult extends ParsedResult {
 
