@@ -423,7 +423,7 @@ final class DecodedBitStreamParser {
       count = 250 * (d1 - 249) + bits.readBits(8);
     }
     for (int i = 0; i < count; i++) {
-      result.append(unrandomize255State(bits.readBits(8), count));
+      result.append(unrandomize255State(bits.readBits(8), i));
     }
   }
   
@@ -434,11 +434,7 @@ final class DecodedBitStreamParser {
                                           int base256CodewordPosition) {
     int pseudoRandomNumber = ((149 * base256CodewordPosition) % 255) + 1;
     int tempVariable = randomizedBase256Codeword - pseudoRandomNumber;
-    if (tempVariable >= 0) {
-      return (char) tempVariable;
-    } else {
-      return (char) (tempVariable + 256);
-    }
+    return tempVariable >= 0 ? (char) tempVariable : (char) (tempVariable + 256);
   }
   
 }
