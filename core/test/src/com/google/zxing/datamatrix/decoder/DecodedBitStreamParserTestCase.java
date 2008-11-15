@@ -29,7 +29,7 @@ public final class DecodedBitStreamParserTestCase extends TestCase{
     // ASCII characters 0-127 are encoded as the value + 1
     byte[] bytes = {(byte) ('a' + 1), (byte) ('b' + 1), (byte) ('c' + 1),
                     (byte) ('A' + 1), (byte) ('B' + 1), (byte) ('C' + 1)};
-    String decodedString = DecodedBitStreamParser.decode(bytes);
+    String decodedString = DecodedBitStreamParser.decode(bytes).getText();
     assertEquals("abcABC", decodedString);
   }
   
@@ -37,7 +37,7 @@ public final class DecodedBitStreamParserTestCase extends TestCase{
     // ASCII double digit (00 - 99) Numeric Value + 130
     byte[] bytes = {(byte)       130 , (byte) ( 1 + 130),
                     (byte) (98 + 130), (byte) (99 + 130)};
-    String decodedString = DecodedBitStreamParser.decode(bytes);
+    String decodedString = DecodedBitStreamParser.decode(bytes).getText();
     assertEquals("00019899", decodedString);
   }
   
