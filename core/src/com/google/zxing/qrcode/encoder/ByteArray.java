@@ -52,6 +52,10 @@ public final class ByteArray {
     return bytes[index] & 0xff;
   }
 
+  public void set(int index, int value) {
+    bytes[index] = (byte) value;
+  }
+
   public int size() {
     return size;
   }
