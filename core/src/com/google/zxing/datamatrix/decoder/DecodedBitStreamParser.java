@@ -18,6 +18,10 @@ package com.google.zxing.datamatrix.decoder;
 
 import com.google.zxing.ReaderException;
 import com.google.zxing.common.BitSource;
+import com.google.zxing.common.DecoderResult;
+
+import java.util.Vector;
+import java.io.UnsupportedEncodingException;
 
 /**
  * <p>Data Matrix Codes can encode text as bits in one of several modes, and can use multiple modes
@@ -71,10 +75,11 @@ final class DecodedBitStreamParser {
   private DecodedBitStreamParser() {
   }
 
-  static String decode(byte[] bytes) throws ReaderException {
+  static DecoderResult decode(byte[] bytes) throws ReaderException {
     BitSource bits = new BitSource(bytes);
     StringBuffer result = new StringBuffer();
     StringBuffer resultTrailer = new StringBuffer(0);
+    Vector byteSegments = new Vector(1);
     int mode = ASCII_ENCODE;
     do {
       if (mode == ASCII_ENCODE) {
@@ -94,7 +99,7 @@ final class DecodedBitStreamParser {
             decodeEdifactSegment(bits, result);
             break;
           case BASE256_ENCODE:
-            decodeBase256Segment(bits, result);
+            decodeBase256Segment(bits, result, byteSegments);
             break;
           default:
             throw new ReaderException("Unsupported mode indicator");
@@ -105,7 +110,7 @@ final class DecodedBitStreamParser {
     if (resultTrailer.length() > 0) {
       result.append(resultTrailer);
     }
-    return result.toString();
+    return new DecoderResult(bytes, result.toString(), byteSegments.isEmpty() ? null : byteSegments);
   }
   
   /**
@@ -411,7 +416,7 @@ final class DecodedBitStreamParser {
   /**
    * See ISO 16022:2006, 5.2.9 and Annex B, B.2
    */
-  private static void decodeBase256Segment(BitSource bits, StringBuffer result) {
+  private static void decodeBase256Segment(BitSource bits, StringBuffer result, Vector byteSegments) {
     // Figure out how long the Base 256 Segment is.
     int d1 = bits.readBits(8);
     int count;
@@ -422,19 +427,26 @@ final class DecodedBitStreamParser {
     } else {
       count = 250 * (d1 - 249) + bits.readBits(8);
     }
+    byte[] bytes = new byte[count];
     for (int i = 0; i < count; i++) {
-      result.append(unrandomize255State(bits.readBits(8), i));
+      bytes[i] = unrandomize255State(bits.readBits(8), i);
+    }
+    byteSegments.addElement(bytes);
+    try {
+      result.append(new String(bytes, "ISO8859_1"));
+    } catch (UnsupportedEncodingException uee) {
+      throw new RuntimeException("Platform does not support required encoding: " + uee);
     }
   }
   
   /**
    * See ISO 16022:2006, Annex B, B.2
    */
-  private static char unrandomize255State(int randomizedBase256Codeword,
+  private static byte unrandomize255State(int randomizedBase256Codeword,
                                           int base256CodewordPosition) {
     int pseudoRandomNumber = ((149 * base256CodewordPosition) % 255) + 1;
     int tempVariable = randomizedBase256Codeword - pseudoRandomNumber;
-    return tempVariable >= 0 ? (char) tempVariable : (char) (tempVariable + 256);
+    return (byte) (tempVariable >= 0 ? tempVariable : (tempVariable + 256));
   }
   
 }

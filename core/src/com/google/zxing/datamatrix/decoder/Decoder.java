@@ -97,8 +97,7 @@ public final class Decoder {
     }
 
     // Decode the contents of that stream of bytes
-    String text = DecodedBitStreamParser.decode(resultBytes);
-    return new DecoderResult(resultBytes, text);
+    return DecodedBitStreamParser.decode(resultBytes);
   }
 
   /**

@@ -19,8 +19,10 @@ package com.google.zxing.qrcode.decoder;
 import com.google.zxing.ReaderException;
 import com.google.zxing.common.BitSource;
 import com.google.zxing.common.CharacterSetECI;
+import com.google.zxing.common.DecoderResult;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Vector;
 
 /**
  * <p>QR Codes can encode text as bits in one of several modes, and can use multiple modes
@@ -55,11 +57,12 @@ final class DecodedBitStreamParser {
   private DecodedBitStreamParser() {
   }
 
-  static String decode(byte[] bytes, Version version) throws ReaderException {
+  static DecoderResult decode(byte[] bytes, Version version) throws ReaderException {
     BitSource bits = new BitSource(bytes);
     StringBuffer result = new StringBuffer();
     CharacterSetECI currentCharacterSetECI = null;
     boolean fc1InEffect = false;
+    Vector byteSegments = new Vector(1);
     Mode mode;
     do {
       // While still another segment to read...
@@ -89,7 +92,7 @@ final class DecodedBitStreamParser {
           } else if (mode.equals(Mode.ALPHANUMERIC)) {
             decodeAlphanumericSegment(bits, result, count, fc1InEffect);
           } else if (mode.equals(Mode.BYTE)) {
-            decodeByteSegment(bits, result, count, currentCharacterSetECI);
+            decodeByteSegment(bits, result, count, currentCharacterSetECI, byteSegments);
           } else if (mode.equals(Mode.KANJI)) {
             decodeKanjiSegment(bits, result, count);
           } else {
@@ -99,16 +102,7 @@ final class DecodedBitStreamParser {
       }
     } while (!mode.equals(Mode.TERMINATOR));
 
-    // I thought it wasn't allowed to leave extra bytes after the terminator but it happens
-    /*
-    int bitsLeft = bits.available();
-    if (bitsLeft > 0) {
-      if (bitsLeft > 6 || bits.readBits(bitsLeft) != 0) {
-        throw new ReaderException("Excess bits or non-zero bits after terminator mode indicator");
-      }
-    }
-     */
-    return result.toString();
+    return new DecoderResult(bytes, result.toString(), byteSegments.isEmpty() ? null : byteSegments);
   }
 
   private static void decodeKanjiSegment(BitSource bits,
@@ -145,7 +139,8 @@ final class DecodedBitStreamParser {
   private static void decodeByteSegment(BitSource bits,
                                         StringBuffer result,
                                         int count,
-                                        CharacterSetECI currentCharacterSetECI) throws ReaderException {
+                                        CharacterSetECI currentCharacterSetECI,
+                                        Vector byteSegments) throws ReaderException {
     byte[] readBytes = new byte[count];
     if (count << 3 > bits.available()) {
       throw new ReaderException("Count too large: " + count);
@@ -169,6 +164,7 @@ final class DecodedBitStreamParser {
     } catch (UnsupportedEncodingException uce) {
       throw new ReaderException(uce.toString());
     }
+    byteSegments.addElement(readBytes);
   }
 
   private static void decodeAlphanumericSegment(BitSource bits,
