@@ -16,11 +16,10 @@
 
 package com.google.zxing.qrcode.encoder;
 
-import java.util.Vector;
+import com.google.zxing.common.reedsolomon.ReedSolomonEncoder;
+import com.google.zxing.common.reedsolomon.GF256;
 
-// class GF_Poly;
-// #include "util/reedsolomon/galois_field.h"
-// #include "util/reedsolomon/galois_poly.h"
+import java.util.Vector;
 
 /**
  * @author satorux@google.com (Satoru Takabayashi) - creator
@@ -278,9 +277,6 @@ private static final ECPolyInfo kECPolynomials[] = {
             27, 101, 184, 127,   3,   5,   8, 163, 238 }),
 };
 
-  private static final int kFieldSize = 8;
-  private static GF_Poly[] g_ec_polynomials = new GF_Poly[kMaxNumECBytes + 1];
-
   private static final class BlockPair {
 
     private ByteArray dataBytes;
@@ -514,8 +510,8 @@ private static final ECPolyInfo kECPolynomials[] = {
   // the result in "num_data_bytes_in_block", and "num_ec_bytes_in_block". See table 12 in 8.5.1 of
   // JISX0510:2004 (p.30)
   static void GetNumDataBytesAndNumECBytesForBlockID(int num_total_bytes, int num_data_bytes,
-      int num_rs_blocks, int block_id, Integer num_data_bytes_in_block,
-      Integer num_ec_bytes_in_block) {
+      int num_rs_blocks, int block_id, int[] num_data_bytes_in_block,
+      int[] num_ec_bytes_in_block) {
     Debug.DCHECK_LT(block_id, num_rs_blocks);
     // num_rs_blocks_in_group2 = 196 % 5 = 1
     final int num_rs_blocks_in_group2 = num_total_bytes % num_rs_blocks;
@@ -548,11 +544,11 @@ private static final ECPolyInfo kECPolynomials[] = {
                 num_rs_blocks_in_group2));
 
     if (block_id < num_rs_blocks_in_group1) {
-      num_data_bytes_in_block = num_data_bytes_in_group1;
-      num_ec_bytes_in_block = num_ec_bytes_in_group1;
+      num_data_bytes_in_block[0] = num_data_bytes_in_group1;
+      num_ec_bytes_in_block[0] = num_ec_bytes_in_group1;
     } else {
-      num_data_bytes_in_block = num_data_bytes_in_group2;
-      num_ec_bytes_in_block = num_ec_bytes_in_group2;
+      num_data_bytes_in_block[0] = num_data_bytes_in_group2;
+      num_ec_bytes_in_block[0] = num_ec_bytes_in_group2;
     }
   }
 
@@ -572,11 +568,11 @@ private static final ECPolyInfo kECPolynomials[] = {
     int max_num_ec_bytes = 0;
 
     // Since, we know the number of reedsolmon blocks, we can initialize the vector with the number.
-    Vector<BlockPair> blocks = new Vector<BlockPair>(num_rs_blocks);
+    Vector blocks = new Vector(num_rs_blocks);
 
     for (int i = 0; i < num_rs_blocks; ++i) {
-      Integer num_data_bytes_in_block = new Integer(0);
-      Integer num_ec_bytes_in_block = new Integer(0);
+      int[] num_data_bytes_in_block = new int[1];
+      int[] num_ec_bytes_in_block = new int[1];
       GetNumDataBytesAndNumECBytesForBlockID(
           num_total_bytes, num_data_bytes, num_rs_blocks, i,
           num_data_bytes_in_block, num_ec_bytes_in_block);
@@ -585,19 +581,19 @@ private static final ECPolyInfo kECPolynomials[] = {
       ByteArray ec_bytes = new ByteArray();
       blocks.addElement(new BlockPair(data_bytes, ec_bytes));
 
-      data_bytes.set(bits, data_bytes_offset, num_data_bytes_in_block);
-      GenerateECBytes(data_bytes, num_ec_bytes_in_block, ec_bytes);
+      data_bytes.set(bits, data_bytes_offset, num_data_bytes_in_block[0]);
+      GenerateECBytes(data_bytes, num_ec_bytes_in_block[0], ec_bytes);
 
       max_num_data_bytes = Math.max(max_num_data_bytes, data_bytes.size());
       max_num_ec_bytes = Math.max(max_num_ec_bytes, ec_bytes.size());
-      data_bytes_offset += num_data_bytes_in_block;
+      data_bytes_offset += num_data_bytes_in_block[0];
     }
     Debug.DCHECK_EQ(num_data_bytes, data_bytes_offset);
 
     // First, place data blocks.
     for (int i = 0; i < max_num_data_bytes; ++i) {
       for (int j = 0; j < blocks.size(); ++j) {
-        final ByteArray data_bytes = blocks.elementAt(j).getDataBytes();
+        final ByteArray data_bytes = ((BlockPair) blocks.elementAt(j)).getDataBytes();
         if (i < data_bytes.size()) {
           result.AppendBits(data_bytes.at(i), 8);
         }
@@ -606,7 +602,7 @@ private static final ECPolyInfo kECPolynomials[] = {
     // Then, place error correction blocks.
     for (int i = 0; i < max_num_ec_bytes; ++i) {
       for (int j = 0; j < blocks.size(); ++j) {
-        final ByteArray ec_bytes = blocks.elementAt(j).getErrorCorrectionBytes();
+        final ByteArray ec_bytes = ((BlockPair) blocks.elementAt(j)).getErrorCorrectionBytes();
         if (i < ec_bytes.size()) {
           result.AppendBits(ec_bytes.at(i), 8);
         }
@@ -618,6 +614,18 @@ private static final ECPolyInfo kECPolynomials[] = {
     Debug.LOG_ERROR("Interleaving error: " + num_total_bytes + " and " + result.num_bytes() +
         "differ.");
     return false;
+  }
+
+  private static void GenerateECBytes(ByteArray data_bytes, int num_ec_bytes_in_block, ByteArray ec_bytes) {
+    int numDataBytes = data_bytes.size();
+    int[] toEncode = new int[numDataBytes + ec_bytes.size()];
+    for (int i = 0; i < numDataBytes; i++) {
+      toEncode[i] = data_bytes.at(i);
+    }
+    new ReedSolomonEncoder(GF256.QR_CODE_FIELD).encode(toEncode, num_ec_bytes_in_block);
+    for (int i = 0; i < ec_bytes.size(); i++) {
+      ec_bytes.set(i, toEncode[numDataBytes + i]);
+    }
   }
 
   // Append mode info. On success, store the result in "bits" and return true. On error, return
@@ -766,85 +774,6 @@ private static final ECPolyInfo kECPolynomials[] = {
       bits.AppendBits(encoded, 13);
     }
     return true;
-  }
-
-  // Only call once
-  static {
-    InitECPolynomials();
-  }
-
-  // Initialize "g_ec_polynomials" with numbers in kECPolynomials.
-  private static void InitECPolynomials() {
-    final GaloisField field = GaloisField.GetField(kFieldSize);
-    for (int i = 0; i < kECPolynomials.length; ++i) {
-      final ECPolyInfo ec_poly_info = kECPolynomials[i];
-      final int ec_length = ec_poly_info.ec_length;
-      vector<GF_Element> *coeffs = new vector<GF_Element>;
-      // The number of coefficients is one more than "ec_length". That's why the termination
-      // condition is <= instead of <.
-      for (int j = 0; j <= ec_length; ++j) {
-        // We need exp'ed numbers for later use.
-        final int coeff = field.Exp(ec_poly_info.coeffs[j]);
-        coeffs.push_back(coeff);
-      }
-      // Reverse the coefficients since the numbers in kECPolynomials are ordered in reverse order
-      // to the order GF_Poly expects.
-      reverse(coeffs.begin(), coeffs.end());
-
-      GF_Poly ec_poly = new GF_Poly(coeffs, GaloisField.GetField(kFieldSize));
-      g_ec_polynomials[ec_length] = ec_poly;
-    }
-  }
-
-  // Get error correction polynomials. The polynomials are defined in Appendix A of JISX0510 2004
-  // (p. 59). In the appendix, they use exponential notations for the polynomials. We need to apply
-  // GaloisField.Log() to all coefficients generated by the function to compare numbers with the
-  // ones in the appendix.
-  //
-  // Example:
-  // - Input: 17
-  // - Output (in reverse order)
-  //   {119,66,83,120,119,22,197,83,249,41,143,134,85,53,125,99,79}
-  // - Log()'ed output (in reverse order)
-  //   {0,43,139,206,78,43,239,123,206,214,147,24,99,150,39,243,163,136}
-  private static final GF_Poly GetECPoly(int ec_length) {
-    Debug.DCHECK_GE(kMaxNumECBytes, ec_length);
-    final GF_Poly ec_poly = g_ec_polynomials[ec_length];
-    Debug.DCHECK(ec_poly);
-    return ec_poly;
-  }
-
-  // Generate error correction bytes of "ec_length".
-  //
-  // Example:
-  // - Input:  {32,65,205,69,41,220,46,128,236}, ec_length = 17
-  // - Output: {42,159,74,221,244,169,239,150,138,70,237,85,224,96,74,219,61}
-  private static void GenerateECBytes(final ByteArray data_bytes, int ec_length, ByteArray ec_bytes) {
-    // First, fill the vector with "ec_length" copies of 0. They are low-order zero coefficients.
-    vector<GF_Element> *coeffs = new vector<GF_Element>(ec_length, 0);
-    // Then copy data_bytes backward.
-    copy(data_bytes.rbegin(), data_bytes.rend(), back_inserter(*coeffs));
-    // Now we have data polynomial.
-    GF_Poly data_poly(coeffs, GaloisField.GetField(kFieldSize));
-
-    // Get error correction polynomial.
-    final GF_Poly &ec_poly = GetECPoly(ec_length);
-    pair<GF_Poly*, GF_Poly*> divrem = GF_Poly.DivRem(data_poly, ec_poly);
-
-    // Basically, the coefficients in the remainder polynomial are the error correction bytes.
-    GF_Poly *remainder = divrem.second;
-    ec_bytes.reserve(ec_length);
-    // However, high-order zero cofficients in the remainder polynomial are ommited. We should add
-    // zero by ourselvs.
-    final int num_pruned_zero_coeffs = ec_length - (remainder.degree() + 1);
-    for (int i = 0; i < num_pruned_zero_coeffs; ++i) {
-      ec_bytes.appendByte(0);
-    }
-    // Copy the remainder numbers to "ec_bytes".
-    for (int i = remainder.degree(); i >= 0; --i) {
-      ec_bytes.appendByte(remainder.coeff(i));
-    }
-    Debug.DCHECK_EQ(ec_length, ec_bytes.size());
   }
 
   // Check if "byte1" and "byte2" can compose a valid Kanji letter (2-byte Shift_JIS letter). The
