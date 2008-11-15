@@ -22,7 +22,7 @@ import java.util.Arrays;
 /**
  * A trie data structure for storing a set of IP addresses efficiently.
  * 
- * @author Sean Owen (srowen@google.com)
+ * @author Sean Owen
  */
 final class IPTrie {
 

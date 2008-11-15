@@ -23,7 +23,7 @@ import com.google.zxing.common.BitArray;
 /**
  * <p>Implements decoding of the EAN-8 format.</p>
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 public final class EAN8Reader extends AbstractUPCEANReader {
 

@@ -20,7 +20,7 @@ import com.google.zxing.MonochromeBitmapSource;
 import com.google.zxing.ReaderException;
 
 /**
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 public final class DefaultGridSampler extends GridSampler {
 

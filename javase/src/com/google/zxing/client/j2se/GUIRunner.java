@@ -41,7 +41,7 @@ import java.net.MalformedURLException;
  * <p>Simple GUI frontend to the library. Right now, only decodes a local file.
  * This definitely needs some improvement. Just throwing something down to start.</p>
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 public final class GUIRunner extends JFrame {
 

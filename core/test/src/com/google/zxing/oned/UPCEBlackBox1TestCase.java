@@ -23,7 +23,7 @@ import com.google.zxing.common.AbstractBlackBoxTestCase;
 import java.io.File;
 
 /**
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 public final class UPCEBlackBox1TestCase extends AbstractBlackBoxTestCase {
 

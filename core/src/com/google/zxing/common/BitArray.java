@@ -19,7 +19,7 @@ package com.google.zxing.common;
 /**
  * <p>A simple, fast array of bits, represented compactly by an array of ints internally.</p>
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 public final class BitArray {
 

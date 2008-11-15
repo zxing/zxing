@@ -24,7 +24,7 @@ import com.google.zxing.common.BitArray;
  * <p>This interfaces captures addtional functionality that readers of
  * UPC/EAN family of barcodes should expose.</p>
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 public interface UPCEANReader extends OneDReader {
 

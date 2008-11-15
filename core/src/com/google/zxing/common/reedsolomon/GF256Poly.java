@@ -23,7 +23,7 @@ package com.google.zxing.common.reedsolomon;
  * <p>Much credit is due to William Rucklidge since portions of this code are an indirect
  * port of his C++ Reed-Solomon implementation.</p>
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 final class GF256Poly {
 

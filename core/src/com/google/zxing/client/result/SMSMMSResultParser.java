@@ -29,7 +29,7 @@ import java.util.Hashtable;
  * "MMSTO:", and treats them all the same way, and effectively converts them to an "sms:" URI
  * for purposes of forwarding to the platform.</p>
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 final class SMSMMSResultParser extends ResultParser {
 

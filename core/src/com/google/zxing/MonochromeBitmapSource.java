@@ -22,7 +22,7 @@ import com.google.zxing.common.BitArray;
  * <p>Encapsulates a generic black-and-white bitmap -- a collection of pixels in two dimensions.
  * This unifies many possible representations, like AWT's <code>BufferedImage</code>.</p>
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  * @author dswitkin@google.com (Daniel Switkin)
  */
 public interface MonochromeBitmapSource {

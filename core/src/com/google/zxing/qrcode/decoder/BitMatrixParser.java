@@ -20,7 +20,7 @@ import com.google.zxing.ReaderException;
 import com.google.zxing.common.BitMatrix;
 
 /**
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 final class BitMatrixParser {
 

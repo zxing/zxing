@@ -19,7 +19,7 @@ package com.google.zxing.common.reedsolomon;
 import java.util.Random;
 
 /**
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  * @author sanfordsquires
  */
 public final class ReedSolomonDecoderDataMatrixTestCase extends AbstractReedSolomonTestCase {

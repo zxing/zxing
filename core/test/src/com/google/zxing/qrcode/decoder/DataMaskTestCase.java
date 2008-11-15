@@ -20,7 +20,7 @@ import com.google.zxing.common.BitMatrix;
 import junit.framework.TestCase;
 
 /**
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 public final class DataMaskTestCase extends TestCase {
 

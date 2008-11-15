@@ -36,7 +36,7 @@ import java.util.Vector;
  * <p>Encapsulates logic that can detect a Data Matrix Code in an image, even if the Data Matrix Code
  * is rotated or skewed, or partially obscured.</p>
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 public final class Detector {
 

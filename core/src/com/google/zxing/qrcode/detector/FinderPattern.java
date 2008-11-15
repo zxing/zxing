@@ -23,7 +23,7 @@ import com.google.zxing.ResultPoint;
  * the corners of QR Codes. It also encapsulates a count of similar finder patterns,
  * as a convenience to the finder's bookkeeping.</p>
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 public final class FinderPattern implements ResultPoint {
 

@@ -26,7 +26,7 @@ import com.google.zxing.common.BitSource;
  * <p>See ISO 16022:2006, 5.2.1 - 5.2.9.2</p>
  *
  * @author bbrown@google.com (Brian Brown)
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 final class DecodedBitStreamParser {
 

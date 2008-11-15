@@ -23,7 +23,7 @@ import com.google.zxing.Result;
  *
  * Supported keys: TO, SUB, BODY
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 final class EmailDoCoMoResultParser extends AbstractDoCoMoResultParser {
 

@@ -34,7 +34,7 @@ import java.util.Hashtable;
 /**
  * This implementation can detect and decode QR Codes in an image.
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 public final class QRCodeReader implements Reader {
 

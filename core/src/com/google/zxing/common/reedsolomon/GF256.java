@@ -24,7 +24,7 @@ package com.google.zxing.common.reedsolomon;
  * for convenience and speed (but at the cost of memory).
  * Only the bottom 8 bits are really used.</p>
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 public final class GF256 {
 

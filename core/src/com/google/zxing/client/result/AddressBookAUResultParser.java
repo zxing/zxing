@@ -26,7 +26,7 @@ import java.util.Vector;
  * http://www.au.kddi.com/ezfactory/tec/two_dimensions/index.html</a>.
  * (Thanks to Yuzo for translating!)
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 final class AddressBookAUResultParser extends ResultParser {
 

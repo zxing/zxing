@@ -22,7 +22,7 @@ import com.google.zxing.ReaderException;
  * <p>Encapsulates a QR Code's format information, including the data mask used and
  * error correction level.</p>
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  * @see DataMask
  * @see ErrorCorrectionLevel
  */

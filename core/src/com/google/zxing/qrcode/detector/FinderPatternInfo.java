@@ -20,7 +20,7 @@ package com.google.zxing.qrcode.detector;
  * <p>Encapsulates information about finder patterns in an image, including the location of
  * the three finder patterns, and their estimated module size.</p>
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 final class FinderPatternInfo {
 

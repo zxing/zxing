@@ -22,7 +22,7 @@ import java.util.Vector;
  * <p>This is basically a substitute for <code>java.util.Collections</code>, which is not
  * present in MIDP 2.0 / CLDC 1.1.</p>
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 public final class Collections {
 

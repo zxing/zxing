@@ -26,7 +26,7 @@ import com.google.zxing.ReaderException;
  * <a href="http://webdiis.unizar.es/~neira/12082/thresholding.pdf">http://webdiis.unizar.es/~neira/12082/thresholding.pdf</a>.
  * </p>
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  * @author dswitkin@google.com (Daniel Switkin)
  */
 public final class BlackPointEstimator {

@@ -22,7 +22,7 @@ import java.util.BitSet;
 import java.util.Random;
 
 /**
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 abstract class AbstractReedSolomonTestCase extends TestCase {
 

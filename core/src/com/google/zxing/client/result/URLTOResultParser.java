@@ -23,7 +23,7 @@ import com.google.zxing.Result;
  * This seems to be used sometimes, but I am not able to find documentation
  * on its origin or official format?
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 final class URLTOResultParser {
 

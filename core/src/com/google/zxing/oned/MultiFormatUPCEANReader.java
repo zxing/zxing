@@ -30,7 +30,7 @@ import java.util.Vector;
  * read all such formats, it is most efficent to use this implementation rather than invoke
  * individual readers.</p>
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 public final class MultiFormatUPCEANReader extends AbstractOneDReader {
 

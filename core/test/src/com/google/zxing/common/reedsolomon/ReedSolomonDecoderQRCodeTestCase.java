@@ -19,7 +19,7 @@ package com.google.zxing.common.reedsolomon;
 import java.util.Random;
 
 /**
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 public final class ReedSolomonDecoderQRCodeTestCase extends AbstractReedSolomonTestCase {
 

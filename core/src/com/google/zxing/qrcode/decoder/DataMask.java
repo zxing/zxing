@@ -25,7 +25,7 @@ package com.google.zxing.qrcode.decoder;
  * <p>Note that the diagram in section 6.8.1 is misleading since it indicates that i is column position
  * and j is row position. In fact, as the text says, i is row position and j is column position.</p>
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 abstract class DataMask {
 

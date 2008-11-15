@@ -14,7 +14,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  -->
-<!-- Author: Sean Owen (srowen@google.com) -->
+<!-- Author: Sean Owen -->
 <jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" xmlns="http://www.w3.org/1999/xhtml" version="2.1">
   <jsp:output omit-xml-declaration="true"/>
   <script type="text/javascript">

@@ -31,7 +31,7 @@ import com.google.zxing.Result;
  *
  * http://www.mobicode.org.tw/files/OMIA%20Mobile%20Bar%20Code%20Standard%20v3.2.1.doc 
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 final class AddressBookDoCoMoResultParser extends AbstractDoCoMoResultParser {
 

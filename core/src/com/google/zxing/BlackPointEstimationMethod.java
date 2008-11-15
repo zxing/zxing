@@ -19,7 +19,8 @@ package com.google.zxing;
 /**
  * <p>Enumerates different methods of sampling an imagine to estimate a black point.</p>
  *
- * @author srowen@google.com (Sean Owen), dswitkin@google.com (Daniel Switkin)
+ * @author Sean Owen
+ * @author dswitkin@google.com (Daniel Switkin)
  */
 public final class BlackPointEstimationMethod {
 

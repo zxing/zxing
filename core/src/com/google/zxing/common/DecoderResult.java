@@ -21,7 +21,7 @@ package com.google.zxing.common;
  * applies to 2D barcode formats. For now it contains the raw bytes obtained,
  * as well as a String interpretation of those bytes, if applicable.</p>
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 public final class DecoderResult {
 

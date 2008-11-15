@@ -26,7 +26,7 @@ import com.google.zxing.common.BitArray;
  * <p><a href="http://www.barcodeisland.com/upce.phtml">This</a> is a great reference for
  * UPC-E information.</p>
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 public final class UPCEReader extends AbstractUPCEANReader {
 

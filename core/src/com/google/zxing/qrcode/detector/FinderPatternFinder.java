@@ -33,7 +33,7 @@ import java.util.Vector;
  *
  * <p>This class is not thread-safe and should not be reused.</p>
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 final class FinderPatternFinder {
 

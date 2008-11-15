@@ -26,7 +26,7 @@ import javax.microedition.media.MediaException;
  * <p>Implementation suitable for JSR-234 phones which takes advantage of advanced camera
  * capability.</p>
  *
- * @author Sean Owen (srowen@google.com)
+ * @author Sean Owen
  */
 final class AdvancedMultimediaManager implements MultimediaManager {
 

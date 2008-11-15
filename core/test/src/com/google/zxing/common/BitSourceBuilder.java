@@ -21,7 +21,7 @@ import java.io.ByteArrayOutputStream;
 /**
  * Class that lets one easily build an array of bytes by appending bits at a time.
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 public final class BitSourceBuilder {
 

@@ -26,7 +26,7 @@ import javax.microedition.lcdui.Graphics;
  * The main {@link Canvas} onto which the camera's field of view is painted.
  * This class manages decoding via {@link SnapshotThread}.
  *
- * @author Sean Owen (srowen@google.com)
+ * @author Sean Owen
  */
 final class VideoCanvas extends Canvas implements CommandListener {
 

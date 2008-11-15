@@ -28,7 +28,7 @@ import java.io.UnsupportedEncodingException;
  *
  * <p>See ISO 18004:2006, 6.4.3 - 6.4.7</p>
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 final class DecodedBitStreamParser {
 

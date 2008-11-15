@@ -30,7 +30,7 @@ import javax.microedition.media.control.VideoControl;
 /**
  * Thread which does the work of capturing a frame and decoding it.
  *
- * @author Sean Owen (srowen@google.com)
+ * @author Sean Owen
  */
 final class SnapshotThread implements Runnable {
 

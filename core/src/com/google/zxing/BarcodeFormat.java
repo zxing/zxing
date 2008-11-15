@@ -19,7 +19,7 @@ package com.google.zxing;
 /**
  * Enumerates barcode formats known to this package.
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 public final class BarcodeFormat {
 

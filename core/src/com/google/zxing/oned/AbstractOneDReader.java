@@ -33,7 +33,7 @@ import java.util.Hashtable;
  * of one-dimensional barcodes.</p>
  *
  * @author dswitkin@google.com (Daniel Switkin)
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 public abstract class AbstractOneDReader implements OneDReader {
 

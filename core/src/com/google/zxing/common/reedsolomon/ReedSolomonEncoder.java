@@ -21,7 +21,7 @@ import java.util.Vector;
 /**
  * <p>Implements Reed-Solomon enbcoding, as the name implies.</p>
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  * @author William Rucklidge
  */
 public final class ReedSolomonEncoder {

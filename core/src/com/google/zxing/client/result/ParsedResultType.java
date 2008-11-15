@@ -20,7 +20,7 @@ package com.google.zxing.client.result;
  * Represents the type of data encoded by a barcode -- from plain text, to a
  * URI, to an e-mail address, etc.
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 public final class ParsedResultType {
 

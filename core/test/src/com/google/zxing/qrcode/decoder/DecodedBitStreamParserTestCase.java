@@ -23,7 +23,7 @@ import junit.framework.TestCase;
 /**
  * Tests {@link com.google.zxing.qrcode.decoder.DecodedBitStreamParser}.
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 public final class DecodedBitStreamParserTestCase extends TestCase {
 

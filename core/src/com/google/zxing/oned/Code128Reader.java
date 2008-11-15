@@ -28,7 +28,7 @@ import java.util.Hashtable;
 /**
  * <p>Decodes Code 128 barcodes.</p>
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 public final class Code128Reader extends AbstractOneDReader {
 

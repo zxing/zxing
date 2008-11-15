@@ -50,7 +50,7 @@ import java.util.logging.Logger;
  * image. When one is found it attempts to decode the image and replies with the decoded messages
  * by e-mail.
  *
- * @author Sean Owen (srowen@google.com)
+ * @author Sean Owen
  */
 final class DecodeEmailTask extends TimerTask {
 

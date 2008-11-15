@@ -22,7 +22,7 @@ import javax.mail.PasswordAuthentication;
 /**
  * A simple {@link Authenticator} which replies with a fixed username and password.
  * 
- * @author Sean Owen (srowen@google.com)
+ * @author Sean Owen
  */
 final class EmailAuthenticator extends Authenticator {
 

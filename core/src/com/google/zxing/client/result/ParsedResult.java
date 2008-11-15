@@ -27,7 +27,7 @@ import com.google.zxing.Result;
  * <p>Thanks to Jeff Griffin for proposing rewrite of these classes that relies less
  * on exception-based mechanisms during parsing.</p>
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 public abstract class ParsedResult {
 

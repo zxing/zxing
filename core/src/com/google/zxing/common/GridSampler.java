@@ -30,7 +30,7 @@ import com.google.zxing.ReaderException;
  * The implementation used can be controlled by calling {@link #setGridSampler(GridSampler)}
  * with an instance of a class which implements this interface.
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 public abstract class GridSampler {
 

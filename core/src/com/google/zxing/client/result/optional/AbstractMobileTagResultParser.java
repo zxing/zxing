@@ -22,7 +22,7 @@ import com.google.zxing.client.result.ResultParser;
  * <p>Superclass for classes encapsulating reader results encoded according
  * to the MobileTag Reader International Specification.</p>
  * 
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 abstract class AbstractMobileTagResultParser extends ResultParser {
 

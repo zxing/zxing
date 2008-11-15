@@ -21,7 +21,7 @@ package com.google.zxing;
  * This includes, but is not limited to, failing checksums / error correction algorithms, being
  * unable to locate finder timing patterns, and so on.
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 
 // TODO: Currently we throw up to 400 ReaderExceptions while scanning a single 240x240 image before

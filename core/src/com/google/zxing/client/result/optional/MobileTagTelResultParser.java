@@ -24,7 +24,7 @@ import com.google.zxing.client.result.TelParsedResult;
  * <p>Represents a "TEL" result encoded according to section 4.4 of the
  * MobileTag Reader International Specification.</p>
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 final class MobileTagTelResultParser extends AbstractMobileTagResultParser {
 

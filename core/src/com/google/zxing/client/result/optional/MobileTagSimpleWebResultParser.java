@@ -24,7 +24,7 @@ import com.google.zxing.client.result.URIParsedResult;
  * <p>Represents a "simple web" result encoded according to section 4.11 of the
  * MobileTag Reader International Specification.</p>
  *
- * @author srowen@google.com (Sean Owen)
+ * @author Sean Owen
  */
 final class MobileTagSimpleWebResultParser extends AbstractMobileTagResultParser {
 
