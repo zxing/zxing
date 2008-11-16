@@ -36,9 +36,6 @@ public final class QRCodeEncoder {
 
   private static final String TAG = "QRCodeEncoder";
 
-  // Since this is an API call rather than a website, we don't use LocaleManager to change the TLD.
-  private static final String CHART_SERVER_URL = "//chart.apis.google.com/chart?cht=qr&chs=";
-
   private final Activity mActivity;
   private String mContents;
   private String mDisplayContents;
@@ -162,9 +159,8 @@ public final class QRCodeEncoder {
     public final void run() {
       AndroidHttpClient client = null;
       try {
-        String url = CHART_SERVER_URL + mPixelResolution + "x" + mPixelResolution + "&chl=" +
-          mContents;
-        URI uri = new URI("http", url, null);
+        URI uri = new URI("http", null, "chart.apis.google.com", -1, "/chart",
+                          "cht=qr&chs=" + mPixelResolution + "x" + mPixelResolution + "&chl=" + mContents, null);
         HttpUriRequest get = new HttpGet(uri);
         client = AndroidHttpClient.newInstance(mUserAgent);
         HttpResponse response = client.execute(get);

@@ -45,19 +45,12 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URI;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
 public final class SearchBookContentsActivity extends Activity {
 
   private static final String TAG = "SearchBookContents";
-
-  // These return a JSON result which describes if and where the query was found. This API may
-  // break or disappear at any time in the future. Since this is an API call rather than a website,
-  // we don't use LocaleManager to change the TLD.
-  private static final String BOOK_SEARCH_URL = "//www.google.com/books?vid=isbn";
-  private static final String BOOK_SEARCH_COMMAND = "&jscmd=SearchWithinVolume2&q=";
 
   private NetworkThread mNetworkThread;
   private String mISBN;
@@ -243,10 +236,12 @@ public final class SearchBookContentsActivity extends Activity {
     public final void run() {
       AndroidHttpClient client = null;
       try {
-        String url = BOOK_SEARCH_URL + mISBN + BOOK_SEARCH_COMMAND + URLEncoder.encode(mQuery, "UTF8");
-        URI uri = new URI("http", url, null);
+        // These return a JSON result which describes if and where the query was found. This API may
+        // break or disappear at any time in the future. Since this is an API call rather than a website,
+        // we don't use LocaleManager to change the TLD.
+        URI uri = new URI("http", null, "www.google.com", -1, "/books", "vid=isbn" + mISBN + "&jscmd=SearchWithinVolume2&q=" + mQuery, null);
         HttpUriRequest get = new HttpGet(uri);
-        get.setHeader("cookie", getCookie("http:" + url));
+        get.setHeader("cookie", getCookie(uri.toString()));
         client = AndroidHttpClient.newInstance(mUserAgent);
         HttpResponse response = client.execute(get);
         if (response.getStatusLine().getStatusCode() == 200) {
@@ -261,8 +256,7 @@ public final class SearchBookContentsActivity extends Activity {
           message.obj = json;
           message.sendToTarget();
         } else {
-          Log.e(TAG, "HTTP returned " + response.getStatusLine().getStatusCode() +
-              " for http:" + url);
+          Log.e(TAG, "HTTP returned " + response.getStatusLine().getStatusCode() + " for " + uri);
           Message message = Message.obtain(mHandler, R.id.search_book_contents_failed);
           message.sendToTarget();
         }
