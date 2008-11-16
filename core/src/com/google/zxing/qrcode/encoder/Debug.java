@@ -24,36 +24,38 @@ package com.google.zxing.qrcode.encoder;
  */
 public class Debug {
 
-  public static final void LOG_ERROR(String message) {
+  public static void LOG_ERROR(String message) {
     // TODO: Implement
   }
 
-  public static final void LOG_INFO(String message) {
+  public static void LOG_INFO(String message) {
     // TODO: Implement
   }
 
-  public static final void DCHECK(boolean condition) {
-    assert(condition);
+  public static void DCHECK(boolean condition) {
+    if (!condition) {
+      throw new IllegalStateException();
+    }
   }
 
-  public static final void DCHECK_LT(int a, int b) {
-    assert(a < b);
+  public static void DCHECK_LT(int a, int b) {
+    DCHECK(a < b);
   }
 
-  public static final void DCHECK_LE(int a, int b) {
-    assert(a <= b);
+  public static void DCHECK_LE(int a, int b) {
+    DCHECK(a <= b);
   }
 
-  public static final void DCHECK_GT(int a, int b) {
-    assert(a > b);
+  public static void DCHECK_GT(int a, int b) {
+    DCHECK(a > b);
   }
 
-  public static final void DCHECK_GE(int a, int b) {
-    assert(a >= b);
+  public static void DCHECK_GE(int a, int b) {
+    DCHECK(a >= b);
   }
 
-  public static final void DCHECK_EQ(int a, int b) {
-    assert(a == b);
+  public static void DCHECK_EQ(int a, int b) {
+    DCHECK(a == b);
   }
 
 }
