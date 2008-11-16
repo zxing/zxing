@@ -253,9 +253,19 @@ final class DecodedBitStreamParser {
     boolean canBeShiftJIS = true;
     boolean sawDoubleByteStart = false;
     int maybeSingleByteKatakanaCount = 0;
+    boolean sawLatin1Supplement = false;
     boolean lastWasPossibleDoubleByteStart = false;
     for (int i = 0; i < length && (canBeISO88591 || canBeShiftJIS); i++) {
       int value = bytes[i] & 0xFF;
+      if (value == 0xC2 || value == 0xC3 && i < length - 1) {
+        // This is really a poor hack. The slightly more exotic characters people might want to put in
+        // a QR Code, by which I mean the Latin-1 supplement characters (e.g. u-umlaut) have encodings
+        // that start with 0xC2 followed by [0xA0,0xBF], or start with 0xC3 followed by [0x80,0xBF].
+        int nextValue = bytes[i + 1] & 0xFF;
+        if (nextValue <= 0xBF && ((value == 0xC2 && nextValue >= 0xA0) || (value == 0xC3 && nextValue >= 0x80))) {
+          sawLatin1Supplement = true;
+        }
+      }
       if (value >= 0x7F && value <= 0x9F) {
         canBeISO88591 = false;
       }
@@ -298,11 +308,11 @@ final class DecodedBitStreamParser {
     //   - at least one byte that starts a double-byte value (bytes that are rare in ISO-8859-1), or
     //   - over 5% of bytes that could be single-byte Katakana (also rare in ISO-8859-1),
     // - and, saw no sequences that are invalid in Shift_JIS, then we conclude Shift_JIS
-    if ((sawDoubleByteStart || 20 * maybeSingleByteKatakanaCount > length) && canBeShiftJIS) {
+    if (canBeShiftJIS && (sawDoubleByteStart || 20 * maybeSingleByteKatakanaCount > length)) {
       return SHIFT_JIS;
     }
     // Otherwise, we default to ISO-8859-1 unless we know it can't be
-    if (canBeISO88591) {
+    if (!sawLatin1Supplement && canBeISO88591) {
       return ISO88591;
     }
     // Otherwise, we take a wild guess with UTF-8
