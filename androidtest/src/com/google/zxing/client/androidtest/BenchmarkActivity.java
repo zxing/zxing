@@ -25,7 +25,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.util.Vector;
+import java.util.List;
 
 public final class BenchmarkActivity extends Activity {
 
@@ -76,7 +76,7 @@ public final class BenchmarkActivity extends Activity {
   };
 
   private void handleBenchmarkDone(Message message) {
-    Vector<BenchmarkItem> items = (Vector<BenchmarkItem>) message.obj;
+    List<BenchmarkItem> items = (List<BenchmarkItem>) message.obj;
     int count = 0;
     for (int x = 0; x < items.size(); x++) {
       BenchmarkItem item = items.get(x);
