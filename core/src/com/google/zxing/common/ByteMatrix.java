@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-package com.google.zxing.qrcode.encoder;
+package com.google.zxing.common;
 
 /**
- * A class which wraps a 2D array.
+ * A class which wraps a 2D array of bytes. The default usage is signed. If you want to use it as a
+ * unsigned container, it's up to you to do byteValue & 0xff at each location.
  *
  * JAVAPORT: I'm not happy about the argument ordering throughout the file, as I always like to have
  * the horizontal component first, but this is for compatibility with the C++ code. The original
@@ -26,13 +27,13 @@ package com.google.zxing.qrcode.encoder;
  *
  * @author dswitkin@google.com (Daniel Switkin)
  */
-public final class Matrix {
+public final class ByteMatrix {
 
   private final byte[][] bytes;
   private final int height;
   private final int width;
 
-  public Matrix(int height, int width) {
+  public ByteMatrix(int height, int width) {
     bytes = new byte[height][width];
     this.height = height;
     this.width = width;
@@ -48,6 +49,10 @@ public final class Matrix {
 
   public final byte get(int y, int x) {
     return bytes[y][x];
+  }
+
+  public final byte[][] getArray() {
+    return bytes;
   }
 
   public final void set(int y, int x, byte value) {

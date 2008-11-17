@@ -16,6 +16,8 @@
 
 package com.google.zxing.qrcode.encoder;
 
+import com.google.zxing.common.ByteMatrix;
+
 /**
  * @author satorux@google.com (Satoru Takabayashi) - creator
  * @author dswitkin@google.com (Daniel Switkin) - ported from C++
@@ -121,15 +123,15 @@ public final class MatrixUtil {
   // Set all cells to -1.  -1 means that the cell is empty (not set yet).
   //
   // JAVAPORT: We shouldn't need to do this at all. The code should be rewritten to begin encoding
-  // with the Matrix initialized all to zero.
-  public static void ClearMatrix(Matrix matrix) {
+  // with the ByteMatrix initialized all to zero.
+  public static void ClearMatrix(ByteMatrix matrix) {
     matrix.clear((byte) -1);
   }
 
   // Build 2D matrix of QR Code from "data_bits" with "ec_level", "version" and "mask_pattern". On
   // success, store the result in "matrix" and return true.  On error, return false.
   public static boolean BuildMatrix(final BitVector data_bits, int ec_level, int version,
-      int mask_pattern, Matrix matrix) {
+      int mask_pattern, ByteMatrix matrix) {
     MatrixUtil.ClearMatrix(matrix);
     if (!EmbedBasicPatterns(version, matrix)) {
       return false;
@@ -152,7 +154,7 @@ public final class MatrixUtil {
   // - Timing patterns
   // - Dark dot at the left bottom corner
   // - Position adjustment patterns, if need be
-  public static boolean EmbedBasicPatterns(int version, Matrix matrix) {
+  public static boolean EmbedBasicPatterns(int version, ByteMatrix matrix) {
     // Let's get started with embedding big squares at corners.
     EmbedPositionDetectionPatternsAndSeparators(matrix);
     // Then, embed the dark dot at the left bottom corner.
@@ -166,7 +168,7 @@ public final class MatrixUtil {
   }
 
   // Embed type information. On success, modify the matrix and return true. On error, return false.
-  public static boolean EmbedTypeInfo(int ec_level, int mask_pattern, Matrix matrix) {
+  public static boolean EmbedTypeInfo(int ec_level, int mask_pattern, ByteMatrix matrix) {
     BitVector type_info_bits = new BitVector();
     if (!MakeTypeInfoBits(ec_level, mask_pattern, type_info_bits)) {
       return false;
@@ -201,7 +203,7 @@ public final class MatrixUtil {
   // Embed version information if need be. On success, modify the matrix and return true. On error,
   // return false. See 8.10 of JISX0510:2004 (p.47) for how to embed version information. Return
   // true on success, otherwise return false.
-  public static boolean MaybeEmbedVersionInfo(int version, Matrix matrix) {
+  public static boolean MaybeEmbedVersionInfo(int version, ByteMatrix matrix) {
     if (version < 7) {  // Version info is necessary if version >= 7.
       return true;  // Don't need version info.
     }
@@ -229,7 +231,7 @@ public final class MatrixUtil {
   // Embed "data_bits" using "mask_pattern". On success, modify the matrix and return true. On
   // error, return false. For debugging purposes, it skips masking process if "mask_pattern" is -1.
   // See 8.7 of JISX0510:2004 (p.38) for how to embed data bits.
-  public static boolean EmbedDataBits(final BitVector data_bits, int mask_pattern, Matrix matrix) {
+  public static boolean EmbedDataBits(final BitVector data_bits, int mask_pattern, ByteMatrix matrix) {
     int bit_index = 0;
     int direction = -1;
     // Start from the right bottom cell.
@@ -387,7 +389,7 @@ public final class MatrixUtil {
         value == 1);  // Dark (black).
   }
 
-  private static void EmbedTimingPatterns(Matrix matrix) {
+  private static void EmbedTimingPatterns(ByteMatrix matrix) {
     // -8 is for skipping position detection patterns (size 7), and two horizontal/vertical
     // separation patterns (size 1). Thus, 8 = 7 + 1.
     for (int i = 8; i < matrix.width() - 8; ++i) {
@@ -406,13 +408,13 @@ public final class MatrixUtil {
   }
 
   // Embed the lonely dark dot at left bottom corner. JISX0510:2004 (p.46)
-  private static void EmbedDarkDotAtLeftBottomCorner(Matrix matrix) {
+  private static void EmbedDarkDotAtLeftBottomCorner(ByteMatrix matrix) {
     Debug.DCHECK(matrix.get(matrix.height() - 8, 8) != 0);
     matrix.set(matrix.height() - 8, 8, 1);
   }
 
   private static void EmbedHorizontalSeparationPattern(final int x_start, final int y_start,
-      Matrix matrix) {
+      ByteMatrix matrix) {
     // We know the width and height.
     Debug.DCHECK_EQ(8, kHorizontalSeparationPattern[0].length);
     Debug.DCHECK_EQ(1, kHorizontalSeparationPattern.length);
@@ -423,7 +425,7 @@ public final class MatrixUtil {
   }
 
   private static void EmbedVerticalSeparationPattern(final int x_start, final int y_start,
-      Matrix matrix) {
+      ByteMatrix matrix) {
     // We know the width and height.
     Debug.DCHECK_EQ(1, kVerticalSeparationPattern[0].length);
     Debug.DCHECK_EQ(7, kVerticalSeparationPattern.length);
@@ -437,7 +439,7 @@ public final class MatrixUtil {
   // almost identical, since we cannot write a function that takes 2D arrays in different sizes in
   // C/C++. We should live with the fact.
   private static void EmbedPositionAdjustmentPattern(final int x_start, final int y_start,
-      Matrix matrix) {
+      ByteMatrix matrix) {
     // We know the width and height.
     Debug.DCHECK_EQ(5, kPositionAdjustmentPattern[0].length);
     Debug.DCHECK_EQ(5, kPositionAdjustmentPattern.length);
@@ -450,7 +452,7 @@ public final class MatrixUtil {
   }
 
   private static void EmbedPositionDetectionPattern(final int x_start, final int y_start,
-      Matrix matrix) {
+      ByteMatrix matrix) {
     // We know the width and height.
     Debug.DCHECK_EQ(7, kPositionDetectionPattern[0].length);
     Debug.DCHECK_EQ(7, kPositionDetectionPattern.length);
@@ -463,7 +465,7 @@ public final class MatrixUtil {
   }
 
   // Embed position detection patterns and surrounding vertical/horizontal separators.
-  private static void EmbedPositionDetectionPatternsAndSeparators(Matrix matrix) {
+  private static void EmbedPositionDetectionPatternsAndSeparators(ByteMatrix matrix) {
     // Embed three big squares at corners.
     final int pdp_width = kPositionDetectionPattern[0].length;
     // Left top corner.
@@ -495,7 +497,7 @@ public final class MatrixUtil {
   }
 
   // Embed position adjustment patterns if need be.
-  private static void MaybeEmbedPositionAdjustmentPatterns(final int version, Matrix matrix) {
+  private static void MaybeEmbedPositionAdjustmentPatterns(final int version, ByteMatrix matrix) {
     if (version < 2) {  // The patterns appear if version >= 2
       return;
     }

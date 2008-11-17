@@ -41,10 +41,7 @@
            optimize="true"
            debug="${generate-debug}"
            deprecation="true"
-           fork="true">
-      <!-- TODO re-add this package -->
-      <exclude name="com/google/zxing/qrcode/encoder/**"/>
-    </javac>
+           fork="true"/>
     <jar jarfile="core.jar" basedir="build">
       <!-- These entries allow core.jar to function as an OSGi bundle, and also specifices
            additional attributes for compatibility with BugLabs's BUG platform.

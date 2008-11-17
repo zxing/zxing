@@ -16,6 +16,8 @@
 
 package com.google.zxing.qrcode.encoder;
 
+import com.google.zxing.common.ByteMatrix;
+
 /**
  * @author satorux@google.com (Satoru Takabayashi) - creator
  * @author dswitkin@google.com (Daniel Switkin) - ported from C++
@@ -24,7 +26,7 @@ public final class MaskUtil {
 
   // The mask penalty calculation is complicated.  See Table 21 of JISX0510:2004 (p.45) for details.
   // Basically it applies four rules and summate all penalties.
-  public static int CalculateMaskPenalty(final Matrix matrix) {
+  public static int CalculateMaskPenalty(final ByteMatrix matrix) {
     int penalty = 0;
     penalty += ApplyMaskPenaltyRule1(matrix);
     penalty += ApplyMaskPenaltyRule2(matrix);
@@ -35,7 +37,7 @@ public final class MaskUtil {
 
   // Apply mask penalty rule 1 and return the penalty. Find repetitive cells with the same color and
   // give penalty to them. Example: 00000 or 11111.
-  public static int ApplyMaskPenaltyRule1(final Matrix matrix) {
+  public static int ApplyMaskPenaltyRule1(final ByteMatrix matrix) {
     final int penalty = (ApplyMaskPenaltyRule1Internal(matrix, true) +
         ApplyMaskPenaltyRule1Internal(matrix, false));
     Debug.LOG_INFO("\tApplyMaskPenaltyRule1: " + penalty);
@@ -45,8 +47,8 @@ public final class MaskUtil {
   // Apply mask penalty rule 2 and return the penalty. Find 2x2 blocks with the same color and give
   // penalty to them.
   //
-  // JAVAPORT: Consider using Matrix.getArray() instead.
-  public static int ApplyMaskPenaltyRule2(final Matrix matrix) {
+  // JAVAPORT: Consider using ByteMatrix.getArray() instead.
+  public static int ApplyMaskPenaltyRule2(final ByteMatrix matrix) {
     int penalty = 0;
     for (int y = 0; y < matrix.height() - 1; ++y) {
       for (int x = 0; x < matrix.width() - 1; ++x) {
@@ -66,9 +68,9 @@ public final class MaskUtil {
   // 10111010000, and give penalty to them.  If we find patterns like 000010111010000, we give
   // penalties twice (i.e. 40 * 2).
   //
-  // JAVAPORT: This many calls to Matrix.get() looks expensive. We should profile and consider
-  // adding a byte[][] Matrix.getArray() method, then using that array locally.
-  public static int ApplyMaskPenaltyRule3(final Matrix matrix) {
+  // JAVAPORT: This many calls to ByteMatrix.get() looks expensive. We should profile and consider
+  // adding a byte[][] ByteMatrix.getArray() method, then using that array locally.
+  public static int ApplyMaskPenaltyRule3(final ByteMatrix matrix) {
     int penalty = 0;
     for (int y = 0; y < matrix.height(); ++y) {
       for (int x = 0; x < matrix.width(); ++x) {
@@ -128,7 +130,7 @@ public final class MaskUtil {
   // -  55% =>  10
   // -  55% =>  20
   // - 100% => 100
-  public static int ApplyMaskPenaltyRule4(final Matrix matrix) {
+  public static int ApplyMaskPenaltyRule4(final ByteMatrix matrix) {
     int num_dark_cells = 0;
     for (int y = 0; y < matrix.height(); ++y) {
       for (int x = 0; x < matrix.width(); ++x) {
@@ -174,7 +176,7 @@ public final class MaskUtil {
 
   // Helper function for ApplyMaskPenaltyRule1. We need this for doing this calculation in both
   // vertical and horizontal orders respectively.
-  private static int ApplyMaskPenaltyRule1Internal(final Matrix matrix, boolean is_horizontal) {
+  private static int ApplyMaskPenaltyRule1Internal(final ByteMatrix matrix, boolean is_horizontal) {
     int penalty = 0;
     int num_same_bit_cells = 0;
     int prev_bit = -1;
