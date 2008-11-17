@@ -68,7 +68,7 @@ public final class MultiFormatOneDReader extends AbstractOneDReader {
       }
     }
 
-    throw new ReaderException("No barcode was detected in this image.");
+    throw ReaderException.getInstance();
   }
 
 }

@@ -124,12 +124,12 @@ public abstract class AbstractUPCEANReader extends AbstractOneDReader implements
     int end = endRange[1];
     int quietEnd = end + (end - endRange[0]);
     if (quietEnd >= row.getSize() || !row.isRange(end, quietEnd, false)) {
-      throw new ReaderException("Pattern not followed by whitespace");
+      throw ReaderException.getInstance();
     }
 
     String resultString = result.toString();
     if (!checkChecksum(resultString)) {
-      throw new ReaderException("Checksum failed");
+      throw ReaderException.getInstance();
     }
 
     float left = (float) (startGuardRange[1] + startGuardRange[0]) / 2.0f;
@@ -162,7 +162,7 @@ public abstract class AbstractUPCEANReader extends AbstractOneDReader implements
     for (int i = length - 2; i >= 0; i -= 2) {
       int digit = (int) s.charAt(i) - (int) '0';
       if (digit < 0 || digit > 9) {
-        throw new ReaderException("Illegal character during checksum");
+        throw ReaderException.getInstance();
       }
       sum += digit;
     }
@@ -170,7 +170,7 @@ public abstract class AbstractUPCEANReader extends AbstractOneDReader implements
     for (int i = length - 1; i >= 0; i -= 2) {
       int digit = (int) s.charAt(i) - (int) '0';
       if (digit < 0 || digit > 9) {
-        throw new ReaderException("Illegal character during checksum");
+        throw ReaderException.getInstance();
       }
       sum += digit;
     }
@@ -242,7 +242,7 @@ public abstract class AbstractUPCEANReader extends AbstractOneDReader implements
         isWhite = !isWhite;
       }
     }
-    throw new ReaderException("Can't find pattern");
+    throw ReaderException.getInstance();
   }
 
   /**
@@ -274,7 +274,7 @@ public abstract class AbstractUPCEANReader extends AbstractOneDReader implements
     if (bestMatch >= 0) {
       return bestMatch;
     } else {
-      throw new ReaderException("Could not match any digit in pattern");
+      throw ReaderException.getInstance();
     }
   }
 

@@ -148,7 +148,7 @@ final class AlignmentPatternFinder {
       return (AlignmentPattern) possibleCenters.elementAt(0);
     }
 
-    throw new ReaderException("Could not find alignment pattern");
+    throw ReaderException.getInstance();
   }
 
   /**

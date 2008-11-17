@@ -93,7 +93,7 @@ public final class QRCodeReader implements Reader {
       borderWidth++;
     }
     if (borderWidth == minDimension) {
-      throw new ReaderException("No black pixels found along diagonal");
+      throw ReaderException.getInstance();
     }
 
     // And then keep tracking across the top-left black module to determine module size
@@ -102,7 +102,7 @@ public final class QRCodeReader implements Reader {
       moduleEnd++;
     }
     if (moduleEnd == minDimension) {
-      throw new ReaderException("No end to black pixels found along diagonal");
+      throw ReaderException.getInstance();
     }
 
     int moduleSize = moduleEnd - borderWidth;
@@ -113,14 +113,13 @@ public final class QRCodeReader implements Reader {
       rowEndOfSymbol--;
     }
     if (rowEndOfSymbol < 0) {
-      throw new ReaderException("Can't find end of rightmost black module");
+      throw ReaderException.getInstance();
     }
     rowEndOfSymbol++;
 
     // Make sure width of barcode is a multiple of module size
     if ((rowEndOfSymbol - borderWidth) % moduleSize != 0) {
-      throw new ReaderException("Bad module size / width: " + moduleSize +
-          " / " + (rowEndOfSymbol - borderWidth));
+      throw ReaderException.getInstance();
     }
     int dimension = (rowEndOfSymbol - borderWidth) / moduleSize;
 
@@ -131,7 +130,7 @@ public final class QRCodeReader implements Reader {
 
     int sampleDimension = borderWidth + (dimension - 1) * moduleSize;
     if (sampleDimension >= width || sampleDimension >= height) {
-      throw new ReaderException("Estimated pure image size is beyond image boundaries");
+      throw ReaderException.getInstance();
     }
 
     // Now just read off the bits

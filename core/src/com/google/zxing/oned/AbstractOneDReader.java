@@ -140,7 +140,7 @@ public abstract class AbstractOneDReader implements OneDReader {
       }
     }
 
-    throw new ReaderException("No barcode found");
+    throw ReaderException.getInstance();
   }
 
   /**
@@ -162,7 +162,7 @@ public abstract class AbstractOneDReader implements OneDReader {
     }
     int end = row.getSize();
     if (start >= end) {
-      throw new ReaderException("Couldn't fully read a pattern");
+      throw ReaderException.getInstance();
     }
     boolean isWhite = !row.get(start);
     int counterPosition = 0;
@@ -185,7 +185,7 @@ public abstract class AbstractOneDReader implements OneDReader {
     // If we read fully the last section of pixels and filled up our counters -- or filled
     // the last counter but ran off the side of the image, OK. Otherwise, a problem.
     if (!(counterPosition == numCounters || (counterPosition == numCounters - 1 && i == end))) {
-      throw new ReaderException("Couldn't fully read a pattern");
+      throw ReaderException.getInstance();
     }
   }
 

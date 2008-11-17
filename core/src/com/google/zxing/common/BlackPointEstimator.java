@@ -88,7 +88,7 @@ public final class BlackPointEstimator {
     // for 1D formats, which are relatively lenient.
     // We arbitrarily say "close" is "<= 1/16 of the total histogram buckets apart"
     if (secondPeak - firstPeak <= numBuckets >> 4) {
-      throw new ReaderException("Too little dynamic range in luminance");
+      throw ReaderException.getInstance();
     }
 
     // Find a valley between them that is low and closer to the white peak

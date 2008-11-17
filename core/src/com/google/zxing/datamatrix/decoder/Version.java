@@ -98,7 +98,7 @@ public final class Version {
    */
   public static Version getVersionForDimensions(int numRows, int numColumns) throws ReaderException {
     if ((numRows & 0x01) != 0 || (numColumns & 0x01) != 0) {
-      throw new ReaderException("Dimension must be 0 mod 2");
+      throw ReaderException.getInstance();
     }
     
     // TODO(bbrown): This is doing a linear search through the array of versions.
@@ -112,7 +112,7 @@ public final class Version {
       }
     }
     
-    throw new ReaderException("Dimensions do not correspond to a valid Data Matrix Version.");
+    throw ReaderException.getInstance();
   }
 
   /**

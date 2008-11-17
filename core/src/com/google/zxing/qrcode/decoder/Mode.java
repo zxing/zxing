@@ -67,7 +67,7 @@ final class Mode {
       case 0x9:
         return FNC1_SECOND_POSITION;
       default:
-        throw new ReaderException("Unsupported mode bits: " + bits);
+        throw ReaderException.getInstance();
     }
   }
 

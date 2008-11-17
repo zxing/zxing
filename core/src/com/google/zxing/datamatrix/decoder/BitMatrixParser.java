@@ -35,7 +35,7 @@ final class BitMatrixParser {
   BitMatrixParser(BitMatrix bitMatrix) throws ReaderException {
     int dimension = bitMatrix.getDimension();
     if (dimension < 10 || dimension > 144 || (dimension & 0x01) != 0) {
-      throw new ReaderException("Invalid dimension (" + dimension + ")  Must be 0 mod 2 and >= 10 and <= 144");
+      throw ReaderException.getInstance();
     }
     
     version = readVersion(bitMatrix);
@@ -141,7 +141,7 @@ final class BitMatrixParser {
     } while ((row < numRows) || (column < numColumns));
 
     if (resultOffset != version.getTotalCodewords()) {
-      throw new ReaderException("Did not read all codewords");
+      throw ReaderException.getInstance();
     }
     return result;
   }

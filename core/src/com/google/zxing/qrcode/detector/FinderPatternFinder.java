@@ -484,7 +484,7 @@ final class FinderPatternFinder {
 
     if (size < 3) {
       // Couldn't find enough finder patterns
-      throw new ReaderException("Could not find three finder patterns");
+      throw ReaderException.getInstance();
     }
 
     if (size > 3) {

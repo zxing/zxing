@@ -126,7 +126,7 @@ public final class EAN13Reader extends AbstractUPCEANReader {
         return;
       }
     }
-    throw new ReaderException("Unable to determine first digit");
+    throw ReaderException.getInstance();
   }
 
 }
