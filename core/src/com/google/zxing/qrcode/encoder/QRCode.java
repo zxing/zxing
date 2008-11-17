@@ -16,6 +16,8 @@
 
 package com.google.zxing.qrcode.encoder;
 
+import com.google.zxing.common.ByteMatrix;
+
 /**
  * @author satorux@google.com (Satoru Takabayashi) - creator
  * @author dswitkin@google.com (Daniel Switkin) - ported from C++
@@ -49,7 +51,7 @@ public final class QRCode {
   private int num_data_bytes_;
   private int num_ec_bytes_;
   private int num_rs_blocks_;
-  private Matrix matrix_;
+  private ByteMatrix matrix_;
 
 
   // They call encoding "mode". The modes are defined in 8.3 of JISX0510:2004 (p.14). It's unlikely
@@ -106,7 +108,7 @@ public final class QRCode {
   public int ec_level() { return ec_level_; }
   // Version of the QR Code.  The bigger size, the bigger version.
   public int version() { return version_; }
-  // Matrix width of the QR Code.
+  // ByteMatrix width of the QR Code.
   public int matrix_width() { return matrix_width_; }
   // Mask pattern of the QR Code.
   public int mask_pattern() { return mask_pattern_; }
@@ -118,8 +120,8 @@ public final class QRCode {
   public int num_ec_bytes() { return num_ec_bytes_; }
   // Number of Reedsolomon blocks in the QR Code.
   public int num_rs_blocks() { return num_rs_blocks_; }
-  // Matrix data of the QR Code.
-  public final Matrix matrix() { return matrix_; }
+  // ByteMatrix data of the QR Code.
+  public final ByteMatrix matrix() { return matrix_; }
 
   // Return the value of the module (cell) pointed by "x" and "y" in the matrix of the QR Code. They
   // call cells in the matrix "modules". 1 represents a black cell, and 0 represents a white cell.
@@ -152,7 +154,7 @@ public final class QRCode {
             IsValidMatrixWidth(matrix_width_) &&
             IsValidMaskPattern(mask_pattern_) &&
             num_total_bytes_ == num_data_bytes_ + num_ec_bytes_ &&
-            // Matrix stuff.
+            // ByteMatrix stuff.
             matrix_ != null &&
             matrix_width_ == matrix_.width() &&
             // See 7.3.1 of JISX0510:2004 (p.5).
@@ -230,7 +232,7 @@ public final class QRCode {
 
   // This takes ownership of the 2D array.  The 2D array will be
   // deleted in the destructor of the class.
-  public void set_matrix(Matrix value) {
+  public void set_matrix(ByteMatrix value) {
     matrix_ = value;
   }
 
@@ -360,8 +362,8 @@ public final class QRCode {
   //
   // JAVAPORT: This is going to be super expensive and unnecessary, we should not call this in
   // production. I'm leaving it because it may be useful for testing. It should be removed entirely
-  // if Matrix is changed never to contain a -1.
-  private static boolean EverythingIsBinary(final Matrix matrix) {
+  // if ByteMatrix is changed never to contain a -1.
+  private static boolean EverythingIsBinary(final ByteMatrix matrix) {
     for (int y = 0; y < matrix.height(); ++y) {
       for (int x = 0; x < matrix.width(); ++x) {
         int value = matrix.get(y, x);

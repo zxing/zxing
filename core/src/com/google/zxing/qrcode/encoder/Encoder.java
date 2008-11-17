@@ -18,6 +18,7 @@ package com.google.zxing.qrcode.encoder;
 
 import com.google.zxing.common.reedsolomon.ReedSolomonEncoder;
 import com.google.zxing.common.reedsolomon.GF256;
+import com.google.zxing.common.ByteMatrix;
 
 import java.util.Vector;
 
@@ -341,7 +342,7 @@ private static final ECPolyInfo kECPolynomials[] = {
         qr_code.num_rs_blocks(), final_bits);
 
     // Step 7: Choose the mask pattern and set to "qr_code".
-    Matrix matrix = new Matrix(qr_code.matrix_width(), qr_code.matrix_width());
+    ByteMatrix matrix = new ByteMatrix(qr_code.matrix_width(), qr_code.matrix_width());
     qr_code.set_mask_pattern(ChooseMaskPattern(final_bits, qr_code.ec_level(), qr_code.version(),
         matrix));
     if (qr_code.mask_pattern() == -1) {
@@ -405,7 +406,7 @@ private static final ECPolyInfo kECPolynomials[] = {
   }
 
   private static int ChooseMaskPattern(final BitVector bits, int ec_level, int version,
-      Matrix matrix) {
+      ByteMatrix matrix) {
     if (!QRCode.IsValidMatrixWidth(matrix.width())) {
       Debug.LOG_ERROR("Invalid matrix width: " + matrix.width());
       return -1;
