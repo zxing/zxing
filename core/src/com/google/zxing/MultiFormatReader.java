@@ -138,7 +138,7 @@ public final class MultiFormatReader implements Reader {
       }
     }
 
-    throw new ReaderException("No barcode was detected in this image.");
+    throw ReaderException.getInstance();
   }
 
 }
