@@ -130,7 +130,7 @@ public final class Detector {
     }
 
     if (maybeTopLeft == null || bottomLeft == null || maybeBottomRight == null) {
-      throw new ReaderException("Could not find three corners");
+      throw ReaderException.getInstance();
     }
 
     // Bottom left is correct but top left and bottom right might be switched
@@ -212,7 +212,7 @@ public final class Detector {
       }
       if (range == null) {
         if (lastRange == null) {
-          throw new ReaderException("Center of image not within barcode");
+          throw ReaderException.getInstance();
         }
         // lastRange was found
         if (dj == 0) {
@@ -240,7 +240,7 @@ public final class Detector {
       }
       lastRange = range;
     }
-    throw new ReaderException("Couldn't find an end to barcode");
+    throw ReaderException.getInstance();
   }
 
   /**

@@ -122,7 +122,7 @@ public abstract class GridSampler {
       int x = (int) points[offset];
       int y = (int) points[offset + 1];
       if (x < -1 || x > width || y < -1 || y > height) {
-        throw new ReaderException("Transformed point out of bounds at " + x + ',' + y);
+        throw ReaderException.getInstance();
       }
       nudged = false;
       if (x == -1) {
@@ -146,7 +146,7 @@ public abstract class GridSampler {
       int x = (int) points[offset];
       int y = (int) points[offset + 1];
       if (x < -1 || x > width || y < -1 || y > height) {
-        throw new ReaderException("Transformed point out of bounds at " + x + ',' + y);
+        throw ReaderException.getInstance();
       }
       nudged = false;
       if (x == -1) {

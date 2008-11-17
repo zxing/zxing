@@ -47,7 +47,7 @@ public final class AWTImageMonochromeBitmapSource extends BaseMonochromeBitmapSo
     try {
       grabber.grabPixels();
     } catch (InterruptedException ie) {
-      throw new ReaderException("Interrupted while reading pixels");
+      throw ReaderException.getInstance();
     }
   }
 

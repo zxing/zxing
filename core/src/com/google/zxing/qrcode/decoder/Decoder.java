@@ -119,7 +119,7 @@ public final class Decoder {
     try {
       rsDecoder.decode(codewordsInts, numECCodewords);
     } catch (ReedSolomonException rse) {
-      throw new ReaderException(rse.toString());
+      throw ReaderException.getInstance();
     }
     // Copy back into array of bytes -- only need to worry about the bytes that were data
     // We don't care about errors in the error-correction codewords

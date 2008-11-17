@@ -102,7 +102,7 @@ final class DecodedBitStreamParser {
             decodeBase256Segment(bits, result, byteSegments);
             break;
           default:
-            throw new ReaderException("Unsupported mode indicator");
+            throw ReaderException.getInstance();
         }
         mode = ASCII_ENCODE;
       }
@@ -122,7 +122,7 @@ final class DecodedBitStreamParser {
     do {
       int oneByte = bits.readBits(8);
       if (oneByte == 0) {
-	    	throw new ReaderException("0 is an invalid ASCII codeword");
+	    	throw ReaderException.getInstance();
 	    } else if (oneByte <= 128) {  // ASCII data (ASCII value + 1)
 	    	oneByte = upperShift ? (oneByte + 128) : oneByte;
 	    	upperShift = false;
@@ -141,11 +141,11 @@ final class DecodedBitStreamParser {
 	    } else if (oneByte == 231) {  // Latch to Base 256 encodation
 	    	return BASE256_ENCODE;
 	    } else if (oneByte == 232) {  // FNC1
-	    	throw new ReaderException("Currently not supporting FNC1");
+	    	throw ReaderException.getInstance();
 	    } else if (oneByte == 233) {  // Structured Append
-	    	throw new ReaderException("Currently not supporting Structured Append");
+	    	throw ReaderException.getInstance();
 	    } else if (oneByte == 234) {  // Reader Programming
-	    	throw new ReaderException("Currently not supporting Reader Programming");
+	    	throw ReaderException.getInstance();
 	    } else if (oneByte == 235) {  // Upper Shift (shift to Extended ASCII)
 	    	upperShift = true;
 	    } else if (oneByte == 236) {  // 05 Macro
@@ -162,9 +162,9 @@ final class DecodedBitStreamParser {
 	    	return EDIFACT_ENCODE;
 	    } else if (oneByte == 241) {  // ECI Character
 	    	// TODO(bbrown): I think we need to support ECI
-	    	throw new ReaderException("Currently not supporting ECI Character");
+	    	throw ReaderException.getInstance();
 	    } else if (oneByte >= 242) {  // Not to be used in ASCII encodation
-	    	throw new ReaderException(oneByte + " should not be used in ASCII encodation");
+	    	throw ReaderException.getInstance();
 	    }
     } while (bits.available() > 0);
     return ASCII_ENCODE;
@@ -226,11 +226,11 @@ final class DecodedBitStreamParser {
                 result.append(C40_SHIFT2_SET_CHARS[cValue]);
               }
             } else if (cValue == 27) {  // FNC1
-              throw new ReaderException("Currently not supporting FNC1");
+              throw ReaderException.getInstance();
             } else if (cValue == 30) {  // Upper Shift
               upperShift = true;
             } else {
-              throw new ReaderException(cValue + " is not valid in the C40 Shift 2 set");
+              throw ReaderException.getInstance();
             }
             shift = 0;
             break;
@@ -244,7 +244,7 @@ final class DecodedBitStreamParser {
             shift = 0;
             break;
           default:
-            throw new ReaderException("Invalid shift value");
+            throw ReaderException.getInstance();
         }
       }
     } while (bits.available() > 0);
@@ -307,11 +307,11 @@ final class DecodedBitStreamParser {
                 result.append(C40_SHIFT2_SET_CHARS[cValue]);
               }
             } else if (cValue == 27) {  // FNC1
-              throw new ReaderException("Currently not supporting FNC1");
+              throw ReaderException.getInstance();
             } else if (cValue == 30) {  // Upper Shift
               upperShift = true;
             } else {
-              throw new ReaderException(cValue + " is not valid in the C40 Shift 2 set");
+              throw ReaderException.getInstance();
             }
             shift = 0;
             break;
@@ -325,7 +325,7 @@ final class DecodedBitStreamParser {
             shift = 0;
             break;
           default:
-            throw new ReaderException("Invalid shift value");
+            throw ReaderException.getInstance();
         }
       }
     } while (bits.available() > 0);
@@ -366,7 +366,7 @@ final class DecodedBitStreamParser {
         } else if (cValue < 40) {  // A - Z
           result.append((char) (cValue + 51));
         } else {
-          throw new ReaderException(cValue + " is not valid in the ANSI X12 set");
+          throw ReaderException.getInstance();
         }
       }
     } while (bits.available() > 0);

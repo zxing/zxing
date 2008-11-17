@@ -99,7 +99,7 @@ public final class UPCEReader extends AbstractUPCEANReader {
         }
       }
     }
-    throw new ReaderException("Unable to determine number system and check digit");
+    throw ReaderException.getInstance();
   }
 
   BarcodeFormat getBarcodeFormat() {

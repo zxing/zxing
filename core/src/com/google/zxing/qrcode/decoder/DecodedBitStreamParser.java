@@ -96,7 +96,7 @@ final class DecodedBitStreamParser {
           } else if (mode.equals(Mode.KANJI)) {
             decodeKanjiSegment(bits, result, count);
           } else {
-            throw new ReaderException("Unsupported mode indicator");
+            throw ReaderException.getInstance();
           }
         }
       }
@@ -132,7 +132,7 @@ final class DecodedBitStreamParser {
     try {
       result.append(new String(buffer, SHIFT_JIS));
     } catch (UnsupportedEncodingException uee) {
-      throw new ReaderException(SHIFT_JIS + " encoding is not supported on this device");
+      throw ReaderException.getInstance();
     }
   }
 
@@ -143,7 +143,7 @@ final class DecodedBitStreamParser {
                                         Vector byteSegments) throws ReaderException {
     byte[] readBytes = new byte[count];
     if (count << 3 > bits.available()) {
-      throw new ReaderException("Count too large: " + count);
+      throw ReaderException.getInstance();
     }
     for (int i = 0; i < count; i++) {
       readBytes[i] = (byte) bits.readBits(8);
@@ -162,7 +162,7 @@ final class DecodedBitStreamParser {
     try {
       result.append(new String(readBytes, encoding));
     } catch (UnsupportedEncodingException uce) {
-      throw new ReaderException(uce.toString());
+      throw ReaderException.getInstance();
     }
     byteSegments.addElement(readBytes);
   }
@@ -208,7 +208,7 @@ final class DecodedBitStreamParser {
       // Each 10 bits encodes three digits
       int threeDigitsBits = bits.readBits(10);
       if (threeDigitsBits >= 1000) {
-        throw new ReaderException("Illegal value for 3-digit unit: " + threeDigitsBits);
+        throw ReaderException.getInstance();
       }
       result.append(ALPHANUMERIC_CHARS[threeDigitsBits / 100]);
       result.append(ALPHANUMERIC_CHARS[(threeDigitsBits / 10) % 10]);
@@ -219,7 +219,7 @@ final class DecodedBitStreamParser {
       // Two digits left over to read, encoded in 7 bits
       int twoDigitsBits = bits.readBits(7);
       if (twoDigitsBits >= 100) {
-        throw new ReaderException("Illegal value for 2-digit unit: " + twoDigitsBits);
+        throw ReaderException.getInstance();
       }
       result.append(ALPHANUMERIC_CHARS[twoDigitsBits / 10]);
       result.append(ALPHANUMERIC_CHARS[twoDigitsBits % 10]);
@@ -227,7 +227,7 @@ final class DecodedBitStreamParser {
       // One digit left over to read
       int digitBits = bits.readBits(4);
       if (digitBits >= 10) {
-        throw new ReaderException("Illegal value for digit unit: " + digitBits);
+        throw ReaderException.getInstance();
       }
       result.append(ALPHANUMERIC_CHARS[digitBits]);
     }

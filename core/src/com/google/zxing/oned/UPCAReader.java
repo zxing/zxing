@@ -55,7 +55,7 @@ public final class UPCAReader implements UPCEANReader {
     if (text.charAt(0) == '0') {
       return new Result(text.substring(1), null, result.getResultPoints(), BarcodeFormat.UPC_A);
     } else {
-      throw new ReaderException("Found EAN-13 code but was not a UPC-A code");
+      throw ReaderException.getInstance();
     }
   }
 

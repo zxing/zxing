@@ -67,7 +67,7 @@ public final class DefaultGridSampler extends GridSampler {
         // This results in an ugly runtime exception despite our clever checks above -- can't have that.
         // We could check each point's coordinates but that feels duplicative. We settle for
         // catching and wrapping ArrayIndexOutOfBoundsException.
-        throw new ReaderException(aioobe.toString());
+        throw ReaderException.getInstance();
       }
     }
     return bits;

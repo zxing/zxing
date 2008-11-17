@@ -75,7 +75,7 @@ public final class Detector {
 
     float moduleSize = calculateModuleSize(topLeft, topRight, bottomLeft);
     if (moduleSize < 1.0f) {
-      throw new ReaderException("Module size too small");
+      throw ReaderException.getInstance();
     }
     int dimension = computeDimension(topLeft, topRight, bottomLeft, moduleSize);
     Version provisionalVersion = Version.getProvisionalVersionForDimension(dimension);
@@ -108,7 +108,7 @@ public final class Detector {
         }
       }
       if (alignmentPattern == null) {
-        throw new ReaderException("Could not find alignment pattern");
+        throw ReaderException.getInstance();
       }
 
     }
@@ -188,7 +188,7 @@ public final class Detector {
         dimension--;
         break;
       case 3:
-        throw new ReaderException("Bad dimension: " + dimension);
+        throw ReaderException.getInstance();
     }
     return dimension;
   }
@@ -335,7 +335,7 @@ public final class Detector {
     int alignmentAreaLeftX = Math.max(0, estAlignmentX - allowance);
     int alignmentAreaRightX = Math.min(image.getWidth() - 1, estAlignmentX + allowance);
     if (alignmentAreaRightX - alignmentAreaLeftX < overallEstModuleSize * 3) {
-      throw new ReaderException("Alignment pattern is too small to search");
+      throw ReaderException.getInstance();
     }
 
     int alignmentAreaTopY = Math.max(0, estAlignmentY - allowance);

@@ -213,7 +213,7 @@ public final class Code128Reader extends AbstractOneDReader {
         isWhite = !isWhite;
       }
     }
-    throw new ReaderException("Can't find pattern");
+    throw ReaderException.getInstance();
   }
 
   private static int decodeCode(BitArray row, int[] counters, int rowOffset) throws ReaderException {
@@ -232,7 +232,7 @@ public final class Code128Reader extends AbstractOneDReader {
     if (bestMatch >= 0) {
       return bestMatch;
     } else {
-      throw new ReaderException("Could not match any code pattern");
+      throw ReaderException.getInstance();
     }
   }
 
@@ -252,7 +252,7 @@ public final class Code128Reader extends AbstractOneDReader {
         codeSet = CODE_CODE_C;
         break;
       default:
-        throw new ReaderException("Illegal start code");
+        throw ReaderException.getInstance();
     }
 
     boolean done = false;
@@ -302,7 +302,7 @@ public final class Code128Reader extends AbstractOneDReader {
         case CODE_START_A:
         case CODE_START_B:
         case CODE_START_C:
-          throw new ReaderException("Unexpected start code");
+          throw ReaderException.getInstance();
       }
 
       switch (codeSet) {
@@ -423,14 +423,14 @@ public final class Code128Reader extends AbstractOneDReader {
       nextStart++;
     }
     if (!row.isRange(nextStart, Math.min(row.getSize(), nextStart + (nextStart - lastStart) / 2), false)) {
-      throw new ReaderException("Pattern not followed by whitespace");
+      throw ReaderException.getInstance();
     }
 
     // Pull out from sum the value of the penultimate check code
     checksumTotal -= multiplier * lastCode;
     // lastCode is the checksum then:
     if (checksumTotal % 103 != lastCode) {
-      throw new ReaderException("Checksum failed");
+      throw ReaderException.getInstance();
     }
 
     // Need to pull out the check digits from string
@@ -449,7 +449,7 @@ public final class Code128Reader extends AbstractOneDReader {
 
     if (resultString.length() == 0) {
       // Almost surely a false positive
-      throw new ReaderException("Empty barcode found; assuming a false positive");
+      throw ReaderException.getInstance();
     }
 
     float left = (float) (startPatternInfo[1] + startPatternInfo[0]) / 2.0f;

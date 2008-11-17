@@ -129,7 +129,7 @@ public final class Code39Reader extends AbstractOneDReader {
     // If 50% of last pattern size, following last pattern, is not whitespace, fail
     // (but if it's whitespace to the very end of the image, that's OK)
     if (nextStart != end && whiteSpaceAfterEnd / 2 < lastPatternSize) {
-      throw new ReaderException("Pattern not followed by whitespace");
+      throw ReaderException.getInstance();
     }
 
     if (usingCheckDigit) {
@@ -139,7 +139,7 @@ public final class Code39Reader extends AbstractOneDReader {
         total += ALPHABET_STRING.indexOf(result.charAt(i));
       }
       if (total % 43 != ALPHABET_STRING.indexOf(result.charAt(max))) {
-        throw new ReaderException("Checksum failed");
+        throw ReaderException.getInstance();
       }
       result.deleteCharAt(max);
     }
@@ -151,7 +151,7 @@ public final class Code39Reader extends AbstractOneDReader {
 
     if (resultString.length() == 0) {
       // Almost surely a false positive
-      throw new ReaderException("Empty barcode found; assuming a false positive");
+      throw ReaderException.getInstance();
     }
 
     float left = (float) (start[1] + start[0]) / 2.0f;
@@ -212,7 +212,7 @@ public final class Code39Reader extends AbstractOneDReader {
         isWhite = !isWhite;
       }
     }
-    throw new ReaderException("Can't find pattern");
+    throw ReaderException.getInstance();
   }
 
   private static int toNarrowWidePattern(int[] counters) throws ReaderException {
@@ -249,14 +249,14 @@ public final class Code39Reader extends AbstractOneDReader {
             wideCounters--;
             // totalWideCountersWidth = 3 * average, so this checks if counter >= 3/2 * average
             if ((counter << 1) >= totalWideCountersWidth) {
-              throw new ReaderException("Wide bars vary too much in width, rejecting");
+              throw ReaderException.getInstance();
             }
           }
         }
         return pattern;
       }
     } while (wideCounters > 3);
-    throw new ReaderException("Can't find 3 wide bars/spaces out of 9");
+    throw ReaderException.getInstance();
   }
 
   private static char patternToChar(int pattern) throws ReaderException {
@@ -265,7 +265,7 @@ public final class Code39Reader extends AbstractOneDReader {
         return ALPHABET[i];
       }
     }
-    throw new ReaderException("Pattern did not match character encoding");
+    throw ReaderException.getInstance();
   }
 
   private static String decodeExtended(String encoded) throws ReaderException {
@@ -282,7 +282,7 @@ public final class Code39Reader extends AbstractOneDReader {
             if (next >= 'A' && next <= 'Z') {
               decodedChar = (char) (next + 32);
             } else {
-              throw new ReaderException("Invalid extended code 39 sequence: " + c + next);
+              throw ReaderException.getInstance();
             }
             break;
           case '$':
@@ -290,7 +290,7 @@ public final class Code39Reader extends AbstractOneDReader {
             if (next >= 'A' && next <= 'Z') {
               decodedChar = (char) (next - 64);
             } else {
-              throw new ReaderException("Invalid extended code 39 sequence: " + c + next);
+              throw ReaderException.getInstance();
             }
             break;
           case '%':
@@ -300,7 +300,7 @@ public final class Code39Reader extends AbstractOneDReader {
             } else if (next >= 'F' && next <= 'W') {
               decodedChar = (char) (next - 11);
             } else {
-              throw new ReaderException("Invalid extended code 39 sequence: " + c + next);
+              throw ReaderException.getInstance();
             }
             break;
           case '/':
@@ -310,7 +310,7 @@ public final class Code39Reader extends AbstractOneDReader {
             } else if (next == 'Z') {
               decodedChar = ':';
             } else {
-              throw new ReaderException("Invalid extended sequence: " + c + next);
+              throw ReaderException.getInstance();
             }
             break;
         }

@@ -95,14 +95,14 @@ public final class Version {
    */
   public static Version getProvisionalVersionForDimension(int dimension) throws ReaderException {
     if (dimension % 4 != 1) {
-      throw new ReaderException("Dimension must be 1 mod 4");
+      throw ReaderException.getInstance();
     }
     return getVersionForNumber((dimension - 17) >> 2);
   }
 
   public static Version getVersionForNumber(int versionNumber) throws ReaderException {
     if (versionNumber < 1 || versionNumber > 40) {
-      throw new ReaderException("versionNumber must be between 1 and 40");
+      throw ReaderException.getInstance();
     }
     return VERSIONS[versionNumber - 1];
   }

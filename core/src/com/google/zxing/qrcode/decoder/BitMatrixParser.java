@@ -35,7 +35,7 @@ final class BitMatrixParser {
   BitMatrixParser(BitMatrix bitMatrix) throws ReaderException {
     int dimension = bitMatrix.getDimension();
     if (dimension < 21 || (dimension & 0x03) != 1) {
-      throw new ReaderException("Dimension must be 1 mod 4 and >= 21");
+      throw ReaderException.getInstance();
     }
     this.bitMatrix = bitMatrix;
   }
@@ -87,7 +87,7 @@ final class BitMatrixParser {
     if (parsedFormatInfo != null) {
       return parsedFormatInfo;
     }
-    throw new ReaderException("Could not decode format information");
+    throw ReaderException.getInstance();
   }
 
   /**
@@ -137,7 +137,7 @@ final class BitMatrixParser {
     if (parsedVersion != null) {
       return parsedVersion;
     }
-    throw new ReaderException("Could not decode version");
+    throw ReaderException.getInstance();
   }
 
   private int copyBit(int i, int j, int versionBits) {
@@ -201,7 +201,7 @@ final class BitMatrixParser {
       readingUp = !readingUp; // switch directions
     }
     if (resultOffset != version.getTotalCodewords()) {
-      throw new ReaderException("Did not read all codewords");
+      throw ReaderException.getInstance();
     }
     return result;
   }

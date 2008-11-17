@@ -63,7 +63,7 @@ final class ErrorCorrectionLevel {
    */
   static ErrorCorrectionLevel forBits(int bits) throws ReaderException {
     if (bits < 0 || bits >= FOR_BITS.length) {
-      throw new ReaderException("Illegal error correction level bits" + bits);
+      throw ReaderException.getInstance();
     }
     return FOR_BITS[bits];
   }

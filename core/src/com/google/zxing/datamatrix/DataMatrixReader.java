@@ -92,7 +92,7 @@ public final class DataMatrixReader implements Reader {
       borderWidth++;
     }
     if (borderWidth == minDimension) {
-      throw new ReaderException("No black pixels found along diagonal");
+      throw ReaderException.getInstance();
     }
 
     // And then keep tracking across the top-left black module to determine module size
@@ -101,7 +101,7 @@ public final class DataMatrixReader implements Reader {
       moduleEnd++;
     }
     if (moduleEnd == width) {
-      throw new ReaderException("No end to black pixels found along row");
+      throw ReaderException.getInstance();
     }
 
     int moduleSize = moduleEnd - borderWidth;
@@ -112,14 +112,13 @@ public final class DataMatrixReader implements Reader {
     	columnEndOfSymbol--;
     }
     if (columnEndOfSymbol < 0) {
-      throw new ReaderException("Can't find end of bottommost black module");
+      throw ReaderException.getInstance();
     }
     columnEndOfSymbol++;
 
     // Make sure width of barcode is a multiple of module size
     if ((columnEndOfSymbol - borderWidth) % moduleSize != 0) {
-      throw new ReaderException("Bad module size / width: " + moduleSize +
-          " / " + (columnEndOfSymbol - borderWidth));
+      throw ReaderException.getInstance();
     }
     int dimension = (columnEndOfSymbol - borderWidth) / moduleSize;
 
@@ -130,7 +129,7 @@ public final class DataMatrixReader implements Reader {
 
     int sampleDimension = borderWidth + (dimension - 1) * moduleSize;
     if (sampleDimension >= width || sampleDimension >= height) {
-      throw new ReaderException("Estimated pure image size is beyond image boundaries");
+      throw ReaderException.getInstance();
     }
 
     // Now just read off the bits
