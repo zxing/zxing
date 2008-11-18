@@ -25,16 +25,18 @@ package com.google.zxing.qrcode.encoder;
 public class Debug {
 
   public static void LOG_ERROR(String message) {
-    throw new IllegalStateException(message);
+    // Can't use IllegalStateException unfortunately in J2ME
+    // TODO do something else with this anyway
+    throw new RuntimeException(message);
   }
 
   public static void LOG_INFO(String message) {
-    throw new IllegalStateException(message);
+    throw new RuntimeException(message);
   }
 
   public static void DCHECK(boolean condition) {
     if (!condition) {
-      throw new IllegalStateException();
+      throw new RuntimeException();
     }
   }
 
