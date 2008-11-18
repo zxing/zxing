@@ -18,6 +18,7 @@ package com.google.zxing.qrcode;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Writer;
+import com.google.zxing.WriterException;
 import com.google.zxing.common.ByteMatrix;
 import com.google.zxing.qrcode.encoder.ByteArray;
 import com.google.zxing.qrcode.encoder.Encoder;
@@ -25,14 +26,21 @@ import com.google.zxing.qrcode.encoder.QRCode;
 
 import java.util.Hashtable;
 
+/**
+ * This object renders a QR Code as a ByteMatrix 2D array of greyscale values.
+ *
+ * @author dswitkin@google.com (Daniel Switkin)
+ */
 public final class QRCodeWriter implements Writer {
 
-  public ByteMatrix encode(byte[] contents, BarcodeFormat format, int width, int height) {
+  public ByteMatrix encode(byte[] contents, BarcodeFormat format, int width, int height)
+      throws WriterException {
 
     return encode(contents, format, width, height, null);
   }
 
-  public ByteMatrix encode(byte[] contents, BarcodeFormat format, int width, int height, Hashtable hints) {
+  public ByteMatrix encode(byte[] contents, BarcodeFormat format, int width, int height,
+      Hashtable hints) throws WriterException {
 
     if (contents == null || contents.length == 0) {
       throw new IllegalArgumentException("Found empty contents");
@@ -53,8 +61,7 @@ public final class QRCodeWriter implements Writer {
     if (Encoder.Encode(new ByteArray(contents), errorCorrectionLevel, code)) {
       return renderResult(code, width, height);
     } else {
-      // TODO need a "WriterException" or something
-      throw new RuntimeException("Could not generate a QR Code");
+      throw new WriterException("Could not generate a QR Code");
     }
   }
 
