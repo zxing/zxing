@@ -38,6 +38,21 @@ public abstract class ResultHandler {
 
   public static final int MAX_BUTTON_COUNT = 4;
 
+  // These are new constants in Contacts.Intents.Insert for Android 1.1.
+  // TODO: Remove these constants once we can build against the 1.1 SDK.
+  private static final String SECONDARY_PHONE = "secondary_phone";
+  private static final String TERTIARY_PHONE = "tertiary_phone";
+  private static final String SECONDARY_EMAIL = "secondary_email";
+  private static final String TERTIARY_EMAIL = "tertiary_email";
+
+  private static final String[] PHONE_INTENTS = {
+      Contacts.Intents.Insert.PHONE, SECONDARY_PHONE, TERTIARY_PHONE
+  };
+
+  private static final String[] EMAIL_INTENTS = {
+      Contacts.Intents.Insert.EMAIL, SECONDARY_EMAIL, TERTIARY_EMAIL
+  };
+
   protected final ParsedResult mResult;
   private final Activity mActivity;
 
@@ -141,8 +156,17 @@ public abstract class ResultHandler {
 
     Intent intent = new Intent(Contacts.Intents.Insert.ACTION, Contacts.People.CONTENT_URI);
     putExtra(intent, Contacts.Intents.Insert.NAME, names);
-    putExtra(intent, Contacts.Intents.Insert.PHONE, phoneNumbers);
-    putExtra(intent, Contacts.Intents.Insert.EMAIL, emails);
+
+    int phoneCount = Math.min((phoneNumbers != null) ? phoneNumbers.length : 0, PHONE_INTENTS.length);
+    for (int x = 0; x < phoneCount; x++) {
+      putExtra(intent, PHONE_INTENTS[x], phoneNumbers[x]);
+    }
+
+    int emailCount = Math.min((emails != null) ? emails.length : 0, EMAIL_INTENTS.length);
+    for (int x = 0; x < emailCount; x++) {
+      putExtra(intent, EMAIL_INTENTS[x], emails[x]);
+    }
+
     putExtra(intent, Contacts.Intents.Insert.NOTES, note);
     putExtra(intent, Contacts.Intents.Insert.POSTAL, address);
     putExtra(intent, Contacts.Intents.Insert.COMPANY, org);
@@ -225,8 +249,8 @@ public abstract class ResultHandler {
   }
 
   public final void getDirections(float latitude, float longitude) {
-    launchIntent(new Intent(Intent.ACTION_VIEW,
-        Uri.parse("http://maps.google." + LocaleManager.getCountryTLD() + "/maps?f=d&daddr=" + latitude + "," + longitude)));
+    launchIntent(new Intent(Intent.ACTION_VIEW, Uri.parse("http://maps.google." +
+        LocaleManager.getCountryTLD() + "/maps?f=d&daddr=" + latitude + "," + longitude)));
   }
 
   public final void openProductSearch(String upc) {
@@ -235,7 +259,8 @@ public abstract class ResultHandler {
   }
 
   public final void openBookSearch(String isbn) {
-    Uri uri = Uri.parse("http://books.google." + LocaleManager.getCountryTLD() + "/books?vid=isbn" + isbn);
+    Uri uri = Uri.parse("http://books.google." + LocaleManager.getCountryTLD() + "/books?vid=isbn" +
+        isbn);
     launchIntent(new Intent(Intent.ACTION_VIEW, uri));
   }
 
@@ -268,8 +293,7 @@ public abstract class ResultHandler {
     }
   }
 
-  // TODO: The current Contacts Intent API can only accept one value for each field, so we pick the
-  // first element in the array for names, phone numbers, and emails. It would be great to fix this.
+  // TODO: This is only used by the names field, and only the first name will be taken.
   private static void putExtra(Intent intent, String key, String[] value) {
     if (value != null && value.length > 0) {
       putExtra(intent, key, value[0]);
