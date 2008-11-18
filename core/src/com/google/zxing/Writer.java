@@ -20,6 +20,11 @@ import com.google.zxing.common.ByteMatrix;
 
 import java.util.Hashtable;
 
+/**
+ * The base class for all objects which encode/generate a barcode image.
+ *
+ * @author dswitkin@google.com (Daniel Switkin)
+ */
 public interface Writer {
 
   /**
@@ -31,7 +36,8 @@ public interface Writer {
    * @param height The preferred height in pixels
    * @return The generated barcode as a Matrix of unsigned bytes (0 == black, 255 == white)
    */
-  ByteMatrix encode(byte[] contents, BarcodeFormat format, int width, int height) throws Exception;
+  ByteMatrix encode(byte[] contents, BarcodeFormat format, int width, int height)
+      throws WriterException;
 
   /**
    *
@@ -43,6 +49,6 @@ public interface Writer {
    * @return The generated barcode as a Matrix of unsigned bytes (0 == black, 255 == white)
    */
   ByteMatrix encode(byte[] contents, BarcodeFormat format, int width, int height, Hashtable hints)
-      throws Exception;
+      throws WriterException;
 
 }

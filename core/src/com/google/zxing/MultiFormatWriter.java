@@ -21,16 +21,22 @@ import com.google.zxing.qrcode.QRCodeWriter;
 
 import java.util.Hashtable;
 
+/**
+ * This is a factory class which finds the appropriate Writer subclass for the BarcodeFormat
+ * requested and encodes the barcode with the supplied contents.
+ *
+ * @author dswitkin@google.com (Daniel Switkin)
+ */
 public final class MultiFormatWriter implements Writer {
 
   public ByteMatrix encode(byte[] contents, BarcodeFormat format, int width,
-      int height) throws Exception {
+      int height) throws WriterException {
 
     return encode(contents, format, width, height, null);
   }
 
   public ByteMatrix encode(byte[] contents, BarcodeFormat format, int width, int height,
-      Hashtable hints) throws Exception {
+      Hashtable hints) throws WriterException {
 
     if (format == BarcodeFormat.QR_CODE) {
       return new QRCodeWriter().encode(contents, format, width, height, hints);
