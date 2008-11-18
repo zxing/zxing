@@ -17,6 +17,7 @@
 package com.google.zxing.qrcode.encoder;
 
 import junit.framework.TestCase;
+import com.google.zxing.common.ByteArray;
 
 /**
  * @author satorux@google.com (Satoru Takabayashi) - creator

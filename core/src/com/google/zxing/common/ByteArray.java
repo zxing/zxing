@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.zxing.qrcode.encoder;
+package com.google.zxing.common;
 
 /**
  * This class implements an array of unsigned bytes.

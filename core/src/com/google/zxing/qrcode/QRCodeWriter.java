@@ -20,7 +20,7 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Writer;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.ByteMatrix;
-import com.google.zxing.qrcode.encoder.ByteArray;
+import com.google.zxing.common.ByteArray;
 import com.google.zxing.qrcode.encoder.Encoder;
 import com.google.zxing.qrcode.encoder.QRCode;
 
