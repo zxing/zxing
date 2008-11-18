@@ -47,7 +47,7 @@ final class AddressBookDoCoMoResultParser extends AbstractDoCoMoResultParser {
     String name = parseName(rawName[0]);
     String pronunciation = matchSingleDoCoMoPrefixedField("SOUND:", rawText, true);
     String[] phoneNumbers = matchDoCoMoPrefixedField("TEL:", rawText, true);
-    String email = matchSingleDoCoMoPrefixedField("EMAIL:", rawText, true);
+    String[] emails = matchDoCoMoPrefixedField("EMAIL:", rawText, true);
     String note = matchSingleDoCoMoPrefixedField("NOTE:", rawText, false);
     String address = matchSingleDoCoMoPrefixedField("ADR:", rawText, true);
     String birthday = matchSingleDoCoMoPrefixedField("BDAY:", rawText, true);
@@ -64,7 +64,7 @@ final class AddressBookDoCoMoResultParser extends AbstractDoCoMoResultParser {
     return new AddressBookParsedResult(maybeWrap(name),
                                        pronunciation,
                                        phoneNumbers,
-                                       maybeWrap(email),
+                                       emails,
                                        note,
                                        address,
                                        org,
