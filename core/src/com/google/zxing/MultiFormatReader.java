@@ -27,7 +27,8 @@ import java.util.Vector;
  * By default it attempts to decode all barcode formats that the library supports. Optionally, you
  * can provide a hints object to request different behavior, for example only decoding QR codes.
  *
- * @author srowen@google.com (Sean Owen), dswitkin@google.com (Daniel Switkin)
+ * @author Sean Owen
+ * @author dswitkin@google.com (Daniel Switkin)
  */
 public final class MultiFormatReader implements Reader {
 
