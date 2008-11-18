@@ -52,13 +52,21 @@ public final class ReedSolomonEncoder {
 
   public void encode(int[] toEncode, int ecBytes) {
     int dataBytes = toEncode.length - ecBytes;
+    if (dataBytes < 0) {
+      throw new IllegalArgumentException("Too few data bytes provided: " + dataBytes);
+    }
     GF256Poly generator = buildGenerator(ecBytes);
     int[] infoCoefficients = new int[dataBytes];
     System.arraycopy(toEncode, 0, infoCoefficients, 0, dataBytes);
     GF256Poly info = new GF256Poly(field, infoCoefficients);
     info = info.multiplyByMonomial(ecBytes, 1);
     GF256Poly remainder = info.divide(generator)[1];
-    System.arraycopy(remainder.getCoefficients(), 0, toEncode, dataBytes, ecBytes);
+    int[] coefficients = remainder.getCoefficients();
+    if (coefficients.length < ecBytes) {
+      throw new RuntimeException("Coefficients array is smaller than EC array (" +
+          coefficients.length + " < " + ecBytes + ")");
+    }
+    System.arraycopy(coefficients, 0, toEncode, dataBytes, ecBytes);
   }
 
 }

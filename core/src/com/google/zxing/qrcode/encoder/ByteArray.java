@@ -33,6 +33,11 @@ public final class ByteArray {
     size = 0;
   }
 
+  public ByteArray(int size) {
+    bytes = new byte[size];
+    this.size = size;
+  }
+
   public ByteArray(String string) {
     bytes = string.getBytes();
     size = bytes.length;
@@ -83,12 +88,12 @@ public final class ByteArray {
     }
   }
 
-  // This could probably be generalized to take a byte[] instead of a BitVector.
-  public void set(BitVector bits, int offset, int count) {
+  // Copy count bytes from array source starting at offset.
+  public void set(byte[] source, int offset, int count) {
     bytes = new byte[count];
     size = count;
     for (int x = 0; x < count; x++) {
-      bytes[x] = (byte) bits.at(x + offset);
+      bytes[x] = source[offset + x];
     }
   }
 

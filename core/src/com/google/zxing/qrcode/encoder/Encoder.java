@@ -16,9 +16,9 @@
 
 package com.google.zxing.qrcode.encoder;
 
-import com.google.zxing.common.reedsolomon.ReedSolomonEncoder;
-import com.google.zxing.common.reedsolomon.GF256;
 import com.google.zxing.common.ByteMatrix;
+import com.google.zxing.common.reedsolomon.GF256;
+import com.google.zxing.common.reedsolomon.ReedSolomonEncoder;
 
 import java.util.Vector;
 
@@ -579,11 +579,9 @@ private static final ECPolyInfo kECPolynomials[] = {
           num_data_bytes_in_block, num_ec_bytes_in_block);
 
       ByteArray data_bytes = new ByteArray();
-      ByteArray ec_bytes = new ByteArray();
+      data_bytes.set(bits.getArray(), data_bytes_offset, num_data_bytes_in_block[0]);
+      ByteArray ec_bytes = GenerateECBytes(data_bytes, num_ec_bytes_in_block[0]);
       blocks.addElement(new BlockPair(data_bytes, ec_bytes));
-
-      data_bytes.set(bits, data_bytes_offset, num_data_bytes_in_block[0]);
-      GenerateECBytes(data_bytes, num_ec_bytes_in_block[0], ec_bytes);
 
       max_num_data_bytes = Math.max(max_num_data_bytes, data_bytes.size());
       max_num_ec_bytes = Math.max(max_num_ec_bytes, ec_bytes.size());
@@ -617,16 +615,19 @@ private static final ECPolyInfo kECPolynomials[] = {
     return false;
   }
 
-  static void GenerateECBytes(ByteArray data_bytes, int num_ec_bytes_in_block, ByteArray ec_bytes) {
+  static ByteArray GenerateECBytes(ByteArray data_bytes, int num_ec_bytes_in_block) {
     int numDataBytes = data_bytes.size();
-    int[] toEncode = new int[numDataBytes + ec_bytes.size()];
+    int[] toEncode = new int[numDataBytes + num_ec_bytes_in_block];
     for (int i = 0; i < numDataBytes; i++) {
       toEncode[i] = data_bytes.at(i);
     }
     new ReedSolomonEncoder(GF256.QR_CODE_FIELD).encode(toEncode, num_ec_bytes_in_block);
-    for (int i = 0; i < ec_bytes.size(); i++) {
+
+    ByteArray ec_bytes = new ByteArray(num_ec_bytes_in_block);
+    for (int i = 0; i < num_ec_bytes_in_block; i++) {
       ec_bytes.set(i, toEncode[numDataBytes + i]);
     }
+    return ec_bytes;
   }
 
   // Append mode info. On success, store the result in "bits" and return true. On error, return
