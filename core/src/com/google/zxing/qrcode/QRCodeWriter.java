@@ -27,14 +27,12 @@ import java.util.Hashtable;
 
 public final class QRCodeWriter implements Writer {
 
-  public ByteMatrix encode(byte[] contents, BarcodeFormat format, int width,
-      int height) throws Exception {
+  public ByteMatrix encode(byte[] contents, BarcodeFormat format, int width, int height) {
 
     return encode(contents, format, width, height, null);
   }
 
-  public ByteMatrix encode(byte[] contents, BarcodeFormat format, int width, int height,
-      Hashtable hints) throws Exception {
+  public ByteMatrix encode(byte[] contents, BarcodeFormat format, int width, int height, Hashtable hints) {
 
     if (contents == null || contents.length == 0) {
       throw new IllegalArgumentException("Found empty contents");
@@ -55,7 +53,8 @@ public final class QRCodeWriter implements Writer {
     if (Encoder.Encode(new ByteArray(contents), errorCorrectionLevel, code)) {
       return renderResult(code, width, height);
     } else {
-      throw new IllegalStateException("Could not generate a QR Code");
+      // TODO need a "WriterException" or something
+      throw new RuntimeException("Could not generate a QR Code");
     }
   }
 
