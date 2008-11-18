@@ -17,6 +17,7 @@
 package com.google.zxing.qrcode.encoder;
 
 import com.google.zxing.common.ByteMatrix;
+import com.google.zxing.common.ByteArray;
 import com.google.zxing.common.reedsolomon.GF256;
 import com.google.zxing.common.reedsolomon.ReedSolomonEncoder;
 
