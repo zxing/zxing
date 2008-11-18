@@ -25,11 +25,11 @@ package com.google.zxing.qrcode.encoder;
 public class Debug {
 
   public static void LOG_ERROR(String message) {
-    // TODO: Implement
+    throw new IllegalStateException(message);
   }
 
   public static void LOG_INFO(String message) {
-    // TODO: Implement
+    throw new IllegalStateException(message);
   }
 
   public static void DCHECK(boolean condition) {

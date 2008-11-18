@@ -27,24 +27,22 @@ package com.google.zxing.qrcode.encoder;
 public final class BitVector {
 
   private int sizeInBits;
-  private int bytePosition;
   private byte[] array;
 
   // For efficiency, start out with some room to work.
-  private static final int DEFAULT_SIZE_IN_BITS = 32 * 8;
+  private static final int DEFAULT_SIZE_IN_BYTES = 32;
 
   public BitVector() {
-    sizeInBits = DEFAULT_SIZE_IN_BITS;
-    bytePosition = 0;
-    array = new byte[DEFAULT_SIZE_IN_BITS / 8];
+    sizeInBits = 0;
+    array = new byte[DEFAULT_SIZE_IN_BYTES];
   }
 
   // Return the bit value at "index".
   public int at(final int index) {
     Debug.DCHECK_LE(0, index);
     Debug.DCHECK_LT(index, sizeInBits);
-    final int value = array[index / 8];
-    return (value >> (7 - (index % 8))) & 1;
+    final int value = array[index >> 3] & 0xff;
+    return (value >> (7 - (index & 0x7))) & 1;
   }
 
   // Return the number of bits in the bit vector.
@@ -53,20 +51,23 @@ public final class BitVector {
   }
 
   // Return the number of bytes in the bit vector.
+  // JAVAPORT: I would have made this ((sizeInBits + 7) >> 3), but apparently users of this class
+  // depend on the number of bytes being rounded down. I don't see how that works though.
   public int num_bytes() {
-    return sizeInBits / 8;
+    return sizeInBits >> 3;
   }
 
   // Append one bit to the bit vector.
   public void AppendBit(final int bit) {
     Debug.DCHECK(bit == 0 || bit == 1);
-    final int num_bits_in_last_byte = sizeInBits % 8;
+    final int num_bits_in_last_byte = sizeInBits & 0x7;
     // We'll expand array if we don't have bits in the last byte.
     if (num_bits_in_last_byte == 0) {
       appendByte(0);
+      sizeInBits -= 8;
     }
     // Modify the last byte.
-    array[array.length - 1] |= (bit << (7 - num_bits_in_last_byte));
+    array[sizeInBits >> 3] |= (bit << (7 - num_bits_in_last_byte));
     ++sizeInBits;
   }
 
@@ -82,10 +83,9 @@ public final class BitVector {
     int num_bits_left = num_bits;
     while (num_bits_left > 0) {
       // Optimization for byte-oriented appending.
-      if (sizeInBits % 8 == 0 && num_bits_left >= 8) {
+      if ((sizeInBits & 0x7) == 0 && num_bits_left >= 8) {
         final int newByte = (value >> (num_bits_left - 8)) & 0xff;
         appendByte(newByte);
-        sizeInBits += 8;
         num_bits_left -= 8;
       } else {
         final int bit = (value >> (num_bits_left - 1)) & 1;
@@ -106,7 +106,8 @@ public final class BitVector {
   // Modify the bit vector by XOR'ing with "other"
   public void XOR(final BitVector other) {
     Debug.DCHECK_EQ(sizeInBits, other.size());
-    for (int i = 0; i < array.length; ++i) {
+    int sizeInBytes = (sizeInBits + 7) >> 3;
+    for (int i = 0; i < sizeInBytes; ++i) {
       // The last byte could be incomplete (i.e. not have 8 bits in
       // it) but there is no problem since 0 XOR 0 == 0.
       array[i] ^= other.array[i];
@@ -128,16 +129,22 @@ public final class BitVector {
     return result.toString();
   }
 
+  // Callers should not assume that array.length is the exact number of bytes needed to hold
+  // sizeInBits - it will typically be larger for efficiency.
+  public byte[] getArray() {
+    return array;
+  }
+
   // Add a new byte to the end, possibly reallocating and doubling the size of the array if we've
   // run out of room.
   private void appendByte(int value) {
-    if (bytePosition >= array.length) {
+    if ((sizeInBits >> 3) == array.length) {
       byte[] newArray = new byte[array.length * 2];
       System.arraycopy(array, 0, newArray, 0, array.length);
       array = newArray;
     }
-    array[bytePosition] = (byte) value;
-    bytePosition++;
+    array[sizeInBits >> 3] = (byte) value;
+    sizeInBits += 8;
   }
 
 }

@@ -613,7 +613,7 @@ private static final ECPolyInfo kECPolynomials[] = {
       return true;
     }
     Debug.LOG_ERROR("Interleaving error: " + num_total_bytes + " and " + result.num_bytes() +
-        "differ.");
+        " differ.");
     return false;
   }
 
