@@ -364,7 +364,7 @@ private static final ECPolyInfo kECPolynomials[] = {
 
   // Return the code point of the table used in alphanumeric mode. Return -1 if there is no
   // corresponding code in the table.
-  private static int GetAlphanumericCode(int code) {
+  static int GetAlphanumericCode(int code) {
     if (code < kAlphanumericTable.length) {
       return kAlphanumericTable[code];
     }
@@ -617,7 +617,7 @@ private static final ECPolyInfo kECPolynomials[] = {
     return false;
   }
 
-  private static void GenerateECBytes(ByteArray data_bytes, int num_ec_bytes_in_block, ByteArray ec_bytes) {
+  static void GenerateECBytes(ByteArray data_bytes, int num_ec_bytes_in_block, ByteArray ec_bytes) {
     int numDataBytes = data_bytes.size();
     int[] toEncode = new int[numDataBytes + ec_bytes.size()];
     for (int i = 0; i < numDataBytes; i++) {
@@ -779,7 +779,7 @@ private static final ECPolyInfo kECPolynomials[] = {
 
   // Check if "byte1" and "byte2" can compose a valid Kanji letter (2-byte Shift_JIS letter). The
   // numbers are from http://ja.wikipedia.org/wiki/Shift_JIS.
-  private static boolean IsValidKanji(final int byte1, final int byte2) {
+  static boolean IsValidKanji(final int byte1, final int byte2) {
     return (byte2 != 0x7f &&
         ((byte1 >= 0x81 && byte1 <= 0x9f &&
             byte2 >= 0x40 && byte2 <= 0xfc) ||
@@ -787,10 +787,8 @@ private static final ECPolyInfo kECPolynomials[] = {
                 byte2 >= 0x40 && byte2 <= 0xfc))));
   }
 
-  // Check if "bytes" is a valid Kanji sequence.
-  //
-  // JAVAPORT - Remove if not used by the unit tests.
-  private static boolean IsValidKanjiSequence(final ByteArray bytes) {
+  // Check if "bytes" is a valid Kanji sequence. Used by the unit tests.
+  static boolean IsValidKanjiSequence(final ByteArray bytes) {
     if (bytes.size() % 2 != 0) {
       return false;
     }
