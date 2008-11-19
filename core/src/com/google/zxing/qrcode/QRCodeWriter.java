@@ -35,16 +35,16 @@ public final class QRCodeWriter implements Writer {
 
   private static final int QUIET_ZONE_SIZE = 4;
 
-  public ByteMatrix encode(byte[] contents, BarcodeFormat format, int width, int height)
+  public ByteMatrix encode(String contents, BarcodeFormat format, int width, int height)
       throws WriterException {
 
     return encode(contents, format, width, height, null);
   }
 
-  public ByteMatrix encode(byte[] contents, BarcodeFormat format, int width, int height,
+  public ByteMatrix encode(String contents, BarcodeFormat format, int width, int height,
       Hashtable hints) throws WriterException {
 
-    if (contents == null || contents.length == 0) {
+    if (contents == null || contents.length() == 0) {
       throw new IllegalArgumentException("Found empty contents");
     }
 
