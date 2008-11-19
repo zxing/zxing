@@ -19,18 +19,15 @@ package com.google.zxing.client.android;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Contacts;
 import android.util.Log;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpUriRequest;
-
-import java.net.URI;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.ByteMatrix;
 
 public final class QRCodeEncoder {
 
@@ -40,21 +37,17 @@ public final class QRCodeEncoder {
   private String mContents;
   private String mDisplayContents;
   private String mTitle;
-  private String mUserAgent;
 
   public QRCodeEncoder(Activity activity, Intent intent) {
     mActivity = activity;
     if (!encodeContents(intent)) {
       throw new IllegalArgumentException("No valid data to encode.");
     }
-    mUserAgent = mActivity.getString(R.string.zxing_user_agent);
   }
 
-  // Once the core ZXing library supports encoding, we'll be able to generate the bitmap
-  // synchronously. For now, it's a network request, so it's handled on a thread.
   public void requestBarcode(Handler handler, int pixelResolution) {
-    Thread mNetworkThread = new NetworkThread(mContents, handler, pixelResolution);
-    mNetworkThread.start();
+    Thread encodeThread = new EncodeThread(mContents, handler, pixelResolution);
+    encodeThread.start();
   }
 
   public String getContents() {
@@ -69,7 +62,7 @@ public final class QRCodeEncoder {
     return mTitle;
   }
 
-  // Perhaps the string encoding should live in the core ZXing library too.
+  // TODO: The string encoding should live in the core ZXing library.
   private boolean encodeContents(Intent intent) {
     if (intent == null) return false;
     String type = intent.getStringExtra(Intents.Encode.TYPE);
@@ -144,45 +137,46 @@ public final class QRCodeEncoder {
     return mContents != null && mContents.length() > 0;
   }
 
-  private final class NetworkThread extends Thread {
+  private final static class EncodeThread extends Thread {
 
     private final String mContents;
     private final Handler mHandler;
     private final int mPixelResolution;
 
-    public NetworkThread(String contents, Handler handler, int pixelResolution) {
+    public EncodeThread(String contents, Handler handler, int pixelResolution) {
       mContents = contents;
       mHandler = handler;
       mPixelResolution = pixelResolution;
     }
 
     public final void run() {
-      AndroidHttpClient client = null;
       try {
-        URI uri = new URI("http", null, "chart.apis.google.com", -1, "/chart",
-                          "cht=qr&chs=" + mPixelResolution + "x" + mPixelResolution + "&chl=" + mContents, null);
-        HttpUriRequest get = new HttpGet(uri);
-        client = AndroidHttpClient.newInstance(mUserAgent);
-        HttpResponse response = client.execute(get);
-        HttpEntity entity = response.getEntity();
-        Bitmap image = BitmapFactory.decodeStream(entity.getContent());
-        if (image != null) {
-          Message message = Message.obtain(mHandler, R.id.encode_succeeded);
-          message.obj = image;
-          message.sendToTarget();
-        } else {
-          Log.e(TAG, "Could not decode png from the network");
-          Message message = Message.obtain(mHandler, R.id.encode_failed);
-          message.sendToTarget();
+        ByteMatrix result = new MultiFormatWriter().encode(mContents, BarcodeFormat.QR_CODE,
+             mPixelResolution, mPixelResolution);
+        int width = result.width();
+        int height = result.height();
+        byte[][] array = result.getArray();
+        int[] pixels = new int[width * height];
+        for (int y = 0; y < height; y++) {
+          for (int x = 0; x < width; x++) {
+            int grey = array[y][x] & 0xff;
+            pixels[y * width + x] = (0xff << 24) | (grey << 16) | (grey << 8) | grey;
+          }
         }
-      } catch (Exception e) {
+
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
+        Message message = Message.obtain(mHandler, R.id.encode_succeeded);
+        message.obj = bitmap;
+        message.sendToTarget();
+      } catch (WriterException e) {
         Log.e(TAG, e.toString());
         Message message = Message.obtain(mHandler, R.id.encode_failed);
         message.sendToTarget();
-      } finally {
-        if (client != null) {
-          client.close();
-        }
+      } catch (IllegalArgumentException e) {
+        Log.e(TAG, e.toString());
+        Message message = Message.obtain(mHandler, R.id.encode_failed);
+        message.sendToTarget();
       }
     }
   }
