@@ -95,7 +95,7 @@ final class YUVMonochromeBitmapSource extends BaseMonochromeBitmapSource {
   /**
    * Create a greyscale Android Bitmap from the YUV data based on the crop rectangle.
    *
-   * @return A 565 bitmap.
+   * @return An 8888 bitmap.
    */
   public Bitmap renderToBitmap() {
     int width = mCrop.width();
