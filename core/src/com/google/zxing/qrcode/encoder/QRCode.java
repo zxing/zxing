@@ -165,7 +165,7 @@ public final class QRCode {
   // Return debug String.
   public String toString() {
     StringBuffer result = new StringBuffer();
-    result.append("<<QRCode\n");
+    result.append("<<\n");
     result.append(" mode: ");
     result.append(ModeToString(mode_));
     result.append("\n ec_level: ");
@@ -187,10 +187,10 @@ public final class QRCode {
     if (matrix_ == null) {
       result.append("\n matrix: null");
     } else {
-      result.append("\n matrix:");
+      result.append("\n matrix:\n");
       result.append(matrix_.toString());
     }
-    result.append("\n>>\n");
+    result.append(">>\n");
     return result.toString();
   }
 

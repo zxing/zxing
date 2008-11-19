@@ -650,9 +650,9 @@ private static final ECPolyInfo kECPolynomials[] = {
     int num_letters = num_bytes;
     // In Kanji mode, a letter is represented in two bytes.
     if (mode == QRCode.MODE_KANJI) {
-    Debug.DCHECK_EQ(0, num_letters % 2);
-    num_letters /= 2;
-  }
+      Debug.DCHECK_EQ(0, num_letters % 2);
+      num_letters /= 2;
+    }
 
     final int num_bits = QRCode.GetNumBitsForLength(version, mode);
     if (num_bits == -1) {
