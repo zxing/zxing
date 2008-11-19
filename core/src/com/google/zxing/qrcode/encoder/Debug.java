@@ -31,7 +31,11 @@ public class Debug {
   }
 
   public static void LOG_INFO(String message) {
-    throw new RuntimeException(message);
+    // Chris M -- throwing RuntimeException in an INFO function seems terribly
+    // strange and violates my assumptions about logging information. Even
+    // ERROR is borderline since it's effectively going to go unchecked by most
+    // callers. There has to be a more general way to do this.
+    // throw new RuntimeException(message);
   }
 
   public static void DCHECK(boolean condition) {
