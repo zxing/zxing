@@ -19,10 +19,6 @@ package com.google.zxing.qrcode.encoder;
 import com.google.zxing.common.ByteMatrix;
 import junit.framework.TestCase;
 
-//#include "util/array/array2d-inl.h"
-//#include "testing/base/gunit.h"
-//#include "wireless/qrcode/qrcode.h"
-
 /**
  * @author satorux@google.com (Satoru Takabayashi) - creator
  * @author mysen@google.com (Chris Mysen) - ported from C++
@@ -63,7 +59,7 @@ public final class QRCodeTestCase extends TestCase {
     // Just set bogus zero/one values.
     for (int y = 0; y < 45; ++y) {
       for (int x = 0; x < 45; ++x) {
-	matrix.set(y, x, (y + x) % 2);
+        matrix.set(y, x, (y + x) % 2);
       }
     }
 
@@ -77,7 +73,7 @@ public final class QRCodeTestCase extends TestCase {
     // Make sure "at()" returns the same value.
     for (int y = 0; y < 45; ++y) {
       for (int x = 0; x < 45; ++x) {
-	assertEquals((y + x) % 2, qr_code.at(x, y));
+        assertEquals((y + x) % 2, qr_code.at(x, y));
       }
     }
   }
@@ -96,7 +92,7 @@ public final class QRCodeTestCase extends TestCase {
 	" num_data_bytes: -1\n" +
 	" num_ec_bytes: -1\n" +
 	" num_rs_blocks: -1\n" +
-	" matrix: NULL\n" +
+	" matrix: null\n" +
 	">>\n";
       assertEquals(expected, qr_code.toString());
     }
@@ -147,9 +143,9 @@ public final class QRCodeTestCase extends TestCase {
       qr_code.set_num_rs_blocks(1);
       ByteMatrix matrix = new ByteMatrix(21, 21);
       for (int y = 0; y < 21; ++y) {
-	for (int x = 0; x < 21; ++x) {
-	  matrix.set(y, x, (y + x) % 2);
-	}
+        for (int x = 0; x < 21; ++x) {
+          matrix.set(y, x, (y + x) % 2);
+        }
       }
       qr_code.set_matrix(matrix);
       assertTrue(qr_code.IsValid());
@@ -198,15 +194,13 @@ public final class QRCodeTestCase extends TestCase {
   public void testModeToString() {
     assertEquals("UNDEFINED", QRCode.ModeToString(QRCode.MODE_UNDEFINED));
     assertEquals("NUMERIC", QRCode.ModeToString(QRCode.MODE_NUMERIC));
-    assertEquals("ALPHANUMERIC",
-		 QRCode.ModeToString(QRCode.MODE_ALPHANUMERIC));
+    assertEquals("ALPHANUMERIC", QRCode.ModeToString(QRCode.MODE_ALPHANUMERIC));
     assertEquals("8BIT_BYTE", QRCode.ModeToString(QRCode.MODE_8BIT_BYTE));
     assertEquals("UNKNOWN", QRCode.ModeToString(QRCode.NUM_MODES));
   }
 
   public void testECLevelToString() {
-    assertEquals("UNDEFINED",
-		 QRCode.ECLevelToString(QRCode.EC_LEVEL_UNDEFINED));
+    assertEquals("UNDEFINED", QRCode.ECLevelToString(QRCode.EC_LEVEL_UNDEFINED));
     assertEquals("L", QRCode.ECLevelToString(QRCode.EC_LEVEL_L));
     assertEquals("M", QRCode.ECLevelToString(QRCode.EC_LEVEL_M));
     assertEquals("Q", QRCode.ECLevelToString(QRCode.EC_LEVEL_Q));

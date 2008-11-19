@@ -17,15 +17,7 @@
 package com.google.zxing.qrcode.encoder;
 
 import com.google.zxing.common.ByteMatrix;
-import com.google.zxing.qrcode.encoder.MatrixUtil;
 import junit.framework.TestCase;
-
-//#include "util/array/array2d-inl.h"
-//#include "wireless/qrcode/bit_vector-inl.h"
-//#include "Strings/Stringpiece.h"
-//#include "testing/base/gunit.h"
-//#include "wireless/qrcode/qrcode.h"
-//#include "wireless/qrcode/qrcode_matrix_util.h"
 
 /**
  * @author satorux@google.com (Satoru Takabayashi) - creator
@@ -149,10 +141,8 @@ public final class MatrixUtilTestCase extends TestCase {
     ByteMatrix matrix = new ByteMatrix(21, 21);
     MatrixUtil.ClearMatrix(matrix);
     boolean info_okay = MatrixUtil.EmbedTypeInfo(QRCode.EC_LEVEL_M, 5, matrix);
-    System.out.println(info_okay + "\n" + matrix.toString());
     assertTrue(info_okay);
     assertEquals(expected, matrix.toString());
-    assertFalse(true);
   }
 
   public void testEmbedVersionInfo() {

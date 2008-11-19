@@ -185,7 +185,7 @@ public final class QRCode {
     result.append("\n num_rs_blocks: ");
     result.append(num_rs_blocks_);
     if (matrix_ == null) {
-      result.append("\n matrix: null");
+      result.append("\n matrix: null\n");
     } else {
       result.append("\n matrix:\n");
       result.append(matrix_.toString());
