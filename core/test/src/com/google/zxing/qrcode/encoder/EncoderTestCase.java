@@ -19,8 +19,6 @@ package com.google.zxing.qrcode.encoder;
 import com.google.zxing.common.ByteArray;
 import junit.framework.TestCase;
 
-import java.util.Arrays;
-
 /**
  * @author satorux@google.com (Satoru Takabayashi) - creator
  * @author mysen@google.com (Chris Mysen) - ported from C++
@@ -305,7 +303,12 @@ public final class EncoderTestCase extends TestCase {
           42, (byte)159, 74, (byte)221, (byte)244, (byte)169, (byte)239, (byte)150, (byte)138, 70,
           (byte)237, 85, (byte)224, 96, 74, (byte)219, 61,
       };
-      assertTrue(Arrays.equals(expected, out.getArray()));
+      assertEquals(expected.length, out.num_bytes());
+      final byte[] out_array = out.getArray();
+      // Can't use Arrays.equals(), because out_array may be longer than out.num_bytes()
+      for (int x = 0; x < expected.length; x++) {
+        assertEquals(expected[x], out_array[x]);
+      }
     }
     // Numbers are from http://www.swetake.com/qr/qr8.html
     {
@@ -340,7 +343,11 @@ public final class EncoderTestCase extends TestCase {
           (byte)140, 61, (byte)179, (byte)154, (byte)214, (byte)138, (byte)147, 87, 27, 96, 77, 47,
           (byte)187, 49, (byte)156, (byte)214,
       };
-      assertTrue(Arrays.equals(expected, out.getArray()));
+      assertEquals(expected.length, out.num_bytes());
+      final byte[] out_array = out.getArray();
+      for (int x = 0; x < expected.length; x++) {
+        assertEquals(expected[x], out_array[x]);
+      }
     }
   }
 
