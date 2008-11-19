@@ -757,7 +757,8 @@ private static final ECPolyInfo kECPolynomials[] = {
   // Kanji bytes.
   static boolean AppendKanjiBytes(final ByteArray bytes, BitVector bits) {
     if (bytes.size() % 2 != 0) {
-      Debug.LOG_ERROR("Invalid byte sequence: " + bytes);
+      // JAVAPORT: Our log implementation throws, which causes the unit test to fail.
+      //Debug.LOG_ERROR("Invalid byte sequence: " + bytes);
       return false;
     }
     for (int i = 0; i < bytes.size(); i += 2) {

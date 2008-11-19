@@ -16,8 +16,10 @@
 
 package com.google.zxing.qrcode.encoder;
 
-import junit.framework.TestCase;
 import com.google.zxing.common.ByteArray;
+import junit.framework.TestCase;
+
+import java.util.Arrays;
 
 /**
  * @author satorux@google.com (Satoru Takabayashi) - creator
@@ -178,24 +180,20 @@ public final class EncoderTestCase extends TestCase {
       // Should use AppendAlphanumericBytes.
       // A = 10 = 0xa = 001010 in 6 bits
       BitVector bits = new BitVector();
-      assertTrue(Encoder.AppendBytes(new ByteArray("A"), QRCode.MODE_ALPHANUMERIC,
-					     bits));
+      assertTrue(Encoder.AppendBytes(new ByteArray("A"), QRCode.MODE_ALPHANUMERIC, bits));
       assertEquals("001010" , bits.toString());
       // Lower letters such as 'a' cannot be encoded in MODE_ALPHANUMERIC.
-      assertFalse(Encoder.AppendBytes(new ByteArray("a"), QRCode.MODE_ALPHANUMERIC,
-					      bits));
+      assertFalse(Encoder.AppendBytes(new ByteArray("a"), QRCode.MODE_ALPHANUMERIC, bits));
     }
     {
       // Should use Append8BitBytes.
       // 0x61, 0x62, 0x63
       BitVector bits = new BitVector();
-      assertTrue(Encoder.AppendBytes(new ByteArray("abc"), QRCode.MODE_8BIT_BYTE,
-					     bits));
+      assertTrue(Encoder.AppendBytes(new ByteArray("abc"), QRCode.MODE_8BIT_BYTE, bits));
       assertEquals("01100001" + "01100010" + "01100011", bits.toString());
       // Anything can be encoded in QRCode.MODE_8BIT_BYTE.
       byte[] bytes = {0x00};
-      assertTrue(Encoder.AppendBytes(new ByteArray(bytes), QRCode.MODE_8BIT_BYTE,
-					     bits));
+      assertTrue(Encoder.AppendBytes(new ByteArray(bytes), QRCode.MODE_8BIT_BYTE, bits));
     }
     {
       // Should use AppendKanjiBytes.
@@ -256,95 +254,93 @@ public final class EncoderTestCase extends TestCase {
   }
 
   public void testGetNumDataBytesAndNumECBytesForBlockID() {
-    int[] num_data_bytes = new int[0];
-    int[] num_ec_bytes = new int[0];
+    int[] num_data_bytes = new int[1];
+    int[] num_ec_bytes = new int[1];
     // Version 1-H.
-    Encoder.GetNumDataBytesAndNumECBytesForBlockID(
-        26, 9, 1, 0, num_data_bytes, num_ec_bytes);
+    Encoder.GetNumDataBytesAndNumECBytesForBlockID(26, 9, 1, 0, num_data_bytes, num_ec_bytes);
     assertEquals(9, num_data_bytes[0]);
     assertEquals(17, num_ec_bytes[0]);
 
     // Version 3-H.  2 blocks.
-    Encoder.GetNumDataBytesAndNumECBytesForBlockID(
-        70, 26, 2, 0, num_data_bytes, num_ec_bytes);
+    Encoder.GetNumDataBytesAndNumECBytesForBlockID(70, 26, 2, 0, num_data_bytes, num_ec_bytes);
     assertEquals(13, num_data_bytes[0]);
     assertEquals(22, num_ec_bytes[0]);
-    Encoder.GetNumDataBytesAndNumECBytesForBlockID(
-        70, 26, 2, 1, num_data_bytes, num_ec_bytes);
+    Encoder.GetNumDataBytesAndNumECBytesForBlockID(70, 26, 2, 1, num_data_bytes, num_ec_bytes);
     assertEquals(13, num_data_bytes[0]);
     assertEquals(22, num_ec_bytes[0]);
 
     // Version 7-H. (4 + 1) blocks.
-    Encoder.GetNumDataBytesAndNumECBytesForBlockID(
-        196, 66, 5, 0, num_data_bytes, num_ec_bytes);
+    Encoder.GetNumDataBytesAndNumECBytesForBlockID(196, 66, 5, 0, num_data_bytes, num_ec_bytes);
     assertEquals(13, num_data_bytes[0]);
     assertEquals(26, num_ec_bytes[0]);
-    Encoder.GetNumDataBytesAndNumECBytesForBlockID(
-        196, 66, 5, 4, num_data_bytes, num_ec_bytes);
+    Encoder.GetNumDataBytesAndNumECBytesForBlockID(196, 66, 5, 4, num_data_bytes, num_ec_bytes);
     assertEquals(14, num_data_bytes[0]);
     assertEquals(26, num_ec_bytes[0]);
 
     // Version 40-H. (20 + 61) blocks.
-    Encoder.GetNumDataBytesAndNumECBytesForBlockID(
-        3706, 1276, 81, 0, num_data_bytes, num_ec_bytes);
+    Encoder.GetNumDataBytesAndNumECBytesForBlockID(3706, 1276, 81, 0, num_data_bytes, num_ec_bytes);
     assertEquals(15, num_data_bytes[0]);
     assertEquals(30, num_ec_bytes[0]);
-    Encoder.GetNumDataBytesAndNumECBytesForBlockID(
-        3706, 1276, 81, 20, num_data_bytes, num_ec_bytes);
+    Encoder.GetNumDataBytesAndNumECBytesForBlockID(3706, 1276, 81, 20, num_data_bytes, num_ec_bytes);
     assertEquals(16, num_data_bytes[0]);
     assertEquals(30, num_ec_bytes[0]);
-    Encoder.GetNumDataBytesAndNumECBytesForBlockID(
-        3706, 1276, 81, 80, num_data_bytes, num_ec_bytes);
+    Encoder.GetNumDataBytesAndNumECBytesForBlockID(3706, 1276, 81, 80, num_data_bytes, num_ec_bytes);
     assertEquals(16, num_data_bytes[0]);
     assertEquals(30, num_ec_bytes[0]);
   }
 
   public void testInterleaveWithECBytes() {
     {
-      final char[] data_bytes = {32, 65, 205, 69, 41, 220, 46, 128, 236};
+      final byte[] data_bytes = {32, 65, (byte)205, 69, 41, (byte)220, 46, (byte)128, (byte)236};
       BitVector in = new BitVector();
-      for (char data_byte: data_bytes) {
+      for (byte data_byte: data_bytes) {
         in.AppendBits(data_byte, 8);
       }
       BitVector out = new BitVector();
       assertTrue(Encoder.InterleaveWithECBytes(in, 26, 9, 1, out));
-      final char[] expected = {
+      final byte[] expected = {
           // Data bytes.
-          32, 65, 205, 69, 41, 220, 46, 128, 236,
+          32, 65, (byte)205, 69, 41, (byte)220, 46, (byte)128, (byte)236,
           // Error correction bytes.
-          42, 159, 74, 221, 244, 169, 239, 150, 138, 70, 237, 85, 224,
-          96, 74, 219, 61,
+          42, (byte)159, 74, (byte)221, (byte)244, (byte)169, (byte)239, (byte)150, (byte)138, 70,
+          (byte)237, 85, (byte)224, 96, 74, (byte)219, 61,
       };
-      assertEquals(new String(expected), out.toString());
+      assertTrue(Arrays.equals(expected, out.getArray()));
     }
     // Numbers are from http://www.swetake.com/qr/qr8.html
     {
-      final char[] data_bytes = {
-          67, 70, 22, 38, 54, 70, 86, 102, 118, 134, 150, 166, 182, 198, 214,
-          230, 247, 7, 23, 39, 55, 71, 87, 103, 119, 135, 151, 166, 22, 38,
-          54, 70, 86, 102, 118, 134, 150, 166, 182, 198, 214, 230, 247, 7, 23, 39,
-          55, 71, 87, 103, 119, 135, 151, 160, 236, 17, 236, 17, 236, 17, 236, 17,
+      final byte[] data_bytes = {
+          67, 70, 22, 38, 54, 70, 86, 102, 118, (byte)134, (byte)150, (byte)166, (byte)182,
+          (byte)198, (byte)214, (byte)230, (byte)247, 7, 23, 39, 55, 71, 87, 103, 119, (byte)135,
+          (byte)151, (byte)166, 22, 38, 54, 70, 86, 102, 118, (byte)134, (byte)150, (byte)166,
+          (byte)182, (byte)198, (byte)214, (byte)230, (byte)247, 7, 23, 39, 55, 71, 87, 103, 119,
+          (byte)135, (byte)151, (byte)160, (byte)236, 17, (byte)236, 17, (byte)236, 17, (byte)236,
+          17
       };
       BitVector in = new BitVector();
-      for (char data_byte: data_bytes) {
+      for (byte data_byte: data_bytes) {
         in.AppendBits(data_byte, 8);
       }
       BitVector out = new BitVector();
       assertTrue(Encoder.InterleaveWithECBytes(in, 134, 62, 4, out));
-      final char[] expected = {
+      final byte[] expected = {
           // Data bytes.
-          67, 230, 54, 55, 70, 247, 70, 71, 22, 7, 86, 87, 38, 23, 102, 103, 54,
-          39, 118, 119, 70, 55, 134, 135, 86, 71, 150, 151, 102, 87, 166, 160,
-          118, 103, 182, 236, 134, 119, 198, 17, 150, 135, 214, 236, 166, 151,
-          230, 17, 182, 166, 247, 236, 198, 22, 7, 17, 214, 38, 23, 236, 39, 17,
+          67, (byte)230, 54, 55, 70, (byte)247, 70, 71, 22, 7, 86, 87, 38, 23, 102, 103, 54, 39,
+          118, 119, 70, 55, (byte)134, (byte)135, 86, 71, (byte)150, (byte)151, 102, 87, (byte)166,
+          (byte)160, 118, 103, (byte)182, (byte)236, (byte)134, 119, (byte)198, 17, (byte)150,
+          (byte)135, (byte)214, (byte)236, (byte)166, (byte)151, (byte)230, 17, (byte)182,
+          (byte)166, (byte)247, (byte)236, (byte)198, 22, 7, 17, (byte)214, 38, 23, (byte)236, 39,
+          17,
           // Error correction bytes.
-          175, 155, 245, 236, 80, 146, 56, 74, 155, 165, 133, 142, 64, 183, 132,
-          13, 178, 54, 132, 108, 45, 113, 53, 50, 214, 98, 193, 152, 233, 147, 50,
-          71, 65, 190, 82, 51, 209, 199, 171, 54, 12, 112, 57, 113, 155, 117, 211,
-          164, 117, 30, 158, 225, 31, 190, 242, 38, 140, 61, 179, 154, 214, 138,
-          147, 87, 27, 96, 77, 47, 187, 49, 156, 214,
+          (byte)175, (byte)155, (byte)245, (byte)236, 80, (byte)146, 56, 74, (byte)155, (byte)165,
+          (byte)133, (byte)142, 64, (byte)183, (byte)132, 13, (byte)178, 54, (byte)132, 108, 45,
+          113, 53, 50, (byte)214, 98, (byte)193, (byte)152, (byte)233, (byte)147, 50, 71, 65,
+          (byte)190, 82, 51, (byte)209, (byte)199, (byte)171, 54, 12, 112, 57, 113, (byte)155, 117,
+          (byte)211, (byte)164, 117, 30, (byte)158, (byte)225, 31, (byte)190, (byte)242, 38,
+          (byte)140, 61, (byte)179, (byte)154, (byte)214, (byte)138, (byte)147, 87, 27, 96, 77, 47,
+          (byte)187, 49, (byte)156, (byte)214,
       };
-      assertEquals(new String(expected), out.toString());
+      assertTrue(Arrays.equals(expected, out.getArray()));
     }
   }
 
