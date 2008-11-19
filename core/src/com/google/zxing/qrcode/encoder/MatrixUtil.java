@@ -291,7 +291,7 @@ public final class MatrixUtil {
   public static int FindMSBSet(int value) {
     int num_digits = 0;
     while (value != 0) {
-      value >>= 1;
+      value >>>= 1;
       ++num_digits;
     }
     return num_digits;
