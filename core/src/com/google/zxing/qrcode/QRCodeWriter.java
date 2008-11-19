@@ -33,6 +33,8 @@ import java.util.Hashtable;
  */
 public final class QRCodeWriter implements Writer {
 
+  private static final int QUIET_ZONE_SIZE = 4;
+
   public ByteMatrix encode(byte[] contents, BarcodeFormat format, int width, int height)
       throws WriterException {
 
@@ -71,10 +73,16 @@ public final class QRCodeWriter implements Writer {
     ByteMatrix input = code.matrix();
     int inputWidth = input.width();
     int inputHeight = input.height();
-    int outputWidth = Math.max(width, inputWidth);
-    int outputHeight = Math.max(height, inputHeight);
+    int qrWidth = inputWidth + (QUIET_ZONE_SIZE * 2);
+    int qrHeight = inputHeight + (QUIET_ZONE_SIZE * 2);
+    int outputWidth = Math.max(width, qrWidth);
+    int outputHeight = Math.max(height, qrHeight);
 
-    int multiple = Math.min(outputWidth / inputWidth, outputHeight / inputHeight);
+    int multiple = Math.min(outputWidth / qrWidth, outputHeight / qrHeight);
+    // Padding includes both the quiet zone and the extra white pixels to accomodate the requested
+    // dimensions. For example, if input is 25x25 the QR will be 33x33 including the quiet zone.
+    // If the requested size is 200x160, the multiple will be 4, for a QR of 132x132. These will
+    // handle all the padding from 100x100 (the actual QR) up to 200x160.
     int leftPadding = (outputWidth - (inputWidth * multiple)) / 2;
     int topPadding = (outputHeight - (inputHeight * multiple)) / 2;
 
