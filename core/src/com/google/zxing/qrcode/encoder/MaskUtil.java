@@ -46,16 +46,15 @@ public final class MaskUtil {
 
   // Apply mask penalty rule 2 and return the penalty. Find 2x2 blocks with the same color and give
   // penalty to them.
-  //
-  // JAVAPORT: Consider using ByteMatrix.getArray() instead.
   public static int ApplyMaskPenaltyRule2(final ByteMatrix matrix) {
     int penalty = 0;
-    for (int y = 0; y < matrix.height() - 1; ++y) {
-      for (int x = 0; x < matrix.width() - 1; ++x) {
-        int value = matrix.get(y, x);
-        if (value == matrix.get(y + 0, x + 1) &&
-            value == matrix.get(y + 1, x + 0) &&
-            value == matrix.get(y + 1, x + 1)) {
+    byte[][] array = matrix.getArray();
+    int width = matrix.width();
+    int height = matrix.height();
+    for (int y = 0; y < height - 1; ++y) {
+      for (int x = 0; x < width - 1; ++x) {
+        int value = array[y][x];
+        if (value == array[y][x + 1] && value == array[y + 1][x] && value == array[y + 1][x + 1]) {
           penalty += 3;
         }
       }
@@ -67,52 +66,52 @@ public final class MaskUtil {
   // Apply mask penalty rule 3 and return the penalty. Find consecutive cells of 00001011101 or
   // 10111010000, and give penalty to them.  If we find patterns like 000010111010000, we give
   // penalties twice (i.e. 40 * 2).
-  //
-  // JAVAPORT: This many calls to ByteMatrix.get() looks expensive. We should profile and consider
-  // adding a byte[][] ByteMatrix.getArray() method, then using that array locally.
   public static int ApplyMaskPenaltyRule3(final ByteMatrix matrix) {
     int penalty = 0;
-    for (int y = 0; y < matrix.height(); ++y) {
-      for (int x = 0; x < matrix.width(); ++x) {
+    byte[][] array = matrix.getArray();
+    int width = matrix.width();
+    int height = matrix.height();
+    for (int y = 0; y < height; ++y) {
+      for (int x = 0; x < width; ++x) {
         // Tried to simplify following conditions but failed.
-        if (x + 6 < matrix.width() &&
-            matrix.get(y, x +  0) == 1 &&
-            matrix.get(y, x +  1) == 0 &&
-            matrix.get(y, x +  2) == 1 &&
-            matrix.get(y, x +  3) == 1 &&
-            matrix.get(y, x +  4) == 1 &&
-            matrix.get(y, x +  5) == 0 &&
-            matrix.get(y, x +  6) == 1 &&
-            ((x + 10 < matrix.width() &&
-                matrix.get(y, x +  7) == 0 &&
-                matrix.get(y, x +  8) == 0 &&
-                matrix.get(y, x +  9) == 0 &&
-                matrix.get(y, x + 10) == 0) ||
+        if (x + 6 < width &&
+            array[y][x] == 1 &&
+            array[y][x +  1] == 0 &&
+            array[y][x +  2] == 1 &&
+            array[y][x +  3] == 1 &&
+            array[y][x +  4] == 1 &&
+            array[y][x +  5] == 0 &&
+            array[y][x +  6] == 1 &&
+            ((x + 10 < width &&
+                array[y][x +  7] == 0 &&
+                array[y][x +  8] == 0 &&
+                array[y][x +  9] == 0 &&
+                array[y][x + 10] == 0) ||
                 (x - 4 >= 0 &&
-                    matrix.get(y, x -  1) == 0 &&
-                    matrix.get(y, x -  2) == 0 &&
-                    matrix.get(y, x -  3) == 0 &&
-                    matrix.get(y, x -  4) == 0))) {
+                    array[y][x -  1] == 0 &&
+                    array[y][x -  2] == 0 &&
+                    array[y][x -  3] == 0 &&
+                    array[y][x -  4] == 0))) {
           penalty += 40;
         }
-        if (y + 6 < matrix.height() &&
-            matrix.get(y +  0, x) == 1  &&
-            matrix.get(y +  1, x) == 0  &&
-            matrix.get(y +  2, x) == 1  &&
-            matrix.get(y +  3, x) == 1  &&
-            matrix.get(y +  4, x) == 1  &&
-            matrix.get(y +  5, x) == 0  &&
-            matrix.get(y +  6, x) == 1 &&
-            ((y + 10 < matrix.height() &&
-                matrix.get(y +  7, x) == 0 &&
-                matrix.get(y +  8, x) == 0 &&
-                matrix.get(y +  9, x) == 0 &&
-                matrix.get(y + 10, x) == 0) ||
+        if (y + 6 < height &&
+            array[y][x] == 1  &&
+            array[y +  1][x] == 0  &&
+            array[y +  2][x] == 1  &&
+            array[y +  3][x] == 1  &&
+            array[y +  4][x] == 1  &&
+            array[y +  5][x] == 0  &&
+            array[y +  6][x] == 1 &&
+            ((y + 10 < height &&
+                array[y +  7][x] == 0 &&
+                array[y +  8][x] == 0 &&
+                array[y +  9][x] == 0 &&
+                array[y + 10][x] == 0) ||
                 (y - 4 >= 0 &&
-                    matrix.get(y -  1, x) == 0 &&
-                    matrix.get(y -  2, x) == 0 &&
-                    matrix.get(y -  3, x) == 0 &&
-                    matrix.get(y -  4, x) == 0))) {
+                    array[y -  1][x] == 0 &&
+                    array[y -  2][x] == 0 &&
+                    array[y -  3][x] == 0 &&
+                    array[y -  4][x] == 0))) {
           penalty += 40;
         }
       }
@@ -132,9 +131,12 @@ public final class MaskUtil {
   // - 100% => 100
   public static int ApplyMaskPenaltyRule4(final ByteMatrix matrix) {
     int num_dark_cells = 0;
-    for (int y = 0; y < matrix.height(); ++y) {
-      for (int x = 0; x < matrix.width(); ++x) {
-        if (matrix.get(y, x) == 1) {
+    byte[][] array = matrix.getArray();
+    int width = matrix.width();
+    int height = matrix.height();
+    for (int y = 0; y < height; ++y) {
+      for (int x = 0; x < width; ++x) {
+        if (array[y][x] == 1) {
           num_dark_cells += 1;
         }
       }
@@ -190,9 +192,10 @@ public final class MaskUtil {
     //       int bit = matrix.get(j, i);
     final int i_limit = is_horizontal ? matrix.height() : matrix.width();
     final int j_limit = is_horizontal ? matrix.width() : matrix.height();
+    byte[][] array = matrix.getArray();
     for (int i = 0; i < i_limit; ++i) {
       for (int j = 0; j < j_limit; ++j) {
-        final int bit = is_horizontal ? matrix.get(i, j) : matrix.get(j, i);
+        final int bit = is_horizontal ? array[i][j] : array[j][i];
         if (bit == prev_bit) {
           num_same_bit_cells += 1;
           // Found five repetitive cells with the same color (bit).

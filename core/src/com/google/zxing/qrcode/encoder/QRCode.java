@@ -230,8 +230,7 @@ public final class QRCode {
     num_rs_blocks_ = value;
   }
 
-  // This takes ownership of the 2D array.  The 2D array will be
-  // deleted in the destructor of the class.
+  // This takes ownership of the 2D array.
   public void set_matrix(ByteMatrix value) {
     matrix_ = value;
   }
@@ -262,7 +261,7 @@ public final class QRCode {
   }
 
   // Convert "ec_level" to String for debugging.
-  public static final String ECLevelToString(int ec_level) {
+  public static String ECLevelToString(int ec_level) {
     switch (ec_level) {
       case QRCode.EC_LEVEL_UNDEFINED:
         return "UNDEFINED";
@@ -281,7 +280,7 @@ public final class QRCode {
   }
 
   // Convert "mode" to String for debugging.
-  public static final String ModeToString(int mode) {
+  public static String ModeToString(int mode) {
     switch (mode) {
       case QRCode.MODE_UNDEFINED:
         return "UNDEFINED";
