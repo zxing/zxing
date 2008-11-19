@@ -511,31 +511,37 @@ public final class EncoderTestCase extends TestCase {
     {
       final byte[] data_bytes = {32, 65, (byte)205, 69, 41, (byte)220, 46, (byte)128, (byte)236};
       ByteArray ec_bytes = Encoder.GenerateECBytes(new ByteArray(data_bytes), 17);
-      final byte[] expected = {
-          42, (byte)159, 74, (byte)221, (byte)244, (byte)169, (byte)239, (byte)150, (byte)138, 70,
-          (byte)237, 85, (byte)224, 96, 74, (byte)219, 61
+      final int[] expected = {
+          42, 159, 74, 221, 244, 169, 239, 150, 138, 70, 237, 85, 224, 96, 74, 219, 61
       };
-      assertEquals(new ByteArray(expected), ec_bytes);
+      assertEquals(expected.length, ec_bytes.size());
+      for (int x = 0; x < expected.length; x++) {
+        assertEquals(expected[x], ec_bytes.at(x));
+      }
     }
     {
       final byte[] data_bytes = {67, 70, 22, 38, 54, 70, 86, 102, 118,
           (byte)134, (byte)150, (byte)166, (byte)182, (byte)198, (byte)214};
       ByteArray ec_bytes = Encoder.GenerateECBytes(new ByteArray(data_bytes), 18);
-      final byte[] expected = {
-          (byte)175, 80, (byte)155, 64, (byte)178, 45, (byte)214, (byte)233, 65, (byte)209, 12,
-          (byte)155, 117, 31, (byte)140, (byte)214, 27, (byte)187
+      final int[] expected = {
+          175, 80, 155, 64, 178, 45, 214, 233, 65, 209, 12, 155, 117, 31, 140, 214, 27, 187
       };
-      assertEquals(new ByteArray(expected), ec_bytes);
+      assertEquals(expected.length, ec_bytes.size());
+      for (int x = 0; x < expected.length; x++) {
+        assertEquals(expected[x], ec_bytes.at(x));
+      }
     }
     {
       // High-order zero cofficient case.
       final byte[] data_bytes = {32, 49, (byte)205, 69, 42, 20, 0, (byte)236, 17};
       ByteArray ec_bytes = Encoder.GenerateECBytes(new ByteArray(data_bytes), 17);
-      final byte[] expected = {
-          0, 3, (byte)130, (byte)179, (byte)194, 0, 55, (byte)211, 110, 79, 98, 72, (byte)170, 96,
-          (byte)211, (byte)137, (byte)213
+      final int[] expected = {
+          0, 3, 130, 179, 194, 0, 55, 211, 110, 79, 98, 72, 170, 96, 211, 137, 213
       };
-      assertEquals(new ByteArray(expected), ec_bytes);
+      assertEquals(expected.length, ec_bytes.size());
+      for (int x = 0; x < expected.length; x++) {
+        assertEquals(expected[x], ec_bytes.at(x));
+      }
     }
   }
 
