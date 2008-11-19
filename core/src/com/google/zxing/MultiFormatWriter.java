@@ -29,13 +29,13 @@ import java.util.Hashtable;
  */
 public final class MultiFormatWriter implements Writer {
 
-  public ByteMatrix encode(byte[] contents, BarcodeFormat format, int width,
+  public ByteMatrix encode(String contents, BarcodeFormat format, int width,
       int height) throws WriterException {
 
     return encode(contents, format, width, height, null);
   }
 
-  public ByteMatrix encode(byte[] contents, BarcodeFormat format, int width, int height,
+  public ByteMatrix encode(String contents, BarcodeFormat format, int width, int height,
       Hashtable hints) throws WriterException {
 
     if (format == BarcodeFormat.QR_CODE) {
