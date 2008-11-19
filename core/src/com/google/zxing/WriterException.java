@@ -22,7 +22,7 @@ package com.google.zxing;
  *
  * @author dswitkin@google.com (Daniel Switkin)
  */
-public class WriterException extends Exception {
+public final class WriterException extends Exception {
 
   public WriterException(String message) {
     super(message);

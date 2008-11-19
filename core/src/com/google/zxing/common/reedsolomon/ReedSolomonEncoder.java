@@ -51,9 +51,12 @@ public final class ReedSolomonEncoder {
   }
 
   public void encode(int[] toEncode, int ecBytes) {
+    if (ecBytes == 0) {
+      throw new IllegalArgumentException("No error correction bytes");
+    }
     int dataBytes = toEncode.length - ecBytes;
-    if (dataBytes < 0) {
-      throw new IllegalArgumentException("Too few data bytes provided: " + dataBytes);
+    if (dataBytes <= 0) {
+      throw new IllegalArgumentException("No data bytes provided");
     }
     GF256Poly generator = buildGenerator(ecBytes);
     int[] infoCoefficients = new int[dataBytes];
@@ -62,11 +65,11 @@ public final class ReedSolomonEncoder {
     info = info.multiplyByMonomial(ecBytes, 1);
     GF256Poly remainder = info.divide(generator)[1];
     int[] coefficients = remainder.getCoefficients();
-    if (coefficients.length < ecBytes) {
-      throw new RuntimeException("Coefficients array is smaller than EC array (" +
-          coefficients.length + " < " + ecBytes + ")");
+    int numZeroCoefficients = ecBytes - coefficients.length;
+    for (int i = 0; i < numZeroCoefficients; i++) {
+      toEncode[dataBytes + i] = 0;
     }
-    System.arraycopy(coefficients, 0, toEncode, dataBytes, ecBytes);
+    System.arraycopy(coefficients, 0, toEncode, dataBytes + numZeroCoefficients, coefficients.length);
   }
 
 }
