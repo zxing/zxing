@@ -145,6 +145,13 @@ public abstract class AbstractUPCEANReader extends AbstractOneDReader implements
   abstract BarcodeFormat getBarcodeFormat();
 
   /**
+   * @return {@link #checkStandardUPCEANChecksum(String)} 
+   */
+  boolean checkChecksum(String s) throws ReaderException {
+    return checkStandardUPCEANChecksum(s);
+  }
+
+  /**
    * Computes the UPC/EAN checksum on a string of digits, and reports
    * whether the checksum is correct or not.
    *
@@ -152,7 +159,7 @@ public abstract class AbstractUPCEANReader extends AbstractOneDReader implements
    * @return true iff string of digits passes the UPC/EAN checksum algorithm
    * @throws ReaderException if the string does not contain only digits
    */
-  boolean checkChecksum(String s) throws ReaderException {
+  public static boolean checkStandardUPCEANChecksum(String s) throws ReaderException {
     int length = s.length();
     if (length == 0) {
       return false;
