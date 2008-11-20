@@ -40,7 +40,6 @@ public final class MaskUtil {
   public static int ApplyMaskPenaltyRule1(final ByteMatrix matrix) {
     final int penalty = (ApplyMaskPenaltyRule1Internal(matrix, true) +
         ApplyMaskPenaltyRule1Internal(matrix, false));
-    System.out.println("\tApplyMaskPenaltyRule1: " + penalty);
     return penalty;
   }
 
@@ -59,7 +58,6 @@ public final class MaskUtil {
         }
       }
     }
-    System.out.println("\tApplyMaskPenaltyRule2: " + penalty);
     return penalty;
   }
 
@@ -116,7 +114,6 @@ public final class MaskUtil {
         }
       }
     }
-    System.out.println("\tApplyMaskPenaltyRule3: " + penalty);
     return penalty;
   }
 
@@ -144,7 +141,6 @@ public final class MaskUtil {
     final int num_total_cells = matrix.height() * matrix.width();
     double dark_ratio = (double) num_dark_cells / num_total_cells;
     final int penalty = Math.abs((int) (dark_ratio * 100 - 50)) / 5 * 10;
-    System.out.println("\tApplyMaskPenaltyRule4: " + penalty);
     return penalty;
   }
 
