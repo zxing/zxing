@@ -607,4 +607,42 @@ public final class EncoderTestCase extends TestCase {
     assertFalse(Encoder.IsValidKanjiSequence(new ByteArray("0123")));
     assertFalse(Encoder.IsValidKanjiSequence(new ByteArray("ABC")));
   }
+
+  public void testBugInBitVectorNumBytes() throws WriterException {
+    // There was a bug in BitVector::num_bytes() that caused it to return a
+    // smaller-by-one value (ex. 1465 instead of 1466) if the number of bits
+    // in the vector is not 8-bit aligned.  In QRCodeEncoder::InitQRCode(),
+    // BitVector::num_bytes() is used for finding the smallest QR Code
+    // version that can fit the given data.  Hence there were corner cases
+    // where we chose a wrong QR Code version that cannot fit the given
+    // data.  Note that the issue did not occur with MODE_8BIT_BYTE, as the
+    // bits in the bit vector are always 8-bit aligned.
+    //
+    // Before the bug was fixed, the following test didn't pass, because:
+    //
+    // - MODE_NUMERIC is chosen as all bytes in the data are '0'
+    // - The 3518-byte numeric data needs 1466 bytes
+    //   - 3518 / 3 * 10 + 7 = 11727 bits = 1465.875 bytes
+    //   - 3 numeric bytes are encoded in 10 bits, hence the first
+    //     3516 bytes are encoded in 3516 / 3 * 10 = 11720 bits.
+    //   - 2 numeric bytes can be encoded in 7 bits, hence the last
+    //     2 bytes are encoded in 7 bits.
+    // - The version 27 QR Code with the EC level L has 1468 bytes for data.
+    //   - 1828 - 360 = 1468
+    // - In InitQRCode(), 3 bytes are reserved for a header.  Hence 1465 bytes
+    //   (1468 -3) are left for data.
+    // - Because of the bug in BitVector::num_bytes(), InitQRCode() determines
+    //   the given data can fit in 1465 bytes, despite it needs 1466 bytes.
+    // - Hence QRCodeEncoder::Encode() failed and returned false.
+    //   - To be precise, it needs 11727 + 4 (mode info) + 14 (length info) =
+    //     11745 bits = 1468.125 bytes are needed (i.e. cannot fit in 1468
+    //     bytes).
+    final int arraySize = 3518;
+    byte[] data_bytes = new byte[arraySize];
+    for (int x = 0; x < arraySize; x++) {
+      data_bytes[x] = '0';
+    }
+    QRCode qr_code = new QRCode();
+    Encoder.Encode(new ByteArray(data_bytes), QRCode.EC_LEVEL_L, qr_code);
+  }
 }

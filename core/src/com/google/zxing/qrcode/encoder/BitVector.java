@@ -52,10 +52,8 @@ public final class BitVector {
   }
 
   // Return the number of bytes in the bit vector.
-  // JAVAPORT: I would have made this ((sizeInBits + 7) >> 3), but apparently users of this class
-  // depend on the number of bytes being rounded down. I don't see how that works though.
   public int num_bytes() {
-    return sizeInBits >> 3;
+    return (sizeInBits + 7) >> 3;
   }
 
   // Append one bit to the bit vector.
