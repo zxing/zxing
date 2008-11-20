@@ -49,6 +49,9 @@ public final class BarcodeFormat {
   /** Code 39 1D format. */
   public static final BarcodeFormat CODE_39 = new BarcodeFormat("CODE_39");
 
+  /** ITF-14 1D format. */
+  public static final BarcodeFormat ITF_14 = new BarcodeFormat("ITF_14");
+
   private final String name;
 
   private BarcodeFormat(String name) {
