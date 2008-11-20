@@ -16,7 +16,6 @@
 
 package com.google.zxing.oned;
 
-import com.google.zxing.MultiFormatReader;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.common.AbstractBlackBoxTestCase;
 
@@ -28,9 +27,10 @@ import java.io.File;
 public final class ITF14BlackBox1TestCase extends AbstractBlackBoxTestCase {
 
   public ITF14BlackBox1TestCase() {
-    super(new File("test/data/blackbox/itf14-1"), new MultiFormatReader(), BarcodeFormat.ITF_14);
-    addTest(0, 0, 0.0f);
-    addTest(0, 0, 180.0f);
+    // TODO re-enable MultiFormatReader here once we've better settled how to handle all these new formats
+    super(new File("test/data/blackbox/itf14-1"), new ITF14Reader(), BarcodeFormat.ITF_14);
+    addTest(2, 2, 0.0f);
+    addTest(2, 2, 180.0f);
   }
 
 }
