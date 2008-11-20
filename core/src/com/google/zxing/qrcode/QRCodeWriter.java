@@ -17,10 +17,11 @@
 package com.google.zxing.qrcode;
 
 import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
 import com.google.zxing.Writer;
 import com.google.zxing.WriterException;
-import com.google.zxing.common.ByteMatrix;
 import com.google.zxing.common.ByteArray;
+import com.google.zxing.common.ByteMatrix;
 import com.google.zxing.qrcode.encoder.Encoder;
 import com.google.zxing.qrcode.encoder.QRCode;
 
@@ -57,8 +58,14 @@ public final class QRCodeWriter implements Writer {
           height);
     }
 
-    // TODO: Check hints for error correction level instead of hardcoding
     int errorCorrectionLevel = QRCode.EC_LEVEL_L;
+    if (hints != null) {
+      Integer requestedECLevel = (Integer) hints.get(EncodeHintType.ERROR_CORRECTION);
+      if (requestedECLevel != null) {
+        errorCorrectionLevel = requestedECLevel.intValue();
+      }
+    }
+
     QRCode code = new QRCode();
     Encoder.Encode(new ByteArray(contents), errorCorrectionLevel, code);
     return renderResult(code, width, height);
