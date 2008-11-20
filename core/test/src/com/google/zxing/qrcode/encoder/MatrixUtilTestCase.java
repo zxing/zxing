@@ -17,6 +17,7 @@
 package com.google.zxing.qrcode.encoder;
 
 import com.google.zxing.common.ByteMatrix;
+import com.google.zxing.WriterException;
 import junit.framework.TestCase;
 
 /**
@@ -48,7 +49,7 @@ public final class MatrixUtilTestCase extends TestCase {
     assertEquals(-1, matrix.get(1, 1));
   }
 
-  public void testEmbedBasicPatterns() {
+  public void testEmbedBasicPatterns() throws WriterException {
     {
       // Version 1.
       String expected =
@@ -75,7 +76,7 @@ public final class MatrixUtilTestCase extends TestCase {
 	" 1 1 1 1 1 1 1 0                          \n";
       ByteMatrix matrix = new ByteMatrix(21, 21);
       MatrixUtil.ClearMatrix(matrix);
-      assertTrue(MatrixUtil.EmbedBasicPatterns(1, matrix));
+      MatrixUtil.EmbedBasicPatterns(1, matrix);
       assertEquals(expected, matrix.toString());
     }
     {
@@ -109,12 +110,12 @@ public final class MatrixUtilTestCase extends TestCase {
 	" 1 1 1 1 1 1 1 0                                  \n";
       ByteMatrix matrix = new ByteMatrix(25, 25);
       MatrixUtil.ClearMatrix(matrix);
-      assertTrue(MatrixUtil.EmbedBasicPatterns(2, matrix));
+      MatrixUtil.EmbedBasicPatterns(2, matrix);
       assertEquals(expected, matrix.toString());
     }
   }
 
-  public void testEmbedTypeInfo() {
+  public void testEmbedTypeInfo() throws WriterException {
     // Type info bits = 100000011001110.
     String expected =
       "                 0                        \n" +
@@ -140,12 +141,11 @@ public final class MatrixUtilTestCase extends TestCase {
       "                 1                        \n";
     ByteMatrix matrix = new ByteMatrix(21, 21);
     MatrixUtil.ClearMatrix(matrix);
-    boolean info_okay = MatrixUtil.EmbedTypeInfo(QRCode.EC_LEVEL_M, 5, matrix);
-    assertTrue(info_okay);
+    MatrixUtil.EmbedTypeInfo(QRCode.EC_LEVEL_M, 5, matrix);
     assertEquals(expected, matrix.toString());
   }
 
-  public void testEmbedVersionInfo() {
+  public void testEmbedVersionInfo() throws WriterException {
     // Version info bits = 000111 110010 010100
     String expected =
       "                     0 0 1                \n" +
@@ -173,11 +173,11 @@ public final class MatrixUtilTestCase extends TestCase {
     // since 45x45 matrix is too big to depict.
     ByteMatrix matrix = new ByteMatrix(21, 21);
     MatrixUtil.ClearMatrix(matrix);
-    assertTrue(MatrixUtil.MaybeEmbedVersionInfo(7, matrix));
+    MatrixUtil.MaybeEmbedVersionInfo(7, matrix);
     assertEquals(expected, matrix.toString());
   }
 
-  public void testEmbedDataBits() {
+  public void testEmbedDataBits() throws WriterException {
     // Cells other than basic patterns should be filled with zero.
     String expected =
       " 1 1 1 1 1 1 1 0 0 0 0 0 0 0 1 1 1 1 1 1 1\n" +
@@ -205,11 +205,11 @@ public final class MatrixUtilTestCase extends TestCase {
     ByteMatrix matrix = new ByteMatrix(21, 21);
     MatrixUtil.ClearMatrix(matrix);
     MatrixUtil.EmbedBasicPatterns(1, matrix);
-    assertTrue(MatrixUtil.EmbedDataBits(bits, -1, matrix));
+    MatrixUtil.EmbedDataBits(bits, -1, matrix);
     assertEquals(expected, matrix.toString());
   }
 
-  public void testBuildMatrix() {
+  public void testBuildMatrix() throws WriterException {
     // From http://www.swetake.com/qr/qr7.html
     String expected =
       " 1 1 1 1 1 1 1 0 0 1 1 0 0 0 1 1 1 1 1 1 1\n" +
@@ -241,11 +241,11 @@ public final class MatrixUtilTestCase extends TestCase {
       bits.AppendBits(c, 8);
     }
     ByteMatrix matrix = new ByteMatrix(21, 21);
-    assertTrue(MatrixUtil.BuildMatrix(bits,
+    MatrixUtil.BuildMatrix(bits,
 					      QRCode.EC_LEVEL_H,
 					      1,  // Version 1
 					      3,  // Mask pattern 3
-					      matrix));
+					      matrix);
   }
 
   public void testFindMSBSet() {
@@ -277,20 +277,20 @@ public final class MatrixUtilTestCase extends TestCase {
 
   // We don't test a lot of cases in this function since we've already
   // tested them in TEST(CalculateBCHCode).
-  public void testMakeVersionInfoBits() {
+  public void testMakeVersionInfoBits() throws WriterException {
     // From Appendix D in JISX0510:2004 (p 68)
     BitVector bits = new BitVector();
-    assertTrue(MatrixUtil.MakeVersionInfoBits(7, bits));
+    MatrixUtil.MakeVersionInfoBits(7, bits);
     assertEquals("000111110010010100", bits.toString());
   }
 
   // We don't test a lot of cases in this function since we've already
   // tested them in TEST(CalculateBCHCode).
-  public void testMakeTypeInfoInfoBits() {
+  public void testMakeTypeInfoInfoBits() throws WriterException {
     // From Appendix C in JISX0510:2004 (p 65)
     BitVector bits = new BitVector();
-    assertTrue(MatrixUtil.MakeTypeInfoBits(QRCode.EC_LEVEL_M,
-						   5, bits));
+    MatrixUtil.MakeTypeInfoBits(QRCode.EC_LEVEL_M,
+						   5, bits);
     assertEquals("100000011001110", bits.toString());
   }
 }

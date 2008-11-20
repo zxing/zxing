@@ -20,6 +20,7 @@ import com.google.zxing.common.ByteMatrix;
 import com.google.zxing.common.ByteArray;
 import com.google.zxing.common.reedsolomon.GF256;
 import com.google.zxing.common.reedsolomon.ReedSolomonEncoder;
+import com.google.zxing.WriterException;
 
 import java.util.Vector;
 
@@ -41,8 +42,8 @@ public final class Encoder {
 
   private static final class RSBlockInfo {
 
-    int num_bytes;
-    int block_info[][];
+    final int num_bytes;
+    final int[][] block_info;
 
     public RSBlockInfo(int num_bytes, int[][] block_info) {
       this.num_bytes = num_bytes;
@@ -99,8 +100,8 @@ public final class Encoder {
 
   private static final class BlockPair {
 
-    private ByteArray dataBytes;
-    private ByteArray errorCorrectionBytes;
+    private final ByteArray dataBytes;
+    private final ByteArray errorCorrectionBytes;
 
     public BlockPair(ByteArray data, ByteArray errorCorrection) {
       dataBytes = data;
@@ -125,35 +126,25 @@ public final class Encoder {
   //
   // Note that there is no way to encode bytes in MODE_KANJI. We might want to add EncodeWithMode()
   // with which clients can specify the encoding mode. For now, we don't need the functionality.
-  public static boolean Encode(final ByteArray bytes, int ec_level, QRCode qr_code) {
+  public static void Encode(final ByteArray bytes, int ec_level, QRCode qr_code) throws WriterException {
     // Step 1: Choose the mode (encoding).
     final int mode = ChooseMode(bytes);
 
     // Step 2: Append "bytes" into "data_bits" in appropriate encoding.
     BitVector data_bits = new BitVector();
-    if (!AppendBytes(bytes, mode, data_bits)) {
-      return false;
-    }
+    AppendBytes(bytes, mode, data_bits);
     // Step 3: Initialize QR code that can contain "data_bits".
     final int num_input_bytes = data_bits.num_bytes();
-    if (!InitQRCode(num_input_bytes, ec_level, mode, qr_code)) {
-      return false;
-    }
+    InitQRCode(num_input_bytes, ec_level, mode, qr_code);
 
     // Step 4: Build another bit vector that contains header and data.
     BitVector header_and_data_bits = new BitVector();
-    if (!AppendModeInfo(qr_code.mode(), header_and_data_bits)) {
-      return false;
-    }
-    if (!AppendLengthInfo(bytes.size(), qr_code.version(), qr_code.mode(), header_and_data_bits)) {
-      return false;
-    }
+    AppendModeInfo(qr_code.mode(), header_and_data_bits);
+    AppendLengthInfo(bytes.size(), qr_code.version(), qr_code.mode(), header_and_data_bits);
     header_and_data_bits.AppendBitVector(data_bits);
 
     // Step 5: Terminate the bits properly.
-    if (!TerminateBits(qr_code.num_data_bytes(), header_and_data_bits)) {
-      return false;
-    }
+    TerminateBits(qr_code.num_data_bytes(), header_and_data_bits);
 
     // Step 6: Interleave data bits with error correction code.
     BitVector final_bits = new BitVector();
@@ -164,10 +155,6 @@ public final class Encoder {
     ByteMatrix matrix = new ByteMatrix(qr_code.matrix_width(), qr_code.matrix_width());
     qr_code.set_mask_pattern(ChooseMaskPattern(final_bits, qr_code.ec_level(), qr_code.version(),
         matrix));
-    if (qr_code.mask_pattern() == -1) {
-      // There was an error.
-      return false;
-    }
 
     // Step 8.  Build the matrix and set it to "qr_code".
     MatrixUtil.BuildMatrix(final_bits, qr_code.ec_level(), qr_code.version(),
@@ -175,10 +162,8 @@ public final class Encoder {
     qr_code.set_matrix(matrix);
     // Step 9.  Make sure we have a valid QR Code.
     if (!qr_code.IsValid()) {
-      Debug.LOG_ERROR("Invalid QR code: " + qr_code.toString());
-      return false;
+      throw new WriterException("Invalid QR code: " + qr_code.toString());
     }
-    return true;
   }
 
   // Return the code point of the table used in alphanumeric mode. Return -1 if there is no
@@ -198,7 +183,7 @@ public final class Encoder {
   // interpreted as one character in Shift_JIS, but also two characters in ISO-8859-1.
   //
   // JAVAPORT: This MODE_KANJI limitation sounds like a problem for us.
-  public static int ChooseMode(final ByteArray bytes) {
+  public static int ChooseMode(final ByteArray bytes) throws WriterException {
     boolean has_numeric = false;
     boolean has_alphanumeric = false;
     boolean has_other = false;
@@ -220,15 +205,16 @@ public final class Encoder {
       return QRCode.MODE_NUMERIC;
     }
     // "bytes" must be empty to reach here.
-    Debug.DCHECK(bytes.empty());
+    if (!bytes.empty()) {
+      throw new WriterException("Bytes left over");
+    }
     return QRCode.MODE_8BIT_BYTE;
   }
 
   private static int ChooseMaskPattern(final BitVector bits, int ec_level, int version,
-      ByteMatrix matrix) {
+      ByteMatrix matrix) throws WriterException {
     if (!QRCode.IsValidMatrixWidth(matrix.width())) {
-      Debug.LOG_ERROR("Invalid matrix width: " + matrix.width());
-      return -1;
+      throw new WriterException("Invalid matrix width: " + matrix.width());
     }
 
     int min_penalty = Integer.MAX_VALUE;  // Lower penalty is better.
@@ -236,12 +222,9 @@ public final class Encoder {
     // We try all mask patterns to choose the best one.
     for (int i = 0; i < QRCode.kNumMaskPatterns; ++i) {
       final int mask_pattern = i;
-      if (!MatrixUtil.BuildMatrix(bits, ec_level, version,
-          mask_pattern, matrix)) {
-        return -1;
-      }
+      MatrixUtil.BuildMatrix(bits, ec_level, version, mask_pattern, matrix);
       final int penalty = MaskUtil.CalculateMaskPenalty(matrix);
-      Debug.LOG_INFO("mask_pattern: " + mask_pattern + ", " + "penalty: " + penalty);
+      System.out.println("mask_pattern: " + mask_pattern + ", " + "penalty: " + penalty);
       if (penalty < min_penalty) {
         min_penalty = penalty;
         best_mask_pattern = mask_pattern;
@@ -252,13 +235,12 @@ public final class Encoder {
 
   // Initialize "qr_code" according to "num_input_bytes", "ec_level", and "mode". On success, modify
   // "qr_code" and return true. On error, return false.
-  private static boolean InitQRCode(int num_input_bytes, int ec_level, int mode, QRCode qr_code) {
+  private static void InitQRCode(int num_input_bytes, int ec_level, int mode, QRCode qr_code) throws WriterException {
     qr_code.set_ec_level(ec_level);
     qr_code.set_mode(mode);
 
     if (!QRCode.IsValidECLevel(ec_level)) {
-      Debug.LOG_ERROR("Invalid EC level: " + ec_level);
-      return false;
+      throw new WriterException("Invalid EC level: " + ec_level);
     }
 
     // In the following comments, we use numbers of Version 7-H.
@@ -285,19 +267,17 @@ public final class Encoder {
         qr_code.set_num_ec_bytes(num_bytes - num_data_bytes);
         // num_matrix_width = 21 + 6 * 4 = 45
         qr_code.set_matrix_width(21 + i * 4);
-        return true;
+        return;
       }
     }
-    Debug.LOG_ERROR("Cannot find proper rs block info (input data too big?)");
-    return false;
+    throw new WriterException("Cannot find proper rs block info (input data too big?)");
   }
 
   // Terminate bits as described in 8.4.8 and 8.4.9 of JISX0510:2004 (p.24).
-  static boolean TerminateBits(int num_data_bytes, BitVector bits) {
+  static void TerminateBits(int num_data_bytes, BitVector bits) throws WriterException {
     final int capacity = num_data_bytes * 8;
     if (bits.size() > capacity) {
-      Debug.LOG_ERROR("data bits cannot fit in the QR Code" + bits.size() + " > " + capacity);
-      return false;
+      throw new WriterException("data bits cannot fit in the QR Code" + bits.size() + " > " + capacity);
     }
     // Append termination bits. See 8.4.8 of JISX0510:2004 (p.24) for details.
     for (int i = 0; i < 4 && bits.size() < capacity; ++i) {
@@ -312,7 +292,9 @@ public final class Encoder {
       }
     }
     // Should be 8-bit aligned here.
-    Debug.DCHECK_EQ(0, bits.size() % 8);
+    if (bits.size() % 8 != 0) {
+      throw new WriterException("Number of bits is not a multiple of 8");
+    }
     // If we have more space, we'll fill the space with padding patterns defined in 8.4.9 (p.24).
     final int num_padding_bytes = num_data_bytes - bits.num_bytes();
     for (int i = 0; i < num_padding_bytes; ++i) {
@@ -322,8 +304,9 @@ public final class Encoder {
         bits.AppendBits(0x11, 8);
       }
     }
-    Debug.DCHECK_EQ(bits.size(), capacity);  // Should be same.
-    return bits.size() == capacity;
+    if (bits.size() != capacity) {
+      throw new WriterException("Bits size does not equal capacity");
+    }
   }
 
   // Get number of data bytes and number of error correction bytes for block id "block_id". Store
@@ -331,8 +314,10 @@ public final class Encoder {
   // JISX0510:2004 (p.30)
   static void GetNumDataBytesAndNumECBytesForBlockID(int num_total_bytes, int num_data_bytes,
       int num_rs_blocks, int block_id, int[] num_data_bytes_in_block,
-      int[] num_ec_bytes_in_block) {
-    Debug.DCHECK_LT(block_id, num_rs_blocks);
+      int[] num_ec_bytes_in_block) throws WriterException {
+    if (block_id >= num_rs_blocks) {
+      throw new WriterException("Block ID too large");
+    }
     // num_rs_blocks_in_group2 = 196 % 5 = 1
     final int num_rs_blocks_in_group2 = num_total_bytes % num_rs_blocks;
     // num_rs_blocks_in_group1 = 5 - 1 = 4
@@ -353,15 +338,21 @@ public final class Encoder {
         num_data_bytes_in_group2;
     // Sanity checks.
     // 26 = 26
-    Debug.DCHECK_EQ(num_ec_bytes_in_group1, num_ec_bytes_in_group2);
+    if (num_ec_bytes_in_group1 != num_ec_bytes_in_group2) {
+      throw new WriterException("EC bytes mismatch");
+    }
     // 5 = 4 + 1.
-    Debug.DCHECK_EQ(num_rs_blocks, num_rs_blocks_in_group1 + num_rs_blocks_in_group2);
+    if (num_rs_blocks != num_rs_blocks_in_group1 + num_rs_blocks_in_group2) {
+      throw new WriterException("RS blocks mismatch");
+    }
     // 196 = (13 + 26) * 4 + (14 + 26) * 1
-    Debug.DCHECK_EQ(num_total_bytes,
+    if (num_total_bytes !=
         ((num_data_bytes_in_group1 + num_ec_bytes_in_group1) *
             num_rs_blocks_in_group1) +
             ((num_data_bytes_in_group2 + num_ec_bytes_in_group2) *
-                num_rs_blocks_in_group2));
+                num_rs_blocks_in_group2)) {
+      throw new WriterException("Total bytes mismatch");
+    }
 
     if (block_id < num_rs_blocks_in_group1) {
       num_data_bytes_in_block[0] = num_data_bytes_in_group1;
@@ -375,11 +366,13 @@ public final class Encoder {
   // Interleave "bits" with corresponding error correction bytes. On success, store the result in
   // "result" and return true. On error, return false. The interleave rule is complicated. See 8.6
   // of JISX0510:2004 (p.37) for details.
-  static boolean InterleaveWithECBytes(final BitVector bits, int num_total_bytes,
-      int num_data_bytes, int num_rs_blocks, BitVector result) {
+  static void InterleaveWithECBytes(final BitVector bits, int num_total_bytes,
+      int num_data_bytes, int num_rs_blocks, BitVector result) throws WriterException {
 
     // "bits" must have "num_data_bytes" bytes of data.
-    Debug.DCHECK(bits.num_bytes() == num_data_bytes);
+    if (bits.num_bytes() != num_data_bytes) {
+      throw new WriterException("Number of bits and data bytes does not match");
+    }
 
     // Step 1.  Divide data bytes into blocks and generate error correction bytes for them. We'll
     // store the divided data bytes blocks and error correction bytes blocks into "blocks".
@@ -406,7 +399,9 @@ public final class Encoder {
       max_num_ec_bytes = Math.max(max_num_ec_bytes, ec_bytes.size());
       data_bytes_offset += num_data_bytes_in_block[0];
     }
-    Debug.DCHECK_EQ(num_data_bytes, data_bytes_offset);
+    if (num_data_bytes != data_bytes_offset) {
+      throw new WriterException("Data bytes does not match offset");
+    }
 
     // First, place data blocks.
     for (int i = 0; i < max_num_data_bytes; ++i) {
@@ -426,12 +421,10 @@ public final class Encoder {
         }
       }
     }
-    if (num_total_bytes == result.num_bytes()) {  // Should be same.
-      return true;
-    }
-    Debug.LOG_ERROR("Interleaving error: " + num_total_bytes + " and " + result.num_bytes() +
+    if (num_total_bytes != result.num_bytes()) {  // Should be same.
+      throw new WriterException("Interleaving error: " + num_total_bytes + " and " + result.num_bytes() +
         " differ.");
-    return false;
+    }
   }
 
   static ByteArray GenerateECBytes(ByteArray data_bytes, int num_ec_bytes_in_block) {
@@ -451,67 +444,60 @@ public final class Encoder {
 
   // Append mode info. On success, store the result in "bits" and return true. On error, return
   // false.
-  static boolean AppendModeInfo(int mode, BitVector bits) {
+  static void AppendModeInfo(int mode, BitVector bits) throws WriterException {
     final int code = QRCode.GetModeCode(mode);
-    if (code == -1) {
-      Debug.LOG_ERROR("Invalid mode: " + mode);
-      return false;
-    }
     bits.AppendBits(code, 4);
-    return true;
   }
 
 
   // Append length info. On success, store the result in "bits" and return true. On error, return
   // false.
-  static boolean AppendLengthInfo(int num_bytes, int version, int mode, BitVector bits) {
+  static void AppendLengthInfo(int num_bytes, int version, int mode, BitVector bits) throws WriterException {
     int num_letters = num_bytes;
     // In Kanji mode, a letter is represented in two bytes.
     if (mode == QRCode.MODE_KANJI) {
-      Debug.DCHECK_EQ(0, num_letters % 2);
+      if (num_letters % 2 != 0) {
+        throw new WriterException("Number of letters must be even");
+      }
       num_letters /= 2;
     }
 
     final int num_bits = QRCode.GetNumBitsForLength(version, mode);
-    if (num_bits == -1) {
-      Debug.LOG_ERROR("num_bits unset");
-      return false;
-    }
     if (num_letters > ((1 << num_bits) - 1)) {
-      Debug.LOG_ERROR(num_letters + "is bigger than" + ((1 << num_bits) - 1));
-      return false;
+      throw new WriterException(num_letters + "is bigger than" + ((1 << num_bits) - 1));
     }
     bits.AppendBits(num_letters, num_bits);
-    return true;
   }
 
   // Append "bytes" in "mode" mode (encoding) into "bits". On success, store the result in "bits"
   // and return true. On error, return false.
-  static boolean AppendBytes(final ByteArray bytes, int mode, BitVector bits) {
+  static void AppendBytes(final ByteArray bytes, int mode, BitVector bits) throws WriterException {
     switch (mode) {
       case QRCode.MODE_NUMERIC:
-        return AppendNumericBytes(bytes, bits);
-      case QRCode.MODE_ALPHANUMERIC:
-        return AppendAlphanumericBytes(bytes, bits);
-      case QRCode.MODE_8BIT_BYTE:
-        return Append8BitBytes(bytes, bits);
-      case QRCode.MODE_KANJI:
-        return AppendKanjiBytes(bytes, bits);
-      default:
+        AppendNumericBytes(bytes, bits);
         break;
+      case QRCode.MODE_ALPHANUMERIC:
+        AppendAlphanumericBytes(bytes, bits);
+        break;
+      case QRCode.MODE_8BIT_BYTE:
+        Append8BitBytes(bytes, bits);
+        break;
+      case QRCode.MODE_KANJI:
+        AppendKanjiBytes(bytes, bits);
+        break;
+      default:
+        throw new WriterException("Invalid mode: " + mode);        
     }
-    Debug.LOG_ERROR("Invalid mode: " + mode);
-    return false;
   }
 
   // Append "bytes" to "bits" using QRCode.MODE_NUMERIC mode. On success, store the result in "bits"
   // and return true. On error, return false.
-  static boolean AppendNumericBytes(final ByteArray bytes, BitVector bits) {
+  static void AppendNumericBytes(final ByteArray bytes, BitVector bits) throws WriterException {
     // Validate all the bytes first.
     for (int i = 0; i < bytes.size(); ++i) {
       int oneByte = bytes.at(i);
       if (oneByte < '0' || oneByte > '9') {
-        return false;
+        throw new WriterException("Non-digit found");
       }
     }
     for (int i = 0; i < bytes.size();) {
@@ -533,21 +519,20 @@ public final class Encoder {
         ++i;
       }
     }
-    return true;
   }
 
   // Append "bytes" to "bits" using QRCode.MODE_ALPHANUMERIC mode. On success, store the result in
   // "bits" and return true. On error, return false.
-  static boolean AppendAlphanumericBytes(final ByteArray bytes, BitVector bits) {
+  static void AppendAlphanumericBytes(final ByteArray bytes, BitVector bits) throws WriterException {
     for (int i = 0; i < bytes.size();) {
       final int code1 = GetAlphanumericCode(bytes.at(i));
       if (code1 == -1) {
-        return false;
+        throw new WriterException();
       }
       if (i + 1 < bytes.size()) {
         final int code2 = GetAlphanumericCode(bytes.at(i + 1));
         if (code2 == -1) {
-          return false;
+          throw new WriterException();
         }
         // Encode two alphanumeric letters in 11 bits.
         bits.AppendBits(code1 * 45 + code2, 11);
@@ -558,29 +543,27 @@ public final class Encoder {
         ++i;
       }
     }
-    return true;
   }
 
   // Append "bytes" to "bits" using QRCode.MODE_8BIT_BYTE mode. On success, store the result in
   // "bits" and return true. On error, return false.
-  static boolean Append8BitBytes(final ByteArray bytes, BitVector bits) {
+  static void Append8BitBytes(final ByteArray bytes, BitVector bits) {
     for (int i = 0; i < bytes.size(); ++i) {
       bits.AppendBits(bytes.at(i), 8);
     }
-    return true;
   }
 
   // Append "bytes" to "bits" using QRCode.MODE_KANJI mode. On success, store the result in "bits"
   // and return true. On error, return false. See 8.4.5 of JISX0510:2004 (p.21) for how to encode
   // Kanji bytes.
-  static boolean AppendKanjiBytes(final ByteArray bytes, BitVector bits) {
+  static void AppendKanjiBytes(final ByteArray bytes, BitVector bits) throws WriterException {
     if (bytes.size() % 2 != 0) {
-      // JAVAPORT: Our log implementation throws, which causes the unit test to fail.
-      //Debug.LOG_ERROR("Invalid byte sequence: " + bytes);
-      return false;
+      throw new WriterException("Number of bytes must be even");
     }
     for (int i = 0; i < bytes.size(); i += 2) {
-      Debug.DCHECK(IsValidKanji(bytes.at(i), bytes.at(i + 1)));
+      if (!IsValidKanji(bytes.at(i), bytes.at(i + 1))) {
+        throw new WriterException("Invalid Kanji at " + i);
+      }
       final int code = (bytes.at(i) << 8) | bytes.at(i + 1);
       int subtracted = -1;
       if (code >= 0x8140 && code <= 0x9ffc) {
@@ -589,13 +572,11 @@ public final class Encoder {
         subtracted = code - 0xc140;
       }
       if (subtracted == -1) {
-        Debug.LOG_ERROR("Invalid byte sequence: " + bytes);
-        return false;
+        throw new WriterException("Invalid byte sequence: " + bytes);
       }
       final int encoded = ((subtracted >> 8) * 0xc0) + (subtracted & 0xff);
       bits.AppendBits(encoded, 13);
     }
-    return true;
   }
 
   // Check if "byte1" and "byte2" can compose a valid Kanji letter (2-byte Shift_JIS letter). The

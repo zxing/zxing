@@ -39,8 +39,9 @@ public final class BitVector {
 
   // Return the bit value at "index".
   public int at(final int index) {
-    Debug.DCHECK_LE(0, index);
-    Debug.DCHECK_LT(index, sizeInBits);
+    if (index < 0 || index >= sizeInBits) {
+      throw new IllegalArgumentException("Bad index: " + index);
+    }
     final int value = array[index >> 3] & 0xff;
     return (value >> (7 - (index & 0x7))) & 1;
   }
@@ -59,7 +60,9 @@ public final class BitVector {
 
   // Append one bit to the bit vector.
   public void AppendBit(final int bit) {
-    Debug.DCHECK(bit == 0 || bit == 1);
+    if (!(bit == 0 || bit == 1)) {
+      throw new IllegalArgumentException("Bad bit");
+    }
     final int num_bits_in_last_byte = sizeInBits & 0x7;
     // We'll expand array if we don't have bits in the last byte.
     if (num_bits_in_last_byte == 0) {
@@ -79,7 +82,9 @@ public final class BitVector {
   // - AppendBits(0x00, 4) adds 0000.
   // - AppendBits(0xff, 8) adds 11111111.
   public void AppendBits(final int value, final int num_bits) {
-    Debug.DCHECK(num_bits >= 0 && num_bits <= 32);
+    if (num_bits < 0 || num_bits > 32) {
+      throw new IllegalArgumentException("Num bits must be between 0 and 32");
+    }
     int num_bits_left = num_bits;
     while (num_bits_left > 0) {
       // Optimization for byte-oriented appending.
@@ -105,7 +110,9 @@ public final class BitVector {
 
   // Modify the bit vector by XOR'ing with "other"
   public void XOR(final BitVector other) {
-    Debug.DCHECK_EQ(sizeInBits, other.size());
+    if (sizeInBits != other.size()) {
+      throw new IllegalArgumentException("BitVector sizes don't match");
+    }
     int sizeInBytes = (sizeInBits + 7) >> 3;
     for (int i = 0; i < sizeInBytes; ++i) {
       // The last byte could be incomplete (i.e. not have 8 bits in
@@ -123,7 +130,7 @@ public final class BitVector {
       } else if (at(i) == 1) {
         result.append("1");
       } else {
-        Debug.DCHECK(false);
+        throw new IllegalArgumentException("Byte isn't 0 or 1");
       }
     }
     return result.toString();

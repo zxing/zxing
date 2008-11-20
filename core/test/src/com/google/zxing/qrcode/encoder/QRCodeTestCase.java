@@ -17,6 +17,7 @@
 package com.google.zxing.qrcode.encoder;
 
 import com.google.zxing.common.ByteMatrix;
+import com.google.zxing.WriterException;
 import junit.framework.TestCase;
 
 /**
@@ -208,19 +209,29 @@ public final class QRCodeTestCase extends TestCase {
     assertEquals("UNKNOWN", QRCode.ECLevelToString(QRCode.NUM_EC_LEVELS));
   }
 
-  public void testGetModeCode() {
+  public void testGetModeCode() throws WriterException {
     assertEquals(1, QRCode.GetModeCode(QRCode.MODE_NUMERIC));
     assertEquals(2, QRCode.GetModeCode(QRCode.MODE_ALPHANUMERIC));
     assertEquals(4, QRCode.GetModeCode(QRCode.MODE_8BIT_BYTE));
     assertEquals(8, QRCode.GetModeCode(QRCode.MODE_KANJI));
-    assertEquals(-1, QRCode.GetModeCode(QRCode.MODE_UNDEFINED));
+    try {
+      QRCode.GetModeCode(QRCode.MODE_UNDEFINED);
+      fail("Should have thrown exception");      
+    } catch (WriterException we) {
+      // good
+    }
   }
 
-  public void testGetECLevelCode() {
+  public void testGetECLevelCode() throws WriterException {
     assertEquals(1, QRCode.GetECLevelCode(QRCode.EC_LEVEL_L));
     assertEquals(0, QRCode.GetECLevelCode(QRCode.EC_LEVEL_M));
     assertEquals(3, QRCode.GetECLevelCode(QRCode.EC_LEVEL_Q));
     assertEquals(2, QRCode.GetECLevelCode(QRCode.EC_LEVEL_H));
-    assertEquals(-1, QRCode.GetECLevelCode(QRCode.EC_LEVEL_UNDEFINED));
+    try {
+      QRCode.GetECLevelCode(QRCode.EC_LEVEL_UNDEFINED);
+      fail("Should have thrown exception");
+    } catch (WriterException we) {
+      // good
+    }
   }
 }
