@@ -108,15 +108,19 @@ public final class QRCodeEncoder {
             mContents += "ADR:" + address + ";";
             mDisplayContents += "\n" + address;
           }
-          String phone = bundle.getString(Contacts.Intents.Insert.PHONE);
-          if (phone != null && phone.length() > 0) {
-            mContents += "TEL:" + phone + ";";
-            mDisplayContents += "\n" + phone;
+          for (int x = 0; x < Contents.PHONE_KEYS.length; x++) {
+            String phone = bundle.getString(Contents.PHONE_KEYS[x]);
+            if (phone != null && phone.length() > 0) {
+              mContents += "TEL:" + phone + ";";
+              mDisplayContents += "\n" + phone;
+            }
           }
-          String email = bundle.getString(Contacts.Intents.Insert.EMAIL);
-          if (email != null && email.length() > 0) {
-            mContents += "EMAIL:" + email + ";";
-            mDisplayContents += "\n" + email;
+          for (int x = 0; x < Contents.EMAIL_KEYS.length; x++) {
+            String email = bundle.getString(Contents.EMAIL_KEYS[x]);
+            if (email != null && email.length() > 0) {
+              mContents += "EMAIL:" + email + ";";
+              mDisplayContents += "\n" + email;
+            }
           }
           mContents += ";";
           mTitle = mActivity.getString(R.string.contents_contact);

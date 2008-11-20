@@ -24,6 +24,7 @@ import com.google.zxing.client.android.Intents;
 import com.google.zxing.client.android.R;
 import com.google.zxing.client.android.SearchBookContentsActivity;
 import com.google.zxing.client.android.LocaleManager;
+import com.google.zxing.client.android.Contents;
 import com.google.zxing.client.result.ParsedResult;
 import com.google.zxing.client.result.ParsedResultType;
 
@@ -37,21 +38,6 @@ import java.util.GregorianCalendar;
 public abstract class ResultHandler {
 
   public static final int MAX_BUTTON_COUNT = 4;
-
-  // These are new constants in Contacts.Intents.Insert for Android 1.1.
-  // TODO: Remove these constants once we can build against the 1.1 SDK.
-  private static final String SECONDARY_PHONE = "secondary_phone";
-  private static final String TERTIARY_PHONE = "tertiary_phone";
-  private static final String SECONDARY_EMAIL = "secondary_email";
-  private static final String TERTIARY_EMAIL = "tertiary_email";
-
-  private static final String[] PHONE_INTENTS = {
-      Contacts.Intents.Insert.PHONE, SECONDARY_PHONE, TERTIARY_PHONE
-  };
-
-  private static final String[] EMAIL_INTENTS = {
-      Contacts.Intents.Insert.EMAIL, SECONDARY_EMAIL, TERTIARY_EMAIL
-  };
 
   protected final ParsedResult mResult;
   private final Activity mActivity;
@@ -157,14 +143,15 @@ public abstract class ResultHandler {
     Intent intent = new Intent(Contacts.Intents.Insert.ACTION, Contacts.People.CONTENT_URI);
     putExtra(intent, Contacts.Intents.Insert.NAME, names);
 
-    int phoneCount = Math.min((phoneNumbers != null) ? phoneNumbers.length : 0, PHONE_INTENTS.length);
+    int phoneCount = Math.min((phoneNumbers != null) ? phoneNumbers.length : 0,
+        Contents.PHONE_KEYS.length);
     for (int x = 0; x < phoneCount; x++) {
-      putExtra(intent, PHONE_INTENTS[x], phoneNumbers[x]);
+      putExtra(intent, Contents.PHONE_KEYS[x], phoneNumbers[x]);
     }
 
-    int emailCount = Math.min((emails != null) ? emails.length : 0, EMAIL_INTENTS.length);
+    int emailCount = Math.min((emails != null) ? emails.length : 0, Contents.EMAIL_KEYS.length);
     for (int x = 0; x < emailCount; x++) {
-      putExtra(intent, EMAIL_INTENTS[x], emails[x]);
+      putExtra(intent, Contents.EMAIL_KEYS[x], emails[x]);
     }
 
     putExtra(intent, Contacts.Intents.Insert.NOTES, note);
