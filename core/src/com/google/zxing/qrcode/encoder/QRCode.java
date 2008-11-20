@@ -17,6 +17,7 @@
 package com.google.zxing.qrcode.encoder;
 
 import com.google.zxing.common.ByteMatrix;
+import com.google.zxing.WriterException;
 
 /**
  * @author satorux@google.com (Satoru Takabayashi) - creator
@@ -25,11 +26,11 @@ import com.google.zxing.common.ByteMatrix;
 public final class QRCode {
 
   // Magic numbers.
-  public static final int kMinVersion = 1;
-  public static final int kMaxVersion = 40;
+  private static final int kMinVersion = 1;
+  private static final int kMaxVersion = 40;
   // For matrix width, see 7.3.1 of JISX0510:2004 (p.5).
-  public static final int kMinMatrixWidth = 21;  // Version 1
-  public static final int kMaxMatrixWidth = 177;  // Version 40 (21 + 4 * (40 -1)).
+  private static final int kMinMatrixWidth = 21;  // Version 1
+  private static final int kMaxMatrixWidth = 177;  // Version 40 (21 + 4 * (40 -1)).
   public static final int kNumMaskPatterns = 8;
 
   // See table 3 of JISX0510:2004 (p.16)
@@ -128,7 +129,10 @@ public final class QRCode {
   public int at(int x, int y) {
     // The value must be zero or one.
     int value = matrix_.get(y, x);
-    Debug.DCHECK(value == 0 || value == 1);
+    if (!(value == 0 || value == 1)) {
+      // this is really like an assert... not sure what better exception to use?
+      throw new RuntimeException("Bad value");
+    }
     return value;
   }
 
@@ -300,7 +304,7 @@ public final class QRCode {
 
   // Return the code of error correction level. On error, return -1. The codes of error correction
   // levels are defined in the table 22 of JISX0510:2004 (p.45).
-  public static int GetECLevelCode(final int ec_level) {
+  public static int GetECLevelCode(final int ec_level) throws WriterException {
     switch (ec_level) {
       case QRCode.EC_LEVEL_L:
         return 1;
@@ -311,14 +315,13 @@ public final class QRCode {
       case QRCode.EC_LEVEL_H:
         return 2;
       default:
-        break;
+        throw new WriterException("Unknown EC level");
     }
-    return -1;  // Unknown error correction level.
   }
 
   // Return the code of mode. On error, return -1. The codes of modes are defined in the table 2 of
   // JISX0510:2004 (p.16).
-  public static int GetModeCode(final int mode) {
+  public static int GetModeCode(final int mode) throws WriterException {
     switch (mode) {
       case QRCode.MODE_NUMERIC:
         return 1;
@@ -329,21 +332,18 @@ public final class QRCode {
       case QRCode.MODE_KANJI:
         return 8;
       default:
-        break;
+        throw new WriterException("Unknown mode: " + mode);
     }
-    return -1;  // Unknown mode.
   }
 
   // Return the number of bits needed for representing the length info of QR Code with "version" and
   // "mode". On error, return -1.
-  public static int GetNumBitsForLength(int version, int mode) {
+  static int GetNumBitsForLength(int version, int mode) {
     if (!IsValidVersion(version)) {
-      Debug.LOG_ERROR("Invalid version: " + version);
-      return -1;
+      throw new IllegalArgumentException("Invalid version: " + version);
     }
     if (!IsValidMode(mode)) {
-      Debug.LOG_ERROR("Invalid mode: " + mode);
-      return -1;
+      throw new IllegalArgumentException("Invalid mode: " + mode);
     }
     if (version >= 1 && version <= 9) {
       return kNumBitsTable[0][mode];
@@ -351,10 +351,8 @@ public final class QRCode {
       return kNumBitsTable[1][mode];
     } else if (version >= 27 && version <= 40) {
       return kNumBitsTable[2][mode];
-    } else {
-      Debug.LOG_ERROR("Should not reach");
     }
-    return -1;
+    throw new IllegalArgumentException("Bad version: " + version);
   }
 
   // Return true if the all values in the matrix are binary numbers. Otherwise, return false.

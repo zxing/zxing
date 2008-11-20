@@ -40,7 +40,7 @@ public final class MaskUtil {
   public static int ApplyMaskPenaltyRule1(final ByteMatrix matrix) {
     final int penalty = (ApplyMaskPenaltyRule1Internal(matrix, true) +
         ApplyMaskPenaltyRule1Internal(matrix, false));
-    Debug.LOG_INFO("\tApplyMaskPenaltyRule1: " + penalty);
+    System.out.println("\tApplyMaskPenaltyRule1: " + penalty);
     return penalty;
   }
 
@@ -59,7 +59,7 @@ public final class MaskUtil {
         }
       }
     }
-    Debug.LOG_INFO("\tApplyMaskPenaltyRule2: " + penalty);
+    System.out.println("\tApplyMaskPenaltyRule2: " + penalty);
     return penalty;
   }
 
@@ -116,7 +116,7 @@ public final class MaskUtil {
         }
       }
     }
-    Debug.LOG_INFO("\tApplyMaskPenaltyRule3: " + penalty);
+    System.out.println("\tApplyMaskPenaltyRule3: " + penalty);
     return penalty;
   }
 
@@ -144,14 +144,16 @@ public final class MaskUtil {
     final int num_total_cells = matrix.height() * matrix.width();
     double dark_ratio = (double) num_dark_cells / num_total_cells;
     final int penalty = Math.abs((int) (dark_ratio * 100 - 50)) / 5 * 10;
-    Debug.LOG_INFO("\tApplyMaskPenaltyRule4: " + penalty);
+    System.out.println("\tApplyMaskPenaltyRule4: " + penalty);
     return penalty;
   }
 
   // Return the mask bit for "mask_pattern" at "x" and "y". See 8.8 of JISX0510:2004 for mask
   // pattern conditions.
   public static int GetDataMaskBit(final int mask_pattern, final int x, final int y) {
-    Debug.DCHECK(QRCode.IsValidMaskPattern(mask_pattern));
+    if (!QRCode.IsValidMaskPattern(mask_pattern)) {
+      throw new IllegalArgumentException("Invalid mask pattern");
+    }
     switch (mask_pattern) {
       case 0:
         return ((y + x) % 2 == 0) ? 1 : 0;
@@ -169,11 +171,8 @@ public final class MaskUtil {
         return ((((y * x) % 2) + ((y * x) % 3)) % 2 == 0) ? 1 : 0;
       case 7:
         return ((((y * x) % 3) + ((y + x) % 2)) % 2 == 0) ? 1 : 0;
-      default:
-        ;
     }
-    Debug.LOG_ERROR("invalid mask pattern: " + mask_pattern);
-    return -1;
+    throw new IllegalArgumentException("invalid mask pattern: " + mask_pattern);
   }
 
   // Helper function for ApplyMaskPenaltyRule1. We need this for doing this calculation in both

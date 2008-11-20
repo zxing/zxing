@@ -60,11 +60,8 @@ public final class QRCodeWriter implements Writer {
     // TODO: Check hints for error correction level instead of hardcoding
     int errorCorrectionLevel = QRCode.EC_LEVEL_L;
     QRCode code = new QRCode();
-    if (Encoder.Encode(new ByteArray(contents), errorCorrectionLevel, code)) {
-      return renderResult(code, width, height);
-    } else {
-      throw new WriterException("Could not generate a QR Code");
-    }
+    Encoder.Encode(new ByteArray(contents), errorCorrectionLevel, code);
+    return renderResult(code, width, height);
   }
 
   // Note that the input matrix uses 0 == white, 1 == black, while the output matrix uses
