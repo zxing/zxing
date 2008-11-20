@@ -224,7 +224,6 @@ public final class Encoder {
       final int mask_pattern = i;
       MatrixUtil.BuildMatrix(bits, ec_level, version, mask_pattern, matrix);
       final int penalty = MaskUtil.CalculateMaskPenalty(matrix);
-      System.out.println("mask_pattern: " + mask_pattern + ", " + "penalty: " + penalty);
       if (penalty < min_penalty) {
         min_penalty = penalty;
         best_mask_pattern = mask_pattern;
