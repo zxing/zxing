@@ -16,6 +16,7 @@
 
 package com.google.zxing.client.android;
 
+import android.provider.Contacts;
 
 public final class Contents {
 
@@ -79,5 +80,25 @@ public final class Contents {
      */
     public static final String LOCATION = "LOCATION_TYPE";
   }
+
+  // These are new constants in Contacts.Intents.Insert for Android 1.1.
+  // TODO: Remove these constants once we can build against the 1.1 SDK.
+  private static final String SECONDARY_PHONE = "secondary_phone";
+  private static final String TERTIARY_PHONE = "tertiary_phone";
+  private static final String SECONDARY_EMAIL = "secondary_email";
+  private static final String TERTIARY_EMAIL = "tertiary_email";
+
+
+  /**
+   * When using Type.CONTACT, these arrays provide the keys for adding or retrieving multiple
+   * phone numbers and addresses.
+   */
+  public static final String[] PHONE_KEYS = {
+      Contacts.Intents.Insert.PHONE, SECONDARY_PHONE, TERTIARY_PHONE
+  };
+
+  public static final String[] EMAIL_KEYS = {
+      Contacts.Intents.Insert.EMAIL, SECONDARY_EMAIL, TERTIARY_EMAIL
+  };
 
 }
