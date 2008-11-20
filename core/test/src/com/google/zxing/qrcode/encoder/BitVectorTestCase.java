@@ -101,11 +101,15 @@ public class BitVectorTestCase extends TestCase {
     BitVector v = new BitVector();
     assertEquals(0, v.num_bytes());
     v.AppendBit(0);
-    assertEquals(0, v.num_bytes());
+    // 1 bit was added in the vector, so 1 byte should be consumed.
+    assertEquals(1, v.num_bytes());
     v.AppendBits(0, 7);
     assertEquals(1, v.num_bytes());
     v.AppendBits(0, 8);
     assertEquals(2, v.num_bytes());
+    v.AppendBits(0, 1);
+    // We now have 17 bits, so 3 bytes should be consumed.
+    assertEquals(3, v.num_bytes());
   }
 
   public void testAppendBitVector() {
