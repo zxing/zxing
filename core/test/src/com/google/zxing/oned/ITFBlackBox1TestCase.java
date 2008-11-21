@@ -29,7 +29,7 @@ public final class ITFBlackBox1TestCase extends AbstractBlackBoxTestCase {
 
   public ITFBlackBox1TestCase() {
     super(new File("test/data/blackbox/itf-1"), new MultiFormatReader(), BarcodeFormat.ITF);
-    addTest(6, 6, 0.0f);
+    addTest(0, 0, 0.0f);
   }
 
 }

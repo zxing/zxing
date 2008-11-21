@@ -49,16 +49,17 @@ public final class MultiFormatOneDReader extends AbstractOneDReader {
       if (possibleFormats.contains(BarcodeFormat.CODE_128)) {
         readers.addElement(new Code128Reader());
       }
-      
-      if (possibleFormats.contains(BarcodeFormat.ITF)) {
-         readers.addElement(new ITFReader());
-       }
+      // TODO: Add ITFReader once it is validated as production ready. 
+      //if (possibleFormats.contains(BarcodeFormat.ITF)) {
+      //   readers.addElement(new ITFReader());
+      //}
     }
     if (readers.isEmpty()) {
       readers.addElement(new MultiFormatUPCEANReader(hints));
       readers.addElement(new Code39Reader());
       readers.addElement(new Code128Reader());
-      readers.addElement(new ITFReader());
+      // TODO: Add ITFReader once it is validated as production ready.
+      //readers.addElement(new ITFReader());
     }
   }
 
