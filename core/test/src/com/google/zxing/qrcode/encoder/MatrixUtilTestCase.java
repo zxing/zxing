@@ -238,7 +238,7 @@ public final class MatrixUtilTestCase extends TestCase {
 		    70, 237, 85, 224, 96, 74, 219 , 61};
     BitVector bits = new BitVector();
     for (char c: bytes) {
-      bits.AppendBits(c, 8);
+      bits.appendBits(c, 8);
     }
     ByteMatrix matrix = new ByteMatrix(21, 21);
     MatrixUtil.BuildMatrix(bits,
