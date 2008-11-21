@@ -30,9 +30,8 @@ import java.util.Hashtable;
  * Implements decoding of the ITF format.
  * </p>
  *<p>
- * "ITF" stands for Interleaved Two of Five. This Reader will scan an arbritary
- * ITF length barcode. The checksum is optional and is not applied by this
- * Reader. The user of the decoded value will have to apply a checksum if
+ * "ITF" stands for Interleaved Two of Five. This Reader will scan ITF barcode with 6, 10 or 14 digits. 
+ * The checksum is optional and is not applied by this Reader. The consumer of the decoded value will have to apply a checksum if
  * required.
  * </p>
  * 
@@ -43,7 +42,7 @@ import java.util.Hashtable;
  * information.
  * </p>
  * 
- * @author kevin.osullivan@sita.aero
+ * @author kevin.osullivan@sita.aero, SITA Lab.
  */
 public class ITFReader extends AbstractOneDReader {
 
@@ -94,10 +93,11 @@ public class ITFReader extends AbstractOneDReader {
 
 		String resultString = result.toString();
 		/**
-		 * To avoid false positives with 2D barcodes, make
-		 * an assumption that the decoded string must be at least 6 digits.
+		 * To avoid false positives with 2D barcodes (and other patterns), make
+		 * an assumption that the decoded string must be 6, 10 or 14 digits.
 		 */
-		if (resultString.length() < 6 || resultString.length() % 2 == 1)
+		if ((resultString.length() != 6 && resultString.length() != 10 && resultString.length() != 14) || 
+		     resultString.length() % 2 == 1)
 			throw ReaderException.getInstance();
 
 		return new Result(resultString,
@@ -175,10 +175,6 @@ public class ITFReader extends AbstractOneDReader {
 
 	/**
 	 * 
-	 * 
-	 */
-	/**
-	 * 
 	 *	The start & end patterns must be pre/post fixed by a quiet zone. This
 	 * zone must be at least 10 times the width of a narrow line.  Scan back until
 	 * we either get to the start of the barcode or match the necessary number of 
@@ -207,15 +203,6 @@ public class ITFReader extends AbstractOneDReader {
 		if (quietCount!=0)
 		{
 			// Unable to find the necessary number of quiet zone pixels.
-			throw ReaderException.getInstance();
-		}
-		
-		if (i>this.narrowLineWidth*20)
-		{
-			// The distance from the image edge to the start of the quiet zone 
-			// is twice the size of the quiet zone. 
-			// This is unrealistic as the barcode should mostly fill the camera viewfinder.
-			// This implies that this is a false positive.
 			throw ReaderException.getInstance();
 		}
 	}
