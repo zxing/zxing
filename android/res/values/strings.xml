@@ -73,8 +73,8 @@
   <string name="msg_sbc_snippet_unavailable">Snippet not available</string>
   <string name="msg_sbc_unknown_page">Unknown page</string>
   <string name="msg_sbc_searching_book">Searching book\u2026</string>
-  <string name="msg_share_explanation">You can share data with a friend by displaying a barcode on
-    your screen, and letting them scan it with their phone.</string>
+  <string name="msg_share_explanation">You can share data by displaying a barcode on
+    your screen and scanning it with another phone.</string>
   <string name="msg_share_subject_line">Here\'s the contents of a barcode I scanned</string>
 
   <string name="preferences_decode_1D_title">Decode 1D barcodes</string>
