@@ -237,19 +237,19 @@ public final class EncoderTestCase extends TestCase {
     }
     {
       BitVector v = new BitVector();
-      v.AppendBits(0, 3);  // Append 000
+      v.appendBits(0, 3);  // Append 000
       Encoder.TerminateBits(1, v);
       assertEquals("00000000", v.toString());
     }
     {
       BitVector v = new BitVector();
-      v.AppendBits(0, 5);  // Append 00000
+      v.appendBits(0, 5);  // Append 00000
       Encoder.TerminateBits(1, v);
       assertEquals("00000000", v.toString());
     }
     {
       BitVector v = new BitVector();
-      v.AppendBits(0, 8);  // Append 00000000
+      v.appendBits(0, 8);  // Append 00000000
       Encoder.TerminateBits(1, v);
       assertEquals("00000000", v.toString());
     }
@@ -260,7 +260,7 @@ public final class EncoderTestCase extends TestCase {
     }
     {
       BitVector v = new BitVector();
-      v.AppendBits(0, 1);  // Append 0
+      v.appendBits(0, 1);  // Append 0
       Encoder.TerminateBits(3, v);
       assertEquals("000000001110110000010001", v.toString());
     }
@@ -307,7 +307,7 @@ public final class EncoderTestCase extends TestCase {
       final byte[] data_bytes = {32, 65, (byte)205, 69, 41, (byte)220, 46, (byte)128, (byte)236};
       BitVector in = new BitVector();
       for (byte data_byte: data_bytes) {
-        in.AppendBits(data_byte, 8);
+        in.appendBits(data_byte, 8);
       }
       BitVector out = new BitVector();
       Encoder.InterleaveWithECBytes(in, 26, 9, 1, out);
@@ -318,9 +318,9 @@ public final class EncoderTestCase extends TestCase {
           42, (byte)159, 74, (byte)221, (byte)244, (byte)169, (byte)239, (byte)150, (byte)138, 70,
           (byte)237, 85, (byte)224, 96, 74, (byte)219, 61,
       };
-      assertEquals(expected.length, out.num_bytes());
+      assertEquals(expected.length, out.sizeInBytes());
       final byte[] out_array = out.getArray();
-      // Can't use Arrays.equals(), because out_array may be longer than out.num_bytes()
+      // Can't use Arrays.equals(), because out_array may be longer than out.sizeInBytes()
       for (int x = 0; x < expected.length; x++) {
         assertEquals(expected[x], out_array[x]);
       }
@@ -337,7 +337,7 @@ public final class EncoderTestCase extends TestCase {
       };
       BitVector in = new BitVector();
       for (byte data_byte: data_bytes) {
-        in.AppendBits(data_byte, 8);
+        in.appendBits(data_byte, 8);
       }
       BitVector out = new BitVector();
       Encoder.InterleaveWithECBytes(in, 134, 62, 4, out);
@@ -358,7 +358,7 @@ public final class EncoderTestCase extends TestCase {
           (byte)140, 61, (byte)179, (byte)154, (byte)214, (byte)138, (byte)147, 87, 27, 96, 77, 47,
           (byte)187, 49, (byte)156, (byte)214,
       };
-      assertEquals(expected.length, out.num_bytes());
+      assertEquals(expected.length, out.sizeInBytes());
       final byte[] out_array = out.getArray();
       for (int x = 0; x < expected.length; x++) {
         assertEquals(expected[x], out_array[x]);
@@ -609,10 +609,10 @@ public final class EncoderTestCase extends TestCase {
   }
 
   public void testBugInBitVectorNumBytes() throws WriterException {
-    // There was a bug in BitVector::num_bytes() that caused it to return a
+    // There was a bug in BitVector::sizeInBytes() that caused it to return a
     // smaller-by-one value (ex. 1465 instead of 1466) if the number of bits
     // in the vector is not 8-bit aligned.  In QRCodeEncoder::InitQRCode(),
-    // BitVector::num_bytes() is used for finding the smallest QR Code
+    // BitVector::sizeInBytes() is used for finding the smallest QR Code
     // version that can fit the given data.  Hence there were corner cases
     // where we chose a wrong QR Code version that cannot fit the given
     // data.  Note that the issue did not occur with MODE_8BIT_BYTE, as the
@@ -631,7 +631,7 @@ public final class EncoderTestCase extends TestCase {
     //   - 1828 - 360 = 1468
     // - In InitQRCode(), 3 bytes are reserved for a header.  Hence 1465 bytes
     //   (1468 -3) are left for data.
-    // - Because of the bug in BitVector::num_bytes(), InitQRCode() determines
+    // - Because of the bug in BitVector::sizeInBytes(), InitQRCode() determines
     //   the given data can fit in 1465 bytes, despite it needs 1466 bytes.
     // - Hence QRCodeEncoder::Encode() failed and returned false.
     //   - To be precise, it needs 11727 + 4 (mode info) + 14 (length info) =

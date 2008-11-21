@@ -52,12 +52,12 @@ public final class BitVector {
   }
 
   // Return the number of bytes in the bit vector.
-  public int num_bytes() {
+  public int sizeInBytes() {
     return (sizeInBits + 7) >> 3;
   }
 
   // Append one bit to the bit vector.
-  public void AppendBit(final int bit) {
+  public void appendBit(final int bit) {
     if (!(bit == 0 || bit == 1)) {
       throw new IllegalArgumentException("Bad bit");
     }
@@ -76,10 +76,10 @@ public final class BitVector {
   // REQUIRES: 0<= num_bits <= 32.
   //
   // Examples:
-  // - AppendBits(0x00, 1) adds 0.
-  // - AppendBits(0x00, 4) adds 0000.
-  // - AppendBits(0xff, 8) adds 11111111.
-  public void AppendBits(final int value, final int num_bits) {
+  // - appendBits(0x00, 1) adds 0.
+  // - appendBits(0x00, 4) adds 0000.
+  // - appendBits(0xff, 8) adds 11111111.
+  public void appendBits(final int value, final int num_bits) {
     if (num_bits < 0 || num_bits > 32) {
       throw new IllegalArgumentException("Num bits must be between 0 and 32");
     }
@@ -92,22 +92,22 @@ public final class BitVector {
         num_bits_left -= 8;
       } else {
         final int bit = (value >> (num_bits_left - 1)) & 1;
-        AppendBit(bit);
+        appendBit(bit);
         --num_bits_left;
       }
     }
   }
 
   // Append "bits".
-  public void AppendBitVector(final BitVector bits) {
+  public void appendBitVector(final BitVector bits) {
     int size = bits.size();
     for (int i = 0; i < size; ++i) {
-      AppendBit(bits.at(i));
+      appendBit(bits.at(i));
     }
   }
 
   // Modify the bit vector by XOR'ing with "other"
-  public void XOR(final BitVector other) {
+  public void xor(final BitVector other) {
     if (sizeInBits != other.size()) {
       throw new IllegalArgumentException("BitVector sizes don't match");
     }

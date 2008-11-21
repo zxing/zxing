@@ -134,14 +134,14 @@ public final class Encoder {
     BitVector data_bits = new BitVector();
     AppendBytes(bytes, mode, data_bits);
     // Step 3: Initialize QR code that can contain "data_bits".
-    final int num_input_bytes = data_bits.num_bytes();
+    final int num_input_bytes = data_bits.sizeInBytes();
     InitQRCode(num_input_bytes, ec_level, mode, qr_code);
 
     // Step 4: Build another bit vector that contains header and data.
     BitVector header_and_data_bits = new BitVector();
     AppendModeInfo(qr_code.mode(), header_and_data_bits);
     AppendLengthInfo(bytes.size(), qr_code.version(), qr_code.mode(), header_and_data_bits);
-    header_and_data_bits.AppendBitVector(data_bits);
+    header_and_data_bits.appendBitVector(data_bits);
 
     // Step 5: Terminate the bits properly.
     TerminateBits(qr_code.num_data_bytes(), header_and_data_bits);
@@ -280,14 +280,14 @@ public final class Encoder {
     }
     // Append termination bits. See 8.4.8 of JISX0510:2004 (p.24) for details.
     for (int i = 0; i < 4 && bits.size() < capacity; ++i) {
-      bits.AppendBit(0);
+      bits.appendBit(0);
     }
     final int num_bits_in_last_byte = bits.size() % 8;
     // If the last byte isn't 8-bit aligned, we'll add padding bits.
     if (num_bits_in_last_byte > 0) {
       final int num_padding_bits = 8 - num_bits_in_last_byte;
       for (int i = 0; i < num_padding_bits; ++i) {
-        bits.AppendBit(0);
+        bits.appendBit(0);
       }
     }
     // Should be 8-bit aligned here.
@@ -295,12 +295,12 @@ public final class Encoder {
       throw new WriterException("Number of bits is not a multiple of 8");
     }
     // If we have more space, we'll fill the space with padding patterns defined in 8.4.9 (p.24).
-    final int num_padding_bytes = num_data_bytes - bits.num_bytes();
+    final int num_padding_bytes = num_data_bytes - bits.sizeInBytes();
     for (int i = 0; i < num_padding_bytes; ++i) {
       if (i % 2 == 0) {
-        bits.AppendBits(0xec, 8);
+        bits.appendBits(0xec, 8);
       } else {
-        bits.AppendBits(0x11, 8);
+        bits.appendBits(0x11, 8);
       }
     }
     if (bits.size() != capacity) {
@@ -369,7 +369,7 @@ public final class Encoder {
       int num_data_bytes, int num_rs_blocks, BitVector result) throws WriterException {
 
     // "bits" must have "num_data_bytes" bytes of data.
-    if (bits.num_bytes() != num_data_bytes) {
+    if (bits.sizeInBytes() != num_data_bytes) {
       throw new WriterException("Number of bits and data bytes does not match");
     }
 
@@ -407,7 +407,7 @@ public final class Encoder {
       for (int j = 0; j < blocks.size(); ++j) {
         final ByteArray data_bytes = ((BlockPair) blocks.elementAt(j)).getDataBytes();
         if (i < data_bytes.size()) {
-          result.AppendBits(data_bytes.at(i), 8);
+          result.appendBits(data_bytes.at(i), 8);
         }
       }
     }
@@ -416,12 +416,12 @@ public final class Encoder {
       for (int j = 0; j < blocks.size(); ++j) {
         final ByteArray ec_bytes = ((BlockPair) blocks.elementAt(j)).getErrorCorrectionBytes();
         if (i < ec_bytes.size()) {
-          result.AppendBits(ec_bytes.at(i), 8);
+          result.appendBits(ec_bytes.at(i), 8);
         }
       }
     }
-    if (num_total_bytes != result.num_bytes()) {  // Should be same.
-      throw new WriterException("Interleaving error: " + num_total_bytes + " and " + result.num_bytes() +
+    if (num_total_bytes != result.sizeInBytes()) {  // Should be same.
+      throw new WriterException("Interleaving error: " + num_total_bytes + " and " + result.sizeInBytes() +
         " differ.");
     }
   }
@@ -445,7 +445,7 @@ public final class Encoder {
   // false.
   static void AppendModeInfo(int mode, BitVector bits) throws WriterException {
     final int code = QRCode.GetModeCode(mode);
-    bits.AppendBits(code, 4);
+    bits.appendBits(code, 4);
   }
 
 
@@ -465,7 +465,7 @@ public final class Encoder {
     if (num_letters > ((1 << num_bits) - 1)) {
       throw new WriterException(num_letters + "is bigger than" + ((1 << num_bits) - 1));
     }
-    bits.AppendBits(num_letters, num_bits);
+    bits.appendBits(num_letters, num_bits);
   }
 
   // Append "bytes" in "mode" mode (encoding) into "bits". On success, store the result in "bits"
@@ -505,16 +505,16 @@ public final class Encoder {
         // Encode three numeric letters in ten bits.
         final int num2 = bytes.at(i + 1) - '0';
         final int num3 = bytes.at(i + 2) - '0';
-        bits.AppendBits(num1 * 100 + num2 * 10 + num3, 10);
+        bits.appendBits(num1 * 100 + num2 * 10 + num3, 10);
         i += 3;
       } else if (i + 1 < bytes.size()) {
         // Encode two numeric letters in seven bits.
         final int num2 = bytes.at(i + 1) - '0';
-        bits.AppendBits(num1 * 10 + num2, 7);
+        bits.appendBits(num1 * 10 + num2, 7);
         i += 2;
       } else {
         // Encode one numeric letter in four bits.
-        bits.AppendBits(num1, 4);
+        bits.appendBits(num1, 4);
         ++i;
       }
     }
@@ -534,11 +534,11 @@ public final class Encoder {
           throw new WriterException();
         }
         // Encode two alphanumeric letters in 11 bits.
-        bits.AppendBits(code1 * 45 + code2, 11);
+        bits.appendBits(code1 * 45 + code2, 11);
         i += 2;
       } else {
         // Encode one alphanumeric letter in six bits.
-        bits.AppendBits(code1, 6);
+        bits.appendBits(code1, 6);
         ++i;
       }
     }
@@ -548,7 +548,7 @@ public final class Encoder {
   // "bits" and return true. On error, return false.
   static void Append8BitBytes(final ByteArray bytes, BitVector bits) {
     for (int i = 0; i < bytes.size(); ++i) {
-      bits.AppendBits(bytes.at(i), 8);
+      bits.appendBits(bytes.at(i), 8);
     }
   }
 
@@ -574,7 +574,7 @@ public final class Encoder {
         throw new WriterException("Invalid byte sequence: " + bytes);
       }
       final int encoded = ((subtracted >> 8) * 0xc0) + (subtracted & 0xff);
-      bits.AppendBits(encoded, 13);
+      bits.appendBits(encoded, 13);
     }
   }
 

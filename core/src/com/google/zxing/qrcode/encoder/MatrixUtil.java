@@ -326,14 +326,14 @@ public final class MatrixUtil {
       throw new WriterException("Invalid mask pattern");
     }
     final int type_info = (ec_code << 3) | mask_pattern;
-    bits.AppendBits(type_info, 5);
+    bits.appendBits(type_info, 5);
 
     final int bch_code = MatrixUtil.CalculateBCHCode(type_info, kTypeInfoPoly);
-    bits.AppendBits(bch_code, 10);
+    bits.appendBits(bch_code, 10);
 
     BitVector mask_bits = new BitVector();
-    mask_bits.AppendBits(kTypeInfoMaskPattern, 15);
-    bits.XOR(mask_bits);
+    mask_bits.appendBits(kTypeInfoMaskPattern, 15);
+    bits.xor(mask_bits);
 
     if (bits.size() != 15) {  // Just in case.
       throw new WriterException("should not happen but we got: " + bits.size());
@@ -343,9 +343,9 @@ public final class MatrixUtil {
   // Make bit vector of version information. On success, store the result in "bits" and return true.
   // On error, return false. See 8.10 of JISX0510:2004 (p.45) for details.
   public static void MakeVersionInfoBits(int version, BitVector bits) throws WriterException {
-    bits.AppendBits(version, 6);
+    bits.appendBits(version, 6);
     final int bch_code = MatrixUtil.CalculateBCHCode(version, kVersionInfoPoly);
-    bits.AppendBits(bch_code, 12);
+    bits.appendBits(bch_code, 12);
 
     if (bits.size() != 18) {  // Just in case.
       throw new WriterException("should not happen but we got: " + bits.size());
