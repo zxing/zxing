@@ -93,7 +93,11 @@ public class ITFReader extends AbstractOneDReader {
 		decodeMiddle(row, startRange[1], endRange[0], result);
 
 		String resultString = result.toString();
-		if (resultString.length() == 0 || resultString.length() % 2 == 1)
+		/**
+		 * To avoid false positives with 2D barcodes, make
+		 * an assumption that the decoded string must be at least 6 digits.
+		 */
+		if (resultString.length() < 6 || resultString.length() % 2 == 1)
 			throw ReaderException.getInstance();
 
 		return new Result(resultString,
@@ -164,18 +168,56 @@ public class ITFReader extends AbstractOneDReader {
 		 */
 		this.narrowLineWidth = (startPattern[1] - startPattern[0]) / 4;
 
-		/**
-		 * The start & end patterns must be pre/post fixed by a quiet zone. This
-		 * zone must be at least 10 times the width of a narrow line.
-		 * 
-		 * ref: http://www.barcode-1.net/i25code.html
-		 */
-		if (this.narrowLineWidth * 10 > startPattern[0]) {
-			// Unable to find the quiet zone preceeding the start sequence.
-			throw ReaderException.getInstance();
-		}
+		validateQuietZone(row, startPattern[0]);
 
 		return startPattern;
+	}
+
+	/**
+	 * 
+	 * 
+	 */
+	/**
+	 * 
+	 *	The start & end patterns must be pre/post fixed by a quiet zone. This
+	 * zone must be at least 10 times the width of a narrow line.  Scan back until
+	 * we either get to the start of the barcode or match the necessary number of 
+	 * quiet zone pixels.
+	 * 
+	 * Note: Its assumed the row is reversed when using this method to find
+	 * quiet zone after the end pattern.
+	 * 
+	 * ref: http://www.barcode-1.net/i25code.html
+	 * 
+	 * @param row					- The bit array representing the scanned barcode. 
+	 * @param startPattern		- The index into row of the start or end pattern.
+	 * @throws ReaderException - If the quiet zone cannot be found, a ReaderException is thrown.
+	 */
+	private void validateQuietZone(BitArray row, int startPattern) throws ReaderException {
+
+		int quietCount=this.narrowLineWidth * 10;	// expect to find this many pixels of quiet zone
+		
+		int i=0;
+		for (i=startPattern-1; quietCount>0 && i>=0; i--)
+		{
+			if (row.get(i)==true)
+				break;
+			quietCount--;
+		}
+		if (quietCount!=0)
+		{
+			// Unable to find the necessary number of quiet zone pixels.
+			throw ReaderException.getInstance();
+		}
+		
+		if (i>this.narrowLineWidth*20)
+		{
+			// The distance from the image edge to the start of the quiet zone 
+			// is twice the size of the quiet zone. 
+			// This is unrealistic as the barcode should mostly fill the camera viewfinder.
+			// This implies that this is a false positive.
+			throw ReaderException.getInstance();
+		}
 	}
 
 	/**
@@ -234,10 +276,8 @@ public class ITFReader extends AbstractOneDReader {
 		 * 
 		 * ref: http://www.barcode-1.net/i25code.html
 		 */
-		if (this.narrowLineWidth * 10 > endPattern[0]) {
-			// Unable to find the quiet zone preceeding the start sequence.
-			throw ReaderException.getInstance();
-		}
+		
+		validateQuietZone(row, endPattern[0]);
 
 		// Now recalc the indicies of where the 'endblock' starts & stops to
 		// accomodate
