@@ -24,6 +24,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.Contacts;
 import android.util.Log;
+import android.telephony.PhoneNumberUtils;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
@@ -86,14 +87,14 @@ public final class QRCodeEncoder {
       String string = intent.getStringExtra(Intents.Encode.DATA);
       if (string != null && string.length() > 0) {
         mContents = "tel:" + string;
-        mDisplayContents = string;
+        mDisplayContents = PhoneNumberUtils.formatNumber(string);
         mTitle = mActivity.getString(R.string.contents_phone);
       }
     } else if (type.equals(Contents.Type.SMS)) {
       String string = intent.getStringExtra(Intents.Encode.DATA);
       if (string != null && string.length() > 0) {
         mContents = "sms:" + string;
-        mDisplayContents = string;
+        mDisplayContents = PhoneNumberUtils.formatNumber(string);
         mTitle = mActivity.getString(R.string.contents_sms);
       }
     } else if (type.equals(Contents.Type.CONTACT)) {
@@ -112,7 +113,7 @@ public final class QRCodeEncoder {
             String phone = bundle.getString(Contents.PHONE_KEYS[x]);
             if (phone != null && phone.length() > 0) {
               mContents += "TEL:" + phone + ";";
-              mDisplayContents += "\n" + phone;
+              mDisplayContents += "\n" + PhoneNumberUtils.formatNumber(phone);
             }
           }
           for (int x = 0; x < Contents.EMAIL_KEYS.length; x++) {
