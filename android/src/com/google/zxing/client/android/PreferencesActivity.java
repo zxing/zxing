@@ -28,6 +28,7 @@ public final class PreferencesActivity extends android.preference.PreferenceActi
   static final String KEY_DECODE_1D = "preferences_decode_1D";
   static final String KEY_DECODE_QR = "preferences_decode_QR";
   static final String KEY_PLAY_BEEP = "preferences_play_beep";
+  static final String KEY_HELP_VERSION_SHOWN = "preferences_help_version_shown";
 
   CheckBoxPreference mDecode1D;
   CheckBoxPreference mDecodeQR;

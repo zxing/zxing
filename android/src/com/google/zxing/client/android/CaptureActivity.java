@@ -21,6 +21,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -72,6 +74,8 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private static final int INTENT_RESULT_DURATION = 1500;
   private static final float BEEP_VOLUME = 0.15f;
 
+  private static final String PACKAGE_NAME = "com.google.zxing.client.android";
+
   public CaptureActivityHandler mHandler;
 
   private ViewfinderView mViewfinderView;
@@ -83,9 +87,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private boolean mPlayBeep;
   private boolean mScanIntent;
   private String mDecodeMode;
-  /**
-   * When the beep has finished playing, rewind to queue up another one.
-   */
+
   private final OnCompletionListener mBeepListener = new BeepListener();
 
   @Override
@@ -103,6 +105,8 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     mHandler = null;
     mLastResult = null;
     mHasSurface = false;
+
+    showHelpOnFirstLaunch();
   }
 
   @Override
@@ -206,11 +210,9 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         break;
       }
       case HELP_ID: {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.title_help);
-        builder.setMessage(R.string.msg_help);
-        builder.setPositiveButton(R.string.button_ok, null);
-        builder.show();
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setClassName(this, HelpActivity.class.getName());
+        startActivity(intent);
         break;
       }
       case ABOUT_ID: {
@@ -367,6 +369,28 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   }
 
   /**
+   * We want the help screen to be shown automatically the first time a new version of the app is
+   * run. The easiest way to do this is to check android:versionCode from the manifest, and compare
+   * it to a value stored as a preference.
+   */
+  private void showHelpOnFirstLaunch() {
+    try {
+      PackageInfo info = getPackageManager().getPackageInfo(PACKAGE_NAME, 0);
+      int currentVersion = info.versionCode;
+      SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+      int lastVersion = prefs.getInt(PreferencesActivity.KEY_HELP_VERSION_SHOWN, 0);
+      if (currentVersion > lastVersion) {
+        prefs.edit().putInt(PreferencesActivity.KEY_HELP_VERSION_SHOWN, currentVersion).commit();
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setClassName(this, HelpActivity.class.getName());
+        startActivity(intent);
+      }
+    } catch (PackageManager.NameNotFoundException e) {
+
+    }
+  }
+
+  /**
    * Creates the beep MediaPlayer in advance so that the sound can be triggered with the least
    * latency possible.
    */
@@ -420,9 +444,13 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     mViewfinderView.drawViewfinder();
   }
 
+  /**
+   * When the beep has finished playing, rewind to queue up another one.
+   */
   private static class BeepListener implements OnCompletionListener {
     public void onCompletion(MediaPlayer mediaPlayer) {
       mediaPlayer.seekTo(0);
     }
   }
+
 }
