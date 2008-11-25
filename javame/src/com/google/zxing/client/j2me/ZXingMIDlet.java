@@ -49,6 +49,8 @@ import java.io.IOException;
  */
 public final class ZXingMIDlet extends MIDlet {
 
+  private static final int ALERT_TIMEOUT_MS = 5 * 1000;
+
   private Canvas canvas;
   private Player player;
   private VideoControl videoControl;
@@ -144,7 +146,7 @@ public final class ZXingMIDlet extends MIDlet {
 
   private void showOpenURL(String title, String display, final String uri) {
     Alert alert = new Alert(title, display, null, AlertType.CONFIRMATION);
-    alert.setTimeout(Alert.FOREVER);
+    alert.setTimeout(ALERT_TIMEOUT_MS);
     Command yes = new Command("Yes", Command.OK, 1);
     alert.addCommand(yes);
     Command no = new Command("No", Command.CANCEL, 1);
@@ -171,7 +173,7 @@ public final class ZXingMIDlet extends MIDlet {
 
   private void showAlert(String title, String text) {
     Alert alert = new Alert(title, text, null, AlertType.INFO);
-    alert.setTimeout(Alert.FOREVER);
+    alert.setTimeout(ALERT_TIMEOUT_MS);
     showAlert(alert);
   }
 
