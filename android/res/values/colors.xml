@@ -17,6 +17,8 @@
 <resources>
   <color name="contents_text">#ff000000</color>
   <color name="encode_view">#ffffffff</color>
+  <color name="help_button_view">#ffcccccc</color>
+  <color name="help_view">#ffffffff</color>
   <color name="result_image_border">#ffffffff</color>
   <color name="result_minor_text">#ffc0c0c0</color>
   <color name="result_points">#c000ff00</color>

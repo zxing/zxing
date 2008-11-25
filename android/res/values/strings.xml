@@ -20,11 +20,13 @@
 
   <string name="button_add_calendar">Add event to calendar</string>
   <string name="button_add_contact">Add contact</string>
+  <string name="button_back">Back</string>
   <string name="button_book_search">Open Book Search</string>
   <string name="button_cancel">Cancel</string>
   <string name="button_clipboard_empty">Clipboard empty</string>
   <string name="button_dial">Dial number</string>
   <string name="button_email">Send email</string>
+  <string name="button_exit">Exit</string>
   <string name="button_get_directions">Get directions</string>
   <string name="button_mms">Send MMS</string>
   <string name="button_ok">OK</string>
@@ -56,17 +58,13 @@
   <string name="msg_default_contents">Contents</string>
   <string name="msg_default_format">Format</string>
   <string name="msg_default_mms_subject">Hi</string>
-  <string name="msg_default_status">Place a barcode inside the viewfinder rectangle to read it.
+  <string name="msg_default_status">Place a barcode inside the viewfinder rectangle to scan it.
   </string>
   <string name="msg_default_type">Type</string>
   <string name="msg_encode_barcode_failed">Could not generate the requested barcode.</string>
   <string name="msg_encode_contents_failed">Could not encode a barcode from the data provided.
   </string>
   <string name="msg_encode_in_progress">Generating a barcode\u2026</string>
-  <string name="msg_help">Barcode Scanner continuously scans the viewfinder rectangle, so there\'s
-    no need to press the shutter button. If you\'re having trouble, make sure to hold the phone
-    steady. If the camera is unable to focus, try moving further back from the barcode.
-  </string>
   <string name="msg_sbc_failed">Sorry, the search encountered a problem.</string>
   <string name="msg_sbc_no_page_returned">No page returned</string>
   <string name="msg_sbc_page">Page</string>
@@ -99,7 +97,6 @@
   <string name="share_name">Share via barcode</string>
 
   <string name="title_about">About Barcode Scanner</string>
-  <string name="title_help">Help</string>
 
   <string name="zxing_url">http://code.google.com/p/zxing</string>
   <string name="zxing_user_agent">ZXing-Android/1.1</string>
