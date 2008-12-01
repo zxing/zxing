@@ -25,8 +25,8 @@
   <string name="button_cancel">Cancel</string>
   <string name="button_clipboard_empty">Clipboard empty</string>
   <string name="button_dial">Dial number</string>
+  <string name="button_done">Done</string>
   <string name="button_email">Send email</string>
-  <string name="button_exit">Exit</string>
   <string name="button_get_directions">Get directions</string>
   <string name="button_mms">Send MMS</string>
   <string name="button_ok">OK</string>
@@ -65,6 +65,7 @@
   <string name="msg_encode_contents_failed">Could not encode a barcode from the data provided.
   </string>
   <string name="msg_encode_in_progress">Generating a barcode\u2026</string>
+  <string name="msg_sbc_book_not_searchable">Sorry, this book is not searchable.</string>
   <string name="msg_sbc_failed">Sorry, the search encountered a problem.</string>
   <string name="msg_sbc_no_page_returned">No page returned</string>
   <string name="msg_sbc_page">Page</string>

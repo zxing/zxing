@@ -179,6 +179,10 @@ public final class SearchBookContentsActivity extends Activity {
         }
         mResultListView.setAdapter(new SearchBookContentsAdapter(this, items));
       } else {
+        String searchable = json.optString("searchable");
+        if (searchable != null && searchable.equals("false")) {
+          mHeaderView.setText(R.string.msg_sbc_book_not_searchable);
+        }
         mResultListView.setAdapter(null);
       }
     } catch (JSONException e) {
@@ -237,9 +241,10 @@ public final class SearchBookContentsActivity extends Activity {
       AndroidHttpClient client = null;
       try {
         // These return a JSON result which describes if and where the query was found. This API may
-        // break or disappear at any time in the future. Since this is an API call rather than a website,
-        // we don't use LocaleManager to change the TLD.
-        URI uri = new URI("http", null, "www.google.com", -1, "/books", "vid=isbn" + mISBN + "&jscmd=SearchWithinVolume2&q=" + mQuery, null);
+        // break or disappear at any time in the future. Since this is an API call rather than a
+        // website, we don't use LocaleManager to change the TLD.
+        URI uri = new URI("http", null, "www.google.com", -1, "/books", "vid=isbn" + mISBN +
+            "&jscmd=SearchWithinVolume2&q=" + mQuery, null);
         HttpUriRequest get = new HttpGet(uri);
         get.setHeader("cookie", getCookie(uri.toString()));
         client = AndroidHttpClient.newInstance(mUserAgent);
