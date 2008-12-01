@@ -39,10 +39,10 @@
             android:layout_height="wrap_content"
             android:text="@string/button_back"/>
 
-    <Button android:id="@+id/exit_button"
+    <Button android:id="@+id/done_button"
             android:layout_width="100px"
             android:layout_height="wrap_content"
-            android:text="@string/button_exit"/>
+            android:text="@string/button_done"/>
 
   </LinearLayout>
 

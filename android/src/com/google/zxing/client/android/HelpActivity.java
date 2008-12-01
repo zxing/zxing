@@ -50,8 +50,8 @@ public final class HelpActivity extends Activity {
     mBackButton = (Button)findViewById(R.id.back_button);
     mBackButton.setOnClickListener(mBackListener);
 
-    Button exitButton = (Button)findViewById(R.id.exit_button);
-    exitButton.setOnClickListener(mExitListener);
+    Button doneButton = (Button)findViewById(R.id.done_button);
+    doneButton.setOnClickListener(mDoneListener);
   }
 
   @Override
@@ -81,7 +81,7 @@ public final class HelpActivity extends Activity {
     }
   };
 
-  private final Button.OnClickListener mExitListener = new Button.OnClickListener() {
+  private final Button.OnClickListener mDoneListener = new Button.OnClickListener() {
     public void onClick(View view) {
       finish();
     }
