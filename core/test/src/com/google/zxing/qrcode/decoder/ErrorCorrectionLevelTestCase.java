@@ -16,7 +16,6 @@
 
 package com.google.zxing.qrcode.decoder;
 
-import com.google.zxing.ReaderException;
 import junit.framework.TestCase;
 
 /**
@@ -24,7 +23,7 @@ import junit.framework.TestCase;
  */
 public final class ErrorCorrectionLevelTestCase extends TestCase {
 
-  public void testForBits() throws ReaderException {
+  public void testForBits() {
     assertEquals(ErrorCorrectionLevel.M, ErrorCorrectionLevel.forBits(0));
     assertEquals(ErrorCorrectionLevel.L, ErrorCorrectionLevel.forBits(1));
     assertEquals(ErrorCorrectionLevel.H, ErrorCorrectionLevel.forBits(2));
@@ -32,7 +31,7 @@ public final class ErrorCorrectionLevelTestCase extends TestCase {
     try {
       ErrorCorrectionLevel.forBits(4);
       fail("Should have thrown an exception");
-    } catch (ReaderException re) {
+    } catch (IllegalArgumentException iae) {
       // good
     }
   }

@@ -18,6 +18,7 @@ package com.google.zxing.qrcode.encoder;
 
 import com.google.zxing.common.ByteMatrix;
 import com.google.zxing.WriterException;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 /**
  * @author satorux@google.com (Satoru Takabayashi) - creator
@@ -42,7 +43,7 @@ public final class QRCode {
   };
 
   private int mode;
-  private int ecLevel;
+  private ErrorCorrectionLevel ecLevel;
   private int version;
   private int matrixWidth;
   private int maskPattern;
@@ -75,22 +76,9 @@ public final class QRCode {
   // MODE_FNC1,
   public static final int NUM_MODES = 4;
 
-  // The error correction levels are defined in the table 22 of JISX0510:2004 (p.45). It's very
-  // unlikely (we've already covered all of them!)  but if you add an item to this, please also add
-  // it to ecLevelToString() and getECLevelCode().
-  //
-  // Formerly enum ECLevel
-  public static final int EC_LEVEL_UNDEFINED  = -1;
-  // They don't have names in the standard!
-  public static final int EC_LEVEL_L = 0;  //  7% of corruption can be recovered.
-  public static final int EC_LEVEL_M = 1;  // 15%
-  public static final int EC_LEVEL_Q = 2;  // 25%
-  public static final int EC_LEVEL_H = 3;  // 30%
-  public static final int NUM_EC_LEVELS = 4;
-
   public QRCode() {
     mode = MODE_UNDEFINED;
-    ecLevel = EC_LEVEL_UNDEFINED;
+    ecLevel = null;
     version = -1;
     matrixWidth = -1;
     maskPattern = -1;
@@ -102,25 +90,55 @@ public final class QRCode {
   }
 
   // Mode of the QR Code.
-  public int getMode() { return mode; }
+  public int getMode() {
+    return mode;
+  }
+
   // Error correction level of the QR Code.
-  public int getECLevel() { return ecLevel; }
+  public ErrorCorrectionLevel getECLevel() {
+    return ecLevel;
+  }
+
   // Version of the QR Code.  The bigger size, the bigger version.
-  public int getVersion() { return version; }
+  public int getVersion() {
+    return version;
+  }
+
   // ByteMatrix width of the QR Code.
-  public int getMatrixWidth() { return matrixWidth; }
+  public int getMatrixWidth() {
+    return matrixWidth;
+  }
+
   // Mask pattern of the QR Code.
-  public int getMaskPattern() { return maskPattern; }
+  public int getMaskPattern() {
+    return maskPattern;
+  }
+
   // Number of total bytes in the QR Code.
-  public int getNumTotalBytes() { return numTotalBytes; }
+  public int getNumTotalBytes() {
+    return numTotalBytes;
+  }
+
   // Number of data bytes in the QR Code.
-  public int getNumDataBytes() { return numDataBytes; }
+  public int getNumDataBytes() {
+    return numDataBytes;
+  }
+
   // Number of error correction bytes in the QR Code.
-  public int getNumECBytes() { return numECBytes; }
+  public int getNumECBytes() {
+    return numECBytes;
+  }
+
   // Number of Reedsolomon blocks in the QR Code.
-  public int getNumRSBlocks() { return numRSBlocks; }
+  public int getNumRSBlocks() {
+    return numRSBlocks;
+  }
+
   // ByteMatrix data of the QR Code.
-  public final ByteMatrix getMatrix() { return matrix; }
+  public final ByteMatrix getMatrix() {
+    return matrix;
+  }
+  
 
   // Return the value of the module (cell) pointed by "x" and "y" in the matrix of the QR Code. They
   // call cells in the matrix "modules". 1 represents a black cell, and 0 represents a white cell.
@@ -140,7 +158,7 @@ public final class QRCode {
     return (
         // First check if all version are not uninitialized.
         mode != MODE_UNDEFINED &&
-            ecLevel != EC_LEVEL_UNDEFINED &&
+            ecLevel != null &&
             version != -1 &&
             matrixWidth != -1 &&
             maskPattern != -1 &&
@@ -151,7 +169,6 @@ public final class QRCode {
             // Then check them in other ways..
             isValidVersion(version) &&
             isValidMode(mode) &&
-            isValidECLevel(ecLevel) &&
             isValidMatrixWidth(matrixWidth) &&
             isValidMaskPattern(maskPattern) &&
             numTotalBytes == numDataBytes + numECBytes &&
@@ -170,7 +187,7 @@ public final class QRCode {
     result.append(" mode: ");
     result.append(modeToString(mode));
     result.append("\n ecLevel: ");
-    result.append(ecLevelToString(ecLevel));
+    result.append(ecLevel);
     result.append("\n version: ");
     result.append(version);
     result.append("\n matrixWidth: ");
@@ -199,7 +216,7 @@ public final class QRCode {
     mode = value;
   }
 
-  public void setECLevel(int value) {
+  public void setECLevel(ErrorCorrectionLevel value) {
     ecLevel = value;
   }
 
@@ -241,11 +258,6 @@ public final class QRCode {
     return version >= MIN_VERSION && version <= MAX_VERSION;
   }
 
-  // Check if "ecLevel" is valid.
-  public static boolean isValidECLevel(int ecLevel) {
-    return ecLevel >= 0 && ecLevel < NUM_EC_LEVELS;
-  }
-
   // Check if "mode" is valid.
   public static boolean isValidMode(final int mode) {
     return mode >= 0 && mode < NUM_MODES;
@@ -259,25 +271,6 @@ public final class QRCode {
   // Check if "mask_pattern" is valid.
   public static boolean isValidMaskPattern(int maskPattern) {
     return maskPattern >= 0 && maskPattern < NUM_MASK_PATTERNS;
-  }
-
-  // Convert "getECLevel" to String for debugging.
-  public static String ecLevelToString(int ecLevel) {
-    switch (ecLevel) {
-      case QRCode.EC_LEVEL_UNDEFINED:
-        return "UNDEFINED";
-      case QRCode.EC_LEVEL_L:
-        return "L";
-      case QRCode.EC_LEVEL_M:
-        return "M";
-      case QRCode.EC_LEVEL_Q:
-        return "Q";
-      case QRCode.EC_LEVEL_H:
-        return "H";
-      default:
-        break;
-    }
-    return "UNKNOWN";
   }
 
   // Convert "mode" to String for debugging.
@@ -297,23 +290,6 @@ public final class QRCode {
         break;
     }
     return "UNKNOWN";
-  }
-
-  // Return the code of error correction level. On error, return -1. The codes of error correction
-  // levels are defined in the table 22 of JISX0510:2004 (p.45).
-  public static int getECLevelCode(final int ecLevel) throws WriterException {
-    switch (ecLevel) {
-      case QRCode.EC_LEVEL_L:
-        return 1;
-      case QRCode.EC_LEVEL_M:
-        return 0;
-      case QRCode.EC_LEVEL_Q:
-        return 3;
-      case QRCode.EC_LEVEL_H:
-        return 2;
-      default:
-        throw new WriterException("Unknown EC level");
-    }
   }
 
   // Return the code of mode. On error, return -1. The codes of modes are defined in the table 2 of
@@ -352,7 +328,7 @@ public final class QRCode {
     throw new IllegalArgumentException("Bad version: " + version);
   }
 
-  // Return true if the all values in the matrix are binary numbers. Otherwise, return false.
+  // Return true if the all values in the matrix are binary numbers.
   //
   // JAVAPORT: This is going to be super expensive and unnecessary, we should not call this in
   // production. I'm leaving it because it may be useful for testing. It should be removed entirely

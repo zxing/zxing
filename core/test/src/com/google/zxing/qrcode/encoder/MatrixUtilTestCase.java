@@ -18,6 +18,7 @@ package com.google.zxing.qrcode.encoder;
 
 import com.google.zxing.common.ByteMatrix;
 import com.google.zxing.WriterException;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import junit.framework.TestCase;
 
 /**
@@ -141,7 +142,7 @@ public final class MatrixUtilTestCase extends TestCase {
       "                 1                        \n";
     ByteMatrix matrix = new ByteMatrix(21, 21);
     MatrixUtil.clearMatrix(matrix);
-    MatrixUtil.embedTypeInfo(QRCode.EC_LEVEL_M, 5, matrix);
+    MatrixUtil.embedTypeInfo(ErrorCorrectionLevel.M, 5, matrix);
     assertEquals(expected, matrix.toString());
   }
 
@@ -242,7 +243,7 @@ public final class MatrixUtilTestCase extends TestCase {
     }
     ByteMatrix matrix = new ByteMatrix(21, 21);
     MatrixUtil.buildMatrix(bits,
-					      QRCode.EC_LEVEL_H,
+					      ErrorCorrectionLevel.H,
 					      1,  // Version 1
 					      3,  // Mask pattern 3
 					      matrix);
@@ -289,7 +290,7 @@ public final class MatrixUtilTestCase extends TestCase {
   public void testMakeTypeInfoInfoBits() throws WriterException {
     // From Appendix C in JISX0510:2004 (p 65)
     BitVector bits = new BitVector();
-    MatrixUtil.makeTypeInfoBits(QRCode.EC_LEVEL_M,
+    MatrixUtil.makeTypeInfoBits(ErrorCorrectionLevel.M,
 						   5, bits);
     assertEquals("100000011001110", bits.toString());
   }

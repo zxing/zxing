@@ -20,7 +20,7 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.ByteMatrix;
-import com.google.zxing.qrcode.encoder.QRCode;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import junit.framework.TestCase;
 
 import javax.imageio.ImageIO;
@@ -96,7 +96,7 @@ public final class QRCodeWriterTestCase extends TestCase {
     assertEquals(strangeHeight, matrix.height());
   }
 
-  private static boolean compareToGoldenFile(final String contents, final int ecLevel,
+  private static boolean compareToGoldenFile(final String contents, final ErrorCorrectionLevel ecLevel,
       final int resolution, final String fileName) throws WriterException {
 
     BufferedImage image = loadImage(fileName);
@@ -106,7 +106,7 @@ public final class QRCodeWriterTestCase extends TestCase {
 
     QRCodeWriter writer = new QRCodeWriter();
     Hashtable hints = new Hashtable();
-    hints.put(EncodeHintType.ERROR_CORRECTION, new Integer(ecLevel));
+    hints.put(EncodeHintType.ERROR_CORRECTION, ecLevel);
     ByteMatrix generatedResult = writer.encode(contents, BarcodeFormat.QR_CODE, resolution,
         resolution, hints);
 
@@ -123,16 +123,16 @@ public final class QRCodeWriterTestCase extends TestCase {
   // and cell phones. We expect pixel-perfect results, because the error correction level is known,
   // and the pixel dimensions matches exactly.
   public void testRegressionTest() throws WriterException {
-    assertTrue(compareToGoldenFile("http://www.google.com/", QRCode.EC_LEVEL_M, 99,
+    assertTrue(compareToGoldenFile("http://www.google.com/", ErrorCorrectionLevel.M, 99,
         "renderer-test-01.png"));
 
-    assertTrue(compareToGoldenFile("12345", QRCode.EC_LEVEL_L, 58, "renderer-test-02.png"));
+    assertTrue(compareToGoldenFile("12345", ErrorCorrectionLevel.L, 58, "renderer-test-02.png"));
 
     // Test in Katakana in Shift_JIS.
     final byte[] KATAKANA_INPUT = {
         (byte)0x83, 0x65, (byte)0x83, 0x58, (byte)0x83, 0x67
     };
-    assertTrue(compareToGoldenFile(new String(KATAKANA_INPUT), QRCode.EC_LEVEL_H, 145,
+    assertTrue(compareToGoldenFile(new String(KATAKANA_INPUT), ErrorCorrectionLevel.H, 145,
         "renderer-test-03.png"));
   }
 
