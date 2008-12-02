@@ -24,28 +24,30 @@ import com.google.zxing.common.ByteMatrix;
  */
 public final class MaskUtil {
 
+  private MaskUtil() {
+    // do nothing
+  }
+
   // The mask penalty calculation is complicated.  See Table 21 of JISX0510:2004 (p.45) for details.
   // Basically it applies four rules and summate all penalties.
-  public static int CalculateMaskPenalty(final ByteMatrix matrix) {
+  public static int calculateMaskPenalty(final ByteMatrix matrix) {
     int penalty = 0;
-    penalty += ApplyMaskPenaltyRule1(matrix);
-    penalty += ApplyMaskPenaltyRule2(matrix);
-    penalty += ApplyMaskPenaltyRule3(matrix);
-    penalty += ApplyMaskPenaltyRule4(matrix);
+    penalty += applyMaskPenaltyRule1(matrix);
+    penalty += applyMaskPenaltyRule2(matrix);
+    penalty += applyMaskPenaltyRule3(matrix);
+    penalty += applyMaskPenaltyRule4(matrix);
     return penalty;
   }
 
   // Apply mask penalty rule 1 and return the penalty. Find repetitive cells with the same color and
   // give penalty to them. Example: 00000 or 11111.
-  public static int ApplyMaskPenaltyRule1(final ByteMatrix matrix) {
-    final int penalty = (ApplyMaskPenaltyRule1Internal(matrix, true) +
-        ApplyMaskPenaltyRule1Internal(matrix, false));
-    return penalty;
+  public static int applyMaskPenaltyRule1(final ByteMatrix matrix) {
+    return applyMaskPenaltyRule1Internal(matrix, true) + applyMaskPenaltyRule1Internal(matrix, false);
   }
 
   // Apply mask penalty rule 2 and return the penalty. Find 2x2 blocks with the same color and give
   // penalty to them.
-  public static int ApplyMaskPenaltyRule2(final ByteMatrix matrix) {
+  public static int applyMaskPenaltyRule2(final ByteMatrix matrix) {
     int penalty = 0;
     byte[][] array = matrix.getArray();
     int width = matrix.width();
@@ -64,7 +66,7 @@ public final class MaskUtil {
   // Apply mask penalty rule 3 and return the penalty. Find consecutive cells of 00001011101 or
   // 10111010000, and give penalty to them.  If we find patterns like 000010111010000, we give
   // penalties twice (i.e. 40 * 2).
-  public static int ApplyMaskPenaltyRule3(final ByteMatrix matrix) {
+  public static int applyMaskPenaltyRule3(final ByteMatrix matrix) {
     int penalty = 0;
     byte[][] array = matrix.getArray();
     int width = matrix.width();
@@ -126,31 +128,30 @@ public final class MaskUtil {
   // -  55% =>  10
   // -  55% =>  20
   // - 100% => 100
-  public static int ApplyMaskPenaltyRule4(final ByteMatrix matrix) {
-    int num_dark_cells = 0;
+  public static int applyMaskPenaltyRule4(final ByteMatrix matrix) {
+    int numDarkCells = 0;
     byte[][] array = matrix.getArray();
     int width = matrix.width();
     int height = matrix.height();
     for (int y = 0; y < height; ++y) {
       for (int x = 0; x < width; ++x) {
         if (array[y][x] == 1) {
-          num_dark_cells += 1;
+          numDarkCells += 1;
         }
       }
     }
-    final int num_total_cells = matrix.height() * matrix.width();
-    double dark_ratio = (double) num_dark_cells / num_total_cells;
-    final int penalty = Math.abs((int) (dark_ratio * 100 - 50)) / 5 * 10;
-    return penalty;
+    final int numTotalCells = matrix.height() * matrix.width();
+    double darkRatio = (double) numDarkCells / numTotalCells;
+    return Math.abs((int) (darkRatio * 100 - 50)) / 5 * 10;
   }
 
-  // Return the mask bit for "mask_pattern" at "x" and "y". See 8.8 of JISX0510:2004 for mask
+  // Return the mask bit for "getMaskPattern" at "x" and "y". See 8.8 of JISX0510:2004 for mask
   // pattern conditions.
-  public static int GetDataMaskBit(final int mask_pattern, final int x, final int y) {
-    if (!QRCode.IsValidMaskPattern(mask_pattern)) {
+  public static int getDataMaskBit(final int maskPattern, final int x, final int y) {
+    if (!QRCode.isValidMaskPattern(maskPattern)) {
       throw new IllegalArgumentException("Invalid mask pattern");
     }
-    switch (mask_pattern) {
+    switch (maskPattern) {
       case 0:
         return ((y + x) % 2 == 0) ? 1 : 0;
       case 1:
@@ -168,15 +169,15 @@ public final class MaskUtil {
       case 7:
         return ((((y * x) % 3) + ((y + x) % 2)) % 2 == 0) ? 1 : 0;
     }
-    throw new IllegalArgumentException("invalid mask pattern: " + mask_pattern);
+    throw new IllegalArgumentException("invalid mask pattern: " + maskPattern);
   }
 
-  // Helper function for ApplyMaskPenaltyRule1. We need this for doing this calculation in both
+  // Helper function for applyMaskPenaltyRule1. We need this for doing this calculation in both
   // vertical and horizontal orders respectively.
-  private static int ApplyMaskPenaltyRule1Internal(final ByteMatrix matrix, boolean is_horizontal) {
+  private static int applyMaskPenaltyRule1Internal(final ByteMatrix matrix, boolean isHorizontal) {
     int penalty = 0;
-    int num_same_bit_cells = 0;
-    int prev_bit = -1;
+    int numSameBitCells = 0;
+    int prevBit = -1;
     // Horizontal mode:
     //   for (int i = 0; i < matrix.height(); ++i) {
     //     for (int j = 0; j < matrix.width(); ++j) {
@@ -185,29 +186,29 @@ public final class MaskUtil {
     //   for (int i = 0; i < matrix.width(); ++i) {
     //     for (int j = 0; j < matrix.height(); ++j) {
     //       int bit = matrix.get(j, i);
-    final int i_limit = is_horizontal ? matrix.height() : matrix.width();
-    final int j_limit = is_horizontal ? matrix.width() : matrix.height();
+    final int iLimit = isHorizontal ? matrix.height() : matrix.width();
+    final int jLimit = isHorizontal ? matrix.width() : matrix.height();
     byte[][] array = matrix.getArray();
-    for (int i = 0; i < i_limit; ++i) {
-      for (int j = 0; j < j_limit; ++j) {
-        final int bit = is_horizontal ? array[i][j] : array[j][i];
-        if (bit == prev_bit) {
-          num_same_bit_cells += 1;
+    for (int i = 0; i < iLimit; ++i) {
+      for (int j = 0; j < jLimit; ++j) {
+        final int bit = isHorizontal ? array[i][j] : array[j][i];
+        if (bit == prevBit) {
+          numSameBitCells += 1;
           // Found five repetitive cells with the same color (bit).
           // We'll give penalty of 3.
-          if (num_same_bit_cells == 5) {
+          if (numSameBitCells == 5) {
             penalty += 3;
-          } else if (num_same_bit_cells > 5) {
+          } else if (numSameBitCells > 5) {
             // After five repetitive cells, we'll add the penalty one
             // by one.
             penalty += 1;
           }
         } else {
-          num_same_bit_cells = 1;  // Include the cell itself.
-          prev_bit = bit;
+          numSameBitCells = 1;  // Include the cell itself.
+          prevBit = bit;
         }
       }
-      num_same_bit_cells = 0;  // Clear at each row/column.
+      numSameBitCells = 0;  // Clear at each row/column.
     }
     return penalty;
   }
