@@ -16,8 +16,8 @@
 
 package com.google.zxing.qrcode.encoder;
 
-import com.google.zxing.common.ByteMatrix;
 import com.google.zxing.WriterException;
+import com.google.zxing.common.ByteMatrix;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 /**

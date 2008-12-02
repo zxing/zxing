@@ -16,12 +16,14 @@
 
 package com.google.zxing.qrcode.encoder;
 
-import com.google.zxing.common.ByteMatrix;
+import com.google.zxing.WriterException;
 import com.google.zxing.common.ByteArray;
+import com.google.zxing.common.ByteMatrix;
 import com.google.zxing.common.reedsolomon.GF256;
 import com.google.zxing.common.reedsolomon.ReedSolomonEncoder;
-import com.google.zxing.WriterException;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import com.google.zxing.qrcode.decoder.Mode;
+import com.google.zxing.qrcode.decoder.Version;
 
 import java.util.Vector;
 
@@ -130,7 +132,7 @@ public final class Encoder {
   public static void encode(final ByteArray bytes, ErrorCorrectionLevel ecLevel, QRCode qrCode)
       throws WriterException {
     // Step 1: Choose the mode (encoding).
-    final int mode = chooseMode(bytes);
+    final Mode mode = chooseMode(bytes);
 
     // Step 2: Append "bytes" into "dataBits" in appropriate encoding.
     BitVector dataBits = new BitVector();
@@ -185,7 +187,7 @@ public final class Encoder {
   // interpreted as one character in Shift_JIS, but also two characters in ISO-8859-1.
   //
   // JAVAPORT: This MODE_KANJI limitation sounds like a problem for us.
-  public static int chooseMode(final ByteArray bytes) throws WriterException {
+  public static Mode chooseMode(final ByteArray bytes) throws WriterException {
     boolean hasNumeric = false;
     boolean hasAlphanumeric = false;
     boolean hasOther = false;
@@ -200,17 +202,17 @@ public final class Encoder {
       }
     }
     if (hasOther) {
-      return QRCode.MODE_8BIT_BYTE;
+      return Mode.BYTE;
     } else if (hasAlphanumeric) {
-      return QRCode.MODE_ALPHANUMERIC;
+      return Mode.ALPHANUMERIC;
     } else if (hasNumeric) {
-      return QRCode.MODE_NUMERIC;
+      return Mode.NUMERIC;
     }
     // "bytes" must be empty to reach here.
     if (!bytes.empty()) {
       throw new WriterException("Bytes left over");
     }
-    return QRCode.MODE_8BIT_BYTE;
+    return Mode.BYTE;
   }
 
   private static int chooseMaskPattern(final BitVector bits, ErrorCorrectionLevel ecLevel, int version,
@@ -235,7 +237,7 @@ public final class Encoder {
 
   // Initialize "qrCode" according to "numInputBytes", "ecLevel", and "mode". On success, modify
   // "qrCode" and return true.
-  private static void initQRCode(int numInputBytes, ErrorCorrectionLevel ecLevel, int mode, QRCode qrCode)
+  private static void initQRCode(int numInputBytes, ErrorCorrectionLevel ecLevel, Mode mode, QRCode qrCode)
       throws WriterException {
     qrCode.setECLevel(ecLevel);
     qrCode.setMode(mode);
@@ -439,25 +441,25 @@ public final class Encoder {
 
   // Append mode info. On success, store the result in "bits" and return true. On error, return
   // false.
-  static void appendModeInfo(int mode, BitVector bits) throws WriterException {
-    final int code = QRCode.getModeCode(mode);
-    bits.appendBits(code, 4);
+  static void appendModeInfo(Mode mode, BitVector bits) {
+    bits.appendBits(mode.getBits(), 4);
   }
 
 
   // Append length info. On success, store the result in "bits" and return true. On error, return
   // false.
-  static void appendLengthInfo(int numBytes, int version, int mode, BitVector bits) throws WriterException {
+  static void appendLengthInfo(int numBytes, int version, Mode mode, BitVector bits) throws WriterException {
     int numLetters = numBytes;
     // In Kanji mode, a letter is represented in two bytes.
-    if (mode == QRCode.MODE_KANJI) {
+    if (mode.equals(Mode.KANJI)) {
       if (numLetters % 2 != 0) {
         throw new WriterException("Number of letters must be even");
       }
       numLetters /= 2;
     }
 
-    final int numBits = QRCode.getNumBitsForLength(version, mode);
+    final int numBits = mode.getCharacterCountBits(Version.getVersionForNumber(version));
+
     if (numLetters > ((1 << numBits) - 1)) {
       throw new WriterException(numLetters + "is bigger than" + ((1 << numBits) - 1));
     }
@@ -466,22 +468,17 @@ public final class Encoder {
 
   // Append "bytes" in "mode" mode (encoding) into "bits". On success, store the result in "bits"
   // and return true.
-  static void appendBytes(final ByteArray bytes, int mode, BitVector bits) throws WriterException {
-    switch (mode) {
-      case QRCode.MODE_NUMERIC:
-        appendNumericBytes(bytes, bits);
-        break;
-      case QRCode.MODE_ALPHANUMERIC:
-        appendAlphanumericBytes(bytes, bits);
-        break;
-      case QRCode.MODE_8BIT_BYTE:
-        append8BitBytes(bytes, bits);
-        break;
-      case QRCode.MODE_KANJI:
-        appendKanjiBytes(bytes, bits);
-        break;
-      default:
-        throw new WriterException("Invalid mode: " + mode);
+  static void appendBytes(final ByteArray bytes, Mode mode, BitVector bits) throws WriterException {
+    if (mode.equals(Mode.NUMERIC)) {
+      appendNumericBytes(bytes, bits);
+    } else if (mode.equals(Mode.ALPHANUMERIC)) {
+      appendAlphanumericBytes(bytes, bits);
+    } else if (mode.equals(Mode.BYTE)) {
+      append8BitBytes(bytes, bits);
+    } else if (mode.equals(Mode.KANJI)) {
+      appendKanjiBytes(bytes, bits);
+    } else {
+      throw new WriterException("Invalid mode: " + mode);
     }
   }
 

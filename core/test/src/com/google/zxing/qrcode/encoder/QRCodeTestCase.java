@@ -17,8 +17,8 @@
 package com.google.zxing.qrcode.encoder;
 
 import com.google.zxing.common.ByteMatrix;
-import com.google.zxing.WriterException;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import com.google.zxing.qrcode.decoder.Mode;
 import junit.framework.TestCase;
 
 /**
@@ -33,7 +33,7 @@ public final class QRCodeTestCase extends TestCase {
 
     // First, test simple setters and getters.
     // We use numbers of version 7-H.
-    qrCode.setMode(QRCode.MODE_8BIT_BYTE);
+    qrCode.setMode(Mode.BYTE);
     qrCode.setECLevel(ErrorCorrectionLevel.H);
     qrCode.setVersion(7);
     qrCode.setMatrixWidth(45);
@@ -43,7 +43,7 @@ public final class QRCodeTestCase extends TestCase {
     qrCode.setNumECBytes(130);
     qrCode.setNumRSBlocks(5);
 
-    assertEquals(QRCode.MODE_8BIT_BYTE, qrCode.getMode());
+    assertEquals(Mode.BYTE, qrCode.getMode());
     assertEquals(ErrorCorrectionLevel.H, qrCode.getECLevel());
     assertEquals(7, qrCode.getVersion());
     assertEquals(45, qrCode.getMatrixWidth());
@@ -85,7 +85,7 @@ public final class QRCodeTestCase extends TestCase {
       QRCode qrCode = new QRCode();
       String expected =
 	"<<\n" +
-	" mode: UNDEFINED\n" +
+	" mode: null\n" +
 	" ecLevel: null\n" +
 	" version: -1\n" +
 	" matrixWidth: -1\n" +
@@ -101,7 +101,7 @@ public final class QRCodeTestCase extends TestCase {
     {
       String expected =
 	"<<\n" +
-	" mode: 8BIT_BYTE\n" +
+	" mode: BYTE\n" +
 	" ecLevel: H\n" +
 	" version: 1\n" +
 	" matrixWidth: 21\n" +
@@ -134,7 +134,7 @@ public final class QRCodeTestCase extends TestCase {
 	" 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n" +
 	">>\n";
       QRCode qrCode = new QRCode();
-      qrCode.setMode(QRCode.MODE_8BIT_BYTE);
+      qrCode.setMode(Mode.BYTE);
       qrCode.setECLevel(ErrorCorrectionLevel.H);
       qrCode.setVersion(1);
       qrCode.setMatrixWidth(21);
@@ -162,14 +162,6 @@ public final class QRCodeTestCase extends TestCase {
     assertFalse(QRCode.isValidVersion(0));
   }
 
-  public void testIsValidMode() {
-    assertFalse(QRCode.isValidMode(QRCode.MODE_UNDEFINED));
-    assertTrue(QRCode.isValidMode(QRCode.MODE_NUMERIC));
-    assertTrue(QRCode.isValidMode(QRCode.MODE_ALPHANUMERIC));
-    assertTrue(QRCode.isValidMode(QRCode.MODE_8BIT_BYTE));
-    assertFalse(QRCode.isValidMode(QRCode.NUM_MODES));
-  }
-
   public void testIsValidMatrixWidth() {
     assertFalse(QRCode.isValidMatrixWidth(20));
     assertTrue(QRCode.isValidMatrixWidth(21));
@@ -182,27 +174,6 @@ public final class QRCodeTestCase extends TestCase {
     assertTrue(QRCode.isValidMaskPattern(0));
     assertTrue(QRCode.isValidMaskPattern(7));
     assertFalse(QRCode.isValidMaskPattern(8));
-  }
-
-  public void testModeToString() {
-    assertEquals("UNDEFINED", QRCode.modeToString(QRCode.MODE_UNDEFINED));
-    assertEquals("NUMERIC", QRCode.modeToString(QRCode.MODE_NUMERIC));
-    assertEquals("ALPHANUMERIC", QRCode.modeToString(QRCode.MODE_ALPHANUMERIC));
-    assertEquals("8BIT_BYTE", QRCode.modeToString(QRCode.MODE_8BIT_BYTE));
-    assertEquals("UNKNOWN", QRCode.modeToString(QRCode.NUM_MODES));
-  }
-
-  public void testGetModeCode() throws WriterException {
-    assertEquals(1, QRCode.getModeCode(QRCode.MODE_NUMERIC));
-    assertEquals(2, QRCode.getModeCode(QRCode.MODE_ALPHANUMERIC));
-    assertEquals(4, QRCode.getModeCode(QRCode.MODE_8BIT_BYTE));
-    assertEquals(8, QRCode.getModeCode(QRCode.MODE_KANJI));
-    try {
-      QRCode.getModeCode(QRCode.MODE_UNDEFINED);
-      fail("Should have thrown exception");      
-    } catch (WriterException we) {
-      // good
-    }
   }
 
 }

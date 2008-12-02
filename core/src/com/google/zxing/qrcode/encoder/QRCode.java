@@ -17,8 +17,8 @@
 package com.google.zxing.qrcode.encoder;
 
 import com.google.zxing.common.ByteMatrix;
-import com.google.zxing.WriterException;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import com.google.zxing.qrcode.decoder.Mode;
 
 /**
  * @author satorux@google.com (Satoru Takabayashi) - creator
@@ -34,15 +34,7 @@ public final class QRCode {
   private static final int MAX_MATRIX_WIDTH = 177;  // Version 40 (21 + 4 * (40 -1)).
   public static final int NUM_MASK_PATTERNS = 8;
 
-  // See table 3 of JISX0510:2004 (p.16)
-  private static final int[][] NUM_BITS_TABLE = {
-      // NUMERIC  ALPHANUMERIC  8BIT_BYTE  KANJI
-      {       10,            9,         8,     8 },  // Version 1-9
-      {       12,           11,        16,    10 },  // Version 10-26
-      {       14,           13,        16,    12 },  // Version 27-40
-  };
-
-  private int mode;
+  private Mode mode;
   private ErrorCorrectionLevel ecLevel;
   private int version;
   private int matrixWidth;
@@ -53,31 +45,8 @@ public final class QRCode {
   private int numRSBlocks;
   private ByteMatrix matrix;
 
-
-  // They call encoding "mode". The modes are defined in 8.3 of JISX0510:2004 (p.14). It's unlikely
-  // (probably we will not support complicated modes) but if you add an item to this, please also
-  // add it to modeToString(), getModeCode(), getNumBitsForLength(), Encoder.appendBytes(), and
-  // Encoder.chooseMode().
-  //
-  // JAVAPORT: These used to be C++ enums, but the code evaluates them as integers, and requires
-  // negative values. I don't want to take the ParsedResultType approach of a class full of statics
-  // of that class's type. The best compromise here is integer constants.
-  //
-  // Formerly enum Mode
-  public static final int MODE_UNDEFINED = -1;
-  public static final int MODE_NUMERIC = 0;
-  public static final int MODE_ALPHANUMERIC = 1;
-  public static final int MODE_8BIT_BYTE = 2;
-  public static final int MODE_KANJI = 3;  // Shift_JIS
-  // The following modes are unimplemented.
-  // MODE_ECI,
-  // MODE_MIXED,
-  // MODE_CONCATENATED,
-  // MODE_FNC1,
-  public static final int NUM_MODES = 4;
-
   public QRCode() {
-    mode = MODE_UNDEFINED;
+    mode = null;
     ecLevel = null;
     version = -1;
     matrixWidth = -1;
@@ -90,7 +59,7 @@ public final class QRCode {
   }
 
   // Mode of the QR Code.
-  public int getMode() {
+  public Mode getMode() {
     return mode;
   }
 
@@ -155,29 +124,28 @@ public final class QRCode {
   // Checks all the member variables are set properly. Returns true on success. Otherwise, returns
   // false.
   public boolean isValid() {
-    return (
+    return
         // First check if all version are not uninitialized.
-        mode != MODE_UNDEFINED &&
-            ecLevel != null &&
-            version != -1 &&
-            matrixWidth != -1 &&
-            maskPattern != -1 &&
-            numTotalBytes != -1 &&
-            numDataBytes != -1 &&
-            numECBytes != -1 &&
-            numRSBlocks != -1 &&
-            // Then check them in other ways..
-            isValidVersion(version) &&
-            isValidMode(mode) &&
-            isValidMatrixWidth(matrixWidth) &&
-            isValidMaskPattern(maskPattern) &&
-            numTotalBytes == numDataBytes + numECBytes &&
-            // ByteMatrix stuff.
-            matrix != null &&
-            matrixWidth == matrix.width() &&
-            // See 7.3.1 of JISX0510:2004 (p.5).
-            matrixWidth == MIN_MATRIX_WIDTH + (version - 1) * 4 &&
-            matrix.width() == matrix.height()); // Must be square.
+        mode != null &&
+        ecLevel != null &&
+        version != -1 &&
+        matrixWidth != -1 &&
+        maskPattern != -1 &&
+        numTotalBytes != -1 &&
+        numDataBytes != -1 &&
+        numECBytes != -1 &&
+        numRSBlocks != -1 &&
+        // Then check them in other ways..
+        isValidVersion(version) &&
+        isValidMatrixWidth(matrixWidth) &&
+        isValidMaskPattern(maskPattern) &&
+        numTotalBytes == numDataBytes + numECBytes &&
+        // ByteMatrix stuff.
+        matrix != null &&
+        matrixWidth == matrix.width() &&
+        // See 7.3.1 of JISX0510:2004 (p.5).
+        matrixWidth == MIN_MATRIX_WIDTH + (version - 1) * 4 &&
+        matrix.width() == matrix.height(); // Must be square.
   }
 
   // Return debug String.
@@ -185,7 +153,7 @@ public final class QRCode {
     StringBuffer result = new StringBuffer();
     result.append("<<\n");
     result.append(" mode: ");
-    result.append(modeToString(mode));
+    result.append(mode);
     result.append("\n ecLevel: ");
     result.append(ecLevel);
     result.append("\n version: ");
@@ -212,7 +180,7 @@ public final class QRCode {
     return result.toString();
   }
 
-  public void setMode(int value) {
+  public void setMode(Mode value) {
     mode = value;
   }
 
@@ -258,11 +226,6 @@ public final class QRCode {
     return version >= MIN_VERSION && version <= MAX_VERSION;
   }
 
-  // Check if "mode" is valid.
-  public static boolean isValidMode(final int mode) {
-    return mode >= 0 && mode < NUM_MODES;
-  }
-
   // Check if "width" is valid.
   public static boolean isValidMatrixWidth(int width) {
     return width >= MIN_MATRIX_WIDTH && width <= MAX_MATRIX_WIDTH;
@@ -271,61 +234,6 @@ public final class QRCode {
   // Check if "mask_pattern" is valid.
   public static boolean isValidMaskPattern(int maskPattern) {
     return maskPattern >= 0 && maskPattern < NUM_MASK_PATTERNS;
-  }
-
-  // Convert "mode" to String for debugging.
-  public static String modeToString(int mode) {
-    switch (mode) {
-      case QRCode.MODE_UNDEFINED:
-        return "UNDEFINED";
-      case QRCode.MODE_NUMERIC:
-        return "NUMERIC";
-      case QRCode.MODE_ALPHANUMERIC:
-        return "ALPHANUMERIC";
-      case QRCode.MODE_8BIT_BYTE:
-        return "8BIT_BYTE";
-      case QRCode.MODE_KANJI:
-        return "KANJI";
-      default:
-        break;
-    }
-    return "UNKNOWN";
-  }
-
-  // Return the code of mode. On error, return -1. The codes of modes are defined in the table 2 of
-  // JISX0510:2004 (p.16).
-  public static int getModeCode(final int mode) throws WriterException {
-    switch (mode) {
-      case QRCode.MODE_NUMERIC:
-        return 1;
-      case QRCode.MODE_ALPHANUMERIC:
-        return 2;
-      case QRCode.MODE_8BIT_BYTE:
-        return 4;
-      case QRCode.MODE_KANJI:
-        return 8;
-      default:
-        throw new WriterException("Unknown mode: " + mode);
-    }
-  }
-
-  // Return the number of bits needed for representing the length info of QR Code with "version" and
-  // "mode". On error, return -1.
-  static int getNumBitsForLength(int version, int mode) {
-    if (!isValidVersion(version)) {
-      throw new IllegalArgumentException("Invalid version: " + version);
-    }
-    if (!isValidMode(mode)) {
-      throw new IllegalArgumentException("Invalid mode: " + mode);
-    }
-    if (version >= 1 && version <= 9) {
-      return NUM_BITS_TABLE[0][mode];
-    } else if (version >= 10 && version <= 26) {
-      return NUM_BITS_TABLE[1][mode];
-    } else if (version >= 27 && version <= 40) {
-      return NUM_BITS_TABLE[2][mode];
-    }
-    throw new IllegalArgumentException("Bad version: " + version);
   }
 
   // Return true if the all values in the matrix are binary numbers.

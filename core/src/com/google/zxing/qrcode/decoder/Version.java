@@ -100,9 +100,9 @@ public final class Version {
     return getVersionForNumber((dimension - 17) >> 2);
   }
 
-  public static Version getVersionForNumber(int versionNumber) throws ReaderException {
+  public static Version getVersionForNumber(int versionNumber) {
     if (versionNumber < 1 || versionNumber > 40) {
-      throw ReaderException.getInstance();
+      throw new IllegalArgumentException();
     }
     return VERSIONS[versionNumber - 1];
   }

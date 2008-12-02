@@ -24,11 +24,11 @@ import junit.framework.TestCase;
  */
 public final class VersionTestCase extends TestCase {
 
-  public void testVersionForNumber() throws ReaderException {
+  public void testVersionForNumber() {
     try {
       Version.getVersionForNumber(0);
       fail("Should have thrown an exception");
-    } catch (ReaderException re) {
+    } catch (IllegalArgumentException iae) {
       // good
     }
     for (int i = 1; i <= 40; i++) {
