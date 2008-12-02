@@ -16,7 +16,6 @@
 
 package com.google.zxing.qrcode.decoder;
 
-import com.google.zxing.ReaderException;
 import junit.framework.TestCase;
 
 /**
@@ -24,7 +23,7 @@ import junit.framework.TestCase;
  */
 public final class ModeTestCase extends TestCase {
 
-  public void testForBits() throws ReaderException {
+  public void testForBits() {
     assertEquals(Mode.TERMINATOR, Mode.forBits(0x00));
     assertEquals(Mode.NUMERIC, Mode.forBits(0x01));
     assertEquals(Mode.ALPHANUMERIC, Mode.forBits(0x02));
@@ -33,12 +32,12 @@ public final class ModeTestCase extends TestCase {
     try {
       Mode.forBits(0x10);
       fail("Should have thrown an exception");
-    } catch (ReaderException re) {
+    } catch (IllegalArgumentException iae) {
       // good
     }
   }
 
-  public void testCharacterCount() throws ReaderException {
+  public void testCharacterCount() {
     // Spot check a few values
     assertEquals(10, Mode.NUMERIC.getCharacterCountBits(Version.getVersionForNumber(5)));
     assertEquals(12, Mode.NUMERIC.getCharacterCountBits(Version.getVersionForNumber(26)));

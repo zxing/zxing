@@ -16,9 +16,10 @@
 
 package com.google.zxing.qrcode.encoder;
 
-import com.google.zxing.common.ByteArray;
 import com.google.zxing.WriterException;
+import com.google.zxing.common.ByteArray;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import com.google.zxing.qrcode.decoder.Mode;
 import junit.framework.TestCase;
 
 /**
@@ -57,31 +58,31 @@ public final class EncoderTestCase extends TestCase {
 
   public void testChooseMode() throws WriterException {
     // Numeric mode.
-    assertEquals(QRCode.MODE_NUMERIC, Encoder.chooseMode(new ByteArray("0")));
-    assertEquals(QRCode.MODE_NUMERIC, Encoder.chooseMode(new ByteArray("0123456789")));
+    assertEquals(Mode.NUMERIC, Encoder.chooseMode(new ByteArray("0")));
+    assertEquals(Mode.NUMERIC, Encoder.chooseMode(new ByteArray("0123456789")));
     // Alphanumeric mode.
-    assertEquals(QRCode.MODE_ALPHANUMERIC, Encoder.chooseMode(new ByteArray("A")));
-    assertEquals(QRCode.MODE_ALPHANUMERIC,
+    assertEquals(Mode.ALPHANUMERIC, Encoder.chooseMode(new ByteArray("A")));
+    assertEquals(Mode.ALPHANUMERIC,
         Encoder.chooseMode(new ByteArray("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:")));
     // 8-bit byte mode.
-    assertEquals(QRCode.MODE_8BIT_BYTE, Encoder.chooseMode(new ByteArray("a")));
-    assertEquals(QRCode.MODE_8BIT_BYTE, Encoder.chooseMode(new ByteArray("#")));
-    assertEquals(QRCode.MODE_8BIT_BYTE, Encoder.chooseMode(new ByteArray("")));
+    assertEquals(Mode.BYTE, Encoder.chooseMode(new ByteArray("a")));
+    assertEquals(Mode.BYTE, Encoder.chooseMode(new ByteArray("#")));
+    assertEquals(Mode.BYTE, Encoder.chooseMode(new ByteArray("")));
     // Kanji mode.  We used to use MODE_KANJI for these, but we stopped
     // doing that as we cannot distinguish Shift_JIS from other encodings
     // from data bytes alone.  See also comments in qrcode_encoder.h.
 
     // AIUE in Hiragana in Shift_JIS
     byte[] dat1 = {0x8,0xa,0x8,0xa,0x8,0xa,0x8,(byte)0xa6};
-    assertEquals(QRCode.MODE_8BIT_BYTE, Encoder.chooseMode(new ByteArray(dat1)));
+    assertEquals(Mode.BYTE, Encoder.chooseMode(new ByteArray(dat1)));
 
     // Nihon in Kanji in Shift_JIS.
     byte[] dat2 = {0x9,0xf,0x9,0x7b};
-    assertEquals(QRCode.MODE_8BIT_BYTE, Encoder.chooseMode(new ByteArray(dat2)));
+    assertEquals(Mode.BYTE, Encoder.chooseMode(new ByteArray(dat2)));
 
     // Sou-Utsu-Byou in Kanji in Shift_JIS.
     byte[] dat3 = {0xe,0x4,0x9,0x5,0x9,0x61};
-    assertEquals(QRCode.MODE_8BIT_BYTE, Encoder.chooseMode(new ByteArray(dat3)));
+    assertEquals(Mode.BYTE, Encoder.chooseMode(new ByteArray(dat3)));
   }
 
   public void testEncode() throws WriterException {
@@ -127,7 +128,7 @@ public final class EncoderTestCase extends TestCase {
 
   public void testAppendModeInfo() throws WriterException {
     BitVector bits = new BitVector();
-    Encoder.appendModeInfo(QRCode.MODE_NUMERIC, bits);
+    Encoder.appendModeInfo(Mode.NUMERIC, bits);
     assertEquals("0001", bits.toString());
   }
 
@@ -136,7 +137,7 @@ public final class EncoderTestCase extends TestCase {
       BitVector bits = new BitVector();
       Encoder.appendLengthInfo(1,  // 1 letter (1/1).
 						  1,  // version 1.
-						  QRCode.MODE_NUMERIC,
+						  Mode.NUMERIC,
 						  bits);
       assertEquals("0000000001", bits.toString());  // 10 bits.
     }
@@ -144,7 +145,7 @@ public final class EncoderTestCase extends TestCase {
       BitVector bits = new BitVector();
       Encoder.appendLengthInfo(2,  // 2 letters (2/1).
 						  10,  // version 10.
-						  QRCode.MODE_ALPHANUMERIC,
+						  Mode.ALPHANUMERIC,
 						  bits);
       assertEquals("00000000010", bits.toString());  // 11 bits.
     }
@@ -152,7 +153,7 @@ public final class EncoderTestCase extends TestCase {
       BitVector bits = new BitVector();
       Encoder.appendLengthInfo(255,  // 255 letter (255/1).
 						  27,  // version 27.
-						  QRCode.MODE_8BIT_BYTE,
+						  Mode.BYTE,
 						  bits);
       assertEquals("0000000011111111", bits.toString());  // 16 bits.
     }
@@ -160,7 +161,7 @@ public final class EncoderTestCase extends TestCase {
       BitVector bits = new BitVector();
       Encoder.appendLengthInfo(1024,  // 512 letters (1024/2).
 						  40,  // version 40.
-						  QRCode.MODE_KANJI,
+						  Mode.KANJI,
 						  bits);
       assertEquals("001000000000", bits.toString());  // 12 bits.
     }
@@ -171,11 +172,11 @@ public final class EncoderTestCase extends TestCase {
       // Should use appendNumericBytes.
       // 1 = 01 = 0001 in 4 bits.
       BitVector bits = new BitVector();
-      Encoder.appendBytes(new ByteArray("1"), QRCode.MODE_NUMERIC, bits);
+      Encoder.appendBytes(new ByteArray("1"), Mode.NUMERIC, bits);
       assertEquals("0001" , bits.toString());
       // 'A' cannot be encoded in MODE_NUMERIC.
       try {
-        Encoder.appendBytes(new ByteArray("A"), QRCode.MODE_NUMERIC, bits);
+        Encoder.appendBytes(new ByteArray("A"), Mode.NUMERIC, bits);
         fail("Should have thrown exception");
       } catch (WriterException we) {
         // good
@@ -185,11 +186,11 @@ public final class EncoderTestCase extends TestCase {
       // Should use appendAlphanumericBytes.
       // A = 10 = 0xa = 001010 in 6 bits
       BitVector bits = new BitVector();
-      Encoder.appendBytes(new ByteArray("A"), QRCode.MODE_ALPHANUMERIC, bits);
+      Encoder.appendBytes(new ByteArray("A"), Mode.ALPHANUMERIC, bits);
       assertEquals("001010" , bits.toString());
       // Lower letters such as 'a' cannot be encoded in MODE_ALPHANUMERIC.
       try {
-        Encoder.appendBytes(new ByteArray("a"), QRCode.MODE_ALPHANUMERIC, bits);
+        Encoder.appendBytes(new ByteArray("a"), Mode.ALPHANUMERIC, bits);
       } catch (WriterException we) {
         // good
       }
@@ -198,23 +199,23 @@ public final class EncoderTestCase extends TestCase {
       // Should use append8BitBytes.
       // 0x61, 0x62, 0x63
       BitVector bits = new BitVector();
-      Encoder.appendBytes(new ByteArray("abc"), QRCode.MODE_8BIT_BYTE, bits);
+      Encoder.appendBytes(new ByteArray("abc"), Mode.BYTE, bits);
       assertEquals("01100001" + "01100010" + "01100011", bits.toString());
       // Anything can be encoded in QRCode.MODE_8BIT_BYTE.
       byte[] bytes = {0x00};
-      Encoder.appendBytes(new ByteArray(bytes), QRCode.MODE_8BIT_BYTE, bits);
+      Encoder.appendBytes(new ByteArray(bytes), Mode.BYTE, bits);
     }
     {
       // Should use appendKanjiBytes.
       // 0x93, 0x5f
       BitVector bits = new BitVector();
       byte[] bytes = {(byte)0x93,0x5f};
-      Encoder.appendBytes(new ByteArray(bytes), QRCode.MODE_KANJI, bits);
+      Encoder.appendBytes(new ByteArray(bytes), Mode.KANJI, bits);
       assertEquals("0110110011111", bits.toString());
       // ASCII characters can not be encoded in QRCode.MODE_KANJI.
 
       try {
-        Encoder.appendBytes(new ByteArray("a"), QRCode.MODE_KANJI, bits);
+        Encoder.appendBytes(new ByteArray("a"), Mode.KANJI, bits);
       } catch (WriterException we) {
         // good
       }
