@@ -29,75 +29,75 @@ public final class EncoderTestCase extends TestCase {
   public void testGetAlphanumericCode() throws WriterException {
     // The first ten code points are numbers.
     for (int i = 0; i < 10; ++i) {
-      assertEquals(i, Encoder.GetAlphanumericCode('0' + i));
+      assertEquals(i, Encoder.getAlphanumericCode('0' + i));
     }
 
     // The next 26 code points are capital alphabet letters.
     for (int i = 10; i < 36; ++i) {
-      assertEquals(i, Encoder.GetAlphanumericCode('A' + i - 10));
+      assertEquals(i, Encoder.getAlphanumericCode('A' + i - 10));
     }
 
     // Others are symbol letters
-    assertEquals(36, Encoder.GetAlphanumericCode(' '));
-    assertEquals(37, Encoder.GetAlphanumericCode('$'));
-    assertEquals(38, Encoder.GetAlphanumericCode('%'));
-    assertEquals(39, Encoder.GetAlphanumericCode('*'));
-    assertEquals(40, Encoder.GetAlphanumericCode('+'));
-    assertEquals(41, Encoder.GetAlphanumericCode('-'));
-    assertEquals(42, Encoder.GetAlphanumericCode('.'));
-    assertEquals(43, Encoder.GetAlphanumericCode('/'));
-    assertEquals(44, Encoder.GetAlphanumericCode(':'));
+    assertEquals(36, Encoder.getAlphanumericCode(' '));
+    assertEquals(37, Encoder.getAlphanumericCode('$'));
+    assertEquals(38, Encoder.getAlphanumericCode('%'));
+    assertEquals(39, Encoder.getAlphanumericCode('*'));
+    assertEquals(40, Encoder.getAlphanumericCode('+'));
+    assertEquals(41, Encoder.getAlphanumericCode('-'));
+    assertEquals(42, Encoder.getAlphanumericCode('.'));
+    assertEquals(43, Encoder.getAlphanumericCode('/'));
+    assertEquals(44, Encoder.getAlphanumericCode(':'));
 
     // Should return -1 for other letters;
-    assertEquals(-1, Encoder.GetAlphanumericCode('a'));
-    assertEquals(-1, Encoder.GetAlphanumericCode('#'));
-    assertEquals(-1, Encoder.GetAlphanumericCode('\0'));
+    assertEquals(-1, Encoder.getAlphanumericCode('a'));
+    assertEquals(-1, Encoder.getAlphanumericCode('#'));
+    assertEquals(-1, Encoder.getAlphanumericCode('\0'));
   }
 
   public void testChooseMode() throws WriterException {
     // Numeric mode.
-    assertEquals(QRCode.MODE_NUMERIC, Encoder.ChooseMode(new ByteArray("0")));
-    assertEquals(QRCode.MODE_NUMERIC, Encoder.ChooseMode(new ByteArray("0123456789")));
+    assertEquals(QRCode.MODE_NUMERIC, Encoder.chooseMode(new ByteArray("0")));
+    assertEquals(QRCode.MODE_NUMERIC, Encoder.chooseMode(new ByteArray("0123456789")));
     // Alphanumeric mode.
-    assertEquals(QRCode.MODE_ALPHANUMERIC, Encoder.ChooseMode(new ByteArray("A")));
+    assertEquals(QRCode.MODE_ALPHANUMERIC, Encoder.chooseMode(new ByteArray("A")));
     assertEquals(QRCode.MODE_ALPHANUMERIC,
-        Encoder.ChooseMode(new ByteArray("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:")));
+        Encoder.chooseMode(new ByteArray("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:")));
     // 8-bit byte mode.
-    assertEquals(QRCode.MODE_8BIT_BYTE, Encoder.ChooseMode(new ByteArray("a")));
-    assertEquals(QRCode.MODE_8BIT_BYTE, Encoder.ChooseMode(new ByteArray("#")));
-    assertEquals(QRCode.MODE_8BIT_BYTE, Encoder.ChooseMode(new ByteArray("")));
+    assertEquals(QRCode.MODE_8BIT_BYTE, Encoder.chooseMode(new ByteArray("a")));
+    assertEquals(QRCode.MODE_8BIT_BYTE, Encoder.chooseMode(new ByteArray("#")));
+    assertEquals(QRCode.MODE_8BIT_BYTE, Encoder.chooseMode(new ByteArray("")));
     // Kanji mode.  We used to use MODE_KANJI for these, but we stopped
     // doing that as we cannot distinguish Shift_JIS from other encodings
     // from data bytes alone.  See also comments in qrcode_encoder.h.
 
     // AIUE in Hiragana in Shift_JIS
     byte[] dat1 = {0x8,0xa,0x8,0xa,0x8,0xa,0x8,(byte)0xa6};
-    assertEquals(QRCode.MODE_8BIT_BYTE, Encoder.ChooseMode(new ByteArray(dat1)));
+    assertEquals(QRCode.MODE_8BIT_BYTE, Encoder.chooseMode(new ByteArray(dat1)));
 
     // Nihon in Kanji in Shift_JIS.
     byte[] dat2 = {0x9,0xf,0x9,0x7b};
-    assertEquals(QRCode.MODE_8BIT_BYTE, Encoder.ChooseMode(new ByteArray(dat2)));
+    assertEquals(QRCode.MODE_8BIT_BYTE, Encoder.chooseMode(new ByteArray(dat2)));
 
     // Sou-Utsu-Byou in Kanji in Shift_JIS.
     byte[] dat3 = {0xe,0x4,0x9,0x5,0x9,0x61};
-    assertEquals(QRCode.MODE_8BIT_BYTE, Encoder.ChooseMode(new ByteArray(dat3)));
+    assertEquals(QRCode.MODE_8BIT_BYTE, Encoder.chooseMode(new ByteArray(dat3)));
   }
 
   public void testEncode() throws WriterException {
-    QRCode qr_code = new QRCode();
-    Encoder.Encode(new ByteArray("ABCDEF"), QRCode.EC_LEVEL_H, qr_code);
+    QRCode qrCode = new QRCode();
+    Encoder.encode(new ByteArray("ABCDEF"), QRCode.EC_LEVEL_H, qrCode);
     // The following is a valid QR Code that can be read by cell phones.
     String expected =
       "<<\n" +
       " mode: ALPHANUMERIC\n" +
-      " ec_level: H\n" +
+      " ecLevel: H\n" +
       " version: 1\n" +
-      " matrix_width: 21\n" +
-      " mask_pattern: 0\n" +
-      " num_total_bytes_: 26\n" +
-      " num_data_bytes: 9\n" +
-      " num_ec_bytes: 17\n" +
-      " num_rs_blocks: 1\n" +
+      " matrixWidth: 21\n" +
+      " maskPattern: 0\n" +
+      " numTotalBytes: 26\n" +
+      " numDataBytes: 9\n" +
+      " numECBytes: 17\n" +
+      " numRSBlocks: 1\n" +
       " matrix:\n" +
       " 1 1 1 1 1 1 1 0 1 1 1 1 0 0 1 1 1 1 1 1 1\n" +
       " 1 0 0 0 0 0 1 0 0 1 1 1 0 0 1 0 0 0 0 0 1\n" +
@@ -121,19 +121,19 @@ public final class EncoderTestCase extends TestCase {
       " 1 0 0 0 0 0 1 0 0 1 1 0 1 1 0 1 0 0 0 1 1\n" +
       " 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 1 0 1 0 1\n" +
       ">>\n";
-    assertEquals(expected, qr_code.toString());
+    assertEquals(expected, qrCode.toString());
   }
 
   public void testAppendModeInfo() throws WriterException {
     BitVector bits = new BitVector();
-    Encoder.AppendModeInfo(QRCode.MODE_NUMERIC, bits);
+    Encoder.appendModeInfo(QRCode.MODE_NUMERIC, bits);
     assertEquals("0001", bits.toString());
   }
 
   public void testAppendLengthInfo() throws WriterException {
     {
       BitVector bits = new BitVector();
-      Encoder.AppendLengthInfo(1,  // 1 letter (1/1).
+      Encoder.appendLengthInfo(1,  // 1 letter (1/1).
 						  1,  // version 1.
 						  QRCode.MODE_NUMERIC,
 						  bits);
@@ -141,7 +141,7 @@ public final class EncoderTestCase extends TestCase {
     }
     {
       BitVector bits = new BitVector();
-      Encoder.AppendLengthInfo(2,  // 2 letters (2/1).
+      Encoder.appendLengthInfo(2,  // 2 letters (2/1).
 						  10,  // version 10.
 						  QRCode.MODE_ALPHANUMERIC,
 						  bits);
@@ -149,7 +149,7 @@ public final class EncoderTestCase extends TestCase {
     }
     {
       BitVector bits = new BitVector();
-      Encoder.AppendLengthInfo(255,  // 255 letter (255/1).
+      Encoder.appendLengthInfo(255,  // 255 letter (255/1).
 						  27,  // version 27.
 						  QRCode.MODE_8BIT_BYTE,
 						  bits);
@@ -157,7 +157,7 @@ public final class EncoderTestCase extends TestCase {
     }
     {
       BitVector bits = new BitVector();
-      Encoder.AppendLengthInfo(1024,  // 512 letters (1024/2).
+      Encoder.appendLengthInfo(1024,  // 512 letters (1024/2).
 						  40,  // version 40.
 						  QRCode.MODE_KANJI,
 						  bits);
@@ -167,53 +167,53 @@ public final class EncoderTestCase extends TestCase {
 
   public void testAppendBytes() throws WriterException {
     {
-      // Should use AppendNumericBytes.
+      // Should use appendNumericBytes.
       // 1 = 01 = 0001 in 4 bits.
       BitVector bits = new BitVector();
-      Encoder.AppendBytes(new ByteArray("1"), QRCode.MODE_NUMERIC, bits);
+      Encoder.appendBytes(new ByteArray("1"), QRCode.MODE_NUMERIC, bits);
       assertEquals("0001" , bits.toString());
       // 'A' cannot be encoded in MODE_NUMERIC.
       try {
-        Encoder.AppendBytes(new ByteArray("A"), QRCode.MODE_NUMERIC, bits);
+        Encoder.appendBytes(new ByteArray("A"), QRCode.MODE_NUMERIC, bits);
         fail("Should have thrown exception");
       } catch (WriterException we) {
         // good
       }
     }
     {
-      // Should use AppendAlphanumericBytes.
+      // Should use appendAlphanumericBytes.
       // A = 10 = 0xa = 001010 in 6 bits
       BitVector bits = new BitVector();
-      Encoder.AppendBytes(new ByteArray("A"), QRCode.MODE_ALPHANUMERIC, bits);
+      Encoder.appendBytes(new ByteArray("A"), QRCode.MODE_ALPHANUMERIC, bits);
       assertEquals("001010" , bits.toString());
       // Lower letters such as 'a' cannot be encoded in MODE_ALPHANUMERIC.
       try {
-        Encoder.AppendBytes(new ByteArray("a"), QRCode.MODE_ALPHANUMERIC, bits);
+        Encoder.appendBytes(new ByteArray("a"), QRCode.MODE_ALPHANUMERIC, bits);
       } catch (WriterException we) {
         // good
       }
     }
     {
-      // Should use Append8BitBytes.
+      // Should use append8BitBytes.
       // 0x61, 0x62, 0x63
       BitVector bits = new BitVector();
-      Encoder.AppendBytes(new ByteArray("abc"), QRCode.MODE_8BIT_BYTE, bits);
+      Encoder.appendBytes(new ByteArray("abc"), QRCode.MODE_8BIT_BYTE, bits);
       assertEquals("01100001" + "01100010" + "01100011", bits.toString());
       // Anything can be encoded in QRCode.MODE_8BIT_BYTE.
       byte[] bytes = {0x00};
-      Encoder.AppendBytes(new ByteArray(bytes), QRCode.MODE_8BIT_BYTE, bits);
+      Encoder.appendBytes(new ByteArray(bytes), QRCode.MODE_8BIT_BYTE, bits);
     }
     {
-      // Should use AppendKanjiBytes.
+      // Should use appendKanjiBytes.
       // 0x93, 0x5f
       BitVector bits = new BitVector();
       byte[] bytes = {(byte)0x93,0x5f};
-      Encoder.AppendBytes(new ByteArray(bytes), QRCode.MODE_KANJI, bits);
+      Encoder.appendBytes(new ByteArray(bytes), QRCode.MODE_KANJI, bits);
       assertEquals("0110110011111", bits.toString());
       // ASCII characters can not be encoded in QRCode.MODE_KANJI.
 
       try {
-        Encoder.AppendBytes(new ByteArray("a"), QRCode.MODE_KANJI, bits);
+        Encoder.appendBytes(new ByteArray("a"), QRCode.MODE_KANJI, bits);
       } catch (WriterException we) {
         // good
       }
@@ -227,90 +227,90 @@ public final class EncoderTestCase extends TestCase {
   public void testTerminateBits() throws WriterException {
     {
       BitVector v = new BitVector();
-      Encoder.TerminateBits(0, v);
+      Encoder.terminateBits(0, v);
       assertEquals("", v.toString());
     }
     {
       BitVector v = new BitVector();
-      Encoder.TerminateBits(1, v);
+      Encoder.terminateBits(1, v);
       assertEquals("00000000", v.toString());
     }
     {
       BitVector v = new BitVector();
       v.appendBits(0, 3);  // Append 000
-      Encoder.TerminateBits(1, v);
+      Encoder.terminateBits(1, v);
       assertEquals("00000000", v.toString());
     }
     {
       BitVector v = new BitVector();
       v.appendBits(0, 5);  // Append 00000
-      Encoder.TerminateBits(1, v);
+      Encoder.terminateBits(1, v);
       assertEquals("00000000", v.toString());
     }
     {
       BitVector v = new BitVector();
       v.appendBits(0, 8);  // Append 00000000
-      Encoder.TerminateBits(1, v);
+      Encoder.terminateBits(1, v);
       assertEquals("00000000", v.toString());
     }
     {
       BitVector v = new BitVector();
-      Encoder.TerminateBits(2, v);
+      Encoder.terminateBits(2, v);
       assertEquals("0000000011101100", v.toString());
     }
     {
       BitVector v = new BitVector();
       v.appendBits(0, 1);  // Append 0
-      Encoder.TerminateBits(3, v);
+      Encoder.terminateBits(3, v);
       assertEquals("000000001110110000010001", v.toString());
     }
   }
 
   public void testGetNumDataBytesAndNumECBytesForBlockID() throws WriterException {
-    int[] num_data_bytes = new int[1];
-    int[] num_ec_bytes = new int[1];
+    int[] numDataBytes = new int[1];
+    int[] numEcBytes = new int[1];
     // Version 1-H.
-    Encoder.GetNumDataBytesAndNumECBytesForBlockID(26, 9, 1, 0, num_data_bytes, num_ec_bytes);
-    assertEquals(9, num_data_bytes[0]);
-    assertEquals(17, num_ec_bytes[0]);
+    Encoder.getNumDataBytesAndNumECBytesForBlockID(26, 9, 1, 0, numDataBytes, numEcBytes);
+    assertEquals(9, numDataBytes[0]);
+    assertEquals(17, numEcBytes[0]);
 
     // Version 3-H.  2 blocks.
-    Encoder.GetNumDataBytesAndNumECBytesForBlockID(70, 26, 2, 0, num_data_bytes, num_ec_bytes);
-    assertEquals(13, num_data_bytes[0]);
-    assertEquals(22, num_ec_bytes[0]);
-    Encoder.GetNumDataBytesAndNumECBytesForBlockID(70, 26, 2, 1, num_data_bytes, num_ec_bytes);
-    assertEquals(13, num_data_bytes[0]);
-    assertEquals(22, num_ec_bytes[0]);
+    Encoder.getNumDataBytesAndNumECBytesForBlockID(70, 26, 2, 0, numDataBytes, numEcBytes);
+    assertEquals(13, numDataBytes[0]);
+    assertEquals(22, numEcBytes[0]);
+    Encoder.getNumDataBytesAndNumECBytesForBlockID(70, 26, 2, 1, numDataBytes, numEcBytes);
+    assertEquals(13, numDataBytes[0]);
+    assertEquals(22, numEcBytes[0]);
 
     // Version 7-H. (4 + 1) blocks.
-    Encoder.GetNumDataBytesAndNumECBytesForBlockID(196, 66, 5, 0, num_data_bytes, num_ec_bytes);
-    assertEquals(13, num_data_bytes[0]);
-    assertEquals(26, num_ec_bytes[0]);
-    Encoder.GetNumDataBytesAndNumECBytesForBlockID(196, 66, 5, 4, num_data_bytes, num_ec_bytes);
-    assertEquals(14, num_data_bytes[0]);
-    assertEquals(26, num_ec_bytes[0]);
+    Encoder.getNumDataBytesAndNumECBytesForBlockID(196, 66, 5, 0, numDataBytes, numEcBytes);
+    assertEquals(13, numDataBytes[0]);
+    assertEquals(26, numEcBytes[0]);
+    Encoder.getNumDataBytesAndNumECBytesForBlockID(196, 66, 5, 4, numDataBytes, numEcBytes);
+    assertEquals(14, numDataBytes[0]);
+    assertEquals(26, numEcBytes[0]);
 
     // Version 40-H. (20 + 61) blocks.
-    Encoder.GetNumDataBytesAndNumECBytesForBlockID(3706, 1276, 81, 0, num_data_bytes, num_ec_bytes);
-    assertEquals(15, num_data_bytes[0]);
-    assertEquals(30, num_ec_bytes[0]);
-    Encoder.GetNumDataBytesAndNumECBytesForBlockID(3706, 1276, 81, 20, num_data_bytes, num_ec_bytes);
-    assertEquals(16, num_data_bytes[0]);
-    assertEquals(30, num_ec_bytes[0]);
-    Encoder.GetNumDataBytesAndNumECBytesForBlockID(3706, 1276, 81, 80, num_data_bytes, num_ec_bytes);
-    assertEquals(16, num_data_bytes[0]);
-    assertEquals(30, num_ec_bytes[0]);
+    Encoder.getNumDataBytesAndNumECBytesForBlockID(3706, 1276, 81, 0, numDataBytes, numEcBytes);
+    assertEquals(15, numDataBytes[0]);
+    assertEquals(30, numEcBytes[0]);
+    Encoder.getNumDataBytesAndNumECBytesForBlockID(3706, 1276, 81, 20, numDataBytes, numEcBytes);
+    assertEquals(16, numDataBytes[0]);
+    assertEquals(30, numEcBytes[0]);
+    Encoder.getNumDataBytesAndNumECBytesForBlockID(3706, 1276, 81, 80, numDataBytes, numEcBytes);
+    assertEquals(16, numDataBytes[0]);
+    assertEquals(30, numEcBytes[0]);
   }
 
   public void testInterleaveWithECBytes() throws WriterException {
     {
-      final byte[] data_bytes = {32, 65, (byte)205, 69, 41, (byte)220, 46, (byte)128, (byte)236};
+      final byte[] dataBytes = {32, 65, (byte)205, 69, 41, (byte)220, 46, (byte)128, (byte)236};
       BitVector in = new BitVector();
-      for (byte data_byte: data_bytes) {
-        in.appendBits(data_byte, 8);
+      for (byte dataByte: dataBytes) {
+        in.appendBits(dataByte, 8);
       }
       BitVector out = new BitVector();
-      Encoder.InterleaveWithECBytes(in, 26, 9, 1, out);
+      Encoder.interleaveWithECBytes(in, 26, 9, 1, out);
       final byte[] expected = {
           // Data bytes.
           32, 65, (byte)205, 69, 41, (byte)220, 46, (byte)128, (byte)236,
@@ -319,15 +319,15 @@ public final class EncoderTestCase extends TestCase {
           (byte)237, 85, (byte)224, 96, 74, (byte)219, 61,
       };
       assertEquals(expected.length, out.sizeInBytes());
-      final byte[] out_array = out.getArray();
-      // Can't use Arrays.equals(), because out_array may be longer than out.sizeInBytes()
+      final byte[] outArray = out.getArray();
+      // Can't use Arrays.equals(), because outArray may be longer than out.sizeInBytes()
       for (int x = 0; x < expected.length; x++) {
-        assertEquals(expected[x], out_array[x]);
+        assertEquals(expected[x], outArray[x]);
       }
     }
     // Numbers are from http://www.swetake.com/qr/qr8.html
     {
-      final byte[] data_bytes = {
+      final byte[] dataBytes = {
           67, 70, 22, 38, 54, 70, 86, 102, 118, (byte)134, (byte)150, (byte)166, (byte)182,
           (byte)198, (byte)214, (byte)230, (byte)247, 7, 23, 39, 55, 71, 87, 103, 119, (byte)135,
           (byte)151, (byte)166, 22, 38, 54, 70, 86, 102, 118, (byte)134, (byte)150, (byte)166,
@@ -336,11 +336,11 @@ public final class EncoderTestCase extends TestCase {
           17
       };
       BitVector in = new BitVector();
-      for (byte data_byte: data_bytes) {
-        in.appendBits(data_byte, 8);
+      for (byte dataByte: dataBytes) {
+        in.appendBits(dataByte, 8);
       }
       BitVector out = new BitVector();
-      Encoder.InterleaveWithECBytes(in, 134, 62, 4, out);
+      Encoder.interleaveWithECBytes(in, 134, 62, 4, out);
       final byte[] expected = {
           // Data bytes.
           67, (byte)230, 54, 55, 70, (byte)247, 70, 71, 22, 7, 86, 87, 38, 23, 102, 103, 54, 39,
@@ -359,9 +359,9 @@ public final class EncoderTestCase extends TestCase {
           (byte)187, 49, (byte)156, (byte)214,
       };
       assertEquals(expected.length, out.sizeInBytes());
-      final byte[] out_array = out.getArray();
+      final byte[] outArray = out.getArray();
       for (int x = 0; x < expected.length; x++) {
-        assertEquals(expected[x], out_array[x]);
+        assertEquals(expected[x], outArray[x]);
       }
     }
   }
@@ -370,38 +370,38 @@ public final class EncoderTestCase extends TestCase {
     {
       // 1 = 01 = 0001 in 4 bits.
       BitVector bits = new BitVector();
-      Encoder.AppendNumericBytes(new ByteArray("1"), bits);
+      Encoder.appendNumericBytes(new ByteArray("1"), bits);
       assertEquals("0001" , bits.toString());
     }
     {
       // 12 = 0xc = 0001100 in 7 bits.
       BitVector bits = new BitVector();
-      Encoder.AppendNumericBytes(new ByteArray("12"), bits);
+      Encoder.appendNumericBytes(new ByteArray("12"), bits);
       assertEquals("0001100" , bits.toString());
     }
     {
       // 123 = 0x7b = 0001111011 in 10 bits.
       BitVector bits = new BitVector();
-      Encoder.AppendNumericBytes(new ByteArray("123"), bits);
+      Encoder.appendNumericBytes(new ByteArray("123"), bits);
       assertEquals("0001111011" , bits.toString());
     }
     {
       // 1234 = "123" + "4" = 0001111011 + 0100
       BitVector bits = new BitVector();
-      Encoder.AppendNumericBytes(new ByteArray("1234"), bits);
+      Encoder.appendNumericBytes(new ByteArray("1234"), bits);
       assertEquals("0001111011" + "0100" , bits.toString());
     }
     {
       // Empty.
       BitVector bits = new BitVector();
-      Encoder.AppendNumericBytes(new ByteArray(""), bits);
+      Encoder.appendNumericBytes(new ByteArray(""), bits);
       assertEquals("" , bits.toString());
     }
     {
       // Invalid data.
       BitVector bits = new BitVector();
       try {
-        Encoder.AppendNumericBytes(new ByteArray("abc"), bits);
+        Encoder.appendNumericBytes(new ByteArray("abc"), bits);
       } catch (WriterException we) {
         // good
       }
@@ -412,32 +412,32 @@ public final class EncoderTestCase extends TestCase {
     {
       // A = 10 = 0xa = 001010 in 6 bits
       BitVector bits = new BitVector();
-      Encoder.AppendAlphanumericBytes(new ByteArray("A"), bits);
+      Encoder.appendAlphanumericBytes(new ByteArray("A"), bits);
       assertEquals("001010" , bits.toString());
     }
     {
       // AB = 10 * 45 + 11 = 461 = 0x1cd = 00111001101 in 11 bits
       BitVector bits = new BitVector();
-      Encoder.AppendAlphanumericBytes(new ByteArray("AB"), bits);
+      Encoder.appendAlphanumericBytes(new ByteArray("AB"), bits);
       assertEquals("00111001101", bits.toString());
     }
     {
       // ABC = "AB" + "C" = 00111001101 + 001100
       BitVector bits = new BitVector();
-      Encoder.AppendAlphanumericBytes(new ByteArray("ABC"), bits);
+      Encoder.appendAlphanumericBytes(new ByteArray("ABC"), bits);
       assertEquals("00111001101" + "001100" , bits.toString());
     }
     {
       // Empty.
       BitVector bits = new BitVector();
-      Encoder.AppendAlphanumericBytes(new ByteArray(""), bits);
+      Encoder.appendAlphanumericBytes(new ByteArray(""), bits);
       assertEquals("" , bits.toString());
     }
     {
       // Invalid data.
       BitVector bits = new BitVector();
       try {
-        Encoder.AppendAlphanumericBytes(new ByteArray("abc"), bits);
+        Encoder.appendAlphanumericBytes(new ByteArray("abc"), bits);
       } catch (WriterException we) {
         // good
       }
@@ -448,13 +448,13 @@ public final class EncoderTestCase extends TestCase {
     {
       // 0x61, 0x62, 0x63
       BitVector bits = new BitVector();
-      Encoder.Append8BitBytes(new ByteArray("abc"), bits);
+      Encoder.append8BitBytes(new ByteArray("abc"), bits);
       assertEquals("01100001" + "01100010" + "01100011", bits.toString());
     }
     {
       // Empty.
       BitVector bits = new BitVector();
-      Encoder.Append8BitBytes(new ByteArray(""), bits);
+      Encoder.append8BitBytes(new ByteArray(""), bits);
       assertEquals("", bits.toString());
     }
   }
@@ -464,10 +464,10 @@ public final class EncoderTestCase extends TestCase {
     {
       BitVector bits = new BitVector();
       byte[] dat1 = {(byte)0x93,0x5f};
-      Encoder.AppendKanjiBytes(new ByteArray(dat1), bits);
+      Encoder.appendKanjiBytes(new ByteArray(dat1), bits);
       assertEquals("0110110011111", bits.toString());
       byte[] dat2 = {(byte)0xe4,(byte)0xaa};
-      Encoder.AppendKanjiBytes(new ByteArray(dat2), bits);
+      Encoder.appendKanjiBytes(new ByteArray(dat2), bits);
       assertEquals("0110110011111" + "1101010101010", bits.toString());
     }
   }
@@ -539,52 +539,52 @@ public final class EncoderTestCase extends TestCase {
   // http://www.swetake.com/qr/qr9.html
   public void testGenerateECBytes() {
     {
-      final byte[] data_bytes = {32, 65, (byte)205, 69, 41, (byte)220, 46, (byte)128, (byte)236};
-      ByteArray ec_bytes = Encoder.GenerateECBytes(new ByteArray(data_bytes), 17);
+      final byte[] dataBytes = {32, 65, (byte)205, 69, 41, (byte)220, 46, (byte)128, (byte)236};
+      ByteArray ecBytes = Encoder.generateECBytes(new ByteArray(dataBytes), 17);
       final int[] expected = {
           42, 159, 74, 221, 244, 169, 239, 150, 138, 70, 237, 85, 224, 96, 74, 219, 61
       };
-      assertEquals(expected.length, ec_bytes.size());
+      assertEquals(expected.length, ecBytes.size());
       for (int x = 0; x < expected.length; x++) {
-        assertEquals(expected[x], ec_bytes.at(x));
+        assertEquals(expected[x], ecBytes.at(x));
       }
     }
     {
-      final byte[] data_bytes = {67, 70, 22, 38, 54, 70, 86, 102, 118,
+      final byte[] dataBytes = {67, 70, 22, 38, 54, 70, 86, 102, 118,
           (byte)134, (byte)150, (byte)166, (byte)182, (byte)198, (byte)214};
-      ByteArray ec_bytes = Encoder.GenerateECBytes(new ByteArray(data_bytes), 18);
+      ByteArray ecBytes = Encoder.generateECBytes(new ByteArray(dataBytes), 18);
       final int[] expected = {
           175, 80, 155, 64, 178, 45, 214, 233, 65, 209, 12, 155, 117, 31, 140, 214, 27, 187
       };
-      assertEquals(expected.length, ec_bytes.size());
+      assertEquals(expected.length, ecBytes.size());
       for (int x = 0; x < expected.length; x++) {
-        assertEquals(expected[x], ec_bytes.at(x));
+        assertEquals(expected[x], ecBytes.at(x));
       }
     }
     {
       // High-order zero cofficient case.
-      final byte[] data_bytes = {32, 49, (byte)205, 69, 42, 20, 0, (byte)236, 17};
-      ByteArray ec_bytes = Encoder.GenerateECBytes(new ByteArray(data_bytes), 17);
+      final byte[] dataBytes = {32, 49, (byte)205, 69, 42, 20, 0, (byte)236, 17};
+      ByteArray ecBytes = Encoder.generateECBytes(new ByteArray(dataBytes), 17);
       final int[] expected = {
           0, 3, 130, 179, 194, 0, 55, 211, 110, 79, 98, 72, 170, 96, 211, 137, 213
       };
-      assertEquals(expected.length, ec_bytes.size());
+      assertEquals(expected.length, ecBytes.size());
       for (int x = 0; x < expected.length; x++) {
-        assertEquals(expected[x], ec_bytes.at(x));
+        assertEquals(expected[x], ecBytes.at(x));
       }
     }
   }
 
   public void testIsValidKanji() {
-    assertTrue(Encoder.IsValidKanji(0x82, 0xa0));  // Hiragana "A".
-    assertTrue(Encoder.IsValidKanji(0x93, 0xfa));  // Nichi in Kanji.
-    assertTrue(Encoder.IsValidKanji(0x8a, 0xbf));  // Kan in Kanji.
-    assertTrue(Encoder.IsValidKanji(0xe7, 0x4e));  // Sou in Kanji.
-    assertTrue(Encoder.IsValidKanji(0xea, 0xa2));  // Haruka in Kanji.
+    assertTrue(Encoder.isValidKanji(0x82, 0xa0));  // Hiragana "A".
+    assertTrue(Encoder.isValidKanji(0x93, 0xfa));  // Nichi in Kanji.
+    assertTrue(Encoder.isValidKanji(0x8a, 0xbf));  // Kan in Kanji.
+    assertTrue(Encoder.isValidKanji(0xe7, 0x4e));  // Sou in Kanji.
+    assertTrue(Encoder.isValidKanji(0xea, 0xa2));  // Haruka in Kanji.
 
-    assertFalse(Encoder.IsValidKanji('0', '1'));
-    assertFalse(Encoder.IsValidKanji(0x82, 0x7f));
-    assertFalse(Encoder.IsValidKanji(0xa0, 0xa0));
+    assertFalse(Encoder.isValidKanji('0', '1'));
+    assertFalse(Encoder.isValidKanji(0x82, 0x7f));
+    assertFalse(Encoder.isValidKanji(0xa0, 0xa0));
   }
 
   public void testIsValidKanjiSequence() {
@@ -592,24 +592,24 @@ public final class EncoderTestCase extends TestCase {
     byte[] dat1 = {
         (byte)0x83, 0x41, (byte)0x83, 0x43, (byte)0x83, 0x45, (byte)0x83, 0x47, (byte)0x83, 0x49
     };
-    assertTrue(Encoder.IsValidKanjiSequence(new ByteArray(dat1)));
+    assertTrue(Encoder.isValidKanjiSequence(new ByteArray(dat1)));
     // 012345 in multi-byte letters.
     byte[] dat2 = {
         (byte)0x82, 0x4f, (byte)0x82, 0x50, (byte)0x82, 0x51, (byte)0x82, 0x52, (byte)0x82, 0x53,
         (byte)0x82, 0x54
     };
-    assertTrue(Encoder.IsValidKanjiSequence(new ByteArray(dat2)));
+    assertTrue(Encoder.isValidKanjiSequence(new ByteArray(dat2)));
     // Yoroshiku in Kanji.
     byte[] dat3 = {
         (byte)0x96, (byte)0xe9, (byte)0x98, 0x49, (byte)0x8e, (byte)0x80, (byte)0x8b, (byte)0xea
     };
-    assertTrue(Encoder.IsValidKanjiSequence(new ByteArray(dat3)));
-    assertFalse(Encoder.IsValidKanjiSequence(new ByteArray("0123")));
-    assertFalse(Encoder.IsValidKanjiSequence(new ByteArray("ABC")));
+    assertTrue(Encoder.isValidKanjiSequence(new ByteArray(dat3)));
+    assertFalse(Encoder.isValidKanjiSequence(new ByteArray("0123")));
+    assertFalse(Encoder.isValidKanjiSequence(new ByteArray("ABC")));
   }
 
   public void testBugInBitVectorNumBytes() throws WriterException {
-    // There was a bug in BitVector::sizeInBytes() that caused it to return a
+    // There was a bug in BitVector.sizeInBytes() that caused it to return a
     // smaller-by-one value (ex. 1465 instead of 1466) if the number of bits
     // in the vector is not 8-bit aligned.  In QRCodeEncoder::InitQRCode(),
     // BitVector::sizeInBytes() is used for finding the smallest QR Code
@@ -633,16 +633,16 @@ public final class EncoderTestCase extends TestCase {
     //   (1468 -3) are left for data.
     // - Because of the bug in BitVector::sizeInBytes(), InitQRCode() determines
     //   the given data can fit in 1465 bytes, despite it needs 1466 bytes.
-    // - Hence QRCodeEncoder::Encode() failed and returned false.
-    //   - To be precise, it needs 11727 + 4 (mode info) + 14 (length info) =
+    // - Hence QRCodeEncoder.encode() failed and returned false.
+    //   - To be precise, it needs 11727 + 4 (getMode info) + 14 (length info) =
     //     11745 bits = 1468.125 bytes are needed (i.e. cannot fit in 1468
     //     bytes).
     final int arraySize = 3518;
-    byte[] data_bytes = new byte[arraySize];
+    byte[] dataBytes = new byte[arraySize];
     for (int x = 0; x < arraySize; x++) {
-      data_bytes[x] = '0';
+      dataBytes[x] = '0';
     }
-    QRCode qr_code = new QRCode();
-    Encoder.Encode(new ByteArray(data_bytes), QRCode.EC_LEVEL_L, qr_code);
+    QRCode qrCode = new QRCode();
+    Encoder.encode(new ByteArray(dataBytes), QRCode.EC_LEVEL_L, qrCode);
   }
 }

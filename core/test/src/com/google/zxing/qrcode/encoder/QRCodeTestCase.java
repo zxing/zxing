@@ -26,34 +26,34 @@ import junit.framework.TestCase;
  */
 public final class QRCodeTestCase extends TestCase {
   public void test() {
-    QRCode qr_code = new QRCode();
+    QRCode qrCode = new QRCode();
     // Initially the QR Code should be invalid.
-    assertFalse(qr_code.IsValid());
+    assertFalse(qrCode.isValid());
 
     // First, test simple setters and getters.
     // We use numbers of version 7-H.
-    qr_code.set_mode(QRCode.MODE_8BIT_BYTE);
-    qr_code.set_ec_level(QRCode.EC_LEVEL_H);
-    qr_code.set_version(7);
-    qr_code.set_matrix_width(45);
-    qr_code.set_mask_pattern(3);
-    qr_code.set_num_total_bytes(196);
-    qr_code.set_num_data_bytes(66);
-    qr_code.set_num_ec_bytes(130);
-    qr_code.set_num_rs_blocks(5);
+    qrCode.setMode(QRCode.MODE_8BIT_BYTE);
+    qrCode.setECLevel(QRCode.EC_LEVEL_H);
+    qrCode.setVersion(7);
+    qrCode.setMatrixWidth(45);
+    qrCode.setMaskPattern(3);
+    qrCode.setNumTotalBytes(196);
+    qrCode.setNumDataBytes(66);
+    qrCode.setNumECBytes(130);
+    qrCode.setNumRSBlocks(5);
 
-    assertEquals(QRCode.MODE_8BIT_BYTE, qr_code.mode());
-    assertEquals(QRCode.EC_LEVEL_H, qr_code.ec_level());
-    assertEquals(7, qr_code.version());
-    assertEquals(45, qr_code.matrix_width());
-    assertEquals(3, qr_code.mask_pattern());
-    assertEquals(196, qr_code.num_total_bytes());
-    assertEquals(66, qr_code.num_data_bytes());
-    assertEquals(130, qr_code.num_ec_bytes());
-    assertEquals(5, qr_code.num_rs_blocks());
+    assertEquals(QRCode.MODE_8BIT_BYTE, qrCode.getMode());
+    assertEquals(QRCode.EC_LEVEL_H, qrCode.getECLevel());
+    assertEquals(7, qrCode.getVersion());
+    assertEquals(45, qrCode.getMatrixWidth());
+    assertEquals(3, qrCode.getMaskPattern());
+    assertEquals(196, qrCode.getNumTotalBytes());
+    assertEquals(66, qrCode.getNumDataBytes());
+    assertEquals(130, qrCode.getNumECBytes());
+    assertEquals(5, qrCode.getNumRSBlocks());
 
     // It still should be invalid.
-    assertFalse(qr_code.IsValid());
+    assertFalse(qrCode.isValid());
 
     // Prepare the matrix.
     ByteMatrix matrix = new ByteMatrix(45, 45);
@@ -65,50 +65,50 @@ public final class QRCodeTestCase extends TestCase {
     }
 
     // Set the matrix.
-    qr_code.set_matrix(matrix);
-    assertEquals(matrix, qr_code.matrix());
+    qrCode.setMatrix(matrix);
+    assertEquals(matrix, qrCode.getMatrix());
 
     // Finally, it should be valid.
-    assertTrue(qr_code.IsValid());
+    assertTrue(qrCode.isValid());
 
     // Make sure "at()" returns the same value.
     for (int y = 0; y < 45; ++y) {
       for (int x = 0; x < 45; ++x) {
-        assertEquals((y + x) % 2, qr_code.at(x, y));
+        assertEquals((y + x) % 2, qrCode.at(x, y));
       }
     }
   }
 
   public void testToString() {
     {
-      QRCode qr_code = new QRCode();
+      QRCode qrCode = new QRCode();
       String expected =
 	"<<\n" +
 	" mode: UNDEFINED\n" +
-	" ec_level: UNDEFINED\n" +
+	" ecLevel: UNDEFINED\n" +
 	" version: -1\n" +
-	" matrix_width: -1\n" +
-	" mask_pattern: -1\n" +
-	" num_total_bytes_: -1\n" +
-	" num_data_bytes: -1\n" +
-	" num_ec_bytes: -1\n" +
-	" num_rs_blocks: -1\n" +
+	" matrixWidth: -1\n" +
+	" maskPattern: -1\n" +
+	" numTotalBytes: -1\n" +
+	" numDataBytes: -1\n" +
+	" numECBytes: -1\n" +
+	" numRSBlocks: -1\n" +
 	" matrix: null\n" +
 	">>\n";
-      assertEquals(expected, qr_code.toString());
+      assertEquals(expected, qrCode.toString());
     }
     {
       String expected =
 	"<<\n" +
 	" mode: 8BIT_BYTE\n" +
-	" ec_level: H\n" +
+	" ecLevel: H\n" +
 	" version: 1\n" +
-	" matrix_width: 21\n" +
-	" mask_pattern: 3\n" +
-	" num_total_bytes_: 26\n" +
-	" num_data_bytes: 9\n" +
-	" num_ec_bytes: 17\n" +
-	" num_rs_blocks: 1\n" +
+	" matrixWidth: 21\n" +
+	" maskPattern: 3\n" +
+	" numTotalBytes: 26\n" +
+	" numDataBytes: 9\n" +
+	" numECBytes: 17\n" +
+	" numRSBlocks: 1\n" +
 	" matrix:\n" +
 	" 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n" +
 	" 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n" +
@@ -132,90 +132,90 @@ public final class QRCodeTestCase extends TestCase {
 	" 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n" +
 	" 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n" +
 	">>\n";
-      QRCode qr_code = new QRCode();
-      qr_code.set_mode(QRCode.MODE_8BIT_BYTE);
-      qr_code.set_ec_level(QRCode.EC_LEVEL_H);
-      qr_code.set_version(1);
-      qr_code.set_matrix_width(21);
-      qr_code.set_mask_pattern(3);
-      qr_code.set_num_total_bytes(26);
-      qr_code.set_num_data_bytes(9);
-      qr_code.set_num_ec_bytes(17);
-      qr_code.set_num_rs_blocks(1);
+      QRCode qrCode = new QRCode();
+      qrCode.setMode(QRCode.MODE_8BIT_BYTE);
+      qrCode.setECLevel(QRCode.EC_LEVEL_H);
+      qrCode.setVersion(1);
+      qrCode.setMatrixWidth(21);
+      qrCode.setMaskPattern(3);
+      qrCode.setNumTotalBytes(26);
+      qrCode.setNumDataBytes(9);
+      qrCode.setNumECBytes(17);
+      qrCode.setNumRSBlocks(1);
       ByteMatrix matrix = new ByteMatrix(21, 21);
       for (int y = 0; y < 21; ++y) {
         for (int x = 0; x < 21; ++x) {
           matrix.set(y, x, (y + x) % 2);
         }
       }
-      qr_code.set_matrix(matrix);
-      assertTrue(qr_code.IsValid());
-      assertEquals(expected, qr_code.toString());
+      qrCode.setMatrix(matrix);
+      assertTrue(qrCode.isValid());
+      assertEquals(expected, qrCode.toString());
     }
   }
 
   public void testIsValidVersion() {
-    assertFalse(QRCode.IsValidVersion(0));
-    assertTrue(QRCode.IsValidVersion(1));
-    assertTrue(QRCode.IsValidVersion(40));
-    assertFalse(QRCode.IsValidVersion(0));
+    assertFalse(QRCode.isValidVersion(0));
+    assertTrue(QRCode.isValidVersion(1));
+    assertTrue(QRCode.isValidVersion(40));
+    assertFalse(QRCode.isValidVersion(0));
   }
 
   public void testIsValidECLevel() {
-    assertFalse(QRCode.IsValidECLevel(QRCode.EC_LEVEL_UNDEFINED));
-    assertTrue(QRCode.IsValidECLevel(QRCode.EC_LEVEL_L));
-    assertTrue(QRCode.IsValidECLevel(QRCode.EC_LEVEL_Q));
-    assertTrue(QRCode.IsValidECLevel(QRCode.EC_LEVEL_M));
-    assertTrue(QRCode.IsValidECLevel(QRCode.EC_LEVEL_H));
-    assertFalse(QRCode.IsValidECLevel(QRCode.NUM_EC_LEVELS));
+    assertFalse(QRCode.isValidECLevel(QRCode.EC_LEVEL_UNDEFINED));
+    assertTrue(QRCode.isValidECLevel(QRCode.EC_LEVEL_L));
+    assertTrue(QRCode.isValidECLevel(QRCode.EC_LEVEL_Q));
+    assertTrue(QRCode.isValidECLevel(QRCode.EC_LEVEL_M));
+    assertTrue(QRCode.isValidECLevel(QRCode.EC_LEVEL_H));
+    assertFalse(QRCode.isValidECLevel(QRCode.NUM_EC_LEVELS));
   }
 
   public void testIsValidMode() {
-    assertFalse(QRCode.IsValidMode(QRCode.MODE_UNDEFINED));
-    assertTrue(QRCode.IsValidMode(QRCode.MODE_NUMERIC));
-    assertTrue(QRCode.IsValidMode(QRCode.MODE_ALPHANUMERIC));
-    assertTrue(QRCode.IsValidMode(QRCode.MODE_8BIT_BYTE));
-    assertFalse(QRCode.IsValidMode(QRCode.NUM_MODES));
+    assertFalse(QRCode.isValidMode(QRCode.MODE_UNDEFINED));
+    assertTrue(QRCode.isValidMode(QRCode.MODE_NUMERIC));
+    assertTrue(QRCode.isValidMode(QRCode.MODE_ALPHANUMERIC));
+    assertTrue(QRCode.isValidMode(QRCode.MODE_8BIT_BYTE));
+    assertFalse(QRCode.isValidMode(QRCode.NUM_MODES));
   }
 
   public void testIsValidMatrixWidth() {
-    assertFalse(QRCode.IsValidMatrixWidth(20));
-    assertTrue(QRCode.IsValidMatrixWidth(21));
-    assertTrue(QRCode.IsValidMatrixWidth(177));
-    assertFalse(QRCode.IsValidMatrixWidth(178));
+    assertFalse(QRCode.isValidMatrixWidth(20));
+    assertTrue(QRCode.isValidMatrixWidth(21));
+    assertTrue(QRCode.isValidMatrixWidth(177));
+    assertFalse(QRCode.isValidMatrixWidth(178));
   }
 
   public void testIsValidMaskPattern() {
-    assertFalse(QRCode.IsValidMaskPattern(-1));
-    assertTrue(QRCode.IsValidMaskPattern(0));
-    assertTrue(QRCode.IsValidMaskPattern(7));
-    assertFalse(QRCode.IsValidMaskPattern(8));
+    assertFalse(QRCode.isValidMaskPattern(-1));
+    assertTrue(QRCode.isValidMaskPattern(0));
+    assertTrue(QRCode.isValidMaskPattern(7));
+    assertFalse(QRCode.isValidMaskPattern(8));
   }
 
   public void testModeToString() {
-    assertEquals("UNDEFINED", QRCode.ModeToString(QRCode.MODE_UNDEFINED));
-    assertEquals("NUMERIC", QRCode.ModeToString(QRCode.MODE_NUMERIC));
-    assertEquals("ALPHANUMERIC", QRCode.ModeToString(QRCode.MODE_ALPHANUMERIC));
-    assertEquals("8BIT_BYTE", QRCode.ModeToString(QRCode.MODE_8BIT_BYTE));
-    assertEquals("UNKNOWN", QRCode.ModeToString(QRCode.NUM_MODES));
+    assertEquals("UNDEFINED", QRCode.modeToString(QRCode.MODE_UNDEFINED));
+    assertEquals("NUMERIC", QRCode.modeToString(QRCode.MODE_NUMERIC));
+    assertEquals("ALPHANUMERIC", QRCode.modeToString(QRCode.MODE_ALPHANUMERIC));
+    assertEquals("8BIT_BYTE", QRCode.modeToString(QRCode.MODE_8BIT_BYTE));
+    assertEquals("UNKNOWN", QRCode.modeToString(QRCode.NUM_MODES));
   }
 
   public void testECLevelToString() {
-    assertEquals("UNDEFINED", QRCode.ECLevelToString(QRCode.EC_LEVEL_UNDEFINED));
-    assertEquals("L", QRCode.ECLevelToString(QRCode.EC_LEVEL_L));
-    assertEquals("M", QRCode.ECLevelToString(QRCode.EC_LEVEL_M));
-    assertEquals("Q", QRCode.ECLevelToString(QRCode.EC_LEVEL_Q));
-    assertEquals("H", QRCode.ECLevelToString(QRCode.EC_LEVEL_H));
-    assertEquals("UNKNOWN", QRCode.ECLevelToString(QRCode.NUM_EC_LEVELS));
+    assertEquals("UNDEFINED", QRCode.ecLevelToString(QRCode.EC_LEVEL_UNDEFINED));
+    assertEquals("L", QRCode.ecLevelToString(QRCode.EC_LEVEL_L));
+    assertEquals("M", QRCode.ecLevelToString(QRCode.EC_LEVEL_M));
+    assertEquals("Q", QRCode.ecLevelToString(QRCode.EC_LEVEL_Q));
+    assertEquals("H", QRCode.ecLevelToString(QRCode.EC_LEVEL_H));
+    assertEquals("UNKNOWN", QRCode.ecLevelToString(QRCode.NUM_EC_LEVELS));
   }
 
   public void testGetModeCode() throws WriterException {
-    assertEquals(1, QRCode.GetModeCode(QRCode.MODE_NUMERIC));
-    assertEquals(2, QRCode.GetModeCode(QRCode.MODE_ALPHANUMERIC));
-    assertEquals(4, QRCode.GetModeCode(QRCode.MODE_8BIT_BYTE));
-    assertEquals(8, QRCode.GetModeCode(QRCode.MODE_KANJI));
+    assertEquals(1, QRCode.getModeCode(QRCode.MODE_NUMERIC));
+    assertEquals(2, QRCode.getModeCode(QRCode.MODE_ALPHANUMERIC));
+    assertEquals(4, QRCode.getModeCode(QRCode.MODE_8BIT_BYTE));
+    assertEquals(8, QRCode.getModeCode(QRCode.MODE_KANJI));
     try {
-      QRCode.GetModeCode(QRCode.MODE_UNDEFINED);
+      QRCode.getModeCode(QRCode.MODE_UNDEFINED);
       fail("Should have thrown exception");      
     } catch (WriterException we) {
       // good
@@ -223,12 +223,12 @@ public final class QRCodeTestCase extends TestCase {
   }
 
   public void testGetECLevelCode() throws WriterException {
-    assertEquals(1, QRCode.GetECLevelCode(QRCode.EC_LEVEL_L));
-    assertEquals(0, QRCode.GetECLevelCode(QRCode.EC_LEVEL_M));
-    assertEquals(3, QRCode.GetECLevelCode(QRCode.EC_LEVEL_Q));
-    assertEquals(2, QRCode.GetECLevelCode(QRCode.EC_LEVEL_H));
+    assertEquals(1, QRCode.getECLevelCode(QRCode.EC_LEVEL_L));
+    assertEquals(0, QRCode.getECLevelCode(QRCode.EC_LEVEL_M));
+    assertEquals(3, QRCode.getECLevelCode(QRCode.EC_LEVEL_Q));
+    assertEquals(2, QRCode.getECLevelCode(QRCode.EC_LEVEL_H));
     try {
-      QRCode.GetECLevelCode(QRCode.EC_LEVEL_UNDEFINED);
+      QRCode.getECLevelCode(QRCode.EC_LEVEL_UNDEFINED);
       fail("Should have thrown exception");
     } catch (WriterException we) {
       // good

@@ -26,39 +26,37 @@ import com.google.zxing.WriterException;
 public final class QRCode {
 
   // Magic numbers.
-  private static final int kMinVersion = 1;
-  private static final int kMaxVersion = 40;
+  private static final int MIN_VERSION = 1;
+  private static final int MAX_VERSION = 40;
   // For matrix width, see 7.3.1 of JISX0510:2004 (p.5).
-  private static final int kMinMatrixWidth = 21;  // Version 1
-  private static final int kMaxMatrixWidth = 177;  // Version 40 (21 + 4 * (40 -1)).
-  public static final int kNumMaskPatterns = 8;
+  private static final int MIN_MATRIX_WIDTH = 21;  // Version 1
+  private static final int MAX_MATRIX_WIDTH = 177;  // Version 40 (21 + 4 * (40 -1)).
+  public static final int NUM_MASK_PATTERNS = 8;
 
   // See table 3 of JISX0510:2004 (p.16)
-  private static final int kNumBitsTable[][] = {
+  private static final int[][] NUM_BITS_TABLE = {
       // NUMERIC  ALPHANUMERIC  8BIT_BYTE  KANJI
       {       10,            9,         8,     8 },  // Version 1-9
       {       12,           11,        16,    10 },  // Version 10-26
       {       14,           13,        16,    12 },  // Version 27-40
   };
 
-  // JAVAPORT: Do not remove trailing slashes yet. There are very likely conflicts with local
-  // variables and parameters which will introduce insidious bugs.
-  private int mode_;
-  private int ec_level_;
-  private int version_;
-  private int matrix_width_;
-  private int mask_pattern_;
-  private int num_total_bytes_;
-  private int num_data_bytes_;
-  private int num_ec_bytes_;
-  private int num_rs_blocks_;
-  private ByteMatrix matrix_;
+  private int mode;
+  private int ecLevel;
+  private int version;
+  private int matrixWidth;
+  private int maskPattern;
+  private int numTotalBytes;
+  private int numDataBytes;
+  private int numECBytes;
+  private int numRSBlocks;
+  private ByteMatrix matrix;
 
 
   // They call encoding "mode". The modes are defined in 8.3 of JISX0510:2004 (p.14). It's unlikely
   // (probably we will not support complicated modes) but if you add an item to this, please also
-  // add it to ModeToString(), GetModeCode(), GetNumBitsForLength(), Encoder.AppendBytes(), and
-  // Encoder.ChooseMode().
+  // add it to modeToString(), getModeCode(), getNumBitsForLength(), Encoder.appendBytes(), and
+  // Encoder.chooseMode().
   //
   // JAVAPORT: These used to be C++ enums, but the code evaluates them as integers, and requires
   // negative values. I don't want to take the ParsedResultType approach of a class full of statics
@@ -79,7 +77,7 @@ public final class QRCode {
 
   // The error correction levels are defined in the table 22 of JISX0510:2004 (p.45). It's very
   // unlikely (we've already covered all of them!)  but if you add an item to this, please also add
-  // it to ECLevelToString() and GetECLevelCode().
+  // it to ecLevelToString() and getECLevelCode().
   //
   // Formerly enum ECLevel
   public static final int EC_LEVEL_UNDEFINED  = -1;
@@ -91,44 +89,44 @@ public final class QRCode {
   public static final int NUM_EC_LEVELS = 4;
 
   public QRCode() {
-    mode_ = MODE_UNDEFINED;
-    ec_level_ = EC_LEVEL_UNDEFINED;
-    version_ = -1;
-    matrix_width_ = -1;
-    mask_pattern_ = -1;
-    num_total_bytes_ = -1;
-    num_data_bytes_ = -1;
-    num_ec_bytes_ = -1;
-    num_rs_blocks_ = -1;
-    matrix_ = null;
+    mode = MODE_UNDEFINED;
+    ecLevel = EC_LEVEL_UNDEFINED;
+    version = -1;
+    matrixWidth = -1;
+    maskPattern = -1;
+    numTotalBytes = -1;
+    numDataBytes = -1;
+    numECBytes = -1;
+    numRSBlocks = -1;
+    matrix = null;
   }
 
   // Mode of the QR Code.
-  public int mode() { return mode_; }
+  public int getMode() { return mode; }
   // Error correction level of the QR Code.
-  public int ec_level() { return ec_level_; }
+  public int getECLevel() { return ecLevel; }
   // Version of the QR Code.  The bigger size, the bigger version.
-  public int version() { return version_; }
+  public int getVersion() { return version; }
   // ByteMatrix width of the QR Code.
-  public int matrix_width() { return matrix_width_; }
+  public int getMatrixWidth() { return matrixWidth; }
   // Mask pattern of the QR Code.
-  public int mask_pattern() { return mask_pattern_; }
+  public int getMaskPattern() { return maskPattern; }
   // Number of total bytes in the QR Code.
-  public int num_total_bytes() { return num_total_bytes_; }
+  public int getNumTotalBytes() { return numTotalBytes; }
   // Number of data bytes in the QR Code.
-  public int num_data_bytes() { return num_data_bytes_; }
+  public int getNumDataBytes() { return numDataBytes; }
   // Number of error correction bytes in the QR Code.
-  public int num_ec_bytes() { return num_ec_bytes_; }
+  public int getNumECBytes() { return numECBytes; }
   // Number of Reedsolomon blocks in the QR Code.
-  public int num_rs_blocks() { return num_rs_blocks_; }
+  public int getNumRSBlocks() { return numRSBlocks; }
   // ByteMatrix data of the QR Code.
-  public final ByteMatrix matrix() { return matrix_; }
+  public final ByteMatrix getMatrix() { return matrix; }
 
   // Return the value of the module (cell) pointed by "x" and "y" in the matrix of the QR Code. They
   // call cells in the matrix "modules". 1 represents a black cell, and 0 represents a white cell.
   public int at(int x, int y) {
     // The value must be zero or one.
-    int value = matrix_.get(y, x);
+    int value = matrix.get(y, x);
     if (!(value == 0 || value == 1)) {
       // this is really like an assert... not sure what better exception to use?
       throw new RuntimeException("Bad value");
@@ -138,32 +136,31 @@ public final class QRCode {
 
   // Checks all the member variables are set properly. Returns true on success. Otherwise, returns
   // false.
-  // JAVAPORT: Do not call EverythingIsBinary(matrix_) here as it is very expensive.
-  public boolean IsValid() {
+  public boolean isValid() {
     return (
         // First check if all version are not uninitialized.
-        mode_ != MODE_UNDEFINED &&
-            ec_level_ != EC_LEVEL_UNDEFINED &&
-            version_ != -1 &&
-            matrix_width_ != -1 &&
-            mask_pattern_ != -1 &&
-            num_total_bytes_ != -1 &&
-            num_data_bytes_ != -1 &&
-            num_ec_bytes_ != -1 &&
-            num_rs_blocks_ != -1 &&
+        mode != MODE_UNDEFINED &&
+            ecLevel != EC_LEVEL_UNDEFINED &&
+            version != -1 &&
+            matrixWidth != -1 &&
+            maskPattern != -1 &&
+            numTotalBytes != -1 &&
+            numDataBytes != -1 &&
+            numECBytes != -1 &&
+            numRSBlocks != -1 &&
             // Then check them in other ways..
-            IsValidVersion(version_) &&
-            IsValidMode(mode_) &&
-            IsValidECLevel(ec_level_) &&
-            IsValidMatrixWidth(matrix_width_) &&
-            IsValidMaskPattern(mask_pattern_) &&
-            num_total_bytes_ == num_data_bytes_ + num_ec_bytes_ &&
+            isValidVersion(version) &&
+            isValidMode(mode) &&
+            isValidECLevel(ecLevel) &&
+            isValidMatrixWidth(matrixWidth) &&
+            isValidMaskPattern(maskPattern) &&
+            numTotalBytes == numDataBytes + numECBytes &&
             // ByteMatrix stuff.
-            matrix_ != null &&
-            matrix_width_ == matrix_.width() &&
+            matrix != null &&
+            matrixWidth == matrix.width() &&
             // See 7.3.1 of JISX0510:2004 (p.5).
-            matrix_width_ == kMinMatrixWidth + (version_ - 1) * 4 &&
-            matrix_.width() == matrix_.height()); // Must be square.
+            matrixWidth == MIN_MATRIX_WIDTH + (version - 1) * 4 &&
+            matrix.width() == matrix.height()); // Must be square.
   }
 
   // Return debug String.
@@ -171,102 +168,102 @@ public final class QRCode {
     StringBuffer result = new StringBuffer();
     result.append("<<\n");
     result.append(" mode: ");
-    result.append(ModeToString(mode_));
-    result.append("\n ec_level: ");
-    result.append(ECLevelToString(ec_level_));
+    result.append(modeToString(mode));
+    result.append("\n ecLevel: ");
+    result.append(ecLevelToString(ecLevel));
     result.append("\n version: ");
-    result.append(version_);
-    result.append("\n matrix_width: ");
-    result.append(matrix_width_);
-    result.append("\n mask_pattern: ");
-    result.append(mask_pattern_);
-    result.append("\n num_total_bytes_: ");
-    result.append(num_total_bytes_);
-    result.append("\n num_data_bytes: ");
-    result.append(num_data_bytes_);
-    result.append("\n num_ec_bytes: ");
-    result.append(num_ec_bytes_);
-    result.append("\n num_rs_blocks: ");
-    result.append(num_rs_blocks_);
-    if (matrix_ == null) {
+    result.append(version);
+    result.append("\n matrixWidth: ");
+    result.append(matrixWidth);
+    result.append("\n maskPattern: ");
+    result.append(maskPattern);
+    result.append("\n numTotalBytes: ");
+    result.append(numTotalBytes);
+    result.append("\n numDataBytes: ");
+    result.append(numDataBytes);
+    result.append("\n numECBytes: ");
+    result.append(numECBytes);
+    result.append("\n numRSBlocks: ");
+    result.append(numRSBlocks);
+    if (matrix == null) {
       result.append("\n matrix: null\n");
     } else {
       result.append("\n matrix:\n");
-      result.append(matrix_.toString());
+      result.append(matrix.toString());
     }
     result.append(">>\n");
     return result.toString();
   }
 
-  public void set_mode(int value) {
-    mode_ = value;
+  public void setMode(int value) {
+    mode = value;
   }
 
-  public void set_ec_level(int value) {
-    ec_level_ = value;
+  public void setECLevel(int value) {
+    ecLevel = value;
   }
 
-  public void set_version(int value) {
-    version_ = value;
+  public void setVersion(int value) {
+    version = value;
   }
 
-  public void set_matrix_width(int value) {
-    matrix_width_ = value;
+  public void setMatrixWidth(int value) {
+    matrixWidth = value;
   }
 
-  public void set_mask_pattern(int value) {
-    mask_pattern_ = value;
+  public void setMaskPattern(int value) {
+    maskPattern = value;
   }
 
-  public void set_num_total_bytes(int value) {
-    num_total_bytes_ = value;
+  public void setNumTotalBytes(int value) {
+    numTotalBytes = value;
   }
 
-  public void set_num_data_bytes(int value) {
-    num_data_bytes_ = value;
+  public void setNumDataBytes(int value) {
+    numDataBytes = value;
   }
 
-  public void set_num_ec_bytes(int value) {
-    num_ec_bytes_ = value;
+  public void setNumECBytes(int value) {
+    numECBytes = value;
   }
 
-  public void set_num_rs_blocks(int value) {
-    num_rs_blocks_ = value;
+  public void setNumRSBlocks(int value) {
+    numRSBlocks = value;
   }
 
   // This takes ownership of the 2D array.
-  public void set_matrix(ByteMatrix value) {
-    matrix_ = value;
+  public void setMatrix(ByteMatrix value) {
+    matrix = value;
   }
 
   // Check if "version" is valid.
-  public static boolean IsValidVersion(final int version) {
-    return version >= kMinVersion && version <= kMaxVersion;
+  public static boolean isValidVersion(final int version) {
+    return version >= MIN_VERSION && version <= MAX_VERSION;
   }
 
-  // Check if "mask_pattern" is valid.
-  public static boolean IsValidECLevel(int ec_level) {
-    return ec_level >= 0 && ec_level < NUM_EC_LEVELS;
+  // Check if "ecLevel" is valid.
+  public static boolean isValidECLevel(int ecLevel) {
+    return ecLevel >= 0 && ecLevel < NUM_EC_LEVELS;
   }
 
   // Check if "mode" is valid.
-  public static boolean IsValidMode(final int mode) {
+  public static boolean isValidMode(final int mode) {
     return mode >= 0 && mode < NUM_MODES;
   }
 
   // Check if "width" is valid.
-  public static boolean IsValidMatrixWidth(int width) {
-    return width >= kMinMatrixWidth && width <= kMaxMatrixWidth;
+  public static boolean isValidMatrixWidth(int width) {
+    return width >= MIN_MATRIX_WIDTH && width <= MAX_MATRIX_WIDTH;
   }
 
   // Check if "mask_pattern" is valid.
-  public static boolean IsValidMaskPattern(int mask_pattern) {
-    return mask_pattern >= 0 && mask_pattern < kNumMaskPatterns;
+  public static boolean isValidMaskPattern(int maskPattern) {
+    return maskPattern >= 0 && maskPattern < NUM_MASK_PATTERNS;
   }
 
-  // Convert "ec_level" to String for debugging.
-  public static String ECLevelToString(int ec_level) {
-    switch (ec_level) {
+  // Convert "getECLevel" to String for debugging.
+  public static String ecLevelToString(int ecLevel) {
+    switch (ecLevel) {
       case QRCode.EC_LEVEL_UNDEFINED:
         return "UNDEFINED";
       case QRCode.EC_LEVEL_L:
@@ -284,7 +281,7 @@ public final class QRCode {
   }
 
   // Convert "mode" to String for debugging.
-  public static String ModeToString(int mode) {
+  public static String modeToString(int mode) {
     switch (mode) {
       case QRCode.MODE_UNDEFINED:
         return "UNDEFINED";
@@ -304,8 +301,8 @@ public final class QRCode {
 
   // Return the code of error correction level. On error, return -1. The codes of error correction
   // levels are defined in the table 22 of JISX0510:2004 (p.45).
-  public static int GetECLevelCode(final int ec_level) throws WriterException {
-    switch (ec_level) {
+  public static int getECLevelCode(final int ecLevel) throws WriterException {
+    switch (ecLevel) {
       case QRCode.EC_LEVEL_L:
         return 1;
       case QRCode.EC_LEVEL_M:
@@ -321,7 +318,7 @@ public final class QRCode {
 
   // Return the code of mode. On error, return -1. The codes of modes are defined in the table 2 of
   // JISX0510:2004 (p.16).
-  public static int GetModeCode(final int mode) throws WriterException {
+  public static int getModeCode(final int mode) throws WriterException {
     switch (mode) {
       case QRCode.MODE_NUMERIC:
         return 1;
@@ -338,19 +335,19 @@ public final class QRCode {
 
   // Return the number of bits needed for representing the length info of QR Code with "version" and
   // "mode". On error, return -1.
-  static int GetNumBitsForLength(int version, int mode) {
-    if (!IsValidVersion(version)) {
+  static int getNumBitsForLength(int version, int mode) {
+    if (!isValidVersion(version)) {
       throw new IllegalArgumentException("Invalid version: " + version);
     }
-    if (!IsValidMode(mode)) {
+    if (!isValidMode(mode)) {
       throw new IllegalArgumentException("Invalid mode: " + mode);
     }
     if (version >= 1 && version <= 9) {
-      return kNumBitsTable[0][mode];
+      return NUM_BITS_TABLE[0][mode];
     } else if (version >= 10 && version <= 26) {
-      return kNumBitsTable[1][mode];
+      return NUM_BITS_TABLE[1][mode];
     } else if (version >= 27 && version <= 40) {
-      return kNumBitsTable[2][mode];
+      return NUM_BITS_TABLE[2][mode];
     }
     throw new IllegalArgumentException("Bad version: " + version);
   }
@@ -360,6 +357,7 @@ public final class QRCode {
   // JAVAPORT: This is going to be super expensive and unnecessary, we should not call this in
   // production. I'm leaving it because it may be useful for testing. It should be removed entirely
   // if ByteMatrix is changed never to contain a -1.
+  /*
   private static boolean EverythingIsBinary(final ByteMatrix matrix) {
     for (int y = 0; y < matrix.height(); ++y) {
       for (int x = 0; x < matrix.width(); ++x) {
@@ -372,5 +370,6 @@ public final class QRCode {
     }
     return true;
   }
+   */
 
 }

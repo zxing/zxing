@@ -61,39 +61,39 @@ public final class BitVector {
     if (!(bit == 0 || bit == 1)) {
       throw new IllegalArgumentException("Bad bit");
     }
-    final int num_bits_in_last_byte = sizeInBits & 0x7;
+    final int numBitsInLastByte = sizeInBits & 0x7;
     // We'll expand array if we don't have bits in the last byte.
-    if (num_bits_in_last_byte == 0) {
+    if (numBitsInLastByte == 0) {
       appendByte(0);
       sizeInBits -= 8;
     }
     // Modify the last byte.
-    array[sizeInBits >> 3] |= (bit << (7 - num_bits_in_last_byte));
+    array[sizeInBits >> 3] |= (bit << (7 - numBitsInLastByte));
     ++sizeInBits;
   }
 
-  // Append "num_bits" bits in "value" to the bit vector.
-  // REQUIRES: 0<= num_bits <= 32.
+  // Append "numBits" bits in "value" to the bit vector.
+  // REQUIRES: 0<= numBits <= 32.
   //
   // Examples:
   // - appendBits(0x00, 1) adds 0.
   // - appendBits(0x00, 4) adds 0000.
   // - appendBits(0xff, 8) adds 11111111.
-  public void appendBits(final int value, final int num_bits) {
-    if (num_bits < 0 || num_bits > 32) {
+  public void appendBits(final int value, final int numBits) {
+    if (numBits < 0 || numBits > 32) {
       throw new IllegalArgumentException("Num bits must be between 0 and 32");
     }
-    int num_bits_left = num_bits;
-    while (num_bits_left > 0) {
+    int numBitsLeft = numBits;
+    while (numBitsLeft > 0) {
       // Optimization for byte-oriented appending.
-      if ((sizeInBits & 0x7) == 0 && num_bits_left >= 8) {
-        final int newByte = (value >> (num_bits_left - 8)) & 0xff;
+      if ((sizeInBits & 0x7) == 0 && numBitsLeft >= 8) {
+        final int newByte = (value >> (numBitsLeft - 8)) & 0xff;
         appendByte(newByte);
-        num_bits_left -= 8;
+        numBitsLeft -= 8;
       } else {
-        final int bit = (value >> (num_bits_left - 1)) & 1;
+        final int bit = (value >> (numBitsLeft - 1)) & 1;
         appendBit(bit);
-        --num_bits_left;
+        --numBitsLeft;
       }
     }
   }

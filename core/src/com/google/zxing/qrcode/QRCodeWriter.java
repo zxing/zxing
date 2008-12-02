@@ -67,14 +67,14 @@ public final class QRCodeWriter implements Writer {
     }
 
     QRCode code = new QRCode();
-    Encoder.Encode(new ByteArray(contents), errorCorrectionLevel, code);
+    Encoder.encode(new ByteArray(contents), errorCorrectionLevel, code);
     return renderResult(code, width, height);
   }
 
   // Note that the input matrix uses 0 == white, 1 == black, while the output matrix uses
   // 0 == black, 255 == white (i.e. an 8 bit greyscale bitmap).
   private ByteMatrix renderResult(QRCode code, final int width, final int height) {
-    ByteMatrix input = code.matrix();
+    ByteMatrix input = code.getMatrix();
     int inputWidth = input.width();
     int inputHeight = input.height();
     int qrWidth = inputWidth + (QUIET_ZONE_SIZE * 2);
