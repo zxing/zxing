@@ -18,6 +18,7 @@ package com.google.zxing.qrcode.encoder;
 
 import com.google.zxing.common.ByteArray;
 import com.google.zxing.WriterException;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import junit.framework.TestCase;
 
 /**
@@ -85,7 +86,7 @@ public final class EncoderTestCase extends TestCase {
 
   public void testEncode() throws WriterException {
     QRCode qrCode = new QRCode();
-    Encoder.encode(new ByteArray("ABCDEF"), QRCode.EC_LEVEL_H, qrCode);
+    Encoder.encode(new ByteArray("ABCDEF"), ErrorCorrectionLevel.H, qrCode);
     // The following is a valid QR Code that can be read by cell phones.
     String expected =
       "<<\n" +
@@ -643,6 +644,6 @@ public final class EncoderTestCase extends TestCase {
       dataBytes[x] = '0';
     }
     QRCode qrCode = new QRCode();
-    Encoder.encode(new ByteArray(dataBytes), QRCode.EC_LEVEL_L, qrCode);
+    Encoder.encode(new ByteArray(dataBytes), ErrorCorrectionLevel.L, qrCode);
   }
 }

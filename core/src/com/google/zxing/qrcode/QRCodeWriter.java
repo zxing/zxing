@@ -24,6 +24,7 @@ import com.google.zxing.common.ByteArray;
 import com.google.zxing.common.ByteMatrix;
 import com.google.zxing.qrcode.encoder.Encoder;
 import com.google.zxing.qrcode.encoder.QRCode;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 import java.util.Hashtable;
 
@@ -58,11 +59,11 @@ public final class QRCodeWriter implements Writer {
           height);
     }
 
-    int errorCorrectionLevel = QRCode.EC_LEVEL_L;
+    ErrorCorrectionLevel errorCorrectionLevel = ErrorCorrectionLevel.L;
     if (hints != null) {
-      Integer requestedECLevel = (Integer) hints.get(EncodeHintType.ERROR_CORRECTION);
+      ErrorCorrectionLevel requestedECLevel = (ErrorCorrectionLevel) hints.get(EncodeHintType.ERROR_CORRECTION);
       if (requestedECLevel != null) {
-        errorCorrectionLevel = requestedECLevel.intValue();
+        errorCorrectionLevel = requestedECLevel;
       }
     }
 

@@ -18,6 +18,7 @@ package com.google.zxing.qrcode.encoder;
 
 import com.google.zxing.common.ByteMatrix;
 import com.google.zxing.WriterException;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 /**
  * @author satorux@google.com (Satoru Takabayashi) - creator
@@ -133,9 +134,9 @@ public final class MatrixUtil {
     matrix.clear((byte) -1);
   }
 
-  // Build 2D matrix of QR Code from "dataBits" with "getECLevel", "version" and "getMaskPattern". On
-  // success, store the result in "matrix" and return true.  On error, return false.
-  public static void buildMatrix(final BitVector dataBits, int ecLevel, int version,
+  // Build 2D matrix of QR Code from "dataBits" with "ecLevel", "version" and "getMaskPattern". On
+  // success, store the result in "matrix" and return true.
+  public static void buildMatrix(final BitVector dataBits, ErrorCorrectionLevel ecLevel, int version,
       int maskPattern, ByteMatrix matrix) throws WriterException {
     MatrixUtil.clearMatrix(matrix);
     embedBasicPatterns(version, matrix);
@@ -147,7 +148,7 @@ public final class MatrixUtil {
     embedDataBits(dataBits, maskPattern, matrix);
   }
 
-  // Embed basic patterns. On success, modify the matrix and return true. On error, return false.
+  // Embed basic patterns. On success, modify the matrix and return true.
   // The basic patterns are:
   // - Position detection patterns
   // - Timing patterns
@@ -166,7 +167,8 @@ public final class MatrixUtil {
   }
 
   // Embed type information. On success, modify the matrix.
-  public static void embedTypeInfo(int ecLevel, int maskPattern, ByteMatrix matrix) throws WriterException {
+  public static void embedTypeInfo(ErrorCorrectionLevel ecLevel, int maskPattern, ByteMatrix matrix)
+      throws WriterException {
     BitVector typeInfoBits = new BitVector();
     makeTypeInfoBits(ecLevel, maskPattern, typeInfoBits);
 
@@ -194,9 +196,8 @@ public final class MatrixUtil {
     }
   }
 
-  // Embed version information if need be. On success, modify the matrix and return true. On error,
-  // return false. See 8.10 of JISX0510:2004 (p.47) for how to embed version information. Return
-  // true on success, otherwise return false.
+  // Embed version information if need be. On success, modify the matrix and return true.
+  // See 8.10 of JISX0510:2004 (p.47) for how to embed version information.
   public static void maybeEmbedVersionInfo(int version, ByteMatrix matrix) throws WriterException {
     if (version < 7) {  // Version info is necessary if version >= 7.
       return;  // Don't need version info.
@@ -218,8 +219,8 @@ public final class MatrixUtil {
     }
   }
 
-  // Embed "dataBits" using "getMaskPattern". On success, modify the matrix and return true. On
-  // error, return false. For debugging purposes, it skips masking process if "getMaskPattern" is -1.
+  // Embed "dataBits" using "getMaskPattern". On success, modify the matrix and return true.
+  // For debugging purposes, it skips masking process if "getMaskPattern" is -1.
   // See 8.7 of JISX0510:2004 (p.38) for how to embed data bits.
   public static void embedDataBits(final BitVector dataBits, int maskPattern, ByteMatrix matrix)
       throws WriterException {
@@ -322,14 +323,14 @@ public final class MatrixUtil {
   }
 
   // Make bit vector of type information. On success, store the result in "bits" and return true.
-  // On error, return false. Encode error correction level and mask pattern. See 8.9 of
+  // Encode error correction level and mask pattern. See 8.9 of
   // JISX0510:2004 (p.45) for details.
-  public static void makeTypeInfoBits(int ecLevel, final int maskPattern, BitVector bits) throws WriterException {
-    final int ecCode = QRCode.getECLevelCode(ecLevel);
+  public static void makeTypeInfoBits(ErrorCorrectionLevel ecLevel, final int maskPattern, BitVector bits)
+      throws WriterException {
     if (!QRCode.isValidMaskPattern(maskPattern)) {
       throw new WriterException("Invalid mask pattern");
     }
-    final int typeInfo = (ecCode << 3) | maskPattern;
+    final int typeInfo = (ecLevel.getBits() << 3) | maskPattern;
     bits.appendBits(typeInfo, 5);
 
     final int bchCode = MatrixUtil.calculateBCHCode(typeInfo, TYPE_INFO_POLY);
@@ -345,7 +346,7 @@ public final class MatrixUtil {
   }
 
   // Make bit vector of version information. On success, store the result in "bits" and return true.
-  // On error, return false. See 8.10 of JISX0510:2004 (p.45) for details.
+  // See 8.10 of JISX0510:2004 (p.45) for details.
   public static void makeVersionInfoBits(int version, BitVector bits) throws WriterException {
     bits.appendBits(version, 6);
     final int bchCode = MatrixUtil.calculateBCHCode(version, VERSION_INFO_POLY);
@@ -494,7 +495,8 @@ public final class MatrixUtil {
   }
 
   // Embed position adjustment patterns if need be.
-  private static void maybeEmbedPositionAdjustmentPatterns(final int version, ByteMatrix matrix) throws WriterException {
+  private static void maybeEmbedPositionAdjustmentPatterns(final int version, ByteMatrix matrix)
+      throws WriterException {
     if (version < 2) {  // The patterns appear if version >= 2
       return;
     }

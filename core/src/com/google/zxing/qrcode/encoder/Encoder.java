@@ -21,6 +21,7 @@ import com.google.zxing.common.ByteArray;
 import com.google.zxing.common.reedsolomon.GF256;
 import com.google.zxing.common.reedsolomon.ReedSolomonEncoder;
 import com.google.zxing.WriterException;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 import java.util.Vector;
 
@@ -119,14 +120,15 @@ public final class Encoder {
   }
 
   // Encode "bytes" with the error correction level "getECLevel". The encoding mode will be chosen
-  // internally by chooseMode(). On success, store the result in "qrCode" and return true. On
-  // error, return false. We recommend you to use QRCode.EC_LEVEL_L (the lowest level) for
+  // internally by chooseMode(). On success, store the result in "qrCode" and return true.
+  // We recommend you to use QRCode.EC_LEVEL_L (the lowest level) for
   // "getECLevel" since our primary use is to show QR code on desktop screens. We don't need very
   // strong error correction for this purpose.
   //
   // Note that there is no way to encode bytes in MODE_KANJI. We might want to add EncodeWithMode()
   // with which clients can specify the encoding mode. For now, we don't need the functionality.
-  public static void encode(final ByteArray bytes, int ecLevel, QRCode qrCode) throws WriterException {
+  public static void encode(final ByteArray bytes, ErrorCorrectionLevel ecLevel, QRCode qrCode)
+      throws WriterException {
     // Step 1: Choose the mode (encoding).
     final int mode = chooseMode(bytes);
 
@@ -211,7 +213,7 @@ public final class Encoder {
     return QRCode.MODE_8BIT_BYTE;
   }
 
-  private static int chooseMaskPattern(final BitVector bits, int ecLevel, int version,
+  private static int chooseMaskPattern(final BitVector bits, ErrorCorrectionLevel ecLevel, int version,
       ByteMatrix matrix) throws WriterException {
     if (!QRCode.isValidMatrixWidth(matrix.width())) {
       throw new WriterException("Invalid matrix width: " + matrix.width());
@@ -231,15 +233,12 @@ public final class Encoder {
     return bestMaskPattern;
   }
 
-  // Initialize "qrCode" according to "numInputBytes", "getECLevel", and "mode". On success, modify
-  // "qrCode" and return true. On error, return false.
-  private static void initQRCode(int numInputBytes, int ecLevel, int mode, QRCode qrCode) throws WriterException {
+  // Initialize "qrCode" according to "numInputBytes", "ecLevel", and "mode". On success, modify
+  // "qrCode" and return true.
+  private static void initQRCode(int numInputBytes, ErrorCorrectionLevel ecLevel, int mode, QRCode qrCode)
+      throws WriterException {
     qrCode.setECLevel(ecLevel);
     qrCode.setMode(mode);
-
-    if (!QRCode.isValidECLevel(ecLevel)) {
-      throw new WriterException("Invalid EC level: " + ecLevel);
-    }
 
     // In the following comments, we use numbers of Version 7-H.
     for (int i = 0; i < RS_BLOCK_TABLE.length; ++i) {
@@ -247,9 +246,9 @@ public final class Encoder {
       // numBytes = 196
       final int numBytes = row.numBytes;
       // getNumECBytes = 130
-      final int numEcBytes  = row.blockInfo[ecLevel][0];
+      final int numEcBytes  = row.blockInfo[ecLevel.ordinal()][0];
       // getNumRSBlocks = 5
-      final int numRSBlocks = row.blockInfo[ecLevel][1];
+      final int numRSBlocks = row.blockInfo[ecLevel.ordinal()][1];
       // getNumDataBytes = 196 - 130 = 66
       final int numDataBytes = numBytes - numEcBytes;
       // We want to choose the smallest version which can contain data of "numInputBytes" + some
@@ -360,7 +359,7 @@ public final class Encoder {
   }
 
   // Interleave "bits" with corresponding error correction bytes. On success, store the result in
-  // "result" and return true. On error, return false. The interleave rule is complicated. See 8.6
+  // "result" and return true. The interleave rule is complicated. See 8.6
   // of JISX0510:2004 (p.37) for details.
   static void interleaveWithECBytes(final BitVector bits, int numTotalBytes,
       int numDataBytes, int numRSBlocks, BitVector result) throws WriterException {
@@ -466,7 +465,7 @@ public final class Encoder {
   }
 
   // Append "bytes" in "mode" mode (encoding) into "bits". On success, store the result in "bits"
-  // and return true. On error, return false.
+  // and return true.
   static void appendBytes(final ByteArray bytes, int mode, BitVector bits) throws WriterException {
     switch (mode) {
       case QRCode.MODE_NUMERIC:
@@ -487,7 +486,7 @@ public final class Encoder {
   }
 
   // Append "bytes" to "bits" using QRCode.MODE_NUMERIC mode. On success, store the result in "bits"
-  // and return true. On error, return false.
+  // and return true.
   static void appendNumericBytes(final ByteArray bytes, BitVector bits) throws WriterException {
     // Validate all the bytes first.
     for (int i = 0; i < bytes.size(); ++i) {
@@ -518,7 +517,7 @@ public final class Encoder {
   }
 
   // Append "bytes" to "bits" using QRCode.MODE_ALPHANUMERIC mode. On success, store the result in
-  // "bits" and return true. On error, return false.
+  // "bits" and return true.
   static void appendAlphanumericBytes(final ByteArray bytes, BitVector bits) throws WriterException {
     for (int i = 0; i < bytes.size();) {
       final int code1 = getAlphanumericCode(bytes.at(i));
@@ -542,7 +541,7 @@ public final class Encoder {
   }
 
   // Append "bytes" to "bits" using QRCode.MODE_8BIT_BYTE mode. On success, store the result in
-  // "bits" and return true. On error, return false.
+  // "bits" and return true.
   static void append8BitBytes(final ByteArray bytes, BitVector bits) {
     for (int i = 0; i < bytes.size(); ++i) {
       bits.appendBits(bytes.at(i), 8);
@@ -550,7 +549,7 @@ public final class Encoder {
   }
 
   // Append "bytes" to "bits" using QRCode.MODE_KANJI mode. On success, store the result in "bits"
-  // and return true. On error, return false. See 8.4.5 of JISX0510:2004 (p.21) for how to encode
+  // and return true. See 8.4.5 of JISX0510:2004 (p.21) for how to encode
   // Kanji bytes.
   static void appendKanjiBytes(final ByteArray bytes, BitVector bits) throws WriterException {
     if (bytes.size() % 2 != 0) {

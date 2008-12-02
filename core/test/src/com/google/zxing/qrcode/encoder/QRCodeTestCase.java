@@ -18,6 +18,7 @@ package com.google.zxing.qrcode.encoder;
 
 import com.google.zxing.common.ByteMatrix;
 import com.google.zxing.WriterException;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import junit.framework.TestCase;
 
 /**
@@ -33,7 +34,7 @@ public final class QRCodeTestCase extends TestCase {
     // First, test simple setters and getters.
     // We use numbers of version 7-H.
     qrCode.setMode(QRCode.MODE_8BIT_BYTE);
-    qrCode.setECLevel(QRCode.EC_LEVEL_H);
+    qrCode.setECLevel(ErrorCorrectionLevel.H);
     qrCode.setVersion(7);
     qrCode.setMatrixWidth(45);
     qrCode.setMaskPattern(3);
@@ -43,7 +44,7 @@ public final class QRCodeTestCase extends TestCase {
     qrCode.setNumRSBlocks(5);
 
     assertEquals(QRCode.MODE_8BIT_BYTE, qrCode.getMode());
-    assertEquals(QRCode.EC_LEVEL_H, qrCode.getECLevel());
+    assertEquals(ErrorCorrectionLevel.H, qrCode.getECLevel());
     assertEquals(7, qrCode.getVersion());
     assertEquals(45, qrCode.getMatrixWidth());
     assertEquals(3, qrCode.getMaskPattern());
@@ -85,7 +86,7 @@ public final class QRCodeTestCase extends TestCase {
       String expected =
 	"<<\n" +
 	" mode: UNDEFINED\n" +
-	" ecLevel: UNDEFINED\n" +
+	" ecLevel: null\n" +
 	" version: -1\n" +
 	" matrixWidth: -1\n" +
 	" maskPattern: -1\n" +
@@ -134,7 +135,7 @@ public final class QRCodeTestCase extends TestCase {
 	">>\n";
       QRCode qrCode = new QRCode();
       qrCode.setMode(QRCode.MODE_8BIT_BYTE);
-      qrCode.setECLevel(QRCode.EC_LEVEL_H);
+      qrCode.setECLevel(ErrorCorrectionLevel.H);
       qrCode.setVersion(1);
       qrCode.setMatrixWidth(21);
       qrCode.setMaskPattern(3);
@@ -159,15 +160,6 @@ public final class QRCodeTestCase extends TestCase {
     assertTrue(QRCode.isValidVersion(1));
     assertTrue(QRCode.isValidVersion(40));
     assertFalse(QRCode.isValidVersion(0));
-  }
-
-  public void testIsValidECLevel() {
-    assertFalse(QRCode.isValidECLevel(QRCode.EC_LEVEL_UNDEFINED));
-    assertTrue(QRCode.isValidECLevel(QRCode.EC_LEVEL_L));
-    assertTrue(QRCode.isValidECLevel(QRCode.EC_LEVEL_Q));
-    assertTrue(QRCode.isValidECLevel(QRCode.EC_LEVEL_M));
-    assertTrue(QRCode.isValidECLevel(QRCode.EC_LEVEL_H));
-    assertFalse(QRCode.isValidECLevel(QRCode.NUM_EC_LEVELS));
   }
 
   public void testIsValidMode() {
@@ -200,15 +192,6 @@ public final class QRCodeTestCase extends TestCase {
     assertEquals("UNKNOWN", QRCode.modeToString(QRCode.NUM_MODES));
   }
 
-  public void testECLevelToString() {
-    assertEquals("UNDEFINED", QRCode.ecLevelToString(QRCode.EC_LEVEL_UNDEFINED));
-    assertEquals("L", QRCode.ecLevelToString(QRCode.EC_LEVEL_L));
-    assertEquals("M", QRCode.ecLevelToString(QRCode.EC_LEVEL_M));
-    assertEquals("Q", QRCode.ecLevelToString(QRCode.EC_LEVEL_Q));
-    assertEquals("H", QRCode.ecLevelToString(QRCode.EC_LEVEL_H));
-    assertEquals("UNKNOWN", QRCode.ecLevelToString(QRCode.NUM_EC_LEVELS));
-  }
-
   public void testGetModeCode() throws WriterException {
     assertEquals(1, QRCode.getModeCode(QRCode.MODE_NUMERIC));
     assertEquals(2, QRCode.getModeCode(QRCode.MODE_ALPHANUMERIC));
@@ -222,16 +205,4 @@ public final class QRCodeTestCase extends TestCase {
     }
   }
 
-  public void testGetECLevelCode() throws WriterException {
-    assertEquals(1, QRCode.getECLevelCode(QRCode.EC_LEVEL_L));
-    assertEquals(0, QRCode.getECLevelCode(QRCode.EC_LEVEL_M));
-    assertEquals(3, QRCode.getECLevelCode(QRCode.EC_LEVEL_Q));
-    assertEquals(2, QRCode.getECLevelCode(QRCode.EC_LEVEL_H));
-    try {
-      QRCode.getECLevelCode(QRCode.EC_LEVEL_UNDEFINED);
-      fail("Should have thrown exception");
-    } catch (WriterException we) {
-      // good
-    }
-  }
 }
