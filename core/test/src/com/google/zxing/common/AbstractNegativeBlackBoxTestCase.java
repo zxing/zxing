@@ -116,7 +116,7 @@ public abstract class AbstractNegativeBlackBoxTestCase extends AbstractBlackBoxT
     } catch (ReaderException re) {
     }
 
-    // Try "try harder" mode
+    // Try "try harder" getMode
     try {
       result = getReader().decode(source, TRY_HARDER_HINT);
       System.out.println("Try harder found false positive: '" + result.getText() + "' with format '" +
