@@ -62,9 +62,8 @@ public final class GeoParsedResult extends ParsedResult {
   public String getDisplayResult() {
     StringBuffer result = new StringBuffer(50);
     result.append(latitude);
-    result.append(" deg N, ");
+    result.append(", ");
     result.append(longitude);
-    result.append(" deg E");
     if (altitude > 0.0f) {
       result.append(", ");
       result.append(altitude);
