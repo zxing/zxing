@@ -32,7 +32,7 @@ final class URLTOResultParser {
 
   public static URIParsedResult parse(Result result) {
     String rawText = result.getText();
-    if (rawText == null || !rawText.startsWith("URLTO:")) {
+    if (rawText == null || (!rawText.startsWith("urlto:") && !rawText.startsWith("URLTO:"))) {
       return null;
     }
     int titleEnd = rawText.indexOf(':', 6);

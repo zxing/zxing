@@ -42,7 +42,8 @@ final class SMSMMSResultParser extends ResultParser {
       return null;
     }
     int prefixLength;
-    if (rawText.startsWith("sms:") || rawText.startsWith("mms:")) {
+    if (rawText.startsWith("sms:") || rawText.startsWith("SMS:") ||
+        rawText.startsWith("mms:") || rawText.startsWith("MMS:")) {
       prefixLength = 4;
     } else if (rawText.startsWith("smsto:") || rawText.startsWith("SMSTO:") ||
                rawText.startsWith("mmsto:") || rawText.startsWith("MMSTO:")) {

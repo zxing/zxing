@@ -34,7 +34,7 @@ final class EmailAddressResultParser extends ResultParser {
       return null;
     }
     String emailAddress;
-    if (rawText.startsWith("mailto:")) {
+    if (rawText.startsWith("mailto:") || rawText.startsWith("MAILTO:")) {
       // If it starts with mailto:, assume it is definitely trying to be an email address
       emailAddress = rawText.substring(7);
       int queryStart = emailAddress.indexOf('?');

@@ -33,7 +33,7 @@ final class GeoResultParser extends ResultParser {
 
   public static GeoParsedResult parse(Result result) {
     String rawText = result.getText();
-    if (rawText == null || !rawText.startsWith("geo:")) {
+    if (rawText == null || (!rawText.startsWith("geo:") && !rawText.startsWith("GEO:"))) {
       return null;
     }
     // Drop geo, query portion

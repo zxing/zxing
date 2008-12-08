@@ -42,6 +42,7 @@ public final class ParsedReaderResultTestCase extends TestCase {
   }
 
   public void testURLTOType() {
+    doTestResult("urlto:foo:bar.com", ParsedResultType.URI);
     doTestResult("URLTO:foo:bar.com", ParsedResultType.URI);
     doTestResult("URLTO::bar.com", ParsedResultType.URI);
     doTestResult("URLTO::http://bar.com", ParsedResultType.URI);
@@ -58,6 +59,7 @@ public final class ParsedReaderResultTestCase extends TestCase {
   public void testEmailAddressType() {
     doTestResult("srowen@example.org", ParsedResultType.EMAIL_ADDRESS);
     doTestResult("mailto:srowen@example.org", ParsedResultType.EMAIL_ADDRESS);
+    doTestResult("MAILTO:srowen@example.org", ParsedResultType.EMAIL_ADDRESS);
     doTestResult("srowen@example", ParsedResultType.TEXT);
     doTestResult("srowen", ParsedResultType.TEXT);
     doTestResult("Let's meet @ 2", ParsedResultType.TEXT);
@@ -67,7 +69,7 @@ public final class ParsedReaderResultTestCase extends TestCase {
     doTestResult("MECARD:N:Sean Owen;;", ParsedResultType.ADDRESSBOOK);
     doTestResult("MECARD:TEL:+12125551212;N:Sean Owen;;", ParsedResultType.ADDRESSBOOK);
     doTestResult("MECARD:TEL:+12125551212;N:Sean Owen;URL:google.com;;", ParsedResultType.ADDRESSBOOK);
-    doTestResult("TEL:+12125551212;N:Sean Owen;;", ParsedResultType.TEXT);
+    doTestResult("N:Sean Owen;TEL:+12125551212;;", ParsedResultType.TEXT);
   }
 
   public void testAddressBookAUType() {
@@ -108,6 +110,7 @@ public final class ParsedReaderResultTestCase extends TestCase {
 
   public void testGeo() {
     doTestResult("geo:1,2", ParsedResultType.GEO);
+    doTestResult("GEO:1,2", ParsedResultType.GEO);
     doTestResult("geo:1,2,3", ParsedResultType.GEO);
     doTestResult("geo:100.33,-32.3344,3.35", ParsedResultType.GEO);
     doTestResult("geography", ParsedResultType.TEXT);
@@ -115,6 +118,7 @@ public final class ParsedReaderResultTestCase extends TestCase {
 
   public void testTel() {
     doTestResult("tel:+15551212", ParsedResultType.TEL);
+    doTestResult("TEL:+15551212", ParsedResultType.TEL);
     doTestResult("tel:212 555 1212", ParsedResultType.TEL);
     doTestResult("tel:2125551212", ParsedResultType.TEL);
     doTestResult("telephone", ParsedResultType.TEXT);
@@ -157,6 +161,7 @@ public final class ParsedReaderResultTestCase extends TestCase {
 
   public void testSMS() {
     doTestResult("sms:+15551212", ParsedResultType.SMS);
+    doTestResult("SMS:+15551212", ParsedResultType.SMS);
     doTestResult("SMSTO:+15551212", ParsedResultType.SMS);
     doTestResult("smsto:+15551212", ParsedResultType.SMS);
     doTestResult("sms:+15551212;via=999333", ParsedResultType.SMS);
@@ -166,6 +171,7 @@ public final class ParsedReaderResultTestCase extends TestCase {
 
   public void testMMS() {
     doTestResult("mms:+15551212", ParsedResultType.SMS);
+    doTestResult("MMS:+15551212", ParsedResultType.SMS);
     doTestResult("MMSTO:+15551212", ParsedResultType.SMS);
     doTestResult("mmsto:+15551212", ParsedResultType.SMS);
     doTestResult("mms:+15551212;via=999333", ParsedResultType.SMS);
