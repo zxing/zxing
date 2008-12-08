@@ -30,7 +30,7 @@ final class TelResultParser extends ResultParser {
 
   public static TelParsedResult parse(Result result) {
     String rawText = result.getText();
-    if (rawText == null || !rawText.startsWith("tel:")) {
+    if (rawText == null || (!rawText.startsWith("tel:") && !rawText.startsWith("TEL:"))) {
       return null;
     }
     String telURI = rawText;
