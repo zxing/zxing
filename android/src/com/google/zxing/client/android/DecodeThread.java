@@ -28,7 +28,6 @@ import com.google.zxing.MultiFormatReader;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 
-import java.util.Date;
 import java.util.Hashtable;
 import java.util.Vector;
 
@@ -151,7 +150,7 @@ final class DecodeThread extends Thread {
    * @param height The height of the preview frame.
    */
   private void decode(byte[] data, int width, int height) {
-    Date startDate = new Date();
+    long start = System.currentTimeMillis();
     boolean success;
     Result rawResult = null;
     YUVMonochromeBitmapSource source = new YUVMonochromeBitmapSource(data, width, height,
@@ -162,18 +161,18 @@ final class DecodeThread extends Thread {
     } catch (ReaderException e) {
       success = false;
     }
-    Date endDate = new Date();
+    long end = System.currentTimeMillis();
 
     if (success) {
       Message message = Message.obtain(mActivity.mHandler, R.id.decode_succeeded, rawResult);
-      message.arg1 = (int) (endDate.getTime() - startDate.getTime());
+      message.arg1 = (int) (end - start);
       Bundle bundle = new Bundle();
       bundle.putParcelable(BARCODE_BITMAP, source.renderToBitmap());
       message.setData(bundle);
       message.sendToTarget();
     } else {
       Message message = Message.obtain(mActivity.mHandler, R.id.decode_failed);
-      message.arg1 = (int) (endDate.getTime() - startDate.getTime());
+      message.arg1 = (int) (end - start);
       message.sendToTarget();
     }
   }
