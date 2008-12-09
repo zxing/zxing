@@ -37,6 +37,9 @@ import java.util.GregorianCalendar;
 
 public abstract class ResultHandler {
 
+  private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyyMMdd");
+  private static final DateFormat DATE_TIME_FORMAT = new SimpleDateFormat("yyyyMMdd'T'HHmmss");
+
   public static final int MAX_BUTTON_COUNT = 4;
 
   protected final ParsedResult mResult;
@@ -119,13 +122,17 @@ public abstract class ResultHandler {
   private long calculateMilliseconds(String when) {
     if (when.length() == 8) {
       // Only contains year/month/day
-      DateFormat format = new SimpleDateFormat("yyyyMMdd");
-      Date date = format.parse(when, new ParsePosition(0));
+      Date date;
+      synchronized (DATE_FORMAT) {
+        date = DATE_FORMAT.parse(when, new ParsePosition(0));
+      }
       return date.getTime();
     } else {
       // The when string can be local time, or UTC if it ends with a Z
-      DateFormat format = new SimpleDateFormat("yyyyMMdd'T'HHmmss");
-      Date date = format.parse(when.substring(0, 15), new ParsePosition(0));
+      Date date;
+      synchronized (DATE_TIME_FORMAT) {
+       date = DATE_TIME_FORMAT.parse(when.substring(0, 15), new ParsePosition(0));
+      }
       long milliseconds = date.getTime();
       if (when.length() == 16 && when.charAt(15) == 'Z') {
         Calendar calendar = new GregorianCalendar();

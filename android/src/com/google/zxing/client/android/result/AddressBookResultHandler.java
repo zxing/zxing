@@ -32,6 +32,8 @@ import java.util.Date;
 
 public final class AddressBookResultHandler extends ResultHandler {
 
+  private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyyMMdd");
+
   private final boolean[] mFields;
   private int mButtonCount;
 
@@ -145,8 +147,10 @@ public final class AddressBookResultHandler extends ResultHandler {
 
     String birthday = result.getBirthday();
     if (birthday != null && birthday.length() > 0) {
-      DateFormat format = new SimpleDateFormat("yyyyMMdd");
-      Date date = format.parse(birthday, new ParsePosition(0));
+      Date date;
+      synchronized (DATE_FORMAT) {
+        date = DATE_FORMAT.parse(birthday, new ParsePosition(0));
+      }
       ParsedResult.maybeAppend(DateFormat.getDateInstance().format(date.getTime()), contents);
     }
     ParsedResult.maybeAppend(result.getNote(), contents);
