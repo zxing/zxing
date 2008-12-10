@@ -70,34 +70,34 @@ public final class QRCodeWriterTestCase extends TestCase {
 
   public void testQRCodeWriter() throws WriterException {
     // The QR should be multiplied up to fit, with extra padding if necessary
-    final int bigEnough = 256;
+    int bigEnough = 256;
     QRCodeWriter writer = new QRCodeWriter();
     ByteMatrix matrix = writer.encode("http://www.google.com/", BarcodeFormat.QR_CODE, bigEnough,
         bigEnough, null);
-    assertTrue(matrix != null);
+    assertNotNull(matrix);
     assertEquals(bigEnough, matrix.width());
     assertEquals(bigEnough, matrix.height());
 
     // The QR will not fit in this size, so the matrix should come back bigger
-    final int tooSmall = 20;
+    int tooSmall = 20;
     matrix = writer.encode("http://www.google.com/", BarcodeFormat.QR_CODE, tooSmall,
         tooSmall, null);
-    assertTrue(matrix != null);
+    assertNotNull(matrix);
     assertTrue(tooSmall < matrix.width());
     assertTrue(tooSmall < matrix.height());
 
     // We should also be able to handle non-square requests by padding them
-    final int strangeWidth = 500;
-    final int strangeHeight = 100;
+    int strangeWidth = 500;
+    int strangeHeight = 100;
     matrix = writer.encode("http://www.google.com/", BarcodeFormat.QR_CODE, strangeWidth,
         strangeHeight, null);
-    assertTrue(matrix != null);
+    assertNotNull(matrix);
     assertEquals(strangeWidth, matrix.width());
     assertEquals(strangeHeight, matrix.height());
   }
 
-  private static boolean compareToGoldenFile(final String contents, final ErrorCorrectionLevel ecLevel,
-      final int resolution, final String fileName) throws WriterException {
+  private static void compareToGoldenFile(String contents, ErrorCorrectionLevel ecLevel,
+      int resolution, String fileName) throws WriterException {
 
     BufferedImage image = loadImage(fileName);
     assertNotNull(image);
@@ -116,24 +116,26 @@ public final class QRCodeWriterTestCase extends TestCase {
         resolution, generatedResult.height());
     assertTrue("Expected " + goldenResult.toString() + " but got " + generatedResult.toString(),
         Arrays.deepEquals(goldenResult.getArray(), generatedResult.getArray()));
-    return true;
   }
 
   // Golden images are generated with "qrcode_sample.cc". The images are checked with both eye balls
   // and cell phones. We expect pixel-perfect results, because the error correction level is known,
   // and the pixel dimensions matches exactly.
-  public void testRegressionTest() throws WriterException {
-    assertTrue(compareToGoldenFile("http://www.google.com/", ErrorCorrectionLevel.M, 99,
-        "renderer-test-01.png"));
+  public void testRegressionTest() throws WriterException, IOException {
+    compareToGoldenFile("http://www.google.com/", ErrorCorrectionLevel.M, 99,
+        "renderer-test-01.png");
 
-    assertTrue(compareToGoldenFile("12345", ErrorCorrectionLevel.L, 58, "renderer-test-02.png"));
+    compareToGoldenFile("12345", ErrorCorrectionLevel.L, 58, "renderer-test-02.png");
 
     // Test in Katakana in Shift_JIS.
-    final byte[] KATAKANA_INPUT = {
-        (byte)0x83, 0x65, (byte)0x83, 0x58, (byte)0x83, 0x67
-    };
-    assertTrue(compareToGoldenFile(new String(KATAKANA_INPUT), ErrorCorrectionLevel.H, 145,
-        "renderer-test-03.png"));
+    // TODO: this test is bogus now that byte mode has been basically fixed to assuming ISO-8859-1 encoding
+    //  The real solution is to implement Kanji mode, in which case the golden file will be wrong again
+    /*
+    compareToGoldenFile(
+        new String(new byte[] {(byte)0x83, 0x65, (byte)0x83, 0x58, (byte)0x83, 0x67}, "Shift_JIS"),
+        ErrorCorrectionLevel.H, 145,
+        "renderer-test-03.png");
+     */
   }
 
 }

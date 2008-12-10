@@ -38,11 +38,6 @@ public final class ByteArray {
     this.size = size;
   }
 
-  public ByteArray(String string) {
-    bytes = string.getBytes();
-    size = bytes.length;
-  }
-
   public ByteArray(byte[] byteArray) {
     bytes = byteArray;
     size = bytes.length;

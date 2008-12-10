@@ -155,20 +155,6 @@ public final class QRCodeTestCase extends TestCase {
     }
   }
 
-  public void testIsValidVersion() {
-    assertFalse(QRCode.isValidVersion(0));
-    assertTrue(QRCode.isValidVersion(1));
-    assertTrue(QRCode.isValidVersion(40));
-    assertFalse(QRCode.isValidVersion(0));
-  }
-
-  public void testIsValidMatrixWidth() {
-    assertFalse(QRCode.isValidMatrixWidth(20));
-    assertTrue(QRCode.isValidMatrixWidth(21));
-    assertTrue(QRCode.isValidMatrixWidth(177));
-    assertFalse(QRCode.isValidMatrixWidth(178));
-  }
-
   public void testIsValidMaskPattern() {
     assertFalse(QRCode.isValidMaskPattern(-1));
     assertTrue(QRCode.isValidMaskPattern(0));

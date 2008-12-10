@@ -26,12 +26,6 @@ import com.google.zxing.qrcode.decoder.Mode;
  */
 public final class QRCode {
 
-  // Magic numbers.
-  private static final int MIN_VERSION = 1;
-  private static final int MAX_VERSION = 40;
-  // For matrix width, see 7.3.1 of JISX0510:2004 (p.5).
-  private static final int MIN_MATRIX_WIDTH = 21;  // Version 1
-  private static final int MAX_MATRIX_WIDTH = 177;  // Version 40 (21 + 4 * (40 -1)).
   public static final int NUM_MASK_PATTERNS = 8;
 
   private Mode mode;
@@ -104,7 +98,7 @@ public final class QRCode {
   }
 
   // ByteMatrix data of the QR Code.
-  public final ByteMatrix getMatrix() {
+  public ByteMatrix getMatrix() {
     return matrix;
   }
   
@@ -136,21 +130,18 @@ public final class QRCode {
         numECBytes != -1 &&
         numRSBlocks != -1 &&
         // Then check them in other ways..
-        isValidVersion(version) &&
-        isValidMatrixWidth(matrixWidth) &&
         isValidMaskPattern(maskPattern) &&
         numTotalBytes == numDataBytes + numECBytes &&
         // ByteMatrix stuff.
         matrix != null &&
         matrixWidth == matrix.width() &&
         // See 7.3.1 of JISX0510:2004 (p.5).
-        matrixWidth == MIN_MATRIX_WIDTH + (version - 1) * 4 &&
         matrix.width() == matrix.height(); // Must be square.
   }
 
   // Return debug String.
   public String toString() {
-    StringBuffer result = new StringBuffer();
+    StringBuffer result = new StringBuffer(200);
     result.append("<<\n");
     result.append(" mode: ");
     result.append(mode);
@@ -219,16 +210,6 @@ public final class QRCode {
   // This takes ownership of the 2D array.
   public void setMatrix(ByteMatrix value) {
     matrix = value;
-  }
-
-  // Check if "version" is valid.
-  public static boolean isValidVersion(final int version) {
-    return version >= MIN_VERSION && version <= MAX_VERSION;
-  }
-
-  // Check if "width" is valid.
-  public static boolean isValidMatrixWidth(int width) {
-    return width >= MIN_MATRIX_WIDTH && width <= MAX_MATRIX_WIDTH;
   }
 
   // Check if "mask_pattern" is valid.

@@ -65,7 +65,7 @@ final class DataBlock {
       Version.ECB ecBlock = ecBlockArray[j];
       for (int i = 0; i < ecBlock.getCount(); i++) {
         int numDataCodewords = ecBlock.getDataCodewords();
-        int numBlockCodewords = ecBlocks.getECCodewords() + numDataCodewords;
+        int numBlockCodewords = ecBlocks.getECCodewordsPerBlock() + numDataCodewords;
         result[numResultBlocks++] = new DataBlock(numDataCodewords, new byte[numBlockCodewords]);
       }
     }
@@ -86,7 +86,7 @@ final class DataBlock {
     }
     longerBlocksStartAt++;
 
-    int shorterBlocksNumDataCodewords = shorterBlocksTotalCodewords - ecBlocks.getECCodewords();
+    int shorterBlocksNumDataCodewords = shorterBlocksTotalCodewords - ecBlocks.getECCodewordsPerBlock();
     // The last elements of result may be 1 element longer;
     // first fill out as many elements as all of them have
     int rawCodewordsOffset = 0;

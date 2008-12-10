@@ -38,11 +38,11 @@ public final class BitVector {
   }
 
   // Return the bit value at "index".
-  public int at(final int index) {
+  public int at(int index) {
     if (index < 0 || index >= sizeInBits) {
       throw new IllegalArgumentException("Bad index: " + index);
     }
-    final int value = array[index >> 3] & 0xff;
+    int value = array[index >> 3] & 0xff;
     return (value >> (7 - (index & 0x7))) & 1;
   }
 
@@ -57,11 +57,11 @@ public final class BitVector {
   }
 
   // Append one bit to the bit vector.
-  public void appendBit(final int bit) {
+  public void appendBit(int bit) {
     if (!(bit == 0 || bit == 1)) {
       throw new IllegalArgumentException("Bad bit");
     }
-    final int numBitsInLastByte = sizeInBits & 0x7;
+    int numBitsInLastByte = sizeInBits & 0x7;
     // We'll expand array if we don't have bits in the last byte.
     if (numBitsInLastByte == 0) {
       appendByte(0);
@@ -79,7 +79,7 @@ public final class BitVector {
   // - appendBits(0x00, 1) adds 0.
   // - appendBits(0x00, 4) adds 0000.
   // - appendBits(0xff, 8) adds 11111111.
-  public void appendBits(final int value, final int numBits) {
+  public void appendBits(int value, int numBits) {
     if (numBits < 0 || numBits > 32) {
       throw new IllegalArgumentException("Num bits must be between 0 and 32");
     }
@@ -87,11 +87,11 @@ public final class BitVector {
     while (numBitsLeft > 0) {
       // Optimization for byte-oriented appending.
       if ((sizeInBits & 0x7) == 0 && numBitsLeft >= 8) {
-        final int newByte = (value >> (numBitsLeft - 8)) & 0xff;
+        int newByte = (value >> (numBitsLeft - 8)) & 0xff;
         appendByte(newByte);
         numBitsLeft -= 8;
       } else {
-        final int bit = (value >> (numBitsLeft - 1)) & 1;
+        int bit = (value >> (numBitsLeft - 1)) & 1;
         appendBit(bit);
         --numBitsLeft;
       }
@@ -99,7 +99,7 @@ public final class BitVector {
   }
 
   // Append "bits".
-  public void appendBitVector(final BitVector bits) {
+  public void appendBitVector(BitVector bits) {
     int size = bits.size();
     for (int i = 0; i < size; ++i) {
       appendBit(bits.at(i));
@@ -107,7 +107,7 @@ public final class BitVector {
   }
 
   // Modify the bit vector by XOR'ing with "other"
-  public void xor(final BitVector other) {
+  public void xor(BitVector other) {
     if (sizeInBits != other.size()) {
       throw new IllegalArgumentException("BitVector sizes don't match");
     }
@@ -124,9 +124,9 @@ public final class BitVector {
     StringBuffer result = new StringBuffer(sizeInBits);
     for (int i = 0; i < sizeInBits; ++i) {
       if (at(i) == 0) {
-        result.append("0");
+        result.append('0');
       } else if (at(i) == 1) {
-        result.append("1");
+        result.append('1');
       } else {
         throw new IllegalArgumentException("Byte isn't 0 or 1");
       }
@@ -144,7 +144,7 @@ public final class BitVector {
   // run out of room.
   private void appendByte(int value) {
     if ((sizeInBits >> 3) == array.length) {
-      byte[] newArray = new byte[array.length * 2];
+      byte[] newArray = new byte[(array.length << 1)];
       System.arraycopy(array, 0, newArray, 0, array.length);
       array = newArray;
     }
