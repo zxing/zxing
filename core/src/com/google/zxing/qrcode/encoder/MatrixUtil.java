@@ -136,9 +136,9 @@ public final class MatrixUtil {
 
   // Build 2D matrix of QR Code from "dataBits" with "ecLevel", "version" and "getMaskPattern". On
   // success, store the result in "matrix" and return true.
-  public static void buildMatrix(final BitVector dataBits, ErrorCorrectionLevel ecLevel, int version,
+  public static void buildMatrix(BitVector dataBits, ErrorCorrectionLevel ecLevel, int version,
       int maskPattern, ByteMatrix matrix) throws WriterException {
-    MatrixUtil.clearMatrix(matrix);
+    clearMatrix(matrix);
     embedBasicPatterns(version, matrix);
     // Type information appear with any version.
     embedTypeInfo(ecLevel, maskPattern, matrix);
@@ -175,22 +175,22 @@ public final class MatrixUtil {
     for (int i = 0; i < typeInfoBits.size(); ++i) {
       // Place bits in LSB to MSB order.  LSB (least significant bit) is the last value in
       // "typeInfoBits".
-      final int bit = typeInfoBits.at(typeInfoBits.size() - 1 - i);
+      int bit = typeInfoBits.at(typeInfoBits.size() - 1 - i);
 
       // Type info bits at the left top corner. See 8.9 of JISX0510:2004 (p.46).
-      final int x1 = TYPE_INFO_COORDINATES[i][0];
-      final int y1 = TYPE_INFO_COORDINATES[i][1];
+      int x1 = TYPE_INFO_COORDINATES[i][0];
+      int y1 = TYPE_INFO_COORDINATES[i][1];
       matrix.set(y1, x1, bit);
 
       if (i < 8) {
         // Right top corner.
-        final int x2 = matrix.width() - i - 1;
-        final int y2 = 8;
+        int x2 = matrix.width() - i - 1;
+        int y2 = 8;
         matrix.set(y2, x2, bit);
       } else {
         // Left bottom corner.
-        final int x2 = 8;
-        final int y2 = matrix.height() - 7 + (i - 8);
+        int x2 = 8;
+        int y2 = matrix.height() - 7 + (i - 8);
         matrix.set(y2, x2, bit);
       }
     }
@@ -209,7 +209,7 @@ public final class MatrixUtil {
     for (int i = 0; i < 6; ++i) {
       for (int j = 0; j < 3; ++j) {
         // Place bits in LSB (least significant bit) to MSB order.
-        final int bit = versionInfoBits.at(bitIndex);
+        int bit = versionInfoBits.at(bitIndex);
         bitIndex--;
         // Left bottom corner.
         matrix.set(matrix.height() - 11 + j, i, bit);
@@ -222,7 +222,7 @@ public final class MatrixUtil {
   // Embed "dataBits" using "getMaskPattern". On success, modify the matrix and return true.
   // For debugging purposes, it skips masking process if "getMaskPattern" is -1.
   // See 8.7 of JISX0510:2004 (p.38) for how to embed data bits.
-  public static void embedDataBits(final BitVector dataBits, int maskPattern, ByteMatrix matrix)
+  public static void embedDataBits(BitVector dataBits, int maskPattern, ByteMatrix matrix)
       throws WriterException {
     int bitIndex = 0;
     int direction = -1;
@@ -236,7 +236,7 @@ public final class MatrixUtil {
       }
       while (y >= 0 && y < matrix.height()) {
         for (int i = 0; i < 2; ++i) {
-          final int xx = x - i;
+          int xx = x - i;
           // Skip the cell if it's not empty.
           if (!isEmpty(matrix.get(y, xx))) {
             continue;
@@ -253,7 +253,7 @@ public final class MatrixUtil {
 
           // Skip masking if mask_pattern is -1.
           if (maskPattern != -1) {
-            final int mask = MaskUtil.getDataMaskBit(maskPattern, xx, y);
+            int mask = MaskUtil.getDataMaskBit(maskPattern, xx, y);
             bit ^= mask;
           }
           matrix.set(y, xx, bit);
@@ -266,7 +266,7 @@ public final class MatrixUtil {
     }
     // All bits should be consumed.
     if (bitIndex != dataBits.size()) {
-      throw new WriterException("Not all bits consumed: " + bitIndex + "/" + dataBits.size());
+      throw new WriterException("Not all bits consumed: " + bitIndex + '/' + dataBits.size());
     }
   }
 
@@ -312,7 +312,7 @@ public final class MatrixUtil {
   public static int calculateBCHCode(int value, int poly) {
     // If poly is "1 1111 0010 0101" (version info poly), msbSetInPoly is 13. We'll subtract 1
     // from 13 to make it 12.
-    final int msbSetInPoly = findMSBSet(poly);
+    int msbSetInPoly = findMSBSet(poly);
     value <<= msbSetInPoly - 1;
     // Do the division business using exclusive-or operations.
     while (findMSBSet(value) >= msbSetInPoly) {
@@ -325,15 +325,15 @@ public final class MatrixUtil {
   // Make bit vector of type information. On success, store the result in "bits" and return true.
   // Encode error correction level and mask pattern. See 8.9 of
   // JISX0510:2004 (p.45) for details.
-  public static void makeTypeInfoBits(ErrorCorrectionLevel ecLevel, final int maskPattern, BitVector bits)
+  public static void makeTypeInfoBits(ErrorCorrectionLevel ecLevel, int maskPattern, BitVector bits)
       throws WriterException {
     if (!QRCode.isValidMaskPattern(maskPattern)) {
       throw new WriterException("Invalid mask pattern");
     }
-    final int typeInfo = (ecLevel.getBits() << 3) | maskPattern;
+    int typeInfo = (ecLevel.getBits() << 3) | maskPattern;
     bits.appendBits(typeInfo, 5);
 
-    final int bchCode = MatrixUtil.calculateBCHCode(typeInfo, TYPE_INFO_POLY);
+    int bchCode = calculateBCHCode(typeInfo, TYPE_INFO_POLY);
     bits.appendBits(bchCode, 10);
 
     BitVector maskBits = new BitVector();
@@ -349,7 +349,7 @@ public final class MatrixUtil {
   // See 8.10 of JISX0510:2004 (p.45) for details.
   public static void makeVersionInfoBits(int version, BitVector bits) throws WriterException {
     bits.appendBits(version, 6);
-    final int bchCode = MatrixUtil.calculateBCHCode(version, VERSION_INFO_POLY);
+    int bchCode = calculateBCHCode(version, VERSION_INFO_POLY);
     bits.appendBits(bchCode, 12);
 
     if (bits.size() != 18) {  // Just in case.
@@ -358,12 +358,12 @@ public final class MatrixUtil {
   }
 
   // Check if "value" is empty.
-  private static boolean isEmpty(final int value) {
+  private static boolean isEmpty(int value) {
     return value == -1;
   }
 
   // Check if "value" is valid.
-  private static boolean isValidValue(final int value) {
+  private static boolean isValidValue(int value) {
     return (value == -1 ||  // Empty.
         value == 0 ||  // Light (white).
         value == 1);  // Dark (black).
@@ -373,7 +373,7 @@ public final class MatrixUtil {
     // -8 is for skipping position detection patterns (size 7), and two horizontal/vertical
     // separation patterns (size 1). Thus, 8 = 7 + 1.
     for (int i = 8; i < matrix.width() - 8; ++i) {
-      final int bit = (i + 1) % 2;
+      int bit = (i + 1) % 2;
       // Horizontal line.
       if (!isValidValue(matrix.get(6, i))) {
         throw new WriterException();
@@ -399,7 +399,7 @@ public final class MatrixUtil {
     matrix.set(matrix.height() - 8, 8, 1);
   }
 
-  private static void embedHorizontalSeparationPattern(final int xStart, final int yStart,
+  private static void embedHorizontalSeparationPattern(int xStart, int yStart,
       ByteMatrix matrix) throws WriterException {
     // We know the width and height.
     if (HORIZONTAL_SEPARATION_PATTERN[0].length != 8 || HORIZONTAL_SEPARATION_PATTERN.length != 1) {
@@ -413,7 +413,7 @@ public final class MatrixUtil {
     }
   }
 
-  private static void embedVerticalSeparationPattern(final int xStart, final int yStart,
+  private static void embedVerticalSeparationPattern(int xStart, int yStart,
       ByteMatrix matrix) throws WriterException {
     // We know the width and height.
     if (VERTICAL_SEPARATION_PATTERN[0].length != 1 || VERTICAL_SEPARATION_PATTERN.length != 7) {
@@ -430,7 +430,7 @@ public final class MatrixUtil {
   // Note that we cannot unify the function with embedPositionDetectionPattern() despite they are
   // almost identical, since we cannot write a function that takes 2D arrays in different sizes in
   // C/C++. We should live with the fact.
-  private static void embedPositionAdjustmentPattern(final int xStart, final int yStart,
+  private static void embedPositionAdjustmentPattern(int xStart, int yStart,
       ByteMatrix matrix) throws WriterException {
     // We know the width and height.
     if (POSITION_ADJUSTMENT_PATTERN[0].length != 5 || POSITION_ADJUSTMENT_PATTERN.length != 5) {
@@ -446,7 +446,7 @@ public final class MatrixUtil {
     }
   }
 
-  private static void embedPositionDetectionPattern(final int xStart, final int yStart,
+  private static void embedPositionDetectionPattern(int xStart, int yStart,
       ByteMatrix matrix) throws WriterException {
     // We know the width and height.
     if (POSITION_DETECTION_PATTERN[0].length != 7 || POSITION_DETECTION_PATTERN.length != 7) {
@@ -465,7 +465,7 @@ public final class MatrixUtil {
   // Embed position detection patterns and surrounding vertical/horizontal separators.
   private static void embedPositionDetectionPatternsAndSeparators(ByteMatrix matrix) throws WriterException {
     // Embed three big squares at corners.
-    final int pdpWidth = POSITION_DETECTION_PATTERN[0].length;
+    int pdpWidth = POSITION_DETECTION_PATTERN[0].length;
     // Left top corner.
     embedPositionDetectionPattern(0, 0, matrix);
     // Right top corner.
@@ -474,7 +474,7 @@ public final class MatrixUtil {
     embedPositionDetectionPattern(0, matrix.width() - pdpWidth, matrix);
 
     // Embed horizontal separation patterns around the squares.
-    final int hspWidth = HORIZONTAL_SEPARATION_PATTERN[0].length;
+    int hspWidth = HORIZONTAL_SEPARATION_PATTERN[0].length;
     // Left top corner.
     embedHorizontalSeparationPattern(0, hspWidth - 1, matrix);
     // Right top corner.
@@ -484,7 +484,7 @@ public final class MatrixUtil {
     embedHorizontalSeparationPattern(0, matrix.width() - hspWidth, matrix);
 
     // Embed vertical separation patterns around the squares.
-    final int vspSize = VERTICAL_SEPARATION_PATTERN.length;
+    int vspSize = VERTICAL_SEPARATION_PATTERN.length;
     // Left top corner.
     embedVerticalSeparationPattern(vspSize, 0, matrix);
     // Right top corner.
@@ -495,18 +495,18 @@ public final class MatrixUtil {
   }
 
   // Embed position adjustment patterns if need be.
-  private static void maybeEmbedPositionAdjustmentPatterns(final int version, ByteMatrix matrix)
+  private static void maybeEmbedPositionAdjustmentPatterns(int version, ByteMatrix matrix)
       throws WriterException {
     if (version < 2) {  // The patterns appear if version >= 2
       return;
     }
-    final int index = version - 1;
-    final int[] coordinates = POSITION_ADJUSTMENT_PATTERN_COORDINATE_TABLE[index];
-    final int numCoordinates = POSITION_ADJUSTMENT_PATTERN_COORDINATE_TABLE[index].length;
+    int index = version - 1;
+    int[] coordinates = POSITION_ADJUSTMENT_PATTERN_COORDINATE_TABLE[index];
+    int numCoordinates = POSITION_ADJUSTMENT_PATTERN_COORDINATE_TABLE[index].length;
     for (int i = 0; i < numCoordinates; ++i) {
       for (int j = 0; j < numCoordinates; ++j) {
-        final int y = coordinates[i];
-        final int x = coordinates[j];
+        int y = coordinates[i];
+        int x = coordinates[j];
         if (x == -1 || y == -1) {
           continue;
         }

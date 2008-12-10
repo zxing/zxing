@@ -68,7 +68,7 @@ public final class QRCodeWriter implements Writer {
     }
 
     QRCode code = new QRCode();
-    Encoder.encode(new ByteArray(contents), errorCorrectionLevel, code);
+    Encoder.encode(contents, errorCorrectionLevel, code);
     return renderResult(code, width, height);
   }
 

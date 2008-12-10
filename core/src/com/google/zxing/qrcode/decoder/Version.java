@@ -57,7 +57,7 @@ public final class Version {
     this.alignmentPatternCenters = alignmentPatternCenters;
     this.ecBlocks = new ECBlocks[]{ecBlocks1, ecBlocks2, ecBlocks3, ecBlocks4};
     int total = 0;
-    int ecCodewords = ecBlocks1.getECCodewords();
+    int ecCodewords = ecBlocks1.getECCodewordsPerBlock();
     ECB[] ecbArray = ecBlocks1.getECBlocks();
     for (int i = 0; i < ecbArray.length; i++) {
       ECB ecBlock = ecbArray[i];
@@ -82,7 +82,7 @@ public final class Version {
     return 17 + 4 * versionNumber;
   }
 
-  ECBlocks getECBlocksForLevel(ErrorCorrectionLevel ecLevel) {
+  public ECBlocks getECBlocksForLevel(ErrorCorrectionLevel ecLevel) {
     return ecBlocks[ecLevel.ordinal()];
   }
 
@@ -107,7 +107,7 @@ public final class Version {
     return VERSIONS[versionNumber - 1];
   }
 
-  static Version decodeVersionInformation(int versionBits) throws ReaderException {
+  static Version decodeVersionInformation(int versionBits) {
     int bestDifference = Integer.MAX_VALUE;
     int bestVersion = 0;
     for (int i = 0; i < VERSION_DECODE_INFO.length; i++) {
@@ -180,25 +180,37 @@ public final class Version {
    * each set of blocks. It also holds the number of error-correction codewords per block since it
    * will be the same across all blocks within one version.</p>
    */
-  static final class ECBlocks {
-    private final int ecCodewords;
+  public static final class ECBlocks {
+    private final int ecCodewordsPerBlock;
     private final ECB[] ecBlocks;
 
-    private ECBlocks(int ecCodewords, ECB ecBlocks) {
-      this.ecCodewords = ecCodewords;
+    private ECBlocks(int ecCodewordsPerBlock, ECB ecBlocks) {
+      this.ecCodewordsPerBlock = ecCodewordsPerBlock;
       this.ecBlocks = new ECB[]{ecBlocks};
     }
 
-    private ECBlocks(int ecCodewords, ECB ecBlocks1, ECB ecBlocks2) {
-      this.ecCodewords = ecCodewords;
+    private ECBlocks(int ecCodewordsPerBlock, ECB ecBlocks1, ECB ecBlocks2) {
+      this.ecCodewordsPerBlock = ecCodewordsPerBlock;
       this.ecBlocks = new ECB[]{ecBlocks1, ecBlocks2};
     }
 
-    int getECCodewords() {
-      return ecCodewords;
+    public int getECCodewordsPerBlock() {
+      return ecCodewordsPerBlock;
     }
 
-    ECB[] getECBlocks() {
+    public int getNumBlocks() {
+      int total = 0;
+      for (int i = 0; i < ecBlocks.length; i++) {
+        total += ecBlocks[i].getCount();
+      }
+      return total;
+    }
+
+    public int getTotalECCodewords() {
+      return ecCodewordsPerBlock * getNumBlocks();
+    }
+
+    public ECB[] getECBlocks() {
       return ecBlocks;
     }
   }
@@ -208,20 +220,20 @@ public final class Version {
    * This includes the number of data codewords, and the number of times a block with these
    * parameters is used consecutively in the QR code version's format.</p>
    */
-  static final class ECB {
-    final int count;
-    final int dataCodewords;
+  public static final class ECB {
+    private final int count;
+    private final int dataCodewords;
 
     ECB(int count, int dataCodewords) {
       this.count = count;
       this.dataCodewords = dataCodewords;
     }
 
-    int getCount() {
+    public int getCount() {
       return count;
     }
 
-    int getDataCodewords() {
+    public int getDataCodewords() {
       return dataCodewords;
     }
   }
