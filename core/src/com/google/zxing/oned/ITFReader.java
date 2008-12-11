@@ -73,7 +73,7 @@ public final class ITFReader extends AbstractOneDReader {
       {N, W, N, W, N}  // 9
   };
 
-  public final Result decodeRow(int rowNumber, BitArray row, Hashtable hints) throws ReaderException {
+  public Result decodeRow(int rowNumber, BitArray row, Hashtable hints) throws ReaderException {
 
     StringBuffer result = new StringBuffer(20);
 
@@ -149,7 +149,7 @@ public final class ITFReader extends AbstractOneDReader {
    */
   int[] decodeStart(BitArray row) throws ReaderException {
     int endStart = skipWhiteSpace(row);
-    int startPattern[] = findGuardPattern(row, endStart, START_PATTERN);
+    int[] startPattern = findGuardPattern(row, endStart, START_PATTERN);
 
     // Determine the width of a narrow line in pixels. We can do this by
     // getting the width of the start pattern and dividing by 4 because its
@@ -231,7 +231,7 @@ public final class ITFReader extends AbstractOneDReader {
     row.reverse();
 
     int endStart = skipWhiteSpace(row);
-    int endPattern[];
+    int[] endPattern;
     try {
       endPattern = findGuardPattern(row, endStart, END_PATTERN_REVERSED);
     } catch (ReaderException e) {

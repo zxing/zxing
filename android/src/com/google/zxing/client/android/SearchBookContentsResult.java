@@ -18,7 +18,7 @@ package com.google.zxing.client.android;
 
 public final class SearchBookContentsResult {
 
-  static private String sQuery;
+  private static String sQuery;
 
   private final String mPageNumber;
   private final String mSnippet;

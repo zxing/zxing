@@ -62,19 +62,19 @@ public final class RGBMonochromeBitmapSource extends BaseMonochromeBitmapSource 
     }
   }
 
-  public final int getHeight() {
+  public int getHeight() {
     return mHeight;
   }
 
-  public final int getWidth() {
+  public int getWidth() {
     return mWidth;
   }
 
-  protected final int getLuminance(int x, int y) {
+  protected int getLuminance(int x, int y) {
     return mLuminances[y * mWidth + x] & 0xff;
   }
 
-  protected final int[] getLuminanceRow(int y, int[] row) {
+  protected int[] getLuminanceRow(int y, int[] row) {
     int width = mWidth;
     if (row == null || row.length < width) {
       row = new int[width];
@@ -86,7 +86,7 @@ public final class RGBMonochromeBitmapSource extends BaseMonochromeBitmapSource 
     return row;
   }
 
-  protected final int[] getLuminanceColumn(int x, int[] column) {
+  protected int[] getLuminanceColumn(int x, int[] column) {
     int width = mWidth;
     int height = mHeight;
     if (column == null || column.length < height) {

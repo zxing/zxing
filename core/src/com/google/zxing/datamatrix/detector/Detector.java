@@ -134,7 +134,7 @@ public final class Detector {
     }
 
     // Bottom left is correct but top left and bottom right might be switched
-    ResultPoint[] corners = new ResultPoint[] { maybeTopLeft, bottomLeft, maybeBottomRight };
+    ResultPoint[] corners = { maybeTopLeft, bottomLeft, maybeBottomRight };
     // Use the dot product trick to sort them out
     GenericResultPoint.orderBestPatterns(corners);
 

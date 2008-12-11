@@ -53,6 +53,7 @@ public final class CaptureActivityHandler extends Handler {
     }
   }
 
+  @Override
   public void handleMessage(Message message) {
     switch (message.what) {
       case R.id.auto_focus:

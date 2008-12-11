@@ -65,9 +65,13 @@ public final class QRCodeEncoder {
 
   // TODO: The string encoding should live in the core ZXing library.
   private boolean encodeContents(Intent intent) {
-    if (intent == null) return false;
+    if (intent == null) {
+      return false;
+    }
     String type = intent.getStringExtra(Intents.Encode.TYPE);
-    if (type == null || type.length() == 0) return false;
+    if (type == null || type.length() == 0) {
+      return false;
+    }
 
     if (type.equals(Contents.Type.TEXT)) {
       String string = intent.getStringExtra(Intents.Encode.DATA);
@@ -142,7 +146,7 @@ public final class QRCodeEncoder {
     return mContents != null && mContents.length() > 0;
   }
 
-  private final static class EncodeThread extends Thread {
+  private static final class EncodeThread extends Thread {
 
     private final String mContents;
     private final Handler mHandler;
@@ -154,7 +158,7 @@ public final class QRCodeEncoder {
       mPixelResolution = pixelResolution;
     }
 
-    public final void run() {
+    public void run() {
       try {
         ByteMatrix result = new MultiFormatWriter().encode(mContents, BarcodeFormat.QR_CODE,
              mPixelResolution, mPixelResolution);

@@ -46,7 +46,7 @@ public final class ResultMetadataType {
    * the complete raw bytes in the barcode for these formats, it does not offer the bytes
    * from the byte segments alone.</p>
    *
-   * <p>This maps to a {@link java.util.Vector} of {@link byte[]}s corresponding to the
+   * <p>This maps to a {@link java.util.Vector} of byte arrays corresponding to the
    * raw bytes in the byte segments in the barcode, in order.</p>
    */
   public static final ResultMetadataType BYTE_SEGMENTS = new ResultMetadataType();

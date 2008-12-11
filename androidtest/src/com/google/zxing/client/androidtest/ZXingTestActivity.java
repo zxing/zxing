@@ -27,7 +27,7 @@ import android.widget.Button;
 public final class ZXingTestActivity extends Activity {
 
   @Override
-  public final void onCreate(Bundle icicle) {
+  public void onCreate(Bundle icicle) {
     super.onCreate(icicle);
 
     setContentView(R.layout.test);
@@ -124,7 +124,7 @@ public final class ZXingTestActivity extends Activity {
   };
 
   @Override
-  public final void onActivityResult(int requestCode, int resultCode, Intent intent) {
+  public void onActivityResult(int requestCode, int resultCode, Intent intent) {
     if (requestCode == 0) {
       if (resultCode == RESULT_OK) {
         String contents = intent.getStringExtra("SCAN_RESULT");

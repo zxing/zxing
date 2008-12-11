@@ -20,7 +20,6 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.Writer;
 import com.google.zxing.WriterException;
-import com.google.zxing.common.ByteArray;
 import com.google.zxing.common.ByteMatrix;
 import com.google.zxing.qrcode.encoder.Encoder;
 import com.google.zxing.qrcode.encoder.QRCode;
@@ -74,7 +73,7 @@ public final class QRCodeWriter implements Writer {
 
   // Note that the input matrix uses 0 == white, 1 == black, while the output matrix uses
   // 0 == black, 255 == white (i.e. an 8 bit greyscale bitmap).
-  private ByteMatrix renderResult(QRCode code, final int width, final int height) {
+  private ByteMatrix renderResult(QRCode code, int width, int height) {
     ByteMatrix input = code.getMatrix();
     int inputWidth = input.width();
     int inputHeight = input.height();
@@ -104,7 +103,7 @@ public final class QRCodeWriter implements Writer {
     }
 
     // 2. Expand the QR image to the multiple
-    final byte[][] inputArray = input.getArray();
+    byte[][] inputArray = input.getArray();
     for (int y = 0; y < inputHeight; y++) {
       // a. Write the white pixels at the left of each row
       for (int x = 0; x < leftPadding; x++) {

@@ -35,21 +35,21 @@ public final class BenchmarkItem {
     mFormat = null;
   }
 
-  public final void addResult(int microseconds) {
+  public void addResult(int microseconds) {
     mTimes[mPosition] = microseconds;
     mPosition++;
   }
 
-  public final void setDecoded(boolean decoded) {
+  public void setDecoded(boolean decoded) {
     mDecoded = decoded;
   }
 
-  public final void setFormat(BarcodeFormat format) {
+  public void setFormat(BarcodeFormat format) {
     mFormat = format;
   }
 
   @Override
-  public final String toString() {
+  public String toString() {
     StringBuffer result = new StringBuffer();
     result.append(mDecoded ? ("DECODED " + mFormat.toString() + ": ") : "FAILED: ");
     result.append(mPath);

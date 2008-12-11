@@ -223,7 +223,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         startActivity(intent);
         break;
       }
-      case ABOUT_ID: {
+      case ABOUT_ID:
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.title_about);
         builder.setMessage(getString(R.string.msg_about) + "\n\n" + getString(R.string.zxing_url));
@@ -232,7 +232,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         builder.setNegativeButton(R.string.button_cancel, null);
         builder.show();
         break;
-      }
     }
     return super.onOptionsItemSelected(item);
   }

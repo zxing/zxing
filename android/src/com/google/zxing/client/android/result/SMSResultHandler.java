@@ -33,14 +33,17 @@ public final class SMSResultHandler extends ResultHandler {
     super(activity, result);
   }
 
+  @Override
   public int getButtonCount() {
     return mButtons.length;
   }
 
+  @Override
   public int getButtonText(int index) {
     return mButtons[index];
   }
 
+  @Override
   public void handleButtonPress(int index) {
     SMSParsedResult smsResult = (SMSParsedResult) mResult;
     switch (index) {
@@ -65,6 +68,7 @@ public final class SMSResultHandler extends ResultHandler {
     return contents.toString();
   }
 
+  @Override
   public int getDisplayTitle() {
     return R.string.result_sms;
   }

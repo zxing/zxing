@@ -37,7 +37,7 @@ public final class BenchmarkActivity extends Activity {
   private BenchmarkThread mBenchmarkThread;
 
   @Override
-  public final void onCreate(Bundle icicle) {
+  public void onCreate(Bundle icicle) {
     super.onCreate(icicle);
 
     setContentView(R.layout.benchmark);
@@ -61,6 +61,7 @@ public final class BenchmarkActivity extends Activity {
   };
 
   public final Handler mHandler = new Handler() {
+    @Override
     public void handleMessage(Message message) {
       switch (message.what) {
         case R.id.benchmark_done:

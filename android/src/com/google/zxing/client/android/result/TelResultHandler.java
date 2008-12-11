@@ -33,14 +33,17 @@ public final class TelResultHandler extends ResultHandler {
     super(activity, result);
   }
 
+  @Override
   public int getButtonCount() {
     return mButtons.length;
   }
 
+  @Override
   public int getButtonText(int index) {
     return mButtons[index];
   }
 
+  @Override
   public void handleButtonPress(int index) {
     TelParsedResult telResult = (TelParsedResult) mResult;
     switch (index) {
@@ -63,6 +66,7 @@ public final class TelResultHandler extends ResultHandler {
     return PhoneNumberUtils.formatNumber(contents);
   }
 
+  @Override
   public int getDisplayTitle() {
     return R.string.result_tel;
   }

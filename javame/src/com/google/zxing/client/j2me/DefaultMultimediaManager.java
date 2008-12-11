@@ -25,9 +25,6 @@ import javax.microedition.media.Controllable;
  */
 final class DefaultMultimediaManager implements MultimediaManager {
 
-  DefaultMultimediaManager() {
-  }
-
   public void setFocus(Controllable player) {
   }
 

@@ -43,8 +43,12 @@ public final class AddressBookResultHandler extends ResultHandler {
     if (index < mButtonCount) {
       int count = -1;
       for (int x = 0; x < MAX_BUTTON_COUNT; x++) {
-        if (mFields[x]) count++;
-        if (count == index) return x;
+        if (mFields[x]) {
+          count++;
+        }
+        if (count == index) {
+          return x;
+        }
       }
     }
     return -1;
@@ -68,14 +72,18 @@ public final class AddressBookResultHandler extends ResultHandler {
 
     mButtonCount = 0;
     for (int x = 0; x < MAX_BUTTON_COUNT; x++) {
-      if (mFields[x]) mButtonCount++;
+      if (mFields[x]) {
+        mButtonCount++;
+      }
     }
   }
 
+  @Override
   public int getButtonCount() {
     return mButtonCount;
   }
 
+  @Override
   public int getButtonText(int index) {
     int action = mapIndexToAction(index);
     switch (action) {
@@ -92,6 +100,7 @@ public final class AddressBookResultHandler extends ResultHandler {
     }
   }
 
+  @Override
   public void handleButtonPress(int index) {
     AddressBookParsedResult addressResult = (AddressBookParsedResult) mResult;
     int action = mapIndexToAction(index);
@@ -165,6 +174,7 @@ public final class AddressBookResultHandler extends ResultHandler {
     }
   }
 
+  @Override
   public int getDisplayTitle() {
     return R.string.result_address_book;
   }

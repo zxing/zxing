@@ -61,7 +61,7 @@ final class VCardResultParser extends ResultParser {
   private static String[] matchVCardPrefixedField(String prefix, String rawText, boolean trim) {
     Vector matches = null;
     int i = 0;
-    final int max = rawText.length();
+    int max = rawText.length();
     while (i < max) {
       i = rawText.indexOf(prefix, i);
       if (i < 0) {
