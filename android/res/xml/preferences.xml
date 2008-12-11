@@ -25,10 +25,18 @@
         android:defaultValue="true"
         android:title="@string/preferences_decode_QR_title"/>
   </PreferenceCategory>
-  <PreferenceCategory android:title="@string/preferences_sounds_title">
+  <PreferenceCategory android:title="@string/preferences_actions_title">
     <CheckBoxPreference
         android:key="preferences_play_beep"
         android:defaultValue="true"
         android:title="@string/preferences_play_beep_title"/>
+    <CheckBoxPreference
+        android:key="preferences_vibrate"
+        android:defaultValue="false"
+        android:title="@string/preferences_vibrate_title"/>
+    <CheckBoxPreference
+        android:key="preferences_copy_to_clipboard"
+        android:defaultValue="true"
+        android:title="@string/preferences_copy_to_clipboard_title"/>
   </PreferenceCategory>
 </PreferenceScreen>
