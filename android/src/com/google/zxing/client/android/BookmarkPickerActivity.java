@@ -51,7 +51,7 @@ public final class BookmarkPickerActivity extends ListActivity {
   private Cursor mCursor;
 
   @Override
-  protected final void onCreate(Bundle icicle) {
+  protected void onCreate(Bundle icicle) {
     super.onCreate(icicle);
 
     mCursor = getContentResolver().query(Browser.BOOKMARKS_URI, BOOKMARK_PROJECTION,
@@ -64,7 +64,7 @@ public final class BookmarkPickerActivity extends ListActivity {
   }
 
   @Override
-  protected final void onListItemClick(ListView l, View view, int position, long id) {
+  protected void onListItemClick(ListView l, View view, int position, long id) {
     if (mCursor.moveToPosition(position)) {
       Intent intent = new Intent();
       intent.putExtra(Browser.BookmarkColumns.TITLE, mCursor.getString(TITLE_COLUMN));

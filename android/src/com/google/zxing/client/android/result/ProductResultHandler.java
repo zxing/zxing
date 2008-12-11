@@ -32,14 +32,17 @@ public final class ProductResultHandler extends ResultHandler {
     super(activity, result);
   }
 
+  @Override
   public int getButtonCount() {
     return mButtons.length;
   }
 
+  @Override
   public int getButtonText(int index) {
     return mButtons[index];
   }
 
+  @Override
   public void handleButtonPress(int index) {
     ProductParsedResult productResult = (ProductParsedResult) mResult;
     switch (index) {
@@ -52,6 +55,7 @@ public final class ProductResultHandler extends ResultHandler {
     }
   }
 
+  @Override
   public int getDisplayTitle() {
     return R.string.result_product;
   }

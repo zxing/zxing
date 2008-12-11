@@ -20,7 +20,6 @@ import android.util.Log;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpEntityEnclosingRequest;
-import org.apache.http.HttpException;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpMessage;
 import org.apache.http.HttpRequest;
@@ -212,7 +211,9 @@ public final class AndroidHttpClient implements HttpClient {
     if (contentEncoding == null) {
       return responseStream;
     }
-    if (contentEncoding.contains("gzip")) responseStream = new GZIPInputStream(responseStream);
+    if (contentEncoding.contains("gzip")) {
+      responseStream = new GZIPInputStream(responseStream);
+    }
     return responseStream;
   }
 
@@ -281,7 +282,7 @@ public final class AndroidHttpClient implements HttpClient {
    * @param data The bytes to compress
    * @return Entity holding the data
    */
-  public static AbstractHttpEntity getCompressedEntity(byte data[]) throws IOException {
+  public static AbstractHttpEntity getCompressedEntity(byte[] data) throws IOException {
     AbstractHttpEntity entity;
     if (data.length < getMinGzipSize()) {
       entity = new ByteArrayEntity(data);
@@ -371,7 +372,7 @@ public final class AndroidHttpClient implements HttpClient {
    * Logs cURL commands equivalent to requests.
    */
   private final class CurlLogger implements HttpRequestInterceptor {
-    public final void process(HttpRequest request, HttpContext context)
+    public void process(HttpRequest request, HttpContext context)
         throws IOException {
       LoggingConfiguration configuration = curlConfiguration;
       if (configuration != null

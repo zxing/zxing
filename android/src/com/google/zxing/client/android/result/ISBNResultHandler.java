@@ -33,14 +33,17 @@ public final class ISBNResultHandler extends ResultHandler {
     super(activity, result);
   }
 
+  @Override
   public int getButtonCount() {
     return mButtons.length;
   }
 
+  @Override
   public int getButtonText(int index) {
     return mButtons[index];
   }
 
+  @Override
   public void handleButtonPress(int index) {
     ISBNParsedResult isbnResult = (ISBNParsedResult) mResult;
     switch (index) {
@@ -56,6 +59,7 @@ public final class ISBNResultHandler extends ResultHandler {
     }
   }
 
+  @Override
   public int getDisplayTitle() {
     return R.string.result_isbn;
   }

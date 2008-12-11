@@ -84,10 +84,12 @@ public final class BufferedImageMonochromeBitmapSource extends BaseMonochromeBit
     return image;
   }
 
+  @Override
   public int getHeight() {
     return height;
   }
 
+  @Override
   public int getWidth() {
     return width;
   }
@@ -127,6 +129,7 @@ public final class BufferedImageMonochromeBitmapSource extends BaseMonochromeBit
    *
    * where R, G, and B are values in [0,1].
    */
+  @Override
   protected int getLuminance(int x, int y) {
     int pixel = image.getRGB(left + x, top + y);
     // Coefficients add up to 1024 to make the divide into a fast shift
@@ -135,6 +138,7 @@ public final class BufferedImageMonochromeBitmapSource extends BaseMonochromeBit
         117 * (pixel & 0xFF)) >> 10;
   }
 
+  @Override
   protected int[] getLuminanceRow(int y, int[] row) {
     if (row == null || row.length < width) {
       row = new int[width];
@@ -149,6 +153,7 @@ public final class BufferedImageMonochromeBitmapSource extends BaseMonochromeBit
     return row;
   }
 
+  @Override
   protected int[] getLuminanceColumn(int x, int[] column) {
     if (column == null || column.length < height) {
       column = new int[height];

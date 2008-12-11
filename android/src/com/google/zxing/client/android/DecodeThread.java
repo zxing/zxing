@@ -75,6 +75,7 @@ final class DecodeThread extends Thread {
   public void run() {
     Looper.prepare();
     mHandler = new Handler() {
+      @Override
       public void handleMessage(Message message) {
         switch (message.what) {
           case R.id.decode:

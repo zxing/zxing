@@ -41,14 +41,17 @@ public final class CalendarResultHandler extends ResultHandler {
     super(activity, result);
   }
 
+  @Override
   public int getButtonCount() {
     return mButtons.length;
   }
 
+  @Override
   public int getButtonText(int index) {
     return mButtons[index];
   }
 
+  @Override
   public void handleButtonPress(int index) {
     CalendarParsedResult calendarResult = (CalendarParsedResult) mResult;
     switch (index) {
@@ -68,7 +71,9 @@ public final class CalendarResultHandler extends ResultHandler {
 
     // The end can be null if the event has no duration, so use the start time.
     String endString = calResult.getEnd();
-    if (endString == null) endString = calResult.getStart();
+    if (endString == null) {
+      endString = calResult.getStart();
+    }
     appendTime(endString, result);
 
     ParsedResult.maybeAppend(calResult.getLocation(), result);
@@ -77,7 +82,7 @@ public final class CalendarResultHandler extends ResultHandler {
     return result.toString();
   }
 
-  private void appendTime(String when, StringBuffer result) {
+  private static void appendTime(String when, StringBuffer result) {
     if (when.length() == 8) {
       // Show only year/month/day
       Date date;
@@ -101,6 +106,7 @@ public final class CalendarResultHandler extends ResultHandler {
     }
   }
 
+  @Override
   public int getDisplayTitle() {
     return R.string.result_calendar;
   }

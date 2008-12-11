@@ -76,19 +76,18 @@ public final class CameraTestActivity extends Activity implements SurfaceHolder.
   }
 
   public final Handler mHandler = new Handler() {
+    @Override
     public void handleMessage(Message message) {
       switch (message.what) {
         case R.id.auto_focus:
           // Do not continuously auto focus
           break;
-        case R.id.save_succeeded: {
+        case R.id.save_succeeded:
           Toast.makeText(CameraTestActivity.this, R.string.save_succeeded, 500).show();
           break;
-        }
-        case R.id.save_failed: {
+        case R.id.save_failed:
           Toast.makeText(CameraTestActivity.this, R.string.save_failed, 2000).show();
           break;
-        }
       }
     }
   };

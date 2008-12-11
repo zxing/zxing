@@ -39,31 +39,31 @@ public final class ByteMatrix {
     this.width = width;
   }
 
-  public final int height() {
+  public int height() {
     return height;
   }
 
-  public final int width() {
+  public int width() {
     return width;
   }
 
-  public final byte get(int y, int x) {
+  public byte get(int y, int x) {
     return bytes[y][x];
   }
 
-  public final byte[][] getArray() {
+  public byte[][] getArray() {
     return bytes;
   }
 
-  public final void set(int y, int x, byte value) {
+  public void set(int y, int x, byte value) {
     bytes[y][x] = value;
   }
 
-  public final void set(int y, int x, int value) {
+  public void set(int y, int x, int value) {
     bytes[y][x] = (byte) value;
   }
 
-  public final void clear(byte value) {
+  public void clear(byte value) {
     for (int y = 0; y < height; ++y) {
       for (int x = 0; x < width; ++x) {
         bytes[y][x] = value;
@@ -71,7 +71,7 @@ public final class ByteMatrix {
     }
   }
 
-  public final String toString() {
+  public String toString() {
     StringBuffer result = new StringBuffer();
     for (int y = 0; y < height; ++y) {
       for (int x = 0; x < width; ++x) {

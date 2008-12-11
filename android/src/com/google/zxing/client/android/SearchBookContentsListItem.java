@@ -57,7 +57,9 @@ public final class SearchBookContentsListItem extends LinearLayout {
         int offset = 0;
         while (true) {
           int pos = lowerSnippet.indexOf(lowerQuery, offset);
-          if (pos < 0) break;
+          if (pos < 0) {
+            break;
+          }
           styledSnippet.setSpan(boldSpan, pos, pos + queryLength, 0);
           offset = pos + queryLength;
         }

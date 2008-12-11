@@ -18,7 +18,6 @@ package com.google.zxing.client.android;
 
 import android.app.Activity;
 import android.content.ContentResolver;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -38,7 +37,7 @@ public final class ShareActivity extends Activity {
   private static final int METHODS_KIND_COLUMN = 1;
   private static final int METHODS_DATA_COLUMN = 2;
 
-  private static final String[] METHODS_PROJECTION = new String[] {
+  private static final String[] METHODS_PROJECTION = {
     Contacts.People.ContactMethods._ID, // 0
     Contacts.People.ContactMethods.KIND, // 1
     Contacts.People.ContactMethods.DATA, // 2
@@ -63,7 +62,7 @@ public final class ShareActivity extends Activity {
   protected void onResume() {
     super.onResume();
 
-    ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+    ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
     if (clipboard.hasText()) {
       mClipboardButton.setEnabled(true);
       mClipboardButton.setText(R.string.button_share_clipboard);
@@ -95,7 +94,7 @@ public final class ShareActivity extends Activity {
 
   private final Button.OnClickListener mClipboardListener = new Button.OnClickListener() {
     public void onClick(View v) {
-      ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+      ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
       // Should always be true, because we grey out the clipboard button in onResume() if it's empty
       if (clipboard.hasText()) {
         Intent intent = new Intent(Intents.Encode.ACTION);
@@ -158,8 +157,8 @@ public final class ShareActivity extends Activity {
       boolean foundPostal = false;
       if (methodsCursor != null) {
         while (methodsCursor.moveToNext()) {
-          final int kind = methodsCursor.getInt(METHODS_KIND_COLUMN);
-          final String data = methodsCursor.getString(METHODS_DATA_COLUMN);
+          int kind = methodsCursor.getInt(METHODS_KIND_COLUMN);
+          String data = methodsCursor.getString(METHODS_DATA_COLUMN);
           switch (kind) {
             case Contacts.KIND_EMAIL:
               if (!foundEmail) {

@@ -35,9 +35,6 @@ final class AdvancedMultimediaManager implements MultimediaManager {
   private static final long FOCUS_TIME_MS = 750L;
   private static final String DESIRED_METERING = "center-weighted";
 
-  AdvancedMultimediaManager() {
-  }
-
   public void setFocus(Controllable player) {
     FocusControl focusControl = (FocusControl)
         player.getControl("javax.microedition.amms.control.camera.FocusControl");

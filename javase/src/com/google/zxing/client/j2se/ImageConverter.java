@@ -58,7 +58,9 @@ public final class ImageConverter {
       }
     }
     for (String arg : args) {
-      if (arg.startsWith("-")) continue;
+      if (arg.startsWith("-")) {
+        continue;
+      }
       File inputFile = new File(arg);
       if (inputFile.exists()) {
         if (inputFile.isDirectory()) {

@@ -94,6 +94,7 @@ public final class EncodeActivity extends Activity {
   };
 
   public final Handler mHandler = new Handler() {
+    @Override
     public void handleMessage(Message message) {
       switch (message.what) {
         case R.id.encode_succeeded:

@@ -113,6 +113,7 @@ public final class SearchBookContentsActivity extends Activity {
   }
 
   public final Handler mHandler = new Handler() {
+    @Override
     public void handleMessage(Message message) {
       switch (message.what) {
         case R.id.search_book_contents_succeeded:
@@ -237,7 +238,8 @@ public final class SearchBookContentsActivity extends Activity {
       mUserAgent = userAgent;
     }
 
-    public final void run() {
+    @Override
+    public void run() {
       AndroidHttpClient client = null;
       try {
         // These return a JSON result which describes if and where the query was found. This API may

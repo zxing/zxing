@@ -44,7 +44,7 @@ public final class ViewfinderView extends View {
   }
 
   @Override
-  public final void onDraw(Canvas canvas) {
+  public void onDraw(Canvas canvas) {
     Rect frame = CameraManager.get().getFramingRect();
     int width = canvas.getWidth();
     int height = canvas.getHeight();
