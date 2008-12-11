@@ -27,12 +27,15 @@ public final class PreferencesActivity extends android.preference.PreferenceActi
 
   static final String KEY_DECODE_1D = "preferences_decode_1D";
   static final String KEY_DECODE_QR = "preferences_decode_QR";
+
   static final String KEY_PLAY_BEEP = "preferences_play_beep";
+  static final String KEY_VIBRATE = "preferences_vibrate";
+  static final String KEY_COPY_TO_CLIPBOARD = "preferences_copy_to_clipboard";
+
   static final String KEY_HELP_VERSION_SHOWN = "preferences_help_version_shown";
 
   CheckBoxPreference mDecode1D;
   CheckBoxPreference mDecodeQR;
-  CheckBoxPreference mPlayBeep;
 
   @Override
   protected void onCreate(Bundle icicle) {
@@ -43,7 +46,6 @@ public final class PreferencesActivity extends android.preference.PreferenceActi
     preferences.getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
     mDecode1D = (CheckBoxPreference) preferences.findPreference(KEY_DECODE_1D);
     mDecodeQR = (CheckBoxPreference) preferences.findPreference(KEY_DECODE_QR);
-    mPlayBeep = (CheckBoxPreference) preferences.findPreference(KEY_PLAY_BEEP);
   }
 
   // Prevent the user from turning off both decode options

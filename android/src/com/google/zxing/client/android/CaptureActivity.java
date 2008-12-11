@@ -18,6 +18,7 @@ package com.google.zxing.client.android;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -35,8 +36,10 @@ import android.media.MediaPlayer.OnCompletionListener;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Message;
+import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.text.SpannableStringBuilder;
+import android.text.ClipboardManager;
 import android.text.style.UnderlineSpan;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -73,6 +76,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private static final int MAX_RESULT_IMAGE_SIZE = 150;
   private static final int INTENT_RESULT_DURATION = 1500;
   private static final float BEEP_VOLUME = 0.15f;
+  private static final long VIBRATE_DURATION = 200;
 
   private static final String PACKAGE_NAME = "com.google.zxing.client.android";
 
@@ -85,6 +89,8 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private Result mLastResult;
   private boolean mHasSurface;
   private boolean mPlayBeep;
+  private boolean mVibrate;
+  private boolean mCopyToClipboard;
   private boolean mScanIntent;
   private String mDecodeMode;
 
@@ -141,6 +147,8 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
     mPlayBeep = prefs.getBoolean(PreferencesActivity.KEY_PLAY_BEEP, true);
+    mVibrate = prefs.getBoolean(PreferencesActivity.KEY_VIBRATE, false);
+    mCopyToClipboard = prefs.getBoolean(PreferencesActivity.KEY_COPY_TO_CLIPBOARD, true);
     initBeepSound();
   }
 
@@ -266,7 +274,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
    */
   public void handleDecode(Result rawResult, Bitmap barcode, int duration) {
     mLastResult = rawResult;
-    playBeepSound();
+    playBeepSoundAndVibrate();
     drawResultPoints(barcode, rawResult);
 
     if (mScanIntent) {
@@ -294,7 +302,8 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       CharSequence title = getString(resultHandler.getDisplayTitle());
       SpannableStringBuilder styled = new SpannableStringBuilder(title + "\n\n");
       styled.setSpan(new UnderlineSpan(), 0, title.length(), 0);
-      styled.append(resultHandler.getDisplayContents());
+      CharSequence displayContents = resultHandler.getDisplayContents();
+      styled.append(displayContents);
       contentsTextView.setText(styled);
 
       int buttonCount = resultHandler.getButtonCount();
@@ -309,6 +318,11 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         } else {
           button.setVisibility(View.GONE);
         }
+      }
+
+      if (mCopyToClipboard) {
+        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        clipboard.setText(displayContents);
       }
     }
   }
@@ -357,6 +371,11 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     textView.setText(getString(resultHandler.getDisplayTitle()));
 
     mStatusView.setBackgroundColor(getResources().getColor(R.color.transparent));
+
+    if (mCopyToClipboard) {
+      ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+      clipboard.setText(resultHandler.getDisplayContents());
+    }
 
     // Hand back whatever action they requested - this can be changed to Intents.Scan.ACTION when
     // the deprecated intent is retired.
@@ -413,9 +432,13 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     }
   }
 
-  private void playBeepSound() {
+  private void playBeepSoundAndVibrate() {
     if (mPlayBeep && mMediaPlayer != null) {
       mMediaPlayer.start();
+    }
+    if (mVibrate) {
+      Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+      vibrator.vibrate(VIBRATE_DURATION);
     }
   }
 
