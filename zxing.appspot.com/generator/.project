@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<projectDescription>
+   <name>BarcodeGenerator</name>
+   <comment>BarcodeGenerator project</comment>
+   <projects/>
+   <buildSpec>
+       <buildCommand>
+           <name>org.eclipse.jdt.core.javabuilder</name>
+           <arguments/>
+       </buildCommand>
+   </buildSpec>
+   <natures>
+       <nature>org.eclipse.jdt.core.javanature</nature>
+   </natures>
+   <linkedResources>
+      <link>
+         <name>gwt-user.jar</name>
+         <type>1</type>
+         <locationURI>GWT_HOME/gwt-user.jar</locationURI>
+      </link>
+      <link>
+         <name>gwt.jar</name>
+         <type>1</type>
+         <locationURI>GWT_JAR</locationURI>
+      </link>
+   </linkedResources>
+</projectDescription>
