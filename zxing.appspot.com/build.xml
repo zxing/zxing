@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (C) 2008 ZXing authors
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<project name="zxing.appspot.com" default="build">
+  <property file="../build.properties"/>
+
+  <!-- Properties -->
+  <property name="outdir" value="build"/>
+  <property name="outdir-site" value="${outdir}/site"/>
+  <property name="yaml-file" value="app.yaml"/>
+  <property name="redirect-script" value="redirect.py"/>
+  <property name="generator-package" value="com.google.zxing.web.generator.Generator"/>
+
+  <!-- Contains pre-built jars like gwt-incubator.jar -->
+  <property name="external-libs" value="generator/libs"/>
+
+  <!-- Create the output directories if they don't exist yet. -->
+  <target name="create-dirs">
+    <echo>Creating output directories if needed...</echo>
+    <mkdir dir="${outdir}"/>
+    <mkdir dir="${outdir-site}"/>
+  </target>
+
+  <!-- Generate the HTML and JS from the Java source. -->
+  <target name="compile" depends="create-dirs">
+    <java classname="com.google.gwt.dev.GWTCompiler" fork="true" failonerror="true">
+      <jvmarg value="-Xmx256M"/>
+      <classpath>
+        <pathelement path="generator/src"/>
+        <fileset dir="${GWT-home}" includes="*.jar"/>
+        <fileset dir="${external-libs}" includes="*.jar"/>
+      </classpath>
+      <arg line="-out ${outdir-site}"/>
+      <arg value="${generator-package}"/>
+    </java>
+  </target>
+
+  <!-- Part of copying all the needed pieces into ${outdir-site} so it can be uploaded. -->
+  <target name="copy-static-files" depends="create-dirs">
+    <echo>Copying static files...</echo>
+    <copy file="${yaml-file}" todir="${outdir}"/>
+    <copy file="${redirect-script}" todir="${outdir}"/>
+    <copy todir="${outdir-site}">
+      <fileset dir="static"/>
+    </copy>
+  </target>
+
+  <!--
+  The GWTCompiler adds the package name to the output directory, but we want to change that to
+  mirror the user-perceived site layout. We also want to rename the main HTML file.
+  -->
+  <target name="rename-generator" depends="compile">
+    <echo>Renaming generator output...</echo>
+    <move file="${outdir-site}/${generator-package}" tofile="${outdir-site}/generator"/>
+    <move file="${outdir-site}/generator/Generator.html" tofile="${outdir-site}/generator/index.html"/>
+  </target>
+
+  <target name="build" depends="compile,copy-static-files,rename-generator">
+
+  </target>
+
+  <target name="clean">
+    <delete dir="${outdir}"/>
+  </target>
+
+</project>
