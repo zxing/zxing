@@ -8,9 +8,8 @@ handlers:
   script: redirect.py
 
 - url: (.*)/
-  static_files: static\1/index.html
-  upload: static/index.html
+  static_files: site\1/index.html
+  upload: site/index.html
 
 - url: /
-  static_dir: static
-
+  static_dir: site
