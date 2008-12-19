@@ -181,7 +181,7 @@ public class Generator implements EntryPoint {
     result += "x";
     result += sizeY;
     result += "&chl=";
-    result += URL.encode(content);
+    result += URL.encodeComponent(content);
     return result;
   }
   
