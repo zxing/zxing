@@ -16,8 +16,6 @@
 
 package com.google.zxing.web.generator.client;
 
-import com.google.gwt.dom.client.Node;
-import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.maps.client.MapWidget;
 import com.google.gwt.maps.client.control.SmallMapControl;
@@ -146,6 +144,7 @@ public class GeoLocationGenerator implements GeneratorSource, ChangeListener {
     
     map.setSize("256px", "256px");
     map.addControl(new SmallMapControl());
+    map.getElement().getStyle().setProperty("overflow", "hidden");
     map.addMapClickHandler(new MapClickHandler() {
       public void onClick(MapClickEvent event) {
         mapClick(event);
