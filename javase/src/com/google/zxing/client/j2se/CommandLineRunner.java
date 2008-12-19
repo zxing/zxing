@@ -21,6 +21,8 @@ import com.google.zxing.MonochromeBitmapSource;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
+import com.google.zxing.client.result.ParsedResult;
+import com.google.zxing.client.result.ResultParser;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -31,8 +33,8 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.URI;
-import java.util.Hashtable;
 import java.nio.charset.Charset;
+import java.util.Hashtable;
 
 /**
  * <p>This simple command line utility decodes files, directories of files, or URIs which are passed
@@ -138,8 +140,10 @@ public final class CommandLineRunner {
     try {
       MonochromeBitmapSource source = new BufferedImageMonochromeBitmapSource(image);
       Result result = new MultiFormatReader().decode(source, hints);
-      System.out.println(uri.toString() + " (format: " + result.getBarcodeFormat() + "):\n" +
-          result.getText());
+      ParsedResult parsedResult = ResultParser.parseResult(result);
+      System.out.println(uri.toString() + " (format: " + result.getBarcodeFormat() +
+          ", type: " + parsedResult.getType() + "):\nRaw result:\n" + result.getText() +
+          "\nParsed result:\n" + parsedResult.getDisplayResult());
       return result;
     } catch (ReaderException e) {
       System.out.println(uri.toString() + ": No barcode found");

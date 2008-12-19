@@ -232,11 +232,8 @@ public abstract class ResultParser {
       String value = uri.substring(separator + 1, paramEnd);
       value = urlDecode(value);
       result.put(key, value);
-    } else {
-      // key, no value
-      String key = uri.substring(paramStart, paramEnd);
-      result.put(key, null);
     }
+    // Can't put key, null into a hashtable
   }
 
   static String[] matchPrefixedField(String prefix, String rawText, char endChar, boolean trim) {
