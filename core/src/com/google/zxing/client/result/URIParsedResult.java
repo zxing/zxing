@@ -69,8 +69,8 @@ public final class URIParsedResult extends ParsedResult {
 
   public String getDisplayResult() {
     StringBuffer result = new StringBuffer();
-    maybeAppend(uri, result);
     maybeAppend(title, result);
+    maybeAppend(uri, result);
     return result.toString();
   }
 
@@ -83,11 +83,30 @@ public final class URIParsedResult extends ParsedResult {
     if (protocolEnd < 0) {
       // No protocol, assume http
       uri = "http://" + uri;
+    } else if (isColonFollowedByPortNumber(uri, protocolEnd)) {
+      // Found a colon, but it looks like it is after the host, so the protocol is still missing
+      uri = "http://" + uri;
     } else {
       // Lowercase protocol to avoid problems
       uri = uri.substring(0, protocolEnd).toLowerCase() + uri.substring(protocolEnd);
     }
     return uri;
+  }
+
+  private static boolean isColonFollowedByPortNumber(String uri, int protocolEnd) {
+    int nextSlash = uri.indexOf('/', protocolEnd + 1);
+    if (nextSlash < 0) {
+      nextSlash = uri.length();
+    }
+    if (nextSlash <= protocolEnd + 1) {
+      return false;
+    }
+    for (int x = protocolEnd + 1; x < nextSlash; x++) {
+      if (uri.charAt(x) < '0' || uri.charAt(x) > '9') {
+        return false;
+      }
+    }
+    return true;
   }
 
 
