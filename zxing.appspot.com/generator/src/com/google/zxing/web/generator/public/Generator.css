@@ -121,3 +121,9 @@ body {
   font-size: 11px;
   color: red;
 }
+
+div .gmnoprint {
+	white-space: normal !important;
+	/* overflow: hidden; */
+}
+	
