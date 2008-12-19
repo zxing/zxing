@@ -24,11 +24,11 @@ package com.google.zxing.web.generator.client;
  */
 public final class Validators {
   public static String filterNumber(String number) {
-    return number.replaceAll("[ +\\.,\\-\\(\\)]", "");
+    return number.replaceAll("[ \\.,\\-\\(\\)]", "");
   }
   
   public static void validateNumber(String number) throws GeneratorException {    
-    if (!number.matches("[0-9]+")) {
+    if (!number.matches("\\+?[0-9]+")) {
       throw new GeneratorException("Phone number must be digits only.");
     }
   }
