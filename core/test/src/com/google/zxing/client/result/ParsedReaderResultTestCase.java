@@ -121,6 +121,7 @@ public final class ParsedReaderResultTestCase extends TestCase {
     doTestResult("TEL:+15551212", ParsedResultType.TEL);
     doTestResult("tel:212 555 1212", ParsedResultType.TEL);
     doTestResult("tel:2125551212", ParsedResultType.TEL);
+    doTestResult("tel:212-555-1212", ParsedResultType.TEL);
     doTestResult("telephone", ParsedResultType.TEXT);
   }
 
@@ -167,6 +168,9 @@ public final class ParsedReaderResultTestCase extends TestCase {
     doTestResult("sms:+15551212;via=999333", ParsedResultType.SMS);
     doTestResult("sms:+15551212?subject=foo&body=bar", ParsedResultType.SMS);
     doTestResult("sms:+15551212:subject", ParsedResultType.SMS);
+    // Need to handle question mark in the subject
+    doTestResult("sms:+15551212:What's up?", ParsedResultType.SMS);
+    doTestResult("sms:212-555-1212:Here's a longer message. Should be fine.", ParsedResultType.SMS);
   }
 
   public void testMMS() {
@@ -177,6 +181,8 @@ public final class ParsedReaderResultTestCase extends TestCase {
     doTestResult("mms:+15551212;via=999333", ParsedResultType.SMS);
     doTestResult("mms:+15551212?subject=foo&body=bar", ParsedResultType.SMS);
     doTestResult("mms:+15551212:subject", ParsedResultType.SMS);
+    doTestResult("mms:+15551212:What's up?", ParsedResultType.SMS);
+    doTestResult("mms:212-555-1212:Here's a longer message. Should be fine.", ParsedResultType.SMS);
   }
 
   /*

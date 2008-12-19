@@ -51,10 +51,23 @@ final class SMSMMSResultParser extends ResultParser {
     } else {
       return null;
     }
+
+    // Check up front if this is a URI syntax string with query arguments
+    Hashtable nameValuePairs = parseNameValuePairs(rawText);
+    String subject = null;
+    String body = null;
+    boolean querySyntax = false;
+    if (nameValuePairs != null && nameValuePairs.size() > 0) {
+      subject = (String) nameValuePairs.get("subject");
+      body = (String) nameValuePairs.get("body");
+      querySyntax = true;
+    }
+
     // Drop sms, query portion
     int queryStart = rawText.indexOf('?', prefixLength);
     String smsURIWithoutQuery;
-    if (queryStart < 0) {
+    // If it's not query syntax, the question mark is part of the subject or message
+    if (queryStart < 0 || !querySyntax) {
       smsURIWithoutQuery = rawText.substring(prefixLength);
     } else {
       smsURIWithoutQuery = rawText.substring(prefixLength, queryStart);
@@ -74,13 +87,7 @@ final class SMSMMSResultParser extends ResultParser {
         via = null;
       }
     }
-    Hashtable nameValuePairs = parseNameValuePairs(rawText);
-    String subject = null;
-    String body = null;
-    if (nameValuePairs != null) {
-      subject = (String) nameValuePairs.get("subject");
-      body = (String) nameValuePairs.get("body");
-    }
+
     // Thanks to dominik.wild for suggesting this enhancement to support
     // smsto:number:body URIs
     if (body == null) {
