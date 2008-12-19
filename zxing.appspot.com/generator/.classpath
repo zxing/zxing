@@ -6,5 +6,6 @@
 	<classpathentry kind="lib" path="gwt.jar"/>
 	<classpathentry kind="var" path="JUNIT_HOME/junit.jar"/>
 	<classpathentry kind="lib" path="libs/gwt-incubator.jar"/>
+	<classpathentry kind="lib" path="libs/gwt-maps.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

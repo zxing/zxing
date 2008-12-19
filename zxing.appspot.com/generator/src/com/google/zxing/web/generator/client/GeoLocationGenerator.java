@@ -16,11 +16,22 @@
 
 package com.google.zxing.web.generator.client;
 
+import com.google.gwt.dom.client.Node;
+import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.http.client.URL;
+import com.google.gwt.maps.client.MapWidget;
+import com.google.gwt.maps.client.control.SmallMapControl;
+import com.google.gwt.maps.client.event.MapClickHandler;
+import com.google.gwt.maps.client.event.MarkerDragEndHandler;
+import com.google.gwt.maps.client.event.MapClickHandler.MapClickEvent;
+import com.google.gwt.maps.client.geom.LatLng;
+import com.google.gwt.maps.client.overlay.Marker;
+import com.google.gwt.maps.client.overlay.MarkerOptions;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Grid;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -30,7 +41,7 @@ import com.google.gwt.user.client.ui.Widget;
  * 
  * @author Yohann Coppel
  */
-public class GeoLocationGenerator implements GeneratorSource {
+public class GeoLocationGenerator implements GeneratorSource, ChangeListener {
   private static final String LON_REGEXP = "[+-]?[0-9]+(.[0-9]+)?";
   private static final String LAT_REGEXP = "[+-]?[0-9]+(.[0-9]+)?";
   
@@ -39,12 +50,18 @@ public class GeoLocationGenerator implements GeneratorSource {
   TextBox longitude = new TextBox();
   TextBox query = new TextBox();
   TextBox mapsLink = new TextBox();
+  MapWidget map = new MapWidget();
+  Marker mapMarker = null;
+  private ChangeListener changeListener;
   
   public GeoLocationGenerator(ChangeListener listener) {
+    this.changeListener = listener;
     latitude.addStyleName(StylesDefs.INPUT_FIELD_REQUIRED);
     longitude.addStyleName(StylesDefs.INPUT_FIELD_REQUIRED);
     latitude.addChangeListener(listener);
+    latitude.addChangeListener(this);
     longitude.addChangeListener(listener);
+    longitude.addChangeListener(this);
     query.addChangeListener(listener);
   }
   
@@ -106,7 +123,7 @@ public class GeoLocationGenerator implements GeneratorSource {
     if (table != null) {
       return table;
     }
-    table = new Grid(5, 2);
+    table = new Grid(7, 2);
     
     table.setText(0, 0, "Latitude");
     table.setWidget(0, 1, latitude);
@@ -127,7 +144,58 @@ public class GeoLocationGenerator implements GeneratorSource {
     table.setWidget(4, 0, fill);
     table.setWidget(4, 1, mapsLink);
     
+    map.setSize("256px", "256px");
+    map.addControl(new SmallMapControl());
+    map.addMapClickHandler(new MapClickHandler() {
+      public void onClick(MapClickEvent event) {
+        mapClick(event);
+      }
+    });
+    table.setText(5, 0, "OR");
+    table.setText(5, 1, "use the map to select a location:");
+    SimplePanel sp = new SimplePanel();
+    sp.add(map);
+    table.setWidget(6, 1, sp);
     return table;
+  }
+
+  protected void mapClick(MapClickEvent event) {
+    latitude.setText("" + event.getLatLng().getLatitude());
+    longitude.setText("" + event.getLatLng().getLongitude());
+    setMapMarker(event.getLatLng().getLatitude(), event.getLatLng().getLongitude(), false);
+    changeListener.onChange(latitude);
+    changeListener.onChange(longitude);
+  }
+  
+  protected void mapMarkerMoved() {
+    latitude.setText("" + mapMarker.getLatLng().getLatitude());
+    longitude.setText("" + mapMarker.getLatLng().getLongitude());
+    changeListener.onChange(latitude);
+    changeListener.onChange(longitude);
+  }
+  
+  protected void setMapMarker(double lat, double lon, boolean zoomAndCenter) {
+    if (mapMarker != null) {
+      map.removeOverlay(mapMarker);
+    }
+    LatLng ll = LatLng.newInstance(lat, lon);
+    if (zoomAndCenter) {
+      map.setCenter(ll);
+      map.setZoomLevel(12);
+    }
+    if (mapMarker != null) {
+      mapMarker.setLatLng(ll);
+    } else {
+      MarkerOptions opt = MarkerOptions.newInstance();
+      opt.setDraggable(true);
+      mapMarker = new Marker(ll, opt);
+      mapMarker.addMarkerDragEndHandler(new MarkerDragEndHandler() {
+        public void onDragEnd(MarkerDragEndEvent event) {
+          mapMarkerMoved();
+        }
+      });
+    }
+    map.addOverlay(mapMarker);  
   }
 
   protected void fillWithMaps() {
@@ -172,6 +240,9 @@ public class GeoLocationGenerator implements GeneratorSource {
     query.setText(URL.decode(q));
     latitude.setText(lat);
     longitude.setText(lon);
+    changeListener.onChange(latitude);
+    changeListener.onChange(longitude);
+    this.onChange(latitude);
   }
 
   public void validate(Widget widget) throws GeneratorException {
@@ -181,5 +252,17 @@ public class GeoLocationGenerator implements GeneratorSource {
 
   public void setFocus() {
     latitude.setFocus(true);
+  }
+
+  public void onChange(Widget sender) {
+    if (sender == latitude || sender == longitude) {
+      try {
+        double lat = Double.parseDouble(getLatitudeField());
+        double lon = Double.parseDouble(getLongitudeField());
+        setMapMarker(lat, lon, true);
+      } catch (NumberFormatException e) {
+      } catch (GeneratorException e) {
+      }
+    }
   }
 }
