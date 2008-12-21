@@ -57,7 +57,7 @@ final class SMSMMSResultParser extends ResultParser {
     String subject = null;
     String body = null;
     boolean querySyntax = false;
-    if (nameValuePairs != null && nameValuePairs.size() > 0) {
+    if (nameValuePairs != null && !nameValuePairs.isEmpty()) {
       subject = (String) nameValuePairs.get("subject");
       body = (String) nameValuePairs.get("body");
       querySyntax = true;

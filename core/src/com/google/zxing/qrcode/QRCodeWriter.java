@@ -54,7 +54,7 @@ public final class QRCodeWriter implements Writer {
     }
 
     if (width < 0 || height < 0) {
-      throw new IllegalArgumentException("Requested dimensions are too small: " + width + "x" +
+      throw new IllegalArgumentException("Requested dimensions are too small: " + width + 'x' +
           height);
     }
 
@@ -73,12 +73,12 @@ public final class QRCodeWriter implements Writer {
 
   // Note that the input matrix uses 0 == white, 1 == black, while the output matrix uses
   // 0 == black, 255 == white (i.e. an 8 bit greyscale bitmap).
-  private ByteMatrix renderResult(QRCode code, int width, int height) {
+  private static ByteMatrix renderResult(QRCode code, int width, int height) {
     ByteMatrix input = code.getMatrix();
     int inputWidth = input.width();
     int inputHeight = input.height();
-    int qrWidth = inputWidth + (QUIET_ZONE_SIZE * 2);
-    int qrHeight = inputHeight + (QUIET_ZONE_SIZE * 2);
+    int qrWidth = inputWidth + (QUIET_ZONE_SIZE << 1);
+    int qrHeight = inputHeight + (QUIET_ZONE_SIZE << 1);
     int outputWidth = Math.max(width, qrWidth);
     int outputHeight = Math.max(height, qrHeight);
 

@@ -87,7 +87,7 @@ public final class ByteMatrix {
             break;
         }
       }
-      result.append("\n");
+      result.append('\n');
     }
     return result.toString();
   }

@@ -86,7 +86,7 @@ public abstract class AbstractUPCEANReader extends AbstractOneDReader implements
 
   private final StringBuffer decodeRowStringBuffer;
 
-  public AbstractUPCEANReader() {
+  protected AbstractUPCEANReader() {
     decodeRowStringBuffer = new StringBuffer(20);
   }
 

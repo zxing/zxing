@@ -66,7 +66,7 @@ public final class ByteArray {
 
   public void appendByte(int value) {
     if (size == 0 || size >= bytes.length) {
-      int newSize = Math.max(INITIAL_SIZE, size * 2);
+      int newSize = Math.max(INITIAL_SIZE, size << 1);
       reserve(newSize);
     }
     bytes[size] = (byte) value;
