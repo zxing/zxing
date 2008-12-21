@@ -70,7 +70,11 @@ final class DecodedBitStreamParser {
         // OK, assume we're done. Really, a TERMINATOR mode should have been recorded here
         mode = Mode.TERMINATOR;
       } else {
-        mode = Mode.forBits(bits.readBits(4)); // mode is encoded by 4 bits
+        try {
+          mode = Mode.forBits(bits.readBits(4)); // mode is encoded by 4 bits
+        } catch (IllegalArgumentException iae) {
+          throw ReaderException.getInstance();
+        }
       }
       if (!mode.equals(Mode.TERMINATOR)) {
         if (mode.equals(Mode.FNC1_FIRST_POSITION) || mode.equals(Mode.FNC1_SECOND_POSITION)) {
@@ -78,11 +82,11 @@ final class DecodedBitStreamParser {
           fc1InEffect = true;
         } else if (mode.equals(Mode.ECI)) {
           // Count doesn't apply to ECI
-          int value = parseECIValue(bits);
           try {
+            int value = parseECIValue(bits);
             currentCharacterSetECI = CharacterSetECI.getCharacterSetECIByValue(value);
           } catch (IllegalArgumentException iae) {
-            // unsupported... just continue?
+            throw ReaderException.getInstance();
           }
         } else {
           // How many characters will follow, encoded in this mode?

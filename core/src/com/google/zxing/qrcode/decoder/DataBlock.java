@@ -34,7 +34,7 @@ final class DataBlock {
   }
 
   /**
-   * <p>When QR Codes use multiple data blocks, they are actually interleave the bytes of each of them.
+   * <p>When QR Codes use multiple data blocks, they are actually interleaved.
    * That is, the first byte of data block 1 to n is written, then the second bytes, and so on. This
    * method will separate the data into original blocks.</p>
    *
@@ -47,6 +47,11 @@ final class DataBlock {
   static DataBlock[] getDataBlocks(byte[] rawCodewords,
                                    Version version,
                                    ErrorCorrectionLevel ecLevel) {
+
+    if (rawCodewords.length != version.getTotalCodewords()) {
+      throw new IllegalArgumentException();
+    }
+
     // Figure out the number and size of data blocks used by this version and
     // error correction level
     Version.ECBlocks ecBlocks = version.getECBlocksForLevel(ecLevel);
@@ -79,9 +84,6 @@ final class DataBlock {
       if (numCodewords == shorterBlocksTotalCodewords) {
         break;
       }
-      if (numCodewords != shorterBlocksTotalCodewords + 1) {
-        throw new IllegalArgumentException("Data block sizes differ by more than 1");
-      }
       longerBlocksStartAt--;
     }
     longerBlocksStartAt++;
@@ -107,11 +109,6 @@ final class DataBlock {
         result[j].codewords[iOffset] = rawCodewords[rawCodewordsOffset++];
       }
     }
-
-    if (rawCodewordsOffset != rawCodewords.length) {
-      throw new IllegalArgumentException();
-    }
-
     return result;
   }
 
