@@ -26,7 +26,7 @@ final class BitMatrixParser {
 
   private final BitMatrix mappingBitMatrix;
   private final BitMatrix readMappingMatrix;
-  private Version version;
+  private final Version version;
 
   /**
    * @param bitMatrix {@link BitMatrix} to parse

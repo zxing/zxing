@@ -60,7 +60,7 @@ public final class ITFReader extends AbstractOneDReader {
   /**
    * Patterns of Wide / Narrow lines to indicate each digit
    */
-  static final int[][] PATTERNS = {
+  private static final int[][] PATTERNS = {
       {N, N, W, W, N}, // 0
       {W, N, N, N, W}, // 1
       {N, W, N, N, W}, // 2
@@ -106,7 +106,7 @@ public final class ITFReader extends AbstractOneDReader {
    * @param resultString {@link StringBuffer} to append decoded chars to
    * @throws ReaderException if decoding could not complete successfully
    */
-  protected void decodeMiddle(BitArray row, int payloadStart, int payloadEnd, StringBuffer resultString) throws ReaderException {
+  static void decodeMiddle(BitArray row, int payloadStart, int payloadEnd, StringBuffer resultString) throws ReaderException {
 
     // Digits are interleaved in pairs - 5 black lines for one digit, and the
     // 5
@@ -129,9 +129,9 @@ public final class ITFReader extends AbstractOneDReader {
       }
 
       int bestMatch = decodeDigit(counterBlack);
-      resultString.append((char) ('0' + bestMatch % 10));
+      resultString.append((char) ('0' + bestMatch));
       bestMatch = decodeDigit(counterWhite);
-      resultString.append((char) ('0' + bestMatch % 10));
+      resultString.append((char) ('0' + bestMatch));
 
       for (int i = 0; i < counterDigitPair.length; i++) {
         payloadStart += counterDigitPair[i];
@@ -312,7 +312,7 @@ public final class ITFReader extends AbstractOneDReader {
    * @return The decoded digit
    * @throws ReaderException if digit cannot be decoded
    */
-  static int decodeDigit(int[] counters) throws ReaderException {
+  private static int decodeDigit(int[] counters) throws ReaderException {
 
     int bestVariance = MAX_AVG_VARIANCE; // worst variance we'll accept
     int bestMatch = -1;

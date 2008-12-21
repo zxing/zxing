@@ -77,7 +77,7 @@ final class FormatInformation {
   private final ErrorCorrectionLevel errorCorrectionLevel;
   private final byte dataMask;
 
-  private FormatInformation(int formatInfo) throws ReaderException {
+  private FormatInformation(int formatInfo) {
     // Bits 3,4
     errorCorrectionLevel = ErrorCorrectionLevel.forBits((formatInfo >> 3) & 0x03);
     // Bottom 3 bits
