@@ -115,6 +115,10 @@ public abstract class AbstractBlackBoxTestCase extends TestCase {
     return barcodeReader;
   }
 
+  protected Hashtable<DecodeHintType, Object> getHints() {
+    return null;
+  }
+
   public void testBlackBox() throws IOException {
     assertFalse(testResults.isEmpty());
 
@@ -172,7 +176,15 @@ public abstract class AbstractBlackBoxTestCase extends TestCase {
     String suffix = " (" + (tryHarder ? "try harder, " : "") + "rotation: " + rotation + ')';
 
     try {
-      result = barcodeReader.decode(source, tryHarder ? TRY_HARDER_HINT : null);
+      Hashtable<DecodeHintType, Object> hints = getHints();
+      if (tryHarder) {
+        if (hints == null) {
+          hints = TRY_HARDER_HINT;
+        } else {
+          hints.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
+        }
+      }
+      result = getReader().decode(source, hints);
     } catch (ReaderException re) {
       System.out.println(re + suffix);
       return false;
