@@ -197,4 +197,18 @@
   - Better calendar event and MECARD support
   - Compatibility with the Android 1.0 SDK
   - Added androidtest app for testing intents and capturing blackbox test images
-  
+
+1.2 (23 December 2008)
+  - New Android benchmark application to time decoding performance
+  - Dramatic performance improvements for worst case images (up to 2x faster)
+  - Expanded blackbox unit tests with many new test images
+  - Many small decoding improvements and bug fixes
+  - New Share functionality in the Android client which encodes contacts, bookmarks, or the
+    clipboard contents as a QR Code for a friend to scan with their phone
+  - Locale-specific Android client which picks the right TLD when connecting to Google
+  - Support for Furigana in the Android client, and better parsing of Kanji in core
+  - Added the ability to import and export multiple phone numbers and emails for a single contact
+  - Native QR Encoding added to the ZXing library - no need to send request to ChartServer
+  - New ITF barcode format support from Kevin O'Sullivan at SITA
+  - New HTML help system for the Android client.
+  - New web-based QR Code encoder at zxing.appspot.com based on GWT
