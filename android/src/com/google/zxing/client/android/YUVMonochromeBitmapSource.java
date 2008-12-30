@@ -47,10 +47,12 @@ final class YUVMonochromeBitmapSource extends BaseMonochromeBitmapSource {
     assert (crop.height() <= dataHeight);
   }
 
+  @Override
   public int getHeight() {
     return mCrop.height();
   }
 
+  @Override
   public int getWidth() {
     return mCrop.width();
   }
@@ -63,10 +65,12 @@ final class YUVMonochromeBitmapSource extends BaseMonochromeBitmapSource {
    * @param y The y coordinate to fetch within crop
    * @return The luminance as an int, from 0-255
    */
+  @Override
   protected int getLuminance(int x, int y) {
     return mYUVData[(y + mCrop.top) * mDataWidth + x + mCrop.left] & 0xff;
   }
 
+  @Override
   protected int[] getLuminanceRow(int y, int[] row) {
     int width = getWidth();
     if (row == null || row.length < width) {
@@ -79,6 +83,7 @@ final class YUVMonochromeBitmapSource extends BaseMonochromeBitmapSource {
     return row;
   }
 
+  @Override
   protected int[] getLuminanceColumn(int x, int[] column) {
     int height = getHeight();
     if (column == null || column.length < height) {

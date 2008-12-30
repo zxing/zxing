@@ -64,7 +64,7 @@ final class BenchmarkThread extends Thread {
       String[] files = file.list();
       Arrays.sort(files);
       for (int x = 0; x < files.length; x++) {
-        walkTree(file.getAbsolutePath() + "/" + files[x], items);
+        walkTree(file.getAbsolutePath() + '/' + files[x], items);
       }
     } else {
       BenchmarkItem item = decode(path);

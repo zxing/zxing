@@ -32,8 +32,6 @@ import com.google.zxing.common.ByteMatrix;
 
 public final class QRCodeEncoder {
 
-  private static final String TAG = "QRCodeEncoder";
-
   private final Activity mActivity;
   private String mContents;
   private String mDisplayContents;
@@ -74,31 +72,31 @@ public final class QRCodeEncoder {
     }
 
     if (type.equals(Contents.Type.TEXT)) {
-      String string = intent.getStringExtra(Intents.Encode.DATA);
-      if (string != null && string.length() > 0) {
-        mContents = string;
-        mDisplayContents = string;
+      String data = intent.getStringExtra(Intents.Encode.DATA);
+      if (data != null && data.length() > 0) {
+        mContents = data;
+        mDisplayContents = data;
         mTitle = mActivity.getString(R.string.contents_text);
       }
     } else if (type.equals(Contents.Type.EMAIL)) {
-      String string = intent.getStringExtra(Intents.Encode.DATA);
-      if (string != null && string.length() > 0) {
-        mContents = "mailto:" + string;
-        mDisplayContents = string;
+      String data = intent.getStringExtra(Intents.Encode.DATA);
+      if (data != null && data.length() > 0) {
+        mContents = "mailto:" + data;
+        mDisplayContents = data;
         mTitle = mActivity.getString(R.string.contents_email);
       }
     } else if (type.equals(Contents.Type.PHONE)) {
-      String string = intent.getStringExtra(Intents.Encode.DATA);
-      if (string != null && string.length() > 0) {
-        mContents = "tel:" + string;
-        mDisplayContents = PhoneNumberUtils.formatNumber(string);
+      String data = intent.getStringExtra(Intents.Encode.DATA);
+      if (data != null && data.length() > 0) {
+        mContents = "tel:" + data;
+        mDisplayContents = PhoneNumberUtils.formatNumber(data);
         mTitle = mActivity.getString(R.string.contents_phone);
       }
     } else if (type.equals(Contents.Type.SMS)) {
-      String string = intent.getStringExtra(Intents.Encode.DATA);
-      if (string != null && string.length() > 0) {
-        mContents = "sms:" + string;
-        mDisplayContents = PhoneNumberUtils.formatNumber(string);
+      String data = intent.getStringExtra(Intents.Encode.DATA);
+      if (data != null && data.length() > 0) {
+        mContents = "sms:" + data;
+        mDisplayContents = PhoneNumberUtils.formatNumber(data);
         mTitle = mActivity.getString(R.string.contents_sms);
       }
     } else if (type.equals(Contents.Type.CONTACT)) {
@@ -106,25 +104,25 @@ public final class QRCodeEncoder {
       if (bundle != null) {
         String name = bundle.getString(Contacts.Intents.Insert.NAME);
         if (name != null && name.length() > 0) {
-          mContents = "MECARD:N:" + name + ";";
+          mContents = "MECARD:N:" + name + ';';
           mDisplayContents = name;
           String address = bundle.getString(Contacts.Intents.Insert.POSTAL);
           if (address != null && address.length() > 0) {
-            mContents += "ADR:" + address + ";";
-            mDisplayContents += "\n" + address;
+            mContents += "ADR:" + address + ';';
+            mDisplayContents += '\n' + address;
           }
           for (int x = 0; x < Contents.PHONE_KEYS.length; x++) {
             String phone = bundle.getString(Contents.PHONE_KEYS[x]);
             if (phone != null && phone.length() > 0) {
-              mContents += "TEL:" + phone + ";";
-              mDisplayContents += "\n" + PhoneNumberUtils.formatNumber(phone);
+              mContents += "TEL:" + phone + ';';
+              mDisplayContents += '\n' + PhoneNumberUtils.formatNumber(phone);
             }
           }
           for (int x = 0; x < Contents.EMAIL_KEYS.length; x++) {
             String email = bundle.getString(Contents.EMAIL_KEYS[x]);
             if (email != null && email.length() > 0) {
-              mContents += "EMAIL:" + email + ";";
-              mDisplayContents += "\n" + email;
+              mContents += "EMAIL:" + email + ';';
+              mDisplayContents += '\n' + email;
             }
           }
           mContents += ";";
@@ -134,10 +132,10 @@ public final class QRCodeEncoder {
     } else if (type.equals(Contents.Type.LOCATION)) {
       Bundle bundle = intent.getBundleExtra(Intents.Encode.DATA);
       if (bundle != null) {
-        float latitude = bundle.getFloat("LAT", Float.MAX_VALUE);
-        float longitude = bundle.getFloat("LONG", Float.MAX_VALUE);
-        if (latitude != Float.MAX_VALUE && longitude != Float.MAX_VALUE) {
-          mContents = "geo:" + latitude + "," + longitude;
+        double latitude = bundle.getDouble("LAT", Double.NaN);
+        double longitude = bundle.getDouble("LONG", Double.NaN);
+        if (!Double.isNaN(latitude) && !Double.isNaN(longitude)) {
+          mContents = "geo:" + latitude + ',' + longitude;
           mDisplayContents = latitude + "," + longitude;
           mTitle = mActivity.getString(R.string.contents_location);
         }
@@ -148,11 +146,13 @@ public final class QRCodeEncoder {
 
   private static final class EncodeThread extends Thread {
 
+    private static final String TAG = "EncodeThread";
+
     private final String mContents;
     private final Handler mHandler;
     private final int mPixelResolution;
 
-    public EncodeThread(String contents, Handler handler, int pixelResolution) {
+    EncodeThread(String contents, Handler handler, int pixelResolution) {
       mContents = contents;
       mHandler = handler;
       mPixelResolution = pixelResolution;
@@ -169,7 +169,8 @@ public final class QRCodeEncoder {
         for (int y = 0; y < height; y++) {
           for (int x = 0; x < width; x++) {
             int grey = array[y][x] & 0xff;
-            pixels[y * width + x] = (0xff << 24) | (grey << 16) | (grey << 8) | grey;
+            //pixels[y * width + x] = (0xff << 24) | (grey << 16) | (grey << 8) | grey;
+            pixels[y * width + x] = 0xff000000 | (0x00010101 * grey);
           }
         }
 

@@ -192,14 +192,14 @@ public abstract class AbstractBlackBoxTestCase extends TestCase {
 
     if (!expectedFormat.equals(result.getBarcodeFormat())) {
       System.out.println("Format mismatch: expected '" + expectedFormat + "' but got '" +
-          result.getBarcodeFormat() + "'" + suffix);
+          result.getBarcodeFormat() + '\'' + suffix);
       return false;
     }
 
     String resultText = result.getText();
     if (!expectedText.equals(resultText)) {
       System.out.println("Mismatch: expected '" + expectedText + "' but got '" + resultText +
-          "'" +  suffix);
+          '\'' +  suffix);
       return false;
     }
     return true;

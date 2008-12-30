@@ -125,7 +125,7 @@ public final class EncoderTestCase extends TestCase {
     assertEquals(expected, qrCode.toString());
   }
 
-  public void testAppendModeInfo() throws WriterException {
+  public void testAppendModeInfo() {
     BitVector bits = new BitVector();
     Encoder.appendModeInfo(Mode.NUMERIC, bits);
     assertEquals("0001", bits.toString());
@@ -444,9 +444,9 @@ public final class EncoderTestCase extends TestCase {
   // http://www.swetake.com/qr/qr9.html
   public void testGenerateECBytes() {
     {
-      final byte[] dataBytes = {32, 65, (byte)205, 69, 41, (byte)220, 46, (byte)128, (byte)236};
+      byte[] dataBytes = {32, 65, (byte)205, 69, 41, (byte)220, 46, (byte)128, (byte)236};
       ByteArray ecBytes = Encoder.generateECBytes(new ByteArray(dataBytes), 17);
-      final int[] expected = {
+      int[] expected = {
           42, 159, 74, 221, 244, 169, 239, 150, 138, 70, 237, 85, 224, 96, 74, 219, 61
       };
       assertEquals(expected.length, ecBytes.size());
@@ -455,10 +455,10 @@ public final class EncoderTestCase extends TestCase {
       }
     }
     {
-      final byte[] dataBytes = {67, 70, 22, 38, 54, 70, 86, 102, 118,
+      byte[] dataBytes = {67, 70, 22, 38, 54, 70, 86, 102, 118,
           (byte)134, (byte)150, (byte)166, (byte)182, (byte)198, (byte)214};
       ByteArray ecBytes = Encoder.generateECBytes(new ByteArray(dataBytes), 18);
-      final int[] expected = {
+      int[] expected = {
           175, 80, 155, 64, 178, 45, 214, 233, 65, 209, 12, 155, 117, 31, 140, 214, 27, 187
       };
       assertEquals(expected.length, ecBytes.size());
@@ -468,9 +468,9 @@ public final class EncoderTestCase extends TestCase {
     }
     {
       // High-order zero cofficient case.
-      final byte[] dataBytes = {32, 49, (byte)205, 69, 42, 20, 0, (byte)236, 17};
+      byte[] dataBytes = {32, 49, (byte)205, 69, 42, 20, 0, (byte)236, 17};
       ByteArray ecBytes = Encoder.generateECBytes(new ByteArray(dataBytes), 17);
-      final int[] expected = {
+      int[] expected = {
           0, 3, 130, 179, 194, 0, 55, 211, 110, 79, 98, 72, 170, 96, 211, 137, 213
       };
       assertEquals(expected.length, ecBytes.size());

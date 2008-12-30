@@ -57,7 +57,7 @@ public final class VersionTestCase extends TestCase {
     }
   }
 
-  public void testDecodeVersionInformation() throws ReaderException {
+  public void testDecodeVersionInformation() {
     // Spot check
     assertEquals(7, Version.decodeVersionInformation(0x07C94).getVersionNumber());
     assertEquals(12, Version.decodeVersionInformation(0x0C762).getVersionNumber());

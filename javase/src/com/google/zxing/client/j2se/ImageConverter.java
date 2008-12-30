@@ -158,7 +158,7 @@ public final class ImageConverter {
         name = name.substring(0, dotpos);
       }
       String suffix = (sMethod == BlackPointEstimationMethod.ROW_SAMPLING) ? "row" : "2d";
-      result = new File(name + "_converted_" + suffix + "." + FORMAT);
+      result = new File(name + "_converted_" + suffix + '.' + FORMAT);
     }
     return result;
   }

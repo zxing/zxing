@@ -22,11 +22,11 @@ package com.google.zxing.client.result;
 public final class GeoParsedResult extends ParsedResult {
 
   private final String geoURI;
-  private final float latitude;
-  private final float longitude;
-  private final float altitude;
+  private final double latitude;
+  private final double longitude;
+  private final double altitude;
 
-  GeoParsedResult(String geoURI, float latitude, float longitude, float altitude) {
+  GeoParsedResult(String geoURI, double latitude, double longitude, double altitude) {
     super(ParsedResultType.GEO);
     this.geoURI = geoURI;
     this.latitude = latitude;
@@ -41,21 +41,21 @@ public final class GeoParsedResult extends ParsedResult {
   /**
    * @return latitude in degrees
    */
-  public float getLatitude() {
+  public double getLatitude() {
     return latitude;
   }
 
   /**
    * @return longitude in degrees
    */
-  public float getLongitude() {
+  public double getLongitude() {
     return longitude;
   }
 
   /**
    * @return altitude in meters. If not specified, in the geo URI, returns 0.0
    */
-  public float getAltitude() {
+  public double getAltitude() {
     return altitude;
   }
 
@@ -87,8 +87,8 @@ public final class GeoParsedResult extends ParsedResult {
     if (altitude > 0.0f) {
       // Map altitude to zoom level, cleverly. Roughly, zoom level 19 is like a
       // view from 1000ft, 18 is like 2000ft, 17 like 4000ft, and so on.
-      float altitudeInFeet = altitude * 3.28f;
-      int altitudeInKFeet = (int) (altitudeInFeet / 1000.0f);
+      double altitudeInFeet = altitude * 3.28;
+      int altitudeInKFeet = (int) (altitudeInFeet / 1000.0);
       // No Math.log() available here, so compute log base 2 the old fashioned way
       // Here logBaseTwo will take on a value between 0 and 18 actually
       int logBaseTwo = 0;

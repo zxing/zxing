@@ -18,6 +18,9 @@ package com.google.zxing.client.android;
 
 public final class Intents {
 
+  private Intents() {
+  }
+
   public static final class Scan {
     /**
      * Send this intent to open the Barcodes app in scanning mode, find a barcode, and return
@@ -64,6 +67,9 @@ public final class Intents {
      * See Contents.Format for possible values.
      */
     public static final String RESULT_FORMAT = "SCAN_RESULT_FORMAT";
+
+    private Scan() {
+    }
   }
 
   public static final class Encode {
@@ -87,6 +93,9 @@ public final class Intents {
      * Contents.Type.
      */
     public static final String TYPE = "ENCODE_TYPE";
+
+    private Encode() {
+    }
   }
 
   public static final class SearchBookContents {
@@ -107,6 +116,9 @@ public final class Intents {
      * An optional field which is the text to search for.
      */
     public static final String QUERY = "QUERY";
+
+    private SearchBookContents() {
+    }
   }
 
   public static final class Share {
@@ -115,6 +127,9 @@ public final class Intents {
      * display onscreen for a friend to scan with their phone.
      */
     public static final String ACTION = "com.google.zxing.client.android.SHARE";
+
+    private Share() {
+    }
   }
 
 }

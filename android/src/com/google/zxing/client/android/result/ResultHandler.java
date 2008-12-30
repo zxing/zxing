@@ -45,7 +45,7 @@ public abstract class ResultHandler {
   protected final ParsedResult mResult;
   private final Activity mActivity;
 
-  public ResultHandler(Activity activity, ParsedResult result) {
+  protected ResultHandler(Activity activity, ParsedResult result) {
     mResult = result;
     mActivity = activity;
   }
@@ -119,7 +119,7 @@ public abstract class ResultHandler {
     launchIntent(intent);
   }
 
-  private long calculateMilliseconds(String when) {
+  private static long calculateMilliseconds(String when) {
     if (when.length() == 8) {
       // Only contains year/month/day
       Date date;
@@ -237,14 +237,14 @@ public abstract class ResultHandler {
   public final void searchMap(String address, String title) {
     String query = address;
     if (title != null && title.length() > 0) {
-      query = query + " (" + title + ")";
+      query = query + " (" + title + ')';
     }
     launchIntent(new Intent(Intent.ACTION_VIEW, Uri.parse("geo:0,0?q=" + Uri.encode(query))));
   }
 
   public final void getDirections(float latitude, float longitude) {
     launchIntent(new Intent(Intent.ACTION_VIEW, Uri.parse("http://maps.google." +
-        LocaleManager.getCountryTLD() + "/maps?f=d&daddr=" + latitude + "," + longitude)));
+        LocaleManager.getCountryTLD() + "/maps?f=d&daddr=" + latitude + ',' + longitude)));
   }
 
   public final void openProductSearch(String upc) {

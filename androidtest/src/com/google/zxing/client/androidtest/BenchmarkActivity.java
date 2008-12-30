@@ -76,7 +76,7 @@ public final class BenchmarkActivity extends Activity {
     }
   };
 
-  private void handleBenchmarkDone(Message message) {
+  private static void handleBenchmarkDone(Message message) {
     List<BenchmarkItem> items = (List<BenchmarkItem>) message.obj;
     int count = 0;
     for (int x = 0; x < items.size(); x++) {

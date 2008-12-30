@@ -112,7 +112,7 @@ final class FormatInformation {
     return doDecodeFormatInformation(rawFormatInfo ^ FORMAT_INFO_MASK_QR);
   }
 
-  private static FormatInformation doDecodeFormatInformation(int rawFormatInfo) throws ReaderException {
+  private static FormatInformation doDecodeFormatInformation(int rawFormatInfo) {
     // Unmask:
     int unmaskedFormatInfo = rawFormatInfo ^ FORMAT_INFO_MASK_QR;
     // Find the int in FORMAT_INFO_DECODE_LOOKUP with fewest bits differing
