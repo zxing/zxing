@@ -35,7 +35,7 @@ public final class AddressBookResultHandler extends ResultHandler {
   private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyyMMdd");
 
   private final boolean[] mFields;
-  private int mButtonCount;
+  private final int mButtonCount;
 
   // This takes all the work out of figuring out which buttons/actions should be in which
   // positions, based on which fields are present in this barcode.
@@ -139,7 +139,7 @@ public final class AddressBookResultHandler extends ResultHandler {
     if (pronunciation != null && pronunciation.length() > 0) {
       contents.append("\n(");
       contents.append(pronunciation);
-      contents.append(")");
+      contents.append(')');
     }
 
     ParsedResult.maybeAppend(result.getTitle(), contents);

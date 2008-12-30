@@ -355,7 +355,7 @@ public final class AndroidHttpClient implements HttpClient {
     }
     if (level < Log.VERBOSE || level > Log.ASSERT) {
       throw new IllegalArgumentException("Level is out of range ["
-          + Log.VERBOSE + ".." + Log.ASSERT + "]");
+          + Log.VERBOSE + ".." + Log.ASSERT + ']');
     }
 
     curlConfiguration = new LoggingConfiguration(name, level);

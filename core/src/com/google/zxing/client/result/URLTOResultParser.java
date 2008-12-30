@@ -39,7 +39,7 @@ final class URLTOResultParser {
     if (titleEnd < 0) {
       return null;
     }
-    String title = rawText.substring(6, titleEnd);
+    String title = titleEnd <= 6 ? null : rawText.substring(6, titleEnd);
     String uri = rawText.substring(titleEnd + 1);
     return new URIParsedResult(uri, title);
   }

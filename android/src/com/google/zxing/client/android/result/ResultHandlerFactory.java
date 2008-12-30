@@ -24,6 +24,9 @@ import com.google.zxing.client.result.ResultParser;
 
 public final class ResultHandlerFactory {
 
+  private ResultHandlerFactory() {
+  }
+
   public static ResultHandler makeResultHandler(Activity activity, Result rawResult) {
     ParsedResult result = parseResult(rawResult);
     ParsedResultType type = result.getType();

@@ -199,7 +199,7 @@ public final class ITFReader extends AbstractOneDReader {
    * @return index of the first black line.
    * @throws ReaderException Throws exception if no black lines are found in the row
    */
-  private int skipWhiteSpace(BitArray row) throws ReaderException {
+  private static int skipWhiteSpace(BitArray row) throws ReaderException {
     int width = row.getSize();
     int endStart = 0;
     while (endStart < width) {
@@ -266,7 +266,7 @@ public final class ITFReader extends AbstractOneDReader {
    *         ints
    * @throws ReaderException if pattern is not found
    */
-  int[] findGuardPattern(BitArray row, int rowOffset, int[] pattern) throws ReaderException {
+  static int[] findGuardPattern(BitArray row, int rowOffset, int[] pattern) throws ReaderException {
 
     // TODO: This is very similar to implementation in AbstractUPCEANReader. Consider if they can be merged to
     // a single method.

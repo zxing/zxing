@@ -110,7 +110,7 @@ public final class DataMaskTestCase extends TestCase {
     }
   }
 
-  private static interface MaskCondition {
+  private interface MaskCondition {
     boolean isMasked(int i, int j);
   }
 

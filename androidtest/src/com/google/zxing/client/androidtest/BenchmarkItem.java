@@ -21,7 +21,7 @@ import com.google.zxing.BarcodeFormat;
 public final class BenchmarkItem {
 
   private final String mPath;
-  private int[] mTimes;
+  private final int[] mTimes;
   private int mPosition;
   private boolean mDecoded;
   private BarcodeFormat mFormat;
@@ -50,7 +50,7 @@ public final class BenchmarkItem {
 
   @Override
   public String toString() {
-    StringBuffer result = new StringBuffer();
+    StringBuilder result = new StringBuilder();
     result.append(mDecoded ? ("DECODED " + mFormat.toString() + ": ") : "FAILED: ");
     result.append(mPath);
     result.append(" (");

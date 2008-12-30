@@ -48,16 +48,16 @@ final class GeoResultParser extends ResultParser {
     if (latitudeEnd < 0) {
       return null;
     }
-    float latitude = Float.parseFloat(geoURIWithoutQuery.substring(0, latitudeEnd));
+    double latitude = Double.parseDouble(geoURIWithoutQuery.substring(0, latitudeEnd));
     int longitudeEnd = geoURIWithoutQuery.indexOf(',', latitudeEnd + 1);
-    float longitude;
-    float altitude; // in meters
+    double longitude;
+    double altitude; // in meters
     if (longitudeEnd < 0) {
-      longitude = Float.parseFloat(geoURIWithoutQuery.substring(latitudeEnd + 1));
-      altitude = 0.0f;
+      longitude = Double.parseDouble(geoURIWithoutQuery.substring(latitudeEnd + 1));
+      altitude = 0.0;
     } else {
-      longitude = Float.parseFloat(geoURIWithoutQuery.substring(latitudeEnd + 1, longitudeEnd));
-      altitude = Float.parseFloat(geoURIWithoutQuery.substring(longitudeEnd + 1));
+      longitude = Double.parseDouble(geoURIWithoutQuery.substring(latitudeEnd + 1, longitudeEnd));
+      altitude = Double.parseDouble(geoURIWithoutQuery.substring(longitudeEnd + 1));
     }
     return new GeoParsedResult(rawText, latitude, longitude, altitude);
   }

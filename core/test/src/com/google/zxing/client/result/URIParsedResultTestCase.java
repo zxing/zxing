@@ -17,13 +17,34 @@
 package com.google.zxing.client.result;
 
 import junit.framework.TestCase;
+import com.google.zxing.Result;
+import com.google.zxing.BarcodeFormat;
 
 /**
- * Tests {@link com.google.zxing.client.result.URIParsedResult}.
+ * Tests {@link URIParsedResult}.
  *
  * @author Sean Owen
  */
 public final class URIParsedResultTestCase extends TestCase {
+
+  public void testBookmarkDocomo() {
+    doTest("MEBKM:URL:google.com;;", "http://google.com", null);
+    doTest("MEBKM:URL:http://google.com;;", "http://google.com", null);    
+    doTest("MEBKM:URL:google.com;TITLE:Google;", "http://google.com", "Google");
+  }
+
+  public void testURI() {
+    doTest("google.com", "http://google.com", null);
+    doTest("http://google.com", "http://google.com", null);
+    doTest("https://google.com", "https://google.com", null);
+    doTest("google.com:443", "http://google.com:443", null);
+  }
+
+  public void testURLTO() {
+    doTest("urlto::bar.com", "http://bar.com", null);
+    doTest("urlto::http://bar.com", "http://bar.com", null);    
+    doTest("urlto:foo:bar.com", "http://bar.com", "foo");
+  }
 
   public void testIsPossiblyMalicious() {
     doTestIsPossiblyMalicious("http://google.com", false);
@@ -34,7 +55,16 @@ public final class URIParsedResultTestCase extends TestCase {
     doTestIsPossiblyMalicious("http://google.com/foo@bar", false);    
   }
 
-  private void doTestIsPossiblyMalicious(String uri, boolean expected) {
+  private static void doTest(String contents, String uri, String title) {
+    Result fakeResult = new Result(contents, null, null, BarcodeFormat.QR_CODE);
+    ParsedResult result = ResultParser.parseResult(fakeResult);
+    assertEquals(ParsedResultType.URI, result.getType());
+    URIParsedResult uriResult = (URIParsedResult) result;
+    assertEquals(uri, uriResult.getURI());
+    assertEquals(title, uriResult.getTitle());
+  }
+
+  private static void doTestIsPossiblyMalicious(String uri, boolean expected) {
     URIParsedResult result = new URIParsedResult(uri, null);
     assertEquals(expected, result.isPossiblyMaliciousURI());
   }

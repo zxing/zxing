@@ -20,6 +20,9 @@ import android.provider.Contacts;
 
 public final class Contents {
 
+  private Contents() {
+  }
+
   /**
    * All the formats we know about.
    */
@@ -31,6 +34,8 @@ public final class Contents {
     public static final String CODE_39 = "CODE_39";
     public static final String CODE_128 = "CODE_128";
     public static final String QR_CODE = "QR_CODE";
+    private Format() {
+    }
   }
 
   public static final class Type {
@@ -79,6 +84,9 @@ public final class Contents {
      * intent.putExtra(Intents.Encode.DATA, bundle);
      */
     public static final String LOCATION = "LOCATION_TYPE";
+
+    private Type() {
+    }
   }
 
   // These are new constants in Contacts.Intents.Insert for Android 1.1.

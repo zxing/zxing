@@ -104,10 +104,19 @@ public final class ParsedReaderResultTestCase extends TestCase {
     doTestResult("TEL1:+12125551212\r\nMEMORY:\r\n", "+12125551212", ParsedResultType.ADDRESSBOOK);
   }
 
-  public void testUPC() {
+  public void testBizcard() {
+    doTestResult("BIZCARD:N:Sean;X:Owen;C:Google;A:123 Main St;M:+12225551212;E:srowen@example.org;",
+        "Sean Owen\nGoogle\n123 Main St\n+12225551212\nsrowen@example.org", ParsedResultType.ADDRESSBOOK);
+  }
+
+  public void testUPCA() {
     doTestResult("123456789012", "123456789012", ParsedResultType.PRODUCT, BarcodeFormat.UPC_A);
     doTestResult("1234567890123", "1234567890123", ParsedResultType.PRODUCT, BarcodeFormat.UPC_A);
     doTestResult("12345678901", "12345678901", ParsedResultType.TEXT);
+  }
+
+  public void testUPCE() {
+    doTestResult("01234565", "01234565", ParsedResultType.PRODUCT, BarcodeFormat.UPC_E);
   }
 
   public void testEAN() {

@@ -320,7 +320,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       }
 
       if (mCopyToClipboard) {
-        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
         clipboard.setText(displayContents);
       }
     }
@@ -372,7 +372,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     mStatusView.setBackgroundColor(getResources().getColor(R.color.transparent));
 
     if (mCopyToClipboard) {
-      ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+      ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
       clipboard.setText(resultHandler.getDisplayContents());
     }
 
@@ -436,7 +436,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       mMediaPlayer.start();
     }
     if (mVibrate) {
-      Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+      Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
       vibrator.vibrate(VIBRATE_DURATION);
     }
   }

@@ -105,7 +105,7 @@ public final class QRCodeWriterTestCase extends TestCase {
     assertNotNull(goldenResult);
 
     QRCodeWriter writer = new QRCodeWriter();
-    Hashtable hints = new Hashtable();
+    Hashtable<EncodeHintType,Object> hints = new Hashtable<EncodeHintType,Object>();
     hints.put(EncodeHintType.ERROR_CORRECTION, ecLevel);
     ByteMatrix generatedResult = writer.encode(contents, BarcodeFormat.QR_CODE, resolution,
         resolution, hints);
@@ -121,7 +121,7 @@ public final class QRCodeWriterTestCase extends TestCase {
   // Golden images are generated with "qrcode_sample.cc". The images are checked with both eye balls
   // and cell phones. We expect pixel-perfect results, because the error correction level is known,
   // and the pixel dimensions matches exactly.
-  public void testRegressionTest() throws WriterException, IOException {
+  public void testRegressionTest() throws WriterException {
     compareToGoldenFile("http://www.google.com/", ErrorCorrectionLevel.M, 99,
         "renderer-test-01.png");
 

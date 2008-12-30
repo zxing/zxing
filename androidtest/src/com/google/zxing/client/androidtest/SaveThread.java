@@ -102,7 +102,7 @@ final class SaveThread extends Thread {
     message.sendToTarget();
   }
 
-  private OutputStream getNewPhotoOutputStream() {
+  private static OutputStream getNewPhotoOutputStream() {
     File sdcard = new File("/sdcard");
     if (sdcard.exists()) {
       File barcodes = new File(sdcard, "barcodes");

@@ -24,9 +24,9 @@ import java.io.FileNotFoundException;
 
 public final class RGBMonochromeBitmapSource extends BaseMonochromeBitmapSource {
 
-  private int mWidth;
-  private int mHeight;
-  private byte[] mLuminances;
+  private final int mWidth;
+  private final int mHeight;
+  private final byte[] mLuminances;
 
   public RGBMonochromeBitmapSource(String path) throws FileNotFoundException {
     Bitmap bitmap = BitmapFactory.decodeFile(path);
@@ -62,18 +62,22 @@ public final class RGBMonochromeBitmapSource extends BaseMonochromeBitmapSource 
     }
   }
 
+  @Override
   public int getHeight() {
     return mHeight;
   }
 
+  @Override
   public int getWidth() {
     return mWidth;
   }
 
+  @Override
   protected int getLuminance(int x, int y) {
     return mLuminances[y * mWidth + x] & 0xff;
   }
 
+  @Override
   protected int[] getLuminanceRow(int y, int[] row) {
     int width = mWidth;
     if (row == null || row.length < width) {
@@ -86,6 +90,7 @@ public final class RGBMonochromeBitmapSource extends BaseMonochromeBitmapSource 
     return row;
   }
 
+  @Override
   protected int[] getLuminanceColumn(int x, int[] column) {
     int width = mWidth;
     int height = mHeight;

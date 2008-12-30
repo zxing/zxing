@@ -198,7 +198,7 @@ public final class SearchBookContentsActivity extends Activity {
     try {
       String pageNumber = json.getString("page_number");
       if (pageNumber.length() > 0) {
-        pageNumber = getString(R.string.msg_sbc_page) + " " + pageNumber;
+        pageNumber = getString(R.string.msg_sbc_page) + ' ' + pageNumber;
       } else {
         // This can happen for text on the jacket, and possibly other reasons.
         pageNumber = getString(R.string.msg_sbc_unknown_page);
@@ -214,7 +214,7 @@ public final class SearchBookContentsActivity extends Activity {
         snippet = snippet.replaceAll("&#39;", "'");
         snippet = snippet.replaceAll("&quot;", "\"");
       } else {
-        snippet = "(" + getString(R.string.msg_sbc_snippet_unavailable) + ")";
+        snippet = '(' + getString(R.string.msg_sbc_snippet_unavailable) + ')';
         valid = false;
       }
       return new SearchBookContentsResult(pageNumber, snippet, valid);
@@ -231,7 +231,7 @@ public final class SearchBookContentsActivity extends Activity {
     private final Handler mHandler;
     private final String mUserAgent;
 
-    public NetworkThread(String isbn, String query, Handler handler, String userAgent) {
+    NetworkThread(String isbn, String query, Handler handler, String userAgent) {
       mISBN = isbn;
       mQuery = query;
       mHandler = handler;
@@ -305,7 +305,7 @@ public final class SearchBookContentsActivity extends Activity {
       return cookie;
     }
 
-    private String getEncoding(HttpEntity entity) {
+    private static String getEncoding(HttpEntity entity) {
       // FIXME: The server is returning ISO-8859-1 but the content is actually windows-1252.
       // Once Jeff fixes the HTTP response, remove this hardcoded value and go back to getting
       // the encoding dynamically.
