@@ -66,7 +66,7 @@ import java.io.IOException;
  * The barcode reader activity itself. This is loosely based on the CameraPreview
  * example included in the Android SDK.
  */
-public final class DECaptureActivity extends Activity implements SurfaceHolder.Callback {
+public final class CaptureActivity extends Activity implements SurfaceHolder.Callback {
 
   private static final int SHARE_ID = Menu.FIRST;
   private static final int SETTINGS_ID = Menu.FIRST + 1;
