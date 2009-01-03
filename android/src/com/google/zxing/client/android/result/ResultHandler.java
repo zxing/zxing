@@ -242,7 +242,7 @@ public abstract class ResultHandler {
     launchIntent(new Intent(Intent.ACTION_VIEW, Uri.parse("geo:0,0?q=" + Uri.encode(query))));
   }
 
-  public final void getDirections(float latitude, float longitude) {
+  public final void getDirections(double latitude, double longitude) {
     launchIntent(new Intent(Intent.ACTION_VIEW, Uri.parse("http://maps.google." +
         LocaleManager.getCountryTLD() + "/maps?f=d&daddr=" + latitude + ',' + longitude)));
   }
