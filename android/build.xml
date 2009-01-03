@@ -220,6 +220,7 @@ limitations under the License.
   <!-- Convert this project's .class files into .dex files. -->
   <target name="dex" depends="compile">
     <echo>Converting compiled files and external libraries into ${outdir}/${dex-file}...</echo>
+    <echo>NOTE: This will fail unless you built core with build-no-debug.</echo>
     <apply executable="${dx}" failonerror="true" parallel="true">
       <arg value="--dex" />
       <arg value="--output=${intermediate-dex-ospath}" />
@@ -230,6 +231,7 @@ limitations under the License.
 
   <target name="dex-optimized" depends="compile-release,optimize">
     <echo>Converting compiled files and external libraries into ${outdir}/${dex-file}...</echo>
+    <echo>NOTE: This will fail unless you built core with build-no-debug.</echo>      
     <apply executable="${dx}" failonerror="true" parallel="true">
       <arg value="--dex" />
       <arg value="--output=${intermediate-dex-ospath}" />
