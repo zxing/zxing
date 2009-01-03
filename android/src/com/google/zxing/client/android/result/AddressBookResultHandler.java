@@ -35,7 +35,7 @@ public final class AddressBookResultHandler extends ResultHandler {
   private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyyMMdd");
 
   private final boolean[] mFields;
-  private final int mButtonCount;
+  private int mButtonCount;
 
   // This takes all the work out of figuring out which buttons/actions should be in which
   // positions, based on which fields are present in this barcode.
