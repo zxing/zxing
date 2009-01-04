@@ -423,10 +423,10 @@ final class FinderPatternFinder {
           // How far down can we skip before resuming looking for the next
           // pattern? In the worst case, only the difference between the
           // difference in the x / y coordinates of the two centers.
-          // This is the case where you find top left first. Draw it out.
+          // This is the case where you find top left last.
           hasSkipped = true;
           return (int) (Math.abs(firstConfirmedCenter.getX() - center.getX()) -
-              Math.abs(firstConfirmedCenter.getY() - center.getY()));
+              Math.abs(firstConfirmedCenter.getY() - center.getY())) / 2;
         }
       }
     }
