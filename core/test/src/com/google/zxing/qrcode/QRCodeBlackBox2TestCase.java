@@ -29,7 +29,7 @@ public final class QRCodeBlackBox2TestCase extends AbstractBlackBoxTestCase {
 
   public QRCodeBlackBox2TestCase() {
     super(new File("test/data/blackbox/qrcode-2"), new MultiFormatReader(), BarcodeFormat.QR_CODE);
-    addTest(23, 23, 0.0f);
+    addTest(22, 22, 0.0f);
     addTest(18, 18, 90.0f);
     addTest(22, 22, 180.0f);
     addTest(17, 17, 270.0f);
