@@ -23,16 +23,16 @@ import com.google.zxing.common.AbstractBlackBoxTestCase;
 import java.io.File;
 
 /**
- * @author bbrown@google.com (Brian Brown)
+ * @author dswitkin@google.com (Daniel Switkin)
  */
-public final class DataMatrixBlackBox1TestCase extends AbstractBlackBoxTestCase {
+public final class DataMatrixBlackBox2TestCase extends AbstractBlackBoxTestCase {
 
-  public DataMatrixBlackBox1TestCase() {
+  public DataMatrixBlackBox2TestCase() {
     // TODO use MultiFormatReader here once Data Matrix decoder is done
-    super(new File("test/data/blackbox/datamatrix-1"), new DataMatrixReader(), BarcodeFormat.DATAMATRIX);
-    addTest(7, 7, 0.0f);
-    addTest(7, 7, 90.0f);
-    addTest(6, 6, 180.0f);
+    super(new File("test/data/blackbox/datamatrix-2"), new DataMatrixReader(), BarcodeFormat.DATAMATRIX);
+    addTest(3, 3, 0.0f);
+    addTest(1, 1, 90.0f);
+    addTest(3, 3, 180.0f);
     addTest(4, 4, 270.0f);
   }
 
