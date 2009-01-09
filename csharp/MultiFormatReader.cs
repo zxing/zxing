@@ -14,7 +14,8 @@
 
 using System;
 using System.Collections;
-using com.google.zxing.qrcode;  
+using com.google.zxing.qrcode;
+using com.google.zxing.oned;
 
 namespace com.google.zxing
 {
@@ -106,7 +107,7 @@ namespace com.google.zxing
 
                   if (addOneDReader && !tryHarder)
                   {
-                      //readers.Add(new MultiFormatOneDReader(hints));
+                      readers.Add(new MultiFormatOneDReader(hints));
                   }
 
                   if (possibleFormats.Contains(BarcodeFormat.QR_CODE))
@@ -114,13 +115,13 @@ namespace com.google.zxing
                       readers.Add(new QRCodeReader());
                   }
                   // TODO re-enable once Data Matrix is ready
-                  //if (possibleFormats.contains(BarcodeFormat.DATAMATRIX)) {
-                  //  readers.addElement(new DataMatrixReader());
-                  //}
+                  if (possibleFormats.Contains(BarcodeFormat.DATAMATRIX)) {
+                    //readers.Add(new DataMatrixReader());
+                  }
                   // At end in "try harder" mode
                   if (addOneDReader && tryHarder)
                   {
-                      //readers.Add(new MultiFormatOneDReader(hints));
+                      readers.Add(new MultiFormatOneDReader(hints));
                   }
               }
 
