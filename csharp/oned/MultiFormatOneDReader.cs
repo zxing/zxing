@@ -23,6 +23,7 @@ namespace com.google.zxing.oned
     public sealed class MultiFormatOneDReader : AbstractOneDReader
     { 
           private System.Collections.ArrayList readers;
+
           public MultiFormatOneDReader(System.Collections.Hashtable hints)
           {
             System.Collections.ArrayList possibleFormats = hints == null ? null : (System.Collections.ArrayList) hints[DecodeHintType.POSSIBLE_FORMATS];
