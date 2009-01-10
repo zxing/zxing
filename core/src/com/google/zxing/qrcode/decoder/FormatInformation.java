@@ -101,7 +101,7 @@ final class FormatInformation {
    * @param rawFormatInfo
    * @return
    */
-  static FormatInformation decodeFormatInformation(int rawFormatInfo) throws ReaderException {
+  static FormatInformation decodeFormatInformation(int rawFormatInfo) {
     FormatInformation formatInfo = doDecodeFormatInformation(rawFormatInfo);
     if (formatInfo != null) {
       return formatInfo;
