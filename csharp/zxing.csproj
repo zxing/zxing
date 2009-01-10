@@ -71,6 +71,13 @@
     <Compile Include="common\reedsolomon\ReedSolomonDecoder.cs" />
     <Compile Include="common\reedsolomon\ReedSolomonEncoder.cs" />
     <Compile Include="common\reedsolomon\ReedSolomonException.cs" />
+    <Compile Include="datamatrix\DataMatrixReader.cs" />
+    <Compile Include="datamatrix\decoder\BitMatrixParser.cs" />
+    <Compile Include="datamatrix\decoder\DataBlock.cs" />
+    <Compile Include="datamatrix\decoder\DecodedBitStreamParser.cs" />
+    <Compile Include="datamatrix\decoder\Decoder.cs" />
+    <Compile Include="datamatrix\decoder\Version.cs" />
+    <Compile Include="datamatrix\detector\Detector.cs" />
     <Compile Include="DecodeHintType.cs" />
     <Compile Include="EncodeHintType.cs" />
     <Compile Include="oned\MultiFormatOneDReader.cs" />
