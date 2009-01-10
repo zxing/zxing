@@ -43,7 +43,7 @@ final class SnapshotThread implements Runnable {
     this.zXingMIDlet = zXingMIDlet;
     waitLock = new Object();
     done = false;
-    multimediaManager = new DefaultMultimediaManager();
+    multimediaManager = ZXingMIDlet.buildMultimediaManager();
   }
 
   void continueRun() {

@@ -67,13 +67,17 @@ public final class ZXingMIDlet extends MIDlet {
     return videoControl;
   }
 
+  static MultimediaManager buildMultimediaManager() {
+    return new AdvancedMultimediaManager();
+    // Comment line above / uncomment below to make the basic version
+    // return new DefaultMultimediaManager();
+  }
+
   protected void startApp() throws MIDletStateChangeException {
     try {
       player = createPlayer();
       player.realize();
-      MultimediaManager multimediaManager = new AdvancedMultimediaManager();
-      // Comment line above / uncomment below to make the basic version
-      //MultimediaManager multimediaManager = new DefaultMultimediaManager();
+      MultimediaManager multimediaManager = buildMultimediaManager();
       multimediaManager.setZoom(player);
       multimediaManager.setExposure(player);
       videoControl = (VideoControl) player.getControl("VideoControl");
