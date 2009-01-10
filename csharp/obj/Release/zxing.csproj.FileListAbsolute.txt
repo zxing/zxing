@@ -1,0 +1,5 @@
+C:\projects\my open source project\zxingsharp\obj\Release\ResolveAssemblyReference.cache
+C:\projects\my open source project\zxingsharp\bin\Release\com.google.zxing.dll
+C:\projects\my open source project\zxingsharp\bin\Release\com.google.zxing.pdb
+C:\projects\my open source project\zxingsharp\obj\Release\com.google.zxing.dll
+C:\projects\my open source project\zxingsharp\obj\Release\com.google.zxing.pdb
