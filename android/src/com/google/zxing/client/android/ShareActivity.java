@@ -24,6 +24,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Browser;
 import android.provider.Contacts;
+import android.provider.BaseColumns;
 import android.text.ClipboardManager;
 import android.view.View;
 import android.widget.Button;
@@ -33,14 +34,14 @@ public final class ShareActivity extends Activity {
   private static final int PICK_BOOKMARK = 0;
   private static final int PICK_CONTACT = 1;
 
-  private static final int METHODS_ID_COLUMN = 0;
+  //private static final int METHODS_ID_COLUMN = 0;
   private static final int METHODS_KIND_COLUMN = 1;
   private static final int METHODS_DATA_COLUMN = 2;
 
   private static final String[] METHODS_PROJECTION = {
-    Contacts.People.ContactMethods._ID, // 0
-    Contacts.People.ContactMethods.KIND, // 1
-    Contacts.People.ContactMethods.DATA, // 2
+      BaseColumns._ID, // 0
+      Contacts.ContactMethodsColumns.KIND, // 1
+      Contacts.ContactMethodsColumns.DATA, // 2
   };
 
   private Button mClipboardButton;
@@ -70,11 +71,6 @@ public final class ShareActivity extends Activity {
       mClipboardButton.setEnabled(false);
       mClipboardButton.setText(R.string.button_clipboard_empty);
     }
-  }
-
-  @Override
-  protected void onPause() {
-    super.onPause();
   }
 
   private final Button.OnClickListener mContactListener = new Button.OnClickListener() {
@@ -138,7 +134,7 @@ public final class ShareActivity extends Activity {
     Cursor contactCursor = resolver.query(contactUri, null, null, null, null);
     Bundle bundle = new Bundle();
     if (contactCursor != null && contactCursor.moveToFirst()) {
-      int nameColumn = contactCursor.getColumnIndex(Contacts.People.NAME);
+      int nameColumn = contactCursor.getColumnIndex(Contacts.PeopleColumns.NAME);
       String name = contactCursor.getString(nameColumn);
       if (name == null || name.length() == 0) {
         // TODO: Show error
@@ -146,16 +142,16 @@ public final class ShareActivity extends Activity {
       }
       bundle.putString(Contacts.Intents.Insert.NAME, name);
 
-      int phoneColumn = contactCursor.getColumnIndex(Contacts.People.NUMBER);
+      int phoneColumn = contactCursor.getColumnIndex(Contacts.PhonesColumns.NUMBER);
       bundle.putString(Contacts.Intents.Insert.PHONE, contactCursor.getString(phoneColumn));
       contactCursor.close();
 
       Uri methodsUri = Uri.withAppendedPath(contactUri,
           Contacts.People.ContactMethods.CONTENT_DIRECTORY);
       Cursor methodsCursor = resolver.query(methodsUri, METHODS_PROJECTION, null, null, null);
-      boolean foundEmail = false;
-      boolean foundPostal = false;
       if (methodsCursor != null) {
+        boolean foundEmail = false;
+        boolean foundPostal = false;
         while (methodsCursor.moveToNext()) {
           int kind = methodsCursor.getInt(METHODS_KIND_COLUMN);
           String data = methodsCursor.getString(METHODS_DATA_COLUMN);
