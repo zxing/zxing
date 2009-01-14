@@ -33,6 +33,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.util.Hashtable;
 
@@ -72,7 +73,7 @@ public final class CommandLineRunner {
   }
 
   private static void decodeOneArgument(String argument, Hashtable<DecodeHintType, Object> hints,
-      boolean dumpResults) throws Exception {
+      boolean dumpResults) throws IOException, URISyntaxException {
 
     File inputFile = new File(argument);
     if (inputFile.exists()) {
