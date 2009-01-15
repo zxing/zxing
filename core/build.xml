@@ -20,13 +20,6 @@
 
   <property file="../build.properties"/>
 
-  <path id="javame-compile-bootclasspath">
-    <fileset dir="${WTK-home}/lib">
-      <include name="cldcapi11.jar"/>
-    </fileset>
-  </path>
-  <property name="javame-compile-bootclasspath-path" refid="javame-compile-bootclasspath"/>
-
   <target name="init">
     <tstamp/>
   </target>
@@ -37,7 +30,6 @@
            destdir="build"
            source="1.2"
            target="1.2"
-           bootclasspath="${javame-compile-bootclasspath-path}"
            optimize="true"
            debug="${generate-debug}"
            deprecation="true"
