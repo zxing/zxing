@@ -220,18 +220,19 @@ final class ZXingLMMainScreen extends MainScreen {
         showMessage("An error occured processing the image.");
         return;
       } finally {
-        if (is != null) {
-          try {
+        try {
+          if (is != null) {
             is.close();
-          } catch (IOException ioe) {
           }
-        }
-        if (file != null && file.exists()) {
-          if (file.isOpen()) {
-            //file.close();
+          if (file != null && file.exists()) {
+            if (file.isOpen()) {
+              file.close();
+            }
+            file.delete();
+            Log.info("Deleted image file.");
           }
-          //file.delete();
-          Log.info("Deleted image file.");
+        } catch (IOException ioe) {
+          Log.error("Error while closing file: " + ioe);
         }
       }
 
