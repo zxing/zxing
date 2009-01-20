@@ -29,6 +29,7 @@ public final class Mode {
   public static final Mode TERMINATOR = new Mode(new int[]{0, 0, 0}, 0x00, "TERMINATOR"); // Not really a mode...
   public static final Mode NUMERIC = new Mode(new int[]{10, 12, 14}, 0x01, "NUMERIC");
   public static final Mode ALPHANUMERIC = new Mode(new int[]{9, 11, 13}, 0x02, "ALPHANUMERIC");
+  public static final Mode STRUCTURED_APPEND = new Mode(new int[]{0, 0, 0}, 0x03, "STRUCTURED_APPEND"); // Not supported
   public static final Mode BYTE = new Mode(new int[]{8, 16, 16}, 0x04, "BYTE");
   public static final Mode ECI = new Mode(null, 0x07, "ECI"); // character counts don't apply
   public static final Mode KANJI = new Mode(new int[]{8, 10, 12}, 0x08, "KANJI");
@@ -58,6 +59,8 @@ public final class Mode {
         return NUMERIC;
       case 0x2:
         return ALPHANUMERIC;
+      case 0x3:
+        return STRUCTURED_APPEND;
       case 0x4:
         return BYTE;
       case 0x5:
