@@ -54,6 +54,8 @@ public final class ZXingMIDlet extends MIDlet {
   private Canvas canvas;
   private Player player;
   private VideoControl videoControl;
+  private Alert confirmation;
+  private Alert alert;
 
   Displayable getCanvas() {
     return canvas;
@@ -94,6 +96,17 @@ public final class ZXingMIDlet extends MIDlet {
     } catch (MediaException me) {
       throw new MIDletStateChangeException(me.toString());
     }
+
+    // Set up one confirmation and alert object to re-use
+    confirmation = new Alert(null);
+    confirmation.setType(AlertType.CONFIRMATION);
+    confirmation.setTimeout(ALERT_TIMEOUT_MS);
+    Command yes = new Command("Yes", Command.OK, 1);
+    confirmation.addCommand(yes);
+    Command no = new Command("No", Command.CANCEL, 1);
+    confirmation.addCommand(no);
+    alert = new Alert(null);
+    alert.setTimeout(ALERT_TIMEOUT_MS);
   }
 
   private static Player createPlayer() throws IOException, MediaException {
@@ -149,12 +162,8 @@ public final class ZXingMIDlet extends MIDlet {
   // Convenience methods to show dialogs
 
   private void showOpenURL(String title, String display, final String uri) {
-    Alert alert = new Alert(title, display, null, AlertType.CONFIRMATION);
-    alert.setTimeout(ALERT_TIMEOUT_MS);
-    Command yes = new Command("Yes", Command.OK, 1);
-    alert.addCommand(yes);
-    Command no = new Command("No", Command.CANCEL, 1);
-    alert.addCommand(no);
+    confirmation.setTitle(title);
+    confirmation.setString(display);
     CommandListener listener = new CommandListener() {
       public void commandAction(Command command, Displayable displayable) {
         if (command.getCommandType() == Command.OK) {
@@ -171,13 +180,14 @@ public final class ZXingMIDlet extends MIDlet {
         }
       }
     };
-    alert.setCommandListener(listener);
-    showAlert(alert);
+    confirmation.setCommandListener(listener);
+    showAlert(confirmation);
   }
 
   private void showAlert(String title, String text) {
-    Alert alert = new Alert(title, text, null, AlertType.INFO);
-    alert.setTimeout(ALERT_TIMEOUT_MS);
+    alert.setTitle(title);
+    alert.setString(text);
+    alert.setType(AlertType.INFO);
     showAlert(alert);
   }
 
@@ -191,7 +201,10 @@ public final class ZXingMIDlet extends MIDlet {
   }
 
   void showError(String message) {
-    showAlert(new Alert("Error", message, null, AlertType.ERROR));
+    alert.setTitle("Error");
+    alert.setString(message);
+    alert.setType(AlertType.ERROR);
+    showAlert(alert);
   }
 
   private void showAlert(Alert alert) {
