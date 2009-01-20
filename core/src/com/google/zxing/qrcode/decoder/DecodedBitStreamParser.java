@@ -80,6 +80,9 @@ final class DecodedBitStreamParser {
         if (mode.equals(Mode.FNC1_FIRST_POSITION) || mode.equals(Mode.FNC1_SECOND_POSITION)) {
           // We do little with FNC1 except alter the parsed result a bit according to the spec
           fc1InEffect = true;
+        } else if (mode.equals(Mode.STRUCTURED_APPEND)) {
+          // not supported
+          throw ReaderException.getInstance();
         } else if (mode.equals(Mode.ECI)) {
           // Count doesn't apply to ECI
           try {
