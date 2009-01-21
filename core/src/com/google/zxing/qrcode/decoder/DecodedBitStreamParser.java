@@ -81,8 +81,9 @@ final class DecodedBitStreamParser {
           // We do little with FNC1 except alter the parsed result a bit according to the spec
           fc1InEffect = true;
         } else if (mode.equals(Mode.STRUCTURED_APPEND)) {
-          // not supported
-          throw ReaderException.getInstance();
+          // not really supported; all we do is ignore it
+          // Read next 8 bits (symbol sequence #) and 8 bits (parity data), then continue
+          bits.readBits(16);
         } else if (mode.equals(Mode.ECI)) {
           // Count doesn't apply to ECI
           try {
