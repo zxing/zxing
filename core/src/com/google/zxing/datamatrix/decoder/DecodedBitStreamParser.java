@@ -108,7 +108,7 @@ final class DecodedBitStreamParser {
       }
     } while (mode != PAD_ENCODE && bits.available() > 0);
     if (resultTrailer.length() > 0) {
-      result.append(resultTrailer);
+      result.append(resultTrailer.toString());
     }
     return new DecoderResult(bytes, result.toString(), byteSegments.isEmpty() ? null : byteSegments);
   }
