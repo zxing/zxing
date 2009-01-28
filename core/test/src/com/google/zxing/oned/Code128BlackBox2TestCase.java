@@ -20,15 +20,13 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.common.AbstractBlackBoxTestCase;
 
-import java.io.File;
-
 /**
  * @author dswitkin@google.com (Daniel Switkin)
  */
 public final class Code128BlackBox2TestCase extends AbstractBlackBoxTestCase {
 
   public Code128BlackBox2TestCase() {
-    super(new File("test/data/blackbox/code128-2"), new MultiFormatReader(), BarcodeFormat.CODE_128);
+    super("test/data/blackbox/code128-2", new MultiFormatReader(), BarcodeFormat.CODE_128);
     addTest(33, 39, 0.0f);
     addTest(34, 37, 180.0f);
   }

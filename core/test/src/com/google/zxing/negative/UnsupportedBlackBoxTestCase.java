@@ -18,8 +18,6 @@ package com.google.zxing.negative;
 
 import com.google.zxing.common.AbstractNegativeBlackBoxTestCase;
 
-import java.io.File;
-
 /**
  * This test ensures that unsupported barcodes do not decode.
  *
@@ -28,7 +26,7 @@ import java.io.File;
 public final class UnsupportedBlackBoxTestCase extends AbstractNegativeBlackBoxTestCase {
 
   public UnsupportedBlackBoxTestCase() {
-    super(new File("test/data/blackbox/unsupported"));
+    super("test/data/blackbox/unsupported");
     addTest(0, 0.0f);
     addTest(0, 90.0f);
     addTest(1, 180.0f);

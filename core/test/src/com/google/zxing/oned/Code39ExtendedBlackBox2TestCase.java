@@ -19,15 +19,13 @@ package com.google.zxing.oned;
 import com.google.zxing.common.AbstractBlackBoxTestCase;
 import com.google.zxing.BarcodeFormat;
 
-import java.io.File;
-
 /**
  * @author Sean Owen
  */
 public final class Code39ExtendedBlackBox2TestCase extends AbstractBlackBoxTestCase {
 
   public Code39ExtendedBlackBox2TestCase() {
-    super(new File("test/data/blackbox/code39-2"), new Code39Reader(false, true), BarcodeFormat.CODE_39);
+    super("test/data/blackbox/code39-2", new Code39Reader(false, true), BarcodeFormat.CODE_39);
     addTest(2, 2, 0.0f);
     addTest(2, 2, 180.0f);
   }

@@ -21,7 +21,6 @@ import com.google.zxing.DecodeHintType;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.common.AbstractBlackBoxTestCase;
 
-import java.io.File;
 import java.util.Hashtable;
 import java.util.Vector;
 
@@ -31,7 +30,7 @@ import java.util.Vector;
 public final class ITFBlackBox1TestCase extends AbstractBlackBoxTestCase {
 
   public ITFBlackBox1TestCase() {
-    super(new File("test/data/blackbox/itf-1"), new MultiFormatReader(), BarcodeFormat.ITF);
+    super("test/data/blackbox/itf-1", new MultiFormatReader(), BarcodeFormat.ITF);
     addTest(9, 12, 0.0f);
   }
 

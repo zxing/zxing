@@ -20,15 +20,13 @@ import com.google.zxing.MultiFormatReader;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.common.AbstractBlackBoxTestCase;
 
-import java.io.File;
-
 /**
  * @author Sean Owen
  */
 public final class UPCABlackBox1TestCase extends AbstractBlackBoxTestCase {
 
   public UPCABlackBox1TestCase() {
-    super(new File("test/data/blackbox/upca-1"), new MultiFormatReader(), BarcodeFormat.UPC_A);
+    super("test/data/blackbox/upca-1", new MultiFormatReader(), BarcodeFormat.UPC_A);
     addTest(15, 16, 0.0f);
     addTest(15, 19, 180.0f);
   }

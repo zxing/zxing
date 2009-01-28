@@ -18,8 +18,6 @@ package com.google.zxing.negative;
 
 import com.google.zxing.common.AbstractNegativeBlackBoxTestCase;
 
-import java.io.File;
-
 /**
  * This test ensures that random images with high contrast patterns do not decode as barcodes.
  *
@@ -28,7 +26,7 @@ import java.io.File;
 public final class FalsePositivesBlackBoxTestCase extends AbstractNegativeBlackBoxTestCase {
 
   public FalsePositivesBlackBoxTestCase() {
-    super(new File("test/data/blackbox/falsepositives"));
+    super("test/data/blackbox/falsepositives");
     addTest(2, 0.0f);
     addTest(0, 90.0f);
     addTest(0, 180.0f);
