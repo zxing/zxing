@@ -20,8 +20,6 @@ import com.google.zxing.MultiFormatReader;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.common.AbstractBlackBoxTestCase;
 
-import java.io.File;
-
 /**
  * Tests of various QR Codes from t-shirts, which are notoriously not flat.
  *
@@ -30,7 +28,7 @@ import java.io.File;
 public final class QRCodeBlackBox4TestCase extends AbstractBlackBoxTestCase {
 
   public QRCodeBlackBox4TestCase() {
-    super(new File("test/data/blackbox/qrcode-4"), new MultiFormatReader(), BarcodeFormat.QR_CODE);
+    super("test/data/blackbox/qrcode-4", new MultiFormatReader(), BarcodeFormat.QR_CODE);
     addTest(32, 32, 0.0f);
     addTest(33, 33, 90.0f);
     addTest(32, 32, 180.0f);

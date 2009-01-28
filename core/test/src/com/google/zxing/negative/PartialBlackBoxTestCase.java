@@ -18,8 +18,6 @@ package com.google.zxing.negative;
 
 import com.google.zxing.common.AbstractNegativeBlackBoxTestCase;
 
-import java.io.File;
-
 /**
  * This test ensures that partial barcodes do not decode.
  *
@@ -28,7 +26,7 @@ import java.io.File;
 public final class PartialBlackBoxTestCase extends AbstractNegativeBlackBoxTestCase {
 
   public PartialBlackBoxTestCase() {
-    super(new File("test/data/blackbox/partial"));
+    super("test/data/blackbox/partial");
     addTest(0, 0.0f);
     addTest(1, 90.0f);
     addTest(1, 180.0f);

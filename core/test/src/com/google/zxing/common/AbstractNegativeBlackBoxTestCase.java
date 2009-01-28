@@ -58,8 +58,8 @@ public abstract class AbstractNegativeBlackBoxTestCase extends AbstractBlackBoxT
   private final List<TestResult> testResults;
 
   // Use the multiformat reader to evaluate all decoders in the system.
-  protected AbstractNegativeBlackBoxTestCase(File testBase) {
-    super(testBase, new MultiFormatReader(), null);
+  protected AbstractNegativeBlackBoxTestCase(String testBasePathSuffix) {
+    super(testBasePathSuffix, new MultiFormatReader(), null);
     testResults = new ArrayList<TestResult>();
   }
 

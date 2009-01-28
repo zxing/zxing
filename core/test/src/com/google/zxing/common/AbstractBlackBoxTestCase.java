@@ -86,9 +86,15 @@ public abstract class AbstractBlackBoxTestCase extends TestCase {
   private final BarcodeFormat expectedFormat;
   private final List<TestResult> testResults;
 
-  protected AbstractBlackBoxTestCase(File testBase,
+  protected AbstractBlackBoxTestCase(String testBasePathSuffix,
                                      Reader barcodeReader,
                                      BarcodeFormat expectedFormat) {
+    // A little workaround to prevent aggravation in my IDE
+    File testBase = new File(testBasePathSuffix);
+    if (!testBase.exists()) {
+      // try starting with 'core' since the test base is often given as the project root
+      testBase = new File("core/" + testBasePathSuffix);
+    }
     this.testBase = testBase;
     this.barcodeReader = barcodeReader;
     this.expectedFormat = expectedFormat;
@@ -184,7 +190,7 @@ public abstract class AbstractBlackBoxTestCase extends TestCase {
           hints.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
         }
       }
-      result = getReader().decode(source, hints);
+      result = barcodeReader.decode(source, hints);
     } catch (ReaderException re) {
       System.out.println(re + suffix);
       return false;
@@ -225,7 +231,7 @@ public abstract class AbstractBlackBoxTestCase extends TestCase {
       return original;
     } else {
       AffineTransform at = new AffineTransform();
-      at.rotate(Math.toRadians(degrees), original.getWidth() / 2.0f, original.getHeight() / 2.0f);
+      at.rotate(Math.toRadians(degrees), original.getWidth() / 2.0, original.getHeight() / 2.0);
       BufferedImageOp op = new AffineTransformOp(at, AffineTransformOp.TYPE_BICUBIC);
       return op.filter(original, null);
     }
