@@ -52,6 +52,11 @@ public final class DecodeHintType {
    */
   public static final DecodeHintType TRY_HARDER = new DecodeHintType();
 
+  /**
+   * Allowed lengths of encoded data -- reject anything else. Maps to an {@link int[]}.
+   */
+  public static final DecodeHintType ALLOWED_LENGTHS = new DecodeHintType();
+
   private DecodeHintType() {
   }
 

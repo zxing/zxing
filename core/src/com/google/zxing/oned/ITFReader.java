@@ -20,6 +20,7 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
+import com.google.zxing.DecodeHintType;
 import com.google.zxing.common.BitArray;
 import com.google.zxing.common.GenericResultPoint;
 
@@ -44,6 +45,8 @@ public final class ITFReader extends AbstractOneDReader {
 
   private static final int W = 3; // Pixel width of a wide line
   private static final int N = 1; // Pixed width of a narrow line
+
+  private static final int[] DEFAULT_ALLOWED_LENGTHS = { 6, 10, 14 };
 
   // Stores the actual narrow line width of the image being decoded.
   private int narrowLineWidth = -1;
@@ -85,10 +88,23 @@ public final class ITFReader extends AbstractOneDReader {
 
     String resultString = result.toString();
 
+    int[] allowedLengths = (int[]) hints.get(DecodeHintType.ALLOWED_LENGTHS);
+    if (allowedLengths == null) {
+      allowedLengths = DEFAULT_ALLOWED_LENGTHS;
+    }
+
     // To avoid false positives with 2D barcodes (and other patterns), make
     // an assumption that the decoded string must be 6, 10 or 14 digits.
     int length = resultString.length();
-    if (length != 6 && length != 10 && length != 14) {
+    boolean lengthOK = false;
+    for (int i = 0; i < allowedLengths.length; i++) {
+      if (length == allowedLengths[i]) {
+        lengthOK = true;
+        break;
+      }
+
+    }
+    if (!lengthOK) {
       throw ReaderException.getInstance();
     }
 
