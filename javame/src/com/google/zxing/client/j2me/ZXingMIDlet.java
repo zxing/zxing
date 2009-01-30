@@ -26,6 +26,7 @@ import com.google.zxing.client.result.TelParsedResult;
 import com.google.zxing.client.result.ProductParsedResult;
 import com.google.zxing.client.result.URIParsedResult;
 
+import javax.microedition.lcdui.Image;
 import javax.microedition.io.ConnectionNotFoundException;
 import javax.microedition.lcdui.Alert;
 import javax.microedition.lcdui.AlertType;
@@ -77,6 +78,9 @@ public final class ZXingMIDlet extends MIDlet {
 
   protected void startApp() throws MIDletStateChangeException {
     try {
+      Image image = Image.createImage("/res/zxing-icon.png");
+      SplashThread splash = new SplashThread(this, 2000, image);
+      Display.getDisplay(this).setCurrent(splash);
       player = createPlayer();
       player.realize();
       MultimediaManager multimediaManager = buildMultimediaManager();
@@ -88,9 +92,6 @@ public final class ZXingMIDlet extends MIDlet {
       videoControl.initDisplayMode(VideoControl.USE_DIRECT_VIDEO, canvas);
       videoControl.setDisplayLocation(0, 0);
       videoControl.setDisplaySize(canvas.getWidth(), canvas.getHeight());
-      videoControl.setVisible(true);
-      player.start();
-      Display.getDisplay(this).setCurrent(canvas);
     } catch (IOException ioe) {
       throw new MIDletStateChangeException(ioe.toString());
     } catch (MediaException me) {
@@ -107,6 +108,16 @@ public final class ZXingMIDlet extends MIDlet {
     confirmation.addCommand(no);
     alert = new Alert(null);
     alert.setTimeout(ALERT_TIMEOUT_MS);
+  }
+
+  void splashDone() {
+    try {
+      videoControl.setVisible(true);
+      player.start();
+    } catch (MediaException me) {
+      // continue
+    }
+    Display.getDisplay(this).setCurrent(canvas);
   }
 
   private static Player createPlayer() throws IOException, MediaException {
