@@ -53,6 +53,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.util.Log;
 import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.client.android.result.ResultButtonListener;
@@ -66,6 +67,8 @@ import java.io.IOException;
  * example included in the Android SDK.
  */
 public final class CaptureActivity extends Activity implements SurfaceHolder.Callback {
+
+  private static final String TAG = "CaptureActivity";
 
   private static final int SHARE_ID = Menu.FIRST;
   private static final int SETTINGS_ID = Menu.FIRST + 1;
@@ -97,6 +100,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
   @Override
   public void onCreate(Bundle icicle) {
+    Log.i(TAG, "Creating CaptureActivity");
     super.onCreate(icicle);
 
     Window window = getWindow();
