@@ -28,6 +28,11 @@ public final class EncodeHintType {
    */
   public static final EncodeHintType ERROR_CORRECTION = new EncodeHintType();
 
+  /**
+   * Specifies what character encoding to use where applicable (type String)
+   */
+  public static final EncodeHintType CHARACTER_SET = new EncodeHintType();
+
   private EncodeHintType() {
   }
 

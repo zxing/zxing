@@ -17,6 +17,7 @@
 package com.google.zxing.qrcode.encoder;
 
 import com.google.zxing.WriterException;
+import com.google.zxing.EncodeHintType;
 import com.google.zxing.common.ByteArray;
 import com.google.zxing.common.ByteMatrix;
 import com.google.zxing.common.reedsolomon.GF256;
@@ -26,6 +27,7 @@ import com.google.zxing.qrcode.decoder.Mode;
 import com.google.zxing.qrcode.decoder.Version;
 
 import java.util.Vector;
+import java.util.Hashtable;
 import java.io.UnsupportedEncodingException;
 
 /**
@@ -78,22 +80,36 @@ public final class Encoder {
 
   }
 
-  // Encode "bytes" with the error correction level "getECLevel". The encoding mode will be chosen
-  // internally by chooseMode(). On success, store the result in "qrCode" and return true.
-  // We recommend you to use QRCode.EC_LEVEL_L (the lowest level) for
-  // "getECLevel" since our primary use is to show QR code on desktop screens. We don't need very
-  // strong error correction for this purpose.
-  //
-  // Note that there is no way to encode bytes in MODE_KANJI. We might want to add EncodeWithMode()
-  // with which clients can specify the encoding mode. For now, we don't need the functionality.
+  /**
+   *  Encode "bytes" with the error correction level "ecLevel". The encoding mode will be chosen
+   * internally by chooseMode(). On success, store the result in "qrCode".
+   *
+   * We recommend you to use QRCode.EC_LEVEL_L (the lowest level) for
+   * "getECLevel" since our primary use is to show QR code on desktop screens. We don't need very
+   * strong error correction for this purpose.
+   *
+   * Note that there is no way to encode bytes in MODE_KANJI. We might want to add EncodeWithMode()
+   * with which clients can specify the encoding mode. For now, we don't need the functionality.
+   */
   public static void encode(String content, ErrorCorrectionLevel ecLevel, QRCode qrCode)
       throws WriterException {
+    encode(content, ecLevel, null, qrCode);
+  }
+
+  public static void encode(String content, ErrorCorrectionLevel ecLevel, Hashtable hints, QRCode qrCode)
+      throws WriterException {
+
+    String characterEncoding = hints == null ? null : (String) hints.get(EncodeHintType.CHARACTER_SET);
+    if (characterEncoding == null) {
+      characterEncoding = "ISO-8859-1";
+    }
+
     // Step 1: Choose the mode (encoding).
     Mode mode = chooseMode(content);
 
     // Step 2: Append "bytes" into "dataBits" in appropriate encoding.
     BitVector dataBits = new BitVector();
-    appendBytes(content, mode, dataBits);
+    appendBytes(content, mode, dataBits, characterEncoding);
     // Step 3: Initialize QR code that can contain "dataBits".
     int numInputBytes = dataBits.sizeInBytes();
     initQRCode(numInputBytes, ecLevel, mode, qrCode);
@@ -127,8 +143,10 @@ public final class Encoder {
     }
   }
 
-  // Return the code point of the table used in alphanumeric mode. Return -1 if there is no
-  // corresponding code in the table.
+  /**
+   * @return the code point of the table used in alphanumeric mode or
+   *  -1 if there is no corresponding code in the table.
+   */
   static int getAlphanumericCode(int code) {
     if (code < ALPHANUMERIC_TABLE.length) {
       return ALPHANUMERIC_TABLE[code];
@@ -136,13 +154,13 @@ public final class Encoder {
     return -1;
   }
 
-  // Choose the best mode by examining the content.
-  //
-  // Note that this function does not return MODE_KANJI, as we cannot distinguish Shift_JIS from
-  // other encodings such as ISO-8859-1, from data bytes alone. For example "\xE0\xE0" can be
-  // interpreted as one character in Shift_JIS, but also two characters in ISO-8859-1.
-  //
-  // JAVAPORT: This MODE_KANJI limitation sounds like a problem for us.
+  /**
+   * Choose the best mode by examining the content.
+   *
+   * Note that this function does not return MODE_KANJI, as we cannot distinguish Shift_JIS from
+   * other encodings such as ISO-8859-1, from data bytes alone. For example "\xE0\xE0" can be
+   * interpreted as one character in Shift_JIS, but also two characters in ISO-8859-1.
+   */
   public static Mode chooseMode(String content) {
     boolean hasNumeric = false;
     boolean hasAlphanumeric = false;
@@ -181,8 +199,9 @@ public final class Encoder {
     return bestMaskPattern;
   }
 
-  // Initialize "qrCode" according to "numInputBytes", "ecLevel", and "mode". On success, modify
-  // "qrCode".
+  /**
+   * Initialize "qrCode" according to "numInputBytes", "ecLevel", and "mode". On success, modify "qrCode".
+   */
   private static void initQRCode(int numInputBytes, ErrorCorrectionLevel ecLevel, Mode mode, QRCode qrCode)
       throws WriterException {
     qrCode.setECLevel(ecLevel);
@@ -219,7 +238,9 @@ public final class Encoder {
     throw new WriterException("Cannot find proper rs block info (input data too big?)");
   }
 
-  // Terminate bits as described in 8.4.8 and 8.4.9 of JISX0510:2004 (p.24).
+  /**
+   * Terminate bits as described in 8.4.8 and 8.4.9 of JISX0510:2004 (p.24).
+   */
   static void terminateBits(int numDataBytes, BitVector bits) throws WriterException {
     int capacity = numDataBytes << 3;
     if (bits.size() > capacity) {
@@ -255,9 +276,11 @@ public final class Encoder {
     }
   }
 
-  // Get number of data bytes and number of error correction bytes for block id "blockID". Store
-  // the result in "numDataBytesInBlock", and "numECBytesInBlock". See table 12 in 8.5.1 of
-  // JISX0510:2004 (p.30)
+  /**
+   * Get number of data bytes and number of error correction bytes for block id "blockID". Store
+   * the result in "numDataBytesInBlock", and "numECBytesInBlock". See table 12 in 8.5.1 of
+   * JISX0510:2004 (p.30)
+   */
   static void getNumDataBytesAndNumECBytesForBlockID(int numTotalBytes, int numDataBytes,
       int numRSBlocks, int blockID, int[] numDataBytesInBlock,
       int[] numECBytesInBlock) throws WriterException {
@@ -307,9 +330,10 @@ public final class Encoder {
     }
   }
 
-  // Interleave "bits" with corresponding error correction bytes. On success, store the result in
-  // "result" and return true. The interleave rule is complicated. See 8.6
-  // of JISX0510:2004 (p.37) for details.
+  /**
+   * Interleave "bits" with corresponding error correction bytes. On success, store the result in
+   * "result". The interleave rule is complicated. See 8.6 of JISX0510:2004 (p.37) for details.
+   */
   static void interleaveWithECBytes(BitVector bits, int numTotalBytes,
       int numDataBytes, int numRSBlocks, BitVector result) throws WriterException {
 
@@ -386,15 +410,17 @@ public final class Encoder {
     return ecBytes;
   }
 
-  // Append mode info. On success, store the result in "bits" and return true. On error, return
-  // false.
+  /**
+   * Append mode info. On success, store the result in "bits".
+   */
   static void appendModeInfo(Mode mode, BitVector bits) {
     bits.appendBits(mode.getBits(), 4);
   }
 
 
-  // Append length info. On success, store the result in "bits" and return true. On error, return
-  // false.
+  /**
+   * Append length info. On success, store the result in "bits".
+   */
   static void appendLengthInfo(int numLetters, int version, Mode mode, BitVector bits) throws WriterException {
     int numBits = mode.getCharacterCountBits(Version.getVersionForNumber(version));
     if (numLetters > ((1 << numBits) - 1)) {
@@ -403,15 +429,16 @@ public final class Encoder {
     bits.appendBits(numLetters, numBits);
   }
 
-  // Append "bytes" in "mode" mode (encoding) into "bits". On success, store the result in "bits"
-  // and return true.
-  static void appendBytes(String content, Mode mode, BitVector bits) throws WriterException {
+  /**
+   * Append "bytes" in "mode" mode (encoding) into "bits". On success, store the result in "bits".
+   */
+  static void appendBytes(String content, Mode mode, BitVector bits, String encoding) throws WriterException {
     if (mode.equals(Mode.NUMERIC)) {
       appendNumericBytes(content, bits);
     } else if (mode.equals(Mode.ALPHANUMERIC)) {
       appendAlphanumericBytes(content, bits);
     } else if (mode.equals(Mode.BYTE)) {
-      append8BitBytes(content, bits);
+      append8BitBytes(content, bits, encoding);
     } else if (mode.equals(Mode.KANJI)) {
       appendKanjiBytes(content, bits);
     } else {
@@ -467,10 +494,10 @@ public final class Encoder {
     }
   }
 
-  static void append8BitBytes(String content, BitVector bits) throws WriterException {
+  static void append8BitBytes(String content, BitVector bits, String encoding) throws WriterException {
     byte[] bytes;
     try {
-      bytes = content.getBytes("ISO-8859-1"); // TODO support specifying encoding?
+      bytes = content.getBytes(encoding);
     } catch (UnsupportedEncodingException uee) {
       throw new WriterException(uee.toString());
     }
