@@ -34,6 +34,11 @@ public abstract class ECI {
     return value;
   }
 
+  /**
+   * @param value ECI value
+   * @return {@link ECI} representing ECI of given value, or null if it is legal but unsupported
+   * @throws IllegalArgumentException if ECI value is invalid
+   */
   public static ECI getECIByValue(int value) {
     if (value < 0 || value > 999999) {
       throw new IllegalArgumentException("Bad ECI value: " + value);
@@ -41,7 +46,7 @@ public abstract class ECI {
     if (value < 900) { // Character set ECIs use 000000 - 000899
       return CharacterSetECI.getCharacterSetECIByValue(value);
     }
-    throw new IllegalArgumentException("Unsupported ECI value: " + value);
+    return null;
   }
 
 }

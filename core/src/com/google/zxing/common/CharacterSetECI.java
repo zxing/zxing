@@ -26,14 +26,17 @@ import java.util.Hashtable;
  */
 public final class CharacterSetECI extends ECI {
 
-  private static final Hashtable VALUE_TO_ECI;
-  static {
+  private static Hashtable VALUE_TO_ECI;
+  private static Hashtable NAME_TO_ECI;
+
+  private static void initialize() {
     VALUE_TO_ECI = new Hashtable(29);
+    NAME_TO_ECI = new Hashtable(29);
     // TODO figure out if these values are even right!
     addCharacterSet(0, "Cp437");
-    addCharacterSet(1, "ISO8859_1");
+    addCharacterSet(1, new String[] {"ISO8859_1", "ISO-8859-1"});
     addCharacterSet(2, "Cp437");
-    addCharacterSet(3, "ISO8859_1");
+    addCharacterSet(3, new String[] {"ISO8859_1", "ISO-8859-1"});
     addCharacterSet(4, "ISO8859_2");
     addCharacterSet(5, "ISO8859_3");
     addCharacterSet(6, "ISO8859_4");
@@ -48,7 +51,7 @@ public final class CharacterSetECI extends ECI {
     addCharacterSet(16, "ISO8859_14");
     addCharacterSet(17, "ISO8859_15");
     addCharacterSet(18, "ISO8859_16");
-    addCharacterSet(20, "SJIS");
+    addCharacterSet(20, new String[] {"SJIS", "Shift_JIS"});
   }
 
   private final String encodingName;
@@ -63,15 +66,43 @@ public final class CharacterSetECI extends ECI {
   }
 
   private static void addCharacterSet(int value, String encodingName) {
-    VALUE_TO_ECI.put(new Integer(value), new CharacterSetECI(value, encodingName));
+    CharacterSetECI eci = new CharacterSetECI(value, encodingName);
+    VALUE_TO_ECI.put(new Integer(value), eci);
+    NAME_TO_ECI.put(encodingName, eci);
   }
 
-  public static CharacterSetECI getCharacterSetECIByValue(int value) {
-    CharacterSetECI eci = (CharacterSetECI) VALUE_TO_ECI.get(new Integer(value));
-    if (eci == null) {
-      throw new IllegalArgumentException("Unsupported value: " + value);
+  private static void addCharacterSet(int value, String[] encodingNames) {
+    CharacterSetECI eci = new CharacterSetECI(value, encodingNames[0]);
+    VALUE_TO_ECI.put(new Integer(value), eci);
+    for (int i = 0; i < encodingNames.length; i++) {
+      NAME_TO_ECI.put(encodingNames[i], eci);
     }
-    return eci;
+  }
+
+  /**
+   * @param value character set ECI value
+   * @return {@link CharacterSetECI} representing ECI of given value, or null if it is legal but unsupported
+   * @throws IllegalArgumentException if ECI value is invalid
+   */
+  public static CharacterSetECI getCharacterSetECIByValue(int value) {
+    if (VALUE_TO_ECI == null) {
+      initialize();
+    }
+    if (value < 0 || value >= 900) {
+      throw new IllegalArgumentException("Bad ECI value: " + value);
+    }
+    return (CharacterSetECI) VALUE_TO_ECI.get(new Integer(value));
+  }
+
+  /**
+   * @param name character set ECI encoding name
+   * @return {@link CharacterSetECI} representing ECI for character encoding, or null if it is legal but unsupported
+   */
+  public static CharacterSetECI getCharacterSetECIByName(String name) {
+    if (NAME_TO_ECI == null) {
+      initialize();
+    }
+    return (CharacterSetECI) NAME_TO_ECI.get(name);
   }
 
 }

@@ -20,6 +20,7 @@ import com.google.zxing.WriterException;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.common.ByteArray;
 import com.google.zxing.common.ByteMatrix;
+import com.google.zxing.common.CharacterSetECI;
 import com.google.zxing.common.reedsolomon.GF256;
 import com.google.zxing.common.reedsolomon.ReedSolomonEncoder;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
@@ -45,6 +46,8 @@ public final class Encoder {
       -1, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24,  // 0x40-0x4f
       25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, -1, -1, -1, -1, -1,  // 0x50-0x5f
   };
+
+  static final String DEFAULT_BYTE_MODE_ENCODING = "ISO-8859-1";
 
   private Encoder() {
   }
@@ -101,7 +104,7 @@ public final class Encoder {
 
     String characterEncoding = hints == null ? null : (String) hints.get(EncodeHintType.CHARACTER_SET);
     if (characterEncoding == null) {
-      characterEncoding = "ISO-8859-1";
+      characterEncoding = DEFAULT_BYTE_MODE_ENCODING;
     }
 
     // Step 1: Choose the mode (encoding).
@@ -116,8 +119,18 @@ public final class Encoder {
 
     // Step 4: Build another bit vector that contains header and data.
     BitVector headerAndDataBits = new BitVector();
-    appendModeInfo(qrCode.getMode(), headerAndDataBits);
-    appendLengthInfo(content.length(), qrCode.getVersion(), qrCode.getMode(), headerAndDataBits);
+
+    // Step 4.5: Append ECI message if applicable
+    /*
+    if (mode == Mode.BYTE && !DEFAULT_BYTE_MODE_ENCODING.equals(characterEncoding)) {
+      CharacterSetECI eci = CharacterSetECI.getCharacterSetECIByName(characterEncoding);
+      if (eci != null) {
+        appendECI(eci, headerAndDataBits);
+      }
+    }
+     */
+    appendModeInfo(mode, headerAndDataBits);
+    appendLengthInfo(content.length(), qrCode.getVersion(), mode, headerAndDataBits);
     headerAndDataBits.appendBitVector(dataBits);
 
     // Step 5: Terminate the bits properly.
@@ -247,6 +260,8 @@ public final class Encoder {
       throw new WriterException("data bits cannot fit in the QR Code" + bits.size() + " > " + capacity);
     }
     // Append termination bits. See 8.4.8 of JISX0510:2004 (p.24) for details.
+    // TODO srowen says we can remove this for loop, since the 4 terminator bits are optional if the last byte
+    // has less than 4 bits left. So it amounts to padding the last byte with zeroes either way.
     for (int i = 0; i < 4 && bits.size() < capacity; ++i) {
       bits.appendBit(0);
     }
@@ -530,6 +545,11 @@ public final class Encoder {
       int encoded = ((subtracted >> 8) * 0xc0) + (subtracted & 0xff);
       bits.appendBits(encoded, 13);
     }
+  }
+
+  static void appendECI(CharacterSetECI eci, BitVector bits) {
+    bits.appendBits(Mode.ECI.getBits(), 4);
+    bits.appendBits(eci.getValue(), 8); // This is correct for values up to 127, which is all we need now
   }
 
 }
