@@ -171,18 +171,18 @@ public final class EncoderTestCase extends TestCase {
       // Should use appendNumericBytes.
       // 1 = 01 = 0001 in 4 bits.
       BitVector bits = new BitVector();
-      Encoder.appendBytes("1", Mode.NUMERIC, bits);
+      Encoder.appendBytes("1", Mode.NUMERIC, bits, Encoder.DEFAULT_BYTE_MODE_ENCODING);
       assertEquals("0001" , bits.toString());
     }
     {
       // Should use appendAlphanumericBytes.
       // A = 10 = 0xa = 001010 in 6 bits
       BitVector bits = new BitVector();
-      Encoder.appendBytes("A", Mode.ALPHANUMERIC, bits);
+      Encoder.appendBytes("A", Mode.ALPHANUMERIC, bits, Encoder.DEFAULT_BYTE_MODE_ENCODING);
       assertEquals("001010" , bits.toString());
       // Lower letters such as 'a' cannot be encoded in MODE_ALPHANUMERIC.
       try {
-        Encoder.appendBytes("a", Mode.ALPHANUMERIC, bits);
+        Encoder.appendBytes("a", Mode.ALPHANUMERIC, bits, Encoder.DEFAULT_BYTE_MODE_ENCODING);
       } catch (WriterException we) {
         // good
       }
@@ -191,16 +191,16 @@ public final class EncoderTestCase extends TestCase {
       // Should use append8BitBytes.
       // 0x61, 0x62, 0x63
       BitVector bits = new BitVector();
-      Encoder.appendBytes("abc", Mode.BYTE, bits);
+      Encoder.appendBytes("abc", Mode.BYTE, bits, Encoder.DEFAULT_BYTE_MODE_ENCODING);
       assertEquals("011000010110001001100011", bits.toString());
       // Anything can be encoded in QRCode.MODE_8BIT_BYTE.
-      Encoder.appendBytes("\0", Mode.BYTE, bits);
+      Encoder.appendBytes("\0", Mode.BYTE, bits, Encoder.DEFAULT_BYTE_MODE_ENCODING);
     }
     {
       // Should use appendKanjiBytes.
       // 0x93, 0x5f
       BitVector bits = new BitVector();
-      Encoder.appendBytes(shiftJISString(new byte[] {(byte)0x93,0x5f}), Mode.KANJI, bits);
+      Encoder.appendBytes(shiftJISString(new byte[] {(byte)0x93,0x5f}), Mode.KANJI, bits, Encoder.DEFAULT_BYTE_MODE_ENCODING);
       assertEquals("0110110011111", bits.toString());
     }
   }
@@ -420,13 +420,13 @@ public final class EncoderTestCase extends TestCase {
     {
       // 0x61, 0x62, 0x63
       BitVector bits = new BitVector();
-      Encoder.append8BitBytes("abc", bits);
+      Encoder.append8BitBytes("abc", bits, Encoder.DEFAULT_BYTE_MODE_ENCODING);
       assertEquals("01100001" + "01100010" + "01100011", bits.toString());
     }
     {
       // Empty.
       BitVector bits = new BitVector();
-      Encoder.append8BitBytes("", bits);
+      Encoder.append8BitBytes("", bits, Encoder.DEFAULT_BYTE_MODE_ENCODING);
       assertEquals("", bits.toString());
     }
   }

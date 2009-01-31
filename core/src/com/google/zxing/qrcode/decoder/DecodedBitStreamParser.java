@@ -86,10 +86,9 @@ final class DecodedBitStreamParser {
           bits.readBits(16);
         } else if (mode.equals(Mode.ECI)) {
           // Count doesn't apply to ECI
-          try {
-            int value = parseECIValue(bits);
-            currentCharacterSetECI = CharacterSetECI.getCharacterSetECIByValue(value);
-          } catch (IllegalArgumentException iae) {
+          int value = parseECIValue(bits);
+          currentCharacterSetECI = CharacterSetECI.getCharacterSetECIByValue(value);
+          if (currentCharacterSetECI == null) {
             throw ReaderException.getInstance();
           }
         } else {
