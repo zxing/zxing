@@ -27,10 +27,12 @@ import javax.microedition.lcdui.Graphics;
  * This class manages decoding via {@link SnapshotThread}.
  *
  * @author Sean Owen
+ * @author Simon Flannery
  */
 final class VideoCanvas extends Canvas implements CommandListener {
 
   private static final Command exit = new Command("Exit", Command.EXIT, 1);
+  private static final Command history = new Command("History", Command.ITEM, 0);
 
   private final ZXingMIDlet zXingMIDlet;
   private final SnapshotThread snapshotThread;
@@ -38,6 +40,7 @@ final class VideoCanvas extends Canvas implements CommandListener {
   VideoCanvas(ZXingMIDlet zXingMIDlet) {
     this.zXingMIDlet = zXingMIDlet;
     addCommand(exit);
+    addCommand(history);
     setCommandListener(this);
     snapshotThread = new SnapshotThread(zXingMIDlet);
     new Thread(snapshotThread).start();
@@ -58,7 +61,9 @@ final class VideoCanvas extends Canvas implements CommandListener {
 
   public void commandAction(Command command, Displayable displayable) {
     int type = command.getCommandType();
-    if (type == Command.EXIT || type == Command.STOP || type == Command.BACK || type == Command.CANCEL) {
+    if (command == history) {
+      zXingMIDlet.historyRequest();
+    } else if (type == Command.EXIT || type == Command.STOP || type == Command.BACK || type == Command.CANCEL) {
       snapshotThread.stop();
       zXingMIDlet.stop();
     }
