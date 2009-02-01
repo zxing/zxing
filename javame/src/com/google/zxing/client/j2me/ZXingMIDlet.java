@@ -42,11 +42,13 @@ import javax.microedition.media.control.VideoControl;
 import javax.microedition.midlet.MIDlet;
 import javax.microedition.midlet.MIDletStateChangeException;
 import java.io.IOException;
+import java.util.Vector;
 
 /**
  * <p>The actual reader application {@link MIDlet}.</p>
  *
  * @author Sean Owen
+ * @author Simon Flannery
  */
 public final class ZXingMIDlet extends MIDlet {
 
@@ -57,6 +59,8 @@ public final class ZXingMIDlet extends MIDlet {
   private VideoControl videoControl;
   private Alert confirmation;
   private Alert alert;
+  private Menu history;
+  private Vector resultHistory;
 
   Displayable getCanvas() {
     return canvas;
@@ -79,8 +83,12 @@ public final class ZXingMIDlet extends MIDlet {
   protected void startApp() throws MIDletStateChangeException {
     try {
       Image image = Image.createImage("/res/zxing-icon.png");
-      SplashThread splash = new SplashThread(this, 2000, image);
+      Displayable splash = new SplashThread(this, 2000, image);
       Display.getDisplay(this).setCurrent(splash);
+
+      resultHistory = new Vector(5);
+      history = new Menu(this, "Scan History", "Use");
+
       player = createPlayer();
       player.realize();
       MultimediaManager multimediaManager = buildMultimediaManager();
@@ -115,7 +123,7 @@ public final class ZXingMIDlet extends MIDlet {
       videoControl.setVisible(true);
       player.start();
     } catch (MediaException me) {
-      // continue
+      showError(me);
     }
     Display.getDisplay(this).setCurrent(canvas);
   }
@@ -168,6 +176,10 @@ public final class ZXingMIDlet extends MIDlet {
   void stop() {
     destroyApp(false);
     notifyDestroyed();
+  }
+
+  void historyRequest() {
+    Display.getDisplay(this).setCurrent(history);
   }
 
   // Convenience methods to show dialogs
@@ -223,8 +235,7 @@ public final class ZXingMIDlet extends MIDlet {
     display.setCurrent(alert, canvas);
   }
 
-  void handleDecodedText(Result theResult) {
-    ParsedResult result = ResultParser.parseResult(theResult);
+  void barcodeAction(ParsedResult result) {
     ParsedResultType type = result.getType();
     if (type.equals(ParsedResultType.URI)) {
       String uri = ((URIParsedResult) result).getURI();
@@ -245,6 +256,28 @@ public final class ZXingMIDlet extends MIDlet {
     } else {
       showAlert("Barcode Detected", result.getDisplayResult());
     }
+  }
+
+  void itemRequest() {
+    ParsedResult result = (ParsedResult) resultHistory.elementAt(history.getSelectedIndex());
+    barcodeAction(result);
+  }
+
+  void handleDecodedText(Result theResult) {
+    ParsedResult result = ResultParser.parseResult(theResult);
+    String resultString = result.toString();
+    int i = 0;
+    while (i < resultHistory.size()) {
+      if (resultString.equals(resultHistory.elementAt(i).toString())) {
+        break;
+      }
+      i++;
+    }
+    if (i == resultHistory.size()) {
+      resultHistory.addElement(result);
+      history.append(result.getDisplayResult(), null);
+    }
+    barcodeAction(result);
   }
 
 }
