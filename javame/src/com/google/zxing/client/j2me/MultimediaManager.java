@@ -34,4 +34,6 @@ interface MultimediaManager {
 
   void setExposure(Controllable player);
 
+  void setFlash(Controllable player);
+
 }
