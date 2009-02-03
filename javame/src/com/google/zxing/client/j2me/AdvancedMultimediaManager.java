@@ -19,8 +19,10 @@ package com.google.zxing.client.j2me;
 import javax.microedition.amms.control.camera.ExposureControl;
 import javax.microedition.amms.control.camera.FocusControl;
 import javax.microedition.amms.control.camera.ZoomControl;
+import javax.microedition.amms.control.camera.FlashControl;
 import javax.microedition.media.Controllable;
 import javax.microedition.media.MediaException;
+import javax.microedition.media.Control;
 
 /**
  * <p>Implementation suitable for JSR-234 phones which takes advantage of advanced camera
@@ -34,13 +36,11 @@ final class AdvancedMultimediaManager implements MultimediaManager {
   private static final int MAX_ZOOM = 200;
   private static final long FOCUS_TIME_MS = 750L;
   private static final String DESIRED_METERING = "center-weighted";
+  private static final int DESIRED_FLASH = FlashControl.AUTO;
 
   public void setFocus(Controllable player) {
-    FocusControl focusControl = (FocusControl)
-        player.getControl("javax.microedition.amms.control.camera.FocusControl");
-    if (focusControl == null) {
-      focusControl = (FocusControl) player.getControl("FocusControl");
-    }
+    FocusControl focusControl =
+        (FocusControl) getControl(player, "javax.microedition.amms.control.camera.FocusControl");
     if (focusControl != null) {
       try {
         if (focusControl.isMacroSupported() && !focusControl.getMacro()) {
@@ -62,10 +62,7 @@ final class AdvancedMultimediaManager implements MultimediaManager {
   }
 
   public void setZoom(Controllable player) {
-    ZoomControl zoomControl = (ZoomControl) player.getControl("javax.microedition.amms.control.camera.ZoomControl");
-    if (zoomControl == null) {
-      zoomControl = (ZoomControl) player.getControl("ZoomControl");
-    }
+    ZoomControl zoomControl = (ZoomControl) getControl(player, "javax.microedition.amms.control.camera.ZoomControl");
     if (zoomControl != null) {
       // We zoom in if possible to encourage the viewer to take a snapshot from a greater distance.
       // This is a crude way of dealing with the fact that many phone cameras will not focus at a
@@ -84,10 +81,7 @@ final class AdvancedMultimediaManager implements MultimediaManager {
 
   public void setExposure(Controllable player) {
     ExposureControl exposureControl =
-        (ExposureControl) player.getControl("javax.microedition.amms.control.camera.ExposureControl");
-    if (exposureControl == null) {
-      exposureControl = (ExposureControl) player.getControl("ExposureControl");
-    }
+        (ExposureControl) getControl(player, "javax.microedition.amms.control.camera.ExposureControl");
     if (exposureControl != null) {
 
       int[] supportedISOs = exposureControl.getSupportedISOs();
@@ -116,6 +110,35 @@ final class AdvancedMultimediaManager implements MultimediaManager {
       }
 
     }
+  }
+
+  public void setFlash(Controllable player) {
+    FlashControl flashControl =
+        (FlashControl) getControl(player, "javax.microedition.amms.control.camera.FlashControl");
+    if (flashControl != null) {
+      int[] supportedFlash = flashControl.getSupportedModes();
+      if (supportedFlash != null && supportedFlash.length > 0) {
+        for (int i = 0; i < supportedFlash.length; i++) {
+          if (supportedFlash[i] == DESIRED_FLASH) {
+            try {
+              flashControl.setMode(DESIRED_FLASH);
+            } catch (IllegalArgumentException iae) {
+              // continue
+            }
+            break;
+          }
+        }
+      }
+    }
+  }
+
+  private static Control getControl(Controllable player, String fullName) {
+    Control control = player.getControl(fullName);
+    if (control == null) {
+      String shortName = fullName.substring(fullName.lastIndexOf('.') + 1);
+      control = player.getControl(shortName);
+    }
+    return control;
   }
 
 }

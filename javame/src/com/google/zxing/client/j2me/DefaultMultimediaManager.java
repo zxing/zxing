@@ -34,4 +34,7 @@ final class DefaultMultimediaManager implements MultimediaManager {
   public void setExposure(Controllable player) {
   }
 
+  public void setFlash(Controllable player) {
+  }
+
 }

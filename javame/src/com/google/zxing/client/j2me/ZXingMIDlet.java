@@ -94,6 +94,7 @@ public final class ZXingMIDlet extends MIDlet {
       MultimediaManager multimediaManager = buildMultimediaManager();
       multimediaManager.setZoom(player);
       multimediaManager.setExposure(player);
+      multimediaManager.setFlash(player);
       videoControl = (VideoControl) player.getControl("VideoControl");
       canvas = new VideoCanvas(this);
       canvas.setFullScreenMode(true);
