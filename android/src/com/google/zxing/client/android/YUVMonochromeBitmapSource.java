@@ -40,11 +40,12 @@ final class YUVMonochromeBitmapSource extends BaseMonochromeBitmapSource {
    * @param crop       The rectangle within the yuvData to expose to MonochromeBitmapSource users
    */
   YUVMonochromeBitmapSource(byte[] yuvData, int dataWidth, int dataHeight, Rect crop) {
+    if (crop.width() > dataWidth || crop.height() > dataHeight) {
+      throw new IllegalArgumentException();
+    }
     mYUVData = yuvData;
     mDataWidth = dataWidth;
     mCrop = crop;
-    assert (crop.width() <= dataWidth);
-    assert (crop.height() <= dataHeight);
   }
 
   @Override
