@@ -27,8 +27,10 @@ public final class BenchmarkItem {
   private BarcodeFormat mFormat;
 
   public BenchmarkItem(String path, int runs) {
+    if (runs <= 0) {
+      throw new IllegalArgumentException();
+    }
     mPath = path;
-    assert(runs > 0);
     mTimes = new int[runs];
     mPosition = 0;
     mDecoded = false;

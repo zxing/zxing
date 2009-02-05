@@ -67,8 +67,9 @@ final class SaveThread extends Thread {
   private void save(byte[] data, int width, int height) {
     int framingWidth = mFramingRect.width();
     int framingHeight = mFramingRect.height();
-    assert (framingWidth <= width);
-    assert (framingHeight <= height);
+    if (framingWidth > width || framingHeight > height) {
+      throw new IllegalArgumentException();
+    }
 
     int leftOffset = mFramingRect.left;
     int topOffset = mFramingRect.top;
