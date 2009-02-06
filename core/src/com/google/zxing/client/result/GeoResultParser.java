@@ -48,16 +48,19 @@ final class GeoResultParser extends ResultParser {
     if (latitudeEnd < 0) {
       return null;
     }
-    double latitude = Double.parseDouble(geoURIWithoutQuery.substring(0, latitudeEnd));
-    int longitudeEnd = geoURIWithoutQuery.indexOf(',', latitudeEnd + 1);
-    double longitude;
-    double altitude; // in meters
-    if (longitudeEnd < 0) {
-      longitude = Double.parseDouble(geoURIWithoutQuery.substring(latitudeEnd + 1));
-      altitude = 0.0;
-    } else {
-      longitude = Double.parseDouble(geoURIWithoutQuery.substring(latitudeEnd + 1, longitudeEnd));
-      altitude = Double.parseDouble(geoURIWithoutQuery.substring(longitudeEnd + 1));
+    int longitudeEnd = geoURIWithoutQuery.indexOf(',', latitudeEnd + 1);    
+    double latitude, longitude, altitude;
+    try {
+      latitude = Double.parseDouble(geoURIWithoutQuery.substring(0, latitudeEnd));
+      if (longitudeEnd < 0) {
+        longitude = Double.parseDouble(geoURIWithoutQuery.substring(latitudeEnd + 1));
+        altitude = 0.0;
+      } else {
+        longitude = Double.parseDouble(geoURIWithoutQuery.substring(latitudeEnd + 1, longitudeEnd));
+        altitude = Double.parseDouble(geoURIWithoutQuery.substring(longitudeEnd + 1));
+      }
+    } catch (NumberFormatException nfe) {
+      return null;
     }
     return new GeoParsedResult(rawText, latitude, longitude, altitude);
   }
