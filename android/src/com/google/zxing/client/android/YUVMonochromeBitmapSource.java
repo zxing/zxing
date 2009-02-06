@@ -24,38 +24,81 @@ import com.google.zxing.common.BaseMonochromeBitmapSource;
  * This object implements MonochromeBitmapSource around an array of YUV data, giving you the option
  * to crop to a rectangle within the full data. This can be used to exclude superfluous pixels
  * around the perimeter and speed up decoding.
+ *
+ * @author Sean Owen
+ * @author Daniel Switkin
  */
-final class YUVMonochromeBitmapSource extends BaseMonochromeBitmapSource {
+public final class YUVMonochromeBitmapSource extends BaseMonochromeBitmapSource {
 
   private final byte[] mYUVData;
   private final int mDataWidth;
-  private final Rect mCrop;
+  private final int mCropTop;
+  private final int mCropLeft;
+  private final int mCropBottom;
+  private final int mCropRight;
 
   /**
-   * Builds an object around a YUV buffer from the camera.
+   * Builds an object around a YUV buffer from the camera. The image is not cropped.
+   *
+   * @param yuvData    A byte array of planar Y data, followed by interleaved U and V
+   * @param dataWidth  The width of the Y data
+   * @param dataHeight The height of the Y data
+   */
+  public YUVMonochromeBitmapSource(byte[] yuvData, int dataWidth, int dataHeight) {
+    this(yuvData, dataWidth, dataHeight, 0, 0, dataHeight, dataWidth);
+  }
+
+  /**
+   * Builds an object around a YUV buffer from the camera. THe image is cropped and only
+   * that part of the image is evaluated.
    *
    * @param yuvData    A byte array of planar Y data, followed by interleaved U and V
    * @param dataWidth  The width of the Y data
    * @param dataHeight The height of the Y data
    * @param crop       The rectangle within the yuvData to expose to MonochromeBitmapSource users
    */
-  YUVMonochromeBitmapSource(byte[] yuvData, int dataWidth, int dataHeight, Rect crop) {
-    if (crop.width() > dataWidth || crop.height() > dataHeight) {
+  public YUVMonochromeBitmapSource(byte[] yuvData, int dataWidth, int dataHeight, Rect crop) {
+    this(yuvData, dataWidth, dataHeight, crop.top, crop.left, crop.bottom, crop.right);
+  }
+
+  /**
+   * Builds an object around a YUV buffer from the camera. The image is cropped and only 
+   * that part of the image is evaluated.
+   *
+   * @param yuvData    A byte array of planar Y data, followed by interleaved U and V
+   * @param dataWidth  The width of the Y data
+   * @param dataHeight The height of the Y data
+   * @param cropTop    Top coordinate of rectangle to crop
+   * @param cropLeft   Left coordinate of rectangle to crop
+   * @param cropBottom Bottom coordinate of rectangle to crop
+   * @param cropRight  Right coordinate of rectangle to crop
+   */
+  public YUVMonochromeBitmapSource(byte[] yuvData,
+                                   int dataWidth,
+                                   int dataHeight,
+                                   int cropTop,
+                                   int cropLeft,
+                                   int cropBottom,
+                                   int cropRight) {
+    if (cropRight - cropLeft > dataWidth || cropBottom - cropTop > dataHeight) {
       throw new IllegalArgumentException();
     }
     mYUVData = yuvData;
     mDataWidth = dataWidth;
-    mCrop = crop;
+    this.mCropTop = cropTop;
+    this.mCropLeft = cropLeft;
+    this.mCropBottom = cropBottom;
+    this.mCropRight = cropRight;
   }
 
   @Override
   public int getHeight() {
-    return mCrop.height();
+    return mCropBottom - mCropTop;
   }
 
   @Override
   public int getWidth() {
-    return mCrop.width();
+    return mCropRight - mCropLeft;
   }
 
   /**
@@ -68,7 +111,7 @@ final class YUVMonochromeBitmapSource extends BaseMonochromeBitmapSource {
    */
   @Override
   protected int getLuminance(int x, int y) {
-    return mYUVData[(y + mCrop.top) * mDataWidth + x + mCrop.left] & 0xff;
+    return mYUVData[(y + mCropTop) * mDataWidth + x + mCropLeft] & 0xff;
   }
 
   @Override
@@ -77,9 +120,10 @@ final class YUVMonochromeBitmapSource extends BaseMonochromeBitmapSource {
     if (row == null || row.length < width) {
       row = new int[width];
     }
-    int offset = (y + mCrop.top) * mDataWidth + mCrop.left;
+    int offset = (y + mCropTop) * mDataWidth + mCropLeft;
+    byte[] yuvData = mYUVData;
     for (int x = 0; x < width; x++) {
-      row[x] = mYUVData[offset + x] & 0xff;
+      row[x] = yuvData[offset + x] & 0xff;
     }
     return row;
   }
@@ -90,10 +134,12 @@ final class YUVMonochromeBitmapSource extends BaseMonochromeBitmapSource {
     if (column == null || column.length < height) {
       column = new int[height];
     }
-    int offset = mCrop.top * mDataWidth + mCrop.left + x;
+    int dataWidth = mDataWidth;
+    int offset = mCropTop * dataWidth + mCropLeft + x;
+    byte[] yuvData = mYUVData;
     for (int y = 0; y < height; y++) {
-      column[y] = mYUVData[offset] & 0xff;
-      offset += mDataWidth;
+      column[y] = yuvData[offset] & 0xff;
+      offset += dataWidth;
     }
     return column;
   }
@@ -104,13 +150,13 @@ final class YUVMonochromeBitmapSource extends BaseMonochromeBitmapSource {
    * @return An 8888 bitmap.
    */
   public Bitmap renderToBitmap() {
-    int width = mCrop.width();
-    int height = mCrop.height();
+    int width = getWidth();
+    int height = getHeight();
     int[] pixels = new int[width * height];
-    for (int y = 0; y < height; y++) {
-      int base = (y + mCrop.top) * mDataWidth + mCrop.left;
+    byte[] yuvData = mYUVData;
+    for (int y = 0, base = mCropTop * mDataWidth + mCropLeft; y < height; y++, base += mDataWidth) {
       for (int x = 0; x < width; x++) {
-        int grey = mYUVData[base + x] & 0xff;
+        int grey = yuvData[base + x] & 0xff;
         pixels[y * width + x] = (0xff << 24) | (grey << 16) | (grey << 8) | grey;
       }
     }
