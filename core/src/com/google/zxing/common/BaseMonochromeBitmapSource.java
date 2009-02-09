@@ -28,12 +28,16 @@ public abstract class BaseMonochromeBitmapSource implements MonochromeBitmapSour
   private static final int LUMINANCE_SHIFT = 8 - LUMINANCE_BITS;
   private static final int LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
 
+  private final int height;
+  private final int width;
   private int blackPoint;
   private BlackPointEstimationMethod lastMethod;
   private int lastArgument;
   private int[] luminances;
 
-  protected BaseMonochromeBitmapSource() {
+  protected BaseMonochromeBitmapSource(int height, int width) {
+    this.height = height;
+    this.width = width;
     blackPoint = 0x7F;
     lastMethod = null;
     lastArgument = 0;
@@ -151,13 +155,17 @@ public abstract class BaseMonochromeBitmapSource implements MonochromeBitmapSour
     return false;
   }
 
-  // These two methods should not need to exist because they are defined in the interface that
-  // this abstract class implements. However this seems to cause problems on some Nokias. 
+  public final int getHeight() {
+    return height;
+  }
+
+  public final int getWidth() {
+    return width;
+  }
+
+  // These methods below should not need to exist because they are defined in the interface that
+  // this abstract class implements. However this seems to cause problems on some Nokias.
   // So we write these redundant declarations.
-
-  public abstract int getHeight();
-
-  public abstract int getWidth();
 
   /**
    * Retrieves the luminance at the pixel x,y in the bitmap. This method is only used for estimating

@@ -24,16 +24,22 @@ import java.io.FileNotFoundException;
 
 public final class RGBMonochromeBitmapSource extends BaseMonochromeBitmapSource {
 
-  private final int mWidth;
-  private final int mHeight;
   private final byte[] mLuminances;
 
   public RGBMonochromeBitmapSource(String path) throws FileNotFoundException {
+    this(loadBitmap(path));
+  }
+
+  private static Bitmap loadBitmap(String path) throws FileNotFoundException {
     Bitmap bitmap = BitmapFactory.decodeFile(path);
     if (bitmap == null) {
       throw new FileNotFoundException("Couldn't open " + path);
     }
+    return bitmap;
+  }
 
+  public RGBMonochromeBitmapSource(Bitmap bitmap) {
+    super(bitmap.getHeight(), bitmap.getWidth());
     int width = bitmap.getWidth();
     int height = bitmap.getHeight();
     int[] pixels = new int[width * height];
@@ -42,8 +48,6 @@ public final class RGBMonochromeBitmapSource extends BaseMonochromeBitmapSource 
     // In order to measure pure decoding speed, we convert the entire image to a greyscale array up
     // front, which is the same as the Y channel of the YUVMonochromeBitmapSource in the real app.
     mLuminances = new byte[width * height];
-    mWidth = width;
-    mHeight = height;
     for (int y = 0; y < height; y++) {
       int offset = y * height;
       for (int x = 0; x < width; x++) {
@@ -63,23 +67,13 @@ public final class RGBMonochromeBitmapSource extends BaseMonochromeBitmapSource 
   }
 
   @Override
-  public int getHeight() {
-    return mHeight;
-  }
-
-  @Override
-  public int getWidth() {
-    return mWidth;
-  }
-
-  @Override
   protected int getLuminance(int x, int y) {
-    return mLuminances[y * mWidth + x] & 0xff;
+    return mLuminances[y * getWidth() + x] & 0xff;
   }
 
   @Override
   protected int[] getLuminanceRow(int y, int[] row) {
-    int width = mWidth;
+    int width = getWidth();
     if (row == null || row.length < width) {
       row = new int[width];
     }
@@ -92,8 +86,8 @@ public final class RGBMonochromeBitmapSource extends BaseMonochromeBitmapSource 
 
   @Override
   protected int[] getLuminanceColumn(int x, int[] column) {
-    int width = mWidth;
-    int height = mHeight;
+    int width = getWidth();
+    int height = getHeight();
     if (column == null || column.length < height) {
       column = new int[height];
     }

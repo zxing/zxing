@@ -33,13 +33,12 @@ import java.awt.image.PixelGrabber;
  */
 public final class AWTImageMonochromeBitmapSource extends BaseMonochromeBitmapSource {
 
-  private final int height;
-  private final int width;
   private final int[] pixels;
 
   public AWTImageMonochromeBitmapSource(Image image) throws ReaderException {
-    height = image.getHeight(null);
-    width = image.getWidth(null);
+    super(image.getHeight(null), image.getWidth(null));
+    int height = getHeight();
+    int width = getWidth();
     pixels = new int[height * width];
     // Seems best in this situation to grab all pixels upfront. Grabbing any individual pixel
     // entails creating a relatively expensive object and calling through several methods.
@@ -51,26 +50,19 @@ public final class AWTImageMonochromeBitmapSource extends BaseMonochromeBitmapSo
     }
   }
 
-  public int getHeight() {
-    return height;
-  }
-
-  public int getWidth() {
-    return width;
-  }
-
   /**
    * See <code>com.google.zxing.client.j2me.LCDUIImageMonochromeBitmapSource</code> for more explanation
    * of the computation used in this method.
    */
   protected int getLuminance(int x, int y) {
-    int pixel = pixels[y * width + x];
+    int pixel = pixels[y * getWidth() + x];
     return (((pixel & 0x00FF0000) >> 16) +
             ((pixel & 0x0000FF00) >>  7) +
              (pixel & 0x000000FF       )) >> 2;
   }
 
   protected int[] getLuminanceRow(int y, int[] row) {
+    int width = getWidth();
     if (row == null || row.length < width) {
       row = new int[width];
     }
@@ -85,6 +77,8 @@ public final class AWTImageMonochromeBitmapSource extends BaseMonochromeBitmapSo
   }
 
   protected int[] getLuminanceColumn(int x, int[] column) {
+    int height = getHeight();
+    int width = getWidth();
     if (column == null || column.length < height) {
       column = new int[height];
     }
