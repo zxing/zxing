@@ -41,8 +41,6 @@ public final class BufferedImageMonochromeBitmapSource extends BaseMonochromeBit
   private final BufferedImage image;
   private final int left;
   private final int top;
-  private final int width;
-  private final int height;
 
   /**
    * Creates an instance that uses the entire given image as a source of pixels to decode.
@@ -64,6 +62,7 @@ public final class BufferedImageMonochromeBitmapSource extends BaseMonochromeBit
    * @param bottom likewise, one more than the y coordinate of the bottommost pixels to decode
    */
   public BufferedImageMonochromeBitmapSource(BufferedImage image, int left, int top, int right, int bottom) {
+    super(bottom - top, right - left);
     this.image = image;
     int sourceHeight = image.getHeight();
     int sourceWidth = image.getWidth();
@@ -72,8 +71,6 @@ public final class BufferedImageMonochromeBitmapSource extends BaseMonochromeBit
     }
     this.left = left;
     this.top = top;
-    this.width = right - left;
-    this.height = bottom - top;
   }
 
   /**
@@ -82,16 +79,6 @@ public final class BufferedImageMonochromeBitmapSource extends BaseMonochromeBit
    */
   public BufferedImage getImage() {
     return image;
-  }
-
-  @Override
-  public int getHeight() {
-    return height;
-  }
-
-  @Override
-  public int getWidth() {
-    return width;
   }
 
   @Override
@@ -109,8 +96,8 @@ public final class BufferedImageMonochromeBitmapSource extends BaseMonochromeBit
     op.filter(image, rotatedImage);
     return new BufferedImageMonochromeBitmapSource(rotatedImage,
                                                    top,
-                                                   sourceWidth - (left + width),
-                                                   top + height,
+                                                   sourceWidth - (left + getWidth()),
+                                                   top + getHeight(),
                                                    sourceWidth - left);
   }
 
@@ -140,6 +127,7 @@ public final class BufferedImageMonochromeBitmapSource extends BaseMonochromeBit
 
   @Override
   protected int[] getLuminanceRow(int y, int[] row) {
+    int width = getWidth();
     if (row == null || row.length < width) {
       row = new int[width];
     }
@@ -155,6 +143,7 @@ public final class BufferedImageMonochromeBitmapSource extends BaseMonochromeBit
 
   @Override
   protected int[] getLuminanceColumn(int x, int[] column) {
+    int height = getHeight();
     if (column == null || column.length < height) {
       column = new int[height];
     }

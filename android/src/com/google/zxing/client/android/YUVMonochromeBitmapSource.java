@@ -34,8 +34,6 @@ public final class YUVMonochromeBitmapSource extends BaseMonochromeBitmapSource 
   private final int mDataWidth;
   private final int mCropTop;
   private final int mCropLeft;
-  private final int mCropBottom;
-  private final int mCropRight;
 
   /**
    * Builds an object around a YUV buffer from the camera. The image is not cropped.
@@ -80,6 +78,7 @@ public final class YUVMonochromeBitmapSource extends BaseMonochromeBitmapSource 
                                    int cropLeft,
                                    int cropBottom,
                                    int cropRight) {
+    super(cropBottom - cropTop, cropRight - cropLeft);
     if (cropRight - cropLeft > dataWidth || cropBottom - cropTop > dataHeight) {
       throw new IllegalArgumentException();
     }
@@ -87,18 +86,6 @@ public final class YUVMonochromeBitmapSource extends BaseMonochromeBitmapSource 
     mDataWidth = dataWidth;
     this.mCropTop = cropTop;
     this.mCropLeft = cropLeft;
-    this.mCropBottom = cropBottom;
-    this.mCropRight = cropRight;
-  }
-
-  @Override
-  public int getHeight() {
-    return mCropBottom - mCropTop;
-  }
-
-  @Override
-  public int getWidth() {
-    return mCropRight - mCropLeft;
   }
 
   /**
