@@ -176,10 +176,12 @@ public abstract class ResultHandler {
     sendEmailFromUri("mailto:" + address, subject, body);
   }
 
+  // Use public Intent fields rather than private GMail app fields to specify subject and body.
   public final void sendEmailFromUri(String uri, String subject, String body) {
-    Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse(uri));
-    putExtra(intent, "subject", subject);
-    putExtra(intent, "body", body);
+    Intent intent = new Intent(Intent.ACTION_SEND, Uri.parse(uri));
+    putExtra(intent, Intent.EXTRA_SUBJECT, subject);
+    putExtra(intent, Intent.EXTRA_TEXT, body);
+    intent.setType("text/plain");
     launchIntent(intent);
   }
 
