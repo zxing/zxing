@@ -55,8 +55,20 @@ final class EmailDoCoMoResultParser extends AbstractDoCoMoResultParser {
     if (email == null) {
       return false;
     }
-    int atIndex = email.indexOf('@');
-    return atIndex >= 0 && email.indexOf('.') > atIndex && email.indexOf(' ') < 0;
+    boolean atFound = false;
+    for (int i = 0; i < email.length(); i++) {
+      char c = email.charAt(i);
+      if (c == '@') {
+        atFound = true;
+      } else if (c == '.') {
+        if (!atFound) {
+          return false;
+        }
+      } else if (c == ' ' || c == '\n') {
+        return false;
+      }
+    }
+    return true;
   }
 
 }
