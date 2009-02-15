@@ -60,6 +60,9 @@ final class EmailDoCoMoResultParser extends AbstractDoCoMoResultParser {
     for (int i = 0; i < email.length(); i++) {
       char c = email.charAt(i);
       if (c == '@') {
+        if (atFound) {
+          return false;
+        }
         atFound = true;
       } else if (c == '.') {
         periodFound = true;
