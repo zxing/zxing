@@ -45,8 +45,6 @@ public abstract class ResultParser {
       return result;
     } else if ((result = EmailDoCoMoResultParser.parse(theResult)) != null) {
       return result;
-    } else if ((result = EmailAddressResultParser.parse(theResult)) != null) {
-      return result;
     } else if ((result = AddressBookAUResultParser.parse(theResult)) != null) {
       return result;
     } else if ((result = VCardResultParser.parse(theResult)) != null) {
@@ -54,6 +52,8 @@ public abstract class ResultParser {
     } else if ((result = BizcardResultParser.parse(theResult)) != null) {
       return result;
     } else if ((result = VEventResultParser.parse(theResult)) != null) {
+      return result;
+    } else if ((result = EmailAddressResultParser.parse(theResult)) != null) {
       return result;
     } else if ((result = TelResultParser.parse(theResult)) != null) {
       return result;

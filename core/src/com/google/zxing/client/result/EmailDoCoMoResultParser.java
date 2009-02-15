@@ -47,7 +47,7 @@ final class EmailDoCoMoResultParser extends AbstractDoCoMoResultParser {
 
   /**
    * This implements only the most basic checking for an email address's validity -- that it contains
-   * an '@' and a '.' somewhere after that, and that it contains no space.
+   * an '@' and a '.', and that it contains no space or LF.
    * We want to generally be lenient here since this class is only intended to encapsulate what's
    * in a barcode, not "judge" it.
    */
@@ -56,19 +56,18 @@ final class EmailDoCoMoResultParser extends AbstractDoCoMoResultParser {
       return false;
     }
     boolean atFound = false;
+    boolean periodFound = false;
     for (int i = 0; i < email.length(); i++) {
       char c = email.charAt(i);
       if (c == '@') {
         atFound = true;
       } else if (c == '.') {
-        if (!atFound) {
-          return false;
-        }
+        periodFound = true;
       } else if (c == ' ' || c == '\n') {
         return false;
       }
     }
-    return true;
+    return atFound && periodFound;
   }
 
 }
