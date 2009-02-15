@@ -462,7 +462,7 @@ final class FinderPatternFinder {
       FinderPattern pattern = (FinderPattern) possibleCenters.elementAt(i);
       totalDeviation += Math.abs(pattern.getEstimatedModuleSize() - average);
     }
-    return totalDeviation <= 0.15f * totalModuleSize;
+    return totalDeviation <= 0.05f * totalModuleSize;
   }
 
   /**
