@@ -44,6 +44,13 @@ public final class ShareActivity extends Activity {
       Contacts.ContactMethodsColumns.DATA, // 2
   };
 
+  private static final int PHONES_NUMBER_COLUMN = 1;
+
+  private static final String[] PHONES_PROJECTION = {
+      BaseColumns._ID, // 0
+      Contacts.PhonesColumns.NUMBER // 1
+  };
+
   private Button mClipboardButton;
 
   @Override
@@ -141,26 +148,36 @@ public final class ShareActivity extends Activity {
         return;
       }
       bundle.putString(Contacts.Intents.Insert.NAME, name);
-
-      int phoneColumn = contactCursor.getColumnIndex(Contacts.PhonesColumns.NUMBER);
-      bundle.putString(Contacts.Intents.Insert.PHONE, contactCursor.getString(phoneColumn));
       contactCursor.close();
+
+      Uri phonesUri = Uri.withAppendedPath(contactUri, Contacts.People.Phones.CONTENT_DIRECTORY);
+      Cursor phonesCursor = resolver.query(phonesUri, PHONES_PROJECTION, null, null, null);
+      if (phonesCursor != null) {
+        int foundPhone = 0;
+        while (phonesCursor.moveToNext()) {
+          String number = phonesCursor.getString(PHONES_NUMBER_COLUMN);
+          if (foundPhone < Contents.PHONE_KEYS.length) {
+            bundle.putString(Contents.PHONE_KEYS[foundPhone], number);
+            foundPhone++;
+          }
+        }
+        phonesCursor.close();
+      }
 
       Uri methodsUri = Uri.withAppendedPath(contactUri,
           Contacts.People.ContactMethods.CONTENT_DIRECTORY);
       Cursor methodsCursor = resolver.query(methodsUri, METHODS_PROJECTION, null, null, null);
       if (methodsCursor != null) {
-        boolean foundEmail = false;
+        int foundEmail = 0;
         boolean foundPostal = false;
         while (methodsCursor.moveToNext()) {
           int kind = methodsCursor.getInt(METHODS_KIND_COLUMN);
           String data = methodsCursor.getString(METHODS_DATA_COLUMN);
           switch (kind) {
             case Contacts.KIND_EMAIL:
-              if (!foundEmail) {
-                // Use the first address encountered, since we can't encode multiple addresses
-                bundle.putString(Contacts.Intents.Insert.EMAIL, data);
-                foundEmail = true;
+              if (foundEmail < Contents.EMAIL_KEYS.length) {
+                bundle.putString(Contents.EMAIL_KEYS[foundEmail], data);
+                foundEmail++;
               }
               break;
             case Contacts.KIND_POSTAL:
