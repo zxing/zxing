@@ -14,28 +14,35 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/encode_view"
-              android:layout_width="fill_parent"
-              android:layout_height="fill_parent"
-              android:background="@color/encode_view"
-              android:orientation="vertical"
-              android:gravity="center">
 
-  <ImageView android:id="@+id/image_view"
-             android:layout_width="fill_parent"
-             android:layout_height="wrap_content"
-             android:layout_gravity="center_horizontal"
-             android:scaleType="center"/>
-
-  <TextView android:id="@+id/contents_text_view"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/encode_view"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center"
-            android:textColor="@color/contents_text"
-            android:textSize="20.0sp"
-            android:paddingBottom="8px"
-            android:paddingLeft="8px"
-            android:paddingRight="8px"/>
-</LinearLayout>
+            android:layout_height="fill_parent"
+            android:fillViewport="true"
+            android:background="@color/encode_view">
+  
+  <LinearLayout android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="@color/encode_view"
+                android:orientation="vertical"
+                android:gravity="center">
+
+    <ImageView android:id="@+id/image_view"
+               android:layout_width="fill_parent"
+               android:layout_height="wrap_content"
+               android:layout_gravity="center_horizontal"
+               android:scaleType="center"/>
+
+    <TextView android:id="@+id/contents_text_view"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center_horizontal"
+              android:gravity="center"
+              android:textColor="@color/contents_text"
+              android:textSize="20.0sp"
+              android:paddingBottom="8px"
+              android:paddingLeft="8px"
+              android:paddingRight="8px"/>
+  </LinearLayout>
+</ScrollView>

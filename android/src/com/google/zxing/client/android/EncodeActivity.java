@@ -27,10 +27,9 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.View;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 /**
@@ -72,7 +71,7 @@ public final class EncodeActivity extends Activity {
   public final OnGlobalLayoutListener mLayoutListener = new OnGlobalLayoutListener() {
     public void onGlobalLayout() {
       if (mFirstLayout) {
-        LinearLayout layout = (LinearLayout) findViewById(R.id.encode_view);
+        View layout = findViewById(R.id.encode_view);
         int width = layout.getWidth();
         int height = layout.getHeight();
         int smallerDimension = (width < height) ? width : height;
