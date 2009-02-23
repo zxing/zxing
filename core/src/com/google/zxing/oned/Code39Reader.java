@@ -184,7 +184,7 @@ public final class Code39Reader extends AbstractOneDReader {
 
     for (int i = rowOffset; i < width; i++) {
       boolean pixel = row.get(i);
-      if ((!pixel && isWhite) || (pixel && !isWhite)) {
+      if (pixel ^ isWhite) {
         counters[counterPosition]++;
       } else {
         if (counterPosition == patternLength - 1) {
@@ -209,7 +209,7 @@ public final class Code39Reader extends AbstractOneDReader {
           counterPosition++;
         }
         counters[counterPosition] = 1;
-        isWhite = !isWhite;
+        isWhite ^= true; // isWhite = !isWhite;
       }
     }
     throw ReaderException.getInstance();

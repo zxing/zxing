@@ -231,7 +231,7 @@ public final class Detector {
     boolean inBlack = image.isBlack(steep ? fromY : fromX, steep ? fromX : fromY);
     for (int x = fromX, y = fromY; x != toX; x += xstep) {
       boolean isBlack = image.isBlack(steep ? y : x, steep ? x : y);
-      if (isBlack == !inBlack) {
+      if (isBlack != inBlack) {
         transitions++;
         inBlack = isBlack;
       }
