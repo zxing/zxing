@@ -228,7 +228,7 @@ public abstract class AbstractUPCEANReader extends AbstractOneDReader implements
     int patternStart = rowOffset;
     for (int x = rowOffset; x < width; x++) {
       boolean pixel = row.get(x);
-      if ((!pixel && isWhite) || (pixel && !isWhite)) {
+      if (pixel ^ isWhite) {
         counters[counterPosition]++;
       } else {
         if (counterPosition == patternLength - 1) {
@@ -246,7 +246,7 @@ public abstract class AbstractUPCEANReader extends AbstractOneDReader implements
           counterPosition++;
         }
         counters[counterPosition] = 1;
-        isWhite = !isWhite;
+        isWhite ^= true; // isWhite = !isWhite;
       }
     }
     throw ReaderException.getInstance();

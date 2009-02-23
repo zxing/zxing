@@ -169,7 +169,7 @@ public abstract class AbstractOneDReader implements OneDReader {
     int i = start;
     while (i < end) {
       boolean pixel = row.get(i);
-      if ((!pixel && isWhite) || (pixel && !isWhite)) {
+      if (pixel ^ isWhite) { // that is, exactly one is true
         counters[counterPosition]++;
       } else {
         counterPosition++;
@@ -177,7 +177,7 @@ public abstract class AbstractOneDReader implements OneDReader {
           break;
         } else {
           counters[counterPosition] = 1;
-          isWhite = !isWhite;
+          isWhite ^= true; // isWhite = !isWhite;  Is this too clever? shorter byte code, no conditional
         }
       }
       i++;

@@ -198,7 +198,7 @@ final class BitMatrixParser {
           }
         }
       }
-      readingUp = !readingUp; // switch directions
+      readingUp ^= true; // readingUp = !readingUp; // switch directions
     }
     if (resultOffset != version.getTotalCodewords()) {
       throw ReaderException.getInstance();
