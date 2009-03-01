@@ -41,8 +41,7 @@ public class TextGenerator implements GeneratorSource {
   }
 
   public String getText() throws GeneratorException {
-    String message = getTextField();
-    return message;
+    return getTextField();
   }
   
   public String getTextField() throws GeneratorException {
@@ -73,7 +72,9 @@ public class TextGenerator implements GeneratorSource {
   }
 
   public void validate(Widget widget) throws GeneratorException {
-    if (widget == text) getTextField();
+    if (widget == text) {
+      getTextField();
+    }
   }
   
   public void setFocus() {

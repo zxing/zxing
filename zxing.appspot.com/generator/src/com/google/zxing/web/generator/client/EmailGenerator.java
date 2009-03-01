@@ -66,7 +66,9 @@ public class EmailGenerator implements GeneratorSource {
   }
 
   public void validate(Widget widget) throws GeneratorException {
-    if (widget == email) getEmailField();
+    if (widget == email) {
+      getEmailField();
+    }
   }
 
   public void setFocus() {

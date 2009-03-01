@@ -37,8 +37,8 @@ public class TimeZoneList {
     }
   }
   
-  private final static long ONE_HOUR = 60*60*1000;
-  private final static long THIRTY_MIN = 30*60*1000;
+  private static final long ONE_HOUR = 60L*60*1000;
+  private static final long THIRTY_MIN = 30L*60*1000;
   
   public static final TimeZoneInfo[] TIMEZONES = {
     new TimeZoneInfo("GMT", "Greenwich Mean Time", "GMT",               0 * ONE_HOUR + 0 * THIRTY_MIN), // 0
