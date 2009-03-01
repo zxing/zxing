@@ -40,9 +40,9 @@ import java.util.Date;
  * @author Yohann Coppel
  */
 public class CalendarEventGenerator implements GeneratorSource {
-  public final static String[] FULL_DAY_ONLY_IDS = { "fullDayOnlyInfo1",
+  public static final String[] FULL_DAY_ONLY_IDS = { "fullDayOnlyInfo1",
       "fullDayOnlyInfo2", "fullDayOnlyInfo3", "fullDayOnlyInfo4" };
-  private final static long ONE_HOUR = 60 * 60 * 1000;
+  private static final long ONE_HOUR = 60L * 60 * 1000;
 
   Grid table = null;
   TextBox eventName = new TextBox();
@@ -77,7 +77,7 @@ public class CalendarEventGenerator implements GeneratorSource {
         Date time2 = timePicker2.getDateTime();
         if (time2.after(time)) {
           // keep the same time difference if the interval is valid.
-          long diff = timeDifference(time, time2);
+          long diff = time2.getTime() - time.getTime();
           timePicker2.setDateTime(addMilliseconds(time1, diff));
         } else {
           // otherwise erase the end date and set it to startdate + one hour.
@@ -98,8 +98,7 @@ public class CalendarEventGenerator implements GeneratorSource {
 
   private void buildTimeZoneList() {
     for (TimeZoneInfo info : TimeZoneList.TIMEZONES) {
-      timeZones.addItem(info.GMTRelative + " " + info.abreviation, ""
-          + info.gmtDiff);
+      timeZones.addItem(info.GMTRelative + ' ' + info.abreviation, String.valueOf(info.gmtDiff));
     }
   }
 
@@ -157,10 +156,7 @@ public class CalendarEventGenerator implements GeneratorSource {
   private void setFullDay(boolean fullDay) {
     for (String s : FULL_DAY_ONLY_IDS) {
       Element element = DOM.getElementById(s);
-      String style = "";
-      if (fullDay) {
-        style = "none";
-      }
+      String style = fullDay ? "none" : "";
       DOM.setStyleAttribute(element, "display", style);
     }
   }
@@ -168,13 +164,12 @@ public class CalendarEventGenerator implements GeneratorSource {
   public String getText() throws GeneratorException {
     String eventName = getEventNameField();
     String dates = getDateTimeFields();
-
-    String output = "";
-    output += "BEGIN:VEVENT\n";
-    output += eventName;
-    output += dates;
-    output += "END:VEVENT\n";
-    return output;
+    StringBuilder output = new StringBuilder();
+    output.append("BEGIN:VEVENT\r\n");
+    output.append(eventName);
+    output.append(dates);
+    output.append("END:VEVENT\r\n");
+    return output.toString();
   }
 
   private String getEventNameField() throws GeneratorException {
@@ -186,7 +181,7 @@ public class CalendarEventGenerator implements GeneratorSource {
       throw new GeneratorException(
           "Event name should not contain \\n characters.");
     }
-    return "SUMMARY:" + inputName + "\n";
+    return "SUMMARY:" + inputName + "\r\n";
   }
 
   private String getDateTimeFields() throws GeneratorException {
@@ -206,10 +201,14 @@ public class CalendarEventGenerator implements GeneratorSource {
       throw new GeneratorException("Ending date is after starting date.");
     }
     DateTimeFormat isoFormatter = DateTimeFormat.getFormat("yyyyMMdd");
-    String output = "";
-    output += "DTSTART:" + isoFormatter.format(date1) + "\n";
-    output += "DTEND:" + isoFormatter.format(date2) + "\n";
-    return output;
+    StringBuilder output = new StringBuilder();
+    output.append("DTSTART:");
+    output.append(isoFormatter.format(date1));
+    output.append("\r\n");
+    output.append("DTEND:");
+    output.append(isoFormatter.format(date2));
+    output.append("\r\n");
+    return output.toString();
   }
 
   private String getDateTimeValues() throws GeneratorException {
@@ -233,38 +232,39 @@ public class CalendarEventGenerator implements GeneratorSource {
       throw new GeneratorException("Ending date is after starting date.");
     }
     DateTimeFormat isoFormatter = DateTimeFormat
-        .getFormat("yyyyMMdd'T'kkmmss'Z'");
-    String output = "";
-    output += "DTSTART:" + isoFormatter.format(dateTime1) + "\n";
-    output += "DTEND:" + isoFormatter.format(dateTime2) + "\n";
-    return output;
+        .getFormat("yyyyMMdd'T'HHmmss'Z'");
+    StringBuilder output = new StringBuilder();
+    output.append("DTSTART:");
+    output.append(isoFormatter.format(dateTime1));
+    output.append("\r\n");
+    output.append("DTEND:");
+    output.append(isoFormatter.format(dateTime2));
+    output.append("\r\n");
+    return output.toString();
   }
 
-  private Date mergeDateAndTime(Date date, Date time) {
+  private static Date mergeDateAndTime(Date date, Date time) {
     // Is that the only ugly way to do with GWT ? given that we don't
     // have java.util.Calendar for instance
     DateTimeFormat extractDate = DateTimeFormat.getFormat("yyyyMMdd");
-    DateTimeFormat extractTime = DateTimeFormat.getFormat("kkmm");
-    DateTimeFormat merger = DateTimeFormat.getFormat("yyyyMMddkkmmss");
+    DateTimeFormat extractTime = DateTimeFormat.getFormat("HHmm");
+    DateTimeFormat merger = DateTimeFormat.getFormat("yyyyMMddHHmmss");
     String d = extractDate.format(date);
     String t = extractTime.format(time) + "00";
     return merger.parse(d + t);
   }
 
   public void validate(Widget widget) throws GeneratorException {
-    if (widget == eventName)
+    if (widget == eventName) {
       getEventNameField();
-    if (widget == datePicker1 || widget == timePicker1 || widget == datePicker2
-        || widget == timePicker2)
+    } else if (widget == datePicker1 || widget == timePicker1 || widget == datePicker2
+        || widget == timePicker2) {
       getDateTimeFields();
+    }
   }
 
   private static Date addMilliseconds(Date time1, long milliseconds) {
     return new Date(time1.getTime() + milliseconds);
-  }
-
-  private static long timeDifference(Date time1, Date time2) {
-    return time2.getTime() - time1.getTime();
   }
 
   public void setFocus() {

@@ -80,11 +80,11 @@ public class GeoLocationGenerator implements GeneratorSource, ChangeListener {
     String lat = getLatitudeField();
     String lon = getLongitudeField();
     
-    if (que.length() > 0) {
-      return "geo:"+lat+","+lon+"?q="+que;
+    if (null != que && que.length() > 0) {
+      return "geo:"+lat+ ',' +lon+"?q="+que;
     }
 
-    return "geo:"+lat+","+lon;
+    return "geo:"+lat+ ',' +lon;
   }
 
   private String getQueryField() {
@@ -159,16 +159,16 @@ public class GeoLocationGenerator implements GeneratorSource, ChangeListener {
   }
 
   protected void mapClick(MapClickEvent event) {
-    latitude.setText("" + event.getLatLng().getLatitude());
-    longitude.setText("" + event.getLatLng().getLongitude());
+    latitude.setText(String.valueOf(event.getLatLng().getLatitude()));
+    longitude.setText(String.valueOf(event.getLatLng().getLongitude()));
     setMapMarker(event.getLatLng().getLatitude(), event.getLatLng().getLongitude(), false);
     changeListener.onChange(latitude);
     changeListener.onChange(longitude);
   }
   
   protected void mapMarkerMoved() {
-    latitude.setText("" + mapMarker.getLatLng().getLatitude());
-    longitude.setText("" + mapMarker.getLatLng().getLongitude());
+    latitude.setText(String.valueOf(mapMarker.getLatLng().getLatitude()));
+    longitude.setText(String.valueOf(mapMarker.getLatLng().getLongitude()));
     changeListener.onChange(latitude);
     changeListener.onChange(longitude);
   }
@@ -216,17 +216,17 @@ public class GeoLocationGenerator implements GeneratorSource, ChangeListener {
     String lat = "";
     String lon = "";
     if (link.matches(".*&s?ll=[^&]*&.*")) {
-      boolean beforeComa = true;
-      int start = 0;
+      int start;
       if (link.indexOf("&sll=") == -1) {
         start = link.indexOf("&ll=") + 4;
       } else {
         start = link.indexOf("&sll=") + 5;
       }
+      boolean beforeComma = true;
       for (int i = start; i < link.length() && link.charAt(i) != '&'; ++i) {
-        if (beforeComa) {
+        if (beforeComma) {
           if (link.charAt(i) == ',') {
-            beforeComa = false;
+            beforeComma = false;
           } else {
             lat += link.charAt(i); 
           }
@@ -245,8 +245,12 @@ public class GeoLocationGenerator implements GeneratorSource, ChangeListener {
   }
 
   public void validate(Widget widget) throws GeneratorException {
-    if (widget == latitude) getLatitudeField();
-    if (widget == longitude) getLongitudeField();
+    if (widget == latitude) {
+      getLatitudeField();
+    }
+    if (widget == longitude) {
+      getLongitudeField();
+    }
   }
 
   public void setFocus() {

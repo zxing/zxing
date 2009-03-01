@@ -57,8 +57,7 @@ public class UrlGenerator implements GeneratorSource {
   }
 
   public String getText() throws GeneratorException {
-    String input = getUrlField();
-    return input;
+    return getUrlField();
   }
 
   private String getUrlField() throws GeneratorException {
@@ -68,7 +67,9 @@ public class UrlGenerator implements GeneratorSource {
   }
   
   public void validate(Widget widget) throws GeneratorException {
-    if (widget == url) getUrlField();
+    if (widget == url) {
+      getUrlField();
+    }
   }
   
   public void setFocus() {

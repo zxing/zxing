@@ -67,7 +67,9 @@ public class PhoneNumberGenerator implements GeneratorSource {
   }
 
   public void validate(Widget widget) throws GeneratorException {
-    if (widget == number) getTelField();
+    if (widget == number) {
+      getTelField();
+    }
   }
   
   public void setFocus() {

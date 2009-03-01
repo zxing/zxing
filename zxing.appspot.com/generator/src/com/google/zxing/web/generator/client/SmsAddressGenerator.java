@@ -50,7 +50,7 @@ public class SmsAddressGenerator implements GeneratorSource {
     String output = inputNumber;
     // we add the text only if there actually is something in the field.
     if (inputMessage.length() > 0) {
-      output += ":" + inputMessage;
+      output += ':' + inputMessage;
     }
     
     return "smsto:" + output;
@@ -90,8 +90,12 @@ public class SmsAddressGenerator implements GeneratorSource {
   }
 
   public void validate(Widget widget) throws GeneratorException {
-    if (widget == number) getTelField();
-    if (widget == message) getMessageField();
+    if (widget == number) {
+      getTelField();
+    }
+    if (widget == message) {
+      getMessageField();
+    }
   }
   
   public void setFocus() {
