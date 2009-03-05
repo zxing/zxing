@@ -53,8 +53,6 @@ public abstract class ResultParser {
       return result;
     } else if ((result = VEventResultParser.parse(theResult)) != null) {
       return result;
-    } else if ((result = EmailAddressResultParser.parse(theResult)) != null) {
-      return result;
     } else if ((result = TelResultParser.parse(theResult)) != null) {
       return result;
     } else if ((result = SMSMMSResultParser.parse(theResult)) != null) {
@@ -64,6 +62,8 @@ public abstract class ResultParser {
     } else if ((result = URLTOResultParser.parse(theResult)) != null) {
       return result;
     } else if ((result = URIResultParser.parse(theResult)) != null) {
+      return result;
+    } else if ((result = EmailAddressResultParser.parse(theResult)) != null) {
       return result;
     } else if ((result = ISBNResultParser.parse(theResult)) != null) {
       // We depend on ISBN parsing coming before UPC, as it is a subset.
