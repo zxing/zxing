@@ -33,15 +33,12 @@ final class TelResultParser extends ResultParser {
     if (rawText == null || (!rawText.startsWith("tel:") && !rawText.startsWith("TEL:"))) {
       return null;
     }
-    String telURI = rawText;
+    // Normalize "TEL:" to "tel:"
+    String telURI = rawText.startsWith("TEL:") ? "tel:" + rawText.substring(4) : rawText;
     // Drop tel, query portion
     int queryStart = rawText.indexOf('?', 4);
-    if (queryStart < 0) {
-      rawText = rawText.substring(4);
-    } else {
-      rawText = rawText.substring(4, queryStart);
-    }
-    return new TelParsedResult(rawText, telURI, null);
+    String number = queryStart < 0 ? rawText.substring(4) : rawText.substring(4, queryStart);
+    return new TelParsedResult(number, telURI, null);
   }
 
 }
