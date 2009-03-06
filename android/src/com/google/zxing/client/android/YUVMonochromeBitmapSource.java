@@ -78,7 +78,7 @@ public final class YUVMonochromeBitmapSource extends BaseMonochromeBitmapSource 
                                    int cropLeft,
                                    int cropBottom,
                                    int cropRight) {
-    super(cropBottom - cropTop, cropRight - cropLeft);
+    super(cropRight - cropLeft, cropBottom - cropTop);
     if (cropRight - cropLeft > dataWidth || cropBottom - cropTop > dataHeight) {
       throw new IllegalArgumentException();
     }

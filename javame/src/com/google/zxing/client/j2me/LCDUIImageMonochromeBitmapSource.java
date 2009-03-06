@@ -32,9 +32,17 @@ public final class LCDUIImageMonochromeBitmapSource extends BaseMonochromeBitmap
   private final int[] pixelHolder;
 
   public LCDUIImageMonochromeBitmapSource(Image image) {
-    super(image.getHeight(), image.getWidth());
+    super(image.getWidth(), image.getHeight());
     this.image = image;
     pixelHolder = new int[1];
+  }
+
+  public final int getHeight() {
+    return image.getHeight();
+  }
+
+  public final int getWidth() {
+    return image.getWidth();
   }
 
   // This is expensive and should be used very sparingly.
