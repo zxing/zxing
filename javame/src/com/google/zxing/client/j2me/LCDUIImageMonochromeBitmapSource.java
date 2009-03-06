@@ -37,14 +37,6 @@ public final class LCDUIImageMonochromeBitmapSource extends BaseMonochromeBitmap
     pixelHolder = new int[1];
   }
 
-  public final int getHeight() {
-    return image.getHeight();
-  }
-
-  public final int getWidth() {
-    return image.getWidth();
-  }
-
   // This is expensive and should be used very sparingly.
   protected int getLuminance(int x, int y) {
     image.getRGB(pixelHolder, 0, getWidth(), x, y, 1, 1);
