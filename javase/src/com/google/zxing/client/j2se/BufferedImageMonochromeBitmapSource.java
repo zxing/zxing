@@ -57,17 +57,20 @@ public final class BufferedImageMonochromeBitmapSource extends BaseMonochromeBit
    * @param image image to decode a region of
    * @param left x coordinate of leftmost pixels to decode
    * @param top y coordinate of topmost pixels to decode
-   * @param right one more than the x coordinate of rightmost pixels to decode. That is, we will decode
+   * @param right one more than the x coordinate of rightmost pixels to decode, i.e. we will decode
    *  pixels whose x coordinate is in [left,right)
    * @param bottom likewise, one more than the y coordinate of the bottommost pixels to decode
    */
-  public BufferedImageMonochromeBitmapSource(BufferedImage image, int left, int top, int right, int bottom) {
-    super(bottom - top, right - left);
+  public BufferedImageMonochromeBitmapSource(BufferedImage image, int left, int top, int right,
+      int bottom) {
+    super(right - left, bottom - top);
     this.image = image;
     int sourceHeight = image.getHeight();
     int sourceWidth = image.getWidth();
-    if (left < 0 || top < 0 || right > sourceWidth || bottom > sourceHeight || right <= left || bottom <= top) {
-      throw new IllegalArgumentException("Invalid bounds: (" + top + ',' + left + ") (" + right + ',' + bottom + ')');
+    if (left < 0 || top < 0 || right > sourceWidth || bottom > sourceHeight || right <= left ||
+        bottom <= top) {
+      throw new IllegalArgumentException("Invalid bounds: (" + top + ',' + left + ") (" + right +
+          ',' + bottom + ')');
     }
     this.left = left;
     this.top = top;
@@ -75,7 +78,8 @@ public final class BufferedImageMonochromeBitmapSource extends BaseMonochromeBit
 
   /**
    * @return underlying {@link BufferedImage} behind this instance. Note that even if this instance
-   *  only uses a subset of the full image, the returned value here represents the entire backing image.
+   *  only uses a subset of the full image, the returned value here represents the entire backing
+   *  image.
    */
   public BufferedImage getImage() {
     return image;
@@ -88,9 +92,11 @@ public final class BufferedImageMonochromeBitmapSource extends BaseMonochromeBit
     }
     int sourceWidth = image.getWidth();
     int sourceHeight = image.getHeight();
+
     // 90 degrees counterclockwise:
     AffineTransform transform = new AffineTransform(0.0, -1.0, 1.0, 0.0, 0.0, sourceWidth);
     BufferedImageOp op = new AffineTransformOp(transform, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+
     // Note width/height are flipped since we are rotating 90 degrees:
     BufferedImage rotatedImage = new BufferedImage(sourceHeight, sourceWidth, image.getType());
     op.filter(image, rotatedImage);

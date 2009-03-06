@@ -35,7 +35,7 @@ public abstract class BaseMonochromeBitmapSource implements MonochromeBitmapSour
   private int lastArgument;
   private int[] luminances;
 
-  protected BaseMonochromeBitmapSource(int height, int width) {
+  protected BaseMonochromeBitmapSource(int width, int height) {
     this.height = height;
     this.width = width;
     blackPoint = 0x7F;

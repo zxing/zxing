@@ -39,7 +39,7 @@ public final class RGBMonochromeBitmapSource extends BaseMonochromeBitmapSource 
   }
 
   public RGBMonochromeBitmapSource(Bitmap bitmap) {
-    super(bitmap.getHeight(), bitmap.getWidth());
+    super(bitmap.getWidth(), bitmap.getHeight());
     int width = bitmap.getWidth();
     int height = bitmap.getHeight();
     int[] pixels = new int[width * height];

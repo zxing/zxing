@@ -36,7 +36,7 @@ public final class AWTImageMonochromeBitmapSource extends BaseMonochromeBitmapSo
   private final int[] pixels;
 
   public AWTImageMonochromeBitmapSource(Image image) throws ReaderException {
-    super(image.getHeight(null), image.getWidth(null));
+    super(image.getWidth(null), image.getHeight(null));
     int height = getHeight();
     int width = getWidth();
     pixels = new int[height * width];
