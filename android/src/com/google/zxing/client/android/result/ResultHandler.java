@@ -17,6 +17,8 @@
 package com.google.zxing.client.android.result;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.Contacts;
@@ -279,7 +281,15 @@ public abstract class ResultHandler {
 
   private void launchIntent(Intent intent) {
     if (intent != null) {
-      mActivity.startActivity(intent);
+      try {
+        mActivity.startActivity(intent);
+      } catch (ActivityNotFoundException e) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
+        builder.setTitle(mActivity.getString(R.string.app_name));
+        builder.setMessage(mActivity.getString(R.string.msg_intent_failed));
+        builder.setPositiveButton(R.string.button_ok, null);
+        builder.show();
+      }
     }
   }
 

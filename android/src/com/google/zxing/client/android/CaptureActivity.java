@@ -95,6 +95,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private boolean mCopyToClipboard;
   private boolean mScanIntent;
   private String mDecodeMode;
+  private String versionName;
 
   private final OnCompletionListener mBeepListener = new BeepListener();
 
@@ -229,7 +230,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       }
       case ABOUT_ID:
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.title_about);
+        builder.setTitle(getString(R.string.title_about) + versionName);
         builder.setMessage(getString(R.string.msg_about) + "\n\n" + getString(R.string.zxing_url));
         builder.setIcon(R.drawable.zxing_icon);
         builder.setPositiveButton(R.string.button_open_browser, mAboutListener);
@@ -399,6 +400,9 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     try {
       PackageInfo info = getPackageManager().getPackageInfo(PACKAGE_NAME, 0);
       int currentVersion = info.versionCode;
+      // Since we're paying to talk to the PackageManager anyway, it makes sense to cache the app
+      // version name here for display in the about box later.
+      this.versionName = info.versionName;
       SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
       int lastVersion = prefs.getInt(PreferencesActivity.KEY_HELP_VERSION_SHOWN, 0);
       if (currentVersion > lastVersion) {
