@@ -51,6 +51,7 @@ import java.util.List;
 public final class SearchBookContentsActivity extends Activity {
 
   private static final String TAG = "SearchBookContents";
+  private static final String USER_AGENT = "ZXing/1.2 (Android)";
 
   private NetworkThread mNetworkThread;
   private String mISBN;
@@ -58,7 +59,6 @@ public final class SearchBookContentsActivity extends Activity {
   private Button mQueryButton;
   private ListView mResultListView;
   private TextView mHeaderView;
-  private String mUserAgent;
 
   @Override
   public void onCreate(Bundle icicle) {
@@ -96,8 +96,6 @@ public final class SearchBookContentsActivity extends Activity {
     mHeaderView = (TextView) factory.inflate(R.layout.search_book_contents_header,
         mResultListView, false);
     mResultListView.addHeaderView(mHeaderView);
-
-    mUserAgent = getString(R.string.zxing_user_agent);
   }
 
   @Override
@@ -155,7 +153,7 @@ public final class SearchBookContentsActivity extends Activity {
     if (mNetworkThread == null) {
       String query = mQueryTextView.getText().toString();
       if (query != null && query.length() > 0) {
-        mNetworkThread = new NetworkThread(mISBN, query, mHandler, mUserAgent);
+        mNetworkThread = new NetworkThread(mISBN, query, mHandler);
         mNetworkThread.start();
         mHeaderView.setText(R.string.msg_sbc_searching_book);
         mResultListView.setAdapter(null);
@@ -229,13 +227,11 @@ public final class SearchBookContentsActivity extends Activity {
     private final String mISBN;
     private final String mQuery;
     private final Handler mHandler;
-    private final String mUserAgent;
 
-    NetworkThread(String isbn, String query, Handler handler, String userAgent) {
+    NetworkThread(String isbn, String query, Handler handler) {
       mISBN = isbn;
       mQuery = query;
       mHandler = handler;
-      mUserAgent = userAgent;
     }
 
     @Override
@@ -249,7 +245,7 @@ public final class SearchBookContentsActivity extends Activity {
             "&jscmd=SearchWithinVolume2&q=" + mQuery, null);
         HttpUriRequest get = new HttpGet(uri);
         get.setHeader("cookie", getCookie(uri.toString()));
-        client = AndroidHttpClient.newInstance(mUserAgent);
+        client = AndroidHttpClient.newInstance(USER_AGENT);
         HttpResponse response = client.execute(get);
         if (response.getStatusLine().getStatusCode() == 200) {
           HttpEntity entity = response.getEntity();
@@ -286,7 +282,7 @@ public final class SearchBookContentsActivity extends Activity {
       if (cookie == null || cookie.length() == 0) {
         Log.v(TAG, "Book Search cookie was missing or expired");
         HttpUriRequest head = new HttpHead(url);
-        AndroidHttpClient client = AndroidHttpClient.newInstance(mUserAgent);
+        AndroidHttpClient client = AndroidHttpClient.newInstance(USER_AGENT);
         try {
           HttpResponse response = client.execute(head);
           if (response.getStatusLine().getStatusCode() == 200) {
