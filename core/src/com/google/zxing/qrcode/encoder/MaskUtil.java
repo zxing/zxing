@@ -136,29 +136,43 @@ public final class MaskUtil {
 
   // Return the mask bit for "getMaskPattern" at "x" and "y". See 8.8 of JISX0510:2004 for mask
   // pattern conditions.
-  public static int getDataMaskBit(int maskPattern, int x, int y) {
+  public static boolean getDataMaskBit(int maskPattern, int x, int y) {
     if (!QRCode.isValidMaskPattern(maskPattern)) {
       throw new IllegalArgumentException("Invalid mask pattern");
     }
+    int intermediate, temp;
     switch (maskPattern) {
       case 0:
-        return ((y + x) % 2 == 0) ? 1 : 0;
+        intermediate = (y + x) & 0x1;
+        break;
       case 1:
-        return (y % 2 == 0) ? 1 : 0;
+        intermediate = y & 0x1;
+        break;
       case 2:
-        return (x % 3 == 0) ? 1 : 0;
+        intermediate = x % 3;
+        break;
       case 3:
-        return ((y + x) % 3 == 0) ? 1 : 0;
+        intermediate = (y + x) % 3;
+        break;
       case 4:
-        return (((y / 2) + (x / 3)) % 2 == 0) ? 1 : 0;
+        intermediate = ((y >>> 1) + (x / 3)) & 0x1;
+        break;
       case 5:
-        return (((y * x) % 2) + ((y * x) % 3) == 0) ? 1 : 0;
+        temp = y * x;
+        intermediate = (temp & 0x1) + (temp % 3);
+        break;
       case 6:
-        return ((((y * x) % 2) + ((y * x) % 3)) % 2 == 0) ? 1 : 0;
+        temp = y * x;
+        intermediate = (((temp & 0x1) + (temp % 3)) & 0x1);
+        break;
       case 7:
-        return ((((y * x) % 3) + ((y + x) % 2)) % 2 == 0) ? 1 : 0;
+        temp = y * x;
+        intermediate = (((temp % 3) + ((y + x) & 0x1)) & 0x1);
+        break;
+      default:
+        throw new IllegalArgumentException("Invalid mask pattern: " + maskPattern);
     }
-    throw new IllegalArgumentException("invalid mask pattern: " + maskPattern);
+    return intermediate == 0;
   }
 
   // Helper function for applyMaskPenaltyRule1. We need this for doing this calculation in both
