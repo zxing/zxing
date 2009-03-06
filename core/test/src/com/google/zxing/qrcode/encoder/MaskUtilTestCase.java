@@ -196,7 +196,7 @@ public final class MaskUtilTestCase extends TestCase {
                                          int[][] expected) {
     for (int x = 0; x < 6; ++x) {
       for (int y = 0; y < 6; ++y) {
-        if (expected[y][x] !=
+        if ((expected[y][x] == 1) !=
             MaskUtil.getDataMaskBit(maskPattern, x, y)) {
           return false;
         }
