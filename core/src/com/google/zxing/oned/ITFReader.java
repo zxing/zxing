@@ -88,7 +88,11 @@ public final class ITFReader extends AbstractOneDReader {
 
     String resultString = result.toString();
 
-    int[] allowedLengths = (int[]) hints.get(DecodeHintType.ALLOWED_LENGTHS);
+    int[] allowedLengths = null;
+    if (hints != null) {
+      allowedLengths = (int[]) hints.get(DecodeHintType.ALLOWED_LENGTHS);
+
+    }
     if (allowedLengths == null) {
       allowedLengths = DEFAULT_ALLOWED_LENGTHS;
     }
@@ -245,32 +249,27 @@ public final class ITFReader extends AbstractOneDReader {
     // For convenience, reverse the row and then
     // search from 'the start' for the end block
     row.reverse();
-
-    int endStart = skipWhiteSpace(row);
-    int[] endPattern;
     try {
-      endPattern = findGuardPattern(row, endStart, END_PATTERN_REVERSED);
-    } catch (ReaderException e) {
-      // Put our row of data back the right way before throwing
+      int endStart = skipWhiteSpace(row);
+      int[] endPattern = findGuardPattern(row, endStart, END_PATTERN_REVERSED);
+
+      // The start & end patterns must be pre/post fixed by a quiet zone. This
+      // zone must be at least 10 times the width of a narrow line.
+      // ref: http://www.barcode-1.net/i25code.html
+      validateQuietZone(row, endPattern[0]);
+
+      // Now recalc the indicies of where the 'endblock' starts & stops to
+      // accomodate
+      // the reversed nature of the search
+      int temp = endPattern[0];
+      endPattern[0] = row.getSize() - endPattern[1];
+      endPattern[1] = row.getSize() - temp;
+
+      return endPattern;
+    } finally {
+      // Put the row back the righ way.
       row.reverse();
-      throw e;
     }
-
-    // The start & end patterns must be pre/post fixed by a quiet zone. This
-    // zone must be at least 10 times the width of a narrow line.
-    // ref: http://www.barcode-1.net/i25code.html
-    validateQuietZone(row, endPattern[0]);
-
-    // Now recalc the indicies of where the 'endblock' starts & stops to
-    // accomodate
-    // the reversed nature of the search
-    int temp = endPattern[0];
-    endPattern[0] = row.getSize() - endPattern[1];
-    endPattern[1] = row.getSize() - temp;
-
-    // Put the row back the righ way.
-    row.reverse();
-    return endPattern;
   }
 
   /**
