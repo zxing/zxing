@@ -57,8 +57,7 @@ public final class MultiFormatOneDReader extends AbstractOneDReader {
       readers.addElement(new MultiFormatUPCEANReader(hints));
       readers.addElement(new Code39Reader());
       readers.addElement(new Code128Reader());
-      // TODO: Add ITFReader once it is validated as production ready, and tested for performance.
-      //readers.addElement(new ITFReader());
+      readers.addElement(new ITFReader());
     }
   }
 

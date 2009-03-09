@@ -98,7 +98,8 @@ public final class MultiFormatReader implements Reader {
               possibleFormats.contains(BarcodeFormat.EAN_13) ||
               possibleFormats.contains(BarcodeFormat.EAN_8) ||
               possibleFormats.contains(BarcodeFormat.CODE_39) ||
-              possibleFormats.contains(BarcodeFormat.CODE_128);
+              possibleFormats.contains(BarcodeFormat.CODE_128) ||
+              possibleFormats.contains(BarcodeFormat.ITF);
       // Put 1D readers upfront in "normal" mode
       if (addOneDReader && !tryHarder) {
         readers.addElement(new MultiFormatOneDReader(hints));
