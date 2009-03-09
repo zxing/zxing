@@ -21,14 +21,14 @@ import com.google.zxing.MultiFormatReader;
 import com.google.zxing.common.AbstractBlackBoxTestCase;
 
 /**
- * @author kevin.osullivan@sita.aero
+ * @author dswitkin@google.com (Daniel Switkin)
  */
-public final class ITFBlackBox1TestCase extends AbstractBlackBoxTestCase {
+public final class ITFBlackBox2TestCase extends AbstractBlackBoxTestCase {
 
-  public ITFBlackBox1TestCase() {
-    super("test/data/blackbox/itf-1", new MultiFormatReader(), BarcodeFormat.ITF);
-    addTest(9, 12, 0.0f);
-    addTest(8, 12, 180.0f);
+  public ITFBlackBox2TestCase() {
+    super("test/data/blackbox/itf-2", new MultiFormatReader(), BarcodeFormat.ITF);
+    addTest(8, 9, 0.0f);
+    addTest(8, 9, 180.0f);
   }
 
 }
