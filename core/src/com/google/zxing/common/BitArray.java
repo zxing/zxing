@@ -133,11 +133,7 @@ public final class BitArray {
    * Reverses all bits in the array.
    */
   public void reverse() {
-    int[] newBits = makeArray(size);
-    int max = newBits.length;
-    for (int i = 0; i < max; i++) {
-      newBits[i] = 0;
-    }
+    int[] newBits = new int[bits.length];
     int size = this.size;
     for (int i = 0; i < size; i++) {
       if (get(size - i - 1)) {
@@ -158,7 +154,7 @@ public final class BitArray {
   public String toString() {
     StringBuffer result = new StringBuffer(size);
     for (int i = 0; i < size; i++) {
-      if (i % 8 == 0) {
+      if ((i & 0x07) == 0) {
         result.append(' ');
       }
       result.append(get(i) ? 'X' : '.');
