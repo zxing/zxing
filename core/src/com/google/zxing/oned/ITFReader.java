@@ -116,7 +116,7 @@ public final class ITFReader extends AbstractOneDReader {
         resultString,
         null, // no natural byte representation for these barcodes
         new ResultPoint[] { new GenericResultPoint(startRange[1], (float) rowNumber),
-                            new GenericResultPoint(startRange[0], (float) rowNumber)},
+                            new GenericResultPoint(endRange[0], (float) rowNumber)},
         BarcodeFormat.ITF);
   }
 
