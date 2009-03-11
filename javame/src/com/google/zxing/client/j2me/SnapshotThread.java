@@ -91,10 +91,31 @@ final class SnapshotThread implements Runnable {
   }
 
   private byte[] takeSnapshot() throws MediaException {
+
+    // Check this property, present on some Nokias?
+    String supportsVideoCapture = System.getProperty("supports.video.capture");
+    if ("false".equals(supportsVideoCapture)) {
+      throw new MediaException("supports.video.capture is false");
+    }
+
+    String bestEncoding = null;
+    String videoSnapshotEncodings = System.getProperty("video.snapshot.encodings");
+    if (videoSnapshotEncodings != null) {
+      // We know explicitly what the camera supports; see if PNG is among them since
+      // Image.createImage() should always support it
+      int pngEncodingStart = videoSnapshotEncodings.indexOf("encoding=png");
+      if (pngEncodingStart >= 0) {
+        int space = videoSnapshotEncodings.indexOf(' ', pngEncodingStart);
+        bestEncoding = space >= 0 ?
+            videoSnapshotEncodings.substring(pngEncodingStart, space) : 
+            videoSnapshotEncodings.substring(pngEncodingStart);
+      }
+    }
+
     VideoControl videoControl = zXingMIDlet.getVideoControl();
     byte[] snapshot = null;
     try {
-      snapshot = videoControl.getSnapshot(null);
+      snapshot = videoControl.getSnapshot(bestEncoding);
     } catch (MediaException me) {
     }
     if (snapshot == null) {
