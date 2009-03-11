@@ -210,5 +210,15 @@
   - Added the ability to import and export multiple phone numbers and emails for a single contact
   - Native QR Encoding added to the ZXing library - no need to send request to ChartServer
   - New ITF barcode format support from Kevin O'Sullivan at SITA
-  - New HTML help system for the Android client.
+  - New HTML help system for the Android client
   - New web-based QR Code encoder at zxing.appspot.com based on GWT
+
+1.3 (11 March 2009)
+  - ITF format scanning now on by default
+  - Many new blackbox test images
+  - Better QR Code detection
+  - Better Android Intent handling
+  - Improved email parsing
+  - New Android Integration module to make life easier for third party ZXing users
+  - More robust URI parsing
+  - Many other small improvements and bug fixes
