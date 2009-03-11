@@ -20,8 +20,8 @@ version to be published. The next versionCode will be 7, regardless of whether t
 versionName is 2.31, 2.4, or 3.0. -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.google.zxing.client.android"
-          android:versionName="2.6b1"
-          android:versionCode="12">
+          android:versionName="2.6"
+          android:versionCode="13">
   <application android:icon="@drawable/launcher_icon"
                android:label="@string/app_name">
     <activity android:name=".CaptureActivity"
@@ -40,6 +40,13 @@ versionName is 2.31, 2.4, or 3.0. -->
         <!-- For compatibility only - do not use in new code, this will go away! -->
         <action android:name="com.android.barcodes.SCAN"/>
         <category android:name="android.intent.category.DEFAULT"/>
+      </intent-filter>
+      <!-- Allow web apps to launch Barcode Scanner by linking to http://zxing.appspot.com/scan. -->
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW"/>
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE"/>
+        <data android:scheme="http" android:host="zxing.appspot.com" android:path="/scan" />
       </intent-filter>
     </activity>
     <activity android:name="PreferencesActivity"
