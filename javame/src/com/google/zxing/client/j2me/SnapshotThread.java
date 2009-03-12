@@ -38,6 +38,7 @@ final class SnapshotThread implements Runnable {
   private final Object waitLock;
   private volatile boolean done;
   private final MultimediaManager multimediaManager;
+  private String bestEncoding;
 
   SnapshotThread(ZXingMIDlet zXingMIDlet) {
     this.zXingMIDlet = zXingMIDlet;
@@ -92,30 +93,12 @@ final class SnapshotThread implements Runnable {
 
   private byte[] takeSnapshot() throws MediaException {
 
-    // Check this property, present on some Nokias?
-    String supportsVideoCapture = System.getProperty("supports.video.capture");
-    if ("false".equals(supportsVideoCapture)) {
-      throw new MediaException("supports.video.capture is false");
-    }
-
-    String bestEncoding = null;
-    String videoSnapshotEncodings = System.getProperty("video.snapshot.encodings");
-    if (videoSnapshotEncodings != null) {
-      // We know explicitly what the camera supports; see if PNG is among them since
-      // Image.createImage() should always support it
-      int pngEncodingStart = videoSnapshotEncodings.indexOf("encoding=png");
-      if (pngEncodingStart >= 0) {
-        int space = videoSnapshotEncodings.indexOf(' ', pngEncodingStart);
-        bestEncoding = space >= 0 ?
-            videoSnapshotEncodings.substring(pngEncodingStart, space) : 
-            videoSnapshotEncodings.substring(pngEncodingStart);
-      }
-    }
+    String bestEncoding = guessBestEncoding();
 
     VideoControl videoControl = zXingMIDlet.getVideoControl();
     byte[] snapshot = null;
     try {
-      snapshot = videoControl.getSnapshot(bestEncoding);
+      snapshot = videoControl.getSnapshot("".equals(bestEncoding) ? null : bestEncoding);
     } catch (MediaException me) {
     }
     if (snapshot == null) {
@@ -127,6 +110,31 @@ final class SnapshotThread implements Runnable {
       }
     }
     return snapshot;
+  }
+
+  private synchronized String guessBestEncoding() throws MediaException {
+    if (bestEncoding == null) {
+      // Check this property, present on some Nokias?
+      String supportsVideoCapture = System.getProperty("supports.video.capture");
+      if ("false".equals(supportsVideoCapture)) {
+        throw new MediaException("supports.video.capture is false");
+      }
+
+      bestEncoding = "";
+      String videoSnapshotEncodings = System.getProperty("video.snapshot.encodings");
+      if (videoSnapshotEncodings != null) {
+        // We know explicitly what the camera supports; see if PNG is among them since
+        // Image.createImage() should always support it
+        int pngEncodingStart = videoSnapshotEncodings.indexOf("encoding=png");
+        if (pngEncodingStart >= 0) {
+          int space = videoSnapshotEncodings.indexOf(' ', pngEncodingStart);
+          bestEncoding = space >= 0 ?
+              videoSnapshotEncodings.substring(pngEncodingStart, space) :
+              videoSnapshotEncodings.substring(pngEncodingStart);
+        }
+      }
+    }
+    return bestEncoding;
   }
 
 }
