@@ -7,6 +7,10 @@ handlers:
 - url: /generator
   script: redirect.py
 
+- url: /scan
+  static_files: site/scan.html
+  upload: site/scan.html
+
 - url: (.*)/
   static_files: site\1/index.html
   upload: site/index.html
