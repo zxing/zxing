@@ -44,7 +44,7 @@ public final class MonochromeRectangleDetector {
    * <p>Detects a rectangular region of black and white -- mostly black -- with a region of mostly
    * white, in an image.</p>
    *
-   * @return {@link ResultPoint[]} describing the corners of the rectangular region. The first and last points
+   * @return {@link ResultPoint}[] describing the corners of the rectangular region. The first and last points
    *  are opposed on the diagonal, as are the second and third. The first point will be the topmost point and
    *  the last, the bottommost. The second point will be leftmost and the third, the rightmost
    * @throws ReaderException if no Data Matrix Code can be found
