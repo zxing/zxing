@@ -112,7 +112,7 @@ namespace qrcode {
       versionBits = 0;
       for (int j = 5; j >= 0; j--) {
         int iMin = dimension - 11;
-        for (int i = dimension - 11; i >= iMin; i--) {
+        for (int i = dimension - 9; i >= iMin; i--) {
           versionBits = copyBit(i, j, versionBits);
         }
       }
