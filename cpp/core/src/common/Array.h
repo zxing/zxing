@@ -37,7 +37,7 @@ namespace common {
   protected:
   public:
     valarray<T> values_;
-    Array(size_t n) : Counted(), values_(n) { }
+    Array(size_t n) : Counted(), values_(T(), n) { }
     Array(T *ts, size_t n) : Counted(), values_(ts, n) { }
     Array(T v, size_t n) : Counted(), values_(v, n) { }
     Array(valarray<T> &v) : Counted(), values_(v) { }
