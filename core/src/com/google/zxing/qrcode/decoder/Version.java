@@ -121,6 +121,7 @@ public final class Version {
       int bitsDifference = FormatInformation.numBitsDiffering(versionBits, targetVersion);
       if (bitsDifference < bestDifference) {
         bestVersion = i + 7;
+        bestDifference = bitsDifference;
       }
     }
     // We can tolerate up to 3 bits of error since no two version info codewords will
