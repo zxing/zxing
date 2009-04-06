@@ -159,7 +159,7 @@ public final class MonochromeRectangleDetector {
    */
   private int[] blackWhiteRange(int fixedDimension, int maxWhiteRun, int minDim, int maxDim, boolean horizontal) {
 
-    int center = (minDim + maxDim) / 2;
+    int center = (minDim + maxDim) >> 1;
 
     BitArray rowOrColumn = horizontal ? image.getBlackRow(fixedDimension, null, 0, image.getWidth())
                                       : image.getBlackColumn(fixedDimension, null, 0, image.getHeight());
@@ -176,7 +176,7 @@ public final class MonochromeRectangleDetector {
         } while (start >= minDim && !rowOrColumn.get(start));
         int whiteRunSize = whiteRunStart - start;
         if (start < minDim || whiteRunSize > maxWhiteRun) {
-          start = whiteRunStart + 1; // back up
+          start = whiteRunStart;
           break;
         }
       }
@@ -195,18 +195,14 @@ public final class MonochromeRectangleDetector {
         } while (end < maxDim && !rowOrColumn.get(end));
         int whiteRunSize = end - whiteRunStart;
         if (end >= maxDim || whiteRunSize > maxWhiteRun) {
-          end = whiteRunStart - 1;
+          end = whiteRunStart;
           break;
         }
       }
     }
     end--;
 
-    if (end > start) {
-      return new int[] { start, end };
-    } else {
-      return null;
-    }
+    return end > start ? new int[]{start, end} : null;
   }
 
 }
