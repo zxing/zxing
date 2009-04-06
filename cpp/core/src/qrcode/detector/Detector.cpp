@@ -40,7 +40,7 @@ namespace qrcode {
     image_(image) { }
     
     Ref<DetectorResult> Detector::detect() {
-      if (!BlackPointEstimationMethod_2D == image_->getLastEstimationMethod()) {
+      if (BlackPointEstimationMethod_2D != image_->getLastEstimationMethod()) {
         image_->estimateBlackPoint(BlackPointEstimationMethod_2D, 0);
       }
       
