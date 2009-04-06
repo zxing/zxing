@@ -53,12 +53,12 @@ namespace reedsolomon {
       if (x >= 0x100) {
         x ^= primitive;
       }
+    }
       
-      // log(0) == 0, but should never be used
-      log_[0] = 0;
-      for (int i = 0; i < 255; i++) {
-        log_[exp_[i]] = i;
-      }
+    // log(0) == 0, but should never be used
+    log_[0] = 0;
+    for (int i = 0; i < 255; i++) {
+      log_[exp_[i]] = i;
     }
   }
   
