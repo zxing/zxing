@@ -143,16 +143,11 @@ public final class Detector {
 
     // The top right point is actually the corner of a module, which is one of the two black modules
     // adjacent to the white module at the top right. Tracing to that corner from either the top left
-    // or bottom right should work here, but, one will be more reliable since it's traced straight
-    // up or across, rather than at a slight angle. We use dot products to figure out which is
-    // better to use:
-    int dimension;
-    if (GenericResultPoint.crossProductZ(bottomLeft, bottomRight, topRight) <
-        GenericResultPoint.crossProductZ(topRight, topLeft, bottomLeft)) {
-      dimension = transitionsBetween(topLeft, topRight).getTransitions();
-    } else {
-      dimension = transitionsBetween(bottomRight, topRight).getTransitions();
-    }
+    // or bottom right should work here. The number of transitions could be higher than it should be
+    // due to noise. So we try both and take the min.
+
+    int dimension = Math.min(transitionsBetween(topLeft, topRight).getTransitions(), 
+                             transitionsBetween(bottomRight, topRight).getTransitions());
     dimension += 2;
 
     BitMatrix bits = sampleGrid(image, topLeft, bottomLeft, bottomRight, dimension);

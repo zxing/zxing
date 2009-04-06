@@ -141,11 +141,14 @@ final class DecodedBitStreamParser {
 	    } else if (oneByte == 231) {  // Latch to Base 256 encodation
 	    	return BASE256_ENCODE;
 	    } else if (oneByte == 232) {  // FNC1
-	    	throw ReaderException.getInstance();
+	    	//throw ReaderException.getInstance();
+        // Ignore this symbol for now
 	    } else if (oneByte == 233) {  // Structured Append
-	    	throw ReaderException.getInstance();
+	    	//throw ReaderException.getInstance();
+        // Ignore this symbol for now
 	    } else if (oneByte == 234) {  // Reader Programming
-	    	throw ReaderException.getInstance();
+	    	//throw ReaderException.getInstance();
+        // Ignore this symbol for now
 	    } else if (oneByte == 235) {  // Upper Shift (shift to Extended ASCII)
 	    	upperShift = true;
 	    } else if (oneByte == 236) {  // 05 Macro
@@ -162,7 +165,8 @@ final class DecodedBitStreamParser {
 	    	return EDIFACT_ENCODE;
 	    } else if (oneByte == 241) {  // ECI Character
 	    	// TODO(bbrown): I think we need to support ECI
-	    	throw ReaderException.getInstance();
+	    	//throw ReaderException.getInstance();
+        // Ignore this symbol for now
 	    } else if (oneByte >= 242) {  // Not to be used in ASCII encodation
 	    	throw ReaderException.getInstance();
 	    }
