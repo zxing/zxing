@@ -45,8 +45,6 @@ public abstract class BaseMonochromeBitmapSource implements MonochromeBitmapSour
 
   private void initLuminances() {
     if (luminances == null) {
-      int width = getWidth();
-      int height = getHeight();
       int max = width > height ? width : height;
       luminances = new int[max];
     }
@@ -135,7 +133,7 @@ public abstract class BaseMonochromeBitmapSource implements MonochromeBitmapSour
           histogram[luminances[x] >> LUMINANCE_SHIFT]++;
         }
       } else {
-        throw new IllegalArgumentException("Unknown method: " + method);
+        throw new IllegalArgumentException("Unknown method");
       }
       blackPoint = BlackPointEstimator.estimate(histogram) << LUMINANCE_SHIFT;
       lastMethod = method;

@@ -21,6 +21,7 @@ import com.google.zxing.MultiFormatReader;
 import com.google.zxing.Reader;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
+import com.google.zxing.BarcodeFormat;
 import com.google.zxing.client.j2se.BufferedImageMonochromeBitmapSource;
 import com.google.zxing.client.result.ParsedResult;
 import com.google.zxing.client.result.ResultParser;
@@ -63,6 +64,7 @@ import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Vector;
 import java.util.logging.Logger;
 
 /**
@@ -80,8 +82,19 @@ public final class DecodeServlet extends HttpServlet {
   static final Hashtable<DecodeHintType, Object> HINTS;
 
   static {
-    HINTS = new Hashtable<DecodeHintType, Object>(3);
+    HINTS = new Hashtable<DecodeHintType, Object>(5);
     HINTS.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
+    Vector possibleFormats = new Vector();
+    possibleFormats.add(BarcodeFormat.UPC_A);
+    possibleFormats.add(BarcodeFormat.UPC_E);
+    possibleFormats.add(BarcodeFormat.EAN_8);
+    possibleFormats.add(BarcodeFormat.EAN_13);
+    possibleFormats.add(BarcodeFormat.CODE_39);
+    possibleFormats.add(BarcodeFormat.CODE_128);
+    possibleFormats.add(BarcodeFormat.ITF);
+    possibleFormats.add(BarcodeFormat.QR_CODE);
+    possibleFormats.add(BarcodeFormat.DATAMATRIX);
+    HINTS.put(DecodeHintType.POSSIBLE_FORMATS, possibleFormats);
   }
 
   private HttpClient client;

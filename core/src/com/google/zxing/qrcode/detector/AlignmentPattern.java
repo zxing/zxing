@@ -49,11 +49,11 @@ public final class AlignmentPattern implements ResultPoint {
    * position and size -- meaning, it is at nearly the same center with nearly the same size.</p>
    */
   boolean aboutEquals(float moduleSize, float i, float j) {
-    return
-        Math.abs(i - posY) <= moduleSize &&
-            Math.abs(j - posX) <= moduleSize &&
-            (Math.abs(moduleSize - estimatedModuleSize) <= 1.0f ||
-                Math.abs(moduleSize - estimatedModuleSize) / estimatedModuleSize <= 0.1f);
+    if (Math.abs(i - posY) <= moduleSize && Math.abs(j - posX) <= moduleSize) {
+      float moduleSizeDiff = Math.abs(moduleSize - estimatedModuleSize);
+      return moduleSizeDiff <= 1.0f || moduleSizeDiff / estimatedModuleSize <= 1.0f;
+    }
+    return false;
   }
 
 }
