@@ -16,8 +16,6 @@
 
 package com.google.zxing.qrcode.decoder;
 
-import com.google.zxing.ReaderException;
-
 /**
  * <p>Encapsulates a QR Code's format information, including the data mask used and
  * error correction level.</p>
