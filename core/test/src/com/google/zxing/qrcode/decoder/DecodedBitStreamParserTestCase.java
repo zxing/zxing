@@ -34,7 +34,8 @@ public final class DecodedBitStreamParserTestCase extends TestCase {
     builder.write(0xF1, 8);
     builder.write(0xF2, 8);
     builder.write(0xF3, 8);
-    String result = DecodedBitStreamParser.decode(builder.toByteArray(), Version.getVersionForNumber(1)).getText();
+    String result = DecodedBitStreamParser.decode(builder.toByteArray(),
+        Version.getVersionForNumber(1)).getText();
     assertEquals("\u00f1\u00f2\u00f3", result);
   }
 
@@ -45,7 +46,8 @@ public final class DecodedBitStreamParserTestCase extends TestCase {
     builder.write(0xA1, 8);
     builder.write(0xA2, 8);
     builder.write(0xA3, 8);
-    String result = DecodedBitStreamParser.decode(builder.toByteArray(), Version.getVersionForNumber(1)).getText();
+    String result = DecodedBitStreamParser.decode(builder.toByteArray(),
+        Version.getVersionForNumber(1)).getText();
     assertEquals("\uff61\uff62\uff63", result);
   }
 
@@ -58,7 +60,8 @@ public final class DecodedBitStreamParserTestCase extends TestCase {
     builder.write(0xA1, 8);
     builder.write(0xA2, 8);
     builder.write(0xA3, 8);
-    String result = DecodedBitStreamParser.decode(builder.toByteArray(), Version.getVersionForNumber(1)).getText();
+    String result = DecodedBitStreamParser.decode(builder.toByteArray(),
+        Version.getVersionForNumber(1)).getText();
     assertEquals("\u00ed\u00f3\u00fa", result);
   }
 

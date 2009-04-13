@@ -187,7 +187,8 @@ public final class Code128Reader extends AbstractOneDReader {
           int bestVariance = MAX_AVG_VARIANCE;
           int bestMatch = -1;
           for (int startCode = CODE_START_A; startCode <= CODE_START_C; startCode++) {
-            int variance = patternMatchVariance(counters, CODE_PATTERNS[startCode], MAX_INDIVIDUAL_VARIANCE);
+            int variance = patternMatchVariance(counters, CODE_PATTERNS[startCode],
+                MAX_INDIVIDUAL_VARIANCE);
             if (variance < bestVariance) {
               bestVariance = variance;
               bestMatch = startCode;
@@ -195,7 +196,8 @@ public final class Code128Reader extends AbstractOneDReader {
           }
           if (bestMatch >= 0) {
             // Look for whitespace before start pattern, >= 50% of width of start pattern            
-            if (row.isRange(Math.max(0, patternStart - (i - patternStart) / 2), patternStart, false)) {
+            if (row.isRange(Math.max(0, patternStart - (i - patternStart) / 2), patternStart,
+                false)) {
               return new int[]{patternStart, i, bestMatch};
             }
           }
@@ -228,7 +230,7 @@ public final class Code128Reader extends AbstractOneDReader {
         bestMatch = d;
       }
     }
-    // TODO We're overlooking the fact that the STOP pattern has 7 values, not 6
+    // TODO We're overlooking the fact that the STOP pattern has 7 values, not 6.
     if (bestMatch >= 0) {
       return bestMatch;
     } else {
@@ -313,8 +315,8 @@ public final class Code128Reader extends AbstractOneDReader {
           } else if (code < 96) {
             result.append((char) (code - 64));
           } else {
-            // Don't let CODE_STOP, which always appears, affect whether whether we think the last code
-            // was printable or not
+            // Don't let CODE_STOP, which always appears, affect whether whether we think the last
+            // code was printable or not.
             if (code != CODE_STOP) {
               lastCharacterWasPrintable = false;
             }
@@ -416,13 +418,14 @@ public final class Code128Reader extends AbstractOneDReader {
 
     }
 
-    // Check for ample whitespice following pattern, but, to do this we first need to remember that we
-    // fudged decoding CODE_STOP since it actually has 7 bars, not 6. There is a black bar left to read off.
-    // Would be slightly better to properly read. Here we just skip it:
+    // Check for ample whitespice following pattern, but, to do this we first need to remember that
+    // we fudged decoding CODE_STOP since it actually has 7 bars, not 6. There is a black bar left
+    // to read off. Would be slightly better to properly read. Here we just skip it:
     while (row.get(nextStart)) {
       nextStart++;
     }
-    if (!row.isRange(nextStart, Math.min(row.getSize(), nextStart + (nextStart - lastStart) / 2), false)) {
+    if (!row.isRange(nextStart, Math.min(row.getSize(), nextStart + (nextStart - lastStart) / 2),
+        false)) {
       throw ReaderException.getInstance();
     }
 
@@ -435,8 +438,8 @@ public final class Code128Reader extends AbstractOneDReader {
 
     // Need to pull out the check digits from string
     int resultLength = result.length();
-    // Only bother if, well, the result had at least one character, and if the checksum digit happened
-    // to be a printable character. If it was just interpreted as a control code, nothing to remove
+    // Only bother if the result had at least one character, and if the checksum digit happened to
+    // be a printable character. If it was just interpreted as a control code, nothing to remove.
     if (resultLength > 0 && lastCharacterWasPrintable) {
       if (codeSet == CODE_CODE_C) {
         result.delete(resultLength - 2, resultLength);
