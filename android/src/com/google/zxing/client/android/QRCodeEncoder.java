@@ -132,9 +132,10 @@ public final class QRCodeEncoder {
     } else if (type.equals(Contents.Type.LOCATION)) {
       Bundle bundle = intent.getBundleExtra(Intents.Encode.DATA);
       if (bundle != null) {
-        double latitude = bundle.getDouble("LAT", Double.NaN);
-        double longitude = bundle.getDouble("LONG", Double.NaN);
-        if (!Double.isNaN(latitude) && !Double.isNaN(longitude)) {
+        // These must use Bundle.getFloat(), not getDouble(), it's part of the API.
+        float latitude = bundle.getFloat("LAT", Float.MAX_VALUE);
+        float longitude = bundle.getFloat("LONG", Float.MAX_VALUE);
+        if (latitude != Float.MAX_VALUE && longitude != Float.MAX_VALUE) {
           mContents = "geo:" + latitude + ',' + longitude;
           mDisplayContents = latitude + "," + longitude;
           mTitle = mActivity.getString(R.string.contents_location);
