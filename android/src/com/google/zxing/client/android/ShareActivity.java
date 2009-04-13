@@ -133,7 +133,7 @@ public final class ShareActivity extends Activity {
   /**
    * Takes a contact Uri and does the necessary database lookups to retrieve that person's info,
    * then sends an Encode intent to render it as a QR Code.
-   *  
+   *
    * @param contactUri A Uri of the form content://contacts/people/17
    */
   private void showContactAsBarcode(Uri contactUri) {
@@ -143,11 +143,11 @@ public final class ShareActivity extends Activity {
     if (contactCursor != null && contactCursor.moveToFirst()) {
       int nameColumn = contactCursor.getColumnIndex(Contacts.PeopleColumns.NAME);
       String name = contactCursor.getString(nameColumn);
-      if (name == null || name.length() == 0) {
-        // TODO: Show error
-        return;
+
+      // Don't require a name to be present, this contact might be just a phone number.
+      if (name != null && name.length() > 0) {
+        bundle.putString(Contacts.Intents.Insert.NAME, name);
       }
-      bundle.putString(Contacts.Intents.Insert.NAME, name);
       contactCursor.close();
 
       Uri phonesUri = Uri.withAppendedPath(contactUri, Contacts.People.Phones.CONTENT_DIRECTORY);

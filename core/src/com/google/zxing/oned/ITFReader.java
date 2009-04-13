@@ -29,9 +29,9 @@ import java.util.Hashtable;
 /**
  * <p>Implements decoding of the ITF format.</p>
  *
- * <p>"ITF" stands for Interleaved Two of Five. This Reader will scan ITF barcode with 6, 10 or 14 digits.
- * The checksum is optional and is not applied by this Reader. The consumer of the decoded value
- * will have to apply a checksum if required.</p>
+ * <p>"ITF" stands for Interleaved Two of Five. This Reader will scan ITF barcode with 6, 10 or 14
+ * digits. The checksum is optional and is not applied by this Reader. The consumer of the decoded
+ * value will have to apply a checksum if required.</p>
  *
  * <p><a href="http://en.wikipedia.org/wiki/Interleaved_2_of_5">http://en.wikipedia.org/wiki/Interleaved_2_of_5</a>
  * is a great reference for Interleaved 2 of 5 information.</p>
@@ -126,7 +126,8 @@ public final class ITFReader extends AbstractOneDReader {
    * @param resultString {@link StringBuffer} to append decoded chars to
    * @throws ReaderException if decoding could not complete successfully
    */
-  static void decodeMiddle(BitArray row, int payloadStart, int payloadEnd, StringBuffer resultString) throws ReaderException {
+  static void decodeMiddle(BitArray row, int payloadStart, int payloadEnd,
+      StringBuffer resultString) throws ReaderException {
 
     // Digits are interleaved in pairs - 5 black lines for one digit, and the
     // 5
@@ -283,9 +284,8 @@ public final class ITFReader extends AbstractOneDReader {
    */
   static int[] findGuardPattern(BitArray row, int rowOffset, int[] pattern) throws ReaderException {
 
-    // TODO: This is very similar to implementation in AbstractUPCEANReader. Consider if they can be merged to
-    // a single method.
-
+    // TODO: This is very similar to implementation in AbstractUPCEANReader. Consider if they can be
+    // merged to a single method.
     int patternLength = pattern.length;
     int[] counters = new int[patternLength];
     int width = row.getSize();

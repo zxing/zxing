@@ -61,7 +61,8 @@ public final class QRCodeEncoder {
     return mTitle;
   }
 
-  // TODO: The string encoding should live in the core ZXing library.
+  // It would be nice if the string encoding lived in the core ZXing library, but we use platform
+  // specific code like PhoneNumberUtils, so it can't.
   private boolean encodeContents(Intent intent) {
     if (intent == null) {
       return false;
@@ -102,31 +103,38 @@ public final class QRCodeEncoder {
     } else if (type.equals(Contents.Type.CONTACT)) {
       Bundle bundle = intent.getBundleExtra(Intents.Encode.DATA);
       if (bundle != null) {
+        mContents = "MECARD:";
+        mDisplayContents = "";
         String name = bundle.getString(Contacts.Intents.Insert.NAME);
         if (name != null && name.length() > 0) {
-          mContents = "MECARD:N:" + name + ';';
-          mDisplayContents = name;
-          String address = bundle.getString(Contacts.Intents.Insert.POSTAL);
-          if (address != null && address.length() > 0) {
-            mContents += "ADR:" + address + ';';
-            mDisplayContents += '\n' + address;
+          mContents = "N:" + name + ';';
+          mDisplayContents += name;
+        }
+        String address = bundle.getString(Contacts.Intents.Insert.POSTAL);
+        if (address != null && address.length() > 0) {
+          mContents += "ADR:" + address + ';';
+          mDisplayContents += '\n' + address;
+        }
+        for (int x = 0; x < Contents.PHONE_KEYS.length; x++) {
+          String phone = bundle.getString(Contents.PHONE_KEYS[x]);
+          if (phone != null && phone.length() > 0) {
+            mContents += "TEL:" + phone + ';';
+            mDisplayContents += '\n' + PhoneNumberUtils.formatNumber(phone);
           }
-          for (int x = 0; x < Contents.PHONE_KEYS.length; x++) {
-            String phone = bundle.getString(Contents.PHONE_KEYS[x]);
-            if (phone != null && phone.length() > 0) {
-              mContents += "TEL:" + phone + ';';
-              mDisplayContents += '\n' + PhoneNumberUtils.formatNumber(phone);
-            }
+        }
+        for (int x = 0; x < Contents.EMAIL_KEYS.length; x++) {
+          String email = bundle.getString(Contents.EMAIL_KEYS[x]);
+          if (email != null && email.length() > 0) {
+            mContents += "EMAIL:" + email + ';';
+            mDisplayContents += '\n' + email;
           }
-          for (int x = 0; x < Contents.EMAIL_KEYS.length; x++) {
-            String email = bundle.getString(Contents.EMAIL_KEYS[x]);
-            if (email != null && email.length() > 0) {
-              mContents += "EMAIL:" + email + ';';
-              mDisplayContents += '\n' + email;
-            }
-          }
+        }
+        // Make sure we've encoded at least one field.
+        if (mDisplayContents.length() > 0) {
           mContents += ";";
           mTitle = mActivity.getString(R.string.contents_contact);
+        } else {
+          mContents = null;
         }
       }
     } else if (type.equals(Contents.Type.LOCATION)) {
@@ -162,7 +170,7 @@ public final class QRCodeEncoder {
     public void run() {
       try {
         ByteMatrix result = new MultiFormatWriter().encode(mContents, BarcodeFormat.QR_CODE,
-             mPixelResolution, mPixelResolution);
+            mPixelResolution, mPixelResolution);
         int width = result.width();
         int height = result.height();
         byte[][] array = result.getArray();

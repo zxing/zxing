@@ -278,10 +278,7 @@ limitations under the License.
     </exec>
   </target>
 
-  <!-- Invoke the proper target depending on whether or not
-an assets directory is present. -->
-  <!-- TODO: find a nicer way to include the "-A ${asset-dir}" argument
-only when the assets dir exists. -->
+  <!-- Invoke the proper target depending on whether or not an assets directory is present. -->
   <target name="package-res">
     <available file="${asset-dir}" type="dir"
                property="res-target" value="and-assets" />

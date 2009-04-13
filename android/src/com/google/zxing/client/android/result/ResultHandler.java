@@ -149,8 +149,9 @@ public abstract class ResultHandler {
   public final void addContact(String[] names, String[] phoneNumbers, String[] emails, String note,
                          String address, String org, String title) {
 
+    // Only use the first name in the array, if present.
     Intent intent = new Intent(Contacts.Intents.Insert.ACTION, Contacts.People.CONTENT_URI);
-    putExtra(intent, Contacts.Intents.Insert.NAME, names);
+    putExtra(intent, Contacts.Intents.Insert.NAME, names != null ? names[0] : null);
 
     int phoneCount = Math.min((phoneNumbers != null) ? phoneNumbers.length : 0,
         Contents.PHONE_KEYS.length);
@@ -188,7 +189,8 @@ public abstract class ResultHandler {
   }
 
   public final void shareBySMS(String contents) {
-    sendSMSFromUri("smsto:", mActivity.getString(R.string.msg_share_subject_line) + ":\n" + contents);
+    sendSMSFromUri("smsto:", mActivity.getString(R.string.msg_share_subject_line) + ":\n" +
+        contents);
   }
 
   public final void sendSMS(String phoneNumber, String body) {
@@ -252,7 +254,8 @@ public abstract class ResultHandler {
   }
 
   public final void openProductSearch(String upc) {
-    Uri uri = Uri.parse("http://www.google." + LocaleManager.getCountryTLD() + "/products?q=" + upc);
+    Uri uri = Uri.parse("http://www.google." + LocaleManager.getCountryTLD() + "/products?q=" +
+        upc);
     launchIntent(new Intent(Intent.ACTION_VIEW, uri));
   }
 
@@ -296,13 +299,6 @@ public abstract class ResultHandler {
   private static void putExtra(Intent intent, String key, String value) {
     if (value != null && value.length() > 0) {
       intent.putExtra(key, value);
-    }
-  }
-
-  // TODO: This is only used by the names field, and only the first name will be taken.
-  private static void putExtra(Intent intent, String key, String[] value) {
-    if (value != null && value.length > 0) {
-      putExtra(intent, key, value[0]);
     }
   }
 

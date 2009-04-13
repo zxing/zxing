@@ -101,8 +101,9 @@ final class DecodeThread extends Thread {
     mMultiFormatReader.setHints(hints);
   }
 
-  // TODO: This is fragile in case we add new formats. It would be better to have a new enum
-  // value which represented all 1D formats.
+  /**
+   * Select the 1D formats we want this client to decode by hand.
+   */
   private void setDecode1DMode() {
     Hashtable<DecodeHintType, Object> hints = new Hashtable<DecodeHintType, Object>(3);
     Vector<BarcodeFormat> vector = new Vector<BarcodeFormat>();

@@ -99,12 +99,12 @@ public final class Encoder {
     encode(content, ecLevel, null, qrCode);
   }
 
-  public static void encode(String content, ErrorCorrectionLevel ecLevel, Hashtable hints, QRCode qrCode)
-      throws WriterException {
+  public static void encode(String content, ErrorCorrectionLevel ecLevel, Hashtable hints,
+      QRCode qrCode) throws WriterException {
 
-    String characterEncoding = hints == null ? null : (String) hints.get(EncodeHintType.CHARACTER_SET);
-    if (characterEncoding == null) {
-      characterEncoding = DEFAULT_BYTE_MODE_ENCODING;
+    String encoding = hints == null ? null : (String) hints.get(EncodeHintType.CHARACTER_SET);
+    if (encoding == null) {
+      encoding = DEFAULT_BYTE_MODE_ENCODING;
     }
 
     // Step 1: Choose the mode (encoding).
@@ -112,7 +112,7 @@ public final class Encoder {
 
     // Step 2: Append "bytes" into "dataBits" in appropriate encoding.
     BitVector dataBits = new BitVector();
-    appendBytes(content, mode, dataBits, characterEncoding);
+    appendBytes(content, mode, dataBits, encoding);
     // Step 3: Initialize QR code that can contain "dataBits".
     int numInputBytes = dataBits.sizeInBytes();
     initQRCode(numInputBytes, ecLevel, mode, qrCode);
@@ -121,9 +121,10 @@ public final class Encoder {
     BitVector headerAndDataBits = new BitVector();
 
     // Step 4.5: Append ECI message if applicable
+    // TODO: Why is this commented out?
     /*
-    if (mode == Mode.BYTE && !DEFAULT_BYTE_MODE_ENCODING.equals(characterEncoding)) {
-      CharacterSetECI eci = CharacterSetECI.getCharacterSetECIByName(characterEncoding);
+    if (mode == Mode.BYTE && !DEFAULT_BYTE_MODE_ENCODING.equals(encoding)) {
+      CharacterSetECI eci = CharacterSetECI.getCharacterSetECIByName(encoding);
       if (eci != null) {
         appendECI(eci, headerAndDataBits);
       }
@@ -213,10 +214,11 @@ public final class Encoder {
   }
 
   /**
-   * Initialize "qrCode" according to "numInputBytes", "ecLevel", and "mode". On success, modify "qrCode".
+   * Initialize "qrCode" according to "numInputBytes", "ecLevel", and "mode". On success,
+   * modify "qrCode".
    */
-  private static void initQRCode(int numInputBytes, ErrorCorrectionLevel ecLevel, Mode mode, QRCode qrCode)
-      throws WriterException {
+  private static void initQRCode(int numInputBytes, ErrorCorrectionLevel ecLevel, Mode mode,
+      QRCode qrCode) throws WriterException {
     qrCode.setECLevel(ecLevel);
     qrCode.setMode(mode);
 
@@ -257,11 +259,13 @@ public final class Encoder {
   static void terminateBits(int numDataBytes, BitVector bits) throws WriterException {
     int capacity = numDataBytes << 3;
     if (bits.size() > capacity) {
-      throw new WriterException("data bits cannot fit in the QR Code" + bits.size() + " > " + capacity);
+      throw new WriterException("data bits cannot fit in the QR Code" + bits.size() + " > " +
+          capacity);
     }
     // Append termination bits. See 8.4.8 of JISX0510:2004 (p.24) for details.
-    // TODO srowen says we can remove this for loop, since the 4 terminator bits are optional if the last byte
-    // has less than 4 bits left. So it amounts to padding the last byte with zeroes either way.
+    // TODO: srowen says we can remove this for loop, since the 4 terminator bits are optional if
+    // the last byte has less than 4 bits left. So it amounts to padding the last byte with zeroes
+    // either way.
     for (int i = 0; i < 4 && bits.size() < capacity; ++i) {
       bits.appendBit(0);
     }
@@ -405,8 +409,8 @@ public final class Encoder {
       }
     }
     if (numTotalBytes != result.sizeInBytes()) {  // Should be same.
-      throw new WriterException("Interleaving error: " + numTotalBytes + " and " + result.sizeInBytes() +
-        " differ.");
+      throw new WriterException("Interleaving error: " + numTotalBytes + " and " +
+          result.sizeInBytes() + " differ.");
     }
   }
 
@@ -436,7 +440,8 @@ public final class Encoder {
   /**
    * Append length info. On success, store the result in "bits".
    */
-  static void appendLengthInfo(int numLetters, int version, Mode mode, BitVector bits) throws WriterException {
+  static void appendLengthInfo(int numLetters, int version, Mode mode, BitVector bits)
+      throws WriterException {
     int numBits = mode.getCharacterCountBits(Version.getVersionForNumber(version));
     if (numLetters > ((1 << numBits) - 1)) {
       throw new WriterException(numLetters + "is bigger than" + ((1 << numBits) - 1));
@@ -447,7 +452,8 @@ public final class Encoder {
   /**
    * Append "bytes" in "mode" mode (encoding) into "bits". On success, store the result in "bits".
    */
-  static void appendBytes(String content, Mode mode, BitVector bits, String encoding) throws WriterException {
+  static void appendBytes(String content, Mode mode, BitVector bits, String encoding)
+      throws WriterException {
     if (mode.equals(Mode.NUMERIC)) {
       appendNumericBytes(content, bits);
     } else if (mode.equals(Mode.ALPHANUMERIC)) {
@@ -509,7 +515,8 @@ public final class Encoder {
     }
   }
 
-  static void append8BitBytes(String content, BitVector bits, String encoding) throws WriterException {
+  static void append8BitBytes(String content, BitVector bits, String encoding)
+      throws WriterException {
     byte[] bytes;
     try {
       bytes = content.getBytes(encoding);
@@ -549,7 +556,8 @@ public final class Encoder {
 
   static void appendECI(CharacterSetECI eci, BitVector bits) {
     bits.appendBits(Mode.ECI.getBits(), 4);
-    bits.appendBits(eci.getValue(), 8); // This is correct for values up to 127, which is all we need now
+    // This is correct for values up to 127, which is all we need now.
+    bits.appendBits(eci.getValue(), 8);
   }
 
 }
