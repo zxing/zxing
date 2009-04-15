@@ -27,6 +27,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import java.io.IOException;
+
 public final class CameraTestActivity extends Activity implements SurfaceHolder.Callback {
 
   private SaveThread mSaveThread;
@@ -109,7 +111,12 @@ public final class CameraTestActivity extends Activity implements SurfaceHolder.
   }
 
   public void surfaceCreated(SurfaceHolder holder) {
-    CameraManager.get().openDriver(holder);
+    try {
+      CameraManager.get().openDriver(holder);
+    } catch (IOException ioe) {
+      // IOException clause added for Android 1.5
+      throw new RuntimeException(ioe);
+    }
     CameraManager.get().startPreview();
   }
 
