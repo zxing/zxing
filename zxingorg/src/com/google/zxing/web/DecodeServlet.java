@@ -36,6 +36,7 @@ import org.apache.http.HttpMessage;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.params.HttpClientParams;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
@@ -142,6 +143,7 @@ public final class DecodeServlet extends HttpServlet {
     }
 
     HttpGet getRequest = new HttpGet(imageURI);
+    getRequest.addHeader("Connection", "close"); // Avoids CLOSE_WAIT socket issue?
 
     try {
       HttpResponse getResponse = client.execute(getRequest);
