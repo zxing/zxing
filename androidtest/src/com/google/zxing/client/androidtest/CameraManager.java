@@ -26,6 +26,8 @@ import android.view.Display;
 import android.view.SurfaceHolder;
 import android.view.WindowManager;
 
+import java.io.IOException;
+
 /**
  * This object wraps the Camera service object and expects to be the only one talking to it. The
  * implementation encapsulates the steps needed to take preview-sized images, which are used for
@@ -46,7 +48,7 @@ final class CameraManager {
   private int mAutoFocusMessage;
   private boolean mPreviewing;
 
-  public static void init(Context context) {
+  public static synchronized void init(Context context) {
     if (mCameraManager == null) {
       mCameraManager = new CameraManager(context);
       mCameraManager.getScreenResolution();
@@ -63,11 +65,11 @@ final class CameraManager {
     mPreviewing = false;
   }
 
-  public void openDriver(SurfaceHolder holder) {
+  public void openDriver(SurfaceHolder holder) throws IOException {
+    // "throws IOException added to accommodate Android 1.5
     if (mCamera == null) {
       mCamera = Camera.open();
       mCamera.setPreviewDisplay(holder);
-
       setCameraParameters();
     }
   }
