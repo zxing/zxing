@@ -97,7 +97,11 @@ public final class Version {
     if (dimension % 4 != 1) {
       throw ReaderException.getInstance();
     }
-    return getVersionForNumber((dimension - 17) >> 2);
+    try {
+      return getVersionForNumber((dimension - 17) >> 2);
+    } catch (IllegalArgumentException iae) {
+      throw ReaderException.getInstance();
+    }
   }
 
   public static Version getVersionForNumber(int versionNumber) {
