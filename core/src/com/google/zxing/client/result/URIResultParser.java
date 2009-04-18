@@ -30,12 +30,12 @@ final class URIResultParser extends ResultParser {
 
   public static URIParsedResult parse(Result result) {
     String rawText = result.getText();
+    // We specifically handle the odd "URL" scheme here for simplicity
+    if (rawText != null && rawText.startsWith("URL:")) {
+      rawText = rawText.substring(4);
+    }
     if (!isBasicallyValidURI(rawText)) {
       return null;
-    }
-    // We specifically handle the odd "URL" scheme here for simplicity
-    if (rawText.startsWith("URL:")) {
-      rawText = rawText.substring(4);
     }
     return new URIParsedResult(rawText, null);
   }
@@ -46,8 +46,16 @@ final class URIResultParser extends ResultParser {
    * need to know when a string is obviously not a URI.
    */
   static boolean isBasicallyValidURI(String uri) {
-    return uri != null && uri.indexOf(' ') < 0 && uri.indexOf('\n') < 0 &&
-           (uri.indexOf(':') >= 0 || uri.indexOf('.') >= 0);
+
+    if (uri == null || uri.indexOf(' ') >= 0 || uri.indexOf('\n') >= 0) {
+      return false;
+    }
+    int period = uri.indexOf('.');
+    // Look for period in a domain but followed by at least a two-char TLD
+    if (period >= uri.length() - 2) {
+      return false;
+    }
+    return period >= 0 || uri.indexOf(':') >= 0;
   }
 
 }
