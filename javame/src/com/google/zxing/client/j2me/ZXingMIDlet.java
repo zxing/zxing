@@ -138,13 +138,21 @@ public final class ZXingMIDlet extends MIDlet {
         player = Manager.createPlayer("capture://image");
       } catch (MediaException me) {
         // if this fails, just continue with capture://video
+      } catch (NullPointerException npe) { // Thanks webblaz... for this improvement:
+        // The Nokia 2630 throws this if image/video capture is not supported
+        // We should still try to continue
       } catch (Error e) {
         // Ugly, but, it seems the Nokia N70 throws "java.lang.Error: 136" here
         // We should still try to continue
       }
     }
     if (player == null) {
-      player = Manager.createPlayer("capture://video");
+      try {
+        player = Manager.createPlayer("capture://video");
+      } catch (NullPointerException npe) {
+        // The Nokia 2630 throws this if image/video capture is not supported
+        throw new MediaException("Image/video capture not supported on this phone");
+      }
     }
     return player;
   }
