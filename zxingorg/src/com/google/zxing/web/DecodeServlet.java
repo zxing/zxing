@@ -170,9 +170,6 @@ public final class DecodeServlet extends HttpServlet {
       // Thrown if hostname is bad or null
       getRequest.abort();
       response.sendRedirect("badurl.jspx");
-    } catch (HttpException he) {
-      getRequest.abort();
-      response.sendRedirect("badurl.jspx");
     } catch (UnknownHostException uhe) {
       getRequest.abort();
       response.sendRedirect("badurl.jspx");
