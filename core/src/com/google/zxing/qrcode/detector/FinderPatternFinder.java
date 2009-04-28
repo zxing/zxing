@@ -19,10 +19,10 @@ package com.google.zxing.qrcode.detector;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.MonochromeBitmapSource;
 import com.google.zxing.ReaderException;
+import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitArray;
 import com.google.zxing.common.Collections;
 import com.google.zxing.common.Comparator;
-import com.google.zxing.common.GenericResultPoint;
 
 import java.util.Hashtable;
 import java.util.Vector;
@@ -162,7 +162,7 @@ final class FinderPatternFinder {
     }
 
     FinderPattern[] patternInfo = selectBestPatterns();
-    GenericResultPoint.orderBestPatterns(patternInfo);
+    ResultPoint.orderBestPatterns(patternInfo);
 
     return new FinderPatternInfo(patternInfo);
   }
