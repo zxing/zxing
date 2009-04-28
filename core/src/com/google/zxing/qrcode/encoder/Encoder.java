@@ -108,7 +108,7 @@ public final class Encoder {
     }
 
     // Step 1: Choose the mode (encoding).
-    Mode mode = chooseMode(content);
+    Mode mode = chooseMode(content, encoding);
 
     // Step 2: Append "bytes" into "dataBits" in appropriate encoding.
     BitVector dataBits = new BitVector();
@@ -121,17 +121,17 @@ public final class Encoder {
     BitVector headerAndDataBits = new BitVector();
 
     // Step 4.5: Append ECI message if applicable
-    // TODO: Why is this commented out?
-    /*
     if (mode == Mode.BYTE && !DEFAULT_BYTE_MODE_ENCODING.equals(encoding)) {
       CharacterSetECI eci = CharacterSetECI.getCharacterSetECIByName(encoding);
       if (eci != null) {
         appendECI(eci, headerAndDataBits);
       }
     }
-     */
+
     appendModeInfo(mode, headerAndDataBits);
-    appendLengthInfo(content.length(), qrCode.getVersion(), mode, headerAndDataBits);
+
+    int numLetters = mode.equals(Mode.BYTE) ? dataBits.sizeInBytes() : content.length();
+    appendLengthInfo(numLetters, qrCode.getVersion(), mode, headerAndDataBits);
     headerAndDataBits.appendBitVector(dataBits);
 
     // Step 5: Terminate the bits properly.
@@ -168,14 +168,18 @@ public final class Encoder {
     return -1;
   }
 
-  /**
-   * Choose the best mode by examining the content.
-   *
-   * Note that this function does not return MODE_KANJI, as we cannot distinguish Shift_JIS from
-   * other encodings such as ISO-8859-1, from data bytes alone. For example "\xE0\xE0" can be
-   * interpreted as one character in Shift_JIS, but also two characters in ISO-8859-1.
-   */
   public static Mode chooseMode(String content) {
+    return chooseMode(content, null);
+  }
+
+  /**
+   * Choose the best mode by examining the content. Note that 'encoding' is used as a hint;
+   * if it is Shift_JIS then we assume the input is Kanji and return {@link Mode#KANJI}.
+   */
+  public static Mode chooseMode(String content, String encoding) {
+    if ("Shift_JIS".equals(encoding)) {
+      return Mode.KANJI;
+    }
     boolean hasNumeric = false;
     boolean hasAlphanumeric = false;
     for (int i = 0; i < content.length(); ++i) {

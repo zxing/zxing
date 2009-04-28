@@ -23,7 +23,6 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.Collections;
 import com.google.zxing.common.Comparator;
 import com.google.zxing.common.DetectorResult;
-import com.google.zxing.common.GenericResultPoint;
 import com.google.zxing.common.GridSampler;
 import com.google.zxing.common.detector.MonochromeRectangleDetector;
 
@@ -39,7 +38,7 @@ import java.util.Vector;
  */
 public final class Detector {
 
-  private static final int MAX_MODULES = 32;
+  //private static final int MAX_MODULES = 32;
 
   // Trick to avoid creating new Integer objects below -- a sort of crude copy of
   // the Integer.valueOf(int) optimization added in Java 5, not in J2ME
@@ -117,7 +116,7 @@ public final class Detector {
     // Bottom left is correct but top left and bottom right might be switched
     ResultPoint[] corners = { maybeTopLeft, bottomLeft, maybeBottomRight };
     // Use the dot product trick to sort them out
-    GenericResultPoint.orderBestPatterns(corners);
+    ResultPoint.orderBestPatterns(corners);
 
     // Now we know which is which:
     ResultPoint bottomRight = corners[0];

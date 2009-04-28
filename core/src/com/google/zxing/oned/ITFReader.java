@@ -22,7 +22,6 @@ import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.common.BitArray;
-import com.google.zxing.common.GenericResultPoint;
 
 import java.util.Hashtable;
 
@@ -115,8 +114,8 @@ public final class ITFReader extends AbstractOneDReader {
     return new Result(
         resultString,
         null, // no natural byte representation for these barcodes
-        new ResultPoint[] { new GenericResultPoint(startRange[1], (float) rowNumber),
-                            new GenericResultPoint(endRange[0], (float) rowNumber)},
+        new ResultPoint[] { new ResultPoint(startRange[1], (float) rowNumber),
+                            new ResultPoint(endRange[0], (float) rowNumber)},
         BarcodeFormat.ITF);
   }
 

@@ -21,7 +21,6 @@ import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitArray;
-import com.google.zxing.common.GenericResultPoint;
 
 import java.util.Hashtable;
 
@@ -137,8 +136,8 @@ public abstract class AbstractUPCEANReader extends AbstractOneDReader implements
     return new Result(resultString,
         null, // no natural byte representation for these barcodes
         new ResultPoint[]{
-            new GenericResultPoint(left, (float) rowNumber),
-            new GenericResultPoint(right, (float) rowNumber)},
+            new ResultPoint(left, (float) rowNumber),
+            new ResultPoint(right, (float) rowNumber)},
         getBarcodeFormat());
   }
 

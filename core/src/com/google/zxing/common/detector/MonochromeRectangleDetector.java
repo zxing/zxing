@@ -21,7 +21,6 @@ import com.google.zxing.ReaderException;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.BlackPointEstimationMethod;
 import com.google.zxing.common.BitArray;
-import com.google.zxing.common.GenericResultPoint;
 
 /**
  * <p>A somewhat generic detector that looks for a barcode-like rectangular region within an image.
@@ -122,21 +121,21 @@ public final class MonochromeRectangleDetector {
           if (lastRange[0] < centerJ) {
             if (lastRange[1] > centerJ) {
               // straddle, choose one or the other based on direction
-              return new GenericResultPoint(di > 0 ? lastRange[0] : lastRange[1], lastI);
+              return new ResultPoint(di > 0 ? lastRange[0] : lastRange[1], lastI);
             }
-            return new GenericResultPoint(lastRange[0], lastI);
+            return new ResultPoint(lastRange[0], lastI);
           } else {
-            return new GenericResultPoint(lastRange[1], lastI);
+            return new ResultPoint(lastRange[1], lastI);
           }
         } else {
           int lastJ = j - dj;
           if (lastRange[0] < centerI) {
             if (lastRange[1] > centerI) {
-              return new GenericResultPoint(lastJ, dj < 0 ? lastRange[0] : lastRange[1]);
+              return new ResultPoint(lastJ, dj < 0 ? lastRange[0] : lastRange[1]);
             }
-            return new GenericResultPoint(lastJ, lastRange[0]);
+            return new ResultPoint(lastJ, lastRange[0]);
           } else {
-            return new GenericResultPoint(lastJ, lastRange[1]);
+            return new ResultPoint(lastJ, lastRange[1]);
           }
         }
       }
