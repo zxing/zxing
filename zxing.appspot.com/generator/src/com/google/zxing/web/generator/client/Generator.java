@@ -176,13 +176,12 @@ public class Generator implements EntryPoint {
   }
 
   protected String getUrl(int sizeX, int sizeY, String content) {
-    String result = "http://chart.apis.google.com/chart?cht=qr&chs=";
-    result += sizeX;
-    result += "x";
-    result += sizeY;
-    result += "&chl=";
-    result += URL.encodeComponent(content);
-    return result;
+    StringBuilder result = new StringBuilder();
+    result.append("http://chart.apis.google.com/chart?cht=qr&chs=");
+    result.append(sizeX).append('x').append(sizeY);
+    result.append("&chl=");
+    result.append(URL.encodeComponent(content));
+    return result.toString();
   }
   
   private void generate() {

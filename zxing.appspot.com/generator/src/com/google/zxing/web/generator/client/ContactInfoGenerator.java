@@ -21,6 +21,8 @@ import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
+import java.net.URI;
+
 /**
  * A Generator for contact informations, output is in MeCard format.
  * 
@@ -34,8 +36,9 @@ public class ContactInfoGenerator implements GeneratorSource {
   TextBox url = new TextBox();
   TextBox email = new TextBox();
   TextBox address = new TextBox();
+  TextBox address2 = new TextBox();
   TextBox memo = new TextBox();
-  TextBox[] widgets = {name, company, tel, url, email, address, memo};
+  TextBox[] widgets = {name, company, tel, url, email, address, address2, memo};
   
   public ContactInfoGenerator(ChangeListener changeListener) {
     for (TextBox w: widgets) {
@@ -54,26 +57,47 @@ public class ContactInfoGenerator implements GeneratorSource {
     String url = getUrlField();
     String email = getEmailField();
     String address = getAddressField();
+    String address2 = getAddress2Field();
     String memo = getMemoField();
     
     // Build the output with obtained data.
     // note that some informations may just be "" if they were not specified.
     //return getVCard(name, company, tel, url, email, address, memo);
-    return getMeCard(name, company, tel, url, email, address, memo);
+    return getMeCard(name, company, tel, url, email, address, address2, memo);
   }
 
   private String getMeCard(String name, String company, String tel, String url,
-      String email, String address, String memo) {
-    String output = "MECARD:";
-    output += "N:" + name + ";";
-    output += company.length() > 0 ? "ORG:" + company + ";" : "";
-    output += tel.length() > 0 ? "TEL:" + tel + ";" : "";
-    output += url.length() > 0 ? "URL:" + url + ";" : "";
-    output += email.length() > 0 ? "EMAIL:" + email + ";" : "";
-    output += address.length() > 0 ? "ADR:" + address + ";" : "";
-    output += memo.length() > 0 ? "NOTE:" + memo + ";" : "";
-    output += ";";    
-    return output;    
+      String email, String address, String address2, String memo) {
+    StringBuilder output = new StringBuilder();
+    output.append("MECARD:");
+    output.append("N:").append(name).append(';');
+    maybeAppend(output, "ORG:", company);
+    maybeAppend(output, "TEL:", tel);
+    maybeAppend(output, "URL:", url);
+    maybeAppend(output, "EMAIL:", email);
+    maybeAppend(output, "ADR:", address);
+    if (address.length() > 0 || address2.length() > 0) {
+      output.append("ADR:");
+      if (address.length() > 0) {
+        output.append(address);
+      }
+      if (address2.length() > 0) {
+        if (address.length() > 0) {
+          output.append(' ');
+        }
+        output.append(address2);
+      }
+      output.append(';');
+    }
+    maybeAppend(output, "NOTE:", memo);
+    output.append(';');
+    return output.toString();
+  }
+
+  private static void maybeAppend(StringBuilder output, String prefix, String value) {
+    if (value.length() > 0) {
+      output.append(prefix).append(value).append(';');
+    }
   }
   
   /*// VCARD GENERATION. Keep this in case we want to go back to vcard format
@@ -93,34 +117,27 @@ public class ContactInfoGenerator implements GeneratorSource {
     return output;    
   }
   */
-  
-  private String getNameField() throws GeneratorException {
-    String inputName = name.getText();
-    if (inputName.length() < 1) {
-      throw new GeneratorException("Name must be at least 1 character.");
-    }
-    if (inputName.contains("\n")) {
-      throw new GeneratorException("Name should not contanains \\n characters.");
-    }
-    if (inputName.contains(";")) {
-      throw new GeneratorException("Name must not contains ; characters");
-    }
-    return inputName;
-  }
-  
-  private String getCompanyField() throws GeneratorException {
-    String input = company.getText();
+
+  private static String parseTextField(TextBox textBox) throws GeneratorException {
+    String input = textBox.getText();
     if (input.length() < 1) {
       return "";
     }
     if (input.contains("\n")) {
-      throw new GeneratorException("Company should not contanains \\n characters.");
+      throw new GeneratorException("Field must not contain \\n characters.");
     }
     if (input.contains(";")) {
-      throw new GeneratorException("Company must not contains ; characters");
+      throw new GeneratorException("Field must not contains ; characters");
     }
-    // the input contains some informations. 
     return input;
+  }
+  
+  private String getNameField() throws GeneratorException {
+    return parseTextField(name);
+  }
+  
+  private String getCompanyField() throws GeneratorException {
+    return parseTextField(company);
   }
 
   private String getTelField() throws GeneratorException {
@@ -137,13 +154,7 @@ public class ContactInfoGenerator implements GeneratorSource {
   
   private String getUrlField() throws GeneratorException {
     String input = url.getText();
-    if (input.length() < 1) {
-      return "";
-    }
     Validators.validateUrl(input);
-    if (input.contains(";")) {
-      throw new GeneratorException("URL must not contains ; characters");
-    }
     return input;
   }
   
@@ -160,31 +171,15 @@ public class ContactInfoGenerator implements GeneratorSource {
   }
   
   private String getAddressField() throws GeneratorException {
-    String input = address.getText();
-    if (input.length() < 1) {
-      return "";
-    }
-    if (input.contains("\n")) {
-      throw new GeneratorException("Address must not contain \\n characters.");
-    }
-    if (input.contains(";")) {
-      throw new GeneratorException("Address must not contains ; characters");
-    }
-    return input;
+    return parseTextField(address);
+  }
+
+  private String getAddress2Field() throws GeneratorException {
+    return parseTextField(address2);
   }
   
   private String getMemoField() throws GeneratorException {
-    String input = memo.getText();
-    if (input.length() < 1) {
-      return "";
-    }
-    if (input.contains("\n")) {
-      throw new GeneratorException("Memo must not contain \\n characters.");
-    }
-    if (input.contains(";")) {
-      throw new GeneratorException("Memo must not contains ; characters");
-    }
-    return input;
+    return parseTextField(memo);
   }
   
   public Grid getWidget() {
@@ -192,7 +187,7 @@ public class ContactInfoGenerator implements GeneratorSource {
       // early termination if the table has already been constructed
       return table;
     }
-    table = new Grid(7, 2);
+    table = new Grid(8, 2);
     
     table.setText(0, 0, "Name");
     table.setWidget(0, 1, name);
@@ -204,10 +199,12 @@ public class ContactInfoGenerator implements GeneratorSource {
     table.setWidget(3, 1, email);
     table.setText(4, 0, "Address");
     table.setWidget(4, 1, address);
-    table.setText(5, 0, "Website");
-    table.setWidget(5, 1, url);
-    table.setText(6, 0, "Memo");
-    table.setWidget(6, 1, memo);
+    table.setText(5, 0, "Address 2");
+    table.setWidget(5, 1, address2);
+    table.setText(6, 0, "Website");
+    table.setWidget(6, 1, url);
+    table.setText(7, 0, "Memo");
+    table.setWidget(7, 1, memo);
     
     name.addStyleName(StylesDefs.INPUT_FIELD_REQUIRED);
     return table;
@@ -219,6 +216,7 @@ public class ContactInfoGenerator implements GeneratorSource {
     if (widget == tel) getTelField();
     if (widget == email) getEmailField();
     if (widget == address) getAddressField();
+    if (widget == address2) getAddress2Field();
     if (widget == url) getUrlField();
     if (widget == memo) getMemoField();
   }

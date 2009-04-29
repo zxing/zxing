@@ -28,25 +28,25 @@ public interface GeneratorSource {
   /**
    * @return a GWT Grid object, containing the GUI.
    */
-  public Grid getWidget();
+  Grid getWidget();
   /**
    * @return the name of the generator to be used in the GUI.
    */
-  public String getName();
+  String getName();
   /**
    * @return the text to be encoded into the QR code.
    * @throws GeneratorException if the input data contains errors.
    */
-  public String getText() throws GeneratorException;
+  String getText() throws GeneratorException;
   /**
    * @param widget the widget that was last modified, and that we want to
    *        validate the content.
    * @throws GeneratorException if the widget contains errors.
    */
-  public void validate(Widget widget) throws GeneratorException;
+  void validate(Widget widget) throws GeneratorException;
   /**
    * Called when the generator is selected in the list. Using this method,
    * the generator should set the focus to the first widget it defines.
    */
-  public void setFocus();
+  void setFocus();
 }

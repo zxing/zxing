@@ -204,17 +204,19 @@ public class GeoLocationGenerator implements GeneratorSource, ChangeListener {
     }
     String q = "";
     if (link.matches(".*&q=[^&]*&.*")) {
+      StringBuilder qBuilder = new StringBuilder();
       for (int i = link.indexOf("&q=") + 3;
           i < link.length() && link.charAt(i) != '&'; ++i) {
-        q += link.charAt(i);
+        qBuilder.append(link.charAt(i));
       }
+      q = qBuilder.toString();
       // special cases:
       q = q.replace("+", " ");
       q = q.replace("%26", "&");
     }
     
-    String lat = "";
-    String lon = "";
+    StringBuilder lat = new StringBuilder();
+    StringBuilder lon = new StringBuilder();
     if (link.matches(".*&s?ll=[^&]*&.*")) {
       int start;
       if (link.indexOf("&sll=") == -1) {
@@ -224,21 +226,22 @@ public class GeoLocationGenerator implements GeneratorSource, ChangeListener {
       }
       boolean beforeComma = true;
       for (int i = start; i < link.length() && link.charAt(i) != '&'; ++i) {
+        char c = link.charAt(i);
         if (beforeComma) {
-          if (link.charAt(i) == ',') {
+          if (c == ',') {
             beforeComma = false;
           } else {
-            lat += link.charAt(i); 
+            lat.append(c);
           }
         } else {
-          lon += link.charAt(i);
+          lon.append(c);
         }
       }
     }
     
     query.setText(URL.decode(q));
-    latitude.setText(lat);
-    longitude.setText(lon);
+    latitude.setText(lat.toString());
+    longitude.setText(lon.toString());
     changeListener.onChange(latitude);
     changeListener.onChange(longitude);
     this.onChange(latitude);
