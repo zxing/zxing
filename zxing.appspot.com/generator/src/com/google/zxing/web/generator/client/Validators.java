@@ -16,6 +16,9 @@
 
 package com.google.zxing.web.generator.client;
 
+import java.net.URL;
+import java.net.MalformedURLException;
+
 /**
  * Helpers methods to check for phone numbers, email addresses, and URL. Other
  * general purpose check methods should go here as well.
@@ -34,11 +37,10 @@ public final class Validators {
   }
   
   public static void validateUrl(String url) throws GeneratorException {
-    //FIXME: url specification is a bit more complex than just that.
-    if (!((url.startsWith("http://") && url.length() > 7)
-        || (url.startsWith("https://") && url.length() > 8))) {
-      throw new GeneratorException("URL: http:// or https://," +
-            "plus at least 1 character.");
+    try {
+      new URL(url);
+    } catch (MalformedURLException mue) {
+      throw new GeneratorException("URL is not valid.");
     }
   }
   

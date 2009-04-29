@@ -20,6 +20,6 @@ import com.google.gwt.i18n.client.Messages;
 
 // Not used yet. A first atempt to localization.
 public interface StringConstants extends Messages {
-  public String codeType();
-  public String generateButton();
+  String codeType();
+  String generateButton();
 }
