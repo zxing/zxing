@@ -16,9 +16,6 @@
 
 package com.google.zxing.web.generator.client;
 
-import java.net.URL;
-import java.net.MalformedURLException;
-
 /**
  * Helpers methods to check for phone numbers, email addresses, and URL. Other
  * general purpose check methods should go here as well.
@@ -37,11 +34,21 @@ public final class Validators {
   }
   
   public static void validateUrl(String url) throws GeneratorException {
-    try {
-      new URL(url);
-    } catch (MalformedURLException mue) {
+    if (!isBasicallyValidURI(url)) {
       throw new GeneratorException("URL is not valid.");
     }
+  }
+
+  private static boolean isBasicallyValidURI(String uri) {
+    if (uri == null || uri.indexOf(' ') >= 0 || uri.indexOf('\n') >= 0) {
+      return false;
+    }
+    int period = uri.indexOf('.');
+    // Look for period in a domain but followed by at least a two-char TLD
+    if (period >= uri.length() - 2) {
+      return false;
+    }
+    return period >= 0 || uri.indexOf(':') >= 0;
   }
   
   public static void validateEmail(String email) throws GeneratorException {

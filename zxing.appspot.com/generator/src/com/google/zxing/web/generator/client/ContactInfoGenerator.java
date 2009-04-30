@@ -21,8 +21,6 @@ import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
-import java.net.URI;
-
 /**
  * A Generator for contact informations, output is in MeCard format.
  * 
