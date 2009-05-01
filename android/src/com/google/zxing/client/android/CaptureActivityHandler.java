@@ -19,6 +19,7 @@ package com.google.zxing.client.android;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -70,8 +71,7 @@ public final class CaptureActivityHandler extends Handler {
         mState = State.SUCCESS;
         Bundle bundle = message.getData();
         Bitmap barcode = bundle.getParcelable(DecodeThread.BARCODE_BITMAP);
-        int duration = message.arg1;
-        mActivity.handleDecode((Result) message.obj, barcode, duration);
+        mActivity.handleDecode((Result) message.obj, barcode);
         break;
       case R.id.decode_failed:
         // We're decoding as fast as possible, so when one decode fails, start another.
@@ -81,6 +81,10 @@ public final class CaptureActivityHandler extends Handler {
       case R.id.return_scan_result:
         mActivity.setResult(Activity.RESULT_OK, (Intent) message.obj);
         mActivity.finish();
+        break;
+      case R.id.launch_product_query:
+        String url = (String) message.obj;
+        mActivity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
         break;
     }
   }
