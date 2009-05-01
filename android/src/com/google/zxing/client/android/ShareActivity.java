@@ -146,7 +146,7 @@ public final class ShareActivity extends Activity {
 
       // Don't require a name to be present, this contact might be just a phone number.
       if (name != null && name.length() > 0) {
-        bundle.putString(Contacts.Intents.Insert.NAME, name);
+        bundle.putString(Contacts.Intents.Insert.NAME, massageContactData(name));
       }
       contactCursor.close();
 
@@ -157,7 +157,7 @@ public final class ShareActivity extends Activity {
         while (phonesCursor.moveToNext()) {
           String number = phonesCursor.getString(PHONES_NUMBER_COLUMN);
           if (foundPhone < Contents.PHONE_KEYS.length) {
-            bundle.putString(Contents.PHONE_KEYS[foundPhone], number);
+            bundle.putString(Contents.PHONE_KEYS[foundPhone], massageContactData(number));
             foundPhone++;
           }
         }
@@ -176,13 +176,13 @@ public final class ShareActivity extends Activity {
           switch (kind) {
             case Contacts.KIND_EMAIL:
               if (foundEmail < Contents.EMAIL_KEYS.length) {
-                bundle.putString(Contents.EMAIL_KEYS[foundEmail], data);
+                bundle.putString(Contents.EMAIL_KEYS[foundEmail], massageContactData(data));
                 foundEmail++;
               }
               break;
             case Contacts.KIND_POSTAL:
               if (!foundPostal) {
-                bundle.putString(Contacts.Intents.Insert.POSTAL, data);
+                bundle.putString(Contacts.Intents.Insert.POSTAL, massageContactData(data));
                 foundPostal = true;
               }
               break;
@@ -196,6 +196,18 @@ public final class ShareActivity extends Activity {
       intent.putExtra(Intents.Encode.DATA, bundle);
       startActivity(intent);
     }
+  }
+
+  private static String massageContactData(String data) {
+    // For now -- make sure we don't put newlines in shared contact data. It messes up
+    // any known encoding of contact data. Replace with space.
+    if (data.indexOf('\n') >= 0) {
+      data = data.replace("\n", " ");
+    }
+    if (data.indexOf('\r') >= 0) {
+      data = data.replace("\r", " ");
+    }
+    return data;
   }
 
 }
