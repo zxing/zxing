@@ -197,8 +197,12 @@ public final class AndroidHttpClient implements HttpClient {
     return responseStream;
   }
 
+  /**
+   * Release resources associated with this client.  You must call this,
+   * or significant resources (sockets and memory) may be leaked.
+   */
   public void close() {
-    // do nothing
+    getConnectionManager().shutdown();
   }
 
   public HttpParams getParams() {
