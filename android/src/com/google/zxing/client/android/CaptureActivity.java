@@ -147,8 +147,8 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     }
 
     Intent intent = getIntent();
-    String action = intent.getAction();
-    String dataString = intent.getDataString();
+    String action = intent == null ? null : intent.getAction();
+    String dataString = intent == null ? null : intent.getDataString();
     if (intent != null && action != null) {
       if (action.equals(Intents.Scan.ACTION) || action.equals(Intents.Scan.DEPRECATED_ACTION)) {
         // Scan the formats the intent requested, and return the result to the calling activity.
@@ -156,7 +156,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         mDecodeMode = intent.getStringExtra(Intents.Scan.MODE);
         resetStatusView();
       } else if (dataString != null && dataString.contains(PRODUCT_SEARCH_URL_PREFIX) &&
-          dataString.contains(PRODUCT_SEARCH_URL_PREFIX)) {
+          dataString.contains(PRODUCT_SEARCH_URL_SUFFIX)) {
         // Scan only products and send the result to mobile Product Search.
         mSource = Source.PRODUCT_SEARCH_LINK;
         mSourceUrl = dataString;
@@ -465,7 +465,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         startActivity(intent);
       }
     } catch (PackageManager.NameNotFoundException e) {
-
+      Log.w(TAG, e);
     }
   }
 

@@ -16,7 +16,6 @@
 
 package com.google.zxing.client.android;
 
-import android.util.Log;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
@@ -68,9 +67,6 @@ public final class AndroidHttpClient implements HttpClient {
 
   // Gzip of data shorter than this probably won't be worthwhile
   private static final long DEFAULT_SYNC_MIN_GZIP_BYTES = 256;
-
-  private static final String TAG = "AndroidHttpClient";
-
 
   /**
    * Set if HTTP requests are blocked from being executed on this thread
@@ -129,8 +125,6 @@ public final class AndroidHttpClient implements HttpClient {
 
   private final HttpClient delegate;
 
-  private RuntimeException mLeakedException = new IllegalStateException(
-      "AndroidHttpClient created and never closed");
 
   private AndroidHttpClient(ClientConnectionManager ccm, HttpParams params) {
     this.delegate = new DefaultHttpClient(ccm, params) {
@@ -153,15 +147,6 @@ public final class AndroidHttpClient implements HttpClient {
         return context;
       }
     };
-  }
-
-  @Override
-  protected void finalize() throws Throwable {
-    super.finalize();
-    if (mLeakedException != null) {
-      Log.e(TAG, "Leak found", mLeakedException);
-      mLeakedException = null;
-    }
   }
 
   /**
@@ -212,15 +197,8 @@ public final class AndroidHttpClient implements HttpClient {
     return responseStream;
   }
 
-  /**
-   * Release resources associated with this client.  You must call this,
-   * or significant resources (sockets and memory) may be leaked.
-   */
   public void close() {
-    if (mLeakedException != null) {
-      getConnectionManager().shutdown();
-      mLeakedException = null;
-    }
+    // do nothing
   }
 
   public HttpParams getParams() {
@@ -279,7 +257,7 @@ public final class AndroidHttpClient implements HttpClient {
    */
   public static AbstractHttpEntity getCompressedEntity(byte[] data) throws IOException {
     AbstractHttpEntity entity;
-    if (data.length < getMinGzipSize()) {
+    if (data.length < DEFAULT_SYNC_MIN_GZIP_BYTES) {
       entity = new ByteArrayEntity(data);
     } else {
       ByteArrayOutputStream arr = new ByteArrayOutputStream();
@@ -295,11 +273,4 @@ public final class AndroidHttpClient implements HttpClient {
     return entity;
   }
 
-  /**
-   * Retrieves the minimum size for compressing data.
-   * Shorter data will not be compressed.
-   */
-  private static long getMinGzipSize() {
-    return DEFAULT_SYNC_MIN_GZIP_BYTES;
-  }
 }
