@@ -37,9 +37,10 @@ import android.os.Bundle;
 import android.os.Message;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
-import android.text.SpannableStringBuilder;
 import android.text.ClipboardManager;
+import android.text.SpannableStringBuilder;
 import android.text.style.UnderlineSpan;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -53,7 +54,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.util.Log;
 import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.client.android.result.ResultButtonListener;
@@ -81,6 +81,16 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private static final long VIBRATE_DURATION = 200;
 
   private static final String PACKAGE_NAME = "com.google.zxing.client.android";
+  private static final String PRODUCT_SEARCH_URL_PREFIX = "http://www.google";
+  private static final String PRODUCT_SEARCH_URL_SUFFIX = "/m/products/scan";
+  private static final String ZXING_URL = "http://zxing.appspot.com/scan";
+
+  private enum Source {
+    NATIVE_APP_INTENT,
+    PRODUCT_SEARCH_LINK,
+    ZXING_LINK,
+    NONE
+  }
 
   public CaptureActivityHandler mHandler;
 
@@ -93,9 +103,10 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private boolean mPlayBeep;
   private boolean mVibrate;
   private boolean mCopyToClipboard;
-  private boolean mScanIntent;
+  private Source mSource;
+  private String mSourceUrl;
   private String mDecodeMode;
-  private String versionName;
+  private String mVersionName;
 
   private final OnCompletionListener mBeepListener = new BeepListener();
 
@@ -137,13 +148,35 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
     Intent intent = getIntent();
     String action = intent.getAction();
-    if (intent != null && action != null && (action.equals(Intents.Scan.ACTION) ||
-        action.equals(Intents.Scan.DEPRECATED_ACTION))) {
-      mScanIntent = true;
-      mDecodeMode = intent.getStringExtra(Intents.Scan.MODE);
-      resetStatusView();
+    String dataString = intent.getDataString();
+    if (intent != null && action != null) {
+      if (action.equals(Intents.Scan.ACTION) || action.equals(Intents.Scan.DEPRECATED_ACTION)) {
+        // Scan the formats the intent requested, and return the result to the calling activity.
+        mSource = Source.NATIVE_APP_INTENT;
+        mDecodeMode = intent.getStringExtra(Intents.Scan.MODE);
+        resetStatusView();
+      } else if (dataString != null && dataString.contains(PRODUCT_SEARCH_URL_PREFIX) &&
+          dataString.contains(PRODUCT_SEARCH_URL_PREFIX)) {
+        // Scan only products and send the result to mobile Product Search.
+        mSource = Source.PRODUCT_SEARCH_LINK;
+        mSourceUrl = dataString;
+        mDecodeMode = Intents.Scan.PRODUCT_MODE;
+        resetStatusView();
+      } else if (dataString != null && dataString.equals(ZXING_URL)) {
+        // Scan all formats and handle the results ourselves.
+        // TODO: In the future we could allow the hyperlink to include a URL to send the results to.
+        mSource = Source.ZXING_LINK;
+        mSourceUrl = dataString;
+        mDecodeMode = null;
+        resetStatusView();
+      } else {
+        // Scan all formats and handle the results ourselves (launched from Home).
+        mSource = Source.NONE;
+        mDecodeMode = null;
+        resetStatusView();
+      }
     } else {
-      mScanIntent = false;
+      mSource = Source.NONE;
       mDecodeMode = null;
       if (mLastResult == null) {
         resetStatusView();
@@ -170,11 +203,11 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   @Override
   public boolean onKeyDown(int keyCode, KeyEvent event) {
     if (keyCode == KeyEvent.KEYCODE_BACK) {
-      if (mScanIntent) {
+      if (mSource == Source.NATIVE_APP_INTENT) {
         setResult(RESULT_CANCELED);
         finish();
         return true;
-      } else if (mLastResult != null) {
+      } else if ((mSource == Source.NONE || mSource == Source.ZXING_LINK) && mLastResult != null) {
         resetStatusView();
         mHandler.sendEmptyMessage(R.id.restart_preview);
         return true;
@@ -230,7 +263,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       }
       case ABOUT_ID:
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(getString(R.string.title_about) + versionName);
+        builder.setTitle(getString(R.string.title_about) + mVersionName);
         builder.setMessage(getString(R.string.msg_about) + "\n\n" + getString(R.string.zxing_url));
         builder.setIcon(R.drawable.zxing_icon);
         builder.setPositiveButton(R.string.button_open_browser, mAboutListener);
@@ -274,60 +307,21 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
    *
    * @param rawResult The contents of the barcode.
    * @param barcode   A greyscale bitmap of the camera data which was decoded.
-   * @param duration  How long the decoding took in milliseconds.
    */
-  public void handleDecode(Result rawResult, Bitmap barcode, int duration) {
+  public void handleDecode(Result rawResult, Bitmap barcode) {
     mLastResult = rawResult;
     playBeepSoundAndVibrate();
     drawResultPoints(barcode, rawResult);
 
-    if (mScanIntent) {
-      handleDecodeForScanIntent(rawResult, barcode, duration);
-    } else {
-      mStatusView.setVisibility(View.GONE);
-      mViewfinderView.setVisibility(View.GONE);
-      mResultView.setVisibility(View.VISIBLE);
-
-      ImageView barcodeImageView = (ImageView) findViewById(R.id.barcode_image_view);
-      barcodeImageView.setMaxWidth(MAX_RESULT_IMAGE_SIZE);
-      barcodeImageView.setMaxHeight(MAX_RESULT_IMAGE_SIZE);
-      barcodeImageView.setImageBitmap(barcode);
-
-      TextView formatTextView = (TextView) findViewById(R.id.format_text_view);
-      formatTextView.setText(getString(R.string.msg_default_format) + ": " +
-          rawResult.getBarcodeFormat().toString());
-
-      ResultHandler resultHandler = ResultHandlerFactory.makeResultHandler(this, rawResult);
-      TextView typeTextView = (TextView) findViewById(R.id.type_text_view);
-      typeTextView.setText(getString(R.string.msg_default_type) + ": " +
-          resultHandler.getType().toString());
-
-      TextView contentsTextView = (TextView) findViewById(R.id.contents_text_view);
-      CharSequence title = getString(resultHandler.getDisplayTitle());
-      SpannableStringBuilder styled = new SpannableStringBuilder(title + "\n\n");
-      styled.setSpan(new UnderlineSpan(), 0, title.length(), 0);
-      CharSequence displayContents = resultHandler.getDisplayContents();
-      styled.append(displayContents);
-      contentsTextView.setText(styled);
-
-      int buttonCount = resultHandler.getButtonCount();
-      ViewGroup buttonView = (ViewGroup) findViewById(R.id.result_button_view);
-      buttonView.requestFocus();
-      for (int x = 0; x < ResultHandler.MAX_BUTTON_COUNT; x++) {
-        Button button = (Button) buttonView.getChildAt(x);
-        if (x < buttonCount) {
-          button.setVisibility(View.VISIBLE);
-          button.setText(resultHandler.getButtonText(x));
-          button.setOnClickListener(new ResultButtonListener(resultHandler, x));
-        } else {
-          button.setVisibility(View.GONE);
-        }
-      }
-
-      if (mCopyToClipboard) {
-        ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-        clipboard.setText(displayContents);
-      }
+    switch (mSource) {
+      case NATIVE_APP_INTENT:
+      case PRODUCT_SEARCH_LINK:
+        handleDecodeExternally(rawResult, barcode);
+        break;
+      case ZXING_LINK:
+      case NONE:
+        handleDecodeInternally(rawResult, barcode);
+        break;
     }
   }
 
@@ -362,7 +356,56 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     }
   }
 
-  private void handleDecodeForScanIntent(Result rawResult, Bitmap barcode, int duration) {
+  // Put up our own UI for how to handle the decoded contents.
+  private void handleDecodeInternally(Result rawResult, Bitmap barcode) {
+    mStatusView.setVisibility(View.GONE);
+    mViewfinderView.setVisibility(View.GONE);
+    mResultView.setVisibility(View.VISIBLE);
+
+    ImageView barcodeImageView = (ImageView) findViewById(R.id.barcode_image_view);
+    barcodeImageView.setMaxWidth(MAX_RESULT_IMAGE_SIZE);
+    barcodeImageView.setMaxHeight(MAX_RESULT_IMAGE_SIZE);
+    barcodeImageView.setImageBitmap(barcode);
+
+    TextView formatTextView = (TextView) findViewById(R.id.format_text_view);
+    formatTextView.setText(getString(R.string.msg_default_format) + ": " +
+        rawResult.getBarcodeFormat().toString());
+
+    ResultHandler resultHandler = ResultHandlerFactory.makeResultHandler(this, rawResult);
+    TextView typeTextView = (TextView) findViewById(R.id.type_text_view);
+    typeTextView.setText(getString(R.string.msg_default_type) + ": " +
+        resultHandler.getType().toString());
+
+    TextView contentsTextView = (TextView) findViewById(R.id.contents_text_view);
+    CharSequence title = getString(resultHandler.getDisplayTitle());
+    SpannableStringBuilder styled = new SpannableStringBuilder(title + "\n\n");
+    styled.setSpan(new UnderlineSpan(), 0, title.length(), 0);
+    CharSequence displayContents = resultHandler.getDisplayContents();
+    styled.append(displayContents);
+    contentsTextView.setText(styled);
+
+    int buttonCount = resultHandler.getButtonCount();
+    ViewGroup buttonView = (ViewGroup) findViewById(R.id.result_button_view);
+    buttonView.requestFocus();
+    for (int x = 0; x < ResultHandler.MAX_BUTTON_COUNT; x++) {
+      Button button = (Button) buttonView.getChildAt(x);
+      if (x < buttonCount) {
+        button.setVisibility(View.VISIBLE);
+        button.setText(resultHandler.getButtonText(x));
+        button.setOnClickListener(new ResultButtonListener(resultHandler, x));
+      } else {
+        button.setVisibility(View.GONE);
+      }
+    }
+
+    if (mCopyToClipboard) {
+      ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+      clipboard.setText(displayContents);
+    }
+  }
+
+  // Briefly show the contents of the barcode, then handle the result outside Barcode Scanner.
+  private void handleDecodeExternally(Result rawResult, Bitmap barcode) {
     mViewfinderView.drawResultBitmap(barcode);
 
     // Since this message will only be shown for a second, just tell the user what kind of
@@ -381,14 +424,24 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       clipboard.setText(resultHandler.getDisplayContents());
     }
 
-    // Hand back whatever action they requested - this can be changed to Intents.Scan.ACTION when
-    // the deprecated intent is retired.
-    Intent intent = new Intent(getIntent().getAction());
-    intent.putExtra(Intents.Scan.RESULT, rawResult.toString());
-    intent.putExtra(Intents.Scan.RESULT_FORMAT, rawResult.getBarcodeFormat().toString());
-    Message message = Message.obtain(mHandler, R.id.return_scan_result);
-    message.obj = intent;
-    mHandler.sendMessageDelayed(message, INTENT_RESULT_DURATION);
+    if (mSource == Source.NATIVE_APP_INTENT) {
+      // Hand back whatever action they requested - this can be changed to Intents.Scan.ACTION when
+      // the deprecated intent is retired.
+      Intent intent = new Intent(getIntent().getAction());
+      intent.putExtra(Intents.Scan.RESULT, rawResult.toString());
+      intent.putExtra(Intents.Scan.RESULT_FORMAT, rawResult.getBarcodeFormat().toString());
+      Message message = Message.obtain(mHandler, R.id.return_scan_result);
+      message.obj = intent;
+      mHandler.sendMessageDelayed(message, INTENT_RESULT_DURATION);
+    } else if (mSource == Source.PRODUCT_SEARCH_LINK) {
+      // Reformulate the URL which triggered us into a query, so that the request goes to the same
+      // TLD as the scan URL.
+      Message message = Message.obtain(mHandler, R.id.launch_product_query);
+      int end = mSourceUrl.lastIndexOf("/scan");
+      message.obj = mSourceUrl.substring(0, end) + "?q=" +
+          resultHandler.getDisplayContents().toString() + "&source=zxing";
+      mHandler.sendMessageDelayed(message, INTENT_RESULT_DURATION);
+    }
   }
 
   /**
@@ -402,7 +455,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       int currentVersion = info.versionCode;
       // Since we're paying to talk to the PackageManager anyway, it makes sense to cache the app
       // version name here for display in the about box later.
-      this.versionName = info.versionName;
+      this.mVersionName = info.versionName;
       SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
       int lastVersion = prefs.getInt(PreferencesActivity.KEY_HELP_VERSION_SHOWN, 0);
       if (currentVersion > lastVersion) {

@@ -40,6 +40,13 @@ public final class LocaleManager {
     GOOGLE_COUNTRY_TLD.put(Locale.UK, "co.uk");
   }
 
+  // Google Product Search for mobile is available in fewer countries than web search.
+  private static final Map<Locale,String> GOOGLE_PRODUCT_SEARCH_COUNTRY_TLD;
+  static {
+    GOOGLE_PRODUCT_SEARCH_COUNTRY_TLD = new HashMap<Locale,String>();
+    GOOGLE_PRODUCT_SEARCH_COUNTRY_TLD.put(Locale.UK, "co.uk");
+  }
+
   private LocaleManager() {}
 
   /**
@@ -52,6 +59,22 @@ public final class LocaleManager {
       return DEFAULT_TLD;
     }
     String tld = GOOGLE_COUNTRY_TLD.get(locale);
+    if (tld == null) {
+      return DEFAULT_TLD;
+    }
+    return tld;
+  }
+
+  /**
+   * The same as above, but specifically for Google Product Search.
+   * @return The top-level domain to use.
+   */
+  public static String getProductSearchCountryTLD() {
+    Locale locale = Locale.getDefault();
+    if (locale == null) {
+      return DEFAULT_TLD;
+    }
+    String tld = GOOGLE_PRODUCT_SEARCH_COUNTRY_TLD.get(locale);
     if (tld == null) {
       return DEFAULT_TLD;
     }

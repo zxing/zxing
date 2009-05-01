@@ -20,8 +20,9 @@ version to be published. The next versionCode will be 7, regardless of whether t
 versionName is 2.31, 2.4, or 3.0. -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.google.zxing.client.android"
-          android:versionName="2.6"
-          android:versionCode="13">
+          android:versionName="2.7"
+          android:versionCode="18">
+  <uses-sdk android:minSdkVersion="1"/>
   <application android:icon="@drawable/launcher_icon"
                android:label="@string/app_name">
     <activity android:name=".CaptureActivity"
@@ -47,6 +48,20 @@ versionName is 2.31, 2.4, or 3.0. -->
         <category android:name="android.intent.category.DEFAULT" />
         <category android:name="android.intent.category.BROWSABLE"/>
         <data android:scheme="http" android:host="zxing.appspot.com" android:path="/scan" />
+      </intent-filter>
+      <!-- We also support a Google Product Search URL. -->
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW"/>
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE"/>
+        <data android:scheme="http" android:host="www.google.com" android:path="/m/products/scan" />
+      </intent-filter>
+      <!-- And the UK version. -->
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW"/>
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE"/>
+        <data android:scheme="http" android:host="www.google.co.uk" android:path="/m/products/scan" />
       </intent-filter>
     </activity>
     <activity android:name="PreferencesActivity"
