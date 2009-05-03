@@ -106,10 +106,7 @@ public final class Detector {
           // try next round
         }
       }
-      if (alignmentPattern == null) {
-        throw ReaderException.getInstance();
-      }
-
+      // If we didn't find alignment pattern... well try anyway without it
     }
 
     BitMatrix bits = sampleGrid(image, topLeft, topRight, bottomLeft, alignmentPattern, dimension);
