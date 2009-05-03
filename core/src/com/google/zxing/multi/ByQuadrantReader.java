@@ -31,7 +31,7 @@ import java.util.Hashtable;
  * (e.g. QR Codes). Instead this scans the four quadrants of the image -- and also the center 'quadrant'
  * to cover the case where a barcode is found in the center.
  *
- * @see MultipleBarcodeReader
+ * @see GenericMultipleBarcodeReader
  */
 public final class ByQuadrantReader implements Reader {
 
