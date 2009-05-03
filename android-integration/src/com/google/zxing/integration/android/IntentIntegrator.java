@@ -28,6 +28,8 @@ import android.net.Uri;
  * way to invoke barcode scanning and receive the result, without any need to integrate, modify, or learn the
  * project's source code.</p>
  *
+ * <h2>Initiating a barcode can</h2>
+ *
  * <p>Integration is essentially as easy as calling {@link #initiateScan(Activity)} and waiting
  * for the result in your app.</p>
  *
@@ -57,31 +59,40 @@ import android.net.Uri;
  * {@link #initiateScan(Activity, int, int, int, int)} to customize the download prompt with
  * different text labels.</p>
  *
+ * <h2>Sharing text via barcode</h2>
+ *
+ * <p>To share text, encoded as a QR Code on-screen, similarly, see {@link #shareText(Activity, String)}.</p>
+ *
  * <p>Some code, particularly download integration, was contributed from the Anobiit application.</p>
  *
  * @author Sean Owen
  * @author Fred Lin
+ * @author Isaac Potoczny-Jones
  */
 public final class IntentIntegrator {
 
   public static final int REQUEST_CODE = 0x0ba7c0de; // get it?
 
+  private static final String DEFAULT_TITLE = "Install Barcode Scanner?";
+  private static final String DEFAULT_MESSAGE =
+      "This application requires Barcode Scanner. Would you like to install it?";
+  private static final String DEFAULT_YES = "Yes";
+  private static final String DEFAULT_NO = "No";
+
   private IntentIntegrator() {
   }
 
   /**
-   * See {@link #initiateScan(Activity, String, String, String, String)} -- same, but uses default English labels.
+   * See {@link #initiateScan(Activity, String, String, String, String)} --
+   * same, but uses default English labels.
    */
   public static void initiateScan(Activity activity) {
-    initiateScan(activity,
-                 "Install Barcode Scanner?",
-                 "This application requires Barcode Scanner. Would you like to install it?",
-                 "Yes",
-                 "No");
+    initiateScan(activity, DEFAULT_TITLE, DEFAULT_MESSAGE, DEFAULT_YES, DEFAULT_NO);
   }
 
   /**
-   * See {@link #initiateScan(Activity, String, String, String, String)} -- same, but takes string IDs which refer
+   * See {@link #initiateScan(Activity, String, String, String, String)} --
+   * same, but takes string IDs which refer
    * to the {@link Activity}'s resource bundle entries.
    */
   public static void initiateScan(Activity activity,
@@ -101,8 +112,10 @@ public final class IntentIntegrator {
    *
    * @param stringTitle title of dialog prompting user to download Barcode Scanner
    * @param stringMessage text of dialog prompting user to download Barcode Scanner
-   * @param stringButtonYes text of button user clicks when agreeing to download Barcode Scanner (e.g. "Yes")
-   * @param stringButtonNo text of button user clicks when declining to download Barcode Scanner (e.g. "No")
+   * @param stringButtonYes text of button user clicks when agreeing to download
+   *  Barcode Scanner (e.g. "Yes")
+   * @param stringButtonNo text of button user clicks when declining to download
+   *  Barcode Scanner (e.g. "No")
    * @return the contents of the barcode that was scanned, or null if none was found
    * @throws InterruptedException if timeout expires before a scan completes
    */
@@ -143,7 +156,8 @@ public final class IntentIntegrator {
 
 
   /**
-   * <p>Call this from your {@link Activity}'s {@link Activity#onActivityResult(int, int, Intent)} method.</p>
+   * <p>Call this from your {@link Activity}'s
+   * {@link Activity#onActivityResult(int, int, Intent)} method.</p>
    *
    * @return null if the event handled here was not related to {@link IntentIntegrator}, or
    *  else an {@link IntentResult} containing the result of the scan. If the user cancelled scanning,
@@ -160,6 +174,62 @@ public final class IntentIntegrator {
       }
     }
     return null;
+  }
+
+  /**
+   * See {@link #shareText(Activity, String, String, String, String, String)} --
+   * same, but uses default English labels.
+   */
+  public static void shareText(Activity activity, String text) {
+    shareText(activity, text, DEFAULT_TITLE, DEFAULT_MESSAGE, DEFAULT_YES, DEFAULT_NO);
+  }
+
+  /**
+   * See {@link #shareText(Activity, String, String, String, String, String)} --
+   * same, but takes string IDs which refer to the {@link Activity}'s resource bundle entries.
+   */
+  public static void shareText(Activity activity,
+                               String text,
+                               int stringTitle,
+                               int stringMessage,
+                               int stringButtonYes,
+                               int stringButtonNo) {
+    shareText(activity,
+              text,
+              activity.getString(stringTitle),
+              activity.getString(stringMessage),
+              activity.getString(stringButtonYes),
+              activity.getString(stringButtonNo));
+  }
+
+  /**
+   * Shares the given text by encoding it as a barcode, such that another user can
+   * scan the text off the screen of the device.
+   *
+   * @param text the text string to encode as a barcode
+   * @param stringTitle title of dialog prompting user to download Barcode Scanner
+   * @param stringMessage text of dialog prompting user to download Barcode Scanner
+   * @param stringButtonYes text of button user clicks when agreeing to download
+   *  Barcode Scanner (e.g. "Yes")
+   * @param stringButtonNo text of button user clicks when declining to download
+   *  Barcode Scanner (e.g. "No")
+   */
+  public static void shareText(Activity activity,
+                               String text,
+                               String stringTitle,
+                               String stringMessage,
+                               String stringButtonYes,
+                               String stringButtonNo) {
+
+    Intent intent = new Intent();
+    intent.setAction("com.google.zxing.client.android.ENCODE");
+    intent.putExtra("ENCODE_TYPE", "TEXT_TYPE");
+    intent.putExtra("ENCODE_DATA", text);
+    try {
+      activity.startActivity(intent);
+    } catch (ActivityNotFoundException e) {
+      showDownloadDialog(activity, stringTitle, stringMessage, stringButtonYes, stringButtonNo);
+    }
   }
 
 }
