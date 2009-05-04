@@ -152,7 +152,9 @@ public class ContactInfoGenerator implements GeneratorSource {
   
   private String getUrlField() throws GeneratorException {
     String input = url.getText();
-    Validators.validateUrl(input);
+    if (input != null && input.length() > 0) {
+      Validators.validateUrl(input);
+    }
     return input;
   }
   
