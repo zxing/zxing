@@ -33,12 +33,16 @@ import java.util.Hashtable;
  *
  * @author Sean Owen
  */
-public final class Detector {
+public class Detector {
 
   private final MonochromeBitmapSource image;
 
   public Detector(MonochromeBitmapSource image) {
     this.image = image;
+  }
+
+  protected MonochromeBitmapSource getImage() {
+    return image;
   }
 
   /**
@@ -67,6 +71,11 @@ public final class Detector {
 
     FinderPatternFinder finder = new FinderPatternFinder(image);
     FinderPatternInfo info = finder.find(hints);
+
+    return processFinderPatternInfo(info);
+  }
+
+  protected DetectorResult processFinderPatternInfo(FinderPatternInfo info) throws ReaderException {
 
     FinderPattern topLeft = info.getTopLeft();
     FinderPattern topRight = info.getTopRight();

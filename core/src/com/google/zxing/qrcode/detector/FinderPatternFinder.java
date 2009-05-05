@@ -35,11 +35,11 @@ import java.util.Vector;
  *
  * @author Sean Owen
  */
-final class FinderPatternFinder {
+public class FinderPatternFinder {
 
   private static final int CENTER_QUORUM = 2;
-  private static final int MIN_SKIP = 3; // 1 pixel/module times 3 modules/center
-  private static final int MAX_MODULES = 57; // support up to version 10 for mobile clients
+  protected static final int MIN_SKIP = 3; // 1 pixel/module times 3 modules/center
+  protected static final int MAX_MODULES = 57; // support up to version 10 for mobile clients
   private static final int INTEGER_MATH_SHIFT = 8;
 
   private final MonochromeBitmapSource image;
@@ -52,10 +52,18 @@ final class FinderPatternFinder {
    *
    * @param image image to search
    */
-  FinderPatternFinder(MonochromeBitmapSource image) {
+  public FinderPatternFinder(MonochromeBitmapSource image) {
     this.image = image;
     this.possibleCenters = new Vector();
     this.crossCheckStateCount = new int[5];
+  }
+
+  protected MonochromeBitmapSource getImage() {
+    return image;
+  }
+
+  protected Vector getPossibleCenters() {
+    return possibleCenters;
   }
 
   FinderPatternInfo find(Hashtable hints) throws ReaderException {
@@ -180,7 +188,7 @@ final class FinderPatternFinder {
    * @return true iff the proportions of the counts is close enough to the 1/1/3/1/1 ratios
    *         used by finder patterns to be considered a match
    */
-  private static boolean foundPatternCross(int[] stateCount) {
+  protected static boolean foundPatternCross(int[] stateCount) {
     int totalModuleSize = 0;
     for (int i = 0; i < 5; i++) {
       int count = stateCount[i];
@@ -370,7 +378,7 @@ final class FinderPatternFinder {
    * @param j end of possible finder pattern in row
    * @return true if a finder pattern candidate was found this time
    */
-  private boolean handlePossibleCenter(int[] stateCount,
+  protected boolean handlePossibleCenter(int[] stateCount,
                                        int i,
                                        int j) {
     int stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2] + stateCount[3] + stateCount[4];
