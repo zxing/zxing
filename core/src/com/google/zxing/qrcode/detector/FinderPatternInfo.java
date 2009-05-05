@@ -22,27 +22,27 @@ package com.google.zxing.qrcode.detector;
  *
  * @author Sean Owen
  */
-final class FinderPatternInfo {
+public final class FinderPatternInfo {
 
   private final FinderPattern bottomLeft;
   private final FinderPattern topLeft;
   private final FinderPattern topRight;
 
-  FinderPatternInfo(FinderPattern[] patternCenters) {
+  public FinderPatternInfo(FinderPattern[] patternCenters) {
     this.bottomLeft = patternCenters[0];
     this.topLeft = patternCenters[1];
     this.topRight = patternCenters[2];
   }
 
-  FinderPattern getBottomLeft() {
+  public FinderPattern getBottomLeft() {
     return bottomLeft;
   }
 
-  FinderPattern getTopLeft() {
+  public FinderPattern getTopLeft() {
     return topLeft;
   }
 
-  FinderPattern getTopRight() {
+  public FinderPattern getTopRight() {
     return topRight;
   }
 
