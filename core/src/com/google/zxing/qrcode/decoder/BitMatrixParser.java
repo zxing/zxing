@@ -120,7 +120,7 @@ final class BitMatrixParser {
     }
 
     parsedVersion = Version.decodeVersionInformation(versionBits);
-    if (parsedVersion != null) {
+    if (parsedVersion != null && parsedVersion.getDimensionForVersion() == dimension) {
       return parsedVersion;
     }
 
@@ -134,7 +134,7 @@ final class BitMatrixParser {
     }
 
     parsedVersion = Version.decodeVersionInformation(versionBits);
-    if (parsedVersion != null) {
+    if (parsedVersion != null && parsedVersion.getDimensionForVersion() == dimension) {
       return parsedVersion;
     }
     throw ReaderException.getInstance();
