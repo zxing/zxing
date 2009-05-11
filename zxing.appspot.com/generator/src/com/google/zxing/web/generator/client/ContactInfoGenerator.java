@@ -116,26 +116,30 @@ public class ContactInfoGenerator implements GeneratorSource {
   }
   */
 
-  private static String parseTextField(TextBox textBox) throws GeneratorException {
+  private static String parseTextField(String name, TextBox textBox) throws GeneratorException {
     String input = textBox.getText();
     if (input.length() < 1) {
       return "";
     }
     if (input.contains("\n")) {
-      throw new GeneratorException("Field must not contain \\n characters.");
+      throw new GeneratorException(name + " field must not contain \\n characters.");
     }
     if (input.contains(";")) {
-      throw new GeneratorException("Field must not contains ; characters");
+      throw new GeneratorException(name + " field must not contains ; characters");
     }
     return input;
   }
   
   private String getNameField() throws GeneratorException {
-    return parseTextField(name);
+    String input = name.getText();
+    if (input.length() < 1) {
+      throw new GeneratorException("Name must be at least 1 character.");
+    }
+    return parseTextField("Name", name);
   }
   
   private String getCompanyField() throws GeneratorException {
-    return parseTextField(company);
+    return parseTextField("Company", company);
   }
 
   private String getTelField() throws GeneratorException {
@@ -171,15 +175,15 @@ public class ContactInfoGenerator implements GeneratorSource {
   }
   
   private String getAddressField() throws GeneratorException {
-    return parseTextField(address);
+    return parseTextField("Address", address);
   }
 
   private String getAddress2Field() throws GeneratorException {
-    return parseTextField(address2);
+    return parseTextField("Address 2", address2);
   }
   
   private String getMemoField() throws GeneratorException {
-    return parseTextField(memo);
+    return parseTextField("Memo", memo);
   }
   
   public Grid getWidget() {
