@@ -161,6 +161,20 @@ public abstract class BaseMonochromeBitmapSource implements MonochromeBitmapSour
     return width;
   }
 
+  public String toString() {
+    StringBuffer result = new StringBuffer(height * (width + 1));
+    BitArray row = new BitArray(width);
+    for (int i = 0; i < height; i++) {
+      row = getBlackRow(i, row, 0, width);
+      for (int j = 0; j < width; j++) {
+        result.append(row.get(j) ? "X " : "  ");
+      }
+      result.append('\n');
+    }
+    return result.toString();
+  }
+
+
   // These methods below should not need to exist because they are defined in the interface that
   // this abstract class implements. However this seems to cause problems on some Nokias.
   // So we write these redundant declarations.
