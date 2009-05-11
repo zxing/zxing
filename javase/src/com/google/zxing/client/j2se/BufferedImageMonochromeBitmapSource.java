@@ -60,10 +60,7 @@ public final class BufferedImageMonochromeBitmapSource extends BaseMonochromeBit
    * @param right one more than the x coordinate of rightmost pixels to decode, i.e. we will decode
    *  pixels whose x coordinate is in [left,right)
    * @param bottom likewise, one more than the y coordinate of the bottommost pixels to decode
-   * @deprecated use
-   *  {@link com.google.zxing.CroppedMonochromeBitmapSource#CroppedMonochromeBitmapSource(MonochromeBitmapSource, int, int, int, int)}
    */
-  @Deprecated
   public BufferedImageMonochromeBitmapSource(BufferedImage image, int left, int top, int right,
       int bottom) {
     super(right - left, bottom - top);
