@@ -147,6 +147,10 @@ public final class Detector {
 
     int dimension = Math.min(transitionsBetween(topLeft, topRight).getTransitions(), 
                              transitionsBetween(bottomRight, topRight).getTransitions());
+    if ((dimension & 0x01) == 1) {
+      // it can't be odd, so, round... up?
+      dimension++;
+    }
     dimension += 2;
 
     BitMatrix bits = sampleGrid(image, topLeft, bottomLeft, bottomRight, dimension);
