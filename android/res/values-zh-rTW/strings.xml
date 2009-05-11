@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (C) 2009 ZXing authors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<resources>
+  <string name="app_name">條碼掃描器</string>
+  <string name="bookmark_picker_name">書簽</string>
+  <string name="button_add_calendar">添加事件至日歷</string>
+  <string name="button_add_contact">添加聯系人</string>
+  <string name="button_back">返回</string>
+  <string name="button_book_search">打開圖書搜索</string>
+  <string name="button_cancel">取消</string>
+  <string name="button_clipboard_empty">剪切板清空</string>
+  <string name="button_dial">撥號</string>
+  <string name="button_done">完成</string>
+  <string name="button_email">發送email</string>
+  <string name="button_get_directions">獲取地址</string>
+  <string name="button_mms">發送彩信</string>
+  <string name="button_ok">確定</string>
+  <string name="button_open_browser">打開瀏覽器</string>
+  <string name="button_product_search">打開產品搜索</string>
+  <string name="button_search_book_contents">搜索圖書內容</string>
+  <string name="button_share_bookmark">分享書簽</string>
+  <string name="button_share_by_email">通過email分享</string>
+  <string name="button_share_by_sms">通過短信分享</string>
+  <string name="button_share_clipboard">分享剪切板</string>
+  <string name="button_share_contact">分享聯系人</string>
+  <string name="button_show_map">顯示地圖</string>
+  <string name="button_sms">發送短信</string>
+  <string name="button_web_search">網頁搜索</string>
+  <string name="contents_contact">聯系人信息</string>
+  <string name="contents_email">Email地址</string>
+  <string name="contents_location">地理坐標</string>
+  <string name="contents_phone">電話號碼</string>
+  <string name="contents_sms">短信地址</string>
+  <string name="contents_text">純文本</string>
+  <string name="menu_about">關于</string>
+  <string name="menu_help">幫助</string>
+  <string name="menu_settings">設置</string>
+  <string name="menu_share">分享</string>
+  <string name="msg_about">以ZXing的開源條碼庫為基礎</string>
+  <string name="msg_default_contents">內容</string>
+  <string name="msg_default_format">格式</string>
+  <string name="msg_default_mms_subject">Hi</string>
+  <string name="msg_default_status">將條碼放置于鏡頭范圍內進行掃描。  </string>
+  <string name="msg_default_type">類型</string>
+  <string name="msg_encode_barcode_failed">找不到條碼。</string>
+  <string name="msg_encode_contents_failed">不能從已有數據中讀取條碼。   </string>
+  <string name="msg_encode_in_progress">正在生成條碼\u2026</string>
+  <string name="msg_intent_failed">抱歉，無法打開所需軟件。 條碼內容可能無效。</string>
+  <string name="msg_sbc_book_not_searchable">抱歉，無法找到此圖書。</string>
+  <string name="msg_sbc_failed">抱歉，搜索時遇到錯誤。</string>
+  <string name="msg_sbc_no_page_returned">沒有返回頁面</string>
+  <string name="msg_sbc_page">頁面</string>
+  <string name="msg_sbc_snippet_unavailable">摘錄不可用</string>
+  <string name="msg_sbc_unknown_page">未知頁面</string>
+  <string name="msg_sbc_searching_book">搜索圖書\u2026</string>
+  <string name="msg_share_explanation">你可以在你的手機屏幕上顯示條碼，并使用其他手機掃描此條碼方式進行分享</string>
+  <string name="msg_share_subject_line">這是我所掃描條碼的內容</string>
+  <string name="preferences_actions_title">找到條碼時\u2026</string>
+  <string name="preferences_copy_to_clipboard_title">復制到剪切板</string>
+  <string name="preferences_decode_1D_title">解碼一維條碼</string>
+  <string name="preferences_decode_QR_title">解碼QR條碼</string>
+  <string name="preferences_general_title">一般設置</string>
+  <string name="preferences_name">設置</string>
+  <string name="preferences_play_beep_title">提示音</string>
+  <string name="preferences_vibrate_title">振動</string>
+  <string name="result_address_book">找到聯系人信息</string>
+  <string name="result_calendar">找到日歷事件</string>
+  <string name="result_email_address">找到email地址</string>
+  <string name="result_geo">找到地理坐標</string>
+  <string name="result_isbn">找到圖書</string>
+  <string name="result_product">找到產品</string>
+  <string name="result_sms">找到短信地址</string>
+  <string name="result_tel">找到電話號碼</string>
+  <string name="result_text">找到純文本</string>
+  <string name="result_uri">找到URL</string>
+  <string name="sbc_name">Google圖書搜索</string>
+  <string name="share_name">通過條碼分享</string>
+  <string name="title_about">條碼掃描器</string>
+  <string name="zxing_url">http://code.google.com/p/zxing</string>
+</resources>
