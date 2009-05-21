@@ -22,6 +22,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.MultiFormatReader;
@@ -37,6 +38,7 @@ import java.util.Vector;
 final class DecodeThread extends Thread {
 
   public static final String BARCODE_BITMAP = "barcode_bitmap";
+  private static final String TAG = "DecodeThread";
 
   public Handler mHandler;
   private final CaptureActivity mActivity;
@@ -168,15 +170,14 @@ final class DecodeThread extends Thread {
     long end = System.currentTimeMillis();
 
     if (success) {
+      Log.v(TAG, "Found barcode (" + (end - start) + " ms):\n" + rawResult.toString());
       Message message = Message.obtain(mActivity.mHandler, R.id.decode_succeeded, rawResult);
-      message.arg1 = (int) (end - start);
       Bundle bundle = new Bundle();
       bundle.putParcelable(BARCODE_BITMAP, source.renderToBitmap());
       message.setData(bundle);
       message.sendToTarget();
     } else {
       Message message = Message.obtain(mActivity.mHandler, R.id.decode_failed);
-      message.arg1 = (int) (end - start);
       message.sendToTarget();
     }
   }
