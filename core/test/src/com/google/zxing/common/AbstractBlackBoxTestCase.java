@@ -156,6 +156,8 @@ public abstract class AbstractBlackBoxTestCase extends TestCase {
     }
 
     // Print the results of all tests first
+    int totalFound = 0;
+    int totalMustPass = 0;
     for (int x = 0; x < testCount; x++) {
       System.out.println("Rotation " + testResults.get(x).getRotation() + " degrees:");
       System.out.println("  " + passedCounts[x] + " of " + imageFiles.length + " images passed ("
@@ -163,6 +165,17 @@ public abstract class AbstractBlackBoxTestCase extends TestCase {
       System.out.println("  " + tryHarderCounts[x] + " of " + imageFiles.length +
           " images passed with try harder (" + testResults.get(x).getTryHarderCount() +
           " required)");
+      totalFound += passedCounts[x];
+      totalFound += tryHarderCounts[x];
+      totalMustPass += testResults.get(x).getMustPassCount();
+      totalMustPass += testResults.get(x).getTryHarderCount();
+    }
+
+    int totalTests = imageFiles.length * testCount * 2;
+    System.out.println("TOTALS:\n  Decoded " + totalFound + " images out of " + totalTests +
+      " (" + (totalFound * 100 / totalTests) + "%)");
+    if (totalFound > totalMustPass) {
+      System.out.println("  *** Test too lax by " + (totalFound - totalMustPass) + " images");
     }
 
     // Then run through again and assert if any failed
