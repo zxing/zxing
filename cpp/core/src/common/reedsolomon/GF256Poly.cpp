@@ -55,10 +55,6 @@ namespace reedsolomon {
   
   GF256Poly::GF256Poly(GF256 &f, ArrayRef<int> c) : 
   Counted(), field(f), coefficients(c) {
-#ifdef DEBUG
-    cout << "instantiating GF256Poly @ " << this << " with Array " << c.array_ << "(" << c.array_->count_ << "), size " << c.size() << ", ";
-    cout << "coefficients size = " << coefficients.size() << "\n";
-#endif
     fixCoefficients();
   }
   
