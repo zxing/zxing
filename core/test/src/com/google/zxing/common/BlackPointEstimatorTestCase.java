@@ -22,18 +22,18 @@ import junit.framework.TestCase;
 /**
  * @author Sean Owen
  */
-public final class BlackPointEstimationMethodTestCase extends TestCase {
+public final class BlackPointEstimatorTestCase extends TestCase {
 
   public void testBasic() throws ReaderException {
     int[] histogram = { 0, 0, 11, 43, 37, 18, 3, 1, 0, 0, 13, 36, 24, 0, 11, 2 };
-    int point = BlackPointEstimator.estimate(histogram);
+    int point = BlackPointEstimator.findBestValley(histogram);
     assertEquals(8, point);
   }
 
   public void testTooLittleRange() {
     try {
       int[] histogram = { 0, 0, 0, 0, 0, 0, 1, 43, 48, 18, 3, 1, 0, 0, 0, 0 };
-      BlackPointEstimator.estimate(histogram);
+      BlackPointEstimator.findBestValley(histogram);
       fail("Should have thrown an exception");
     } catch (ReaderException re) {
       // good

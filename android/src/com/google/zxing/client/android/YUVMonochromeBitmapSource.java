@@ -97,12 +97,12 @@ public final class YUVMonochromeBitmapSource extends BaseMonochromeBitmapSource 
    * @return The luminance as an int, from 0-255
    */
   @Override
-  protected int getLuminance(int x, int y) {
+  public int getLuminance(int x, int y) {
     return mYUVData[(y + mCropTop) * mDataWidth + x + mCropLeft] & 0xff;
   }
 
   @Override
-  protected int[] getLuminanceRow(int y, int[] row) {
+  public int[] getLuminanceRow(int y, int[] row) {
     int width = getWidth();
     if (row == null || row.length < width) {
       row = new int[width];
@@ -116,7 +116,7 @@ public final class YUVMonochromeBitmapSource extends BaseMonochromeBitmapSource 
   }
 
   @Override
-  protected int[] getLuminanceColumn(int x, int[] column) {
+  public int[] getLuminanceColumn(int x, int[] column) {
     int height = getHeight();
     if (column == null || column.length < height) {
       column = new int[height];

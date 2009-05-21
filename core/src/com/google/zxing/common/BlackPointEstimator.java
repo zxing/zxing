@@ -16,6 +16,8 @@
 
 package com.google.zxing.common;
 
+import com.google.zxing.BlackPointEstimationMethod;
+import com.google.zxing.MonochromeBitmapSource;
 import com.google.zxing.ReaderException;
 
 /**
@@ -26,12 +28,72 @@ import com.google.zxing.ReaderException;
  * <a href="http://webdiis.unizar.es/~neira/12082/thresholding.pdf">http://webdiis.unizar.es/~neira/12082/thresholding.pdf</a>.
  * </p>
  *
+ * NOTE: This class is not threadsafe.
+ *
  * @author Sean Owen
  * @author dswitkin@google.com (Daniel Switkin)
  */
 public final class BlackPointEstimator {
 
+  private static final int LUMINANCE_BITS = 5;
+  private static final int LUMINANCE_SHIFT = 8 - LUMINANCE_BITS;
+  private static final int LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
+
+  private static int[] luminances = null;
+  private static int[] histogram = null;
+
   private BlackPointEstimator() {
+  }
+
+  private static void initArrays(int luminanceSize) {
+    if (luminances == null || luminances.length < luminanceSize) {
+      luminances = new int[luminanceSize];
+    }
+    if (histogram == null) {
+      histogram = new int[LUMINANCE_BUCKETS];
+    } else {
+      for (int x = 0; x < LUMINANCE_BUCKETS; x++) {
+        histogram[x] = 0;
+      }
+    }
+  }
+
+  /**
+   * Calculates the black point for the supplied bitmap.
+   *
+   * @param source The bitmap to analyze.
+   * @param method The pixel sampling technique to use.
+   * @param argument The row index in the case of ROW_SAMPLING, otherwise ignored.
+   * @return The black point as an integer 0-255.
+   * @throws ReaderException An exception thrown if the blackpoint cannot be determined.
+   */
+  public static int estimate(MonochromeBitmapSource source, BlackPointEstimationMethod method,
+      int argument) throws ReaderException {
+    int width = source.getWidth();
+    int height = source.getHeight();
+    initArrays(width);
+
+    if (method.equals(BlackPointEstimationMethod.TWO_D_SAMPLING)) {
+      int minDimension = width < height ? width : height;
+      int startX = (width - minDimension) >> 1;
+      int startY = (height - minDimension) >> 1;
+      for (int n = 0; n < minDimension; n++) {
+        int luminance = source.getLuminance(startX + n, startY + n);
+        histogram[luminance >> LUMINANCE_SHIFT]++;
+      }
+    } else if (method.equals(BlackPointEstimationMethod.ROW_SAMPLING)) {
+      if (argument < 0 || argument >= height) {
+        throw new IllegalArgumentException("Row is not within the image: " + argument);
+      }
+
+      luminances = source.getLuminanceRow(argument, luminances);
+      for (int x = 0; x < width; x++) {
+        histogram[luminances[x] >> LUMINANCE_SHIFT]++;
+      }
+    } else {
+      throw new IllegalArgumentException("Unknown method");
+    }
+    return findBestValley(histogram) << LUMINANCE_SHIFT;
   }
 
   /**
@@ -39,24 +101,24 @@ public final class BlackPointEstimator {
    * decides which bucket of values corresponds to the black point -- which bucket contains the
    * count of the brightest luminance values that should be considered "black".</p>
    *
-   * @param histogram an array of <em>counts</em> of luminance values
+   * @param buckets an array of <em>counts</em> of luminance values
    * @return index within argument of bucket corresponding to brightest values which should be
    *         considered "black"
    * @throws ReaderException if "black" and "white" appear to be very close in luminance
    */
-  public static int estimate(int[] histogram) throws ReaderException{
-    int numBuckets = histogram.length;
+  public static int findBestValley(int[] buckets) throws ReaderException {
+    int numBuckets = buckets.length;
     int maxBucketCount = 0;
     // Find tallest peak in histogram
     int firstPeak = 0;
     int firstPeakSize = 0;
     for (int i = 0; i < numBuckets; i++) {
-      if (histogram[i] > firstPeakSize) {
+      if (buckets[i] > firstPeakSize) {
         firstPeak = i;
-        firstPeakSize = histogram[i];
+        firstPeakSize = buckets[i];
       }
-      if (histogram[i] > maxBucketCount) {
-        maxBucketCount = histogram[i];
+      if (buckets[i] > maxBucketCount) {
+        maxBucketCount = buckets[i];
       }
     }
 
@@ -67,7 +129,7 @@ public final class BlackPointEstimator {
     for (int i = 0; i < numBuckets; i++) {
       int distanceToBiggest = i - firstPeak;
       // Encourage more distant second peaks by multiplying by square of distance
-      int score = histogram[i] * distanceToBiggest * distanceToBiggest;
+      int score = buckets[i] * distanceToBiggest * distanceToBiggest;
       if (score > secondPeakScore) {
         secondPeak = i;
         secondPeakScore = score;
@@ -81,7 +143,7 @@ public final class BlackPointEstimator {
       secondPeak = temp;
     }
 
-    // Kind of aribtrary; if the two peaks are very close, then we figure there is so little
+    // Kind of arbitrary; if the two peaks are very close, then we figure there is so little
     // dynamic range in the image, that discriminating black and white is too error-prone.
     // Decoding the image/line is either pointless, or may in some cases lead to a false positive
     // for 1D formats, which are relatively lenient.
@@ -97,7 +159,7 @@ public final class BlackPointEstimator {
       int fromFirst = i - firstPeak;
       // Favor a "valley" that is not too close to either peak -- especially not the black peak --
       // and that has a low value of course
-      int score = fromFirst * fromFirst * (secondPeak - i) * (maxBucketCount - histogram[i]);
+      int score = fromFirst * fromFirst * (secondPeak - i) * (maxBucketCount - buckets[i]);
       if (score > bestValleyScore) {
         bestValley = i;
         bestValleyScore = score;

@@ -95,4 +95,16 @@ public final class CroppedMonochromeBitmapSource implements MonochromeBitmapSour
     return delegate.isRotateSupported();
   }
 
+  public int getLuminance(int x, int y) {
+    return delegate.getLuminance(x, y);
+  }
+
+  public int[] getLuminanceRow(int y, int[] row) {
+    return delegate.getLuminanceRow(y, row);
+  }
+
+  public int[] getLuminanceColumn(int x, int[] column) {
+    return delegate.getLuminanceColumn(x, column);
+  }
+
 }
