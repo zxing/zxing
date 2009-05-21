@@ -81,7 +81,8 @@ public final class CharacterSetECI extends ECI {
 
   /**
    * @param value character set ECI value
-   * @return {@link CharacterSetECI} representing ECI of given value, or null if it is legal but unsupported
+   * @return {@link CharacterSetECI} representing ECI of given value, or null if it is legal but
+   *   unsupported
    * @throws IllegalArgumentException if ECI value is invalid
    */
   public static CharacterSetECI getCharacterSetECIByValue(int value) {
@@ -96,7 +97,8 @@ public final class CharacterSetECI extends ECI {
 
   /**
    * @param name character set ECI encoding name
-   * @return {@link CharacterSetECI} representing ECI for character encoding, or null if it is legal but unsupported
+   * @return {@link CharacterSetECI} representing ECI for character encoding, or null if it is legal
+   *   but unsupported
    */
   public static CharacterSetECI getCharacterSetECIByName(String name) {
     if (NAME_TO_ECI == null) {

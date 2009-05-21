@@ -90,25 +90,25 @@ public final class MultiFormatReader implements Reader {
     this.hints = hints;
 
     boolean tryHarder = hints != null && hints.containsKey(DecodeHintType.TRY_HARDER);
-    Vector possibleFormats = hints == null ? null : (Vector) hints.get(DecodeHintType.POSSIBLE_FORMATS);
+    Vector formats = hints == null ? null : (Vector) hints.get(DecodeHintType.POSSIBLE_FORMATS);
     readers = new Vector();
-    if (possibleFormats != null) {
+    if (formats != null) {
       boolean addOneDReader =
-          possibleFormats.contains(BarcodeFormat.UPC_A) ||
-              possibleFormats.contains(BarcodeFormat.UPC_E) ||
-              possibleFormats.contains(BarcodeFormat.EAN_13) ||
-              possibleFormats.contains(BarcodeFormat.EAN_8) ||
-              possibleFormats.contains(BarcodeFormat.CODE_39) ||
-              possibleFormats.contains(BarcodeFormat.CODE_128) ||
-              possibleFormats.contains(BarcodeFormat.ITF);
+          formats.contains(BarcodeFormat.UPC_A) ||
+              formats.contains(BarcodeFormat.UPC_E) ||
+              formats.contains(BarcodeFormat.EAN_13) ||
+              formats.contains(BarcodeFormat.EAN_8) ||
+              formats.contains(BarcodeFormat.CODE_39) ||
+              formats.contains(BarcodeFormat.CODE_128) ||
+              formats.contains(BarcodeFormat.ITF);
       // Put 1D readers upfront in "normal" mode
       if (addOneDReader && !tryHarder) {
         readers.addElement(new MultiFormatOneDReader(hints));
       }
-      if (possibleFormats.contains(BarcodeFormat.QR_CODE)) {
+      if (formats.contains(BarcodeFormat.QR_CODE)) {
         readers.addElement(new QRCodeReader());
       }
-      if (possibleFormats.contains(BarcodeFormat.DATAMATRIX)) {
+      if (formats.contains(BarcodeFormat.DATAMATRIX)) {
         readers.addElement(new DataMatrixReader());
       }
       // At end in "try harder" mode

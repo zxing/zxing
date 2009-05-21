@@ -65,27 +65,27 @@ public abstract class GridSampler {
   }
 
   /**
-   * <p>Samples an image for a square matrix of bits of the given dimension. This is used to extract the
-   * black/white modules of a 2D barcode like a QR Code found in an image. Because this barcode may be
-   * rotated or perspective-distorted, the caller supplies four points in the source image that define
-   * known points in the barcode, so that the image may be sampled appropriately.</p>
+   * <p>Samples an image for a square matrix of bits of the given dimension. This is used to extract
+   * the black/white modules of a 2D barcode like a QR Code found in an image. Because this barcode
+   * may be rotated or perspective-distorted, the caller supplies four points in the source image
+   * that define known points in the barcode, so that the image may be sampled appropriately.</p>
    *
    * <p>The last eight "from" parameters are four X/Y coordinate pairs of locations of points in
    * the image that define some significant points in the image to be sample. For example,
    * these may be the location of finder pattern in a QR Code.</p>
    *
    * <p>The first eight "to" parameters are four X/Y coordinate pairs measured in the destination
-   * {@link BitMatrix}, from the top left, where the known points in the image given by the "from" parameters
-   * map to.</p>
+   * {@link BitMatrix}, from the top left, where the known points in the image given by the "from"
+   * parameters map to.</p>
    *
    * <p>These 16 parameters define the transformation needed to sample the image.</p>
    *
    * @param image image to sample
    * @param dimension width/height of {@link BitMatrix} to sample from iamge
    * @return {@link BitMatrix} representing a grid of points sampled from the image within a region
-   *  defined by the "from" parameters
-   * @throws ReaderException if image can't be sampled, for example, if the transformation defined by
-   *  the given points is invalid or results in sampling outside the image boundaries
+   *   defined by the "from" parameters
+   * @throws ReaderException if image can't be sampled, for example, if the transformation defined
+   *   by the given points is invalid or results in sampling outside the image boundaries
    */
   public abstract BitMatrix sampleGrid(MonochromeBitmapSource image,
                                        int dimension,
@@ -102,9 +102,9 @@ public abstract class GridSampler {
    * <p>Checks a set of points that have been transformed to sample points on an image against
    * the image's dimensions to see if the point are even within the image.</p>
    *
-   * <p>This method will actually "nudge" the endpoints back onto the image if they are found to be barely
-   * (less than 1 pixel) off the image. This accounts for imperfect detection of finder patterns in an image
-   * where the QR Code runs all the way to the image border.</p>
+   * <p>This method will actually "nudge" the endpoints back onto the image if they are found to be
+   * barely (less than 1 pixel) off the image. This accounts for imperfect detection of finder
+   * patterns in an image where the QR Code runs all the way to the image border.</p>
    *
    * <p>For efficiency, the method will check points from either end of the line until one is found
    * to be within the image. Because the set of points are assumed to be linear, this is valid.</p>
@@ -113,7 +113,8 @@ public abstract class GridSampler {
    * @param points actual points in x1,y1,...,xn,yn form
    * @throws ReaderException if an endpoint is lies outside the image boundaries
    */
-  protected static void checkAndNudgePoints(MonochromeBitmapSource image, float[] points) throws ReaderException {
+  protected static void checkAndNudgePoints(MonochromeBitmapSource image, float[] points)
+      throws ReaderException {
     int width = image.getWidth();
     int height = image.getHeight();
     // Check and nudge points from start until we see some that are OK:
