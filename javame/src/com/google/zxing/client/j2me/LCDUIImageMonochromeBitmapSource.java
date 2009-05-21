@@ -38,7 +38,7 @@ public final class LCDUIImageMonochromeBitmapSource extends BaseMonochromeBitmap
   }
 
   // This is expensive and should be used very sparingly.
-  protected int getLuminance(int x, int y) {
+  public int getLuminance(int x, int y) {
     image.getRGB(pixelHolder, 0, getWidth(), x, y, 1, 1);
     int pixel = pixelHolder[0];
 
@@ -60,7 +60,7 @@ public final class LCDUIImageMonochromeBitmapSource extends BaseMonochromeBitmap
   }
 
   // For efficiency, the RGB data and the luminance data share the same array.
-  protected int[] getLuminanceRow(int y, int[] row) {
+  public int[] getLuminanceRow(int y, int[] row) {
     int width = getWidth();
     if (row == null || row.length < width) {
       row = new int[width];
@@ -75,7 +75,7 @@ public final class LCDUIImageMonochromeBitmapSource extends BaseMonochromeBitmap
     return row;
   }
 
-  protected int[] getLuminanceColumn(int x, int[] column) {
+  public int[] getLuminanceColumn(int x, int[] column) {
     int height = getHeight();
     if (column == null || column.length < height) {
       column = new int[height];

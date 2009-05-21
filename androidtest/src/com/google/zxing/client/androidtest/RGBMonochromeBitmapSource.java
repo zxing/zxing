@@ -67,12 +67,12 @@ public final class RGBMonochromeBitmapSource extends BaseMonochromeBitmapSource 
   }
 
   @Override
-  protected int getLuminance(int x, int y) {
+  public int getLuminance(int x, int y) {
     return mLuminances[y * getWidth() + x] & 0xff;
   }
 
   @Override
-  protected int[] getLuminanceRow(int y, int[] row) {
+  public int[] getLuminanceRow(int y, int[] row) {
     int width = getWidth();
     if (row == null || row.length < width) {
       row = new int[width];
@@ -85,7 +85,7 @@ public final class RGBMonochromeBitmapSource extends BaseMonochromeBitmapSource 
   }
 
   @Override
-  protected int[] getLuminanceColumn(int x, int[] column) {
+  public int[] getLuminanceColumn(int x, int[] column) {
     int width = getWidth();
     int height = getHeight();
     if (column == null || column.length < height) {

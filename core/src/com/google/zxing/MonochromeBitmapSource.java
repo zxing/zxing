@@ -101,4 +101,37 @@ public interface MonochromeBitmapSource {
    */
   boolean isRotateSupported();
 
+  /**
+   * Retrieves the luminance at the pixel x,y in the bitmap. This method is only used for estimating
+   * the black point and implementing getBlackRow() - it is not meant for decoding, hence it is not
+   * part of MonochromeBitmapSource itself, and is protected.
+   *
+   * @param x The x coordinate in the image.
+   * @param y The y coordinate in the image.
+   * @return The luminance value between 0 and 255.
+   */
+  public abstract int getLuminance(int x, int y);
+
+  /**
+   * This is the main mechanism for retrieving luminance data. It is dramatically more efficient
+   * than repeatedly calling getLuminance(). As above, this is not meant for decoders.
+   *
+   * @param y The row to fetch
+   * @param row The array to write luminance values into. It is <b>strongly</b> suggested that you
+   *            allocate this yourself, making sure row.length >= getWidth(), and reuse the same
+   *            array on subsequent calls for performance. If you pass null, you will be flogged,
+   *            but then I will take pity on you and allocate a sufficient array internally.
+   * @return The array containing the luminance data. This is the same as row if it was usable.
+   */
+  public abstract int[] getLuminanceRow(int y, int[] row);
+
+  /**
+   * The same as getLuminanceRow(), but for columns.
+   *
+   * @param x The column to fetch
+   * @param column The array to write luminance values into. See above.
+   * @return The array containing the luminance data.
+   */
+  public abstract int[] getLuminanceColumn(int x, int[] column);
+
 }

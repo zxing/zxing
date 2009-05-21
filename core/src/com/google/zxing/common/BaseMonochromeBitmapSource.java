@@ -24,16 +24,12 @@ import com.google.zxing.ReaderException;
  */
 public abstract class BaseMonochromeBitmapSource implements MonochromeBitmapSource {
 
-  private static final int LUMINANCE_BITS = 5;
-  private static final int LUMINANCE_SHIFT = 8 - LUMINANCE_BITS;
-  private static final int LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
-
   private final int height;
   private final int width;
   private int blackPoint;
   private BlackPointEstimationMethod lastMethod;
   private int lastArgument;
-  private int[] luminances;
+  private int[] luminances = null;
 
   protected BaseMonochromeBitmapSource(int width, int height) {
     this.height = height;
@@ -113,30 +109,7 @@ public abstract class BaseMonochromeBitmapSource implements MonochromeBitmapSour
   public void estimateBlackPoint(BlackPointEstimationMethod method, int argument)
       throws ReaderException {
     if (!method.equals(lastMethod) || argument != lastArgument) {
-      int width = getWidth();
-      int height = getHeight();
-      int[] histogram = new int[LUMINANCE_BUCKETS];
-      if (method.equals(BlackPointEstimationMethod.TWO_D_SAMPLING)) {
-        int minDimension = width < height ? width : height;
-        int startX = (width - minDimension) >> 1;
-        int startY = (height - minDimension) >> 1;
-        for (int n = 0; n < minDimension; n++) {
-          int luminance = getLuminance(startX + n, startY + n);
-          histogram[luminance >> LUMINANCE_SHIFT]++;
-        }
-      } else if (method.equals(BlackPointEstimationMethod.ROW_SAMPLING)) {
-        if (argument < 0 || argument >= height) {
-          throw new IllegalArgumentException("Row is not within the image: " + argument);
-        }
-        initLuminances();
-        luminances = getLuminanceRow(argument, luminances);
-        for (int x = 0; x < width; x++) {
-          histogram[luminances[x] >> LUMINANCE_SHIFT]++;
-        }
-      } else {
-        throw new IllegalArgumentException("Unknown method");
-      }
-      blackPoint = BlackPointEstimator.estimate(histogram) << LUMINANCE_SHIFT;
+      blackPoint = BlackPointEstimator.estimate(this, method, argument);
       lastMethod = method;
       lastArgument = argument;
     }
@@ -189,7 +162,7 @@ public abstract class BaseMonochromeBitmapSource implements MonochromeBitmapSour
    * @param y The y coordinate in the image.
    * @return The luminance value between 0 and 255.
    */
-  protected abstract int getLuminance(int x, int y);
+  public abstract int getLuminance(int x, int y);
 
   /**
    * This is the main mechanism for retrieving luminance data. It is dramatically more efficient
@@ -202,7 +175,7 @@ public abstract class BaseMonochromeBitmapSource implements MonochromeBitmapSour
    *            but then I will take pity on you and allocate a sufficient array internally.
    * @return The array containing the luminance data. This is the same as row if it was usable.
    */
-  protected abstract int[] getLuminanceRow(int y, int[] row);
+  public abstract int[] getLuminanceRow(int y, int[] row);
 
   /**
    * The same as getLuminanceRow(), but for columns.
@@ -211,6 +184,6 @@ public abstract class BaseMonochromeBitmapSource implements MonochromeBitmapSour
    * @param column The array to write luminance values into. See above.
    * @return The array containing the luminance data.
    */
-  protected abstract int[] getLuminanceColumn(int x, int[] column);
+  public abstract int[] getLuminanceColumn(int x, int[] column);
 
 }
