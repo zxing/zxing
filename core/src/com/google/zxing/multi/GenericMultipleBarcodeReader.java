@@ -21,7 +21,7 @@ import com.google.zxing.Result;
 import com.google.zxing.MonochromeBitmapSource;
 import com.google.zxing.ReaderException;
 import com.google.zxing.ResultPoint;
-import com.google.zxing.CroppedMonochromeBitmapSource;
+import com.google.zxing.common.CroppedMonochromeBitmapSource;
 
 import java.util.Hashtable;
 import java.util.Vector;
@@ -31,9 +31,9 @@ import java.util.Vector;
  * After one barcode is found, the areas left, above, right and below the barcode's
  * {@link com.google.zxing.ResultPoint}s are scanned, recursively.</p>
  *
- * <p>A caller may want to also employ {@link ByQuadrantReader} when attempting to
- * find multiple 2D barcodes, like QR Codes, in an image, where the presence of multiple barcodes might
- * prevent detecting any one of them.</p>
+ * <p>A caller may want to also employ {@link ByQuadrantReader} when attempting to find multiple
+ * 2D barcodes, like QR Codes, in an image, where the presence of multiple barcodes might prevent
+ * detecting any one of them.</p>
  *
  * <p>That is, instead of passing a {@link Reader} a caller might pass
  * <code>new ByQuadrantReader(reader)</code>.</p>
@@ -52,7 +52,8 @@ public final class GenericMultipleBarcodeReader implements MultipleBarcodeReader
     return decodeMultiple(image, null);
   }
 
-  public Result[] decodeMultiple(MonochromeBitmapSource image, Hashtable hints) throws ReaderException {
+  public Result[] decodeMultiple(MonochromeBitmapSource image, Hashtable hints)
+      throws ReaderException {
     Vector results = new Vector();
     doDecodeMultiple(image, hints, results, 0, 0);
     if (results.isEmpty()) {
@@ -107,20 +108,20 @@ public final class GenericMultipleBarcodeReader implements MultipleBarcodeReader
     }
 
     if (minX > 0) {
-      doDecodeMultiple(new CroppedMonochromeBitmapSource(image, 0,          0,          (int) minX - 1, height),
-                       hints, results, 0,          0);
+      doDecodeMultiple(new CroppedMonochromeBitmapSource(image, 0, 0, (int) minX - 1, height),
+                       hints, results, 0, 0);
     }
     if (minY > 0) {
-      doDecodeMultiple(new CroppedMonochromeBitmapSource(image, 0,          0,          width,      (int) minY - 1),
-                       hints, results, 0,          0);
+      doDecodeMultiple(new CroppedMonochromeBitmapSource(image, 0, 0, width, (int) minY - 1),
+                       hints, results, 0, 0);
     }
     if (maxX < width - 1) {
-      doDecodeMultiple(new CroppedMonochromeBitmapSource(image, (int) maxX, 0,          width,      height),
+      doDecodeMultiple(new CroppedMonochromeBitmapSource(image, (int) maxX, 0, width, height),
                        hints, results, (int) maxX, 0);
     }
     if (maxY < height - 1) {
-      doDecodeMultiple(new CroppedMonochromeBitmapSource(image, 0,          (int) maxY, width,      height),
-                       hints, results, 0,          (int) maxY);
+      doDecodeMultiple(new CroppedMonochromeBitmapSource(image, 0, (int) maxY, width, height),
+                       hints, results, 0, (int) maxY);
     }
   }
 
@@ -131,7 +132,8 @@ public final class GenericMultipleBarcodeReader implements MultipleBarcodeReader
       ResultPoint oldPoint = oldResultPoints[i];
       newResultPoints[i] = new ResultPoint(oldPoint.getX() + xOffset, oldPoint.getY() + yOffset);
     }
-    return new Result(result.getText(), result.getRawBytes(), newResultPoints, result.getBarcodeFormat());
+    return new Result(result.getText(), result.getRawBytes(), newResultPoints,
+        result.getBarcodeFormat());
   }
 
 }
