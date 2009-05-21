@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-package com.google.zxing;
+package com.google.zxing.common;
 
-import com.google.zxing.common.BitArray;
+import com.google.zxing.BlackPointEstimationMethod;
+import com.google.zxing.MonochromeBitmapSource;
+import com.google.zxing.ReaderException;
 
 /**
- * Encapulates a cropped region, a subset, of another {@link MonochromeBitmapSource}.
+ * Encapulates a cropped region of another {@link com.google.zxing.MonochromeBitmapSource}.
  *
  * @author Sean Owen
  */
@@ -70,7 +72,8 @@ public final class CroppedMonochromeBitmapSource implements MonochromeBitmapSour
     return right - left;
   }
 
-  public void estimateBlackPoint(BlackPointEstimationMethod method, int argument) throws ReaderException {
+  public void estimateBlackPoint(BlackPointEstimationMethod method, int argument)
+      throws ReaderException {
     // Hmm, the delegate will probably base this on the whole image though...
     delegate.estimateBlackPoint(method, argument);
   }
