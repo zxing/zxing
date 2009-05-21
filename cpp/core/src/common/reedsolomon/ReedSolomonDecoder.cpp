@@ -36,10 +36,6 @@ namespace reedsolomon {
   }
   
   void ReedSolomonDecoder::decode(ArrayRef<int> received, int twoS) {
-#ifdef DEBUG
-    cout << "decode(): received = " << &received << ", array = " <<
-      received.array_ << " (" << received.array_->count_ << ")\n";
-#endif
     
     Ref<GF256Poly> poly(new GF256Poly(field, received));
     
@@ -63,35 +59,14 @@ namespace reedsolomon {
       }
     }
     if (noError) {
-      
-#ifdef DEBUG
-      cout << "before returning: syndromeCoefficients rc = " << 
-        syndromeCoefficients.array_->count_ << "\n";
-#endif
-      
       return;
     }
-    
-#ifdef DEBUG
-    cout << "syndromeCoefficients rc = " << 
-      syndromeCoefficients.array_->count_ << "\n";
-#endif
+
     Ref<GF256Poly> syndrome(new GF256Poly(field, syndromeCoefficients));
-#ifdef DEBUG
-    cout << "syndrome rc = " << syndrome.object_->count_ << 
-      ", syndromeCoefficients rc = " << 
-      syndromeCoefficients.array_->count_ << "\n";
-#endif
     Ref<GF256Poly> monomial(field.buildMonomial(twoS, 1));
-#ifdef DEBUG
-    cout << "monopmial rc = " << monomial.object_->count_ << "\n";
-#endif
     vector<Ref<GF256Poly> > sigmaOmega
       (runEuclideanAlgorithm(monomial, syndrome, twoS));
     ArrayRef<int> errorLocations = findErrorLocations(sigmaOmega[0]);
-#ifdef DEBUG
-    cout << "errorLocations count: " << errorLocations.array_->count_ << "\n";
-#endif
     ArrayRef<int> errorMagitudes = findErrorMagnitudes(sigmaOmega[1],
                                                        errorLocations);
     for (unsigned i = 0; i < errorLocations->size(); i++) {
