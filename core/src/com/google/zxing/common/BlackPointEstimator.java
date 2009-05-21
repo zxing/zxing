@@ -42,10 +42,9 @@ public final class BlackPointEstimator {
    * @param histogram an array of <em>counts</em> of luminance values
    * @return index within argument of bucket corresponding to brightest values which should be
    *         considered "black"
-   * @throws ReaderException if "black" and "white" appear to be very close in luminance in the image
+   * @throws ReaderException if "black" and "white" appear to be very close in luminance
    */
   public static int estimate(int[] histogram) throws ReaderException{
-
     int numBuckets = histogram.length;
     int maxBucketCount = 0;
     // Find tallest peak in histogram

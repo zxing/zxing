@@ -110,7 +110,8 @@ public abstract class BaseMonochromeBitmapSource implements MonochromeBitmapSour
     return column;
   }
 
-  public void estimateBlackPoint(BlackPointEstimationMethod method, int argument) throws ReaderException {
+  public void estimateBlackPoint(BlackPointEstimationMethod method, int argument)
+      throws ReaderException {
     if (!method.equals(lastMethod) || argument != lastArgument) {
       int width = getWidth();
       int height = getHeight();

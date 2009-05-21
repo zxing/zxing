@@ -69,15 +69,16 @@ public final class Result {
   }
 
   /**
-   * @return {@link BarcodeFormat} representing the format of the barcode that was recognized and decoded
+   * @return {@link BarcodeFormat} representing the format of the barcode that was decoded
    */
   public BarcodeFormat getBarcodeFormat() {
     return format;
   }
 
   /**
-   * @return {@link Hashtable} mapping {@link ResultMetadataType} keys to values. May be <code>null</code>.
-   *  This contains optional metadata about what was detected about the barcode, like orientation.
+   * @return {@link Hashtable} mapping {@link ResultMetadataType} keys to values. May be
+   *   <code>null</code>. This contains optional metadata about what was detected about the barcode,
+   *   like orientation.
    */
   public Hashtable getResultMetadata() {
     return resultMetadata;
