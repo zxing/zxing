@@ -59,15 +59,15 @@ public abstract class BaseMonochromeBitmapSource implements MonochromeBitmapSour
 
     // Reuse the same int array each time
     initLuminances();
-    luminances = getLuminanceRow(y, luminances);
+    int[] localLuminances = getLuminanceRow(y, luminances);
 
     // If the current decoder calculated the blackPoint based on one row, assume we're trying to
     // decode a 1D barcode, and apply some sharpening.
     if (lastMethod.equals(BlackPointEstimationMethod.ROW_SAMPLING)) {
-      int left = luminances[startX];
-      int center = luminances[startX + 1];
+      int left = localLuminances[startX];
+      int center = localLuminances[startX + 1];
       for (int x = 1; x < getWidth - 1; x++) {
-        int right = luminances[startX + x + 1];
+        int right = localLuminances[startX + x + 1];
         // Simple -1 4 -1 box filter with a weight of 2
         int luminance = ((center << 2) - left - right) >> 1;
         if (luminance < blackPoint) {
@@ -78,7 +78,7 @@ public abstract class BaseMonochromeBitmapSource implements MonochromeBitmapSour
       }
     } else {
       for (int x = 0; x < getWidth; x++) {
-        if (luminances[startX + x] < blackPoint) {
+        if (localLuminances[startX + x] < blackPoint) {
           row.set(x);
         }
       }
@@ -95,11 +95,11 @@ public abstract class BaseMonochromeBitmapSource implements MonochromeBitmapSour
 
     // Reuse the same int array each time
     initLuminances();
-    luminances = getLuminanceColumn(x, luminances);
+    int[] localLuminances = getLuminanceColumn(x, luminances);
 
     // We don't handle "row sampling" specially here
     for (int y = 0; y < getHeight; y++) {
-      if (luminances[startY + y] < blackPoint) {
+      if (localLuminances[startY + y] < blackPoint) {
         column.set(y);
       }
     }
