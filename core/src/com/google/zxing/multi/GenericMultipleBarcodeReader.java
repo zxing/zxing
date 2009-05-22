@@ -108,11 +108,11 @@ public final class GenericMultipleBarcodeReader implements MultipleBarcodeReader
     }
 
     if (minX > 0) {
-      doDecodeMultiple(new CroppedMonochromeBitmapSource(image, 0, 0, (int) minX - 1, height),
+      doDecodeMultiple(new CroppedMonochromeBitmapSource(image, 0, 0, (int) minX, height),
                        hints, results, 0, 0);
     }
     if (minY > 0) {
-      doDecodeMultiple(new CroppedMonochromeBitmapSource(image, 0, 0, width, (int) minY - 1),
+      doDecodeMultiple(new CroppedMonochromeBitmapSource(image, 0, 0, width, (int) minY),
                        hints, results, 0, 0);
     }
     if (maxX < width - 1) {
