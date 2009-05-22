@@ -54,14 +54,14 @@ public final class AWTImageMonochromeBitmapSource extends BaseMonochromeBitmapSo
    * See <code>com.google.zxing.client.j2me.LCDUIImageMonochromeBitmapSource</code> for more explanation
    * of the computation used in this method.
    */
-  protected int getLuminance(int x, int y) {
+  public int getLuminance(int x, int y) {
     int pixel = pixels[y * getWidth() + x];
     return (((pixel & 0x00FF0000) >> 16) +
             ((pixel & 0x0000FF00) >>  7) +
              (pixel & 0x000000FF       )) >> 2;
   }
 
-  protected int[] getLuminanceRow(int y, int[] row) {
+  public int[] getLuminanceRow(int y, int[] row) {
     int width = getWidth();
     if (row == null || row.length < width) {
       row = new int[width];
@@ -76,7 +76,7 @@ public final class AWTImageMonochromeBitmapSource extends BaseMonochromeBitmapSo
     return row;
   }
 
-  protected int[] getLuminanceColumn(int x, int[] column) {
+  public int[] getLuminanceColumn(int x, int[] column) {
     int height = getHeight();
     int width = getWidth();
     if (column == null || column.length < height) {
