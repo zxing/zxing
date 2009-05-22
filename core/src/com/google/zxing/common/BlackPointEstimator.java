@@ -25,8 +25,7 @@ import com.google.zxing.ReaderException;
  * which is the best line between "white" and "black" in a grayscale image.</p>
  *
  * <p>For an interesting discussion of this issue, see
- * <a href="http://webdiis.unizar.es/~neira/12082/thresholding.pdf">http://webdiis.unizar.es/~neira/12082/thresholding.pdf</a>.
- * </p>
+ * <a href="http://webdiis.unizar.es/~neira/12082/thresholding.pdf">this paper</a>.</p>
  *
  * NOTE: This class is not threadsafe.
  *
@@ -74,21 +73,26 @@ public final class BlackPointEstimator {
     initArrays(width);
 
     if (method.equals(BlackPointEstimationMethod.TWO_D_SAMPLING)) {
-      int minDimension = width < height ? width : height;
-      int startX = (width - minDimension) >> 1;
-      int startY = (height - minDimension) >> 1;
-      for (int n = 0; n < minDimension; n++) {
-        int luminance = source.getLuminance(startX + n, startY + n);
-        histogram[luminance >> LUMINANCE_SHIFT]++;
+      // We used to sample a diagonal in the 2D case, but it missed a lot of pixels, and it required
+      // n calls to getLuminance(). We had a net improvement of 63 blackbox tests decoded by
+      // sampling several rows from the middle of the image, using getLuminanceRow(). We read more
+      // pixels total, but with fewer function calls, and more continguous memory.
+      for (int y = 1; y < 5; y++) {
+        int row = height * y / 5;
+        int[] localLuminances = source.getLuminanceRow(row, luminances);
+        int right = width * 4 / 5;
+        for (int x = width / 5; x < right; x++) {
+          histogram[localLuminances[x] >> LUMINANCE_SHIFT]++;
+        }
       }
     } else if (method.equals(BlackPointEstimationMethod.ROW_SAMPLING)) {
       if (argument < 0 || argument >= height) {
         throw new IllegalArgumentException("Row is not within the image: " + argument);
       }
 
-      luminances = source.getLuminanceRow(argument, luminances);
+      int[] localLuminances = source.getLuminanceRow(argument, luminances);
       for (int x = 0; x < width; x++) {
-        histogram[luminances[x] >> LUMINANCE_SHIFT]++;
+        histogram[localLuminances[x] >> LUMINANCE_SHIFT]++;
       }
     } else {
       throw new IllegalArgumentException("Unknown method");
