@@ -42,6 +42,8 @@ import java.util.Vector;
  */
 public final class GenericMultipleBarcodeReader implements MultipleBarcodeReader {
 
+  private static final int MIN_DIMENSION_TO_RECUR = 30;
+
   private final Reader delegate;
 
   public GenericMultipleBarcodeReader(Reader delegate) {
@@ -78,6 +80,17 @@ public final class GenericMultipleBarcodeReader implements MultipleBarcodeReader
     } catch (ReaderException re) {
       return;
     }
+    boolean alreadyFound = false;
+    for (int i = 0; i < results.size(); i++) {
+      Result existingResult = (Result) results.elementAt(i);
+      if (existingResult.getText().equals(result.getText())) {
+        alreadyFound = true;
+        break;
+      }
+    }
+    if (alreadyFound) {
+      return;
+    }
     results.addElement(translateResultPoints(result, xOffset, yOffset));
     ResultPoint[] resultPoints = result.getResultPoints();
     if (resultPoints == null || resultPoints.length == 0) {
@@ -107,19 +120,19 @@ public final class GenericMultipleBarcodeReader implements MultipleBarcodeReader
       }
     }
 
-    if (minX > 0) {
+    if (minX > MIN_DIMENSION_TO_RECUR) {
       doDecodeMultiple(new CroppedMonochromeBitmapSource(image, 0, 0, (int) minX, height),
                        hints, results, 0, 0);
     }
-    if (minY > 0) {
+    if (minY > MIN_DIMENSION_TO_RECUR) {
       doDecodeMultiple(new CroppedMonochromeBitmapSource(image, 0, 0, width, (int) minY),
                        hints, results, 0, 0);
     }
-    if (maxX < width - 1) {
+    if (maxX < width - MIN_DIMENSION_TO_RECUR) {
       doDecodeMultiple(new CroppedMonochromeBitmapSource(image, (int) maxX, 0, width, height),
                        hints, results, (int) maxX, 0);
     }
-    if (maxY < height - 1) {
+    if (maxY < height - MIN_DIMENSION_TO_RECUR) {
       doDecodeMultiple(new CroppedMonochromeBitmapSource(image, 0, (int) maxY, width, height),
                        hints, results, 0, (int) maxY);
     }
