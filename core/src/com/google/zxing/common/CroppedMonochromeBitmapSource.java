@@ -87,8 +87,8 @@ public final class CroppedMonochromeBitmapSource implements MonochromeBitmapSour
     return new CroppedMonochromeBitmapSource(rotated,
                                              top,
                                              delegate.getWidth() - right,
-                                             delegate.getHeight() - bottom,
-                                             left);
+                                             bottom,
+                                             delegate.getWidth() - left);
   }
 
   public boolean isRotateSupported() {
