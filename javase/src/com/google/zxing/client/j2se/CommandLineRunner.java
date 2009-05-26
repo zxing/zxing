@@ -170,7 +170,6 @@ public final class CommandLineRunner {
   // Writes out a single PNG which is three times the width of the input image, containing from left
   // to right: the original image, the row sampling monochrome version, and the 2D sampling
   // monochrome version.
-  // TODO: Currently fails on URLs. Would be nice to handle gracefully and write the output to pwd.
   private static void dumpBlackPoint(URI uri, BufferedImage image, MonochromeBitmapSource source) {
     String inputName = uri.getPath();
     if (inputName.contains(".mono.png")) {
@@ -235,7 +234,14 @@ public final class CommandLineRunner {
     BufferedImage result = new BufferedImage(stride, height, BufferedImage.TYPE_INT_ARGB);
     result.setRGB(0, 0, stride, height, pixels, 0, stride);
 
+    // Use the current working directory for URLs
     String resultName = inputName;
+    if (uri.getScheme().equals("http")) {
+      int pos = resultName.lastIndexOf('/');
+      if (pos > 0) {
+        resultName = "." + resultName.substring(pos);
+      }
+    }
     int pos = resultName.lastIndexOf('.');
     if (pos > 0) {
       resultName = resultName.substring(0, pos);
