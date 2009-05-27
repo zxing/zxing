@@ -77,7 +77,7 @@ public class FinderPatternFinder {
     // image, and then account for the center being 3 modules in size. This gives the smallest
     // number of pixels the center could be, so skip this often. When trying harder, look for all
     // QR versions regardless of how dense they are.
-    int iSkip = (int) (maxI / (MAX_MODULES * 4.0f) * 3);
+    int iSkip = (3 * maxI) / (4 * MAX_MODULES);
     if (iSkip < MIN_SKIP || tryHarder) {
       iSkip = MIN_SKIP;
     }
@@ -111,7 +111,7 @@ public class FinderPatternFinder {
                   // expensive and didn't improve performance.
                   iSkip = 2;
                   if (hasSkipped) {
-                    done = haveMulitplyConfirmedCenters();
+                    done = haveMultiplyConfirmedCenters();
                   } else {
                     int rowSkip = findRowSkip();
                     if (rowSkip > stateCount[2]) {
@@ -163,7 +163,7 @@ public class FinderPatternFinder {
           iSkip = stateCount[0];
           if (hasSkipped) {
             // Found a third one
-            done = haveMulitplyConfirmedCenters();
+            done = haveMultiplyConfirmedCenters();
           }
         }
       }
@@ -446,7 +446,7 @@ public class FinderPatternFinder {
    *         at least {@link #CENTER_QUORUM} times each, and, the estimated module size of the
    *         candidates is "pretty similar"
    */
-  private boolean haveMulitplyConfirmedCenters() {
+  private boolean haveMultiplyConfirmedCenters() {
     int confirmedCount = 0;
     float totalModuleSize = 0.0f;
     int max = possibleCenters.size();
@@ -464,7 +464,7 @@ public class FinderPatternFinder {
     // and that we need to keep looking. We detect this by asking if the estimated module sizes
     // vary too much. We arbitrarily say that when the total deviation from average exceeds
     // 15% of the total module size estimates, it's too much.
-    float average = totalModuleSize / max;
+    float average = totalModuleSize / (float) max;
     float totalDeviation = 0.0f;
     for (int i = 0; i < max; i++) {
       FinderPattern pattern = (FinderPattern) possibleCenters.elementAt(i);
