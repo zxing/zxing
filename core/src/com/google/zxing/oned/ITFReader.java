@@ -77,14 +77,12 @@ public final class ITFReader extends AbstractOneDReader {
 
   public Result decodeRow(int rowNumber, BitArray row, Hashtable hints) throws ReaderException {
 
-    StringBuffer result = new StringBuffer(20);
-
     // Find out where the Middle section (payload) starts & ends
     int[] startRange = decodeStart(row);
     int[] endRange = decodeEnd(row);
 
+    StringBuffer result = new StringBuffer(20);
     decodeMiddle(row, startRange[1], endRange[0], result);
-
     String resultString = result.toString();
 
     int[] allowedLengths = null;
