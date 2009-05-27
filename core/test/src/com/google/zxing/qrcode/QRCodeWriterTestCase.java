@@ -41,6 +41,10 @@ public final class QRCodeWriterTestCase extends TestCase {
   private static BufferedImage loadImage(String fileName) {
     try {
       File file = new File(BASE_IMAGE_PATH + fileName);
+      if (!file.exists()) {
+        // try starting with 'core' since the test base is often given as the project root
+        file = new File("core/" + BASE_IMAGE_PATH + fileName);
+      }
       assertTrue("Please run from the 'core' directory", file.exists());
       return ImageIO.read(file);
     } catch (IOException e) {
