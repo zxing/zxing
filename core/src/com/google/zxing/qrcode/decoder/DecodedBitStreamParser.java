@@ -285,10 +285,9 @@ final class DecodedBitStreamParser {
       if (!lastWasPossibleDoubleByteStart && ((value >= 0xF0 && value <= 0xFF) || value == 0x80 || value == 0xA0)) {
         canBeShiftJIS = false;
       }
-      if (((value >= 0x81 && value <= 0x9F) || (value >= 0xE0 && value <= 0xEF)) && i < length - 1) {
+      if (((value >= 0x81 && value <= 0x9F) || (value >= 0xE0 && value <= 0xEF))) {
         // These start double-byte characters in Shift_JIS. Let's see if it's followed by a valid
         // second byte.
-        sawDoubleByteStart = true;
         if (lastWasPossibleDoubleByteStart) {
           // If we just checked this and the last byte for being a valid double-byte
           // char, don't check starting on this byte. If this and the last byte
@@ -299,12 +298,18 @@ final class DecodedBitStreamParser {
           // ... otherwise do check to see if this plus the next byte form a valid
           // double byte pair encoding a character.
           lastWasPossibleDoubleByteStart = true;
-          int nextValue = bytes[i + 1] & 0xFF;
-          if (nextValue < 0x40 || nextValue > 0xFC) {
+          if (i >= bytes.length - 1) {
             canBeShiftJIS = false;
+          } else {
+            int nextValue = bytes[i + 1] & 0xFF;
+            if (nextValue < 0x40 || nextValue > 0xFC) {
+              canBeShiftJIS = false;
+            } else {
+              sawDoubleByteStart = true;
+            }
+            // There is some conflicting information out there about which bytes can follow which in
+            // double-byte Shift_JIS characters. The rule above seems to be the one that matches practice.
           }
-          // There is some conflicting information out there about which bytes can follow which in
-          // double-byte Shift_JIS characters. The rule above seems to be the one that matches practice.
         }
       } else {
         lastWasPossibleDoubleByteStart = false;
