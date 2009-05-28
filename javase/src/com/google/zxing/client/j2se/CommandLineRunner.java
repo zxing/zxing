@@ -55,6 +55,10 @@ public final class CommandLineRunner {
   }
 
   public static void main(String[] args) throws Exception {
+    if (args == null || args.length == 0) {
+      printUsage();
+      return;
+    }
     Hashtable<DecodeHintType, Object> hints = null;
     boolean dumpResults = false;
     boolean dumpBlackPoint = false;
@@ -66,8 +70,9 @@ public final class CommandLineRunner {
         dumpResults = true;
       } else if ("--dump_black_point".equals(arg)) {
         dumpBlackPoint = true;
-      } else if (arg.startsWith("--")) {
+      } else if (arg.startsWith("-")) {
         System.out.println("Unknown command line option " + arg);
+        printUsage();
         return;
       }
     }
@@ -76,6 +81,14 @@ public final class CommandLineRunner {
         decodeOneArgument(arg, hints, dumpResults, dumpBlackPoint);
       }
     }
+  }
+
+  private static void printUsage() {
+    System.out.println("Decode barcode images using the ZXing library\n");
+    System.out.println("usage: CommandLineRunner { file | dir | url } [ options ]");
+    System.out.println("  --try_harder: Use the TRY_HARDER hint, default is normal (mobile) mode");
+    System.out.println("  --dump_results: Write the decoded contents to input.txt");
+    System.out.println("  --dump_black_point: Compare black point algorithms as input.mono.png");
   }
 
   private static void decodeOneArgument(String argument, Hashtable<DecodeHintType, Object> hints,
