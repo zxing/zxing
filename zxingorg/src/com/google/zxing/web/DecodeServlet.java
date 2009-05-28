@@ -85,7 +85,7 @@ public final class DecodeServlet extends HttpServlet {
   static {
     HINTS = new Hashtable<DecodeHintType, Object>(5);
     HINTS.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
-    Vector possibleFormats = new Vector();
+    Vector<BarcodeFormat> possibleFormats = new Vector<BarcodeFormat>();
     possibleFormats.add(BarcodeFormat.UPC_A);
     possibleFormats.add(BarcodeFormat.UPC_E);
     possibleFormats.add(BarcodeFormat.EAN_8);

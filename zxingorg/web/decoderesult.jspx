@@ -18,9 +18,9 @@
 <jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" xmlns="http://www.w3.org/1999/xhtml" version="2.1">
   <jsp:output
           omit-xml-declaration="false" doctype-root-element="html"
-          doctype-public="-//WAPFORUM//DTD XHTML Mobile 1.1//EN"
-          doctype-system="http://www.openmobilealliance.org/tech/DTD/xhtml-mobile11.dtd"/>
-  <jsp:directive.page contentType="application/xhtml+xml" session="false"/>
+          doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN"
+          doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"/>
+  <jsp:directive.page contentType="text/html" session="false"/>
   <jsp:scriptlet>response.setHeader("Cache-Control", "no-cache");</jsp:scriptlet>
   <jsp:useBean id="result" scope="request" type="com.google.zxing.Result"/>
   <jsp:useBean id="parsedResult" scope="request" type="com.google.zxing.client.result.ParsedResult"/>
