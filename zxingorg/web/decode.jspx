@@ -18,8 +18,8 @@
 <jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" xmlns="http://www.w3.org/1999/xhtml" version="2.1">
   <jsp:output
           omit-xml-declaration="false" doctype-root-element="html"
-          doctype-public="-//W3C//DTD XHTML 1.1//EN"
-          doctype-system="http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"/>
+          doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN"
+          doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"/>
   <jsp:directive.page contentType="text/html" session="false"/>
   <jsp:scriptlet>response.setHeader("Cache-Control", "public");</jsp:scriptlet>
   <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
@@ -28,7 +28,7 @@
     </head>
     <body>
       <h1><img src="zxing-icon.png" height="32" width="32" alt=""/> ZXing Decoder Online</h1>
-      <p><b>Under Construction</b>: This is a simple page that will let you decode a 1D or 2D barcode found
+      <p>This is a simple page that will let you decode a 1D or 2D barcode found
         in an image online. Enter a URL below.
       </p>
       <form action="decode" method="get">

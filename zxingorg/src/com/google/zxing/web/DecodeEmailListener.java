@@ -27,7 +27,7 @@ import java.util.Timer;
  */
 public final class DecodeEmailListener implements ServletContextListener {
 
-  private static final long EMAIL_CHECK_INTERVAL = 3L * 60 * 1000;
+  private static final long EMAIL_CHECK_INTERVAL = 5L * 60 * 1000;
 
   private Timer emailTimer;
 
