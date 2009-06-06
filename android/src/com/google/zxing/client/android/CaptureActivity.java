@@ -76,9 +76,9 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private static final int ABOUT_ID = Menu.FIRST + 3;
 
   private static final int MAX_RESULT_IMAGE_SIZE = 150;
-  private static final int INTENT_RESULT_DURATION = 1500;
+  private static final long INTENT_RESULT_DURATION = 1500L;
   private static final float BEEP_VOLUME = 0.15f;
-  private static final long VIBRATE_DURATION = 200;
+  private static final long VIBRATE_DURATION = 200L;
 
   private static final String PACKAGE_NAME = "com.google.zxing.client.android";
   private static final String PRODUCT_SEARCH_URL_PREFIX = "http://www.google";
@@ -281,7 +281,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   }
 
   private final DialogInterface.OnClickListener mAboutListener = new DialogInterface.OnClickListener() {
-    public void onClick(android.content.DialogInterface dialogInterface, int i) {
+    public void onClick(DialogInterface dialogInterface, int i) {
       Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.zxing_url)));
       startActivity(intent);
     }
@@ -337,20 +337,20 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       Canvas canvas = new Canvas(barcode);
       Paint paint = new Paint();
       paint.setColor(getResources().getColor(R.color.result_image_border));
-      paint.setStrokeWidth(3);
+      paint.setStrokeWidth(3.0f);
       paint.setStyle(Paint.Style.STROKE);
       Rect border = new Rect(2, 2, barcode.getWidth() - 2, barcode.getHeight() - 2);
       canvas.drawRect(border, paint);
 
       paint.setColor(getResources().getColor(R.color.result_points));
       if (points.length == 2) {
-        paint.setStrokeWidth(4);
+        paint.setStrokeWidth(4.0f);
         canvas.drawLine(points[0].getX(), points[0].getY(), points[1].getX(),
             points[1].getY(), paint);
       } else {
-        paint.setStrokeWidth(10);
-        for (int x = 0; x < points.length; x++) {
-          canvas.drawPoint(points[x].getX(), points[x].getY(), paint);
+        paint.setStrokeWidth(10.0f);
+        for (ResultPoint point : points) {
+          canvas.drawPoint(point.getX(), point.getY(), paint);
         }
       }
     }
@@ -503,7 +503,12 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   }
 
   private void initCamera(SurfaceHolder surfaceHolder) {
-    CameraManager.get().openDriver(surfaceHolder);
+    try {
+      CameraManager.get().openDriver(surfaceHolder);
+    } catch (IOException ioe) {
+      Log.w(TAG, ioe);
+      return;
+    }
     if (mHandler == null) {
       boolean beginScanning = mLastResult == null;
       mHandler = new CaptureActivityHandler(this, mDecodeMode, beginScanning);
