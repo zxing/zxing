@@ -28,6 +28,8 @@ import android.view.SurfaceHolder;
 import android.view.WindowManager;
 import com.google.zxing.ResultPoint;
 
+import java.io.IOException;
+
 /**
  * This object wraps the Camera service object and expects to be the only one talking to it. The
  * implementation encapsulates the steps needed to take preview-sized images, which are used for
@@ -66,7 +68,7 @@ final class CameraManager {
     mPreviewing = false;
   }
 
-  public void openDriver(SurfaceHolder holder) {
+  public void openDriver(SurfaceHolder holder) throws IOException {
     if (mCamera == null) {
       mCamera = Camera.open();
       mCamera.setPreviewDisplay(holder);
@@ -138,7 +140,7 @@ final class CameraManager {
    */
   public Rect getFramingRect() {
     if (mFramingRect == null) {
-      int size = ((mScreenResolution.x < mScreenResolution.y) ? mScreenResolution.x :
+      int size = (mScreenResolution.x < mScreenResolution.y ? mScreenResolution.x :
           mScreenResolution.y) * 3 / 4;
       int leftOffset = (mScreenResolution.x - size) / 2;
       int topOffset = (mScreenResolution.y - size) / 2;
@@ -188,7 +190,7 @@ final class CameraManager {
       if (mAutoFocusHandler != null) {
         Message message = mAutoFocusHandler.obtainMessage(mAutoFocusMessage, success);
         // Simulate continuous autofocus by sending a focus request every 1.5 seconds.
-        mAutoFocusHandler.sendMessageDelayed(message, 1500);
+        mAutoFocusHandler.sendMessageDelayed(message, 1500L);
         mAutoFocusHandler = null;
       }
     }
