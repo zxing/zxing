@@ -138,8 +138,7 @@ public abstract class ResultHandler {
       long milliseconds = date.getTime();
       if (when.length() == 16 && when.charAt(15) == 'Z') {
         Calendar calendar = new GregorianCalendar();
-        int offset = (calendar.get(java.util.Calendar.ZONE_OFFSET) +
-            calendar.get(java.util.Calendar.DST_OFFSET));
+        int offset = calendar.get(Calendar.ZONE_OFFSET) + calendar.get(Calendar.DST_OFFSET);
         milliseconds += offset;
       }
       return milliseconds;
@@ -261,8 +260,8 @@ public abstract class ResultHandler {
   }
 
   public final void openBookSearch(String isbn) {
-    Uri uri = Uri.parse("http://books.google." + LocaleManager.getCountryTLD() + "/books?vid=isbn" +
-        isbn);
+    Uri uri = Uri.parse("http://books.google." + LocaleManager.getBookSearchCountryTLD() +
+        "/books?vid=isbn" + isbn);
     launchIntent(new Intent(Intent.ACTION_VIEW, uri));
   }
 

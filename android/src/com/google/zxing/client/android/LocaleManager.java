@@ -43,8 +43,15 @@ public final class LocaleManager {
   // Google Product Search for mobile is available in fewer countries than web search.
   private static final Map<Locale,String> GOOGLE_PRODUCT_SEARCH_COUNTRY_TLD;
   static {
-    GOOGLE_PRODUCT_SEARCH_COUNTRY_TLD = new HashMap<Locale,String>();
+    GOOGLE_PRODUCT_SEARCH_COUNTRY_TLD = new HashMap<Locale,String>(3);
     GOOGLE_PRODUCT_SEARCH_COUNTRY_TLD.put(Locale.UK, "co.uk");
+  }
+
+  private static final Map<Locale,String> GOOGLE_BOOK_SEARCH_COUNTRY_TLD;
+  static {
+    GOOGLE_BOOK_SEARCH_COUNTRY_TLD = new HashMap<Locale,String>(13);
+    GOOGLE_BOOK_SEARCH_COUNTRY_TLD.putAll(GOOGLE_COUNTRY_TLD);
+    GOOGLE_BOOK_SEARCH_COUNTRY_TLD.remove(Locale.CHINA);
   }
 
   private LocaleManager() {}
@@ -54,15 +61,7 @@ public final class LocaleManager {
    *  (e.g. "co.uk" for the United Kingdom)
    */
   public static String getCountryTLD() {
-    Locale locale = Locale.getDefault();
-    if (locale == null) {
-      return DEFAULT_TLD;
-    }
-    String tld = GOOGLE_COUNTRY_TLD.get(locale);
-    if (tld == null) {
-      return DEFAULT_TLD;
-    }
-    return tld;
+    return doGetTLD(GOOGLE_COUNTRY_TLD);
   }
 
   /**
@@ -70,11 +69,24 @@ public final class LocaleManager {
    * @return The top-level domain to use.
    */
   public static String getProductSearchCountryTLD() {
+    return doGetTLD(GOOGLE_PRODUCT_SEARCH_COUNTRY_TLD);
+  }
+
+  /**
+   * The same as above, but specifically for Google Book Search.
+   * @return The top-level domain to use.
+   */
+  public static String getBookSearchCountryTLD() {
+    return doGetTLD(GOOGLE_BOOK_SEARCH_COUNTRY_TLD);
+  }
+
+
+  private static String doGetTLD(Map<Locale,String> map) {
     Locale locale = Locale.getDefault();
     if (locale == null) {
       return DEFAULT_TLD;
     }
-    String tld = GOOGLE_PRODUCT_SEARCH_COUNTRY_TLD.get(locale);
+    String tld = map.get(locale);
     if (tld == null) {
       return DEFAULT_TLD;
     }
