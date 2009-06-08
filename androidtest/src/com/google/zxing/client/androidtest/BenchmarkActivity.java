@@ -68,7 +68,6 @@ public final class BenchmarkActivity extends Activity {
           handleBenchmarkDone(message);
           mBenchmarkThread = null;
           mRunBenchmarkButton.setEnabled(true);
-          mTextView.setText(R.string.benchmark_help);
           break;
         default:
           break;
@@ -76,17 +75,21 @@ public final class BenchmarkActivity extends Activity {
     }
   };
 
-  private static void handleBenchmarkDone(Message message) {
+  private void handleBenchmarkDone(Message message) {
     List<BenchmarkItem> items = (List<BenchmarkItem>) message.obj;
     int count = 0;
+    int time = 0;
     for (int x = 0; x < items.size(); x++) {
       BenchmarkItem item = items.get(x);
       if (item != null) {
         Log.v(TAG, item.toString());
         count++;
+        time += item.getAverageTime();
       }
     }
-    Log.v(TAG, "TOTAL: Decoded " + count + " images");
+    String totals = "TOTAL: Decoded " + count + " images in " + time + " us";
+    Log.v(TAG, totals);
+    mTextView.setText(totals + "\n\n" + getString(R.string.benchmark_help));
   }
 
 }

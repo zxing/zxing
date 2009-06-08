@@ -71,7 +71,7 @@ public final class BenchmarkItem {
    *
    * @return The average decoding time in microseconds.
    */
-  private int getAverageTime() {
+  public int getAverageTime() {
     int size = mTimes.length;
     int total = 0;
     int max = mTimes[0];
