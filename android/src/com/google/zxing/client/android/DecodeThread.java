@@ -94,7 +94,7 @@ final class DecodeThread extends Thread {
 
   private void setDecodeProductMode() {
     Hashtable<DecodeHintType, Object> hints = new Hashtable<DecodeHintType, Object>(3);
-    Vector<BarcodeFormat> vector = new Vector<BarcodeFormat>();
+    Vector<BarcodeFormat> vector = new Vector<BarcodeFormat>(4);
     vector.addElement(BarcodeFormat.UPC_A);
     vector.addElement(BarcodeFormat.UPC_E);
     vector.addElement(BarcodeFormat.EAN_13);
@@ -108,7 +108,7 @@ final class DecodeThread extends Thread {
    */
   private void setDecode1DMode() {
     Hashtable<DecodeHintType, Object> hints = new Hashtable<DecodeHintType, Object>(3);
-    Vector<BarcodeFormat> vector = new Vector<BarcodeFormat>();
+    Vector<BarcodeFormat> vector = new Vector<BarcodeFormat>(7);
     vector.addElement(BarcodeFormat.UPC_A);
     vector.addElement(BarcodeFormat.UPC_E);
     vector.addElement(BarcodeFormat.EAN_13);
@@ -122,7 +122,7 @@ final class DecodeThread extends Thread {
 
   private void setDecodeQRMode() {
     Hashtable<DecodeHintType, Object> hints = new Hashtable<DecodeHintType, Object>(3);
-    Vector<BarcodeFormat> vector = new Vector<BarcodeFormat>();
+    Vector<BarcodeFormat> vector = new Vector<BarcodeFormat>(1);
     vector.addElement(BarcodeFormat.QR_CODE);
     hints.put(DecodeHintType.POSSIBLE_FORMATS, vector);
     mMultiFormatReader.setHints(hints);
@@ -134,7 +134,7 @@ final class DecodeThread extends Thread {
    */
   private void setDecodeAllMode() {
     Hashtable<DecodeHintType, Object> hints = new Hashtable<DecodeHintType, Object>(3);
-    Vector<BarcodeFormat> vector = new Vector<BarcodeFormat>();
+    Vector<BarcodeFormat> vector = new Vector<BarcodeFormat>(8);
     vector.addElement(BarcodeFormat.UPC_A);
     vector.addElement(BarcodeFormat.UPC_E);
     vector.addElement(BarcodeFormat.EAN_13);

@@ -17,7 +17,10 @@
 package com.google.zxing.client.android.result;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import com.google.zxing.client.android.R;
+import com.google.zxing.client.android.PreferencesActivity;
 import com.google.zxing.client.result.ISBNParsedResult;
 import com.google.zxing.client.result.ParsedResult;
 
@@ -26,16 +29,21 @@ public final class ISBNResultHandler extends ResultHandler {
   private static final int[] mButtons = {
       R.string.button_product_search,
       R.string.button_book_search,
-      R.string.button_search_book_contents
+      R.string.button_search_book_contents,
+      R.string.button_custom_product_search,
   };
+
+  private final String mCustomProductSearch;
 
   public ISBNResultHandler(Activity activity, ParsedResult result) {
     super(activity, result);
+    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+    mCustomProductSearch = prefs.getString(PreferencesActivity.KEY_CUSTOM_PRODUCT_SEARCH, null);
   }
 
   @Override
   public int getButtonCount() {
-    return mButtons.length;
+    return mCustomProductSearch != null && mCustomProductSearch.length() > 0 ? mButtons.length : mButtons.length - 1;
   }
 
   @Override
@@ -55,6 +63,10 @@ public final class ISBNResultHandler extends ResultHandler {
         break;
       case 2:
         searchBookContents(isbnResult.getISBN());
+        break;
+      case 3:
+        String url = mCustomProductSearch.replace("%s", isbnResult.getISBN());
+        openURL(url);
         break;
     }
   }
