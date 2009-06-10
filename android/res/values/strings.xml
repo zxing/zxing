@@ -18,12 +18,13 @@
   <string name="app_name">Barcode Scanner</string>
   <string name="bookmark_picker_name">Bookmarks</string>
 
-  <string name="button_add_calendar">Add event to calendar</string>
+  <string name="button_add_calendar">Add to calendar</string>
   <string name="button_add_contact">Add contact</string>
   <string name="button_back">Back</string>
-  <string name="button_book_search">Open Book Search</string>
+  <string name="button_book_search">Book Search</string>
   <string name="button_cancel">Cancel</string>
   <string name="button_clipboard_empty">Clipboard empty</string>
+  <string name="button_custom_product_search">Custom search</string>
   <string name="button_dial">Dial number</string>
   <string name="button_done">Done</string>
   <string name="button_email">Send email</string>
@@ -31,8 +32,8 @@
   <string name="button_mms">Send MMS</string>
   <string name="button_ok">OK</string>
   <string name="button_open_browser">Open browser</string>
-  <string name="button_product_search">Open Product Search</string>
-  <string name="button_search_book_contents">Search book contents</string>
+  <string name="button_product_search">Product Search</string>
+  <string name="button_search_book_contents">Search book</string>
   <string name="button_share_bookmark">Share bookmark</string>
   <string name="button_share_by_email">Share via email</string>
   <string name="button_share_by_sms">Share via SMS</string>
@@ -86,6 +87,9 @@
   <string name="preferences_name">Settings</string>
   <string name="preferences_play_beep_title">Beep</string>
   <string name="preferences_vibrate_title">Vibrate</string>
+  <string name="preferences_result_title">Result Settings</string>
+  <string name="preferences_custom_product_search_title">Custom product search URL</string>
+  <string name="preferences_custom_product_search_summary">Use %s as placeholder for product ID</string>
 
   <string name="result_address_book">Found contact info</string>
   <string name="result_calendar">Found calendar event</string>

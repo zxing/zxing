@@ -16,10 +16,7 @@
 
 package com.google.zxing.client.android;
 
-import org.apache.http.Header;
-import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
-import org.apache.http.HttpMessage;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpRequestInterceptor;
 import org.apache.http.HttpResponse;
@@ -33,8 +30,6 @@ import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
-import org.apache.http.entity.AbstractHttpEntity;
-import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.params.BasicHttpParams;
@@ -45,12 +40,7 @@ import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.BasicHttpProcessor;
 import org.apache.http.protocol.HttpContext;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
 
 /**
  * <p>Subclass of the Apache {@link DefaultHttpClient} that is configured with
@@ -65,9 +55,6 @@ import java.util.zip.GZIPOutputStream;
  */
 public final class AndroidHttpClient implements HttpClient {
 
-  // Gzip of data shorter than this probably won't be worthwhile
-  private static final long DEFAULT_SYNC_MIN_GZIP_BYTES = 256;
-
   /**
    * Set if HTTP requests are blocked from being executed on this thread
    */
@@ -80,7 +67,7 @@ public final class AndroidHttpClient implements HttpClient {
   private static final HttpRequestInterceptor sThreadCheckInterceptor =
       new HttpRequestInterceptor() {
         public void process(HttpRequest request, HttpContext context) {
-          if (sThreadBlocked.get() != null && sThreadBlocked.get()) {
+          if (Boolean.TRUE.equals(sThreadBlocked.get())) {
             throw new RuntimeException("This thread forbids HTTP requests");
           }
         }
@@ -150,54 +137,6 @@ public final class AndroidHttpClient implements HttpClient {
   }
 
   /**
-   * Block this thread from executing HTTP requests.
-   * Used to guard against HTTP requests blocking the main application thread.
-   *
-   * @param blocked if HTTP requests run on this thread should be denied
-   */
-  public static void setThreadBlocked(boolean blocked) {
-    sThreadBlocked.set(blocked);
-  }
-
-  /**
-   * Modifies a request to indicate to the server that we would like a
-   * gzipped response.  (Uses the "Accept-Encoding" HTTP header.)
-   *
-   * @param request the request to modify
-   * @see #getUngzippedContent
-   */
-  public static void modifyRequestToAcceptGzipResponse(HttpMessage request) {
-    request.addHeader("Accept-Encoding", "gzip");
-  }
-
-  /**
-   * Gets the input stream from a response entity.  If the entity is gzipped
-   * then this will get a stream over the uncompressed data.
-   *
-   * @param entity the entity whose content should be read
-   * @return the input stream to read from
-   * @throws IOException
-   */
-  public static InputStream getUngzippedContent(HttpEntity entity) throws IOException {
-    InputStream responseStream = entity.getContent();
-    if (responseStream == null) {
-      return responseStream;
-    }
-    Header header = entity.getContentEncoding();
-    if (header == null) {
-      return responseStream;
-    }
-    String contentEncoding = header.getValue();
-    if (contentEncoding == null) {
-      return responseStream;
-    }
-    if (contentEncoding.contains("gzip")) {
-      responseStream = new GZIPInputStream(responseStream);
-    }
-    return responseStream;
-  }
-
-  /**
    * Release resources associated with this client.  You must call this,
    * or significant resources (sockets and memory) may be leaked.
    */
@@ -249,32 +188,6 @@ public final class AndroidHttpClient implements HttpClient {
                        HttpContext context)
       throws IOException {
     return delegate.execute(target, request, responseHandler, context);
-  }
-
-  /**
-   * Compress data to send to server.
-   * Creates a Http Entity holding the gzipped data.
-   * The data will not be compressed if it is too short.
-   *
-   * @param data The bytes to compress
-   * @return Entity holding the data
-   */
-  public static AbstractHttpEntity getCompressedEntity(byte[] data) throws IOException {
-    AbstractHttpEntity entity;
-    if (data.length < DEFAULT_SYNC_MIN_GZIP_BYTES) {
-      entity = new ByteArrayEntity(data);
-    } else {
-      ByteArrayOutputStream arr = new ByteArrayOutputStream();
-      OutputStream zipper = new GZIPOutputStream(arr);
-      try {
-        zipper.write(data);
-      } finally {
-        zipper.close();
-      }
-      entity = new ByteArrayEntity(arr.toByteArray());
-      entity.setContentEncoding("gzip");
-    }
-    return entity;
   }
 
 }

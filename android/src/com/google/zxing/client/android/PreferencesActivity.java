@@ -20,13 +20,15 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
+import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
 
-public final class PreferencesActivity extends android.preference.PreferenceActivity
+public final class PreferencesActivity extends PreferenceActivity
     implements OnSharedPreferenceChangeListener {
 
   static final String KEY_DECODE_1D = "preferences_decode_1D";
   static final String KEY_DECODE_QR = "preferences_decode_QR";
+  public static final String KEY_CUSTOM_PRODUCT_SEARCH = "preferences_custom_product_search";
 
   static final String KEY_PLAY_BEEP = "preferences_play_beep";
   static final String KEY_VIBRATE = "preferences_vibrate";

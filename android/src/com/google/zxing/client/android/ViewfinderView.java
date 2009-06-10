@@ -32,7 +32,7 @@ import android.view.View;
 public final class ViewfinderView extends View {
 
   private static final int[] SCANNER_ALPHA = {0, 64, 128, 192, 255, 192, 128, 64};
-  private static final int ANIMATION_DELAY = 100;
+  private static final long ANIMATION_DELAY = 100L;
 
   private final Paint mPaint;
   private final Rect mBox;

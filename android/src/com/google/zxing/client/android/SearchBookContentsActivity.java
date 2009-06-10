@@ -51,7 +51,7 @@ import java.util.List;
 public final class SearchBookContentsActivity extends Activity {
 
   private static final String TAG = "SearchBookContents";
-  private static final String USER_AGENT = "ZXing/1.3 (Android)";
+  private static final String USER_AGENT = "ZXing/1.5 (Android)";
 
   private NetworkThread mNetworkThread;
   private String mISBN;
@@ -168,7 +168,7 @@ public final class SearchBookContentsActivity extends Activity {
   private void handleSearchResults(JSONObject json) {
     try {
       int count = json.getInt("number_of_results");
-      mHeaderView.setText("Found " + ((count == 1) ? "1 result" : count + " results"));
+      mHeaderView.setText("Found " + (count == 1 ? "1 result" : count + " results"));
       if (count > 0) {
         JSONArray results = json.getJSONArray("search_results");
         SearchBookContentsResult.setQuery(mQueryTextView.getText().toString());
@@ -179,7 +179,7 @@ public final class SearchBookContentsActivity extends Activity {
         mResultListView.setAdapter(new SearchBookContentsAdapter(this, items));
       } else {
         String searchable = json.optString("searchable");
-        if (searchable != null && searchable.equals("false")) {
+        if ("false".equals(searchable)) {
           mHeaderView.setText(R.string.msg_sbc_book_not_searchable);
         }
         mResultListView.setAdapter(null);
@@ -287,8 +287,8 @@ public final class SearchBookContentsActivity extends Activity {
           HttpResponse response = client.execute(head);
           if (response.getStatusLine().getStatusCode() == 200) {
             Header[] cookies = response.getHeaders("set-cookie");
-            for (int x = 0; x < cookies.length; x++) {
-              CookieManager.getInstance().setCookie(url, cookies[x].getValue());
+            for (Header theCookie : cookies) {
+              CookieManager.getInstance().setCookie(url, theCookie.getValue());
             }
             CookieSyncManager.getInstance().sync();
             cookie = CookieManager.getInstance().getCookie(url);

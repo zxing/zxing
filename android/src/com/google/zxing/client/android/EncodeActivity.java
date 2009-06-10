@@ -74,7 +74,7 @@ public final class EncodeActivity extends Activity {
         View layout = findViewById(R.id.encode_view);
         int width = layout.getWidth();
         int height = layout.getHeight();
-        int smallerDimension = (width < height) ? width : height;
+        int smallerDimension = width < height ? width : height;
         smallerDimension = smallerDimension * 7 / 8;
 
         Intent intent = getIntent();
