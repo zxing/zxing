@@ -54,6 +54,8 @@ public interface MonochromeBitmapSource {
    */
   BitArray getBlackColumn(int x, BitArray column, int startY, int getHeight);
 
+  BitArray getBlackDiagonal(int x, int y, int dx, int dy, BitArray diagonal, int size);
+
   /**
    * @return height of underlying image
    */
@@ -110,7 +112,7 @@ public interface MonochromeBitmapSource {
    * @param y The y coordinate in the image.
    * @return The luminance value between 0 and 255.
    */
-  public abstract int getLuminance(int x, int y);
+  int getLuminance(int x, int y);
 
   /**
    * This is the main mechanism for retrieving luminance data. It is dramatically more efficient
@@ -123,7 +125,7 @@ public interface MonochromeBitmapSource {
    *            but then I will take pity on you and allocate a sufficient array internally.
    * @return The array containing the luminance data. This is the same as row if it was usable.
    */
-  public abstract int[] getLuminanceRow(int y, int[] row);
+  int[] getLuminanceRow(int y, int[] row);
 
   /**
    * The same as getLuminanceRow(), but for columns.
@@ -132,6 +134,6 @@ public interface MonochromeBitmapSource {
    * @param column The array to write luminance values into. See above.
    * @return The array containing the luminance data.
    */
-  public abstract int[] getLuminanceColumn(int x, int[] column);
+  int[] getLuminanceColumn(int x, int[] column);
 
 }

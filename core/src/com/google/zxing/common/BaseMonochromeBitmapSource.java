@@ -106,6 +106,22 @@ public abstract class BaseMonochromeBitmapSource implements MonochromeBitmapSour
     return column;
   }
 
+  public BitArray getBlackDiagonal(int x, int y, int dx, int dy, BitArray diagonal, int size) {
+    if (diagonal == null || diagonal.getSize() < size) {
+      diagonal = new BitArray(size);
+    } else {
+      diagonal.clear();
+    }
+    for (int i = 0; i < size; i++) {
+      if (isBlack(x, y)) {
+        diagonal.set(i);
+      }
+      x += dx;
+      y += dy;
+    }
+    return diagonal;
+  }
+
   public void estimateBlackPoint(BlackPointEstimationMethod method, int argument)
       throws ReaderException {
     if (!method.equals(lastMethod) || argument != lastArgument) {
