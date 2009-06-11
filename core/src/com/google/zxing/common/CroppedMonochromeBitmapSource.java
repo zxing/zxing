@@ -21,7 +21,7 @@ import com.google.zxing.MonochromeBitmapSource;
 import com.google.zxing.ReaderException;
 
 /**
- * Encapulates a cropped region of another {@link com.google.zxing.MonochromeBitmapSource}.
+ * Encapulates a cropped region of another {@link MonochromeBitmapSource}.
  *
  * @author Sean Owen
  */
@@ -70,6 +70,10 @@ public final class CroppedMonochromeBitmapSource implements MonochromeBitmapSour
 
   public int getWidth() {
     return right - left;
+  }
+
+  public BitArray getBlackDiagonal(int x, int y, int dx, int dy, BitArray diagonal, int size) {
+    return delegate.getBlackDiagonal(left + x, top + y, dx, dy, diagonal, size);
   }
 
   public void estimateBlackPoint(BlackPointEstimationMethod method, int argument)
