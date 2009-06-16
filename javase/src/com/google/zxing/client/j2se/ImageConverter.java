@@ -16,16 +16,17 @@
 
 package com.google.zxing.client.j2se;
 
-import com.google.zxing.MonochromeBitmapSource;
 import com.google.zxing.BlackPointEstimationMethod;
+import com.google.zxing.MonochromeBitmapSource;
 import com.google.zxing.ReaderException;
 import com.google.zxing.common.BitArray;
 
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+
+import javax.imageio.ImageIO;
 
 /**
  * Utility application for evaluating the effectiveness of the BlackPointEstimator used by
@@ -65,6 +66,16 @@ public final class ImageConverter {
       if (inputFile.exists()) {
         if (inputFile.isDirectory()) {
           for (File input : inputFile.listFiles()) {
+            String filename = input.getName().toLowerCase();
+            // Skip hidden files and text files (the latter is found in the blackbox tests).
+            if (filename.startsWith(".") || filename.endsWith(".txt")) {
+              continue;
+            }
+            // Skip the results of dumping the black point.
+            if (filename.contains(".mono.png") || filename.contains(".row.png") ||
+                filename.contains(".2d.png")) {
+              continue;
+            }
             convertImage(input.toURI());
           }
         } else {
@@ -158,7 +169,7 @@ public final class ImageConverter {
         name = name.substring(0, dotpos);
       }
       String suffix = (sMethod == BlackPointEstimationMethod.ROW_SAMPLING) ? "row" : "2d";
-      result = new File(name + "_converted_" + suffix + '.' + FORMAT);
+      result = new File(name + '.' + suffix + '.' + FORMAT);
     }
     return result;
   }
