@@ -23,9 +23,9 @@ import com.google.zxing.Reader;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 import com.google.zxing.client.j2se.BufferedImageMonochromeBitmapSource;
+
 import junit.framework.TestCase;
 
-import javax.imageio.ImageIO;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
@@ -35,10 +35,12 @@ import java.io.FileInputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
-import java.util.ArrayList;
-import java.nio.charset.Charset;
+
+import javax.imageio.ImageIO;
 
 /**
  * @author Sean Owen
@@ -59,6 +61,35 @@ public abstract class AbstractBlackBoxTestCase extends TestCase {
              lowerCase.endsWith(".gif") || lowerCase.endsWith(".png");
     }
   };
+
+  public static class SummaryResults {
+    private int totalFound;
+    private int totalMustPass;
+    private int totalTests;
+
+    public SummaryResults() {
+      totalFound = 0;
+      totalMustPass = 0;
+      totalTests = 0;
+    }
+
+    public SummaryResults(int found, int mustPass, int total) {
+      totalFound = found;
+      totalMustPass = mustPass;
+      totalTests = total;
+    }
+
+    public void add(SummaryResults other) {
+      totalFound += other.totalFound;
+      totalMustPass += other.totalMustPass;
+      totalTests += other.totalTests;
+    }
+
+    public String toString() {
+      return "\nSUMMARY RESULTS:\n  Decoded " + totalFound + " images out of " + totalTests +
+        " (" + (totalFound * 100 / totalTests) + "%, " + totalMustPass + " required)";
+    }
+  }
 
   private static class TestResult {
     private final int mustPassCount;
@@ -125,7 +156,13 @@ public abstract class AbstractBlackBoxTestCase extends TestCase {
     return null;
   }
 
+  // This workaround is used because AbstractNegativeBlackBoxTestCase overrides this method but does
+  // not return SummaryResults.
   public void testBlackBox() throws IOException {
+    testBlackBoxCountingResults();
+  }
+
+  public SummaryResults testBlackBoxCountingResults() throws IOException {
     assertFalse(testResults.isEmpty());
 
     File[] imageFiles = getImageFiles();
@@ -187,6 +224,7 @@ public abstract class AbstractBlackBoxTestCase extends TestCase {
           " degrees: Too many images failed",
           tryHarderCounts[x] >= testResults.get(x).getTryHarderCount());
     }
+    return new SummaryResults(totalFound, totalMustPass, totalTests);
   }
 
   private boolean decode(MonochromeBitmapSource source, float rotation, String expectedText,
