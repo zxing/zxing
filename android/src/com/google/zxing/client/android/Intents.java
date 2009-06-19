@@ -84,15 +84,23 @@ public final class Intents {
 
     /**
      * The data to encode. Use Intent.putExtra(DATA, data) where data is either a String or a
-     * Bundle, depending on the type specified. See Contents for details.
+     * Bundle, depending on the type and format specified. Non-QR Code formats should
+     * just use a String here. For QR Code, see Contents for details.
      */
     public static final String DATA = "ENCODE_DATA";
 
     /**
-     * The type of data being supplied. Use Intent.putExtra(TYPE, type) with one of
-     * Contents.Type.
+     * The type of data being supplied if the format is QR Code. Use
+     * Intent.putExtra(TYPE, type) with one of Contents.Type.
      */
     public static final String TYPE = "ENCODE_TYPE";
+    
+    /**
+     * The barcode format to be displayed. If this isn't specified or is blank, 
+     * it defaults to QR Code. Use Intent.putExtra(FORMAT, format), where
+     * format is one of Contents.Format. 
+     */
+    public static final String FORMAT = "com.google.zxing.client.android.ENCODE_FORMAT";
 
     private Encode() {
     }

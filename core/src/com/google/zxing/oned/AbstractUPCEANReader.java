@@ -40,7 +40,7 @@ public abstract class AbstractUPCEANReader extends AbstractOneDReader implements
   /**
    * Start/end guard pattern.
    */
-  private static final int[] START_END_PATTERN = {1, 1, 1,};
+  static final int[] START_END_PATTERN = {1, 1, 1,};
 
   /**
    * Pattern marking the middle of a UPC/EAN pattern, separating the two halves.
