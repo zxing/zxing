@@ -35,6 +35,7 @@ import java.util.Vector;
  * markers at three corners of a QR Code.</p>
  *
  * <p>This class is not thread-safe and should not be reused.</p>
+ * TODO(dswitkin): Is this comment still true? I don't see any global variables for example.
  *
  * <p>In contrast to {@link FinderPatternFinder}, this class will return an array of all possible
  * QR code locations in the image.</p>

@@ -32,6 +32,7 @@ import java.util.Vector;
  * markers at three corners of a QR Code.</p>
  *
  * <p>This class is not thread-safe and should not be reused.</p>
+ * TODO(dswitkin): Is this still true?
  *
  * @author Sean Owen
  */
