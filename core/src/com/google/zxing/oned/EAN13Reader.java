@@ -51,14 +51,14 @@ public final class EAN13Reader extends AbstractUPCEANReader {
   // Note that the encoding for '0' uses the same parity as a UPC barcode. Hence
   // a UPC barcode can be converted to an EAN-13 barcode by prepending a 0.
   //
-  // The encodong is represented by the following array, which is a bit pattern
+  // The encoding is represented by the following array, which is a bit pattern
   // using Odd = 0 and Even = 1. For example, 5 is represented by:
   //
   //              Odd Even Even Odd Odd Even
   // in binary:
   //                0    1    1   0   0    1   == 0x19
   //
-  private static final int[] FIRST_DIGIT_ENCODINGS = {
+  public static final int[] FIRST_DIGIT_ENCODINGS = {
       0x00, 0x0B, 0x0D, 0xE, 0x13, 0x19, 0x1C, 0x15, 0x16, 0x1A
   };
 

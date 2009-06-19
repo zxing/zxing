@@ -36,6 +36,7 @@ public final class QRCodeEncoder {
   private String mContents;
   private String mDisplayContents;
   private String mTitle;
+  private BarcodeFormat mFormat;
 
   public QRCodeEncoder(Activity activity, Intent intent) {
     mActivity = activity;
@@ -45,7 +46,8 @@ public final class QRCodeEncoder {
   }
 
   public void requestBarcode(Handler handler, int pixelResolution) {
-    Thread encodeThread = new EncodeThread(mContents, handler, pixelResolution);
+    Thread encodeThread = new EncodeThread(mContents, handler, pixelResolution,
+        mFormat);
     encodeThread.start();
   }
 
@@ -60,18 +62,52 @@ public final class QRCodeEncoder {
   public String getTitle() {
     return mTitle;
   }
+  
+  public String getFormat() {
+    return mFormat.toString();
+  }
 
-  // It would be nice if the string encoding lived in the core ZXing library, but we use platform
-  // specific code like PhoneNumberUtils, so it can't.
+  // It would be nice if the string encoding lived in the core ZXing library,
+  // but we use platform specific code like PhoneNumberUtils, so it can't.
   private boolean encodeContents(Intent intent) {
     if (intent == null) {
       return false;
     }
-    String type = intent.getStringExtra(Intents.Encode.TYPE);
-    if (type == null || type.length() == 0) {
-      return false;
+    
+    // default to QR_CODE if no format given
+    String format = intent.getStringExtra(Intents.Encode.FORMAT);
+    if (format == null || format.length() == 0 || 
+        format.equals(Contents.Format.QR_CODE)) {
+      String type = intent.getStringExtra(Intents.Encode.TYPE);
+      if (type == null || type.length() == 0) {
+        return false;
+      }
+      mFormat = BarcodeFormat.QR_CODE;
+      encodeQRCodeContents(intent, type);
+    } else {
+      String data = intent.getStringExtra(Intents.Encode.DATA);
+      if (data != null && data.length() != 0) {
+        mContents = data;
+        mDisplayContents = data;
+        mTitle = mActivity.getString(R.string.contents_text);
+        if (format.equals(Contents.Format.CODE_128))
+          mFormat = BarcodeFormat.CODE_128;
+        else if (format.equals(Contents.Format.CODE_39))
+          mFormat = BarcodeFormat.CODE_39;
+        else if (format.equals(Contents.Format.EAN_8))
+          mFormat = BarcodeFormat.EAN_8;
+        else if (format.equals(Contents.Format.EAN_13))
+          mFormat = BarcodeFormat.EAN_13;
+        else if (format.equals(Contents.Format.UPC_A))
+          mFormat = BarcodeFormat.UPC_A;
+        else if (format.equals(Contents.Format.UPC_E))
+          mFormat = BarcodeFormat.UPC_E;
+      }
     }
+    return mContents != null && mContents.length() > 0;
+  }
 
+  private void encodeQRCodeContents(Intent intent, String type) {
     if (type.equals(Contents.Type.TEXT)) {
       String data = intent.getStringExtra(Intents.Encode.DATA);
       if (data != null && data.length() > 0) {
@@ -154,7 +190,6 @@ public final class QRCodeEncoder {
         }
       }
     }
-    return mContents != null && mContents.length() > 0;
   }
 
   private static final class EncodeThread extends Thread {
@@ -164,18 +199,21 @@ public final class QRCodeEncoder {
     private final String mContents;
     private final Handler mHandler;
     private final int mPixelResolution;
+    private final BarcodeFormat mFormat;
 
-    EncodeThread(String contents, Handler handler, int pixelResolution) {
+    EncodeThread(String contents, Handler handler, int pixelResolution,
+        BarcodeFormat format) {
       mContents = contents;
       mHandler = handler;
       mPixelResolution = pixelResolution;
+      mFormat = format;
     }
 
     @Override
     public void run() {
       try {
-        ByteMatrix result = new MultiFormatWriter().encode(mContents, BarcodeFormat.QR_CODE,
-            mPixelResolution, mPixelResolution);
+        ByteMatrix result = new MultiFormatWriter().encode(mContents,
+            mFormat, mPixelResolution, mPixelResolution);
         int width = result.width();
         int height = result.height();
         byte[][] array = result.getArray();
@@ -183,7 +221,7 @@ public final class QRCodeEncoder {
         for (int y = 0; y < height; y++) {
           for (int x = 0; x < width; x++) {
             int grey = array[y][x] & 0xff;
-            //pixels[y * width + x] = (0xff << 24) | (grey << 16) | (grey << 8) | grey;
+            // pixels[y * width + x] = (0xff << 24) | (grey << 16) | (grey << 8) | grey;
             pixels[y * width + x] = 0xff000000 | (0x00010101 * grey);
           }
         }

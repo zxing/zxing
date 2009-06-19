@@ -21,7 +21,7 @@ import com.google.zxing.Result;
 import com.google.zxing.common.BitArray;
 
 /**
- * <p>This interfaces captures addtional functionality that readers of
+ * <p>This interfaces captures additional functionality that readers of
  * UPC/EAN family of barcodes should expose.</p>
  *
  * @author Sean Owen

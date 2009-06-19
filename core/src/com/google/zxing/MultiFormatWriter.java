@@ -17,6 +17,8 @@
 package com.google.zxing;
 
 import com.google.zxing.common.ByteMatrix;
+import com.google.zxing.oned.EAN13Writer;
+import com.google.zxing.oned.EAN8Writer;
 import com.google.zxing.qrcode.QRCodeWriter;
 
 import java.util.Hashtable;
@@ -38,9 +40,14 @@ public final class MultiFormatWriter implements Writer {
   public ByteMatrix encode(String contents, BarcodeFormat format, int width, int height,
       Hashtable hints) throws WriterException {
 
-    if (format == BarcodeFormat.QR_CODE) {
+    if (format == BarcodeFormat.EAN_8) {
+      return new EAN8Writer().encode(contents, format, width, height, hints);
+    } else if (format == BarcodeFormat.EAN_13) {
+      return new EAN13Writer().encode(contents, format, width, height, hints);
+    } else if (format == BarcodeFormat.QR_CODE) {
       return new QRCodeWriter().encode(contents, format, width, height, hints);
-    } else {
+    }
+    else {
       throw new IllegalArgumentException("No encoder available for format " + format);
     }
   }

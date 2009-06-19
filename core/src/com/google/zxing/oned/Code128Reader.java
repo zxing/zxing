@@ -417,7 +417,7 @@ public final class Code128Reader extends AbstractOneDReader {
 
     }
 
-    // Check for ample whitespice following pattern, but, to do this we first need to remember that
+    // Check for ample whitespace following pattern, but, to do this we first need to remember that
     // we fudged decoding CODE_STOP since it actually has 7 bars, not 6. There is a black bar left
     // to read off. Would be slightly better to properly read. Here we just skip it:
     while (row.get(nextStart)) {

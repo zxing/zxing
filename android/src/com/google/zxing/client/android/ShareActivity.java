@@ -103,6 +103,7 @@ public final class ShareActivity extends Activity {
         Intent intent = new Intent(Intents.Encode.ACTION);
         intent.putExtra(Intents.Encode.TYPE, Contents.Type.TEXT);
         intent.putExtra(Intents.Encode.DATA, clipboard.getText());
+        intent.putExtra(Intents.Encode.FORMAT, Contents.Format.QR_CODE);
         startActivity(intent);
       }
     }
@@ -127,6 +128,7 @@ public final class ShareActivity extends Activity {
     Intent intent = new Intent(Intents.Encode.ACTION);
     intent.putExtra(Intents.Encode.TYPE, Contents.Type.TEXT);
     intent.putExtra(Intents.Encode.DATA, text);
+    intent.putExtra(Intents.Encode.FORMAT, Contents.Format.QR_CODE);
     startActivity(intent);
   }
 
@@ -194,6 +196,8 @@ public final class ShareActivity extends Activity {
       Intent intent = new Intent(Intents.Encode.ACTION);
       intent.putExtra(Intents.Encode.TYPE, Contents.Type.CONTACT);
       intent.putExtra(Intents.Encode.DATA, bundle);
+      intent.putExtra(Intents.Encode.FORMAT, Contents.Format.QR_CODE);
+
       startActivity(intent);
     }
   }
