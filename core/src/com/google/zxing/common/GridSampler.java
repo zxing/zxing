@@ -34,7 +34,7 @@ import com.google.zxing.ReaderException;
  */
 public abstract class GridSampler {
 
-  private static GridSampler gridSampler = null;
+  private static GridSampler gridSampler = new DefaultGridSampler();
 
   /**
    * Sets the implementation of {@link GridSampler} used by the library. One global
@@ -43,7 +43,7 @@ public abstract class GridSampler {
    * in the whole lifetime of the JVM. For instance, an Android activity can swap in
    * an implementation that takes advantage of native platform libraries.
    * 
-   * @param newGridSampler
+   * @param newGridSampler The platform-specific object to install.
    */
   public static void setGridSampler(GridSampler newGridSampler) {
     if (newGridSampler == null) {
@@ -56,11 +56,6 @@ public abstract class GridSampler {
    * @return the current implementation of {@link GridSampler}
    */
   public static GridSampler getInstance() {
-    // No real point in trying to make this thread-safe;
-    // doesn't matter if a second instance is created
-    if (gridSampler == null) {
-      gridSampler = new DefaultGridSampler();
-    }
     return gridSampler;
   }
 

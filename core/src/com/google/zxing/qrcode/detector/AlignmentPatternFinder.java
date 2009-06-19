@@ -33,6 +33,7 @@ import java.util.Vector;
  * some code.</p>
  *
  * <p>This class is not thread-safe.</p>
+ * TODO(dswitkin): Is this still true?
  *
  * @author Sean Owen
  */

@@ -27,7 +27,7 @@ import com.google.zxing.ReaderException;
  * <p>For an interesting discussion of this issue, see
  * <a href="http://webdiis.unizar.es/~neira/12082/thresholding.pdf">this paper</a>.</p>
  *
- * NOTE: This class is not threadsafe.
+ * NOTE: This class is not thread-safe.
  *
  * @author Sean Owen
  * @author dswitkin@google.com (Daniel Switkin)
