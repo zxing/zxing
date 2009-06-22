@@ -50,13 +50,4 @@ public final class BitMatrixTestCase extends TestCase {
     }
   }
 
-  public void testGetBits() {
-    BitMatrix matrix = new BitMatrix(6);
-    matrix.set(0, 0);
-    matrix.set(5, 5);
-    int[] bits = matrix.getBits();
-    assertEquals(1, bits[0]);
-    assertEquals(8, bits[1]);
-  }
-
 }
