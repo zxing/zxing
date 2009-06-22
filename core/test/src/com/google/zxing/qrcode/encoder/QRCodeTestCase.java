@@ -61,7 +61,7 @@ public final class QRCodeTestCase extends TestCase {
     // Just set bogus zero/one values.
     for (int y = 0; y < 45; ++y) {
       for (int x = 0; x < 45; ++x) {
-        matrix.set(y, x, (y + x) % 2);
+        matrix.set(x, y, (y + x) % 2);
       }
     }
 
@@ -146,7 +146,7 @@ public final class QRCodeTestCase extends TestCase {
       ByteMatrix matrix = new ByteMatrix(21, 21);
       for (int y = 0; y < 21; ++y) {
         for (int x = 0; x < 21; ++x) {
-          matrix.set(y, x, (y + x) % 2);
+          matrix.set(x, y, (y + x) % 2);
         }
       }
       qrCode.setMatrix(matrix);

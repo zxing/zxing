@@ -180,18 +180,18 @@ public final class MatrixUtil {
       // Type info bits at the left top corner. See 8.9 of JISX0510:2004 (p.46).
       int x1 = TYPE_INFO_COORDINATES[i][0];
       int y1 = TYPE_INFO_COORDINATES[i][1];
-      matrix.set(y1, x1, bit);
+      matrix.set(x1, y1, bit);
 
       if (i < 8) {
         // Right top corner.
         int x2 = matrix.width() - i - 1;
         int y2 = 8;
-        matrix.set(y2, x2, bit);
+        matrix.set(x2, y2, bit);
       } else {
         // Left bottom corner.
         int x2 = 8;
         int y2 = matrix.height() - 7 + (i - 8);
-        matrix.set(y2, x2, bit);
+        matrix.set(x2, y2, bit);
       }
     }
   }
@@ -212,9 +212,9 @@ public final class MatrixUtil {
         int bit = versionInfoBits.at(bitIndex);
         bitIndex--;
         // Left bottom corner.
-        matrix.set(matrix.height() - 11 + j, i, bit);
-        // Right bottom corner.
         matrix.set(i, matrix.height() - 11 + j, bit);
+        // Right bottom corner.
+        matrix.set(matrix.height() - 11 + j, i, bit);
       }
     }
   }
@@ -238,7 +238,7 @@ public final class MatrixUtil {
         for (int i = 0; i < 2; ++i) {
           int xx = x - i;
           // Skip the cell if it's not empty.
-          if (!isEmpty(matrix.get(y, xx))) {
+          if (!isEmpty(matrix.get(xx, y))) {
             continue;
           }
           int bit;
@@ -257,7 +257,7 @@ public final class MatrixUtil {
               bit ^= 0x1;
             }
           }
-          matrix.set(y, xx, bit);
+          matrix.set(xx, y, bit);
         }
         y += direction;
       }
@@ -376,28 +376,28 @@ public final class MatrixUtil {
     for (int i = 8; i < matrix.width() - 8; ++i) {
       int bit = (i + 1) % 2;
       // Horizontal line.
-      if (!isValidValue(matrix.get(6, i))) {
-        throw new WriterException();
-      }
-      if (isEmpty(matrix.get(6, i))) {
-        matrix.set(6, i, bit);
-      }
-      // Vertical line.
       if (!isValidValue(matrix.get(i, 6))) {
         throw new WriterException();
       }
       if (isEmpty(matrix.get(i, 6))) {
         matrix.set(i, 6, bit);
       }
+      // Vertical line.
+      if (!isValidValue(matrix.get(6, i))) {
+        throw new WriterException();
+      }
+      if (isEmpty(matrix.get(6, i))) {
+        matrix.set(6, i, bit);
+      }
     }
   }
 
   // Embed the lonely dark dot at left bottom corner. JISX0510:2004 (p.46)
   private static void embedDarkDotAtLeftBottomCorner(ByteMatrix matrix) throws WriterException {
-    if (matrix.get(matrix.height() - 8, 8) == 0) {
+    if (matrix.get(8, matrix.height() - 8) == 0) {
       throw new WriterException();
     }
-    matrix.set(matrix.height() - 8, 8, 1);
+    matrix.set(8, matrix.height() - 8, 1);
   }
 
   private static void embedHorizontalSeparationPattern(int xStart, int yStart,
@@ -407,10 +407,10 @@ public final class MatrixUtil {
       throw new WriterException("Bad horizontal separation pattern");
     }
     for (int x = 0; x < 8; ++x) {
-      if (!isEmpty(matrix.get(yStart, xStart + x))) {
+      if (!isEmpty(matrix.get(xStart + x, yStart))) {
         throw new WriterException();
       }
-      matrix.set(yStart, xStart + x, HORIZONTAL_SEPARATION_PATTERN[0][x]);
+      matrix.set(xStart + x, yStart, HORIZONTAL_SEPARATION_PATTERN[0][x]);
     }
   }
 
@@ -421,10 +421,10 @@ public final class MatrixUtil {
       throw new WriterException("Bad vertical separation pattern");
     }
     for (int y = 0; y < 7; ++y) {
-      if (!isEmpty(matrix.get(yStart + y, xStart))) {
+      if (!isEmpty(matrix.get(xStart, yStart + y))) {
         throw new WriterException();
       }
-      matrix.set(yStart + y, xStart, VERTICAL_SEPARATION_PATTERN[y][0]);
+      matrix.set(xStart, yStart + y, VERTICAL_SEPARATION_PATTERN[y][0]);
     }
   }
 
@@ -439,10 +439,10 @@ public final class MatrixUtil {
     }
     for (int y = 0; y < 5; ++y) {
       for (int x = 0; x < 5; ++x) {
-        if (!isEmpty(matrix.get(yStart + y, xStart + x))) {
+        if (!isEmpty(matrix.get(xStart + x, yStart + y))) {
           throw new WriterException();
         }
-        matrix.set(yStart + y, xStart + x, POSITION_ADJUSTMENT_PATTERN[y][x]);
+        matrix.set(xStart + x, yStart + y, POSITION_ADJUSTMENT_PATTERN[y][x]);
       }
     }
   }
@@ -455,10 +455,10 @@ public final class MatrixUtil {
     }
     for (int y = 0; y < 7; ++y) {
       for (int x = 0; x < 7; ++x) {
-        if (!isEmpty(matrix.get(yStart + y, xStart + x))) {
+        if (!isEmpty(matrix.get(xStart + x, yStart + y))) {
           throw new WriterException();
         }
-        matrix.set(yStart + y, xStart + x, POSITION_DETECTION_PATTERN[y][x]);
+        matrix.set(xStart + x, yStart + y, POSITION_DETECTION_PATTERN[y][x]);
       }
     }
   }
@@ -512,7 +512,7 @@ public final class MatrixUtil {
           continue;
         }
         // If the cell is unset, we embed the position adjustment pattern here.
-        if (isEmpty(matrix.get(y, x))) {
+        if (isEmpty(matrix.get(x, y))) {
           // -2 is necessary since the x/y coordinates point to the center of the pattern, not the
           // left top corner.
           embedPositionAdjustmentPattern(x - 2, y - 2, matrix);

@@ -61,7 +61,7 @@ public abstract class AbstractUPCEANWriter implements UPCEANWriter {
     int multiple = outputWidth / fullWidth;
     int leftPadding = (outputWidth - (inputWidth * multiple)) / 2;
 
-    ByteMatrix output = new ByteMatrix(outputHeight, outputWidth);
+    ByteMatrix output = new ByteMatrix(outputWidth, outputHeight);
     byte[][] outputArray = output.getArray();
 
     byte[] row = new byte[outputWidth];

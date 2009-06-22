@@ -90,7 +90,7 @@ public final class QRCodeWriter implements Writer {
     int leftPadding = (outputWidth - (inputWidth * multiple)) / 2;
     int topPadding = (outputHeight - (inputHeight * multiple)) / 2;
 
-    ByteMatrix output = new ByteMatrix(outputHeight, outputWidth);
+    ByteMatrix output = new ByteMatrix(outputWidth, outputHeight);
     byte[][] outputArray = output.getArray();
 
     // We could be tricky and use the first row in each set of multiple as the temporary storage,
