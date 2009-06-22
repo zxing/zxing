@@ -138,7 +138,7 @@ public final class DataMatrixReader implements Reader {
       int iOffset = borderWidth + i * moduleSize;
       for (int j = 0; j < dimension; j++) {
         if (image.isBlack(borderWidth + j * moduleSize, iOffset)) {
-          bits.set(i, j);
+          bits.set(j, i);
         }
       }
     }

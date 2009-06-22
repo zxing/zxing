@@ -141,7 +141,7 @@ final class BitMatrixParser {
   }
 
   private int copyBit(int i, int j, int versionBits) {
-    return bitMatrix.get(i, j) ? (versionBits << 1) | 0x1 : versionBits << 1;
+    return bitMatrix.get(j, i) ? (versionBits << 1) | 0x1 : versionBits << 1;
   }
 
   /**
@@ -182,11 +182,11 @@ final class BitMatrixParser {
         int i = readingUp ? dimension - 1 - count : count;
         for (int col = 0; col < 2; col++) {
           // Ignore bits covered by the function pattern
-          if (!functionPattern.get(i, j - col)) {
+          if (!functionPattern.get(j - col, i)) {
             // Read a bit
             bitsRead++;
             currentByte <<= 1;
-            if (bitMatrix.get(i, j - col)) {
+            if (bitMatrix.get(j - col, i)) {
               currentByte |= 1;
             }
             // If we've made a whole byte, save it off

@@ -105,7 +105,7 @@ public final class DataMaskTestCase extends TestCase {
         assertEquals(
             "(" + i + ',' + j + ')',
             condition.isMasked(i, j),
-            bits.get(i, j));
+            bits.get(j, i));
       }
     }
   }

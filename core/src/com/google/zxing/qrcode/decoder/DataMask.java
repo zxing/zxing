@@ -56,16 +56,16 @@ abstract class DataMask {
    * @param dimension dimension of QR Code, represented by bits, being unmasked
    */
   final void unmaskBitMatrix(BitMatrix bits, int dimension) {
-    for (int y = 0; y < dimension; y++) {
-      for (int x = 0; x < dimension; x++) {
-        if (isMasked(x, y)) {
-          bits.flip(x, y);
+    for (int i = 0; i < dimension; i++) {
+      for (int j = 0; j < dimension; j++) {
+        if (isMasked(i, j)) {
+          bits.flip(j, i);
         }
       }
     }
   }
 
-  abstract boolean isMasked(int x, int y);
+  abstract boolean isMasked(int i, int j);
 
   /**
    * @param reference a value between 0 and 7 indicating one of the eight possible
@@ -83,8 +83,8 @@ abstract class DataMask {
    * 000: mask bits for which (x + y) mod 2 == 0
    */
   private static class DataMask000 extends DataMask {
-    boolean isMasked(int x, int y) {
-      return ((x + y) & 0x01) == 0;
+    boolean isMasked(int i, int j) {
+      return ((i + j) & 0x01) == 0;
     }
   }
 
@@ -92,8 +92,8 @@ abstract class DataMask {
    * 001: mask bits for which x mod 2 == 0
    */
   private static class DataMask001 extends DataMask {
-    boolean isMasked(int x, int y) {
-      return (x & 0x01) == 0;
+    boolean isMasked(int i, int j) {
+      return (i & 0x01) == 0;
     }
   }
 
@@ -101,8 +101,8 @@ abstract class DataMask {
    * 010: mask bits for which y mod 3 == 0
    */
   private static class DataMask010 extends DataMask {
-    boolean isMasked(int x, int y) {
-      return y % 3 == 0;
+    boolean isMasked(int i, int j) {
+      return j % 3 == 0;
     }
   }
 
@@ -110,8 +110,8 @@ abstract class DataMask {
    * 011: mask bits for which (x + y) mod 3 == 0
    */
   private static class DataMask011 extends DataMask {
-    boolean isMasked(int x, int y) {
-      return (x + y) % 3 == 0;
+    boolean isMasked(int i, int j) {
+      return (i + j) % 3 == 0;
     }
   }
 
@@ -119,8 +119,8 @@ abstract class DataMask {
    * 100: mask bits for which (x/2 + y/3) mod 2 == 0
    */
   private static class DataMask100 extends DataMask {
-    boolean isMasked(int x, int y) {
-      return (((x >>> 1) + (y/3)) & 0x01) == 0;
+    boolean isMasked(int i, int j) {
+      return (((i >>> 1) + (j /3)) & 0x01) == 0;
     }
   }
 
@@ -128,8 +128,8 @@ abstract class DataMask {
    * 101: mask bits for which xy mod 2 + xy mod 3 == 0
    */
   private static class DataMask101 extends DataMask {
-    boolean isMasked(int x, int y) {
-      int temp = x * y;
+    boolean isMasked(int i, int j) {
+      int temp = i * j;
       return (temp & 0x01) + (temp % 3) == 0;
     }
   }
@@ -138,18 +138,18 @@ abstract class DataMask {
    * 110: mask bits for which (xy mod 2 + xy mod 3) mod 2 == 0
    */
   private static class DataMask110 extends DataMask {
-    boolean isMasked(int x, int y) {
-      int temp = x * y;
+    boolean isMasked(int i, int j) {
+      int temp = i * j;
       return (((temp & 0x01) + (temp % 3)) & 0x01) == 0;
     }
   }
 
   /**
-   * 111: mask bits for which ((i+j)mod 2 + ij mod 3) mod 2 == 0
+   * 111: mask bits for which ((x+y)mod 2 + xy mod 3) mod 2 == 0
    */
   private static class DataMask111 extends DataMask {
-    boolean isMasked(int x, int y) {
-      return ((((x + y) & 0x01) + ((x * y) % 3)) & 0x01) == 0;
+    boolean isMasked(int i, int j) {
+      return ((((i + j) & 0x01) + ((i * j) % 3)) & 0x01) == 0;
     }
   }
 }

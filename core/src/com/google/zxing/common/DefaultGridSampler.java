@@ -56,7 +56,7 @@ public final class DefaultGridSampler extends GridSampler {
         for (int j = 0; j < max; j += 2) {
           if (image.isBlack((int) points[j], (int) points[j + 1])) {
             // Black(-ish) pixel
-            bits.set(i, j >> 1);
+            bits.set(j >> 1, i);
           }
         }
       } catch (ArrayIndexOutOfBoundsException aioobe) {
