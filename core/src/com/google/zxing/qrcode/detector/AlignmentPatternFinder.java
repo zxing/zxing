@@ -32,8 +32,7 @@ import java.util.Vector;
  * pasted and stripped down here for maximum performance but does unfortunately duplicate
  * some code.</p>
  *
- * <p>This class is not thread-safe.</p>
- * TODO(dswitkin): Is this still true?
+ * <p>This class is thread-safe but not reentrant. Each thread must allocate its own object.
  *
  * @author Sean Owen
  */
