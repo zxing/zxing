@@ -99,7 +99,7 @@ public final class DataMaskTestCase extends TestCase {
 
   private void testMask(DataMask mask, int dimension, MaskCondition condition) {
     BitMatrix bits = new BitMatrix(dimension);
-    mask.unmaskBitMatrix(bits.getBits(), dimension);
+    mask.unmaskBitMatrix(bits, dimension);
     for (int i = 0; i < dimension; i++) {
       for (int j = 0; j < dimension; j++) {
         assertEquals(

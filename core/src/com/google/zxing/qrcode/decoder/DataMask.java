@@ -16,6 +16,8 @@
 
 package com.google.zxing.qrcode.decoder;
 
+import com.google.zxing.common.BitMatrix;
+
 /**
  * <p>Encapsulates data masks for the data bits in a QR code, per ISO 18004:2006 6.8. Implementations
  * of this class can un-mask a raw BitMatrix. For simplicity, they will unmask the entire BitMatrix,
@@ -50,10 +52,20 @@ abstract class DataMask {
    * <p>Implementations of this method reverse the data masking process applied to a QR Code and
    * make its bits ready to read.</p>
    *
-   * @param bits representation of QR Code bits from {@link com.google.zxing.common.BitMatrix#getBits()}
+   * @param bits representation of QR Code bits
    * @param dimension dimension of QR Code, represented by bits, being unmasked
    */
-  abstract void unmaskBitMatrix(int[] bits, int dimension);
+  final void unmaskBitMatrix(BitMatrix bits, int dimension) {
+    for (int y = 0; y < dimension; y++) {
+      for (int x = 0; x < dimension; x++) {
+        if (isMasked(x, y)) {
+          bits.flip(x, y);
+        }
+      }
+    }
+  }
+
+  abstract boolean isMasked(int x, int y);
 
   /**
    * @param reference a value between 0 and 7 indicating one of the eight possible
@@ -68,166 +80,67 @@ abstract class DataMask {
   }
 
   /**
-   * 000: mask bits for which (i + j) mod 2 == 0
+   * 000: mask bits for which (x + y) mod 2 == 0
    */
   private static class DataMask000 extends DataMask {
-    private static final int BITMASK = 0x55555555; // = 010101...
-
-    void unmaskBitMatrix(int[] bits, int dimension) {
-      // This one's easy. Because the dimension of BitMatrix is always odd,
-      // we can merely flip every other bit
-      int max = bits.length;
-      for (int i = 0; i < max; i++) {
-        bits[i] ^= BITMASK;
-      }
+    boolean isMasked(int x, int y) {
+      return ((x + y) & 0x01) == 0;
     }
   }
 
   /**
-   * 001: mask bits for which i mod 2 == 0
+   * 001: mask bits for which x mod 2 == 0
    */
   private static class DataMask001 extends DataMask {
-    void unmaskBitMatrix(int[] bits, int dimension) {
-      int bitMask = 0;
-      int count = 0;
-      int offset = 0;
-      for (int j = 0; j < dimension; j++) {
-        for (int i = 0; i < dimension; i++) {
-          if ((i & 0x01) == 0) {
-            bitMask |= 1 << count;
-          }
-          if (++count == 32) {
-            bits[offset++] ^= bitMask;
-            count = 0;
-            bitMask = 0;
-          }
-        }
-      }
-      bits[offset] ^= bitMask;
+    boolean isMasked(int x, int y) {
+      return (x & 0x01) == 0;
     }
   }
 
   /**
-   * 010: mask bits for which j mod 3 == 0
+   * 010: mask bits for which y mod 3 == 0
    */
   private static class DataMask010 extends DataMask {
-    void unmaskBitMatrix(int[] bits, int dimension) {
-      int bitMask = 0;
-      int count = 0;
-      int offset = 0;
-      for (int j = 0; j < dimension; j++) {
-        boolean columnMasked = j % 3 == 0;
-        for (int i = 0; i < dimension; i++) {
-          if (columnMasked) {
-            bitMask |= 1 << count;
-          }
-          if (++count == 32) {
-            bits[offset++] ^= bitMask;
-            count = 0;
-            bitMask = 0;
-          }
-        }
-      }
-      bits[offset] ^= bitMask;
+    boolean isMasked(int x, int y) {
+      return y % 3 == 0;
     }
   }
 
   /**
-   * 011: mask bits for which (i + j) mod 3 == 0
+   * 011: mask bits for which (x + y) mod 3 == 0
    */
   private static class DataMask011 extends DataMask {
-    void unmaskBitMatrix(int[] bits, int dimension) {
-      int bitMask = 0;
-      int count = 0;
-      int offset = 0;
-      for (int j = 0; j < dimension; j++) {
-        for (int i = 0; i < dimension; i++) {
-          if ((i + j) % 3 == 0) {
-            bitMask |= 1 << count;
-          }
-          if (++count == 32) {
-            bits[offset++] ^= bitMask;
-            count = 0;
-            bitMask = 0;
-          }
-        }
-      }
-      bits[offset] ^= bitMask;
+    boolean isMasked(int x, int y) {
+      return (x + y) % 3 == 0;
     }
   }
 
   /**
-   * 100: mask bits for which (i/2 + j/3) mod 2 == 0
+   * 100: mask bits for which (x/2 + y/3) mod 2 == 0
    */
   private static class DataMask100 extends DataMask {
-    void unmaskBitMatrix(int[] bits, int dimension) {
-      int bitMask = 0;
-      int count = 0;
-      int offset = 0;
-      for (int j = 0; j < dimension; j++) {
-        int jComponentParity = (j / 3) & 0x01;
-        for (int i = 0; i < dimension; i++) {
-          if (((i >> 1) & 0x01) == jComponentParity) {
-            bitMask |= 1 << count;
-          }
-          if (++count == 32) {
-            bits[offset++] ^= bitMask;
-            count = 0;
-            bitMask = 0;
-          }
-        }
-      }
-      bits[offset] ^= bitMask;
+    boolean isMasked(int x, int y) {
+      return (((x >>> 1) + (y/3)) & 0x01) == 0;
     }
   }
 
   /**
-   * 101: mask bits for which ij mod 2 + ij mod 3 == 0
+   * 101: mask bits for which xy mod 2 + xy mod 3 == 0
    */
   private static class DataMask101 extends DataMask {
-    void unmaskBitMatrix(int[] bits, int dimension) {
-      int bitMask = 0;
-      int count = 0;
-      int offset = 0;
-      for (int j = 0; j < dimension; j++) {
-        for (int i = 0; i < dimension; i++) {
-          int product = i * j;
-          if (((product & 0x01) == 0) && product % 3 == 0) {
-            bitMask |= 1 << count;
-          }
-          if (++count == 32) {
-            bits[offset++] ^= bitMask;
-            count = 0;
-            bitMask = 0;
-          }
-        }
-      }
-      bits[offset] ^= bitMask;
+    boolean isMasked(int x, int y) {
+      int temp = x * y;
+      return (temp & 0x01) + (temp % 3) == 0;
     }
   }
 
   /**
-   * 110: mask bits for which (ij mod 2 + ij mod 3) mod 2 == 0
+   * 110: mask bits for which (xy mod 2 + xy mod 3) mod 2 == 0
    */
   private static class DataMask110 extends DataMask {
-    void unmaskBitMatrix(int[] bits, int dimension) {
-      int bitMask = 0;
-      int count = 0;
-      int offset = 0;
-      for (int j = 0; j < dimension; j++) {
-        for (int i = 0; i < dimension; i++) {
-          int product = i * j;
-          if ((((product & 0x01) + product % 3) & 0x01) == 0) {
-            bitMask |= 1 << count;
-          }
-          if (++count == 32) {
-            bits[offset++] ^= bitMask;
-            count = 0;
-            bitMask = 0;
-          }
-        }
-      }
-      bits[offset] ^= bitMask;
+    boolean isMasked(int x, int y) {
+      int temp = x * y;
+      return (((temp & 0x01) + (temp % 3)) & 0x01) == 0;
     }
   }
 
@@ -235,23 +148,8 @@ abstract class DataMask {
    * 111: mask bits for which ((i+j)mod 2 + ij mod 3) mod 2 == 0
    */
   private static class DataMask111 extends DataMask {
-    void unmaskBitMatrix(int[] bits, int dimension) {
-      int bitMask = 0;
-      int count = 0;
-      int offset = 0;
-      for (int j = 0; j < dimension; j++) {
-        for (int i = 0; i < dimension; i++) {
-          if (((((i + j) & 0x01) + (i * j) % 3) & 0x01) == 0) {
-            bitMask |= 1 << count;
-          }
-          if (++count == 32) {
-            bits[offset++] ^= bitMask;
-            count = 0;
-            bitMask = 0;
-          }
-        }
-      }
-      bits[offset] ^= bitMask;
+    boolean isMasked(int x, int y) {
+      return ((((x + y) & 0x01) + ((x * y) % 3)) & 0x01) == 0;
     }
   }
 }

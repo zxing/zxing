@@ -161,7 +161,7 @@ final class BitMatrixParser {
     // some bits from reading as we wind through the bit matrix.
     DataMask dataMask = DataMask.forReference((int) formatInfo.getDataMask());
     int dimension = bitMatrix.getDimension();
-    dataMask.unmaskBitMatrix(bitMatrix.getBits(), dimension);
+    dataMask.unmaskBitMatrix(bitMatrix, dimension);
 
     BitMatrix functionPattern = version.buildFunctionPattern();
 

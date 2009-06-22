@@ -72,6 +72,17 @@ public final class BitMatrix {
   }
 
   /**
+   * <p>Flips the given bit.</p>
+   *
+   * @param i row offset
+   * @param j column offset
+   */
+  public void flip(int i, int j) {
+    int offset = i + dimension * j;
+    bits[offset >> 5] ^= 1 << (offset & 0x1F);
+  }
+
+  /**
    * <p>Sets a square region of the bit matrix to true.</p>
    *
    * @param topI row offset of region's top-left corner (inclusive)
@@ -106,13 +117,6 @@ public final class BitMatrix {
    */
   public int getDimension() {
     return dimension;
-  }
-
-  /**
-   * @return array of ints holding internal representation of this matrix's bits
-   */
-  public int[] getBits() {
-    return bits;
   }
 
   public String toString() {

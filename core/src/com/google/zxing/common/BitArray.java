@@ -60,6 +60,15 @@ public final class BitArray {
   }
 
   /**
+   * Flips bit i.
+   *
+   * @param i bit to set
+   */
+  public void flip(int i) {
+    bits[i >> 5] ^= 1 << (i & 0x1F);
+  }
+
+  /**
    * Sets a block of 32 bits, starting at bit i.
    *
    * @param i first bit to set
