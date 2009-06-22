@@ -27,26 +27,14 @@ import junit.framework.TestCase;
 public final class MaskUtilTestCase extends TestCase {
   public void testApplyMaskPenaltyRule1() {
     {
-      ByteMatrix matrix = new ByteMatrix(1, 4);
+      ByteMatrix matrix = new ByteMatrix(4, 1);
       matrix.set(0, 0, 0);
-      matrix.set(0, 1, 0);
-      matrix.set(0, 2, 0);
-      matrix.set(0, 3, 0);
+      matrix.set(1, 0, 0);
+      matrix.set(2, 0, 0);
+      matrix.set(3, 0, 0);
       assertEquals(0, MaskUtil.applyMaskPenaltyRule1(matrix));
     }
     {  // Horizontal.
-      ByteMatrix matrix = new ByteMatrix(1, 6);
-      matrix.set(0, 0, 0);
-      matrix.set(0, 1, 0);
-      matrix.set(0, 2, 0);
-      matrix.set(0, 3, 0);
-      matrix.set(0, 4, 0);
-      matrix.set(0, 5, 1);
-      assertEquals(3, MaskUtil.applyMaskPenaltyRule1(matrix));
-      matrix.set(0, 5, 0);
-      assertEquals(4, MaskUtil.applyMaskPenaltyRule1(matrix));
-    }
-    {  // Vertical.
       ByteMatrix matrix = new ByteMatrix(6, 1);
       matrix.set(0, 0, 0);
       matrix.set(1, 0, 0);
@@ -56,6 +44,18 @@ public final class MaskUtilTestCase extends TestCase {
       matrix.set(5, 0, 1);
       assertEquals(3, MaskUtil.applyMaskPenaltyRule1(matrix));
       matrix.set(5, 0, 0);
+      assertEquals(4, MaskUtil.applyMaskPenaltyRule1(matrix));
+    }
+    {  // Vertical.
+      ByteMatrix matrix = new ByteMatrix(1, 6);
+      matrix.set(0, 0, 0);
+      matrix.set(0, 1, 0);
+      matrix.set(0, 2, 0);
+      matrix.set(0, 3, 0);
+      matrix.set(0, 4, 0);
+      matrix.set(0, 5, 1);
+      assertEquals(3, MaskUtil.applyMaskPenaltyRule1(matrix));
+      matrix.set(0, 5, 0);
       assertEquals(4, MaskUtil.applyMaskPenaltyRule1(matrix));
     }
   }
@@ -69,29 +69,29 @@ public final class MaskUtilTestCase extends TestCase {
     {
       ByteMatrix matrix = new ByteMatrix(2, 2);
       matrix.set(0, 0, 0);
-      matrix.set(0, 1, 0);
       matrix.set(1, 0, 0);
+      matrix.set(0, 1, 0);
       matrix.set(1, 1, 1);
       assertEquals(0, MaskUtil.applyMaskPenaltyRule2(matrix));
     }
     {
       ByteMatrix matrix = new ByteMatrix(2, 2);
       matrix.set(0, 0, 0);
-      matrix.set(0, 1, 0);
       matrix.set(1, 0, 0);
+      matrix.set(0, 1, 0);
       matrix.set(1, 1, 0);
       assertEquals(3, MaskUtil.applyMaskPenaltyRule2(matrix));
     }
     {
       ByteMatrix matrix = new ByteMatrix(3, 3);
       matrix.set(0, 0, 0);
-      matrix.set(0, 1, 0);
-      matrix.set(0, 2, 0);
       matrix.set(1, 0, 0);
-      matrix.set(1, 1, 0);
-      matrix.set(1, 2, 0);
       matrix.set(2, 0, 0);
+      matrix.set(0, 1, 0);
+      matrix.set(1, 1, 0);
       matrix.set(2, 1, 0);
+      matrix.set(0, 2, 0);
+      matrix.set(1, 2, 0);
       matrix.set(2, 2, 0);
       // Four instances of 2x2 blocks.
       assertEquals(3 * 4, MaskUtil.applyMaskPenaltyRule2(matrix));
@@ -101,38 +101,6 @@ public final class MaskUtilTestCase extends TestCase {
   public void testApplyMaskPenaltyRule3() {
     {
       // Horizontal 00001011101.
-      ByteMatrix matrix = new ByteMatrix(1, 11);
-      matrix.set(0, 0, 0);
-      matrix.set(0, 1, 0);
-      matrix.set(0, 2, 0);
-      matrix.set(0, 3, 0);
-      matrix.set(0, 4, 1);
-      matrix.set(0, 5, 0);
-      matrix.set(0, 6, 1);
-      matrix.set(0, 7, 1);
-      matrix.set(0, 8, 1);
-      matrix.set(0, 9, 0);
-      matrix.set(0, 10, 1);
-      assertEquals(40, MaskUtil.applyMaskPenaltyRule3(matrix));
-    }
-    {
-      // Horizontal 10111010000.
-      ByteMatrix matrix = new ByteMatrix(1, 11);
-      matrix.set(0, 0, 1);
-      matrix.set(0, 1, 0);
-      matrix.set(0, 2, 1);
-      matrix.set(0, 3, 1);
-      matrix.set(0, 4, 1);
-      matrix.set(0, 5, 0);
-      matrix.set(0, 6, 1);
-      matrix.set(0, 7, 0);
-      matrix.set(0, 8, 0);
-      matrix.set(0, 9, 0);
-      matrix.set(0, 10, 0);
-      assertEquals(40, MaskUtil.applyMaskPenaltyRule3(matrix));
-    }
-    {
-      // Vertical 00001011101.
       ByteMatrix matrix = new ByteMatrix(11, 1);
       matrix.set(0, 0, 0);
       matrix.set(1, 0, 0);
@@ -148,7 +116,7 @@ public final class MaskUtilTestCase extends TestCase {
       assertEquals(40, MaskUtil.applyMaskPenaltyRule3(matrix));
     }
     {
-      // Vertical 10111010000.
+      // Horizontal 10111010000.
       ByteMatrix matrix = new ByteMatrix(11, 1);
       matrix.set(0, 0, 1);
       matrix.set(1, 0, 0);
@@ -163,6 +131,38 @@ public final class MaskUtilTestCase extends TestCase {
       matrix.set(10, 0, 0);
       assertEquals(40, MaskUtil.applyMaskPenaltyRule3(matrix));
     }
+    {
+      // Vertical 00001011101.
+      ByteMatrix matrix = new ByteMatrix(1, 11);
+      matrix.set(0, 0, 0);
+      matrix.set(0, 1, 0);
+      matrix.set(0, 2, 0);
+      matrix.set(0, 3, 0);
+      matrix.set(0, 4, 1);
+      matrix.set(0, 5, 0);
+      matrix.set(0, 6, 1);
+      matrix.set(0, 7, 1);
+      matrix.set(0, 8, 1);
+      matrix.set(0, 9, 0);
+      matrix.set(0, 10, 1);
+      assertEquals(40, MaskUtil.applyMaskPenaltyRule3(matrix));
+    }
+    {
+      // Vertical 10111010000.
+      ByteMatrix matrix = new ByteMatrix(1, 11);
+      matrix.set(0, 0, 1);
+      matrix.set(0, 1, 0);
+      matrix.set(0, 2, 1);
+      matrix.set(0, 3, 1);
+      matrix.set(0, 4, 1);
+      matrix.set(0, 5, 0);
+      matrix.set(0, 6, 1);
+      matrix.set(0, 7, 0);
+      matrix.set(0, 8, 0);
+      matrix.set(0, 9, 0);
+      matrix.set(0, 10, 0);
+      assertEquals(40, MaskUtil.applyMaskPenaltyRule3(matrix));
+    }
   }
 
   public void testApplyMaskPenaltyRule4() {
@@ -174,20 +174,20 @@ public final class MaskUtilTestCase extends TestCase {
     }
     {
       // Dark cell ratio = 5%
-      ByteMatrix matrix = new ByteMatrix(1, 2);
+      ByteMatrix matrix = new ByteMatrix(2, 1);
       matrix.set(0, 0, 0);
       matrix.set(0, 0, 1);
       assertEquals(0, MaskUtil.applyMaskPenaltyRule4(matrix));
     }
     {
       // Dark cell ratio = 66.67%
-      ByteMatrix matrix = new ByteMatrix(1, 6);
+      ByteMatrix matrix = new ByteMatrix(6, 1);
       matrix.set(0, 0, 0);
-      matrix.set(0, 1, 1);
-      matrix.set(0, 2, 1);
-      matrix.set(0, 3, 1);
-      matrix.set(0, 4, 1);
-      matrix.set(0, 5, 0);
+      matrix.set(1, 0, 1);
+      matrix.set(2, 0, 1);
+      matrix.set(3, 0, 1);
+      matrix.set(4, 0, 1);
+      matrix.set(5, 0, 0);
       assertEquals(30, MaskUtil.applyMaskPenaltyRule4(matrix));
     }
   }

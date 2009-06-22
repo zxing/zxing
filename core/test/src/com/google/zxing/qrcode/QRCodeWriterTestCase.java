@@ -59,14 +59,14 @@ public final class QRCodeWriterTestCase extends TestCase {
     int[] pixels = new int[width * height];
     image.getRGB(0, 0, width, height, pixels, 0, width);
 
-    ByteMatrix matrix = new ByteMatrix(height, width);
+    ByteMatrix matrix = new ByteMatrix(width, height);
     for (int y = 0; y < height; y++) {
       for (int x = 0; x < width; x++) {
         int pixel = pixels[y * width + x];
         int luminance = (306 * ((pixel >> 16) & 0xFF) +
             601 * ((pixel >> 8) & 0xFF) +
             117 * (pixel & 0xFF)) >> 10;
-        matrix.set(y, x, luminance);
+        matrix.set(x, y, luminance);
       }
     }
     return matrix;

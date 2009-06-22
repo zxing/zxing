@@ -29,13 +29,13 @@ public final class MatrixUtilTestCase extends TestCase {
   public void testtoString() {
     ByteMatrix array = new ByteMatrix(3, 3);
     array.set(0, 0, 0);
-    array.set(0, 1, 1);
-    array.set(0, 2, 0);
     array.set(1, 0, 1);
+    array.set(2, 0, 0);
+    array.set(0, 1, 1);
     array.set(1, 1, 0);
-    array.set(1, 2, 1);
-    array.set(2, 0, -1);
-    array.set(2, 1, -1);
+    array.set(2, 1, 1);
+    array.set(0, 2, -1);
+    array.set(1, 2, -1);
     array.set(2, 2, -1);
     String expected = " 0 1 0\n" + " 1 0 1\n" + "      \n";
     assertEquals(expected, array.toString());
@@ -45,8 +45,8 @@ public final class MatrixUtilTestCase extends TestCase {
     ByteMatrix matrix = new ByteMatrix(2, 2);
     MatrixUtil.clearMatrix(matrix);
     assertEquals(-1, matrix.get(0, 0));
-    assertEquals(-1, matrix.get(0, 1));
     assertEquals(-1, matrix.get(1, 0));
+    assertEquals(-1, matrix.get(0, 1));
     assertEquals(-1, matrix.get(1, 1));
   }
 

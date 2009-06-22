@@ -20,23 +20,21 @@ package com.google.zxing.common;
  * A class which wraps a 2D array of bytes. The default usage is signed. If you want to use it as a
  * unsigned container, it's up to you to do byteValue & 0xff at each location.
  *
- * JAVAPORT: I'm not happy about the argument ordering throughout the file, as I always like to have
- * the horizontal component first, but this is for compatibility with the C++ code. The original
- * code was a 2D array of ints, but since it only ever gets assigned -1, 0, and 1, I'm going to use
- * less memory and go with bytes.
+ * JAVAPORT: The original code was a 2D array of ints, but since it only ever gets assigned
+ * -1, 0, and 1, I'm going to use less memory and go with bytes.
  *
  * @author dswitkin@google.com (Daniel Switkin)
  */
 public final class ByteMatrix {
 
   private final byte[][] bytes;
-  private final int height;
   private final int width;
+  private final int height;
 
-  public ByteMatrix(int height, int width) {
+  public ByteMatrix(int width, int height) {
     bytes = new byte[height][width];
-    this.height = height;
     this.width = width;
+    this.height = height;
   }
 
   public int height() {
@@ -47,7 +45,7 @@ public final class ByteMatrix {
     return width;
   }
 
-  public byte get(int y, int x) {
+  public byte get(int x, int y) {
     return bytes[y][x];
   }
 
@@ -55,11 +53,11 @@ public final class ByteMatrix {
     return bytes;
   }
 
-  public void set(int y, int x, byte value) {
+  public void set(int x, int y, byte value) {
     bytes[y][x] = value;
   }
 
-  public void set(int y, int x, int value) {
+  public void set(int x, int y, int value) {
     bytes[y][x] = (byte) value;
   }
 
