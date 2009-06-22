@@ -17,20 +17,16 @@
 package com.google.zxing.common;
 
 /**
- * <p>Represnts a square matrix of bits. In function arguments below, i is the row position
- * and j the column position of a bit. The top left bit corresponds to i = 0 and j = 0.</p>
+ * <p>Represents a square matrix of bits. In function arguments below, and throughout the common
+ * module, x is the column position, and y is the row position. The ordering is always x, y.
+ * The origin is at the top-left.</p>
  *
- * <p>Internally the bits are represented in a compact 1-D array of 32-bit ints. The
- * ordering of bits is column-major; that is the bits in this array correspond to
- * j=0 and i=0..dimension-1 first, then j=1 and i=0..dimension-1, etc.</p>
- *
- * <p>Within each int, less-signficant bits correspond to lower values of i and higher rows.
- * That is, the top-left bit is the least significant bit of the first int.</p>
- *
- * <p>This class is a convenient wrapper around this representation, but also exposes the internal
- * array for efficient access and manipulation.</p>
+ * <p>Internally the bits are represented in a compact 1-D array of 32-bit ints.
+ * The ordering of bits is row-major. Within each int, the least significant bits are used first,
+ * meaning they represent lower x values. This is compatible with BitArray's implementation.</p>
  *
  * @author Sean Owen
+ * @author dswitkin@google.com (Daniel Switkin)
  */
 public final class BitMatrix {
 
@@ -51,63 +47,65 @@ public final class BitMatrix {
   }
 
   /**
-   * @param i row offset
-   * @param j column offset
+   * <p>Gets the requested bit, where true means black.</p>
+   *
+   * @param x The horizontal component (i.e. which column)
+   * @param y The vertical component (i.e. which row)
    * @return value of given bit in matrix
    */
-  public boolean get(int i, int j) {
-    int offset = i + dimension * j;
+  public boolean get(int x, int y) {
+    int offset = y * dimension + x;
     return ((bits[offset >> 5] >>> (offset & 0x1F)) & 0x01) != 0;
   }
 
   /**
    * <p>Sets the given bit to true.</p>
    *
-   * @param i row offset
-   * @param j column offset
+   * @param x The horizontal component (i.e. which column)
+   * @param y The vertical component (i.e. which row)
    */
-  public void set(int i, int j) {
-    int offset = i + dimension * j;
+  public void set(int x, int y) {
+    int offset = y * dimension + x;
     bits[offset >> 5] |= 1 << (offset & 0x1F);
   }
 
   /**
    * <p>Flips the given bit.</p>
    *
-   * @param i row offset
-   * @param j column offset
+   * @param x The horizontal component (i.e. which column)
+   * @param y The vertical component (i.e. which row)
    */
-  public void flip(int i, int j) {
-    int offset = i + dimension * j;
+  public void flip(int x, int y) {
+    int offset = y * dimension + x;
     bits[offset >> 5] ^= 1 << (offset & 0x1F);
   }
 
   /**
    * <p>Sets a square region of the bit matrix to true.</p>
    *
-   * @param topI row offset of region's top-left corner (inclusive)
-   * @param leftJ column offset of region's top-left corner (inclusive)
-   * @param height height of region
-   * @param width width of region
+   * @param left The horizontal position to begin at (inclusive)
+   * @param top The vertical position to begin at (inclusive)
+   * @param width The width of the region
+   * @param height The height of the region
    */
-  public void setRegion(int topI, int leftJ, int height, int width) {
-    if (topI < 0 || leftJ < 0) {
-      throw new IllegalArgumentException("topI and leftJ must be nonnegative");
+  public void setRegion(int left, int top, int width, int height) {
+    if (top < 0 || left < 0) {
+      throw new IllegalArgumentException("left and top must be nonnegative");
     }
     if (height < 1 || width < 1) {
       throw new IllegalArgumentException("height and width must be at least 1");
     }
-    int maxJ = leftJ + width;
-    int maxI = topI + height;
-    if (maxI > dimension || maxJ > dimension) {
+    int right = left + width;
+    int bottom = top + height;
+    if (bottom > dimension || right > dimension) {
       throw new IllegalArgumentException(
-          "topI + height and leftJ + width must be <= matrix dimension");
+          "top + height and left + width must be <= matrix dimension");
     }
-    for (int j = leftJ; j < maxJ; j++) {
-      int jOffset = dimension * j;
-      for (int i = topI; i < maxI; i++) {
-        int offset = i + jOffset;
-        bits[offset >> 5] |= 1 << (offset & 0x1F);
+    for (int y = top; y < bottom; y++) {
+      int yoffset = dimension * y;
+      for (int x = left; x < right; x++) {
+        int xoffset = yoffset + x;
+        bits[xoffset >> 5] |= 1 << (xoffset & 0x1F);
       }
     }
   }
@@ -121,9 +119,9 @@ public final class BitMatrix {
 
   public String toString() {
     StringBuffer result = new StringBuffer(dimension * (dimension + 1));
-    for (int i = 0; i < dimension; i++) {
-      for (int j = 0; j < dimension; j++) {
-        result.append(get(i, j) ? "X " : "  ");
+    for (int y = 0; y < dimension; y++) {
+      for (int x = 0; x < dimension; x++) {
+        result.append(get(x, y) ? "X " : "  ");
       }
       result.append('\n');
     }

@@ -29,13 +29,13 @@ public final class BitMatrixTestCase extends TestCase {
     for (int i = 0; i < 33; i++) {
       for (int j = 0; j < 33; j++) {
         if (i * j % 3 == 0) {
-          matrix.set(i, j);
+          matrix.set(j, i);
         }
       }
     }
     for (int i = 0; i < 33; i++) {
       for (int j = 0; j < 33; j++) {
-        assertEquals(i * j % 3 == 0, matrix.get(i, j));
+        assertEquals(i * j % 3 == 0, matrix.get(j, i));
       }
     }
   }
@@ -45,7 +45,7 @@ public final class BitMatrixTestCase extends TestCase {
     matrix.setRegion(1, 1, 3, 3);
     for (int i = 0; i < 5; i++) {
       for (int j = 0; j < 5; j++) {
-        assertEquals(i >= 1 && i <= 3 && j >= 1 && j <= 3, matrix.get(i, j));
+        assertEquals(i >= 1 && i <= 3 && j >= 1 && j <= 3, matrix.get(j, i));
       }
     }
   }

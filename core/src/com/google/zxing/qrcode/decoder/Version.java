@@ -147,9 +147,9 @@ public final class Version {
     // Top left finder pattern + separator + format
     bitMatrix.setRegion(0, 0, 9, 9);
     // Top right finder pattern + separator + format
-    bitMatrix.setRegion(0, dimension - 8, 9, 8);
-    // Bottom left finder pattern + separator + format
     bitMatrix.setRegion(dimension - 8, 0, 8, 9);
+    // Bottom left finder pattern + separator + format
+    bitMatrix.setRegion(0, dimension - 8, 9, 8);
 
     // Alignment patterns
     int max = alignmentPatternCenters.length;
@@ -160,20 +160,20 @@ public final class Version {
           // No alignment patterns near the three finder paterns
           continue;
         }
-        bitMatrix.setRegion(i, alignmentPatternCenters[y] - 2, 5, 5);
+        bitMatrix.setRegion(alignmentPatternCenters[y] - 2, i, 5, 5);
       }
     }
 
     // Vertical timing pattern
-    bitMatrix.setRegion(9, 6, dimension - 17, 1);
-    // Horizontal timing pattern
     bitMatrix.setRegion(6, 9, 1, dimension - 17);
+    // Horizontal timing pattern
+    bitMatrix.setRegion(9, 6, dimension - 17, 1);
 
     if (versionNumber > 6) {
       // Version info, top right
-      bitMatrix.setRegion(0, dimension - 11, 6, 3);
-      // Version info, bottom left
       bitMatrix.setRegion(dimension - 11, 0, 3, 6);
+      // Version info, bottom left
+      bitMatrix.setRegion(0, dimension - 11, 6, 3);
     }
 
     return bitMatrix;
