@@ -34,8 +34,7 @@ import java.util.Vector;
  * <p>This class attempts to find finder patterns in a QR Code. Finder patterns are the square
  * markers at three corners of a QR Code.</p>
  *
- * <p>This class is not thread-safe and should not be reused.</p>
- * TODO(dswitkin): Is this comment still true? I don't see any global variables for example.
+ * <p>This class is thread-safe but not reentrant. Each thread must allocate its own object.
  *
  * <p>In contrast to {@link FinderPatternFinder}, this class will return an array of all possible
  * QR code locations in the image.</p>
