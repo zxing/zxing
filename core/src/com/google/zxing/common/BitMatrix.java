@@ -93,6 +93,16 @@ public final class BitMatrix {
   }
 
   /**
+   * Clears all bits (sets to false).
+   */
+  public void clear() {
+    int max = bits.length;
+    for (int i = 0; i < max; i++) {
+      bits[i] = 0;
+    }
+  }
+
+  /**
    * <p>Sets a square region of the bit matrix to true.</p>
    *
    * @param left The horizontal position to begin at (inclusive)
