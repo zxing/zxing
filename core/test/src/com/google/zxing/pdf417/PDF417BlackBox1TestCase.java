@@ -37,12 +37,12 @@ public final class PDF417BlackBox1TestCase extends AbstractBlackBoxTestCase {
     //addTest(1, 1, 270.0f);
   }
   
+  @Override
   protected Hashtable<DecodeHintType, Object> getHints() {
-     Hashtable<DecodeHintType, Object> table = new Hashtable<DecodeHintType, Object>();
-     Vector v = new Vector();
+     Hashtable<DecodeHintType, Object> table = new Hashtable<DecodeHintType, Object>(3);
+     Vector<BarcodeFormat> v = new Vector<BarcodeFormat>(1);
      v.add(BarcodeFormat.PDF417);
      table.put(DecodeHintType.POSSIBLE_FORMATS, v);
-     
      return table;
    }
 
