@@ -52,6 +52,9 @@ public final class BarcodeFormat {
   /** ITF (Interleaved Two of Five) 1D format. */
   public static final BarcodeFormat ITF = new BarcodeFormat("ITF");
 
+  /** PDF417 format. */
+  public static final BarcodeFormat PDF417 = new BarcodeFormat("PDF417");
+  
   private final String name;
 
   private BarcodeFormat(String name) {
