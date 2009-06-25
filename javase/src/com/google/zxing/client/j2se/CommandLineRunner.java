@@ -26,7 +26,6 @@ import com.google.zxing.client.result.ParsedResult;
 import com.google.zxing.client.result.ResultParser;
 import com.google.zxing.common.BitArray;
 
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -39,6 +38,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.util.Hashtable;
+
+import javax.imageio.ImageIO;
 
 /**
  * <p>This simple command line utility decodes files, directories of files, or URIs which are passed
@@ -215,7 +216,7 @@ public final class CommandLineRunner {
         }
         continue;
       }
-      source.getBlackRow(y, row, 0, width);
+      row = source.getBlackRow(y, row, 0, width);
       int offset = y * stride + width;
       for (int x = 0; x < width; x++) {
         if (row.get(x)) {
@@ -230,7 +231,7 @@ public final class CommandLineRunner {
     try {
       source.estimateBlackPoint(BlackPointEstimationMethod.TWO_D_SAMPLING, 0);
       for (int y = 0; y < height; y++) {
-        source.getBlackRow(y, row, 0, width);
+        row = source.getBlackRow(y, row, 0, width);
         int offset = y * stride + width * 2;
         for (int x = 0; x < width; x++) {
           if (row.get(x)) {
