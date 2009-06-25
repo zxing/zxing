@@ -112,7 +112,7 @@ public abstract class AbstractOneDReader implements OneDReader {
       } catch (ReaderException re) {
         continue;
       }
-      image.getBlackRow(rowNumber, row, 0, width);
+      row = image.getBlackRow(rowNumber, row, 0, width);
 
       // While we have the image data in a BitArray, it's fairly cheap to reverse it in place to
       // handle decoding upside down barcodes.
