@@ -101,7 +101,7 @@ public final class CameraTestActivity extends Activity implements SurfaceHolder.
         CameraManager.get().requestAutoFocus(mHandler, R.id.auto_focus);
       }
       return true;
-    } else if (keyCode == KeyEvent.KEYCODE_CAMERA) {
+    } else if (keyCode == KeyEvent.KEYCODE_CAMERA || keyCode == KeyEvent.KEYCODE_SEARCH) {
       if (event.getRepeatCount() == 0) {
         CameraManager.get().requestPreviewFrame(mSaveThread.mHandler, R.id.save);
       }
