@@ -35,6 +35,13 @@
         </not>
       </condition>
     </fail>
+    <fail message="Please build project javadoc first">
+      <condition>
+        <not>
+          <available file="../docs/javadoc" type="dir"/>
+        </not>
+      </condition>
+    </fail>
     <fail message="Please set 'tomcat-home' in build.properties">
       <condition>
         <not>
@@ -72,9 +79,15 @@
         <include name="*.jar"/>
       </lib>
       <classes dir="web/WEB-INF/classes"/>
+      <webinf dir="web/WEB-INF">
+        <include name="appengine-web.xml"/>
+      </webinf>
       <fileset dir="web">
         <include name="*.jspx"/>
         <include name="*.png"/>
+      </fileset>
+      <fileset dir="..">
+        <include name="docs/**"/>
       </fileset>
     </war>
   </target>
