@@ -132,11 +132,11 @@ final class CameraManager {
    */
   public Rect getFramingRect() {
     if (mFramingRect == null) {
-      int size = ((mScreenResolution.x < mScreenResolution.y) ? mScreenResolution.x :
-          mScreenResolution.y) * 3 / 4;
-      int leftOffset = (mScreenResolution.x - size) / 2;
-      int topOffset = (mScreenResolution.y - size) / 2;
-      mFramingRect = new Rect(leftOffset, topOffset, leftOffset + size, topOffset + size);
+      int width = mScreenResolution.x;
+      int height = mScreenResolution.y * 3 / 4;
+      int leftOffset = (mScreenResolution.x - width) / 2;
+      int topOffset = (mScreenResolution.y - height) / 2;
+      mFramingRect = new Rect(leftOffset, topOffset, leftOffset + width, topOffset + height);
     }
     return mFramingRect;
   }

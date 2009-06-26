@@ -31,13 +31,15 @@
   <string name="result_failed">No barcode found</string>
   <string name="result_failed_why">"The user gave up and pressed Back"</string>
   <string name="result_succeeded">Found barcode</string>
-  <string name="status_message">Press the shutter button to save images to the SD card for testing purposes. Press DPAD_CENTER to trigger autofocus.</string>
+  <string name="status_message">Press the shutter button or Search to save test images to the
+    SD card. Press DPAD_CENTER to trigger autofocus.</string>
   <string name="save_succeeded">Save succeeded</string>
   <string name="save_failed">Save failed - is the SD card installed?</string>
   <string name="share_via_barcode">Share via barcode</string>
 
   <string name="benchmark_name">ZXing Benchmark</string>
-  <string name="benchmark_help">Place images in /sdcard/zxingbenchmark, then check \"adb logcat\" for results. Turn on Airplane Mode first for more reliable results.</string>
+  <string name="benchmark_help">Place images in /sdcard/zxingbenchmark, then check \"adb logcat\"
+    for results. Turn on Airplane Mode first for more reliable results.</string>
   <string name="benchmark_run">Run benchmark</string>
   <string name="benchmark_running">Benchmark running...\u2026</string>
 </resources>

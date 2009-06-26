@@ -63,7 +63,7 @@ final class SaveThread extends Thread {
     Looper.loop();
   }
 
-  // Save the center rectangle of the Y channel as a greyscale JPEG to the SD card
+  // Save the center rectangle of the Y channel as a greyscale PNG to the SD card.
   private void save(byte[] data, int width, int height) {
     int framingWidth = mFramingRect.width();
     int framingHeight = mFramingRect.height();
@@ -88,7 +88,7 @@ final class SaveThread extends Thread {
         Bitmap.Config.ARGB_8888);
     OutputStream outStream = getNewPhotoOutputStream();
     if (outStream != null) {
-      bitmap.compress(Bitmap.CompressFormat.JPEG, 80, outStream);
+      bitmap.compress(Bitmap.CompressFormat.PNG, 100, outStream);
       try {
         outStream.close();
         Message message = Message.obtain(mActivity.mHandler, R.id.save_succeeded);
@@ -119,7 +119,7 @@ final class SaveThread extends Thread {
         }
       }
       Date now = new Date();
-      String fileName = now.getTime() + ".jpg";
+      String fileName = now.getTime() + ".png";
       try {
         return new FileOutputStream(new File(barcodes, fileName));
       } catch (FileNotFoundException e) {
