@@ -89,14 +89,14 @@ final class BitMatrixParser {
       for (int j = 0; j < width; j++) {
         // Accumulate differences between this line and the
         // previous line.
-        if (bitMatrix.get(i, j) != bitMatrix.get(i - 1, j)) {
+        if (bitMatrix.get(j, i) != bitMatrix.get(j, i - 1)) {
           rowDifference++;
         }
       }
       if (rowDifference <= moduleWidth * MAX_ROW_DIFFERENCE) {
         for (int j = 0; j < width; j++) {
           // Accumulate the black pixels on this line
-          if (bitMatrix.get(i, j)) {
+          if (bitMatrix.get(j, i)) {
             rowCounters[j]++;
           }
         }
