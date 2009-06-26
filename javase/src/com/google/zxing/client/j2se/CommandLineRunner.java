@@ -16,15 +16,17 @@
 
 package com.google.zxing.client.j2se;
 
-import com.google.zxing.BlackPointEstimationMethod;
+import com.google.zxing.BinaryBitmap;
 import com.google.zxing.DecodeHintType;
-import com.google.zxing.MonochromeBitmapSource;
+import com.google.zxing.LuminanceSource;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 import com.google.zxing.client.result.ParsedResult;
 import com.google.zxing.client.result.ResultParser;
 import com.google.zxing.common.BitArray;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.common.GlobalHistogramBinarizer;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -165,11 +167,12 @@ public final class CommandLineRunner {
       return null;
     }
     try {
-      MonochromeBitmapSource source = new BufferedImageMonochromeBitmapSource(image);
+      LuminanceSource source = new BufferedImageLuminanceSource(image);
+      BinaryBitmap bitmap = new BinaryBitmap(new GlobalHistogramBinarizer(source));
       if (dumpBlackPoint) {
-        dumpBlackPoint(uri, image, source);
+        dumpBlackPoint(uri, image, bitmap);
       }
-      Result result = new MultiFormatReader().decode(source, hints);
+      Result result = new MultiFormatReader().decode(bitmap, hints);
       ParsedResult parsedResult = ResultParser.parseResult(result);
       System.out.println(uri.toString() + " (format: " + result.getBarcodeFormat() +
           ", type: " + parsedResult.getType() + "):\nRaw result:\n" + result.getText() +
@@ -184,14 +187,15 @@ public final class CommandLineRunner {
   // Writes out a single PNG which is three times the width of the input image, containing from left
   // to right: the original image, the row sampling monochrome version, and the 2D sampling
   // monochrome version.
-  private static void dumpBlackPoint(URI uri, BufferedImage image, MonochromeBitmapSource source) {
+  // TODO: Update to compare different Binarizer implementations.
+  private static void dumpBlackPoint(URI uri, BufferedImage image, BinaryBitmap bitmap) {
     String inputName = uri.getPath();
     if (inputName.contains(".mono.png")) {
       return;
     }
 
-    int width = source.getWidth();
-    int height = source.getHeight();
+    int width = bitmap.getWidth();
+    int height = bitmap.getHeight();
     int stride = width * 3;
     int[] pixels = new int[stride * height];
 
@@ -207,16 +211,16 @@ public final class CommandLineRunner {
     BitArray row = new BitArray(width);
     for (int y = 0; y < height; y++) {
       try {
-        source.estimateBlackPoint(BlackPointEstimationMethod.ROW_SAMPLING, y);
+        row = bitmap.getBlackRow(y, row);
       } catch (ReaderException e) {
-        // If the row histogram failed, draw a red line and keep going
+        // If fetching the row failed, draw a red line and keep going.
         int offset = y * stride + width;
         for (int x = 0; x < width; x++) {
           pixels[offset + x] = 0xffff0000;
         }
         continue;
       }
-      row = source.getBlackRow(y, row, 0, width);
+
       int offset = y * stride + width;
       for (int x = 0; x < width; x++) {
         if (row.get(x)) {
@@ -229,12 +233,11 @@ public final class CommandLineRunner {
 
     // 2D sampling
     try {
-      source.estimateBlackPoint(BlackPointEstimationMethod.TWO_D_SAMPLING, 0);
       for (int y = 0; y < height; y++) {
-        row = source.getBlackRow(y, row, 0, width);
+        BitMatrix matrix = bitmap.getBlackMatrix();
         int offset = y * stride + width * 2;
         for (int x = 0; x < width; x++) {
-          if (row.get(x)) {
+          if (matrix.get(x, y)) {
             pixels[offset + x] = 0xff000000;
           } else {
             pixels[offset + x] = 0xffffffff;

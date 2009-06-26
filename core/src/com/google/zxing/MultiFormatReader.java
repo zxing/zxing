@@ -38,7 +38,7 @@ public final class MultiFormatReader implements Reader {
   private Vector readers;
 
   /**
-   * This version of decode honors the intent of Reader.decode(MonochromeBitmapSource) in that it
+   * This version of decode honors the intent of Reader.decode(BinaryBitmap) in that it
    * passes null as a hint to the decoders. However, that makes it inefficient to call repeatedly.
    * Use setHints() followed by decodeWithState() for continuous scan applications.
    *
@@ -46,7 +46,7 @@ public final class MultiFormatReader implements Reader {
    * @return The contents of the image
    * @throws ReaderException Any errors which occurred
    */
-  public Result decode(MonochromeBitmapSource image) throws ReaderException {
+  public Result decode(BinaryBitmap image) throws ReaderException {
     setHints(null);
     return decodeInternal(image);
   }
@@ -59,7 +59,7 @@ public final class MultiFormatReader implements Reader {
    * @return The contents of the image
    * @throws ReaderException Any errors which occurred
    */
-  public Result decode(MonochromeBitmapSource image, Hashtable hints) throws ReaderException {
+  public Result decode(BinaryBitmap image, Hashtable hints) throws ReaderException {
     setHints(hints);
     return decodeInternal(image);
   }
@@ -72,7 +72,7 @@ public final class MultiFormatReader implements Reader {
    * @return The contents of the image
    * @throws ReaderException Any errors which occurred
    */
-  public Result decodeWithState(MonochromeBitmapSource image) throws ReaderException {
+  public Result decodeWithState(BinaryBitmap image) throws ReaderException {
     // Make sure to set up the default state so we don't crash
     if (readers == null) {
       setHints(null);
@@ -101,8 +101,7 @@ public final class MultiFormatReader implements Reader {
               formats.contains(BarcodeFormat.EAN_8) ||
               formats.contains(BarcodeFormat.CODE_39) ||
               formats.contains(BarcodeFormat.CODE_128) ||
-              formats.contains(BarcodeFormat.ITF) ||
-              formats.contains(BarcodeFormat.PDF417);
+              formats.contains(BarcodeFormat.ITF);
       // Put 1D readers upfront in "normal" mode
       if (addOneDReader && !tryHarder) {
         readers.addElement(new MultiFormatOneDReader(hints));
@@ -139,7 +138,7 @@ public final class MultiFormatReader implements Reader {
     }
   }
 
-  private Result decodeInternal(MonochromeBitmapSource image) throws ReaderException {
+  private Result decodeInternal(BinaryBitmap image) throws ReaderException {
     int size = readers.size();
     for (int i = 0; i < size; i++) {
       Reader reader = (Reader) readers.elementAt(i);

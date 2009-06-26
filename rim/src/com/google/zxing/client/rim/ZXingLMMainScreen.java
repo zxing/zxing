@@ -16,13 +16,15 @@
 
 package com.google.zxing.client.rim;
 
+import com.google.zxing.BinaryBitmap;
 import com.google.zxing.DecodeHintType;
-import com.google.zxing.MonochromeBitmapSource;
+import com.google.zxing.LuminanceSource;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.Reader;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
-import com.google.zxing.client.j2me.LCDUIImageMonochromeBitmapSource;
+import com.google.zxing.common.GlobalHistogramBinarizer;
+import com.google.zxing.client.j2me.LCDUIImageLuminanceSource;
 import com.google.zxing.client.rim.persistence.AppSettings;
 import com.google.zxing.client.rim.persistence.history.DecodeHistory;
 import com.google.zxing.client.rim.persistence.history.DecodeHistoryItem;
@@ -238,13 +240,14 @@ final class ZXingLMMainScreen extends MainScreen {
 
       if (capturedImage != null) {
         Log.info("Got image...");
-        MonochromeBitmapSource source = new LCDUIImageMonochromeBitmapSource(capturedImage);
+        LuminanceSource source = new LCDUIImageLuminanceSource(capturedImage);
+        BinaryBitmap bitmap = new BinaryBitmap(new GlobalHistogramBinarizer(source));
         Result result;
         ReasonableTimer decodingTimer = null;
         try {
           decodingTimer = new ReasonableTimer();
           Log.info("Attempting to decode image...");
-          result = reader.decode(source, readerHints);
+          result = reader.decode(bitmap, readerHints);
           decodingTimer.finished();
         } catch (ReaderException e) {
           Log.error("Could not decode image: " + e);

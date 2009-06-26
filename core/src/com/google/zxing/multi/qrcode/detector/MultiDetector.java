@@ -16,8 +16,7 @@
 
 package com.google.zxing.multi.qrcode.detector;
 
-import com.google.zxing.BlackPointEstimationMethod;
-import com.google.zxing.MonochromeBitmapSource;
+import com.google.zxing.BinaryBitmap;
 import com.google.zxing.ReaderException;
 import com.google.zxing.common.DetectorResult;
 import com.google.zxing.qrcode.detector.Detector;
@@ -37,16 +36,12 @@ public final class MultiDetector extends Detector {
 
   private static final DetectorResult[] EMPTY_DETECTOR_RESULTS = new DetectorResult[0];
 
-  public MultiDetector(MonochromeBitmapSource image) {
+  public MultiDetector(BinaryBitmap image) {
     super(image);
   }
 
   public DetectorResult[] detectMulti(Hashtable hints) throws ReaderException {
-    MonochromeBitmapSource image = getImage();
-    if (!BlackPointEstimationMethod.TWO_D_SAMPLING.equals(image.getLastEstimationMethod())) {
-      image.estimateBlackPoint(BlackPointEstimationMethod.TWO_D_SAMPLING, 0);
-    }
-
+    BinaryBitmap image = getImage();
     MultiFinderPatternFinder finder = new MultiFinderPatternFinder(image);
     FinderPatternInfo[] info = finder.findMulti(hints);
 

@@ -17,7 +17,7 @@
 package com.google.zxing.multi.qrcode.detector;
 
 import com.google.zxing.DecodeHintType;
-import com.google.zxing.MonochromeBitmapSource;
+import com.google.zxing.BinaryBitmap;
 import com.google.zxing.ReaderException;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitArray;
@@ -48,10 +48,13 @@ final class MultiFinderPatternFinder extends FinderPatternFinder {
 
   private static final FinderPatternInfo[] EMPTY_RESULT_ARRAY = new FinderPatternInfo[0];
 
-  // TODO MIN_MODULE_COUNT and MAX_MODULE_COUNT would be great
-  // hints to ask the user for since it limits the number of regions to decode
-  private static final float MAX_MODULE_COUNT_PER_EDGE = 180; // max. legal count of modules per QR code edge (177)
-  private static final float MIN_MODULE_COUNT_PER_EDGE = 9; // min. legal count per modules per QR code edge (11)
+  // TODO MIN_MODULE_COUNT and MAX_MODULE_COUNT would be great hints to ask the user for
+  // since it limits the number of regions to decode
+
+  // max. legal count of modules per QR code edge (177)
+  private static final float MAX_MODULE_COUNT_PER_EDGE = 180;
+  // min. legal count per modules per QR code edge (11)
+  private static final float MIN_MODULE_COUNT_PER_EDGE = 9;
 
   /**
    * More or less arbitrary cutoff point for determining if two finder patterns might belong
@@ -84,7 +87,7 @@ final class MultiFinderPatternFinder extends FinderPatternFinder {
    *
    * @param image image to search
    */
-  MultiFinderPatternFinder(MonochromeBitmapSource image) {
+  MultiFinderPatternFinder(BinaryBitmap image) {
     super(image);
   }
 
@@ -124,12 +127,13 @@ final class MultiFinderPatternFinder extends FinderPatternFinder {
      *  - feature similar module sizes
      *  - are placed in a distance so the estimated module count is within the QR specification
      *  - have similar distance between upper left/right and left top/bottom finder patterns
-     *  - form a triangle with 90° angle (checked by comparing top right/bottom left distance with pythagoras)
+     *  - form a triangle with 90° angle (checked by comparing top right/bottom left distance
+     *    with pythagoras)
      *
-     * Note: we allow each point to be used for more than one code region: this might seem counterintuitive at first,
-     * but the performance penalty is not that big. At this point, we cannot make a good quality decision whether
-     * the three finders actually represent a QR code, or are just by chance layouted so it looks like there might
-     * be a QR code there.
+     * Note: we allow each point to be used for more than one code region: this might seem
+     * counterintuitive at first, but the performance penalty is not that big. At this point,
+     * we cannot make a good quality decision whether the three finders actually represent
+     * a QR code, or are just by chance layouted so it looks like there might be a QR code there.
      * So, if the layout seems right, lets have the decoder try to decode.     
      */
 
@@ -184,7 +188,8 @@ final class MultiFinderPatternFinder extends FinderPatternFinder {
 
           // Check the sizes
           float estimatedModuleCount = ((dA + dB) / p1.getEstimatedModuleSize()) / 2;
-          if (estimatedModuleCount > MAX_MODULE_COUNT_PER_EDGE || estimatedModuleCount < MIN_MODULE_COUNT_PER_EDGE) {
+          if (estimatedModuleCount > MAX_MODULE_COUNT_PER_EDGE ||
+              estimatedModuleCount < MIN_MODULE_COUNT_PER_EDGE) {
             continue;
           }
 
@@ -223,7 +228,7 @@ final class MultiFinderPatternFinder extends FinderPatternFinder {
 
   public FinderPatternInfo[] findMulti(Hashtable hints) throws ReaderException {
     boolean tryHarder = hints != null && hints.containsKey(DecodeHintType.TRY_HARDER);
-    MonochromeBitmapSource image = getImage();
+    BinaryBitmap image = getImage();
     int maxI = image.getHeight();
     int maxJ = image.getWidth();
     // We are looking for black/white/black/white/black modules in

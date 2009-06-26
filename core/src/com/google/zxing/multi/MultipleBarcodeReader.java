@@ -17,7 +17,7 @@
 package com.google.zxing.multi;
 
 import com.google.zxing.Result;
-import com.google.zxing.MonochromeBitmapSource;
+import com.google.zxing.BinaryBitmap;
 import com.google.zxing.ReaderException;
 
 import java.util.Hashtable;
@@ -30,8 +30,8 @@ import java.util.Hashtable;
  */
 public interface MultipleBarcodeReader {
 
-  Result[] decodeMultiple(MonochromeBitmapSource image) throws ReaderException;
+  Result[] decodeMultiple(BinaryBitmap image) throws ReaderException;
 
-  Result[] decodeMultiple(MonochromeBitmapSource image, Hashtable hints) throws ReaderException;
+  Result[] decodeMultiple(BinaryBitmap image, Hashtable hints) throws ReaderException;
 
 }

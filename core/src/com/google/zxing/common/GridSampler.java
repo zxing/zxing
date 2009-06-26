@@ -16,7 +16,7 @@
 
 package com.google.zxing.common;
 
-import com.google.zxing.MonochromeBitmapSource;
+import com.google.zxing.BinaryBitmap;
 import com.google.zxing.ReaderException;
 
 /**
@@ -82,7 +82,7 @@ public abstract class GridSampler {
    * @throws ReaderException if image can't be sampled, for example, if the transformation defined
    *   by the given points is invalid or results in sampling outside the image boundaries
    */
-  public abstract BitMatrix sampleGrid(MonochromeBitmapSource image,
+  public abstract BitMatrix sampleGrid(BinaryBitmap image,
                                        int dimension,
                                        float p1ToX, float p1ToY,
                                        float p2ToX, float p2ToY,
@@ -108,7 +108,7 @@ public abstract class GridSampler {
    * @param points actual points in x1,y1,...,xn,yn form
    * @throws ReaderException if an endpoint is lies outside the image boundaries
    */
-  protected static void checkAndNudgePoints(MonochromeBitmapSource image, float[] points)
+  protected static void checkAndNudgePoints(BinaryBitmap image, float[] points)
       throws ReaderException {
     int width = image.getWidth();
     int height = image.getHeight();

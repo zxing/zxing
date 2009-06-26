@@ -16,11 +16,10 @@
 
 package com.google.zxing.multi;
 
+import com.google.zxing.BinaryBitmap;
 import com.google.zxing.Reader;
-import com.google.zxing.Result;
-import com.google.zxing.MonochromeBitmapSource;
 import com.google.zxing.ReaderException;
-import com.google.zxing.common.CroppedMonochromeBitmapSource;
+import com.google.zxing.Result;
 
 import java.util.Hashtable;
 
@@ -41,56 +40,57 @@ public final class ByQuadrantReader implements Reader {
     this.delegate = delegate;
   }
 
-  public Result decode(MonochromeBitmapSource image) throws ReaderException {
+  public Result decode(BinaryBitmap image) throws ReaderException {
     return decode(image, null);
   }
 
-  public Result decode(MonochromeBitmapSource image, Hashtable hints) throws ReaderException {
-    
+  public Result decode(BinaryBitmap image, Hashtable hints) throws ReaderException {
+
     int width = image.getWidth();
     int height = image.getHeight();
     int halfWidth = width / 2;
     int halfHeight = height / 2;
 
-    MonochromeBitmapSource topLeft = new CroppedMonochromeBitmapSource(image, 0, 0, halfWidth,
-        halfHeight);
-    try {
-      return delegate.decode(topLeft, hints);
-    } catch (ReaderException re) {
-      // continue
+    {
+      BinaryBitmap topLeft = image.crop(0, 0, halfWidth, halfHeight);
+      try {
+        return delegate.decode(topLeft, hints);
+      } catch (ReaderException re) {
+        // continue
+      }
     }
 
-    MonochromeBitmapSource topRight = new CroppedMonochromeBitmapSource(image, halfWidth, 0, width,
-        halfHeight);
-    try {
-      return delegate.decode(topRight, hints);
-    } catch (ReaderException re) {
-      // continue
+    {
+      BinaryBitmap topRight = image.crop(halfWidth, 0, width, halfHeight);
+      try {
+        return delegate.decode(topRight, hints);
+      } catch (ReaderException re) {
+        // continue
+      }
     }
 
-    MonochromeBitmapSource bottomLeft = new CroppedMonochromeBitmapSource(image, 0, halfHeight,
-        halfWidth, height);
-    try {
-      return delegate.decode(bottomLeft, hints);
-    } catch (ReaderException re) {
-      // continue
+    {
+      BinaryBitmap bottomLeft = image.crop(0, halfHeight, halfWidth, height);
+      try {
+        return delegate.decode(bottomLeft, hints);
+      } catch (ReaderException re) {
+        // continue
+      }
     }
 
-    MonochromeBitmapSource bottomRight = new CroppedMonochromeBitmapSource(image, halfWidth,
-        halfHeight, width, height);
-    try {
-      return delegate.decode(bottomRight, hints);
-    } catch (ReaderException re) {
-      // continue
+    {
+      BinaryBitmap bottomRight = image.crop(halfWidth, halfHeight, width, height);
+      try {
+        return delegate.decode(bottomRight, hints);
+      } catch (ReaderException re) {
+        // continue
+      }
     }
 
     int quarterWidth = halfWidth / 2;
     int quarterHeight = halfHeight / 2;
-    MonochromeBitmapSource center = new CroppedMonochromeBitmapSource(image,
-                                                                      quarterWidth,
-                                                                      quarterHeight,
-                                                                      width - quarterWidth,
-                                                                      height - quarterHeight);
+    BinaryBitmap center = image.crop(quarterWidth, quarterHeight, width - quarterWidth,
+        height - quarterHeight);
     return delegate.decode(center, hints);
   }
 

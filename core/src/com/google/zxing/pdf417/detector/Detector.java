@@ -16,8 +16,7 @@
 
 package com.google.zxing.pdf417.detector;
 
-import com.google.zxing.BlackPointEstimationMethod;
-import com.google.zxing.MonochromeBitmapSource;
+import com.google.zxing.BinaryBitmap;
 import com.google.zxing.ReaderException;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitArray;
@@ -50,9 +49,9 @@ public final class Detector {
   private static final int[] STOP_PATTERN_REVERSE = {1, 2, 1, 1, 1, 3, 1, 1,
       7}; // 1111111 0 1 000 1 0 1 00 1
 
-  private final MonochromeBitmapSource image;
+  private final BinaryBitmap image;
 
-  public Detector(MonochromeBitmapSource image) {
+  public Detector(BinaryBitmap image) {
     this.image = image;
   }
 
@@ -80,11 +79,6 @@ public final class Detector {
    * @throws ReaderException if no PDF417 Code can be found
    */
   public DetectorResult detect(Hashtable hints) throws ReaderException {
-    if (!BlackPointEstimationMethod.TWO_D_SAMPLING.equals(image
-        .getLastEstimationMethod())) {
-      image.estimateBlackPoint(BlackPointEstimationMethod.TWO_D_SAMPLING, 0);
-    }
-
     ResultPoint[] vertices = findVertices(image);
     if (vertices == null) { // Couldn't find the vertices
       // Maybe the image is rotated 180 degrees?
@@ -130,7 +124,7 @@ public final class Detector {
    *         area vertices[6] x, y top right codeword area vertices[7] x, y
    *         bottom right codeword area
    */
-  private static ResultPoint[] findVertices(MonochromeBitmapSource image) {
+  private static ResultPoint[] findVertices(BinaryBitmap image) throws ReaderException {
     int height = image.getHeight();
     int width = image.getWidth();
 
@@ -211,7 +205,7 @@ public final class Detector {
    *         area vertices[6] x, y top right codeword area vertices[7] x, y
    *         bottom right codeword area
    */
-  private static ResultPoint[] findVertices180(MonochromeBitmapSource image) {
+  private static ResultPoint[] findVertices180(BinaryBitmap image) throws ReaderException {
     int height = image.getHeight();
     int width = image.getWidth();
 
@@ -315,10 +309,8 @@ public final class Detector {
    * @param moduleWidth estimated module size
    * @return the number of modules in a row.
    */
-  private static int computeDimension(ResultPoint topLeft,
-                                      ResultPoint topRight, ResultPoint bottomLeft, ResultPoint bottomRight,
-                                      float moduleWidth) {
-
+  private static int computeDimension(ResultPoint topLeft, ResultPoint topRight,
+      ResultPoint bottomLeft, ResultPoint bottomRight, float moduleWidth) {
     int topRowDimension = round(ResultPoint
         .distance(topLeft, topRight)
         / moduleWidth);
@@ -337,9 +329,9 @@ public final class Detector {
     */
   }
 
-  private static BitMatrix sampleGrid(MonochromeBitmapSource image,
-                                      ResultPoint topLeft, ResultPoint bottomLeft, ResultPoint topRight,
-                                      ResultPoint bottomRight, int dimension) throws ReaderException {
+  private static BitMatrix sampleGrid(BinaryBitmap image, ResultPoint topLeft,
+      ResultPoint bottomLeft, ResultPoint topRight, ResultPoint bottomRight, int dimension)
+      throws ReaderException {
 
     // Note that unlike in the QR Code sampler, we didn't find the center of
     // modules, but the

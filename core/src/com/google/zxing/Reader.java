@@ -39,19 +39,19 @@ public interface Reader {
    * @return String which the barcode encodes
    * @throws ReaderException if the barcode cannot be located or decoded for any reason
    */
-  Result decode(MonochromeBitmapSource image) throws ReaderException;
+  Result decode(BinaryBitmap image) throws ReaderException;
 
   /**
    * Locates and decodes a barcode in some format within an image. This method also accepts
    * hints, each possibly associated to some data, which may help the implementation decode.
    *
    * @param image image of barcode to decode
-   * @param hints passed as a {@link Hashtable} from {@link DecodeHintType} to aribtrary data. The
+   * @param hints passed as a {@link java.util.Hashtable} from {@link com.google.zxing.DecodeHintType} to aribtrary data. The
    * meaning of the data depends upon the hint type. The implementation may or may not do
    * anything with these hints.
    * @return String which the barcode encodes
    * @throws ReaderException if the barcode cannot be located or decoded for any reason
    */
-  Result decode(MonochromeBitmapSource image, Hashtable hints) throws ReaderException;
+  Result decode(BinaryBitmap image, Hashtable hints) throws ReaderException;
 
 }

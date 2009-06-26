@@ -16,9 +16,8 @@
 
 package com.google.zxing.oned;
 
-import com.google.zxing.BlackPointEstimationMethod;
+import com.google.zxing.BinaryBitmap;
 import com.google.zxing.DecodeHintType;
-import com.google.zxing.MonochromeBitmapSource;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 import com.google.zxing.ResultMetadataType;
@@ -39,24 +38,25 @@ public abstract class AbstractOneDReader implements OneDReader {
   private static final int INTEGER_MATH_SHIFT = 8;
   static final int PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
 
-  public final Result decode(MonochromeBitmapSource image) throws ReaderException {
+  public final Result decode(BinaryBitmap image) throws ReaderException {
     return decode(image, null);
   }
 
-  public final Result decode(MonochromeBitmapSource image, Hashtable hints) throws ReaderException {
+  public final Result decode(BinaryBitmap image, Hashtable hints) throws ReaderException {
     try {
       return doDecode(image, hints);
     } catch (ReaderException re) {
       boolean tryHarder = hints != null && hints.containsKey(DecodeHintType.TRY_HARDER);
       if (tryHarder && image.isRotateSupported()) {
-        MonochromeBitmapSource rotatedImage = image.rotateCounterClockwise();
+        BinaryBitmap rotatedImage = image.rotateCounterClockwise();
         Result result = doDecode(rotatedImage, hints);
         // Record that we found it rotated 90 degrees CCW / 270 degrees CW
         Hashtable metadata = result.getResultMetadata();
         int orientation = 270;
         if (metadata != null && metadata.containsKey(ResultMetadataType.ORIENTATION)) {
           // But if we found it reversed in doDecode(), add in that result here:
-          orientation = (orientation + ((Integer) metadata.get(ResultMetadataType.ORIENTATION)).intValue()) % 360;
+          orientation = (orientation +
+              ((Integer) metadata.get(ResultMetadataType.ORIENTATION)).intValue()) % 360;
         }
         result.putMetadata(ResultMetadataType.ORIENTATION, new Integer(orientation));
         return result;
@@ -80,7 +80,7 @@ public abstract class AbstractOneDReader implements OneDReader {
    * @return The contents of the decoded barcode
    * @throws ReaderException Any spontaneous errors which occur
    */
-  private Result doDecode(MonochromeBitmapSource image, Hashtable hints) throws ReaderException {
+  private Result doDecode(BinaryBitmap image, Hashtable hints) throws ReaderException {
     int width = image.getWidth();
     int height = image.getHeight();
     BitArray row = new BitArray(width);
@@ -108,11 +108,10 @@ public abstract class AbstractOneDReader implements OneDReader {
 
       // Estimate black point for this row and load it:
       try {
-        image.estimateBlackPoint(BlackPointEstimationMethod.ROW_SAMPLING, rowNumber);
+        row = image.getBlackRow(rowNumber, row);
       } catch (ReaderException re) {
         continue;
-      }
-      row = image.getBlackRow(rowNumber, row, 0, width);
+      }      
 
       // While we have the image data in a BitArray, it's fairly cheap to reverse it in place to
       // handle decoding upside down barcodes.
@@ -152,7 +151,8 @@ public abstract class AbstractOneDReader implements OneDReader {
    * @param row row to count from
    * @param start offset into row to start at
    * @param counters array into which to record counts
-   * @throws ReaderException if counters cannot be filled entirely from row before running out of pixels
+   * @throws ReaderException if counters cannot be filled entirely from row before running out
+   *  of pixels
    */
   static void recordPattern(BitArray row, int start, int[] counters) throws ReaderException {
     int numCounters = counters.length;
@@ -238,6 +238,7 @@ public abstract class AbstractOneDReader implements OneDReader {
   // method of an interface it implements, but it is causing NoSuchMethodError
   // issues on some Nokia JVMs. So we add this superfluous declaration:
 
-  public abstract Result decodeRow(int rowNumber, BitArray row, Hashtable hints) throws ReaderException;
+  public abstract Result decodeRow(int rowNumber, BitArray row, Hashtable hints)
+      throws ReaderException;
 
 }

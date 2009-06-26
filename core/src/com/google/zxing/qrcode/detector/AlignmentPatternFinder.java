@@ -16,8 +16,8 @@
 
 package com.google.zxing.qrcode.detector;
 
-import com.google.zxing.MonochromeBitmapSource;
 import com.google.zxing.ReaderException;
+import com.google.zxing.BinaryBitmap;
 import com.google.zxing.common.BitArray;
 
 import java.util.Vector;
@@ -38,7 +38,7 @@ import java.util.Vector;
  */
 final class AlignmentPatternFinder {
 
-  private final MonochromeBitmapSource image;
+  private final BinaryBitmap image;
   private final Vector possibleCenters;
   private final int startX;
   private final int startY;
@@ -57,7 +57,7 @@ final class AlignmentPatternFinder {
    * @param height height of region to search
    * @param moduleSize estimated module size so far
    */
-  AlignmentPatternFinder(MonochromeBitmapSource image,
+  AlignmentPatternFinder(BinaryBitmap image,
                          int startX,
                          int startY,
                          int width,
@@ -186,8 +186,9 @@ final class AlignmentPatternFinder {
    * observed in any reading state, based on the results of the horizontal scan
    * @return vertical center of alignment pattern, or {@link Float#NaN} if not found
    */
-  private float crossCheckVertical(int startI, int centerJ, int maxCount, int originalStateCountTotal) {
-    MonochromeBitmapSource image = this.image;
+  private float crossCheckVertical(int startI, int centerJ, int maxCount,
+      int originalStateCountTotal) throws ReaderException {
+    BinaryBitmap image = this.image;
 
     int maxI = image.getHeight();
     int[] stateCount = crossCheckStateCount;
@@ -249,7 +250,8 @@ final class AlignmentPatternFinder {
    * @param j end of possible alignment pattern in row
    * @return {@link AlignmentPattern} if we have found the same pattern twice, or null if not
    */
-  private AlignmentPattern handlePossibleCenter(int[] stateCount, int i, int j) {
+  private AlignmentPattern handlePossibleCenter(int[] stateCount, int i, int j)
+      throws ReaderException {
     int stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2];
     float centerJ = centerFromEnd(stateCount, j);
     float centerI = crossCheckVertical(i, (int) centerJ, 2 * stateCount[1], stateCountTotal);
