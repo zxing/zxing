@@ -18,7 +18,6 @@ package com.google.zxing.qrcode.detector;
 
 import com.google.zxing.ReaderException;
 import com.google.zxing.ResultPoint;
-import com.google.zxing.BinaryBitmap;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.DetectorResult;
 import com.google.zxing.common.GridSampler;
@@ -34,13 +33,13 @@ import java.util.Hashtable;
  */
 public class Detector {
 
-  private final BinaryBitmap image;
+  private final BitMatrix image;
 
-  public Detector(BinaryBitmap image) {
+  public Detector(BitMatrix image) {
     this.image = image;
   }
 
-  protected BinaryBitmap getImage() {
+  protected BitMatrix getImage() {
     return image;
   }
 
@@ -63,7 +62,6 @@ public class Detector {
    */
   public DetectorResult detect(Hashtable hints) throws ReaderException {
 
-    BinaryBitmap image = this.image;
     FinderPatternFinder finder = new FinderPatternFinder(image);
     FinderPatternInfo info = finder.find(hints);
 
@@ -124,7 +122,7 @@ public class Detector {
     return new DetectorResult(bits, points);
   }
 
-  private static BitMatrix sampleGrid(BinaryBitmap image,
+  private static BitMatrix sampleGrid(BitMatrix image,
                                       ResultPoint topLeft,
                                       ResultPoint topRight,
                                       ResultPoint bottomLeft,
@@ -209,8 +207,7 @@ public class Detector {
    * {@link #sizeOfBlackWhiteBlackRunBothWays(int, int, int, int)} to figure the
    * width of each, measuring along the axis between their centers.</p>
    */
-  private float calculateModuleSizeOneWay(ResultPoint pattern, ResultPoint otherPattern)
-      throws ReaderException {
+  private float calculateModuleSizeOneWay(ResultPoint pattern, ResultPoint otherPattern) {
     float moduleSizeEst1 = sizeOfBlackWhiteBlackRunBothWays((int) pattern.getX(),
         (int) pattern.getY(),
         (int) otherPattern.getX(),
@@ -235,8 +232,7 @@ public class Detector {
    * a finder pattern by looking for a black-white-black run from the center in the direction
    * of another point (another finder pattern center), and in the opposite direction too.</p>
    */
-  private float sizeOfBlackWhiteBlackRunBothWays(int fromX, int fromY, int toX, int toY)
-      throws ReaderException {
+  private float sizeOfBlackWhiteBlackRunBothWays(int fromX, int fromY, int toX, int toY) {
 
     float result = sizeOfBlackWhiteBlackRun(fromX, fromY, toX, toY);
 
@@ -267,8 +263,7 @@ public class Detector {
    * <p>This is used when figuring out how wide a finder pattern is, when the finder pattern
    * may be skewed or rotated.</p>
    */
-  private float sizeOfBlackWhiteBlackRun(int fromX, int fromY, int toX, int toY)
-      throws ReaderException {
+  private float sizeOfBlackWhiteBlackRun(int fromX, int fromY, int toX, int toY) {
     // Mild variant of Bresenham's algorithm;
     // see http://en.wikipedia.org/wiki/Bresenham's_line_algorithm
     boolean steep = Math.abs(toY - fromY) > Math.abs(toX - fromX);
@@ -292,11 +287,11 @@ public class Detector {
       int realX = steep ? y : x;
       int realY = steep ? x : y;
       if (state == 1) { // In white pixels, looking for black
-        if (image.isBlack(realX, realY)) {
+        if (image.get(realX, realY)) {
           state++;
         }
       } else {
-        if (!image.isBlack(realX, realY)) {
+        if (!image.get(realX, realY)) {
           state++;
         }
       }

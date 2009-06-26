@@ -16,10 +16,10 @@
 
 package com.google.zxing.common.detector;
 
-import com.google.zxing.BinaryBitmap;
 import com.google.zxing.ReaderException;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitArray;
+import com.google.zxing.common.BitMatrix;
 
 /**
  * <p>A somewhat generic detector that looks for a barcode-like rectangular region within an image.
@@ -32,9 +32,9 @@ public final class MonochromeRectangleDetector {
 
   private static final int MAX_MODULES = 32;
 
-  private final BinaryBitmap image;
+  private final BitMatrix image;
 
-  public MonochromeRectangleDetector(BinaryBitmap image) {
+  public MonochromeRectangleDetector(BitMatrix image) {
     this.image = image;
   }
 
@@ -160,24 +160,20 @@ public final class MonochromeRectangleDetector {
    *  (e.g. only white was found)
    */
   private int[] blackWhiteRange(int fixedDimension, int maxWhiteRun, int minDim, int maxDim,
-      boolean horizontal) throws ReaderException {
+      boolean horizontal) {
 
     int center = (minDim + maxDim) >> 1;
-
-    BitArray rowOrColumn = horizontal ?
-        image.getBlackRow(fixedDimension, null, 0, image.getWidth()) :
-        image.getBlackColumn(fixedDimension, null, 0, image.getHeight());
 
     // Scan left/up first
     int start = center;
     while (start >= minDim) {
-      if (rowOrColumn.get(start)) {
+      if (horizontal ? image.get(start, fixedDimension) : image.get(fixedDimension, start)) {
         start--;
       } else {
         int whiteRunStart = start;
         do {
           start--;
-        } while (start >= minDim && !rowOrColumn.get(start));
+        } while (start >= minDim && !(horizontal ? image.get(start, fixedDimension) : image.get(fixedDimension, start)));
         int whiteRunSize = whiteRunStart - start;
         if (start < minDim || whiteRunSize > maxWhiteRun) {
           start = whiteRunStart;
@@ -190,13 +186,13 @@ public final class MonochromeRectangleDetector {
     // Then try right/down
     int end = center;
     while (end < maxDim) {
-      if (rowOrColumn.get(end)) {
+      if (horizontal ? image.get(end, fixedDimension) : image.get(fixedDimension, end)) {
         end++;
       } else {
         int whiteRunStart = end;
         do {
           end++;
-        } while (end < maxDim && !rowOrColumn.get(end));
+        } while (end < maxDim && !(horizontal ? image.get(end, fixedDimension) : image.get(fixedDimension, end)));
         int whiteRunSize = end - whiteRunStart;
         if (end >= maxDim || whiteRunSize > maxWhiteRun) {
           end = whiteRunStart;

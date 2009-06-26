@@ -17,8 +17,7 @@
 package com.google.zxing.qrcode.detector;
 
 import com.google.zxing.ReaderException;
-import com.google.zxing.BinaryBitmap;
-import com.google.zxing.common.BitArray;
+import com.google.zxing.common.BitMatrix;
 
 import java.util.Vector;
 
@@ -38,7 +37,7 @@ import java.util.Vector;
  */
 final class AlignmentPatternFinder {
 
-  private final BinaryBitmap image;
+  private final BitMatrix image;
   private final Vector possibleCenters;
   private final int startX;
   private final int startY;
@@ -57,7 +56,7 @@ final class AlignmentPatternFinder {
    * @param height height of region to search
    * @param moduleSize estimated module size so far
    */
-  AlignmentPatternFinder(BinaryBitmap image,
+  AlignmentPatternFinder(BitMatrix image,
                          int startX,
                          int startY,
                          int width,
@@ -85,14 +84,12 @@ final class AlignmentPatternFinder {
     int height = this.height;
     int maxJ = startX + width;
     int middleI = startY + (height >> 1);
-    BitArray luminanceRow = new BitArray(width);
     // We are looking for black/white/black modules in 1:1:1 ratio;
     // this tracks the number of black/white/black modules seen so far
     int[] stateCount = new int[3];
     for (int iGen = 0; iGen < height; iGen++) {
       // Search from middle outwards
       int i = middleI + ((iGen & 0x01) == 0 ? ((iGen + 1) >> 1) : -((iGen + 1) >> 1));
-      luminanceRow = image.getBlackRow(i, luminanceRow, startX, width);
       stateCount[0] = 0;
       stateCount[1] = 0;
       stateCount[2] = 0;
@@ -100,12 +97,12 @@ final class AlignmentPatternFinder {
       // Burn off leading white pixels before anything else; if we start in the middle of
       // a white run, it doesn't make sense to count its length, since we don't know if the
       // white run continued to the left of the start point
-      while (j < maxJ && !luminanceRow.get(j - startX)) {
+      while (j < maxJ && !image.get(j, i)) {
         j++;
       }
       int currentState = 0;
       while (j < maxJ) {
-        if (luminanceRow.get(j - startX)) {
+        if (image.get(j, i)) {
           // Black pixel
           if (currentState == 1) { // Counting black pixels
             stateCount[currentState]++;
@@ -187,8 +184,8 @@ final class AlignmentPatternFinder {
    * @return vertical center of alignment pattern, or {@link Float#NaN} if not found
    */
   private float crossCheckVertical(int startI, int centerJ, int maxCount,
-      int originalStateCountTotal) throws ReaderException {
-    BinaryBitmap image = this.image;
+      int originalStateCountTotal) {
+    BitMatrix image = this.image;
 
     int maxI = image.getHeight();
     int[] stateCount = crossCheckStateCount;
@@ -198,7 +195,7 @@ final class AlignmentPatternFinder {
 
     // Start counting up from center
     int i = startI;
-    while (i >= 0 && image.isBlack(centerJ, i) && stateCount[1] <= maxCount) {
+    while (i >= 0 && image.get(centerJ, i) && stateCount[1] <= maxCount) {
       stateCount[1]++;
       i--;
     }
@@ -206,7 +203,7 @@ final class AlignmentPatternFinder {
     if (i < 0 || stateCount[1] > maxCount) {
       return Float.NaN;
     }
-    while (i >= 0 && !image.isBlack(centerJ, i) && stateCount[0] <= maxCount) {
+    while (i >= 0 && !image.get(centerJ, i) && stateCount[0] <= maxCount) {
       stateCount[0]++;
       i--;
     }
@@ -216,14 +213,14 @@ final class AlignmentPatternFinder {
 
     // Now also count down from center
     i = startI + 1;
-    while (i < maxI && image.isBlack(centerJ, i) && stateCount[1] <= maxCount) {
+    while (i < maxI && image.get(centerJ, i) && stateCount[1] <= maxCount) {
       stateCount[1]++;
       i++;
     }
     if (i == maxI || stateCount[1] > maxCount) {
       return Float.NaN;
     }
-    while (i < maxI && !image.isBlack(centerJ, i) && stateCount[2] <= maxCount) {
+    while (i < maxI && !image.get(centerJ, i) && stateCount[2] <= maxCount) {
       stateCount[2]++;
       i++;
     }
@@ -250,8 +247,7 @@ final class AlignmentPatternFinder {
    * @param j end of possible alignment pattern in row
    * @return {@link AlignmentPattern} if we have found the same pattern twice, or null if not
    */
-  private AlignmentPattern handlePossibleCenter(int[] stateCount, int i, int j)
-      throws ReaderException {
+  private AlignmentPattern handlePossibleCenter(int[] stateCount, int i, int j) {
     int stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2];
     float centerJ = centerFromEnd(stateCount, j);
     float centerI = crossCheckVertical(i, (int) centerJ, 2 * stateCount[1], stateCountTotal);

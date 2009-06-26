@@ -24,7 +24,6 @@ import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.ResultMetadataType;
-import com.google.zxing.BinaryBitmap;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.DecoderResult;
 import com.google.zxing.common.DetectorResult;
@@ -59,11 +58,11 @@ public final class DataMatrixReader implements Reader {
     DecoderResult decoderResult;
     ResultPoint[] points;
     if (hints != null && hints.containsKey(DecodeHintType.PURE_BARCODE)) {
-      BitMatrix bits = extractPureBits(image);
+      BitMatrix bits = extractPureBits(image.getBlackMatrix());
       decoderResult = decoder.decode(bits);
       points = NO_POINTS;
     } else {
-      DetectorResult detectorResult = new Detector(image).detect();
+      DetectorResult detectorResult = new Detector(image.getBlackMatrix()).detect();
       decoderResult = decoder.decode(detectorResult.getBits());
       points = detectorResult.getPoints();
     }
@@ -80,7 +79,7 @@ public final class DataMatrixReader implements Reader {
    * around it. This is a specialized method that works exceptionally fast in this special
    * case.
    */
-  private static BitMatrix extractPureBits(BinaryBitmap image) throws ReaderException {
+  private static BitMatrix extractPureBits(BitMatrix image) throws ReaderException {
     // Now need to determine module size in pixels
 
     int height = image.getHeight();
@@ -89,7 +88,7 @@ public final class DataMatrixReader implements Reader {
 
     // First, skip white border by tracking diagonally from the top left down and to the right:
     int borderWidth = 0;
-    while (borderWidth < minDimension && !image.isBlack(borderWidth, borderWidth)) {
+    while (borderWidth < minDimension && !image.get(borderWidth, borderWidth)) {
       borderWidth++;
     }
     if (borderWidth == minDimension) {
@@ -98,7 +97,7 @@ public final class DataMatrixReader implements Reader {
 
     // And then keep tracking across the top-left black module to determine module size
     int moduleEnd = borderWidth + 1;
-    while (moduleEnd < width && image.isBlack(moduleEnd, borderWidth)) {
+    while (moduleEnd < width && image.get(moduleEnd, borderWidth)) {
       moduleEnd++;
     }
     if (moduleEnd == width) {
@@ -109,7 +108,7 @@ public final class DataMatrixReader implements Reader {
 
     // And now find where the bottommost black module on the first column ends
     int columnEndOfSymbol = height - 1;
-    while (columnEndOfSymbol >= 0 && !image.isBlack(borderWidth, columnEndOfSymbol)) {
+    while (columnEndOfSymbol >= 0 && !image.get(borderWidth, columnEndOfSymbol)) {
     	columnEndOfSymbol--;
     }
     if (columnEndOfSymbol < 0) {
@@ -138,7 +137,7 @@ public final class DataMatrixReader implements Reader {
     for (int i = 0; i < dimension; i++) {
       int iOffset = borderWidth + i * moduleSize;
       for (int j = 0; j < dimension; j++) {
-        if (image.isBlack(borderWidth + j * moduleSize, iOffset)) {
+        if (image.get(borderWidth + j * moduleSize, iOffset)) {
           bits.set(j, i);
         }
       }

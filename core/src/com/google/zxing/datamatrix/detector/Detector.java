@@ -16,10 +16,8 @@
 
 package com.google.zxing.datamatrix.detector;
 
-import com.google.zxing.BinaryBitmap;
 import com.google.zxing.ReaderException;
 import com.google.zxing.ResultPoint;
-import com.google.zxing.BinaryBitmap;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.Collections;
 import com.google.zxing.common.Comparator;
@@ -46,10 +44,10 @@ public final class Detector {
   private static final Integer[] INTEGERS =
       { new Integer(0), new Integer(1), new Integer(2), new Integer(3), new Integer(4) };
 
-  private final BinaryBitmap image;
+  private final BitMatrix image;
   private final MonochromeRectangleDetector rectangleDetector;
 
-  public Detector(BinaryBitmap image) {
+  public Detector(BitMatrix image) {
     this.image = image;
     rectangleDetector = new MonochromeRectangleDetector(image);
   }
@@ -166,7 +164,7 @@ public final class Detector {
     table.put(key, value == null ? INTEGERS[1] : INTEGERS[value.intValue() + 1]);
   }
 
-  private static BitMatrix sampleGrid(BinaryBitmap image,
+  private static BitMatrix sampleGrid(BitMatrix image,
                                       ResultPoint topLeft,
                                       ResultPoint bottomLeft,
                                       ResultPoint bottomRight,
@@ -228,9 +226,9 @@ public final class Detector {
     int ystep = fromY < toY ? 1 : -1;
     int xstep = fromX < toX ? 1 : -1;
     int transitions = 0;
-    boolean inBlack = image.isBlack(steep ? fromY : fromX, steep ? fromX : fromY);
+    boolean inBlack = image.get(steep ? fromY : fromX, steep ? fromX : fromY);
     for (int x = fromX, y = fromY; x != toX; x += xstep) {
-      boolean isBlack = image.isBlack(steep ? y : x, steep ? x : y);
+      boolean isBlack = image.get(steep ? y : x, steep ? x : y);
       if (isBlack != inBlack) {
         transitions++;
         inBlack = isBlack;

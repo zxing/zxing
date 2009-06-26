@@ -17,14 +17,13 @@
 package com.google.zxing.common;
 
 import com.google.zxing.ReaderException;
-import com.google.zxing.BinaryBitmap;
 
 /**
  * @author Sean Owen
  */
 public final class DefaultGridSampler extends GridSampler {
 
-  public BitMatrix sampleGrid(BinaryBitmap image,
+  public BitMatrix sampleGrid(BitMatrix image,
                               int dimension,
                               float p1ToX, float p1ToY,
                               float p2ToX, float p2ToY,
@@ -50,11 +49,11 @@ public final class DefaultGridSampler extends GridSampler {
       }
       transform.transformPoints(points);
       // Quick check to see if points transformed to something inside the image;
-      // sufficent to check the endpoints
+      // sufficient to check the endpoints
       checkAndNudgePoints(image, points);
       try {
         for (int j = 0; j < max; j += 2) {
-          if (image.isBlack((int) points[j], (int) points[j + 1])) {
+          if (image.get((int) points[j], (int) points[j + 1])) {
             // Black(-ish) pixel
             bits.set(j >> 1, i);
           }

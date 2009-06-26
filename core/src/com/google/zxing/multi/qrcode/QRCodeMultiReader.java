@@ -47,7 +47,7 @@ public final class QRCodeMultiReader extends QRCodeReader implements MultipleBar
 
   public Result[] decodeMultiple(BinaryBitmap image, Hashtable hints) throws ReaderException {
     Vector results = new Vector();
-    DetectorResult[] detectorResult = new MultiDetector(image).detectMulti(hints);
+    DetectorResult[] detectorResult = new MultiDetector(image.getBlackMatrix()).detectMulti(hints);
     for (int i = 0; i < detectorResult.length; i++) {
       try {
         DecoderResult decoderResult = getDecoder().decode(detectorResult[i].getBits());
