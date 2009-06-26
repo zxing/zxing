@@ -22,6 +22,7 @@ import com.google.zxing.LuminanceSource;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
+import com.google.zxing.BarcodeFormat;
 import com.google.zxing.client.result.ParsedResult;
 import com.google.zxing.client.result.ResultParser;
 import com.google.zxing.common.BitArray;
@@ -40,6 +41,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.util.Hashtable;
+import java.util.Vector;
 
 import javax.imageio.ImageIO;
 
@@ -62,12 +64,11 @@ public final class CommandLineRunner {
       printUsage();
       return;
     }
-    Hashtable<DecodeHintType, Object> hints = null;
+    Hashtable<DecodeHintType, Object> hints = buildHints();
     boolean dumpResults = false;
     boolean dumpBlackPoint = false;
     for (String arg : args) {
       if ("--try_harder".equals(arg)) {
-        hints = new Hashtable<DecodeHintType, Object>(3);
         hints.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
       } else if ("--dump_results".equals(arg)) {
         dumpResults = true;
@@ -84,6 +85,24 @@ public final class CommandLineRunner {
         decodeOneArgument(arg, hints, dumpResults, dumpBlackPoint);
       }
     }
+  }
+
+  // Manually turn on all formats, even those not yet considered production quality.
+  private static Hashtable<DecodeHintType, Object> buildHints() {
+    Hashtable<DecodeHintType, Object> hints = new Hashtable<DecodeHintType, Object>(3);
+    Vector<BarcodeFormat> vector = new Vector<BarcodeFormat>(8);
+    vector.addElement(BarcodeFormat.UPC_A);
+    vector.addElement(BarcodeFormat.UPC_E);
+    vector.addElement(BarcodeFormat.EAN_13);
+    vector.addElement(BarcodeFormat.EAN_8);
+    vector.addElement(BarcodeFormat.CODE_39);
+    vector.addElement(BarcodeFormat.CODE_128);
+    vector.addElement(BarcodeFormat.ITF);
+    vector.addElement(BarcodeFormat.QR_CODE);
+    vector.addElement(BarcodeFormat.DATAMATRIX);
+    vector.addElement(BarcodeFormat.PDF417);
+    hints.put(DecodeHintType.POSSIBLE_FORMATS, vector);
+    return hints;
   }
 
   private static void printUsage() {
