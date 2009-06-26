@@ -16,13 +16,12 @@
 
 package com.google.zxing.qrcode.detector;
 
-import com.google.zxing.BinaryBitmap;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.ReaderException;
 import com.google.zxing.ResultPoint;
-import com.google.zxing.common.BitArray;
 import com.google.zxing.common.Collections;
 import com.google.zxing.common.Comparator;
+import com.google.zxing.common.BitMatrix;
 
 import java.util.Hashtable;
 import java.util.Vector;
@@ -42,7 +41,7 @@ public class FinderPatternFinder {
   protected static final int MAX_MODULES = 57; // support up to version 10 for mobile clients
   private static final int INTEGER_MATH_SHIFT = 8;
 
-  private final BinaryBitmap image;
+  private final BitMatrix image;
   private final Vector possibleCenters;
   private boolean hasSkipped;
   private final int[] crossCheckStateCount;
@@ -52,13 +51,13 @@ public class FinderPatternFinder {
    *
    * @param image image to search
    */
-  public FinderPatternFinder(BinaryBitmap image) {
+  public FinderPatternFinder(BitMatrix image) {
     this.image = image;
     this.possibleCenters = new Vector();
     this.crossCheckStateCount = new int[5];
   }
 
-  protected BinaryBitmap getImage() {
+  protected BitMatrix getImage() {
     return image;
   }
 
@@ -84,10 +83,8 @@ public class FinderPatternFinder {
 
     boolean done = false;
     int[] stateCount = new int[5];
-    BitArray blackRow = new BitArray(maxJ);
     for (int i = iSkip - 1; i < maxI && !done; i += iSkip) {
       // Get a row of black/white values
-      blackRow = image.getBlackRow(i, blackRow, 0, maxJ);
       stateCount[0] = 0;
       stateCount[1] = 0;
       stateCount[2] = 0;
@@ -95,7 +92,7 @@ public class FinderPatternFinder {
       stateCount[4] = 0;
       int currentState = 0;
       for (int j = 0; j < maxJ; j++) {
-        if (blackRow.get(j)) {
+        if (image.get(j, i)) {
           // Black pixel
           if ((currentState & 1) == 1) { // Counting white pixels
             currentState++;
@@ -131,7 +128,7 @@ public class FinderPatternFinder {
                   // Advance to next black pixel
                   do {
                     j++;
-                  } while (j < maxJ && !blackRow.get(j));
+                  } while (j < maxJ && !image.get(j, i));
                   j--; // back up to that last white pixel
                 }
                 // Clear state to start looking again
@@ -231,22 +228,22 @@ public class FinderPatternFinder {
    * @return vertical center of finder pattern, or {@link Float#NaN} if not found
    */
   private float crossCheckVertical(int startI, int centerJ, int maxCount,
-      int originalStateCountTotal) throws ReaderException {
-    BinaryBitmap image = this.image;
+      int originalStateCountTotal) {
+    BitMatrix image = this.image;
 
     int maxI = image.getHeight();
     int[] stateCount = getCrossCheckStateCount();
 
     // Start counting up from center
     int i = startI;
-    while (i >= 0 && image.isBlack(centerJ, i)) {
+    while (i >= 0 && image.get(centerJ, i)) {
       stateCount[2]++;
       i--;
     }
     if (i < 0) {
       return Float.NaN;
     }
-    while (i >= 0 && !image.isBlack(centerJ, i) && stateCount[1] <= maxCount) {
+    while (i >= 0 && !image.get(centerJ, i) && stateCount[1] <= maxCount) {
       stateCount[1]++;
       i--;
     }
@@ -254,7 +251,7 @@ public class FinderPatternFinder {
     if (i < 0 || stateCount[1] > maxCount) {
       return Float.NaN;
     }
-    while (i >= 0 && image.isBlack(centerJ, i) && stateCount[0] <= maxCount) {
+    while (i >= 0 && image.get(centerJ, i) && stateCount[0] <= maxCount) {
       stateCount[0]++;
       i--;
     }
@@ -264,21 +261,21 @@ public class FinderPatternFinder {
 
     // Now also count down from center
     i = startI + 1;
-    while (i < maxI && image.isBlack(centerJ, i)) {
+    while (i < maxI && image.get(centerJ, i)) {
       stateCount[2]++;
       i++;
     }
     if (i == maxI) {
       return Float.NaN;
     }
-    while (i < maxI && !image.isBlack(centerJ, i) && stateCount[3] < maxCount) {
+    while (i < maxI && !image.get(centerJ, i) && stateCount[3] < maxCount) {
       stateCount[3]++;
       i++;
     }
     if (i == maxI || stateCount[3] >= maxCount) {
       return Float.NaN;
     }
-    while (i < maxI && image.isBlack(centerJ, i) && stateCount[4] < maxCount) {
+    while (i < maxI && image.get(centerJ, i) && stateCount[4] < maxCount) {
       stateCount[4]++;
       i++;
     }
@@ -303,28 +300,28 @@ public class FinderPatternFinder {
    * check a vertical cross check and locate the real center of the alignment pattern.</p>
    */
   private float crossCheckHorizontal(int startJ, int centerI, int maxCount,
-      int originalStateCountTotal) throws ReaderException {
-    BinaryBitmap image = this.image;
+      int originalStateCountTotal) {
+    BitMatrix image = this.image;
 
     int maxJ = image.getWidth();
     int[] stateCount = getCrossCheckStateCount();
 
     int j = startJ;
-    while (j >= 0 && image.isBlack(j, centerI)) {
+    while (j >= 0 && image.get(j, centerI)) {
       stateCount[2]++;
       j--;
     }
     if (j < 0) {
       return Float.NaN;
     }
-    while (j >= 0 && !image.isBlack(j, centerI) && stateCount[1] <= maxCount) {
+    while (j >= 0 && !image.get(j, centerI) && stateCount[1] <= maxCount) {
       stateCount[1]++;
       j--;
     }
     if (j < 0 || stateCount[1] > maxCount) {
       return Float.NaN;
     }
-    while (j >= 0 && image.isBlack(j, centerI) && stateCount[0] <= maxCount) {
+    while (j >= 0 && image.get(j, centerI) && stateCount[0] <= maxCount) {
       stateCount[0]++;
       j--;
     }
@@ -333,21 +330,21 @@ public class FinderPatternFinder {
     }
 
     j = startJ + 1;
-    while (j < maxJ && image.isBlack(j, centerI)) {
+    while (j < maxJ && image.get(j, centerI)) {
       stateCount[2]++;
       j++;
     }
     if (j == maxJ) {
       return Float.NaN;
     }
-    while (j < maxJ && !image.isBlack(j, centerI) && stateCount[3] < maxCount) {
+    while (j < maxJ && !image.get(j, centerI) && stateCount[3] < maxCount) {
       stateCount[3]++;
       j++;
     }
     if (j == maxJ || stateCount[3] >= maxCount) {
       return Float.NaN;
     }
-    while (j < maxJ && image.isBlack(j, centerI) && stateCount[4] < maxCount) {
+    while (j < maxJ && image.get(j, centerI) && stateCount[4] < maxCount) {
       stateCount[4]++;
       j++;
     }

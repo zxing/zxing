@@ -17,12 +17,11 @@
 package com.google.zxing.multi.qrcode.detector;
 
 import com.google.zxing.DecodeHintType;
-import com.google.zxing.BinaryBitmap;
 import com.google.zxing.ReaderException;
 import com.google.zxing.ResultPoint;
-import com.google.zxing.common.BitArray;
 import com.google.zxing.common.Collections;
 import com.google.zxing.common.Comparator;
+import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.detector.FinderPattern;
 import com.google.zxing.qrcode.detector.FinderPatternFinder;
 import com.google.zxing.qrcode.detector.FinderPatternInfo;
@@ -87,7 +86,7 @@ final class MultiFinderPatternFinder extends FinderPatternFinder {
    *
    * @param image image to search
    */
-  MultiFinderPatternFinder(BinaryBitmap image) {
+  MultiFinderPatternFinder(BitMatrix image) {
     super(image);
   }
 
@@ -228,7 +227,7 @@ final class MultiFinderPatternFinder extends FinderPatternFinder {
 
   public FinderPatternInfo[] findMulti(Hashtable hints) throws ReaderException {
     boolean tryHarder = hints != null && hints.containsKey(DecodeHintType.TRY_HARDER);
-    BinaryBitmap image = getImage();
+    BitMatrix image = getImage();
     int maxI = image.getHeight();
     int maxJ = image.getWidth();
     // We are looking for black/white/black/white/black modules in
@@ -245,10 +244,7 @@ final class MultiFinderPatternFinder extends FinderPatternFinder {
 
     int[] stateCount = new int[5];
     for (int i = iSkip - 1; i < maxI; i += iSkip) {
-      BitArray blackRow = new BitArray(maxJ);
-
       // Get a row of black/white values
-      blackRow = image.getBlackRow(i, blackRow, 0, maxJ);
       stateCount[0] = 0;
       stateCount[1] = 0;
       stateCount[2] = 0;
@@ -256,7 +252,7 @@ final class MultiFinderPatternFinder extends FinderPatternFinder {
       stateCount[4] = 0;
       int currentState = 0;
       for (int j = 0; j < maxJ; j++) {
-        if (blackRow.get(j)) {
+        if (image.get(j, i)) {
           // Black pixel
           if ((currentState & 1) == 1) { // Counting white pixels
             currentState++;
@@ -270,7 +266,7 @@ final class MultiFinderPatternFinder extends FinderPatternFinder {
                 if (!confirmed) {
                   do { // Advance to next black pixel
                     j++;
-                  } while (j < maxJ && !blackRow.get(j));
+                  } while (j < maxJ && !image.get(j, i));
                   j--; // back up to that last white pixel
                 }
                 // Clear state to start looking again

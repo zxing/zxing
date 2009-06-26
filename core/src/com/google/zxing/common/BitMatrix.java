@@ -138,13 +138,13 @@ public final class BitMatrix {
    * @return The resulting BitArray - this reference should always be used even when passing
    *         your own row
    */
-  BitArray getRow(int y, BitArray row) {
+  public BitArray getRow(int y, BitArray row) {
     if (row == null || row.getSize() < width) {
       row = new BitArray(width);
     }
     int offset = y * rowSize;
     for (int x = 0; x < rowSize; x++) {
-      row.setBulk(x * 32, bits[offset + x]);
+      row.setBulk(x << 5, bits[offset + x]);
     }
     return row;
   }

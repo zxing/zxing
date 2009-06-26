@@ -62,11 +62,11 @@ public class QRCodeReader implements Reader {
     DecoderResult decoderResult;
     ResultPoint[] points;
     if (hints != null && hints.containsKey(DecodeHintType.PURE_BARCODE)) {
-      BitMatrix bits = extractPureBits(image);
+      BitMatrix bits = extractPureBits(image.getBlackMatrix());
       decoderResult = decoder.decode(bits);
       points = NO_POINTS;
     } else {
-      DetectorResult detectorResult = new Detector(image).detect(hints);
+      DetectorResult detectorResult = new Detector(image.getBlackMatrix()).detect(hints);
       decoderResult = decoder.decode(detectorResult.getBits());
       points = detectorResult.getPoints();
     }
@@ -84,7 +84,7 @@ public class QRCodeReader implements Reader {
    * around it. This is a specialized method that works exceptionally fast in this special
    * case.
    */
-  private static BitMatrix extractPureBits(BinaryBitmap image) throws ReaderException {
+  private static BitMatrix extractPureBits(BitMatrix image) throws ReaderException {
     // Now need to determine module size in pixels
 
     int height = image.getHeight();
@@ -93,7 +93,7 @@ public class QRCodeReader implements Reader {
 
     // First, skip white border by tracking diagonally from the top left down and to the right:
     int borderWidth = 0;
-    while (borderWidth < minDimension && !image.isBlack(borderWidth, borderWidth)) {
+    while (borderWidth < minDimension && !image.get(borderWidth, borderWidth)) {
       borderWidth++;
     }
     if (borderWidth == minDimension) {
@@ -102,7 +102,7 @@ public class QRCodeReader implements Reader {
 
     // And then keep tracking across the top-left black module to determine module size
     int moduleEnd = borderWidth;
-    while (moduleEnd < minDimension && image.isBlack(moduleEnd, moduleEnd)) {
+    while (moduleEnd < minDimension && image.get(moduleEnd, moduleEnd)) {
       moduleEnd++;
     }
     if (moduleEnd == minDimension) {
@@ -113,7 +113,7 @@ public class QRCodeReader implements Reader {
 
     // And now find where the rightmost black module on the first row ends
     int rowEndOfSymbol = width - 1;
-    while (rowEndOfSymbol >= 0 && !image.isBlack(rowEndOfSymbol, borderWidth)) {
+    while (rowEndOfSymbol >= 0 && !image.get(rowEndOfSymbol, borderWidth)) {
       rowEndOfSymbol--;
     }
     if (rowEndOfSymbol < 0) {
@@ -142,7 +142,7 @@ public class QRCodeReader implements Reader {
     for (int i = 0; i < dimension; i++) {
       int iOffset = borderWidth + i * moduleSize;
       for (int j = 0; j < dimension; j++) {
-        if (image.isBlack(borderWidth + j * moduleSize, iOffset)) {
+        if (image.get(borderWidth + j * moduleSize, iOffset)) {
           bits.set(j, i);
         }
       }
