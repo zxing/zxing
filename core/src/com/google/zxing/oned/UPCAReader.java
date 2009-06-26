@@ -17,9 +17,9 @@
 package com.google.zxing.oned;
 
 import com.google.zxing.BarcodeFormat;
-import com.google.zxing.MonochromeBitmapSource;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
+import com.google.zxing.BinaryBitmap;
 import com.google.zxing.common.BitArray;
 
 import java.util.Hashtable;
@@ -42,11 +42,11 @@ public final class UPCAReader implements UPCEANReader {
     return maybeReturnResult(ean13Reader.decodeRow(rowNumber, row, hints));
   }
 
-  public Result decode(MonochromeBitmapSource image) throws ReaderException {
+  public Result decode(BinaryBitmap image) throws ReaderException {
     return maybeReturnResult(ean13Reader.decode(image));
   }
 
-  public Result decode(MonochromeBitmapSource image, Hashtable hints) throws ReaderException {
+  public Result decode(BinaryBitmap image, Hashtable hints) throws ReaderException {
     return maybeReturnResult(ean13Reader.decode(image, hints));
   }
 

@@ -16,26 +16,21 @@
 
 package com.google.zxing.client.j2se;
 
-import com.google.zxing.MonochromeBitmapSource;
+import com.google.zxing.BinaryBitmap;
+import com.google.zxing.LuminanceSource;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
+import com.google.zxing.common.GlobalHistogramBinarizer;
 
-import javax.imageio.ImageIO;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
 
 /**
  * <p>Simple GUI frontend to the library. Right now, only decodes a local file.
@@ -91,10 +86,11 @@ public final class GUIRunner extends JFrame {
     if (image == null) {
       return "Could not decode image";
     }
-    MonochromeBitmapSource source = new BufferedImageMonochromeBitmapSource(image);
+    LuminanceSource source = new BufferedImageLuminanceSource(image);
+    BinaryBitmap bitmap = new BinaryBitmap(new GlobalHistogramBinarizer(source));
     Result result;
     try {
-      result = new MultiFormatReader().decode(source);
+      result = new MultiFormatReader().decode(bitmap);
     } catch (ReaderException re) {
       return re.toString();
     }

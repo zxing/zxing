@@ -16,18 +16,22 @@
 
 package com.google.zxing.client.android;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.BinaryBitmap;
+import com.google.zxing.DecodeHintType;
+import com.google.zxing.MultiFormatReader;
+import com.google.zxing.ReaderException;
+import com.google.zxing.Result;
+import com.google.zxing.common.GlobalHistogramBinarizer;
+
 import android.content.SharedPreferences;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.DecodeHintType;
-import com.google.zxing.MultiFormatReader;
-import com.google.zxing.ReaderException;
-import com.google.zxing.Result;
 
 import java.util.Hashtable;
 import java.util.Vector;
@@ -159,10 +163,12 @@ final class DecodeThread extends Thread {
     long start = System.currentTimeMillis();
     boolean success;
     Result rawResult = null;
-    YUVMonochromeBitmapSource source = new YUVMonochromeBitmapSource(data, width, height,
-        CameraManager.get().getFramingRect());
+    Rect rect = CameraManager.get().getFramingRect();
+    YUVLuminanceSource source = new YUVLuminanceSource(data, width, height, rect.left, rect.top,
+        rect.width(), rect.height());
+    BinaryBitmap bitmap = new BinaryBitmap(new GlobalHistogramBinarizer(source));
     try {
-      rawResult = mMultiFormatReader.decodeWithState(source);
+      rawResult = mMultiFormatReader.decodeWithState(bitmap);
       success = true;
     } catch (ReaderException e) {
       success = false;

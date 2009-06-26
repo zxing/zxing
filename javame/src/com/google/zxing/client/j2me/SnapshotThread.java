@@ -16,11 +16,13 @@
 
 package com.google.zxing.client.j2me;
 
-import com.google.zxing.MonochromeBitmapSource;
+import com.google.zxing.BinaryBitmap;
+import com.google.zxing.LuminanceSource;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.Reader;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
+import com.google.zxing.common.GlobalHistogramBinarizer;
 
 import javax.microedition.lcdui.Image;
 import javax.microedition.media.MediaException;
@@ -76,9 +78,10 @@ final class SnapshotThread implements Runnable {
         multimediaManager.setFocus(player);
         byte[] snapshot = takeSnapshot();
         Image capturedImage = Image.createImage(snapshot, 0, snapshot.length);
-        MonochromeBitmapSource source = new LCDUIImageMonochromeBitmapSource(capturedImage);
+        LuminanceSource source = new LCDUIImageLuminanceSource(capturedImage);
+        BinaryBitmap bitmap = new BinaryBitmap(new GlobalHistogramBinarizer(source));
         Reader reader = new MultiFormatReader();
-        Result result = reader.decode(source);
+        Result result = reader.decode(bitmap);
         zXingMIDlet.handleDecodedText(result);
       } catch (ReaderException re) {
         // Show a friendlier message on a mere failure to read the barcode

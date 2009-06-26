@@ -16,15 +16,19 @@
 
 package com.google.zxing.web;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.BinaryBitmap;
 import com.google.zxing.DecodeHintType;
+import com.google.zxing.LuminanceSource;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.Reader;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.client.j2se.BufferedImageMonochromeBitmapSource;
+import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.client.result.ParsedResult;
 import com.google.zxing.client.result.ResultParser;
+import com.google.zxing.common.GlobalHistogramBinarizer;
+
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -36,8 +40,8 @@ import org.apache.http.HttpMessage;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.params.HttpClientParams;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.params.HttpClientParams;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
@@ -48,12 +52,6 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
 
-import javax.imageio.ImageIO;
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
@@ -67,6 +65,13 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
+
+import javax.imageio.ImageIO;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * {@link HttpServlet} which decodes images containing barcodes. Given a URL, it will
@@ -122,8 +127,8 @@ public final class DecodeServlet extends HttpServlet {
   }
 
   @Override
-  protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+  protected void doGet(HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException {
     String imageURIString = request.getParameter("u");
     if (imageURIString == null || imageURIString.length() == 0) {
       response.sendRedirect("badurl.jspx");
@@ -213,8 +218,8 @@ public final class DecodeServlet extends HttpServlet {
 
   }
 
-  private static void processStream(InputStream is, HttpServletRequest request, HttpServletResponse response)
-      throws ServletException, IOException {
+  private static void processStream(InputStream is, HttpServletRequest request,
+      HttpServletResponse response) throws ServletException, IOException {
     BufferedImage image = ImageIO.read(is);
     if (image == null) {
       response.sendRedirect("badimage.jspx");
@@ -224,7 +229,9 @@ public final class DecodeServlet extends HttpServlet {
     Reader reader = new MultiFormatReader();
     Result result;
     try {
-      result = reader.decode(new BufferedImageMonochromeBitmapSource(image), HINTS);
+      LuminanceSource source = new BufferedImageLuminanceSource(image);
+      BinaryBitmap bitmap = new BinaryBitmap(new GlobalHistogramBinarizer(source));
+      result = reader.decode(bitmap, HINTS);
     } catch (ReaderException re) {
       log.info("DECODE FAILED: " + re.toString());
       response.sendRedirect("notfound.jspx");

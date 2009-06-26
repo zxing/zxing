@@ -16,8 +16,8 @@
 
 package com.google.zxing.qrcode.detector;
 
+import com.google.zxing.BinaryBitmap;
 import com.google.zxing.DecodeHintType;
-import com.google.zxing.MonochromeBitmapSource;
 import com.google.zxing.ReaderException;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitArray;
@@ -42,7 +42,7 @@ public class FinderPatternFinder {
   protected static final int MAX_MODULES = 57; // support up to version 10 for mobile clients
   private static final int INTEGER_MATH_SHIFT = 8;
 
-  private final MonochromeBitmapSource image;
+  private final BinaryBitmap image;
   private final Vector possibleCenters;
   private boolean hasSkipped;
   private final int[] crossCheckStateCount;
@@ -52,13 +52,13 @@ public class FinderPatternFinder {
    *
    * @param image image to search
    */
-  public FinderPatternFinder(MonochromeBitmapSource image) {
+  public FinderPatternFinder(BinaryBitmap image) {
     this.image = image;
     this.possibleCenters = new Vector();
     this.crossCheckStateCount = new int[5];
   }
 
-  protected MonochromeBitmapSource getImage() {
+  protected BinaryBitmap getImage() {
     return image;
   }
 
@@ -230,8 +230,9 @@ public class FinderPatternFinder {
    * observed in any reading state, based on the results of the horizontal scan
    * @return vertical center of finder pattern, or {@link Float#NaN} if not found
    */
-  private float crossCheckVertical(int startI, int centerJ, int maxCount, int originalStateCountTotal) {
-    MonochromeBitmapSource image = this.image;
+  private float crossCheckVertical(int startI, int centerJ, int maxCount,
+      int originalStateCountTotal) throws ReaderException {
+    BinaryBitmap image = this.image;
 
     int maxI = image.getHeight();
     int[] stateCount = getCrossCheckStateCount();
@@ -287,7 +288,8 @@ public class FinderPatternFinder {
 
     // If we found a finder-pattern-like section, but its size is more than 20% different than
     // the original, assume it's a false positive
-    int stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2] + stateCount[3] + stateCount[4];
+    int stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2] + stateCount[3] +
+        stateCount[4];
     if (5 * Math.abs(stateCountTotal - originalStateCountTotal) >= originalStateCountTotal) {
       return Float.NaN;
     }
@@ -300,8 +302,9 @@ public class FinderPatternFinder {
    * except it reads horizontally instead of vertically. This is used to cross-cross
    * check a vertical cross check and locate the real center of the alignment pattern.</p>
    */
-  private float crossCheckHorizontal(int startJ, int centerI, int maxCount, int originalStateCountTotal) {
-    MonochromeBitmapSource image = this.image;
+  private float crossCheckHorizontal(int startJ, int centerI, int maxCount,
+      int originalStateCountTotal) throws ReaderException {
+    BinaryBitmap image = this.image;
 
     int maxJ = image.getWidth();
     int[] stateCount = getCrossCheckStateCount();
@@ -354,7 +357,8 @@ public class FinderPatternFinder {
 
     // If we found a finder-pattern-like section, but its size is significantly different than
     // the original, assume it's a false positive
-    int stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2] + stateCount[3] + stateCount[4];
+    int stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2] + stateCount[3] +
+        stateCount[4];
     if (5 * Math.abs(stateCountTotal - originalStateCountTotal) >= originalStateCountTotal) {
       return Float.NaN;
     }
@@ -378,10 +382,9 @@ public class FinderPatternFinder {
    * @param j end of possible finder pattern in row
    * @return true if a finder pattern candidate was found this time
    */
-  protected boolean handlePossibleCenter(int[] stateCount,
-                                       int i,
-                                       int j) {
-    int stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2] + stateCount[3] + stateCount[4];
+  protected boolean handlePossibleCenter(int[] stateCount, int i, int j) throws ReaderException {
+    int stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2] + stateCount[3] +
+        stateCount[4];
     float centerJ = centerFromEnd(stateCount, j);
     float centerI = crossCheckVertical(i, (int) centerJ, stateCount[2], stateCountTotal);
     if (!Float.isNaN(centerI)) {

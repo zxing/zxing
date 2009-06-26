@@ -16,18 +16,20 @@
 
 package com.google.zxing.common;
 
-import com.google.zxing.MonochromeBitmapSource;
+import com.google.zxing.BinaryBitmap;
+import com.google.zxing.LuminanceSource;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
-import com.google.zxing.client.j2se.BufferedImageMonochromeBitmapSource;
+import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
+
+import javax.imageio.ImageIO;
 
 /**
  * This abstract class looks for negative results, i.e. it only allows a certain number of false
@@ -106,10 +108,11 @@ public abstract class AbstractNegativeBlackBoxTestCase extends AbstractBlackBoxT
    */
   private boolean checkForFalsePositives(BufferedImage image, float rotationInDegrees) {
     BufferedImage rotatedImage = rotateImage(image, rotationInDegrees);
-    MonochromeBitmapSource source = new BufferedImageMonochromeBitmapSource(rotatedImage);
+    LuminanceSource source = new BufferedImageLuminanceSource(rotatedImage);
+    BinaryBitmap bitmap = new BinaryBitmap(new GlobalHistogramBinarizer(source));
     Result result;
     try {
-      result = getReader().decode(source);
+      result = getReader().decode(bitmap);
       System.out.println("Found false positive: '" + result.getText() + "' with format '" +
           result.getBarcodeFormat() + "' (rotation: " + rotationInDegrees + ')');
       return false;
@@ -118,9 +121,10 @@ public abstract class AbstractNegativeBlackBoxTestCase extends AbstractBlackBoxT
 
     // Try "try harder" getMode
     try {
-      result = getReader().decode(source, TRY_HARDER_HINT);
-      System.out.println("Try harder found false positive: '" + result.getText() + "' with format '" +
-          result.getBarcodeFormat() + "' (rotation: " + rotationInDegrees + ')');
+      result = getReader().decode(bitmap, TRY_HARDER_HINT);
+      System.out.println("Try harder found false positive: '" + result.getText() +
+          "' with format '" + result.getBarcodeFormat() + "' (rotation: " +
+          rotationInDegrees + ')');
       return false;
     } catch (ReaderException re) {
     }

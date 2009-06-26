@@ -16,17 +16,20 @@
 
 package com.google.zxing.client.androidtest;
 
-import android.os.Debug;
-import android.os.Message;
-import android.util.Log;
+import com.google.zxing.BinaryBitmap;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
+import com.google.zxing.common.GlobalHistogramBinarizer;
+
+import android.os.Debug;
+import android.os.Message;
+import android.util.Log;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 final class BenchmarkThread extends Thread {
@@ -75,9 +78,9 @@ final class BenchmarkThread extends Thread {
   }
 
   private BenchmarkItem decode(String path) {
-    RGBMonochromeBitmapSource source;
+    RGBLuminanceSource source;
     try {
-      source = new RGBMonochromeBitmapSource(path);
+      source = new RGBLuminanceSource(path);
     } catch (FileNotFoundException e) {
       Log.e(TAG, e.toString());
       return null;
@@ -91,7 +94,8 @@ final class BenchmarkThread extends Thread {
       // scheduling and what else is happening in the system.
       long now = Debug.threadCpuTimeNanos();
       try {
-        result = mMultiFormatReader.decodeWithState(source);
+        BinaryBitmap bitmap = new BinaryBitmap(new GlobalHistogramBinarizer(source));
+        result = mMultiFormatReader.decodeWithState(bitmap);
         success = true;
       } catch (ReaderException e) {
         success = false;

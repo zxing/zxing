@@ -16,16 +16,15 @@
 
 package com.google.zxing.common.detector;
 
-import com.google.zxing.MonochromeBitmapSource;
+import com.google.zxing.BinaryBitmap;
 import com.google.zxing.ReaderException;
 import com.google.zxing.ResultPoint;
-import com.google.zxing.BlackPointEstimationMethod;
 import com.google.zxing.common.BitArray;
 
 /**
  * <p>A somewhat generic detector that looks for a barcode-like rectangular region within an image.
- * It looks within a mostly white region of an image for a region of black and white, but mostly black.
- * It returns the four corners of the region, as best it can determine.</p>
+ * It looks within a mostly white region of an image for a region of black and white, but mostly
+ * black. It returns the four corners of the region, as best it can determine.</p>
  *
  * @author Sean Owen
  */
@@ -33,9 +32,9 @@ public final class MonochromeRectangleDetector {
 
   private static final int MAX_MODULES = 32;
 
-  private final MonochromeBitmapSource image;
+  private final BinaryBitmap image;
 
-  public MonochromeRectangleDetector(MonochromeBitmapSource image) {
+  public MonochromeRectangleDetector(BinaryBitmap image) {
     this.image = image;
   }
 
@@ -43,17 +42,13 @@ public final class MonochromeRectangleDetector {
    * <p>Detects a rectangular region of black and white -- mostly black -- with a region of mostly
    * white, in an image.</p>
    *
-   * @return {@link ResultPoint}[] describing the corners of the rectangular region. The first and last points
-   *  are opposed on the diagonal, as are the second and third. The first point will be the topmost point and
-   *  the last, the bottommost. The second point will be leftmost and the third, the rightmost
+   * @return {@link ResultPoint}[] describing the corners of the rectangular region. The first and
+   *  last points are opposed on the diagonal, as are the second and third. The first point will be
+   *  the topmost point and the last, the bottommost. The second point will be leftmost and the
+   *  third, the rightmost
    * @throws ReaderException if no Data Matrix Code can be found
    */
   public ResultPoint[] detect() throws ReaderException {
-
-    if (!BlackPointEstimationMethod.TWO_D_SAMPLING.equals(image.getLastEstimationMethod())) {
-      image.estimateBlackPoint(BlackPointEstimationMethod.TWO_D_SAMPLING, 0);
-    }
-
     int height = image.getHeight();
     int width = image.getWidth();
     int halfHeight = height >> 1;
@@ -65,16 +60,21 @@ public final class MonochromeRectangleDetector {
     int maxI = height;
     int minJ = 0;
     int maxJ = width;
-    ResultPoint pointA = findCornerFromCenter(halfHeight, -iSkip, minI, maxI, halfWidth,      0, minJ, maxJ, halfWidth >> 1);
+    ResultPoint pointA = findCornerFromCenter(halfHeight, -iSkip, minI, maxI, halfWidth,      0,
+        minJ, maxJ, halfWidth >> 1);
     minI = (int) pointA.getY() - 1;
-    ResultPoint pointB = findCornerFromCenter(halfHeight, 0,      minI, maxI, halfWidth, -jSkip, minJ, maxJ, halfHeight >> 1);
+    ResultPoint pointB = findCornerFromCenter(halfHeight, 0,      minI, maxI, halfWidth, -jSkip,
+        minJ, maxJ, halfHeight >> 1);
     minJ = (int) pointB.getX() - 1;
-    ResultPoint pointC = findCornerFromCenter(halfHeight, 0,      minI, maxI, halfWidth,  jSkip, minJ, maxJ, halfHeight >> 1);
+    ResultPoint pointC = findCornerFromCenter(halfHeight, 0,      minI, maxI, halfWidth,  jSkip,
+        minJ, maxJ, halfHeight >> 1);
     maxJ = (int) pointC.getX() + 1;
-    ResultPoint pointD = findCornerFromCenter(halfHeight,  iSkip, minI, maxI, halfWidth,      0, minJ, maxJ, halfWidth >> 1);
+    ResultPoint pointD = findCornerFromCenter(halfHeight,  iSkip, minI, maxI, halfWidth,      0,
+        minJ, maxJ, halfWidth >> 1);
     maxI = (int) pointD.getY() + 1;
     // Go try to find point A again with better information -- might have been off at first.
-    pointA = findCornerFromCenter(halfHeight, -iSkip, minI, maxI, halfWidth,      0, minJ, maxJ, halfWidth >> 2);
+    pointA = findCornerFromCenter(halfHeight, -iSkip, minI, maxI, halfWidth, 0, minJ, maxJ,
+        halfWidth >> 2);
 
     return new ResultPoint[] { pointA, pointB, pointC, pointD };
   }
@@ -84,7 +84,8 @@ public final class MonochromeRectangleDetector {
    * point which should be within the barcode.
    *
    * @param centerI center's i componennt (vertical)
-   * @param di change in i per step. If scanning up this is negative; down, positive; left or right, 0
+   * @param di change in i per step. If scanning up this is negative; down, positive;
+   *  left or right, 0
    * @param minI minimum value of i to search through (meaningless when di == 0)
    * @param maxI maximum value of i
    * @param centerJ center's j component (horizontal)
@@ -145,23 +146,27 @@ public final class MonochromeRectangleDetector {
   }
 
   /**
-   * Computes the start and end of a region of pixels, either horizontally or vertically, that could be
-   * part of a Data Matrix barcode.
+   * Computes the start and end of a region of pixels, either horizontally or vertically, that could
+   * be part of a Data Matrix barcode.
    *
-   * @param fixedDimension if scanning horizontally, this is the row (the fixed vertical location) where
-   *  we are scanning. If scanning vertically it's the colummn, the fixed horizontal location
-   * @param maxWhiteRun largest run of white pixels that can still be considered part of the barcode region
+   * @param fixedDimension if scanning horizontally, this is the row (the fixed vertical location)
+   *  where we are scanning. If scanning vertically it's the colummn, the fixed horizontal location
+   * @param maxWhiteRun largest run of white pixels that can still be considered part of the
+   *  barcode region
    * @param minDim minimum pixel location, horizontally or vertically, to consider
    * @param maxDim maximum pixel location, horizontally or vertically, to consider
    * @param horizontal if true, we're scanning left-right, instead of up-down
-   * @return int[] with start and end of found range, or null if no such range is found (e.g. only white was found)
+   * @return int[] with start and end of found range, or null if no such range is found
+   *  (e.g. only white was found)
    */
-  private int[] blackWhiteRange(int fixedDimension, int maxWhiteRun, int minDim, int maxDim, boolean horizontal) {
+  private int[] blackWhiteRange(int fixedDimension, int maxWhiteRun, int minDim, int maxDim,
+      boolean horizontal) throws ReaderException {
 
     int center = (minDim + maxDim) >> 1;
 
-    BitArray rowOrColumn = horizontal ? image.getBlackRow(fixedDimension, null, 0, image.getWidth())
-                                      : image.getBlackColumn(fixedDimension, null, 0, image.getHeight());
+    BitArray rowOrColumn = horizontal ?
+        image.getBlackRow(fixedDimension, null, 0, image.getWidth()) :
+        image.getBlackColumn(fixedDimension, null, 0, image.getHeight());
 
     // Scan left/up first
     int start = center;

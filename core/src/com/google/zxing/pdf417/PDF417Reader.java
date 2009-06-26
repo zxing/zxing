@@ -17,8 +17,8 @@
 package com.google.zxing.pdf417;
 
 import com.google.zxing.BarcodeFormat;
+import com.google.zxing.BinaryBitmap;
 import com.google.zxing.DecodeHintType;
-import com.google.zxing.MonochromeBitmapSource;
 import com.google.zxing.Reader;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
@@ -48,11 +48,11 @@ public final class PDF417Reader implements Reader {
    * @return a String representing the content encoded by the PDF417 code
    * @throws ReaderException if a PDF417 code cannot be found, or cannot be decoded
    */
-  public Result decode(MonochromeBitmapSource image) throws ReaderException {
+  public Result decode(BinaryBitmap image) throws ReaderException {
     return decode(image, null);
   }
 
-  public Result decode(MonochromeBitmapSource image, Hashtable hints)
+  public Result decode(BinaryBitmap image, Hashtable hints)
       throws ReaderException {
     DecoderResult decoderResult;
     ResultPoint[] points;
@@ -65,7 +65,8 @@ public final class PDF417Reader implements Reader {
       decoderResult = decoder.decode(detectorResult.getBits());
       points = detectorResult.getPoints();
     }
-    return new Result(decoderResult.getText(), decoderResult.getRawBytes(), points, BarcodeFormat.PDF417);
+    return new Result(decoderResult.getText(), decoderResult.getRawBytes(), points,
+        BarcodeFormat.PDF417);
   }
 
   /**
@@ -74,7 +75,7 @@ public final class PDF417Reader implements Reader {
    * around it. This is a specialized method that works exceptionally fast in this special
    * case.
    */
-  private static BitMatrix extractPureBits(MonochromeBitmapSource image) throws ReaderException {
+  private static BitMatrix extractPureBits(BinaryBitmap image) throws ReaderException {
     // Now need to determine module size in pixels
 
     int height = image.getHeight();

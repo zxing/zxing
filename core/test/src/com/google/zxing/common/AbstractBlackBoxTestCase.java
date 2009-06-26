@@ -17,12 +17,13 @@
 package com.google.zxing.common;
 
 import com.google.zxing.BarcodeFormat;
+import com.google.zxing.BinaryBitmap;
 import com.google.zxing.DecodeHintType;
-import com.google.zxing.MonochromeBitmapSource;
+import com.google.zxing.LuminanceSource;
 import com.google.zxing.Reader;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
-import com.google.zxing.client.j2se.BufferedImageMonochromeBitmapSource;
+import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 
 import junit.framework.TestCase;
 
@@ -182,11 +183,12 @@ public abstract class AbstractBlackBoxTestCase extends TestCase {
       for (int x = 0; x < testCount; x++) {
         float rotation = testResults.get(x).getRotation();
         BufferedImage rotatedImage = rotateImage(image, rotation);
-        MonochromeBitmapSource source = new BufferedImageMonochromeBitmapSource(rotatedImage);
-        if (decode(source, rotation, expectedText, false)) {
+        LuminanceSource source = new BufferedImageLuminanceSource(rotatedImage);
+        BinaryBitmap bitmap = new BinaryBitmap(new GlobalHistogramBinarizer(source));
+        if (decode(bitmap, rotation, expectedText, false)) {
           passedCounts[x]++;
         }
-        if (decode(source, rotation, expectedText, true)) {
+        if (decode(bitmap, rotation, expectedText, true)) {
           tryHarderCounts[x]++;
         }
       }
@@ -227,7 +229,7 @@ public abstract class AbstractBlackBoxTestCase extends TestCase {
     return new SummaryResults(totalFound, totalMustPass, totalTests);
   }
 
-  private boolean decode(MonochromeBitmapSource source, float rotation, String expectedText,
+  private boolean decode(BinaryBitmap source, float rotation, String expectedText,
                          boolean tryHarder) {
     Result result;
     String suffix = " (" + (tryHarder ? "try harder, " : "") + "rotation: " + rotation + ')';

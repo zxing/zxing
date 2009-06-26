@@ -16,11 +16,22 @@
 
 package com.google.zxing.web;
 
+import com.google.zxing.BinaryBitmap;
+import com.google.zxing.LuminanceSource;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.Reader;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
-import com.google.zxing.client.j2se.BufferedImageMonochromeBitmapSource;
+import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
+import com.google.zxing.common.GlobalHistogramBinarizer;
+
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.Properties;
+import java.util.TimerTask;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
 import javax.mail.Address;
@@ -29,21 +40,14 @@ import javax.mail.Flags;
 import javax.mail.Folder;
 import javax.mail.Message;
 import javax.mail.MessagingException;
+import javax.mail.Service;
 import javax.mail.Session;
 import javax.mail.Store;
 import javax.mail.Transport;
-import javax.mail.Service;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
-import java.awt.image.BufferedImage;
-import java.io.UnsupportedEncodingException;
-import java.io.IOException;
-import java.util.Properties;
-import java.util.TimerTask;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * A {@link TimerTask} which repeatedly checks an e-mail account for messages with an attached
@@ -119,7 +123,8 @@ final class DecodeEmailTask extends TimerTask {
     }
   }
 
-  private void processMessage(Session session, Message message) throws MessagingException, IOException {
+  private void processMessage(Session session, Message message) throws MessagingException,
+      IOException {
     Object content = message.getContent();
     if (content instanceof MimeMultipart) {
       MimeMultipart mimeContent = (MimeMultipart) content;
@@ -141,7 +146,9 @@ final class DecodeEmailTask extends TimerTask {
         Reader reader = new MultiFormatReader();
         Result result = null;
         try {
-          result = reader.decode(new BufferedImageMonochromeBitmapSource(image), DecodeServlet.HINTS);
+          LuminanceSource source = new BufferedImageLuminanceSource(image);
+          BinaryBitmap bitmap = new BinaryBitmap(new GlobalHistogramBinarizer(source));
+          result = reader.decode(bitmap, DecodeServlet.HINTS);
         } catch (ReaderException re) {
           log.info("Decoding FAILED");
         }

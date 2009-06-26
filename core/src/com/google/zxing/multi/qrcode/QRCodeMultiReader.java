@@ -17,7 +17,7 @@
 package com.google.zxing.multi.qrcode;
 
 import com.google.zxing.BarcodeFormat;
-import com.google.zxing.MonochromeBitmapSource;
+import com.google.zxing.BinaryBitmap;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 import com.google.zxing.ResultMetadataType;
@@ -41,18 +41,19 @@ public final class QRCodeMultiReader extends QRCodeReader implements MultipleBar
 
   private static final Result[] EMPTY_RESULT_ARRAY = new Result[0];
 
-  public Result[] decodeMultiple(MonochromeBitmapSource image) throws ReaderException {
+  public Result[] decodeMultiple(BinaryBitmap image) throws ReaderException {
     return decodeMultiple(image, null);
   }
 
-  public Result[] decodeMultiple(MonochromeBitmapSource image, Hashtable hints) throws ReaderException {
+  public Result[] decodeMultiple(BinaryBitmap image, Hashtable hints) throws ReaderException {
     Vector results = new Vector();
     DetectorResult[] detectorResult = new MultiDetector(image).detectMulti(hints);
     for (int i = 0; i < detectorResult.length; i++) {
       try {
         DecoderResult decoderResult = getDecoder().decode(detectorResult[i].getBits());
         ResultPoint[] points = detectorResult[i].getPoints();
-        Result result = new Result(decoderResult.getText(), decoderResult.getRawBytes(), points, BarcodeFormat.QR_CODE);
+        Result result = new Result(decoderResult.getText(), decoderResult.getRawBytes(), points,
+            BarcodeFormat.QR_CODE);
         if (decoderResult.getByteSegments() != null) {
           result.putMetadata(ResultMetadataType.BYTE_SEGMENTS, decoderResult.getByteSegments());
         }

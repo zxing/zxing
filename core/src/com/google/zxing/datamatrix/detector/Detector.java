@@ -16,9 +16,10 @@
 
 package com.google.zxing.datamatrix.detector;
 
-import com.google.zxing.MonochromeBitmapSource;
+import com.google.zxing.BinaryBitmap;
 import com.google.zxing.ReaderException;
 import com.google.zxing.ResultPoint;
+import com.google.zxing.BinaryBitmap;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.Collections;
 import com.google.zxing.common.Comparator;
@@ -45,10 +46,10 @@ public final class Detector {
   private static final Integer[] INTEGERS =
       { new Integer(0), new Integer(1), new Integer(2), new Integer(3), new Integer(4) };
 
-  private final MonochromeBitmapSource image;
+  private final BinaryBitmap image;
   private final MonochromeRectangleDetector rectangleDetector;
 
-  public Detector(MonochromeBitmapSource image) {
+  public Detector(BinaryBitmap image) {
     this.image = image;
     rectangleDetector = new MonochromeRectangleDetector(image);
   }
@@ -165,7 +166,7 @@ public final class Detector {
     table.put(key, value == null ? INTEGERS[1] : INTEGERS[value.intValue() + 1]);
   }
 
-  private static BitMatrix sampleGrid(MonochromeBitmapSource image,
+  private static BitMatrix sampleGrid(BinaryBitmap image,
                                       ResultPoint topLeft,
                                       ResultPoint bottomLeft,
                                       ResultPoint bottomRight,
@@ -204,7 +205,8 @@ public final class Detector {
   /**
    * Counts the number of black/white transitions between two points, using something like Bresenham's algorithm.
    */
-  private ResultPointsAndTransitions transitionsBetween(ResultPoint from, ResultPoint to) {
+  private ResultPointsAndTransitions transitionsBetween(ResultPoint from, ResultPoint to)
+      throws ReaderException {
     // See QR Code Detector, sizeOfBlackWhiteBlackRun()
     int fromX = (int) from.getX();
     int fromY = (int) from.getY();

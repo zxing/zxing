@@ -18,12 +18,12 @@ package com.google.zxing.qrcode;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.DecodeHintType;
-import com.google.zxing.MonochromeBitmapSource;
 import com.google.zxing.Reader;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.ResultMetadataType;
+import com.google.zxing.BinaryBitmap;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.DecoderResult;
 import com.google.zxing.common.DetectorResult;
@@ -53,11 +53,11 @@ public class QRCodeReader implements Reader {
    * @return a String representing the content encoded by the QR code
    * @throws ReaderException if a QR code cannot be found, or cannot be decoded
    */
-  public Result decode(MonochromeBitmapSource image) throws ReaderException {
+  public Result decode(BinaryBitmap image) throws ReaderException {
     return decode(image, null);
   }
 
-  public Result decode(MonochromeBitmapSource image, Hashtable hints)
+  public Result decode(BinaryBitmap image, Hashtable hints)
       throws ReaderException {
     DecoderResult decoderResult;
     ResultPoint[] points;
@@ -84,7 +84,7 @@ public class QRCodeReader implements Reader {
    * around it. This is a specialized method that works exceptionally fast in this special
    * case.
    */
-  private static BitMatrix extractPureBits(MonochromeBitmapSource image) throws ReaderException {
+  private static BitMatrix extractPureBits(BinaryBitmap image) throws ReaderException {
     // Now need to determine module size in pixels
 
     int height = image.getHeight();

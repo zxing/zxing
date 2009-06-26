@@ -16,15 +16,15 @@
 
 package com.google.zxing.common;
 
-import com.google.zxing.MonochromeBitmapSource;
 import com.google.zxing.ReaderException;
+import com.google.zxing.BinaryBitmap;
 
 /**
  * @author Sean Owen
  */
 public final class DefaultGridSampler extends GridSampler {
 
-  public BitMatrix sampleGrid(MonochromeBitmapSource image,
+  public BitMatrix sampleGrid(BinaryBitmap image,
                               int dimension,
                               float p1ToX, float p1ToY,
                               float p2ToX, float p2ToY,

@@ -18,10 +18,9 @@ package com.google.zxing.multi;
 
 import com.google.zxing.Reader;
 import com.google.zxing.Result;
-import com.google.zxing.MonochromeBitmapSource;
+import com.google.zxing.BinaryBitmap;
 import com.google.zxing.ReaderException;
 import com.google.zxing.ResultPoint;
-import com.google.zxing.common.CroppedMonochromeBitmapSource;
 
 import java.util.Hashtable;
 import java.util.Vector;
@@ -50,11 +49,11 @@ public final class GenericMultipleBarcodeReader implements MultipleBarcodeReader
     this.delegate = delegate;
   }
 
-  public Result[] decodeMultiple(MonochromeBitmapSource image) throws ReaderException {
+  public Result[] decodeMultiple(BinaryBitmap image) throws ReaderException {
     return decodeMultiple(image, null);
   }
 
-  public Result[] decodeMultiple(MonochromeBitmapSource image, Hashtable hints)
+  public Result[] decodeMultiple(BinaryBitmap image, Hashtable hints)
       throws ReaderException {
     Vector results = new Vector();
     doDecodeMultiple(image, hints, results, 0, 0);
@@ -69,7 +68,7 @@ public final class GenericMultipleBarcodeReader implements MultipleBarcodeReader
     return resultArray;
   }
 
-  private void doDecodeMultiple(MonochromeBitmapSource image,
+  private void doDecodeMultiple(BinaryBitmap image,
                                 Hashtable hints,
                                 Vector results,
                                 int xOffset,
@@ -121,20 +120,16 @@ public final class GenericMultipleBarcodeReader implements MultipleBarcodeReader
     }
 
     if (minX > MIN_DIMENSION_TO_RECUR) {
-      doDecodeMultiple(new CroppedMonochromeBitmapSource(image, 0, 0, (int) minX, height),
-                       hints, results, 0, 0);
+      doDecodeMultiple(image.crop(0, 0, (int) minX, height), hints, results, 0, 0);
     }
     if (minY > MIN_DIMENSION_TO_RECUR) {
-      doDecodeMultiple(new CroppedMonochromeBitmapSource(image, 0, 0, width, (int) minY),
-                       hints, results, 0, 0);
+      doDecodeMultiple(image.crop(0, 0, width, (int) minY), hints, results, 0, 0);
     }
     if (maxX < width - MIN_DIMENSION_TO_RECUR) {
-      doDecodeMultiple(new CroppedMonochromeBitmapSource(image, (int) maxX, 0, width, height),
-                       hints, results, (int) maxX, 0);
+      doDecodeMultiple(image.crop((int) maxX, 0, width, height), hints, results, (int) maxX, 0);
     }
     if (maxY < height - MIN_DIMENSION_TO_RECUR) {
-      doDecodeMultiple(new CroppedMonochromeBitmapSource(image, 0, (int) maxY, width, height),
-                       hints, results, 0, (int) maxY);
+      doDecodeMultiple(image.crop(0, (int) maxY, width, height), hints, results, 0, (int) maxY);
     }
   }
 
