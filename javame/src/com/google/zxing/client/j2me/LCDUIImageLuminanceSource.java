@@ -18,6 +18,8 @@ package com.google.zxing.client.j2me;
 
 import com.google.zxing.LuminanceSource;
 
+import javax.microedition.lcdui.Image;
+
 /**
  * A LuminanceSource based on Java ME's Image class. It does not support cropping or rotation.
  *
