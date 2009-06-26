@@ -49,7 +49,7 @@ public final class RGBLuminanceSource extends LuminanceSource {
     // up front, which is the same as the Y channel of the YUVLuminanceSource in the real app.
     luminances = new byte[width * height];
     for (int y = 0; y < height; y++) {
-      int offset = y * height;
+      int offset = y * width;
       for (int x = 0; x < width; x++) {
         int pixel = pixels[offset + x];
         int r = (pixel >> 16) & 0xff;
