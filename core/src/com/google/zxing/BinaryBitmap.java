@@ -124,14 +124,18 @@ public final class BinaryBitmap {
     return new BinaryBitmap(binarizer.createBinarizer(newSource));
   }
 
-  // FIXME: REMOVE!
-  // These three methods are TEMPORARY and should be removed by the end of July 2009.
-  // They are only here so the transition from MonochromeBitmapSource to BinaryBitmap
-  // can be done in stages. We need to go through all the Reader objects and convert
-  // these calls to getBlackRow() and getBlackMatrix() at the top of this file.
-  //
-  // TIP: Replace calls to isBlack() with a single call to getBlackMatrix(), then call
-  // BitMatrix.get(x, y) per pixel.
+  /**
+   * @deprecated
+   *
+   * FIXME: REMOVE!
+   * These three methods are TEMPORARY and should be removed by the end of July 2009.
+   * They are only here so the transition from MonochromeBitmapSource to BinaryBitmap
+   * can be done in stages. We need to go through all the Reader objects and convert
+   * these calls to getBlackRow() and getBlackMatrix() at the top of this file.
+   *
+   * TIP: Replace calls to isBlack() with a single call to getBlackMatrix(), then call
+   * BitMatrix.get(x, y) per pixel.
+   */
   public boolean isBlack(int x, int y) throws ReaderException {
     if (matrix == null) {
       matrix = binarizer.getBlackMatrix();
@@ -139,11 +143,15 @@ public final class BinaryBitmap {
     return matrix.get(x, y);
   }
 
-  // FIXME: REMOVE!
-  //
-  // TIP: 2D Readers should replace uses of this method with a single call to getBlackMatrix(),
-  // then perform random access on that BitMatrix as needed. The version of getBlackRow() with
-  // two arguments is only meant for 1D Readers, which I've already converted.
+  /**
+   * @deprecated
+   *
+   * FIXME: REMOVE!
+   *
+   * TIP: 2D Readers should replace uses of this method with a single call to getBlackMatrix(),
+   * then perform random access on that BitMatrix as needed. The version of getBlackRow() with
+   * two arguments is only meant for 1D Readers, which I've already converted.
+   */
   public BitArray getBlackRow(int y, BitArray row, int startX, int getWidth)
       throws ReaderException {
     if (row == null || row.getSize() < getWidth) {
@@ -163,10 +171,14 @@ public final class BinaryBitmap {
     return row;
   }
 
-  // FIXME: REMOVE!
-  //
-  // TIP: Replace calls to getBlackColumn() with a single call to getBlackMatrix(), then
-  // perform random access on that BitMatrix as needed.
+  /**
+   * @deprecated
+   *
+   * FIXME: REMOVE!
+   *
+   * TIP: Replace calls to getBlackColumn() with a single call to getBlackMatrix(), then
+   * perform random access on that BitMatrix as needed.
+   */
   public BitArray getBlackColumn(int x, BitArray column, int startY, int getHeight)
       throws ReaderException {
     if (column == null || column.getSize() < getHeight) {
