@@ -30,7 +30,7 @@ namespace qrcode {
     
     DataMask &DataMask::forReference(int reference) {
       if (reference < 0 || reference > 7) {
-        throw new IllegalArgumentException("reference must be between 0 and 7");
+        throw IllegalArgumentException("reference must be between 0 and 7");
       }
       return *DATA_MASKS[reference];
     }

@@ -38,13 +38,13 @@ namespace qrcode {
     
     class DecodedBitStreamParser {
     private:
-      static char ALPHANUMERIC_CHARS[];
+      static const char ALPHANUMERIC_CHARS[];
       
-      static char *ASCII;
-      static char *ISO88591;
-      static char *UTF8;
-      static char *SHIFT_JIS;
-      static char *EUC_JP;
+      static const char *ASCII;
+      static const char *ISO88591;
+      static const char *UTF8;
+      static const char *SHIFT_JIS;
+      static const char *EUC_JP;
       
       static void decodeKanjiSegment(Ref<BitSource> bits,
                                      ostringstream &result,
@@ -58,7 +58,7 @@ namespace qrcode {
       static void decodeNumericSegment(Ref<BitSource> bits,
                                        ostringstream &result,
                                        int count);
-      static char *guessEncoding(unsigned char *bytes, int length);
+      static const char *guessEncoding(unsigned char *bytes, int length);
       static void append(ostream &ost, unsigned char *bufIn, 
                          size_t nIn, const char *src);
       

@@ -52,7 +52,7 @@ namespace qrcode {
         default:
           ostringstream s;
           s << "Illegal mode bits: " << bits;
-          throw new ReaderException(s.str().c_str());
+          throw ReaderException(s.str().c_str());
       }
     }
     

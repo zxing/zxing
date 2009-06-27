@@ -36,7 +36,7 @@ namespace qrcode {
     bitMatrix_(bitMatrix), parsedVersion_(0), parsedFormatInfo_() {
       int dimension = bitMatrix->getDimension();
       if ((dimension < 21) || (dimension & 0x03) != 1) {
-        throw new ReaderException("Dimension must be 1 mod 4 and >= 21");
+        throw ReaderException("Dimension must be 1 mod 4 and >= 21");
       }
     }
     
@@ -79,7 +79,7 @@ namespace qrcode {
       if (parsedFormatInfo_ != 0) {
         return parsedFormatInfo_;
       }
-      throw new ReaderException("Could not decode format information");
+      throw ReaderException("Could not decode format information");
     }
     
     Version *BitMatrixParser::readVersion() {
@@ -121,7 +121,7 @@ namespace qrcode {
       if (parsedVersion_ != 0) {
         return parsedVersion_;
       }
-      throw new ReaderException("Could not decode version");
+      throw ReaderException("Could not decode version");
     }
     
     ArrayRef<unsigned char> BitMatrixParser::readCodewords() {
@@ -177,7 +177,7 @@ namespace qrcode {
         readingUp = !readingUp; // switch directions
       }
       if (resultOffset != version->getTotalCodewords()) {
-        throw new ReaderException("Did not read all codewords");
+        throw ReaderException("Did not read all codewords");
       }
       return result;
     }

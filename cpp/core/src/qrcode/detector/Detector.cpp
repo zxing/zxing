@@ -86,13 +86,12 @@ namespace qrcode {
                                                      estAlignmentY,
                                                      (float) i);
             break;
-          } catch (ReaderException *re) {
+          } catch (ReaderException re) {
             // try next round
-            delete re;
           }
         }
         if (alignmentPattern == 0) {
-          throw new ReaderException("Could not find alignment pattern");
+          throw ReaderException("Could not find alignment pattern");
         }
         
       }
@@ -173,7 +172,7 @@ namespace qrcode {
         case 3:
           ostringstream s;
           s << "Bad dimension: " << dimension;
-          throw new ReaderException(s.str().c_str());
+          throw ReaderException(s.str().c_str());
       }
       return dimension;
     }

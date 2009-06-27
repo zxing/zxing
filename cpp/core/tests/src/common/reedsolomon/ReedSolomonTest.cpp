@@ -97,9 +97,8 @@ namespace reedsolomon {
       checkQRRSDecode(received);
       cout << "expected exception!\n";
       CPPUNIT_FAIL("should not happen!");
-    } catch (ReedSolomonException *e) {
+    } catch (ReedSolomonException e) {
       // expected
-      delete e;
     } catch (...) {
       CPPUNIT_FAIL("unexpected exception!");
     }

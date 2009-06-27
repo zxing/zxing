@@ -27,18 +27,18 @@ namespace qrcode {
     using namespace common;
     using namespace std;
     
-    char DecodedBitStreamParser::ALPHANUMERIC_CHARS[] = {
+    const char DecodedBitStreamParser::ALPHANUMERIC_CHARS[] = {
       '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B',
       'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
       'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
       ' ', '$', '%', '*', '+', '-', '.', '/', ':'
     };
 
-    char *DecodedBitStreamParser::ASCII = "ASCII";
-    char *DecodedBitStreamParser::ISO88591 = "ISO-8859-1";
-    char *DecodedBitStreamParser::UTF8 = "UTF-8";
-    char *DecodedBitStreamParser::SHIFT_JIS = "SHIFT_JIS";
-    char *DecodedBitStreamParser::EUC_JP = "EUC-JP";
+    const char *DecodedBitStreamParser::ASCII = "ASCII";
+    const char *DecodedBitStreamParser::ISO88591 = "ISO-8859-1";
+    const char *DecodedBitStreamParser::UTF8 = "UTF-8";
+    const char *DecodedBitStreamParser::SHIFT_JIS = "SHIFT_JIS";
+    const char *DecodedBitStreamParser::EUC_JP = "EUC-JP";
     
     void DecodedBitStreamParser::append(ostream &ost,
                                         unsigned char *bufIn, 
@@ -59,7 +59,7 @@ namespace qrcode {
       while (nFrom > 0) {
         size_t oneway = iconv(cd, &fromPtr, &nFrom, &toPtr, &nTo);
         if (oneway == (size_t)(-1)) {
-          throw new ReaderException("error converting characters");
+          throw ReaderException("error converting characters");
         }
       }
       iconv_close(cd);
@@ -106,7 +106,7 @@ namespace qrcode {
       if (count << 3 > bits->available()) {
         ostringstream s;
         s << "Count too large: " << count;
-        throw new ReaderException(s.str().c_str());
+        throw ReaderException(s.str().c_str());
       }
       for (int i = 0; i < count; i++) {
         readBytes[i] = (unsigned char) bits->readBits(8);
@@ -116,7 +116,7 @@ namespace qrcode {
       // upon decoding. I have seen ISO-8859-1 used as well as
       // Shift_JIS -- without anything like an ECI designator to
       // give a hint.
-      char *encoding = guessEncoding(readBytes, nBytes);
+      const char *encoding = guessEncoding(readBytes, nBytes);
       append(result, readBytes, nBytes, encoding);
     }
     
@@ -133,7 +133,7 @@ namespace qrcode {
         if (threeDigitsBits >= 1000) {
           ostringstream s;
           s << "Illegal value for 3-digit unit: " << threeDigitsBits;
-          throw new ReaderException(s.str().c_str());
+          throw ReaderException(s.str().c_str());
         }
         bytes[i++] = ALPHANUMERIC_CHARS[threeDigitsBits / 100];
         bytes[i++] = ALPHANUMERIC_CHARS[(threeDigitsBits / 10) % 10];
@@ -146,7 +146,7 @@ namespace qrcode {
         if (twoDigitsBits >= 100) {
           ostringstream s;
           s << "Illegal value for 2-digit unit: " << twoDigitsBits;
-          throw new ReaderException(s.str().c_str());
+          throw ReaderException(s.str().c_str());
         }
         bytes[i++] = ALPHANUMERIC_CHARS[twoDigitsBits / 10];
         bytes[i++] = ALPHANUMERIC_CHARS[twoDigitsBits % 10];
@@ -156,7 +156,7 @@ namespace qrcode {
         if (digitBits >= 10) {
           ostringstream s;
           s << "Illegal value for digit unit: " << digitBits;
-          throw new ReaderException(s.str().c_str());
+          throw ReaderException(s.str().c_str());
         }
         bytes[i++] = ALPHANUMERIC_CHARS[digitBits];
       }
@@ -182,7 +182,7 @@ namespace qrcode {
       append(result, bytes, nBytes, ASCII);
     }      
     
-    char * 
+    const char * 
     DecodedBitStreamParser::guessEncoding(unsigned char *bytes, int length) {
       // Does it start with the UTF-8 byte order mark? then guess it's UTF-8
       if (length > 3 && bytes[0] == (unsigned char) 0xEF && 
@@ -262,7 +262,7 @@ namespace qrcode {
           } else if (mode == &Mode::KANJI) {
             decodeKanjiSegment(bits, result, count);
           } else {
-            throw new ReaderException("Unsupported mode indicator");
+            throw ReaderException("Unsupported mode indicator");
           }
         }
       } while (mode != &Mode::TERMINATOR);

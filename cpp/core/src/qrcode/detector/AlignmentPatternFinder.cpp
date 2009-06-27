@@ -211,7 +211,7 @@ namespace qrcode {
         return center;
       }
       
-      throw new ReaderException("Could not find alignment pattern");
+      throw ReaderException("Could not find alignment pattern");
     }
     
   }

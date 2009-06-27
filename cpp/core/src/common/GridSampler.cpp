@@ -77,7 +77,7 @@ namespace common {
       if (x < -1 || x > width || y < -1 || y > height) {
         ostringstream s;
         s << "Transformed point out of bounds at " << x << "," << y;
-        throw new ReaderException(s.str().c_str());
+        throw ReaderException(s.str().c_str());
       }
       nudged = false;
       if (x == -1) {
@@ -103,7 +103,7 @@ namespace common {
       if (x < -1 || x > width || y < -1 || y > height) {
         ostringstream s;
         s << "Transformed point out of bounds at " << x << "," << y;
-        throw new ReaderException(s.str().c_str());
+        throw ReaderException(s.str().c_str());
       }
       nudged = false;
       if (x == -1) {

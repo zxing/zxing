@@ -63,14 +63,14 @@ namespace qrcode {
     
     Version *Version::getProvisionalVersionForDimension(int dimension) {
       if (dimension %4 != 1) { 
-        throw new ReaderException("Dimension must be 1 mod 4");
+        throw ReaderException("Dimension must be 1 mod 4");
       }
       return Version::getVersionForNumber((dimension - 17) >> 2);
     }
     
     Version *Version::getVersionForNumber(int versionNumber) {
       if (versionNumber < 1 || versionNumber > 40) {
-        throw new ReaderException("versionNumber must be between 1 and 40");
+        throw ReaderException("versionNumber must be between 1 and 40");
       }
       N_VERSIONS;
       return VERSIONS[versionNumber - 1];

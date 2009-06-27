@@ -73,15 +73,15 @@ namespace common {
                             size_t height, 
                             size_t width) {
     if (topI < 0 || leftJ < 0) {
-      throw new IllegalArgumentException("topI and leftJ must be nonnegative");
+      throw IllegalArgumentException("topI and leftJ must be nonnegative");
     }
     if (height < 1 || width < 1) {
-      throw new IllegalArgumentException("height and width must be at least 1");
+      throw IllegalArgumentException("height and width must be at least 1");
     }
     size_t maxJ = leftJ + width;
     size_t maxI = topI + height;
     if (maxI > dimension_ || maxJ > dimension_) {
-      throw new IllegalArgumentException
+      throw IllegalArgumentException
         ("topI + height and leftJ + width must be <= matrix dimension");
     }
     for (size_t j = leftJ; j < maxJ; j++) {

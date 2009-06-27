@@ -99,7 +99,7 @@ namespace reedsolomon {
   
   GF256Poly *GF256Poly::addOrSubtract(GF256Poly *b) {
     if (&field != &b->field) {
-      throw new IllegalArgumentException("Fields must be the same");
+      throw IllegalArgumentException("Fields must be the same");
     }
     if (isZero()) {
       return b;
@@ -131,7 +131,7 @@ namespace reedsolomon {
   
   GF256Poly *GF256Poly::multiply(GF256Poly *b) {
     if (&field != &b->field) {
-      throw new IllegalArgumentException("Fields must be the same");
+      throw IllegalArgumentException("Fields must be the same");
     }
     if (isZero() || b->isZero()) {
       return field.getZero();
@@ -172,7 +172,7 @@ namespace reedsolomon {
   GF256Poly *GF256Poly::multiplyByMonomial(int degree,
                                            int coefficient) {
     if (degree < 0) {
-      throw new IllegalArgumentException("Degree must be non-negative");
+      throw IllegalArgumentException("Degree must be non-negative");
     }
     if (coefficient == 0) {
       return field.getZero();

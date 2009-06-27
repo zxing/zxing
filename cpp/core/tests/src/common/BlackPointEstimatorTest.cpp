@@ -41,9 +41,8 @@ namespace common {
       valarray<int> histogram(histogramRaw, 16);
       BlackPointEstimator::estimate(histogram);
       CPPUNIT_FAIL("Should have thrown an exception");
-    } catch (IllegalArgumentException* ie) {
+    } catch (IllegalArgumentException ie) {
       // good
-      delete ie;
     }
   }
 }

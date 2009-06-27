@@ -318,7 +318,7 @@ namespace qrcode {
       
       if (size < 3) {
         // Couldn't find enough finder patterns
-        throw new ReaderException("Could not find three finder patterns");
+        throw ReaderException("Could not find three finder patterns");
       }
       
       if (size == 3) {

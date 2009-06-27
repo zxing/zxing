@@ -75,7 +75,7 @@ namespace reedsolomon {
     cout << __FUNCTION__ << "\n";
 #endif
     if (degree < 0) {
-      throw new IllegalArgumentException("Degree must be non-negative");
+      throw IllegalArgumentException("Degree must be non-negative");
     }
     if (coefficient == 0) {
       return zero_;
@@ -97,14 +97,14 @@ namespace reedsolomon {
   
   int GF256::log(int a) {
     if (a == 0) {
-      throw new IllegalArgumentException("Cannot take the logarithm of 0");
+      throw IllegalArgumentException("Cannot take the logarithm of 0");
     }
     return log_[a];
   }
   
   int GF256::inverse(int a) {
     if (a == 0) {
-      throw new IllegalArgumentException("Cannot calculate the inverse of 0");
+      throw IllegalArgumentException("Cannot calculate the inverse of 0");
     }
     return exp_[255 - log_[a]];
   }
