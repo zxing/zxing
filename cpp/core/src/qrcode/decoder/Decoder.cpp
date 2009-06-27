@@ -45,9 +45,8 @@ namespace qrcode {
       try {
         rsDecoder_.decode(codewordInts, numECCodewords);
       }
-      catch (ReedSolomonException *ex) {
-        ReaderException *rex = new ReaderException(ex->what());
-        delete ex;
+      catch (ReedSolomonException ex) {
+        ReaderException rex(ex.what());
         throw rex;
       }
       

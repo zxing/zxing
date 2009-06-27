@@ -67,7 +67,7 @@ namespace qrcode {
           break;
         }
         if (numCodewords != shorterBlocksTotalCodewords + 1) {
-          throw new IllegalArgumentException("Data block sizes differ by more than 1");
+          throw IllegalArgumentException("Data block sizes differ by more than 1");
         }
         longerBlocksStartAt--;
       }
@@ -96,7 +96,7 @@ namespace qrcode {
       }
       
       if ((size_t) rawCodewordsOffset != rawCodewords.size()) {
-        throw new IllegalArgumentException("rawCodewordsOffset != rawCodewords.length");
+        throw IllegalArgumentException("rawCodewordsOffset != rawCodewords.length");
       }
       
       return result;

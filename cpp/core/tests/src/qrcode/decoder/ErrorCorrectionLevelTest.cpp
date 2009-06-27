@@ -40,9 +40,8 @@ namespace qrcode {
         ErrorCorrectionLevel::forBits(4);
         CPPUNIT_FAIL("should have thrown an exception");
       }
-      catch (ReaderException *ex) {
+      catch (ReaderException ex) {
         // expected
-        delete ex;
       }
     }
   }

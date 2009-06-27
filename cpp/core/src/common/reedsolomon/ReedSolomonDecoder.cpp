@@ -106,7 +106,7 @@ namespace reedsolomon {
       // Divide rLastLast by rLast, with quotient q and remainder r
       if (rLast->isZero()) {
         // Oops, Euclidean algorithm already terminated?
-        throw new ReedSolomonException("r_{i-1} was zero");
+        throw ReedSolomonException("r_{i-1} was zero");
       }
       r = rLastLast;
       Ref<GF256Poly> q(field.getZero());
@@ -126,7 +126,7 @@ namespace reedsolomon {
     
     int sigmaTildeAtZero = t->getCoefficient(0);
     if (sigmaTildeAtZero == 0) {
-      throw new ReedSolomonException("sigmaTilde(0) was zero");
+      throw ReedSolomonException("sigmaTilde(0) was zero");
     }
     
     int inverse = field.inverse(sigmaTildeAtZero);
@@ -165,7 +165,7 @@ namespace reedsolomon {
       }
     }
     if (e != numErrors) {
-      throw new ReedSolomonException
+      throw ReedSolomonException
         ("Error locator degree does not match number of roots");
     }
     return result;

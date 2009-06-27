@@ -72,7 +72,7 @@ namespace common {
   }
   bool BitArray::isRange(size_t start, size_t end, bool value) {
     if (end < start) {
-      throw new IllegalArgumentException("end must be after start");
+      throw IllegalArgumentException("end must be after start");
     }
     if (end == start) {
       return true;

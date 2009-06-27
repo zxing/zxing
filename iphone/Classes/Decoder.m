@@ -180,14 +180,12 @@ using namespace qrcode;
       
       decoderResult = [TwoDDecoderResult resultWithText:resultString
                                              points:points];
-    } catch (ReaderException *rex) {
+    } catch (ReaderException rex) {
       NSLog(@"failed to decode, caught ReaderException '%s'",
-            rex->what());
-      delete rex;
-    } catch (IllegalArgumentException *iex) {
+            rex.what());
+    } catch (IllegalArgumentException iex) {
       NSLog(@"failed to decode, caught IllegalArgumentException '%s'", 
-            iex->what());
-      delete iex;
+            iex.what());
     } catch (...) {
       NSLog(@"Caught unknown exception!");
     }

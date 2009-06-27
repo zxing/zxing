@@ -33,7 +33,7 @@ size_t GrayBytesMonochromeBitmapSource::getHeight() {
 
 unsigned char GrayBytesMonochromeBitmapSource::getPixel(size_t x, size_t y) {
   if (x >= width_ || y >= height_) {
-    throw new ReaderException("bitmap coordinate out of bounds");
+    throw ReaderException("bitmap coordinate out of bounds");
   }
   size_t index = y * bytesPerRow_ + x;
   return bytes_[index];

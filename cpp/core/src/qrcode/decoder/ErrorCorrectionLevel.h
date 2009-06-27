@@ -41,7 +41,7 @@ namespace qrcode {
       int ordinal() { return ordinal_; }
       static ErrorCorrectionLevel& forBits(int bits) {
         if (bits < 0 || bits >= N_LEVELS) {
-          throw new ReaderException("Ellegal error correction level bits");
+          throw ReaderException("Ellegal error correction level bits");
         }
         return *FOR_BITS[bits];
       }

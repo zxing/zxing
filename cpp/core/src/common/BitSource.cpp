@@ -24,7 +24,7 @@
 namespace common {
   int BitSource::readBits(int numBits) {
     if (numBits < 0 || numBits > 32) {
-      throw new IllegalArgumentException("cannot read <1 or >32 bits");
+      throw IllegalArgumentException("cannot read <1 or >32 bits");
     }
     
     int result = 0;

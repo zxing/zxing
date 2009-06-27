@@ -36,9 +36,8 @@ namespace qrcode {
         Mode::forBits(0x10);
         CPPUNIT_FAIL("should have thrown an exception");
       }
-      catch (ReaderException *ex) {
+      catch (ReaderException ex) {
         // expected
-        delete ex;
       }
     }
     

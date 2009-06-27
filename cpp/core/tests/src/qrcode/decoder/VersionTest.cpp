@@ -56,9 +56,8 @@ namespace qrcode {
       try {
         Version::getVersionForNumber(0);
         CPPUNIT_FAIL("Should have thrown an exception");
-      } catch (ReaderException *re) {
+      } catch (ReaderException re) {
         // good
-        delete re;
       }
       for (int i = 1; i <= 40; i++) {
         checkVersion(Version::getVersionForNumber(i), i, 4*i + 17);

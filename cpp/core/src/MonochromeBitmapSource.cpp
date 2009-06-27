@@ -95,7 +95,7 @@ estimateBlackPoint(BlackPointEstimationMethod method, int arg) {
       }
     } else if (method == BlackPointEstimationMethod_RowSampling) {
       if (arg < 0 || arg >= (int)height) {
-        throw new IllegalArgumentException
+        throw IllegalArgumentException
         ("black point estimation argument out of range");
       }
       size_t y = static_cast<size_t> (arg);
@@ -103,7 +103,7 @@ estimateBlackPoint(BlackPointEstimationMethod method, int arg) {
         histogram[getPixel(x, y) >> LUMINANCE_SHIFT]++;
       }
     } else {
-      throw new IllegalArgumentException
+      throw IllegalArgumentException
       ("unknown black point estimation method");
     }
     
