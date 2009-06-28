@@ -70,7 +70,7 @@ public final class ByteMatrix {
   }
 
   public String toString() {
-    StringBuffer result = new StringBuffer();
+    StringBuffer result = new StringBuffer(2 * width * height + 2);
     for (int y = 0; y < height; ++y) {
       for (int x = 0; x < width; ++x) {
         switch (bytes[y][x]) {

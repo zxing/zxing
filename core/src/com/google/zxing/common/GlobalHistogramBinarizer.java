@@ -90,7 +90,7 @@ public final class GlobalHistogramBinarizer extends Binarizer {
     for (int y = 1; y < 5; y++) {
       int row = height * y / 5;
       byte[] localLuminances = source.getRow(row, luminances);
-      int right = width * 4 / 5;
+      int right = (width << 2) / 5;
       for (int x = width / 5; x < right; x++) {
         int pixel = localLuminances[x] & 0xff;
         localBuckets[pixel >> LUMINANCE_SHIFT]++;
