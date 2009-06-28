@@ -30,7 +30,7 @@ public abstract class LuminanceSource {
   private final int width;
   private final int height;
 
-  public LuminanceSource(int width, int height) {
+  protected LuminanceSource(int width, int height) {
     this.width = width;
     this.height = height;
   }

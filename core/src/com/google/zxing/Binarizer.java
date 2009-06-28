@@ -31,7 +31,7 @@ public abstract class Binarizer {
 
   private final LuminanceSource source;
 
-  public Binarizer(LuminanceSource source) {
+  protected Binarizer(LuminanceSource source) {
     if (source == null) {
       throw new IllegalArgumentException("Source must be non-null.");
     }

@@ -17,7 +17,6 @@
 package com.google.zxing.common;
 
 import com.google.zxing.Binarizer;
-import com.google.zxing.ReaderException;
 import com.google.zxing.LuminanceSource;
 
 /**
@@ -38,12 +37,12 @@ public final class LocalBlockBinarizer extends Binarizer {
     super(source);
   }
 
-  public BitArray getBlackRow(int y, BitArray row) throws ReaderException {
+  public BitArray getBlackRow(int y, BitArray row) {
     binarizeEntireImage();
     return matrix.getRow(y, row);
   }
 
-  public BitMatrix getBlackMatrix() throws ReaderException {
+  public BitMatrix getBlackMatrix() {
     binarizeEntireImage();
     return matrix;
   }
@@ -80,11 +79,11 @@ public final class LocalBlockBinarizer extends Binarizer {
       int stride, int[][] blackPoints, BitMatrix matrix) {
     for (int y = 0; y < subHeight; y++) {
       for (int x = 0; x < subWidth; x++) {
-        int sum = 0;
         int left = (x > 1) ? x : 2;
         left = (left < subWidth - 2) ? left : subWidth - 3;
         int top = (y > 1) ? y : 2;
         top = (top < subHeight - 2) ? top : subHeight - 3;
+        int sum = 0;
         for (int z = -2; z <= 2; z++) {
           sum += blackPoints[top + z][left - 2];
           sum += blackPoints[top + z][left - 1];
@@ -93,7 +92,7 @@ public final class LocalBlockBinarizer extends Binarizer {
           sum += blackPoints[top + z][left + 2];
         }
         int average = sum / 25;
-        threshold8x8Block(luminances, x * 8, y * 8, average, stride, matrix);
+        threshold8x8Block(luminances, x << 3, y << 3, average, stride, matrix);
       }
     }
   }
@@ -122,7 +121,7 @@ public final class LocalBlockBinarizer extends Binarizer {
         int min = 255;
         int max = 0;
         for (int yy = 0; yy < 8; yy++) {
-          int offset = (y * 8 + yy) * stride + (x * 8);
+          int offset = ((y << 3) + yy) * stride + (x << 3);
           for (int xx = 0; xx < 8; xx++) {
             int pixel = luminances[offset + xx] & 0xff;
             sum += pixel;

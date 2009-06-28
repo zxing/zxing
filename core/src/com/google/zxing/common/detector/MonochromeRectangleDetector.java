@@ -18,7 +18,6 @@ package com.google.zxing.common.detector;
 
 import com.google.zxing.ReaderException;
 import com.google.zxing.ResultPoint;
-import com.google.zxing.common.BitArray;
 import com.google.zxing.common.BitMatrix;
 
 /**
