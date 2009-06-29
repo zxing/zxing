@@ -27,6 +27,8 @@ import com.google.zxing.LuminanceSource;
  * However it tends to produce artifacts on lower frequency images and is therefore not
  * a good general purpose binarizer for uses outside ZXing.
  *
+ * NOTE: This class is still experimental and may not be ready for prime time yet.
+ *
  * @author dswitkin@google.com (Daniel Switkin)
  */
 public final class LocalBlockBinarizer extends Binarizer {
@@ -37,11 +39,13 @@ public final class LocalBlockBinarizer extends Binarizer {
     super(source);
   }
 
+  // TODO: Consider a different strategy for 1D Readers.
   public BitArray getBlackRow(int y, BitArray row) {
     binarizeEntireImage();
     return matrix.getRow(y, row);
   }
 
+  // TODO: If getBlackRow() calculates its own values, removing sharpening here.
   public BitMatrix getBlackMatrix() {
     binarizeEntireImage();
     return matrix;
@@ -152,7 +156,14 @@ public final class LocalBlockBinarizer extends Binarizer {
       int center = luminances[offset + 1] & 0xff;
       for (int x = 1; x < width - 1; x++) {
         int right = luminances[offset + x + 1] & 0xff;
-        luminances[x] = (byte)(((center << 2) - left - right) >> 1);
+        int pixel = ((center << 2) - left - right) >> 1;
+        // Must clamp values to 0..255 so they will fit in a byte.
+        if (pixel > 255) {
+          pixel = 255;
+        } else if (pixel < 0) {
+          pixel = 0;
+        }
+        luminances[offset + x] = (byte)pixel;
         left = center;
         center = right;
       }

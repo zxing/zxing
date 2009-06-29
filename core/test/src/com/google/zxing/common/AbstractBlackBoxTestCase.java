@@ -160,10 +160,10 @@ public abstract class AbstractBlackBoxTestCase extends TestCase {
   // This workaround is used because AbstractNegativeBlackBoxTestCase overrides this method but does
   // not return SummaryResults.
   public void testBlackBox() throws IOException {
-    testBlackBoxCountingResults();
+    testBlackBoxCountingResults(true);
   }
 
-  public SummaryResults testBlackBoxCountingResults() throws IOException {
+  public SummaryResults testBlackBoxCountingResults(boolean assertOnFailure) throws IOException {
     assertFalse(testResults.isEmpty());
 
     File[] imageFiles = getImageFiles();
@@ -218,13 +218,15 @@ public abstract class AbstractBlackBoxTestCase extends TestCase {
     }
 
     // Then run through again and assert if any failed
-    for (int x = 0; x < testCount; x++) {
-      assertTrue("Rotation " + testResults.get(x).getRotation() +
-          " degrees: Too many images failed",
-          passedCounts[x] >= testResults.get(x).getMustPassCount());
-      assertTrue("Try harder, Rotation " + testResults.get(x).getRotation() +
-          " degrees: Too many images failed",
-          tryHarderCounts[x] >= testResults.get(x).getTryHarderCount());
+    if (assertOnFailure) {
+      for (int x = 0; x < testCount; x++) {
+        assertTrue("Rotation " + testResults.get(x).getRotation() +
+            " degrees: Too many images failed",
+            passedCounts[x] >= testResults.get(x).getMustPassCount());
+        assertTrue("Try harder, Rotation " + testResults.get(x).getRotation() +
+            " degrees: Too many images failed",
+            tryHarderCounts[x] >= testResults.get(x).getTryHarderCount());
+      }
     }
     return new SummaryResults(totalFound, totalMustPass, totalTests);
   }

@@ -337,7 +337,10 @@ public final class Detector {
     // modules, but the
     // very corners. So there is no 0.5f here; 0.0f is right.
     GridSampler sampler = GridSampler.getInstance();
-    return sampler.sampleGrid(image, dimension, 0.0f, // p1ToX
+
+    // FIXME: Temporary fix calling getBlackMatrix() inline here. It should be called once
+    // and the result matrix passed down into sampleGrid() and throughout the reader.
+    return sampler.sampleGrid(image.getBlackMatrix(), dimension, 0.0f, // p1ToX
         0.0f, // p1ToY
         dimension, // p2ToX
         0.0f, // p2ToY
