@@ -212,9 +212,11 @@ public abstract class AbstractBlackBoxTestCase extends TestCase {
 
     int totalTests = imageFiles.length * testCount * 2;
     System.out.println("TOTALS:\n  Decoded " + totalFound + " images out of " + totalTests +
-      " (" + (totalFound * 100 / totalTests) + "%)");
+      " (" + (totalFound * 100 / totalTests) + "%, " + totalMustPass + " required)");
     if (totalFound > totalMustPass) {
       System.out.println("  *** Test too lax by " + (totalFound - totalMustPass) + " images");
+    } else if (totalFound < totalMustPass) {
+      System.out.println("  *** Test failed by " + (totalMustPass - totalFound) + " images");
     }
 
     // Then run through again and assert if any failed
