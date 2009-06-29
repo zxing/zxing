@@ -39,6 +39,7 @@ import com.google.zxing.oned.UPCABlackBox4TestCase;
 import com.google.zxing.oned.UPCEBlackBox1TestCase;
 import com.google.zxing.oned.UPCEBlackBox2TestCase;
 import com.google.zxing.oned.UPCEBlackBox3ReflectiveTestCase;
+import com.google.zxing.pdf417.PDF417BlackBox1TestCase;
 import com.google.zxing.qrcode.QRCodeBlackBox1TestCase;
 import com.google.zxing.qrcode.QRCodeBlackBox2TestCase;
 import com.google.zxing.qrcode.QRCodeBlackBox3TestCase;
@@ -81,6 +82,7 @@ public final class AllPositiveBlackBoxTester {
     new UPCEBlackBox1TestCase(),
     new UPCEBlackBox2TestCase(),
     new UPCEBlackBox3ReflectiveTestCase(),
+    new PDF417BlackBox1TestCase(),
     new QRCodeBlackBox1TestCase(),
     new QRCodeBlackBox2TestCase(),
     new QRCodeBlackBox3TestCase(),
@@ -156,7 +158,7 @@ public final class AllPositiveBlackBoxTester {
     AbstractBlackBoxTestCase.SummaryResults results = new AbstractBlackBoxTestCase.SummaryResults();
 
     for (int x = 0; x < TESTS.length; x++) {
-      results.add(TESTS[x].testBlackBoxCountingResults());
+      results.add(TESTS[x].testBlackBoxCountingResults(false));
     }
 
     // This threaded version can't be used yet because BlackPointEstimator (and possibly other code)
