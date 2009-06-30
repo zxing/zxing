@@ -19,7 +19,6 @@ package com.google.zxing.pdf417.detector;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.ReaderException;
 import com.google.zxing.ResultPoint;
-import com.google.zxing.common.BitArray;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.DetectorResult;
 import com.google.zxing.common.GridSampler;
@@ -38,16 +37,20 @@ public final class Detector {
 
   public static final int MAX_AVG_VARIANCE = (int) ((1 << 8) * 0.42f);
   public static final int MAX_INDIVIDUAL_VARIANCE = (int) ((1 << 8) * 0.8f);
+
   // B S B S B S B S Bar/Space pattern
-  private static final int[] START_PATTERN = {8, 1, 1, 1, 1, 1, 1, 3}; // 11111111
-  // 0 1
-  // 0 1
-  // 0 1
-  // 000
+  // 11111111 0 1 0 1 0 1 000
+  private static final int[] START_PATTERN = {8, 1, 1, 1, 1, 1, 1, 3};
+
+  // 11111111 0 1 0 1 0 1 000
+  private static final int[] START_PATTERN_REVERSE = {3, 1, 1, 1, 1, 1, 1, 8};
+
+  // 1111111 0 1 000 1 0 1 00 1
+  private static final int[] STOP_PATTERN = {7, 1, 1, 3, 1, 1, 1, 2, 1};
 
   // B S B S B S B S B Bar/Space pattern
-  private static final int[] STOP_PATTERN_REVERSE = {1, 2, 1, 1, 1, 3, 1, 1,
-      7}; // 1111111 0 1 000 1 0 1 00 1
+  // 1111111 0 1 000 1 0 1 00 1
+  private static final int[] STOP_PATTERN_REVERSE = {1, 2, 1, 1, 1, 3, 1, 1, 7};
 
   private final BinaryBitmap image;
 
@@ -79,10 +82,13 @@ public final class Detector {
    * @throws ReaderException if no PDF417 Code can be found
    */
   public DetectorResult detect(Hashtable hints) throws ReaderException {
-    ResultPoint[] vertices = findVertices(image);
+    // Fetch the 1 bit matrix once up front.
+    BitMatrix matrix = image.getBlackMatrix();
+    
+    ResultPoint[] vertices = findVertices(matrix);
     if (vertices == null) { // Couldn't find the vertices
       // Maybe the image is rotated 180 degrees?
-      vertices = findVertices180(image);
+      vertices = findVertices180(matrix);
       /*
       * // Don't need this because the PDF417 code won't fit into // the
       * camera view finder when it is rotated. if (vertices == null) { //
@@ -102,7 +108,7 @@ public final class Detector {
           vertices[5], vertices[7], moduleWidth);
 
       // Deskew and sample image
-      BitMatrix bits = sampleGrid(image, vertices[4], vertices[5],
+      BitMatrix bits = sampleGrid(matrix, vertices[4], vertices[5],
           vertices[6], vertices[7], dimension);
       //bits.setModuleWidth(moduleWidth);
       return new DetectorResult(bits, new ResultPoint[]{vertices[4],
@@ -114,9 +120,12 @@ public final class Detector {
 
   /**
    * Locate the vertices and the codewords area of a black blob using the Start
-   * and Stop patterns as locators.
+   * and Stop patterns as locators. Assumes that the barcode begins in the left half
+   * of the image, and ends in the right half.
+   * TODO: Fix this assumption, allowing the barcode to be anywhere in the image.
+   * TODO: Scanning every row is very expensive. We should only do this for TRY_HARDER.
    *
-   * @param image the scanned barcode image.
+   * @param matrix the scanned barcode image.
    * @return the an array containing the vertices. vertices[0] x, y top left
    *         barcode vertices[1] x, y bottom left barcode vertices[2] x, y top
    *         right barcode vertices[3] x, y bottom right barcode vertices[4] x,
@@ -124,19 +133,18 @@ public final class Detector {
    *         area vertices[6] x, y top right codeword area vertices[7] x, y
    *         bottom right codeword area
    */
-  private static ResultPoint[] findVertices(BinaryBitmap image) throws ReaderException {
-    int height = image.getHeight();
-    int width = image.getWidth();
+  private static ResultPoint[] findVertices(BitMatrix matrix) throws ReaderException {
+    int height = matrix.getHeight();
+    int width = matrix.getWidth();
+    int halfWidth = width >> 1;
 
     ResultPoint[] result = new ResultPoint[8];
-    BitArray row = null;
     boolean found = false;
 
     int[] loc = null;
     // Top Left
     for (int i = 0; i < height; i++) {
-      row = image.getBlackRow(i, null, 0, width / 4);
-      loc = findGuardPattern(row, 0, START_PATTERN);
+      loc = findGuardPattern(matrix, 0, i, halfWidth, START_PATTERN);
       if (loc != null) {
         result[0] = new ResultPoint(loc[0], i);
         result[4] = new ResultPoint(loc[1], i);
@@ -148,8 +156,7 @@ public final class Detector {
     if (found) { // Found the Top Left vertex
       found = false;
       for (int i = height - 1; i > 0; i--) {
-        row = image.getBlackRow(i, null, 0, width / 4);
-        loc = findGuardPattern(row, 0, START_PATTERN);
+        loc = findGuardPattern(matrix, 0, i, halfWidth, START_PATTERN);
         if (loc != null) {
           result[1] = new ResultPoint(loc[0], i);
           result[5] = new ResultPoint(loc[1], i);
@@ -162,12 +169,10 @@ public final class Detector {
     if (found) { // Found the Bottom Left vertex
       found = false;
       for (int i = 0; i < height; i++) {
-        row = image.getBlackRow(i, null, (width * 3) / 4, width / 4);
-        row.reverse();
-        loc = findGuardPattern(row, 0, STOP_PATTERN_REVERSE);
+        loc = findGuardPattern(matrix, halfWidth, i, halfWidth, STOP_PATTERN);
         if (loc != null) {
-          result[2] = new ResultPoint(width - loc[0], i);
-          result[6] = new ResultPoint(width - loc[1], i);
+          result[2] = new ResultPoint(loc[1], i);
+          result[6] = new ResultPoint(loc[0], i);
           found = true;
           break;
         }
@@ -177,12 +182,10 @@ public final class Detector {
     if (found) { // Found the Top right vertex
       found = false;
       for (int i = height - 1; i > 0; i--) {
-        row = image.getBlackRow(i, null, (width * 3) / 4, width / 4);
-        row.reverse();
-        loc = findGuardPattern(row, 0, STOP_PATTERN_REVERSE);
+        loc = findGuardPattern(matrix, halfWidth, i, halfWidth, STOP_PATTERN);
         if (loc != null) {
-          result[3] = new ResultPoint(width - loc[0], i);
-          result[7] = new ResultPoint(width - loc[1], i);
+          result[3] = new ResultPoint(loc[1], i);
+          result[7] = new ResultPoint(loc[0], i);
           found = true;
           break;
         }
@@ -196,8 +199,10 @@ public final class Detector {
    * and Stop patterns as locators. This assumes that the image is rotated 180
    * degrees and if it locates the start and stop patterns at it will re-map
    * the vertices for a 0 degree rotation.
+   * TODO: Change assumption about barcode location.
+   * TODO: Scanning every row is very expensive. We should only do this for TRY_HARDER.
    *
-   * @param image the scanned barcode image.
+   * @param matrix the scanned barcode image.
    * @return the an array containing the vertices. vertices[0] x, y top left
    *         barcode vertices[1] x, y bottom left barcode vertices[2] x, y top
    *         right barcode vertices[3] x, y bottom right barcode vertices[4] x,
@@ -205,23 +210,21 @@ public final class Detector {
    *         area vertices[6] x, y top right codeword area vertices[7] x, y
    *         bottom right codeword area
    */
-  private static ResultPoint[] findVertices180(BinaryBitmap image) throws ReaderException {
-    int height = image.getHeight();
-    int width = image.getWidth();
+  private static ResultPoint[] findVertices180(BitMatrix matrix) throws ReaderException {
+    int height = matrix.getHeight();
+    int width = matrix.getWidth();
+    int halfWidth = width >> 1;
 
     ResultPoint[] result = new ResultPoint[8];
-    BitArray row = null;
     boolean found = false;
 
     int[] loc = null;
     // Top Left
     for (int i = height - 1; i > 0; i--) {
-      row = image.getBlackRow(i, null, 0, width / 4);
-      row.reverse();
-      loc = findGuardPattern(row, 0, START_PATTERN);
+      loc = findGuardPattern(matrix, halfWidth, i, halfWidth, START_PATTERN_REVERSE);
       if (loc != null) {
-        result[0] = new ResultPoint(width - loc[0], i);
-        result[4] = new ResultPoint(width - loc[1], i);
+        result[0] = new ResultPoint(loc[1], i);
+        result[4] = new ResultPoint(loc[0], i);
         found = true;
         break;
       }
@@ -230,12 +233,10 @@ public final class Detector {
     if (found) { // Found the Top Left vertex
       found = false;
       for (int i = 0; i < height; i++) {
-        row = image.getBlackRow(i, null, 0, width / 4);
-        row.reverse();
-        loc = findGuardPattern(row, 0, START_PATTERN);
+        loc = findGuardPattern(matrix, halfWidth, i, halfWidth, START_PATTERN_REVERSE);
         if (loc != null) {
-          result[1] = new ResultPoint(width - loc[0], i);
-          result[5] = new ResultPoint(width - loc[1], i);
+          result[1] = new ResultPoint(loc[1], i);
+          result[5] = new ResultPoint(loc[0], i);
           found = true;
           break;
         }
@@ -245,8 +246,7 @@ public final class Detector {
     if (found) { // Found the Bottom Left vertex
       found = false;
       for (int i = height - 1; i > 0; i--) {
-        row = image.getBlackRow(i, null, (width * 3) / 4, width / 4);
-        loc = findGuardPattern(row, 0, STOP_PATTERN_REVERSE);
+        loc = findGuardPattern(matrix, 0, i, halfWidth, STOP_PATTERN_REVERSE);
         if (loc != null) {
           result[2] = new ResultPoint(loc[0], i);
           result[6] = new ResultPoint(loc[1], i);
@@ -259,8 +259,7 @@ public final class Detector {
     if (found) { // Found the Top Right vertex
       found = false;
       for (int i = 0; i < height; i++) {
-        row = image.getBlackRow(i, null, (width * 3) / 4, width / 4);
-        loc = findGuardPattern(row, 0, STOP_PATTERN_REVERSE);
+        loc = findGuardPattern(matrix, 0, i, halfWidth, STOP_PATTERN_REVERSE);
         if (loc != null) {
           result[3] = new ResultPoint(loc[0], i);
           result[7] = new ResultPoint(loc[1], i);
@@ -269,11 +268,7 @@ public final class Detector {
         }
       }
     }
-    if (found) {
-      return result;
-    } else {
-      return null;
-    }
+    return found ? result : null;
   }
 
   /**
@@ -329,7 +324,7 @@ public final class Detector {
     */
   }
 
-  private static BitMatrix sampleGrid(BinaryBitmap image, ResultPoint topLeft,
+  private static BitMatrix sampleGrid(BitMatrix matrix, ResultPoint topLeft,
       ResultPoint bottomLeft, ResultPoint topRight, ResultPoint bottomRight, int dimension)
       throws ReaderException {
 
@@ -338,9 +333,7 @@ public final class Detector {
     // very corners. So there is no 0.5f here; 0.0f is right.
     GridSampler sampler = GridSampler.getInstance();
 
-    // FIXME: Temporary fix calling getBlackMatrix() inline here. It should be called once
-    // and the result matrix passed down into sampleGrid() and throughout the reader.
-    return sampler.sampleGrid(image.getBlackMatrix(), dimension, 0.0f, // p1ToX
+    return sampler.sampleGrid(matrix, dimension, 0.0f, // p1ToX
         0.0f, // p1ToY
         dimension, // p2ToX
         0.0f, // p2ToY
@@ -368,29 +361,28 @@ public final class Detector {
   }
 
   /**
-   * @param row       row of black/white values to search
-   * @param rowOffset position to start search
+   * @param matrix row of black/white values to search
+   * @param column x position to start search
+   * @param row y position to start search
+   * @param width the number of pixels to search on this row
    * @param pattern   pattern of counts of number of black and white pixels that are
    *                  being searched for as a pattern
-   * @return start/end horizontal offset of guard pattern, as an array of two
-   *         ints.
+   * @return start/end horizontal offset of guard pattern, as an array of two ints.
    */
-  static int[] findGuardPattern(BitArray row, int rowOffset, int[] pattern) {
+  static int[] findGuardPattern(BitMatrix matrix, int column, int row, int width, int[] pattern) {
     int patternLength = pattern.length;
     int[] counters = new int[patternLength];
-    int width = row.getSize();
     boolean isWhite = false;
 
     int counterPosition = 0;
-    int patternStart = rowOffset;
-    for (int x = rowOffset; x < width; x++) {
-      boolean pixel = row.get(x);
+    int patternStart = column;
+    for (int x = column; x < column + width; x++) {
+      boolean pixel = matrix.get(x, row);
       if (pixel ^ isWhite) {
         counters[counterPosition]++;
       } else {
         if (counterPosition == patternLength - 1) {
-          if (patternMatchVariance(counters, pattern,
-              MAX_INDIVIDUAL_VARIANCE) < MAX_AVG_VARIANCE) {
+          if (patternMatchVariance(counters, pattern, MAX_INDIVIDUAL_VARIANCE) < MAX_AVG_VARIANCE) {
             return new int[]{patternStart, x};
           }
           patternStart += counters[0] + counters[1];
