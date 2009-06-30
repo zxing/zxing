@@ -16,22 +16,24 @@
 
 package com.google.zxing.pdf417;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.DecodeHintType;
+import com.google.zxing.MultiFormatReader;
+import com.google.zxing.common.AbstractBlackBoxTestCase;
+
 import java.util.Hashtable;
 import java.util.Vector;
 
-import com.google.zxing.DecodeHintType;
-import com.google.zxing.MultiFormatReader;
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.common.AbstractBlackBoxTestCase;
-
 /**
+ * This test consists of perfect, computer-generated images. We should have 100% passing.
+ *
  * @author SITA Lab (kevin.osullivan@sita.aero)
  */
 public final class PDF417BlackBox1TestCase extends AbstractBlackBoxTestCase {
 
   public PDF417BlackBox1TestCase() {
     super("test/data/blackbox/pdf417", new MultiFormatReader(), BarcodeFormat.PDF417);
-    addTest(1, 1, 0.0f);
+    addTest(2, 2, 0.0f);
     //addTest(1, 1, 90.0f);
     //addTest(1, 1, 180.0f);
     //addTest(1, 1, 270.0f);
