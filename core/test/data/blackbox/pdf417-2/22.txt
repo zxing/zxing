@@ -1,0 +1,1 @@
+A larger PDF 417 barcode with a greater amount of text. This is a more difficult test for mobile devices to resolve.
