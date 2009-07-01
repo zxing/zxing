@@ -26,10 +26,8 @@ import com.google.zxing.common.GridSampler;
 import java.util.Hashtable;
 
 /**
- * <p>
- * Encapsulates logic that can detect a PDF417 Code in an image, even if the
- * PDF417 Code is rotated or skewed, or partially obscured.
- * </p>
+ * <p>Encapsulates logic that can detect a PDF417 Code in an image, even if the
+ * PDF417 Code is rotated or skewed, or partially obscured.</p>
  *
  * @author SITA Lab (kevin.osullivan@sita.aero)
  */
@@ -59,12 +57,9 @@ public final class Detector {
   }
 
   /**
-   * <p>
-   * Detects a PDF417 Code in an image, simply.
-   * </p>
+   * <p>Detects a PDF417 Code in an image, simply.</p>
    *
-   * @return {@link DetectorResult} encapsulating results of detecting a PDF417
-   *         Code
+   * @return {@link DetectorResult} encapsulating results of detecting a PDF417 Code
    * @throws ReaderException if no QR Code can be found
    */
   public DetectorResult detect() throws ReaderException {
@@ -72,32 +67,23 @@ public final class Detector {
   }
 
   /**
-   * <p>
-   * Detects a PDF417 Code in an image, simply.
-   * </p>
+   * <p>Detects a PDF417 Code in an image. Only checks 0 and 180 degree rotations.</p>
    *
    * @param hints optional hints to detector
-   * @return {@link DetectorResult} encapsulating results of detecting a PDF417
-   *         Code
+   * @return {@link DetectorResult} encapsulating results of detecting a PDF417 Code
    * @throws ReaderException if no PDF417 Code can be found
    */
   public DetectorResult detect(Hashtable hints) throws ReaderException {
     // Fetch the 1 bit matrix once up front.
     BitMatrix matrix = image.getBlackMatrix();
-    
+
+    // Try to find the vertices assuming the image is upright.
     ResultPoint[] vertices = findVertices(matrix);
-    if (vertices == null) { // Couldn't find the vertices
+    if (vertices == null) {
       // Maybe the image is rotated 180 degrees?
       vertices = findVertices180(matrix);
-      /*
-      * // Don't need this because the PDF417 code won't fit into // the
-      * camera view finder when it is rotated. if (vertices == null) { //
-      * Couldn't find the vertices // Maybe the image is rotated 90 degrees?
-      * vertices = findVertices90(image); if (vertices == null) { //
-      * Couldn't find the vertices // Maybe the image is rotated 270
-      * degrees? vertices = findVertices270(image); } }
-      */
     }
+
     if (vertices != null) {
       float moduleWidth = computeModuleWidth(vertices);
       if (moduleWidth < 1.0f) {
@@ -107,10 +93,9 @@ public final class Detector {
       int dimension = computeDimension(vertices[4], vertices[6],
           vertices[5], vertices[7], moduleWidth);
 
-      // Deskew and sample image
+      // Deskew and sample image.
       BitMatrix bits = sampleGrid(matrix, vertices[4], vertices[5],
           vertices[6], vertices[7], dimension);
-      //bits.setModuleWidth(moduleWidth);
       return new DetectorResult(bits, new ResultPoint[]{vertices[4],
           vertices[5], vertices[6], vertices[7]});
     } else {
@@ -126,12 +111,15 @@ public final class Detector {
    * TODO: Scanning every row is very expensive. We should only do this for TRY_HARDER.
    *
    * @param matrix the scanned barcode image.
-   * @return the an array containing the vertices. vertices[0] x, y top left
-   *         barcode vertices[1] x, y bottom left barcode vertices[2] x, y top
-   *         right barcode vertices[3] x, y bottom right barcode vertices[4] x,
-   *         y top left codeword area vertices[5] x, y bottom left codeword
-   *         area vertices[6] x, y top right codeword area vertices[7] x, y
-   *         bottom right codeword area
+   * @return an array containing the vertices:
+   *           vertices[0] x, y top left barcode
+   *           vertices[1] x, y bottom left barcode
+   *           vertices[2] x, y top right barcode
+   *           vertices[3] x, y bottom right barcode
+   *           vertices[4] x, y top left codeword area
+   *           vertices[5] x, y bottom left codeword area
+   *           vertices[6] x, y top right codeword area
+   *           vertices[7] x, y bottom right codeword area
    */
   private static ResultPoint[] findVertices(BitMatrix matrix) throws ReaderException {
     int height = matrix.getHeight();
@@ -203,12 +191,15 @@ public final class Detector {
    * TODO: Scanning every row is very expensive. We should only do this for TRY_HARDER.
    *
    * @param matrix the scanned barcode image.
-   * @return the an array containing the vertices. vertices[0] x, y top left
-   *         barcode vertices[1] x, y bottom left barcode vertices[2] x, y top
-   *         right barcode vertices[3] x, y bottom right barcode vertices[4] x,
-   *         y top left codeword area vertices[5] x, y bottom left codeword
-   *         area vertices[6] x, y top right codeword area vertices[7] x, y
-   *         bottom right codeword area
+   * @return an array containing the vertices:
+   *           vertices[0] x, y top left barcode
+   *           vertices[1] x, y bottom left barcode
+   *           vertices[2] x, y top right barcode
+   *           vertices[3] x, y bottom right barcode
+   *           vertices[4] x, y top left codeword area
+   *           vertices[5] x, y bottom left codeword area
+   *           vertices[6] x, y top right codeword area
+   *           vertices[7] x, y bottom right codeword area
    */
   private static ResultPoint[] findVertices180(BitMatrix matrix) throws ReaderException {
     int height = matrix.getHeight();
@@ -272,15 +263,18 @@ public final class Detector {
   }
 
   /**
-   * <p>
-   * Estimates module size (pixels in a module) based on the Start and End
+   * <p>Estimates module size (pixels in a module) based on the Start and End
    * finder patterns.</p>
    *
-   * @param vertices [] vertices[0] x, y top left barcode vertices[1] x, y bottom
-   *                 left barcode vertices[2] x, y top right barcode vertices[3] x, y
-   *                 bottom right barcode vertices[4] x, y top left Codeword area
-   *                 vertices[5] x, y bottom left Codeword area vertices[6] x, y top
-   *                 right Codeword area vertices[7] x, y bottom right Codeword area
+   * @param vertices an array of vertices:
+   *           vertices[0] x, y top left barcode
+   *           vertices[1] x, y bottom left barcode
+   *           vertices[2] x, y top right barcode
+   *           vertices[3] x, y bottom right barcode
+   *           vertices[4] x, y top left codeword area
+   *           vertices[5] x, y bottom left codeword area
+   *           vertices[6] x, y top right codeword area
+   *           vertices[7] x, y bottom right codeword area
    * @return the module size.
    */
   private static float computeModuleWidth(ResultPoint[] vertices) {
@@ -306,12 +300,8 @@ public final class Detector {
    */
   private static int computeDimension(ResultPoint topLeft, ResultPoint topRight,
       ResultPoint bottomLeft, ResultPoint bottomRight, float moduleWidth) {
-    int topRowDimension = round(ResultPoint
-        .distance(topLeft, topRight)
-        / moduleWidth);
-    int bottomRowDimension = round(ResultPoint.distance(bottomLeft,
-        bottomRight)
-        / moduleWidth);
+    int topRowDimension = round(ResultPoint.distance(topLeft, topRight) / moduleWidth);
+    int bottomRowDimension = round(ResultPoint.distance(bottomLeft, bottomRight) / moduleWidth);
     return ((((topRowDimension + bottomRowDimension) >> 1) + 8) / 17) * 17;
     /*
     * int topRowDimension = round(ResultPoint.distance(topLeft,
@@ -328,8 +318,7 @@ public final class Detector {
       ResultPoint bottomLeft, ResultPoint topRight, ResultPoint bottomRight, int dimension)
       throws ReaderException {
 
-    // Note that unlike in the QR Code sampler, we didn't find the center of
-    // modules, but the
+    // Note that unlike the QR Code sampler, we didn't find the center of modules, but the
     // very corners. So there is no 0.5f here; 0.0f is right.
     GridSampler sampler = GridSampler.getInstance();
 
@@ -349,7 +338,6 @@ public final class Detector {
         bottomRight.getY(), // p3FromY
         bottomLeft.getX(), // p4FromX
         bottomLeft.getY()); // p4FromY
-
   }
 
   /**
@@ -365,12 +353,14 @@ public final class Detector {
    * @param column x position to start search
    * @param row y position to start search
    * @param width the number of pixels to search on this row
-   * @param pattern   pattern of counts of number of black and white pixels that are
-   *                  being searched for as a pattern
+   * @param pattern pattern of counts of number of black and white pixels that are
+   *                 being searched for as a pattern
    * @return start/end horizontal offset of guard pattern, as an array of two ints.
    */
   static int[] findGuardPattern(BitMatrix matrix, int column, int row, int width, int[] pattern) {
     int patternLength = pattern.length;
+    // TODO: Find a way to cache this array, as this method is called hundreds of times
+    // per image, and we want to allocate as seldom as possible.
     int[] counters = new int[patternLength];
     boolean isWhite = false;
 
@@ -408,8 +398,8 @@ public final class Detector {
    * the total variance from the expected pattern proportions across all
    * pattern elements, to the length of the pattern.
    *
-   * @param counters              observed counters
-   * @param pattern               expected pattern
+   * @param counters observed counters
+   * @param pattern expected pattern
    * @param maxIndividualVariance The most any counter can differ before we give up
    * @return ratio of total variance between counters and pattern compared to
    *         total pattern size, where the ratio has been multiplied by 256.
@@ -417,8 +407,7 @@ public final class Detector {
    *         variance between counters and patterns equals the pattern length,
    *         higher values mean even more variance
    */
-  public static int patternMatchVariance(int[] counters, int[] pattern,
-                                         int maxIndividualVariance) {
+  public static int patternMatchVariance(int[] counters, int[] pattern, int maxIndividualVariance) {
     int numCounters = counters.length;
     int total = 0;
     int patternLength = 0;
@@ -428,15 +417,12 @@ public final class Detector {
     }
     if (total < patternLength) {
       // If we don't even have one pixel per unit of bar width, assume this
-      // is too small
-      // to reliably match, so fail:
+      // is too small to reliably match, so fail:
       return Integer.MAX_VALUE;
     }
-    // We're going to fake floating-point math in integers. We just need to
-    // use more bits.
-    // Scale up patternLength so that intermediate values below like
-    // scaledCounter will have
-    // more "significant digits"
+    // We're going to fake floating-point math in integers. We just need to use more bits.
+    // Scale up patternLength so that intermediate values below like scaledCounter will have
+    // more "significant digits".
     int unitBarWidth = (total << 8) / patternLength;
     maxIndividualVariance = (maxIndividualVariance * unitBarWidth) >> 8;
 
@@ -444,8 +430,7 @@ public final class Detector {
     for (int x = 0; x < numCounters; x++) {
       int counter = counters[x] << 8;
       int scaledPattern = pattern[x] * unitBarWidth;
-      int variance = counter > scaledPattern ? counter - scaledPattern
-          : scaledPattern - counter;
+      int variance = counter > scaledPattern ? counter - scaledPattern : scaledPattern - counter;
       if (variance > maxIndividualVariance) {
         return Integer.MAX_VALUE;
       }
