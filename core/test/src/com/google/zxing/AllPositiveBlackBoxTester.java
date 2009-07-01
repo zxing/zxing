@@ -40,6 +40,7 @@ import com.google.zxing.oned.UPCEBlackBox1TestCase;
 import com.google.zxing.oned.UPCEBlackBox2TestCase;
 import com.google.zxing.oned.UPCEBlackBox3ReflectiveTestCase;
 import com.google.zxing.pdf417.PDF417BlackBox1TestCase;
+import com.google.zxing.pdf417.PDF417BlackBox2TestCase;
 import com.google.zxing.qrcode.QRCodeBlackBox1TestCase;
 import com.google.zxing.qrcode.QRCodeBlackBox2TestCase;
 import com.google.zxing.qrcode.QRCodeBlackBox3TestCase;
@@ -83,6 +84,7 @@ public final class AllPositiveBlackBoxTester {
     new UPCEBlackBox2TestCase(),
     new UPCEBlackBox3ReflectiveTestCase(),
     new PDF417BlackBox1TestCase(),
+    new PDF417BlackBox2TestCase(),
     new QRCodeBlackBox1TestCase(),
     new QRCodeBlackBox2TestCase(),
     new QRCodeBlackBox3TestCase(),
