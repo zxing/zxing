@@ -77,14 +77,14 @@ public final class PDF417Reader implements Reader {
    */
   private static BitMatrix extractPureBits(BinaryBitmap image) throws ReaderException {
     // Now need to determine module size in pixels
-
-    int height = image.getHeight();
-    int width = image.getWidth();
+    BitMatrix matrix = image.getBlackMatrix();
+    int height = matrix.getHeight();
+    int width = matrix.getWidth();
     int minDimension = Math.min(height, width);
 
     // First, skip white border by tracking diagonally from the top left down and to the right:
     int borderWidth = 0;
-    while (borderWidth < minDimension && !image.isBlack(borderWidth, borderWidth)) {
+    while (borderWidth < minDimension && !matrix.get(borderWidth, borderWidth)) {
       borderWidth++;
     }
     if (borderWidth == minDimension) {
@@ -93,7 +93,7 @@ public final class PDF417Reader implements Reader {
 
     // And then keep tracking across the top-left black module to determine module size
     int moduleEnd = borderWidth;
-    while (moduleEnd < minDimension && image.isBlack(moduleEnd, moduleEnd)) {
+    while (moduleEnd < minDimension && matrix.get(moduleEnd, moduleEnd)) {
       moduleEnd++;
     }
     if (moduleEnd == minDimension) {
@@ -104,7 +104,7 @@ public final class PDF417Reader implements Reader {
 
     // And now find where the rightmost black module on the first row ends
     int rowEndOfSymbol = width - 1;
-    while (rowEndOfSymbol >= 0 && !image.isBlack(rowEndOfSymbol, borderWidth)) {
+    while (rowEndOfSymbol >= 0 && !matrix.get(rowEndOfSymbol, borderWidth)) {
       rowEndOfSymbol--;
     }
     if (rowEndOfSymbol < 0) {
@@ -130,15 +130,14 @@ public final class PDF417Reader implements Reader {
 
     // Now just read off the bits
     BitMatrix bits = new BitMatrix(dimension);
-    for (int i = 0; i < dimension; i++) {
-      int iOffset = borderWidth + i * moduleSize;
-      for (int j = 0; j < dimension; j++) {
-        if (image.isBlack(borderWidth + j * moduleSize, iOffset)) {
-          bits.set(i, j);
+    for (int y = 0; y < dimension; y++) {
+      int iOffset = borderWidth + y * moduleSize;
+      for (int x = 0; x < dimension; x++) {
+        if (matrix.get(borderWidth + x * moduleSize, iOffset)) {
+          bits.set(x, y);
         }
       }
     }
     return bits;
   }
 }
-

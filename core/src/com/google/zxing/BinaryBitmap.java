@@ -77,7 +77,8 @@ public final class BinaryBitmap {
   public BitMatrix getBlackMatrix() throws ReaderException {
     // The matrix is created on demand the first time it is requested, then cached. There are two
     // reasons for this:
-    // 1. This work will never be done if the caller only installs 1D Reader objects.
+    // 1. This work will never be done if the caller only installs 1D Reader objects, or if a
+    //    1D Reader finds a barcode before the 2D Readers run.
     // 2. This work will only be done once even if the caller installs multiple 2D Readers.
     if (matrix == null) {
       matrix = binarizer.getBlackMatrix();
@@ -122,80 +123,6 @@ public final class BinaryBitmap {
   public BinaryBitmap rotateCounterClockwise() {
     LuminanceSource newSource = binarizer.getLuminanceSource().rotateCounterClockwise();
     return new BinaryBitmap(binarizer.createBinarizer(newSource));
-  }
-
-  /**
-   * @deprecated
-   *
-   * FIXME: REMOVE!
-   * These three methods are TEMPORARY and should be removed by the end of July 2009.
-   * They are only here so the transition from MonochromeBitmapSource to BinaryBitmap
-   * can be done in stages. We need to go through all the Reader objects and convert
-   * these calls to getBlackRow() and getBlackMatrix() at the top of this file.
-   *
-   * TIP: Replace calls to isBlack() with a single call to getBlackMatrix(), then call
-   * BitMatrix.get(x, y) per pixel.
-   */
-  public boolean isBlack(int x, int y) throws ReaderException {
-    if (matrix == null) {
-      matrix = binarizer.getBlackMatrix();
-    }
-    return matrix.get(x, y);
-  }
-
-  /**
-   * @deprecated
-   *
-   * FIXME: REMOVE!
-   *
-   * TIP: 2D Readers should replace uses of this method with a single call to getBlackMatrix(),
-   * then perform random access on that BitMatrix as needed. The version of getBlackRow() with
-   * two arguments is only meant for 1D Readers, which I've already converted.
-   */
-  public BitArray getBlackRow(int y, BitArray row, int startX, int getWidth)
-      throws ReaderException {
-    if (row == null || row.getSize() < getWidth) {
-      row = new BitArray(getWidth);
-    } else {
-      row.clear();
-    }
-
-    if (matrix == null) {
-      matrix = binarizer.getBlackMatrix();
-    }
-    for (int x = 0; x < getWidth; x++) {
-      if (matrix.get(startX + x, y)) {
-        row.set(x);
-      }
-    }
-    return row;
-  }
-
-  /**
-   * @deprecated
-   *
-   * FIXME: REMOVE!
-   *
-   * TIP: Replace calls to getBlackColumn() with a single call to getBlackMatrix(), then
-   * perform random access on that BitMatrix as needed.
-   */
-  public BitArray getBlackColumn(int x, BitArray column, int startY, int getHeight)
-      throws ReaderException {
-    if (column == null || column.getSize() < getHeight) {
-      column = new BitArray(getHeight);
-    } else {
-      column.clear();
-    }
-
-    if (matrix == null) {
-      matrix = binarizer.getBlackMatrix();
-    }
-    for (int y = 0; y < getHeight; y++) {
-      if (matrix.get(x, startY + y)) {
-        column.set(y);
-      }
-    }
-    return column;
   }
 
 }
