@@ -34,9 +34,7 @@ public final class PDF417BlackBox1TestCase extends AbstractBlackBoxTestCase {
   public PDF417BlackBox1TestCase() {
     super("test/data/blackbox/pdf417", new MultiFormatReader(), BarcodeFormat.PDF417);
     addTest(3, 3, 0.0f);
-    //addTest(1, 1, 90.0f);
-    //addTest(1, 1, 180.0f);
-    //addTest(1, 1, 270.0f);
+    addTest(3, 3, 180.0f);
   }
   
   @Override
