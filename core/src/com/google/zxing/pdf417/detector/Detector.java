@@ -30,11 +30,13 @@ import java.util.Hashtable;
  * PDF417 Code is rotated or skewed, or partially obscured.</p>
  *
  * @author SITA Lab (kevin.osullivan@sita.aero)
+ * @author dswitkin@google.com (Daniel Switkin)
  */
 public final class Detector {
 
-  public static final int MAX_AVG_VARIANCE = (int) ((1 << 8) * 0.42f);
-  public static final int MAX_INDIVIDUAL_VARIANCE = (int) ((1 << 8) * 0.8f);
+  private static final int MAX_AVG_VARIANCE = (int) ((1 << 8) * 0.42f);
+  private static final int MAX_INDIVIDUAL_VARIANCE = (int) ((1 << 8) * 0.8f);
+  private static final int SKEW_THRESHOLD = 2;
 
   // B S B S B S B S Bar/Space pattern
   // 11111111 0 1 0 1 0 1 000
@@ -90,6 +92,7 @@ public final class Detector {
         throw ReaderException.getInstance();
       }
 
+      correctCodeWordVertices(vertices);
       int dimension = computeDimension(vertices[4], vertices[6],
           vertices[5], vertices[7], moduleWidth);
 
@@ -260,6 +263,52 @@ public final class Detector {
       }
     }
     return found ? result : null;
+  }
+
+  /**
+   * Because we scan horizontally to detect the start and stop patterns, the vertical component of
+   * the codeword coordinates will be slightly wrong if there is any skew or rotation in the image.
+   * This method moves those points back onto the edges of the theoretically perfect bounding
+   * quadrilateral if needed.
+   *
+   * FIXME: Make this work for 180 degree rotation.
+   *
+   * @param vertices The eight vertices located by findVertices().
+   */
+  private static void correctCodeWordVertices(ResultPoint[] vertices) {
+    float skew = vertices[4].getY() - vertices[6].getY();
+    if (skew > SKEW_THRESHOLD) {
+      // Fix v4
+      float length = vertices[4].getX() - vertices[0].getX();
+      float deltax = vertices[6].getX() - vertices[0].getX();
+      float deltay = vertices[6].getY() - vertices[0].getY();
+      float correction = length * deltay / deltax;
+      vertices[4] = new ResultPoint(vertices[4].getX(), vertices[4].getY() + correction);
+    } else if (-skew > SKEW_THRESHOLD) {
+      // Fix v6
+      float length = vertices[2].getX() - vertices[6].getX();
+      float deltax = vertices[2].getX() - vertices[4].getX();
+      float deltay = vertices[2].getY() - vertices[4].getY();
+      float correction = length * deltay / deltax;
+      vertices[6] = new ResultPoint(vertices[6].getX(), vertices[6].getY() - correction);
+    }
+
+    skew = vertices[7].getY() - vertices[5].getY();
+    if (skew > SKEW_THRESHOLD) {
+      // Fix v5
+      float length = vertices[5].getX() - vertices[1].getX();
+      float deltax = vertices[7].getX() - vertices[1].getX();
+      float deltay = vertices[7].getY() - vertices[1].getY();
+      float correction = length * deltay / deltax;
+      vertices[5] = new ResultPoint(vertices[5].getX(), vertices[5].getY() + correction);
+    } else if (-skew > SKEW_THRESHOLD) {
+      // Fix v7
+      float length = vertices[3].getX() - vertices[7].getX();
+      float deltax = vertices[3].getX() - vertices[5].getX();
+      float deltay = vertices[3].getY() - vertices[5].getY();
+      float correction = length * deltay / deltax;
+      vertices[7] = new ResultPoint(vertices[7].getX(), vertices[7].getY() - correction);
+    }
   }
 
   /**
