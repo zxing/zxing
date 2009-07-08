@@ -84,6 +84,11 @@ public final class Detector {
     if (vertices == null) {
       // Maybe the image is rotated 180 degrees?
       vertices = findVertices180(matrix);
+      if (vertices != null) {
+        correctCodeWordVertices(vertices, true);
+      }
+    } else {
+      correctCodeWordVertices(vertices, false);
     }
 
     if (vertices != null) {
@@ -92,7 +97,6 @@ public final class Detector {
         throw ReaderException.getInstance();
       }
 
-      correctCodeWordVertices(vertices);
       int dimension = computeDimension(vertices[4], vertices[6],
           vertices[5], vertices[7], moduleWidth);
 
@@ -271,12 +275,13 @@ public final class Detector {
    * This method moves those points back onto the edges of the theoretically perfect bounding
    * quadrilateral if needed.
    *
-   * FIXME: Make this work for 180 degree rotation.
-   *
    * @param vertices The eight vertices located by findVertices().
    */
-  private static void correctCodeWordVertices(ResultPoint[] vertices) {
+  private static void correctCodeWordVertices(ResultPoint[] vertices, boolean upsideDown) {
     float skew = vertices[4].getY() - vertices[6].getY();
+    if (upsideDown) {
+      skew = -skew;
+    }
     if (skew > SKEW_THRESHOLD) {
       // Fix v4
       float length = vertices[4].getX() - vertices[0].getX();
@@ -294,6 +299,9 @@ public final class Detector {
     }
 
     skew = vertices[7].getY() - vertices[5].getY();
+    if (upsideDown) {
+      skew = -skew;
+    }
     if (skew > SKEW_THRESHOLD) {
       // Fix v5
       float length = vertices[5].getX() - vertices[1].getX();
