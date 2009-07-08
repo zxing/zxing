@@ -138,25 +138,25 @@ public final class GlobalHistogramBinarizer extends Binarizer {
     int maxBucketCount = 0;
     int firstPeak = 0;
     int firstPeakSize = 0;
-    for (int i = 0; i < numBuckets; i++) {
-      if (buckets[i] > firstPeakSize) {
-        firstPeak = i;
-        firstPeakSize = buckets[i];
+    for (int x = 0; x < numBuckets; x++) {
+      if (buckets[x] > firstPeakSize) {
+        firstPeak = x;
+        firstPeakSize = buckets[x];
       }
-      if (buckets[i] > maxBucketCount) {
-        maxBucketCount = buckets[i];
+      if (buckets[x] > maxBucketCount) {
+        maxBucketCount = buckets[x];
       }
     }
 
     // Find the second-tallest peak which is somewhat far from the tallest peak.
     int secondPeak = 0;
     int secondPeakScore = 0;
-    for (int i = 0; i < numBuckets; i++) {
-      int distanceToBiggest = i - firstPeak;
+    for (int x = 0; x < numBuckets; x++) {
+      int distanceToBiggest = x - firstPeak;
       // Encourage more distant second peaks by multiplying by square of distance.
-      int score = buckets[i] * distanceToBiggest * distanceToBiggest;
+      int score = buckets[x] * distanceToBiggest * distanceToBiggest;
       if (score > secondPeakScore) {
-        secondPeak = i;
+        secondPeak = x;
         secondPeakScore = score;
       }
     }
@@ -179,11 +179,11 @@ public final class GlobalHistogramBinarizer extends Binarizer {
     // Find a valley between them that is low and closer to the white peak.
     int bestValley = secondPeak - 1;
     int bestValleyScore = -1;
-    for (int i = secondPeak - 1; i > firstPeak; i--) {
-      int fromFirst = i - firstPeak;
-      int score = fromFirst * fromFirst * (secondPeak - i) * (maxBucketCount - buckets[i]);
+    for (int x = secondPeak - 1; x > firstPeak; x--) {
+      int fromFirst = x - firstPeak;
+      int score = fromFirst * fromFirst * (secondPeak - x) * (maxBucketCount - buckets[x]);
       if (score > bestValleyScore) {
-        bestValley = i;
+        bestValley = x;
         bestValleyScore = score;
       }
     }

@@ -52,28 +52,29 @@ public final class MonochromeRectangleDetector {
     int width = image.getWidth();
     int halfHeight = height >> 1;
     int halfWidth = width >> 1;
-    int iSkip = Math.max(1, height / (MAX_MODULES << 3));
-    int jSkip = Math.max(1, width / (MAX_MODULES << 3));
+    int deltaY = Math.max(1, height / (MAX_MODULES << 3));
+    int deltaX = Math.max(1, width / (MAX_MODULES << 3));
 
-    int minI = 0;
-    int maxI = height;
-    int minJ = 0;
-    int maxJ = width;
-    ResultPoint pointA = findCornerFromCenter(halfHeight, -iSkip, minI, maxI, halfWidth,      0,
-        minJ, maxJ, halfWidth >> 1);
-    minI = (int) pointA.getY() - 1;
-    ResultPoint pointB = findCornerFromCenter(halfHeight, 0,      minI, maxI, halfWidth, -jSkip,
-        minJ, maxJ, halfHeight >> 1);
-    minJ = (int) pointB.getX() - 1;
-    ResultPoint pointC = findCornerFromCenter(halfHeight, 0,      minI, maxI, halfWidth,  jSkip,
-        minJ, maxJ, halfHeight >> 1);
-    maxJ = (int) pointC.getX() + 1;
-    ResultPoint pointD = findCornerFromCenter(halfHeight,  iSkip, minI, maxI, halfWidth,      0,
-        minJ, maxJ, halfWidth >> 1);
-    maxI = (int) pointD.getY() + 1;
+    int top = 0;
+    int bottom = height;
+    int left = 0;
+    int right = width;
+    ResultPoint pointA = findCornerFromCenter(halfWidth, 0, left, right,
+        halfHeight, -deltaY, top, bottom, halfWidth >> 1);
+    top = (int) pointA.getY() - 1;
+    ResultPoint pointB = findCornerFromCenter(halfWidth, -deltaX, left, right,
+        halfHeight, 0, top, bottom, halfHeight >> 1);
+    left = (int) pointB.getX() - 1;
+    ResultPoint pointC = findCornerFromCenter(halfWidth, deltaX, left, right,
+        halfHeight, 0, top, bottom, halfHeight >> 1);
+    right = (int) pointC.getX() + 1;
+    ResultPoint pointD = findCornerFromCenter(halfWidth, 0, left, right,
+        halfHeight, deltaY, top, bottom, halfWidth >> 1);
+    bottom = (int) pointD.getY() + 1;
+
     // Go try to find point A again with better information -- might have been off at first.
-    pointA = findCornerFromCenter(halfHeight, -iSkip, minI, maxI, halfWidth, 0, minJ, maxJ,
-        halfWidth >> 2);
+    pointA = findCornerFromCenter(halfWidth, 0, left, right,
+        halfHeight, -deltaY, top, bottom, halfWidth >> 2);
 
     return new ResultPoint[] { pointA, pointB, pointC, pointD };
   }
@@ -82,60 +83,59 @@ public final class MonochromeRectangleDetector {
    * Attempts to locate a corner of the barcode by scanning up, down, left or right from a center
    * point which should be within the barcode.
    *
-   * @param centerI center's i componennt (vertical)
-   * @param di change in i per step. If scanning up this is negative; down, positive;
+   * @param centerX center's x component (horizontal)
+   * @param deltaX same as deltaY but change in x per step instead
+   * @param left minimum value of x
+   * @param right maximum value of x
+   * @param centerY center's y component (vertical)
+   * @param deltaY change in y per step. If scanning up this is negative; down, positive;
    *  left or right, 0
-   * @param minI minimum value of i to search through (meaningless when di == 0)
-   * @param maxI maximum value of i
-   * @param centerJ center's j component (horizontal)
-   * @param dj same as di but change in j per step instead
-   * @param minJ see minI
-   * @param maxJ see minJ
+   * @param top minimum value of y to search through (meaningless when di == 0)
+   * @param bottom maximum value of y
    * @param maxWhiteRun maximum run of white pixels that can still be considered to be within
    *  the barcode
    * @return a {@link com.google.zxing.ResultPoint} encapsulating the corner that was found
    * @throws com.google.zxing.ReaderException if such a point cannot be found
    */
-  private ResultPoint findCornerFromCenter(int centerI, int di, int minI, int maxI,
-                                           int centerJ, int dj, int minJ, int maxJ,
-                                           int maxWhiteRun) throws ReaderException {
+  private ResultPoint findCornerFromCenter(int centerX, int deltaX, int left, int right,
+      int centerY, int deltaY, int top, int bottom, int maxWhiteRun) throws ReaderException {
     int[] lastRange = null;
-    for (int i = centerI, j = centerJ;
-         i < maxI && i >= minI && j < maxJ && j >= minJ;
-         i += di, j += dj) {
+    for (int y = centerY, x = centerX;
+         y < bottom && y >= top && x < right && x >= left;
+         y += deltaY, x += deltaX) {
       int[] range;
-      if (dj == 0) {
+      if (deltaX == 0) {
         // horizontal slices, up and down
-        range = blackWhiteRange(i, maxWhiteRun, minJ, maxJ, true);
+        range = blackWhiteRange(y, maxWhiteRun, left, right, true);
       } else {
         // vertical slices, left and right
-        range = blackWhiteRange(j, maxWhiteRun, minI, maxI, false);
+        range = blackWhiteRange(x, maxWhiteRun, top, bottom, false);
       }
       if (range == null) {
         if (lastRange == null) {
           throw ReaderException.getInstance();
         }
         // lastRange was found
-        if (dj == 0) {
-          int lastI = i - di;
-          if (lastRange[0] < centerJ) {
-            if (lastRange[1] > centerJ) {
+        if (deltaX == 0) {
+          int lastY = y - deltaY;
+          if (lastRange[0] < centerX) {
+            if (lastRange[1] > centerX) {
               // straddle, choose one or the other based on direction
-              return new ResultPoint(di > 0 ? lastRange[0] : lastRange[1], lastI);
+              return new ResultPoint(deltaY > 0 ? lastRange[0] : lastRange[1], lastY);
             }
-            return new ResultPoint(lastRange[0], lastI);
+            return new ResultPoint(lastRange[0], lastY);
           } else {
-            return new ResultPoint(lastRange[1], lastI);
+            return new ResultPoint(lastRange[1], lastY);
           }
         } else {
-          int lastJ = j - dj;
-          if (lastRange[0] < centerI) {
-            if (lastRange[1] > centerI) {
-              return new ResultPoint(lastJ, dj < 0 ? lastRange[0] : lastRange[1]);
+          int lastX = x - deltaX;
+          if (lastRange[0] < centerY) {
+            if (lastRange[1] > centerY) {
+              return new ResultPoint(lastX, deltaX < 0 ? lastRange[0] : lastRange[1]);
             }
-            return new ResultPoint(lastJ, lastRange[0]);
+            return new ResultPoint(lastX, lastRange[0]);
           } else {
-            return new ResultPoint(lastJ, lastRange[1]);
+            return new ResultPoint(lastX, lastRange[1]);
           }
         }
       }
@@ -172,7 +172,8 @@ public final class MonochromeRectangleDetector {
         int whiteRunStart = start;
         do {
           start--;
-        } while (start >= minDim && !(horizontal ? image.get(start, fixedDimension) : image.get(fixedDimension, start)));
+        } while (start >= minDim && !(horizontal ? image.get(start, fixedDimension) :
+            image.get(fixedDimension, start)));
         int whiteRunSize = whiteRunStart - start;
         if (start < minDim || whiteRunSize > maxWhiteRun) {
           start = whiteRunStart;
@@ -191,7 +192,8 @@ public final class MonochromeRectangleDetector {
         int whiteRunStart = end;
         do {
           end++;
-        } while (end < maxDim && !(horizontal ? image.get(end, fixedDimension) : image.get(fixedDimension, end)));
+        } while (end < maxDim && !(horizontal ? image.get(end, fixedDimension) :
+            image.get(fixedDimension, end)));
         int whiteRunSize = end - whiteRunStart;
         if (end >= maxDim || whiteRunSize > maxWhiteRun) {
           end = whiteRunStart;

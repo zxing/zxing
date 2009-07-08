@@ -40,22 +40,22 @@ public final class DefaultGridSampler extends GridSampler {
 
     BitMatrix bits = new BitMatrix(dimension);
     float[] points = new float[dimension << 1];
-    for (int i = 0; i < dimension; i++) {
+    for (int y = 0; y < dimension; y++) {
       int max = points.length;
-      float iValue = (float) i + 0.5f;
-      for (int j = 0; j < max; j += 2) {
-        points[j] = (float) (j >> 1) + 0.5f;
-        points[j + 1] = iValue;
+      float iValue = (float) y + 0.5f;
+      for (int x = 0; x < max; x += 2) {
+        points[x] = (float) (x >> 1) + 0.5f;
+        points[x + 1] = iValue;
       }
       transform.transformPoints(points);
       // Quick check to see if points transformed to something inside the image;
       // sufficient to check the endpoints
       checkAndNudgePoints(image, points);
       try {
-        for (int j = 0; j < max; j += 2) {
-          if (image.get((int) points[j], (int) points[j + 1])) {
+        for (int x = 0; x < max; x += 2) {
+          if (image.get((int) points[x], (int) points[x + 1])) {
             // Black(-ish) pixel
-            bits.set(j >> 1, i);
+            bits.set(x >> 1, y);
           }
         }
       } catch (ArrayIndexOutOfBoundsException aioobe) {
