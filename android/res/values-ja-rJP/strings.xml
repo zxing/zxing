@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (C) 2009 ZXing authors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<resources>
+  <string name="app_name">QRコードスキャナー</string>
+  <string name="bookmark_picker_name">ブックマーク</string>
+
+  <string name="button_add_calendar">カレンダーに追加</string>
+  <string name="button_add_contact">連絡先を追加</string>
+  <string name="button_back">戻る</string>
+  <string name="button_book_search">書籍を検索</string>
+  <string name="button_cancel">キャンセル</string>
+  <string name="button_clipboard_empty">クリップボードは空です</string>
+  <string name="button_custom_product_search">カスタム サーチ</string>
+  <string name="button_dial">発信</string>
+  <string name="button_done">完了</string>
+  <string name="button_email">メール送信</string>
+  <string name="button_get_directions">道案内</string>
+  <string name="button_mms">MMS 送信</string>
+  <string name="button_ok">OK</string>
+  <string name="button_open_browser">ブラウザ起動</string>
+  <string name="button_product_search">商品検索</string>
+  <string name="button_search_book_contents">書籍の内容を検索する</string>
+  <string name="button_share_bookmark">ブックマークを送信する</string>
+  <string name="button_share_by_email">メールで送信する</string>
+  <string name="button_share_by_sms">SMSで送信する</string>
+  <string name="button_share_clipboard">クリップボードを送信する</string>
+  <string name="button_share_contact">連絡先を送信する</string>
+  <string name="button_show_map">地図を表示する</string>
+  <string name="button_sms">SMS送信</string>
+  <string name="button_web_search">インターネット検索</string>
+
+  <string name="contents_contact">連絡先</string>
+  <string name="contents_email">メールアドレス</string>
+  <string name="contents_location">地理座標</string>
+  <string name="contents_phone">電話番号</string>
+  <string name="contents_sms">SMSアドレス</string>
+  <string name="contents_text">テキストデータ</string>
+
+  <string name="menu_about">詳細</string>
+  <string name="menu_help">ヘルプ</string>
+  <string name="menu_settings">設定</string>
+  <string name="menu_share">共有</string>
+
+  <string name="msg_about">オープンソースのバーコード ライブラリ、ZXing を使用しています</string>
+  <string name="msg_default_contents">コンテンツ</string>
+  <string name="msg_default_format">フォーマット</string>
+  <string name="msg_default_mms_subject">こんにちは！</string>
+  <string name="msg_default_status">バーコードをカメラ画面の読み取り範囲内に写してスキャンしてください。
+  </string>
+  <string name="msg_default_type">タイプ</string>
+  <string name="msg_encode_barcode_failed">バーコードを作成できませんでした。</string>
+  <string name="msg_encode_contents_failed">このデータからバーコードを作成できませんでした。
+  </string>
+  <string name="msg_encode_in_progress">バーコード作成中\u2026</string>
+  <string name="msg_intent_failed">指定されたアプリケーションを起動できませんでした。
+    バーコードの内容が無効である可能性があります。</string>
+  <string name="msg_sbc_book_not_searchable">この書籍は検索できません。</string>
+  <string name="msg_sbc_failed">検索中に問題が発生しました。</string>
+  <string name="msg_sbc_no_page_returned">検索結果はありません</string>
+  <string name="msg_sbc_page">ページ</string>
+  <string name="msg_sbc_snippet_unavailable">要約文はありません</string>
+  <string name="msg_sbc_unknown_page">不明なページ</string>
+  <string name="msg_sbc_searching_book">書籍を検索中\u2026</string>
+  <string name="msg_share_explanation">画面にバーコードを表示させ、別の端末でスキャンすれば
+    データを共有することができます。</string>
+  <string name="msg_share_subject_line">スキャンしたバーコードの内容を送信します。</string>
+
+  <string name="preferences_actions_title">バーコード発見時\u2026</string>
+  <string name="preferences_copy_to_clipboard_title">クリップボードにコピーする</string>
+  <string name="preferences_decode_1D_title">1Dバーコードを読み取る</string>
+  <string name="preferences_decode_QR_title">QRコードを読み取る</string>
+  <string name="preferences_general_title">一般設定</string>
+  <string name="preferences_name">設定</string>
+  <string name="preferences_play_beep_title">通知音</string>
+  <string name="preferences_vibrate_title">バイブ</string>
+  <string name="preferences_result_title">検索結果の設定</string>
+  <string name="preferences_custom_product_search_title">カスタム商品サーチ URL</string>
+  <string name="preferences_custom_product_search_summary">URL中の「%s」はスキャン結果に置換される</string>
+
+  <string name="result_address_book">連絡先がヒットしました</string>
+  <string name="result_calendar">カレンダーの予定がヒットしました</string>
+  <string name="result_email_address">メールアドレスがヒットしました</string>
+  <string name="result_geo">地理座標がヒットしました</string>
+  <string name="result_isbn">書籍がヒットしました</string>
+  <string name="result_product">商品がヒットしました</string>
+  <string name="result_sms">SMS 連絡先がヒットしました</string>
+  <string name="result_tel">電話番号がヒットしました</string>
+  <string name="result_text">テキストデータがヒットしました</string>
+  <string name="result_uri">URL がヒットしました</string>
+
+  <string name="sbc_name">Google ブックス</string>
+  <string name="share_name">バーコードで共有する</string>
+
+  <string name="title_about">>QRコードスキャナー v</string>
+
+  <string name="zxing_url">http://code.google.com/p/zxing</string>
+</resources>
