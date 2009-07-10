@@ -28,7 +28,7 @@ public final class LocaleManager {
   private static final String DEFAULT_TLD = "com";
   private static final Map<Locale,String> GOOGLE_COUNTRY_TLD;
   static {
-    GOOGLE_COUNTRY_TLD = new HashMap<Locale,String>(13);
+    GOOGLE_COUNTRY_TLD = new HashMap<Locale,String>();
     GOOGLE_COUNTRY_TLD.put(Locale.CANADA, "ca");
     GOOGLE_COUNTRY_TLD.put(Locale.CHINA, "cn");
     GOOGLE_COUNTRY_TLD.put(Locale.FRANCE, "fr");
@@ -43,13 +43,14 @@ public final class LocaleManager {
   // Google Product Search for mobile is available in fewer countries than web search.
   private static final Map<Locale,String> GOOGLE_PRODUCT_SEARCH_COUNTRY_TLD;
   static {
-    GOOGLE_PRODUCT_SEARCH_COUNTRY_TLD = new HashMap<Locale,String>(3);
+    GOOGLE_PRODUCT_SEARCH_COUNTRY_TLD = new HashMap<Locale,String>();
     GOOGLE_PRODUCT_SEARCH_COUNTRY_TLD.put(Locale.UK, "co.uk");
+    GOOGLE_PRODUCT_SEARCH_COUNTRY_TLD.put(Locale.GERMANY, "de");
   }
 
   private static final Map<Locale,String> GOOGLE_BOOK_SEARCH_COUNTRY_TLD;
   static {
-    GOOGLE_BOOK_SEARCH_COUNTRY_TLD = new HashMap<Locale,String>(13);
+    GOOGLE_BOOK_SEARCH_COUNTRY_TLD = new HashMap<Locale,String>();
     GOOGLE_BOOK_SEARCH_COUNTRY_TLD.putAll(GOOGLE_COUNTRY_TLD);
     GOOGLE_BOOK_SEARCH_COUNTRY_TLD.remove(Locale.CHINA);
   }
