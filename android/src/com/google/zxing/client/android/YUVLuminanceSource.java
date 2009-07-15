@@ -59,10 +59,7 @@ public final class YUVLuminanceSource extends LuminanceSource {
       row = new byte[width];
     }
     int offset = (y + top) * dataWidth + left;
-    byte[] yuv = yuvData;
-    for (int x = 0; x < width; x++) {
-      row[x] = yuv[offset + x];
-    }
+    System.arraycopy(yuvData, offset, row, 0, width);
     return row;
   }
 
@@ -78,14 +75,19 @@ public final class YUVLuminanceSource extends LuminanceSource {
 
     int area = width * height;
     byte[] matrix = new byte[area];
-    byte[] yuv = yuvData;
     int inputOffset = top * dataWidth + left;
+
+    // If the width matches the full width of the underlying data, perform a single copy.
+    if (width == dataWidth) {
+      System.arraycopy(yuvData, inputOffset, matrix, 0, area);
+      return matrix;
+    }
+
+    // Otherwise copy one cropped row at a time.
+    byte[] yuv = yuvData;
     for (int y = 0; y < height; y++) {
       int outputOffset = y * width;
-      for (int x = 0; x < width; x++) {
-        // TODO: Compare performance with using System.arraycopy().
-        matrix[outputOffset + x] = yuv[inputOffset + x];
-      }
+      System.arraycopy(yuv, inputOffset, matrix, outputOffset, width);
       inputOffset += dataWidth;
     }
     return matrix;
