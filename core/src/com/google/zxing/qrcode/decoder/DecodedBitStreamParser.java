@@ -258,7 +258,7 @@ final class DecodedBitStreamParser {
     int length = bytes.length;
     boolean canBeISO88591 = true;
     boolean canBeShiftJIS = true;
-    boolean sawDoubleByteStart = false;
+    int maybeDoubleByteCount = 0;
     int maybeSingleByteKatakanaCount = 0;
     boolean sawLatin1Supplement = false;
     boolean lastWasPossibleDoubleByteStart = false;
@@ -305,7 +305,7 @@ final class DecodedBitStreamParser {
             if (nextValue < 0x40 || nextValue > 0xFC) {
               canBeShiftJIS = false;
             } else {
-              sawDoubleByteStart = true;
+              maybeDoubleByteCount++;
             }
             // There is some conflicting information out there about which bytes can follow which in
             // double-byte Shift_JIS characters. The rule above seems to be the one that matches practice.
@@ -317,10 +317,10 @@ final class DecodedBitStreamParser {
     }
     // Distinguishing Shift_JIS and ISO-8859-1 can be a little tough. The crude heuristic is:
     // - If we saw
-    //   - at least one byte that starts a double-byte value (bytes that are rare in ISO-8859-1), or
+    //   - at least three byte that starts a double-byte value (bytes that are rare in ISO-8859-1), or
     //   - over 5% of bytes that could be single-byte Katakana (also rare in ISO-8859-1),
     // - and, saw no sequences that are invalid in Shift_JIS, then we conclude Shift_JIS
-    if (canBeShiftJIS && (sawDoubleByteStart || 20 * maybeSingleByteKatakanaCount > length)) {
+    if (canBeShiftJIS && (maybeDoubleByteCount >= 3 || 20 * maybeSingleByteKatakanaCount > length)) {
       return SHIFT_JIS;
     }
     // Otherwise, we default to ISO-8859-1 unless we know it can't be
