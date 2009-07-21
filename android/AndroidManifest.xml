@@ -22,7 +22,7 @@ versionName is 2.31, 2.4, or 3.0. -->
           package="com.google.zxing.client.android"
           android:versionName="2.9"
           android:versionCode="23">
-  <uses-sdk android:minSdkVersion="1"/>
+  <uses-sdk android:minSdkVersion="3"/>
   <application android:icon="@drawable/launcher_icon"
                android:label="@string/app_name">
     <activity android:name=".CaptureActivity"

@@ -110,7 +110,7 @@ final class CameraManager {
     if (mCamera != null && mPreviewing) {
       mPreviewHandler = handler;
       mPreviewMessage = message;
-      mCamera.setPreviewCallback(previewCallback);
+      mCamera.setOneShotPreviewCallback(previewCallback);
     }
   }
 
@@ -147,7 +147,6 @@ final class CameraManager {
    */
   private final Camera.PreviewCallback previewCallback = new Camera.PreviewCallback() {
     public void onPreviewFrame(byte[] data, Camera camera) {
-      camera.setPreviewCallback(null);
       if (mPreviewHandler != null) {
         Message message = mPreviewHandler.obtainMessage(mPreviewMessage,
             mScreenResolution.x, mScreenResolution.y, data);
