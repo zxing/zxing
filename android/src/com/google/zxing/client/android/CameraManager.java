@@ -204,6 +204,9 @@ final class CameraManager {
   private void setCameraParameters() {
     Camera.Parameters parameters = mCamera.getParameters();
     parameters.setPreviewSize(mScreenResolution.x, mScreenResolution.y);
+
+    // Disables the built-in flash if present. Hopefully devices will honor this setting.
+    parameters.set("flash-mode", "off");
     mCamera.setParameters(parameters);
     Log.v(TAG, "Setting params for preview: width " + mScreenResolution.x + " height " +
         mScreenResolution.y);
