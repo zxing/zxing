@@ -42,7 +42,7 @@ limitations under the License.
   should be checked in in Version Control Systems.
 
   -->
-  <!--<property file="build.properties"/>-->
+  <property file="build.properties"/>
 
   <!-- The default.properties file is created and updated by the 'android' tool, as well as ADT.
   This file is an integral part of the build system for your application and
@@ -267,7 +267,7 @@ limitations under the License.
     <echo>Uninstalling ${application-package} from the default emulator...</echo>
     <exec executable="${adb}" failonerror="true">
       <arg value="uninstall" />
-      <arg path="${application-package}" />
+      <arg value="${application-package}" />
     </exec>
   </target>
 
