@@ -480,34 +480,25 @@ public class FinderPatternFinder {
    * @throws ReaderException if 3 such finder patterns do not exist
    */
   private FinderPattern[] selectBestPatterns() throws ReaderException {
-    Collections.insertionSort(possibleCenters, new CenterComparator());
-    int size = 0;
-    int max = possibleCenters.size();
-    while (size < max) {
-      if (((FinderPattern) possibleCenters.elementAt(size)).getCount() < CENTER_QUORUM) {
-        break;
-      }
-      size++;
-    }
-
-    if (size < 3) {
+    if (possibleCenters.size() < 3) {
       // Couldn't find enough finder patterns
       throw ReaderException.getInstance();
     }
+    Collections.insertionSort(possibleCenters, new CenterComparator());
 
-    if (size > 3) {
+    if (possibleCenters.size() > 3) {
       // Throw away all but those first size candidate points we found.
-      possibleCenters.setSize(size);
-      //  We need to pick the best three. Find the most
-      // popular ones whose module size is nearest the average
-      float averageModuleSize = 0.0f;
-      for (int i = 0; i < size; i++) {
-        averageModuleSize += ((FinderPattern) possibleCenters.elementAt(i)).getEstimatedModuleSize();
-      }
-      averageModuleSize /= (float) size;
-      // We don't have java.util.Collections in J2ME
-      Collections.insertionSort(possibleCenters, new ClosestToAverageComparator(averageModuleSize));
+      possibleCenters.setSize(3);
     }
+    //  We need to pick the best three. Find the most
+    // popular ones whose module size is nearest the average
+    float averageModuleSize = 0.0f;
+    for (int i = 0; i < 3; i++) {
+      averageModuleSize += ((FinderPattern) possibleCenters.elementAt(i)).getEstimatedModuleSize();
+    }
+    averageModuleSize /= 3.0f;
+    // We don't have java.util.Collections in J2ME
+    Collections.insertionSort(possibleCenters, new ClosestToAverageComparator(averageModuleSize));
 
     return new FinderPattern[]{
         (FinderPattern) possibleCenters.elementAt(0),
