@@ -189,12 +189,12 @@ public final class Version {
     private final int ecCodewordsPerBlock;
     private final ECB[] ecBlocks;
 
-    private ECBlocks(int ecCodewordsPerBlock, ECB ecBlocks) {
+    ECBlocks(int ecCodewordsPerBlock, ECB ecBlocks) {
       this.ecCodewordsPerBlock = ecCodewordsPerBlock;
       this.ecBlocks = new ECB[]{ecBlocks};
     }
 
-    private ECBlocks(int ecCodewordsPerBlock, ECB ecBlocks1, ECB ecBlocks2) {
+    ECBlocks(int ecCodewordsPerBlock, ECB ecBlocks1, ECB ecBlocks2) {
       this.ecCodewordsPerBlock = ecCodewordsPerBlock;
       this.ecBlocks = new ECB[]{ecBlocks1, ecBlocks2};
     }
