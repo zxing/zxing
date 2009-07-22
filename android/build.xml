@@ -95,7 +95,7 @@ limitations under the License.
   <property name="source-location" value="${basedir}/${source-folder}" />
 
   <!-- folder for the 3rd party java libraries -->
-  <property name="external-libs-folder" value="../core" />
+  <!--<property name="external-libs-folder" value="../core" />-->
 
   <!-- folder for the native libraries -->
   <property name="native-libs-folder" value="libs" />
@@ -179,9 +179,37 @@ limitations under the License.
       <src path="${gen-folder}" />
       <classpath>
         <fileset dir="${external-libs-folder}" includes="*.jar"/>
+        <!-- yeah, want to not use this mechanism above -->
+        <pathelement path="../core/core.jar"/>
         <pathelement path="${main-out-classes}"/>
       </classpath>
     </javac>
+
+    <!-- Optimize with ProGuard -->
+    <unzip src="../core/core.jar" dest="${out-classes}" overwrite="true"/>
+    <jar jarfile="temp.jar" basedir="${out-classes}"/>
+    <delete dir="${out-classes}"/>
+    <mkdir dir="${out-classes}"/>
+    <property name="libraryjars.path" refid="android.target.classpath"/>
+    <java jar="${WTK-home}/bin/proguard.jar" fork="true" failonerror="true">
+      <jvmarg value="-Dmaximum.inlined.code.length=32"/>
+      <arg value="-injars temp.jar"/>
+      <arg value="-outjars temp-optimized.jar"/>
+      <arg value="-libraryjars ${libraryjars.path}"/>
+      <arg value="-keep class com.google.zxing.client.android.*Activity"/>
+      <arg value="-keep class com.google.zxing.client.android.ViewfinderView { public * ; }"/>
+      <arg value="-keep class com.google.zxing.client.android.SearchBookContents* { public * ; }"/>
+      <arg value="-target 5"/>
+      <arg value="-optimizationpasses 7"/>
+      <arg value="-dontshrink"/>
+      <arg value="-dontobfuscate"/>
+      <arg value="-dontskipnonpubliclibraryclasses"/>
+      <arg value="-verbose"/>
+      <arg value="-dump proguard-dump.txt"/>
+    </java>
+    <delete file="temp.jar"/>
+    <unzip src="temp-optimized.jar" dest="${out-classes}" overwrite="true"/>
+    <delete file="temp-optimized.jar"/>
   </target>
 
   <!-- Convert this project's .class files into .dex files. -->
@@ -212,6 +240,19 @@ limitations under the License.
               outfolder="${out-folder}"
               basename="${ant.project.name}" />
   </target>
+
+  <!--
+  Getting an error like this?
+
+   [apply] UNEXPECTED TOP-LEVEL EXCEPTION:
+   [apply] com.android.dx.cf.code.SimException: local variable type
+   mismatch: attempt to set or access a value of type int using a local
+   variable of type com.google.zxing.qrcode.decoder.Version. This is
+   symptomatic of .class transformation tools that ignore local variable
+   information.
+
+  Build core/ with the 'build-no-debug' target. It's a long story.
+  -->
 
   <!-- Package the application and sign it with a debug key.
   This is the default target when building. It is used for debug. -->
