@@ -97,7 +97,7 @@ public final class Decoder {
     }
 
     // Decode the contents of that stream of bytes
-    return DecodedBitStreamParser.decode(resultBytes, version);
+    return DecodedBitStreamParser.decode(resultBytes, version, ecLevel);
   }
 
   /**

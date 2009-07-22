@@ -51,6 +51,12 @@ public final class ResultMetadataType {
    */
   public static final ResultMetadataType BYTE_SEGMENTS = new ResultMetadataType();
 
+  /**
+   * Error correction level used, if applicable. The value type depends on the
+   * format, but is typically a String.
+   */
+  public static final ResultMetadataType ERROR_CORRECTION_LEVEL = new ResultMetadataType();
+
   private ResultMetadataType() {
   }
 

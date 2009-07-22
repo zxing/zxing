@@ -110,7 +110,7 @@ final class DecodedBitStreamParser {
     if (resultTrailer.length() > 0) {
       result.append(resultTrailer.toString());
     }
-    return new DecoderResult(bytes, result.toString(), byteSegments.isEmpty() ? null : byteSegments);
+    return new DecoderResult(bytes, result.toString(), byteSegments.isEmpty() ? null : byteSegments, null);
   }
   
   /**

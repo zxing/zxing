@@ -57,7 +57,7 @@ final class DecodedBitStreamParser {
   private DecodedBitStreamParser() {
   }
 
-  static DecoderResult decode(byte[] bytes, Version version) throws ReaderException {
+  static DecoderResult decode(byte[] bytes, Version version, ErrorCorrectionLevel ecLevel) throws ReaderException {
     BitSource bits = new BitSource(bytes);
     StringBuffer result = new StringBuffer();
     CharacterSetECI currentCharacterSetECI = null;
@@ -109,7 +109,7 @@ final class DecodedBitStreamParser {
       }
     } while (!mode.equals(Mode.TERMINATOR));
 
-    return new DecoderResult(bytes, result.toString(), byteSegments.isEmpty() ? null : byteSegments);
+    return new DecoderResult(bytes, result.toString(), byteSegments.isEmpty() ? null : byteSegments, ecLevel);
   }
 
   private static void decodeKanjiSegment(BitSource bits,
