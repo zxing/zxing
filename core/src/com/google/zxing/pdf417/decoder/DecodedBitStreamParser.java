@@ -123,7 +123,7 @@ final class DecodedBitStreamParser {
         throw ReaderException.getInstance();
       }
     }
-    return new DecoderResult(null, result.toString(), null);
+    return new DecoderResult(null, result.toString(), null, null);
   }
 
   /**

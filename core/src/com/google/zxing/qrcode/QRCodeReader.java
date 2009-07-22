@@ -75,6 +75,9 @@ public class QRCodeReader implements Reader {
     if (decoderResult.getByteSegments() != null) {
       result.putMetadata(ResultMetadataType.BYTE_SEGMENTS, decoderResult.getByteSegments());
     }
+    if (decoderResult.getECLevel() != null) {
+      result.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, decoderResult.getECLevel().toString());
+    }
     return result;
   }
 
