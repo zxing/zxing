@@ -33,7 +33,8 @@ public final class EAN8Reader extends AbstractUPCEANReader {
     decodeMiddleCounters = new int[4];
   }
 
-  protected int decodeMiddle(BitArray row, int[] startRange, StringBuffer result) throws ReaderException {
+  protected int decodeMiddle(BitArray row, int[] startRange, StringBuffer result)
+      throws ReaderException {
     int[] counters = decodeMiddleCounters;
     counters[0] = 0;
     counters[1] = 0;
