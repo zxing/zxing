@@ -97,9 +97,9 @@ public abstract class AbstractUPCEANReader extends AbstractOneDReader implements
       startRange = findGuardPattern(row, nextStart, false, START_END_PATTERN);
       int start = startRange[0];
       nextStart = startRange[1];
-      // Make sure there is a quiet zone at least as big as the start pattern before the barcode. If
-      // this check would run off the left edge of the image, do not accept this barcode, as it is
-      // very likely to be a false positive.
+      // Make sure there is a quiet zone at least as big as the start pattern before the barcode.
+      // If this check would run off the left edge of the image, do not accept this barcode,
+      // as it is very likely to be a false positive.
       int quietStart = start - (nextStart - start);
       if (quietStart >= 0) {
         foundStart = row.isRange(quietStart, start, false);
@@ -108,11 +108,13 @@ public abstract class AbstractUPCEANReader extends AbstractOneDReader implements
     return startRange;
   }
 
-  public final Result decodeRow(int rowNumber, BitArray row, Hashtable hints) throws ReaderException {
+  public final Result decodeRow(int rowNumber, BitArray row, Hashtable hints)
+      throws ReaderException {
     return decodeRow(rowNumber, row, findStartGuardPattern(row));
   }
 
-  public final Result decodeRow(int rowNumber, BitArray row, int[] startGuardRange) throws ReaderException {
+  public final Result decodeRow(int rowNumber, BitArray row, int[] startGuardRange)
+      throws ReaderException {
     StringBuffer result = decodeRowStringBuffer;
     result.setLength(0);
     int endStart = decodeMiddle(row, startGuardRange, result);
@@ -184,7 +186,8 @@ public abstract class AbstractUPCEANReader extends AbstractOneDReader implements
   }
 
   /**
-   * Subclasses override this to decode the portion of a barcode between the start and end guard patterns.
+   * Subclasses override this to decode the portion of a barcode between the start
+   * and end guard patterns.
    *
    * @param row row of black/white values to search
    * @param startRange start/end offset of start guard pattern
