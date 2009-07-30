@@ -55,9 +55,9 @@ public final class ImageConverter {
 
   public static void main(String[] args) throws Exception {
     for (String arg : args) {
-      if (arg.equals("-row")) {
+      if ("-row".equals(arg)) {
         rowSampling = true;
-      } else if (arg.equals("-2d")) {
+      } else if ("-2d".equals(arg)) {
         rowSampling = false;
       } else if (arg.startsWith("-")) {
         System.out.println("Ignoring unrecognized option: " + arg);
@@ -140,7 +140,8 @@ public final class ImageConverter {
   private static File getFileOfUri(URI uri) {
     String name = uri.getPath();
     int slashPos = name.lastIndexOf((int) '/');
-    String parent, basename;
+    String parent;
+    String basename;
     if (slashPos != -1 && slashPos != name.length() - 1) {
       parent = name.substring(0, slashPos);
       basename = name.substring(slashPos + 1);

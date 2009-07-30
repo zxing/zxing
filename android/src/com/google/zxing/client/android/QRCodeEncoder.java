@@ -214,8 +214,8 @@ public final class QRCodeEncoder {
       try {
         ByteMatrix result = new MultiFormatWriter().encode(mContents,
             mFormat, mPixelResolution, mPixelResolution);
-        int width = result.width();
-        int height = result.height();
+        int width = result.getWidth();
+        int height = result.getHeight();
         byte[][] array = result.getArray();
         int[] pixels = new int[width * height];
         for (int y = 0; y < height; y++) {

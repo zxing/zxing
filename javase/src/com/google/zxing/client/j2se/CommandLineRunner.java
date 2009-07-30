@@ -224,7 +224,6 @@ public final class CommandLineRunner {
       image.getRGB(0, y, width, 1, argb, 0, width);
       System.arraycopy(argb, 0, pixels, y * stride, width);
     }
-    argb = null;
 
     // Row sampling
     BitArray row = new BitArray(width);
@@ -272,10 +271,10 @@ public final class CommandLineRunner {
 
     // Use the current working directory for URLs
     String resultName = inputName;
-    if (uri.getScheme().equals("http")) {
+    if ("http".equals(uri.getScheme())) {
       int pos = resultName.lastIndexOf('/');
       if (pos > 0) {
-        resultName = "." + resultName.substring(pos);
+        resultName = '.' + resultName.substring(pos);
       }
     }
     int pos = resultName.lastIndexOf('.');

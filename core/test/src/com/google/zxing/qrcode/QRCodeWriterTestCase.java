@@ -79,16 +79,16 @@ public final class QRCodeWriterTestCase extends TestCase {
     ByteMatrix matrix = writer.encode("http://www.google.com/", BarcodeFormat.QR_CODE, bigEnough,
         bigEnough, null);
     assertNotNull(matrix);
-    assertEquals(bigEnough, matrix.width());
-    assertEquals(bigEnough, matrix.height());
+    assertEquals(bigEnough, matrix.getWidth());
+    assertEquals(bigEnough, matrix.getHeight());
 
     // The QR will not fit in this size, so the matrix should come back bigger
     int tooSmall = 20;
     matrix = writer.encode("http://www.google.com/", BarcodeFormat.QR_CODE, tooSmall,
         tooSmall, null);
     assertNotNull(matrix);
-    assertTrue(tooSmall < matrix.width());
-    assertTrue(tooSmall < matrix.height());
+    assertTrue(tooSmall < matrix.getWidth());
+    assertTrue(tooSmall < matrix.getHeight());
 
     // We should also be able to handle non-square requests by padding them
     int strangeWidth = 500;
@@ -96,8 +96,8 @@ public final class QRCodeWriterTestCase extends TestCase {
     matrix = writer.encode("http://www.google.com/", BarcodeFormat.QR_CODE, strangeWidth,
         strangeHeight, null);
     assertNotNull(matrix);
-    assertEquals(strangeWidth, matrix.width());
-    assertEquals(strangeHeight, matrix.height());
+    assertEquals(strangeWidth, matrix.getWidth());
+    assertEquals(strangeHeight, matrix.getHeight());
   }
 
   private static void compareToGoldenFile(String contents, ErrorCorrectionLevel ecLevel,
@@ -114,10 +114,10 @@ public final class QRCodeWriterTestCase extends TestCase {
     ByteMatrix generatedResult = writer.encode(contents, BarcodeFormat.QR_CODE, resolution,
         resolution, hints);
 
-    assertEquals("Width should be " + resolution + ", but was " + generatedResult.width(),
-        resolution, generatedResult.width());
-    assertEquals("Height should be " + resolution + ", but was " + generatedResult.height(),
-        resolution, generatedResult.height());
+    assertEquals("Width should be " + resolution + ", but was " + generatedResult.getWidth(),
+        resolution, generatedResult.getWidth());
+    assertEquals("Height should be " + resolution + ", but was " + generatedResult.getHeight(),
+        resolution, generatedResult.getHeight());
     assertTrue("Expected " + goldenResult.toString() + " but got " + generatedResult.toString(),
         Arrays.deepEquals(goldenResult.getArray(), generatedResult.getArray()));
   }

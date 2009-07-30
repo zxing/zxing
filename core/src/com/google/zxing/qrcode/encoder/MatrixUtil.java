@@ -184,13 +184,13 @@ public final class MatrixUtil {
 
       if (i < 8) {
         // Right top corner.
-        int x2 = matrix.width() - i - 1;
+        int x2 = matrix.getWidth() - i - 1;
         int y2 = 8;
         matrix.set(x2, y2, bit);
       } else {
         // Left bottom corner.
         int x2 = 8;
-        int y2 = matrix.height() - 7 + (i - 8);
+        int y2 = matrix.getHeight() - 7 + (i - 8);
         matrix.set(x2, y2, bit);
       }
     }
@@ -212,9 +212,9 @@ public final class MatrixUtil {
         int bit = versionInfoBits.at(bitIndex);
         bitIndex--;
         // Left bottom corner.
-        matrix.set(i, matrix.height() - 11 + j, bit);
+        matrix.set(i, matrix.getHeight() - 11 + j, bit);
         // Right bottom corner.
-        matrix.set(matrix.height() - 11 + j, i, bit);
+        matrix.set(matrix.getHeight() - 11 + j, i, bit);
       }
     }
   }
@@ -227,14 +227,14 @@ public final class MatrixUtil {
     int bitIndex = 0;
     int direction = -1;
     // Start from the right bottom cell.
-    int x = matrix.width() - 1;
-    int y = matrix.height() - 1;
+    int x = matrix.getWidth() - 1;
+    int y = matrix.getHeight() - 1;
     while (x > 0) {
       // Skip the vertical timing pattern.
       if (x == 6) {
         x -= 1;
       }
-      while (y >= 0 && y < matrix.height()) {
+      while (y >= 0 && y < matrix.getHeight()) {
         for (int i = 0; i < 2; ++i) {
           int xx = x - i;
           // Skip the cell if it's not empty.
@@ -373,7 +373,7 @@ public final class MatrixUtil {
   private static void embedTimingPatterns(ByteMatrix matrix) throws WriterException {
     // -8 is for skipping position detection patterns (size 7), and two horizontal/vertical
     // separation patterns (size 1). Thus, 8 = 7 + 1.
-    for (int i = 8; i < matrix.width() - 8; ++i) {
+    for (int i = 8; i < matrix.getWidth() - 8; ++i) {
       int bit = (i + 1) % 2;
       // Horizontal line.
       if (!isValidValue(matrix.get(i, 6))) {
@@ -394,10 +394,10 @@ public final class MatrixUtil {
 
   // Embed the lonely dark dot at left bottom corner. JISX0510:2004 (p.46)
   private static void embedDarkDotAtLeftBottomCorner(ByteMatrix matrix) throws WriterException {
-    if (matrix.get(8, matrix.height() - 8) == 0) {
+    if (matrix.get(8, matrix.getHeight() - 8) == 0) {
       throw new WriterException();
     }
-    matrix.set(8, matrix.height() - 8, 1);
+    matrix.set(8, matrix.getHeight() - 8, 1);
   }
 
   private static void embedHorizontalSeparationPattern(int xStart, int yStart,
@@ -470,28 +470,28 @@ public final class MatrixUtil {
     // Left top corner.
     embedPositionDetectionPattern(0, 0, matrix);
     // Right top corner.
-    embedPositionDetectionPattern(matrix.width() - pdpWidth, 0, matrix);
+    embedPositionDetectionPattern(matrix.getWidth() - pdpWidth, 0, matrix);
     // Left bottom corner.
-    embedPositionDetectionPattern(0, matrix.width() - pdpWidth, matrix);
+    embedPositionDetectionPattern(0, matrix.getWidth() - pdpWidth, matrix);
 
     // Embed horizontal separation patterns around the squares.
     int hspWidth = HORIZONTAL_SEPARATION_PATTERN[0].length;
     // Left top corner.
     embedHorizontalSeparationPattern(0, hspWidth - 1, matrix);
     // Right top corner.
-    embedHorizontalSeparationPattern(matrix.width() - hspWidth,
+    embedHorizontalSeparationPattern(matrix.getWidth() - hspWidth,
         hspWidth - 1, matrix);
     // Left bottom corner.
-    embedHorizontalSeparationPattern(0, matrix.width() - hspWidth, matrix);
+    embedHorizontalSeparationPattern(0, matrix.getWidth() - hspWidth, matrix);
 
     // Embed vertical separation patterns around the squares.
     int vspSize = VERTICAL_SEPARATION_PATTERN.length;
     // Left top corner.
     embedVerticalSeparationPattern(vspSize, 0, matrix);
     // Right top corner.
-    embedVerticalSeparationPattern(matrix.height() - vspSize - 1, 0, matrix);
+    embedVerticalSeparationPattern(matrix.getHeight() - vspSize - 1, 0, matrix);
     // Left bottom corner.
-    embedVerticalSeparationPattern(vspSize, matrix.height() - vspSize,
+    embedVerticalSeparationPattern(vspSize, matrix.getHeight() - vspSize,
         matrix);
   }
 

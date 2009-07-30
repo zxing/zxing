@@ -57,6 +57,7 @@ public final class BufferedImageLuminanceSource extends LuminanceSource {
 
   // These methods use an integer calculation for luminance derived from:
   // <code>Y = 0.299R + 0.587G + 0.114B</code>
+  @Override
   public byte[] getRow(int y, byte[] row) {
     if (y < 0 || y >= getHeight()) {
       throw new IllegalArgumentException("Requested row is outside the image: " + y);
@@ -80,6 +81,7 @@ public final class BufferedImageLuminanceSource extends LuminanceSource {
     return row;
   }
 
+  @Override
   public byte[] getMatrix() {
     int width = getWidth();
     int height = getHeight();
@@ -101,19 +103,23 @@ public final class BufferedImageLuminanceSource extends LuminanceSource {
     return matrix;
   }
 
+  @Override
   public boolean isCropSupported() {
     return true;
   }
 
+  @Override
   public LuminanceSource crop(int left, int top, int width, int height) {
     return new BufferedImageLuminanceSource(image, left, top, width, height);
   }
 
   // Can't run AffineTransforms on images of unknown format.
+  @Override
   public boolean isRotateSupported() {
     return image.getType() != BufferedImage.TYPE_CUSTOM;
   }
 
+  @Override
   public LuminanceSource rotateCounterClockwise() {
     if (!isRotateSupported()) {
       throw new IllegalStateException("Rotate not supported");
