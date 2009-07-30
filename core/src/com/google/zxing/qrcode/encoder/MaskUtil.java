@@ -39,8 +39,8 @@ public final class MaskUtil {
   public static int applyMaskPenaltyRule2(ByteMatrix matrix) {
     int penalty = 0;
     byte[][] array = matrix.getArray();
-    int width = matrix.width();
-    int height = matrix.height();
+    int width = matrix.getWidth();
+    int height = matrix.getHeight();
     for (int y = 0; y < height - 1; ++y) {
       for (int x = 0; x < width - 1; ++x) {
         int value = array[y][x];
@@ -58,8 +58,8 @@ public final class MaskUtil {
   public static int applyMaskPenaltyRule3(ByteMatrix matrix) {
     int penalty = 0;
     byte[][] array = matrix.getArray();
-    int width = matrix.width();
-    int height = matrix.height();
+    int width = matrix.getWidth();
+    int height = matrix.getHeight();
     for (int y = 0; y < height; ++y) {
       for (int x = 0; x < width; ++x) {
         // Tried to simplify following conditions but failed.
@@ -120,8 +120,8 @@ public final class MaskUtil {
   public static int applyMaskPenaltyRule4(ByteMatrix matrix) {
     int numDarkCells = 0;
     byte[][] array = matrix.getArray();
-    int width = matrix.width();
-    int height = matrix.height();
+    int width = matrix.getWidth();
+    int height = matrix.getHeight();
     for (int y = 0; y < height; ++y) {
       for (int x = 0; x < width; ++x) {
         if (array[y][x] == 1) {
@@ -129,7 +129,7 @@ public final class MaskUtil {
         }
       }
     }
-    int numTotalCells = matrix.height() * matrix.width();
+    int numTotalCells = matrix.getHeight() * matrix.getWidth();
     double darkRatio = (double) numDarkCells / numTotalCells;
     return Math.abs((int) (darkRatio * 100 - 50)) / 5 * 10;
   }
@@ -189,8 +189,8 @@ public final class MaskUtil {
     //   for (int i = 0; i < matrix.width(); ++i) {
     //     for (int j = 0; j < matrix.height(); ++j) {
     //       int bit = matrix.get(j, i);
-    int iLimit = isHorizontal ? matrix.height() : matrix.width();
-    int jLimit = isHorizontal ? matrix.width() : matrix.height();
+    int iLimit = isHorizontal ? matrix.getHeight() : matrix.getWidth();
+    int jLimit = isHorizontal ? matrix.getWidth() : matrix.getHeight();
     byte[][] array = matrix.getArray();
     for (int i = 0; i < iLimit; ++i) {
       for (int j = 0; j < jLimit; ++j) {

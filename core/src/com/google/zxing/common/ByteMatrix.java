@@ -37,11 +37,11 @@ public final class ByteMatrix {
     this.height = height;
   }
 
-  public int height() {
+  public int getHeight() {
     return height;
   }
 
-  public int width() {
+  public int getWidth() {
     return width;
   }
 

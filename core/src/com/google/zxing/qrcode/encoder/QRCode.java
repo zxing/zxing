@@ -134,9 +134,9 @@ public final class QRCode {
         numTotalBytes == numDataBytes + numECBytes &&
         // ByteMatrix stuff.
         matrix != null &&
-        matrixWidth == matrix.width() &&
+        matrixWidth == matrix.getWidth() &&
         // See 7.3.1 of JISX0510:2004 (p.5).
-        matrix.width() == matrix.height(); // Must be square.
+        matrix.getWidth() == matrix.getHeight(); // Must be square.
   }
 
   // Return debug String.

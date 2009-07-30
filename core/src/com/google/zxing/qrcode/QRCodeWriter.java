@@ -75,8 +75,8 @@ public final class QRCodeWriter implements Writer {
   // 0 == black, 255 == white (i.e. an 8 bit greyscale bitmap).
   private static ByteMatrix renderResult(QRCode code, int width, int height) {
     ByteMatrix input = code.getMatrix();
-    int inputWidth = input.width();
-    int inputHeight = input.height();
+    int inputWidth = input.getWidth();
+    int inputHeight = input.getHeight();
     int qrWidth = inputWidth + (QUIET_ZONE_SIZE << 1);
     int qrHeight = inputHeight + (QUIET_ZONE_SIZE << 1);
     int outputWidth = Math.max(width, qrWidth);
