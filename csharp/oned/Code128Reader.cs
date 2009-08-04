@@ -427,9 +427,9 @@ namespace com.google.zxing.oned
         // to be a printable character. If it was just interpreted as a control code, nothing to remove
         if (resultLength > 0 && lastCharacterWasPrintable) {
           if (codeSet == CODE_CODE_C) {
-              result.Remove(resultLength - 2, resultLength);
+              result.Remove(resultLength - 2, 2);
           } else {
-              result.Remove(resultLength - 1, resultLength);
+              result.Remove(resultLength - 1, 1);
           }
         }
 
