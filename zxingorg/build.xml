@@ -69,11 +69,13 @@
         <pathelement location="${tomcat-home}/lib/servlet-api.jar"/>
       </classpath>
     </javac>
-    <copy file="web/WEB-INF/web.xml.template" tofile="web/WEB-INF/web.xml" overwrite="true">
+    <!--
+    <copy file="web/WEB-INF/web.xml" tofile="web/WEB-INF/web.xml" overwrite="true">
       <filterset>
         <filter token="EMAIL_PASSWORD" value="${emailPassword}"/>
       </filterset>
     </copy>
+    -->
     <war warfile="zxingorg.war" webxml="web/WEB-INF/web.xml">
       <lib dir="web/WEB-INF/lib">
         <include name="*.jar"/>
@@ -93,7 +95,6 @@
   </target>
 
   <target name="clean">
-    <delete dir="web/WEB-INF/web.xml"/>
     <delete dir="web/WEB-INF/classes"/>
     <delete file="web/WEB-INF/lib/core.jar"/>
     <delete file="web/WEB-INF/lib/javase.jar"/>

@@ -28,10 +28,13 @@
   <listener>
     <listener-class>org.apache.commons.fileupload.servlet.FileCleanerCleanup</listener-class>
   </listener>
+  <!--
   <listener>
     <listener-class>com.google.zxing.web.DecodeEmailListener</listener-class>
   </listener>
+  -->
 
+  <!--
   <context-param>
     <param-name>emailAddress</param-name>
     <param-value>w@zxing.org</param-value>
@@ -40,6 +43,7 @@
     <param-name>emailPassword</param-name>
     <param-value>@EMAIL_PASSWORD@</param-value>
   </context-param>
+  -->
 
   <servlet>
     <servlet-name>DecodeServlet</servlet-name>
