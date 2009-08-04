@@ -33,8 +33,8 @@ import java.awt.image.BufferedImage;
  */
 public final class MatrixToImageWriter {
 
-  private static final int BLACK = 0x00000000;
-  private static final int WHITE = 0x00FFFFFF;
+  private static final int BLACK = 0xFF000000;
+  private static final int WHITE = 0xFFFFFFFF;
 
   private MatrixToImageWriter() {}
 
