@@ -15,51 +15,45 @@
  limitations under the License.
  -->
 <!-- Author: Sean Owen -->
-<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" xmlns="http://www.w3.org/1999/xhtml" version="2.0">
-  <jsp:output
-          omit-xml-declaration="false" doctype-root-element="html"
-          doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN"
-          doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"/>
-  <jsp:directive.page contentType="text/html" session="false"/>
-  <jsp:scriptlet>response.setHeader("Cache-Control", "no-cache");</jsp:scriptlet>
-  <jsp:useBean id="result" scope="request" type="com.google.zxing.Result"/>
-  <jsp:useBean id="parsedResult" scope="request" type="com.google.zxing.client.result.ParsedResult"/>
-  <jsp:useBean id="rawBytesString" scope="request" type="java.lang.String"/>
-  <jsp:useBean id="text" scope="request" type="java.lang.String"/>
-  <jsp:useBean id="displayResult" scope="request" type="java.lang.String"/>  
-  <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
-    <head>
-      <title>Decode Succeeded</title>
-      <style type="text/css">
-        td { vertical-align: top; padding: 0.1in; background-color: #EEEEEE; font-family: monospace; }
-      </style>
-    </head>
-    <body>
-      <h1><img src="zxing-icon.png" height="32" width="32" alt=""/> Decode Succeeded</h1>
-      <table>
-        <tr>
-          <td>Raw text</td>
-          <td>${text}</td>
-        </tr>
-        <tr>
-          <td>Raw bytes</td>
-          <td>${rawBytesString}</td>
-        </tr>
-        <tr>
-          <td>Barcode format</td>
-          <td>${result.barcodeFormat}</td>
-        </tr>
-        <tr>
-          <td>Parsed Result Type</td>
-          <td>${parsedResult.type}</td>
-        </tr>
-        <tr>
-          <td>Parsed Result</td>
-          <td>${displayResult}</td>
-        </tr>
-      </table>
-      <p>Copyright 2008 ZXing authors</p>
-      <jsp:include page="analytics.jspx"/>      
-    </body>
-  </html>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="1.2">
+<jsp:directive.page contentType="text/html" session="false"/>
+<jsp:scriptlet>response.setHeader("Cache-Control", "no-cache");</jsp:scriptlet>
+<jsp:useBean id="result" scope="request" type="com.google.zxing.Result"/>
+<jsp:useBean id="parsedResult" scope="request" type="com.google.zxing.client.result.ParsedResult"/>
+<jsp:text><![CDATA[<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">]]></jsp:text>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Decode Succeeded</title>
+    <style type="text/css">
+      td { vertical-align: top; padding: 0.1in; background-color: #EEEEEE; font-family: monospace; }
+    </style>
+  </head>
+  <body>
+    <h1><img src="zxing-icon.png" height="32" width="32" alt=""/> Decode Succeeded</h1>
+    <table>
+      <tr>
+        <td>Raw text</td>
+        <td><jsp:expression>request.getAttribute("text")</jsp:expression></td>
+      </tr>
+      <tr>
+        <td>Raw bytes</td>
+        <td><jsp:expression>request.getAttribute("rawBytesString")</jsp:expression></td>
+      </tr>
+      <tr>
+        <td>Barcode format</td>
+        <td><jsp:getProperty name="result" property="barcodeFormat"/></td>
+      </tr>
+      <tr>
+        <td>Parsed Result Type</td>
+        <td><jsp:getProperty name="parsedResult" property="type"/></td>
+      </tr>
+      <tr>
+        <td>Parsed Result</td>
+        <td><jsp:expression>request.getAttribute("displayResult")</jsp:expression></td>
+      </tr>
+    </table>
+    <p>Copyright 2008 and onwards ZXing authors</p>
+    <jsp:include page="analytics.jspx"/>
+  </body>
+</html>
 </jsp:root>

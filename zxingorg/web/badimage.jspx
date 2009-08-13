@@ -15,23 +15,20 @@
  limitations under the License.
  -->
 <!-- Author: Sean Owen -->
-<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" xmlns="http://www.w3.org/1999/xhtml" version="2.0">
-  <jsp:output
-          omit-xml-declaration="false" doctype-root-element="html"
-          doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN"
-          doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"/>
-  <jsp:directive.page contentType="text/html" session="false"/>
-  <jsp:scriptlet>response.setHeader("Cache-Control", "public");</jsp:scriptlet>
-  <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
-    <head>
-      <title>Bad Image</title>
-    </head>
-    <body>
-      <h1><img src="zxing-icon.png" height="32" width="32" alt=""/> Bad Image</h1>
-      <p>The image you uploaded could not be decoded, or was too large. Go "Back" in your browser and try another
-        image.
-      </p>
-      <jsp:include page="analytics.jspx"/>
-    </body>
-  </html>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="1.2">
+<jsp:directive.page contentType="text/html" session="false"/>
+<jsp:scriptlet>response.setHeader("Cache-Control", "public");</jsp:scriptlet>
+<jsp:text><![CDATA[<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">]]></jsp:text>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Bad Image</title>
+  </head>
+  <body>
+    <h1><img src="zxing-icon.png" height="32" width="32" alt=""/> Bad Image</h1>
+    <p>The image you uploaded could not be decoded, or was too large. Go "Back" in your browser and try another
+      image.
+    </p>
+    <jsp:include page="analytics.jspx"/>
+  </body>
+</html>
 </jsp:root>

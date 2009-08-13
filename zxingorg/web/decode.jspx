@@ -15,41 +15,38 @@
  limitations under the License.
  -->
 <!-- Author: Sean Owen -->
-<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" xmlns="http://www.w3.org/1999/xhtml" version="2.0">
-  <jsp:output
-          omit-xml-declaration="false" doctype-root-element="html"
-          doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN"
-          doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"/>
-  <jsp:directive.page contentType="text/html" session="false"/>
-  <jsp:scriptlet>response.setHeader("Cache-Control", "public");</jsp:scriptlet>
-  <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
-    <head>
-      <title>ZXing Decoder Online</title>
-    </head>
-    <body>
-      <h1><img src="zxing-icon.png" height="32" width="32" alt=""/> ZXing Decoder Online</h1>
-      <p>This is a simple page that will let you decode a 1D or 2D barcode found
-        in an image online. Enter a URL below.
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="1.2">
+<jsp:directive.page contentType="text/html" session="false"/>
+<jsp:scriptlet>response.setHeader("Cache-Control", "public");</jsp:scriptlet>
+<jsp:text><![CDATA[<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">]]></jsp:text>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>ZXing Decoder Online</title>
+  </head>
+  <body>
+    <h1><img src="zxing-icon.png" height="32" width="32" alt=""/> ZXing Decoder Online</h1>
+    <p>This is a simple page that will let you decode a 1D or 2D barcode found
+      in an image online. Enter a URL below.
+    </p>
+    <form action="decode" method="get">
+      <p>
+        <input type="text" size="50" name="u"/>&amp;nbsp;<input type="submit"/>
+        <input type="hidden" name="full" value="true"/>
       </p>
-      <form action="decode" method="get">
-        <p>
-          <input type="text" size="50" name="u"/>&amp;nbsp;<input type="submit"/>
-          <input type="hidden" name="full" value="true"/>
-        </p>
-      </form>
-      <p>Or try uploading a file:</p>
-      <form action="decode" method="post" enctype="multipart/form-data">
-        <p>
-          <input type="file" size="50" name="f"/>&amp;nbsp;<input type="submit"/>
-          <input type="hidden" name="full" value="true"/>
-        </p>
-      </form>
-      <p>See the
-        <a href="http://code.google.com/p/zxing">project page</a>
-        for details.
+    </form>
+    <p>Or try uploading a file:</p>
+    <form action="decode" method="post" enctype="multipart/form-data">
+      <p>
+        <input type="file" size="50" name="f"/>&amp;nbsp;<input type="submit"/>
+        <input type="hidden" name="full" value="true"/>
       </p>
-      <p>Copyright 2008 ZXing authors</p>
-      <jsp:include page="analytics.jspx"/>
-    </body>
-  </html>
+    </form>
+    <p>See the
+      <a href="http://code.google.com/p/zxing">project page</a>
+      for details.
+    </p>
+    <p>Copyright 2008 and onwards ZXing authors</p>
+    <jsp:include page="analytics.jspx"/>
+  </body>
+</html>
 </jsp:root>
