@@ -15,15 +15,14 @@
  limitations under the License.
  -->
 <!-- Author: Sean Owen -->
-<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" xmlns="http://www.w3.org/1999/xhtml" version="2.0">
-  <jsp:output omit-xml-declaration="true"/>
-  <script type="text/javascript">
-    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-  </script>
-  <script type="text/javascript">
-    var pageTracker = _gat._getTracker("UA-788492-5");
-    pageTracker._initData();
-    pageTracker._trackPageview();
-  </script>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="1.2">
+<script type="text/javascript">
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+  var pageTracker = _gat._getTracker("UA-788492-5");
+  pageTracker._initData();
+  pageTracker._trackPageview();
+</script>
 </jsp:root>

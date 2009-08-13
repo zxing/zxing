@@ -15,30 +15,27 @@
  limitations under the License.
  -->
 <!-- Author: Sean Owen -->
-<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" xmlns="http://www.w3.org/1999/xhtml" version="2.0">
-  <jsp:output
-          omit-xml-declaration="false" doctype-root-element="html"
-          doctype-public="-//WAPFORUM//DTD XHTML Mobile 1.1//EN"
-          doctype-system="http://www.openmobilealliance.org/tech/DTD/xhtml-mobile11.dtd"/>
-  <jsp:directive.page contentType="application/xhtml+xml" session="false"/>
-  <jsp:scriptlet>response.setHeader("Cache-Control", "public");</jsp:scriptlet>
-  <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
-    <head>
-      <title>Download ZXing Reader</title>
-    </head>
-    <body>
-      <h1><img src="zxing-icon.png" height="32" width="32" alt=""/> Download ZXing Reader</h1>
-      <p>
-        <a href="BarcodeReader.jad">Download</a> the ZXing Barcode Reader for J2ME.
-      </p>
-      <p>
-        (<a href="basic/BarcodeReader.jad">Download</a> the alternate "basic" version for J2ME.)
-      </p>
-      <p>
-        <a href="BarcodeScanner.apk">Download</a> the Android client.
-      </p>
-      <p>Copyright 2008 ZXing authors</p>
-      <jsp:include page="analytics.jspx"/>      
-    </body>
-  </html>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="1.2">
+<jsp:directive.page contentType="application/xhtml+xml" session="false"/>
+<jsp:scriptlet>response.setHeader("Cache-Control", "public");</jsp:scriptlet>
+<jsp:text><![CDATA[<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.1//EN" "http://www.openmobilealliance.org/tech/DTD/xhtml-mobile11.dtd">]]></jsp:text>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Download ZXing Reader</title>
+  </head>
+  <body>
+    <h1><img src="zxing-icon.png" height="32" width="32" alt=""/> Download ZXing Reader</h1>
+    <p>
+      <a href="BarcodeReader.jad">Download</a> the ZXing Barcode Reader for J2ME.
+    </p>
+    <p>
+      (<a href="basic/BarcodeReader.jad">Download</a> the alternate "basic" version for J2ME.)
+    </p>
+    <p>
+      <a href="market://search?q=pname%3Acom.google.zxing.client.android">Download</a> the Android client.
+    </p>
+    <p>Copyright 2008 and onwards ZXing authors</p>
+    <jsp:include page="analytics.jspx"/>
+  </body>
+</html>
 </jsp:root>

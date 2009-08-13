@@ -17,7 +17,7 @@
 <project name="zxingorg" basedir="." default="build">
 
   <property file="../build.properties"/>
-  <property file="secrets.properties"/>
+  <!--<property file="secrets.properties"/>-->
 
   <target name="init">
     <tstamp/>
@@ -76,17 +76,16 @@
       </filterset>
     </copy>
     -->
-    <war warfile="zxingorg.war" webxml="web/WEB-INF/web.xml">
+    <war warfile="w.war" webxml="web/WEB-INF/web.xml">
       <lib dir="web/WEB-INF/lib">
         <include name="*.jar"/>
       </lib>
       <classes dir="web/WEB-INF/classes"/>
-      <webinf dir="web/WEB-INF">
-        <include name="appengine-web.xml"/>
-      </webinf>
       <fileset dir="web">
         <include name="*.jspx"/>
         <include name="*.png"/>
+        <include name="**/*.jad"/>
+        <include name="**/*.jar"/>
       </fileset>
       <fileset dir="..">
         <include name="docs/**"/>

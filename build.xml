@@ -86,6 +86,7 @@
              footer="&lt;script type=&quot;text/javascript&quot;&gt; var gaJsHost = ((&quot;https:&quot; == document.location.protocol) ?  &quot;https://ssl.&quot; : &quot;http://www.&quot;); document.write(unescape(&quot;%3Cscript src='&quot; + gaJsHost + &quot;google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E&quot;)); &lt;/script&gt; &lt;script type=&quot;text/javascript&quot;&gt; var pageTracker = _gat._getTracker(&quot;UA-788492-5&quot;); pageTracker._initData(); pageTracker._trackPageview(); &lt;/script&gt;">
       <sourcepath>
         <pathelement location="android/src"/>
+        <pathelement location="android/gen"/>        
         <pathelement location="bug/src"/>
         <pathelement location="core/src"/>
         <pathelement location="javame/src"/>
@@ -98,7 +99,7 @@
         <pathelement location="${WTK-home}/lib/midpapi20.jar"/>
         <pathelement location="${WTK-home}/lib/mmapi.jar"/>
         <pathelement location="${WTK-home}/lib/jsr234.jar"/>
-        <pathelement location="${android-home}/android.jar"/>
+        <pathelement location="${android-home}/platforms/android-1.5/android.jar"/>
         <pathelement location="${BB-JDK-home}/lib/net_rim_api.jar"/>
         <pathelement location="${tomcat-home}/lib/servlet-api.jar"/>
         <fileset dir="zxingorg/web/WEB-INF/lib">

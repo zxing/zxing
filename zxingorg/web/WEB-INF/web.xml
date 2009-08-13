@@ -14,25 +14,12 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  -->
-<web-app version="2.5"
-         xmlns="http://java.sun.com/xml/ns/javaee"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" "http://java.sun.com/dtd/web-app_2_3.dtd">
+<web-app>
 
   <display-name>zxing.org</display-name>
 
-  <welcome-file-list>
-    <welcome-file>index.jspx</welcome-file>
-  </welcome-file-list>
-
-  <listener>
-    <listener-class>org.apache.commons.fileupload.servlet.FileCleanerCleanup</listener-class>
-  </listener>
-  <!--
-  <listener>
-    <listener-class>com.google.zxing.web.DecodeEmailListener</listener-class>
-  </listener>
-  -->
+  <distributable/>
 
   <!--
   <context-param>
@@ -45,17 +32,6 @@
   </context-param>
   -->
 
-  <servlet>
-    <servlet-name>DecodeServlet</servlet-name>
-    <servlet-class>com.google.zxing.web.DecodeServlet</servlet-class>
-    <load-on-startup>1</load-on-startup>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>DecodeServlet</servlet-name>
-    <url-pattern>/decode</url-pattern>
-  </servlet-mapping>
-
   <filter>
     <filter-name>DoSFilter</filter-name>
     <filter-class>com.google.zxing.web.DoSFilter</filter-class>
@@ -66,9 +42,37 @@
     <url-pattern>/*</url-pattern>
   </filter-mapping>
 
+  <listener>
+    <listener-class>org.apache.commons.fileupload.servlet.FileCleanerCleanup</listener-class>
+  </listener>
+  <!--
+  <listener>
+    <listener-class>com.google.zxing.web.DecodeEmailListener</listener-class>
+  </listener>
+  -->
+
+  <servlet>
+    <servlet-name>DecodeServlet</servlet-name>
+    <servlet-class>com.google.zxing.web.DecodeServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>DecodeServlet</servlet-name>
+    <url-pattern>/decode</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>jsp</servlet-name>
+    <url-pattern>*.jspx</url-pattern>
+  </servlet-mapping>
+
   <mime-mapping>
     <extension>cod</extension>
     <mime-type>application/vnd.rim.cod</mime-type>
   </mime-mapping>
+
+  <welcome-file-list>
+    <welcome-file>index.jspx</welcome-file>
+  </welcome-file-list>
 
 </web-app>
