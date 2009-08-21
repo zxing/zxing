@@ -205,9 +205,12 @@ final class CameraManager {
     Camera.Parameters parameters = mCamera.getParameters();
     parameters.setPreviewSize(mScreenResolution.x, mScreenResolution.y);
 
-    // FIXME: This is a hack to turn the flash off on the Samsung Galaxy. In the future there
-    // will hopefully be a standard setting like "off" that all devices will honor.
-    parameters.set("flash-mode", "2");
+    // FIXME: This is a hack to turn the flash off on the Samsung Galaxy.
+    parameters.set("flash-value", 2);
+
+    // This is the standard setting to turn the flash off that all devices should honor.
+    parameters.set("flash-mode", "off");
+
     mCamera.setParameters(parameters);
     Log.v(TAG, "Setting params for preview: width " + mScreenResolution.x + " height " +
         mScreenResolution.y);
