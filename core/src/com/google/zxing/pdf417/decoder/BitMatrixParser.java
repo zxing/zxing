@@ -30,14 +30,14 @@ final class BitMatrixParser {
 
   private static final int MAX_ROW_DIFFERENCE = 6;
   private static final int MAX_ROWS = 90;
-  private static final int MAX_COLUMNS = 30;
+  //private static final int MAX_COLUMNS = 30;
   // Maximum Codewords (Data + Error)
   private static final int MAX_CW_CAPACITY = 929;
   private static final int MODULES_IN_SYMBOL = 17;
 
   private final BitMatrix bitMatrix;
   private int rows = 0;
-  private int columns = 0;
+  //private int columns = 0;
 
   private int leftColumnECData = 0;
   private int rightColumnECData = 0;
@@ -58,7 +58,7 @@ final class BitMatrixParser {
    *
    * @return an array of codewords.
    */
-  int[] readCodewords() throws ReaderException {
+  int[] readCodewords() {
     int width = bitMatrix.getDimension();
     // TODO should be a rectangular matrix
     int height = width;
@@ -113,8 +113,7 @@ final class BitMatrixParser {
       } else {
         if (rowInProgress) {
           // Process Row
-          next = processRow(rowCounters, rowNumber, rowHeight,
-              moduleWidth, codewords, next);
+          next = processRow(rowCounters, rowNumber, rowHeight, codewords, next);
           if (next == -1) {
             // Something is wrong, since we have exceeded
             // the maximum columns in the specification.
@@ -142,8 +141,7 @@ final class BitMatrixParser {
         // TODO Maybe return error code
         return null;
       }
-      next = processRow(rowCounters, rowNumber, rowHeight, moduleWidth,
-          codewords, next);
+      next = processRow(rowCounters, rowNumber, rowHeight, codewords, next);
       rowNumber++;
       rows = rowNumber;
     }
@@ -160,7 +158,7 @@ final class BitMatrixParser {
    */
   private static int[] trimArray(int[] array, int size) {
     if (size > 0) {
-      int a[] = new int[size];
+      int[] a = new int[size];
       for (int i = 0; i < size; i++) {
         a[i] = array[i];
       }
@@ -172,36 +170,31 @@ final class BitMatrixParser {
 
   /**
    * Convert the symbols in the row to codewords.
+   * Each PDF417 symbol character consists of four bar elements and four space
+   * elements, each of which can be one to six modules wide. The four bar and
+   * four space elements shall measure 17 modules in total.
    *
    * @param rowCounters an array containing the counts of black pixels for each column
    *                    in the row.
    * @param rowNumber   the current row number of codewords.
    * @param rowHeight   the height of this row in pixels.
-   * @param moduleWidth the size of a module in pixels.
    * @param codewords   the codeword array to save codewords into.
    * @param next        the next available index into the codewords array.
    * @return the next available index into the codeword array after processing
    *         this row.
-   * @throws ReaderException
    */
-  /*
-  * Each PDF417 symbol character consists of four bar elements and four space
-  * elements, each of which can be one to six modules wide. The four bar and
-  * four space elements shall measure 17 modules in total.
-  */
-  int processRow(int[] rowCounters, int rowNumber, int rowHeight,
-                 float moduleWidth, int[] codewords, int next) throws ReaderException {
+  int processRow(int[] rowCounters, int rowNumber, int rowHeight, int[] codewords, int next) {
     int width = bitMatrix.getDimension();
     int columnNumber = 0;
     long symbol = 0;
     for (int i = 0; i < width; i += MODULES_IN_SYMBOL) {
       for (int mask = MODULES_IN_SYMBOL - 1; mask >= 0; mask--) {
-        if (rowCounters[i + (MODULES_IN_SYMBOL - 1 - mask)] >= rowHeight / 2) {
+        if (rowCounters[i + (MODULES_IN_SYMBOL - 1 - mask)] >= rowHeight >>> 1) {
           symbol |= 1 << mask;
         }
       }
       if (columnNumber > 0) {
-        int cw = getCodeword(symbol, rowNumber);
+        int cw = getCodeword(symbol);
         // if (debug) System.out.println(" " + Long.toBinaryString(symbol) +
         // " cw=" +cw + " ColumnNumber=" +columnNumber + "i=" +i);
         if (cw < 0 && i < width - MODULES_IN_SYMBOL) {
@@ -214,7 +207,7 @@ final class BitMatrixParser {
         }
       } else {
         // Left row indicator column
-        int cw = getCodeword(symbol, rowNumber);
+        int cw = getCodeword(symbol);
         // if (debug) System.out.println(" " + Long.toBinaryString(symbol) +
         // " cw=" +cw + " ColumnNumber=" +columnNumber + "i=" +i);
         if (ecLevel < 0) {
@@ -230,12 +223,12 @@ final class BitMatrixParser {
         }
       }
       symbol = 0;
-      columns = columnNumber;
+      //columns = columnNumber;
       columnNumber++;
     }
     if (columnNumber > 1) {
       // Right row indicator column is in codeword[next]
-      columns--;
+      //columns--;
       // Overwrite the last codeword i.e. Right Row Indicator
       --next;
       if (ecLevel < 0) {
@@ -259,18 +252,16 @@ final class BitMatrixParser {
   }
 
   /**
-   * Build a symbol from the pixels
+   * Build a symbol from the pixels.
+   * Each symbol character is defined by an 8-digit bar-space sequence which
+   * represents the module widths of the eight elements of that symbol
+   * character.
    *
    * @param counters  array of pixel counter corresponding to each Bar/Space pattern.
-   * @param rowNumber
    * @return the symbol
    */
   /*
-  * Each symbol character is defined by an 8-digit bar-space sequence which
-  * represents the module widths of the eight elements of that symbol
-  * character.
-  */
-  private static long getSymbol(int[] counters, int rowNumber, float moduleWidth) {
+  private static long getSymbol(int[] counters, float moduleWidth) {
     int pixelsInSymbol = 0;
     for (int j = 0; j < counters.length; j++) {
       pixelsInSymbol += counters[j];
@@ -306,28 +297,25 @@ final class BitMatrixParser {
     }
     return symbol;
   }
+   */
 
   /**
    * Translate the symbol into a codeword.
    *
    * @param symbol
-   * @param row
    * @return the codeword corresponding to the symbol.
-   * @throws ReaderException
    */
-  private int getCodeword(long symbol, int row) throws ReaderException {
-
+  private int getCodeword(long symbol) {
     long sym = symbol;
     sym &= 0x3ffff;
     int i = findCodewordIndex(sym);
-    long cw = 0;
     if (i == -1) {
       return -1;
     } else {
-      cw = CODEWORD_TABLE[i] - 1;
+      long cw = CODEWORD_TABLE[i] - 1;
       cw %= 929;
+      return (int) cw;
     }
-    return (int) cw;
   }
 
   /**
@@ -337,11 +325,11 @@ final class BitMatrixParser {
    * @param symbol the symbol from the barcode.
    * @return the index into the codeword table.
    */
-  private int findCodewordIndex(long symbol) {
+  private static int findCodewordIndex(long symbol) {
     int first = 0;
     int upto = SYMBOL_TABLE.length;
     while (first < upto) {
-      int mid = (first + upto) / 2; // Compute mid point.
+      int mid = (first + upto) >>> 1; // Compute mid point.
       if (symbol < SYMBOL_TABLE[mid]) {
         upto = mid; // repeat search in bottom half.
       } else if (symbol > SYMBOL_TABLE[mid]) {
@@ -359,16 +347,11 @@ final class BitMatrixParser {
    * Ends up being a bit faster than Math.round(). This merely rounds its
    * argument to the nearest int, where x.5 rounds up.
    */
+  /*
   private static int round(float d) {
     return (int) (d + 0.5f);
   }
-
-  /**
-   * Returns the number of codewords flagged as erasures.
    */
-  public int getEraseCount() {
-    return eraseCount;
-  }
 
   /**
    * Returns an array of locations representing the erasures.
@@ -398,14 +381,15 @@ final class BitMatrixParser {
    *         this row.
    * @throws ReaderException
    */
+  /*
   int processRow1(int[] rowCounters, int rowNumber, int rowHeight,
-                  float moduleWidth, int[] codewords, int next) throws ReaderException {
+                  float moduleWidth, int[] codewords, int next) {
     int width = bitMatrix.getDimension();
     int firstBlack = 0;
 
     for (firstBlack = 0; firstBlack < width; firstBlack++) {
       // Step forward until we find the first black pixels
-      if (rowCounters[firstBlack] >= rowHeight / 2) {
+      if (rowCounters[firstBlack] >= rowHeight >>> 1) {
         break;
       }
     }
@@ -421,7 +405,7 @@ final class BitMatrixParser {
         // for
         // black
         // If more than half the column is black
-        if (rowCounters[i] >= rowHeight / 2 || i == width - 1) {
+        if (rowCounters[i] >= rowHeight >>> 1 || i == width - 1) {
           if (i == width - 1) {
             counters[state]++;
           }
@@ -435,7 +419,7 @@ final class BitMatrixParser {
           counters[state]++;
         }
       } else {
-        if (rowCounters[i] < rowHeight / 2) {
+        if (rowCounters[i] < rowHeight >>> 1) {
           // Found white pixels
           state++;
           if (state == 7 && i == width - 1) {
@@ -462,8 +446,8 @@ final class BitMatrixParser {
           return -1;
         }
         if (columnNumber > 0) {
-          symbol = getSymbol(counters, rowNumber, moduleWidth);
-          int cw = getCodeword(symbol, rowNumber);
+          symbol = getSymbol(counters, moduleWidth);
+          int cw = getCodeword(symbol);
           // if (debug) System.out.println(" " +
           // Long.toBinaryString(symbol) + " cw=" +cw + " ColumnNumber="
           // +columnNumber + "i=" +i);
@@ -476,8 +460,8 @@ final class BitMatrixParser {
           }
         } else {
           // Left row indicator column
-          symbol = getSymbol(counters, rowNumber, moduleWidth);
-          int cw = getCodeword(symbol, rowNumber);
+          symbol = getSymbol(counters, moduleWidth);
+          int cw = getCodeword(symbol);
           if (ecLevel < 0) {
             switch (rowNumber % 3) {
               case 0:
@@ -496,15 +480,13 @@ final class BitMatrixParser {
         counters = new int[8];
         columns = columnNumber;
         columnNumber++;
-        /*
-        * // Introduce some errors if (rowNumber == 0 && columnNumber == 4)
-        * { codewords[next-1] = 0; erasures[eraseCount] = next-1;
-        * eraseCount++; } if (rowNumber == 0 && columnNumber == 6) {
-        * codewords[next-1] = 10; erasures[eraseCount] = next-1;
-        * eraseCount++; } if (rowNumber == 0 && columnNumber == 8) {
-        * codewords[next-1] = 10; erasures[eraseCount] = next-1;
-        * eraseCount++; }
-        */
+        // Introduce some errors if (rowNumber == 0 && columnNumber == 4)
+        // { codewords[next-1] = 0; erasures[eraseCount] = next-1;
+        // eraseCount++; } if (rowNumber == 0 && columnNumber == 6) {
+        // codewords[next-1] = 10; erasures[eraseCount] = next-1;
+        // eraseCount++; } if (rowNumber == 0 && columnNumber == 8) {
+        // codewords[next-1] = 10; erasures[eraseCount] = next-1;
+        // eraseCount++; }
         state = 0;
         symbol = 0;
       }
@@ -533,6 +515,7 @@ final class BitMatrixParser {
     }
     return next;
   }
+   */
 
   /**
    * The sorted table of all possible symbols. Extracted from the PDF417
