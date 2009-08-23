@@ -463,7 +463,7 @@ public class FinderPatternFinder {
     // OK, we have at least 3 confirmed centers, but, it's possible that one is a "false positive"
     // and that we need to keep looking. We detect this by asking if the estimated module sizes
     // vary too much. We arbitrarily say that when the total deviation from average exceeds
-    // 15% of the total module size estimates, it's too much.
+    // 5% of the total module size estimates, it's too much.
     float average = totalModuleSize / (float) max;
     float totalDeviation = 0.0f;
     for (int i = 0; i < max; i++) {
@@ -480,25 +480,35 @@ public class FinderPatternFinder {
    * @throws ReaderException if 3 such finder patterns do not exist
    */
   private FinderPattern[] selectBestPatterns() throws ReaderException {
-    if (possibleCenters.size() < 3) {
+
+    int startSize = possibleCenters.size();
+    if (startSize < 3) {
       // Couldn't find enough finder patterns
       throw ReaderException.getInstance();
     }
-    Collections.insertionSort(possibleCenters, new CenterComparator());
+
+    // Filter outlier possibilities whose module size is too different
+    if (startSize > 3) {
+      // But we can only afford to do so if we have at least 4 possibilities to choose from
+      float totalModuleSize = 0.0f;
+      for (int i = 0; i < startSize; i++) {
+        totalModuleSize += ((FinderPattern) possibleCenters.get(i)).getEstimatedModuleSize();
+      }
+      float average = totalModuleSize / (float) startSize;
+      for (int i = 0; i < possibleCenters.size() && possibleCenters.size() > 3; i++) {
+        FinderPattern pattern = (FinderPattern) possibleCenters.get(i);
+        if (Math.abs(pattern.getEstimatedModuleSize() - average) > 0.2f * average) {
+          possibleCenters.remove(i);
+          i--;
+        }
+      }
+    }
 
     if (possibleCenters.size() > 3) {
       // Throw away all but those first size candidate points we found.
+      Collections.insertionSort(possibleCenters, new CenterComparator());      
       possibleCenters.setSize(3);
     }
-    //  We need to pick the best three. Find the most
-    // popular ones whose module size is nearest the average
-    float averageModuleSize = 0.0f;
-    for (int i = 0; i < 3; i++) {
-      averageModuleSize += ((FinderPattern) possibleCenters.elementAt(i)).getEstimatedModuleSize();
-    }
-    averageModuleSize /= 3.0f;
-    // We don't have java.util.Collections in J2ME
-    Collections.insertionSort(possibleCenters, new ClosestToAverageComparator(averageModuleSize));
 
     return new FinderPattern[]{
         (FinderPattern) possibleCenters.elementAt(0),
@@ -513,24 +523,6 @@ public class FinderPatternFinder {
   private static class CenterComparator implements Comparator {
     public int compare(Object center1, Object center2) {
       return ((FinderPattern) center2).getCount() - ((FinderPattern) center1).getCount();
-    }
-  }
-
-  /**
-   * <p>Orders by variance from average module size, ascending.</p>
-   */
-  private static class ClosestToAverageComparator implements Comparator {
-    private final float averageModuleSize;
-
-    private ClosestToAverageComparator(float averageModuleSize) {
-      this.averageModuleSize = averageModuleSize;
-    }
-
-    public int compare(Object center1, Object center2) {
-      return Math.abs(((FinderPattern) center1).getEstimatedModuleSize() - averageModuleSize) <
-          Math.abs(((FinderPattern) center2).getEstimatedModuleSize() - averageModuleSize) ?
-          -1 :
-          1;
     }
   }
 
