@@ -264,7 +264,7 @@ final class DecodedBitStreamParser {
     boolean lastWasPossibleDoubleByteStart = false;
     for (int i = 0; i < length && (canBeISO88591 || canBeShiftJIS); i++) {
       int value = bytes[i] & 0xFF;
-      if (value == 0xC2 || value == 0xC3 && i < length - 1) {
+      if ((value == 0xC2 || value == 0xC3) && i < length - 1) {
         // This is really a poor hack. The slightly more exotic characters people might want to put in
         // a QR Code, by which I mean the Latin-1 supplement characters (e.g. u-umlaut) have encodings
         // that start with 0xC2 followed by [0xA0,0xBF], or start with 0xC3 followed by [0x80,0xBF].
