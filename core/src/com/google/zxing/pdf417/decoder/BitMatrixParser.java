@@ -190,7 +190,7 @@ final class BitMatrixParser {
     for (int i = 0; i < width; i += MODULES_IN_SYMBOL) {
       for (int mask = MODULES_IN_SYMBOL - 1; mask >= 0; mask--) {
         if (rowCounters[i + (MODULES_IN_SYMBOL - 1 - mask)] >= rowHeight >>> 1) {
-          symbol |= 1 << mask;
+          symbol |= 1L << mask;
         }
       }
       if (columnNumber > 0) {
@@ -305,7 +305,7 @@ final class BitMatrixParser {
    * @param symbol
    * @return the codeword corresponding to the symbol.
    */
-  private int getCodeword(long symbol) {
+  private static int getCodeword(long symbol) {
     long sym = symbol;
     sym &= 0x3ffff;
     int i = findCodewordIndex(sym);

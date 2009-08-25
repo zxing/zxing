@@ -52,10 +52,7 @@ final class URIResultParser extends ResultParser {
     }
     int period = uri.indexOf('.');
     // Look for period in a domain but followed by at least a two-char TLD
-    if (period >= uri.length() - 2) {
-      return false;
-    }
-    return period >= 0 || uri.indexOf(':') >= 0;
+    return period < uri.length() - 2 && (period >= 0 || uri.indexOf(':') >= 0);
   }
 
 }

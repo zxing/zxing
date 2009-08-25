@@ -51,11 +51,11 @@ public final class Version {
     
     // Calculate the total number of codewords
     int total = 0;
-    int ecCodewords = ecBlocks.ecCodewords;
-    ECB[] ecbArray = ecBlocks.ecBlocks;
+    int ecCodewords = ecBlocks.getECCodewords();
+    ECB[] ecbArray = ecBlocks.getECBlocks();
     for (int i = 0; i < ecbArray.length; i++) {
       ECB ecBlock = ecbArray[i];
-      total += ecBlock.count * (ecBlock.dataCodewords + ecCodewords);
+      total += ecBlock.getCount() * (ecBlock.getDataCodewords() + ecCodewords);
     }
     this.totalCodewords = total;
   }
