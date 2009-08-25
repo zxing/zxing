@@ -138,9 +138,9 @@ final class DecodedBitStreamParser {
    */
   private static int textCompaction(int[] codewords, int codeIndex, StringBuffer result) {
     // 2 character per codeword
-    int[] textCompactionData = new int[codewords[0] * 2];
+    int[] textCompactionData = new int[codewords[0] << 1];
     // Used to hold the byte compaction value if there is a mode shift
-    int[] byteCompactionData = new int[codewords[0] * 2];
+    int[] byteCompactionData = new int[codewords[0] << 1];
 
     int index = 0;
     int code = 0;

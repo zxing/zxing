@@ -96,7 +96,7 @@ public final class Result {
       return "[" + rawBytes.length + " bytes]";
     } else {
       return text;
-    }
+  }
   }
 
 }

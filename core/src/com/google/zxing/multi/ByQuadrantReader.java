@@ -51,40 +51,32 @@ public final class ByQuadrantReader implements Reader {
     int halfWidth = width / 2;
     int halfHeight = height / 2;
 
-    {
-      BinaryBitmap topLeft = image.crop(0, 0, halfWidth, halfHeight);
-      try {
-        return delegate.decode(topLeft, hints);
-      } catch (ReaderException re) {
-        // continue
-      }
+    BinaryBitmap topLeft = image.crop(0, 0, halfWidth, halfHeight);
+    try {
+      return delegate.decode(topLeft, hints);
+    } catch (ReaderException re) {
+      // continue
     }
 
-    {
-      BinaryBitmap topRight = image.crop(halfWidth, 0, width, halfHeight);
-      try {
-        return delegate.decode(topRight, hints);
-      } catch (ReaderException re) {
-        // continue
-      }
+    BinaryBitmap topRight = image.crop(halfWidth, 0, width, halfHeight);
+    try {
+      return delegate.decode(topRight, hints);
+    } catch (ReaderException re) {
+      // continue
     }
 
-    {
-      BinaryBitmap bottomLeft = image.crop(0, halfHeight, halfWidth, height);
-      try {
-        return delegate.decode(bottomLeft, hints);
-      } catch (ReaderException re) {
-        // continue
-      }
+    BinaryBitmap bottomLeft = image.crop(0, halfHeight, halfWidth, height);
+    try {
+      return delegate.decode(bottomLeft, hints);
+    } catch (ReaderException re) {
+      // continue
     }
 
-    {
-      BinaryBitmap bottomRight = image.crop(halfWidth, halfHeight, width, height);
-      try {
-        return delegate.decode(bottomRight, hints);
-      } catch (ReaderException re) {
-        // continue
-      }
+    BinaryBitmap bottomRight = image.crop(halfWidth, halfHeight, width, height);
+    try {
+      return delegate.decode(bottomRight, hints);
+    } catch (ReaderException re) {
+      // continue
     }
 
     int quarterWidth = halfWidth / 2;
