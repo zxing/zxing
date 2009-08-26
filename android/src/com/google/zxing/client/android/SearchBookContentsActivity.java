@@ -51,7 +51,7 @@ import java.util.List;
 public final class SearchBookContentsActivity extends Activity {
 
   private static final String TAG = "SearchBookContents";
-  private static final String USER_AGENT = "ZXing/1.5 (Android)";
+  private static final String USER_AGENT = "ZXing (Android)";
 
   private NetworkThread mNetworkThread;
   private String mISBN;
