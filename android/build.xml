@@ -187,29 +187,26 @@ limitations under the License.
 
     <!-- Optimize with ProGuard -->
     <unzip src="../core/core.jar" dest="${out-classes}" overwrite="true"/>
-    <jar jarfile="temp.jar" basedir="${out-classes}"/>
-    <delete dir="${out-classes}"/>
-    <mkdir dir="${out-classes}"/>
+    <mkdir dir="optimized"/>
     <property name="libraryjars.path" refid="android.target.classpath"/>
     <java jar="${WTK-home}/bin/proguard.jar" fork="true" failonerror="true">
-      <jvmarg value="-Dmaximum.inlined.code.length=32"/>
-      <arg value="-injars temp.jar"/>
-      <arg value="-outjars temp-optimized.jar"/>
+      <jvmarg value="-Dmaximum.inlined.code.length=48"/>
+      <arg value="-injars ${out-classes}"/>
+      <arg value="-outjars optimized"/>
       <arg value="-libraryjars ${libraryjars.path}"/>
       <arg value="-keep class com.google.zxing.client.android.*Activity"/>
       <arg value="-keep class com.google.zxing.client.android.ViewfinderView { public * ; }"/>
       <arg value="-keep class com.google.zxing.client.android.SearchBookContents* { public * ; }"/>
       <arg value="-target 5"/>
-      <arg value="-optimizationpasses 7"/>
+      <arg value="-optimizationpasses 9"/>
       <arg value="-dontshrink"/>
       <arg value="-dontobfuscate"/>
       <arg value="-dontskipnonpubliclibraryclasses"/>
       <arg value="-verbose"/>
       <arg value="-dump proguard-dump.txt"/>
     </java>
-    <delete file="temp.jar"/>
-    <unzip src="temp-optimized.jar" dest="${out-classes}" overwrite="true"/>
-    <delete file="temp-optimized.jar"/>
+    <delete dir="${out-classes}"/>
+    <move file="optimized" tofile="${out-classes}"/>
   </target>
 
   <!-- Convert this project's .class files into .dex files. -->
