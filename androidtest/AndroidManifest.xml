@@ -15,13 +15,16 @@
  limitations under the License.
  -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.google.zxing.client.androidtest">
+          package="com.google.zxing.client.androidtest"
+          android:versionName="1.0"
+          android:versionCode="1">
   <uses-sdk android:minSdkVersion="3"/>
   <application android:label="@string/app_name"
                android:icon="@drawable/icon"
                android:debuggable="true">
     <activity android:name="ZXingTestActivity"
-              android:label="@string/app_name">
+              android:label="@string/app_name"
+              android:screenOrientation="portrait">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
         <category android:name="android.intent.category.LAUNCHER"/>
@@ -31,7 +34,8 @@
               android:screenOrientation="landscape">
     </activity>
     <activity android:name="BenchmarkActivity"
-              android:label="@string/benchmark_name"/>
+              android:label="@string/benchmark_name"
+              android:screenOrientation="portrait"/>
   </application>
   <uses-permission android:name="android.permission.CAMERA"/>
 </manifest>

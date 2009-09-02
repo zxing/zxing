@@ -19,66 +19,87 @@ package com.google.zxing.client.androidtest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.provider.Contacts;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
 public final class ZXingTestActivity extends Activity {
 
+  private static final int ABOUT_ID = Menu.FIRST;
+  private static final String PACKAGE_NAME = "com.google.zxing.client.androidtest";
+
   @Override
   public void onCreate(Bundle icicle) {
     super.onCreate(icicle);
-
     setContentView(R.layout.test);
 
-    View test_camera = findViewById(R.id.test_camera);
-    test_camera.setOnClickListener(mTestCamera);
-
-    View run_benchmark = findViewById(R.id.run_benchmark);
-    run_benchmark.setOnClickListener(mRunBenchmark);
-
-    View scan_product = findViewById(R.id.scan_product);
-    scan_product.setOnClickListener(mScanProduct);
-
-    View scan_qr_code = findViewById(R.id.scan_qr_code);
-    scan_qr_code.setOnClickListener(mScanQRCode);
-
-    View scan_anything = findViewById(R.id.scan_anything);
-    scan_anything.setOnClickListener(mScanAnything);
-
-    View search_book_contents = findViewById(R.id.search_book_contents);
-    search_book_contents.setOnClickListener(mSearchBookContents);
-
-    View encode_url = findViewById(R.id.encode_url);
-    encode_url.setOnClickListener(mEncodeURL);
-
-    View encode_email = findViewById(R.id.encode_email);
-    encode_email.setOnClickListener(mEncodeEmail);
-
-    View encode_phone = findViewById(R.id.encode_phone);
-    encode_phone.setOnClickListener(mEncodePhone);
-
-    View encode_sms = findViewById(R.id.encode_sms);
-    encode_sms.setOnClickListener(mEncodeSMS);
-
-    View encode_contact = findViewById(R.id.encode_contact);
-    encode_contact.setOnClickListener(mEncodeContact);
-
-    View encode_location = findViewById(R.id.encode_location);
-    encode_location.setOnClickListener(mEncodeLocation);
-
-    View encode_bad_data = findViewById(R.id.encode_bad_data);
-    encode_bad_data.setOnClickListener(mEncodeBadData);
-
-    View share_via_barcode = findViewById(R.id.share_via_barcode);
-    share_via_barcode.setOnClickListener(mShareViaBarcode);
+    findViewById(R.id.take_test_photos).setOnClickListener(mTakeTestPhotos);
+    findViewById(R.id.get_camera_parameters).setOnClickListener(mGetCameraParameters);
+    findViewById(R.id.run_benchmark).setOnClickListener(mRunBenchmark);
+    findViewById(R.id.scan_product).setOnClickListener(mScanProduct);
+    findViewById(R.id.scan_qr_code).setOnClickListener(mScanQRCode);
+    findViewById(R.id.scan_anything).setOnClickListener(mScanAnything);
+    findViewById(R.id.search_book_contents).setOnClickListener(mSearchBookContents);
+    findViewById(R.id.encode_url).setOnClickListener(mEncodeURL);
+    findViewById(R.id.encode_email).setOnClickListener(mEncodeEmail);
+    findViewById(R.id.encode_phone).setOnClickListener(mEncodePhone);
+    findViewById(R.id.encode_sms).setOnClickListener(mEncodeSMS);
+    findViewById(R.id.encode_contact).setOnClickListener(mEncodeContact);
+    findViewById(R.id.encode_location).setOnClickListener(mEncodeLocation);
+    findViewById(R.id.encode_bad_data).setOnClickListener(mEncodeBadData);
+    findViewById(R.id.share_via_barcode).setOnClickListener(mShareViaBarcode);
   }
 
-  public final Button.OnClickListener mTestCamera = new Button.OnClickListener() {
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    super.onCreateOptionsMenu(menu);
+    menu.add(0, ABOUT_ID, 0, R.string.about_menu)
+        .setIcon(android.R.drawable.ic_menu_info_details);
+    return true;
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    switch (item.getItemId()) {
+      case ABOUT_ID:
+        int versionCode = 0;
+        String versionName = "unknown";
+        try {
+          PackageInfo info = getPackageManager().getPackageInfo(PACKAGE_NAME, 0);
+          versionCode = info.versionCode;
+          versionName = info.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.app_name) + " " + versionName + " (" + versionCode +
+            ")");
+        builder.setMessage(getString(R.string.about_message));
+        builder.setPositiveButton(R.string.ok_button, null);
+        builder.show();
+        break;
+    }
+    return super.onOptionsItemSelected(item);
+  }
+
+  public final Button.OnClickListener mTakeTestPhotos = new Button.OnClickListener() {
     public void onClick(View v) {
       Intent intent = new Intent(Intent.ACTION_VIEW);
       intent.setClassName(ZXingTestActivity.this, CameraTestActivity.class.getName());
+      intent.putExtra(CameraTestActivity.GET_CAMERA_PARAMETERS, false);
+      startActivity(intent);
+    }
+  };
+
+  public final Button.OnClickListener mGetCameraParameters = new Button.OnClickListener() {
+    public void onClick(View v) {
+      Intent intent = new Intent(Intent.ACTION_VIEW);
+      intent.setClassName(ZXingTestActivity.this, CameraTestActivity.class.getName());
+      intent.putExtra(CameraTestActivity.GET_CAMERA_PARAMETERS, true);
       startActivity(intent);
     }
   };
