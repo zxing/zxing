@@ -23,12 +23,6 @@
                android:layout_height="fill_parent"
                android:layout_centerInParent="true"/>
 
-  <com.google.zxing.client.androidtest.ViewfinderView
-      android:id="@+id/viewfinder_view"
-      android:layout_width="fill_parent"
-      android:layout_height="fill_parent"
-      android:background="@color/transparent"/>
-
   <LinearLayout
       android:orientation="vertical"
       android:layout_width="fill_parent"
@@ -46,7 +40,7 @@
               android:layout_height="wrap_content"
               android:layout_gravity="left|center_vertical"
               android:layout_weight="0"
-              android:text="@string/status_message"
+              android:text="@string/parameters_message"
               android:textColor="@color/status_text"
               android:background="@color/status_view"
               android:padding="4px"/>

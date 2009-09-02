@@ -17,6 +17,8 @@
 package com.google.zxing.client.androidtest;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -31,7 +33,11 @@ import java.io.IOException;
 
 public final class CameraTestActivity extends Activity implements SurfaceHolder.Callback {
 
-  private SaveThread mSaveThread;
+  public static final String GET_CAMERA_PARAMETERS = "GET_CAMERA_PARAMETERS";
+  private static final String[] EMAIL_ADDRESS = {"zxing@googlegroups.com"};
+
+  private SaveThread mSaveThread = null;
+  private boolean mGetCameraParameters;
 
   @Override
   public void onCreate(Bundle icicle) {
@@ -41,8 +47,13 @@ public final class CameraTestActivity extends Activity implements SurfaceHolder.
     Window window = getWindow();
     window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-    setContentView(R.layout.camera_test);
 
+    mGetCameraParameters = getIntent().getBooleanExtra(GET_CAMERA_PARAMETERS, false);
+    if (mGetCameraParameters) {
+      setContentView(R.layout.camera_parameters);
+    } else {
+      setContentView(R.layout.camera_test);
+    }
     CameraManager.init(getApplication());
 
     SurfaceView surfaceView = (SurfaceView) findViewById(R.id.preview_view);
@@ -54,7 +65,7 @@ public final class CameraTestActivity extends Activity implements SurfaceHolder.
   @Override
   protected void onResume() {
     super.onResume();
-    if (mSaveThread == null) {
+    if (mSaveThread == null && !mGetCameraParameters) {
       mSaveThread = new SaveThread(this, CameraManager.get().getFramingRect());
       mSaveThread.start();
     }
@@ -96,28 +107,33 @@ public final class CameraTestActivity extends Activity implements SurfaceHolder.
 
   @Override
   public boolean onKeyDown(int keyCode, KeyEvent event) {
-    if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER) {
-      if (event.getRepeatCount() == 0) {
-        CameraManager.get().requestAutoFocus(mHandler, R.id.auto_focus);
+    if (!mGetCameraParameters) {
+      if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER) {
+        if (event.getRepeatCount() == 0) {
+          CameraManager.get().requestAutoFocus(mHandler, R.id.auto_focus);
+        }
+        return true;
+      } else if (keyCode == KeyEvent.KEYCODE_CAMERA || keyCode == KeyEvent.KEYCODE_SEARCH) {
+        if (event.getRepeatCount() == 0) {
+          CameraManager.get().requestPreviewFrame(mSaveThread.mHandler, R.id.save);
+        }
+        return true;
       }
-      return true;
-    } else if (keyCode == KeyEvent.KEYCODE_CAMERA || keyCode == KeyEvent.KEYCODE_SEARCH) {
-      if (event.getRepeatCount() == 0) {
-        CameraManager.get().requestPreviewFrame(mSaveThread.mHandler, R.id.save);
-      }
-      return true;
     }
     return super.onKeyDown(keyCode, event);
   }
 
   public void surfaceCreated(SurfaceHolder holder) {
     try {
-      CameraManager.get().openDriver(holder);
-    } catch (IOException ioe) {
+      String parameters = CameraManager.get().openDriver(holder, mGetCameraParameters);
+      CameraManager.get().startPreview();
+      if (mGetCameraParameters) {
+        collectStatsAndSendEmail(parameters);
+      }
+    } catch (IOException e) {
       // IOException clause added for Android 1.5
-      throw new RuntimeException(ioe);
+      throw new RuntimeException(e);
     }
-    CameraManager.get().startPreview();
   }
 
   public void surfaceDestroyed(SurfaceHolder holder) {
@@ -126,6 +142,51 @@ public final class CameraTestActivity extends Activity implements SurfaceHolder.
 
   public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
 
+  }
+
+  private void collectStatsAndSendEmail(String parameters) {
+    StringBuffer result = new StringBuffer();
+    result.append("Device info:");
+    result.append("\n  Board: ");
+    result.append(Build.BOARD);
+    result.append("\n  Brand: ");
+    result.append(Build.BRAND);
+    result.append("\n  Device: ");
+    result.append(Build.DEVICE);
+    result.append("\n  Display: ");
+    result.append(Build.DISPLAY);
+    result.append("\n  Fingerprint: ");
+    result.append(Build.FINGERPRINT);
+    result.append("\n  Host: ");
+    result.append(Build.HOST);
+    result.append("\n  ID: ");
+    result.append(Build.ID);
+    result.append("\n  Model: ");
+    result.append(Build.MODEL);
+    result.append("\n  Product: ");
+    result.append(Build.PRODUCT);
+    result.append("\n  Tags: ");
+    result.append(Build.TAGS);
+    result.append("\n  Type: ");
+    result.append(Build.TYPE);
+    result.append("\n  User: ");
+    result.append(Build.USER);
+    result.append("\n  Version Incremental: ");
+    result.append(Build.VERSION.INCREMENTAL);
+    result.append("\n  Version Release: ");
+    result.append(Build.VERSION.RELEASE);
+    result.append("\n  Version SDK: ");
+    result.append(Build.VERSION.SDK);
+
+    result.append("\n\n");
+    result.append(parameters);
+
+    Intent intent = new Intent(Intent.ACTION_SEND);
+    intent.putExtra(Intent.EXTRA_EMAIL, EMAIL_ADDRESS);
+    intent.putExtra(Intent.EXTRA_SUBJECT, "Camera parameters report");
+    intent.putExtra(Intent.EXTRA_TEXT, result.toString());
+    intent.setType("text/plain");
+    startActivity(intent);
   }
 
 }

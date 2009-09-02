@@ -65,13 +65,18 @@ final class CameraManager {
     mPreviewing = false;
   }
 
-  public void openDriver(SurfaceHolder holder) throws IOException {
-    // "throws IOException added to accommodate Android 1.5
+  // Throws IOException added to accommodate Android 1.5.
+  public String openDriver(SurfaceHolder holder, boolean getParameters) throws IOException {
+    String result = null;
     if (mCamera == null) {
       mCamera = Camera.open();
       mCamera.setPreviewDisplay(holder);
+      if (getParameters) {
+        result = collectCameraParameters();
+      }
       setCameraParameters();
     }
+    return result;
   }
 
   public void closeDriver() {
@@ -110,7 +115,7 @@ final class CameraManager {
     if (mCamera != null && mPreviewing) {
       mPreviewHandler = handler;
       mPreviewMessage = message;
-      mCamera.setOneShotPreviewCallback(previewCallback);
+      mCamera.setPreviewCallback(previewCallback);
     }
   }
 
@@ -132,7 +137,7 @@ final class CameraManager {
    */
   public Rect getFramingRect() {
     if (mFramingRect == null) {
-      int width = mScreenResolution.x;
+      int width = mScreenResolution.x * 3 / 4;
       int height = mScreenResolution.y * 3 / 4;
       int leftOffset = (mScreenResolution.x - width) / 2;
       int topOffset = (mScreenResolution.y - height) / 2;
@@ -148,6 +153,7 @@ final class CameraManager {
   private final Camera.PreviewCallback previewCallback = new Camera.PreviewCallback() {
     public void onPreviewFrame(byte[] data, Camera camera) {
       if (mPreviewHandler != null) {
+        mCamera.setPreviewCallback(null);
         Message message = mPreviewHandler.obtainMessage(mPreviewMessage,
             mScreenResolution.x, mScreenResolution.y, data);
         message.sendToTarget();
@@ -177,6 +183,19 @@ final class CameraManager {
     Camera.Parameters parameters = mCamera.getParameters();
     parameters.setPreviewSize(mScreenResolution.x, mScreenResolution.y);
     mCamera.setParameters(parameters);
+  }
+
+  private String collectCameraParameters() {
+    Camera.Parameters parameters = mCamera.getParameters();
+    String[] params = parameters.flatten().split(";");
+    StringBuffer result = new StringBuffer();
+    result.append("Default camera parameters:");
+    for (String param : params) {
+      result.append("\n  ");
+      result.append(param);
+    }
+    result.append('\n');
+    return result.toString();
   }
 
   private Point getScreenResolution() {
