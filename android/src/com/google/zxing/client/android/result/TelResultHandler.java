@@ -16,15 +16,20 @@
 
 package com.google.zxing.client.android.result;
 
-import android.app.Activity;
-import android.telephony.PhoneNumberUtils;
 import com.google.zxing.client.android.R;
 import com.google.zxing.client.result.ParsedResult;
 import com.google.zxing.client.result.TelParsedResult;
 
-public final class TelResultHandler extends ResultHandler {
+import android.app.Activity;
+import android.telephony.PhoneNumberUtils;
 
-  private static final int[] mButtons = {
+/**
+ * Offers relevant actions for telephone numbers.
+ *
+ * @author dswitkin@google.com (Daniel Switkin)
+ */
+public final class TelResultHandler extends ResultHandler {
+  private static final int[] buttons = {
       R.string.button_dial,
       R.string.button_add_contact
   };
@@ -35,17 +40,17 @@ public final class TelResultHandler extends ResultHandler {
 
   @Override
   public int getButtonCount() {
-    return mButtons.length;
+    return buttons.length;
   }
 
   @Override
   public int getButtonText(int index) {
-    return mButtons[index];
+    return buttons[index];
   }
 
   @Override
   public void handleButtonPress(int index) {
-    TelParsedResult telResult = (TelParsedResult) mResult;
+    TelParsedResult telResult = (TelParsedResult) result;
     switch (index) {
       case 0:
         dialPhoneFromUri(telResult.getTelURI());
@@ -61,7 +66,7 @@ public final class TelResultHandler extends ResultHandler {
   // Overriden so we can take advantage of Android's phone number hyphenation routines.
   @Override
   public CharSequence getDisplayContents() {
-    String contents = mResult.getDisplayResult();
+    String contents = result.getDisplayResult();
     contents = contents.replace("\r", "");
     return PhoneNumberUtils.formatNumber(contents);
   }
@@ -70,5 +75,4 @@ public final class TelResultHandler extends ResultHandler {
   public int getDisplayTitle() {
     return R.string.result_tel;
   }
-
 }

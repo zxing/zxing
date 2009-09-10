@@ -16,6 +16,11 @@
 
 package com.google.zxing.client.android;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.ByteMatrix;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -23,48 +28,49 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Contacts;
-import android.util.Log;
 import android.telephony.PhoneNumberUtils;
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.MultiFormatWriter;
-import com.google.zxing.WriterException;
-import com.google.zxing.common.ByteMatrix;
+import android.util.Log;
 
+/**
+ * This class does the work of decoding the user's request and extracting all the data
+ * to be encoded in a QR Code.
+ *
+ * @author dswitkin@google.com (Daniel Switkin)
+ */
 public final class QRCodeEncoder {
-
-  private final Activity mActivity;
-  private String mContents;
-  private String mDisplayContents;
-  private String mTitle;
-  private BarcodeFormat mFormat;
+  private final Activity activity;
+  private String contents;
+  private String displayContents;
+  private String title;
+  private BarcodeFormat format;
 
   public QRCodeEncoder(Activity activity, Intent intent) {
-    mActivity = activity;
+    this.activity = activity;
     if (!encodeContents(intent)) {
       throw new IllegalArgumentException("No valid data to encode.");
     }
   }
 
   public void requestBarcode(Handler handler, int pixelResolution) {
-    Thread encodeThread = new EncodeThread(mContents, handler, pixelResolution,
-        mFormat);
+    Thread encodeThread = new EncodeThread(contents, handler, pixelResolution,
+        format);
     encodeThread.start();
   }
 
   public String getContents() {
-    return mContents;
+    return contents;
   }
 
   public String getDisplayContents() {
-    return mDisplayContents;
+    return displayContents;
   }
 
   public String getTitle() {
-    return mTitle;
+    return title;
   }
   
   public String getFormat() {
-    return mFormat.toString();
+    return format.toString();
   }
 
   // It would be nice if the string encoding lived in the core ZXing library,
@@ -82,59 +88,59 @@ public final class QRCodeEncoder {
       if (type == null || type.length() == 0) {
         return false;
       }
-      mFormat = BarcodeFormat.QR_CODE;
+      this.format = BarcodeFormat.QR_CODE;
       encodeQRCodeContents(intent, type);
     } else {
       String data = intent.getStringExtra(Intents.Encode.DATA);
       if (data != null && data.length() != 0) {
-        mContents = data;
-        mDisplayContents = data;
-        mTitle = mActivity.getString(R.string.contents_text);
+        contents = data;
+        displayContents = data;
+        title = activity.getString(R.string.contents_text);
         if (format.equals(Contents.Format.CODE_128))
-          mFormat = BarcodeFormat.CODE_128;
+          this.format = BarcodeFormat.CODE_128;
         else if (format.equals(Contents.Format.CODE_39))
-          mFormat = BarcodeFormat.CODE_39;
+          this.format = BarcodeFormat.CODE_39;
         else if (format.equals(Contents.Format.EAN_8))
-          mFormat = BarcodeFormat.EAN_8;
+          this.format = BarcodeFormat.EAN_8;
         else if (format.equals(Contents.Format.EAN_13))
-          mFormat = BarcodeFormat.EAN_13;
+          this.format = BarcodeFormat.EAN_13;
         else if (format.equals(Contents.Format.UPC_A))
-          mFormat = BarcodeFormat.UPC_A;
+          this.format = BarcodeFormat.UPC_A;
         else if (format.equals(Contents.Format.UPC_E))
-          mFormat = BarcodeFormat.UPC_E;
+          this.format = BarcodeFormat.UPC_E;
       }
     }
-    return mContents != null && mContents.length() > 0;
+    return contents != null && contents.length() > 0;
   }
 
   private void encodeQRCodeContents(Intent intent, String type) {
     if (type.equals(Contents.Type.TEXT)) {
       String data = intent.getStringExtra(Intents.Encode.DATA);
       if (data != null && data.length() > 0) {
-        mContents = data;
-        mDisplayContents = data;
-        mTitle = mActivity.getString(R.string.contents_text);
+        contents = data;
+        displayContents = data;
+        title = activity.getString(R.string.contents_text);
       }
     } else if (type.equals(Contents.Type.EMAIL)) {
       String data = intent.getStringExtra(Intents.Encode.DATA);
       if (data != null && data.length() > 0) {
-        mContents = "mailto:" + data;
-        mDisplayContents = data;
-        mTitle = mActivity.getString(R.string.contents_email);
+        contents = "mailto:" + data;
+        displayContents = data;
+        title = activity.getString(R.string.contents_email);
       }
     } else if (type.equals(Contents.Type.PHONE)) {
       String data = intent.getStringExtra(Intents.Encode.DATA);
       if (data != null && data.length() > 0) {
-        mContents = "tel:" + data;
-        mDisplayContents = PhoneNumberUtils.formatNumber(data);
-        mTitle = mActivity.getString(R.string.contents_phone);
+        contents = "tel:" + data;
+        displayContents = PhoneNumberUtils.formatNumber(data);
+        title = activity.getString(R.string.contents_phone);
       }
     } else if (type.equals(Contents.Type.SMS)) {
       String data = intent.getStringExtra(Intents.Encode.DATA);
       if (data != null && data.length() > 0) {
-        mContents = "sms:" + data;
-        mDisplayContents = PhoneNumberUtils.formatNumber(data);
-        mTitle = mActivity.getString(R.string.contents_sms);
+        contents = "sms:" + data;
+        displayContents = PhoneNumberUtils.formatNumber(data);
+        title = activity.getString(R.string.contents_sms);
       }
     } else if (type.equals(Contents.Type.CONTACT)) {
       Bundle bundle = intent.getBundleExtra(Intents.Encode.DATA);
@@ -169,12 +175,12 @@ public final class QRCodeEncoder {
         // Make sure we've encoded at least one field.
         if (newDisplayContents.length() > 0) {
           newContents.append(';');
-          mContents = newContents.toString();
-          mDisplayContents = newDisplayContents.toString();
-          mTitle = mActivity.getString(R.string.contents_contact);
+          contents = newContents.toString();
+          displayContents = newDisplayContents.toString();
+          title = activity.getString(R.string.contents_contact);
         } else {
-          mContents = null;
-          mDisplayContents = null;
+          contents = null;
+          displayContents = null;
         }
       }
     } else if (type.equals(Contents.Type.LOCATION)) {
@@ -184,36 +190,35 @@ public final class QRCodeEncoder {
         float latitude = bundle.getFloat("LAT", Float.MAX_VALUE);
         float longitude = bundle.getFloat("LONG", Float.MAX_VALUE);
         if (latitude != Float.MAX_VALUE && longitude != Float.MAX_VALUE) {
-          mContents = "geo:" + latitude + ',' + longitude;
-          mDisplayContents = latitude + "," + longitude;
-          mTitle = mActivity.getString(R.string.contents_location);
+          contents = "geo:" + latitude + ',' + longitude;
+          displayContents = latitude + "," + longitude;
+          title = activity.getString(R.string.contents_location);
         }
       }
     }
   }
 
   private static final class EncodeThread extends Thread {
-
     private static final String TAG = "EncodeThread";
 
-    private final String mContents;
-    private final Handler mHandler;
-    private final int mPixelResolution;
-    private final BarcodeFormat mFormat;
+    private final String contents;
+    private final Handler handler;
+    private final int pixelResolution;
+    private final BarcodeFormat format;
 
     EncodeThread(String contents, Handler handler, int pixelResolution,
         BarcodeFormat format) {
-      mContents = contents;
-      mHandler = handler;
-      mPixelResolution = pixelResolution;
-      mFormat = format;
+      this.contents = contents;
+      this.handler = handler;
+      this.pixelResolution = pixelResolution;
+      this.format = format;
     }
 
     @Override
     public void run() {
       try {
-        ByteMatrix result = new MultiFormatWriter().encode(mContents,
-            mFormat, mPixelResolution, mPixelResolution);
+        ByteMatrix result = new MultiFormatWriter().encode(contents, format,
+            pixelResolution, pixelResolution);
         int width = result.getWidth();
         int height = result.getHeight();
         byte[][] array = result.getArray();
@@ -228,19 +233,18 @@ public final class QRCodeEncoder {
 
         Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
-        Message message = Message.obtain(mHandler, R.id.encode_succeeded);
+        Message message = Message.obtain(handler, R.id.encode_succeeded);
         message.obj = bitmap;
         message.sendToTarget();
       } catch (WriterException e) {
         Log.e(TAG, e.toString());
-        Message message = Message.obtain(mHandler, R.id.encode_failed);
+        Message message = Message.obtain(handler, R.id.encode_failed);
         message.sendToTarget();
       } catch (IllegalArgumentException e) {
         Log.e(TAG, e.toString());
-        Message message = Message.obtain(mHandler, R.id.encode_failed);
+        Message message = Message.obtain(handler, R.id.encode_failed);
         message.sendToTarget();
       }
     }
   }
-
 }

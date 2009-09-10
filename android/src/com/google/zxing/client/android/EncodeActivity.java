@@ -35,20 +35,82 @@ import android.widget.TextView;
 /**
  * This class encodes data from an Intent into a QR code, and then displays it full screen so that
  * another person can scan it with their device.
+ *
+ * @author dswitkin@google.com (Daniel Switkin)
  */
 public final class EncodeActivity extends Activity {
+  private QRCodeEncoder qrCodeEncoder;
+  private ProgressDialog progressDialog;
+  private boolean firstLayout;
 
-  private QRCodeEncoder mQRCodeEncoder;
-  private ProgressDialog mProgressDialog;
-  private boolean mFirstLayout;
+  /**
+   * This needs to be delayed until after the first layout so that the view dimensions will be
+   * available.
+   */
+  public final OnGlobalLayoutListener layoutListener = new OnGlobalLayoutListener() {
+    public void onGlobalLayout() {
+      if (firstLayout) {
+        View layout = findViewById(R.id.encode_view);
+        int width = layout.getWidth();
+        int height = layout.getHeight();
+        int smallerDimension = width < height ? width : height;
+        smallerDimension = smallerDimension * 7 / 8;
+
+        Intent intent = getIntent();
+        try {
+          qrCodeEncoder = new QRCodeEncoder(EncodeActivity.this, intent);
+          setTitle(getString(R.string.app_name) + " - " + qrCodeEncoder.getTitle());
+          qrCodeEncoder.requestBarcode(handler, smallerDimension);
+          progressDialog = ProgressDialog.show(EncodeActivity.this, null,
+              getString(R.string.msg_encode_in_progress), true, true, cancelListener);
+        } catch (IllegalArgumentException e) {
+          showErrorMessage(R.string.msg_encode_contents_failed);
+        }
+        firstLayout = false;
+      }
+    }
+  };
+
+  public final Handler handler = new Handler() {
+    @Override
+    public void handleMessage(Message message) {
+      switch (message.what) {
+        case R.id.encode_succeeded:
+          progressDialog.dismiss();
+          progressDialog = null;
+          Bitmap image = (Bitmap) message.obj;
+          ImageView view = (ImageView) findViewById(R.id.image_view);
+          view.setImageBitmap(image);
+          TextView contents = (TextView) findViewById(R.id.contents_text_view);
+          contents.setText(qrCodeEncoder.getDisplayContents());
+          qrCodeEncoder = null;
+          break;
+        case R.id.encode_failed:
+          showErrorMessage(R.string.msg_encode_barcode_failed);
+          qrCodeEncoder = null;
+          break;
+      }
+    }
+  };
+
+  private final OnClickListener clickListener = new OnClickListener() {
+    public void onClick(DialogInterface dialog, int which) {
+      finish();
+    }
+  };
+
+  private final OnCancelListener cancelListener = new OnCancelListener() {
+    public void onCancel(DialogInterface dialog) {
+      finish();
+    }
+  };
 
   @Override
   public void onCreate(Bundle icicle) {
     super.onCreate(icicle);
 
     Intent intent = getIntent();
-    if (intent != null && (intent.getAction().equals(Intents.Encode.ACTION) ||
-        intent.getAction().equals(Intents.Encode.DEPRECATED_ACTION))) {
+    if (intent != null && (intent.getAction().equals(Intents.Encode.ACTION))) {
       setContentView(R.layout.encode);
     } else {
       finish();
@@ -60,81 +122,18 @@ public final class EncodeActivity extends Activity {
     super.onResume();
 
     View layout = findViewById(R.id.encode_view);
-    layout.getViewTreeObserver().addOnGlobalLayoutListener(mLayoutListener);
-    mFirstLayout = true;
+    layout.getViewTreeObserver().addOnGlobalLayoutListener(layoutListener);
+    firstLayout = true;
   }
 
-  /**
-   * This needs to be delayed until after the first layout so that the view dimensions will be
-   * available.
-   */
-  public final OnGlobalLayoutListener mLayoutListener = new OnGlobalLayoutListener() {
-    public void onGlobalLayout() {
-      if (mFirstLayout) {
-        View layout = findViewById(R.id.encode_view);
-        int width = layout.getWidth();
-        int height = layout.getHeight();
-        int smallerDimension = width < height ? width : height;
-        smallerDimension = smallerDimension * 7 / 8;
-
-        Intent intent = getIntent();
-        try {
-          mQRCodeEncoder = new QRCodeEncoder(EncodeActivity.this, intent);
-          setTitle(getString(R.string.app_name) + " - " + mQRCodeEncoder.getTitle());
-          mQRCodeEncoder.requestBarcode(mHandler, smallerDimension);
-          mProgressDialog = ProgressDialog.show(EncodeActivity.this, null,
-              getString(R.string.msg_encode_in_progress), true, true, mCancelListener);
-        } catch (IllegalArgumentException e) {
-          showErrorMessage(R.string.msg_encode_contents_failed);
-        }
-        mFirstLayout = false;
-      }
-    }
-  };
-
-  public final Handler mHandler = new Handler() {
-    @Override
-    public void handleMessage(Message message) {
-      switch (message.what) {
-        case R.id.encode_succeeded:
-          mProgressDialog.dismiss();
-          mProgressDialog = null;
-          Bitmap image = (Bitmap) message.obj;
-          ImageView view = (ImageView) findViewById(R.id.image_view);
-          view.setImageBitmap(image);
-          TextView contents = (TextView) findViewById(R.id.contents_text_view);
-          contents.setText(mQRCodeEncoder.getDisplayContents());
-          mQRCodeEncoder = null;
-          break;
-        case R.id.encode_failed:
-          showErrorMessage(R.string.msg_encode_barcode_failed);
-          mQRCodeEncoder = null;
-          break;
-      }
-    }
-  };
-
   private void showErrorMessage(int message) {
-    if (mProgressDialog != null) {
-      mProgressDialog.dismiss();
-      mProgressDialog = null;
+    if (progressDialog != null) {
+      progressDialog.dismiss();
+      progressDialog = null;
     }
     AlertDialog.Builder builder = new AlertDialog.Builder(this);
     builder.setMessage(message);
-    builder.setPositiveButton(R.string.button_ok, mClickListener);
+    builder.setPositiveButton(R.string.button_ok, clickListener);
     builder.show();
   }
-
-  private final OnClickListener mClickListener = new OnClickListener() {
-    public void onClick(DialogInterface dialog, int which) {
-      finish();
-    }
-  };
-
-  private final OnCancelListener mCancelListener = new OnCancelListener() {
-    public void onCancel(DialogInterface dialog) {
-      finish();
-    }
-  };
-
 }

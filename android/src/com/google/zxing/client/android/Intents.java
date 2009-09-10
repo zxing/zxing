@@ -16,8 +16,13 @@
 
 package com.google.zxing.client.android;
 
+/**
+ * This class provides the constants to use when sending an Intent to Barcode Scanner.
+ * These strings are effectively API and cannot be changed.
+ *
+ * @author dswitkin@google.com (Daniel Switkin)
+ */
 public final class Intents {
-
   private Intents() {
   }
 
@@ -27,9 +32,6 @@ public final class Intents {
      * the results.
      */
     public static final String ACTION = "com.google.zxing.client.android.SCAN";
-
-    // For compatibility only - do not use in new code, this will go away!
-    public static final String DEPRECATED_ACTION = "com.android.barcodes.SCAN";
 
     /**
      * By default, sending Scan.ACTION will decode all barcodes that we understand. However it
@@ -79,9 +81,6 @@ public final class Intents {
      */
     public static final String ACTION = "com.google.zxing.client.android.ENCODE";
 
-    // For compatibility only - do not use in new code, this will go away!
-    public static final String DEPRECATED_ACTION = "com.android.barcodes.ENCODE";
-
     /**
      * The data to encode. Use Intent.putExtra(DATA, data) where data is either a String or a
      * Bundle, depending on the type and format specified. Non-QR Code formats should
@@ -112,9 +111,6 @@ public final class Intents {
      */
     public static final String ACTION = "com.google.zxing.client.android.SEARCH_BOOK_CONTENTS";
 
-    // For compatibility only - do not use in new code, this will go away!
-    public static final String DEPRECATED_ACTION = "com.android.barcodes.SEARCH_BOOK_CONTENTS";
-
     /**
      * The book to search, identified by ISBN number.
      */
@@ -139,5 +135,4 @@ public final class Intents {
     private Share() {
     }
   }
-
 }

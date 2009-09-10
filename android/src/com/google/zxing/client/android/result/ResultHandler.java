@@ -16,40 +16,50 @@
 
 package com.google.zxing.client.android.result;
 
+import com.google.zxing.client.android.Contents;
+import com.google.zxing.client.android.Intents;
+import com.google.zxing.client.android.LocaleManager;
+import com.google.zxing.client.android.R;
+import com.google.zxing.client.android.SearchBookContentsActivity;
+import com.google.zxing.client.result.ParsedResult;
+import com.google.zxing.client.result.ParsedResultType;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.Contacts;
-import com.google.zxing.client.android.Intents;
-import com.google.zxing.client.android.R;
-import com.google.zxing.client.android.SearchBookContentsActivity;
-import com.google.zxing.client.android.LocaleManager;
-import com.google.zxing.client.android.Contents;
-import com.google.zxing.client.result.ParsedResult;
-import com.google.zxing.client.result.ParsedResultType;
 
+import java.text.DateFormat;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.text.DateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+/**
+ * A base class for the Android-specific barcode handlers. These allow the app to polymorphically
+ * suggest the appropriate actions for each data type.
+ *
+ * This class also contains a bunch of utility methods to take common actions like opening a URL.
+ * They could easily be moved into a helper object, but it can't be static because the Activity
+ * instance is needed to launch an intent.
+ *
+ * @author dswitkin@google.com (Daniel Switkin)
+ */
 public abstract class ResultHandler {
-
   private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyyMMdd");
   private static final DateFormat DATE_TIME_FORMAT = new SimpleDateFormat("yyyyMMdd'T'HHmmss");
 
   public static final int MAX_BUTTON_COUNT = 4;
 
-  protected final ParsedResult mResult;
-  private final Activity mActivity;
+  protected final ParsedResult result;
+  private final Activity activity;
 
   protected ResultHandler(Activity activity, ParsedResult result) {
-    mResult = result;
-    mActivity = activity;
+    this.result = result;
+    this.activity = activity;
   }
 
   /**
@@ -81,7 +91,7 @@ public abstract class ResultHandler {
    * @return The text to be displayed.
    */
   public CharSequence getDisplayContents() {
-    String contents = mResult.getDisplayResult();
+    String contents = result.getDisplayResult();
     return contents.replace("\r", "");
   }
 
@@ -98,7 +108,7 @@ public abstract class ResultHandler {
    * @return The parsed type, e.g. URI or ISBN
    */
   public final ParsedResultType getType() {
-    return mResult.getType();
+    return result.getType();
   }
 
   /**
@@ -171,7 +181,7 @@ public abstract class ResultHandler {
   }
 
   public final void shareByEmail(String contents) {
-    sendEmailFromUri("mailto:", mActivity.getString(R.string.msg_share_subject_line), contents);
+    sendEmailFromUri("mailto:", activity.getString(R.string.msg_share_subject_line), contents);
   }
 
   public final void sendEmail(String address, String subject, String body) {
@@ -188,7 +198,7 @@ public abstract class ResultHandler {
   }
 
   public final void shareBySMS(String contents) {
-    sendSMSFromUri("smsto:", mActivity.getString(R.string.msg_share_subject_line) + ":\n" +
+    sendSMSFromUri("smsto:", activity.getString(R.string.msg_share_subject_line) + ":\n" +
         contents);
   }
 
@@ -212,7 +222,7 @@ public abstract class ResultHandler {
     Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse(uri));
     // The Messaging app needs to see a valid subject or else it will treat this an an SMS.
     if (subject == null || subject.length() == 0) {
-      putExtra(intent, "subject", mActivity.getString(R.string.msg_default_mms_subject));
+      putExtra(intent, "subject", activity.getString(R.string.msg_default_mms_subject));
     } else {
       putExtra(intent, "subject", subject);
     }
@@ -267,7 +277,7 @@ public abstract class ResultHandler {
 
   public final void searchBookContents(String isbn) {
     Intent intent = new Intent(Intents.SearchBookContents.ACTION);
-    intent.setClassName(mActivity, SearchBookContentsActivity.class.getName());
+    intent.setClassName(activity, SearchBookContentsActivity.class.getName());
     putExtra(intent, Intents.SearchBookContents.ISBN, isbn);
     launchIntent(intent);
   }
@@ -285,11 +295,11 @@ public abstract class ResultHandler {
   private void launchIntent(Intent intent) {
     if (intent != null) {
       try {
-        mActivity.startActivity(intent);
+        activity.startActivity(intent);
       } catch (ActivityNotFoundException e) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
-        builder.setTitle(mActivity.getString(R.string.app_name));
-        builder.setMessage(mActivity.getString(R.string.msg_intent_failed));
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setTitle(activity.getString(R.string.app_name));
+        builder.setMessage(activity.getString(R.string.msg_intent_failed));
         builder.setPositiveButton(R.string.button_ok, null);
         builder.show();
       }
@@ -301,5 +311,4 @@ public abstract class ResultHandler {
       intent.putExtra(key, value);
     }
   }
-
 }

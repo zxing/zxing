@@ -16,38 +16,41 @@
 
 package com.google.zxing.client.android;
 
+/**
+ * The underlying data for a SBC result.
+ *
+ * @author dswitkin@google.com (Daniel Switkin)
+ */
 public final class SearchBookContentsResult {
+  private static String query;
 
-  private static String sQuery;
-
-  private final String mPageNumber;
-  private final String mSnippet;
-  private final boolean mValidSnippet;
+  private final String pageNumber;
+  private final String snippet;
+  private final boolean validSnippet;
 
   public SearchBookContentsResult(String pageNumber, String snippet, boolean validSnippet) {
-    mPageNumber = pageNumber;
-    mSnippet = snippet;
-    mValidSnippet = validSnippet;
+    this.pageNumber = pageNumber;
+    this.snippet = snippet;
+    this.validSnippet = validSnippet;
   }
 
   public static void setQuery(String query) {
-    sQuery = query;
+    SearchBookContentsResult.query = query;
   }
 
   public String getPageNumber() {
-    return mPageNumber;
+    return pageNumber;
   }
 
   public String getSnippet() {
-    return mSnippet;
+    return snippet;
   }
 
   public boolean getValidSnippet() {
-    return mValidSnippet;
+    return validSnippet;
   }
 
   public static String getQuery() {
-    return sQuery;
+    return query;
   }
-
 }

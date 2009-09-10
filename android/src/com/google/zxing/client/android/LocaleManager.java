@@ -22,9 +22,10 @@ import java.util.HashMap;
 
 /**
  * Handles any locale-specific logic for the client.
+ *
+ * @author Sean Owen
  */
 public final class LocaleManager {
-
   private static final String DEFAULT_TLD = "com";
   private static final Map<Locale,String> GOOGLE_COUNTRY_TLD;
   static {
@@ -93,5 +94,4 @@ public final class LocaleManager {
     }
     return tld;
   }
-
 }

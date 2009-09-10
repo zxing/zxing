@@ -29,8 +29,13 @@ import android.text.ClipboardManager;
 import android.view.View;
 import android.widget.Button;
 
+/**
+ * Barcode Scanner can share data like contacts and bookmarks by displaying a QR Code on screen,
+ * such that another user can scan the barcode with their phone.
+ *
+ * @author dswitkin@google.com (Daniel Switkin)
+ */
 public final class ShareActivity extends Activity {
-
   private static final int PICK_BOOKMARK = 0;
   private static final int PICK_CONTACT = 1;
 
@@ -51,43 +56,16 @@ public final class ShareActivity extends Activity {
       Contacts.PhonesColumns.NUMBER // 1
   };
 
-  private Button mClipboardButton;
+  private Button clipboardButton;
 
-  @Override
-  public void onCreate(Bundle icicle) {
-    super.onCreate(icicle);
-    setContentView(R.layout.share);
-
-    Button mContactButton = (Button) findViewById(R.id.contact_button);
-    mContactButton.setOnClickListener(mContactListener);
-    Button mBookmarkButton = (Button) findViewById(R.id.bookmark_button);
-    mBookmarkButton.setOnClickListener(mBookmarkListener);
-    mClipboardButton = (Button) findViewById(R.id.clipboard_button);
-    mClipboardButton.setOnClickListener(mClipboardListener);
-  }
-
-  @Override
-  protected void onResume() {
-    super.onResume();
-
-    ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-    if (clipboard.hasText()) {
-      mClipboardButton.setEnabled(true);
-      mClipboardButton.setText(R.string.button_share_clipboard);
-    } else {
-      mClipboardButton.setEnabled(false);
-      mClipboardButton.setText(R.string.button_clipboard_empty);
-    }
-  }
-
-  private final Button.OnClickListener mContactListener = new Button.OnClickListener() {
+  private final Button.OnClickListener contactListener = new Button.OnClickListener() {
     public void onClick(View v) {
       startActivityForResult(new Intent(Intent.ACTION_PICK, Contacts.People.CONTENT_URI),
           PICK_CONTACT);
     }
   };
 
-  private final Button.OnClickListener mBookmarkListener = new Button.OnClickListener() {
+  private final Button.OnClickListener bookmarkListener = new Button.OnClickListener() {
     public void onClick(View v) {
       Intent intent = new Intent(Intent.ACTION_PICK);
       intent.setClassName(ShareActivity.this, BookmarkPickerActivity.class.getName());
@@ -95,7 +73,7 @@ public final class ShareActivity extends Activity {
     }
   };
 
-  private final Button.OnClickListener mClipboardListener = new Button.OnClickListener() {
+  private final Button.OnClickListener clipboardListener = new Button.OnClickListener() {
     public void onClick(View v) {
       ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
       // Should always be true, because we grey out the clipboard button in onResume() if it's empty
@@ -108,6 +86,33 @@ public final class ShareActivity extends Activity {
       }
     }
   };
+
+  @Override
+  public void onCreate(Bundle icicle) {
+    super.onCreate(icicle);
+    setContentView(R.layout.share);
+
+    Button mContactButton = (Button) findViewById(R.id.contact_button);
+    mContactButton.setOnClickListener(contactListener);
+    Button mBookmarkButton = (Button) findViewById(R.id.bookmark_button);
+    mBookmarkButton.setOnClickListener(bookmarkListener);
+    clipboardButton = (Button) findViewById(R.id.clipboard_button);
+    clipboardButton.setOnClickListener(clipboardListener);
+  }
+
+  @Override
+  protected void onResume() {
+    super.onResume();
+
+    ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+    if (clipboard.hasText()) {
+      clipboardButton.setEnabled(true);
+      clipboardButton.setText(R.string.button_share_clipboard);
+    } else {
+      clipboardButton.setEnabled(false);
+      clipboardButton.setText(R.string.button_clipboard_empty);
+    }
+  }
 
   @Override
   public void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -213,5 +218,4 @@ public final class ShareActivity extends Activity {
     }
     return data;
   }
-
 }
