@@ -16,14 +16,19 @@
 
 package com.google.zxing.client.android.result;
 
-import android.app.Activity;
 import com.google.zxing.Result;
 import com.google.zxing.client.result.ParsedResult;
 import com.google.zxing.client.result.ParsedResultType;
 import com.google.zxing.client.result.ResultParser;
 
-public final class ResultHandlerFactory {
+import android.app.Activity;
 
+/**
+ * Manufactures Android-specific handlers based on the barcode content's type.
+ *
+ * @author dswitkin@google.com (Daniel Switkin)
+ */
+public final class ResultHandlerFactory {
   private ResultHandlerFactory() {
   }
 
@@ -57,22 +62,6 @@ public final class ResultHandlerFactory {
   }
 
   private static ParsedResult parseResult(Result rawResult) {
-    ParsedResult result = ResultParser.parseResult(rawResult);
-
-    // Disabled for now. To reactivate, create an AndroidIntentResultHandler.
-//        if (result.getType().equals(ParsedResultType.TEXT)) {
-//            String rawText = rawResult.getText();
-//            AndroidIntentParsedResult androidResult = AndroidIntentParsedResult.parse(rawText);
-//            if (androidResult != null) {
-//                Intent intent = androidResult.getIntent();
-//                if (!Intent.ACTION_VIEW.equals(intent.getAction())) {
-//                    // For now, don't take anything that just parses as a View action. A lot
-//                    // of things are accepted as a View action by default.
-//                    result = androidResult;
-//                }
-//            }
-//        }
-    return result;
+    return ResultParser.parseResult(rawResult);
   }
-
 }

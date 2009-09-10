@@ -16,10 +16,11 @@
 
 package com.google.zxing.client.android.result;
 
-import android.app.Activity;
 import com.google.zxing.client.android.R;
 import com.google.zxing.client.result.CalendarParsedResult;
 import com.google.zxing.client.result.ParsedResult;
+
+import android.app.Activity;
 
 import java.text.DateFormat;
 import java.text.ParsePosition;
@@ -28,12 +29,16 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+/**
+ * Handles calendar entries encoded in QR Codes.
+ *
+ * @author dswitkin@google.com (Daniel Switkin)
+ */
 public final class CalendarResultHandler extends ResultHandler {
-
   private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyyMMdd");
   private static final DateFormat DATE_TIME_FORMAT = new SimpleDateFormat("yyyyMMdd'T'HHmmss");
 
-  private static final int[] mButtons = {
+  private static final int[] buttons = {
       R.string.button_add_calendar
   };
 
@@ -43,17 +48,17 @@ public final class CalendarResultHandler extends ResultHandler {
 
   @Override
   public int getButtonCount() {
-    return mButtons.length;
+    return buttons.length;
   }
 
   @Override
   public int getButtonText(int index) {
-    return mButtons[index];
+    return buttons[index];
   }
 
   @Override
   public void handleButtonPress(int index) {
-    CalendarParsedResult calendarResult = (CalendarParsedResult) mResult;
+    CalendarParsedResult calendarResult = (CalendarParsedResult) result;
     switch (index) {
       case 0:
         addCalendarEvent(calendarResult.getSummary(), calendarResult.getStart(),
@@ -64,7 +69,7 @@ public final class CalendarResultHandler extends ResultHandler {
 
   @Override
   public CharSequence getDisplayContents() {
-    CalendarParsedResult calResult = (CalendarParsedResult) mResult;
+    CalendarParsedResult calResult = (CalendarParsedResult) result;
     StringBuffer result = new StringBuffer();
     ParsedResult.maybeAppend(calResult.getSummary(), result);
     appendTime(calResult.getStart(), result);
@@ -110,5 +115,4 @@ public final class CalendarResultHandler extends ResultHandler {
   public int getDisplayTitle() {
     return R.string.result_calendar;
   }
-
 }

@@ -16,15 +16,20 @@
 
 package com.google.zxing.client.android.result;
 
-import android.app.Activity;
-import android.telephony.PhoneNumberUtils;
 import com.google.zxing.client.android.R;
 import com.google.zxing.client.result.ParsedResult;
 import com.google.zxing.client.result.SMSParsedResult;
 
-public final class SMSResultHandler extends ResultHandler {
+import android.app.Activity;
+import android.telephony.PhoneNumberUtils;
 
-  private static final int[] mButtons = {
+/**
+ * Handles SMS addresses, offering a choice of composing a new SMS or MMS message.
+ *
+ * @author dswitkin@google.com (Daniel Switkin)
+ */
+public final class SMSResultHandler extends ResultHandler {
+  private static final int[] buttons = {
       R.string.button_sms,
       R.string.button_mms
   };
@@ -35,17 +40,17 @@ public final class SMSResultHandler extends ResultHandler {
 
   @Override
   public int getButtonCount() {
-    return mButtons.length;
+    return buttons.length;
   }
 
   @Override
   public int getButtonText(int index) {
-    return mButtons[index];
+    return buttons[index];
   }
 
   @Override
   public void handleButtonPress(int index) {
-    SMSParsedResult smsResult = (SMSParsedResult) mResult;
+    SMSParsedResult smsResult = (SMSParsedResult) result;
     switch (index) {
       case 0:
         sendSMS(smsResult.getNumber(), smsResult.getBody());
@@ -58,7 +63,7 @@ public final class SMSResultHandler extends ResultHandler {
 
   @Override
   public CharSequence getDisplayContents() {
-    SMSParsedResult smsResult = (SMSParsedResult) mResult;
+    SMSParsedResult smsResult = (SMSParsedResult) result;
     StringBuffer contents = new StringBuffer();
     ParsedResult.maybeAppend(PhoneNumberUtils.formatNumber(smsResult.getNumber()), contents);
     ParsedResult.maybeAppend(smsResult.getVia(), contents);
@@ -72,5 +77,4 @@ public final class SMSResultHandler extends ResultHandler {
   public int getDisplayTitle() {
     return R.string.result_sms;
   }
-
 }

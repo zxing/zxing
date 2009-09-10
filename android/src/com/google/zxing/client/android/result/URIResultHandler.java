@@ -16,14 +16,19 @@
 
 package com.google.zxing.client.android.result;
 
-import android.app.Activity;
 import com.google.zxing.client.android.R;
 import com.google.zxing.client.result.ParsedResult;
 import com.google.zxing.client.result.URIParsedResult;
 
-public final class URIResultHandler extends ResultHandler {
+import android.app.Activity;
 
-  private static final int[] mButtons = {
+/**
+ * Offers appropriate actions for URLS.
+ *
+ * @author dswitkin@google.com (Daniel Switkin)
+ */
+public final class URIResultHandler extends ResultHandler {
+  private static final int[] buttons = {
       R.string.button_open_browser,
       R.string.button_share_by_email,
       R.string.button_share_by_sms
@@ -35,17 +40,17 @@ public final class URIResultHandler extends ResultHandler {
 
   @Override
   public int getButtonCount() {
-    return mButtons.length;
+    return buttons.length;
   }
 
   @Override
   public int getButtonText(int index) {
-    return mButtons[index];
+    return buttons[index];
   }
 
   @Override
   public void handleButtonPress(int index) {
-    URIParsedResult uriResult = (URIParsedResult) mResult;
+    URIParsedResult uriResult = (URIParsedResult) result;
     switch (index) {
       case 0:
         openURL(uriResult.getURI());
@@ -63,5 +68,4 @@ public final class URIResultHandler extends ResultHandler {
   public int getDisplayTitle() {
     return R.string.result_uri;
   }
-
 }

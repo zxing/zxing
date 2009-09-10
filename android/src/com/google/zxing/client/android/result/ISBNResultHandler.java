@@ -16,44 +16,50 @@
 
 package com.google.zxing.client.android.result;
 
-import android.app.Activity;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import com.google.zxing.client.android.R;
 import com.google.zxing.client.android.PreferencesActivity;
+import com.google.zxing.client.android.R;
 import com.google.zxing.client.result.ISBNParsedResult;
 import com.google.zxing.client.result.ParsedResult;
 
-public final class ISBNResultHandler extends ResultHandler {
+import android.app.Activity;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
-  private static final int[] mButtons = {
+/**
+ * Handles books encoded by their ISBN values.
+ *
+ * @author dswitkin@google.com (Daniel Switkin)
+ */
+public final class ISBNResultHandler extends ResultHandler {
+  private static final int[] buttons = {
       R.string.button_product_search,
       R.string.button_book_search,
       R.string.button_search_book_contents,
       R.string.button_custom_product_search,
   };
 
-  private final String mCustomProductSearch;
+  private final String customProductSearch;
 
   public ISBNResultHandler(Activity activity, ParsedResult result) {
     super(activity, result);
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
-    mCustomProductSearch = prefs.getString(PreferencesActivity.KEY_CUSTOM_PRODUCT_SEARCH, null);
+    customProductSearch = prefs.getString(PreferencesActivity.KEY_CUSTOM_PRODUCT_SEARCH, null);
   }
 
   @Override
   public int getButtonCount() {
-    return mCustomProductSearch != null && mCustomProductSearch.length() > 0 ? mButtons.length : mButtons.length - 1;
+    return customProductSearch != null && customProductSearch.length() > 0 ? buttons.length : buttons
+        .length - 1;
   }
 
   @Override
   public int getButtonText(int index) {
-    return mButtons[index];
+    return buttons[index];
   }
 
   @Override
   public void handleButtonPress(int index) {
-    ISBNParsedResult isbnResult = (ISBNParsedResult) mResult;
+    ISBNParsedResult isbnResult = (ISBNParsedResult) result;
     switch (index) {
       case 0:
         openProductSearch(isbnResult.getISBN());
@@ -65,7 +71,7 @@ public final class ISBNResultHandler extends ResultHandler {
         searchBookContents(isbnResult.getISBN());
         break;
       case 3:
-        String url = mCustomProductSearch.replace("%s", isbnResult.getISBN());
+        String url = customProductSearch.replace("%s", isbnResult.getISBN());
         openURL(url);
         break;
     }
@@ -75,5 +81,4 @@ public final class ISBNResultHandler extends ResultHandler {
   public int getDisplayTitle() {
     return R.string.result_isbn;
   }
-
 }

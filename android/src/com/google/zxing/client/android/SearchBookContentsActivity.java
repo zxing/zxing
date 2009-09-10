@@ -48,17 +48,53 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Uses Google Book Search to find a word or phrase in the requested book.
+ *
+ * @author dswitkin@google.com (Daniel Switkin)
+ */
 public final class SearchBookContentsActivity extends Activity {
-
   private static final String TAG = "SearchBookContents";
   private static final String USER_AGENT = "ZXing (Android)";
 
-  private NetworkThread mNetworkThread;
-  private String mISBN;
-  private EditText mQueryTextView;
-  private Button mQueryButton;
-  private ListView mResultListView;
-  private TextView mHeaderView;
+  private NetworkThread networkThread;
+  private String isbn;
+  private EditText queryTextView;
+  private Button queryButton;
+  private ListView resultListView;
+  private TextView headerView;
+
+  public final Handler handler = new Handler() {
+    @Override
+    public void handleMessage(Message message) {
+      switch (message.what) {
+        case R.id.search_book_contents_succeeded:
+          handleSearchResults((JSONObject) message.obj);
+          resetForNewQuery();
+          break;
+        case R.id.search_book_contents_failed:
+          resetForNewQuery();
+          headerView.setText(R.string.msg_sbc_failed);
+          break;
+      }
+    }
+  };
+
+  private final Button.OnClickListener buttonListener = new Button.OnClickListener() {
+    public void onClick(View view) {
+      launchSearch();
+    }
+  };
+
+  private final View.OnKeyListener keyListener = new View.OnKeyListener() {
+    public boolean onKey(View view, int keyCode, KeyEvent event) {
+      if (keyCode == KeyEvent.KEYCODE_ENTER) {
+        launchSearch();
+        return true;
+      }
+      return false;
+    }
+  };
 
   @Override
   public void onCreate(Bundle icicle) {
@@ -69,39 +105,38 @@ public final class SearchBookContentsActivity extends Activity {
     CookieManager.getInstance().removeExpiredCookie();
 
     Intent intent = getIntent();
-    if (intent == null || (!intent.getAction().equals(Intents.SearchBookContents.ACTION) &&
-        !intent.getAction().equals(Intents.SearchBookContents.DEPRECATED_ACTION))) {
+    if (intent == null || (!intent.getAction().equals(Intents.SearchBookContents.ACTION))) {
       finish();
       return;
     }
 
-    mISBN = intent.getStringExtra(Intents.SearchBookContents.ISBN);
-    setTitle(getString(R.string.sbc_name) + ": ISBN " + mISBN);
+    isbn = intent.getStringExtra(Intents.SearchBookContents.ISBN);
+    setTitle(getString(R.string.sbc_name) + ": ISBN " + isbn);
 
     setContentView(R.layout.search_book_contents);
-    mQueryTextView = (EditText) findViewById(R.id.query_text_view);
+    queryTextView = (EditText) findViewById(R.id.query_text_view);
 
     String initialQuery = intent.getStringExtra(Intents.SearchBookContents.QUERY);
     if (initialQuery != null && initialQuery.length() > 0) {
       // Populate the search box but don't trigger the search
-      mQueryTextView.setText(initialQuery);
+      queryTextView.setText(initialQuery);
     }
-    mQueryTextView.setOnKeyListener(mKeyListener);
+    queryTextView.setOnKeyListener(keyListener);
 
-    mQueryButton = (Button) findViewById(R.id.query_button);
-    mQueryButton.setOnClickListener(mButtonListener);
+    queryButton = (Button) findViewById(R.id.query_button);
+    queryButton.setOnClickListener(buttonListener);
 
-    mResultListView = (ListView) findViewById(R.id.result_list_view);
+    resultListView = (ListView) findViewById(R.id.result_list_view);
     LayoutInflater factory = LayoutInflater.from(this);
-    mHeaderView = (TextView) factory.inflate(R.layout.search_book_contents_header,
-        mResultListView, false);
-    mResultListView.addHeaderView(mHeaderView);
+    headerView = (TextView) factory.inflate(R.layout.search_book_contents_header,
+        resultListView, false);
+    resultListView.addHeaderView(headerView);
   }
 
   @Override
   protected void onResume() {
     super.onResume();
-    mQueryTextView.selectAll();
+    queryTextView.selectAll();
   }
 
   @Override
@@ -110,55 +145,23 @@ public final class SearchBookContentsActivity extends Activity {
     super.onConfigurationChanged(config);
   }
 
-  public final Handler mHandler = new Handler() {
-    @Override
-    public void handleMessage(Message message) {
-      switch (message.what) {
-        case R.id.search_book_contents_succeeded:
-          handleSearchResults((JSONObject) message.obj);
-          resetForNewQuery();
-          break;
-        case R.id.search_book_contents_failed:
-          resetForNewQuery();
-          mHeaderView.setText(R.string.msg_sbc_failed);
-          break;
-      }
-    }
-  };
-
   private void resetForNewQuery() {
-    mNetworkThread = null;
-    mQueryTextView.setEnabled(true);
-    mQueryTextView.selectAll();
-    mQueryButton.setEnabled(true);
+    networkThread = null;
+    queryTextView.setEnabled(true);
+    queryTextView.selectAll();
+    queryButton.setEnabled(true);
   }
 
-  private final Button.OnClickListener mButtonListener = new Button.OnClickListener() {
-    public void onClick(View view) {
-      launchSearch();
-    }
-  };
-
-  private final View.OnKeyListener mKeyListener = new View.OnKeyListener() {
-    public boolean onKey(View view, int keyCode, KeyEvent event) {
-      if (keyCode == KeyEvent.KEYCODE_ENTER) {
-        launchSearch();
-        return true;
-      }
-      return false;
-    }
-  };
-
   private void launchSearch() {
-    if (mNetworkThread == null) {
-      String query = mQueryTextView.getText().toString();
+    if (networkThread == null) {
+      String query = queryTextView.getText().toString();
       if (query != null && query.length() > 0) {
-        mNetworkThread = new NetworkThread(mISBN, query, mHandler);
-        mNetworkThread.start();
-        mHeaderView.setText(R.string.msg_sbc_searching_book);
-        mResultListView.setAdapter(null);
-        mQueryTextView.setEnabled(false);
-        mQueryButton.setEnabled(false);
+        networkThread = new NetworkThread(isbn, query, handler);
+        networkThread.start();
+        headerView.setText(R.string.msg_sbc_searching_book);
+        resultListView.setAdapter(null);
+        queryTextView.setEnabled(false);
+        queryButton.setEnabled(false);
       }
     }
   }
@@ -168,26 +171,26 @@ public final class SearchBookContentsActivity extends Activity {
   private void handleSearchResults(JSONObject json) {
     try {
       int count = json.getInt("number_of_results");
-      mHeaderView.setText("Found " + (count == 1 ? "1 result" : count + " results"));
+      headerView.setText("Found " + (count == 1 ? "1 result" : count + " results"));
       if (count > 0) {
         JSONArray results = json.getJSONArray("search_results");
-        SearchBookContentsResult.setQuery(mQueryTextView.getText().toString());
+        SearchBookContentsResult.setQuery(queryTextView.getText().toString());
         List<SearchBookContentsResult> items = new ArrayList<SearchBookContentsResult>(count);
         for (int x = 0; x < count; x++) {
           items.add(parseResult(results.getJSONObject(x)));
         }
-        mResultListView.setAdapter(new SearchBookContentsAdapter(this, items));
+        resultListView.setAdapter(new SearchBookContentsAdapter(this, items));
       } else {
         String searchable = json.optString("searchable");
         if ("false".equals(searchable)) {
-          mHeaderView.setText(R.string.msg_sbc_book_not_searchable);
+          headerView.setText(R.string.msg_sbc_book_not_searchable);
         }
-        mResultListView.setAdapter(null);
+        resultListView.setAdapter(null);
       }
     } catch (JSONException e) {
       Log.e(TAG, e.toString());
-      mResultListView.setAdapter(null);
-      mHeaderView.setText(R.string.msg_sbc_failed);
+      resultListView.setAdapter(null);
+      headerView.setText(R.string.msg_sbc_failed);
     }
   }
 
@@ -223,15 +226,14 @@ public final class SearchBookContentsActivity extends Activity {
   }
 
   private static final class NetworkThread extends Thread {
-
-    private final String mISBN;
-    private final String mQuery;
-    private final Handler mHandler;
+    private final String isbn;
+    private final String query;
+    private final Handler handler;
 
     NetworkThread(String isbn, String query, Handler handler) {
-      mISBN = isbn;
-      mQuery = query;
-      mHandler = handler;
+      this.isbn = isbn;
+      this.query = query;
+      this.handler = handler;
     }
 
     @Override
@@ -241,8 +243,8 @@ public final class SearchBookContentsActivity extends Activity {
         // These return a JSON result which describes if and where the query was found. This API may
         // break or disappear at any time in the future. Since this is an API call rather than a
         // website, we don't use LocaleManager to change the TLD.
-        URI uri = new URI("http", null, "www.google.com", -1, "/books", "vid=isbn" + mISBN +
-            "&jscmd=SearchWithinVolume2&q=" + mQuery, null);
+        URI uri = new URI("http", null, "www.google.com", -1, "/books", "vid=isbn" + isbn +
+            "&jscmd=SearchWithinVolume2&q=" + query, null);
         HttpUriRequest get = new HttpGet(uri);
         get.setHeader("cookie", getCookie(uri.toString()));
         client = AndroidHttpClient.newInstance(USER_AGENT);
@@ -255,17 +257,17 @@ public final class SearchBookContentsActivity extends Activity {
           JSONObject json = new JSONObject(jsonHolder.toString(getEncoding(entity)));
           jsonHolder.close();
 
-          Message message = Message.obtain(mHandler, R.id.search_book_contents_succeeded);
+          Message message = Message.obtain(handler, R.id.search_book_contents_succeeded);
           message.obj = json;
           message.sendToTarget();
         } else {
           Log.e(TAG, "HTTP returned " + response.getStatusLine().getStatusCode() + " for " + uri);
-          Message message = Message.obtain(mHandler, R.id.search_book_contents_failed);
+          Message message = Message.obtain(handler, R.id.search_book_contents_failed);
           message.sendToTarget();
         }
       } catch (Exception e) {
         Log.e(TAG, e.toString());
-        Message message = Message.obtain(mHandler, R.id.search_book_contents_failed);
+        Message message = Message.obtain(handler, R.id.search_book_contents_failed);
         message.sendToTarget();
       } finally {
         if (client != null) {
@@ -316,5 +318,4 @@ public final class SearchBookContentsActivity extends Activity {
 //            return "UTF-8";
     }
   }
-
 }

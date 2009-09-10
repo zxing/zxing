@@ -16,16 +16,18 @@
 
 package com.google.zxing.client.android.result;
 
-import android.app.Activity;
 import com.google.zxing.client.android.R;
 import com.google.zxing.client.result.ParsedResult;
 
+import android.app.Activity;
+
 /**
- * This class handles TextParsedResult as well as unknown formats.
+ * This class handles TextParsedResult as well as unknown formats. It's the fallback handler.
+ *
+ * @author dswitkin@google.com (Daniel Switkin)
  */
 public final class TextResultHandler extends ResultHandler {
-
-  private static final int[] mButtons = {
+  private static final int[] buttons = {
       R.string.button_web_search,
       R.string.button_share_by_email,
       R.string.button_share_by_sms
@@ -37,25 +39,25 @@ public final class TextResultHandler extends ResultHandler {
 
   @Override
   public int getButtonCount() {
-    return mButtons.length;
+    return buttons.length;
   }
 
   @Override
   public int getButtonText(int index) {
-    return mButtons[index];
+    return buttons[index];
   }
 
   @Override
   public void handleButtonPress(int index) {
     switch (index) {
       case 0:
-        webSearch(mResult.getDisplayResult());
+        webSearch(result.getDisplayResult());
         break;
       case 1:
-        shareByEmail(mResult.getDisplayResult());
+        shareByEmail(result.getDisplayResult());
         break;
       case 2:
-        shareBySMS(mResult.getDisplayResult());
+        shareBySMS(result.getDisplayResult());
         break;
     }
   }
@@ -64,5 +66,4 @@ public final class TextResultHandler extends ResultHandler {
   public int getDisplayTitle() {
     return R.string.result_text;
   }
-
 }

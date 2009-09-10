@@ -25,7 +25,6 @@ import com.google.zxing.Result;
 import com.google.zxing.common.GlobalHistogramBinarizer;
 
 import android.content.SharedPreferences;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -38,19 +37,20 @@ import java.util.Vector;
 
 /**
  * This thread does all the heavy lifting of decoding the images.
+ *
+ * @author dswitkin@google.com (Daniel Switkin)
  */
 final class DecodeThread extends Thread {
-
   public static final String BARCODE_BITMAP = "barcode_bitmap";
   private static final String TAG = "DecodeThread";
 
-  public Handler mHandler;
-  private final CaptureActivity mActivity;
-  private final MultiFormatReader mMultiFormatReader;
+  public Handler handler;
+  private final CaptureActivity activity;
+  private final MultiFormatReader multiFormatReader;
 
   DecodeThread(CaptureActivity activity, String mode) {
-    mActivity = activity;
-    mMultiFormatReader = new MultiFormatReader();
+    this.activity = activity;
+    multiFormatReader = new MultiFormatReader();
 
     // The prefs can't change while the thread is running, so pick them up once here.
     if (mode == null || mode.length() == 0) {
@@ -80,7 +80,7 @@ final class DecodeThread extends Thread {
   @Override
   public void run() {
     Looper.prepare();
-    mHandler = new Handler() {
+    handler = new Handler() {
       @Override
       public void handleMessage(Message message) {
         switch (message.what) {
@@ -104,7 +104,7 @@ final class DecodeThread extends Thread {
     vector.addElement(BarcodeFormat.EAN_13);
     vector.addElement(BarcodeFormat.EAN_8);
     hints.put(DecodeHintType.POSSIBLE_FORMATS, vector);
-    mMultiFormatReader.setHints(hints);
+    multiFormatReader.setHints(hints);
   }
 
   /**
@@ -121,7 +121,7 @@ final class DecodeThread extends Thread {
     vector.addElement(BarcodeFormat.CODE_128);
     vector.addElement(BarcodeFormat.ITF);
     hints.put(DecodeHintType.POSSIBLE_FORMATS, vector);
-    mMultiFormatReader.setHints(hints);
+    multiFormatReader.setHints(hints);
   }
 
   private void setDecodeQRMode() {
@@ -129,7 +129,7 @@ final class DecodeThread extends Thread {
     Vector<BarcodeFormat> vector = new Vector<BarcodeFormat>(1);
     vector.addElement(BarcodeFormat.QR_CODE);
     hints.put(DecodeHintType.POSSIBLE_FORMATS, vector);
-    mMultiFormatReader.setHints(hints);
+    multiFormatReader.setHints(hints);
   }
 
   /**
@@ -148,7 +148,7 @@ final class DecodeThread extends Thread {
     vector.addElement(BarcodeFormat.ITF);
     vector.addElement(BarcodeFormat.QR_CODE);
     hints.put(DecodeHintType.POSSIBLE_FORMATS, vector);
-    mMultiFormatReader.setHints(hints);
+    multiFormatReader.setHints(hints);
   }
 
   /**
@@ -163,12 +163,10 @@ final class DecodeThread extends Thread {
     long start = System.currentTimeMillis();
     boolean success;
     Result rawResult = null;
-    Rect rect = CameraManager.get().getFramingRect();
-    YUVLuminanceSource source = new YUVLuminanceSource(data, width, height, rect.left, rect.top,
-        rect.width(), rect.height());
+    BaseLuminanceSource source = CameraManager.get().buildLuminanceSource(data, width, height);
     BinaryBitmap bitmap = new BinaryBitmap(new GlobalHistogramBinarizer(source));
     try {
-      rawResult = mMultiFormatReader.decodeWithState(bitmap);
+      rawResult = multiFormatReader.decodeWithState(bitmap);
       success = true;
     } catch (ReaderException e) {
       success = false;
@@ -177,15 +175,14 @@ final class DecodeThread extends Thread {
 
     if (success) {
       Log.v(TAG, "Found barcode (" + (end - start) + " ms):\n" + rawResult.toString());
-      Message message = Message.obtain(mActivity.mHandler, R.id.decode_succeeded, rawResult);
+      Message message = Message.obtain(activity.handler, R.id.decode_succeeded, rawResult);
       Bundle bundle = new Bundle();
-      bundle.putParcelable(BARCODE_BITMAP, source.renderToBitmap());
+      bundle.putParcelable(BARCODE_BITMAP, source.renderCroppedGreyscaleBitmap());
       message.setData(bundle);
       message.sendToTarget();
     } else {
-      Message message = Message.obtain(mActivity.mHandler, R.id.decode_failed);
+      Message message = Message.obtain(activity.handler, R.id.decode_failed);
       message.sendToTarget();
     }
   }
-
 }

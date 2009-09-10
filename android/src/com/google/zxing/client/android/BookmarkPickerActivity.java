@@ -29,9 +29,10 @@ import android.widget.SimpleCursorAdapter;
 /**
  * This class is only needed because I can't successfully send an ACTION_PICK intent to
  * com.android.browser.BrowserBookmarksPage. It can go away if that starts working in the future.
+ *
+ * @author dswitkin@google.com (Daniel Switkin)
  */
 public final class BookmarkPickerActivity extends ListActivity {
-
   private static final String[] BOOKMARK_PROJECTION = {
       Browser.BookmarkColumns.TITLE,
       Browser.BookmarkColumns.URL
@@ -48,32 +49,31 @@ public final class BookmarkPickerActivity extends ListActivity {
   // Without this selection, we'd get all the history entries too
   private static final String BOOKMARK_SELECTION = "bookmark = 1";
 
-  private Cursor mCursor;
+  private Cursor cursor;
 
   @Override
   protected void onCreate(Bundle icicle) {
     super.onCreate(icicle);
 
-    mCursor = getContentResolver().query(Browser.BOOKMARKS_URI, BOOKMARK_PROJECTION,
+    cursor = getContentResolver().query(Browser.BOOKMARKS_URI, BOOKMARK_PROJECTION,
         BOOKMARK_SELECTION, null, null);
-    startManagingCursor(mCursor);
+    startManagingCursor(cursor);
 
     ListAdapter adapter = new SimpleCursorAdapter(this, R.layout.bookmark_picker_list_item,
-        mCursor, BOOKMARK_PROJECTION, TWO_LINE_VIEW_IDS);
+        cursor, BOOKMARK_PROJECTION, TWO_LINE_VIEW_IDS);
     setListAdapter(adapter);
   }
 
   @Override
   protected void onListItemClick(ListView l, View view, int position, long id) {
-    if (mCursor.moveToPosition(position)) {
+    if (cursor.moveToPosition(position)) {
       Intent intent = new Intent();
-      intent.putExtra(Browser.BookmarkColumns.TITLE, mCursor.getString(TITLE_COLUMN));
-      intent.putExtra(Browser.BookmarkColumns.URL, mCursor.getString(URL_COLUMN));
+      intent.putExtra(Browser.BookmarkColumns.TITLE, cursor.getString(TITLE_COLUMN));
+      intent.putExtra(Browser.BookmarkColumns.URL, cursor.getString(URL_COLUMN));
       setResult(RESULT_OK, intent);
     } else {
       setResult(RESULT_CANCELED);
     }
     finish();
   }
-
 }

@@ -16,14 +16,19 @@
 
 package com.google.zxing.client.android.result;
 
-import android.app.Activity;
 import com.google.zxing.client.android.R;
 import com.google.zxing.client.result.GeoParsedResult;
 import com.google.zxing.client.result.ParsedResult;
 
-public final class GeoResultHandler extends ResultHandler {
+import android.app.Activity;
 
-  private static final int[] mButtons = {
+/**
+ * Handles geographic coordinates (typically encoded as geo: URLs).
+ *
+ * @author dswitkin@google.com (Daniel Switkin)
+ */
+public final class GeoResultHandler extends ResultHandler {
+  private static final int[] buttons = {
       R.string.button_show_map,
       R.string.button_get_directions
   };
@@ -34,17 +39,17 @@ public final class GeoResultHandler extends ResultHandler {
 
   @Override
   public int getButtonCount() {
-    return mButtons.length;
+    return buttons.length;
   }
 
   @Override
   public int getButtonText(int index) {
-    return mButtons[index];
+    return buttons[index];
   }
 
   @Override
   public void handleButtonPress(int index) {
-    GeoParsedResult geoResult = (GeoParsedResult) mResult;
+    GeoParsedResult geoResult = (GeoParsedResult) result;
     switch (index) {
       case 0:
         openMap(geoResult.getGeoURI());
@@ -59,5 +64,4 @@ public final class GeoResultHandler extends ResultHandler {
   public int getDisplayTitle() {
     return R.string.result_geo;
   }
-
 }

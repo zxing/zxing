@@ -16,6 +16,12 @@
 
 package com.google.zxing.client.android;
 
+import com.google.zxing.Result;
+import com.google.zxing.ResultPoint;
+import com.google.zxing.client.android.result.ResultButtonListener;
+import com.google.zxing.client.android.result.ResultHandler;
+import com.google.zxing.client.android.result.ResultHandlerFactory;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -54,20 +60,16 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.google.zxing.Result;
-import com.google.zxing.ResultPoint;
-import com.google.zxing.client.android.result.ResultButtonListener;
-import com.google.zxing.client.android.result.ResultHandler;
-import com.google.zxing.client.android.result.ResultHandlerFactory;
 
 import java.io.IOException;
 
 /**
  * The barcode reader activity itself. This is loosely based on the CameraPreview
  * example included in the Android SDK.
+ *
+ * @author dswitkin@google.com (Daniel Switkin)
  */
 public final class CaptureActivity extends Activity implements SurfaceHolder.Callback {
-
   private static final String TAG = "CaptureActivity";
 
   private static final int SHARE_ID = Menu.FIRST;
@@ -92,23 +94,31 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     NONE
   }
 
-  public CaptureActivityHandler mHandler;
+  public CaptureActivityHandler handler;
 
-  private ViewfinderView mViewfinderView;
-  private View mStatusView;
-  private View mResultView;
-  private MediaPlayer mMediaPlayer;
-  private Result mLastResult;
-  private boolean mHasSurface;
-  private boolean mPlayBeep;
-  private boolean mVibrate;
-  private boolean mCopyToClipboard;
-  private Source mSource;
-  private String mSourceUrl;
-  private String mDecodeMode;
-  private String mVersionName;
+  private ViewfinderView viewfinderView;
+  private View statusView;
+  private View resultView;
+  private MediaPlayer mediaPlayer;
+  private Result lastResult;
+  private boolean hasSurface;
+  private boolean playBeep;
+  private boolean vibrate;
+  private boolean copyToClipboard;
+  private Source source;
+  private String sourceUrl;
+  private String decodeMode;
+  private String versionName;
+  
+  private final OnCompletionListener beepListener = new BeepListener();
 
-  private final OnCompletionListener mBeepListener = new BeepListener();
+  private final DialogInterface.OnClickListener aboutListener =
+      new DialogInterface.OnClickListener() {
+    public void onClick(DialogInterface dialogInterface, int i) {
+      Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.zxing_url)));
+      startActivity(intent);
+    }
+  };
 
   @Override
   public void onCreate(Bundle icicle) {
@@ -120,12 +130,12 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     setContentView(R.layout.capture);
 
     CameraManager.init(getApplication());
-    mViewfinderView = (ViewfinderView) findViewById(R.id.viewfinder_view);
-    mResultView = findViewById(R.id.result_view);
-    mStatusView = findViewById(R.id.status_view);
-    mHandler = null;
-    mLastResult = null;
-    mHasSurface = false;
+    viewfinderView = (ViewfinderView) findViewById(R.id.viewfinder_view);
+    resultView = findViewById(R.id.result_view);
+    statusView = findViewById(R.id.status_view);
+    handler = null;
+    lastResult = null;
+    hasSurface = false;
 
     showHelpOnFirstLaunch();
   }
@@ -136,7 +146,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
     SurfaceView surfaceView = (SurfaceView) findViewById(R.id.preview_view);
     SurfaceHolder surfaceHolder = surfaceView.getHolder();
-    if (mHasSurface) {
+    if (hasSurface) {
       // The activity was paused but not stopped, so the surface still exists. Therefore
       // surfaceCreated() won't be called, so init the camera here.
       initCamera(surfaceHolder);
@@ -150,52 +160,52 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     String action = intent == null ? null : intent.getAction();
     String dataString = intent == null ? null : intent.getDataString();
     if (intent != null && action != null) {
-      if (action.equals(Intents.Scan.ACTION) || action.equals(Intents.Scan.DEPRECATED_ACTION)) {
+      if (action.equals(Intents.Scan.ACTION)) {
         // Scan the formats the intent requested, and return the result to the calling activity.
-        mSource = Source.NATIVE_APP_INTENT;
-        mDecodeMode = intent.getStringExtra(Intents.Scan.MODE);
+        source = Source.NATIVE_APP_INTENT;
+        decodeMode = intent.getStringExtra(Intents.Scan.MODE);
         resetStatusView();
       } else if (dataString != null && dataString.contains(PRODUCT_SEARCH_URL_PREFIX) &&
           dataString.contains(PRODUCT_SEARCH_URL_SUFFIX)) {
         // Scan only products and send the result to mobile Product Search.
-        mSource = Source.PRODUCT_SEARCH_LINK;
-        mSourceUrl = dataString;
-        mDecodeMode = Intents.Scan.PRODUCT_MODE;
+        source = Source.PRODUCT_SEARCH_LINK;
+        sourceUrl = dataString;
+        decodeMode = Intents.Scan.PRODUCT_MODE;
         resetStatusView();
       } else if (dataString != null && dataString.equals(ZXING_URL)) {
         // Scan all formats and handle the results ourselves.
         // TODO: In the future we could allow the hyperlink to include a URL to send the results to.
-        mSource = Source.ZXING_LINK;
-        mSourceUrl = dataString;
-        mDecodeMode = null;
+        source = Source.ZXING_LINK;
+        sourceUrl = dataString;
+        decodeMode = null;
         resetStatusView();
       } else {
         // Scan all formats and handle the results ourselves (launched from Home).
-        mSource = Source.NONE;
-        mDecodeMode = null;
+        source = Source.NONE;
+        decodeMode = null;
         resetStatusView();
       }
     } else {
-      mSource = Source.NONE;
-      mDecodeMode = null;
-      if (mLastResult == null) {
+      source = Source.NONE;
+      decodeMode = null;
+      if (lastResult == null) {
         resetStatusView();
       }
     }
 
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-    mPlayBeep = prefs.getBoolean(PreferencesActivity.KEY_PLAY_BEEP, true);
-    mVibrate = prefs.getBoolean(PreferencesActivity.KEY_VIBRATE, false);
-    mCopyToClipboard = prefs.getBoolean(PreferencesActivity.KEY_COPY_TO_CLIPBOARD, true);
+    playBeep = prefs.getBoolean(PreferencesActivity.KEY_PLAY_BEEP, true);
+    vibrate = prefs.getBoolean(PreferencesActivity.KEY_VIBRATE, false);
+    copyToClipboard = prefs.getBoolean(PreferencesActivity.KEY_COPY_TO_CLIPBOARD, true);
     initBeepSound();
   }
 
   @Override
   protected void onPause() {
     super.onPause();
-    if (mHandler != null) {
-      mHandler.quitSynchronously();
-      mHandler = null;
+    if (handler != null) {
+      handler.quitSynchronously();
+      handler = null;
     }
     CameraManager.get().closeDriver();
   }
@@ -203,13 +213,13 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   @Override
   public boolean onKeyDown(int keyCode, KeyEvent event) {
     if (keyCode == KeyEvent.KEYCODE_BACK) {
-      if (mSource == Source.NATIVE_APP_INTENT) {
+      if (source == Source.NATIVE_APP_INTENT) {
         setResult(RESULT_CANCELED);
         finish();
         return true;
-      } else if ((mSource == Source.NONE || mSource == Source.ZXING_LINK) && mLastResult != null) {
+      } else if ((source == Source.NONE || source == Source.ZXING_LINK) && lastResult != null) {
         resetStatusView();
-        mHandler.sendEmptyMessage(R.id.restart_preview);
+        handler.sendEmptyMessage(R.id.restart_preview);
         return true;
       }
     } else if (keyCode == KeyEvent.KEYCODE_FOCUS || keyCode == KeyEvent.KEYCODE_CAMERA) {
@@ -236,7 +246,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   @Override
   public boolean onPrepareOptionsMenu(Menu menu) {
     super.onPrepareOptionsMenu(menu);
-    menu.findItem(SHARE_ID).setVisible(mLastResult == null);
+    menu.findItem(SHARE_ID).setVisible(lastResult == null);
     return true;
   }
 
@@ -263,10 +273,10 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       }
       case ABOUT_ID:
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(getString(R.string.title_about) + mVersionName);
+        builder.setTitle(getString(R.string.title_about) + versionName);
         builder.setMessage(getString(R.string.msg_about) + "\n\n" + getString(R.string.zxing_url));
         builder.setIcon(R.drawable.zxing_icon);
-        builder.setPositiveButton(R.string.button_open_browser, mAboutListener);
+        builder.setPositiveButton(R.string.button_open_browser, aboutListener);
         builder.setNegativeButton(R.string.button_cancel, null);
         builder.show();
         break;
@@ -280,22 +290,15 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     super.onConfigurationChanged(config);
   }
 
-  private final DialogInterface.OnClickListener mAboutListener = new DialogInterface.OnClickListener() {
-    public void onClick(DialogInterface dialogInterface, int i) {
-      Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.zxing_url)));
-      startActivity(intent);
-    }
-  };
-
   public void surfaceCreated(SurfaceHolder holder) {
-    if (!mHasSurface) {
-      mHasSurface = true;
+    if (!hasSurface) {
+      hasSurface = true;
       initCamera(holder);
     }
   }
 
   public void surfaceDestroyed(SurfaceHolder holder) {
-    mHasSurface = false;
+    hasSurface = false;
   }
 
   public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
@@ -309,11 +312,11 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
    * @param barcode   A greyscale bitmap of the camera data which was decoded.
    */
   public void handleDecode(Result rawResult, Bitmap barcode) {
-    mLastResult = rawResult;
+    lastResult = rawResult;
     playBeepSoundAndVibrate();
     drawResultPoints(barcode, rawResult);
 
-    switch (mSource) {
+    switch (source) {
       case NATIVE_APP_INTENT:
       case PRODUCT_SEARCH_LINK:
         handleDecodeExternally(rawResult, barcode);
@@ -358,9 +361,9 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
   // Put up our own UI for how to handle the decoded contents.
   private void handleDecodeInternally(Result rawResult, Bitmap barcode) {
-    mStatusView.setVisibility(View.GONE);
-    mViewfinderView.setVisibility(View.GONE);
-    mResultView.setVisibility(View.VISIBLE);
+    statusView.setVisibility(View.GONE);
+    viewfinderView.setVisibility(View.GONE);
+    resultView.setVisibility(View.VISIBLE);
 
     ImageView barcodeImageView = (ImageView) findViewById(R.id.barcode_image_view);
     barcodeImageView.setMaxWidth(MAX_RESULT_IMAGE_SIZE);
@@ -398,7 +401,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       }
     }
 
-    if (mCopyToClipboard) {
+    if (copyToClipboard) {
       ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
       clipboard.setText(displayContents);
     }
@@ -406,7 +409,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
   // Briefly show the contents of the barcode, then handle the result outside Barcode Scanner.
   private void handleDecodeExternally(Result rawResult, Bitmap barcode) {
-    mViewfinderView.drawResultBitmap(barcode);
+    viewfinderView.drawResultBitmap(barcode);
 
     // Since this message will only be shown for a second, just tell the user what kind of
     // barcode was found (e.g. contact info) rather than the full contents, which they won't
@@ -417,30 +420,30 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     textView.setTextSize(18.0f);
     textView.setText(getString(resultHandler.getDisplayTitle()));
 
-    mStatusView.setBackgroundColor(getResources().getColor(R.color.transparent));
+    statusView.setBackgroundColor(getResources().getColor(R.color.transparent));
 
-    if (mCopyToClipboard) {
+    if (copyToClipboard) {
       ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
       clipboard.setText(resultHandler.getDisplayContents());
     }
 
-    if (mSource == Source.NATIVE_APP_INTENT) {
+    if (source == Source.NATIVE_APP_INTENT) {
       // Hand back whatever action they requested - this can be changed to Intents.Scan.ACTION when
       // the deprecated intent is retired.
       Intent intent = new Intent(getIntent().getAction());
       intent.putExtra(Intents.Scan.RESULT, rawResult.toString());
       intent.putExtra(Intents.Scan.RESULT_FORMAT, rawResult.getBarcodeFormat().toString());
-      Message message = Message.obtain(mHandler, R.id.return_scan_result);
+      Message message = Message.obtain(handler, R.id.return_scan_result);
       message.obj = intent;
-      mHandler.sendMessageDelayed(message, INTENT_RESULT_DURATION);
-    } else if (mSource == Source.PRODUCT_SEARCH_LINK) {
+      handler.sendMessageDelayed(message, INTENT_RESULT_DURATION);
+    } else if (source == Source.PRODUCT_SEARCH_LINK) {
       // Reformulate the URL which triggered us into a query, so that the request goes to the same
       // TLD as the scan URL.
-      Message message = Message.obtain(mHandler, R.id.launch_product_query);
-      int end = mSourceUrl.lastIndexOf("/scan");
-      message.obj = mSourceUrl.substring(0, end) + "?q=" +
+      Message message = Message.obtain(handler, R.id.launch_product_query);
+      int end = sourceUrl.lastIndexOf("/scan");
+      message.obj = sourceUrl.substring(0, end) + "?q=" +
           resultHandler.getDisplayContents().toString() + "&source=zxing";
-      mHandler.sendMessageDelayed(message, INTENT_RESULT_DURATION);
+      handler.sendMessageDelayed(message, INTENT_RESULT_DURATION);
     }
   }
 
@@ -455,7 +458,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       int currentVersion = info.versionCode;
       // Since we're paying to talk to the PackageManager anyway, it makes sense to cache the app
       // version name here for display in the about box later.
-      this.mVersionName = info.versionName;
+      this.versionName = info.versionName;
       SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
       int lastVersion = prefs.getInt(PreferencesActivity.KEY_HELP_VERSION_SHOWN, 0);
       if (currentVersion > lastVersion) {
@@ -474,29 +477,29 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
    * latency possible.
    */
   private void initBeepSound() {
-    if (mPlayBeep && mMediaPlayer == null) {
-      mMediaPlayer = new MediaPlayer();
-      mMediaPlayer.setAudioStreamType(AudioManager.STREAM_SYSTEM);
-      mMediaPlayer.setOnCompletionListener(mBeepListener);
+    if (playBeep && mediaPlayer == null) {
+      mediaPlayer = new MediaPlayer();
+      mediaPlayer.setAudioStreamType(AudioManager.STREAM_SYSTEM);
+      mediaPlayer.setOnCompletionListener(beepListener);
 
       AssetFileDescriptor file = getResources().openRawResourceFd(R.raw.beep);
       try {
-        mMediaPlayer.setDataSource(file.getFileDescriptor(), file.getStartOffset(),
+        mediaPlayer.setDataSource(file.getFileDescriptor(), file.getStartOffset(),
             file.getLength());
         file.close();
-        mMediaPlayer.setVolume(BEEP_VOLUME, BEEP_VOLUME);
-        mMediaPlayer.prepare();
+        mediaPlayer.setVolume(BEEP_VOLUME, BEEP_VOLUME);
+        mediaPlayer.prepare();
       } catch (IOException e) {
-        mMediaPlayer = null;
+        mediaPlayer = null;
       }
     }
   }
 
   private void playBeepSoundAndVibrate() {
-    if (mPlayBeep && mMediaPlayer != null) {
-      mMediaPlayer.start();
+    if (playBeep && mediaPlayer != null) {
+      mediaPlayer.start();
     }
-    if (mVibrate) {
+    if (vibrate) {
       Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
       vibrator.vibrate(VIBRATE_DURATION);
     }
@@ -509,27 +512,27 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       Log.w(TAG, ioe);
       return;
     }
-    if (mHandler == null) {
-      boolean beginScanning = mLastResult == null;
-      mHandler = new CaptureActivityHandler(this, mDecodeMode, beginScanning);
+    if (handler == null) {
+      boolean beginScanning = lastResult == null;
+      handler = new CaptureActivityHandler(this, decodeMode, beginScanning);
     }
   }
 
   private void resetStatusView() {
-    mResultView.setVisibility(View.GONE);
-    mStatusView.setVisibility(View.VISIBLE);
-    mStatusView.setBackgroundColor(getResources().getColor(R.color.status_view));
-    mViewfinderView.setVisibility(View.VISIBLE);
+    resultView.setVisibility(View.GONE);
+    statusView.setVisibility(View.VISIBLE);
+    statusView.setBackgroundColor(getResources().getColor(R.color.status_view));
+    viewfinderView.setVisibility(View.VISIBLE);
 
     TextView textView = (TextView) findViewById(R.id.status_text_view);
     textView.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
     textView.setTextSize(14.0f);
     textView.setText(R.string.msg_default_status);
-    mLastResult = null;
+    lastResult = null;
   }
 
   public void drawViewfinder() {
-    mViewfinderView.drawViewfinder();
+    viewfinderView.drawViewfinder();
   }
 
   /**
@@ -540,5 +543,4 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       mediaPlayer.seekTo(0);
     }
   }
-
 }

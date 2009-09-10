@@ -25,10 +25,14 @@ import android.util.AttributeSet;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+/**
+ * A list item which displays the page number and snippet of this search result.
+ *
+ * @author dswitkin@google.com (Daniel Switkin)
+ */
 public final class SearchBookContentsListItem extends LinearLayout {
-
-  private TextView mPageNumberView;
-  private TextView mSnippetView;
+  private TextView pageNumberView;
+  private TextView snippetView;
 
   SearchBookContentsListItem(Context context) {
     super(context);
@@ -41,12 +45,12 @@ public final class SearchBookContentsListItem extends LinearLayout {
   @Override
   protected void onFinishInflate() {
     super.onFinishInflate();
-    mPageNumberView = (TextView) findViewById(R.id.page_number_view);
-    mSnippetView = (TextView) findViewById(R.id.snippet_view);
+    pageNumberView = (TextView) findViewById(R.id.page_number_view);
+    snippetView = (TextView) findViewById(R.id.snippet_view);
   }
 
   public void set(SearchBookContentsResult result) {
-    mPageNumberView.setText(result.getPageNumber());
+    pageNumberView.setText(result.getPageNumber());
     String snippet = result.getSnippet();
     if (snippet.length() > 0) {
       if (result.getValidSnippet()) {
@@ -64,14 +68,13 @@ public final class SearchBookContentsListItem extends LinearLayout {
           styledSnippet.setSpan(boldSpan, pos, pos + queryLength, 0);
           offset = pos + queryLength;
         }
-        mSnippetView.setText(styledSnippet);
+        snippetView.setText(styledSnippet);
       } else {
         // This may be an error message, so don't try to bold the query terms within it
-        mSnippetView.setText(snippet);
+        snippetView.setText(snippet);
       }
     } else {
-      mSnippetView.setText("");
+      snippetView.setText("");
     }
   }
-
 }

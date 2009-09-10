@@ -16,34 +16,39 @@
 
 package com.google.zxing.client.android.result;
 
-import android.app.Activity;
-import android.telephony.PhoneNumberUtils;
-import android.text.SpannableString;
-import android.text.Spannable;
-import android.text.style.StyleSpan;
 import com.google.zxing.client.android.R;
 import com.google.zxing.client.result.AddressBookParsedResult;
 import com.google.zxing.client.result.ParsedResult;
+
+import android.app.Activity;
+import android.telephony.PhoneNumberUtils;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.StyleSpan;
 
 import java.text.DateFormat;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * Handles address book entries.
+ *
+ * @author dswitkin@google.com (Daniel Switkin)
+ */
 public final class AddressBookResultHandler extends ResultHandler {
-
   private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyyMMdd");
 
-  private final boolean[] mFields;
-  private int mButtonCount;
+  private final boolean[] fields;
+  private int buttonCount;
 
   // This takes all the work out of figuring out which buttons/actions should be in which
   // positions, based on which fields are present in this barcode.
   private int mapIndexToAction(int index) {
-    if (index < mButtonCount) {
+    if (index < buttonCount) {
       int count = -1;
       for (int x = 0; x < MAX_BUTTON_COUNT; x++) {
-        if (mFields[x]) {
+        if (fields[x]) {
           count++;
         }
         if (count == index) {
@@ -64,23 +69,23 @@ public final class AddressBookResultHandler extends ResultHandler {
     String[] emails = addressResult.getEmails();
     boolean hasEmailAddress = emails != null && emails.length > 0;
 
-    mFields = new boolean[MAX_BUTTON_COUNT];
-    mFields[0] = true; // Add contact is always available
-    mFields[1] = hasAddress;
-    mFields[2] = hasPhoneNumber;
-    mFields[3] = hasEmailAddress;
+    fields = new boolean[MAX_BUTTON_COUNT];
+    fields[0] = true; // Add contact is always available
+    fields[1] = hasAddress;
+    fields[2] = hasPhoneNumber;
+    fields[3] = hasEmailAddress;
 
-    mButtonCount = 0;
+    buttonCount = 0;
     for (int x = 0; x < MAX_BUTTON_COUNT; x++) {
-      if (mFields[x]) {
-        mButtonCount++;
+      if (fields[x]) {
+        buttonCount++;
       }
     }
   }
 
   @Override
   public int getButtonCount() {
-    return mButtonCount;
+    return buttonCount;
   }
 
   @Override
@@ -102,7 +107,7 @@ public final class AddressBookResultHandler extends ResultHandler {
 
   @Override
   public void handleButtonPress(int index) {
-    AddressBookParsedResult addressResult = (AddressBookParsedResult) mResult;
+    AddressBookParsedResult addressResult = (AddressBookParsedResult) result;
     int action = mapIndexToAction(index);
     switch (action) {
       case 0:
@@ -130,7 +135,7 @@ public final class AddressBookResultHandler extends ResultHandler {
   // Overriden so we can hyphenate phone numbers, format birthdays, and bold the name.
   @Override
   public CharSequence getDisplayContents() {
-    AddressBookParsedResult result = (AddressBookParsedResult) mResult;
+    AddressBookParsedResult result = (AddressBookParsedResult) this.result;
     StringBuffer contents = new StringBuffer();
     ParsedResult.maybeAppend(result.getNames(), contents);
     int namesLength = contents.length();
@@ -178,5 +183,4 @@ public final class AddressBookResultHandler extends ResultHandler {
   public int getDisplayTitle() {
     return R.string.result_address_book;
   }
-
 }

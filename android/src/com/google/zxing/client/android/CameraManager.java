@@ -19,6 +19,7 @@ package com.google.zxing.client.android;
 import com.google.zxing.ResultPoint;
 
 import android.content.Context;
+import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.hardware.Camera;
@@ -35,47 +36,82 @@ import java.io.IOException;
  * This object wraps the Camera service object and expects to be the only one talking to it. The
  * implementation encapsulates the steps needed to take preview-sized images, which are used for
  * both preview and decoding.
+ *
+ * @author dswitkin@google.com (Daniel Switkin)
  */
 final class CameraManager {
-
   private static final String TAG = "CameraManager";
+  private static final int MIN_FRAME_WIDTH = 240;
+  private static final int MIN_FRAME_HEIGHT = 240;
+  private static final int MAX_FRAME_WIDTH = 480;
+  private static final int MAX_FRAME_HEIGHT = 360;
 
-  private static CameraManager mCameraManager;
-  private Camera mCamera;
-  private final Context mContext;
-  private Point mScreenResolution;
-  private Rect mFramingRect;
-  private Handler mPreviewHandler;
-  private int mPreviewMessage;
-  private Handler mAutoFocusHandler;
-  private int mAutoFocusMessage;
-  private boolean mInitialized;
-  private boolean mPreviewing;
+  private static CameraManager cameraManager;
+  private Camera camera;
+  private final Context context;
+  private Point screenResolution;
+  private Point cameraResolution;
+  private Rect framingRect;
+  private Handler previewHandler;
+  private int previewMessage;
+  private Handler autoFocusHandler;
+  private int autoFocusMessage;
+  private boolean initialized;
+  private boolean previewing;
+  private int previewFormat;
+  private String previewFormatString;
+
+  /**
+   * Preview frames are delivered here, which we pass on to the registered handler. Make sure to
+   * clear the handler so it will only receive one message.
+   */
+  private final Camera.PreviewCallback previewCallback = new Camera.PreviewCallback() {
+    public void onPreviewFrame(byte[] data, Camera camera) {
+      camera.setPreviewCallback(null);
+      if (previewHandler != null) {
+        Message message = previewHandler.obtainMessage(previewMessage, cameraResolution.x,
+            cameraResolution.y, data);
+        message.sendToTarget();
+        previewHandler = null;
+      }
+    }
+  };
+
+  private final Camera.AutoFocusCallback autoFocusCallback = new Camera.AutoFocusCallback() {
+    public void onAutoFocus(boolean success, Camera camera) {
+      if (autoFocusHandler != null) {
+        Message message = autoFocusHandler.obtainMessage(autoFocusMessage, success);
+        // Simulate continuous autofocus by sending a focus request every 1.5 seconds.
+        autoFocusHandler.sendMessageDelayed(message, 1500L);
+        autoFocusHandler = null;
+      }
+    }
+  };
 
   public static void init(Context context) {
-    if (mCameraManager == null) {
-      mCameraManager = new CameraManager(context);
+    if (cameraManager == null) {
+      cameraManager = new CameraManager(context);
     }
   }
 
   public static CameraManager get() {
-    return mCameraManager;
+    return cameraManager;
   }
 
   private CameraManager(Context context) {
-    mContext = context;
-    mCamera = null;
-    mInitialized = false;
-    mPreviewing = false;
+    this.context = context;
+    camera = null;
+    initialized = false;
+    previewing = false;
   }
 
   public void openDriver(SurfaceHolder holder) throws IOException {
-    if (mCamera == null) {
-      mCamera = Camera.open();
-      mCamera.setPreviewDisplay(holder);
+    if (camera == null) {
+      camera = Camera.open();
+      camera.setPreviewDisplay(holder);
 
-      if (!mInitialized) {
-        mInitialized = true;
+      if (!initialized) {
+        initialized = true;
         getScreenResolution();
       }
 
@@ -84,26 +120,26 @@ final class CameraManager {
   }
 
   public void closeDriver() {
-    if (mCamera != null) {
-      mCamera.release();
-      mCamera = null;
+    if (camera != null) {
+      camera.release();
+      camera = null;
     }
   }
 
   public void startPreview() {
-    if (mCamera != null && !mPreviewing) {
-      mCamera.startPreview();
-      mPreviewing = true;
+    if (camera != null && !previewing) {
+      camera.startPreview();
+      previewing = true;
     }
   }
 
   public void stopPreview() {
-    if (mCamera != null && mPreviewing) {
-      mCamera.setPreviewCallback(null);
-      mCamera.stopPreview();
-      mPreviewHandler = null;
-      mAutoFocusHandler = null;
-      mPreviewing = false;
+    if (camera != null && previewing) {
+      camera.setPreviewCallback(null);
+      camera.stopPreview();
+      previewHandler = null;
+      autoFocusHandler = null;
+      previewing = false;
     }
   }
 
@@ -116,39 +152,48 @@ final class CameraManager {
    * @param message The what field of the message to be sent.
    */
   public void requestPreviewFrame(Handler handler, int message) {
-    if (mCamera != null && mPreviewing) {
-      mPreviewHandler = handler;
-      mPreviewMessage = message;
-      mCamera.setPreviewCallback(previewCallback);
+    if (camera != null && previewing) {
+      previewHandler = handler;
+      previewMessage = message;
+      camera.setPreviewCallback(previewCallback);
     }
   }
 
   public void requestAutoFocus(Handler handler, int message) {
-    if (mCamera != null && mPreviewing) {
-      mAutoFocusHandler = handler;
-      mAutoFocusMessage = message;
-      mCamera.autoFocus(autoFocusCallback);
+    if (camera != null && previewing) {
+      autoFocusHandler = handler;
+      autoFocusMessage = message;
+      camera.autoFocus(autoFocusCallback);
     }
   }
 
   /**
    * Calculates the framing rect which the UI should draw to show the user where to place the
-   * barcode. The actual captured image should be a bit larger than indicated because they might
-   * frame the shot too tightly. This target helps with alignment as well as forces the user to hold
-   * the device far enough away to ensure the image will be in focus.
+   * barcode. This target helps with alignment as well as forces the user to hold the device
+   * far enough away to ensure the image will be in focus.
    *
    * @return The rectangle to draw on screen in window coordinates.
    */
   public Rect getFramingRect() {
-    if (mFramingRect == null) {
-      int size = (mScreenResolution.x < mScreenResolution.y ? mScreenResolution.x :
-          mScreenResolution.y) * 3 / 4;
-      int leftOffset = (mScreenResolution.x - size) / 2;
-      int topOffset = (mScreenResolution.y - size) / 2;
-      mFramingRect = new Rect(leftOffset, topOffset, leftOffset + size, topOffset + size);
-      Log.v(TAG, "Calculated framing rect: " + mFramingRect);
+    if (framingRect == null) {
+      int width = cameraResolution.x * 3 / 4;
+      if (width < MIN_FRAME_WIDTH) {
+        width = MIN_FRAME_WIDTH;
+      } else if (width > MAX_FRAME_WIDTH) {
+        width = MAX_FRAME_WIDTH;
+      }
+      int height = cameraResolution.y * 3 / 4;
+      if (height < MIN_FRAME_HEIGHT) {
+        height = MIN_FRAME_HEIGHT;
+      } else if (height > MAX_FRAME_HEIGHT) {
+        height = MAX_FRAME_HEIGHT;
+      }
+      int leftOffset = (cameraResolution.x - width) / 2;
+      int topOffset = (cameraResolution.y - height) / 2;
+      framingRect = new Rect(leftOffset, topOffset, leftOffset + width, topOffset + height);
+      Log.v(TAG, "Calculated framing rect: " + framingRect);
     }
-    return mFramingRect;
+    return framingRect;
   }
 
   /**
@@ -171,31 +216,31 @@ final class CameraManager {
   }
 
   /**
-   * Preview frames are delivered here, which we pass on to the registered handler. Make sure to
-   * clear the handler so it will only receive one message.
+   * A factory method to build the appropriate LuminanceSource object based on the format
+   * of the preview buffers, as described by Camera.Parameters.
+   *
+   * @param data A preview frame.
+   * @param width The width of the image.
+   * @param height The height of the image.
+   * @return A BaseLuminanceSource subclass.
    */
-  private final Camera.PreviewCallback previewCallback = new Camera.PreviewCallback() {
-    public void onPreviewFrame(byte[] data, Camera camera) {
-      camera.setPreviewCallback(null);
-      if (mPreviewHandler != null) {
-        Message message = mPreviewHandler.obtainMessage(mPreviewMessage, mScreenResolution.x,
-            mScreenResolution.y, data);
-        message.sendToTarget();
-        mPreviewHandler = null;
-      }
+  public BaseLuminanceSource buildLuminanceSource(byte[] data, int width, int height) {
+    Rect rect = getFramingRect();
+    switch (previewFormat) {
+      case PixelFormat.YCbCr_420_SP:
+      case PixelFormat.YCbCr_422_SP:
+        return new PlanarYUVLuminanceSource(data, width, height, rect.left, rect.top,
+            rect.width(), rect.height());
+      default:
+        // There's no PixelFormat constant for this buffer format yet.
+        if (previewFormatString.equals("yuv422i-yuyv")) {
+          return new InterleavedYUV422LuminanceSource(data, width, height, rect.left, rect.top,
+              rect.width(), rect.height());
+        }
+        break;
     }
-  };
-
-  private final Camera.AutoFocusCallback autoFocusCallback = new Camera.AutoFocusCallback() {
-    public void onAutoFocus(boolean success, Camera camera) {
-      if (mAutoFocusHandler != null) {
-        Message message = mAutoFocusHandler.obtainMessage(mAutoFocusMessage, success);
-        // Simulate continuous autofocus by sending a focus request every 1.5 seconds.
-        mAutoFocusHandler.sendMessageDelayed(message, 1500L);
-        mAutoFocusHandler = null;
-      }
-    }
-  };
+    return null;
+  }
 
   /**
    * Sets the camera up to take preview images which are used for both preview and decoding. We're
@@ -203,13 +248,21 @@ final class CameraManager {
    * specify it explicitly with setPreviewFormat().
    */
   private void setCameraParameters() {
-    Camera.Parameters parameters = mCamera.getParameters();
+    Camera.Parameters parameters = camera.getParameters();
     Camera.Size size = parameters.getPreviewSize();
     Log.v(TAG, "Default preview size: " + size.width + ", " + size.height);
-    Log.v(TAG, "Default preview format: " + parameters.getPreviewFormat());
-    Log.v(TAG, "Setting preview size: " + mScreenResolution.x + ", " + mScreenResolution.y);
+    previewFormat = parameters.getPreviewFormat();
+    previewFormatString = parameters.get("preview-format");
+    Log.v(TAG, "Default preview format: " + previewFormat);
 
-    parameters.setPreviewSize(mScreenResolution.x, mScreenResolution.y);
+    // Ensure that the camera resolution is a multiple of 8, as the screen may not be.
+    // TODO: A better solution would be to request the supported preview resolutions
+    // and pick the best match, but this parameter is not standardized in Cupcake.
+    cameraResolution = new Point();
+    cameraResolution.x = (screenResolution.x >> 3) << 3;
+    cameraResolution.y = (screenResolution.y >> 3) << 3;
+    Log.v(TAG, "Setting preview size: " + cameraResolution.x + ", " + cameraResolution.y);
+    parameters.setPreviewSize(cameraResolution.x, cameraResolution.y);
 
     // FIXME: This is a hack to turn the flash off on the Samsung Galaxy.
     parameters.set("flash-value", 2);
@@ -217,16 +270,16 @@ final class CameraManager {
     // This is the standard setting to turn the flash off that all devices should honor.
     parameters.set("flash-mode", "off");
 
-    mCamera.setParameters(parameters);
+    camera.setParameters(parameters);
   }
 
   private Point getScreenResolution() {
-    if (mScreenResolution == null) {
-      WindowManager manager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
+    if (screenResolution == null) {
+      WindowManager manager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
       Display display = manager.getDefaultDisplay();
-      mScreenResolution = new Point(display.getWidth(), display.getHeight());
+      screenResolution = new Point(display.getWidth(), display.getHeight());
     }
-    return mScreenResolution;
+    return screenResolution;
   }
 
 }
