@@ -131,6 +131,7 @@ public final class InterleavedYUV422LuminanceSource extends BaseLuminanceSource 
     return bitmap;
   }
 
+  // Not currently needed.
   @Override
   public Bitmap renderFullColorBitmap(boolean halfSize) {
     return null;

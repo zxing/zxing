@@ -77,6 +77,9 @@ final class CameraManager {
     }
   };
 
+  /**
+   * Autofocus callbacks arrive here, and are dispatched to the Handler which requested them.
+   */
   private final Camera.AutoFocusCallback autoFocusCallback = new Camera.AutoFocusCallback() {
     public void onAutoFocus(boolean success, Camera camera) {
       if (autoFocusHandler != null) {
@@ -88,12 +91,22 @@ final class CameraManager {
     }
   };
 
+  /**
+   * Initializes this static object with the Context of the calling Activity.
+   *
+   * @param context The Activity which wants to use the camera.
+   */
   public static void init(Context context) {
     if (cameraManager == null) {
       cameraManager = new CameraManager(context);
     }
   }
 
+  /**
+   * Gets the CameraManager singleton instance.
+   *
+   * @return A reference to the CameraManager singleton.
+   */
   public static CameraManager get() {
     return cameraManager;
   }
@@ -105,6 +118,12 @@ final class CameraManager {
     previewing = false;
   }
 
+  /**
+   * Opens the camera driver and initializes the hardware parameters.
+   *
+   * @param holder The surface object which the camera will draw preview frames into.
+   * @throws IOException Indicates the camera driver failed to open.
+   */
   public void openDriver(SurfaceHolder holder) throws IOException {
     if (camera == null) {
       camera = Camera.open();
@@ -119,6 +138,9 @@ final class CameraManager {
     }
   }
 
+  /**
+   * Closes the camera driver if still in use.
+   */
   public void closeDriver() {
     if (camera != null) {
       camera.release();
@@ -126,6 +148,9 @@ final class CameraManager {
     }
   }
 
+  /**
+   * Asks the camera hardware to begin drawing preview frames to the screen.
+   */
   public void startPreview() {
     if (camera != null && !previewing) {
       camera.startPreview();
@@ -133,6 +158,9 @@ final class CameraManager {
     }
   }
 
+  /**
+   * Tells the camera to stop drawing preview frames.
+   */
   public void stopPreview() {
     if (camera != null && previewing) {
       camera.setPreviewCallback(null);
@@ -159,6 +187,12 @@ final class CameraManager {
     }
   }
 
+  /**
+   * Asks the camera hardware to perform an autofocus.
+   *
+   * @param handler The Handler to notify when the autofocus completes.
+   * @param message The message to deliver.
+   */
   public void requestAutoFocus(Handler handler, int message) {
     if (camera != null && previewing) {
       autoFocusHandler = handler;
@@ -243,9 +277,10 @@ final class CameraManager {
   }
 
   /**
-   * Sets the camera up to take preview images which are used for both preview and decoding. We're
-   * counting on the default YUV420 semi-planar data. If that changes in the future, we'll need to
-   * specify it explicitly with setPreviewFormat().
+   * Sets the camera up to take preview images which are used for both preview and decoding.
+   * We detect the preview format here so that buildLuminanceSource() can build an appropriate
+   * LuminanceSource subclass. In the future we may want to force YUV420SP as it's the smallest,
+   * and the planar Y can be used for barcode scanning without a copy in some cases.
    */
   private void setCameraParameters() {
     Camera.Parameters parameters = camera.getParameters();
