@@ -16,13 +16,15 @@
 
 package com.google.zxing.qrcode.decoder;
 
-import com.google.zxing.ReaderException;
 import junit.framework.TestCase;
 
 /**
  * @author Sean Owen
  */
 public final class FormatInformationTestCase extends TestCase {
+
+  private static final int MASKED_TEST_FORMAT_INFO = 0x2BED;
+  private static final int UNMASKED_TEST_FORMAT_INFO = MASKED_TEST_FORMAT_INFO ^ 0x5412;
 
   public void testBitsDiffering() {
     assertEquals(0, FormatInformation.numBitsDiffering(1, 1));
@@ -31,19 +33,19 @@ public final class FormatInformationTestCase extends TestCase {
     assertEquals(32, FormatInformation.numBitsDiffering(-1, 0));
   }
 
-  public void testDecode() throws ReaderException {
+  public void testDecode() {
     // Normal case
-    FormatInformation expected = FormatInformation.decodeFormatInformation(0x2BED ^ 0x5412);
+    FormatInformation expected = FormatInformation.decodeFormatInformation(MASKED_TEST_FORMAT_INFO);
     assertEquals((byte) 0x07, expected.getDataMask());
     assertEquals(ErrorCorrectionLevel.Q, expected.getErrorCorrectionLevel());
     // where the code forgot the mask!
-    assertEquals(expected, FormatInformation.decodeFormatInformation(0x2BED));
+    assertEquals(expected, FormatInformation.decodeFormatInformation(UNMASKED_TEST_FORMAT_INFO));
 
     // 1,2,3,4 bits difference
-    assertEquals(expected, FormatInformation.decodeFormatInformation(0x2BEF ^ 0x5412));
-    assertEquals(expected, FormatInformation.decodeFormatInformation(0x2BEE ^ 0x5412));
-    assertEquals(expected, FormatInformation.decodeFormatInformation(0x2BEA ^ 0x5412));
-    assertNull(FormatInformation.decodeFormatInformation(0x2BE2 ^ 0x5412));
+    assertEquals(expected, FormatInformation.decodeFormatInformation(MASKED_TEST_FORMAT_INFO ^ 0x01));
+    assertEquals(expected, FormatInformation.decodeFormatInformation(MASKED_TEST_FORMAT_INFO ^ 0x03));
+    assertEquals(expected, FormatInformation.decodeFormatInformation(MASKED_TEST_FORMAT_INFO ^ 0x07));
+    assertNull(FormatInformation.decodeFormatInformation(MASKED_TEST_FORMAT_INFO ^ 0x0F));
   }
 
 }
