@@ -41,8 +41,8 @@ public final class PreferencesActivity extends PreferenceActivity
 
   static final String KEY_HELP_VERSION_SHOWN = "preferences_help_version_shown";
 
-  CheckBoxPreference decode1D;
-  CheckBoxPreference decodeQR;
+  private CheckBoxPreference decode1D;
+  private CheckBoxPreference decodeQR;
 
   @Override
   protected void onCreate(Bundle icicle) {

@@ -117,7 +117,7 @@ public class ResultPoint {
   /**
    * Returns the z component of the cross product between vectors BC and BA.
    */
-  public static float crossProductZ(ResultPoint pointA, ResultPoint pointB, ResultPoint pointC) {
+  private static float crossProductZ(ResultPoint pointA, ResultPoint pointB, ResultPoint pointC) {
     float bX = pointB.x;
     float bY = pointB.y;
     return ((pointC.x - bX) * (pointA.y - bY)) - ((pointC.y - bY) * (pointA.x - bX));

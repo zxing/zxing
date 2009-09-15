@@ -117,7 +117,7 @@ public abstract class ResultParser {
     return escaped;
   }
 
-  static String urlDecode(String escaped) {
+  private static String urlDecode(String escaped) {
 
     // No we can't use java.net.URLDecoder here. JavaME doesn't have it.
     if (escaped == null) {

@@ -128,7 +128,7 @@ public final class Detector {
    *           vertices[6] x, y top right codeword area
    *           vertices[7] x, y bottom right codeword area
    */
-  private static ResultPoint[] findVertices(BitMatrix matrix) throws ReaderException {
+  private static ResultPoint[] findVertices(BitMatrix matrix) {
     int height = matrix.getHeight();
     int width = matrix.getWidth();
     int halfWidth = width >> 1;
@@ -136,10 +136,9 @@ public final class Detector {
     ResultPoint[] result = new ResultPoint[8];
     boolean found = false;
 
-    int[] loc = null;
     // Top Left
     for (int i = 0; i < height; i++) {
-      loc = findGuardPattern(matrix, 0, i, halfWidth, false, START_PATTERN);
+      int[] loc = findGuardPattern(matrix, 0, i, halfWidth, false, START_PATTERN);
       if (loc != null) {
         result[0] = new ResultPoint(loc[0], i);
         result[4] = new ResultPoint(loc[1], i);
@@ -151,7 +150,7 @@ public final class Detector {
     if (found) { // Found the Top Left vertex
       found = false;
       for (int i = height - 1; i > 0; i--) {
-        loc = findGuardPattern(matrix, 0, i, halfWidth, false, START_PATTERN);
+        int[] loc = findGuardPattern(matrix, 0, i, halfWidth, false, START_PATTERN);
         if (loc != null) {
           result[1] = new ResultPoint(loc[0], i);
           result[5] = new ResultPoint(loc[1], i);
@@ -164,7 +163,7 @@ public final class Detector {
     if (found) { // Found the Bottom Left vertex
       found = false;
       for (int i = 0; i < height; i++) {
-        loc = findGuardPattern(matrix, halfWidth, i, halfWidth, false, STOP_PATTERN);
+        int[] loc = findGuardPattern(matrix, halfWidth, i, halfWidth, false, STOP_PATTERN);
         if (loc != null) {
           result[2] = new ResultPoint(loc[1], i);
           result[6] = new ResultPoint(loc[0], i);
@@ -177,7 +176,7 @@ public final class Detector {
     if (found) { // Found the Top right vertex
       found = false;
       for (int i = height - 1; i > 0; i--) {
-        loc = findGuardPattern(matrix, halfWidth, i, halfWidth, false, STOP_PATTERN);
+        int[] loc = findGuardPattern(matrix, halfWidth, i, halfWidth, false, STOP_PATTERN);
         if (loc != null) {
           result[3] = new ResultPoint(loc[1], i);
           result[7] = new ResultPoint(loc[0], i);
@@ -208,7 +207,7 @@ public final class Detector {
    *           vertices[6] x, y top right codeword area
    *           vertices[7] x, y bottom right codeword area
    */
-  private static ResultPoint[] findVertices180(BitMatrix matrix) throws ReaderException {
+  private static ResultPoint[] findVertices180(BitMatrix matrix) {
     int height = matrix.getHeight();
     int width = matrix.getWidth();
     int halfWidth = width >> 1;
@@ -216,10 +215,9 @@ public final class Detector {
     ResultPoint[] result = new ResultPoint[8];
     boolean found = false;
 
-    int[] loc = null;
     // Top Left
     for (int i = height - 1; i > 0; i--) {
-      loc = findGuardPattern(matrix, halfWidth, i, halfWidth, true, START_PATTERN_REVERSE);
+      int[] loc = findGuardPattern(matrix, halfWidth, i, halfWidth, true, START_PATTERN_REVERSE);
       if (loc != null) {
         result[0] = new ResultPoint(loc[1], i);
         result[4] = new ResultPoint(loc[0], i);
@@ -231,7 +229,7 @@ public final class Detector {
     if (found) { // Found the Top Left vertex
       found = false;
       for (int i = 0; i < height; i++) {
-        loc = findGuardPattern(matrix, halfWidth, i, halfWidth, true, START_PATTERN_REVERSE);
+        int[] loc = findGuardPattern(matrix, halfWidth, i, halfWidth, true, START_PATTERN_REVERSE);
         if (loc != null) {
           result[1] = new ResultPoint(loc[1], i);
           result[5] = new ResultPoint(loc[0], i);
@@ -244,7 +242,7 @@ public final class Detector {
     if (found) { // Found the Bottom Left vertex
       found = false;
       for (int i = height - 1; i > 0; i--) {
-        loc = findGuardPattern(matrix, 0, i, halfWidth, false, STOP_PATTERN_REVERSE);
+        int[] loc = findGuardPattern(matrix, 0, i, halfWidth, false, STOP_PATTERN_REVERSE);
         if (loc != null) {
           result[2] = new ResultPoint(loc[0], i);
           result[6] = new ResultPoint(loc[1], i);
@@ -257,7 +255,7 @@ public final class Detector {
     if (found) { // Found the Top Right vertex
       found = false;
       for (int i = 0; i < height; i++) {
-        loc = findGuardPattern(matrix, 0, i, halfWidth, false, STOP_PATTERN_REVERSE);
+        int[] loc = findGuardPattern(matrix, 0, i, halfWidth, false, STOP_PATTERN_REVERSE);
         if (loc != null) {
           result[3] = new ResultPoint(loc[0], i);
           result[7] = new ResultPoint(loc[1], i);
@@ -414,7 +412,7 @@ public final class Detector {
    *                 being searched for as a pattern
    * @return start/end horizontal offset of guard pattern, as an array of two ints.
    */
-  static int[] findGuardPattern(BitMatrix matrix, int column, int row, int width,
+  private static int[] findGuardPattern(BitMatrix matrix, int column, int row, int width,
       boolean whiteFirst, int[] pattern) {
     int patternLength = pattern.length;
     // TODO: Find a way to cache this array, as this method is called hundreds of times
@@ -465,7 +463,7 @@ public final class Detector {
    *         variance between counters and patterns equals the pattern length,
    *         higher values mean even more variance
    */
-  public static int patternMatchVariance(int[] counters, int[] pattern, int maxIndividualVariance) {
+  private static int patternMatchVariance(int[] counters, int[] pattern, int maxIndividualVariance) {
     int numCounters = counters.length;
     int total = 0;
     int patternLength = 0;

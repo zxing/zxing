@@ -77,7 +77,7 @@ public final class LocalBlockBinarizer extends Binarizer {
 
   // For each 8x8 block in the image, calculate the average black point using a 5x5 grid
   // of the blocks around it. Also handles the corner cases, but will ignore up to 7 pixels
-  // on the right edge and 7 pixels at the bottom of the image if the overall dimsions are not
+  // on the right edge and 7 pixels at the bottom of the image if the overall dimensions are not
   // multiples of eight. In practice, leaving those pixels white does not seem to be a problem.
   private static void calculateThresholdForBlock(byte[] luminances, int subWidth, int subHeight,
       int stride, int[][] blackPoints, BitMatrix matrix) {

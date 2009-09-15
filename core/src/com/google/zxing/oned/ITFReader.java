@@ -123,7 +123,7 @@ public final class ITFReader extends AbstractOneDReader {
    * @param resultString {@link StringBuffer} to append decoded chars to
    * @throws ReaderException if decoding could not complete successfully
    */
-  static void decodeMiddle(BitArray row, int payloadStart, int payloadEnd,
+  private static void decodeMiddle(BitArray row, int payloadStart, int payloadEnd,
       StringBuffer resultString) throws ReaderException {
 
     // Digits are interleaved in pairs - 5 black lines for one digit, and the
@@ -256,8 +256,8 @@ public final class ITFReader extends AbstractOneDReader {
       // ref: http://www.barcode-1.net/i25code.html
       validateQuietZone(row, endPattern[0]);
 
-      // Now recalc the indicies of where the 'endblock' starts & stops to
-      // accomodate
+      // Now recalculate the indices of where the 'endblock' starts & stops to
+      // accommodate
       // the reversed nature of the search
       int temp = endPattern[0];
       endPattern[0] = row.getSize() - endPattern[1];
@@ -265,7 +265,7 @@ public final class ITFReader extends AbstractOneDReader {
 
       return endPattern;
     } finally {
-      // Put the row back the righ way.
+      // Put the row back the right way.
       row.reverse();
     }
   }
@@ -279,7 +279,7 @@ public final class ITFReader extends AbstractOneDReader {
    *         ints
    * @throws ReaderException if pattern is not found
    */
-  static int[] findGuardPattern(BitArray row, int rowOffset, int[] pattern) throws ReaderException {
+  private static int[] findGuardPattern(BitArray row, int rowOffset, int[] pattern) throws ReaderException {
 
     // TODO: This is very similar to implementation in AbstractUPCEANReader. Consider if they can be
     // merged to a single method.

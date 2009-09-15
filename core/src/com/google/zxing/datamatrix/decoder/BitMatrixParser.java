@@ -170,7 +170,7 @@ final class BitMatrixParser {
   }
   
   /**
-   * <p>Reads the 8 bits of the standard utah shaped pattern.</p>
+   * <p>Reads the 8 bits of the standard Utah-shaped pattern.</p>
    * 
    * <p>See ISO 16022:2006, 5.8.1 Figure 6</p>
    * 

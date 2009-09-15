@@ -51,7 +51,7 @@ public abstract class AbstractUPCEANWriter implements UPCEANWriter {
   }
 
   /** @return a byte array of horizontal pixels (0 = white, 1 = black) */
-  protected static ByteMatrix renderResult(byte[] code, int width, int height) {
+  private static ByteMatrix renderResult(byte[] code, int width, int height) {
     int inputWidth = code.length;
     // Add quiet zone on both sides
     int fullWidth = inputWidth + (AbstractUPCEANReader.START_END_PATTERN.length << 1);

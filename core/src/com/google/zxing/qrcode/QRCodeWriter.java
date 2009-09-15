@@ -83,7 +83,7 @@ public final class QRCodeWriter implements Writer {
     int outputHeight = Math.max(height, qrHeight);
 
     int multiple = Math.min(outputWidth / qrWidth, outputHeight / qrHeight);
-    // Padding includes both the quiet zone and the extra white pixels to accomodate the requested
+    // Padding includes both the quiet zone and the extra white pixels to accommodate the requested
     // dimensions. For example, if input is 25x25 the QR will be 33x33 including the quiet zone.
     // If the requested size is 200x160, the multiple will be 4, for a QR of 132x132. These will
     // handle all the padding from 100x100 (the actual QR) up to 200x160.

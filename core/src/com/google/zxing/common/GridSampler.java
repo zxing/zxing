@@ -75,7 +75,7 @@ public abstract class GridSampler {
    * <p>These 16 parameters define the transformation needed to sample the image.</p>
    *
    * @param image image to sample
-   * @param dimension width/height of {@link BitMatrix} to sample from iamge
+   * @param dimension width/height of {@link BitMatrix} to sample from image
    * @return {@link BitMatrix} representing a grid of points sampled from the image within a region
    *   defined by the "from" parameters
    * @throws ReaderException if image can't be sampled, for example, if the transformation defined

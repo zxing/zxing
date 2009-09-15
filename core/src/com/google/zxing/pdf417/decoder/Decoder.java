@@ -93,7 +93,7 @@ public final class Decoder {
    * @return an index to the first data codeword.
    * @throws ReaderException
    */
-  private static int verifyCodewordCount(int[] codewords, int numECCodewords) throws ReaderException {
+  private static void verifyCodewordCount(int[] codewords, int numECCodewords) throws ReaderException {
     if (codewords.length < 4) {
       // Codeword array size should be at least 4 allowing for
       // Count CW, At least one Data CW, Error Correction CW, Error Correction CW
@@ -114,7 +114,6 @@ public final class Decoder {
         throw ReaderException.getInstance();
       }
     }
-    return 1; // Index to first data codeword
   }
 
   /**
