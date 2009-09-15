@@ -35,7 +35,7 @@
            deprecation="true"
            fork="true"/>
     <jar jarfile="core.jar" basedir="build">
-      <!-- These entries allow core.jar to function as an OSGi bundle, and also specifices
+      <!-- These entries allow core.jar to function as an OSGi bundle, and also specifies
            additional attributes for compatibility with BugLabs's BUG platform.
            Thanks to David Albert for this change. -->
       <manifest>
@@ -116,6 +116,7 @@
       <assertions>
         <enable/>
       </assertions>
+      <jvmarg value="-Xint"/> <!-- works around weird JIT bug in Java 6 -->
       <batchtest>
         <fileset dir="test/src">
           <include name="**/${subdir}/*BlackBox*TestCase.java"/>
@@ -137,6 +138,7 @@
       <assertions>
         <enable/>
       </assertions>
+      <jvmarg value="-Xint"/> <!-- works around weird JIT bug in Java 6 -->
       <batchtest>
         <fileset dir="test/src">
           <include name="**/*TestCase.java"/>          
