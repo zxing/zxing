@@ -21,7 +21,7 @@ import com.google.zxing.Result;
 import com.google.zxing.oned.UPCEReader;
 
 /**
- * Parses strings of digits that repesent a UPC code.
+ * Parses strings of digits that represent a UPC code.
  * 
  * @author dswitkin@google.com (Daniel Switkin)
  */

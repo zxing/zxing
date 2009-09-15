@@ -149,7 +149,7 @@ public final class MonochromeRectangleDetector {
    * be part of a Data Matrix barcode.
    *
    * @param fixedDimension if scanning horizontally, this is the row (the fixed vertical location)
-   *  where we are scanning. If scanning vertically it's the colummn, the fixed horizontal location
+   *  where we are scanning. If scanning vertically it's the column, the fixed horizontal location
    * @param maxWhiteRun largest run of white pixels that can still be considered part of the
    *  barcode region
    * @param minDim minimum pixel location, horizontally or vertically, to consider

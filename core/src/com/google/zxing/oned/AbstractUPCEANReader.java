@@ -160,7 +160,7 @@ public abstract class AbstractUPCEANReader extends AbstractOneDReader implements
    * @return true iff string of digits passes the UPC/EAN checksum algorithm
    * @throws ReaderException if the string does not contain only digits
    */
-  public static boolean checkStandardUPCEANChecksum(String s) throws ReaderException {
+  private static boolean checkStandardUPCEANChecksum(String s) throws ReaderException {
     int length = s.length();
     if (length == 0) {
       return false;

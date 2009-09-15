@@ -319,7 +319,7 @@ public class Detector {
    * @param overallEstModuleSize estimated module size so far
    * @param estAlignmentX x coordinate of center of area probably containing alignment pattern
    * @param estAlignmentY y coordinate of above
-   * @param allowanceFactor number of pixels in all directons to search from the center
+   * @param allowanceFactor number of pixels in all directions to search from the center
    * @return {@link AlignmentPattern} if found, or null otherwise
    * @throws ReaderException if an unexpected error occurs during detection
    */

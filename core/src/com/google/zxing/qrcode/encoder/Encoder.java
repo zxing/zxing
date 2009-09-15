@@ -558,7 +558,7 @@ public final class Encoder {
     }
   }
 
-  static void appendECI(CharacterSetECI eci, BitVector bits) {
+  private static void appendECI(CharacterSetECI eci, BitVector bits) {
     bits.appendBits(Mode.ECI.getBits(), 4);
     // This is correct for values up to 127, which is all we need now.
     bits.appendBits(eci.getValue(), 8);

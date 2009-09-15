@@ -109,7 +109,7 @@ final class DecodedBitStreamParser {
           break;
         }
         default: {
-          // Default to text compaction. During testing numberous barcodes
+          // Default to text compaction. During testing numerous barcodes
           // appeared to be missing the starting mode. In these cases defaulting
           // to text compaction seems to work.
           codeIndex--;
@@ -143,10 +143,9 @@ final class DecodedBitStreamParser {
     int[] byteCompactionData = new int[codewords[0] << 1];
 
     int index = 0;
-    int code = 0;
     boolean end = false;
     while ((codeIndex < codewords[0]) && !end) {
-      code = codewords[codeIndex++];
+      int code = codewords[codeIndex++];
       if (code < TEXT_COMPACTION_MODE_LATCH) {
         textCompactionData[index] = code / 30;
         textCompactionData[index + 1] = code % 30;
@@ -341,10 +340,9 @@ final class DecodedBitStreamParser {
       long value = 0;
       char[] decodedData = new char[6];
       int[] byteCompactedCodewords = new int[6];
-      int code = 0;
       boolean end = false;
       while ((codeIndex < codewords[0]) && !end) {
-        code = codewords[codeIndex++];
+        int code = codewords[codeIndex++];
         if (code < TEXT_COMPACTION_MODE_LATCH) {
           byteCompactedCodewords[count] = code;
           count++;
@@ -386,10 +384,9 @@ final class DecodedBitStreamParser {
       // is an integer multiple of 6
       int count = 0;
       long value = 0;
-      int code = 0;
       boolean end = false;
       while ((codeIndex < codewords[0]) && !end) {
-        code = codewords[codeIndex++];
+        int code = codewords[codeIndex++];
         if (code < TEXT_COMPACTION_MODE_LATCH) {
           count += 1;
           // Base 900
@@ -515,9 +512,8 @@ final class DecodedBitStreamParser {
    */
   private static String decodeBase900toBase10(int[] codewords, int count) {
     StringBuffer accum = null;
-    StringBuffer value = null;
     for (int i = 0; i < count; i++) {
-      value = multiply(EXP900[count - i - 1], codewords[i]);
+      StringBuffer value = multiply(EXP900[count - i - 1], codewords[i]);
       if (accum == null) {
         // First time in accum=0
         accum = value;
@@ -526,7 +522,7 @@ final class DecodedBitStreamParser {
       }
     }
     String result = null;
-    // Remove leading '1' which was inserted to preserce
+    // Remove leading '1' which was inserted to preserve
     // leading zeros
     for (int i = 0; i < accum.length(); i++) {
       if (accum.charAt(i) == '1') {

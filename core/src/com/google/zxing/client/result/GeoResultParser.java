@@ -19,7 +19,7 @@ package com.google.zxing.client.result;
 import com.google.zxing.Result;
 
 /**
- * Parses a "geo:" URI result, which specifices a location on the surface of
+ * Parses a "geo:" URI result, which specifies a location on the surface of
  * the Earth as well as an optional altitude above the surface. See
  * <a href="http://tools.ietf.org/html/draft-mayrhofer-geo-uri-00">
  * http://tools.ietf.org/html/draft-mayrhofer-geo-uri-00</a>.
