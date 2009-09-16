@@ -17,9 +17,12 @@
 package com.google.zxing.client.android.result;
 
 import com.google.zxing.client.android.R;
+import com.google.zxing.client.android.PreferencesActivity;
 import com.google.zxing.client.result.ParsedResult;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 /**
  * This class handles TextParsedResult as well as unknown formats. It's the fallback handler.
@@ -27,19 +30,26 @@ import android.app.Activity;
  * @author dswitkin@google.com (Daniel Switkin)
  */
 public final class TextResultHandler extends ResultHandler {
+
   private static final int[] buttons = {
       R.string.button_web_search,
       R.string.button_share_by_email,
-      R.string.button_share_by_sms
+      R.string.button_share_by_sms,
+      R.string.button_custom_product_search,
   };
+
+  private final String customProductSearch;
 
   public TextResultHandler(Activity activity, ParsedResult result) {
     super(activity, result);
+    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+    customProductSearch = prefs.getString(PreferencesActivity.KEY_CUSTOM_PRODUCT_SEARCH, null);
   }
 
   @Override
   public int getButtonCount() {
-    return buttons.length;
+    return customProductSearch != null && customProductSearch.length() > 0 ?
+            buttons.length : buttons.length - 1;
   }
 
   @Override
@@ -49,15 +59,20 @@ public final class TextResultHandler extends ResultHandler {
 
   @Override
   public void handleButtonPress(int index) {
+    String text = result.getDisplayResult();
     switch (index) {
       case 0:
-        webSearch(result.getDisplayResult());
+        webSearch(text);
         break;
       case 1:
-        shareByEmail(result.getDisplayResult());
+        shareByEmail(text);
         break;
       case 2:
-        shareBySMS(result.getDisplayResult());
+        shareBySMS(text);
+        break;
+      case 3:
+        String url = customProductSearch.replace("%s", text);
+        openURL(url);
         break;
     }
   }
