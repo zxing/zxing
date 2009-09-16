@@ -38,13 +38,15 @@ import org.apache.http.Header;
 import org.apache.http.HttpMessage;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
+import org.apache.http.HttpEntity;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.params.HttpClientParams;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
+import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.params.BasicHttpParams;
@@ -63,11 +65,13 @@ import java.net.UnknownHostException;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Vector;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -103,6 +107,7 @@ public final class DecodeServlet extends HttpServlet {
   }
 
   private HttpClient client;
+  private ClientConnectionManager connectionManager;
   private DiskFileItemFactory diskFileItemFactory;
 
   @Override
@@ -118,7 +123,8 @@ public final class DecodeServlet extends HttpServlet {
     registry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
     registry.register(new Scheme("https", SSLSocketFactory.getSocketFactory(), 443));
 
-    client = new DefaultHttpClient(new ThreadSafeClientConnManager(params, registry), params);
+    connectionManager = new ThreadSafeClientConnManager(params, registry);
+    client = new DefaultHttpClient(connectionManager, params);
 
     diskFileItemFactory = new DiskFileItemFactory();
 
@@ -146,37 +152,48 @@ public final class DecodeServlet extends HttpServlet {
       return;
     }
 
-    HttpGet getRequest = new HttpGet(imageURI);
+    HttpUriRequest getRequest = new HttpGet(imageURI);
     getRequest.addHeader("Connection", "close"); // Avoids CLOSE_WAIT socket issue?
 
+    HttpResponse getResponse;
     try {
-      HttpResponse getResponse = client.execute(getRequest);
-      if (getResponse.getStatusLine().getStatusCode() != HttpServletResponse.SC_OK) {
-        response.sendRedirect("badurl.jspx");
-        return;
-      }
-      if (!isSizeOK(getResponse)) {
-        response.sendRedirect("badimage.jspx");
-        return;
-      }
-      log.info("Decoding " + imageURI);
-      InputStream is = getResponse.getEntity().getContent();
-      try {
-        processStream(is, request, response);
-      } finally {
-        is.close();
-      }
+      getResponse = client.execute(getRequest);
     } catch (IllegalArgumentException iae) {
       // Thrown if hostname is bad or null
       getRequest.abort();
       response.sendRedirect("badurl.jspx");
+      return;
     } catch (SocketException se) {
       // Thrown if hostname is bad or null
       getRequest.abort();
       response.sendRedirect("badurl.jspx");
+      return;
     } catch (UnknownHostException uhe) {
       getRequest.abort();
       response.sendRedirect("badurl.jspx");
+      return;
+    }
+
+    if (getResponse.getStatusLine().getStatusCode() != HttpServletResponse.SC_OK) {
+      response.sendRedirect("badurl.jspx");
+      return;
+    }
+    if (!isSizeOK(getResponse)) {
+      response.sendRedirect("badimage.jspx");
+      return;
+    }
+
+    log.info("Decoding " + imageURI);
+    HttpEntity entity = getResponse.getEntity();
+    InputStream is = entity.getContent();
+    try {
+      processStream(is, request, response);
+    } finally {
+      entity.consumeContent();      
+      is.close();
+      // Hmm, trying harder here to avoid the CLOSE_WAIT problem:
+      connectionManager.closeExpiredConnections();
+      connectionManager.closeIdleConnections(0L, TimeUnit.MILLISECONDS);
     }
 
   }
@@ -217,7 +234,7 @@ public final class DecodeServlet extends HttpServlet {
 
   }
 
-  private static void processStream(InputStream is, HttpServletRequest request,
+  private static void processStream(InputStream is, ServletRequest request,
       HttpServletResponse response) throws ServletException, IOException {
     BufferedImage image = ImageIO.read(is);
     if (image == null) {
