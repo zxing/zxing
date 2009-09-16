@@ -97,7 +97,7 @@
     <delete dir="web/WEB-INF/classes"/>
     <delete file="web/WEB-INF/lib/core.jar"/>
     <delete file="web/WEB-INF/lib/javase.jar"/>
-    <delete file="zxingorg.war"/>
+    <delete file="w.war"/>
   </target>
 
 </project>
