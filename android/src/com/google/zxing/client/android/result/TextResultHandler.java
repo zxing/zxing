@@ -59,7 +59,7 @@ public final class TextResultHandler extends ResultHandler {
 
   @Override
   public void handleButtonPress(int index) {
-    String text = result.getDisplayResult();
+    String text = getResult().getDisplayResult();
     switch (index) {
       case 0:
         webSearch(text);

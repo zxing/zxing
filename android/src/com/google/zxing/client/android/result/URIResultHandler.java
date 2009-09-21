@@ -50,7 +50,7 @@ public final class URIResultHandler extends ResultHandler {
 
   @Override
   public void handleButtonPress(int index) {
-    URIParsedResult uriResult = (URIParsedResult) result;
+    URIParsedResult uriResult = (URIParsedResult) getResult();
     switch (index) {
       case 0:
         openURL(uriResult.getURI());

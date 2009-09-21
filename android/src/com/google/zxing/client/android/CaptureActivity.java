@@ -21,6 +21,8 @@ import com.google.zxing.ResultPoint;
 import com.google.zxing.client.android.result.ResultButtonListener;
 import com.google.zxing.client.android.result.ResultHandler;
 import com.google.zxing.client.android.result.ResultHandlerFactory;
+import com.google.zxing.client.android.history.HistoryManager;
+import com.google.zxing.client.android.share.ShareActivity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -42,6 +44,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Message;
 import android.os.Vibrator;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.text.ClipboardManager;
 import android.text.SpannableStringBuilder;
@@ -73,9 +76,10 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private static final String TAG = "CaptureActivity";
 
   private static final int SHARE_ID = Menu.FIRST;
-  private static final int SETTINGS_ID = Menu.FIRST + 1;
-  private static final int HELP_ID = Menu.FIRST + 2;
-  private static final int ABOUT_ID = Menu.FIRST + 3;
+  private static final int HISTORY_ID = Menu.FIRST + 1;
+  private static final int SETTINGS_ID = Menu.FIRST + 2;
+  private static final int HELP_ID = Menu.FIRST + 3;
+  private static final int ABOUT_ID = Menu.FIRST + 4;
 
   private static final int MAX_RESULT_IMAGE_SIZE = 150;
   private static final long INTENT_RESULT_DURATION = 1500L;
@@ -94,7 +98,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     NONE
   }
 
-  public CaptureActivityHandler handler;
+  private CaptureActivityHandler handler;
 
   private ViewfinderView viewfinderView;
   private View statusView;
@@ -109,6 +113,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private String sourceUrl;
   private String decodeMode;
   private String versionName;
+  private HistoryManager historyManager;
   
   private final OnCompletionListener beepListener = new BeepListener();
 
@@ -119,6 +124,10 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       startActivity(intent);
     }
   };
+
+  public Handler getHandler() {
+    return handler;
+  }
 
   @Override
   public void onCreate(Bundle icicle) {
@@ -136,6 +145,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     handler = null;
     lastResult = null;
     hasSurface = false;
+    historyManager = new HistoryManager(this);
 
     showHelpOnFirstLaunch();
   }
@@ -233,6 +243,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   public boolean onCreateOptionsMenu(Menu menu) {
     super.onCreateOptionsMenu(menu);
     menu.add(0, SHARE_ID, 0, R.string.menu_share).setIcon(R.drawable.share_menu_item);
+    menu.add(0, HISTORY_ID, 0, R.string.menu_history).setIcon(android.R.drawable.ic_menu_recent_history);
     menu.add(0, SETTINGS_ID, 0, R.string.menu_settings)
         .setIcon(android.R.drawable.ic_menu_preferences);
     menu.add(0, HELP_ID, 0, R.string.menu_help)
@@ -257,6 +268,11 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setClassName(this, ShareActivity.class.getName());
         startActivity(intent);
+        break;
+      }
+      case HISTORY_ID: {
+        AlertDialog historyAlert = historyManager.buildAlert();
+        historyAlert.show();
         break;
       }
       case SETTINGS_ID: {
@@ -313,18 +329,22 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
    */
   public void handleDecode(Result rawResult, Bitmap barcode) {
     lastResult = rawResult;
-    playBeepSoundAndVibrate();
-    drawResultPoints(barcode, rawResult);
-
-    switch (source) {
-      case NATIVE_APP_INTENT:
-      case PRODUCT_SEARCH_LINK:
-        handleDecodeExternally(rawResult, barcode);
-        break;
-      case ZXING_LINK:
-      case NONE:
-        handleDecodeInternally(rawResult, barcode);
-        break;
+    historyManager.addHistoryItem(rawResult.getText());
+    if (barcode != null) {
+      playBeepSoundAndVibrate();
+      drawResultPoints(barcode, rawResult);
+      switch (source) {
+        case NATIVE_APP_INTENT:
+        case PRODUCT_SEARCH_LINK:
+          handleDecodeExternally(rawResult, barcode);
+          break;
+        case ZXING_LINK:
+        case NONE:
+          handleDecodeInternally(rawResult, barcode);
+          break;
+      }
+    } else {
+      handleDecodeInternally(rawResult, null);
     }
   }
 
@@ -366,13 +386,23 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     resultView.setVisibility(View.VISIBLE);
 
     ImageView barcodeImageView = (ImageView) findViewById(R.id.barcode_image_view);
-    barcodeImageView.setMaxWidth(MAX_RESULT_IMAGE_SIZE);
-    barcodeImageView.setMaxHeight(MAX_RESULT_IMAGE_SIZE);
-    barcodeImageView.setImageBitmap(barcode);
+    if (barcode == null) {
+      barcodeImageView.setVisibility(View.GONE);
+    } else {
+      barcodeImageView.setVisibility(View.VISIBLE);      
+      barcodeImageView.setMaxWidth(MAX_RESULT_IMAGE_SIZE);
+      barcodeImageView.setMaxHeight(MAX_RESULT_IMAGE_SIZE);
+      barcodeImageView.setImageBitmap(barcode);
+    }
 
     TextView formatTextView = (TextView) findViewById(R.id.format_text_view);
-    formatTextView.setText(getString(R.string.msg_default_format) + ": " +
-        rawResult.getBarcodeFormat().toString());
+    if (rawResult.getBarcodeFormat() == null) {
+      formatTextView.setVisibility(View.GONE);
+    } else {
+      formatTextView.setVisibility(View.VISIBLE);
+      formatTextView.setText(getString(R.string.msg_default_format) + ": " +
+          rawResult.getBarcodeFormat().toString());
+    }
 
     ResultHandler resultHandler = ResultHandlerFactory.makeResultHandler(this, rawResult);
     TextView typeTextView = (TextView) findViewById(R.id.type_text_view);

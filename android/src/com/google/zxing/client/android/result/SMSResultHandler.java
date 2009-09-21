@@ -50,7 +50,7 @@ public final class SMSResultHandler extends ResultHandler {
 
   @Override
   public void handleButtonPress(int index) {
-    SMSParsedResult smsResult = (SMSParsedResult) result;
+    SMSParsedResult smsResult = (SMSParsedResult) getResult();
     switch (index) {
       case 0:
         sendSMS(smsResult.getNumber(), smsResult.getBody());
@@ -63,7 +63,7 @@ public final class SMSResultHandler extends ResultHandler {
 
   @Override
   public CharSequence getDisplayContents() {
-    SMSParsedResult smsResult = (SMSParsedResult) result;
+    SMSParsedResult smsResult = (SMSParsedResult) getResult();
     StringBuffer contents = new StringBuffer();
     ParsedResult.maybeAppend(PhoneNumberUtils.formatNumber(smsResult.getNumber()), contents);
     ParsedResult.maybeAppend(smsResult.getVia(), contents);

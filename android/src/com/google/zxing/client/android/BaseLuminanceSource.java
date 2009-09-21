@@ -26,7 +26,8 @@ import android.graphics.Bitmap;
  * @author dswitkin@google.com (Daniel Switkin)
  */
 public abstract class BaseLuminanceSource extends LuminanceSource {
-  public BaseLuminanceSource(int width, int height) {
+
+  BaseLuminanceSource(int width, int height) {
     super(width, height);
   }
 

@@ -44,7 +44,7 @@ final class DecodeThread extends Thread {
   public static final String BARCODE_BITMAP = "barcode_bitmap";
   private static final String TAG = "DecodeThread";
 
-  public Handler handler;
+  private Handler handler;
   private final CaptureActivity activity;
   private final MultiFormatReader multiFormatReader;
 
@@ -75,6 +75,10 @@ final class DecodeThread extends Thread {
         setDecodeAllMode();
       }
     }
+  }
+
+  Handler getHandler() {
+    return handler;
   }
 
   @Override
@@ -175,13 +179,13 @@ final class DecodeThread extends Thread {
 
     if (success) {
       Log.v(TAG, "Found barcode (" + (end - start) + " ms):\n" + rawResult.toString());
-      Message message = Message.obtain(activity.handler, R.id.decode_succeeded, rawResult);
+      Message message = Message.obtain(activity.getHandler(), R.id.decode_succeeded, rawResult);
       Bundle bundle = new Bundle();
       bundle.putParcelable(BARCODE_BITMAP, source.renderCroppedGreyscaleBitmap());
       message.setData(bundle);
       message.sendToTarget();
     } else {
-      Message message = Message.obtain(activity.handler, R.id.decode_failed);
+      Message message = Message.obtain(activity.getHandler(), R.id.decode_failed);
       message.sendToTarget();
     }
   }

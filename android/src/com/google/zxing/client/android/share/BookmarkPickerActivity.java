@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.zxing.client.android;
+package com.google.zxing.client.android.share;
 
 import android.app.ListActivity;
 import android.content.Intent;
@@ -25,6 +25,7 @@ import android.view.View;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import com.google.zxing.client.android.R;
 
 /**
  * This class is only needed because I can't successfully send an ACTION_PICK intent to
@@ -32,7 +33,7 @@ import android.widget.SimpleCursorAdapter;
  *
  * @author dswitkin@google.com (Daniel Switkin)
  */
-public final class BookmarkPickerActivity extends ListActivity {
+final class BookmarkPickerActivity extends ListActivity {
   private static final String[] BOOKMARK_PROJECTION = {
       Browser.BookmarkColumns.TITLE,
       Browser.BookmarkColumns.URL

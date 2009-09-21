@@ -59,7 +59,7 @@ public final class ISBNResultHandler extends ResultHandler {
 
   @Override
   public void handleButtonPress(int index) {
-    ISBNParsedResult isbnResult = (ISBNParsedResult) result;
+    ISBNParsedResult isbnResult = (ISBNParsedResult) getResult();
     switch (index) {
       case 0:
         openProductSearch(isbnResult.getISBN());

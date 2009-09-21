@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
-package com.google.zxing.client.android;
+package com.google.zxing.client.android.encode;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
+import com.google.zxing.client.android.Intents;
+import com.google.zxing.client.android.Contents;
+import com.google.zxing.client.android.R;
 import com.google.zxing.common.ByteMatrix;
 
 import android.app.Activity;
@@ -37,7 +40,7 @@ import android.util.Log;
  *
  * @author dswitkin@google.com (Daniel Switkin)
  */
-public final class QRCodeEncoder {
+final class QRCodeEncoder {
   private final Activity activity;
   private String contents;
   private String displayContents;
@@ -96,18 +99,19 @@ public final class QRCodeEncoder {
         contents = data;
         displayContents = data;
         title = activity.getString(R.string.contents_text);
-        if (format.equals(Contents.Format.CODE_128))
+        if (format.equals(Contents.Format.CODE_128)) {
           this.format = BarcodeFormat.CODE_128;
-        else if (format.equals(Contents.Format.CODE_39))
+        } else if (format.equals(Contents.Format.CODE_39)) {
           this.format = BarcodeFormat.CODE_39;
-        else if (format.equals(Contents.Format.EAN_8))
+        } else if (format.equals(Contents.Format.EAN_8)) {
           this.format = BarcodeFormat.EAN_8;
-        else if (format.equals(Contents.Format.EAN_13))
+        } else if (format.equals(Contents.Format.EAN_13)) {
           this.format = BarcodeFormat.EAN_13;
-        else if (format.equals(Contents.Format.UPC_A))
+        } else if (format.equals(Contents.Format.UPC_A)) {
           this.format = BarcodeFormat.UPC_A;
-        else if (format.equals(Contents.Format.UPC_E))
+        } else if (format.equals(Contents.Format.UPC_E)) {
           this.format = BarcodeFormat.UPC_E;
+        }
       }
     }
     return contents != null && contents.length() > 0;

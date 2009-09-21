@@ -49,7 +49,7 @@ public final class EmailAddressResultHandler extends ResultHandler {
 
   @Override
   public void handleButtonPress(int index) {
-    EmailAddressParsedResult emailResult = (EmailAddressParsedResult) result;
+    EmailAddressParsedResult emailResult = (EmailAddressParsedResult) getResult();
     switch (index) {
       case 0:
         sendEmailFromUri(emailResult.getMailtoURI(), null, null);

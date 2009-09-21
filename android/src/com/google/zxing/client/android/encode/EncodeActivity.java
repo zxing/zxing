@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.zxing.client.android;
+package com.google.zxing.client.android.encode;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -31,6 +31,8 @@ import android.view.View;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.google.zxing.client.android.R;
+import com.google.zxing.client.android.Intents;
 
 /**
  * This class encodes data from an Intent into a QR code, and then displays it full screen so that
@@ -38,7 +40,7 @@ import android.widget.TextView;
  *
  * @author dswitkin@google.com (Daniel Switkin)
  */
-public final class EncodeActivity extends Activity {
+final class EncodeActivity extends Activity {
   private QRCodeEncoder qrCodeEncoder;
   private ProgressDialog progressDialog;
   private boolean firstLayout;
@@ -47,7 +49,7 @@ public final class EncodeActivity extends Activity {
    * This needs to be delayed until after the first layout so that the view dimensions will be
    * available.
    */
-  public final OnGlobalLayoutListener layoutListener = new OnGlobalLayoutListener() {
+  private final OnGlobalLayoutListener layoutListener = new OnGlobalLayoutListener() {
     public void onGlobalLayout() {
       if (firstLayout) {
         View layout = findViewById(R.id.encode_view);
@@ -71,7 +73,7 @@ public final class EncodeActivity extends Activity {
     }
   };
 
-  public final Handler handler = new Handler() {
+  private final Handler handler = new Handler() {
     @Override
     public void handleMessage(Message message) {
       switch (message.what) {

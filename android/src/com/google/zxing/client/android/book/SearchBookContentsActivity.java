@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.zxing.client.android;
+package com.google.zxing.client.android.book;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -47,6 +47,11 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
+
+import com.google.zxing.client.android.R;
+import com.google.zxing.client.android.Intents;
+import com.google.zxing.client.android.AndroidHttpClient;
 
 /**
  * Uses Google Book Search to find a word or phrase in the requested book.
@@ -64,7 +69,7 @@ public final class SearchBookContentsActivity extends Activity {
   private ListView resultListView;
   private TextView headerView;
 
-  public final Handler handler = new Handler() {
+  private final Handler handler = new Handler() {
     @Override
     public void handleMessage(Message message) {
       switch (message.what) {
@@ -95,6 +100,11 @@ public final class SearchBookContentsActivity extends Activity {
       return false;
     }
   };
+  private static final Pattern TAG_PATTERN = Pattern.compile("\\<.*?\\>");
+  private static final Pattern LT_ENTITY_PATTERN = Pattern.compile("&lt;");
+  private static final Pattern GT_ENTITY_PATTERN = Pattern.compile("&gt;");
+  private static final Pattern QUOTE_ENTITY_PATTERN = Pattern.compile("&#39;");
+  private static final Pattern QUOT_ENTITY_PATTERN = Pattern.compile("&quot;");
 
   @Override
   public void onCreate(Bundle icicle) {
@@ -209,11 +219,11 @@ public final class SearchBookContentsActivity extends Activity {
       String snippet = json.optString("snippet_text");
       boolean valid = true;
       if (snippet.length() > 0) {
-        snippet = snippet.replaceAll("\\<.*?\\>", "");
-        snippet = snippet.replaceAll("&lt;", "<");
-        snippet = snippet.replaceAll("&gt;", ">");
-        snippet = snippet.replaceAll("&#39;", "'");
-        snippet = snippet.replaceAll("&quot;", "\"");
+        snippet = TAG_PATTERN.matcher(snippet).replaceAll("");
+        snippet = LT_ENTITY_PATTERN.matcher(snippet).replaceAll("<");
+        snippet = GT_ENTITY_PATTERN.matcher(snippet).replaceAll(">");
+        snippet = QUOTE_ENTITY_PATTERN.matcher(snippet).replaceAll("'");
+        snippet = QUOT_ENTITY_PATTERN.matcher(snippet).replaceAll("\"");
       } else {
         snippet = '(' + getString(R.string.msg_sbc_snippet_unavailable) + ')';
         valid = false;
@@ -279,7 +289,7 @@ public final class SearchBookContentsActivity extends Activity {
     // Book Search requires a cookie to work, which we store persistently. If the cookie does
     // not exist, this could be the first search or it has expired. Either way, do a quick HEAD
     // request to fetch it, save it via the CookieSyncManager to flash, then return it.
-    private String getCookie(String url) {
+    private static String getCookie(String url) {
       String cookie = CookieManager.getInstance().getCookie(url);
       if (cookie == null || cookie.length() == 0) {
         Log.v(TAG, "Book Search cookie was missing or expired");

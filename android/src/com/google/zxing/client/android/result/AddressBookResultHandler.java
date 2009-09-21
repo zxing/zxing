@@ -107,7 +107,7 @@ public final class AddressBookResultHandler extends ResultHandler {
 
   @Override
   public void handleButtonPress(int index) {
-    AddressBookParsedResult addressResult = (AddressBookParsedResult) result;
+    AddressBookParsedResult addressResult = (AddressBookParsedResult) getResult();
     int action = mapIndexToAction(index);
     switch (action) {
       case 0:
@@ -135,7 +135,7 @@ public final class AddressBookResultHandler extends ResultHandler {
   // Overriden so we can hyphenate phone numbers, format birthdays, and bold the name.
   @Override
   public CharSequence getDisplayContents() {
-    AddressBookParsedResult result = (AddressBookParsedResult) this.result;
+    AddressBookParsedResult result = (AddressBookParsedResult) getResult();
     StringBuffer contents = new StringBuffer();
     ParsedResult.maybeAppend(result.getNames(), contents);
     int namesLength = contents.length();

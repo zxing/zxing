@@ -58,7 +58,7 @@ public final class CalendarResultHandler extends ResultHandler {
 
   @Override
   public void handleButtonPress(int index) {
-    CalendarParsedResult calendarResult = (CalendarParsedResult) result;
+    CalendarParsedResult calendarResult = (CalendarParsedResult) getResult();
     switch (index) {
       case 0:
         addCalendarEvent(calendarResult.getSummary(), calendarResult.getStart(),
@@ -69,7 +69,7 @@ public final class CalendarResultHandler extends ResultHandler {
 
   @Override
   public CharSequence getDisplayContents() {
-    CalendarParsedResult calResult = (CalendarParsedResult) result;
+    CalendarParsedResult calResult = (CalendarParsedResult) getResult();
     StringBuffer result = new StringBuffer();
     ParsedResult.maybeAppend(calResult.getSummary(), result);
     appendTime(calResult.getStart(), result);
