@@ -72,13 +72,13 @@ public final class CaptureActivityHandler extends Handler {
       case R.id.decode_succeeded:
         state = State.SUCCESS;
         Bundle bundle = message.getData();
-        Bitmap barcode = bundle.getParcelable(DecodeThread.BARCODE_BITMAP);
+        Bitmap barcode = bundle == null ? null : (Bitmap) bundle.getParcelable(DecodeThread.BARCODE_BITMAP);
         activity.handleDecode((Result) message.obj, barcode);
         break;
       case R.id.decode_failed:
         // We're decoding as fast as possible, so when one decode fails, start another.
         state = State.PREVIEW;
-        CameraManager.get().requestPreviewFrame(decodeThread.handler, R.id.decode);
+        CameraManager.get().requestPreviewFrame(decodeThread.getHandler(), R.id.decode);
         break;
       case R.id.return_scan_result:
         activity.setResult(Activity.RESULT_OK, (Intent) message.obj);
@@ -94,7 +94,7 @@ public final class CaptureActivityHandler extends Handler {
   public void quitSynchronously() {
     state = State.DONE;
     CameraManager.get().stopPreview();
-    Message quit = Message.obtain(decodeThread.handler, R.id.quit);
+    Message quit = Message.obtain(decodeThread.getHandler(), R.id.quit);
     quit.sendToTarget();
     try {
       decodeThread.join();
@@ -109,7 +109,7 @@ public final class CaptureActivityHandler extends Handler {
   private void restartPreviewAndDecode() {
     if (state == State.SUCCESS) {
       state = State.PREVIEW;
-      CameraManager.get().requestPreviewFrame(decodeThread.handler, R.id.decode);
+      CameraManager.get().requestPreviewFrame(decodeThread.getHandler(), R.id.decode);
       CameraManager.get().requestAutoFocus(this, R.id.auto_focus);
       activity.drawViewfinder();
     }

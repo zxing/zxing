@@ -49,7 +49,7 @@ public final class GeoResultHandler extends ResultHandler {
 
   @Override
   public void handleButtonPress(int index) {
-    GeoParsedResult geoResult = (GeoParsedResult) result;
+    GeoParsedResult geoResult = (GeoParsedResult) getResult();
     switch (index) {
       case 0:
         openMap(geoResult.getGeoURI());

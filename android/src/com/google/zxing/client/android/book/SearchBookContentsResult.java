@@ -14,21 +14,21 @@
  * limitations under the License.
  */
 
-package com.google.zxing.client.android;
+package com.google.zxing.client.android.book;
 
 /**
  * The underlying data for a SBC result.
  *
  * @author dswitkin@google.com (Daniel Switkin)
  */
-public final class SearchBookContentsResult {
+final class SearchBookContentsResult {
   private static String query;
 
   private final String pageNumber;
   private final String snippet;
   private final boolean validSnippet;
 
-  public SearchBookContentsResult(String pageNumber, String snippet, boolean validSnippet) {
+  SearchBookContentsResult(String pageNumber, String snippet, boolean validSnippet) {
     this.pageNumber = pageNumber;
     this.snippet = snippet;
     this.validSnippet = validSnippet;

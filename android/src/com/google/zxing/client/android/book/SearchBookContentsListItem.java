@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.zxing.client.android;
+package com.google.zxing.client.android.book;
 
 import android.content.Context;
 import android.graphics.Typeface;
@@ -24,13 +24,14 @@ import android.text.style.StyleSpan;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import com.google.zxing.client.android.R;
 
 /**
  * A list item which displays the page number and snippet of this search result.
  *
  * @author dswitkin@google.com (Daniel Switkin)
  */
-public final class SearchBookContentsListItem extends LinearLayout {
+final class SearchBookContentsListItem extends LinearLayout {
   private TextView pageNumberView;
   private TextView snippetView;
 

@@ -57,7 +57,7 @@ public final class ProductResultHandler extends ResultHandler {
 
   @Override
   public void handleButtonPress(int index) {
-    ProductParsedResult productResult = (ProductParsedResult) result;
+    ProductParsedResult productResult = (ProductParsedResult) getResult();
     switch (index) {
       case 0:
         openProductSearch(productResult.getNormalizedProductID());

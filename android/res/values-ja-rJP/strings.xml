@@ -53,6 +53,7 @@
   <string name="menu_about">詳細</string>
   <string name="menu_help">ヘルプ</string>
   <string name="menu_settings">設定</string>
+  <string name="menu_history">歴史</string>    
   <string name="menu_share">共有</string>
 
   <string name="msg_about">オープンソースのバーコード ライブラリ、ZXing を使用しています</string>
@@ -101,6 +102,9 @@
   <string name="result_tel">電話番号がヒットしました</string>
   <string name="result_text">テキストデータがヒットしました</string>
   <string name="result_uri">URL がヒットしました</string>
+
+  <string name="history_title">歴史</string>
+  <string name="history_clear_text">削除履歴</string>
 
   <string name="sbc_name">Google ブックス</string>
   <string name="share_name">バーコードで共有する</string>

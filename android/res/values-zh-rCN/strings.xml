@@ -49,6 +49,7 @@
   <string name="menu_about">关于</string>
   <string name="menu_help">帮助</string>
   <string name="menu_settings">设置</string>
+  <string name="menu_history">历史</string>      
   <string name="menu_share">分享</string>
   <string name="msg_about">以ZXing的开源条码库为基础</string>
   <string name="msg_default_contents">内容</string>
@@ -87,6 +88,8 @@
   <string name="result_tel">找到电话号码</string>
   <string name="result_text">找到纯文本</string>
   <string name="result_uri">找到URL</string>
+  <string name="history_title">历史</string>
+  <string name="history_clear_text">删除历史</string>
   <string name="sbc_name">Google图书搜索</string>
   <string name="share_name">通过条码分享</string>
   <string name="title_about">条码扫描器</string>

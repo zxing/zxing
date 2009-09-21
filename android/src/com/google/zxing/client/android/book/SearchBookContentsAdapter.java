@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.zxing.client.android;
+package com.google.zxing.client.android.book;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -24,12 +24,14 @@ import android.widget.ArrayAdapter;
 
 import java.util.List;
 
+import com.google.zxing.client.android.R;
+
 /**
  * Manufactures list items which represent SBC results.
  *
  * @author dswitkin@google.com (Daniel Switkin)
  */
-public final class SearchBookContentsAdapter extends ArrayAdapter<SearchBookContentsResult> {
+final class SearchBookContentsAdapter extends ArrayAdapter<SearchBookContentsResult> {
   public SearchBookContentsAdapter(Context context, List<SearchBookContentsResult> items) {
     super(context, R.layout.search_book_contents_list_item, 0, items);
   }

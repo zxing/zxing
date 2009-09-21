@@ -50,7 +50,7 @@ public final class TelResultHandler extends ResultHandler {
 
   @Override
   public void handleButtonPress(int index) {
-    TelParsedResult telResult = (TelParsedResult) result;
+    TelParsedResult telResult = (TelParsedResult) getResult();
     switch (index) {
       case 0:
         dialPhoneFromUri(telResult.getTelURI());
@@ -66,7 +66,7 @@ public final class TelResultHandler extends ResultHandler {
   // Overriden so we can take advantage of Android's phone number hyphenation routines.
   @Override
   public CharSequence getDisplayContents() {
-    String contents = result.getDisplayResult();
+    String contents = getResult().getDisplayResult();
     contents = contents.replace("\r", "");
     return PhoneNumberUtils.formatNumber(contents);
   }
