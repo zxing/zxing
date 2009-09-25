@@ -29,7 +29,10 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.FileNotFoundException;
 
 public final class CameraTestActivity extends Activity implements SurfaceHolder.Callback {
 
@@ -181,12 +184,24 @@ public final class CameraTestActivity extends Activity implements SurfaceHolder.
     result.append("\n\n");
     result.append(parameters);
 
+    File file = new File("/sdcard/CameraParameters.txt");
+    try {
+      FileOutputStream stream = new FileOutputStream(file);
+      stream.write(result.toString().getBytes());
+      stream.close();
+    } catch (FileNotFoundException e) {
+
+    } catch (IOException e) {
+
+    }
+
     Intent intent = new Intent(Intent.ACTION_SEND);
     intent.putExtra(Intent.EXTRA_EMAIL, EMAIL_ADDRESS);
     intent.putExtra(Intent.EXTRA_SUBJECT, "Camera parameters report");
     intent.putExtra(Intent.EXTRA_TEXT, result.toString());
     intent.setType("text/plain");
     startActivity(intent);
+    finish();
   }
 
 }
