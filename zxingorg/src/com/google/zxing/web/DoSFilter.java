@@ -33,6 +33,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.regex.Pattern;
 
 /**
  * A {@link Filter} that rejects requests from hosts that are sending too many
@@ -45,6 +46,7 @@ public final class DoSFilter implements Filter {
   private static final int MAX_ACCESSES_PER_IP_PER_TIME = 10;
   private static final long MAX_ACCESS_INTERVAL_MSEC = 10L * 1000L;
   private static final long UNBAN_INTERVAL_MSEC = 60L * 60L * 1000L;
+  private static final Pattern COMMA_PATTERN = Pattern.compile(",");
 
   private final IPTrie numRecentAccesses;
   private final Timer timer;
@@ -63,7 +65,7 @@ public final class DoSFilter implements Filter {
     context = filterConfig.getServletContext();
     String bannedIPs = filterConfig.getInitParameter("bannedIPs");
     if (bannedIPs != null) {
-      for (String ip : bannedIPs.split(",")) {
+      for (String ip : COMMA_PATTERN.split(bannedIPs)) {
         manuallyBannedIPAddresses.add(ip.trim());
       }
     }

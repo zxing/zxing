@@ -75,7 +75,7 @@ public final class CommandLineRunner {
       } else if ("--dump_black_point".equals(arg)) {
         dumpBlackPoint = true;
       } else if (arg.startsWith("-")) {
-        System.out.println("Unknown command line option " + arg);
+        System.err.println("Unknown command line option " + arg);
         printUsage();
         return;
       }
@@ -106,11 +106,11 @@ public final class CommandLineRunner {
   }
 
   private static void printUsage() {
-    System.out.println("Decode barcode images using the ZXing library\n");
-    System.out.println("usage: CommandLineRunner { file | dir | url } [ options ]");
-    System.out.println("  --try_harder: Use the TRY_HARDER hint, default is normal (mobile) mode");
-    System.out.println("  --dump_results: Write the decoded contents to input.txt");
-    System.out.println("  --dump_black_point: Compare black point algorithms as input.mono.png");
+    System.err.println("Decode barcode images using the ZXing library\n");
+    System.err.println("usage: CommandLineRunner { file | dir | url } [ options ]");
+    System.err.println("  --try_harder: Use the TRY_HARDER hint, default is normal (mobile) mode");
+    System.err.println("  --dump_results: Write the decoded contents to input.txt");
+    System.err.println("  --dump_black_point: Compare black point algorithms as input.mono.png");
   }
 
   private static void decodeOneArgument(String argument, Hashtable<DecodeHintType, Object> hints,
@@ -282,13 +282,22 @@ public final class CommandLineRunner {
       resultName = resultName.substring(0, pos);
     }
     resultName += ".mono.png";
+    OutputStream outStream = null;
     try {
-      OutputStream outStream = new FileOutputStream(resultName);
+      outStream = new FileOutputStream(resultName);
       ImageIO.write(result, "png", outStream);
     } catch (FileNotFoundException e) {
-      System.out.println("Could not create " + resultName);
+      System.err.println("Could not create " + resultName);
     } catch (IOException e) {
-      System.out.println("Could not write to " + resultName);
+      System.err.println("Could not write to " + resultName);
+    } finally {
+      try {
+        if (outStream != null) {
+          outStream.close();
+        }
+      } catch (IOException ioe) {
+        // continue
+      }
     }
   }
 

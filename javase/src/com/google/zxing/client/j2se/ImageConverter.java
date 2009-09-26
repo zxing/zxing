@@ -60,7 +60,7 @@ public final class ImageConverter {
       } else if ("-2d".equals(arg)) {
         rowSampling = false;
       } else if (arg.startsWith("-")) {
-        System.out.println("Ignoring unrecognized option: " + arg);
+        System.err.println("Ignoring unrecognized option: " + arg);
       }
     }
     for (String arg : args) {
