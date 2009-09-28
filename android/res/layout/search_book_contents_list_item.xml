@@ -14,14 +14,13 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  -->
-<com.google.zxing.client.android.SearchBookContentsListItem
+<com.google.zxing.client.android.book.SearchBookContentsListItem
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:background="@color/sbc_list_item"
     android:padding="8px">
-
 
   <TextView android:id="@+id/page_number_view"
             android:layout_width="75px"
@@ -42,4 +41,4 @@
             android:textSize="16sp"
             android:typeface="serif"/>
 
-</com.google.zxing.client.android.SearchBookContentsListItem>
+</com.google.zxing.client.android.book.SearchBookContentsListItem>

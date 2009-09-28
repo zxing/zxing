@@ -71,10 +71,10 @@ versionName is 2.31, 2.4, or 3.0. -->
         <data android:scheme="http" android:host="www.google.co.uk" android:path="/m/products/scan" />
       </intent-filter>
     </activity>
-    <activity android:name="PreferencesActivity"
+    <activity android:name=".PreferencesActivity"
               android:label="@string/preferences_name">
     </activity>
-    <activity android:name="EncodeActivity">
+    <activity android:name=".encode.EncodeActivity">
       <intent-filter>
         <action android:name="com.google.zxing.client.android.ENCODE"/>
         <category android:name="android.intent.category.DEFAULT"/>
@@ -85,7 +85,7 @@ versionName is 2.31, 2.4, or 3.0. -->
         <category android:name="android.intent.category.DEFAULT"/>
       </intent-filter>
     </activity>
-    <activity android:name="SearchBookContentsActivity"
+    <activity android:name=".book.SearchBookContentsActivity"
               android:label="@string/sbc_name"
               android:screenOrientation="landscape"
               android:configChanges="orientation|keyboardHidden">
@@ -99,7 +99,7 @@ versionName is 2.31, 2.4, or 3.0. -->
         <category android:name="android.intent.category.DEFAULT"/>
       </intent-filter>
     </activity>
-    <activity android:name="ShareActivity"
+    <activity android:name=".share.ShareActivity"
               android:label="@string/share_name"
               android:screenOrientation="user">
       <intent-filter>
@@ -107,14 +107,14 @@ versionName is 2.31, 2.4, or 3.0. -->
         <category android:name="android.intent.category.DEFAULT"/>
       </intent-filter>
     </activity>
-    <activity android:name="BookmarkPickerActivity"
+    <activity android:name=".share.BookmarkPickerActivity"
               android:label="@string/bookmark_picker_name">
       <intent-filter>
         <action android:name="android.intent.action.PICK"/>
         <category android:name="android.intent.category.DEFAULT"/>
       </intent-filter>
     </activity>
-    <activity android:name="HelpActivity"
+    <activity android:name=".HelpActivity"
               android:screenOrientation="user">
       <intent-filter>
         <action android:name="android.intent.action.VIEW"/>

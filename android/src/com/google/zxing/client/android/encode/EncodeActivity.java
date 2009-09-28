@@ -16,6 +16,9 @@
 
 package com.google.zxing.client.android.encode;
 
+import com.google.zxing.client.android.Intents;
+import com.google.zxing.client.android.R;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -31,8 +34,6 @@ import android.view.View;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.google.zxing.client.android.R;
-import com.google.zxing.client.android.Intents;
 
 /**
  * This class encodes data from an Intent into a QR code, and then displays it full screen so that
@@ -40,7 +41,7 @@ import com.google.zxing.client.android.Intents;
  *
  * @author dswitkin@google.com (Daniel Switkin)
  */
-final class EncodeActivity extends Activity {
+public final class EncodeActivity extends Activity {
   private QRCodeEncoder qrCodeEncoder;
   private ProgressDialog progressDialog;
   private boolean firstLayout;
