@@ -28,8 +28,10 @@ final class DBHelper extends SQLiteOpenHelper {
   private static final int DB_VERSION = 1;
   private static final String DB_NAME = "barcode_scanner_history.db";
   static final String TABLE_NAME = "history";
-  private static final String ID_COL = "id";
+  static final String ID_COL = "id";
   static final String TEXT_COL = "text";
+  static final String FORMAT_COL = "format";
+  static final String DISPLAY_COL = "display";
   static final String TIMESTAMP_COL = "timestamp";
 
   DBHelper(Context context) {
@@ -42,12 +44,16 @@ final class DBHelper extends SQLiteOpenHelper {
             "CREATE TABLE " + TABLE_NAME + " (" +
             ID_COL + " INTEGER PRIMARY KEY, " +
             TEXT_COL + " TEXT, " +
+            FORMAT_COL + " TEXT, " +
+            DISPLAY_COL + " TEXT, " +
             TIMESTAMP_COL + " INTEGER" +
             ");");
   }
 
   @Override
   public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
+    sqLiteDatabase.delete(TABLE_NAME, null, null);
+    onCreate(sqLiteDatabase);
   }
 
 }

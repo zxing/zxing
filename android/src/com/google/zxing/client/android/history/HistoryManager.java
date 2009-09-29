@@ -27,14 +27,22 @@ import android.os.Message;
 import java.util.List;
 import java.util.ArrayList;
 
+import com.google.zxing.BarcodeFormat;
 import com.google.zxing.client.android.R;
 import com.google.zxing.client.android.CaptureActivity;
 import com.google.zxing.Result;
 
 /**
+ * <p>Manages functionality related to scan history.</p>
+ * 
  * @author Sean Owen
  */
 public final class HistoryManager {
+
+  private static final int MAX_ITEMS = 20;
+  private static final String[] TEXT_COL_PROJECTION = { DBHelper.TEXT_COL };
+  private static final String[] TEXT_FORMAT_COL_PROJECTION = { DBHelper.TEXT_COL, DBHelper.FORMAT_COL };
+  private static final String[] ID_COL_PROJECTION = { DBHelper.ID_COL };
 
   private final CaptureActivity activity;
 
@@ -42,30 +50,34 @@ public final class HistoryManager {
     this.activity = activity;
   }
 
-  List<String> getHistoryItems() {
-
+  List<Result> getHistoryItems() {
     SQLiteOpenHelper helper = new DBHelper(activity);
+    List<Result> items = new ArrayList<Result>();
     SQLiteDatabase db = helper.getReadableDatabase();
-    List<String> items = new ArrayList<String>();
+    Cursor cursor = null;
     try {
-      Cursor cursor = db.query(DBHelper.TABLE_NAME,
-                               new String[] {DBHelper.TEXT_COL},
-                               null, null, null, null,
-                               DBHelper.TIMESTAMP_COL + " DESC");
+      cursor = db.query(DBHelper.TABLE_NAME,
+                        TEXT_FORMAT_COL_PROJECTION,
+                        null, null, null, null,
+                        DBHelper.TIMESTAMP_COL + " DESC");
       while (cursor.moveToNext()) {
-        items.add(cursor.getString(0));
+        Result result = new Result(cursor.getString(0), null, null, BarcodeFormat.valueOf(cursor.getString(1)));
+        items.add(result);
       }
     } finally {
+      if (cursor != null) {
+        cursor.close();
+      }
       db.close();
     }
     return items;
   }
 
   public AlertDialog buildAlert() {
-    List<String> items = getHistoryItems();
+    final List<Result> items = getHistoryItems();
     final String[] dialogItems = new String[items.size() + 1];
     for (int i = 0; i < items.size(); i++) {
-      dialogItems[i] = items.get(i);
+      dialogItems[i] = items.get(i).getText();
     }
     dialogItems[dialogItems.length - 1] = activity.getResources().getString(R.string.history_clear_text);
     DialogInterface.OnClickListener clickListener = new DialogInterface.OnClickListener() {
@@ -73,7 +85,7 @@ public final class HistoryManager {
         if (i == dialogItems.length - 1) {
           clearHistory();
         } else {
-          Result result = new Result(dialogItems[i], null, null, null);
+          Result result = items.get(i);
           Message message = Message.obtain(activity.getHandler(), R.id.decode_succeeded, result);
           message.sendToTarget();
         }
@@ -85,20 +97,54 @@ public final class HistoryManager {
     return builder.create();
   }
 
-  public void addHistoryItem(String text) {
-
-    if (getHistoryItems().contains(text)) {
-      return;
-    }
+  public void addHistoryItem(Result result) {
 
     SQLiteOpenHelper helper = new DBHelper(activity);
     SQLiteDatabase db = helper.getWritableDatabase();
+    Cursor cursor = null;
     try {
+      cursor = db.query(DBHelper.TABLE_NAME,
+                        TEXT_COL_PROJECTION,
+                        DBHelper.TEXT_COL + "=?",
+                        new String[] { result.getText() },
+                        null, null, null, null);
+      if (cursor.moveToNext()) {
+        return;
+      }
       ContentValues values = new ContentValues();
-      values.put(DBHelper.TEXT_COL, text);
+      values.put(DBHelper.TEXT_COL, result.getText());
+      values.put(DBHelper.FORMAT_COL, result.getBarcodeFormat().toString());
+      values.put(DBHelper.DISPLAY_COL, result.getText()); // TODO use parsed result display value?
       values.put(DBHelper.TIMESTAMP_COL, System.currentTimeMillis());
       db.insert(DBHelper.TABLE_NAME, DBHelper.TIMESTAMP_COL, values);
     } finally {
+      if (cursor != null) {
+        cursor.close();
+      }
+      db.close();
+    }
+  }
+
+  public void trimHistory() {
+    SQLiteOpenHelper helper = new DBHelper(activity);
+    SQLiteDatabase db = helper.getWritableDatabase();
+    Cursor cursor = null;
+    try {
+      cursor = db.query(DBHelper.TABLE_NAME,
+                        ID_COL_PROJECTION,
+                        null, null, null, null,
+                        DBHelper.TIMESTAMP_COL + " DESC");
+      int count = 0;
+      while (count < MAX_ITEMS && cursor.moveToNext()) {
+        count++;
+      }
+      while (cursor.moveToNext()) {
+        db.delete(DBHelper.TABLE_NAME, DBHelper.ID_COL + '=' + cursor.getString(0), null);
+      }
+    } finally {
+      if (cursor != null) {
+        cursor.close();
+      }
       db.close();
     }
   }
