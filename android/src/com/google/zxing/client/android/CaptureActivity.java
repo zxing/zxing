@@ -16,6 +16,7 @@
 
 package com.google.zxing.client.android;
 
+import android.graphics.drawable.BitmapDrawable;
 import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.client.android.result.ResultButtonListener;
@@ -60,7 +61,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -146,6 +146,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     lastResult = null;
     hasSurface = false;
     historyManager = new HistoryManager(this);
+    historyManager.trimHistory();
 
     showHelpOnFirstLaunch();
   }
@@ -329,8 +330,11 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
    */
   public void handleDecode(Result rawResult, Bitmap barcode) {
     lastResult = rawResult;
-    historyManager.addHistoryItem(rawResult.getText());
-    if (barcode != null) {
+    historyManager.addHistoryItem(rawResult);
+    if (barcode == null) {
+      // This is from history -- no saved barcode
+      handleDecodeInternally(rawResult, null);
+    } else {
       playBeepSoundAndVibrate();
       drawResultPoints(barcode, rawResult);
       switch (source) {
@@ -343,8 +347,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
           handleDecodeInternally(rawResult, barcode);
           break;
       }
-    } else {
-      handleDecodeInternally(rawResult, null);
     }
   }
 
@@ -385,24 +387,19 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     viewfinderView.setVisibility(View.GONE);
     resultView.setVisibility(View.VISIBLE);
 
-    ImageView barcodeImageView = (ImageView) findViewById(R.id.barcode_image_view);
     if (barcode == null) {
-      barcodeImageView.setVisibility(View.GONE);
-    } else {
-      barcodeImageView.setVisibility(View.VISIBLE);      
-      barcodeImageView.setMaxWidth(MAX_RESULT_IMAGE_SIZE);
-      barcodeImageView.setMaxHeight(MAX_RESULT_IMAGE_SIZE);
-      barcodeImageView.setImageBitmap(barcode);
+      barcode = ((BitmapDrawable) getResources().getDrawable(R.drawable.unknown_barcode)).getBitmap();
     }
+    ImageView barcodeImageView = (ImageView) findViewById(R.id.barcode_image_view);
+    barcodeImageView.setVisibility(View.VISIBLE);
+    barcodeImageView.setMaxWidth(MAX_RESULT_IMAGE_SIZE);
+    barcodeImageView.setMaxHeight(MAX_RESULT_IMAGE_SIZE);
+    barcodeImageView.setImageBitmap(barcode);
 
     TextView formatTextView = (TextView) findViewById(R.id.format_text_view);
-    if (rawResult.getBarcodeFormat() == null) {
-      formatTextView.setVisibility(View.GONE);
-    } else {
-      formatTextView.setVisibility(View.VISIBLE);
-      formatTextView.setText(getString(R.string.msg_default_format) + ": " +
-          rawResult.getBarcodeFormat().toString());
-    }
+    formatTextView.setVisibility(View.VISIBLE);
+    formatTextView.setText(getString(R.string.msg_default_format) + ": " +
+        rawResult.getBarcodeFormat().toString());
 
     ResultHandler resultHandler = ResultHandlerFactory.makeResultHandler(this, rawResult);
     TextView typeTextView = (TextView) findViewById(R.id.type_text_view);
@@ -421,7 +418,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     ViewGroup buttonView = (ViewGroup) findViewById(R.id.result_button_view);
     buttonView.requestFocus();
     for (int x = 0; x < ResultHandler.MAX_BUTTON_COUNT; x++) {
-      Button button = (Button) buttonView.getChildAt(x);
+      TextView button = (TextView) buttonView.getChildAt(x);
       if (x < buttonCount) {
         button.setVisibility(View.VISIBLE);
         button.setText(resultHandler.getButtonText(x));
