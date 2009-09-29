@@ -17,6 +17,7 @@
 package com.google.zxing.client.android.result;
 
 import com.google.zxing.client.android.R;
+import com.google.zxing.client.android.LocaleManager;
 import com.google.zxing.client.result.ParsedResult;
 import com.google.zxing.client.result.URIParsedResult;
 
@@ -31,7 +32,8 @@ public final class URIResultHandler extends ResultHandler {
   private static final int[] buttons = {
       R.string.button_open_browser,
       R.string.button_share_by_email,
-      R.string.button_share_by_sms
+      R.string.button_share_by_sms,
+      R.string.button_read_book,
   };
 
   public URIResultHandler(Activity activity, ParsedResult result) {
@@ -40,7 +42,7 @@ public final class URIResultHandler extends ResultHandler {
 
   @Override
   public int getButtonCount() {
-    return buttons.length;
+    return isGoogleBooksURI() ? buttons.length : buttons.length - 1;
   }
 
   @Override
@@ -51,15 +53,23 @@ public final class URIResultHandler extends ResultHandler {
   @Override
   public void handleButtonPress(int index) {
     URIParsedResult uriResult = (URIParsedResult) getResult();
+    String uri = uriResult.getURI();
     switch (index) {
       case 0:
-        openURL(uriResult.getURI());
+        openURL(uri);
         break;
       case 1:
-        shareByEmail(uriResult.getURI());
+        shareByEmail(uri);
         break;
       case 2:
-        shareBySMS(uriResult.getURI());
+        shareBySMS(uri);
+        break;
+      case 3:
+        int equals = uri.indexOf('=');
+        String id = uri.substring(equals + 1);
+        String readBookURI = "http://books.google." +
+            LocaleManager.getBookSearchCountryTLD() + "/m#Read?id=" + id;
+        openURL(readBookURI);
         break;
     }
   }
@@ -68,4 +78,9 @@ public final class URIResultHandler extends ResultHandler {
   public int getDisplayTitle() {
     return R.string.result_uri;
   }
+
+  private boolean isGoogleBooksURI() {
+    return ((URIParsedResult) getResult()).getURI().startsWith("http://google.com/books?id=");
+  }
+
 }

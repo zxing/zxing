@@ -34,6 +34,7 @@
   <string name="button_open_browser">Open browser</string>
   <string name="button_product_search">Product Search</string>
   <string name="button_search_book_contents">Search book contents</string>
+  <string name="button_read_book">Browse book</string>
   <string name="button_share_bookmark">Share bookmark</string>
   <string name="button_share_by_email">Share via email</string>
   <string name="button_share_by_sms">Share via SMS</string>

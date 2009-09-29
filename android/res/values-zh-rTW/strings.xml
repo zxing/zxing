@@ -32,6 +32,7 @@
   <string name="button_open_browser">打開瀏覽器</string>
   <string name="button_product_search">打開產品搜索</string>
   <string name="button_search_book_contents">搜索圖書內容</string>
+  <string name="button_read_book">瀏覽本書</string>
   <string name="button_share_bookmark">分享書簽</string>
   <string name="button_share_by_email">通過email分享</string>
   <string name="button_share_by_sms">通過短信分享</string>

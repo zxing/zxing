@@ -34,6 +34,7 @@
   <string name="button_open_browser">ブラウザ起動</string>
   <string name="button_product_search">商品検索</string>
   <string name="button_search_book_contents">書籍の内容を検索する</string>
+  <string name="button_read_book">閲覧図書</string>
   <string name="button_share_bookmark">ブックマークを送信する</string>
   <string name="button_share_by_email">メールで送信する</string>
   <string name="button_share_by_sms">SMSで送信する</string>
