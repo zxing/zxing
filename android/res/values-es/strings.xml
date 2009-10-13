@@ -17,7 +17,6 @@
 <resources>
    <string name="app_name">Escáner de código de barras</string>
    <string name="bookmark_picker_name">Marcadores</string>
-
    <string name="button_add_calendar">Añadir a calendario</string>
    <string name="button_add_contact">Añadir contacto</string>
    <string name="button_back">Volver</string>
@@ -43,20 +42,17 @@
    <string name="button_show_map">Mostrar mapa</string>
    <string name="button_sms">Enviar SMS</string>
    <string name="button_web_search">Búsqueda Web</string>
-
    <string name="contents_contact">Información de contacto</string>
    <string name="contents_email">Dirección de correo electrónico</string>
    <string name="contents_location">Coordenadas geográficas</string>
    <string name="contents_phone">Número de teléfono</string>
    <string name="contents_sms">Dirección SMS</string>
    <string name="contents_text">Texto plano</string>
-
    <string name="menu_about">Acerca de</string>
    <string name="menu_help">Ayuda</string>
    <string name="menu_settings">Configuración</string>
    <string name="menu_history">Historia</string>
    <string name="menu_share">Compartir</string>
-
    <string name="msg_about">Basado en el código de barras de código abierto ZXing Biblioteca</string>
    <string name="msg_default_contents">Contenidos</string>
    <string name="msg_default_format">Formato</string>
@@ -76,7 +72,6 @@
    <string name="msg_sbc_searching_book">Buscando libro\u2026</string>
    <string name="msg_share_explanation">Usted puede compartir los datos mostrando un código de barras en la pantalla y escanear con otro teléfono.</string>
    <string name="msg_share_subject_line">Aquí es el contenido de un código de barras que ha escaneado</string>
-
    <string name="preferences_actions_title">Cuando un código de barras se encuentra\u2026</string>
    <string name="preferences_copy_to_clipboard_title">Copiar al portapapeles</string>
    <string name="preferences_decode_1D_title">Descodificar códigos de barras 1D</string>
@@ -88,7 +83,6 @@
    <string name="preferences_result_title">Configuración de resultados</string>
    <string name="preferences_custom_product_search_title">URL personalizada de búsqueda de productos</string>
    <string name="preferences_custom_product_search_summary">Use %s como un marcador de posición para el identificador de producto</string>
-
    <string name="result_address_book">Información de contacto encontrado</string>
    <string name="result_calendar">Agenda de eventos encontrado</string>
    <string name="result_email_address">Dirección de correo electrónico encontrado</string>
@@ -99,14 +93,10 @@
    <string name="result_tel">Número de teléfono encontrado</string>
    <string name="result_text">Texto encontrado</string>
    <string name="result_uri">URL encontrado</string>
-
    <string name="history_title">Historia</string>
    <string name="history_clear_text">Borrar historial</string>
-
    <string name="sbc_name">Búsqueda de libros de Google</string>
    <string name="share_name">Compartir por códigos de barras</string>
-
    <string name="title_about">Escáner de código de barras v</string>
-
    <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>
