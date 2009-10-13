@@ -20,8 +20,8 @@ version to be published. The next versionCode will be 7, regardless of whether t
 versionName is 2.31, 2.4, or 3.0. -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.google.zxing.client.android"
-          android:versionName="3.0 alpha2"
-          android:versionCode="33">
+          android:versionName="3.0 alpha3"
+          android:versionCode="34">
   <!-- Allows this app to run on Cupcake devices. -->
   <uses-sdk android:minSdkVersion="3"/>
   <!-- Donut-specific flags which allow us to run on large and high dpi screens. -->
