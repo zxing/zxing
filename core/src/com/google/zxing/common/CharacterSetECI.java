@@ -67,13 +67,13 @@ public final class CharacterSetECI extends ECI {
 
   private static void addCharacterSet(int value, String encodingName) {
     CharacterSetECI eci = new CharacterSetECI(value, encodingName);
-    VALUE_TO_ECI.put(Integer.valueOf(value), eci);
+    VALUE_TO_ECI.put(new Integer(value), eci); // can't use valueOf
     NAME_TO_ECI.put(encodingName, eci);
   }
 
   private static void addCharacterSet(int value, String[] encodingNames) {
     CharacterSetECI eci = new CharacterSetECI(value, encodingNames[0]);
-    VALUE_TO_ECI.put(Integer.valueOf(value), eci);
+    VALUE_TO_ECI.put(new Integer(value), eci); // can't use valueOf
     for (int i = 0; i < encodingNames.length; i++) {
       NAME_TO_ECI.put(encodingNames[i], eci);
     }
@@ -92,7 +92,7 @@ public final class CharacterSetECI extends ECI {
     if (value < 0 || value >= 900) {
       throw new IllegalArgumentException("Bad ECI value: " + value);
     }
-    return (CharacterSetECI) VALUE_TO_ECI.get(Integer.valueOf(value));
+    return (CharacterSetECI) VALUE_TO_ECI.get(new Integer(value));
   }
 
   /**
