@@ -58,21 +58,21 @@ public final class ByQuadrantReader implements Reader {
       // continue
     }
 
-    BinaryBitmap topRight = image.crop(halfWidth, 0, width, halfHeight);
+    BinaryBitmap topRight = image.crop(halfWidth, 0, halfWidth, halfHeight);
     try {
       return delegate.decode(topRight, hints);
     } catch (ReaderException re) {
       // continue
     }
 
-    BinaryBitmap bottomLeft = image.crop(0, halfHeight, halfWidth, height);
+    BinaryBitmap bottomLeft = image.crop(0, halfHeight, halfWidth, halfHeight);
     try {
       return delegate.decode(bottomLeft, hints);
     } catch (ReaderException re) {
       // continue
     }
 
-    BinaryBitmap bottomRight = image.crop(halfWidth, halfHeight, width, height);
+    BinaryBitmap bottomRight = image.crop(halfWidth, halfHeight, halfWidth, halfHeight);
     try {
       return delegate.decode(bottomRight, hints);
     } catch (ReaderException re) {
@@ -81,8 +81,7 @@ public final class ByQuadrantReader implements Reader {
 
     int quarterWidth = halfWidth / 2;
     int quarterHeight = halfHeight / 2;
-    BinaryBitmap center = image.crop(quarterWidth, quarterHeight, width - quarterWidth,
-        height - quarterHeight);
+    BinaryBitmap center = image.crop(quarterWidth, quarterHeight, halfWidth, halfHeight);
     return delegate.decode(center, hints);
   }
 
