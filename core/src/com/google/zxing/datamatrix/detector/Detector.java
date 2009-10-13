@@ -42,7 +42,8 @@ public final class Detector {
   // Trick to avoid creating new Integer objects below -- a sort of crude copy of
   // the Integer.valueOf(int) optimization added in Java 5, not in J2ME
   private static final Integer[] INTEGERS =
-      { Integer.valueOf(0), Integer.valueOf(1), Integer.valueOf(2), Integer.valueOf(3), Integer.valueOf(4) };
+      { new Integer(0), new Integer(1), new Integer(2), new Integer(3), new Integer(4) };
+  // No, can't use valueOf()
 
   private final BitMatrix image;
   private final MonochromeRectangleDetector rectangleDetector;
