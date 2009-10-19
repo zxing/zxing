@@ -18,15 +18,20 @@ package com.google.zxing.client.android.encode;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.Result;
 import com.google.zxing.WriterException;
-import com.google.zxing.client.android.Intents;
 import com.google.zxing.client.android.Contents;
+import com.google.zxing.client.android.Intents;
 import com.google.zxing.client.android.R;
+import com.google.zxing.client.result.AddressBookParsedResult;
+import com.google.zxing.client.result.ParsedResult;
+import com.google.zxing.client.result.ResultParser;
 import com.google.zxing.common.ByteMatrix;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -34,9 +39,13 @@ import android.provider.Contacts;
 import android.telephony.PhoneNumberUtils;
 import android.util.Log;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+
 /**
  * This class does the work of decoding the user's request and extracting all the data
- * to be encoded in a QR Code.
+ * to be encoded in a barcode.
  *
  * @author dswitkin@google.com (Daniel Switkin)
  */
@@ -49,8 +58,19 @@ final class QRCodeEncoder {
 
   public QRCodeEncoder(Activity activity, Intent intent) {
     this.activity = activity;
-    if (!encodeContents(intent)) {
+    if (intent == null) {
       throw new IllegalArgumentException("No valid data to encode.");
+    }
+
+    String action = intent.getAction();
+    if (action.equals(Intents.Encode.ACTION)) {
+      if (!encodeContentsFromZXingIntent(intent)) {
+        throw new IllegalArgumentException("No valid data to encode.");
+      }
+    } else if (action.equals(Intent.ACTION_SEND)) {
+      if (!encodeContentsFromShareIntent(intent)) {
+      throw new IllegalArgumentException("No valid data to encode.");
+      }
     }
   }
 
@@ -71,21 +91,17 @@ final class QRCodeEncoder {
   public String getTitle() {
     return title;
   }
-  
+
   public String getFormat() {
     return format.toString();
   }
 
   // It would be nice if the string encoding lived in the core ZXing library,
   // but we use platform specific code like PhoneNumberUtils, so it can't.
-  private boolean encodeContents(Intent intent) {
-    if (intent == null) {
-      return false;
-    }
-    
-    // default to QR_CODE if no format given
+  private boolean encodeContentsFromZXingIntent(Intent intent) {
+     // Default to QR_CODE if no format given.
     String format = intent.getStringExtra(Intents.Encode.FORMAT);
-    if (format == null || format.length() == 0 || 
+    if (format == null || format.length() == 0 ||
         format.equals(Contents.Format.QR_CODE)) {
       String type = intent.getStringExtra(Intents.Encode.TYPE);
       if (type == null || type.length() == 0) {
@@ -113,6 +129,32 @@ final class QRCodeEncoder {
           this.format = BarcodeFormat.UPC_E;
         }
       }
+    }
+    return contents != null && contents.length() > 0;
+  }
+
+  // Handles send intents from the Contacts app, retrieving a contact as a VCARD.
+  private boolean encodeContentsFromShareIntent(Intent intent) {
+    format = BarcodeFormat.QR_CODE;
+    try {
+      Uri uri = (Uri)intent.getExtras().getParcelable(Intent.EXTRA_STREAM);
+      InputStream stream = activity.getContentResolver().openInputStream(uri);
+      int length = stream.available();
+      byte[] vcard = new byte[length];
+      stream.read(vcard, 0, length);
+      String vcardString = new String(vcard, "utf-8");
+      Result result = new Result(vcardString, vcard, null, BarcodeFormat.QR_CODE);
+      ParsedResult parsedResult = ResultParser.parseResult(result);
+      if (!(parsedResult instanceof AddressBookParsedResult)) {
+        return false;
+      }
+      if (!encodeQRCodeContents((AddressBookParsedResult) parsedResult)) {
+        return false;
+      }
+    } catch (FileNotFoundException e) {
+      return false;
+    } catch (IOException e) {
+      return false;
     }
     return contents != null && contents.length() > 0;
   }
@@ -199,6 +241,59 @@ final class QRCodeEncoder {
           title = activity.getString(R.string.contents_location);
         }
       }
+    }
+  }
+
+  private boolean encodeQRCodeContents(AddressBookParsedResult contact) {
+    StringBuilder newContents = new StringBuilder();
+    StringBuilder newDisplayContents = new StringBuilder();
+    newContents.append("MECARD:");
+    String[] names = contact.getNames();
+    if (names != null && names.length > 0) {
+      newContents.append("N:").append(names[0]).append(';');
+      newDisplayContents.append(names[0]);
+    }
+    String address = contact.getAddress();
+    if (address != null && address.length() > 0) {
+      newContents.append("ADR:").append(address).append(';');
+      newDisplayContents.append('\n').append(address);
+    }
+    String[] phoneNumbers = contact.getPhoneNumbers();
+    if (phoneNumbers != null) {
+      for (int x = 0; x < phoneNumbers.length; x++) {
+        String phone = phoneNumbers[x];
+        if (phone != null && phone.length() > 0) {
+          newContents.append("TEL:").append(phone).append(';');
+          newDisplayContents.append('\n').append(PhoneNumberUtils.formatNumber(phone));
+        }
+      }
+    }
+    String[] emails = contact.getEmails();
+    if (emails != null) {
+      for (int x = 0; x < emails.length; x++) {
+        String email = emails[x];
+        if (email != null && email.length() > 0) {
+          newContents.append("EMAIL:").append(email).append(';');
+          newDisplayContents.append('\n').append(email);
+        }
+      }
+    }
+    String url = contact.getURL();
+    if (url != null && url.length() > 0) {
+      newContents.append("URL:").append(url).append(';');
+      newDisplayContents.append('\n').append(url);
+    }
+    // Make sure we've encoded at least one field.
+    if (newDisplayContents.length() > 0) {
+      newContents.append(';');
+      contents = newContents.toString();
+      displayContents = newDisplayContents.toString();
+      title = activity.getString(R.string.contents_contact);
+      return true;
+    } else {
+      contents = null;
+      displayContents = null;
+      return false;
     }
   }
 
