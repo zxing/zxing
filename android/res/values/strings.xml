@@ -90,7 +90,7 @@
   <string name="preferences_play_beep_title">Beep</string>
   <string name="preferences_vibrate_title">Vibrate</string>
   <string name="preferences_result_title">Result settings</string>
-  <string name="preferences_custom_product_search_title">Custom product search URL</string>
+  <string name="preferences_custom_product_search_title">Custom search URL</string>
   <string name="preferences_custom_product_search_summary">Use %s as a placeholder for the product
     ID</string>
 
