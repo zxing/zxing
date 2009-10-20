@@ -52,7 +52,7 @@ final class DBHelper extends SQLiteOpenHelper {
 
   @Override
   public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
-    sqLiteDatabase.delete(TABLE_NAME, null, null);
+    sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
     onCreate(sqLiteDatabase);
   }
 
