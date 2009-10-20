@@ -208,6 +208,9 @@ final class CameraManager {
    */
   public Rect getFramingRect() {
     if (framingRect == null) {
+      if (camera == null) {
+        return null;
+      }
       int width = cameraResolution.x * 3 / 4;
       if (width < MIN_FRAME_WIDTH) {
         width = MIN_FRAME_WIDTH;
