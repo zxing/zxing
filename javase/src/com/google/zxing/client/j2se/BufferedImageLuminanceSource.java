@@ -70,7 +70,7 @@ public final class BufferedImageLuminanceSource extends LuminanceSource {
     if (rgbData == null || rgbData.length < width) {
       rgbData = new int[width];
     }
-    image.getRGB(left, top + y, width, 1, rgbData, 0, image.getWidth());
+    image.getRGB(left, top + y, width, 1, rgbData, 0, width);
     for (int x = 0; x < width; x++) {
       int pixel = rgbData[x];
       int luminance = (306 * ((pixel >> 16) & 0xFF) +
@@ -89,7 +89,7 @@ public final class BufferedImageLuminanceSource extends LuminanceSource {
     byte[] matrix = new byte[area];
 
     int[] rgb = new int[area];
-    image.getRGB(left, top, width, height, rgb, 0, image.getWidth());
+    image.getRGB(left, top, width, height, rgb, 0, width);
     for (int y = 0; y < height; y++) {
       int offset = y * width;
       for (int x = 0; x < width; x++) {
