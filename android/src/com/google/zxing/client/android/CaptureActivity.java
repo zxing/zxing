@@ -131,7 +131,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
   @Override
   public void onCreate(Bundle icicle) {
-    Log.i(TAG, "Creating CaptureActivity");
     super.onCreate(icicle);
 
     Window window = getWindow();
@@ -244,7 +243,8 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   public boolean onCreateOptionsMenu(Menu menu) {
     super.onCreateOptionsMenu(menu);
     menu.add(0, SHARE_ID, 0, R.string.menu_share).setIcon(R.drawable.share_menu_item);
-    menu.add(0, HISTORY_ID, 0, R.string.menu_history).setIcon(android.R.drawable.ic_menu_recent_history);
+    menu.add(0, HISTORY_ID, 0, R.string.menu_history)
+        .setIcon(android.R.drawable.ic_menu_recent_history);
     menu.add(0, SETTINGS_ID, 0, R.string.menu_settings)
         .setIcon(android.R.drawable.ic_menu_preferences);
     menu.add(0, HELP_ID, 0, R.string.menu_help)
@@ -479,7 +479,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
    * run. The easiest way to do this is to check android:versionCode from the manifest, and compare
    * it to a value stored as a preference.
    */
-  private void showHelpOnFirstLaunch() {
+  private boolean showHelpOnFirstLaunch() {
     try {
       PackageInfo info = getPackageManager().getPackageInfo(PACKAGE_NAME, 0);
       int currentVersion = info.versionCode;
@@ -493,10 +493,12 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setClassName(this, HelpActivity.class.getName());
         startActivity(intent);
+        return true;
       }
     } catch (PackageManager.NameNotFoundException e) {
       Log.w(TAG, e);
     }
+    return false;
   }
 
   /**
@@ -505,8 +507,11 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
    */
   private void initBeepSound() {
     if (playBeep && mediaPlayer == null) {
+      // The volume on STREAM_SYSTEM is not adjustable, and users found it too loud,
+      // so we now play on the music stream.
+      setVolumeControlStream(AudioManager.STREAM_MUSIC);
       mediaPlayer = new MediaPlayer();
-      mediaPlayer.setAudioStreamType(AudioManager.STREAM_SYSTEM);
+      mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
       mediaPlayer.setOnCompletionListener(beepListener);
 
       AssetFileDescriptor file = getResources().openRawResourceFd(R.raw.beep);
