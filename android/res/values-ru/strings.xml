@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (C) 2008 ZXing authors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<resources>
+  <string name="app_name">Сканер штрих-кодов</string>
+  <string name="bookmark_picker_name">Закладки</string>
+
+  <string name="button_add_calendar">Добавить в календарь</string>
+  <string name="button_add_contact">Добавить контакт</string>
+  <string name="button_back">Назад</string>
+  <string name="button_book_search">Поиск книги</string>
+  <string name="button_cancel">Отмена</string>
+  <string name="button_clipboard_empty">Очистить буфер обмена</string>
+  <string name="button_custom_product_search">Пользовательский поиск</string>
+  <string name="button_dial">Набрать номер</string>
+  <string name="button_done">Готово</string>
+  <string name="button_email">Послать эл. письмо</string>
+  <string name="button_get_directions">Проложить маршрут</string>
+  <string name="button_mms">Послать MMS</string>
+  <string name="button_ok">OK</string>
+  <string name="button_open_browser">Открыть браузер</string>
+  <string name="button_product_search">Поиск товара</string>
+  <string name="button_search_book_contents">Поиск содержания книги</string>
+  <string name="button_read_book">Открыть книгу</string>
+  <string name="button_share_bookmark">Поделиться закладкой</string>
+  <string name="button_share_by_email">Поделиться через эл. почту</string>
+  <string name="button_share_by_sms">Поделиться через SMS</string>
+  <string name="button_share_clipboard">Поделиться буфером обмена</string>
+  <string name="button_share_contact">Поделиться контактом</string>
+  <string name="button_show_map">Показать карту</string>
+  <string name="button_sms">Послать SMS</string>
+  <string name="button_web_search">Поиск в Вебе</string>
+
+  <string name="contents_contact">Контактная информация</string>
+  <string name="contents_email">Адрес эл. почты</string>
+  <string name="contents_location">Географические координаты</string>
+  <string name="contents_phone">Номер телефона</string>
+  <string name="contents_sms">Адрес для SMS</string>
+  <string name="contents_text">Текст</string>
+
+  <string name="menu_about">О программе</string>
+  <string name="menu_help">Помощь</string>
+  <string name="menu_settings">Настройки</string>
+  <string name="menu_history">История</string>
+  <string name="menu_share">Поделиться</string>
+
+  <string name="msg_about">Основано на свободной библиотеке штрих-кодов ZXing</string>
+  <string name="msg_default_contents">Содержание</string>
+  <string name="msg_default_format">Формат</string>
+  <string name="msg_default_mms_subject">Привет</string>
+  <string name="msg_default_status">Чтобы сканировать штрих-код, поместите его в квадрат видоискателя.
+  </string>
+  <string name="msg_default_type">Тип</string>
+  <string name="msg_encode_barcode_failed">Не получилось сгенерировать запрошенный штрих-код.</string>
+  <string name="msg_encode_contents_failed">Не могу закодировать штрих-код от источник данных.
+  </string>
+  <string name="msg_encode_in_progress">Генерация штрих-кода\u2026</string>
+  <string name="msg_intent_failed">К сожалению, запрошенное приложение не может быть запущенно.
+    Содержимое штрих-кода может быть повреждено.</string>
+  <string name="msg_sbc_book_not_searchable">К сожалению, поиск книги не удался.</string>
+  <string name="msg_sbc_failed">К сожалению, у поиска возникли проблемы.</string>
+  <string name="msg_sbc_no_page_returned">Ни одна страница не возвращена</string>
+  <string name="msg_sbc_page">Страница</string>
+  <string name="msg_sbc_snippet_unavailable">Фрагмент недоступен</string>
+  <string name="msg_sbc_unknown_page">Неизвестная страница</string>
+  <string name="msg_sbc_searching_book">Поиск книги\u2026</string>
+  <string name="msg_share_explanation">Вы можете поделиться данными, сканировав штрих-код с вашего экрана другим телефоном.</string>
+  <string name="msg_share_subject_line">Тут содержимое отсканированного мною штрих-кода</string>
+
+  <string name="preferences_name">Настройки</string>
+  <string name="preferences_general_title">Общие настройки</string>
+  <string name="preferences_decode_1D_title">Распознавать линейные штрих-коды</string>
+  <string name="preferences_decode_QR_title">Распознавать QR-коды</string>
+  <string name="preferences_actions_title">Когда штрих-код найден\u2026</string>
+  <string name="preferences_play_beep_title">Пищать</string>
+  <string name="preferences_vibrate_title">Вибрировать</string>
+  <string name="preferences_copy_to_clipboard_title">Копировать в буфер обмена</string>
+  <string name="preferences_result_title">Настройки результата</string>
+  <string name="preferences_custom_product_search_title">URL пользовательского поиска</string>
+  <string name="preferences_custom_product_search_summary">%s будет заменён на ID товара</string>
+
+  <string name="result_address_book">Найдены контактные данные</string>
+  <string name="result_calendar">Найдено событие для календаря</string>
+  <string name="result_email_address">Найден адрес эл. почты</string>
+  <string name="result_geo">Найдены географические координаты</string>
+  <string name="result_isbn">Найдена книга</string>
+  <string name="result_product">Найден товар</string>
+  <string name="result_sms">Найден адрес для SMS</string>
+  <string name="result_tel">Найден номер телефона</string>
+  <string name="result_text">Найден текст</string>
+  <string name="result_uri">Найден URL</string>
+
+  <string name="history_title">История</string>
+  <string name="history_clear_text">Очистить историю</string>
+
+  <string name="sbc_name">Поиск книг Google</string>
+  <string name="share_name">Поделиться через штрих-код</string>
+
+  <string name="title_about">Сканер штрих-кодов версии </string>
+
+  <string name="zxing_url">http://code.google.com/p/zxing</string>
+</resources>
