@@ -35,7 +35,7 @@
                 android:layout_height="fill_parent"
                 android:background="@color/result_view"
                 android:visibility="gone"
-                android:padding="4px">
+                android:padding="4dip">
 
     <LinearLayout
         android:orientation="horizontal"
@@ -43,7 +43,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="top"
-        android:padding="12px">
+        android:padding="12dip">
 
       <LinearLayout
           android:orientation="vertical"
@@ -54,7 +54,7 @@
         <ImageView android:id="@+id/barcode_image_view"
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
-                   android:layout_marginBottom="4px"
+                   android:layout_marginBottom="4dip"
                    android:adjustViewBounds="true"
                    android:scaleType="centerInside"/>
 
@@ -88,7 +88,7 @@
                   android:text="@string/msg_default_contents"
                   android:textColor="@color/result_text"
                   android:textSize="22sp"
-                  android:paddingLeft="12px"
+                  android:paddingLeft="12dip"
                   android:autoLink="web"/>
 
       </ScrollView>
@@ -140,7 +140,7 @@
                   android:layout_weight="0"
                   android:background="@color/status_view"
                   android:baselineAligned="false"
-                  android:padding="4px">
+                  android:padding="4dip">
 
       <TextView android:id="@+id/status_text_view"
                 android:layout_width="wrap_content"

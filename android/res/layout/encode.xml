@@ -41,8 +41,8 @@
               android:gravity="center"
               android:textColor="@color/contents_text"
               android:textSize="20.0sp"
-              android:paddingBottom="8px"
-              android:paddingLeft="8px"
-              android:paddingRight="8px"/>
+              android:paddingBottom="8dip"
+              android:paddingLeft="8dip"
+              android:paddingRight="8dip"/>
   </LinearLayout>
 </ScrollView>

@@ -25,7 +25,7 @@
            android:layout_height="wrap_content"
            android:layout_weight="1"
            android:fadingEdge="vertical"
-           android:fadingEdgeLength="16dip"/>
+           android:fadingEdgeLength="12dip"/>
 
   <LinearLayout
       android:layout_width="fill_parent"
@@ -33,7 +33,7 @@
       android:layout_weight="0"
       android:orientation="horizontal"
       android:gravity="center"
-      android:padding="8px"
+      android:padding="6dip"
       android:weightSum="1"
       android:background="@color/help_button_view">
 
