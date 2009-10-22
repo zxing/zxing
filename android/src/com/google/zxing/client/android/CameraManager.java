@@ -23,6 +23,7 @@ import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.hardware.Camera;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -60,6 +61,7 @@ final class CameraManager {
   private boolean previewing;
   private int previewFormat;
   private String previewFormatString;
+  private boolean useOneShotPreviewCallback;
 
   /**
    * Preview frames are delivered here, which we pass on to the registered handler. Make sure to
@@ -67,6 +69,9 @@ final class CameraManager {
    */
   private final Camera.PreviewCallback previewCallback = new Camera.PreviewCallback() {
     public void onPreviewFrame(byte[] data, Camera camera) {
+      if (!useOneShotPreviewCallback) {
+        camera.setPreviewCallback(null);
+      }
       if (previewHandler != null) {
         Message message = previewHandler.obtainMessage(previewMessage, cameraResolution.x,
             cameraResolution.y, data);
@@ -115,6 +120,16 @@ final class CameraManager {
     camera = null;
     initialized = false;
     previewing = false;
+
+    // Camera.setOneShotPreviewCallback() has a race condition in Cupcake, so we use the older
+    // Camera.setPreviewCallback() on 1.5 and earlier. For Donut and later, we need to use
+    // the more efficient one shot callback, as the older one can swamp the system and cause it
+    // to run out of memory.
+    if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.CUPCAKE) {
+      useOneShotPreviewCallback = false;
+    } else {
+      useOneShotPreviewCallback = true;
+    }
   }
 
   /**
@@ -162,6 +177,9 @@ final class CameraManager {
    */
   public void stopPreview() {
     if (camera != null && previewing) {
+      if (!useOneShotPreviewCallback) {
+        camera.setPreviewCallback(null);
+      }
       camera.stopPreview();
       previewHandler = null;
       autoFocusHandler = null;
@@ -181,7 +199,11 @@ final class CameraManager {
     if (camera != null && previewing) {
       previewHandler = handler;
       previewMessage = message;
-      camera.setOneShotPreviewCallback(previewCallback);
+      if (useOneShotPreviewCallback) {
+        camera.setOneShotPreviewCallback(previewCallback);
+      } else {
+        camera.setPreviewCallback(previewCallback);
+      }
     }
   }
 

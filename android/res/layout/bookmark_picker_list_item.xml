@@ -19,7 +19,7 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:padding="4px">
+    android:padding="4dip">
 
 
   <TextView android:id="@+id/bookmark_title"
