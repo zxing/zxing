@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (C) 2009 ZXing authors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<resources>
+  <string name="app_name">Barcode Scanner</string>
+  <string name="bookmark_picker_name">Marques-pages</string>
+  <string name="button_add_calendar">Ajouter à l\'agenda</string>
+  <string name="button_add_contact">Ajouter un contact</string>
+  <string name="button_back">Retour</string>
+  <string name="button_book_search">Recherche de livres</string>
+  <string name="button_cancel">Annuler</string>
+  <string name="button_clipboard_empty">Vider le presse papier</string>
+  <string name="button_custom_product_search">Recherche personalisée</string>
+  <string name="button_dial">Composer numéro</string>
+  <string name="button_done">Terminé</string>
+  <string name="button_email">Envoyer email</string>
+  <string name="button_get_directions">Obtenir adresses</string>
+  <string name="button_mms">Envoyer MMS</string>
+  <string name="button_ok">OK</string>
+  <string name="button_open_browser">Ouvrir le navigateur</string>
+  <string name="button_product_search">Recherche de produits</string>
+  <string name="button_search_book_contents">Recherche contenu du livre</string>
+  <string name="button_read_book">Parcourir le livre</string>
+  <string name="button_share_bookmark">Partager marques-pages</string>
+  <string name="button_share_by_email">Partager par email</string>
+  <string name="button_share_by_sms">Partager par SMS</string>
+  <string name="button_share_clipboard">Partager le presse papier</string>
+  <string name="button_share_contact">Partager contact</string>
+  <string name="button_show_map">Montrer la carte</string>
+  <string name="button_sms">Envoyer SMS</string>
+  <string name="button_web_search">Recherche Web</string>
+  <string name="contents_contact">Information du contact</string>
+  <string name="contents_email">Adresse email</string>
+  <string name="contents_location">Coordonnées géographiques</string>
+  <string name="contents_phone">Numéro de téléphone</string>
+  <string name="contents_sms">Adresse SMS</string>
+  <string name="contents_text">Texte</string>
+  <string name="menu_about">A propos</string>
+  <string name="menu_help">Aide</string>
+  <string name="menu_settings">Paramètres</string>
+  <string name="menu_history">Historique</string>
+  <string name="menu_share">Partager</string>
+  <string name="msg_about">Basé sur la bibliothèque open source ZXing Barcode</string>
+  <string name="msg_default_contents">Contenus</string>
+  <string name="msg_default_format">Format</string>
+  <string name="msg_default_mms_subject">Salut</string>
+  <string name="msg_default_status">Mettre un code barre à l\'intérieur du rectangle pour le scanner.</string>
+  <string name="msg_default_type">Type</string>
+  <string name="msg_encode_barcode_failed">Impossible de générer le code barre demandé.</string>
+  <string name="msg_encode_contents_failed">Impossible de créer le code barre à partir des données fournies.</string>
+  <string name="msg_encode_in_progress">Génération du code barre\u2026</string>
+  <string name="msg_intent_failed">Désolé, l\'application demandée n\'a pas pu être lancé. Le contenu du code barre peut être invalide.</string>
+  <string name="msg_sbc_book_not_searchable">Désolé, ce livre n\'est pas trouvable.</string>
+  <string name="msg_sbc_failed">Désolé, la recherche a rencontrée un problème.</string>
+  <string name="msg_sbc_no_page_returned">Page non trouvée</string>
+  <string name="msg_sbc_page">Page</string>
+  <string name="msg_sbc_snippet_unavailable">Extrait non disponible</string>
+  <string name="msg_sbc_unknown_page">Page inconnue</string>
+  <string name="msg_sbc_searching_book">Recherche du livre\u2026</string>
+  <string name="msg_share_explanation">Vous pouvez partager des données en affichant un code barre sur votre écran et en le scannant avec un autre téléphone.</string>
+  <string name="msg_share_subject_line">Voici le contenu du code barre scanné</string>
+  <string name="preferences_actions_title">Quand un code barre est trouvé\u2026</string>
+  <string name="preferences_copy_to_clipboard_title">Copier dans le presse papier</string>
+  <string name="preferences_decode_1D_title">Décoder les codes barres 1D</string>
+  <string name="preferences_decode_QR_title">Décoder les codes QR</string>
+  <string name="preferences_general_title">Paramètres généraux</string>
+  <string name="preferences_name">Paramètres</string>
+  <string name="preferences_play_beep_title">Bip</string>
+  <string name="preferences_vibrate_title">Vibrer</string>
+  <string name="preferences_result_title">Paramètres de résultat</string>
+  <string name="preferences_custom_product_search_title">URL personnalisée de recherche</string>
+  <string name="preferences_custom_product_search_summary">Utiliser %s à la place de l\'identifiant du produit</string>
+  <string name="result_address_book">Information de contact trouvée</string>
+  <string name="result_calendar">Evénement de l\'agenda trouvée</string>
+  <string name="result_email_address">Adresse email trouvée</string>
+  <string name="result_geo">Coordonnées géographiques trouvées</string>
+  <string name="result_isbn">Livre trouvé</string>
+  <string name="result_product">Produit trouvé</string>
+  <string name="result_sms">Adresse SMS trouvée</string>
+  <string name="result_tel">Numéro de téléphone trouvé</string>
+  <string name="result_text">Texte trouvé</string>
+  <string name="result_uri">URL trouvée</string>
+  <string name="history_title">Historique</string>
+  <string name="history_clear_text">Vider l\'historique</string>
+  <string name="sbc_name">Recherche Google Livres</string>
+  <string name="share_name">Partager par code barre</string>
+  <string name="title_about">Barcode Scanner v</string>
+  <string name="zxing_url">http://code.google.com/p/zxing</string>
+</resources>
