@@ -82,10 +82,15 @@
 
     <unzip src="../core/core.jar" dest="build"/>
 
+    <!--
     <mkdir dir="build-j2me"/>
     <exec executable="${WTK-home}/bin/preverify1.1" failonerror="true">
       <arg line="-classpath '${preverify-classpath}' -d build-j2me build"/>
     </exec>
+    -->
+    <copy todir="build-j2me">
+      <fileset dir="build"/>
+    </copy>
 
     <copy todir="build-j2me">
       <fileset dir=".">
