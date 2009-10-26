@@ -24,11 +24,9 @@
     <ant dir="core" target="build"/>
     <ant dir="javame" target="build"/>
     <ant dir="javase" target="build"/>
-    <ant dir="bug" target="build"/>
-    <ant dir="android" target="debug-optimized"/>
-    <ant dir="androidtest" target="debug-optimized"/>
+    <ant dir="android" target="compile"/>
+    <ant dir="androidtest" target="compile"/>
     <ant dir="android-integration" target="build"/>
-    <ant dir="rim" target="build"/>
     <ant dir="zxingorg" target="build"/>
   </target>
 
@@ -41,10 +39,8 @@
     <ant dir="core" target="clean"/>
     <ant dir="javame" target="clean"/>
     <ant dir="javase" target="clean"/>
-    <ant dir="bug" target="clean"/>    
     <ant dir="android" target="clean"/>
     <ant dir="androidtest" target="clean"/>
-    <ant dir="rim" target="clean"/>
     <ant dir="zxingorg" target="clean"/>
     <delete dir="docs/javadoc"/>
   </target>
@@ -87,11 +83,9 @@
       <sourcepath>
         <pathelement location="android/src"/>
         <pathelement location="android/gen"/>        
-        <pathelement location="bug/src"/>
         <pathelement location="core/src"/>
         <pathelement location="javame/src"/>
         <pathelement location="javase/src"/>
-        <pathelement location="rim/src"/>
         <pathelement location="zxingorg/src"/>
       </sourcepath>
       <classpath>
@@ -100,12 +94,8 @@
         <pathelement location="${WTK-home}/lib/mmapi.jar"/>
         <pathelement location="${WTK-home}/lib/jsr234.jar"/>
         <pathelement location="${android-home}/platforms/android-1.5/android.jar"/>
-        <pathelement location="${BB-JDK-home}/lib/net_rim_api.jar"/>
         <pathelement location="${tomcat-home}/lib/servlet-api.jar"/>
         <fileset dir="zxingorg/web/WEB-INF/lib">
-          <include name="*.jar"/>
-        </fileset>
-        <fileset dir="bug/lib">
           <include name="*.jar"/>
         </fileset>
       </classpath>
