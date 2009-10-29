@@ -223,3 +223,12 @@
   - New Android Integration module to make life easier for third party ZXing users
   - More robust URI parsing
   - Many other small improvements and bug fixes
+
+1.4 (26 Oct 2009)
+  - Wider viewfinder in Android app to account for better close-range focus
+  - More Android app translations: Spanish, Italian, Russian, French
+  - Support for more devices, Cupcake, Donut
+  - Worked around two important, related callback issues in Donut/Cupcake that stopped scanning
+  - New custom search in Android app
+  - New framework for evaluating the black point of an image
+  - Many many small bug fixes, refactorings, small improvements, new versions of dependencies
