@@ -59,8 +59,14 @@ import com.google.zxing.client.android.AndroidHttpClient;
  * @author dswitkin@google.com (Daniel Switkin)
  */
 public final class SearchBookContentsActivity extends Activity {
+
   private static final String TAG = "SearchBookContents";
   private static final String USER_AGENT = "ZXing (Android)";
+  private static final Pattern TAG_PATTERN = Pattern.compile("\\<.*?\\>");
+  private static final Pattern LT_ENTITY_PATTERN = Pattern.compile("&lt;");
+  private static final Pattern GT_ENTITY_PATTERN = Pattern.compile("&gt;");
+  private static final Pattern QUOTE_ENTITY_PATTERN = Pattern.compile("&#39;");
+  private static final Pattern QUOT_ENTITY_PATTERN = Pattern.compile("&quot;");
 
   private NetworkThread networkThread;
   private String isbn;
@@ -100,11 +106,10 @@ public final class SearchBookContentsActivity extends Activity {
       return false;
     }
   };
-  private static final Pattern TAG_PATTERN = Pattern.compile("\\<.*?\\>");
-  private static final Pattern LT_ENTITY_PATTERN = Pattern.compile("&lt;");
-  private static final Pattern GT_ENTITY_PATTERN = Pattern.compile("&gt;");
-  private static final Pattern QUOTE_ENTITY_PATTERN = Pattern.compile("&#39;");
-  private static final Pattern QUOT_ENTITY_PATTERN = Pattern.compile("&quot;");
+
+  String getISBN() {
+    return isbn;
+  }
 
   @Override
   public void onCreate(Bundle icicle) {
@@ -121,7 +126,11 @@ public final class SearchBookContentsActivity extends Activity {
     }
 
     isbn = intent.getStringExtra(Intents.SearchBookContents.ISBN);
-    setTitle(getString(R.string.sbc_name) + ": ISBN " + isbn);
+    if (isbn.startsWith("http://google.com/books?id=")) {
+      setTitle(getString(R.string.sbc_name));
+    } else {
+      setTitle(getString(R.string.sbc_name) + ": ISBN " + isbn);
+    }
 
     setContentView(R.layout.search_book_contents);
     queryTextView = (EditText) findViewById(R.id.query_text_view);
@@ -189,6 +198,7 @@ public final class SearchBookContentsActivity extends Activity {
         for (int x = 0; x < count; x++) {
           items.add(parseResult(results.getJSONObject(x)));
         }
+	      resultListView.setOnItemClickListener(new BrowseBookListener(this, items));
         resultListView.setAdapter(new SearchBookContentsAdapter(this, items));
       } else {
         String searchable = json.optString("searchable");
@@ -204,9 +214,10 @@ public final class SearchBookContentsActivity extends Activity {
     }
   }
 
-  // Available fields: page_number, page_id, page_url, snippet_text
+  // Available fields: page_id, page_number, page_url, snippet_text
   private SearchBookContentsResult parseResult(JSONObject json) {
     try {
+      String pageId = json.getString("page_id");
       String pageNumber = json.getString("page_number");
       if (pageNumber.length() > 0) {
         pageNumber = getString(R.string.msg_sbc_page) + ' ' + pageNumber;
@@ -228,10 +239,10 @@ public final class SearchBookContentsActivity extends Activity {
         snippet = '(' + getString(R.string.msg_sbc_snippet_unavailable) + ')';
         valid = false;
       }
-      return new SearchBookContentsResult(pageNumber, snippet, valid);
+      return new SearchBookContentsResult(pageId, pageNumber, snippet, valid);
     } catch (JSONException e) {
       // Never seen in the wild, just being complete.
-      return new SearchBookContentsResult(getString(R.string.msg_sbc_no_page_returned), "", false);
+	    return new SearchBookContentsResult(getString(R.string.msg_sbc_no_page_returned), "", "", false);
     }
   }
 
@@ -253,8 +264,16 @@ public final class SearchBookContentsActivity extends Activity {
         // These return a JSON result which describes if and where the query was found. This API may
         // break or disappear at any time in the future. Since this is an API call rather than a
         // website, we don't use LocaleManager to change the TLD.
-        URI uri = new URI("http", null, "www.google.com", -1, "/books", "vid=isbn" + isbn +
-            "&jscmd=SearchWithinVolume2&q=" + query, null);
+        URI uri;
+        if (isbn.startsWith("http://google.com/books?id=")) {
+	        int equals = isbn.indexOf('=');
+          String volumeId = isbn.substring(equals + 1);
+          uri = new URI("http", null, "www.google.com", -1, "/books", "id=" + volumeId +
+                        "&jscmd=SearchWithinVolume2&q=" + query, null);
+        } else {
+          uri = new URI("http", null, "www.google.com", -1, "/books", "vid=isbn" + isbn +
+                        "&jscmd=SearchWithinVolume2&q=" + query, null);
+        }
         HttpUriRequest get = new HttpGet(uri);
         get.setHeader("cookie", getCookie(uri.toString()));
         client = AndroidHttpClient.newInstance(USER_AGENT);
