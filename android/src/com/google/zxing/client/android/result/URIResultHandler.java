@@ -17,7 +17,6 @@
 package com.google.zxing.client.android.result;
 
 import com.google.zxing.client.android.R;
-import com.google.zxing.client.android.LocaleManager;
 import com.google.zxing.client.result.ParsedResult;
 import com.google.zxing.client.result.URIParsedResult;
 
@@ -29,11 +28,12 @@ import android.app.Activity;
  * @author dswitkin@google.com (Daniel Switkin)
  */
 public final class URIResultHandler extends ResultHandler {
+
   private static final int[] buttons = {
       R.string.button_open_browser,
       R.string.button_share_by_email,
       R.string.button_share_by_sms,
-      R.string.button_read_book,
+      R.string.button_search_book_contents,
   };
 
   public URIResultHandler(Activity activity, ParsedResult result) {
@@ -65,11 +65,7 @@ public final class URIResultHandler extends ResultHandler {
         shareBySMS(uri);
         break;
       case 3:
-        int equals = uri.indexOf('=');
-        String id = uri.substring(equals + 1);
-        String readBookURI = "http://books.google." +
-            LocaleManager.getBookSearchCountryTLD() + "/m#Read?id=" + id;
-        openURL(readBookURI);
+	      searchBookContents(uri);
         break;
     }
   }
