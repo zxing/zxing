@@ -21,46 +21,47 @@
 #include "BitMatrixTest.h"
 #include <limits>
 
-namespace common {
+namespace zxing {
+using namespace std;
 
-  CPPUNIT_TEST_SUITE_REGISTRATION(BitMatrixTest);
-  
-  void BitMatrixTest::testGetSet() {
-    size_t bits = numeric_limits<unsigned int>::digits;
-    BitMatrix matrix(bits+1);
-    CPPUNIT_ASSERT_EQUAL(bits+1, matrix.getDimension());
-    for (size_t i = 0; i < bits+1; i++) {
-      for (size_t j = 0; j < bits+1; j++) {
-        if (i * j % 3 == 0) {
-          matrix.set(i, j);
-        }
-      }
-    }
-    for (size_t i = 0; i < bits+1; i++) {
-      for (size_t j = 0; j < bits+1; j++) {
-        CPPUNIT_ASSERT_EQUAL(i * j % 3 == 0, matrix.get(i, j));
-      }
-    }    
-  }
-  
-  void BitMatrixTest::testSetRegion() {
-    BitMatrix matrix(5);
-    matrix.setRegion(1, 1, 3, 3);
-    for (int i = 0; i < 5; i++) {
-      for (int j = 0; j < 5; j++) {
-        CPPUNIT_ASSERT_EQUAL(i >= 1 && i <= 3 && j >= 1 && j <= 3,
-                             matrix.get(i, j));
+CPPUNIT_TEST_SUITE_REGISTRATION(BitMatrixTest);
+
+void BitMatrixTest::testGetSet() {
+  size_t bits = numeric_limits<unsigned int>::digits;
+  BitMatrix matrix(bits + 1);
+  CPPUNIT_ASSERT_EQUAL(bits + 1, matrix.getDimension());
+  for (size_t i = 0; i < bits + 1; i++) {
+    for (size_t j = 0; j < bits + 1; j++) {
+      if (i * j % 3 == 0) {
+        matrix.set(i, j);
       }
     }
   }
-  
-  void BitMatrixTest::testGetBits() {
-    BitMatrix matrix(6);
-    matrix.set(0, 0);
-    matrix.set(5, 5);
-    valarray<unsigned int> bits = matrix.getBits();
-    CPPUNIT_ASSERT_EQUAL(1u, bits[0]);
-    CPPUNIT_ASSERT_EQUAL(8u, bits[1]);
-  }  
+  for (size_t i = 0; i < bits + 1; i++) {
+    for (size_t j = 0; j < bits + 1; j++) {
+      CPPUNIT_ASSERT_EQUAL(i * j % 3 == 0, matrix.get(i, j));
+    }
+  }
+}
+
+void BitMatrixTest::testSetRegion() {
+  BitMatrix matrix(5);
+  matrix.setRegion(1, 1, 3, 3);
+  for (int i = 0; i < 5; i++) {
+    for (int j = 0; j < 5; j++) {
+      CPPUNIT_ASSERT_EQUAL(i >= 1 && i <= 3 && j >= 1 && j <= 3,
+                           matrix.get(i, j));
+    }
+  }
+}
+
+void BitMatrixTest::testGetBits() {
+  BitMatrix matrix(6);
+  matrix.set(0, 0);
+  matrix.set(5, 5);
+  unsigned int* bits = matrix.getBits();
+  CPPUNIT_ASSERT_EQUAL(1u, bits[0]);
+  CPPUNIT_ASSERT_EQUAL(8u, bits[1]);
+}
 
 }

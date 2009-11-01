@@ -23,26 +23,26 @@
 
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include "../../../src/common/PerspectiveTransform.h"
+#include <zxing/common/PerspectiveTransform.h>
 
-namespace common {
-  class PerspectiveTransformTest : public CPPUNIT_NS::TestFixture {
-    CPPUNIT_TEST_SUITE (PerspectiveTransformTest);
-    CPPUNIT_TEST (testSquareToQuadrilateral);
-    CPPUNIT_TEST (testQuadrilateralToQuadrilateral);
-    CPPUNIT_TEST_SUITE_END ();
-    
-  public:
-    
-  protected:
-    void testSquareToQuadrilateral();
-    void testQuadrilateralToQuadrilateral();
-    
-  private:
-    static void assertPointEquals(float expectedX, float expectedY, 
-                                  float sourceX, float sourceY, 
-                                  Ref<PerspectiveTransform> pt);
-  };
+namespace zxing {
+class PerspectiveTransformTest : public CPPUNIT_NS::TestFixture {
+  CPPUNIT_TEST_SUITE(PerspectiveTransformTest);
+  CPPUNIT_TEST(testSquareToQuadrilateral);
+  CPPUNIT_TEST(testQuadrilateralToQuadrilateral);
+  CPPUNIT_TEST_SUITE_END();
+
+public:
+
+protected:
+  void testSquareToQuadrilateral();
+  void testQuadrilateralToQuadrilateral();
+
+private:
+  static void assertPointEquals(float expectedX, float expectedY,
+                                float sourceX, float sourceY,
+                                Ref<PerspectiveTransform> pt);
+};
 }
 
 #endif // __PERSPECTIVE_TRANSFORM_TEST_H__

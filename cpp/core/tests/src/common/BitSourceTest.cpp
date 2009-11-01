@@ -20,30 +20,30 @@
 
 #include "BitSourceTest.h"
 
-namespace common {
-  
-  CPPUNIT_TEST_SUITE_REGISTRATION(BitSourceTest);
+namespace zxing {
 
-  typedef unsigned char byte;
-  
-  void BitSourceTest::testSource() {
-    byte rawBytes[] = {(byte) 1, (byte) 2, (byte) 3, (byte) 4, (byte) 5};
-    ArrayRef<byte> bytes(rawBytes, 5);
-    BitSource source(bytes);
-    CPPUNIT_ASSERT_EQUAL(40, source.available());
-    CPPUNIT_ASSERT_EQUAL(0, source.readBits(1));
-    CPPUNIT_ASSERT_EQUAL(39, source.available());
-    CPPUNIT_ASSERT_EQUAL(0, source.readBits(6));
-    CPPUNIT_ASSERT_EQUAL(33, source.available());
-    CPPUNIT_ASSERT_EQUAL(1, source.readBits(1));
-    CPPUNIT_ASSERT_EQUAL(32, source.available());
-    CPPUNIT_ASSERT_EQUAL(2, source.readBits(8));
-    CPPUNIT_ASSERT_EQUAL(24, source.available());
-    CPPUNIT_ASSERT_EQUAL(12, source.readBits(10));
-    CPPUNIT_ASSERT_EQUAL(14, source.available());
-    CPPUNIT_ASSERT_EQUAL(16, source.readBits(8));
-    CPPUNIT_ASSERT_EQUAL(6, source.available());
-    CPPUNIT_ASSERT_EQUAL(5, source.readBits(6));
-    CPPUNIT_ASSERT_EQUAL(0, source.available());
-  }
+CPPUNIT_TEST_SUITE_REGISTRATION(BitSourceTest);
+
+typedef unsigned char byte;
+
+void BitSourceTest::testSource() {
+  byte rawBytes[] = {(byte) 1, (byte) 2, (byte) 3, (byte) 4, (byte) 5};
+  ArrayRef<byte> bytes(rawBytes, 5);
+  BitSource source(bytes);
+  CPPUNIT_ASSERT_EQUAL(40, source.available());
+  CPPUNIT_ASSERT_EQUAL(0, source.readBits(1));
+  CPPUNIT_ASSERT_EQUAL(39, source.available());
+  CPPUNIT_ASSERT_EQUAL(0, source.readBits(6));
+  CPPUNIT_ASSERT_EQUAL(33, source.available());
+  CPPUNIT_ASSERT_EQUAL(1, source.readBits(1));
+  CPPUNIT_ASSERT_EQUAL(32, source.available());
+  CPPUNIT_ASSERT_EQUAL(2, source.readBits(8));
+  CPPUNIT_ASSERT_EQUAL(24, source.available());
+  CPPUNIT_ASSERT_EQUAL(12, source.readBits(10));
+  CPPUNIT_ASSERT_EQUAL(14, source.available());
+  CPPUNIT_ASSERT_EQUAL(16, source.readBits(8));
+  CPPUNIT_ASSERT_EQUAL(6, source.available());
+  CPPUNIT_ASSERT_EQUAL(5, source.readBits(6));
+  CPPUNIT_ASSERT_EQUAL(0, source.available());
+}
 }

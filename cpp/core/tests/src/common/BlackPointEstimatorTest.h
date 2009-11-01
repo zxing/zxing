@@ -23,24 +23,24 @@
 
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include "../../../src/common/BlackPointEstimator.h"
+#include <zxing/common/GlobalHistogramBinarizer.h>
 
-namespace common {
-  class BlackPointEstimatorTest : public CPPUNIT_NS::TestFixture {
-    CPPUNIT_TEST_SUITE (BlackPointEstimatorTest);
-    CPPUNIT_TEST (testBasic);
-    CPPUNIT_TEST (testTooLittleRange);
-    CPPUNIT_TEST_SUITE_END ();
-    
-  public:
-    
-  protected:
-    void testBasic();
-    void testTooLittleRange();
-    
-  private:
-  };
+namespace zxing {
+class BlackPointEstimatorTest : public CPPUNIT_NS::TestFixture {
+  CPPUNIT_TEST_SUITE(BlackPointEstimatorTest);
+  CPPUNIT_TEST(testBasic);
+  CPPUNIT_TEST(testTooLittleRange);
+  CPPUNIT_TEST_SUITE_END();
+
+public:
+
+protected:
+  void testBasic();
+  void testTooLittleRange();
+
+private:
+};
 }
 
 
-#endif __BLACK_POINT_ESTIMATOR_TEST_H__
+#endif // __BLACK_POINT_ESTIMATOR_TEST_H__

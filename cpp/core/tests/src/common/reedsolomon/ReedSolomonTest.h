@@ -25,41 +25,39 @@
 #include <memory>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include "../../../../src/common/Counted.h"
-#include "../../../../src/common/Array.h"
+#include <zxing/common/Counted.h>
+#include <zxing/common/Array.h>
 
-using namespace std;
-using namespace common;
 
-namespace reedsolomon {
-  class ReedSolomonDecoder;
-  
-  class ReedSolomonTest : public CppUnit::TestFixture {
-    CPPUNIT_TEST_SUITE (ReedSolomonTest);
-    CPPUNIT_TEST (testNoError);
-    CPPUNIT_TEST (testOneError);
-    CPPUNIT_TEST (testMaxErrors);
-    CPPUNIT_TEST (testTooManyErrors);
-    CPPUNIT_TEST_SUITE_END ();
-    
-  public:
-    void setUp();
-    void tearDown();
-    
-  protected:
-    void testNoError();
-    void testOneError();
-    void testMaxErrors();
-    void testTooManyErrors();
-    
-  private:
-    ArrayRef<int> qrCodeTest_;
-    ArrayRef<int> qrCodeTestWithEc_;
-    int qrCodeCorrectable_;
-    ReedSolomonDecoder *qrRSDecoder_;
-    void checkQRRSDecode(ArrayRef<int> &received);
-    static void corrupt(ArrayRef<int> &received, int howMany);
-  };
+namespace zxing {
+class ReedSolomonDecoder;
+
+class ReedSolomonTest : public CppUnit::TestFixture {
+  CPPUNIT_TEST_SUITE(ReedSolomonTest);
+  CPPUNIT_TEST(testNoError);
+  CPPUNIT_TEST(testOneError);
+  CPPUNIT_TEST(testMaxErrors);
+  CPPUNIT_TEST(testTooManyErrors);
+  CPPUNIT_TEST_SUITE_END();
+
+public:
+  void setUp();
+  void tearDown();
+
+protected:
+  void testNoError();
+  void testOneError();
+  void testMaxErrors();
+  void testTooManyErrors();
+
+private:
+  ArrayRef<int> qrCodeTest_;
+  ArrayRef<int> qrCodeTestWithEc_;
+  int qrCodeCorrectable_;
+  ReedSolomonDecoder *qrRSDecoder_;
+  void checkQRRSDecode(ArrayRef<int> &received);
+  static void corrupt(ArrayRef<int> &received, int howMany);
+};
 }
 
 #endif // __REED_SOLOMON_TEST_H__
