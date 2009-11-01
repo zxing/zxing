@@ -19,30 +19,29 @@
  */
 
 #include "BlackPointEstimatorTest.h"
-#include "IllegalArgumentException.h"
+#include <zxing/common/IllegalArgumentException.h>
 #include <valarray>
 
-namespace common {
-  
-  CPPUNIT_TEST_SUITE_REGISTRATION(BlackPointEstimatorTest);
+namespace zxing {
+using namespace std;
+CPPUNIT_TEST_SUITE_REGISTRATION(BlackPointEstimatorTest);
 
-  void BlackPointEstimatorTest::testBasic() {
-    int histogramRaw[] = 
-      { 0, 0, 11, 43, 37, 18, 3, 1, 0, 0, 13, 36, 24, 0, 11, 2 };
+void BlackPointEstimatorTest::testBasic() {
+  int histogramRaw[] = { 0, 0, 11, 43, 37, 18, 3, 1, 0, 0, 13, 36, 24, 0, 11, 2 };
+  valarray<int> histogram(histogramRaw, 16);
+  size_t point = GlobalHistogramBinarizer::estimate(histogram);
+  CPPUNIT_ASSERT_EQUAL((size_t)8, point);
+}
+
+void BlackPointEstimatorTest::testTooLittleRange() {
+  try {
+    int histogramRaw[] = { 0, 0, 0, 0, 0, 0, 1, 43, 48, 18, 3, 1, 0, 0, 0, 0 };
     valarray<int> histogram(histogramRaw, 16);
-    size_t point = BlackPointEstimator::estimate(histogram);
-    CPPUNIT_ASSERT_EQUAL((size_t)8, point);
+    GlobalHistogramBinarizer::estimate(histogram);
+    CPPUNIT_FAIL("Should have thrown an exception");
+
+  } catch (IllegalArgumentException ie) {
+    // good
   }
-  
-  void BlackPointEstimatorTest::testTooLittleRange() {
-    try {
-      int histogramRaw[] = 
-        { 0, 0, 0, 0, 0, 0, 1, 43, 48, 18, 3, 1, 0, 0, 0, 0 };
-      valarray<int> histogram(histogramRaw, 16);
-      BlackPointEstimator::estimate(histogram);
-      CPPUNIT_FAIL("Should have thrown an exception");
-    } catch (IllegalArgumentException ie) {
-      // good
-    }
-  }
+}
 }

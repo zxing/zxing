@@ -26,22 +26,22 @@
 
 using namespace std;
 
-namespace common {
-  
-  class CountedTest : public CppUnit::TestFixture {
-    CPPUNIT_TEST_SUITE (CountedTest);
-    CPPUNIT_TEST (test);
-    CPPUNIT_TEST_SUITE_END ();
-    
-  public:
-    void setUp();
-    void tearDown();
-    
-  protected:
-    void test();
-    
-  private:
-  };
+namespace zxing {
+
+class CountedTest : public CppUnit::TestFixture {
+  CPPUNIT_TEST_SUITE(CountedTest);
+  CPPUNIT_TEST(test);
+  CPPUNIT_TEST_SUITE_END();
+
+public:
+  void setUp();
+  void tearDown();
+
+protected:
+  void test();
+
+private:
+};
 }
 
 #endif // __COUNTED_TEST_H__

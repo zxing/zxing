@@ -19,34 +19,36 @@
  */
 
 #include "CountedTest.h"
-#include "Counted.h"
+#include <zxing/common/Counted.h>
 #include <iostream>
 
 using namespace std;
 using namespace CPPUNIT_NS;
 
-namespace common {
-  
-  class Foo : public Counted {
-  public:
-    void foo() { cout << "foo!\n"; }
-  };
-  
-  //CPPUNIT_TEST_SUITE_REGISTRATION(CountedTest);
+namespace zxing {
 
-  void CountedTest::setUp() {}
-  void CountedTest::tearDown() {}
-  
-  void CountedTest::test() {
-    Foo foo;
-    CPPUNIT_ASSERT_EQUAL(0, foo.count());
-    foo.retain();
-    CPPUNIT_ASSERT_EQUAL(1, foo.count());
-    {
-      Ref<Foo> fooRef(foo);
-      CPPUNIT_ASSERT_EQUAL(2, foo.count());
-    }
-    CPPUNIT_ASSERT_EQUAL(1, foo.count());
+class Foo : public Counted {
+public:
+  void foo() {
+    cout << "foo!\n";
   }
+};
+
+//CPPUNIT_TEST_SUITE_REGISTRATION(CountedTest);
+
+void CountedTest::setUp() {}
+void CountedTest::tearDown() {}
+
+void CountedTest::test() {
+  Foo foo;
+  CPPUNIT_ASSERT_EQUAL(0, foo.count());
+  foo.retain();
+  CPPUNIT_ASSERT_EQUAL(1, foo.count());
+  {
+    Ref<Foo> fooRef(foo);
+    CPPUNIT_ASSERT_EQUAL(2, foo.count());
+  }
+  CPPUNIT_ASSERT_EQUAL(1, foo.count());
+}
 
 }

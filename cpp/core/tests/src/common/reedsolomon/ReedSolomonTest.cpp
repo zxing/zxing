@@ -19,112 +19,111 @@
  */
 
 #include "ReedSolomonTest.h"
-#include "../../../../src/common/reedsolomon/GF256.h"
-#include "../../../../src/common/reedsolomon/GF256Poly.h"
-#include "../../../../src/common/reedsolomon/ReedSolomonDecoder.h"
-#include "../../../../src/common/reedsolomon/ReedSolomonException.h"
-#include "../../../../src/common/IllegalArgumentException.h"
+#include <zxing/common/reedsolomon/GF256.h>
+#include <zxing/common/reedsolomon/GF256Poly.h>
+#include <zxing/common/reedsolomon/ReedSolomonDecoder.h>
+#include <zxing/common/reedsolomon/ReedSolomonException.h>
+#include <zxing/common/IllegalArgumentException.h>
 #include <vector>
 #include <cmath>
 
-using namespace common;
+namespace zxing {
+using namespace std;
 
-namespace reedsolomon {
-  
-  CPPUNIT_TEST_SUITE_REGISTRATION(ReedSolomonTest);
-  
-  static inline ArrayRef<int> makeVector(int n, int *items) {
-    ArrayRef<int> v(new Array<int>(items, n));
-    return v;
-  }
-  
-  static int QR_CODE_TEST[] =                                               
-  { 0x10, 0x20, 0x0C, 0x56, 0x61, 0x80, 0xEC, 0x11, 0xEC,
-  0x11, 0xEC, 0x11, 0xEC, 0x11, 0xEC, 0x11, 0xA5 };
-  static int QR_CODE_TEST_WITH_EC[] = 
-  { 0x10, 0x20, 0x0C, 0x56, 0x61, 0x80, 0xEC, 0x11, 0xEC,
-  0x11, 0xEC, 0x11, 0xEC, 0x11, 0xEC, 0x11, 0xA5, 0x24,
-  0xD4, 0xC1, 0xED, 0x36, 0xC7, 0x87, 0x2C, 0x55 };
-  
-  void ReedSolomonTest::setUp() {
-    qrCodeTest_ = 
-    makeVector(sizeof(QR_CODE_TEST) / sizeof(QR_CODE_TEST[0]), 
+CPPUNIT_TEST_SUITE_REGISTRATION(ReedSolomonTest);
+
+static inline ArrayRef<int> makeVector(int n, int *items) {
+  ArrayRef<int> v(new Array<int>(items, n));
+  return v;
+}
+
+static int QR_CODE_TEST[] = { 0x10, 0x20, 0x0C, 0x56, 0x61, 0x80, 0xEC, 0x11, 0xEC,
+                              0x11, 0xEC, 0x11, 0xEC, 0x11, 0xEC, 0x11, 0xA5
+                            };
+static int QR_CODE_TEST_WITH_EC[] = { 0x10, 0x20, 0x0C, 0x56, 0x61, 0x80, 0xEC, 0x11, 0xEC,
+                                      0x11, 0xEC, 0x11, 0xEC, 0x11, 0xEC, 0x11, 0xA5, 0x24,
+                                      0xD4, 0xC1, 0xED, 0x36, 0xC7, 0x87, 0x2C, 0x55
+                                    };
+
+void ReedSolomonTest::setUp() {
+  qrCodeTest_ =
+    makeVector(sizeof(QR_CODE_TEST) / sizeof(QR_CODE_TEST[0]),
                QR_CODE_TEST);
-    qrCodeTestWithEc_ =
+  qrCodeTestWithEc_ =
     makeVector(sizeof(QR_CODE_TEST_WITH_EC) / sizeof(QR_CODE_TEST_WITH_EC[0]),
                QR_CODE_TEST_WITH_EC);
-    qrCodeCorrectable_ = 
+  qrCodeCorrectable_ =
     (qrCodeTestWithEc_->size() - qrCodeTest_->size()) / 2;
-    
-    qrRSDecoder_ = new ReedSolomonDecoder(GF256::QR_CODE_FIELD);
-  }
-  
-  void ReedSolomonTest::tearDown() {
-  }
-  
-  void ReedSolomonTest::testNoError() {
+
+  qrRSDecoder_ = new ReedSolomonDecoder(GF256::QR_CODE_FIELD);
+}
+
+void ReedSolomonTest::tearDown() {
+}
+
+void ReedSolomonTest::testNoError() {
   ArrayRef<int> received(new Array<int>(qrCodeTestWithEc_->size()));
+  *received = *qrCodeTestWithEc_;
+  checkQRRSDecode(received);
+}
+
+void ReedSolomonTest::testOneError() {
+  ArrayRef<int> received(new Array<int>(qrCodeTestWithEc_->size()));
+  srandom(0xDEADBEEFL);
+  for (unsigned i = 0; i < received->size(); i++) {
     *received = *qrCodeTestWithEc_;
+    received[i] = random() % 256;
     checkQRRSDecode(received);
   }
-  
-  void ReedSolomonTest::testOneError() {
-    ArrayRef<int> received(new Array<int>(qrCodeTestWithEc_->size()));    
-    srandom(0xDEADBEEFL);
-    for (unsigned i = 0; i < received->size(); i++) {
-      *received = *qrCodeTestWithEc_;
-      received[i] = random() % 256;
-      checkQRRSDecode(received);
-    }
-  }
-  
-  void ReedSolomonTest::testMaxErrors() {
-    ArrayRef<int> received(new Array<int>(qrCodeTestWithEc_->size()));    
-    srandom(0xDEADBEEFL);
-    for (unsigned i = 0; i < qrCodeTest_->size(); i++) {
-      *received = *qrCodeTestWithEc_;
-      corrupt(received, qrCodeCorrectable_);
-      checkQRRSDecode(received);
-    }
-  }
-  
-  void ReedSolomonTest::testTooManyErrors() {
-    ArrayRef<int> received(new Array<int>(qrCodeTestWithEc_->size()));    
-    srandom(0xDEADBEEFL);
+}
+
+void ReedSolomonTest::testMaxErrors() {
+  ArrayRef<int> received(new Array<int>(qrCodeTestWithEc_->size()));
+  srandom(0xDEADBEEFL);
+  for (unsigned i = 0; i < qrCodeTest_->size(); i++) {
     *received = *qrCodeTestWithEc_;
-    try {
-      corrupt(received, qrCodeCorrectable_ + 1);
-      checkQRRSDecode(received);
-      cout << "expected exception!\n";
-      CPPUNIT_FAIL("should not happen!");
-    } catch (ReedSolomonException e) {
-      // expected
-    } catch (...) {
-      CPPUNIT_FAIL("unexpected exception!");
+    corrupt(received, qrCodeCorrectable_);
+    checkQRRSDecode(received);
+  }
+}
+
+void ReedSolomonTest::testTooManyErrors() {
+  ArrayRef<int> received(new Array<int>(qrCodeTestWithEc_->size()));
+  srandom(0xDEADBEEFL);
+  *received = *qrCodeTestWithEc_;
+  try {
+    corrupt(received, qrCodeCorrectable_ + 1);
+    checkQRRSDecode(received);
+    cout << "expected exception!\n";
+    CPPUNIT_FAIL("should not happen!");
+  } catch (ReedSolomonException e) {
+    // expected
+  } catch (...) {
+    CPPUNIT_FAIL("unexpected exception!");
+  }
+}
+
+
+void ReedSolomonTest::checkQRRSDecode(ArrayRef<int> &received) {
+  int twoS = 2 * qrCodeCorrectable_;
+  qrRSDecoder_->decode(received, twoS);
+  for (unsigned i = 0; i < qrCodeTest_->size(); i++) {
+    CPPUNIT_ASSERT_EQUAL(qrCodeTest_[i], received[i]);
+  }
+}
+
+void ReedSolomonTest::corrupt(ArrayRef<int> &received, int howMany) {
+  vector<bool> corrupted(received->size());
+  for (int j = 0; j < howMany; j++) {
+    int location = floor(received->size() * ((double)(random() >> 1) / (double)((RAND_MAX >> 1) + 1)));
+    if (corrupted[location]) {
+      j--;
+    } else {
+      corrupted[location] = true;
+      int newByte = random() % 256;
+      received[location] = newByte;
     }
   }
-  
-  
-  void ReedSolomonTest::checkQRRSDecode(ArrayRef<int> &received) {
-    int twoS = 2 * qrCodeCorrectable_;
-    qrRSDecoder_->decode(received, twoS);
-    for (unsigned i = 0; i < qrCodeTest_->size(); i++) {
-      CPPUNIT_ASSERT_EQUAL(qrCodeTest_[i], received[i]);
-    }
-  }
-  
-  void ReedSolomonTest::corrupt(ArrayRef<int> &received, int howMany) {
-    vector<bool> corrupted(received->size());
-    for (int j = 0; j < howMany; j++) {
-      int location = floor(received->size() * ((double)(random()>>1) / (double)((RAND_MAX>>1)+1)));
-      if (corrupted[location]) {
-        j--;
-      } else {
-        corrupted[location] = true;
-        int newByte = random() % 256;
-        received[location] = newByte;
-      }
-    }
-  }  
+}
 
 }

@@ -23,29 +23,29 @@
 
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include "../../../src/common/BitArray.h"
+#include <zxing/common/BitArray.h>
 
-namespace common {
-  class BitArrayTest : public CPPUNIT_NS::TestFixture {
-    CPPUNIT_TEST_SUITE (BitArrayTest);
-    CPPUNIT_TEST (testGetSet);
-    CPPUNIT_TEST (testSetBulk);
-    CPPUNIT_TEST (testClear);
-    CPPUNIT_TEST (testGetArray);
-    CPPUNIT_TEST (testIsRange);
-    CPPUNIT_TEST_SUITE_END ();
-    
-  public:
-    
-  protected:
-    void testGetSet();
-    void testSetBulk();
-    void testClear();
-    void testGetArray();
-    void testIsRange();
-    
-  private:
-  };
+namespace zxing {
+class BitArrayTest : public CPPUNIT_NS::TestFixture {
+  CPPUNIT_TEST_SUITE(BitArrayTest);
+  CPPUNIT_TEST(testGetSet);
+  CPPUNIT_TEST(testSetBulk);
+  CPPUNIT_TEST(testClear);
+  CPPUNIT_TEST(testGetArray);
+  CPPUNIT_TEST(testIsRange);
+  CPPUNIT_TEST_SUITE_END();
+
+public:
+
+protected:
+  void testGetSet();
+  void testSetBulk();
+  void testClear();
+  void testGetArray();
+  void testIsRange();
+
+private:
+};
 }
 
 #endif // __BIT_ARRAY_TEST_H__

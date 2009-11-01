@@ -19,35 +19,34 @@
  */
 
 #include "ModeTest.h"
-#include "Version.h"
+#include <zxing/qrcode/Version.h>
 
+namespace zxing {
 namespace qrcode {
-  namespace decoder {
-    
-    CPPUNIT_TEST_SUITE_REGISTRATION(ModeTest);
 
-    void ModeTest::testForBits() {
-      CPPUNIT_ASSERT_EQUAL(&Mode::TERMINATOR, &(Mode::forBits(0x00)));
-      CPPUNIT_ASSERT_EQUAL(&Mode::NUMERIC, &(Mode::forBits(0x01)));
-      CPPUNIT_ASSERT_EQUAL(&Mode::ALPHANUMERIC, &(Mode::forBits(0x02)));
-      CPPUNIT_ASSERT_EQUAL(&Mode::BYTE, &(Mode::forBits(0x04)));
-      CPPUNIT_ASSERT_EQUAL(&Mode::KANJI, &(Mode::forBits(0x08)));
-      try {
-        Mode::forBits(0x10);
-        CPPUNIT_FAIL("should have thrown an exception");
-      }
-      catch (ReaderException ex) {
-        // expected
-      }
-    }
-    
-    void ModeTest::testCharacterCount() {
-      CPPUNIT_ASSERT_EQUAL(10, Mode::NUMERIC.getCharacterCountBits(Version::getVersionForNumber(5)));
-      CPPUNIT_ASSERT_EQUAL(12, Mode::NUMERIC.getCharacterCountBits(Version::getVersionForNumber(26)));
-      CPPUNIT_ASSERT_EQUAL(14, Mode::NUMERIC.getCharacterCountBits(Version::getVersionForNumber(40)));
-      CPPUNIT_ASSERT_EQUAL(9, Mode::ALPHANUMERIC.getCharacterCountBits(Version::getVersionForNumber(6)));
-      CPPUNIT_ASSERT_EQUAL(8, Mode::BYTE.getCharacterCountBits(Version::getVersionForNumber(7)));
-      CPPUNIT_ASSERT_EQUAL(8, Mode::KANJI.getCharacterCountBits(Version::getVersionForNumber(8)));
-    }
+CPPUNIT_TEST_SUITE_REGISTRATION(ModeTest);
+
+void ModeTest::testForBits() {
+  CPPUNIT_ASSERT_EQUAL(&Mode::TERMINATOR, &(Mode::forBits(0x00)));
+  CPPUNIT_ASSERT_EQUAL(&Mode::NUMERIC, &(Mode::forBits(0x01)));
+  CPPUNIT_ASSERT_EQUAL(&Mode::ALPHANUMERIC, &(Mode::forBits(0x02)));
+  CPPUNIT_ASSERT_EQUAL(&Mode::BYTE, &(Mode::forBits(0x04)));
+  CPPUNIT_ASSERT_EQUAL(&Mode::KANJI, &(Mode::forBits(0x08)));
+  try {
+    Mode::forBits(0x10);
+    CPPUNIT_FAIL("should have thrown an exception");
+  } catch (zxing::ReaderException ex) {
+    // expected
   }
+}
+
+void ModeTest::testCharacterCount() {
+  CPPUNIT_ASSERT_EQUAL(10, Mode::NUMERIC.getCharacterCountBits(Version::getVersionForNumber(5)));
+  CPPUNIT_ASSERT_EQUAL(12, Mode::NUMERIC.getCharacterCountBits(Version::getVersionForNumber(26)));
+  CPPUNIT_ASSERT_EQUAL(14, Mode::NUMERIC.getCharacterCountBits(Version::getVersionForNumber(40)));
+  CPPUNIT_ASSERT_EQUAL(9, Mode::ALPHANUMERIC.getCharacterCountBits(Version::getVersionForNumber(6)));
+  CPPUNIT_ASSERT_EQUAL(8, Mode::BYTE.getCharacterCountBits(Version::getVersionForNumber(7)));
+  CPPUNIT_ASSERT_EQUAL(8, Mode::KANJI.getCharacterCountBits(Version::getVersionForNumber(8)));
+}
+}
 }

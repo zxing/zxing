@@ -23,26 +23,26 @@
 
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include "../../../../src/qrcode/decoder/Mode.h"
+#include <zxing/qrcode/decoder/Mode.h>
 
+namespace zxing {
 namespace qrcode {
-  namespace decoder {
-    
-    class ModeTest : public CPPUNIT_NS::TestFixture {
-      CPPUNIT_TEST_SUITE (ModeTest);
-      CPPUNIT_TEST (testForBits);
-      CPPUNIT_TEST (testCharacterCount);
-      CPPUNIT_TEST_SUITE_END ();
-      
-    public:
-      
-    protected:
-      void testForBits();
-      void testCharacterCount();
-      
-    private:
-    };
-  }
+
+class ModeTest : public CPPUNIT_NS::TestFixture {
+  CPPUNIT_TEST_SUITE(ModeTest);
+  CPPUNIT_TEST(testForBits);
+  CPPUNIT_TEST(testCharacterCount);
+  CPPUNIT_TEST_SUITE_END();
+
+public:
+
+protected:
+  void testForBits();
+  void testCharacterCount();
+
+private:
+};
+}
 }
 
 #endif // __MODE_TEST_H__

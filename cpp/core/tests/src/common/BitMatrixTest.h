@@ -23,25 +23,25 @@
 
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include "../../../src/common/BitMatrix.h"
+#include <zxing/common/BitMatrix.h>
 
-namespace common {
-  class BitMatrixTest : public CPPUNIT_NS::TestFixture {
-    CPPUNIT_TEST_SUITE (BitMatrixTest);
-    CPPUNIT_TEST (testGetSet);
-    CPPUNIT_TEST (testSetRegion);
-    CPPUNIT_TEST (testGetBits);
-    CPPUNIT_TEST_SUITE_END ();
-    
-  public:
-    
-  protected:
-    void testGetSet();
-    void testSetRegion();
-    void testGetBits();
-    
-  private:
-  };
+namespace zxing {
+class BitMatrixTest : public CPPUNIT_NS::TestFixture {
+  CPPUNIT_TEST_SUITE(BitMatrixTest);
+  CPPUNIT_TEST(testGetSet);
+  CPPUNIT_TEST(testSetRegion);
+  CPPUNIT_TEST(testGetBits);
+  CPPUNIT_TEST_SUITE_END();
+
+public:
+
+protected:
+  void testGetSet();
+  void testSetRegion();
+  void testGetBits();
+
+private:
+};
 }
 
 

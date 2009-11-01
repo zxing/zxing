@@ -1,0 +1,30 @@
+This is only tested on Linux. With some trouble, it might work on Windows as well.
+
+To build the library only:
+- Install scons
+- Run "scons lib" in this folder (cpp).
+
+To build the unit tests:
+- Install cppunit (libcppunit-dev on Ubuntu)
+- Run "scons tests"
+- Run "testrunner" in the build folder
+
+To build the test utility:
+- Install Magick++ (libmagick++-dev on Ubuntu)
+- Run "scons zxing"
+
+To clean:
+- Run "scons -c all"
+
+To use the test utility:
+- Basic usage:
+  - "mkdir testout"
+  - "zxing testout *.jpg > report.html"
+- With the zxing test data, from the cpp folder:
+  - "mkdir testout"
+  - "build/zxing testout ../core/test/data/blackbox/qrcode-*/* > report.html"
+
+To format the code:
+ - Install astyle
+ - Run ./format
+

@@ -23,21 +23,21 @@
 
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include "../../../src/common/BitSource.h"
+#include <zxing/common/BitSource.h>
 
-namespace common {
-  class BitSourceTest : public CPPUNIT_NS::TestFixture {
-    CPPUNIT_TEST_SUITE (BitSourceTest);
-    CPPUNIT_TEST (testSource);
-    CPPUNIT_TEST_SUITE_END ();
-    
-  public:
-    
-  protected:
-    void testSource();
-    
-  private:
-  };
+namespace zxing {
+class BitSourceTest : public CPPUNIT_NS::TestFixture {
+  CPPUNIT_TEST_SUITE(BitSourceTest);
+  CPPUNIT_TEST(testSource);
+  CPPUNIT_TEST_SUITE_END();
+
+public:
+
+protected:
+  void testSource();
+
+private:
+};
 }
 
 #endif // __BIT_SOURCE_TEST_H__
