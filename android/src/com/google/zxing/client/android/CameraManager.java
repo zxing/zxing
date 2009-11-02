@@ -289,14 +289,19 @@ final class CameraManager {
         return new PlanarYUVLuminanceSource(data, width, height, rect.left, rect.top,
             rect.width(), rect.height());
       default:
+        // Handle some non-standard values:
         // There's no PixelFormat constant for this buffer format yet.
         if (previewFormatString.equals("yuv422i-yuyv")) {
           return new InterleavedYUV422LuminanceSource(data, width, height, rect.left, rect.top,
               rect.width(), rect.height());
+        } else if (previewFormatString.equals("yuv420p")) {
+          // Assume this is a synonym for YUV420SP -- note the lack of 's'
+          return new PlanarYUVLuminanceSource(data, width, height, rect.left, rect.top,
+            rect.width(), rect.height());
         }
-        break;
+        throw new IllegalArgumentException("Unsupported picture format: " +
+            previewFormat + '/' + previewFormatString);
     }
-    return null;
   }
 
   /**
@@ -311,7 +316,7 @@ final class CameraManager {
     Log.v(TAG, "Default preview size: " + size.width + ", " + size.height);
     previewFormat = parameters.getPreviewFormat();
     previewFormatString = parameters.get("preview-format");
-    Log.v(TAG, "Default preview format: " + previewFormat);
+    Log.v(TAG, "Default preview format: " + previewFormat + '/' + previewFormatString);
 
     // Ensure that the camera resolution is a multiple of 8, as the screen may not be.
     // TODO: A better solution would be to request the supported preview resolutions
