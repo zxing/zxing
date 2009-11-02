@@ -151,7 +151,7 @@ final class VCardResultParser extends ResultParser {
           start = end + 1;
         }
         components[componentIndex] = name.substring(start);
-        StringBuffer newName = new StringBuffer();
+        StringBuffer newName = new StringBuffer(100);
         maybeAppendComponent(components, 3, newName);
         maybeAppendComponent(components, 1, newName);
         maybeAppendComponent(components, 2, newName);

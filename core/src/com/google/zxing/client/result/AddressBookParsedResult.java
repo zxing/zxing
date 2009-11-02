@@ -105,7 +105,7 @@ public final class AddressBookParsedResult extends ParsedResult {
   }
 
   public String getDisplayResult() {
-    StringBuffer result = new StringBuffer();
+    StringBuffer result = new StringBuffer(100);
     maybeAppend(names, result);
     maybeAppend(pronunciation, result);
     maybeAppend(title, result);

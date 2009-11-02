@@ -99,7 +99,7 @@ public final class Code39Reader extends AbstractOneDReader {
       nextStart++;
     }
 
-    StringBuffer result = new StringBuffer();
+    StringBuffer result = new StringBuffer(20);
     int[] counters = new int[9];
     char decodedChar;
     int lastStart;

@@ -77,7 +77,7 @@ final class DecodedBitStreamParser {
 
   static DecoderResult decode(byte[] bytes) throws ReaderException {
     BitSource bits = new BitSource(bytes);
-    StringBuffer result = new StringBuffer();
+    StringBuffer result = new StringBuffer(100);
     StringBuffer resultTrailer = new StringBuffer(0);
     Vector byteSegments = new Vector(1);
     int mode = ASCII_ENCODE;

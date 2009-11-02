@@ -204,8 +204,7 @@ public final class Detector {
   /**
    * Counts the number of black/white transitions between two points, using something like Bresenham's algorithm.
    */
-  private ResultPointsAndTransitions transitionsBetween(ResultPoint from, ResultPoint to)
-      throws ReaderException {
+  private ResultPointsAndTransitions transitionsBetween(ResultPoint from, ResultPoint to) {
     // See QR Code Detector, sizeOfBlackWhiteBlackRun()
     int fromX = (int) from.getX();
     int fromY = (int) from.getY();

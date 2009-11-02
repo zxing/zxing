@@ -45,7 +45,7 @@ public final class TelParsedResult extends ParsedResult {
   }
 
   public String getDisplayResult() {
-    StringBuffer result = new StringBuffer();
+    StringBuffer result = new StringBuffer(20);
     maybeAppend(number, result);
     maybeAppend(title, result);
     return result.toString();

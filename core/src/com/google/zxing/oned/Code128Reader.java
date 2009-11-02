@@ -259,7 +259,7 @@ public final class Code128Reader extends AbstractOneDReader {
     boolean done = false;
     boolean isNextShifted = false;
 
-    StringBuffer result = new StringBuffer();
+    StringBuffer result = new StringBuffer(20);
     int lastStart = startPatternInfo[0];
     int nextStart = startPatternInfo[1];
     int[] counters = new int[6];
