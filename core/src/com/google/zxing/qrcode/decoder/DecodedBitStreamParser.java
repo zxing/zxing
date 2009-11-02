@@ -59,7 +59,7 @@ final class DecodedBitStreamParser {
 
   static DecoderResult decode(byte[] bytes, Version version, ErrorCorrectionLevel ecLevel) throws ReaderException {
     BitSource bits = new BitSource(bytes);
-    StringBuffer result = new StringBuffer();
+    StringBuffer result = new StringBuffer(50);
     CharacterSetECI currentCharacterSetECI = null;
     boolean fc1InEffect = false;
     Vector byteSegments = new Vector(1);

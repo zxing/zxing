@@ -84,7 +84,7 @@ public final class CalendarParsedResult extends ParsedResult {
   }
 
   public String getDisplayResult() {
-    StringBuffer result = new StringBuffer();
+    StringBuffer result = new StringBuffer(100);
     maybeAppend(summary, result);
     maybeAppend(start, result);
     maybeAppend(end, result);

@@ -196,7 +196,7 @@ public class Detector {
    * of the three finder patterns.</p>
    */
   private float calculateModuleSize(ResultPoint topLeft, ResultPoint topRight,
-      ResultPoint bottomLeft) throws ReaderException {
+      ResultPoint bottomLeft) {
     // Take the average
     return (calculateModuleSizeOneWay(topLeft, topRight) +
         calculateModuleSizeOneWay(topLeft, bottomLeft)) / 2.0f;

@@ -68,7 +68,7 @@ public final class URIParsedResult extends ParsedResult {
   }
 
   public String getDisplayResult() {
-    StringBuffer result = new StringBuffer();
+    StringBuffer result = new StringBuffer(30);
     maybeAppend(title, result);
     maybeAppend(uri, result);
     return result.toString();

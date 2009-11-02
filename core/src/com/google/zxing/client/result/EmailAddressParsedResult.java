@@ -51,7 +51,7 @@ public final class EmailAddressParsedResult extends ParsedResult {
   }
 
   public String getDisplayResult() {
-    StringBuffer result = new StringBuffer();
+    StringBuffer result = new StringBuffer(30);
     maybeAppend(emailAddress, result);
     maybeAppend(subject, result);
     maybeAppend(body, result);
