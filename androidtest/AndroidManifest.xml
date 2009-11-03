@@ -16,8 +16,8 @@
  -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.google.zxing.client.androidtest"
-          android:versionName="1.1"
-          android:versionCode="2">
+          android:versionName="1.11"
+          android:versionCode="3">
   <uses-sdk android:minSdkVersion="3"/>
   <application android:label="@string/app_name"
                android:icon="@drawable/icon"
