@@ -30,14 +30,14 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.FileNotFoundException;
 
 public final class CameraTestActivity extends Activity implements SurfaceHolder.Callback {
 
   public static final String GET_CAMERA_PARAMETERS = "GET_CAMERA_PARAMETERS";
-  private static final String[] EMAIL_ADDRESS = {"zxing@googlegroups.com"};
+  private static final String[] EMAIL_ADDRESS = {"zxing-external@google.com"};
 
   private SaveThread mSaveThread = null;
   private boolean mGetCameraParameters;
