@@ -16,6 +16,8 @@
 
 package com.google.zxing.client.j2se;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.ByteMatrix;
 
@@ -24,6 +26,7 @@ import java.io.File;
 import java.io.OutputStream;
 import java.io.IOException;
 import java.awt.image.BufferedImage;
+import java.util.Hashtable;
 
 /**
  * Writes a {@link BitMatrix} or {@link ByteMatrix} to {@link BufferedImage}, file or stream.
@@ -56,7 +59,7 @@ public final class MatrixToImageWriter {
     BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
     for (int x = 0; x < width; x++) {
       for (int y = 0; y < height; y++) {
-        image.setRGB(x, y, matrix.get(x, y) == 0 ? WHITE : BLACK);
+        image.setRGB(x, y, matrix.get(x, y) == 0 ? BLACK : WHITE);
       }
     }
     return image;
