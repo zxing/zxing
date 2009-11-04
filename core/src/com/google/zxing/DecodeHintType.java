@@ -57,6 +57,11 @@ public final class DecodeHintType {
    */
   public static final DecodeHintType ALLOWED_LENGTHS = new DecodeHintType();
 
+  /**
+   * Assume Code 39 codes employ a check digit. Maps to {@link Boolean}.
+   */
+  public static final DecodeHintType ASSUME_CODE_39_CHECK_DIGIT = new DecodeHintType();
+
   private DecodeHintType() {
   }
 
