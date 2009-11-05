@@ -29,7 +29,7 @@
 #include <typeinfo>
 #endif
 
-#include "Counted.h"
+#include <zxing/common/Counted.h>
 
 
 namespace zxing {
