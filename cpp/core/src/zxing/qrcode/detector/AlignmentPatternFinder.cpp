@@ -46,7 +46,7 @@ bool AlignmentPatternFinder::foundPatternCross(valarray<int> &stateCount) {
 float AlignmentPatternFinder::crossCheckVertical(size_t startI, size_t centerJ, int maxCount,
     int originalStateCountTotal) {
   int maxI = image_->getHeight();
-  valarray<int> stateCount(3);
+  valarray<int> stateCount(0, 3);
 
 
   // Start counting up from center
@@ -136,7 +136,7 @@ Ref<AlignmentPattern> AlignmentPatternFinder::find() {
   //      Ref<BitArray> luminanceRow(new BitArray(width_));
   // We are looking for black/white/black modules in 1:1:1 ratio;
   // this tracks the number of black/white/black modules seen so far
-  valarray<int> stateCount(3);
+  valarray<int> stateCount(0, 3);
   for (size_t iGen = 0; iGen < height_; iGen++) {
     // Search from middle outwards
     size_t i = middleI + ((iGen & 0x01) == 0 ? ((iGen + 1) >> 1) : -((iGen + 1) >> 1));

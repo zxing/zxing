@@ -23,6 +23,11 @@
 #include <iconv.h>
 
 // Required for compatibility. TODO: test on Symbian
+#ifdef ZXING_ICONV_CONST
+#undef ICONV_CONST
+#define ICONV_CONST const
+#endif
+
 #ifndef ICONV_CONST
 #define ICONV_CONST /**/
 #endif
@@ -51,8 +56,8 @@ void DecodedBitStreamParser::append(ostream &ost, const unsigned char *bufIn, si
   }
 
   iconv_t cd = iconv_open(UTF8, src);
-  int maxOut = 4 * nIn + 1;
-  unsigned char bufOut[maxOut];
+  const int maxOut = 4 * nIn + 1;
+  unsigned char* bufOut = new unsigned char[maxOut];
 
   ICONV_CONST char *fromPtr = (ICONV_CONST char *)bufIn;
   size_t nFrom = nIn;
@@ -63,6 +68,7 @@ void DecodedBitStreamParser::append(ostream &ost, const unsigned char *bufIn, si
     size_t oneway = iconv(cd, &fromPtr, &nFrom, &toPtr, &nTo);
     if (oneway == (size_t)(-1)) {
       iconv_close(cd);
+      delete[] bufOut;
       throw ReaderException("error converting characters");
     }
   }
@@ -72,13 +78,14 @@ void DecodedBitStreamParser::append(ostream &ost, const unsigned char *bufIn, si
   bufOut[nResult] = '\0';
 
   ost << bufOut;
+  delete[] bufOut;
 }
 
 void DecodedBitStreamParser::decodeKanjiSegment(Ref<BitSource> bits, ostringstream &result, int count) {
   // Each character will require 2 bytes. Read the characters as 2-byte pairs
   // and decode as Shift_JIS afterwards
   size_t nBytes = 2 * count;
-  unsigned char buffer[nBytes];
+  unsigned char* buffer = new unsigned char[nBytes];
   int offset = 0;
   while (count > 0) {
     // Each 13 bits encodes a 2-byte character
@@ -99,14 +106,16 @@ void DecodedBitStreamParser::decodeKanjiSegment(Ref<BitSource> bits, ostringstre
   }
 
   append(result, buffer, nBytes, SHIFT_JIS);
+  delete[] buffer;
 }
 
 void DecodedBitStreamParser::decodeByteSegment(Ref<BitSource> bits, ostringstream &result, int count) {
   int nBytes = count;
-  unsigned char readBytes[nBytes];
+  unsigned char* readBytes = new unsigned char[nBytes];
   if (count << 3 > bits->available()) {
     ostringstream s;
     s << "Count too large: " << count;
+    delete[] readBytes;
     throw ReaderException(s.str().c_str());
   }
   for (int i = 0; i < count; i++) {
@@ -119,11 +128,12 @@ void DecodedBitStreamParser::decodeByteSegment(Ref<BitSource> bits, ostringstrea
   // give a hint.
   const char *encoding = guessEncoding(readBytes, nBytes);
   append(result, readBytes, nBytes, encoding);
+  delete[] readBytes;
 }
 
 void DecodedBitStreamParser::decodeNumericSegment(Ref<BitSource> bits, ostringstream &result, int count) {
   int nBytes = count;
-  unsigned char bytes[nBytes];
+  unsigned char* bytes = new unsigned char[nBytes];
   int i = 0;
   // Read three digits at a time
   while (count >= 3) {
@@ -132,6 +142,7 @@ void DecodedBitStreamParser::decodeNumericSegment(Ref<BitSource> bits, ostringst
     if (threeDigitsBits >= 1000) {
       ostringstream s;
       s << "Illegal value for 3-digit unit: " << threeDigitsBits;
+      delete[] bytes;
       throw ReaderException(s.str().c_str());
     }
     bytes[i++] = ALPHANUMERIC_CHARS[threeDigitsBits / 100];
@@ -145,6 +156,7 @@ void DecodedBitStreamParser::decodeNumericSegment(Ref<BitSource> bits, ostringst
     if (twoDigitsBits >= 100) {
       ostringstream s;
       s << "Illegal value for 2-digit unit: " << twoDigitsBits;
+      delete[] bytes;
       throw ReaderException(s.str().c_str());
     }
     bytes[i++] = ALPHANUMERIC_CHARS[twoDigitsBits / 10];
@@ -155,16 +167,18 @@ void DecodedBitStreamParser::decodeNumericSegment(Ref<BitSource> bits, ostringst
     if (digitBits >= 10) {
       ostringstream s;
       s << "Illegal value for digit unit: " << digitBits;
+      delete[] bytes;
       throw ReaderException(s.str().c_str());
     }
     bytes[i++] = ALPHANUMERIC_CHARS[digitBits];
   }
   append(result, bytes, nBytes, ASCII);
+  delete[] bytes;
 }
 
 void DecodedBitStreamParser::decodeAlphanumericSegment(Ref<BitSource> bits, ostringstream &result, int count) {
   int nBytes = count;
-  unsigned char bytes[nBytes];
+  unsigned char* bytes = new unsigned char[nBytes];
   int i = 0;
   // Read two characters at a time
   while (count > 1) {
@@ -177,6 +191,7 @@ void DecodedBitStreamParser::decodeAlphanumericSegment(Ref<BitSource> bits, ostr
     bytes[i++] = ALPHANUMERIC_CHARS[bits->readBits(6)];
   }
   append(result, bytes, nBytes, ASCII);
+  delete[] bytes;
 }
 
 const char *
