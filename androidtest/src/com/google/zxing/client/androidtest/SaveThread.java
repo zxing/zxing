@@ -37,11 +37,9 @@ final class SaveThread extends Thread {
   public Handler mHandler;
 
   private final CameraTestActivity mActivity;
-  private final Rect mFramingRect;
 
-  SaveThread(CameraTestActivity activity, Rect framingRect) {
+  SaveThread(CameraTestActivity activity) {
     mActivity = activity;
-    mFramingRect = framingRect;
   }
 
   @Override
@@ -65,14 +63,15 @@ final class SaveThread extends Thread {
 
   // Save the center rectangle of the Y channel as a greyscale PNG to the SD card.
   private void save(byte[] data, int width, int height) {
-    int framingWidth = mFramingRect.width();
-    int framingHeight = mFramingRect.height();
+    final Rect framingRect = CameraManager.get().getFramingRect();
+    int framingWidth = framingRect.width();
+    int framingHeight = framingRect.height();
     if (framingWidth > width || framingHeight > height) {
       throw new IllegalArgumentException();
     }
 
-    int leftOffset = mFramingRect.left;
-    int topOffset = mFramingRect.top;
+    int leftOffset = framingRect.left;
+    int topOffset = framingRect.top;
     int[] colors = new int[framingWidth * framingHeight];
 
     for (int y = 0; y < framingHeight; y++) {
