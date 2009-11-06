@@ -17,7 +17,6 @@
 <resources>
   <string name="app_name">Barcode Scanner</string>
   <string name="bookmark_picker_name">Bookmarks</string>
-
   <string name="button_add_calendar">Add to calendar</string>
   <string name="button_add_contact">Add contact</string>
   <string name="button_back">Back</string>
@@ -43,33 +42,27 @@
   <string name="button_show_map">Show map</string>
   <string name="button_sms">Send SMS</string>
   <string name="button_web_search">Web search</string>
-
   <string name="contents_contact">Contact info</string>
   <string name="contents_email">Email address</string>
   <string name="contents_location">Geographic coordinates</string>
   <string name="contents_phone">Phone number</string>
   <string name="contents_sms">SMS address</string>
   <string name="contents_text">Plain text</string>
-
   <string name="menu_about">About</string>
   <string name="menu_help">Help</string>
   <string name="menu_settings">Settings</string>
   <string name="menu_history">History</string>
   <string name="menu_share">Share</string>
-
   <string name="msg_about">Based on the open source ZXing Barcode Library</string>
   <string name="msg_default_contents">Contents</string>
   <string name="msg_default_format">Format</string>
   <string name="msg_default_mms_subject">Hi</string>
-  <string name="msg_default_status">Place a barcode inside the viewfinder rectangle to scan it.
-  </string>
+  <string name="msg_default_status">Place a barcode inside the viewfinder rectangle to scan it.</string>
   <string name="msg_default_type">Type</string>
   <string name="msg_encode_barcode_failed">Could not generate the requested barcode.</string>
-  <string name="msg_encode_contents_failed">Could not encode a barcode from the data provided.
-  </string>
+  <string name="msg_encode_contents_failed">Could not encode a barcode from the data provided.</string>
   <string name="msg_encode_in_progress">Generating a barcode\u2026</string>
-  <string name="msg_intent_failed">Sorry, the requested application could not be launched.
-    The barcode contents may be invalid.</string>
+  <string name="msg_intent_failed">Sorry, the requested application could not be launched. The barcode contents may be invalid.</string>
   <string name="msg_sbc_book_not_searchable">Sorry, this book is not searchable.</string>
   <string name="msg_sbc_failed">Sorry, the search encountered a problem.</string>
   <string name="msg_sbc_no_page_returned">No page returned</string>
@@ -77,10 +70,8 @@
   <string name="msg_sbc_snippet_unavailable">Snippet not available</string>
   <string name="msg_sbc_unknown_page">Unknown page</string>
   <string name="msg_sbc_searching_book">Searching book\u2026</string>
-  <string name="msg_share_explanation">You can share data by displaying a barcode on
-    your screen and scanning it with another phone.</string>
+  <string name="msg_share_explanation">You can share data by displaying a barcode on your screen and scanning it with another phone.</string>
   <string name="msg_share_subject_line">Here\'s the contents of a barcode I scanned</string>
-
   <string name="preferences_actions_title">When a barcode is found\u2026</string>
   <string name="preferences_copy_to_clipboard_title">Copy to clipboard</string>
   <string name="preferences_decode_1D_title">Decode 1D barcodes</string>
@@ -91,9 +82,7 @@
   <string name="preferences_vibrate_title">Vibrate</string>
   <string name="preferences_result_title">Result settings</string>
   <string name="preferences_custom_product_search_title">Custom search URL</string>
-  <string name="preferences_custom_product_search_summary">Use %s as a placeholder for the product
-    ID</string>
-
+  <string name="preferences_custom_product_search_summary">Use %s as a placeholder for the product ID</string>
   <string name="result_address_book">Found contact info</string>
   <string name="result_calendar">Found calendar event</string>
   <string name="result_email_address">Found email address</string>
@@ -104,14 +93,10 @@
   <string name="result_tel">Found phone number</string>
   <string name="result_text">Found plain text</string>
   <string name="result_uri">Found URL</string>
-
   <string name="history_title">History</string>
   <string name="history_clear_text">Clear history</string>
-
   <string name="sbc_name">Google Book Search</string>
   <string name="share_name">Share via barcode</string>
-
   <string name="title_about">Barcode Scanner v</string>
-
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

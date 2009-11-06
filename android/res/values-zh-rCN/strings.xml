@@ -23,6 +23,7 @@
   <string name="button_book_search">打开图书搜索</string>
   <string name="button_cancel">取消</string>
   <string name="button_clipboard_empty">剪切板清空</string>
+  <string name="button_custom_product_search">自定义搜索</string>
   <string name="button_dial">拨号</string>
   <string name="button_done">完成</string>
   <string name="button_email">发送email</string>
@@ -79,6 +80,9 @@
   <string name="preferences_name">设置</string>
   <string name="preferences_play_beep_title">提示音</string>
   <string name="preferences_vibrate_title">振动</string>
+  <string name="preferences_result_title">结果设置</string>
+  <string name="preferences_custom_product_search_title">自定义搜索网址</string>
+  <string name="preferences_custom_product_search_summary">使用％s作为产品ID占位</string>
   <string name="result_address_book">找到联系人信息</string>
   <string name="result_calendar">找到日历事件</string>
   <string name="result_email_address">找到email地址</string>
