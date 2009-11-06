@@ -69,7 +69,7 @@ public final class CameraTestActivity extends Activity implements SurfaceHolder.
   protected void onResume() {
     super.onResume();
     if (mSaveThread == null && !mGetCameraParameters) {
-      mSaveThread = new SaveThread(this, CameraManager.get().getFramingRect());
+      mSaveThread = new SaveThread(this);
       mSaveThread.start();
     }
   }
