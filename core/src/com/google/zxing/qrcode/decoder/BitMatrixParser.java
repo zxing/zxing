@@ -55,16 +55,16 @@ final class BitMatrixParser {
 
     // Read top-left format info bits
     int formatInfoBits = 0;
-    for (int j = 0; j < 6; j++) {
-      formatInfoBits = copyBit(8, j, formatInfoBits);
+    for (int i = 0; i < 6; i++) {
+      formatInfoBits = copyBit(i, 8, formatInfoBits);
     }
     // .. and skip a bit in the timing pattern ...
-    formatInfoBits = copyBit(8, 7, formatInfoBits);
-    formatInfoBits = copyBit(8, 8, formatInfoBits);
     formatInfoBits = copyBit(7, 8, formatInfoBits);
+    formatInfoBits = copyBit(8, 8, formatInfoBits);
+    formatInfoBits = copyBit(8, 7, formatInfoBits);
     // .. and skip a bit in the timing pattern ...
-    for (int i = 5; i >= 0; i--) {
-      formatInfoBits = copyBit(i, 8, formatInfoBits);
+    for (int j = 5; j >= 0; j--) {
+      formatInfoBits = copyBit(8, j, formatInfoBits);
     }
 
     parsedFormatInfo = FormatInformation.decodeFormatInformation(formatInfoBits);
@@ -112,9 +112,9 @@ final class BitMatrixParser {
 
     // Read top-right version info: 3 wide by 6 tall
     int versionBits = 0;
-    for (int i = 5; i >= 0; i--) {
-      int jMin = dimension - 11;
-      for (int j = dimension - 9; j >= jMin; j--) {
+    int ijMin = dimension - 11;
+    for (int j = 5; j >= 0; j--) {
+      for (int i = dimension - 9; i >= ijMin; i--) {
         versionBits = copyBit(i, j, versionBits);
       }
     }
@@ -126,9 +126,8 @@ final class BitMatrixParser {
 
     // Hmm, failed. Try bottom left: 6 wide by 3 tall
     versionBits = 0;
-    for (int j = 5; j >= 0; j--) {
-      int iMin = dimension - 11;
-      for (int i = dimension - 9; i >= iMin; i--) {
+    for (int i = 5; i >= 0; i--) {
+      for (int j = dimension - 9; j >= ijMin; j--) {
         versionBits = copyBit(i, j, versionBits);
       }
     }
@@ -141,7 +140,7 @@ final class BitMatrixParser {
   }
 
   private int copyBit(int i, int j, int versionBits) {
-    return bitMatrix.get(j, i) ? (versionBits << 1) | 0x1 : versionBits << 1;
+    return bitMatrix.get(i, j) ? (versionBits << 1) | 0x1 : versionBits << 1;
   }
 
   /**
