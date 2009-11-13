@@ -110,7 +110,7 @@ public final class BufferedImageLuminanceSource extends LuminanceSource {
 
   @Override
   public LuminanceSource crop(int left, int top, int width, int height) {
-    return new BufferedImageLuminanceSource(image, left, top, width, height);
+    return new BufferedImageLuminanceSource(image, this.left + left, this.top + top, width, height);
   }
 
   // Can't run AffineTransforms on images of unknown format.
