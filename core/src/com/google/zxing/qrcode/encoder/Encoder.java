@@ -174,11 +174,12 @@ public final class Encoder {
 
   /**
    * Choose the best mode by examining the content. Note that 'encoding' is used as a hint;
-   * if it is Shift_JIS then we assume the input is Kanji and return {@link Mode#KANJI}.
+   * if it is Shift_JIS, and the input is only double-byte Kanji, then we return {@link Mode#KANJI}.
    */
   public static Mode chooseMode(String content, String encoding) {
     if ("Shift_JIS".equals(encoding)) {
-      return Mode.KANJI;
+      // Choose Kanji mode if all input are double-byte characters
+      return isOnlyDoubleByteKanji(content) ? Mode.KANJI : Mode.BYTE;
     }
     boolean hasNumeric = false;
     boolean hasAlphanumeric = false;
@@ -198,6 +199,26 @@ public final class Encoder {
       return Mode.NUMERIC;
     }
     return Mode.BYTE;
+  }
+
+  private static boolean isOnlyDoubleByteKanji(String content) {
+    byte[] bytes;
+    try {
+      bytes = content.getBytes("Shift_JIS");
+    } catch (UnsupportedEncodingException uee) {
+      return false;
+    }
+    int length = bytes.length;
+    if (length % 2 != 0) {
+      return false;
+    }
+    for (int i = 0; i < length; i += 2) {
+      int byte1 = bytes[i] & 0xFF;
+      if ((byte1 < 0x81 || byte1 > 0x9F) && (byte1 < 0xE0 || byte1 > 0xEB)) {
+        return false;
+      }
+    }
+    return true;
   }
 
   private static int chooseMaskPattern(BitVector bits, ErrorCorrectionLevel ecLevel, int version,
