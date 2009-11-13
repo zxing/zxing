@@ -119,17 +119,23 @@ public final class GenericMultipleBarcodeReader implements MultipleBarcodeReader
       }
     }
 
+    // Decode left of barcode
     if (minX > MIN_DIMENSION_TO_RECUR) {
       doDecodeMultiple(image.crop(0, 0, (int) minX, height), hints, results, 0, 0);
     }
+    // Decode above barcode
     if (minY > MIN_DIMENSION_TO_RECUR) {
       doDecodeMultiple(image.crop(0, 0, width, (int) minY), hints, results, 0, 0);
     }
+    // Decode right of barcode
     if (maxX < width - MIN_DIMENSION_TO_RECUR) {
-      doDecodeMultiple(image.crop((int) maxX, 0, width, height), hints, results, (int) maxX, 0);
+      doDecodeMultiple(image.crop((int) maxX, 0, MIN_DIMENSION_TO_RECUR - (int) maxX, height),
+                       hints, results, (int) maxX, 0);
     }
+    // Decode below barcode
     if (maxY < height - MIN_DIMENSION_TO_RECUR) {
-      doDecodeMultiple(image.crop(0, (int) maxY, width, height), hints, results, 0, (int) maxY);
+      doDecodeMultiple(image.crop(0, (int) maxY, width, MIN_DIMENSION_TO_RECUR - (int) maxY),
+                       hints, results, 0, (int) maxY);
     }
   }
 
