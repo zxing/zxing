@@ -61,7 +61,7 @@ public final class InterleavedYUV422LuminanceSource extends BaseLuminanceSource 
     if (row == null || row.length < width) {
       row = new byte[width];
     }
-    int offset = (y + top) * dataWidth * 2 + (left * 2);
+    int offset = ((y + top) * dataWidth << 1) + (left << 1);
     byte[] yuv = yuvData;
     for (int x = 0; x < width; x++) {
       row[x] = yuv[offset + (x << 1)];
@@ -75,7 +75,8 @@ public final class InterleavedYUV422LuminanceSource extends BaseLuminanceSource 
     int height = getHeight();
     int area = width * height;
     byte[] matrix = new byte[area];
-    int inputOffset = top * dataWidth * 2 + (left * 2);
+    int dataWidth = this.dataWidth;    
+    int inputOffset = (top * dataWidth << 1) + (left << 1);
     byte[] yuv = yuvData;
 
     for (int y = 0; y < height; y++) {
@@ -83,7 +84,7 @@ public final class InterleavedYUV422LuminanceSource extends BaseLuminanceSource 
       for (int x = 0; x < width; x++) {
         matrix[outputOffset + x] = yuv[inputOffset + (x << 1)];
       }
-      inputOffset += (dataWidth * 2);
+      inputOffset += (dataWidth << 1);
     }
     return matrix;
   }
@@ -115,7 +116,8 @@ public final class InterleavedYUV422LuminanceSource extends BaseLuminanceSource 
     int height = getHeight();
     int[] pixels = new int[width * height];
     byte[] yuv = yuvData;
-    int inputOffset = top * dataWidth * 2 + (left * 2);
+    int dataWidth = this.dataWidth;
+    int inputOffset = (top * dataWidth << 1) + (left << 1);
 
     for (int y = 0; y < height; y++) {
       int outputOffset = y * width;
@@ -123,7 +125,7 @@ public final class InterleavedYUV422LuminanceSource extends BaseLuminanceSource 
         int grey = yuv[inputOffset + (x << 1)] & 0xff;
         pixels[outputOffset + x] = (0xff000000) | (grey * 0x00010101);
       }
-      inputOffset += (dataWidth * 2);
+      inputOffset += (dataWidth << 1);
     }
 
     Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
