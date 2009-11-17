@@ -15,6 +15,7 @@
  limitations under the License.
  -->
 <resources>
+  <string name="app_picker_name">應用</string>
   <string name="app_name">條碼掃描器</string>
   <string name="bookmark_picker_name">書簽</string>
   <string name="button_add_calendar">添加事件至日歷</string>
@@ -34,6 +35,7 @@
   <string name="button_product_search">打開產品搜索</string>
   <string name="button_search_book_contents">搜索圖書內容</string>
   <string name="button_read_book">瀏覽本書</string>
+  <string name="button_share_app">共享應用</string>  
   <string name="button_share_bookmark">分享書簽</string>
   <string name="button_share_by_email">通過email分享</string>
   <string name="button_share_by_sms">通過短信分享</string>
@@ -63,6 +65,7 @@
   <string name="msg_encode_contents_failed">不能從已有數據中讀取條碼。   </string>
   <string name="msg_encode_in_progress">正在生成條碼\u2026</string>
   <string name="msg_intent_failed">抱歉，無法打開所需軟件。 條碼內容可能無效。</string>
+  <string name="msg_loading_apps">裝載應用名單</string>
   <string name="msg_sbc_book_not_searchable">抱歉，無法找到此圖書。</string>
   <string name="msg_sbc_failed">抱歉，搜索時遇到錯誤。</string>
   <string name="msg_sbc_no_page_returned">沒有返回頁面</string>

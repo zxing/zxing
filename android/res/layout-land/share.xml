@@ -45,29 +45,39 @@
         android:src="@drawable/share_via_barcode"
         android:paddingRight="48dip"/>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@color/share_view"
-        android:orientation="vertical"
-        android:gravity="center">
+    <TableLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
 
-      <Button android:id="@+id/contact_button"
-              android:layout_width="fill_parent"
-              android:layout_height="wrap_content"
-              android:text="@string/button_share_contact"/>
+      <TableRow>
 
-      <Button android:id="@+id/bookmark_button"
-              android:layout_width="fill_parent"
-              android:layout_height="wrap_content"
-              android:text="@string/button_share_bookmark"/>
+        <Button android:id="@+id/contact_button"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/button_share_contact"/>
 
-      <Button android:id="@+id/clipboard_button"
-              android:layout_width="fill_parent"
-              android:layout_height="wrap_content"
-              android:text="@string/button_share_clipboard"/>
+        <Button android:id="@+id/bookmark_button"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/button_share_bookmark"/>
 
-    </LinearLayout>
+      </TableRow>
+
+      <TableRow>
+
+        <Button android:id="@+id/clipboard_button"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/button_share_clipboard"/>
+
+        <Button android:id="@+id/app_button"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/button_share_app"/>
+
+      </TableRow>
+
+    </TableLayout>
 
   </LinearLayout>
 
