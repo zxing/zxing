@@ -165,19 +165,17 @@ final class DecodeThread extends Thread {
    */
   private void decode(byte[] data, int width, int height) {
     long start = System.currentTimeMillis();
-    boolean success;
     Result rawResult = null;
     BaseLuminanceSource source = CameraManager.get().buildLuminanceSource(data, width, height);
     BinaryBitmap bitmap = new BinaryBitmap(new GlobalHistogramBinarizer(source));
     try {
       rawResult = multiFormatReader.decodeWithState(bitmap);
-      success = true;
-    } catch (ReaderException e) {
-      success = false;
+    } catch (ReaderException re) {
+      // continue
     }
-    long end = System.currentTimeMillis();
 
-    if (success) {
+    if (rawResult != null) {
+      long end = System.currentTimeMillis();
       Log.v(TAG, "Found barcode (" + (end - start) + " ms):\n" + rawResult.toString());
       Message message = Message.obtain(activity.getHandler(), R.id.decode_succeeded, rawResult);
       Bundle bundle = new Bundle();
