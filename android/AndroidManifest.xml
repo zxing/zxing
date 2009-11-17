@@ -105,6 +105,13 @@ versionName is 2.31, 2.4, or 3.0. -->
         <category android:name="android.intent.category.DEFAULT"/>
       </intent-filter>
     </activity>
+    <activity android:name=".share.AppPickerActivity"
+              android:label="@string/app_picker_name">
+      <intent-filter>
+        <action android:name="android.intent.action.PICK"/>
+        <category android:name="android.intent.category.DEFAULT"/>
+      </intent-filter>
+    </activity>
     <activity android:name=".HelpActivity"
               android:screenOrientation="user">
       <intent-filter>

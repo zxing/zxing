@@ -39,8 +39,10 @@ import com.google.zxing.client.android.R;
  * @author dswitkin@google.com (Daniel Switkin)
  */
 public final class ShareActivity extends Activity {
+
   private static final int PICK_BOOKMARK = 0;
   private static final int PICK_CONTACT = 1;
+  private static final int PICK_APP = 2;
 
   //private static final int METHODS_ID_COLUMN = 0;
   private static final int METHODS_KIND_COLUMN = 1;
@@ -76,6 +78,14 @@ public final class ShareActivity extends Activity {
     }
   };
 
+  private final Button.OnClickListener appListener = new Button.OnClickListener() {
+    public void onClick(View v) {
+      Intent intent = new Intent(Intent.ACTION_PICK);
+      intent.setClassName(ShareActivity.this, AppPickerActivity.class.getName());
+      startActivityForResult(intent, PICK_APP);
+    }
+  };
+
   private final Button.OnClickListener clipboardListener = new Button.OnClickListener() {
     public void onClick(View v) {
       ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
@@ -95,10 +105,9 @@ public final class ShareActivity extends Activity {
     super.onCreate(icicle);
     setContentView(R.layout.share);
 
-    Button mContactButton = (Button) findViewById(R.id.contact_button);
-    mContactButton.setOnClickListener(contactListener);
-    Button mBookmarkButton = (Button) findViewById(R.id.bookmark_button);
-    mBookmarkButton.setOnClickListener(bookmarkListener);
+    findViewById(R.id.contact_button).setOnClickListener(contactListener);
+    findViewById(R.id.bookmark_button).setOnClickListener(bookmarkListener);
+    findViewById(R.id.app_button).setOnClickListener(appListener);
     clipboardButton = (Button) findViewById(R.id.clipboard_button);
     clipboardButton.setOnClickListener(clipboardListener);
   }
@@ -122,6 +131,7 @@ public final class ShareActivity extends Activity {
     if (resultCode == RESULT_OK) {
       switch (requestCode) {
         case PICK_BOOKMARK:
+        case PICK_APP:
           showTextAsBarcode(intent.getStringExtra(Browser.BookmarkColumns.URL));
           break;
         case PICK_CONTACT:

@@ -15,6 +15,7 @@
  limitations under the License.
  -->
 <resources>
+  <string name="app_picker_name">Anwendungen</string>  
   <string name="app_name">Barcode Scanner</string>
   <string name="bookmark_picker_name">Lesezeichen</string>
   <string name="button_add_calendar">Termin hinzufügen</string>
@@ -34,11 +35,12 @@
   <string name="button_product_search">Produktsuche</string>
   <string name="button_search_book_contents">Buchinhalt durchsuchen</string>
   <string name="button_read_book">Buch anzeigen</string>
-  <string name="button_share_bookmark">Lesezeichen weitergeben</string>
+  <string name="button_share_app">Anwendung</string>
+  <string name="button_share_bookmark">Lesezeichen</string>
   <string name="button_share_by_email">Als E-Mail weitergeben</string>
   <string name="button_share_by_sms">Als SMS weitergeben</string>
-  <string name="button_share_clipboard">Zwischenablage weitergeben</string>
-  <string name="button_share_contact">Kontakt weitergeben</string>
+  <string name="button_share_clipboard">Zwischenablage</string>
+  <string name="button_share_contact">Kontakt</string>
   <string name="button_show_map">Karte anzeigen</string>
   <string name="button_sms">SMS senden</string>
   <string name="button_web_search">Im Web suchen</string>
@@ -63,6 +65,7 @@
   <string name="msg_encode_contents_failed">Aus den Daten kann kein Barcode erzeugt werden.</string>
   <string name="msg_encode_in_progress">Erzeuge Barcode\u2026</string>
   <string name="msg_intent_failed">Die gewünschte Applikation kann nicht geöffnet werden. Der Barcode könnte ungültig sein.</string>
+  <string name="msg_loading_apps">Laden einer Liste von Anwendungen</string>
   <string name="msg_sbc_book_not_searchable">Das Buch kann nicht durchsucht werden.</string>
   <string name="msg_sbc_failed">Bei der Suche ist ein Fehler aufgetreten.</string>
   <string name="msg_sbc_no_page_returned">Keine Seite zurückgeliefert.</string>

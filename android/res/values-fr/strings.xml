@@ -15,6 +15,7 @@
  limitations under the License.
  -->
 <resources>
+  <string name="app_picker_name">Applications</string>
   <string name="app_name">Barcode Scanner</string>
   <string name="bookmark_picker_name">Marques-pages</string>
   <string name="button_add_calendar">Ajouter à l\'agenda</string>
@@ -34,11 +35,12 @@
   <string name="button_product_search">Recherche de produits</string>
   <string name="button_search_book_contents">Recherche contenu du livre</string>
   <string name="button_read_book">Parcourir le livre</string>
-  <string name="button_share_bookmark">Partager marques-pages</string>
+  <string name="button_share_app">Application</string>
+  <string name="button_share_bookmark">Marques-pages</string>
   <string name="button_share_by_email">Partager par email</string>
   <string name="button_share_by_sms">Partager par SMS</string>
-  <string name="button_share_clipboard">Partager le presse papier</string>
-  <string name="button_share_contact">Partager contact</string>
+  <string name="button_share_clipboard">Presse papier</string>
+  <string name="button_share_contact">Contact</string>
   <string name="button_show_map">Montrer la carte</string>
   <string name="button_sms">Envoyer SMS</string>
   <string name="button_web_search">Recherche Web</string>
@@ -63,6 +65,7 @@
   <string name="msg_encode_contents_failed">Impossible de créer le code barre à partir des données fournies.</string>
   <string name="msg_encode_in_progress">Génération du code barre\u2026</string>
   <string name="msg_intent_failed">Désolé, l\'application demandée n\'a pas pu être lancé. Le contenu du code barre peut être invalide.</string>
+  <string name="msg_loading_apps">Chargement d'une liste d'applications</string>
   <string name="msg_sbc_book_not_searchable">Désolé, ce livre n\'est pas trouvable.</string>
   <string name="msg_sbc_failed">Désolé, la recherche a rencontrée un problème.</string>
   <string name="msg_sbc_no_page_returned">Page non trouvée</string>

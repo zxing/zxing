@@ -15,6 +15,7 @@
  limitations under the License.
  -->
 <resources>
+  <string name="app_picker_name">Применения</string>  
   <string name="app_name">Сканер штрих-кодов</string>
   <string name="bookmark_picker_name">Закладки</string>
   <string name="button_add_calendar">Добавить в календарь</string>
@@ -34,11 +35,12 @@
   <string name="button_product_search">Поиск товара</string>
   <string name="button_search_book_contents">Поиск содержания книги</string>
   <string name="button_read_book">Открыть книгу</string>
-  <string name="button_share_bookmark">Поделиться закладкой</string>
+  <string name="button_share_app">Приложение</string>
+  <string name="button_share_bookmark">Закладкой</string>
   <string name="button_share_by_email">Поделиться через эл. почту</string>
   <string name="button_share_by_sms">Поделиться через SMS</string>
-  <string name="button_share_clipboard">Поделиться буфером обмена</string>
-  <string name="button_share_contact">Поделиться контактом</string>
+  <string name="button_share_clipboard">Буфер обмена</string>
+  <string name="button_share_contact">Контактом</string>
   <string name="button_show_map">Показать карту</string>
   <string name="button_sms">Послать SMS</string>
   <string name="button_web_search">Поиск в Вебе</string>
@@ -63,6 +65,7 @@
   <string name="msg_encode_contents_failed">Не могу закодировать штрих-код от источник данных.</string>
   <string name="msg_encode_in_progress">Генерация штрих-кода\u2026</string>
   <string name="msg_intent_failed">К сожалению, запрошенное приложение не может быть запущенно. Содержимое штрих-кода может быть повреждено.</string>
+  <string name="msg_loading_apps">Нагружать список применений</string>
   <string name="msg_sbc_book_not_searchable">К сожалению, поиск книги не удался.</string>
   <string name="msg_sbc_failed">К сожалению, у поиска возникли проблемы.</string>
   <string name="msg_sbc_no_page_returned">Ни одна страница не возвращена</string>

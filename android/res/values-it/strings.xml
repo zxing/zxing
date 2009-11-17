@@ -15,6 +15,7 @@
  limitations under the License.
  -->
 <resources>
+  <string name="app_picker_name">Applications</string>  
   <string name="app_name">Scansione codice a barre</string>
   <string name="bookmark_picker_name">Segnalibri</string>
   <string name="button_add_calendar">Aggiungi al calendario</string>
@@ -34,11 +35,12 @@
   <string name="button_product_search">Cerca prodotto</string>
   <string name="button_search_book_contents">Cerca contenuti libro</string>
   <string name="button_read_book">Sfoglia libro</string>
-  <string name="button_share_bookmark">Condividi segnalibro</string>
+  <string name="button_share_app">Applicazione</string>
+  <string name="button_share_bookmark">Segnalibro</string>
   <string name="button_share_by_email">Condividi tramite email</string>
   <string name="button_share_by_sms">Condividi tramite SMS</string>
-  <string name="button_share_clipboard">Condividi appunti</string>
-  <string name="button_share_contact">Condividi contatto</string>
+  <string name="button_share_clipboard">Appunti</string>
+  <string name="button_share_contact">Contatto</string>
   <string name="button_show_map">Mostra mappa</string>
   <string name="button_sms">Invia SMS</string>
   <string name="button_web_search">Ricerca web</string>
@@ -63,6 +65,7 @@
   <string name="msg_encode_contents_failed">Impossibile codificare un codice a barre dai dati forniti.</string>
   <string name="msg_encode_in_progress">Generazione codice a barre\u2026</string>
   <string name="msg_intent_failed">Spiacenti, l\'applicazione richiesta non può essere avviata. Il contenuto del codice a barre può essere non valido.</string>
+  <string name="msg_loading_apps">Carico della lista delle applicazioni</string>
   <string name="msg_sbc_book_not_searchable">Spiacenti, questo libro non è ricercabile.</string>
   <string name="msg_sbc_failed">Spiacenti, la ricerca ha avuto un problema.</string>
   <string name="msg_sbc_no_page_returned">Nessuna pagina restitiuta</string>
