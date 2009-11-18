@@ -18,6 +18,8 @@ package com.google.zxing.web.generator.client;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Button;
@@ -103,14 +105,14 @@ public class Generator implements EntryPoint {
   }
 
   private void loadGenerators() {
-    generators.add(new CalendarEventGenerator(changeListener));
-    generators.add(new ContactInfoGenerator(changeListener));
-    generators.add(new EmailGenerator(changeListener));
-    generators.add(new GeoLocationGenerator(changeListener));
-    generators.add(new PhoneNumberGenerator(changeListener));
-    generators.add(new SmsAddressGenerator(changeListener));
+    generators.add(new CalendarEventGenerator(changeListener, keyPressHandler));
+    generators.add(new ContactInfoGenerator(changeListener, keyPressHandler));
+    generators.add(new EmailGenerator(changeListener, keyPressHandler));
+    generators.add(new GeoLocationGenerator(changeListener, keyPressHandler));
+    generators.add(new PhoneNumberGenerator(changeListener, keyPressHandler));
+    generators.add(new SmsAddressGenerator(changeListener, keyPressHandler));
     generators.add(new TextGenerator(changeListener));
-    generators.add(new UrlGenerator(changeListener));
+    generators.add(new UrlGenerator(changeListener, keyPressHandler));
   }
   
   public void setupLeftPanel() {
@@ -237,4 +239,12 @@ public class Generator implements EntryPoint {
     }
   };
   
+  public KeyPressHandler keyPressHandler = new KeyPressHandler() {
+    @Override
+    public void onKeyPress(KeyPressEvent event) {
+      if (event.getCharCode() == '\n' || event.getCharCode() == '\r') {
+        generate();
+      }
+    }
+  };
 }

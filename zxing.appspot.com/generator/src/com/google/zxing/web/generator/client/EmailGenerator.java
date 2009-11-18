@@ -16,6 +16,7 @@
 
 package com.google.zxing.web.generator.client;
 
+import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.TextBox;
@@ -30,9 +31,10 @@ public class EmailGenerator implements GeneratorSource {
   Grid table = null;
   TextBox email = new TextBox();
   
-  public EmailGenerator(ChangeListener listener) {
+  public EmailGenerator(ChangeListener listener, KeyPressHandler keyListener) {
     email.addStyleName(StylesDefs.INPUT_FIELD_REQUIRED);
     email.addChangeListener(listener);
+    email.addKeyPressHandler(keyListener);
   }
   
   public String getName() {

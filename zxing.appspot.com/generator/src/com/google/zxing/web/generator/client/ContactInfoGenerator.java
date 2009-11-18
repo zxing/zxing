@@ -16,6 +16,7 @@
 
 package com.google.zxing.web.generator.client;
 
+import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.TextBox;
@@ -38,9 +39,11 @@ public class ContactInfoGenerator implements GeneratorSource {
   TextBox memo = new TextBox();
   TextBox[] widgets = {name, company, tel, url, email, address, address2, memo};
   
-  public ContactInfoGenerator(ChangeListener changeListener) {
+  public ContactInfoGenerator(ChangeListener changeListener,
+      KeyPressHandler keyListener) {
     for (TextBox w: widgets) {
       w.addChangeListener(changeListener);
+      w.addKeyPressHandler(keyListener);
     }
   }
   

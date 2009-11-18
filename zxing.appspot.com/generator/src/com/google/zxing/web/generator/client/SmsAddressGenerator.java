@@ -16,6 +16,7 @@
 
 package com.google.zxing.web.generator.client;
 
+import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.TextArea;
@@ -33,9 +34,11 @@ public class SmsAddressGenerator implements GeneratorSource {
   TextBox number = new TextBox();
   TextArea message = new TextArea();
 
-  public SmsAddressGenerator(ChangeListener listener) {
+  public SmsAddressGenerator(ChangeListener listener,
+      KeyPressHandler keyListener) {
     number.addStyleName(StylesDefs.INPUT_FIELD_REQUIRED);
     number.addChangeListener(listener);
+    number.addKeyPressHandler(keyListener);
     message.addChangeListener(listener);
   }
   
