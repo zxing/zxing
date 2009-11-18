@@ -16,6 +16,7 @@
 
 package com.google.zxing.web.generator.client;
 
+import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.TextBox;
@@ -30,9 +31,10 @@ public class UrlGenerator implements GeneratorSource {
   Grid table = null;
   TextBox url = new TextBox();
   
-  public UrlGenerator(ChangeListener listener) {
+  public UrlGenerator(ChangeListener listener, KeyPressHandler keyListener) {
     url.addStyleName(StylesDefs.INPUT_FIELD_REQUIRED);
     url.addChangeListener(listener);
+    url.addKeyPressHandler(keyListener);
   }
   
   public Grid getWidget() {

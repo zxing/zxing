@@ -16,6 +16,7 @@
 
 package com.google.zxing.web.generator.client;
 
+import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.TextBox;
@@ -30,9 +31,11 @@ public class PhoneNumberGenerator implements GeneratorSource {
   Grid table = null;
   TextBox number = new TextBox();
   
-  public PhoneNumberGenerator(ChangeListener listener) {
+  public PhoneNumberGenerator(ChangeListener listener,
+      KeyPressHandler keyListener) {
     number.addStyleName(StylesDefs.INPUT_FIELD_REQUIRED);
     number.addChangeListener(listener);
+    number.addKeyPressHandler(keyListener);
   }
   
   public String getName() {

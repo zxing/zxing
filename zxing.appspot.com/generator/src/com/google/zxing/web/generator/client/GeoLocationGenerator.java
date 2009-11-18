@@ -16,6 +16,7 @@
 
 package com.google.zxing.web.generator.client;
 
+import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.maps.client.MapWidget;
 import com.google.gwt.maps.client.control.SmallMapControl;
@@ -52,15 +53,19 @@ public class GeoLocationGenerator implements GeneratorSource, ChangeListener {
   Marker mapMarker = null;
   private ChangeListener changeListener;
   
-  public GeoLocationGenerator(ChangeListener listener) {
+  public GeoLocationGenerator(ChangeListener listener,
+      KeyPressHandler keyListener) {
     this.changeListener = listener;
     latitude.addStyleName(StylesDefs.INPUT_FIELD_REQUIRED);
-    longitude.addStyleName(StylesDefs.INPUT_FIELD_REQUIRED);
     latitude.addChangeListener(listener);
     latitude.addChangeListener(this);
+    latitude.addKeyPressHandler(keyListener);
+    longitude.addStyleName(StylesDefs.INPUT_FIELD_REQUIRED);
     longitude.addChangeListener(listener);
     longitude.addChangeListener(this);
+    longitude.addKeyPressHandler(keyListener);
     query.addChangeListener(listener);
+    query.addKeyPressHandler(keyListener);
   }
   
   public String getName() {

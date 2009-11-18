@@ -16,6 +16,7 @@
 
 package com.google.zxing.web.generator.client;
 
+import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
@@ -59,9 +60,11 @@ public class CalendarEventGenerator implements GeneratorSource {
   ListBox timeZones = new ListBox();
   Date timePicker1PreviousDate = null;
 
-  public CalendarEventGenerator(final ChangeListener listener) {
+  public CalendarEventGenerator(final ChangeListener listener,
+      KeyPressHandler keyListener) {
     eventName.addStyleName(StylesDefs.INPUT_FIELD_REQUIRED);
     eventName.addChangeListener(listener);
+    eventName.addKeyPressHandler(keyListener);
     datePicker1.setAnimationEnabled(true);
     datePicker2.setAnimationEnabled(true);
     timePicker2
@@ -70,6 +73,7 @@ public class CalendarEventGenerator implements GeneratorSource {
 
     buildTimeZoneList();
     timeZones.setSelectedIndex(25);
+    timeZones.addKeyPressHandler(keyListener);
     timePicker1.addChangeHandler(new ChangeHandler<Date>() {
       public void onChange(ChangeEvent<Date> event) {
         Date time = timePicker1PreviousDate;
