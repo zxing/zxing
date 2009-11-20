@@ -31,6 +31,9 @@ import android.graphics.Bitmap;
  * @author dswitkin@google.com (Daniel Switkin)
  */
 public final class InterleavedYUV422LuminanceSource extends BaseLuminanceSource {
+
+  private static final int OPAQUE_ALPHA = 0xFF000000;
+
   private final byte[] yuvData;
   private final int dataWidth;
   private final int dataHeight;
@@ -117,13 +120,13 @@ public final class InterleavedYUV422LuminanceSource extends BaseLuminanceSource 
     int[] pixels = new int[width * height];
     byte[] yuv = yuvData;
     int dataWidth = this.dataWidth;
-    int inputOffset = (top * dataWidth << 1) + (left << 1);
+    int inputOffset = (top * dataWidth + left) << 1;
 
     for (int y = 0; y < height; y++) {
       int outputOffset = y * width;
       for (int x = 0; x < width; x++) {
         int grey = yuv[inputOffset + (x << 1)] & 0xff;
-        pixels[outputOffset + x] = (0xff000000) | (grey * 0x00010101);
+        pixels[outputOffset + x] = OPAQUE_ALPHA | (grey * 0x00010101);
       }
       inputOffset += (dataWidth << 1);
     }
@@ -136,6 +139,51 @@ public final class InterleavedYUV422LuminanceSource extends BaseLuminanceSource 
   // Not currently needed.
   @Override
   public Bitmap renderFullColorBitmap(boolean halfSize) {
-    return null;
+    // TODO implement halfSize
+    int width = getWidth();
+    int height = getHeight();
+    int[] pixels = new int[width * height];
+    byte[] yuv = yuvData;
+    int dataWidth = this.dataWidth;
+    int inputOffset = (top * dataWidth + left) << 1;
+
+    for (int y = 0; y < height; y++) {
+      int outputOffset = y * width;
+      for (int x = 0; x < width; x += 2) {
+        int localOffset = inputOffset + (x << 1);
+        int y1 = yuv[localOffset] & 0xFF;
+        int u = yuv[localOffset + 1] & 0xFF;
+        int y2 = yuv[localOffset + 2] & 0xFF;
+        int v = yuv[localOffset + 3] & 0xFF;
+        int rgb1 = yuvToRGB(y1, u, v);
+        int rgb2 = yuvToRGB(y2, u, v);
+        pixels[outputOffset + x] = OPAQUE_ALPHA | rgb1;
+        pixels[outputOffset + x + 1] = OPAQUE_ALPHA | rgb2;        
+      }
+      inputOffset += (dataWidth << 1);
+    }
+
+    Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+    bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
+    return bitmap;
   }
+
+  /**
+   * @link http://en.wikipedia.org/wiki/YUV#Y.27UV444
+   */
+  private static int yuvToRGB(int y, int u, int v) {
+    int c = y - 16;
+    int d = u - 128;
+    int e = v - 128;
+    int c298 = 298 * c;
+    int r = clip((c298           + 409 * e + 128) >> 8);
+    int g = clip((c298 - 100 * d - 208 * e + 128) >> 8);
+    int b = clip((c298 + 516 * d           + 128) >> 8);
+    return (r << 16) | (g << 8) | b;
+  }
+
+  private static int clip(int x) {
+    return x < 0 ? 0 : x & 0xFF;
+  }
+
 }
