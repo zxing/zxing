@@ -142,6 +142,6 @@ public final class PlanarYUVLuminanceSource extends BaseLuminanceSource {
   // Can't be implemented here, as the color representations vary.
   @Override
   public Bitmap renderFullColorBitmap(boolean halfSize) {
-    return null;
+    throw new UnsupportedOperationException();
   }
 }
