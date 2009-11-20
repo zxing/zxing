@@ -1,0 +1,460 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	layout="absolute" creationComplete="{this.init();}">
+	    <mx:Script>
+    <![CDATA[
+    	import com.google.zxing.common.BitMatrix;
+    /*
+    	Dear developer,
+    	
+    	Thank you for your interest in the AS3 implementation of the zxing library.
+    	This Actionscript (AS3) code needs Flash player version 10 to run.
+    	This file is a very basic example how to use the zxing library to 
+    	scan various barcodes with a standard webcam.
+    	This conversion is based on the zxing Java library, checked out from the SVN on August 7th 2009 (SVN revision ???)
+    	All additions and bugfixes added after this date have not yet been implemented in this version.
+    	This AS3 implementation has roughly the same recognition rate as revision ??? of Java implementation.
+    	
+    	How to build this example in FlexBuilder:
+    	- import this project (File->Import->Flex Project : select the 'client' folder)
+    	- uncheck 'Use default location' and press Finish
+    	- import the zxing library project (File->Import->FlexProject : select the 'core' folder)
+    	- uncheck 'Use default location' and press Finish
+    	- Right click the 'zxing client' project to select Properties
+    	- goto the 'Flex Build Path' section and select the 'Source path' tabsheet
+    	- click the 'Add Folder' button and select the 'src' directory in the 'core' project folder
+    	Now the client will use the zxing source files directly to build the application.
+    	Any updates in the library will then automatically be used by the client
+    	An an alternative would be to generate a SWC library file for the zxing.   
+   	
+    	For more details, join the zxing project and please commit your bugfixes to the zxing repository.
+    	http://zxing.google.com
+    	
+    	Bas Vijfwinkel
+    	 
+    	Notes :	
+    		- This project should compile with Flexbuilder 3.0 in combination with Flash10.
+    		  If you do not need access to the local filesystem, Flash 9 should be sufficient to run this application.
+    		- I have omitted some very specific settings in this example application (e.g. the extended mode for code39/128 barcodes).
+    		  The zxing library does handle these barcodes correctly if you set these modes correctly.
+    		- Actionscript is not very good at handling character sets with various encodings (used in e.g. in QRCodes).
+    		  UTF8 and ShiftJIS encodings seem to work but I have not been able to test other character encodings.
+    		   
+    		- Great performance improvements can be made but this needs quite some altering of the 
+    		  current library.
+    		  In order to keep the library as much in line with the original library for future updates and bugfixes,
+    		  I have choosen not to implement those improvements here. I believe maintainability has a higher priority 
+    		  than performance at this moment 
+    		  I have introduced some extra classes in the
+    		  com/google/zxing/common/flexdatatypes folder that match some of the default Java classes.
+    		- If you encounter bugs (and hopefully solutions) please join the zxing project and commit your fixes to
+    		  the repository. Zxing project members are always willing to assist you if you're not familiar with repositories.    
+    		- The Zxing project files are licensed under the Apache License, Version 2.0 (the "License");
+ 			  You may not use this file except in compliance with the License. You may obtain a copy of the License at
+ 			  http://www.apache.org/licenses/LICENSE-2.0
+ 			- When using a webcam make sure you set the resolution to at least 300x300 with the setMode method of the Camera object.
+ 			  The default 160x120 resolution is too low for recognition of most barcodes. 
+    
+    */
+    	import mx.core.BitmapAsset;
+    	import com.google.zxing.common.flexdatatypes.HashTable;
+    	import flash.net.FileReference;
+    	import flash.display.Bitmap;
+    	import flash.display.*;
+		import flash.net.URLRequest;
+		import flash.events.Event;
+        import mx.controls.Alert;
+        
+        import com.google.zxing.common.GlobalHistogramBinarizer;
+        import com.google.zxing.common.ByteMatrix;
+        import com.google.zxing.client.result.ParsedResult;
+        import com.google.zxing.client.result.ResultParser;
+        import com.google.zxing.DecodeHintType;
+        import com.google.zxing.BarcodeFormat;
+        import com.google.zxing.BinaryBitmap;
+        import com.google.zxing.BufferedImageLuminanceSource;
+        import com.google.zxing.MultiFormatReader;
+        import com.google.zxing.MultiFormatWriter;
+        import com.google.zxing.Result;
+        
+    	private var fileRef:FileReference;
+    	private var myReader:MultiFormatReader;
+    	private var hints:HashTable;
+    	private var myWriter:MultiFormatWriter;
+
+    	public function init():void
+    	{
+    		// initialise the generic reader
+    		myReader = new MultiFormatReader();
+    	}
+    	
+    	public function decodeImage():void
+    	{
+    		// did the user select an image?
+       		if (this.img.source != "")
+    		{
+    			// show a message we are decoding
+    			this.resulttextarea.text = "*** decoding ***"
+    			try
+    			{
+    				// is the image valid?
+    				if (img.content != null)
+    				{
+    					// try to decode the image
+						this.decodeBitmapData((img.content as Bitmap).bitmapData,img.contentWidth, img.contentHeight);
+    				}
+    				else
+    				{
+    					// invalid image
+    					this.resulttextarea.text = "no image selected";
+    				}
+    			}
+    			catch(E:Error)
+    			{
+    				this.resulttextarea.text = "*** Error in image data***"
+    			}
+	    	}
+    	}
+    	
+    	public function decodeBitmapData(bmpd:BitmapData, width:int, height:int):void
+    	{
+    		// create the container to store the image data in
+        	var lsource:BufferedImageLuminanceSource = new BufferedImageLuminanceSource(bmpd);
+        	// convert it to a binary bitmap
+        	var bitmap:BinaryBitmap = new BinaryBitmap(new GlobalHistogramBinarizer(lsource));
+        	// get all the hints
+    		var ht:HashTable = null;
+    		ht = this.getAllHints()
+    		var res:Result = null;
+    		try
+    		{
+    			// try to decode the image
+    			res = myReader.decode(bitmap,ht);
+    		}
+    		catch(e:Error) 
+    		{
+    			// failed
+    		}
+    		
+    		// did we find something?
+    		if (res == null)
+    		{
+    			// no : we could not detect a valid barcode in the image
+    			this.resulttextarea.text = "<<No decoder could read the barcode>>";
+    			if (!this.bc_tryharder.selected)
+    			{
+    				this.resulttextarea.text = "<<No decoder could read the barcode : Retry with the 'Try Harder' setting>>";
+    			}
+    		}
+    		else
+    		{
+    			// yes : parse the result
+    			var parsedResult:ParsedResult = ResultParser.parseResult(res);
+    			// get a formatted string and display it in our textarea
+    			this.resulttextarea.text = parsedResult.getDisplayResult();
+    		}
+    }
+	    
+	    
+	    public function getAllHints():HashTable
+	    {
+	    	// get all hints from the user
+	    	var ht:HashTable = new HashTable();
+			if (this.bc_QR_CODE.selected)    { ht.Add(DecodeHintType.POSSIBLE_FORMATS,BarcodeFormat.QR_CODE); }
+			if (this.bc_DATAMATRIX.selected) { ht.Add(DecodeHintType.POSSIBLE_FORMATS,BarcodeFormat.DATAMATRIX); }
+			if (this.bc_UPC_E.selected)      { ht.Add(DecodeHintType.POSSIBLE_FORMATS,BarcodeFormat.UPC_E); }
+			if (this.bc_UPC_A.selected)      { ht.Add(DecodeHintType.POSSIBLE_FORMATS,BarcodeFormat.UPC_A); }
+			if (this.bc_EAN_8.selected)      { ht.Add(DecodeHintType.POSSIBLE_FORMATS,BarcodeFormat.EAN_8); }
+			if (this.bc_EAN_13.selected)     { ht.Add(DecodeHintType.POSSIBLE_FORMATS,BarcodeFormat.EAN_13); }
+			if (this.bc_CODE_39.selected)    { ht.Add(DecodeHintType.POSSIBLE_FORMATS,BarcodeFormat.CODE_39);}
+			if (this.bc_CODE_128.selected)   { ht.Add(DecodeHintType.POSSIBLE_FORMATS,BarcodeFormat.CODE_128); }
+			if (this.bc_PDF417.selected)	 { ht.Add(DecodeHintType.POSSIBLE_FORMATS,BarcodeFormat.PDF417); }
+			if (this.bc_ITF.selected)        { ht.Add(DecodeHintType.POSSIBLE_FORMATS,BarcodeFormat.ITF); }
+			if (this.bc_tryharder.selected)  { ht.Add(DecodeHintType.TRY_HARDER,true); }
+			return ht;
+	    }
+	    
+   	
+    	public function clearImage():void
+    	{
+    		// remove the image
+    		this.img.source = null;
+    		this.resulttextarea.text = "";
+    	}
+    	
+    	public function selectFile():void
+    	{
+    		// file open menu
+    		fileRef = new FileReference();
+    		var fileFilter4:FileFilter = new FileFilter('JPG','*.jpg');
+    		var fileFilter1:FileFilter = new FileFilter('PNG','*.png');
+    		var fileFilter2:FileFilter = new FileFilter('GIF','*.gif');
+    		var fileFilter3:FileFilter = new FileFilter('All files','*.*');
+    		fileRef.addEventListener(Event.SELECT, selectHandler);
+    		fileRef.addEventListener(Event.COMPLETE,completeHandler);
+    		fileRef.browse([fileFilter4,
+    						fileFilter1,
+    						fileFilter2,
+    						fileFilter3]);
+    	}
+
+		public function selectHandler(event:Event):void
+		{
+			// try to load the image
+			fileRef.removeEventListener(Event.SELECT, selectHandler);
+			fileRef.load();
+		}
+		
+		public function completeHandler(event:Event):void
+		{
+			// image loaded succesfully
+			fileRef.removeEventListener(Event.COMPLETE,completeHandler);
+			img.load(fileRef.data);
+		}
+		
+		public function selectNone():void
+		{
+			// remove all hints (except the try harder hint)
+			this.bc_QR_CODE.selected = false;
+	   		this.bc_DATAMATRIX.selected = false;
+			this.bc_UPC_E.selected = false;
+			this.bc_UPC_A.selected = false;
+			this.bc_EAN_8.selected = false;
+			this.bc_EAN_13.selected = false;
+			this.bc_CODE_128.selected = false;
+			this.bc_CODE_39.selected = false;
+			this.bc_ITF.selected = false;
+		}
+
+        private function videoDisplay_creationComplete():void 
+        {
+        	// try to attach the webcam to the videoDisplay
+                var camera:Camera = Camera.getCamera();
+                if (camera) 
+                {
+                	if ((camera.width == -1) && ( camera.height == -1))
+                	{
+                		// no webcam seems to be attached -> hide videoDisplay
+                		videoDisplay.width  = 0;
+                		videoDisplay.height = 0;
+                		this.videoDisplayLabel.visible = true;
+                		this.buttonBox.visible = false;	
+                	}
+                	else
+                	{
+                		// webcam detected
+                		
+                		// change the default mode of the webcam
+                		camera.setMode(350,350,5,true);
+      		            videoDisplay.width  = camera.width;
+                		videoDisplay.height = camera.height;
+                		this.videoDisplayLabel.visible = false;
+                		this.buttonBox.visible = true;	
+
+                    	videoDisplay.attachCamera(camera);
+                 	}
+                } else {
+                    Alert.show("You don't seem to have a webcam.");
+                }
+            }
+            
+            private function decodeSnapshot():void
+            {
+            	// try to decode the current snapshpt
+            	 var bmd:BitmapData = new BitmapData(this.videoDisplay.width, this.videoDisplay.height);
+                bmd.draw(videoDisplay);
+                this.decodeBitmapData(bmd, this.videoDisplay.width, this.videoDisplay.height);
+                
+            }
+
+            public function generateQRCode():void
+            {
+            	// read input string
+            	var contents:String = this.QRINput.text;
+            	myWriter = new MultiFormatWriter();
+            	try
+            	{
+            		// try to encode the string
+            		var result:ByteMatrix = (myWriter.encode(contents,BarcodeFormat.QR_CODE,300,300)) as ByteMatrix;
+            	}
+            	catch (e:Error)
+            	{
+            		Alert.show('An error occurred during the encoding process');
+            		return;
+            	}
+            	// try to generate an image with the result data
+            	var bmpd:BitmapData = new BitmapData(300, 300, false, 0x009900);
+            	var bmp:Bitmap = new Bitmap(bmpd);            	
+            	this.QRImage.source = bmp;
+            	for (var h:int=0;h<300;h++)
+            	{
+            		for (var w:int=0;w<300;w++)
+            		{
+            			if (result._get(w,h) == 0)
+            			{
+            				bmpd.setPixel(w,h, 0);
+            			}
+            			else
+            			{
+            				bmpd.setPixel(w,h, 0xFFFFFF);
+            			}		
+            		}
+            	}
+
+            } 
+            
+            public function generateEANBarcode():void
+            {
+            	var name:String = "";
+            	var barcodeType:BarcodeFormat = null;
+            	var inputlength:int = 0;
+				// set the correct parameters
+            	if (this.EAN8.selected)
+            	{
+            		name       = "EAN8";
+            		barcodeType = BarcodeFormat.EAN_8;
+            		inputlength = 8;
+            	}
+            	else
+            	{
+            		name       = "EAN13";
+            		barcodeType = BarcodeFormat.EAN_13;
+            		inputlength = 13;
+
+
+            	}
+            	var resultBits:Array =  null;
+            	var contents:String = this.EANINput.text;
+	            // do some checking
+	            if (contents.length > inputlength) 
+	            {
+	            	Alert.show(name+' can only contain '+inputlength+' digits');
+	            	return;
+	            }
+	            var counter:int=0;
+	            while(counter < contents.length)
+	            {
+	            	
+	            	var cc:int = contents.charCodeAt(counter);
+	            	if ((cc<0x30) || (cc>0x39)) 
+	            	{
+	            		 Alert.show("EAN barcodes can only contain digits"); 
+	            		 return;
+	            	}
+	            	counter++;
+	            }
+	            while (contents.length < inputlength) { contents = "0" + contents; }
+	            this.EANINput.text = contents;
+            	myWriter = new MultiFormatWriter();
+            	try
+            	{
+            		// try to generate the data for the barcode
+            		var result:ByteMatrix = myWriter.encode(contents,barcodeType) as ByteMatrix;
+            	}
+            	catch (e:Error)
+            	{
+            		Alert.show("An error occured when making the barcode");
+            	}
+            	resultBits = new Array(result.height());
+            	for (var i:int=0;i<result.height();i++)
+            	{
+            		resultBits[i] = result._get(i,0);
+            	}
+
+            	// generate an image            	
+            	var bmpd:BitmapData = new BitmapData(this.EANImage.width, this.EANImage.height, false, 0x009900);
+            	var bmp:Bitmap = new Bitmap(bmpd);            	
+            	this.EANImage.source = bmp;
+            	for (var h:int=0;h<bmpd.height;h++)
+            	{
+            		var bmpdwidth:int = bmpd.width; 
+            		for (var w:int=0;w<bmpdwidth;w++)
+            		{
+            			if (resultBits[Math.round(w*(resultBits.length/bmpdwidth))] == 0)
+            			{
+            				bmpd.setPixel(w,h, 0);
+            			}
+            			else
+            			{
+            				bmpd.setPixel(w,h, 0xFFFFFF);
+            			}		
+            		}
+            	}
+            }
+            
+		
+    ]]>
+    </mx:Script>
+    <mx:VBox>
+    	<mx:Label text="Example for reading and creating barcodes with the ZXing library       by Bas Vijfwinkel" fontWeight="bold" />
+	    <mx:TabNavigator>
+		    <mx:HBox label="Read a barcode">
+				<mx:VBox width="300">
+					<mx:HBox>
+						<mx:Button label="Select image" click="selectFile()"  x="10" y="318"/>
+						<mx:Button label="Decode!" click="decodeImage()"  x="117" y="318"/>
+						<mx:Button label="Clear" click="clearImage()"  x="198" y="318"/>
+					</mx:HBox>
+					<mx:Canvas width="300" height="300" backgroundColor="white">
+						<mx:Image id="img" width="300" height="300"/>	
+					</mx:Canvas>
+					<mx:Label text="Result :"/>
+					<mx:TextArea id="resulttextarea" width="300" height="100" />
+				</mx:VBox>
+					<mx:VBox>
+					    <mx:VideoDisplay id="videoDisplay"
+			    				        creationComplete="videoDisplay_creationComplete();"
+			            				width="300"
+			            				height="300" />
+			            <mx:Label id="videoDisplayLabel" text="Camera not attached" visible="false"/>
+			 			<mx:HBox id="buttonBox" visible="true">
+					    	<mx:Button id="button"
+					            label="Reload Camera"
+					            click="videoDisplay_creationComplete();" />
+					        <mx:Button id="snapshot"
+					                   label = "Decode Snapshot"
+					                   click ="decodeSnapshot();"
+					                   />
+					    </mx:HBox>
+					    <mx:HBox  x="320" y="10">
+							<mx:VBox>
+								<mx:CheckBox id="bc_QR_CODE"      label="QR_CODE" />
+						   		<mx:CheckBox id="bc_DATAMATRIX"   label="DATAMATRIX" />
+								<mx:CheckBox id="bc_UPC_E"        label="UPC_E" />
+								<mx:CheckBox id="bc_UPC_A"        label="UPC_A" />
+								<mx:CheckBox id="bc_EAN_8"        label="EAN_8" />
+								<mx:CheckBox id="bc_EAN_13"       label="EAN_13" />
+							</mx:VBox>
+							<mx:VBox>
+								<mx:CheckBox id="bc_CODE_128"     label="CODE_128" />
+								<mx:CheckBox id="bc_CODE_39"      label="CODE_39" />
+								<mx:CheckBox id="bc_PDF417"       label="PDF417" />
+								<mx:CheckBox id="bc_ITF"          label="ITF" />
+								<mx:CheckBox id="bc_tryharder"    label="Try Harder" />
+								<mx:Button label="Select None"    click="selectNone()" />
+							</mx:VBox>		
+						</mx:HBox>
+					</mx:VBox>
+			</mx:HBox>
+			<mx:TabNavigator label="Create a barcode">
+				<mx:VBox label="EAN">
+					<mx:Label text="Generate an EAN barcode"/>
+					<mx:TextInput id="EANINput" text="type the digits here"/>
+					<mx:RadioButton groupName="EANRB" id="EAN8" label="EAN8" selected="true"/>
+					<mx:RadioButton groupName="EANRB" id="EAN13" label="EAN13" selected="false"/>
+					<mx:Button label="Generate" buttonDown="{this.generateEANBarcode();}"/>
+					<mx:Image id="EANImage" width="300" height="100" />
+				</mx:VBox>
+				<mx:VBox label="QRCode">
+					<mx:Label text="Generate a QRCode"/>
+					<mx:TextInput id="QRINput" text="type text here"/>
+					<mx:Button label="Generate" buttonDown="{this.generateQRCode();}"/>
+					<mx:Image id="QRImage" width="300" height="300" />
+					
+					
+				</mx:VBox>
+			</mx:TabNavigator>
+	    </mx:TabNavigator>
+	</mx:VBox>
+</mx:Application>
