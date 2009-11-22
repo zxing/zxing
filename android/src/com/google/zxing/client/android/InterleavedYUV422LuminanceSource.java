@@ -171,7 +171,7 @@ public final class InterleavedYUV422LuminanceSource extends BaseLuminanceSource 
   /**
    * @link http://en.wikipedia.org/wiki/YUV#Y.27UV444
    */
-  private static int yuvToRGB(int y, int u, int v) {
+  static int yuvToRGB(int y, int u, int v) {
     int c = y - 16;
     int d = u - 128;
     int e = v - 128;

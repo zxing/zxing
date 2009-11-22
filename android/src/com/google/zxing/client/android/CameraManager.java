@@ -285,8 +285,10 @@ final class CameraManager {
     Rect rect = getFramingRect();
     switch (previewFormat) {
       case PixelFormat.YCbCr_420_SP:
+        return new PlanarYUV420LuminanceSource(data, width, height, rect.left, rect.top,
+            rect.width(), rect.height());
       case PixelFormat.YCbCr_422_SP:
-        return new PlanarYUVLuminanceSource(data, width, height, rect.left, rect.top,
+        return new PlanarYUV422LuminanceSource(data, width, height, rect.left, rect.top,
             rect.width(), rect.height());
       default:
         // Handle some non-standard values:
@@ -296,12 +298,12 @@ final class CameraManager {
               rect.width(), rect.height());
         } else if (previewFormatString.equals("yuv420p")) {
           // Assume this is a synonym for YUV420SP -- note the lack of 's'
-          return new PlanarYUVLuminanceSource(data, width, height, rect.left, rect.top,
+          return new PlanarYUV420LuminanceSource(data, width, height, rect.left, rect.top,
             rect.width(), rect.height());
-        }
-        throw new IllegalArgumentException("Unsupported picture format: " +
-            previewFormat + '/' + previewFormatString);
+        }   
     }
+    throw new IllegalArgumentException("Unsupported picture format: " +
+            previewFormat + '/' + previewFormatString);
   }
 
   /**
