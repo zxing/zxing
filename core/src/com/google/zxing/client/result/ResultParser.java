@@ -208,6 +208,24 @@ public abstract class ResultParser {
     return true;
   }
 
+  protected static boolean isSubstringOfDigits(String value, int offset, int length) {
+    if (value == null) {
+      return false;
+    }
+    int stringLength = value.length();
+    int max = offset + length;
+    if (stringLength < max) {
+      return false;
+    }
+    for (int i = offset; i < max; i++) {
+      char c = value.charAt(i);
+      if (c < '0' || c > '9') {
+        return false;
+      }
+    }
+    return true;
+  }
+
   static Hashtable parseNameValuePairs(String uri) {
     int paramStart = uri.indexOf('?');
     if (paramStart < 0) {
