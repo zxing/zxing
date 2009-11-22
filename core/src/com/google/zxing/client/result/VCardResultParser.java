@@ -52,7 +52,7 @@ final class VCardResultParser extends ResultParser {
     address = formatAddress(address);
     String org = matchSingleVCardPrefixedField("ORG", rawText, true);
     String birthday = matchSingleVCardPrefixedField("BDAY", rawText, true);
-    if (birthday != null && !isStringOfDigits(birthday, 8)) {
+    if (!isLikeVCardDate(birthday)) {
       return null;
     }
     String title = matchSingleVCardPrefixedField("TITLE", rawText, true);
@@ -112,6 +112,22 @@ final class VCardResultParser extends ResultParser {
   static String matchSingleVCardPrefixedField(String prefix, String rawText, boolean trim) {
     String[] values = matchVCardPrefixedField(prefix, rawText, trim);
     return values == null ? null : values[0];
+  }
+
+  private static boolean isLikeVCardDate(String value) {
+    // Not really sure this is true but matches practice
+    // Mach YYYYMMDD
+    if (isStringOfDigits(value, 8)) {
+      return true;
+    }
+    // or YYYY-MM-DD
+    return
+        value.length() == 10 &&
+        value.charAt(4) == '-' &&
+        value.charAt(7) == '-' &&
+        isSubstringOfDigits(value, 0, 4) &&
+        isSubstringOfDigits(value, 5, 2) &&
+        isSubstringOfDigits(value, 8, 2);
   }
 
   private static String formatAddress(String address) {
