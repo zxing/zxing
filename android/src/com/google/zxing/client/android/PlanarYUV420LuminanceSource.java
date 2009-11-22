@@ -38,8 +38,9 @@ public final class PlanarYUV420LuminanceSource extends AbstractPlanarYUVLuminanc
     int width = getWidth();
     int height = getHeight();
     int dataWidth = getDataWidth();
+    int dataHeight = getDataHeight();
     byte[] yuv = getYUVData();
-    int expectedYBytes = width * height;
+    int expectedYBytes = dataWidth * dataHeight;
     int expectedUBytes = expectedYBytes >> 2;
     int expectedVBytes = expectedYBytes >> 2;
     int expectedBytes = expectedYBytes + expectedUBytes + expectedVBytes;
