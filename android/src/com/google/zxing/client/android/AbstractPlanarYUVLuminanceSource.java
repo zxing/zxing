@@ -16,8 +16,6 @@
 
 package com.google.zxing.client.android;
 
-import com.google.zxing.LuminanceSource;
-
 import android.graphics.Bitmap;
 
 /**
@@ -26,18 +24,21 @@ import android.graphics.Bitmap;
  * superfluous pixels around the perimeter and speed up decoding.
  *
  * It works for any pixel format where the Y channel is planar and appears first, including
- * YCbCr_420_SP and YCbCr_422_SP. Any subsequent color data will be ignored.
+ * YCbCr_420_SP and YCbCr_422_SP.
  *
  * @author dswitkin@google.com (Daniel Switkin)
  */
-public final class PlanarYUVLuminanceSource extends BaseLuminanceSource {
+public abstract class AbstractPlanarYUVLuminanceSource extends BaseLuminanceSource {
+
+  protected static final int OPAQUE_ALPHA = 0xFF000000;
+
   private final byte[] yuvData;
   private final int dataWidth;
   private final int dataHeight;
   private final int left;
   private final int top;
 
-  public PlanarYUVLuminanceSource(byte[] yuvData, int dataWidth, int dataHeight, int left, int top,
+  AbstractPlanarYUVLuminanceSource(byte[] yuvData, int dataWidth, int dataHeight, int left, int top,
       int width, int height) {
     super(width, height);
 
@@ -53,7 +54,7 @@ public final class PlanarYUVLuminanceSource extends BaseLuminanceSource {
   }
 
   @Override
-  public byte[] getRow(int y, byte[] row) {
+  public final byte[] getRow(int y, byte[] row) {
     if (y < 0 || y >= getHeight()) {
       throw new IllegalArgumentException("Requested row is outside the image: " + y);
     }
@@ -67,7 +68,7 @@ public final class PlanarYUVLuminanceSource extends BaseLuminanceSource {
   }
 
   @Override
-  public byte[] getMatrix() {
+  public final byte[] getMatrix() {
     int width = getWidth();
     int height = getHeight();
 
@@ -98,27 +99,34 @@ public final class PlanarYUVLuminanceSource extends BaseLuminanceSource {
   }
 
   @Override
-  public boolean isCropSupported() {
+  public final boolean isCropSupported() {
     return true;
   }
 
   @Override
-  public LuminanceSource crop(int left, int top, int width, int height) {
-    return new PlanarYUVLuminanceSource(yuvData, dataWidth, dataHeight, left, top, width, height);
-  }
-
-  @Override
-  public int getDataWidth() {
+  public final int getDataWidth() {
     return dataWidth;
   }
 
   @Override
-  public int getDataHeight() {
+  public final int getDataHeight() {
     return dataHeight;
   }
 
+  protected final byte[] getYUVData() {
+    return yuvData;
+  }
+
+  protected final int getLeft() {
+    return left;
+  }
+
+  protected final int getTop() {
+    return top;
+  }
+
   @Override
-  public Bitmap renderCroppedGreyscaleBitmap() {
+  public final Bitmap renderCroppedGreyscaleBitmap() {
     int width = getWidth();
     int height = getHeight();
     int[] pixels = new int[width * height];
@@ -129,7 +137,7 @@ public final class PlanarYUVLuminanceSource extends BaseLuminanceSource {
       int outputOffset = y * width;
       for (int x = 0; x < width; x++) {
         int grey = yuv[inputOffset + x] & 0xff;
-        pixels[outputOffset + x] = (0xff000000) | (grey * 0x00010101);
+        pixels[outputOffset + x] = OPAQUE_ALPHA | (grey * 0x00010101);
       }
       inputOffset += dataWidth;
     }
@@ -139,9 +147,4 @@ public final class PlanarYUVLuminanceSource extends BaseLuminanceSource {
     return bitmap;
   }
 
-  // Can't be implemented here, as the color representations vary.
-  @Override
-  public Bitmap renderFullColorBitmap(boolean halfSize) {
-    throw new UnsupportedOperationException();
-  }
 }
