@@ -27,7 +27,23 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * Loads a list of packages installed on the device asynchronously.
+ *
+ * @author Sean Owen
+ */
 final class LoadPackagesAsyncTask extends AsyncTask<List<String[]>,Void,List<String[]>> {
+
+  private static final String[] PKG_PREFIX_WHITELIST = {
+      "com.google.android.apps.",
+  };
+  private static final String[] PKG_PREFIX_BLACKLIST = {
+      "com.android.",
+      "android",
+      "com.google.android.",
+      "com.htc",
+  };
+
 
   private final AppPickerActivity appPickerActivity;
 
@@ -58,10 +74,20 @@ final class LoadPackagesAsyncTask extends AsyncTask<List<String[]>,Void,List<Str
   }
 
   private static boolean isHidden(String packageName) {
-    return packageName == null ||
-        packageName.startsWith("com.android.") ||
-        (packageName.startsWith("com.google.android.") &&
-         !packageName.startsWith("com.google.android.apps."));
+    if (packageName == null) {
+      return true;
+    }
+    for (String prefix : PKG_PREFIX_WHITELIST) {
+      if (packageName.startsWith(prefix)) {
+        return false;
+      }
+    }
+    for (String prefix : PKG_PREFIX_BLACKLIST) {
+      if (packageName.startsWith(prefix)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   @Override
