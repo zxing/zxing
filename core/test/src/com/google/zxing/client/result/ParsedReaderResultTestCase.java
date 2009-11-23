@@ -181,8 +181,7 @@ public final class ParsedReaderResultTestCase extends TestCase {
         ParsedResultType.ADDRESSBOOK);
     doTestResult("BEGIN:VCARD\r\nADR;HOME:123 Main St\r\nVERSION:2.1\r\nN:Owen;Sean\r\nEND:VCARD",
         "Sean Owen\n123 Main St", ParsedResultType.ADDRESSBOOK);
-    doTestResult("BEGIN:VCARD", "begin:VCARD",
-        ParsedResultType.URI); // yeah we end up guessing "URI" here
+    doTestResult("BEGIN:VCARD", "", ParsedResultType.ADDRESSBOOK);
   }
 
   public void testVEvent() {
