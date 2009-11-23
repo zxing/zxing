@@ -37,7 +37,11 @@ public final class AppPickerActivity extends ListActivity {
   protected void onCreate(Bundle icicle) {
     super.onCreate(icicle);
     dialog = ProgressDialog.show(this, "", getString(R.string.msg_loading_apps), true, true);
-    new LoadPackagesAsyncTask(this).execute(labelsPackages);
+    if (labelsPackages.isEmpty()) {
+      new LoadPackagesAsyncTask(this).execute(labelsPackages);
+    }
+    // otherwise use last copy we loaded -- apps don't change much, and it takes
+    // forever to load for some reason
   }
 
   @Override
