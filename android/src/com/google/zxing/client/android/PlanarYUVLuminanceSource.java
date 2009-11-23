@@ -16,6 +16,8 @@
 
 package com.google.zxing.client.android;
 
+import com.google.zxing.LuminanceSource;
+
 import android.graphics.Bitmap;
 
 /**
@@ -28,17 +30,14 @@ import android.graphics.Bitmap;
  *
  * @author dswitkin@google.com (Daniel Switkin)
  */
-public abstract class AbstractPlanarYUVLuminanceSource extends BaseLuminanceSource {
-
-  protected static final int OPAQUE_ALPHA = 0xFF000000;
-
+public final class PlanarYUVLuminanceSource extends LuminanceSource {
   private final byte[] yuvData;
   private final int dataWidth;
   private final int dataHeight;
   private final int left;
   private final int top;
 
-  AbstractPlanarYUVLuminanceSource(byte[] yuvData, int dataWidth, int dataHeight, int left, int top,
+  PlanarYUVLuminanceSource(byte[] yuvData, int dataWidth, int dataHeight, int left, int top,
       int width, int height) {
     super(width, height);
 
@@ -54,7 +53,7 @@ public abstract class AbstractPlanarYUVLuminanceSource extends BaseLuminanceSour
   }
 
   @Override
-  public final byte[] getRow(int y, byte[] row) {
+  public byte[] getRow(int y, byte[] row) {
     if (y < 0 || y >= getHeight()) {
       throw new IllegalArgumentException("Requested row is outside the image: " + y);
     }
@@ -68,7 +67,7 @@ public abstract class AbstractPlanarYUVLuminanceSource extends BaseLuminanceSour
   }
 
   @Override
-  public final byte[] getMatrix() {
+  public byte[] getMatrix() {
     int width = getWidth();
     int height = getHeight();
 
@@ -99,34 +98,19 @@ public abstract class AbstractPlanarYUVLuminanceSource extends BaseLuminanceSour
   }
 
   @Override
-  public final boolean isCropSupported() {
+  public boolean isCropSupported() {
     return true;
   }
 
-  @Override
-  public final int getDataWidth() {
+  public int getDataWidth() {
     return dataWidth;
   }
 
-  @Override
-  public final int getDataHeight() {
+  public int getDataHeight() {
     return dataHeight;
   }
 
-  protected final byte[] getYUVData() {
-    return yuvData;
-  }
-
-  protected final int getLeft() {
-    return left;
-  }
-
-  protected final int getTop() {
-    return top;
-  }
-
-  @Override
-  public final Bitmap renderCroppedGreyscaleBitmap() {
+  public Bitmap renderCroppedGreyscaleBitmap() {
     int width = getWidth();
     int height = getHeight();
     int[] pixels = new int[width * height];
@@ -137,7 +121,7 @@ public abstract class AbstractPlanarYUVLuminanceSource extends BaseLuminanceSour
       int outputOffset = y * width;
       for (int x = 0; x < width; x++) {
         int grey = yuv[inputOffset + x] & 0xff;
-        pixels[outputOffset + x] = OPAQUE_ALPHA | (grey * 0x00010101);
+        pixels[outputOffset + x] = 0xFF000000 | (grey * 0x00010101);
       }
       inputOffset += dataWidth;
     }
@@ -146,5 +130,4 @@ public abstract class AbstractPlanarYUVLuminanceSource extends BaseLuminanceSour
     bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
     return bitmap;
   }
-
 }

@@ -279,31 +279,31 @@ final class CameraManager {
    * @param data A preview frame.
    * @param width The width of the image.
    * @param height The height of the image.
-   * @return A BaseLuminanceSource subclass.
+   * @return A PlanarYUVLuminanceSource instance.
    */
-  public BaseLuminanceSource buildLuminanceSource(byte[] data, int width, int height) {
+  public PlanarYUVLuminanceSource buildLuminanceSource(byte[] data, int width, int height) {
     Rect rect = getFramingRect();
     switch (previewFormat) {
+      // This is the standard Android format which all devices are REQUIRED to support.
+      // In theory, it's the only one we should ever care about.
       case PixelFormat.YCbCr_420_SP:
-        return new PlanarYUV420LuminanceSource(data, width, height, rect.left, rect.top,
+        return new PlanarYUVLuminanceSource(data, width, height, rect.left, rect.top,
             rect.width(), rect.height());
+      // This format has never been seen in the wild, but is compatible as we only care
+      // about the Y channel, so allow it.
       case PixelFormat.YCbCr_422_SP:
-        return new PlanarYUV422LuminanceSource(data, width, height, rect.left, rect.top,
+        return new PlanarYUVLuminanceSource(data, width, height, rect.left, rect.top,
             rect.width(), rect.height());
       default:
-        // Handle some non-standard values:
-        // There's no PixelFormat constant for this buffer format yet.
-        if (previewFormatString.equals("yuv422i-yuyv")) {
-          return new InterleavedYUV422LuminanceSource(data, width, height, rect.left, rect.top,
-              rect.width(), rect.height());
-        } else if (previewFormatString.equals("yuv420p")) {
-          // Assume this is a synonym for YUV420SP -- note the lack of 's'
-          return new PlanarYUV420LuminanceSource(data, width, height, rect.left, rect.top,
+        // The Samsung Moment incorrectly uses this variant instead of the 'sp' version.
+        // Fortunately, it too has all the Y data up front, so we can read it.
+        if (previewFormatString.equals("yuv420p")) {
+          return new PlanarYUVLuminanceSource(data, width, height, rect.left, rect.top,
             rect.width(), rect.height());
-        }   
+        }
     }
     throw new IllegalArgumentException("Unsupported picture format: " +
-            previewFormat + '/' + previewFormatString);
+        previewFormat + '/' + previewFormatString);
   }
 
   /**
