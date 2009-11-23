@@ -187,7 +187,10 @@ limitations under the License.
 
     <unzip src="../core/core.jar" dest="${out-classes}" overwrite="true"/>
 
-    <!-- Optimize with ProGuard; can comment out this section to disable it -->
+    <antcall target="optimize"/>
+  </target>
+
+  <target name="optimize" unless="no-optimize">
     <mkdir dir="optimized"/>
     <property name="libraryjars.path" refid="android.target.classpath"/>
     <java jar="${WTK-home}/bin/proguard.jar" fork="true" failonerror="true">
@@ -208,7 +211,6 @@ limitations under the License.
     </java>
     <delete dir="${out-classes}"/>
     <move file="optimized" tofile="${out-classes}"/>
-    <!-- End optimization -->
   </target>
 
   <!-- Convert this project's .class files into .dex files. -->
