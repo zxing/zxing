@@ -17,9 +17,11 @@
 package com.google.zxing.oned;
 
 import com.google.zxing.BarcodeFormat;
+import com.google.zxing.DecodeHintType;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
+import com.google.zxing.ResultPointCallback;
 import com.google.zxing.common.BitArray;
 
 import java.util.Hashtable;
@@ -110,15 +112,39 @@ public abstract class AbstractUPCEANReader extends AbstractOneDReader implements
 
   public final Result decodeRow(int rowNumber, BitArray row, Hashtable hints)
       throws ReaderException {
-    return decodeRow(rowNumber, row, findStartGuardPattern(row));
+    return decodeRow(rowNumber, row, findStartGuardPattern(row), hints);
   }
 
-  public final Result decodeRow(int rowNumber, BitArray row, int[] startGuardRange)
+  public final Result decodeRow(int rowNumber, BitArray row, int[] startGuardRange, Hashtable hints)
       throws ReaderException {
+
+    ResultPointCallback resultPointCallback = hints == null ? null :
+        (ResultPointCallback) hints.get(DecodeHintType.NEED_RESULT_POINT_CALLBACK);
+
+    if (resultPointCallback != null) {
+      resultPointCallback.foundPossibleResultPoint(new ResultPoint(
+          (startGuardRange[0] + startGuardRange[1]) / 2.0f, rowNumber
+      ));
+    }
+
     StringBuffer result = decodeRowStringBuffer;
     result.setLength(0);
     int endStart = decodeMiddle(row, startGuardRange, result);
+
+    if (resultPointCallback != null) {
+      resultPointCallback.foundPossibleResultPoint(new ResultPoint(
+          endStart, rowNumber
+      ));
+    }
+
     int[] endRange = decodeEnd(row, endStart);
+
+    if (resultPointCallback != null) {
+      resultPointCallback.foundPossibleResultPoint(new ResultPoint(
+          (endRange[0] + endRange[1]) / 2.0f, rowNumber
+      ));
+    }
+
 
     // Make sure there is a quiet zone at least as big as the end pattern after the barcode. The
     // spec might want more whitespace, but in practice this is the maximum we can count on.

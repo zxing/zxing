@@ -19,6 +19,7 @@ package com.google.zxing.multi.qrcode.detector;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.ReaderException;
 import com.google.zxing.ResultPoint;
+import com.google.zxing.ResultPointCallback;
 import com.google.zxing.common.Collections;
 import com.google.zxing.common.Comparator;
 import com.google.zxing.common.BitMatrix;
@@ -88,6 +89,10 @@ final class MultiFinderPatternFinder extends FinderPatternFinder {
    */
   MultiFinderPatternFinder(BitMatrix image) {
     super(image);
+  }
+
+  MultiFinderPatternFinder(BitMatrix image, ResultPointCallback resultPointCallback) {
+    super(image, resultPointCallback);
   }
 
   /**

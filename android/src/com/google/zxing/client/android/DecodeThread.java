@@ -22,6 +22,7 @@ import com.google.zxing.DecodeHintType;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
+import com.google.zxing.ResultPointCallback;
 import com.google.zxing.common.GlobalHistogramBinarizer;
 
 import android.content.SharedPreferences;
@@ -47,10 +48,12 @@ final class DecodeThread extends Thread {
   private Handler handler;
   private final CaptureActivity activity;
   private final MultiFormatReader multiFormatReader;
+  private final ResultPointCallback resultPointCallback;
 
-  DecodeThread(CaptureActivity activity, String mode) {
+  DecodeThread(CaptureActivity activity, String mode, ResultPointCallback resultPointCallback) {
     this.activity = activity;
     multiFormatReader = new MultiFormatReader();
+    this.resultPointCallback = resultPointCallback;
 
     // The prefs can't change while the thread is running, so pick them up once here.
     if (mode == null || mode.length() == 0) {
@@ -101,39 +104,27 @@ final class DecodeThread extends Thread {
   }
 
   private void setDecodeProductMode() {
-    Hashtable<DecodeHintType, Object> hints = new Hashtable<DecodeHintType, Object>(3);
-    Vector<BarcodeFormat> vector = new Vector<BarcodeFormat>(4);
-    vector.addElement(BarcodeFormat.UPC_A);
-    vector.addElement(BarcodeFormat.UPC_E);
-    vector.addElement(BarcodeFormat.EAN_13);
-    vector.addElement(BarcodeFormat.EAN_8);
-    hints.put(DecodeHintType.POSSIBLE_FORMATS, vector);
-    multiFormatReader.setHints(hints);
+    doSetDecodeMode(BarcodeFormat.UPC_A,
+                    BarcodeFormat.UPC_E,
+                    BarcodeFormat.EAN_13,
+                    BarcodeFormat.EAN_8);
   }
 
   /**
    * Select the 1D formats we want this client to decode by hand.
    */
   private void setDecode1DMode() {
-    Hashtable<DecodeHintType, Object> hints = new Hashtable<DecodeHintType, Object>(3);
-    Vector<BarcodeFormat> vector = new Vector<BarcodeFormat>(7);
-    vector.addElement(BarcodeFormat.UPC_A);
-    vector.addElement(BarcodeFormat.UPC_E);
-    vector.addElement(BarcodeFormat.EAN_13);
-    vector.addElement(BarcodeFormat.EAN_8);
-    vector.addElement(BarcodeFormat.CODE_39);
-    vector.addElement(BarcodeFormat.CODE_128);
-    vector.addElement(BarcodeFormat.ITF);
-    hints.put(DecodeHintType.POSSIBLE_FORMATS, vector);
-    multiFormatReader.setHints(hints);
+    doSetDecodeMode(BarcodeFormat.UPC_A,
+                    BarcodeFormat.UPC_E,
+                    BarcodeFormat.EAN_13,
+                    BarcodeFormat.EAN_8,
+                    BarcodeFormat.CODE_39,
+                    BarcodeFormat.CODE_128,
+                    BarcodeFormat.ITF);
   }
 
   private void setDecodeQRMode() {
-    Hashtable<DecodeHintType, Object> hints = new Hashtable<DecodeHintType, Object>(3);
-    Vector<BarcodeFormat> vector = new Vector<BarcodeFormat>(1);
-    vector.addElement(BarcodeFormat.QR_CODE);
-    hints.put(DecodeHintType.POSSIBLE_FORMATS, vector);
-    multiFormatReader.setHints(hints);
+    doSetDecodeMode(BarcodeFormat.QR_CODE);
   }
 
   /**
@@ -141,17 +132,24 @@ final class DecodeThread extends Thread {
    * explicitly set which formats are available.
    */
   private void setDecodeAllMode() {
+    doSetDecodeMode(BarcodeFormat.UPC_A,
+                    BarcodeFormat.UPC_E,
+                    BarcodeFormat.EAN_13,
+                    BarcodeFormat.EAN_8,
+                    BarcodeFormat.CODE_39,
+                    BarcodeFormat.CODE_128,
+                    BarcodeFormat.ITF,
+                    BarcodeFormat.QR_CODE);
+  }
+
+  private void doSetDecodeMode(BarcodeFormat... formats) {
     Hashtable<DecodeHintType, Object> hints = new Hashtable<DecodeHintType, Object>(3);
-    Vector<BarcodeFormat> vector = new Vector<BarcodeFormat>(8);
-    vector.addElement(BarcodeFormat.UPC_A);
-    vector.addElement(BarcodeFormat.UPC_E);
-    vector.addElement(BarcodeFormat.EAN_13);
-    vector.addElement(BarcodeFormat.EAN_8);
-    vector.addElement(BarcodeFormat.CODE_39);
-    vector.addElement(BarcodeFormat.CODE_128);
-    vector.addElement(BarcodeFormat.ITF);
-    vector.addElement(BarcodeFormat.QR_CODE);
+    Vector<BarcodeFormat> vector = new Vector<BarcodeFormat>(formats.length);
+    for (BarcodeFormat format : formats) {
+      vector.addElement(format);
+    }
     hints.put(DecodeHintType.POSSIBLE_FORMATS, vector);
+    hints.put(DecodeHintType.NEED_RESULT_POINT_CALLBACK, resultPointCallback);
     multiFormatReader.setHints(hints);
   }
 

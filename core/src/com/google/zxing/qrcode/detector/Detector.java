@@ -16,8 +16,10 @@
 
 package com.google.zxing.qrcode.detector;
 
+import com.google.zxing.DecodeHintType;
 import com.google.zxing.ReaderException;
 import com.google.zxing.ResultPoint;
+import com.google.zxing.ResultPointCallback;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.DetectorResult;
 import com.google.zxing.common.GridSampler;
@@ -34,6 +36,7 @@ import java.util.Hashtable;
 public class Detector {
 
   private final BitMatrix image;
+  private ResultPointCallback resultPointCallback;
 
   public Detector(BitMatrix image) {
     this.image = image;
@@ -62,7 +65,10 @@ public class Detector {
    */
   public DetectorResult detect(Hashtable hints) throws ReaderException {
 
-    FinderPatternFinder finder = new FinderPatternFinder(image);
+    resultPointCallback = hints == null ? null :
+        (ResultPointCallback) hints.get(DecodeHintType.NEED_RESULT_POINT_CALLBACK);
+
+    FinderPatternFinder finder = new FinderPatternFinder(image, resultPointCallback);
     FinderPatternInfo info = finder.find(hints);
 
     return processFinderPatternInfo(info);
@@ -347,7 +353,8 @@ public class Detector {
             alignmentAreaTopY,
             alignmentAreaRightX - alignmentAreaLeftX,
             alignmentAreaBottomY - alignmentAreaTopY,
-            overallEstModuleSize);
+            overallEstModuleSize,
+            resultPointCallback);
     return alignmentFinder.find();
   }
 

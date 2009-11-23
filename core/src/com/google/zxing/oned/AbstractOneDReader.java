@@ -118,6 +118,14 @@ public abstract class AbstractOneDReader implements OneDReader {
       for (int attempt = 0; attempt < 2; attempt++) {
         if (attempt == 1) { // trying again?
           row.reverse(); // reverse the row and continue
+          // This means we will only ever draw result points *once* in the life of this method
+          // since we want to avoid drawing the wrong points after flipping the row, and,
+          // don't want to clutter with noise from every single row scan -- just the scans
+          // that start on the center line.
+          if (hints != null && hints.containsKey(DecodeHintType.NEED_RESULT_POINT_CALLBACK)) {
+            hints = (Hashtable) hints.clone();
+            hints.remove(DecodeHintType.NEED_RESULT_POINT_CALLBACK);
+          }
         }
         try {
           // Look for a barcode

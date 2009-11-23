@@ -20,6 +20,8 @@ import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 import com.google.zxing.common.BitArray;
 
+import java.util.Hashtable;
+
 /**
  * <p>This interfaces captures additional functionality that readers of
  * UPC/EAN family of barcodes should expose.</p>
@@ -33,6 +35,7 @@ public interface UPCEANReader extends OneDReader {
    * allows caller to inform method about where the UPC/EAN start pattern is
    * found. This allows this to be computed once and reused across many implementations.</p>
    */
-  Result decodeRow(int rowNumber, BitArray row, int[] startGuardRange) throws ReaderException;
+  Result decodeRow(int rowNumber, BitArray row, int[] startGuardRange, Hashtable hints)
+      throws ReaderException;
 
 }

@@ -62,6 +62,12 @@ public final class DecodeHintType {
    */
   public static final DecodeHintType ASSUME_CODE_39_CHECK_DIGIT = new DecodeHintType();
 
+  /**
+   * The caller needs to be notified via callback when a possible {@link ResultPoint}
+   * is found. Maps to a {@link ResultPointCallback}.
+   */
+  public static final DecodeHintType NEED_RESULT_POINT_CALLBACK = new DecodeHintType();
+
   private DecodeHintType() {
   }
 
