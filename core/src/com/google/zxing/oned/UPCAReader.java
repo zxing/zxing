@@ -34,8 +34,9 @@ public final class UPCAReader implements UPCEANReader {
 
   private final UPCEANReader ean13Reader = new EAN13Reader();
 
-  public Result decodeRow(int rowNumber, BitArray row, int[] startGuardRange) throws ReaderException {
-    return maybeReturnResult(ean13Reader.decodeRow(rowNumber, row, startGuardRange));
+  public Result decodeRow(int rowNumber, BitArray row, int[] startGuardRange, Hashtable hints)
+      throws ReaderException {
+    return maybeReturnResult(ean13Reader.decodeRow(rowNumber, row, startGuardRange, hints));
   }
 
   public Result decodeRow(int rowNumber, BitArray row, Hashtable hints) throws ReaderException {

@@ -68,7 +68,7 @@ public final class MultiFormatUPCEANReader extends AbstractOneDReader {
       UPCEANReader reader = (UPCEANReader) readers.elementAt(i);
       Result result;
       try {
-        result = reader.decodeRow(rowNumber, row, startGuardPattern);
+        result = reader.decodeRow(rowNumber, row, startGuardPattern, hints);
       } catch (ReaderException re) {
         continue;
       }

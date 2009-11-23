@@ -19,6 +19,7 @@
   <color name="encode_view">#ffffffff</color>
   <color name="help_button_view">#ffcccccc</color>
   <color name="help_view">#ff404040</color>
+  <color name="possible_result_points">#c0ffff00</color>  
   <color name="result_image_border">#ffffffff</color>
   <color name="result_minor_text">#ffc0c0c0</color>
   <color name="result_points">#c000ff00</color>

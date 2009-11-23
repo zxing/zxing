@@ -42,10 +42,12 @@ public final class CaptureActivityHandler extends Handler {
     DONE
   }
 
-  CaptureActivityHandler(CaptureActivity activity, String decodeMode,
-                                 boolean beginScanning) {
+  CaptureActivityHandler(CaptureActivity activity,
+                         String decodeMode,
+                         boolean beginScanning) {
     this.activity = activity;
-    decodeThread = new DecodeThread(activity, decodeMode);
+    decodeThread = new DecodeThread(activity, decodeMode,
+        new ViewfinderResultPointCallback(activity.getViewfinderView()));
     decodeThread.start();
     state = State.SUCCESS;
 

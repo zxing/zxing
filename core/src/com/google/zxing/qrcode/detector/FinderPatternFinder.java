@@ -19,6 +19,7 @@ package com.google.zxing.qrcode.detector;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.ReaderException;
 import com.google.zxing.ResultPoint;
+import com.google.zxing.ResultPointCallback;
 import com.google.zxing.common.Collections;
 import com.google.zxing.common.Comparator;
 import com.google.zxing.common.BitMatrix;
@@ -45,6 +46,7 @@ public class FinderPatternFinder {
   private final Vector possibleCenters;
   private boolean hasSkipped;
   private final int[] crossCheckStateCount;
+  private final ResultPointCallback resultPointCallback;
 
   /**
    * <p>Creates a finder that will search the image for three finder patterns.</p>
@@ -52,9 +54,14 @@ public class FinderPatternFinder {
    * @param image image to search
    */
   public FinderPatternFinder(BitMatrix image) {
+    this(image, null);
+  }
+
+  public FinderPatternFinder(BitMatrix image, ResultPointCallback resultPointCallback) {
     this.image = image;
     this.possibleCenters = new Vector();
     this.crossCheckStateCount = new int[5];
+    this.resultPointCallback = resultPointCallback;
   }
 
   protected BitMatrix getImage() {
@@ -401,7 +408,11 @@ public class FinderPatternFinder {
           }
         }
         if (!found) {
-          possibleCenters.addElement(new FinderPattern(centerJ, centerI, estimatedModuleSize));
+          ResultPoint point = new FinderPattern(centerJ, centerI, estimatedModuleSize);
+          possibleCenters.addElement(point);
+          if (resultPointCallback != null) {
+            resultPointCallback.foundPossibleResultPoint(point);
+          }
         }
         return true;
       }

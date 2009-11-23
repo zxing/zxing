@@ -125,6 +125,10 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     }
   };
 
+  ViewfinderView getViewfinderView() {
+    return viewfinderView;
+  }
+
   public Handler getHandler() {
     return handler;
   }
