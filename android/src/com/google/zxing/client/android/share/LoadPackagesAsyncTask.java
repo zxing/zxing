@@ -43,7 +43,10 @@ final class LoadPackagesAsyncTask extends AsyncTask<List<String[]>,Void,List<Str
     for (ApplicationInfo appInfo : appInfos) {
       CharSequence label = appInfo.loadLabel(packageManager);
       if (label != null) {
-        labelsPackages.add(new String[]{label.toString(), appInfo.packageName});
+        String packageName = appInfo.packageName;
+        if (!isHidden(packageName)) {
+          labelsPackages.add(new String[]{label.toString(), packageName});
+        }
       }
     }
     Collections.sort(labelsPackages, new Comparator<String[]>() {
@@ -52,6 +55,13 @@ final class LoadPackagesAsyncTask extends AsyncTask<List<String[]>,Void,List<Str
       }
     });
     return labelsPackages;
+  }
+
+  private static boolean isHidden(String packageName) {
+    return packageName == null ||
+        packageName.startsWith("com.android.") ||
+        (packageName.startsWith("com.google.android.") &&
+         !packageName.startsWith("com.google.android.apps."));
   }
 
   @Override
