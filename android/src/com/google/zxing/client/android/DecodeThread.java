@@ -166,7 +166,7 @@ final class DecodeThread extends Thread {
   private void decode(byte[] data, int width, int height) {
     long start = System.currentTimeMillis();
     Result rawResult = null;
-    BaseLuminanceSource source = CameraManager.get().buildLuminanceSource(data, width, height);
+    PlanarYUVLuminanceSource source = CameraManager.get().buildLuminanceSource(data, width, height);
     BinaryBitmap bitmap = new BinaryBitmap(new GlobalHistogramBinarizer(source));
     try {
       rawResult = multiFormatReader.decodeWithState(bitmap);

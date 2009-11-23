@@ -42,7 +42,6 @@ import android.util.Log;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.Charset;
 
 /**
  * This class does the work of decoding the user's request and extracting all the data
@@ -146,7 +145,7 @@ final class QRCodeEncoder {
       int length = stream.available();
       byte[] vcard = new byte[length];
       stream.read(vcard, 0, length);
-      String vcardString = new String(vcard, Charset.forName("UTF-8"));
+      String vcardString = new String(vcard, "UTF-8");
       Log.d(TAG, "Encoding share intent content: " + vcardString);
       Result result = new Result(vcardString, vcard, null, BarcodeFormat.QR_CODE);
       ParsedResult parsedResult = ResultParser.parseResult(result);
