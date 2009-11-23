@@ -115,6 +115,9 @@ final class VCardResultParser extends ResultParser {
   }
 
   private static boolean isLikeVCardDate(String value) {
+    if (value == null) {
+      return true;
+    }
     // Not really sure this is true but matches practice
     // Mach YYYYMMDD
     if (isStringOfDigits(value, 8)) {
