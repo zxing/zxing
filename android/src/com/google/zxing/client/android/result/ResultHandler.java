@@ -16,20 +16,22 @@
 
 package com.google.zxing.client.android.result;
 
-import com.google.zxing.client.android.Contents;
-import com.google.zxing.client.android.Intents;
-import com.google.zxing.client.android.LocaleManager;
-import com.google.zxing.client.android.R;
-import com.google.zxing.client.android.book.SearchBookContentsActivity;
-import com.google.zxing.client.result.ParsedResult;
-import com.google.zxing.client.result.ParsedResultType;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.provider.Contacts;
+import com.google.zxing.client.android.Contents;
+import com.google.zxing.client.android.Intents;
+import com.google.zxing.client.android.LocaleManager;
+import com.google.zxing.client.android.PreferencesActivity;
+import com.google.zxing.client.android.R;
+import com.google.zxing.client.android.book.SearchBookContentsActivity;
+import com.google.zxing.client.result.ParsedResult;
+import com.google.zxing.client.result.ParsedResultType;
 
 import java.text.DateFormat;
 import java.text.ParsePosition;
@@ -315,4 +317,20 @@ public abstract class ResultHandler {
       intent.putExtra(key, value);
     }
   }
+
+  protected void showNotOurResults(int index, AlertDialog.OnClickListener proceedListener) {
+    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+    if (prefs.getBoolean(PreferencesActivity.KEY_NOT_OUR_RESULTS_SHOWN, false)) {
+      // already seen it, just proceed
+      proceedListener.onClick(null, index);
+    } else {
+      // note the user has seen it
+      prefs.edit().putBoolean(PreferencesActivity.KEY_NOT_OUR_RESULTS_SHOWN, true);
+      AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+      builder.setMessage(R.string.msg_not_our_results);
+      builder.setPositiveButton(R.string.button_ok, proceedListener);
+      builder.show();
+    }
+  }
+
 }

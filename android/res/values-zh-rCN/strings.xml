@@ -66,6 +66,7 @@
   <string name="msg_encode_in_progress">正在生成条码\u2026</string>
   <string name="msg_intent_failed">抱歉，无法打开所需软件。 条码内容可能无效。</string>
   <string name="msg_loading_apps">装载应用名单</string>
+  <string name="msg_not_our_results">你离开此应用程序。搜索结果，您会看到的都没有涉及这个应用程序</string>
   <string name="msg_sbc_book_not_searchable">抱歉，无法找到此图书。</string>
   <string name="msg_sbc_failed">抱歉，搜索时遇到错误。</string>
   <string name="msg_sbc_no_page_returned">没有返回页面</string>

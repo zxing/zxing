@@ -66,6 +66,7 @@
   <string name="msg_encode_in_progress">Генерация штрих-кода\u2026</string>
   <string name="msg_intent_failed">К сожалению, запрошенное приложение не может быть запущенно. Содержимое штрих-кода может быть повреждено.</string>
   <string name="msg_loading_apps">Нагружать список применений</string>
+  <string name="msg_not_our_results">Вы покидаете это приложение. Результаты поиска, которую вы видите, не связанным с этим приложением.</string>
   <string name="msg_sbc_book_not_searchable">К сожалению, поиск книги не удался.</string>
   <string name="msg_sbc_failed">К сожалению, у поиска возникли проблемы.</string>
   <string name="msg_sbc_no_page_returned">Ни одна страница не возвращена</string>
