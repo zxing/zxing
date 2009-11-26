@@ -335,6 +335,9 @@ final class CameraManager {
     // This is the standard setting to turn the flash off that all devices should honor.
     parameters.set("flash-mode", "off");
 
+    parameters.set("zoom", "2.0");
+    parameters.set("taking-picture-zoom", "20");
+
     camera.setParameters(parameters);
   }
 
