@@ -66,6 +66,7 @@
   <string name="msg_encode_in_progress">Generando un código de barras\u2026</string>
   <string name="msg_intent_failed">Lo sentimos, la aplicación solicitada no pudo ser lanzada. El contenido de código de barras puede ser inválida.</string>
   <string name="msg_loading_apps">Cargando una lista de aplicaciones</string>
+  <string name="msg_not_our_results">Usted está saliendo de esta aplicación. Los resultados de búsqueda que se ver, no están relacionados con esta aplicación.</string>  
   <string name="msg_sbc_book_not_searchable">Lo sentimos, no se puede buscar en este libro.</string>
   <string name="msg_sbc_failed">Lo sentimos, la búsqueda ha detectado un problema.</string>
   <string name="msg_sbc_no_page_returned">Página no encontrada</string>

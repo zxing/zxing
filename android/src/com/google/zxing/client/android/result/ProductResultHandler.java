@@ -16,14 +16,15 @@
 
 package com.google.zxing.client.android.result;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import com.google.zxing.client.android.PreferencesActivity;
 import com.google.zxing.client.android.R;
 import com.google.zxing.client.result.ParsedResult;
 import com.google.zxing.client.result.ProductParsedResult;
-
-import android.app.Activity;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
 /**
  * Handles generic products which are not books.
@@ -56,20 +57,24 @@ public final class ProductResultHandler extends ResultHandler {
   }
 
   @Override
-  public void handleButtonPress(int index) {
-    ProductParsedResult productResult = (ProductParsedResult) getResult();
-    switch (index) {
-      case 0:
-        openProductSearch(productResult.getNormalizedProductID());
-        break;
-      case 1:
-        webSearch(productResult.getNormalizedProductID());
-        break;
-      case 2:
-        String url = customProductSearch.replace("%s", productResult.getNormalizedProductID());
-        openURL(url);
-        break;
-    }
+  public void handleButtonPress(final int index) {
+    showNotOurResults(index, new AlertDialog.OnClickListener() {
+      public void onClick(DialogInterface dialogInterface, int i) {
+        ProductParsedResult productResult = (ProductParsedResult) getResult();
+        switch (index) {
+          case 0:
+            openProductSearch(productResult.getNormalizedProductID());
+            break;
+          case 1:
+            webSearch(productResult.getNormalizedProductID());
+            break;
+          case 2:
+            String url = customProductSearch.replace("%s", productResult.getNormalizedProductID());
+            openURL(url);
+            break;
+        }
+      }
+    });
   }
 
   @Override

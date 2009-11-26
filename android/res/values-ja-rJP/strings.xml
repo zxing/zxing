@@ -66,6 +66,7 @@
   <string name="msg_encode_in_progress">バーコード作成中\u2026</string>
   <string name="msg_intent_failed">指定されたアプリケーションを起動できませんでした。バーコードの内容が無効である可能性があります。</string>
   <string name="msg_loading_apps">適用のリストの負荷</string>
+  <string name="msg_not_our_results">このアプリケーションを残している。検索結果が必要になります。このアプリケーションに関連していないことがわかります。</string>
   <string name="msg_sbc_book_not_searchable">この書籍は検索できません。</string>
   <string name="msg_sbc_failed">検索中に問題が発生しました。</string>
   <string name="msg_sbc_no_page_returned">検索結果はありません</string>
