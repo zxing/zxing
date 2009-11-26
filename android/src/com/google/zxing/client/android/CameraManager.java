@@ -335,7 +335,11 @@ final class CameraManager {
     // This is the standard setting to turn the flash off that all devices should honor.
     parameters.set("flash-mode", "off");
 
+    // Set zoom to 2x if available. This helps encourage the user to pull back.
+    // Some devices like the Behold have a zoom parameter
     parameters.set("zoom", "2.0");
+    // Most devices, like the Hero, appear to expose this zoom parameter.
+    // (I think) This means 2.0x
     parameters.set("taking-picture-zoom", "20");
 
     camera.setParameters(parameters);
