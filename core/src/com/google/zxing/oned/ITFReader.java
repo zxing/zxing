@@ -45,7 +45,7 @@ public final class ITFReader extends AbstractOneDReader {
   private static final int W = 3; // Pixel width of a wide line
   private static final int N = 1; // Pixed width of a narrow line
 
-  private static final int[] DEFAULT_ALLOWED_LENGTHS = { 6, 10, 14 };
+  private static final int[] DEFAULT_ALLOWED_LENGTHS = { 6, 10, 14, 44 };
 
   // Stores the actual narrow line width of the image being decoded.
   private int narrowLineWidth = -1;
