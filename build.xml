@@ -60,6 +60,8 @@
         <include name="build.xml"/>
         <include name="build.properties"/>
         <include name="android/**"/>
+        <include name="android-integration/**"/>
+        <include name="androidtest/**"/>
         <include name="bug/**"/>
         <exclude name="bug/lib/com.buglabs*"/> <!-- Cannot distributed GPLed libraries -->
         <include name="core/**"/>
