@@ -15,7 +15,7 @@
  limitations under the License.
  -->
 <resources>
-  <string name="app_picker_name">Applications</string>  
+  <string name="app_picker_name">Applications</string>
   <string name="app_name">Barcode Scanner</string>
   <string name="bookmark_picker_name">Bookmarks</string>
   <string name="button_add_calendar">Add to calendar</string>
@@ -65,7 +65,7 @@
   <string name="msg_encode_contents_failed">Could not encode a barcode from the data provided.</string>
   <string name="msg_encode_in_progress">Generating a barcode\u2026</string>
   <string name="msg_intent_failed">Sorry, the requested application could not be launched. The barcode contents may be invalid.</string>
-  <string name="msg_loading_apps">Loading list of applications</string>
+  <string name="msg_loading_apps">Loading list of applications\u2026</string>
   <string name="msg_not_our_results">You are leaving this application. The search results you will see are not related to this application.</string>
   <string name="msg_sbc_book_not_searchable">Sorry, this book is not searchable.</string>
   <string name="msg_sbc_failed">Sorry, the search encountered a problem.</string>
