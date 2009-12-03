@@ -42,6 +42,7 @@ public abstract class AbstractOneDReader implements OneDReader {
     return decode(image, null);
   }
 
+  // Note that we don't try rotation without the try harder flag, even if rotation was supported.
   public final Result decode(BinaryBitmap image, Hashtable hints) throws ReaderException {
     try {
       return doDecode(image, hints);
@@ -111,7 +112,7 @@ public abstract class AbstractOneDReader implements OneDReader {
         row = image.getBlackRow(rowNumber, row);
       } catch (ReaderException re) {
         continue;
-      }      
+      }
 
       // While we have the image data in a BitArray, it's fairly cheap to reverse it in place to
       // handle decoding upside down barcodes.
@@ -184,7 +185,7 @@ public abstract class AbstractOneDReader implements OneDReader {
           break;
         } else {
           counters[counterPosition] = 1;
-          isWhite ^= true; // isWhite = !isWhite;  Is this too clever? shorter byte code, no conditional
+          isWhite = !isWhite;
         }
       }
       i++;
@@ -236,7 +237,7 @@ public abstract class AbstractOneDReader implements OneDReader {
       if (variance > maxIndividualVariance) {
         return Integer.MAX_VALUE;
       }
-      totalVariance += variance; 
+      totalVariance += variance;
     }
     return totalVariance / total;
   }

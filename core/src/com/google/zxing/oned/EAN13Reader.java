@@ -68,7 +68,8 @@ public final class EAN13Reader extends AbstractUPCEANReader {
     decodeMiddleCounters = new int[4];
   }
 
-  protected int decodeMiddle(BitArray row, int[] startRange, StringBuffer resultString) throws ReaderException {
+  protected int decodeMiddle(BitArray row, int[] startRange, StringBuffer resultString)
+      throws ReaderException {
     int[] counters = decodeMiddleCounters;
     counters[0] = 0;
     counters[1] = 0;
@@ -111,15 +112,17 @@ public final class EAN13Reader extends AbstractUPCEANReader {
   }
 
   /**
-   * Based on pattern of odd-even ('L' and 'G') patterns used to encoded the explicitly-encoded digits
-   * in a barcode, determines the implicitly encoded first digit and adds it to the result string.
+   * Based on pattern of odd-even ('L' and 'G') patterns used to encoded the explicitly-encoded
+   * digits in a barcode, determines the implicitly encoded first digit and adds it to the
+   * result string.
    *
    * @param resultString string to insert decoded first digit into
    * @param lgPatternFound int whose bits indicates the pattern of odd/even L/G patterns used to
-   * encode digits
+   *  encode digits
    * @throws ReaderException if first digit cannot be determined
    */
-  private static void determineFirstDigit(StringBuffer resultString, int lgPatternFound) throws ReaderException {
+  private static void determineFirstDigit(StringBuffer resultString, int lgPatternFound)
+      throws ReaderException {
     for (int d = 0; d < 10; d++) {
       if (lgPatternFound == FIRST_DIGIT_ENCODINGS[d]) {
         resultString.insert(0, (char) ('0' + d));

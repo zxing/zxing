@@ -36,6 +36,9 @@ import java.util.Hashtable;
  */
 public abstract class AbstractUPCEANReader extends AbstractOneDReader implements UPCEANReader {
 
+  // These two values are critical for determining how permissive the decoding will be.
+  // We've arrived at these values through a lot of trial and error. Setting them any higher
+  // lets false positives creep in quickly.
   private static final int MAX_AVG_VARIANCE = (int) (PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.42f);
   private static final int MAX_INDIVIDUAL_VARIANCE = (int) (PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.7f);
 
@@ -172,7 +175,7 @@ public abstract class AbstractUPCEANReader extends AbstractOneDReader implements
   abstract BarcodeFormat getBarcodeFormat();
 
   /**
-   * @return {@link #checkStandardUPCEANChecksum(String)} 
+   * @return {@link #checkStandardUPCEANChecksum(String)}
    */
   boolean checkChecksum(String s) throws ReaderException {
     return checkStandardUPCEANChecksum(s);
@@ -274,7 +277,7 @@ public abstract class AbstractUPCEANReader extends AbstractOneDReader implements
           counterPosition++;
         }
         counters[counterPosition] = 1;
-        isWhite ^= true; // isWhite = !isWhite;
+        isWhite = !isWhite;
       }
     }
     throw ReaderException.getInstance();

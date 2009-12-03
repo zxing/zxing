@@ -34,8 +34,10 @@ public final class MultiFormatOneDReader extends AbstractOneDReader {
   private final Vector readers;
 
   public MultiFormatOneDReader(Hashtable hints) {
-    Vector possibleFormats = hints == null ? null : (Vector) hints.get(DecodeHintType.POSSIBLE_FORMATS);
-    boolean useCode39CheckDigit = hints != null && hints.get(DecodeHintType.ASSUME_CODE_39_CHECK_DIGIT) != null;
+    Vector possibleFormats = hints == null ? null :
+        (Vector) hints.get(DecodeHintType.POSSIBLE_FORMATS);
+    boolean useCode39CheckDigit = hints != null &&
+        hints.get(DecodeHintType.ASSUME_CODE_39_CHECK_DIGIT) != null;
     readers = new Vector();
     if (possibleFormats != null) {
       if (possibleFormats.contains(BarcodeFormat.EAN_13) ||
