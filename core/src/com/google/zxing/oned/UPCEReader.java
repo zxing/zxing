@@ -52,7 +52,8 @@ public final class UPCEReader extends AbstractUPCEANReader {
     decodeMiddleCounters = new int[4];
   }
 
-  protected int decodeMiddle(BitArray row, int[] startRange, StringBuffer result) throws ReaderException {
+  protected int decodeMiddle(BitArray row, int[] startRange, StringBuffer result)
+      throws ReaderException {
     int[] counters = decodeMiddleCounters;
     counters[0] = 0;
     counters[1] = 0;
@@ -103,7 +104,7 @@ public final class UPCEReader extends AbstractUPCEANReader {
   }
 
   BarcodeFormat getBarcodeFormat() {
-    return BarcodeFormat.UPC_E;  
+    return BarcodeFormat.UPC_E;
   }
 
   /**

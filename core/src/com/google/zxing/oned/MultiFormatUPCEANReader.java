@@ -37,7 +37,8 @@ public final class MultiFormatUPCEANReader extends AbstractOneDReader {
   private final Vector readers;
 
   public MultiFormatUPCEANReader(Hashtable hints) {
-    Vector possibleFormats = hints == null ? null : (Vector) hints.get(DecodeHintType.POSSIBLE_FORMATS);
+    Vector possibleFormats = hints == null ? null :
+        (Vector) hints.get(DecodeHintType.POSSIBLE_FORMATS);
     readers = new Vector();
     if (possibleFormats != null) {
       if (possibleFormats.contains(BarcodeFormat.EAN_13)) {
@@ -82,8 +83,10 @@ public final class MultiFormatUPCEANReader extends AbstractOneDReader {
       // a UPC-A code. But for efficiency we only run the EAN-13 decoder to also read
       // UPC-A. So we special case it here, and convert an EAN-13 result to a UPC-A
       // result if appropriate.
-      if (result.getBarcodeFormat().equals(BarcodeFormat.EAN_13) && result.getText().charAt(0) == '0') {
-        return new Result(result.getText().substring(1), null, result.getResultPoints(), BarcodeFormat.UPC_A);
+      if (result.getBarcodeFormat().equals(BarcodeFormat.EAN_13) &&
+          result.getText().charAt(0) == '0') {
+        return new Result(result.getText().substring(1), null, result.getResultPoints(),
+            BarcodeFormat.UPC_A);
       }
       return result;
     }
