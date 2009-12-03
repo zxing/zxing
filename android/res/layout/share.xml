@@ -31,53 +31,57 @@
       android:text="@string/msg_share_explanation"
       android:paddingBottom="32dip"/>
 
-  <LinearLayout
-      android:layout_width="wrap_content"
+  <ImageView
+      android:layout_width="fill_parent"
       android:layout_height="wrap_content"
-      android:background="@color/share_view"
-      android:orientation="vertical"
-      android:layout_gravity="center">
+      android:layout_gravity="center"
+      android:scaleType="center"
+      android:src="@drawable/share_via_barcode"
+      android:paddingBottom="32dip"/>
 
-    <ImageView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:scaleType="center"
-        android:src="@drawable/share_via_barcode"
-        android:paddingBottom="32dip"/>
+  <LinearLayout
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:layout_weight="0"
+      android:layout_gravity="center"
+      android:orientation="horizontal"
+      android:gravity="center"
+      android:weightSum="1"
+      android:paddingBottom="8dip">
 
-    <TableLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
+    <Button android:id="@+id/contact_button"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.4"
+            android:text="@string/button_share_contact"/>
 
-      <TableRow>
+    <Button android:id="@+id/bookmark_button"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.4"
+            android:text="@string/button_share_bookmark"/>
 
-        <Button android:id="@+id/contact_button"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/button_share_contact"/>
+  </LinearLayout>
 
-        <Button android:id="@+id/bookmark_button"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/button_share_bookmark"/>
+  <LinearLayout
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:layout_weight="0"
+      android:orientation="horizontal"
+      android:gravity="center"
+      android:weightSum="1">
 
-      </TableRow>
+    <Button android:id="@+id/clipboard_button"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.4"
+            android:text="@string/button_share_clipboard"/>
 
-      <TableRow>
-
-        <Button android:id="@+id/clipboard_button"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/button_share_clipboard"/>
-
-        <Button android:id="@+id/app_button"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/button_share_app"/>
-
-      </TableRow>
-
-    </TableLayout>
+    <Button android:id="@+id/app_button"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.4"
+            android:text="@string/button_share_app"/>
 
   </LinearLayout>
 
