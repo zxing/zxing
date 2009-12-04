@@ -325,7 +325,7 @@ public abstract class ResultHandler {
       proceedListener.onClick(null, index);
     } else {
       // note the user has seen it
-      prefs.edit().putBoolean(PreferencesActivity.KEY_NOT_OUR_RESULTS_SHOWN, true);
+      prefs.edit().putBoolean(PreferencesActivity.KEY_NOT_OUR_RESULTS_SHOWN, true).commit();
       AlertDialog.Builder builder = new AlertDialog.Builder(activity);
       builder.setMessage(R.string.msg_not_our_results);
       builder.setPositiveButton(R.string.button_ok, proceedListener);
