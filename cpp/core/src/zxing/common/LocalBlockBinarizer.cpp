@@ -86,7 +86,7 @@ void LocalBlockBinarizer::calculateThresholdForBlock(const unsigned char* lumina
       int top = (y > 0) ? y : 1;
       top = (top < subHeight - 1) ? top : subHeight - 2;
       int sum = 0;
-      int type = 0;
+      int contrast = 0;
       for (int z = -1; z <= 1; z++) {
 //				sum += averages[(top + z) * subWidth + left - 2];
         sum += averages[(top + z) * subWidth + left - 1];
@@ -95,15 +95,15 @@ void LocalBlockBinarizer::calculateThresholdForBlock(const unsigned char* lumina
 //				sum += averages[(top + z) * subWidth + left + 2];
 
 //				type += types[(top + z) * subWidth + left - 2];
-        type += types[(top + z) * subWidth + left - 1];
-        type += types[(top + z) * subWidth + left];
-        type += types[(top + z) * subWidth + left + 1];
+        contrast += types[(top + z) * subWidth + left - 1];
+        contrast += types[(top + z) * subWidth + left];
+        contrast += types[(top + z) * subWidth + left + 1];
 //				type += types[(top + z) * subWidth + left + 2];
       }
       int average = sum / 9;
 
 
-      if (type > 3)
+      if (contrast > 2)
         threshold8x8Block(luminances, x << 3, y << 3, average, stride, matrix);
 //			else if(average < global)	// Black
 //				matrix.setRegion(x << 3, y << 3, 8, 8);

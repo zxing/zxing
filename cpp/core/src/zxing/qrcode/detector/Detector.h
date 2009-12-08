@@ -31,7 +31,7 @@ namespace zxing {
 namespace qrcode {
 
 class Detector : public Counted {
-private:
+protected:
   Ref<BitMatrix> image_;
 
 
@@ -46,7 +46,7 @@ private:
       float allowanceFactor);
 public:
 
-  static Ref<PerspectiveTransform> createTransform(Ref<ResultPoint> topLeft, Ref<ResultPoint> topRight, Ref <
+  virtual Ref<PerspectiveTransform> createTransform(Ref<ResultPoint> topLeft, Ref<ResultPoint> topRight, Ref <
       ResultPoint > bottomLeft, Ref<ResultPoint> alignmentPattern, int dimension);
 
   Detector(Ref<BitMatrix> image);

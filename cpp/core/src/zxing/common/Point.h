@@ -1,8 +1,8 @@
 /*
- *  MagickBitmapSource.h
+ *  Point.h
  *  zxing
  *
- *  Created by Ralf Kistner on 16/10/2009.
+ *  Created by Ralf Kistner on 7/12/2009.
  *  Copyright 2008 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,28 +18,30 @@
  * limitations under the License.
  */
 
-#ifndef MAGICKMONOCHROMEBITMAPSOURCE_H_
-#define MAGICKMONOCHROMEBITMAPSOURCE_H_
+#ifndef ZXING_POINT_H_
+#define ZXING_POINT_H_
 
-#include <Magick++.h>
-#include <zxing/LuminanceSource.h>
-
-class MagickBitmapSource : public zxing::LuminanceSource {
-private:
-  Magick::Image& image_;
-  int width;
-  int height;
-  const Magick::PixelPacket* pixel_cache;
-
+namespace zxing {
+class PointI {
 public:
-  MagickBitmapSource(Magick::Image& image);
-
-  ~MagickBitmapSource();
-
-  int getWidth();
-  int getHeight();
-  unsigned char getPixel(int x, int y);
-  unsigned char* copyMatrix();
+  int x;
+  int y;
 };
 
-#endif /* MAGICKMONOCHROMEBITMAPSOURCE_H_ */
+class Point {
+public:
+  Point(float x_, float y_) : x(x_), y(y_) {};
+
+  float x;
+  float y;
+};
+
+class Line {
+public:
+  Line(Point start_, Point end_) : start(start_), end(end_) {};
+
+  Point start;
+  Point end;
+};
+}
+#endif // POINT_H_

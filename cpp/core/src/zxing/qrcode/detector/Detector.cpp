@@ -77,7 +77,7 @@ Ref<DetectorResult> Detector::detect() {
       }
     }
     if (alignmentPattern == 0) {
-      throw zxing::ReaderException("Could not find alignment pattern");
+      // Try anyway
     }
 
   }
