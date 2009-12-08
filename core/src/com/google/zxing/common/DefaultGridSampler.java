@@ -38,6 +38,12 @@ public final class DefaultGridSampler extends GridSampler {
         p1ToX, p1ToY, p2ToX, p2ToY, p3ToX, p3ToY, p4ToX, p4ToY,
         p1FromX, p1FromY, p2FromX, p2FromY, p3FromX, p3FromY, p4FromX, p4FromY);
 
+    return sampleGrid(image, dimension, transform);
+  }
+
+  public BitMatrix sampleGrid(BitMatrix image,
+                              int dimension,
+                              PerspectiveTransform transform) throws ReaderException {
     BitMatrix bits = new BitMatrix(dimension);
     float[] points = new float[dimension << 1];
     for (int y = 0; y < dimension; y++) {
