@@ -234,7 +234,7 @@ final class AlignmentPatternFinder {
     }
 
     int stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2];
-    if (5 * Math.abs(stateCountTotal - originalStateCountTotal) >= originalStateCountTotal) {
+    if (5 * Math.abs(stateCountTotal - originalStateCountTotal) >= 2 * originalStateCountTotal) {
       return Float.NaN;
     }
 
