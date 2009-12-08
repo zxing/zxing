@@ -290,11 +290,11 @@ public class FinderPatternFinder {
       return Float.NaN;
     }
 
-    // If we found a finder-pattern-like section, but its size is more than 20% different than
+    // If we found a finder-pattern-like section, but its size is more than 40% different than
     // the original, assume it's a false positive
     int stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2] + stateCount[3] +
         stateCount[4];
-    if (5 * Math.abs(stateCountTotal - originalStateCountTotal) >= originalStateCountTotal) {
+    if (5 * Math.abs(stateCountTotal - originalStateCountTotal) >= 2 * originalStateCountTotal) {
       return Float.NaN;
     }
 
