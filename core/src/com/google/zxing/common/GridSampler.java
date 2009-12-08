@@ -92,6 +92,13 @@ public abstract class GridSampler {
                                        float p3FromX, float p3FromY,
                                        float p4FromX, float p4FromY) throws ReaderException;
 
+  public BitMatrix sampleGrid(BitMatrix image,
+                              int dimension,
+                              PerspectiveTransform transform) throws ReaderException {
+    throw new UnsupportedOperationException();
+  }
+  
+
   /**
    * <p>Checks a set of points that have been transformed to sample points on an image against
    * the image's dimensions to see if the point are even within the image.</p>

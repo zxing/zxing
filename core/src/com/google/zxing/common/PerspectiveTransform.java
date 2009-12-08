@@ -23,7 +23,7 @@ package com.google.zxing.common;
  *
  * @author Sean Owen
  */
-final class PerspectiveTransform {
+public final class PerspectiveTransform {
 
   private final float a11, a12, a13, a21, a22, a23, a31, a32, a33;
 
@@ -41,21 +41,21 @@ final class PerspectiveTransform {
     this.a33 = a33;
   }
 
-  static PerspectiveTransform quadrilateralToQuadrilateral(float x0, float y0,
-                                                           float x1, float y1,
-                                                           float x2, float y2,
-                                                           float x3, float y3,
-                                                           float x0p, float y0p,
-                                                           float x1p, float y1p,
-                                                           float x2p, float y2p,
-                                                           float x3p, float y3p) {
+  public static PerspectiveTransform quadrilateralToQuadrilateral(float x0, float y0,
+                                                                  float x1, float y1,
+                                                                  float x2, float y2,
+                                                                  float x3, float y3,
+                                                                  float x0p, float y0p,
+                                                                  float x1p, float y1p,
+                                                                  float x2p, float y2p,
+                                                                  float x3p, float y3p) {
 
     PerspectiveTransform qToS = quadrilateralToSquare(x0, y0, x1, y1, x2, y2, x3, y3);
     PerspectiveTransform sToQ = squareToQuadrilateral(x0p, y0p, x1p, y1p, x2p, y2p, x3p, y3p);
     return sToQ.times(qToS);
   }
 
-  void transformPoints(float[] points) {
+  public void transformPoints(float[] points) {
     int max = points.length;
     float a11 = this.a11;
     float a12 = this.a12;
@@ -75,10 +75,22 @@ final class PerspectiveTransform {
     }
   }
 
-  static PerspectiveTransform squareToQuadrilateral(float x0, float y0,
-                                                    float x1, float y1,
-                                                    float x2, float y2,
-                                                    float x3, float y3) {
+  /** Convenience method, not optimized for performance. */
+  public void transformPoints(float[] xValues, float[] yValues) {
+    int n = xValues.length;
+    for (int i = 0; i < n; i ++) {
+      float x = xValues[i];
+      float y = yValues[i];
+      float denominator = a13 * x + a23 * y + a33;
+      xValues[i] = (a11 * x + a21 * y + a31) / denominator;
+      yValues[i] = (a12 * x + a22 * y + a32) / denominator;
+    }
+  }
+
+  public static PerspectiveTransform squareToQuadrilateral(float x0, float y0,
+                                                           float x1, float y1,
+                                                           float x2, float y2,
+                                                           float x3, float y3) {
     float dy2 = y3 - y2;
     float dy3 = y0 - y1 + y2 - y3;
     if (dy2 == 0.0f && dy3 == 0.0f) {
@@ -99,10 +111,10 @@ final class PerspectiveTransform {
     }
   }
 
-  private static PerspectiveTransform quadrilateralToSquare(float x0, float y0,
-                                                            float x1, float y1,
-                                                            float x2, float y2,
-                                                            float x3, float y3) {
+  public static PerspectiveTransform quadrilateralToSquare(float x0, float y0,
+                                                           float x1, float y1,
+                                                           float x2, float y2,
+                                                           float x3, float y3) {
     // Here, the adjoint serves as the inverse:
     return squareToQuadrilateral(x0, y0, x1, y1, x2, y2, x3, y3).buildAdjoint();
   }

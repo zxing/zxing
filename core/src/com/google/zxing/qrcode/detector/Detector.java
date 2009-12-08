@@ -23,6 +23,7 @@ import com.google.zxing.ResultPointCallback;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.DetectorResult;
 import com.google.zxing.common.GridSampler;
+import com.google.zxing.common.PerspectiveTransform;
 import com.google.zxing.qrcode.decoder.Version;
 
 import java.util.Hashtable;
@@ -44,6 +45,10 @@ public class Detector {
 
   protected BitMatrix getImage() {
     return image;
+  }
+
+  protected ResultPointCallback getResultPointCallback() {
+    return resultPointCallback;
   }
 
   /**
@@ -117,7 +122,10 @@ public class Detector {
       // If we didn't find alignment pattern... well try anyway without it
     }
 
-    BitMatrix bits = sampleGrid(image, topLeft, topRight, bottomLeft, alignmentPattern, dimension);
+    PerspectiveTransform transform =
+        createTransform(topLeft, topRight, bottomLeft, alignmentPattern, dimension);
+
+    BitMatrix bits = sampleGrid(image, transform, dimension);
 
     ResultPoint[] points;
     if (alignmentPattern == null) {
@@ -128,12 +136,11 @@ public class Detector {
     return new DetectorResult(bits, points);
   }
 
-  private static BitMatrix sampleGrid(BitMatrix image,
-                                      ResultPoint topLeft,
-                                      ResultPoint topRight,
-                                      ResultPoint bottomLeft,
-                                      ResultPoint alignmentPattern,
-                                      int dimension) throws ReaderException {
+  public PerspectiveTransform createTransform(ResultPoint topLeft,
+                                              ResultPoint topRight,
+                                              ResultPoint bottomLeft,
+                                              ResultPoint alignmentPattern,
+                                              int dimension) {
     float dimMinusThree = (float) dimension - 3.5f;
     float bottomRightX;
     float bottomRightY;
@@ -150,10 +157,7 @@ public class Detector {
       sourceBottomRightX = sourceBottomRightY = dimMinusThree;
     }
 
-    GridSampler sampler = GridSampler.getInstance();
-    return sampler.sampleGrid(
-        image,
-        dimension,
+    PerspectiveTransform transform = PerspectiveTransform.quadrilateralToQuadrilateral(
         3.5f,
         3.5f,
         dimMinusThree,
@@ -170,15 +174,25 @@ public class Detector {
         bottomRightY,
         bottomLeft.getX(),
         bottomLeft.getY());
+
+    return transform;
+  }
+
+  private static BitMatrix sampleGrid(BitMatrix image,
+                                      PerspectiveTransform transform,
+                                      int dimension) throws ReaderException {
+
+    GridSampler sampler = GridSampler.getInstance();
+    return sampler.sampleGrid(image, dimension, transform);
   }
 
   /**
    * <p>Computes the dimension (number of modules on a size) of the QR Code based on the position
    * of the finder patterns and estimated module size.</p>
    */
-  private static int computeDimension(ResultPoint topLeft,
-                                      ResultPoint topRight,
-                                      ResultPoint bottomLeft,
+  protected static int computeDimension(ResultPoint topLeft,
+                                        ResultPoint topRight,
+                                        ResultPoint bottomLeft,
                                       float moduleSize) throws ReaderException {
     int tltrCentersDimension = round(ResultPoint.distance(topLeft, topRight) / moduleSize);
     int tlblCentersDimension = round(ResultPoint.distance(topLeft, bottomLeft) / moduleSize);
@@ -201,8 +215,9 @@ public class Detector {
    * <p>Computes an average estimated module size based on estimated derived from the positions
    * of the three finder patterns.</p>
    */
-  private float calculateModuleSize(ResultPoint topLeft, ResultPoint topRight,
-      ResultPoint bottomLeft) {
+  protected float calculateModuleSize(ResultPoint topLeft,
+                                      ResultPoint topRight,
+                                      ResultPoint bottomLeft) {
     // Take the average
     return (calculateModuleSizeOneWay(topLeft, topRight) +
         calculateModuleSizeOneWay(topLeft, bottomLeft)) / 2.0f;
@@ -329,10 +344,10 @@ public class Detector {
    * @return {@link AlignmentPattern} if found, or null otherwise
    * @throws ReaderException if an unexpected error occurs during detection
    */
-  private AlignmentPattern findAlignmentInRegion(float overallEstModuleSize,
-                                                 int estAlignmentX,
-                                                 int estAlignmentY,
-                                                 float allowanceFactor)
+  protected AlignmentPattern findAlignmentInRegion(float overallEstModuleSize,
+                                                   int estAlignmentX,
+                                                   int estAlignmentY,
+                                                   float allowanceFactor)
       throws ReaderException {
     // Look for an alignment pattern (3 modules in size) around where it
     // should be
@@ -365,5 +380,4 @@ public class Detector {
   private static int round(float d) {
     return (int) (d + 0.5f);
   }
-
 }
