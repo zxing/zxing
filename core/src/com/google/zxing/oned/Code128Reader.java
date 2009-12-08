@@ -29,7 +29,7 @@ import java.util.Hashtable;
  *
  * @author Sean Owen
  */
-public final class Code128Reader extends AbstractOneDReader {
+public final class Code128Reader extends OneDReader {
 
   private static final int[][] CODE_PATTERNS = {
       {2, 1, 2, 2, 2, 2}, // 0
@@ -194,7 +194,7 @@ public final class Code128Reader extends AbstractOneDReader {
             }
           }
           if (bestMatch >= 0) {
-            // Look for whitespace before start pattern, >= 50% of width of start pattern            
+            // Look for whitespace before start pattern, >= 50% of width of start pattern
             if (row.isRange(Math.max(0, patternStart - (i - patternStart) / 2), patternStart,
                 false)) {
               return new int[]{patternStart, i, bestMatch};

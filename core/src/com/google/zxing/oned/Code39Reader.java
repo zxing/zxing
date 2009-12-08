@@ -29,7 +29,7 @@ import java.util.Hashtable;
  *
  * @author Sean Owen
  */
-public final class Code39Reader extends AbstractOneDReader {
+public final class Code39Reader extends OneDReader {
 
   private static final String ALPHABET_STRING = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. *$/+%";
   private static final char[] ALPHABET = ALPHABET_STRING.toCharArray();
