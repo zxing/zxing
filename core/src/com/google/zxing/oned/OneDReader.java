@@ -25,6 +25,7 @@ import com.google.zxing.ResultMetadataType;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitArray;
 
+import java.util.Enumeration;
 import java.util.Hashtable;
 
 /**
@@ -125,8 +126,15 @@ public abstract class OneDReader implements Reader {
           // don't want to clutter with noise from every single row scan -- just the scans
           // that start on the center line.
           if (hints != null && hints.containsKey(DecodeHintType.NEED_RESULT_POINT_CALLBACK)) {
-            hints = (Hashtable) hints.clone();
-            hints.remove(DecodeHintType.NEED_RESULT_POINT_CALLBACK);
+            Hashtable newHints = new Hashtable(); // Can't use clone() in J2ME
+            Enumeration hintEnum = hints.keys();
+            while (hintEnum.hasMoreElements()) {
+              Object key = hintEnum.nextElement();
+              if (!key.equals(DecodeHintType.NEED_RESULT_POINT_CALLBACK)) {
+                newHints.put(key, hints.get(key));
+              }
+            }
+            hints = newHints;
           }
         }
         try {
