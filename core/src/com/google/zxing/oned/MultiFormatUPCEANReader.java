@@ -32,7 +32,7 @@ import java.util.Vector;
  *
  * @author Sean Owen
  */
-public final class MultiFormatUPCEANReader extends AbstractOneDReader {
+public final class MultiFormatUPCEANReader extends OneDReader {
 
   private final Vector readers;
 
@@ -63,7 +63,7 @@ public final class MultiFormatUPCEANReader extends AbstractOneDReader {
 
   public Result decodeRow(int rowNumber, BitArray row, Hashtable hints) throws ReaderException {
     // Compute this location once and reuse it on multiple implementations
-    int[] startGuardPattern = AbstractUPCEANReader.findStartGuardPattern(row);
+    int[] startGuardPattern = UPCEANReader.findStartGuardPattern(row);
     int size = readers.size();
     for (int i = 0; i < size; i++) {
       UPCEANReader reader = (UPCEANReader) readers.elementAt(i);

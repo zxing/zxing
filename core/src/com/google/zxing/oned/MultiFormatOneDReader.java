@@ -16,10 +16,10 @@
 
 package com.google.zxing.oned;
 
+import com.google.zxing.BarcodeFormat;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
-import com.google.zxing.BarcodeFormat;
 import com.google.zxing.common.BitArray;
 
 import java.util.Hashtable;
@@ -29,7 +29,7 @@ import java.util.Vector;
  * @author dswitkin@google.com (Daniel Switkin)
  * @author Sean Owen
  */
-public final class MultiFormatOneDReader extends AbstractOneDReader {
+public final class MultiFormatOneDReader extends OneDReader {
 
   private final Vector readers;
 

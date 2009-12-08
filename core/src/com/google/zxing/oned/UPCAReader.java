@@ -30,7 +30,7 @@ import java.util.Hashtable;
  * @author dswitkin@google.com (Daniel Switkin)
  * @author Sean Owen
  */
-public final class UPCAReader implements UPCEANReader {
+public final class UPCAReader extends UPCEANReader {
 
   private final UPCEANReader ean13Reader = new EAN13Reader();
 
@@ -49,6 +49,15 @@ public final class UPCAReader implements UPCEANReader {
 
   public Result decode(BinaryBitmap image, Hashtable hints) throws ReaderException {
     return maybeReturnResult(ean13Reader.decode(image, hints));
+  }
+
+  BarcodeFormat getBarcodeFormat() {
+    return BarcodeFormat.UPC_A;
+  }
+
+  protected int decodeMiddle(BitArray row, int[] startRange, StringBuffer resultString)
+      throws ReaderException {
+    return ean13Reader.decodeMiddle(row, startRange, resultString);
   }
 
   private static Result maybeReturnResult(Result result) throws ReaderException {

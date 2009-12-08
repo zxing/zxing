@@ -17,10 +17,10 @@
 package com.google.zxing.oned;
 
 import com.google.zxing.BarcodeFormat;
+import com.google.zxing.DecodeHintType;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
-import com.google.zxing.DecodeHintType;
 import com.google.zxing.common.BitArray;
 
 import java.util.Hashtable;
@@ -37,7 +37,7 @@ import java.util.Hashtable;
  *
  * @author kevin.osullivan@sita.aero, SITA Lab.
  */
-public final class ITFReader extends AbstractOneDReader {
+public final class ITFReader extends OneDReader {
 
   private static final int MAX_AVG_VARIANCE = (int) (PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.42f);
   private static final int MAX_INDIVIDUAL_VARIANCE = (int) (PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.8f);
@@ -281,7 +281,7 @@ public final class ITFReader extends AbstractOneDReader {
    */
   private static int[] findGuardPattern(BitArray row, int rowOffset, int[] pattern) throws ReaderException {
 
-    // TODO: This is very similar to implementation in AbstractUPCEANReader. Consider if they can be
+    // TODO: This is very similar to implementation in UPCEANReader. Consider if they can be
     // merged to a single method.
     int patternLength = pattern.length;
     int[] counters = new int[patternLength];

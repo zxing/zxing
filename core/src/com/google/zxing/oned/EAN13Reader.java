@@ -16,8 +16,8 @@
 
 package com.google.zxing.oned;
 
-import com.google.zxing.ReaderException;
 import com.google.zxing.BarcodeFormat;
+import com.google.zxing.ReaderException;
 import com.google.zxing.common.BitArray;
 
 /**
@@ -27,7 +27,7 @@ import com.google.zxing.common.BitArray;
  * @author Sean Owen
  * @author alasdair@google.com (Alasdair Mackintosh)
  */
-public final class EAN13Reader extends AbstractUPCEANReader {
+public final class EAN13Reader extends UPCEANReader {
 
   // For an EAN-13 barcode, the first digit is represented by the parities used
   // to encode the next six digits, according to the table below. For example,

@@ -16,8 +16,8 @@
 
 package com.google.zxing.oned;
 
-import com.google.zxing.ReaderException;
 import com.google.zxing.BarcodeFormat;
+import com.google.zxing.ReaderException;
 import com.google.zxing.common.BitArray;
 
 /**
@@ -28,7 +28,7 @@ import com.google.zxing.common.BitArray;
  *
  * @author Sean Owen
  */
-public final class UPCEReader extends AbstractUPCEANReader {
+public final class UPCEReader extends UPCEANReader {
 
   /**
    * The pattern that marks the middle, and end, of a UPC-E pattern.

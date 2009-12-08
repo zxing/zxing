@@ -16,20 +16,19 @@
 
 package com.google.zxing.oned;
 
-import java.util.Hashtable;
-
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.ByteMatrix;
 
+import java.util.Hashtable;
 
 /**
  * This object renders an EAN8 code as a ByteMatrix 2D array of greyscale
  * values.
- * 
+ *
  * @author aripollak@gmail.com (Ari Pollak)
  */
-public final class EAN8Writer extends AbstractUPCEANWriter {
+public final class EAN8Writer extends UPCEANWriter {
 
   private static final int codeWidth = 3 + // start guard
       (7 * 4) + // left bars
@@ -43,7 +42,7 @@ public final class EAN8Writer extends AbstractUPCEANWriter {
       throw new IllegalArgumentException("Can only encode EAN_8, but got "
           + format);
     }
-    
+
     return super.encode(contents, format, width, height, hints);
   }
 
@@ -57,20 +56,20 @@ public final class EAN8Writer extends AbstractUPCEANWriter {
     byte[] result = new byte[codeWidth];
     int pos = 0;
 
-    pos += appendPattern(result, pos, AbstractUPCEANReader.START_END_PATTERN, 1);
+    pos += appendPattern(result, pos, UPCEANReader.START_END_PATTERN, 1);
 
     for (int i = 0; i <= 3; i++) {
       int digit = Integer.parseInt(contents.substring(i, i + 1));
-      pos += appendPattern(result, pos, AbstractUPCEANReader.L_PATTERNS[digit], 0);
+      pos += appendPattern(result, pos, UPCEANReader.L_PATTERNS[digit], 0);
     }
 
-    pos += appendPattern(result, pos, AbstractUPCEANReader.MIDDLE_PATTERN, 0);
+    pos += appendPattern(result, pos, UPCEANReader.MIDDLE_PATTERN, 0);
 
     for (int i = 4; i <= 7; i++) {
       int digit = Integer.parseInt(contents.substring(i, i + 1));
-      pos += appendPattern(result, pos, AbstractUPCEANReader.L_PATTERNS[digit], 1);
+      pos += appendPattern(result, pos, UPCEANReader.L_PATTERNS[digit], 1);
     }
-    pos += appendPattern(result, pos, AbstractUPCEANReader.START_END_PATTERN, 1);
+    pos += appendPattern(result, pos, UPCEANReader.START_END_PATTERN, 1);
 
     return result;
   }
