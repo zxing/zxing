@@ -46,5 +46,26 @@ int MagickBitmapSource::getHeight() {
 unsigned char MagickBitmapSource::getPixel(int x, int y) {
   const PixelPacket* p = pixel_cache + y * width + x;
   // We assume 16 bit values here
-  return (unsigned char)((((int)p->red + (int)p->green + (int)p->blue) >> 8) / 3);
+
+  //return (unsigned char)((((int)p->red + (int)p->green + (int)p->blue) >> 8) / 3);
+
+  return (unsigned char)((306 * ((int)p->red >> 8) + 601 * ((int)p->green >> 8) + 117 * ((int)p->blue >> 8)) >> 10);
 }
+
+/** This is a more efficient implementation. */
+unsigned char* MagickBitmapSource::copyMatrix() {
+  int width = getWidth();
+  int height =  getHeight();
+  unsigned char* matrix = new unsigned char[width*height];
+  unsigned char* m = matrix;
+  const Magick::PixelPacket* p = pixel_cache;
+  for (int y = 0; y < height; y++) {
+    for (int x = 0; x < width; x++) {
+      *m = (unsigned char)((306 * ((int)p->red >> 8) + 601 * ((int)p->green >> 8) + 117 * ((int)p->blue >> 8)) >> 10);
+      m++;
+      p++;
+    }
+  }
+  return matrix;
+}
+

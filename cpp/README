@@ -13,6 +13,8 @@ To build the test utility:
 - Install Magick++ (libmagick++-dev on Ubuntu)
 - Run "scons zxing"
 
+An simple example application is now also included, but no compilation instructions yet.
+
 To clean:
 - Run "scons -c all"
 
@@ -28,3 +30,7 @@ To format the code:
  - Install astyle
  - Run ./format
 
+To profile the code (very useful to optimize the code):
+ - Install valgrind
+ - "valgrind --tool=callgrind build/zxing - path/to/test/data/*.jpg > report.html"
+ - kcachegrind is a very nice tool to analize the output

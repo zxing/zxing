@@ -1,8 +1,8 @@
 /*
- *  MagickBitmapSource.h
+ *  EdgeDetector.h
  *  zxing
  *
- *  Created by Ralf Kistner on 16/10/2009.
+ *  Created by Ralf Kistner on 7/12/2009.
  *  Copyright 2008 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,28 +18,21 @@
  * limitations under the License.
  */
 
-#ifndef MAGICKMONOCHROMEBITMAPSOURCE_H_
-#define MAGICKMONOCHROMEBITMAPSOURCE_H_
+#ifndef EDGEDETECTOR_H_
+#define EDGEDETECTOR_H_
 
-#include <Magick++.h>
-#include <zxing/LuminanceSource.h>
+#include <vector>
+#include <zxing/common/BitMatrix.h>
+#include <zxing/common/Point.h>
 
-class MagickBitmapSource : public zxing::LuminanceSource {
-private:
-  Magick::Image& image_;
-  int width;
-  int height;
-  const Magick::PixelPacket* pixel_cache;
+namespace zxing {
+namespace EdgeDetector {
 
-public:
-  MagickBitmapSource(Magick::Image& image);
+void findEdgePoints(std::vector<Point>& points, const BitMatrix& image, Point start, Point end, bool invert, int skip, float deviation);
+Line findLine(const BitMatrix& image, Line estimate, bool invert, int deviation, float threshold, int skip);
 
-  ~MagickBitmapSource();
+Point intersection(Line a, Line b);
 
-  int getWidth();
-  int getHeight();
-  unsigned char getPixel(int x, int y);
-  unsigned char* copyMatrix();
-};
-
-#endif /* MAGICKMONOCHROMEBITMAPSOURCE_H_ */
+}
+}
+#endif /* EDGEDETECTOR_H_ */

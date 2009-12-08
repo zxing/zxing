@@ -35,6 +35,7 @@
 #include <zxing/BinaryBitmap.h>
 
 #include <zxing/qrcode/detector/Detector.h>
+#include <zxing/qrcode/detector/QREdgeDetector.h>
 #include <zxing/qrcode/decoder/Decoder.h>
 
 using namespace Magick;
@@ -108,7 +109,7 @@ void save_grid(Ref<BitMatrix> matrix, string filename, Ref<PerspectiveTransform>
 Ref<Result> decode(string out_prefix, Ref<BinaryBitmap> image, string& cell_grid, string& cell_transformed) {
   Decoder decoder;
 
-  Detector detector(image->getBlackMatrix());
+  QREdgeDetector detector = QREdgeDetector(image->getBlackMatrix());
 
   Ref<DetectorResult> detectorResult(detector.detect());
 
@@ -147,6 +148,7 @@ int test_image(Image& image, string out_prefix, bool localized) {
   string cell_transformed;
   string cell_result;
   string cell_grid;
+  string result_color = "red";
   int res = -1;
 
   Ref<BitMatrix> matrix(NULL);
@@ -171,7 +173,8 @@ int test_image(Image& image, string out_prefix, bool localized) {
 
     Ref<BinaryBitmap> binary(new BinaryBitmap(binarizer));
     Ref<Result> result(decode(out_prefix, binary, cell_grid, cell_transformed));
-    cell_result = "<font color=\"blue\"><b>" + result->getText()->getText() + "</b></font>";
+    cell_result = result->getText()->getText();
+    result_color = "green";
     res = 0;
   } catch (ReaderException e) {
     cell_result = "zxing::ReaderException: " + string(e.what());
@@ -190,7 +193,7 @@ int test_image(Image& image, string out_prefix, bool localized) {
   cout << "<td>" << cell_mono << "</td>" << endl;
   cout << "<td>" << cell_grid << "</td>" << endl;
   cout << "<td>" << cell_transformed << "</td>" << endl;
-  cout << "<td>" << cell_result << "</td>" << endl;
+  cout << "<td bgcolor=\"" << result_color << "\">" << cell_result << "</td>" << endl;
   return res;
 }
 
@@ -216,7 +219,7 @@ int main(int argc, char** argv) {
   int both = 0;
   int neither = 0;
 
-  cout << "<html><body><table>" << endl;
+  cout << "<html><body><table border=\"1\">" << endl;
   for (int i = 2; i < argc; i++) {
     string infilename = argv[i];
     cerr << "Processing: " << infilename << endl;
@@ -227,7 +230,7 @@ int main(int argc, char** argv) {
       cerr << "Unable to open image, ignoring" << endl;
       continue;
     }
-    cout << "<tr><td colspan=\"3\">" << infilename << "</td></tr>" << endl;
+    cout << "<tr><td colspan=\"5\">" << infilename << "</td></tr>" << endl;
     cout << "<tr>" << endl;
 
     cout << "<td><img src=\"" << infilename << "\" /></td>" << endl;
@@ -237,12 +240,12 @@ int main(int argc, char** argv) {
     int lresult = 1;
 
     if (outfolder == string("-")) {
-      gresult = test_image_global(image, "");
+      //gresult = test_image_global(image, "");
       lresult = test_image_local(image, "");
     } else {
       replace(infilename.begin(), infilename.end(), '/', '_');
       string prefix = string(outfolder) + string("/") + infilename;
-      gresult = test_image_global(image, prefix + ".g");
+      //gresult = test_image_global(image, prefix + ".g");
       lresult = test_image_local(image, prefix + ".l");
     }
 

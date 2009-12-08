@@ -85,7 +85,7 @@ float AlignmentPatternFinder::crossCheckVertical(size_t startI, size_t centerJ, 
   }
 
   int stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2];
-  if (5 * abs(stateCountTotal - originalStateCountTotal) >= originalStateCountTotal) {
+  if (5 * abs(stateCountTotal - originalStateCountTotal) >= 2 * originalStateCountTotal) {
     return NAN;
   }
 
