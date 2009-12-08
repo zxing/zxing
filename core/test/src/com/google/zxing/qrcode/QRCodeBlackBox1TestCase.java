@@ -30,7 +30,7 @@ public final class QRCodeBlackBox1TestCase extends AbstractBlackBoxTestCase {
     addTest(19, 19, 0.0f);
     addTest(15, 15, 90.0f);
     addTest(17, 17, 180.0f);
-    addTest(14, 14, 270.0f);
+    addTest(15, 15, 270.0f);
   }
 
 }
