@@ -49,7 +49,7 @@ Ref<PerspectiveTransform> QREdgeDetector::createTransform(Ref<ResultPoint> topLe
       ResultPoint > bottomLeft, Ref<ResultPoint> alignmentPattern, int dimension) {
 
   if(alignmentPattern == NULL) {
-    Point corner = findCorner(*image_.object_, rp(topLeft), rp(topRight), rp(bottomLeft), dimension);
+    Point corner = findCorner(*Detector::getImage(), rp(topLeft), rp(topRight), rp(bottomLeft), dimension);
     return get1CornerTransform(rp(topLeft), rp(topRight), rp(bottomLeft), corner, dimension);
   } else {
     return Detector::createTransform(topLeft, topRight, bottomLeft, alignmentPattern, dimension);
@@ -108,10 +108,10 @@ Ref<PerspectiveTransform> QREdgeDetector::get1CornerTransform(Point topLeft, Poi
 
 // Adapted from "sizeOfBlackWhiteBlackRun" in zxing::qrcode::Detector
 Point QREdgeDetector::endOfReverseBlackWhiteBlackRun(const BitMatrix& image, Point from, Point to) {
-  float fromX = from.x;
-  float fromY = from.y;
-  float toX = to.x;
-  float toY = to.y;
+  int fromX = (int)from.x;
+  int fromY = (int)from.y;
+  int toX = (int)to.x;
+  int toY = (int)to.y;
 
   bool steep = abs(toY - fromY) > abs(toX - fromX);
   if (steep) {
@@ -131,8 +131,8 @@ Point QREdgeDetector::endOfReverseBlackWhiteBlackRun(const BitMatrix& image, Poi
   int state = 0; // In black pixels, looking for white, first or second time
 
   // In case there are no points, prepopulate to from
-  int realX = from.x;
-  int realY = from.y;
+  int realX = fromX;
+  int realY = fromY;
   for (int x = fromX, y = fromY; x != toX; x += xstep) {
     realX = steep ? y : x;
     realY = steep ? x : y;

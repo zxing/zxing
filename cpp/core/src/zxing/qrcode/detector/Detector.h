@@ -31,9 +31,11 @@ namespace zxing {
 namespace qrcode {
 
 class Detector : public Counted {
-protected:
+private:
   Ref<BitMatrix> image_;
 
+protected:
+  Ref<BitMatrix> getImage();
 
   static Ref<BitMatrix> sampleGrid(Ref<BitMatrix> image, int dimension, Ref<PerspectiveTransform>);
   static int computeDimension(Ref<ResultPoint> topLeft, Ref<ResultPoint> topRight, Ref<ResultPoint> bottomLeft,
