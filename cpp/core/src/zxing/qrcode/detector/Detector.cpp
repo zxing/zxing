@@ -37,6 +37,10 @@ Detector::Detector(Ref<BitMatrix> image) :
     image_(image) {
 }
 
+Ref<BitMatrix> Detector::getImage() {
+   return image_;
+}
+
 Ref<DetectorResult> Detector::detect() {
   FinderPatternFinder finder(image_);
   Ref<FinderPatternInfo> info(finder.find());
