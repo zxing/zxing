@@ -76,7 +76,6 @@ public class ContactInfoGenerator implements GeneratorSource {
     maybeAppend(output, "TEL:", tel);
     maybeAppend(output, "URL:", url);
     maybeAppend(output, "EMAIL:", email);
-    maybeAppend(output, "ADR:", address);
     if (address.length() > 0 || address2.length() > 0) {
       output.append("ADR:");
       if (address.length() > 0) {
