@@ -48,8 +48,12 @@ final class VCardResultParser extends ResultParser {
     String[] phoneNumbers = matchVCardPrefixedField("TEL", rawText, true);
     String[] emails = matchVCardPrefixedField("EMAIL", rawText, true);
     String note = matchSingleVCardPrefixedField("NOTE", rawText, false);
-    String address = matchSingleVCardPrefixedField("ADR", rawText, true);
-    address = formatAddress(address);
+    String[] addresses = matchVCardPrefixedField("ADR", rawText, true);
+    if (addresses != null) {
+      for (int i = 0; i < addresses.length; i++) {
+        addresses[i] = formatAddress(addresses[i]);
+      }
+    }
     String org = matchSingleVCardPrefixedField("ORG", rawText, true);
     String birthday = matchSingleVCardPrefixedField("BDAY", rawText, true);
     if (!isLikeVCardDate(birthday)) {
@@ -57,7 +61,7 @@ final class VCardResultParser extends ResultParser {
     }
     String title = matchSingleVCardPrefixedField("TITLE", rawText, true);
     String url = matchSingleVCardPrefixedField("URL", rawText, true);
-    return new AddressBookParsedResult(names, null, phoneNumbers, emails, note, address, org,
+    return new AddressBookParsedResult(names, null, phoneNumbers, emails, note, addresses, org,
         birthday, title, url);
   }
 

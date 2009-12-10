@@ -26,7 +26,7 @@ public final class AddressBookParsedResult extends ParsedResult {
   private final String[] phoneNumbers;
   private final String[] emails;
   private final String note;
-  private final String address;
+  private final String[] addresses;
   private final String org;
   private final String birthday;
   private final String title;
@@ -37,7 +37,7 @@ public final class AddressBookParsedResult extends ParsedResult {
                                  String[] phoneNumbers,
                                  String[] emails,
                                  String note,
-                                 String address,
+                                 String[] addresses,
                                  String org,
                                  String birthday,
                                  String title,
@@ -48,7 +48,7 @@ public final class AddressBookParsedResult extends ParsedResult {
     this.phoneNumbers = phoneNumbers;
     this.emails = emails;
     this.note = note;
-    this.address = address;
+    this.addresses = addresses;
     this.org = org;
     this.birthday = birthday;
     this.title = title;
@@ -81,8 +81,22 @@ public final class AddressBookParsedResult extends ParsedResult {
     return note;
   }
 
+  public String[] getAddresses() {
+    return addresses;
+  }
+
   public String getAddress() {
-    return address;
+    if (addresses == null || addresses.length == 0) {
+      return null;
+    }
+    StringBuffer result = new StringBuffer();
+    for (int i = 0; i < addresses.length; i++) {
+      if (result.length() > 0) {
+        result.append(' ');
+      }
+      result.append(addresses[i]);
+    }
+    return result.toString();
   }
 
   public String getTitle() {
@@ -110,7 +124,7 @@ public final class AddressBookParsedResult extends ParsedResult {
     maybeAppend(pronunciation, result);
     maybeAppend(title, result);
     maybeAppend(org, result);
-    maybeAppend(address, result);
+    maybeAppend(addresses, result);
     maybeAppend(phoneNumbers, result);
     maybeAppend(emails, result);
     maybeAppend(url, result);

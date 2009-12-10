@@ -49,7 +49,7 @@ final class AddressBookDoCoMoResultParser extends AbstractDoCoMoResultParser {
     String[] phoneNumbers = matchDoCoMoPrefixedField("TEL:", rawText, true);
     String[] emails = matchDoCoMoPrefixedField("EMAIL:", rawText, true);
     String note = matchSingleDoCoMoPrefixedField("NOTE:", rawText, false);
-    String address = matchSingleDoCoMoPrefixedField("ADR:", rawText, true);
+    String[] addresses = matchDoCoMoPrefixedField("ADR:", rawText, true);
     String birthday = matchSingleDoCoMoPrefixedField("BDAY:", rawText, true);
     if (birthday != null && !isStringOfDigits(birthday, 8)) {
       // No reason to throw out the whole card because the birthday is formatted wrong.
@@ -66,7 +66,7 @@ final class AddressBookDoCoMoResultParser extends AbstractDoCoMoResultParser {
                                        phoneNumbers,
                                        emails,
                                        note,
-                                       address,
+                                       addresses,
                                        org,
                                        birthday,
                                        null,

@@ -43,7 +43,7 @@ final class BizcardResultParser extends AbstractDoCoMoResultParser {
     String fullName = buildName(firstName, lastName);
     String title = matchSingleDoCoMoPrefixedField("T:", rawText, true);
     String org = matchSingleDoCoMoPrefixedField("C:", rawText, true);
-    String address = matchSingleDoCoMoPrefixedField("A:", rawText, true);
+    String[] addresses = matchDoCoMoPrefixedField("A:", rawText, true);
     String phoneNumber1 = matchSingleDoCoMoPrefixedField("B:", rawText, true);
     String phoneNumber2 = matchSingleDoCoMoPrefixedField("M:", rawText, true);
     String phoneNumber3 = matchSingleDoCoMoPrefixedField("F:", rawText, true);
@@ -54,7 +54,7 @@ final class BizcardResultParser extends AbstractDoCoMoResultParser {
                                        buildPhoneNumbers(phoneNumber1, phoneNumber2, phoneNumber3),
                                        maybeWrap(email),
                                        null,
-                                       address,
+                                       addresses,
                                        org,
                                        null,
                                        title,
