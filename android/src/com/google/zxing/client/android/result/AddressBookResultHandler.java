@@ -108,18 +108,20 @@ public final class AddressBookResultHandler extends ResultHandler {
   @Override
   public void handleButtonPress(int index) {
     AddressBookParsedResult addressResult = (AddressBookParsedResult) getResult();
+    String[] addresses = addressResult.getAddresses();
+    String address1 = addresses == null || addresses.length < 1 ? null : addresses[0];
     int action = mapIndexToAction(index);
     switch (action) {
       case 0:
         addContact(addressResult.getNames(), addressResult.getPhoneNumbers(),
             addressResult.getEmails(), addressResult.getNote(),
-            addressResult.getAddress(), addressResult.getOrg(),
+            address1, addressResult.getOrg(),
             addressResult.getTitle());
         break;
       case 1:
         String[] names = addressResult.getNames();
         String title = names != null ? names[0] : null;
-        searchMap(addressResult.getAddress(), title);
+        searchMap(address1, title);
         break;
       case 2:
         dialPhone(addressResult.getPhoneNumbers()[0]);
@@ -149,7 +151,7 @@ public final class AddressBookResultHandler extends ResultHandler {
 
     ParsedResult.maybeAppend(result.getTitle(), contents);
     ParsedResult.maybeAppend(result.getOrg(), contents);
-    ParsedResult.maybeAppend(result.getAddress(), contents);
+    ParsedResult.maybeAppend(result.getAddresses(), contents);
     String[] numbers = result.getPhoneNumbers();
     if (numbers != null) {
       for (String number : numbers) {
