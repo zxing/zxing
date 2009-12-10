@@ -257,10 +257,14 @@ final class QRCodeEncoder {
       newContents.append("N:").append(names[0]).append(';');
       newDisplayContents.append(names[0]);
     }
-    String address = contact.getAddress();
-    if (address != null && address.length() > 0) {
-      newContents.append("ADR:").append(address).append(';');
-      newDisplayContents.append('\n').append(address);
+    String[] addresses = contact.getAddresses();
+    if (addresses != null) {
+      for (int x = 0; x < addresses.length; x++) {
+        if (addresses[x] != null && addresses[x].length() > 0) {
+          newContents.append("ADR:").append(addresses[x]).append(';');
+          newDisplayContents.append('\n').append(addresses[x]);
+        }
+      }
     }
     String[] phoneNumbers = contact.getPhoneNumbers();
     if (phoneNumbers != null) {
