@@ -53,7 +53,7 @@ public class ContactInfoGenerator implements GeneratorSource {
 
   public String getText() throws GeneratorException {
     String name = getNameField();
-    String company = getCompanyField();
+    //String company = getCompanyField();
     String tel = getTelField();
     String url = getUrlField();
     String email = getEmailField();
@@ -64,15 +64,15 @@ public class ContactInfoGenerator implements GeneratorSource {
     // Build the output with obtained data.
     // note that some informations may just be "" if they were not specified.
     //return getVCard(name, company, tel, url, email, address, memo);
-    return getMeCard(name, company, tel, url, email, address, address2, memo);
+    return getMeCard(name, tel, url, email, address, address2, memo);
   }
 
-  private String getMeCard(String name, String company, String tel, String url,
+  private String getMeCard(String name, String tel, String url,
       String email, String address, String address2, String memo) {
     StringBuilder output = new StringBuilder();
     output.append("MECARD:");
     output.append("N:").append(name).append(';');
-    maybeAppend(output, "ORG:", company);
+    //maybeAppend(output, "ORG:", company); // Not standard; don't generate
     maybeAppend(output, "TEL:", tel);
     maybeAppend(output, "URL:", url);
     maybeAppend(output, "EMAIL:", email);
