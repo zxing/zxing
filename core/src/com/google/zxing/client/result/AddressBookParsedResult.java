@@ -85,20 +85,6 @@ public final class AddressBookParsedResult extends ParsedResult {
     return addresses;
   }
 
-  public String getAddress() {
-    if (addresses == null || addresses.length == 0) {
-      return null;
-    }
-    StringBuffer result = new StringBuffer();
-    for (int i = 0; i < addresses.length; i++) {
-      if (result.length() > 0) {
-        result.append(' ');
-      }
-      result.append(addresses[i]);
-    }
-    return result.toString();
-  }
-
   public String getTitle() {
     return title;
   }
