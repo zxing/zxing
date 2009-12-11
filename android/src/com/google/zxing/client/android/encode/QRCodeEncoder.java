@@ -159,6 +159,9 @@ final class QRCodeEncoder {
       return false;
     } catch (IOException e) {
       return false;
+    } catch (NullPointerException e) {
+      // In case the uri was not found in the Intent.
+      return false;
     }
     return contents != null && contents.length() > 0;
   }

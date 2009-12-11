@@ -114,7 +114,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private String decodeMode;
   private String versionName;
   private HistoryManager historyManager;
-  
+
   private final OnCompletionListener beepListener = new BeepListener();
 
   private final DialogInterface.OnClickListener aboutListener =
@@ -233,7 +233,9 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         return true;
       } else if ((source == Source.NONE || source == Source.ZXING_LINK) && lastResult != null) {
         resetStatusView();
-        handler.sendEmptyMessage(R.id.restart_preview);
+        if (handler != null) {
+          handler.sendEmptyMessage(R.id.restart_preview);
+        }
         return true;
       }
     } else if (keyCode == KeyEvent.KEYCODE_FOCUS || keyCode == KeyEvent.KEYCODE_CAMERA) {
@@ -546,12 +548,31 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       CameraManager.get().openDriver(surfaceHolder);
     } catch (IOException ioe) {
       Log.w(TAG, ioe);
+      displayFrameworkBugMessageAndExit();
+      return;
+    } catch (RuntimeException e) {
+      // Barcode Scanner has seen crashes in the wild of this variety:
+      // java.?lang.?RuntimeException: Fail to connect to camera service
+      Log.e(TAG, e.toString());
+      displayFrameworkBugMessageAndExit();
       return;
     }
     if (handler == null) {
       boolean beginScanning = lastResult == null;
       handler = new CaptureActivityHandler(this, decodeMode, beginScanning);
     }
+  }
+
+  private void displayFrameworkBugMessageAndExit() {
+    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    builder.setTitle(getString(R.string.app_name));
+    builder.setMessage(getString(R.string.msg_camera_framework_bug));
+    builder.setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
+      public void onClick(DialogInterface dialogInterface, int i) {
+        finish();
+      }
+    });
+    builder.show();
   }
 
   private void resetStatusView() {
