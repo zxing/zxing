@@ -23,6 +23,7 @@ import com.google.zxing.common.AbstractBlackBoxTestCase;
 /**
  * Some very difficult exposure conditions including self-shadowing, which happens a lot when
  * pointing down at a barcode (i.e. the phone's shadow falls across part of the image).
+ * The global histogram gets about 5/15, where the local one gets 15/15.
  *
  * @author dswitkin@google.com (Daniel Switkin)
  */
@@ -30,10 +31,10 @@ public final class QRCodeBlackBox5TestCase extends AbstractBlackBoxTestCase {
 
   public QRCodeBlackBox5TestCase() {
     super("test/data/blackbox/qrcode-5", new MultiFormatReader(), BarcodeFormat.QR_CODE);
-    addTest(5, 5, 0.0f);
-    addTest(4, 4, 90.0f);
-    addTest(5, 5, 180.0f);
-    addTest(5, 5, 270.0f);
+    addTest(15, 15, 0.0f);
+    addTest(15, 15, 90.0f);
+    addTest(15, 15, 180.0f);
+    addTest(15, 15, 270.0f);
   }
 
 }

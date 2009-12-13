@@ -109,7 +109,7 @@ public abstract class AbstractNegativeBlackBoxTestCase extends AbstractBlackBoxT
   private boolean checkForFalsePositives(BufferedImage image, float rotationInDegrees) {
     BufferedImage rotatedImage = rotateImage(image, rotationInDegrees);
     LuminanceSource source = new BufferedImageLuminanceSource(rotatedImage);
-    BinaryBitmap bitmap = new BinaryBitmap(new GlobalHistogramBinarizer(source));
+    BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
     Result result;
     try {
       result = getReader().decode(bitmap);

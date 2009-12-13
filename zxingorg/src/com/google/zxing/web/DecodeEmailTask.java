@@ -23,7 +23,7 @@ import com.google.zxing.Reader;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
-import com.google.zxing.common.GlobalHistogramBinarizer;
+import com.google.zxing.common.HybridBinarizer;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -147,7 +147,7 @@ final class DecodeEmailTask extends TimerTask {
         Result result = null;
         try {
           LuminanceSource source = new BufferedImageLuminanceSource(image);
-          BinaryBitmap bitmap = new BinaryBitmap(new GlobalHistogramBinarizer(source));
+          BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
           result = reader.decode(bitmap, DecodeServlet.HINTS);
         } catch (ReaderException re) {
           log.info("Decoding FAILED");

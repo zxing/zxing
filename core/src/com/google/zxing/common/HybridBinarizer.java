@@ -18,6 +18,7 @@ package com.google.zxing.common;
 
 import com.google.zxing.Binarizer;
 import com.google.zxing.LuminanceSource;
+import com.google.zxing.ReaderException;
 
 /**
  * This class implements a local thresholding algorithm, which while slower than the
@@ -27,51 +28,56 @@ import com.google.zxing.LuminanceSource;
  * However it tends to produce artifacts on lower frequency images and is therefore not
  * a good general purpose binarizer for uses outside ZXing.
  *
- * NOTE: This class is still experimental and may not be ready for prime time yet.
+ * This class extends GlobalHistogramBinarizer, using the older histogram approach for 1D readers,
+ * and the newer local approach for 2D readers. 1D decoding using a per-row histogram is already
+ * inherently local, and only fails for horizontal gradients. We can revisit that problem later,
+ * but for now it was not a win to use local blocks for 1D.
+ *
+ * This Binarizer is the default for the unit tests and the recommended class for library users.
  *
  * @author dswitkin@google.com (Daniel Switkin)
  */
-public final class LocalBlockBinarizer extends Binarizer {
+public final class HybridBinarizer extends GlobalHistogramBinarizer {
+
+  // This class uses 5x5 blocks to compute local luminance, where each block is 8x8 pixels.
+  // So this is the smallest dimension in each axis we can accept.
+  private static final int MINIMUM_DIMENSION = 40;
 
   private BitMatrix matrix = null;
 
-  public LocalBlockBinarizer(LuminanceSource source) {
+  public HybridBinarizer(LuminanceSource source) {
     super(source);
   }
 
-  // TODO: Consider a different strategy for 1D Readers.
-  public BitArray getBlackRow(int y, BitArray row) {
-    binarizeEntireImage();
-    return matrix.getRow(y, row);
-  }
-
-  // TODO: If getBlackRow() calculates its own values, removing sharpening here.
-  public BitMatrix getBlackMatrix() {
+  public BitMatrix getBlackMatrix() throws ReaderException {
     binarizeEntireImage();
     return matrix;
   }
 
   public Binarizer createBinarizer(LuminanceSource source) {
-    return new LocalBlockBinarizer(source);
+    return new HybridBinarizer(source);
   }
 
   // Calculates the final BitMatrix once for all requests. This could be called once from the
   // constructor instead, but there are some advantages to doing it lazily, such as making
   // profiling easier, and not doing heavy lifting when callers don't expect it.
-  private void binarizeEntireImage() {
+  private void binarizeEntireImage() throws ReaderException {
     if (matrix == null) {
       LuminanceSource source = getLuminanceSource();
-      byte[] luminances = source.getMatrix();
-      int width = source.getWidth();
-      int height = source.getHeight();
-      sharpenRow(luminances, width, height);
+      if (source.getWidth() >= MINIMUM_DIMENSION && source.getHeight() >= MINIMUM_DIMENSION) {
+        byte[] luminances = source.getMatrix();
+        int width = source.getWidth();
+        int height = source.getHeight();
+        int subWidth = width >> 3;
+        int subHeight = height >> 3;
+        int[][] blackPoints = calculateBlackPoints(luminances, subWidth, subHeight, width);
 
-      int subWidth = width >> 3;
-      int subHeight = height >> 3;
-      int[][] blackPoints = calculateBlackPoints(luminances, subWidth, subHeight, width);
-
-      matrix = new BitMatrix(width, height);
-      calculateThresholdForBlock(luminances, subWidth, subHeight, width, blackPoints, matrix);
+        matrix = new BitMatrix(width, height);
+        calculateThresholdForBlock(luminances, subWidth, subHeight, width, blackPoints, matrix);
+      } else {
+        // If the image is too small, fall back to the global histogram approach.
+        matrix = super.getBlackMatrix();
+      }
     }
   }
 
@@ -146,28 +152,6 @@ public final class LocalBlockBinarizer extends Binarizer {
       }
     }
     return blackPoints;
-  }
-
-  // Applies a simple -1 4 -1 box filter with a weight of 2 to each row.
-  private static void sharpenRow(byte[] luminances, int width, int height) {
-    for (int y = 0; y < height; y++) {
-      int offset = y * width;
-      int left = luminances[offset] & 0xff;
-      int center = luminances[offset + 1] & 0xff;
-      for (int x = 1; x < width - 1; x++) {
-        int right = luminances[offset + x + 1] & 0xff;
-        int pixel = ((center << 2) - left - right) >> 1;
-        // Must clamp values to 0..255 so they will fit in a byte.
-        if (pixel > 255) {
-          pixel = 255;
-        } else if (pixel < 0) {
-          pixel = 0;
-        }
-        luminances[offset + x] = (byte)pixel;
-        left = center;
-        center = right;
-      }
-    }
   }
 
 }
