@@ -64,12 +64,16 @@ public final class CommandLineRunner {
       printUsage();
       return;
     }
-    Hashtable<DecodeHintType, Object> hints = buildHints();
+
+    boolean tryHarder = false;
+    boolean productsOnly = false;
     boolean dumpResults = false;
     boolean dumpBlackPoint = false;
     for (String arg : args) {
       if ("--try_harder".equals(arg)) {
-        hints.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
+        tryHarder = true;
+      } else if ("--products_only".equals(arg)) {
+        productsOnly = true;
       } else if ("--dump_results".equals(arg)) {
         dumpResults = true;
       } else if ("--dump_black_point".equals(arg)) {
@@ -80,6 +84,8 @@ public final class CommandLineRunner {
         return;
       }
     }
+
+    Hashtable<DecodeHintType, Object> hints = buildHints(tryHarder, productsOnly);
     for (String arg : args) {
       if (!arg.startsWith("--")) {
         decodeOneArgument(arg, hints, dumpResults, dumpBlackPoint);
@@ -88,20 +94,26 @@ public final class CommandLineRunner {
   }
 
   // Manually turn on all formats, even those not yet considered production quality.
-  private static Hashtable<DecodeHintType, Object> buildHints() {
+  private static Hashtable<DecodeHintType, Object> buildHints(boolean tryHarder,
+      boolean productsOnly) {
     Hashtable<DecodeHintType, Object> hints = new Hashtable<DecodeHintType, Object>(3);
     Vector<BarcodeFormat> vector = new Vector<BarcodeFormat>(8);
     vector.addElement(BarcodeFormat.UPC_A);
     vector.addElement(BarcodeFormat.UPC_E);
     vector.addElement(BarcodeFormat.EAN_13);
     vector.addElement(BarcodeFormat.EAN_8);
-    vector.addElement(BarcodeFormat.CODE_39);
-    vector.addElement(BarcodeFormat.CODE_128);
-    vector.addElement(BarcodeFormat.ITF);
-    vector.addElement(BarcodeFormat.QR_CODE);
-    vector.addElement(BarcodeFormat.DATAMATRIX);
-    vector.addElement(BarcodeFormat.PDF417);
+    if (!productsOnly) {
+      vector.addElement(BarcodeFormat.CODE_39);
+      vector.addElement(BarcodeFormat.CODE_128);
+      vector.addElement(BarcodeFormat.ITF);
+      vector.addElement(BarcodeFormat.QR_CODE);
+      vector.addElement(BarcodeFormat.DATAMATRIX);
+      vector.addElement(BarcodeFormat.PDF417);
+    }
     hints.put(DecodeHintType.POSSIBLE_FORMATS, vector);
+    if (tryHarder) {
+      hints.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
+    }
     return hints;
   }
 
@@ -109,6 +121,7 @@ public final class CommandLineRunner {
     System.err.println("Decode barcode images using the ZXing library\n");
     System.err.println("usage: CommandLineRunner { file | dir | url } [ options ]");
     System.err.println("  --try_harder: Use the TRY_HARDER hint, default is normal (mobile) mode");
+    System.err.println("  --products_only: Only decode the UPC and EAN families of barcodes");
     System.err.println("  --dump_results: Write the decoded contents to input.txt");
     System.err.println("  --dump_black_point: Compare black point algorithms as input.mono.png");
   }
