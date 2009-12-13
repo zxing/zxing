@@ -20,7 +20,7 @@ import com.google.zxing.BinaryBitmap;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
-import com.google.zxing.common.GlobalHistogramBinarizer;
+import com.google.zxing.common.HybridBinarizer;
 
 import android.os.Debug;
 import android.os.Message;
@@ -94,7 +94,7 @@ final class BenchmarkThread extends Thread {
       // scheduling and what else is happening in the system.
       long now = Debug.threadCpuTimeNanos();
       try {
-        BinaryBitmap bitmap = new BinaryBitmap(new GlobalHistogramBinarizer(source));
+        BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
         result = mMultiFormatReader.decodeWithState(bitmap);
         success = true;
       } catch (ReaderException e) {

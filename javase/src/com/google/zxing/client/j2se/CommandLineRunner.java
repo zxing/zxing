@@ -16,18 +16,18 @@
 
 package com.google.zxing.client.j2se;
 
+import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.LuminanceSource;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
-import com.google.zxing.BarcodeFormat;
 import com.google.zxing.client.result.ParsedResult;
 import com.google.zxing.client.result.ResultParser;
 import com.google.zxing.common.BitArray;
 import com.google.zxing.common.BitMatrix;
-import com.google.zxing.common.GlobalHistogramBinarizer;
+import com.google.zxing.common.HybridBinarizer;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -200,7 +200,7 @@ public final class CommandLineRunner {
     }
     try {
       LuminanceSource source = new BufferedImageLuminanceSource(image);
-      BinaryBitmap bitmap = new BinaryBitmap(new GlobalHistogramBinarizer(source));
+      BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
       if (dumpBlackPoint) {
         dumpBlackPoint(uri, image, bitmap);
       }

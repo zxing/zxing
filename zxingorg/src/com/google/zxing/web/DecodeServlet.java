@@ -27,7 +27,7 @@ import com.google.zxing.Result;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.client.result.ParsedResult;
 import com.google.zxing.client.result.ResultParser;
-import com.google.zxing.common.GlobalHistogramBinarizer;
+import com.google.zxing.common.HybridBinarizer;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
@@ -78,7 +78,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * {@link HttpServlet} which decodes images containing barcodes. Given a URL, it will
  * retrieve the image and decode it. It can also process image files uploaded via POST.
- * 
+ *
  * @author Sean Owen
  */
 public final class DecodeServlet extends HttpServlet {
@@ -102,7 +102,7 @@ public final class DecodeServlet extends HttpServlet {
     possibleFormats.add(BarcodeFormat.ITF);
     possibleFormats.add(BarcodeFormat.QR_CODE);
     possibleFormats.add(BarcodeFormat.DATAMATRIX);
-    possibleFormats.add(BarcodeFormat.PDF417);    
+    possibleFormats.add(BarcodeFormat.PDF417);
     HINTS.put(DecodeHintType.POSSIBLE_FORMATS, possibleFormats);
   }
 
@@ -249,7 +249,7 @@ public final class DecodeServlet extends HttpServlet {
     Result result;
     try {
       LuminanceSource source = new BufferedImageLuminanceSource(image);
-      BinaryBitmap bitmap = new BinaryBitmap(new GlobalHistogramBinarizer(source));
+      BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
       result = reader.decode(bitmap, HINTS);
     } catch (ReaderException re) {
       log.info("DECODE FAILED: " + re.toString());

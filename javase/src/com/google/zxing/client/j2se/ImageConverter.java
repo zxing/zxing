@@ -21,7 +21,7 @@ import com.google.zxing.LuminanceSource;
 import com.google.zxing.ReaderException;
 import com.google.zxing.common.BitArray;
 import com.google.zxing.common.BitMatrix;
-import com.google.zxing.common.GlobalHistogramBinarizer;
+import com.google.zxing.common.HybridBinarizer;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -96,7 +96,7 @@ public final class ImageConverter {
   private static void convertImage(URI uri) throws IOException {
     BufferedImage image = ImageIO.read(uri.toURL());
     LuminanceSource source = new BufferedImageLuminanceSource(image);
-    BinaryBitmap bitmap = new BinaryBitmap(new GlobalHistogramBinarizer(source));
+    BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
     int width = bitmap.getWidth();
     int height = bitmap.getHeight();
 

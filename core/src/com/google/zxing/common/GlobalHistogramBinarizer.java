@@ -26,10 +26,12 @@ import com.google.zxing.ReaderException;
  * algorithm. However, because it picks a global black point, it cannot handle difficult shadows
  * and gradients.
  *
+ * Faster mobile devices and all desktop applications should probably use HybridBinarizer instead.
+ *
  * @author dswitkin@google.com (Daniel Switkin)
  * @author Sean Owen
  */
-public final class GlobalHistogramBinarizer extends Binarizer {
+public class GlobalHistogramBinarizer extends Binarizer {
 
   private static final int LUMINANCE_BITS = 5;
   private static final int LUMINANCE_SHIFT = 8 - LUMINANCE_BITS;
@@ -105,7 +107,7 @@ public final class GlobalHistogramBinarizer extends Binarizer {
     for (int y = 0; y < height; y++) {
       int offset = y * width;
       for (int x = 0; x< width; x++) {
-        int pixel = localLuminances[offset + x] & 0xff; 
+        int pixel = localLuminances[offset + x] & 0xff;
         if (pixel < blackPoint) {
           matrix.set(x, y);
         }

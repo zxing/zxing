@@ -184,7 +184,7 @@ public abstract class AbstractBlackBoxTestCase extends TestCase {
         float rotation = testResults.get(x).getRotation();
         BufferedImage rotatedImage = rotateImage(image, rotation);
         LuminanceSource source = new BufferedImageLuminanceSource(rotatedImage);
-        BinaryBitmap bitmap = new BinaryBitmap(new GlobalHistogramBinarizer(source));
+        BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
         if (decode(bitmap, rotation, expectedText, false)) {
           passedCounts[x]++;
         }
