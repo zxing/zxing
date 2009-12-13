@@ -95,7 +95,7 @@ limitations under the License.
   <property name="source-location" value="${basedir}/${source-folder}" />
 
   <!-- folder for the 3rd party java libraries -->
-  <property name="external-libs-folder" value="../core" />
+  <!--<property name="external-libs-folder" value="../core" />-->
 
   <!-- folder for the native libraries -->
   <property name="native-libs-folder" value="libs" />
@@ -179,9 +179,36 @@ limitations under the License.
       <src path="${gen-folder}" />
       <classpath>
         <fileset dir="${external-libs-folder}" includes="*.jar"/>
+        <pathelement path="../core/core.jar"/>
         <pathelement path="${main-out-classes}"/>
       </classpath>
     </javac>
+
+    <unzip src="../core/core.jar" dest="${out-classes}" overwrite="true"/>
+
+    <antcall target="optimize"/>
+  </target>
+
+  <target name="optimize" unless="no-optimize">
+    <mkdir dir="optimized"/>
+    <property name="libraryjars.path" refid="android.target.classpath"/>
+    <java jar="${WTK-home}/bin/proguard.jar" fork="true" failonerror="true">
+      <jvmarg value="-Dmaximum.inlined.code.length=48"/>
+      <arg value="-injars ${out-classes}"/>
+      <arg value="-outjars optimized"/>
+      <arg value="-libraryjars ${libraryjars.path}"/>
+      <arg value="-keep class com.google.zxing.client.androidtest.*Activity"/>
+      <arg value="-keep class com.google.zxing.client.androidtest.ViewfinderView { public * ; }"/>
+      <arg value="-target 5"/>
+      <arg value="-optimizationpasses 4"/>
+      <arg value="-dontshrink"/>
+      <arg value="-dontobfuscate"/>
+      <arg value="-dontskipnonpubliclibraryclasses"/>
+      <arg value="-verbose"/>
+      <arg value="-dump proguard-dump.txt"/>
+    </java>
+    <delete dir="${out-classes}"/>
+    <move file="optimized" tofile="${out-classes}"/>
   </target>
 
   <!-- Convert this project's .class files into .dex files. -->
