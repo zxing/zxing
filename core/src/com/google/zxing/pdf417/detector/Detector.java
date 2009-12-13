@@ -99,6 +99,9 @@ public final class Detector {
 
       int dimension = computeDimension(vertices[4], vertices[6],
           vertices[5], vertices[7], moduleWidth);
+      if (dimension < 1) {
+        throw ReaderException.getInstance();
+      }
 
       // Deskew and sample image.
       BitMatrix bits = sampleGrid(matrix, vertices[4], vertices[5],
