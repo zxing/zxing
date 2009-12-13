@@ -106,6 +106,9 @@ public final class Code39Reader extends OneDReader {
     do {
       recordPattern(row, nextStart, counters);
       int pattern = toNarrowWidePattern(counters);
+      if (pattern < 0) {
+        throw ReaderException.getInstance();
+      }
       decodedChar = patternToChar(pattern);
       result.append(decodedChar);
       lastStart = nextStart;
@@ -187,15 +190,11 @@ public final class Code39Reader extends OneDReader {
         counters[counterPosition]++;
       } else {
         if (counterPosition == patternLength - 1) {
-          try {
-            if (toNarrowWidePattern(counters) == ASTERISK_ENCODING) {
-              // Look for whitespace before start pattern, >= 50% of width of start pattern
-              if (row.isRange(Math.max(0, patternStart - (i - patternStart) / 2), patternStart, false)) {
-                return new int[]{patternStart, i};
-              }
+          if (toNarrowWidePattern(counters) == ASTERISK_ENCODING) {
+            // Look for whitespace before start pattern, >= 50% of width of start pattern
+            if (row.isRange(Math.max(0, patternStart - (i - patternStart) / 2), patternStart, false)) {
+              return new int[]{patternStart, i};
             }
-          } catch (ReaderException re) {
-            // no match, continue
           }
           patternStart += counters[0] + counters[1];
           for (int y = 2; y < patternLength; y++) {
@@ -214,7 +213,9 @@ public final class Code39Reader extends OneDReader {
     throw ReaderException.getInstance();
   }
 
-  private static int toNarrowWidePattern(int[] counters) throws ReaderException {
+  // For efficiency, returns -1 on failure. Not throwing here saved as many as 700 exceptions
+  // per image when using some of our blackbox images.
+  private static int toNarrowWidePattern(int[] counters) {
     int numCounters = counters.length;
     int maxNarrowCounter = 0;
     int wideCounters;
@@ -248,14 +249,14 @@ public final class Code39Reader extends OneDReader {
             wideCounters--;
             // totalWideCountersWidth = 3 * average, so this checks if counter >= 3/2 * average
             if ((counter << 1) >= totalWideCountersWidth) {
-              throw ReaderException.getInstance();
+              return -1;
             }
           }
         }
         return pattern;
       }
     } while (wideCounters > 3);
-    throw ReaderException.getInstance();
+    return -1;
   }
 
   private static char patternToChar(int pattern) throws ReaderException {
