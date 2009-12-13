@@ -95,11 +95,12 @@ public final class HybridBinarizer extends GlobalHistogramBinarizer {
         top = (top < subHeight - 2) ? top : subHeight - 3;
         int sum = 0;
         for (int z = -2; z <= 2; z++) {
-          sum += blackPoints[top + z][left - 2];
-          sum += blackPoints[top + z][left - 1];
-          sum += blackPoints[top + z][left];
-          sum += blackPoints[top + z][left + 1];
-          sum += blackPoints[top + z][left + 2];
+          int[] blackRow = blackPoints[top + z];
+          sum += blackRow[left - 2];
+          sum += blackRow[left - 1];
+          sum += blackRow[left];
+          sum += blackRow[left + 1];
+          sum += blackRow[left + 2];
         }
         int average = sum / 25;
         threshold8x8Block(luminances, x << 3, y << 3, average, stride, matrix);
