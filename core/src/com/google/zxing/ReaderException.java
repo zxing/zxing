@@ -36,13 +36,57 @@ public final class ReaderException extends Exception {
 
   private static final ReaderException instance = new ReaderException();
 
+  // EXCEPTION TRACKING SUPPORT
+  // Identifies who is throwing exceptions and how often. To use:
+  //
+  // 1. Uncomment these lines and the code below which uses them.
+  // 2. Uncomment the two corresponding lines in j2se/CommandLineRunner.decode()
+  // 3. Change core to build as Java 1.5 temporarily
+//  private static int exceptionCount = 0;
+//  private static Map<String,Integer> throwers = new HashMap<String,Integer>(32);
+
   private ReaderException() {
     // do nothing
   }
 
   public static ReaderException getInstance() {
+//    Exception e = new Exception();
+//    // Take the stack frame before this one.
+//    StackTraceElement stack = e.getStackTrace()[1];
+//    String key = stack.getClassName() + "." + stack.getMethodName() + "(), line " +
+//        stack.getLineNumber();
+//    if (throwers.containsKey(key)) {
+//      Integer value = throwers.get(key);
+//      value++;
+//      throwers.put(key, value);
+//    } else {
+//      throwers.put(key, 1);
+//    }
+//    exceptionCount++;
+
     return instance;
   }
+
+//  public static int getExceptionCountAndReset() {
+//    int temp = exceptionCount;
+//    exceptionCount = 0;
+//    return temp;
+//  }
+//
+//  public static String getThrowersAndReset() {
+//    StringBuilder builder = new StringBuilder(1024);
+//    Object[] keys = throwers.keySet().toArray();
+//    for (int x = 0; x < keys.length; x++) {
+//      String key = (String) keys[x];
+//      Integer value = throwers.get(key);
+//      builder.append(key);
+//      builder.append(": ");
+//      builder.append(value);
+//      builder.append("\n");
+//    }
+//    throwers.clear();
+//    return builder.toString();
+//  }
 
   // Prevent stack traces from being taken
   // srowen says: huh, my IDE is saying this is not an override. native methods can't be overridden?
