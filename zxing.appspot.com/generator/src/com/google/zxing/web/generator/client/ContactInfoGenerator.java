@@ -71,6 +71,7 @@ public class ContactInfoGenerator implements GeneratorSource {
       String email, String address, String address2, String memo) {
     StringBuilder output = new StringBuilder();
     output.append("MECARD:");
+    name = name.replace(",", ""); // remove commas -- reserved char in MECARD
     output.append("N:").append(name).append(';');
     //maybeAppend(output, "ORG:", company); // Not standard; don't generate
     maybeAppend(output, "TEL:", tel);
