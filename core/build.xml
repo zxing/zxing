@@ -42,7 +42,7 @@
         <attribute name="Bundle-Name" value="ZXing"/>
         <attribute name="Bundle-Vendor" value="ZXing Project"/>
         <attribute name="Bundle-SymbolicName" value="ZXing"/>
-        <attribute name="Bundle-Version" value="${version}"/>        
+        <attribute name="Bundle-Version" value="${version}"/>
         <attribute name="Export-Package" value="com.google.zxing,com.google.zxing.common,com.google.zxing.client.result"/>
         <attribute name="Bug-Bundle-Type" value="Application"/>
       </manifest>
@@ -61,6 +61,38 @@
     <antcall target="compile">
       <param name="generate-debug" value="false"/>
     </antcall>
+  </target>
+
+  <!-- This target builds an optimized core.jar using ProGuard. It is not intended for our Android
+  client - use build-no-debug intead, then build the client which runs ProGuard on everything. -->
+  <target name="build-optimized" depends="clean">
+    <antcall target="compile">
+      <param name="generate-debug" value="false"/>
+    </antcall>
+
+    <delete file="core.jar"/>
+    <mkdir dir="optimized"/>
+    <java jar="${WTK-home}/bin/proguard.jar" fork="true" failonerror="true">
+      <jvmarg value="-Dmaximum.inlined.code.length=48"/>
+      <arg value="-injars build"/>
+      <arg value="-outjars optimized"/>
+      <!-- Needed for Mac OS. -->
+      <!--<arg value="-libraryjars ${java.home}/../Classes/classes.jar"/>-->
+      <!-- Needed for other Android apps besides Barcode Scanner. -->
+      <!--<arg value="-libraryjars ${android-home}/platforms/android-1.6/android.jar"/>-->
+      <arg value="-keep class com.google.zxing.* {public protected *;}"/>
+      <arg value="-keep class com.google.zxing.common.*Binarizer {public protected *;}"/>
+      <!-- Remove this line is you only use the Result base object and want the smallest jar. -->
+      <arg value="-keep class com.google.zxing.client.result.* {public protected *;}"/>
+      <!-- Contains a useful UPC-E to UPC-A method. -->
+      <arg value="-keep class com.google.zxing.oned.UPCEReader {public *;}"/>
+      <arg value="-target 1.2"/>
+      <arg value="-optimizationpasses 4"/>
+      <arg value="-dontobfuscate"/>
+      <arg value="-dontskipnonpubliclibraryclasses"/>
+      <arg value="-verbose"/>
+    </java>
+    <jar jarfile="core.jar" basedir="optimized"/>
   </target>
 
   <target name="build-test" depends="init,build">
@@ -120,7 +152,7 @@
       <batchtest>
         <fileset dir="test/src">
           <include name="**/${subdir}/*BlackBox*TestCase.java"/>
-          <exclude name="**/Abstract*.java"/>            
+          <exclude name="**/Abstract*.java"/>
         </fileset>
       </batchtest>
     </junit>
@@ -141,7 +173,7 @@
       <jvmarg value="-Xint"/> <!-- works around weird JIT bug in Java 6 -->
       <batchtest>
         <fileset dir="test/src">
-          <include name="**/*TestCase.java"/>          
+          <include name="**/*TestCase.java"/>
           <exclude name="**/*BlackBox*TestCase.java"/>
           <exclude name="**/Abstract*.java"/>
         </fileset>
@@ -154,6 +186,7 @@
   <target name="clean">
     <delete dir="build"/>
     <delete dir="build-test"/>
+    <delete dir="optimized"/>
     <delete file="core.jar"/>
     <delete file="ZXingReader.*"/>
     <delete file="proguard-dump.txt"/>
