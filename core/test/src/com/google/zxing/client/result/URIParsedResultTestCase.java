@@ -49,6 +49,14 @@ public final class URIParsedResultTestCase extends TestCase {
     doTest("urlto:foo:bar.com", "http://bar.com", "foo");
   }
 
+  public void testGarbage() {
+    String text = "Da65cV1g^>%^f0bAbPn1CJB6lV7ZY8hs0Sm:DXU0cd]GyEeWBz8]bUHLB";
+    Result fakeResult = new Result(text, null, null, BarcodeFormat.QR_CODE);
+    ParsedResult result = ResultParser.parseResult(fakeResult);
+    assertSame(ParsedResultType.TEXT, result.getType());
+    assertEquals(text, result.getDisplayResult());
+  }
+
   public void testIsPossiblyMalicious() {
     doTestIsPossiblyMalicious("http://google.com", false);
     doTestIsPossiblyMalicious("http://google.com@evil.com", true);
@@ -61,7 +69,7 @@ public final class URIParsedResultTestCase extends TestCase {
   private static void doTest(String contents, String uri, String title) {
     Result fakeResult = new Result(contents, null, null, BarcodeFormat.QR_CODE);
     ParsedResult result = ResultParser.parseResult(fakeResult);
-    assertEquals(ParsedResultType.URI, result.getType());
+    assertSame(ParsedResultType.URI, result.getType());
     URIParsedResult uriResult = (URIParsedResult) result;
     assertEquals(uri, uriResult.getURI());
     assertEquals(title, uriResult.getTitle());

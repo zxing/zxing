@@ -73,7 +73,7 @@ public final class AddressBookParsedResultTestCase extends TestCase {
                              String note) {
     Result fakeResult = new Result(contents, null, null, BarcodeFormat.QR_CODE);
     ParsedResult result = ResultParser.parseResult(fakeResult);
-    assertEquals(ParsedResultType.ADDRESSBOOK, result.getType());
+    assertSame(ParsedResultType.ADDRESSBOOK, result.getType());
     AddressBookParsedResult addressResult = (AddressBookParsedResult) result;
     assertEquals(title, addressResult.getTitle());
     assertTrue(Arrays.equals(names, addressResult.getNames()));

@@ -295,20 +295,10 @@ public final class ParsedReaderResultTestCase extends TestCase {
     Result fakeResult = new Result(contents, null, null, format);
     ParsedResult result = ResultParser.parseResult(fakeResult);
     assertNotNull(result);
-    assertEquals(type, result.getType());
+    assertSame(type, result.getType());
 
     String displayResult = result.getDisplayResult();
-    assertTrue("Expected:\n" + goldenResult + "\nbut got:\n" + displayResult,
-        goldenResult.equals(displayResult));
+    assertEquals(goldenResult, displayResult);
   }
-
-  /*
-  private static void doTestResult(byte[] rawBytes, ParsedResultType type) {
-    Result fakeResult = new Result(null, rawBytes, null, null);
-    ParsedResult result = ResultParser.parseResult(fakeResult);
-    assertNotNull(result);
-    assertEquals(type, result.getType());
-  }
-   */
 
 }
