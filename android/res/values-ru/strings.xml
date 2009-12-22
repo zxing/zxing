@@ -15,7 +15,7 @@
  limitations under the License.
  -->
 <resources>
-  <string name="app_picker_name">Применения</string>  
+  <string name="app_picker_name">Программы</string>  
   <string name="app_name">Сканер штрих-кодов</string>
   <string name="bookmark_picker_name">Закладки</string>
   <string name="button_add_calendar">Добавить в календарь</string>
@@ -27,7 +27,7 @@
   <string name="button_custom_product_search">Пользовательский поиск</string>
   <string name="button_dial">Набрать номер</string>
   <string name="button_done">Готово</string>
-  <string name="button_email">Послать эл. письмо</string>
+  <string name="button_email">Отправить по эл. почте</string>
   <string name="button_get_directions">Проложить маршрут</string>
   <string name="button_mms">Послать MMS</string>
   <string name="button_ok">OK</string>
@@ -65,7 +65,7 @@
   <string name="msg_encode_contents_failed">Не могу закодировать штрих-код от источник данных.</string>
   <string name="msg_encode_in_progress">Генерация штрих-кода\u2026</string>
   <string name="msg_intent_failed">К сожалению, запрошенное приложение не может быть запущенно. Содержимое штрих-кода может быть повреждено.</string>
-  <string name="msg_loading_apps">Нагружать список применений</string>
+  <string name="msg_loading_apps">Загружаю список программ</string>
   <string name="msg_not_our_results">Вы покидаете это приложение. Результаты поиска, которую вы видите, не связанным с этим приложением.</string>
   <string name="msg_sbc_book_not_searchable">К сожалению, поиск книги не удался.</string>
   <string name="msg_sbc_failed">К сожалению, у поиска возникли проблемы.</string>
@@ -75,7 +75,7 @@
   <string name="msg_sbc_unknown_page">Неизвестная страница</string>
   <string name="msg_sbc_searching_book">Поиск книги\u2026</string>
   <string name="msg_share_explanation">Вы можете поделиться данными, сканировав штрих-код с вашего экрана другим телефоном.</string>
-  <string name="msg_share_subject_line">Тут содержимое отсканированного мною штрих-кода</string>
+  <string name="msg_share_subject_line">Тут содержимое отсканированных Вами штрих-кодов</string>
   <string name="preferences_name">Настройки</string>
   <string name="preferences_general_title">Общие настройки</string>
   <string name="preferences_decode_1D_title">Распознавать линейные штрих-коды</string>
