@@ -237,6 +237,9 @@ public final class Detector {
       if (error > 0) {
         y += ystep;
         error -= dx;
+        if (y == toY) {
+          break;
+        }
       }
     }
     return new ResultPointsAndTransitions(from, to, transitions);
