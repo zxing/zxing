@@ -263,13 +263,13 @@ public class Detector {
       // "to" should the be the first value not included, so, the first value off
       // the edge is -1
       otherToX = -1;
-    } else if (otherToX >= image.getWidth()) {
+    } else if (otherToX > image.getWidth()) {
       otherToX = image.getWidth();
     }
     int otherToY = fromY - (toY - fromY);
     if (otherToY < 0) {
       otherToY = -1;
-    } else if (otherToY >= image.getHeight()) {
+    } else if (otherToY > image.getHeight()) {
       otherToY = image.getHeight();
     }
     result += sizeOfBlackWhiteBlackRun(fromX, fromY, otherToX, otherToY);
@@ -326,6 +326,9 @@ public class Detector {
       if (error > 0) {
         y += ystep;
         error -= dx;
+        if (y == toY) {
+          break;
+        }
       }
     }
     int diffX = toX - fromX;
