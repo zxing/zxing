@@ -37,7 +37,7 @@ public final class ProductParsedResultTestCase extends TestCase {
   private static void doTest(String contents, String normalized, BarcodeFormat format) {
     Result fakeResult = new Result(contents, null, null, format);
     ParsedResult result = ResultParser.parseResult(fakeResult);
-    assertEquals(ParsedResultType.PRODUCT, result.getType());
+    assertSame(ParsedResultType.PRODUCT, result.getType());
     ProductParsedResult productResult = (ProductParsedResult) result;
     assertEquals(contents, productResult.getProductID());
     assertEquals(normalized, productResult.getNormalizedProductID());

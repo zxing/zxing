@@ -34,7 +34,7 @@ public final class ISBNParsedResultTestCase extends TestCase {
   private static void doTest(String contents) {
     Result fakeResult = new Result(contents, null, null, BarcodeFormat.EAN_13);
     ParsedResult result = ResultParser.parseResult(fakeResult);
-    assertEquals(ParsedResultType.ISBN, result.getType());
+    assertSame(ParsedResultType.ISBN, result.getType());
     ISBNParsedResult isbnResult = (ISBNParsedResult) result;
     assertEquals(contents, isbnResult.getISBN());
   }

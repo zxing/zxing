@@ -42,7 +42,7 @@ public final class EmailAddressParsedResultTestCase extends TestCase {
   private static void doTest(String contents, String email, String subject, String body) {
     Result fakeResult = new Result(contents, null, null, BarcodeFormat.QR_CODE);
     ParsedResult result = ResultParser.parseResult(fakeResult);
-    assertEquals(ParsedResultType.EMAIL_ADDRESS, result.getType());
+    assertSame(ParsedResultType.EMAIL_ADDRESS, result.getType());
     EmailAddressParsedResult emailResult = (EmailAddressParsedResult) result;
     assertEquals(email, emailResult.getEmailAddress());
     assertEquals("mailto:" + email, emailResult.getMailtoURI());

@@ -42,7 +42,7 @@ public final class SMSMMSParsedResultTestCase extends TestCase {
   private static void doTest(String contents, String number, String subject, String body, String via) {
     Result fakeResult = new Result(contents, null, null, BarcodeFormat.QR_CODE);
     ParsedResult result = ResultParser.parseResult(fakeResult);
-    assertEquals(ParsedResultType.SMS, result.getType());
+    assertSame(ParsedResultType.SMS, result.getType());
     SMSParsedResult smsResult = (SMSParsedResult) result;
     assertEquals(number, smsResult.getNumber());
     assertEquals(subject, smsResult.getSubject());

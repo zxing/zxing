@@ -43,7 +43,7 @@ public final class CalendarParsedResultTestCase extends TestCase {
                              String attendee) {
     Result fakeResult = new Result(contents, null, null, BarcodeFormat.QR_CODE);
     ParsedResult result = ResultParser.parseResult(fakeResult);
-    assertEquals(ParsedResultType.CALENDAR, result.getType());
+    assertSame(ParsedResultType.CALENDAR, result.getType());
     CalendarParsedResult calResult = (CalendarParsedResult) result;
     assertEquals(title, calResult.getTitle());
     assertEquals(summary, calResult.getSummary());

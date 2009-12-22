@@ -35,7 +35,7 @@ public final class TelParsedResultTestCase extends TestCase {
   private static void doTest(String contents, String number, String title) {
     Result fakeResult = new Result(contents, null, null, BarcodeFormat.QR_CODE);
     ParsedResult result = ResultParser.parseResult(fakeResult);
-    assertEquals(ParsedResultType.TEL, result.getType());
+    assertSame(ParsedResultType.TEL, result.getType());
     TelParsedResult telResult = (TelParsedResult) result;
     assertEquals(number, telResult.getNumber());
     assertEquals(title, telResult.getTitle());

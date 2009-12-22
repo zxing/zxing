@@ -35,7 +35,7 @@ public final class GeoParsedResultTestCase extends TestCase {
   private static void doTest(String contents, double latitude, double longitude, double altitude) {
     Result fakeResult = new Result(contents, null, null, BarcodeFormat.QR_CODE);
     ParsedResult result = ResultParser.parseResult(fakeResult);
-    assertEquals(ParsedResultType.GEO, result.getType());
+    assertSame(ParsedResultType.GEO, result.getType());
     GeoParsedResult geoResult = (GeoParsedResult) result;
     assertEquals(latitude, geoResult.getLatitude());
     assertEquals(longitude, geoResult.getLongitude());
