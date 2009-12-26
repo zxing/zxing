@@ -15,7 +15,7 @@
  limitations under the License.
  -->
 <resources>
-  <string name="app_picker_name">Applications</string>  
+  <string name="app_picker_name">Applications</string>
   <string name="app_name">Scansione codice a barre</string>
   <string name="bookmark_picker_name">Segnalibri</string>
   <string name="button_add_calendar">Aggiungi al calendario</string>
@@ -36,11 +36,11 @@
   <string name="button_search_book_contents">Cerca contenuti libro</string>
   <string name="button_read_book">Sfoglia libro</string>
   <string name="button_share_app">Applicazione</string>
-  <string name="button_share_bookmark">Segnalibro</string>
+  <string name="button_share_bookmark">Condividi segnalibro</string>
   <string name="button_share_by_email">Condividi tramite email</string>
   <string name="button_share_by_sms">Condividi tramite SMS</string>
-  <string name="button_share_clipboard">Appunti</string>
-  <string name="button_share_contact">Contatto</string>
+  <string name="button_share_clipboard">Condividi appunti</string>
+  <string name="button_share_contact">Condividi contatto</string>
   <string name="button_show_map">Mostra mappa</string>
   <string name="button_sms">Invia SMS</string>
   <string name="button_web_search">Ricerca web</string>
@@ -95,7 +95,7 @@
   <string name="result_product">Prodotto trovato</string>
   <string name="result_sms">Numero SMS trovato</string>
   <string name="result_tel">Numero di telefono trovato</string>
-  <string name="result_text">Testo pure trovato</string>
+  <string name="result_text">Testo puro trovato</string>
   <string name="result_uri">URL trovato</string>
   <string name="history_title">Cronologia</string>
   <string name="history_clear_text">Cancella cronologia</string>
