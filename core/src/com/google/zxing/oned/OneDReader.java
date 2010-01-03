@@ -194,7 +194,7 @@ public abstract class OneDReader implements Reader {
           break;
         } else {
           counters[counterPosition] = 1;
-          isWhite = !isWhite;
+          isWhite ^= true; // isWhite = !isWhite;
         }
       }
       i++;
