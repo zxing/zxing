@@ -266,7 +266,7 @@ public abstract class UPCEANReader extends OneDReader {
           counterPosition++;
         }
         counters[counterPosition] = 1;
-        isWhite = !isWhite;
+        isWhite ^= true; // isWhite = !isWhite;
       }
     }
     throw ReaderException.getInstance();
