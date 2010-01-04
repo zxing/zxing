@@ -20,17 +20,21 @@ version to be published. The next versionCode will be 7, regardless of whether t
 versionName is 2.31, 2.4, or 3.0. -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.google.zxing.client.android"
-          android:versionName="3.1"
-          android:versionCode="42">
+          android:versionName="3.11 alpha 1"
+          android:versionCode="43">
   <!-- We require Cupcake (Android 1.5) or later, but are really targeting Donut. -->
   <uses-sdk android:minSdkVersion="3"
             android:targetSdkVersion="4"/>
-  <!-- Donut-specific flags which allow us to run on large and high dpi screens. -->
-  <supports-screens
-    android:largeScreens="true"
-    android:normalScreens="true"
-    android:smallScreens="true"
-    android:anyDensity="true"/>
+  <!-- Donut-specific flags which allow us to run on any dpi screens. -->
+  <supports-screens android:largeScreens="true"
+                    android:normalScreens="true"
+                    android:smallScreens="true"
+                    android:anyDensity="true"/>
+  <!-- For Donut and above we must specify that we use the camera, but intentionally omit the
+  autofocus feature in order for the app to appear in Market for non-AF devices. While it's true
+  that 1D barcodes will not be scannable, QR Codes will work. Ideally we'd show users a message
+  to this effect on first launch. -->
+  <uses-feature android:name="android.hardware.camera"/>
   <application android:icon="@drawable/launcher_icon"
                android:label="@string/app_name">
     <activity android:name=".CaptureActivity"
