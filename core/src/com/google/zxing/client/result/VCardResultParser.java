@@ -57,7 +57,7 @@ final class VCardResultParser extends ResultParser {
     String org = matchSingleVCardPrefixedField("ORG", rawText, true);
     String birthday = matchSingleVCardPrefixedField("BDAY", rawText, true);
     if (!isLikeVCardDate(birthday)) {
-      return null;
+      birthday = null;
     }
     String title = matchSingleVCardPrefixedField("TITLE", rawText, true);
     String url = matchSingleVCardPrefixedField("URL", rawText, true);
