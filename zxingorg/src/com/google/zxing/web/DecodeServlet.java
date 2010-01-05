@@ -27,6 +27,7 @@ import com.google.zxing.Result;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.client.result.ParsedResult;
 import com.google.zxing.client.result.ResultParser;
+import com.google.zxing.common.GlobalHistogramBinarizer;
 import com.google.zxing.common.HybridBinarizer;
 
 import org.apache.commons.fileupload.FileItem;
@@ -249,7 +250,7 @@ public final class DecodeServlet extends HttpServlet {
     Result result;
     try {
       LuminanceSource source = new BufferedImageLuminanceSource(image);
-      BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+      BinaryBitmap bitmap = new BinaryBitmap(new GlobalHistogramBinarizer(source));
       result = reader.decode(bitmap, HINTS);
     } catch (ReaderException re) {
       log.info("DECODE FAILED: " + re.toString());
