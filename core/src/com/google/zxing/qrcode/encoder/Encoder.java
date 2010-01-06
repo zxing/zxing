@@ -63,26 +63,6 @@ public final class Encoder {
     return penalty;
   }
 
-  private static final class BlockPair {
-
-    private final ByteArray dataBytes;
-    private final ByteArray errorCorrectionBytes;
-
-    BlockPair(ByteArray data, ByteArray errorCorrection) {
-      dataBytes = data;
-      errorCorrectionBytes = errorCorrection;
-    }
-
-    public ByteArray getDataBytes() {
-      return dataBytes;
-    }
-
-    public ByteArray getErrorCorrectionBytes() {
-      return errorCorrectionBytes;
-    }
-
-  }
-
   /**
    *  Encode "bytes" with the error correction level "ecLevel". The encoding mode will be chosen
    * internally by chooseMode(). On success, store the result in "qrCode".
