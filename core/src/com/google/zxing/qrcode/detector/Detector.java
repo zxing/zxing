@@ -260,17 +260,15 @@ public class Detector {
     // Now count other way -- don't run off image though of course
     int otherToX = fromX - (toX - fromX);
     if (otherToX < 0) {
-      // "to" should the be the first value not included, so, the first value off
-      // the edge is -1
-      otherToX = -1;
-    } else if (otherToX > image.getWidth()) {
-      otherToX = image.getWidth();
+      otherToX = 0;
+    } else if (otherToX >= image.getWidth()) {
+      otherToX = image.getWidth() - 1;
     }
     int otherToY = fromY - (toY - fromY);
     if (otherToY < 0) {
-      otherToY = -1;
-    } else if (otherToY > image.getHeight()) {
-      otherToY = image.getHeight();
+      otherToY = 0;
+    } else if (otherToY >= image.getHeight()) {
+      otherToY = image.getHeight() - 1;
     }
     result += sizeOfBlackWhiteBlackRun(fromX, fromY, otherToX, otherToY);
     return result - 1.0f; // -1 because we counted the middle pixel twice
@@ -324,11 +322,11 @@ public class Detector {
       }
       error += dy;
       if (error > 0) {
-        y += ystep;
-        error -= dx;
         if (y == toY) {
           break;
         }
+        y += ystep;
+        error -= dx;
       }
     }
     int diffX = toX - fromX;
