@@ -235,11 +235,11 @@ public final class Detector {
       }
       error += dy;
       if (error > 0) {
-        y += ystep;
-        error -= dx;
         if (y == toY) {
           break;
         }
+        y += ystep;
+        error -= dx;
       }
     }
     return new ResultPointsAndTransitions(from, to, transitions);
