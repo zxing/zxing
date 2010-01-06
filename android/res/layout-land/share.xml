@@ -43,7 +43,7 @@
         android:layout_height="wrap_content"
         android:scaleType="center"
         android:src="@drawable/share_via_barcode"
-        android:paddingRight="48dip"/>
+        android:paddingRight="32dip"/>
 
     <TableLayout
         android:layout_width="fill_parent"
@@ -54,12 +54,14 @@
         <Button android:id="@+id/contact_button"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/button_share_contact"/>
+                android:text="@string/button_share_contact"
+                android:minWidth="90dip"/>
 
         <Button android:id="@+id/bookmark_button"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/button_share_bookmark"/>
+                android:text="@string/button_share_bookmark"
+                android:minWidth="90dip"/>
 
       </TableRow>
 
@@ -68,12 +70,14 @@
         <Button android:id="@+id/clipboard_button"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/button_share_clipboard"/>
+                android:text="@string/button_share_clipboard"
+                android:minWidth="90dip"/>
 
         <Button android:id="@+id/app_button"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/button_share_app"/>
+                android:text="@string/button_share_app"
+                android:minWidth="90dip"/>
 
       </TableRow>
 

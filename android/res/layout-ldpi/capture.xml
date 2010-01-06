@@ -52,7 +52,7 @@
           android:gravity="left|top">
 
         <ImageView android:id="@+id/barcode_image_view"
-                   android:layout_width="wrap_content"
+                   android:layout_width="160dip"
                    android:layout_height="wrap_content"
                    android:layout_marginBottom="4dip"
                    android:adjustViewBounds="true"
@@ -64,7 +64,7 @@
                   android:layout_gravity="left"
                   android:text="@string/msg_default_format"
                   android:textColor="@color/result_minor_text"
-                  android:textSize="12sp"/>
+                  android:textSize="14sp"/>
 
         <TextView android:id="@+id/type_text_view"
                   android:layout_width="wrap_content"
@@ -72,7 +72,7 @@
                   android:layout_gravity="left"
                   android:text="@string/msg_default_type"
                   android:textColor="@color/result_minor_text"
-                  android:textSize="12sp"/>
+                  android:textSize="14sp"/>
 
       </LinearLayout>
 
