@@ -37,7 +37,13 @@ import java.util.Date;
  * @author dswitkin@google.com (Daniel Switkin)
  */
 public final class AddressBookResultHandler extends ResultHandler {
-  private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyyMMdd");
+
+  private static final DateFormat[] DATE_FORMATS = {
+    new SimpleDateFormat("yyyyMMdd"),
+    new SimpleDateFormat("yyyyMMdd'T'HHmmss"),
+    new SimpleDateFormat("yyyy-MM-dd"),
+    new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss"),
+  };
 
   private final boolean[] fields;
   private int buttonCount;
@@ -134,6 +140,19 @@ public final class AddressBookResultHandler extends ResultHandler {
     }
   }
 
+  private static Date parseDate(String s) {
+    for (DateFormat currentFomat : DATE_FORMATS) {
+      synchronized (currentFomat) {
+        currentFomat.setLenient(false);
+        Date result = currentFomat.parse(s, new ParsePosition(0));
+        if (result != null) {
+          return result;
+        }
+      }
+    }
+    return null;
+  }
+
   // Overriden so we can hyphenate phone numbers, format birthdays, and bold the name.
   @Override
   public CharSequence getDisplayContents() {
@@ -163,11 +182,10 @@ public final class AddressBookResultHandler extends ResultHandler {
 
     String birthday = result.getBirthday();
     if (birthday != null && birthday.length() > 0) {
-      Date date;
-      synchronized (DATE_FORMAT) {
-        date = DATE_FORMAT.parse(birthday, new ParsePosition(0));
+      Date date = parseDate(birthday);
+      if (date != null) {
+        ParsedResult.maybeAppend(DateFormat.getDateInstance().format(date.getTime()), contents);
       }
-      ParsedResult.maybeAppend(DateFormat.getDateInstance().format(date.getTime()), contents);
     }
     ParsedResult.maybeAppend(result.getNote(), contents);
 
