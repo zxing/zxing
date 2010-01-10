@@ -207,7 +207,7 @@ public final class Code39Reader extends OneDReader {
           counterPosition++;
         }
         counters[counterPosition] = 1;
-        isWhite ^= true; // isWhite = !isWhite;
+        isWhite = !isWhite;
       }
     }
     throw ReaderException.getInstance();
