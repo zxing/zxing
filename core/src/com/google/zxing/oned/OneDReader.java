@@ -62,6 +62,12 @@ public abstract class OneDReader implements Reader {
               ((Integer) metadata.get(ResultMetadataType.ORIENTATION)).intValue()) % 360;
         }
         result.putMetadata(ResultMetadataType.ORIENTATION, new Integer(orientation));
+        // Update result points
+        ResultPoint[] points = result.getResultPoints();
+        int height = rotatedImage.getHeight();
+        for (int i = 0; i < points.length; i++) {
+          points[i] = new ResultPoint(height - points[i].getY() - 1, points[i].getX());
+        }
         return result;
       } else {
         throw re;
