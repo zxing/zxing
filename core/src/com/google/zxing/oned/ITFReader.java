@@ -310,7 +310,7 @@ public final class ITFReader extends OneDReader {
           counterPosition++;
         }
         counters[counterPosition] = 1;
-        isWhite ^= true; // isWhite = !isWhite;
+        isWhite = !isWhite;
       }
     }
     throw ReaderException.getInstance();
