@@ -130,8 +130,9 @@ limitations under the License.
 
   <!-- rules -->
 
-  <!-- Create the output directories if they don't exist yet. -->
-  <target name="dirs">
+  <!-- Create the output directories if they don't exist yet. All builds do a clean first
+  to prevent stale resources and to make ProGuard happy. -->
+  <target name="dirs" depends="clean">
     <echo>Creating output directories if needed...</echo>
     <mkdir dir="${resource-folder}" />
     <mkdir dir="${external-libs-folder}" />
