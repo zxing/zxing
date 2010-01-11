@@ -255,24 +255,33 @@ public class Detector {
    */
   private float sizeOfBlackWhiteBlackRunBothWays(int fromX, int fromY, int toX, int toY) {
 
-    float result = sizeOfBlackWhiteBlackRun(fromX, fromY, toX, toY);
+   float result = sizeOfBlackWhiteBlackRun(fromX, fromY, toX, toY);
 
-    // Now count other way -- don't run off image though of course
-    int otherToX = fromX - (toX - fromX);
-    if (otherToX < 0) {
-      otherToX = 0;
-    } else if (otherToX >= image.getWidth()) {
-      otherToX = image.getWidth() - 1;
-    }
-    int otherToY = fromY - (toY - fromY);
-    if (otherToY < 0) {
-      otherToY = 0;
-    } else if (otherToY >= image.getHeight()) {
-      otherToY = image.getHeight() - 1;
-    }
-    result += sizeOfBlackWhiteBlackRun(fromX, fromY, otherToX, otherToY);
-    return result - 1.0f; // -1 because we counted the middle pixel twice
-  }
+   // Now count other way -- don't run off image though of course
+   float scale = 1.0f;
+   int otherToX = fromX - (toX - fromX);
+   if (otherToX < 0) {
+     scale = (float) fromX / (float) (fromX - otherToX);
+     otherToX = 0;
+   } else if (otherToX >= image.getWidth()) {
+     scale = (float) (image.getWidth() - 1 - fromX) / (float) (otherToX - fromX);
+     otherToX = image.getWidth() - 1;
+   }
+   int otherToY = (int) (fromY - (toY - fromY) * scale);
+
+   scale = 1.0f;
+   if (otherToY < 0) {
+     scale = (float) fromY / (float) (fromY - otherToY);
+     otherToY = 0;
+   } else if (otherToY >= image.getHeight()) {
+     scale = (float) (image.getHeight() - 1 - fromY) / (float) (otherToY - fromY);
+     otherToY = image.getHeight() - 1;
+   }
+   otherToX = (int) (fromX + (otherToX - fromX) * scale);
+
+   result += sizeOfBlackWhiteBlackRun(fromX, fromY, otherToX, otherToY);
+   return result - 1.0f; // -1 because we counted the middle pixel twice
+ }
 
   /**
    * <p>This method traces a line from a point in the image, in the direction towards another point.
