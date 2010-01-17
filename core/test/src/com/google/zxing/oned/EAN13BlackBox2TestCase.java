@@ -21,14 +21,16 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.common.AbstractBlackBoxTestCase;
 
 /**
+ * This is a set of mobile image taken at 480x360 with difficult lighting.
+ *
  * @author dswitkin@google.com (Daniel Switkin)
  */
 public final class EAN13BlackBox2TestCase extends AbstractBlackBoxTestCase {
 
   public EAN13BlackBox2TestCase() {
     super("test/data/blackbox/ean13-2", new MultiFormatReader(), BarcodeFormat.EAN_13);
-    addTest(1, 1, 0.0f);
-    addTest(1, 1, 180.0f);
+    addTest(10, 14, 0.0f);
+    addTest(10, 16, 180.0f);
   }
 
 }
