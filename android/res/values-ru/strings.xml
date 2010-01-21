@@ -99,6 +99,8 @@
   <string name="result_uri">Найден URL</string>
   <string name="history_title">История</string>
   <string name="history_clear_text">Очистить историю</string>
+  <string name="history_send">Отправить историю</string>
+  <string name="history_email_title">Сканер штрих-кодов История</string>
   <string name="sbc_name">Поиск книг Google</string>
   <string name="share_name">Поделиться через штрих-код</string>
   <string name="title_about">Сканер штрих-кодов версии </string>

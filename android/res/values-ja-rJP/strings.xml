@@ -99,6 +99,8 @@
   <string name="result_uri">URL がヒットしました</string>
   <string name="history_title">歴史</string>
   <string name="history_clear_text">削除履歴</string>
+  <string name="history_send">歴史を送信</string>
+  <string name="history_email_title">QRコードスキャナー歴史</string>
   <string name="sbc_name">Google ブックス</string>
   <string name="share_name">バーコードで共有する</string>
   <string name="title_about">>QRコードスキャナー v</string>

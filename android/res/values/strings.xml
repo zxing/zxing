@@ -100,6 +100,8 @@
   <string name="result_uri">Found URL</string>
   <string name="history_title">History</string>
   <string name="history_clear_text">Clear history</string>
+  <string name="history_send">Send history</string>  
+  <string name="history_email_title">Barcode Scanner history</string>
   <string name="sbc_name">Google Book Search</string>
   <string name="share_name">Share via barcode</string>
   <string name="title_about">Barcode Scanner v</string>

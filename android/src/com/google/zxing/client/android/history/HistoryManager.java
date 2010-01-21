@@ -19,15 +19,19 @@ package com.google.zxing.client.android.history;
 import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Message;
 
 import java.util.List;
 import java.util.ArrayList;
 
 import com.google.zxing.BarcodeFormat;
+import com.google.zxing.client.android.Intents;
 import com.google.zxing.client.android.R;
 import com.google.zxing.client.android.CaptureActivity;
 import com.google.zxing.Result;
@@ -39,7 +43,7 @@ import com.google.zxing.Result;
  */
 public final class HistoryManager {
 
-  private static final int MAX_ITEMS = 20;
+  private static final int MAX_ITEMS = 50;
   private static final String[] TEXT_COL_PROJECTION = { DBHelper.TEXT_COL };
   private static final String[] TEXT_FORMAT_COL_PROJECTION = { DBHelper.TEXT_COL, DBHelper.FORMAT_COL };
   private static final String[] ID_COL_PROJECTION = { DBHelper.ID_COL };
@@ -75,15 +79,24 @@ public final class HistoryManager {
 
   public AlertDialog buildAlert() {
     final List<Result> items = getHistoryItems();
-    final String[] dialogItems = new String[items.size() + 1];
+    final String[] dialogItems = new String[items.size() + 2];
     for (int i = 0; i < items.size(); i++) {
       dialogItems[i] = items.get(i).getText();
     }
-    dialogItems[dialogItems.length - 1] = activity.getResources().getString(R.string.history_clear_text);
+    final Resources res = activity.getResources();
+    dialogItems[dialogItems.length - 2] = res.getString(R.string.history_send);
+    dialogItems[dialogItems.length - 1] = res.getString(R.string.history_clear_text);
     DialogInterface.OnClickListener clickListener = new DialogInterface.OnClickListener() {
       public void onClick(DialogInterface dialogInterface, int i) {
         if (i == dialogItems.length - 1) {
           clearHistory();
+        } else if (i == dialogItems.length - 2) {
+          String history = buildHistory();
+          Intent intent = new Intent(Intent.ACTION_SEND, Uri.parse("mailto:"));
+          intent.putExtra(Intent.EXTRA_SUBJECT, res.getString(R.string.history_email_title));
+          intent.putExtra(Intent.EXTRA_TEXT, history);
+          intent.setType("text/plain");
+          activity.startActivity(intent);
         } else {
           Result result = items.get(i);
           Message message = Message.obtain(activity.getHandler(), R.id.decode_succeeded, result);
@@ -98,6 +111,10 @@ public final class HistoryManager {
   }
 
   public void addHistoryItem(Result result) {
+
+    if (!activity.getIntent().getBooleanExtra(Intents.Scan.SAVE_HISTORY, true)) {
+      return; // Do not save this item to the history.
+    }
 
     SQLiteOpenHelper helper = new DBHelper(activity);
     SQLiteDatabase db = helper.getWritableDatabase();
@@ -147,6 +164,28 @@ public final class HistoryManager {
       }
       db.close();
     }
+  }
+
+  private String buildHistory() {
+    StringBuilder historyText = new StringBuilder();
+    SQLiteOpenHelper helper = new DBHelper(activity);
+    SQLiteDatabase db = helper.getReadableDatabase();
+    Cursor cursor = null;
+    try {
+      cursor = db.query(DBHelper.TABLE_NAME,
+                        TEXT_COL_PROJECTION,
+                        null, null, null, null,
+                        DBHelper.TIMESTAMP_COL + " DESC");
+      while (cursor.moveToNext()) {
+        historyText.append(cursor.getString(0)).append('\n');
+      }
+    } finally {
+      if (cursor != null) {
+        cursor.close();
+      }
+      db.close();
+    }
+    return historyText.toString();
   }
 
   void clearHistory() {
