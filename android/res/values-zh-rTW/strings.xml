@@ -99,6 +99,8 @@
   <string name="result_uri">找到URL</string>
   <string name="history_title">歷史</string>
   <string name="history_clear_text">刪除歷史</string>
+  <string name="history_send">發送歷史</string>
+  <string name="history_email_title">條碼掃描器歷史</string>
   <string name="sbc_name">Google圖書搜索</string>
   <string name="share_name">通過條碼分享</string>
   <string name="title_about">條碼掃描器</string>

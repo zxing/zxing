@@ -99,6 +99,8 @@
   <string name="result_uri">URL trovato</string>
   <string name="history_title">Cronologia</string>
   <string name="history_clear_text">Cancella cronologia</string>
+  <string name="history_send">Invia cronologia</string>  
+  <string name="history_email_title">Scansione codice a barre cronologia</string>
   <string name="sbc_name">Ricerca Google Book</string>
   <string name="share_name">Condividi tramite codice a barre</string>
   <string name="title_about">Scansione codice a barre v</string>

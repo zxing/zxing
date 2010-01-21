@@ -99,6 +99,8 @@
   <string name="result_uri">URL gefunden</string>
   <string name="history_title">Historie</string>
   <string name="history_clear_text">Historie löschen</string>
+  <string name="history_send">Historie senden</string>
+  <string name="history_email_title">Barcode Scanner Historie</string> 
   <string name="sbc_name">Google Book Search</string>
   <string name="share_name">Weitergabe mittels Barcode</string>
   <string name="title_about">Barcode Scanner v</string>
