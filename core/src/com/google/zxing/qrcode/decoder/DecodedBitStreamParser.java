@@ -16,12 +16,14 @@
 
 package com.google.zxing.qrcode.decoder;
 
+import com.google.zxing.DecodeHintType;
 import com.google.zxing.ReaderException;
 import com.google.zxing.common.BitSource;
 import com.google.zxing.common.CharacterSetECI;
 import com.google.zxing.common.DecoderResult;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Hashtable;
 import java.util.Vector;
 
 /**
@@ -57,7 +59,8 @@ final class DecodedBitStreamParser {
   private DecodedBitStreamParser() {
   }
 
-  static DecoderResult decode(byte[] bytes, Version version, ErrorCorrectionLevel ecLevel) throws ReaderException {
+  static DecoderResult decode(byte[] bytes, Version version, ErrorCorrectionLevel ecLevel, Hashtable hints)
+      throws ReaderException {
     BitSource bits = new BitSource(bytes);
     StringBuffer result = new StringBuffer(50);
     CharacterSetECI currentCharacterSetECI = null;
@@ -99,7 +102,7 @@ final class DecodedBitStreamParser {
           } else if (mode.equals(Mode.ALPHANUMERIC)) {
             decodeAlphanumericSegment(bits, result, count, fc1InEffect);
           } else if (mode.equals(Mode.BYTE)) {
-            decodeByteSegment(bits, result, count, currentCharacterSetECI, byteSegments);
+            decodeByteSegment(bits, result, count, currentCharacterSetECI, byteSegments, hints);
           } else if (mode.equals(Mode.KANJI)) {
             decodeKanjiSegment(bits, result, count);
           } else {
@@ -147,7 +150,8 @@ final class DecodedBitStreamParser {
                                         StringBuffer result,
                                         int count,
                                         CharacterSetECI currentCharacterSetECI,
-                                        Vector byteSegments) throws ReaderException {
+                                        Vector byteSegments,
+                                        Hashtable hints) throws ReaderException {
     byte[] readBytes = new byte[count];
     if (count << 3 > bits.available()) {
       throw ReaderException.getInstance();
@@ -162,7 +166,7 @@ final class DecodedBitStreamParser {
     // upon decoding. I have seen ISO-8859-1 used as well as
     // Shift_JIS -- without anything like an ECI designator to
     // give a hint.
-      encoding = guessEncoding(readBytes);
+      encoding = guessEncoding(readBytes, hints);
     } else {
       encoding = currentCharacterSetECI.getEncodingName();
     }
@@ -240,7 +244,13 @@ final class DecodedBitStreamParser {
     }
   }
 
-  private static String guessEncoding(byte[] bytes) {
+  private static String guessEncoding(byte[] bytes, Hashtable hints) {
+    if (hints != null) {
+      String characterSet = (String) hints.get(DecodeHintType.CHARACTER_SET);
+      if (characterSet != null) {
+        return characterSet;
+      }
+    }
     if (ASSUME_SHIFT_JIS) {
       return SHIFT_JIS;
     }
