@@ -23,6 +23,8 @@ import com.google.zxing.common.reedsolomon.GF256;
 import com.google.zxing.common.reedsolomon.ReedSolomonDecoder;
 import com.google.zxing.common.reedsolomon.ReedSolomonException;
 
+import java.util.Hashtable;
+
 /**
  * <p>The main class which implements QR Code decoding -- as opposed to locating and extracting
  * the QR Code from an image.</p>
@@ -37,6 +39,10 @@ public final class Decoder {
     rsDecoder = new ReedSolomonDecoder(GF256.QR_CODE_FIELD);
   }
 
+  public DecoderResult decode(boolean[][] image) throws ReaderException {
+    return decode(image, null);
+  }
+
   /**
    * <p>Convenience method that can decode a QR Code represented as a 2D array of booleans.
    * "true" is taken to mean a black module.</p>
@@ -45,7 +51,7 @@ public final class Decoder {
    * @return text and bytes encoded within the QR Code
    * @throws ReaderException if the QR Code cannot be decoded
    */
-  public DecoderResult decode(boolean[][] image) throws ReaderException {
+  public DecoderResult decode(boolean[][] image, Hashtable hints) throws ReaderException {
     int dimension = image.length;
     BitMatrix bits = new BitMatrix(dimension);
     for (int i = 0; i < dimension; i++) {
@@ -55,7 +61,11 @@ public final class Decoder {
         }
       }
     }
-    return decode(bits);
+    return decode(bits, hints);
+  }
+
+  public DecoderResult decode(BitMatrix bits) throws ReaderException {
+    return decode(bits, null);
   }
 
   /**
@@ -65,7 +75,7 @@ public final class Decoder {
    * @return text and bytes encoded within the QR Code
    * @throws ReaderException if the QR Code cannot be decoded
    */
-  public DecoderResult decode(BitMatrix bits) throws ReaderException {
+  public DecoderResult decode(BitMatrix bits, Hashtable hints) throws ReaderException {
 
     // Construct a parser and read version, error-correction level
     BitMatrixParser parser = new BitMatrixParser(bits);
@@ -97,7 +107,7 @@ public final class Decoder {
     }
 
     // Decode the contents of that stream of bytes
-    return DecodedBitStreamParser.decode(resultBytes, version, ecLevel);
+    return DecodedBitStreamParser.decode(resultBytes, version, ecLevel, hints);
   }
 
   /**

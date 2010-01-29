@@ -63,11 +63,11 @@ public class QRCodeReader implements Reader {
     ResultPoint[] points;
     if (hints != null && hints.containsKey(DecodeHintType.PURE_BARCODE)) {
       BitMatrix bits = extractPureBits(image.getBlackMatrix());
-      decoderResult = decoder.decode(bits);
+      decoderResult = decoder.decode(bits, hints);
       points = NO_POINTS;
     } else {
       DetectorResult detectorResult = new Detector(image.getBlackMatrix()).detect(hints);
-      decoderResult = decoder.decode(detectorResult.getBits());
+      decoderResult = decoder.decode(detectorResult.getBits(), hints);
       points = detectorResult.getPoints();
     }
 
@@ -79,6 +79,10 @@ public class QRCodeReader implements Reader {
       result.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, decoderResult.getECLevel().toString());
     }
     return result;
+  }
+
+  public void reset() {
+    // do nothing
   }
 
   /**

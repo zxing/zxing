@@ -53,6 +53,11 @@ public final class DecodeHintType {
   public static final DecodeHintType TRY_HARDER = new DecodeHintType();
 
   /**
+   * Specifies what character encoding to use when decoding, where applicable (type String)
+   */
+  public static final DecodeHintType CHARACTER_SET = new DecodeHintType();
+
+  /**
    * Allowed lengths of encoded data -- reject anything else. Maps to an int[].
    */
   public static final DecodeHintType ALLOWED_LENGTHS = new DecodeHintType();
