@@ -22,9 +22,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
   <head>
     <title>ZXing Decoder Online</title>
+    <link rel="stylesheet" href="style.css" type="text/css"/>
   </head>
   <body>
-    <h1><img src="zxing-icon.png" height="32" width="32" alt=""/> ZXing Decoder Online</h1>
+    <div id="header"><h1><img src="zxing-icon.png" height="32" width="32" alt=""/> ZXing Decoder Online</h1></div>
     <p>This is a simple page that will let you decode a 1D or 2D barcode found
       in an image online. Enter a URL below.
     </p>
@@ -45,7 +46,7 @@
       <a href="http://code.google.com/p/zxing">project page</a>
       for details.
     </p>
-    <p>Copyright 2008 and onwards ZXing authors</p>
+    <div id="footer"><p>Copyright 2008 and onwards ZXing authors</p></div>
     <jsp:include page="analytics.jspx"/>
   </body>
 </html>

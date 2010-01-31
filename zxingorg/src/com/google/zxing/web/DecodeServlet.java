@@ -63,6 +63,7 @@ import java.net.SocketException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
+import java.util.Collection;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Vector;
@@ -93,7 +94,7 @@ public final class DecodeServlet extends HttpServlet {
   static {
     HINTS = new Hashtable<DecodeHintType, Object>(5);
     HINTS.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
-    Vector<BarcodeFormat> possibleFormats = new Vector<BarcodeFormat>();
+    Collection<BarcodeFormat> possibleFormats = new Vector<BarcodeFormat>();
     possibleFormats.add(BarcodeFormat.UPC_A);
     possibleFormats.add(BarcodeFormat.UPC_E);
     possibleFormats.add(BarcodeFormat.EAN_8);
@@ -253,9 +254,16 @@ public final class DecodeServlet extends HttpServlet {
       BinaryBitmap bitmap = new BinaryBitmap(new GlobalHistogramBinarizer(source));
       result = reader.decode(bitmap, HINTS);
     } catch (ReaderException re) {
-      log.info("DECODE FAILED: " + re.toString());
-      response.sendRedirect("notfound.jspx");
-      return;
+      try {
+        // Try again with other binarizer
+        LuminanceSource source = new BufferedImageLuminanceSource(image);
+        BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+        result = reader.decode(bitmap, HINTS);
+      } catch (ReaderException re2) {
+        log.info("DECODE FAILED: " + re.toString());
+        response.sendRedirect("notfound.jspx");
+        return;
+      }
     }
 
     if (request.getParameter("full") == null) {

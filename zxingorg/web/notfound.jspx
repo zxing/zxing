@@ -22,9 +22,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
   <head>
     <title>No Barcode Found</title>
+    <link rel="stylesheet" href="style.css" type="text/css"/>    
   </head>
   <body>
-    <h1><img src="zxing-icon.png" height="32" width="32" alt=""/> No Barcode Found</h1>
+    <div id="header"><h1><img src="zxing-icon.png" height="32" width="32" alt=""/> No Barcode Found</h1></div>
     <p>No barcode was found in this image. Either it did not contain a barcode, or did not contain one in a
       supported format, or the software was simply unable to find it. Go "Back" in your browser and try another image.
     </p>

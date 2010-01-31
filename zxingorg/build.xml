@@ -84,6 +84,7 @@
       <fileset dir="web">
         <include name="*.jspx"/>
         <include name="*.png"/>
+        <include name="*.css"/>        
         <include name="**/*.jad"/>
         <include name="**/*.jar"/>
       </fileset>

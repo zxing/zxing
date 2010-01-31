@@ -24,12 +24,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
   <head>
     <title>Decode Succeeded</title>
+    <link rel="stylesheet" href="style.css" type="text/css"/>    
     <style type="text/css">
       td { vertical-align: top; padding: 0.1in; background-color: #EEEEEE; font-family: monospace; }
     </style>
   </head>
   <body>
-    <h1><img src="zxing-icon.png" height="32" width="32" alt=""/> Decode Succeeded</h1>
+    <div id="header"><h1><img src="zxing-icon.png" height="32" width="32" alt=""/> Decode Succeeded</h1></div>
     <table>
       <tr>
         <td>Raw text</td>
@@ -52,7 +53,7 @@
         <td><jsp:expression>request.getAttribute("displayResult")</jsp:expression></td>
       </tr>
     </table>
-    <p>Copyright 2008 and onwards ZXing authors</p>
+    <div id="footer"><p>Copyright 2008 and onwards ZXing authors</p></div>
     <jsp:include page="analytics.jspx"/>
   </body>
 </html>

@@ -26,14 +26,14 @@
   <body>
     <h1><img src="zxing-icon.png" height="32" width="32" alt=""/> Download ZXing Reader</h1>
     <p>
-      <a href="BarcodeReader.jad">Download</a> the ZXing Barcode Reader for J2ME.
+      <a href="market://search?q=pname%3Acom.google.zxing.client.android">Download</a> the Android client.
+    </p>
+    <p>
+      <a href="BarcodeReader.jad">Download</a> the Barcode Reader for J2ME.
     </p>
     <p>
       (<a href="basic/BarcodeReader.jad">Download</a> the alternate "basic" version for J2ME.)
-    </p>
-    <p>
-      <a href="market://search?q=pname%3Acom.google.zxing.client.android">Download</a> the Android client.
-    </p>
+    </p> 
     <p>Copyright 2008 and onwards ZXing authors</p>
     <jsp:include page="analytics.jspx"/>
   </body>
