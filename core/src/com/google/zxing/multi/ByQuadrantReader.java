@@ -85,4 +85,8 @@ public final class ByQuadrantReader implements Reader {
     return delegate.decode(center, hints);
   }
 
+  public void reset() {
+    delegate.reset();
+  }
+
 }

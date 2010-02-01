@@ -38,7 +38,7 @@ import java.util.Hashtable;
 public abstract class OneDReader implements Reader {
 
   private static final int INTEGER_MATH_SHIFT = 8;
-  static final int PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
+  protected static final int PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
 
   public Result decode(BinaryBitmap image) throws ReaderException {
     return decode(image, null);
@@ -73,6 +73,10 @@ public abstract class OneDReader implements Reader {
         throw re;
       }
     }
+  }
+
+  public void reset() {
+    // do nothing
   }
 
   /**
@@ -178,7 +182,7 @@ public abstract class OneDReader implements Reader {
    * @throws ReaderException if counters cannot be filled entirely from row before running out
    *  of pixels
    */
-  static void recordPattern(BitArray row, int start, int[] counters) throws ReaderException {
+  protected static void recordPattern(BitArray row, int start, int[] counters) throws ReaderException {
     int numCounters = counters.length;
     for (int i = 0; i < numCounters; i++) {
       counters[i] = 0;
@@ -200,7 +204,7 @@ public abstract class OneDReader implements Reader {
           break;
         } else {
           counters[counterPosition] = 1;
-          isWhite ^= true; // isWhite = !isWhite;
+          isWhite = !isWhite;
         }
       }
       i++;
@@ -210,6 +214,23 @@ public abstract class OneDReader implements Reader {
     if (!(counterPosition == numCounters || (counterPosition == numCounters - 1 && i == end))) {
       throw ReaderException.getInstance();
     }
+  }
+
+  protected static void recordPatternInReverse(BitArray row, int start, int[] counters)
+      throws ReaderException {
+    // This could be more efficient I guess
+    int numTransitionsLeft = counters.length;
+    boolean last = row.get(start);
+    while (start > 0 && numTransitionsLeft >= 0) {
+      if (row.get(--start) != last) {
+        numTransitionsLeft--;
+        last = !last;
+      }
+    }
+    if (numTransitionsLeft >= 0) {
+      throw ReaderException.getInstance();
+    }
+    recordPattern(row, start + 1, counters);
   }
 
   /**
@@ -225,7 +246,7 @@ public abstract class OneDReader implements Reader {
    *  the total variance between counters and patterns equals the pattern length, higher values mean
    *  even more variance
    */
-  static int patternMatchVariance(int[] counters, int[] pattern, int maxIndividualVariance) {
+  protected static int patternMatchVariance(int[] counters, int[] pattern, int maxIndividualVariance) {
     int numCounters = counters.length;
     int total = 0;
     int patternLength = 0;
