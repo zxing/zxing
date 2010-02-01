@@ -69,6 +69,10 @@ public final class PDF417Reader implements Reader {
         BarcodeFormat.PDF417);
   }
 
+  public void reset() {
+    // do nothing
+  }
+
   /**
    * This method detects a barcode in a "pure" image -- that is, pure monochrome image
    * which contains only an unrotated, unskewed, image of a barcode, with some white border

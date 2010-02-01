@@ -42,6 +42,7 @@ import java.util.Vector;
  * @author dswitkin@google.com (Daniel Switkin)
  */
 final class DecodeThread extends Thread {
+
   public static final String BARCODE_BITMAP = "barcode_bitmap";
   private static final String TAG = "DecodeThread";
 
@@ -107,7 +108,8 @@ final class DecodeThread extends Thread {
     doSetDecodeMode(BarcodeFormat.UPC_A,
                     BarcodeFormat.UPC_E,
                     BarcodeFormat.EAN_13,
-                    BarcodeFormat.EAN_8);
+                    BarcodeFormat.EAN_8,
+                    BarcodeFormat.RSS14);
   }
 
   /**
@@ -120,7 +122,8 @@ final class DecodeThread extends Thread {
                     BarcodeFormat.EAN_8,
                     BarcodeFormat.CODE_39,
                     BarcodeFormat.CODE_128,
-                    BarcodeFormat.ITF);
+                    BarcodeFormat.ITF,
+                    BarcodeFormat.RSS14);
   }
 
   private void setDecodeQRMode() {
@@ -139,6 +142,7 @@ final class DecodeThread extends Thread {
                     BarcodeFormat.CODE_39,
                     BarcodeFormat.CODE_128,
                     BarcodeFormat.ITF,
+                    BarcodeFormat.RSS14,
                     BarcodeFormat.QR_CODE);
   }
 
@@ -170,6 +174,8 @@ final class DecodeThread extends Thread {
       rawResult = multiFormatReader.decodeWithState(bitmap);
     } catch (ReaderException re) {
       // continue
+    } finally {
+      multiFormatReader.reset();
     }
 
     if (rawResult != null) {

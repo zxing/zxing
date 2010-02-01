@@ -76,6 +76,10 @@ public final class DataMatrixReader implements Reader {
     return result;
   }
 
+  public void reset() {
+    // do nothing
+  }
+
   /**
    * This method detects a Data Matrix code in a "pure" image -- that is, pure monochrome image
    * which contains only an unrotated, unskewed, image of a Data Matrix code, with some white border

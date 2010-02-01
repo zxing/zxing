@@ -18,6 +18,7 @@ package com.google.zxing.oned;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.DecodeHintType;
+import com.google.zxing.Reader;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 import com.google.zxing.common.BitArray;
@@ -92,6 +93,14 @@ public final class MultiFormatUPCEANReader extends OneDReader {
     }
 
     throw ReaderException.getInstance();
+  }
+
+  public void reset() {
+    int size = readers.size();
+    for (int i = 0; i < size; i++) {
+      Reader reader = (Reader) readers.elementAt(i);
+      reader.reset();
+    }
   }
 
 }

@@ -55,4 +55,10 @@ public interface Reader {
    */
   Result decode(BinaryBitmap image, Hashtable hints) throws ReaderException;
 
+  /**
+   * Resets any internal state the implementation has after a decode, to prepare it
+   * for reuse.
+   */
+  void reset();
+
 }
