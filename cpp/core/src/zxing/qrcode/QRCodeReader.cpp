@@ -24,60 +24,59 @@
 #include <iostream>
 
 namespace zxing {
-namespace qrcode {
-
-using namespace std;
-
-QRCodeReader::QRCodeReader() :
-    decoder_() {
-}
-
-Ref<Result> QRCodeReader::decode(Ref<BinaryBitmap> image) {
+	namespace qrcode {
+		
+		using namespace std;
+		
+		QRCodeReader::QRCodeReader() :decoder_() {
+		}
+		
+		Ref<Result> QRCodeReader::decode(Ref<BinaryBitmap> image) {
 #ifdef DEBUG
-  cout << "decoding image " << image.object_ << ":\n" << flush;
+			cout << "decoding image " << image.object_ << ":\n" << flush;
 #endif
-
-  Detector detector(image->getBlackMatrix());
-
-
+			
+			Detector detector(image->getBlackMatrix());
+			
+			
 #ifdef DEBUG
-  cout << "(1) created detector " << &detector << "\n" << flush;
+			cout << "(1) created detector " << &detector << "\n" << flush;
 #endif
-
-  Ref<DetectorResult> detectorResult(detector.detect());
+			
+			Ref<DetectorResult> detectorResult(detector.detect());
 #ifdef DEBUG
-  cout << "(2) detected, have detectorResult " << detectorResult.object_ << "\n" << flush;
+			cout << "(2) detected, have detectorResult " << detectorResult.object_ << "\n" << flush;
 #endif
-
-  std::vector<Ref<ResultPoint> > points(detectorResult->getPoints());
-
-
+			
+			std::vector<Ref<ResultPoint> > points(detectorResult->getPoints());
+			
+			
 #ifdef DEBUG
-  cout << "(3) extracted points " << &points << "\n" << flush;
-  cout << "found " << points->size() << " points:\n";
-  for (size_t i = 0; i < points->size(); i++) {
-    cout << "   " << points[i]->getX() << "," << points[i]->getY() << "\n";
-  }
-  cout << "bits:\n";
-  cout << *(detectorResult->getBits()) << "\n";
+			cout << "(3) extracted points " << &points << "\n" << flush;
+			cout << "found " << points->size() << " points:\n";
+			for (size_t i = 0; i < points->size(); i++) {
+				cout << "   " << points[i]->getX() << "," << points[i]->getY() << "\n";
+			}
+			cout << "bits:\n";
+			cout << *(detectorResult->getBits()) << "\n";
 #endif
-
-  Ref<DecoderResult> decoderResult(decoder_.decode(detectorResult->getBits()));
+			
+			Ref<DecoderResult> decoderResult(decoder_.decode(detectorResult->getBits()));
 #ifdef DEBUG
-  cout << "(4) decoded, have decoderResult " << decoderResult.object_ << "\n" << flush;
+			cout << "(4) decoded, have decoderResult " << decoderResult.object_ << "\n" << flush;
 #endif
-
-  Ref<Result> result(
-    new Result(decoderResult->getText(), decoderResult->getRawBytes(), points, BarcodeFormat_QR_CODE));
+			
+			Ref<Result> result(
+							   new Result(decoderResult->getText(), decoderResult->getRawBytes(), points, BarcodeFormat_QR_CODE));
 #ifdef DEBUG
-  cout << "(5) created result " << result.object_ << ", returning\n" << flush;
+			cout << "(5) created result " << result.object_ << ", returning\n" << flush;
 #endif
-
-  return result;
-}
-
-QRCodeReader::~QRCodeReader() {
-}
-
-}
+			
+			return result;
+		}
+		
+		QRCodeReader::~QRCodeReader() {
+		}
+		
+	}
 }

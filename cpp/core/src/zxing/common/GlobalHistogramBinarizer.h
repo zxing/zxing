@@ -4,6 +4,7 @@
  *
  *  Created by Ralf Kistner on 16/10/2009.
  *  Copyright 2008 ZXing authors All rights reserved.
+ *  Modified by Lukasz Warchol on 02/02/2010.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,19 +24,21 @@
 
 #include <valarray>
 #include <zxing/Binarizer.h>
+#include <zxing/common/BitArray.h>
 #include <zxing/common/BitMatrix.h>
 
 namespace zxing {
-
-class GlobalHistogramBinarizer : public Binarizer {
-public:
-  GlobalHistogramBinarizer(Ref<LuminanceSource> source);
-  virtual ~GlobalHistogramBinarizer();
-
-  virtual Ref<BitMatrix> estimateBlackMatrix();
-  static int estimate(std::valarray<int> &histogram);
-};
-
+	
+	class GlobalHistogramBinarizer : public Binarizer {
+	public:
+		GlobalHistogramBinarizer(Ref<LuminanceSource> source);
+		virtual ~GlobalHistogramBinarizer();
+		
+		virtual Ref<BitArray> estimateBlackRow(int y, Ref<BitArray> row);
+		virtual Ref<BitMatrix> estimateBlackMatrix();
+		static int estimate(std::valarray<int> &histogram);
+	};
+	
 }
 
 #endif /* GLOBALHISTOGRAMBINARIZER_H_ */

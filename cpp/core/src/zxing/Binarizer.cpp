@@ -4,6 +4,7 @@
  *
  *  Created by Ralf Kistner on 16/10/2009.
  *  Copyright 2008 ZXing authors All rights reserved.
+ *  Modified by Lukasz Warchol on 02/02/2010.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,21 +22,27 @@
 #include <zxing/Binarizer.h>
 
 namespace zxing {
-
-Binarizer::Binarizer(Ref<LuminanceSource> source) : source_(source) {
-}
-
-Binarizer::~Binarizer() {
-}
-
-Ref<BitMatrix> Binarizer::getBlackMatrix() {
-  if (matrix_ == NULL)
-    matrix_ = estimateBlackMatrix();
-  return matrix_;
-}
-
-Ref<LuminanceSource> Binarizer::getSource() {
-  return source_;
-}
-
+	
+	Binarizer::Binarizer(Ref<LuminanceSource> source) : source_(source) {
+	}
+	
+	Binarizer::~Binarizer() {
+	}
+	
+	Ref<BitArray> Binarizer::getBlackRow(int y, Ref<BitArray> row){
+		if (array_ == NULL)
+			array_ = estimateBlackRow(y, row);
+		return array_;
+	}
+	
+	Ref<BitMatrix> Binarizer::getBlackMatrix() {
+		if (matrix_ == NULL)
+			matrix_ = estimateBlackMatrix();
+		return matrix_;
+	}
+	
+	Ref<LuminanceSource> Binarizer::getSource() {
+		return source_;
+	}
+	
 }

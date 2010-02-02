@@ -1,12 +1,9 @@
-#ifndef __FINDER_PATTERN_H__
-#define __FINDER_PATTERN_H__
-
 /*
- *  FinderPattern.h
- *  zxing
+ *  OneDResultPoint.h
+ *  ZXing
  *
- *  Created by Christian Brunschen on 13/05/2008.
- *  Copyright 2008 ZXing authors All rights reserved.
+ *  Created by Lukasz Warchol on 10-01-20.
+ *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,30 +17,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 #include <zxing/ResultPoint.h>
 #include <cmath>
 
 namespace zxing {
-	namespace qrcode {
+	namespace oned {
 		
-		class FinderPattern : public ResultPoint {
+		class OneDResultPoint : public ResultPoint {
 		private:
 			float posX_;
 			float posY_;
-			float estimatedModuleSize_;
-			int counter_;
 			
 		public:
-			FinderPattern(float posX, float posY, float estimatedModuleSize);
+			OneDResultPoint(float posX, float posY);
 			float getX();
 			float getY();
-			int getCount();
-			float getEstimatedModuleSize();
-			void incrementCount();
-			bool aboutEquals(float moduleSize, float i, float j);
 		};
 	}
 }
-
-#endif // __FINDER_PATTERN_H__
