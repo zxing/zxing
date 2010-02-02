@@ -16,7 +16,7 @@
 
 package com.google.zxing.common.detector;
 
-import com.google.zxing.ReaderException;
+import com.google.zxing.NotFoundException;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitMatrix;
 
@@ -45,9 +45,9 @@ public final class MonochromeRectangleDetector {
    *  last points are opposed on the diagonal, as are the second and third. The first point will be
    *  the topmost point and the last, the bottommost. The second point will be leftmost and the
    *  third, the rightmost
-   * @throws ReaderException if no Data Matrix Code can be found
+   * @throws NotFoundException if no Data Matrix Code can be found
    */
-  public ResultPoint[] detect() throws ReaderException {
+  public ResultPoint[] detect() throws NotFoundException {
     int height = image.getHeight();
     int width = image.getWidth();
     int halfHeight = height >> 1;
@@ -95,10 +95,10 @@ public final class MonochromeRectangleDetector {
    * @param maxWhiteRun maximum run of white pixels that can still be considered to be within
    *  the barcode
    * @return a {@link com.google.zxing.ResultPoint} encapsulating the corner that was found
-   * @throws com.google.zxing.ReaderException if such a point cannot be found
+   * @throws NotFoundException if such a point cannot be found
    */
   private ResultPoint findCornerFromCenter(int centerX, int deltaX, int left, int right,
-      int centerY, int deltaY, int top, int bottom, int maxWhiteRun) throws ReaderException {
+      int centerY, int deltaY, int top, int bottom, int maxWhiteRun) throws NotFoundException {
     int[] lastRange = null;
     for (int y = centerY, x = centerX;
          y < bottom && y >= top && x < right && x >= left;
@@ -113,7 +113,7 @@ public final class MonochromeRectangleDetector {
       }
       if (range == null) {
         if (lastRange == null) {
-          throw ReaderException.getInstance();
+          throw NotFoundException.getNotFoundInstance();
         }
         // lastRange was found
         if (deltaX == 0) {
@@ -141,7 +141,7 @@ public final class MonochromeRectangleDetector {
       }
       lastRange = range;
     }
-    throw ReaderException.getInstance();
+    throw NotFoundException.getNotFoundInstance();
   }
 
   /**

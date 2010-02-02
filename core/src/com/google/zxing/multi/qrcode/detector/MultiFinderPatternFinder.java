@@ -17,12 +17,12 @@
 package com.google.zxing.multi.qrcode.detector;
 
 import com.google.zxing.DecodeHintType;
-import com.google.zxing.ReaderException;
+import com.google.zxing.NotFoundException;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.ResultPointCallback;
+import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.Collections;
 import com.google.zxing.common.Comparator;
-import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.detector.FinderPattern;
 import com.google.zxing.qrcode.detector.FinderPatternFinder;
 import com.google.zxing.qrcode.detector.FinderPatternInfo;
@@ -99,15 +99,15 @@ final class MultiFinderPatternFinder extends FinderPatternFinder {
    * @return the 3 best {@link FinderPattern}s from our list of candidates. The "best" are
    *         those that have been detected at least {@link #CENTER_QUORUM} times, and whose module
    *         size differs from the average among those patterns the least
-   * @throws ReaderException if 3 such finder patterns do not exist
+   * @throws NotFoundException if 3 such finder patterns do not exist
    */
-  private FinderPattern[][] selectBestPatterns() throws ReaderException {
+  private FinderPattern[][] selectBestPatterns() throws NotFoundException {
     Vector possibleCenters = getPossibleCenters();
     int size = possibleCenters.size();
 
     if (size < 3) {
       // Couldn't find enough finder patterns
-      throw ReaderException.getInstance();
+      throw NotFoundException.getNotFoundInstance();
     }
 
     /*
@@ -227,10 +227,10 @@ final class MultiFinderPatternFinder extends FinderPatternFinder {
     }
 
     // Nothing found!
-    throw ReaderException.getInstance();
+    throw NotFoundException.getNotFoundInstance();
   }
 
-  public FinderPatternInfo[] findMulti(Hashtable hints) throws ReaderException {
+  public FinderPatternInfo[] findMulti(Hashtable hints) throws NotFoundException {
     boolean tryHarder = hints != null && hints.containsKey(DecodeHintType.TRY_HARDER);
     BitMatrix image = getImage();
     int maxI = image.getHeight();

@@ -17,7 +17,7 @@
 package com.google.zxing.oned;
 
 import com.google.zxing.BarcodeFormat;
-import com.google.zxing.ReaderException;
+import com.google.zxing.NotFoundException;
 import com.google.zxing.common.BitArray;
 
 /**
@@ -69,7 +69,7 @@ public final class EAN13Reader extends UPCEANReader {
   }
 
   protected int decodeMiddle(BitArray row, int[] startRange, StringBuffer resultString)
-      throws ReaderException {
+      throws NotFoundException {
     int[] counters = decodeMiddleCounters;
     counters[0] = 0;
     counters[1] = 0;
@@ -119,17 +119,17 @@ public final class EAN13Reader extends UPCEANReader {
    * @param resultString string to insert decoded first digit into
    * @param lgPatternFound int whose bits indicates the pattern of odd/even L/G patterns used to
    *  encode digits
-   * @throws ReaderException if first digit cannot be determined
+   * @throws NotFoundException if first digit cannot be determined
    */
   private static void determineFirstDigit(StringBuffer resultString, int lgPatternFound)
-      throws ReaderException {
+      throws NotFoundException {
     for (int d = 0; d < 10; d++) {
       if (lgPatternFound == FIRST_DIGIT_ENCODINGS[d]) {
         resultString.insert(0, (char) ('0' + d));
         return;
       }
     }
-    throw ReaderException.getInstance();
+    throw NotFoundException.getNotFoundInstance();
   }
 
 }

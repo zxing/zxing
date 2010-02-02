@@ -18,14 +18,12 @@ package com.google.zxing.datamatrix.decoder;
 
 import junit.framework.TestCase;
 
-import com.google.zxing.ReaderException;
-
 /**
  * @author bbrown@google.com (Brian Brown)
  */
 public final class DecodedBitStreamParserTestCase extends TestCase{
 
-  public void testAsciiStandardDecode() throws ReaderException {
+  public void testAsciiStandardDecode() throws Exception {
     // ASCII characters 0-127 are encoded as the value + 1
     byte[] bytes = {(byte) ('a' + 1), (byte) ('b' + 1), (byte) ('c' + 1),
                     (byte) ('A' + 1), (byte) ('B' + 1), (byte) ('C' + 1)};
@@ -33,7 +31,7 @@ public final class DecodedBitStreamParserTestCase extends TestCase{
     assertEquals("abcABC", decodedString);
   }
   
-  public void testAsciiDoubleDigitDecode() throws ReaderException{
+  public void testAsciiDoubleDigitDecode() throws Exception{
     // ASCII double digit (00 - 99) Numeric Value + 130
     byte[] bytes = {(byte)       130 , (byte) ( 1 + 130),
                     (byte) (98 + 130), (byte) (99 + 130)};

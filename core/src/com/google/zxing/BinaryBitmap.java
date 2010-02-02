@@ -62,7 +62,7 @@ public final class BinaryBitmap {
    *            If used, the Binarizer will call BitArray.clear(). Always use the returned object.
    * @return The array of bits for this row (true means black).
    */
-  public BitArray getBlackRow(int y, BitArray row) throws ReaderException {
+  public BitArray getBlackRow(int y, BitArray row) throws NotFoundException {
     return binarizer.getBlackRow(y, row);
   }
 
@@ -74,7 +74,7 @@ public final class BinaryBitmap {
    *
    * @return The 2D array of bits for the image (true means black).
    */
-  public BitMatrix getBlackMatrix() throws ReaderException {
+  public BitMatrix getBlackMatrix() throws NotFoundException {
     // The matrix is created on demand the first time it is requested, then cached. There are two
     // reasons for this:
     // 1. This work will never be done if the caller only installs 1D Reader objects, or if a

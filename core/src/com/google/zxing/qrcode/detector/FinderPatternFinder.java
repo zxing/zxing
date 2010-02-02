@@ -17,12 +17,12 @@
 package com.google.zxing.qrcode.detector;
 
 import com.google.zxing.DecodeHintType;
-import com.google.zxing.ReaderException;
+import com.google.zxing.NotFoundException;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.ResultPointCallback;
+import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.Collections;
 import com.google.zxing.common.Comparator;
-import com.google.zxing.common.BitMatrix;
 
 import java.util.Hashtable;
 import java.util.Vector;
@@ -72,7 +72,7 @@ public class FinderPatternFinder {
     return possibleCenters;
   }
 
-  FinderPatternInfo find(Hashtable hints) throws ReaderException {
+  FinderPatternInfo find(Hashtable hints) throws NotFoundException {
     boolean tryHarder = hints != null && hints.containsKey(DecodeHintType.TRY_HARDER);
     int maxI = image.getHeight();
     int maxJ = image.getWidth();
@@ -488,14 +488,14 @@ public class FinderPatternFinder {
    * @return the 3 best {@link FinderPattern}s from our list of candidates. The "best" are
    *         those that have been detected at least {@link #CENTER_QUORUM} times, and whose module
    *         size differs from the average among those patterns the least
-   * @throws ReaderException if 3 such finder patterns do not exist
+   * @throws NotFoundException if 3 such finder patterns do not exist
    */
-  private FinderPattern[] selectBestPatterns() throws ReaderException {
+  private FinderPattern[] selectBestPatterns() throws NotFoundException {
 
     int startSize = possibleCenters.size();
     if (startSize < 3) {
       // Couldn't find enough finder patterns
-      throw ReaderException.getInstance();
+      throw NotFoundException.getNotFoundInstance();
     }
 
     // Filter outlier possibilities whose module size is too different

@@ -18,7 +18,8 @@ package com.google.zxing.oned;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.DecodeHintType;
-import com.google.zxing.ReaderException;
+import com.google.zxing.FormatException;
+import com.google.zxing.NotFoundException;
 import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitArray;
@@ -75,7 +76,7 @@ public final class ITFReader extends OneDReader {
       {N, W, N, W, N}  // 9
   };
 
-  public Result decodeRow(int rowNumber, BitArray row, Hashtable hints) throws ReaderException {
+  public Result decodeRow(int rowNumber, BitArray row, Hashtable hints) throws FormatException, NotFoundException {
 
     // Find out where the Middle section (payload) starts & ends
     int[] startRange = decodeStart(row);
@@ -106,7 +107,7 @@ public final class ITFReader extends OneDReader {
 
     }
     if (!lengthOK) {
-      throw ReaderException.getInstance();
+      throw FormatException.getFormatInstance();
     }
 
     return new Result(
@@ -121,10 +122,10 @@ public final class ITFReader extends OneDReader {
    * @param row          row of black/white values to search
    * @param payloadStart offset of start pattern
    * @param resultString {@link StringBuffer} to append decoded chars to
-   * @throws ReaderException if decoding could not complete successfully
+   * @throws NotFoundException if decoding could not complete successfully
    */
   private static void decodeMiddle(BitArray row, int payloadStart, int payloadEnd,
-      StringBuffer resultString) throws ReaderException {
+      StringBuffer resultString) throws NotFoundException {
 
     // Digits are interleaved in pairs - 5 black lines for one digit, and the
     // 5
@@ -163,9 +164,9 @@ public final class ITFReader extends OneDReader {
    * @param row row of black/white values to search
    * @return Array, containing index of start of 'start block' and end of
    *         'start block'
-   * @throws ReaderException
+   * @throws NotFoundException
    */
-  int[] decodeStart(BitArray row) throws ReaderException {
+  int[] decodeStart(BitArray row) throws NotFoundException {
     int endStart = skipWhiteSpace(row);
     int[] startPattern = findGuardPattern(row, endStart, START_PATTERN);
 
@@ -192,9 +193,9 @@ public final class ITFReader extends OneDReader {
    *
    * @param row bit array representing the scanned barcode.
    * @param startPattern index into row of the start or end pattern.
-   * @throws ReaderException if the quiet zone cannot be found, a ReaderException is thrown.
+   * @throws NotFoundException if the quiet zone cannot be found, a ReaderException is thrown.
    */
-  private void validateQuietZone(BitArray row, int startPattern) throws ReaderException {
+  private void validateQuietZone(BitArray row, int startPattern) throws NotFoundException {
 
     int quietCount = this.narrowLineWidth * 10;  // expect to find this many pixels of quiet zone
 
@@ -206,7 +207,7 @@ public final class ITFReader extends OneDReader {
     }
     if (quietCount != 0) {
       // Unable to find the necessary number of quiet zone pixels.
-      throw ReaderException.getInstance();
+      throw NotFoundException.getNotFoundInstance();
     }
   }
 
@@ -215,9 +216,9 @@ public final class ITFReader extends OneDReader {
    *
    * @param row row of black/white values to search
    * @return index of the first black line.
-   * @throws ReaderException Throws exception if no black lines are found in the row
+   * @throws NotFoundException Throws exception if no black lines are found in the row
    */
-  private static int skipWhiteSpace(BitArray row) throws ReaderException {
+  private static int skipWhiteSpace(BitArray row) throws NotFoundException {
     int width = row.getSize();
     int endStart = 0;
     while (endStart < width) {
@@ -227,7 +228,7 @@ public final class ITFReader extends OneDReader {
       endStart++;
     }
     if (endStart == width) {
-      throw ReaderException.getInstance();
+      throw NotFoundException.getNotFoundInstance();
     }
 
     return endStart;
@@ -239,10 +240,10 @@ public final class ITFReader extends OneDReader {
    * @param row row of black/white values to search
    * @return Array, containing index of start of 'end block' and end of 'end
    *         block'
-   * @throws ReaderException
+   * @throws NotFoundException
    */
 
-  int[] decodeEnd(BitArray row) throws ReaderException {
+  int[] decodeEnd(BitArray row) throws NotFoundException {
 
     // For convenience, reverse the row and then
     // search from 'the start' for the end block
@@ -277,9 +278,9 @@ public final class ITFReader extends OneDReader {
    *                  being searched for as a pattern
    * @return start/end horizontal offset of guard pattern, as an array of two
    *         ints
-   * @throws ReaderException if pattern is not found
+   * @throws NotFoundException if pattern is not found
    */
-  private static int[] findGuardPattern(BitArray row, int rowOffset, int[] pattern) throws ReaderException {
+  private static int[] findGuardPattern(BitArray row, int rowOffset, int[] pattern) throws NotFoundException {
 
     // TODO: This is very similar to implementation in UPCEANReader. Consider if they can be
     // merged to a single method.
@@ -313,7 +314,7 @@ public final class ITFReader extends OneDReader {
         isWhite = !isWhite;
       }
     }
-    throw ReaderException.getInstance();
+    throw NotFoundException.getNotFoundInstance();
   }
 
   /**
@@ -322,9 +323,9 @@ public final class ITFReader extends OneDReader {
    *
    * @param counters the counts of runs of observed black/white/black/... values
    * @return The decoded digit
-   * @throws ReaderException if digit cannot be decoded
+   * @throws NotFoundException if digit cannot be decoded
    */
-  private static int decodeDigit(int[] counters) throws ReaderException {
+  private static int decodeDigit(int[] counters) throws NotFoundException {
 
     int bestVariance = MAX_AVG_VARIANCE; // worst variance we'll accept
     int bestMatch = -1;
@@ -340,7 +341,7 @@ public final class ITFReader extends OneDReader {
     if (bestMatch >= 0) {
       return bestMatch;
 		} else {
-			throw ReaderException.getInstance();
+			throw NotFoundException.getNotFoundInstance();
 		}
 	}
 

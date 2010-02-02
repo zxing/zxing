@@ -16,8 +16,8 @@
 
 package com.google.zxing.oned;
 
-import com.google.zxing.common.AbstractBlackBoxTestCase;
 import com.google.zxing.BarcodeFormat;
+import com.google.zxing.common.AbstractBlackBoxTestCase;
 
 /**
  * @author Sean Owen

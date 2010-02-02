@@ -16,7 +16,8 @@
 
 package com.google.zxing.datamatrix.decoder;
 
-import com.google.zxing.ReaderException;
+import com.google.zxing.ChecksumException;
+import com.google.zxing.FormatException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.DecoderResult;
 import com.google.zxing.common.reedsolomon.GF256;
@@ -43,9 +44,10 @@ public final class Decoder {
    *
    * @param image booleans representing white/black Data Matrix Code modules
    * @return text and bytes encoded within the Data Matrix Code
-   * @throws ReaderException if the Data Matrix Code cannot be decoded
+   * @throws FormatException if the Data Matrix Code cannot be decoded
+   * @throws ChecksumException if error correction fails
    */
-  public DecoderResult decode(boolean[][] image) throws ReaderException {
+  public DecoderResult decode(boolean[][] image) throws FormatException, ChecksumException {
     int dimension = image.length;
     BitMatrix bits = new BitMatrix(dimension);
     for (int i = 0; i < dimension; i++) {
@@ -64,9 +66,10 @@ public final class Decoder {
    *
    * @param bits booleans representing white/black Data Matrix Code modules
    * @return text and bytes encoded within the Data Matrix Code
-   * @throws ReaderException if the Data Matrix Code cannot be decoded
+   * @throws FormatException if the Data Matrix Code cannot be decoded
+   * @throws ChecksumException if error correction fails
    */
-  public DecoderResult decode(BitMatrix bits) throws ReaderException {
+  public DecoderResult decode(BitMatrix bits) throws FormatException, ChecksumException {
 
     // Construct a parser and read version, error-correction level
     BitMatrixParser parser = new BitMatrixParser(bits);
@@ -106,9 +109,9 @@ public final class Decoder {
    *
    * @param codewordBytes data and error correction codewords
    * @param numDataCodewords number of codewords that are data bytes
-   * @throws ReaderException if error correction fails
+   * @throws ChecksumException if error correction fails
    */
-  private void correctErrors(byte[] codewordBytes, int numDataCodewords) throws ReaderException {
+  private void correctErrors(byte[] codewordBytes, int numDataCodewords) throws ChecksumException {
     int numCodewords = codewordBytes.length;
     // First read into an array of ints
     int[] codewordsInts = new int[numCodewords];
@@ -119,7 +122,7 @@ public final class Decoder {
     try {
       rsDecoder.decode(codewordsInts, numECCodewords);
     } catch (ReedSolomonException rse) {
-      throw ReaderException.getInstance();
+      throw ChecksumException.getChecksumInstance();
     }
     // Copy back into array of bytes -- only need to worry about the bytes that were data
     // We don't care about errors in the error-correction codewords

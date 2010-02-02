@@ -16,7 +16,7 @@
 
 package com.google.zxing.common;
 
-import com.google.zxing.ReaderException;
+import com.google.zxing.NotFoundException;
 
 /**
  * Implementations of this class can, given locations of finder patterns for a QR code in an
@@ -78,7 +78,7 @@ public abstract class GridSampler {
    * @param dimension width/height of {@link BitMatrix} to sample from image
    * @return {@link BitMatrix} representing a grid of points sampled from the image within a region
    *   defined by the "from" parameters
-   * @throws ReaderException if image can't be sampled, for example, if the transformation defined
+   * @throws NotFoundException if image can't be sampled, for example, if the transformation defined
    *   by the given points is invalid or results in sampling outside the image boundaries
    */
   public abstract BitMatrix sampleGrid(BitMatrix image,
@@ -90,11 +90,11 @@ public abstract class GridSampler {
                                        float p1FromX, float p1FromY,
                                        float p2FromX, float p2FromY,
                                        float p3FromX, float p3FromY,
-                                       float p4FromX, float p4FromY) throws ReaderException;
+                                       float p4FromX, float p4FromY) throws NotFoundException;
 
   public BitMatrix sampleGrid(BitMatrix image,
                               int dimension,
-                              PerspectiveTransform transform) throws ReaderException {
+                              PerspectiveTransform transform) throws NotFoundException {
     throw new UnsupportedOperationException();
   }
   
@@ -112,10 +112,10 @@ public abstract class GridSampler {
    *
    * @param image image into which the points should map
    * @param points actual points in x1,y1,...,xn,yn form
-   * @throws ReaderException if an endpoint is lies outside the image boundaries
+   * @throws NotFoundException if an endpoint is lies outside the image boundaries
    */
   protected static void checkAndNudgePoints(BitMatrix image, float[] points)
-      throws ReaderException {
+      throws NotFoundException {
     int width = image.getWidth();
     int height = image.getHeight();
     // Check and nudge points from start until we see some that are OK:
@@ -124,7 +124,7 @@ public abstract class GridSampler {
       int x = (int) points[offset];
       int y = (int) points[offset + 1];
       if (x < -1 || x > width || y < -1 || y > height) {
-        throw ReaderException.getInstance();
+        throw NotFoundException.getNotFoundInstance();
       }
       nudged = false;
       if (x == -1) {
@@ -148,7 +148,7 @@ public abstract class GridSampler {
       int x = (int) points[offset];
       int y = (int) points[offset + 1];
       if (x < -1 || x > width || y < -1 || y > height) {
-        throw ReaderException.getInstance();
+        throw NotFoundException.getNotFoundInstance();
       }
       nudged = false;
       if (x == -1) {

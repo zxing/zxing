@@ -16,8 +16,8 @@
 
 package com.google.zxing.qrcode.encoder;
 
-import com.google.zxing.WriterException;
 import com.google.zxing.EncodeHintType;
+import com.google.zxing.WriterException;
 import com.google.zxing.common.ByteArray;
 import com.google.zxing.common.ByteMatrix;
 import com.google.zxing.common.CharacterSetECI;
@@ -27,9 +27,9 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.google.zxing.qrcode.decoder.Mode;
 import com.google.zxing.qrcode.decoder.Version;
 
-import java.util.Vector;
-import java.util.Hashtable;
 import java.io.UnsupportedEncodingException;
+import java.util.Hashtable;
+import java.util.Vector;
 
 /**
  * @author satorux@google.com (Satoru Takabayashi) - creator

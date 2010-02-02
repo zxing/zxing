@@ -16,7 +16,7 @@
 
 package com.google.zxing.datamatrix.decoder;
 
-import com.google.zxing.ReaderException;
+import com.google.zxing.FormatException;
 import com.google.zxing.common.BitMatrix;
 
 /**
@@ -30,12 +30,12 @@ final class BitMatrixParser {
 
   /**
    * @param bitMatrix {@link BitMatrix} to parse
-   * @throws ReaderException if dimension is < 10 or > 144 or not 0 mod 2
+   * @throws FormatException if dimension is < 10 or > 144 or not 0 mod 2
    */
-  BitMatrixParser(BitMatrix bitMatrix) throws ReaderException {
+  BitMatrixParser(BitMatrix bitMatrix) throws FormatException {
     int dimension = bitMatrix.getDimension();
     if (dimension < 10 || dimension > 144 || (dimension & 0x01) != 0) {
-      throw ReaderException.getInstance();
+      throw FormatException.getFormatInstance();
     }
     
     version = readVersion(bitMatrix);
@@ -52,10 +52,10 @@ final class BitMatrixParser {
    * 
    * @param bitMatrix Original {@link BitMatrix} including alignment patterns
    * @return {@link Version} encapsulating the Data Matrix Code's "version"
-   * @throws ReaderException if the dimensions of the mapping matrix are not valid
+   * @throws FormatException if the dimensions of the mapping matrix are not valid
    * Data Matrix dimensions.
    */
-  Version readVersion(BitMatrix bitMatrix) throws ReaderException {
+  Version readVersion(BitMatrix bitMatrix) throws FormatException {
 
     if (version != null) {
       return version;
@@ -74,9 +74,9 @@ final class BitMatrixParser {
    * Data Matrix Code.</p>
    *
    * @return bytes encoded within the Data Matrix Code
-   * @throws ReaderException if the exact number of bytes expected is not read
+   * @throws FormatException if the exact number of bytes expected is not read
    */
-  byte[] readCodewords() throws ReaderException {
+  byte[] readCodewords() throws FormatException {
 
     byte[] result = new byte[version.getTotalCodewords()];
     int resultOffset = 0;
@@ -141,7 +141,7 @@ final class BitMatrixParser {
     } while ((row < numRows) || (column < numColumns));
 
     if (resultOffset != version.getTotalCodewords()) {
-      throw ReaderException.getInstance();
+      throw FormatException.getFormatInstance();
     }
     return result;
   }

@@ -17,8 +17,10 @@
 package com.google.zxing.multi;
 
 import com.google.zxing.BinaryBitmap;
+import com.google.zxing.ChecksumException;
+import com.google.zxing.FormatException;
+import com.google.zxing.NotFoundException;
 import com.google.zxing.Reader;
-import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 
 import java.util.Hashtable;
@@ -40,11 +42,13 @@ public final class ByQuadrantReader implements Reader {
     this.delegate = delegate;
   }
 
-  public Result decode(BinaryBitmap image) throws ReaderException {
+  public Result decode(BinaryBitmap image)
+      throws NotFoundException, ChecksumException, FormatException {
     return decode(image, null);
   }
 
-  public Result decode(BinaryBitmap image, Hashtable hints) throws ReaderException {
+  public Result decode(BinaryBitmap image, Hashtable hints)
+      throws NotFoundException, ChecksumException, FormatException {
 
     int width = image.getWidth();
     int height = image.getHeight();
@@ -54,28 +58,28 @@ public final class ByQuadrantReader implements Reader {
     BinaryBitmap topLeft = image.crop(0, 0, halfWidth, halfHeight);
     try {
       return delegate.decode(topLeft, hints);
-    } catch (ReaderException re) {
+    } catch (NotFoundException re) {
       // continue
     }
 
     BinaryBitmap topRight = image.crop(halfWidth, 0, halfWidth, halfHeight);
     try {
       return delegate.decode(topRight, hints);
-    } catch (ReaderException re) {
+    } catch (NotFoundException re) {
       // continue
     }
 
     BinaryBitmap bottomLeft = image.crop(0, halfHeight, halfWidth, halfHeight);
     try {
       return delegate.decode(bottomLeft, hints);
-    } catch (ReaderException re) {
+    } catch (NotFoundException re) {
       // continue
     }
 
     BinaryBitmap bottomRight = image.crop(halfWidth, halfHeight, halfWidth, halfHeight);
     try {
       return delegate.decode(bottomRight, hints);
-    } catch (ReaderException re) {
+    } catch (NotFoundException re) {
       // continue
     }
 

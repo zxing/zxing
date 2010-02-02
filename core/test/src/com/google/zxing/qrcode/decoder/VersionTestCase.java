@@ -16,7 +16,6 @@
 
 package com.google.zxing.qrcode.decoder;
 
-import com.google.zxing.ReaderException;
 import junit.framework.TestCase;
 
 /**
@@ -51,7 +50,7 @@ public final class VersionTestCase extends TestCase {
     assertNotNull(version.buildFunctionPattern());
   }
 
-  public void testGetProvisionalVersionForDimension() throws ReaderException {
+  public void testGetProvisionalVersionForDimension() throws Exception {
     for (int i = 1; i <= 40; i++) {
       assertEquals(i, Version.getProvisionalVersionForDimension(4*i + 17).getVersionNumber());
     }

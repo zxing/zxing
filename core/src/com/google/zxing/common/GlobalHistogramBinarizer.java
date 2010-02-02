@@ -18,7 +18,7 @@ package com.google.zxing.common;
 
 import com.google.zxing.Binarizer;
 import com.google.zxing.LuminanceSource;
-import com.google.zxing.ReaderException;
+import com.google.zxing.NotFoundException;
 
 /**
  * This Binarizer implementation uses the old ZXing global histogram approach. It is suitable
@@ -45,7 +45,7 @@ public class GlobalHistogramBinarizer extends Binarizer {
   }
 
   // Applies simple sharpening to the row data to improve performance of the 1D Readers.
-  public BitArray getBlackRow(int y, BitArray row) throws ReaderException {
+  public BitArray getBlackRow(int y, BitArray row) throws NotFoundException {
     LuminanceSource source = getLuminanceSource();
     int width = source.getWidth();
     if (row == null || row.getSize() < width) {
@@ -79,7 +79,7 @@ public class GlobalHistogramBinarizer extends Binarizer {
   }
 
   // Does not sharpen the data, as this call is intended to only be used by 2D Readers.
-  public BitMatrix getBlackMatrix() throws ReaderException {
+  public BitMatrix getBlackMatrix() throws NotFoundException {
     LuminanceSource source = getLuminanceSource();
     int width = source.getWidth();
     int height = source.getHeight();
@@ -134,7 +134,7 @@ public class GlobalHistogramBinarizer extends Binarizer {
     }
   }
 
-  private static int estimateBlackPoint(int[] buckets) throws ReaderException {
+  private static int estimateBlackPoint(int[] buckets) throws NotFoundException {
     // Find the tallest peak in the histogram.
     int numBuckets = buckets.length;
     int maxBucketCount = 0;
@@ -175,7 +175,7 @@ public class GlobalHistogramBinarizer extends Binarizer {
     // TODO: It might be worth comparing the brightest and darkest pixels seen, rather than the
     // two peaks, to determine the contrast.
     if (secondPeak - firstPeak <= numBuckets >> 4) {
-      throw ReaderException.getInstance();
+      throw NotFoundException.getNotFoundInstance();
     }
 
     // Find a valley between them that is low and closer to the white peak.

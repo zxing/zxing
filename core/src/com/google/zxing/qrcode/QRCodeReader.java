@@ -17,13 +17,15 @@
 package com.google.zxing.qrcode;
 
 import com.google.zxing.BarcodeFormat;
-import com.google.zxing.DecodeHintType;
-import com.google.zxing.Reader;
-import com.google.zxing.ReaderException;
-import com.google.zxing.Result;
-import com.google.zxing.ResultPoint;
-import com.google.zxing.ResultMetadataType;
 import com.google.zxing.BinaryBitmap;
+import com.google.zxing.ChecksumException;
+import com.google.zxing.DecodeHintType;
+import com.google.zxing.FormatException;
+import com.google.zxing.NotFoundException;
+import com.google.zxing.Reader;
+import com.google.zxing.Result;
+import com.google.zxing.ResultMetadataType;
+import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.DecoderResult;
 import com.google.zxing.common.DetectorResult;
@@ -51,14 +53,16 @@ public class QRCodeReader implements Reader {
    * Locates and decodes a QR code in an image.
    *
    * @return a String representing the content encoded by the QR code
-   * @throws ReaderException if a QR code cannot be found, or cannot be decoded
+   * @throws NotFoundException if a QR code cannot be found
+   * @throws FormatException if a QR code cannot be decoded
+   * @throws ChecksumException if error correction fails
    */
-  public Result decode(BinaryBitmap image) throws ReaderException {
+  public Result decode(BinaryBitmap image) throws NotFoundException, ChecksumException, FormatException {
     return decode(image, null);
   }
 
   public Result decode(BinaryBitmap image, Hashtable hints)
-      throws ReaderException {
+      throws NotFoundException, ChecksumException, FormatException {
     DecoderResult decoderResult;
     ResultPoint[] points;
     if (hints != null && hints.containsKey(DecodeHintType.PURE_BARCODE)) {
@@ -91,7 +95,7 @@ public class QRCodeReader implements Reader {
    * around it. This is a specialized method that works exceptionally fast in this special
    * case.
    */
-  private static BitMatrix extractPureBits(BitMatrix image) throws ReaderException {
+  private static BitMatrix extractPureBits(BitMatrix image) throws NotFoundException {
     // Now need to determine module size in pixels
 
     int height = image.getHeight();
@@ -104,7 +108,7 @@ public class QRCodeReader implements Reader {
       borderWidth++;
     }
     if (borderWidth == minDimension) {
-      throw ReaderException.getInstance();
+      throw NotFoundException.getNotFoundInstance();
     }
 
     // And then keep tracking across the top-left black module to determine module size
@@ -113,7 +117,7 @@ public class QRCodeReader implements Reader {
       moduleEnd++;
     }
     if (moduleEnd == minDimension) {
-      throw ReaderException.getInstance();
+      throw NotFoundException.getNotFoundInstance();
     }
 
     int moduleSize = moduleEnd - borderWidth;
@@ -124,13 +128,13 @@ public class QRCodeReader implements Reader {
       rowEndOfSymbol--;
     }
     if (rowEndOfSymbol < 0) {
-      throw ReaderException.getInstance();
+      throw NotFoundException.getNotFoundInstance();
     }
     rowEndOfSymbol++;
 
     // Make sure width of barcode is a multiple of module size
     if ((rowEndOfSymbol - borderWidth) % moduleSize != 0) {
-      throw ReaderException.getInstance();
+      throw NotFoundException.getNotFoundInstance();
     }
     int dimension = (rowEndOfSymbol - borderWidth) / moduleSize;
 
@@ -141,7 +145,7 @@ public class QRCodeReader implements Reader {
 
     int sampleDimension = borderWidth + (dimension - 1) * moduleSize;
     if (sampleDimension >= width || sampleDimension >= height) {
-      throw ReaderException.getInstance();
+      throw NotFoundException.getNotFoundInstance();
     }
 
     // Now just read off the bits

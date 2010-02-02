@@ -16,10 +16,11 @@
 
 package com.google.zxing.multi;
 
-import com.google.zxing.Reader;
-import com.google.zxing.Result;
 import com.google.zxing.BinaryBitmap;
+import com.google.zxing.NotFoundException;
+import com.google.zxing.Reader;
 import com.google.zxing.ReaderException;
+import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
 
 import java.util.Hashtable;
@@ -49,16 +50,16 @@ public final class GenericMultipleBarcodeReader implements MultipleBarcodeReader
     this.delegate = delegate;
   }
 
-  public Result[] decodeMultiple(BinaryBitmap image) throws ReaderException {
+  public Result[] decodeMultiple(BinaryBitmap image) throws NotFoundException {
     return decodeMultiple(image, null);
   }
 
   public Result[] decodeMultiple(BinaryBitmap image, Hashtable hints)
-      throws ReaderException {
+      throws NotFoundException {
     Vector results = new Vector();
     doDecodeMultiple(image, hints, results, 0, 0);
     if (results.isEmpty()) {
-      throw ReaderException.getInstance();
+      throw NotFoundException.getNotFoundInstance();
     }
     int numResults = results.size();
     Result[] resultArray = new Result[numResults];

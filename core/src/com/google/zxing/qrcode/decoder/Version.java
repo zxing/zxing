@@ -16,7 +16,7 @@
 
 package com.google.zxing.qrcode.decoder;
 
-import com.google.zxing.ReaderException;
+import com.google.zxing.FormatException;
 import com.google.zxing.common.BitMatrix;
 
 /**
@@ -91,16 +91,16 @@ public final class Version {
    *
    * @param dimension dimension in modules
    * @return {@link Version} for a QR Code of that dimension
-   * @throws ReaderException if dimension is not 1 mod 4
+   * @throws FormatException if dimension is not 1 mod 4
    */
-  public static Version getProvisionalVersionForDimension(int dimension) throws ReaderException {
+  public static Version getProvisionalVersionForDimension(int dimension) throws FormatException {
     if (dimension % 4 != 1) {
-      throw ReaderException.getInstance();
+      throw FormatException.getFormatInstance();
     }
     try {
       return getVersionForNumber((dimension - 17) >> 2);
     } catch (IllegalArgumentException iae) {
-      throw ReaderException.getInstance();
+      throw FormatException.getFormatInstance();
     }
   }
 

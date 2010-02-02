@@ -16,7 +16,7 @@
 
 package com.google.zxing.qrcode.detector;
 
-import com.google.zxing.ReaderException;
+import com.google.zxing.NotFoundException;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.ResultPointCallback;
 import com.google.zxing.common.BitMatrix;
@@ -82,9 +82,9 @@ final class AlignmentPatternFinder {
    * it's pretty performance-critical and so is written to be fast foremost.</p>
    *
    * @return {@link AlignmentPattern} if found
-   * @throws ReaderException if not found
+   * @throws NotFoundException if not found
    */
-  AlignmentPattern find() throws ReaderException {
+  AlignmentPattern find() throws NotFoundException {
     int startX = this.startX;
     int height = this.height;
     int maxJ = startX + width;
@@ -150,7 +150,7 @@ final class AlignmentPatternFinder {
       return (AlignmentPattern) possibleCenters.elementAt(0);
     }
 
-    throw ReaderException.getInstance();
+    throw NotFoundException.getNotFoundInstance();
   }
 
   /**

@@ -16,7 +16,7 @@
 
 package com.google.zxing.datamatrix.decoder;
 
-import com.google.zxing.ReaderException;
+import com.google.zxing.FormatException;
 
 /**
  * The Version object encapsulates attributes about a particular
@@ -94,11 +94,11 @@ public final class Version {
    * @param numRows Number of rows in modules
    * @param numColumns Number of columns in modules
    * @return {@link Version} for a Data Matrix Code of those dimensions
-   * @throws ReaderException if dimensions do correspond to a valid Data Matrix size
+   * @throws FormatException if dimensions do correspond to a valid Data Matrix size
    */
-  public static Version getVersionForDimensions(int numRows, int numColumns) throws ReaderException {
+  public static Version getVersionForDimensions(int numRows, int numColumns) throws FormatException {
     if ((numRows & 0x01) != 0 || (numColumns & 0x01) != 0) {
-      throw ReaderException.getInstance();
+      throw FormatException.getFormatInstance();
     }
     
     // TODO(bbrown): This is doing a linear search through the array of versions.
@@ -112,7 +112,7 @@ public final class Version {
       }
     }
     
-    throw ReaderException.getInstance();
+    throw FormatException.getFormatInstance();
   }
 
   /**

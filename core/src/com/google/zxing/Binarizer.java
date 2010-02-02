@@ -55,7 +55,7 @@ public abstract class Binarizer {
    *            If used, the Binarizer will call BitArray.clear(). Always use the returned object.
    * @return The array of bits for this row (true means black).
    */
-  public abstract BitArray getBlackRow(int y, BitArray row) throws ReaderException;
+  public abstract BitArray getBlackRow(int y, BitArray row) throws NotFoundException;
 
   /**
    * Converts a 2D array of luminance data to 1 bit data. As above, assume this method is expensive
@@ -65,7 +65,7 @@ public abstract class Binarizer {
    *
    * @return The 2D array of bits for the image (true means black).
    */
-  public abstract BitMatrix getBlackMatrix() throws ReaderException;
+  public abstract BitMatrix getBlackMatrix() throws NotFoundException;
 
   /**
    * Creates a new object with the same type as this Binarizer implementation, but with pristine

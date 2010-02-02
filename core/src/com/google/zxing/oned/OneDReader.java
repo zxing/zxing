@@ -17,7 +17,10 @@
 package com.google.zxing.oned;
 
 import com.google.zxing.BinaryBitmap;
+import com.google.zxing.ChecksumException;
 import com.google.zxing.DecodeHintType;
+import com.google.zxing.FormatException;
+import com.google.zxing.NotFoundException;
 import com.google.zxing.Reader;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
@@ -40,15 +43,15 @@ public abstract class OneDReader implements Reader {
   private static final int INTEGER_MATH_SHIFT = 8;
   protected static final int PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
 
-  public Result decode(BinaryBitmap image) throws ReaderException {
+  public Result decode(BinaryBitmap image) throws NotFoundException, FormatException {
     return decode(image, null);
   }
 
   // Note that we don't try rotation without the try harder flag, even if rotation was supported.
-  public Result decode(BinaryBitmap image, Hashtable hints) throws ReaderException {
+  public Result decode(BinaryBitmap image, Hashtable hints) throws NotFoundException, FormatException {
     try {
       return doDecode(image, hints);
-    } catch (ReaderException re) {
+    } catch (NotFoundException nfe) {
       boolean tryHarder = hints != null && hints.containsKey(DecodeHintType.TRY_HARDER);
       if (tryHarder && image.isRotateSupported()) {
         BinaryBitmap rotatedImage = image.rotateCounterClockwise();
@@ -70,7 +73,7 @@ public abstract class OneDReader implements Reader {
         }
         return result;
       } else {
-        throw re;
+        throw nfe;
       }
     }
   }
@@ -91,9 +94,9 @@ public abstract class OneDReader implements Reader {
    * @param image The image to decode
    * @param hints Any hints that were requested
    * @return The contents of the decoded barcode
-   * @throws ReaderException Any spontaneous errors which occur
+   * @throws NotFoundException Any spontaneous errors which occur
    */
-  private Result doDecode(BinaryBitmap image, Hashtable hints) throws ReaderException {
+  private Result doDecode(BinaryBitmap image, Hashtable hints) throws NotFoundException {
     int width = image.getWidth();
     int height = image.getHeight();
     BitArray row = new BitArray(width);
@@ -122,7 +125,7 @@ public abstract class OneDReader implements Reader {
       // Estimate black point for this row and load it:
       try {
         row = image.getBlackRow(rowNumber, row);
-      } catch (ReaderException re) {
+      } catch (NotFoundException nfe) {
         continue;
       }
 
@@ -166,7 +169,7 @@ public abstract class OneDReader implements Reader {
       }
     }
 
-    throw ReaderException.getInstance();
+    throw NotFoundException.getNotFoundInstance();
   }
 
   /**
@@ -179,17 +182,17 @@ public abstract class OneDReader implements Reader {
    * @param row row to count from
    * @param start offset into row to start at
    * @param counters array into which to record counts
-   * @throws ReaderException if counters cannot be filled entirely from row before running out
+   * @throws NotFoundException if counters cannot be filled entirely from row before running out
    *  of pixels
    */
-  protected static void recordPattern(BitArray row, int start, int[] counters) throws ReaderException {
+  protected static void recordPattern(BitArray row, int start, int[] counters) throws NotFoundException {
     int numCounters = counters.length;
     for (int i = 0; i < numCounters; i++) {
       counters[i] = 0;
     }
     int end = row.getSize();
     if (start >= end) {
-      throw ReaderException.getInstance();
+      throw NotFoundException.getNotFoundInstance();
     }
     boolean isWhite = !row.get(start);
     int counterPosition = 0;
@@ -212,12 +215,12 @@ public abstract class OneDReader implements Reader {
     // If we read fully the last section of pixels and filled up our counters -- or filled
     // the last counter but ran off the side of the image, OK. Otherwise, a problem.
     if (!(counterPosition == numCounters || (counterPosition == numCounters - 1 && i == end))) {
-      throw ReaderException.getInstance();
+      throw NotFoundException.getNotFoundInstance();
     }
   }
 
   protected static void recordPatternInReverse(BitArray row, int start, int[] counters)
-      throws ReaderException {
+      throws NotFoundException {
     // This could be more efficient I guess
     int numTransitionsLeft = counters.length;
     boolean last = row.get(start);
@@ -228,7 +231,7 @@ public abstract class OneDReader implements Reader {
       }
     }
     if (numTransitionsLeft >= 0) {
-      throw ReaderException.getInstance();
+      throw NotFoundException.getNotFoundInstance();
     }
     recordPattern(row, start + 1, counters);
   }
@@ -286,9 +289,9 @@ public abstract class OneDReader implements Reader {
    * @param row the black/white pixel data of the row
    * @param hints decode hints
    * @return {@link Result} containing encoded string and start/end of barcode
-   * @throws ReaderException if an error occurs or barcode cannot be found
+   * @throws NotFoundException if an error occurs or barcode cannot be found
    */
   public abstract Result decodeRow(int rowNumber, BitArray row, Hashtable hints)
-      throws ReaderException;
+      throws NotFoundException, ChecksumException, FormatException;
 
 }

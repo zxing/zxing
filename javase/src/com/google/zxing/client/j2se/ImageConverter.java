@@ -18,6 +18,7 @@ package com.google.zxing.client.j2se;
 
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.LuminanceSource;
+import com.google.zxing.NotFoundException;
 import com.google.zxing.ReaderException;
 import com.google.zxing.common.BitArray;
 import com.google.zxing.common.BitMatrix;
@@ -107,7 +108,7 @@ public final class ImageConverter {
       for (int y = 0; y < height; y++) {
           try {
             array = bitmap.getBlackRow(y, array);
-          } catch (ReaderException e) {
+          } catch (NotFoundException nfe) {
             // Draw rows with insufficient dynamic range in red
             for (int x = 0; x < width; x++) {
               result.setRGB(x, y, RED);
@@ -127,7 +128,7 @@ public final class ImageConverter {
             result.setRGB(x, y, matrix.get(x, y) ? BLACK : WHITE);
           }
         }
-      } catch (ReaderException e) {
+      } catch (NotFoundException nfe) {
 
       }
     }
