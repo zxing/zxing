@@ -24,6 +24,8 @@
 #import "TwoDDecoderResult.h"
 
 #include <zxing/qrcode/QRCodeReader.h>
+#include <zxing/MultiFormatReader.h>
+
 #include <zxing/BinaryBitmap.h>
 #include <zxing/ReaderException.h>
 #include <zxing/common/IllegalArgumentException.h>
@@ -31,7 +33,6 @@
 #include "GrayBytesMonochromeBitmapSource.h"
 
 using namespace zxing;
-using namespace zxing::qrcode;
 
 @implementation Decoder
 
@@ -139,9 +140,10 @@ using namespace zxing::qrcode;
 - (void)decode:(id)arg {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	{ 
-		QRCodeReader reader;
+
+		MultiFormatReader reader;
 #ifdef DEBUG
-		NSLog(@"created QRCoreReader");
+		NSLog(@"created MultiFormatReader");
 #endif
 		
 		Ref<LuminanceSource> source (new GrayBytesMonochromeBitmapSource(subsetData, subsetWidth, subsetHeight, subsetBytesPerRow));
