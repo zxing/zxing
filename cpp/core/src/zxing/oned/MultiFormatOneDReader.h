@@ -1,12 +1,9 @@
-#ifndef __ALIGNMENT_PATTERN_H__
-#define __ALIGNMENT_PATTERN_H__
-
 /*
- *  AlignmentPattern.h
- *  zxing
+ *  MultiFormatOneDReader.h
+ *  ZXing
  *
- *  Created by Christian Brunschen on 13/05/2008.
- *  Copyright 2008 ZXing authors All rights reserved.
+ *  Created by Lukasz Warchol on 10-01-25.
+ *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,26 +18,22 @@
  * limitations under the License.
  */
 
-#include <zxing/ResultPoint.h>
-#include <cmath>
+#include <zxing/oned/OneDReader.h>
+#include <zxing/common/BitArray.h>
+#include <zxing/Result.h>
 
 namespace zxing {
-	namespace qrcode {
-		
-		class AlignmentPattern : public ResultPoint {
-		private:
-			float posX_;
-			float posY_;
-			float estimatedModuleSize_;
+	namespace oned {
+		class MultiFormatOneDReader : public OneDReader {
 			
+		private:
+			std::vector<OneDReader*>* readers;
 		public:
-			AlignmentPattern(float posX, float posY, float estimatedModuleSize);
-			float getX();
-			float getY();
-			bool aboutEquals(float moduleSize, float i, float j);
+			MultiFormatOneDReader();
+			
+			Ref<Result> decodeRow(int rowNumber, Ref<BitArray> row);
+			
+			~MultiFormatOneDReader();
 		};
-		
 	}
 }
-
-#endif // __ALIGNMENT_PATTERN_H__

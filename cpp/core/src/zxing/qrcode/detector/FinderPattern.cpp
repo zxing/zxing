@@ -21,38 +21,38 @@
 #include <zxing/qrcode/detector/FinderPattern.h>
 
 namespace zxing {
-namespace qrcode {
-
-using namespace std;
-
-FinderPattern::FinderPattern(float posX, float posY, float estimatedModuleSize) :
-    posX_(posX), posY_(posY), estimatedModuleSize_(estimatedModuleSize), counter_(1) {
-}
-
-float FinderPattern::getX() {
-  return posX_;
-}
-
-float FinderPattern::getY() {
-  return posY_;
-}
-
-int FinderPattern::getCount() {
-  return counter_;
-}
-
-float FinderPattern::getEstimatedModuleSize() {
-  return estimatedModuleSize_;
-}
-
-void FinderPattern::incrementCount() {
-  counter_++;
-}
-
-bool FinderPattern::aboutEquals(float moduleSize, float i, float j) {
-  return abs(i - posY_) <= moduleSize && abs(j - posX_) <= moduleSize && (abs(moduleSize - estimatedModuleSize_)
-         <= 1.0f || abs(moduleSize - estimatedModuleSize_) / estimatedModuleSize_ <= 0.1f);
-}
-
-}
+	namespace qrcode {
+		
+		using namespace std;
+		
+		FinderPattern::FinderPattern(float posX, float posY, float estimatedModuleSize) :
+		posX_(posX), posY_(posY), estimatedModuleSize_(estimatedModuleSize), counter_(1) {
+		}
+		
+		float FinderPattern::getX() {
+			return posX_;
+		}
+		
+		float FinderPattern::getY() {
+			return posY_;
+		}
+		
+		int FinderPattern::getCount() {
+			return counter_;
+		}
+		
+		float FinderPattern::getEstimatedModuleSize() {
+			return estimatedModuleSize_;
+		}
+		
+		void FinderPattern::incrementCount() {
+			counter_++;
+		}
+		
+		bool FinderPattern::aboutEquals(float moduleSize, float i, float j) {
+			return abs(i - posY_) <= moduleSize && abs(j - posX_) <= moduleSize && (abs(moduleSize - estimatedModuleSize_)
+																					<= 1.0f || abs(moduleSize - estimatedModuleSize_) / estimatedModuleSize_ <= 0.1f);
+		}
+		
+	}
 }

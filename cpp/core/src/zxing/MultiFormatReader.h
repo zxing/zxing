@@ -1,12 +1,9 @@
-#ifndef __QR_CODE_READER_H__
-#define __QR_CODE_READER_H__
-
 /*
- *  QRCodeReader.h
- *  zxing
+ *  MultiFormatBarcodeReader.h
+ *  ZXing
  *
- *  Created by Christian Brunschen on 20/05/2008.
- *  Copyright 2008 ZXing authors All rights reserved.
+ *  Created by Lukasz Warchol on 10-01-26.
+ *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,23 +18,21 @@
  * limitations under the License.
  */
 
+ 
 #include <zxing/Reader.h>
-#include <zxing/qrcode/decoder/Decoder.h>
+#include <zxing/common/BitArray.h>
+#include <zxing/Result.h>
 
 namespace zxing {
-	namespace qrcode {
+	class MultiFormatReader : public Reader {
 		
-		class QRCodeReader : public Reader {
-		private:
-			Decoder decoder_;
-			
-		public:
-			QRCodeReader();
-			virtual Ref<Result> decode(Ref<BinaryBitmap> image);
-			virtual ~QRCodeReader();
-			
-		};
-	}
+	private:
+		std::vector<Reader*>* readers;
+	public:
+		MultiFormatReader();
+		
+		Ref<Result> decode(Ref<BinaryBitmap> image);
+		
+		~MultiFormatReader();
+	};
 }
-
-#endif // __QR_CODE_READER_H__

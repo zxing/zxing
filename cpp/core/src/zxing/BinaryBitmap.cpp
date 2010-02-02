@@ -4,6 +4,7 @@
  *
  *  Created by Ralf Kistner on 19/10/2009.
  *  Copyright 2008 ZXing authors All rights reserved.
+ *  Modified by Lukasz Warchol on 02/02/2010.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,24 +22,36 @@
 #include <zxing/BinaryBitmap.h>
 
 namespace zxing {
-
-BinaryBitmap::BinaryBitmap(Ref<Binarizer> binarizer) : bits_(NULL), binarizer_(binarizer) {
-
-}
-
-BinaryBitmap::~BinaryBitmap() {
-}
-
-
-Ref<BitMatrix> BinaryBitmap::getBlackMatrix() {
-  if (bits_ == NULL) {
-    bits_ = binarizer_->getBlackMatrix();
-  }
-  return bits_;
-}
-
-Ref<LuminanceSource> BinaryBitmap::getSource() {
-  return binarizer_->getSource();
-}
-
+	
+	BinaryBitmap::BinaryBitmap(Ref<Binarizer> binarizer) : bits_(NULL), binarizer_(binarizer) {
+		
+	}
+	
+	BinaryBitmap::~BinaryBitmap() {
+	}
+	
+	Ref<BitArray> BinaryBitmap::getBlackRow(int y, Ref<BitArray> row) {
+		if (array_bits_ == NULL) {
+			array_bits_ = binarizer_->getBlackRow(y, row);
+		}
+		return array_bits_;
+	}
+	
+	Ref<BitMatrix> BinaryBitmap::getBlackMatrix() {
+		if (bits_ == NULL) {
+			bits_ = binarizer_->getBlackMatrix();
+		}
+		return bits_;
+	}
+	int BinaryBitmap::getWidth() {
+		return getSource()->getWidth();
+	}
+	int BinaryBitmap::getHeight() {
+		return getSource()->getHeight();
+	}
+	
+	Ref<LuminanceSource> BinaryBitmap::getSource() {
+		return binarizer_->getSource();
+	}
+	
 }

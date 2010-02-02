@@ -4,6 +4,7 @@
  *
  *  Created by Ralf Kistner on 19/10/2009.
  *  Copyright 2008 ZXing authors All rights reserved.
+ *  Modified by Lukasz Warchol on 02/02/2010.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,23 +23,29 @@
 
 #include <zxing/common/Counted.h>
 #include <zxing/common/BitMatrix.h>
+#include <zxing/common/BitArray.h>
 #include <zxing/Binarizer.h>
 
 namespace zxing {
-
-class BinaryBitmap : public Counted {
-private:
-  Ref<BitMatrix> bits_;
-  Ref<Binarizer> binarizer_;
-
-public:
-  BinaryBitmap(Ref<Binarizer> binarizer);
-  virtual ~BinaryBitmap();
-
-  Ref<BitMatrix> getBlackMatrix();
-  Ref<LuminanceSource> getSource();
-};
-
+	
+	class BinaryBitmap : public Counted {
+	private:
+		Ref<BitMatrix> bits_;
+		Ref<BitArray> array_bits_;
+		Ref<Binarizer> binarizer_;
+		
+	public:
+		BinaryBitmap(Ref<Binarizer> binarizer);
+		virtual ~BinaryBitmap();
+		
+		Ref<BitArray> getBlackRow(int y, Ref<BitArray> row);
+		Ref<BitMatrix> getBlackMatrix();
+		Ref<LuminanceSource> getSource();
+		
+		int getWidth();
+		int getHeight();
+	};
+	
 }
 
 #endif /* BINARYBITMAP_H_ */

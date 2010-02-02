@@ -1,12 +1,9 @@
-#ifndef __ALIGNMENT_PATTERN_H__
-#define __ALIGNMENT_PATTERN_H__
-
 /*
- *  AlignmentPattern.h
- *  zxing
+ *  EAN13Reader.h
+ *  ZXing
  *
- *  Created by Christian Brunschen on 13/05/2008.
- *  Copyright 2008 ZXing authors All rights reserved.
+ *  Created by Lukasz Warchol on 10-01-22.
+ *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,26 +18,24 @@
  * limitations under the License.
  */
 
-#include <zxing/ResultPoint.h>
-#include <cmath>
+#include <zxing/oned/UPCEANReader.h>
+#include <zxing/Result.h>
 
 namespace zxing {
-	namespace qrcode {
-		
-		class AlignmentPattern : public ResultPoint {
+	namespace oned {
+		class EAN13Reader : public UPCEANReader {
+			
 		private:
-			float posX_;
-			float posY_;
-			float estimatedModuleSize_;
+			int* decodeMiddleCounters;
+			static void determineFirstDigit(std::string& resultString, int lgPatternFound);								//throws ReaderException
 			
 		public:
-			AlignmentPattern(float posX, float posY, float estimatedModuleSize);
-			float getX();
-			float getY();
-			bool aboutEquals(float moduleSize, float i, float j);
+			EAN13Reader();
+			
+			int decodeMiddle(Ref<BitArray> row, int startRange[], int startRangeLen, std::string& resultString);			//throws ReaderException
+			
+			BarcodeFormat getBarcodeFormat();
+			~EAN13Reader();
 		};
-		
 	}
 }
-
-#endif // __ALIGNMENT_PATTERN_H__
