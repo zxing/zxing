@@ -1,5 +1,5 @@
 /*
- * Copyright 2008 ZXing authors
+ * Copyright 2007 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,21 +14,25 @@
  * limitations under the License.
  */
 
-package com.google.zxing.oned;
-
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.MultiFormatReader;
-import com.google.zxing.common.AbstractBlackBoxTestCase;
+package com.google.zxing;
 
 /**
- * @author dswitkin@google.com (Daniel Switkin)
+ * Thrown when a barcode was successfully detected, but some aspect of
+ * the content did not conform to the barcode's format rules. This could have
+ * been due to a mis-detection.
+ *
+ * @author Sean Owen
  */
-public final class EAN13BlackBox3TestCase extends AbstractBlackBoxTestCase {
+public final class FormatException extends ReaderException {
 
-  public EAN13BlackBox3TestCase() {
-    super("test/data/blackbox/ean13-3", new MultiFormatReader(), BarcodeFormat.EAN_13);
-    addTest(49, 55, 0.0f);
-    addTest(52, 55, 180.0f);
+  private static final FormatException instance = new FormatException();
+
+  private FormatException() {
+    // do nothing
+  }
+
+  public static FormatException getFormatInstance() {
+    return instance;
   }
 
 }

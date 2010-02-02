@@ -19,8 +19,9 @@ package com.google.zxing.pdf417;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.DecodeHintType;
+import com.google.zxing.FormatException;
+import com.google.zxing.NotFoundException;
 import com.google.zxing.Reader;
-import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitMatrix;
@@ -46,14 +47,15 @@ public final class PDF417Reader implements Reader {
    * Locates and decodes a PDF417 code in an image.
    *
    * @return a String representing the content encoded by the PDF417 code
-   * @throws ReaderException if a PDF417 code cannot be found, or cannot be decoded
+   * @throws NotFoundException if a PDF417 code cannot be found,
+   * @throws FormatException if a PDF417 cannot be decoded
    */
-  public Result decode(BinaryBitmap image) throws ReaderException {
+  public Result decode(BinaryBitmap image) throws NotFoundException, FormatException {
     return decode(image, null);
   }
 
   public Result decode(BinaryBitmap image, Hashtable hints)
-      throws ReaderException {
+      throws NotFoundException, FormatException {
     DecoderResult decoderResult;
     ResultPoint[] points;
     if (hints != null && hints.containsKey(DecodeHintType.PURE_BARCODE)) {
@@ -79,7 +81,7 @@ public final class PDF417Reader implements Reader {
    * around it. This is a specialized method that works exceptionally fast in this special
    * case.
    */
-  private static BitMatrix extractPureBits(BinaryBitmap image) throws ReaderException {
+  private static BitMatrix extractPureBits(BinaryBitmap image) throws NotFoundException {
     // Now need to determine module size in pixels
     BitMatrix matrix = image.getBlackMatrix();
     int height = matrix.getHeight();
@@ -92,7 +94,7 @@ public final class PDF417Reader implements Reader {
       borderWidth++;
     }
     if (borderWidth == minDimension) {
-      throw ReaderException.getInstance();
+      throw NotFoundException.getNotFoundInstance();
     }
 
     // And then keep tracking across the top-left black module to determine module size
@@ -101,7 +103,7 @@ public final class PDF417Reader implements Reader {
       moduleEnd++;
     }
     if (moduleEnd == minDimension) {
-      throw ReaderException.getInstance();
+      throw NotFoundException.getNotFoundInstance();
     }
 
     int moduleSize = moduleEnd - borderWidth;
@@ -112,13 +114,13 @@ public final class PDF417Reader implements Reader {
       rowEndOfSymbol--;
     }
     if (rowEndOfSymbol < 0) {
-      throw ReaderException.getInstance();
+      throw NotFoundException.getNotFoundInstance();
     }
     rowEndOfSymbol++;
 
     // Make sure width of barcode is a multiple of module size
     if ((rowEndOfSymbol - borderWidth) % moduleSize != 0) {
-      throw ReaderException.getInstance();
+      throw NotFoundException.getNotFoundInstance();
     }
     int dimension = (rowEndOfSymbol - borderWidth) / moduleSize;
 
@@ -129,7 +131,7 @@ public final class PDF417Reader implements Reader {
 
     int sampleDimension = borderWidth + (dimension - 1) * moduleSize;
     if (sampleDimension >= width || sampleDimension >= height) {
-      throw ReaderException.getInstance();
+      throw NotFoundException.getNotFoundInstance();
     }
 
     // Now just read off the bits

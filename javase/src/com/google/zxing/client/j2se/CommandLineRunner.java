@@ -18,9 +18,12 @@ package com.google.zxing.client.j2se;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
+import com.google.zxing.ChecksumException;
 import com.google.zxing.DecodeHintType;
+import com.google.zxing.FormatException;
 import com.google.zxing.LuminanceSource;
 import com.google.zxing.MultiFormatReader;
+import com.google.zxing.NotFoundException;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 import com.google.zxing.client.result.ParsedResult;
@@ -210,7 +213,7 @@ public final class CommandLineRunner {
           ", type: " + parsedResult.getType() + "):\nRaw result:\n" + result.getText() +
           "\nParsed result:\n" + parsedResult.getDisplayResult());
       return result;
-    } catch (ReaderException e) {
+    } catch (NotFoundException nfe) {
       System.out.println(uri.toString() + ": No barcode found");
       return null;
     } finally {
@@ -247,7 +250,7 @@ public final class CommandLineRunner {
     for (int y = 0; y < height; y++) {
       try {
         row = bitmap.getBlackRow(y, row);
-      } catch (ReaderException e) {
+      } catch (NotFoundException nfe) {
         // If fetching the row failed, draw a red line and keep going.
         int offset = y * stride + width;
         for (int x = 0; x < width; x++) {
@@ -279,7 +282,7 @@ public final class CommandLineRunner {
           }
         }
       }
-    } catch (ReaderException e) {
+    } catch (NotFoundException nfe) {
     }
 
     // Write the result

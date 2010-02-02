@@ -16,7 +16,7 @@
 
 package com.google.zxing.pdf417.decoder;
 
-import com.google.zxing.ReaderException;
+import com.google.zxing.FormatException;
 import com.google.zxing.common.DecoderResult;
 
 /**
@@ -81,7 +81,7 @@ final class DecodedBitStreamParser {
   private DecodedBitStreamParser() {
   }
 
-  static DecoderResult decode(int[] codewords) throws ReaderException {
+  static DecoderResult decode(int[] codewords) throws FormatException {
     StringBuffer result = new StringBuffer(100);
     // Get compaction mode
     int codeIndex = 1;
@@ -120,7 +120,7 @@ final class DecodedBitStreamParser {
       if (codeIndex < codewords.length) {
         code = codewords[codeIndex++];
       } else {
-        throw ReaderException.getInstance();
+        throw FormatException.getFormatInstance();
       }
     }
     return new DecoderResult(null, result.toString(), null, null);

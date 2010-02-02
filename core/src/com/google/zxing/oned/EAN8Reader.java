@@ -17,7 +17,7 @@
 package com.google.zxing.oned;
 
 import com.google.zxing.BarcodeFormat;
-import com.google.zxing.ReaderException;
+import com.google.zxing.NotFoundException;
 import com.google.zxing.common.BitArray;
 
 /**
@@ -34,7 +34,7 @@ public final class EAN8Reader extends UPCEANReader {
   }
 
   protected int decodeMiddle(BitArray row, int[] startRange, StringBuffer result)
-      throws ReaderException {
+      throws NotFoundException {
     int[] counters = decodeMiddleCounters;
     counters[0] = 0;
     counters[1] = 0;

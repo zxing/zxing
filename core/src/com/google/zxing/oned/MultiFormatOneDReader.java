@@ -18,11 +18,11 @@ package com.google.zxing.oned;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.DecodeHintType;
+import com.google.zxing.NotFoundException;
 import com.google.zxing.Reader;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 import com.google.zxing.common.BitArray;
-import com.google.zxing.oned.rss.RSS14Reader;
 
 import java.util.Hashtable;
 import java.util.Vector;
@@ -70,7 +70,7 @@ public final class MultiFormatOneDReader extends OneDReader {
     }
   }
 
-  public Result decodeRow(int rowNumber, BitArray row, Hashtable hints) throws ReaderException {
+  public Result decodeRow(int rowNumber, BitArray row, Hashtable hints) throws NotFoundException {
     int size = readers.size();
     for (int i = 0; i < size; i++) {
       OneDReader reader = (OneDReader) readers.elementAt(i);
@@ -81,7 +81,7 @@ public final class MultiFormatOneDReader extends OneDReader {
       }
     }
 
-    throw ReaderException.getInstance();
+    throw NotFoundException.getNotFoundInstance();
   }
 
   public void reset() {

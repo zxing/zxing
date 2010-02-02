@@ -18,6 +18,7 @@ package com.google.zxing.multi.qrcode;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
+import com.google.zxing.NotFoundException;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 import com.google.zxing.ResultMetadataType;
@@ -41,11 +42,11 @@ public final class QRCodeMultiReader extends QRCodeReader implements MultipleBar
 
   private static final Result[] EMPTY_RESULT_ARRAY = new Result[0];
 
-  public Result[] decodeMultiple(BinaryBitmap image) throws ReaderException {
+  public Result[] decodeMultiple(BinaryBitmap image) throws NotFoundException {
     return decodeMultiple(image, null);
   }
 
-  public Result[] decodeMultiple(BinaryBitmap image, Hashtable hints) throws ReaderException {
+  public Result[] decodeMultiple(BinaryBitmap image, Hashtable hints) throws NotFoundException {
     Vector results = new Vector();
     DetectorResult[] detectorResult = new MultiDetector(image.getBlackMatrix()).detectMulti(hints);
     for (int i = 0; i < detectorResult.length; i++) {

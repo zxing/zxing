@@ -16,7 +16,7 @@
 
 package com.google.zxing.common;
 
-import com.google.zxing.ReaderException;
+import com.google.zxing.NotFoundException;
 
 /**
  * @author Sean Owen
@@ -32,7 +32,7 @@ public final class DefaultGridSampler extends GridSampler {
                               float p1FromX, float p1FromY,
                               float p2FromX, float p2FromY,
                               float p3FromX, float p3FromY,
-                              float p4FromX, float p4FromY) throws ReaderException {
+                              float p4FromX, float p4FromY) throws NotFoundException {
 
     PerspectiveTransform transform = PerspectiveTransform.quadrilateralToQuadrilateral(
         p1ToX, p1ToY, p2ToX, p2ToY, p3ToX, p3ToY, p4ToX, p4ToY,
@@ -43,7 +43,7 @@ public final class DefaultGridSampler extends GridSampler {
 
   public BitMatrix sampleGrid(BitMatrix image,
                               int dimension,
-                              PerspectiveTransform transform) throws ReaderException {
+                              PerspectiveTransform transform) throws NotFoundException {
     BitMatrix bits = new BitMatrix(dimension);
     float[] points = new float[dimension << 1];
     for (int y = 0; y < dimension; y++) {
@@ -72,7 +72,7 @@ public final class DefaultGridSampler extends GridSampler {
         // This results in an ugly runtime exception despite our clever checks above -- can't have
         // that. We could check each point's coordinates but that feels duplicative. We settle for
         // catching and wrapping ArrayIndexOutOfBoundsException.
-        throw ReaderException.getInstance();
+        throw NotFoundException.getNotFoundInstance();
       }
     }
     return bits;

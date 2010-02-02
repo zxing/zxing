@@ -16,7 +16,6 @@
 
 package com.google.zxing.qrcode.decoder;
 
-import com.google.zxing.ReaderException;
 import com.google.zxing.common.BitSourceBuilder;
 import junit.framework.TestCase;
 
@@ -27,7 +26,7 @@ import junit.framework.TestCase;
  */
 public final class DecodedBitStreamParserTestCase extends TestCase {
 
-  public void testSimpleByteMode() throws ReaderException {
+  public void testSimpleByteMode() throws Exception {
     BitSourceBuilder builder = new BitSourceBuilder();
     builder.write(0x04, 4); // Byte mode
     builder.write(0x03, 8); // 3 bytes
@@ -39,7 +38,7 @@ public final class DecodedBitStreamParserTestCase extends TestCase {
     assertEquals("\u00f1\u00f2\u00f3", result);
   }
 
-  public void testSimpleSJIS() throws ReaderException {
+  public void testSimpleSJIS() throws Exception {
     BitSourceBuilder builder = new BitSourceBuilder();
     builder.write(0x04, 4); // Byte mode
     builder.write(0x03, 8); // 3 bytes
@@ -51,7 +50,7 @@ public final class DecodedBitStreamParserTestCase extends TestCase {
     assertEquals("\uff61\uff62\uff63", result);
   }
 
-  public void testECI() throws ReaderException {
+  public void testECI() throws Exception {
     BitSourceBuilder builder = new BitSourceBuilder();
     builder.write(0x07, 4); // ECI mode
     builder.write(0x02, 8); // ECI 2 = CP437 encoding

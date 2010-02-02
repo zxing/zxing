@@ -16,7 +16,9 @@
 
 package com.google.zxing.qrcode.decoder;
 
-import com.google.zxing.ReaderException;
+import com.google.zxing.ChecksumException;
+import com.google.zxing.FormatException;
+import com.google.zxing.NotFoundException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.DecoderResult;
 import com.google.zxing.common.reedsolomon.GF256;
@@ -39,7 +41,8 @@ public final class Decoder {
     rsDecoder = new ReedSolomonDecoder(GF256.QR_CODE_FIELD);
   }
 
-  public DecoderResult decode(boolean[][] image) throws ReaderException {
+  public DecoderResult decode(boolean[][] image)
+      throws ChecksumException, FormatException, NotFoundException {
     return decode(image, null);
   }
 
@@ -49,9 +52,12 @@ public final class Decoder {
    *
    * @param image booleans representing white/black QR Code modules
    * @return text and bytes encoded within the QR Code
-   * @throws ReaderException if the QR Code cannot be decoded
+   * @throws NotFoundException if the QR Code cannot be found
+   * @throws FormatException if the QR Code cannot be decoded
+   * @throws ChecksumException if error correction fails
    */
-  public DecoderResult decode(boolean[][] image, Hashtable hints) throws ReaderException {
+  public DecoderResult decode(boolean[][] image, Hashtable hints)
+      throws ChecksumException, FormatException, NotFoundException {
     int dimension = image.length;
     BitMatrix bits = new BitMatrix(dimension);
     for (int i = 0; i < dimension; i++) {
@@ -64,7 +70,7 @@ public final class Decoder {
     return decode(bits, hints);
   }
 
-  public DecoderResult decode(BitMatrix bits) throws ReaderException {
+  public DecoderResult decode(BitMatrix bits) throws ChecksumException, FormatException, NotFoundException {
     return decode(bits, null);
   }
 
@@ -73,9 +79,12 @@ public final class Decoder {
    *
    * @param bits booleans representing white/black QR Code modules
    * @return text and bytes encoded within the QR Code
-   * @throws ReaderException if the QR Code cannot be decoded
+   * @throws NotFoundException if the QR Code cannot be found
+   * @throws FormatException if the QR Code cannot be decoded
+   * @throws ChecksumException if error correction fails
    */
-  public DecoderResult decode(BitMatrix bits, Hashtable hints) throws ReaderException {
+  public DecoderResult decode(BitMatrix bits, Hashtable hints)
+      throws NotFoundException, FormatException, ChecksumException {
 
     // Construct a parser and read version, error-correction level
     BitMatrixParser parser = new BitMatrixParser(bits);
@@ -116,9 +125,9 @@ public final class Decoder {
    *
    * @param codewordBytes data and error correction codewords
    * @param numDataCodewords number of codewords that are data bytes
-   * @throws ReaderException if error correction fails
+   * @throws ChecksumException if error correction fails
    */
-  private void correctErrors(byte[] codewordBytes, int numDataCodewords) throws ReaderException {
+  private void correctErrors(byte[] codewordBytes, int numDataCodewords) throws ChecksumException {
     int numCodewords = codewordBytes.length;
     // First read into an array of ints
     int[] codewordsInts = new int[numCodewords];
@@ -129,7 +138,7 @@ public final class Decoder {
     try {
       rsDecoder.decode(codewordsInts, numECCodewords);
     } catch (ReedSolomonException rse) {
-      throw ReaderException.getInstance();
+      throw ChecksumException.getChecksumInstance();
     }
     // Copy back into array of bytes -- only need to worry about the bytes that were data
     // We don't care about errors in the error-correction codewords

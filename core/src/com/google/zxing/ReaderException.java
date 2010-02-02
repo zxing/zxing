@@ -23,7 +23,7 @@ package com.google.zxing;
  *
  * @author Sean Owen
  */
-public final class ReaderException extends Exception {
+public abstract class ReaderException extends Exception {
 
   // TODO: Currently we throw up to 400 ReaderExceptions while scanning a single 240x240 image before
   // rejecting it. This involves a lot of overhead and memory allocation, and affects both performance
@@ -34,7 +34,7 @@ public final class ReaderException extends Exception {
   // by disabling the generation of stack traces, which is especially time consuming. These are just
   // temporary measures, pending the big cleanup.
 
-  private static final ReaderException instance = new ReaderException();
+  //private static final ReaderException instance = new ReaderException();
 
   // EXCEPTION TRACKING SUPPORT
   // Identifies who is throwing exceptions and how often. To use:
@@ -45,11 +45,11 @@ public final class ReaderException extends Exception {
 //  private static int exceptionCount = 0;
 //  private static Map<String,Integer> throwers = new HashMap<String,Integer>(32);
 
-  private ReaderException() {
+  ReaderException() {
     // do nothing
   }
 
-  public static ReaderException getInstance() {
+  //public static ReaderException getInstance() {
 //    Exception e = new Exception();
 //    // Take the stack frame before this one.
 //    StackTraceElement stack = e.getStackTrace()[1];
@@ -64,8 +64,8 @@ public final class ReaderException extends Exception {
 //    }
 //    exceptionCount++;
 
-    return instance;
-  }
+    //return instance;
+  //}
 
 //  public static int getExceptionCountAndReset() {
 //    int temp = exceptionCount;
@@ -91,7 +91,7 @@ public final class ReaderException extends Exception {
   // Prevent stack traces from being taken
   // srowen says: huh, my IDE is saying this is not an override. native methods can't be overridden?
   // This, at least, does not hurt. Because we use a singleton pattern here, it doesn't matter anyhow.
-  public Throwable fillInStackTrace() {
+  public final Throwable fillInStackTrace() {
     return null;
   }
 

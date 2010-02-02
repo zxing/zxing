@@ -16,7 +16,7 @@
 
 package com.google.zxing.pdf417.decoder;
 
-import com.google.zxing.ReaderException;
+import com.google.zxing.NotFoundException;
 import com.google.zxing.common.BitMatrix;
 
 /**
@@ -379,7 +379,7 @@ final class BitMatrixParser {
    * @param next        the next available index into the codewords array.
    * @return the next available index into the codeword array after processing
    *         this row.
-   * @throws ReaderException
+   * @throws NotFoundException
    */
   /*
   int processRow1(int[] rowCounters, int rowNumber, int rowHeight,

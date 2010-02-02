@@ -17,7 +17,7 @@
 package com.google.zxing.pdf417.detector;
 
 import com.google.zxing.BinaryBitmap;
-import com.google.zxing.ReaderException;
+import com.google.zxing.NotFoundException;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.DetectorResult;
@@ -62,9 +62,9 @@ public final class Detector {
    * <p>Detects a PDF417 Code in an image, simply.</p>
    *
    * @return {@link DetectorResult} encapsulating results of detecting a PDF417 Code
-   * @throws ReaderException if no QR Code can be found
+   * @throws NotFoundException if no QR Code can be found
    */
-  public DetectorResult detect() throws ReaderException {
+  public DetectorResult detect() throws NotFoundException {
     return detect(null);
   }
 
@@ -73,9 +73,9 @@ public final class Detector {
    *
    * @param hints optional hints to detector
    * @return {@link DetectorResult} encapsulating results of detecting a PDF417 Code
-   * @throws ReaderException if no PDF417 Code can be found
+   * @throws NotFoundException if no PDF417 Code can be found
    */
-  public DetectorResult detect(Hashtable hints) throws ReaderException {
+  public DetectorResult detect(Hashtable hints) throws NotFoundException {
     // Fetch the 1 bit matrix once up front.
     BitMatrix matrix = image.getBlackMatrix();
 
@@ -91,26 +91,26 @@ public final class Detector {
       correctCodeWordVertices(vertices, false);
     }
 
-    if (vertices != null) {
-      float moduleWidth = computeModuleWidth(vertices);
-      if (moduleWidth < 1.0f) {
-        throw ReaderException.getInstance();
-      }
-
-      int dimension = computeDimension(vertices[4], vertices[6],
-          vertices[5], vertices[7], moduleWidth);
-      if (dimension < 1) {
-        throw ReaderException.getInstance();
-      }
-
-      // Deskew and sample image.
-      BitMatrix bits = sampleGrid(matrix, vertices[4], vertices[5],
-          vertices[6], vertices[7], dimension);
-      return new DetectorResult(bits, new ResultPoint[]{vertices[4],
-          vertices[5], vertices[6], vertices[7]});
-    } else {
-      throw ReaderException.getInstance();
+    if (vertices == null) {
+      throw NotFoundException.getNotFoundInstance();
     }
+
+    float moduleWidth = computeModuleWidth(vertices);
+    if (moduleWidth < 1.0f) {
+      throw NotFoundException.getNotFoundInstance();
+    }
+
+    int dimension = computeDimension(vertices[4], vertices[6],
+        vertices[5], vertices[7], moduleWidth);
+    if (dimension < 1) {
+      throw NotFoundException.getNotFoundInstance();
+    }
+
+    // Deskew and sample image.
+    BitMatrix bits = sampleGrid(matrix, vertices[4], vertices[5],
+        vertices[6], vertices[7], dimension);
+    return new DetectorResult(bits, new ResultPoint[]{vertices[4],
+        vertices[5], vertices[6], vertices[7]});
   }
 
   /**
@@ -374,7 +374,7 @@ public final class Detector {
 
   private static BitMatrix sampleGrid(BitMatrix matrix, ResultPoint topLeft,
       ResultPoint bottomLeft, ResultPoint topRight, ResultPoint bottomRight, int dimension)
-      throws ReaderException {
+      throws NotFoundException {
 
     // Note that unlike the QR Code sampler, we didn't find the center of modules, but the
     // very corners. So there is no 0.5f here; 0.0f is right.

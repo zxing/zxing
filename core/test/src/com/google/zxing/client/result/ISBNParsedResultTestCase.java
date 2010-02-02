@@ -16,9 +16,9 @@
 
 package com.google.zxing.client.result;
 
-import junit.framework.TestCase;
-import com.google.zxing.Result;
 import com.google.zxing.BarcodeFormat;
+import com.google.zxing.Result;
+import junit.framework.TestCase;
 
 /**
  * Tests {@link ISBNParsedResult}.

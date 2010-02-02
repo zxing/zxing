@@ -1,5 +1,5 @@
 /*
- * Copyright 2008 ZXing authors
+ * Copyright 2007 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,21 +14,24 @@
  * limitations under the License.
  */
 
-package com.google.zxing.oned;
-
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.MultiFormatReader;
-import com.google.zxing.common.AbstractBlackBoxTestCase;
+package com.google.zxing;
 
 /**
- * @author dswitkin@google.com (Daniel Switkin)
+ * Thrown when a barcode was not found in the image. It might have been
+ * partially detected but could not be confirmed.
+ *
+ * @author Sean Owen
  */
-public final class EAN13BlackBox3TestCase extends AbstractBlackBoxTestCase {
+public final class NotFoundException extends ReaderException {
 
-  public EAN13BlackBox3TestCase() {
-    super("test/data/blackbox/ean13-3", new MultiFormatReader(), BarcodeFormat.EAN_13);
-    addTest(49, 55, 0.0f);
-    addTest(52, 55, 180.0f);
+  private static final NotFoundException instance = new NotFoundException();
+
+  private NotFoundException() {
+    // do nothing
+  }
+
+  public static NotFoundException getNotFoundInstance() {
+    return instance;
   }
 
 }

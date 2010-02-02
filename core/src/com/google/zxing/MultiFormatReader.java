@@ -16,10 +16,10 @@
 
 package com.google.zxing;
 
+import com.google.zxing.datamatrix.DataMatrixReader;
 import com.google.zxing.oned.MultiFormatOneDReader;
 import com.google.zxing.pdf417.PDF417Reader;
 import com.google.zxing.qrcode.QRCodeReader;
-import com.google.zxing.datamatrix.DataMatrixReader;
 
 import java.util.Hashtable;
 import java.util.Vector;
@@ -44,9 +44,9 @@ public final class MultiFormatReader implements Reader {
    *
    * @param image The pixel data to decode
    * @return The contents of the image
-   * @throws ReaderException Any errors which occurred
+   * @throws NotFoundException Any errors which occurred
    */
-  public Result decode(BinaryBitmap image) throws ReaderException {
+  public Result decode(BinaryBitmap image) throws NotFoundException {
     setHints(null);
     return decodeInternal(image);
   }
@@ -57,9 +57,9 @@ public final class MultiFormatReader implements Reader {
    * @param image The pixel data to decode
    * @param hints The hints to use, clearing the previous state.
    * @return The contents of the image
-   * @throws ReaderException Any errors which occurred
+   * @throws NotFoundException Any errors which occurred
    */
-  public Result decode(BinaryBitmap image, Hashtable hints) throws ReaderException {
+  public Result decode(BinaryBitmap image, Hashtable hints) throws NotFoundException {
     setHints(hints);
     return decodeInternal(image);
   }
@@ -70,9 +70,9 @@ public final class MultiFormatReader implements Reader {
    *
    * @param image The pixel data to decode
    * @return The contents of the image
-   * @throws ReaderException Any errors which occurred
+   * @throws NotFoundException Any errors which occurred
    */
-  public Result decodeWithState(BinaryBitmap image) throws ReaderException {
+  public Result decodeWithState(BinaryBitmap image) throws NotFoundException {
     // Make sure to set up the default state so we don't crash
     if (readers == null) {
       setHints(null);
@@ -147,7 +147,7 @@ public final class MultiFormatReader implements Reader {
     }
   }
 
-  private Result decodeInternal(BinaryBitmap image) throws ReaderException {
+  private Result decodeInternal(BinaryBitmap image) throws NotFoundException {
     int size = readers.size();
     for (int i = 0; i < size; i++) {
       Reader reader = (Reader) readers.elementAt(i);
@@ -158,7 +158,7 @@ public final class MultiFormatReader implements Reader {
       }
     }
 
-    throw ReaderException.getInstance();
+    throw NotFoundException.getNotFoundInstance();
   }
 
 }

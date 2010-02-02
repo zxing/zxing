@@ -16,7 +16,7 @@
 
 package com.google.zxing.datamatrix.detector;
 
-import com.google.zxing.ReaderException;
+import com.google.zxing.NotFoundException;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.Collections;
@@ -57,9 +57,9 @@ public final class Detector {
    * <p>Detects a Data Matrix Code in an image.</p>
    *
    * @return {@link DetectorResult} encapsulating results of detecting a QR Code
-   * @throws ReaderException if no Data Matrix Code can be found
+   * @throws NotFoundException if no Data Matrix Code can be found
    */
-  public DetectorResult detect() throws ReaderException {
+  public DetectorResult detect() throws NotFoundException {
 
     ResultPoint[] cornerPoints = rectangleDetector.detect();
     ResultPoint pointA = cornerPoints[0];
@@ -110,7 +110,7 @@ public final class Detector {
     }
 
     if (maybeTopLeft == null || bottomLeft == null || maybeBottomRight == null) {
-      throw ReaderException.getInstance();
+      throw NotFoundException.getNotFoundInstance();
     }
 
     // Bottom left is correct but top left and bottom right might be switched
@@ -169,7 +169,7 @@ public final class Detector {
                                       ResultPoint topLeft,
                                       ResultPoint bottomLeft,
                                       ResultPoint bottomRight,
-                                      int dimension) throws ReaderException {
+                                      int dimension) throws NotFoundException {
 
     // We make up the top right point for now, based on the others.
     // TODO: we actually found a fourth corner above and figured out which of two modules

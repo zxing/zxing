@@ -17,7 +17,9 @@
 package com.google.zxing.oned;
 
 import com.google.zxing.BarcodeFormat;
-import com.google.zxing.ReaderException;
+import com.google.zxing.ChecksumException;
+import com.google.zxing.FormatException;
+import com.google.zxing.NotFoundException;
 import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitArray;
@@ -161,7 +163,7 @@ public final class Code128Reader extends OneDReader {
   private static final int CODE_START_C = 105;
   private static final int CODE_STOP = 106;
 
-  private static int[] findStartPattern(BitArray row) throws ReaderException {
+  private static int[] findStartPattern(BitArray row) throws NotFoundException {
     int width = row.getSize();
     int rowOffset = 0;
     while (rowOffset < width) {
@@ -214,10 +216,10 @@ public final class Code128Reader extends OneDReader {
         isWhite = !isWhite;
       }
     }
-    throw ReaderException.getInstance();
+    throw NotFoundException.getNotFoundInstance();
   }
 
-  private static int decodeCode(BitArray row, int[] counters, int rowOffset) throws ReaderException {
+  private static int decodeCode(BitArray row, int[] counters, int rowOffset) throws NotFoundException {
     recordPattern(row, rowOffset, counters);
     int bestVariance = MAX_AVG_VARIANCE; // worst variance we'll accept
     int bestMatch = -1;
@@ -233,11 +235,12 @@ public final class Code128Reader extends OneDReader {
     if (bestMatch >= 0) {
       return bestMatch;
     } else {
-      throw ReaderException.getInstance();
+      throw NotFoundException.getNotFoundInstance();
     }
   }
 
-  public Result decodeRow(int rowNumber, BitArray row, Hashtable hints) throws ReaderException {
+  public Result decodeRow(int rowNumber, BitArray row, Hashtable hints)
+      throws NotFoundException, FormatException, ChecksumException {
 
     int[] startPatternInfo = findStartPattern(row);
     int startCode = startPatternInfo[2];
@@ -253,7 +256,7 @@ public final class Code128Reader extends OneDReader {
         codeSet = CODE_CODE_C;
         break;
       default:
-        throw ReaderException.getInstance();
+        throw FormatException.getFormatInstance();
     }
 
     boolean done = false;
@@ -303,7 +306,7 @@ public final class Code128Reader extends OneDReader {
         case CODE_START_A:
         case CODE_START_B:
         case CODE_START_C:
-          throw ReaderException.getInstance();
+          throw FormatException.getFormatInstance();
       }
 
       switch (codeSet) {
@@ -426,14 +429,14 @@ public final class Code128Reader extends OneDReader {
     }
     if (!row.isRange(nextStart, Math.min(width, nextStart + (nextStart - lastStart) / 2),
         false)) {
-      throw ReaderException.getInstance();
+      throw NotFoundException.getNotFoundInstance();
     }
 
     // Pull out from sum the value of the penultimate check code
     checksumTotal -= multiplier * lastCode;
     // lastCode is the checksum then:
     if (checksumTotal % 103 != lastCode) {
-      throw ReaderException.getInstance();
+      throw ChecksumException.getChecksumInstance();
     }
 
     // Need to pull out the check digits from string
@@ -452,7 +455,7 @@ public final class Code128Reader extends OneDReader {
 
     if (resultString.length() == 0) {
       // Almost surely a false positive
-      throw ReaderException.getInstance();
+      throw FormatException.getFormatInstance();
     }
 
     float left = (float) (startPatternInfo[1] + startPatternInfo[0]) / 2.0f;

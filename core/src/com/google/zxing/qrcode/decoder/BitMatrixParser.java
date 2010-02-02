@@ -16,7 +16,7 @@
 
 package com.google.zxing.qrcode.decoder;
 
-import com.google.zxing.ReaderException;
+import com.google.zxing.FormatException;
 import com.google.zxing.common.BitMatrix;
 
 /**
@@ -30,12 +30,12 @@ final class BitMatrixParser {
 
   /**
    * @param bitMatrix {@link BitMatrix} to parse
-   * @throws ReaderException if dimension is not >= 21 and 1 mod 4
+   * @throws FormatException if dimension is not >= 21 and 1 mod 4
    */
-  BitMatrixParser(BitMatrix bitMatrix) throws ReaderException {
+  BitMatrixParser(BitMatrix bitMatrix) throws FormatException {
     int dimension = bitMatrix.getDimension();
     if (dimension < 21 || (dimension & 0x03) != 1) {
-      throw ReaderException.getInstance();
+      throw FormatException.getFormatInstance();
     }
     this.bitMatrix = bitMatrix;
   }
@@ -44,10 +44,10 @@ final class BitMatrixParser {
    * <p>Reads format information from one of its two locations within the QR Code.</p>
    *
    * @return {@link FormatInformation} encapsulating the QR Code's format info
-   * @throws ReaderException if both format information locations cannot be parsed as
+   * @throws FormatException if both format information locations cannot be parsed as
    * the valid encoding of format information
    */
-  FormatInformation readFormatInformation() throws ReaderException {
+  FormatInformation readFormatInformation() throws FormatException {
 
     if (parsedFormatInfo != null) {
       return parsedFormatInfo;
@@ -87,17 +87,17 @@ final class BitMatrixParser {
     if (parsedFormatInfo != null) {
       return parsedFormatInfo;
     }
-    throw ReaderException.getInstance();
+    throw FormatException.getFormatInstance();
   }
 
   /**
    * <p>Reads version information from one of its two locations within the QR Code.</p>
    *
    * @return {@link Version} encapsulating the QR Code's version
-   * @throws ReaderException if both version information locations cannot be parsed as
+   * @throws FormatException if both version information locations cannot be parsed as
    * the valid encoding of version information
    */
-  Version readVersion() throws ReaderException {
+  Version readVersion() throws FormatException {
 
     if (parsedVersion != null) {
       return parsedVersion;
@@ -136,7 +136,7 @@ final class BitMatrixParser {
     if (parsedVersion != null && parsedVersion.getDimensionForVersion() == dimension) {
       return parsedVersion;
     }
-    throw ReaderException.getInstance();
+    throw FormatException.getFormatInstance();
   }
 
   private int copyBit(int i, int j, int versionBits) {
@@ -149,9 +149,9 @@ final class BitMatrixParser {
    * QR Code.</p>
    *
    * @return bytes encoded within the QR Code
-   * @throws ReaderException if the exact number of bytes expected is not read
+   * @throws FormatException if the exact number of bytes expected is not read
    */
-  byte[] readCodewords() throws ReaderException {
+  byte[] readCodewords() throws FormatException {
 
     FormatInformation formatInfo = readFormatInformation();
     Version version = readVersion();
@@ -200,7 +200,7 @@ final class BitMatrixParser {
       readingUp ^= true; // readingUp = !readingUp; // switch directions
     }
     if (resultOffset != version.getTotalCodewords()) {
-      throw ReaderException.getInstance();
+      throw FormatException.getFormatInstance();
     }
     return result;
   }

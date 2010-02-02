@@ -16,12 +16,12 @@
 
 package com.google.zxing.datamatrix.decoder;
 
-import com.google.zxing.ReaderException;
+import com.google.zxing.FormatException;
 import com.google.zxing.common.BitSource;
 import com.google.zxing.common.DecoderResult;
 
-import java.util.Vector;
 import java.io.UnsupportedEncodingException;
+import java.util.Vector;
 
 /**
  * <p>Data Matrix Codes can encode text as bits in one of several modes, and can use multiple modes
@@ -75,7 +75,7 @@ final class DecodedBitStreamParser {
   private DecodedBitStreamParser() {
   }
 
-  static DecoderResult decode(byte[] bytes) throws ReaderException {
+  static DecoderResult decode(byte[] bytes) throws FormatException {
     BitSource bits = new BitSource(bytes);
     StringBuffer result = new StringBuffer(100);
     StringBuffer resultTrailer = new StringBuffer(0);
@@ -102,7 +102,7 @@ final class DecodedBitStreamParser {
             decodeBase256Segment(bits, result, byteSegments);
             break;
           default:
-            throw ReaderException.getInstance();
+            throw FormatException.getFormatInstance();
         }
         mode = ASCII_ENCODE;
       }
@@ -117,12 +117,12 @@ final class DecodedBitStreamParser {
    * See ISO 16022:2006, 5.2.3 and Annex C, Table C.2
    */
   private static int decodeAsciiSegment(BitSource bits, StringBuffer result, StringBuffer resultTrailer)
-      throws ReaderException {
+      throws FormatException {
     boolean upperShift = false;
     do {
       int oneByte = bits.readBits(8);
       if (oneByte == 0) {
-	    	throw ReaderException.getInstance();
+	    	throw FormatException.getFormatInstance();
 	    } else if (oneByte <= 128) {  // ASCII data (ASCII value + 1)
 	    	oneByte = upperShift ? (oneByte + 128) : oneByte;
 	    	upperShift = false;
@@ -168,7 +168,7 @@ final class DecodedBitStreamParser {
 	    	//throw ReaderException.getInstance();
         // Ignore this symbol for now
 	    } else if (oneByte >= 242) {  // Not to be used in ASCII encodation
-	    	throw ReaderException.getInstance();
+	    	throw FormatException.getFormatInstance();
 	    }
     } while (bits.available() > 0);
     return ASCII_ENCODE;
@@ -177,7 +177,7 @@ final class DecodedBitStreamParser {
   /**
    * See ISO 16022:2006, 5.2.5 and Annex C, Table C.1
    */
-  private static void decodeC40Segment(BitSource bits, StringBuffer result) throws ReaderException {
+  private static void decodeC40Segment(BitSource bits, StringBuffer result) throws FormatException {
     // Three C40 values are encoded in a 16-bit value as
     // (1600 * C1) + (40 * C2) + C3 + 1
     // TODO(bbrown): The Upper Shift with C40 doesn't work in the 4 value scenario all the time
@@ -230,11 +230,11 @@ final class DecodedBitStreamParser {
                 result.append(C40_SHIFT2_SET_CHARS[cValue]);
               }
             } else if (cValue == 27) {  // FNC1
-              throw ReaderException.getInstance();
+              throw FormatException.getFormatInstance();
             } else if (cValue == 30) {  // Upper Shift
               upperShift = true;
             } else {
-              throw ReaderException.getInstance();
+              throw FormatException.getFormatInstance();
             }
             shift = 0;
             break;
@@ -248,7 +248,7 @@ final class DecodedBitStreamParser {
             shift = 0;
             break;
           default:
-            throw ReaderException.getInstance();
+            throw FormatException.getFormatInstance();
         }
       }
     } while (bits.available() > 0);
@@ -257,7 +257,7 @@ final class DecodedBitStreamParser {
   /**
    * See ISO 16022:2006, 5.2.6 and Annex C, Table C.2
    */
-  private static void decodeTextSegment(BitSource bits, StringBuffer result) throws ReaderException {
+  private static void decodeTextSegment(BitSource bits, StringBuffer result) throws FormatException {
     // Three Text values are encoded in a 16-bit value as
     // (1600 * C1) + (40 * C2) + C3 + 1
     // TODO(bbrown): The Upper Shift with Text doesn't work in the 4 value scenario all the time
@@ -311,11 +311,11 @@ final class DecodedBitStreamParser {
                 result.append(C40_SHIFT2_SET_CHARS[cValue]);
               }
             } else if (cValue == 27) {  // FNC1
-              throw ReaderException.getInstance();
+              throw FormatException.getFormatInstance();
             } else if (cValue == 30) {  // Upper Shift
               upperShift = true;
             } else {
-              throw ReaderException.getInstance();
+              throw FormatException.getFormatInstance();
             }
             shift = 0;
             break;
@@ -329,7 +329,7 @@ final class DecodedBitStreamParser {
             shift = 0;
             break;
           default:
-            throw ReaderException.getInstance();
+            throw FormatException.getFormatInstance();
         }
       }
     } while (bits.available() > 0);
@@ -338,7 +338,7 @@ final class DecodedBitStreamParser {
   /**
    * See ISO 16022:2006, 5.2.7
    */
-  private static void decodeAnsiX12Segment(BitSource bits, StringBuffer result) throws ReaderException {
+  private static void decodeAnsiX12Segment(BitSource bits, StringBuffer result) throws FormatException {
     // Three ANSI X12 values are encoded in a 16-bit value as
     // (1600 * C1) + (40 * C2) + C3 + 1
 
@@ -370,7 +370,7 @@ final class DecodedBitStreamParser {
         } else if (cValue < 40) {  // A - Z
           result.append((char) (cValue + 51));
         } else {
-          throw ReaderException.getInstance();
+          throw FormatException.getFormatInstance();
         }
       }
     } while (bits.available() > 0);

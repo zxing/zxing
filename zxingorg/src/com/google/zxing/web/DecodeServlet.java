@@ -18,9 +18,12 @@ package com.google.zxing.web;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
+import com.google.zxing.ChecksumException;
 import com.google.zxing.DecodeHintType;
+import com.google.zxing.FormatException;
 import com.google.zxing.LuminanceSource;
 import com.google.zxing.MultiFormatReader;
+import com.google.zxing.NotFoundException;
 import com.google.zxing.Reader;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
@@ -85,7 +88,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 public final class DecodeServlet extends HttpServlet {
 
-  private static final long MAX_IMAGE_SIZE = 500000L;
+  private static final long MAX_IMAGE_SIZE = 2000000L;
 
   private static final Logger log = Logger.getLogger(DecodeServlet.class.getName());
 
@@ -260,9 +263,17 @@ public final class DecodeServlet extends HttpServlet {
         LuminanceSource source = new BufferedImageLuminanceSource(image);
         BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
         result = reader.decode(bitmap, HINTS);
-      } catch (ReaderException re2) {
-        log.info("DECODE FAILED: " + re.toString());
+      } catch (NotFoundException nfe) {
+        log.info("Not found: " + re.toString());
         response.sendRedirect("notfound.jspx");
+        return;
+      } catch (FormatException fe) {
+        log.info("Format problem: " + re.toString());
+        response.sendRedirect("format.jspx");
+        return;
+      } catch (ChecksumException ce) {
+        log.info("Checksum problem: " + re.toString());
+        response.sendRedirect("format.jspx");
         return;
       }
     }
