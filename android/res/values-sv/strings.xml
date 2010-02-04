@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (C) 2010 ZXing authors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<resources>
+  <string name="app_picker_name">Applikationer</string>
+  <string name="app_name">Streckkodsläsare</string>
+  <string name="bookmark_picker_name">Bokmärken</string>
+  <string name="button_add_calendar">Lägg till i kalendern</string>
+  <string name="button_add_contact">Lägg till kontakt</string>
+  <string name="button_back">Tillbaka</string>
+  <string name="button_book_search">Boksökning</string>
+  <string name="button_cancel">Avbryt</string>
+  <string name="button_clipboard_empty">Klippbordet är tomt</string>
+  <string name="button_custom_product_search">Anpassad sökning</string>
+  <string name="button_dial">Ring nummer</string>
+  <string name="button_done">Klar</string>
+  <string name="button_email">Skicka email</string>
+  <string name="button_get_directions">Hämta instruktioner</string>
+  <string name="button_mms">Skicka MMS</string>
+  <string name="button_ok">OK</string>
+  <string name="button_open_browser">Öppna webbläsare</string>
+  <string name="button_product_search">Produktsökning</string>
+  <string name="button_search_book_contents">Sök bokinnehåll</string>
+  <string name="button_read_book">Bläddra i boken</string>
+  <string name="button_share_app">Applikation</string>
+  <string name="button_share_bookmark">Bokmärke</string>
+  <string name="button_share_by_email">Dela via email</string>
+  <string name="button_share_by_sms">Dela via SMS</string>
+  <string name="button_share_clipboard">Klippbord</string>
+  <string name="button_share_contact">Kontakt</string>
+  <string name="button_show_map">Visa karta</string>
+  <string name="button_sms">Skicka SMS</string>
+  <string name="button_web_search">Webbsökning</string>
+  <string name="contents_contact">Kontaktinfo</string>
+  <string name="contents_email">Emailadress</string>
+  <string name="contents_location">Geografiska koordinater</string>
+  <string name="contents_phone">Telefonnummer</string>
+  <string name="contents_sms">SMSadress</string>
+  <string name="contents_text">Ren text</string>
+  <string name="menu_about">Om</string>
+  <string name="menu_help">Hjälp</string>
+  <string name="menu_settings">Inställningar</string>
+  <string name="menu_history">Historik</string>
+  <string name="menu_share">Dela</string>
+  <string name="msg_about">Baserad på ZXing Barcode Library som är öppen källkod</string>
+  <string name="msg_camera_framework_bug">Tyvärr, Androidens kamera fick problem. Du kan behöva starta om.</string>
+  <string name="msg_default_contents">Innehåll</string>
+  <string name="msg_default_format">Format</string>
+  <string name="msg_default_mms_subject">Hej</string>
+  <string name="msg_default_status">Placera steckkoden inom sökarens rektangel för att läsa den.</string>
+  <string name="msg_default_type">Typ</string>
+  <string name="msg_encode_barcode_failed">Misslyckades med att skapa den önskade streckkoden.</string>
+  <string name="msg_encode_contents_failed">Kunde inte skape en streckkod från de givna uppgifterna.</string>
+  <string name="msg_encode_in_progress">Genererar en streckkod\u2026</string>
+  <string name="msg_intent_failed">Tyvärr, den önskade applikationen kunde inte startas. Streckkodens innehåll kanske är ogiltigt.</string>
+  <string name="msg_loading_apps">Läser in applikationslistan\u2026</string>
+  <string name="msg_not_our_results">Du lämnar denna applikationen. Sökresultaten som visas har inget med denna appliation att göra.</string>
+  <string name="msg_sbc_book_not_searchable">Tyvärr, denna bok är inte sökbar.</string>
+  <string name="msg_sbc_failed">Tyvärr, sökningen stötte på problem.</string>
+  <string name="msg_sbc_no_page_returned">Ingen sida mottagen</string>
+  <string name="msg_sbc_page">Sida</string>
+  <string name="msg_sbc_snippet_unavailable">Klippet finns inte</string>
+  <string name="msg_sbc_unknown_page">Okänd sida</string>
+  <string name="msg_sbc_searching_book">Söker bok\u2026</string>
+  <string name="msg_share_explanation">Di kan dela data genom att visa en streckkod på din skärm och läsa den med en annan telefon.</string>
+  <string name="msg_share_subject_line">Detta är vad en streckod jag skannade innehöll</string>
+  <string name="preferences_actions_title">När en streckkod hittats\u2026</string>
+  <string name="preferences_copy_to_clipboard_title">Kopiera till klippbordet</string>
+  <string name="preferences_decode_1D_title">Avkoda 1D steckkod</string>
+  <string name="preferences_decode_QR_title">Avkoda QR-koder</string>
+  <string name="preferences_general_title">Grundläggande installningar</string>
+  <string name="preferences_name">Inställningar</string>
+  <string name="preferences_play_beep_title">Pip</string>
+  <string name="preferences_vibrate_title">Vibrera</string>
+  <string name="preferences_result_title">Resultatinställningar</string>
+  <string name="preferences_custom_product_search_title">Anpassad sök-URL</string>
+  <string name="preferences_custom_product_search_summary">Skriv %s där produktens ID ska placeras</string>
+  <string name="result_address_book">Hittade kontaktinformation</string>
+  <string name="result_calendar">Hittade kalenderpost</string>
+  <string name="result_email_address">Hittade emailadress</string>
+  <string name="result_geo">Hittade geografiska koordinater</string>
+  <string name="result_isbn">Hittade bok</string>
+  <string name="result_product">Hittade produkt</string>
+  <string name="result_sms">Hittade SMSadress</string>
+  <string name="result_tel">Hittade telefonnummer</string>
+  <string name="result_text">Hittade ren text</string>
+  <string name="result_uri">Hittade URL</string>
+  <string name="history_title">Historik</string>
+  <string name="history_clear_text">Rensa historik</string>
+  <string name="history_send">Skicka historik</string>  
+  <string name="history_email_title">Streckkodsläsarens historik</string>
+  <string name="sbc_name">Google boksökning</string>
+  <string name="share_name">Dela via streckkod</string>
+  <string name="title_about">Barcode Scanner v</string>
+  <string name="zxing_url">http://code.google.com/p/zxing</string>
+</resources>
