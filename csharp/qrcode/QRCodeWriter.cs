@@ -126,10 +126,17 @@ namespace com.google.zxing.qrcode
 
             // 3. Write the white lines at the bottom
             int offset2 = topPadding + (inputHeight * multiple);
-            for (int y = offset2; y < outputHeight; y++)
-            {
+            for (int y = offset2; y < outputHeight; y++) {
               setRowColor(outputArray[y], unchecked((sbyte) 255));
             }
+
+            // Added per beyonddeath
+            for (int x = 0; x < outputHeight; x++) {
+              for (int y = 0; y < outputWidth; y++) {
+                output.set(y, x, outputArray[x][y]);
+              }
+            }
+
             return output;
           }
 
