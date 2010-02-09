@@ -16,6 +16,7 @@
 
 package com.google.zxing.client.android;
 
+import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
 
 import android.app.Activity;
@@ -25,6 +26,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+
+import java.util.Vector;
 
 /**
  * This class handles all the messaging which comprises the state machine for capture.
@@ -43,10 +46,10 @@ public final class CaptureActivityHandler extends Handler {
   }
 
   CaptureActivityHandler(CaptureActivity activity,
-                         String decodeMode,
+                         Vector<BarcodeFormat> decodeFormats,
                          boolean beginScanning) {
     this.activity = activity;
-    decodeThread = new DecodeThread(activity, decodeMode,
+    decodeThread = new DecodeThread(activity, decodeFormats,
         new ViewfinderResultPointCallback(activity.getViewfinderView()));
     decodeThread.start();
     state = State.SUCCESS;
