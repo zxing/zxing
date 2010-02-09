@@ -51,33 +51,27 @@ final class DecodeThread extends Thread {
   private final MultiFormatReader multiFormatReader;
   private final ResultPointCallback resultPointCallback;
 
-  DecodeThread(CaptureActivity activity, String mode, ResultPointCallback resultPointCallback) {
+  DecodeThread(CaptureActivity activity,
+               Vector<BarcodeFormat> decodeFormats,
+               ResultPointCallback resultPointCallback) {
     this.activity = activity;
     multiFormatReader = new MultiFormatReader();
     this.resultPointCallback = resultPointCallback;
 
     // The prefs can't change while the thread is running, so pick them up once here.
-    if (mode == null || mode.length() == 0) {
+    if (decodeFormats == null || decodeFormats.isEmpty()) {
       SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
       boolean decode1D = prefs.getBoolean(PreferencesActivity.KEY_DECODE_1D, true);
       boolean decodeQR = prefs.getBoolean(PreferencesActivity.KEY_DECODE_QR, true);
       if (decode1D && decodeQR) {
-        setDecodeAllMode();
+        doSetDecodeMode(CaptureActivity.ALL_FORMATS);
       } else if (decode1D) {
-        setDecode1DMode();
+        doSetDecodeMode(CaptureActivity.ONE_D_FORMATS);
       } else if (decodeQR) {
-        setDecodeQRMode();
+        doSetDecodeMode(CaptureActivity.QR_CODE_FORMATS);
       }
     } else {
-      if (mode.equals(Intents.Scan.PRODUCT_MODE)) {
-        setDecodeProductMode();
-      } else if (mode.equals(Intents.Scan.ONE_D_MODE)) {
-        setDecode1DMode();
-      } else if (mode.equals(Intents.Scan.QR_CODE_MODE)) {
-        setDecodeQRMode();
-      } else {
-        setDecodeAllMode();
-      }
+      doSetDecodeMode(decodeFormats);
     }
   }
 
@@ -104,55 +98,11 @@ final class DecodeThread extends Thread {
     Looper.loop();
   }
 
-  private void setDecodeProductMode() {
-    doSetDecodeMode(BarcodeFormat.UPC_A,
-                    BarcodeFormat.UPC_E,
-                    BarcodeFormat.EAN_13,
-                    BarcodeFormat.EAN_8,
-                    BarcodeFormat.RSS14);
-  }
-
-  /**
-   * Select the 1D formats we want this client to decode by hand.
-   */
-  private void setDecode1DMode() {
-    doSetDecodeMode(BarcodeFormat.UPC_A,
-                    BarcodeFormat.UPC_E,
-                    BarcodeFormat.EAN_13,
-                    BarcodeFormat.EAN_8,
-                    BarcodeFormat.CODE_39,
-                    BarcodeFormat.CODE_128,
-                    BarcodeFormat.ITF,
-                    BarcodeFormat.RSS14);
-  }
-
-  private void setDecodeQRMode() {
-    doSetDecodeMode(BarcodeFormat.QR_CODE);
-  }
-
-  /**
-   * Instead of calling setHints(null), which would allow new formats to sneak in, we
-   * explicitly set which formats are available.
-   */
-  private void setDecodeAllMode() {
-    doSetDecodeMode(BarcodeFormat.UPC_A,
-                    BarcodeFormat.UPC_E,
-                    BarcodeFormat.EAN_13,
-                    BarcodeFormat.EAN_8,
-                    BarcodeFormat.CODE_39,
-                    BarcodeFormat.CODE_128,
-                    BarcodeFormat.ITF,
-                    BarcodeFormat.RSS14,
-                    BarcodeFormat.QR_CODE);
-  }
-
-  private void doSetDecodeMode(BarcodeFormat... formats) {
+  private void doSetDecodeMode(Vector<BarcodeFormat> vector) {
     Hashtable<DecodeHintType, Object> hints = new Hashtable<DecodeHintType, Object>(3);
-    Vector<BarcodeFormat> vector = new Vector<BarcodeFormat>(formats.length);
-    for (BarcodeFormat format : formats) {
-      vector.addElement(format);
+    if (vector != null) {
+      hints.put(DecodeHintType.POSSIBLE_FORMATS, vector);
     }
-    hints.put(DecodeHintType.POSSIBLE_FORMATS, vector);
     hints.put(DecodeHintType.NEED_RESULT_POINT_CALLBACK, resultPointCallback);
     multiFormatReader.setHints(hints);
   }

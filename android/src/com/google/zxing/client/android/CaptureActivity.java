@@ -16,6 +16,7 @@
 
 package com.google.zxing.client.android;
 
+import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.client.android.history.HistoryManager;
@@ -65,6 +66,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.IOException;
+import java.util.Vector;
+import java.util.regex.Pattern;
 
 /**
  * The barcode reader activity itself. This is loosely based on the CameraPreview
@@ -73,7 +76,9 @@ import java.io.IOException;
  * @author dswitkin@google.com (Daniel Switkin)
  */
 public final class CaptureActivity extends Activity implements SurfaceHolder.Callback {
+
   private static final String TAG = "CaptureActivity";
+  private static final Pattern COMMA_PATTERN = Pattern.compile(",");
 
   private static final int SHARE_ID = Menu.FIRST;
   private static final int HISTORY_ID = Menu.FIRST + 1;
@@ -90,6 +95,30 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private static final String PRODUCT_SEARCH_URL_PREFIX = "http://www.google";
   private static final String PRODUCT_SEARCH_URL_SUFFIX = "/m/products/scan";
   private static final String ZXING_URL = "http://zxing.appspot.com/scan";
+
+  static final Vector<BarcodeFormat> PRODUCT_FORMATS;
+  static final Vector<BarcodeFormat> ONE_D_FORMATS;
+  static final Vector<BarcodeFormat> QR_CODE_FORMATS;
+  static final Vector<BarcodeFormat> ALL_FORMATS;
+
+  static {
+    PRODUCT_FORMATS = new Vector<BarcodeFormat>(5);
+    PRODUCT_FORMATS.add(BarcodeFormat.UPC_A);
+    PRODUCT_FORMATS.add(BarcodeFormat.UPC_E);
+    PRODUCT_FORMATS.add(BarcodeFormat.EAN_13);
+    PRODUCT_FORMATS.add(BarcodeFormat.EAN_8);
+    PRODUCT_FORMATS.add(BarcodeFormat.RSS14);
+    ONE_D_FORMATS = new Vector<BarcodeFormat>(PRODUCT_FORMATS.size() + 3);
+    ONE_D_FORMATS.addAll(PRODUCT_FORMATS);
+    ONE_D_FORMATS.add(BarcodeFormat.CODE_39);
+    ONE_D_FORMATS.add(BarcodeFormat.CODE_128);
+    ONE_D_FORMATS.add(BarcodeFormat.ITF);
+    QR_CODE_FORMATS = new Vector<BarcodeFormat>(1);
+    QR_CODE_FORMATS.add(BarcodeFormat.QR_CODE);
+    ALL_FORMATS = new Vector<BarcodeFormat>(ONE_D_FORMATS.size() + QR_CODE_FORMATS.size());
+    ALL_FORMATS.addAll(ONE_D_FORMATS);
+    ALL_FORMATS.addAll(QR_CODE_FORMATS);
+  }
 
   private enum Source {
     NATIVE_APP_INTENT,
@@ -111,7 +140,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private boolean copyToClipboard;
   private Source source;
   private String sourceUrl;
-  private String decodeMode;
+  private Vector<BarcodeFormat> decodeFormats;
   private String versionName;
   private HistoryManager historyManager;
 
@@ -177,31 +206,31 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       if (action.equals(Intents.Scan.ACTION)) {
         // Scan the formats the intent requested, and return the result to the calling activity.
         source = Source.NATIVE_APP_INTENT;
-        decodeMode = intent.getStringExtra(Intents.Scan.MODE);
+        decodeFormats = parseDecodeFormats(intent);
         resetStatusView();
       } else if (dataString != null && dataString.contains(PRODUCT_SEARCH_URL_PREFIX) &&
           dataString.contains(PRODUCT_SEARCH_URL_SUFFIX)) {
         // Scan only products and send the result to mobile Product Search.
         source = Source.PRODUCT_SEARCH_LINK;
         sourceUrl = dataString;
-        decodeMode = Intents.Scan.PRODUCT_MODE;
+        decodeFormats = PRODUCT_FORMATS;
         resetStatusView();
       } else if (dataString != null && dataString.equals(ZXING_URL)) {
         // Scan all formats and handle the results ourselves.
         // TODO: In the future we could allow the hyperlink to include a URL to send the results to.
         source = Source.ZXING_LINK;
         sourceUrl = dataString;
-        decodeMode = null;
+        decodeFormats = null;
         resetStatusView();
       } else {
         // Scan all formats and handle the results ourselves (launched from Home).
         source = Source.NONE;
-        decodeMode = null;
+        decodeFormats = null;
         resetStatusView();
       }
     } else {
       source = Source.NONE;
-      decodeMode = null;
+      decodeFormats = null;
       if (lastResult == null) {
         resetStatusView();
       }
@@ -212,6 +241,33 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     vibrate = prefs.getBoolean(PreferencesActivity.KEY_VIBRATE, false);
     copyToClipboard = prefs.getBoolean(PreferencesActivity.KEY_COPY_TO_CLIPBOARD, true);
     initBeepSound();
+  }
+
+  private static Vector<BarcodeFormat> parseDecodeFormats(Intent intent) {
+    String scanFormats = intent.getStringExtra(Intents.Scan.SCAN_FORMATS);
+    if (scanFormats != null) {
+      Vector<BarcodeFormat> formats = new Vector<BarcodeFormat>();
+      try {
+        for (String format : COMMA_PATTERN.split(scanFormats)) {
+          formats.add(BarcodeFormat.valueOf(format));
+        }
+      } catch (IllegalArgumentException iae) {
+        // ignore it then
+      }
+    }
+    String decodeMode = intent.getStringExtra(Intents.Scan.MODE);
+    if (decodeMode != null) {
+      if (Intents.Scan.PRODUCT_MODE.equals(decodeMode)) {
+        return PRODUCT_FORMATS;
+      }
+      if (Intents.Scan.QR_CODE_MODE.equals(decodeMode)) {
+        return QR_CODE_FORMATS;
+      }
+      if (Intents.Scan.ONE_D_MODE.equals(decodeMode)) {
+        return ONE_D_FORMATS;
+      }
+    }
+    return null;
   }
 
   @Override
@@ -559,7 +615,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     }
     if (handler == null) {
       boolean beginScanning = lastResult == null;
-      handler = new CaptureActivityHandler(this, decodeMode, beginScanning);
+      handler = new CaptureActivityHandler(this, decodeFormats, beginScanning);
     }
   }
 
