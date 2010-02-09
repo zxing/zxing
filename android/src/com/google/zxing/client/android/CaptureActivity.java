@@ -141,6 +141,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private Source source;
   private String sourceUrl;
   private Vector<BarcodeFormat> decodeFormats;
+  private String characterSet;
   private String versionName;
   private HistoryManager historyManager;
 
@@ -228,9 +229,11 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         decodeFormats = null;
         resetStatusView();
       }
+      characterSet = intent.getStringExtra(Intents.Scan.CHARACTER_SET);
     } else {
       source = Source.NONE;
       decodeFormats = null;
+      characterSet = null;
       if (lastResult == null) {
         resetStatusView();
       }
@@ -615,7 +618,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     }
     if (handler == null) {
       boolean beginScanning = lastResult == null;
-      handler = new CaptureActivityHandler(this, decodeFormats, beginScanning);
+      handler = new CaptureActivityHandler(this, decodeFormats, characterSet, beginScanning);
     }
   }
 

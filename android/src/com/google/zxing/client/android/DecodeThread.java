@@ -49,14 +49,14 @@ final class DecodeThread extends Thread {
   private Handler handler;
   private final CaptureActivity activity;
   private final MultiFormatReader multiFormatReader;
-  private final ResultPointCallback resultPointCallback;
 
   DecodeThread(CaptureActivity activity,
                Vector<BarcodeFormat> decodeFormats,
+               String characterSet,
                ResultPointCallback resultPointCallback) {
     this.activity = activity;
     multiFormatReader = new MultiFormatReader();
-    this.resultPointCallback = resultPointCallback;
+    Hashtable<DecodeHintType, Object> hints = new Hashtable<DecodeHintType, Object>(3);
 
     // The prefs can't change while the thread is running, so pick them up once here.
     if (decodeFormats == null || decodeFormats.isEmpty()) {
@@ -64,15 +64,23 @@ final class DecodeThread extends Thread {
       boolean decode1D = prefs.getBoolean(PreferencesActivity.KEY_DECODE_1D, true);
       boolean decodeQR = prefs.getBoolean(PreferencesActivity.KEY_DECODE_QR, true);
       if (decode1D && decodeQR) {
-        doSetDecodeMode(CaptureActivity.ALL_FORMATS);
+        hints.put(DecodeHintType.POSSIBLE_FORMATS, CaptureActivity.ALL_FORMATS);
       } else if (decode1D) {
-        doSetDecodeMode(CaptureActivity.ONE_D_FORMATS);
+        hints.put(DecodeHintType.POSSIBLE_FORMATS, CaptureActivity.ONE_D_FORMATS);
       } else if (decodeQR) {
-        doSetDecodeMode(CaptureActivity.QR_CODE_FORMATS);
+        hints.put(DecodeHintType.POSSIBLE_FORMATS, CaptureActivity.QR_CODE_FORMATS);
       }
     } else {
-      doSetDecodeMode(decodeFormats);
+      hints.put(DecodeHintType.POSSIBLE_FORMATS, decodeFormats);
     }
+
+    if (characterSet != null) {
+      hints.put(DecodeHintType.CHARACTER_SET, characterSet);
+    }
+
+    hints.put(DecodeHintType.NEED_RESULT_POINT_CALLBACK, resultPointCallback);
+
+    multiFormatReader.setHints(hints);
   }
 
   Handler getHandler() {
@@ -96,15 +104,6 @@ final class DecodeThread extends Thread {
       }
     };
     Looper.loop();
-  }
-
-  private void doSetDecodeMode(Vector<BarcodeFormat> vector) {
-    Hashtable<DecodeHintType, Object> hints = new Hashtable<DecodeHintType, Object>(3);
-    if (vector != null) {
-      hints.put(DecodeHintType.POSSIBLE_FORMATS, vector);
-    }
-    hints.put(DecodeHintType.NEED_RESULT_POINT_CALLBACK, resultPointCallback);
-    multiFormatReader.setHints(hints);
   }
 
   /**

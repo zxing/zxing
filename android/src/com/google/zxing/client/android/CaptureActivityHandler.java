@@ -47,9 +47,10 @@ public final class CaptureActivityHandler extends Handler {
 
   CaptureActivityHandler(CaptureActivity activity,
                          Vector<BarcodeFormat> decodeFormats,
+                         String characterSet,
                          boolean beginScanning) {
     this.activity = activity;
-    decodeThread = new DecodeThread(activity, decodeFormats,
+    decodeThread = new DecodeThread(activity, decodeFormats, characterSet,
         new ViewfinderResultPointCallback(activity.getViewfinderView()));
     decodeThread.start();
     state = State.SUCCESS;

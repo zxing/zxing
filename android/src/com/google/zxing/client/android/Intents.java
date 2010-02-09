@@ -54,6 +54,11 @@ public final class Intents {
     public static final String SCAN_FORMATS = "SCAN_FORMATS";
 
     /**
+     * @see com.google.zxing.DecodeHintType#CHARACTER_SET
+     */
+    public static final String CHARACTER_SET = "CHARACTER_SET";
+
+    /**
      * Decode only UPC and EAN barcodes. This is the right choice for shopping apps which get
      * prices, reviews, etc. for products.
      */
