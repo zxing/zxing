@@ -287,8 +287,6 @@ final class CameraManager {
       // This is the standard Android format which all devices are REQUIRED to support.
       // In theory, it's the only one we should ever care about.
       case PixelFormat.YCbCr_420_SP:
-        return new PlanarYUVLuminanceSource(data, width, height, rect.left, rect.top,
-            rect.width(), rect.height());
       // This format has never been seen in the wild, but is compatible as we only care
       // about the Y channel, so allow it.
       case PixelFormat.YCbCr_422_SP:
@@ -297,7 +295,7 @@ final class CameraManager {
       default:
         // The Samsung Moment incorrectly uses this variant instead of the 'sp' version.
         // Fortunately, it too has all the Y data up front, so we can read it.
-        if (previewFormatString.equals("yuv420p")) {
+        if ("yuv420p".equals(previewFormatString)) {
           return new PlanarYUVLuminanceSource(data, width, height, rect.left, rect.top,
             rect.width(), rect.height());
         }
