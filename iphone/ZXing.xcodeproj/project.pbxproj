@@ -168,6 +168,19 @@
 		85E883980E1A34D2004C4547 /* ScannedImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 85E883970E1A34D2004C4547 /* ScannedImageView.m */; };
 		85E945270E9410EF0052CC40 /* ZxingLarge.png in Resources */ = {isa = PBXBuildFile; fileRef = 85E945260E9410EF0052CC40 /* ZxingLarge.png */; };
 		85F895030E543EE100C0A666 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 85F895020E543EE100C0A666 /* InfoPlist.strings */; };
+		86C045CE1127E58E00F3F43B /* MultiFormatReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 86C045B31127E58E00F3F43B /* MultiFormatReader.cpp */; };
+		86C045CF1127E58E00F3F43B /* Code128Reader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 86C045B61127E58E00F3F43B /* Code128Reader.cpp */; };
+		86C045D01127E58E00F3F43B /* Code39Reader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 86C045B81127E58E00F3F43B /* Code39Reader.cpp */; };
+		86C045D11127E58E00F3F43B /* EAN13Reader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 86C045BA1127E58E00F3F43B /* EAN13Reader.cpp */; };
+		86C045D21127E58E00F3F43B /* EAN8Reader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 86C045BC1127E58E00F3F43B /* EAN8Reader.cpp */; };
+		86C045D31127E58E00F3F43B /* ITFReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 86C045BE1127E58E00F3F43B /* ITFReader.cpp */; };
+		86C045D41127E58E00F3F43B /* MultiFormatOneDReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 86C045C01127E58E00F3F43B /* MultiFormatOneDReader.cpp */; };
+		86C045D51127E58E00F3F43B /* MultiFormatUPCEANReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 86C045C21127E58E00F3F43B /* MultiFormatUPCEANReader.cpp */; };
+		86C045D61127E58E00F3F43B /* OneDReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 86C045C41127E58E00F3F43B /* OneDReader.cpp */; };
+		86C045D71127E58E00F3F43B /* OneDResultPoint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 86C045C61127E58E00F3F43B /* OneDResultPoint.cpp */; };
+		86C045D81127E58E00F3F43B /* UPCAReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 86C045C81127E58E00F3F43B /* UPCAReader.cpp */; };
+		86C045D91127E58E00F3F43B /* UPCEANReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 86C045CA1127E58E00F3F43B /* UPCEANReader.cpp */; };
+		86C045DA1127E58E00F3F43B /* UPCEReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 86C045CC1127E58E00F3F43B /* UPCEReader.cpp */; };
 		AD86BA5910BBED4A0007D49B /* BarcodeFormat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD86B9FB10BBED4A0007D49B /* BarcodeFormat.cpp */; };
 		AD86BA5A10BBED4A0007D49B /* BarcodeFormat.h in Headers */ = {isa = PBXBuildFile; fileRef = AD86B9FC10BBED4A0007D49B /* BarcodeFormat.h */; };
 		AD86BA5B10BBED4A0007D49B /* Binarizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD86B9FD10BBED4A0007D49B /* Binarizer.cpp */; };
@@ -615,6 +628,32 @@
 		85F7D2100E41D4B300FDC34E /* sv */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = sv; path = sv.lproj/Message.xib; sourceTree = "<group>"; };
 		85F7D2110E41D4B300FDC34E /* sv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = sv; path = sv.lproj/Hints.html; sourceTree = "<group>"; };
 		85F895040E543F0400C0A666 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		86C045B31127E58E00F3F43B /* MultiFormatReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MultiFormatReader.cpp; sourceTree = "<group>"; };
+		86C045B41127E58E00F3F43B /* MultiFormatReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MultiFormatReader.h; sourceTree = "<group>"; };
+		86C045B61127E58E00F3F43B /* Code128Reader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Code128Reader.cpp; sourceTree = "<group>"; };
+		86C045B71127E58E00F3F43B /* Code128Reader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Code128Reader.h; sourceTree = "<group>"; };
+		86C045B81127E58E00F3F43B /* Code39Reader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Code39Reader.cpp; sourceTree = "<group>"; };
+		86C045B91127E58E00F3F43B /* Code39Reader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Code39Reader.h; sourceTree = "<group>"; };
+		86C045BA1127E58E00F3F43B /* EAN13Reader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EAN13Reader.cpp; sourceTree = "<group>"; };
+		86C045BB1127E58E00F3F43B /* EAN13Reader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EAN13Reader.h; sourceTree = "<group>"; };
+		86C045BC1127E58E00F3F43B /* EAN8Reader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EAN8Reader.cpp; sourceTree = "<group>"; };
+		86C045BD1127E58E00F3F43B /* EAN8Reader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EAN8Reader.h; sourceTree = "<group>"; };
+		86C045BE1127E58E00F3F43B /* ITFReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ITFReader.cpp; sourceTree = "<group>"; };
+		86C045BF1127E58E00F3F43B /* ITFReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ITFReader.h; sourceTree = "<group>"; };
+		86C045C01127E58E00F3F43B /* MultiFormatOneDReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MultiFormatOneDReader.cpp; sourceTree = "<group>"; };
+		86C045C11127E58E00F3F43B /* MultiFormatOneDReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MultiFormatOneDReader.h; sourceTree = "<group>"; };
+		86C045C21127E58E00F3F43B /* MultiFormatUPCEANReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MultiFormatUPCEANReader.cpp; sourceTree = "<group>"; };
+		86C045C31127E58E00F3F43B /* MultiFormatUPCEANReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MultiFormatUPCEANReader.h; sourceTree = "<group>"; };
+		86C045C41127E58E00F3F43B /* OneDReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OneDReader.cpp; sourceTree = "<group>"; };
+		86C045C51127E58E00F3F43B /* OneDReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OneDReader.h; sourceTree = "<group>"; };
+		86C045C61127E58E00F3F43B /* OneDResultPoint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OneDResultPoint.cpp; sourceTree = "<group>"; };
+		86C045C71127E58E00F3F43B /* OneDResultPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OneDResultPoint.h; sourceTree = "<group>"; };
+		86C045C81127E58E00F3F43B /* UPCAReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UPCAReader.cpp; sourceTree = "<group>"; };
+		86C045C91127E58E00F3F43B /* UPCAReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPCAReader.h; sourceTree = "<group>"; };
+		86C045CA1127E58E00F3F43B /* UPCEANReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UPCEANReader.cpp; sourceTree = "<group>"; };
+		86C045CB1127E58E00F3F43B /* UPCEANReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPCEANReader.h; sourceTree = "<group>"; };
+		86C045CC1127E58E00F3F43B /* UPCEReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UPCEReader.cpp; sourceTree = "<group>"; };
+		86C045CD1127E58E00F3F43B /* UPCEReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPCEReader.h; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AD86B9FB10BBED4A0007D49B /* BarcodeFormat.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BarcodeFormat.cpp; sourceTree = "<group>"; };
 		AD86B9FC10BBED4A0007D49B /* BarcodeFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BarcodeFormat.h; sourceTree = "<group>"; };
@@ -1316,9 +1355,43 @@
 			name = Images;
 			sourceTree = "<group>";
 		};
+		86C045B51127E58E00F3F43B /* oned */ = {
+			isa = PBXGroup;
+			children = (
+				86C045B61127E58E00F3F43B /* Code128Reader.cpp */,
+				86C045B71127E58E00F3F43B /* Code128Reader.h */,
+				86C045B81127E58E00F3F43B /* Code39Reader.cpp */,
+				86C045B91127E58E00F3F43B /* Code39Reader.h */,
+				86C045BA1127E58E00F3F43B /* EAN13Reader.cpp */,
+				86C045BB1127E58E00F3F43B /* EAN13Reader.h */,
+				86C045BC1127E58E00F3F43B /* EAN8Reader.cpp */,
+				86C045BD1127E58E00F3F43B /* EAN8Reader.h */,
+				86C045BE1127E58E00F3F43B /* ITFReader.cpp */,
+				86C045BF1127E58E00F3F43B /* ITFReader.h */,
+				86C045C01127E58E00F3F43B /* MultiFormatOneDReader.cpp */,
+				86C045C11127E58E00F3F43B /* MultiFormatOneDReader.h */,
+				86C045C21127E58E00F3F43B /* MultiFormatUPCEANReader.cpp */,
+				86C045C31127E58E00F3F43B /* MultiFormatUPCEANReader.h */,
+				86C045C41127E58E00F3F43B /* OneDReader.cpp */,
+				86C045C51127E58E00F3F43B /* OneDReader.h */,
+				86C045C61127E58E00F3F43B /* OneDResultPoint.cpp */,
+				86C045C71127E58E00F3F43B /* OneDResultPoint.h */,
+				86C045C81127E58E00F3F43B /* UPCAReader.cpp */,
+				86C045C91127E58E00F3F43B /* UPCAReader.h */,
+				86C045CA1127E58E00F3F43B /* UPCEANReader.cpp */,
+				86C045CB1127E58E00F3F43B /* UPCEANReader.h */,
+				86C045CC1127E58E00F3F43B /* UPCEReader.cpp */,
+				86C045CD1127E58E00F3F43B /* UPCEReader.h */,
+			);
+			path = oned;
+			sourceTree = "<group>";
+		};
 		AD86B9FA10BBED4A0007D49B /* zxing */ = {
 			isa = PBXGroup;
 			children = (
+				86C045B31127E58E00F3F43B /* MultiFormatReader.cpp */,
+				86C045B41127E58E00F3F43B /* MultiFormatReader.h */,
+				86C045B51127E58E00F3F43B /* oned */,
 				AD86B9FB10BBED4A0007D49B /* BarcodeFormat.cpp */,
 				AD86B9FC10BBED4A0007D49B /* BarcodeFormat.h */,
 				AD86B9FD10BBED4A0007D49B /* Binarizer.cpp */,
@@ -1708,6 +1781,19 @@
 				85764F2E0E3DE75700A61BF5 /* PlainEmailResultParser.m in Sources */,
 				853678530E538F9E0054126A /* MessageViewController.m in Sources */,
 				AD92A8BB10BFE07F009C3614 /* GrayBytesMonochromeBitmapSource.cpp in Sources */,
+				86C045CE1127E58E00F3F43B /* MultiFormatReader.cpp in Sources */,
+				86C045CF1127E58E00F3F43B /* Code128Reader.cpp in Sources */,
+				86C045D01127E58E00F3F43B /* Code39Reader.cpp in Sources */,
+				86C045D11127E58E00F3F43B /* EAN13Reader.cpp in Sources */,
+				86C045D21127E58E00F3F43B /* EAN8Reader.cpp in Sources */,
+				86C045D31127E58E00F3F43B /* ITFReader.cpp in Sources */,
+				86C045D41127E58E00F3F43B /* MultiFormatOneDReader.cpp in Sources */,
+				86C045D51127E58E00F3F43B /* MultiFormatUPCEANReader.cpp in Sources */,
+				86C045D61127E58E00F3F43B /* OneDReader.cpp in Sources */,
+				86C045D71127E58E00F3F43B /* OneDResultPoint.cpp in Sources */,
+				86C045D81127E58E00F3F43B /* UPCAReader.cpp in Sources */,
+				86C045D91127E58E00F3F43B /* UPCEANReader.cpp in Sources */,
+				86C045DA1127E58E00F3F43B /* UPCEReader.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
