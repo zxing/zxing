@@ -240,12 +240,12 @@ int main(int argc, char** argv) {
     int lresult = 1;
 
     if (outfolder == string("-")) {
-      //gresult = test_image_global(image, "");
+      gresult = test_image_global(image, "");
       lresult = test_image_local(image, "");
     } else {
       replace(infilename.begin(), infilename.end(), '/', '_');
       string prefix = string(outfolder) + string("/") + infilename;
-      //gresult = test_image_global(image, prefix + ".g");
+      gresult = test_image_global(image, prefix + ".g");
       lresult = test_image_local(image, prefix + ".l");
     }
 

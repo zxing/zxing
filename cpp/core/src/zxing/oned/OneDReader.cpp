@@ -21,6 +21,7 @@
 #include "OneDReader.h"
 #include <zxing/ReaderException.h>
 #include <math.h>
+#include <limits.h>
 
 namespace zxing {
 	namespace oned {
