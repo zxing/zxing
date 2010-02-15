@@ -31,8 +31,10 @@ public:
   virtual ~LocalBlockBinarizer();
 
   virtual Ref<BitMatrix> estimateBlackMatrix();
-
+  Ref<BitArray> estimateBlackRow(int y, Ref<BitArray> row);
+  
 private:
+  
   void calculateThresholdForBlock(const unsigned char* luminances, int subWidth, int subHeight,
                                   int stride, const unsigned char* averages, const unsigned char* types, BitMatrix& matrix);
   void sharpenRow(unsigned char* luminances, int width, int height);

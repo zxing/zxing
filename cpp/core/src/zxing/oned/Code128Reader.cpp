@@ -23,6 +23,7 @@
 #include <zxing/common/Array.h>
 #include <zxing/ReaderException.h>
 #include <math.h>
+#include <string.h>
 
 namespace zxing {
 	namespace oned {

@@ -33,6 +33,11 @@ LocalBlockBinarizer::LocalBlockBinarizer(Ref<LuminanceSource> source) :
 LocalBlockBinarizer::~LocalBlockBinarizer() {
 }
 
+Ref<BitArray> LocalBlockBinarizer::estimateBlackRow(int y, Ref<BitArray> row) {
+  //TODO: implement
+  return Ref<BitArray>();
+}
+
 // Calculates the final BitMatrix once for all requests. This could be called once from the
 // constructor instead, but there are some advantages to doing it lazily, such as making
 // profiling easier, and not doing heavy lifting when callers don't expect it.
