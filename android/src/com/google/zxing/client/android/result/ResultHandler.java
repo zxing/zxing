@@ -16,14 +16,6 @@
 
 package com.google.zxing.client.android.result;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.ActivityNotFoundException;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.net.Uri;
-import android.preference.PreferenceManager;
-import android.provider.Contacts;
 import com.google.zxing.client.android.Contents;
 import com.google.zxing.client.android.Intents;
 import com.google.zxing.client.android.LocaleManager;
@@ -32,6 +24,18 @@ import com.google.zxing.client.android.R;
 import com.google.zxing.client.android.book.SearchBookContentsActivity;
 import com.google.zxing.client.result.ParsedResult;
 import com.google.zxing.client.result.ParsedResultType;
+
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.SearchManager;
+import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.preference.PreferenceManager;
+import android.provider.Contacts;
 
 import java.text.DateFormat;
 import java.text.ParsePosition;
@@ -54,10 +58,25 @@ public abstract class ResultHandler {
   private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyyMMdd");
   private static final DateFormat DATE_TIME_FORMAT = new SimpleDateFormat("yyyyMMdd'T'HHmmss");
 
+  private static final String GOOGLE_SHOPPER_PACKAGE = "com.google.android.apps.shopper";
+  private static final String GOOGLE_SHOPPER_ACTIVITY = GOOGLE_SHOPPER_PACKAGE +
+      ".results.SearchResultsActivity";
+  private static final String MARKET_URI_PREFIX = "market://search?q=pname:";
+  private static final String MARKET_REFERRER_SUFFIX =
+      "&referrer=utm_source%3Dbarcodescanner%26utm_medium%3Dapps%26utm_campaign%3Dscan";
+
   public static final int MAX_BUTTON_COUNT = 4;
 
   private final ParsedResult result;
   private final Activity activity;
+
+  private final DialogInterface.OnClickListener shopperMarketListener =
+      new DialogInterface.OnClickListener() {
+    public void onClick(DialogInterface dialogInterface, int which) {
+      launchIntent(new Intent(Intent.ACTION_VIEW, Uri.parse(MARKET_URI_PREFIX +
+          GOOGLE_SHOPPER_PACKAGE + MARKET_REFERRER_SUFFIX)));
+    }
+  };
 
   ResultHandler(Activity activity, ParsedResult result) {
     this.result = result;
@@ -298,14 +317,34 @@ public abstract class ResultHandler {
     launchIntent(intent);
   }
 
+  final void openGoogleShopper(String query) {
+    try {
+      activity.getPackageManager().getPackageInfo(GOOGLE_SHOPPER_PACKAGE, 0);
+      // If we didn't throw, Shopper is installed, so launch it.
+      Intent intent = new Intent(Intent.ACTION_SEARCH);
+      intent.setClassName(GOOGLE_SHOPPER_PACKAGE, GOOGLE_SHOPPER_ACTIVITY);
+      intent.putExtra(SearchManager.QUERY, query);
+      activity.startActivity(intent);
+    } catch (PackageManager.NameNotFoundException e) {
+      // Otherwise offer to install it from Market.
+      AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+      builder.setTitle(R.string.msg_google_shopper_missing);
+      builder.setMessage(R.string.msg_install_google_shopper);
+      builder.setIcon(R.drawable.shopper_icon);
+      builder.setPositiveButton(R.string.button_ok, shopperMarketListener);
+      builder.setNegativeButton(R.string.button_cancel, null);
+      builder.show();
+    }
+  }
+
   void launchIntent(Intent intent) {
     if (intent != null) {
       try {
         activity.startActivity(intent);
       } catch (ActivityNotFoundException e) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setTitle(activity.getString(R.string.app_name));
-        builder.setMessage(activity.getString(R.string.msg_intent_failed));
+        builder.setTitle(R.string.app_name);
+        builder.setMessage(R.string.msg_intent_failed);
         builder.setPositiveButton(R.string.button_ok, null);
         builder.show();
       }

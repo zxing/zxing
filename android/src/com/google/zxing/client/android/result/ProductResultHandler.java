@@ -16,15 +16,16 @@
 
 package com.google.zxing.client.android.result;
 
+import com.google.zxing.client.android.PreferencesActivity;
+import com.google.zxing.client.android.R;
+import com.google.zxing.client.result.ParsedResult;
+import com.google.zxing.client.result.ProductParsedResult;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import com.google.zxing.client.android.PreferencesActivity;
-import com.google.zxing.client.android.R;
-import com.google.zxing.client.result.ParsedResult;
-import com.google.zxing.client.result.ProductParsedResult;
 
 /**
  * Handles generic products which are not books.
@@ -35,15 +36,19 @@ public final class ProductResultHandler extends ResultHandler {
   private static final int[] buttons = {
       R.string.button_product_search,
       R.string.button_web_search,
+      R.string.button_google_shopper,
       R.string.button_custom_product_search,
   };
 
-  private final String customProductSearch;
+  private String customProductSearch;
 
   public ProductResultHandler(Activity activity, ParsedResult result) {
     super(activity, result);
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
     customProductSearch = prefs.getString(PreferencesActivity.KEY_CUSTOM_PRODUCT_SEARCH, null);
+    if (customProductSearch != null && customProductSearch.length() == 0) {
+      customProductSearch = null;
+    }
   }
 
   @Override
@@ -69,6 +74,9 @@ public final class ProductResultHandler extends ResultHandler {
             webSearch(productResult.getNormalizedProductID());
             break;
           case 2:
+            openGoogleShopper(productResult.getNormalizedProductID());
+            break;
+          case 3:
             String url = customProductSearch.replace("%s", productResult.getNormalizedProductID());
             openURL(url);
             break;
