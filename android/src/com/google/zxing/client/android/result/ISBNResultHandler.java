@@ -16,15 +16,16 @@
 
 package com.google.zxing.client.android.result;
 
+import com.google.zxing.client.android.PreferencesActivity;
+import com.google.zxing.client.android.R;
+import com.google.zxing.client.result.ISBNParsedResult;
+import com.google.zxing.client.result.ParsedResult;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import com.google.zxing.client.android.PreferencesActivity;
-import com.google.zxing.client.android.R;
-import com.google.zxing.client.result.ISBNParsedResult;
-import com.google.zxing.client.result.ParsedResult;
 
 /**
  * Handles books encoded by their ISBN values.
@@ -36,25 +37,31 @@ public final class ISBNResultHandler extends ResultHandler {
       R.string.button_product_search,
       R.string.button_book_search,
       R.string.button_search_book_contents,
-      R.string.button_custom_product_search,
+      R.string.button_google_shopper
   };
 
-  private final String customProductSearch;
+  private String customProductSearch;
 
   public ISBNResultHandler(Activity activity, ParsedResult result) {
     super(activity, result);
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
     customProductSearch = prefs.getString(PreferencesActivity.KEY_CUSTOM_PRODUCT_SEARCH, null);
+    if (customProductSearch != null && customProductSearch.length() == 0) {
+      customProductSearch = null;
+    }
   }
 
   @Override
   public int getButtonCount() {
-    return customProductSearch != null && customProductSearch.length() > 0 ? buttons.length : buttons
-        .length - 1;
+    // Always show four buttons - Shopper and Custom Search are mutually exclusive.
+    return buttons.length;
   }
 
   @Override
   public int getButtonText(int index) {
+    if (index == buttons.length - 1 && customProductSearch != null) {
+      return R.string.button_custom_product_search;
+    }
     return buttons[index];
   }
 
@@ -74,8 +81,12 @@ public final class ISBNResultHandler extends ResultHandler {
             searchBookContents(isbnResult.getISBN());
             break;
           case 3:
-            String url = customProductSearch.replace("%s", isbnResult.getISBN());
-            openURL(url);
+            if (customProductSearch != null) {
+              String url = customProductSearch.replace("%s", isbnResult.getISBN());
+              openURL(url);
+            } else {
+              openGoogleShopper(isbnResult.getISBN());
+            }
             break;
         }
       }
