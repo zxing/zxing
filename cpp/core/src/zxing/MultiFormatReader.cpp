@@ -3,6 +3,7 @@
  *  ZXing
  *
  *  Created by Lukasz Warchol on 10-01-26.
+ *  Modified by Luiz Silva on 09/02/2010.
  *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,6 +21,7 @@
 
 #include "MultiFormatReader.h"
 #include <zxing/qrcode/QRCodeReader.h>
+#include <zxing/datamatrix/DataMatrixReader.h>
 #include <zxing/oned/MultiFormatUPCEANReader.h>
 #include <zxing/oned/MultiFormatOneDReader.h>
 #include <zxing/ReaderException.h>
@@ -29,6 +31,7 @@ namespace zxing {
 		readers = new std::vector<Reader*>();
 		
 		readers->push_back(new zxing::qrcode::QRCodeReader());
+		readers->push_back(new zxing::datamatrix::DataMatrixReader());
 		readers->push_back(new zxing::oned::MultiFormatUPCEANReader());
 		readers->push_back(new zxing::oned::MultiFormatOneDReader());
 	}

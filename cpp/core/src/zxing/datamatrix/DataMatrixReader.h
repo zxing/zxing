@@ -1,13 +1,12 @@
-#ifndef __BARCODE_FORMAT_H__
-#define __BARCODE_FORMAT_H__
+#ifndef __DATA_MATRIX_READER_H__
+#define __DATA_MATRIX_READER_H__
 
 /*
- *  BarcodeFormat.h
+ *  DataMatrixReader.h
  *  zxing
  *
- *  Created by Christian Brunschen on 13/05/2008.
- *	Modified by Lukasz Warchol on 02/02/2010
- *  Copyright 2008 ZXing authors All rights reserved.
+ *  Created by Luiz Silva on 09/02/2010.
+ *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,21 +21,24 @@
  * limitations under the License.
  */
 
+#include <zxing/Reader.h>
+#include <zxing/datamatrix/decoder/Decoder.h>
+
 namespace zxing {
-	
-	typedef enum BarcodeFormat {
-		BarcodeFormat_None = 0, 
-		BarcodeFormat_QR_CODE,
-		BarcodeFormat_DATA_MATRIX,
-		BarcodeFormat_UPC_E,
-		BarcodeFormat_UPC_A,
-		BarcodeFormat_EAN_8,
-		BarcodeFormat_EAN_13,
-		BarcodeFormat_CODE_128,
-		BarcodeFormat_CODE_39,
-		BarcodeFormat_ITF
-	} BarcodeFormat;
-	
+namespace datamatrix {
+
+class DataMatrixReader : public Reader {
+private:
+  Decoder decoder_;
+
+public:
+  DataMatrixReader();
+  virtual Ref<Result> decode(Ref<BinaryBitmap> image);
+  virtual ~DataMatrixReader();
+
+};
+
+}
 }
 
-#endif // __BARCODE_FORMAT_H__
+#endif // __DATA_MATRIX_READER_H__
