@@ -32,6 +32,7 @@ import android.view.SurfaceHolder;
 import android.view.WindowManager;
 
 import java.io.IOException;
+import java.util.regex.Pattern;
 
 /**
  * This object wraps the Camera service object and expects to be the only one talking to it. The
@@ -41,13 +42,21 @@ import java.io.IOException;
  * @author dswitkin@google.com (Daniel Switkin)
  */
 final class CameraManager {
+
   private static final String TAG = "CameraManager";
+
   private static final int MIN_FRAME_WIDTH = 240;
   private static final int MIN_FRAME_HEIGHT = 240;
   private static final int MAX_FRAME_WIDTH = 480;
   private static final int MAX_FRAME_HEIGHT = 360;
 
+  private static final int TARGET_PREVIEW_WIDTH = 320;
+  private static final int TARGET_PREVIEW_HEIGHT = 240;
+
+  private static final Pattern COMMA_PATTERN = Pattern.compile(",");
+
   private static CameraManager cameraManager;
+
   private Camera camera;
   private final Context context;
   private Point screenResolution;
@@ -125,11 +134,7 @@ final class CameraManager {
     // Camera.setPreviewCallback() on 1.5 and earlier. For Donut and later, we need to use
     // the more efficient one shot callback, as the older one can swamp the system and cause it
     // to run out of memory. We can't use SDK_INT because it was introduced in the Donut SDK.
-    if (Integer.parseInt(Build.VERSION.SDK) <= Build.VERSION_CODES.CUPCAKE) {
-      useOneShotPreviewCallback = false;
-    } else {
-      useOneShotPreviewCallback = true;
-    }
+    useOneShotPreviewCallback = Integer.parseInt(Build.VERSION.SDK) > Build.VERSION_CODES.CUPCAKE;
   }
 
   /**
@@ -141,6 +146,9 @@ final class CameraManager {
   public void openDriver(SurfaceHolder holder) throws IOException {
     if (camera == null) {
       camera = Camera.open();
+      if (camera == null) {
+        throw new IOException();
+      }
       camera.setPreviewDisplay(holder);
 
       if (!initialized) {
@@ -312,18 +320,11 @@ final class CameraManager {
    */
   private void setCameraParameters() {
     Camera.Parameters parameters = camera.getParameters();
-    Camera.Size size = parameters.getPreviewSize();
-    Log.v(TAG, "Default preview size: " + size.width + ", " + size.height);
     previewFormat = parameters.getPreviewFormat();
     previewFormatString = parameters.get("preview-format");
     Log.v(TAG, "Default preview format: " + previewFormat + '/' + previewFormatString);
 
-    // Ensure that the camera resolution is a multiple of 8, as the screen may not be.
-    // TODO: A better solution would be to request the supported preview resolutions
-    // and pick the best match, but this parameter is not standardized in Cupcake.
-    cameraResolution = new Point();
-    cameraResolution.x = (screenResolution.x >> 3) << 3;
-    cameraResolution.y = (screenResolution.y >> 3) << 3;
+    cameraResolution = getCameraResolution(parameters);
     Log.v(TAG, "Setting preview size: " + cameraResolution.x + ", " + cameraResolution.y);
     parameters.setPreviewSize(cameraResolution.x, cameraResolution.y);
 
@@ -350,6 +351,80 @@ final class CameraManager {
       screenResolution = new Point(display.getWidth(), display.getHeight());
     }
     return screenResolution;
+  }
+
+  private Point getCameraResolution(Camera.Parameters parameters) {
+
+    String previewSizeValueString = parameters.get("preview-size-values");
+    // saw this on Xperia
+    if (previewSizeValueString == null) {
+      previewSizeValueString = parameters.get("preview-size-value");
+    }
+    Point cameraResolution = null;
+    if (previewSizeValueString != null) {
+      Log.v(TAG, "preview-size parameter: " + previewSizeValueString);
+      cameraResolution = findBestPreviewSizeValue(previewSizeValueString);
+    }
+
+    if (cameraResolution == null) {
+      Camera.Size cameraPreviewSize = parameters.getPreviewSize();
+      if (cameraPreviewSize != null) {
+        Log.v(TAG, "Default preview size: " + cameraPreviewSize.width + ", " + cameraPreviewSize.height);
+        cameraResolution = new Point(cameraPreviewSize.width, cameraPreviewSize.height);
+      }
+    }
+
+    if (cameraResolution == null) {
+      cameraResolution = new Point(screenResolution.x, screenResolution.y);
+    }
+
+    // Ensure that the camera resolution is a multiple of 8, as the screen may not be.
+    cameraResolution.x = (cameraResolution.x >> 3) << 3;
+    cameraResolution.y = (cameraResolution.y >> 3) << 3;
+
+    return cameraResolution;
+  }
+
+  private static Point findBestPreviewSizeValue(String previewSizeValueString) {
+    int bestX = 0;
+    int bestY = 0;
+    int diff = Integer.MAX_VALUE;
+    for (String previewSize : COMMA_PATTERN.split(previewSizeValueString)) {
+
+      previewSize = previewSize.trim();
+      int dimPosition = previewSize.indexOf('x');
+      if (dimPosition < 0) {
+        Log.w(TAG, "Bad preview-size");
+        continue;
+      }
+
+      int newX;
+      int newY;
+      try {
+        newX = Integer.parseInt(previewSize.substring(0, dimPosition));
+        newY = Integer.parseInt(previewSize.substring(dimPosition + 1));
+      } catch (NumberFormatException nfe) {
+        Log.w(TAG, "Bad preview-size");
+        continue;
+      }
+
+      int newDiff = Math.abs(newX - TARGET_PREVIEW_WIDTH) + Math.abs(newY - TARGET_PREVIEW_HEIGHT);
+      if (newDiff == 0) {
+        bestX = newX;
+        bestY = newY;
+        break;
+      } else if (newDiff < diff) {
+        bestX = newX;
+        bestY = newY;
+        diff = newDiff;
+      }
+
+    }
+
+    if (bestX > 0 && bestY > 0) {
+      return new Point(bestX, bestY);
+    }
+    return null;
   }
 
 }
