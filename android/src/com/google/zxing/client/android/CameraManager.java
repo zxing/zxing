@@ -154,6 +154,7 @@ final class CameraManager {
       }
 
       setCameraParameters();
+      FlashlightManager.enableFlashlight();
     }
   }
 
@@ -162,6 +163,7 @@ final class CameraManager {
    */
   public void closeDriver() {
     if (camera != null) {
+      FlashlightManager.disableFlashlight();
       camera.release();
       camera = null;
     }
