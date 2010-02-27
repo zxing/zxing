@@ -50,9 +50,6 @@ final class CameraManager {
   private static final int MAX_FRAME_WIDTH = 480;
   private static final int MAX_FRAME_HEIGHT = 360;
 
-  private static final int TARGET_PREVIEW_WIDTH = 320;
-  private static final int TARGET_PREVIEW_HEIGHT = 240;
-
   private static final Pattern COMMA_PATTERN = Pattern.compile(",");
 
   private static CameraManager cameraManager;
@@ -355,37 +352,37 @@ final class CameraManager {
 
   private Point getCameraResolution(Camera.Parameters parameters) {
 
-    String previewSizeValueString = parameters.get("preview-size-values");
-    // saw this on Xperia
-    if (previewSizeValueString == null) {
-      previewSizeValueString = parameters.get("preview-size-value");
-    }
     Point cameraResolution = null;
-    if (previewSizeValueString != null) {
-      Log.v(TAG, "preview-size parameter: " + previewSizeValueString);
-      cameraResolution = findBestPreviewSizeValue(previewSizeValueString);
+
+    Camera.Size cameraPreviewSize = parameters.getPreviewSize();
+    if (cameraPreviewSize != null) {
+      Log.v(TAG, "Default preview size: " + cameraPreviewSize.width + ", " + cameraPreviewSize.height);
+      cameraResolution = new Point(cameraPreviewSize.width, cameraPreviewSize.height);
     }
 
     if (cameraResolution == null) {
-      Camera.Size cameraPreviewSize = parameters.getPreviewSize();
-      if (cameraPreviewSize != null) {
-        Log.v(TAG, "Default preview size: " + cameraPreviewSize.width + ", " + cameraPreviewSize.height);
-        cameraResolution = new Point(cameraPreviewSize.width, cameraPreviewSize.height);
+      String previewSizeValueString = parameters.get("preview-size-values");
+      // saw this on Xperia
+      if (previewSizeValueString == null) {
+        previewSizeValueString = parameters.get("preview-size-value");
+      }
+      if (previewSizeValueString != null) {
+        Log.v(TAG, "preview-size parameter: " + previewSizeValueString);
+        cameraResolution = findBestPreviewSizeValue(previewSizeValueString, screenResolution);
       }
     }
 
     if (cameraResolution == null) {
-      cameraResolution = new Point(screenResolution.x, screenResolution.y);
+      // Ensure that the camera resolution is a multiple of 8, as the screen may not be.
+      cameraResolution = new Point(
+          (screenResolution.x >> 3) << 3,
+          (screenResolution.y >> 3) << 3);
     }
-
-    // Ensure that the camera resolution is a multiple of 8, as the screen may not be.
-    cameraResolution.x = (cameraResolution.x >> 3) << 3;
-    cameraResolution.y = (cameraResolution.y >> 3) << 3;
 
     return cameraResolution;
   }
 
-  private static Point findBestPreviewSizeValue(String previewSizeValueString) {
+  private static Point findBestPreviewSizeValue(String previewSizeValueString, Point screenResolution) {
     int bestX = 0;
     int bestY = 0;
     int diff = Integer.MAX_VALUE;
@@ -408,7 +405,7 @@ final class CameraManager {
         continue;
       }
 
-      int newDiff = Math.abs(newX - TARGET_PREVIEW_WIDTH) + Math.abs(newY - TARGET_PREVIEW_HEIGHT);
+      int newDiff = Math.abs(newX - screenResolution.x) + Math.abs(newY - screenResolution.y);
       if (newDiff == 0) {
         bestX = newX;
         bestY = newY;
