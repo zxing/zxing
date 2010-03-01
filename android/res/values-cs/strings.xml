@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
  Copyright (C) 2008 ZXing authors
 
@@ -56,6 +56,7 @@
   <string name="menu_history">Historie</string>
   <string name="menu_share">Sdílet</string>
   <string name="msg_about">Na bázi open source ZXing Barcode Library</string>
+  <string name="msg_buggy">Tento přístroj má známé chyby, které způsobují problémy čárového kódu. Pro Více informací najdete na http://code.google.com/p/zxing/wiki/FrequentlyAskedQuestions</string>
   <string name="msg_camera_framework_bug">Omlouváme se, fotoaparát má problém. Možná bude nutné restartovat zařízení</string>
   <string name="msg_default_contents">Obsah</string>
   <string name="msg_default_format">Formát</string>

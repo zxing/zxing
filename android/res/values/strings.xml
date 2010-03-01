@@ -57,6 +57,7 @@
   <string name="menu_history">History</string>
   <string name="menu_share">Share</string>
   <string name="msg_about">Based on the open source ZXing Barcode Library</string>
+  <string name="msg_buggy">This device has known bugs that cause barcode scanning problems. For more information, visit http://code.google.com/p/zxing/wiki/FrequentlyAskedQuestions</string>
   <string name="msg_camera_framework_bug">Sorry, the Android camera encountered a problem. You may need to restart the device.</string>
   <string name="msg_default_contents">Contents</string>
   <string name="msg_default_format">Format</string>

@@ -17,7 +17,13 @@
 package com.google.zxing.client.android;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.KeyEvent;
 import android.webkit.WebView;
@@ -30,6 +36,11 @@ import android.widget.Button;
  * @author dswitkin@google.com (Daniel Switkin)
  */
 public final class HelpActivity extends Activity {
+
+  private static final String TAG = HelpActivity.class.getName();
+
+  private static final String[] BUGGY_MODEL_SUBSTRINGS = {"Behold II", "Pulse"};
+  private static final Uri BUGGY_URI = Uri.parse("http://code.google.com/p/zxing/wiki/FrequentlyAskedQuestions");
   private static final String DEFAULT_URL = "file:///android_asset/html/index.html";
 
   private WebView webView;
@@ -44,6 +55,12 @@ public final class HelpActivity extends Activity {
   private final Button.OnClickListener doneListener = new Button.OnClickListener() {
     public void onClick(View view) {
       finish();
+    }
+  };
+
+  private final DialogInterface.OnClickListener groupsListener = new DialogInterface.OnClickListener() {
+    public void onClick(DialogInterface dialogInterface, int i) {
+      HelpActivity.this.startActivity(new Intent(Intent.ACTION_VIEW, BUGGY_URI));
     }
   };
 
@@ -70,6 +87,22 @@ public final class HelpActivity extends Activity {
   @Override
   public void onResume() {
     super.onResume();
+    checkBuggyDevice();
+  }
+
+  private void checkBuggyDevice() {
+    String model = Build.MODEL;
+    Log.i(TAG, "Build model is " + model);
+    for (String buggyModelSubstring : BUGGY_MODEL_SUBSTRINGS) {
+      if (model.contains(buggyModelSubstring)) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.msg_buggy);
+        builder.setPositiveButton(R.string.button_ok, groupsListener);
+        builder.setNegativeButton(R.string.button_cancel, null);
+        builder.create().show();
+        break;
+      }
+    }
   }
 
   @Override

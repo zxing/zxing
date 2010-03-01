@@ -56,6 +56,7 @@
   <string name="menu_history">Historia</string>
   <string name="menu_share">Compartir</string>
   <string name="msg_about">Basado en la libreria de código de barras de código abierto ZXing</string>
+  <string name="msg_buggy">Este dispositivo ha conocido errores de escaneo de código de barras causa problemas. Para más información, visite http://code.google.com/p/zxing/wiki/FrequentlyAskedQuestions</string>  
   <string name="msg_camera_framework_bug">Lo sentimos, la cámara de Android ha encontrado un problema. Es posible que necesite reiniciar el dispositivo.</string>
   <string name="msg_default_contents">Contenidos</string>
   <string name="msg_default_format">Formato</string>
