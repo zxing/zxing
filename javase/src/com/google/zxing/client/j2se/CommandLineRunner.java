@@ -18,13 +18,10 @@ package com.google.zxing.client.j2se;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
-import com.google.zxing.ChecksumException;
 import com.google.zxing.DecodeHintType;
-import com.google.zxing.FormatException;
 import com.google.zxing.LuminanceSource;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.NotFoundException;
-import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 import com.google.zxing.client.result.ParsedResult;
 import com.google.zxing.client.result.ResultParser;
@@ -69,12 +66,15 @@ public final class CommandLineRunner {
     }
 
     boolean tryHarder = false;
+    boolean pureBarcode = false;
     boolean productsOnly = false;
     boolean dumpResults = false;
     boolean dumpBlackPoint = false;
     for (String arg : args) {
       if ("--try_harder".equals(arg)) {
         tryHarder = true;
+      } else if ("--pure_barcode".equals(arg)) {
+        pureBarcode = true;
       } else if ("--products_only".equals(arg)) {
         productsOnly = true;
       } else if ("--dump_results".equals(arg)) {
@@ -88,7 +88,7 @@ public final class CommandLineRunner {
       }
     }
 
-    Hashtable<DecodeHintType, Object> hints = buildHints(tryHarder, productsOnly);
+    Hashtable<DecodeHintType, Object> hints = buildHints(tryHarder, pureBarcode, productsOnly);
     for (String arg : args) {
       if (!arg.startsWith("--")) {
         decodeOneArgument(arg, hints, dumpResults, dumpBlackPoint);
@@ -98,7 +98,8 @@ public final class CommandLineRunner {
 
   // Manually turn on all formats, even those not yet considered production quality.
   private static Hashtable<DecodeHintType, Object> buildHints(boolean tryHarder,
-      boolean productsOnly) {
+                                                              boolean pureBarcode,
+                                                              boolean productsOnly) {
     Hashtable<DecodeHintType, Object> hints = new Hashtable<DecodeHintType, Object>(3);
     Vector<BarcodeFormat> vector = new Vector<BarcodeFormat>(8);
     vector.addElement(BarcodeFormat.UPC_A);
@@ -116,6 +117,9 @@ public final class CommandLineRunner {
     hints.put(DecodeHintType.POSSIBLE_FORMATS, vector);
     if (tryHarder) {
       hints.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
+    }
+    if (pureBarcode) {
+      hints.put(DecodeHintType.PURE_BARCODE, Boolean.TRUE);
     }
     return hints;
   }

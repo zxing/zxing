@@ -93,6 +93,7 @@ public final class DecodeServlet extends HttpServlet {
   private static final Logger log = Logger.getLogger(DecodeServlet.class.getName());
 
   static final Hashtable<DecodeHintType, Object> HINTS;
+  static final Hashtable<DecodeHintType, Object> HINTS_PURE;
 
   static {
     HINTS = new Hashtable<DecodeHintType, Object>(5);
@@ -110,6 +111,8 @@ public final class DecodeServlet extends HttpServlet {
     possibleFormats.add(BarcodeFormat.DATAMATRIX);
     possibleFormats.add(BarcodeFormat.PDF417);
     HINTS.put(DecodeHintType.POSSIBLE_FORMATS, possibleFormats);
+    HINTS_PURE = new Hashtable<DecodeHintType, Object>(HINTS);
+    HINTS_PURE.put(DecodeHintType.PURE_BARCODE, Boolean.TRUE);
   }
 
   private HttpParams params;
@@ -245,6 +248,7 @@ public final class DecodeServlet extends HttpServlet {
 
   private static void processStream(InputStream is, ServletRequest request,
       HttpServletResponse response) throws ServletException, IOException {
+
     BufferedImage image = ImageIO.read(is);
     if (image == null) {
       response.sendRedirect("badimage.jspx");
@@ -252,30 +256,40 @@ public final class DecodeServlet extends HttpServlet {
     }
 
     Reader reader = new MultiFormatReader();
-    Result result;
+    LuminanceSource source = new BufferedImageLuminanceSource(image);
+    BinaryBitmap bitmap = new BinaryBitmap(new GlobalHistogramBinarizer(source));
+    Result result = null;
+    ReaderException savedException = null;
+
     try {
-      LuminanceSource source = new BufferedImageLuminanceSource(image);
-      BinaryBitmap bitmap = new BinaryBitmap(new GlobalHistogramBinarizer(source));
-      result = reader.decode(bitmap, HINTS);
+      // Look for pure barcode
+      result = reader.decode(bitmap, HINTS_PURE);
     } catch (ReaderException re) {
+      savedException = re;
+    }
+
+    if (result == null) {
+      try {
+        // Look for normal barcode in photo
+        result = reader.decode(bitmap, HINTS);
+      } catch (ReaderException re) {
+        savedException = re;
+      }
+    }
+
+    if (result == null) {
       try {
         // Try again with other binarizer
-        LuminanceSource source = new BufferedImageLuminanceSource(image);
-        BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
-        result = reader.decode(bitmap, HINTS);
-      } catch (NotFoundException nfe) {
-        log.info("Not found: " + re.toString());
-        response.sendRedirect("notfound.jspx");
-        return;
-      } catch (FormatException fe) {
-        log.info("Format problem: " + re.toString());
-        response.sendRedirect("format.jspx");
-        return;
-      } catch (ChecksumException ce) {
-        log.info("Checksum problem: " + re.toString());
-        response.sendRedirect("format.jspx");
-        return;
+        BinaryBitmap hybridBitmap = new BinaryBitmap(new HybridBinarizer(source));
+        result = reader.decode(hybridBitmap, HINTS);
+      } catch (ReaderException re) {
+        savedException = re;
       }
+    }
+
+    if (result == null) {
+      handleException(savedException, response);
+      return;
     }
 
     if (request.getParameter("full") == null) {
@@ -310,6 +324,22 @@ public final class DecodeServlet extends HttpServlet {
         request.setAttribute("displayResult", "(Not applicable)");
       }
       request.getRequestDispatcher("decoderesult.jspx").forward(request, response);
+    }
+  }
+
+  private static void handleException(ReaderException re, HttpServletResponse response) throws IOException {
+    if (re instanceof NotFoundException) {
+      log.info("Not found: " + re);
+      response.sendRedirect("notfound.jspx");
+    } else if (re instanceof FormatException) {
+      log.info("Format problem: " + re);
+      response.sendRedirect("format.jspx");
+    } else if (re instanceof ChecksumException) {
+      log.info("Checksum problem: " + re);
+      response.sendRedirect("format.jspx");
+    } else {
+      log.info("Unknown problem: " + re);
+      response.sendRedirect("notfound.jspx");
     }
   }
 
