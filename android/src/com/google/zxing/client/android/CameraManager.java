@@ -354,24 +354,17 @@ final class CameraManager {
 
   private Point getCameraResolution(Camera.Parameters parameters) {
 
-    Point cameraResolution = null;
-
-    Camera.Size cameraPreviewSize = parameters.getPreviewSize();
-    if (cameraPreviewSize != null) {
-      Log.v(TAG, "Default preview size: " + cameraPreviewSize.width + ", " + cameraPreviewSize.height);
-      cameraResolution = new Point(cameraPreviewSize.width, cameraPreviewSize.height);
+    String previewSizeValueString = parameters.get("preview-size-values");
+    // saw this on Xperia
+    if (previewSizeValueString == null) {
+      previewSizeValueString = parameters.get("preview-size-value");
     }
 
-    if (cameraResolution == null) {
-      String previewSizeValueString = parameters.get("preview-size-values");
-      // saw this on Xperia
-      if (previewSizeValueString == null) {
-        previewSizeValueString = parameters.get("preview-size-value");
-      }
-      if (previewSizeValueString != null) {
-        Log.v(TAG, "preview-size parameter: " + previewSizeValueString);
-        cameraResolution = findBestPreviewSizeValue(previewSizeValueString, screenResolution);
-      }
+    Point cameraResolution = null;
+    
+    if (previewSizeValueString != null) {
+      Log.v(TAG, "preview-size parameter: " + previewSizeValueString);
+      cameraResolution = findBestPreviewSizeValue(previewSizeValueString, screenResolution);
     }
 
     if (cameraResolution == null) {
