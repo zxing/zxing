@@ -96,36 +96,47 @@ final class FormatInformation {
   }
 
   /**
-   * @param maskedFormatInfo format info indicator, with mask still applied
+   * @param maskedFormatInfo1 format info indicator, with mask still applied
+   * @param maskedFormatInfo2 second copy of same info; both are checked at the same time
+   *  to establish best match
    * @return information about the format it specifies, or <code>null</code>
    *  if doesn't seem to match any known pattern
    */
-  static FormatInformation decodeFormatInformation(int maskedFormatInfo) {
-    FormatInformation formatInfo = doDecodeFormatInformation(maskedFormatInfo);
+  static FormatInformation decodeFormatInformation(int maskedFormatInfo1, int maskedFormatInfo2) {
+    FormatInformation formatInfo = doDecodeFormatInformation(maskedFormatInfo1, maskedFormatInfo2);
     if (formatInfo != null) {
       return formatInfo;
     }
     // Should return null, but, some QR codes apparently
     // do not mask this info. Try again by actually masking the pattern
     // first
-    return doDecodeFormatInformation(maskedFormatInfo ^ FORMAT_INFO_MASK_QR);
+    return doDecodeFormatInformation(maskedFormatInfo1 ^ FORMAT_INFO_MASK_QR,
+                                     maskedFormatInfo2 ^ FORMAT_INFO_MASK_QR);
   }
 
-  private static FormatInformation doDecodeFormatInformation(int maskedFormatInfo) {
+  private static FormatInformation doDecodeFormatInformation(int maskedFormatInfo1, int maskedFormatInfo2) {
     // Find the int in FORMAT_INFO_DECODE_LOOKUP with fewest bits differing
     int bestDifference = Integer.MAX_VALUE;
     int bestFormatInfo = 0;
     for (int i = 0; i < FORMAT_INFO_DECODE_LOOKUP.length; i++) {
       int[] decodeInfo = FORMAT_INFO_DECODE_LOOKUP[i];
       int targetInfo = decodeInfo[0];
-      if (targetInfo == maskedFormatInfo) {
+      if (targetInfo == maskedFormatInfo1 || targetInfo == maskedFormatInfo2) {
         // Found an exact match
         return new FormatInformation(decodeInfo[1]);
       }
-      int bitsDifference = numBitsDiffering(maskedFormatInfo, targetInfo);
+      int bitsDifference = numBitsDiffering(maskedFormatInfo1, targetInfo);
       if (bitsDifference < bestDifference) {
         bestFormatInfo = decodeInfo[1];
         bestDifference = bitsDifference;
+      }
+      if (maskedFormatInfo1 != maskedFormatInfo2) {
+        // also try the other option
+        bitsDifference = numBitsDiffering(maskedFormatInfo2, targetInfo);
+        if (bitsDifference < bestDifference) {
+          bestFormatInfo = decodeInfo[1];
+          bestDifference = bitsDifference;
+        }
       }
     }
     // Hamming distance of the 32 masked codes is 7, by construction, so <= 3 bits

@@ -54,36 +54,31 @@ final class BitMatrixParser {
     }
 
     // Read top-left format info bits
-    int formatInfoBits = 0;
+    int formatInfoBits1 = 0;
     for (int i = 0; i < 6; i++) {
-      formatInfoBits = copyBit(i, 8, formatInfoBits);
+      formatInfoBits1 = copyBit(i, 8, formatInfoBits1);
     }
     // .. and skip a bit in the timing pattern ...
-    formatInfoBits = copyBit(7, 8, formatInfoBits);
-    formatInfoBits = copyBit(8, 8, formatInfoBits);
-    formatInfoBits = copyBit(8, 7, formatInfoBits);
+    formatInfoBits1 = copyBit(7, 8, formatInfoBits1);
+    formatInfoBits1 = copyBit(8, 8, formatInfoBits1);
+    formatInfoBits1 = copyBit(8, 7, formatInfoBits1);
     // .. and skip a bit in the timing pattern ...
     for (int j = 5; j >= 0; j--) {
-      formatInfoBits = copyBit(8, j, formatInfoBits);
+      formatInfoBits1 = copyBit(8, j, formatInfoBits1);
     }
 
-    parsedFormatInfo = FormatInformation.decodeFormatInformation(formatInfoBits);
-    if (parsedFormatInfo != null) {
-      return parsedFormatInfo;
-    }
-
-    // Hmm, failed. Try the top-right/bottom-left pattern
+    // Read the top-right/bottom-left pattern too
     int dimension = bitMatrix.getDimension();
-    formatInfoBits = 0;
+    int formatInfoBits2 = 0;
     int iMin = dimension - 8;
     for (int i = dimension - 1; i >= iMin; i--) {
-      formatInfoBits = copyBit(i, 8, formatInfoBits);
+      formatInfoBits2 = copyBit(i, 8, formatInfoBits2);
     }
     for (int j = dimension - 7; j < dimension; j++) {
-      formatInfoBits = copyBit(8, j, formatInfoBits);
+      formatInfoBits2 = copyBit(8, j, formatInfoBits2);
     }
 
-    parsedFormatInfo = FormatInformation.decodeFormatInformation(formatInfoBits);
+    parsedFormatInfo = FormatInformation.decodeFormatInformation(formatInfoBits1, formatInfoBits2);
     if (parsedFormatInfo != null) {
       return parsedFormatInfo;
     }
