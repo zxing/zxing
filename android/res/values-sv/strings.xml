@@ -16,7 +16,7 @@
  -->
 <resources>
   <string name="app_picker_name">Applikationer</string>
-  <string name="app_name">Streckkodsläsare</string>
+  <string name="app_name">Barcode Scanner</string>
   <string name="bookmark_picker_name">Bokmärken</string>
   <string name="button_add_calendar">Lägg till i kalendern</string>
   <string name="button_add_contact">Lägg till kontakt</string>
@@ -29,6 +29,7 @@
   <string name="button_done">Klar</string>
   <string name="button_email">Skicka email</string>
   <string name="button_get_directions">Hämta instruktioner</string>
+  <string name="button_google_shopper">Google Shopper</string>
   <string name="button_mms">Skicka MMS</string>
   <string name="button_ok">OK</string>
   <string name="button_open_browser">Öppna webbläsare</string>
@@ -66,6 +67,8 @@
   <string name="msg_encode_barcode_failed">Misslyckades med att skapa den önskade streckkoden.</string>
   <string name="msg_encode_contents_failed">Kunde inte skape en streckkod från de givna uppgifterna.</string>
   <string name="msg_encode_in_progress">Genererar en streckkod\u2026</string>
+  <string name="msg_google_shopper_missing">Google Shopper är inte installerat</string>
+  <string name="msg_install_google_shopper">Google Shopper kombinerar barcode scanning med priser, recensioner och mer utan att öppna webbläsaren. Vill du prova det?</string>
   <string name="msg_intent_failed">Tyvärr, den önskade applikationen kunde inte startas. Streckkodens innehåll kanske är ogiltigt.</string>
   <string name="msg_loading_apps">Läser in applikationslistan\u2026</string>
   <string name="msg_not_our_results">Du lämnar denna applikationen. Sökresultaten som visas har inget med denna appliation att göra.</string>

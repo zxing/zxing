@@ -16,7 +16,7 @@
  -->
 <resources>
   <string name="app_picker_name">Ohjelmat</string>
-  <string name="app_name">Viivakoodin lukija</string>
+  <string name="app_name">Barcode Scanner</string>
   <string name="bookmark_picker_name">Kirjanmerkit</string>
   <string name="button_add_calendar">Lisää kalenteriin</string>
   <string name="button_add_contact">Lisää kontakti</string>
@@ -29,6 +29,7 @@
   <string name="button_done">Tehty</string>
   <string name="button_email">Lähetä sähköpostia</string>
   <string name="button_get_directions">Ota suunta</string>
+  <string name="button_google_shopper">Google Shopper</string>
   <string name="button_mms">Lähetä MMS</string>
   <string name="button_ok">OK</string>
   <string name="button_open_browser">Avaa selain</string>
@@ -66,6 +67,8 @@
   <string name="msg_encode_barcode_failed">Ei voinut generoida pyydettyä viivakoodia.</string>
   <string name="msg_encode_contents_failed">Ei voinut purkaa viivakoodin sisältöä.</string>
   <string name="msg_encode_in_progress">Generoidaan viivakoodia\u2026</string>
+  <string name="msg_google_shopper_missing">Google Shopper ei ole asennettu</string>
+  <string name="msg_install_google_shopper">Google Shopper yhdistää viivakoodi skannauksen hintoihin, arvostelut ja avaamatta selainta. Haluatko kokeilla sitä?</string>
   <string name="msg_intent_failed">Anteeksi, pyydettyä ohjelmaa ei voi käynnistää. Viivakoodin sisältö on voinut vahingoittua.</string>
   <string name="msg_loading_apps">Ladataan listaa ohjelmista\u2026</string>
   <string name="msg_not_our_results">Olet lähtemässä ohjelmasta. Hakutulokset jotka näet eivät välttämättä kuulu ohjelmaan.</string>

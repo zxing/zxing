@@ -29,6 +29,7 @@
   <string name="button_done">Готово</string>
   <string name="button_email">Отправить по эл. почте</string>
   <string name="button_get_directions">Проложить маршрут</string>
+  <string name="button_google_shopper">Google Shopper</string>
   <string name="button_mms">Послать MMS</string>
   <string name="button_ok">OK</string>
   <string name="button_open_browser">Открыть браузер</string>
@@ -66,6 +67,8 @@
   <string name="msg_encode_barcode_failed">Не получилось сгенерировать запрошенный штрих-код.</string>
   <string name="msg_encode_contents_failed">Не могу закодировать штрих-код от источник данных.</string>
   <string name="msg_encode_in_progress">Генерация штрих-кода\u2026</string>
+  <string name="msg_google_shopper_missing">Google Shopper не установлена</string>
+  <string name="msg_install_google_shopper">Google Shopper объединяет сканирования штрих-кодов с ценами, отзывы и более, не открывая браузер. Хотите попробовать?</string>
   <string name="msg_intent_failed">К сожалению, запрошенное приложение не может быть запущенно. Содержимое штрих-кода может быть повреждено.</string>
   <string name="msg_loading_apps">Загружаю список программ</string>
   <string name="msg_not_our_results">Вы покидаете это приложение. Результаты поиска, которые вы видите, не связанным с этим приложением.</string>
