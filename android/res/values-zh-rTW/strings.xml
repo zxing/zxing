@@ -56,6 +56,7 @@
   <string name="menu_history">歷史</string>  
   <string name="menu_share">分享</string>
   <string name="msg_about">以ZXing的開源條碼庫為基礎</string>
+  <string name="msg_buggy">該器件具有已知的錯誤導致條形碼掃描問題。為了 更多信息，請訪問 http://code.google.com/p/zxing/wiki/FrequentlyAskedQuestions</string>  
   <string name="msg_camera_framework_bug">很抱歉，機器人相機出現問題。您可能需要重新啟動設備。</string>
   <string name="msg_default_contents">內容</string>
   <string name="msg_default_format">格式</string>

@@ -56,6 +56,7 @@
   <string name="menu_history">Historia</string>
   <string name="menu_share">Jaa</string>
   <string name="msg_about">Perustuu avoimen koodin ZXing Barcode kirjastoon</string>
+  <string name="msg_buggy">Tämä laite on tunnettuja vikoja, jotka aiheuttavat viivakoodi skannauksen ongelmia. Varten Lisätietoja http://code.google.com/p/zxing/wiki/FrequentlyAskedQuestions</string>  
   <string name="msg_camera_framework_bug">Anteeksi, Android kamera kohtasi virheen. Sinun täytyy ehkä käynnistää laite uudelleen.</string>
   <string name="msg_default_contents">Sisällys</string>
   <string name="msg_default_format">Formaatti</string>

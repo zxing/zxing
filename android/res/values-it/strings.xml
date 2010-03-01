@@ -56,6 +56,7 @@
   <string name="menu_history">Cronologia</string>
   <string name="menu_share">Condividi</string>
   <string name="msg_about">Basato sulla libreria di software libero ZXing Barcode</string>
+  <string name="msg_buggy">Questo dispositivo è noto bug che causano la scansione dei codici a barre problemi. Per ulteriori informazioni, visitare http://code.google.com/p/zxing/wiki/FrequentlyAskedQuestions</string>  
   <string name="msg_camera_framework_bug">Siamo spiacenti, la fotocamera Android riscontrato un problema. Potrebbe essere necessario riavviare il dispositivo.</string>
   <string name="msg_default_contents">Contenuti</string>
   <string name="msg_default_format">Formato</string>

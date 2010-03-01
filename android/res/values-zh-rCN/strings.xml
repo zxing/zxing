@@ -56,6 +56,7 @@
   <string name="menu_history">历史</string>      
   <string name="menu_share">分享</string>
   <string name="msg_about">以ZXing的开源条码库为基础</string>
+  <string name="msg_buggy">该器件具有已知的错误导致条形码扫描问题。为了 更多信息，请访问 http://code.google.com/p/zxing/wiki/FrequentlyAskedQuestions</string>  
   <string name="msg_camera_framework_bug">很抱歉，机器人相机出现问题。您可能需要重新启动设备。</string>
   <string name="msg_default_contents">内容</string>
   <string name="msg_default_format">格式</string>
