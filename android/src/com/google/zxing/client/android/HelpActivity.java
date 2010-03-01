@@ -93,14 +93,16 @@ public final class HelpActivity extends Activity {
   private void checkBuggyDevice() {
     String model = Build.MODEL;
     Log.i(TAG, "Build model is " + model);
-    for (String buggyModelSubstring : BUGGY_MODEL_SUBSTRINGS) {
-      if (model.contains(buggyModelSubstring)) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(R.string.msg_buggy);
-        builder.setPositiveButton(R.string.button_ok, groupsListener);
-        builder.setNegativeButton(R.string.button_cancel, null);
-        builder.create().show();
-        break;
+    if (model != null) {
+      for (String buggyModelSubstring : BUGGY_MODEL_SUBSTRINGS) {
+        if (model.contains(buggyModelSubstring)) {
+          AlertDialog.Builder builder = new AlertDialog.Builder(this);
+          builder.setMessage(R.string.msg_buggy);
+          builder.setPositiveButton(R.string.button_ok, groupsListener);
+          builder.setNegativeButton(R.string.button_cancel, null);
+          builder.create().show();
+          break;
+        }
       }
     }
   }
