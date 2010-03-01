@@ -93,6 +93,7 @@ public final class HistoryManager {
         } else if (i == dialogItems.length - 2) {
           String history = buildHistory();
           Intent intent = new Intent(Intent.ACTION_SEND, Uri.parse("mailto:"));
+          intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);          
           intent.putExtra(Intent.EXTRA_SUBJECT, res.getString(R.string.history_email_title));
           intent.putExtra(Intent.EXTRA_TEXT, history);
           intent.setType("text/plain");

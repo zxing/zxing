@@ -60,7 +60,9 @@ public final class HelpActivity extends Activity {
 
   private final DialogInterface.OnClickListener groupsListener = new DialogInterface.OnClickListener() {
     public void onClick(DialogInterface dialogInterface, int i) {
-      HelpActivity.this.startActivity(new Intent(Intent.ACTION_VIEW, BUGGY_URI));
+      Intent intent = new Intent(Intent.ACTION_VIEW, BUGGY_URI);
+      intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);              
+      HelpActivity.this.startActivity(intent);
     }
   };
 
