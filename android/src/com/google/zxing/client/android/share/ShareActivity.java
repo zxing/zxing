@@ -65,14 +65,16 @@ public final class ShareActivity extends Activity {
 
   private final Button.OnClickListener contactListener = new Button.OnClickListener() {
     public void onClick(View v) {
-      startActivityForResult(new Intent(Intent.ACTION_PICK, Contacts.People.CONTENT_URI),
-          PICK_CONTACT);
+      Intent intent = new Intent(Intent.ACTION_PICK, Contacts.People.CONTENT_URI);
+      intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+      startActivityForResult(intent, PICK_CONTACT);
     }
   };
 
   private final Button.OnClickListener bookmarkListener = new Button.OnClickListener() {
     public void onClick(View v) {
       Intent intent = new Intent(Intent.ACTION_PICK);
+      intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
       intent.setClassName(ShareActivity.this, BookmarkPickerActivity.class.getName());
       startActivityForResult(intent, PICK_BOOKMARK);
     }
@@ -81,6 +83,7 @@ public final class ShareActivity extends Activity {
   private final Button.OnClickListener appListener = new Button.OnClickListener() {
     public void onClick(View v) {
       Intent intent = new Intent(Intent.ACTION_PICK);
+      intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
       intent.setClassName(ShareActivity.this, AppPickerActivity.class.getName());
       startActivityForResult(intent, PICK_APP);
     }
@@ -92,6 +95,7 @@ public final class ShareActivity extends Activity {
       // Should always be true, because we grey out the clipboard button in onResume() if it's empty
       if (clipboard.hasText()) {
         Intent intent = new Intent(Intents.Encode.ACTION);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
         intent.putExtra(Intents.Encode.TYPE, Contents.Type.TEXT);
         intent.putExtra(Intents.Encode.DATA, clipboard.getText());
         intent.putExtra(Intents.Encode.FORMAT, Contents.Format.QR_CODE);
@@ -144,6 +148,7 @@ public final class ShareActivity extends Activity {
 
   private void showTextAsBarcode(String text) {
     Intent intent = new Intent(Intents.Encode.ACTION);
+    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
     intent.putExtra(Intents.Encode.TYPE, Contents.Type.TEXT);
     intent.putExtra(Intents.Encode.DATA, text);
     intent.putExtra(Intents.Encode.FORMAT, Contents.Format.QR_CODE);
@@ -212,6 +217,7 @@ public final class ShareActivity extends Activity {
       }
 
       Intent intent = new Intent(Intents.Encode.ACTION);
+      intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);      
       intent.putExtra(Intents.Encode.TYPE, Contents.Type.CONTACT);
       intent.putExtra(Intents.Encode.DATA, bundle);
       intent.putExtra(Intents.Encode.FORMAT, Contents.Format.QR_CODE);

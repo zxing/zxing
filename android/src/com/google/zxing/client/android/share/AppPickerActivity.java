@@ -49,6 +49,7 @@ public final class AppPickerActivity extends ListActivity {
     if (position >= 0 && position < labelsPackages.size()) {
       String url = "market://search?q=pname:" + labelsPackages.get(position)[1];
       Intent intent = new Intent();
+      intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);      
       intent.putExtra(Browser.BookmarkColumns.URL, url);
       setResult(RESULT_OK, intent);
     } else {

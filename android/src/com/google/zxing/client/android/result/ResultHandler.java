@@ -339,6 +339,7 @@ public abstract class ResultHandler {
 
   void launchIntent(Intent intent) {
     if (intent != null) {
+      intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
       try {
         activity.startActivity(intent);
       } catch (ActivityNotFoundException e) {

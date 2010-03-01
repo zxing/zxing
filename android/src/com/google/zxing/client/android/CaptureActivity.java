@@ -151,6 +151,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       new DialogInterface.OnClickListener() {
     public void onClick(DialogInterface dialogInterface, int i) {
       Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.zxing_url)));
+      intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
       startActivity(intent);
     }
   };
@@ -333,6 +334,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     switch (item.getItemId()) {
       case SHARE_ID: {
         Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
         intent.setClassName(this, ShareActivity.class.getName());
         startActivity(intent);
         break;
@@ -344,12 +346,14 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       }
       case SETTINGS_ID: {
         Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
         intent.setClassName(this, PreferencesActivity.class.getName());
         startActivity(intent);
         break;
       }
       case HELP_ID: {
         Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
         intent.setClassName(this, HelpActivity.class.getName());
         startActivity(intent);
         break;
@@ -524,6 +528,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       // Hand back whatever action they requested - this can be changed to Intents.Scan.ACTION when
       // the deprecated intent is retired.
       Intent intent = new Intent(getIntent().getAction());
+      intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
       intent.putExtra(Intents.Scan.RESULT, rawResult.toString());
       intent.putExtra(Intents.Scan.RESULT_FORMAT, rawResult.getBarcodeFormat().toString());
       Message message = Message.obtain(handler, R.id.return_scan_result);
@@ -557,6 +562,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       if (currentVersion > lastVersion) {
         prefs.edit().putInt(PreferencesActivity.KEY_HELP_VERSION_SHOWN, currentVersion).commit();
         Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);        
         intent.setClassName(this, HelpActivity.class.getName());
         startActivity(intent);
         return true;

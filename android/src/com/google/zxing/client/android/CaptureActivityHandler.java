@@ -92,7 +92,9 @@ public final class CaptureActivityHandler extends Handler {
         break;
       case R.id.launch_product_query:
         String url = (String) message.obj;
-        activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);        
+        activity.startActivity(intent);
         break;
     }
   }
