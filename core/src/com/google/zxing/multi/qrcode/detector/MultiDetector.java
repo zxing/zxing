@@ -16,8 +16,8 @@
 
 package com.google.zxing.multi.qrcode.detector;
 
-import com.google.zxing.FormatException;
 import com.google.zxing.NotFoundException;
+import com.google.zxing.ReaderException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.DetectorResult;
 import com.google.zxing.qrcode.detector.Detector;
@@ -54,7 +54,7 @@ public final class MultiDetector extends Detector {
     for (int i = 0; i < info.length; i++) {
       try {
         result.addElement(processFinderPatternInfo(info[i]));
-      } catch (FormatException e) {
+      } catch (ReaderException e) {
         // ignore
       }
     }
