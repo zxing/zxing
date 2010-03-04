@@ -95,7 +95,7 @@ public abstract class GridSampler {
   public BitMatrix sampleGrid(BitMatrix image,
                               int dimension,
                               PerspectiveTransform transform) throws NotFoundException {
-    throw new UnsupportedOperationException();
+    throw new IllegalStateException(); // Can't use UnsupportedOperationException
   }
   
 
