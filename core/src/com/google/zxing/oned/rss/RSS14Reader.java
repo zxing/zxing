@@ -81,12 +81,12 @@ public final class RSS14Reader extends OneDReader {
   public Result decodeRow(int rowNumber, BitArray row, Hashtable hints) throws NotFoundException {
     Pair leftPair = decodePair(row, false, rowNumber, hints);
     if (leftPair != null) {
-      possibleLeftPairs.add(leftPair);
+      possibleLeftPairs.addElement(leftPair);
     }
     row.reverse();
     Pair rightPair = decodePair(row, true, rowNumber, hints);
     if (rightPair != null) {
-      possibleRightPairs.add(rightPair);
+      possibleRightPairs.addElement(rightPair);
     }
     row.reverse();
     int numLeftPairs = possibleLeftPairs.size();
@@ -104,8 +104,8 @@ public final class RSS14Reader extends OneDReader {
   }
 
   public void reset() {
-    possibleLeftPairs.clear();
-    possibleRightPairs.clear();
+    possibleLeftPairs.setSize(0);
+    possibleRightPairs.setSize(0);
   }
 
   private static Result constructResult(Pair leftPair, Pair rightPair) {
