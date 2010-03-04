@@ -27,7 +27,7 @@
     <ant dir="android" target="compile"/>
     <ant dir="androidtest" target="compile"/>
     <ant dir="android-integration" target="build"/>
-    <ant dir="zxingorg" target="build"/>
+    <!--<ant dir="zxingorg" target="build"/>-->
   </target>
 
   <target name="buildwithoutj2me">
@@ -41,6 +41,7 @@
     <ant dir="javase" target="clean"/>
     <ant dir="android" target="clean"/>
     <ant dir="androidtest" target="clean"/>
+    <ant dir="android-integration" target="clean"/>
     <ant dir="zxingorg" target="clean"/>
     <delete dir="docs/javadoc"/>
   </target>
@@ -53,12 +54,15 @@
     <zip file="ZXing-${version}.zip">
       <zipfileset dir="." prefix="zxing-${version}">
         <exclude name="**/.*"/> <!-- exclude hidden files -->
+        <exclude name="**/.svn"/>
+        <exclude name="**/.iml"/>
         <include name="AUTHORS"/>
         <include name="COPYING"/>
         <include name="README"/>
         <include name="CHANGES"/>
         <include name="build.xml"/>
         <include name="build.properties"/>
+        <include name="actionscript/**"/>
         <include name="android/**"/>
         <include name="android-integration/**"/>
         <include name="androidtest/**"/>
