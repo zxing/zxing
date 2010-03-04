@@ -75,6 +75,7 @@
         <include name="javase/**"/>
         <include name="rim/**"/>
         <include name="docs/**"/>
+        <include name="zxing.appspot.com/**"/>
         <include name="zxingorg/**"/>
         <exclude name="zxingorg/secrets.properties"/>
       </zipfileset>
