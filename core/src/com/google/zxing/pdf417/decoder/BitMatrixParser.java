@@ -16,6 +16,7 @@
 
 package com.google.zxing.pdf417.decoder;
 
+import com.google.zxing.FormatException;
 import com.google.zxing.NotFoundException;
 import com.google.zxing.common.BitMatrix;
 
@@ -58,7 +59,7 @@ final class BitMatrixParser {
    *
    * @return an array of codewords.
    */
-  int[] readCodewords() {
+  int[] readCodewords() throws FormatException {
     int width = bitMatrix.getDimension();
     // TODO should be a rectangular matrix
     int height = width;
@@ -183,11 +184,16 @@ final class BitMatrixParser {
    * @return the next available index into the codeword array after processing
    *         this row.
    */
-  int processRow(int[] rowCounters, int rowNumber, int rowHeight, int[] codewords, int next) {
+  int processRow(int[] rowCounters, int rowNumber, int rowHeight, int[] codewords, int next)
+      throws FormatException {
     int width = bitMatrix.getDimension();
     int columnNumber = 0;
     long symbol = 0;
     for (int i = 0; i < width; i += MODULES_IN_SYMBOL) {
+      // This happens in real life and is almost surely a rare misdecode
+      if (i + MODULES_IN_SYMBOL > rowCounters.length) {
+        throw FormatException.getFormatInstance();
+      }
       for (int mask = MODULES_IN_SYMBOL - 1; mask >= 0; mask--) {
         if (rowCounters[i + (MODULES_IN_SYMBOL - 1 - mask)] >= rowHeight >>> 1) {
           symbol |= 1L << mask;
