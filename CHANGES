@@ -232,3 +232,16 @@
   - New custom search in Android app
   - New framework for evaluating the black point of an image
   - Many many small bug fixes, refactorings, small improvements, new versions of dependencies
+
+1.5 (5 March 2010)
+  - Android app:
+    - Shopper integration
+    - Tries to activate front light on some devices
+    - Xperia et al. support with new screen sizes
+    - Translations: Dutch, Swedish, Czech, Finnish
+    - "Thinking" visualization
+  - Updated C++ port, including new Data Matrix port
+  - Updated C# port
+  - Preliminary RSS-14 support
+  - Reconceived support for various image sources and thresholding
+  - Other small bug fixes and performance improvements
