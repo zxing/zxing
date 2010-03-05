@@ -18,9 +18,8 @@ package com.google.zxing.client.j2se;
 
 import com.google.zxing.LuminanceSource;
 
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.awt.image.BufferedImageOp;
-import java.awt.image.AffineTransformOp;
 import java.awt.geom.AffineTransform;
 
 /**
@@ -129,11 +128,14 @@ public final class BufferedImageLuminanceSource extends LuminanceSource {
 
     // Rotate 90 degrees counterclockwise.
     AffineTransform transform = new AffineTransform(0.0, -1.0, 1.0, 0.0, 0.0, sourceWidth);
-    BufferedImageOp op = new AffineTransformOp(transform, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
 
     // Note width/height are flipped since we are rotating 90 degrees.
     BufferedImage rotatedImage = new BufferedImage(sourceHeight, sourceWidth, image.getType());
-    op.filter(image, rotatedImage);
+
+    // Draw the original image into rotated, via transformation
+    Graphics2D g = rotatedImage.createGraphics();
+    g.drawImage(image, transform, null);
+    g.dispose();
 
     // Maintain the cropped region, but rotate it too.
     int width = getWidth();
