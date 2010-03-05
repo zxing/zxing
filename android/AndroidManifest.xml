@@ -20,8 +20,8 @@ version to be published. The next versionCode will be 7, regardless of whether t
 versionName is 2.31, 2.4, or 3.0. -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.google.zxing.client.android"
-          android:versionName="3.2"
-          android:versionCode="45">
+          android:versionName="3.21 beta 1"
+          android:versionCode="46">
   <!-- We require Cupcake (Android 1.5) or later, but are really targeting Donut. -->
   <uses-sdk android:minSdkVersion="3"
             android:targetSdkVersion="4"/>
@@ -131,5 +131,5 @@ versionName is 2.31, 2.4, or 3.0. -->
   <uses-permission android:name="android.permission.INTERNET"/>
   <uses-permission android:name="com.android.browser.permission.READ_HISTORY_BOOKMARKS"/>
   <uses-permission android:name="android.permission.VIBRATE"/>
-  <uses-permission android:name="android.permission.FLASHLIGHT"/>  
+  <uses-permission android:name="android.permission.FLASHLIGHT"/>
 </manifest>

@@ -40,8 +40,15 @@ public final class HelpActivity extends Activity {
   private static final String TAG = HelpActivity.class.getName();
 
   private static final String[] BUGGY_MODEL_SUBSTRINGS = {"Behold II", "Pulse"};
-  private static final Uri BUGGY_URI = Uri.parse("http://code.google.com/p/zxing/wiki/FrequentlyAskedQuestions");
-  private static final String DEFAULT_URL = "file:///android_asset/html/index.html";
+  private static final Uri BUGGY_URI =
+      Uri.parse("http://code.google.com/p/zxing/wiki/FrequentlyAskedQuestions");
+
+  // Use this key and one of the values below when launching this activity via intent. If not
+  // present, the default page will be loaded.
+  public static final String REQUESTED_PAGE_KEY = "requested_page_key";
+  public static final String DEFAULT_PAGE = "index.html";
+  public static final String WHATS_NEW_PAGE = "whatsnew.html";
+  private static final String BASE_URL = "file:///android_asset/html/";
 
   private WebView webView;
   private Button backButton;
@@ -58,10 +65,11 @@ public final class HelpActivity extends Activity {
     }
   };
 
-  private final DialogInterface.OnClickListener groupsListener = new DialogInterface.OnClickListener() {
+  private final DialogInterface.OnClickListener groupsListener =
+      new DialogInterface.OnClickListener() {
     public void onClick(DialogInterface dialogInterface, int i) {
       Intent intent = new Intent(Intent.ACTION_VIEW, BUGGY_URI);
-      intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);              
+      intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
       HelpActivity.this.startActivity(intent);
     }
   };
@@ -73,15 +81,23 @@ public final class HelpActivity extends Activity {
 
     webView = (WebView)findViewById(R.id.help_contents);
     webView.setWebViewClient(new HelpClient());
+
+    Intent intent = getIntent();
     if (icicle != null) {
       webView.restoreState(icicle);
+    } else if (intent != null) {
+      String page = intent.getStringExtra(REQUESTED_PAGE_KEY);
+      if (page != null && page.length() > 0) {
+        webView.loadUrl(BASE_URL + page);
+      } else {
+        webView.loadUrl(BASE_URL + DEFAULT_PAGE);
+      }
     } else {
-      webView.loadUrl(DEFAULT_URL);
+      webView.loadUrl(BASE_URL + DEFAULT_PAGE);
     }
 
     backButton = (Button)findViewById(R.id.back_button);
     backButton.setOnClickListener(backListener);
-
     Button doneButton = (Button)findViewById(R.id.done_button);
     doneButton.setOnClickListener(doneListener);
   }
