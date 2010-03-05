@@ -561,9 +561,11 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       int lastVersion = prefs.getInt(PreferencesActivity.KEY_HELP_VERSION_SHOWN, 0);
       if (currentVersion > lastVersion) {
         prefs.edit().putInt(PreferencesActivity.KEY_HELP_VERSION_SHOWN, currentVersion).commit();
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);        
-        intent.setClassName(this, HelpActivity.class.getName());
+        Intent intent = new Intent(this, HelpActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+        // Show the default page on a clean install, and the what's new page on an upgrade.
+        String page = (lastVersion == 0) ? HelpActivity.DEFAULT_PAGE : HelpActivity.WHATS_NEW_PAGE;
+        intent.putExtra(HelpActivity.REQUESTED_PAGE_KEY, page);
         startActivity(intent);
         return true;
       }
