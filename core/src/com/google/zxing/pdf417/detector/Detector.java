@@ -115,9 +115,7 @@ public final class Detector {
 
   /**
    * Locate the vertices and the codewords area of a black blob using the Start
-   * and Stop patterns as locators. Assumes that the barcode begins in the left half
-   * of the image, and ends in the right half.
-   * TODO: Fix this assumption, allowing the barcode to be anywhere in the image.
+   * and Stop patterns as locators.
    * TODO: Scanning every row is very expensive. We should only do this for TRY_HARDER.
    *
    * @param matrix the scanned barcode image.
@@ -134,14 +132,13 @@ public final class Detector {
   private static ResultPoint[] findVertices(BitMatrix matrix) {
     int height = matrix.getHeight();
     int width = matrix.getWidth();
-    int halfWidth = width >> 1;
 
     ResultPoint[] result = new ResultPoint[8];
     boolean found = false;
 
     // Top Left
     for (int i = 0; i < height; i++) {
-      int[] loc = findGuardPattern(matrix, 0, i, halfWidth, false, START_PATTERN);
+      int[] loc = findGuardPattern(matrix, 0, i, width, false, START_PATTERN);
       if (loc != null) {
         result[0] = new ResultPoint(loc[0], i);
         result[4] = new ResultPoint(loc[1], i);
@@ -153,7 +150,7 @@ public final class Detector {
     if (found) { // Found the Top Left vertex
       found = false;
       for (int i = height - 1; i > 0; i--) {
-        int[] loc = findGuardPattern(matrix, 0, i, halfWidth, false, START_PATTERN);
+        int[] loc = findGuardPattern(matrix, 0, i, width, false, START_PATTERN);
         if (loc != null) {
           result[1] = new ResultPoint(loc[0], i);
           result[5] = new ResultPoint(loc[1], i);
@@ -166,7 +163,7 @@ public final class Detector {
     if (found) { // Found the Bottom Left vertex
       found = false;
       for (int i = 0; i < height; i++) {
-        int[] loc = findGuardPattern(matrix, halfWidth, i, halfWidth, false, STOP_PATTERN);
+        int[] loc = findGuardPattern(matrix, 0, i, width, false, STOP_PATTERN);
         if (loc != null) {
           result[2] = new ResultPoint(loc[1], i);
           result[6] = new ResultPoint(loc[0], i);
@@ -179,7 +176,7 @@ public final class Detector {
     if (found) { // Found the Top right vertex
       found = false;
       for (int i = height - 1; i > 0; i--) {
-        int[] loc = findGuardPattern(matrix, halfWidth, i, halfWidth, false, STOP_PATTERN);
+        int[] loc = findGuardPattern(matrix, 0, i, width, false, STOP_PATTERN);
         if (loc != null) {
           result[3] = new ResultPoint(loc[1], i);
           result[7] = new ResultPoint(loc[0], i);
