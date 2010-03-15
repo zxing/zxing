@@ -50,6 +50,9 @@ final class CameraManager {
   private static final int MAX_FRAME_WIDTH = 480;
   private static final int MAX_FRAME_HEIGHT = 360;
 
+  private static final int TEN_DESIRED_ZOOM = 27;
+  private static final int DESIRED_SHARPNESS = 30;
+
   private static final Pattern COMMA_PATTERN = Pattern.compile(",");
 
   private static CameraManager cameraManager;
@@ -67,7 +70,7 @@ final class CameraManager {
   private boolean previewing;
   private int previewFormat;
   private String previewFormatString;
-  private boolean useOneShotPreviewCallback;
+  private final boolean useOneShotPreviewCallback;
 
   /**
    * Preview frames are delivered here, which we pass on to the registered handler. Make sure to
@@ -327,18 +330,9 @@ final class CameraManager {
     Log.v(TAG, "Setting preview size: " + cameraResolution.x + ", " + cameraResolution.y);
     parameters.setPreviewSize(cameraResolution.x, cameraResolution.y);
 
-    // FIXME: This is a hack to turn the flash off on the Samsung Galaxy.
-    parameters.set("flash-value", 2);
-
-    // This is the standard setting to turn the flash off that all devices should honor.
-    parameters.set("flash-mode", "off");
-
-    // Set zoom to 2x if available. This helps encourage the user to pull back.
-    // Some devices like the Behold have a zoom parameter
-    parameters.set("zoom", "2.0");
-    // Most devices, like the Hero, appear to expose this zoom parameter.
-    // (I think) This means 2.0x
-    parameters.set("taking-picture-zoom", "20");
+    setFlash(parameters);
+    setZoom(parameters);
+    //setSharpness(parameters);
 
     camera.setParameters(parameters);
   }
@@ -386,7 +380,7 @@ final class CameraManager {
       previewSize = previewSize.trim();
       int dimPosition = previewSize.indexOf('x');
       if (dimPosition < 0) {
-        Log.w(TAG, "Bad preview-size");
+        Log.w(TAG, "Bad preview-size: " + previewSize);
         continue;
       }
 
@@ -396,7 +390,7 @@ final class CameraManager {
         newX = Integer.parseInt(previewSize.substring(0, dimPosition));
         newY = Integer.parseInt(previewSize.substring(dimPosition + 1));
       } catch (NumberFormatException nfe) {
-        Log.w(TAG, "Bad preview-size");
+        Log.w(TAG, "Bad preview-size: " + previewSize);
         continue;
       }
 
@@ -419,4 +413,74 @@ final class CameraManager {
     return null;
   }
 
+  private void setFlash(Camera.Parameters parameters) {
+    // FIXME: This is a hack to turn the flash off on the Samsung Galaxy.
+    parameters.set("flash-value", 2);
+    // This is the standard setting to turn the flash off that all devices should honor.
+    parameters.set("flash-mode", "off");
+  }
+
+  private void setZoom(Camera.Parameters parameters) {
+
+    String zoomSupportedString = parameters.get("zoom-supported");
+    if (zoomSupportedString != null && !Boolean.parseBoolean(zoomSupportedString)) {
+      return;
+    }
+
+    int tenDesiredZoom = TEN_DESIRED_ZOOM;
+
+    String maxZoomString = parameters.get("max-zoom");
+    if (maxZoomString != null) {
+      try {
+        int tenMaxZoom = (int) (10.0 * Double.parseDouble(maxZoomString));
+        if (tenDesiredZoom > tenMaxZoom) {
+          tenDesiredZoom = tenMaxZoom;
+        }
+      } catch (NumberFormatException nfe) {
+        Log.w(TAG, "Bad max-zoom: " + maxZoomString);
+      }
+    }
+
+    String takingPictureZoomString = parameters.get("taking-picture-zoom-max");
+    if (takingPictureZoomString != null) {
+      try {
+        int tenMaxZoom = Integer.parseInt(takingPictureZoomString);
+        if (tenDesiredZoom > tenMaxZoom) {
+          tenDesiredZoom = tenMaxZoom;
+        }
+      } catch (NumberFormatException nfe) {
+        Log.w(TAG, "Bad taking-picture-zoom-max: " + takingPictureZoomString);
+      }
+    }
+
+
+    // Set zoom. This helps encourage the user to pull back.
+    // Some devices like the Behold have a zoom parameter
+    parameters.set("zoom", String.valueOf(tenDesiredZoom / 10.0));
+
+    // Most devices, like the Hero, appear to expose this zoom parameter.
+    // It takes on values like "27" which appears to mean 2.7x zoom
+    parameters.set("taking-picture-zoom", tenDesiredZoom);
+  }
+
+  /*
+  private void setSharpness(Camera.Parameters parameters) {
+
+    int desiredSharpness = DESIRED_SHARPNESS;
+
+    String maxSharpnessString = parameters.get("sharpness-max");
+    if (maxSharpnessString != null) {
+      try {
+        int maxSharpness = Integer.parseInt(maxSharpnessString);
+        if (desiredSharpness > maxSharpness) {
+          desiredSharpness = maxSharpness;
+        }
+      } catch (NumberFormatException nfe) {
+        Log.w(TAG, "Bad sharpness-max: " + maxSharpnessString);
+      }
+    }
+
+    parameters.set("sharpness", desiredSharpness);
+  }
+   */
 }
