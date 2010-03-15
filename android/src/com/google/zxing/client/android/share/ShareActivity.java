@@ -97,7 +97,7 @@ public final class ShareActivity extends Activity {
         Intent intent = new Intent(Intents.Encode.ACTION);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
         intent.putExtra(Intents.Encode.TYPE, Contents.Type.TEXT);
-        intent.putExtra(Intents.Encode.DATA, clipboard.getText());
+        intent.putExtra(Intents.Encode.DATA, clipboard.getText().toString());
         intent.putExtra(Intents.Encode.FORMAT, Contents.Format.QR_CODE);
         startActivity(intent);
       }
