@@ -441,26 +441,30 @@ final class CameraManager {
       }
     }
 
-    String takingPictureZoomString = parameters.get("taking-picture-zoom-max");
-    if (takingPictureZoomString != null) {
+    String takingPictureZoomMaxString = parameters.get("taking-picture-zoom-max");
+    if (takingPictureZoomMaxString != null) {
       try {
-        int tenMaxZoom = Integer.parseInt(takingPictureZoomString);
+        int tenMaxZoom = Integer.parseInt(takingPictureZoomMaxString);
         if (tenDesiredZoom > tenMaxZoom) {
           tenDesiredZoom = tenMaxZoom;
         }
       } catch (NumberFormatException nfe) {
-        Log.w(TAG, "Bad taking-picture-zoom-max: " + takingPictureZoomString);
+        Log.w(TAG, "Bad taking-picture-zoom-max: " + takingPictureZoomMaxString);
       }
     }
 
 
     // Set zoom. This helps encourage the user to pull back.
     // Some devices like the Behold have a zoom parameter
-    parameters.set("zoom", String.valueOf(tenDesiredZoom / 10.0));
+    if (maxZoomString != null) {
+      parameters.set("zoom", String.valueOf(tenDesiredZoom / 10.0));
+    }
 
     // Most devices, like the Hero, appear to expose this zoom parameter.
     // It takes on values like "27" which appears to mean 2.7x zoom
-    parameters.set("taking-picture-zoom", tenDesiredZoom);
+    if (takingPictureZoomMaxString != null) {    
+      parameters.set("taking-picture-zoom", tenDesiredZoom);
+    }
   }
 
   /*
