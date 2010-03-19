@@ -68,7 +68,7 @@ public final class MatrixToImageWriter {
     BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
     for (int x = 0; x < width; x++) {
       for (int y = 0; y < height; y++) {
-        image.setRGB(x, y, matrix.get(x, y) == 0 ? WHITE : BLACK);
+        image.setRGB(x, y, matrix.get(x, y) == 0 ? BLACK : WHITE);
       }
     }
     return image;
