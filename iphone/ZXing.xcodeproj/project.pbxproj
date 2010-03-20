@@ -181,6 +181,15 @@
 		86C045D81127E58E00F3F43B /* UPCAReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 86C045C81127E58E00F3F43B /* UPCAReader.cpp */; };
 		86C045D91127E58E00F3F43B /* UPCEANReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 86C045CA1127E58E00F3F43B /* UPCEANReader.cpp */; };
 		86C045DA1127E58E00F3F43B /* UPCEReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 86C045CC1127E58E00F3F43B /* UPCEReader.cpp */; };
+		AD38DE961154C8D2006BD46A /* DataMatrixReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD38DE821154C8D2006BD46A /* DataMatrixReader.cpp */; };
+		AD38DE971154C8D2006BD46A /* BitMatrixParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD38DE851154C8D2006BD46A /* BitMatrixParser.cpp */; };
+		AD38DE981154C8D2006BD46A /* DataBlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD38DE871154C8D2006BD46A /* DataBlock.cpp */; };
+		AD38DE991154C8D2006BD46A /* DecodedBitStreamParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD38DE891154C8D2006BD46A /* DecodedBitStreamParser.cpp */; };
+		AD38DE9A1154C8D2006BD46A /* Decoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD38DE8B1154C8D2006BD46A /* Decoder.cpp */; };
+		AD38DE9B1154C8D2006BD46A /* CornerPoint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD38DE8E1154C8D2006BD46A /* CornerPoint.cpp */; };
+		AD38DE9C1154C8D2006BD46A /* Detector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD38DE901154C8D2006BD46A /* Detector.cpp */; };
+		AD38DE9D1154C8D2006BD46A /* MonochromeRectangleDetector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD38DE921154C8D2006BD46A /* MonochromeRectangleDetector.cpp */; };
+		AD38DE9E1154C8D2006BD46A /* Version.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD38DE941154C8D2006BD46A /* Version.cpp */; };
 		AD86BA5910BBED4A0007D49B /* BarcodeFormat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD86B9FB10BBED4A0007D49B /* BarcodeFormat.cpp */; };
 		AD86BA5A10BBED4A0007D49B /* BarcodeFormat.h in Headers */ = {isa = PBXBuildFile; fileRef = AD86B9FC10BBED4A0007D49B /* BarcodeFormat.h */; };
 		AD86BA5B10BBED4A0007D49B /* Binarizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD86B9FD10BBED4A0007D49B /* Binarizer.cpp */; };
@@ -655,6 +664,24 @@
 		86C045CC1127E58E00F3F43B /* UPCEReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UPCEReader.cpp; sourceTree = "<group>"; };
 		86C045CD1127E58E00F3F43B /* UPCEReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPCEReader.h; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AD38DE821154C8D2006BD46A /* DataMatrixReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DataMatrixReader.cpp; sourceTree = "<group>"; };
+		AD38DE831154C8D2006BD46A /* DataMatrixReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataMatrixReader.h; sourceTree = "<group>"; };
+		AD38DE851154C8D2006BD46A /* BitMatrixParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BitMatrixParser.cpp; sourceTree = "<group>"; };
+		AD38DE861154C8D2006BD46A /* BitMatrixParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BitMatrixParser.h; sourceTree = "<group>"; };
+		AD38DE871154C8D2006BD46A /* DataBlock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DataBlock.cpp; sourceTree = "<group>"; };
+		AD38DE881154C8D2006BD46A /* DataBlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataBlock.h; sourceTree = "<group>"; };
+		AD38DE891154C8D2006BD46A /* DecodedBitStreamParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DecodedBitStreamParser.cpp; sourceTree = "<group>"; };
+		AD38DE8A1154C8D2006BD46A /* DecodedBitStreamParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DecodedBitStreamParser.h; sourceTree = "<group>"; };
+		AD38DE8B1154C8D2006BD46A /* Decoder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Decoder.cpp; sourceTree = "<group>"; };
+		AD38DE8C1154C8D2006BD46A /* Decoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Decoder.h; sourceTree = "<group>"; };
+		AD38DE8E1154C8D2006BD46A /* CornerPoint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CornerPoint.cpp; sourceTree = "<group>"; };
+		AD38DE8F1154C8D2006BD46A /* CornerPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CornerPoint.h; sourceTree = "<group>"; };
+		AD38DE901154C8D2006BD46A /* Detector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Detector.cpp; sourceTree = "<group>"; };
+		AD38DE911154C8D2006BD46A /* Detector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Detector.h; sourceTree = "<group>"; };
+		AD38DE921154C8D2006BD46A /* MonochromeRectangleDetector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MonochromeRectangleDetector.cpp; sourceTree = "<group>"; };
+		AD38DE931154C8D2006BD46A /* MonochromeRectangleDetector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MonochromeRectangleDetector.h; sourceTree = "<group>"; };
+		AD38DE941154C8D2006BD46A /* Version.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Version.cpp; sourceTree = "<group>"; };
+		AD38DE951154C8D2006BD46A /* Version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Version.h; sourceTree = "<group>"; };
 		AD86B9FB10BBED4A0007D49B /* BarcodeFormat.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BarcodeFormat.cpp; sourceTree = "<group>"; };
 		AD86B9FC10BBED4A0007D49B /* BarcodeFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BarcodeFormat.h; sourceTree = "<group>"; };
 		AD86B9FD10BBED4A0007D49B /* Binarizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Binarizer.cpp; sourceTree = "<group>"; };
@@ -1386,9 +1413,51 @@
 			path = oned;
 			sourceTree = "<group>";
 		};
+		AD38DE811154C8D2006BD46A /* datamatrix */ = {
+			isa = PBXGroup;
+			children = (
+				AD38DE821154C8D2006BD46A /* DataMatrixReader.cpp */,
+				AD38DE831154C8D2006BD46A /* DataMatrixReader.h */,
+				AD38DE841154C8D2006BD46A /* decoder */,
+				AD38DE8D1154C8D2006BD46A /* detector */,
+				AD38DE941154C8D2006BD46A /* Version.cpp */,
+				AD38DE951154C8D2006BD46A /* Version.h */,
+			);
+			path = datamatrix;
+			sourceTree = "<group>";
+		};
+		AD38DE841154C8D2006BD46A /* decoder */ = {
+			isa = PBXGroup;
+			children = (
+				AD38DE851154C8D2006BD46A /* BitMatrixParser.cpp */,
+				AD38DE861154C8D2006BD46A /* BitMatrixParser.h */,
+				AD38DE871154C8D2006BD46A /* DataBlock.cpp */,
+				AD38DE881154C8D2006BD46A /* DataBlock.h */,
+				AD38DE891154C8D2006BD46A /* DecodedBitStreamParser.cpp */,
+				AD38DE8A1154C8D2006BD46A /* DecodedBitStreamParser.h */,
+				AD38DE8B1154C8D2006BD46A /* Decoder.cpp */,
+				AD38DE8C1154C8D2006BD46A /* Decoder.h */,
+			);
+			path = decoder;
+			sourceTree = "<group>";
+		};
+		AD38DE8D1154C8D2006BD46A /* detector */ = {
+			isa = PBXGroup;
+			children = (
+				AD38DE8E1154C8D2006BD46A /* CornerPoint.cpp */,
+				AD38DE8F1154C8D2006BD46A /* CornerPoint.h */,
+				AD38DE901154C8D2006BD46A /* Detector.cpp */,
+				AD38DE911154C8D2006BD46A /* Detector.h */,
+				AD38DE921154C8D2006BD46A /* MonochromeRectangleDetector.cpp */,
+				AD38DE931154C8D2006BD46A /* MonochromeRectangleDetector.h */,
+			);
+			path = detector;
+			sourceTree = "<group>";
+		};
 		AD86B9FA10BBED4A0007D49B /* zxing */ = {
 			isa = PBXGroup;
 			children = (
+				AD38DE811154C8D2006BD46A /* datamatrix */,
 				86C045B31127E58E00F3F43B /* MultiFormatReader.cpp */,
 				86C045B41127E58E00F3F43B /* MultiFormatReader.h */,
 				86C045B51127E58E00F3F43B /* oned */,
@@ -1794,6 +1863,15 @@
 				86C045D81127E58E00F3F43B /* UPCAReader.cpp in Sources */,
 				86C045D91127E58E00F3F43B /* UPCEANReader.cpp in Sources */,
 				86C045DA1127E58E00F3F43B /* UPCEReader.cpp in Sources */,
+				AD38DE961154C8D2006BD46A /* DataMatrixReader.cpp in Sources */,
+				AD38DE971154C8D2006BD46A /* BitMatrixParser.cpp in Sources */,
+				AD38DE981154C8D2006BD46A /* DataBlock.cpp in Sources */,
+				AD38DE991154C8D2006BD46A /* DecodedBitStreamParser.cpp in Sources */,
+				AD38DE9A1154C8D2006BD46A /* Decoder.cpp in Sources */,
+				AD38DE9B1154C8D2006BD46A /* CornerPoint.cpp in Sources */,
+				AD38DE9C1154C8D2006BD46A /* Detector.cpp in Sources */,
+				AD38DE9D1154C8D2006BD46A /* MonochromeRectangleDetector.cpp in Sources */,
+				AD38DE9E1154C8D2006BD46A /* Version.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
