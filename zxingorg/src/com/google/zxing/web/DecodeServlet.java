@@ -28,16 +28,15 @@ import com.google.zxing.Reader;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
-import com.google.zxing.client.result.ParsedResult;
-import com.google.zxing.client.result.ResultParser;
 import com.google.zxing.common.GlobalHistogramBinarizer;
 import com.google.zxing.common.HybridBinarizer;
 
+import com.google.zxing.multi.GenericMultipleBarcodeReader;
+import com.google.zxing.multi.MultipleBarcodeReader;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpMessage;
 import org.apache.http.HttpResponse;
@@ -66,6 +65,8 @@ import java.net.SocketException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.List;
@@ -258,36 +259,58 @@ public final class DecodeServlet extends HttpServlet {
     Reader reader = new MultiFormatReader();
     LuminanceSource source = new BufferedImageLuminanceSource(image);
     BinaryBitmap bitmap = new BinaryBitmap(new GlobalHistogramBinarizer(source));
-    Result result = null;
+    Collection<Result> results = new ArrayList<Result>(1);
     ReaderException savedException = null;
 
     try {
-      // Look for pure barcode
-      result = reader.decode(bitmap, HINTS_PURE);
+      // Look for multiple barcodes
+      MultipleBarcodeReader multiReader = new GenericMultipleBarcodeReader(reader);
+      Result[] theResults = multiReader.decodeMultiple(bitmap, HINTS);
+      if (theResults != null) {
+        results.addAll(Arrays.asList(theResults));
+      }
     } catch (ReaderException re) {
       savedException = re;
     }
 
-    if (result == null) {
+    if (results.isEmpty()) {
       try {
-        // Look for normal barcode in photo
-        result = reader.decode(bitmap, HINTS);
+        // Look for pure barcode
+        Result theResult = reader.decode(bitmap, HINTS_PURE);
+        if (theResult != null) {
+          results.add(theResult);
+        }
       } catch (ReaderException re) {
         savedException = re;
       }
     }
 
-    if (result == null) {
+    if (results.isEmpty()) {
+      try {
+        // Look for normal barcode in photo
+        Result theResult = reader.decode(bitmap, HINTS);
+        if (theResult != null) {
+          results.add(theResult);
+        }
+      } catch (ReaderException re) {
+        savedException = re;
+      }
+    }
+
+    if (results.isEmpty()) {
       try {
         // Try again with other binarizer
         BinaryBitmap hybridBitmap = new BinaryBitmap(new HybridBinarizer(source));
-        result = reader.decode(hybridBitmap, HINTS);
+        Result theResult = reader.decode(hybridBitmap, HINTS);
+        if (theResult != null) {
+          results.add(theResult);
+        }
       } catch (ReaderException re) {
         savedException = re;
       }
     }
 
-    if (result == null) {
+    if (results.isEmpty()) {
       handleException(savedException, response);
       return;
     }
@@ -297,32 +320,15 @@ public final class DecodeServlet extends HttpServlet {
       response.setCharacterEncoding("UTF8");
       Writer out = new OutputStreamWriter(response.getOutputStream(), "UTF8");
       try {
-        out.write(result.getText());
+        for (Result result : results) {
+          out.write(result.getText());
+          out.write('\n');
+        }
       } finally {
         out.close();
       }
     } else {
-      request.setAttribute("result", result);
-      byte[] rawBytes = result.getRawBytes();
-      if (rawBytes != null) {
-        request.setAttribute("rawBytesString", arrayToString(rawBytes));
-      } else {
-        request.setAttribute("rawBytesString", "(Not applicable)");
-      }
-      String text = result.getText();
-      if (text != null) {
-        request.setAttribute("text", StringEscapeUtils.escapeXml(text));
-      } else {
-        request.setAttribute("text", "(Not applicable)");
-      }
-      ParsedResult parsedResult = ResultParser.parseResult(result);
-      request.setAttribute("parsedResult", parsedResult);
-      String displayResult = parsedResult.getDisplayResult();
-      if (displayResult != null) {
-        request.setAttribute("displayResult", StringEscapeUtils.escapeXml(displayResult));
-      } else {
-        request.setAttribute("displayResult", "(Not applicable)");
-      }
+      request.setAttribute("results", results);
       request.getRequestDispatcher("decoderesult.jspx").forward(request, response);
     }
   }
@@ -352,28 +358,6 @@ public final class DecodeServlet extends HttpServlet {
       }
     }
     return true;
-  }
-
-  private static String arrayToString(byte[] bytes) {
-    int length = bytes.length;
-    StringBuilder result = new StringBuilder(length << 2);
-    int i = 0;
-    while (i < length) {
-      int max = Math.min(i + 8, length);
-      for (int j = i; j < max; j++) {
-        int value = bytes[j] & 0xFF;
-        result.append(Integer.toHexString(value / 16));
-        result.append(Integer.toHexString(value % 16));
-        result.append(' ');
-      }
-      result.append('\n');
-      i += 8;
-    }
-    for (int j = i - 8; j < length; j++) {
-      result.append(Integer.toHexString(bytes[j] & 0xFF));
-      result.append(' ');
-    }
-    return result.toString();
   }
 
   @Override

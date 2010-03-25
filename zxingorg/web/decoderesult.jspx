@@ -16,10 +16,37 @@
  -->
 <!-- Author: Sean Owen -->
 <jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="1.2">
+<jsp:directive.page import="
+  java.util.List,
+  com.google.zxing.Result,
+  com.google.zxing.client.result.ResultParser,
+  com.google.zxing.client.result.ParsedResult,
+  org.apache.commons.lang.StringEscapeUtils"/>
+  <jsp:declaration>
+  private static String arrayToString(byte[] bytes) {
+    int length = bytes.length;
+    StringBuilder result = new StringBuilder(length &lt;&lt; 2);
+    int i = 0;
+    while (i &lt; length) {
+      int max = Math.min(i + 8, length);
+      for (int j = i; j &lt; max; j++) {
+        int value = bytes[j] &amp; 0xFF;
+        result.append(Integer.toHexString(value / 16));
+        result.append(Integer.toHexString(value % 16));
+        result.append(' ');
+      }
+      result.append('\n');
+      i += 8;
+    }
+    for (int j = i - 8; j &lt; length; j++) {
+      result.append(Integer.toHexString(bytes[j] &amp; 0xFF));
+      result.append(' ');
+    }
+    return result.toString();
+  }
+</jsp:declaration>
 <jsp:directive.page contentType="text/html" session="false"/>
 <jsp:scriptlet>response.setHeader("Cache-Control", "no-cache");</jsp:scriptlet>
-<jsp:useBean id="result" scope="request" type="com.google.zxing.Result"/>
-<jsp:useBean id="parsedResult" scope="request" type="com.google.zxing.client.result.ParsedResult"/>
 <jsp:text><![CDATA[<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">]]></jsp:text>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
   <head>
@@ -31,28 +58,58 @@
   </head>
   <body>
     <div id="header"><h1><img src="zxing-icon.png" height="32" width="32" alt=""/> Decode Succeeded</h1></div>
+    <jsp:scriptlet>
+      for (Result result : (List&lt;Result&gt;) request.getAttribute("results")) {
+        ParsedResult parsedResult = ResultParser.parseResult(result);
+
+        String text = result.getText();
+        if (text == null) {
+          text = "(Not applicable)";
+        } else {
+          text = StringEscapeUtils.escapeXml(text);
+        }
+
+        byte[] rawBytes = result.getRawBytes();
+        String rawBytesString;
+        if (rawBytes == null) {
+          rawBytesString = "(Not applicable)";
+        } else {
+          rawBytesString = arrayToString(rawBytes);
+        }
+
+        String displayResult = parsedResult.getDisplayResult();
+        if (displayResult == null) {
+          displayResult = "(Not applicable)";
+        } else {
+          displayResult = StringEscapeUtils.escapeXml(displayResult);
+        }
+    </jsp:scriptlet>
     <table>
       <tr>
         <td>Raw text</td>
-        <td><jsp:expression>request.getAttribute("text")</jsp:expression></td>
+        <td><jsp:expression>text</jsp:expression></td>
       </tr>
       <tr>
         <td>Raw bytes</td>
-        <td><jsp:expression>request.getAttribute("rawBytesString")</jsp:expression></td>
+        <td><jsp:expression>rawBytesString</jsp:expression></td>
       </tr>
       <tr>
         <td>Barcode format</td>
-        <td><jsp:getProperty name="result" property="barcodeFormat"/></td>
+        <td><jsp:expression>result.getBarcodeFormat()</jsp:expression></td>
       </tr>
       <tr>
         <td>Parsed Result Type</td>
-        <td><jsp:getProperty name="parsedResult" property="type"/></td>
+        <td><jsp:expression>parsedResult.getType()</jsp:expression></td>
       </tr>
       <tr>
         <td>Parsed Result</td>
-        <td><jsp:expression>request.getAttribute("displayResult")</jsp:expression></td>
+        <td><jsp:expression>displayResult</jsp:expression></td>
       </tr>
     </table>
+    <hr/>
+    <jsp:scriptlet>
+      }
+    </jsp:scriptlet>
     <div id="footer"><p>Copyright 2008 and onwards ZXing authors</p></div>
     <jsp:include page="analytics.jspx"/>
   </body>
