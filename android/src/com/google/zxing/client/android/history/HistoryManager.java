@@ -27,6 +27,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Message;
 
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -46,7 +48,14 @@ public final class HistoryManager {
   private static final int MAX_ITEMS = 50;
   private static final String[] TEXT_COL_PROJECTION = { DBHelper.TEXT_COL };
   private static final String[] TEXT_FORMAT_COL_PROJECTION = { DBHelper.TEXT_COL, DBHelper.FORMAT_COL };
+  private static final String[] EXPORT_COL_PROJECTION = {
+      DBHelper.TEXT_COL,
+      DBHelper.DISPLAY_COL,
+      DBHelper.FORMAT_COL,
+      DBHelper.TIMESTAMP_COL,
+  };
   private static final String[] ID_COL_PROJECTION = { DBHelper.ID_COL };
+  private static final DateFormat EXPORT_DATE_TIME_FORMAT = DateFormat.getDateTimeInstance();
 
   private final CaptureActivity activity;
 
@@ -91,12 +100,12 @@ public final class HistoryManager {
         if (i == dialogItems.length - 1) {
           clearHistory();
         } else if (i == dialogItems.length - 2) {
-          String history = buildHistory();
+          CharSequence history = buildHistory();
           Intent intent = new Intent(Intent.ACTION_SEND, Uri.parse("mailto:"));
           intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);          
           intent.putExtra(Intent.EXTRA_SUBJECT, res.getString(R.string.history_email_title));
           intent.putExtra(Intent.EXTRA_TEXT, history);
-          intent.setType("text/plain");
+          intent.setType("text/csv");
           activity.startActivity(intent);
         } else {
           Result result = items.get(i);
@@ -167,18 +176,38 @@ public final class HistoryManager {
     }
   }
 
-  private String buildHistory() {
-    StringBuilder historyText = new StringBuilder();
+  /**
+   * <p>Builds a text representation of the scanning history. Each scan is encoded on one
+   * line, terminated by a line break (\n). The values in each line are comma-separated,
+   * and double-quoted. Double-quotes within values are escaped with a sequence of two
+   * double-quotes. The fields output are:</p>
+   *
+   * <ul>
+   *  <li>Raw text</li>
+   *  <li>Display text</li>
+   *  <li>Format (e.g. QR_CODE)</li>
+   *  <li>Timestamp</li>
+   *  <li>Formatted version of timestamp</li>
+   * </ul>
+   */
+  private CharSequence buildHistory() {
+    StringBuilder historyText = new StringBuilder(1000);
     SQLiteOpenHelper helper = new DBHelper(activity);
     SQLiteDatabase db = helper.getReadableDatabase();
     Cursor cursor = null;
     try {
       cursor = db.query(DBHelper.TABLE_NAME,
-                        TEXT_COL_PROJECTION,
+                        EXPORT_COL_PROJECTION,
                         null, null, null, null,
                         DBHelper.TIMESTAMP_COL + " DESC");
       while (cursor.moveToNext()) {
-        historyText.append(cursor.getString(0)).append('\n');
+        for (int col = 0; col < EXPORT_COL_PROJECTION.length; col++) {
+          historyText.append('"').append(massageHistoryField(cursor.getString(col)));
+        }
+        // Add timestamp again, formatted
+        long timestamp = cursor.getLong(EXPORT_COL_PROJECTION.length - 1);
+        historyText.append('"').append(massageHistoryField(EXPORT_DATE_TIME_FORMAT.format(new Date(timestamp))))
+            .append('"').append('\n');
       }
     } finally {
       if (cursor != null) {
@@ -186,7 +215,11 @@ public final class HistoryManager {
       }
       db.close();
     }
-    return historyText.toString();
+    return historyText;
+  }
+
+  private static String massageHistoryField(String value) {
+    return value.replace("\"","\"\"");
   }
 
   void clearHistory() {
