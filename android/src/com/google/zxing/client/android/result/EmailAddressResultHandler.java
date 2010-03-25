@@ -52,7 +52,7 @@ public final class EmailAddressResultHandler extends ResultHandler {
     EmailAddressParsedResult emailResult = (EmailAddressParsedResult) getResult();
     switch (index) {
       case 0:
-        sendEmailFromUri(emailResult.getMailtoURI(), null, null);
+        sendEmailFromUri(emailResult.getMailtoURI(), emailResult.getEmailAddress(), null, null);
         break;
       case 1:
         String[] addresses = new String[1];
