@@ -206,16 +206,19 @@ public abstract class ResultHandler {
   }
 
   final void shareByEmail(String contents) {
-    sendEmailFromUri("mailto:", activity.getString(R.string.msg_share_subject_line), contents);
+    sendEmailFromUri("mailto:", null, activity.getString(R.string.msg_share_subject_line), contents);
   }
 
   final void sendEmail(String address, String subject, String body) {
-    sendEmailFromUri("mailto:" + address, subject, body);
+    sendEmailFromUri("mailto:" + address, address, subject, body);
   }
 
   // Use public Intent fields rather than private GMail app fields to specify subject and body.
-  final void sendEmailFromUri(String uri, String subject, String body) {
+  final void sendEmailFromUri(String uri, String email, String subject, String body) {
     Intent intent = new Intent(Intent.ACTION_SEND, Uri.parse(uri));
+    if (email != null) {
+      intent.putExtra(Intent.EXTRA_EMAIL, new String[] {email});
+    }
     putExtra(intent, Intent.EXTRA_SUBJECT, subject);
     putExtra(intent, Intent.EXTRA_TEXT, body);
     intent.setType("text/plain");
