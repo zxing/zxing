@@ -33,7 +33,7 @@ import java.util.Hashtable;
  */
 public final class Code128Reader extends OneDReader {
 
-  private static final int[][] CODE_PATTERNS = {
+  static final int[][] CODE_PATTERNS = {
       {2, 1, 2, 2, 2, 2}, // 0
       {2, 2, 2, 1, 2, 2},
       {2, 2, 2, 2, 2, 1},
