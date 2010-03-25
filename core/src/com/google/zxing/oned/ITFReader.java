@@ -63,7 +63,7 @@ public final class ITFReader extends OneDReader {
   /**
    * Patterns of Wide / Narrow lines to indicate each digit
    */
-  private static final int[][] PATTERNS = {
+  static final int[][] PATTERNS = {
       {N, N, W, W, N}, // 0
       {W, N, N, N, W}, // 1
       {N, W, N, N, W}, // 2
