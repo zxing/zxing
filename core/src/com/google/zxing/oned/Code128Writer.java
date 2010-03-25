@@ -19,7 +19,7 @@ package com.google.zxing.oned;
 import java.util.Hashtable;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
-import com.google.zxing.common.BitMatrix;
+import com.google.zxing.common.ByteMatrix;
 
 /**
  * This object renders a CODE128 code as a {@link BitMatrix}.
@@ -28,7 +28,7 @@ import com.google.zxing.common.BitMatrix;
  */
 public final class Code128Writer extends UPCEANWriter {
 
-	  public BitMatrix encode(String contents,
+	  public ByteMatrix encode(String contents,
                             BarcodeFormat format,
                             int width,
                             int height,

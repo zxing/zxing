@@ -19,7 +19,7 @@ package com.google.zxing.oned;
 import java.util.Hashtable;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
-import com.google.zxing.common.BitMatrix;
+import com.google.zxing.common.ByteMatrix;
 
 /**
  * This object renders a CODE39 code as a {@link BitMatrix}.
@@ -28,7 +28,7 @@ import com.google.zxing.common.BitMatrix;
  */
 public final class Code39Writer extends UPCEANWriter {
 
-	  public BitMatrix encode(String contents, BarcodeFormat format, int width, int height,
+	  public ByteMatrix encode(String contents, BarcodeFormat format, int width, int height,
 	      Hashtable hints) throws WriterException {
 	    if (format != BarcodeFormat.CODE_39) {
 	      throw new IllegalArgumentException("Can only encode CODE_39, but got " + format);
