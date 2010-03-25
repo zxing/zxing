@@ -42,7 +42,7 @@ import java.util.Vector;
  */
 public final class GenericMultipleBarcodeReader implements MultipleBarcodeReader {
 
-  private static final int MIN_DIMENSION_TO_RECUR = 30;
+  private static final int MIN_DIMENSION_TO_RECUR = 100;
 
   private final Reader delegate;
 
