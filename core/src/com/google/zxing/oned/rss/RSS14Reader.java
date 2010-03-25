@@ -25,6 +25,7 @@ import com.google.zxing.ResultPointCallback;
 import com.google.zxing.common.BitArray;
 import com.google.zxing.oned.OneDReader;
 
+import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
 
@@ -80,27 +81,46 @@ public final class RSS14Reader extends OneDReader {
 
   public Result decodeRow(int rowNumber, BitArray row, Hashtable hints) throws NotFoundException {
     Pair leftPair = decodePair(row, false, rowNumber, hints);
-    if (leftPair != null) {
-      possibleLeftPairs.addElement(leftPair);
-    }
+    addOrTally(possibleLeftPairs, leftPair);
     row.reverse();
     Pair rightPair = decodePair(row, true, rowNumber, hints);
-    if (rightPair != null) {
-      possibleRightPairs.addElement(rightPair);
-    }
+    addOrTally(possibleRightPairs, rightPair);
     row.reverse();
     int numLeftPairs = possibleLeftPairs.size();
     int numRightPairs = possibleRightPairs.size();
     for (int l = 0; l < numLeftPairs; l++) {
       Pair left = (Pair) possibleLeftPairs.elementAt(l);
-      for (int r = 0; r < numRightPairs; r++) {
-        Pair right = (Pair) possibleRightPairs.elementAt(r);
-        if (checkChecksum(left, right)) {
-          return constructResult(left, right);
+      if (left.getCount() > 1) {
+        for (int r = 0; r < numRightPairs; r++) {
+          Pair right = (Pair) possibleRightPairs.elementAt(r);
+          if (right.getCount() > 1) {
+            if (checkChecksum(left, right)) {
+              return constructResult(left, right);
+            }
+          }
         }
       }
     }
     throw NotFoundException.getNotFoundInstance();
+  }
+
+  private static void addOrTally(Vector possiblePairs, Pair pair) {
+    if (pair == null) {
+      return;
+    }
+    Enumeration e = possiblePairs.elements();
+    boolean found = false;
+    while (e.hasMoreElements()) {
+      Pair other = (Pair) e.nextElement();
+      if (other.getValue() == pair.getValue()) {
+        other.incrementCount();
+        found = true;
+        break;
+      }
+    }
+    if (!found) {
+      possiblePairs.addElement(pair);
+    }
   }
 
   public void reset() {

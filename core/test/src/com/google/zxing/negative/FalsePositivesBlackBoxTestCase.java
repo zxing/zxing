@@ -29,8 +29,8 @@ public final class FalsePositivesBlackBoxTestCase extends AbstractNegativeBlackB
     super("test/data/blackbox/falsepositives");
     addTest(2, 0.0f);
     addTest(0, 90.0f);
-    addTest(0, 180.0f);
-    addTest(0, 270.0f);
+    addTest(1, 180.0f);
+    addTest(1, 270.0f);
   }
 
 }
