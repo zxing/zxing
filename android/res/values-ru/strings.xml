@@ -64,6 +64,7 @@
   <string name="msg_default_mms_subject">Привет</string>
   <string name="msg_default_status">Чтобы сканировать штрих-код, поместите его в прямоугольник видоискателя.</string>
   <string name="msg_default_type">Тип</string>
+  <string name="msg_default_time">Время</string>
   <string name="msg_encode_barcode_failed">Не получилось сгенерировать запрошенный штрих-код.</string>
   <string name="msg_encode_contents_failed">Не могу закодировать штрих-код от источник данных.</string>
   <string name="msg_encode_in_progress">Генерация штрих-кода\u2026</string>

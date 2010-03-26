@@ -30,11 +30,20 @@ public final class Result {
   private final ResultPoint[] resultPoints;
   private final BarcodeFormat format;
   private Hashtable resultMetadata;
+  private final long timestamp;
 
   public Result(String text,
                 byte[] rawBytes,
                 ResultPoint[] resultPoints,
                 BarcodeFormat format) {
+    this(text, rawBytes, resultPoints, format, System.currentTimeMillis());
+  }
+
+  public Result(String text,
+                byte[] rawBytes,
+                ResultPoint[] resultPoints,
+                BarcodeFormat format,
+                long timestamp) {
     if (text == null && rawBytes == null) {
       throw new IllegalArgumentException("Text and bytes are null");
     }
@@ -43,6 +52,7 @@ public final class Result {
     this.resultPoints = resultPoints;
     this.format = format;
     this.resultMetadata = null;
+    this.timestamp = timestamp;
   }
 
   /**
@@ -91,12 +101,16 @@ public final class Result {
     resultMetadata.put(type, value);
   }
 
+  public long getTimestamp() {
+    return timestamp;
+  }
+
   public String toString() {
     if (text == null) {
       return "[" + rawBytes.length + " bytes]";
     } else {
       return text;
-  }
+    }
   }
 
 }

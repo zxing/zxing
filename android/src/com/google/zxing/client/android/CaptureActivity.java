@@ -66,6 +66,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.Vector;
 import java.util.regex.Pattern;
 
@@ -474,8 +476,15 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
     ResultHandler resultHandler = ResultHandlerFactory.makeResultHandler(this, rawResult);
     TextView typeTextView = (TextView) findViewById(R.id.type_text_view);
+    typeTextView.setVisibility(View.VISIBLE);
     typeTextView.setText(getString(R.string.msg_default_type) + ": " +
         resultHandler.getType().toString());
+
+    DateFormat formatter = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
+    String formattedTime = formatter.format(new Date(rawResult.getTimestamp()));
+    TextView timeTextView = (TextView) findViewById(R.id.time_text_view);
+    timeTextView.setVisibility(View.VISIBLE);
+    timeTextView.setText(getString(R.string.msg_default_time) + ": " + formattedTime);
 
     TextView contentsTextView = (TextView) findViewById(R.id.contents_text_view);
     CharSequence title = getString(resultHandler.getDisplayTitle());
