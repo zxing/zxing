@@ -47,7 +47,11 @@ public final class HistoryManager {
 
   private static final int MAX_ITEMS = 50;
   private static final String[] TEXT_COL_PROJECTION = { DBHelper.TEXT_COL };
-  private static final String[] TEXT_FORMAT_COL_PROJECTION = { DBHelper.TEXT_COL, DBHelper.FORMAT_COL };
+  private static final String[] GET_ITEM_COL_PROJECTION = {
+      DBHelper.TEXT_COL,
+      DBHelper.FORMAT_COL,
+      DBHelper.TIMESTAMP_COL,
+  };
   private static final String[] EXPORT_COL_PROJECTION = {
       DBHelper.TEXT_COL,
       DBHelper.DISPLAY_COL,
@@ -70,11 +74,15 @@ public final class HistoryManager {
     Cursor cursor = null;
     try {
       cursor = db.query(DBHelper.TABLE_NAME,
-                        TEXT_FORMAT_COL_PROJECTION,
+                        GET_ITEM_COL_PROJECTION,
                         null, null, null, null,
                         DBHelper.TIMESTAMP_COL + " DESC");
       while (cursor.moveToNext()) {
-        Result result = new Result(cursor.getString(0), null, null, BarcodeFormat.valueOf(cursor.getString(1)));
+        Result result = new Result(cursor.getString(0),
+                                   null,
+                                   null,
+                                   BarcodeFormat.valueOf(cursor.getString(1)),
+                                   cursor.getLong(2));
         items.add(result);
       }
     } finally {

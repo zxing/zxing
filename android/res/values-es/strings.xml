@@ -64,6 +64,7 @@
   <string name="msg_default_mms_subject">Hola</string>
   <string name="msg_default_status">Coloque un código de barras en el interior del rectángulo de el visor para escanear.</string>
   <string name="msg_default_type">Tipo</string>
+  <string name="msg_default_time">Tiempo</string>  
   <string name="msg_encode_barcode_failed">No se pudo generar el código de barras solicitado.</string>
   <string name="msg_encode_contents_failed">No puede codificar un código de barras con estos datos.</string>
   <string name="msg_encode_in_progress">Generando un código de barras\u2026</string>

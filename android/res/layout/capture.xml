@@ -74,6 +74,14 @@
                   android:textColor="@color/result_minor_text"
                   android:textSize="12sp"/>
 
+        <TextView android:id="@+id/time_text_view"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_gravity="left"
+                  android:text="@string/msg_default_time"
+                  android:textColor="@color/result_minor_text"
+                  android:textSize="12sp"/>
+
       </LinearLayout>
 
       <ScrollView
