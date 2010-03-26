@@ -160,7 +160,7 @@ final class CameraManager {
 
       setCameraParameters();
       SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-      if (prefs.getBoolean(PreferencesActivity.KEY_FRONT_LIGHT, true)) {
+      if (prefs.getBoolean(PreferencesActivity.KEY_FRONT_LIGHT, false)) {
         FlashlightManager.enableFlashlight();
       }
     }
