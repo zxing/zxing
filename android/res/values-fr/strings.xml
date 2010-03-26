@@ -89,6 +89,8 @@
   <string name="preferences_name">Paramètres</string>
   <string name="preferences_play_beep_title">Bip</string>
   <string name="preferences_vibrate_title">Vibrer</string>
+  <string name="preferences_front_light_title">Phare avant</string>
+  <string name="preferences_front_light_summary">Activer phare avant si disponible</string>
   <string name="preferences_result_title">Paramètres de résultat</string>
   <string name="preferences_custom_product_search_title">URL personnalisée de recherche</string>
   <string name="preferences_custom_product_search_summary">Utiliser %s à la place de l\'identifiant du produit</string>

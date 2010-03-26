@@ -89,6 +89,8 @@
   <string name="preferences_name">Asetukset</string>
   <string name="preferences_play_beep_title">Piip</string>
   <string name="preferences_vibrate_title">Värinä</string>
+  <string name="preferences_front_light_title">Valo edessä</string>
+  <string name="preferences_front_light_summary">Activoi valo edessä, jos käytettävissä</string>
   <string name="preferences_result_title">Tuloksien asetukset</string>
   <string name="preferences_custom_product_search_title">Mukautettu hakukone</string>
   <string name="preferences_custom_product_search_summary">Käytä %s paikkana tuotetunnukselle</string>

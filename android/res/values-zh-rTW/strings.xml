@@ -89,6 +89,8 @@
   <string name="preferences_name">設置</string>
   <string name="preferences_play_beep_title">提示音</string>
   <string name="preferences_vibrate_title">振動</string>
+  <string name="preferences_front_light_title">前燈</string>
+  <string name="preferences_front_light_summary">使前燈如果可用</string>
   <string name="preferences_result_title">結果設置</string>
   <string name="preferences_custom_product_search_title">自定義搜索網址</string>
   <string name="preferences_custom_product_search_summary">使用％s作為佔位符的產品ID</string>

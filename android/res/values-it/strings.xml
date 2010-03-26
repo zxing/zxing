@@ -89,6 +89,8 @@
   <string name="preferences_name">Impostazioni</string>
   <string name="preferences_play_beep_title">Suona</string>
   <string name="preferences_vibrate_title">Vibra</string>
+  <string name="preferences_front_light_title">Luce anteriore</string>
+  <string name="preferences_front_light_summary">Consentire la luce anteriore, se disponibile</string>
   <string name="preferences_result_title">Impostazioni risultato</string>
   <string name="preferences_custom_product_search_title">URL ricerca prodotto personalizzata</string>
   <string name="preferences_custom_product_search_summary">Utilizza %s come segnaposto per l\'ID del prodotto</string>
