@@ -89,6 +89,8 @@
   <string name="preferences_name">Nastavení</string>
   <string name="preferences_play_beep_title">Zvuky</string>
   <string name="preferences_vibrate_title">Vibrace</string>
+  <string name="preferences_front_light_title">Přední světla</string>
+  <string name="preferences_front_light_summary">Povolte přední světlo, pokud je k dispozici</string>
   <string name="preferences_result_title">Výsledek nastavení</string>
   <string name="preferences_custom_product_search_title">Vlastní vyhledávání URL.</string>
   <string name="preferences_custom_product_search_summary">Použít % jako zástupný symbol pro ID produktu</string>

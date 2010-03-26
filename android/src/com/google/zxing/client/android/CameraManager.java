@@ -19,6 +19,7 @@ package com.google.zxing.client.android;
 import com.google.zxing.ResultPoint;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.graphics.Rect;
@@ -26,6 +27,7 @@ import android.hardware.Camera;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Display;
 import android.view.SurfaceHolder;
@@ -157,7 +159,10 @@ final class CameraManager {
       }
 
       setCameraParameters();
-      FlashlightManager.enableFlashlight();
+      SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+      if (prefs.getBoolean(PreferencesActivity.KEY_FRONT_LIGHT, true)) {
+        FlashlightManager.enableFlashlight();
+      }
     }
   }
 

@@ -89,6 +89,8 @@
   <string name="preferences_name">Inställningar</string>
   <string name="preferences_play_beep_title">Pip</string>
   <string name="preferences_vibrate_title">Vibrera</string>
+  <string name="preferences_front_light_title">Ljuset framför</string>
+  <string name="preferences_front_light_summary">Aktivera ljuset framför, om det finns</string>
   <string name="preferences_result_title">Resultatinställningar</string>
   <string name="preferences_custom_product_search_title">Anpassad sök-URL</string>
   <string name="preferences_custom_product_search_summary">Skriv %s där produktens ID ska placeras</string>

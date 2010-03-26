@@ -89,6 +89,8 @@
   <string name="preferences_name">Instellingen</string>
   <string name="preferences_play_beep_title">Piepen</string>
   <string name="preferences_vibrate_title">Trillen</string>
+  <string name="preferences_front_light_title">Voorzijde licht</string>
+  <string name="preferences_front_light_summary">Inschakelen voorzijde licht, indien beschikbaar</string>
   <string name="preferences_result_title">Instellingen voor resultaat</string>
   <string name="preferences_custom_product_search_title">Zoek aangepaste URL</string>
   <string name="preferences_custom_product_search_summary">Gebruik %s voor de plaats van het product ID</string>

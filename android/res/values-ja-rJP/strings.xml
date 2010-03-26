@@ -89,6 +89,8 @@
   <string name="preferences_name">設定</string>
   <string name="preferences_play_beep_title">通知音</string>
   <string name="preferences_vibrate_title">バイブ</string>
+  <string name="preferences_front_light_title">フロントライト</string>
+  <string name="preferences_front_light_summary">有効にするフロントライト可能な場合</string>
   <string name="preferences_result_title">検索結果の設定</string>
   <string name="preferences_custom_product_search_title">カスタム商品サーチ URL</string>
   <string name="preferences_custom_product_search_summary">URL中の「%s」はスキャン結果に置換される</string>

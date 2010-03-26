@@ -89,6 +89,8 @@
   <string name="preferences_name">Einstellungen</string>
   <string name="preferences_play_beep_title">Ton</string>
   <string name="preferences_vibrate_title">Vibration</string>
+  <string name="preferences_front_light_title">Vor Licht</string>
+  <string name="preferences_front_light_summary">Aktivieren Sie vor Licht, wenn verfügbar</string>
   <string name="preferences_result_title">Ergebnis-Einstellungen</string>
   <string name="preferences_custom_product_search_title">Eigene Such-URL</string>
   <string name="preferences_custom_product_search_summary">Verwenden Sie %s als Platzhalter für die Produkt-ID</string>
