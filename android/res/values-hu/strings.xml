@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (C) 2008 ZXing authors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<resources>
+  <string name="app_picker_name">Alkalmazások</string>
+  <string name="app_name">Barcode Scanner</string>
+  <string name="bookmark_picker_name">Könyvjelzők</string>
+  <string name="button_add_calendar">Hozzáadás a naptárhoz</string>
+  <string name="button_add_contact">Kapcsolat hozzáadása</string>
+  <string name="button_back">Vissza</string>
+  <string name="button_book_search">Könyv keresése</string>
+  <string name="button_cancel">Mégse</string>
+  <string name="button_clipboard_empty">Üres a vágólap</string>
+  <string name="button_custom_product_search">Egyedi keresés</string>
+  <string name="button_dial">Szám tárcsázása</string>
+  <string name="button_done">Kész</string>
+  <string name="button_email">Email küldése</string>
+  <string name="button_get_directions">Útvonaltervezés</string>
+  <string name="button_google_shopper">Google Shopper</string>
+  <string name="button_mms">MMS küldése</string>
+  <string name="button_ok">OK</string>
+  <string name="button_open_browser">Böngésző megnyitása</string>
+  <string name="button_product_search">Termék keresése</string>
+  <string name="button_search_book_contents">Tartalom keresése</string>
+  <string name="button_read_book">Könyv böngészése</string>
+  <string name="button_share_app">Alkalmazás</string>
+  <string name="button_share_bookmark">Könyvjelző</string>
+  <string name="button_share_by_email">Megosztás email-ben</string>
+  <string name="button_share_by_sms">Megosztás SMS-el</string>
+  <string name="button_share_clipboard">Vágólap</string>
+  <string name="button_share_contact">Kapcsolat</string>
+  <string name="button_show_map">Térkép mutatása</string>
+  <string name="button_sms">SMS küldése</string>
+  <string name="button_web_search">Web keresés</string>
+  <string name="contents_contact">Kapcsolat információ</string>
+  <string name="contents_email">Email cím</string>
+  <string name="contents_location">Földrajzi koordináták</string>
+  <string name="contents_phone">Telefonszám</string>
+  <string name="contents_sms">SMS cím</string>
+  <string name="contents_text">Szöveges</string>
+  <string name="menu_about">Rólunk</string>
+  <string name="menu_help">Segítség</string>
+  <string name="menu_settings">Beállítások</string>
+  <string name="menu_history">Előzmények</string>
+  <string name="menu_share">Megosztás</string>
+  <string name="msg_about">A nyílt forráskódú ZXing Barcode Library alapján</string>
+  <string name="msg_buggy">Ennek a készüléknek ismert hibái vannak, amik vonalkód olvasási problémákat okoznak. További információkért, látogasd meg a http://code.google.com/p/zxing/wiki/FrequentlyAskedQuestions weboldalt!</string>
+  <string name="msg_camera_framework_bug">Elnézést, az Android kamera problémába ütközött. Lehet, hogy újra kell indítanod a készüléket.</string>
+  <string name="msg_default_contents">Tartalom</string>
+  <string name="msg_default_format">Formátum</string>
+  <string name="msg_default_mms_subject">Szia</string>
+  <string name="msg_default_status">Helyezd a vonalkódot a kereső téglalapba a szkenneléshez.</string>
+  <string name="msg_default_type">Típus</string>
+  <string name="msg_default_time">Temne</string>
+  <string name="msg_encode_barcode_failed">Nem lehetett legenerálni a kért vonalkódot.</string>
+  <string name="msg_encode_contents_failed">Nem lehetett lekódolni a vonalkódot a megadott tartalomból.</string>
+  <string name="msg_encode_in_progress">Vonalkód generálása\u2026</string>
+  <string name="msg_google_shopper_missing">A Google Shopper nincs telepítve</string>
+  <string name="msg_install_google_shopper">A Google Shopper kombinálja a vonalkód szkennelést árakkal, értékelésekkel és más dolgokkal, böngésző megnyitása nélkül. Ki szeretnéd próbálni?</string>
+  <string name="msg_intent_failed">Elnézést, a kért alkalmazást nem lehet elindítani. A vonalkód tartalma lehet, hogy érvénytelen.</string>
+  <string name="msg_loading_apps">Alkalmazások listájának betöltése\u2026</string>
+  <string name="msg_not_our_results">Elhagyod ezt az alkalmazást. A keresési találatok amiket látni fogsz nincsenek kapcsolatba az alkalmazással.</string>
+  <string name="msg_sbc_book_not_searchable">Elnézést, ez a könyv nem kereshető.</string>
+  <string name="msg_sbc_failed">Elnézést, a keresés problémába ütközött.</string>
+  <string name="msg_sbc_no_page_returned">Nincs visszakapott oldal</string>
+  <string name="msg_sbc_page">Oldal</string>
+  <string name="msg_sbc_snippet_unavailable">Kódrészlet nem elérhető</string>
+  <string name="msg_sbc_unknown_page">Ismeretlen oldal</string>
+  <string name="msg_sbc_searching_book">Könyv keresése\u2026</string>
+  <string name="msg_share_explanation">Megtudsz osztani adatot úgy, hogy egy vonalkódot jelenítesz meg a képernyődön, melyet egy másik telefon beszkennel.</string>
+  <string name="msg_share_subject_line">Itt a tartalma a vonalkódnak amit beolvastam</string>
+  <string name="preferences_actions_title">Amikor a vonalkód megvan\u2026</string>
+  <string name="preferences_copy_to_clipboard_title">Másolás a vágólapra</string>
+  <string name="preferences_decode_1D_title">1D vonalkódok megfejtése</string>
+  <string name="preferences_decode_QR_title">QR-kódok megfejtése</string>
+  <string name="preferences_general_title">Általános beállítások</string>
+  <string name="preferences_name">Beállítások</string>
+  <string name="preferences_play_beep_title">Sípolás</string>
+  <string name="preferences_vibrate_title">Rezgés</string>
+  <string name="preferences_front_light_title">Első lámpa</string>
+  <string name="preferences_front_light_summary">Első lámpa engedélyezése ha elérhető</string>  
+  <string name="preferences_result_title">Találati beállítások</string>
+  <string name="preferences_custom_product_search_title">Egyedi keresés URL</string>
+  <string name="preferences_custom_product_search_summary">Használd a %s helyiktöltés a termék azonosító helyén</string>
+  <string name="result_address_book">Kapcsolat információ találat</string>
+  <string name="result_calendar">Naptár esemény találat</string>
+  <string name="result_email_address">Email cím találat</string>
+  <string name="result_geo">Földrajzi koordináták találat</string>
+  <string name="result_isbn">Könyv találat</string>
+  <string name="result_product">Termék találat</string>
+  <string name="result_sms">SMS cím találat</string>
+  <string name="result_tel">Telefonszám találat</string>
+  <string name="result_text">Szöveges találat</string>
+  <string name="result_uri">URL találat</string>
+  <string name="history_title">Előzmények</string>
+  <string name="history_clear_text">Előzmények törlése</string>
+  <string name="history_send">Előzmények küldése</string>
+  <string name="history_email_title">Barcode Scanner előzmények</string>
+  <string name="sbc_name">Google Könyvek</string>
+  <string name="share_name">Megosztás vonalkóddal</string>
+  <string name="title_about">Barcode Scanner v</string>
+  <string name="zxing_url">http://code.google.com/p/zxing</string>
+</resources>
