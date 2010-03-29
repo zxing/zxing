@@ -26,7 +26,7 @@
         android:title="@string/preferences_decode_QR_title"/>
     <CheckBoxPreference
         android:key="preferences_front_light"
-        android:defaultValue="true"
+        android:defaultValue="false"
         android:title="@string/preferences_front_light_title"
         android:summary="@string/preferences_front_light_summary"/>
   </PreferenceCategory>
