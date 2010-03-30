@@ -38,7 +38,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.graphics.drawable.BitmapDrawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
@@ -88,7 +87,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private static final int HELP_ID = Menu.FIRST + 3;
   private static final int ABOUT_ID = Menu.FIRST + 4;
 
-  private static final int MAX_RESULT_IMAGE_SIZE = 150;
   private static final long INTENT_RESULT_DURATION = 1500L;
   private static final float BEEP_VOLUME = 0.10f;
   private static final long VIBRATE_DURATION = 200L;
@@ -460,14 +458,13 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     viewfinderView.setVisibility(View.GONE);
     resultView.setVisibility(View.VISIBLE);
 
-    if (barcode == null) {
-      barcode = ((BitmapDrawable) getResources().getDrawable(R.drawable.unknown_barcode)).getBitmap();
-    }
     ImageView barcodeImageView = (ImageView) findViewById(R.id.barcode_image_view);
+    if (barcode == null) {
+      barcodeImageView.setImageResource(R.drawable.zxing_icon);
+    } else {
+      barcodeImageView.setImageBitmap(barcode);
+    }
     barcodeImageView.setVisibility(View.VISIBLE);
-    barcodeImageView.setMaxWidth(MAX_RESULT_IMAGE_SIZE);
-    barcodeImageView.setMaxHeight(MAX_RESULT_IMAGE_SIZE);
-    barcodeImageView.setImageBitmap(barcode);
 
     TextView formatTextView = (TextView) findViewById(R.id.format_text_view);
     formatTextView.setVisibility(View.VISIBLE);
