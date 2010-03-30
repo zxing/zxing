@@ -26,7 +26,7 @@ public final class BitMatrixTestCase extends TestCase {
 
   public void testGetSet() {
     BitMatrix matrix = new BitMatrix(33);
-    assertEquals(33, matrix.getDimension());
+    assertEquals(33, matrix.getHeight());
     for (int y = 0; y < 33; y++) {
       for (int x = 0; x < 33; x++) {
         if (y * x % 3 == 0) {
@@ -94,7 +94,7 @@ public final class BitMatrixTestCase extends TestCase {
   public void testGetRow() {
     BitMatrix matrix = new BitMatrix(102, 5);
     for (int x = 0; x < 102; x++) {
-      if ((x & 3) == 0) {
+      if ((x & 0x03) == 0) {
         matrix.set(x, 2);
       }
     }
@@ -114,7 +114,7 @@ public final class BitMatrixTestCase extends TestCase {
     assertEquals(200, array3.getSize());
 
     for (int x = 0; x < 102; x++) {
-      boolean on = ((x & 3) == 0);
+      boolean on = ((x & 0x03) == 0);
       assertEquals(on, array.get(x));
       assertEquals(on, array2.get(x));
       assertEquals(on, array3.get(x));

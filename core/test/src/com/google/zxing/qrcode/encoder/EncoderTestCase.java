@@ -17,7 +17,7 @@
 package com.google.zxing.qrcode.encoder;
 
 import com.google.zxing.WriterException;
-import com.google.zxing.common.ByteArray;
+import com.google.zxing.common.BitArray;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.google.zxing.qrcode.decoder.Mode;
 import junit.framework.TestCase;
@@ -60,28 +60,29 @@ public final class EncoderTestCase extends TestCase {
 
   public void testChooseMode() throws WriterException {
     // Numeric mode.
-    assertEquals(Mode.NUMERIC, Encoder.chooseMode("0"));
-    assertEquals(Mode.NUMERIC, Encoder.chooseMode("0123456789"));
+    assertSame(Mode.NUMERIC, Encoder.chooseMode("0"));
+    assertSame(Mode.NUMERIC, Encoder.chooseMode("0123456789"));
     // Alphanumeric mode.
-    assertEquals(Mode.ALPHANUMERIC, Encoder.chooseMode("A"));
-    assertEquals(Mode.ALPHANUMERIC,
-        Encoder.chooseMode("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:"));
+    assertSame(Mode.ALPHANUMERIC, Encoder.chooseMode("A"));
+    assertSame(Mode.ALPHANUMERIC,
+               Encoder.chooseMode("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:"));
     // 8-bit byte mode.
-    assertEquals(Mode.BYTE, Encoder.chooseMode("a"));
-    assertEquals(Mode.BYTE, Encoder.chooseMode("#"));
-    assertEquals(Mode.BYTE, Encoder.chooseMode(""));
+    assertSame(Mode.BYTE, Encoder.chooseMode("a"));
+    assertSame(Mode.BYTE, Encoder.chooseMode("#"));
+    assertSame(Mode.BYTE, Encoder.chooseMode(""));
     // Kanji mode.  We used to use MODE_KANJI for these, but we stopped
     // doing that as we cannot distinguish Shift_JIS from other encodings
     // from data bytes alone.  See also comments in qrcode_encoder.h.
 
     // AIUE in Hiragana in Shift_JIS
-    assertEquals(Mode.BYTE, Encoder.chooseMode(shiftJISString(new byte[] {0x8,0xa,0x8,0xa,0x8,0xa,0x8,(byte)0xa6})));
+    assertSame(Mode.BYTE,
+               Encoder.chooseMode(shiftJISString(new byte[]{0x8, 0xa, 0x8, 0xa, 0x8, 0xa, 0x8, (byte) 0xa6})));
 
     // Nihon in Kanji in Shift_JIS.
-    assertEquals(Mode.BYTE, Encoder.chooseMode(shiftJISString(new byte[] {0x9,0xf,0x9,0x7b})));
+    assertSame(Mode.BYTE, Encoder.chooseMode(shiftJISString(new byte[]{0x9, 0xf, 0x9, 0x7b})));
 
     // Sou-Utsu-Byou in Kanji in Shift_JIS.
-    assertEquals(Mode.BYTE, Encoder.chooseMode(shiftJISString(new byte[] {0xe,0x4,0x9,0x5,0x9,0x61})));
+    assertSame(Mode.BYTE, Encoder.chooseMode(shiftJISString(new byte[]{0xe, 0x4, 0x9, 0x5, 0x9, 0x61})));
   }
 
   public void testEncode() throws WriterException {
@@ -126,43 +127,43 @@ public final class EncoderTestCase extends TestCase {
   }
 
   public void testAppendModeInfo() {
-    BitVector bits = new BitVector();
+    BitArray bits = new BitArray();
     Encoder.appendModeInfo(Mode.NUMERIC, bits);
-    assertEquals("0001", bits.toString());
+    assertEquals(" ...X", bits.toString());
   }
 
   public void testAppendLengthInfo() throws WriterException {
     {
-      BitVector bits = new BitVector();
+      BitArray bits = new BitArray();
       Encoder.appendLengthInfo(1,  // 1 letter (1/1).
 						  1,  // version 1.
 						  Mode.NUMERIC,
 						  bits);
-      assertEquals("0000000001", bits.toString());  // 10 bits.
+      assertEquals(" ........ .X", bits.toString());  // 10 bits.
     }
     {
-      BitVector bits = new BitVector();
+      BitArray bits = new BitArray();
       Encoder.appendLengthInfo(2,  // 2 letters (2/1).
 						  10,  // version 10.
 						  Mode.ALPHANUMERIC,
 						  bits);
-      assertEquals("00000000010", bits.toString());  // 11 bits.
+      assertEquals(" ........ .X.", bits.toString());  // 11 bits.
     }
     {
-      BitVector bits = new BitVector();
+      BitArray bits = new BitArray();
       Encoder.appendLengthInfo(255,  // 255 letter (255/1).
 						  27,  // version 27.
 						  Mode.BYTE,
 						  bits);
-      assertEquals("0000000011111111", bits.toString());  // 16 bits.
+      assertEquals(" ........ XXXXXXXX", bits.toString());  // 16 bits.
     }
     {
-      BitVector bits = new BitVector();
+      BitArray bits = new BitArray();
       Encoder.appendLengthInfo(512,  // 512 letters (1024/2).
 						  40,  // version 40.
 						  Mode.KANJI,
 						  bits);
-      assertEquals("001000000000", bits.toString());  // 12 bits.
+      assertEquals(" ..X..... ....", bits.toString());  // 12 bits.
     }
   }
 
@@ -170,16 +171,16 @@ public final class EncoderTestCase extends TestCase {
     {
       // Should use appendNumericBytes.
       // 1 = 01 = 0001 in 4 bits.
-      BitVector bits = new BitVector();
+      BitArray bits = new BitArray();
       Encoder.appendBytes("1", Mode.NUMERIC, bits, Encoder.DEFAULT_BYTE_MODE_ENCODING);
-      assertEquals("0001" , bits.toString());
+      assertEquals(" ...X" , bits.toString());
     }
     {
       // Should use appendAlphanumericBytes.
       // A = 10 = 0xa = 001010 in 6 bits
-      BitVector bits = new BitVector();
+      BitArray bits = new BitArray();
       Encoder.appendBytes("A", Mode.ALPHANUMERIC, bits, Encoder.DEFAULT_BYTE_MODE_ENCODING);
-      assertEquals("001010" , bits.toString());
+      assertEquals(" ..X.X." , bits.toString());
       // Lower letters such as 'a' cannot be encoded in MODE_ALPHANUMERIC.
       try {
         Encoder.appendBytes("a", Mode.ALPHANUMERIC, bits, Encoder.DEFAULT_BYTE_MODE_ENCODING);
@@ -190,60 +191,60 @@ public final class EncoderTestCase extends TestCase {
     {
       // Should use append8BitBytes.
       // 0x61, 0x62, 0x63
-      BitVector bits = new BitVector();
+      BitArray bits = new BitArray();
       Encoder.appendBytes("abc", Mode.BYTE, bits, Encoder.DEFAULT_BYTE_MODE_ENCODING);
-      assertEquals("011000010110001001100011", bits.toString());
+      assertEquals(" .XX....X .XX...X. .XX...XX", bits.toString());
       // Anything can be encoded in QRCode.MODE_8BIT_BYTE.
       Encoder.appendBytes("\0", Mode.BYTE, bits, Encoder.DEFAULT_BYTE_MODE_ENCODING);
     }
     {
       // Should use appendKanjiBytes.
       // 0x93, 0x5f
-      BitVector bits = new BitVector();
+      BitArray bits = new BitArray();
       Encoder.appendBytes(shiftJISString(new byte[] {(byte)0x93,0x5f}), Mode.KANJI, bits, Encoder.DEFAULT_BYTE_MODE_ENCODING);
-      assertEquals("0110110011111", bits.toString());
+      assertEquals(" .XX.XX.. XXXXX", bits.toString());
     }
   }
 
   public void testTerminateBits() throws WriterException {
     {
-      BitVector v = new BitVector();
+      BitArray v = new BitArray();
       Encoder.terminateBits(0, v);
       assertEquals("", v.toString());
     }
     {
-      BitVector v = new BitVector();
+      BitArray v = new BitArray();
       Encoder.terminateBits(1, v);
-      assertEquals("00000000", v.toString());
+      assertEquals(" ........", v.toString());
     }
     {
-      BitVector v = new BitVector();
+      BitArray v = new BitArray();
       v.appendBits(0, 3);  // Append 000
       Encoder.terminateBits(1, v);
-      assertEquals("00000000", v.toString());
+      assertEquals(" ........", v.toString());
     }
     {
-      BitVector v = new BitVector();
+      BitArray v = new BitArray();
       v.appendBits(0, 5);  // Append 00000
       Encoder.terminateBits(1, v);
-      assertEquals("00000000", v.toString());
+      assertEquals(" ........", v.toString());
     }
     {
-      BitVector v = new BitVector();
+      BitArray v = new BitArray();
       v.appendBits(0, 8);  // Append 00000000
       Encoder.terminateBits(1, v);
-      assertEquals("00000000", v.toString());
+      assertEquals(" ........", v.toString());
     }
     {
-      BitVector v = new BitVector();
+      BitArray v = new BitArray();
       Encoder.terminateBits(2, v);
-      assertEquals("0000000011101100", v.toString());
+      assertEquals(" ........ XXX.XX..", v.toString());
     }
     {
-      BitVector v = new BitVector();
+      BitArray v = new BitArray();
       v.appendBits(0, 1);  // Append 0
       Encoder.terminateBits(3, v);
-      assertEquals("000000001110110000010001", v.toString());
+      assertEquals(" ........ XXX.XX.. ...X...X", v.toString());
     }
   }
 
@@ -286,11 +287,11 @@ public final class EncoderTestCase extends TestCase {
   public void testInterleaveWithECBytes() throws WriterException {
     {
       byte[] dataBytes = {32, 65, (byte)205, 69, 41, (byte)220, 46, (byte)128, (byte)236};
-      BitVector in = new BitVector();
+      BitArray in = new BitArray();
       for (byte dataByte: dataBytes) {
         in.appendBits(dataByte, 8);
       }
-      BitVector out = new BitVector();
+      BitArray out = new BitArray();
       Encoder.interleaveWithECBytes(in, 26, 9, 1, out);
       byte[] expected = {
           // Data bytes.
@@ -299,8 +300,9 @@ public final class EncoderTestCase extends TestCase {
           42, (byte)159, 74, (byte)221, (byte)244, (byte)169, (byte)239, (byte)150, (byte)138, 70,
           (byte)237, 85, (byte)224, 96, 74, (byte)219, 61,
       };
-      assertEquals(expected.length, out.sizeInBytes());
-      byte[] outArray = out.getArray();
+      assertEquals(expected.length, out.getSizeInBytes());
+      byte[] outArray = new byte[expected.length];
+      out.toBytes(0, outArray, 0, expected.length);
       // Can't use Arrays.equals(), because outArray may be longer than out.sizeInBytes()
       for (int x = 0; x < expected.length; x++) {
         assertEquals(expected[x], outArray[x]);
@@ -316,11 +318,11 @@ public final class EncoderTestCase extends TestCase {
           (byte)135, (byte)151, (byte)160, (byte)236, 17, (byte)236, 17, (byte)236, 17, (byte)236,
           17
       };
-      BitVector in = new BitVector();
+      BitArray in = new BitArray();
       for (byte dataByte: dataBytes) {
         in.appendBits(dataByte, 8);
       }
-      BitVector out = new BitVector();
+      BitArray out = new BitArray();
       Encoder.interleaveWithECBytes(in, 134, 62, 4, out);
       byte[] expected = {
           // Data bytes.
@@ -339,8 +341,9 @@ public final class EncoderTestCase extends TestCase {
           (byte)140, 61, (byte)179, (byte)154, (byte)214, (byte)138, (byte)147, 87, 27, 96, 77, 47,
           (byte)187, 49, (byte)156, (byte)214,
       };
-      assertEquals(expected.length, out.sizeInBytes());
-      byte[] outArray = out.getArray();
+      assertEquals(expected.length, out.getSizeInBytes());
+      byte[] outArray = new byte[expected.length];
+      out.toBytes(0, outArray, 0, expected.length);
       for (int x = 0; x < expected.length; x++) {
         assertEquals(expected[x], outArray[x]);
       }
@@ -350,31 +353,31 @@ public final class EncoderTestCase extends TestCase {
   public void testAppendNumericBytes() {
     {
       // 1 = 01 = 0001 in 4 bits.
-      BitVector bits = new BitVector();
+      BitArray bits = new BitArray();
       Encoder.appendNumericBytes("1", bits);
-      assertEquals("0001" , bits.toString());
+      assertEquals(" ...X" , bits.toString());
     }
     {
       // 12 = 0xc = 0001100 in 7 bits.
-      BitVector bits = new BitVector();
+      BitArray bits = new BitArray();
       Encoder.appendNumericBytes("12", bits);
-      assertEquals("0001100" , bits.toString());
+      assertEquals(" ...XX.." , bits.toString());
     }
     {
       // 123 = 0x7b = 0001111011 in 10 bits.
-      BitVector bits = new BitVector();
+      BitArray bits = new BitArray();
       Encoder.appendNumericBytes("123", bits);
-      assertEquals("0001111011" , bits.toString());
+      assertEquals(" ...XXXX. XX" , bits.toString());
     }
     {
       // 1234 = "123" + "4" = 0001111011 + 0100
-      BitVector bits = new BitVector();
+      BitArray bits = new BitArray();
       Encoder.appendNumericBytes("1234", bits);
-      assertEquals("0001111011" + "0100" , bits.toString());
+      assertEquals(" ...XXXX. XX.X.." , bits.toString());
     }
     {
       // Empty.
-      BitVector bits = new BitVector();
+      BitArray bits = new BitArray();
       Encoder.appendNumericBytes("", bits);
       assertEquals("" , bits.toString());
     }
@@ -383,31 +386,31 @@ public final class EncoderTestCase extends TestCase {
   public void testAppendAlphanumericBytes() throws WriterException {
     {
       // A = 10 = 0xa = 001010 in 6 bits
-      BitVector bits = new BitVector();
+      BitArray bits = new BitArray();
       Encoder.appendAlphanumericBytes("A", bits);
-      assertEquals("001010" , bits.toString());
+      assertEquals(" ..X.X." , bits.toString());
     }
     {
       // AB = 10 * 45 + 11 = 461 = 0x1cd = 00111001101 in 11 bits
-      BitVector bits = new BitVector();
+      BitArray bits = new BitArray();
       Encoder.appendAlphanumericBytes("AB", bits);
-      assertEquals("00111001101", bits.toString());
+      assertEquals(" ..XXX..X X.X", bits.toString());
     }
     {
       // ABC = "AB" + "C" = 00111001101 + 001100
-      BitVector bits = new BitVector();
+      BitArray bits = new BitArray();
       Encoder.appendAlphanumericBytes("ABC", bits);
-      assertEquals("00111001101" + "001100" , bits.toString());
+      assertEquals(" ..XXX..X X.X..XX. ." , bits.toString());
     }
     {
       // Empty.
-      BitVector bits = new BitVector();
+      BitArray bits = new BitArray();
       Encoder.appendAlphanumericBytes("", bits);
       assertEquals("" , bits.toString());
     }
     {
       // Invalid data.
-      BitVector bits = new BitVector();
+      BitArray bits = new BitArray();
       try {
         Encoder.appendAlphanumericBytes("abc", bits);
       } catch (WriterException we) {
@@ -419,13 +422,13 @@ public final class EncoderTestCase extends TestCase {
   public void testAppend8BitBytes() throws WriterException {
     {
       // 0x61, 0x62, 0x63
-      BitVector bits = new BitVector();
+      BitArray bits = new BitArray();
       Encoder.append8BitBytes("abc", bits, Encoder.DEFAULT_BYTE_MODE_ENCODING);
-      assertEquals("01100001" + "01100010" + "01100011", bits.toString());
+      assertEquals(" .XX....X .XX...X. .XX...XX", bits.toString());
     }
     {
       // Empty.
-      BitVector bits = new BitVector();
+      BitArray bits = new BitArray();
       Encoder.append8BitBytes("", bits, Encoder.DEFAULT_BYTE_MODE_ENCODING);
       assertEquals("", bits.toString());
     }
@@ -433,11 +436,11 @@ public final class EncoderTestCase extends TestCase {
 
   // Numbers are from page 21 of JISX0510:2004
   public void testAppendKanjiBytes() throws WriterException {
-      BitVector bits = new BitVector();
+    BitArray bits = new BitArray();
       Encoder.appendKanjiBytes(shiftJISString(new byte[] {(byte)0x93,0x5f}), bits);
-      assertEquals("0110110011111", bits.toString());
+      assertEquals(" .XX.XX.. XXXXX", bits.toString());
       Encoder.appendKanjiBytes(shiftJISString(new byte[] {(byte)0xe4,(byte)0xaa}), bits);
-      assertEquals("0110110011111" + "1101010101010", bits.toString());
+      assertEquals(" .XX.XX.. XXXXXXX. X.X.X.X. X.", bits.toString());
   }
 
   // Numbers are from http://www.swetake.com/qr/qr3.html and
@@ -445,37 +448,37 @@ public final class EncoderTestCase extends TestCase {
   public void testGenerateECBytes() {
     {
       byte[] dataBytes = {32, 65, (byte)205, 69, 41, (byte)220, 46, (byte)128, (byte)236};
-      ByteArray ecBytes = Encoder.generateECBytes(new ByteArray(dataBytes), 17);
+      byte[] ecBytes = Encoder.generateECBytes(dataBytes, 17);
       int[] expected = {
           42, 159, 74, 221, 244, 169, 239, 150, 138, 70, 237, 85, 224, 96, 74, 219, 61
       };
-      assertEquals(expected.length, ecBytes.size());
+      assertEquals(expected.length, ecBytes.length);
       for (int x = 0; x < expected.length; x++) {
-        assertEquals(expected[x], ecBytes.at(x));
+        assertEquals(expected[x], ecBytes[x] & 0xFF);
       }
     }
     {
       byte[] dataBytes = {67, 70, 22, 38, 54, 70, 86, 102, 118,
           (byte)134, (byte)150, (byte)166, (byte)182, (byte)198, (byte)214};
-      ByteArray ecBytes = Encoder.generateECBytes(new ByteArray(dataBytes), 18);
+      byte[] ecBytes = Encoder.generateECBytes(dataBytes, 18);
       int[] expected = {
           175, 80, 155, 64, 178, 45, 214, 233, 65, 209, 12, 155, 117, 31, 140, 214, 27, 187
       };
-      assertEquals(expected.length, ecBytes.size());
+      assertEquals(expected.length, ecBytes.length);
       for (int x = 0; x < expected.length; x++) {
-        assertEquals(expected[x], ecBytes.at(x));
+        assertEquals(expected[x], ecBytes[x] & 0xFF);
       }
     }
     {
-      // High-order zero cofficient case.
+      // High-order zero coefficient case.
       byte[] dataBytes = {32, 49, (byte)205, 69, 42, 20, 0, (byte)236, 17};
-      ByteArray ecBytes = Encoder.generateECBytes(new ByteArray(dataBytes), 17);
+      byte[] ecBytes = Encoder.generateECBytes(dataBytes, 17);
       int[] expected = {
           0, 3, 130, 179, 194, 0, 55, 211, 110, 79, 98, 72, 170, 96, 211, 137, 213
       };
-      assertEquals(expected.length, ecBytes.size());
+      assertEquals(expected.length, ecBytes.length);
       for (int x = 0; x < expected.length; x++) {
-        assertEquals(expected[x], ecBytes.at(x));
+        assertEquals(expected[x], ecBytes[x] & 0xFF);
       }
     }
   }

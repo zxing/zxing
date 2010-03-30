@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.zxing.common;
+package com.google.zxing.qrcode.encoder;
 
 /**
  * A class which wraps a 2D array of bytes. The default usage is signed. If you want to use it as a
@@ -59,6 +59,10 @@ public final class ByteMatrix {
 
   public void set(int x, int y, int value) {
     bytes[y][x] = (byte) value;
+  }
+
+  public void set(int x, int y, boolean value) {
+    bytes[y][x] = (byte) (value ? 1 : 0);
   }
 
   public void clear(byte value) {

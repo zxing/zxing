@@ -16,7 +16,6 @@
 
 package com.google.zxing.qrcode.encoder;
 
-import com.google.zxing.common.ByteMatrix;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.google.zxing.qrcode.decoder.Mode;
 import junit.framework.TestCase;

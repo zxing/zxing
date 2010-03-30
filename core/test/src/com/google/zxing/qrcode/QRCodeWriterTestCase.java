@@ -19,7 +19,7 @@ package com.google.zxing.qrcode;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
-import com.google.zxing.common.ByteMatrix;
+import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import junit.framework.TestCase;
 
@@ -53,20 +53,22 @@ public final class QRCodeWriterTestCase extends TestCase {
   }
 
   // In case the golden images are not monochromatic, convert the RGB values to greyscale.
-  private static ByteMatrix createMatrixFromImage(BufferedImage image) {
+  private static BitMatrix createMatrixFromImage(BufferedImage image) {
     int width = image.getWidth();
     int height = image.getHeight();
     int[] pixels = new int[width * height];
     image.getRGB(0, 0, width, height, pixels, 0, width);
 
-    ByteMatrix matrix = new ByteMatrix(width, height);
+    BitMatrix matrix = new BitMatrix(width, height);
     for (int y = 0; y < height; y++) {
       for (int x = 0; x < width; x++) {
         int pixel = pixels[y * width + x];
         int luminance = (306 * ((pixel >> 16) & 0xFF) +
             601 * ((pixel >> 8) & 0xFF) +
             117 * (pixel & 0xFF)) >> 10;
-        matrix.set(x, y, luminance);
+        if (luminance <= 0x7F) {
+          matrix.set(x, y);
+        }
       }
     }
     return matrix;
@@ -76,7 +78,7 @@ public final class QRCodeWriterTestCase extends TestCase {
     // The QR should be multiplied up to fit, with extra padding if necessary
     int bigEnough = 256;
     QRCodeWriter writer = new QRCodeWriter();
-    ByteMatrix matrix = writer.encode("http://www.google.com/", BarcodeFormat.QR_CODE, bigEnough,
+    BitMatrix matrix = writer.encode("http://www.google.com/", BarcodeFormat.QR_CODE, bigEnough,
         bigEnough, null);
     assertNotNull(matrix);
     assertEquals(bigEnough, matrix.getWidth());
@@ -105,21 +107,18 @@ public final class QRCodeWriterTestCase extends TestCase {
 
     BufferedImage image = loadImage(fileName);
     assertNotNull(image);
-    ByteMatrix goldenResult = createMatrixFromImage(image);
+    BitMatrix goldenResult = createMatrixFromImage(image);
     assertNotNull(goldenResult);
 
     QRCodeWriter writer = new QRCodeWriter();
     Hashtable<EncodeHintType,Object> hints = new Hashtable<EncodeHintType,Object>();
     hints.put(EncodeHintType.ERROR_CORRECTION, ecLevel);
-    ByteMatrix generatedResult = writer.encode(contents, BarcodeFormat.QR_CODE, resolution,
+    BitMatrix generatedResult = writer.encode(contents, BarcodeFormat.QR_CODE, resolution,
         resolution, hints);
 
-    assertEquals("Width should be " + resolution + ", but was " + generatedResult.getWidth(),
-        resolution, generatedResult.getWidth());
-    assertEquals("Height should be " + resolution + ", but was " + generatedResult.getHeight(),
-        resolution, generatedResult.getHeight());
-    assertTrue("Expected " + goldenResult.toString() + " but got " + generatedResult.toString(),
-        Arrays.deepEquals(goldenResult.getArray(), generatedResult.getArray()));
+    assertEquals(resolution, generatedResult.getWidth());
+    assertEquals(resolution, generatedResult.getHeight());
+    assertEquals(goldenResult, generatedResult);
   }
 
   // Golden images are generated with "qrcode_sample.cc". The images are checked with both eye balls

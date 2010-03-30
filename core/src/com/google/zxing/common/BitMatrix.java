@@ -50,11 +50,7 @@ public final class BitMatrix {
     }
     this.width = width;
     this.height = height;
-    int rowSize = width >> 5;
-    if ((width & 0x1f) != 0) {
-      rowSize++;
-    }
-    this.rowSize = rowSize;
+    this.rowSize = (width + 31) >> 5;
     bits = new int[rowSize * height];
   }
 
@@ -163,17 +159,32 @@ public final class BitMatrix {
     return height;
   }
 
-  /**
-   * This method is for compatibility with older code. It's only logical to call if the matrix
-   * is square, so I'm throwing if that's not the case.
-   *
-   * @return row/column dimension of this matrix
-   */
-  public int getDimension() {
-    if (width != height) {
-      throw new RuntimeException("Can't call getDimension() on a non-square matrix");
+  public boolean equals(Object o) {
+    if (!(o instanceof BitMatrix)) {
+      return false;
     }
-    return width;
+    BitMatrix other = (BitMatrix) o;
+    if (width != other.width || height != other.height ||
+        rowSize != other.rowSize || bits.length != other.bits.length) {
+      return false;
+    }
+    for (int i = 0; i < bits.length; i++) {
+      if (bits[i] != other.bits[i]) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  public int hashCode() {
+    int hash = width;
+    hash = 31 * hash + width;
+    hash = 31 * hash + height;
+    hash = 31 * hash + rowSize;
+    for (int i = 0; i < bits.length; i++) {
+      hash = 31 * hash + bits[i];
+    }
+    return hash;
   }
 
   public String toString() {

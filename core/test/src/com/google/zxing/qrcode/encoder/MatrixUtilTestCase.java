@@ -17,7 +17,7 @@
 package com.google.zxing.qrcode.encoder;
 
 import com.google.zxing.WriterException;
-import com.google.zxing.common.ByteMatrix;
+import com.google.zxing.common.BitArray;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import junit.framework.TestCase;
 
@@ -202,7 +202,7 @@ public final class MatrixUtilTestCase extends TestCase {
       " 1 0 1 1 1 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0\n" +
       " 1 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0\n" +
       " 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0\n";
-    BitVector bits = new BitVector();
+    BitArray bits = new BitArray();
     ByteMatrix matrix = new ByteMatrix(21, 21);
     MatrixUtil.clearMatrix(matrix);
     MatrixUtil.embedBasicPatterns(1, matrix);
@@ -237,7 +237,7 @@ public final class MatrixUtilTestCase extends TestCase {
     char[] bytes = {32, 65, 205, 69, 41, 220, 46, 128, 236,
 		    42, 159, 74, 221, 244, 169, 239, 150, 138,
 		    70, 237, 85, 224, 96, 74, 219 , 61};
-    BitVector bits = new BitVector();
+    BitArray bits = new BitArray();
     for (char c: bytes) {
       bits.appendBits(c, 8);
     }
@@ -280,18 +280,18 @@ public final class MatrixUtilTestCase extends TestCase {
   // tested them in TEST(calculateBCHCode).
   public void testMakeVersionInfoBits() throws WriterException {
     // From Appendix D in JISX0510:2004 (p 68)
-    BitVector bits = new BitVector();
+    BitArray bits = new BitArray();
     MatrixUtil.makeVersionInfoBits(7, bits);
-    assertEquals("000111110010010100", bits.toString());
+    assertEquals(" ...XXXXX ..X..X.X ..", bits.toString());
   }
 
   // We don't test a lot of cases in this function since we've already
   // tested them in TEST(calculateBCHCode).
   public void testMakeTypeInfoInfoBits() throws WriterException {
     // From Appendix C in JISX0510:2004 (p 65)
-    BitVector bits = new BitVector();
+    BitArray bits = new BitArray();
     MatrixUtil.makeTypeInfoBits(ErrorCorrectionLevel.M,
 						   5, bits);
-    assertEquals("100000011001110", bits.toString());
+    assertEquals(" X......X X..XXX.", bits.toString());
   }
 }

@@ -19,7 +19,7 @@ package com.google.zxing.oned;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Writer;
 import com.google.zxing.WriterException;
-import com.google.zxing.common.ByteMatrix;
+import com.google.zxing.common.BitMatrix;
 
 import java.util.Hashtable;
 
@@ -31,12 +31,12 @@ import java.util.Hashtable;
  */
 public abstract class UPCEANWriter implements Writer {
 
-  public ByteMatrix encode(String contents, BarcodeFormat format, int width, int height)
+  public BitMatrix encode(String contents, BarcodeFormat format, int width, int height)
   throws WriterException {
     return encode(contents, format, width, height, null);
   }
 
-  public ByteMatrix encode(String contents, BarcodeFormat format, int width, int height,
+  public BitMatrix encode(String contents, BarcodeFormat format, int width, int height,
       Hashtable hints) throws WriterException {
     if (contents == null || contents.length() == 0) {
       throw new IllegalArgumentException("Found empty contents");
@@ -52,7 +52,7 @@ public abstract class UPCEANWriter implements Writer {
   }
 
   /** @return a byte array of horizontal pixels (0 = white, 1 = black) */
-  private static ByteMatrix renderResult(byte[] code, int width, int height) {
+  private static BitMatrix renderResult(byte[] code, int width, int height) {
     int inputWidth = code.length;
     // Add quiet zone on both sides
     int fullWidth = inputWidth + (UPCEANReader.START_END_PATTERN.length << 1);
@@ -62,37 +62,12 @@ public abstract class UPCEANWriter implements Writer {
     int multiple = outputWidth / fullWidth;
     int leftPadding = (outputWidth - (inputWidth * multiple)) / 2;
 
-    ByteMatrix output = new ByteMatrix(outputWidth, outputHeight);
-    byte[][] outputArray = output.getArray();
-
-    byte[] row = new byte[outputWidth];
-
-    // a. Write the white pixels at the left of each row
-    for (int x = 0; x < leftPadding; x++) {
-      row[x] = (byte) 255;
-    }
-
-    // b. Write the contents of this row of the barcode
-    int offset = leftPadding;
-    for (int x = 0; x < inputWidth; x++) {
-      byte value = (code[x] == 1) ? 0 : (byte) 255;
-      for (int z = 0; z < multiple; z++) {
-        row[offset + z] = value;
+    BitMatrix output = new BitMatrix(outputWidth, outputHeight);
+    for (int inputX = 0, outputX = leftPadding; inputX < inputWidth; inputX++, outputX += multiple) {
+      if (code[inputX] == 1) {
+        output.setRegion(outputX, 0, multiple, outputHeight);
       }
-      offset += multiple;
     }
-
-    // c. Write the white pixels at the right of each row
-    offset = leftPadding + (inputWidth * multiple);
-    for (int x = offset; x < outputWidth; x++) {
-      row[x] = (byte) 255;
-    }
-
-    // d. Write the completed row multiple times
-    for (int z = 0; z < outputHeight; z++) {
-      System.arraycopy(row, 0, outputArray[z], 0, outputWidth);
-    }
-
     return output;
   }
 
