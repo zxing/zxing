@@ -28,18 +28,32 @@ public final class BitArray {
   // resulting binary at runtime on Android. If we find a solution to this, these should be changed
   // back to private.
   public int[] bits;
-  public final int size;
+  public int size;
+
+  public BitArray() {
+    this.size = 0;
+    this.bits = new int[1];
+  }
 
   public BitArray(int size) {
-    if (size < 1) {
-      throw new IllegalArgumentException("size must be at least 1");
-    }
     this.size = size;
     this.bits = makeArray(size);
   }
 
   public int getSize() {
     return size;
+  }
+
+  public int getSizeInBytes() {
+    return (size + 7) >> 3;
+  }
+
+  private void ensureCapacity(int size) {
+    if (size > bits.length << 5) {
+      int[] newBits = makeArray(size);
+      System.arraycopy(bits, 0, newBits, 0, bits.length);
+      this.bits = newBits;
+    }
   }
 
   /**
@@ -130,6 +144,69 @@ public final class BitArray {
     return true;
   }
 
+  public void appendBit(boolean bit) {
+    ensureCapacity(size + 1);
+    if (bit) {
+      bits[size >> 5] |= (1 << (size & 0x1F));
+    }
+    size++;
+  }
+
+  /**
+   * Appends the least-significant bits, from value, in order from most-significant to
+   * least-significant. For example, appending 6 bits from 0x000001E will append the bits
+   * 0, 1, 1, 1, 1, 0 in that order.
+   */
+  public void appendBits(int value, int numBits) {
+    if (numBits < 0 || numBits > 32) {
+      throw new IllegalArgumentException("Num bits must be between 0 and 32");
+    }
+    ensureCapacity(size + numBits);
+    for (int numBitsLeft = numBits; numBitsLeft > 0; numBitsLeft--) {
+      appendBit(((value >> (numBitsLeft - 1)) & 0x01) == 1);
+    }
+  }
+
+  public void appendBitArray(BitArray other) {
+    int otherSize = other.getSize();
+    ensureCapacity(size + otherSize);
+    for (int i = 0; i < otherSize; i++) {
+      appendBit(other.get(i));
+    }
+  }
+
+  public void xor(BitArray other) {
+    if (bits.length != other.bits.length) {
+      throw new IllegalArgumentException("Sizes don't match");
+    }
+    for (int i = 0; i < bits.length; i++) {
+      // The last byte could be incomplete (i.e. not have 8 bits in
+      // it) but there is no problem since 0 XOR 0 == 0.
+      bits[i] ^= other.bits[i];
+    }
+  }
+
+  /**
+   *
+   * @param bitOffset first bit to start writing
+   * @param array array to write into. Bytes are written most-significant byte first. This is the opposite
+   *  of the internal representation, which is exposed by {@link #getBitArray()}
+   * @param offset position in array to start writing
+   * @param numBytes how many bytes to write
+   */
+  public void toBytes(int bitOffset, byte[] array, int offset, int numBytes) {
+    for (int i = 0; i < numBytes; i++) {
+      int theByte = 0;
+      for (int j = 0; j < 8; j++) {
+        if (get(bitOffset)) {
+          theByte |= 1 << (7 - j);
+        }
+        bitOffset++;
+      }
+      array[offset + i] = (byte) theByte;
+    }
+  }
+
   /**
    * @return underlying array of ints. The first element holds the first 32 bits, and the least
    *         significant bit is bit 0.
@@ -153,11 +230,7 @@ public final class BitArray {
   }
 
   private static int[] makeArray(int size) {
-    int arraySize = size >> 5;
-    if ((size & 0x1F) != 0) {
-      arraySize++;
-    }
-    return new int[arraySize];
+    return new int[(size + 31) >> 5];
   }
   
   public String toString() {

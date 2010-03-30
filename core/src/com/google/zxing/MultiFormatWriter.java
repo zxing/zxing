@@ -16,7 +16,7 @@
 
 package com.google.zxing;
 
-import com.google.zxing.common.ByteMatrix;
+import com.google.zxing.common.BitMatrix;
 import com.google.zxing.oned.Code128Writer;
 import com.google.zxing.oned.Code39Writer;
 import com.google.zxing.oned.EAN13Writer;
@@ -34,13 +34,13 @@ import java.util.Hashtable;
  */
 public final class MultiFormatWriter implements Writer {
 
-  public ByteMatrix encode(String contents, BarcodeFormat format, int width,
+  public BitMatrix encode(String contents, BarcodeFormat format, int width,
       int height) throws WriterException {
 
     return encode(contents, format, width, height, null);
   }
 
-  public ByteMatrix encode(String contents, BarcodeFormat format, int width, int height,
+  public BitMatrix encode(String contents, BarcodeFormat format, int width, int height,
       Hashtable hints) throws WriterException {
 
     Writer writer;

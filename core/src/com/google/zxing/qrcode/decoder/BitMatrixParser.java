@@ -33,7 +33,7 @@ final class BitMatrixParser {
    * @throws FormatException if dimension is not >= 21 and 1 mod 4
    */
   BitMatrixParser(BitMatrix bitMatrix) throws FormatException {
-    int dimension = bitMatrix.getDimension();
+    int dimension = bitMatrix.getHeight();
     if (dimension < 21 || (dimension & 0x03) != 1) {
       throw FormatException.getFormatInstance();
     }
@@ -68,7 +68,7 @@ final class BitMatrixParser {
     }
 
     // Read the top-right/bottom-left pattern too
-    int dimension = bitMatrix.getDimension();
+    int dimension = bitMatrix.getHeight();
     int formatInfoBits2 = 0;
     int iMin = dimension - 8;
     for (int i = dimension - 1; i >= iMin; i--) {
@@ -98,7 +98,7 @@ final class BitMatrixParser {
       return parsedVersion;
     }
 
-    int dimension = bitMatrix.getDimension();
+    int dimension = bitMatrix.getHeight();
 
     int provisionalVersion = (dimension - 17) >> 2;
     if (provisionalVersion <= 6) {
@@ -154,7 +154,7 @@ final class BitMatrixParser {
     // Get the data mask for the format used in this QR Code. This will exclude
     // some bits from reading as we wind through the bit matrix.
     DataMask dataMask = DataMask.forReference((int) formatInfo.getDataMask());
-    int dimension = bitMatrix.getDimension();
+    int dimension = bitMatrix.getHeight();
     dataMask.unmaskBitMatrix(bitMatrix, dimension);
 
     BitMatrix functionPattern = version.buildFunctionPattern();

@@ -19,7 +19,7 @@ package com.google.zxing.oned;
 import java.util.Hashtable;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
-import com.google.zxing.common.ByteMatrix;
+import com.google.zxing.common.BitMatrix;
 
 /**
  * This object renders a ITF code as a {@link BitMatrix}.
@@ -28,7 +28,7 @@ import com.google.zxing.common.ByteMatrix;
  */
 public final class ITFWriter extends UPCEANWriter {
 
-	  public ByteMatrix encode(String contents, BarcodeFormat format, int width, int height,
+	  public BitMatrix encode(String contents, BarcodeFormat format, int width, int height,
 	      Hashtable hints) throws WriterException {
 	    if (format != BarcodeFormat.ITF) {
 	      throw new IllegalArgumentException("Can only encode ITF, but got " + format);

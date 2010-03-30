@@ -17,7 +17,7 @@
 package com.google.zxing.qrcode.encoder;
 
 import com.google.zxing.WriterException;
-import com.google.zxing.common.ByteMatrix;
+import com.google.zxing.common.BitArray;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 /**
@@ -136,7 +136,7 @@ public final class MatrixUtil {
 
   // Build 2D matrix of QR Code from "dataBits" with "ecLevel", "version" and "getMaskPattern". On
   // success, store the result in "matrix" and return true.
-  public static void buildMatrix(BitVector dataBits, ErrorCorrectionLevel ecLevel, int version,
+  public static void buildMatrix(BitArray dataBits, ErrorCorrectionLevel ecLevel, int version,
       int maskPattern, ByteMatrix matrix) throws WriterException {
     clearMatrix(matrix);
     embedBasicPatterns(version, matrix);
@@ -169,13 +169,13 @@ public final class MatrixUtil {
   // Embed type information. On success, modify the matrix.
   public static void embedTypeInfo(ErrorCorrectionLevel ecLevel, int maskPattern, ByteMatrix matrix)
       throws WriterException {
-    BitVector typeInfoBits = new BitVector();
+    BitArray typeInfoBits = new BitArray();
     makeTypeInfoBits(ecLevel, maskPattern, typeInfoBits);
 
-    for (int i = 0; i < typeInfoBits.size(); ++i) {
+    for (int i = 0; i < typeInfoBits.getSize(); ++i) {
       // Place bits in LSB to MSB order.  LSB (least significant bit) is the last value in
       // "typeInfoBits".
-      int bit = typeInfoBits.at(typeInfoBits.size() - 1 - i);
+      boolean bit = typeInfoBits.get(typeInfoBits.getSize() - 1 - i);
 
       // Type info bits at the left top corner. See 8.9 of JISX0510:2004 (p.46).
       int x1 = TYPE_INFO_COORDINATES[i][0];
@@ -202,14 +202,14 @@ public final class MatrixUtil {
     if (version < 7) {  // Version info is necessary if version >= 7.
       return;  // Don't need version info.
     }
-    BitVector versionInfoBits = new BitVector();
+    BitArray versionInfoBits = new BitArray();
     makeVersionInfoBits(version, versionInfoBits);
 
     int bitIndex = 6 * 3 - 1;  // It will decrease from 17 to 0.
     for (int i = 0; i < 6; ++i) {
       for (int j = 0; j < 3; ++j) {
         // Place bits in LSB (least significant bit) to MSB order.
-        int bit = versionInfoBits.at(bitIndex);
+        boolean bit = versionInfoBits.get(bitIndex);
         bitIndex--;
         // Left bottom corner.
         matrix.set(i, matrix.getHeight() - 11 + j, bit);
@@ -222,7 +222,7 @@ public final class MatrixUtil {
   // Embed "dataBits" using "getMaskPattern". On success, modify the matrix and return true.
   // For debugging purposes, it skips masking process if "getMaskPattern" is -1.
   // See 8.7 of JISX0510:2004 (p.38) for how to embed data bits.
-  public static void embedDataBits(BitVector dataBits, int maskPattern, ByteMatrix matrix)
+  public static void embedDataBits(BitArray dataBits, int maskPattern, ByteMatrix matrix)
       throws WriterException {
     int bitIndex = 0;
     int direction = -1;
@@ -241,20 +241,20 @@ public final class MatrixUtil {
           if (!isEmpty(matrix.get(xx, y))) {
             continue;
           }
-          int bit;
-          if (bitIndex < dataBits.size()) {
-            bit = dataBits.at(bitIndex);
+          boolean bit;
+          if (bitIndex < dataBits.getSize()) {
+            bit = dataBits.get(bitIndex);
             ++bitIndex;
           } else {
             // Padding bit. If there is no bit left, we'll fill the left cells with 0, as described
             // in 8.4.9 of JISX0510:2004 (p. 24).
-            bit = 0;
+            bit = false;
           }
 
           // Skip masking if mask_pattern is -1.
           if (maskPattern != -1) {
             if (MaskUtil.getDataMaskBit(maskPattern, xx, y)) {
-              bit ^= 0x1;
+              bit = !bit;
             }
           }
           matrix.set(xx, y, bit);
@@ -266,8 +266,8 @@ public final class MatrixUtil {
       x -= 2;  // Move to the left.
     }
     // All bits should be consumed.
-    if (bitIndex != dataBits.size()) {
-      throw new WriterException("Not all bits consumed: " + bitIndex + '/' + dataBits.size());
+    if (bitIndex != dataBits.getSize()) {
+      throw new WriterException("Not all bits consumed: " + bitIndex + '/' + dataBits.getSize());
     }
   }
 
@@ -326,7 +326,7 @@ public final class MatrixUtil {
   // Make bit vector of type information. On success, store the result in "bits" and return true.
   // Encode error correction level and mask pattern. See 8.9 of
   // JISX0510:2004 (p.45) for details.
-  public static void makeTypeInfoBits(ErrorCorrectionLevel ecLevel, int maskPattern, BitVector bits)
+  public static void makeTypeInfoBits(ErrorCorrectionLevel ecLevel, int maskPattern, BitArray bits)
       throws WriterException {
     if (!QRCode.isValidMaskPattern(maskPattern)) {
       throw new WriterException("Invalid mask pattern");
@@ -337,24 +337,24 @@ public final class MatrixUtil {
     int bchCode = calculateBCHCode(typeInfo, TYPE_INFO_POLY);
     bits.appendBits(bchCode, 10);
 
-    BitVector maskBits = new BitVector();
+    BitArray maskBits = new BitArray();
     maskBits.appendBits(TYPE_INFO_MASK_PATTERN, 15);
     bits.xor(maskBits);
 
-    if (bits.size() != 15) {  // Just in case.
-      throw new WriterException("should not happen but we got: " + bits.size());
+    if (bits.getSize() != 15) {  // Just in case.
+      throw new WriterException("should not happen but we got: " + bits.getSize());
     }
   }
 
   // Make bit vector of version information. On success, store the result in "bits" and return true.
   // See 8.10 of JISX0510:2004 (p.45) for details.
-  public static void makeVersionInfoBits(int version, BitVector bits) throws WriterException {
+  public static void makeVersionInfoBits(int version, BitArray bits) throws WriterException {
     bits.appendBits(version, 6);
     int bchCode = calculateBCHCode(version, VERSION_INFO_POLY);
     bits.appendBits(bchCode, 12);
 
-    if (bits.size() != 18) {  // Just in case.
-      throw new WriterException("should not happen but we got: " + bits.size());
+    if (bits.getSize() != 18) {  // Just in case.
+      throw new WriterException("should not happen but we got: " + bits.getSize());
     }
   }
 

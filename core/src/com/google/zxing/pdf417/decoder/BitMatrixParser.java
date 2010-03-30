@@ -60,7 +60,7 @@ final class BitMatrixParser {
    * @return an array of codewords.
    */
   int[] readCodewords() throws FormatException {
-    int width = bitMatrix.getDimension();
+    int width = bitMatrix.getWidth();
     // TODO should be a rectangular matrix
     int height = width;
 
@@ -186,7 +186,7 @@ final class BitMatrixParser {
    */
   int processRow(int[] rowCounters, int rowNumber, int rowHeight, int[] codewords, int next)
       throws FormatException {
-    int width = bitMatrix.getDimension();
+    int width = bitMatrix.getWidth();
     int columnNumber = 0;
     long symbol = 0;
     for (int i = 0; i < width; i += MODULES_IN_SYMBOL) {

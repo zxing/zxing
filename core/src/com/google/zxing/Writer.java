@@ -16,7 +16,7 @@
 
 package com.google.zxing;
 
-import com.google.zxing.common.ByteMatrix;
+import com.google.zxing.common.BitMatrix;
 
 import java.util.Hashtable;
 
@@ -36,7 +36,7 @@ public interface Writer {
    * @param height The preferred height in pixels
    * @return The generated barcode as a Matrix of unsigned bytes (0 == black, 255 == white)
    */
-  ByteMatrix encode(String contents, BarcodeFormat format, int width, int height)
+  BitMatrix encode(String contents, BarcodeFormat format, int width, int height)
       throws WriterException;
 
   /**
@@ -48,7 +48,7 @@ public interface Writer {
    * @param hints Additional parameters to supply to the encoder
    * @return The generated barcode as a Matrix of unsigned bytes (0 == black, 255 == white)
    */
-  ByteMatrix encode(String contents, BarcodeFormat format, int width, int height, Hashtable hints)
+  BitMatrix encode(String contents, BarcodeFormat format, int width, int height, Hashtable hints)
       throws WriterException;
 
 }

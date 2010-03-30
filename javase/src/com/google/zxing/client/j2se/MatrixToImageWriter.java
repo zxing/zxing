@@ -17,7 +17,6 @@
 package com.google.zxing.client.j2se;
 
 import com.google.zxing.common.BitMatrix;
-import com.google.zxing.common.ByteMatrix;
 
 import javax.imageio.ImageIO;
 import java.io.File;
@@ -26,7 +25,7 @@ import java.io.IOException;
 import java.awt.image.BufferedImage;
 
 /**
- * Writes a {@link BitMatrix} or {@link ByteMatrix} to {@link BufferedImage},
+ * Writes a {@link BitMatrix} to {@link BufferedImage},
  * file or stream. Provided here instead of core since it depends on
  * Java SE libraries.
  *
@@ -56,25 +55,6 @@ public final class MatrixToImageWriter {
   }
 
   /**
-   * Renders a {@link ByteMatrix} as an image, as a
-   * {@link BufferedImage}. The byte values are construed as (unsigned)
-   * luminance values, in theory.
-   * However, anything but 0 will be rendered as white, and 0 will be
-   * rendered as black.
-   */
-  public static BufferedImage toBufferedImage(ByteMatrix matrix) {
-    int width = matrix.getWidth();
-    int height = matrix.getHeight();
-    BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-    for (int x = 0; x < width; x++) {
-      for (int y = 0; y < height; y++) {
-        image.setRGB(x, y, matrix.get(x, y) == 0 ? BLACK : WHITE);
-      }
-    }
-    return image;
-  }
-
-  /**
    * Writes a {@link BitMatrix} to a file.
    *
    * @see #toBufferedImage(BitMatrix)
@@ -86,33 +66,11 @@ public final class MatrixToImageWriter {
   }
 
   /**
-   * Writes a {@link ByteMatrix} to a file.
-   *
-   * @see #toBufferedImage(ByteMatrix)
-   */
-  public static void writeToFile(ByteMatrix matrix, String format, File file)
-          throws IOException {
-    BufferedImage image = toBufferedImage(matrix);
-    ImageIO.write(image, format, file);
-  }
-
-  /**
    * Writes a {@link BitMatrix} to a stream.
    *
    * @see #toBufferedImage(BitMatrix)
    */
   public static void writeToStream(BitMatrix matrix, String format, OutputStream stream)
-          throws IOException {
-    BufferedImage image = toBufferedImage(matrix);
-    ImageIO.write(image, format, stream);
-  }
-
-  /**
-   * Writes a {@link ByteMatrix} to a stream.
-   *
-   * @see #toBufferedImage(ByteMatrix)
-   */
-  public static void writeToStream(ByteMatrix matrix, String format, OutputStream stream)
           throws IOException {
     BufferedImage image = toBufferedImage(matrix);
     ImageIO.write(image, format, stream);

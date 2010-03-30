@@ -16,8 +16,6 @@
 
 package com.google.zxing.qrcode.encoder;
 
-import com.google.zxing.common.ByteMatrix;
-
 /**
  * @author satorux@google.com (Satoru Takabayashi) - creator
  * @author dswitkin@google.com (Daniel Switkin) - ported from C++

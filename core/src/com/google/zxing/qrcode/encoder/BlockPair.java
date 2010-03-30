@@ -16,23 +16,21 @@
 
 package com.google.zxing.qrcode.encoder;
 
-import com.google.zxing.common.ByteArray;
-
 final class BlockPair {
 
-  private final ByteArray dataBytes;
-  private final ByteArray errorCorrectionBytes;
+  private final byte[] dataBytes;
+  private final byte[] errorCorrectionBytes;
 
-  BlockPair(ByteArray data, ByteArray errorCorrection) {
+  BlockPair(byte[] data, byte[] errorCorrection) {
     dataBytes = data;
     errorCorrectionBytes = errorCorrection;
   }
 
-  public ByteArray getDataBytes() {
+  public byte[] getDataBytes() {
     return dataBytes;
   }
 
-  public ByteArray getErrorCorrectionBytes() {
+  public byte[] getErrorCorrectionBytes() {
     return errorCorrectionBytes;
   }
 

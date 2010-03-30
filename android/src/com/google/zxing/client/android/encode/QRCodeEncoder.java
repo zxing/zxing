@@ -26,7 +26,7 @@ import com.google.zxing.client.android.R;
 import com.google.zxing.client.result.AddressBookParsedResult;
 import com.google.zxing.client.result.ParsedResult;
 import com.google.zxing.client.result.ResultParser;
-import com.google.zxing.common.ByteMatrix;
+import com.google.zxing.common.BitMatrix;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -52,6 +52,8 @@ import java.io.InputStream;
 final class QRCodeEncoder {
 
   private static final String TAG = "QRCodeEncoder";
+
+  private static final int WHITE = 0xFFFFFFFF;
 
   private final Activity activity;
   private String contents;
@@ -327,17 +329,18 @@ final class QRCodeEncoder {
     @Override
     public void run() {
       try {
-        ByteMatrix result = new MultiFormatWriter().encode(contents, format,
+        BitMatrix result = new MultiFormatWriter().encode(contents, format,
             pixelResolution, pixelResolution);
         int width = result.getWidth();
         int height = result.getHeight();
-        byte[][] array = result.getArray();
         int[] pixels = new int[width * height];
+        // All are 0, or black, by default
         for (int y = 0; y < height; y++) {
+          int offset = y * width;
           for (int x = 0; x < width; x++) {
-            int grey = array[y][x] & 0xff;
-            // pixels[y * width + x] = (0xff << 24) | (grey << 16) | (grey << 8) | grey;
-            pixels[y * width + x] = 0xff000000 | (0x00010101 * grey);
+            if (!result.get(x, y)) {
+              pixels[offset + x] = WHITE;
+            }
           }
         }
 

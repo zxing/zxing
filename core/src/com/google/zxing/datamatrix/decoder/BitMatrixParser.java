@@ -33,7 +33,7 @@ final class BitMatrixParser {
    * @throws FormatException if dimension is < 10 or > 144 or not 0 mod 2
    */
   BitMatrixParser(BitMatrix bitMatrix) throws FormatException {
-    int dimension = bitMatrix.getDimension();
+    int dimension = bitMatrix.getHeight();
     if (dimension < 10 || dimension > 144 || (dimension & 0x01) != 0) {
       throw FormatException.getFormatInstance();
     }
@@ -41,7 +41,7 @@ final class BitMatrixParser {
     version = readVersion(bitMatrix);
     this.mappingBitMatrix = extractDataRegion(bitMatrix);
     // TODO(bbrown): Make this work for rectangular symbols
-    this.readMappingMatrix = new BitMatrix(this.mappingBitMatrix.getDimension());
+    this.readMappingMatrix = new BitMatrix(this.mappingBitMatrix.getHeight());
   }
 
   /**
@@ -62,7 +62,7 @@ final class BitMatrixParser {
     }
 
     // TODO(bbrown): make this work for rectangular dimensions as well.
-    int numRows = bitMatrix.getDimension();
+    int numRows = bitMatrix.getHeight();
     int numColumns = numRows;
     
     return Version.getVersionForDimensions(numRows, numColumns);
@@ -84,7 +84,7 @@ final class BitMatrixParser {
     int row = 4;
     int column = 0;
     // TODO(bbrown): Data Matrix can be rectangular, assuming square for now
-    int numRows = mappingBitMatrix.getDimension();
+    int numRows = mappingBitMatrix.getHeight();
     int numColumns = numRows;
     
     boolean corner1Read = false;
@@ -408,7 +408,7 @@ final class BitMatrixParser {
     int symbolSizeColumns = version.getSymbolSizeColumns();
     
     // TODO(bbrown): Make this work with rectangular codes
-    if (bitMatrix.getDimension() != symbolSizeRows) {
+    if (bitMatrix.getHeight() != symbolSizeRows) {
       throw new IllegalArgumentException("Dimension of bitMarix must match the version size");
     }
     
