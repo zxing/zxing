@@ -59,6 +59,8 @@ public abstract class ResultParser {
       return result;
     } else if ((result = SMSMMSResultParser.parse(theResult)) != null) {
       return result;
+    } else if ((result = SMSTOMMSTOResultParser.parse(theResult)) != null) {
+      return result;
     } else if ((result = GeoResultParser.parse(theResult)) != null) {
       return result;
     } else if ((result = URLTOResultParser.parse(theResult)) != null) {

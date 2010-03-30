@@ -21,33 +21,68 @@ package com.google.zxing.client.result;
  */
 public final class SMSParsedResult extends ParsedResult {
 
-  private final String smsURI;
-  private final String number;
-  private final String via;
+  private final String[] numbers;
+  private final String[] vias;
   private final String subject;
   private final String body;
-  private final String title;
 
-  public SMSParsedResult(String smsURI, String number, String via, String subject, String body, String title) {
+  public SMSParsedResult(String number, String via, String subject, String body) {
     super(ParsedResultType.SMS);
-    this.smsURI = smsURI;
-    this.number = number;
-    this.via = via;
+    this.numbers = new String[] {number};
+    this.vias = new String[] {via};
     this.subject = subject;
     this.body = body;
-    this.title = title;
+  }
+
+  public SMSParsedResult(String[] numbers, String[] vias, String subject, String body) {
+    super(ParsedResultType.SMS);
+    this.numbers = numbers;
+    this.vias = vias;
+    this.subject = subject;
+    this.body = body;
   }
 
   public String getSMSURI() {
-    return smsURI;
+    StringBuffer result = new StringBuffer();
+    result.append("sms:");
+    boolean first = true;
+    for (int i = 0; i < numbers.length; i++) {
+      if (first) {
+        first = false;
+      } else {
+        result.append(',');
+      }
+      result.append(numbers[i]);
+      if (vias[i] != null) {
+        result.append(";via=");
+        result.append(vias[i]);
+      }
+    }
+    boolean hasBody = body != null;
+    boolean hasSubject = subject != null;
+    if (hasBody || hasSubject) {
+      result.append('?');
+      if (hasBody) {
+        result.append("body=");
+        result.append(body);
+      }
+      if (hasSubject) {
+        if (hasBody) {
+          result.append('&');
+        }
+        result.append("subject=");
+        result.append(subject);
+      }
+    }
+    return result.toString();
   }
 
-  public String getNumber() {
-    return number;
+  public String[] getNumbers() {
+    return numbers;
   }
 
-  public String getVia() {
-    return via;
+  public String[] getVias() {
+    return vias;
   }
 
   public String getSubject() {
@@ -58,17 +93,11 @@ public final class SMSParsedResult extends ParsedResult {
     return body;
   }
 
-  public String getTitle() {
-    return title;
-  }
-
   public String getDisplayResult() {
     StringBuffer result = new StringBuffer(100);
-    maybeAppend(number, result);
-    maybeAppend(via, result);
+    maybeAppend(numbers, result);
     maybeAppend(subject, result);
     maybeAppend(body, result);
-    maybeAppend(title, result);
     return result.toString();
   }
 

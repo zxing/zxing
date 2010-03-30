@@ -158,7 +158,7 @@ public final class ParsedReaderResultTestCase extends TestCase {
     doTestResult("geo:1,2", "1.0, 2.0", ParsedResultType.GEO);
     doTestResult("GEO:1,2", "1.0, 2.0", ParsedResultType.GEO);
     doTestResult("geo:1,2,3", "1.0, 2.0, 3.0m", ParsedResultType.GEO);
-    doTestResult("geo:100.33,-32.3344,3.35", "100.33, -32.3344, 3.35m", ParsedResultType.GEO);
+    doTestResult("geo:80.33,-32.3344,3.35", "80.33, -32.3344, 3.35m", ParsedResultType.GEO);
     doTestResult("geo", "geo", ParsedResultType.TEXT);
     doTestResult("geography", "geography", ParsedResultType.TEXT);
   }
@@ -221,18 +221,22 @@ public final class ParsedReaderResultTestCase extends TestCase {
   public void testSMS() {
     doTestResult("sms:+15551212", "+15551212", ParsedResultType.SMS);
     doTestResult("SMS:+15551212", "+15551212", ParsedResultType.SMS);
+    doTestResult("sms:+15551212;via=999333", "+15551212", ParsedResultType.SMS);
+    doTestResult("sms:+15551212?subject=foo&body=bar", "+15551212\nfoo\nbar", ParsedResultType.SMS);
+    doTestResult("sms:+15551212,+12124440101", "+15551212\n+12124440101", ParsedResultType.SMS);    
+  }
+
+  public void testSMSTO() {
     doTestResult("SMSTO:+15551212", "+15551212", ParsedResultType.SMS);
     doTestResult("smsto:+15551212", "+15551212", ParsedResultType.SMS);
-    doTestResult("sms:+15551212;via=999333", "+15551212\n999333", ParsedResultType.SMS);
-    doTestResult("sms:+15551212?subject=foo&body=bar", "+15551212\nfoo\nbar", ParsedResultType.SMS);
-    doTestResult("sms:+15551212:subject", "+15551212\nsubject", ParsedResultType.SMS);
-    doTestResult("sms:+15551212:My message", "+15551212\nMy message", ParsedResultType.SMS);
+    doTestResult("smsto:+15551212:subject", "+15551212\nsubject", ParsedResultType.SMS);
+    doTestResult("smsto:+15551212:My message", "+15551212\nMy message", ParsedResultType.SMS);
     // Need to handle question mark in the subject
-    doTestResult("sms:+15551212:What's up?", "+15551212\nWhat's up?", ParsedResultType.SMS);
+    doTestResult("smsto:+15551212:What's up?", "+15551212\nWhat's up?", ParsedResultType.SMS);
     // Need to handle colon in the subject
-    doTestResult("sms:+15551212:Directions: Do this", "+15551212\nDirections: Do this",
+    doTestResult("smsto:+15551212:Directions: Do this", "+15551212\nDirections: Do this",
         ParsedResultType.SMS);
-    doTestResult("sms:212-555-1212:Here's a longer message. Should be fine.",
+    doTestResult("smsto:212-555-1212:Here's a longer message. Should be fine.",
         "212-555-1212\nHere's a longer message. Should be fine.",
         ParsedResultType.SMS);
   }
@@ -240,16 +244,20 @@ public final class ParsedReaderResultTestCase extends TestCase {
   public void testMMS() {
     doTestResult("mms:+15551212", "+15551212", ParsedResultType.SMS);
     doTestResult("MMS:+15551212", "+15551212", ParsedResultType.SMS);
+    doTestResult("mms:+15551212;via=999333", "+15551212", ParsedResultType.SMS);
+    doTestResult("mms:+15551212?subject=foo&body=bar", "+15551212\nfoo\nbar", ParsedResultType.SMS);
+    doTestResult("mms:+15551212,+12124440101", "+15551212\n+12124440101", ParsedResultType.SMS);        
+  }
+
+  public void testMMSTO() {
     doTestResult("MMSTO:+15551212", "+15551212", ParsedResultType.SMS);
     doTestResult("mmsto:+15551212", "+15551212", ParsedResultType.SMS);
-    doTestResult("mms:+15551212;via=999333", "+15551212\n999333", ParsedResultType.SMS);
-    doTestResult("mms:+15551212?subject=foo&body=bar", "+15551212\nfoo\nbar", ParsedResultType.SMS);
-    doTestResult("mms:+15551212:subject", "+15551212\nsubject", ParsedResultType.SMS);
-    doTestResult("mms:+15551212:My message", "+15551212\nMy message", ParsedResultType.SMS);
-    doTestResult("mms:+15551212:What's up?", "+15551212\nWhat's up?", ParsedResultType.SMS);
-    doTestResult("mms:+15551212:Directions: Do this", "+15551212\nDirections: Do this",
+    doTestResult("mmsto:+15551212:subject", "+15551212\nsubject", ParsedResultType.SMS);
+    doTestResult("mmsto:+15551212:My message", "+15551212\nMy message", ParsedResultType.SMS);
+    doTestResult("mmsto:+15551212:What's up?", "+15551212\nWhat's up?", ParsedResultType.SMS);
+    doTestResult("mmsto:+15551212:Directions: Do this", "+15551212\nDirections: Do this",
         ParsedResultType.SMS);
-    doTestResult("mms:212-555-1212:Here's a longer message. Should be fine.",
+    doTestResult("mmsto:212-555-1212:Here's a longer message. Should be fine.",
         "212-555-1212\nHere's a longer message. Should be fine.", ParsedResultType.SMS);
   }
 

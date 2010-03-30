@@ -47,6 +47,9 @@ final class GeoResultParser extends ResultParser {
     double latitude, longitude, altitude;
     try {
       latitude = Double.parseDouble(geoURIWithoutQuery.substring(0, latitudeEnd));
+      if (latitude > 90.0 || latitude < -90.0) {
+        return null;
+      }
       if (longitudeEnd < 0) {
         longitude = Double.parseDouble(geoURIWithoutQuery.substring(latitudeEnd + 1));
         altitude = 0.0;
@@ -54,11 +57,13 @@ final class GeoResultParser extends ResultParser {
         longitude = Double.parseDouble(geoURIWithoutQuery.substring(latitudeEnd + 1, longitudeEnd));
         altitude = Double.parseDouble(geoURIWithoutQuery.substring(longitudeEnd + 1));
       }
+      if (longitude > 180.0 || longitude < -180.0 || altitude < 0) {
+        return null;
+      }
     } catch (NumberFormatException nfe) {
       return null;
     }
-    return new GeoParsedResult(rawText.startsWith("GEO:") ? "geo:" + rawText.substring(4) : rawText,
-                               latitude, longitude, altitude);
+    return new GeoParsedResult(latitude, longitude, altitude);
   }
 
 }
