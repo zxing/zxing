@@ -54,6 +54,8 @@
         <ImageView android:id="@+id/barcode_image_view"
                    android:layout_width="160dip"
                    android:layout_height="wrap_content"
+                   android:maxWidth="160dip"
+                   android:maxHeight="160dip"
                    android:layout_marginBottom="4dip"
                    android:adjustViewBounds="true"
                    android:scaleType="centerInside"/>
