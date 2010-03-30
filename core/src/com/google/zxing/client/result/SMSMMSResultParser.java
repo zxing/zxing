@@ -19,15 +19,20 @@ package com.google.zxing.client.result;
 import com.google.zxing.Result;
 
 import java.util.Hashtable;
+import java.util.Vector;
 
 /**
- * <p>Parses an "sms:" URI result, which specifies a number to SMS and optional
- * "via" number. See <a href="http://gbiv.com/protocols/uri/drafts/draft-antti-gsm-sms-url-04.txt">
- * the IETF draft</a> on this.</p>
+ * <p>Parses an "sms:" URI result, which specifies a number to SMS.
+ * See <a href="http://tools.ietf.org/html/rfc5724"> RFC 5724</a> on this.</p>
  *
- * <p>This actually also parses URIs starting with "mms:", "smsto:", "mmsto:", "SMSTO:", and
- * "MMSTO:", and treats them all the same way, and effectively converts them to an "sms:" URI
- * for purposes of forwarding to the platform.</p>
+ * <p>This class supports "via" syntax for numbers, which is not part of the spec.
+ * For example "+12125551212;via=+12124440101" may appear as a number.
+ * It also supports a "subject" query parameter, which is not mentioned in the spec.
+ * These are included since they were mentioned in earlier IETF drafts and might be
+ * used.</p>
+ *
+ * <p>This actually also parses URIs starting with "mms:" and treats them all the same way,
+ * and effectively converts them to an "sms:" URI for purposes of forwarding to the platform.</p>
  *
  * @author Sean Owen
  */
@@ -41,14 +46,8 @@ final class SMSMMSResultParser extends ResultParser {
     if (rawText == null) {
       return null;
     }
-    int prefixLength;
-    if (rawText.startsWith("sms:") || rawText.startsWith("SMS:") ||
-        rawText.startsWith("mms:") || rawText.startsWith("MMS:")) {
-      prefixLength = 4;
-    } else if (rawText.startsWith("smsto:") || rawText.startsWith("SMSTO:") ||
-               rawText.startsWith("mmsto:") || rawText.startsWith("MMSTO:")) {
-      prefixLength = 6;
-    } else {
+    if (!(rawText.startsWith("sms:") || rawText.startsWith("SMS:") ||
+          rawText.startsWith("mms:") || rawText.startsWith("MMS:"))) {
       return null;
     }
 
@@ -64,40 +63,45 @@ final class SMSMMSResultParser extends ResultParser {
     }
 
     // Drop sms, query portion
-    int queryStart = rawText.indexOf('?', prefixLength);
+    int queryStart = rawText.indexOf('?', 4);
     String smsURIWithoutQuery;
     // If it's not query syntax, the question mark is part of the subject or message
     if (queryStart < 0 || !querySyntax) {
-      smsURIWithoutQuery = rawText.substring(prefixLength);
+      smsURIWithoutQuery = rawText.substring(4);
     } else {
-      smsURIWithoutQuery = rawText.substring(prefixLength, queryStart);
+      smsURIWithoutQuery = rawText.substring(4, queryStart);
     }
-    int numberEnd = smsURIWithoutQuery.indexOf(';');
-    String number;
-    String via;
+
+    int lastComma = -1;
+    int comma;
+    Vector numbers = new Vector(1);
+    Vector vias = new Vector(1);
+    while ((comma = smsURIWithoutQuery.indexOf(',', lastComma + 1)) > lastComma) {
+      String numberPart = smsURIWithoutQuery.substring(lastComma + 1, comma);
+      addNumberVia(numbers, vias, numberPart);
+      lastComma = comma;
+    }
+    addNumberVia(numbers, vias, smsURIWithoutQuery.substring(lastComma + 1));    
+
+    return new SMSParsedResult(toStringArray(numbers), toStringArray(vias), subject, body);
+  }
+
+  private static void addNumberVia(Vector numbers, Vector vias, String numberPart) {
+    int numberEnd = numberPart.indexOf(';');
     if (numberEnd < 0) {
-      number = smsURIWithoutQuery;
-      via = null;
+      numbers.addElement(numberPart);
+      vias.addElement(null);
     } else {
-      number = smsURIWithoutQuery.substring(0, numberEnd);
-      String maybeVia = smsURIWithoutQuery.substring(numberEnd + 1);
+      numbers.addElement(numberPart.substring(0, numberEnd));
+      String maybeVia = numberPart.substring(numberEnd + 1);
+      String via;
       if (maybeVia.startsWith("via=")) {
         via = maybeVia.substring(4);
       } else {
         via = null;
       }
+      vias.addElement(via);
     }
-
-    // Thanks to dominik.wild for suggesting this enhancement to support
-    // smsto:number:body URIs
-    if (body == null) {
-      int bodyStart = number.indexOf(':');
-      if (bodyStart >= 0) {
-        body = number.substring(bodyStart + 1);
-        number = number.substring(0, bodyStart);
-      }
-    }
-    return new SMSParsedResult("sms:" + number, number, via, subject, body, null);
   }
 
 }

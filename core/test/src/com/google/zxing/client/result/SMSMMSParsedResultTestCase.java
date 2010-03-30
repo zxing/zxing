@@ -20,6 +20,8 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
 import junit.framework.TestCase;
 
+import java.util.Arrays;
+
 /**
  * Tests {@link SMSParsedResult}.
  *
@@ -40,15 +42,18 @@ public final class SMSMMSParsedResultTestCase extends TestCase {
   }
 
   private static void doTest(String contents, String number, String subject, String body, String via) {
+    doTest(contents, new String[] {number}, subject, body, new String[] {via});
+  }
+
+  private static void doTest(String contents, String[] numbers, String subject, String body, String[] vias) {
     Result fakeResult = new Result(contents, null, null, BarcodeFormat.QR_CODE);
     ParsedResult result = ResultParser.parseResult(fakeResult);
     assertSame(ParsedResultType.SMS, result.getType());
     SMSParsedResult smsResult = (SMSParsedResult) result;
-    assertEquals(number, smsResult.getNumber());
+    assertTrue(Arrays.equals(numbers, smsResult.getNumbers()));
     assertEquals(subject, smsResult.getSubject());
     assertEquals(body, smsResult.getBody());
-    assertEquals(via, smsResult.getVia());
-    assertEquals("sms:" + number, smsResult.getSMSURI());
+    assertTrue(Arrays.equals(vias, smsResult.getVias()));
   }
 
 }

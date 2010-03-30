@@ -21,21 +21,28 @@ package com.google.zxing.client.result;
  */
 public final class GeoParsedResult extends ParsedResult {
 
-  private final String geoURI;
   private final double latitude;
   private final double longitude;
   private final double altitude;
 
-  GeoParsedResult(String geoURI, double latitude, double longitude, double altitude) {
+  GeoParsedResult(double latitude, double longitude, double altitude) {
     super(ParsedResultType.GEO);
-    this.geoURI = geoURI;
     this.latitude = latitude;
     this.longitude = longitude;
     this.altitude = altitude;
   }
 
   public String getGeoURI() {
-    return geoURI;
+    StringBuffer result = new StringBuffer();
+    result.append("geo:");
+    result.append(latitude);
+    result.append(',');
+    result.append(longitude);
+    if (altitude > 0) {
+      result.append(',');
+      result.append(altitude);
+    }
+    return result.toString();
   }
 
   /**
@@ -60,11 +67,11 @@ public final class GeoParsedResult extends ParsedResult {
   }
 
   public String getDisplayResult() {
-    StringBuffer result = new StringBuffer(50);
+    StringBuffer result = new StringBuffer();
     result.append(latitude);
     result.append(", ");
     result.append(longitude);
-    if (altitude > 0.0f) {
+    if (altitude > 0.0) {
       result.append(", ");
       result.append(altitude);
       result.append('m');

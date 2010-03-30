@@ -53,10 +53,11 @@ public final class SMSResultHandler extends ResultHandler {
     SMSParsedResult smsResult = (SMSParsedResult) getResult();
     switch (index) {
       case 0:
-        sendSMS(smsResult.getNumber(), smsResult.getBody());
+        // Don't know of a way yet to express a SENDTO intent with multiple recipients
+        sendSMS(smsResult.getNumbers()[0], smsResult.getBody());
         break;
       case 1:
-        sendMMS(smsResult.getNumber(), smsResult.getSubject(), smsResult.getBody());
+        sendMMS(smsResult.getNumbers()[0], smsResult.getSubject(), smsResult.getBody());
         break;
     }
   }
@@ -65,11 +66,14 @@ public final class SMSResultHandler extends ResultHandler {
   public CharSequence getDisplayContents() {
     SMSParsedResult smsResult = (SMSParsedResult) getResult();
     StringBuffer contents = new StringBuffer();
-    ParsedResult.maybeAppend(PhoneNumberUtils.formatNumber(smsResult.getNumber()), contents);
-    ParsedResult.maybeAppend(smsResult.getVia(), contents);
+    String[] rawNumbers = smsResult.getNumbers();
+    String[] formattedNumbers = new String[rawNumbers.length];
+    for (int i = 0; i < rawNumbers.length; i++) {
+      formattedNumbers[i] = PhoneNumberUtils.formatNumber(rawNumbers[i]);
+    }
+    ParsedResult.maybeAppend(formattedNumbers, contents);
     ParsedResult.maybeAppend(smsResult.getSubject(), contents);
     ParsedResult.maybeAppend(smsResult.getBody(), contents);
-    ParsedResult.maybeAppend(smsResult.getTitle(), contents);
     return contents.toString();
   }
 

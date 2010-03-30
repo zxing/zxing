@@ -29,7 +29,8 @@ public final class GeoParsedResultTestCase extends TestCase {
 
   public void testGeo() {
     doTest("geo:1,2", 1.0, 2.0, 0.0);
-    doTest("geo:100.33,-32.3344,3.35", 100.33, -32.3344, 3.35);
+    doTest("geo:80.33,-32.3344,3.35", 80.33, -32.3344, 3.35);
+    doTest("geo:-20.33,132.3344,0.01", -20.33, 132.3344, 0.01);
   }
 
   private static void doTest(String contents, double latitude, double longitude, double altitude) {
