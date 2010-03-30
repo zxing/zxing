@@ -39,7 +39,7 @@ public final class HelpActivity extends Activity {
 
   private static final String TAG = HelpActivity.class.getName();
 
-  private static final String[] BUGGY_MODEL_SUBSTRINGS = {"Behold II", "Pulse"};
+  private static final String[] BUGGY_MODEL_SUBSTRINGS = {"Behold II", "Pulse", "Geeksphone"};
   private static final Uri BUGGY_URI =
       Uri.parse("http://code.google.com/p/zxing/wiki/FrequentlyAskedQuestions");
 
