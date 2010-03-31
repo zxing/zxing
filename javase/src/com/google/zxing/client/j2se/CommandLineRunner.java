@@ -70,6 +70,7 @@ public final class CommandLineRunner {
     boolean productsOnly = false;
     boolean dumpResults = false;
     boolean dumpBlackPoint = false;
+    int[] crop = null;
     for (String arg : args) {
       if ("--try_harder".equals(arg)) {
         tryHarder = true;
@@ -81,6 +82,12 @@ public final class CommandLineRunner {
         dumpResults = true;
       } else if ("--dump_black_point".equals(arg)) {
         dumpBlackPoint = true;
+      } else if (arg.startsWith("--crop")) {
+        crop = new int[4];
+        String[] tokens = arg.substring(7).split(",");
+        for (int i = 0; i < crop.length; i++) {
+          crop[i] = Integer.parseInt(tokens[i]);
+        }
       } else if (arg.startsWith("-")) {
         System.err.println("Unknown command line option " + arg);
         printUsage();
@@ -91,7 +98,7 @@ public final class CommandLineRunner {
     Hashtable<DecodeHintType, Object> hints = buildHints(tryHarder, pureBarcode, productsOnly);
     for (String arg : args) {
       if (!arg.startsWith("--")) {
-        decodeOneArgument(arg, hints, dumpResults, dumpBlackPoint);
+        decodeOneArgument(arg, hints, dumpResults, dumpBlackPoint, crop);
       }
     }
   }
@@ -128,13 +135,18 @@ public final class CommandLineRunner {
     System.err.println("Decode barcode images using the ZXing library\n");
     System.err.println("usage: CommandLineRunner { file | dir | url } [ options ]");
     System.err.println("  --try_harder: Use the TRY_HARDER hint, default is normal (mobile) mode");
+    System.err.println("  --pure_barcode: Input image is a pure monochrome barcode image, not a photo");
     System.err.println("  --products_only: Only decode the UPC and EAN families of barcodes");
     System.err.println("  --dump_results: Write the decoded contents to input.txt");
     System.err.println("  --dump_black_point: Compare black point algorithms as input.mono.png");
+    System.err.println("  --crop=left,top,width,height: Only examine cropped region of input image(s)");
   }
 
-  private static void decodeOneArgument(String argument, Hashtable<DecodeHintType, Object> hints,
-      boolean dumpResults, boolean dumpBlackPoint) throws IOException,
+  private static void decodeOneArgument(String argument,
+                                        Hashtable<DecodeHintType, Object> hints,
+                                        boolean dumpResults,
+                                        boolean dumpBlackPoint,
+                                        int[] crop) throws IOException,
       URISyntaxException {
 
     File inputFile = new File(argument);
@@ -152,7 +164,7 @@ public final class CommandLineRunner {
           if (filename.contains(".mono.png")) {
             continue;
           }
-          Result result = decode(input.toURI(), hints, dumpBlackPoint);
+          Result result = decode(input.toURI(), hints, dumpBlackPoint, crop);
           if (result != null) {
             successful++;
             if (dumpResults) {
@@ -164,13 +176,13 @@ public final class CommandLineRunner {
         System.out.println("\nDecoded " + successful + " files out of " + total +
             " successfully (" + (successful * 100 / total) + "%)\n");
       } else {
-        Result result = decode(inputFile.toURI(), hints, dumpBlackPoint);
+        Result result = decode(inputFile.toURI(), hints, dumpBlackPoint, crop);
         if (dumpResults) {
           dumpResult(inputFile, result);
         }
       }
     } else {
-      decode(new URI(argument), hints, dumpBlackPoint);
+      decode(new URI(argument), hints, dumpBlackPoint, crop);
     }
   }
 
@@ -193,8 +205,10 @@ public final class CommandLineRunner {
     }
   }
 
-  private static Result decode(URI uri, Hashtable<DecodeHintType, Object> hints,
-      boolean dumpBlackPoint) throws IOException {
+  private static Result decode(URI uri,
+                               Hashtable<DecodeHintType, Object> hints,
+                               boolean dumpBlackPoint,
+                               int[] crop) throws IOException {
     BufferedImage image;
     try {
       image = ImageIO.read(uri.toURL());
@@ -206,7 +220,12 @@ public final class CommandLineRunner {
       return null;
     }
     try {
-      LuminanceSource source = new BufferedImageLuminanceSource(image);
+      LuminanceSource source;
+      if (crop == null) {
+        source = new BufferedImageLuminanceSource(image);
+      } else {
+        source = new BufferedImageLuminanceSource(image, crop[0], crop[1], crop[2], crop[3]);
+      }
       BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
       if (dumpBlackPoint) {
         dumpBlackPoint(uri, image, bitmap);
