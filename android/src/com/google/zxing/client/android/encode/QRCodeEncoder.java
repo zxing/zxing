@@ -54,6 +54,7 @@ final class QRCodeEncoder {
   private static final String TAG = "QRCodeEncoder";
 
   private static final int WHITE = 0xFFFFFFFF;
+  private static final int BLACK = 0xFF000000;
 
   private final Activity activity;
   private String contents;
@@ -338,9 +339,7 @@ final class QRCodeEncoder {
         for (int y = 0; y < height; y++) {
           int offset = y * width;
           for (int x = 0; x < width; x++) {
-            if (!result.get(x, y)) {
-              pixels[offset + x] = WHITE;
-            }
+            pixels[offset + x] = result.get(x, y) ? BLACK : WHITE;
           }
         }
 
