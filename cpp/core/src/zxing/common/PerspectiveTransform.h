@@ -22,7 +22,7 @@
  */
 
 #include <zxing/common/Counted.h>
-#include <valarray>
+#include <vector>
 
 namespace zxing {
 class PerspectiveTransform : public Counted {
@@ -41,7 +41,7 @@ public:
       float x3, float y3);
   Ref<PerspectiveTransform> buildAdjoint();
   Ref<PerspectiveTransform> times(Ref<PerspectiveTransform> other);
-  void transformPoints(std::valarray<float> &points);
+  void transformPoints(std::vector<float> &points);
 
   friend std::ostream& operator<<(std::ostream& out, PerspectiveTransform &pt);
 };

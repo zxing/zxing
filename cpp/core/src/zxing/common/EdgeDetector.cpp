@@ -20,6 +20,7 @@
 
 #include <zxing/common/EdgeDetector.h>
 #include <algorithm>
+#include <cmath>
 
 using namespace std;
 

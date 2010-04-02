@@ -22,7 +22,6 @@
  */
 
 #include <zxing/common/Counted.h>
-#include <valarray>
 #include <limits>
 
 namespace zxing {

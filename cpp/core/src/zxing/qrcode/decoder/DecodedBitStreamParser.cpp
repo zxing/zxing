@@ -20,7 +20,9 @@
 
 #include <zxing/qrcode/decoder/DecodedBitStreamParser.h>
 #include <iostream>
+#ifndef NO_ICONV
 #include <iconv.h>
+#endif
 
 // Required for compatibility. TODO: test on Symbian
 #ifdef ZXING_ICONV_CONST
@@ -50,9 +52,10 @@ const char *DecodedBitStreamParser::UTF8 = "UTF-8";
 const char *DecodedBitStreamParser::SHIFT_JIS = "SHIFT_JIS";
 const char *DecodedBitStreamParser::EUC_JP = "EUC-JP";
 
-void DecodedBitStreamParser::append(ostream &ost, const unsigned char *bufIn, size_t nIn, const char *src) {
+string DecodedBitStreamParser::convert(const unsigned char *bufIn, size_t nIn, const char *src) {
+#ifndef NO_ICONV
   if (nIn == 0) {
-    return;
+    return string();
   }
 
   iconv_t cd = iconv_open(UTF8, src);
@@ -76,12 +79,15 @@ void DecodedBitStreamParser::append(ostream &ost, const unsigned char *bufIn, si
 
   int nResult = maxOut - nTo;
   bufOut[nResult] = '\0';
-
-  ost << bufOut;
+  string result((const char *)bufOut);
   delete[] bufOut;
+  return result;
+ #else
+  return string((const char *)bufIn, nIn);
+ #endif
 }
 
-void DecodedBitStreamParser::decodeKanjiSegment(Ref<BitSource> bits, ostringstream &result, int count) {
+string DecodedBitStreamParser::decodeKanjiSegment(Ref<BitSource> bits, int count) {
   // Each character will require 2 bytes. Read the characters as 2-byte pairs
   // and decode as Shift_JIS afterwards
   size_t nBytes = 2 * count;
@@ -105,11 +111,12 @@ void DecodedBitStreamParser::decodeKanjiSegment(Ref<BitSource> bits, ostringstre
     count--;
   }
 
-  append(result, buffer, nBytes, SHIFT_JIS);
+  string result = convert(buffer, nBytes, SHIFT_JIS);
   delete[] buffer;
+  return result;
 }
 
-void DecodedBitStreamParser::decodeByteSegment(Ref<BitSource> bits, ostringstream &result, int count) {
+string DecodedBitStreamParser::decodeByteSegment(Ref<BitSource> bits, int count) {
   int nBytes = count;
   unsigned char* readBytes = new unsigned char[nBytes];
   if (count << 3 > bits->available()) {
@@ -127,11 +134,12 @@ void DecodedBitStreamParser::decodeByteSegment(Ref<BitSource> bits, ostringstrea
   // Shift_JIS -- without anything like an ECI designator to
   // give a hint.
   const char *encoding = guessEncoding(readBytes, nBytes);
-  append(result, readBytes, nBytes, encoding);
+  string result = convert(readBytes, nBytes, encoding);
   delete[] readBytes;
+  return result;
 }
 
-void DecodedBitStreamParser::decodeNumericSegment(Ref<BitSource> bits, ostringstream &result, int count) {
+string DecodedBitStreamParser::decodeNumericSegment(Ref<BitSource> bits, int count) {
   int nBytes = count;
   unsigned char* bytes = new unsigned char[nBytes];
   int i = 0;
@@ -172,11 +180,12 @@ void DecodedBitStreamParser::decodeNumericSegment(Ref<BitSource> bits, ostringst
     }
     bytes[i++] = ALPHANUMERIC_CHARS[digitBits];
   }
-  append(result, bytes, nBytes, ASCII);
+  string result = convert(bytes, nBytes, ASCII);
   delete[] bytes;
+  return result;
 }
 
-void DecodedBitStreamParser::decodeAlphanumericSegment(Ref<BitSource> bits, ostringstream &result, int count) {
+string DecodedBitStreamParser::decodeAlphanumericSegment(Ref<BitSource> bits, int count) {
   int nBytes = count;
   unsigned char* bytes = new unsigned char[nBytes];
   int i = 0;
@@ -190,8 +199,9 @@ void DecodedBitStreamParser::decodeAlphanumericSegment(Ref<BitSource> bits, ostr
   if (count == 1) {
     bytes[i++] = ALPHANUMERIC_CHARS[bits->readBits(6)];
   }
-  append(result, bytes, nBytes, ASCII);
+  string result = convert(bytes, nBytes, ASCII);
   delete[] bytes;
+  return result;
 }
 
 const char *
@@ -248,7 +258,7 @@ DecodedBitStreamParser::guessEncoding(unsigned char *bytes, int length) {
 }
 
 string DecodedBitStreamParser::decode(ArrayRef<unsigned char> bytes, Version *version) {
-  ostringstream result;
+  string result;
   Ref<BitSource> bits(new BitSource(bytes));
   Mode *mode = &Mode::TERMINATOR;
   do {
@@ -263,19 +273,19 @@ string DecodedBitStreamParser::decode(ArrayRef<unsigned char> bytes, Version *ve
       // How many characters will follow, encoded in this mode?
       int count = bits->readBits(mode->getCharacterCountBits(version));
       if (mode == &Mode::NUMERIC) {
-        decodeNumericSegment(bits, result, count);
+        result = decodeNumericSegment(bits, count);
       } else if (mode == &Mode::ALPHANUMERIC) {
-        decodeAlphanumericSegment(bits, result, count);
+        result = decodeAlphanumericSegment(bits, count);
       } else if (mode == &Mode::BYTE) {
-        decodeByteSegment(bits, result, count);
+        result = decodeByteSegment(bits, count);
       } else if (mode == &Mode::KANJI) {
-        decodeKanjiSegment(bits, result, count);
+        result = decodeKanjiSegment(bits, count);
       } else {
         throw ReaderException("Unsupported mode indicator");
       }
     }
   } while (mode != &Mode::TERMINATOR);
-  return result.str();
+  return result;
 }
 
 }

@@ -27,6 +27,7 @@
 #include <zxing/common/GridSampler.h>
 #include <cmath>
 #include <sstream>
+#include <cstdlib>
 
 namespace zxing {
 namespace qrcode {
@@ -133,8 +134,8 @@ Ref<BitMatrix> Detector::sampleGrid(Ref<BitMatrix> image, int dimension, Ref<Per
 
 int Detector::computeDimension(Ref<ResultPoint> topLeft, Ref<ResultPoint> topRight, Ref<ResultPoint> bottomLeft,
                                float moduleSize) {
-  int tltrCentersDimension = lround(FinderPatternFinder::distance(topLeft, topRight) / moduleSize);
-  int tlblCentersDimension = lround(FinderPatternFinder::distance(topLeft, bottomLeft) / moduleSize);
+  int tltrCentersDimension = int(FinderPatternFinder::distance(topLeft, topRight) / moduleSize + 0.5f);
+  int tlblCentersDimension = int(FinderPatternFinder::distance(topLeft, bottomLeft) / moduleSize + 0.5f);
   int dimension = ((tltrCentersDimension + tlblCentersDimension) >> 1) + 7;
   switch (dimension & 0x03) { // mod 4
   case 0:
@@ -200,7 +201,7 @@ float Detector::sizeOfBlackWhiteBlackRunBothWays(int fromX, int fromY, int toX, 
 float Detector::sizeOfBlackWhiteBlackRun(int fromX, int fromY, int toX, int toY) {
   // Mild variant of Bresenham's algorithm;
   // see http://en.wikipedia.org/wiki/Bresenham's_line_algorithm
-  bool steep = abs(toY - fromY) > abs(toX - fromX);
+  bool steep = labs(toY - fromY) > labs(toX - fromX);
   if (steep) {
     int temp = fromX;
     fromX = fromY;
@@ -210,8 +211,8 @@ float Detector::sizeOfBlackWhiteBlackRun(int fromX, int fromY, int toX, int toY)
     toY = temp;
   }
 
-  int dx = abs(toX - fromX);
-  int dy = abs(toY - fromY);
+  int dx = labs(toX - fromX);
+  int dy = labs(toY - fromY);
   int error = -dx >> 1;
   int ystep = fromY < toY ? 1 : -1;
   int xstep = fromX < toX ? 1 : -1;

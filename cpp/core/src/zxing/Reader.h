@@ -21,7 +21,6 @@
  * limitations under the License.
  */
 
-#include <map>
 #include <zxing/BinaryBitmap.h>
 #include <zxing/Result.h>
 

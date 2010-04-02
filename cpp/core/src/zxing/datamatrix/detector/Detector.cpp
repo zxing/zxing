@@ -22,6 +22,7 @@
 #include <zxing/datamatrix/detector/Detector.h>
 #include <cmath>
 #include <sstream>
+#include <cstdlib>
 
 namespace zxing {
 namespace datamatrix {
@@ -180,7 +181,7 @@ Ref<ResultPointsAndTransitions> Detector::transitionsBetween(Ref<CornerPoint> fr
     int fromY = (int) from->getY();
     int toX = (int) to->getX();
     int toY = (int) to->getY();
-    bool steep = abs(toY - fromY) > abs(toX - fromX);
+    bool steep = labs(toY - fromY) > labs(toX - fromX);
     if (steep) {
       int temp = fromX;
       fromX = fromY;
@@ -190,8 +191,8 @@ Ref<ResultPointsAndTransitions> Detector::transitionsBetween(Ref<CornerPoint> fr
       toY = temp;
     }
 
-    int dx = abs(toX - fromX);
-    int dy = abs(toY - fromY);
+    int dx = labs(toX - fromX);
+    int dy = labs(toY - fromY);
     int error = -dx >> 1;
     int ystep = fromY < toY ? 1 : -1;
     int xstep = fromX < toX ? 1 : -1;

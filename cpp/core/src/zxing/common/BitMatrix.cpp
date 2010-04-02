@@ -24,7 +24,6 @@
 #include <iostream>
 #include <sstream>
 #include <string>
-#include <cstring>
 
 namespace zxing {
 using namespace std;
@@ -40,7 +39,7 @@ unsigned int logDigits(unsigned digits) {
 }
 
 
-const unsigned int bitsPerWord = std::numeric_limits<unsigned int>::digits;
+const unsigned int bitsPerWord = sizeof(unsigned int)*8;
 const unsigned int logBits = logDigits(bitsPerWord);
 const unsigned int bitsMask = (1 << logBits) - 1;
 
@@ -90,7 +89,7 @@ void BitMatrix::flip(size_t x, size_t y) {
 }
 
 void BitMatrix::clear() {
-  std::memset(bits_, 0, sizeof(unsigned int) * words_);
+  std::fill(bits_, bits_+words_, 0);
 }
 
 void BitMatrix::setRegion(size_t left, size_t top, size_t width, size_t height) {
