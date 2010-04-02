@@ -20,6 +20,7 @@
 
 #include <zxing/qrcode/detector/QREdgeDetector.h>
 #include <zxing/common/EdgeDetector.h>
+#include <cstdlib>
 
 using namespace std;
 
@@ -113,7 +114,7 @@ Point QREdgeDetector::endOfReverseBlackWhiteBlackRun(const BitMatrix& image, Poi
   int toX = (int)to.x;
   int toY = (int)to.y;
 
-  bool steep = abs(toY - fromY) > abs(toX - fromX);
+  bool steep = labs(toY - fromY) > labs(toX - fromX);
   if (steep) {
     int temp = fromX;
     fromX = fromY;
@@ -123,8 +124,8 @@ Point QREdgeDetector::endOfReverseBlackWhiteBlackRun(const BitMatrix& image, Poi
     toY = temp;
   }
 
-  int dx = abs(toX - fromX);
-  int dy = abs(toY - fromY);
+  int dx = labs(toX - fromX);
+  int dy = labs(toY - fromY);
   int error = -dx >> 1;
   int ystep = fromY < toY ? -1 : 1;
   int xstep = fromX < toX ? -1 : 1;

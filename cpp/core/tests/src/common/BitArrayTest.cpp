@@ -65,7 +65,7 @@ void BitArrayTest::testGetArray() {
   BitArray array(2*bits);
   array.set(0);
   array.set(2*bits - 1);
-  valarray<unsigned> words(array.getBitArray());
+  vector<unsigned> words(array.getBitArray());
   CPPUNIT_ASSERT_EQUAL(1u, words[0]);
   CPPUNIT_ASSERT_EQUAL((1u << (bits - 1)), words[1]);
 }

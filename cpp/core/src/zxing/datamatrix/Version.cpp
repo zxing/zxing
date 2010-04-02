@@ -19,7 +19,6 @@
  */
 
 #include <zxing/datamatrix/Version.h>
-#include <cstdarg>
 #include <limits>
 #include <iostream>
 

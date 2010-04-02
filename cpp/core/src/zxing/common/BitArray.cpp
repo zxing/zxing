@@ -33,7 +33,7 @@ static unsigned int logDigits(unsigned digits) {
   }
   return log;
 }
-const unsigned int BitArray::bitsPerWord_ = numeric_limits<unsigned int>::digits;
+const unsigned int BitArray::bitsPerWord_ = sizeof(unsigned int)*8;
 const unsigned int BitArray::logBits_ = logDigits(bitsPerWord_);
 const unsigned int BitArray::bitsMask_ = (1 << logBits_) - 1;
 size_t BitArray::wordsForBits(size_t bits) {
@@ -48,7 +48,7 @@ BitArray::BitArray() {
 }
 
 BitArray::BitArray(size_t size) :
-    size_(size), bits_((const unsigned int)0, wordsForBits(size)) {
+    size_(size), bits_(wordsForBits(size), (const unsigned int)0) {
 }
 BitArray::~BitArray() {
 }
@@ -105,7 +105,7 @@ bool BitArray::isRange(size_t start, size_t end, bool value) {
   }
   return true;
 }
-valarray<unsigned int>& BitArray::getBitArray() {
+vector<unsigned int>& BitArray::getBitArray() {
   return bits_;
 }
 void BitArray::reverse() {

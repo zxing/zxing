@@ -22,7 +22,7 @@
  */
 
 #include <memory>
-#include <valarray>
+#include <vector>
 #include <zxing/common/Counted.h>
 
 namespace zxing {
@@ -42,8 +42,8 @@ class GF256 {
    * @author christian.brunschen@gmail.com (Christian Brunschen)
    */
 private:
-  std::valarray<int> exp_;
-  std::valarray<int> log_;
+  std::vector<int> exp_;
+  std::vector<int> log_;
   Ref<GF256Poly> zero_;
   Ref<GF256Poly> one_;
 

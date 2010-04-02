@@ -26,6 +26,7 @@
 #include <zxing/common/IllegalArgumentException.h>
 #include <vector>
 #include <cmath>
+#include <cstdlib>
 
 namespace zxing {
 using namespace std;

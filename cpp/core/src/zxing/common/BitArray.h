@@ -23,7 +23,7 @@
 
 #include <zxing/common/Counted.h>
 #include <zxing/common/IllegalArgumentException.h>
-#include <valarray>
+#include <vector>
 #include <limits>
 #include <iostream>
 
@@ -32,7 +32,7 @@ namespace zxing {
 class BitArray : public Counted {
 private:
   size_t size_;
-  std::valarray<unsigned int> bits_;
+  std::vector<unsigned int> bits_;
   static const unsigned int bitsPerWord_;
   static const unsigned int logBits_;
   static const unsigned int bitsMask_;
@@ -48,7 +48,7 @@ public:
   void setBulk(size_t i, unsigned int newBits);
   void clear();
   bool isRange(size_t start, size_t end, bool value);
-  std::valarray<unsigned int>& getBitArray();
+  std::vector<unsigned int>& getBitArray();
   void reverse();
 };
 

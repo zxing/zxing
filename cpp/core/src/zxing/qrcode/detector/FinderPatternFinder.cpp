@@ -22,6 +22,8 @@
 #include <zxing/ReaderException.h>
 #include <vector>
 #include <cmath>
+#include <cstdlib>
+#include <algorithm>
 
 namespace zxing {
 namespace qrcode {
@@ -32,6 +34,8 @@ class ClosestToAverageComparator {
 private:
   float averageModuleSize_;
 public:
+  ClosestToAverageComparator() : averageModuleSize_(0.0f) { }
+  
   ClosestToAverageComparator(float averageModuleSize) :
       averageModuleSize_(averageModuleSize) {
   }
@@ -136,7 +140,7 @@ float FinderPatternFinder::crossCheckVertical(size_t startI, size_t centerJ, int
   // If we found a finder-pattern-like section, but its size is more than 40% different than
   // the original, assume it's a false positive
   int stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2] + stateCount[3] + stateCount[4];
-  if (5 * abs(stateCountTotal - originalStateCountTotal) >= 2 * originalStateCountTotal) {
+  if (5 * labs(stateCountTotal - originalStateCountTotal) >= 2 * originalStateCountTotal) {
     return NAN;
   }
 
@@ -200,7 +204,7 @@ float FinderPatternFinder::crossCheckHorizontal(size_t startJ, size_t centerI, i
   // If we found a finder-pattern-like section, but its size is significantly different than
   // the original, assume it's a false positive
   int stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2] + stateCount[3] + stateCount[4];
-  if (5 * abs(stateCountTotal - originalStateCountTotal) >= originalStateCountTotal) {
+  if (5 * labs(stateCountTotal - originalStateCountTotal) >= originalStateCountTotal) {
     return NAN;
   }
 
@@ -393,7 +397,7 @@ Ref<FinderPatternInfo> FinderPatternFinder::find() {
   // We are looking for black/white/black/white/black modules in
   // 1:1:3:1:1 ratio; this tracks the number of such modules seen so far
 
-  // As this is used often, we use an integer array instead of valarray
+  // As this is used often, we use an integer array instead of vector
   int stateCount[5];
   bool done = false;
 

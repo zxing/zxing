@@ -91,7 +91,7 @@ Ref<PerspectiveTransform> PerspectiveTransform::times(Ref<PerspectiveTransform> 
   return result;
 }
 
-void PerspectiveTransform::transformPoints(valarray<float> &points) {
+void PerspectiveTransform::transformPoints(vector<float> &points) {
   int max = points.size();
   float a11 = this->a11;
   float a12 = this->a12;

@@ -82,7 +82,7 @@ void save_grid(Ref<BitMatrix> matrix, string filename, Ref<PerspectiveTransform>
   image.strokeWidth(1);
 
   for (int i = 0; i <= dimension; i++) {
-    valarray<float> tpoints(0.0, 4);
+    vector<float> tpoints(4);
 
     tpoints[0] = 0;
     tpoints[1] = i;

@@ -25,7 +25,6 @@
 #include <zxing/common/BitMatrix.h>
 #include <zxing/common/Counted.h>
 #include <vector>
-#include <valarray>
 
 namespace zxing {
 namespace datamatrix {

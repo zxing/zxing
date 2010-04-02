@@ -57,7 +57,7 @@ void PerspectiveTransformTest::assertPointEquals(float expectedX,
     float sourceX,
     float sourceY,
     Ref<PerspectiveTransform> pt) {
-  valarray<float> points(2);
+  vector<float> points(2);
   points[0] = sourceX;
   points[1] = sourceY;
   pt->transformPoints(points);
