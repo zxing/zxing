@@ -37,7 +37,7 @@ float AlignmentPatternFinder::centerFromEnd(vector<int> &stateCount, int end) {
 bool AlignmentPatternFinder::foundPatternCross(vector<int> &stateCount) {
   float maxVariance = moduleSize_ / 2.0f;
   for (size_t i = 0; i < 3; i++) {
-    if (labs(moduleSize_ - stateCount[i]) >= maxVariance) {
+    if (abs(moduleSize_ - stateCount[i]) >= maxVariance) {
       return false;
     }
   }
@@ -86,7 +86,7 @@ float AlignmentPatternFinder::crossCheckVertical(size_t startI, size_t centerJ, 
   }
 
   int stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2];
-  if (5 * labs(stateCountTotal - originalStateCountTotal) >= 2 * originalStateCountTotal) {
+  if (5 * abs(stateCountTotal - originalStateCountTotal) >= 2 * originalStateCountTotal) {
     return NAN;
   }
 

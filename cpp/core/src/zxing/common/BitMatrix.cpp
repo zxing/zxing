@@ -39,7 +39,7 @@ unsigned int logDigits(unsigned digits) {
 }
 
 
-const unsigned int bitsPerWord = sizeof(unsigned int)*8;
+const unsigned int bitsPerWord = numeric_limits<unsigned int>::digits;
 const unsigned int logBits = logDigits(bitsPerWord);
 const unsigned int bitsMask = (1 << logBits) - 1;
 
