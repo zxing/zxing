@@ -20,6 +20,7 @@
 
 #include <zxing/common/BitArray.h>
 #include <iostream>
+#include <limits>
 
 using namespace std;
 
@@ -33,7 +34,7 @@ static unsigned int logDigits(unsigned digits) {
   }
   return log;
 }
-const unsigned int BitArray::bitsPerWord_ = sizeof(unsigned int)*8;
+const unsigned int BitArray::bitsPerWord_ = numeric_limits<unsigned int>::digits;
 const unsigned int BitArray::logBits_ = logDigits(bitsPerWord_);
 const unsigned int BitArray::bitsMask_ = (1 << logBits_) - 1;
 size_t BitArray::wordsForBits(size_t bits) {

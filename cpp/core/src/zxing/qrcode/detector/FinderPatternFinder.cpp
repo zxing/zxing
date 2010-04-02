@@ -140,7 +140,7 @@ float FinderPatternFinder::crossCheckVertical(size_t startI, size_t centerJ, int
   // If we found a finder-pattern-like section, but its size is more than 40% different than
   // the original, assume it's a false positive
   int stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2] + stateCount[3] + stateCount[4];
-  if (5 * labs(stateCountTotal - originalStateCountTotal) >= 2 * originalStateCountTotal) {
+  if (5 * abs(stateCountTotal - originalStateCountTotal) >= 2 * originalStateCountTotal) {
     return NAN;
   }
 
@@ -204,7 +204,7 @@ float FinderPatternFinder::crossCheckHorizontal(size_t startJ, size_t centerI, i
   // If we found a finder-pattern-like section, but its size is significantly different than
   // the original, assume it's a false positive
   int stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2] + stateCount[3] + stateCount[4];
-  if (5 * labs(stateCountTotal - originalStateCountTotal) >= originalStateCountTotal) {
+  if (5 * abs(stateCountTotal - originalStateCountTotal) >= originalStateCountTotal) {
     return NAN;
   }
 

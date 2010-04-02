@@ -201,7 +201,7 @@ float Detector::sizeOfBlackWhiteBlackRunBothWays(int fromX, int fromY, int toX, 
 float Detector::sizeOfBlackWhiteBlackRun(int fromX, int fromY, int toX, int toY) {
   // Mild variant of Bresenham's algorithm;
   // see http://en.wikipedia.org/wiki/Bresenham's_line_algorithm
-  bool steep = labs(toY - fromY) > labs(toX - fromX);
+  bool steep = abs(toY - fromY) > abs(toX - fromX);
   if (steep) {
     int temp = fromX;
     fromX = fromY;
@@ -211,8 +211,8 @@ float Detector::sizeOfBlackWhiteBlackRun(int fromX, int fromY, int toX, int toY)
     toY = temp;
   }
 
-  int dx = labs(toX - fromX);
-  int dy = labs(toY - fromY);
+  int dx = abs(toX - fromX);
+  int dy = abs(toY - fromY);
   int error = -dx >> 1;
   int ystep = fromY < toY ? 1 : -1;
   int xstep = fromX < toX ? 1 : -1;

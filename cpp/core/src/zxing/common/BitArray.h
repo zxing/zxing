@@ -24,7 +24,6 @@
 #include <zxing/common/Counted.h>
 #include <zxing/common/IllegalArgumentException.h>
 #include <vector>
-#include <limits>
 #include <iostream>
 
 namespace zxing {

@@ -52,10 +52,10 @@ const char *DecodedBitStreamParser::UTF8 = "UTF-8";
 const char *DecodedBitStreamParser::SHIFT_JIS = "SHIFT_JIS";
 const char *DecodedBitStreamParser::EUC_JP = "EUC-JP";
 
-string DecodedBitStreamParser::convert(const unsigned char *bufIn, size_t nIn, const char *src) {
+void DecodedBitStreamParser::append(std::string &result, const unsigned char *bufIn, size_t nIn, const char *src) {
 #ifndef NO_ICONV
   if (nIn == 0) {
-    return string();
+    return;
   }
 
   iconv_t cd = iconv_open(UTF8, src);
@@ -79,15 +79,14 @@ string DecodedBitStreamParser::convert(const unsigned char *bufIn, size_t nIn, c
 
   int nResult = maxOut - nTo;
   bufOut[nResult] = '\0';
-  string result((const char *)bufOut);
+  result.append((const char *)bufOut);
   delete[] bufOut;
-  return result;
  #else
-  return string((const char *)bufIn, nIn);
+  result.append((const char *)bufIn, nIn);
  #endif
 }
 
-string DecodedBitStreamParser::decodeKanjiSegment(Ref<BitSource> bits, int count) {
+void DecodedBitStreamParser::decodeKanjiSegment(Ref<BitSource> bits, std::string &result, int count) {
   // Each character will require 2 bytes. Read the characters as 2-byte pairs
   // and decode as Shift_JIS afterwards
   size_t nBytes = 2 * count;
@@ -111,12 +110,11 @@ string DecodedBitStreamParser::decodeKanjiSegment(Ref<BitSource> bits, int count
     count--;
   }
 
-  string result = convert(buffer, nBytes, SHIFT_JIS);
+  append(result, buffer, nBytes, SHIFT_JIS);
   delete[] buffer;
-  return result;
 }
 
-string DecodedBitStreamParser::decodeByteSegment(Ref<BitSource> bits, int count) {
+void DecodedBitStreamParser::decodeByteSegment(Ref<BitSource> bits, std::string &result, int count) {
   int nBytes = count;
   unsigned char* readBytes = new unsigned char[nBytes];
   if (count << 3 > bits->available()) {
@@ -134,12 +132,11 @@ string DecodedBitStreamParser::decodeByteSegment(Ref<BitSource> bits, int count)
   // Shift_JIS -- without anything like an ECI designator to
   // give a hint.
   const char *encoding = guessEncoding(readBytes, nBytes);
-  string result = convert(readBytes, nBytes, encoding);
+  append(result, readBytes, nBytes, encoding);
   delete[] readBytes;
-  return result;
 }
 
-string DecodedBitStreamParser::decodeNumericSegment(Ref<BitSource> bits, int count) {
+void DecodedBitStreamParser::decodeNumericSegment(Ref<BitSource> bits, std::string &result, int count) {
   int nBytes = count;
   unsigned char* bytes = new unsigned char[nBytes];
   int i = 0;
@@ -180,12 +177,11 @@ string DecodedBitStreamParser::decodeNumericSegment(Ref<BitSource> bits, int cou
     }
     bytes[i++] = ALPHANUMERIC_CHARS[digitBits];
   }
-  string result = convert(bytes, nBytes, ASCII);
+  append(result, bytes, nBytes, ASCII);
   delete[] bytes;
-  return result;
 }
 
-string DecodedBitStreamParser::decodeAlphanumericSegment(Ref<BitSource> bits, int count) {
+void DecodedBitStreamParser::decodeAlphanumericSegment(Ref<BitSource> bits, std::string &result, int count) {
   int nBytes = count;
   unsigned char* bytes = new unsigned char[nBytes];
   int i = 0;
@@ -199,9 +195,8 @@ string DecodedBitStreamParser::decodeAlphanumericSegment(Ref<BitSource> bits, in
   if (count == 1) {
     bytes[i++] = ALPHANUMERIC_CHARS[bits->readBits(6)];
   }
-  string result = convert(bytes, nBytes, ASCII);
+  append(result, bytes, nBytes, ASCII);
   delete[] bytes;
-  return result;
 }
 
 const char *
@@ -273,13 +268,13 @@ string DecodedBitStreamParser::decode(ArrayRef<unsigned char> bytes, Version *ve
       // How many characters will follow, encoded in this mode?
       int count = bits->readBits(mode->getCharacterCountBits(version));
       if (mode == &Mode::NUMERIC) {
-        result = decodeNumericSegment(bits, count);
+        decodeNumericSegment(bits, result, count);
       } else if (mode == &Mode::ALPHANUMERIC) {
-        result = decodeAlphanumericSegment(bits, count);
+        decodeAlphanumericSegment(bits, result, count);
       } else if (mode == &Mode::BYTE) {
-        result = decodeByteSegment(bits, count);
+        decodeByteSegment(bits, result, count);
       } else if (mode == &Mode::KANJI) {
-        result = decodeKanjiSegment(bits, count);
+        decodeKanjiSegment(bits, result, count);
       } else {
         throw ReaderException("Unsupported mode indicator");
       }
