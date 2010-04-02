@@ -28,7 +28,7 @@ import android.net.Uri;
  * way to invoke barcode scanning and receive the result, without any need to integrate, modify, or learn the
  * project's source code.</p>
  *
- * <h2>Initiating a barcode can</h2>
+ * <h2>Initiating a barcode scan</h2>
  *
  * <p>Integration is essentially as easy as calling {@link #initiateScan(Activity)} and waiting
  * for the result in your app.</p>
@@ -53,7 +53,7 @@ import android.net.Uri;
  * <p>This is where you will handle a scan result.
  * Second, just call this in response to a user action somewhere to begin the scan process:</p>
  *
- * <p>{@code integrator.initiateScan();}</p>
+ * <p>{@code IntentIntegrator.initiateScan(yourActivity);}</p>
  *
  * <p>You can use {@link #initiateScan(Activity, String, String, String, String)} or
  * {@link #initiateScan(Activity, int, int, int, int)} to customize the download prompt with
@@ -68,16 +68,23 @@ import android.net.Uri;
  * @author Sean Owen
  * @author Fred Lin
  * @author Isaac Potoczny-Jones
+ * @author Brad Drehmer
  */
 public final class IntentIntegrator {
 
   public static final int REQUEST_CODE = 0x0ba7c0de; // get it?
 
-  private static final String DEFAULT_TITLE = "Install Barcode Scanner?";
-  private static final String DEFAULT_MESSAGE =
+  public static final String DEFAULT_TITLE = "Install Barcode Scanner?";
+  public static final String DEFAULT_MESSAGE =
       "This application requires Barcode Scanner. Would you like to install it?";
-  private static final String DEFAULT_YES = "Yes";
-  private static final String DEFAULT_NO = "No";
+  public static final String DEFAULT_YES = "Yes";
+  public static final String DEFAULT_NO = "No";
+
+  // supported barcode formats
+  public static final String PRODUCT_CODE_TYPES = "UPC_A,UPC_E,EAN_8,EAN_13";
+  public static final String ONE_D_CODE_TYPES = PRODUCT_CODE_TYPES + ",CODE_39,CODE_128";
+  public static final String QR_CODE_TYPES = "QR_CODE";
+  public static final String ALL_CODE_TYPES = null;
 
   private IntentIntegrator() {
   }
@@ -108,6 +115,30 @@ public final class IntentIntegrator {
   }
 
   /**
+   * See {@link #initiateScan(Activity, String, String, String, String, String)} --
+   * same, but scans for all supported barcode types.
+   * @param stringTitle title of dialog prompting user to download Barcode Scanner
+   * @param stringMessage text of dialog prompting user to download Barcode Scanner
+   * @param stringButtonYes text of button user clicks when agreeing to download
+   *  Barcode Scanner (e.g. "Yes")
+   * @param stringButtonNo text of button user clicks when declining to download
+   *  Barcode Scanner (e.g. "No")
+   */
+  public static void initiateScan(Activity activity,
+                                  String stringTitle,
+                                  String stringMessage,
+                                  String stringButtonYes,
+                                  String stringButtonNo) {
+
+	  initiateScan(activity,
+                 stringTitle,
+                 stringMessage,
+                 stringButtonYes,
+                 stringButtonNo,
+                 ALL_CODE_TYPES);
+  }
+
+  /**
    * Invokes scanning.
    *
    * @param stringTitle title of dialog prompting user to download Barcode Scanner
@@ -116,6 +147,8 @@ public final class IntentIntegrator {
    *  Barcode Scanner (e.g. "Yes")
    * @param stringButtonNo text of button user clicks when declining to download
    *  Barcode Scanner (e.g. "No")
+   * @param stringDesiredBarcodeFormats a comma separated list of codes you would
+   *  like to scan for.
    * @return the contents of the barcode that was scanned, or null if none was found
    * @throws InterruptedException if timeout expires before a scan completes
    */
@@ -123,9 +156,17 @@ public final class IntentIntegrator {
                                   String stringTitle,
                                   String stringMessage,
                                   String stringButtonYes,
-                                  String stringButtonNo) {
+                                  String stringButtonNo,
+                                  String stringDesiredBarcodeFormats) {
     Intent intentScan = new Intent("com.google.zxing.client.android.SCAN");
     intentScan.addCategory(Intent.CATEGORY_DEFAULT);
+
+    // check which types of codes to scan for
+    if (stringDesiredBarcodeFormats != null) {
+    	// set the desired barcode types
+    	intentScan.putExtra("SCAN_FORMATS", stringDesiredBarcodeFormats);
+    }
+
     try {
       activity.startActivityForResult(intentScan, REQUEST_CODE);
     } catch (ActivityNotFoundException e) {
