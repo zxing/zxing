@@ -60,7 +60,8 @@ import com.google.zxing.client.android.AndroidHttpClient;
  */
 public final class SearchBookContentsActivity extends Activity {
 
-  private static final String TAG = "SearchBookContents";
+  private static final String TAG = SearchBookContentsActivity.class.getSimpleName();
+
   private static final String USER_AGENT = "ZXing (Android)";
   private static final Pattern TAG_PATTERN = Pattern.compile("\\<.*?\\>");
   private static final Pattern LT_ENTITY_PATTERN = Pattern.compile("&lt;");
