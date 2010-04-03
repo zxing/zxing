@@ -45,7 +45,7 @@ import java.util.regex.Pattern;
  */
 final class CameraManager {
 
-  private static final String TAG = "CameraManager";
+  private static final String TAG = CameraManager.class.getSimpleName();
 
   private static final int MIN_FRAME_WIDTH = 240;
   private static final int MIN_FRAME_HEIGHT = 240;

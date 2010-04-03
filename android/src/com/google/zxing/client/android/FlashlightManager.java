@@ -35,7 +35,7 @@ import java.lang.reflect.Method;
  */
 final class FlashlightManager {
 
-  private static final String TAG = FlashlightManager.class.getName();
+  private static final String TAG = FlashlightManager.class.getSimpleName();
 
   private static Object iHardwareService;
   private static Method setFlashEnabledMethod;

@@ -37,7 +37,7 @@ import android.widget.Button;
  */
 public final class HelpActivity extends Activity {
 
-  private static final String TAG = HelpActivity.class.getName();
+  private static final String TAG = HelpActivity.class.getSimpleName();
 
   private static final String[] BUGGY_MODEL_SUBSTRINGS = {"Behold II", "Pulse", "Geeksphone"};
   private static final Uri BUGGY_URI =

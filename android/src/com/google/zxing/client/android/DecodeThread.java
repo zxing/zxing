@@ -43,8 +43,9 @@ import java.util.Vector;
  */
 final class DecodeThread extends Thread {
 
+  private static final String TAG = DecodeThread.class.getSimpleName();
+
   public static final String BARCODE_BITMAP = "barcode_bitmap";
-  private static final String TAG = "DecodeThread";
 
   private Handler handler;
   private final CaptureActivity activity;

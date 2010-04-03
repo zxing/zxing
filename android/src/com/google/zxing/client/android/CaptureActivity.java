@@ -78,7 +78,8 @@ import java.util.regex.Pattern;
  */
 public final class CaptureActivity extends Activity implements SurfaceHolder.Callback {
 
-  private static final String TAG = "CaptureActivity";
+  private static final String TAG = CaptureActivity.class.getSimpleName();
+
   private static final Pattern COMMA_PATTERN = Pattern.compile(",");
 
   private static final int SHARE_ID = Menu.FIRST;
