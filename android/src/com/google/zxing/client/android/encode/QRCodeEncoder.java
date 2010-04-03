@@ -51,7 +51,7 @@ import java.io.InputStream;
  */
 final class QRCodeEncoder {
 
-  private static final String TAG = "QRCodeEncoder";
+  private static final String TAG = QRCodeEncoder.class.getSimpleName();
 
   private static final int WHITE = 0xFFFFFFFF;
   private static final int BLACK = 0xFF000000;
@@ -311,8 +311,31 @@ final class QRCodeEncoder {
     }
   }
 
+  static Bitmap encodeAsBitmap(String contents,
+                               BarcodeFormat format,
+                               int desiredWidth,
+                               int desiredHeight) throws WriterException {
+    BitMatrix result = new MultiFormatWriter().encode(contents, format,
+        desiredWidth, desiredHeight);
+    int width = result.getWidth();
+    int height = result.getHeight();
+    int[] pixels = new int[width * height];
+    // All are 0, or black, by default
+    for (int y = 0; y < height; y++) {
+      int offset = y * width;
+      for (int x = 0; x < width; x++) {
+        pixels[offset + x] = result.get(x, y) ? BLACK : WHITE;
+      }
+    }
+
+    Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+    bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
+    return bitmap;
+  }
+
   private static final class EncodeThread extends Thread {
-    private static final String TAG = "EncodeThread";
+
+    private static final String TAG = EncodeThread.class.getSimpleName();
 
     private final String contents;
     private final Handler handler;
@@ -330,21 +353,7 @@ final class QRCodeEncoder {
     @Override
     public void run() {
       try {
-        BitMatrix result = new MultiFormatWriter().encode(contents, format,
-            pixelResolution, pixelResolution);
-        int width = result.getWidth();
-        int height = result.getHeight();
-        int[] pixels = new int[width * height];
-        // All are 0, or black, by default
-        for (int y = 0; y < height; y++) {
-          int offset = y * width;
-          for (int x = 0; x < width; x++) {
-            pixels[offset + x] = result.get(x, y) ? BLACK : WHITE;
-          }
-        }
-
-        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
+        Bitmap bitmap = encodeAsBitmap(contents, format, pixelResolution, pixelResolution);
         Message message = Message.obtain(handler, R.id.encode_succeeded);
         message.obj = bitmap;
         message.sendToTarget();
