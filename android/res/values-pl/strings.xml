@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (C) 2008 ZXing authors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<resources>
+  <string name="app_picker_name">Aplikacje</string>
+  <string name="app_name">Barcode Scanner</string>
+  <string name="bookmark_picker_name">Zakładki</string>
+  <string name="button_add_calendar">Dodaj do kalendarza</string>
+  <string name="button_add_contact">Dodaj kontakt</string>
+  <string name="button_back">Wstecz</string>
+  <string name="button_book_search">Szukaj książek</string>
+  <string name="button_cancel">Anuluj</string>
+  <string name="button_clipboard_empty">Schowek pusty</string>
+  <string name="button_custom_product_search">Wyszukiwanie indywidualne</string>
+  <string name="button_dial">Wykręć numer</string>
+  <string name="button_done">Gotowe</string>
+  <string name="button_email">Wyślij email</string>
+  <string name="button_get_directions">Otrzymaj wskazówki</string>
+  <string name="button_google_shopper">Google Shopper</string>
+  <string name="button_mms">Wyślij MMS</string>
+  <string name="button_ok">OK</string>
+  <string name="button_open_browser">Otwórz przeglądarkę</string>
+  <string name="button_product_search">Szukaj produktów</string>
+  <string name="button_search_book_contents">Przeszukaj zawartość</string>
+  <string name="button_read_book">Przeglądaj książkę</string>
+  <string name="button_share_app">Aplikacja</string>
+  <string name="button_share_bookmark">Zakładka</string>
+  <string name="button_share_by_email">Udostępnij przez email</string>
+  <string name="button_share_by_sms">Udostępnij przez SMS</string>
+  <string name="button_share_clipboard">Schowek</string>
+  <string name="button_share_contact">Kontakt</string>
+  <string name="button_show_map">Pokaż mapę</string>
+  <string name="button_sms">Wyślij SMS</string>
+  <string name="button_web_search">Szukaj w sieci</string>
+  <string name="contents_contact">Informacje o kontakcie</string>
+  <string name="contents_email">Adres email</string>
+  <string name="contents_location">Współrzędne geograficzne</string>
+  <string name="contents_phone">Numer telefonu</string>
+  <string name="contents_sms">Adres SMS</string>
+  <string name="contents_text">Zwykły tekst</string>
+  <string name="menu_about">O aplikacji</string>
+  <string name="menu_help">Pomoc</string>
+  <string name="menu_settings">Ustawienia</string>
+  <string name="menu_history">Historia</string>
+  <string name="menu_share">Udostępnij</string>
+  <string name="msg_about">Bazowane na bibliotece kodów paskowych ZXing o otwartym źródle</string>
+  <string name="msg_buggy">To urządzenie wykazuje znane błędy które powodują problemy podczas skanowania kodów paskowych. W celu otrzymania dalszych informacji, odwiedź http://code.google.com/p/zxing/wiki/FrequentlyAskedQuestions</string>
+  <string name="msg_camera_framework_bug">Przepraszamy, aparat Android napotkał problem. Może wystąpić potrzeba ponownego uruchomienia urządzenia.</string>
+  <string name="msg_default_contents">Zawartość</string>
+  <string name="msg_default_format">Format</string>
+  <string name="msg_default_mms_subject">Cześć</string>
+  <string name="msg_default_status">Umieść kod paskowy w prostokącie wizjera aby zeskanować.</string>
+  <string name="msg_default_type">Typ</string>
+  <string name="msg_default_time">Czas</string>
+  <string name="msg_encode_barcode_failed">Nie można wygenerować żądanego kodu paskowego.</string>
+  <string name="msg_encode_contents_failed">Nie można zakodować kodu paskowego z dostarczonych danych.</string>
+  <string name="msg_encode_in_progress">Generowanie kodu paskowego\u2026</string>
+  <string name="msg_google_shopper_missing">Google Shopper nie jest zainstalowany</string>
+  <string name="msg_install_google_shopper">Google Shopper łączy skanowanie kodów paskowych z cenami, recenzjami, itp bez otwierania przeglądarki. Czy chciał/a byś go wypróbować?</string>
+  <string name="msg_intent_failed">Przepraszamy, żadana aplikacja nie może zostać uruchomiona. Zawartość kodu paskowego może być nieprawidłowa.</string>
+  <string name="msg_loading_apps">Ładowanie listy aplikacji\u2026</string>
+  <string name="msg_not_our_results">Opuszczasz tą aplikację. Rezultaty wyszukiwania które zobaczysz nie są związane z tą aplikacją.</string>
+  <string name="msg_sbc_book_not_searchable">Przepraszamy, ta książka nie jest przeszukiwalna.</string>
+  <string name="msg_sbc_failed">Przepraszamy, wyszukiwania napotkało problem.</string>
+  <string name="msg_sbc_no_page_returned">Nie zwrócono żadnej strony</string>
+  <string name="msg_sbc_page">Strona</string>
+  <string name="msg_sbc_snippet_unavailable">Wycinek niedostępny</string>
+  <string name="msg_sbc_unknown_page">Nieznana strona</string>
+  <string name="msg_sbc_searching_book">Przeszukiwanie książki\u2026</string>
+  <string name="msg_share_explanation">Możesz udostępniać dane wyświetlając kod paskowy na swoim ekranie, skanując go innym telefonem.</string>
+  <string name="msg_share_subject_line">Oto zawartość kodu paskowego który został zeskanowany</string>
+  <string name="preferences_actions_title">Kiedy kod paskowy zostaje odnaleziony\u2026</string>
+  <string name="preferences_copy_to_clipboard_title">Kopiuj do schowka</string>
+  <string name="preferences_decode_1D_title">Dekoduj kody 1D</string>
+  <string name="preferences_decode_QR_title">Dekoduj kody QR</string>
+  <string name="preferences_general_title">Ustawienia ogólne</string>
+  <string name="preferences_name">Ustawienia</string>
+  <string name="preferences_play_beep_title">Piszcz</string>
+  <string name="preferences_vibrate_title">Wibruj</string>
+  <string name="preferences_front_light_title">Używaj lampy frontowej</string>
+  <string name="preferences_front_light_summary">Polepsza skanowanie przy małej ilości światła w niektórych telefonach, ale może powodować odbłysk</string>  
+  <string name="preferences_result_title">Ustawienia rezultatów</string>
+  <string name="preferences_custom_product_search_title">Własny URL wyszukiwania</string>
+  <string name="preferences_custom_product_search_summary">Użyj %s jako zamiennik dla ID produktu</string>
+  <string name="result_address_book">Znaleziono dane kontaktu</string>
+  <string name="result_calendar">Znaleziono wydarzenie kalendarza</string>
+  <string name="result_email_address">Znaleziono adres email</string>
+  <string name="result_geo">Znaleziono współrzędne geograficzne</string>
+  <string name="result_isbn">Znaleziono książkę</string>
+  <string name="result_product">Znaleziono produkt</string>
+  <string name="result_sms">Znaleziono adres SMS</string>
+  <string name="result_tel">Znaleziono numer telefonu</string>
+  <string name="result_text">Znaleziono zwykły tekst</string>
+  <string name="result_uri">Znaleziono URL</string>
+  <string name="history_title">Historia</string>
+  <string name="history_clear_text">Wyczyść historię</string>
+  <string name="history_send">Wyślij historię</string>
+  <string name="history_email_title">Historia Skanera Kodów Paskowych</string>
+  <string name="sbc_name">Wyszukiwanie książek Google</string>
+  <string name="share_name">Udostępnij przez kod paskowy</string>
+  <string name="title_about">Skaner Kodów Paskowych v</string>
+  <string name="zxing_url">http://code.google.com/p/zxing</string>
+</resources>
