@@ -17,11 +17,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.google.zxing</groupId>
-  <artifactId>core</artifactId>
+  <artifactId>javase</artifactId>
   <packaging>pom</packaging>
-  <name>ZXing Core</name>
+  <name>ZXing Java SE extensions</name>
   <version>1.6-SNAPSHOT</version>
-  <description>Core barcode encoding/decoding library</description>
+  <description>Java SE-specific extensions to core ZXing library</description>
   <url>http://code.google.com/p/zxing</url>
   <inceptionYear>2007</inceptionYear>
   <issueManagement>
@@ -50,10 +50,25 @@
     <developerConnection>scm:svn:https://zxing.googlecode.com/svn/trunk</developerConnection>
     <url>http://zxing.googlecode.com/svn/trunk</url>
   </scm>
+  <dependencies>
+    <dependency>
+      <groupId>com.google.zxing</groupId>
+      <artifactId>core</artifactId>
+      <version>1.6-SNAPSHOT</version>
+    </dependency>
+  </dependencies>
   <build>
     <sourceDirectory>src</sourceDirectory>
     <outputDirectory>build</outputDirectory>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>6</source>
+          <target>6</target>
+        </configuration>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-release-plugin</artifactId>
