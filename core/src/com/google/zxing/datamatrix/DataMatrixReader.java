@@ -89,66 +89,67 @@ public final class DataMatrixReader implements Reader {
    * which contains only an unrotated, unskewed, image of a Data Matrix code, with some white border
    * around it. This is a specialized method that works exceptionally fast in this special
    * case.
+   *
+   * @see com.google.zxing.qrcode.QRCodeReader#extractPureBits(BitMatrix) 
    */
   private static BitMatrix extractPureBits(BitMatrix image) throws NotFoundException {
-    // Now need to determine module size in pixels
 
     int height = image.getHeight();
     int width = image.getWidth();
     int minDimension = Math.min(height, width);
 
-    // First, skip white border by tracking diagonally from the top left down and to the right:
-    int borderWidth = 0;
-    while (borderWidth < minDimension && !image.get(borderWidth, borderWidth)) {
-      borderWidth++;
-    }
-    if (borderWidth == minDimension) {
-      throw NotFoundException.getNotFoundInstance();
-    }
-
     // And then keep tracking across the top-left black module to determine module size
-    int moduleEnd = borderWidth + 1;
-    while (moduleEnd < width && image.get(moduleEnd, borderWidth)) {
-      moduleEnd++;
+    //int moduleEnd = borderWidth;
+    int[] leftTopBlack = image.getTopLeftOnBit();
+    if (leftTopBlack == null) {
+      throw NotFoundException.getNotFoundInstance();
     }
-    if (moduleEnd == width) {
+    int x = leftTopBlack[0];
+    int y = leftTopBlack[1];
+    while (x < minDimension && y < minDimension && image.get(x, y)) {
+      x++;
+    }
+    if (x == minDimension) {
       throw NotFoundException.getNotFoundInstance();
     }
 
-    int moduleSize = moduleEnd - borderWidth;
+    int moduleSize = x - leftTopBlack[0];
 
-    // And now find where the bottommost black module on the first column ends
-    int columnEndOfSymbol = height - 1;
-    while (columnEndOfSymbol >= 0 && !image.get(borderWidth, columnEndOfSymbol)) {
-    	columnEndOfSymbol--;
+    // And now find where the rightmost black module on the first row ends
+    int rowEndOfSymbol = width - 1;
+    while (rowEndOfSymbol >= 0 && !image.get(rowEndOfSymbol, y)) {
+      rowEndOfSymbol--;
     }
-    if (columnEndOfSymbol < 0) {
+    if (rowEndOfSymbol < 0) {
       throw NotFoundException.getNotFoundInstance();
     }
-    columnEndOfSymbol++;
+    rowEndOfSymbol++;
 
     // Make sure width of barcode is a multiple of module size
-    if ((columnEndOfSymbol - borderWidth) % moduleSize != 0) {
+    if ((rowEndOfSymbol - x) % moduleSize != 0) {
       throw NotFoundException.getNotFoundInstance();
     }
-    int dimension = (columnEndOfSymbol - borderWidth) / moduleSize;
+    int dimension = 2 + ((rowEndOfSymbol - x) / moduleSize);
 
+    y += moduleSize;
+    
     // Push in the "border" by half the module width so that we start
     // sampling in the middle of the module. Just in case the image is a
     // little off, this will help recover.
-    borderWidth += moduleSize >> 1;
+    x -= moduleSize >> 1;
+    y -= moduleSize >> 1;
 
-    int sampleDimension = borderWidth + (dimension - 1) * moduleSize;
-    if (sampleDimension >= width || sampleDimension >= height) {
+    if ((x + (dimension - 1) * moduleSize) >= width ||
+        (y + (dimension - 1) * moduleSize) >= height) {
       throw NotFoundException.getNotFoundInstance();
     }
 
     // Now just read off the bits
     BitMatrix bits = new BitMatrix(dimension);
     for (int i = 0; i < dimension; i++) {
-      int iOffset = borderWidth + i * moduleSize;
+      int iOffset = y + i * moduleSize;
       for (int j = 0; j < dimension; j++) {
-        if (image.get(borderWidth + j * moduleSize, iOffset)) {
+        if (image.get(x + j * moduleSize, iOffset)) {
           bits.set(j, i);
         }
       }
