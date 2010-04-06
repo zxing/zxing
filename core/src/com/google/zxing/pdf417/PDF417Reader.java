@@ -29,6 +29,7 @@ import com.google.zxing.common.DecoderResult;
 import com.google.zxing.common.DetectorResult;
 import com.google.zxing.pdf417.decoder.Decoder;
 import com.google.zxing.pdf417.detector.Detector;
+import com.google.zxing.qrcode.QRCodeReader;
 
 import java.util.Hashtable;
 
@@ -59,7 +60,7 @@ public final class PDF417Reader implements Reader {
     DecoderResult decoderResult;
     ResultPoint[] points;
     if (hints != null && hints.containsKey(DecodeHintType.PURE_BARCODE)) {
-      BitMatrix bits = extractPureBits(image);
+      BitMatrix bits = QRCodeReader.extractPureBits(image.getBlackMatrix());
       decoderResult = decoder.decode(bits);
       points = NO_POINTS;
     } else {
@@ -75,75 +76,4 @@ public final class PDF417Reader implements Reader {
     // do nothing
   }
 
-  /**
-   * This method detects a barcode in a "pure" image -- that is, pure monochrome image
-   * which contains only an unrotated, unskewed, image of a barcode, with some white border
-   * around it. This is a specialized method that works exceptionally fast in this special
-   * case.
-   */
-  private static BitMatrix extractPureBits(BinaryBitmap image) throws NotFoundException {
-    // Now need to determine module size in pixels
-    BitMatrix matrix = image.getBlackMatrix();
-    int height = matrix.getHeight();
-    int width = matrix.getWidth();
-    int minDimension = Math.min(height, width);
-
-    // First, skip white border by tracking diagonally from the top left down and to the right:
-    int borderWidth = 0;
-    while (borderWidth < minDimension && !matrix.get(borderWidth, borderWidth)) {
-      borderWidth++;
-    }
-    if (borderWidth == minDimension) {
-      throw NotFoundException.getNotFoundInstance();
-    }
-
-    // And then keep tracking across the top-left black module to determine module size
-    int moduleEnd = borderWidth;
-    while (moduleEnd < minDimension && matrix.get(moduleEnd, moduleEnd)) {
-      moduleEnd++;
-    }
-    if (moduleEnd == minDimension) {
-      throw NotFoundException.getNotFoundInstance();
-    }
-
-    int moduleSize = moduleEnd - borderWidth;
-
-    // And now find where the rightmost black module on the first row ends
-    int rowEndOfSymbol = width - 1;
-    while (rowEndOfSymbol >= 0 && !matrix.get(rowEndOfSymbol, borderWidth)) {
-      rowEndOfSymbol--;
-    }
-    if (rowEndOfSymbol < 0) {
-      throw NotFoundException.getNotFoundInstance();
-    }
-    rowEndOfSymbol++;
-
-    // Make sure width of barcode is a multiple of module size
-    if ((rowEndOfSymbol - borderWidth) % moduleSize != 0) {
-      throw NotFoundException.getNotFoundInstance();
-    }
-    int dimension = (rowEndOfSymbol - borderWidth) / moduleSize;
-
-    // Push in the "border" by half the module width so that we start
-    // sampling in the middle of the module. Just in case the image is a
-    // little off, this will help recover.
-    borderWidth += moduleSize >> 1;
-
-    int sampleDimension = borderWidth + (dimension - 1) * moduleSize;
-    if (sampleDimension >= width || sampleDimension >= height) {
-      throw NotFoundException.getNotFoundInstance();
-    }
-
-    // Now just read off the bits
-    BitMatrix bits = new BitMatrix(dimension);
-    for (int y = 0; y < dimension; y++) {
-      int iOffset = borderWidth + y * moduleSize;
-      for (int x = 0; x < dimension; x++) {
-        if (matrix.get(borderWidth + x * moduleSize, iOffset)) {
-          bits.set(x, y);
-        }
-      }
-    }
-    return bits;
-  }
 }

@@ -95,36 +95,33 @@ public class QRCodeReader implements Reader {
    * around it. This is a specialized method that works exceptionally fast in this special
    * case.
    */
-  private static BitMatrix extractPureBits(BitMatrix image) throws NotFoundException {
-    // Now need to determine module size in pixels
+  public static BitMatrix extractPureBits(BitMatrix image) throws NotFoundException {
 
     int height = image.getHeight();
     int width = image.getWidth();
     int minDimension = Math.min(height, width);
 
-    // First, skip white border by tracking diagonally from the top left down and to the right:
-    int borderWidth = 0;
-    while (borderWidth < minDimension && !image.get(borderWidth, borderWidth)) {
-      borderWidth++;
-    }
-    if (borderWidth == minDimension) {
-      throw NotFoundException.getNotFoundInstance();
-    }
-
     // And then keep tracking across the top-left black module to determine module size
-    int moduleEnd = borderWidth;
-    while (moduleEnd < minDimension && image.get(moduleEnd, moduleEnd)) {
-      moduleEnd++;
+    //int moduleEnd = borderWidth;
+    int[] leftTopBlack = image.getTopLeftOnBit();
+    if (leftTopBlack == null) {
+      throw NotFoundException.getNotFoundInstance();
     }
-    if (moduleEnd == minDimension) {
+    int x = leftTopBlack[0];
+    int y = leftTopBlack[1];
+    while (x < minDimension && y < minDimension && image.get(x, y)) {
+      x++;
+      y++;
+    }
+    if (x == minDimension || y == minDimension) {
       throw NotFoundException.getNotFoundInstance();
     }
 
-    int moduleSize = moduleEnd - borderWidth;
+    int moduleSize = x - leftTopBlack[0];
 
     // And now find where the rightmost black module on the first row ends
     int rowEndOfSymbol = width - 1;
-    while (rowEndOfSymbol >= 0 && !image.get(rowEndOfSymbol, borderWidth)) {
+    while (rowEndOfSymbol >= 0 && !image.get(rowEndOfSymbol, y)) {
       rowEndOfSymbol--;
     }
     if (rowEndOfSymbol < 0) {
@@ -133,27 +130,28 @@ public class QRCodeReader implements Reader {
     rowEndOfSymbol++;
 
     // Make sure width of barcode is a multiple of module size
-    if ((rowEndOfSymbol - borderWidth) % moduleSize != 0) {
+    if ((rowEndOfSymbol - x) % moduleSize != 0) {
       throw NotFoundException.getNotFoundInstance();
     }
-    int dimension = (rowEndOfSymbol - borderWidth) / moduleSize;
+    int dimension = 1 + ((rowEndOfSymbol - x) / moduleSize);
 
     // Push in the "border" by half the module width so that we start
     // sampling in the middle of the module. Just in case the image is a
     // little off, this will help recover.
-    borderWidth += moduleSize >> 1;
+    x -= moduleSize >> 1;
+    y -= moduleSize >> 1;
 
-    int sampleDimension = borderWidth + (dimension - 1) * moduleSize;
-    if (sampleDimension >= width || sampleDimension >= height) {
+    if ((x + (dimension - 1) * moduleSize) >= width ||
+        (y + (dimension - 1) * moduleSize) >= height) {
       throw NotFoundException.getNotFoundInstance();
     }
 
     // Now just read off the bits
     BitMatrix bits = new BitMatrix(dimension);
     for (int i = 0; i < dimension; i++) {
-      int iOffset = borderWidth + i * moduleSize;
+      int iOffset = y + i * moduleSize;
       for (int j = 0; j < dimension; j++) {
-        if (image.get(borderWidth + j * moduleSize, iOffset)) {
+        if (image.get(x + j * moduleSize, iOffset)) {
           bits.set(j, i);
         }
       }

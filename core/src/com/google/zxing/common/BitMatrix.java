@@ -146,6 +146,31 @@ public final class BitMatrix {
   }
 
   /**
+   * This is useful in detecting a corner of a 'pure' barcode.
+   * 
+   * @return {x,y} coordinate of top-left-most 1 bit, or null if it is all white
+   */
+  public int[] getTopLeftOnBit() {
+    int bitsOffset = 0;
+    while (bitsOffset < bits.length && bits[bitsOffset] == 0) {
+      bitsOffset++;
+    }
+    if (bitsOffset == bits.length) {
+      return null;
+    }
+    int y = bitsOffset / rowSize;
+    int x = (bitsOffset % rowSize) << 5;
+    
+    int theBits = bits[bitsOffset];
+    int bit = 0;
+    while ((theBits << (31-bit)) == 0) {
+      bit++;
+    }
+    x += bit;
+    return new int[] {x, y};
+  }
+
+  /**
    * @return The width of the matrix
    */
   public int getWidth() {
