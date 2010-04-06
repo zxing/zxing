@@ -18,7 +18,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.google.zxing</groupId>
   <artifactId>javase</artifactId>
-  <packaging>pom</packaging>
+  <packaging>jar</packaging>
   <name>ZXing Java SE extensions</name>
   <version>1.6-SNAPSHOT</version>
   <description>Java SE-specific extensions to core ZXing library</description>
