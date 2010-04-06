@@ -18,7 +18,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.google.zxing</groupId>
   <artifactId>core</artifactId>
-  <packaging>pom</packaging>
+  <packaging>jar</packaging>
   <name>ZXing Core</name>
   <version>1.6-SNAPSHOT</version>
   <description>Core barcode encoding/decoding library</description>
