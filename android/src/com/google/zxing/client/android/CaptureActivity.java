@@ -66,6 +66,8 @@ import android.widget.TextView;
 
 import java.io.IOException;
 import java.text.DateFormat;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Date;
 import java.util.Vector;
 import java.util.regex.Pattern;
@@ -96,6 +98,8 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private static final String PRODUCT_SEARCH_URL_PREFIX = "http://www.google";
   private static final String PRODUCT_SEARCH_URL_SUFFIX = "/m/products/scan";
   private static final String ZXING_URL = "http://zxing.appspot.com/scan";
+  private static final String RETURN_CODE_PLACEHOLDER = "{CODE}";
+  private static final String RETURN_URL_PARAM = "ret";
 
   static final Vector<BarcodeFormat> PRODUCT_FORMATS;
   static final Vector<BarcodeFormat> ONE_D_FORMATS;
@@ -141,6 +145,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private boolean copyToClipboard;
   private Source source;
   private String sourceUrl;
+  private String returnUrlTemplate;
   private Vector<BarcodeFormat> decodeFormats;
   private String characterSet;
   private String versionName;
@@ -218,12 +223,14 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         sourceUrl = dataString;
         decodeFormats = PRODUCT_FORMATS;
         resetStatusView();
-      } else if (dataString != null && dataString.equals(ZXING_URL)) {
-        // Scan all formats and handle the results ourselves.
-        // TODO: In the future we could allow the hyperlink to include a URL to send the results to.
+      } else if (dataString != null && dataString.startsWith(ZXING_URL)) {
+        // Scan formats requested in query string (all formats if none specified).
+        // If a return URL is specified, send the results there. Otherwise, handle the results ourselves.
         source = Source.ZXING_LINK;
         sourceUrl = dataString;
-        decodeFormats = null;
+        Uri inputUri = Uri.parse(sourceUrl);
+        returnUrlTemplate = inputUri.getQueryParameter(RETURN_URL_PARAM);
+        decodeFormats = parseDecodeFormats(inputUri);
         resetStatusView();
       } else {
         // Scan all formats and handle the results ourselves (launched from Home).
@@ -249,11 +256,25 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   }
 
   private static Vector<BarcodeFormat> parseDecodeFormats(Intent intent) {
-    String scanFormats = intent.getStringExtra(Intents.Scan.SCAN_FORMATS);
+    return parseDecodeFormats(
+        Arrays.asList(COMMA_PATTERN.split(intent.getStringExtra(Intents.Scan.SCAN_FORMATS))),
+        intent.getStringExtra(Intents.Scan.MODE));
+  }
+  
+  private static Vector<BarcodeFormat> parseDecodeFormats(Uri inputUri) {
+    List<String> formats = inputUri.getQueryParameters(Intents.Scan.SCAN_FORMATS);
+    if (formats.size() == 1){
+      formats = Arrays.asList(COMMA_PATTERN.split(formats.get(0)));
+    }
+    return parseDecodeFormats(formats, inputUri.getQueryParameter(Intents.Scan.MODE));
+  }
+  
+  private static Vector<BarcodeFormat> parseDecodeFormats(List<String> scanFormats,
+                                                          String decodeMode) {
     if (scanFormats != null) {
       Vector<BarcodeFormat> formats = new Vector<BarcodeFormat>();
       try {
-        for (String format : COMMA_PATTERN.split(scanFormats)) {
+        for (String format : scanFormats) {
           formats.add(BarcodeFormat.valueOf(format));
         }
         return formats;
@@ -261,7 +282,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         // ignore it then
       }
     }
-    String decodeMode = intent.getStringExtra(Intents.Scan.MODE);
     if (decodeMode != null) {
       if (Intents.Scan.PRODUCT_MODE.equals(decodeMode)) {
         return PRODUCT_FORMATS;
@@ -415,6 +435,12 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
           handleDecodeExternally(rawResult, barcode);
           break;
         case ZXING_LINK:
+          if(returnUrlTemplate == null){
+            handleDecodeInternally(rawResult, barcode);
+          } else {
+            handleDecodeExternally(rawResult, barcode);
+          }
+          break;
         case NONE:
           handleDecodeInternally(rawResult, barcode);
           break;
@@ -549,6 +575,12 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       int end = sourceUrl.lastIndexOf("/scan");
       message.obj = sourceUrl.substring(0, end) + "?q=" +
           resultHandler.getDisplayContents().toString() + "&source=zxing";
+      handler.sendMessageDelayed(message, INTENT_RESULT_DURATION);
+    } else if (source == Source.ZXING_LINK) {
+    	// Replace each occurrence of RETURN_CODE_PLACEHOLDER in the returnUrlTemplate
+    	// with the scanned code. This allows both queries and REST-style URLs to work.
+      Message message = Message.obtain(handler, R.id.launch_product_query);
+      message.obj = returnUrlTemplate.replace(RETURN_CODE_PLACEHOLDER, resultHandler.getDisplayContents().toString());
       handler.sendMessageDelayed(message, INTENT_RESULT_DURATION);
     }
   }
