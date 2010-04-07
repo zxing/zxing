@@ -37,7 +37,7 @@ public final class PlanarYUVLuminanceSource extends LuminanceSource {
   private final int left;
   private final int top;
 
-  PlanarYUVLuminanceSource(byte[] yuvData, int dataWidth, int dataHeight, int left, int top,
+  public PlanarYUVLuminanceSource(byte[] yuvData, int dataWidth, int dataHeight, int left, int top,
       int width, int height) {
     super(width, height);
 

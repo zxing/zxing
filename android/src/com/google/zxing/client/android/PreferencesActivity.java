@@ -31,16 +31,16 @@ import android.preference.PreferenceScreen;
 public final class PreferencesActivity extends PreferenceActivity
     implements OnSharedPreferenceChangeListener {
 
-  static final String KEY_DECODE_1D = "preferences_decode_1D";
-  static final String KEY_DECODE_QR = "preferences_decode_QR";
+  public static final String KEY_DECODE_1D = "preferences_decode_1D";
+  public static final String KEY_DECODE_QR = "preferences_decode_QR";
   public static final String KEY_CUSTOM_PRODUCT_SEARCH = "preferences_custom_product_search";
 
-  static final String KEY_PLAY_BEEP = "preferences_play_beep";
-  static final String KEY_VIBRATE = "preferences_vibrate";
-  static final String KEY_COPY_TO_CLIPBOARD = "preferences_copy_to_clipboard";
-  static final String KEY_FRONT_LIGHT = "preferences_front_light";
+  public static final String KEY_PLAY_BEEP = "preferences_play_beep";
+  public static final String KEY_VIBRATE = "preferences_vibrate";
+  public static final String KEY_COPY_TO_CLIPBOARD = "preferences_copy_to_clipboard";
+  public static final String KEY_FRONT_LIGHT = "preferences_front_light";
 
-  static final String KEY_HELP_VERSION_SHOWN = "preferences_help_version_shown";
+  public static final String KEY_HELP_VERSION_SHOWN = "preferences_help_version_shown";
   public static final String KEY_NOT_OUR_RESULTS_SHOWN = "preferences_not_out_results_shown";
 
   private CheckBoxPreference decode1D;

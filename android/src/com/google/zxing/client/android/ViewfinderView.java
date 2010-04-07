@@ -16,6 +16,9 @@
 
 package com.google.zxing.client.android;
 
+import com.google.zxing.ResultPoint;
+import com.google.zxing.client.android.camera.CameraManager;
+
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -24,7 +27,6 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.View;
-import com.google.zxing.ResultPoint;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -36,6 +38,7 @@ import java.util.HashSet;
  * @author dswitkin@google.com (Daniel Switkin)
  */
 public final class ViewfinderView extends View {
+
   private static final int[] SCANNER_ALPHA = {0, 64, 128, 192, 255, 192, 128, 64};
   private static final long ANIMATION_DELAY = 100L;
   private static final int OPAQUE = 0xFF;
