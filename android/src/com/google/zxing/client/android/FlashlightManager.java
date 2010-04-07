@@ -32,6 +32,7 @@ import java.lang.reflect.Method;
  * http://almondmendoza.com/2009/01/05/changing-the-screen-brightness-programatically/</a> and
  * <a href="http://code.google.com/p/droidled/source/browse/trunk/src/com/droidled/demo/DroidLED.java">
  * http://code.google.com/p/droidled/source/browse/trunk/src/com/droidled/demo/DroidLED.java</a>.
+ * Thanks to Ryan Alford for pointing out the availability of this class.
  */
 final class FlashlightManager {
 
