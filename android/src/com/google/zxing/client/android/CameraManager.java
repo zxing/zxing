@@ -418,6 +418,24 @@ final class CameraManager {
     return null;
   }
 
+  private static int findBestMotZoomValue(String stringValues, int tenDesiredZoom) {
+    int tenBestValue = 0;
+    for (String stringValue : COMMA_PATTERN.split(stringValues)) {
+      stringValue = stringValue.trim();
+      double value;
+      try {
+        value = Double.parseDouble(stringValue);
+      } catch (NumberFormatException nfe) {
+        return tenDesiredZoom;
+      }
+      int tenValue = (int) (10.0 * value);
+      if (Math.abs(tenDesiredZoom - value) < Math.abs(tenDesiredZoom - tenBestValue)) {
+        tenBestValue = tenValue;
+      }
+    }
+    return tenBestValue;
+  }
+
   private void setFlash(Camera.Parameters parameters) {
     // FIXME: This is a hack to turn the flash off on the Samsung Galaxy.
     parameters.set("flash-value", 2);
@@ -458,10 +476,14 @@ final class CameraManager {
       }
     }
 
+    String motZoomValues = parameters.get("mot-zoom-values");
+    if (motZoomValues != null) {
+      tenDesiredZoom = findBestMotZoomValue(motZoomValues, tenDesiredZoom);
+    }
 
     // Set zoom. This helps encourage the user to pull back.
     // Some devices like the Behold have a zoom parameter
-    if (maxZoomString != null) {
+    if (maxZoomString != null || motZoomValues != null) {
       parameters.set("zoom", String.valueOf(tenDesiredZoom / 10.0));
     }
 
