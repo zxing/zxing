@@ -476,14 +476,27 @@ final class CameraManager {
       }
     }
 
-    String motZoomValues = parameters.get("mot-zoom-values");
-    if (motZoomValues != null) {
-      tenDesiredZoom = findBestMotZoomValue(motZoomValues, tenDesiredZoom);
+    String motZoomValuesString = parameters.get("mot-zoom-values");
+    if (motZoomValuesString != null) {
+      tenDesiredZoom = findBestMotZoomValue(motZoomValuesString, tenDesiredZoom);
+    }
+
+    String motZoomStepString = parameters.get("mot-zoom-step");
+    if (motZoomStepString != null) {
+      try {
+        double motZoomStep = Double.parseDouble(motZoomStepString.trim());
+        int tenZoomStep = (int) (10.0 * motZoomStep);
+        if (tenZoomStep > 1) {
+          tenDesiredZoom -= tenDesiredZoom % tenZoomStep;
+        }
+      } catch (NumberFormatException nfe) {
+        // continue
+      }
     }
 
     // Set zoom. This helps encourage the user to pull back.
     // Some devices like the Behold have a zoom parameter
-    if (maxZoomString != null || motZoomValues != null) {
+    if (maxZoomString != null || motZoomValuesString != null) {
       parameters.set("zoom", String.valueOf(tenDesiredZoom / 10.0));
     }
 
