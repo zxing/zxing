@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.zxing.client.android;
+package com.google.zxing.client.android.camera;
 
 import android.os.IBinder;
 import android.util.Log;
