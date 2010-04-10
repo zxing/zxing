@@ -271,6 +271,14 @@ limitations under the License.
       <jarfolder path="${external-libs-folder}" />
       <nativefolder path="${native-libs-folder}" />
     </apkbuilder>
+    <copy file="${out-folder}/BarcodeScanner-debug.apk" tofile="${out-folder}/temp.apk" overwrite="true"/>
+    <exec executable="${android-tools}/zipalign">
+      <arg value="-f"/>
+      <arg value="-v"/>
+      <arg value="4"/>
+      <arg value="${out-folder}/temp.apk"/>      
+      <arg value="${out-folder}/BarcodeScanner-debug.apk"/>
+    </exec>
   </target>
 
   <!-- Package the application without signing it.
@@ -287,6 +295,7 @@ limitations under the License.
       <nativefolder path="${native-libs-folder}" />
     </apkbuilder>
     <echo>All generated packages need to be signed with jarsigner before they are published.</echo>
+    <echo>Also run zipalign -f -v 4 BarcodeScanner.apk BarcodeScanner-aligned.apk after signing</echo>
   </target>
 
   <!-- Install the package on the default emulator -->
