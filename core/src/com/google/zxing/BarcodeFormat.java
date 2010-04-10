@@ -78,6 +78,9 @@ public final class BarcodeFormat {
   }
 
   public static BarcodeFormat valueOf(String name) {
+    if (name == null || name.length() == 0) {
+      throw new IllegalArgumentException();
+    }
     BarcodeFormat format = (BarcodeFormat) VALUES.get(name);
     if (format == null) {
       throw new IllegalArgumentException();
