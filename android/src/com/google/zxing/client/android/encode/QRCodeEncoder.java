@@ -106,9 +106,15 @@ final class QRCodeEncoder {
   // but we use platform specific code like PhoneNumberUtils, so it can't.
   private boolean encodeContentsFromZXingIntent(Intent intent) {
      // Default to QR_CODE if no format given.
-    String format = intent.getStringExtra(Intents.Encode.FORMAT);
-    if (format == null || format.length() == 0 ||
-        format.equals(Contents.Format.QR_CODE)) {
+    String formatString = intent.getStringExtra(Intents.Encode.FORMAT);
+    try {
+      format = BarcodeFormat.valueOf(formatString);
+    } catch (IllegalArgumentException iae) {
+      // Ignore it then
+      format = null;
+      formatString = null;
+    }
+    if (format == null || BarcodeFormat.QR_CODE.equals(format)) {
       String type = intent.getStringExtra(Intents.Encode.TYPE);
       if (type == null || type.length() == 0) {
         return false;
@@ -121,19 +127,6 @@ final class QRCodeEncoder {
         contents = data;
         displayContents = data;
         title = activity.getString(R.string.contents_text);
-        if (format.equals(Contents.Format.CODE_128)) {
-          this.format = BarcodeFormat.CODE_128;
-        } else if (format.equals(Contents.Format.CODE_39)) {
-          this.format = BarcodeFormat.CODE_39;
-        } else if (format.equals(Contents.Format.EAN_8)) {
-          this.format = BarcodeFormat.EAN_8;
-        } else if (format.equals(Contents.Format.EAN_13)) {
-          this.format = BarcodeFormat.EAN_13;
-        } else if (format.equals(Contents.Format.UPC_A)) {
-          this.format = BarcodeFormat.UPC_A;
-        } else if (format.equals(Contents.Format.UPC_E)) {
-          this.format = BarcodeFormat.UPC_E;
-        }
       }
     }
     return contents != null && contents.length() > 0;

@@ -28,21 +28,6 @@ public final class Contents {
   private Contents() {
   }
 
-  /**
-   * All the formats we know about.
-   */
-  public static final class Format {
-    public static final String UPC_A = "UPC_A";
-    public static final String UPC_E = "UPC_E";
-    public static final String EAN_8 = "EAN_8";
-    public static final String EAN_13 = "EAN_13";
-    public static final String CODE_39 = "CODE_39";
-    public static final String CODE_128 = "CODE_128";
-    public static final String QR_CODE = "QR_CODE";
-    private Format() {
-    }
-  }
-
   public static final class Type {
     /**
      * Plain text. Use Intent.putExtra(DATA, string). This can be used for URLs too, but string
