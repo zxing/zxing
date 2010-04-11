@@ -20,7 +20,7 @@ import com.google.zxing.Result;
 
 /**
  * Partially implements the iCalendar format's "VEVENT" format for specifying a
- * calendar event. See RFC 2445. This supports SUMMARY, DTSTART and DTEND fields.
+ * calendar event. See RFC 2445. This supports SUMMARY, LOCATION, DTSTART and DTEND fields.
  *
  * @author Sean Owen
  */
@@ -46,8 +46,9 @@ final class VEventResultParser extends ResultParser {
     String summary = VCardResultParser.matchSingleVCardPrefixedField("SUMMARY", rawText, true);
     String start = VCardResultParser.matchSingleVCardPrefixedField("DTSTART", rawText, true);
     String end = VCardResultParser.matchSingleVCardPrefixedField("DTEND", rawText, true);
+    String location = VCardResultParser.matchSingleVCardPrefixedField("LOCATION", rawText, true);
     try {
-      return new CalendarParsedResult(summary, start, end, null, null, null);
+      return new CalendarParsedResult(summary, start, end, location, null, null);
     } catch (IllegalArgumentException iae) {
       return null;
     }
