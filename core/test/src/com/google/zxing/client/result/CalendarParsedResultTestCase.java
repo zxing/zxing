@@ -29,9 +29,10 @@ public final class CalendarParsedResultTestCase extends TestCase {
 
   public void testVEvent() {
     doTest(
-        "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456Z\r\nDTEND:20080505T234555Z\r\n" +
+        "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456Z\r\n" +
+        "DTEND:20080505T234555Z\r\nLOCATION:Miami\r\n" +
         "END:VEVENT\r\nEND:VCALENDAR",
-        null, "foo", null, "20080504T123456Z", "20080505T234555Z", null);
+        null, "foo", "Miami", "20080504T123456Z", "20080505T234555Z", null);
   }
 
   private static void doTest(String contents,

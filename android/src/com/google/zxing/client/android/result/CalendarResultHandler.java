@@ -59,11 +59,11 @@ public final class CalendarResultHandler extends ResultHandler {
   @Override
   public void handleButtonPress(int index) {
     CalendarParsedResult calendarResult = (CalendarParsedResult) getResult();
-    switch (index) {
-      case 0:
-        addCalendarEvent(calendarResult.getSummary(), calendarResult.getStart(),
-            calendarResult.getEnd());
-        break;
+    if (index == 0) {
+      addCalendarEvent(calendarResult.getSummary(),
+                       calendarResult.getStart(),
+                       calendarResult.getEnd(),
+                       calendarResult.getLocation());
     }
   }
 
