@@ -376,4 +376,13 @@ public abstract class ResultHandler {
     }
   }
 
+  protected String parseCustomSearchURL() {
+    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+    String customProductSearch = prefs.getString(PreferencesActivity.KEY_CUSTOM_PRODUCT_SEARCH, null);
+    if (customProductSearch != null && customProductSearch.trim().length() == 0) {
+      return null;
+    }
+    return customProductSearch;
+  }
+
 }

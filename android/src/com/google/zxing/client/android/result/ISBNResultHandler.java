@@ -16,7 +16,6 @@
 
 package com.google.zxing.client.android.result;
 
-import com.google.zxing.client.android.PreferencesActivity;
 import com.google.zxing.client.android.R;
 import com.google.zxing.client.result.ISBNParsedResult;
 import com.google.zxing.client.result.ParsedResult;
@@ -24,8 +23,6 @@ import com.google.zxing.client.result.ParsedResult;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
 /**
  * Handles books encoded by their ISBN values.
@@ -40,15 +37,11 @@ public final class ISBNResultHandler extends ResultHandler {
       R.string.button_google_shopper
   };
 
-  private String customProductSearch;
+  private final String customProductSearch;
 
   public ISBNResultHandler(Activity activity, ParsedResult result) {
     super(activity, result);
-    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
-    customProductSearch = prefs.getString(PreferencesActivity.KEY_CUSTOM_PRODUCT_SEARCH, null);
-    if (customProductSearch != null && customProductSearch.length() == 0) {
-      customProductSearch = null;
-    }
+    customProductSearch = parseCustomSearchURL();
   }
 
   @Override

@@ -17,12 +17,9 @@
 package com.google.zxing.client.android.result;
 
 import com.google.zxing.client.android.R;
-import com.google.zxing.client.android.PreferencesActivity;
 import com.google.zxing.client.result.ParsedResult;
 
 import android.app.Activity;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
 /**
  * This class handles TextParsedResult as well as unknown formats. It's the fallback handler.
@@ -42,14 +39,12 @@ public final class TextResultHandler extends ResultHandler {
 
   public TextResultHandler(Activity activity, ParsedResult result) {
     super(activity, result);
-    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
-    customProductSearch = prefs.getString(PreferencesActivity.KEY_CUSTOM_PRODUCT_SEARCH, null);
+    customProductSearch = parseCustomSearchURL();
   }
 
   @Override
   public int getButtonCount() {
-    return customProductSearch != null && customProductSearch.length() > 0 ?
-            buttons.length : buttons.length - 1;
+    return customProductSearch != null ? buttons.length : buttons.length - 1;
   }
 
   @Override
