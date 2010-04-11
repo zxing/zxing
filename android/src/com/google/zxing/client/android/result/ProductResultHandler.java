@@ -16,7 +16,6 @@
 
 package com.google.zxing.client.android.result;
 
-import com.google.zxing.client.android.PreferencesActivity;
 import com.google.zxing.client.android.R;
 import com.google.zxing.client.result.ParsedResult;
 import com.google.zxing.client.result.ProductParsedResult;
@@ -24,8 +23,6 @@ import com.google.zxing.client.result.ProductParsedResult;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
 /**
  * Handles generic products which are not books.
@@ -40,15 +37,11 @@ public final class ProductResultHandler extends ResultHandler {
       R.string.button_custom_product_search,
   };
 
-  private String customProductSearch;
+  private final String customProductSearch;
 
   public ProductResultHandler(Activity activity, ParsedResult result) {
     super(activity, result);
-    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
-    customProductSearch = prefs.getString(PreferencesActivity.KEY_CUSTOM_PRODUCT_SEARCH, null);
-    if (customProductSearch != null && customProductSearch.length() == 0) {
-      customProductSearch = null;
-    }
+    customProductSearch = parseCustomSearchURL();
   }
 
   @Override
