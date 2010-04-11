@@ -37,13 +37,18 @@ final class DecodeThread extends Thread {
 
   public static final String BARCODE_BITMAP = "barcode_bitmap";
 
-  private final Handler handler;
+  private final CaptureActivity activity;
+  private final Hashtable<DecodeHintType, Object> hints;
+  private Handler handler;
 
   DecodeThread(CaptureActivity activity,
                Vector<BarcodeFormat> decodeFormats,
                String characterSet,
                ResultPointCallback resultPointCallback) {
-    Hashtable<DecodeHintType, Object> hints = new Hashtable<DecodeHintType, Object>(3);
+
+    this.activity = activity;
+
+    hints = new Hashtable<DecodeHintType, Object>(3);
 
     // The prefs can't change while the thread is running, so pick them up once here.
     if (decodeFormats == null || decodeFormats.isEmpty()) {
@@ -66,8 +71,6 @@ final class DecodeThread extends Thread {
     }
 
     hints.put(DecodeHintType.NEED_RESULT_POINT_CALLBACK, resultPointCallback);
-
-    this.handler = new DecodeHandler(activity, hints);
   }
 
   Handler getHandler() {
@@ -77,6 +80,7 @@ final class DecodeThread extends Thread {
   @Override
   public void run() {
     Looper.prepare();
+    handler = new DecodeHandler(activity, hints);    
     Looper.loop();
   }
 
