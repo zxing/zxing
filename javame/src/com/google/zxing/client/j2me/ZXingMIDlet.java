@@ -254,7 +254,7 @@ public final class ZXingMIDlet extends MIDlet {
       showOpenURL("Compose E-mail?", emailResult.getEmailAddress(), emailResult.getMailtoURI());
     } else if (type.equals(ParsedResultType.SMS)) {
       SMSParsedResult smsResult = (SMSParsedResult) result;
-      showOpenURL("Compose SMS?", smsResult.getNumber(), smsResult.getSMSURI());
+      showOpenURL("Compose SMS?", smsResult.getNumbers()[0], smsResult.getSMSURI());
     } else if (type.equals(ParsedResultType.PRODUCT)) {
       ProductParsedResult productResult = (ProductParsedResult) result;
       String uri = "http://www.upcdatabase.com/item.asp?upc=" + productResult.getNormalizedProductID();

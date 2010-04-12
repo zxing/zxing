@@ -192,7 +192,7 @@ limitations under the License.
   <target name="optimize" unless="no-optimize">
     <mkdir dir="optimized"/>
     <property name="libraryjars.path" refid="android.target.classpath"/>
-    <java jar="${WTK-home}/bin/proguard.jar" fork="true" failonerror="true">
+    <java jar="${proguard-jar}" fork="true" failonerror="true">
       <jvmarg value="-Dmaximum.inlined.code.length=48"/>
       <arg value="-injars ${out-classes}"/>
       <arg value="-outjars optimized"/>

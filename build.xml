@@ -96,10 +96,17 @@
         <pathelement location="zxingorg/src"/>
       </sourcepath>
       <classpath>
+        <!-- These are used with WTK 2.5.x -->
+        <!--
         <pathelement location="${WTK-home}/lib/cldcapi11.jar"/>
         <pathelement location="${WTK-home}/lib/midpapi20.jar"/>
         <pathelement location="${WTK-home}/lib/mmapi.jar"/>
         <pathelement location="${WTK-home}/lib/jsr234.jar"/>
+        -->
+        <pathelement location="${WTK-home}/lib/cldc_1.1.jar"/>
+        <pathelement location="${WTK-home}/lib/midp_2.0.jar"/>
+        <pathelement location="${WTK-home}/lib/jsr135_1.2.jar"/>
+        <pathelement location="${WTK-home}/lib/jsr234_1.0.jar"/>
         <pathelement location="${android-home}/platforms/android-1.5/android.jar"/>
         <pathelement location="${tomcat-home}/lib/servlet-api.jar"/>
         <fileset dir="zxingorg/web/WEB-INF/lib">

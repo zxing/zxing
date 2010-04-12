@@ -31,8 +31,8 @@ import javax.microedition.lcdui.List;
 final class Menu extends List implements CommandListener {
 
   private final ZXingMIDlet zXingMIDlet;
-  private Command cancelCommand;
-  private Command barcodeCommand;
+  private final Command cancelCommand;
+  private final Command barcodeCommand;
 
   /**
    * Creates a new Search List and initialises all components.

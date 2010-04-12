@@ -22,11 +22,18 @@
 
   <path id="wtk-build-path">
     <fileset dir="${WTK-home}/lib">
+      <!-- These are used with WTK 2.5.x -->
+      <!--
       <include name="cldcapi11.jar"/>
       <include name="midpapi20.jar"/>
       <include name="mmapi.jar"/>
       <include name="jsr234.jar"/>
       <include name="satsa-apdu.jar"/>
+      -->
+      <include name="cldc_1.1.jar"/>
+      <include name="midp_2.0.jar"/>
+      <include name="jsr135_1.2.jar"/>
+      <include name="jsr234_1.0.jar"/>
     </fileset>
     <pathelement location="../core/core.jar"/>
   </path>
@@ -34,8 +41,13 @@
 
   <path id="javame-compile-bootclasspath">
     <fileset dir="${WTK-home}/lib">
+      <!-- These are used with WTK 2.5.x -->
+      <!--
       <include name="cldcapi11.jar"/>
       <include name="midpapi20.jar"/>
+      -->
+      <include name="cldc_1.1.jar"/>
+      <include name="midp_2.0.jar"/>
     </fileset>
   </path>
   <property name="javame-compile-bootclasspath-path" refid="javame-compile-bootclasspath"/>
@@ -49,10 +61,10 @@
         </not>
       </condition>
     </fail>
-    <fail message="Please put proguard.jar in 'bin' under the WTK install directory">
+    <fail message="Please set 'proguard.jar' in build.properties">
       <condition>
         <not>
-          <available file="${WTK-home}/bin/proguard.jar" type="file"/>
+          <available file="${proguard-jar}" type="file"/>
         </not>
       </condition>
     </fail>
@@ -109,20 +121,27 @@
     <jar jarfile="BarcodeReader.jar" basedir="build-j2me" manifest="src/com/google/zxing/client/j2me/MANIFEST.MF"/>
 
     <move file="BarcodeReader.jar" tofile="temp.jar"/>
-    <java jar="${WTK-home}/bin/proguard.jar" fork="true" failonerror="true">
+    <java jar="${proguard-jar}" fork="true" failonerror="true">
       <jvmarg value="-Dmaximum.inlined.code.length=32"/>
       <arg value="-injars temp.jar"/>
       <arg value="-outjars BarcodeReader.jar"/>
+      <!-- These are used with WTK 2.5.x -->
+      <!--
       <arg value="-libraryjars ${WTK-home}/lib/cldcapi11.jar"/>
       <arg value="-libraryjars ${WTK-home}/lib/midpapi20.jar"/>
       <arg value="-libraryjars ${WTK-home}/lib/mmapi.jar"/>
       <arg value="-libraryjars ${WTK-home}/lib/jsr234.jar"/>
+      -->
+      <arg value="-libraryjars ${WTK-home}/lib/cldc_1.1.jar"/>
+      <arg value="-libraryjars ${WTK-home}/lib/midp_2.0.jar"/>
+      <arg value="-libraryjars ${WTK-home}/lib/jsr135_1.2.jar"/>
+      <arg value="-libraryjars ${WTK-home}/lib/jsr234_1.0.jar"/>
       <arg value="-microedition"/>
       <arg value="-keep public class com.google.zxing.client.j2me.ZXingMIDlet"/>
       <arg value="-keep class com.google.zxing.client.j2me.AdvancedMultimediaManager"/>
       <arg value="-keep class com.google.zxing.client.j2me.DefaultMultimediaManager"/>
       <arg value="-keep class com.google.zxing.client.j2me.MultimediaManager"/>      
-      <arg value="-optimizationpasses 7"/>
+      <arg value="-optimizationpasses 5"/>
       <arg value="-overloadaggressively"/>
       <arg value="-allowaccessmodification"/>
       <arg value="-verbose"/>
@@ -144,12 +163,19 @@
   </target>
 
   <target name="dump">
-    <java jar="${WTK-home}/bin/proguard.jar" fork="true">
+    <java jar="${proguard-jar}" fork="true">
       <arg value="-injars BarcodeReader.jar"/>
+      <!-- These are used with WTK 2.5.x -->
+      <!--
       <arg value="-libraryjars ${WTK-home}/lib/cldcapi11.jar"/>
       <arg value="-libraryjars ${WTK-home}/lib/midpapi20.jar"/>
       <arg value="-libraryjars ${WTK-home}/lib/mmapi.jar"/>
       <arg value="-libraryjars ${WTK-home}/lib/jsr234.jar"/>
+      -->
+      <arg value="-libraryjars ${WTK-home}/lib/cldc_1.1.jar"/>
+      <arg value="-libraryjars ${WTK-home}/lib/midp_2.0.jar"/>
+      <arg value="-libraryjars ${WTK-home}/lib/jsr135_1.2.jar"/>
+      <arg value="-libraryjars ${WTK-home}/lib/jsr234_1.0.jar"/>
       <arg value="-dontshrink"/>
       <arg value="-dontobfuscate"/>
       <arg value="-dontoptimize"/>
