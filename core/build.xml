@@ -72,7 +72,7 @@
 
     <delete file="core.jar"/>
     <mkdir dir="optimized"/>
-    <java jar="${WTK-home}/bin/proguard.jar" fork="true" failonerror="true">
+    <java jar="${proguard-jar}" fork="true" failonerror="true">
       <jvmarg value="-Dmaximum.inlined.code.length=48"/>
       <arg value="-injars build"/>
       <arg value="-outjars optimized"/>
