@@ -144,8 +144,13 @@ public abstract class ResultHandler {
    * @param start   The start time as yyyyMMdd or yyyyMMdd'T'HHmmss or yyyyMMdd'T'HHmmss'Z'
    * @param end     The end time as yyyyMMdd or yyyyMMdd'T'HHmmss or yyyyMMdd'T'HHmmss'Z'
    * @param location a text description of the event location
+   * @param description a text description of the event itself
    */
-  final void addCalendarEvent(String summary, String start, String end, String location) {
+  final void addCalendarEvent(String summary, 
+                              String start,
+                              String end,
+                              String location,
+                              String description) {
     Intent intent = new Intent(Intent.ACTION_EDIT);
     intent.setType("vnd.android.cursor.item/event");
     intent.putExtra("beginTime", calculateMilliseconds(start));
@@ -158,6 +163,7 @@ public abstract class ResultHandler {
     intent.putExtra("endTime", calculateMilliseconds(end));
     intent.putExtra("title", summary);
     intent.putExtra("eventLocation", location);
+    intent.putExtra("description", description);
     launchIntent(intent);
   }
 

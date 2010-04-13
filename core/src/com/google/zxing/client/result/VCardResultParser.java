@@ -88,7 +88,12 @@ final class VCardResultParser extends ResultParser {
       }
       i++; // skip colon
       int start = i; // Found the start of a match here
-      i = rawText.indexOf((int) '\n', i); // Really, ends in \r\n
+      while ((i = rawText.indexOf((int) '\n', i)) >= 0 &&  // Really, ends in \r\n
+             i < rawText.length() - 1 &&           // But if followed by tab or space,
+             (rawText.charAt(i+1) == ' ' ||        // this is only a continuation
+              rawText.charAt(i+1) == '\t')) {
+        i += 2;
+      }
       if (i < 0) {
         // No terminating end character? uh, done. Set i such that loop terminates and break
         i = max;
@@ -97,10 +102,14 @@ final class VCardResultParser extends ResultParser {
         if (matches == null) {
           matches = new Vector(3); // lazy init
         }
+        if (rawText.charAt(i-1) == '\r') {
+          i--; // Back up over \r, which really should be there
+        }
         String element = rawText.substring(start, i);
         if (trim) {
           element = element.trim();
         }
+        element = stripContinuationCRLF(element);
         matches.addElement(element);
         i++;
       } else {
@@ -111,6 +120,30 @@ final class VCardResultParser extends ResultParser {
       return null;
     }
     return toStringArray(matches);
+  }
+
+  private static String stripContinuationCRLF(String value) {
+    int length = value.length();
+    StringBuffer result = new StringBuffer(length);
+    boolean lastWasLF = false;
+    for (int i = 0; i < length; i++) {
+      if (lastWasLF) {
+        lastWasLF = false;
+        continue;
+      }
+      char c = value.charAt(i);
+      lastWasLF = false;
+      switch (c) {
+        case '\n':
+          lastWasLF = true;
+          break;
+        case '\r':
+          break;
+        default:
+          result.append(c);
+      }
+    }
+    return result.toString();
   }
 
   static String matchSingleVCardPrefixedField(String prefix, String rawText, boolean trim) {
