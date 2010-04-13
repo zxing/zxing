@@ -43,6 +43,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -57,6 +58,7 @@ public final class EncodeActivity extends Activity {
   private static final String TAG = EncodeActivity.class.getSimpleName();
 
   private static final int SHARE_BARCODE_DIMENSION = 300;
+  private static final int MAX_BARCODE_FILENAME_LENGTH = 24;
 
   private QRCodeEncoder qrCodeEncoder;
   private ProgressDialog progressDialog;
@@ -153,10 +155,10 @@ public final class EncodeActivity extends Activity {
       return true;
     }
 
-
+    String contents = qrCodeEncoder.getContents();
     Bitmap bitmap;
     try {
-      bitmap = QRCodeEncoder.encodeAsBitmap(qrCodeEncoder.getContents(),
+      bitmap = QRCodeEncoder.encodeAsBitmap(contents,
                                             BarcodeFormat.QR_CODE,
                                             SHARE_BARCODE_DIMENSION,
                                             SHARE_BARCODE_DIMENSION);
@@ -168,14 +170,27 @@ public final class EncodeActivity extends Activity {
     File barcodeFile;
     try {
       File bsRoot = new File(Environment.getExternalStorageDirectory(), "BarcodeScanner");
-      bsRoot.mkdir();
-      File barcodesRoot = new File(bsRoot, "barcodes");
-      barcodesRoot.mkdir();
-      barcodeFile = new File(barcodesRoot, "barcode-" + System.currentTimeMillis() + ".png");
+      File barcodesRoot = new File(bsRoot, "Barcodes");
+      if (!barcodesRoot.mkdirs()) {
+        Log.v(TAG, "Couldn't make dir " + barcodesRoot);
+        showErrorMessage(R.string.msg_unmount_usb);
+        return true;
+      }
+      barcodeFile = new File(barcodesRoot, makeBarcodeFileName(contents) + ".png");
       barcodeFile.delete();
-      FileOutputStream fos = new FileOutputStream(barcodeFile);
-      bitmap.compress(Bitmap.CompressFormat.PNG, 0, fos);
-      fos.close();
+      FileOutputStream fos = null;
+      try {
+        fos = new FileOutputStream(barcodeFile);
+        bitmap.compress(Bitmap.CompressFormat.PNG, 0, fos);
+      } catch (FileNotFoundException fnfe) {
+        Log.v(TAG, "Couldn't access file " + barcodeFile + " due to " + fnfe);
+        showErrorMessage(R.string.msg_unmount_usb);
+        return true;
+      } finally {
+        if (fos != null) {
+          fos.close();
+        }
+      }
     } catch (IOException ioe) {
       Log.w(TAG, ioe.toString());
       return true;
@@ -189,6 +204,20 @@ public final class EncodeActivity extends Activity {
     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
     startActivity(Intent.createChooser(intent, null));
     return true;
+  }
+
+  private static CharSequence makeBarcodeFileName(CharSequence contents) {
+    int fileNameLength = Math.min(MAX_BARCODE_FILENAME_LENGTH, contents.length());
+    StringBuilder fileName = new StringBuilder(fileNameLength);
+    for (int i = 0; i < fileNameLength; i++) {
+      char c = contents.charAt(i);
+      if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9')) {
+        fileName.append(c);
+      } else {
+        fileName.append('_');
+      }
+    }
+    return fileName;
   }
 
   @Override

@@ -82,6 +82,7 @@
   <string name="msg_sbc_searching_book">Searching book\u2026</string>
   <string name="msg_share_explanation">You can share data by displaying a barcode on your screen and scanning it with another phone.</string>
   <string name="msg_share_subject_line">Here\'s the contents of a barcode I scanned</string>
+  <string name="msg_unmount_usb">Please turn off USB storage to continue.</string>
   <string name="preferences_actions_title">When a barcode is found\u2026</string>
   <string name="preferences_copy_to_clipboard_title">Copy to clipboard</string>
   <string name="preferences_decode_1D_title">Decode 1D barcodes</string>
