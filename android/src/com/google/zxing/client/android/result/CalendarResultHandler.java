@@ -35,6 +35,7 @@ import java.util.GregorianCalendar;
  * @author dswitkin@google.com (Daniel Switkin)
  */
 public final class CalendarResultHandler extends ResultHandler {
+
   private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyyMMdd");
   private static final DateFormat DATE_TIME_FORMAT = new SimpleDateFormat("yyyyMMdd'T'HHmmss");
 
@@ -63,7 +64,8 @@ public final class CalendarResultHandler extends ResultHandler {
       addCalendarEvent(calendarResult.getSummary(),
                        calendarResult.getStart(),
                        calendarResult.getEnd(),
-                       calendarResult.getLocation());
+                       calendarResult.getLocation(),
+                       calendarResult.getDescription());
     }
   }
 
@@ -83,7 +85,7 @@ public final class CalendarResultHandler extends ResultHandler {
 
     ParsedResult.maybeAppend(calResult.getLocation(), result);
     ParsedResult.maybeAppend(calResult.getAttendee(), result);
-    ParsedResult.maybeAppend(calResult.getTitle(), result);
+    ParsedResult.maybeAppend(calResult.getDescription(), result);
     return result.toString();
   }
 

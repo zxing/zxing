@@ -47,8 +47,9 @@ final class VEventResultParser extends ResultParser {
     String start = VCardResultParser.matchSingleVCardPrefixedField("DTSTART", rawText, true);
     String end = VCardResultParser.matchSingleVCardPrefixedField("DTEND", rawText, true);
     String location = VCardResultParser.matchSingleVCardPrefixedField("LOCATION", rawText, true);
+    String description = VCardResultParser.matchSingleVCardPrefixedField("DESCRIPTION", rawText, true);
     try {
-      return new CalendarParsedResult(summary, start, end, location, null, null);
+      return new CalendarParsedResult(summary, start, end, location, null, description);
     } catch (IllegalArgumentException iae) {
       return null;
     }

@@ -27,16 +27,58 @@ import junit.framework.TestCase;
  */
 public final class CalendarParsedResultTestCase extends TestCase {
 
-  public void testVEvent() {
+  public void testStartEnd() {
     doTest(
-        "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456Z\r\n" +
-        "DTEND:20080505T234555Z\r\nLOCATION:Miami\r\n" +
+        "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n" +
+        "DTSTART:20080504T123456Z\r\n" +
+        "DTEND:20080505T234555Z\r\n" +
         "END:VEVENT\r\nEND:VCALENDAR",
-        null, "foo", "Miami", "20080504T123456Z", "20080505T234555Z", null);
+        null, null, null, "20080504T123456Z", "20080505T234555Z", null);
+  }
+
+  public void testStart() {
+    doTest(
+        "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n" +
+        "DTSTART:20080504T123456Z\r\n" +
+        "END:VEVENT\r\nEND:VCALENDAR",
+        null, null, null, "20080504T123456Z", "20080504T123456Z", null);
+  }
+
+  public void testSummary() {
+    doTest(
+        "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n" +
+        "SUMMARY:foo\r\n" +
+        "DTSTART:20080504T123456Z\r\n" +
+        "END:VEVENT\r\nEND:VCALENDAR",
+        null, "foo", null, "20080504T123456Z", "20080504T123456Z", null);
+  }
+
+  public void testLocation() {
+    doTest(
+        "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n" +
+        "LOCATION:Miami\r\n" +
+        "DTSTART:20080504T123456Z\r\n" +
+        "END:VEVENT\r\nEND:VCALENDAR",
+        null, null, "Miami", "20080504T123456Z", "20080504T123456Z", null);
+  }
+
+  public void testDescription() {
+    doTest(
+        "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n" +
+        "DTSTART:20080504T123456Z\r\n" +
+        "DESCRIPTION:This is a test\r\n" +
+        "END:VEVENT\r\nEND:VCALENDAR",
+        "This is a test", null, null, "20080504T123456Z", "20080504T123456Z", null);
+    doTest(
+        "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n" +
+        "DTSTART:20080504T123456Z\r\n" +
+        "DESCRIPTION:This is a test\r\n\t with a continuation\r\n" +        
+        "END:VEVENT\r\nEND:VCALENDAR",
+        "This is a test with a continuation", null, null, "20080504T123456Z", "20080504T123456Z", null);
   }
 
   private static void doTest(String contents,
-                             String title,
+                             String description,
                              String summary,
                              String location,
                              String start,
@@ -46,7 +88,7 @@ public final class CalendarParsedResultTestCase extends TestCase {
     ParsedResult result = ResultParser.parseResult(fakeResult);
     assertSame(ParsedResultType.CALENDAR, result.getType());
     CalendarParsedResult calResult = (CalendarParsedResult) result;
-    assertEquals(title, calResult.getTitle());
+    assertEquals(description, calResult.getDescription());
     assertEquals(summary, calResult.getSummary());
     assertEquals(location, calResult.getLocation());
     assertEquals(start, calResult.getStart());

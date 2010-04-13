@@ -26,27 +26,31 @@ public final class CalendarParsedResult extends ParsedResult {
   private final String end;
   private final String location;
   private final String attendee;
-  private final String title;
+  private final String description;
 
   public CalendarParsedResult(String summary,
                               String start,
                               String end,
                               String location,
                               String attendee,
-                              String title) {
+                              String description) {
     super(ParsedResultType.CALENDAR);
     // Start is required, end is not
     if (start == null) {
       throw new IllegalArgumentException();
     }
     validateDate(start);
-    validateDate(end);
+    if (end == null) {
+      end = start;
+    } else {
+      validateDate(end);
+    }
     this.summary = summary;
     this.start = start;
     this.end = end;
     this.location = location;
     this.attendee = attendee;
-    this.title = title;
+    this.description = description;
   }
 
   public String getSummary() {
@@ -79,8 +83,8 @@ public final class CalendarParsedResult extends ParsedResult {
     return attendee;
   }
 
-  public String getTitle() {
-    return title;
+  public String getDescription() {
+    return description;
   }
 
   public String getDisplayResult() {
@@ -90,7 +94,7 @@ public final class CalendarParsedResult extends ParsedResult {
     maybeAppend(end, result);
     maybeAppend(location, result);
     maybeAppend(attendee, result);
-    maybeAppend(title, result);
+    maybeAppend(description, result);
     return result.toString();
   }
 
