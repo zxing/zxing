@@ -59,6 +59,8 @@ public class CalendarEventGenerator implements GeneratorSource {
   CheckBox summerTime = new CheckBox();
   ListBox timeZones = new ListBox();
   Date timePicker1PreviousDate = null;
+  TextBox location = new TextBox();
+  TextBox description = new TextBox();
 
   public CalendarEventGenerator(final ChangeListener listener,
       KeyPressHandler keyListener) {
@@ -116,7 +118,7 @@ public class CalendarEventGenerator implements GeneratorSource {
     }
     datePicker1.getDatePicker().setSelectedDate(new Date());
     datePicker2.getDatePicker().setSelectedDate(new Date());
-    table = new Grid(8, 2);
+    table = new Grid(10, 2);
 
     table.setText(0, 0, "All day event");
     table.setWidget(0, 1, fullDay);
@@ -142,6 +144,12 @@ public class CalendarEventGenerator implements GeneratorSource {
     table.setText(7, 0, "Daylight savings");
     table.setWidget(7, 1, summerTime);
 
+    table.setText(8, 0, "Location");
+    table.setWidget(8, 1, location);
+
+    table.setText(9, 0, "Description");
+    table.setWidget(9, 1, description);
+
     table.getRowFormatter().getElement(3).setId(FULL_DAY_ONLY_IDS[0]);
     table.getRowFormatter().getElement(5).setId(FULL_DAY_ONLY_IDS[1]);
     table.getRowFormatter().getElement(6).setId(FULL_DAY_ONLY_IDS[2]);
@@ -157,7 +165,7 @@ public class CalendarEventGenerator implements GeneratorSource {
     return table;
   }
 
-  private void setFullDay(boolean fullDay) {
+  private static void setFullDay(boolean fullDay) {
     for (String s : FULL_DAY_ONLY_IDS) {
       Element element = DOM.getElementById(s);
       String style = fullDay ? "none" : "";
@@ -168,10 +176,14 @@ public class CalendarEventGenerator implements GeneratorSource {
   public String getText() throws GeneratorException {
     String eventName = getEventNameField();
     String dates = getDateTimeFields();
+    String location = getLocationField();
+    String description = getDescriptionField();
     StringBuilder output = new StringBuilder();
     output.append("BEGIN:VEVENT\r\n");
     output.append(eventName);
     output.append(dates);
+    output.append(location);
+    output.append(description);
     output.append("END:VEVENT\r\n");
     return output.toString();
   }
@@ -193,6 +205,30 @@ public class CalendarEventGenerator implements GeneratorSource {
       return getFullDayDateFields();
     }
     return getDateTimeValues();
+  }
+
+  private String getLocationField() throws GeneratorException {
+    String locationString = location.getText();
+    if (locationString.length() < 1) {
+      return "";
+    }
+    if (locationString.contains("\n")) {
+      throw new GeneratorException(
+          "Location should not contain \\n characters.");
+    }
+    return "LOCATION:" + locationString + "\r\n";
+  }
+
+  private String getDescriptionField() throws GeneratorException {
+    String descriptionString = description.getText();
+    if (descriptionString.length() < 1) {
+      return "";
+    }
+    if (descriptionString.contains("\n")) {
+      throw new GeneratorException(
+          "Description should not contain \\n characters.");
+    }
+    return "DESCRIPTION:" + descriptionString + "\r\n";
   }
 
   private String getFullDayDateFields() throws GeneratorException {
