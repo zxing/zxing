@@ -257,7 +257,8 @@ public final class ZXingMIDlet extends MIDlet {
       showOpenURL("Compose SMS?", smsResult.getNumbers()[0], smsResult.getSMSURI());
     } else if (type.equals(ParsedResultType.PRODUCT)) {
       ProductParsedResult productResult = (ProductParsedResult) result;
-      String uri = "http://www.upcdatabase.com/item.asp?upc=" + productResult.getNormalizedProductID();
+      String uri = "http://www.google.com/m/products?q=" +
+          productResult.getNormalizedProductID() + "&source=zxing";
       showOpenURL("Look Up Barcode Online?", productResult.getProductID(), uri);
     } else if (type.equals(ParsedResultType.TEL)) {
       TelParsedResult telResult = (TelParsedResult) result;
