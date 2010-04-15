@@ -56,6 +56,7 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
 
+import java.awt.color.CMMException;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
@@ -250,7 +251,17 @@ public final class DecodeServlet extends HttpServlet {
   private static void processStream(InputStream is, ServletRequest request,
       HttpServletResponse response) throws ServletException, IOException {
 
-    BufferedImage image = ImageIO.read(is);
+    BufferedImage image;
+    try {
+      image = ImageIO.read(is);
+    } catch (IOException ioe) {
+      response.sendRedirect("badimage.jspx");
+      return;
+    } catch (CMMException cmme) {
+      // Have seen this in logs
+      response.sendRedirect("badimage.jspx");
+      return;
+    }
     if (image == null) {
       response.sendRedirect("badimage.jspx");
       return;
