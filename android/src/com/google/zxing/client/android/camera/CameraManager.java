@@ -16,8 +16,6 @@
 
 package com.google.zxing.client.android.camera;
 
-import com.google.zxing.ResultPoint;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.PixelFormat;
@@ -56,6 +54,7 @@ public final class CameraManager {
   private final CameraConfigurationManager configManager;
   private Camera camera;
   private Rect framingRect;
+  private Rect framingRectInPreview;
   private boolean initialized;
   private boolean previewing;
   private final boolean useOneShotPreviewCallback;
@@ -205,29 +204,47 @@ public final class CameraManager {
    * @return The rectangle to draw on screen in window coordinates.
    */
   public Rect getFramingRect() {
-    Point cameraResolution = configManager.getCameraResolution();
+    Point screenResolution = configManager.getScreenResolution();
     if (framingRect == null) {
       if (camera == null) {
         return null;
       }
-      int width = cameraResolution.x * 3 / 4;
+      int width = screenResolution.x * 3 / 4;
       if (width < MIN_FRAME_WIDTH) {
         width = MIN_FRAME_WIDTH;
       } else if (width > MAX_FRAME_WIDTH) {
         width = MAX_FRAME_WIDTH;
       }
-      int height = cameraResolution.y * 3 / 4;
+      int height = screenResolution.y * 3 / 4;
       if (height < MIN_FRAME_HEIGHT) {
         height = MIN_FRAME_HEIGHT;
       } else if (height > MAX_FRAME_HEIGHT) {
         height = MAX_FRAME_HEIGHT;
       }
-      int leftOffset = (cameraResolution.x - width) / 2;
-      int topOffset = (cameraResolution.y - height) / 2;
+      int leftOffset = (screenResolution.x - width) / 2;
+      int topOffset = (screenResolution.y - height) / 2;
       framingRect = new Rect(leftOffset, topOffset, leftOffset + width, topOffset + height);
       Log.v(TAG, "Calculated framing rect: " + framingRect);
     }
     return framingRect;
+  }
+
+  /**
+   * Like {@link #getFramingRect} but coordinates are in terms of the preview frame,
+   * not UI / screen.
+   */
+  public Rect getFramingRectInPreview() {
+    if (framingRectInPreview == null) {
+      Rect rect = new Rect(getFramingRect());
+      Point cameraResolution = configManager.getCameraResolution();
+      Point screenResolution = configManager.getScreenResolution();
+      rect.left = rect.left * cameraResolution.x / screenResolution.x;
+      rect.right = rect.right * cameraResolution.x / screenResolution.x;
+      rect.top = rect.top * cameraResolution.y / screenResolution.y;
+      rect.bottom = rect.bottom * cameraResolution.y / screenResolution.y;
+      framingRectInPreview = rect;
+    }
+    return framingRectInPreview;
   }
 
   /**
@@ -237,8 +254,9 @@ public final class CameraManager {
    * @return An array of Points scaled to the size of the framing rect and offset appropriately
    *         so they can be drawn in screen coordinates.
    */
+  /*
   public Point[] convertResultPoints(ResultPoint[] points) {
-    Rect frame = getFramingRect();
+    Rect frame = getFramingRectInPreview();
     int count = points.length;
     Point[] output = new Point[count];
     for (int x = 0; x < count; x++) {
@@ -248,6 +266,7 @@ public final class CameraManager {
     }
     return output;
   }
+   */
 
   /**
    * A factory method to build the appropriate LuminanceSource object based on the format
@@ -259,7 +278,7 @@ public final class CameraManager {
    * @return A PlanarYUVLuminanceSource instance.
    */
   public PlanarYUVLuminanceSource buildLuminanceSource(byte[] data, int width, int height) {
-    Rect rect = getFramingRect();
+    Rect rect = getFramingRectInPreview();
     int previewFormat = configManager.getPreviewFormat();
     String previewFormatString = configManager.getPreviewFormatString();
     switch (previewFormat) {
