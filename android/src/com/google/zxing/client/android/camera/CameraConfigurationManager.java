@@ -52,8 +52,12 @@ final class CameraConfigurationManager {
     previewFormat = parameters.getPreviewFormat();
     previewFormatString = parameters.get("preview-format");
     Log.v(TAG, "Default preview format: " + previewFormat + '/' + previewFormatString);
-    screenResolution = getScreenResolution();
-    cameraResolution = getCameraResolution(parameters);
+    WindowManager manager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+    Display display = manager.getDefaultDisplay();
+    screenResolution = new Point(display.getWidth(), display.getHeight());
+    Log.v(TAG, "Screen resolution: " + screenResolution);
+    cameraResolution = getCameraResolution(parameters, screenResolution);
+    Log.v(TAG, "Camera resolution: " + screenResolution);
   }
 
   /**
@@ -64,7 +68,7 @@ final class CameraConfigurationManager {
    */
   void setDesiredCameraParameters(Camera camera) {
     Camera.Parameters parameters = camera.getParameters();
-    Log.v(TAG, "Setting preview size: " + cameraResolution.x + ", " + cameraResolution.y);
+    Log.v(TAG, "Setting preview size: " + cameraResolution);
     parameters.setPreviewSize(cameraResolution.x, cameraResolution.y);
     setFlash(parameters);
     setZoom(parameters);
@@ -76,6 +80,10 @@ final class CameraConfigurationManager {
     return cameraResolution;
   }
 
+  Point getScreenResolution() {
+    return screenResolution;
+  }
+
   int getPreviewFormat() {
     return previewFormat;
   }
@@ -84,13 +92,7 @@ final class CameraConfigurationManager {
     return previewFormatString;
   }
 
-  private Point getScreenResolution() {
-    WindowManager manager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-    Display display = manager.getDefaultDisplay();
-    return new Point(display.getWidth(), display.getHeight());
-  }
-
-  private Point getCameraResolution(Camera.Parameters parameters) {
+  private static Point getCameraResolution(Camera.Parameters parameters, Point screenResolution) {
 
     String previewSizeValueString = parameters.get("preview-size-values");
     // saw this on Xperia
@@ -101,7 +103,7 @@ final class CameraConfigurationManager {
     Point cameraResolution = null;
 
     if (previewSizeValueString != null) {
-      Log.v(TAG, "preview-size parameter: " + previewSizeValueString);
+      Log.v(TAG, "preview-size-values parameter: " + previewSizeValueString);
       cameraResolution = findBestPreviewSizeValue(previewSizeValueString, screenResolution);
     }
 
@@ -157,7 +159,7 @@ final class CameraConfigurationManager {
     return null;
   }
 
-  private static int findBestMotZoomValue(String stringValues, int tenDesiredZoom) {
+  private static int findBestMotZoomValue(CharSequence stringValues, int tenDesiredZoom) {
     int tenBestValue = 0;
     for (String stringValue : COMMA_PATTERN.split(stringValues)) {
       stringValue = stringValue.trim();
