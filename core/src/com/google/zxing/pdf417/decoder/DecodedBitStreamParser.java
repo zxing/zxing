@@ -347,19 +347,18 @@ final class DecodedBitStreamParser {
           byteCompactedCodewords[count] = code;
           count++;
           // Base 900
-          value *= 900;
-          value += code;
+          value = 900 * value + code;
         } else {
-          if ((code == TEXT_COMPACTION_MODE_LATCH) ||
-              (code == BYTE_COMPACTION_MODE_LATCH) ||
-              (code == NUMERIC_COMPACTION_MODE_LATCH) ||
-              (code == BYTE_COMPACTION_MODE_LATCH_6) ||
-              (code == BEGIN_MACRO_PDF417_CONTROL_BLOCK) ||
-              (code == BEGIN_MACRO_PDF417_OPTIONAL_FIELD) ||
-              (code == MACRO_PDF417_TERMINATOR)) {
+          if (code == TEXT_COMPACTION_MODE_LATCH ||
+              code == BYTE_COMPACTION_MODE_LATCH ||
+              code == NUMERIC_COMPACTION_MODE_LATCH ||
+              code == BYTE_COMPACTION_MODE_LATCH_6 ||
+              code == BEGIN_MACRO_PDF417_CONTROL_BLOCK ||
+              code == BEGIN_MACRO_PDF417_OPTIONAL_FIELD ||
+              code == MACRO_PDF417_TERMINATOR) {
+            codeIndex--;
+            end = true;
           }
-          codeIndex--;
-          end = true;
         }
         if ((count % 5 == 0) && (count > 0)) {
           // Decode every 5 codewords
@@ -385,31 +384,30 @@ final class DecodedBitStreamParser {
       int count = 0;
       long value = 0;
       boolean end = false;
-      while ((codeIndex < codewords[0]) && !end) {
+      while (codeIndex < codewords[0] && !end) {
         int code = codewords[codeIndex++];
         if (code < TEXT_COMPACTION_MODE_LATCH) {
-          count += 1;
+          count++;
           // Base 900
-          value *= 900;
-          value += code;
+          value = 900 * value + code;
         } else {
-          if ((code == TEXT_COMPACTION_MODE_LATCH) ||
-              (code == BYTE_COMPACTION_MODE_LATCH) ||
-              (code == NUMERIC_COMPACTION_MODE_LATCH) ||
-              (code == BYTE_COMPACTION_MODE_LATCH_6) ||
-              (code == BEGIN_MACRO_PDF417_CONTROL_BLOCK) ||
-              (code == BEGIN_MACRO_PDF417_OPTIONAL_FIELD) ||
-              (code == MACRO_PDF417_TERMINATOR)) {
+          if (code == TEXT_COMPACTION_MODE_LATCH ||
+              code == BYTE_COMPACTION_MODE_LATCH ||
+              code == NUMERIC_COMPACTION_MODE_LATCH ||
+              code == BYTE_COMPACTION_MODE_LATCH_6 ||
+              code == BEGIN_MACRO_PDF417_CONTROL_BLOCK ||
+              code == BEGIN_MACRO_PDF417_OPTIONAL_FIELD ||
+              code == MACRO_PDF417_TERMINATOR) {
+            codeIndex--;
+            end = true;
           }
-          codeIndex--;
-          end = true;
         }
         if ((count % 5 == 0) && (count > 0)) {
           // Decode every 5 codewords
           // Convert to Base 256
           char[] decodedData = new char[6];
           for (int j = 0; j < 6; ++j) {
-            decodedData[5 - j] = (char) (value % 256);
+            decodedData[5 - j] = (char) (value & 0xFF);
             value >>= 8;
           }
           result.append(decodedData);
@@ -433,24 +431,28 @@ final class DecodedBitStreamParser {
 
     int[] numericCodewords = new int[MAX_NUMERIC_CODEWORDS];
 
-    while ((codeIndex < codewords.length) && !end) {
+    while (codeIndex < codewords[0] && !end) {
       int code = codewords[codeIndex++];
+      if (codeIndex == codewords[0]) {
+        end = true;
+      }
       if (code < TEXT_COMPACTION_MODE_LATCH) {
         numericCodewords[count] = code;
         count++;
       } else {
-        if ((code == TEXT_COMPACTION_MODE_LATCH) ||
-            (code == BYTE_COMPACTION_MODE_LATCH) ||
-            (code == BYTE_COMPACTION_MODE_LATCH_6) ||
-            (code == BEGIN_MACRO_PDF417_CONTROL_BLOCK) ||
-            (code == BEGIN_MACRO_PDF417_OPTIONAL_FIELD) ||
-            (code == MACRO_PDF417_TERMINATOR)) {
+        if (code == TEXT_COMPACTION_MODE_LATCH ||
+            code == BYTE_COMPACTION_MODE_LATCH ||
+            code == BYTE_COMPACTION_MODE_LATCH_6 ||
+            code == BEGIN_MACRO_PDF417_CONTROL_BLOCK ||
+            code == BEGIN_MACRO_PDF417_OPTIONAL_FIELD ||
+            code == MACRO_PDF417_TERMINATOR) {
+	        codeIndex--;
+          end = true;          
         }
-        codeIndex--;
-        end = true;
       }
-      if ((count % MAX_NUMERIC_CODEWORDS) == 0 ||
-          code == NUMERIC_COMPACTION_MODE_LATCH) {
+      if (count % MAX_NUMERIC_CODEWORDS == 0 ||
+          code == NUMERIC_COMPACTION_MODE_LATCH ||
+          end) {
         // Re-invoking Numeric Compaction mode (by using codeword 902
         // while in Numeric Compaction mode) serves  to terminate the
         // current Numeric Compaction mode grouping as described in 5.4.4.2,
