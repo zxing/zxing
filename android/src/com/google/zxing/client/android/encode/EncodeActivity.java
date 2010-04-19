@@ -167,33 +167,31 @@ public final class EncodeActivity extends Activity {
       return true;
     }
 
-    File barcodeFile;
+    File bsRoot = new File(Environment.getExternalStorageDirectory(), "BarcodeScanner");
+    File barcodesRoot = new File(bsRoot, "Barcodes");
+    if (!barcodesRoot.exists() && !barcodesRoot.mkdirs()) {
+      Log.v(TAG, "Couldn't make dir " + barcodesRoot);
+      showErrorMessage(R.string.msg_unmount_usb);
+      return true;
+    }
+    File barcodeFile = new File(barcodesRoot, makeBarcodeFileName(contents) + ".png");
+    barcodeFile.delete();
+    FileOutputStream fos = null;
     try {
-      File bsRoot = new File(Environment.getExternalStorageDirectory(), "BarcodeScanner");
-      File barcodesRoot = new File(bsRoot, "Barcodes");
-      if (!barcodesRoot.mkdirs()) {
-        Log.v(TAG, "Couldn't make dir " + barcodesRoot);
-        showErrorMessage(R.string.msg_unmount_usb);
-        return true;
-      }
-      barcodeFile = new File(barcodesRoot, makeBarcodeFileName(contents) + ".png");
-      barcodeFile.delete();
-      FileOutputStream fos = null;
-      try {
-        fos = new FileOutputStream(barcodeFile);
-        bitmap.compress(Bitmap.CompressFormat.PNG, 0, fos);
-      } catch (FileNotFoundException fnfe) {
-        Log.v(TAG, "Couldn't access file " + barcodeFile + " due to " + fnfe);
-        showErrorMessage(R.string.msg_unmount_usb);
-        return true;
-      } finally {
-        if (fos != null) {
+      fos = new FileOutputStream(barcodeFile);
+      bitmap.compress(Bitmap.CompressFormat.PNG, 0, fos);
+    } catch (FileNotFoundException fnfe) {
+      Log.v(TAG, "Couldn't access file " + barcodeFile + " due to " + fnfe);
+      showErrorMessage(R.string.msg_unmount_usb);
+      return true;
+    } finally {
+      if (fos != null) {
+        try {
           fos.close();
+        } catch (IOException ioe) {
+          // do nothing
         }
       }
-    } catch (IOException ioe) {
-      Log.w(TAG, ioe.toString());
-      return true;
     }
 
     Intent intent = new Intent(Intent.ACTION_SEND, Uri.parse("mailto:"));
