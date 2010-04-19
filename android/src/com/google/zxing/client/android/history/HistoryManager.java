@@ -25,13 +25,20 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Environment;
 import android.os.Message;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.ArrayList;
 
+import android.util.Log;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.client.android.Intents;
 import com.google.zxing.client.android.R;
@@ -44,6 +51,8 @@ import com.google.zxing.Result;
  * @author Sean Owen
  */
 public final class HistoryManager {
+
+  private static final String TAG = HistoryManager.class.getSimpleName();
 
   private static final int MAX_ITEMS = 50;
   private static final String[] TEXT_COL_PROJECTION = { DBHelper.TEXT_COL };
@@ -95,33 +104,16 @@ public final class HistoryManager {
   }
 
   public AlertDialog buildAlert() {
-    final List<Result> items = getHistoryItems();
-    final String[] dialogItems = new String[items.size() + 2];
-    for (int i = 0; i < items.size(); i++) {
+    List<Result> items = getHistoryItems();
+    int size = items.size();
+    String[] dialogItems = new String[size + 2];
+    for (int i = 0; i < size; i++) {
       dialogItems[i] = items.get(i).getText();
     }
-    final Resources res = activity.getResources();
+    Resources res = activity.getResources();
     dialogItems[dialogItems.length - 2] = res.getString(R.string.history_send);
     dialogItems[dialogItems.length - 1] = res.getString(R.string.history_clear_text);
-    DialogInterface.OnClickListener clickListener = new DialogInterface.OnClickListener() {
-      public void onClick(DialogInterface dialogInterface, int i) {
-        if (i == dialogItems.length - 1) {
-          clearHistory();
-        } else if (i == dialogItems.length - 2) {
-          CharSequence history = buildHistory();
-          Intent intent = new Intent(Intent.ACTION_SEND, Uri.parse("mailto:"));
-          intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);          
-          intent.putExtra(Intent.EXTRA_SUBJECT, res.getString(R.string.history_email_title));
-          intent.putExtra(Intent.EXTRA_TEXT, history);
-          intent.setType("text/csv");
-          activity.startActivity(intent);
-        } else {
-          Result result = items.get(i);
-          Message message = Message.obtain(activity.getHandler(), R.id.decode_succeeded, result);
-          message.sendToTarget();
-        }
-      }
-    };
+    DialogInterface.OnClickListener clickListener = new HistoryClickListener(dialogItems, items);
     AlertDialog.Builder builder = new AlertDialog.Builder(activity);
     builder.setTitle(R.string.history_title);
     builder.setItems(dialogItems, clickListener);
@@ -186,7 +178,7 @@ public final class HistoryManager {
 
   /**
    * <p>Builds a text representation of the scanning history. Each scan is encoded on one
-   * line, terminated by a line break (\n). The values in each line are comma-separated,
+   * line, terminated by a line break (\r\n). The values in each line are comma-separated,
    * and double-quoted. Double-quotes within values are escaped with a sequence of two
    * double-quotes. The fields output are:</p>
    *
@@ -210,12 +202,12 @@ public final class HistoryManager {
                         DBHelper.TIMESTAMP_COL + " DESC");
       while (cursor.moveToNext()) {
         for (int col = 0; col < EXPORT_COL_PROJECTION.length; col++) {
-          historyText.append('"').append(massageHistoryField(cursor.getString(col)));
+          historyText.append('"').append(massageHistoryField(cursor.getString(col))).append("\",");
         }
         // Add timestamp again, formatted
         long timestamp = cursor.getLong(EXPORT_COL_PROJECTION.length - 1);
-        historyText.append('"').append(massageHistoryField(EXPORT_DATE_TIME_FORMAT.format(new Date(timestamp))))
-            .append('"').append('\n');
+        historyText.append('"').append(massageHistoryField(
+            EXPORT_DATE_TIME_FORMAT.format(new Date(timestamp)))).append("\"\r\n");
       }
     } finally {
       if (cursor != null) {
@@ -224,6 +216,33 @@ public final class HistoryManager {
       db.close();
     }
     return historyText;
+  }
+
+  private Uri saveHistory(String history) {
+    File bsRoot = new File(Environment.getExternalStorageDirectory(), "BarcodeScanner");
+    File historyRoot = new File(bsRoot, "History");
+    if (!historyRoot.exists() && !historyRoot.mkdirs()) {
+      Log.v(TAG, "Couldn't make dir " + historyRoot);
+      return null;
+    }
+    File historyFile = new File(historyRoot, "history-" + System.currentTimeMillis() + ".csv");
+    OutputStreamWriter out = null;
+    try {
+      out = new OutputStreamWriter(new FileOutputStream(historyFile), Charset.forName("UTF-8"));
+      out.write(history);
+      return Uri.parse("file://" + historyFile.getAbsolutePath());
+    } catch (IOException ioe) {
+      Log.v(TAG, "Couldn't access file " + historyFile + " due to " + ioe);
+      return null;
+    } finally {
+      if (out != null) {
+        try {
+          out.close();
+        } catch (IOException ioe) {
+          // do nothing
+        }
+      }
+    }
   }
 
   private static String massageHistoryField(String value) {
@@ -240,4 +259,42 @@ public final class HistoryManager {
     }
   }
 
+  private class HistoryClickListener implements DialogInterface.OnClickListener {
+
+    private final String[] dialogItems;
+    private final List<Result> items;
+
+    private HistoryClickListener(String[] dialogItems, List<Result> items) {
+      this.dialogItems = dialogItems;
+      this.items = items;
+    }
+
+    public void onClick(DialogInterface dialogInterface, int i) {
+      if (i == dialogItems.length - 1) {
+        clearHistory();
+      } else if (i == dialogItems.length - 2) {
+        CharSequence history = buildHistory();
+        Uri historyFile = saveHistory(history.toString());
+        if (historyFile == null) {
+          AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+          builder.setMessage(R.string.msg_unmount_usb);
+          builder.setPositiveButton(R.string.button_ok, null);
+          builder.show();
+          return;
+        }
+        Intent intent = new Intent(Intent.ACTION_SEND, Uri.parse("mailto:"));
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+        String subject = activity.getResources().getString(R.string.history_email_title);
+        intent.putExtra(Intent.EXTRA_SUBJECT, subject);
+        intent.putExtra(Intent.EXTRA_TEXT, subject);
+        intent.putExtra(Intent.EXTRA_STREAM, historyFile);
+        intent.setType("text/csv");
+        activity.startActivity(intent);
+      } else {
+        Result result = items.get(i);
+        Message message = Message.obtain(activity.getHandler(), R.id.decode_succeeded, result);
+        message.sendToTarget();
+      }
+    }
+  }
 }
