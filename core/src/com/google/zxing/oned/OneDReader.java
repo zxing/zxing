@@ -103,12 +103,12 @@ public abstract class OneDReader implements Reader {
 
     int middle = height >> 1;
     boolean tryHarder = hints != null && hints.containsKey(DecodeHintType.TRY_HARDER);
-    int rowStep = Math.max(1, height >> (tryHarder ? 8 : 4));
+    int rowStep = Math.max(1, height >> (tryHarder ? 8 : 5));
     int maxLines;
     if (tryHarder) {
       maxLines = height; // Look at the whole image, not just the center
     } else {
-      maxLines = 9; // Nine rows spaced 1/16 apart is roughly the middle half of the image
+      maxLines = 15; // 15 rows spaced 1/32 apart is roughly the middle half of the image
     }
 
     for (int x = 0; x < maxLines; x++) {

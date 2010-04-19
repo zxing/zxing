@@ -205,7 +205,8 @@ limitations under the License.
       <!-- This works around some strange Android/ProGuard problem verifying MaskUtil -->
       <arg value="-keep class com.google.zxing.qrcode.encoder.MaskUtil { public * ; }"/>
       <arg value="-target 5"/>
-      <arg value="-optimizationpasses 4"/>
+      <!-- Keeping this low also avoids some weird Android/ProGuard issue I couldn't resolve otherwise --> 
+      <arg value="-optimizationpasses 2"/>
       <arg value="-dontshrink"/>
       <arg value="-dontobfuscate"/>
       <arg value="-dontskipnonpubliclibraryclasses"/>

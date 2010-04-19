@@ -113,6 +113,7 @@ public final class CommandLineRunner {
     vector.addElement(BarcodeFormat.UPC_E);
     vector.addElement(BarcodeFormat.EAN_13);
     vector.addElement(BarcodeFormat.EAN_8);
+    vector.addElement(BarcodeFormat.RSS14);    
     if (!productsOnly) {
       vector.addElement(BarcodeFormat.CODE_39);
       vector.addElement(BarcodeFormat.CODE_128);
