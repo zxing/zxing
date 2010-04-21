@@ -55,13 +55,18 @@ import android.net.Uri;
  *
  * <p>{@code IntentIntegrator.initiateScan(yourActivity);}</p>
  *
- * <p>You can use {@link #initiateScan(Activity, String, String, String, String)} or
+ * <p>You can use {@link #initiateScan(Activity, CharSequence, CharSequence, CharSequence, CharSequence)} or
  * {@link #initiateScan(Activity, int, int, int, int)} to customize the download prompt with
  * different text labels.</p>
  *
+ * <p>Note that {@link #initiateScan(Activity)} returns an {@link AlertDialog} which is non-null if the
+ * user was prompted to download the application. This lets the calling app potentially manage the dialog.
+ * In particular, ideally, the app dismisses the dialog if it's still active in its {@link Activity#onPause()}
+ * method.</p>
+ *
  * <h2>Sharing text via barcode</h2>
  *
- * <p>To share text, encoded as a QR Code on-screen, similarly, see {@link #shareText(Activity, String)}.</p>
+ * <p>To share text, encoded as a QR Code on-screen, similarly, see {@link #shareText(Activity, CharSequence)}.</p>
  *
  * <p>Some code, particularly download integration, was contributed from the Anobiit application.</p>
  *
@@ -90,32 +95,32 @@ public final class IntentIntegrator {
   }
 
   /**
-   * See {@link #initiateScan(Activity, String, String, String, String)} --
+   * See {@link #initiateScan(Activity, CharSequence, CharSequence, CharSequence, CharSequence)} --
    * same, but uses default English labels.
    */
-  public static void initiateScan(Activity activity) {
-    initiateScan(activity, DEFAULT_TITLE, DEFAULT_MESSAGE, DEFAULT_YES, DEFAULT_NO);
+  public static AlertDialog initiateScan(Activity activity) {
+    return initiateScan(activity, DEFAULT_TITLE, DEFAULT_MESSAGE, DEFAULT_YES, DEFAULT_NO);
   }
 
   /**
-   * See {@link #initiateScan(Activity, String, String, String, String)} --
+   * See {@link #initiateScan(Activity, CharSequence, CharSequence, CharSequence, CharSequence)} --
    * same, but takes string IDs which refer
    * to the {@link Activity}'s resource bundle entries.
    */
-  public static void initiateScan(Activity activity,
-                                  int stringTitle,
-                                  int stringMessage,
-                                  int stringButtonYes,
-                                  int stringButtonNo) {
-    initiateScan(activity,
-                 activity.getString(stringTitle),
-                 activity.getString(stringMessage),
-                 activity.getString(stringButtonYes),
-                 activity.getString(stringButtonNo));
+  public static AlertDialog initiateScan(Activity activity,
+                                         int stringTitle,
+                                         int stringMessage,
+                                         int stringButtonYes,
+                                         int stringButtonNo) {
+    return initiateScan(activity,
+                        activity.getString(stringTitle),
+                        activity.getString(stringMessage),
+                        activity.getString(stringButtonYes),
+                        activity.getString(stringButtonNo));
   }
 
   /**
-   * See {@link #initiateScan(Activity, String, String, String, String, String)} --
+   * See {@link #initiateScan(Activity, CharSequence, CharSequence, CharSequence, CharSequence, CharSequence)} --
    * same, but scans for all supported barcode types.
    * @param stringTitle title of dialog prompting user to download Barcode Scanner
    * @param stringMessage text of dialog prompting user to download Barcode Scanner
@@ -123,19 +128,21 @@ public final class IntentIntegrator {
    *  Barcode Scanner (e.g. "Yes")
    * @param stringButtonNo text of button user clicks when declining to download
    *  Barcode Scanner (e.g. "No")
+   * @return an {@link AlertDialog} if the user was prompted to download the app,
+   *  null otherwise
    */
-  public static void initiateScan(Activity activity,
-                                  String stringTitle,
-                                  String stringMessage,
-                                  String stringButtonYes,
-                                  String stringButtonNo) {
+  public static AlertDialog initiateScan(Activity activity,
+                                         CharSequence stringTitle,
+                                         CharSequence stringMessage,
+                                         CharSequence stringButtonYes,
+                                         CharSequence stringButtonNo) {
 
-	  initiateScan(activity,
-                 stringTitle,
-                 stringMessage,
-                 stringButtonYes,
-                 stringButtonNo,
-                 ALL_CODE_TYPES);
+	  return initiateScan(activity,
+                        stringTitle,
+                        stringMessage,
+                        stringButtonYes,
+                        stringButtonNo,
+                        ALL_CODE_TYPES);
   }
 
   /**
@@ -149,15 +156,16 @@ public final class IntentIntegrator {
    *  Barcode Scanner (e.g. "No")
    * @param stringDesiredBarcodeFormats a comma separated list of codes you would
    *  like to scan for.
-   * @return the contents of the barcode that was scanned, or null if none was found
+   * @return an {@link AlertDialog} if the user was prompted to download the app,
+   *  null otherwise
    * @throws InterruptedException if timeout expires before a scan completes
    */
-  public static void initiateScan(Activity activity,
-                                  String stringTitle,
-                                  String stringMessage,
-                                  String stringButtonYes,
-                                  String stringButtonNo,
-                                  String stringDesiredBarcodeFormats) {
+  public static AlertDialog initiateScan(Activity activity,
+                                         CharSequence stringTitle,
+                                         CharSequence stringMessage,
+                                         CharSequence stringButtonYes,
+                                         CharSequence stringButtonNo,
+                                         CharSequence stringDesiredBarcodeFormats) {
     Intent intentScan = new Intent("com.google.zxing.client.android.SCAN");
     intentScan.addCategory(Intent.CATEGORY_DEFAULT);
 
@@ -169,16 +177,17 @@ public final class IntentIntegrator {
 
     try {
       activity.startActivityForResult(intentScan, REQUEST_CODE);
+      return null;
     } catch (ActivityNotFoundException e) {
-      showDownloadDialog(activity, stringTitle, stringMessage, stringButtonYes, stringButtonNo);
+      return showDownloadDialog(activity, stringTitle, stringMessage, stringButtonYes, stringButtonNo);
     }
   }
 
-  private static void showDownloadDialog(final Activity activity,
-                                         String stringTitle,
-                                         String stringMessage,
-                                         String stringButtonYes,
-                                         String stringButtonNo) {
+  private static AlertDialog showDownloadDialog(final Activity activity,
+                                                CharSequence stringTitle,
+                                                CharSequence stringMessage,
+                                                CharSequence stringButtonYes,
+                                                CharSequence stringButtonNo) {
     AlertDialog.Builder downloadDialog = new AlertDialog.Builder(activity);
     downloadDialog.setTitle(stringTitle);
     downloadDialog.setMessage(stringMessage);
@@ -192,7 +201,7 @@ public final class IntentIntegrator {
     downloadDialog.setNegativeButton(stringButtonNo, new DialogInterface.OnClickListener() {
       public void onClick(DialogInterface dialogInterface, int i) {}
     });
-    downloadDialog.show();
+    return downloadDialog.show();
   }
 
 
@@ -218,19 +227,19 @@ public final class IntentIntegrator {
   }
 
   /**
-   * See {@link #shareText(Activity, String, String, String, String, String)} --
+   * See {@link #shareText(Activity, CharSequence, CharSequence, CharSequence, CharSequence, CharSequence)} --
    * same, but uses default English labels.
    */
-  public static void shareText(Activity activity, String text) {
+  public static void shareText(Activity activity, CharSequence text) {
     shareText(activity, text, DEFAULT_TITLE, DEFAULT_MESSAGE, DEFAULT_YES, DEFAULT_NO);
   }
 
   /**
-   * See {@link #shareText(Activity, String, String, String, String, String)} --
+   * See {@link #shareText(Activity, CharSequence, CharSequence, CharSequence, CharSequence, CharSequence)} --
    * same, but takes string IDs which refer to the {@link Activity}'s resource bundle entries.
    */
   public static void shareText(Activity activity,
-                               String text,
+                               CharSequence text,
                                int stringTitle,
                                int stringMessage,
                                int stringButtonYes,
@@ -256,11 +265,11 @@ public final class IntentIntegrator {
    *  Barcode Scanner (e.g. "No")
    */
   public static void shareText(Activity activity,
-                               String text,
-                               String stringTitle,
-                               String stringMessage,
-                               String stringButtonYes,
-                               String stringButtonNo) {
+                               CharSequence text,
+                               CharSequence stringTitle,
+                               CharSequence stringMessage,
+                               CharSequence stringButtonYes,
+                               CharSequence stringButtonNo) {
 
     Intent intent = new Intent();
     intent.setAction("com.google.zxing.client.android.ENCODE");
