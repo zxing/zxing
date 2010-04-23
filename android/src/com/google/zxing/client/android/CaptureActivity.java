@@ -251,6 +251,13 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
     playBeep = prefs.getBoolean(PreferencesActivity.KEY_PLAY_BEEP, true);
+    if (playBeep) {
+      // See if sound settings overrides this
+      AudioManager audioService = (AudioManager) getSystemService(AUDIO_SERVICE);
+      if (audioService.getRingerMode() != AudioManager.RINGER_MODE_NORMAL) {
+        playBeep = false;
+      }
+    }
     vibrate = prefs.getBoolean(PreferencesActivity.KEY_VIBRATE, false);
     copyToClipboard = prefs.getBoolean(PreferencesActivity.KEY_COPY_TO_CLIPBOARD, true);
     initBeepSound();
