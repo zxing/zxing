@@ -69,11 +69,14 @@ final class VCardResultParser extends ResultParser {
     Vector matches = null;
     int i = 0;
     int max = rawText.length();
+
     while (i < max) {
+
       i = rawText.indexOf(prefix, i);
       if (i < 0) {
         break;
       }
+
       if (i > 0 && rawText.charAt(i - 1) != '\n') {
         // then this didn't start a new token, we matched in the middle of something
         i++;
@@ -83,39 +86,81 @@ final class VCardResultParser extends ResultParser {
       if (rawText.charAt(i) != ':' && rawText.charAt(i) != ';') {
         continue;
       }
+
+      int metadataStart = i;
       while (rawText.charAt(i) != ':') { // Skip until a colon
         i++;
       }
-      i++; // skip colon
-      int start = i; // Found the start of a match here
-      while ((i = rawText.indexOf((int) '\n', i)) >= 0 &&  // Really, ends in \r\n
-             i < rawText.length() - 1 &&           // But if followed by tab or space,
-             (rawText.charAt(i+1) == ' ' ||        // this is only a continuation
-              rawText.charAt(i+1) == '\t')) {
-        i += 2;
+
+      boolean quotedPrintable = false;
+      if (i > metadataStart) {
+        // There was something after the tag, before colon
+        int j = metadataStart+1;
+        while (j <= i) {
+          if (rawText.charAt(j) == ';' || rawText.charAt(j) == ':') {
+            String metadata = rawText.substring(metadataStart+1, j);
+            int equals = metadata.indexOf('=');
+            if (equals >= 0) {
+              String key = metadata.substring(0, equals);
+              String value = metadata.substring(equals+1);
+              if (key.equalsIgnoreCase("ENCODING")) {
+                if (value.equalsIgnoreCase("QUOTED-PRINTABLE")) {
+                  quotedPrintable = true;
+                }
+              }
+            }
+            metadataStart = j;
+          }
+          j++;
+        }
       }
+
+      i++; // skip colon
+
+      int matchStart = i; // Found the start of a match here
+
+      while ((i = rawText.indexOf((int) '\n', i)) >= 0) { // Really, end in \r\n
+        if (i < rawText.length() - 1 &&           // But if followed by tab or space,
+            (rawText.charAt(i+1) == ' ' ||        // this is only a continuation
+             rawText.charAt(i+1) == '\t')) {
+          i += 2; // Skip \n and continutation whitespace
+        } else if (quotedPrintable &&             // If preceded by = in quoted printable
+                   (rawText.charAt(i-1) == '=' || // this is a continuation
+                    rawText.charAt(i-2) == '=')) {
+          i++; // Skip \n
+        } else {
+          break;
+        }
+      }
+
       if (i < 0) {
         // No terminating end character? uh, done. Set i such that loop terminates and break
         i = max;
-      } else if (i > start) {
+      } else if (i > matchStart) {
         // found a match
         if (matches == null) {
-          matches = new Vector(3); // lazy init
+          matches = new Vector(1); // lazy init
         }
         if (rawText.charAt(i-1) == '\r') {
           i--; // Back up over \r, which really should be there
         }
-        String element = rawText.substring(start, i);
+        String element = rawText.substring(matchStart, i);
         if (trim) {
           element = element.trim();
         }
-        element = stripContinuationCRLF(element);
+        if (quotedPrintable) {
+          element = decodeQuotedPrintable(element);
+        } else {
+          element = stripContinuationCRLF(element);
+        }
         matches.addElement(element);
         i++;
       } else {
         i++;
       }
+
     }
+
     if (matches == null || matches.isEmpty()) {
       return null;
     }
@@ -144,6 +189,50 @@ final class VCardResultParser extends ResultParser {
       }
     }
     return result.toString();
+  }
+
+  private static String decodeQuotedPrintable(String value) {
+    int length = value.length();
+    StringBuffer result = new StringBuffer(length);
+    for (int i = 0; i < length; i++) {
+      char c = value.charAt(i);
+      switch (c) {
+        case '\r':
+        case '\n':
+          break;
+        case '=':
+          if (i < length - 2) {
+            char nextChar = value.charAt(i+1);
+            if (nextChar == '\r' || nextChar == '\n') {
+              // Ignore, it's just a continuation symbol
+            } else {
+              char nextNextChar = value.charAt(i+2);
+              try {
+                int encodedChar = 16 * toHexValue(nextChar) + toHexValue(nextNextChar);
+                result.append((char) encodedChar);
+              } catch (IllegalArgumentException iae) {
+                // continue, assume it was incorrectly encoded
+              }
+              i += 2;
+            }
+          }
+          break;
+        default:
+          result.append(c);
+      }
+    }
+    return result.toString();
+  }
+
+  private static int toHexValue(char c) {
+    if (c >= '0' && c <= '9') {
+      return c - '0';
+    } else if (c >= 'A' && c <= 'F') {
+      return c - 'A' + 10;
+    } else if (c >= 'a' && c <= 'f') {
+      return c - 'a' + 10;
+    }
+    throw new IllegalArgumentException();
   }
 
   static String matchSingleVCardPrefixedField(String prefix, String rawText, boolean trim) {
