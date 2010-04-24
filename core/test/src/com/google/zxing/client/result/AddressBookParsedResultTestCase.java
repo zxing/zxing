@@ -60,6 +60,15 @@ public final class AddressBookParsedResultTestCase extends TestCase {
            new String[] {"5555555555" }, "Company", null, null, "This is the memo.");
   }
 
+  public void testQuotedPrintable() {
+    doTest("BEGIN:VCARD\r\nADR;HOME;CHARSET=UTF-8;ENCODING=QUOTED-PRINTABLE:;;" +
+           "=35=38=20=4C=79=6E=62=72=6F=6F=6B=0D=0A=43=\r\n" +
+           "=4F=20=36=39=39=\r\n" +
+           "=32=36;;;\r\nEND:VCARD",
+           null, null, null, new String[] {"58 Lynbrook\r\nCO 69926"},
+           null, null, null, null, null, null);
+  }
+
   private static void doTest(String contents,
                              String title,
                              String[] names,
