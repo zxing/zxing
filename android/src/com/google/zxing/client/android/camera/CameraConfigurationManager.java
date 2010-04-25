@@ -21,6 +21,7 @@ import java.util.regex.Pattern;
 import android.content.Context;
 import android.graphics.Point;
 import android.hardware.Camera;
+import android.os.Build;
 import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
@@ -179,7 +180,12 @@ final class CameraConfigurationManager {
 
   private void setFlash(Camera.Parameters parameters) {
     // FIXME: This is a hack to turn the flash off on the Samsung Galaxy.
-    parameters.set("flash-value", 2);
+    // And this is a hack-hack to work around a different value on the Behold II
+    if (Build.MODEL.contains("Behold II")) {
+      parameters.set("flash-value", 1);
+    } else {
+      parameters.set("flash-value", 2);
+    }
     // This is the standard setting to turn the flash off that all devices should honor.
     parameters.set("flash-mode", "off");
   }
