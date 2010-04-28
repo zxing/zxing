@@ -158,10 +158,8 @@ public final class EncodeActivity extends Activity {
     String contents = qrCodeEncoder.getContents();
     Bitmap bitmap;
     try {
-      bitmap = QRCodeEncoder.encodeAsBitmap(contents,
-                                            BarcodeFormat.QR_CODE,
-                                            SHARE_BARCODE_DIMENSION,
-                                            SHARE_BARCODE_DIMENSION);
+      bitmap = QRCodeEncoder.encodeAsBitmap(contents, BarcodeFormat.QR_CODE,
+          SHARE_BARCODE_DIMENSION, SHARE_BARCODE_DIMENSION);
     } catch (WriterException we) {
       Log.w(TAG, we.toString());
       return true;
@@ -195,7 +193,8 @@ public final class EncodeActivity extends Activity {
     }
 
     Intent intent = new Intent(Intent.ACTION_SEND, Uri.parse("mailto:"));
-    intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name) + " - " + qrCodeEncoder.getTitle());
+    intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name) + " - " +
+        qrCodeEncoder.getTitle());
     intent.putExtra(Intent.EXTRA_TEXT, qrCodeEncoder.getContents());
     intent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + barcodeFile.getAbsolutePath()));
     intent.setType("image/png");
