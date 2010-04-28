@@ -16,7 +16,7 @@
  -->
 <resources>
   <string name="app_picker_name">Applications</string>
-  <string name="app_name">Scanner de código barras</string>
+  <string name="app_name">Barcode Scanner</string>
   <string name="bookmark_picker_name">Marcadores</string>
   <string name="button_add_calendar">Adicionar ao calendário</string>
   <string name="button_add_contact">Adicionar contactos</string>
@@ -40,8 +40,8 @@
   <string name="button_share_bookmark">Marcador</string>
   <string name="button_share_by_email">Partilhar por e-mail</string>
   <string name="button_share_by_sms">Partilhar por SMS</string>
-  <string name="button_share_clipboard">área de transferência</string>
-  <string name="button_share_contact">contacto</string>
+  <string name="button_share_clipboard">Área de transferência</string>
+  <string name="button_share_contact">Contacto</string>
   <string name="button_show_map">Mostrar mapa</string>
   <string name="button_sms">Enviar SMS</string>
   <string name="button_web_search">Pesquisa Web</string>
@@ -57,22 +57,22 @@
   <string name="menu_history">Histórico</string>
   <string name="menu_share">Partilhar</string>
   <string name="msg_about">Baseado na biblioteca de código de barras de código aberto ZXing</string>
-  <string name="msg_buggy">This device has known bugs that cause barcode scanning problems. For more information, visit http://code.google.com/p/zxing/wiki/FrequentlyAskedQuestions</string>
-  <string name="msg_camera_framework_bug">Sorry, the Android camera encountered a problem. You may need to restart the device.</string>
+  <string name="msg_buggy">Este dispositivo tem bugs conhecidos que causam problemas de varredura de código de barras. Para obter mais informações, visite http://code.google.com/p/zxing/wiki/FrequentlyAskedQuestions</string>
+  <string name="msg_camera_framework_bug">Desculpe, a câmera Android encontrou um problema. Você pode precisar reiniciar o dispositivo.</string>
   <string name="msg_default_contents">Conteúdos</string>
   <string name="msg_default_format">Formato</string>
   <string name="msg_default_mms_subject">Olá</string>
-  <string name="msg_default_status">Place a barcode inside the viewfinder rectangle to scan it.</string>
+  <string name="msg_default_status">Coloque um código de barras dentro do retângulo do visor para verificar isso.</string>
   <string name="msg_default_type">Tipo</string>
-  <string name="msg_default_time">Time</string>
+  <string name="msg_default_time">Tempo</string>
   <string name="msg_encode_barcode_failed">Não foi possível criar código de barras pedido.</string>
   <string name="msg_encode_contents_failed">Não foi possível codificar código de barras dos dados fornecidos.</string>
   <string name="msg_encode_in_progress">A gerar código de barras\u2026</string>
-  <string name="msg_google_shopper_missing">Google Shopper is not installed</string>
-  <string name="msg_install_google_shopper">Google Shopper combines barcode scanning with prices, reviews and more without opening the browser. Would you like to try it?</string>
+  <string name="msg_google_shopper_missing">Google Shopper não está instalado.</string>
+  <string name="msg_install_google_shopper">Google Shopper combina escaneamento de código de barras com os preços, opiniões e muito mais sem precisar abrir o navegador. Você gostaria de experimentar?</string>
   <string name="msg_intent_failed">Lamentamos, não foi possível iniciar a aplicação pedida. Conteúdos do código de barras inválidos..</string>
-  <string name="msg_loading_apps">Loading list of applications\u2026</string>
-  <string name="msg_not_our_results">You are leaving this application. The search results you will see are not related to this application.</string>
+  <string name="msg_loading_apps">Carregando lista de pedidos\u2026</string>
+  <string name="msg_not_our_results">Você está deixando o presente pedido. Os resultados da pesquisa, você verá não estão ligadas a este pedido.</string>
   <string name="msg_sbc_book_not_searchable">Lamentamos, não é possível pesquisar este livro.</string>
   <string name="msg_sbc_failed">Lamentamos, ocorreu um problema com a pesquisa.</string>
   <string name="msg_sbc_no_page_returned">Não foram encontradas páginas</string>
@@ -82,7 +82,7 @@
   <string name="msg_sbc_searching_book">A pesquisar livro\u2026</string>
   <string name="msg_share_explanation">Pode partilhar dados exibindo um código de barras no ecrã e digitalizando-o com outro telefone.</string>
   <string name="msg_share_subject_line">Aqui está o conteúdo de um código de barras que digitalizei</string>
-  <string name="msg_unmount_usb">Please turn off USB storage to continue.</string>
+  <string name="msg_unmount_usb">Desculpa, o cartão SD não está acessível.</string>
   <string name="preferences_actions_title">Quando um código de barras é encontrado\u2026</string>
   <string name="preferences_copy_to_clipboard_title">Copiar para a área de transferência</string>
   <string name="preferences_decode_1D_title">Descodificar código de barras 1D</string>
@@ -91,10 +91,10 @@
   <string name="preferences_name">Definições</string>
   <string name="preferences_play_beep_title">Bip</string>
   <string name="preferences_vibrate_title">Vibrar</string>
-  <string name="preferences_front_light_title">Use front light</string>
-  <string name="preferences_front_light_summary">Improves scanning in low light on some phones, but may cause glare</string>  
+  <string name="preferences_front_light_title">Use a luz da frente</string>
+  <string name="preferences_front_light_summary">Melhora a digitalização em baixa luminosidade em alguns aparelhos, mas pode causar ofuscamento</string>
   <string name="preferences_result_title">Definições de resultados</string>
-  <string name="preferences_custom_product_search_title">Custom search URL</string>
+  <string name="preferences_custom_product_search_title">URL de pesquisa personalizada </string>
   <string name="preferences_custom_product_search_summary">Usar %s como marcador de posição para o ID do produto</string>
   <string name="result_address_book">Info de contacto encontrada</string>
   <string name="result_calendar">Evento de calendário encontrado </string>
@@ -108,8 +108,8 @@
   <string name="result_uri">URL encontrado</string>
   <string name="history_title">Histórico</string>
   <string name="history_clear_text">Limpar histórico</string>
-  <string name="history_send">Send history</string>
-  <string name="history_email_title">Barcode Scanner history</string>
+  <string name="history_send">Enviar história</string>
+  <string name="history_email_title">Barcode Scanner história</string>
   <string name="sbc_name">Pesquisa Google Book</string>
   <string name="share_name">Partilhar por código de barras</string>
   <string name="title_about">Scanner de código barras v</string>
