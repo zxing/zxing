@@ -82,7 +82,7 @@
   <string name="msg_sbc_searching_book">Поиск книги\u2026</string>
   <string name="msg_share_explanation">Вы можете поделиться данными, сканировав штрих-код с вашего экрана другим телефоном.</string>
   <string name="msg_share_subject_line">Тут содержимое отсканированных Вами штрих-кодов</string>
-  <string name="msg_unmount_usb">Пожалуйста, отключите USB хранения, чтобы продолжить.</string>  
+  <string name="msg_unmount_usb">К сожалению, карты SD не является доступным.</string>  
   <string name="preferences_actions_title">Когда штрих-код найден\u2026</string>
   <string name="preferences_copy_to_clipboard_title">Копировать в буфер обмена</string>
   <string name="preferences_decode_1D_title">Распознавать линейные штрих-коды</string>

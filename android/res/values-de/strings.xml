@@ -82,7 +82,7 @@
   <string name="msg_sbc_searching_book">Durchsuche Buch\u2026</string>
   <string name="msg_share_explanation">Sie können Daten weitergeben, indem Sie einen Barcode auf Ihrem Bilschirm anzeigen und mit einem anderen Telefon einscannen.</string>
   <string name="msg_share_subject_line">Hier ist der gescannte Barcode-Inhalt</string>
-  <string name="msg_unmount_usb">Bitte schalten Sie USB-Speicher, um fortzufahren.</string>  
+  <string name="msg_unmount_usb">Leider ist die SD-Karte nicht zugänglich.</string>  
   <string name="preferences_actions_title">Wenn ein Barcode erkannt wird\u2026</string>
   <string name="preferences_copy_to_clipboard_title">In Zwischenablage kopieren</string>
   <string name="preferences_decode_1D_title">Dekodiere 1D Barcodes</string>

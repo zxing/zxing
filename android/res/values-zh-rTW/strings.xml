@@ -82,7 +82,7 @@
   <string name="msg_sbc_searching_book">搜索圖書\u2026</string>
   <string name="msg_share_explanation">你可以在你的手機屏幕上顯示條碼，并使用其他手機掃描此條碼方式進行分享</string>
   <string name="msg_share_subject_line">這是我所掃描條碼的內容</string>
-  <string name="msg_unmount_usb">請關閉 USB存儲繼續。</string>  
+  <string name="msg_unmount_usb">對不起，SD卡是不可訪問。</string>  
   <string name="preferences_actions_title">找到條碼時\u2026</string>
   <string name="preferences_copy_to_clipboard_title">復制到剪切板</string>
   <string name="preferences_decode_1D_title">解碼一維條碼</string>

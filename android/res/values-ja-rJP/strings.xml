@@ -82,7 +82,7 @@
   <string name="msg_sbc_searching_book">書籍を検索中\u2026</string>
   <string name="msg_share_explanation">画面にバーコードを表示させ、別の端末でスキャンすれば データを共有することができます。</string>
   <string name="msg_share_subject_line">スキャンしたバーコードの内容を送信します。</string>
-  <string name="msg_unmount_usb">続行するには、USBストレージをオフにします。</string>  
+  <string name="msg_unmount_usb">申し訳ありませんが、SDカードにアクセスできないです。</string>  
   <string name="preferences_actions_title">バーコード発見時\u2026</string>
   <string name="preferences_copy_to_clipboard_title">クリップボードにコピーする</string>
   <string name="preferences_decode_1D_title">1Dバーコードを読み取る</string>
