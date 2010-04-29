@@ -264,17 +264,17 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   }
 
   private static Vector<BarcodeFormat> parseDecodeFormats(Intent intent) {
-    String formats = intent.getStringExtra(Intents.Scan.SCAN_FORMATS);
-    if (formats != null) {
-      return parseDecodeFormats(Arrays.asList(COMMA_PATTERN.split(formats)),
-          intent.getStringExtra(Intents.Scan.MODE));
+    List<String> scanFormats = null;
+    String scanFormatsString = intent.getStringExtra(Intents.Scan.SCAN_FORMATS);
+    if (scanFormatsString != null) {
+      scanFormats = Arrays.asList(COMMA_PATTERN.split(scanFormatsString));
     }
-    return null;
+    return parseDecodeFormats(scanFormats, intent.getStringExtra(Intents.Scan.MODE));
   }
 
   private static Vector<BarcodeFormat> parseDecodeFormats(Uri inputUri) {
     List<String> formats = inputUri.getQueryParameters(Intents.Scan.SCAN_FORMATS);
-    if (formats.size() == 1){
+    if (formats != null && formats.size() == 1 && formats.get(0) != null){
       formats = Arrays.asList(COMMA_PATTERN.split(formats.get(0)));
     }
     return parseDecodeFormats(formats, inputUri.getQueryParameter(Intents.Scan.MODE));
