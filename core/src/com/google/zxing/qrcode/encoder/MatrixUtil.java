@@ -290,7 +290,7 @@ public final class MatrixUtil {
   // Example: Calculation of version information of 7.
   // f(x) is created from 7.
   //   - 7 = 000111 in 6 bits
-  //   - f(x) = x^2 + x^2 + x^1
+  //   - f(x) = x^2 + x^1 + x^0
   // g(x) is given by the standard (p. 67)
   //   - g(x) = x^12 + x^11 + x^10 + x^9 + x^8 + x^5 + x^2 + 1
   // Multiply f(x) by x^(18 - 6)
