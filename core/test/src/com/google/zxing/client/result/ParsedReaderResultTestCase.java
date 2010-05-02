@@ -202,11 +202,11 @@ public final class ParsedReaderResultTestCase extends TestCase {
         "DTEND:20080505\r\nEND:VEVENT", "foo\n20080504\n20080505", ParsedResultType.CALENDAR);
     // Start time only
     doTestResult("BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456Z\r\nEND:VEVENT",
-        "foo\n20080504T123456Z", ParsedResultType.CALENDAR);
+        "foo\n20080504T123456Z\n20080504T123456Z", ParsedResultType.CALENDAR);
     doTestResult("BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456\r\nEND:VEVENT",
-        "foo\n20080504T123456", ParsedResultType.CALENDAR);
+        "foo\n20080504T123456\n20080504T123456", ParsedResultType.CALENDAR);
     doTestResult("BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504\r\nEND:VEVENT",
-        "foo\n20080504", ParsedResultType.CALENDAR);
+        "foo\n20080504\n20080504", ParsedResultType.CALENDAR);
     doTestResult("BEGIN:VEVENT\r\nDTEND:20080505T\r\nEND:VEVENT",
         "BEGIN:VEVENT\r\nDTEND:20080505T\r\nEND:VEVENT", ParsedResultType.TEXT);
     // Make sure illegal entries without newlines don't crash

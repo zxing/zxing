@@ -47,7 +47,7 @@ final class DecodedBitStreamParser {
   private static final char[] C40_SHIFT2_SET_CHARS = {
     '!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.',
     '/', ':', ';', '<', '=', '>', '?', '@', '[', '\\', ']', '^', '_'
-	};
+  };
   
   /**
    * See ISO 16022:2006, Annex C Table C.2
@@ -122,54 +122,54 @@ final class DecodedBitStreamParser {
     do {
       int oneByte = bits.readBits(8);
       if (oneByte == 0) {
-	    	throw FormatException.getFormatInstance();
-	    } else if (oneByte <= 128) {  // ASCII data (ASCII value + 1)
-	    	oneByte = upperShift ? (oneByte + 128) : oneByte;
-	    	upperShift = false;
-	    	result.append((char) (oneByte - 1));
-	    	return ASCII_ENCODE;
-	    } else if (oneByte == 129) {  // Pad
-	    	return PAD_ENCODE;
-	    } else if (oneByte <= 229) {  // 2-digit data 00-99 (Numeric Value + 130)
-	      int value = oneByte - 130;
-	      if (value < 10) { // padd with '0' for single digit values
-	        result.append('0');
-	      }
-	    	result.append(value);
-	    } else if (oneByte == 230) {  // Latch to C40 encodation
-	    	return C40_ENCODE;
-	    } else if (oneByte == 231) {  // Latch to Base 256 encodation
-	    	return BASE256_ENCODE;
-	    } else if (oneByte == 232) {  // FNC1
-	    	//throw ReaderException.getInstance();
+        throw FormatException.getFormatInstance();
+      } else if (oneByte <= 128) {  // ASCII data (ASCII value + 1)
+        oneByte = upperShift ? (oneByte + 128) : oneByte;
+        upperShift = false;
+        result.append((char) (oneByte - 1));
+        return ASCII_ENCODE;
+      } else if (oneByte == 129) {  // Pad
+        return PAD_ENCODE;
+      } else if (oneByte <= 229) {  // 2-digit data 00-99 (Numeric Value + 130)
+        int value = oneByte - 130;
+        if (value < 10) { // padd with '0' for single digit values
+          result.append('0');
+        }
+        result.append(value);
+      } else if (oneByte == 230) {  // Latch to C40 encodation
+        return C40_ENCODE;
+      } else if (oneByte == 231) {  // Latch to Base 256 encodation
+        return BASE256_ENCODE;
+      } else if (oneByte == 232) {  // FNC1
+        //throw ReaderException.getInstance();
         // Ignore this symbol for now
-	    } else if (oneByte == 233) {  // Structured Append
-	    	//throw ReaderException.getInstance();
+      } else if (oneByte == 233) {  // Structured Append
+        //throw ReaderException.getInstance();
         // Ignore this symbol for now
-	    } else if (oneByte == 234) {  // Reader Programming
-	    	//throw ReaderException.getInstance();
+      } else if (oneByte == 234) {  // Reader Programming
+        //throw ReaderException.getInstance();
         // Ignore this symbol for now
-	    } else if (oneByte == 235) {  // Upper Shift (shift to Extended ASCII)
-	    	upperShift = true;
-	    } else if (oneByte == 236) {  // 05 Macro
+      } else if (oneByte == 235) {  // Upper Shift (shift to Extended ASCII)
+        upperShift = true;
+      } else if (oneByte == 236) {  // 05 Macro
         result.append("[)>\u001E05\u001D");
         resultTrailer.insert(0, "\u001E\u0004");
       } else if (oneByte == 237) {  // 06 Macro
-	    	result.append("[)>\u001E06\u001D");
+        result.append("[)>\u001E06\u001D");
         resultTrailer.insert(0, "\u001E\u0004");
-	    } else if (oneByte == 238) {  // Latch to ANSI X12 encodation
-	    	return ANSIX12_ENCODE;
-	    } else if (oneByte == 239) {  // Latch to Text encodation
-	    	return TEXT_ENCODE;
-	    } else if (oneByte == 240) {  // Latch to EDIFACT encodation
-	    	return EDIFACT_ENCODE;
-	    } else if (oneByte == 241) {  // ECI Character
-	    	// TODO(bbrown): I think we need to support ECI
-	    	//throw ReaderException.getInstance();
+      } else if (oneByte == 238) {  // Latch to ANSI X12 encodation
+        return ANSIX12_ENCODE;
+      } else if (oneByte == 239) {  // Latch to Text encodation
+        return TEXT_ENCODE;
+      } else if (oneByte == 240) {  // Latch to EDIFACT encodation
+        return EDIFACT_ENCODE;
+      } else if (oneByte == 241) {  // ECI Character
+        // TODO(bbrown): I think we need to support ECI
+        //throw ReaderException.getInstance();
         // Ignore this symbol for now
-	    } else if (oneByte >= 242) {  // Not to be used in ASCII encodation
-	    	throw FormatException.getFormatInstance();
-	    }
+      } else if (oneByte >= 242) {  // Not to be used in ASCII encodation
+        throw FormatException.getFormatInstance();
+      }
     } while (bits.available() > 0);
     return ASCII_ENCODE;
   }

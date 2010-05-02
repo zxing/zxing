@@ -30,8 +30,10 @@ final class SearchBookContentsResult {
   private final String snippet;
   private final boolean validSnippet;
 
-    SearchBookContentsResult(String pageId, String pageNumber, String snippet, 
-			     boolean validSnippet) {
+    SearchBookContentsResult(String pageId,
+                             String pageNumber,
+                             String snippet,
+                             boolean validSnippet) {
     this.pageId = pageId;
     this.pageNumber = pageNumber;
     this.snippet = snippet;

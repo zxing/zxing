@@ -136,33 +136,33 @@ public final class EncoderTestCase extends TestCase {
     {
       BitArray bits = new BitArray();
       Encoder.appendLengthInfo(1,  // 1 letter (1/1).
-						  1,  // version 1.
-						  Mode.NUMERIC,
-						  bits);
+                               1,  // version 1.
+                               Mode.NUMERIC,
+                               bits);
       assertEquals(" ........ .X", bits.toString());  // 10 bits.
     }
     {
       BitArray bits = new BitArray();
       Encoder.appendLengthInfo(2,  // 2 letters (2/1).
-						  10,  // version 10.
-						  Mode.ALPHANUMERIC,
-						  bits);
+                               10,  // version 10.
+                               Mode.ALPHANUMERIC,
+                               bits);
       assertEquals(" ........ .X.", bits.toString());  // 11 bits.
     }
     {
       BitArray bits = new BitArray();
       Encoder.appendLengthInfo(255,  // 255 letter (255/1).
-						  27,  // version 27.
-						  Mode.BYTE,
-						  bits);
+                               27,  // version 27.
+                               Mode.BYTE,
+                               bits);
       assertEquals(" ........ XXXXXXXX", bits.toString());  // 16 bits.
     }
     {
       BitArray bits = new BitArray();
       Encoder.appendLengthInfo(512,  // 512 letters (1024/2).
-						  40,  // version 40.
-						  Mode.KANJI,
-						  bits);
+                               40,  // version 40.
+                               Mode.KANJI,
+                               bits);
       assertEquals(" ..X..... ....", bits.toString());  // 12 bits.
     }
   }
