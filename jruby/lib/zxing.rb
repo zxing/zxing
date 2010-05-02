@@ -1,7 +1,7 @@
 raise "ZXing requires JRuby" unless defined?(JRuby)
 
-require File.expand_path( File.dirname(__FILE__) + '/core.jar' )	  # ZXing core classes
-require File.expand_path( File.dirname(__FILE__) + '/javase.jar' )	# ZXing JavaSE classes
+require File.expand_path( File.dirname(__FILE__) + '/core.jar' )    # ZXing core classes
+require File.expand_path( File.dirname(__FILE__) + '/javase.jar' )  # ZXing JavaSE classes
 
 require 'uri'
 

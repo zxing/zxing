@@ -65,7 +65,7 @@ public final class URIResultHandler extends ResultHandler {
         shareBySMS(uri);
         break;
       case 3:
-	      searchBookContents(uri);
+        searchBookContents(uri);
         break;
     }
   }

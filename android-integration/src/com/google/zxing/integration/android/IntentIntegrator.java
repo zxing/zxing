@@ -137,7 +137,7 @@ public final class IntentIntegrator {
                                          CharSequence stringButtonYes,
                                          CharSequence stringButtonNo) {
 
-	  return initiateScan(activity,
+    return initiateScan(activity,
                         stringTitle,
                         stringMessage,
                         stringButtonYes,
@@ -171,8 +171,8 @@ public final class IntentIntegrator {
 
     // check which types of codes to scan for
     if (stringDesiredBarcodeFormats != null) {
-    	// set the desired barcode types
-    	intentScan.putExtra("SCAN_FORMATS", stringDesiredBarcodeFormats);
+      // set the desired barcode types
+      intentScan.putExtra("SCAN_FORMATS", stringDesiredBarcodeFormats);
     }
 
     try {

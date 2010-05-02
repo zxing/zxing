@@ -340,9 +340,9 @@ public final class ITFReader extends OneDReader {
     }
     if (bestMatch >= 0) {
       return bestMatch;
-		} else {
-			throw NotFoundException.getNotFoundInstance();
-		}
-	}
+    } else {
+      throw NotFoundException.getNotFoundInstance();
+    }
+  }
 
 }

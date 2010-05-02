@@ -6,12 +6,10 @@ body {
   font-family: Arial, sans-serif;
   font-size: 11px;
 }
-
 #header {
   background-color: #dde3e9;
   border-bottom: 1px solid #f2f7fc;
 }
-
 #header h1 {
   font-size: 15px;
   font-weight: bold;
@@ -19,23 +17,19 @@ body {
   padding: 12px;
   border-bottom: 1px solid #c8d0d9;
 }
-
 #header span {
   font-weight: normal;
   color: #5e6b75;
 }
-
 #footer {
   width: 100%;
   text-align:center;
   padding-top: 12px;
 }
-
 #footer a {
   text-decoration:none;
   color: #5e6b75;
 }
-
 /****************************************/
 #mainpanel {
   width: 800px;
@@ -43,7 +37,6 @@ body {
   padding: 12px;
   font-size: 11px;
 }
-
 #imageresult {
   background-color: #dde3e9;
   height: 350px;
@@ -56,7 +49,6 @@ body {
   display: table;
   #position: relative;
 }
-
 #innerresult {
   display: table-cell;
   vertical-align: middle;
@@ -64,20 +56,16 @@ body {
   #position: absolute;
   #top: 50%;
 }
-  
 #innerresult img {
    #position: relative;
    #top: -50%;
 }
-  
 #downloadText {
   font-size: 11px;
 }
-
 #urlresult {
   width: 350px;
 }
-
 .firstColumn {
   width: 100px;
   text-align: right;
@@ -87,14 +75,12 @@ body {
   font-weight: bold;
   font-size: 11px;
 }
-
 .secondColumn {
   width: 270px;
   font-size: 11px;
   color: #5e6b75;
   font-weight: bold;
 }
-
 /*.inputfield,*/
 .gwt-TextBox,
 .gwt-TextArea {
@@ -106,19 +92,15 @@ body {
   color: #000;
   font-weight: normal;
 }
-
 /*.inputfield:focus,*/
 .gwt-TextBox:focus {
   background-color: #fffbcc;
 }
-
 .required {
   background: #ffffff url(required-field-bg.png) repeat-y;
 }
-
 .errorMessage {
   padding-left: 110px;
   font-size: 11px;
   color: red;
 }
-	

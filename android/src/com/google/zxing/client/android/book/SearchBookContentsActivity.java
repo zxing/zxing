@@ -199,7 +199,7 @@ public final class SearchBookContentsActivity extends Activity {
         for (int x = 0; x < count; x++) {
           items.add(parseResult(results.getJSONObject(x)));
         }
-	      resultListView.setOnItemClickListener(new BrowseBookListener(this, items));
+        resultListView.setOnItemClickListener(new BrowseBookListener(this, items));
         resultListView.setAdapter(new SearchBookContentsAdapter(this, items));
       } else {
         String searchable = json.optString("searchable");
@@ -243,7 +243,7 @@ public final class SearchBookContentsActivity extends Activity {
       return new SearchBookContentsResult(pageId, pageNumber, snippet, valid);
     } catch (JSONException e) {
       // Never seen in the wild, just being complete.
-	    return new SearchBookContentsResult(getString(R.string.msg_sbc_no_page_returned), "", "", false);
+      return new SearchBookContentsResult(getString(R.string.msg_sbc_no_page_returned), "", "", false);
     }
   }
 
@@ -267,7 +267,7 @@ public final class SearchBookContentsActivity extends Activity {
         // website, we don't use LocaleManager to change the TLD.
         URI uri;
         if (isbn.startsWith("http://google.com/books?id=")) {
-	        int equals = isbn.indexOf('=');
+          int equals = isbn.indexOf('=');
           String volumeId = isbn.substring(equals + 1);
           uri = new URI("http", null, "www.google.com", -1, "/books", "id=" + volumeId +
                         "&jscmd=SearchWithinVolume2&q=" + query, null);

@@ -588,8 +588,8 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
           resultHandler.getDisplayContents().toString() + "&source=zxing";
       handler.sendMessageDelayed(message, INTENT_RESULT_DURATION);
     } else if (source == Source.ZXING_LINK) {
-    	// Replace each occurrence of RETURN_CODE_PLACEHOLDER in the returnUrlTemplate
-    	// with the scanned code. This allows both queries and REST-style URLs to work.
+      // Replace each occurrence of RETURN_CODE_PLACEHOLDER in the returnUrlTemplate
+      // with the scanned code. This allows both queries and REST-style URLs to work.
       Message message = Message.obtain(handler, R.id.launch_product_query);
       message.obj = returnUrlTemplate.replace(RETURN_CODE_PLACEHOLDER, resultHandler.getDisplayContents().toString());
       handler.sendMessageDelayed(message, INTENT_RESULT_DURATION);

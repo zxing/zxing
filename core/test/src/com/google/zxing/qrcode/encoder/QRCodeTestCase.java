@@ -83,55 +83,55 @@ public final class QRCodeTestCase extends TestCase {
     {
       QRCode qrCode = new QRCode();
       String expected =
-	"<<\n" +
-	" mode: null\n" +
-	" ecLevel: null\n" +
-	" version: -1\n" +
-	" matrixWidth: -1\n" +
-	" maskPattern: -1\n" +
-	" numTotalBytes: -1\n" +
-	" numDataBytes: -1\n" +
-	" numECBytes: -1\n" +
-	" numRSBlocks: -1\n" +
-	" matrix: null\n" +
-	">>\n";
+        "<<\n" +
+        " mode: null\n" +
+        " ecLevel: null\n" +
+        " version: -1\n" +
+        " matrixWidth: -1\n" +
+        " maskPattern: -1\n" +
+        " numTotalBytes: -1\n" +
+        " numDataBytes: -1\n" +
+        " numECBytes: -1\n" +
+        " numRSBlocks: -1\n" +
+        " matrix: null\n" +
+        ">>\n";
       assertEquals(expected, qrCode.toString());
     }
     {
       String expected =
-	"<<\n" +
-	" mode: BYTE\n" +
-	" ecLevel: H\n" +
-	" version: 1\n" +
-	" matrixWidth: 21\n" +
-	" maskPattern: 3\n" +
-	" numTotalBytes: 26\n" +
-	" numDataBytes: 9\n" +
-	" numECBytes: 17\n" +
-	" numRSBlocks: 1\n" +
-	" matrix:\n" +
-	" 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n" +
-	" 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n" +
-	" 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n" +
-	" 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n" +
-	" 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n" +
-	" 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n" +
-	" 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n" +
-	" 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n" +
-	" 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n" +
-	" 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n" +
-	" 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n" +
-	" 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n" +
-	" 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n" +
-	" 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n" +
-	" 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n" +
-	" 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n" +
-	" 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n" +
-	" 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n" +
-	" 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n" +
-	" 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n" +
-	" 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n" +
-	">>\n";
+        "<<\n" +
+        " mode: BYTE\n" +
+        " ecLevel: H\n" +
+        " version: 1\n" +
+        " matrixWidth: 21\n" +
+        " maskPattern: 3\n" +
+        " numTotalBytes: 26\n" +
+        " numDataBytes: 9\n" +
+        " numECBytes: 17\n" +
+        " numRSBlocks: 1\n" +
+        " matrix:\n" +
+        " 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n" +
+        " 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n" +
+        " 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n" +
+        " 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n" +
+        " 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n" +
+        " 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n" +
+        " 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n" +
+        " 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n" +
+        " 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n" +
+        " 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n" +
+        " 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n" +
+        " 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n" +
+        " 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n" +
+        " 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n" +
+        " 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n" +
+        " 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n" +
+        " 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n" +
+        " 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n" +
+        " 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n" +
+        " 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n" +
+        " 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n" +
+        ">>\n";
       QRCode qrCode = new QRCode();
       qrCode.setMode(Mode.BYTE);
       qrCode.setECLevel(ErrorCorrectionLevel.H);
