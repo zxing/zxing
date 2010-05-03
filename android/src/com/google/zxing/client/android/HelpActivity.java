@@ -39,7 +39,8 @@ public final class HelpActivity extends Activity {
 
   private static final String TAG = HelpActivity.class.getSimpleName();
 
-  private static final String[] BUGGY_MODEL_SUBSTRINGS = {"Behold II", "Pulse", "Geeksphone"};
+  // Actually guessing at the Desire's MODEL for now:
+  private static final String[] BUGGY_MODEL_SUBSTRINGS = {"Desire", "Pulse", "Geeksphone"};
   private static final Uri BUGGY_URI =
       Uri.parse("http://code.google.com/p/zxing/wiki/FrequentlyAskedQuestions");
 
