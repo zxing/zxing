@@ -94,9 +94,15 @@ namespace zxing {
 			char decodedChar;
 			int lastStart;
 			do {
+				try {
 				recordPattern(row, nextStart, counters, countersLen);
+				} catch (ReaderException re) {
+					delete [] start;
+					throw re;
+				}
 				int pattern = toNarrowWidePattern(counters, countersLen);
 				if (pattern < 0) {
+					delete [] start;
 					throw ReaderException("pattern < 0");
 				}
 				decodedChar = patternToChar(pattern);
@@ -117,10 +123,14 @@ namespace zxing {
 			for (int i = 0; i < countersLen; i++) {
 				lastPatternSize += counters[i];
 			}
+			// IS begin
+			delete [] counters;
+			// IS end
 			int whiteSpaceAfterEnd = nextStart - lastStart - lastPatternSize;
 			// If 50% of last pattern size, following last pattern, is not whitespace, fail
 			// (but if it's whitespace to the very end of the image, that's OK)
 			if (nextStart != end && whiteSpaceAfterEnd / 2 < lastPatternSize) {
+				delete [] start;
 				throw ReaderException("too short end white space");
 			}
 			
@@ -146,6 +156,7 @@ namespace zxing {
 			}
 			
 			if (tmpResultString.length() == 0) {
+				delete [] start;
 				// Almost surely a false positive
 				throw ReaderException("");
 			}
@@ -216,6 +227,9 @@ namespace zxing {
 					isWhite = !isWhite;
 				}
 			}
+			// IS begin
+			delete [] counters;
+			// IS end
 			throw ReaderException("");
 		}
 		

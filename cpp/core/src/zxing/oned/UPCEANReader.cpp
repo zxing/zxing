@@ -100,7 +100,16 @@ namespace zxing {
 			
 			std::string tmpResultString;
 			std::string& tmpResultStringRef = tmpResultString;
-			int endStart = decodeMiddle(row, startGuardRange, 2 /*reference findGuardPattern*/ , tmpResultStringRef);
+			int endStart;
+			try {
+				endStart = decodeMiddle(row, startGuardRange, 2 /*reference findGuardPattern*/ , tmpResultStringRef);
+			} catch (ReaderException re) {
+				if (startGuardRange!=NULL) {
+					delete [] startGuardRange;
+					startGuardRange = NULL;
+				}
+				throw re;
+			}
 			
 			int* endRange = decodeEnd(row, endStart);
 						
@@ -114,6 +123,14 @@ namespace zxing {
 //			}
 			
 			if (!checkChecksum(tmpResultString)) {
+				if (startGuardRange!=NULL) {
+					delete [] startGuardRange;
+					startGuardRange = NULL;
+				}
+				if (endRange!=NULL) {
+					delete [] endRange;
+					endRange = NULL;
+				}
 				throw ReaderException("Checksum fail.");
 			}
 			
@@ -158,6 +175,9 @@ namespace zxing {
 				int quietStart = start - (nextStart - start);
 				if (quietStart >= 0) {
 					foundStart = row->isRange(quietStart, start, false);
+				}
+				if (!foundStart) {
+					delete [] startRange;
 				}
 			}
 			return startRange;
@@ -217,13 +237,13 @@ namespace zxing {
 		}
 		
 //		int UPCEANReader::decodeDigit(Ref<BitArray> row, int counters[], int countersLen, int rowOffset, int** patterns/*[][]*/, int paterns1Len, int paterns2Len)		
-		int UPCEANReader::decodeDigit(Ref<BitArray> row, int counters[], int countersLen, int rowOffset, UPC_EAN_PATTERNS paternType){
+		int UPCEANReader::decodeDigit(Ref<BitArray> row, int counters[], int countersLen, int rowOffset, UPC_EAN_PATTERNS patternType){
 			recordPattern(row, rowOffset, counters, countersLen);
 			int bestVariance = MAX_AVG_VARIANCE; // worst variance we'll accept
 			int bestMatch = -1;
 			
 			int max = 0;
-			switch (paternType) {
+			switch (patternType) {
 				case UPC_EAN_PATTERNS_L_PATTERNS:
 					max = L_PATTERNS_LEN;
 					for (int i = 0; i < max; i++) {
