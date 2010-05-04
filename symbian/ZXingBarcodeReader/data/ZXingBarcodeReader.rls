@@ -1,0 +1,16 @@
+/*
+ * Copyright (c) 2009 Nokia Corporation.
+ */
+
+//  LOCALISATION STRINGS
+
+// Caption string for app.
+#define qtn_caption_string "ZXingBarcodeReader"
+#define qtn_about "About"
+#define qtn_exit "Exit"
+#define qtn_command1_text "ZXingBarcodeReader"
+#define qtn_loc_resource_file_1 "\\resource\\apps\\ZXingBarcodeReader_0xEF24C10A"
+#define qtn_about_dialog_title "About"
+#define qtn_about_dialog_text "ZXing Qr Reader 0.1.0\n\n"
+
+// End of File

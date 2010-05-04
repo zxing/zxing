@@ -1,0 +1,19 @@
+/*
+ * Copyright (c) 2009 Nokia Corporation.
+ */
+
+#ifndef __CAMERAWRAPPEREXAMPLE_HRH__
+#define __CAMERAWRAPPEREXAMPLE_HRH__
+
+#define _UID3 0xEF24C10A
+
+// CameraWrapperExample enumerate command codes
+enum TCameraWrapperExampleIds
+    {
+    ECommand1 = 0x6001, // start value must not be 0
+    ECommand2,
+    EHelp,
+    EAbout
+    };
+
+#endif // __CAMERAWRAPPEREXAMPLE_HRH__
