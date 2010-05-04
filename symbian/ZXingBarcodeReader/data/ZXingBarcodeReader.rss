@@ -12,7 +12,7 @@ NAME CAME	// 4 letter ID
 #include <avkon.rsg>
 #include <avkon.rh>
 #include <appinfo.rh>
-#include "CameraWrapperExample.hrh"
+#include "ZXingBarcodeReader.hrh"
 #include "ZXingBarcodeReader.rls"
 
 //  RESOURCE DEFINITIONS

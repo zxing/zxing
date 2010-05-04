@@ -9,36 +9,36 @@
 #include <pathinfo.h>
 #include <f32file.h>
 #include <BAUTILS.H>
-#include "CameraWrapperExampleAppView.h"
-#include "CameraWrapperExampleAppUi.h"
+#include "ZXingBarcodeReaderAppView.h"
+#include "ZXingBarcodeReaderAppUi.h"
 
 
 
 // ============================ MEMBER FUNCTIONS ===============================
 
-CCameraWrapperExampleAppView* CCameraWrapperExampleAppView::NewL (const TRect& aRect )
+CZXingBarcodeReaderAppView* CZXingBarcodeReaderAppView::NewL (const TRect& aRect )
 	{
-	CCameraWrapperExampleAppView* self = CCameraWrapperExampleAppView::NewLC (aRect );
+	CZXingBarcodeReaderAppView* self = CZXingBarcodeReaderAppView::NewLC (aRect );
 	CleanupStack::Pop (self );
 	return self;
 	}
 
-CCameraWrapperExampleAppView* CCameraWrapperExampleAppView::NewLC (const TRect& aRect )
+CZXingBarcodeReaderAppView* CZXingBarcodeReaderAppView::NewLC (const TRect& aRect )
 	{
-	CCameraWrapperExampleAppView* self = new (ELeave) CCameraWrapperExampleAppView;
+	CZXingBarcodeReaderAppView* self = new (ELeave) CZXingBarcodeReaderAppView;
 	CleanupStack::PushL (self );
 	self->ConstructL (aRect );
 	return self;
 	}
 
-void CCameraWrapperExampleAppView::ConstructL (const TRect& aRect )
+void CZXingBarcodeReaderAppView::ConstructL (const TRect& aRect )
 	{
 	// Create a window for this application view
 	CreateWindowL ();
 
 	iTitleFont = AknLayoutUtils::FontFromId(EAknLogicalFontPrimarySmallFont);
 
-	iAppUi = static_cast<CCameraWrapperExampleAppUi*>(iEikonEnv->EikAppUi());
+	iAppUi = static_cast<CZXingBarcodeReaderAppUi*>(iEikonEnv->EikAppUi());
 
 	// Set the windows size
 	SetRect (aRect );
@@ -50,11 +50,11 @@ void CCameraWrapperExampleAppView::ConstructL (const TRect& aRect )
 	ActivateL ();
 	}
 
-CCameraWrapperExampleAppView::CCameraWrapperExampleAppView () : iPeriodic(NULL)
+CZXingBarcodeReaderAppView::CZXingBarcodeReaderAppView () : iPeriodic(NULL)
 	{
 	}
 
-CCameraWrapperExampleAppView::~CCameraWrapperExampleAppView ()
+CZXingBarcodeReaderAppView::~CZXingBarcodeReaderAppView ()
 	{
 	if (iCameraWrapper)
 		{
@@ -66,7 +66,7 @@ CCameraWrapperExampleAppView::~CCameraWrapperExampleAppView ()
 	ReleaseBackBuffer();
 	}
 
-TKeyResponse CCameraWrapperExampleAppView::OfferKeyEventL(const TKeyEvent& aKeyEvent,TEventCode aType)
+TKeyResponse CZXingBarcodeReaderAppView::OfferKeyEventL(const TKeyEvent& aKeyEvent,TEventCode aType)
 	{
 	switch ( aKeyEvent.iCode )
 		{
@@ -143,7 +143,7 @@ TKeyResponse CCameraWrapperExampleAppView::OfferKeyEventL(const TKeyEvent& aKeyE
 	return EKeyWasNotConsumed;
 	}
 
-void CCameraWrapperExampleAppView::CancelCapturedPicture(TBool aCleanTexts)
+void CZXingBarcodeReaderAppView::CancelCapturedPicture(TBool aCleanTexts)
 	{
 	if (iCameraWrapper && iCameraWrapper->State() == CCameraEngine::EEngineIdle)
 		{
@@ -162,7 +162,7 @@ void CCameraWrapperExampleAppView::CancelCapturedPicture(TBool aCleanTexts)
 		}
 	}
 
-void CCameraWrapperExampleAppView::Draw(const TRect& /*aRect*/) const
+void CZXingBarcodeReaderAppView::Draw(const TRect& /*aRect*/) const
 		{
 	CWindowGc& gc = SystemGc ();
 
@@ -180,7 +180,7 @@ void CCameraWrapperExampleAppView::Draw(const TRect& /*aRect*/) const
 		}
 		}
 
-void CCameraWrapperExampleAppView::DrawTexts(CWindowGc& gc) const
+void CZXingBarcodeReaderAppView::DrawTexts(CWindowGc& gc) const
 		{
 	if (iTitle.Length()>0)
 		{
@@ -192,7 +192,7 @@ void CCameraWrapperExampleAppView::DrawTexts(CWindowGc& gc) const
 		}
 		}
 
-void CCameraWrapperExampleAppView::SizeChanged()
+void CZXingBarcodeReaderAppView::SizeChanged()
 	{
 	// Create camera wrapper class here because
 	// whole camera wrapper and all handles have to reset
@@ -244,7 +244,7 @@ void CCameraWrapperExampleAppView::SizeChanged()
 		}
 	}
 
-void CCameraWrapperExampleAppView::HandlePointerEventL (
+void CZXingBarcodeReaderAppView::HandlePointerEventL (
 		const TPointerEvent& aPointerEvent )
 	{
 	if (aPointerEvent.iType == TPointerEvent::EButton1Down)
@@ -267,25 +267,25 @@ void CCameraWrapperExampleAppView::HandlePointerEventL (
 		}
 	}
 
-void CCameraWrapperExampleAppView::SetTitle(const TDesC& aTitle)
+void CZXingBarcodeReaderAppView::SetTitle(const TDesC& aTitle)
 	{
 	iTitle.Copy(aTitle);
 	DrawNow();
 	}
 
-void CCameraWrapperExampleAppView::SetError( const TDesC& aMsg, TInt aVal )
+void CZXingBarcodeReaderAppView::SetError( const TDesC& aMsg, TInt aVal )
 	{
 	iTitle.Format(aMsg, aVal);
 	DrawNow();
 	}
 
-void CCameraWrapperExampleAppView::SetError( const TDesC& aMsg, TInt aVal1, TInt aVal2 )
+void CZXingBarcodeReaderAppView::SetError( const TDesC& aMsg, TInt aVal1, TInt aVal2 )
 	{
 	iTitle.Format(aMsg, aVal1, aVal2);
 	DrawNow();
 	}
 
-void CCameraWrapperExampleAppView::CreateBackBufferL()
+void CZXingBarcodeReaderAppView::CreateBackBufferL()
 	{
 	// create back buffer bitmap
 	iBackBuffer = new (ELeave) CFbsBitmap;
@@ -301,7 +301,7 @@ void CCameraWrapperExampleAppView::CreateBackBufferL()
 	iBackBufferContext->Clear();
 	}
 
-void CCameraWrapperExampleAppView::ReleaseBackBuffer()
+void CZXingBarcodeReaderAppView::ReleaseBackBuffer()
 	{
 	if (iBackBufferContext)
 		{
@@ -320,7 +320,7 @@ void CCameraWrapperExampleAppView::ReleaseBackBuffer()
 		}
 	}
 
-void CCameraWrapperExampleAppView::MceoCameraReady()
+void CZXingBarcodeReaderAppView::MceoCameraReady()
 	{
 	iAppUi->UseOptionsExitCbaL();
 
@@ -346,7 +346,7 @@ void CCameraWrapperExampleAppView::MceoCameraReady()
 		}
 	}
 
-void CCameraWrapperExampleAppView::Capture()
+void CZXingBarcodeReaderAppView::Capture()
 	{
 	// This method is called when picture is focused with camera shutter and pressed whole down
 	// as taking a new picture
@@ -365,7 +365,7 @@ void CCameraWrapperExampleAppView::Capture()
 #endif
 	}
 
-void CCameraWrapperExampleAppView::StartFocusing()
+void CZXingBarcodeReaderAppView::StartFocusing()
 	{
 	if (iCameraWrapper && iCameraWrapper->State() == CCameraEngine::EEngineViewFinding)
 		{
@@ -389,7 +389,7 @@ void CCameraWrapperExampleAppView::StartFocusing()
 		}
 	}
 
-void CCameraWrapperExampleAppView::MceoFocusComplete()
+void CZXingBarcodeReaderAppView::MceoFocusComplete()
 	{
 	// CameraEngine state is EEngineIdle
 	SetTitle(_L("Focused"));                    
@@ -397,7 +397,7 @@ void CCameraWrapperExampleAppView::MceoFocusComplete()
 	if (iCameraShutterFocusing)
 		{
 	// Leave as focused. User must press whole camera shutter down for capturing
-	// then CCameraWrapperExampleAppView::Capture() is called
+	// then CZXingBarcodeReaderAppView::Capture() is called
 		}
 	else
 		{
@@ -411,7 +411,7 @@ void CCameraWrapperExampleAppView::MceoFocusComplete()
 		}
 	}
 
-void CCameraWrapperExampleAppView::MceoCapturedDataReady( TDesC8* aData )
+void CZXingBarcodeReaderAppView::MceoCapturedDataReady( TDesC8* aData )
 	{
 	SetTitle(_L("Saving picture..."));
 
@@ -426,7 +426,7 @@ void CCameraWrapperExampleAppView::MceoCapturedDataReady( TDesC8* aData )
 	StorePicture(iData);
 	}
 
-void CCameraWrapperExampleAppView::StorePicture( TDesC8* aData )
+void CZXingBarcodeReaderAppView::StorePicture( TDesC8* aData )
 	{
 	// Create path for filename
 	TFileName path = PathInfo::PhoneMemoryRootPath(); 
@@ -474,7 +474,7 @@ void CCameraWrapperExampleAppView::StorePicture( TDesC8* aData )
 	}
 
 
-void CCameraWrapperExampleAppView::MceoCapturedBitmapReady( CFbsBitmap* aBitmap )
+void CZXingBarcodeReaderAppView::MceoCapturedBitmapReady( CFbsBitmap* aBitmap )
 	{
 	if (iBackBufferContext)
 		{
@@ -493,7 +493,7 @@ void CCameraWrapperExampleAppView::MceoCapturedBitmapReady( CFbsBitmap* aBitmap 
 		iCameraWrapper->ReleaseImageBuffer();
 	}
 
-void CCameraWrapperExampleAppView::MceoViewFinderFrameReady( CFbsBitmap& aFrame )
+void CZXingBarcodeReaderAppView::MceoViewFinderFrameReady( CFbsBitmap& aFrame )
 	{
 	if (iBackBufferContext)
 		{
@@ -512,7 +512,7 @@ void CCameraWrapperExampleAppView::MceoViewFinderFrameReady( CFbsBitmap& aFrame 
 		iCameraWrapper->ReleaseViewFinderBuffer();
 	}
 
-void CCameraWrapperExampleAppView::MceoHandleError( TCameraEngineError aErrorType, TInt aError )
+void CZXingBarcodeReaderAppView::MceoHandleError( TCameraEngineError aErrorType, TInt aError )
 	{
 	// NOTE: CameraEngine state seems to go into CCameraEngine::EEngineIdle state
 
@@ -565,7 +565,7 @@ void CCameraWrapperExampleAppView::MceoHandleError( TCameraEngineError aErrorTyp
 	iAppUi->UseOptionsExitCbaL();
 	}
 
-void CCameraWrapperExampleAppView::MceoHandleOtherEvent( const TECAMEvent& /*aEvent*/ )
+void CZXingBarcodeReaderAppView::MceoHandleOtherEvent( const TECAMEvent& /*aEvent*/ )
 	{
 	}
 

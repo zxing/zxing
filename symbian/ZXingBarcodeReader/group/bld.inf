@@ -7,5 +7,5 @@ WINSCW GCCE ARMV5
 
 PRJ_MMPFILES
 gnumakefile icons_scalable_dc.mk
-CameraWrapperExample.mmp
+ZXingBarcodeReader.mmp
 

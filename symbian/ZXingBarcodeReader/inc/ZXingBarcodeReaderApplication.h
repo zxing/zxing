@@ -7,7 +7,7 @@
 
 // INCLUDES
 #include <aknapp.h>
-#include "CameraWrapperExample.hrh"
+#include "ZXingBarcodeReader.hrh"
 
 // UID for the application;
 // this should correspond to the uid defined in the mmp file
@@ -18,7 +18,7 @@ const TUid KUidCameraWrapperExampleApp =
 
 // CLASS DECLARATION
 
-class CCameraWrapperExampleApplication : public CAknApplication
+class CZXingBarcodeReaderApplication : public CAknApplication
     {
     public:
         // Functions from base classes

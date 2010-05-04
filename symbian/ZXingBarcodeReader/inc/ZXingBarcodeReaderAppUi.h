@@ -36,17 +36,17 @@ const TUint KCameraShutterKeyEventCodes[6] = {
 
 
 // FORWARD DECLARATIONS
-class CCameraWrapperExampleAppView;
+class CZXingBarcodeReaderAppView;
 
 // CLASS DECLARATION
-class CCameraWrapperExampleAppUi : public CAknAppUi,
+class CZXingBarcodeReaderAppUi : public CAknAppUi,
                                    public MCoeForegroundObserver
     {
     public:
         // Constructors and destructor
         void ConstructL ();
-        CCameraWrapperExampleAppUi ();
-        virtual ~CCameraWrapperExampleAppUi ();
+        CZXingBarcodeReaderAppUi ();
+        virtual ~CZXingBarcodeReaderAppUi ();
         
     private:
         TKeyResponse HandleKeyEventL(const TKeyEvent& aKeyEvent,TEventCode aType);
@@ -68,7 +68,7 @@ class CCameraWrapperExampleAppUi : public CAknAppUi,
         
     private:
         // Data
-        CCameraWrapperExampleAppView*   iAppView;
+        CZXingBarcodeReaderAppView*   iAppView;
         RArray<TInt32>                  iShutterKeyHandles;
         TBool                           iCameraKeyCaptured;
 

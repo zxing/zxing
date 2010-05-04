@@ -9,17 +9,17 @@
 #include <akndoc.h>
 
 // FORWARD DECLARATIONS
-class CCameraWrapperExampleAppUi;
+class CZXingBarcodeReaderAppUi;
 class CEikApplication;
 
 // CLASS DECLARATION
-class CCameraWrapperExampleDocument : public CAknDocument
+class CZXingBarcodeReaderDocument : public CAknDocument
     {
     public:
         // Constructors and destructor
-        static CCameraWrapperExampleDocument* NewL (CEikApplication& aApp );
-        static CCameraWrapperExampleDocument* NewLC (CEikApplication& aApp );
-        virtual ~CCameraWrapperExampleDocument ();
+        static CZXingBarcodeReaderDocument* NewL (CEikApplication& aApp );
+        static CZXingBarcodeReaderDocument* NewLC (CEikApplication& aApp );
+        virtual ~CZXingBarcodeReaderDocument ();
     
     public:
         // Functions from base classes
@@ -28,7 +28,7 @@ class CCameraWrapperExampleDocument : public CAknDocument
     private:
         // Constructors
         void ConstructL ();
-        CCameraWrapperExampleDocument (CEikApplication& aApp );
+        CZXingBarcodeReaderDocument (CEikApplication& aApp );
 
     private:
         // Data 

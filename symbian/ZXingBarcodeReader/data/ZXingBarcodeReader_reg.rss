@@ -2,7 +2,7 @@
  * Copyright (c) 2009 Nokia Corporation.
  */
 
-#include "CameraWrapperExample.hrh"
+#include "ZXingBarcodeReader.hrh"
 #include "ZXingBarcodeReader.rls"
 #include <appinfo.rh>
 #include <ZXingBarcodeReader_0xEF24C10A.rsg>

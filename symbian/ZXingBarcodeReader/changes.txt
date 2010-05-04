@@ -1,0 +1,3 @@
+DecodeButStreamParser.cpp : line 68 : iconv(cd, (const char**)&fromPtr, &nFrom, &toPtr, &nTo);
+EAN13Reader.cpp : line 81 : resultString.insert((size_t)0, (size_t)1, (char) ('0' + d));
+UPCEReader.cpp : line 93 : resultString.insert((size_t)0, (size_t)1, (char) ('0' + numSys));

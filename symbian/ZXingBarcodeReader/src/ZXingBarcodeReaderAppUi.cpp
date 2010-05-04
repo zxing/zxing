@@ -10,16 +10,16 @@
 #include <eikenv.h>
 
 #include <ZXingBarcodeReader_0xEF24C10A.rsg>
-#include "CameraWrapperExample.hrh"
-#include "CameraWrapperExample.pan"
-#include "CameraWrapperExampleApplication.h"
-#include "CameraWrapperExampleAppUi.h"
-#include "CameraWrapperExampleAppView.h"
+#include "ZXingBarcodeReader.hrh"
+#include "ZXingBarcodeReader.pan"
+#include "ZXingBarcodeReaderApplication.h"
+#include "ZXingBarcodeReaderAppUi.h"
+#include "ZXingBarcodeReaderAppView.h"
 
 
 // ============================ MEMBER FUNCTIONS ===============================
 
-void CCameraWrapperExampleAppUi::ConstructL ()
+void CZXingBarcodeReaderAppUi::ConstructL ()
     {
     // Initialise app UI with standard value.
     BaseConstructL (CAknAppUi::EAknEnableSkin );
@@ -33,14 +33,14 @@ void CCameraWrapperExampleAppUi::ConstructL ()
     iEikonEnv->AddForegroundObserverL(*this);
     
     // Create view
-    iAppView = CCameraWrapperExampleAppView::NewL (ClientRect () );
+    iAppView = CZXingBarcodeReaderAppView::NewL (ClientRect () );
     }
 
-CCameraWrapperExampleAppUi::CCameraWrapperExampleAppUi ()
+CZXingBarcodeReaderAppUi::CZXingBarcodeReaderAppUi ()
     {
     }
 
-CCameraWrapperExampleAppUi::~CCameraWrapperExampleAppUi ()
+CZXingBarcodeReaderAppUi::~CZXingBarcodeReaderAppUi ()
     {
     delete iAppView;
     
@@ -53,7 +53,7 @@ CCameraWrapperExampleAppUi::~CCameraWrapperExampleAppUi ()
 
 #ifdef ENABLE_CAMERA_SHUTTER
 
-void CCameraWrapperExampleAppUi::CaptureCameraShutter(TBool aEnable)
+void CZXingBarcodeReaderAppUi::CaptureCameraShutter(TBool aEnable)
     {
     // Try to capture events from the camera shutter key(s)
     // http://wiki.forum.nokia.com/index.php/KIS000563_-_Camera_shutter_key_(EKeyCamera_events)_cannot_be_used_in_3rd_party_applications
@@ -89,7 +89,7 @@ void CCameraWrapperExampleAppUi::CaptureCameraShutter(TBool aEnable)
 #endif
 
 
-void CCameraWrapperExampleAppUi::HandleGainingForeground()
+void CZXingBarcodeReaderAppUi::HandleGainingForeground()
     {
     // Application gets focused so reserve the camera
     // http://wiki.forum.nokia.com/index.php/CS000821_-_Handling_Camera_resource
@@ -105,7 +105,7 @@ void CCameraWrapperExampleAppUi::HandleGainingForeground()
         }
     }
 
-void CCameraWrapperExampleAppUi::HandleLosingForeground()
+void CZXingBarcodeReaderAppUi::HandleLosingForeground()
     {
     // Application loses focus so release the camera
     // http://wiki.forum.nokia.com/index.php/CS000821_-_Handling_Camera_resource
@@ -121,7 +121,7 @@ void CCameraWrapperExampleAppUi::HandleLosingForeground()
         }
     }
 
-void CCameraWrapperExampleAppUi::UseOptionsExitCbaL()
+void CZXingBarcodeReaderAppUi::UseOptionsExitCbaL()
     {
     CEikButtonGroupContainer* cba = Cba();
     if (cba)
@@ -131,7 +131,7 @@ void CCameraWrapperExampleAppUi::UseOptionsExitCbaL()
         }
     }
 
-void CCameraWrapperExampleAppUi::UseOptionsBackCbaL()
+void CZXingBarcodeReaderAppUi::UseOptionsBackCbaL()
     {
     CEikButtonGroupContainer* cba = Cba();
     if (cba)
@@ -141,7 +141,7 @@ void CCameraWrapperExampleAppUi::UseOptionsBackCbaL()
         }
     }
 
-TBool CCameraWrapperExampleAppUi::IsBackCBA()
+TBool CZXingBarcodeReaderAppUi::IsBackCBA()
     {
     CEikButtonGroupContainer* cba = Cba();
     // NOTE: There should be EAknSoftkeyBack in the application because
@@ -154,7 +154,7 @@ TBool CCameraWrapperExampleAppUi::IsBackCBA()
         return EFalse;
     }
 
-TKeyResponse CCameraWrapperExampleAppUi::HandleKeyEventL(
+TKeyResponse CZXingBarcodeReaderAppUi::HandleKeyEventL(
     const TKeyEvent& aKeyEvent,TEventCode aType)
     {
     // Capture picture with selection key
@@ -205,7 +205,7 @@ TKeyResponse CCameraWrapperExampleAppUi::HandleKeyEventL(
     return EKeyWasNotConsumed;
     }
 
-void CCameraWrapperExampleAppUi::HandleCommandL (TInt aCommand )
+void CZXingBarcodeReaderAppUi::HandleCommandL (TInt aCommand )
     {
     switch (aCommand )
         {
@@ -241,7 +241,7 @@ void CCameraWrapperExampleAppUi::HandleCommandL (TInt aCommand )
         };
     }
 
-void CCameraWrapperExampleAppUi::HandleResourceChangeL(TInt aType)
+void CZXingBarcodeReaderAppUi::HandleResourceChangeL(TInt aType)
     {
     CAknAppUi::HandleResourceChangeL( aType );
        
