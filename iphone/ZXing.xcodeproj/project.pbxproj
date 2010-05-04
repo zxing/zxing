@@ -2237,11 +2237,8 @@
 		8555301C0E64248400C7B5DE /* AdHoc Distribution */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				PRODUCT_NAME = "Test All";
-				ZERO_LINK = NO;
+				SDKROOT = "Mac OS X 10.5";
 			};
 			name = "AdHoc Distribution";
 		};
@@ -2272,6 +2269,7 @@
 					../cpp/core/src,
 				);
 				PRODUCT_NAME = "zxingcore-tests";
+				SDKROOT = "";
 			};
 			name = "AdHoc Distribution";
 		};
@@ -2299,21 +2297,16 @@
 		856C257E0E1BC779006ABF00 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
 				PRODUCT_NAME = "Test All";
+				SDKROOT = "Mac OS X 10.5";
 			};
 			name = Debug;
 		};
 		856C257F0E1BC779006ABF00 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				PRODUCT_NAME = "Test All";
-				ZERO_LINK = NO;
+				SDKROOT = "Mac OS X 10.5";
 			};
 			name = Release;
 		};
@@ -2362,8 +2355,8 @@
 					"../cpp/core/tests/cppunit-1.12.1/include",
 					../cpp/core/src,
 				);
-				PREBINDING = NO;
 				PRODUCT_NAME = "zxingcore-tests";
+				SDKROOT = "";
 			};
 			name = Debug;
 		};
@@ -2375,6 +2368,7 @@
 					../cpp/core/src,
 				);
 				PRODUCT_NAME = "zxingcore-tests";
+				SDKROOT = "";
 			};
 			name = Release;
 		};
@@ -2446,9 +2440,6 @@
 		856EABFE0E1CF73600B2E1C7 /* Test */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
 				PRODUCT_NAME = "Test All";
 				SDKROOT = "Mac OS X 10.5";
 			};
@@ -2553,11 +2544,8 @@
 		858459720E64181200211F1B /* Distribution */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				PRODUCT_NAME = "Test All";
-				ZERO_LINK = NO;
+				SDKROOT = "Mac OS X 10.5";
 			};
 			name = Distribution;
 		};
@@ -2588,6 +2576,7 @@
 					../cpp/core/src,
 				);
 				PRODUCT_NAME = "zxingcore-tests";
+				SDKROOT = "";
 			};
 			name = Distribution;
 		};
