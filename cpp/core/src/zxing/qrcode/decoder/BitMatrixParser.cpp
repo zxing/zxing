@@ -158,8 +158,8 @@ ArrayRef<unsigned char> BitMatrixParser::readCodewords() {
       x--;
     }
     // Read alternatingly from bottom to top then top to bottom
-    for (int count = 0; count < dimension; count++) {
-      int y = readingUp ? dimension - 1 - count : count;
+    for (int counter = 0; counter < dimension; counter++) {
+      int y = readingUp ? dimension - 1 - counter : counter;
       for (int col = 0; col < 2; col++) {
         // Ignore bits covered by the function pattern
         if (!functionPattern->get(x - col, y)) {

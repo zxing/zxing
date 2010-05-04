@@ -32,6 +32,6 @@
 @property (nonatomic, copy) NSString *text;
 @property (nonatomic, retain) NSDate *stamp;
 
-- initWithIdent:(int)i text:(NSString *)t stamp:(NSDate *)s;
+- (id)initWithIdent:(int)i text:(NSString *)t stamp:(NSDate *)s;
 
 @end

@@ -35,8 +35,8 @@
 @synthesize decoderViewController;
 @synthesize dateFormatter;
 
-- initWithDecoderViewController:(DecoderViewController *)dc {
-	if (self = [super initWithStyle:UITableViewStylePlain]) {
+- (id)initWithDecoderViewController:(DecoderViewController *)dc {
+	if ((self = [super initWithStyle:UITableViewStylePlain])) {
     decoderViewController = [dc retain];
     scans = [[NSMutableArray alloc] init];
     results = [[NSMutableArray alloc] init];
@@ -66,17 +66,17 @@
 	}
   
 	// Configure the cell
-  int index = [self scanIndexForRow:indexPath.row];
-  Scan *scan = [scans objectAtIndex:index];
+  int idx = [self scanIndexForRow:indexPath.row];
+  Scan *scan = [scans objectAtIndex:idx];
   [cell setScan:scan];
 	return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
   //[decoderViewController showScan:[scans objectAtIndex:[self scanIndexForRow:indexPath.row]]];
-  int index = [self scanIndexForRow:indexPath.row];
-  Scan *scan = [scans objectAtIndex:index];
-  ParsedResult *result = [results objectAtIndex:index];
+  int idx = [self scanIndexForRow:indexPath.row];
+  Scan *scan = [scans objectAtIndex:idx];
+  ParsedResult *result = [results objectAtIndex:idx];
   ScanViewController *scanViewController = [[ScanViewController alloc] initWithResult:result forScan:scan];
   [self.navigationController pushViewController:scanViewController animated:YES];
   [scanViewController release];
@@ -84,14 +84,14 @@
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
 	if (editingStyle == UITableViewCellEditingStyleDelete) {
-    int index = [self scanIndexForRow:indexPath.row];
-    Scan *scan = [self.scans objectAtIndex:index];
+    int idx = [self scanIndexForRow:indexPath.row];
+    Scan *scan = [self.scans objectAtIndex:idx];
     // delete the scan from the database ...
     [[Database sharedDatabase] deleteScan:scan];
     // ... delete the scan from our in-memory cache of the database ...
-    [scans removeObjectAtIndex:index];
+    [scans removeObjectAtIndex:idx];
     // ... delete the corresponding result from our in-memory cache  ...
-    [results removeObjectAtIndex:index];
+    [results removeObjectAtIndex:idx];
     // ... and remove the row from the table view.
     [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
     // [tableView reloadData];

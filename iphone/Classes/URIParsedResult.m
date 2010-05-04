@@ -35,7 +35,7 @@
   return [OpenUrlAction actionWithURL:self.URL];
 }
 
-- initWithURLString:(NSString *)s title:(NSString *)t URL:(NSURL *)url {
+- (id)initWithURLString:(NSString *)s title:(NSString *)t URL:(NSURL *)url {
   if ((self = [super init]) != nil) {
     self.urlString = s;
     self.title = t;
@@ -44,15 +44,15 @@
   return self;
 }
 
-- initWithURLString:(NSString *)s URL:(NSURL *)url {
+- (id)initWithURLString:(NSString *)s URL:(NSURL *)url {
   return [self initWithURLString:s title:nil URL:url];
 }
 
-- initWithURLString:(NSString *)s title:(NSString *)t {
+- (id)initWithURLString:(NSString *)s title:(NSString *)t {
   return [self initWithURLString:s title:t URL:[NSURL URLWithString:s]];
 }
 
-- initWithURLString:(NSString *)s {
+- (id)initWithURLString:(NSString *)s {
   return [self initWithURLString:s title:nil URL:[NSURL URLWithString:s]];
 }
 

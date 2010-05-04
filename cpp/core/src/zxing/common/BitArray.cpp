@@ -44,9 +44,6 @@ size_t BitArray::wordsForBits(size_t bits) {
   }
   return arraySize;
 }
-BitArray::BitArray() {
-  cout << "hey! don't use this BitArrayConstructor!\n";
-}
 
 BitArray::BitArray(size_t size) :
     size_(size), bits_(wordsForBits(size), (const unsigned int)0) {

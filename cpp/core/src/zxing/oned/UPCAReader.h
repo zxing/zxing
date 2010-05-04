@@ -18,15 +18,14 @@
  * limitations under the License.
  */
 
-#include <zxing/oned/UPCEANReader.h>
-#include <zxing/Result.h>
+#include <zxing/oned/EAN13Reader.h>
 
 namespace zxing {
 	namespace oned {
 		class UPCAReader : public UPCEANReader {
 			
 		private:
-			UPCEANReader* ean13Reader;
+			EAN13Reader ean13Reader;
 			static Ref<Result> maybeReturnResult(Ref<Result> result);														//throws ReaderException
 			
 		public:
@@ -39,7 +38,6 @@ namespace zxing {
 			Ref<Result> decode(Ref<BinaryBitmap> image);
 			
 			BarcodeFormat getBarcodeFormat();
-			~UPCAReader();
 		};
 	}
 }

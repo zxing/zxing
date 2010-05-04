@@ -1,12 +1,9 @@
-#ifndef __COMMON__STRING_H__
-#define __COMMON__STRING_H__
-
+//
+//  MultiFormatReader.mm
+//
+//  Created by Dave MacLachlan on 2010-05-03.
 /*
- *  String.h
- *  zxing
- *
- *  Created by Christian Brunschen on 20/05/2008.
- *  Copyright 2008 ZXing authors All rights reserved.
+ * Copyright 2010 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,21 +18,23 @@
  * limitations under the License.
  */
 
-#include <string>
-#include <iostream>
-#include <zxing/common/Counted.h>
+#import "FormatReader.h"
+#import <zxing/MultiFormatReader.h>
 
-namespace zxing {
+@interface MultiFormatReader : FormatReader
+@end
 
-class String : public Counted {
-private:
-  std::string text_;
-public:
-  String(const std::string &text);
-  const std::string &getText() const;
-  friend std::ostream &operator<<(std::ostream &out, const String &s);
-};
+@implementation MultiFormatReader
 
++ (void)load {
+  NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+  [FormatReader registerFormatReader:[[[self alloc] init] autorelease]];
+  [pool drain];
 }
 
-#endif // __COMMON__STRING_H__
+- (id)init {
+  zxing::MultiFormatReader *reader = new zxing::MultiFormatReader();
+  return [super initWithReader:reader];
+}
+
+@end

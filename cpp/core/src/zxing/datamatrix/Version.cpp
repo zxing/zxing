@@ -39,13 +39,11 @@ int ECB::getDataCodewords() {
 }
 
 ECBlocks::ECBlocks(int ecCodewords, ECB *ecBlocks) :
-    ecCodewords_(ecCodewords) {
-  ecBlocks_.push_back(ecBlocks);
+    ecCodewords_(ecCodewords), ecBlocks_(1, ecBlocks) {
 }
 
 ECBlocks::ECBlocks(int ecCodewords, ECB *ecBlocks1, ECB *ecBlocks2) :
-    ecCodewords_(ecCodewords) {
-  ecBlocks_.push_back(ecBlocks1);
+    ecCodewords_(ecCodewords), ecBlocks_(1, ecBlocks1) {
   ecBlocks_.push_back(ecBlocks2);
 }
 
@@ -70,7 +68,7 @@ Version::Version(int versionNumber, int symbolSizeRows, int symbolSizeColumns, i
 		int dataRegionSizeColumns, ECBlocks* ecBlocks) : versionNumber_(versionNumber), 
 		symbolSizeRows_(symbolSizeRows), symbolSizeColumns_(symbolSizeColumns), 
 		dataRegionSizeRows_(dataRegionSizeRows), dataRegionSizeColumns_(dataRegionSizeColumns), 
-		ecBlocks_(ecBlocks) {
+		ecBlocks_(ecBlocks), totalCodewords_(0) {
     // Calculate the total number of codewords
     int total = 0;
     int ecCodewords = ecBlocks_->getECCodewords();
@@ -114,7 +112,7 @@ ECBlocks* Version::getECBlocks() {
   return ecBlocks_;
 }
   
-Version* Version::getVersionForDimensions(int numRows, int numColumns) {
+Ref<Version> Version::getVersionForDimensions(int numRows, int numColumns) {
     if ((numRows & 0x01) != 0 || (numColumns & 0x01) != 0) {
       throw ReaderException("Number of rows and columns must be even");
     }
@@ -123,7 +121,7 @@ Version* Version::getVersionForDimensions(int numRows, int numColumns) {
     // If we interleave the rectangular versions with the square versions we could
     // do a binary search.
     for (int i = 0; i < N_VERSIONS; ++i){
-      Version* version = VERSIONS[i];
+      Ref<Version> version(VERSIONS[i]);
       if (version->getSymbolSizeRows() == numRows && version->getSymbolSizeColumns() == numColumns) {
         return version;
       }

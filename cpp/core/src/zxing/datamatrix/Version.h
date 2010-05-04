@@ -28,7 +28,6 @@
 
 namespace zxing {
 namespace datamatrix {
-using namespace std;
 
 class ECB {
 private:
@@ -76,7 +75,11 @@ public:
   int getTotalCodewords();
   ECBlocks* getECBlocks();
   static int  buildVersions();  
-  Version* getVersionForDimensions(int numRows, int numColumns);
+  Ref<Version> getVersionForDimensions(int numRows, int numColumns);
+  
+private:
+  Version(const Version&);
+  Version & operator=(const Version&);
 };
 }
 }

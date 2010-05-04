@@ -53,7 +53,7 @@ static size_t wordsForSize(size_t width, size_t height) {
 }
 
 BitMatrix::BitMatrix(size_t dimension) :
-    width_(dimension), height_(dimension), bits_(NULL) {
+    width_(dimension), height_(dimension), words_(0), bits_(NULL) {
 
   words_ = wordsForSize(width_, height_);
   bits_ = new unsigned int[words_];
@@ -61,7 +61,7 @@ BitMatrix::BitMatrix(size_t dimension) :
 }
 
 BitMatrix::BitMatrix(size_t width, size_t height) :
-    width_(width), height_(height), bits_(NULL) {
+    width_(width), height_(height), words_(0), bits_(NULL) {
 
   words_ = wordsForSize(width_, height_);
   bits_ = new unsigned int[words_];
@@ -125,11 +125,11 @@ size_t BitMatrix::getDimension() const {
   return width_;
 }
 
-unsigned int* BitMatrix::getBits() {
+unsigned int* BitMatrix::getBits() const {
   return bits_;
 }
 
-ostream& operator<<(ostream &out, BitMatrix &bm) {
+ostream& operator<<(ostream &out, const BitMatrix &bm) {
   for (size_t y = 0; y < bm.height_; y++) {
     for (size_t x = 0; x < bm.width_; x++) {
       out << (bm.get(x, y) ? "X " : "  ");

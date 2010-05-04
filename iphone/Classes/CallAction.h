@@ -30,7 +30,7 @@
 
 + (NSURL *)urlForNumber:(NSString *)number;
 
-- initWithNumber:(NSString *)number;
-+ actionWithNumber:(NSString *)number;
+- (id)initWithNumber:(NSString *)number;
++ (id)actionWithNumber:(NSString *)number;
 
 @end

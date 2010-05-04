@@ -55,6 +55,11 @@ public:
                          float moduleSize);
   ~AlignmentPatternFinder();
   Ref<AlignmentPattern> find();
+  
+private:
+  AlignmentPatternFinder(const AlignmentPatternFinder&);
+  AlignmentPatternFinder& operator =(const AlignmentPatternFinder&);
+  
 };
 }
 }

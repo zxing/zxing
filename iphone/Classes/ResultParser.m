@@ -21,37 +21,25 @@
 
 #import "ResultParser.h"
 
-#import "MeCardParser.h"
-#import "EmailDoCoMoResultParser.h"
-#import "BookmarkDoCoMoResultParser.h"
-#import "TelResultParser.h"
-#import "GeoResultParser.h"
-#import "URLTOResultParser.h"
-#import "URLResultParser.h"
-#import "TextResultParser.h"
-#import "SMSResultParser.h"
-#import "SMSTOResultParser.h"
-#import "PlainEmailResultParser.h"
-
 @implementation ResultParser
 
-static NSArray *resultParsers = nil;
-+ (NSArray *)resultParsers {
-  if (resultParsers == nil) {
-    resultParsers = 
-    [[NSArray alloc] initWithObjects:
-     [MeCardParser class],
-     [EmailDoCoMoResultParser class],
-     [BookmarkDoCoMoResultParser class],
-     [TelResultParser class],
-     [GeoResultParser class],
-     [SMSTOResultParser class],
-     [SMSResultParser class],
-     [URLTOResultParser class],
-     [URLResultParser class],
-     [PlainEmailResultParser class],
-     [TextResultParser class],
-     nil];
+static NSMutableSet *sResultParsers = nil;
+
++ (void)registerResultParserClass:(Class)resultParser {
+  NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+  @synchronized(self) {
+    if (!sResultParsers) {
+      sResultParsers = [[NSMutableSet alloc] init];
+    }
+    [sResultParsers addObject:resultParser];
+  }
+  [pool drain];
+}
+
++ (NSSet *)resultParsers {
+  NSSet *resultParsers = nil;
+  @synchronized(self) {
+    resultParsers = [[sResultParsers copy] autorelease];
   }
   return resultParsers;
 }

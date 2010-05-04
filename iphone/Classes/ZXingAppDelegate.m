@@ -48,20 +48,18 @@
   [window makeKeyAndVisible];
   
   // pick and decode using the first available source type in priority order
-#define N_SOURCE_TYPES 3
-  UIImagePickerControllerSourceType sourceTypes[N_SOURCE_TYPES] = {
+  UIImagePickerControllerSourceType sourceTypes[] = {
     UIImagePickerControllerSourceTypeCamera,
     UIImagePickerControllerSourceTypeSavedPhotosAlbum,
     UIImagePickerControllerSourceTypePhotoLibrary
   };
 
-  for (int i = 0; i < N_SOURCE_TYPES; i++) {
+  for (int i = 0; i < sizeof(sourceTypes) / sizeof(*sourceTypes); i++) {
     if ([UIImagePickerController isSourceTypeAvailable:sourceTypes[i]]) {
       [viewController pickAndDecodeFromSource:sourceTypes[i]];
       break;
     }
   }
-#undef N_SOURCE_TYPES
 }
 
 - (void)dealloc {

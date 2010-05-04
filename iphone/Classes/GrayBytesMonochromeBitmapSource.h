@@ -38,11 +38,14 @@ public:
 									int bytesPerRow);
 	virtual ~GrayBytesMonochromeBitmapSource() { }
 	
-	virtual unsigned char getPixel(int x, int y);
+	virtual unsigned char getPixel(int x, int y) const;
 	
-	virtual int getWidth();
-	virtual int getHeight();
-	
+	virtual int getWidth() const;
+	virtual int getHeight() const;
+
+private:
+  GrayBytesMonochromeBitmapSource(const GrayBytesMonochromeBitmapSource&);
+  GrayBytesMonochromeBitmapSource& operator=(const GrayBytesMonochromeBitmapSource&);  
 };
 
 #endif // __GRAY_BYTES_MONOCHROM_BITMAP_SOURCE_H__

@@ -53,8 +53,8 @@ Ref<Result> DataMatrixReader::decode(Ref<BinaryBitmap> image) {
 
 #ifdef DEBUG
   cout << "(3) extracted points " << &points << "\n" << flush;
-  cout << "found " << points->size() << " points:\n";
-  for (size_t i = 0; i < points->size(); i++) {
+  cout << "found " << points.size() << " points:\n";
+  for (size_t i = 0; i < points.size(); i++) {
     cout << "   " << points[i]->getX() << "," << points[i]->getY() << "\n";
   }
   cout << "bits:\n";

@@ -23,16 +23,6 @@
 
 #import <UIKit/UIKit.h>
 
-#include <iostream>
-
-class Exception {
-public:
-  Exception() {}
-  virtual ~Exception() { }
-};
-
-using namespace std;
-
 int main(int argc, char *argv[]) {
 	NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
 	int retVal = UIApplicationMain(argc, argv, nil, nil);

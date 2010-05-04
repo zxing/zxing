@@ -29,17 +29,14 @@ namespace datamatrix {
 
 using namespace std;
 
-ResultPointsAndTransitions::ResultPointsAndTransitions() { 
+ResultPointsAndTransitions::ResultPointsAndTransitions() : from_(), to_(), transitions_(0) { 
 	Ref<CornerPoint> ref(new CornerPoint(0,0)); 
 	from_ = ref; 
 	to_ = ref; 
-	transitions_ = 0;
 }
 
-ResultPointsAndTransitions::ResultPointsAndTransitions(Ref<CornerPoint> from, Ref<CornerPoint> to, int transitions) {
-	from_ = from; 
-	to_ = to; 
-	transitions_ = transitions;
+ResultPointsAndTransitions::ResultPointsAndTransitions(Ref<CornerPoint> from, Ref<CornerPoint> to, int transitions) : 
+  from_(from), to_(to), transitions_(transitions) {
 }
 
 Ref<CornerPoint> ResultPointsAndTransitions::getFrom() {

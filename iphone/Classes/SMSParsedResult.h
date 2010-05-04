@@ -31,6 +31,6 @@
 @property (nonatomic, copy) NSString *number;
 @property (nonatomic, copy) NSString *body;
 
-- initWithNumber:(NSString *)n body:(NSString *)b;
+- (id)initWithNumber:(NSString *)n body:(NSString *)b;
 
 @end

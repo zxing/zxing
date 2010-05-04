@@ -30,19 +30,18 @@
 namespace zxing {
 	namespace oned {
 		
-		MultiFormatUPCEANReader::MultiFormatUPCEANReader(){
-			readers = new std::vector<OneDReader*>();
-			readers->push_back(new EAN13Reader());
+		MultiFormatUPCEANReader::MultiFormatUPCEANReader() : readers() {
+			readers.push_back(Ref<OneDReader>(new EAN13Reader()));
 			// UPC-A is covered by EAN-13
-			readers->push_back(new EAN8Reader());
-			readers->push_back(new UPCEReader());
+			readers.push_back(Ref<OneDReader>(new EAN8Reader()));
+			readers.push_back(Ref<OneDReader>(new UPCEReader()));
 		}
 		
 		Ref<Result> MultiFormatUPCEANReader::decodeRow(int rowNumber, Ref<BitArray> row){			
 			// Compute this location once and reuse it on multiple implementations
-			int size = readers->size();
+			int size = readers.size();
 			for (int i = 0; i < size; i++) {
-				OneDReader* reader = (*readers)[i];
+				Ref<OneDReader> reader = readers[i];
 				Ref<Result> result;
 				try {
 					result = reader->decodeRow(rowNumber, row);//decodeRow(rowNumber, row, startGuardPattern);
@@ -60,7 +59,7 @@ namespace zxing {
 				// UPC-A. So we special case it here, and convert an EAN-13 result to a UPC-A
 				// result if appropriate.
 				if (result->getBarcodeFormat() == BarcodeFormat_EAN_13) {
-					std::string& text = (result->getText())->getText();
+					const std::string& text = (result->getText())->getText();
 					if (text[0] == '0') {
 						Ref<String> resultString(new String(text.substr(1)));
 						Ref<Result> res(new Result(resultString, result->getRawBytes(), result->getResultPoints(), BarcodeFormat_UPC_A));
@@ -70,14 +69,6 @@ namespace zxing {
 				return result;
 			}
 			throw ReaderException("No EAN code detected");
-		}
-		
-		MultiFormatUPCEANReader::~MultiFormatUPCEANReader(){
-			int size = readers->size();
-			for (int i = 0; i < size; i++) {
-				delete (*readers)[i];
-			}
-			delete readers;
 		}
 	}
 }

@@ -29,7 +29,7 @@
 @property (nonatomic, copy) NSString *text;
 @property (nonatomic, retain) NSArray *points;
 
-+ resultWithText:(NSString *)text points:(NSArray *)points;
-- initWithText:(NSString *)text points:(NSArray *)points;
++ (id)resultWithText:(NSString *)text points:(NSArray *)points;
+- (id)initWithText:(NSString *)text points:(NSArray *)points;
 
 @end

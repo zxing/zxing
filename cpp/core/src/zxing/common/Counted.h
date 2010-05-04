@@ -172,10 +172,10 @@ public:
   T& operator*() {
     return *object_;
   }
-  T* operator->() {
+  T* operator->() const {
     return object_;
   }
-  operator T*() {
+  operator T*() const {
     return object_;
   }
 

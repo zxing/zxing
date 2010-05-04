@@ -36,6 +36,6 @@
 @property (nonatomic, retain) NSDateFormatter *dateFormatter;
 
 - (NSInteger)scanIndexForRow:(NSInteger)row;
-- initWithDecoderViewController:(DecoderViewController *)dc;
+- (id)initWithDecoderViewController:(DecoderViewController *)dc;
 
 @end

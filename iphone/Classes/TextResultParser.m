@@ -24,6 +24,10 @@
 
 @implementation TextResultParser
 
++ (void)load {
+  [ResultParser registerResultParserClass:self];
+}
+
 + (ParsedResult *)parsedResultForString:(NSString *)s {
   return [[[TextParsedResult alloc] initWithString:s] autorelease];
 }

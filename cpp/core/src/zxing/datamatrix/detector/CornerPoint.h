@@ -35,11 +35,11 @@ namespace zxing {
 			
 		public:
 			CornerPoint(float posX, float posY);
-			float getX();
-			float getY();
-			int getCount();
+			float getX() const;
+			float getY() const;
+			int getCount() const;
 			void incrementCount();
-			bool equals(Ref<CornerPoint> other);
+			bool equals(Ref<CornerPoint> other) const;
 		};
 	}
 }

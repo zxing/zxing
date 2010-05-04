@@ -27,18 +27,18 @@ namespace zxing {
 		using namespace std;
 		
 		CornerPoint::CornerPoint(float posX, float posY) :
-		posX_(posX), posY_(posY) {
+		  posX_(posX), posY_(posY), counter_(0) {
 		}
 		
-		float CornerPoint::getX() {
+		float CornerPoint::getX() const {
 			return posX_;
 		}
 		
-		float CornerPoint::getY() {
+		float CornerPoint::getY() const {
 			return posY_;
 		}
 		
-		int CornerPoint::getCount() {
+		int CornerPoint::getCount() const {
 			return counter_;
 		}
 				
@@ -46,7 +46,7 @@ namespace zxing {
 			counter_++;
 		}
 		
-		bool CornerPoint::equals(Ref<CornerPoint> other) {
+		bool CornerPoint::equals(Ref<CornerPoint> other) const {
 			return posX_ == other->getX() && posY_ == other->getY();
 		}
 		

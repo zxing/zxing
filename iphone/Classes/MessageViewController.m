@@ -37,7 +37,7 @@
                        target:(id)cbt
                     onSuccess:(SEL)ss 
                     onFailure:(SEL)fs  {
-	if (self = [super initWithNibName:@"Message" bundle:nil]) {
+	if ((self = [super initWithNibName:@"Message" bundle:nil])) {
     self.callbackTarget = cbt;
     self.callbackSelectorSuccess = ss;
     self.callbackSelectorFailure = fs;

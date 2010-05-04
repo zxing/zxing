@@ -34,7 +34,7 @@ static sqlite3_stmt *deleteStatement;
 
 static Database *sharedDatabase = nil;
 
-+ sharedDatabase {
++ (id)sharedDatabase {
   if (!sharedDatabase) {
     sharedDatabase = [[self alloc] init];
     
@@ -58,17 +58,17 @@ static Database *sharedDatabase = nil;
     sqlite3_open([writableDBPath UTF8String], &connection);
     sharedDatabase.connection = connection;
     
-    static char *maxIdSql = "SELECT MAX(id) FROM SCAN";
+    static const char *maxIdSql = "SELECT MAX(id) FROM SCAN";
     sqlite3_prepare_v2(connection, maxIdSql, -1, &maxIdStatement, NULL);
     
-    static char *selectAllSql = "SELECT id, text, stamp FROM SCAN ORDER BY id";
+    static const char *selectAllSql = "SELECT id, text, stamp FROM SCAN ORDER BY id";
     sqlite3_prepare_v2(connection, selectAllSql, -1, &selectAllStatement, NULL);
     
-    static char *insertSql = 
+    static const char *insertSql = 
       "INSERT INTO SCAN (id, text, stamp) VALUES (?, ?, ?)";
     sqlite3_prepare_v2(connection, insertSql, -1, &insertStatement, NULL);
     
-    static char *deleteSql = "DELETE FROM SCAN WHERE id = ?";
+    static const char *deleteSql = "DELETE FROM SCAN WHERE id = ?";
     sqlite3_prepare_v2(connection, deleteSql, -1, &deleteStatement, NULL);
     
     if (SQLITE_ROW == sqlite3_step(maxIdStatement)) {

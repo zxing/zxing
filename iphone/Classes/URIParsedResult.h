@@ -33,10 +33,10 @@
   NSURL *URL;
 }
 
-- initWithURLString:(NSString *)s title:(NSString *)t URL:(NSURL *)ur;
-- initWithURLString:(NSString *)s title:(NSString *)t;
-- initWithURLString:(NSString *)s URL:(NSURL *)ur;
-- initWithURLString:(NSString *)s;
+- (id)initWithURLString:(NSString *)s title:(NSString *)t URL:(NSURL *)ur;
+- (id)initWithURLString:(NSString *)s title:(NSString *)t;
+- (id)initWithURLString:(NSString *)s URL:(NSURL *)ur;
+- (id)initWithURLString:(NSString *)s;
 
 @property (nonatomic, retain) NSString *urlString;
 @property (nonatomic, retain) NSString *title;

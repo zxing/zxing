@@ -29,15 +29,15 @@ AlignmentPattern::AlignmentPattern(float posX, float posY, float estimatedModule
     posX_(posX), posY_(posY), estimatedModuleSize_(estimatedModuleSize) {
 }
 
-float AlignmentPattern::getX() {
+float AlignmentPattern::getX() const {
   return posX_;
 }
 
-float AlignmentPattern::getY() {
+float AlignmentPattern::getY() const {
   return posY_;
 }
 
-bool AlignmentPattern::aboutEquals(float moduleSize, float i, float j) {
+bool AlignmentPattern::aboutEquals(float moduleSize, float i, float j) const {
   return abs(i - posY_) <= moduleSize && abs(j - posX_) <= moduleSize && (abs(moduleSize - estimatedModuleSize_)
          <= 1.0f || abs(moduleSize - estimatedModuleSize_) / estimatedModuleSize_ <= 0.1f);
 }

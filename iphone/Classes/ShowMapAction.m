@@ -32,14 +32,14 @@ static NSURL * URLForLocation(NSString *location) {
   return [NSURL URLWithString:urlString];
 }
 
-- initWithLocation:(NSString *)l {
+- (id)initWithLocation:(NSString *)l {
   if ((self = [super initWithURL:URLForLocation(l)]) != nil) {
     self.location = l;
   }
   return self;
 }
 
-+ actionWithLocation:(NSString *)location {
++ (id)actionWithLocation:(NSString *)location {
   return [[[self alloc] initWithLocation:location] autorelease];
 }
 

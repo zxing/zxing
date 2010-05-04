@@ -41,11 +41,11 @@
 @property (nonatomic, copy) NSString *urlString;
 @property (nonatomic, copy) NSString *address;
 
-+ actionWithName:(NSString *)n
-    phoneNumbers:(NSArray *)nums
-           email:(NSString *)em
-             url:(NSString *)us
-         address:(NSString *)ad
-            note:(NSString *)nt;
++ (id)actionWithName:(NSString *)n
+        phoneNumbers:(NSArray *)nums
+               email:(NSString *)em
+                 url:(NSString *)us
+             address:(NSString *)ad
+                note:(NSString *)nt;
 
 @end
