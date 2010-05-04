@@ -15,17 +15,17 @@
 #include <e32base.h>  
 #include <string>
 
-class CCameraWrapperExampleAppUi;
+class CZXingBarcodeReaderAppUi;
 
 // CLASS DECLARATION
-class CCameraWrapperExampleAppView : 
+class CZXingBarcodeReaderAppView : 
 public CCoeControl, public MCameraEngineObserver
     {
     public: 
         // Constructors
-        static CCameraWrapperExampleAppView* NewL (const TRect& aRect );
-        static CCameraWrapperExampleAppView* NewLC (const TRect& aRect );
-        virtual ~CCameraWrapperExampleAppView ();
+        static CZXingBarcodeReaderAppView* NewL (const TRect& aRect );
+        static CZXingBarcodeReaderAppView* NewLC (const TRect& aRect );
+        virtual ~CZXingBarcodeReaderAppView ();
     
     private: 
         // Functions from base classes
@@ -57,7 +57,7 @@ public CCoeControl, public MCameraEngineObserver
     private: 
         // Constructors
         void ConstructL (const TRect& aRect );
-        CCameraWrapperExampleAppView ();
+        CZXingBarcodeReaderAppView ();
 
     public:
         void decodeBackbufferImage();
@@ -74,7 +74,7 @@ public CCoeControl, public MCameraEngineObserver
     private: 
         // Data
         
-        CCameraWrapperExampleAppUi*         iAppUi;
+        CZXingBarcodeReaderAppUi*         iAppUi;
 
         // CameraWrapper class
         CCameraEngine*                      iCameraWrapper;

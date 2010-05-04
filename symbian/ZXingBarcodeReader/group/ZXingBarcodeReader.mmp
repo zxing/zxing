@@ -38,12 +38,10 @@ SYSTEMINCLUDE		zxing/qrcode/decoder
 SYSTEMINCLUDE		zxing/qrcode/detector
 
 SOURCEPATH      ../src
-SOURCE          CameraWrapperExample.cpp
-SOURCE          CameraWrapperExampleApplication.cpp
-SOURCE          CameraWrapperExampleAppView.cpp
-SOURCE          CameraWrapperExampleAppUi.cpp
-SOURCE          CameraWrapperExampleDocument.cpp
-SOURCE 			CameraImage.cpp
+SOURCE          ZXingBarcodeReader.cpp
+SOURCE          ZXingBarcodeReaderApplication.cpp ZXingBarcodeReaderAppView.cpp
+SOURCE 			ZXingBarcodeReaderAppUi.cpp ZXingBarcodeReaderDocument.cpp CameraImage.cpp
+SOURCE 			DecodingOperations.cpp
 
 LIBRARY     euser.lib
 LIBRARY     apparc.lib
@@ -87,5 +85,4 @@ OPTION CW -wchar_t on
 OPTION ARMCC --visibility_inlines_hidden
 OPTION GCCE -fvisibility-inlines-hidden
 
-SOURCEPATH ../src
-SOURCE DecodingOperations.cpp
+

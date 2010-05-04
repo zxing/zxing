@@ -3,19 +3,19 @@
  */
 
 // INCLUDE FILES
-#include "CameraWrapperExample.hrh"
-#include "CameraWrapperExampleDocument.h"
-#include "CameraWrapperExampleApplication.h"
+#include "ZXingBarcodeReader.hrh"
+#include "ZXingBarcodeReaderDocument.h"
+#include "ZXingBarcodeReaderApplication.h"
 
 // ============================ MEMBER FUNCTIONS ===============================
 
-CApaDocument* CCameraWrapperExampleApplication::CreateDocumentL ()
+CApaDocument* CZXingBarcodeReaderApplication::CreateDocumentL ()
     {
     // Create an CameraWrapperExample document, and return a pointer to it
-    return CCameraWrapperExampleDocument::NewL (*this );
+    return CZXingBarcodeReaderDocument::NewL (*this );
     }
 
-TUid CCameraWrapperExampleApplication::AppDllUid () const
+TUid CZXingBarcodeReaderApplication::AppDllUid () const
     {
     // Return the UID for the CameraWrapperExample application
     return KUidCameraWrapperExampleApp;

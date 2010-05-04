@@ -1,4 +1,4 @@
-#include "CameraWrapperExampleAppView.h"
+#include "ZXingBarcodeReaderAppView.h"
 #include <e32std.h>
 
 #include <zxing/qrcode/QRCodeReader.h>
@@ -12,26 +12,26 @@
 using namespace zxing;
 using namespace zxing::qrcode;
 
-void CCameraWrapperExampleAppView::StartTimer()
+void CZXingBarcodeReaderAppView::StartTimer()
 	{
 	const TInt tickInterval=2000000;
 	iPeriodic=CPeriodic::NewL(0); // neutral priority
 
 	//CleanupStack::PushL(iPeriodic);
 
-	iPeriodic->Start(tickInterval,tickInterval,TCallBack(&CCameraWrapperExampleAppView::Tick, this));
+	iPeriodic->Start(tickInterval,tickInterval,TCallBack(&CZXingBarcodeReaderAppView::Tick, this));
 
 //	CleanupStack::PopAndDestroy(iPeriodic);
 	}
 
-TInt CCameraWrapperExampleAppView::Tick(TAny* aObject)
+TInt CZXingBarcodeReaderAppView::Tick(TAny* aObject)
 	{
 	// cast, and call non-static function
-	((CCameraWrapperExampleAppView*)aObject)->decodeBackbufferImage();
+	((CZXingBarcodeReaderAppView*)aObject)->decodeBackbufferImage();
 	return 1;
 	}
 
-void CCameraWrapperExampleAppView::decodeBackbufferImage()
+void CZXingBarcodeReaderAppView::decodeBackbufferImage()
 	{
 	QRCodeReader decoder;
 
@@ -75,7 +75,7 @@ void CCameraWrapperExampleAppView::decodeBackbufferImage()
 		}
 	}
 
-void CCameraWrapperExampleAppView::ShowResultL(TDesC16& message)
+void CZXingBarcodeReaderAppView::ShowResultL(TDesC16& message)
 	{
 	if (!iNote)
 		{
