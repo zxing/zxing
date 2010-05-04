@@ -27,11 +27,11 @@
 @synthesize text;
 @synthesize points;
 
-+ resultWithText:(NSString *)text points:(NSArray *)points {
++ (id)resultWithText:(NSString *)text points:(NSArray *)points {
   return [[[self alloc] initWithText:text points:points] autorelease];
 }
 
-- initWithText:(NSString *)t points:(NSArray *)p {
+- (id)initWithText:(NSString *)t points:(NSArray *)p {
   if ((self = [super init]) != nil) {
     self.text = t;
     self.points = p;
@@ -45,5 +45,8 @@
   [super dealloc];
 }
 
+- (NSString *)description {
+  return [NSString stringWithFormat:@"<%@: %p> %@", [self class], self, self.text];
+}
 
 @end

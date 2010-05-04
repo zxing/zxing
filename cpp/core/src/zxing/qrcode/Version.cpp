@@ -41,13 +41,11 @@ int ECB::getDataCodewords() {
 }
 
 ECBlocks::ECBlocks(int ecCodewords, ECB *ecBlocks) :
-    ecCodewords_(ecCodewords) {
-  ecBlocks_.push_back(ecBlocks);
+    ecCodewords_(ecCodewords), ecBlocks_(1, ecBlocks) {
 }
 
 ECBlocks::ECBlocks(int ecCodewords, ECB *ecBlocks1, ECB *ecBlocks2) :
-    ecCodewords_(ecCodewords) {
-  ecBlocks_.push_back(ecBlocks1);
+    ecCodewords_(ecCodewords), ecBlocks_(1, ecBlocks1) {
   ecBlocks_.push_back(ecBlocks2);
 }
 
@@ -102,7 +100,7 @@ Version *Version::getProvisionalVersionForDimension(int dimension) {
 }
 
 Version *Version::getVersionForNumber(int versionNumber) {
-  if (versionNumber < 1 || versionNumber > 40) {
+  if (versionNumber < 1 || versionNumber > N_VERSIONS) {
     throw ReaderException("versionNumber must be between 1 and 40");
   }
 
@@ -111,7 +109,7 @@ Version *Version::getVersionForNumber(int versionNumber) {
 
 Version::Version(int versionNumber, vector<int> *alignmentPatternCenters, ECBlocks *ecBlocks1, ECBlocks *ecBlocks2,
                  ECBlocks *ecBlocks3, ECBlocks *ecBlocks4) :
-    versionNumber_(versionNumber), alignmentPatternCenters_(*alignmentPatternCenters), ecBlocks_(4) {
+    versionNumber_(versionNumber), alignmentPatternCenters_(*alignmentPatternCenters), ecBlocks_(4), totalCodewords_(0) {
   ecBlocks_[0] = ecBlocks1;
   ecBlocks_[1] = ecBlocks2;
   ecBlocks_[2] = ecBlocks3;

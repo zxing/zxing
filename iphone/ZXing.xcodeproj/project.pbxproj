@@ -61,7 +61,7 @@
 		855A668C0DF5E757007B394F /* TelParsedResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 855A666A0DF5E757007B394F /* TelParsedResult.m */; };
 		855A668D0DF5E757007B394F /* TextParsedResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 855A666C0DF5E757007B394F /* TextParsedResult.m */; };
 		855A668E0DF5E757007B394F /* DecoderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 855A666E0DF5E757007B394F /* DecoderViewController.m */; };
-		855A668F0DF5E757007B394F /* Decoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 855A66710DF5E757007B394F /* Decoder.m */; };
+		855A668F0DF5E757007B394F /* Decoder.mm in Sources */ = {isa = PBXBuildFile; fileRef = 855A66710DF5E757007B394F /* Decoder.mm */; };
 		855A66900DF5E757007B394F /* ZXingAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 855A66730DF5E757007B394F /* ZXingAppDelegate.m */; };
 		855A66910DF5E757007B394F /* ParsedResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 855A66750DF5E757007B394F /* ParsedResult.m */; };
 		855A66920DF5E757007B394F /* NSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = 855A66770DF5E757007B394F /* NSString+HTML.m */; };
@@ -181,6 +181,8 @@
 		86C045D81127E58E00F3F43B /* UPCAReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 86C045C81127E58E00F3F43B /* UPCAReader.cpp */; };
 		86C045D91127E58E00F3F43B /* UPCEANReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 86C045CA1127E58E00F3F43B /* UPCEANReader.cpp */; };
 		86C045DA1127E58E00F3F43B /* UPCEReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 86C045CC1127E58E00F3F43B /* UPCEReader.cpp */; };
+		8B2B9BE6118FB42D00437315 /* FormatReader.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B2B9BE3118FB42D00437315 /* FormatReader.mm */; };
+		8B2B9BE7118FB42D00437315 /* MultiFormatReader.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B2B9BE4118FB42D00437315 /* MultiFormatReader.mm */; };
 		AD38DE961154C8D2006BD46A /* DataMatrixReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD38DE821154C8D2006BD46A /* DataMatrixReader.cpp */; };
 		AD38DE971154C8D2006BD46A /* BitMatrixParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD38DE851154C8D2006BD46A /* BitMatrixParser.cpp */; };
 		AD38DE981154C8D2006BD46A /* DataBlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD38DE871154C8D2006BD46A /* DataBlock.cpp */; };
@@ -319,7 +321,7 @@
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D6058910D05DD3D006BFB54 /* Barcodes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Barcodes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = main.m; sourceTree = "<group>"; };
+		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.objc; fileEncoding = 4; path = main.m; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* ZXing_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXing_Prefix.pch; sourceTree = "<group>"; };
 		85096CCE0E06D45400D660F9 /* SMSAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMSAction.h; sourceTree = "<group>"; };
 		85096CCF0E06D45400D660F9 /* SMSAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SMSAction.m; sourceTree = "<group>"; };
@@ -339,13 +341,13 @@
 		8514EA6F0DF88C9E00EE78D3 /* ReedSolomonTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReedSolomonTest.h; sourceTree = "<group>"; };
 		8514EA720DF88C9E00EE78D3 /* DataMaskTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DataMaskTest.cpp; sourceTree = "<group>"; };
 		8514EA730DF88C9E00EE78D3 /* DataMaskTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataMaskTest.h; sourceTree = "<group>"; };
-		8514EA740DF88C9E00EE78D3 /* ErrorCorrectionLevelTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ErrorCorrectionLevelTest.cpp; sourceTree = "<group>"; };
+		8514EA740DF88C9E00EE78D3 /* ErrorCorrectionLevelTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ErrorCorrectionLevelTest.cpp; path = ../ErrorCorrectionLevelTest.cpp; sourceTree = "<group>"; };
 		8514EA750DF88C9E00EE78D3 /* ErrorCorrectionLevelTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ErrorCorrectionLevelTest.h; sourceTree = "<group>"; };
-		8514EA760DF88C9E00EE78D3 /* FormatInformationTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FormatInformationTest.cpp; sourceTree = "<group>"; };
+		8514EA760DF88C9E00EE78D3 /* FormatInformationTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FormatInformationTest.cpp; path = ../FormatInformationTest.cpp; sourceTree = "<group>"; };
 		8514EA770DF88C9E00EE78D3 /* FormatInformationTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FormatInformationTest.h; sourceTree = "<group>"; };
 		8514EA780DF88C9E00EE78D3 /* ModeTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ModeTest.cpp; sourceTree = "<group>"; };
 		8514EA790DF88C9E00EE78D3 /* ModeTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModeTest.h; sourceTree = "<group>"; };
-		8514EA7A0DF88C9E00EE78D3 /* VersionTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VersionTest.cpp; sourceTree = "<group>"; };
+		8514EA7A0DF88C9E00EE78D3 /* VersionTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = VersionTest.cpp; path = ../VersionTest.cpp; sourceTree = "<group>"; };
 		8514EA7B0DF88C9E00EE78D3 /* VersionTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VersionTest.h; sourceTree = "<group>"; };
 		8514EA7C0DF88C9E00EE78D3 /* TestRunner.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TestRunner.cpp; sourceTree = "<group>"; };
 		8514EB190DF8A52700EE78D3 /* libzxingcore.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libzxingcore.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -400,7 +402,7 @@
 		855A666E0DF5E757007B394F /* DecoderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DecoderViewController.m; sourceTree = "<group>"; };
 		855A666F0DF5E757007B394F /* DecoderDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DecoderDelegate.h; sourceTree = "<group>"; };
 		855A66700DF5E757007B394F /* Decoder.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; path = Decoder.h; sourceTree = "<group>"; };
-		855A66710DF5E757007B394F /* Decoder.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = Decoder.m; sourceTree = "<group>"; };
+		855A66710DF5E757007B394F /* Decoder.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = Decoder.mm; sourceTree = "<group>"; };
 		855A66720DF5E757007B394F /* ZXingAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXingAppDelegate.h; sourceTree = "<group>"; };
 		855A66730DF5E757007B394F /* ZXingAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXingAppDelegate.m; sourceTree = "<group>"; };
 		855A66740DF5E757007B394F /* ParsedResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParsedResult.h; sourceTree = "<group>"; };
@@ -663,6 +665,9 @@
 		86C045CB1127E58E00F3F43B /* UPCEANReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPCEANReader.h; sourceTree = "<group>"; };
 		86C045CC1127E58E00F3F43B /* UPCEReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UPCEReader.cpp; sourceTree = "<group>"; };
 		86C045CD1127E58E00F3F43B /* UPCEReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPCEReader.h; sourceTree = "<group>"; };
+		8B2B9BE3118FB42D00437315 /* FormatReader.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FormatReader.mm; sourceTree = "<group>"; };
+		8B2B9BE4118FB42D00437315 /* MultiFormatReader.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MultiFormatReader.mm; sourceTree = "<group>"; };
+		8B2B9BE5118FB42D00437315 /* FormatReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FormatReader.h; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AD38DE821154C8D2006BD46A /* DataMatrixReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DataMatrixReader.cpp; sourceTree = "<group>"; };
 		AD38DE831154C8D2006BD46A /* DataMatrixReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataMatrixReader.h; sourceTree = "<group>"; };
@@ -824,6 +829,9 @@
 				85D937260E11064700B785E0 /* ScanViewController.m */,
 				85B1D7ED0E18EB6700514A6A /* ScanCell.h */,
 				85B1D7EE0E18EB6700514A6A /* ScanCell.m */,
+				8B2B9BE3118FB42D00437315 /* FormatReader.mm */,
+				8B2B9BE4118FB42D00437315 /* MultiFormatReader.mm */,
+				8B2B9BE5118FB42D00437315 /* FormatReader.h */,
 				855A66520DF5E757007B394F /* ArchiveController.h */,
 				855A66510DF5E757007B394F /* ArchiveController.m */,
 				855A66530DF5E757007B394F /* Database.h */,
@@ -832,7 +840,7 @@
 				855A666E0DF5E757007B394F /* DecoderViewController.m */,
 				855A666F0DF5E757007B394F /* DecoderDelegate.h */,
 				855A66700DF5E757007B394F /* Decoder.h */,
-				855A66710DF5E757007B394F /* Decoder.m */,
+				855A66710DF5E757007B394F /* Decoder.mm */,
 				855A66720DF5E757007B394F /* ZXingAppDelegate.h */,
 				855A66730DF5E757007B394F /* ZXingAppDelegate.m */,
 				855A66760DF5E757007B394F /* NSString+HTML.h */,
@@ -1821,7 +1829,7 @@
 				855A668C0DF5E757007B394F /* TelParsedResult.m in Sources */,
 				855A668D0DF5E757007B394F /* TextParsedResult.m in Sources */,
 				855A668E0DF5E757007B394F /* DecoderViewController.m in Sources */,
-				855A668F0DF5E757007B394F /* Decoder.m in Sources */,
+				855A668F0DF5E757007B394F /* Decoder.mm in Sources */,
 				855A66900DF5E757007B394F /* ZXingAppDelegate.m in Sources */,
 				855A66910DF5E757007B394F /* ParsedResult.m in Sources */,
 				855A66920DF5E757007B394F /* NSString+HTML.m in Sources */,
@@ -1872,6 +1880,8 @@
 				AD38DE9C1154C8D2006BD46A /* Detector.cpp in Sources */,
 				AD38DE9D1154C8D2006BD46A /* MonochromeRectangleDetector.cpp in Sources */,
 				AD38DE9E1154C8D2006BD46A /* Version.cpp in Sources */,
+				8B2B9BE6118FB42D00437315 /* FormatReader.mm in Sources */,
+				8B2B9BE7118FB42D00437315 /* MultiFormatReader.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2168,10 +2178,20 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
+				GCC_WARN_EFFECTIVE_CPLUSPLUS_VIOLATIONS = YES;
+				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
+				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
+				GCC_WARN_MISSING_PARENTHESES = NO;
+				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
+				GCC_WARN_SHADOW = YES;
+				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				PREBINDING = NO;
-				SDKROOT = iphoneos2.2.1;
+				SDKROOT = iphoneos3.1.2;
 			};
 			name = "AdHoc Distribution";
 		};
@@ -2233,6 +2253,10 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_MODEL_TUNING = G5;
+				GCC_WARN_EFFECTIVE_CPLUSPLUS_VIOLATIONS = NO;
+				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = NO;
+				GCC_WARN_SHADOW = NO;
+				HEADER_SEARCH_PATHS = "../cpp/core/tests/cppunit-1.12.1/include";
 				INSTALL_PATH = /usr/local/lib;
 				PREBINDING = NO;
 				PRODUCT_NAME = CppUnit;
@@ -2243,18 +2267,11 @@
 		8555301E0E64248400C7B5DE /* AdHoc Distribution */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(NATIVE_ARCH)";
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_MODEL_TUNING = G5;
-				INSTALL_PATH = /usr/local/bin;
-				ONLY_ACTIVE_ARCH = YES;
-				PREBINDING = NO;
+				HEADER_SEARCH_PATHS = (
+					"../cpp/core/tests/cppunit-1.12.1/include",
+					../cpp/core/src,
+				);
 				PRODUCT_NAME = "zxingcore-tests";
-				SDKROOT = macosx10.5;
-				ZERO_LINK = NO;
 			};
 			name = "AdHoc Distribution";
 		};
@@ -2309,7 +2326,10 @@
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../cpp/core/tests/cppunit-1.12.1/include";
+				GCC_WARN_EFFECTIVE_CPLUSPLUS_VIOLATIONS = NO;
+				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = NO;
+				GCC_WARN_SHADOW = NO;
+				HEADER_SEARCH_PATHS = "../cpp/core/tests/cppunit-1.12.1/include";
 				INSTALL_PATH = /usr/local/lib;
 				PREBINDING = NO;
 				PRODUCT_NAME = CppUnit;
@@ -2324,6 +2344,10 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_MODEL_TUNING = G5;
+				GCC_WARN_EFFECTIVE_CPLUSPLUS_VIOLATIONS = NO;
+				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = NO;
+				GCC_WARN_SHADOW = NO;
+				HEADER_SEARCH_PATHS = "../cpp/core/tests/cppunit-1.12.1/include";
 				INSTALL_PATH = /usr/local/lib;
 				PREBINDING = NO;
 				PRODUCT_NAME = CppUnit;
@@ -2334,37 +2358,23 @@
 		856EAB7B0E1CE8AA00B2E1C7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(NATIVE_ARCH)";
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../cpp/core/tests/cppunit-1.12.1/include";
-				INSTALL_PATH = /usr/local/bin;
-				ONLY_ACTIVE_ARCH = YES;
+				HEADER_SEARCH_PATHS = (
+					"../cpp/core/tests/cppunit-1.12.1/include",
+					../cpp/core/src,
+				);
 				PREBINDING = NO;
 				PRODUCT_NAME = "zxingcore-tests";
-				SDKROOT = macosx10.5;
 			};
 			name = Debug;
 		};
 		856EAB7C0E1CE8AA00B2E1C7 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(NATIVE_ARCH)";
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_MODEL_TUNING = G5;
-				INSTALL_PATH = /usr/local/bin;
-				ONLY_ACTIVE_ARCH = YES;
-				PREBINDING = NO;
+				HEADER_SEARCH_PATHS = (
+					"../cpp/core/tests/cppunit-1.12.1/include",
+					../cpp/core/src,
+				);
 				PRODUCT_NAME = "zxingcore-tests";
-				SDKROOT = macosx10.5;
-				ZERO_LINK = NO;
 			};
 			name = Release;
 		};
@@ -2373,11 +2383,21 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
+				GCC_WARN_EFFECTIVE_CPLUSPLUS_VIOLATIONS = YES;
+				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
+				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
+				GCC_WARN_MISSING_PARENTHESES = NO;
+				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
+				GCC_WARN_SHADOW = YES;
+				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PREBINDING = NO;
-				SDKROOT = iphoneos2.2.1;
+				SDKROOT = iphoneos3.1.2;
 			};
 			name = Test;
 		};
@@ -2409,6 +2429,7 @@
 				PREBINDING = NO;
 				PRODUCT_NAME = zxingcore;
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = YES;
+				SDKROOT = macosx10.5;
 			};
 			name = Test;
 		};
@@ -2429,6 +2450,7 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				PRODUCT_NAME = "Test All";
+				SDKROOT = "Mac OS X 10.5";
 			};
 			name = Test;
 		};
@@ -2441,29 +2463,29 @@
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../cpp/core/tests/cppunit-1.12.1/include";
+				GCC_WARN_EFFECTIVE_CPLUSPLUS_VIOLATIONS = NO;
+				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = NO;
+				GCC_WARN_SHADOW = NO;
+				HEADER_SEARCH_PATHS = "../cpp/core/tests/cppunit-1.12.1/include";
 				INSTALL_PATH = /usr/local/lib;
 				PREBINDING = NO;
 				PRODUCT_NAME = CppUnit;
+				SDKROOT = macosx10.5;
 			};
 			name = Test;
 		};
 		856EAC000E1CF73600B2E1C7 /* Test */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(NATIVE_ARCH)";
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../cpp/core/tests/cppunit-1.12.1/include";
-				INSTALL_PATH = /usr/local/bin;
-				ONLY_ACTIVE_ARCH = YES;
-				PREBINDING = NO;
+				GCC_WARN_EFFECTIVE_CPLUSPLUS_VIOLATIONS = NO;
+				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = NO;
+				GCC_WARN_SHADOW = NO;
+				HEADER_SEARCH_PATHS = (
+					"../cpp/core/tests/cppunit-1.12.1/include",
+					../cpp/core/src,
+				);
 				PRODUCT_NAME = "zxingcore-tests";
-				SDKROOT = macosx10.5;
+				SDKROOT = "";
 			};
 			name = Test;
 		};
@@ -2472,10 +2494,20 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
+				GCC_WARN_EFFECTIVE_CPLUSPLUS_VIOLATIONS = YES;
+				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
+				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
+				GCC_WARN_MISSING_PARENTHESES = NO;
+				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
+				GCC_WARN_SHADOW = YES;
+				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				PREBINDING = NO;
-				SDKROOT = iphoneos2.2.1;
+				SDKROOT = iphoneos3.1.2;
 			};
 			name = Distribution;
 		};
@@ -2537,6 +2569,10 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_MODEL_TUNING = G5;
+				GCC_WARN_EFFECTIVE_CPLUSPLUS_VIOLATIONS = NO;
+				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = NO;
+				GCC_WARN_SHADOW = NO;
+				HEADER_SEARCH_PATHS = "../cpp/core/tests/cppunit-1.12.1/include";
 				INSTALL_PATH = /usr/local/lib;
 				PREBINDING = NO;
 				PRODUCT_NAME = CppUnit;
@@ -2547,18 +2583,11 @@
 		858459740E64181200211F1B /* Distribution */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(NATIVE_ARCH)";
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_MODEL_TUNING = G5;
-				INSTALL_PATH = /usr/local/bin;
-				ONLY_ACTIVE_ARCH = YES;
-				PREBINDING = NO;
+				HEADER_SEARCH_PATHS = (
+					"../cpp/core/tests/cppunit-1.12.1/include",
+					../cpp/core/src,
+				);
 				PRODUCT_NAME = "zxingcore-tests";
-				SDKROOT = macosx10.5;
-				ZERO_LINK = NO;
 			};
 			name = Distribution;
 		};
@@ -2567,11 +2596,22 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
+				GCC_WARN_EFFECTIVE_CPLUSPLUS_VIOLATIONS = YES;
+				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
+				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
+				GCC_WARN_MISSING_PARENTHESES = NO;
+				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
+				GCC_WARN_SHADOW = YES;
+				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PREBINDING = NO;
-				SDKROOT = iphoneos2.2.1;
+				SDKROOT = iphoneos3.1.2;
 			};
 			name = Debug;
 		};
@@ -2580,10 +2620,20 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
+				GCC_WARN_EFFECTIVE_CPLUSPLUS_VIOLATIONS = YES;
+				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
+				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
+				GCC_WARN_MISSING_PARENTHESES = NO;
+				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
+				GCC_WARN_SHADOW = YES;
+				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				PREBINDING = NO;
-				SDKROOT = iphoneos2.2.1;
+				SDKROOT = iphoneos3.1.2;
 			};
 			name = Release;
 		};

@@ -23,7 +23,7 @@
 
 namespace zxing {
 	
-	Binarizer::Binarizer(Ref<LuminanceSource> source) : source_(source) {
+	Binarizer::Binarizer(Ref<LuminanceSource> source) : source_(source), array_(NULL), matrix_(NULL) {
 	}
 	
 	Binarizer::~Binarizer() {

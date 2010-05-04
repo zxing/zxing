@@ -28,8 +28,8 @@
 
 @property(nonatomic, retain) NSURL *URL;
 
-- initWithURL:(NSURL *)URL;
-+ actionWithURL:(NSURL *)URL;
+- (id)initWithURL:(NSURL *)URL;
++ (id)actionWithURL:(NSURL *)URL;
 - (void)openURL;
 
 - (NSString *)alertTitle;

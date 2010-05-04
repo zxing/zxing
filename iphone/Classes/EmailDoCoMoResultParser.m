@@ -24,6 +24,10 @@
 
 @implementation EmailDoCoMoResultParser
 
++ (void)load {
+  [ResultParser registerResultParserClass:self];
+}
+
 + (ParsedResult *)parsedResultForString:(NSString *)s {
   NSRange foundRange = [s rangeOfString:@"MATMSG:"];
   if (foundRange.location == NSNotFound) {

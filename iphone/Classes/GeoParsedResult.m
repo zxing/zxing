@@ -26,7 +26,7 @@
 
 @synthesize location;
 
-- initWithLocation:(NSString *)l {
+- (id)initWithLocation:(NSString *)l {
   if ((self = [super init]) != nil) {
     self.location = l;
   }

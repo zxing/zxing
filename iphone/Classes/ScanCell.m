@@ -66,7 +66,7 @@ static NSString *_timeString(NSDate *date) {
 
 
 - (id)initWithFrame:(CGRect)frame reuseIdentifier:(NSString *)reuseIdentifier {
-	if (self = [super initWithFrame:frame reuseIdentifier:reuseIdentifier]) {
+	if ((self = [super initWithFrame:frame reuseIdentifier:reuseIdentifier])) {
     imageView = [[UIImageView alloc] initWithFrame:CGRectZero];
     imageView.contentMode = UIViewContentModeCenter;
     [self.contentView addSubview:imageView];

@@ -44,6 +44,11 @@ public:
   Ref<FormatInformation> readFormatInformation();
   Version *readVersion();
   ArrayRef<unsigned char> readCodewords();
+
+private:
+  BitMatrixParser(const BitMatrixParser&);
+  BitMatrixParser& operator =(const BitMatrixParser&);
+  
 };
 
 }

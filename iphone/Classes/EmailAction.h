@@ -28,7 +28,7 @@
 
 @property (nonatomic, copy) NSString *recipient;
 
-- initWithRecipient:(NSString *)recipient subject:(NSString *)subject body:(NSString *)body;
-+ actionWithRecipient:(NSString *)recipient subject:(NSString *)subject body:(NSString *)body;
+- (id)initWithRecipient:(NSString *)recipient subject:(NSString *)subject body:(NSString *)body;
++ (id)actionWithRecipient:(NSString *)recipient subject:(NSString *)subject body:(NSString *)body;
 
 @end

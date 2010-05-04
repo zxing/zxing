@@ -27,7 +27,7 @@
 
 @synthesize text;
 
-- initWithString:(NSString *)s {
+- (id)initWithString:(NSString *)s {
   if ((self  = [super init]) != nil) {
     self.text = s;
   }

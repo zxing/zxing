@@ -32,7 +32,7 @@
 @property sqlite3 *connection;
 @property int nextScanIdent;
 
-+ sharedDatabase;
++ (id)sharedDatabase;
 
 - (void)addScanWithText:(NSString *)text;
 - (NSArray *)scans;

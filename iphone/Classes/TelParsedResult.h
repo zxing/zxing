@@ -28,6 +28,6 @@
 
 @property (nonatomic, copy) NSString *number;
 
-- initWithNumber:(NSString *)n;
+- (id)initWithNumber:(NSString *)n;
 
 @end

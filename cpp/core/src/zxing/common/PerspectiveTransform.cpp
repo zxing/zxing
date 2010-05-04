@@ -23,18 +23,13 @@
 namespace zxing {
 using namespace std;
 
-PerspectiveTransform::PerspectiveTransform(float a11, float a21, float a31, float a12, float a22, float a32, float a13,
-    float a23, float a33) {
-  this->a11 = a11;
-  this->a12 = a12;
-  this->a13 = a13;
-  this->a21 = a21;
-  this->a22 = a22;
-  this->a23 = a23;
-  this->a31 = a31;
-  this->a32 = a32;
-  this->a33 = a33;
-}
+PerspectiveTransform::PerspectiveTransform(float inA11, float inA21, 
+                                           float inA31, float inA12, 
+                                           float inA22, float inA32, 
+                                           float inA13, float inA23, 
+                                           float inA33) : 
+  a11(inA11), a21(inA21), a31(inA31), a12(inA12), a22(inA22), a32(inA32),
+  a13(inA13), a23(inA23), a33(inA33) {}
 
 Ref<PerspectiveTransform> PerspectiveTransform::quadrilateralToQuadrilateral(float x0, float y0, float x1, float y1,
     float x2, float y2, float x3, float y3, float x0p, float y0p, float x1p, float y1p, float x2p, float y2p,
@@ -93,15 +88,6 @@ Ref<PerspectiveTransform> PerspectiveTransform::times(Ref<PerspectiveTransform> 
 
 void PerspectiveTransform::transformPoints(vector<float> &points) {
   int max = points.size();
-  float a11 = this->a11;
-  float a12 = this->a12;
-  float a13 = this->a13;
-  float a21 = this->a21;
-  float a22 = this->a22;
-  float a23 = this->a23;
-  float a31 = this->a31;
-  float a32 = this->a32;
-  float a33 = this->a33;
   for (int i = 0; i < max; i += 2) {
     float x = points[i];
     float y = points[i + 1];
@@ -111,7 +97,7 @@ void PerspectiveTransform::transformPoints(vector<float> &points) {
   }
 }
 
-ostream& operator<<(ostream& out, PerspectiveTransform &pt) {
+ostream& operator<<(ostream& out, const PerspectiveTransform &pt) {
   out << pt.a11 << ", " << pt.a12 << ", " << pt.a13 << ", \n";
   out << pt.a21 << ", " << pt.a22 << ", " << pt.a23 << ", \n";
   out << pt.a31 << ", " << pt.a32 << ", " << pt.a33 << "\n";

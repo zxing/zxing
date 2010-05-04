@@ -53,7 +53,7 @@
 @synthesize resultPointViews;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-	if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+	if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) {
 		// Initialization code
     self.title = NSLocalizedString(@"DecoderViewController AppTitle", @"Barcode Scanner");
     
@@ -82,24 +82,24 @@
   NSLog(@"Showing Hints!");
   
   MessageViewController *hintsController = 
-  [[MessageViewController alloc] initWithMessageFilename:@"Hints"
-                                                  target:self 
-                                               onSuccess:@selector(messageReady:) 
-                                               onFailure:@selector(messageFailed:)];
+      [[MessageViewController alloc] initWithMessageFilename:@"Hints"
+                                                      target:self 
+                                                   onSuccess:@selector(messageReady:) 
+                                                   onFailure:@selector(messageFailed:)];
   hintsController.title = NSLocalizedString(@"DecoderViewController Hints MessageViewController title", @"Hints");
-  hintsController.view;
+  [hintsController view];
 }
 
 - (void) showAbout:(id)sender {
   NSLog(@"Showing About!");
   
   MessageViewController *aboutController = 
-  [[MessageViewController alloc] initWithMessageFilename:@"About"
-                                                  target:self 
-                                               onSuccess:@selector(messageReady:) 
-                                               onFailure:@selector(messageFailed:)];
+      [[MessageViewController alloc] initWithMessageFilename:@"About"
+                                                      target:self 
+                                                   onSuccess:@selector(messageReady:) 
+                                                   onFailure:@selector(messageFailed:)];
   aboutController.title = NSLocalizedString(@"DecoderViewController About MessageViewController title", @"About");
-  aboutController.view;
+  [aboutController view];
 }
 
   
@@ -257,11 +257,11 @@
   NSLog(@"Showing message '%@' %@ help Button", message, showHelpButton ? @"with" : @"without");
 #endif
   
-  CGSize maxSize = imageView.bounds.size;
+  CGSize imageMaxSize = imageView.bounds.size;
   if (showHelpButton) {
-    maxSize.width -= messageHelpButton.frame.size.width;
+    imageMaxSize.width -= messageHelpButton.frame.size.width;
   }
-  CGSize size = [message sizeWithFont:messageTextView.font constrainedToSize:maxSize lineBreakMode:UILineBreakModeWordWrap];
+  CGSize size = [message sizeWithFont:messageTextView.font constrainedToSize:imageMaxSize lineBreakMode:UILineBreakModeWordWrap];
   float height = 20.0 + fmin(100.0, size.height);
   if (showHelpButton) {
     height = fmax(HELP_BUTTON_HEIGHT, height);

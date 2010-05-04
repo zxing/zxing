@@ -24,6 +24,10 @@
 
 @implementation MeCardParser
 
++ (void)load {
+  [ResultParser registerResultParserClass:self];
+}
+
 + (ParsedResult *)parsedResultForString:(NSString *)s {
   NSRange foundRange = [s rangeOfString:@"MECARD:"];
   if (foundRange.location == NSNotFound) {

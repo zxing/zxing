@@ -26,6 +26,10 @@
 
 @implementation TelResultParser
 
++ (void)load {
+  [ResultParser registerResultParserClass:self];
+}
+
 + (ParsedResult *)parsedResultForString:(NSString *)s {
   NSRange telRange = [s rangeOfString:PREFIX options:NSCaseInsensitiveSearch];
   if (telRange.location == 0) {

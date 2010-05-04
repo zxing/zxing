@@ -37,14 +37,14 @@ static NSURL *MailtoURL(NSString *to, NSString *sub, NSString *body) {
   return [NSURL URLWithString:result];
 }
 
-- initWithRecipient:(NSString *)rec subject:(NSString *)subject body:(NSString *)body {
+- (id)initWithRecipient:(NSString *)rec subject:(NSString *)subject body:(NSString *)body {
   if ((self = [super initWithURL:MailtoURL(rec, subject, body)]) != nil) {
     self.recipient = rec;
   }
   return self;
 }
 
-+ actionWithRecipient:(NSString *)recipient subject:(NSString *)subject body:(NSString *)body {
++ (id)actionWithRecipient:(NSString *)recipient subject:(NSString *)subject body:(NSString *)body {
   return [[[self alloc] initWithRecipient:recipient subject:subject body:body] autorelease];
 }
 

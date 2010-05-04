@@ -28,7 +28,7 @@
 
 @property (nonatomic, copy) NSString *location;
 
-- initWithLocation:(NSString *)location;
+- (id)initWithLocation:(NSString *)location;
 
 
 @end

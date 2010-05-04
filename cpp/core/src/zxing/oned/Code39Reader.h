@@ -33,7 +33,7 @@ namespace zxing {
 		class Code39Reader : public OneDReader {
 			
 		private:
-			std::string* ALPHABET_STRING;
+			std::string alphabet_string;
 
 			bool usingCheckDigit;
 			bool extendedMode;
@@ -49,9 +49,7 @@ namespace zxing {
 			Code39Reader(bool usingCheckDigit_);
 			
 			Ref<Result> decodeRow(int rowNumber, Ref<BitArray> row);
-			
-			~Code39Reader();
-		};
+    };
 	}
 }
 

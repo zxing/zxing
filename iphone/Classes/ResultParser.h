@@ -25,7 +25,7 @@
 @interface ResultParser : NSObject {
 
 }
-
++ (void)registerResultParserClass:(Class)resultParser;
 + (ParsedResult *)parsedResultForString:(NSString *)s;
 
 @end

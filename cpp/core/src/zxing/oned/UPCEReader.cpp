@@ -40,21 +40,11 @@ namespace zxing {
 			{0x07, 0x0B, 0x0D, 0x0E, 0x13, 0x19, 0x1C, 0x15, 0x16, 0x1A}
 		};
 		
-		UPCEReader::UPCEReader(){
-			decodeMiddleCounters = new int[4];
-			for (int i=0; i<4; i++) {
-				decodeMiddleCounters[i] = 0;
-			}
-		}
+		UPCEReader::UPCEReader(){}
 		
 		int UPCEReader::decodeMiddle(Ref<BitArray> row, int startRange[], int startRangeLen, std::string& resultString){
-			int countersLen = 4;
-			int* counters = decodeMiddleCounters;
-			counters[0] = 0;
-			counters[1] = 0;
-			counters[2] = 0;
-			counters[3] = 0;
-			
+			const int countersLen = 4;
+			int counters[countersLen] = { 0, 0, 0, 0 };
 			
 			int end = row->getSize();
 			int rowOffset = startRange[1];
@@ -142,9 +132,6 @@ namespace zxing {
 		
 		BarcodeFormat UPCEReader::getBarcodeFormat(){
 			return BarcodeFormat_UPC_E;
-		}
-		UPCEReader::~UPCEReader(){
-			delete [] decodeMiddleCounters;
 		}
 	}
 }

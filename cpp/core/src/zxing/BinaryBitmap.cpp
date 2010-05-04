@@ -23,7 +23,7 @@
 
 namespace zxing {
 	
-	BinaryBitmap::BinaryBitmap(Ref<Binarizer> binarizer) : bits_(NULL), binarizer_(binarizer) {
+	BinaryBitmap::BinaryBitmap(Ref<Binarizer> binarizer) : bits_(NULL), array_bits_(NULL), binarizer_(binarizer) {
 		
 	}
 	

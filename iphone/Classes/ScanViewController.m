@@ -39,7 +39,7 @@
 #define FONT_SIZE 16
 
 - (id)initWithResult:(ParsedResult *)r forScan:(Scan *)s {
-	if (self = [super initWithStyle:UITableViewStyleGrouped]) {
+	if ((self = [super initWithStyle:UITableViewStyleGrouped])) {
     self.result = r;
     self.scan = s;
     self.title = NSLocalizedString(@"ScanViewController title", @"Scan");
@@ -86,9 +86,10 @@
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:DatetimeIdentifier];
 	if (cell == nil) {
 		cell = [[[UITableViewCell alloc] initWithFrame:CGRectMake(0, 0, 320, 34) reuseIdentifier:DatetimeIdentifier] autorelease];
-    cell.font = [UIFont systemFontOfSize:[UIFont systemFontSize] * 2.0 / 3.0];
-    cell.textColor = [UIColor grayColor];
-    cell.textAlignment = UITextAlignmentCenter;
+    UILabel *label = [cell textLabel];
+    label.font = [UIFont systemFontOfSize:[UIFont systemFontSize] * 2.0 / 3.0];
+    label.textColor = [UIColor grayColor];
+    label.textAlignment = UITextAlignmentCenter;
 	}
   return cell;
 }
@@ -152,15 +153,18 @@
   if (indexPath.section == 0) {
     if (indexPath.row == 0) {
       cell = [self titleCellInTableView:tableView];
-      cell.image = [result icon];
-      cell.text = [[result class] typeName];
+      UIImageView *imageView = cell.imageView;
+      imageView.image = [result icon];
+      UILabel *textLabel = cell.textLabel;
+      textLabel.text = [[result class] typeName];
     } else if (indexPath.row == 1) {
       cell = [self bodyCellInTableView:tableView];
       UITextView *textView = (UITextView *)[cell viewWithTag:TEXT_VIEW_TAG];
       textView.text = [result stringForDisplay];
     } else if (indexPath.row == 2) {
       cell = [self datetimeCellInTableView:tableView];
-      cell.text = [dateFormatter stringFromDate:[scan stamp]];
+      UILabel *textLabel = cell.textLabel;
+      textLabel.text = [dateFormatter stringFromDate:[scan stamp]];
     }
   } else if (indexPath.section == 1) {
     cell = [self buttonCellInTableView:tableView];

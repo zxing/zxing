@@ -25,7 +25,7 @@
 @implementation ScannedImageView
 
 - (id)initWithFrame:(CGRect)frame {
-	if (self = [super initWithFrame:frame]) {
+	if ((self = [super initWithFrame:frame])) {
     resultPoints = [[NSMutableArray alloc] initWithCapacity:10];
 	}
 	return self;

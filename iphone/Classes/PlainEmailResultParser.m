@@ -24,6 +24,10 @@
 
 @implementation PlainEmailResultParser
 
++ (void)load {
+  [ResultParser registerResultParserClass:self];
+}
+
 + (ParsedResult *)parsedResultForString:(NSString *)s {
   if ([EmailParsedResult looksLikeAnEmailAddress:s]) {
     EmailParsedResult *result = [[[EmailParsedResult alloc] init] autorelease];

@@ -26,6 +26,10 @@
 
 @implementation GeoResultParser
 
++ (void)load {
+  [ResultParser registerResultParserClass:self];
+}
+
 + (ParsedResult *)parsedResultForString:(NSString *)s {
   NSRange prefixRange = [s rangeOfString:PREFIX options:NSCaseInsensitiveSearch];
   if (prefixRange.location == 0) {

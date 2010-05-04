@@ -62,8 +62,7 @@ namespace zxing {
 		};
 		
 		
-		ITFReader::ITFReader(){
-			narrowLineWidth = -1;
+		ITFReader::ITFReader() : narrowLineWidth(-1) {
 		}
 		
 		

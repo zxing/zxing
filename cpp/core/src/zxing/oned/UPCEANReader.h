@@ -63,3 +63,4 @@ namespace zxing {
 		};
 	}
 }
+

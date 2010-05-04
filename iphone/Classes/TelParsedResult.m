@@ -26,7 +26,7 @@
 
 @synthesize number;
 
-- initWithNumber:(NSString *)n {
+- (id)initWithNumber:(NSString *)n {
   if ((self = [super init]) != nil) {
     self.number = n;
   }

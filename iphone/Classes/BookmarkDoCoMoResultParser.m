@@ -24,6 +24,10 @@
 
 @implementation BookmarkDoCoMoResultParser
 
++ (void)load {
+  [ResultParser registerResultParserClass:self];
+}
+
 + (ParsedResult *)parsedResultForString:(NSString *)s {
   NSRange foundRange = [s rangeOfString:@"MEBKM:"];
   if (foundRange.location == NSNotFound) {

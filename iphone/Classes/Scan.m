@@ -28,7 +28,7 @@
 @synthesize text;
 @synthesize stamp;
 
-- initWithIdent:(int)i text:(NSString *)t stamp:(NSDate *)s {
+- (id)initWithIdent:(int)i text:(NSString *)t stamp:(NSDate *)s {
   if ((self = [super init]) != nil) {
     self.ident = i;
     self.text = t;

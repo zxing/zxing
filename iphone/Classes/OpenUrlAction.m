@@ -26,14 +26,14 @@
 
 @synthesize URL;
 
-- initWithURL:(NSURL *)url {
+- (id)initWithURL:(NSURL *)url {
   if ((self = [super init]) != nil) {
     self.URL = url;
   }
   return self;
 }
 
-+ actionWithURL:(NSURL *)URL {
++ (id)actionWithURL:(NSURL *)URL {
   return [[[self alloc] initWithURL:URL] autorelease];
 }
 

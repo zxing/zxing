@@ -29,6 +29,6 @@
 
 @property (nonatomic, copy) NSString *text;
 
-- initWithString:(NSString *)s;
+- (id)initWithString:(NSString *)s;
 
 @end

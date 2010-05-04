@@ -33,15 +33,15 @@ GrayBytesMonochromeBitmapSource::GrayBytesMonochromeBitmapSource(const unsigned 
 				bytesPerRow_(bytesPerRow) { }
 
 
-int GrayBytesMonochromeBitmapSource::getWidth() {
+int GrayBytesMonochromeBitmapSource::getWidth() const{
 	return width_;
 }
 
-int GrayBytesMonochromeBitmapSource::getHeight() {
+int GrayBytesMonochromeBitmapSource::getHeight() const {
 	return height_;
 }
 
-unsigned char GrayBytesMonochromeBitmapSource::getPixel(int x, int y) {
+unsigned char GrayBytesMonochromeBitmapSource::getPixel(int x, int y) const {
 /*	if (x >= width_ || y >= height_) {
 		throw new ReaderException("bitmap coordinate out of bounds");
 	}*/

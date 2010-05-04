@@ -27,7 +27,7 @@
 @synthesize number;
 @synthesize body;
 
-- initWithNumber:(NSString *)n body:(NSString *)b {
+- (id)initWithNumber:(NSString *)n body:(NSString *)b {
   if ((self = [super init]) != nil) {
     self.number = n;
     self.body = b;

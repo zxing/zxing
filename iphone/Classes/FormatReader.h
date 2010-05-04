@@ -1,12 +1,9 @@
-#ifndef __COMMON__STRING_H__
-#define __COMMON__STRING_H__
-
+//
+//  FormatReader.h
+//
+//  Created by Dave MacLachlan on 2010-05-03.
 /*
- *  String.h
- *  zxing
- *
- *  Created by Christian Brunschen on 20/05/2008.
- *  Copyright 2008 ZXing authors All rights reserved.
+ * Copyright 2010 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,21 +18,20 @@
  * limitations under the License.
  */
 
-#include <string>
-#include <iostream>
-#include <zxing/common/Counted.h>
+#import <Foundation/Foundation.h>
+#import <zxing/common/Counted.h>
+#import <zxing/Result.h>
+#import <zxing/BinaryBitmap.h>
+#import <zxing/Reader.h>
 
-namespace zxing {
-
-class String : public Counted {
-private:
-  std::string text_;
-public:
-  String(const std::string &text);
-  const std::string &getText() const;
-  friend std::ostream &operator<<(std::ostream &out, const String &s);
-};
-
+@interface FormatReader : NSObject {
+  zxing::Reader *reader_;
 }
 
-#endif // __COMMON__STRING_H__
++ (void)registerFormatReader:(FormatReader *)formatReader;
++ (NSSet *)formatReaders;
+
+- (id)initWithReader:(zxing::Reader *)reader;
+- (zxing::Ref<zxing::Result>)decode:(zxing::Ref<zxing::BinaryBitmap>)grayImage;
+
+@end

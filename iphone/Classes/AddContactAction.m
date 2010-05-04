@@ -32,12 +32,12 @@
 @synthesize urlString;
 @synthesize address;
 
-+ actionWithName:(NSString *)n
-    phoneNumbers:(NSArray *)nums
-           email:(NSString *)em
-             url:(NSString *)us
-         address:(NSString *)ad
-            note:(NSString *)nt {
++ (id)actionWithName:(NSString *)n
+        phoneNumbers:(NSArray *)nums
+               email:(NSString *)em
+                 url:(NSString *)us
+             address:(NSString *)ad
+                note:(NSString *)nt {
   AddContactAction *aca = [[[self alloc] init] autorelease];
   aca.name = n;
   aca.phoneNumbers = nums;

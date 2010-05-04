@@ -31,14 +31,14 @@
   return [NSURL URLWithString:urlString];
 }
 
-- initWithNumber:(NSString *)n {
+- (id)initWithNumber:(NSString *)n {
   if ((self = [super initWithURL:[[self class] urlForNumber:n]]) != nil) {
     self.number = n;
   }
   return self;
 }
 
-+ actionWithNumber:(NSString *)number {
++ (id)actionWithNumber:(NSString *)number {
   return [[[self alloc] initWithNumber:number] autorelease];
 }
 
