@@ -70,10 +70,22 @@ namespace zxing {
 		Ref<Result> ITFReader::decodeRow(int rowNumber, Ref<BitArray> row){
 			// Find out where the Middle section (payload) starts & ends
 			int* startRange = decodeStart(row);
-			int* endRange = decodeEnd(row);
+			int* endRange;
+			try {
+				endRange = decodeEnd(row);
+			} catch (Exception e) {
+				delete [] startRange;
+				throw e;
+			}
 			
 			std::string tmpResult;
+			try {
 			decodeMiddle(row, startRange[1], endRange[0], tmpResult);
+			} catch (zxing::ReaderException re) {
+				delete [] startRange;
+				delete [] endRange;
+				throw re;
+			}
 			
 			// To avoid false positives with 2D barcodes (and other patterns), make
 			// an assumption that the decoded string must be 6, 10 or 14 digits.
@@ -83,7 +95,9 @@ namespace zxing {
 					lengthOK = true;
 				}
 			if (!lengthOK) {
-				throw ReaderException("not enought characters count");
+				delete [] startRange;
+				delete [] endRange;
+				throw ReaderException("not enough characters count");
 			}
 			
 			Ref<String> resultString(new String(tmpResult));
@@ -116,13 +130,13 @@ namespace zxing {
 			// Therefore, need to scan 10 lines and then
 			// split these into two arrays
 			int counterDigitPairLen = 10;
-			int* counterDigitPair = new int[counterDigitPairLen];
+			int counterDigitPair[counterDigitPairLen];
 			for (int i=0; i<counterDigitPairLen; i++) {
 				counterDigitPair[i] = 0;
 			}
 			
-			int* counterBlack = new int[5];
-			int* counterWhite = new int[5];
+			int counterBlack[5];
+			int counterWhite[5];
 			for (int i=0; i<5; i++) {
 				counterBlack[i] = 0;
 				counterWhite[i] = 0;
@@ -147,9 +161,6 @@ namespace zxing {
 					payloadStart += counterDigitPair[i];
 				}
 			}
-			delete [] counterDigitPair;
-			delete [] counterBlack;
-			delete [] counterWhite;
 		}
 		
 		/**
@@ -278,7 +289,7 @@ namespace zxing {
 			// TODO: This is very similar to implementation in UPCEANReader. Consider if they can be
 			// merged to a single method.
 			int patternLength = patternLen;
-			int* counters = new int[patternLength];
+			int counters[patternLength];
 			for (int i=0; i<patternLength; i++) {
 				counters[i] = 0;
 			}

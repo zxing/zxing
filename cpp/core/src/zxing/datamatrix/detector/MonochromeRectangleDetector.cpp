@@ -86,12 +86,15 @@ Ref<CornerPoint> MonochromeRectangleDetector::findCornerFromCenter(int centerX, 
             if (lastRange[1] > centerX) {
               // straddle, choose one or the other based on direction
 			        Ref<CornerPoint> result(new CornerPoint(deltaY > 0 ? lastRange[0] : lastRange[1], lastY));
+							delete [] lastRange;
 			        return result;
             }
 			      Ref<CornerPoint> result(new CornerPoint(lastRange[0], lastY));
+						delete [] lastRange;
 			      return result;
           } else {
 			      Ref<CornerPoint> result(new CornerPoint(lastRange[1], lastY));
+						delete [] lastRange;
 			      return result;
             }
         } else {
@@ -99,19 +102,24 @@ Ref<CornerPoint> MonochromeRectangleDetector::findCornerFromCenter(int centerX, 
           if (lastRange[0] < centerY) {
             if (lastRange[1] > centerY) {
 			        Ref<CornerPoint> result(new CornerPoint(lastX, deltaX < 0 ? lastRange[0] : lastRange[1]));
+							delete [] lastRange;
 			        return result;
             }
 			      Ref<CornerPoint> result(new CornerPoint(lastX, lastRange[0]));
+						delete [] lastRange;
 			      return result;
           } else {
 			      Ref<CornerPoint> result(new CornerPoint(lastX, lastRange[1]));
+						delete [] lastRange;
 			      return result;
             }
           }
         }
       }
+		delete [] lastRange;
       lastRange = range;
     }
+	delete [] lastRange;
     throw ReaderException("Couldn't find corners");
   }
 

@@ -73,6 +73,10 @@ namespace zxing {
 		}
 		
 		MultiFormatUPCEANReader::~MultiFormatUPCEANReader(){
+			int size = readers->size();
+			for (int i = 0; i < size; i++) {
+				delete (*readers)[i];
+			}
 			delete readers;
 		}
 	}

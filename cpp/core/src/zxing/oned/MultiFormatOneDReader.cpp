@@ -49,6 +49,10 @@ namespace zxing {
 			throw ReaderException("No code detected");
 		}
 		MultiFormatOneDReader::~MultiFormatOneDReader(){
+			int size = readers->size();
+			for (int i = 0; i < size; i++) {
+				delete (*readers)[i];
+			}
 			delete readers;
 		}
 	}

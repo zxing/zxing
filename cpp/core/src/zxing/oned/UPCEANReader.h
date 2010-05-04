@@ -54,7 +54,7 @@ namespace zxing {
 			Ref<Result> decodeRow(int rowNumber, Ref<BitArray> row);
 			Ref<Result> decodeRow(int rowNumber, Ref<BitArray> row, int startGuardRange[]);
 			
-			static int decodeDigit(Ref<BitArray> row, int counters[], int countersLen, int rowOffset, UPC_EAN_PATTERNS paternType);	//throws ReaderException 
+			static int decodeDigit(Ref<BitArray> row, int counters[], int countersLen, int rowOffset, UPC_EAN_PATTERNS patternType);	//throws ReaderException 
 			
 			bool checkChecksum(std::string s);																						//throws ReaderException
 			
