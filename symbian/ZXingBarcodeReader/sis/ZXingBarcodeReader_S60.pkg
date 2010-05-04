@@ -1,0 +1,27 @@
+;Language - standard language definitions
+&EN
+
+; standard SIS file header
+#{"ZXingBarcodeReader"},(0xEF24C10A),1,0,0
+
+;Localised Vendor name
+%{"Forum Nokia"}
+
+;Unique Vendor name
+:"Forum Nokia"
+
+;Supports S60 3rd Edition
+[0x101F7961], 0, 0, 0, {"Series60ProductID"}
+
+;Supports S60 5th Edition
+[0x1028315F], 0, 0, 0, {"S60ProductID"}
+
+;Files to install
+"$(EPOCROOT)Epoc32\release\$(PLATFORM)\$(TARGET)\ZXingBarcodeReader_0xEF24C10A.exe"       -"!:\sys\bin\ZXingBarcodeReader_0xEF24C10A.exe"
+"$(EPOCROOT)Epoc32\data\z\resource\apps\ZXingBarcodeReader_0xEF24C10A.rsc"        -"!:\resource\apps\ZXingBarcodeReader_0xEF24C10A.rsc"
+"$(EPOCROOT)Epoc32\data\z\private\10003a3f\apps\ZXingBarcodeReader_0xEF24C10A_reg.rsc"    -"!:\private\10003a3f\import\apps\ZXingBarcodeReader_0xEF24C10A_reg.rsc"
+"$(EPOCROOT)Epoc32\data\z\resource\apps\ZXingBarcodeReader_0xEF24C10A.mif" -"!:\resource\apps\ZXingBarcodeReader_0xEF24C10A.mif"
+
+;CameraWrapper
+@"$(EPOCROOT)Epoc32\InstallToDevice\CameraWrapper\sis\camerawrapper.sisx", (0x2001ec5f)
+
