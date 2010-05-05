@@ -176,8 +176,10 @@ public final class CameraManager {
     if (camera != null && previewing) {
       previewCallback.setHandler(handler, message);
       if (useOneShotPreviewCallback) {
+        Log.v(TAG, "Requesting one-shot preview callback");
         camera.setOneShotPreviewCallback(previewCallback);
       } else {
+        Log.v(TAG, "Requesting preview callback");
         camera.setPreviewCallback(previewCallback);
       }
     }
@@ -192,6 +194,7 @@ public final class CameraManager {
   public void requestAutoFocus(Handler handler, int message) {
     if (camera != null && previewing) {
       autoFocusCallback.setHandler(handler, message);
+      Log.v(TAG, "Requesting auto-focus callback");
       camera.autoFocus(autoFocusCallback);
     }
   }
