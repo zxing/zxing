@@ -49,7 +49,6 @@ final class PreviewCallback implements Camera.PreviewCallback {
     if (previewHandler != null) {
       Message message = previewHandler.obtainMessage(previewMessage, cameraResolution.x,
           cameraResolution.y, data);
-      Log.v(TAG, "Got preview callback; sending message to decoder");
       message.sendToTarget();
       previewHandler = null;
     } else {

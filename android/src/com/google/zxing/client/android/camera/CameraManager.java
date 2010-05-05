@@ -176,10 +176,8 @@ public final class CameraManager {
     if (camera != null && previewing) {
       previewCallback.setHandler(handler, message);
       if (useOneShotPreviewCallback) {
-        Log.v(TAG, "Requesting one-shot preview callback");
         camera.setOneShotPreviewCallback(previewCallback);
       } else {
-        Log.v(TAG, "Requesting preview callback");
         camera.setPreviewCallback(previewCallback);
       }
     }
