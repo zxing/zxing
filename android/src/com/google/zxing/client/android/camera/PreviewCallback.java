@@ -20,8 +20,11 @@ import android.graphics.Point;
 import android.hardware.Camera;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
 final class PreviewCallback implements Camera.PreviewCallback {
+
+  private static final String TAG = PreviewCallback.class.getSimpleName();
 
   private final CameraConfigurationManager configManager;
   private final boolean useOneShotPreviewCallback;
@@ -46,8 +49,11 @@ final class PreviewCallback implements Camera.PreviewCallback {
     if (previewHandler != null) {
       Message message = previewHandler.obtainMessage(previewMessage, cameraResolution.x,
           cameraResolution.y, data);
+      Log.v(TAG, "Got preview callback; sending message to decoder");
       message.sendToTarget();
       previewHandler = null;
+    } else {
+      Log.v(TAG, "Got preview callback, but no handler for it");
     }
   }
 
