@@ -90,7 +90,6 @@ public final class CaptureActivityHandler extends Handler {
         activity.handleDecode((Result) message.obj, barcode);
         break;
       case R.id.decode_failed:
-        Log.v(TAG, "Got decode failed message");
         // We're decoding as fast as possible, so when one decode fails, start another.
         state = State.PREVIEW;
         CameraManager.get().requestPreviewFrame(decodeThread.getHandler(), R.id.decode);
