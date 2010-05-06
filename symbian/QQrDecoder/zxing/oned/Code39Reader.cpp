@@ -46,17 +46,16 @@ namespace zxing {
 		};
 		
 		static int ASTERISK_ENCODING = 0x094;
-		
+		static const char* ALPHABET_STRING = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. *$/+%";
 	
 		
 		/**
 		 * Creates a reader that assumes all encoded data is data, and does not treat the final
 		 * character as a check digit. It will not decoded "extended Code 39" sequences.
 		 */
-		Code39Reader::Code39Reader(){
-			ALPHABET_STRING = new std::string("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. *$/+%");
-			usingCheckDigit = false;
-			extendedMode = false;
+		Code39Reader::Code39Reader() : alphabet_string(ALPHABET_STRING), 
+                                   usingCheckDigit(false), 
+                                   extendedMode(false) {
 		}
 		
 		/**
@@ -66,10 +65,9 @@ namespace zxing {
 		 * @param usingCheckDigit if true, treat the last data character as a check digit, not
 		 * data, and verify that the checksum passes.
 		 */
-		Code39Reader::Code39Reader(bool usingCheckDigit_){
-			ALPHABET_STRING = new std::string("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. *$/+%");
-			usingCheckDigit = usingCheckDigit_;
-			extendedMode = false;
+		Code39Reader::Code39Reader(bool usingCheckDigit_) : alphabet_string(ALPHABET_STRING), 
+                                                        usingCheckDigit(usingCheckDigit_), 
+                                                        extendedMode(false) {
 		}
  
 
@@ -94,9 +92,15 @@ namespace zxing {
 			char decodedChar;
 			int lastStart;
 			do {
+				try {
 				recordPattern(row, nextStart, counters, countersLen);
+				} catch (ReaderException re) {
+					delete [] start;
+					throw re;
+				}
 				int pattern = toNarrowWidePattern(counters, countersLen);
 				if (pattern < 0) {
+					delete [] start;
 					throw ReaderException("pattern < 0");
 				}
 				decodedChar = patternToChar(pattern);
@@ -117,10 +121,14 @@ namespace zxing {
 			for (int i = 0; i < countersLen; i++) {
 				lastPatternSize += counters[i];
 			}
+			// IS begin
+			delete [] counters;
+			// IS end
 			int whiteSpaceAfterEnd = nextStart - lastStart - lastPatternSize;
 			// If 50% of last pattern size, following last pattern, is not whitespace, fail
 			// (but if it's whitespace to the very end of the image, that's OK)
 			if (nextStart != end && whiteSpaceAfterEnd / 2 < lastPatternSize) {
+				delete [] start;
 				throw ReaderException("too short end white space");
 			}
 			
@@ -128,9 +136,9 @@ namespace zxing {
 				int max = tmpResultString.length() - 1;
 				int total = 0;
 				for (int i = 0; i < max; i++) {
-					total += ALPHABET_STRING->find_first_of(tmpResultString[i], 0);
+					total += alphabet_string.find_first_of(tmpResultString[i], 0);
 				}
-				if (total % 43 != ALPHABET_STRING->find_first_of(tmpResultString[max], 0)) {
+				if (total % 43 != alphabet_string.find_first_of(tmpResultString[max], 0)) {
 					throw ReaderException("");
 				}
 				tmpResultString.erase(max, 1);
@@ -146,6 +154,7 @@ namespace zxing {
 			}
 			
 			if (tmpResultString.length() == 0) {
+				delete [] start;
 				// Almost surely a false positive
 				throw ReaderException("");
 			}
@@ -216,6 +225,9 @@ namespace zxing {
 					isWhite = !isWhite;
 				}
 			}
+			// IS begin
+			delete [] counters;
+			// IS end
 			throw ReaderException("");
 		}
 		
@@ -330,11 +342,5 @@ namespace zxing {
 			Ref<String> decoded(new String(tmpDecoded));
 			return decoded;
 		}
-		
-
-		Code39Reader::~Code39Reader(){
-			delete ALPHABET_STRING;
-		}
-
 	}
 }

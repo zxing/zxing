@@ -22,7 +22,7 @@
 #ifndef GLOBALHISTOGRAMBINARIZER_H_
 #define GLOBALHISTOGRAMBINARIZER_H_
 
-#include <valarray>
+#include <vector>
 #include <zxing/Binarizer.h>
 #include <zxing/common/BitArray.h>
 #include <zxing/common/BitMatrix.h>
@@ -36,7 +36,7 @@ namespace zxing {
 		
 		virtual Ref<BitArray> estimateBlackRow(int y, Ref<BitArray> row);
 		virtual Ref<BitMatrix> estimateBlackMatrix();
-		static int estimate(std::valarray<int> &histogram);
+		static int estimate(std::vector<int> &histogram);
 	};
 	
 }

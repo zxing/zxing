@@ -22,7 +22,6 @@
  */
 
 #include <zxing/common/Counted.h>
-#include <valarray>
 #include <limits>
 
 namespace zxing {
@@ -50,10 +49,14 @@ public:
   size_t getWidth() const;
   size_t getHeight() const;
 
-  unsigned int* getBits();
+  unsigned int* getBits() const;
 
-  friend std::ostream& operator<<(std::ostream &out, BitMatrix &bm);
+  friend std::ostream& operator<<(std::ostream &out, const BitMatrix &bm);
   const char *description();
+
+private:
+  BitMatrix(const BitMatrix&);
+  BitMatrix& operator =(const BitMatrix&);
 };
 
 }

@@ -30,6 +30,7 @@ public:
 
 class Point {
 public:
+  Point() : x(0.0f), y(0.0f) {};
   Point(float x_, float y_) : x(x_), y(y_) {};
 
   float x;

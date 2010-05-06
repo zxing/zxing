@@ -28,7 +28,7 @@ namespace zxing {
 
 class Exception : public std::exception {
 private:
-  const char * message;
+  std::string message;
 
 public:
   Exception(const char *msg);

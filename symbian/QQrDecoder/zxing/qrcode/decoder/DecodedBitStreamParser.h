@@ -43,12 +43,12 @@ private:
   static const char *SHIFT_JIS;
   static const char *EUC_JP;
 
-  static void decodeKanjiSegment(Ref<BitSource> bits, std::ostringstream &result, int count);
-  static void decodeByteSegment(Ref<BitSource> bits, std::ostringstream &result, int count);
-  static void decodeAlphanumericSegment(Ref<BitSource> bits, std::ostringstream &result, int count);
-  static void decodeNumericSegment(Ref<BitSource> bits, std::ostringstream &result, int count);
+  static void decodeKanjiSegment(Ref<BitSource> bits, std::string &result, int count);
+  static void decodeByteSegment(Ref<BitSource> bits, std::string &result, int count);
+  static void decodeAlphanumericSegment(Ref<BitSource> bits, std::string &result, int count);
+  static void decodeNumericSegment(Ref<BitSource> bits, std::string &result, int count);
   static const char *guessEncoding(unsigned char *bytes, int length);
-  static void append(std::ostream &ost, const unsigned char *bufIn, size_t nIn, const char *src);
+  static void append(std::string &ost, const unsigned char *bufIn, size_t nIn, const char *src);
 
 public:
   static std::string decode(ArrayRef<unsigned char> bytes, Version *version);

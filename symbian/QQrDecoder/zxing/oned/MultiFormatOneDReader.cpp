@@ -28,18 +28,17 @@
 
 namespace zxing {
 	namespace oned {
-		MultiFormatOneDReader::MultiFormatOneDReader(){
-			readers = new std::vector<OneDReader*>();
-			readers->push_back(new MultiFormatUPCEANReader());
-			readers->push_back(new Code39Reader());
-			readers->push_back(new Code128Reader());
-			readers->push_back(new ITFReader());
+		MultiFormatOneDReader::MultiFormatOneDReader() : readers() {
+			readers.push_back(Ref<OneDReader>(new MultiFormatUPCEANReader()));
+			readers.push_back(Ref<OneDReader>(new Code39Reader()));
+			readers.push_back(Ref<OneDReader>(new Code128Reader()));
+			readers.push_back(Ref<OneDReader>(new ITFReader()));
 		}
 		
 		Ref<Result> MultiFormatOneDReader::decodeRow(int rowNumber, Ref<BitArray> row){
-			int size = readers->size();
+			int size = readers.size();
 			for (int i = 0; i < size; i++) {
-				OneDReader* reader = (*readers)[i];
+				OneDReader* reader = readers[i];
 				try {
 					return reader->decodeRow(rowNumber, row);
 				} catch (ReaderException re) {
@@ -47,9 +46,6 @@ namespace zxing {
 				}
 			}
 			throw ReaderException("No code detected");
-		}
-		MultiFormatOneDReader::~MultiFormatOneDReader(){
-			delete readers;
 		}
 	}
 }

@@ -27,19 +27,17 @@
 #include <zxing/ReaderException.h>
 
 namespace zxing {
-	MultiFormatReader::MultiFormatReader(){
-		readers = new std::vector<Reader*>();
-		
-		readers->push_back(new zxing::qrcode::QRCodeReader());
-//		readers->push_back(new zxing::datamatrix::DataMatrixReader());
-		readers->push_back(new zxing::oned::MultiFormatUPCEANReader());
-		readers->push_back(new zxing::oned::MultiFormatOneDReader());
+	MultiFormatReader::MultiFormatReader() : readers() {
+    readers.push_back(Ref<Reader>(new zxing::qrcode::QRCodeReader()));
+		//readers.push_back(Ref<Reader>(new zxing::datamatrix::DataMatrixReader()));
+		readers.push_back(Ref<Reader>(new zxing::oned::MultiFormatUPCEANReader()));
+		readers.push_back(Ref<Reader>(new zxing::oned::MultiFormatOneDReader()));
 	}
 	
 	Ref<Result> MultiFormatReader::decode(Ref<BinaryBitmap> image){
-		int size = readers->size();
+		int size = readers.size();
 		for (int i = 0; i < size; i++) {
-			Reader* reader = (*readers)[i];
+			Ref<Reader> reader = readers[i];
 			try {
 				return reader->decode(image);
 			} catch (ReaderException re) {
@@ -47,8 +45,5 @@ namespace zxing {
 			}
 		}
 		throw ReaderException("No code detected");
-	}
-	MultiFormatReader::~MultiFormatReader(){
-		delete readers;
 	}
 }

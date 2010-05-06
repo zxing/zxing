@@ -27,12 +27,11 @@ namespace zxing {
 	class MultiFormatReader : public Reader {
 		
 	private:
-		std::vector<Reader*>* readers;
+		std::vector<Ref<Reader> >readers;
 	public:
 		MultiFormatReader();
 		
 		Ref<Result> decode(Ref<BinaryBitmap> image);
-		
-		~MultiFormatReader();
+  
 	};
 }

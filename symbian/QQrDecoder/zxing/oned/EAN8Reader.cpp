@@ -24,21 +24,11 @@
 namespace zxing {
 	namespace oned {
 		
-		EAN8Reader::EAN8Reader(){
-			decodeMiddleCounters = new int[4];
-			for (int i=0; i<4; i++) {
-				decodeMiddleCounters[i] = 0;
-			}
-		}
+		EAN8Reader::EAN8Reader(){ }
 		
 		int EAN8Reader::decodeMiddle(Ref<BitArray> row, int startRange[], int startRangeLen, std::string& resultString){
-			int countersLen = 4;
-			int* counters = decodeMiddleCounters;
-			counters[0] = 0;
-			counters[1] = 0;
-			counters[2] = 0;
-			counters[3] = 0;
-			
+			const int countersLen = 4;
+			int counters[countersLen] = { 0, 0, 0, 0 };
 			
 			int end = row->getSize();
 			int rowOffset = startRange[1];
@@ -67,9 +57,6 @@ namespace zxing {
 		
 		BarcodeFormat EAN8Reader::getBarcodeFormat(){
 			return BarcodeFormat_EAN_8;
-		}
-		EAN8Reader::~EAN8Reader(){
-			delete [] decodeMiddleCounters;
 		}
 	}
 }
