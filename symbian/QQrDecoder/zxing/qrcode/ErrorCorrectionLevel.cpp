@@ -23,8 +23,8 @@
 namespace zxing {
 namespace qrcode {
 
-ErrorCorrectionLevel::ErrorCorrectionLevel(int ordinal) :
-    ordinal_(ordinal) {
+ErrorCorrectionLevel::ErrorCorrectionLevel(int inOrdinal) :
+    ordinal_(inOrdinal) {
 }
 
 int ErrorCorrectionLevel::ordinal() {

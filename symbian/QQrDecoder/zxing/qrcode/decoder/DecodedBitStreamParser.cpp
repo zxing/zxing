@@ -20,7 +20,9 @@
 
 #include <zxing/qrcode/decoder/DecodedBitStreamParser.h>
 #include <iostream>
+#ifndef NO_ICONV
 #include <iconv.h>
+#endif
 
 // Required for compatibility. TODO: test on Symbian
 #ifdef ZXING_ICONV_CONST
@@ -50,7 +52,8 @@ const char *DecodedBitStreamParser::UTF8 = "UTF-8";
 const char *DecodedBitStreamParser::SHIFT_JIS = "SHIFT_JIS";
 const char *DecodedBitStreamParser::EUC_JP = "EUC-JP";
 
-void DecodedBitStreamParser::append(ostream &ost, const unsigned char *bufIn, size_t nIn, const char *src) {
+void DecodedBitStreamParser::append(std::string &result, const unsigned char *bufIn, size_t nIn, const char *src) {
+#ifndef NO_ICONV
   if (nIn == 0) {
     return;
   }
@@ -65,7 +68,7 @@ void DecodedBitStreamParser::append(ostream &ost, const unsigned char *bufIn, si
   size_t nTo = maxOut;
 
   while (nFrom > 0) {
-    size_t oneway = iconv(cd, (const char**)&fromPtr, &nFrom, &toPtr, &nTo);
+    size_t oneway = iconv(cd, &fromPtr, &nFrom, &toPtr, &nTo);
     if (oneway == (size_t)(-1)) {
       iconv_close(cd);
       delete[] bufOut;
@@ -76,12 +79,14 @@ void DecodedBitStreamParser::append(ostream &ost, const unsigned char *bufIn, si
 
   int nResult = maxOut - nTo;
   bufOut[nResult] = '\0';
-
-  ost << bufOut;
+  result.append((const char *)bufOut);
   delete[] bufOut;
+ #else
+  result.append((const char *)bufIn, nIn);
+ #endif
 }
 
-void DecodedBitStreamParser::decodeKanjiSegment(Ref<BitSource> bits, ostringstream &result, int count) {
+void DecodedBitStreamParser::decodeKanjiSegment(Ref<BitSource> bits, std::string &result, int count) {
   // Each character will require 2 bytes. Read the characters as 2-byte pairs
   // and decode as Shift_JIS afterwards
   size_t nBytes = 2 * count;
@@ -109,7 +114,7 @@ void DecodedBitStreamParser::decodeKanjiSegment(Ref<BitSource> bits, ostringstre
   delete[] buffer;
 }
 
-void DecodedBitStreamParser::decodeByteSegment(Ref<BitSource> bits, ostringstream &result, int count) {
+void DecodedBitStreamParser::decodeByteSegment(Ref<BitSource> bits, std::string &result, int count) {
   int nBytes = count;
   unsigned char* readBytes = new unsigned char[nBytes];
   if (count << 3 > bits->available()) {
@@ -131,7 +136,7 @@ void DecodedBitStreamParser::decodeByteSegment(Ref<BitSource> bits, ostringstrea
   delete[] readBytes;
 }
 
-void DecodedBitStreamParser::decodeNumericSegment(Ref<BitSource> bits, ostringstream &result, int count) {
+void DecodedBitStreamParser::decodeNumericSegment(Ref<BitSource> bits, std::string &result, int count) {
   int nBytes = count;
   unsigned char* bytes = new unsigned char[nBytes];
   int i = 0;
@@ -176,7 +181,7 @@ void DecodedBitStreamParser::decodeNumericSegment(Ref<BitSource> bits, ostringst
   delete[] bytes;
 }
 
-void DecodedBitStreamParser::decodeAlphanumericSegment(Ref<BitSource> bits, ostringstream &result, int count) {
+void DecodedBitStreamParser::decodeAlphanumericSegment(Ref<BitSource> bits, std::string &result, int count) {
   int nBytes = count;
   unsigned char* bytes = new unsigned char[nBytes];
   int i = 0;
@@ -248,7 +253,7 @@ DecodedBitStreamParser::guessEncoding(unsigned char *bytes, int length) {
 }
 
 string DecodedBitStreamParser::decode(ArrayRef<unsigned char> bytes, Version *version) {
-  ostringstream result;
+  string result;
   Ref<BitSource> bits(new BitSource(bytes));
   Mode *mode = &Mode::TERMINATOR;
   do {
@@ -275,7 +280,7 @@ string DecodedBitStreamParser::decode(ArrayRef<unsigned char> bytes, Version *ve
       }
     }
   } while (mode != &Mode::TERMINATOR);
-  return result.str();
+  return result;
 }
 
 }

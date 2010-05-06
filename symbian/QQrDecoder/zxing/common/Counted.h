@@ -26,10 +26,8 @@
 
 #include <iostream>
 
-
 #ifdef DEBUG_COUNTING
 #include <typeinfo>
-using namespace std;
 #endif
 
 namespace zxing {
@@ -174,10 +172,10 @@ public:
   T& operator*() {
     return *object_;
   }
-  T* operator->() {
+  T* operator->() const {
     return object_;
   }
-  operator T*() {
+  operator T*() const {
     return object_;
   }
 

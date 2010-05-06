@@ -21,8 +21,7 @@
  * limitations under the License.
  */
 
-#include <valarray>
-#include <cstdarg>
+#include <vector>
 
 #ifdef DEBUG_COUNTING
 #include <iostream>
@@ -37,17 +36,17 @@ namespace zxing {
 template<typename T> class Array : public Counted {
 protected:
 public:
-  std::valarray<T> values_;
+  std::vector<T> values_;
   Array(size_t n) :
-      Counted(), values_(T(), n) {
+      Counted(), values_(n, T()) {
   }
   Array(T *ts, size_t n) :
-      Counted(), values_(ts, n) {
+      Counted(), values_(ts, ts+n) {
   }
   Array(T v, size_t n) :
-      Counted(), values_(v, n) {
+      Counted(), values_(n, v) {
   }
-  Array(std::valarray<T> &v) :
+  Array(std::vector<T> &v) :
       Counted(), values_(v) {
   }
   Array(Array<T> &other) :
@@ -68,7 +67,7 @@ public:
 #endif
     return *this;
   }
-  Array<T>& operator=(const std::valarray<T> &array) {
+  Array<T>& operator=(const std::vector<T> &array) {
 #ifdef DEBUG_COUNTING
     cout << "assigning values from Array " << &array << " to this Array " << this << ", ";
 #endif
@@ -87,10 +86,10 @@ public:
   size_t size() const {
     return values_.size();
   }
-  std::valarray<T> values() const {
+  std::vector<T> values() const {
     return values_;
   }
-  std::valarray<T>& values() {
+  std::vector<T>& values() {
     return values_;
   }
 };

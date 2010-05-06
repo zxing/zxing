@@ -156,4 +156,6 @@ symbian {
 	DEPLOYMENT += customrules
 }
 
+DEFINES += ZXING_ICONV_CONST
+
 ICON = QQrDecoder.svg

@@ -24,7 +24,6 @@
 #include <iostream>
 #include <sstream>
 #include <string>
-#include <cstring>
 
 namespace zxing {
 using namespace std;
@@ -40,7 +39,7 @@ unsigned int logDigits(unsigned digits) {
 }
 
 
-const unsigned int bitsPerWord = std::numeric_limits<unsigned int>::digits;
+const unsigned int bitsPerWord = numeric_limits<unsigned int>::digits;
 const unsigned int logBits = logDigits(bitsPerWord);
 const unsigned int bitsMask = (1 << logBits) - 1;
 
@@ -54,7 +53,7 @@ static size_t wordsForSize(size_t width, size_t height) {
 }
 
 BitMatrix::BitMatrix(size_t dimension) :
-    width_(dimension), height_(dimension), bits_(NULL) {
+    width_(dimension), height_(dimension), words_(0), bits_(NULL) {
 
   words_ = wordsForSize(width_, height_);
   bits_ = new unsigned int[words_];
@@ -62,7 +61,7 @@ BitMatrix::BitMatrix(size_t dimension) :
 }
 
 BitMatrix::BitMatrix(size_t width, size_t height) :
-    width_(width), height_(height), bits_(NULL) {
+    width_(width), height_(height), words_(0), bits_(NULL) {
 
   words_ = wordsForSize(width_, height_);
   bits_ = new unsigned int[words_];
@@ -90,7 +89,7 @@ void BitMatrix::flip(size_t x, size_t y) {
 }
 
 void BitMatrix::clear() {
-  std::memset(bits_, 0, sizeof(unsigned int) * words_);
+  std::fill(bits_, bits_+words_, 0);
 }
 
 void BitMatrix::setRegion(size_t left, size_t top, size_t width, size_t height) {
@@ -126,11 +125,11 @@ size_t BitMatrix::getDimension() const {
   return width_;
 }
 
-unsigned int* BitMatrix::getBits() {
+unsigned int* BitMatrix::getBits() const {
   return bits_;
 }
 
-ostream& operator<<(ostream &out, BitMatrix &bm) {
+ostream& operator<<(ostream &out, const BitMatrix &bm) {
   for (size_t y = 0; y < bm.height_; y++) {
     for (size_t x = 0; x < bm.width_; x++) {
       out << (bm.get(x, y) ? "X " : "  ");

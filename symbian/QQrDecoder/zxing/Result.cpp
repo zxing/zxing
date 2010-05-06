@@ -39,11 +39,11 @@ ArrayRef<unsigned char> Result::getRawBytes() {
   return rawBytes_;
 }
 
-std::vector<Ref<ResultPoint> > Result::getResultPoints() {
+const std::vector<Ref<ResultPoint> >& Result::getResultPoints() const {
   return resultPoints_;
 }
 
-BarcodeFormat Result::getBarcodeFormat() {
+BarcodeFormat Result::getBarcodeFormat() const {
   return format_;
 }
 

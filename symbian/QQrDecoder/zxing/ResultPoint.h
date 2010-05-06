@@ -26,9 +26,11 @@
 namespace zxing {
 
 class ResultPoint : public Counted {
+protected:
+  ResultPoint() {}
 public:
-  virtual float getX() = 0;
-  virtual float getY() = 0;
+  virtual float getX() const = 0;
+  virtual float getY() const = 0;
 };
 
 }

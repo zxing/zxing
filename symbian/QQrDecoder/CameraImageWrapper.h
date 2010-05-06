@@ -14,12 +14,13 @@ public:
     CameraImageWrapper(CameraImageWrapper& otherInstance);
     ~CameraImageWrapper();
     
-    int getWidth();
-    int getHeight();
+    int getWidth() const;
+    int getHeight() const;
     
-    unsigned char getPixel(int x, int y);
+    unsigned char getPixel(int x, int y) const;
+    unsigned char* copyMatrix() const;
     
-    void setImage(QString fileName, char* format);
+    void setImage(QString fileName);
     void setImage(QImage newImage);
     QImage grayScaleImage(QImage::Format f);
     QImage getOriginalImage();

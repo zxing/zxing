@@ -40,7 +40,7 @@ namespace zxing {
 	
 	
 	Ref<BitArray> GlobalHistogramBinarizer::estimateBlackRow(int y, Ref<BitArray> row){
-		valarray<int> histogram(0, LUMINANCE_BUCKETS);
+		vector<int> histogram(LUMINANCE_BUCKETS, 0);
 		LuminanceSource& source = *getSource();
 		int width = source.getWidth();
 		if (row == NULL || row->getSize() < width) {
@@ -80,7 +80,7 @@ namespace zxing {
 		LuminanceSource& source = *getSource();
 		int width = source.getWidth();
 		int height = source.getHeight();
-		valarray<int> histogram(0, LUMINANCE_BUCKETS);
+		vector<int> histogram(LUMINANCE_BUCKETS, 0);
 		
 		
 		// Quickly calculates the histogram by sampling four rows from the image. This proved to be
@@ -109,7 +109,7 @@ namespace zxing {
 		return matrix_ref;
 	}
 	
-	int GlobalHistogramBinarizer::estimate(valarray<int> &histogram) {
+	int GlobalHistogramBinarizer::estimate(vector<int> &histogram) {
 		int numBuckets = histogram.size();
 		int maxBucketCount = 0;
 		

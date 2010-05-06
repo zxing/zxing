@@ -29,19 +29,19 @@ namespace zxing {
 		posX_(posX), posY_(posY), estimatedModuleSize_(estimatedModuleSize), counter_(1) {
 		}
 		
-		float FinderPattern::getX() {
+		float FinderPattern::getX() const {
 			return posX_;
 		}
 		
-		float FinderPattern::getY() {
+		float FinderPattern::getY() const {
 			return posY_;
 		}
 		
-		int FinderPattern::getCount() {
+		int FinderPattern::getCount() const {
 			return counter_;
 		}
 		
-		float FinderPattern::getEstimatedModuleSize() {
+		float FinderPattern::getEstimatedModuleSize() const {
 			return estimatedModuleSize_;
 		}
 		
@@ -49,7 +49,7 @@ namespace zxing {
 			counter_++;
 		}
 		
-		bool FinderPattern::aboutEquals(float moduleSize, float i, float j) {
+		bool FinderPattern::aboutEquals(float moduleSize, float i, float j) const {
 			return abs(i - posY_) <= moduleSize && abs(j - posX_) <= moduleSize && (abs(moduleSize - estimatedModuleSize_)
 																					<= 1.0f || abs(moduleSize - estimatedModuleSize_) / estimatedModuleSize_ <= 0.1f);
 		}

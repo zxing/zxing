@@ -27,7 +27,6 @@
 #include <zxing/common/BitMatrix.h>
 #include <zxing/common/Counted.h>
 #include <vector>
-#include <valarray>
 
 namespace zxing {
 namespace qrcode {
@@ -58,10 +57,10 @@ class Version : public Counted {
 
 private:
   int versionNumber_;
-  std::valarray<int> &alignmentPatternCenters_;
+  std::vector<int> &alignmentPatternCenters_;
   std::vector<ECBlocks*> ecBlocks_;
   int totalCodewords_;
-  Version(int versionNumber, std::valarray<int> *alignmentPatternCenters, ECBlocks *ecBlocks1, ECBlocks *ecBlocks2,
+  Version(int versionNumber, std::vector<int> *alignmentPatternCenters, ECBlocks *ecBlocks1, ECBlocks *ecBlocks2,
           ECBlocks *ecBlocks3, ECBlocks *ecBlocks4);
 
 public:
@@ -71,7 +70,7 @@ public:
 
   ~Version();
   int getVersionNumber();
-  std::valarray<int> &getAlignmentPatternCenters();
+  std::vector<int> &getAlignmentPatternCenters();
   int getTotalCodewords();
   int getDimensionForVersion();
   ECBlocks &getECBlocksForLevel(ErrorCorrectionLevel &ecLevel);

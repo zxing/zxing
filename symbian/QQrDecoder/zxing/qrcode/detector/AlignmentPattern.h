@@ -35,9 +35,9 @@ namespace zxing {
 			
 		public:
 			AlignmentPattern(float posX, float posY, float estimatedModuleSize);
-			float getX();
-			float getY();
-			bool aboutEquals(float moduleSize, float i, float j);
+			float getX() const;
+			float getY() const;
+			bool aboutEquals(float moduleSize, float i, float j) const;
 		};
 		
 	}

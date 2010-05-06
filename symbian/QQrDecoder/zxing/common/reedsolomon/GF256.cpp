@@ -18,7 +18,6 @@
  * limitations under the License.
  */
 
-#include <valarray>
 #include <vector>
 #include <iostream>
 #include <zxing/common/reedsolomon/GF256.h>
@@ -42,7 +41,7 @@ static inline Ref<GF256Poly> refPoly(GF256 &field, int value) {
 }
 
 GF256::GF256(int primitive) :
-    exp_((const int)0, 256), log_((const int)0, 256), zero_(refPoly(*this, 0)), one_(refPoly(*this, 1)) {
+    exp_(256, (const int)0), log_(256, (const int)0), zero_(refPoly(*this, 0)), one_(refPoly(*this, 1)) {
   int x = 1;
   for (int i = 0; i < 256; i++) {
     exp_[i] = x;

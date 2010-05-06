@@ -23,17 +23,18 @@
 #include <zxing/common/BitArray.h>
 #include <vector>
 #include <cmath>
+#include <cstdlib>
 
 namespace zxing {
 namespace qrcode {
 
 using namespace std;
 
-float AlignmentPatternFinder::centerFromEnd(valarray<int> &stateCount, int end) {
+float AlignmentPatternFinder::centerFromEnd(vector<int> &stateCount, int end) {
   return (float)(end - stateCount[2]) - stateCount[1] / 2.0f;
 }
 
-bool AlignmentPatternFinder::foundPatternCross(valarray<int> &stateCount) {
+bool AlignmentPatternFinder::foundPatternCross(vector<int> &stateCount) {
   float maxVariance = moduleSize_ / 2.0f;
   for (size_t i = 0; i < 3; i++) {
     if (abs(moduleSize_ - stateCount[i]) >= maxVariance) {
@@ -46,7 +47,7 @@ bool AlignmentPatternFinder::foundPatternCross(valarray<int> &stateCount) {
 float AlignmentPatternFinder::crossCheckVertical(size_t startI, size_t centerJ, int maxCount,
     int originalStateCountTotal) {
   int maxI = image_->getHeight();
-  valarray<int> stateCount(0, 3);
+  vector<int> stateCount(3, 0);
 
 
   // Start counting up from center
@@ -92,7 +93,7 @@ float AlignmentPatternFinder::crossCheckVertical(size_t startI, size_t centerJ, 
   return foundPatternCross(stateCount) ? centerFromEnd(stateCount, i) : NAN;
 }
 
-Ref<AlignmentPattern> AlignmentPatternFinder::handlePossibleCenter(valarray<int> &stateCount, size_t i, size_t j) {
+Ref<AlignmentPattern> AlignmentPatternFinder::handlePossibleCenter(vector<int> &stateCount, size_t i, size_t j) {
   int stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2];
   float centerJ = centerFromEnd(stateCount, j);
   float centerI = crossCheckVertical(i, (int)centerJ, 2 * stateCount[1], stateCountTotal);
@@ -136,7 +137,7 @@ Ref<AlignmentPattern> AlignmentPatternFinder::find() {
   //      Ref<BitArray> luminanceRow(new BitArray(width_));
   // We are looking for black/white/black modules in 1:1:1 ratio;
   // this tracks the number of black/white/black modules seen so far
-  valarray<int> stateCount(0, 3);
+  vector<int> stateCount(3, 0);
   for (size_t iGen = 0; iGen < height_; iGen++) {
     // Search from middle outwards
     size_t i = middleI + ((iGen & 0x01) == 0 ? ((iGen + 1) >> 1) : -((iGen + 1) >> 1));
