@@ -1,0 +1,431 @@
+ARM Linker, RVCT2.2 [Build 616]
+
+================================================================================
+
+Image Symbol Table
+
+    Local Symbols
+
+    Symbol Name                              Value     Ov Type        Size  Object(Section)
+
+    [Anonymous Symbol]                       0x00000000   Number         0  FBSCLI{000a0000}-130.o ABSOLUTE
+    [Anonymous Symbol]                       0x00000000   Number         0  drtaeabi{000a0000}-184.o ABSOLUTE
+    [Anonymous Symbol]                       0x00000000   Number         0  FBSCLI{000a0000}-25.o ABSOLUTE
+    [Anonymous Symbol]                       0x00000000   Number         0  euser{000a0000}-2123.o ABSOLUTE
+    [Anonymous Symbol]                       0x00000000   Number         0  scppnwdl{000a0000}-3.o ABSOLUTE
+    [Anonymous Symbol]                       0x00000000   Number         0  FBSCLI{000a0000}-30.o ABSOLUTE
+    [Anonymous Symbol]                       0x00000000   Number         0  euser{000a0000}-2125.o ABSOLUTE
+    [Anonymous Symbol]                       0x00000000   Number         0  euser{000a0000}-2061.o ABSOLUTE
+    [Anonymous Symbol]                       0x00000000   Number         0  FBSCLI{000a0000}-31.o ABSOLUTE
+    [Anonymous Symbol]                       0x00000000   Number         0  euser{000a0000}-593.o ABSOLUTE
+    [Anonymous Symbol]                       0x00000000   Number         0  euser{000a0000}-208.o ABSOLUTE
+    [Anonymous Symbol]                       0x00000000   Number         0  ecamadvsettings{000a0000}-120.o ABSOLUTE
+    [Anonymous Symbol]                       0x00000000   Number         0  euser{000a0000}-649.o ABSOLUTE
+    [Anonymous Symbol]                       0x00000000   Number         0  euser{000a0000}-2082.o ABSOLUTE
+    [Anonymous Symbol]                       0x00000000   Number         0  ecamadvsettings{000a0000}-125.o ABSOLUTE
+    [Anonymous Symbol]                       0x00000000   Number         0  euser{000a0000}-654.o ABSOLUTE
+    [Anonymous Symbol]                       0x00000000   Number         0  ecamadvsettings{000a0000}-64.o ABSOLUTE
+    [Anonymous Symbol]                       0x00000000   Number         0  ecamadvsettings{000a0000}-26.o ABSOLUTE
+    [Anonymous Symbol]                       0x00000000   Number         0  euser{000a0000}-669.o ABSOLUTE
+    [Anonymous Symbol]                       0x00000000   Number         0  drtaeabi{000a0000}-158.o ABSOLUTE
+    [Anonymous Symbol]                       0x00000000   Number         0  ecamadvsettings{000a0000}-28.o ABSOLUTE
+    [Anonymous Symbol]                       0x00000000   Number         0  ecam{000a0000}-2.o ABSOLUTE
+    [Anonymous Symbol]                       0x00000000   Number         0  drtaeabi{000a0000}-180.o ABSOLUTE
+    [Anonymous Symbol]                       0x00000000   Number         0  ecamadvsettings{000a0000}-41.o ABSOLUTE
+    [Anonymous Symbol]                       0x00000000   Number         0  ecam{000a0000}-3.o ABSOLUTE
+    [Anonymous Symbol]                       0x00000000   Number         0  drtaeabi{000a0000}-183.o ABSOLUTE
+    [Anonymous Symbol]                       0x00000000   Number         0  ecamadvsettings{000a0000}-42.o ABSOLUTE
+    [Anonymous Symbol]                       0x00000000   Number         0  euser{000a0000}-1356.o ABSOLUTE
+    [Anonymous Symbol]                       0x00000000   Number         0  euser{000a0000}-205.o ABSOLUTE
+    [Anonymous Symbol]                       0x00000000   Number         0  euser{000a0000}-1657.o ABSOLUTE
+    [Anonymous Symbol]                       0x00000000   Number         0  euser{000a0000}-1601.o ABSOLUTE
+    [Anonymous Symbol]                       0x00000000   Number         0  euser{000a0000}-2060.o ABSOLUTE
+    [Anonymous Symbol]                       0x00000000   Number         0  euser{000a0000}-1659.o ABSOLUTE
+    [Anonymous Symbol]                       0x00000000   Number         0  euser{000a0000}-1311.o ABSOLUTE
+    [Anonymous Symbol]                       0x00000000   Number         0  euser{000a0000}-1308.o ABSOLUTE
+    [Anonymous Symbol]                       0x00000000   Number         0  euser{000a0000}-1838.o ABSOLUTE
+    [Anonymous Symbol]                       0x00000000   Number         0  euser{000a0000}-1169.o ABSOLUTE
+    ..\..\..\..\..\..\EPOC32\BUILD\src\common\generic\COMMS-INFRAS\Flogger\GROUP\FLOGGER\ARMV5\VtblExports.s 0x00000000   Number         0  VtblExports.o ABSOLUTE
+    ..\src\Ccamautofocus.cpp                 0x00000000   Number         0  CCamAutoFocus.o ABSOLUTE
+    ..\src\Ccamautofocusimpl.cpp             0x00000000   Number         0  CCamAutoFocusImpl.o ABSOLUTE
+    \EPOC32\BUILD\src\cedar\generic\BASE\E32\EDLL\ARMV5\UREL\uc_dll_.cpp 0x00000000   Number         0  uc_dll_.o ABSOLUTE
+    \EPOC32\BUILD\src\cedar\generic\BASE\E32\EUSER\ARMV5\VtblExports.s 0x00000000   Number         0  VtblExports.o ABSOLUTE
+    \EPOC32\BUILD\src\cedar\generic\BASE\E32\compsupp\DRTAEABI\ARMV5\VtblExports.s 0x00000000   Number         0  VtblExports.o ABSOLUTE
+    \EPOC32\BUILD\src\common\generic\GRAPHICS\Fbserv\GROUP\FBSCLI\ARMV5\VtblExports.s 0x00000000   Number         0  VtblExports.o ABSOLUTE
+    \EPOC32\BUILD\src\common\generic\MULTIMEDIA\ECAM\GROUP\ECAMADVSETTINGS\ARMV5\VtblExports.s 0x00000000   Number         0  VtblExports.o ABSOLUTE
+    \EPOC32\BUILD\src\common\generic\MULTIMEDIA\ECAM\GROUP\ECAM\ARMV5\VtblExports.s 0x00000000   Number         0  VtblExports.o ABSOLUTE
+    \S60\S60_3rd_FP1\EPOC32\BUILD\S60\proj\CameraWrapper\group\CAMERAWRAPPER\ARMV5\camerawrapper{000a0000}.s 0x00000000   Number         0  camerawrapper{000a0000}.exp ABSOLUTE
+    \S60\proj\CameraWrapper\src\cameraengine.cpp 0x00000000   Number         0  camerawrapper.in ABSOLUTE
+    \S60\proj\CameraWrapper\src\cameraengineprivate.cpp 0x00000000   Number         0  camerawrapper.in ABSOLUTE
+    \\EPOC32\\BUILD\\src\\cedar\\generic\\BASE\\E32\\EDLL\\ARMV5\\UREL\\uc_dll_.cpp 0x00000000   Number         0  uc_dll_.o ABSOLUTE
+    \\src\\cedar\\generic\\BASE\\E32\\compsupp\\RVCT2_2\\ucppinit_aeabi.cpp 0x00000000   Number         0  ucppinit_aeabi.o ABSOLUTE
+    \src\cedar\generic\BASE\E32\EUSER\epoc\arm\uc_dll.cpp 0x00000000   Number         0  uc_dll.o ABSOLUTE
+    \src\cedar\generic\BASE\E32\compsupp\RVCT2_2\ucppinit_aeabi.cpp 0x00000000   Number         0  ucppinit_aeabi.o ABSOLUTE
+    .emb_text                                0x00008000   Section       40  uc_dll_.o(.emb_text)
+    .emb_text                                0x00008028   Section       72  ucppinit_aeabi.o(.emb_text)
+    skip                                     0x0000803c   ARM Code       0  ucppinit_aeabi.o(.emb_text)
+    loop                                     0x0000804c   ARM Code       0  ucppinit_aeabi.o(.emb_text)
+    fpinit                                   0x00008064   Data           0  ucppinit_aeabi.o(.emb_text)
+    base                                     0x00008068   Data           0  ucppinit_aeabi.o(.emb_text)
+    limit                                    0x0000806c   Data           0  ucppinit_aeabi.o(.emb_text)
+    .text                                    0x00008070   Section      348  camerawrapper.in(.text)
+    .text                                    0x000081cc   Section     2104  camerawrapper.in(.text)
+    .text                                    0x00008a04   Section       40  uc_dll.o(.text)
+    .text                                    0x00008a2c   Section      188  CCamAutoFocus.o(.text)
+    .text                                    0x00008ae8   Section      304  CCamAutoFocusImpl.o(.text)
+    .text.clean                              0x00008c18   Section       10  camerawrapper.in(.text.clean)
+    .text.clean                              0x00008c22   Section       76  camerawrapper.in(.text.clean)
+    .text.clean                              0x00008c6e   Section       10  CCamAutoFocus.o(.text.clean)
+    .text.clean                              0x00008c78   Section       10  CCamAutoFocusImpl.o(.text.clean)
+    ExportTable                              0x00008c84   Section      140  camerawrapper{000a0000}.exp(ExportTable)
+    StubCode                                 0x00008d10   Section        8  euser{000a0000}-1169.o(StubCode)
+    theImportedSymbol                        0x00008d14   Data           0  euser{000a0000}-1169.o(StubCode)
+    StubCode                                 0x00008d18   Section        8  euser{000a0000}-1308.o(StubCode)
+    theImportedSymbol                        0x00008d1c   Data           0  euser{000a0000}-1308.o(StubCode)
+    StubCode                                 0x00008d20   Section        8  euser{000a0000}-1311.o(StubCode)
+    theImportedSymbol                        0x00008d24   Data           0  euser{000a0000}-1311.o(StubCode)
+    StubCode                                 0x00008d28   Section        8  euser{000a0000}-1356.o(StubCode)
+    theImportedSymbol                        0x00008d2c   Data           0  euser{000a0000}-1356.o(StubCode)
+    StubCode                                 0x00008d30   Section        8  euser{000a0000}-1601.o(StubCode)
+    theImportedSymbol                        0x00008d34   Data           0  euser{000a0000}-1601.o(StubCode)
+    StubCode                                 0x00008d38   Section        8  euser{000a0000}-1657.o(StubCode)
+    theImportedSymbol                        0x00008d3c   Data           0  euser{000a0000}-1657.o(StubCode)
+    StubCode                                 0x00008d40   Section        8  euser{000a0000}-1659.o(StubCode)
+    theImportedSymbol                        0x00008d44   Data           0  euser{000a0000}-1659.o(StubCode)
+    StubCode                                 0x00008d48   Section        8  euser{000a0000}-1838.o(StubCode)
+    theImportedSymbol                        0x00008d4c   Data           0  euser{000a0000}-1838.o(StubCode)
+    StubCode                                 0x00008d50   Section        8  euser{000a0000}-205.o(StubCode)
+    theImportedSymbol                        0x00008d54   Data           0  euser{000a0000}-205.o(StubCode)
+    StubCode                                 0x00008d58   Section        8  euser{000a0000}-2060.o(StubCode)
+    theImportedSymbol                        0x00008d5c   Data           0  euser{000a0000}-2060.o(StubCode)
+    StubCode                                 0x00008d60   Section        8  euser{000a0000}-2061.o(StubCode)
+    theImportedSymbol                        0x00008d64   Data           0  euser{000a0000}-2061.o(StubCode)
+    StubCode                                 0x00008d68   Section        8  euser{000a0000}-208.o(StubCode)
+    theImportedSymbol                        0x00008d6c   Data           0  euser{000a0000}-208.o(StubCode)
+    StubCode                                 0x00008d70   Section        8  euser{000a0000}-2082.o(StubCode)
+    theImportedSymbol                        0x00008d74   Data           0  euser{000a0000}-2082.o(StubCode)
+    StubCode                                 0x00008d78   Section        8  euser{000a0000}-2123.o(StubCode)
+    theImportedSymbol                        0x00008d7c   Data           0  euser{000a0000}-2123.o(StubCode)
+    StubCode                                 0x00008d80   Section        8  euser{000a0000}-2125.o(StubCode)
+    theImportedSymbol                        0x00008d84   Data           0  euser{000a0000}-2125.o(StubCode)
+    StubCode                                 0x00008d88   Section        8  euser{000a0000}-593.o(StubCode)
+    theImportedSymbol                        0x00008d8c   Data           0  euser{000a0000}-593.o(StubCode)
+    StubCode                                 0x00008d90   Section        8  euser{000a0000}-649.o(StubCode)
+    theImportedSymbol                        0x00008d94   Data           0  euser{000a0000}-649.o(StubCode)
+    StubCode                                 0x00008d98   Section        8  euser{000a0000}-654.o(StubCode)
+    theImportedSymbol                        0x00008d9c   Data           0  euser{000a0000}-654.o(StubCode)
+    StubCode                                 0x00008da0   Section        8  euser{000a0000}-669.o(StubCode)
+    theImportedSymbol                        0x00008da4   Data           0  euser{000a0000}-669.o(StubCode)
+    StubCode                                 0x00008da8   Section        8  ecam{000a0000}-2.o(StubCode)
+    theImportedSymbol                        0x00008dac   Data           0  ecam{000a0000}-2.o(StubCode)
+    StubCode                                 0x00008db0   Section        8  ecam{000a0000}-3.o(StubCode)
+    theImportedSymbol                        0x00008db4   Data           0  ecam{000a0000}-3.o(StubCode)
+    StubCode                                 0x00008db8   Section        8  FBSCLI{000a0000}-130.o(StubCode)
+    theImportedSymbol                        0x00008dbc   Data           0  FBSCLI{000a0000}-130.o(StubCode)
+    StubCode                                 0x00008dc0   Section        8  FBSCLI{000a0000}-25.o(StubCode)
+    theImportedSymbol                        0x00008dc4   Data           0  FBSCLI{000a0000}-25.o(StubCode)
+    StubCode                                 0x00008dc8   Section        8  FBSCLI{000a0000}-30.o(StubCode)
+    theImportedSymbol                        0x00008dcc   Data           0  FBSCLI{000a0000}-30.o(StubCode)
+    StubCode                                 0x00008dd0   Section        8  FBSCLI{000a0000}-31.o(StubCode)
+    theImportedSymbol                        0x00008dd4   Data           0  FBSCLI{000a0000}-31.o(StubCode)
+    StubCode                                 0x00008dd8   Section        8  ecamadvsettings{000a0000}-120.o(StubCode)
+    theImportedSymbol                        0x00008ddc   Data           0  ecamadvsettings{000a0000}-120.o(StubCode)
+    StubCode                                 0x00008de0   Section        8  ecamadvsettings{000a0000}-125.o(StubCode)
+    theImportedSymbol                        0x00008de4   Data           0  ecamadvsettings{000a0000}-125.o(StubCode)
+    StubCode                                 0x00008de8   Section        8  ecamadvsettings{000a0000}-26.o(StubCode)
+    theImportedSymbol                        0x00008dec   Data           0  ecamadvsettings{000a0000}-26.o(StubCode)
+    StubCode                                 0x00008df0   Section        8  ecamadvsettings{000a0000}-28.o(StubCode)
+    theImportedSymbol                        0x00008df4   Data           0  ecamadvsettings{000a0000}-28.o(StubCode)
+    StubCode                                 0x00008df8   Section        8  ecamadvsettings{000a0000}-41.o(StubCode)
+    theImportedSymbol                        0x00008dfc   Data           0  ecamadvsettings{000a0000}-41.o(StubCode)
+    StubCode                                 0x00008e00   Section        8  ecamadvsettings{000a0000}-42.o(StubCode)
+    theImportedSymbol                        0x00008e04   Data           0  ecamadvsettings{000a0000}-42.o(StubCode)
+    StubCode                                 0x00008e08   Section        8  ecamadvsettings{000a0000}-64.o(StubCode)
+    theImportedSymbol                        0x00008e0c   Data           0  ecamadvsettings{000a0000}-64.o(StubCode)
+    StubCode                                 0x00008e10   Section        8  drtaeabi{000a0000}-158.o(StubCode)
+    theImportedSymbol                        0x00008e14   Data           0  drtaeabi{000a0000}-158.o(StubCode)
+    StubCode                                 0x00008e18   Section        8  drtaeabi{000a0000}-180.o(StubCode)
+    theImportedSymbol                        0x00008e1c   Data           0  drtaeabi{000a0000}-180.o(StubCode)
+    StubCode                                 0x00008e20   Section        8  drtaeabi{000a0000}-183.o(StubCode)
+    theImportedSymbol                        0x00008e24   Data           0  drtaeabi{000a0000}-183.o(StubCode)
+    StubCode                                 0x00008e28   Section        8  drtaeabi{000a0000}-184.o(StubCode)
+    theImportedSymbol                        0x00008e2c   Data           0  drtaeabi{000a0000}-184.o(StubCode)
+    StubCode                                 0x00008e30   Section        8  scppnwdl{000a0000}-3.o(StubCode)
+    theImportedSymbol                        0x00008e34   Data           0  scppnwdl{000a0000}-3.o(StubCode)
+    i._ZN20CCameraEnginePrivate16FrameBufferReadyEP12MFrameBufferi 0x00008e38   Section        2  camerawrapper.in(i._ZN20CCameraEnginePrivate16FrameBufferReadyEP12MFrameBufferi)
+    i._ZN20CCameraEnginePrivate16VideoBufferReadyER13MCameraBufferi 0x00008e3a   Section        2  camerawrapper.in(i._ZN20CCameraEnginePrivate16VideoBufferReadyER13MCameraBufferi)
+    i._ZThn4_N20CCameraEnginePrivate16FrameBufferReadyEP12MFrameBufferi 0x00008e3c   Section        2  camerawrapper.in(i._ZThn4_N20CCameraEnginePrivate16FrameBufferReadyEP12MFrameBufferi)
+    i._ZThn8_N20CCameraEnginePrivate16VideoBufferReadyER13MCameraBufferi 0x00008e3e   Section        2  camerawrapper.in(i._ZThn8_N20CCameraEnginePrivate16VideoBufferReadyER13MCameraBufferi)
+    .extab._ZN13CCameraEngineD1Ev            0x00008e40   Data           0  camerawrapper.in(.ARM.extab)
+    .extab._ZN20CCameraEnginePrivate10ConstructLEv 0x00008e50   Data           0  camerawrapper.in(.ARM.extab)
+    .extab._ZN20CCameraEnginePrivateC1EiiP21MCameraEngineObserver 0x00008eb8   Data           0  camerawrapper.in(.ARM.extab)
+    .extab._ZN20CCameraEnginePrivateD1Ev     0x00008ec8   Data           0  camerawrapper.in(.ARM.extab)
+    .extab._ZN20CCameraEnginePrivate13SetFocusRangeEi 0x00008ed8   Data           0  camerawrapper.in(.ARM.extab)
+    .extab._ZN20CCameraEnginePrivate17AdjustDigitalZoomEi 0x00008f00   Data           0  camerawrapper.in(.ARM.extab)
+    .extab._ZN20CCameraEnginePrivate11SetExposureEi 0x00008f28   Data           0  camerawrapper.in(.ARM.extab)
+    .extab._ZN20CCameraEnginePrivate8SetFlashEi 0x00008f50   Data           0  camerawrapper.in(.ARM.extab)
+    .extab._ZN20CCameraEnginePrivate16ImageBufferReadyER13MCameraBufferi 0x00008f78   Data           0  camerawrapper.in(.ARM.extab)
+    .extab._ZN20CCameraEnginePrivate15PowerOnCompleteEi 0x00008fc0   Data           0  camerawrapper.in(.ARM.extab)
+    .extab._ZN13CCamAutoFocusD1Ev            0x00008fe8   Data           0  CCamAutoFocus.o(.ARM.extab)
+    .extab._ZN17CCamAutoFocusImplD1Ev        0x00008ff8   Data           0  CCamAutoFocusImpl.o(.ARM.extab)
+    .constdata$1                             0x00009008   Data           0  camerawrapper.in(.constdata)
+    KUidECamEventReserveComplete             0x00009008   Data           4  camerawrapper.in(.constdata)
+    .constdata                               0x00009008   Section       16  camerawrapper.in(.constdata)
+    KUidECamEventPowerOnComplete             0x0000900c   Data           4  camerawrapper.in(.constdata)
+    KNullDesC                                0x00009010   Data           8  camerawrapper.in(.constdata)
+    .constdata$1                             0x00009018   Data           0  CCamAutoFocusImpl.o(.constdata)
+    KCameraAutoFocusUid                      0x00009018   Data           4  CCamAutoFocusImpl.o(.constdata)
+    .constdata                               0x00009018   Section        4  CCamAutoFocusImpl.o(.constdata)
+    .constdata__ZTI13CCamAutoFocus           0x0000901c   Section       12  CCamAutoFocus.o(.constdata__ZTI13CCamAutoFocus)
+    .constdata__ZTI13CCameraEngine           0x00009028   Section       12  camerawrapper.in(.constdata__ZTI13CCameraEngine)
+    .constdata__ZTI15MCameraObserver         0x00009034   Section        8  camerawrapper.in(.constdata__ZTI15MCameraObserver)
+    .constdata__ZTI16MCameraObserver2        0x0000903c   Section        8  camerawrapper.in(.constdata__ZTI16MCameraObserver2)
+    .constdata__ZTI17CCamAutoFocusImpl       0x00009044   Section       32  CCamAutoFocusImpl.o(.constdata__ZTI17CCamAutoFocusImpl)
+    .constdata__ZTI20CCameraEnginePrivate    0x00009064   Section       48  camerawrapper.in(.constdata__ZTI20CCameraEnginePrivate)
+    .constdata__ZTI21MCamAutoFocusObserver   0x00009094   Section        8  camerawrapper.in(.constdata__ZTI21MCamAutoFocusObserver)
+    .constdata__ZTI24MCameraAutoFocusObserver 0x0000909c   Section        8  CCamAutoFocusImpl.o(.constdata__ZTI24MCameraAutoFocusObserver)
+    .constdata__ZTS13CCamAutoFocus           0x000090a4   Section       16  CCamAutoFocus.o(.constdata__ZTS13CCamAutoFocus)
+    .constdata__ZTS13CCameraEngine           0x000090b4   Section       16  camerawrapper.in(.constdata__ZTS13CCameraEngine)
+    .constdata__ZTS15MCameraObserver         0x000090c4   Section       18  camerawrapper.in(.constdata__ZTS15MCameraObserver)
+    .constdata__ZTS16MCameraObserver2        0x000090d6   Section       19  camerawrapper.in(.constdata__ZTS16MCameraObserver2)
+    .constdata__ZTS17CCamAutoFocusImpl       0x000090e9   Section       20  CCamAutoFocusImpl.o(.constdata__ZTS17CCamAutoFocusImpl)
+    .constdata__ZTS20CCameraEnginePrivate    0x000090fd   Section       23  camerawrapper.in(.constdata__ZTS20CCameraEnginePrivate)
+    .constdata__ZTS21MCamAutoFocusObserver   0x00009114   Section       24  camerawrapper.in(.constdata__ZTS21MCamAutoFocusObserver)
+    .constdata__ZTS24MCameraAutoFocusObserver 0x0000912c   Section       27  CCamAutoFocusImpl.o(.constdata__ZTS24MCameraAutoFocusObserver)
+    .constdata__ZTV13CCamAutoFocus           0x00009148   Section       20  CCamAutoFocus.o(.constdata__ZTV13CCamAutoFocus)
+    .constdata__ZTV13CCameraEngine           0x0000915c   Section       20  camerawrapper.in(.constdata__ZTV13CCameraEngine)
+    .constdata__ZTV17CCamAutoFocusImpl       0x00009170   Section       44  CCamAutoFocusImpl.o(.constdata__ZTV17CCamAutoFocusImpl)
+    .constdata__ZTV20CCameraEnginePrivate    0x0000919c   Section      132  camerawrapper.in(.constdata__ZTV20CCameraEnginePrivate)
+    .ARM.exidx                               0x00009220   Section        8  ucppinit_aeabi.o(.ARM.exidx)
+
+    Global Symbols
+
+    Symbol Name                              Value     Ov Type        Size  Object(Section)
+
+    BuildAttributes$$THUMB_ISAv2$ARM_ISAv5$M$PE$A:L22$X:L11$S22$IEEE1$IW$USESV6$~STKCKD$USESV7$~SHL$OSPACE$IEEEJ$EBA8$UX$REQ8$PRES8$EABIv2 0x00000000   Number         0  anon$$obj.o ABSOLUTE
+    #<DLL>FBSCLI{000a0000}[10003a15].DLL#<\DLL>19  - Undefined Reference
+    #<DLL>FBSCLI{000a0000}[10003a15].DLL#<\DLL>1e  - Undefined Reference
+    #<DLL>FBSCLI{000a0000}[10003a15].DLL#<\DLL>1f  - Undefined Reference
+    #<DLL>FBSCLI{000a0000}[10003a15].DLL#<\DLL>82  - Undefined Reference
+    #<DLL>drtaeabi{000a0000}.dll#<\DLL>9e     - Undefined Reference
+    #<DLL>drtaeabi{000a0000}.dll#<\DLL>b4     - Undefined Reference
+    #<DLL>drtaeabi{000a0000}.dll#<\DLL>b7     - Undefined Reference
+    #<DLL>drtaeabi{000a0000}.dll#<\DLL>b8     - Undefined Reference
+    #<DLL>ecamadvsettings{000a0000}[1020e76b].dll#<\DLL>1a  - Undefined Reference
+    #<DLL>ecamadvsettings{000a0000}[1020e76b].dll#<\DLL>1c  - Undefined Reference
+    #<DLL>ecamadvsettings{000a0000}[1020e76b].dll#<\DLL>29  - Undefined Reference
+    #<DLL>ecamadvsettings{000a0000}[1020e76b].dll#<\DLL>2a  - Undefined Reference
+    #<DLL>ecamadvsettings{000a0000}[1020e76b].dll#<\DLL>40  - Undefined Reference
+    #<DLL>ecamadvsettings{000a0000}[1020e76b].dll#<\DLL>78  - Undefined Reference
+    #<DLL>ecamadvsettings{000a0000}[1020e76b].dll#<\DLL>7d  - Undefined Reference
+    #<DLL>ecam{000a0000}[101fb4c3].dll#<\DLL>2  - Undefined Reference
+    #<DLL>ecam{000a0000}[101fb4c3].dll#<\DLL>3  - Undefined Reference
+    #<DLL>euser{000a0000}[100039e5].dll#<\DLL>251  - Undefined Reference
+    #<DLL>euser{000a0000}[100039e5].dll#<\DLL>289  - Undefined Reference
+    #<DLL>euser{000a0000}[100039e5].dll#<\DLL>28e  - Undefined Reference
+    #<DLL>euser{000a0000}[100039e5].dll#<\DLL>29d  - Undefined Reference
+    #<DLL>euser{000a0000}[100039e5].dll#<\DLL>491  - Undefined Reference
+    #<DLL>euser{000a0000}[100039e5].dll#<\DLL>51c  - Undefined Reference
+    #<DLL>euser{000a0000}[100039e5].dll#<\DLL>51f  - Undefined Reference
+    #<DLL>euser{000a0000}[100039e5].dll#<\DLL>54c  - Undefined Reference
+    #<DLL>euser{000a0000}[100039e5].dll#<\DLL>641  - Undefined Reference
+    #<DLL>euser{000a0000}[100039e5].dll#<\DLL>679  - Undefined Reference
+    #<DLL>euser{000a0000}[100039e5].dll#<\DLL>67b  - Undefined Reference
+    #<DLL>euser{000a0000}[100039e5].dll#<\DLL>72e  - Undefined Reference
+    #<DLL>euser{000a0000}[100039e5].dll#<\DLL>80c  - Undefined Reference
+    #<DLL>euser{000a0000}[100039e5].dll#<\DLL>80d  - Undefined Reference
+    #<DLL>euser{000a0000}[100039e5].dll#<\DLL>822  - Undefined Reference
+    #<DLL>euser{000a0000}[100039e5].dll#<\DLL>84b  - Undefined Reference
+    #<DLL>euser{000a0000}[100039e5].dll#<\DLL>84d  - Undefined Reference
+    #<DLL>euser{000a0000}[100039e5].dll#<\DLL>cd  - Undefined Reference
+    #<DLL>euser{000a0000}[100039e5].dll#<\DLL>d0  - Undefined Reference
+    #<DLL>scppnwdl{000a0000}.dll#<\DLL>3      - Undefined Reference
+    SHT$$INIT_ARRAY$$Base                     - Undefined Weak Reference
+    SHT$$INIT_ARRAY$$Limit                    - Undefined Weak Reference
+    typeinfo for XLeaveException              - Undefined Reference
+    typeinfo for CBase                        - Undefined Reference
+    vtable for __cxxabiv1::__class_type_info  - Undefined Reference
+    vtable for __cxxabiv1::__si_class_type_info  - Undefined Reference
+    vtable for __cxxabiv1::__vmi_class_type_info  - Undefined Reference
+    _fp_init                                  - Undefined Weak Reference
+    run_static_dtors                          - Undefined Weak Reference
+    Image$$ER_RO$$Base                       0x00008000   Number         0  anon$$obj.o(linker$$defined$$symbols)
+    _E32Dll                                  0x00008000   ARM Code      40  uc_dll_.o(.emb_text)
+    Symbian$$CPP$$Exception$$Descriptor      0x00008014   Data           0  uc_dll_.o(.emb_text)
+    __cpp_initialize__aeabi_                 0x00008028   ARM Code      72  ucppinit_aeabi.o(.emb_text)
+    CCameraEngine::CCameraEngine()           0x00008071   Thumb Code     6  camerawrapper.in(.text)
+    CCameraEngine::CCameraEngine__sub_object() 0x00008071   Thumb Code     0  camerawrapper.in(.text)
+    std::nothrow                             0x00008071   Thumb Code     0  ucppinit_aeabi.o(.emb_text)
+    CCameraEngine::NewL(int, int, MCameraEngineObserver*) 0x00008077   Thumb Code    44  camerawrapper.in(.text)
+    CCameraEngine::~CCameraEngine()          0x000080a3   Thumb Code    28  camerawrapper.in(.text)
+    CCameraEngine::~CCameraEngine__sub_object() 0x000080a3   Thumb Code     0  camerawrapper.in(.text)
+    CCameraEngine::~CCameraEngine__deallocating() 0x000080bf   Thumb Code    16  camerawrapper.in(.text)
+    CCameraEngine::State() const             0x000080cf   Thumb Code     6  camerawrapper.in(.text)
+    CCameraEngine::IsCameraReady() const     0x000080d5   Thumb Code     6  camerawrapper.in(.text)
+    CCameraEngine::IsAutoFocusSupported() const 0x000080db   Thumb Code    10  camerawrapper.in(.text)
+    CCameraEngine::CaptureL()                0x000080e5   Thumb Code    10  camerawrapper.in(.text)
+    CCameraEngine::ReserveAndPowerOn()       0x000080ef   Thumb Code    10  camerawrapper.in(.text)
+    CCameraEngine::ReleaseAndPowerOff()      0x000080f9   Thumb Code    10  camerawrapper.in(.text)
+    CCameraEngine::PrepareL(TSize&, CCamera::TFormat) 0x00008103   Thumb Code    10  camerawrapper.in(.text)
+    CCameraEngine::StartViewFinderL(TSize&)  0x0000810d   Thumb Code    10  camerawrapper.in(.text)
+    CCameraEngine::StopViewFinder()          0x00008117   Thumb Code    10  camerawrapper.in(.text)
+    CCameraEngine::ReleaseViewFinderBuffer() 0x00008121   Thumb Code    10  camerawrapper.in(.text)
+    CCameraEngine::ReleaseImageBuffer()      0x0000812b   Thumb Code    10  camerawrapper.in(.text)
+    CCameraEngine::StartFocusL()             0x00008135   Thumb Code    10  camerawrapper.in(.text)
+    CCameraEngine::FocusCancel()             0x0000813f   Thumb Code    10  camerawrapper.in(.text)
+    CCameraEngine::SupportedFocusRanges(int&) const 0x00008149   Thumb Code    10  camerawrapper.in(.text)
+    CCameraEngine::SetFocusRange(int)        0x00008153   Thumb Code    10  camerawrapper.in(.text)
+    CCameraEngine::Camera()                  0x0000815d   Thumb Code     6  camerawrapper.in(.text)
+    CCameraEngine::AdvancedSettings()        0x00008163   Thumb Code     8  camerawrapper.in(.text)
+    CCameraEngine::CamerasAvailable()        0x0000816b   Thumb Code     8  camerawrapper.in(.text)
+    CCameraEngine::MaxDigitalZoom()          0x00008173   Thumb Code     6  camerawrapper.in(.text)
+    CCameraEngine::DigitalZoom()             0x00008179   Thumb Code     8  camerawrapper.in(.text)
+    CCameraEngine::AdjustDigitalZoom(int)    0x00008181   Thumb Code    10  camerawrapper.in(.text)
+    CCameraEngine::SupportedExposureModes()  0x0000818b   Thumb Code     6  camerawrapper.in(.text)
+    CCameraEngine::Exposure()                0x00008191   Thumb Code    14  camerawrapper.in(.text)
+    CCameraEngine::SetExposure(int)          0x0000819f   Thumb Code    10  camerawrapper.in(.text)
+    CCameraEngine::SupportedFlashModes()     0x000081a9   Thumb Code     6  camerawrapper.in(.text)
+    CCameraEngine::Flash()                   0x000081af   Thumb Code    14  camerawrapper.in(.text)
+    CCameraEngine::SetFlash(int)             0x000081bd   Thumb Code    10  camerawrapper.in(.text)
+    CCameraEnginePrivate::ConstructL()       0x000081cd   Thumb Code   268  camerawrapper.in(.text)
+    CCameraEnginePrivate::CCameraEnginePrivate(int, int, MCameraEngineObserver*) 0x000082d9   Thumb Code    48  camerawrapper.in(.text)
+    CCameraEnginePrivate::CCameraEnginePrivate__sub_object(int, int, MCameraEngineObserver*) 0x000082d9   Thumb Code     0  camerawrapper.in(.text)
+    CCameraEnginePrivate::NewL(int, int, MCameraEngineObserver*) 0x00008309   Thumb Code    44  camerawrapper.in(.text)
+    CCameraEnginePrivate::ReleaseImageBuffer() 0x00008335   Thumb Code    40  camerawrapper.in(.text)
+    CCameraEnginePrivate::ReleaseViewFinderBuffer() 0x0000835d   Thumb Code    22  camerawrapper.in(.text)
+    CCameraEnginePrivate::StopViewFinder()   0x00008373   Thumb Code    30  camerawrapper.in(.text)
+    CCameraEnginePrivate::~CCameraEnginePrivate() 0x00008391   Thumb Code    98  camerawrapper.in(.text)
+    CCameraEnginePrivate::~CCameraEnginePrivate__sub_object() 0x00008391   Thumb Code     0  camerawrapper.in(.text)
+    CCameraEnginePrivate::~CCameraEnginePrivate__deallocating() 0x000083f3   Thumb Code    16  camerawrapper.in(.text)
+    CCameraEnginePrivate::IsAutoFocusSupported() const 0x00008403   Thumb Code    34  camerawrapper.in(.text)
+    CCameraEnginePrivate::CaptureL()         0x00008425   Thumb Code    34  camerawrapper.in(.text)
+    CCameraEnginePrivate::ReserveAndPowerOn() 0x00008447   Thumb Code     8  camerawrapper.in(.text)
+    CCameraEnginePrivate::FocusCancel()      0x0000844f   Thumb Code    38  camerawrapper.in(.text)
+    CCameraEnginePrivate::ReleaseAndPowerOff() 0x00008475   Thumb Code    44  camerawrapper.in(.text)
+    CCameraEnginePrivate::PrepareL(TSize&, CCamera::TFormat) 0x000084a1   Thumb Code   118  camerawrapper.in(.text)
+    CCameraEnginePrivate::StartViewFinderL(TSize&) 0x00008517   Thumb Code    62  camerawrapper.in(.text)
+    CCameraEnginePrivate::StartFocusL()      0x00008555   Thumb Code    88  camerawrapper.in(.text)
+    CCameraEnginePrivate::SupportedFocusRanges(int&) const 0x000085ad   Thumb Code    36  camerawrapper.in(.text)
+    CCameraEnginePrivate::SetFocusRange(int) 0x000085d1   Thumb Code    98  camerawrapper.in(.text)
+    CCameraEnginePrivate::AdjustDigitalZoom(int) 0x00008633   Thumb Code   110  camerawrapper.in(.text)
+    CCameraEnginePrivate::SetExposure(int)   0x000086a1   Thumb Code    62  camerawrapper.in(.text)
+    CCameraEnginePrivate::SetFlash(int)      0x000086df   Thumb Code    62  camerawrapper.in(.text)
+    CCameraEnginePrivate::HandleEvent(const TECAMEvent&) 0x0000871d   Thumb Code   196  camerawrapper.in(.text)
+    thunk{-8} to CCameraEnginePrivate::HandleEvent(const TECAMEvent&) 0x000087e1   Thumb Code     4  camerawrapper.in(.text)
+    CCameraEnginePrivate::ViewFinderReady(MCameraBuffer&, int) 0x000087e5   Thumb Code    46  camerawrapper.in(.text)
+    thunk{-8} to CCameraEnginePrivate::ViewFinderReady(MCameraBuffer&, int) 0x00008813   Thumb Code     4  camerawrapper.in(.text)
+    CCameraEnginePrivate::HandleImageReady(CFbsBitmap*, TDesC8*, int) 0x00008817   Thumb Code    60  camerawrapper.in(.text)
+    CCameraEnginePrivate::ImageBufferReady(MCameraBuffer&, int) 0x00008853   Thumb Code   126  camerawrapper.in(.text)
+    thunk{-8} to CCameraEnginePrivate::ImageBufferReady(MCameraBuffer&, int) 0x000088d1   Thumb Code     4  camerawrapper.in(.text)
+    CCameraEnginePrivate::ReserveComplete(int) 0x000088d5   Thumb Code    24  camerawrapper.in(.text)
+    thunk{-4} to CCameraEnginePrivate::ReserveComplete(int) 0x000088ed   Thumb Code     4  camerawrapper.in(.text)
+    CCameraEnginePrivate::PowerOnComplete(int) 0x000088f1   Thumb Code   142  camerawrapper.in(.text)
+    thunk{-4} to CCameraEnginePrivate::PowerOnComplete(int) 0x0000897f   Thumb Code     4  camerawrapper.in(.text)
+    CCameraEnginePrivate::ViewFinderFrameReady(CFbsBitmap&) 0x00008983   Thumb Code     8  camerawrapper.in(.text)
+    thunk{-4} to CCameraEnginePrivate::ViewFinderFrameReady(CFbsBitmap&) 0x0000898b   Thumb Code     4  camerawrapper.in(.text)
+    CCameraEnginePrivate::ImageReady(CFbsBitmap*, HBufC8*, int) 0x0000898f   Thumb Code    48  camerawrapper.in(.text)
+    thunk{-4} to CCameraEnginePrivate::ImageReady(CFbsBitmap*, HBufC8*, int) 0x000089bf   Thumb Code     4  camerawrapper.in(.text)
+    CCameraEnginePrivate::InitComplete(int)  0x000089c3   Thumb Code    18  camerawrapper.in(.text)
+    thunk{-12} to CCameraEnginePrivate::InitComplete(int) 0x000089d5   Thumb Code     4  camerawrapper.in(.text)
+    CCameraEnginePrivate::OptimisedFocusComplete(int) 0x000089d9   Thumb Code    26  camerawrapper.in(.text)
+    thunk{-12} to CCameraEnginePrivate::OptimisedFocusComplete(int) 0x000089f3   Thumb Code     4  camerawrapper.in(.text)
+    _E32Dll_Body                             0x00008a05   Thumb Code    34  uc_dll.o(.text)
+    CCamAutoFocus::ConstructL(CCamera*)      0x00008a2d   Thumb Code    26  CCamAutoFocus.o(.text)
+    CCamAutoFocus::CCamAutoFocus()           0x00008a47   Thumb Code     6  CCamAutoFocus.o(.text)
+    CCamAutoFocus::CCamAutoFocus__sub_object() 0x00008a47   Thumb Code     0  CCamAutoFocus.o(.text)
+    CCamAutoFocus::NewL(CCamera*)            0x00008a4d   Thumb Code    36  CCamAutoFocus.o(.text)
+    CCamAutoFocus::~CCamAutoFocus()          0x00008a71   Thumb Code    28  CCamAutoFocus.o(.text)
+    CCamAutoFocus::~CCamAutoFocus__sub_object() 0x00008a71   Thumb Code     0  CCamAutoFocus.o(.text)
+    CCamAutoFocus::~CCamAutoFocus__deallocating() 0x00008a8d   Thumb Code    16  CCamAutoFocus.o(.text)
+    CCamAutoFocus::InitL(MCamAutoFocusObserver&) 0x00008a9d   Thumb Code    10  CCamAutoFocus.o(.text)
+    CCamAutoFocus::AttemptOptimisedFocusL()  0x00008aa7   Thumb Code    10  CCamAutoFocus.o(.text)
+    CCamAutoFocus::SetFocusRangeL(CCamAutoFocus::TAutoFocusRange) 0x00008ab1   Thumb Code    10  CCamAutoFocus.o(.text)
+    CCamAutoFocus::FocusRange(CCamAutoFocus::TAutoFocusRange&) 0x00008abb   Thumb Code    10  CCamAutoFocus.o(.text)
+    CCamAutoFocus::Cancel()                  0x00008ac5   Thumb Code    10  CCamAutoFocus.o(.text)
+    CCamAutoFocus::ResetToIdleL()            0x00008acf   Thumb Code    10  CCamAutoFocus.o(.text)
+    CCamAutoFocus::Close()                   0x00008ad9   Thumb Code    10  CCamAutoFocus.o(.text)
+    CCamAutoFocusImpl::CCamAutoFocusImpl(CCamera*) 0x00008ae9   Thumb Code    22  CCamAutoFocusImpl.o(.text)
+    CCamAutoFocusImpl::CCamAutoFocusImpl__sub_object(CCamera*) 0x00008ae9   Thumb Code     0  CCamAutoFocusImpl.o(.text)
+    CCamAutoFocusImpl::ConstructL()          0x00008aff   Thumb Code     2  CCamAutoFocusImpl.o(.text)
+    CCamAutoFocusImpl::Close()               0x00008b01   Thumb Code    22  CCamAutoFocusImpl.o(.text)
+    CCamAutoFocusImpl::~CCamAutoFocusImpl()  0x00008b17   Thumb Code    26  CCamAutoFocusImpl.o(.text)
+    CCamAutoFocusImpl::~CCamAutoFocusImpl__sub_object() 0x00008b17   Thumb Code     0  CCamAutoFocusImpl.o(.text)
+    CCamAutoFocusImpl::~CCamAutoFocusImpl__deallocating() 0x00008b31   Thumb Code    16  CCamAutoFocusImpl.o(.text)
+    CCamAutoFocusImpl::InitL(MCamAutoFocusObserver&) 0x00008b41   Thumb Code    60  CCamAutoFocusImpl.o(.text)
+    CCamAutoFocusImpl::AttemptOptimisedFocusL() 0x00008b7d   Thumb Code    28  CCamAutoFocusImpl.o(.text)
+    CCamAutoFocusImpl::SetFocusRangeL(int)   0x00008b99   Thumb Code    34  CCamAutoFocusImpl.o(.text)
+    CCamAutoFocusImpl::FocusRange(int&)      0x00008bbb   Thumb Code     6  CCamAutoFocusImpl.o(.text)
+    CCamAutoFocusImpl::Cancel()              0x00008bc1   Thumb Code    14  CCamAutoFocusImpl.o(.text)
+    CCamAutoFocusImpl::ResetToIdleL()        0x00008bcf   Thumb Code    28  CCamAutoFocusImpl.o(.text)
+    CCamAutoFocusImpl::InitComplete(int)     0x00008beb   Thumb Code    14  CCamAutoFocusImpl.o(.text)
+    thunk{-4} to CCamAutoFocusImpl::InitComplete(int) 0x00008bf9   Thumb Code     4  CCamAutoFocusImpl.o(.text)
+    CCamAutoFocusImpl::OptimisedFocusComplete(int) 0x00008bfd   Thumb Code    14  CCamAutoFocusImpl.o(.text)
+    thunk{-4} to CCamAutoFocusImpl::OptimisedFocusComplete(int) 0x00008c0b   Thumb Code     4  CCamAutoFocusImpl.o(.text)
+    __DLL_Export_Table__                     0x00008c84   ARM Code       0  camerawrapper{000a0000}.exp(ExportTable)
+    DLL##ExportTableSize                     0x00008c88   Data           0  camerawrapper{000a0000}.exp(ExportTable)
+    DLL##ExportTable                         0x00008c8c   Data           0  camerawrapper{000a0000}.exp(ExportTable)
+    TPtrC16::TPtrC16(const unsigned short*)  0x00008d10   ARM Code       0  euser{000a0000}-1169.o(StubCode)
+    RLibrary::Load(const TDesC16&, const TDesC16&) 0x00008d18   ARM Code       0  euser{000a0000}-1308.o(StubCode)
+    RLibrary::Close()                        0x00008d20   ARM Code       0  euser{000a0000}-1311.o(StubCode)
+    TVersion::TVersion()                     0x00008d28   ARM Code       0  euser{000a0000}-1356.o(StubCode)
+    TUid::operator ==(const TUid&) const     0x00008d30   ARM Code       0  euser{000a0000}-1601.o(StubCode)
+    TSize::operator ==(const TSize&) const   0x00008d38   ARM Code       0  euser{000a0000}-1657.o(StubCode)
+    TSize::operator -(const TSize&) const    0x00008d40   ARM Code       0  euser{000a0000}-1659.o(StubCode)
+    RLibrary::Lookup(int) const              0x00008d48   ARM Code       0  euser{000a0000}-1838.o(StubCode)
+    CleanupStack::Pop()                      0x00008d50   ARM Code       0  euser{000a0000}-205.o(StubCode)
+    User::MarkCleanupStack()                 0x00008d58   ARM Code       0  euser{000a0000}-2060.o(StubCode)
+    User::UnMarkCleanupStack(TTrapHandler*)  0x00008d60   ARM Code       0  euser{000a0000}-2061.o(StubCode)
+    CleanupStack::PushL(CBase*)              0x00008d68   ARM Code       0  euser{000a0000}-208.o(StubCode)
+    XLeaveException::GetReason() const       0x00008d70   ARM Code       0  euser{000a0000}-2082.o(StubCode)
+    CBase::Extension_(unsigned, void*&, void*) 0x00008d78   ARM Code       0  euser{000a0000}-2123.o(StubCode)
+    CBase::~CBase()                          0x00008d80   ARM Code       0  euser{000a0000}-2125.o(StubCode)
+    User::LeaveIfError(int)                  0x00008d88   ARM Code       0  euser{000a0000}-593.o(StubCode)
+    User::Leave(int)                         0x00008d90   ARM Code       0  euser{000a0000}-649.o(StubCode)
+    User::AllocZL(int)                       0x00008d98   ARM Code       0  euser{000a0000}-654.o(StubCode)
+    User::Invariant()                        0x00008da0   ARM Code       0  euser{000a0000}-669.o(StubCode)
+    CCamera::CamerasAvailable()              0x00008da8   ARM Code       0  ecam{000a0000}-2.o(StubCode)
+    CCamera::NewL(MCameraObserver&, int)     0x00008db0   ARM Code       0  ecam{000a0000}-3.o(StubCode)
+    CFbsBitmap::Handle() const               0x00008db8   ARM Code       0  FBSCLI{000a0000}-130.o(StubCode)
+    CFbsBitmap::Reset()                      0x00008dc0   ARM Code       0  FBSCLI{000a0000}-25.o(StubCode)
+    CFbsBitmap::Duplicate(int)               0x00008dc8   ARM Code       0  FBSCLI{000a0000}-30.o(StubCode)
+    CFbsBitmap::CFbsBitmap()                 0x00008dd0   ARM Code       0  FBSCLI{000a0000}-31.o(StubCode)
+    CCamera::CCameraAdvancedSettings::SupportedFocusModes() const 0x00008dd8   ARM Code       0  ecamadvsettings{000a0000}-120.o(StubCode)
+    CCamera::CCameraAdvancedSettings::SupportedFocusRanges() const 0x00008de0   ARM Code       0  ecamadvsettings{000a0000}-125.o(StubCode)
+    CCamera::CCameraAdvancedSettings::SetFocusMode(CCamera::CCameraAdvancedSettings::TFocusMode) 0x00008de8   ARM Code       0  ecamadvsettings{000a0000}-26.o(StubCode)
+    CCamera::CCameraAdvancedSettings::SetFocusRange(CCamera::CCameraAdvancedSettings::TFocusRange) 0x00008df0   ARM Code       0  ecamadvsettings{000a0000}-28.o(StubCode)
+    CCamera::CCameraAdvancedSettings::SetAutoFocusArea(CCamera::CCameraAdvancedSettings::TAutoFocusArea) 0x00008df8   ARM Code       0  ecamadvsettings{000a0000}-41.o(StubCode)
+    CCamera::CCameraAdvancedSettings::SetAutoFocusType(CCamera::CCameraAdvancedSettings::TAutoFocusType) 0x00008e00   ARM Code       0  ecamadvsettings{000a0000}-42.o(StubCode)
+    CCamera::CCameraAdvancedSettings::NewL(CCamera&) 0x00008e08   ARM Code       0  ecamadvsettings{000a0000}-64.o(StubCode)
+    __aeabi_unwind_cpp_pr0                   0x00008e10   ARM Code       0  drtaeabi{000a0000}-158.o(StubCode)
+    __cxa_begin_catch                        0x00008e18   ARM Code       0  drtaeabi{000a0000}-180.o(StubCode)
+    __cxa_end_catch                          0x00008e20   ARM Code       0  drtaeabi{000a0000}-183.o(StubCode)
+    __cxa_end_cleanup                        0x00008e28   ARM Code       0  drtaeabi{000a0000}-184.o(StubCode)
+    operator delete (void*)                  0x00008e30   ARM Code       0  scppnwdl{000a0000}-3.o(StubCode)
+    CCameraEnginePrivate::FrameBufferReady(MFrameBuffer*, int) 0x00008e39   Thumb Code     2  camerawrapper.in(i._ZN20CCameraEnginePrivate16FrameBufferReadyEP12MFrameBufferi)
+    CCameraEnginePrivate::VideoBufferReady(MCameraBuffer&, int) 0x00008e3b   Thumb Code     2  camerawrapper.in(i._ZN20CCameraEnginePrivate16VideoBufferReadyER13MCameraBufferi)
+    thunk{-4} to CCameraEnginePrivate::FrameBufferReady(MFrameBuffer*, int) 0x00008e3d   Thumb Code     2  camerawrapper.in(i._ZThn4_N20CCameraEnginePrivate16FrameBufferReadyEP12MFrameBufferi)
+    thunk{-8} to CCameraEnginePrivate::VideoBufferReady(MCameraBuffer&, int) 0x00008e3f   Thumb Code     2  camerawrapper.in(i._ZThn8_N20CCameraEnginePrivate16VideoBufferReadyER13MCameraBufferi)
+    typeinfo for CCamAutoFocus               0x0000901c   Data          12  CCamAutoFocus.o(.constdata__ZTI13CCamAutoFocus)
+    typeinfo for CCameraEngine               0x00009028   Data          12  camerawrapper.in(.constdata__ZTI13CCameraEngine)
+    typeinfo for MCameraObserver             0x00009034   Data           8  camerawrapper.in(.constdata__ZTI15MCameraObserver)
+    typeinfo for MCameraObserver2            0x0000903c   Data           8  camerawrapper.in(.constdata__ZTI16MCameraObserver2)
+    typeinfo for CCamAutoFocusImpl           0x00009044   Data          32  CCamAutoFocusImpl.o(.constdata__ZTI17CCamAutoFocusImpl)
+    typeinfo for CCameraEnginePrivate        0x00009064   Data          48  camerawrapper.in(.constdata__ZTI20CCameraEnginePrivate)
+    typeinfo for MCamAutoFocusObserver       0x00009094   Data           8  camerawrapper.in(.constdata__ZTI21MCamAutoFocusObserver)
+    typeinfo for MCameraAutoFocusObserver    0x0000909c   Data           8  CCamAutoFocusImpl.o(.constdata__ZTI24MCameraAutoFocusObserver)
+    typeinfo name for CCamAutoFocus          0x000090a4   Data          16  CCamAutoFocus.o(.constdata__ZTS13CCamAutoFocus)
+    typeinfo name for CCameraEngine          0x000090b4   Data          16  camerawrapper.in(.constdata__ZTS13CCameraEngine)
+    typeinfo name for MCameraObserver        0x000090c4   Data          18  camerawrapper.in(.constdata__ZTS15MCameraObserver)
+    typeinfo name for MCameraObserver2       0x000090d6   Data          19  camerawrapper.in(.constdata__ZTS16MCameraObserver2)
+    typeinfo name for CCamAutoFocusImpl      0x000090e9   Data          20  CCamAutoFocusImpl.o(.constdata__ZTS17CCamAutoFocusImpl)
+    typeinfo name for CCameraEnginePrivate   0x000090fd   Data          23  camerawrapper.in(.constdata__ZTS20CCameraEnginePrivate)
+    typeinfo name for MCamAutoFocusObserver  0x00009114   Data          24  camerawrapper.in(.constdata__ZTS21MCamAutoFocusObserver)
+    typeinfo name for MCameraAutoFocusObserver 0x0000912c   Data          27  CCamAutoFocusImpl.o(.constdata__ZTS24MCameraAutoFocusObserver)
+    vtable for CCamAutoFocus                 0x00009148   Data          20  CCamAutoFocus.o(.constdata__ZTV13CCamAutoFocus)
+    vtable for CCameraEngine                 0x0000915c   Data          20  camerawrapper.in(.constdata__ZTV13CCameraEngine)
+    vtable for CCamAutoFocusImpl             0x00009170   Data          44  CCamAutoFocusImpl.o(.constdata__ZTV17CCamAutoFocusImpl)
+    vtable for CCameraEnginePrivate          0x0000919c   Data         132  camerawrapper.in(.constdata__ZTV20CCameraEnginePrivate)
+    .ARM.exidx$$Base                         0x00009220   Number         0  ucppinit_aeabi.o(.ARM.exidx)
+    .ARM.exidx$$Limit                        0x00009338   Number         0  camerawrapper.in(.ARM.exidx)
+    Image$$ER_RO$$Limit                      0x00009338   Number         0  anon$$obj.o(linker$$defined$$symbols)
+
