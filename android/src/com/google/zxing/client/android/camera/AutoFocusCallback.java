@@ -46,7 +46,7 @@ final class AutoFocusCallback implements Camera.AutoFocusCallback {
       Message message = autoFocusHandler.obtainMessage(autoFocusMessage, success);
       // Simulate continuous autofocus by sending a focus request every
       // AUTOFOCUS_INTERVAL_MS milliseconds.
-      Log.v(TAG, "Got auto-focus callback; requesting another");
+      //Log.d(TAG, "Got auto-focus callback; requesting another");
       autoFocusHandler.sendMessageDelayed(message, AUTOFOCUS_INTERVAL_MS);
       autoFocusHandler = null;
       if (!reinitCamera) {
@@ -54,7 +54,7 @@ final class AutoFocusCallback implements Camera.AutoFocusCallback {
         configManager.setDesiredCameraParameters(camera);
       }
     } else {
-      Log.v(TAG, "Got auto-focus callback, but no handler for it");
+      Log.d(TAG, "Got auto-focus callback, but no handler for it");
     }
   }
 

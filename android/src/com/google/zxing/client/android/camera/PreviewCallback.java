@@ -52,7 +52,7 @@ final class PreviewCallback implements Camera.PreviewCallback {
       message.sendToTarget();
       previewHandler = null;
     } else {
-      Log.v(TAG, "Got preview callback, but no handler for it");
+      Log.d(TAG, "Got preview callback, but no handler for it");
     }
   }
 

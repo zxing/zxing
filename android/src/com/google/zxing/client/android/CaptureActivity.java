@@ -672,7 +672,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     } catch (RuntimeException e) {
       // Barcode Scanner has seen crashes in the wild of this variety:
       // java.?lang.?RuntimeException: Fail to connect to camera service
-      Log.e(TAG, e.toString());
+      Log.w(TAG, "Unexpected error initializating camera", e);
       displayFrameworkBugMessageAndExit();
       return;
     }

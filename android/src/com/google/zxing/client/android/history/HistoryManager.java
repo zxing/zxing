@@ -222,7 +222,7 @@ public final class HistoryManager {
     File bsRoot = new File(Environment.getExternalStorageDirectory(), "BarcodeScanner");
     File historyRoot = new File(bsRoot, "History");
     if (!historyRoot.exists() && !historyRoot.mkdirs()) {
-      Log.v(TAG, "Couldn't make dir " + historyRoot);
+      Log.w(TAG, "Couldn't make dir " + historyRoot);
       return null;
     }
     File historyFile = new File(historyRoot, "history-" + System.currentTimeMillis() + ".csv");
@@ -232,7 +232,7 @@ public final class HistoryManager {
       out.write(history);
       return Uri.parse("file://" + historyFile.getAbsolutePath());
     } catch (IOException ioe) {
-      Log.v(TAG, "Couldn't access file " + historyFile + " due to " + ioe);
+      Log.w(TAG, "Couldn't access file " + historyFile + " due to " + ioe);
       return null;
     } finally {
       if (out != null) {

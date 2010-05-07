@@ -209,7 +209,7 @@ public final class SearchBookContentsActivity extends Activity {
         resultListView.setAdapter(null);
       }
     } catch (JSONException e) {
-      Log.e(TAG, e.toString());
+      Log.w(TAG, "Bad JSON from book search", e);
       resultListView.setAdapter(null);
       headerView.setText(R.string.msg_sbc_failed);
     }
@@ -291,12 +291,12 @@ public final class SearchBookContentsActivity extends Activity {
           message.obj = json;
           message.sendToTarget();
         } else {
-          Log.e(TAG, "HTTP returned " + response.getStatusLine().getStatusCode() + " for " + uri);
+          Log.w(TAG, "HTTP returned " + response.getStatusLine().getStatusCode() + " for " + uri);
           Message message = Message.obtain(handler, R.id.search_book_contents_failed);
           message.sendToTarget();
         }
       } catch (Exception e) {
-        Log.e(TAG, e.toString());
+        Log.w(TAG, "Error accessing book search", e);
         Message message = Message.obtain(handler, R.id.search_book_contents_failed);
         message.sendToTarget();
       } finally {
@@ -312,7 +312,7 @@ public final class SearchBookContentsActivity extends Activity {
     private static String getCookie(String url) {
       String cookie = CookieManager.getInstance().getCookie(url);
       if (cookie == null || cookie.length() == 0) {
-        Log.v(TAG, "Book Search cookie was missing or expired");
+        Log.d(TAG, "Book Search cookie was missing or expired");
         HttpUriRequest head = new HttpHead(url);
         AndroidHttpClient client = AndroidHttpClient.newInstance(USER_AGENT);
         try {
@@ -326,7 +326,7 @@ public final class SearchBookContentsActivity extends Activity {
             cookie = CookieManager.getInstance().getCookie(url);
           }
         } catch (IOException e) {
-          Log.e(TAG, e.toString());
+          Log.w(TAG, "Error setting book search cookie", e);
         }
         client.close();
       }

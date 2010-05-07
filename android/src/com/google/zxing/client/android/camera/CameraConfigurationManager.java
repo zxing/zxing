@@ -52,13 +52,13 @@ final class CameraConfigurationManager {
     Camera.Parameters parameters = camera.getParameters();
     previewFormat = parameters.getPreviewFormat();
     previewFormatString = parameters.get("preview-format");
-    Log.v(TAG, "Default preview format: " + previewFormat + '/' + previewFormatString);
+    Log.d(TAG, "Default preview format: " + previewFormat + '/' + previewFormatString);
     WindowManager manager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
     Display display = manager.getDefaultDisplay();
     screenResolution = new Point(display.getWidth(), display.getHeight());
-    Log.v(TAG, "Screen resolution: " + screenResolution);
+    Log.d(TAG, "Screen resolution: " + screenResolution);
     cameraResolution = getCameraResolution(parameters, screenResolution);
-    Log.v(TAG, "Camera resolution: " + screenResolution);
+    Log.d(TAG, "Camera resolution: " + screenResolution);
   }
 
   /**
@@ -69,7 +69,7 @@ final class CameraConfigurationManager {
    */
   void setDesiredCameraParameters(Camera camera) {
     Camera.Parameters parameters = camera.getParameters();
-    Log.v(TAG, "Setting preview size: " + cameraResolution);
+    Log.d(TAG, "Setting preview size: " + cameraResolution);
     parameters.setPreviewSize(cameraResolution.x, cameraResolution.y);
     setFlash(parameters);
     setZoom(parameters);
@@ -104,7 +104,7 @@ final class CameraConfigurationManager {
     Point cameraResolution = null;
 
     if (previewSizeValueString != null) {
-      Log.v(TAG, "preview-size-values parameter: " + previewSizeValueString);
+      Log.d(TAG, "preview-size-values parameter: " + previewSizeValueString);
       cameraResolution = findBestPreviewSizeValue(previewSizeValueString, screenResolution);
     }
 

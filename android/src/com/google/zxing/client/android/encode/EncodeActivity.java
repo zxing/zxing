@@ -161,14 +161,14 @@ public final class EncodeActivity extends Activity {
       bitmap = QRCodeEncoder.encodeAsBitmap(contents, BarcodeFormat.QR_CODE,
           SHARE_BARCODE_DIMENSION, SHARE_BARCODE_DIMENSION);
     } catch (WriterException we) {
-      Log.w(TAG, we.toString());
+      Log.w(TAG, we);
       return true;
     }
 
     File bsRoot = new File(Environment.getExternalStorageDirectory(), "BarcodeScanner");
     File barcodesRoot = new File(bsRoot, "Barcodes");
     if (!barcodesRoot.exists() && !barcodesRoot.mkdirs()) {
-      Log.v(TAG, "Couldn't make dir " + barcodesRoot);
+      Log.w(TAG, "Couldn't make dir " + barcodesRoot);
       showErrorMessage(R.string.msg_unmount_usb);
       return true;
     }
@@ -179,7 +179,7 @@ public final class EncodeActivity extends Activity {
       fos = new FileOutputStream(barcodeFile);
       bitmap.compress(Bitmap.CompressFormat.PNG, 0, fos);
     } catch (FileNotFoundException fnfe) {
-      Log.v(TAG, "Couldn't access file " + barcodeFile + " due to " + fnfe);
+      Log.w(TAG, "Couldn't access file " + barcodeFile + " due to " + fnfe);
       showErrorMessage(R.string.msg_unmount_usb);
       return true;
     } finally {
