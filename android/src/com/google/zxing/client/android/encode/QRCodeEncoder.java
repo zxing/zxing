@@ -351,11 +351,11 @@ final class QRCodeEncoder {
         message.obj = bitmap;
         message.sendToTarget();
       } catch (WriterException e) {
-        Log.e(TAG, e.toString());
+        Log.e(TAG, "Could not encode barcode", e);
         Message message = Message.obtain(handler, R.id.encode_failed);
         message.sendToTarget();
       } catch (IllegalArgumentException e) {
-        Log.e(TAG, e.toString());
+        Log.e(TAG, "Could not encode barcode", e);
         Message message = Message.obtain(handler, R.id.encode_failed);
         message.sendToTarget();
       }
