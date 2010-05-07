@@ -29,14 +29,14 @@ namespace datamatrix {
 
 using namespace std;
 
-ResultPointsAndTransitions::ResultPointsAndTransitions() : from_(), to_(), transitions_(0) { 
-	Ref<CornerPoint> ref(new CornerPoint(0,0)); 
-	from_ = ref; 
-	to_ = ref; 
+ResultPointsAndTransitions::ResultPointsAndTransitions() : to_(), from_(), transitions_(0) {
+  Ref<CornerPoint> ref(new CornerPoint(0,0));
+  from_ = ref;
+  to_ = ref;
 }
 
-ResultPointsAndTransitions::ResultPointsAndTransitions(Ref<CornerPoint> from, Ref<CornerPoint> to, int transitions) : 
-  from_(from), to_(to), transitions_(transitions) {
+ResultPointsAndTransitions::ResultPointsAndTransitions(Ref<CornerPoint> from, Ref<CornerPoint> to, int transitions) :
+  to_(to), from_(from), transitions_(transitions) {
 }
 
 Ref<CornerPoint> ResultPointsAndTransitions::getFrom() {
@@ -67,12 +67,12 @@ Ref<DetectorResult> Detector::detect() {
 
     // Point A and D are across the diagonal from one another,
     // as are B and C. Figure out which are the solid black lines
-    // by counting transitions    
-  	std::vector<Ref<ResultPointsAndTransitions> > transitions(4);
-  	transitions[0].reset(transitionsBetween(pointA, pointB));
-  	transitions[1].reset(transitionsBetween(pointA, pointC));
-  	transitions[2].reset(transitionsBetween(pointB, pointD));
-  	transitions[3].reset(transitionsBetween(pointC, pointD));
+    // by counting transitions
+    std::vector<Ref<ResultPointsAndTransitions> > transitions(4);
+    transitions[0].reset(transitionsBetween(pointA, pointB));
+    transitions[1].reset(transitionsBetween(pointA, pointC));
+    transitions[2].reset(transitionsBetween(pointB, pointD));
+    transitions[3].reset(transitionsBetween(pointC, pointD));
     insertionSort(transitions);
 
     // Sort by number of transitions. First two will be the two solid sides; last two
@@ -85,42 +85,42 @@ Ref<DetectorResult> Detector::detect() {
     Ref<CornerPoint> maybeTopLeft;
     Ref<CornerPoint> bottomLeft;
     Ref<CornerPoint> maybeBottomRight;
-	if (lSideOne->getFrom()->equals(lSideOne->getTo())) {
-		bottomLeft = lSideOne->getFrom(); 
-		maybeTopLeft = lSideTwo->getFrom();
-		maybeBottomRight = lSideTwo->getTo();
-	}
-	else if (lSideOne->getFrom()->equals(lSideTwo->getFrom())) {
-		bottomLeft = lSideOne->getFrom(); 
-		maybeTopLeft = lSideOne->getTo();
-		maybeBottomRight = lSideTwo->getTo();
-	} 
-	else if (lSideOne->getFrom()->equals(lSideTwo->getTo())) {
-		bottomLeft = lSideOne->getFrom(); 
-		maybeTopLeft = lSideOne->getTo();
-		maybeBottomRight = lSideTwo->getFrom();
-	} 
-	else if (lSideOne->getTo()->equals(lSideTwo->getFrom())) {
-		bottomLeft = lSideOne->getTo(); 
-		maybeTopLeft = lSideOne->getFrom();
-		maybeBottomRight = lSideTwo->getTo();
-	} 
-	else if (lSideOne->getTo()->equals(lSideTwo->getTo())) {
-		bottomLeft = lSideOne->getTo(); 
-		maybeTopLeft = lSideOne->getFrom();
-		maybeBottomRight = lSideTwo->getFrom();
-	} 
-	else {
-		bottomLeft = lSideTwo->getFrom(); 
-		maybeTopLeft = lSideOne->getTo();
-		maybeBottomRight = lSideOne->getFrom();
-	} 
+  if (lSideOne->getFrom()->equals(lSideOne->getTo())) {
+    bottomLeft = lSideOne->getFrom();
+    maybeTopLeft = lSideTwo->getFrom();
+    maybeBottomRight = lSideTwo->getTo();
+  }
+  else if (lSideOne->getFrom()->equals(lSideTwo->getFrom())) {
+    bottomLeft = lSideOne->getFrom();
+    maybeTopLeft = lSideOne->getTo();
+    maybeBottomRight = lSideTwo->getTo();
+  }
+  else if (lSideOne->getFrom()->equals(lSideTwo->getTo())) {
+    bottomLeft = lSideOne->getFrom();
+    maybeTopLeft = lSideOne->getTo();
+    maybeBottomRight = lSideTwo->getFrom();
+  }
+  else if (lSideOne->getTo()->equals(lSideTwo->getFrom())) {
+    bottomLeft = lSideOne->getTo();
+    maybeTopLeft = lSideOne->getFrom();
+    maybeBottomRight = lSideTwo->getTo();
+  }
+  else if (lSideOne->getTo()->equals(lSideTwo->getTo())) {
+    bottomLeft = lSideOne->getTo();
+    maybeTopLeft = lSideOne->getFrom();
+    maybeBottomRight = lSideTwo->getFrom();
+  }
+  else {
+    bottomLeft = lSideTwo->getFrom();
+    maybeTopLeft = lSideOne->getTo();
+    maybeBottomRight = lSideOne->getFrom();
+  }
 
     // Bottom left is correct but top left and bottom right might be switched
     std::vector<Ref<CornerPoint> > corners(3);
-  	corners[0].reset(maybeTopLeft);
-  	corners[1].reset(bottomLeft);
-  	corners[2].reset(maybeBottomRight);
+    corners[0].reset(maybeTopLeft);
+    corners[1].reset(bottomLeft);
+    corners[2].reset(maybeBottomRight);
     // Use the dot product trick to sort them out
     orderBestPatterns(corners);
 
@@ -141,9 +141,9 @@ Ref<DetectorResult> Detector::detect() {
       topRight = pointD;
     }
 
-	float topRightX = (bottomRight->getX() - bottomLeft->getX()) + topLeft->getX();
+  float topRightX = (bottomRight->getX() - bottomLeft->getX()) + topLeft->getX();
   float topRightY = (bottomRight->getY() - bottomLeft->getY()) + topLeft->getY();
-	Ref<CornerPoint> topR(new CornerPoint(topRightX,topRightY));
+  Ref<CornerPoint> topR(new CornerPoint(topRightX,topRightY));
 
     // Next determine the dimension by tracing along the top or right side and counting black/white
     // transitions. Since we start inside a black module, we should see a number of transitions
@@ -153,7 +153,7 @@ Ref<DetectorResult> Detector::detect() {
     // adjacent to the white module at the top right. Tracing to that corner from either the top left
     // or bottom right should work here. The number of transitions could be higher than it should be
     // due to noise. So we try both and take the min.
-	int dimension = min(transitionsBetween(topLeft, topRight)->getTransitions(), 
+  int dimension = min(transitionsBetween(topLeft, topRight)->getTransitions(),
                              transitionsBetween(bottomRight, topRight)->getTransitions());
     if ((dimension & 0x01) == 1) {
       // it can't be odd, so, round... up?
@@ -161,14 +161,14 @@ Ref<DetectorResult> Detector::detect() {
     }
     dimension += 2;
 
-  	Ref<PerspectiveTransform> transform = createTransform(topLeft, topR, bottomLeft, bottomRight, dimension);
-  	Ref<BitMatrix> bits(sampleGrid(image_, dimension, transform));
-  	std::vector<Ref<ResultPoint> > points(4);
-	  points[0].reset(pointA);
-	  points[1].reset(pointB);
-	  points[2].reset(pointC);
-	  points[3].reset(pointD);
-	  Ref<DetectorResult> detectorResult(new DetectorResult(bits, points, transform));
+    Ref<PerspectiveTransform> transform = createTransform(topLeft, topR, bottomLeft, bottomRight, dimension);
+    Ref<BitMatrix> bits(sampleGrid(image_, dimension, transform));
+    std::vector<Ref<ResultPoint> > points(4);
+    points[0].reset(pointA);
+    points[1].reset(pointB);
+    points[2].reset(pointC);
+    points[3].reset(pointD);
+    Ref<DetectorResult> detectorResult(new DetectorResult(bits, points, transform));
     return detectorResult;
 }
 
@@ -210,7 +210,7 @@ Ref<ResultPointsAndTransitions> Detector::transitionsBetween(Ref<CornerPoint> fr
         error -= dx;
       }
     }
-	Ref<ResultPointsAndTransitions> result(new ResultPointsAndTransitions(from, to, transitions));
+  Ref<ResultPointsAndTransitions> result(new ResultPointsAndTransitions(from, to, transitions));
     return result;
   }
 
@@ -244,20 +244,20 @@ Ref<BitMatrix> Detector::sampleGrid(Ref<BitMatrix> image, int dimension, Ref<Per
 
 void Detector::insertionSort(std::vector<Ref<ResultPointsAndTransitions> > &vector) {
     int max = vector.size();
-	bool swapped = true;
-   	Ref<ResultPointsAndTransitions> value;
+  bool swapped = true;
+     Ref<ResultPointsAndTransitions> value;
     Ref<ResultPointsAndTransitions> valueB;
-	do {
-		swapped = false;
-	    for (int i = 1; i < max; i++) {
-    	  value = vector[i-1];
-		  if (compare(value, (valueB = vector[i])) > 0) {
-			swapped = true;
-			vector[i-1].reset(valueB);
-		  	vector[i].reset(value);
-		  }
-		}
-	} while (swapped);
+  do {
+    swapped = false;
+      for (int i = 1; i < max; i++) {
+        value = vector[i-1];
+      if (compare(value, (valueB = vector[i])) > 0) {
+      swapped = true;
+      vector[i-1].reset(valueB);
+        vector[i].reset(value);
+      }
+    }
+  } while (swapped);
 }
 void Detector::orderBestPatterns(std::vector<Ref<CornerPoint> > &patterns) {
     // Find distances between pattern centers
@@ -293,7 +293,7 @@ void Detector::orderBestPatterns(std::vector<Ref<CornerPoint> > &patterns) {
 
     patterns[0] = pointA;
     patterns[1] = pointB;
-    patterns[2] = pointC; 
+    patterns[2] = pointC;
 }
 
 float Detector::distance(float x1, float x2, float y1, float y2) {
