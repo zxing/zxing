@@ -28,13 +28,13 @@ int BitMatrixParser::copyBit(size_t x, size_t y, int versionBits) {
   return bitMatrix_->get(x, y) ? (versionBits << 1) | 0x1 : versionBits << 1;
 }
 
-BitMatrixParser::BitMatrixParser(Ref<BitMatrix> bitMatrix) : parsedVersion_(NULL), 
-                                                             bitMatrix_(NULL), 
+BitMatrixParser::BitMatrixParser(Ref<BitMatrix> bitMatrix) : bitMatrix_(NULL),
+                                                             parsedVersion_(NULL),
                                                              readBitMatrix_(NULL) {
   size_t dimension = bitMatrix->getDimension();
   if (dimension < 10 || dimension > 144 || (dimension & 0x01) != 0)
     throw ReaderException("Dimension must be even, > 10 < 144");
-  
+
   parsedVersion_ = readVersion(bitMatrix);
   bitMatrix_ = extractDataRegion(bitMatrix);
   // TODO(bbrown): Make this work for rectangular symbols
@@ -49,7 +49,7 @@ Ref<Version> BitMatrixParser::readVersion(Ref<BitMatrix> bitMatrix) {
   // TODO(bbrown): make this work for rectangular dimensions as well.
   int numRows = bitMatrix->getDimension();
   int numColumns = numRows;
-   
+
   Ref<Version> version = parsedVersion_->getVersionForDimensions(numRows, numColumns);
   if (version != 0) {
     return version;
@@ -66,12 +66,12 @@ ArrayRef<unsigned char> BitMatrixParser::readCodewords() {
     // TODO(bbrown): Data Matrix can be rectangular, assuming square for now
     int numRows = bitMatrix_->getDimension();
     int numColumns = numRows;
-    
+
     bool corner1Read = false;
     bool corner2Read = false;
     bool corner3Read = false;
     bool corner4Read = false;
-    
+
     // Read all of the codewords
     do {
       // Check the four corner cases
@@ -106,7 +106,7 @@ ArrayRef<unsigned char> BitMatrixParser::readCodewords() {
         } while ((row >= 0) && (column < numColumns));
         row += 1;
         column +=3;
-        
+
         // Sweep downward diagonally to the left
         do {
           if ((row >= 0) && (column < numColumns) && !readBitMatrix_->get(column, row)) {
@@ -125,7 +125,7 @@ ArrayRef<unsigned char> BitMatrixParser::readCodewords() {
     }
     return result;
 }
-  
+
 bool BitMatrixParser::readModule(int row, int column, int numRows, int numColumns) {
     // Adjust the row and column indices based on boundary wrapping
     if (row < 0) {
@@ -139,7 +139,7 @@ bool BitMatrixParser::readModule(int row, int column, int numRows, int numColumn
     readBitMatrix_->set(column, row);
     return bitMatrix_->get(column, row);
   }
-  
+
 int BitMatrixParser::readUtah(int row, int column, int numRows, int numColumns) {
     int currentByte = 0;
     if (readModule(row - 2, column - 2, numRows, numColumns)) {
@@ -175,7 +175,7 @@ int BitMatrixParser::readUtah(int row, int column, int numRows, int numColumns) 
     }
     return currentByte;
   }
-  
+
 int BitMatrixParser::readCorner1(int numRows, int numColumns) {
     int currentByte = 0;
     if (readModule(numRows - 1, 0, numRows, numColumns)) {
@@ -211,7 +211,7 @@ int BitMatrixParser::readCorner1(int numRows, int numColumns) {
     }
     return currentByte;
   }
-  
+
 int BitMatrixParser::readCorner2(int numRows, int numColumns) {
     int currentByte = 0;
     if (readModule(numRows - 3, 0, numRows, numColumns)) {
@@ -247,7 +247,7 @@ int BitMatrixParser::readCorner2(int numRows, int numColumns) {
     }
     return currentByte;
   }
-  
+
 int BitMatrixParser::readCorner3(int numRows, int numColumns) {
     int currentByte = 0;
     if (readModule(numRows - 1, 0, numRows, numColumns)) {
@@ -283,7 +283,7 @@ int BitMatrixParser::readCorner3(int numRows, int numColumns) {
     }
     return currentByte;
   }
-  
+
 int BitMatrixParser::readCorner4(int numRows, int numColumns) {
     int currentByte = 0;
     if (readModule(numRows - 3, 0, numRows, numColumns)) {
@@ -319,25 +319,25 @@ int BitMatrixParser::readCorner4(int numRows, int numColumns) {
     }
     return currentByte;
   }
-  
+
 Ref<BitMatrix> BitMatrixParser::extractDataRegion(Ref<BitMatrix> bitMatrix) {
     int symbolSizeRows = parsedVersion_->getSymbolSizeRows();
     int symbolSizeColumns = parsedVersion_->getSymbolSizeColumns();
-    
+
     // TODO(bbrown): Make this work with rectangular codes
     if ((int)bitMatrix->getDimension() != symbolSizeRows) {
       throw IllegalArgumentException("Dimension of bitMarix must match the version size");
     }
-    
+
     int dataRegionSizeRows = parsedVersion_->getDataRegionSizeRows();
     int dataRegionSizeColumns = parsedVersion_->getDataRegionSizeColumns();
-    
+
     int numDataRegionsRow = symbolSizeRows / dataRegionSizeRows;
     int numDataRegionsColumn = symbolSizeColumns / dataRegionSizeColumns;
-    
+
     int sizeDataRegionRow = numDataRegionsRow * dataRegionSizeRows;
     //int sizeDataRegionColumn = numDataRegionsColumn * dataRegionSizeColumns;
-    
+
     // TODO(bbrown): Make this work with rectangular codes
     Ref<BitMatrix> bitMatrixWithoutAlignment(new BitMatrix(sizeDataRegionRow));
     for (int dataRegionRow = 0; dataRegionRow < numDataRegionsRow; ++dataRegionRow) {

@@ -28,8 +28,8 @@ PerspectiveTransform::PerspectiveTransform(float inA11, float inA21,
                                            float inA22, float inA32, 
                                            float inA13, float inA23, 
                                            float inA33) : 
-  a11(inA11), a21(inA21), a31(inA31), a12(inA12), a22(inA22), a32(inA32),
-  a13(inA13), a23(inA23), a33(inA33) {}
+  a11(inA11), a12(inA12), a13(inA13), a21(inA21), a22(inA22), a23(inA23),
+  a31(inA31), a32(inA32), a33(inA33) {}
 
 Ref<PerspectiveTransform> PerspectiveTransform::quadrilateralToQuadrilateral(float x0, float y0, float x1, float y1,
     float x2, float y2, float x3, float y3, float x0p, float y0p, float x1p, float y1p, float x2p, float y2p,

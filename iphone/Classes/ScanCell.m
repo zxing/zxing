@@ -65,8 +65,8 @@ static NSString *_timeString(NSDate *date) {
 @synthesize timeView;
 
 
-- (id)initWithFrame:(CGRect)frame reuseIdentifier:(NSString *)reuseIdentifier {
-	if ((self = [super initWithFrame:frame reuseIdentifier:reuseIdentifier])) {
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
+  if ((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) {
     imageView = [[UIImageView alloc] initWithFrame:CGRectZero];
     imageView.contentMode = UIViewContentModeCenter;
     [self.contentView addSubview:imageView];
@@ -88,8 +88,8 @@ static NSString *_timeString(NSDate *date) {
     timeView.textAlignment = UITextAlignmentRight;
     timeView.textColor = [UIColor grayColor];
     [self.contentView addSubview:timeView];
-	}
-	return self;
+  }
+  return self;
 }
 
 - (CGRect) _imageViewFrame {
@@ -168,7 +168,7 @@ static NSString *_timeString(NSDate *date) {
   [timeView release];
   [scan release];
   [result release];
-	[super dealloc];
+  [super dealloc];
 }
 
 

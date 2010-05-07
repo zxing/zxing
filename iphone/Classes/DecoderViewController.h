@@ -36,17 +36,18 @@
   IBOutlet UIBarItem *libraryBarItem;
   IBOutlet UIBarItem *archiveBarItem;
   IBOutlet UIBarItem *actionBarItem;
-  
+
   IBOutlet UIView *messageView;
   IBOutlet UITextView *messageTextView;
   IBOutlet UIButton *messageHelpButton;
   IBOutlet ScannedImageView *imageView;
   IBOutlet UIToolbar *toolbar;
-  
+  UIImagePickerController *picker;
+
   Decoder *decoder;
   ParsedResult *result;
   NSArray *actions;
-  
+
   NSMutableArray *resultPointViews;
 }
 
@@ -60,6 +61,7 @@
 @property (nonatomic, retain) UITextView *messageTextView;
 @property (nonatomic, retain) UIButton *messageHelpButton;
 @property (nonatomic, retain) ScannedImageView *imageView;
+@property (nonatomic, retain) UIImagePickerController *picker;
 @property (nonatomic, retain) UIToolbar *toolbar;
 
 @property (nonatomic, retain) Decoder *decoder;
@@ -86,8 +88,7 @@
 /* UIImagePickerControllerDelegate methods */
 
 - (void)imagePickerController:(UIImagePickerController *)picker
-        didFinishPickingImage:(UIImage *)image
-                  editingInfo:(NSDictionary *)editingInfo;
+didFinishPickingMediaWithInfo:(NSDictionary *)info;
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker;
 
 /* UINavigationControllerDelegate methods */

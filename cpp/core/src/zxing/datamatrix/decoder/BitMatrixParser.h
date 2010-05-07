@@ -33,8 +33,8 @@ namespace datamatrix {
 class BitMatrixParser : public Counted {
 private:
   Ref<BitMatrix> bitMatrix_;
-  Ref<BitMatrix> readBitMatrix_;
   Ref<Version> parsedVersion_;
+  Ref<BitMatrix> readBitMatrix_;
 
   int copyBit(size_t x, size_t y, int versionBits);
 
