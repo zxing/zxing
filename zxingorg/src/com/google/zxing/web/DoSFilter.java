@@ -27,13 +27,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.regex.Pattern;
 
 /**
  * A {@link Filter} that rejects requests from hosts that are sending too many
@@ -46,29 +44,20 @@ public final class DoSFilter implements Filter {
   private static final int MAX_ACCESSES_PER_IP_PER_TIME = 10;
   private static final long MAX_ACCESS_INTERVAL_MSEC = 10L * 1000L;
   private static final long UNBAN_INTERVAL_MSEC = 60L * 60L * 1000L;
-  private static final Pattern COMMA_PATTERN = Pattern.compile(",");
 
   private final IPTrie numRecentAccesses;
   private final Timer timer;
   private final Set<String> bannedIPAddresses;
-  private final Collection<String> manuallyBannedIPAddresses;
   private ServletContext context;
 
   public DoSFilter() {
     numRecentAccesses = new IPTrie();
     timer = new Timer("DosFilter reset timer");
     bannedIPAddresses = Collections.synchronizedSet(new HashSet<String>());
-    manuallyBannedIPAddresses = new HashSet<String>();
   }
 
   public void init(FilterConfig filterConfig) {
     context = filterConfig.getServletContext();
-    String bannedIPs = filterConfig.getInitParameter("bannedIPs");
-    if (bannedIPs != null) {
-      for (String ip : COMMA_PATTERN.split(bannedIPs)) {
-        manuallyBannedIPAddresses.add(ip.trim());
-      }
-    }
     timer.scheduleAtFixedRate(new ResetTask(), 0L, MAX_ACCESS_INTERVAL_MSEC);
     timer.scheduleAtFixedRate(new UnbanTask(), 0L, UNBAN_INTERVAL_MSEC);
   }
@@ -86,8 +75,7 @@ public final class DoSFilter implements Filter {
 
   private boolean isBanned(ServletRequest request) {
     String remoteIPAddressString = request.getRemoteAddr();
-    if (bannedIPAddresses.contains(remoteIPAddressString) ||
-            manuallyBannedIPAddresses.contains(remoteIPAddressString)) {
+    if (bannedIPAddresses.contains(remoteIPAddressString)) {
       return true;
     }
     InetAddress remoteIPAddress;

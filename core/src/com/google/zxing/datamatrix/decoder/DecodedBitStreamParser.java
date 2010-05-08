@@ -420,7 +420,8 @@ final class DecodedBitStreamParser {
   /**
    * See ISO 16022:2006, 5.2.9 and Annex B, B.2
    */
-  private static void decodeBase256Segment(BitSource bits, StringBuffer result, Vector byteSegments) {
+  private static void decodeBase256Segment(BitSource bits, StringBuffer result, Vector byteSegments)
+      throws FormatException {
     // Figure out how long the Base 256 Segment is.
     int d1 = bits.readBits(8);
     int count;
@@ -433,6 +434,11 @@ final class DecodedBitStreamParser {
     }
     byte[] bytes = new byte[count];
     for (int i = 0; i < count; i++) {
+      // Have seen this particular error in the wild, such as at
+      // http://www.bcgen.com/demo/IDAutomationStreamingDataMatrix.aspx?MODE=3&D=Fred&PFMT=3&PT=F&X=0.3&O=0&LM=0.2
+      if (bits.available() < 8) {
+        throw FormatException.getFormatInstance();
+      }
       bytes[i] = unrandomize255State(bits.readBits(8), i);
     }
     byteSegments.addElement(bytes);
