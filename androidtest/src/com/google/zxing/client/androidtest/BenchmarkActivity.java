@@ -79,8 +79,7 @@ public final class BenchmarkActivity extends Activity {
     List<BenchmarkItem> items = (List<BenchmarkItem>) message.obj;
     int count = 0;
     int time = 0;
-    for (int x = 0; x < items.size(); x++) {
-      BenchmarkItem item = items.get(x);
+    for (BenchmarkItem item : items) {
       if (item != null) {
         Log.v(TAG, item.toString());
         count++;

@@ -62,10 +62,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
-import java.net.SocketException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -90,7 +88,10 @@ import javax.servlet.http.HttpServletResponse;
  */
 public final class DecodeServlet extends HttpServlet {
 
+  // No real reason to let people upload more than a 2MB image
   private static final long MAX_IMAGE_SIZE = 2000000L;
+  // No real reason to deal with more than maybe 2.5 megapixels
+  private static final int MAX_PIXELS = 1 << 16;
 
   private static final Logger log = Logger.getLogger(DecodeServlet.class.getName());
 
@@ -148,6 +149,8 @@ public final class DecodeServlet extends HttpServlet {
       return;
     }
 
+    imageURIString = imageURIString.trim();
+
     if (!(imageURIString.startsWith("http://") || imageURIString.startsWith("https://"))) {
       imageURIString = "http://" + imageURIString;
     }
@@ -176,12 +179,12 @@ public final class DecodeServlet extends HttpServlet {
         getRequest.abort();
         response.sendRedirect("badurl.jspx");
         return;
-      } catch (SocketException se) {
-        // Thrown if hostname is bad or null
-        getRequest.abort();
-        response.sendRedirect("badurl.jspx");
-        return;
-      } catch (UnknownHostException uhe) {
+      } catch (IOException ioe) {
+        // Encompasses lots of stuff, including
+        //  java.net.SocketException, java.net.UnknownHostException,
+        //  javax.net.ssl.SSLPeerUnverifiedException,
+        //  org.apache.http.NoHttpResponseException,
+        //  org.apache.http.client.ClientProtocolException,
         getRequest.abort();
         response.sendRedirect("badurl.jspx");
         return;
@@ -255,14 +258,21 @@ public final class DecodeServlet extends HttpServlet {
     try {
       image = ImageIO.read(is);
     } catch (IOException ioe) {
+      // Includes javax.imageio.IIOException
       response.sendRedirect("badimage.jspx");
       return;
     } catch (CMMException cmme) {
       // Have seen this in logs
       response.sendRedirect("badimage.jspx");
       return;
+    } catch (IllegalArgumentException iae) {
+      // Have seen this in logs for some JPEGs
+      response.sendRedirect("badimage.jspx");
+      return;
     }
-    if (image == null) {
+    if (image == null ||
+        image.getHeight() <= 1 || image.getWidth() >= 1 ||
+        image.getHeight() * image.getWidth() > MAX_PIXELS) {
       response.sendRedirect("badimage.jspx");
       return;
     }
