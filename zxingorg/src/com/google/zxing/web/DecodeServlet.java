@@ -90,8 +90,8 @@ public final class DecodeServlet extends HttpServlet {
 
   // No real reason to let people upload more than a 2MB image
   private static final long MAX_IMAGE_SIZE = 2000000L;
-  // No real reason to deal with more than maybe 2.5 megapixels
-  private static final int MAX_PIXELS = 1 << 16;
+  // No real reason to deal with more than maybe 2 megapixels
+  private static final int MAX_PIXELS = 1 << 21;
 
   private static final Logger log = Logger.getLogger(DecodeServlet.class.getName());
 
@@ -145,6 +145,7 @@ public final class DecodeServlet extends HttpServlet {
       throws ServletException, IOException {
     String imageURIString = request.getParameter("u");
     if (imageURIString == null || imageURIString.length() == 0) {
+      log.fine("URI was empty");
       response.sendRedirect("badurl.jspx");
       return;
     }
@@ -159,6 +160,7 @@ public final class DecodeServlet extends HttpServlet {
     try {
       imageURI = new URI(imageURIString);
     } catch (URISyntaxException urise) {
+      log.fine("URI was not valid: " + imageURIString);
       response.sendRedirect("badurl.jspx");
       return;
     }
@@ -176,6 +178,7 @@ public final class DecodeServlet extends HttpServlet {
         getResponse = client.execute(getRequest);
       } catch (IllegalArgumentException iae) {
         // Thrown if hostname is bad or null
+        log.fine(iae.toString());
         getRequest.abort();
         response.sendRedirect("badurl.jspx");
         return;
@@ -185,16 +188,19 @@ public final class DecodeServlet extends HttpServlet {
         //  javax.net.ssl.SSLPeerUnverifiedException,
         //  org.apache.http.NoHttpResponseException,
         //  org.apache.http.client.ClientProtocolException,
+        log.fine(ioe.toString());
         getRequest.abort();
         response.sendRedirect("badurl.jspx");
         return;
       }
 
       if (getResponse.getStatusLine().getStatusCode() != HttpServletResponse.SC_OK) {
+        log.fine("Unsuccessful return code: " + getResponse.getStatusLine().getStatusCode());
         response.sendRedirect("badurl.jspx");
         return;
       }
       if (!isSizeOK(getResponse)) {
+        log.fine("Too large");
         response.sendRedirect("badimage.jspx");
         return;
       }
@@ -220,6 +226,7 @@ public final class DecodeServlet extends HttpServlet {
           throws ServletException, IOException {
 
     if (!ServletFileUpload.isMultipartContent(request)) {
+      log.fine("File upload was not multipart");
       response.sendRedirect("badimage.jspx");
       return;
     }
@@ -240,12 +247,14 @@ public final class DecodeServlet extends HttpServlet {
               is.close();
             }
           } else {
+            log.fine("Too large");
             response.sendRedirect("badimage.jspx");
           }
           break;
         }
       }
     } catch (FileUploadException fue) {
+      log.fine(fue.toString());
       response.sendRedirect("badimage.jspx");
     }
 
@@ -258,21 +267,25 @@ public final class DecodeServlet extends HttpServlet {
     try {
       image = ImageIO.read(is);
     } catch (IOException ioe) {
+      log.fine(ioe.toString());
       // Includes javax.imageio.IIOException
       response.sendRedirect("badimage.jspx");
       return;
     } catch (CMMException cmme) {
+      log.fine(cmme.toString());
       // Have seen this in logs
       response.sendRedirect("badimage.jspx");
       return;
     } catch (IllegalArgumentException iae) {
+      log.fine(iae.toString());
       // Have seen this in logs for some JPEGs
       response.sendRedirect("badimage.jspx");
       return;
     }
     if (image == null ||
-        image.getHeight() <= 1 || image.getWidth() >= 1 ||
+        image.getHeight() <= 1 || image.getWidth() <= 1 ||
         image.getHeight() * image.getWidth() > MAX_PIXELS) {
+      log.fine("Dimensions too large: " + image.getWidth() + 'x' + image.getHeight());        
       response.sendRedirect("badimage.jspx");
       return;
     }
