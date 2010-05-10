@@ -16,21 +16,21 @@
 
 package com.google.zxing.oned.rss;
 
-class DataCharacter {
+public class DataCharacter {
 
   private final int value;
   private final int checksumPortion;
 
-  DataCharacter(int value, int checksumPortion) {
+  public DataCharacter(int value, int checksumPortion) {
     this.value = value;
     this.checksumPortion = checksumPortion;
   }
 
-  int getValue() {
+  public int getValue() {
     return value;
   }
 
-  int getChecksumPortion() {
+  public int getChecksumPortion() {
     return checksumPortion;
   }
 

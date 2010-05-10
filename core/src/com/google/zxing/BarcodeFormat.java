@@ -62,6 +62,9 @@ public final class BarcodeFormat {
   /** PDF417 format. */
   public static final BarcodeFormat PDF417 = new BarcodeFormat("PDF417");
   
+  /** RSS EXPANDED */
+  public static final BarcodeFormat RSS_EXPANDED = new BarcodeFormat("RSS_EXPANDED");
+
   private final String name;
 
   private BarcodeFormat(String name) {
