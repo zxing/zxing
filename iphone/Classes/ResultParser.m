@@ -48,7 +48,19 @@ static NSMutableSet *sResultParsers = nil;
 #ifdef DEBUG
   NSLog(@"parsing result:\n<<<\n%@\n>>>\n", s);
 #endif
-  for (Class c in [self resultParsers]) {
+
+  // Make the parser of last resort the last parser we try.
+  NSMutableArray *resultParsers =
+    [NSMutableArray arrayWithArray:[[self resultParsers] allObjects]];
+  NSUInteger textIndex =
+    [resultParsers indexOfObject:NSClassFromString(@"TextResultParser")];
+  if (NSNotFound != textIndex) {
+    // If it is present, make sure it is last.
+    [resultParsers exchangeObjectAtIndex:textIndex
+                       withObjectAtIndex:[resultParsers count] - 1];
+  }
+
+  for (Class c in resultParsers) {
 #ifdef DEBUG
     NSLog(@"trying %@", NSStringFromClass(c));
 #endif
