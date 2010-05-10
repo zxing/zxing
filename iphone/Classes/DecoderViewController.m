@@ -230,32 +230,39 @@ CGImageRef MyCGImageCopyScreenContents(void) {
 
     // [[NSUserDefaults standardUserDefaults] boolForKey:@"allowEditing"];
     BOOL isCamera = (sourceType == UIImagePickerControllerSourceTypeCamera);
-    picker.allowsEditing = !isCamera;
+    if ([picker respondsToSelector:@selector(setAllowsEditing:)]) {
+      // not in 3.0
+      [picker setAllowsEditing:!isCamera];
+    }
     if (isCamera) {
-      picker.showsCameraControls = NO;
-      UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-      NSString *cancelString =
+      if ([picker respondsToSelector:@selector(setShowsCameraControls:)]) {
+        [picker setShowsCameraControls:NO];
+        UIButton *cancelButton =
+          [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        NSString *cancelString =
           NSLocalizedString(@"DecoderViewController cancel button title", @"");
-      CGFloat height = [UIFont systemFontSize];
-      CGSize size = [cancelString sizeWithFont:[UIFont systemFontOfSize:height]];
-      [cancelButton setTitle:cancelString forState:UIControlStateNormal];
-      CGRect appFrame = [[UIScreen mainScreen] bounds];
-      static const int kMargin = 10;
-      static const int kInternalXMargin = 10;
-      static const int kInternalYMargin = 10;
-      CGRect frame = CGRectMake(kMargin,
-        appFrame.size.height - (height + 2*kInternalYMargin + kMargin),
-        2*kInternalXMargin + size.width,
-        height + 2*kInternalYMargin);
-      [cancelButton setFrame:frame];
-      [cancelButton addTarget:self
-                       action:@selector(cancel:)
-             forControlEvents:UIControlEventTouchUpInside];
-      picker.cameraOverlayView = cancelButton;
-      // The camera takes quite a while to start up. Hence the 2 second delay.
-      [self performSelector:@selector(takeScreenshot)
-                 withObject:nil
-                 afterDelay:2.0];
+        CGFloat height = [UIFont systemFontSize];
+        CGSize size =
+          [cancelString sizeWithFont:[UIFont systemFontOfSize:height]];
+        [cancelButton setTitle:cancelString forState:UIControlStateNormal];
+        CGRect appFrame = [[UIScreen mainScreen] bounds];
+        static const int kMargin = 10;
+        static const int kInternalXMargin = 10;
+        static const int kInternalYMargin = 10;
+        CGRect frame = CGRectMake(kMargin,
+          appFrame.size.height - (height + 2*kInternalYMargin + kMargin),
+          2*kInternalXMargin + size.width,
+          height + 2*kInternalYMargin);
+        [cancelButton setFrame:frame];
+        [cancelButton addTarget:self
+                         action:@selector(cancel:)
+               forControlEvents:UIControlEventTouchUpInside];
+        picker.cameraOverlayView = cancelButton;
+        // The camera takes quite a while to start up. Hence the 2 second delay.
+        [self performSelector:@selector(takeScreenshot)
+                   withObject:nil
+                   afterDelay:2.0];
+      }
     }
 
     // Picker is displayed asynchronously.
