@@ -33,20 +33,20 @@
       android:layout_weight="0"
       android:orientation="horizontal"
       android:gravity="center"
-      android:padding="6dip"
+      android:padding="4dip"
       android:weightSum="1"
       android:background="@color/help_button_view">
 
     <Button android:id="@+id/back_button"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
-            android:layout_weight="0.35"
+            android:layout_weight="0.5"
             android:text="@string/button_back"/>
 
     <Button android:id="@+id/done_button"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
-            android:layout_weight="0.35"
+            android:layout_weight="0.5"
             android:text="@string/button_done"/>
 
   </LinearLayout>
