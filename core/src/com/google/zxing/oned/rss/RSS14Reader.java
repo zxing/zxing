@@ -23,7 +23,6 @@ import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.ResultPointCallback;
 import com.google.zxing.common.BitArray;
-import com.google.zxing.oned.OneDReader;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -32,13 +31,7 @@ import java.util.Vector;
 /**
  * Decodes RSS-14, including truncated and stacked variants. See ISO/IEC 24724:2006.
  */
-public final class RSS14Reader extends OneDReader {
-
-  private static final int MAX_AVG_VARIANCE = (int) (PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.2f);
-  private static final int MAX_INDIVIDUAL_VARIANCE = (int) (PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.4f);
-
-  private static final float MIN_FINDER_PATTERN_RATIO = 9.5f / 12.0f;
-  private static final float MAX_FINDER_PATTERN_RATIO = 12.5f / 14.0f;
+public final class RSS14Reader extends AbstractRSSReader {
 
   private static final int[] OUTSIDE_EVEN_TOTAL_SUBSET = {1,10,34,70,126};
   private static final int[] INSIDE_ODD_TOTAL_SUBSET = {4,20,48,81};
@@ -59,22 +52,10 @@ public final class RSS14Reader extends OneDReader {
       {1,3,9,1},
   };
 
-  private final int[] decodeFinderCounters;
-  private final int[] dataCharacterCounters;
-  private final float[] oddRoundingErrors;
-  private final float[] evenRoundingErrors;
-  private final int[] oddCounts;
-  private final int[] evenCounts;
   private final Vector possibleLeftPairs;
   private final Vector possibleRightPairs;
 
   public RSS14Reader() {
-    decodeFinderCounters = new int[4];
-    dataCharacterCounters = new int[8];
-    oddRoundingErrors = new float[4];
-    evenRoundingErrors = new float[4];
-    oddCounts = new int[dataCharacterCounters.length / 2];
-    evenCounts = new int[dataCharacterCounters.length / 2];
     possibleLeftPairs = new Vector();
     possibleRightPairs = new Vector();
   }
@@ -348,28 +329,6 @@ public final class RSS14Reader extends OneDReader {
 
   }
 
-  private static boolean isFinderPattern(int[] counters) {
-    int firstTwoSum = counters[0] + counters[1];
-    int sum = firstTwoSum + counters[2] + counters[3];
-    float ratio = (float) firstTwoSum / (float) sum;
-    if (ratio >= MIN_FINDER_PATTERN_RATIO && ratio <= MAX_FINDER_PATTERN_RATIO) {
-      // passes ratio test in spec, but see if the counts are unreasonable
-      int minCounter = Integer.MAX_VALUE;
-      int maxCounter = Integer.MIN_VALUE;
-      for (int i = 0; i < counters.length; i++) {
-        int counter = counters[i];
-        if (counter > maxCounter) {
-          maxCounter = counter;
-        }
-        if (counter < minCounter) {
-          minCounter = counter;
-        }
-      }
-      return maxCounter < 10 * minCounter;
-    }
-    return false;
-  }
-
   private FinderPattern parseFoundFinderPattern(BitArray row, int rowNumber, boolean right, int[] startEnd)
       throws NotFoundException {
     // Actually we found elements 2-5
@@ -387,7 +346,7 @@ public final class RSS14Reader extends OneDReader {
       counters[i] = counters[i-1];
     }
     counters[0] = firstCounter;
-    int value = parseFinderValue(counters);
+    int value = parseFinderValue(counters, FINDER_PATTERNS);
     int start = firstElementStart;
     int end = startEnd[1];
     if (right) {
@@ -396,16 +355,6 @@ public final class RSS14Reader extends OneDReader {
       end = row.getSize() - 1 - end;
     }
     return new FinderPattern(value, new int[] {firstElementStart, startEnd[1]}, start, end, rowNumber);
-  }
-
-  private static int parseFinderValue(int[] counters) throws NotFoundException {
-    for (int value = 0; value < FINDER_PATTERNS.length; value++) {
-      if (patternMatchVariance(counters, FINDER_PATTERNS[value], MAX_INDIVIDUAL_VARIANCE) <
-          MAX_AVG_VARIANCE) {
-        return value;
-      }
-    }
-    throw NotFoundException.getNotFoundInstance();
   }
 
   /*
@@ -424,38 +373,6 @@ public final class RSS14Reader extends OneDReader {
     return normalized;
   }
    */
-
-  private static int count(int[] array) {
-    int count = 0;
-    for (int i = 0; i < array.length; i++) {
-      count += array[i];
-    }
-    return count;
-  }
-
-  private static void increment(int[] array, float[] errors) {
-    int index = 0;
-    float biggestError = errors[0];
-    for (int i = 1; i < array.length; i++) {
-      if (errors[i] > biggestError) {
-        biggestError = errors[i];
-        index = i;
-      }
-    }
-    array[index]++;
-  }
-
-  private static void decrement(int[] array, float[] errors) {
-    int index = 0;
-    float biggestError = errors[0];
-    for (int i = 1; i < array.length; i++) {
-      if (errors[i] < biggestError) {
-        biggestError = errors[i];
-        index = i;
-      }
-    }
-    array[index]--;
-  }
 
   private void adjustOddEvenCounts(boolean outsideChar, int numModules) throws NotFoundException {
 

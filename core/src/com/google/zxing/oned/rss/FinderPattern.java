@@ -18,13 +18,13 @@ package com.google.zxing.oned.rss;
 
 import com.google.zxing.ResultPoint;
 
-final class FinderPattern {
+public final class FinderPattern {
 
   private final int value;
   private final int[] startEnd;
   private final ResultPoint[] resultPoints;
 
-  FinderPattern(int value, int[] startEnd, int start, int end, int rowNumber) {
+  public FinderPattern(int value, int[] startEnd, int start, int end, int rowNumber) {
     this.value = value;
     this.startEnd = startEnd;
     this.resultPoints = new ResultPoint[] {
@@ -33,15 +33,15 @@ final class FinderPattern {
     };
   }
 
-  int getValue() {
+  public int getValue() {
     return value;
   }
 
-  int[] getStartEnd() {
+  public int[] getStartEnd() {
     return startEnd;
   }
 
-  ResultPoint[] getResultPoints() {
+  public ResultPoint[] getResultPoints() {
     return resultPoints;
   }
 

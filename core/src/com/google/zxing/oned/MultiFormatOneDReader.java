@@ -24,6 +24,7 @@ import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 import com.google.zxing.common.BitArray;
 import com.google.zxing.oned.rss.RSS14Reader;
+import com.google.zxing.oned.rss.expanded.RSSExpandedReader;
 
 import java.util.Hashtable;
 import java.util.Vector;
@@ -61,6 +62,9 @@ public final class MultiFormatOneDReader extends OneDReader {
       if (possibleFormats.contains(BarcodeFormat.RSS14)) {
          readers.addElement(new RSS14Reader());
       }
+      if (possibleFormats.contains(BarcodeFormat.RSS_EXPANDED)){
+        readers.addElement(new RSSExpandedReader());
+      }
     }
     if (readers.isEmpty()) {
       readers.addElement(new MultiFormatUPCEANReader(hints));
@@ -68,6 +72,7 @@ public final class MultiFormatOneDReader extends OneDReader {
       readers.addElement(new Code128Reader());
       readers.addElement(new ITFReader());
       readers.addElement(new RSS14Reader());      
+      readers.addElement(new RSSExpandedReader());      
     }
   }
 

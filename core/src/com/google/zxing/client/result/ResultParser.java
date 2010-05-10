@@ -72,6 +72,8 @@ public abstract class ResultParser {
       return result;
     } else if ((result = ProductResultParser.parse(theResult)) != null) {
       return result;
+    } else if ((result = ExpandedProductResultParser.parse(theResult)) != null) {
+      return result;
     }
     return new TextParsedResult(theResult.getText(), null);
   }
