@@ -4,3 +4,7 @@ body {
   font-family: arial;
   font-size: 16;
 }
+ul.touchable li {
+  padding-top:8px;
+  padding-bottom:8px;
+}
