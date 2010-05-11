@@ -282,8 +282,11 @@ public final class DecodeServlet extends HttpServlet {
       response.sendRedirect("badimage.jspx");
       return;
     }
-    if (image == null ||
-        image.getHeight() <= 1 || image.getWidth() <= 1 ||
+    if (image == null) {
+      response.sendRedirect("badimage.jspx");
+      return;      
+    }
+    if (image.getHeight() <= 1 || image.getWidth() <= 1 ||
         image.getHeight() * image.getWidth() > MAX_PIXELS) {
       log.fine("Dimensions too large: " + image.getWidth() + 'x' + image.getHeight());        
       response.sendRedirect("badimage.jspx");
