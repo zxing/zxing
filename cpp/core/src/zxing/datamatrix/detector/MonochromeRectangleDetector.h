@@ -31,6 +31,11 @@
 namespace zxing {
 namespace datamatrix {
 
+struct TwoInts: public Counted {
+	int start;
+	int end;
+};
+
 class MonochromeRectangleDetector : public Counted {
 private:
   static const int MAX_MODULES = 32;
@@ -45,7 +50,7 @@ private:
   Ref<CornerPoint> findCornerFromCenter(int centerX, int deltaX, int left, int right,
       int centerY, int deltaY, int top, int bottom, int maxWhiteRun);
 
-  int* blackWhiteRange(int fixedDimension, int maxWhiteRun, int minDim, int maxDim,
+  Ref<TwoInts> blackWhiteRange(int fixedDimension, int maxWhiteRun, int minDim, int maxDim,
       bool horizontal);
 
   int max(int a, float b) { return (float) a > b ? a : (int) b;};
