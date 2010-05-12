@@ -53,7 +53,8 @@ std::vector<Ref<CornerPoint> > MonochromeRectangleDetector::detect() {
     // Go try to find point A again with better information -- might have been off at first.
     pointA.reset(findCornerFromCenter(halfWidth, 0, left, right,
         halfHeight, -deltaY, top, bottom, halfWidth >> 2));
-	std::vector<Ref<CornerPoint> > corners(4);
+	  std::vector<Ref<CornerPoint> > corners(4);
+
   	corners[0].reset(pointA);
   	corners[1].reset(pointB);
   	corners[2].reset(pointC);
@@ -63,11 +64,11 @@ std::vector<Ref<CornerPoint> > MonochromeRectangleDetector::detect() {
 
 Ref<CornerPoint> MonochromeRectangleDetector::findCornerFromCenter(int centerX, int deltaX, int left, int right,
       int centerY, int deltaY, int top, int bottom, int maxWhiteRun) {    
-	  int* lastRange = NULL;
+	Ref<TwoInts> lastRange(NULL);
     for (int y = centerY, x = centerX;
          y < bottom && y >= top && x < right && x >= left;
          y += deltaY, x += deltaX) {
-      int* range;
+    Ref<TwoInts> range(NULL);
       if (deltaX == 0) {
         // horizontal slices, up and down
         range = blackWhiteRange(y, maxWhiteRun, left, right, true);
@@ -82,48 +83,40 @@ Ref<CornerPoint> MonochromeRectangleDetector::findCornerFromCenter(int centerX, 
         // lastRange was found
         if (deltaX == 0) {
           int lastY = y - deltaY;
-          if (lastRange[0] < centerX) {
-            if (lastRange[1] > centerX) {
+          if (lastRange->start < centerX) {
+            if (lastRange->end > centerX) {
               // straddle, choose one or the other based on direction
-			        Ref<CornerPoint> result(new CornerPoint(deltaY > 0 ? lastRange[0] : lastRange[1], lastY));
-							delete [] lastRange;
+			        Ref<CornerPoint> result(new CornerPoint(deltaY > 0 ? lastRange->start : lastRange->end, lastY));
 			        return result;
             }
-			      Ref<CornerPoint> result(new CornerPoint(lastRange[0], lastY));
-						delete [] lastRange;
+			      Ref<CornerPoint> result(new CornerPoint(lastRange->start, lastY));
 			      return result;
           } else {
-			      Ref<CornerPoint> result(new CornerPoint(lastRange[1], lastY));
-						delete [] lastRange;
+			      Ref<CornerPoint> result(new CornerPoint(lastRange->end, lastY));
 			      return result;
             }
         } else {
           int lastX = x - deltaX;
-          if (lastRange[0] < centerY) {
-            if (lastRange[1] > centerY) {
-			        Ref<CornerPoint> result(new CornerPoint(lastX, deltaX < 0 ? lastRange[0] : lastRange[1]));
-							delete [] lastRange;
+          if (lastRange->start < centerY) {
+            if (lastRange->end > centerY) {
+			        Ref<CornerPoint> result(new CornerPoint(lastX, deltaX < 0 ? lastRange->start : lastRange->end));
 			        return result;
             }
-			      Ref<CornerPoint> result(new CornerPoint(lastX, lastRange[0]));
-						delete [] lastRange;
+			      Ref<CornerPoint> result(new CornerPoint(lastX, lastRange->start));
 			      return result;
           } else {
-			      Ref<CornerPoint> result(new CornerPoint(lastX, lastRange[1]));
-						delete [] lastRange;
+			      Ref<CornerPoint> result(new CornerPoint(lastX, lastRange->end));
 			      return result;
             }
           }
         }
       }
-		delete [] lastRange;
       lastRange = range;
     }
-	delete [] lastRange;
     throw ReaderException("Couldn't find corners");
   }
 
-int* MonochromeRectangleDetector::blackWhiteRange(int fixedDimension, int maxWhiteRun, int minDim, int maxDim,
+Ref<TwoInts> MonochromeRectangleDetector::blackWhiteRange(int fixedDimension, int maxWhiteRun, int minDim, int maxDim,
       bool horizontal) {
     
 	  int center = (minDim + maxDim) >> 1;
@@ -167,15 +160,13 @@ int* MonochromeRectangleDetector::blackWhiteRange(int fixedDimension, int maxWhi
       }
     }
     end--;
-    int* result;
+    Ref<TwoInts> result(NULL);
     if (end > start) {
-      result = new int [2];
-      result[0] = start;
-      result[1] = end;
+		result = new TwoInts;
+      result->start = start;
+      result->end = end;
     }
-    else
-    	result = NULL;
-	  return result;
+    return result;
   }
 }
 }
