@@ -29,12 +29,13 @@
 CGImageRef UIGetScreenImage();
 
 @implementation ZXingWidgetController
-@synthesize result, actions, showCancel, delegate;
+@synthesize result, actions, showCancel, delegate, soundToPlay;
 
 - (id)initWithDelegate:(id<ZXingDelegate>)scanDelegate {
 	if (self = [super init]) {
 		[self setDelegate:scanDelegate];
 		showCancel = true;
+		beepSound = -1;
 		self.wantsFullScreenLayout = YES;
 		self.sourceType = UIImagePickerControllerSourceTypeCamera;
 		float zoomFactor = CAMERA_SCALAR;
@@ -55,7 +56,9 @@ CGImageRef UIGetScreenImage();
 }
 
 - (void)dealloc {
-	AudioServicesDisposeSystemSoundID(beepSound);
+	if (beepSound != -1) {
+		AudioServicesDisposeSystemSoundID(beepSound);
+	}
 	[overlayView dealloc];
 	[super dealloc];
 }
@@ -85,13 +88,16 @@ CGImageRef UIGetScreenImage();
 	return false;
 }
 
-- (void)viewDidLoad {
-	[super viewDidLoad];
-	NSBundle *mainBundle = [NSBundle mainBundle];
-	OSStatus error = AudioServicesCreateSystemSoundID((CFURLRef)[NSURL fileURLWithPath:[mainBundle pathForResource:@"beep-beep" ofType:@"caf"] isDirectory:NO], &beepSound);
-	if (error != kAudioServicesNoError) {
-		NSLog(@"Problem loading nearSound.caf");
-	}	
+- (void)viewWillAppear:(BOOL)animated {
+	[super viewWillAppear:animated];
+	NSLog(@"should load sound");
+	if ([self soundToPlay] != nil) {
+		NSLog(@"will try to load sound");
+		OSStatus error = AudioServicesCreateSystemSoundID((CFURLRef)[self soundToPlay], &beepSound);
+		if (error != kAudioServicesNoError) {
+			NSLog(@"Problem loading nearSound.caf");
+		}
+	}
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -113,27 +119,30 @@ CGImageRef UIGetScreenImage();
 	CGRect cropRect = overlayView.cropRect;
 	cropRect.origin.x = 0.0;
 	cropRect.origin.y = 0.0;
-	NSLog(@"crop rect %f, %f, %f, %f", cropRect.origin.x, cropRect.origin.y, cropRect.size.width, cropRect.size.height);
 	[d decodeImage:scrn cropRect:cropRect];
 }
 
 // DecoderDelegate methods
 
 - (void)decoder:(Decoder *)decoder willDecodeImage:(UIImage *)image usingSubset:(UIImage *)subset{
+#ifdef DEBUG
 	NSLog(@"DecoderViewController MessageWhileDecodingWithDimensions: Decoding image (%.0fx%.0f) ...", image.size.width, image.size.height);
+#endif
 }
 
 - (void)decoder:(Decoder *)decoder
   decodingImage:(UIImage *)image
     usingSubset:(UIImage *)subset
        progress:(NSString *)message {
-	NSLog(@"decoding image %@", message);
 }
 
 - (void)presentResultForString:(NSString *)resultString {
-	NSLog(@"in presentResultForString()");
 	self.result = [ResultParser parsedResultForString:resultString];
-	AudioServicesPlaySystemSound(beepSound);
+	
+	if (beepSound != -1) {
+		NSLog(@"about to play beep... trying...");
+		AudioServicesPlaySystemSound(beepSound);
+	}
 #ifdef DEBUG
 	NSLog(@"result string = %@", resultString);
 	NSLog(@"result has %d actions", actions ? 0 : actions.count);
@@ -145,13 +154,11 @@ CGImageRef UIGetScreenImage();
                    forImage:(UIImage *)image
                 usingSubset:(UIImage *)subset {
 	// simply add the points to the image view
-	NSLog(@"got points for display");
 	[overlayView setPoints:resultPoints];
 }
 
 - (void)decoder:(Decoder *)decoder didDecodeImage:(UIImage *)image usingSubset:(UIImage *)subset withResult:(TwoDDecoderResult *)twoDResult {
-	//	[self presentResultForString:twoDResult.text];
-	NSLog(@"decoded image!!");
+	[self presentResultForString:[twoDResult text]];
 	[self presentResultPoints:[twoDResult points] forImage:image usingSubset:subset];
 	// now, in a selector, call the delegate to give this overlay time to show the points
 	[self performSelector:@selector(alertDelegate:) withObject:[[twoDResult text] copy] afterDelay:1.0];
