@@ -430,7 +430,6 @@
 		E5345AA21198859A000CB77F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		E5345AC611988B6E000CB77F /* GrayBytesMonochromeBitmapSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GrayBytesMonochromeBitmapSource.h; sourceTree = "<group>"; };
 		E5345AC711988B6E000CB77F /* GrayBytesMonochromeBitmapSource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GrayBytesMonochromeBitmapSource.cpp; sourceTree = "<group>"; };
-		E5345D2911999F62000CB77F /* beep-beep.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "beep-beep.caf"; sourceTree = "<group>"; };
 		E5345F2B119B0762000CB77F /* Decoder.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Decoder.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -816,7 +815,6 @@
 		E5345D2811999F53000CB77F /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				E5345D2911999F62000CB77F /* beep-beep.caf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";

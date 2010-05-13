@@ -28,12 +28,14 @@
 	OverlayView *overlayView;
 	SystemSoundID beepSound;
 	BOOL showCancel;
+	NSURL *soundToPlay;
 	id<ZXingDelegate> delegate;
 	BOOL wasCancelled;
 }
 
 @property (nonatomic, assign) id<ZXingDelegate> delegate;
 @property (nonatomic, assign) BOOL showCancel;
+@property (nonatomic, assign) NSURL *soundToPlay;
 @property (nonatomic, retain) ParsedResult *result;
 @property (nonatomic, retain) NSArray *actions;
 

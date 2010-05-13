@@ -19,6 +19,8 @@
     [super viewDidLoad];
 	[self setTitle:@"ZXing"];
 	scanController = [[ZXingWidgetController alloc] initWithDelegate:self];
+	NSBundle *mainBundle = [NSBundle mainBundle];
+	[scanController setSoundToPlay:[[NSURL fileURLWithPath:[mainBundle pathForResource:@"beep-beep" ofType:@"aiff"] isDirectory:NO] retain]];
 }
 
 - (IBAction)scanPressed:(id)sender {

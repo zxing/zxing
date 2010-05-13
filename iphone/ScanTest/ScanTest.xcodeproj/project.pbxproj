@@ -17,6 +17,7 @@
 		28F335F11007B36200424DE2 /* RootViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28F335F01007B36200424DE2 /* RootViewController.xib */; };
 		E5345BC91198D74D000CB77F /* libZXingWidget.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E5345BC81198D74D000CB77F /* libZXingWidget.a */; };
 		E5345BF11198D81A000CB77F /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5345BF01198D81A000CB77F /* AudioToolbox.framework */; };
+		E548755C119C62B9001CC0F8 /* beep-beep.aiff in Resources */ = {isa = PBXBuildFile; fileRef = E548755B119C62B9001CC0F8 /* beep-beep.aiff */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -72,6 +73,7 @@
 		E5345BED1198D7E2000CB77F /* ZXingWidgetController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZXingWidgetController.h; path = ../ZXingWidget/ZXingWidgetController.h; sourceTree = SOURCE_ROOT; };
 		E5345BF01198D81A000CB77F /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		E5345FD6119B27D2000CB77F /* libZXingWidget.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = libZXingWidget.a; path = "build/Debug-iphoneos/libZXingWidget.a"; sourceTree = "<group>"; };
+		E548755B119C62B9001CC0F8 /* beep-beep.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = "beep-beep.aiff"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -135,6 +137,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				E548755B119C62B9001CC0F8 /* beep-beep.aiff */,
 				28F335F01007B36200424DE2 /* RootViewController.xib */,
 				28AD735F0D9D9599002E5188 /* MainWindow.xib */,
 				8D1107310486CEB800E47090 /* ScanTest-Info.plist */,
@@ -248,6 +251,7 @@
 			files = (
 				28AD73600D9D9599002E5188 /* MainWindow.xib in Resources */,
 				28F335F11007B36200424DE2 /* RootViewController.xib in Resources */,
+				E548755C119C62B9001CC0F8 /* beep-beep.aiff in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
