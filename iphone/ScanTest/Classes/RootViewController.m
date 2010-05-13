@@ -57,8 +57,8 @@
 
 #pragma mark Memory management
 
-- (void)scanResult:(ParsedResult *)result {
-	[resultsView setText:[result stringForDisplay]];
+- (void)scanResult:(NSString *)result {
+	[resultsView setText:result];
 	[self dismissModalViewControllerAnimated:true];
 }
 
