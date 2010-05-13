@@ -54,6 +54,12 @@ CGImageRef UIGetScreenImage();
 	return self;
 }
 
+- (void)dealloc {
+	AudioServicesDisposeSystemSoundID(beepSound);
+	[overlayView dealloc];
+	[super dealloc];
+}
+
 - (void)cancelled {
 	NSLog(@"cancelled called in ZXingWidgetController");
 	wasCancelled = true;
@@ -77,6 +83,15 @@ CGImageRef UIGetScreenImage();
 	if ([platform isEqualToString:@"iPhone1,1"] ||
 		[platform isEqualToString:@"iPhone1,2"]) return true;
 	return false;
+}
+
+- (void)viewDidLoad {
+	[super viewDidLoad];
+	NSBundle *mainBundle = [NSBundle mainBundle];
+	OSStatus error = AudioServicesCreateSystemSoundID((CFURLRef)[NSURL fileURLWithPath:[mainBundle pathForResource:@"beep-beep" ofType:@"caf"] isDirectory:NO], &beepSound);
+	if (error != kAudioServicesNoError) {
+		NSLog(@"Problem loading nearSound.caf");
+	}	
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -119,7 +134,6 @@ CGImageRef UIGetScreenImage();
 	NSLog(@"in presentResultForString()");
 	self.result = [ResultParser parsedResultForString:resultString];
 	AudioServicesPlaySystemSound(beepSound);
-	//	self.actions = self.result.actions;
 #ifdef DEBUG
 	NSLog(@"result string = %@", resultString);
 	NSLog(@"result has %d actions", actions ? 0 : actions.count);
@@ -140,7 +154,7 @@ CGImageRef UIGetScreenImage();
 	NSLog(@"decoded image!!");
 	[self presentResultPoints:[twoDResult points] forImage:image usingSubset:subset];
 	// now, in a selector, call the delegate to give this overlay time to show the points
-	[self performSelectorOnMainThread:@selector(alertDelegate:) withObject:[[twoDResult text] copy] waitUntilDone:false];
+	[self performSelector:@selector(alertDelegate:) withObject:[[twoDResult text] copy] afterDelay:1.0];
 	decoder.delegate = nil;
 	[decoder release];
 }
