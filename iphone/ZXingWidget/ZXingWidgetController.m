@@ -81,6 +81,7 @@ CGImageRef UIGetScreenImage();
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+	[overlayView setPoints:nil];
 	wasCancelled = false;
 	[NSTimer scheduledTimerWithTimeInterval: FIRST_TAKE_DELAY
 									 target: self
@@ -138,16 +139,16 @@ CGImageRef UIGetScreenImage();
 	//	[self presentResultForString:twoDResult.text];
 	NSLog(@"decoded image!!");
 	[self presentResultPoints:[twoDResult points] forImage:image usingSubset:subset];
-	if (delegate != nil) {
-		[delegate scanResult:[twoDResult text]];
-	}
+	// now, in a selector, call the delegate to give this overlay time to show the points
+	[self performSelectorOnMainThread:@selector(alertDelegate:) withObject:[[twoDResult text] copy] waitUntilDone:false];
 	decoder.delegate = nil;
 	[decoder release];
-	
-	// save the scan to the shared database
-	//	[[Database sharedDatabase] addScanWithText:twoDResult.text];
-	// need to call delegate....`
-	//	[self performResultAction:self];
+}
+
+- (void)alertDelegate:(id)text {	
+	if (delegate != nil) {
+		[delegate scanResult:text];
+	}
 }
 
 - (void)decoder:(Decoder *)decoder failedToDecodeImage:(UIImage *)image usingSubset:(UIImage *)subset reason:(NSString *)reason {

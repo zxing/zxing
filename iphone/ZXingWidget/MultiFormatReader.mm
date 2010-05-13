@@ -35,7 +35,6 @@
 
 - (id)init {
   zxing::MultiFormatReader *reader = new zxing::MultiFormatReader();
-	NSLog(@"MultiFormatReader: init called");
   return [super initWithReader:reader];
 }
 
