@@ -37,7 +37,7 @@ namespace zxing {
 	Ref<Result> MultiFormatReader::decode(Ref<BinaryBitmap> image){
 		for (unsigned int i = 0; i < readers.size(); i++) {
 			try {
-				return reader[i]->decode(image);
+				return readers[i]->decode(image);
 			} catch (ReaderException re) {
 				// continue
 			}
