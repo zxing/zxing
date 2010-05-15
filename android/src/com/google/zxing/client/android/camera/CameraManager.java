@@ -98,7 +98,7 @@ public final class CameraManager {
     useOneShotPreviewCallback = Integer.parseInt(Build.VERSION.SDK) > Build.VERSION_CODES.CUPCAKE;
 
     previewCallback = new PreviewCallback(configManager, useOneShotPreviewCallback);
-    autoFocusCallback = new AutoFocusCallback(configManager);
+    autoFocusCallback = new AutoFocusCallback();
   }
 
   /**

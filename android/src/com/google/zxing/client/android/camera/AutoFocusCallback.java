@@ -27,14 +27,8 @@ final class AutoFocusCallback implements Camera.AutoFocusCallback {
 
   private static final long AUTOFOCUS_INTERVAL_MS = 1500L;
 
-  private final CameraConfigurationManager configManager;
-  private boolean reinitCamera;
   private Handler autoFocusHandler;
   private int autoFocusMessage;
-
-  AutoFocusCallback(CameraConfigurationManager configManager) {
-    this.configManager = configManager;
-  }
 
   void setHandler(Handler autoFocusHandler, int autoFocusMessage) {
     this.autoFocusHandler = autoFocusHandler;
@@ -49,10 +43,6 @@ final class AutoFocusCallback implements Camera.AutoFocusCallback {
       //Log.d(TAG, "Got auto-focus callback; requesting another");
       autoFocusHandler.sendMessageDelayed(message, AUTOFOCUS_INTERVAL_MS);
       autoFocusHandler = null;
-      if (!reinitCamera) {
-        reinitCamera = true;
-        configManager.setDesiredCameraParameters(camera);
-      }
     } else {
       Log.d(TAG, "Got auto-focus callback, but no handler for it");
     }
