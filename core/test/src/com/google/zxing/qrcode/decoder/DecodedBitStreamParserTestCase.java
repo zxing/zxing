@@ -41,13 +41,14 @@ public final class DecodedBitStreamParserTestCase extends TestCase {
   public void testSimpleSJIS() throws Exception {
     BitSourceBuilder builder = new BitSourceBuilder();
     builder.write(0x04, 4); // Byte mode
-    builder.write(0x03, 8); // 3 bytes
+    builder.write(0x04, 8); // 4 bytes
     builder.write(0xA1, 8);
     builder.write(0xA2, 8);
     builder.write(0xA3, 8);
+    builder.write(0xD0, 8);
     String result = DecodedBitStreamParser.decode(builder.toByteArray(),
         Version.getVersionForNumber(1), null, null).getText();
-    assertEquals("\uff61\uff62\uff63", result);
+    assertEquals("\uff61\uff62\uff63\uff90", result);
   }
 
   public void testECI() throws Exception {
