@@ -27,6 +27,7 @@ import android.preference.PreferenceManager;
 
 import java.util.Hashtable;
 import java.util.Vector;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * This thread does all the heavy lifting of decoding the images.
@@ -40,6 +41,7 @@ final class DecodeThread extends Thread {
   private final CaptureActivity activity;
   private final Hashtable<DecodeHintType, Object> hints;
   private Handler handler;
+  private final CountDownLatch handlerInitLatch;
 
   DecodeThread(CaptureActivity activity,
                Vector<BarcodeFormat> decodeFormats,
@@ -47,6 +49,7 @@ final class DecodeThread extends Thread {
                ResultPointCallback resultPointCallback) {
 
     this.activity = activity;
+    handlerInitLatch = new CountDownLatch(1);
 
     hints = new Hashtable<DecodeHintType, Object>(3);
 
@@ -74,13 +77,19 @@ final class DecodeThread extends Thread {
   }
 
   Handler getHandler() {
+    try {
+      handlerInitLatch.await();
+    } catch (InterruptedException ie) {
+      // continue?
+    }
     return handler;
   }
 
   @Override
   public void run() {
     Looper.prepare();
-    handler = new DecodeHandler(activity, hints);    
+    handler = new DecodeHandler(activity, hints);
+    handlerInitLatch.countDown();
     Looper.loop();
   }
 
