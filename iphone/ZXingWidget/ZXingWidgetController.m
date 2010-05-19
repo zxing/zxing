@@ -22,7 +22,6 @@
 #import "ResultAction.h"
 #include <sys/types.h>
 #include <sys/sysctl.h>
-#include "UKImage.h"
 
 #define CAMERA_SCALAR 1.12412 // scalar = (480 / (2048 / 480))
 #define FIRST_TAKE_DELAY 1.0
