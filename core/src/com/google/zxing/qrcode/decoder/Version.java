@@ -129,7 +129,7 @@ public final class Version {
       }
     }
     // We can tolerate up to 3 bits of error since no two version info codewords will
-    // differ in less than 4 bits.
+    // differ in less than 8 bits.
     if (bestDifference <= 3) {
       return getVersionForNumber(bestVersion);
     }
