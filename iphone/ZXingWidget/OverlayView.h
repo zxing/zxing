@@ -23,11 +23,13 @@
 	NSArray *_points;
 	UIButton *cancelButton;
 	id<CancelDelegate> delegate;
+	BOOL oneDMode;
 }
 
 //@property (nonatomic, retain)   UIImage*  image;
 @property (nonatomic, retain) NSArray*  points;
 @property (nonatomic, assign) id<CancelDelegate> delegate;
+@property (nonatomic, assign) BOOL oneDMode;
 
 - (id)initWithCancelEnabled:(BOOL)cancelEnabled frame:(CGRect)frame;
 
