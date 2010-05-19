@@ -40,7 +40,6 @@ static NSMutableSet *sFormatReaders = nil;
   @synchronized(self) {
 
     formatReaders = [[sFormatReaders copy] autorelease];
-	  NSLog(@"readers : %d",[formatReaders count]);
   }
   return formatReaders;
 }

@@ -28,7 +28,6 @@
 
 + (void)load {
   NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	NSLog(@"MultiFormatReader: load called");
   [FormatReader registerFormatReader:[[[self alloc] init] autorelease]];
   [pool drain];
 }

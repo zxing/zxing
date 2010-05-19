@@ -133,7 +133,7 @@ using namespace zxing;
   
   self.subsetImage = [UIImage imageWithCGImage:subsetImageRef];
   // for debug purposes.
-  UIImageWriteToSavedPhotosAlbum(self.subsetImage, nil, nil, nil);
+//  UIImageWriteToSavedPhotosAlbum(self.subsetImage, nil, nil, nil);
 
   CGImageRelease(subsetImageRef);
   
@@ -161,7 +161,7 @@ using namespace zxing;
     TwoDDecoderResult *decoderResult = nil;
     
 #ifdef TRY_ROTATIONS
-    for (int i = 0; !decoderResult && i < 4; i++) {`
+    for (int i = 0; !decoderResult && i < 4; i++) {
 #endif
       for (FormatReader *reader in formatReaders) {
         try {

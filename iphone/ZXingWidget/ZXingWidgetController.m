@@ -22,29 +22,32 @@
 #import "ResultAction.h"
 #include <sys/types.h>
 #include <sys/sysctl.h>
+#include "UKImage.h"
 
 #define CAMERA_SCALAR 1.12412 // scalar = (480 / (2048 / 480))
 #define FIRST_TAKE_DELAY 1.0
+#define ONE_D_BAND_HEIGHT 10.0
 
 CGImageRef UIGetScreenImage();
 
 @implementation ZXingWidgetController
-@synthesize result, actions, showCancel, delegate, soundToPlay;
+@synthesize result, actions, showCancel, delegate, soundToPlay, oneDMode;
 
 - (id)initWithDelegate:(id<ZXingDelegate>)scanDelegate {
 	if (self = [super init]) {
 		[self setDelegate:scanDelegate];
-		showCancel = true;
 		beepSound = -1;
 		self.wantsFullScreenLayout = YES;
 		self.sourceType = UIImagePickerControllerSourceTypeCamera;
 		float zoomFactor = CAMERA_SCALAR;
 		if ([self fixedFocus]) {
-			zoomFactor *= 1.5;
+			zoomFactor *= 2.0;
 		}
 		self.cameraViewTransform = CGAffineTransformScale(
 					self.cameraViewTransform, zoomFactor, zoomFactor);
-		overlayView = [[OverlayView alloc] initWithCancelEnabled:showCancel frame:[UIScreen mainScreen].bounds];
+		overlayView = [OverlayView alloc];
+		[overlayView setOneDMode:oneDMode];
+		overlayView = [overlayView initWithCancelEnabled:showCancel frame:[UIScreen mainScreen].bounds];
 		[overlayView setDelegate:self];
 		self.sourceType = UIImagePickerControllerSourceTypeCamera;
 		self.showsCameraControls = NO;
@@ -90,9 +93,7 @@ CGImageRef UIGetScreenImage();
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
-	NSLog(@"should load sound");
 	if ([self soundToPlay] != nil) {
-		NSLog(@"will try to load sound");
 		OSStatus error = AudioServicesCreateSystemSoundID((CFURLRef)[self soundToPlay], &beepSound);
 		if (error != kAudioServicesNoError) {
 			NSLog(@"Problem loading nearSound.caf");
@@ -111,12 +112,104 @@ CGImageRef UIGetScreenImage();
 									repeats: NO];
 }
 
+- (CGImageRef)CGImageRotated90:(CGImageRef)imgRef
+{
+	CGFloat angleInRadians = -90 * (M_PI / 180);
+	CGFloat width = CGImageGetWidth(imgRef);
+	CGFloat height = CGImageGetHeight(imgRef);
+	
+	CGRect imgRect = CGRectMake(0, 0, width, height);
+	CGAffineTransform transform = CGAffineTransformMakeRotation(angleInRadians);
+	CGRect rotatedRect = CGRectApplyAffineTransform(imgRect, transform);
+	
+	CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+	CGContextRef bmContext = CGBitmapContextCreate(NULL,
+												   rotatedRect.size.width,
+												   rotatedRect.size.height,
+												   8,
+												   0,
+												   colorSpace,
+												   kCGImageAlphaPremultipliedFirst);
+	CGContextSetAllowsAntialiasing(bmContext, FALSE);
+	CGContextSetInterpolationQuality(bmContext, kCGInterpolationNone);
+	CGColorSpaceRelease(colorSpace);
+//	CGContextTranslateCTM(bmContext,
+//						  +(rotatedRect.size.width/2),
+//						  +(rotatedRect.size.height/2));
+	CGContextScaleCTM(bmContext, rotatedRect.size.width/rotatedRect.size.height, 1.0);
+	CGContextTranslateCTM(bmContext, 0.0, rotatedRect.size.height);
+	CGContextRotateCTM(bmContext, angleInRadians);
+//	CGContextTranslateCTM(bmContext,
+//						  -(rotatedRect.size.width/2),
+//						  -(rotatedRect.size.height/2));
+	CGContextDrawImage(bmContext, CGRectMake(0, 0,
+											 rotatedRect.size.width,
+											 rotatedRect.size.height),
+					   imgRef);
+	
+	CGImageRef rotatedImage = CGBitmapContextCreateImage(bmContext);
+	CFRelease(bmContext);
+	[(id)rotatedImage autorelease];
+	
+	return rotatedImage;
+}
+
+- (CGImageRef)CGImageRotated180:(CGImageRef)imgRef
+{
+	CGFloat angleInRadians = M_PI;
+	CGFloat width = CGImageGetWidth(imgRef);
+	CGFloat height = CGImageGetHeight(imgRef);
+		
+	CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+	CGContextRef bmContext = CGBitmapContextCreate(NULL,
+												   width,
+												   height,
+												   8,
+												   0,
+												   colorSpace,
+												   kCGImageAlphaPremultipliedFirst);
+	CGContextSetAllowsAntialiasing(bmContext, FALSE);
+	CGContextSetInterpolationQuality(bmContext, kCGInterpolationNone);
+	CGColorSpaceRelease(colorSpace);
+	CGContextTranslateCTM(bmContext,
+							  +(width/2),
+							  +(height/2));
+	CGContextRotateCTM(bmContext, angleInRadians);
+	CGContextTranslateCTM(bmContext,
+							  -(width/2),
+							  -(height/2));
+	CGContextDrawImage(bmContext, CGRectMake(0, 0, width, height), imgRef);
+	
+	CGImageRef rotatedImage = CGBitmapContextCreateImage(bmContext);
+	CFRelease(bmContext);
+	[(id)rotatedImage autorelease];
+	
+	return rotatedImage;
+}
+
 - (void)takePicture:(NSTimer*)theTimer {
 	CGImageRef capture = UIGetScreenImage();
-	UIImage *scrn = [UIImage imageWithCGImage:CGImageCreateWithImageInRect(capture, [overlayView cropRect])];
+	CGRect cropRect = [overlayView cropRect];
+	if (oneDMode) {
+		// let's just give the decoder a vertical band right above the red line
+		cropRect.origin.x = cropRect.origin.x + (cropRect.size.width / 2) - (ONE_D_BAND_HEIGHT + 1);
+		cropRect.size.width = ONE_D_BAND_HEIGHT;
+		// do a rotate
+		CGImageRef croppedImg = CGImageCreateWithImageInRect(capture, cropRect);
+		CGImageRelease(capture);
+		capture = [self CGImageRotated90:croppedImg];
+		capture = [self CGImageRotated180:capture];
+//		UIImageWriteToSavedPhotosAlbum([UIImage imageWithCGImage:capture], nil, nil, nil);
+		CGImageRelease(croppedImg);
+		cropRect.origin.x = 0.0;
+		cropRect.origin.y = 0.0;
+		cropRect.size.width = CGImageGetWidth(capture);
+		cropRect.size.height = CGImageGetHeight(capture);
+	}
+	
+	UIImage *scrn = [UIImage imageWithCGImage:CGImageCreateWithImageInRect(capture, cropRect)];
 	Decoder *d = [[Decoder alloc] init];
 	d.delegate = self;
-	CGRect cropRect = overlayView.cropRect;
 	cropRect.origin.x = 0.0;
 	cropRect.origin.y = 0.0;
 	[d decodeImage:scrn cropRect:cropRect];
@@ -140,7 +233,6 @@ CGImageRef UIGetScreenImage();
 	self.result = [ResultParser parsedResultForString:resultString];
 	
 	if (beepSound != -1) {
-		NSLog(@"about to play beep... trying...");
 		AudioServicesPlaySystemSound(beepSound);
 	}
 #ifdef DEBUG

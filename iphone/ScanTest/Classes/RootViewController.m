@@ -18,7 +18,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 	[self setTitle:@"ZXing"];
-	scanController = [[ZXingWidgetController alloc] initWithDelegate:self];
+	scanController = [ZXingWidgetController alloc];
+	[scanController setOneDMode:false];
+	[scanController setShowCancel:true];
+	scanController = [scanController initWithDelegate:self];
 	NSBundle *mainBundle = [NSBundle mainBundle];
 	[scanController setSoundToPlay:[[NSURL fileURLWithPath:[mainBundle pathForResource:@"beep-beep" ofType:@"aiff"] isDirectory:NO] retain]];
 }

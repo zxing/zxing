@@ -20,7 +20,7 @@ static const CGFloat kPadding = 10;
 
 @implementation OverlayView
 
-@synthesize delegate;
+@synthesize delegate, oneDMode;
 @synthesize points = _points;
 //@synthesize image;
 
@@ -33,7 +33,14 @@ static const CGFloat kPadding = 10;
 	if (cancelEnabled) {
 		cancelButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
 		[cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
-		[cancelButton setFrame:CGRectMake(95, 420, 130, 45)];
+		if (oneDMode) {
+			[cancelButton setTransform:CGAffineTransformMakeRotation(M_PI/2)];
+			[cancelButton setFrame:CGRectMake(20, 175, 45, 130)];
+		}
+		else {
+			[cancelButton setFrame:CGRectMake(95, 420, 130, 45)];			
+		}
+
 		[cancelButton addTarget:self action:@selector(cancel:) forControlEvents:UIControlEventTouchUpInside];
 		[self addSubview:cancelButton];
 	}
@@ -53,7 +60,7 @@ static const CGFloat kPadding = 10;
 	imageView = nil;
 	[_points release];
 	_points = nil;
-	
+	[cancelButton release];
 	[super dealloc];
 }
 
@@ -86,28 +93,57 @@ static const CGFloat kPadding = 10;
 	[self drawRect:cropRect inContext:c];
 	
 //	CGContextSetStrokeColor(c, white);
-	char *text = "Place a barcode inside the";
-	char *text2 = "viewfinder rectangle to scan it.";
 	//	CGContextSetStrokeColor(c, white);
 	CGContextSaveGState(c);
-	CGContextSelectFont(c, "Helvetica", 18, kCGEncodingMacRoman);
-	CGContextScaleCTM(c, -1.0, 1.0);
-	CGContextRotateCTM(c, 3.1415);
-	CGContextShowTextAtPoint(c, 48.0, -45.0, text, 26);
-	CGContextShowTextAtPoint(c, 33.0, -70.0, text2, 32);
+	if (oneDMode) {
+		char *text = "Place a red line over the bar code to be scanned.";
+		CGContextSelectFont(c, "Helvetica", 15, kCGEncodingMacRoman);
+		CGContextScaleCTM(c, -1.0, 1.0);
+		CGContextRotateCTM(c, M_PI/2);
+		CGContextShowTextAtPoint(c, 74.0, 285.0, text, 49);
+	}
+	else {
+		char *text = "Place a barcode inside the";
+		char *text2 = "viewfinder rectangle to scan it.";
+		CGContextSelectFont(c, "Helvetica", 18, kCGEncodingMacRoman);
+		CGContextScaleCTM(c, -1.0, 1.0);
+		CGContextRotateCTM(c, M_PI);
+		CGContextShowTextAtPoint(c, 48.0, -45.0, text, 26);
+		CGContextShowTextAtPoint(c, 33.0, -70.0, text2, 32);
+	}
 	CGContextRestoreGState(c);
+	int offset = rect.size.width / 2;
+	if (oneDMode) {
+		CGFloat red[4] = {1.0f, 0.0f, 0.0f, 1.0f};
+		CGContextSetStrokeColor(c, red);
+		CGContextSetFillColor(c, red);
+		CGContextBeginPath(c);
+		//		CGContextMoveToPoint(c, rect.origin.x + kPadding, rect.origin.y + offset);
+		//		CGContextAddLineToPoint(c, rect.origin.x + rect.size.width - kPadding, rect.origin.y + offset);
+		CGContextMoveToPoint(c, rect.origin.x + offset, rect.origin.y + kPadding);
+		CGContextAddLineToPoint(c, rect.origin.x + offset, rect.origin.y + rect.size.height - kPadding);
+		CGContextStrokePath(c);
+	}
 	if( nil != _points ) {
 		CGFloat blue[4] = {0.0f, 1.0f, 0.0f, 1.0f};
 		CGContextSetStrokeColor(c, blue);
 		CGContextSetFillColor(c, blue);
-		CGRect smallSquare = CGRectMake(0, 0, 10, 10);
-		for( NSValue* value in _points ) {
-			CGPoint point = [value CGPointValue];
-			NSLog(@"drawing point at %f, %f", point.x, point.y);
-			smallSquare.origin = CGPointMake(
-											 cropRect.origin.x + point.x - smallSquare.size.width / 2,
-											 cropRect.origin.y + point.y - smallSquare.size.height / 2);
-			[self drawRect:smallSquare inContext:c];
+		if (oneDMode) {
+			CGPoint val1 = [[_points objectAtIndex:0] CGPointValue];
+			CGPoint val2 = [[_points objectAtIndex:1] CGPointValue];
+			CGContextMoveToPoint(c, offset, val1.x);
+			CGContextAddLineToPoint(c, offset, val2.x);
+			CGContextStrokePath(c);
+		}
+		else {
+			CGRect smallSquare = CGRectMake(0, 0, 10, 10);
+			for( NSValue* value in _points ) {
+				CGPoint point = [value CGPointValue];
+				smallSquare.origin = CGPointMake(
+								cropRect.origin.x + point.x - smallSquare.size.width / 2,
+								cropRect.origin.y + point.y - smallSquare.size.height / 2);
+				[self drawRect:smallSquare inContext:c];
+			}
 		}
 	}
 }
@@ -145,8 +181,13 @@ static const CGFloat kPadding = 10;
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 - (CGRect) cropRect {
 	CGFloat rectSize = self.frame.size.width - kPadding * 2;
-	
-	return CGRectMake(kPadding, (self.frame.size.height - rectSize) / 2, rectSize, rectSize);
+	if (!oneDMode) {
+		return CGRectMake(kPadding, (self.frame.size.height - rectSize) / 2, rectSize, rectSize);
+	}
+	else {
+		CGFloat rectSize2 = self.frame.size.height - kPadding * 2;
+		return CGRectMake(kPadding, kPadding, rectSize, rectSize2);		
+	}
 }
 
 
