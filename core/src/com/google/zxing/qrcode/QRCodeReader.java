@@ -121,10 +121,10 @@ public class QRCodeReader implements Reader {
 
     // And now find where the rightmost black module on the first row ends
     int rowEndOfSymbol = width - 1;
-    while (rowEndOfSymbol >= 0 && !image.get(rowEndOfSymbol, y)) {
+    while (rowEndOfSymbol > x && !image.get(rowEndOfSymbol, y)) {
       rowEndOfSymbol--;
     }
-    if (rowEndOfSymbol < 0) {
+    if (rowEndOfSymbol <= x) {
       throw NotFoundException.getNotFoundInstance();
     }
     rowEndOfSymbol++;
