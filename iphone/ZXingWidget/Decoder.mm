@@ -59,6 +59,8 @@ using namespace zxing;
   if ([self.delegate respondsToSelector:@selector(decoder:didDecodeImage:usingSubset:withResult:)]) {
     [self.delegate decoder:self didDecodeImage:self.image usingSubset:self.subsetImage withResult:result];
   }
+	
+  [result release];
 }
 
 - (void)failedToDecodeImage:(NSString *)reason {
@@ -132,9 +134,6 @@ using namespace zxing;
 #endif
   
   self.subsetImage = [UIImage imageWithCGImage:subsetImageRef];
-  // for debug purposes.
-//  UIImageWriteToSavedPhotosAlbum(self.subsetImage, nil, nil, nil);
-
   CGImageRelease(subsetImageRef);
   
   CGContextRelease(ctx);
@@ -188,8 +187,8 @@ using namespace zxing;
           NSString *resultString = [NSString stringWithCString:cString
                                 encoding:NSUTF8StringEncoding];
           
-          decoderResult = [TwoDDecoderResult resultWithText:resultString
-                                                     points:points];
+          decoderResult = [[TwoDDecoderResult resultWithText:resultString
+                                                     points:points] retain];
         } catch (ReaderException &rex) {
           NSLog(@"failed to decode, caught ReaderException '%s'",
               rex.what());
@@ -213,7 +212,10 @@ using namespace zxing;
       }
     }
 #endif
-    
+	  
+	free(subsetData);
+	self.subsetData = NULL;
+	  
     if (decoderResult) {
       [self performSelectorOnMainThread:@selector(didDecodeImage:)
                    withObject:decoderResult
@@ -223,9 +225,6 @@ using namespace zxing;
                    withObject:NSLocalizedString(@"Decoder BarcodeDetectionFailure", @"No barcode detected.")
                 waitUntilDone:NO];
     }
-    
-    free(subsetData);
-    self.subsetData = NULL;
   }
   [pool drain];
 #ifdef DEBUG
@@ -239,7 +238,7 @@ using namespace zxing;
 }
 
 - (void) decodeImage:(UIImage *)i {
-  [self decodeImage:i cropRect:CGRectMake(0.0f, 0.0f, image.size.width, image.size.height)];
+  [self decodeImage:i cropRect:CGRectMake(0.0f, 0.0f, i.size.width, i.size.height)];
 }
 
 - (void) decodeImage:(UIImage *)i cropRect:(CGRect)cr {
