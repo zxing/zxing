@@ -118,6 +118,9 @@ public class QRCodeReader implements Reader {
     }
 
     int moduleSize = x - leftTopBlack[0];
+    if (moduleSize == 0) {
+      throw NotFoundException.getNotFoundInstance();
+    }
 
     // And now find where the rightmost black module on the first row ends
     int rowEndOfSymbol = width - 1;
