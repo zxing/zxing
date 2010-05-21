@@ -570,6 +570,13 @@ void CZXingBarcodeReaderAppView::MceoHandleOtherEvent( const TECAMEvent& /*aEven
 	}
 
 
+void CZXingBarcodeReaderAppView::StopTimer()
+{
+    if(iPeriodic)
+        iPeriodic->Cancel();
+}
+
+
 
 
 // End of File
