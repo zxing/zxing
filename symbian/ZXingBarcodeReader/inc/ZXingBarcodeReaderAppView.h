@@ -69,6 +69,7 @@ public CCoeControl, public MCameraEngineObserver
         
         //timer
         void StartTimer();
+        void StopTimer();
         static TInt Tick(TAny* aObject);
     
     private: 

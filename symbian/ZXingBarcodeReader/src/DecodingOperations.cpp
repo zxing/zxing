@@ -8,6 +8,8 @@
 #include <zxing/BinaryBitmap.h>
 #include <CameraImage.h>
 #include <string>
+#include <aknmessagequerydialog.h>
+#include "ZXingBarcodeReader_0xEF24C10A.rsg"
 
 using namespace zxing;
 using namespace zxing::qrcode;
@@ -64,41 +66,34 @@ void CZXingBarcodeReaderAppView::decodeBackbufferImage()
 		}
 	catch(zxing::Exception& e)
 		{
-			string string = "Error...retrying...";
+			/*string string = "Error...retrying...";
 			HBufC8 *pHeap8 = HBufC8::NewMaxLC(string.size());
 			pHeap8->Des().Copy((const TUint8 *)string.c_str());
 			
 			HBufC *pHeap16 = HBufC::NewMaxLC(pHeap8->Length());
 			pHeap16->Des().Copy(*pHeap8);
 			
-			ShowResultL(*pHeap16);
+			ShowResultL(*pHeap16);*/
 		}
 	}
 
 void CZXingBarcodeReaderAppView::ShowResultL(TDesC16& message)
 	{
-	if (!iNote)
-		{
-	// Create the note once
-	iNote = CAknInfoPopupNoteController::NewL();
-		}
-	// Hide the note. The last note may be visible when creating the second
-	iNote->HideInfoPopupNote();
-
-	// Set the time delay period before the popup is shown (in milliseconds)
-	iNote->SetTimeDelayBeforeShow(100);
-
-	// Set the time period of how long the popup is in the view (in milliseconds)
-	iNote->SetTimePopupInView(2*1000);
-
-	// Note text
-	iNote->SetTextL(message);
+	 StopTimer();
+	    
+	CAknMessageQueryDialog* dlg = new (ELeave) CAknMessageQueryDialog ();
 	
-	TRect rect(Rect());
+	dlg->PrepareLC(R_TEXT_QUERY_DIALOG );
+	   
+	//HBufC* title = NULL;	
+	//title = iEikonEnv->AllocReadResourceLC ( TEXT_DIALOG_TITLE );
+	dlg->QueryHeading ()->SetTextL (_L("Information") );
+		
+	dlg->SetMessageTextL ( message );
 	
-	// Note position
-	iNote->SetPositionAndAlignment(TPoint(rect.Width()/5,rect.Height()/7),EHLeftVTop);
-
-	// Show note
-	iNote->ShowInfoPopupNote();
+	dlg->RunLD();
+	
+	CleanupStack::PopAndDestroy();
+	
+	StartTimer();
 	}
