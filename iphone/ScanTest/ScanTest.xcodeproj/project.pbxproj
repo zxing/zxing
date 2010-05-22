@@ -11,14 +11,32 @@
 		1D60589B0D05DD56006BFB54 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.mm */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
+		1F027F7F11A7BADA006B06DE /* libZXingWidget.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F027F7E11A7BAD4006B06DE /* libZXingWidget.a */; };
+		1F027F8511A7BB77006B06DE /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F027F8411A7BB77006B06DE /* libiconv.dylib */; };
 		2892E4100DC94CBA00A64D0F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2892E40F0DC94CBA00A64D0F /* CoreGraphics.framework */; };
 		28AD73600D9D9599002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD735F0D9D9599002E5188 /* MainWindow.xib */; };
 		28C286E10D94DF7D0034E888 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C286E00D94DF7D0034E888 /* RootViewController.m */; };
 		28F335F11007B36200424DE2 /* RootViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28F335F01007B36200424DE2 /* RootViewController.xib */; };
-		E5345BC91198D74D000CB77F /* libZXingWidget.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E5345BC81198D74D000CB77F /* libZXingWidget.a */; };
 		E5345BF11198D81A000CB77F /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5345BF01198D81A000CB77F /* AudioToolbox.framework */; };
 		E548755C119C62B9001CC0F8 /* beep-beep.aiff in Resources */ = {isa = PBXBuildFile; fileRef = E548755B119C62B9001CC0F8 /* beep-beep.aiff */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		1F027F7D11A7BAD4006B06DE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1F027F7611A7BAD4006B06DE /* ZXingWidget.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D2AAC07E0554694100DB518D /* libZXingWidget.a */;
+			remoteInfo = ZXingWidget;
+		};
+		1F027F8011A7BB06006B06DE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1F027F7611A7BAD4006B06DE /* ZXingWidget.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = D2AAC07D0554694100DB518D /* ZXingWidget */;
+			remoteInfo = ZXingWidget;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -26,6 +44,8 @@
 		1D3623250D0F684500981E51 /* ScanTestAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScanTestAppDelegate.m; sourceTree = "<group>"; };
 		1D6058910D05DD3D006BFB54 /* ScanTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ScanTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		1F027F7611A7BAD4006B06DE /* ZXingWidget.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ZXingWidget.xcodeproj; path = ../ZXingWidget/ZXingWidget.xcodeproj; sourceTree = SOURCE_ROOT; };
+		1F027F8411A7BB77006B06DE /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
 		2892E40F0DC94CBA00A64D0F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		28A0AAE50D9B0CCF005BE974 /* ScanTest_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScanTest_Prefix.pch; sourceTree = "<group>"; };
 		28AD735F0D9D9599002E5188 /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
@@ -34,43 +54,6 @@
 		28F335F01007B36200424DE2 /* RootViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RootViewController.xib; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* ScanTest-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "ScanTest-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
-		E5345BC81198D74D000CB77F /* libZXingWidget.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libZXingWidget.a; path = "../ZXingWidget/build/Debug-iphoneos/libZXingWidget.a"; sourceTree = SOURCE_ROOT; };
-		E5345BCA1198D7E2000CB77F /* AddContactAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AddContactAction.h; path = ../ZXingWidget/AddContactAction.h; sourceTree = SOURCE_ROOT; };
-		E5345BCB1198D7E2000CB77F /* BookmarkDoCoMoResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BookmarkDoCoMoResultParser.h; path = ../ZXingWidget/BookmarkDoCoMoResultParser.h; sourceTree = SOURCE_ROOT; };
-		E5345BCC1198D7E2000CB77F /* BusinessCardParsedResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BusinessCardParsedResult.h; path = ../ZXingWidget/BusinessCardParsedResult.h; sourceTree = SOURCE_ROOT; };
-		E5345BCD1198D7E2000CB77F /* CallAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CallAction.h; path = ../ZXingWidget/CallAction.h; sourceTree = SOURCE_ROOT; };
-		E5345BCE1198D7E2000CB77F /* Decoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Decoder.h; path = ../ZXingWidget/Decoder.h; sourceTree = SOURCE_ROOT; };
-		E5345BCF1198D7E2000CB77F /* DecoderDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DecoderDelegate.h; path = ../ZXingWidget/DecoderDelegate.h; sourceTree = SOURCE_ROOT; };
-		E5345BD01198D7E2000CB77F /* DoCoMoResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DoCoMoResultParser.h; path = ../ZXingWidget/DoCoMoResultParser.h; sourceTree = SOURCE_ROOT; };
-		E5345BD11198D7E2000CB77F /* EmailAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EmailAction.h; path = ../ZXingWidget/EmailAction.h; sourceTree = SOURCE_ROOT; };
-		E5345BD21198D7E2000CB77F /* EmailDoCoMoResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EmailDoCoMoResultParser.h; path = ../ZXingWidget/EmailDoCoMoResultParser.h; sourceTree = SOURCE_ROOT; };
-		E5345BD31198D7E2000CB77F /* EmailParsedResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EmailParsedResult.h; path = ../ZXingWidget/EmailParsedResult.h; sourceTree = SOURCE_ROOT; };
-		E5345BD41198D7E2000CB77F /* FormatReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FormatReader.h; path = ../ZXingWidget/FormatReader.h; sourceTree = SOURCE_ROOT; };
-		E5345BD51198D7E2000CB77F /* GeoParsedResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GeoParsedResult.h; path = ../ZXingWidget/GeoParsedResult.h; sourceTree = SOURCE_ROOT; };
-		E5345BD61198D7E2000CB77F /* GeoResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GeoResultParser.h; path = ../ZXingWidget/GeoResultParser.h; sourceTree = SOURCE_ROOT; };
-		E5345BD71198D7E2000CB77F /* GrayBytesMonochromeBitmapSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GrayBytesMonochromeBitmapSource.h; path = ../ZXingWidget/GrayBytesMonochromeBitmapSource.h; sourceTree = SOURCE_ROOT; };
-		E5345BD81198D7E2000CB77F /* MeCardParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MeCardParser.h; path = ../ZXingWidget/MeCardParser.h; sourceTree = SOURCE_ROOT; };
-		E5345BD91198D7E2000CB77F /* NSString+HTML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+HTML.h"; path = "../ZXingWidget/NSString+HTML.h"; sourceTree = SOURCE_ROOT; };
-		E5345BDA1198D7E2000CB77F /* OpenUrlAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OpenUrlAction.h; path = ../ZXingWidget/OpenUrlAction.h; sourceTree = SOURCE_ROOT; };
-		E5345BDB1198D7E2000CB77F /* OverlayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OverlayView.h; path = ../ZXingWidget/OverlayView.h; sourceTree = SOURCE_ROOT; };
-		E5345BDC1198D7E2000CB77F /* ParsedResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ParsedResult.h; path = ../ZXingWidget/ParsedResult.h; sourceTree = SOURCE_ROOT; };
-		E5345BDD1198D7E2000CB77F /* PlainEmailResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlainEmailResultParser.h; path = ../ZXingWidget/PlainEmailResultParser.h; sourceTree = SOURCE_ROOT; };
-		E5345BDE1198D7E2000CB77F /* ResultAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ResultAction.h; path = ../ZXingWidget/ResultAction.h; sourceTree = SOURCE_ROOT; };
-		E5345BDF1198D7E2000CB77F /* ResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ResultParser.h; path = ../ZXingWidget/ResultParser.h; sourceTree = SOURCE_ROOT; };
-		E5345BE01198D7E2000CB77F /* ShowMapAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ShowMapAction.h; path = ../ZXingWidget/ShowMapAction.h; sourceTree = SOURCE_ROOT; };
-		E5345BE11198D7E2000CB77F /* SMSAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SMSAction.h; path = ../ZXingWidget/SMSAction.h; sourceTree = SOURCE_ROOT; };
-		E5345BE21198D7E2000CB77F /* SMSParsedResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SMSParsedResult.h; path = ../ZXingWidget/SMSParsedResult.h; sourceTree = SOURCE_ROOT; };
-		E5345BE31198D7E2000CB77F /* SMSResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SMSResultParser.h; path = ../ZXingWidget/SMSResultParser.h; sourceTree = SOURCE_ROOT; };
-		E5345BE41198D7E2000CB77F /* SMSTOResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SMSTOResultParser.h; path = ../ZXingWidget/SMSTOResultParser.h; sourceTree = SOURCE_ROOT; };
-		E5345BE51198D7E2000CB77F /* TelParsedResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TelParsedResult.h; path = ../ZXingWidget/TelParsedResult.h; sourceTree = SOURCE_ROOT; };
-		E5345BE61198D7E2000CB77F /* TelResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TelResultParser.h; path = ../ZXingWidget/TelResultParser.h; sourceTree = SOURCE_ROOT; };
-		E5345BE71198D7E2000CB77F /* TextParsedResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextParsedResult.h; path = ../ZXingWidget/TextParsedResult.h; sourceTree = SOURCE_ROOT; };
-		E5345BE81198D7E2000CB77F /* TextResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextResultParser.h; path = ../ZXingWidget/TextResultParser.h; sourceTree = SOURCE_ROOT; };
-		E5345BE91198D7E2000CB77F /* TwoDDecoderResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TwoDDecoderResult.h; path = ../ZXingWidget/TwoDDecoderResult.h; sourceTree = SOURCE_ROOT; };
-		E5345BEA1198D7E2000CB77F /* URIParsedResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = URIParsedResult.h; path = ../ZXingWidget/URIParsedResult.h; sourceTree = SOURCE_ROOT; };
-		E5345BEB1198D7E2000CB77F /* URLResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = URLResultParser.h; path = ../ZXingWidget/URLResultParser.h; sourceTree = SOURCE_ROOT; };
-		E5345BEC1198D7E2000CB77F /* URLTOResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = URLTOResultParser.h; path = ../ZXingWidget/URLTOResultParser.h; sourceTree = SOURCE_ROOT; };
-		E5345BED1198D7E2000CB77F /* ZXingWidgetController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZXingWidgetController.h; path = ../ZXingWidget/ZXingWidgetController.h; sourceTree = SOURCE_ROOT; };
 		E5345BF01198D81A000CB77F /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		E5345FD6119B27D2000CB77F /* libZXingWidget.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = libZXingWidget.a; path = "build/Debug-iphoneos/libZXingWidget.a"; sourceTree = "<group>"; };
 		E548755B119C62B9001CC0F8 /* beep-beep.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = "beep-beep.aiff"; sourceTree = "<group>"; };
@@ -84,8 +67,9 @@
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
 				2892E4100DC94CBA00A64D0F /* CoreGraphics.framework in Frameworks */,
-				E5345BC91198D74D000CB77F /* libZXingWidget.a in Frameworks */,
 				E5345BF11198D81A000CB77F /* AudioToolbox.framework in Frameworks */,
+				1F027F7F11A7BADA006B06DE /* libZXingWidget.a in Frameworks */,
+				1F027F8511A7BB77006B06DE /* libiconv.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,14 +96,30 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		1F027F6D11A7BAB1006B06DE /* Dependencies */ = {
+			isa = PBXGroup;
+			children = (
+				1F027F7611A7BAD4006B06DE /* ZXingWidget.xcodeproj */,
+			);
+			name = Dependencies;
+			sourceTree = "<group>";
+		};
+		1F027F7711A7BAD4006B06DE /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1F027F7E11A7BAD4006B06DE /* libZXingWidget.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
-				E5345BC71198D714000CB77F /* ZXingWidget */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
+				1F027F6D11A7BAB1006B06DE /* Dependencies */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
 			);
 			name = CustomTemplate;
@@ -152,52 +152,9 @@
 				1D30AB110D05D00D00671497 /* Foundation.framework */,
 				2892E40F0DC94CBA00A64D0F /* CoreGraphics.framework */,
 				E5345BF01198D81A000CB77F /* AudioToolbox.framework */,
+				1F027F8411A7BB77006B06DE /* libiconv.dylib */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		E5345BC71198D714000CB77F /* ZXingWidget */ = {
-			isa = PBXGroup;
-			children = (
-				E5345BCA1198D7E2000CB77F /* AddContactAction.h */,
-				E5345BCB1198D7E2000CB77F /* BookmarkDoCoMoResultParser.h */,
-				E5345BCC1198D7E2000CB77F /* BusinessCardParsedResult.h */,
-				E5345BCD1198D7E2000CB77F /* CallAction.h */,
-				E5345BCE1198D7E2000CB77F /* Decoder.h */,
-				E5345BCF1198D7E2000CB77F /* DecoderDelegate.h */,
-				E5345BD01198D7E2000CB77F /* DoCoMoResultParser.h */,
-				E5345BD11198D7E2000CB77F /* EmailAction.h */,
-				E5345BD21198D7E2000CB77F /* EmailDoCoMoResultParser.h */,
-				E5345BD31198D7E2000CB77F /* EmailParsedResult.h */,
-				E5345BD41198D7E2000CB77F /* FormatReader.h */,
-				E5345BD51198D7E2000CB77F /* GeoParsedResult.h */,
-				E5345BD61198D7E2000CB77F /* GeoResultParser.h */,
-				E5345BD71198D7E2000CB77F /* GrayBytesMonochromeBitmapSource.h */,
-				E5345BD81198D7E2000CB77F /* MeCardParser.h */,
-				E5345BD91198D7E2000CB77F /* NSString+HTML.h */,
-				E5345BDA1198D7E2000CB77F /* OpenUrlAction.h */,
-				E5345BDB1198D7E2000CB77F /* OverlayView.h */,
-				E5345BDC1198D7E2000CB77F /* ParsedResult.h */,
-				E5345BDD1198D7E2000CB77F /* PlainEmailResultParser.h */,
-				E5345BDE1198D7E2000CB77F /* ResultAction.h */,
-				E5345BDF1198D7E2000CB77F /* ResultParser.h */,
-				E5345BE01198D7E2000CB77F /* ShowMapAction.h */,
-				E5345BE11198D7E2000CB77F /* SMSAction.h */,
-				E5345BE21198D7E2000CB77F /* SMSParsedResult.h */,
-				E5345BE31198D7E2000CB77F /* SMSResultParser.h */,
-				E5345BE41198D7E2000CB77F /* SMSTOResultParser.h */,
-				E5345BE51198D7E2000CB77F /* TelParsedResult.h */,
-				E5345BE61198D7E2000CB77F /* TelResultParser.h */,
-				E5345BE71198D7E2000CB77F /* TextParsedResult.h */,
-				E5345BE81198D7E2000CB77F /* TextResultParser.h */,
-				E5345BE91198D7E2000CB77F /* TwoDDecoderResult.h */,
-				E5345BEA1198D7E2000CB77F /* URIParsedResult.h */,
-				E5345BEB1198D7E2000CB77F /* URLResultParser.h */,
-				E5345BEC1198D7E2000CB77F /* URLTOResultParser.h */,
-				E5345BED1198D7E2000CB77F /* ZXingWidgetController.h */,
-				E5345BC81198D74D000CB77F /* libZXingWidget.a */,
-			);
-			name = ZXingWidget;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -214,6 +171,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				1F027F8111A7BB06006B06DE /* PBXTargetDependency */,
 			);
 			name = ScanTest;
 			productName = ScanTest;
@@ -237,12 +195,28 @@
 			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 1F027F7711A7BAD4006B06DE /* Products */;
+					ProjectRef = 1F027F7611A7BAD4006B06DE /* ZXingWidget.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				1D6058900D05DD3D006BFB54 /* ScanTest */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		1F027F7E11A7BAD4006B06DE /* libZXingWidget.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libZXingWidget.a;
+			remoteRef = 1F027F7D11A7BAD4006B06DE /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		1D60588D0D05DD3D006BFB54 /* Resources */ = {
@@ -270,6 +244,14 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		1F027F8111A7BB06006B06DE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = ZXingWidget;
+			targetProxy = 1F027F8011A7BB06006B06DE /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
 		1D6058940D05DD3E006BFB54 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -284,10 +266,7 @@
 				GCC_PREFIX_HEADER = ScanTest_Prefix.pch;
 				GCC_VERSION = 4.2;
 				INFOPLIST_FILE = "ScanTest-Info.plist";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../ZXingWidget/build/Debug-iphoneos\"",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = "";
 				PRESERVE_DEAD_CODE_INITS_AND_TERMS = YES;
 				PRODUCT_NAME = ScanTest;
@@ -320,6 +299,7 @@
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = ../ZXingWidget;
 				PREBINDING = NO;
 				SDKROOT = iphoneos3.1.3;
 			};
@@ -333,6 +313,7 @@
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = ../ZXingWidget;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PREBINDING = NO;
 				SDKROOT = iphoneos3.1.3;
