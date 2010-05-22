@@ -26,14 +26,14 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 1F027F7611A7BAD4006B06DE /* ZXingWidget.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = D2AAC07E0554694100DB518D /* libZXingWidget.a */;
+			remoteGlobalIDString = D2AAC07E0554694100DB518D;
 			remoteInfo = ZXingWidget;
 		};
 		1F027F8011A7BB06006B06DE /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 1F027F7611A7BAD4006B06DE /* ZXingWidget.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = D2AAC07D0554694100DB518D /* ZXingWidget */;
+			remoteGlobalIDString = D2AAC07D0554694100DB518D;
 			remoteInfo = ZXingWidget;
 		};
 /* End PBXContainerItemProxy section */
