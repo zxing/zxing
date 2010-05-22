@@ -12,8 +12,10 @@
 @interface RootViewController : UIViewController <ZXingDelegate> {
 	IBOutlet UITextView *resultsView;
 	ZXingWidgetController *scanController;
+  NSString *resultsToDisplay;
 }
-@property (nonatomic, assign) IBOutlet UITextView *resultsView;
+@property (nonatomic, retain) IBOutlet UITextView *resultsView;
+@property (nonatomic, retain) NSString *resultsToDisplay;
 
 - (IBAction)scanPressed:(id)sender;
 @end

@@ -11,7 +11,7 @@
 
 @implementation RootViewController
 @synthesize resultsView;
-
+@synthesize resultsToDisplay;
 #pragma mark -
 #pragma mark View lifecycle
 
@@ -19,8 +19,8 @@
     [super viewDidLoad];
 	[self setTitle:@"ZXing"];
 	scanController = [ZXingWidgetController alloc];
-	[scanController setOneDMode:false];
-	[scanController setShowCancel:true];
+	[scanController setOneDMode:NO];
+	[scanController setShowCancel:YES];
 	scanController = [scanController initWithDelegate:self];
 	NSBundle *mainBundle = [NSBundle mainBundle];
 	[scanController setSoundToPlay:[[NSURL fileURLWithPath:[mainBundle pathForResource:@"beep-beep" ofType:@"aiff"] isDirectory:NO] retain]];
@@ -63,8 +63,18 @@
 #pragma mark Memory management
 
 - (void)scanResult:(NSString *)result {
-	[resultsView setText:result];
-	[self dismissModalViewControllerAnimated:true];
+	//[self.resultsView setText:result];
+	[self dismissModalViewControllerAnimated:NO];
+  self.resultsToDisplay = result;
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+  if (resultsToDisplay)
+  {
+    [resultsView setText:resultsToDisplay];
+    [resultsView setNeedsDisplay];
+  }
+  
 }
 
 - (void)cancelled {
@@ -88,7 +98,9 @@
 
 
 - (void)dealloc {
-	[scanController dealloc];
+  [resultsView release];
+	[scanController release];
+  [resultsToDisplay release];
     [super dealloc];
 }
 
