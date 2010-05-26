@@ -36,7 +36,6 @@ import android.widget.Button;
  * @author dswitkin@google.com (Daniel Switkin)
  */
 public final class HelpActivity extends Activity {
-
   private static final String TAG = HelpActivity.class.getSimpleName();
 
   // Actually guessing at the Desire's MODEL for now:
@@ -51,6 +50,7 @@ public final class HelpActivity extends Activity {
   public static final String WHATS_NEW_PAGE = "whatsnew.html";
   private static final String BASE_URL = "file:///android_asset/html/";
 
+  private static boolean initialized = false;
   private WebView webView;
   private Button backButton;
 
@@ -101,12 +101,11 @@ public final class HelpActivity extends Activity {
     backButton.setOnClickListener(backListener);
     Button doneButton = (Button)findViewById(R.id.done_button);
     doneButton.setOnClickListener(doneListener);
-  }
 
-  @Override
-  public void onResume() {
-    super.onResume();
-    checkBuggyDevice();
+    if (!initialized) {
+      initialized = true;
+      checkBuggyDevice();
+    }
   }
 
   private void checkBuggyDevice() {
@@ -119,7 +118,7 @@ public final class HelpActivity extends Activity {
           builder.setMessage(R.string.msg_buggy);
           builder.setPositiveButton(R.string.button_ok, groupsListener);
           builder.setNegativeButton(R.string.button_cancel, null);
-          builder.create().show();
+          builder.show();
           break;
         }
       }
@@ -149,5 +148,4 @@ public final class HelpActivity extends Activity {
       backButton.setEnabled(view.canGoBack());
     }
   }
-
 }
