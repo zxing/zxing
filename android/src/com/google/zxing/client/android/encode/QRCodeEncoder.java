@@ -17,6 +17,7 @@
 package com.google.zxing.client.android.encode;
 
 import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.Result;
 import com.google.zxing.WriterException;
@@ -34,7 +35,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.provider.Contacts;
 import android.telephony.PhoneNumberUtils;
 import android.util.Log;
@@ -42,6 +42,7 @@ import android.util.Log;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Hashtable;
 
 /**
  * This class does the work of decoding the user's request and extracting all the data
@@ -308,8 +309,14 @@ final class QRCodeEncoder {
                                BarcodeFormat format,
                                int desiredWidth,
                                int desiredHeight) throws WriterException {
-    BitMatrix result = new MultiFormatWriter().encode(contents, format,
-        desiredWidth, desiredHeight);
+    Hashtable hints = null;
+    String encoding = guessAppropriateEncoding(contents);
+    if (encoding != null) {
+      hints = new Hashtable(2);
+      hints.put(EncodeHintType.CHARACTER_SET, encoding);
+    }
+    MultiFormatWriter writer = new MultiFormatWriter();    
+    BitMatrix result = writer.encode(contents, format, desiredWidth, desiredHeight, hints);
     int width = result.getWidth();
     int height = result.getHeight();
     int[] pixels = new int[width * height];
@@ -326,39 +333,13 @@ final class QRCodeEncoder {
     return bitmap;
   }
 
-  private static final class EncodeThread extends Thread {
-
-    private static final String TAG = EncodeThread.class.getSimpleName();
-
-    private final String contents;
-    private final Handler handler;
-    private final int pixelResolution;
-    private final BarcodeFormat format;
-
-    EncodeThread(String contents, Handler handler, int pixelResolution,
-        BarcodeFormat format) {
-      this.contents = contents;
-      this.handler = handler;
-      this.pixelResolution = pixelResolution;
-      this.format = format;
-    }
-
-    @Override
-    public void run() {
-      try {
-        Bitmap bitmap = encodeAsBitmap(contents, format, pixelResolution, pixelResolution);
-        Message message = Message.obtain(handler, R.id.encode_succeeded);
-        message.obj = bitmap;
-        message.sendToTarget();
-      } catch (WriterException e) {
-        Log.e(TAG, "Could not encode barcode", e);
-        Message message = Message.obtain(handler, R.id.encode_failed);
-        message.sendToTarget();
-      } catch (IllegalArgumentException e) {
-        Log.e(TAG, "Could not encode barcode", e);
-        Message message = Message.obtain(handler, R.id.encode_failed);
-        message.sendToTarget();
+  private static String guessAppropriateEncoding(CharSequence contents) {
+    // Very crude at the moment
+    for (int i = 0; i < contents.length(); i++) {
+      if (contents.charAt(i) > 0xFF) {
+        return "UTF-8";
       }
     }
+    return null;
   }
 }
