@@ -39,7 +39,6 @@ import android.provider.Contacts;
 import android.telephony.PhoneNumberUtils;
 import android.util.Log;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Hashtable;
@@ -141,22 +140,25 @@ final class QRCodeEncoder {
       InputStream stream = activity.getContentResolver().openInputStream(uri);
       int length = stream.available();
       byte[] vcard = new byte[length];
-      stream.read(vcard, 0, length);
-      String vcardString = new String(vcard, "UTF-8");
-      Log.d(TAG, "Encoding share intent content: " + vcardString);
+      int bytesRead = stream.read(vcard, 0, length);
+      String vcardString = new String(vcard, 0, bytesRead, "UTF-8");
+      Log.d(TAG, "Encoding share intent content:");
+      Log.d(TAG, vcardString);
       Result result = new Result(vcardString, vcard, null, BarcodeFormat.QR_CODE);
       ParsedResult parsedResult = ResultParser.parseResult(result);
       if (!(parsedResult instanceof AddressBookParsedResult)) {
+        Log.d(TAG, "Result was not an address");
         return false;
       }
       if (!encodeQRCodeContents((AddressBookParsedResult) parsedResult)) {
+        Log.d(TAG, "Unable to encode contents");
         return false;
       }
-    } catch (FileNotFoundException e) {
-      return false;
     } catch (IOException e) {
+      Log.w(TAG, e);
       return false;
     } catch (NullPointerException e) {
+      Log.w(TAG, e);
       // In case the uri was not found in the Intent.
       return false;
     }
@@ -259,17 +261,16 @@ final class QRCodeEncoder {
     }
     String[] addresses = contact.getAddresses();
     if (addresses != null) {
-      for (int x = 0; x < addresses.length; x++) {
-        if (addresses[x] != null && addresses[x].length() > 0) {
-          newContents.append("ADR:").append(addresses[x]).append(';');
-          newDisplayContents.append('\n').append(addresses[x]);
+      for (String address : addresses) {
+        if (address != null && address.length() > 0) {
+          newContents.append("ADR:").append(address).append(';');
+          newDisplayContents.append('\n').append(address);
         }
       }
     }
     String[] phoneNumbers = contact.getPhoneNumbers();
     if (phoneNumbers != null) {
-      for (int x = 0; x < phoneNumbers.length; x++) {
-        String phone = phoneNumbers[x];
+      for (String phone : phoneNumbers) {
         if (phone != null && phone.length() > 0) {
           newContents.append("TEL:").append(phone).append(';');
           newDisplayContents.append('\n').append(PhoneNumberUtils.formatNumber(phone));
@@ -278,8 +279,7 @@ final class QRCodeEncoder {
     }
     String[] emails = contact.getEmails();
     if (emails != null) {
-      for (int x = 0; x < emails.length; x++) {
-        String email = emails[x];
+      for (String email : emails) {
         if (email != null && email.length() > 0) {
           newContents.append("EMAIL:").append(email).append(';');
           newDisplayContents.append('\n').append(email);
