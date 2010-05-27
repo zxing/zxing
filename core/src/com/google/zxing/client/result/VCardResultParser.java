@@ -18,6 +18,8 @@ package com.google.zxing.client.result;
 
 import com.google.zxing.Result;
 
+import java.io.ByteArrayOutputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.Vector;
 
 /**
@@ -93,6 +95,7 @@ final class VCardResultParser extends ResultParser {
       }
 
       boolean quotedPrintable = false;
+      String quotedPrintableCharset = null;
       if (i > metadataStart) {
         // There was something after the tag, before colon
         int j = metadataStart+1;
@@ -107,6 +110,8 @@ final class VCardResultParser extends ResultParser {
                 if (value.equalsIgnoreCase("QUOTED-PRINTABLE")) {
                   quotedPrintable = true;
                 }
+              } else if (key.equalsIgnoreCase("CHARSET")) {
+                quotedPrintableCharset = value;
               }
             }
             metadataStart = j;
@@ -149,7 +154,7 @@ final class VCardResultParser extends ResultParser {
           element = element.trim();
         }
         if (quotedPrintable) {
-          element = decodeQuotedPrintable(element);
+          element = decodeQuotedPrintable(element, quotedPrintableCharset);
         } else {
           element = stripContinuationCRLF(element);
         }
@@ -191,9 +196,10 @@ final class VCardResultParser extends ResultParser {
     return result.toString();
   }
 
-  private static String decodeQuotedPrintable(String value) {
+  private static String decodeQuotedPrintable(String value, String charset) {
     int length = value.length();
     StringBuffer result = new StringBuffer(length);
+    ByteArrayOutputStream fragmentBuffer = new ByteArrayOutputStream();
     for (int i = 0; i < length; i++) {
       char c = value.charAt(i);
       switch (c) {
@@ -208,8 +214,8 @@ final class VCardResultParser extends ResultParser {
             } else {
               char nextNextChar = value.charAt(i+2);
               try {
-                int encodedChar = 16 * toHexValue(nextChar) + toHexValue(nextNextChar);
-                result.append((char) encodedChar);
+                int encodedByte = 16 * toHexValue(nextChar) + toHexValue(nextNextChar);
+                fragmentBuffer.write(encodedByte);
               } catch (IllegalArgumentException iae) {
                 // continue, assume it was incorrectly encoded
               }
@@ -218,9 +224,11 @@ final class VCardResultParser extends ResultParser {
           }
           break;
         default:
+          maybeAppendFragment(fragmentBuffer, charset, result);
           result.append(c);
       }
     }
+    maybeAppendFragment(fragmentBuffer, charset, result);
     return result.toString();
   }
 
@@ -233,6 +241,27 @@ final class VCardResultParser extends ResultParser {
       return c - 'a' + 10;
     }
     throw new IllegalArgumentException();
+  }
+
+  private static void maybeAppendFragment(ByteArrayOutputStream fragmentBuffer,
+                                          String charset,
+                                          StringBuffer result) {
+    if (fragmentBuffer.size() > 0) {
+      byte[] fragmentBytes = fragmentBuffer.toByteArray();
+      String fragment;
+      if (charset == null) {
+        fragment = new String(fragmentBytes);
+      } else {
+        try {
+          fragment = new String(fragmentBytes, charset);
+        } catch (UnsupportedEncodingException e) {
+          // Yikes, well try anyway:
+          fragment = new String(fragmentBytes);
+        }
+      }
+      fragmentBuffer.reset();
+      result.append(fragment);
+    }
   }
 
   static String matchSingleVCardPrefixedField(String prefix, String rawText, boolean trim) {
