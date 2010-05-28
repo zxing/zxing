@@ -130,13 +130,10 @@ public final class GF256 {
     if (a == 0 || b == 0) {
       return 0;
     }
-    if (a == 1) {
-      return b;
-    }
-    if (b == 1) {
-      return a;
-    }
-    return expTable[(logTable[a] + logTable[b]) % 255];
+    int logSum = logTable[a] + logTable[b];
+    // index is a sped-up alternative to logSum % 255 since sum
+    // is in [0,510]. Thanks to jmsachs for the idea
+    return expTable[(logSum & 0xFF) + (logSum >>> 8)];
   }
 
 }
