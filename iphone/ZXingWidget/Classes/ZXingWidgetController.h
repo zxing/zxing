@@ -23,15 +23,15 @@
 @protocol ZXingDelegate;
 
 @interface ZXingWidgetController : UIImagePickerController <DecoderDelegate, CancelDelegate> {
-	ParsedResult *result;
-	NSArray *actions;	
-	OverlayView *overlayView;
-	SystemSoundID beepSound;
-	BOOL showCancel;
-	NSURL *soundToPlay;
-	id<ZXingDelegate> delegate;
-	BOOL wasCancelled;
-	BOOL oneDMode;
+  ParsedResult *result;
+  NSArray *actions;       
+  OverlayView *overlayView;
+  SystemSoundID beepSound;
+  BOOL showCancel;
+  NSURL *soundToPlay;
+  id<ZXingDelegate> delegate;
+  BOOL wasCancelled;
+  BOOL oneDMode;
 }
 
 @property (nonatomic, assign) id<ZXingDelegate> delegate;

@@ -33,192 +33,199 @@ CGImageRef UIGetScreenImage();
 @synthesize result, actions, showCancel, delegate, soundToPlay, oneDMode;
 
 - (id)initWithDelegate:(id<ZXingDelegate>)scanDelegate {
-	if (self = [super init]) {
-		[self setDelegate:scanDelegate];
-		beepSound = -1;
-		self.wantsFullScreenLayout = YES;
-		self.sourceType = UIImagePickerControllerSourceTypeCamera;
-		float zoomFactor = CAMERA_SCALAR;
-		if ([self fixedFocus]) {
-			zoomFactor *= 2.0;
-		}
-		self.cameraViewTransform = CGAffineTransformScale(
-					self.cameraViewTransform, zoomFactor, zoomFactor);
-		overlayView = [OverlayView alloc];
-		[overlayView setOneDMode:oneDMode];
-		overlayView = [overlayView initWithCancelEnabled:showCancel frame:[UIScreen mainScreen].bounds];
-		[overlayView setDelegate:self];
-		self.sourceType = UIImagePickerControllerSourceTypeCamera;
-		self.showsCameraControls = NO;
-		self.cameraOverlayView = overlayView;
-		self.allowsEditing = NO; // [[NSUserDefaults standardUserDefaults] boolForKey:@"allowEditing"];
-	}
-	
-	return self;
+  if (self = [super init]) {
+    [self setDelegate:scanDelegate];
+    beepSound = -1;
+    self.wantsFullScreenLayout = YES;
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
+      self.sourceType = UIImagePickerControllerSourceTypeCamera;
+    float zoomFactor = CAMERA_SCALAR;
+    if ([self fixedFocus]) {
+      zoomFactor *= 2.0;
+    }
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
+      self.cameraViewTransform = CGAffineTransformScale(
+                                                      self.cameraViewTransform, zoomFactor, zoomFactor);
+    overlayView = [OverlayView alloc];
+    [overlayView setOneDMode:oneDMode];
+    overlayView = [overlayView initWithCancelEnabled:showCancel frame:[UIScreen mainScreen].bounds];
+    [overlayView setDelegate:self];
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
+    {
+      self.showsCameraControls = NO;
+      self.cameraOverlayView = overlayView;
+      self.allowsEditing = NO; // [[NSUserDefaults standardUserDefaults] boolForKey:@"allowEditing"];
+    }
+  }
+  
+  return self;
 }
 
 - (void)dealloc {
-	if (beepSound != -1) {
-		AudioServicesDisposeSystemSoundID(beepSound);
-	}
-	[overlayView dealloc];
-	[super dealloc];
+  if (beepSound != -1) {
+    AudioServicesDisposeSystemSoundID(beepSound);
+  }
+  [overlayView dealloc];
+  [super dealloc];
 }
 
 - (void)cancelled {
-	NSLog(@"cancelled called in ZXingWidgetController");
-	wasCancelled = true;
-	if (delegate != nil) {
-		[delegate cancelled];
-	}
+  NSLog(@"cancelled called in ZXingWidgetController");
+  wasCancelled = true;
+  if (delegate != nil) {
+    [delegate cancelled];
+  }
 }
 
 - (NSString *)getPlatform {
-	size_t size;
-    sysctlbyname("hw.machine", NULL, &size, NULL, 0);
-    char *machine = malloc(size);
-    sysctlbyname("hw.machine", machine, &size, NULL, 0);
-    NSString *platform = [NSString stringWithCString:machine encoding:NSASCIIStringEncoding];
-    free(machine);
-	return platform;
+  size_t size;
+  sysctlbyname("hw.machine", NULL, &size, NULL, 0);
+  char *machine = malloc(size);
+  sysctlbyname("hw.machine", machine, &size, NULL, 0);
+  NSString *platform = [NSString stringWithCString:machine encoding:NSASCIIStringEncoding];
+  free(machine);
+  return platform;
 }
 
 - (BOOL)fixedFocus {
-	NSString *platform = [self getPlatform];
-	if ([platform isEqualToString:@"iPhone1,1"] ||
-		[platform isEqualToString:@"iPhone1,2"]) return true;
-	return false;
+  NSString *platform = [self getPlatform];
+  if ([platform isEqualToString:@"iPhone1,1"] ||
+      [platform isEqualToString:@"iPhone1,2"]) return true;
+  return false;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-	[super viewWillAppear:animated];
-	if ([self soundToPlay] != nil) {
-		OSStatus error = AudioServicesCreateSystemSoundID((CFURLRef)[self soundToPlay], &beepSound);
-		if (error != kAudioServicesNoError) {
-			NSLog(@"Problem loading nearSound.caf");
-		}
-	}
+  [super viewWillAppear:animated];
+  if ([self soundToPlay] != nil) {
+    OSStatus error = AudioServicesCreateSystemSoundID((CFURLRef)[self soundToPlay], &beepSound);
+    if (error != kAudioServicesNoError) {
+      NSLog(@"Problem loading nearSound.caf");
+    }
+  }
 }
 
 - (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-	[overlayView setPoints:nil];
-	wasCancelled = false;
-	[NSTimer scheduledTimerWithTimeInterval: FIRST_TAKE_DELAY
-									 target: self
-								   selector: @selector(takePicture:)
-								   userInfo: nil
-									repeats: NO];
+  [super viewDidAppear:animated];
+  [overlayView setPoints:nil];
+  wasCancelled = false;
+  [NSTimer scheduledTimerWithTimeInterval: FIRST_TAKE_DELAY
+                                   target: self
+                                 selector: @selector(takePicture:)
+                                 userInfo: nil
+                                  repeats: NO];
 }
 
 - (CGImageRef)CGImageRotated90:(CGImageRef)imgRef
 {
-	CGFloat angleInRadians = -90 * (M_PI / 180);
-	CGFloat width = CGImageGetWidth(imgRef);
-	CGFloat height = CGImageGetHeight(imgRef);
-	
-	CGRect imgRect = CGRectMake(0, 0, width, height);
-	CGAffineTransform transform = CGAffineTransformMakeRotation(angleInRadians);
-	CGRect rotatedRect = CGRectApplyAffineTransform(imgRect, transform);
-	
-	CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-	CGContextRef bmContext = CGBitmapContextCreate(NULL,
-												   rotatedRect.size.width,
-												   rotatedRect.size.height,
-												   8,
-												   0,
-												   colorSpace,
-												   kCGImageAlphaPremultipliedFirst);
-	CGContextSetAllowsAntialiasing(bmContext, FALSE);
-	CGContextSetInterpolationQuality(bmContext, kCGInterpolationNone);
-	CGColorSpaceRelease(colorSpace);
-//	CGContextTranslateCTM(bmContext,
-//						  +(rotatedRect.size.width/2),
-//						  +(rotatedRect.size.height/2));
-	CGContextScaleCTM(bmContext, rotatedRect.size.width/rotatedRect.size.height, 1.0);
-	CGContextTranslateCTM(bmContext, 0.0, rotatedRect.size.height);
-	CGContextRotateCTM(bmContext, angleInRadians);
-//	CGContextTranslateCTM(bmContext,
-//						  -(rotatedRect.size.width/2),
-//						  -(rotatedRect.size.height/2));
-	CGContextDrawImage(bmContext, CGRectMake(0, 0,
-											 rotatedRect.size.width,
-											 rotatedRect.size.height),
-					   imgRef);
-	
-	CGImageRef rotatedImage = CGBitmapContextCreateImage(bmContext);
-	CFRelease(bmContext);
-	[(id)rotatedImage autorelease];
-	
-	return rotatedImage;
+  CGFloat angleInRadians = -90 * (M_PI / 180);
+  CGFloat width = CGImageGetWidth(imgRef);
+  CGFloat height = CGImageGetHeight(imgRef);
+  
+  CGRect imgRect = CGRectMake(0, 0, width, height);
+  CGAffineTransform transform = CGAffineTransformMakeRotation(angleInRadians);
+  CGRect rotatedRect = CGRectApplyAffineTransform(imgRect, transform);
+  
+  CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+  CGContextRef bmContext = CGBitmapContextCreate(NULL,
+                                                 rotatedRect.size.width,
+                                                 rotatedRect.size.height,
+                                                 8,
+                                                 0,
+                                                 colorSpace,
+                                                 kCGImageAlphaPremultipliedFirst);
+  CGContextSetAllowsAntialiasing(bmContext, FALSE);
+  CGContextSetInterpolationQuality(bmContext, kCGInterpolationNone);
+  CGColorSpaceRelease(colorSpace);
+  //      CGContextTranslateCTM(bmContext,
+  //                                                +(rotatedRect.size.width/2),
+  //                                                +(rotatedRect.size.height/2));
+  CGContextScaleCTM(bmContext, rotatedRect.size.width/rotatedRect.size.height, 1.0);
+  CGContextTranslateCTM(bmContext, 0.0, rotatedRect.size.height);
+  CGContextRotateCTM(bmContext, angleInRadians);
+  //      CGContextTranslateCTM(bmContext,
+  //                                                -(rotatedRect.size.width/2),
+  //                                                -(rotatedRect.size.height/2));
+  CGContextDrawImage(bmContext, CGRectMake(0, 0,
+                                           rotatedRect.size.width,
+                                           rotatedRect.size.height),
+                     imgRef);
+  
+  CGImageRef rotatedImage = CGBitmapContextCreateImage(bmContext);
+  CFRelease(bmContext);
+  [(id)rotatedImage autorelease];
+  
+  return rotatedImage;
 }
 
 - (CGImageRef)CGImageRotated180:(CGImageRef)imgRef
 {
-	CGFloat angleInRadians = M_PI;
-	CGFloat width = CGImageGetWidth(imgRef);
-	CGFloat height = CGImageGetHeight(imgRef);
-		
-	CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-	CGContextRef bmContext = CGBitmapContextCreate(NULL,
-												   width,
-												   height,
-												   8,
-												   0,
-												   colorSpace,
-												   kCGImageAlphaPremultipliedFirst);
-	CGContextSetAllowsAntialiasing(bmContext, FALSE);
-	CGContextSetInterpolationQuality(bmContext, kCGInterpolationNone);
-	CGColorSpaceRelease(colorSpace);
-	CGContextTranslateCTM(bmContext,
-							  +(width/2),
-							  +(height/2));
-	CGContextRotateCTM(bmContext, angleInRadians);
-	CGContextTranslateCTM(bmContext,
-							  -(width/2),
-							  -(height/2));
-	CGContextDrawImage(bmContext, CGRectMake(0, 0, width, height), imgRef);
-	
-	CGImageRef rotatedImage = CGBitmapContextCreateImage(bmContext);
-	CFRelease(bmContext);
-	[(id)rotatedImage autorelease];
-	
-	return rotatedImage;
+  CGFloat angleInRadians = M_PI;
+  CGFloat width = CGImageGetWidth(imgRef);
+  CGFloat height = CGImageGetHeight(imgRef);
+  
+  CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+  CGContextRef bmContext = CGBitmapContextCreate(NULL,
+                                                 width,
+                                                 height,
+                                                 8,
+                                                 0,
+                                                 colorSpace,
+                                                 kCGImageAlphaPremultipliedFirst);
+  CGContextSetAllowsAntialiasing(bmContext, FALSE);
+  CGContextSetInterpolationQuality(bmContext, kCGInterpolationNone);
+  CGColorSpaceRelease(colorSpace);
+  CGContextTranslateCTM(bmContext,
+                        +(width/2),
+                        +(height/2));
+  CGContextRotateCTM(bmContext, angleInRadians);
+  CGContextTranslateCTM(bmContext,
+                        -(width/2),
+                        -(height/2));
+  CGContextDrawImage(bmContext, CGRectMake(0, 0, width, height), imgRef);
+  
+  CGImageRef rotatedImage = CGBitmapContextCreateImage(bmContext);
+  CFRelease(bmContext);
+  [(id)rotatedImage autorelease];
+  
+  return rotatedImage;
 }
 
 - (void)takePicture:(NSTimer*)theTimer {
-	CGImageRef capture = UIGetScreenImage();
-	CGRect cropRect = [overlayView cropRect];
-	if (oneDMode) {
-		// let's just give the decoder a vertical band right above the red line
-		cropRect.origin.x = cropRect.origin.x + (cropRect.size.width / 2) - (ONE_D_BAND_HEIGHT + 1);
-		cropRect.size.width = ONE_D_BAND_HEIGHT;
-		// do a rotate
-		CGImageRef croppedImg = CGImageCreateWithImageInRect(capture, cropRect);
-		CGImageRelease(capture);
-		capture = [self CGImageRotated90:croppedImg];
-		capture = [self CGImageRotated180:capture];
-//		UIImageWriteToSavedPhotosAlbum([UIImage imageWithCGImage:capture], nil, nil, nil);
-		CGImageRelease(croppedImg);
-		cropRect.origin.x = 0.0;
-		cropRect.origin.y = 0.0;
-		cropRect.size.width = CGImageGetWidth(capture);
-		cropRect.size.height = CGImageGetHeight(capture);
-	}
-	
-	UIImage *scrn = [UIImage imageWithCGImage:CGImageCreateWithImageInRect(capture, cropRect)];
-	Decoder *d = [[Decoder alloc] init];
-	d.delegate = self;
-	cropRect.origin.x = 0.0;
-	cropRect.origin.y = 0.0;
-	[d decodeImage:scrn cropRect:cropRect];
+  CGImageRef capture = UIGetScreenImage();
+  CGRect cropRect = [overlayView cropRect];
+  if (oneDMode) {
+    // let's just give the decoder a vertical band right above the red line
+    cropRect.origin.x = cropRect.origin.x + (cropRect.size.width / 2) - (ONE_D_BAND_HEIGHT + 1);
+    cropRect.size.width = ONE_D_BAND_HEIGHT;
+    // do a rotate
+    CGImageRef croppedImg = CGImageCreateWithImageInRect(capture, cropRect);
+    capture = [self CGImageRotated90:croppedImg];
+    capture = [self CGImageRotated180:capture];
+    //              UIImageWriteToSavedPhotosAlbum([UIImage imageWithCGImage:capture], nil, nil, nil);
+    CGImageRelease(croppedImg);
+    cropRect.origin.x = 0.0;
+    cropRect.origin.y = 0.0;
+    cropRect.size.width = CGImageGetWidth(capture);
+    cropRect.size.height = CGImageGetHeight(capture);
+  }
+  CGImageRef newImage = CGImageCreateWithImageInRect(capture, cropRect);
+  CGImageRelease(capture);
+  //UIImage *scrn = [UIImage imageWithCGImage:newImage];
+  UIImage *scrn = [[UIImage alloc] initWithCGImage:newImage];
+  CGImageRelease(newImage);
+  Decoder *d = [[Decoder alloc] init];
+  d.delegate = self;
+  cropRect.origin.x = 0.0;
+  cropRect.origin.y = 0.0;
+  [d decodeImage:scrn cropRect:cropRect];
+  [scrn release];
 }
 
 // DecoderDelegate methods
 
 - (void)decoder:(Decoder *)decoder willDecodeImage:(UIImage *)image usingSubset:(UIImage *)subset{
 #ifdef DEBUG
-	NSLog(@"DecoderViewController MessageWhileDecodingWithDimensions: Decoding image (%.0fx%.0f) ...", image.size.width, image.size.height);
+  NSLog(@"DecoderViewController MessageWhileDecodingWithDimensions: Decoding image (%.0fx%.0f) ...", image.size.width, image.size.height);
 #endif
 }
 
@@ -229,48 +236,48 @@ CGImageRef UIGetScreenImage();
 }
 
 - (void)presentResultForString:(NSString *)resultString {
-	self.result = [ResultParser parsedResultForString:resultString];
-	
-	if (beepSound != -1) {
-		AudioServicesPlaySystemSound(beepSound);
-	}
+  self.result = [ResultParser parsedResultForString:resultString];
+  
+  if (beepSound != -1) {
+    AudioServicesPlaySystemSound(beepSound);
+  }
 #ifdef DEBUG
-	NSLog(@"result string = %@", resultString);
-	NSLog(@"result has %d actions", actions ? 0 : actions.count);
+  NSLog(@"result string = %@", resultString);
+  NSLog(@"result has %d actions", actions ? 0 : actions.count);
 #endif
-	//	[self updateToolbar];
+  //      [self updateToolbar];
 }
 
 - (void)presentResultPoints:(NSArray *)resultPoints
                    forImage:(UIImage *)image
                 usingSubset:(UIImage *)subset {
-	// simply add the points to the image view
-	[overlayView setPoints:resultPoints];
+  // simply add the points to the image view
+  [overlayView setPoints:resultPoints];
 }
 
 - (void)decoder:(Decoder *)decoder didDecodeImage:(UIImage *)image usingSubset:(UIImage *)subset withResult:(TwoDDecoderResult *)twoDResult {
-	[self presentResultForString:[twoDResult text]];
-	[self presentResultPoints:[twoDResult points] forImage:image usingSubset:subset];
-	// now, in a selector, call the delegate to give this overlay time to show the points
-	[self performSelector:@selector(alertDelegate:) withObject:[[twoDResult text] copy] afterDelay:1.0];
-	decoder.delegate = nil;
-	[decoder release];
+  [self presentResultForString:[twoDResult text]];
+  [self presentResultPoints:[twoDResult points] forImage:image usingSubset:subset];
+  // now, in a selector, call the delegate to give this overlay time to show the points
+  [self performSelector:@selector(alertDelegate:) withObject:[[twoDResult text] copy] afterDelay:1.0];
+  decoder.delegate = nil;
+  [decoder release];
 }
 
-- (void)alertDelegate:(id)text {	
-	if (delegate != nil) {
-		[delegate scanResult:text];
-	}
+- (void)alertDelegate:(id)text {        
+  if (delegate != nil) {
+    [delegate scanResult:text];
+  }
 }
 
 - (void)decoder:(Decoder *)decoder failedToDecodeImage:(UIImage *)image usingSubset:(UIImage *)subset reason:(NSString *)reason {
-	decoder.delegate = nil;
-	[decoder release];
-	[overlayView setPoints:nil];
-	if (!wasCancelled) {
-		[self takePicture:nil];
-	}
-	//[self updateToolbar];
+  decoder.delegate = nil;
+  [decoder release];
+  [overlayView setPoints:nil];
+  if (!wasCancelled) {
+    [self takePicture:nil];
+  }
+  //[self updateToolbar];
 }
 
 @end

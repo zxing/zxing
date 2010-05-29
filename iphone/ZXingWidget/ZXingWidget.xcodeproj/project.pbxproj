@@ -461,22 +461,6 @@
 			children = (
 				E53458B311987396000CB77F /* CoreSrc */,
 				08FB77AEFE84172EC02AAC07 /* Classes */,
-				1F027FB711A7BEBF006B06DE /* TwoDDecoderResult.h */,
-				1F027FB811A7BEBF006B06DE /* TwoDDecoderResult.m */,
-				1F027FB911A7BEBF006B06DE /* ZXingWidgetController.h */,
-				1F027FBA11A7BEBF006B06DE /* ZXingWidgetController.m */,
-				1F027F9F11A7BEAF006B06DE /* Decoder.h */,
-				1F027FA011A7BEAF006B06DE /* Decoder.mm */,
-				1F027FA111A7BEAF006B06DE /* DecoderDelegate.h */,
-				1F027FA211A7BEAF006B06DE /* FormatReader.h */,
-				1F027FA311A7BEAF006B06DE /* FormatReader.mm */,
-				1F027FA411A7BEAF006B06DE /* GrayBytesMonochromeBitmapSource.cpp */,
-				1F027FA511A7BEAF006B06DE /* GrayBytesMonochromeBitmapSource.h */,
-				1F027FA611A7BEAF006B06DE /* MultiFormatReader.mm */,
-				1F027FA711A7BEAF006B06DE /* NSString+HTML.h */,
-				1F027FA811A7BEAF006B06DE /* NSString+HTML.m */,
-				1F027FA911A7BEAF006B06DE /* OverlayView.h */,
-				1F027FAA11A7BEAF006B06DE /* OverlayView.m */,
 				32C88DFF0371C24200C91783 /* Other Sources */,
 				0867D69AFE84028FC02AAC07 /* Frameworks */,
 				E5345D2811999F53000CB77F /* Resources */,
@@ -499,6 +483,22 @@
 		08FB77AEFE84172EC02AAC07 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				1F027FB711A7BEBF006B06DE /* TwoDDecoderResult.h */,
+				1F027FB811A7BEBF006B06DE /* TwoDDecoderResult.m */,
+				1F027FB911A7BEBF006B06DE /* ZXingWidgetController.h */,
+				1F027FBA11A7BEBF006B06DE /* ZXingWidgetController.m */,
+				1F027F9F11A7BEAF006B06DE /* Decoder.h */,
+				1F027FA011A7BEAF006B06DE /* Decoder.mm */,
+				1F027FA111A7BEAF006B06DE /* DecoderDelegate.h */,
+				1F027FA211A7BEAF006B06DE /* FormatReader.h */,
+				1F027FA311A7BEAF006B06DE /* FormatReader.mm */,
+				1F027FA411A7BEAF006B06DE /* GrayBytesMonochromeBitmapSource.cpp */,
+				1F027FA511A7BEAF006B06DE /* GrayBytesMonochromeBitmapSource.h */,
+				1F027FA611A7BEAF006B06DE /* MultiFormatReader.mm */,
+				1F027FA711A7BEAF006B06DE /* NSString+HTML.h */,
+				1F027FA811A7BEAF006B06DE /* NSString+HTML.m */,
+				1F027FA911A7BEAF006B06DE /* OverlayView.h */,
+				1F027FAA11A7BEAF006B06DE /* OverlayView.m */,
 				E5345A00119876A5000CB77F /* Actions */,
 				E53459EF119876A5000CB77F /* ParsedResults */,
 				E53459D4119876A5000CB77F /* ResultParsers */,
@@ -1144,7 +1144,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 3.1.3;
 				OTHER_LDFLAGS = "-ObjC";
 				PREBINDING = NO;
-				SDKROOT = iphoneos3.1.3;
+				SDKROOT = iphoneos4.0;
 			};
 			name = Debug;
 		};
@@ -1158,7 +1158,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 3.1.3;
 				OTHER_LDFLAGS = "-ObjC";
 				PREBINDING = NO;
-				SDKROOT = iphoneos3.1.3;
+				SDKROOT = iphoneos4.0;
 			};
 			name = Release;
 		};
