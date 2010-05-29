@@ -32,6 +32,7 @@
   size_t subsetHeight;
   size_t subsetBytesPerRow;
 	id<DecoderDelegate> delegate;
+  NSOperationQueue *operationQueue;
 }
 
 @property(nonatomic, retain) UIImage *image;
@@ -42,6 +43,7 @@
 @property(assign) size_t subsetHeight;
 @property(assign) size_t subsetBytesPerRow;
 @property(nonatomic, assign) id<DecoderDelegate> delegate;
+@property (nonatomic, retain) NSOperationQueue *operationQueue;
 
 - (void) decodeImage:(UIImage *)image;
 - (void) decodeImage:(UIImage *)image cropRect:(CGRect)cropRect;

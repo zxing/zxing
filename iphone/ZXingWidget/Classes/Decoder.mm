@@ -42,7 +42,17 @@ using namespace zxing;
 @synthesize subsetHeight;
 @synthesize subsetBytesPerRow;
 @synthesize delegate;
+@synthesize operationQueue;
 
+
+- (id)init {
+  if (self = [super init]) {
+    NSOperationQueue *opQueue = [[NSOperationQueue alloc] init];
+    self.operationQueue = opQueue;
+    [opQueue release];
+  }
+  return self;
+}
 - (void)willDecodeImage {
   if ([self.delegate respondsToSelector:@selector(decoder:willDecodeImage:usingSubset:)]) {
     [self.delegate decoder:self willDecodeImage:self.image usingSubset:self.subsetImage];
@@ -56,6 +66,7 @@ using namespace zxing;
 }
 
 - (void)didDecodeImage:(TwoDDecoderResult *)result {
+
   if ([self.delegate respondsToSelector:@selector(decoder:didDecodeImage:usingSubset:withResult:)]) {
     [self.delegate decoder:self didDecodeImage:self.image usingSubset:self.subsetImage withResult:result];
   }
@@ -64,6 +75,7 @@ using namespace zxing;
 }
 
 - (void)failedToDecodeImage:(NSString *)reason {
+
   if ([self.delegate respondsToSelector:@selector(decoder:failedToDecodeImage:usingSubset:reason:)]) {
     [self.delegate decoder:self failedToDecodeImage:self.image usingSubset:self.subsetImage reason:reason];
   }
@@ -143,13 +155,13 @@ using namespace zxing;
 }  
 
 - (void)decode:(id)arg {
-  NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+  
+  NSAutoreleasePool* mainpool = [[NSAutoreleasePool alloc] init];
   { 
 
     NSSet *formatReaders = [FormatReader formatReaders];
     
     Ref<LuminanceSource> source (new GrayBytesMonochromeBitmapSource(subsetData, subsetWidth, subsetHeight, subsetBytesPerRow));
-    
     Ref<Binarizer> binarizer (new GlobalHistogramBinarizer(source));
     Ref<BinaryBitmap> grayImage (new BinaryBitmap(binarizer));
 #ifdef DEBUG
@@ -163,10 +175,11 @@ using namespace zxing;
     for (int i = 0; !decoderResult && i < 4; i++) {
 #endif
       for (FormatReader *reader in formatReaders) {
+        NSAutoreleasePool *secondarypool = [[NSAutoreleasePool alloc] init];
         try {
   #ifdef DEBUG
           NSLog(@"decoding gray image");
-  #endif
+  #endif  
           Ref<Result> result([reader decode:grayImage]);
   #ifdef DEBUG
           NSLog(@"gray image decoded");
@@ -198,6 +211,7 @@ using namespace zxing;
         } catch (...) {
           NSLog(@"Caught unknown exception!");
         }
+        [secondarypool release];
       }
       
 #ifdef TRY_ROTATIONS
@@ -226,15 +240,12 @@ using namespace zxing;
                 waitUntilDone:NO];
     }
   }
-  [pool drain];
+  
+  
 #ifdef DEBUG
   NSLog(@"finished decoding.");
 #endif
-  
-  // if this is not the main thread, then we end it
-  if (![NSThread isMainThread]) {
-    [NSThread exit];
-  }
+  [mainpool release];
 }
 
 - (void) decodeImage:(UIImage *)i {
@@ -249,17 +260,25 @@ using namespace zxing;
   [self willDecodeImage];
   [self performSelectorOnMainThread:@selector(progressDecodingImage:)
                withObject:NSLocalizedString(@"Decoder MessageWhileDecoding", @"Decoding ...")
-            waitUntilDone:NO];  
-  
-  [NSThread detachNewThreadSelector:@selector(decode:) 
+            waitUntilDone:NO];
+  NSInvocationOperation *op = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(decode:) object:nil];
+  [operationQueue addOperation:op];
+  [op release];
+  //[self performSelectorInBackground:@selector(decode:) withObject:nil];
+
+ 
+  //[self performSelector:@selector(decode:) onThread:decodingThread withObject:nil waitUntilDone:NO];
+  /*[NSThread detachNewThreadSelector:@selector(decode:) 
                toTarget:self 
-               withObject:nil];
+               withObject:nil];*/
 }
 
 - (void) dealloc {
+
   [image release];
   [subsetImage release];
   if (subsetData) free(subsetData);
+  [operationQueue release];
   [super dealloc];
 }
 

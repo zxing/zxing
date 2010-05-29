@@ -18,16 +18,20 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 	[self setTitle:@"ZXing"];
-	scanController = [ZXingWidgetController alloc];
+  
+	scanController = [[ZXingWidgetController alloc] initWithDelegate:self];
 	[scanController setOneDMode:NO];
 	[scanController setShowCancel:YES];
 	scanController = [scanController initWithDelegate:self];
 	NSBundle *mainBundle = [NSBundle mainBundle];
 	[scanController setSoundToPlay:[[NSURL fileURLWithPath:[mainBundle pathForResource:@"beep-beep" ofType:@"aiff"] isDirectory:NO] retain]];
+   
 }
 
 - (IBAction)scanPressed:(id)sender {
-	[self presentModalViewController:scanController animated:YES];
+  //UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+	[self presentModalViewController:scanController
+                          animated:YES];
 //	[self.navigationController pushViewController:scanController animated:true];
 }
 
@@ -64,7 +68,7 @@
 
 - (void)scanResult:(NSString *)result {
 	//[self.resultsView setText:result];
-	[self dismissModalViewControllerAnimated:NO];
+	[self dismissModalViewControllerAnimated:YES];
   self.resultsToDisplay = result;
 }
 
@@ -78,7 +82,7 @@
 }
 
 - (void)cancelled {
-	[self dismissModalViewControllerAnimated:true];
+	[self dismissModalViewControllerAnimated:YES];
 }
 
 #pragma mark -
