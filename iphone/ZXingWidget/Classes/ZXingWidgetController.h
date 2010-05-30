@@ -35,13 +35,13 @@
 }
 
 @property (nonatomic, assign) id<ZXingDelegate> delegate;
-@property (nonatomic, assign) BOOL showCancel;
 @property (nonatomic, assign) NSURL *soundToPlay;
-@property (nonatomic, assign) BOOL oneDMode;
 @property (nonatomic, retain) ParsedResult *result;
 @property (nonatomic, retain) NSArray *actions;
+@property (nonatomic, retain) OverlayView *overlayView;
 
-- (id)initWithDelegate:(id<ZXingDelegate>)delegate;
+- (id)initWithDelegate:(id<ZXingDelegate>)delegate showCancel:(BOOL)shouldShowCancel OneDMode:(BOOL)shouldUseoOneDMode;
+
 - (BOOL)fixedFocus;
 @end
 

@@ -27,14 +27,29 @@
 #define FIRST_TAKE_DELAY 1.0
 #define ONE_D_BAND_HEIGHT 10.0
 
-CGImageRef UIGetScreenImage();
+CGImageRef UIGetScreenImage(void);
+
+@interface ZXingWidgetController ()
+
+@property BOOL showCancel;
+@property BOOL oneDMode;
+
+@end
+
+
+
+
 
 @implementation ZXingWidgetController
-@synthesize result, actions, showCancel, delegate, soundToPlay, oneDMode;
+@synthesize result, actions, delegate, soundToPlay;
+@synthesize overlayView;
+@synthesize oneDMode, showCancel;
 
-- (id)initWithDelegate:(id<ZXingDelegate>)scanDelegate {
+- (id)initWithDelegate:(id<ZXingDelegate>)scanDelegate showCancel:(BOOL)shouldShowCancel OneDMode:(BOOL)shouldUseoOneDMode {
   if (self = [super init]) {
     [self setDelegate:scanDelegate];
+    self.oneDMode = shouldUseoOneDMode;
+    self.showCancel = shouldShowCancel;
     beepSound = -1;
     self.wantsFullScreenLayout = YES;
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
@@ -65,7 +80,8 @@ CGImageRef UIGetScreenImage();
   if (beepSound != -1) {
     AudioServicesDisposeSystemSoundID(beepSound);
   }
-  [overlayView dealloc];
+  self.cameraOverlayView = nil;
+  [overlayView release];
   [super dealloc];
 }
 

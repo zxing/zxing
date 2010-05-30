@@ -155,10 +155,8 @@ using namespace zxing;
 }  
 
 - (void)decode:(id)arg {
-  
   NSAutoreleasePool* mainpool = [[NSAutoreleasePool alloc] init];
   { 
-
     NSSet *formatReaders = [FormatReader formatReaders];
     
     Ref<LuminanceSource> source (new GrayBytesMonochromeBitmapSource(subsetData, subsetWidth, subsetHeight, subsetBytesPerRow));
@@ -252,25 +250,27 @@ using namespace zxing;
   [self decodeImage:i cropRect:CGRectMake(0.0f, 0.0f, i.size.width, i.size.height)];
 }
 
+
+- (void) asyncDecodeImage {
+  [self prepareSubset];
+  [self willDecodeImage];
+  [self performSelectorOnMainThread:@selector(willDecodeImage) 
+                         withObject:nil 
+                      waitUntilDone:NO];
+  [self performSelectorOnMainThread:@selector(progressDecodingImage:)
+                         withObject:NSLocalizedString(@"Decoder MessageWhileDecoding", @"Decoding ...")
+                      waitUntilDone:NO];
+/*  NSInvocationOperation *op = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(decode:) object:nil];
+  [operationQueue addOperation:op];
+  [op release];*/
+  [self decode:nil];
+}
 - (void) decodeImage:(UIImage *)i cropRect:(CGRect)cr {
   self.image = i;
   self.cropRect = cr;
-  
-  [self prepareSubset];
-  [self willDecodeImage];
-  [self performSelectorOnMainThread:@selector(progressDecodingImage:)
-               withObject:NSLocalizedString(@"Decoder MessageWhileDecoding", @"Decoding ...")
-            waitUntilDone:NO];
-  NSInvocationOperation *op = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(decode:) object:nil];
+  NSInvocationOperation *op = [[NSInvocationOperation  alloc] initWithTarget:self selector:@selector(asyncDecodeImage) object:nil];
   [operationQueue addOperation:op];
   [op release];
-  //[self performSelectorInBackground:@selector(decode:) withObject:nil];
-
- 
-  //[self performSelector:@selector(decode:) onThread:decodingThread withObject:nil waitUntilDone:NO];
-  /*[NSThread detachNewThreadSelector:@selector(decode:) 
-               toTarget:self 
-               withObject:nil];*/
 }
 
 - (void) dealloc {
