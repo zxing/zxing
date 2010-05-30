@@ -107,6 +107,7 @@ public final class DecodeServlet extends HttpServlet {
     possibleFormats.add(BarcodeFormat.EAN_8);
     possibleFormats.add(BarcodeFormat.EAN_13);
     possibleFormats.add(BarcodeFormat.CODE_39);
+    possibleFormats.add(BarcodeFormat.CODE_93);    
     possibleFormats.add(BarcodeFormat.CODE_128);
     possibleFormats.add(BarcodeFormat.ITF);
     possibleFormats.add(BarcodeFormat.RSS14);    

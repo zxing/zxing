@@ -53,6 +53,9 @@ public final class MultiFormatOneDReader extends OneDReader {
       if (possibleFormats.contains(BarcodeFormat.CODE_39)) {
         readers.addElement(new Code39Reader(useCode39CheckDigit));
       }
+      if (possibleFormats.contains(BarcodeFormat.CODE_93)) {
+        readers.addElement(new Code93Reader());
+      }
       if (possibleFormats.contains(BarcodeFormat.CODE_128)) {
         readers.addElement(new Code128Reader());
       }
@@ -69,6 +72,7 @@ public final class MultiFormatOneDReader extends OneDReader {
     if (readers.isEmpty()) {
       readers.addElement(new MultiFormatUPCEANReader(hints));
       readers.addElement(new Code39Reader());
+      readers.addElement(new Code93Reader());      
       readers.addElement(new Code128Reader());
       readers.addElement(new ITFReader());
       readers.addElement(new RSS14Reader());      

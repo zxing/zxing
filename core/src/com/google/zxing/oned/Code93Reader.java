@@ -1,5 +1,5 @@
 /*
- * Copyright 2008 ZXing authors
+ * Copyright 2010 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@
 
 package com.google.zxing.oned;
 
+import java.util.Hashtable;
+
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.ChecksumException;
 import com.google.zxing.FormatException;
@@ -24,72 +26,31 @@ import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitArray;
 
-import java.util.Hashtable;
-
 /**
- * <p>Decodes Code 39 barcodes. This does not support "Full ASCII Code 39" yet.</p>
+ * <p>Decodes Code 93 barcodes.</p>
  *
  * @author Sean Owen
- * @see Code93Reader
+ * @see Code39Reader
  */
-public final class Code39Reader extends OneDReader {
+public final class Code93Reader extends OneDReader {
 
-  static final String ALPHABET_STRING = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. *$/+%";
+  // Note that 'abcd' are dummy characters in place of control characters.
+  private static final String ALPHABET_STRING = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. $/+%abcd*";
   private static final char[] ALPHABET = ALPHABET_STRING.toCharArray();
 
   /**
    * These represent the encodings of characters, as patterns of wide and narrow bars.
-   * The 9 least-significant bits of each int correspond to the pattern of wide and narrow,
-   * with 1s representing "wide" and 0s representing narrow.
+   * The 9 least-significant bits of each int correspond to the pattern of wide and narrow.
    */
-  static final int[] CHARACTER_ENCODINGS = {
-      0x034, 0x121, 0x061, 0x160, 0x031, 0x130, 0x070, 0x025, 0x124, 0x064, // 0-9
-      0x109, 0x049, 0x148, 0x019, 0x118, 0x058, 0x00D, 0x10C, 0x04C, 0x01C, // A-J
-      0x103, 0x043, 0x142, 0x013, 0x112, 0x052, 0x007, 0x106, 0x046, 0x016, // K-T
-      0x181, 0x0C1, 0x1C0, 0x091, 0x190, 0x0D0, 0x085, 0x184, 0x0C4, 0x094, // U-*
-      0x0A8, 0x0A2, 0x08A, 0x02A // $-%
+  private static final int[] CHARACTER_ENCODINGS = {
+      0x114, 0x148, 0x144, 0x142, 0x128, 0x124, 0x122, 0x150, 0x112, 0x10A, // 0-9
+      0x1A8, 0x1A4, 0x1A2, 0x194, 0x192, 0x18A, 0x168, 0x164, 0x162, 0x134, // A-J
+      0x11A, 0x158, 0x14C, 0x146, 0x12C, 0x116, 0x1B4, 0x1B2, 0x1AC, 0x1A6, // K-T
+      0x196, 0x19A, 0x16C, 0x166, 0x136, 0x13A, // U-Z
+      0x12E, 0x1D4, 0x1D2, 0x1CA, 0x16E, 0x176, 0x1AE, // - - %
+      0x126, 0x1DA, 0x1D6, 0x132, 0x15E, // Control chars? $-*
   };
-
-  private static final int ASTERISK_ENCODING = CHARACTER_ENCODINGS[39];
-
-  private final boolean usingCheckDigit;
-  private final boolean extendedMode;
-
-  /**
-   * Creates a reader that assumes all encoded data is data, and does not treat the final
-   * character as a check digit. It will not decoded "extended Code 39" sequences.
-   */
-  public Code39Reader() {
-    usingCheckDigit = false;
-    extendedMode = false;
-  }
-
-  /**
-   * Creates a reader that can be configured to check the last character as a check digit.
-   * It will not decoded "extended Code 39" sequences.
-   *
-   * @param usingCheckDigit if true, treat the last data character as a check digit, not
-   * data, and verify that the checksum passes.
-   */
-  public Code39Reader(boolean usingCheckDigit) {
-    this.usingCheckDigit = usingCheckDigit;
-    this.extendedMode = false;
-  }
-
-  /**
-   * Creates a reader that can be configured to check the last character as a check digit,
-   * or optionally attempt to decode "extended Code 39" sequences that are used to encode
-   * the full ASCII character set.
-   *
-   * @param usingCheckDigit if true, treat the last data character as a check digit, not
-   * data, and verify that the checksum passes.
-   * @param extendedMode if true, will attempt to decode extended Code 39 sequences in the
-   * text.
-   */
-  public Code39Reader(boolean usingCheckDigit, boolean extendedMode) {
-    this.usingCheckDigit = usingCheckDigit;
-    this.extendedMode = extendedMode;
-  }
+  private static final int ASTERISK_ENCODING = CHARACTER_ENCODINGS[47];
 
   public Result decodeRow(int rowNumber, BitArray row, Hashtable hints)
       throws NotFoundException, ChecksumException, FormatException {
@@ -104,12 +65,12 @@ public final class Code39Reader extends OneDReader {
     }
 
     StringBuffer result = new StringBuffer(20);
-    int[] counters = new int[9];
+    int[] counters = new int[6];
     char decodedChar;
     int lastStart;
     do {
       recordPattern(row, nextStart, counters);
-      int pattern = toNarrowWidePattern(counters);
+      int pattern = toPattern(counters);
       if (pattern < 0) {
         throw NotFoundException.getNotFoundInstance();
       }
@@ -126,41 +87,21 @@ public final class Code39Reader extends OneDReader {
     } while (decodedChar != '*');
     result.deleteCharAt(result.length() - 1); // remove asterisk
 
-    // Look for whitespace after pattern:
-    int lastPatternSize = 0;
-    for (int i = 0; i < counters.length; i++) {
-      lastPatternSize += counters[i];
-    }
-    int whiteSpaceAfterEnd = nextStart - lastStart - lastPatternSize;
-    // If 50% of last pattern size, following last pattern, is not whitespace, fail
-    // (but if it's whitespace to the very end of the image, that's OK)
-    if (nextStart != end && whiteSpaceAfterEnd / 2 < lastPatternSize) {
+    // Should be at least one more black module
+    if (nextStart == end || !row.get(nextStart)) {
       throw NotFoundException.getNotFoundInstance();
     }
 
-    if (usingCheckDigit) {
-      int max = result.length() - 1;
-      int total = 0;
-      for (int i = 0; i < max; i++) {
-        total += ALPHABET_STRING.indexOf(result.charAt(i));
-      }
-      if (result.charAt(max) != ALPHABET[total % 43]) {
-        throw ChecksumException.getChecksumInstance();
-      }
-      result.deleteCharAt(max);
-    }
-
-    if (result.length() == 0) {
+    if (result.length() < 2) {
       // Almost surely a false positive
       throw NotFoundException.getNotFoundInstance();
     }
 
-    String resultString;
-    if (extendedMode) {
-      resultString = decodeExtended(result);
-    } else {
-      resultString = result.toString();
-    }
+    checkChecksums(result);
+    // Remove checksum digits
+    result.setLength(result.length() - 2);
+
+    String resultString = decodeExtended(result);
 
     float left = (float) (start[1] + start[0]) / 2.0f;
     float right = (float) (nextStart + lastStart) / 2.0f;
@@ -170,7 +111,7 @@ public final class Code39Reader extends OneDReader {
         new ResultPoint[]{
             new ResultPoint(left, (float) rowNumber),
             new ResultPoint(right, (float) rowNumber)},
-        BarcodeFormat.CODE_39);
+        BarcodeFormat.CODE_93);
 
   }
 
@@ -185,7 +126,7 @@ public final class Code39Reader extends OneDReader {
     }
 
     int counterPosition = 0;
-    int[] counters = new int[9];
+    int[] counters = new int[6];
     int patternStart = rowOffset;
     boolean isWhite = false;
     int patternLength = counters.length;
@@ -196,11 +137,8 @@ public final class Code39Reader extends OneDReader {
         counters[counterPosition]++;
       } else {
         if (counterPosition == patternLength - 1) {
-          if (toNarrowWidePattern(counters) == ASTERISK_ENCODING) {
-            // Look for whitespace before start pattern, >= 50% of width of start pattern
-            if (row.isRange(Math.max(0, patternStart - (i - patternStart) / 2), patternStart, false)) {
-              return new int[]{patternStart, i};
-            }
+          if (toPattern(counters) == ASTERISK_ENCODING) {
+            return new int[]{patternStart, i};
           }
           patternStart += counters[0] + counters[1];
           for (int y = 2; y < patternLength; y++) {
@@ -219,50 +157,31 @@ public final class Code39Reader extends OneDReader {
     throw NotFoundException.getNotFoundInstance();
   }
 
-  // For efficiency, returns -1 on failure. Not throwing here saved as many as 700 exceptions
-  // per image when using some of our blackbox images.
-  private static int toNarrowWidePattern(int[] counters) {
-    int numCounters = counters.length;
-    int maxNarrowCounter = 0;
-    int wideCounters;
-    do {
-      int minCounter = Integer.MAX_VALUE;
-      for (int i = 0; i < numCounters; i++) {
-        int counter = counters[i];
-        if (counter < minCounter && counter > maxNarrowCounter) {
-          minCounter = counter;
-        }
+  private static int toPattern(int[] counters) {
+    int max = counters.length;
+    int sum = 0;
+    for (int i = 0; i < max; i++) {
+      sum += counters[i];
+    }
+    int pattern = 0;
+    for (int i = 0; i < max; i++) {
+      int scaledShifted = (counters[i] << INTEGER_MATH_SHIFT) * 9 / sum;
+      int scaledUnshifted = scaledShifted >> INTEGER_MATH_SHIFT;
+      if ((scaledShifted & 0xFF) > 0x7F) {
+        scaledUnshifted++;
       }
-      maxNarrowCounter = minCounter;
-      wideCounters = 0;
-      int totalWideCountersWidth = 0;
-      int pattern = 0;
-      for (int i = 0; i < numCounters; i++) {
-        int counter = counters[i];
-        if (counters[i] > maxNarrowCounter) {
-          pattern |= 1 << (numCounters - 1 - i);
-          wideCounters++;
-          totalWideCountersWidth += counter;
-        }
+      if (scaledUnshifted < 1 || scaledUnshifted > 4) {
+        return -1;
       }
-      if (wideCounters == 3) {
-        // Found 3 wide counters, but are they close enough in width?
-        // We can perform a cheap, conservative check to see if any individual
-        // counter is more than 1.5 times the average:
-        for (int i = 0; i < numCounters && wideCounters > 0; i++) {
-          int counter = counters[i];
-          if (counters[i] > maxNarrowCounter) {
-            wideCounters--;
-            // totalWideCountersWidth = 3 * average, so this checks if counter >= 3/2 * average
-            if ((counter << 1) >= totalWideCountersWidth) {
-              return -1;
-            }
-          }
+      if ((i & 0x01) == 0) {
+        for (int j = 0; j < scaledUnshifted; j++) {
+          pattern = (pattern << 1) | 0x01;
         }
-        return pattern;
+      } else {
+        pattern <<= scaledUnshifted;
       }
-    } while (wideCounters > 3);
-    return -1;
+    }
+    return pattern;
   }
 
   private static char patternToChar(int pattern) throws NotFoundException {
@@ -279,11 +198,11 @@ public final class Code39Reader extends OneDReader {
     StringBuffer decoded = new StringBuffer(length);
     for (int i = 0; i < length; i++) {
       char c = encoded.charAt(i);
-      if (c == '+' || c == '$' || c == '%' || c == '/') {
+      if (c >= 'a' && c <= 'd') {
         char next = encoded.charAt(i + 1);
         char decodedChar = '\0';
         switch (c) {
-          case '+':
+          case 'd':
             // +A to +Z map to a to z
             if (next >= 'A' && next <= 'Z') {
               decodedChar = (char) (next + 32);
@@ -291,7 +210,7 @@ public final class Code39Reader extends OneDReader {
               throw FormatException.getFormatInstance();
             }
             break;
-          case '$':
+          case 'a':
             // $A to $Z map to control codes SH to SB
             if (next >= 'A' && next <= 'Z') {
               decodedChar = (char) (next - 64);
@@ -299,7 +218,7 @@ public final class Code39Reader extends OneDReader {
               throw FormatException.getFormatInstance();
             }
             break;
-          case '%':
+          case 'b':
             // %A to %E map to control codes ESC to US
             if (next >= 'A' && next <= 'E') {
               decodedChar = (char) (next - 38);
@@ -309,7 +228,7 @@ public final class Code39Reader extends OneDReader {
               throw FormatException.getFormatInstance();
             }
             break;
-          case '/':
+          case 'c':
             // /A to /O map to ! to , and /Z maps to :
             if (next >= 'A' && next <= 'O') {
               decodedChar = (char) (next - 32);
@@ -328,6 +247,27 @@ public final class Code39Reader extends OneDReader {
       }
     }
     return decoded.toString();
+  }
+
+  private static void checkChecksums(StringBuffer result) throws ChecksumException {
+    int length = result.length();
+    checkOneChecksum(result, length - 2, 20);
+    checkOneChecksum(result, length - 1, 15);
+  }
+
+  private static void checkOneChecksum(StringBuffer result, int checkPosition, int weightMax)
+      throws ChecksumException {
+    int weight = 1;
+    int total = 0;
+    for (int i = checkPosition - 1; i >= 0; i--) {
+      total += weight * ALPHABET_STRING.indexOf(result.charAt(i));
+      if (++weight > weightMax) {
+        weight = 1;
+      }
+    }
+    if (result.charAt(checkPosition) != ALPHABET[total % 47]) {
+      throw ChecksumException.getChecksumInstance();
+    }
   }
 
 }

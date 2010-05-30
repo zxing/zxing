@@ -116,6 +116,7 @@ public final class CommandLineRunner {
     vector.addElement(BarcodeFormat.RSS14);    
     if (!productsOnly) {
       vector.addElement(BarcodeFormat.CODE_39);
+      vector.addElement(BarcodeFormat.CODE_93);      
       vector.addElement(BarcodeFormat.CODE_128);
       vector.addElement(BarcodeFormat.ITF);
       vector.addElement(BarcodeFormat.QR_CODE);

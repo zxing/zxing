@@ -53,6 +53,9 @@ public final class BarcodeFormat {
   /** Code 39 1D format. */
   public static final BarcodeFormat CODE_39 = new BarcodeFormat("CODE_39");
 
+  /** Code 93 1D format. */
+  public static final BarcodeFormat CODE_93 = new BarcodeFormat("CODE_93");
+
   /** ITF (Interleaved Two of Five) 1D format. */
   public static final BarcodeFormat ITF = new BarcodeFormat("ITF");
 
