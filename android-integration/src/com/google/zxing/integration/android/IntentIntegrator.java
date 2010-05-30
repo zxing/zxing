@@ -87,7 +87,7 @@ public final class IntentIntegrator {
 
   // supported barcode formats
   public static final String PRODUCT_CODE_TYPES = "UPC_A,UPC_E,EAN_8,EAN_13";
-  public static final String ONE_D_CODE_TYPES = PRODUCT_CODE_TYPES + ",CODE_39,CODE_128";
+  public static final String ONE_D_CODE_TYPES = PRODUCT_CODE_TYPES + ",CODE_39,CODE_93,CODE_128";
   public static final String QR_CODE_TYPES = "QR_CODE";
   public static final String ALL_CODE_TYPES = null;
 

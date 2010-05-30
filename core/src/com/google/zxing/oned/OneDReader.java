@@ -40,7 +40,7 @@ import java.util.Hashtable;
  */
 public abstract class OneDReader implements Reader {
 
-  private static final int INTEGER_MATH_SHIFT = 8;
+  protected static final int INTEGER_MATH_SHIFT = 8;
   protected static final int PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
 
   public Result decode(BinaryBitmap image) throws NotFoundException, FormatException {

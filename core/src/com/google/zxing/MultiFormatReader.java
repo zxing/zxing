@@ -100,6 +100,7 @@ public final class MultiFormatReader implements Reader {
               formats.contains(BarcodeFormat.EAN_13) ||
               formats.contains(BarcodeFormat.EAN_8) ||
               formats.contains(BarcodeFormat.CODE_39) ||
+              formats.contains(BarcodeFormat.CODE_93) ||
               formats.contains(BarcodeFormat.CODE_128) ||
               formats.contains(BarcodeFormat.ITF) ||
               formats.contains(BarcodeFormat.RSS14) || 

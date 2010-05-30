@@ -21,16 +21,14 @@ import com.google.zxing.MultiFormatReader;
 import com.google.zxing.common.AbstractBlackBoxTestCase;
 
 /**
- * This is a set of mobile image taken at 480x360 with difficult lighting.
- *
- * @author dswitkin@google.com (Daniel Switkin)
+ * @author Sean Owen
  */
-public final class EAN13BlackBox2TestCase extends AbstractBlackBoxTestCase {
+public final class Code93BlackBox1TestCase extends AbstractBlackBoxTestCase {
 
-  public EAN13BlackBox2TestCase() {
-    super("test/data/blackbox/ean13-2", new MultiFormatReader(), BarcodeFormat.EAN_13);
-    addTest(11, 16, 0.0f);
-    addTest(10, 16, 180.0f);
+  public Code93BlackBox1TestCase() {
+    super("test/data/blackbox/code93-1", new MultiFormatReader(), BarcodeFormat.CODE_93);
+    addTest(3, 3, 0.0f);
+    addTest(3, 3, 180.0f);
   }
 
 }
