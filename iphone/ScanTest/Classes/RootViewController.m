@@ -7,11 +7,16 @@
 //
 
 #import "RootViewController.h"
+@interface RootViewController()
+@property (nonatomic,retain) ZXingWidgetController *scanController;
+
+@end
 
 
 @implementation RootViewController
 @synthesize resultsView;
 @synthesize resultsToDisplay;
+@synthesize scanController;
 #pragma mark -
 #pragma mark View lifecycle
 
@@ -19,10 +24,9 @@
     [super viewDidLoad];
 	[self setTitle:@"ZXing"];
   
-	scanController = [[ZXingWidgetController alloc] initWithDelegate:self];
-	[scanController setOneDMode:NO];
-	[scanController setShowCancel:YES];
-	scanController = [scanController initWithDelegate:self];
+  ZXingWidgetController *widController = [[ZXingWidgetController alloc] initWithDelegate:self showCancel:YES OneDMode:NO];
+	self.scanController = widController;
+  [widController release];
 	NSBundle *mainBundle = [NSBundle mainBundle];
 	[scanController setSoundToPlay:[[NSURL fileURLWithPath:[mainBundle pathForResource:@"beep-beep" ofType:@"aiff"] isDirectory:NO] retain]];
    
