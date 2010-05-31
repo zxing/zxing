@@ -122,7 +122,7 @@ public final class CommandLineRunner {
       vector.addElement(BarcodeFormat.QR_CODE);
       vector.addElement(BarcodeFormat.DATAMATRIX);
       vector.addElement(BarcodeFormat.PDF417);
-	  vector.addElement(BarcodeFormat.CODABAR);
+      //vector.addElement(BarcodeFormat.CODABAR);
     }
     hints.put(DecodeHintType.POSSIBLE_FORMATS, vector);
     if (tryHarder) {

@@ -101,7 +101,7 @@ public final class DecodeServlet extends HttpServlet {
   static {
     HINTS = new Hashtable<DecodeHintType, Object>(5);
     HINTS.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
-    Collection<BarcodeFormat> possibleFormats = new Vector<BarcodeFormat>();
+    Collection<BarcodeFormat> possibleFormats = new Vector<BarcodeFormat>(17);
     possibleFormats.add(BarcodeFormat.UPC_A);
     possibleFormats.add(BarcodeFormat.UPC_E);
     possibleFormats.add(BarcodeFormat.EAN_8);
@@ -109,6 +109,7 @@ public final class DecodeServlet extends HttpServlet {
     possibleFormats.add(BarcodeFormat.CODE_39);
     possibleFormats.add(BarcodeFormat.CODE_93);    
     possibleFormats.add(BarcodeFormat.CODE_128);
+    //possibleFormats.add(BarcodeFormat.CODABAR);
     possibleFormats.add(BarcodeFormat.ITF);
     possibleFormats.add(BarcodeFormat.RSS14);    
     possibleFormats.add(BarcodeFormat.QR_CODE);
