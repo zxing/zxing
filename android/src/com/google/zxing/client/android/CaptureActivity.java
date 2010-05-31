@@ -117,6 +117,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     ONE_D_FORMATS = new Vector<BarcodeFormat>(PRODUCT_FORMATS.size() + 3);
     ONE_D_FORMATS.addAll(PRODUCT_FORMATS);
     ONE_D_FORMATS.add(BarcodeFormat.CODE_39);
+    ONE_D_FORMATS.add(BarcodeFormat.CODE_93);
     ONE_D_FORMATS.add(BarcodeFormat.CODE_128);
     ONE_D_FORMATS.add(BarcodeFormat.ITF);
     QR_CODE_FORMATS = new Vector<BarcodeFormat>(1);
