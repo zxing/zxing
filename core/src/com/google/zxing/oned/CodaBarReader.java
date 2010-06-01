@@ -45,11 +45,20 @@ public final class CodaBarReader extends OneDReader {
       0x01A, 0x029 //TN
   };
 
+  // minimal number of characters that should be present (inclusing start and stop characters)
+  // this check has been added to reduce the number of false positive on other formats
+  // until the cause for this behaviour has been determined
+  // under normal circumstances this should be set to 3
+  private static final int minCharacterLength = 6; 
+  
   // multiple start/end patterns
   // official start and end patterns
+  private static final char[] STARTEND_ENCODING = {'E', '*', 'A', 'B', 'C', 'D', 'T', 'N'};
   // some codabar generator allow the codabar string to be closed by every character
-  private static final char[] STARTEND_ENCODING = {
-      '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-', '$', ':', '/', '.', '+', 'A', 'B', 'C', 'D', 'T', 'N'};
+  //private static final char[] STARTEND_ENCODING = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-', '$', ':', '/', '.', '+', 'A', 'B', 'C', 'D', 'T', 'N'};
+  
+  // some industries use a checksum standard but this is not part of the original codabar standard
+  // for more information see : http://www.mecsw.com/specs/codabar.html
 
   public Result decodeRow(int rowNumber, BitArray row, Hashtable hints) throws NotFoundException {
     int[] start = findAsteriskPattern(row);
@@ -87,29 +96,12 @@ public final class CodaBarReader extends OneDReader {
       }
     } while (nextStart < end); // no fixed end pattern so keep on reading while data is available
 
-    // find last character in STARTEND_ENCODING
-    for (int k = result.length() - 1; k >= 0; k--) {
-      if (arrayContains(STARTEND_ENCODING, result.charAt(k))) {
-        // valid character -> remove and break out of loop
-        result.deleteCharAt(k);
-        k = -1;// break out of loop
-      } else {
-        // not a valid character -> remove anyway
-        result.deleteCharAt(k);
-      }
-    }
-
-
-    // remove first character
-    if (result.length() > 0) {
-      result.deleteCharAt(0);
-    }
-
     // Look for whitespace after pattern:
     int lastPatternSize = 0;
     for (int i = 0; i < counters.length; i++) {
       lastPatternSize += counters[i];
     }
+
     int whiteSpaceAfterEnd = nextStart - lastStart - lastPatternSize;
     // If 50% of last pattern size, following last pattern, is not whitespace, fail
     // (but if it's whitespace to the very end of the image, that's OK)
@@ -117,17 +109,49 @@ public final class CodaBarReader extends OneDReader {
       throw NotFoundException.getNotFoundInstance();
     }
 
-
-    String resultString = result.toString();
-    if (resultString.length() == 0) {
-      // Almost surely a false positive
-      throw NotFoundException.getNotFoundInstance();
+	// valid result?
+	if (result.length() < 2)
+	{
+		throw NotFoundException.getNotFoundInstance();
+	}
+	
+	char startchar = result.charAt(0);
+	if (!arrayContains(STARTEND_ENCODING, startchar))
+	{
+		//invalid start character
+		throw NotFoundException.getNotFoundInstance();
+	}
+    
+	// find stop character
+    for (int k = 1;k < result.length() ;k++) 
+	{
+      if (result.charAt(k) == startchar) 
+	  {
+        // found stop character -> discard rest of the string
+		if ((k+1) != result.length())
+		{
+			result.delete(k+1,result.length()-1);
+			k = result.length();// break out of loop
+		} 
+	  }
     }
+
+    // remove stop/start characters character and check if a string longer than 5 characters is contained
+    if (result.length() > minCharacterLength) 
+	{ 
+		result.deleteCharAt(result.length()-1); 
+		result.deleteCharAt(0); 
+	}
+	else
+	{
+		// Almost surely a false positive ( start + stop + at least 1 character)
+		throw NotFoundException.getNotFoundInstance();
+	}
 
     float left = (float) (start[1] + start[0]) / 2.0f;
     float right = (float) (nextStart + lastStart) / 2.0f;
     return new Result(
-        resultString,
+        result.toString(),
         null,
         new ResultPoint[]{
             new ResultPoint(left, (float) rowNumber),
