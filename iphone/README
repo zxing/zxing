@@ -27,4 +27,10 @@ How to include ZXingWidget in a easy and clean way:
 	 it.  Add the relative path from your project's directory to the
 	 "zxing/iphone/ZXingWidget/Classes" directory. Make sure you click the checkbox "relative path" !
  
-  5. You're ready to go. Just #import <ZXingWidgetController.h> from anywhere and it should work !
+  5. Ultimately you need to make a tweak so that ZXing actually decodes barcode. In target section, double
+     click on your project target, and go to the build tab. Look for the "Exported Symbols Files" and
+     double-click on it. Att the relative path to the exportList files in "/zxing/iphone/ZXingWidget/exportList".
+     This will tell the linket to actually link with some key classes so that this code registers the necessary
+     decoders.
+ 
+  6. You're ready to go. Just #import <ZXingWidgetController.h> from anywhere and it should work !
