@@ -42,7 +42,7 @@ public class TimeZoneList {
   
   public static final TimeZoneInfo[] TIMEZONES = {
     new TimeZoneInfo("GMT", "Greenwich Mean Time", "GMT",               0 * ONE_HOUR + 0 * THIRTY_MIN), // 0
-    new TimeZoneInfo("UTC", "Universal Coordinated Time", "GMT",        1 * ONE_HOUR + 0 * THIRTY_MIN),
+    new TimeZoneInfo("UTC", "Universal Coordinated Time", "GMT",        0 * ONE_HOUR + 0 * THIRTY_MIN),
     new TimeZoneInfo("ECT", "European Central Time", "GMT+1:00",        1 * ONE_HOUR + 0 * THIRTY_MIN),
     new TimeZoneInfo("EET", "Eastern European Time", "GMT+2:00",        2 * ONE_HOUR + 0 * THIRTY_MIN),
     new TimeZoneInfo("ART", "(Arabic) Egypt Standard Time", "GMT+2:00", 2 * ONE_HOUR + 0 * THIRTY_MIN),
