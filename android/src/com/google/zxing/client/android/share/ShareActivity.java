@@ -26,6 +26,7 @@ import android.provider.Browser;
 import android.provider.Contacts;
 import android.provider.BaseColumns;
 import android.text.ClipboardManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import com.google.zxing.BarcodeFormat;
@@ -40,6 +41,8 @@ import com.google.zxing.client.android.R;
  * @author dswitkin@google.com (Daniel Switkin)
  */
 public final class ShareActivity extends Activity {
+
+  private static final String TAG = ShareActivity.class.getSimpleName();
 
   private static final int PICK_BOOKMARK = 0;
   private static final int PICK_CONTACT = 1;
@@ -163,6 +166,7 @@ public final class ShareActivity extends Activity {
    * @param contactUri A Uri of the form content://contacts/people/17
    */
   private void showContactAsBarcode(Uri contactUri) {
+    Log.i(TAG, "Showing contact URI as barcode: " + contactUri);
     ContentResolver resolver = getContentResolver();
     Cursor contactCursor = resolver.query(contactUri, null, null, null, null);
     Bundle bundle = new Bundle();
@@ -223,6 +227,7 @@ public final class ShareActivity extends Activity {
       intent.putExtra(Intents.Encode.DATA, bundle);
       intent.putExtra(Intents.Encode.FORMAT, BarcodeFormat.QR_CODE.toString());
 
+      Log.i(TAG, "Sending bundle for encoding: " + bundle);
       startActivity(intent);
     }
   }
