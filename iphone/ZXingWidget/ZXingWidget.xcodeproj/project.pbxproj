@@ -1111,7 +1111,7 @@
 				);
 				PRESERVE_DEAD_CODE_INITS_AND_TERMS = NO;
 				PRODUCT_NAME = ZXingWidget;
-				SDKROOT = iphonesimulator3.0;
+				SDKROOT = iphonesimulator3.1;
 				SEPARATE_STRIP = NO;
 				SKIP_INSTALL = YES;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
@@ -1130,7 +1130,7 @@
 				HEADER_SEARCH_PATHS = ../../cpp/core/src;
 				INSTALL_PATH = /usr/local/lib;
 				PRODUCT_NAME = ZXingWidget;
-				SDKROOT = iphonesimulator3.0;
+				SDKROOT = iphonesimulator3.1;
 			};
 			name = Release;
 		};
@@ -1146,7 +1146,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 3.1.3;
 				OTHER_LDFLAGS = "-ObjC";
 				PREBINDING = NO;
-				SDKROOT = iphoneos3.1;
+				SDKROOT = iphonesimulator3.1;
 			};
 			name = Debug;
 		};
@@ -1161,7 +1161,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 3.1.3;
 				OTHER_LDFLAGS = "-ObjC";
 				PREBINDING = NO;
-				SDKROOT = iphoneos3.1;
+				SDKROOT = iphonesimulator3.1;
 			};
 			name = Release;
 		};
