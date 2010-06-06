@@ -22,8 +22,10 @@
 
 @protocol ZXingDelegate;
 
-@interface ZXingWidgetController : UIImagePickerController <DecoderDelegate, CancelDelegate> {
+//@interface ZXingWidgetController : UIImagePickerController <DecoderDelegate, CancelDelegate> {
+@interface ZXingWidgetController : UIViewController<DecoderDelegate, CancelDelegate, UIImagePickerControllerDelegate,UINavigationControllerDelegate> {
   ParsedResult *result;
+  UIImagePickerController *imagePicker;
   NSArray *actions;       
   OverlayView *overlayView;
   SystemSoundID beepSound;
@@ -43,6 +45,7 @@
 - (id)initWithDelegate:(id<ZXingDelegate>)delegate showCancel:(BOOL)shouldShowCancel OneDMode:(BOOL)shouldUseoOneDMode;
 
 - (BOOL)fixedFocus;
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker;
 @end
 
 @protocol ZXingDelegate

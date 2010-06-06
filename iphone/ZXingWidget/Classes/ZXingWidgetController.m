@@ -34,6 +34,8 @@ CGImageRef UIGetScreenImage(void);
 @property BOOL showCancel;
 @property BOOL oneDMode;
 
+@property (nonatomic, retain) UIImagePickerController* imagePicker;
+
 @end
 
 
@@ -44,33 +46,50 @@ CGImageRef UIGetScreenImage(void);
 @synthesize result, actions, delegate, soundToPlay;
 @synthesize overlayView;
 @synthesize oneDMode, showCancel;
+@synthesize imagePicker;
+
+
+-(void)loadImagePicker {
+  if (self.imagePicker)
+  {
+    [imagePicker release];
+    imagePicker = nil;
+  }
+  UIImagePickerController* imController = [[UIImagePickerController alloc] init];
+  self.imagePicker = imController;
+  imagePicker.delegate = self;
+  [imController release];
+  imagePicker.wantsFullScreenLayout = YES;
+  if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
+    imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
+  float zoomFactor = CAMERA_SCALAR;
+  if ([self fixedFocus]) {
+    zoomFactor *= 2.0;
+  }
+  if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
+    imagePicker.cameraViewTransform = CGAffineTransformScale(
+                                                             imagePicker.cameraViewTransform, zoomFactor, zoomFactor);
+  if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
+  {
+    imagePicker.showsCameraControls = NO;
+    imagePicker.cameraOverlayView = overlayView;
+    imagePicker.allowsEditing = NO;
+  }
+}
 
 - (id)initWithDelegate:(id<ZXingDelegate>)scanDelegate showCancel:(BOOL)shouldShowCancel OneDMode:(BOOL)shouldUseoOneDMode {
   if (self = [super init]) {
     [self setDelegate:scanDelegate];
     self.oneDMode = shouldUseoOneDMode;
     self.showCancel = shouldShowCancel;
-    beepSound = -1;
     self.wantsFullScreenLayout = YES;
-    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
-      self.sourceType = UIImagePickerControllerSourceTypeCamera;
-    float zoomFactor = CAMERA_SCALAR;
-    if ([self fixedFocus]) {
-      zoomFactor *= 2.0;
-    }
-    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
-      self.cameraViewTransform = CGAffineTransformScale(
-                                                      self.cameraViewTransform, zoomFactor, zoomFactor);
-    overlayView = [OverlayView alloc];
-    [overlayView setOneDMode:oneDMode];
-    overlayView = [overlayView initWithCancelEnabled:showCancel frame:[UIScreen mainScreen].bounds];
-    [overlayView setDelegate:self];
-    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
-    {
-      self.showsCameraControls = NO;
-      self.cameraOverlayView = overlayView;
-      self.allowsEditing = NO; // [[NSUserDefaults standardUserDefaults] boolForKey:@"allowEditing"];
-    }
+    beepSound = -1;
+    OverlayView *theOverLayView = [[OverlayView alloc] initWithFrame:[UIScreen mainScreen].bounds 
+                                                       cancelEnabled:showCancel 
+                                                            oneDMode:oneDMode];
+    [theOverLayView setDelegate:self];
+    self.overlayView = theOverLayView;
+    [theOverLayView release];
   }
   
   return self;
@@ -80,13 +99,15 @@ CGImageRef UIGetScreenImage(void);
   if (beepSound != -1) {
     AudioServicesDisposeSystemSoundID(beepSound);
   }
-  self.cameraOverlayView = nil;
+  imagePicker.cameraOverlayView = nil;
+  [imagePicker release];
   [overlayView release];
   [super dealloc];
 }
 
 - (void)cancelled {
   NSLog(@"cancelled called in ZXingWidgetController");
+  [[UIApplication sharedApplication] setStatusBarHidden:NO];
   wasCancelled = true;
   if (delegate != nil) {
     [delegate cancelled];
@@ -112,6 +133,8 @@ CGImageRef UIGetScreenImage(void);
 
 - (void)viewWillAppear:(BOOL)animated {
   [super viewWillAppear:animated];
+  self.wantsFullScreenLayout = YES;
+  //[[UIApplication sharedApplication] setStatusBarHidden:YES];
   if ([self soundToPlay] != nil) {
     OSStatus error = AudioServicesCreateSystemSoundID((CFURLRef)[self soundToPlay], &beepSound);
     if (error != kAudioServicesNoError) {
@@ -121,15 +144,31 @@ CGImageRef UIGetScreenImage(void);
 }
 
 - (void)viewDidAppear:(BOOL)animated {
+  NSLog(@"View did appear");
   [super viewDidAppear:animated];
+  [[UIApplication sharedApplication] setStatusBarHidden:YES];
+  //self.wantsFullScreenLayout = YES;
+  [self loadImagePicker];
+  self.view = imagePicker.view;
+  
   [overlayView setPoints:nil];
   wasCancelled = false;
-  [NSTimer scheduledTimerWithTimeInterval: FIRST_TAKE_DELAY
-                                   target: self
-                                 selector: @selector(takePicture:)
-                                 userInfo: nil
-                                  repeats: NO];
+  if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+
+    [NSTimer scheduledTimerWithTimeInterval: FIRST_TAKE_DELAY
+                                     target: self
+                                   selector: @selector(takePicture:)
+                                   userInfo: nil
+                                    repeats: NO];
+  }
 }
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
+  //self.wantsFullScreenLayout = NO;
+  [UIApplication sharedApplication].statusBarHidden = NO;
+  [self cancelled];
+}
+
 
 - (CGImageRef)CGImageRotated90:(CGImageRef)imgRef
 {

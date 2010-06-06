@@ -25,7 +25,7 @@ How to include ZXingWidget in a easy and clean way:
   4. Finally, we need to tell your project where to find the ZXingWidget headers.  Open your
 	 "Project Settings" and go to the "Build" tab. Look for "Header Search Paths" and double-click
 	 it.  Add the relative path from your project's directory to the
-	 "zxing/iphone/ZXingWidget/Classes" directory. Make sure you click the checkbox "relative path" !
+	 "zxing/iphone/ZXingWidget/Classes" directory. Make sure you click the checkbox "recursive path" !
  
   5. Ultimately you need to make a tweak so that ZXing actually decodes barcode. In target section, double
      click on your project target, and go to the build tab. Look for the "Exported Symbols Files" and
@@ -34,3 +34,17 @@ How to include ZXingWidget in a easy and clean way:
      decoders.
  
   6. You're ready to go. Just #import <ZXingWidgetController.h> from anywhere and it should work !
+
+Know issues for above steps to include:
+======================================
+  - It can happen that when trying to build your own project with ZXoingWidgetController you get linker errors like 
+    "undefined reference to". If this error looks like a c++ undefined reference, then renaming main.m into main.mm (Objectice-C++ source suffix)
+    may fix the problem
+  
+  - If you have building error like " ... : No such file or directory", then it is a classical error, it means that the path to includes is not well
+    specified. The best way to fix this is to look at the Build Command that failed. To do that, click on the lower right corner of your XCode project,
+    you should see the build command that failed. Click on it and expand it by cliking on the "more" symbols that just appeared. This will make appear
+    the exact command line instruction that is ran and fails. You can then make sure that the Header search path you specified is there, and you can also
+    copy/paste this line into your terminal and try to see if you can reproduce/fix the error by adding the right path to the compiler. Once is is fixed,
+    you should have an idea of what's the problem and accordingly modify your Header Search Path.
+    
