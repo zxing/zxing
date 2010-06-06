@@ -35,7 +35,7 @@
 - (IBAction)scanPressed:(id)sender {
   //UIImagePickerController *picker = [[UIImagePickerController alloc] init];
 	[self presentModalViewController:scanController
-                          animated:YES];
+                          animated:NO];
 //	[self.navigationController pushViewController:scanController animated:true];
 }
 
@@ -82,7 +82,6 @@
     [resultsView setText:resultsToDisplay];
     [resultsView setNeedsDisplay];
   }
-  
 }
 
 - (void)cancelled {

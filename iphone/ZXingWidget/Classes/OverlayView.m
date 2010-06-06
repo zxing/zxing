@@ -22,28 +22,28 @@ static const CGFloat kPadding = 10;
 
 @synthesize delegate, oneDMode;
 @synthesize points = _points;
-//@synthesize image;
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-- (id)initWithCancelEnabled:(BOOL)cancelEnabled frame:(CGRect)frame {
-	if( self = [super initWithFrame:frame] ) {
+- (id) initWithFrame:(CGRect)theFrame cancelEnabled:(BOOL)isCancelEnabled oneDMode:(BOOL)isOneDModeEnabled {
+	if( self = [super initWithFrame:theFrame] ) {
 		self.backgroundColor = [UIColor clearColor];
-	}
-	if (cancelEnabled) {
-		cancelButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-		[cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
-		if (oneDMode) {
-			[cancelButton setTransform:CGAffineTransformMakeRotation(M_PI/2)];
-			[cancelButton setFrame:CGRectMake(20, 175, 45, 130)];
-		}
-		else {
-			[cancelButton setFrame:CGRectMake(95, 420, 130, 45)];			
-		}
-
-		[cancelButton addTarget:self action:@selector(cancel:) forControlEvents:UIControlEventTouchUpInside];
-		[self addSubview:cancelButton];
-	}
+    self.oneDMode = isOneDModeEnabled;
+    if (isCancelEnabled) {
+      cancelButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+      [cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
+      if (oneDMode) {
+        [cancelButton setTransform:CGAffineTransformMakeRotation(M_PI/2)];
+        [cancelButton setFrame:CGRectMake(20, 175, 45, 130)];
+      }
+      else {
+        [cancelButton setFrame:CGRectMake(95, 420, 130, 45)];			
+      }
+      
+      [cancelButton addTarget:self action:@selector(cancel:) forControlEvents:UIControlEventTouchUpInside];
+      [self addSubview:cancelButton];
+    }
+  }
 	return self;
 }
 
@@ -80,11 +80,11 @@ static const CGFloat kPadding = 10;
 - (void)drawRect:(CGRect)rect {
 	[super drawRect:rect];
 	CGContextRef c = UIGraphicsGetCurrentContext();
-
+  
 	CGRect cropRect = [self cropRect];
 	
 	if (nil != _points) {
-//		[imageView.image drawAtPoint:cropRect.origin];
+    //		[imageView.image drawAtPoint:cropRect.origin];
 	}
 	
 	CGFloat white[4] = {1.0f, 1.0f, 1.0f, 1.0f};
@@ -92,7 +92,7 @@ static const CGFloat kPadding = 10;
 	CGContextSetFillColor(c, white);
 	[self drawRect:cropRect inContext:c];
 	
-//	CGContextSetStrokeColor(c, white);
+  //	CGContextSetStrokeColor(c, white);
 	//	CGContextSetStrokeColor(c, white);
 	CGContextSaveGState(c);
 	if (oneDMode) {
@@ -140,8 +140,8 @@ static const CGFloat kPadding = 10;
 			for( NSValue* value in _points ) {
 				CGPoint point = [value CGPointValue];
 				smallSquare.origin = CGPointMake(
-								cropRect.origin.x + point.x - smallSquare.size.width / 2,
-								cropRect.origin.y + point.y - smallSquare.size.height / 2);
+                                         cropRect.origin.x + point.x - smallSquare.size.width / 2,
+                                         cropRect.origin.y + point.y - smallSquare.size.height / 2);
 				[self drawRect:smallSquare inContext:c];
 			}
 		}
@@ -151,26 +151,26 @@ static const CGFloat kPadding = 10;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 /*
-- (void) setImage:(UIImage*)image {
-	if( nil == _imageView ) {
-		_imageView = [[UIImageView alloc] initWithImage:image];
-		_imageView.alpha = 0.5;
-	} else {
-		_imageView.image = image;
-	}
-	
-	CGRect frame = _imageView.frame;
-	frame.origin.x = self.cropRect.origin.x;
-	frame.origin.y = self.cropRect.origin.y;
-	_imageView.frame = frame;
-	
-	[_points release];
-	_points = nil;
-	self.backgroundColor = [UIColor clearColor];
-	
-	[self setNeedsDisplay];
-}
-*/
+ - (void) setImage:(UIImage*)image {
+ if( nil == _imageView ) {
+ _imageView = [[UIImageView alloc] initWithImage:image];
+ _imageView.alpha = 0.5;
+ } else {
+ _imageView.image = image;
+ }
+ 
+ CGRect frame = _imageView.frame;
+ frame.origin.x = self.cropRect.origin.x;
+ frame.origin.y = self.cropRect.origin.y;
+ _imageView.frame = frame;
+ 
+ [_points release];
+ _points = nil;
+ self.backgroundColor = [UIColor clearColor];
+ 
+ [self setNeedsDisplay];
+ }
+ */
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 - (UIImage*) image {
