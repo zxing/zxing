@@ -27,7 +27,7 @@
       android:layout_height="wrap_content"
       android:gravity="left"
       android:textColor="@color/share_text"
-      android:textSize="18.0sp"
+      android:textSize="14sp"
       android:text="@string/msg_share_explanation"
       android:paddingBottom="24dip"/>
 

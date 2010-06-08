@@ -40,7 +40,7 @@
               android:layout_gravity="center_horizontal"
               android:gravity="center"
               android:textColor="@color/contents_text"
-              android:textSize="20.0sp"
+              android:textSize="22sp"
               android:paddingBottom="8dip"
               android:paddingLeft="8dip"
               android:paddingRight="8dip"/>

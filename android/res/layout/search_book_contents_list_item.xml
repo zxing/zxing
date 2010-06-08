@@ -29,7 +29,7 @@
             android:layout_marginRight="8dip"
             android:textColor="@color/sbc_page_number_text"
             android:singleLine="false"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:textStyle="bold"/>
 
   <TextView android:id="@+id/snippet_view"
@@ -38,7 +38,7 @@
             android:layout_gravity="left|top"
             android:textColor="@color/sbc_snippet_text"
             android:singleLine="false"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:typeface="serif"/>
 
 </com.google.zxing.client.android.book.SearchBookContentsListItem>
