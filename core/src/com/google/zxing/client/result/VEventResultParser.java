@@ -38,10 +38,6 @@ final class VEventResultParser extends ResultParser {
     if (vEventStart < 0) {
       return null;
     }
-    int vEventEnd = rawText.indexOf("END:VEVENT");
-    if (vEventEnd < 0) {
-      return null;
-    }
 
     String summary = VCardResultParser.matchSingleVCardPrefixedField("SUMMARY", rawText, true);
     String start = VCardResultParser.matchSingleVCardPrefixedField("DTSTART", rawText, true);
