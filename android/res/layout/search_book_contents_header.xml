@@ -23,4 +23,4 @@
           android:enabled="false"
           android:textColor="@color/sbc_header_text"
           android:singleLine="true"
-          android:textSize="16sp"/>
+          android:textSize="14sp"/>
