@@ -139,8 +139,16 @@ final class QRCodeEncoder {
       Uri uri = (Uri)intent.getExtras().getParcelable(Intent.EXTRA_STREAM);
       InputStream stream = activity.getContentResolver().openInputStream(uri);
       int length = stream.available();
+      if (length <= 0) {
+        Log.w(TAG, "Content stream is empty");
+        return false;
+      }
       byte[] vcard = new byte[length];
       int bytesRead = stream.read(vcard, 0, length);
+      if (bytesRead < length) {
+        Log.w(TAG, "Unable to fully read available bytes from content stream");
+        return false;
+      }
       String vcardString = new String(vcard, 0, bytesRead, "UTF-8");
       Log.d(TAG, "Encoding share intent content:");
       Log.d(TAG, vcardString);
