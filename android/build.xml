@@ -173,7 +173,7 @@ limitations under the License.
 
   <!-- Compile this project's .java files into .class files. -->
   <target name="compile" depends="resource-src, aidl">
-    <javac encoding="ascii" target="1.5" debug="true" extdirs=""
+    <javac encoding="ascii" target="1.5" debug="false" extdirs=""
            destdir="${out-classes}"
            bootclasspathref="android.target.classpath">
       <src path="${source-folder}" />
