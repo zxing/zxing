@@ -123,7 +123,7 @@ final class QRCodeEncoder {
       encodeQRCodeContents(intent, type);
     } else {
       String data = intent.getStringExtra(Intents.Encode.DATA);
-      if (data != null && data.length() != 0) {
+      if (data != null && data.length() > 0) {
         contents = data;
         displayContents = data;
         title = activity.getString(R.string.contents_text);
@@ -182,22 +182,22 @@ final class QRCodeEncoder {
         title = activity.getString(R.string.contents_text);
       }
     } else if (type.equals(Contents.Type.EMAIL)) {
-      String data = intent.getStringExtra(Intents.Encode.DATA);
-      if (data != null && data.length() > 0) {
+      String data = trim(intent.getStringExtra(Intents.Encode.DATA));
+      if (data != null) {
         contents = "mailto:" + data;
         displayContents = data;
         title = activity.getString(R.string.contents_email);
       }
     } else if (type.equals(Contents.Type.PHONE)) {
-      String data = intent.getStringExtra(Intents.Encode.DATA);
-      if (data != null && data.length() > 0) {
+      String data = trim(intent.getStringExtra(Intents.Encode.DATA));
+      if (data != null) {
         contents = "tel:" + data;
         displayContents = PhoneNumberUtils.formatNumber(data);
         title = activity.getString(R.string.contents_phone);
       }
     } else if (type.equals(Contents.Type.SMS)) {
-      String data = intent.getStringExtra(Intents.Encode.DATA);
-      if (data != null && data.length() > 0) {
+      String data = trim(intent.getStringExtra(Intents.Encode.DATA));
+      if (data != null) {
         contents = "sms:" + data;
         displayContents = PhoneNumberUtils.formatNumber(data);
         title = activity.getString(R.string.contents_sms);
@@ -208,26 +208,26 @@ final class QRCodeEncoder {
         StringBuilder newContents = new StringBuilder();
         StringBuilder newDisplayContents = new StringBuilder();
         newContents.append("MECARD:");
-        String name = bundle.getString(Contacts.Intents.Insert.NAME);
-        if (name != null && name.length() > 0) {
+        String name = trim(bundle.getString(Contacts.Intents.Insert.NAME));
+        if (name != null) {
           newContents.append("N:").append(name).append(';');
           newDisplayContents.append(name);
         }
-        String address = bundle.getString(Contacts.Intents.Insert.POSTAL);
-        if (address != null && address.length() > 0) {
+        String address = trim(bundle.getString(Contacts.Intents.Insert.POSTAL));
+        if (address != null) {
           newContents.append("ADR:").append(address).append(';');
           newDisplayContents.append('\n').append(address);
         }
         for (int x = 0; x < Contents.PHONE_KEYS.length; x++) {
-          String phone = bundle.getString(Contents.PHONE_KEYS[x]);
-          if (phone != null && phone.length() > 0) {
+          String phone = trim(bundle.getString(Contents.PHONE_KEYS[x]));
+          if (phone != null) {
             newContents.append("TEL:").append(phone).append(';');
             newDisplayContents.append('\n').append(PhoneNumberUtils.formatNumber(phone));
           }
         }
         for (int x = 0; x < Contents.EMAIL_KEYS.length; x++) {
-          String email = bundle.getString(Contents.EMAIL_KEYS[x]);
-          if (email != null && email.length() > 0) {
+          String email = trim(bundle.getString(Contents.EMAIL_KEYS[x]));
+          if (email != null) {
             newContents.append("EMAIL:").append(email).append(';');
             newDisplayContents.append('\n').append(email);
           }
@@ -264,13 +264,17 @@ final class QRCodeEncoder {
     newContents.append("MECARD:");
     String[] names = contact.getNames();
     if (names != null && names.length > 0) {
-      newContents.append("N:").append(names[0]).append(';');
-      newDisplayContents.append(names[0]);
+      String name = trim(names[0]);
+      if (name != null) {
+        newContents.append("N:").append(name).append(';');
+        newDisplayContents.append(name);
+      }
     }
     String[] addresses = contact.getAddresses();
     if (addresses != null) {
       for (String address : addresses) {
-        if (address != null && address.length() > 0) {
+        address = trim(address);
+        if (address != null) {
           newContents.append("ADR:").append(address).append(';');
           newDisplayContents.append('\n').append(address);
         }
@@ -279,7 +283,8 @@ final class QRCodeEncoder {
     String[] phoneNumbers = contact.getPhoneNumbers();
     if (phoneNumbers != null) {
       for (String phone : phoneNumbers) {
-        if (phone != null && phone.length() > 0) {
+        phone = trim(phone);
+        if (phone != null) {
           newContents.append("TEL:").append(phone).append(';');
           newDisplayContents.append('\n').append(PhoneNumberUtils.formatNumber(phone));
         }
@@ -288,14 +293,15 @@ final class QRCodeEncoder {
     String[] emails = contact.getEmails();
     if (emails != null) {
       for (String email : emails) {
-        if (email != null && email.length() > 0) {
+        email = trim(email);
+        if (email != null) {
           newContents.append("EMAIL:").append(email).append(';');
           newDisplayContents.append('\n').append(email);
         }
       }
     }
-    String url = contact.getURL();
-    if (url != null && url.length() > 0) {
+    String url = trim(contact.getURL());
+    if (url != null) {
       newContents.append("URL:").append(url).append(';');
       newDisplayContents.append('\n').append(url);
     }
@@ -350,4 +356,13 @@ final class QRCodeEncoder {
     }
     return null;
   }
+
+  private static String trim(String s) {
+    if (s == null) {
+      return null;
+    }
+    s = s.trim();
+    return s.length() == 0 ? null : s;
+  }
+
 }
