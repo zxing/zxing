@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 ZXing authors
+ * Copyright 2010 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,6 +34,7 @@ public final class ParsedResultType {
   public static final ParsedResultType TEL = new ParsedResultType("TEL");
   public static final ParsedResultType SMS = new ParsedResultType("SMS");
   public static final ParsedResultType CALENDAR = new ParsedResultType("CALENDAR");
+  public static final ParsedResultType WIFI = new ParsedResultType("WIFI");
   // "optional" types
   public static final ParsedResultType NDEF_SMART_POSTER = new ParsedResultType("NDEF_SMART_POSTER");
   public static final ParsedResultType MOBILETAG_RICH_WEB = new ParsedResultType("MOBILETAG_RICH_WEB");

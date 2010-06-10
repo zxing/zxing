@@ -63,6 +63,8 @@ public abstract class ResultParser {
       return result;
     } else if ((result = GeoResultParser.parse(theResult)) != null) {
       return result;
+    } else if ((result = WifiResultParser.parse(theResult)) != null) {
+      return result;
     } else if ((result = URLTOResultParser.parse(theResult)) != null) {
       return result;
     } else if ((result = URIResultParser.parse(theResult)) != null) {
