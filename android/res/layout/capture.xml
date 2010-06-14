@@ -48,8 +48,8 @@
       <LinearLayout
           android:orientation="vertical"
           android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:gravity="left|top">
+          android:layout_height="fill_parent"
+          android:gravity="right">
 
         <ImageView android:id="@+id/barcode_image_view"
                    android:layout_width="160dip"
@@ -58,45 +58,85 @@
                    android:maxHeight="160dip"
                    android:layout_marginBottom="4dip"
                    android:adjustViewBounds="true"
-                   android:scaleType="centerInside"/>
+                   android:scaleType="fitEnd"/>
 
-        <TextView android:id="@+id/format_text_view"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:layout_gravity="left"
-                  android:text="@string/msg_default_format"
-                  android:textColor="@color/result_minor_text"
-                  android:textSize="14sp"/>
+        <LinearLayout
+          android:orientation="horizontal"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content">
 
-        <TextView android:id="@+id/type_text_view"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:layout_gravity="left"
-                  android:text="@string/msg_default_type"
-                  android:textColor="@color/result_minor_text"
-                  android:textSize="14sp"/>
+          <TextView android:id="@+id/format_text_view_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/msg_default_format"
+                    android:textColor="@color/result_minor_text"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    android:paddingRight="4dip"/>
 
-        <TextView android:id="@+id/time_text_view"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:layout_gravity="left"
-                  android:text="@string/msg_default_time"
-                  android:textColor="@color/result_minor_text"
-                  android:textSize="14sp"/>
+          <TextView android:id="@+id/format_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/result_minor_text"
+                    android:textSize="14sp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+          android:orientation="horizontal"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content">
+
+          <TextView android:id="@+id/type_text_view_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/msg_default_type"
+                    android:textColor="@color/result_minor_text"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    android:paddingRight="4dip"/>
+
+          <TextView android:id="@+id/type_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/result_minor_text"
+                    android:textSize="14sp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+          android:orientation="horizontal"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content">
+
+          <TextView android:id="@+id/time_text_view_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/msg_default_time"
+                    android:textColor="@color/result_minor_text"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    android:paddingRight="4dip"/>
+
+          <TextView android:id="@+id/time_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/result_minor_text"
+                    android:textSize="14sp"/>
+
+        </LinearLayout>
 
       </LinearLayout>
 
       <ScrollView
           android:layout_width="fill_parent"
-          android:layout_height="wrap_content"
-          android:layout_weight="1">
+          android:layout_height="wrap_content">
 
         <TextView android:id="@+id/contents_text_view"
-                  android:layout_width="fill_parent"
-                  android:layout_height="fill_parent"
-                  android:gravity="left|top"
-                  android:text="@string/msg_default_contents"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
                   android:textColor="@color/result_text"
+                  android:textColorLink="@color/result_text"
                   android:textSize="22sp"
                   android:paddingLeft="12dip"
                   android:autoLink="web"/>
@@ -111,20 +151,28 @@
                   android:layout_height="wrap_content"
                   android:gravity="center">
 
-      <Button android:layout_width="wrap_content"
+      <Button android:layout_width="0sp"
               android:layout_height="wrap_content"
+              android:layout_weight="1"
+              android:textSize="14sp"
               android:visibility="gone"/>
 
-      <Button android:layout_width="wrap_content"
+      <Button android:layout_width="0sp"
               android:layout_height="wrap_content"
+              android:layout_weight="1"
+              android:textSize="14sp"
               android:visibility="gone"/>
 
-      <Button android:layout_width="wrap_content"
+      <Button android:layout_width="0sp"
               android:layout_height="wrap_content"
+              android:layout_weight="1"
+              android:textSize="14sp"
               android:visibility="gone"/>
 
-      <Button android:layout_width="wrap_content"
+      <Button android:layout_width="0sp"
               android:layout_height="wrap_content"
+              android:layout_weight="1"
+              android:textSize="14sp"
               android:visibility="gone"/>
 
     </LinearLayout>
