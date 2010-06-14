@@ -49,8 +49,6 @@ import android.os.Message;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.text.ClipboardManager;
-import android.text.SpannableStringBuilder;
-import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -499,7 +497,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
     ImageView barcodeImageView = (ImageView) findViewById(R.id.barcode_image_view);
     if (barcode == null) {
-      barcodeImageView.setImageResource(R.drawable.zxing_icon);
+      barcodeImageView.setImageResource(R.drawable.launcher_icon_large);
     } else {
       barcodeImageView.setImageBitmap(barcode);
     }
@@ -507,28 +505,22 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
     TextView formatTextView = (TextView) findViewById(R.id.format_text_view);
     formatTextView.setVisibility(View.VISIBLE);
-    formatTextView.setText(getString(R.string.msg_default_format) + ": " +
-        rawResult.getBarcodeFormat().toString());
+    formatTextView.setText(rawResult.getBarcodeFormat().toString());
 
     ResultHandler resultHandler = ResultHandlerFactory.makeResultHandler(this, rawResult);
     TextView typeTextView = (TextView) findViewById(R.id.type_text_view);
     typeTextView.setVisibility(View.VISIBLE);
-    typeTextView.setText(getString(R.string.msg_default_type) + ": " +
-        resultHandler.getType().toString());
+    typeTextView.setText(resultHandler.getType().toString());
 
     DateFormat formatter = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
     String formattedTime = formatter.format(new Date(rawResult.getTimestamp()));
     TextView timeTextView = (TextView) findViewById(R.id.time_text_view);
     timeTextView.setVisibility(View.VISIBLE);
-    timeTextView.setText(getString(R.string.msg_default_time) + ": " + formattedTime);
+    timeTextView.setText(formattedTime);
 
     TextView contentsTextView = (TextView) findViewById(R.id.contents_text_view);
-    CharSequence title = getString(resultHandler.getDisplayTitle());
-    SpannableStringBuilder styled = new SpannableStringBuilder(title + "\n\n");
-    styled.setSpan(new UnderlineSpan(), 0, title.length(), 0);
     CharSequence displayContents = resultHandler.getDisplayContents();
-    styled.append(displayContents);
-    contentsTextView.setText(styled);
+    contentsTextView.setText(displayContents);
 
     int buttonCount = resultHandler.getButtonCount();
     ViewGroup buttonView = (ViewGroup) findViewById(R.id.result_button_view);
