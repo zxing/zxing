@@ -16,6 +16,7 @@
 
 package com.google.zxing.client.android;
 
+import android.util.TypedValue;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
@@ -521,6 +522,9 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     TextView contentsTextView = (TextView) findViewById(R.id.contents_text_view);
     CharSequence displayContents = resultHandler.getDisplayContents();
     contentsTextView.setText(displayContents);
+    // Crudely scale betweeen 22 and 48 -- bigger font for shorter text
+    int scaledSize = Math.max(22, 48 - displayContents.length() / 4);
+    contentsTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, scaledSize);
 
     int buttonCount = resultHandler.getButtonCount();
     ViewGroup buttonView = (ViewGroup) findViewById(R.id.result_button_view);
