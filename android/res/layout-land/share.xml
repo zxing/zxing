@@ -18,70 +18,73 @@
               android:id="@+id/encode_view"
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
+              android:gravity="center"
               android:background="@color/share_view"
               android:orientation="vertical"
               android:padding="16dip">
 
   <TextView
       android:layout_width="fill_parent"
-      android:layout_height="wrap_content"
-      android:gravity="left"
+      android:layout_height="0dip"
+      android:layout_weight="1"
       android:textColor="@color/share_text"
-      android:textSize="14sp"
-      android:text="@string/msg_share_explanation"
-      android:paddingBottom="32dip"/>
+      android:textSize="22sp"
+      android:text="@string/msg_share_explanation"/>
 
   <LinearLayout
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
+      android:layout_width="fill_parent"
+      android:layout_height="0dip"
+      android:layout_weight="2"
       android:background="@color/share_view"
-      android:orientation="horizontal"
-      android:layout_gravity="center">
+      android:orientation="horizontal">
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dip"
+        android:layout_height="fill_parent"
+        android:layout_weight="3"
         android:scaleType="center"
         android:src="@drawable/share_via_barcode"
         android:paddingRight="32dip"/>
 
-    <TableLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+        android:orientation="vertical">
 
-      <TableRow>
+      <Button android:id="@+id/contact_button"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:layout_weight="1"
+              android:text="@string/button_share_contact"/>
 
-        <Button android:id="@+id/contact_button"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/button_share_contact"
-                android:minWidth="90dip"/>
+      <Button android:id="@+id/bookmark_button"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:layout_weight="1"
+              android:text="@string/button_share_bookmark"/>
 
-        <Button android:id="@+id/bookmark_button"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/button_share_bookmark"
-                android:minWidth="90dip"/>
+    </LinearLayout>
 
-      </TableRow>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+        android:orientation="vertical">
 
-      <TableRow>
+      <Button android:id="@+id/clipboard_button"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:layout_weight="1"
+              android:text="@string/button_share_clipboard"/>
 
-        <Button android:id="@+id/clipboard_button"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/button_share_clipboard"
-                android:minWidth="90dip"/>
+      <Button android:id="@+id/app_button"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:layout_weight="1"
+              android:text="@string/button_share_app"/>
 
-        <Button android:id="@+id/app_button"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/button_share_app"
-                android:minWidth="90dip"/>
-
-      </TableRow>
-
-    </TableLayout>
+    </LinearLayout>
 
   </LinearLayout>
 
