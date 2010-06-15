@@ -30,6 +30,7 @@
 @property (nonatomic, assign) id<CancelDelegate> delegate;
 @property (nonatomic, assign) BOOL oneDMode;
 
+
 - (id)initWithFrame:(CGRect)theFrame cancelEnabled:(BOOL)isCancelEnabled oneDMode:(BOOL)isOneDModeEnabled;
 
 - (CGRect)cropRect;

@@ -43,6 +43,7 @@ using namespace zxing;
 @synthesize subsetBytesPerRow;
 @synthesize delegate;
 @synthesize operationQueue;
+@synthesize readers;
 
 
 - (id)init {
@@ -157,8 +158,8 @@ using namespace zxing;
 - (void)decode:(id)arg {
   NSAutoreleasePool* mainpool = [[NSAutoreleasePool alloc] init];
   { 
-    NSSet *formatReaders = [FormatReader formatReaders];
-    
+    //NSSet *formatReaders = [FormatReader formatReaders];
+    NSSet *formatReaders = self.readers;
     Ref<LuminanceSource> source (new GrayBytesMonochromeBitmapSource(subsetData, subsetWidth, subsetHeight, subsetBytesPerRow));
     Ref<Binarizer> binarizer (new GlobalHistogramBinarizer(source));
     Ref<BinaryBitmap> grayImage (new BinaryBitmap(binarizer));
@@ -187,7 +188,7 @@ using namespace zxing;
           const char *cString = resultText->getText().c_str();
           const std::vector<Ref<ResultPoint> > &resultPoints = result->getResultPoints();
           NSMutableArray *points = 
-            [NSMutableArray arrayWithCapacity:resultPoints.size()];
+            [[NSMutableArray alloc ] initWithCapacity:resultPoints.size()];
           
           for (size_t i = 0; i < resultPoints.size(); i++) {
             const Ref<ResultPoint> &rp = resultPoints[i];
@@ -200,6 +201,7 @@ using namespace zxing;
           
           decoderResult = [[TwoDDecoderResult resultWithText:resultString
                                                      points:points] retain];
+          [points release];
         } catch (ReaderException &rex) {
           NSLog(@"failed to decode, caught ReaderException '%s'",
               rex.what());
@@ -279,6 +281,7 @@ using namespace zxing;
   [subsetImage release];
   if (subsetData) free(subsetData);
   [operationQueue release];
+  [readers release];
   [super dealloc];
 }
 

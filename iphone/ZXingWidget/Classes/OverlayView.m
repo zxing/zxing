@@ -18,11 +18,16 @@
 
 static const CGFloat kPadding = 10;
 
+@interface OverlayView()
+@property (nonatomic,assign) UIButton *cancelButton;
+@end
+
+
 @implementation OverlayView
 
 @synthesize delegate, oneDMode;
 @synthesize points = _points;
-
+@synthesize cancelButton;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 - (id) initWithFrame:(CGRect)theFrame cancelEnabled:(BOOL)isCancelEnabled oneDMode:(BOOL)isOneDModeEnabled {
@@ -30,7 +35,8 @@ static const CGFloat kPadding = 10;
 		self.backgroundColor = [UIColor clearColor];
     self.oneDMode = isOneDModeEnabled;
     if (isCancelEnabled) {
-      cancelButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+      UIButton *butt = [UIButton buttonWithType:UIButtonTypeRoundedRect]; 
+      self.cancelButton = butt;
       [cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
       if (oneDMode) {
         [cancelButton setTransform:CGAffineTransformMakeRotation(M_PI/2)];
@@ -60,7 +66,6 @@ static const CGFloat kPadding = 10;
 	imageView = nil;
 	[_points release];
 	_points = nil;
-	[cancelButton release];
 	[super dealloc];
 }
 

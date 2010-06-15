@@ -35,6 +35,7 @@ static NSMutableSet *sFormatReaders = nil;
   [pool drain];
 }
 
+/*
 + (NSSet *)formatReaders {
   NSSet *formatReaders = nil;
   @synchronized(self) {
@@ -43,6 +44,7 @@ static NSMutableSet *sFormatReaders = nil;
   }
   return formatReaders;
 }
+*/
 
 - (id)initWithReader:(zxing::Reader *)reader {
   if ((self = [super init])) {

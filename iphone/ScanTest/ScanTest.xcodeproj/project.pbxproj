@@ -15,7 +15,7 @@
 		1FF586FD11BBD81D00E8E868 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1FF586FC11BBD81D00E8E868 /* main.mm */; };
 		2892E4100DC94CBA00A64D0F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2892E40F0DC94CBA00A64D0F /* CoreGraphics.framework */; };
 		28AD73600D9D9599002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD735F0D9D9599002E5188 /* MainWindow.xib */; };
-		28C286E10D94DF7D0034E888 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C286E00D94DF7D0034E888 /* RootViewController.m */; };
+		28C286E10D94DF7D0034E888 /* RootViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 28C286E00D94DF7D0034E888 /* RootViewController.mm */; };
 		28F335F11007B36200424DE2 /* RootViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28F335F01007B36200424DE2 /* RootViewController.xib */; };
 		E5345BF11198D81A000CB77F /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5345BF01198D81A000CB77F /* AudioToolbox.framework */; };
 		E548755C119C62B9001CC0F8 /* beep-beep.aiff in Resources */ = {isa = PBXBuildFile; fileRef = E548755B119C62B9001CC0F8 /* beep-beep.aiff */; };
@@ -51,7 +51,7 @@
 		28A0AAE50D9B0CCF005BE974 /* ScanTest_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScanTest_Prefix.pch; sourceTree = "<group>"; };
 		28AD735F0D9D9599002E5188 /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
 		28C286DF0D94DF7D0034E888 /* RootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootViewController.h; sourceTree = "<group>"; };
-		28C286E00D94DF7D0034E888 /* RootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RootViewController.m; sourceTree = "<group>"; };
+		28C286E00D94DF7D0034E888 /* RootViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RootViewController.mm; sourceTree = "<group>"; };
 		28F335F01007B36200424DE2 /* RootViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RootViewController.xib; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* ScanTest-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "ScanTest-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 		E5345BF01198D81A000CB77F /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
@@ -80,7 +80,7 @@
 			isa = PBXGroup;
 			children = (
 				28C286DF0D94DF7D0034E888 /* RootViewController.h */,
-				28C286E00D94DF7D0034E888 /* RootViewController.m */,
+				28C286E00D94DF7D0034E888 /* RootViewController.mm */,
 				1D3623240D0F684500981E51 /* ScanTestAppDelegate.h */,
 				1D3623250D0F684500981E51 /* ScanTestAppDelegate.m */,
 			);
@@ -237,7 +237,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1D3623260D0F684500981E51 /* ScanTestAppDelegate.m in Sources */,
-				28C286E10D94DF7D0034E888 /* RootViewController.m in Sources */,
+				28C286E10D94DF7D0034E888 /* RootViewController.mm in Sources */,
 				1FF586FD11BBD81D00E8E868 /* main.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -264,6 +264,7 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = ScanTest_Prefix.pch;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_VERSION = "";
 				INFOPLIST_FILE = "ScanTest-Info.plist";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
@@ -282,6 +283,7 @@
 				EXPORTED_SYMBOLS_FILE = ../ZXingWidget/exportList;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = ScanTest_Prefix.pch;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INFOPLIST_FILE = "ScanTest-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -301,10 +303,13 @@
 				GCC_VERSION = "";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = "../ZXingWidget/Classes/**";
-				IPHONEOS_DEPLOYMENT_TARGET = 3.1;
+				HEADER_SEARCH_PATHS = (
+					../../cpp/core/src,
+					"../ZXingWidget/Classes/**",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 3.1.3;
 				PREBINDING = NO;
-				SDKROOT = iphoneos3.1;
+				SDKROOT = iphoneos3.1.3;
 			};
 			name = Debug;
 		};
@@ -316,10 +321,14 @@
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = "../ZXingWidget/Classes/**";
+				HEADER_SEARCH_PATHS = (
+					../../cpp/core/src,
+					"../ZXingWidget/Classes/**",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 3.1.3;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PREBINDING = NO;
-				SDKROOT = iphoneos3.1;
+				SDKROOT = iphoneos3.1.3;
 			};
 			name = Release;
 		};
