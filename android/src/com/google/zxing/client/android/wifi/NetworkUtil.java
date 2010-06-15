@@ -21,36 +21,41 @@ import android.text.TextUtils;
 /**
  * Try with:
  * http://chart.apis.google.com/chart?cht=qr&chs=240x240&chl=WIFI:S:linksys;P:mypass;T:WPA;;
- * @author Vikram Aggarwal
  *
  * TODO(vikrama): Test with binary ssid or password.
+ * 
+ * @author Vikram Aggarwal
  */
-public final class NetworkUtil {
+final class NetworkUtil {
+
+  private NetworkUtil() {
+  }
+
   /**
    * Encloses the incoming string inside double quotes, if it isn't already quoted.
    * @param string: the input string
    * @return a quoted string, of the form "input".  If the input string is null, it returns null as well.
    */
-  public static String convertToQuotedString(String string) {
+  static String convertToQuotedString(String string) {
     if (string == null){
       return null;
     }
     if (TextUtils.isEmpty(string)) {
       return "";
     }
-    final int lastPos = string.length() - 1;
+    int lastPos = string.length() - 1;
     if (lastPos < 0 || (string.charAt(0) == '"' && string.charAt(lastPos) == '"')) {
       return string;
     }        
-    return "\"" + string + "\"";
+    return '\"' + string + '\"';
   }
 
-  private static boolean isHex(String key) {
+  private static boolean isHex(CharSequence key) {
     if (key == null){
       return false;
     }
     for (int i = key.length() - 1; i >= 0; i--) {
-      final char c = key.charAt(i);
+      char c = key.charAt(i);
       if (!(c >= '0' && c <= '9' || c >= 'A' && c <= 'F' || c >= 'a' && c <= 'f')) {
         return false;
       }
@@ -63,14 +68,13 @@ public final class NetworkUtil {
    * @param wepKey the input to be checked
    * @return true if the input string is indeed hex or empty.  False if the input string is non-hex or null.
    */
-  public static boolean isHexWepKey(String wepKey) {
-    if (wepKey == null)
-      return false;
-    final int len = wepKey.length();
-    // WEP-40, WEP-104, and some vendors using 256-bit WEP (WEP-232?)
-    if (len != 10 && len != 26 && len != 58) {
+  static boolean isHexWepKey(CharSequence wepKey) {
+    if (wepKey == null) {
       return false;
     }
-    return isHex(wepKey);
-  }	
+    int len = wepKey.length();
+    // WEP-40, WEP-104, and some vendors using 256-bit WEP (WEP-232?)
+    return (len == 10 || len == 26 || len == 58) && isHex(wepKey);
+  }
+
 }

@@ -16,51 +16,44 @@
 
 package com.google.zxing.client.android.wifi;
 
-import java.util.Vector;
-
 import com.google.zxing.client.android.wifi.WifiActivity.NetworkType;
 
 /**
  * Everything we could get from the barcode is to be here
- * @author Vikram Aggarwal
  *
+ * @author Vikram Aggarwal
  */
-class NetworkSetting {
-  // The ancillary network setting from the barcode
-  private NetworkType mNetworkType;
-  // The password this ssid has
-  private String mPassword;
-  // The ssid we read from the barcode
-  private String mSsid;
+final class NetworkSetting {
 
-  static String[] toStringArray(Vector<String> strings) {
-    int size = strings.size();
-    String[] result = new String[size];
-    for (int j = 0; j < size; j++) {
-      result[j] = (String) strings.elementAt(j);
-    }
-    return result;
-  }
+  /** The ancillary network setting from the barcode */
+  private final NetworkType networkType;
+  /** The password this ssid has */
+  private final String password;
+  /** The ssid we read from the barcode */
+  private final String ssid;
+
   /**
    * Create a new NetworkSetting object.
    * @param ssid: The SSID
    * @param password: Password for the setting, blank if unsecured network
    * @param networkType: WPA for WPA/WPA2, or WEP for WEP or unsecured
    */
-  public NetworkSetting(String ssid, String password, NetworkType networkType){
-    mSsid = ssid;
-    mPassword = password;
-    mNetworkType = networkType;
+  NetworkSetting(String ssid, String password, NetworkType networkType){
+    this.ssid = ssid;
+    this.password = password;
+    this.networkType = networkType;
   }
 
-  public NetworkType getNetworkType() {
-    return mNetworkType;
-  }
-  public String getPassword() {
-    return mPassword;
+  NetworkType getNetworkType() {
+    return networkType;
   }
 
-  public String getSsid() {
-    return mSsid;
+  String getPassword() {
+    return password;
   }
+
+  String getSsid() {
+    return ssid;
+  }
+
 }
