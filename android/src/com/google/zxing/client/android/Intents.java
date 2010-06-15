@@ -148,6 +148,32 @@ public final class Intents {
     }
   }
 
+  public static final class WifiConnect {
+	    /**
+	     * Use Google Book Search to search the contents of the book provided.
+	     */
+	    public static final String ACTION = "com.google.zxing.client.android.WIFI_CONNECT";
+
+	    /**
+	     * The network to connect to, all the configuration provided here.
+	     */
+	    public static final String SSID = "SSID";
+
+	    /**
+	     * The network to connect to, all the configuration provided here.
+	     */
+	    public static final String TYPE = "TYPE";
+
+	    /**
+	     * The network to connect to, all the configuration provided here.
+	     */
+	    public static final String PASSWORD = "PASSWORD";
+
+	    private WifiConnect() {
+	    }
+	  }
+
+
   public static final class Share {
     /**
      * Give the user a choice of items to encode as a barcode, then render it as a QR Code and

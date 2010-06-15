@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+<!--	<ImageView android:id="@+id/imageStatus"-->
+<!--		android:layout_width="wrap_content" android:layout_height="wrap_content"-->
+<!--		android:layout_gravity="center_horizontal" android:padding="10dip"-->
+<!--		android:src="@drawable/up" />-->
+		
+			<TextView android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:id="@+id/networkStatus"
+		android:text="Status" android:textSize="20dip"  android:padding="8dip"
+		android:layout_gravity="center_horizontal|bottom" />
+</LinearLayout>
