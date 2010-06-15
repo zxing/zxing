@@ -17,7 +17,6 @@
 package com.google.zxing.client.android;
 
 import android.util.TypedValue;
-import android.widget.Toast;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
@@ -136,7 +135,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private CaptureActivityHandler handler;
 
   private ViewfinderView viewfinderView;
-  private View statusView;
+  private TextView statusView;
   private View resultView;
   private MediaPlayer mediaPlayer;
   private Result lastResult;
@@ -182,7 +181,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     CameraManager.init(getApplication());
     viewfinderView = (ViewfinderView) findViewById(R.id.viewfinder_view);
     resultView = findViewById(R.id.result_view);
-    statusView = findViewById(R.id.status_view);
+    statusView = (TextView) findViewById(R.id.status_view);
     handler = null;
     lastResult = null;
     hasSurface = false;
@@ -522,8 +521,8 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     TextView contentsTextView = (TextView) findViewById(R.id.contents_text_view);
     CharSequence displayContents = resultHandler.getDisplayContents();
     contentsTextView.setText(displayContents);
-    // Crudely scale betweeen 22 and 42 -- bigger font for shorter text
-    int scaledSize = Math.max(22, 42 - displayContents.length() / 4);
+    // Crudely scale betweeen 22 and 36 -- bigger font for shorter text
+    int scaledSize = Math.max(22, 36 - displayContents.length() / 4);
     contentsTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, scaledSize);
 
     int buttonCount = resultHandler.getButtonCount();
@@ -554,7 +553,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     // barcode was found (e.g. contact info) rather than the full contents, which they won't
     // have time to read.
     ResultHandler resultHandler = ResultHandlerFactory.makeResultHandler(this, rawResult);
-    Toast.makeText(this, resultHandler.getDisplayTitle(), Toast.LENGTH_SHORT).show();
+    statusView.setText(getString(resultHandler.getDisplayTitle()));
 
     if (copyToClipboard) {
       ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
@@ -688,6 +687,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
   private void resetStatusView() {
     resultView.setVisibility(View.GONE);
+    statusView.setText(R.string.msg_default_status);
     statusView.setVisibility(View.VISIBLE);
     viewfinderView.setVisibility(View.VISIBLE);
     lastResult = null;
