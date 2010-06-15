@@ -25,16 +25,18 @@ import android.os.Handler;
 /**
  * Close the parent after a delay.
  * @author Vikram Aggarwal
- *
  */
-class Killer implements Runnable {
+final class Killer implements Runnable {
+
   // Three full seconds
-  final int delay_millis = 3 * 1000;
-  Activity parent = null;
-  public Killer(Activity parent) {
+  private static final long DELAY_MS = 3 * 1000L;
+
+  private final Activity parent;
+
+  Killer(Activity parent) {
     this.parent = parent;
   }
-  @Override
+
   public void run() {
     final Handler handler = new Handler();
     Timer t = new Timer();
@@ -47,6 +49,6 @@ class Killer implements Runnable {
           }
         });
       }
-    }, delay_millis);
+    }, DELAY_MS);
   }
 }

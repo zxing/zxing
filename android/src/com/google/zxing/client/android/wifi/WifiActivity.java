@@ -19,73 +19,38 @@ package com.google.zxing.client.android.wifi;
 import java.util.List;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.zxing.client.android.Intents;
 import com.google.zxing.client.android.R;
-import com.google.zxing.client.android.wifi.Killer;
-import com.google.zxing.client.android.wifi.NetworkUtil;
-import com.google.zxing.client.android.wifi.NetworkSetting;
 
 /**
  * A new activity showing the progress of Wifi connection
- * @author Vikram Aggarwal
  *
+ * @author Vikram Aggarwal
  */
 public class WifiActivity extends Activity  {
-  public static enum NetworkType {
+
+  private static final String TAG = WifiActivity.class.getSimpleName();
+
+  private WifiManager wifiManager;
+  private TextView statusView;
+  private ConnectedReceiver connectedReceiver;
+
+  public enum NetworkType {
     NETWORK_WEP, NETWORK_WPA,
   }
 
-  /**
-   * Get a broadcast when the network is connected, and kill the activity.
-   */
-  class ConnectedReceiver extends BroadcastReceiver {
-    Activity parent = null;
-    public ConnectedReceiver(WifiActivity wifiActivity) {
-      parent = wifiActivity;
-    }
-
-    @Override
-    public void onReceive(Context context, Intent intent) {
-      if (intent.getAction().equals(android.net.ConnectivityManager.CONNECTIVITY_ACTION)){
-        ConnectivityManager con = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo[] s = con.getAllNetworkInfo();
-        for (NetworkInfo i : s){
-          if (i.getTypeName().contentEquals("WIFI")){
-            NetworkInfo.State state = i.getState();
-            if (state == NetworkInfo.State.CONNECTED){
-              statusT.setText("Connected!");
-              Killer delay_kill = new Killer(parent);
-              delay_kill.run();
-            }
-          }
-        }
-      }
-    }
-  }
-
-  private static final String tag = "NetworkActivity";
-  WifiManager mWifiManager = null;
-  TextView statusT = null;
-  ImageView statusI = null;
-  ConnectedReceiver rec = null;
-  boolean debug = true;
-
   private int changeNetwork(NetworkSetting setting) {
     // If the password is empty, this is an unencrypted network
-    if (setting.getPassword() == null || setting.getPassword() == "") {
+    if (setting.getPassword() == null || setting.getPassword().length() == 0) {
       return changeNetworkUnEncrypted(setting);
     }
     if (setting.getNetworkType() == NetworkType.NETWORK_WPA) {
@@ -96,11 +61,8 @@ public class WifiActivity extends Activity  {
   }
 
   private WifiConfiguration changeNetworkCommon(NetworkSetting input){
-    statusT.setText("Creating settings...");
-    if (debug) {
-      Log.d(tag, "adding new configuration: \nSSID: " + input.getSsid() + "\nPassword: \""
-          + input.getPassword() + "\"\nType: " + input.getNetworkType());
-    }
+    statusView.setText("Creating settings...");
+    Log.d(TAG, "Adding new configuration: \nSSID: " + input.getSsid() + "\nType: " + input.getNetworkType());
     WifiConfiguration config = new WifiConfiguration();
 
     config.allowedAuthAlgorithms.clear();
@@ -115,10 +77,9 @@ public class WifiActivity extends Activity  {
     return config;
   }
 
-  private int requestNetworkChange(WifiConfiguration config){		
-    boolean disableOthers = false;
-    statusT.setText("Changing Network...");
-    return updateNetwork(config, disableOthers);
+  private int requestNetworkChange(WifiConfiguration config){
+    statusView.setText("Changing Network...");
+    return updateNetwork(config, false);
   }
 
   // Adding a WEP network
@@ -155,9 +116,7 @@ public class WifiActivity extends Activity  {
   // Adding an open, unsecured network
   private int changeNetworkUnEncrypted(NetworkSetting input){
     WifiConfiguration config = changeNetworkCommon(input);
-    if (debug){
-      Log.d(tag, "Empty password prompting a simple account setting");
-    }
+    Log.d(TAG, "Empty password prompting a simple account setting");
     config.wepKeys[0] = "";
     config.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
     config.wepTxKeyIndex = 0;
@@ -169,10 +128,10 @@ public class WifiActivity extends Activity  {
    * @param ssid
    */
   private WifiConfiguration findNetworkInExistingConfig(String ssid){
-    List <WifiConfiguration> existingConfigs = mWifiManager.getConfiguredNetworks();
-    for (int i = 0; i < existingConfigs.size(); i++){
-      if (existingConfigs.get(i).SSID.compareTo(ssid) == 0){
-        return existingConfigs.get(i);
+    List <WifiConfiguration> existingConfigs = wifiManager.getConfiguredNetworks();
+    for (WifiConfiguration existingConfig : existingConfigs) {
+      if (existingConfig.SSID.equals(ssid)) {
+        return existingConfig;
       }
     }
     return null;
@@ -193,68 +152,62 @@ public class WifiActivity extends Activity  {
     String networkType = intent.getStringExtra(Intents.WifiConnect.TYPE);
 
     // TODO(vikrama): Error checking here, to ensure ssid exists.
-    NetworkType networkT = null;
+    NetworkType networkT;
     if (networkType.contains("WPA")) {
       networkT = NetworkType.NETWORK_WPA;
-    }
-    else if (networkType.contains("WEP")) {
+    } else if (networkType.contains("WEP")) {
       networkT = NetworkType.NETWORK_WEP;
-    }
-    else {
+    } else {
       // Got an incorrect network type
       finish();
       return;
     }
 
     setContentView(R.layout.network);
-    statusT = (TextView) findViewById(R.id.networkStatus);
+    statusView = (TextView) findViewById(R.id.networkStatus);
     // This is not available before onCreate
-    mWifiManager = (WifiManager) this.getSystemService(Context.WIFI_SERVICE);
+    wifiManager = (WifiManager) this.getSystemService(WIFI_SERVICE);
 
     // So we know when the network changes
-    rec = new ConnectedReceiver(this);
-    registerReceiver(rec, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+    connectedReceiver = new ConnectedReceiver(this, statusView);
+    registerReceiver(connectedReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
 
-    if (password == null)
+    if (password == null) {
       password = "";
-    if (debug) {
-      Log.d(tag, "adding new configuration: \nSSID: " + ssid + "\nPassword: \"" + password + "\"\nType: " + networkT);
     }
+    Log.d(TAG, "Adding new configuration: \nSSID: " + ssid + "Type: " + networkT);
     NetworkSetting setting = new NetworkSetting(ssid, password, networkT);
     changeNetwork(setting);
   }
 
   @Override
   protected void onDestroy() {
+    if (connectedReceiver != null) {
+      unregisterReceiver(connectedReceiver);
+      connectedReceiver = null;
+    }
     super.onDestroy();
-    if (rec != null)
-      unregisterReceiver(rec);
-    rec = null;
   }
 
   /**
    * Update the network: either create a new network or modify an existing network
-   * @param config: the new network configuration
-   * @param disableOthers: true if other networks must be disabled
+   * @param config the new network configuration
+   * @param disableOthers true if other networks must be disabled
    * @return network ID of the connected network.
    */
   private int updateNetwork(WifiConfiguration config, boolean disableOthers){
-    WifiConfiguration existing = findNetworkInExistingConfig(config.SSID);
     int networkId;
-    if (existing == null){
-      statusT.setText("Creating network...");
-      networkId = mWifiManager.addNetwork(config);
+    if (findNetworkInExistingConfig(config.SSID) == null){
+      statusView.setText("Creating network...");
+      networkId = wifiManager.addNetwork(config);
     } else {
-      statusT.setText("Modifying network...");
-      networkId = mWifiManager.updateNetwork(config);
+      statusView.setText("Modifying network...");
+      networkId = wifiManager.updateNetwork(config);
     }
-    if (networkId == -1){
-      return networkId;
-    }
-    if (!mWifiManager.enableNetwork(networkId, disableOthers)) {
+    if (networkId == -1 || !wifiManager.enableNetwork(networkId, disableOthers)) {
       return -1;
     }
-    mWifiManager.saveConfiguration();
+    wifiManager.saveConfiguration();
     return networkId;
   }
 }
