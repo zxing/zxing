@@ -1,8 +1,11 @@
 body {
-  background-color: white;
-  color: black;
-  font-family: arial;
-  font-size: 16;
+  background-color: black;
+  color: white;
+  font-family: Arial sans-serif;
+  font-size: 14pt;
+}
+a:link, a:visited, a:active {
+  color: white;
 }
 ul.touchable li {
   padding-top:8px;
