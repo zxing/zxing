@@ -179,13 +179,20 @@
 
   </LinearLayout>
 
-  <TextView android:id="@+id/status_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center_horizontal"
-            android:text="@string/msg_default_status"
-            android:background="@color/transparent"
-            android:textColor="@color/status_text"
-            android.textSize="14sp"/>
+  <LinearLayout android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@color/part_transparent"
+                android:layout_gravity="bottom"
+                android:gravity="center">
+
+    <TextView android:id="@+id/status_view"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="@string/msg_default_status"
+              android:textColor="@color/status_text"
+              android:textSize="14sp"/>
+
+  </LinearLayout>
 
 </FrameLayout>
