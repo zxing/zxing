@@ -150,6 +150,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private String characterSet;
   private String versionName;
   private HistoryManager historyManager;
+  private boolean firstLaunch;
 
   private final OnCompletionListener beepListener = new BeepListener();
 
@@ -187,9 +188,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     historyManager = new HistoryManager(this);
     historyManager.trimHistory();
 
-    showHelpOnFirstLaunch();
-
-    Toast.makeText(this, R.string.msg_default_status, Toast.LENGTH_LONG).show();
+    firstLaunch = showHelpOnFirstLaunch();
   }
 
   @Override
@@ -261,6 +260,10 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     vibrate = prefs.getBoolean(PreferencesActivity.KEY_VIBRATE, false);
     copyToClipboard = prefs.getBoolean(PreferencesActivity.KEY_COPY_TO_CLIPBOARD, true);
     initBeepSound();
+
+    if (!firstLaunch) {
+      Toast.makeText(this, R.string.msg_default_status, Toast.LENGTH_SHORT).show();      
+    }
   }
 
   private static Vector<BarcodeFormat> parseDecodeFormats(Intent intent) {
@@ -521,8 +524,8 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     TextView contentsTextView = (TextView) findViewById(R.id.contents_text_view);
     CharSequence displayContents = resultHandler.getDisplayContents();
     contentsTextView.setText(displayContents);
-    // Crudely scale betweeen 22 and 48 -- bigger font for shorter text
-    int scaledSize = Math.max(22, 48 - displayContents.length() / 4);
+    // Crudely scale betweeen 22 and 42 -- bigger font for shorter text
+    int scaledSize = Math.max(22, 42 - displayContents.length() / 4);
     contentsTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, scaledSize);
 
     int buttonCount = resultHandler.getButtonCount();
