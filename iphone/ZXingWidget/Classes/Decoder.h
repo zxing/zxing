@@ -24,7 +24,8 @@
 #import "DecoderDelegate.h"
 
 @interface Decoder : NSObject {
-	UIImage *image;
+	NSSet *readers;
+  UIImage *image;
 	CGRect cropRect;
   UIImage *subsetImage;
   unsigned char *subsetData;
@@ -36,6 +37,7 @@
 }
 
 @property(nonatomic, retain) UIImage *image;
+@property(nonatomic, retain) NSSet *readers;
 @property(nonatomic, assign) CGRect cropRect;
 @property(nonatomic, retain) UIImage *subsetImage;
 @property(nonatomic, assign) unsigned char *subsetData;

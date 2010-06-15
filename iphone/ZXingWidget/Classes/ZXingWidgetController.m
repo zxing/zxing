@@ -47,6 +47,7 @@ CGImageRef UIGetScreenImage(void);
 @synthesize overlayView;
 @synthesize oneDMode, showCancel;
 @synthesize imagePicker;
+@synthesize readers;
 
 
 -(void)loadImagePicker {
@@ -102,6 +103,7 @@ CGImageRef UIGetScreenImage(void);
   imagePicker.cameraOverlayView = nil;
   [imagePicker release];
   [overlayView release];
+  [readers release];
   [super dealloc];
 }
 
@@ -269,6 +271,7 @@ CGImageRef UIGetScreenImage(void);
   UIImage *scrn = [[UIImage alloc] initWithCGImage:newImage];
   CGImageRelease(newImage);
   Decoder *d = [[Decoder alloc] init];
+  d.readers = readers;
   d.delegate = self;
   cropRect.origin.x = 0.0;
   cropRect.origin.y = 0.0;

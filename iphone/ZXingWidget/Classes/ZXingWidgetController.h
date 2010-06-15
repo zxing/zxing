@@ -24,6 +24,7 @@
 
 //@interface ZXingWidgetController : UIImagePickerController <DecoderDelegate, CancelDelegate> {
 @interface ZXingWidgetController : UIViewController<DecoderDelegate, CancelDelegate, UIImagePickerControllerDelegate,UINavigationControllerDelegate> {
+  NSSet *readers;
   ParsedResult *result;
   UIImagePickerController *imagePicker;
   NSArray *actions;       
@@ -36,6 +37,7 @@
   BOOL oneDMode;
 }
 
+@property (nonatomic, retain ) NSSet *readers;
 @property (nonatomic, assign) id<ZXingDelegate> delegate;
 @property (nonatomic, assign) NSURL *soundToPlay;
 @property (nonatomic, retain) ParsedResult *result;

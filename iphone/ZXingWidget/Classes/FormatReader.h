@@ -29,7 +29,7 @@
 }
 
 + (void)registerFormatReader:(FormatReader *)formatReader;
-+ (NSSet *)formatReaders;
+//+ (NSSet *)formatReaders;
 
 - (id)initWithReader:(zxing::Reader *)reader;
 - (zxing::Ref<zxing::Result>)decode:(zxing::Ref<zxing::BinaryBitmap>)grayImage;

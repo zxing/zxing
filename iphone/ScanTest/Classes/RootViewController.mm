@@ -7,6 +7,8 @@
 //
 
 #import "RootViewController.h"
+#import "QRCodeReader.h"
+
 @interface RootViewController()
 @property (nonatomic,retain) ZXingWidgetController *scanController;
 
@@ -25,6 +27,12 @@
 	[self setTitle:@"ZXing"];
   
   ZXingWidgetController *widController = [[ZXingWidgetController alloc] initWithDelegate:self showCancel:YES OneDMode:NO];
+  QRCodeReader* qrcodeReader = [[QRCodeReader alloc] init];
+  NSSet *readers = [[NSSet alloc ] initWithObjects:qrcodeReader,nil];
+  [qrcodeReader release];
+  widController.readers = readers;
+  [readers release];
+  
 	self.scanController = widController;
   [widController release];
 	NSBundle *mainBundle = [NSBundle mainBundle];
@@ -35,7 +43,7 @@
 - (IBAction)scanPressed:(id)sender {
   //UIImagePickerController *picker = [[UIImagePickerController alloc] init];
 	[self presentModalViewController:scanController
-                          animated:NO];
+                          animated:YES];
 //	[self.navigationController pushViewController:scanController animated:true];
 }
 
@@ -72,7 +80,7 @@
 
 - (void)scanResult:(NSString *)result {
 	//[self.resultsView setText:result];
-	[self dismissModalViewControllerAnimated:YES];
+	[self dismissModalViewControllerAnimated:NO];
   self.resultsToDisplay = result;
 }
 
