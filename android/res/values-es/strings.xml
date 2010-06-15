@@ -105,6 +105,7 @@
   <string name="result_sms">Dirección de SMS encontrado</string>
   <string name="result_tel">Número de teléfono encontrado</string>
   <string name="result_text">Texto encontrado</string>
+  <string name="result_wifi">Wifi configuración encontrado</string>
   <string name="result_uri">URL encontrado</string>
   <string name="history_title">Historia</string>
   <string name="history_clear_text">Borrar historial</string>

@@ -105,6 +105,7 @@
   <string name="result_sms">SMS Addresse gefunden</string>
   <string name="result_tel">Telefonnummer gefunden</string>
   <string name="result_text">Text gefunden</string>
+  <string name="result_wifi">Wifi konfiguration gefunden</string>
   <string name="result_uri">URL gefunden</string>
   <string name="history_title">Historie</string>
   <string name="history_clear_text">Historie löschen</string>

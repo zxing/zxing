@@ -43,6 +43,8 @@ public final class ResultHandlerFactory {
       return new ProductResultHandler(activity, result);
     } else if (type.equals(ParsedResultType.URI)) {
       return new URIResultHandler(activity, result);
+    } else if (type.equals(ParsedResultType.WIFI)) {
+      return new WifiResultHandler(activity, result);
     } else if (type.equals(ParsedResultType.TEXT)) {
       return new TextResultHandler(activity, result);
     } else if (type.equals(ParsedResultType.GEO)) {
