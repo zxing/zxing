@@ -136,6 +136,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private CaptureActivityHandler handler;
 
   private ViewfinderView viewfinderView;
+  private View statusView;
   private View resultView;
   private MediaPlayer mediaPlayer;
   private Result lastResult;
@@ -150,7 +151,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private String characterSet;
   private String versionName;
   private HistoryManager historyManager;
-  private boolean firstLaunch;
 
   private final OnCompletionListener beepListener = new BeepListener();
 
@@ -182,13 +182,14 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     CameraManager.init(getApplication());
     viewfinderView = (ViewfinderView) findViewById(R.id.viewfinder_view);
     resultView = findViewById(R.id.result_view);
+    statusView = findViewById(R.id.status_view);
     handler = null;
     lastResult = null;
     hasSurface = false;
     historyManager = new HistoryManager(this);
     historyManager.trimHistory();
 
-    firstLaunch = showHelpOnFirstLaunch();
+    showHelpOnFirstLaunch();
   }
 
   @Override
@@ -260,10 +261,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     vibrate = prefs.getBoolean(PreferencesActivity.KEY_VIBRATE, false);
     copyToClipboard = prefs.getBoolean(PreferencesActivity.KEY_COPY_TO_CLIPBOARD, true);
     initBeepSound();
-
-    if (!firstLaunch) {
-      Toast.makeText(this, R.string.msg_default_status, Toast.LENGTH_SHORT).show();      
-    }
   }
 
   private static Vector<BarcodeFormat> parseDecodeFormats(Intent intent) {
@@ -495,6 +492,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
   // Put up our own UI for how to handle the decoded contents.
   private void handleDecodeInternally(Result rawResult, Bitmap barcode) {
+    statusView.setVisibility(View.GONE);
     viewfinderView.setVisibility(View.GONE);
     resultView.setVisibility(View.VISIBLE);
 
@@ -690,6 +688,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
   private void resetStatusView() {
     resultView.setVisibility(View.GONE);
+    statusView.setVisibility(View.VISIBLE);
     viewfinderView.setVisibility(View.VISIBLE);
     lastResult = null;
   }
