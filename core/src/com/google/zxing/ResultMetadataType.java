@@ -74,6 +74,12 @@ public final class ResultMetadataType {
    */
   public static final ResultMetadataType SUGGESTED_PRICE = new ResultMetadataType("SUGGESTED_PRICE");
 
+  /**
+   * For some products, the possible country of manufacture as a {@link String} denoting the
+   * ISO country code. Some map to multiple possible countries, like "US/CA".
+   */
+  public static final ResultMetadataType POSSIBLE_COUNTRY = new ResultMetadataType("POSSIBLE_COUNTRY");
+
   private final String name;
 
   private ResultMetadataType(String name) {
