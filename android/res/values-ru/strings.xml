@@ -45,6 +45,7 @@
   <string name="button_show_map">Показать карту</string>
   <string name="button_sms">Послать SMS</string>
   <string name="button_web_search">Поиск в Вебе</string>
+  <string name="button_wifi">подключения к сети</string>
   <string name="contents_contact">Контактная информация</string>
   <string name="contents_email">Адрес эл. почты</string>
   <string name="contents_location">Географические координаты</string>
@@ -106,12 +107,14 @@
   <string name="result_tel">Найден номер телефона</string>
   <string name="result_text">Найден текст</string>
   <string name="result_uri">Найден URL</string>
+  <string name="result_wifi">Найдено конфигурации сети</string>
   <string name="history_title">История</string>
   <string name="history_clear_text">Очистить историю</string>
   <string name="history_send">Отправить историю</string>
   <string name="history_email_title">Сканер штрих-кодов История</string>
   <string name="sbc_name">Поиск книг Google</string>
   <string name="share_name">Поделиться через штрих-код</string>
+  <string name="wa_name">конфигурации сети</string>
   <string name="title_about">Сканер штрих-кодов версии </string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

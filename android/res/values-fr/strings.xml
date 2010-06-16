@@ -45,6 +45,7 @@
   <string name="button_show_map">Montrer la carte</string>
   <string name="button_sms">Envoyer SMS</string>
   <string name="button_web_search">Recherche Web</string>
+  <string name="button_wifi">Se connecter au réseau</string>
   <string name="contents_contact">Information du contact</string>
   <string name="contents_email">Adresse email</string>
   <string name="contents_location">Coordonnées géographiques</string>
@@ -106,12 +107,14 @@
   <string name="result_tel">Numéro de téléphone trouvé</string>
   <string name="result_text">Texte trouvé</string>
   <string name="result_uri">URL trouvée</string>
+  <string name="result_wifi">Configuration du réseau trouvé</string>
   <string name="history_title">Historique</string>
   <string name="history_clear_text">Vider l\'historique</string>
   <string name="history_send">Envoyer historique</string>  
   <string name="history_email_title">Historique de Barcode Scanner</string>
   <string name="sbc_name">Recherche Google Livres</string>
   <string name="share_name">Partager par code barre</string>
+  <string name="wa_name">Configuration du réseau</string>
   <string name="title_about">Barcode Scanner v</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

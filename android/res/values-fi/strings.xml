@@ -45,6 +45,7 @@
   <string name="button_show_map">Näytä kartta</string>
   <string name="button_sms">Lähetä tekstiviesti</string>
   <string name="button_web_search">Web haku</string>
+  <string name="button_wifi">Yhteyden verkkoon</string>
   <string name="contents_contact">Kontaktin tiedot</string>
   <string name="contents_email">Sähköposti osoite</string>
   <string name="contents_location">Maantieteelliset koordinaatit</string>
@@ -106,12 +107,14 @@
   <string name="result_tel">Löydettiin puhelin-numero</string>
   <string name="result_text">Löydettiin teksti</string>
   <string name="result_uri">Löydettin URL osoite</string>
+  <string name="result_wifi">Löytyi langattoman yhteyden</string>
   <string name="history_title">Historia</string>
   <string name="history_clear_text">Tyhjennä historia</string>
   <string name="history_send">Lähetä historia</string>  
   <string name="history_email_title">Viivakoodin skanneri historia</string>
   <string name="sbc_name">Google kirja haku</string>
   <string name="share_name">Jaa viivakoodilla</string>
+  <string name="wa_name">Langattoman yhteyden</string>
   <string name="title_about">Viivakoodin lukija v</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

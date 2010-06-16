@@ -48,6 +48,7 @@
   <string name="button_show_map">Térkép mutatása</string>
   <string name="button_sms">SMS küldése</string>
   <string name="button_web_search">Web keresés</string>
+  <string name="button_wifi">Kapcsolódni a hálózathoz</string>
   <string name="contents_contact">Kapcsolat információ</string>
   <string name="contents_email">Email cím</string>
   <string name="contents_location">Földrajzi koordináták</string>
@@ -109,12 +110,14 @@
   <string name="result_tel">Telefonszám találat</string>
   <string name="result_text">Szöveges találat</string>
   <string name="result_uri">URL találat</string>
+  <string name="result_wifi">Talált hálózati konfiguráció</string>
   <string name="history_title">Előzmények</string>
   <string name="history_clear_text">Előzmények törlése</string>
   <string name="history_send">Előzmények küldése</string>
   <string name="history_email_title">Barcode Scanner előzmények</string>
   <string name="sbc_name">Google Könyvek</string>
   <string name="share_name">Megosztás vonalkóddal</string>
+  <string name="wa_name">Hálózati konfiguráció</string>
   <string name="title_about">Barcode Scanner v</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

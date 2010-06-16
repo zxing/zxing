@@ -45,6 +45,7 @@
   <string name="button_show_map">Laat kaart zien</string>
   <string name="button_sms">Verzend SMS</string>
   <string name="button_web_search">Zoek op internet</string>
+  <string name="button_wifi">Loggen op het netwerk</string>
   <string name="contents_contact">Contact informatie</string>
   <string name="contents_email">E-mailadres</string>
   <string name="contents_location">Geografische coördinaten</string>
@@ -106,12 +107,14 @@
   <string name="result_tel">Telefoonnummer gevonden</string>
   <string name="result_text">Platte tekst gevonden</string>
   <string name="result_uri">URL gevonden</string>
+  <string name="result_wifi">Gevonden netwerkconfiguratie</string>
   <string name="history_title">Geschiedenis</string>
   <string name="history_clear_text">Leeg geschiedenis</string>
   <string name="history_send">Verzend geschiedenis</string>
   <string name="history_email_title">Barcode Scanner geschiedenis</string>
   <string name="sbc_name">Google Boekenzoeker</string>
   <string name="share_name">Deel via barcode</string>
+  <string name="wa_name">Netwerkconfiguratie</string>
   <string name="title_about">Barcode Scanner v</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

@@ -45,6 +45,7 @@
   <string name="button_show_map">عرض الخريطة</string>
   <string name="button_sms">إرسال SMS</string>
   <string name="button_web_search">بحث في الويب</string>
+  <string name="button_wifi">الاتصال بشبك</string>
   <string name="contents_contact">معلومات جهة اتصال</string>
   <string name="contents_email">عنوان البريد</string>
   <string name="contents_location">إحداثيات جغرافية</string>
@@ -106,12 +107,14 @@
   <string name="result_tel">تم العثور على رقم الهاتف</string>
   <string name="result_text">تم العثور على نص عادي</string>
   <string name="result_uri">تم العثور على العنوان</string>
+  <string name="result_wifi">العثور على التكوين اللاسلك</string>
   <string name="history_title">سجل</string>
   <string name="history_clear_text">مسح السجل</string>
   <string name="history_send">إرسال السجل</string>
   <string name="history_email_title">سجل ماسح الرموز الشريطية</string>
   <string name="sbc_name">البحث في Google Book</string>
   <string name="share_name">مشاركة عبر الرمز الشريطي</string>
+  <string name="wa_name">التكوين اللاسلك</string>
   <string name="title_about">إصدار ماسح الرمز الشريطي</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>
