@@ -21,6 +21,7 @@ import com.google.zxing.ChecksumException;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.FormatException;
 import com.google.zxing.NotFoundException;
+import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.ResultPointCallback;
@@ -91,9 +92,11 @@ public abstract class UPCEANReader extends OneDReader {
   }
 
   private final StringBuffer decodeRowStringBuffer;
+  private final UPCEANExtensionSupport extensionReader;
 
   protected UPCEANReader() {
     decodeRowStringBuffer = new StringBuffer(20);
+    extensionReader = new UPCEANExtensionSupport();
   }
 
   static int[] findStartGuardPattern(BitArray row) throws NotFoundException {
@@ -171,12 +174,20 @@ public abstract class UPCEANReader extends OneDReader {
 
     float left = (float) (startGuardRange[1] + startGuardRange[0]) / 2.0f;
     float right = (float) (endRange[1] + endRange[0]) / 2.0f;
-    return new Result(resultString,
+    Result decodeResult = new Result(resultString,
         null, // no natural byte representation for these barcodes
         new ResultPoint[]{
             new ResultPoint(left, (float) rowNumber),
             new ResultPoint(right, (float) rowNumber)},
         getBarcodeFormat());
+
+    try {
+      Result extensionResult = extensionReader.decodeRow(row, endRange[1]);
+      decodeResult.putAllMetadata(extensionResult.getResultMetadata());
+    } catch (ReaderException re) {
+      // continue
+    }
+    return decodeResult;
   }
 
   /**
@@ -193,9 +204,8 @@ public abstract class UPCEANReader extends OneDReader {
    * @param s string of digits to check
    * @return true iff string of digits passes the UPC/EAN checksum algorithm
    * @throws FormatException if the string does not contain only digits
-   * @throws ChecksumException if checksum mismatches
    */
-  private static boolean checkStandardUPCEANChecksum(String s) throws ChecksumException, FormatException {
+  private static boolean checkStandardUPCEANChecksum(String s) throws FormatException {
     int length = s.length();
     if (length == 0) {
       return false;
@@ -213,7 +223,7 @@ public abstract class UPCEANReader extends OneDReader {
     for (int i = length - 1; i >= 0; i -= 2) {
       int digit = (int) s.charAt(i) - (int) '0';
       if (digit < 0 || digit > 9) {
-        throw ChecksumException.getChecksumInstance();
+        throw FormatException.getFormatInstance();
       }
       sum += digit;
     }

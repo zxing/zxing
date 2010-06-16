@@ -66,6 +66,7 @@
   <string name="msg_default_status">Plaats een barcode binnen de rechthoek om hem te scannen.</string>
   <string name="msg_default_type">Type</string>
   <string name="msg_default_time">Tijd</string>
+  <string name="msg_default_meta">Metadata</string>
   <string name="msg_encode_barcode_failed">Kan de gevraagde barcode niet genereren.</string>
   <string name="msg_encode_contents_failed">Kan geen barcode van de gegeven data maken.</string>
   <string name="msg_encode_in_progress">Barcode aan het genereren\u2026</string>

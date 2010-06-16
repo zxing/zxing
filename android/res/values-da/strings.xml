@@ -66,6 +66,7 @@
   <string name="msg_default_status">Peg på en stregkode så den er inde i firkanten for at scanne den.</string>
   <string name="msg_default_type">Type</string>
   <string name="msg_default_time">Tid</string>
+  <string name="msg_default_meta">Metadata</string>  
   <string name="msg_encode_barcode_failed">Kunne ikke generere den ønskede stregkode.</string>
   <string name="msg_encode_contents_failed">Kunne ikke indkode en stregkode fra oplysningerne.</string>
   <string name="msg_encode_in_progress">Genererer en stregkode\u2026</string>

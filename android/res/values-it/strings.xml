@@ -66,6 +66,7 @@
   <string name="msg_default_status">Posiziona un codice a barre dentro il mirino rettangolare per la scansione.</string>
   <string name="msg_default_type">Tipo</string>
   <string name="msg_default_time">Tempo</string>
+  <string name="msg_default_meta">Metadati</string>
   <string name="msg_encode_barcode_failed">Impossibile generare il codice a barre richiesto.</string>
   <string name="msg_encode_contents_failed">Impossibile codificare un codice a barre dai dati forniti.</string>
   <string name="msg_encode_in_progress">Generazione codice a barre\u2026</string>

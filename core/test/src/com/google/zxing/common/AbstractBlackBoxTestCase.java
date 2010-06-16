@@ -23,6 +23,7 @@ import com.google.zxing.LuminanceSource;
 import com.google.zxing.Reader;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
+import com.google.zxing.ResultMetadataType;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import junit.framework.TestCase;
 
@@ -40,6 +41,8 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 /**
  * @author Sean Owen
@@ -174,19 +177,25 @@ public abstract class AbstractBlackBoxTestCase extends TestCase {
       BufferedImage image = ImageIO.read(testImage);
 
       String testImageFileName = testImage.getName();
-      File expectedTextFile = new File(testBase,
-          testImageFileName.substring(0, testImageFileName.indexOf('.')) + ".txt");
+      String fileBaseName = testImageFileName.substring(0, testImageFileName.indexOf('.'));
+      File expectedTextFile = new File(testBase, fileBaseName + ".txt");
       String expectedText = readFileAsString(expectedTextFile);
+
+      File expectedMetadataFile = new File(testBase, fileBaseName + ".metadata.txt");
+      Properties expectedMetadata = new Properties();
+      if (expectedMetadataFile.exists()) {
+        expectedMetadata.load(new FileInputStream(expectedMetadataFile));
+      }
 
       for (int x = 0; x < testCount; x++) {
         float rotation = testResults.get(x).getRotation();
         BufferedImage rotatedImage = rotateImage(image, rotation);
         LuminanceSource source = new BufferedImageLuminanceSource(rotatedImage);
         BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
-        if (decode(bitmap, rotation, expectedText, false)) {
+        if (decode(bitmap, rotation, expectedText, expectedMetadata, false)) {
           passedCounts[x]++;
         }
-        if (decode(bitmap, rotation, expectedText, true)) {
+        if (decode(bitmap, rotation, expectedText, expectedMetadata, true)) {
           tryHarderCounts[x]++;
         }
       }
@@ -231,7 +240,10 @@ public abstract class AbstractBlackBoxTestCase extends TestCase {
     return new SummaryResults(totalFound, totalMustPass, totalTests);
   }
 
-  private boolean decode(BinaryBitmap source, float rotation, String expectedText,
+  private boolean decode(BinaryBitmap source,
+                         float rotation,
+                         String expectedText,
+                         Properties expectedMetadata,
                          boolean tryHarder) {
     Result result;
     String suffix = " (" + (tryHarder ? "try harder, " : "") + "rotation: " + rotation + ')';
@@ -263,6 +275,19 @@ public abstract class AbstractBlackBoxTestCase extends TestCase {
           '\'' +  suffix);
       return false;
     }
+
+    Hashtable resultMetadata = result.getResultMetadata();
+    for (Map.Entry<Object,Object> metadatum : expectedMetadata.entrySet()) {
+      ResultMetadataType key = ResultMetadataType.valueOf(metadatum.getKey().toString());
+      Object expectedValue = metadatum.getValue();
+      Object actualValue = resultMetadata == null ? null : resultMetadata.get(key);
+      if (!expectedValue.equals(actualValue)) {
+        System.out.println("Metadata mismatch: for key '" + key + "' expected '" + expectedValue +
+            "' but got '" + actualValue + '\'');
+        return false;
+      }
+    }
+
     return true;
   }
 
