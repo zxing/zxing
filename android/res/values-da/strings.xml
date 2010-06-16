@@ -45,6 +45,7 @@
   <string name="button_show_map">Vis kort</string>
   <string name="button_sms">Send SMS</string>
   <string name="button_web_search">Internetsøgning</string>
+  <string name="button_wifi">Forbindelse til netværk</string>
   <string name="contents_contact">Kontaktinfo</string>
   <string name="contents_email">E-mailadresse</string>
   <string name="contents_location">Geografiske koordinater</string>
@@ -106,12 +107,14 @@
   <string name="result_tel">Fundet telefonnummer</string>
   <string name="result_text">Fundet almindelig tekst</string>
   <string name="result_uri">Fundet URL</string>
+  <string name="result_wifi">Fundet wifi konfiguration</string>
   <string name="history_title">Historik</string>
   <string name="history_clear_text">Ryd historik</string>
   <string name="history_send">Send historik</string>
   <string name="history_email_title">Barcode Scanner-historik</string>
   <string name="sbc_name">Google Bøger-søgning</string>
   <string name="share_name">Del via stregkode</string>
+  <string name="wa_name">Wifi konfiguration</string>
   <string name="title_about">Barcode Scanner v</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

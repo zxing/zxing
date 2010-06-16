@@ -44,8 +44,8 @@
   <string name="button_share_contact">Contact</string>
   <string name="button_show_map">Show map</string>
   <string name="button_sms">Send SMS</string>
-  <string name="button_wifi">Connect to Network</string>
   <string name="button_web_search">Web search</string>
+  <string name="button_wifi">Connect to Network</string>
   <string name="contents_contact">Contact info</string>
   <string name="contents_email">Email address</string>
   <string name="contents_location">Geographic coordinates</string>
@@ -106,16 +106,15 @@
   <string name="result_sms">Found SMS address</string>
   <string name="result_tel">Found phone number</string>
   <string name="result_uri">Found URL</string>
-  <string name="result_wifi">Found Wifi Configuration</string>
   <string name="result_text">Found plain text</string>
+  <string name="result_wifi">Found Wifi Configuration</string>
   <string name="history_title">History</string>
   <string name="history_clear_text">Clear history</string>
   <string name="history_send">Send history</string>
   <string name="history_email_title">Barcode Scanner history</string>
-  
-  <string name="wa_name">Wifi Connection</string>
   <string name="sbc_name">Google Book Search</string>
   <string name="share_name">Share via barcode</string>
+  <string name="wa_name">Wifi Connection</string>
   <string name="title_about">Barcode Scanner v</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

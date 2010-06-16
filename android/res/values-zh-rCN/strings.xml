@@ -45,6 +45,7 @@
   <string name="button_show_map">显示地图</string>
   <string name="button_sms">发送短信</string>
   <string name="button_web_search">网页搜索</string>
+  <string name="button_wifi">连接到网络</string>
   <string name="contents_contact">联系人信息</string>
   <string name="contents_email">Email地址</string>
   <string name="contents_location">地理坐标</string>
@@ -106,12 +107,14 @@
   <string name="result_tel">找到电话号码</string>
   <string name="result_text">找到纯文本</string>
   <string name="result_uri">找到URL</string>
+  <string name="result_wifi">发现网络配置</string>
   <string name="history_title">历史</string>
   <string name="history_clear_text">删除历史</string>
   <string name="history_send">发送历史</string>
   <string name="history_email_title">条码扫描器历史</string>
   <string name="sbc_name">Google图书搜索</string>
   <string name="share_name">通过条码分享</string>
+  <string name="wa_name">网络配置</string>
   <string name="title_about">条码扫描器</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

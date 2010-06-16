@@ -45,6 +45,7 @@
   <string name="button_show_map">Visa karta</string>
   <string name="button_sms">Skicka SMS</string>
   <string name="button_web_search">Webbsökning</string>
+  <string name="button_wifi">Conectar à rede</string>
   <string name="contents_contact">Kontaktinfo</string>
   <string name="contents_email">Emailadress</string>
   <string name="contents_location">Geografiska koordinater</string>
@@ -106,12 +107,14 @@
   <string name="result_tel">Hittade telefonnummer</string>
   <string name="result_text">Hittade ren text</string>
   <string name="result_uri">Hittade URL</string>
+  <string name="result_wifi">Configuração de rede encontrados</string>
   <string name="history_title">Historik</string>
   <string name="history_clear_text">Rensa historik</string>
   <string name="history_send">Skicka historik</string>  
   <string name="history_email_title">Streckkodsläsarens historik</string>
   <string name="sbc_name">Google boksökning</string>
   <string name="share_name">Dela via streckkod</string>
+  <string name="wa_name">Nätverkskonfiguration</string>
   <string name="title_about">Barcode Scanner v</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

@@ -45,6 +45,7 @@
   <string name="button_show_map">Mostrar mapa</string>
   <string name="button_sms">Enviar SMS</string>
   <string name="button_web_search">Búsqueda Web</string>
+  <string name="button_wifi">Conectarse a la red</string>
   <string name="contents_contact">Información de contacto</string>
   <string name="contents_email">Dirección de correo electrónico</string>
   <string name="contents_location">Coordenadas geográficas</string>
@@ -105,14 +106,15 @@
   <string name="result_sms">Dirección de SMS encontrado</string>
   <string name="result_tel">Número de teléfono encontrado</string>
   <string name="result_text">Texto encontrado</string>
-  <string name="result_wifi">Wifi configuración encontrado</string>
   <string name="result_uri">URL encontrado</string>
+  <string name="result_wifi">Encontró red de configuración</string>
   <string name="history_title">Historia</string>
   <string name="history_clear_text">Borrar historial</string>
   <string name="history_send">Enviar historia</string>
   <string name="history_email_title">Historia de Escáner de código de barras</string> 
   <string name="sbc_name">Búsqueda de libros de Google</string>
   <string name="share_name">Compartir por códigos de barras</string>
+  <string name="wa_name">Configuración de la red</string>
   <string name="title_about">Escáner de código de barras v</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>
