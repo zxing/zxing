@@ -168,21 +168,28 @@ final class DecodedBitStreamParser {
     byteSegments.addElement(readBytes);
   }
 
+  private static char toAlphaNumericChar(int value) throws FormatException {
+    if (value >= ALPHANUMERIC_CHARS.length) {
+      throw FormatException.getFormatInstance();
+    }
+    return ALPHANUMERIC_CHARS[value];
+  }
+
   private static void decodeAlphanumericSegment(BitSource bits,
                                                 StringBuffer result,
                                                 int count,
-                                                boolean fc1InEffect) {
+                                                boolean fc1InEffect) throws FormatException {
     // Read two characters at a time
     int start = result.length();
     while (count > 1) {
       int nextTwoCharsBits = bits.readBits(11);
-      result.append(ALPHANUMERIC_CHARS[nextTwoCharsBits / 45]);
-      result.append(ALPHANUMERIC_CHARS[nextTwoCharsBits % 45]);
+      result.append(toAlphaNumericChar(nextTwoCharsBits / 45));
+      result.append(toAlphaNumericChar(nextTwoCharsBits % 45));
       count -= 2;
     }
     if (count == 1) {
       // special case: one character left
-      result.append(ALPHANUMERIC_CHARS[bits.readBits(6)]);
+      result.append(toAlphaNumericChar(bits.readBits(6)));
     }
     // See section 6.4.8.1, 6.4.8.2
     if (fc1InEffect) {
@@ -211,9 +218,9 @@ final class DecodedBitStreamParser {
       if (threeDigitsBits >= 1000) {
         throw FormatException.getFormatInstance();
       }
-      result.append(ALPHANUMERIC_CHARS[threeDigitsBits / 100]);
-      result.append(ALPHANUMERIC_CHARS[(threeDigitsBits / 10) % 10]);
-      result.append(ALPHANUMERIC_CHARS[threeDigitsBits % 10]);
+      result.append(toAlphaNumericChar(threeDigitsBits / 100));
+      result.append(toAlphaNumericChar((threeDigitsBits / 10) % 10));
+      result.append(toAlphaNumericChar(threeDigitsBits % 10));
       count -= 3;
     }
     if (count == 2) {
@@ -222,15 +229,15 @@ final class DecodedBitStreamParser {
       if (twoDigitsBits >= 100) {
         throw FormatException.getFormatInstance();
       }
-      result.append(ALPHANUMERIC_CHARS[twoDigitsBits / 10]);
-      result.append(ALPHANUMERIC_CHARS[twoDigitsBits % 10]);
+      result.append(toAlphaNumericChar(twoDigitsBits / 10));
+      result.append(toAlphaNumericChar(twoDigitsBits % 10));
     } else if (count == 1) {
       // One digit left over to read
       int digitBits = bits.readBits(4);
       if (digitBits >= 10) {
         throw FormatException.getFormatInstance();
       }
-      result.append(ALPHANUMERIC_CHARS[digitBits]);
+      result.append(toAlphaNumericChar(digitBits));
     }
   }
   
