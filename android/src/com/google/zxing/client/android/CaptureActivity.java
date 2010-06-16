@@ -68,7 +68,6 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Date;
 import java.util.Map;
@@ -132,10 +131,11 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
   private static final Set<ResultMetadataType> DISPLAYABLE_METADATA_TYPES;
   static {
-    DISPLAYABLE_METADATA_TYPES = new HashSet<ResultMetadataType>(3);
+    DISPLAYABLE_METADATA_TYPES = new HashSet<ResultMetadataType>(5);
     DISPLAYABLE_METADATA_TYPES.add(ResultMetadataType.ISSUE_NUMBER);
     DISPLAYABLE_METADATA_TYPES.add(ResultMetadataType.SUGGESTED_PRICE);
     DISPLAYABLE_METADATA_TYPES.add(ResultMetadataType.ERROR_CORRECTION_LEVEL);
+    DISPLAYABLE_METADATA_TYPES.add(ResultMetadataType.POSSIBLE_COUNTRY);
   }
 
   private enum Source {

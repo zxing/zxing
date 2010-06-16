@@ -30,10 +30,8 @@ final class UPCEANExtensionSupport {
   private static final int[] CHECK_DIGIT_ENCODINGS = {
       0x18, 0x14, 0x12, 0x11, 0x0C, 0x06, 0x03, 0x0A, 0x09, 0x05
   };
-  private static final int[][] SEPARATOR_PATTERNS = {{1,1}};
 
   private final int[] decodeMiddleCounters = new int[4];
-  private final int[] separatorCounters = new int[2];
   private final StringBuffer decodeRowStringBuffer = new StringBuffer();
 
   Result decodeRow(BitArray row, int rowOffset) throws NotFoundException {
@@ -60,9 +58,6 @@ final class UPCEANExtensionSupport {
     counters[1] = 0;
     counters[2] = 0;
     counters[3] = 0;
-    int[] separatorCounters = this.separatorCounters;
-    separatorCounters[0] = 0;
-    separatorCounters[1] = 0;
     int end = row.getSize();
     int rowOffset = startRange[1];
 
@@ -78,14 +73,6 @@ final class UPCEANExtensionSupport {
         lgPatternFound |= 1 << (4 - x);
       }
       // Read off separator
-      /*
-      try {
-        UPCEANReader.decodeDigit(row, separatorCounters, rowOffset, SEPARATOR_PATTERNS);
-        rowOffset += separatorCounters[0] + separatorCounters[1];
-      } catch (NotFoundException nfe) {
-        break;
-      }
-       */
       while (rowOffset < end && !row.get(rowOffset)) {
         rowOffset++;
       }

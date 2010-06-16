@@ -23,6 +23,7 @@ import com.google.zxing.FormatException;
 import com.google.zxing.NotFoundException;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
+import com.google.zxing.ResultMetadataType;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.ResultPointCallback;
 import com.google.zxing.common.BitArray;
@@ -93,10 +94,12 @@ public abstract class UPCEANReader extends OneDReader {
 
   private final StringBuffer decodeRowStringBuffer;
   private final UPCEANExtensionSupport extensionReader;
+  private final EANManufacturerOrgSupport eanManSupport;
 
   protected UPCEANReader() {
     decodeRowStringBuffer = new StringBuffer(20);
     extensionReader = new UPCEANExtensionSupport();
+    eanManSupport = new EANManufacturerOrgSupport();
   }
 
   static int[] findStartGuardPattern(BitArray row) throws NotFoundException {
@@ -174,12 +177,13 @@ public abstract class UPCEANReader extends OneDReader {
 
     float left = (float) (startGuardRange[1] + startGuardRange[0]) / 2.0f;
     float right = (float) (endRange[1] + endRange[0]) / 2.0f;
+    BarcodeFormat format = getBarcodeFormat();
     Result decodeResult = new Result(resultString,
         null, // no natural byte representation for these barcodes
         new ResultPoint[]{
             new ResultPoint(left, (float) rowNumber),
             new ResultPoint(right, (float) rowNumber)},
-        getBarcodeFormat());
+        format);
 
     try {
       Result extensionResult = extensionReader.decodeRow(row, endRange[1]);
@@ -187,6 +191,14 @@ public abstract class UPCEANReader extends OneDReader {
     } catch (ReaderException re) {
       // continue
     }
+
+    if (BarcodeFormat.EAN_13.equals(format) || BarcodeFormat.UPC_A.equals(format)) {
+      String countryID = eanManSupport.lookupCountryIdentifier(resultString);
+      if (countryID != null) {
+        decodeResult.putMetadata(ResultMetadataType.POSSIBLE_COUNTRY, countryID);
+      }
+    }
+
     return decodeResult;
   }
 
