@@ -65,7 +65,8 @@
   <string name="msg_default_mms_subject">Hi</string>
   <string name="msg_default_status">Positionieren Sie den Barcode innerhalb des Rechteckes.</string>
   <string name="msg_default_type">Typ</string>
-  <string name="msg_default_time">Zeit</string>  
+  <string name="msg_default_time">Zeit</string>
+  <string name="msg_default_meta">Metadata</string>  
   <string name="msg_encode_barcode_failed">Der gewünschte Barcode kann nicht erzeugt werden.</string>
   <string name="msg_encode_contents_failed">Aus den Daten kann kein Barcode erzeugt werden.</string>
   <string name="msg_encode_in_progress">Erzeuge Barcode\u2026</string>

@@ -68,7 +68,8 @@
   <string name="msg_default_mms_subject">Szia</string>
   <string name="msg_default_status">Helyezze a vonalkódot a kereső téglalapba a szkenneléshez.</string>
   <string name="msg_default_type">Típus</string>
-  <string name="msg_default_time">Idő</string> 
+  <string name="msg_default_time">Idő</string>
+  <string name="msg_default_meta">Metaadatok</string>
   <string name="msg_encode_barcode_failed">Nem lehetett legenerálni a kért vonalkódot.</string>
   <string name="msg_encode_contents_failed">Nem lehetett lekódolni a vonalkódot a megadott tartalomból.</string>
   <string name="msg_encode_in_progress">Vonalkód generálása\u2026</string>

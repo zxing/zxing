@@ -66,6 +66,7 @@
   <string name="msg_default_status">Coloque um código de barras dentro do retângulo do visor para verificar isso.</string>
   <string name="msg_default_type">Tipo</string>
   <string name="msg_default_time">Tempo</string>
+  <string name="msg_default_meta">Metadados</string>
   <string name="msg_encode_barcode_failed">Não foi possível criar código de barras pedido.</string>
   <string name="msg_encode_contents_failed">Não foi possível codificar código de barras dos dados fornecidos.</string>
   <string name="msg_encode_in_progress">A gerar código de barras\u2026</string>

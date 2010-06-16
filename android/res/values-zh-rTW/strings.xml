@@ -66,6 +66,7 @@
    <string name="msg_default_status">將條碼放置於鏡頭範圍內進行掃描。  </string>
    <string name="msg_default_type">類型</string>
    <string name="msg_default_time">時間</string>
+   <string name="msg_default_meta">元數據</string>
    <string name="msg_encode_barcode_failed">找不到條碼。</string>
    <string name="msg_encode_contents_failed">無法讀取條碼。   </string>
    <string name="msg_encode_in_progress">正在產生條碼\u2026</string>

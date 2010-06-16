@@ -65,7 +65,8 @@
   <string name="msg_default_mms_subject">Hei</string>
   <string name="msg_default_status">Aseta viivakoodi neliön sisälle.</string>
   <string name="msg_default_type">Tyypi</string>
-  <string name="msg_default_time">Aika</string>  
+  <string name="msg_default_time">Aika</string>
+  <string name="msg_default_meta">Metadata</string>
   <string name="msg_encode_barcode_failed">Ei voinut generoida pyydettyä viivakoodia.</string>
   <string name="msg_encode_contents_failed">Ei voinut purkaa viivakoodin sisältöä.</string>
   <string name="msg_encode_in_progress">Generoidaan viivakoodia\u2026</string>

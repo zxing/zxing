@@ -16,6 +16,7 @@
 
 package com.google.zxing;
 
+import java.util.Enumeration;
 import java.util.Hashtable;
 
 /**
@@ -99,6 +100,21 @@ public final class Result {
       resultMetadata = new Hashtable(3);
     }
     resultMetadata.put(type, value);
+  }
+
+  public void putAllMetadata(Hashtable metadata) {
+    if (metadata != null) {
+      if (resultMetadata == null) {
+        resultMetadata = metadata;
+      } else {
+        Enumeration e = metadata.keys();
+        while (e.hasMoreElements()) {
+          ResultMetadataType key = (ResultMetadataType) e.nextElement();
+          Object value = metadata.get(key);
+          resultMetadata.put(key, value);
+        }
+      }
+    }
   }
 
   public long getTimestamp() {

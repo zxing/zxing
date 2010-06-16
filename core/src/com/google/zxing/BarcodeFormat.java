@@ -47,6 +47,9 @@ public final class BarcodeFormat {
   /** EAN-13 1D format. */
   public static final BarcodeFormat EAN_13 = new BarcodeFormat("EAN_13");
 
+  /** UPC/EAN extension format. Not a stand-alone format. */
+  public static final BarcodeFormat UPC_EAN_EXTENSION = new BarcodeFormat("UPC_EAN_EXTENSION");
+
   /** Code 128 1D format. */
   public static final BarcodeFormat CODE_128 = new BarcodeFormat("CODE_128");
 

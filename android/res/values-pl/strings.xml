@@ -66,6 +66,7 @@
   <string name="msg_default_status">Umieść kod paskowy w prostokącie wizjera aby zeskanować.</string>
   <string name="msg_default_type">Typ</string>
   <string name="msg_default_time">Czas</string>
+  <string name="msg_default_meta">Metadanych</string>
   <string name="msg_encode_barcode_failed">Nie można wygenerować żądanego kodu paskowego.</string>
   <string name="msg_encode_contents_failed">Nie można zakodować kodu paskowego z dostarczonych danych.</string>
   <string name="msg_encode_in_progress">Generowanie kodu paskowego\u2026</string>

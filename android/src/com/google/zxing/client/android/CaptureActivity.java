@@ -19,6 +19,7 @@ package com.google.zxing.client.android;
 import android.util.TypedValue;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
+import com.google.zxing.ResultMetadataType;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.client.android.camera.CameraManager;
 import com.google.zxing.client.android.history.HistoryManager;
@@ -66,8 +67,12 @@ import android.widget.TextView;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Date;
+import java.util.Map;
+import java.util.Set;
 import java.util.Vector;
 import java.util.regex.Pattern;
 
@@ -123,6 +128,14 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     ALL_FORMATS = new Vector<BarcodeFormat>(ONE_D_FORMATS.size() + QR_CODE_FORMATS.size());
     ALL_FORMATS.addAll(ONE_D_FORMATS);
     ALL_FORMATS.addAll(QR_CODE_FORMATS);
+  }
+
+  private static final Set<ResultMetadataType> DISPLAYABLE_METADATA_TYPES;
+  static {
+    DISPLAYABLE_METADATA_TYPES = new HashSet<ResultMetadataType>(3);
+    DISPLAYABLE_METADATA_TYPES.add(ResultMetadataType.ISSUE_NUMBER);
+    DISPLAYABLE_METADATA_TYPES.add(ResultMetadataType.SUGGESTED_PRICE);
+    DISPLAYABLE_METADATA_TYPES.add(ResultMetadataType.ERROR_CORRECTION_LEVEL);
   }
 
   private enum Source {
@@ -504,19 +517,38 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     barcodeImageView.setVisibility(View.VISIBLE);
 
     TextView formatTextView = (TextView) findViewById(R.id.format_text_view);
-    formatTextView.setVisibility(View.VISIBLE);
     formatTextView.setText(rawResult.getBarcodeFormat().toString());
 
     ResultHandler resultHandler = ResultHandlerFactory.makeResultHandler(this, rawResult);
     TextView typeTextView = (TextView) findViewById(R.id.type_text_view);
-    typeTextView.setVisibility(View.VISIBLE);
     typeTextView.setText(resultHandler.getType().toString());
 
     DateFormat formatter = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
     String formattedTime = formatter.format(new Date(rawResult.getTimestamp()));
     TextView timeTextView = (TextView) findViewById(R.id.time_text_view);
-    timeTextView.setVisibility(View.VISIBLE);
     timeTextView.setText(formattedTime);
+
+
+    TextView metaTextView = (TextView) findViewById(R.id.meta_text_view);
+    View metaTextViewLabel = findViewById(R.id.meta_text_view_label);
+    metaTextView.setVisibility(View.GONE);
+    metaTextViewLabel.setVisibility(View.GONE);
+    Map<ResultMetadataType,Object> metadata =
+        (Map<ResultMetadataType,Object>) rawResult.getResultMetadata();
+    if (metadata != null) {
+      StringBuilder metadataText = new StringBuilder(20);
+      for (Map.Entry<ResultMetadataType,Object> entry : metadata.entrySet()) {
+        if (DISPLAYABLE_METADATA_TYPES.contains(entry.getKey())) {
+          metadataText.append(entry.getValue()).append('\n');
+        }
+      }
+      if (metadataText.length() > 0) {
+        metadataText.setLength(metadataText.length() - 1);
+        metaTextView.setText(metadataText);
+        metaTextView.setVisibility(View.VISIBLE);
+        metaTextViewLabel.setVisibility(View.VISIBLE);
+      }
+    }
 
     TextView contentsTextView = (TextView) findViewById(R.id.contents_text_view);
     CharSequence displayContents = resultHandler.getDisplayContents();

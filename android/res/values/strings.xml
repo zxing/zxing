@@ -63,6 +63,7 @@
   <string name="msg_default_contents">Contents</string>
   <string name="msg_default_format">Format</string>
   <string name="msg_default_mms_subject">Hi</string>
+  <string name="msg_default_meta">Metadata</string>  
   <string name="msg_default_status">Place a barcode inside the viewfinder rectangle to scan it.</string>
   <string name="msg_default_type">Type</string>
   <string name="msg_default_time">Time</string>

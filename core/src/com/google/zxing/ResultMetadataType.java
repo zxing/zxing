@@ -16,6 +16,8 @@
 
 package com.google.zxing;
 
+import java.util.Hashtable;
+
 /**
  * Represents some type of metadata about the result of the decoding that the decoder
  * wishes to communicate back to the caller.
@@ -26,10 +28,14 @@ public final class ResultMetadataType {
 
   // No, we can't use an enum here. J2ME doesn't support it.
 
+  private static final Hashtable VALUES = new Hashtable();
+
+  // No, we can't use an enum here. J2ME doesn't support it.
+
   /**
    * Unspecified, application-specific metadata. Maps to an unspecified {@link Object}.
    */
-  public static final ResultMetadataType OTHER = new ResultMetadataType();
+  public static final ResultMetadataType OTHER = new ResultMetadataType("OTHER");
 
   /**
    * Denotes the likely approximate orientation of the barcode in the image. This value
@@ -38,7 +44,7 @@ public final class ResultMetadataType {
    * said to have orientation "90". This key maps to an {@link Integer} whose
    * value is in the range [0,360).
    */
-  public static final ResultMetadataType ORIENTATION = new ResultMetadataType();
+  public static final ResultMetadataType ORIENTATION = new ResultMetadataType("ORIENTATION");
 
   /**
    * <p>2D barcode formats typically encode text, but allow for a sort of 'byte mode'
@@ -49,15 +55,49 @@ public final class ResultMetadataType {
    * <p>This maps to a {@link java.util.Vector} of byte arrays corresponding to the
    * raw bytes in the byte segments in the barcode, in order.</p>
    */
-  public static final ResultMetadataType BYTE_SEGMENTS = new ResultMetadataType();
+  public static final ResultMetadataType BYTE_SEGMENTS = new ResultMetadataType("BYTE_SEGMENTS");
 
   /**
    * Error correction level used, if applicable. The value type depends on the
    * format, but is typically a String.
    */
-  public static final ResultMetadataType ERROR_CORRECTION_LEVEL = new ResultMetadataType();
+  public static final ResultMetadataType ERROR_CORRECTION_LEVEL = new ResultMetadataType("ERROR_CORRECTION_LEVEL");
 
-  private ResultMetadataType() {
+  /**
+   * For some periodicals, indicates the issue number as an {@link Integer}.
+   */
+  public static final ResultMetadataType ISSUE_NUMBER = new ResultMetadataType("ISSUE_NUMBER");
+
+  /**
+   * For some products, indicates the suggested retail price in the barcode as a
+   * formatted {@link String}.
+   */
+  public static final ResultMetadataType SUGGESTED_PRICE = new ResultMetadataType("SUGGESTED_PRICE");
+
+  private final String name;
+
+  private ResultMetadataType(String name) {
+    this.name = name;
+    VALUES.put(name, this);
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public String toString() {
+    return name;
+  }
+
+  public static ResultMetadataType valueOf(String name) {
+    if (name == null || name.length() == 0) {
+      throw new IllegalArgumentException();
+    }
+    ResultMetadataType format = (ResultMetadataType) VALUES.get(name);
+    if (format == null) {
+      throw new IllegalArgumentException();
+    }
+    return format;
   }
 
 }
