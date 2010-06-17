@@ -104,6 +104,7 @@
   <string name="preferences_name">Inställningar</string>
   <string name="preferences_play_beep_title">Pip</string>
   <string name="preferences_result_title">Resultatinställningar</string>
+  <string name="preferences_scanning_title">När du skannar för streckkoder\u2026</string>
   <string name="preferences_vibrate_title">Vibrera</string>
   <string name="result_address_book">Hittade kontaktinformation</string>
   <string name="result_calendar">Hittade kalenderpost</string>

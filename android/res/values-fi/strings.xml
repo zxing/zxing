@@ -104,6 +104,7 @@
   <string name="preferences_name">Asetukset</string>
   <string name="preferences_play_beep_title">Piip</string>
   <string name="preferences_result_title">Tuloksien asetukset</string>
+  <string name="preferences_scanning_title">Kun skannaus viivakoodia\u2026</string>
   <string name="preferences_vibrate_title">Värinä</string>
   <string name="result_address_book">Läydettiin kontakti tietoja</string>
   <string name="result_calendar">Löydetty kalenteri tapahtuma</string>

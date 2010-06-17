@@ -104,6 +104,7 @@
   <string name="preferences_name">Configuración</string>
   <string name="preferences_play_beep_title">Bip</string>
   <string name="preferences_result_title">Configuración de resultados</string>
+  <string name="preferences_scanning_title">Cuando escanea códigos de barras\u2026</string>
   <string name="preferences_vibrate_title">Vibrar</string>
   <string name="result_address_book">Información de contacto encontrado</string>
   <string name="result_calendar">Evento agendado encontrado</string>

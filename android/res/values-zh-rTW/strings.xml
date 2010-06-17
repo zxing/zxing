@@ -74,7 +74,7 @@
   <string name="msg_default_type">類型</string>
   <string name="msg_encode_barcode_failed">找不到條碼。</string>
   <string name="msg_encode_contents_failed">無法讀取條碼。   </string>
-  <string name="msg_encode_in_progress">正在產生條碼\u2026</string>
+  <string name="msg_encode_in_progress">正在產生條碼</string>
   <string name="msg_google_shopper_missing">未安裝谷歌購物</string>
   <string name="msg_install_google_shopper">谷歌購物結合條碼掃描價格，評論，更無需打開瀏覽器。您想試用嗎？</string>
   <string name="msg_intent_failed">抱歉，無法打開所需軟體。 條碼內容可能無效。</string>
@@ -84,13 +84,13 @@
   <string name="msg_sbc_failed">抱歉，搜索時遇到錯誤。</string>
   <string name="msg_sbc_no_page_returned">沒有返回頁面</string>
   <string name="msg_sbc_page">頁面</string>
-  <string name="msg_sbc_searching_book">搜索圖書\u2026</string>
+  <string name="msg_sbc_searching_book">搜索圖書</string>
   <string name="msg_sbc_snippet_unavailable">無法始用摘要</string>
   <string name="msg_sbc_unknown_page">未知頁面</string>
   <string name="msg_share_explanation">你可以在你的手機螢幕上顯示條碼，並使用其他手機掃描此條碼方式並傳送或分享給朋友</string>
   <string name="msg_share_subject_line">這是我所掃描條碼的內容</string>
   <string name="msg_unmount_usb">對不起，無法讀取SD卡。</string>
-  <string name="preferences_actions_title">找到條碼時\u2026</string>
+  <string name="preferences_actions_title">找到條碼時</string>
   <string name="preferences_bulk_mode_summary">條碼掃描和挽救了許多人不斷</string>
   <string name="preferences_bulk_mode_title">批量掃描模式</string>
   <string name="preferences_copy_to_clipboard_title">復製到剪貼簿</string>
@@ -104,6 +104,7 @@
   <string name="preferences_name">設置</string>
   <string name="preferences_play_beep_title">提示音</string>
   <string name="preferences_result_title">結果設定</string>
+  <string name="preferences_scanning_title">當掃描條形碼</string>
   <string name="preferences_vibrate_title">振動</string>
   <string name="result_address_book">找到聯絡人</string>
   <string name="result_calendar">找到日曆事件</string>

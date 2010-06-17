@@ -104,6 +104,7 @@
   <string name="preferences_name">Definições</string>
   <string name="preferences_play_beep_title">Bip</string>
   <string name="preferences_result_title">Definições de resultados</string>
+  <string name="preferences_scanning_title">Quando a digitalização de códigos de barras\u2026</string>
   <string name="preferences_vibrate_title">Vibrar</string>
   <string name="result_address_book">Info de contacto encontrada</string>
   <string name="result_calendar">Evento de calendário encontrado </string>

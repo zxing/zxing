@@ -104,6 +104,7 @@
   <string name="preferences_name">Impostazioni</string>
   <string name="preferences_play_beep_title">Suona</string>
   <string name="preferences_result_title">Impostazioni risultato</string>
+  <string name="preferences_scanning_title">Durante la scansione di codici a barre\u2026</string>
   <string name="preferences_vibrate_title">Vibra</string>
   <string name="result_address_book">Info contatto trovata</string>
   <string name="result_calendar">Evento calendario trovato</string>

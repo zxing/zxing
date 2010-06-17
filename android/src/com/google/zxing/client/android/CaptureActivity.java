@@ -17,6 +17,7 @@
 package com.google.zxing.client.android;
 
 import android.util.TypedValue;
+import android.widget.Toast;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
 import com.google.zxing.ResultMetadataType;
@@ -94,6 +95,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private static final int ABOUT_ID = Menu.FIRST + 4;
 
   private static final long INTENT_RESULT_DURATION = 1500L;
+  private static final long BULK_MODE_SCAN_DELAY_MS = 1000L;
   private static final float BEEP_VOLUME = 0.10f;
   private static final long VIBRATE_DURATION = 200L;
 
@@ -458,14 +460,29 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
           handleDecodeExternally(rawResult, barcode);
           break;
         case ZXING_LINK:
-          if(returnUrlTemplate == null){
+          if (returnUrlTemplate == null){
             handleDecodeInternally(rawResult, barcode);
           } else {
             handleDecodeExternally(rawResult, barcode);
           }
           break;
         case NONE:
-          handleDecodeInternally(rawResult, barcode);
+          SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+          if (prefs.getBoolean(PreferencesActivity.KEY_BULK_MODE, false)) {
+            Toast.makeText(this, R.string.msg_bulk_mode_scanned, Toast.LENGTH_SHORT).show();
+            // Wait a moment or else it will scan the same barcode continuously about 3 times
+            try {
+              Thread.sleep(BULK_MODE_SCAN_DELAY_MS);
+            } catch (InterruptedException ie) {
+              // continue
+            }
+            resetStatusView();
+            if (handler != null) {
+              handler.sendEmptyMessage(R.id.restart_preview);
+            }
+          } else {
+            handleDecodeInternally(rawResult, barcode);
+          }
           break;
       }
     }

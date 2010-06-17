@@ -74,7 +74,7 @@
   <string name="msg_default_type">タイプ</string>
   <string name="msg_encode_barcode_failed">バーコードを作成できませんでした。</string>
   <string name="msg_encode_contents_failed">このデータからバーコードを作成できませんでした。</string>
-  <string name="msg_encode_in_progress">バーコード作成中\u2026</string>
+  <string name="msg_encode_in_progress">バーコード作成中</string>
   <string name="msg_google_shopper_missing">Googleのショッパーがインストールされていません</string>
   <string name="msg_install_google_shopper">Googleのショッパーを組み合わせた価格、レビューなどのブラウザを開かずに複数のスキャンのバーコードです。それを試してみたいか？</string>
   <string name="msg_intent_failed">指定されたアプリケーションを起動できませんでした。バーコードの内容が無効である可能性があります。</string>
@@ -84,13 +84,13 @@
   <string name="msg_sbc_failed">検索中に問題が発生しました。</string>
   <string name="msg_sbc_no_page_returned">検索結果はありません</string>
   <string name="msg_sbc_page">ページ</string>
-  <string name="msg_sbc_searching_book">書籍を検索中\u2026</string>
+  <string name="msg_sbc_searching_book">書籍を検索中</string>
   <string name="msg_sbc_snippet_unavailable">要約文はありません</string>
   <string name="msg_sbc_unknown_page">不明なページ</string>
   <string name="msg_share_explanation">画面にバーコードを表示させ、別の端末でスキャンすれば データを共有することができます。</string>
   <string name="msg_share_subject_line">スキャンしたバーコードの内容を送信します。</string>
   <string name="msg_unmount_usb">申し訳ありませんが、SDカードにアクセスできないです。</string>
-  <string name="preferences_actions_title">バーコード発見時\u2026</string>
+  <string name="preferences_actions_title">バーコード発見時</string>
   <string name="preferences_bulk_mode_summary">スキャンして保存する多くのバーコード連続</string>
   <string name="preferences_bulk_mode_title">バルクモードでのスキャン</string>
   <string name="preferences_copy_to_clipboard_title">クリップボードにコピーする</string>
@@ -104,6 +104,7 @@
   <string name="preferences_name">設定</string>
   <string name="preferences_play_beep_title">通知音</string>
   <string name="preferences_result_title">検索結果の設定</string>
+  <string name="preferences_scanning_title">時バーコードスキャン</string>
   <string name="preferences_vibrate_title">バイブ</string>
   <string name="result_address_book">連絡先がヒットしました</string>
   <string name="result_calendar">カレンダーの予定がヒットしました</string>

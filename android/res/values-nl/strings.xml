@@ -104,6 +104,7 @@
   <string name="preferences_name">Instellingen</string>
   <string name="preferences_play_beep_title">Piepen</string>
   <string name="preferences_result_title">Instellingen voor resultaat</string>
+  <string name="preferences_scanning_title">Bij het scannen van barcodes voor de\u2026</string>
   <string name="preferences_vibrate_title">Trillen</string>
   <string name="result_address_book">Contact informatie gevonden</string>
   <string name="result_calendar">Agendagebeurtenis gevonden</string>

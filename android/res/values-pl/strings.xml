@@ -104,6 +104,7 @@
   <string name="preferences_name">Ustawienia</string>
   <string name="preferences_play_beep_title">Piszcz</string>
   <string name="preferences_result_title">Ustawienia rezultatów</string>
+  <string name="preferences_scanning_title">Podczas skanowania kodów kreskowych\u2026</string>
   <string name="preferences_vibrate_title">Wibruj</string>
   <string name="result_address_book">Znaleziono dane kontaktu</string>
   <string name="result_calendar">Znaleziono wydarzenie kalendarza</string>
