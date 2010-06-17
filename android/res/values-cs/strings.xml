@@ -104,6 +104,7 @@
   <string name="preferences_name">Nastavení</string>
   <string name="preferences_play_beep_title">Zvuky</string>
   <string name="preferences_result_title">Výsledek nastavení</string>
+  <string name="preferences_scanning_title">Při skenování pro čárové kódy\u2026</string>
   <string name="preferences_vibrate_title">Vibrace</string>
   <string name="result_address_book">Našel jsem kontakt</string>
   <string name="result_calendar">Našel jsem kalendář</string>

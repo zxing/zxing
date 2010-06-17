@@ -104,6 +104,7 @@
   <string name="preferences_name">Paramètres</string>
   <string name="preferences_play_beep_title">Bip</string>
   <string name="preferences_result_title">Paramètres de résultat</string>
+  <string name="preferences_scanning_title">Lors de la numérisation de codes à barres\u2026</string>
   <string name="preferences_vibrate_title">Vibrer</string>
   <string name="result_address_book">Information de contact trouvée</string>
   <string name="result_calendar">Evénement de l\'agenda trouvée</string>

@@ -104,6 +104,7 @@
   <string name="preferences_name">Einstellungen</string>
   <string name="preferences_play_beep_title">Ton</string>
   <string name="preferences_result_title">Ergebnis-Einstellungen</string>
+  <string name="preferences_scanning_title">Beim Scannen von Barcodes für\u2026</string>
   <string name="preferences_vibrate_title">Vibration</string>
   <string name="result_address_book">Kontakt gefunden</string>
   <string name="result_calendar">Termin gefunden</string>

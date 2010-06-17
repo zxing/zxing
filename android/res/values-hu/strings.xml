@@ -104,6 +104,7 @@
   <string name="preferences_name">Beállítások</string>
   <string name="preferences_play_beep_title">Sípolás</string>
   <string name="preferences_result_title">Találati beállítások</string>
+  <string name="preferences_scanning_title">Ha a lapolvasó a vonalkód\u2026</string>
   <string name="preferences_vibrate_title">Rezgés</string>
   <string name="result_address_book">Kapcsolat információ találat</string>
   <string name="result_calendar">Naptár esemény találat</string>

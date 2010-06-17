@@ -104,6 +104,7 @@
   <string name="preferences_name">Настройки</string>
   <string name="preferences_play_beep_title">Пищать</string>
   <string name="preferences_result_title">Настройки результата</string>
+  <string name="preferences_scanning_title">При сканировании штрих-кодов\u2026</string>
   <string name="preferences_vibrate_title">Вибрировать</string>
   <string name="result_address_book">Найдены контактные данные</string>
   <string name="result_calendar">Найдено событие для календаря</string>
