@@ -27,7 +27,17 @@ How to include ZXingWidget in a easy and clean way:
 	 it.  Add the relative path from your project's directory to the
 	 "zxing/iphone/ZXingWidget/Classes" directory. Make sure you click the checkbox "recursive path" !
  
-  5. You're ready to go. Just #import <ZXingWidgetController.h> from anywhere and it should work !
+  5. You're almost ready to go ..
+  
+  6. #import <ZXingWidgetController.h> from a file
+  
+  7. #import <QRCodeReader.h> for example because you will need to inject a barcode reader into ZXingWidgetController. 
+
+  8. MAKE SURE the file in which you are using the code deader is a .mm because you are now silently including some c++ code. If you don't do so then
+     the compiler will cry as if it does not find some files !
+
+  9. It should work :)
+  
 
 Know issues for above steps to include:
 ======================================
