@@ -45,12 +45,14 @@ public class WifiActivity extends Activity  {
   private ConnectedReceiver connectedReceiver;
 
   public enum NetworkType {
-    NETWORK_WEP, NETWORK_WPA,
+    NETWORK_WEP, NETWORK_WPA, NETWORK_NOPASS,
   }
 
   private int changeNetwork(NetworkSetting setting) {
     // If the password is empty, this is an unencrypted network
-    if (setting.getPassword() == null || setting.getPassword().length() == 0) {
+    if (setting.getPassword() == null || setting.getPassword().length() == 0 ||
+        setting.getNetworkType() == null ||
+        setting.getNetworkType() == NetworkType.NETWORK_NOPASS) {
       return changeNetworkUnEncrypted(setting);
     }
     if (setting.getNetworkType() == NetworkType.NETWORK_WPA) {
@@ -157,6 +159,8 @@ public class WifiActivity extends Activity  {
       networkT = NetworkType.NETWORK_WPA;
     } else if (networkType.contains("WEP")) {
       networkT = NetworkType.NETWORK_WEP;
+    } else if (networkType.contains("nopass")) {
+     networkT = NetworkType.NETWORK_NOPASS; 
     } else {
       // Got an incorrect network type
       finish();
