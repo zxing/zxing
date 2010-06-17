@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright (C) 2009 ZXing authors
+ Copyright (C) 2010 ZXing authors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  limitations under the License.
  -->
 <resources>
-  <string name="app_picker_name">应用</string>  
   <string name="app_name">条码扫描器</string>
+  <string name="app_picker_name">应用</string>
   <string name="bookmark_picker_name">书签</string>
   <string name="button_add_calendar">添加事件至日历</string>
   <string name="button_add_contact">添加联系人</string>
@@ -34,8 +34,8 @@
   <string name="button_ok">确定</string>
   <string name="button_open_browser">打开浏览器</string>
   <string name="button_product_search">打开产品搜索</string>
-  <string name="button_search_book_contents">搜索图书内容</string>
   <string name="button_read_book">浏览本书</string>
+  <string name="button_search_book_contents">搜索图书内容</string>
   <string name="button_share_app">共享应用</string>
   <string name="button_share_bookmark">分享书签</string>
   <string name="button_share_by_email">通过email分享</string>
@@ -52,21 +52,26 @@
   <string name="contents_phone">电话号码</string>
   <string name="contents_sms">短信地址</string>
   <string name="contents_text">纯文本</string>
+  <string name="history_clear_text">删除历史</string>
+  <string name="history_email_title">条码扫描器历史</string>
+  <string name="history_send">发送历史</string>
+  <string name="history_title">历史</string>
   <string name="menu_about">关于</string>
   <string name="menu_help">帮助</string>
+  <string name="menu_history">历史</string>
   <string name="menu_settings">设置</string>
-  <string name="menu_history">历史</string>      
   <string name="menu_share">分享</string>
   <string name="msg_about">以ZXing的开源条码库为基础</string>
-  <string name="msg_buggy">该器件具有已知的错误导致条形码扫描问题。为了 更多信息，请访问 http://code.google.com/p/zxing/wiki/FrequentlyAskedQuestions</string>  
+  <string name="msg_buggy">该器件具有已知的错误导致条形码扫描问题。为了 更多信息，请访问 http://code.google.com/p/zxing/wiki/FrequentlyAskedQuestions</string>
+  <string name="msg_bulk_mode_scanned">散装模式：条码扫描，并保存</string>
   <string name="msg_camera_framework_bug">很抱歉，机器人相机出现问题。您可能需要重新启动设备。</string>
   <string name="msg_default_contents">内容</string>
   <string name="msg_default_format">格式</string>
+  <string name="msg_default_meta">元数据</string>
   <string name="msg_default_mms_subject">Hi</string>
   <string name="msg_default_status">将条码放置于镜头范围内进行扫描。  </string>
-  <string name="msg_default_type">类型</string>
   <string name="msg_default_time">时间</string>
-  <string name="msg_default_meta">元数据</string>
+  <string name="msg_default_type">类型</string>
   <string name="msg_encode_barcode_failed">找不到条码。</string>
   <string name="msg_encode_contents_failed">不能从已有数据中读取条码。   </string>
   <string name="msg_encode_in_progress">正在生成条码\u2026</string>
@@ -79,25 +84,27 @@
   <string name="msg_sbc_failed">抱歉，搜索时遇到错误。</string>
   <string name="msg_sbc_no_page_returned">没有返回页面</string>
   <string name="msg_sbc_page">页面</string>
+  <string name="msg_sbc_searching_book">搜索图书\u2026</string>
   <string name="msg_sbc_snippet_unavailable">摘录不可用</string>
   <string name="msg_sbc_unknown_page">未知页面</string>
-  <string name="msg_sbc_searching_book">搜索图书\u2026</string>
   <string name="msg_share_explanation">你可以在你的手机屏幕上显示条码，并使用其他手机扫描此条码方式进行分享</string>
   <string name="msg_share_subject_line">这是我所扫描条码的内容</string>
-  <string name="msg_unmount_usb">对不起，SD卡是不可访问。</string>  
+  <string name="msg_unmount_usb">对不起，SD卡是不可访问。</string>
   <string name="preferences_actions_title">找到条码时\u2026</string>
+  <string name="preferences_bulk_mode_summary">连续扫描并保存许多条形码</string>
+  <string name="preferences_bulk_mode_title">批量扫描模式</string>
   <string name="preferences_copy_to_clipboard_title">复制到剪切板</string>
+  <string name="preferences_custom_product_search_summary">使用％s作为产品ID占位</string>
+  <string name="preferences_custom_product_search_title">自定义搜索网址</string>
   <string name="preferences_decode_1D_title">解码一维条码</string>
   <string name="preferences_decode_QR_title">解码QR条码</string>
+  <string name="preferences_front_light_summary">使前灯如果可用</string>
+  <string name="preferences_front_light_title">前灯</string>
   <string name="preferences_general_title">一般设置</string>
   <string name="preferences_name">设置</string>
   <string name="preferences_play_beep_title">提示音</string>
-  <string name="preferences_vibrate_title">振动</string>
-  <string name="preferences_front_light_title">前灯</string>
-  <string name="preferences_front_light_summary">使前灯如果可用</string>
   <string name="preferences_result_title">结果设置</string>
-  <string name="preferences_custom_product_search_title">自定义搜索网址</string>
-  <string name="preferences_custom_product_search_summary">使用％s作为产品ID占位</string>
+  <string name="preferences_vibrate_title">振动</string>
   <string name="result_address_book">找到联系人信息</string>
   <string name="result_calendar">找到日历事件</string>
   <string name="result_email_address">找到email地址</string>
@@ -109,13 +116,9 @@
   <string name="result_text">找到纯文本</string>
   <string name="result_uri">找到URL</string>
   <string name="result_wifi">发现网络配置</string>
-  <string name="history_title">历史</string>
-  <string name="history_clear_text">删除历史</string>
-  <string name="history_send">发送历史</string>
-  <string name="history_email_title">条码扫描器历史</string>
   <string name="sbc_name">Google图书搜索</string>
   <string name="share_name">通过条码分享</string>
-  <string name="wa_name">网络配置</string>
   <string name="title_about">条码扫描器</string>
+  <string name="wa_name">网络配置</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

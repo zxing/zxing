@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright (C) 2008 ZXing authors
+ Copyright (C) 2010 ZXing authors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  limitations under the License.
  -->
 <resources>
-  <string name="app_picker_name">Applicaties</string>
   <string name="app_name">Barcode Scanner</string>
+  <string name="app_picker_name">Applicaties</string>
   <string name="bookmark_picker_name">Bladwijzers</string>
   <string name="button_add_calendar">Voeg toe aan agenda</string>
   <string name="button_add_contact">Voeg contact toe</string>
@@ -34,8 +34,8 @@
   <string name="button_ok">Ok</string>
   <string name="button_open_browser">Open de browser</string>
   <string name="button_product_search">Zoek Producten</string>
-  <string name="button_search_book_contents">Zoek hoofdstukken uit boek</string>
   <string name="button_read_book">Doorzoek boek</string>
+  <string name="button_search_book_contents">Zoek hoofdstukken uit boek</string>
   <string name="button_share_app">Applicatie</string>
   <string name="button_share_bookmark">Bladwijzer</string>
   <string name="button_share_by_email">Deel via email</string>
@@ -52,21 +52,26 @@
   <string name="contents_phone">Telefoonnummer</string>
   <string name="contents_sms">SMSnummer</string>
   <string name="contents_text">Platte tekst</string>
+  <string name="history_clear_text">Leeg geschiedenis</string>
+  <string name="history_email_title">Barcode Scanner geschiedenis</string>
+  <string name="history_send">Verzend geschiedenis</string>
+  <string name="history_title">Geschiedenis</string>
   <string name="menu_about">Over</string>
   <string name="menu_help">Help</string>
-  <string name="menu_settings">Instellingen</string>
   <string name="menu_history">Geschiedenis</string>
+  <string name="menu_settings">Instellingen</string>
   <string name="menu_share">Deel</string>
   <string name="msg_about">Gebaseerd op de open source ZXing Barcodebibliotheek</string>
-  <string name="msg_buggy">Dit apparaat heeft bekende bugs die ervoor zorgen dat barcode scanning problemen. Voor meer informatie, bezoek http://code.google.com/p/zxing/wiki/FrequentlyAskedQuestions</string>  
+  <string name="msg_buggy">Dit apparaat heeft bekende bugs die ervoor zorgen dat barcode scanning problemen. Voor meer informatie, bezoek http://code.google.com/p/zxing/wiki/FrequentlyAskedQuestions</string>
+  <string name="msg_bulk_mode_scanned">Bulk mode: barcode gescand en opgeslagen</string>
   <string name="msg_camera_framework_bug">Sorry, er is een probleem met de Androidcamera. Probeer je telefoon te herstarten.</string>
   <string name="msg_default_contents">Hoofdstukken</string>
   <string name="msg_default_format">Formaat</string>
+  <string name="msg_default_meta">Metadata</string>
   <string name="msg_default_mms_subject">Hallo</string>
   <string name="msg_default_status">Plaats een barcode binnen de rechthoek om hem te scannen.</string>
-  <string name="msg_default_type">Type</string>
   <string name="msg_default_time">Tijd</string>
-  <string name="msg_default_meta">Metadata</string>
+  <string name="msg_default_type">Type</string>
   <string name="msg_encode_barcode_failed">Kan de gevraagde barcode niet genereren.</string>
   <string name="msg_encode_contents_failed">Kan geen barcode van de gegeven data maken.</string>
   <string name="msg_encode_in_progress">Barcode aan het genereren\u2026</string>
@@ -79,25 +84,27 @@
   <string name="msg_sbc_failed">Sorry, er was een probleem met zoeken</string>
   <string name="msg_sbc_no_page_returned">Geen pagina ontvangen</string>
   <string name="msg_sbc_page">Pagina</string>
+  <string name="msg_sbc_searching_book">Zoekt naar boek\u2026</string>
   <string name="msg_sbc_snippet_unavailable">Korte beschrijvende tekst niet beschikbaar</string>
   <string name="msg_sbc_unknown_page">Onbekende pagina</string>
-  <string name="msg_sbc_searching_book">Zoekt naar boek\u2026</string>
   <string name="msg_share_explanation">Je kan data delen door een barcode op je scherm te laten zien, en deze door een andere telefoon te scannen.</string>
   <string name="msg_share_subject_line">Hier is de barcode die ik gescand heb</string>
-  <string name="msg_unmount_usb">Sorry, de SD-kaart is niet toegankelijk.</string>  
+  <string name="msg_unmount_usb">Sorry, de SD-kaart is niet toegankelijk.</string>
   <string name="preferences_actions_title">Als een barcode is gevonden\u2026</string>
+  <string name="preferences_bulk_mode_summary">Scannen en opslaan vele barcodes continu</string>
+  <string name="preferences_bulk_mode_title">Bulk scan mode</string>
   <string name="preferences_copy_to_clipboard_title">Kopieer naar plakbord</string>
+  <string name="preferences_custom_product_search_summary">Gebruik %s voor de plaats van het product ID</string>
+  <string name="preferences_custom_product_search_title">Zoek aangepaste URL</string>
   <string name="preferences_decode_1D_title">Decodeer 1D barcodes</string>
   <string name="preferences_decode_QR_title">Decodeer QR codes</string>
+  <string name="preferences_front_light_summary">Inschakelen voorzijde licht, indien beschikbaar</string>
+  <string name="preferences_front_light_title">Voorzijde licht</string>
   <string name="preferences_general_title">Basisinstellingen</string>
   <string name="preferences_name">Instellingen</string>
   <string name="preferences_play_beep_title">Piepen</string>
-  <string name="preferences_vibrate_title">Trillen</string>
-  <string name="preferences_front_light_title">Voorzijde licht</string>
-  <string name="preferences_front_light_summary">Inschakelen voorzijde licht, indien beschikbaar</string>
   <string name="preferences_result_title">Instellingen voor resultaat</string>
-  <string name="preferences_custom_product_search_title">Zoek aangepaste URL</string>
-  <string name="preferences_custom_product_search_summary">Gebruik %s voor de plaats van het product ID</string>
+  <string name="preferences_vibrate_title">Trillen</string>
   <string name="result_address_book">Contact informatie gevonden</string>
   <string name="result_calendar">Agendagebeurtenis gevonden</string>
   <string name="result_email_address">E-mailadres gevonden</string>
@@ -109,13 +116,9 @@
   <string name="result_text">Platte tekst gevonden</string>
   <string name="result_uri">URL gevonden</string>
   <string name="result_wifi">Gevonden netwerkconfiguratie</string>
-  <string name="history_title">Geschiedenis</string>
-  <string name="history_clear_text">Leeg geschiedenis</string>
-  <string name="history_send">Verzend geschiedenis</string>
-  <string name="history_email_title">Barcode Scanner geschiedenis</string>
   <string name="sbc_name">Google Boekenzoeker</string>
   <string name="share_name">Deel via barcode</string>
-  <string name="wa_name">Netwerkconfiguratie</string>
   <string name="title_about">Barcode Scanner v</string>
+  <string name="wa_name">Netwerkconfiguratie</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

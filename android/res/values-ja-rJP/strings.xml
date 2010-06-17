@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright (C) 2009 ZXing authors
+ Copyright (C) 2010 ZXing authors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  limitations under the License.
  -->
 <resources>
-  <string name="app_picker_name">アプリケーション</string>  
   <string name="app_name">QRコードスキャナー</string>
+  <string name="app_picker_name">アプリケーション</string>
   <string name="bookmark_picker_name">ブックマーク</string>
   <string name="button_add_calendar">カレンダーに追加</string>
   <string name="button_add_contact">連絡先を追加</string>
@@ -34,9 +34,9 @@
   <string name="button_ok">OK</string>
   <string name="button_open_browser">ブラウザ起動</string>
   <string name="button_product_search">商品検索</string>
-  <string name="button_search_book_contents">書籍の内容を検索する</string>
   <string name="button_read_book">閲覧図書</string>
-  <string name="button_share_app">応募で送信する</string>  
+  <string name="button_search_book_contents">書籍の内容を検索する</string>
+  <string name="button_share_app">応募で送信する</string>
   <string name="button_share_bookmark">ブックマークを送信する</string>
   <string name="button_share_by_email">メールで送信する</string>
   <string name="button_share_by_sms">SMSで送信する</string>
@@ -52,21 +52,26 @@
   <string name="contents_phone">電話番号</string>
   <string name="contents_sms">SMSアドレス</string>
   <string name="contents_text">テキストデータ</string>
+  <string name="history_clear_text">削除履歴</string>
+  <string name="history_email_title">QRコードスキャナー歴史</string>
+  <string name="history_send">歴史を送信</string>
+  <string name="history_title">歴史</string>
   <string name="menu_about">詳細</string>
   <string name="menu_help">ヘルプ</string>
+  <string name="menu_history">歴史</string>
   <string name="menu_settings">設定</string>
-  <string name="menu_history">歴史</string>    
   <string name="menu_share">共有</string>
   <string name="msg_about">オープンソースのバーコード ライブラリ、ZXing を使用しています</string>
-  <string name="msg_buggy">このデバイスは、バグの原因となるバーコードの問題をスキャン知られています。 〜のために 詳細については、参照してください http://code.google.com/p/zxing/wiki/FrequentlyAskedQuestions</string>  
-  <string name="msg_camera_framework_bug">申し訳ありませんが、Androidのカメラには、問題が発生しました。場合は、デバイスを再起動する必要があります。</string>  
+  <string name="msg_buggy">このデバイスは、バグの原因となるバーコードの問題をスキャン知られています。 〜のために 詳細については、参照してください http://code.google.com/p/zxing/wiki/FrequentlyAskedQuestions</string>
+  <string name="msg_bulk_mode_scanned">バルクモード：バーコードスキャンして保存</string>
+  <string name="msg_camera_framework_bug">申し訳ありませんが、Androidのカメラには、問題が発生しました。場合は、デバイスを再起動する必要があります。</string>
   <string name="msg_default_contents">コンテンツ</string>
   <string name="msg_default_format">フォーマット</string>
+  <string name="msg_default_meta">メタデータ</string>
   <string name="msg_default_mms_subject">こんにちは！</string>
   <string name="msg_default_status">バーコードをカメラ画面の読み取り範囲内に写してスキャンしてください。</string>
-  <string name="msg_default_type">タイプ</string>
   <string name="msg_default_time">時間</string>
-  <string name="msg_default_meta">メタデータ</string>
+  <string name="msg_default_type">タイプ</string>
   <string name="msg_encode_barcode_failed">バーコードを作成できませんでした。</string>
   <string name="msg_encode_contents_failed">このデータからバーコードを作成できませんでした。</string>
   <string name="msg_encode_in_progress">バーコード作成中\u2026</string>
@@ -79,25 +84,27 @@
   <string name="msg_sbc_failed">検索中に問題が発生しました。</string>
   <string name="msg_sbc_no_page_returned">検索結果はありません</string>
   <string name="msg_sbc_page">ページ</string>
+  <string name="msg_sbc_searching_book">書籍を検索中\u2026</string>
   <string name="msg_sbc_snippet_unavailable">要約文はありません</string>
   <string name="msg_sbc_unknown_page">不明なページ</string>
-  <string name="msg_sbc_searching_book">書籍を検索中\u2026</string>
   <string name="msg_share_explanation">画面にバーコードを表示させ、別の端末でスキャンすれば データを共有することができます。</string>
   <string name="msg_share_subject_line">スキャンしたバーコードの内容を送信します。</string>
-  <string name="msg_unmount_usb">申し訳ありませんが、SDカードにアクセスできないです。</string>  
+  <string name="msg_unmount_usb">申し訳ありませんが、SDカードにアクセスできないです。</string>
   <string name="preferences_actions_title">バーコード発見時\u2026</string>
+  <string name="preferences_bulk_mode_summary">スキャンして保存する多くのバーコード連続</string>
+  <string name="preferences_bulk_mode_title">バルクモードでのスキャン</string>
   <string name="preferences_copy_to_clipboard_title">クリップボードにコピーする</string>
+  <string name="preferences_custom_product_search_summary">URL中の「%s」はスキャン結果に置換される</string>
+  <string name="preferences_custom_product_search_title">カスタム商品サーチ URL</string>
   <string name="preferences_decode_1D_title">1Dバーコードを読み取る</string>
   <string name="preferences_decode_QR_title">QRコードを読み取る</string>
+  <string name="preferences_front_light_summary">有効にするフロントライト可能な場合</string>
+  <string name="preferences_front_light_title">フロントライト</string>
   <string name="preferences_general_title">一般設定</string>
   <string name="preferences_name">設定</string>
   <string name="preferences_play_beep_title">通知音</string>
-  <string name="preferences_vibrate_title">バイブ</string>
-  <string name="preferences_front_light_title">フロントライト</string>
-  <string name="preferences_front_light_summary">有効にするフロントライト可能な場合</string>
   <string name="preferences_result_title">検索結果の設定</string>
-  <string name="preferences_custom_product_search_title">カスタム商品サーチ URL</string>
-  <string name="preferences_custom_product_search_summary">URL中の「%s」はスキャン結果に置換される</string>
+  <string name="preferences_vibrate_title">バイブ</string>
   <string name="result_address_book">連絡先がヒットしました</string>
   <string name="result_calendar">カレンダーの予定がヒットしました</string>
   <string name="result_email_address">メールアドレスがヒットしました</string>
@@ -109,13 +116,9 @@
   <string name="result_text">テキストデータがヒットしました</string>
   <string name="result_uri">URL がヒットしました</string>
   <string name="result_wifi">がネットワーク構成</string>
-  <string name="history_title">歴史</string>
-  <string name="history_clear_text">削除履歴</string>
-  <string name="history_send">歴史を送信</string>
-  <string name="history_email_title">QRコードスキャナー歴史</string>
   <string name="sbc_name">Google ブックス</string>
   <string name="share_name">バーコードで共有する</string>
-  <string name="wa_name">ネットワーク構成</string>
   <string name="title_about">>QRコードスキャナー v</string>
+  <string name="wa_name">ネットワーク構成</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

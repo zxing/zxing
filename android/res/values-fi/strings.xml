@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright (C) 2008 ZXing authors
+ Copyright (C) 2010 ZXing authors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  limitations under the License.
  -->
 <resources>
-  <string name="app_picker_name">Ohjelmat</string>
   <string name="app_name">Barcode Scanner</string>
+  <string name="app_picker_name">Ohjelmat</string>
   <string name="bookmark_picker_name">Kirjanmerkit</string>
   <string name="button_add_calendar">Lisää kalenteriin</string>
   <string name="button_add_contact">Lisää kontakti</string>
@@ -34,8 +34,8 @@
   <string name="button_ok">OK</string>
   <string name="button_open_browser">Avaa selain</string>
   <string name="button_product_search">Tuote haku</string>
-  <string name="button_search_book_contents">Hae kirjan sisältö</string>
   <string name="button_read_book">Selaa kirjaa</string>
+  <string name="button_search_book_contents">Hae kirjan sisältö</string>
   <string name="button_share_app">Ohjelma</string>
   <string name="button_share_bookmark">Kirjanmerkki</string>
   <string name="button_share_by_email">Jaa sähköpostilla</string>
@@ -52,21 +52,26 @@
   <string name="contents_phone">Puhelin numero</string>
   <string name="contents_sms">Tekstiviestin osoite</string>
   <string name="contents_text">Teksti</string>
+  <string name="history_clear_text">Tyhjennä historia</string>
+  <string name="history_email_title">Viivakoodin skanneri historia</string>
+  <string name="history_send">Lähetä historia</string>
+  <string name="history_title">Historia</string>
   <string name="menu_about">Tietoja</string>
   <string name="menu_help">Apua</string>
-  <string name="menu_settings">Asetukset</string>
   <string name="menu_history">Historia</string>
+  <string name="menu_settings">Asetukset</string>
   <string name="menu_share">Jaa</string>
   <string name="msg_about">Perustuu avoimen koodin ZXing Barcode kirjastoon</string>
-  <string name="msg_buggy">Tämä laite on tunnettuja vikoja, jotka aiheuttavat viivakoodi skannauksen ongelmia. Varten Lisätietoja http://code.google.com/p/zxing/wiki/FrequentlyAskedQuestions</string>  
+  <string name="msg_buggy">Tämä laite on tunnettuja vikoja, jotka aiheuttavat viivakoodi skannauksen ongelmia. Varten Lisätietoja http://code.google.com/p/zxing/wiki/FrequentlyAskedQuestions</string>
+  <string name="msg_bulk_mode_scanned">Bulk tila: viivakoodi skannataan ja tallennetaan</string>
   <string name="msg_camera_framework_bug">Anteeksi, Android kamera kohtasi virheen. Sinun täytyy ehkä käynnistää laite uudelleen.</string>
   <string name="msg_default_contents">Sisällys</string>
   <string name="msg_default_format">Formaatti</string>
+  <string name="msg_default_meta">Metadata</string>
   <string name="msg_default_mms_subject">Hei</string>
   <string name="msg_default_status">Aseta viivakoodi neliön sisälle.</string>
-  <string name="msg_default_type">Tyypi</string>
   <string name="msg_default_time">Aika</string>
-  <string name="msg_default_meta">Metadata</string>
+  <string name="msg_default_type">Tyypi</string>
   <string name="msg_encode_barcode_failed">Ei voinut generoida pyydettyä viivakoodia.</string>
   <string name="msg_encode_contents_failed">Ei voinut purkaa viivakoodin sisältöä.</string>
   <string name="msg_encode_in_progress">Generoidaan viivakoodia\u2026</string>
@@ -79,25 +84,27 @@
   <string name="msg_sbc_failed">Anteeksi, haussa tapahtui virhe.</string>
   <string name="msg_sbc_no_page_returned">Sivulta ei vastausta</string>
   <string name="msg_sbc_page">Divu</string>
+  <string name="msg_sbc_searching_book">\u2026</string>
   <string name="msg_sbc_snippet_unavailable">Snippetiä ei saatavilla</string>
   <string name="msg_sbc_unknown_page">Tuntematon sivu</string>
-  <string name="msg_sbc_searching_book">\u2026</string>
   <string name="msg_share_explanation">Voit jakaa dataa asettamalla viivakoodin näytölle ja lukemalla sen toisella puhelimella.</string>
   <string name="msg_share_subject_line">Tässä on viivakoodin skannattu sisältö</string>
   <string name="msg_unmount_usb">SD-kortti ei ole käytettävissä.</string>
   <string name="preferences_actions_title">Kun viivakoodi löytyy\u2026</string>
+  <string name="preferences_bulk_mode_summary">Skannaa ja tallenna monet viivakoodeja jatkuvasti</string>
+  <string name="preferences_bulk_mode_title">Bulk skannaustilassa</string>
   <string name="preferences_copy_to_clipboard_title">Kopioi leikepöydälle</string>
+  <string name="preferences_custom_product_search_summary">Käytä %s paikkana tuotetunnukselle</string>
+  <string name="preferences_custom_product_search_title">Mukautettu hakukone</string>
   <string name="preferences_decode_1D_title">Dekoodaa 1D viivakoodeja</string>
   <string name="preferences_decode_QR_title">Dekoodaa QR koodeja</string>
+  <string name="preferences_front_light_summary">Activoi valo edessä, jos käytettävissä</string>
+  <string name="preferences_front_light_title">Valo edessä</string>
   <string name="preferences_general_title">Yleiset asetukset</string>
   <string name="preferences_name">Asetukset</string>
   <string name="preferences_play_beep_title">Piip</string>
-  <string name="preferences_vibrate_title">Värinä</string>
-  <string name="preferences_front_light_title">Valo edessä</string>
-  <string name="preferences_front_light_summary">Activoi valo edessä, jos käytettävissä</string>
   <string name="preferences_result_title">Tuloksien asetukset</string>
-  <string name="preferences_custom_product_search_title">Mukautettu hakukone</string>
-  <string name="preferences_custom_product_search_summary">Käytä %s paikkana tuotetunnukselle</string>
+  <string name="preferences_vibrate_title">Värinä</string>
   <string name="result_address_book">Läydettiin kontakti tietoja</string>
   <string name="result_calendar">Löydetty kalenteri tapahtuma</string>
   <string name="result_email_address">Löydettiin sähköposti osoite</string>
@@ -109,13 +116,9 @@
   <string name="result_text">Löydettiin teksti</string>
   <string name="result_uri">Löydettin URL osoite</string>
   <string name="result_wifi">Löytyi langattoman yhteyden</string>
-  <string name="history_title">Historia</string>
-  <string name="history_clear_text">Tyhjennä historia</string>
-  <string name="history_send">Lähetä historia</string>  
-  <string name="history_email_title">Viivakoodin skanneri historia</string>
   <string name="sbc_name">Google kirja haku</string>
   <string name="share_name">Jaa viivakoodilla</string>
-  <string name="wa_name">Langattoman yhteyden</string>
   <string name="title_about">Viivakoodin lukija v</string>
+  <string name="wa_name">Langattoman yhteyden</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

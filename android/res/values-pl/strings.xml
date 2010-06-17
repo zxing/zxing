@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright (C) 2008 ZXing authors
+ Copyright (C) 2010 ZXing authors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  limitations under the License.
  -->
 <resources>
-  <string name="app_picker_name">Aplikacje</string>
   <string name="app_name">Barcode Scanner</string>
+  <string name="app_picker_name">Aplikacje</string>
   <string name="bookmark_picker_name">Zakładki</string>
   <string name="button_add_calendar">Dodaj do kalendarza</string>
   <string name="button_add_contact">Dodaj kontakt</string>
@@ -34,8 +34,8 @@
   <string name="button_ok">OK</string>
   <string name="button_open_browser">Otwórz przeglądarkę</string>
   <string name="button_product_search">Szukaj produktów</string>
-  <string name="button_search_book_contents">Przeszukaj zawartość</string>
   <string name="button_read_book">Przeglądaj książkę</string>
+  <string name="button_search_book_contents">Przeszukaj zawartość</string>
   <string name="button_share_app">Aplikacja</string>
   <string name="button_share_bookmark">Zakładka</string>
   <string name="button_share_by_email">Udostępnij przez email</string>
@@ -52,21 +52,26 @@
   <string name="contents_phone">Numer telefonu</string>
   <string name="contents_sms">Adres SMS</string>
   <string name="contents_text">Zwykły tekst</string>
+  <string name="history_clear_text">Wyczyść historię</string>
+  <string name="history_email_title">Historia Skanera Kodów Paskowych</string>
+  <string name="history_send">Wyślij historię</string>
+  <string name="history_title">Historia</string>
   <string name="menu_about">O aplikacji</string>
   <string name="menu_help">Pomoc</string>
-  <string name="menu_settings">Ustawienia</string>
   <string name="menu_history">Historia</string>
+  <string name="menu_settings">Ustawienia</string>
   <string name="menu_share">Udostępnij</string>
   <string name="msg_about">Bazowane na bibliotece kodów paskowych ZXing o otwartym źródle</string>
   <string name="msg_buggy">To urządzenie wykazuje znane błędy które powodują problemy podczas skanowania kodów paskowych. W celu otrzymania dalszych informacji, odwiedź http://code.google.com/p/zxing/wiki/FrequentlyAskedQuestions</string>
+  <string name="msg_bulk_mode_scanned">Tryb zbiorcze: skanowania kodów kreskowych i zapisaniu</string>
   <string name="msg_camera_framework_bug">Przepraszamy, aparat Android napotkał problem. Może wystąpić potrzeba ponownego uruchomienia urządzenia.</string>
   <string name="msg_default_contents">Zawartość</string>
   <string name="msg_default_format">Format</string>
+  <string name="msg_default_meta">Metadanych</string>
   <string name="msg_default_mms_subject">Cześć</string>
   <string name="msg_default_status">Umieść kod paskowy w prostokącie wizjera aby zeskanować.</string>
-  <string name="msg_default_type">Typ</string>
   <string name="msg_default_time">Czas</string>
-  <string name="msg_default_meta">Metadanych</string>
+  <string name="msg_default_type">Typ</string>
   <string name="msg_encode_barcode_failed">Nie można wygenerować żądanego kodu paskowego.</string>
   <string name="msg_encode_contents_failed">Nie można zakodować kodu paskowego z dostarczonych danych.</string>
   <string name="msg_encode_in_progress">Generowanie kodu paskowego\u2026</string>
@@ -79,25 +84,27 @@
   <string name="msg_sbc_failed">Przepraszamy, wyszukiwania napotkało problem.</string>
   <string name="msg_sbc_no_page_returned">Nie zwrócono żadnej strony</string>
   <string name="msg_sbc_page">Strona</string>
+  <string name="msg_sbc_searching_book">Przeszukiwanie książki\u2026</string>
   <string name="msg_sbc_snippet_unavailable">Wycinek niedostępny</string>
   <string name="msg_sbc_unknown_page">Nieznana strona</string>
-  <string name="msg_sbc_searching_book">Przeszukiwanie książki\u2026</string>
   <string name="msg_share_explanation">Możesz udostępniać dane wyświetlając kod paskowy na swoim ekranie, skanując go innym telefonem.</string>
   <string name="msg_share_subject_line">Oto zawartość kodu paskowego który został zeskanowany</string>
   <string name="msg_unmount_usb">Niestety, karta SD nie jest dostępny.</string>
   <string name="preferences_actions_title">Kiedy kod paskowy zostaje odnaleziony\u2026</string>
+  <string name="preferences_bulk_mode_summary">Skanowanie i zapisywanie wielu kodów kreskowych ciągle</string>
+  <string name="preferences_bulk_mode_title">Luzem tryb skanowania</string>
   <string name="preferences_copy_to_clipboard_title">Kopiuj do schowka</string>
+  <string name="preferences_custom_product_search_summary">Użyj %s jako zamiennik dla ID produktu</string>
+  <string name="preferences_custom_product_search_title">Własny URL wyszukiwania</string>
   <string name="preferences_decode_1D_title">Dekoduj kody 1D</string>
   <string name="preferences_decode_QR_title">Dekoduj kody QR</string>
+  <string name="preferences_front_light_summary">Polepsza skanowanie przy małej ilości światła w niektórych telefonach, ale może powodować odbłysk</string>
+  <string name="preferences_front_light_title">Używaj lampy frontowej</string>
   <string name="preferences_general_title">Ustawienia ogólne</string>
   <string name="preferences_name">Ustawienia</string>
   <string name="preferences_play_beep_title">Piszcz</string>
-  <string name="preferences_vibrate_title">Wibruj</string>
-  <string name="preferences_front_light_title">Używaj lampy frontowej</string>
-  <string name="preferences_front_light_summary">Polepsza skanowanie przy małej ilości światła w niektórych telefonach, ale może powodować odbłysk</string>  
   <string name="preferences_result_title">Ustawienia rezultatów</string>
-  <string name="preferences_custom_product_search_title">Własny URL wyszukiwania</string>
-  <string name="preferences_custom_product_search_summary">Użyj %s jako zamiennik dla ID produktu</string>
+  <string name="preferences_vibrate_title">Wibruj</string>
   <string name="result_address_book">Znaleziono dane kontaktu</string>
   <string name="result_calendar">Znaleziono wydarzenie kalendarza</string>
   <string name="result_email_address">Znaleziono adres email</string>
@@ -109,13 +116,9 @@
   <string name="result_text">Znaleziono zwykły tekst</string>
   <string name="result_uri">Znaleziono URL</string>
   <string name="result_wifi">Znaleziono konfiguracji sieci</string>
-  <string name="history_title">Historia</string>
-  <string name="history_clear_text">Wyczyść historię</string>
-  <string name="history_send">Wyślij historię</string>
-  <string name="history_email_title">Historia Skanera Kodów Paskowych</string>
   <string name="sbc_name">Wyszukiwanie książek Google</string>
   <string name="share_name">Udostępnij przez kod paskowy</string>
-  <string name="wa_name">Konfiguracja sieci</string>
   <string name="title_about">Skaner Kodów Paskowych v</string>
+  <string name="wa_name">Konfiguracja sieci</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

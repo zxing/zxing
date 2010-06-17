@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright (C) 2008 ZXing authors
+ Copyright (C) 2010 ZXing authors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  limitations under the License.
  -->
 <resources>
-  <string name="app_picker_name">Aplikace</string>
   <string name="app_name">Barcode Scanner</string>
+  <string name="app_picker_name">Aplikace</string>
   <string name="bookmark_picker_name">Záložky</string>
   <string name="button_add_calendar">Přidat do kalendáře</string>
   <string name="button_add_contact">Přidat kontakt</string>
@@ -34,8 +34,8 @@
   <string name="button_ok">OK</string>
   <string name="button_open_browser">Otevřít prohlížeč</string>
   <string name="button_product_search">Vyhledat produkt</string>
-  <string name="button_search_book_contents">Hledat obsah knihy</string>
   <string name="button_read_book">Prohlížet knihu</string>
+  <string name="button_search_book_contents">Hledat obsah knihy</string>
   <string name="button_share_app">Aplikace</string>
   <string name="button_share_bookmark">Záložky</string>
   <string name="button_share_by_email">Sdílet pomocí Email</string>
@@ -52,26 +52,31 @@
   <string name="contents_phone">Telefonní číslo</string>
   <string name="contents_sms">SMS číslo</string>
   <string name="contents_text">Ostatní</string>
+  <string name="history_clear_text">Vyčistit historii</string>
+  <string name="history_email_title">Barcode Scanner historie</string>
+  <string name="history_send">Poslat historii</string>
+  <string name="history_title">Historie</string>
   <string name="menu_about">O</string>
   <string name="menu_help">Pomoc!</string>
-  <string name="menu_settings">Nastavení</string>
   <string name="menu_history">Historie</string>
+  <string name="menu_settings">Nastavení</string>
   <string name="menu_share">Sdílet</string>
   <string name="msg_about">Na bázi open source ZXing Barcode Library</string>
   <string name="msg_buggy">Tento přístroj má známé chyby, které způsobují problémy čárového kódu. Pro Více informací najdete na http://code.google.com/p/zxing/wiki/FrequentlyAskedQuestions</string>
+  <string name="msg_bulk_mode_scanned">Bulk režimu: čárový kód naskenované a uložené</string>
   <string name="msg_camera_framework_bug">Omlouváme se, fotoaparát má problém. Možná bude nutné restartovat zařízení</string>
   <string name="msg_default_contents">Obsah</string>
   <string name="msg_default_format">Formát</string>
+  <string name="msg_default_meta">Metadata</string>
   <string name="msg_default_mms_subject">Ahoj</string>
   <string name="msg_default_status">Strefte se čtverečkem na čárový kód</string>
-  <string name="msg_default_type">Typ</string>
   <string name="msg_default_time">Čas</string>
-  <string name="msg_default_meta">Metadata</string>  
+  <string name="msg_default_type">Typ</string>
   <string name="msg_encode_barcode_failed">Nepodařilo se vytvořit požadovaný čárový kód.</string>
   <string name="msg_encode_contents_failed">Nepodařilo se rozkódovat čárový kód z poskytnutých údajů.</string>
   <string name="msg_encode_in_progress">Generování kódu\u2026</string>
   <string name="msg_google_shopper_missing">Google Shopper není nainstalován</string>
-  <string name="msg_install_google_shopper">Google Shopper kombinuje technologie čárového kódu s cenami, recenze a více bez otevření prohlížeče. Chtěli byste to zkusit?</string>  
+  <string name="msg_install_google_shopper">Google Shopper kombinuje technologie čárového kódu s cenami, recenze a více bez otevření prohlížeče. Chtěli byste to zkusit?</string>
   <string name="msg_intent_failed">Litujeme, požadovanou aplikaci nelze spustit. Čárový kód je nefunkční.</string>
   <string name="msg_loading_apps">Načítání seznamu aplikací\u2026</string>
   <string name="msg_not_our_results">Vypínáte tuto aplikaci. Výsledky hledání se netýkají této aplikace.</string>
@@ -79,25 +84,27 @@
   <string name="msg_sbc_failed">Omlouváme se, narazili jsme na problém.</string>
   <string name="msg_sbc_no_page_returned">Stránka nenalezena.</string>
   <string name="msg_sbc_page">Stránka</string>
+  <string name="msg_sbc_searching_book">Hledání knihy\u2026</string>
   <string name="msg_sbc_snippet_unavailable">Snippet není k dispozici</string>
   <string name="msg_sbc_unknown_page">Neznámá stránka</string>
-  <string name="msg_sbc_searching_book">Hledání knihy\u2026</string>
   <string name="msg_share_explanation">Můžete sdílet čárový kód na vaší obrazovce a skenování, s jiným telefonem.</string>
   <string name="msg_share_subject_line">Zde je obsah čárového kódu I naskenovaný</string>
-  <string name="msg_unmount_usb">Omlouváme se, karta SD není přístupná.</string>  
+  <string name="msg_unmount_usb">Omlouváme se, karta SD není přístupná.</string>
   <string name="preferences_actions_title">Byl nalezen čárový kód.\u2026</string>
+  <string name="preferences_bulk_mode_summary">Skenování a ušetřit mnoho čárových kódů nepřetržitě</string>
+  <string name="preferences_bulk_mode_title">Bulk režimu skenování</string>
   <string name="preferences_copy_to_clipboard_title">Kopírovat do schránky.</string>
+  <string name="preferences_custom_product_search_summary">Použít % jako zástupný symbol pro ID produktu</string>
+  <string name="preferences_custom_product_search_title">Vlastní vyhledávání URL.</string>
   <string name="preferences_decode_1D_title">Dekódovat 1D kódy</string>
   <string name="preferences_decode_QR_title">Dekódovat QR kódy</string>
+  <string name="preferences_front_light_summary">Povolte přední světlo, pokud je k dispozici</string>
+  <string name="preferences_front_light_title">Přední světla</string>
   <string name="preferences_general_title">Hlavní nastavení</string>
   <string name="preferences_name">Nastavení</string>
   <string name="preferences_play_beep_title">Zvuky</string>
-  <string name="preferences_vibrate_title">Vibrace</string>
-  <string name="preferences_front_light_title">Přední světla</string>
-  <string name="preferences_front_light_summary">Povolte přední světlo, pokud je k dispozici</string>
   <string name="preferences_result_title">Výsledek nastavení</string>
-  <string name="preferences_custom_product_search_title">Vlastní vyhledávání URL.</string>
-  <string name="preferences_custom_product_search_summary">Použít % jako zástupný symbol pro ID produktu</string>
+  <string name="preferences_vibrate_title">Vibrace</string>
   <string name="result_address_book">Našel jsem kontakt</string>
   <string name="result_calendar">Našel jsem kalendář</string>
   <string name="result_email_address">Našel jsem Email</string>
@@ -109,13 +116,9 @@
   <string name="result_text">Našel jsem nějaký text</string>
   <string name="result_uri">Našel jsem URL</string>
   <string name="result_wifi">Nalezeno bezdrátová konfigurace</string>
-  <string name="history_title">Historie</string>
-  <string name="history_clear_text">Vyčistit historii</string>
-  <string name="history_send">Poslat historii</string>  
-  <string name="history_email_title">Barcode Scanner historie</string>
   <string name="sbc_name">Google Knihy hledání</string>
   <string name="share_name">Sdílet pomocí čárového kódu</string>
-  <string name="wa_name">Bezdrátová konfigurace</string>
   <string name="title_about">Barcode Scanner v</string>
+  <string name="wa_name">Bezdrátová konfigurace</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>
