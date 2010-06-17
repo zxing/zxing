@@ -32,12 +32,11 @@ public class WifiGenerator implements GeneratorSource {
   Grid table = null;
   TextBox ssid = new TextBox();
   TextBox password = new TextBox();
-  // Do not allow multiple selections, thus the false
-  ListBox networkType = new ListBox(false);
+  final boolean multipleSelections = false;
+  ListBox networkType = new ListBox(multipleSelections);
   TextBox[] widgets = {ssid, password };
   
-  public WifiGenerator(ChangeListener changeListener,
-      KeyPressHandler keyListener) {
+  public WifiGenerator(ChangeListener changeListener, KeyPressHandler keyListener) {
 	networkType.addItem("WEP", "WEP");
 	networkType.addItem("WPA/WPA2", "WPA");
 	networkType.addItem("No encryption", "nopass");
@@ -58,15 +57,12 @@ public class WifiGenerator implements GeneratorSource {
     String networkType = getNetworkTypeField();
     
     // Build the output with obtained data.
-    // note that some informations may just be "" if they were not specified.
-    //return getVCard(name, company, tel, url, email, address, memo);
     return getWifiString(ssid, password, networkType);
   }
 
   private String getWifiString(String ssid, String password, String type) {
     StringBuilder output = new StringBuilder();
     output.append("WIFI:");
-    // TODO(vikrama): Escape the semicolons in ssid and password
     output.append("S:").append(ssid).append(';');
     maybeAppend(output, "T:", type);
     maybeAppend(output, "P:", password);
@@ -88,10 +84,7 @@ public class WifiGenerator implements GeneratorSource {
     if (input.contains("\n")) {
       throw new GeneratorException(name + " field must not contain \\n characters.");
     }
-    if (input.contains(";")) {
-    	// TODO(viki): Escape semicolons and colons
-      throw new GeneratorException(name + " field must not contains ; characters");
-    }
+    input = input.replace(";", "\\;");
     return input;
   }
   
