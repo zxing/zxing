@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright (C) 2009 ZXing authors
+ Copyright (C) 2010 ZXing authors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  limitations under the License.
  -->
 <resources>
-  <string name="app_picker_name">Anwendungen</string>  
   <string name="app_name">Barcode Scanner</string>
+  <string name="app_picker_name">Anwendungen</string>
   <string name="bookmark_picker_name">Lesezeichen</string>
   <string name="button_add_calendar">Termin hinzufügen</string>
   <string name="button_add_contact">Kontakt hinzufügen</string>
@@ -29,13 +29,13 @@
   <string name="button_done">Fertig</string>
   <string name="button_email">E-Mail senden</string>
   <string name="button_get_directions">Anweisungen</string>
-  <string name="button_google_shopper">Google Shopper</string>  
+  <string name="button_google_shopper">Google Shopper</string>
   <string name="button_mms">MMS senden</string>
   <string name="button_ok">OK</string>
   <string name="button_open_browser">Browser öffnen</string>
   <string name="button_product_search">Produktsuche</string>
-  <string name="button_search_book_contents">Buchinhalt durchsuchen</string>
   <string name="button_read_book">Buch anzeigen</string>
+  <string name="button_search_book_contents">Buchinhalt durchsuchen</string>
   <string name="button_share_app">Anwendung</string>
   <string name="button_share_bookmark">Lesezeichen</string>
   <string name="button_share_by_email">Als E-Mail weitergeben</string>
@@ -52,21 +52,26 @@
   <string name="contents_phone">Telefonnummer</string>
   <string name="contents_sms">SMS Addresse</string>
   <string name="contents_text">Text</string>
+  <string name="history_clear_text">Historie löschen</string>
+  <string name="history_email_title">Barcode Scanner Historie</string>
+  <string name="history_send">Historie senden</string>
+  <string name="history_title">Historie</string>
   <string name="menu_about">Info</string>
   <string name="menu_help">Hilfe</string>
-  <string name="menu_settings">Einstellungen</string>
   <string name="menu_history">Historie</string>
+  <string name="menu_settings">Einstellungen</string>
   <string name="menu_share">Erzeugen</string>
   <string name="msg_about">Basiert auf der Open Source ZXing Barcode Bibliothek </string>
-  <string name="msg_buggy">Dieses Gerät hat Fehler dazu führen, dass Barcode-Scanning Probleme bekannt. Für Weitere Informationen finden Si http://code.google.com/p/zxing/wiki/FrequentlyAskedQuestions</string>  
+  <string name="msg_buggy">Dieses Gerät hat Fehler dazu führen, dass Barcode-Scanning Probleme bekannt. Für Weitere Informationen finden Si http://code.google.com/p/zxing/wiki/FrequentlyAskedQuestions</string>
+  <string name="msg_bulk_mode_scanned">Bulk-Modus: Barcode gescannt und gespeichert</string>
   <string name="msg_camera_framework_bug">Leider stieß das Android Kamera ein Problem. Sie müssen die das Gerät neu zu starten.</string>
   <string name="msg_default_contents">Inhalt</string>
   <string name="msg_default_format">Format</string>
+  <string name="msg_default_meta">Metadata</string>
   <string name="msg_default_mms_subject">Hi</string>
   <string name="msg_default_status">Positionieren Sie den Barcode innerhalb des Rechteckes.</string>
-  <string name="msg_default_type">Typ</string>
   <string name="msg_default_time">Zeit</string>
-  <string name="msg_default_meta">Metadata</string>  
+  <string name="msg_default_type">Typ</string>
   <string name="msg_encode_barcode_failed">Der gewünschte Barcode kann nicht erzeugt werden.</string>
   <string name="msg_encode_contents_failed">Aus den Daten kann kein Barcode erzeugt werden.</string>
   <string name="msg_encode_in_progress">Erzeuge Barcode\u2026</string>
@@ -79,25 +84,27 @@
   <string name="msg_sbc_failed">Bei der Suche ist ein Fehler aufgetreten.</string>
   <string name="msg_sbc_no_page_returned">Keine Seite zurückgeliefert.</string>
   <string name="msg_sbc_page">Seite</string>
+  <string name="msg_sbc_searching_book">Durchsuche Buch\u2026</string>
   <string name="msg_sbc_snippet_unavailable">Ausschnitt nicht verfügbar.</string>
   <string name="msg_sbc_unknown_page">Unbekannte Seite</string>
-  <string name="msg_sbc_searching_book">Durchsuche Buch\u2026</string>
   <string name="msg_share_explanation">Sie können Daten weitergeben, indem Sie einen Barcode auf Ihrem Bilschirm anzeigen und mit einem anderen Telefon einscannen.</string>
   <string name="msg_share_subject_line">Hier ist der gescannte Barcode-Inhalt</string>
-  <string name="msg_unmount_usb">Leider ist die SD-Karte nicht zugänglich.</string>  
+  <string name="msg_unmount_usb">Leider ist die SD-Karte nicht zugänglich.</string>
   <string name="preferences_actions_title">Wenn ein Barcode erkannt wird\u2026</string>
+  <string name="preferences_bulk_mode_summary">Scannen und speichern viele Barcodes kontinuierlich</string>
+  <string name="preferences_bulk_mode_title">Bulk-Scan-Modus</string>
   <string name="preferences_copy_to_clipboard_title">In Zwischenablage kopieren</string>
+  <string name="preferences_custom_product_search_summary">Verwenden Sie %s als Platzhalter für die Produkt-ID</string>
+  <string name="preferences_custom_product_search_title">Eigene Such-URL</string>
   <string name="preferences_decode_1D_title">Dekodiere 1D Barcodes</string>
   <string name="preferences_decode_QR_title">Dekodiere QR Codes</string>
+  <string name="preferences_front_light_summary">Aktivieren Sie vor Licht, wenn verfügbar</string>
+  <string name="preferences_front_light_title">Vor Licht</string>
   <string name="preferences_general_title">Allgemeine Einstellungen</string>
   <string name="preferences_name">Einstellungen</string>
   <string name="preferences_play_beep_title">Ton</string>
-  <string name="preferences_vibrate_title">Vibration</string>
-  <string name="preferences_front_light_title">Vor Licht</string>
-  <string name="preferences_front_light_summary">Aktivieren Sie vor Licht, wenn verfügbar</string>
   <string name="preferences_result_title">Ergebnis-Einstellungen</string>
-  <string name="preferences_custom_product_search_title">Eigene Such-URL</string>
-  <string name="preferences_custom_product_search_summary">Verwenden Sie %s als Platzhalter für die Produkt-ID</string>
+  <string name="preferences_vibrate_title">Vibration</string>
   <string name="result_address_book">Kontakt gefunden</string>
   <string name="result_calendar">Termin gefunden</string>
   <string name="result_email_address">E-Mail-Adresse gefunden</string>
@@ -109,13 +116,9 @@
   <string name="result_text">Text gefunden</string>
   <string name="result_uri">URL gefunden</string>
   <string name="result_wifi">Wifi konfiguration gefunden</string>
-  <string name="history_title">Historie</string>
-  <string name="history_clear_text">Historie löschen</string>
-  <string name="history_send">Historie senden</string>
-  <string name="history_email_title">Barcode Scanner Historie</string> 
   <string name="sbc_name">Google Book Search</string>
   <string name="share_name">Weitergabe mittels Barcode</string>
-  <string name="wa_name">Wifi konfiguration</string>
   <string name="title_about">Barcode Scanner v</string>
+  <string name="wa_name">Wifi konfiguration</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

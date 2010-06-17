@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright (C) 2008 ZXing authors
+ Copyright (C) 2010 ZXing authors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  limitations under the License.
  -->
 <resources>
-  <string name="app_picker_name">Applications</string>
   <string name="app_name">Barcode Scanner</string>
+  <string name="app_picker_name">Applications</string>
   <string name="bookmark_picker_name">Segnalibri</string>
   <string name="button_add_calendar">Aggiungi al calendario</string>
   <string name="button_add_contact">Aggiungi ai contatti</string>
@@ -34,8 +34,8 @@
   <string name="button_ok">OK</string>
   <string name="button_open_browser">Apri browser</string>
   <string name="button_product_search">Cerca prodotto</string>
-  <string name="button_search_book_contents">Cerca contenuti libro</string>
   <string name="button_read_book">Sfoglia libro</string>
+  <string name="button_search_book_contents">Cerca contenuti libro</string>
   <string name="button_share_app">Applicazione</string>
   <string name="button_share_bookmark">Condividi segnalibro</string>
   <string name="button_share_by_email">Condividi tramite email</string>
@@ -52,21 +52,26 @@
   <string name="contents_phone">Numero di telefono</string>
   <string name="contents_sms">Numero SMS</string>
   <string name="contents_text">Testo puro</string>
+  <string name="history_clear_text">Cancella cronologia</string>
+  <string name="history_email_title">Scansione codice a barre cronologia</string>
+  <string name="history_send">Invia cronologia</string>
+  <string name="history_title">Cronologia</string>
   <string name="menu_about">Info</string>
   <string name="menu_help">Aiuto</string>
-  <string name="menu_settings">Impostazioni</string>
   <string name="menu_history">Cronologia</string>
+  <string name="menu_settings">Impostazioni</string>
   <string name="menu_share">Condividi</string>
   <string name="msg_about">Basato sulla libreria di software libero ZXing Barcode</string>
-  <string name="msg_buggy">Questo dispositivo è noto bug che causano la scansione dei codici a barre problemi. Per ulteriori informazioni, visitare http://code.google.com/p/zxing/wiki/FrequentlyAskedQuestions</string>  
+  <string name="msg_buggy">Questo dispositivo è noto bug che causano la scansione dei codici a barre problemi. Per ulteriori informazioni, visitare http://code.google.com/p/zxing/wiki/FrequentlyAskedQuestions</string>
+  <string name="msg_bulk_mode_scanned">Bulk modo: codice a barre scansionati e salvati</string>
   <string name="msg_camera_framework_bug">Siamo spiacenti, la fotocamera Android riscontrato un problema. Potrebbe essere necessario riavviare il dispositivo.</string>
   <string name="msg_default_contents">Contenuti</string>
   <string name="msg_default_format">Formato</string>
+  <string name="msg_default_meta">Metadati</string>
   <string name="msg_default_mms_subject">Ciao</string>
   <string name="msg_default_status">Posiziona un codice a barre dentro il mirino rettangolare per la scansione.</string>
-  <string name="msg_default_type">Tipo</string>
   <string name="msg_default_time">Tempo</string>
-  <string name="msg_default_meta">Metadati</string>
+  <string name="msg_default_type">Tipo</string>
   <string name="msg_encode_barcode_failed">Impossibile generare il codice a barre richiesto.</string>
   <string name="msg_encode_contents_failed">Impossibile codificare un codice a barre dai dati forniti.</string>
   <string name="msg_encode_in_progress">Generazione codice a barre\u2026</string>
@@ -79,25 +84,27 @@
   <string name="msg_sbc_failed">Spiacenti, la ricerca ha avuto un problema.</string>
   <string name="msg_sbc_no_page_returned">Nessuna pagina restitiuta</string>
   <string name="msg_sbc_page">Pagina</string>
+  <string name="msg_sbc_searching_book">Ricerca libro\u2026</string>
   <string name="msg_sbc_snippet_unavailable">Ritaglio non disponibile</string>
   <string name="msg_sbc_unknown_page">Pagina sconosciuta</string>
-  <string name="msg_sbc_searching_book">Ricerca libro\u2026</string>
   <string name="msg_share_explanation">Puoi condividere i dati mostrando un codice a barre sullo schermo e facendo la scansione con un altro telefono.</string>
   <string name="msg_share_subject_line">Questo è il contenuto di un codice a barre di prova</string>
-  <string name="msg_unmount_usb">Spiacenti, la scheda SD non è accessibile.</string>  
+  <string name="msg_unmount_usb">Spiacenti, la scheda SD non è accessibile.</string>
   <string name="preferences_actions_title">Quando viene trovato un codice a barre\u2026</string>
+  <string name="preferences_bulk_mode_summary">scansione di codici a barre e salvare molte continuamente</string>
+  <string name="preferences_bulk_mode_title">Bulk modalità di scansione</string>
   <string name="preferences_copy_to_clipboard_title">Copia negli appunti</string>
+  <string name="preferences_custom_product_search_summary">Utilizza %s come segnaposto per l\'ID del prodotto</string>
+  <string name="preferences_custom_product_search_title">URL ricerca prodotto personalizzata</string>
   <string name="preferences_decode_1D_title">Decodifica codice a barre 1D</string>
   <string name="preferences_decode_QR_title">Decodifica codici QR</string>
+  <string name="preferences_front_light_summary">Consentire la luce anteriore, se disponibile</string>
+  <string name="preferences_front_light_title">Luce anteriore</string>
   <string name="preferences_general_title">Impostazioni generali</string>
   <string name="preferences_name">Impostazioni</string>
   <string name="preferences_play_beep_title">Suona</string>
-  <string name="preferences_vibrate_title">Vibra</string>
-  <string name="preferences_front_light_title">Luce anteriore</string>
-  <string name="preferences_front_light_summary">Consentire la luce anteriore, se disponibile</string>
   <string name="preferences_result_title">Impostazioni risultato</string>
-  <string name="preferences_custom_product_search_title">URL ricerca prodotto personalizzata</string>
-  <string name="preferences_custom_product_search_summary">Utilizza %s come segnaposto per l\'ID del prodotto</string>
+  <string name="preferences_vibrate_title">Vibra</string>
   <string name="result_address_book">Info contatto trovata</string>
   <string name="result_calendar">Evento calendario trovato</string>
   <string name="result_email_address">Indirizzo email trovato</string>
@@ -109,13 +116,9 @@
   <string name="result_text">Testo puro trovato</string>
   <string name="result_uri">URL trovato</string>
   <string name="result_wifi">Configurazione di rete trovato</string>
-  <string name="history_title">Cronologia</string>
-  <string name="history_clear_text">Cancella cronologia</string>
-  <string name="history_send">Invia cronologia</string>  
-  <string name="history_email_title">Scansione codice a barre cronologia</string>
   <string name="sbc_name">Ricerca Google Book</string>
   <string name="share_name">Condividi tramite codice a barre</string>
-  <string name="wa_name">Configurazione di rete</string>
   <string name="title_about">Scansione codice a barre v</string>
+  <string name="wa_name">Configurazione di rete</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

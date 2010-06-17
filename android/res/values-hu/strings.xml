@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright (C) 2008 ZXing authors
+ Copyright (C) 2010 ZXing authors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -14,12 +14,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  -->
-<!--
- Hungarian translation / Magyar fordítás: http://www.androida.hu/
- -->
 <resources>
-  <string name="app_picker_name">Alkalmazások</string>
   <string name="app_name">Barcode Scanner</string>
+  <string name="app_picker_name">Alkalmazások</string>
   <string name="bookmark_picker_name">Könyvjelzők</string>
   <string name="button_add_calendar">Hozzáadás a naptárhoz</string>
   <string name="button_add_contact">Névjegy hozzáadása</string>
@@ -37,8 +34,8 @@
   <string name="button_ok">OK</string>
   <string name="button_open_browser">Böngésző megnyitása</string>
   <string name="button_product_search">Termék keresése</string>
-  <string name="button_search_book_contents">Tartalom keresése</string>
   <string name="button_read_book">Könyv böngészése</string>
+  <string name="button_search_book_contents">Tartalom keresése</string>
   <string name="button_share_app">Alkalmazás</string>
   <string name="button_share_bookmark">Könyvjelző</string>
   <string name="button_share_by_email">Megosztás email-ben</string>
@@ -55,21 +52,26 @@
   <string name="contents_phone">Telefonszám</string>
   <string name="contents_sms">SMS cím</string>
   <string name="contents_text">Szöveges</string>
+  <string name="history_clear_text">Előzmények törlése</string>
+  <string name="history_email_title">Barcode Scanner előzmények</string>
+  <string name="history_send">Előzmények küldése</string>
+  <string name="history_title">Előzmények</string>
   <string name="menu_about">Rólunk</string>
   <string name="menu_help">Segítség</string>
-  <string name="menu_settings">Beállítások</string>
   <string name="menu_history">Előzmények</string>
+  <string name="menu_settings">Beállítások</string>
   <string name="menu_share">Megosztás</string>
   <string name="msg_about">A nyílt forráskódú ZXing Barcode Library alapján.</string>
   <string name="msg_buggy">Ennek a készüléknek ismert hibái vannak, amik vonalkód olvasási problémákat okoznak. További információkért, látogassa meg a http://code.google.com/p/zxing/wiki/FrequentlyAskedQuestions weboldalt.</string>
+  <string name="msg_bulk_mode_scanned">Tömeges mód: vonalkód beszkennelt és tárolt</string>
   <string name="msg_camera_framework_bug">Elnézést, az Android kamera problémába ütközött. Lehet, hogy újra kell indítania a készüléket.</string>
   <string name="msg_default_contents">Tartalom</string>
   <string name="msg_default_format">Formátum</string>
+  <string name="msg_default_meta">Metaadatok</string>
   <string name="msg_default_mms_subject">Szia</string>
   <string name="msg_default_status">Helyezze a vonalkódot a kereső téglalapba a szkenneléshez.</string>
-  <string name="msg_default_type">Típus</string>
   <string name="msg_default_time">Idő</string>
-  <string name="msg_default_meta">Metaadatok</string>
+  <string name="msg_default_type">Típus</string>
   <string name="msg_encode_barcode_failed">Nem lehetett legenerálni a kért vonalkódot.</string>
   <string name="msg_encode_contents_failed">Nem lehetett lekódolni a vonalkódot a megadott tartalomból.</string>
   <string name="msg_encode_in_progress">Vonalkód generálása\u2026</string>
@@ -82,25 +84,27 @@
   <string name="msg_sbc_failed">Elnézést, a keresés problémába ütközött.</string>
   <string name="msg_sbc_no_page_returned">Nincs visszakapott oldal</string>
   <string name="msg_sbc_page">Oldal</string>
+  <string name="msg_sbc_searching_book">Könyv keresése\u2026</string>
   <string name="msg_sbc_snippet_unavailable">Kódrészlet nem elérhető</string>
   <string name="msg_sbc_unknown_page">Ismeretlen oldal</string>
-  <string name="msg_sbc_searching_book">Könyv keresése\u2026</string>
   <string name="msg_share_explanation">Meg tud osztani adatot úgy, hogy egy vonalkódot jelenít meg a képernyőjén, melyet egy másik telefon beszkennel.</string>
   <string name="msg_share_subject_line">Itt a tartalma a vonalkódnak, amit beolvastam</string>
-  <string name="msg_unmount_usb">Sajnáljuk, az SD kártya nem elérhető.</string>  
+  <string name="msg_unmount_usb">Sajnáljuk, az SD kártya nem elérhető.</string>
   <string name="preferences_actions_title">Amikor a vonalkód megvan\u2026</string>
+  <string name="preferences_bulk_mode_summary">Beolvasni és elmenteni több vonalkód folyamatosan</string>
+  <string name="preferences_bulk_mode_title">Tömeges scan üzemmód</string>
   <string name="preferences_copy_to_clipboard_title">Másolás a vágólapra</string>
+  <string name="preferences_custom_product_search_summary">Használja a %s helyktöltést a termék azonosító helyén</string>
+  <string name="preferences_custom_product_search_title">Egyedi keresés URL</string>
   <string name="preferences_decode_1D_title">1D vonalkódok megfejtése</string>
   <string name="preferences_decode_QR_title">QR-kódok megfejtése</string>
+  <string name="preferences_front_light_summary">Javítja a szkennelést kevés fény mellett néhány telefonon, de csillogást okozhat</string>
+  <string name="preferences_front_light_title">Elülső lámpa használata</string>
   <string name="preferences_general_title">Általános beállítások</string>
   <string name="preferences_name">Beállítások</string>
   <string name="preferences_play_beep_title">Sípolás</string>
-  <string name="preferences_vibrate_title">Rezgés</string>
-  <string name="preferences_front_light_title">Elülső lámpa használata</string>
-  <string name="preferences_front_light_summary">Javítja a szkennelést kevés fény mellett néhány telefonon, de csillogást okozhat</string>
   <string name="preferences_result_title">Találati beállítások</string>
-  <string name="preferences_custom_product_search_title">Egyedi keresés URL</string>
-  <string name="preferences_custom_product_search_summary">Használja a %s helyktöltést a termék azonosító helyén</string>
+  <string name="preferences_vibrate_title">Rezgés</string>
   <string name="result_address_book">Kapcsolat információ találat</string>
   <string name="result_calendar">Naptár esemény találat</string>
   <string name="result_email_address">Email cím találat</string>
@@ -112,13 +116,9 @@
   <string name="result_text">Szöveges találat</string>
   <string name="result_uri">URL találat</string>
   <string name="result_wifi">Talált hálózati konfiguráció</string>
-  <string name="history_title">Előzmények</string>
-  <string name="history_clear_text">Előzmények törlése</string>
-  <string name="history_send">Előzmények küldése</string>
-  <string name="history_email_title">Barcode Scanner előzmények</string>
   <string name="sbc_name">Google Könyvek</string>
   <string name="share_name">Megosztás vonalkóddal</string>
-  <string name="wa_name">Hálózati konfiguráció</string>
   <string name="title_about">Barcode Scanner v</string>
+  <string name="wa_name">Hálózati konfiguráció</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

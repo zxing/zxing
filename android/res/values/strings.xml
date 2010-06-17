@@ -59,6 +59,7 @@
   <string name="menu_share">Share</string>
   <string name="msg_about">Based on the open source ZXing Barcode Library</string>
   <string name="msg_buggy">This device has known bugs that cause barcode scanning problems. For more information, visit http://code.google.com/p/zxing/wiki/FrequentlyAskedQuestions</string>
+  <string name="msg_bulk_mode_scanned">Bulk mode: barcode scanned and saved</string>
   <string name="msg_camera_framework_bug">Sorry, the Android camera encountered a problem. You may need to restart the device.</string>
   <string name="msg_default_contents">Contents</string>
   <string name="msg_default_format">Format</string>
@@ -98,6 +99,8 @@
   <string name="preferences_result_title">Result settings</string>
   <string name="preferences_custom_product_search_title">Custom search URL</string>
   <string name="preferences_custom_product_search_summary">Use %s as a placeholder for the product ID</string>
+  <string name="preferences_bulk_mode_title">Bulk scan mode</string>
+  <string name="preferences_bulk_mode_summary">Scan and save many barcodes continuously</string>
   <string name="result_address_book">Found contact info</string>
   <string name="result_calendar">Found calendar event</string>
   <string name="result_email_address">Found email address</string>
