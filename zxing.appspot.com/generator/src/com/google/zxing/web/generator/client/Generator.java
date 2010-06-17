@@ -113,6 +113,7 @@ public class Generator implements EntryPoint {
     generators.add(new SmsAddressGenerator(changeListener, keyPressHandler));
     generators.add(new TextGenerator(changeListener));
     generators.add(new UrlGenerator(changeListener, keyPressHandler));
+    generators.add(new WifiGenerator(changeListener, keyPressHandler));
   }
   
   public void setupLeftPanel() {
