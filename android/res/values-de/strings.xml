@@ -94,11 +94,11 @@
   <string name="preferences_bulk_mode_summary">Scannen und speichern viele Barcodes kontinuierlich</string>
   <string name="preferences_bulk_mode_title">Bulk-Scan-Modus</string>
   <string name="preferences_copy_to_clipboard_title">In Zwischenablage kopieren</string>
-  <string name="preferences_custom_product_search_summary">Verwenden Sie %s als Platzhalter für die Produkt-ID</string>
+  <string name="preferences_custom_product_search_summary">Verwenden Sie %s als Platzhalter für die Produkt-ID und %f für die Format</string>
   <string name="preferences_custom_product_search_title">Eigene Such-URL</string>
   <string name="preferences_decode_1D_title">Dekodiere 1D Barcodes</string>
   <string name="preferences_decode_QR_title">Dekodiere QR Codes</string>
-  <string name="preferences_front_light_summary">Aktivieren Sie vor Licht, wenn verfügbar</string>
+  <string name="preferences_front_light_summary">Erhöht Scannen bei schwachem Licht bei einigen Mobiltelefonen, kann aber Blendung verursachen. Funktioniert nicht auf allen Handys funktionieren.</string>
   <string name="preferences_front_light_title">Vor Licht</string>
   <string name="preferences_general_title">Allgemeine Einstellungen</string>
   <string name="preferences_name">Einstellungen</string>

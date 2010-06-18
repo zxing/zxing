@@ -16,6 +16,7 @@
 
 package com.google.zxing.client.android.result;
 
+import com.google.zxing.Result;
 import com.google.zxing.client.android.Contents;
 import com.google.zxing.client.android.Intents;
 import com.google.zxing.client.android.LocaleManager;
@@ -71,6 +72,8 @@ public abstract class ResultHandler {
 
   private final ParsedResult result;
   private final Activity activity;
+  private final Result rawResult;
+  private final String customProductSearch;
 
   private final DialogInterface.OnClickListener shopperMarketListener =
       new DialogInterface.OnClickListener() {
@@ -81,12 +84,22 @@ public abstract class ResultHandler {
   };
 
   ResultHandler(Activity activity, ParsedResult result) {
+    this(activity, result, null);
+  }
+
+  ResultHandler(Activity activity, ParsedResult result, Result rawResult) {
     this.result = result;
     this.activity = activity;
+    this.rawResult = rawResult;
+    this.customProductSearch = parseCustomSearchURL();
   }
 
   ParsedResult getResult() {
     return result;
+  }
+
+  boolean hasCustomProductSearch() {
+    return customProductSearch != null;
   }
 
   /**
@@ -398,7 +411,7 @@ public abstract class ResultHandler {
     }
   }
 
-  protected String parseCustomSearchURL() {
+  private String parseCustomSearchURL() {
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
     String customProductSearch = prefs.getString(PreferencesActivity.KEY_CUSTOM_PRODUCT_SEARCH, null);
     if (customProductSearch != null && customProductSearch.trim().length() == 0) {
@@ -406,4 +419,13 @@ public abstract class ResultHandler {
     }
     return customProductSearch;
   }
+
+  String fillInCustomSearchURL(String text) {
+    String url = customProductSearch.replace("%s", text);
+    if (rawResult != null) {
+      url = url.replace("%f", rawResult.getBarcodeFormat().toString());
+    }
+    return url;
+  }
+
 }

@@ -94,11 +94,11 @@
   <string name="preferences_bulk_mode_summary">Beolvasni és elmenteni több vonalkód folyamatosan</string>
   <string name="preferences_bulk_mode_title">Tömeges scan üzemmód</string>
   <string name="preferences_copy_to_clipboard_title">Másolás a vágólapra</string>
-  <string name="preferences_custom_product_search_summary">Használja a %s helyktöltést a termék azonosító helyén</string>
+  <string name="preferences_custom_product_search_summary">Használja a %s helyktöltést a termék azonosító helyén, és %f esetében formátum</string>
   <string name="preferences_custom_product_search_title">Egyedi keresés URL</string>
   <string name="preferences_decode_1D_title">1D vonalkódok megfejtése</string>
   <string name="preferences_decode_QR_title">QR-kódok megfejtése</string>
-  <string name="preferences_front_light_summary">Javítja a szkennelést kevés fény mellett néhány telefonon, de csillogást okozhat</string>
+  <string name="preferences_front_light_summary">Javítja a szkennelést kevés fény mellett néhány telefonon, de csillogást okozhat. Nem működik a telefon minden.</string>
   <string name="preferences_front_light_title">Elülső lámpa használata</string>
   <string name="preferences_general_title">Általános beállítások</string>
   <string name="preferences_name">Beállítások</string>

@@ -94,11 +94,11 @@
   <string name="preferences_bulk_mode_summary">Scannen en opslaan vele barcodes continu</string>
   <string name="preferences_bulk_mode_title">Bulk scan mode</string>
   <string name="preferences_copy_to_clipboard_title">Kopieer naar plakbord</string>
-  <string name="preferences_custom_product_search_summary">Gebruik %s voor de plaats van het product ID</string>
+  <string name="preferences_custom_product_search_summary">Gebruik %s voor de plaats van het product ID en %f voor formaat</string>
   <string name="preferences_custom_product_search_title">Zoek aangepaste URL</string>
   <string name="preferences_decode_1D_title">Decodeer 1D barcodes</string>
   <string name="preferences_decode_QR_title">Decodeer QR codes</string>
-  <string name="preferences_front_light_summary">Inschakelen voorzijde licht, indien beschikbaar</string>
+  <string name="preferences_front_light_summary">Inschakelen voorzijde licht, indien beschikbaar, maar kan leiden tot verblinding. Werkt niet op alle telefoons.</string>
   <string name="preferences_front_light_title">Voorzijde licht</string>
   <string name="preferences_general_title">Basisinstellingen</string>
   <string name="preferences_name">Instellingen</string>

@@ -94,11 +94,11 @@
   <string name="preferences_bulk_mode_summary">Skenování a ušetřit mnoho čárových kódů nepřetržitě</string>
   <string name="preferences_bulk_mode_title">Bulk režimu skenování</string>
   <string name="preferences_copy_to_clipboard_title">Kopírovat do schránky.</string>
-  <string name="preferences_custom_product_search_summary">Použít % jako zástupný symbol pro ID produktu</string>
+  <string name="preferences_custom_product_search_summary">Použijte %s jako zástupný symbol pro ID produktu, a %f pro formát</string>
   <string name="preferences_custom_product_search_title">Vlastní vyhledávání URL.</string>
   <string name="preferences_decode_1D_title">Dekódovat 1D kódy</string>
   <string name="preferences_decode_QR_title">Dekódovat QR kódy</string>
-  <string name="preferences_front_light_summary">Povolte přední světlo, pokud je k dispozici</string>
+  <string name="preferences_front_light_summary">Zlepšuje skenování při slabém osvětlení na některých telefonech, ale může způsobit oslnění. Nefunguje na všech telefonech.</string>
   <string name="preferences_front_light_title">Přední světla</string>
   <string name="preferences_general_title">Hlavní nastavení</string>
   <string name="preferences_name">Nastavení</string>

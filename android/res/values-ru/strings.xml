@@ -94,11 +94,11 @@
   <string name="preferences_bulk_mode_summary">Сканировать и сохранить многие штрих-кодов постоянно</string>
   <string name="preferences_bulk_mode_title">Массовое сканирование</string>
   <string name="preferences_copy_to_clipboard_title">Копировать в буфер обмена</string>
-  <string name="preferences_custom_product_search_summary">%s будет заменён на ID товара</string>
+  <string name="preferences_custom_product_search_summary">%s будет заменён на ID товара, и %f для формата</string>
   <string name="preferences_custom_product_search_title">URL пользовательского поиска</string>
   <string name="preferences_decode_1D_title">Распознавать линейные штрих-коды</string>
   <string name="preferences_decode_QR_title">Распознавать QR-коды</string>
-  <string name="preferences_front_light_summary">Включите свет, если передние доступно</string>
+  <string name="preferences_front_light_summary">Включите свет, если передние доступно. Не работает на всех телефонах.</string>
   <string name="preferences_front_light_title">Передние омыватели</string>
   <string name="preferences_general_title">Общие настройки</string>
   <string name="preferences_name">Настройки</string>
