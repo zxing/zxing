@@ -16,6 +16,7 @@
 
 package com.google.zxing.client.android.result;
 
+import com.google.zxing.Result;
 import com.google.zxing.client.android.R;
 import com.google.zxing.client.result.ParsedResult;
 import com.google.zxing.client.result.ProductParsedResult;
@@ -37,16 +38,13 @@ public final class ProductResultHandler extends ResultHandler {
       R.string.button_custom_product_search,
   };
 
-  private final String customProductSearch;
-
-  public ProductResultHandler(Activity activity, ParsedResult result) {
-    super(activity, result);
-    customProductSearch = parseCustomSearchURL();
+  public ProductResultHandler(Activity activity, ParsedResult result, Result rawResult) {
+    super(activity, result, rawResult);
   }
 
   @Override
   public int getButtonCount() {
-    return customProductSearch != null ? buttons.length : buttons.length - 1;
+    return hasCustomProductSearch() ? buttons.length : buttons.length - 1;
   }
 
   @Override
@@ -70,8 +68,7 @@ public final class ProductResultHandler extends ResultHandler {
             openGoogleShopper(productResult.getNormalizedProductID());
             break;
           case 3:
-            String url = customProductSearch.replace("%s", productResult.getNormalizedProductID());
-            openURL(url);
+            openURL(fillInCustomSearchURL(productResult.getNormalizedProductID()));
             break;
         }
       }

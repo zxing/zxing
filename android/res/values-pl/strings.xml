@@ -94,11 +94,11 @@
   <string name="preferences_bulk_mode_summary">Skanowanie i zapisywanie wielu kodów kreskowych ciągle</string>
   <string name="preferences_bulk_mode_title">Luzem tryb skanowania</string>
   <string name="preferences_copy_to_clipboard_title">Kopiuj do schowka</string>
-  <string name="preferences_custom_product_search_summary">Użyj %s jako zamiennik dla ID produktu</string>
+  <string name="preferences_custom_product_search_summary">Użyj %s jako zamiennik dla ID produktu, a dla formatu %f</string>
   <string name="preferences_custom_product_search_title">Własny URL wyszukiwania</string>
   <string name="preferences_decode_1D_title">Dekoduj kody 1D</string>
   <string name="preferences_decode_QR_title">Dekoduj kody QR</string>
-  <string name="preferences_front_light_summary">Polepsza skanowanie przy małej ilości światła w niektórych telefonach, ale może powodować odbłysk</string>
+  <string name="preferences_front_light_summary">Polepsza skanowanie przy małej ilości światła w niektórych telefonach, ale może powodować odbłysk. Nie działa na wszystkich telefonach.</string>
   <string name="preferences_front_light_title">Używaj lampy frontowej</string>
   <string name="preferences_general_title">Ustawienia ogólne</string>
   <string name="preferences_name">Ustawienia</string>

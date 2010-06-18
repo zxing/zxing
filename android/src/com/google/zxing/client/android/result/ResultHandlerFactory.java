@@ -40,7 +40,7 @@ public final class ResultHandlerFactory {
     } else if (type.equals(ParsedResultType.EMAIL_ADDRESS)) {
       return new EmailAddressResultHandler(activity, result);
     } else if (type.equals(ParsedResultType.PRODUCT)) {
-      return new ProductResultHandler(activity, result);
+      return new ProductResultHandler(activity, result, rawResult);
     } else if (type.equals(ParsedResultType.URI)) {
       return new URIResultHandler(activity, result);
     } else if (type.equals(ParsedResultType.WIFI)) {
@@ -56,7 +56,7 @@ public final class ResultHandlerFactory {
     } else if (type.equals(ParsedResultType.CALENDAR)) {
       return new CalendarResultHandler(activity, result);
     } else if (type.equals(ParsedResultType.ISBN)) {
-      return new ISBNResultHandler(activity, result);
+      return new ISBNResultHandler(activity, result, rawResult);
     } else {
       // The TextResultHandler is the fallthrough for unsupported formats.
       return new TextResultHandler(activity, result);

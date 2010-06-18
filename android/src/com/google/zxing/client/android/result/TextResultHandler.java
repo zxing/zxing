@@ -35,16 +35,13 @@ public final class TextResultHandler extends ResultHandler {
       R.string.button_custom_product_search,
   };
 
-  private final String customProductSearch;
-
   public TextResultHandler(Activity activity, ParsedResult result) {
     super(activity, result);
-    customProductSearch = parseCustomSearchURL();
   }
 
   @Override
   public int getButtonCount() {
-    return customProductSearch != null ? buttons.length : buttons.length - 1;
+    return hasCustomProductSearch() ? buttons.length : buttons.length - 1;
   }
 
   @Override
@@ -66,8 +63,7 @@ public final class TextResultHandler extends ResultHandler {
         shareBySMS(text);
         break;
       case 3:
-        String url = customProductSearch.replace("%s", text);
-        openURL(url);
+        openURL(fillInCustomSearchURL(text));
         break;
     }
   }

@@ -94,11 +94,11 @@
   <string name="preferences_bulk_mode_summary">Digitalizar e salvar muitas barras continuamente</string>
   <string name="preferences_bulk_mode_title">Bulk modo de digitalização</string>
   <string name="preferences_copy_to_clipboard_title">Copiar para a área de transferência</string>
-  <string name="preferences_custom_product_search_summary">Usar %s como marcador de posição para o ID do produto</string>
+  <string name="preferences_custom_product_search_summary">Use %s como um espaço reservado para a identificação do produto, e para o formato %f</string>
   <string name="preferences_custom_product_search_title">URL de pesquisa personalizada </string>
   <string name="preferences_decode_1D_title">Descodificar código de barras 1D</string>
   <string name="preferences_decode_QR_title">Descodificar códigos QR</string>
-  <string name="preferences_front_light_summary">Melhora a digitalização em baixa luminosidade em alguns aparelhos, mas pode causar ofuscamento</string>
+  <string name="preferences_front_light_summary">Melhora a digitalização em baixa luminosidade em alguns aparelhos, mas pode causar ofuscamento. Não funciona em todos os telefones.</string>
   <string name="preferences_front_light_title">Use a luz da frente</string>
   <string name="preferences_general_title">Definições Gerais</string>
   <string name="preferences_name">Definições</string>

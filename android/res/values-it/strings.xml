@@ -94,11 +94,11 @@
   <string name="preferences_bulk_mode_summary">scansione di codici a barre e salvare molte continuamente</string>
   <string name="preferences_bulk_mode_title">Bulk modalità di scansione</string>
   <string name="preferences_copy_to_clipboard_title">Copia negli appunti</string>
-  <string name="preferences_custom_product_search_summary">Utilizza %s come segnaposto per l\'ID del prodotto</string>
+  <string name="preferences_custom_product_search_summary">Utilizza %s come segnaposto per l\'ID del prodotto, e per il formato %f</string>
   <string name="preferences_custom_product_search_title">URL ricerca prodotto personalizzata</string>
   <string name="preferences_decode_1D_title">Decodifica codice a barre 1D</string>
   <string name="preferences_decode_QR_title">Decodifica codici QR</string>
-  <string name="preferences_front_light_summary">Consentire la luce anteriore, se disponibile</string>
+  <string name="preferences_front_light_summary">Consentire la luce anteriore, se disponibile, ma può provocare abbagliamento. Non funziona su tutti i telefoni.</string>
   <string name="preferences_front_light_title">Luce anteriore</string>
   <string name="preferences_general_title">Impostazioni generali</string>
   <string name="preferences_name">Impostazioni</string>

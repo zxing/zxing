@@ -16,6 +16,7 @@
 
 package com.google.zxing.client.android.result;
 
+import com.google.zxing.Result;
 import com.google.zxing.client.android.R;
 import com.google.zxing.client.result.ISBNParsedResult;
 import com.google.zxing.client.result.ParsedResult;
@@ -37,11 +38,8 @@ public final class ISBNResultHandler extends ResultHandler {
       R.string.button_google_shopper
   };
 
-  private final String customProductSearch;
-
-  public ISBNResultHandler(Activity activity, ParsedResult result) {
-    super(activity, result);
-    customProductSearch = parseCustomSearchURL();
+  public ISBNResultHandler(Activity activity, ParsedResult result, Result rawResult) {
+    super(activity, result, rawResult);
   }
 
   @Override
@@ -52,7 +50,7 @@ public final class ISBNResultHandler extends ResultHandler {
 
   @Override
   public int getButtonText(int index) {
-    if (index == buttons.length - 1 && customProductSearch != null) {
+    if (index == buttons.length - 1 && hasCustomProductSearch()) {
       return R.string.button_custom_product_search;
     }
     return buttons[index];
@@ -74,9 +72,8 @@ public final class ISBNResultHandler extends ResultHandler {
             searchBookContents(isbnResult.getISBN());
             break;
           case 3:
-            if (customProductSearch != null) {
-              String url = customProductSearch.replace("%s", isbnResult.getISBN());
-              openURL(url);
+            if (hasCustomProductSearch()) {
+              openURL(fillInCustomSearchURL(isbnResult.getISBN()));
             } else {
               openGoogleShopper(isbnResult.getISBN());
             }

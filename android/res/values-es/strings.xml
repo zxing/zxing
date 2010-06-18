@@ -94,11 +94,11 @@
   <string name="preferences_bulk_mode_summary">Escanear y guardar muchos códigos de barras de forma continua</string>
   <string name="preferences_bulk_mode_title">Bulk modo de exploración</string>
   <string name="preferences_copy_to_clipboard_title">Copiar al portapapeles</string>
-  <string name="preferences_custom_product_search_summary">Usar %s como un marcador de posición para el identificador de producto</string>
+  <string name="preferences_custom_product_search_summary">Use %s como un marcador de posición para el identificador del producto, y %f para el formato</string>
   <string name="preferences_custom_product_search_title">Búsqueda de productos con URL personalizada</string>
   <string name="preferences_decode_1D_title">Descodificar códigos de barras 1D</string>
   <string name="preferences_decode_QR_title">Descodificar códigos QR</string>
-  <string name="preferences_front_light_summary">Activar luz delantera si está disponible</string>
+  <string name="preferences_front_light_summary">Activar luz delantera si está disponible, pero puede causar deslumbramiento. No funciona en todos los teléfonos.</string>
   <string name="preferences_front_light_title">Luz delantera</string>
   <string name="preferences_general_title">Configuración general</string>
   <string name="preferences_name">Configuración</string>

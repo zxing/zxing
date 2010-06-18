@@ -94,11 +94,11 @@
   <string name="preferences_bulk_mode_summary">codes à barres de numérisation et de sauver de nombreuses continu</string>
   <string name="preferences_bulk_mode_title">En vrac mode de balayage</string>
   <string name="preferences_copy_to_clipboard_title">Copier dans le presse papier</string>
-  <string name="preferences_custom_product_search_summary">Utiliser %s à la place de l\'identifiant du produit</string>
+  <string name="preferences_custom_product_search_summary">Utiliser %s à la place de l\'identifiant du produit, et %f pour le format</string>
   <string name="preferences_custom_product_search_title">URL personnalisée de recherche</string>
   <string name="preferences_decode_1D_title">Décoder les codes barres 1D</string>
   <string name="preferences_decode_QR_title">Décoder les codes QR</string>
-  <string name="preferences_front_light_summary">Activer phare avant si disponible</string>
+  <string name="preferences_front_light_summary">Activer phare avant si disponible, mais peut provoquer des reflets. Ne fonctionne pas sur tous les téléphones.</string>
   <string name="preferences_front_light_title">Phare avant</string>
   <string name="preferences_general_title">Paramètres généraux</string>
   <string name="preferences_name">Paramètres</string>

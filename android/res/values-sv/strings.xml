@@ -94,11 +94,11 @@
   <string name="preferences_bulk_mode_summary">Skanna och spara många streckkoder kontinuerligt</string>
   <string name="preferences_bulk_mode_title">Bulk skanningsläget</string>
   <string name="preferences_copy_to_clipboard_title">Kopiera till klippbordet</string>
-  <string name="preferences_custom_product_search_summary">Skriv %s där produktens ID ska placeras</string>
+  <string name="preferences_custom_product_search_summary">Skriv %s där produktens ID ska placeras, och %f för format</string>
   <string name="preferences_custom_product_search_title">Anpassad sök-URL</string>
   <string name="preferences_decode_1D_title">Avkoda 1D steckkod</string>
   <string name="preferences_decode_QR_title">Avkoda QR-koder</string>
-  <string name="preferences_front_light_summary">Aktivera ljuset framför, om det finns</string>
+  <string name="preferences_front_light_summary">Aktivera ljuset framför, om det finns. Fungerar inte på alla telefoner.</string>
   <string name="preferences_front_light_title">Ljuset framför</string>
   <string name="preferences_general_title">Grundläggande installningar</string>
   <string name="preferences_name">Inställningar</string>

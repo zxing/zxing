@@ -94,11 +94,11 @@
   <string name="preferences_bulk_mode_summary">Skannaa ja tallenna monet viivakoodeja jatkuvasti</string>
   <string name="preferences_bulk_mode_title">Bulk skannaustilassa</string>
   <string name="preferences_copy_to_clipboard_title">Kopioi leikepöydälle</string>
-  <string name="preferences_custom_product_search_summary">Käytä %s paikkana tuotetunnukselle</string>
+  <string name="preferences_custom_product_search_summary">Käytä %s paikkana tuotetunnukselle tunnus ja %f muoto</string>
   <string name="preferences_custom_product_search_title">Mukautettu hakukone</string>
   <string name="preferences_decode_1D_title">Dekoodaa 1D viivakoodeja</string>
   <string name="preferences_decode_QR_title">Dekoodaa QR koodeja</string>
-  <string name="preferences_front_light_summary">Activoi valo edessä, jos käytettävissä</string>
+  <string name="preferences_front_light_summary">Activoi valo edessä, jos käytettävissä, mutta saattaa aiheuttaa häikäisyä. Ei toimi kaikissa puhelimissa.</string>
   <string name="preferences_front_light_title">Valo edessä</string>
   <string name="preferences_general_title">Yleiset asetukset</string>
   <string name="preferences_name">Asetukset</string>
