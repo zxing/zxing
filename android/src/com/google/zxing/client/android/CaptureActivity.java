@@ -16,8 +16,6 @@
 
 package com.google.zxing.client.android;
 
-import android.util.TypedValue;
-import android.widget.Toast;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
 import com.google.zxing.ResultMetadataType;
@@ -53,6 +51,7 @@ import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.text.ClipboardManager;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -64,13 +63,14 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.text.DateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
@@ -81,6 +81,7 @@ import java.util.regex.Pattern;
  * example included in the Android SDK.
  *
  * @author dswitkin@google.com (Daniel Switkin)
+ * @author Sean Owen
  */
 public final class CaptureActivity extends Activity implements SurfaceHolder.Callback {
 
@@ -166,7 +167,14 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private String versionName;
   private HistoryManager historyManager;
 
-  private final OnCompletionListener beepListener = new BeepListener();
+  /**
+   * When the beep has finished playing, rewind to queue up another one.
+   */
+  private final OnCompletionListener beepListener = new OnCompletionListener() {
+    public void onCompletion(MediaPlayer mediaPlayer) {
+      mediaPlayer.seekTo(0);
+    }
+  };
 
   private final DialogInterface.OnClickListener aboutListener =
       new DialogInterface.OnClickListener() {
@@ -209,6 +217,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   @Override
   protected void onResume() {
     super.onResume();
+    resetStatusView();
 
     SurfaceView surfaceView = (SurfaceView) findViewById(R.id.preview_view);
     SurfaceHolder surfaceHolder = surfaceView.getHolder();
@@ -230,37 +239,30 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         // Scan the formats the intent requested, and return the result to the calling activity.
         source = Source.NATIVE_APP_INTENT;
         decodeFormats = parseDecodeFormats(intent);
-        resetStatusView();
       } else if (dataString != null && dataString.contains(PRODUCT_SEARCH_URL_PREFIX) &&
           dataString.contains(PRODUCT_SEARCH_URL_SUFFIX)) {
         // Scan only products and send the result to mobile Product Search.
         source = Source.PRODUCT_SEARCH_LINK;
         sourceUrl = dataString;
         decodeFormats = PRODUCT_FORMATS;
-        resetStatusView();
       } else if (dataString != null && dataString.startsWith(ZXING_URL)) {
         // Scan formats requested in query string (all formats if none specified).
-        // If a return URL is specified, send the results there. Otherwise, handle the results ourselves.
+        // If a return URL is specified, send the results there. Otherwise, handle it ourselves.
         source = Source.ZXING_LINK;
         sourceUrl = dataString;
         Uri inputUri = Uri.parse(sourceUrl);
         returnUrlTemplate = inputUri.getQueryParameter(RETURN_URL_PARAM);
         decodeFormats = parseDecodeFormats(inputUri);
-        resetStatusView();
       } else {
         // Scan all formats and handle the results ourselves (launched from Home).
         source = Source.NONE;
         decodeFormats = null;
-        resetStatusView();
       }
       characterSet = intent.getStringExtra(Intents.Scan.CHARACTER_SET);
     } else {
       source = Source.NONE;
       decodeFormats = null;
       characterSet = null;
-      if (lastResult == null) {
-        resetStatusView();
-      }
     }
 
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -471,15 +473,10 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
           if (prefs.getBoolean(PreferencesActivity.KEY_BULK_MODE, false)) {
             Toast.makeText(this, R.string.msg_bulk_mode_scanned, Toast.LENGTH_SHORT).show();
             // Wait a moment or else it will scan the same barcode continuously about 3 times
-            try {
-              Thread.sleep(BULK_MODE_SCAN_DELAY_MS);
-            } catch (InterruptedException ie) {
-              // continue
+            if (handler != null) {
+              handler.sendEmptyMessageDelayed(R.id.restart_preview, BULK_MODE_SCAN_DELAY_MS);
             }
             resetStatusView();
-            if (handler != null) {
-              handler.sendEmptyMessage(R.id.restart_preview);
-            }
           } else {
             handleDecodeInternally(rawResult, barcode);
           }
@@ -570,8 +567,8 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     TextView contentsTextView = (TextView) findViewById(R.id.contents_text_view);
     CharSequence displayContents = resultHandler.getDisplayContents();
     contentsTextView.setText(displayContents);
-    // Crudely scale betweeen 22 and 36 -- bigger font for shorter text
-    int scaledSize = Math.max(22, 36 - displayContents.length() / 4);
+    // Crudely scale betweeen 22 and 32 -- bigger font for shorter text
+    int scaledSize = Math.max(22, 32 - displayContents.length() / 4);
     contentsTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, scaledSize);
 
     int buttonCount = resultHandler.getButtonCount();
@@ -631,7 +628,8 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       // Replace each occurrence of RETURN_CODE_PLACEHOLDER in the returnUrlTemplate
       // with the scanned code. This allows both queries and REST-style URLs to work.
       Message message = Message.obtain(handler, R.id.launch_product_query);
-      message.obj = returnUrlTemplate.replace(RETURN_CODE_PLACEHOLDER, resultHandler.getDisplayContents().toString());
+      message.obj = returnUrlTemplate.replace(RETURN_CODE_PLACEHOLDER,
+          resultHandler.getDisplayContents().toString());
       handler.sendMessageDelayed(message, INTENT_RESULT_DURATION);
     }
   }
@@ -717,8 +715,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       return;
     }
     if (handler == null) {
-      boolean beginScanning = lastResult == null;
-      handler = new CaptureActivityHandler(this, decodeFormats, characterSet, beginScanning);
+      handler = new CaptureActivityHandler(this, decodeFormats, characterSet);
     }
   }
 
@@ -744,14 +741,5 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
   public void drawViewfinder() {
     viewfinderView.drawViewfinder();
-  }
-
-  /**
-   * When the beep has finished playing, rewind to queue up another one.
-   */
-  private static class BeepListener implements OnCompletionListener {
-    public void onCompletion(MediaPlayer mediaPlayer) {
-      mediaPlayer.seekTo(0);
-    }
   }
 }

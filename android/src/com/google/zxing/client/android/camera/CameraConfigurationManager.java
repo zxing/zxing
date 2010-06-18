@@ -16,8 +16,6 @@
 
 package com.google.zxing.client.android.camera;
 
-import java.util.regex.Pattern;
-
 import android.content.Context;
 import android.graphics.Point;
 import android.hardware.Camera;
@@ -25,6 +23,8 @@ import android.os.Build;
 import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
+
+import java.util.regex.Pattern;
 
 final class CameraConfigurationManager {
 
@@ -118,7 +118,8 @@ final class CameraConfigurationManager {
     return cameraResolution;
   }
 
-  private static Point findBestPreviewSizeValue(String previewSizeValueString, Point screenResolution) {
+  private static Point findBestPreviewSizeValue(String previewSizeValueString,
+      Point screenResolution) {
     int bestX = 0;
     int bestY = 0;
     int diff = Integer.MAX_VALUE;
