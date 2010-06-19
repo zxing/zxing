@@ -78,6 +78,14 @@ CGImageRef UIGetScreenImage(void);
   }
 }
 
+- (void)unloadImagePicker {
+  if (self.imagePicker)
+  {
+    [imagePicker release];
+    imagePicker = nil;
+  }
+}
+
 - (id)initWithDelegate:(id<ZXingDelegate>)scanDelegate showCancel:(BOOL)shouldShowCancel OneDMode:(BOOL)shouldUseoOneDMode {
   if (self = [super init]) {
     [self setDelegate:scanDelegate];
@@ -108,11 +116,10 @@ CGImageRef UIGetScreenImage(void);
 }
 
 - (void)cancelled {
-  NSLog(@"cancelled called in ZXingWidgetController");
   [[UIApplication sharedApplication] setStatusBarHidden:NO];
-  wasCancelled = true;
+  wasCancelled = YES;
   if (delegate != nil) {
-    [delegate cancelled];
+    [delegate zxingControllerDidCancel:self];
   }
 }
 
@@ -129,8 +136,8 @@ CGImageRef UIGetScreenImage(void);
 - (BOOL)fixedFocus {
   NSString *platform = [self getPlatform];
   if ([platform isEqualToString:@"iPhone1,1"] ||
-      [platform isEqualToString:@"iPhone1,2"]) return true;
-  return false;
+      [platform isEqualToString:@"iPhone1,2"]) return YES;
+  return NO;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -154,7 +161,7 @@ CGImageRef UIGetScreenImage(void);
   self.view = imagePicker.view;
   
   [overlayView setPoints:nil];
-  wasCancelled = false;
+  wasCancelled = NO;
   if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
 
     [NSTimer scheduledTimerWithTimeInterval: FIRST_TAKE_DELAY
@@ -323,8 +330,9 @@ CGImageRef UIGetScreenImage(void);
 }
 
 - (void)alertDelegate:(id)text {        
+  [[UIApplication sharedApplication] setStatusBarHidden:NO];
   if (delegate != nil) {
-    [delegate scanResult:text];
+    [delegate zxingController:self didScanResult:text];
   }
 }
 

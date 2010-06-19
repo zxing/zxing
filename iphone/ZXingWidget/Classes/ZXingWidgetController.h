@@ -51,6 +51,6 @@
 @end
 
 @protocol ZXingDelegate
-- (void)scanResult:(NSString *)result;
-- (void)cancelled;
+- (void)zxingController:(ZXingWidgetController*)controller didScanResult:(NSString *)result;
+- (void)zxingControllerDidCancel:(ZXingWidgetController*)controller;
 @end
