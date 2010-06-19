@@ -11,7 +11,6 @@
 
 @interface RootViewController : UIViewController <ZXingDelegate> {
 	IBOutlet UITextView *resultsView;
-	ZXingWidgetController *scanController;
   NSString *resultsToDisplay;
 }
 @property (nonatomic, retain) IBOutlet UITextView *resultsView;
