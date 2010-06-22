@@ -126,7 +126,7 @@ public final class RSSExpandedReader extends AbstractRSSReader{
   Vector decodeRow2pairs(int rowNumber, BitArray row) throws NotFoundException {
     while(true){
       ExpandedPair nextPair = retrieveNextPair(row, this.pairs, rowNumber);
-      this.pairs.add(nextPair);
+      this.pairs.addElement(nextPair);
 
       if(nextPair.mayBeLast()){
         if(checkChecksum()) {
@@ -145,7 +145,7 @@ public final class RSSExpandedReader extends AbstractRSSReader{
     AbstractExpandedDecoder decoder = AbstractExpandedDecoder.createDecoder(binary);
     String resultingString = decoder.parseInformation();
 
-    ResultPoint [] firstPoints = ((ExpandedPair)pairs.get(0)).getFinderPattern().getResultPoints();
+    ResultPoint [] firstPoints = ((ExpandedPair)pairs.elementAt(0)).getFinderPattern().getResultPoints();
     ResultPoint [] lastPoints  = ((ExpandedPair)pairs.lastElement()).getFinderPattern().getResultPoints();
 
     return new Result(
@@ -157,7 +157,7 @@ public final class RSSExpandedReader extends AbstractRSSReader{
   }
 
   private boolean checkChecksum(){
-    ExpandedPair firstPair = (ExpandedPair)this.pairs.get(0);
+    ExpandedPair firstPair = (ExpandedPair)this.pairs.elementAt(0);
     DataCharacter checkCharacter = firstPair.getLeftChar();
     DataCharacter firstCharacter = firstPair.getRightChar();
 
@@ -165,7 +165,7 @@ public final class RSSExpandedReader extends AbstractRSSReader{
     int S = 2;
 
     for(int i = 1; i < this.pairs.size(); ++i){
-      ExpandedPair currentPair = (ExpandedPair)this.pairs.get(i);
+      ExpandedPair currentPair = (ExpandedPair)this.pairs.elementAt(i);
       checksum += currentPair.getLeftChar().getChecksumPortion();
       S++;
       if(currentPair.getRightChar() != null){
@@ -208,9 +208,9 @@ public final class RSSExpandedReader extends AbstractRSSReader{
     do{
       this.findNextPair(row, previousPairs, forcedOffset);
       pattern = parseFoundFinderPattern(row, rowNumber, isOddPattern);
-      if(pattern == null){
+      if (pattern == null){
         forcedOffset = getNextSecondBar(row, this.startEnd[0]);
-      }else {
+      } else {
         keepFinding = false;
       }
     }while(keepFinding);
@@ -239,7 +239,7 @@ public final class RSSExpandedReader extends AbstractRSSReader{
     }
 
     for(int pos = 0; pos < previousPairs.size(); ++pos) {
-      this.currentSequence[pos] = ((ExpandedPair) previousPairs.get(pos)).getFinderPattern().getValue();
+      this.currentSequence[pos] = ((ExpandedPair) previousPairs.elementAt(pos)).getFinderPattern().getValue();
     }
 
     this.currentSequence[currentSequenceLength - 1] = pattern.getValue();
