@@ -50,7 +50,7 @@ final class BitArrayBuilder {
     BitArray binary = new BitArray(size);
     int accPos = 0;
 
-    ExpandedPair firstPair = (ExpandedPair)pairs.get(0);
+    ExpandedPair firstPair = (ExpandedPair) pairs.elementAt(0);
     int firstValue = firstPair.getRightChar().getValue();
     for(int i = 11; i >= 0; --i){
       if ((firstValue & (1 << i)) != 0) {
@@ -60,7 +60,7 @@ final class BitArrayBuilder {
     }
 
     for(int i = 1; i < pairs.size(); ++i){
-      ExpandedPair currentPair = (ExpandedPair)pairs.get(i);
+      ExpandedPair currentPair = (ExpandedPair) pairs.elementAt(i);
 
       int leftValue = currentPair.getLeftChar().getValue();
       for(int j = 11; j >= 0; --j){
