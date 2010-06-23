@@ -19,9 +19,12 @@ package com.google.zxing.client.android.wifi;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
+import android.net.Uri;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
@@ -34,6 +37,14 @@ import com.google.zxing.client.android.R;
 /**
  * A new activity showing the progress of Wifi connection
  *
+ * TODO(viki): Tell the user when the network is not available here
+ * TODO(viki): Incorrect password, could not connect, give an error
+ * TODO(viki): Should never crash: crashes on S:ssid;P:pass;T:something;else;
+ * TODO(viki): 
+ * TODO(viki): 
+ * TODO(viki): 
+ * TODO(viki): 
+ * 
  * @author Vikram Aggarwal
  */
 public class WifiActivity extends Activity  {
@@ -45,10 +56,21 @@ public class WifiActivity extends Activity  {
   private ConnectedReceiver connectedReceiver;
 
   public enum NetworkType {
-    NETWORK_WEP, NETWORK_WPA, NETWORK_NOPASS,
+    NETWORK_WEP, NETWORK_WPA, NETWORK_NOPASS, NETWORK_INVALID,
   }
 
   private int changeNetwork(NetworkSetting setting) {
+    // All the ways this can be wrong:
+
+    // If the SSID is empty, throw an error and return
+    if (setting.getSsid() == null || setting.getSsid().length() == 0) {
+      return doError("SSID name missing");
+    }
+    // If the network type is invalid
+    if (setting.getNetworkType() == NetworkType.NETWORK_INVALID){
+      return doError("Network type incorrect");
+    }
+    
     // If the password is empty, this is an unencrypted network
     if (setting.getPassword() == null || setting.getPassword().length() == 0 ||
         setting.getNetworkType() == null ||
@@ -60,6 +82,11 @@ public class WifiActivity extends Activity  {
     } else {
       return changeNetworkWEP(setting);
     }
+  }
+
+  private int doError(String string) {
+    statusView.setText(string);
+    return -1;
   }
 
   private WifiConfiguration changeNetworkCommon(NetworkSetting input){
@@ -152,6 +179,8 @@ public class WifiActivity extends Activity  {
     String ssid = intent.getStringExtra(Intents.WifiConnect.SSID);
     String password = intent.getStringExtra(Intents.WifiConnect.PASSWORD);
     String networkType = intent.getStringExtra(Intents.WifiConnect.TYPE);
+    setContentView(R.layout.network);
+    statusView = (TextView) findViewById(R.id.networkStatus);
 
     // TODO(vikrama): Error checking here, to ensure ssid exists.
     NetworkType networkT;
@@ -162,13 +191,11 @@ public class WifiActivity extends Activity  {
     } else if (networkType.contains("nopass")) {
      networkT = NetworkType.NETWORK_NOPASS; 
     } else {
-      // Got an incorrect network type
-      finish();
+      // Got an incorrect network type.  Give an error
+      doError("Incorrect Network type: " + networkType);
       return;
     }
 
-    setContentView(R.layout.network);
-    statusView = (TextView) findViewById(R.id.networkStatus);
     // This is not available before onCreate
     wifiManager = (WifiManager) this.getSystemService(WIFI_SERVICE);
 
