@@ -122,6 +122,7 @@
   <string name="title_about">Viivakoodin lukija v</string>
   <string name="wa_name">Langattoman yhteyden</string>
   <string name="wifi_changing_network">Vaihtaminen Verkko</string>
+  <string name="wifi_connected">Kytketty</string>
   <string name="wifi_creating_network">Luominen verkoston</string>
   <string name="wifi_modifying_network">Muuttaminen Verkko</string>
   <string name="wifi_ssid_missing">Verkon nimi puuttuu</string>

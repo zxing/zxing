@@ -122,6 +122,7 @@
   <string name="title_about">Barcode Scanner v</string>
   <string name="wa_name">Netwerkconfiguratie</string>
   <string name="wifi_changing_network">Veranderen van Netwerk</string>
+  <string name="wifi_connected">Aangesloten</string>
   <string name="wifi_creating_network">Creating Network</string>
   <string name="wifi_modifying_network">Het wijzigen van Netwerk</string>
   <string name="wifi_ssid_missing">Netwerk naam ontbreekt</string>

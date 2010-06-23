@@ -122,6 +122,7 @@
   <string name="title_about">>QRコードスキャナー v</string>
   <string name="wa_name">ネットワーク構成</string>
   <string name="wifi_changing_network">ネットワークを変更する</string>
+  <string name="wifi_connected">接続</string>
   <string name="wifi_creating_network">作成ネットワーク</string>
   <string name="wifi_modifying_network">ネットワークを変更する</string>
   <string name="wifi_ssid_missing">ネットワーク名を欠いて</string>

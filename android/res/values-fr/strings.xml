@@ -122,6 +122,7 @@
   <string name="title_about">Barcode Scanner v</string>
   <string name="wa_name">Configuration du réseau</string>
   <string name="wifi_changing_network">Changement de réseau</string>
+  <string name="wifi_connected">Lié</string>
   <string name="wifi_creating_network">Création d\u0026#39;un réseau</string>
   <string name="wifi_modifying_network">Modification du réseau</string>
   <string name="wifi_ssid_missing">Le nom du réseau disparus</string>

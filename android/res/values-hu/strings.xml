@@ -122,6 +122,7 @@
   <string name="title_about">Barcode Scanner v</string>
   <string name="wa_name">Hálózati konfiguráció</string>
   <string name="wifi_changing_network">Változó Hálózat</string>
+  <string name="wifi_connected">Összefüggő</string>
   <string name="wifi_creating_network">Hálózat létrehozása</string>
   <string name="wifi_modifying_network">Módosítása Hálózat</string>
   <string name="wifi_ssid_missing">A hálózat neve hiányzik</string>

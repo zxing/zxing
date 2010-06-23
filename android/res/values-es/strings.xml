@@ -122,6 +122,7 @@
   <string name="title_about">Escáner de código de barras v</string>
   <string name="wa_name">Configuración de la red</string>
   <string name="wifi_changing_network">Cambio de la red</string>
+  <string name="wifi_connected">Conectado</string>
   <string name="wifi_creating_network">Creación de la Red</string>
   <string name="wifi_modifying_network">Modificación de la Red</string>
   <string name="wifi_ssid_missing">Nombre de la red desaparecidas</string>

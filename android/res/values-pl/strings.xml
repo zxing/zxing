@@ -122,6 +122,7 @@
   <string name="title_about">Skaner Kodów Paskowych v</string>
   <string name="wa_name">Konfiguracja sieci</string>
   <string name="wifi_changing_network">Zmiana sieci</string>
+  <string name="wifi_connected">Połączony</string>
   <string name="wifi_creating_network">Tworzenie sieci</string>
   <string name="wifi_modifying_network">Modyfikowanie sieci</string>
   <string name="wifi_ssid_missing">Nazwa sieci brakuje</string>

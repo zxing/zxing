@@ -24,6 +24,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.widget.TextView;
 
+import com.google.zxing.client.android.R;
+
 /**
  * Get a broadcast when the network is connected, and kill the activity.
  */
@@ -46,7 +48,7 @@ final class ConnectedReceiver extends BroadcastReceiver {
         if (i.getTypeName().contentEquals("WIFI")){
           NetworkInfo.State state = i.getState();
           if (state == NetworkInfo.State.CONNECTED){
-            statusView.setText("Connected!");
+            statusView.setText(R.string.wifi_connected);
             Runnable delayKill = new Killer(parent);
             delayKill.run();
           }
