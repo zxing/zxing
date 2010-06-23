@@ -239,7 +239,7 @@ namespace zxing {
 //		int UPCEANReader::decodeDigit(Ref<BitArray> row, int counters[], int countersLen, int rowOffset, int** patterns/*[][]*/, int paterns1Len, int paterns2Len)		
 		int UPCEANReader::decodeDigit(Ref<BitArray> row, int counters[], int countersLen, int rowOffset, UPC_EAN_PATTERNS patternType){
 			recordPattern(row, rowOffset, counters, countersLen);
-			int bestVariance = MAX_AVG_VARIANCE; // worst variance we'll accept
+			unsigned int bestVariance = MAX_AVG_VARIANCE; // worst variance we'll accept
 			int bestMatch = -1;
 			
 			int max = 0;
@@ -252,7 +252,7 @@ namespace zxing {
 							pattern[j] = L_PATTERNS[i][j];
 						}
 						
-						int variance = patternMatchVariance(counters, countersLen, pattern, MAX_INDIVIDUAL_VARIANCE);
+						unsigned int variance = patternMatchVariance(counters, countersLen, pattern, MAX_INDIVIDUAL_VARIANCE);
 						if (variance < bestVariance) {
 							bestVariance = variance;
 							bestMatch = i;
@@ -267,7 +267,7 @@ namespace zxing {
 							pattern[j] = L_AND_G_PATTERNS[i][j];
 						}
 						
-						int variance = patternMatchVariance(counters, countersLen, pattern, MAX_INDIVIDUAL_VARIANCE);
+						unsigned int variance = patternMatchVariance(counters, countersLen, pattern, MAX_INDIVIDUAL_VARIANCE);
 						if (variance < bestVariance) {
 							bestVariance = variance;
 							bestMatch = i;

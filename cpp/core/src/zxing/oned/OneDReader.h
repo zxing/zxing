@@ -38,7 +38,7 @@ namespace zxing {
 			virtual Ref<Result> decode(Ref<BinaryBitmap> image);
 			virtual Ref<Result> decodeRow(int rowNumber, Ref<BitArray> row) = 0;
 			
-			static int patternMatchVariance(int counters[], int countersSize, const int pattern[], int maxIndividualVariance);
+			static unsigned int patternMatchVariance(int counters[], int countersSize, const int pattern[], int maxIndividualVariance);
 			static void recordPattern(Ref<BitArray> row, int start, int counters[], int countersCount);
 			virtual ~OneDReader();
 		};
