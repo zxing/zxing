@@ -28,10 +28,9 @@ import com.google.zxing.client.result.WifiParsedResult;
  * @author viki@google.com (Vikram Aggarwal)
  */
 public final class WifiResultHandler extends ResultHandler {
-  Activity parentActivity = null;
+
   public WifiResultHandler(Activity activity, ParsedResult result) {
     super(activity, result);
-    parentActivity = activity;
   }
 
   @Override
@@ -42,24 +41,18 @@ public final class WifiResultHandler extends ResultHandler {
 
   @Override
   public int getButtonText(int index) {
-    switch (index) {
-    case 0:
+    if (index == 0) {
       return R.string.button_wifi;
-    default:
-      throw new ArrayIndexOutOfBoundsException();
     }
+    throw new ArrayIndexOutOfBoundsException();
   }
 
   @Override
   public void handleButtonPress(int index) {
     // Get the underlying wifi config
     WifiParsedResult wifiResult = (WifiParsedResult) getResult();
-    switch (index) {
-    case 0:
+    if (index == 0) {
       wifiConnect(wifiResult);
-      break;
-    default:
-      break;
     }
   }
 
