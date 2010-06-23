@@ -82,7 +82,7 @@ public class WifiActivity extends Activity  {
   }
 
   private WifiConfiguration changeNetworkCommon(NetworkSetting input){
-    statusView.setText("Creating settings...");
+    statusView.setText(R.string.wifi_creating_network);
     Log.d(TAG, "Adding new configuration: \nSSID: " + input.getSsid() + "\nType: " + input.getNetworkType());
     WifiConfiguration config = new WifiConfiguration();
 
