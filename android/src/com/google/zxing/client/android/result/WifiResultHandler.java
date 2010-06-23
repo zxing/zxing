@@ -28,53 +28,53 @@ import com.google.zxing.client.result.WifiParsedResult;
  * @author viki@google.com (Vikram Aggarwal)
  */
 public final class WifiResultHandler extends ResultHandler {
-	Activity parentActivity = null;
-	public WifiResultHandler(Activity activity, ParsedResult result) {
-		super(activity, result);
-		parentActivity = activity;
-	}
+  Activity parentActivity = null;
+  public WifiResultHandler(Activity activity, ParsedResult result) {
+    super(activity, result);
+    parentActivity = activity;
+  }
 
-	@Override
-	public int getButtonCount() {
-		// We just need one button, and that is to configure the wireless.  This could change in the future.
-		return 1;
-	}
+  @Override
+  public int getButtonCount() {
+    // We just need one button, and that is to configure the wireless.  This could change in the future.
+    return 1;
+  }
 
-	@Override
-	public int getButtonText(int index) {
-		switch (index) {
-		case 0:
-			return R.string.button_wifi;
-		default:
-			throw new ArrayIndexOutOfBoundsException();
-		}
-	}
+  @Override
+  public int getButtonText(int index) {
+    switch (index) {
+    case 0:
+      return R.string.button_wifi;
+    default:
+      throw new ArrayIndexOutOfBoundsException();
+    }
+  }
 
-	@Override
-	public void handleButtonPress(int index) {
-		// Get the underlying wifi config
-		WifiParsedResult wifiResult = (WifiParsedResult) getResult();
-		switch (index) {
-		case 0:
-			wifiConnect(wifiResult);
-			break;
-		default:
-			break;
-		}
-	}
+  @Override
+  public void handleButtonPress(int index) {
+    // Get the underlying wifi config
+    WifiParsedResult wifiResult = (WifiParsedResult) getResult();
+    switch (index) {
+    case 0:
+      wifiConnect(wifiResult);
+      break;
+    default:
+      break;
+    }
+  }
 
-	// Display the name of the network and the network type to the user.
-	@Override
-	public CharSequence getDisplayContents() {
-		WifiParsedResult wifiResult = (WifiParsedResult) getResult();
-		StringBuffer contents = new StringBuffer();
-		ParsedResult.maybeAppend(wifiResult.getSsid(), contents);
-		ParsedResult.maybeAppend(wifiResult.getNetworkEncryption(), contents);
-		return contents.toString();
-	}
+  // Display the name of the network and the network type to the user.
+  @Override
+  public CharSequence getDisplayContents() {
+    WifiParsedResult wifiResult = (WifiParsedResult) getResult();
+    StringBuffer contents = new StringBuffer();
+    ParsedResult.maybeAppend(wifiResult.getSsid(), contents);
+    ParsedResult.maybeAppend(wifiResult.getNetworkEncryption(), contents);
+    return contents.toString();
+  }
 
-	@Override
-	public int getDisplayTitle() {
-		return R.string.result_wifi;
-	}
+  @Override
+  public int getDisplayTitle() {
+    return R.string.result_wifi;
+  }
 }

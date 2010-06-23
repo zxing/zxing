@@ -121,5 +121,10 @@
   <string name="share_name">バーコードで共有する</string>
   <string name="title_about">>QRコードスキャナー v</string>
   <string name="wa_name">ネットワーク構成</string>
+  <string name="wifi_changing_network">ネットワークを変更する</string>
+  <string name="wifi_creating_network">作成ネットワーク</string>
+  <string name="wifi_modifying_network">ネットワークを変更する</string>
+  <string name="wifi_ssid_missing">ネットワーク名を欠いて</string>
+  <string name="wifi_type_incorrect">ネットワーク型不正</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>
