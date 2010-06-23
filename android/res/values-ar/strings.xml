@@ -122,6 +122,7 @@
   <string name="title_about">إصدار ماسح الرمز الشريطي</string>
   <string name="wa_name">التكوين اللاسلك</string>
   <string name="wifi_changing_network">تغيير الشبكة</string>
+  <string name="wifi_connected">متصل</string>
   <string name="wifi_creating_network">إنشاء شبكة</string>
   <string name="wifi_modifying_network">تعديل شبكة</string>
   <string name="wifi_ssid_missing">اسم الشبكة مفقود</string>

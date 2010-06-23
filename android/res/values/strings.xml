@@ -122,6 +122,7 @@
   <string name="title_about">Barcode Scanner v</string>
   <string name="wa_name">Wifi Connection</string>
   <string name="wifi_changing_network">Changing Network</string>
+  <string name="wifi_connected">Connected</string>
   <string name="wifi_creating_network">Creating Network</string>
   <string name="wifi_modifying_network">Modifying Network</string>
   <string name="wifi_ssid_missing">Network name missing</string>

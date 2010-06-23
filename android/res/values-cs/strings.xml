@@ -122,6 +122,7 @@
   <string name="title_about">Barcode Scanner v</string>
   <string name="wa_name">Bezdrátová konfigurace</string>
   <string name="wifi_changing_network">Změna síť</string>
+  <string name="wifi_connected">Připojeno</string>
   <string name="wifi_creating_network">Vytvoření sítě</string>
   <string name="wifi_modifying_network">Úprava sítě</string>
   <string name="wifi_ssid_missing">Název sítě chybí</string>

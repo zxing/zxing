@@ -122,6 +122,7 @@
   <string name="title_about">Scansione codice a barre v</string>
   <string name="wa_name">Configurazione di rete</string>
   <string name="wifi_changing_network">Cambiare Network</string>
+  <string name="wifi_connected">Collegato</string>
   <string name="wifi_creating_network">Creazione di rete</string>
   <string name="wifi_modifying_network">Modifica della rete</string>
   <string name="wifi_ssid_missing">Nome della rete mancante</string>

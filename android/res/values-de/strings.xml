@@ -123,6 +123,7 @@
   <string name="wa_name">Wifi konfiguration</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
   <string name="wifi_changing_network">Ändern der Netzwerkeinstellungen</string>
+  <string name="wifi_connected">Verbunden</string>
   <string name="wifi_creating_network">Erstellen Network</string>
   <string name="wifi_modifying_network">Ändern Network</string>
   <string name="wifi_ssid_missing">Netzwerk-Name fehlt</string>
