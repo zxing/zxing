@@ -39,11 +39,6 @@ import com.google.zxing.client.android.R;
  *
  * TODO(viki): Tell the user when the network is not available here
  * TODO(viki): Incorrect password, could not connect, give an error
- * TODO(viki): Should never crash: crashes on S:ssid;P:pass;T:something;else;
- * TODO(viki): 
- * TODO(viki): 
- * TODO(viki): 
- * TODO(viki): 
  * 
  * @author Vikram Aggarwal
  */
@@ -64,13 +59,13 @@ public class WifiActivity extends Activity  {
 
     // If the SSID is empty, throw an error and return
     if (setting.getSsid() == null || setting.getSsid().length() == 0) {
-      return doError("SSID name missing");
+      return doError(R.string.wifi_ssid_missing);
     }
     // If the network type is invalid
     if (setting.getNetworkType() == NetworkType.NETWORK_INVALID){
-      return doError("Network type incorrect");
+      return doError(R.string.wifi_type_incorrect);
     }
-    
+
     // If the password is empty, this is an unencrypted network
     if (setting.getPassword() == null || setting.getPassword().length() == 0 ||
         setting.getNetworkType() == null ||
@@ -78,14 +73,14 @@ public class WifiActivity extends Activity  {
       return changeNetworkUnEncrypted(setting);
     }
     if (setting.getNetworkType() == NetworkType.NETWORK_WPA) {
-      return changeNetworkWPA(setting); 
+      return changeNetworkWPA(setting);
     } else {
       return changeNetworkWEP(setting);
     }
   }
 
-  private int doError(String string) {
-    statusView.setText(string);
+  private int doError(int resource_string) {
+    statusView.setText(resource_string);
     return -1;
   }
 
@@ -101,13 +96,13 @@ public class WifiActivity extends Activity  {
     config.allowedProtocols.clear();
 
     // Android API insists that an ascii SSID must be quoted to be correctly handled.
-    config.SSID = NetworkUtil.convertToQuotedString(input.getSsid());	
+    config.SSID = NetworkUtil.convertToQuotedString(input.getSsid());
     config.hiddenSSID = true;
     return config;
   }
 
   private int requestNetworkChange(WifiConfiguration config){
-    statusView.setText("Changing Network...");
+    statusView.setText(R.string.wifi_changing_network);
     return updateNetwork(config, false);
   }
 
@@ -184,15 +179,15 @@ public class WifiActivity extends Activity  {
 
     // TODO(vikrama): Error checking here, to ensure ssid exists.
     NetworkType networkT;
-    if (networkType.contains("WPA")) {
+    if (networkType.equals("WPA")) {
       networkT = NetworkType.NETWORK_WPA;
-    } else if (networkType.contains("WEP")) {
+    } else if (networkType.equals("WEP")) {
       networkT = NetworkType.NETWORK_WEP;
-    } else if (networkType.contains("nopass")) {
-     networkT = NetworkType.NETWORK_NOPASS; 
+    } else if (networkType.equals("nopass")) {
+     networkT = NetworkType.NETWORK_NOPASS;
     } else {
       // Got an incorrect network type.  Give an error
-      doError("Incorrect Network type: " + networkType);
+      doError(R.string.wifi_type_incorrect);
       return;
     }
 
@@ -229,10 +224,10 @@ public class WifiActivity extends Activity  {
   private int updateNetwork(WifiConfiguration config, boolean disableOthers){
     int networkId;
     if (findNetworkInExistingConfig(config.SSID) == null){
-      statusView.setText("Creating network...");
+      statusView.setText(R.string.wifi_creating_network);
       networkId = wifiManager.addNetwork(config);
     } else {
-      statusView.setText("Modifying network...");
+      statusView.setText(R.string.wifi_modifying_network);
       networkId = wifiManager.updateNetwork(config);
     }
     if (networkId == -1 || !wifiManager.enableNetwork(networkId, disableOthers)) {

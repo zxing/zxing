@@ -121,5 +121,10 @@
   <string name="share_name">Поделиться через штрих-код</string>
   <string name="title_about">Сканер штрих-кодов версии </string>
   <string name="wa_name">конфигурации сети</string>
+  <string name="wifi_changing_network">Изменение сети</string>
+  <string name="wifi_creating_network">Создание сети</string>
+  <string name="wifi_modifying_network">Изменение сети</string>
+  <string name="wifi_ssid_missing">Сеть отсутствует имя</string>
+  <string name="wifi_type_incorrect">Тип сети неправильный</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

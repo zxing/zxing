@@ -121,5 +121,10 @@
   <string name="share_name">Condividi tramite codice a barre</string>
   <string name="title_about">Scansione codice a barre v</string>
   <string name="wa_name">Configurazione di rete</string>
+  <string name="wifi_changing_network">Cambiare Network</string>
+  <string name="wifi_creating_network">Creazione di rete</string>
+  <string name="wifi_modifying_network">Modifica della rete</string>
+  <string name="wifi_ssid_missing">Nome della rete mancante</string>
+  <string name="wifi_type_incorrect">Tipo di rete non corretto</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

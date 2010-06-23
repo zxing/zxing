@@ -121,5 +121,10 @@
   <string name="share_name">通过条码分享</string>
   <string name="title_about">条码扫描器</string>
   <string name="wa_name">网络配置</string>
+  <string name="wifi_changing_network">不断变化的网络</string>
+  <string name="wifi_creating_network">创建网络</string>
+  <string name="wifi_modifying_network">修改网络</string>
+  <string name="wifi_ssid_missing">网络实名失踪</string>
+  <string name="wifi_type_incorrect">网络类型不正确</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

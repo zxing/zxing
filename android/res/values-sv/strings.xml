@@ -121,5 +121,10 @@
   <string name="share_name">Dela via streckkod</string>
   <string name="title_about">Barcode Scanner v</string>
   <string name="wa_name">Nätverkskonfiguration</string>
+  <string name="wifi_changing_network">Ändra Network</string>
+  <string name="wifi_creating_network">Skapa nätverk</string>
+  <string name="wifi_modifying_network">Modifiera nätverk</string>
+  <string name="wifi_ssid_missing">Nätverksnamn saknas</string>
+  <string name="wifi_type_incorrect">Nätverkstyp felaktig</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

@@ -121,5 +121,10 @@
   <string name="share_name">Del via stregkode</string>
   <string name="title_about">Barcode Scanner v</string>
   <string name="wa_name">Wifi-forbindelse</string>
+  <string name="wifi_changing_network">Ændring Network</string>
+  <string name="wifi_creating_network">Oprettelse af netværk</string>
+  <string name="wifi_modifying_network">Ændring Network</string>
+  <string name="wifi_ssid_missing">Netværk navn mangler</string>
+  <string name="wifi_type_incorrect">Netværk type forkert</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>
