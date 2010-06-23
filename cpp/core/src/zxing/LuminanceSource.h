@@ -30,11 +30,11 @@ public:
   LuminanceSource();
   virtual ~LuminanceSource();
 
-  virtual int getWidth() const = 0;
-  virtual int getHeight() const = 0;
+  virtual int getWidth() = 0;
+  virtual int getHeight() = 0;
 
-  virtual unsigned char getPixel(int x, int y) const = 0;
-  virtual unsigned char* copyMatrix() const;
+  virtual unsigned char getPixel(int x, int y) = 0;
+  virtual unsigned char* copyMatrix();
 };
 
 }

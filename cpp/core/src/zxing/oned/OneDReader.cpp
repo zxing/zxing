@@ -122,10 +122,10 @@ namespace zxing {
 			throw ReaderException("");
 		}
 		
-		int OneDReader::patternMatchVariance(int counters[], int countersSize, const int pattern[], int maxIndividualVariance) {
+		unsigned int OneDReader::patternMatchVariance(int counters[], int countersSize, const int pattern[], int maxIndividualVariance) {
 			int numCounters = countersSize;
-			int total = 0;
-			int patternLength = 0;
+			unsigned int total = 0;
+			unsigned int patternLength = 0;
 			for (int i = 0; i < numCounters; i++) {
 				total += counters[i];
 				patternLength += pattern[i];
@@ -138,10 +138,10 @@ namespace zxing {
 			// We're going to fake floating-point math in integers. We just need to use more bits.
 			// Scale up patternLength so that intermediate values below like scaledCounter will have
 			// more "significant digits"
-			int unitBarWidth = (total << INTEGER_MATH_SHIFT) / patternLength;
+			unsigned int unitBarWidth = (total << INTEGER_MATH_SHIFT) / patternLength;
 			maxIndividualVariance = (maxIndividualVariance * unitBarWidth) >> INTEGER_MATH_SHIFT;
 			
-			int totalVariance = 0;
+			unsigned int totalVariance = 0;
 			for (int x = 0; x < numCounters; x++) {
 				int counter = counters[x] << INTEGER_MATH_SHIFT;
 				int scaledPattern = pattern[x] * unitBarWidth;
