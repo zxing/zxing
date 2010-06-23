@@ -99,10 +99,11 @@ versionName is 2.31, 2.4, or 3.0. -->
               android:label="@string/wa_name"
               android:screenOrientation="landscape"
               android:configChanges="orientation|keyboardHidden">
-      <intent-filter>
-        <action android:name="com.google.zxing.client.android.WIFI_CONNECT"/>
-        <category android:name="android.intent.category.DEFAULT"/>
-      </intent-filter>
+<!--Do not broadcast this intent-->
+<!--      <intent-filter>-->
+<!--        <action android:name="com.google.zxing.client.android.WIFI_CONNECT"/>-->
+<!--        <category android:name="android.intent.category.DEFAULT"/>-->
+<!--      </intent-filter>-->
     </activity>
     <activity android:name=".share.ShareActivity"
               android:label="@string/share_name"
