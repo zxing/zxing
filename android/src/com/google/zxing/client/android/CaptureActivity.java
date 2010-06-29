@@ -119,7 +119,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     PRODUCT_FORMATS.add(BarcodeFormat.EAN_13);
     PRODUCT_FORMATS.add(BarcodeFormat.EAN_8);
     PRODUCT_FORMATS.add(BarcodeFormat.RSS14);
-    ONE_D_FORMATS = new Vector<BarcodeFormat>(PRODUCT_FORMATS.size() + 3);
+    ONE_D_FORMATS = new Vector<BarcodeFormat>(PRODUCT_FORMATS.size() + 4);
     ONE_D_FORMATS.addAll(PRODUCT_FORMATS);
     ONE_D_FORMATS.add(BarcodeFormat.CODE_39);
     ONE_D_FORMATS.add(BarcodeFormat.CODE_93);

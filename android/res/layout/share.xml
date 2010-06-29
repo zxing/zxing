@@ -28,7 +28,7 @@
       android:layout_height="wrap_content"
       android:layout_weight="1"
       android:textColor="@color/share_text"
-      android:textSize="22sp"
+      android:textSize="18sp"
       android:text="@string/msg_share_explanation"/>
 
   <ImageView
