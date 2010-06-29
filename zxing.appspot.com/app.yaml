@@ -1,5 +1,5 @@
 application: zxing
-version: 1
+version: 2
 runtime: python
 api_version: 1
 
@@ -10,6 +10,10 @@ handlers:
 - url: /scan
   static_files: site/scan.html
   upload: site/scan.html
+
+- url: /favicon.ico
+  static_files: static/favicon.ico
+  upload: static/favicon.ico
 
 - url: (.*)/
   static_files: site\1/index.html
