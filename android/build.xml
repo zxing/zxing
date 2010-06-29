@@ -20,7 +20,7 @@ limitations under the License.
   to find the SDK location, I've removed it and pointed us at the global ZXing build.properties. -->
   <property file="../build.properties"/>
   <!-- Parts of the Android build system insist on the name 'sdk-location', so alias it. -->
-  <property name="sdk-location" value="${android-home}"/>
+  <property name="sdk.dir" value="${android-home}"/>
 
   <!-- The build.properties file can be created by you and is never touched
   by the 'android' tool. This is the place to change some of the default property values
@@ -52,11 +52,11 @@ limitations under the License.
   <!-- Custom Android task to deal with the project target, and import the proper rules.
   This requires ant 1.6.0 or above. -->
   <path id="android.antlibs">
-    <pathelement path="${sdk-location}/tools/lib/anttasks.jar" />
-    <pathelement path="${sdk-location}/tools/lib/sdklib.jar" />
-    <pathelement path="${sdk-location}/tools/lib/androidprefs.jar" />
-    <pathelement path="${sdk-location}/tools/lib/apkbuilder.jar" />
-    <pathelement path="${sdk-location}/tools/lib/jarutils.jar" />
+    <pathelement path="${sdk.dir}/tools/lib/anttasks.jar" />
+    <pathelement path="${sdk.dir}/tools/lib/sdklib.jar" />
+    <pathelement path="${sdk.dir}/tools/lib/androidprefs.jar" />
+    <pathelement path="${sdk.dir}/tools/lib/apkbuilder.jar" />
+    <pathelement path="${sdk.dir}/tools/lib/jarutils.jar" />
   </path>
 
   <taskdef name="setup"
@@ -85,7 +85,7 @@ limitations under the License.
 
   <!-- Properties -->
 
-  <property name="android-tools" value="${sdk-location}/tools" />
+  <property name="android-tools" value="${sdk.dir}/tools" />
 
   <!-- Input directories -->
   <property name="source-folder" value="src" />
@@ -154,7 +154,7 @@ limitations under the License.
       <arg value="-S" />
       <arg path="${resource-folder}" />
       <arg value="-I" />
-      <arg path="${android-jar}" />
+      <arg path="${android.jar}" />
     </exec>
   </target>
 
@@ -239,7 +239,7 @@ limitations under the License.
               manifest="AndroidManifest.xml"
               resources="${resource-folder}"
               assets="${asset-folder}"
-              androidjar="${android-jar}"
+              androidjar="${android.jar}"
               outfolder="${out-folder}"
               basename="${ant.project.name}" />
   </target>
@@ -275,7 +275,7 @@ limitations under the License.
       <arg value="-f"/>
       <arg value="-v"/>
       <arg value="4"/>
-      <arg value="${out-folder}/temp.apk"/>      
+      <arg value="${out-folder}/temp.apk"/>
       <arg value="${out-folder}/BarcodeScanner-debug.apk"/>
     </exec>
   </target>

@@ -52,10 +52,10 @@
           android:gravity="right">
 
         <ImageView android:id="@+id/barcode_image_view"
-                   android:layout_width="160dip"
+                   android:layout_width="150dip"
                    android:layout_height="wrap_content"
-                   android:maxWidth="160dip"
-                   android:maxHeight="160dip"
+                   android:maxWidth="150dip"
+                   android:maxHeight="150dip"
                    android:layout_marginBottom="4dip"
                    android:adjustViewBounds="true"
                    android:scaleType="fitEnd"/>
@@ -126,6 +126,28 @@
 
         </LinearLayout>
 
+        <LinearLayout
+          android:orientation="horizontal"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content">
+
+          <TextView android:id="@+id/meta_text_view_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/msg_default_meta"
+                    android:textColor="@color/result_minor_text"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    android:paddingRight="4dip"/>
+
+          <TextView android:id="@+id/meta_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/result_minor_text"
+                    android:textSize="14sp"/>
+
+        </LinearLayout>
+
       </LinearLayout>
 
       <ScrollView
@@ -179,38 +201,13 @@
 
   </LinearLayout>
 
-  <LinearLayout
-      android:orientation="vertical"
-      android:layout_width="fill_parent"
-      android:layout_height="fill_parent"
-      android:background="@color/transparent">
-
-    <FrameLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_weight="1"
-        android:background="@color/transparent"/>
-
-    <LinearLayout android:id="@+id/status_view"
-                  android:orientation="horizontal"
-                  android:layout_width="fill_parent"
-                  android:layout_height="wrap_content"
-                  android:layout_weight="0"
-                  android:background="@color/status_view"
-                  android:baselineAligned="false"
-                  android:padding="4dip">
-
-      <TextView android:id="@+id/status_text_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left|center_vertical"
-                android:layout_weight="1"
-                android:text="@string/msg_default_status"
-                android:textColor="@color/status_text"
-                android.textSize="14sp"/>
-
-    </LinearLayout>
-
-  </LinearLayout>
+  <TextView android:id="@+id/status_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:background="@color/transparent"
+            android:text="@string/msg_default_status"
+            android:textColor="@color/status_text"
+            android:textSize="14sp"/>
 
 </FrameLayout>
