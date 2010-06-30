@@ -723,11 +723,8 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     AlertDialog.Builder builder = new AlertDialog.Builder(this);
     builder.setTitle(getString(R.string.app_name));
     builder.setMessage(getString(R.string.msg_camera_framework_bug));
-    builder.setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
-      public void onClick(DialogInterface dialogInterface, int i) {
-        finish();
-      }
-    });
+    builder.setPositiveButton(R.string.button_ok, new FinishListener(this));
+    builder.setOnCancelListener(new FinishListener(this));
     builder.show();
   }
 
