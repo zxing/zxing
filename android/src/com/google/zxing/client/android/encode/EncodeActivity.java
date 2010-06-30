@@ -18,6 +18,7 @@ package com.google.zxing.client.android.encode;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
+import com.google.zxing.client.android.FinishListener;
 import com.google.zxing.client.android.Intents;
 import com.google.zxing.client.android.R;
 
@@ -83,7 +84,7 @@ public final class EncodeActivity extends Activity {
           setTitle(getString(R.string.app_name) + " - " + qrCodeEncoder.getTitle());
           qrCodeEncoder.requestBarcode(handler, smallerDimension);
           progressDialog = ProgressDialog.show(EncodeActivity.this, null,
-              getString(R.string.msg_encode_in_progress), true, true, cancelListener);
+              getString(R.string.msg_encode_in_progress), true, true, new FinishListener(EncodeActivity.this));
         } catch (IllegalArgumentException e) {
           showErrorMessage(R.string.msg_encode_contents_failed);
         }
@@ -111,18 +112,6 @@ public final class EncodeActivity extends Activity {
           qrCodeEncoder = null;
           break;
       }
-    }
-  };
-
-  private final OnClickListener clickListener = new OnClickListener() {
-    public void onClick(DialogInterface dialog, int which) {
-      finish();
-    }
-  };
-
-  private final OnCancelListener cancelListener = new OnCancelListener() {
-    public void onCancel(DialogInterface dialog) {
-      finish();
     }
   };
 
@@ -233,7 +222,8 @@ public final class EncodeActivity extends Activity {
     }
     AlertDialog.Builder builder = new AlertDialog.Builder(this);
     builder.setMessage(message);
-    builder.setPositiveButton(R.string.button_ok, clickListener);
+    builder.setPositiveButton(R.string.button_ok, new FinishListener(this));
+    builder.setOnCancelListener(new FinishListener(this));
     builder.show();
   }
 }
