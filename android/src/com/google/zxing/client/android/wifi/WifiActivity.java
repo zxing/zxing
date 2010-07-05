@@ -124,12 +124,22 @@ public class WifiActivity extends Activity  {
   // Adding a WPA or WPA2 network
   private int changeNetworkWPA(NetworkSetting input) {
     WifiConfiguration config = changeNetworkCommon(input);
-    config.preSharedKey = NetworkUtil.convertToQuotedString(input.getPassword());
+    final String pass = input.getPassword();
+    // Hex passwords that are 64 bits long are not to be quoted.
+    if (pass.matches("[0-9A-Fa-f]{64}")){
+      Log.d(TAG, "A 64 bit hex password entered.");
+      config.preSharedKey = pass;
+    } else {
+      Log.d(TAG, "A normal password entered: I am quoting it.");
+      config.preSharedKey = NetworkUtil.convertToQuotedString(pass);
+    }
     config.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.OPEN);
-    config.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_PSK);
     // For WPA
     config.allowedProtocols.set(WifiConfiguration.Protocol.WPA);
     // For WPA2
+    config.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_PSK);
+    config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
+    config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
     config.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
     return requestNetworkChange(config);
   }
