@@ -46,7 +46,7 @@ final class NetworkUtil {
     int lastPos = string.length() - 1;
     if (lastPos < 0 || (string.charAt(0) == '"' && string.charAt(lastPos) == '"')) {
       return string;
-    }        
+    }
     return '\"' + string + '\"';
   }
 
@@ -59,7 +59,7 @@ final class NetworkUtil {
       if (!(c >= '0' && c <= '9' || c >= 'A' && c <= 'F' || c >= 'a' && c <= 'f')) {
         return false;
       }
-    }        
+    }
     return true;
   }
 
