@@ -43,7 +43,7 @@ final class NetworkUtil {
     if (TextUtils.isEmpty(string)) {
       return "";
     }
-    int lastPos = string.length() - 1;
+    final int lastPos = string.length() - 1;
     if (lastPos < 0 || (string.charAt(0) == '"' && string.charAt(lastPos) == '"')) {
       return string;
     }
@@ -55,7 +55,7 @@ final class NetworkUtil {
       return false;
     }
     for (int i = key.length() - 1; i >= 0; i--) {
-      char c = key.charAt(i);
+      final char c = key.charAt(i);
       if (!(c >= '0' && c <= '9' || c >= 'A' && c <= 'F' || c >= 'a' && c <= 'f')) {
         return false;
       }
@@ -72,9 +72,9 @@ final class NetworkUtil {
     if (wepKey == null) {
       return false;
     }
-    int len = wepKey.length();
+    final int length = wepKey.length();
     // WEP-40, WEP-104, and some vendors using 256-bit WEP (WEP-232?)
-    return (len == 10 || len == 26 || len == 58) && isHex(wepKey);
+    return (length == 10 || length == 26 || length == 58) && isHex(wepKey);
   }
 
 }

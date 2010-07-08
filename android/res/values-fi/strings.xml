@@ -127,5 +127,7 @@
   <string name="wifi_modifying_network">Muuttaminen Verkko</string>
   <string name="wifi_ssid_missing">Verkon nimi puuttuu</string>
   <string name="wifi_type_incorrect">Verkon tyyppi virheellinen</string>
+  <string name="wifi_ssid_label">Verkon nimi</string>
+  <string name="wifi_type_label">Tyyppi</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

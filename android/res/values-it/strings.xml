@@ -127,5 +127,7 @@
   <string name="wifi_modifying_network">Modifica della rete</string>
   <string name="wifi_ssid_missing">Nome della rete mancante</string>
   <string name="wifi_type_incorrect">Tipo di rete non corretto</string>
+  <string name="wifi_ssid_label">Nome di rete</string>
+  <string name="wifi_type_label">Tipo</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

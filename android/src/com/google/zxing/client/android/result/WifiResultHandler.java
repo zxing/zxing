@@ -28,9 +28,11 @@ import com.google.zxing.client.result.WifiParsedResult;
  * @author viki@google.com (Vikram Aggarwal)
  */
 public final class WifiResultHandler extends ResultHandler {
+  final Activity parent;
 
   public WifiResultHandler(Activity activity, ParsedResult result) {
     super(activity, result);
+    parent = activity;
   }
 
   @Override
@@ -61,8 +63,10 @@ public final class WifiResultHandler extends ResultHandler {
   public CharSequence getDisplayContents() {
     WifiParsedResult wifiResult = (WifiParsedResult) getResult();
     StringBuffer contents = new StringBuffer();
-    ParsedResult.maybeAppend(wifiResult.getSsid(), contents);
-    ParsedResult.maybeAppend(wifiResult.getNetworkEncryption(), contents);
+    final String wifiLabel = parent.getString(R.string.wifi_ssid_label);
+    ParsedResult.maybeAppend(wifiLabel + "\n" + wifiResult.getSsid(), contents);
+    final String typeLabel = parent.getString(R.string.wifi_type_label);
+    ParsedResult.maybeAppend(typeLabel + "\n" + wifiResult.getNetworkEncryption(), contents);
     return contents.toString();
   }
 

@@ -100,11 +100,6 @@ versionName is 2.31, 2.4, or 3.0. -->
               android:label="@string/wa_name"
               android:screenOrientation="landscape"
               android:configChanges="orientation|keyboardHidden">
-<!--Do not broadcast this intent-->
-<!--      <intent-filter>-->
-<!--        <action android:name="com.google.zxing.client.android.WIFI_CONNECT"/>-->
-<!--        <category android:name="android.intent.category.DEFAULT"/>-->
-<!--      </intent-filter>-->
     </activity>
     <activity android:name=".share.ShareActivity"
               android:label="@string/share_name"
@@ -146,9 +141,9 @@ versionName is 2.31, 2.4, or 3.0. -->
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
   <!-- Wifi related  -->
-  <uses-permission android:name="android.permission.WRITE_SETTINGS"></uses-permission>
-  <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"></uses-permission>
-  <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"></uses-permission>
-  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
+  <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+  <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+  <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
 </manifest>

@@ -52,8 +52,6 @@ public class WifiActivity extends Activity  {
   }
 
   private int changeNetwork(NetworkSetting setting) {
-    // All the ways this can be wrong:
-
     // If the SSID is empty, throw an error and return
     if (setting.getSsid() == null || setting.getSsid().length() == 0) {
       return doError(R.string.wifi_ssid_missing);
@@ -159,7 +157,7 @@ public class WifiActivity extends Activity  {
    * @param ssid
    */
   private WifiConfiguration findNetworkInExistingConfig(String ssid){
-    List <WifiConfiguration> existingConfigs = wifiManager.getConfiguredNetworks();
+    final List <WifiConfiguration> existingConfigs = wifiManager.getConfiguredNetworks();
     for (WifiConfiguration existingConfig : existingConfigs) {
       if (existingConfig.SSID.equals(ssid)) {
         return existingConfig;
@@ -172,15 +170,15 @@ public class WifiActivity extends Activity  {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    Intent intent = getIntent();
+    final Intent intent = getIntent();
     if (intent == null || (!intent.getAction().equals(Intents.WifiConnect.ACTION))) {
       finish();
       return;
     }
 
-    String ssid = intent.getStringExtra(Intents.WifiConnect.SSID);
+    final String ssid = intent.getStringExtra(Intents.WifiConnect.SSID);
     String password = intent.getStringExtra(Intents.WifiConnect.PASSWORD);
-    String networkType = intent.getStringExtra(Intents.WifiConnect.TYPE);
+    final String networkType = intent.getStringExtra(Intents.WifiConnect.TYPE);
     setContentView(R.layout.network);
     statusView = (TextView) findViewById(R.id.networkStatus);
 

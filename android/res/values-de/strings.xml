@@ -128,4 +128,6 @@
   <string name="wifi_modifying_network">Ändern Network</string>
   <string name="wifi_ssid_missing">Netzwerk-Name fehlt</string>
   <string name="wifi_type_incorrect">Netzwerk-Typ nicht korrekt</string>
+  <string name="wifi_ssid_label">Network Name</string>
+  <string name="wifi_type_label">Typ</string>
 </resources>
