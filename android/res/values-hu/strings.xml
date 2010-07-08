@@ -127,5 +127,7 @@
   <string name="wifi_modifying_network">Módosítása Hálózat</string>
   <string name="wifi_ssid_missing">A hálózat neve hiányzik</string>
   <string name="wifi_type_incorrect">Hálózati típusú hibás</string>
+  <string name="wifi_ssid_label">Hálózat neve</string>
+  <string name="wifi_type_label">Típusú</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

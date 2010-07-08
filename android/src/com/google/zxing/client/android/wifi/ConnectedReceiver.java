@@ -35,7 +35,7 @@ final class ConnectedReceiver extends BroadcastReceiver {
   private final TextView statusView;
 
   ConnectedReceiver(Activity wifiActivity, TextView statusView) {
-    parent = wifiActivity;
+    this.parent = wifiActivity;
     this.statusView = statusView;
   }
 
@@ -43,7 +43,7 @@ final class ConnectedReceiver extends BroadcastReceiver {
   public void onReceive(Context context, Intent intent) {
     if (intent.getAction().equals(android.net.ConnectivityManager.CONNECTIVITY_ACTION)) {
       ConnectivityManager con = (ConnectivityManager) parent.getSystemService(Context.CONNECTIVITY_SERVICE);
-      NetworkInfo[] s = con.getAllNetworkInfo();
+      final NetworkInfo[] s = con.getAllNetworkInfo();
       for (NetworkInfo i : s){
         if (i.getTypeName().contentEquals("WIFI")){
           NetworkInfo.State state = i.getState();
