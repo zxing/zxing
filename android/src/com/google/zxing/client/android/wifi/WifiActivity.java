@@ -44,12 +44,8 @@ public class WifiActivity extends Activity  {
   private WifiReceiver wifiReceiver;
   private boolean receiverRegistered;
   private int networkId;
-  private static int errorCount;
+  private int errorCount;
   private IntentFilter mWifiStateFilter;
-
-  static {
-    errorCount = 0;
-  }
 
   public void gotError(){
     final int maxErrorCount = 3;
@@ -243,14 +239,18 @@ public class WifiActivity extends Activity  {
     changeNetwork(setting);
   }
 
-  public void pause() {
+  @Override
+  public void onPause() {
+    super.onPause();
     if (receiverRegistered) {
       unregisterReceiver(wifiReceiver);
       receiverRegistered = false;
     }
   }
 
-  public void resume() {
+  @Override
+  public void onResume() {
+    super.onResume();
     if (wifiReceiver != null && mWifiStateFilter != null && !receiverRegistered) {
       registerReceiver(wifiReceiver, mWifiStateFilter);
       receiverRegistered = true;
@@ -259,6 +259,7 @@ public class WifiActivity extends Activity  {
 
   @Override
   protected void onDestroy() {
+    super.onDestroy();
     if (wifiReceiver != null) {
       if (receiverRegistered) {
 	unregisterReceiver(wifiReceiver);
