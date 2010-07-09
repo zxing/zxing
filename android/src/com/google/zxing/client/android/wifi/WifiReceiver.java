@@ -60,7 +60,7 @@ final class WifiReceiver extends BroadcastReceiver {
           final NetworkInfo.State state = i.getState();
           final String ssid = mWifiManager.getConnectionInfo().getSSID();
 
-          if (state == NetworkInfo.State.CONNECTED){
+          if (state == NetworkInfo.State.CONNECTED && ssid != null){
             mWifiManager.saveConfiguration();
             final String label = parent.getString(R.string.wifi_connected);
             statusView.setText(label + "\n" + ssid);
