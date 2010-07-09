@@ -129,5 +129,6 @@
   <string name="wifi_type_incorrect">Verkon tyyppi virheellinen</string>
   <string name="wifi_ssid_label">Verkon nimi</string>
   <string name="wifi_type_label">Tyyppi</string>
+  <string name="wifi_connect_failed">Verkkoyhteys ei</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

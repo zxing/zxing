@@ -129,5 +129,6 @@
   <string name="wifi_type_incorrect">Rede de tipo incorreto</string>
   <string name="wifi_ssid_label">Nome da Rede</string>
   <string name="wifi_type_label">Tipo</string>
+  <string name="wifi_connect_failed">A conexão de rede não</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>
