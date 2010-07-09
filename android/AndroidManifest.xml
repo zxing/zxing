@@ -20,8 +20,8 @@ version to be published. The next versionCode will be 7, regardless of whether t
 versionName is 2.31, 2.4, or 3.0. -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.google.zxing.client.android"
-          android:versionName="3.4 beta 1"
-          android:versionCode="55"
+          android:versionName="3.4 beta 2"
+          android:versionCode="56"
           android:installLocation="auto">
   <!-- We require Cupcake (Android 1.5) or later, but are really targeting Donut. -->
   <uses-sdk android:minSdkVersion="3"
