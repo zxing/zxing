@@ -20,6 +20,7 @@
 
 #include "OneDReader.h"
 #include <zxing/ReaderException.h>
+#include <zxing/oned/OneDResultPoint.h>
 #include <math.h>
 #include <limits.h>
 
@@ -93,6 +94,8 @@ namespace zxing {
 					row = image->getBlackRow(rowNumber, row);
 				}catch (ReaderException re) {
 					continue;
+				}catch (IllegalArgumentException re) {
+					continue;
 				}
 				
 				// While we have the image data in a BitArray, it's fairly cheap to reverse it in place to
@@ -109,9 +112,17 @@ namespace zxing {
 							//						// But it was upside down, so note that
 							//						result.putMetadata(ResultMetadataType.ORIENTATION, new Integer(180));
 							//						// And remember to flip the result points horizontally.
-							//						ResultPoint[] points = result.getResultPoints();
-							//						points[0] = new ResultPoint(width - points[0].getX() - 1, points[0].getY());
-							//						points[1] = new ResultPoint(width - points[1].getX() - 1, points[1].getY());
+							std::vector<Ref<ResultPoint> > points(result->getResultPoints());
+							if (points.size() == 2) {
+								Ref<ResultPoint> pointZero(new OneDResultPoint(width - points[0]->getX() - 1, points[0]->getY()));
+								points[0] = pointZero;
+
+								Ref<ResultPoint> pointOne(new OneDResultPoint(width - points[1]->getX() - 1, points[1]->getY()));
+								points[1] = pointOne;
+
+                result.reset(new Result(result->getText(),result->getRawBytes(),points,result->getBarcodeFormat()));
+							}
+								
 						}
 						return result;
 					} catch (ReaderException re) {
@@ -119,7 +130,7 @@ namespace zxing {
 					}
 				}
 			}
-			throw ReaderException("");
+			throw ReaderException("doDecode() failed");
 		}
 		
 		unsigned int OneDReader::patternMatchVariance(int counters[], int countersSize, const int pattern[], int maxIndividualVariance) {

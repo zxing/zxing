@@ -107,10 +107,12 @@ vector<unsigned int>& BitArray::getBitArray() {
   return bits_;
 }
 void BitArray::reverse() {
-  unsigned int allBits = numeric_limits<unsigned int>::max();
-  size_t max = bits_.size();
-  for (size_t i = 0; i < max; i++) {
-    bits_[i] = bits_[i] ^ allBits;
+  std::vector<unsigned int> newBits(bits_.size(),(const unsigned int) 0);
+  for (size_t i = 0; i < size_; i++) {
+    if (get(size_ - i - 1)) {
+      newBits[i >> logBits_] |= 1<< (i & bitsMask_);
+    }
   }
+  bits_ = newBits;
 }
 }
