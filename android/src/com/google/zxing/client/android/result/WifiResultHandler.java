@@ -17,7 +17,6 @@
 package com.google.zxing.client.android.result;
 
 import android.app.Activity;
-
 import com.google.zxing.client.android.R;
 import com.google.zxing.client.result.ParsedResult;
 import com.google.zxing.client.result.WifiParsedResult;
@@ -52,7 +51,7 @@ public final class WifiResultHandler extends ResultHandler {
   @Override
   public void handleButtonPress(int index) {
     // Get the underlying wifi config
-    WifiParsedResult wifiResult = (WifiParsedResult) getResult();
+    final WifiParsedResult wifiResult = (WifiParsedResult) getResult();
     if (index == 0) {
       wifiConnect(wifiResult);
     }
@@ -61,7 +60,7 @@ public final class WifiResultHandler extends ResultHandler {
   // Display the name of the network and the network type to the user.
   @Override
   public CharSequence getDisplayContents() {
-    WifiParsedResult wifiResult = (WifiParsedResult) getResult();
+    final WifiParsedResult wifiResult = (WifiParsedResult) getResult();
     StringBuffer contents = new StringBuffer();
     final String wifiLabel = parent.getString(R.string.wifi_ssid_label);
     ParsedResult.maybeAppend(wifiLabel + "\n" + wifiResult.getSsid(), contents);

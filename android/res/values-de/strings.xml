@@ -130,4 +130,5 @@
   <string name="wifi_type_incorrect">Netzwerk-Typ nicht korrekt</string>
   <string name="wifi_ssid_label">Network Name</string>
   <string name="wifi_type_label">Typ</string>
+  <string name="wifi_connect_failed">Network Verbindung fehlgeschlagen</string>
 </resources>

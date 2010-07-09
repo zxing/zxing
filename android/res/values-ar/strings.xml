@@ -129,5 +129,6 @@
   <string name="wifi_type_incorrect">شبكة نوع غير صحيح</string>
   <string name="wifi_ssid_label">اسم الشبكة</string>
   <string name="wifi_type_label">نوع</string>
+  <string name="wifi_connect_failed">فشل شبكة الاتصال</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>
