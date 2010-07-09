@@ -34,6 +34,7 @@ class Binarizer : public Counted {
   Ref<LuminanceSource> source_;
   Ref<BitArray> array_;
   Ref<BitMatrix> matrix_;
+  int cached_y_;
 
  public:
   Binarizer(Ref<LuminanceSource> source);
