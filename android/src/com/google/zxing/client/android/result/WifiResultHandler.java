@@ -27,7 +27,8 @@ import com.google.zxing.client.result.WifiParsedResult;
  * @author viki@google.com (Vikram Aggarwal)
  */
 public final class WifiResultHandler extends ResultHandler {
-  final Activity parent;
+
+  private final Activity parent;
 
   public WifiResultHandler(Activity activity, ParsedResult result) {
     super(activity, result);
@@ -51,7 +52,7 @@ public final class WifiResultHandler extends ResultHandler {
   @Override
   public void handleButtonPress(int index) {
     // Get the underlying wifi config
-    final WifiParsedResult wifiResult = (WifiParsedResult) getResult();
+    WifiParsedResult wifiResult = (WifiParsedResult) getResult();
     if (index == 0) {
       wifiConnect(wifiResult);
     }
@@ -60,12 +61,12 @@ public final class WifiResultHandler extends ResultHandler {
   // Display the name of the network and the network type to the user.
   @Override
   public CharSequence getDisplayContents() {
-    final WifiParsedResult wifiResult = (WifiParsedResult) getResult();
+    WifiParsedResult wifiResult = (WifiParsedResult) getResult();
     StringBuffer contents = new StringBuffer();
-    final String wifiLabel = parent.getString(R.string.wifi_ssid_label);
-    ParsedResult.maybeAppend(wifiLabel + "\n" + wifiResult.getSsid(), contents);
-    final String typeLabel = parent.getString(R.string.wifi_type_label);
-    ParsedResult.maybeAppend(typeLabel + "\n" + wifiResult.getNetworkEncryption(), contents);
+    String wifiLabel = parent.getString(R.string.wifi_ssid_label);
+    ParsedResult.maybeAppend(wifiLabel + '\n' + wifiResult.getSsid(), contents);
+    String typeLabel = parent.getString(R.string.wifi_type_label);
+    ParsedResult.maybeAppend(typeLabel + '\n' + wifiResult.getNetworkEncryption(), contents);
     return contents.toString();
   }
 

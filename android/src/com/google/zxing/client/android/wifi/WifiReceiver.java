@@ -16,7 +16,6 @@
 
 package com.google.zxing.client.android.wifi;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -33,12 +32,14 @@ import com.google.zxing.client.android.R;
  * Get a broadcast when the network is connected, and kill the activity.
  */
 final class WifiReceiver extends BroadcastReceiver {
-  private final String TAG = "WifiReceiver";
+
+  private static final String TAG = WifiReceiver.class.getSimpleName();
+
   private final WifiManager mWifiManager;
-  private final Activity parent;
+  private final WifiActivity parent;
   private final TextView statusView;
 
-  WifiReceiver(WifiManager wifiManager, Activity wifiActivity, TextView statusView, String ssid) {
+  WifiReceiver(WifiManager wifiManager, WifiActivity wifiActivity, TextView statusView, String ssid) {
     this.parent = wifiActivity;
     this.statusView = statusView;
     this.mWifiManager = wifiManager;
@@ -47,28 +48,28 @@ final class WifiReceiver extends BroadcastReceiver {
   @Override
   public void onReceive(Context context, Intent intent) {
     if (intent.getAction().equals(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION)) {
-      handleChange((SupplicantState) intent.getParcelableExtra(WifiManager.EXTRA_NEW_STATE),
-          intent.hasExtra(WifiManager.EXTRA_SUPPLICANT_ERROR),
-          intent.getIntExtra(WifiManager.EXTRA_SUPPLICANT_ERROR, 0));
+      handleChange(
+          (SupplicantState) intent.getParcelableExtra(WifiManager.EXTRA_NEW_STATE),
+          intent.hasExtra(WifiManager.EXTRA_SUPPLICANT_ERROR));
     } else if (intent.getAction().equals(WifiManager.NETWORK_STATE_CHANGED_ACTION)){
       handleNetworkStateChanged((NetworkInfo) intent.getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO));
     } else if (intent.getAction().equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
-      final ConnectivityManager con = (ConnectivityManager) parent.getSystemService(Context.CONNECTIVITY_SERVICE);
-      final NetworkInfo[] s = con.getAllNetworkInfo();
-      for (final NetworkInfo i : s){
+      ConnectivityManager con = (ConnectivityManager) parent.getSystemService(Context.CONNECTIVITY_SERVICE);
+      NetworkInfo[] s = con.getAllNetworkInfo();
+      for (NetworkInfo i : s){
         if (i.getTypeName().contentEquals("WIFI")){
-          final NetworkInfo.State state = i.getState();
-          final String ssid = mWifiManager.getConnectionInfo().getSSID();
+          NetworkInfo.State state = i.getState();
+          String ssid = mWifiManager.getConnectionInfo().getSSID();
 
           if (state == NetworkInfo.State.CONNECTED && ssid != null){
             mWifiManager.saveConfiguration();
-            final String label = parent.getString(R.string.wifi_connected);
-            statusView.setText(label + "\n" + ssid);
+            String label = parent.getString(R.string.wifi_connected);
+            statusView.setText(label + '\n' + ssid);
             Runnable delayKill = new Killer(parent);
             delayKill.run();
           }
           if (state == NetworkInfo.State.DISCONNECTED){
-            Log.d(TAG, "Got state: " + state.toString() + " for ssid: " + ssid);
+            Log.d(TAG, "Got state: " + state + " for ssid: " + ssid);
             ((WifiActivity)parent).gotError();
           }
         }
@@ -77,17 +78,17 @@ final class WifiReceiver extends BroadcastReceiver {
   }
 
   private void handleNetworkStateChanged(NetworkInfo networkInfo) {
-    final NetworkInfo.DetailedState state = networkInfo.getDetailedState();
+    NetworkInfo.DetailedState state = networkInfo.getDetailedState();
     if (state == NetworkInfo.DetailedState.FAILED){
       Log.d(TAG, "Detailed Network state failed");
-      ((WifiActivity)parent).gotError();
+      parent.gotError();
     }
   }
 
-  private void handleChange(SupplicantState state, boolean hasError, int error) {
+  private void handleChange(SupplicantState state, boolean hasError) {
     if (hasError || state == SupplicantState.INACTIVE){
       Log.d(TAG, "Found an error");
-      ((WifiActivity)parent).gotError();
+      parent.gotError();
     }
   }
 }
