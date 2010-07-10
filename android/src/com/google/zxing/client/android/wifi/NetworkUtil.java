@@ -16,6 +16,8 @@
 
 package com.google.zxing.client.android.wifi;
 
+import java.util.regex.Pattern;
+
 import android.text.TextUtils;
 
 /**
@@ -27,6 +29,8 @@ import android.text.TextUtils;
  * @author Vikram Aggarwal
  */
 final class NetworkUtil {
+
+  private static final Pattern HEX_DIGITS = Pattern.compile("[0-9A-Fa-f]+");
 
   private NetworkUtil() {
   }
@@ -43,24 +47,11 @@ final class NetworkUtil {
     if (TextUtils.isEmpty(string)) {
       return "";
     }
-    final int lastPos = string.length() - 1;
+    int lastPos = string.length() - 1;
     if (lastPos < 0 || (string.charAt(0) == '"' && string.charAt(lastPos) == '"')) {
       return string;
     }
     return '\"' + string + '\"';
-  }
-
-  private static boolean isHex(CharSequence key) {
-    if (key == null){
-      return false;
-    }
-    for (int i = key.length() - 1; i >= 0; i--) {
-      final char c = key.charAt(i);
-      if (!(c >= '0' && c <= '9' || c >= 'A' && c <= 'F' || c >= 'a' && c <= 'f')) {
-        return false;
-      }
-    }
-    return true;
   }
 
   /**
@@ -72,9 +63,9 @@ final class NetworkUtil {
     if (wepKey == null) {
       return false;
     }
-    final int length = wepKey.length();
+    int length = wepKey.length();
     // WEP-40, WEP-104, and some vendors using 256-bit WEP (WEP-232?)
-    return (length == 10 || length == 26 || length == 58) && isHex(wepKey);
+    return (length == 10 || length == 26 || length == 58) && HEX_DIGITS.matcher(wepKey).matches();
   }
 
 }

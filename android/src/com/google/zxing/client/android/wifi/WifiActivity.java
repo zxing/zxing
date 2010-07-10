@@ -17,6 +17,7 @@
 package com.google.zxing.client.android.wifi;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -36,9 +37,14 @@ import com.google.zxing.client.android.R;
  * 
  * @author Vikram Aggarwal
  */
-public class WifiActivity extends Activity  {
+public final class WifiActivity extends Activity  {
 
   private static final String TAG = WifiActivity.class.getSimpleName();
+
+  private static final int MAX_ERROR_COUNT = 3;
+  private static final int FAILURE_NO_NETWORK_ID = -1;
+  private static final Pattern HEX_DIGITS_64 = Pattern.compile("[0-9A-Fa-f]{64}");
+
   private WifiManager wifiManager;
   private TextView statusView;
   private WifiReceiver wifiReceiver;
@@ -47,11 +53,10 @@ public class WifiActivity extends Activity  {
   private int errorCount;
   private IntentFilter mWifiStateFilter;
 
-  public void gotError(){
-    final int maxErrorCount = 3;
+  void gotError() {
     errorCount++;
     Log.d(TAG, "Encountered another error.  Errorcount = " + errorCount);
-    if (errorCount > maxErrorCount){
+    if (errorCount > MAX_ERROR_COUNT){
       errorCount = 0;
       doError(R.string.wifi_connect_failed);
     }
@@ -102,7 +107,7 @@ public class WifiActivity extends Activity  {
   private WifiConfiguration changeNetworkCommon(NetworkSetting input){
     statusView.setText(R.string.wifi_creating_network);
     Log.d(TAG, "Adding new configuration: \nSSID: " + input.getSsid() + "\nType: " + input.getNetworkType());
-    final WifiConfiguration config = new WifiConfiguration();
+    WifiConfiguration config = new WifiConfiguration();
 
     config.allowedAuthAlgorithms.clear();
     config.allowedGroupCiphers.clear();
@@ -123,8 +128,8 @@ public class WifiActivity extends Activity  {
 
   // Adding a WEP network
   private int changeNetworkWEP(NetworkSetting input) {
-    final WifiConfiguration config = changeNetworkCommon(input);
-    final String pass = input.getPassword();
+    WifiConfiguration config = changeNetworkCommon(input);
+    String pass = input.getPassword();
     if (NetworkUtil.isHexWepKey(pass)) {
       config.wepKeys[0] = pass;
     } else {
@@ -142,10 +147,10 @@ public class WifiActivity extends Activity  {
 
   // Adding a WPA or WPA2 network
   private int changeNetworkWPA(NetworkSetting input) {
-    final WifiConfiguration config = changeNetworkCommon(input);
-    final String pass = input.getPassword();
+    WifiConfiguration config = changeNetworkCommon(input);
+    String pass = input.getPassword();
     // Hex passwords that are 64 bits long are not to be quoted.
-    if (pass.matches("[0-9A-Fa-f]{64}")){
+    if (HEX_DIGITS_64.matcher(pass).matches()){
       Log.d(TAG, "A 64 bit hex password entered.");
       config.preSharedKey = pass;
     } else {
@@ -178,8 +183,8 @@ public class WifiActivity extends Activity  {
    * @param ssid
    */
   private WifiConfiguration findNetworkInExistingConfig(String ssid){
-    final List <WifiConfiguration> existingConfigs = wifiManager.getConfiguredNetworks();
-    for (final WifiConfiguration existingConfig : existingConfigs) {
+    List<WifiConfiguration> existingConfigs = wifiManager.getConfiguredNetworks();
+    for (WifiConfiguration existingConfig : existingConfigs) {
       if (existingConfig.SSID.equals(ssid)) {
         return existingConfig;
       }
@@ -191,15 +196,15 @@ public class WifiActivity extends Activity  {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    final Intent intent = getIntent();
+    Intent intent = getIntent();
     if (intent == null || (!intent.getAction().equals(Intents.WifiConnect.ACTION))) {
       finish();
       return;
     }
 
-    final String ssid = intent.getStringExtra(Intents.WifiConnect.SSID);
+    String ssid = intent.getStringExtra(Intents.WifiConnect.SSID);
     String password = intent.getStringExtra(Intents.WifiConnect.PASSWORD);
-    final String networkType = intent.getStringExtra(Intents.WifiConnect.TYPE);
+    String networkType = intent.getStringExtra(Intents.WifiConnect.TYPE);
     setContentView(R.layout.network);
     statusView = (TextView) findViewById(R.id.networkStatus);
 
@@ -259,11 +264,10 @@ public class WifiActivity extends Activity  {
 
   @Override
   protected void onDestroy() {
-    super.onDestroy();
     if (wifiReceiver != null) {
       if (receiverRegistered) {
-	unregisterReceiver(wifiReceiver);
-	receiverRegistered = false;
+        unregisterReceiver(wifiReceiver);
+        receiverRegistered = false;
       }
       wifiReceiver = null;
     }
@@ -276,30 +280,31 @@ public class WifiActivity extends Activity  {
    * @param disableOthers true if other networks must be disabled
    * @return network ID of the connected network.
    */
-  private int updateNetwork(WifiConfiguration config, boolean disableOthers){
-    final int FAILURE = -1;
+  private int updateNetwork(WifiConfiguration config, boolean disableOthers) {
     WifiConfiguration found = findNetworkInExistingConfig(config.SSID);
     wifiManager.disconnect();
-    if (found == null){
+    if (found == null) {
       statusView.setText(R.string.wifi_creating_network);
     } else {
       statusView.setText(R.string.wifi_modifying_network);
       Log.d(TAG, "Removing network " + found.networkId);
       wifiManager.removeNetwork(found.networkId);
       wifiManager.saveConfiguration();
-     }
+    }
     networkId = wifiManager.addNetwork(config);
     Log.d(TAG, "Inserted/Modified network " + networkId);
-    if (networkId < 0)
-      return FAILURE;
+    if (networkId < 0) {
+      return FAILURE_NO_NETWORK_ID;
+    }
 
     // Try to disable the current network and start a new one.
     if (!wifiManager.enableNetwork(networkId, disableOthers)) {
-      networkId = -1;
-      return FAILURE;
+      networkId = FAILURE_NO_NETWORK_ID;
+      return FAILURE_NO_NETWORK_ID;
     }
     errorCount = 0;
     wifiManager.reassociate();
     return networkId;
   }
+
 }
