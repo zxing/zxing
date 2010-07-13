@@ -4,6 +4,7 @@
  *
  *  Created by Ralf Kistner on 16/10/2009.
  *  Copyright 2008 ZXing authors All rights reserved.
+ *  Modified by Yakov Okshtein (flyashi@gmail.com) to add 1D barcode support.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,10 +26,12 @@
 #include "MagickBitmapSource.h"
 #include <zxing/common/Counted.h>
 #include <zxing/qrcode/QRCodeReader.h>
+#include <zxing/Binarizer.h>
+#include <zxing/oned/MultiFormatUPCEANReader.h>
 #include <zxing/Result.h>
 #include <zxing/ReaderException.h>
 #include <zxing/common/GlobalHistogramBinarizer.h>
-#include <zxing/common/LocalBlockBinarizer.h>
+//#include <zxing/common/LocalBlockBinarizer.h>
 #include <exception>
 #include <zxing/Exception.h>
 #include <zxing/common/IllegalArgumentException.h>
@@ -106,27 +109,13 @@ void save_grid(Ref<BitMatrix> matrix, string filename, Ref<PerspectiveTransform>
   image.write(filename);
 }
 
-Ref<Result> decode(string out_prefix, Ref<BinaryBitmap> image, string& cell_grid, string& cell_transformed) {
+Ref<Result> decode2D(string out_prefix, Ref<BinaryBitmap> image, string& cell_grid, string& cell_transformed) {
+
   Decoder decoder;
 
   QREdgeDetector detector = QREdgeDetector(image->getBlackMatrix());
 
   Ref<DetectorResult> detectorResult(detector.detect());
-
-  if (out_prefix.size()) {
-    // Grid image
-    string gridfile = out_prefix + ".grid.gif";
-    Ref<PerspectiveTransform> transform = detectorResult->getTransform();
-    int dimension = detectorResult->getBits()->getDimension();
-    save_grid(image->getBlackMatrix(), gridfile, transform, dimension);
-    cell_grid = "<img src=\"" + gridfile + "\" />";
-
-    // Transformed image
-    string tfile = out_prefix + ".transformed.png";
-    save_matrix(detectorResult->getBits(), tfile, 5);
-    cell_transformed = "<img src=\"" + tfile + "\" />";
-  }
-
 
   vector<Ref<ResultPoint> > points(detectorResult->getPoints());
 
@@ -136,11 +125,26 @@ Ref<Result> decode(string out_prefix, Ref<BinaryBitmap> image, string& cell_grid
                                 decoderResult->getRawBytes(),
                                 points,
                                 BarcodeFormat_QR_CODE));
+  return result;
 
+}
+
+Ref<Result> decode1D(string out_prefix, Ref<BinaryBitmap> image, string& cell_grid, string& cell_transformed) {
+
+
+  Ref<Reader> reader(new oned::MultiFormatUPCEANReader);
+  Ref<Result> result(new Result(*reader->decode(image))); 
   return result;
 }
 
-
+//TODO(flyashi): Call MultiFormatReader directly
+Ref<Result> decode(string out_prefix, Ref<BinaryBitmap> image, string& cell_grid, string& cell_transformed) {
+  try {
+    return decode1D(out_prefix,image,cell_grid,cell_transformed);
+  } catch (ReaderException re) {
+    return decode2D(out_prefix,image,cell_grid,cell_transformed);
+  }
+}
 
 
 int test_image(Image& image, string out_prefix, bool localized) {
@@ -159,7 +163,7 @@ int test_image(Image& image, string out_prefix, bool localized) {
     Ref<MagickBitmapSource> source(new MagickBitmapSource(image));
 
     if (localized) {
-      binarizer = new LocalBlockBinarizer(source);
+      //binarizer = new LocalBlockBinarizer(source);
     } else {
       binarizer = new GlobalHistogramBinarizer(source);
     }
@@ -167,7 +171,7 @@ int test_image(Image& image, string out_prefix, bool localized) {
     if (out_prefix.size()) {
       string monofile = out_prefix + ".mono.png";
       matrix = binarizer->getBlackMatrix();
-      save_matrix(matrix, monofile);
+      //save_matrix(matrix, monofile);
       cell_mono = "<img src=\"" + monofile + "\" />";
     }
 
@@ -190,10 +194,8 @@ int test_image(Image& image, string out_prefix, bool localized) {
     res = -5;
   }
 
-  cout << "<td>" << cell_mono << "</td>" << endl;
-  cout << "<td>" << cell_grid << "</td>" << endl;
-  cout << "<td>" << cell_transformed << "</td>" << endl;
-  cout << "<td bgcolor=\"" << result_color << "\">" << cell_result << "</td>" << endl;
+  cout << cell_result;
+
   return res;
 }
 
@@ -213,16 +215,15 @@ int main(int argc, char** argv) {
   }
   string outfolder = argv[1];
 
-  int total = argc - 2;
+ // int total = argc - 2;
   int gonly = 0;
   int lonly = 0;
   int both = 0;
   int neither = 0;
 
-  cout << "<html><body><table border=\"1\">" << endl;
   for (int i = 2; i < argc; i++) {
     string infilename = argv[i];
-    cerr << "Processing: " << infilename << endl;
+//    cerr << "Processing: " << infilename << endl;
     Image image;
     try {
       image.read(infilename);
@@ -230,10 +231,6 @@ int main(int argc, char** argv) {
       cerr << "Unable to open image, ignoring" << endl;
       continue;
     }
-    cout << "<tr><td colspan=\"5\">" << infilename << "</td></tr>" << endl;
-    cout << "<tr>" << endl;
-
-    cout << "<td><img src=\"" << infilename << "\" /></td>" << endl;
 
 
     int gresult = 1;
@@ -241,36 +238,23 @@ int main(int argc, char** argv) {
 
     if (outfolder == string("-")) {
       gresult = test_image_global(image, "");
-      lresult = test_image_local(image, "");
+//      lresult = test_image_local(image, "");
     } else {
       replace(infilename.begin(), infilename.end(), '/', '_');
       string prefix = string(outfolder) + string("/") + infilename;
       gresult = test_image_global(image, prefix + ".g");
-      lresult = test_image_local(image, prefix + ".l");
+ //     lresult = test_image_local(image, prefix + ".l");
     }
 
     gresult = gresult == 0;
-    lresult = lresult == 0;
+ //   lresult = lresult == 0;
 
     gonly += gresult && !lresult;
     lonly += lresult && !gresult;
     both += gresult && lresult;
     neither += !gresult && !lresult;
 
-    cout << "</tr>" << endl;
   }
-  cout << "</table>" << endl;
-
-  cout << "<table>" << endl;
-  cout << "<tr><td>Total</td><td>" << total << "</td></tr>" << endl;
-  cout << "<tr><td>Both correct</td><td>" << both << "</td></tr>" << endl;
-  cout << "<tr><td>Neither correct</td><td>" << neither << "</td></tr>" << endl;
-  cout << "<tr><td>Global only</td><td>" << gonly << "</td></tr>" << endl;
-  cout << "<tr><td>Local only</td><td>" << lonly << "</td></tr>" << endl;
-
-  cout << "</table>" << endl;
-  cout << "</body></html>" << endl;
-
   return 0;
 }
 

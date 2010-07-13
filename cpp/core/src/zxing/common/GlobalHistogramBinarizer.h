@@ -30,13 +30,19 @@
 namespace zxing {
 	
 	class GlobalHistogramBinarizer : public Binarizer {
+	 private:
+      Ref<BitMatrix> cached_matrix_;
+	  Ref<BitArray> cached_row_;
+	  int cached_row_num_;
+
 	public:
 		GlobalHistogramBinarizer(Ref<LuminanceSource> source);
 		virtual ~GlobalHistogramBinarizer();
 		
-		virtual Ref<BitArray> estimateBlackRow(int y, Ref<BitArray> row);
-		virtual Ref<BitMatrix> estimateBlackMatrix();
+		virtual Ref<BitArray> getBlackRow(int y, Ref<BitArray> row);
+		virtual Ref<BitMatrix> getBlackMatrix();
 		static int estimate(std::vector<int> &histogram);
+		Ref<Binarizer> createBinarizer(Ref<LuminanceSource> source);
 	};
 	
 }

@@ -75,7 +75,7 @@ int main(int argc, char** argv) {
     
     bool local = true;	// Use local thresholding
     
-    test_image(image, local);
+    decode_image(image, local);
   }
   return 0;
 }

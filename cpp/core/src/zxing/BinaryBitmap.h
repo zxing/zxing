@@ -30,8 +30,6 @@ namespace zxing {
 	
 	class BinaryBitmap : public Counted {
 	private:
-		Ref<BitMatrix> bits_;
-		Ref<BitArray> array_bits_;
 		Ref<Binarizer> binarizer_;
 		int cached_y_;
 		
@@ -41,10 +39,18 @@ namespace zxing {
 		
 		Ref<BitArray> getBlackRow(int y, Ref<BitArray> row);
 		Ref<BitMatrix> getBlackMatrix();
-		Ref<LuminanceSource> getSource();
 		
-		int getWidth();
-		int getHeight();
+		Ref<LuminanceSource> getLuminanceSource() const;
+
+		int getWidth() const;
+		int getHeight() const;
+
+		bool isRotateSupported() const;
+		Ref<BinaryBitmap> rotateCounterClockwise();
+
+		bool isCropSupported() const;
+		Ref<BinaryBitmap> crop(int left, int top, int width, int height);
+
 	};
 	
 }

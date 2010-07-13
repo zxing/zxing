@@ -19,6 +19,7 @@
  */
 
 #include <zxing/LuminanceSource.h>
+#include <zxing/common/IllegalArgumentException.h>
 
 namespace zxing {
 
@@ -28,16 +29,32 @@ LuminanceSource::LuminanceSource() {
 LuminanceSource::~LuminanceSource() {
 }
 
-unsigned char* LuminanceSource::copyMatrix() {
+unsigned char* LuminanceSource::getMatrix() {
   int width = getWidth();
   int height =  getHeight();
-  unsigned char* matrix = new unsigned char[width*height];
+  unsigned char* matrix = new unsigned char[width * height];
+  unsigned char* row = new unsigned char[width];
   for (int y = 0; y < height; y++) {
-    for (int x = 0; x < width; x++) {
-      matrix[y*width+x] = getPixel(x, y);
-    }
+    getRow(y, row);
+    memcpy(&matrix[y * width], row, width);
   }
   return matrix;
+}
+
+bool LuminanceSource::isCropSupported() const {
+  return false;
+}
+
+Ref<LuminanceSource> LuminanceSource::crop(int left, int top, int width, int height) {
+  throw IllegalArgumentException("This luminance source does not support cropping.");
+}
+
+bool LuminanceSource::isRotateSupported() const {
+  return false;
+}
+
+Ref<LuminanceSource> LuminanceSource::rotateCounterClockwise() {
+  throw IllegalArgumentException("This luminance source does not support rotation.");
 }
 
 }

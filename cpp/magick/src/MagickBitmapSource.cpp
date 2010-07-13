@@ -24,6 +24,8 @@
 
 using namespace Magick;
 
+namespace zxing {
+
 MagickBitmapSource::MagickBitmapSource(Image& image) : image_(image) {
   width = image.columns();
   height = image.rows();
@@ -35,25 +37,30 @@ MagickBitmapSource::~MagickBitmapSource() {
 
 }
 
-int MagickBitmapSource::getWidth() {
+int MagickBitmapSource::getWidth() const {
   return width;
 }
 
-int MagickBitmapSource::getHeight() {
+int MagickBitmapSource::getHeight() const {
   return height;
 }
 
-unsigned char MagickBitmapSource::getPixel(int x, int y) {
-  const PixelPacket* p = pixel_cache + y * width + x;
-  // We assume 16 bit values here
+unsigned char* MagickBitmapSource::getRow(int y, unsigned char* row) {
+  int width = getWidth();
+  if (row == NULL) {
+    row = new unsigned char[width];
+  }
+  for (int x = 0; x < width; x++) {
+    const PixelPacket* p = pixel_cache + y * width + x;
+    // We assume 16 bit values here
+    row[x] = (unsigned char)((306 * ((int)p->red >> 8) + 601 * ((int)p->green >> 8) + 117 * ((int)p->blue >> 8)) >> 10);
+  }
+  return row;
 
-  //return (unsigned char)((((int)p->red + (int)p->green + (int)p->blue) >> 8) / 3);
-
-  return (unsigned char)((306 * ((int)p->red >> 8) + 601 * ((int)p->green >> 8) + 117 * ((int)p->blue >> 8)) >> 10);
 }
 
 /** This is a more efficient implementation. */
-unsigned char* MagickBitmapSource::copyMatrix() {
+unsigned char* MagickBitmapSource::getMatrix() {
   int width = getWidth();
   int height =  getHeight();
   unsigned char* matrix = new unsigned char[width*height];
@@ -67,5 +74,6 @@ unsigned char* MagickBitmapSource::copyMatrix() {
     }
   }
   return matrix;
+}
 }
 

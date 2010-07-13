@@ -24,7 +24,9 @@
 #include <Magick++.h>
 #include <zxing/LuminanceSource.h>
 
-class MagickBitmapSource : public zxing::LuminanceSource {
+namespace zxing {
+
+class MagickBitmapSource : public LuminanceSource {
 private:
   Magick::Image& image_;
   int width;
@@ -36,10 +38,12 @@ public:
 
   ~MagickBitmapSource();
 
-  int getWidth();
-  int getHeight();
-  unsigned char getPixel(int x, int y);
-  unsigned char* copyMatrix();
+  int getWidth() const;
+  int getHeight() const;
+  unsigned char* getRow(int y, unsigned char* row);
+  unsigned char* getMatrix();
 };
+
+}
 
 #endif /* MAGICKMONOCHROMEBITMAPSOURCE_H_ */
