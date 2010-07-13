@@ -56,16 +56,26 @@ public final class PreferencesActivity extends PreferenceActivity
     preferences.getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
     decode1D = (CheckBoxPreference) preferences.findPreference(KEY_DECODE_1D);
     decodeQR = (CheckBoxPreference) preferences.findPreference(KEY_DECODE_QR);
+    disableLastCheckedPref();
   }
 
-  // Prevent the user from turning off both decode options
   public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-    if (key.equals(KEY_DECODE_1D)) {
-      decodeQR.setEnabled(decode1D.isChecked());
+    disableLastCheckedPref();
+  }
+
+  private void disableLastCheckedPref() {
+    if (decode1D.isChecked()) {
+      decodeQR.setEnabled(true);
+    } else {
+      decodeQR.setEnabled(false);
       decodeQR.setChecked(true);
-    } else if (key.equals(KEY_DECODE_QR)) {
-      decode1D.setEnabled(decodeQR.isChecked());
+    }
+    if (decodeQR.isChecked()) {
+      decode1D.setEnabled(true);
+    } else {
+      decode1D.setEnabled(false);
       decode1D.setChecked(true);
     }
   }
+
 }
