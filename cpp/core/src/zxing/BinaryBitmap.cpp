@@ -23,7 +23,7 @@
 
 namespace zxing {
 	
-	BinaryBitmap::BinaryBitmap(Ref<Binarizer> binarizer) : bits_(NULL), array_bits_(NULL), binarizer_(binarizer), cached_y_(-1) {
+	BinaryBitmap::BinaryBitmap(Ref<Binarizer> binarizer) : binarizer_(binarizer) {
 		
 	}
 	
@@ -31,28 +31,23 @@ namespace zxing {
 	}
 	
 	Ref<BitArray> BinaryBitmap::getBlackRow(int y, Ref<BitArray> row) {
-		if (array_bits_ == NULL && cached_y_ != y) {
-			array_bits_ = binarizer_->getBlackRow(y, row);
-			cached_y_ = y;
-		}
-		return array_bits_;
+		return binarizer_->getBlackRow(y, row);
 	}
 	
 	Ref<BitMatrix> BinaryBitmap::getBlackMatrix() {
-		if (bits_ == NULL) {
-			bits_ = binarizer_->getBlackMatrix();
-		}
-		return bits_;
-	}
-	int BinaryBitmap::getWidth() {
-		return getSource()->getWidth();
-	}
-	int BinaryBitmap::getHeight() {
-		return getSource()->getHeight();
+		return binarizer_->getBlackMatrix();
 	}
 	
-	Ref<LuminanceSource> BinaryBitmap::getSource() {
-		return binarizer_->getSource();
+	int BinaryBitmap::getWidth() const {
+		return getLuminanceSource()->getWidth();
+	}
+	
+	int BinaryBitmap::getHeight() const {
+		return getLuminanceSource()->getHeight();
+	}
+	
+	Ref<LuminanceSource> BinaryBitmap::getLuminanceSource() const {
+		return binarizer_->getLuminanceSource();
 	}
 	
 }

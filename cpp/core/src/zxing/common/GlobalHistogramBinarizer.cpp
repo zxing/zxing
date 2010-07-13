@@ -31,7 +31,7 @@ const int LUMINANCE_SHIFT = 8 - LUMINANCE_BITS;
 const int LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
 
 GlobalHistogramBinarizer::GlobalHistogramBinarizer(Ref<LuminanceSource> source) :
-  Binarizer(source) {
+  Binarizer(source), cached_matrix_(NULL), cached_row_(NULL), cached_row_num_(-1) {
 
 }
 
@@ -39,20 +39,26 @@ GlobalHistogramBinarizer::~GlobalHistogramBinarizer() {
 }
 
 
-Ref<BitArray> GlobalHistogramBinarizer::estimateBlackRow(int y,
-  Ref<BitArray> row){
+Ref<BitArray> GlobalHistogramBinarizer::getBlackRow(int y, Ref<BitArray> row) {
+
+  if (row == cached_row_num_) {
+    return cached_row_;
+  }
+
   vector<int> histogram(LUMINANCE_BUCKETS, 0);
-  LuminanceSource& source = *getSource();
+  LuminanceSource& source = *getLuminanceSource();
   int width = source.getWidth();
   if (row == NULL || static_cast<int>(row->getSize()) < width) {
     row = new BitArray(width);
   } else {
     row->clear();
   }
-
+  
+  //TODO(flyashi): cache this instead of allocating and deleting per row
+  unsigned char* row_pixels = new unsigned char[width];
+  getLuminanceSource()->getRow(y,row_pixels);
   for (int x = 0; x < width; x++) {
-    unsigned char pixel = source.getPixel(x, y);
-    histogram[pixel >> LUMINANCE_SHIFT]++;
+    histogram[row_pixels[x] >> LUMINANCE_SHIFT]++;
   }
   int blackPoint = estimate(histogram) << LUMINANCE_SHIFT;
 
@@ -60,10 +66,10 @@ Ref<BitArray> GlobalHistogramBinarizer::estimateBlackRow(int y,
   Ref<BitArray> array_ref(new BitArray(width));
   BitArray& array = *array_ref;
 
-  int left = source.getPixel(0, y);
-  int center = source.getPixel(1, y);
+  int left = row_pixels[0];
+  int center = row_pixels[1];
   for (int x = 1; x < width - 1; x++) {
-    int right = source.getPixel(x+1, y);
+    int right = row_pixels[x + 1];
     // A simple -1 4 -1 box filter with a weight of 2.
     int luminance = ((center << 2) - left - right) >> 1;
     if (luminance < blackPoint) {
@@ -73,12 +79,21 @@ Ref<BitArray> GlobalHistogramBinarizer::estimateBlackRow(int y,
     center = right;
   }
 
+  cached_row_ = array_ref;
+  cached_row_num_ = y;
+	
+  delete [] row_pixels;
   return array_ref;
 }
 
-Ref<BitMatrix> GlobalHistogramBinarizer::estimateBlackMatrix() {
+Ref<BitMatrix> GlobalHistogramBinarizer::getBlackMatrix() {
+
+  if (cached_matrix_ != NULL) {
+    return cached_matrix_;
+  }
+
   // Faster than working with the reference
-  LuminanceSource& source = *getSource();
+  LuminanceSource& source = *getLuminanceSource();
   int width = source.getWidth();
   int height = source.getHeight();
   vector<int> histogram(LUMINANCE_BUCKETS, 0);
@@ -87,14 +102,15 @@ Ref<BitMatrix> GlobalHistogramBinarizer::estimateBlackMatrix() {
   // Quickly calculates the histogram by sampling four rows from the image.
   // This proved to be more robust on the blackbox tests than sampling a
   // diagonal as we used to do.
+  unsigned char* row = new unsigned char[width];
   for (int y = 1; y < 5; y++) {
-    int row = height * y / 5;
+    int rownum = height * y / 5;
     int right = (width << 2) / 5;
     int sdf;
+    getLuminanceSource()->getRow(rownum,row);
     for (int x = width / 5; x < right; x++) {
-      unsigned char pixel = source.getPixel(x, row);
-      histogram[pixel >> LUMINANCE_SHIFT]++;
-      sdf = histogram[pixel >> LUMINANCE_SHIFT];
+      histogram[row[x] >> LUMINANCE_SHIFT]++;
+      sdf = histogram[row[x] >> LUMINANCE_SHIFT];
     }
   }
 
@@ -103,11 +119,16 @@ Ref<BitMatrix> GlobalHistogramBinarizer::estimateBlackMatrix() {
   Ref<BitMatrix> matrix_ref(new BitMatrix(width, height));
   BitMatrix& matrix = *matrix_ref;
   for (int y = 0; y < height; y++) {
+    getLuminanceSource()->getRow(y,row);
     for (int x = 0; x < width; x++) {
-      if (source.getPixel(x, y) <= blackPoint)
+      if (row[x] <= blackPoint)
         matrix.set(x, y);
     }
   }
+
+  cached_matrix_ = matrix_ref;
+
+  delete [] row;
   return matrix_ref;
 }
 
@@ -177,6 +198,10 @@ int GlobalHistogramBinarizer::estimate(vector<int> &histogram) {
   }
 
   return bestValley;
+}
+
+Ref<Binarizer> GlobalHistogramBinarizer::createBinarizer(Ref<LuminanceSource> source) {
+  return Ref<Binarizer> (new GlobalHistogramBinarizer(source));
 }
 
 } // namespace zxing

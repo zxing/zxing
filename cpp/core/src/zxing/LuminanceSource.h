@@ -22,6 +22,7 @@
 #define LUMINANCESOURCE_H_
 
 #include <zxing/common/Counted.h>
+#include <string.h>
 
 namespace zxing {
 
@@ -33,8 +34,15 @@ public:
   virtual int getWidth() const = 0;
   virtual int getHeight() const = 0;
 
-  virtual unsigned char getPixel(int x, int y) const = 0;
-  virtual unsigned char* copyMatrix();
+  virtual unsigned char* getRow(int y, unsigned char* row) = 0;
+  virtual unsigned char* getMatrix();
+
+  virtual bool isCropSupported() const;
+  virtual Ref<LuminanceSource> crop(int left, int top, int width, int height);
+
+  virtual bool isRotateSupported() const;
+  virtual Ref<LuminanceSource> rotateCounterClockwise();
+
 };
 
 }

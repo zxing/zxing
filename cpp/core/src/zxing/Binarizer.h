@@ -32,20 +32,16 @@ namespace zxing {
 class Binarizer : public Counted {
  private:
   Ref<LuminanceSource> source_;
-  Ref<BitArray> array_;
-  Ref<BitMatrix> matrix_;
-  int cached_y_;
 
  public:
   Binarizer(Ref<LuminanceSource> source);
   virtual ~Binarizer();
 
-  virtual Ref<BitArray> estimateBlackRow(int y, Ref<BitArray> row)=0;
-  Ref<BitArray> getBlackRow(int y, Ref<BitArray> row);
+  virtual Ref<BitArray> getBlackRow(int y, Ref<BitArray> row) = 0;
+  virtual Ref<BitMatrix> getBlackMatrix() = 0;
 
-  virtual Ref<BitMatrix> estimateBlackMatrix() = 0;
-  Ref<BitMatrix> getBlackMatrix();
-  Ref<LuminanceSource> getSource();
+  Ref<LuminanceSource> getLuminanceSource() const ;
+  virtual Ref<Binarizer> createBinarizer(Ref<LuminanceSource> source) = 0;
 };
 
 }
