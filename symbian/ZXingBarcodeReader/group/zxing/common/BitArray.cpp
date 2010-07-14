@@ -20,6 +20,7 @@
 
 #include <zxing/common/BitArray.h>
 #include <iostream>
+#include <limits>
 
 using namespace std;
 
@@ -43,12 +44,9 @@ size_t BitArray::wordsForBits(size_t bits) {
   }
   return arraySize;
 }
-BitArray::BitArray() {
-  cout << "hey! don't use this BitArrayConstructor!\n";
-}
 
 BitArray::BitArray(size_t size) :
-    size_(size), bits_((const unsigned int)0, wordsForBits(size)) {
+    size_(size), bits_(wordsForBits(size), (const unsigned int)0) {
 }
 BitArray::~BitArray() {
 }
@@ -105,14 +103,16 @@ bool BitArray::isRange(size_t start, size_t end, bool value) {
   }
   return true;
 }
-valarray<unsigned int>& BitArray::getBitArray() {
+vector<unsigned int>& BitArray::getBitArray() {
   return bits_;
 }
 void BitArray::reverse() {
-  unsigned int allBits = numeric_limits<unsigned int>::max();
-  size_t max = bits_.size();
-  for (size_t i = 0; i < max; i++) {
-    bits_[i] = bits_[i] ^ allBits;
+  std::vector<unsigned int> newBits(bits_.size(),(const unsigned int) 0);
+  for (size_t i = 0; i < size_; i++) {
+    if (get(size_ - i - 1)) {
+      newBits[i >> logBits_] |= 1<< (i & bitsMask_);
+    }
   }
+  bits_ = newBits;
 }
 }

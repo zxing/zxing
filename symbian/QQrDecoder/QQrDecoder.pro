@@ -61,7 +61,6 @@ HEADERS += CameraImageWrapper.h \
     zxing/qrcode/detector/FinderPatternFinder.h \
     zxing/qrcode/detector/FinderPatternInfo.h \
     zxing/qrcode/detector/QREdgeDetector.h \
-    QQrDecoder.loc \
     QQrDecoder.h
 SOURCES += CameraImageWrapper.cpp \
     zxing/BarcodeFormat.cpp \
@@ -121,8 +120,6 @@ SOURCES += CameraImageWrapper.cpp \
     zxing/qrcode/detector/FinderPatternFinder.cpp \
     zxing/qrcode/detector/FinderPatternInfo.cpp \
     zxing/qrcode/detector/QREdgeDetector.cpp \
-    QQrDecoder.rss \
-    QQrDecoder_reg.rss \
     main.cpp \
     QQrDecoder.cpp
 FORMS += QQrDecoder.ui

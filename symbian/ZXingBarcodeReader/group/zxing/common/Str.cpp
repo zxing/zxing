@@ -26,7 +26,7 @@ using namespace std;
 String::String(const std::string &text) :
     text_(text) {
 }
-std::string& String::getText() {
+const std::string& String::getText() const {
   return text_;
 }
 

@@ -14,17 +14,17 @@ CameraImage::~CameraImage()
 {
 }
 
-int CameraImage::getWidth()
+int CameraImage::getWidth() const 
 {
      return image->SizeInPixels().iWidth;
 }
 
-int CameraImage::getHeight()
+int CameraImage::getHeight() const
 {
      return image->SizeInPixels().iHeight;
 }
 
-unsigned char CameraImage::getPixel(int x, int y)
+unsigned char CameraImage::getPixel(int x, int y) const
 {
 	TPoint pixelPosition(x,y);
 	TRgb color;

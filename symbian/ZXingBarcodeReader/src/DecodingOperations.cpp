@@ -2,6 +2,7 @@
 #include <e32std.h>
 
 #include <zxing/qrcode/QRCodeReader.h>
+#include <zxing/MultiFormatReader.h>
 
 #include <zxing/common/GlobalHistogramBinarizer.h>
 #include <zxing/Binarizer.h>
@@ -35,7 +36,7 @@ TInt CZXingBarcodeReaderAppView::Tick(TAny* aObject)
 
 void CZXingBarcodeReaderAppView::decodeBackbufferImage()
 	{
-	QRCodeReader decoder;
+    MultiFormatReader decoder;
 
 	CameraImage image;
 	image.setImage(iBackBuffer);

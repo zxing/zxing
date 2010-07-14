@@ -32,7 +32,7 @@ private:
   std::string text_;
 public:
   String(const std::string &text);
-  std::string &getText();
+  const std::string &getText() const;
   friend std::ostream &operator<<(std::ostream &out, const String &s);
 };
 

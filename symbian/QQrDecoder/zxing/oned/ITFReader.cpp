@@ -237,7 +237,7 @@ namespace zxing {
 		 * @throws ReaderException if the quiet zone cannot be found, a ReaderException is thrown.
 		 */
 		void ITFReader::validateQuietZone(Ref<BitArray> row, int startPattern){
-#pragma mark needs some corrections
+//#pragma mark needs some corrections
 //			int quietCount = narrowLineWidth * 10;  // expect to find this many pixels of quiet zone
 //			
 //			for (int i = startPattern - 1; quietCount > 0 && i >= 0; i--) {
@@ -335,7 +335,7 @@ namespace zxing {
 		 * @throws ReaderException if digit cannot be decoded
 		 */
 		int ITFReader::decodeDigit(int counters[], int countersLen){
-			int bestVariance = MAX_AVG_VARIANCE; // worst variance we'll accept
+			unsigned int bestVariance = MAX_AVG_VARIANCE; // worst variance we'll accept
 			int bestMatch = -1;
 			int max = PATTERNS_LEN;
 			for (int i = 0; i < max; i++) {
@@ -343,7 +343,7 @@ namespace zxing {
 				for(int ind = 0; ind<countersLen; ind++){
 					pattern[ind] = PATTERNS[i][ind];
 				}
-				int variance = patternMatchVariance(counters, countersLen, pattern, MAX_INDIVIDUAL_VARIANCE);
+				unsigned int variance = patternMatchVariance(counters, countersLen, pattern, MAX_INDIVIDUAL_VARIANCE);
 				if (variance < bestVariance) {
 					bestVariance = variance;
 					bestMatch = i;

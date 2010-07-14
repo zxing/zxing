@@ -19,31 +19,29 @@
  */
 
 #include "UPCAReader.h"
-#include <zxing/oned/EAN13Reader.h>
 #include <zxing/ReaderException.h>
 
 namespace zxing {
 	namespace oned {
-		UPCAReader::UPCAReader(){
-			ean13Reader = new EAN13Reader();
+		UPCAReader::UPCAReader() : ean13Reader() {
 		}
 		
 		Ref<Result> UPCAReader::decodeRow(int rowNumber, Ref<BitArray> row){
-			return maybeReturnResult(ean13Reader->decodeRow(rowNumber, row)); 
+			return maybeReturnResult(ean13Reader.decodeRow(rowNumber, row)); 
 		}
 		Ref<Result> UPCAReader::decodeRow(int rowNumber, Ref<BitArray> row, int startGuardRange[]){
-			return maybeReturnResult(ean13Reader->decodeRow(rowNumber, row, startGuardRange));
+			return maybeReturnResult(ean13Reader.decodeRow(rowNumber, row, startGuardRange));
 		}
 		Ref<Result> UPCAReader::decode(Ref<BinaryBitmap> image){
-			return maybeReturnResult(ean13Reader->decode(image));
+			return maybeReturnResult(ean13Reader.decode(image));
 		}
 		
 		int UPCAReader::decodeMiddle(Ref<BitArray> row, int startRange[], int startRangeLen, std::string& resultString){
-			return ean13Reader->decodeMiddle(row, startRange, startRangeLen, resultString);
+			return ean13Reader.decodeMiddle(row, startRange, startRangeLen, resultString);
 		}
 		
 		Ref<Result> UPCAReader::maybeReturnResult(Ref<Result> result){
-			std::string& text = (result->getText())->getText();
+			const std::string& text = (result->getText())->getText();
 			if (text[0] == '0') {
 				Ref<String> resultString(new String(text.substr(1)));
 				Ref<Result> res(new Result(resultString, result->getRawBytes(), result->getResultPoints(), BarcodeFormat_UPC_A));
@@ -56,9 +54,6 @@ namespace zxing {
 		
 		BarcodeFormat UPCAReader::getBarcodeFormat(){
 			return BarcodeFormat_UPC_A;
-		}
-		UPCAReader::~UPCAReader(){
-			delete ean13Reader;
 		}
 	}
 }

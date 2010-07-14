@@ -43,18 +43,23 @@ private:
   size_t height_;
   float moduleSize_;
 
-  static float centerFromEnd(std::valarray<int> &stateCount, int end);
-  bool foundPatternCross(std::valarray<int> &stateCount);
+  static float centerFromEnd(std::vector<int> &stateCount, int end);
+  bool foundPatternCross(std::vector<int> &stateCount);
 
   float crossCheckVertical(size_t startI, size_t centerJ, int maxCount, int originalStateCountTotal);
 
-  Ref<AlignmentPattern> handlePossibleCenter(std::valarray<int> &stateCount, size_t i, size_t j);
+  Ref<AlignmentPattern> handlePossibleCenter(std::vector<int> &stateCount, size_t i, size_t j);
 
 public:
   AlignmentPatternFinder(Ref<BitMatrix> image, size_t startX, size_t startY, size_t width, size_t height,
                          float moduleSize);
   ~AlignmentPatternFinder();
   Ref<AlignmentPattern> find();
+  
+private:
+  AlignmentPatternFinder(const AlignmentPatternFinder&);
+  AlignmentPatternFinder& operator =(const AlignmentPatternFinder&);
+  
 };
 }
 }

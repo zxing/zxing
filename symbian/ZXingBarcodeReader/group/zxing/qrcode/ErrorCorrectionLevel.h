@@ -29,7 +29,7 @@ namespace qrcode {
 class ErrorCorrectionLevel {
 private:
   int ordinal_;
-  ErrorCorrectionLevel(int ordinal);
+  ErrorCorrectionLevel(int inOrdinal);
   static ErrorCorrectionLevel *FOR_BITS[];
   static int N_LEVELS;
 public:

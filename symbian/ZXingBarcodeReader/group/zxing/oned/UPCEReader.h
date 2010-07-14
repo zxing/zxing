@@ -26,7 +26,6 @@ namespace zxing {
 		class UPCEReader : public UPCEANReader {
 			
 		private:
-			int* decodeMiddleCounters;
 			static void determineFirstDigit(std::string& resultString, int lgPatternFound);								//throws ReaderException
 			static void determineNumSysAndCheckDigit(std::string& resultString, int lgPatternFound);						//throws ReaderException
 		protected:
@@ -39,7 +38,6 @@ namespace zxing {
 			static std::string& convertUPCEtoUPCA(std::string upce);
 			
 			BarcodeFormat getBarcodeFormat();
-			~UPCEReader();
 		};
 	}
 }

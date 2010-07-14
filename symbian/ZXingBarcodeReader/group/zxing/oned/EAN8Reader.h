@@ -25,16 +25,12 @@ namespace zxing {
 	namespace oned {
 		class EAN8Reader : public UPCEANReader {
 			
-		private:
-			int* decodeMiddleCounters;
-			
 		public:
 			EAN8Reader();
 			
 			int decodeMiddle(Ref<BitArray> row, int startRange[], int startRangeLen, std::string& resultString);			//throws ReaderException
 			
 			BarcodeFormat getBarcodeFormat();
-			~EAN8Reader();
 		};
 	}
 }

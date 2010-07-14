@@ -30,8 +30,8 @@ namespace zxing {
 			
 		public:
 			OneDResultPoint(float posX, float posY);
-			float getX();
-			float getY();
+			float getX() const;
+			float getY() const;
 		};
 	}
 }

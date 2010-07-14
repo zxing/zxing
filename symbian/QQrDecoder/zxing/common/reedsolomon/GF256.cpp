@@ -109,13 +109,10 @@ int GF256::multiply(int a, int b) {
   if (a == 0 || b == 0) {
     return 0;
   }
-  if (a == 1) {
-    return b;
-  }
-  if (b == 1) {
-    return a;
-  }
-  return exp_[(log_[a] + log_[b]) % 255];
+  int logSum = log_[a] + log_[b];
+  // index is a sped-up alternative to logSum % 255 since sum
+  // is in [0,510]. Thanks to jmsachs for the idea
+  return exp_[(logSum & 0xFF) + (logSum >> 8)];
 }
 
 GF256 GF256::QR_CODE_FIELD(0x011D); // x^8 + x^4 + x^3 + x^2 + 1

@@ -19,7 +19,7 @@
  * limitations under the License.
  */
 
-#include "MultiFormatReader.h"
+#include <zxing/MultiFormatReader.h>
 #include <zxing/qrcode/QRCodeReader.h>
 //#include <zxing/datamatrix/DataMatrixReader.h>
 #include <zxing/oned/MultiFormatUPCEANReader.h>
@@ -27,28 +27,27 @@
 #include <zxing/ReaderException.h>
 
 namespace zxing {
-	MultiFormatReader::MultiFormatReader(){
-		readers = new std::vector<Reader*>();
-		
-		readers->push_back(new zxing::qrcode::QRCodeReader());
-		//readers->push_back(new zxing::datamatrix::DataMatrixReader());
-		readers->push_back(new zxing::oned::MultiFormatUPCEANReader());
-		readers->push_back(new zxing::oned::MultiFormatOneDReader());
+	MultiFormatReader::MultiFormatReader() {
+		readers.push_back(new zxing::qrcode::QRCodeReader());
+		//readers.push_back(new zxing::datamatrix::DataMatrixReader());
+		readers.push_back(new zxing::oned::MultiFormatUPCEANReader());
+		readers.push_back(new zxing::oned::MultiFormatOneDReader());
 	}
 	
 	Ref<Result> MultiFormatReader::decode(Ref<BinaryBitmap> image){
-		int size = readers->size();
-		for (int i = 0; i < size; i++) {
-			Reader* reader = (*readers)[i];
+		for (unsigned int i = 0; i < readers.size(); i++) {
 			try {
-				return reader->decode(image);
+				return readers[i]->decode(image);
 			} catch (ReaderException re) {
 				// continue
 			}
 		}
 		throw ReaderException("No code detected");
 	}
+	
 	MultiFormatReader::~MultiFormatReader(){
-		delete readers;
+		for (unsigned int i = 0; i < readers.size(); i++) {
+			delete readers[i];
+		}
 	}
 }

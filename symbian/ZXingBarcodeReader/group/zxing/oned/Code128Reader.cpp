@@ -24,13 +24,14 @@
 #include <zxing/ReaderException.h>
 #include <math.h>
 #include <string.h>
+#include <sstream>
 
 namespace zxing {
 	namespace oned {
 		
-		const int CODE_PATTERNS_LENGHT = 107;
-		const int countersLenght = 6;
-		static const int CODE_PATTERNS[CODE_PATTERNS_LENGHT][countersLenght] = {
+		const int CODE_PATTERNS_LENGTH = 107;
+		const int countersLength = 6;
+		static const int CODE_PATTERNS[CODE_PATTERNS_LENGTH][countersLength] = {
 			{2, 1, 2, 2, 2, 2}, /* 0 */
 			{2, 2, 2, 1, 2, 2},
 			{2, 2, 2, 2, 2, 1},
@@ -155,7 +156,7 @@ namespace zxing {
 			}
 			
 			int counterPosition = 0;
-			int counters[countersLenght] = {0,0,0,0,0,0};
+			int counters[countersLength] = {0,0,0,0,0,0};
 			int patternStart = rowOffset;
 			bool isWhite = false;
 			int patternLength =  sizeof(counters) / sizeof(int);
@@ -166,10 +167,10 @@ namespace zxing {
 					counters[counterPosition]++;
 				} else {
 					if (counterPosition == patternLength - 1) {
-						int bestVariance = MAX_AVG_VARIANCE;
+						unsigned int bestVariance = MAX_AVG_VARIANCE;
 						int bestMatch = -1;
 						for (int startCode = CODE_START_A; startCode <= CODE_START_C; startCode++) {
-							int variance = patternMatchVariance(counters, sizeof(counters)/sizeof(int), CODE_PATTERNS[startCode], MAX_INDIVIDUAL_VARIANCE);
+							unsigned int variance = patternMatchVariance(counters, sizeof(counters)/sizeof(int), CODE_PATTERNS[startCode], MAX_INDIVIDUAL_VARIANCE);
 							if (variance < bestVariance) {
 								bestVariance = variance;
 								bestMatch = startCode;
@@ -204,16 +205,16 @@ namespace zxing {
 		
 		int Code128Reader::decodeCode(Ref<BitArray> row, int counters[], int countersCount, int rowOffset){
 			recordPattern(row, rowOffset, counters, countersCount);
-			int bestVariance = MAX_AVG_VARIANCE; // worst variance we'll accept
+			unsigned int bestVariance = MAX_AVG_VARIANCE; // worst variance we'll accept
 			int bestMatch = -1;
-			for (int d = 0; d < CODE_PATTERNS_LENGHT; d++) {
-				int pattern[countersLenght];
+			for (int d = 0; d < CODE_PATTERNS_LENGTH; d++) {
+				int pattern[countersLength];
 				
-				for(int ind = 0; ind< countersLenght; ind++){
+				for(int ind = 0; ind< countersLength; ind++){
 					pattern[ind] = CODE_PATTERNS[d][ind];
 				}
-//				memcpy(pattern, CODE_PATTERNS[d], countersLenght);
-				int variance = patternMatchVariance(counters, countersCount, pattern, MAX_INDIVIDUAL_VARIANCE);
+//				memcpy(pattern, CODE_PATTERNS[d], countersLength);
+				unsigned int variance = patternMatchVariance(counters, countersCount, pattern, MAX_INDIVIDUAL_VARIANCE);
 				if (variance < bestVariance) {
 					bestVariance = variance;
 					bestMatch = d;
@@ -243,6 +244,7 @@ namespace zxing {
 					codeSet = CODE_CODE_C;
 					break;
 				default:
+					delete [] startPatternInfo;
 					throw ReaderException("");
 			}
 			
@@ -250,11 +252,11 @@ namespace zxing {
 			bool isNextShifted = false;
 			
 			std::string tmpResultString;
-
+			std::stringstream tmpResultSStr; // used if its Code 128C
 			
 			int lastStart = startPatternInfo[0];
 			int nextStart = startPatternInfo[1];
-			int counters[countersLenght] = {0,0,0,0,0,0};
+			int counters[countersLength] = {0,0,0,0,0,0};
 			
 			int lastCode = 0;
 			int code = 0;
@@ -271,7 +273,12 @@ namespace zxing {
 				lastCode = code;
 				
 				// Decode another code from image
+				try {
 				code = decodeCode(row, counters, sizeof(counters)/sizeof(int), nextStart);
+				} catch (ReaderException re) {
+					delete [] startPatternInfo;
+					throw re;
+				}
 				
 				// Remember whether the last code was printable or not (excluding CODE_STOP)
 				if (code != CODE_STOP) {
@@ -286,8 +293,8 @@ namespace zxing {
 				
 				// Advance to where the next code will to start
 				lastStart = nextStart;
-				int _countersLenght = sizeof(counters) / sizeof(int);
-				for (int i = 0; i < _countersLenght; i++) {
+				int _countersLength = sizeof(counters) / sizeof(int);
+				for (int i = 0; i < _countersLength; i++) {
 					nextStart += counters[i];
 				}
 				
@@ -296,6 +303,7 @@ namespace zxing {
 					case CODE_START_A:
 					case CODE_START_B:
 					case CODE_START_C:
+						delete [] startPatternInfo;
 						throw ReaderException("");
 				}
 				
@@ -366,11 +374,11 @@ namespace zxing {
 						}
 						break;
 					case CODE_CODE_C:
+					// the code read in this case is the number encoded directly
 						if (code < 100) {
-							if (code < 10) {
-								tmpResultString.append(1, '0');
-							}
-							tmpResultString.append(1, code);
+							if (code < 10) 
+							tmpResultSStr << '0';
+						tmpResultSStr << code;
 						} else {
 							if (code != CODE_STOP) {
 								lastCharacterWasPrintable = false;
@@ -418,6 +426,7 @@ namespace zxing {
 				nextStart++;
 			}
 			if (!row->isRange(nextStart, fminl(width, nextStart + (nextStart - lastStart) / 2), false)) {
+				delete [] startPatternInfo;
 				throw ReaderException("");
 			}
 			
@@ -425,8 +434,12 @@ namespace zxing {
 			checksumTotal -= multiplier * lastCode;
 			// lastCode is the checksum then:
 			if (checksumTotal % 103 != lastCode) {
+				delete [] startPatternInfo;
 				throw ReaderException("");
 			}
+			
+			if (codeSet == CODE_CODE_C)
+				tmpResultString.append(tmpResultSStr.str());
 			
 			// Need to pull out the check digits from string
 			int resultLength = tmpResultString.length();
@@ -444,6 +457,7 @@ namespace zxing {
 //			String resultString(tmpResultString);
 			
 			if (tmpResultString.length() == 0) {
+				delete [] startPatternInfo;
 				// Almost surely a false positive
 				throw ReaderException("");
 			}
