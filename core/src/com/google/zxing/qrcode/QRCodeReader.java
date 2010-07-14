@@ -140,9 +140,10 @@ public class QRCodeReader implements Reader {
 
     // Push in the "border" by half the module width so that we start
     // sampling in the middle of the module. Just in case the image is a
-    // little off, this will help recover.
-    x -= moduleSize >> 1;
-    y -= moduleSize >> 1;
+    // little off, this will help recover. Need to back up at least 1.
+    int backOffAmount = moduleSize == 1 ? 1 : moduleSize >> 1;
+    x -= backOffAmount;
+    y -= backOffAmount;
 
     if ((x + (dimension - 1) * moduleSize) >= width ||
         (y + (dimension - 1) * moduleSize) >= height) {
