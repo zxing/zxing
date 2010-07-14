@@ -22,7 +22,7 @@ for format in $formats; do
 		tmp="${pic%JPG}";
 		txt="${tmp%jpg}txt";
 		expected=`cat "$txt"`;
-		actual=`build/zxing . $pic`;
+		actual=`build/zxing $pic`;
 		if [ "$expected" == "$actual" ]; then
 			echo "passed."
 			passed=$((passed+1));
