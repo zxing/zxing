@@ -26,7 +26,6 @@ namespace zxing {
 		class EAN13Reader : public UPCEANReader {
 			
 		private:
-			int* decodeMiddleCounters;
 			static void determineFirstDigit(std::string& resultString, int lgPatternFound);								//throws ReaderException
 			
 		public:
@@ -35,7 +34,6 @@ namespace zxing {
 			int decodeMiddle(Ref<BitArray> row, int startRange[], int startRangeLen, std::string& resultString);			//throws ReaderException
 			
 			BarcodeFormat getBarcodeFormat();
-			~EAN13Reader();
 		};
 	}
 }

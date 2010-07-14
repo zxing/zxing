@@ -3,6 +3,7 @@
  *  ZXing
  *
  *  Created by Lukasz Warchol on 10-01-26.
+ *  Modified by Luiz Silva on 09/02/2010.
  *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,12 +28,12 @@ namespace zxing {
 	class MultiFormatReader : public Reader {
 		
 	private:
-		std::vector<Reader*>* readers;
+		std::vector<Reader*>readers;
 	public:
 		MultiFormatReader();
 		
 		Ref<Result> decode(Ref<BinaryBitmap> image);
-		
+  
 		~MultiFormatReader();
 	};
 }

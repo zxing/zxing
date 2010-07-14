@@ -27,6 +27,7 @@
 #include <zxing/common/GridSampler.h>
 #include <cmath>
 #include <sstream>
+#include <cstdlib>
 
 namespace zxing {
 namespace qrcode {
@@ -133,8 +134,8 @@ Ref<BitMatrix> Detector::sampleGrid(Ref<BitMatrix> image, int dimension, Ref<Per
 
 int Detector::computeDimension(Ref<ResultPoint> topLeft, Ref<ResultPoint> topRight, Ref<ResultPoint> bottomLeft,
                                float moduleSize) {
-  int tltrCentersDimension = lround(FinderPatternFinder::distance(topLeft, topRight) / moduleSize);
-  int tlblCentersDimension = lround(FinderPatternFinder::distance(topLeft, bottomLeft) / moduleSize);
+  int tltrCentersDimension = int(FinderPatternFinder::distance(topLeft, topRight) / moduleSize + 0.5f);
+  int tlblCentersDimension = int(FinderPatternFinder::distance(topLeft, bottomLeft) / moduleSize + 0.5f);
   int dimension = ((tltrCentersDimension + tlblCentersDimension) >> 1) + 7;
   switch (dimension & 0x03) { // mod 4
   case 0:

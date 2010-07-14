@@ -20,6 +20,7 @@
 
 #include <zxing/qrcode/detector/QREdgeDetector.h>
 #include <zxing/common/EdgeDetector.h>
+#include <cstdlib>
 
 using namespace std;
 

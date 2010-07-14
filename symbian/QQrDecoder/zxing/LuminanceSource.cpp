@@ -28,7 +28,7 @@ LuminanceSource::LuminanceSource() {
 LuminanceSource::~LuminanceSource() {
 }
 
-unsigned char* LuminanceSource::copyMatrix() const {
+unsigned char* LuminanceSource::copyMatrix() {
   int width = getWidth();
   int height =  getHeight();
   unsigned char* matrix = new unsigned char[width*height];

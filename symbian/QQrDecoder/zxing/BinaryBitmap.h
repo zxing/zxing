@@ -33,6 +33,7 @@ namespace zxing {
 		Ref<BitMatrix> bits_;
 		Ref<BitArray> array_bits_;
 		Ref<Binarizer> binarizer_;
+		int cached_y_;
 		
 	public:
 		BinaryBitmap(Ref<Binarizer> binarizer);

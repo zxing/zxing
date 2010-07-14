@@ -21,16 +21,17 @@
  * limitations under the License.
  */
 
-#include <map>
 #include <zxing/BinaryBitmap.h>
 #include <zxing/Result.h>
 
 namespace zxing {
 
-class Reader {
-public:
-  virtual Ref<Result> decode(Ref<BinaryBitmap> image) = 0;
-  virtual ~Reader();
+ class Reader : public Counted {
+  protected:
+   Reader() {}
+  public:
+   virtual Ref<Result> decode(Ref<BinaryBitmap> image) = 0;
+   virtual ~Reader();
 };
 
 }

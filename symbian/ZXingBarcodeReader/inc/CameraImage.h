@@ -15,10 +15,10 @@ public:
     CameraImage(CameraImage& otherInstance);
     ~CameraImage();
     
-    int getWidth();
-    int getHeight();
+    int getWidth() const;
+    int getHeight() const;
     
-    unsigned char getPixel(int x, int y);
+    unsigned char getPixel(int x, int y) const;
     
     void setImage(CFbsBitmap* newImage);
     

@@ -23,7 +23,7 @@
 
 namespace zxing {
 	
-	BinaryBitmap::BinaryBitmap(Ref<Binarizer> binarizer) : bits_(NULL), array_bits_(NULL), binarizer_(binarizer) {
+	BinaryBitmap::BinaryBitmap(Ref<Binarizer> binarizer) : bits_(NULL), array_bits_(NULL), binarizer_(binarizer), cached_y_(-1) {
 		
 	}
 	
@@ -31,8 +31,9 @@ namespace zxing {
 	}
 	
 	Ref<BitArray> BinaryBitmap::getBlackRow(int y, Ref<BitArray> row) {
-		if (array_bits_ == NULL) {
+		if (array_bits_ == NULL && cached_y_ != y) {
 			array_bits_ = binarizer_->getBlackRow(y, row);
+			cached_y_ = y;
 		}
 		return array_bits_;
 	}

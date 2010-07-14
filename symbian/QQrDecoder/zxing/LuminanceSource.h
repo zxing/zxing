@@ -34,7 +34,7 @@ public:
   virtual int getHeight() const = 0;
 
   virtual unsigned char getPixel(int x, int y) const = 0;
-  virtual unsigned char* copyMatrix() const;
+  virtual unsigned char* copyMatrix();
 };
 
 }

@@ -28,24 +28,25 @@
 #include <zxing/common/Counted.h>
 
 namespace zxing {
-	
-	class Binarizer : public Counted {
-	private:
-		Ref<LuminanceSource> source_;
-		Ref<BitMatrix> matrix_;
-		Ref<BitArray> array_;
-		
-	public:
-		Binarizer(Ref<LuminanceSource> source);
-		virtual ~Binarizer();
-		
-		virtual Ref<BitArray> estimateBlackRow(int y, Ref<BitArray> row)=0;
-		Ref<BitArray> getBlackRow(int y, Ref<BitArray> row);
-		
-		virtual Ref<BitMatrix> estimateBlackMatrix() = 0;
-		Ref<BitMatrix> getBlackMatrix();
-		Ref<LuminanceSource> getSource();
-	};
-	
+
+class Binarizer : public Counted {
+ private:
+  Ref<LuminanceSource> source_;
+  Ref<BitArray> array_;
+  Ref<BitMatrix> matrix_;
+  int cached_y_;
+
+ public:
+  Binarizer(Ref<LuminanceSource> source);
+  virtual ~Binarizer();
+
+  virtual Ref<BitArray> estimateBlackRow(int y, Ref<BitArray> row)=0;
+  Ref<BitArray> getBlackRow(int y, Ref<BitArray> row);
+
+  virtual Ref<BitMatrix> estimateBlackMatrix() = 0;
+  Ref<BitMatrix> getBlackMatrix();
+  Ref<LuminanceSource> getSource();
+};
+
 }
 #endif /* BINARIZER_H_ */

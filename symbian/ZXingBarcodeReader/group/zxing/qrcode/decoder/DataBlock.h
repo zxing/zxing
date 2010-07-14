@@ -21,7 +21,6 @@
  * limitations under the License.
  */
 
-#include <valarray>
 #include <vector>
 #include <zxing/common/Counted.h>
 #include <zxing/common/Array.h>

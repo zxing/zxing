@@ -29,7 +29,8 @@
  ****************************************************************************/
 
 #include "QQrDecoder.h"
-#include <zxing/qrcode/QRCodeReader.h>
+//#include <zxing/qrcode/QRCodeReader.h>
+#include <zxing/MultiFormatReader.h>
 
 #include <zxing/common/GlobalHistogramBinarizer.h>
 #include <zxing/Binarizer.h>
@@ -41,7 +42,7 @@
 #include <QPixmap>
 
 using namespace zxing;
-using namespace zxing::qrcode;
+//using namespace zxing::qrcode;
 
 QQrDecoder::QQrDecoder(QWidget *parent): QMainWindow(parent)
 {
@@ -67,7 +68,7 @@ void QQrDecoder::findAndDecode()
 
 void QQrDecoder::decodeImage(QImage originalImage)
 {
-    QRCodeReader decoder;
+    MultiFormatReader decoder;
 
     image.setImage(originalImage);
 

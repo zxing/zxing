@@ -29,13 +29,11 @@ namespace zxing {
 		class MultiFormatUPCEANReader : public OneDReader {
 			
 		private:
-			std::vector<OneDReader*>* readers;
+			std::vector<Ref<OneDReader> > readers;
 		public:
 			MultiFormatUPCEANReader();
 			
 			Ref<Result> decodeRow(int rowNumber, Ref<BitArray> row);
-			
-			~MultiFormatUPCEANReader();
-		};
+    };
 	}
 }

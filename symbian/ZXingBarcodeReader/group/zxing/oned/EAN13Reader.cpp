@@ -27,20 +27,11 @@ namespace zxing {
 		static const int FIRST_DIGIT_ENCODINGS[10] = {0x00, 0x0B, 0x0D, 0xE, 0x13, 0x19, 0x1C, 0x15, 0x16, 0x1A};
 				
 		
-		EAN13Reader::EAN13Reader(){
-			decodeMiddleCounters = new int[4];
-			for (int i=0; i<4; i++) {
-				decodeMiddleCounters[i] = 0;
-			}
-		}
+		EAN13Reader::EAN13Reader() { }
 		
 		int EAN13Reader::decodeMiddle(Ref<BitArray> row, int startRange[], int startRangeLen, std::string& resultString){
-			int countersLen = 4;
-			int* counters = decodeMiddleCounters;
-			counters[0] = 0;
-			counters[1] = 0;
-			counters[2] = 0;
-			counters[3] = 0;
+			const int countersLen = 4;
+			int counters[countersLen] = { 0, 0, 0, 0 };
 			
 			
 			int end = row->getSize();
@@ -87,9 +78,6 @@ namespace zxing {
 		
 		BarcodeFormat EAN13Reader::getBarcodeFormat(){
 			return BarcodeFormat_EAN_13;
-		}
-		EAN13Reader::~EAN13Reader(){
-			delete [] decodeMiddleCounters;
 		}
 	}
 }

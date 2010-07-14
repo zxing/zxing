@@ -36,12 +36,12 @@ namespace zxing {
 			
 		public:
 			FinderPattern(float posX, float posY, float estimatedModuleSize);
-			float getX();
-			float getY();
-			int getCount();
-			float getEstimatedModuleSize();
+			float getX() const;
+			float getY() const;
+			int getCount() const;
+			float getEstimatedModuleSize() const;
 			void incrementCount();
-			bool aboutEquals(float moduleSize, float i, float j);
+			bool aboutEquals(float moduleSize, float i, float j) const;
 		};
 	}
 }

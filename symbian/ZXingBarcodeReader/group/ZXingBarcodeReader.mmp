@@ -31,11 +31,18 @@ SYSTEMINCLUDE		/epoc32/include/stdapis/stlport/stl
 
 SYSTEMINCLUDE		.
 SYSTEMINCLUDE     	../inc
+SYSTEMINCLUDE		zxing/common
 SYSTEMINCLUDE		zxing/common/reedsolomon
 SYSTEMINCLUDE		zxing/oned
 SYSTEMINCLUDE		zxing/qrcode
 SYSTEMINCLUDE		zxing/qrcode/decoder
 SYSTEMINCLUDE		zxing/qrcode/detector
+
+/*
+SYSTEMINCLUDE		zxing/datamatrix
+SYSTEMINCLUDE		zxing/datamatrix/decoder
+SYSTEMINCLUDE		zxing/datamatrix/detector
+*/
 
 SOURCEPATH      ../src
 SOURCE          ZXingBarcodeReader.cpp
@@ -80,6 +87,15 @@ SOURCEPATH zxing/qrcode
 SOURCE ErrorCorrectionLevel.cpp FormatInformation.cpp QRCodeReader.cpp Version.cpp
 SOURCEPATH zxing
 SOURCE BarcodeFormat.cpp Binarizer.cpp BinaryBitmap.cpp Exception.cpp LuminanceSource.cpp MultiFormatReader.cpp Reader.cpp ReaderException.cpp Result.cpp ResultPoint.cpp
+
+/*
+SOURCEPATH zxing/datamatrix/detector
+SOURCE CornerPoint.cpp Detector.cpp MonochromeRectangleDetector.cpp
+SOURCEPATH zxing/datamatrix/decoder
+SOURCE BitMatrixParser.cpp DataBlock.cpp DecodedBitStreamParser.cpp Decoder.cpp
+SOURCEPATH zxing/datamatrix
+SOURCE Version.cpp DataMatrixReader.cpp
+*/
 
 OPTION CW -wchar_t on
 OPTION ARMCC --visibility_inlines_hidden

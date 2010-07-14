@@ -27,7 +27,7 @@ namespace zxing {
 		class Code128Reader : public OneDReader {
 			
 		private:
-			static const int MAX_AVG_VARIANCE = (int) (PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.25f);
+			static const unsigned int MAX_AVG_VARIANCE = (unsigned int) (PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.25f);
 			static const int MAX_INDIVIDUAL_VARIANCE = (int) (PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.7f);
 			
 			static const int CODE_SHIFT = 98;
