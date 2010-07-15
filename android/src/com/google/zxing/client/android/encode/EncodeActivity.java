@@ -24,10 +24,6 @@ import com.google.zxing.client.android.R;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnCancelListener;
-import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -62,7 +58,6 @@ public final class EncodeActivity extends Activity {
   private static final int MAX_BARCODE_FILENAME_LENGTH = 24;
 
   private QRCodeEncoder qrCodeEncoder;
-  private ProgressDialog progressDialog;
   private boolean firstLayout;
 
   /**
@@ -83,8 +78,6 @@ public final class EncodeActivity extends Activity {
           qrCodeEncoder = new QRCodeEncoder(EncodeActivity.this, intent);
           setTitle(getString(R.string.app_name) + " - " + qrCodeEncoder.getTitle());
           qrCodeEncoder.requestBarcode(handler, smallerDimension);
-          progressDialog = ProgressDialog.show(EncodeActivity.this, null,
-              getString(R.string.msg_encode_in_progress), true, true, new FinishListener(EncodeActivity.this));
         } catch (IllegalArgumentException e) {
           showErrorMessage(R.string.msg_encode_contents_failed);
         }
@@ -98,8 +91,6 @@ public final class EncodeActivity extends Activity {
     public void handleMessage(Message message) {
       switch (message.what) {
         case R.id.encode_succeeded:
-          progressDialog.dismiss();
-          progressDialog = null;
           Bitmap image = (Bitmap) message.obj;
           ImageView view = (ImageView) findViewById(R.id.image_view);
           view.setImageBitmap(image);
@@ -209,17 +200,12 @@ public final class EncodeActivity extends Activity {
   @Override
   protected void onResume() {
     super.onResume();
-
     View layout = findViewById(R.id.encode_view);
     layout.getViewTreeObserver().addOnGlobalLayoutListener(layoutListener);
     firstLayout = true;
   }
 
   private void showErrorMessage(int message) {
-    if (progressDialog != null) {
-      progressDialog.dismiss();
-      progressDialog = null;
-    }
     AlertDialog.Builder builder = new AlertDialog.Builder(this);
     builder.setMessage(message);
     builder.setPositiveButton(R.string.button_ok, new FinishListener(this));
