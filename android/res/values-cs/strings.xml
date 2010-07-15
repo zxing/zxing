@@ -74,7 +74,6 @@
   <string name="msg_default_type">Typ</string>
   <string name="msg_encode_barcode_failed">Nepodařilo se vytvořit požadovaný čárový kód.</string>
   <string name="msg_encode_contents_failed">Nepodařilo se rozkódovat čárový kód z poskytnutých údajů.</string>
-  <string name="msg_encode_in_progress">Generování kódu\u2026</string>
   <string name="msg_google_shopper_missing">Google Shopper není nainstalován</string>
   <string name="msg_install_google_shopper">Google Shopper kombinuje technologie čárového kódu s cenami, recenze a více bez otevření prohlížeče. Chtěli byste to zkusit?</string>
   <string name="msg_intent_failed">Litujeme, požadovanou aplikaci nelze spustit. Čárový kód je nefunkční.</string>

@@ -74,7 +74,6 @@
   <string name="msg_default_type">Typ</string>
   <string name="msg_encode_barcode_failed">Misslyckades med att skapa den önskade streckkoden.</string>
   <string name="msg_encode_contents_failed">Kunde inte skape en streckkod från de givna uppgifterna.</string>
-  <string name="msg_encode_in_progress">Genererar en streckkod\u2026</string>
   <string name="msg_google_shopper_missing">Google Shopper är inte installerat</string>
   <string name="msg_install_google_shopper">Google Shopper kombinerar barcode scanning med priser, recensioner och mer utan att öppna webbläsaren. Vill du prova det?</string>
   <string name="msg_intent_failed">Tyvärr, den önskade applikationen kunde inte startas. Streckkodens innehåll kanske är ogiltigt.</string>

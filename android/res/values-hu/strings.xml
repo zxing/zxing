@@ -74,7 +74,6 @@
   <string name="msg_default_type">Típus</string>
   <string name="msg_encode_barcode_failed">Nem lehetett legenerálni a kért vonalkódot.</string>
   <string name="msg_encode_contents_failed">Nem lehetett lekódolni a vonalkódot a megadott tartalomból.</string>
-  <string name="msg_encode_in_progress">Vonalkód generálása\u2026</string>
   <string name="msg_google_shopper_missing">A Google Shopper nincs telepítve</string>
   <string name="msg_install_google_shopper">A Google Shopper kombinálja a vonalkód szkennelést árakkal, értékelésekkel és más dolgokkal, böngésző megnyitása nélkül. Ki szeretné próbálni?</string>
   <string name="msg_intent_failed">Elnézést, a kért alkalmazást nem lehet elindítani. A vonalkód tartalma lehet, hogy érvénytelen.</string>

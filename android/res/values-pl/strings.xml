@@ -74,7 +74,6 @@
   <string name="msg_default_type">Typ</string>
   <string name="msg_encode_barcode_failed">Nie można wygenerować żądanego kodu paskowego.</string>
   <string name="msg_encode_contents_failed">Nie można zakodować kodu paskowego z dostarczonych danych.</string>
-  <string name="msg_encode_in_progress">Generowanie kodu paskowego\u2026</string>
   <string name="msg_google_shopper_missing">Google Shopper nie jest zainstalowany</string>
   <string name="msg_install_google_shopper">Google Shopper łączy skanowanie kodów paskowych z cenami, recenzjami, itp bez otwierania przeglądarki. Czy chciał/a byś go wypróbować?</string>
   <string name="msg_intent_failed">Przepraszamy, żadana aplikacja nie może zostać uruchomiona. Zawartość kodu paskowego może być nieprawidłowa.</string>

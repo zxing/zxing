@@ -74,7 +74,6 @@
   <string name="msg_default_type">类型</string>
   <string name="msg_encode_barcode_failed">找不到条码。</string>
   <string name="msg_encode_contents_failed">不能从已有数据中读取条码。   </string>
-  <string name="msg_encode_in_progress">正在生成条码</string>
   <string name="msg_google_shopper_missing">谷歌购物未安装</string>
   <string name="msg_install_google_shopper">谷歌购物结合条码扫描价格，评论和不打开浏览器。您想尝试吗？</string>
   <string name="msg_intent_failed">抱歉，无法打开所需软件。 条码内容可能无效。</string>

@@ -74,7 +74,6 @@
   <string name="msg_default_type">Type</string>
   <string name="msg_encode_barcode_failed">Kan de gevraagde barcode niet genereren.</string>
   <string name="msg_encode_contents_failed">Kan geen barcode van de gegeven data maken.</string>
-  <string name="msg_encode_in_progress">Barcode aan het genereren\u2026</string>
   <string name="msg_google_shopper_missing">Google Shopper is niet geïnstalleerd</string>
   <string name="msg_install_google_shopper">Google Shopper combineert barcode scanning met prijzen, reviews en nog veel meer zonder het openen van de browser. Wilt u het proberen?</string>
   <string name="msg_intent_failed">Sorry, de gevraagde applicatie kan niet gestart worden. De barcode kan verkeerd zijn.</string>

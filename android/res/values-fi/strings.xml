@@ -74,7 +74,6 @@
   <string name="msg_default_type">Tyypi</string>
   <string name="msg_encode_barcode_failed">Ei voinut generoida pyydettyä viivakoodia.</string>
   <string name="msg_encode_contents_failed">Ei voinut purkaa viivakoodin sisältöä.</string>
-  <string name="msg_encode_in_progress">Generoidaan viivakoodia\u2026</string>
   <string name="msg_google_shopper_missing">Google Shopper ei ole asennettu</string>
   <string name="msg_install_google_shopper">Google Shopper yhdistää viivakoodi skannauksen hintoihin, arvostelut ja avaamatta selainta. Haluatko kokeilla sitä?</string>
   <string name="msg_intent_failed">Anteeksi, pyydettyä ohjelmaa ei voi käynnistää. Viivakoodin sisältö on voinut vahingoittua.</string>

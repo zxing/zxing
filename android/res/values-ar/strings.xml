@@ -74,7 +74,6 @@
   <string name="msg_default_type">النوع</string>
   <string name="msg_encode_barcode_failed">تعذر إنشاء الرمز الشريطي المطلوب.</string>
   <string name="msg_encode_contents_failed">تعذر ترميز رمز شريطي من البيانات المتوفرة.</string>
-  <string name="msg_encode_in_progress">إنشاء رمز شريطي</string>
   <string name="msg_google_shopper_missing">لم يتم تثبيت Google Shopper</string>
   <string name="msg_install_google_shopper">يجمع Google Shopper بين مسح الرمز الشريطي مع الأسعار والتعليقات وغيرها بدون فتح المتصفح. هل تريد استخدامه؟</string>
   <string name="msg_intent_failed">عفوا، تعذر تشغيل التطبيق المطلوب. قد تكون محتويات الرمز الشريطي غير صحيحة.</string>
