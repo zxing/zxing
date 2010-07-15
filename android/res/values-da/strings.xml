@@ -74,7 +74,6 @@
   <string name="msg_default_type">Type</string>
   <string name="msg_encode_barcode_failed">Kunne ikke generere den ønskede stregkode.</string>
   <string name="msg_encode_contents_failed">Kunne ikke indkode en stregkode fra oplysningerne.</string>
-  <string name="msg_encode_in_progress">Genererer en stregkode\u2026</string>
   <string name="msg_google_shopper_missing">Google Shopper er ikke installeret</string>
   <string name="msg_install_google_shopper">Google Shopper kombinerer stregkodescanning med priser, anmeldelser og meget mere uden at åbne en browser. Kunne du tænke dig at prøve det?</string>
   <string name="msg_intent_failed">Beklager, den ønskede applikation kunne ikke blive startet. Stregkodeindholdet er måsket ugyldigt.</string>

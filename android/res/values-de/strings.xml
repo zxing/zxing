@@ -74,7 +74,6 @@
   <string name="msg_default_type">Typ</string>
   <string name="msg_encode_barcode_failed">Der gewünschte Barcode kann nicht erzeugt werden.</string>
   <string name="msg_encode_contents_failed">Aus den Daten kann kein Barcode erzeugt werden.</string>
-  <string name="msg_encode_in_progress">Erzeuge Barcode\u2026</string>
   <string name="msg_google_shopper_missing">Google Shopper ist nicht installiert</string>
   <string name="msg_install_google_shopper">Google Shopper vereint Barcode-Scanning mit Preisen, Testberichte und mehr ohne Öffnen des Browsers. Möchten Sie es versuchen?</string>
   <string name="msg_intent_failed">Die gewünschte Applikation kann nicht geöffnet werden. Der Barcode könnte ungültig sein.</string>

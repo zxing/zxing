@@ -74,7 +74,6 @@
   <string name="msg_default_type">Tipo</string>
   <string name="msg_encode_barcode_failed">No se pudo generar el código de barras solicitado.</string>
   <string name="msg_encode_contents_failed">No puede codificar un código de barras con estos datos.</string>
-  <string name="msg_encode_in_progress">Generando un código de barras\u2026</string>
   <string name="msg_google_shopper_missing">Google Shopper no está instalado</string>
   <string name="msg_install_google_shopper">Google Shopper combina escaneo de código de barras con los precios, comentarios y mucho más sin necesidad de abrir el navegador. ¿Le gustaría probarlo?</string>
   <string name="msg_intent_failed">Lo sentimos, la aplicación solicitada no pudo ser lanzada. El contenido de código de barras puede ser inválida.</string>

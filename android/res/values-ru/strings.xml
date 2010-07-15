@@ -74,7 +74,6 @@
   <string name="msg_default_type">Тип</string>
   <string name="msg_encode_barcode_failed">Не получилось сгенерировать запрошенный штрих-код.</string>
   <string name="msg_encode_contents_failed">Не могу закодировать штрих-код от источник данных.</string>
-  <string name="msg_encode_in_progress">Генерация штрих-кода\u2026</string>
   <string name="msg_google_shopper_missing">Google Shopper не установлена</string>
   <string name="msg_install_google_shopper">Google Shopper объединяет сканирования штрих-кодов с ценами, отзывы и более, не открывая браузер. Хотите попробовать?</string>
   <string name="msg_intent_failed">К сожалению, запрошенное приложение не может быть запущенно. Содержимое штрих-кода может быть повреждено.</string>

@@ -74,7 +74,6 @@
   <string name="msg_default_type">タイプ</string>
   <string name="msg_encode_barcode_failed">バーコードを作成できませんでした。</string>
   <string name="msg_encode_contents_failed">このデータからバーコードを作成できませんでした。</string>
-  <string name="msg_encode_in_progress">バーコード作成中</string>
   <string name="msg_google_shopper_missing">Googleのショッパーがインストールされていません</string>
   <string name="msg_install_google_shopper">Googleのショッパーを組み合わせた価格、レビューなどのブラウザを開かずに複数のスキャンのバーコードです。それを試してみたいか？</string>
   <string name="msg_intent_failed">指定されたアプリケーションを起動できませんでした。バーコードの内容が無効である可能性があります。</string>
