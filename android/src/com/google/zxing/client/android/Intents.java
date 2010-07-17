@@ -150,7 +150,7 @@ public final class Intents {
 
   public static final class WifiConnect {
 	    /**
-	     * Use Google Book Search to search the contents of the book provided.
+	     * Internal intent used to trigger connection to a wi-fi network.
 	     */
 	    public static final String ACTION = "com.google.zxing.client.android.WIFI_CONNECT";
 
