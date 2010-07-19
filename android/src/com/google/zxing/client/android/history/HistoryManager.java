@@ -19,14 +19,12 @@ package com.google.zxing.client.android.history;
 import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
-import android.os.Message;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -113,7 +111,7 @@ public final class HistoryManager {
     Resources res = activity.getResources();
     dialogItems[dialogItems.length - 2] = res.getString(R.string.history_send);
     dialogItems[dialogItems.length - 1] = res.getString(R.string.history_clear_text);
-    DialogInterface.OnClickListener clickListener = new HistoryClickListener(dialogItems, items);
+    DialogInterface.OnClickListener clickListener = new HistoryClickListener(this, activity, dialogItems, items);
     AlertDialog.Builder builder = new AlertDialog.Builder(activity);
     builder.setTitle(R.string.history_title);
     builder.setItems(dialogItems, clickListener);
@@ -128,16 +126,10 @@ public final class HistoryManager {
 
     SQLiteOpenHelper helper = new DBHelper(activity);
     SQLiteDatabase db = helper.getWritableDatabase();
-    Cursor cursor = null;
     try {
-      cursor = db.query(DBHelper.TABLE_NAME,
-                        TEXT_COL_PROJECTION,
-                        DBHelper.TEXT_COL + "=?",
-                        new String[] { result.getText() },
-                        null, null, null, null);
-      if (cursor.moveToNext()) {
-        return;
-      }
+      // Delete if already exists
+      db.delete(DBHelper.TABLE_NAME, DBHelper.TEXT_COL + "=?", new String[] { result.getText() });
+      // Insert
       ContentValues values = new ContentValues();
       values.put(DBHelper.TEXT_COL, result.getText());
       values.put(DBHelper.FORMAT_COL, result.getBarcodeFormat().toString());
@@ -145,9 +137,6 @@ public final class HistoryManager {
       values.put(DBHelper.TIMESTAMP_COL, System.currentTimeMillis());
       db.insert(DBHelper.TABLE_NAME, DBHelper.TIMESTAMP_COL, values);
     } finally {
-      if (cursor != null) {
-        cursor.close();
-      }
       db.close();
     }
   }
@@ -190,7 +179,7 @@ public final class HistoryManager {
    *  <li>Formatted version of timestamp</li>
    * </ul>
    */
-  private CharSequence buildHistory() {
+  CharSequence buildHistory() {
     StringBuilder historyText = new StringBuilder(1000);
     SQLiteOpenHelper helper = new DBHelper(activity);
     SQLiteDatabase db = helper.getReadableDatabase();
@@ -218,7 +207,7 @@ public final class HistoryManager {
     return historyText;
   }
 
-  private Uri saveHistory(String history) {
+  static Uri saveHistory(String history) {
     File bsRoot = new File(Environment.getExternalStorageDirectory(), "BarcodeScanner");
     File historyRoot = new File(bsRoot, "History");
     if (!historyRoot.exists() && !historyRoot.mkdirs()) {
@@ -259,42 +248,4 @@ public final class HistoryManager {
     }
   }
 
-  private class HistoryClickListener implements DialogInterface.OnClickListener {
-
-    private final String[] dialogItems;
-    private final List<Result> items;
-
-    private HistoryClickListener(String[] dialogItems, List<Result> items) {
-      this.dialogItems = dialogItems;
-      this.items = items;
-    }
-
-    public void onClick(DialogInterface dialogInterface, int i) {
-      if (i == dialogItems.length - 1) {
-        clearHistory();
-      } else if (i == dialogItems.length - 2) {
-        CharSequence history = buildHistory();
-        Uri historyFile = saveHistory(history.toString());
-        if (historyFile == null) {
-          AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-          builder.setMessage(R.string.msg_unmount_usb);
-          builder.setPositiveButton(R.string.button_ok, null);
-          builder.show();
-          return;
-        }
-        Intent intent = new Intent(Intent.ACTION_SEND, Uri.parse("mailto:"));
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-        String subject = activity.getResources().getString(R.string.history_email_title);
-        intent.putExtra(Intent.EXTRA_SUBJECT, subject);
-        intent.putExtra(Intent.EXTRA_TEXT, subject);
-        intent.putExtra(Intent.EXTRA_STREAM, historyFile);
-        intent.setType("text/csv");
-        activity.startActivity(intent);
-      } else {
-        Result result = items.get(i);
-        Message message = Message.obtain(activity.getHandler(), R.id.decode_succeeded, result);
-        message.sendToTarget();
-      }
-    }
-  }
 }
