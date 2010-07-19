@@ -2,8 +2,7 @@
  *  MagickBitmapSource.cpp
  *  zxing
  *
- *  Created by Ralf Kistner on 16/10/2009.
- *  Copyright 2008 ZXing authors All rights reserved.
+ *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -75,5 +74,23 @@ unsigned char* MagickBitmapSource::getMatrix() {
   }
   return matrix;
 }
+
+bool MagickBitmapSource::isRotateSupported() const {
+  return false;
+}
+
+Ref<LuminanceSource> MagickBitmapSource::rotateCounterClockwise() {
+    //TODO(flyashi): add rotated image support.
+  /* this segfaults. I tried a few things, none seemed to work. Perhaps the problem is elsewhere? */
+  /*
+  Magick::Image rotated(image_);
+  rotated.modifyImage();
+  rotated.rotate(90); // Image::rotate takes CCW degrees as an argument
+  rotated.syncPixels();
+  return Ref<MagickBitmapSource> (new MagickBitmapSource(rotated));
+  */
+  return Ref<MagickBitmapSource> (NULL);
+}
+
 }
 

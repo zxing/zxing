@@ -2,9 +2,7 @@
  *  main.cpp
  *  zxing
  *
- *  Created by Ralf Kistner on 16/10/2009.
- *  Copyright 2008 ZXing authors All rights reserved.
- *  Modified by Yakov Okshtein (flyashi@gmail.com) to add 1D barcode support.
+ *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +29,7 @@
 #include <zxing/Result.h>
 #include <zxing/ReaderException.h>
 #include <zxing/common/GlobalHistogramBinarizer.h>
-//#include <zxing/common/LocalBlockBinarizer.h>
+#include <zxing/common/HybridBinarizer.h>
 #include <exception>
 #include <zxing/Exception.h>
 #include <zxing/common/IllegalArgumentException.h>
@@ -46,13 +44,17 @@ using namespace std;
 using namespace zxing;
 //using namespace zxing::qrcode;
 
+static bool raw_dump = false;
+
+static const int MAX_EXPECTED = 1024;
+
 Ref<Result> decode(Ref<BinaryBitmap> image) {
   Ref<Reader> reader(new MultiFormatReader);
   return Ref<Result> (new Result(*reader->decode(image)));
 }
 
 
-int test_image(Image& image, bool localized) {
+int test_image(Image& image, bool hybrid, string expected = "") {
 
   string cell_result;
   int res = -1;
@@ -64,8 +66,8 @@ int test_image(Image& image, bool localized) {
   try {
     Ref<MagickBitmapSource> source(new MagickBitmapSource(image));
 
-    if (localized) {
-      //binarizer = new LocalBlockBinarizer(source);
+    if (hybrid) {
+      binarizer = new HybridBinarizer(source);
     } else {
       binarizer = new GlobalHistogramBinarizer(source);
     }
@@ -88,33 +90,88 @@ int test_image(Image& image, bool localized) {
     res = -5;
   }
 
-  cout << cell_result;
+  if (cell_result.compare(expected)) {
+    res = -6;
+    if (!raw_dump) {
+        cout << (hybrid ? "Hybrid" : "Global") << " binarizer failed:\n";
+        if (expected.length() >= 0) {
+          cout << "  Expected: " << expected << "\n";
+        }
+        cout << "  Detected: " << cell_result << endl;
+    }
+  }
+
+
+  if (raw_dump && !hybrid) /* don't print twice, and global is a bit better */
+    cout << cell_result << endl;
+
   return res;
 }
 
-int test_image_local(Image& image) {
-  return test_image(image, true);
+int test_image_hybrid(Image& image, string expected = "") {
+  return test_image(image, true, expected);
 }
 
-int test_image_global(Image& image) {
-  return test_image(image, false);
+int test_image_global(Image& image, string expected = "") {
+  return test_image(image, false, expected);
+}
+
+string get_expected(string imagefilename) {
+  string textfilename = imagefilename;
+  int dotpos = textfilename.rfind(".");
+  textfilename.replace(dotpos+1, textfilename.length() - dotpos - 1, "txt");
+  char data[MAX_EXPECTED];
+  FILE *fp = fopen(textfilename.data(), "rb");
+    
+  // get file size
+  fseek(fp, 0, SEEK_END);
+  int toread = ftell(fp);
+  rewind(fp);
+  
+  if (toread > MAX_EXPECTED) {
+  	cerr << "MAX_EXPECTED = " << MAX_EXPECTED << " but file '" << textfilename << "' has " << toread
+  	     << " bytes! Skipping..." << endl;
+    fclose(fp);
+    return "";
+  }
+  
+  int nread = fread(data, sizeof(char), toread, fp);
+  if (nread != toread) {
+    cerr << "Could not read entire contents of file '" << textfilename << "'! Skipping..." << endl;
+    fclose(fp);
+    return "";
+  }
+  fclose(fp);
+  data[nread] = '\0';
+  string expected(data);
+  return expected;
 }
 
 int main(int argc, char** argv) {
   if (argc <= 1) {
-    cout << "Usage: " << argv[0] << " <filename1> [<filename2> ...]" << endl;
+    cout << "Usage: " << argv[0] << " [--dump-raw] <filename1> [<filename2> ...]" << endl;
     return 1;
   }
 
- // int total = argc - 2;
+  int total = 0;
   int gonly = 0;
-  int lonly = 0;
+  int honly = 0;
   int both = 0;
   int neither = 0;
 
+  if (argc == 2) raw_dump = true;
+
   for (int i = 1; i < argc; i++) {
     string infilename = argv[i];
-//    cerr << "Processing: " << infilename << endl;
+    if (infilename.substr(infilename.length()-3,3).compare("txt") == 0) {
+      continue;
+    }
+    if (infilename.compare("--dump-raw") == 0) {
+      raw_dump = true;
+      continue;
+    }
+    if (!raw_dump)
+      cerr << "Processing: " << infilename << endl;
     Image image;
     try {
       image.read(infilename);
@@ -123,21 +180,31 @@ int main(int argc, char** argv) {
       continue;
     }
 
-    int gresult = 1;
-    int lresult = 1;
+    string expected;
+    expected = get_expected(infilename);
 
-    gresult = test_image_global(image);
-//    lresult = test_image_local(image);
+    int gresult = 1;
+    int hresult = 1;
+
+    hresult = test_image_hybrid(image, expected);
+    gresult = test_image_global(image, expected);
 
     gresult = gresult == 0;
- //   lresult = lresult == 0;
+    hresult = hresult == 0;
 
-    gonly += gresult && !lresult;
-    lonly += lresult && !gresult;
-    both += gresult && lresult;
-    neither += !gresult && !lresult;
-
+    gonly += gresult && !hresult;
+    honly += hresult && !gresult;
+    both += gresult && hresult;
+    neither += !gresult && !hresult;
+    total = total + 1;
   }
+
+  if (!raw_dump)
+    cout << (honly+both)  << " passed hybrid, " << (gonly+both) << " passed global, "
+      << both << " pass both, " << neither << " pass neither, " << honly
+      << " passed only hybrid, " << gonly << " passed only global, of " << total
+      << " total." << endl;
+
   return 0;
 }
 

@@ -2,14 +2,18 @@
 
 blackboxpath="../core/test/data/blackbox"
 
-formats="ean13 ean8 upce upca qrcode"
+if [ "$*" != "" ]; then
+	formats="$*"
+else
+	formats="ean13 ean8 upce upca qrcode"
+fi
 
 passed=0;
 failed=0;
 oldcat="";
 
 for format in $formats; do
-	for pic in `ls ${blackboxpath}/${format}-*/*.{jpg,JPG} 2>/dev/null`; do
+	for pic in `ls ${blackboxpath}/${format}-*/*.{jpg,JPG,gif,GIF,png,PNG} 2>/dev/null | sort -n`; do
 		category=${pic%/*};
 		category=${category##*/};
 		if [ "$oldcat" != "$category" ]; then
@@ -19,8 +23,14 @@ for format in $formats; do
 			failed=0;
 		fi
 		echo -n "Processing: $pic ... "
-		tmp="${pic%JPG}";
-		txt="${tmp%jpg}txt";
+		tmp="${pic}"
+		tmp="${tmp%JPG}";
+		tmp="${tmp%jpg}";
+		tmp="${tmp%gif}";
+		tmp="${tmp%GIF}";
+		tmp="${tmp%png}";
+		tmp="${tmp%PNG}";
+		txt="${tmp}txt";
 		expected=`cat "$txt"`;
 		actual=`build/zxing $pic`;
 		if [ "$expected" == "$actual" ]; then

@@ -2,8 +2,7 @@
  *  MagickBitmapSource.h
  *  zxing
  *
- *  Created by Ralf Kistner on 16/10/2009.
- *  Copyright 2008 ZXing authors All rights reserved.
+ *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,6 +41,8 @@ public:
   int getHeight() const;
   unsigned char* getRow(int y, unsigned char* row);
   unsigned char* getMatrix();
+  bool isRotateSupported() const;
+  Ref<LuminanceSource> rotateCounterClockwise();
 };
 
 }
