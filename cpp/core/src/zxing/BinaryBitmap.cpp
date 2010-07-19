@@ -2,9 +2,7 @@
  *  BinaryBitmap.cpp
  *  zxing
  *
- *  Created by Ralf Kistner on 19/10/2009.
- *  Copyright 2008 ZXing authors All rights reserved.
- *  Modified by Lukasz Warchol on 02/02/2010.
+ *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,4 +48,20 @@ namespace zxing {
 		return binarizer_->getLuminanceSource();
 	}
 	
+
+	bool BinaryBitmap::isCropSupported() const {
+	  return getLuminanceSource()->isCropSupported();
+	}
+
+	Ref<BinaryBitmap> BinaryBitmap::crop(int left, int top, int width, int height) {
+	  return Ref<BinaryBitmap> (new BinaryBitmap(binarizer_->createBinarizer(getLuminanceSource()->crop(left, top, width, height))));
+	}
+
+	bool BinaryBitmap::isRotateSupported() const {
+	  return getLuminanceSource()->isRotateSupported();
+	}
+
+	Ref<BinaryBitmap> BinaryBitmap::rotateCounterClockwise() {
+	  return Ref<BinaryBitmap> (new BinaryBitmap(binarizer_->createBinarizer(getLuminanceSource()->rotateCounterClockwise())));
+	}
 }
