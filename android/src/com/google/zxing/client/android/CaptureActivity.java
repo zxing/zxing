@@ -37,6 +37,7 @@ import android.content.pm.PackageManager;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -524,11 +525,11 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
     ImageView barcodeImageView = (ImageView) findViewById(R.id.barcode_image_view);
     if (barcode == null) {
-      barcodeImageView.setImageResource(R.drawable.launcher_icon_large);
+      barcodeImageView.setImageBitmap(BitmapFactory.decodeResource(getResources(),
+          R.drawable.launcher_icon));
     } else {
       barcodeImageView.setImageBitmap(barcode);
     }
-    barcodeImageView.setVisibility(View.VISIBLE);
 
     TextView formatTextView = (TextView) findViewById(R.id.format_text_view);
     formatTextView.setText(rawResult.getBarcodeFormat().toString());

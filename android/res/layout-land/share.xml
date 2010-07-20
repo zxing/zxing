@@ -25,64 +25,58 @@
 
   <TextView
       android:layout_width="fill_parent"
-      android:layout_height="0dip"
-      android:layout_weight="1"
+      android:layout_height="wrap_content"
       android:textColor="@color/share_text"
       android:textSize="18sp"
-      android:text="@string/msg_share_explanation"/>
+      android:text="@string/msg_share_explanation"
+      android:paddingBottom="24dip"/>
 
   <LinearLayout
       android:layout_width="fill_parent"
-      android:layout_height="0dip"
-      android:layout_weight="2"
+      android:layout_height="wrap_content"
       android:background="@color/share_view"
       android:orientation="horizontal">
 
     <ImageView
-        android:layout_width="0dip"
-        android:layout_height="fill_parent"
-        android:layout_weight="2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:scaleType="center"
         android:src="@drawable/share_via_barcode"
-        android:paddingRight="32dip"/>
+        android:paddingRight="24dip"/>
 
     <LinearLayout
         android:layout_width="0dip"
-        android:layout_height="fill_parent"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
         android:orientation="vertical">
 
+      <Button android:id="@+id/app_button"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:text="@string/button_share_app"/>
+
       <Button android:id="@+id/contact_button"
               android:layout_width="fill_parent"
-              android:layout_height="fill_parent"
-              android:layout_weight="1"
+              android:layout_height="wrap_content"
               android:text="@string/button_share_contact"/>
-
-      <Button android:id="@+id/bookmark_button"
-              android:layout_width="fill_parent"
-              android:layout_height="fill_parent"
-              android:layout_weight="1"
-              android:text="@string/button_share_bookmark"/>
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="0dip"
-        android:layout_height="fill_parent"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
         android:orientation="vertical">
 
+      <Button android:id="@+id/bookmark_button"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:text="@string/button_share_bookmark"/>
+
       <Button android:id="@+id/clipboard_button"
               android:layout_width="fill_parent"
-              android:layout_height="fill_parent"
-              android:layout_weight="1"
+              android:layout_height="wrap_content"
               android:text="@string/button_share_clipboard"/>
-
-      <Button android:id="@+id/app_button"
-              android:layout_width="fill_parent"
-              android:layout_height="fill_parent"
-              android:layout_weight="1"
-              android:text="@string/button_share_app"/>
 
     </LinearLayout>
 

@@ -53,7 +53,9 @@ public final class HelpActivity extends Activity {
   public static final String REQUESTED_PAGE_KEY = "requested_page_key";
   public static final String DEFAULT_PAGE = "index.html";
   public static final String WHATS_NEW_PAGE = "whatsnew.html";
+
   private static final String BASE_URL = "file:///android_asset/html/";
+  private static final String WEBVIEW_STATE_PRESENT = "webview_state_present";
 
   private static boolean initialized = false;
   private WebView webView;
@@ -88,8 +90,11 @@ public final class HelpActivity extends Activity {
     webView = (WebView)findViewById(R.id.help_contents);
     webView.setWebViewClient(new HelpClient());
 
+    // Froyo has a bug with calling onCreate() twice in a row, which causes the What's New page
+    // that's auto-loaded on first run to appear blank. As a workaround we only call restoreState()
+    // if a valid URL was loaded at the time the previous activity was torn down.
     Intent intent = getIntent();
-    if (icicle != null) {
+    if (icicle != null && icicle.getBoolean(WEBVIEW_STATE_PRESENT, false)) {
       webView.restoreState(icicle);
     } else if (intent != null) {
       String page = intent.getStringExtra(REQUESTED_PAGE_KEY);
@@ -132,7 +137,11 @@ public final class HelpActivity extends Activity {
 
   @Override
   protected void onSaveInstanceState(Bundle state) {
-    webView.saveState(state);
+    String url = webView.getUrl();
+    if (url != null && url.length() > 0) {
+      webView.saveState(state);
+      state.putBoolean(WEBVIEW_STATE_PRESENT, true);
+    }
   }
 
   @Override
@@ -151,6 +160,18 @@ public final class HelpActivity extends Activity {
     public void onPageFinished(WebView view, String url) {
       setTitle(view.getTitle());
       backButton.setEnabled(view.canGoBack());
+    }
+
+    @Override
+    public boolean shouldOverrideUrlLoading(WebView view, String url) {
+      if (url.startsWith("file")) {
+        // Keep local assets in this WebView.
+        return false;
+      } else {
+        // Open external URLs in Browser.
+        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+        return true;
+      }
     }
   }
 }

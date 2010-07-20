@@ -58,7 +58,7 @@
                    android:maxHeight="150dip"
                    android:layout_marginBottom="4dip"
                    android:adjustViewBounds="true"
-                   android:scaleType="fitEnd"/>
+                   android:scaleType="centerInside"/>
 
         <LinearLayout
           android:orientation="horizontal"
