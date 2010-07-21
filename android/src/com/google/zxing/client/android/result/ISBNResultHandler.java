@@ -24,6 +24,7 @@ import com.google.zxing.client.result.ParsedResult;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.view.View;
 
 /**
  * Handles books encoded by their ISBN values.
@@ -35,24 +36,26 @@ public final class ISBNResultHandler extends ResultHandler {
       R.string.button_product_search,
       R.string.button_book_search,
       R.string.button_search_book_contents,
-      R.string.button_google_shopper
+      R.string.button_custom_product_search
   };
 
   public ISBNResultHandler(Activity activity, ParsedResult result, Result rawResult) {
     super(activity, result, rawResult);
+    showGoogleShopperButton(new View.OnClickListener() {
+      public void onClick(View view) {
+        ISBNParsedResult isbnResult = (ISBNParsedResult) getResult();
+        openGoogleShopper(isbnResult.getISBN());
+      }
+    });
   }
 
   @Override
   public int getButtonCount() {
-    // Always show four buttons - Shopper and Custom Search are mutually exclusive.
-    return buttons.length;
+    return hasCustomProductSearch() ? buttons.length : buttons.length - 1;
   }
 
   @Override
   public int getButtonText(int index) {
-    if (index == buttons.length - 1 && hasCustomProductSearch()) {
-      return R.string.button_custom_product_search;
-    }
     return buttons[index];
   }
 
@@ -72,11 +75,7 @@ public final class ISBNResultHandler extends ResultHandler {
             searchBookContents(isbnResult.getISBN());
             break;
           case 3:
-            if (hasCustomProductSearch()) {
-              openURL(fillInCustomSearchURL(isbnResult.getISBN()));
-            } else {
-              openGoogleShopper(isbnResult.getISBN());
-            }
+            openURL(fillInCustomSearchURL(isbnResult.getISBN()));
             break;
         }
       }

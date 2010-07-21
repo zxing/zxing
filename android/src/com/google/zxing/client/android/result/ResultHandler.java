@@ -39,6 +39,8 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.provider.Contacts;
+import android.view.View;
+import android.widget.Button;
 
 import java.text.DateFormat;
 import java.text.ParsePosition;
@@ -126,6 +128,17 @@ public abstract class ResultHandler {
   public abstract void handleButtonPress(int index);
 
   /**
+   * The Google Shopper button is special and is not handled by the abstract button methods above.
+   *
+   * @param listener The on click listener to install for this button.
+   */
+  protected void showGoogleShopperButton(View.OnClickListener listener) {
+    Button shopperButton = (Button) activity.findViewById(R.id.shopper_button);
+    shopperButton.setVisibility(View.VISIBLE);
+    shopperButton.setOnClickListener(listener);
+  }
+
+  /**
    * Create a possibly styled string for the contents of the current barcode.
    *
    * @return The text to be displayed.
@@ -161,7 +174,7 @@ public abstract class ResultHandler {
    * @param location a text description of the event location
    * @param description a text description of the event itself
    */
-  final void addCalendarEvent(String summary, 
+  final void addCalendarEvent(String summary,
                               String start,
                               String end,
                               String location,
