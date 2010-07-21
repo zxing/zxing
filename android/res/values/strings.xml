@@ -75,7 +75,7 @@
   <string name="msg_encode_barcode_failed">Could not generate the requested barcode.</string>
   <string name="msg_encode_contents_failed">Could not encode a barcode from the data provided.</string>
   <string name="msg_google_shopper_missing">Google Shopper is not installed</string>
-  <string name="msg_install_google_shopper">Google Shopper combines barcode scanning with prices, reviews and more without opening the browser. Would you like to try it?</string>
+  <string name="msg_install_google_shopper">Google Shopper combines barcode scanning with online and local prices, reviews and more without opening the browser. Would you like to try it?</string>
   <string name="msg_intent_failed">Sorry, the requested application could not be launched. The barcode contents may be invalid.</string>
   <string name="msg_loading_apps">Loading list of applications\u2026</string>
   <string name="msg_not_our_results">You are leaving this application. The search results you will see are not related to this application.</string>
@@ -126,7 +126,7 @@
   <string name="wifi_modifying_network">Modifying Network</string>
   <string name="wifi_ssid_missing">Network name missing</string>
   <string name="wifi_type_incorrect">Network type incorrect</string>
-  <string name="wifi_connect_failed">Network connection failed</string>  
+  <string name="wifi_connect_failed">Network connection failed</string>
   <string name="wifi_ssid_label">Network Name</string>
   <string name="wifi_type_label">Type</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>

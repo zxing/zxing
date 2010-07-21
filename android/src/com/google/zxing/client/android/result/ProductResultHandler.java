@@ -24,6 +24,7 @@ import com.google.zxing.client.result.ProductParsedResult;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.view.View;
 
 /**
  * Handles generic products which are not books.
@@ -34,12 +35,17 @@ public final class ProductResultHandler extends ResultHandler {
   private static final int[] buttons = {
       R.string.button_product_search,
       R.string.button_web_search,
-      R.string.button_google_shopper,
-      R.string.button_custom_product_search,
+      R.string.button_custom_product_search
   };
 
   public ProductResultHandler(Activity activity, ParsedResult result, Result rawResult) {
     super(activity, result, rawResult);
+    showGoogleShopperButton(new View.OnClickListener() {
+      public void onClick(View view) {
+        ProductParsedResult productResult = (ProductParsedResult) getResult();
+        openGoogleShopper(productResult.getNormalizedProductID());
+      }
+    });
   }
 
   @Override
@@ -65,9 +71,6 @@ public final class ProductResultHandler extends ResultHandler {
             webSearch(productResult.getNormalizedProductID());
             break;
           case 2:
-            openGoogleShopper(productResult.getNormalizedProductID());
-            break;
-          case 3:
             openURL(fillInCustomSearchURL(productResult.getNormalizedProductID()));
             break;
         }
