@@ -72,7 +72,7 @@ namespace zxing {
 			int* endRange;
 			try {
 				endRange = decodeEnd(row);
-			} catch (Exception e) {
+			} catch (ReaderException e) {
 				delete [] startRange;
 				throw e;
 			}
