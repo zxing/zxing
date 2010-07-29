@@ -34,6 +34,7 @@
 #include <zxing/Exception.h>
 #include <zxing/common/IllegalArgumentException.h>
 #include <zxing/BinaryBitmap.h>
+#include <zxing/DecodeHints.h>
 
 //#include <zxing/qrcode/detector/Detector.h>
 //#include <zxing/qrcode/detector/QREdgeDetector.h>
@@ -45,12 +46,15 @@ using namespace zxing;
 //using namespace zxing::qrcode;
 
 static bool raw_dump = false;
+static bool show_format = false;
+static bool tryHarder = false;
+static bool show_filename = false;
 
 static const int MAX_EXPECTED = 1024;
 
-Ref<Result> decode(Ref<BinaryBitmap> image) {
+Ref<Result> decode(Ref<BinaryBitmap> image, DecodeHints hints) {
   Ref<Reader> reader(new MultiFormatReader);
-  return Ref<Result> (new Result(*reader->decode(image)));
+  return Ref<Result> (new Result(*reader->decode(image, hints)));
 }
 
 
@@ -61,7 +65,7 @@ int test_image(Image& image, bool hybrid, string expected = "") {
 
   Ref<BitMatrix> matrix(NULL);
   Ref<Binarizer> binarizer(NULL);
-
+  const char* result_format = "";
 
   try {
     Ref<MagickBitmapSource> source(new MagickBitmapSource(image));
@@ -72,9 +76,12 @@ int test_image(Image& image, bool hybrid, string expected = "") {
       binarizer = new GlobalHistogramBinarizer(source);
     }
 
+    DecodeHints hints(hints.DEFAULT_HINTS);
+    hints.setTryHarder(tryHarder);
     Ref<BinaryBitmap> binary(new BinaryBitmap(binarizer));
-    Ref<Result> result(decode(binary));
+    Ref<Result> result(decode(binary, hints));
     cell_result = result->getText()->getText();
+    result_format = barcodeFormatNames[result->getBarcodeFormat()];
     res = 0;
   } catch (ReaderException e) {
     cell_result = "zxing::ReaderException: " + string(e.what());
@@ -102,9 +109,14 @@ int test_image(Image& image, bool hybrid, string expected = "") {
   }
 
 
-  if (raw_dump && !hybrid) /* don't print twice, and global is a bit better */
-    cout << cell_result << endl;
+  if (raw_dump && !hybrid) {/* don't print twice, and global is a bit better */
+    cout << cell_result;
+    if (show_format) {
+      cout << " " << result_format;
+    }
+    cout << endl;
 
+  }
   return res;
 }
 
@@ -149,7 +161,7 @@ string get_expected(string imagefilename) {
 
 int main(int argc, char** argv) {
   if (argc <= 1) {
-    cout << "Usage: " << argv[0] << " [--dump-raw] <filename1> [<filename2> ...]" << endl;
+    cout << "Usage: " << argv[0] << " [--dump-raw] [--show-format] [--try-harder] [--show-filename] <filename1> [<filename2> ...]" << endl;
     return 1;
   }
 
@@ -170,8 +182,22 @@ int main(int argc, char** argv) {
       raw_dump = true;
       continue;
     }
+    if (infilename.compare("--show-format") == 0) {
+      show_format = true;
+      continue;
+    }
+    if (infilename.compare("--try-harder") == 0) {
+      tryHarder = true;
+      continue;
+    }
+    if (infilename.compare("--show-filename") == 0) {
+      show_filename = true;
+      continue;
+    }
     if (!raw_dump)
       cerr << "Processing: " << infilename << endl;
+    if (show_filename)
+      cout << infilename << " ";
     Image image;
     try {
       image.read(infilename);
