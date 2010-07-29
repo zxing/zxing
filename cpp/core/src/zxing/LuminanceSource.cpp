@@ -38,6 +38,7 @@ unsigned char* LuminanceSource::getMatrix() {
     getRow(y, row);
     memcpy(&matrix[y * width], row, width);
   }
+  delete [] row;
   return matrix;
 }
 
