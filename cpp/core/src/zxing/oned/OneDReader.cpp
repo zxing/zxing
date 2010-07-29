@@ -31,14 +31,16 @@ namespace zxing {
 		OneDReader::OneDReader() {
 		}
 		
-		Ref<Result> OneDReader::decode(Ref<BinaryBitmap> image) {
-			try {
-				return doDecode(image);
+		Ref<Result> OneDReader::decode(Ref<BinaryBitmap> image, DecodeHints hints) {
+
+		  try {
+				return doDecode(image, hints);
 			}catch (ReaderException re) {
-				if (false /*tryHarder && image.isRotateSupported()*/) {
+				if (hints.getTryHarder() && image->isRotateSupported()) {
+
+					Ref<BinaryBitmap> rotatedImage(image->rotateCounterClockwise());
+					Ref<Result> result(doDecode(rotatedImage, hints));
 					/*
-					BinaryBitmap rotatedImage = image.rotateCounterClockwise();
-					Result result = doDecode(rotatedImage, hints);
 					// Record that we found it rotated 90 degrees CCW / 270 degrees CW
 					Hashtable metadata = result.getResultMetadata();
 					int orientation = 270;
@@ -48,34 +50,32 @@ namespace zxing {
 									   ((Integer) metadata.get(ResultMetadataType.ORIENTATION)).intValue()) % 360;
 					}
 					result.putMetadata(ResultMetadataType.ORIENTATION, new Integer(orientation));
-					// Update result points
-					ResultPoint[] points = result.getResultPoints();
-					int height = rotatedImage.getHeight();
-					for (int i = 0; i < points.length; i++) {
-						points[i] = new ResultPoint(height - points[i].getY() - 1, points[i].getX());
+					*/
+          // Update result points
+					std::vector<Ref<ResultPoint> > points (result->getResultPoints());
+					int height = rotatedImage->getHeight();
+					for (size_t i = 0; i < points.size(); i++) {
+						points[i].reset(new OneDResultPoint(height - points[i]->getY() - 1, points[i]->getX()));
 					}
 					return result;
-					*/
 				} else {
 					throw re;
 				}
 			}
 		}
 		
-		Ref<Result> OneDReader::doDecode(Ref<BinaryBitmap> image){
+		Ref<Result> OneDReader::doDecode(Ref<BinaryBitmap> image, DecodeHints hints){
 			int width = image->getWidth();
 			int height = image->getHeight();
 			Ref<BitArray> row(new BitArray(width));
-//			BitArray row = new BitArray(width);
-			
 			int middle = height >> 1;
-			bool tryHarder = true;//hints != null && hints.containsKey(DecodeHintType.TRY_HARDER);
-			int rowStep = (int)fmax(1, height >> (tryHarder ? 7 : 4));
+			bool tryHarder = hints.getTryHarder();
+			int rowStep = (int)fmax(1, height >> (tryHarder ? 8 : 5));
 			int maxLines;
 			if (tryHarder) {
 				maxLines = height; // Look at the whole image, not just the center
 			} else {
-				maxLines = 9; // Nine rows spaced 1/16 apart is roughly the middle half of the image
+        maxLines = 15; // 15 rows spaced 1/32 apart is roughly the middle half of the image
 			}
 			
 			for (int x = 0; x < maxLines; x++) {
@@ -95,7 +95,7 @@ namespace zxing {
 				}catch (ReaderException re) {
 					continue;
 				}catch (IllegalArgumentException re) {
-					continue;
+          continue;
 				}
 				
 				// While we have the image data in a BitArray, it's fairly cheap to reverse it in place to
@@ -112,17 +112,18 @@ namespace zxing {
 							//						// But it was upside down, so note that
 							//						result.putMetadata(ResultMetadataType.ORIENTATION, new Integer(180));
 							//						// And remember to flip the result points horizontally.
-							std::vector<Ref<ResultPoint> > points(result->getResultPoints());
-							if (points.size() == 2) {
-								Ref<ResultPoint> pointZero(new OneDResultPoint(width - points[0]->getX() - 1, points[0]->getY()));
-								points[0] = pointZero;
+						  std::vector<Ref<ResultPoint> > points(result->getResultPoints());
+						  // if there's exactly two points (which there should be), flip the x coordinate
+              // if there's not exactly 2, I don't know what do do with it
+						  if (points.size() == 2) {
+                Ref<ResultPoint> pointZero(new OneDResultPoint(width - points[0]->getX() - 1, points[0]->getY()));
+                points[0] = pointZero;
 
-								Ref<ResultPoint> pointOne(new OneDResultPoint(width - points[1]->getX() - 1, points[1]->getY()));
-								points[1] = pointOne;
+                Ref<ResultPoint> pointOne(new OneDResultPoint(width - points[1]->getX() - 1, points[1]->getY()));
+                points[1] = pointOne;
 
                 result.reset(new Result(result->getText(),result->getRawBytes(),points,result->getBarcodeFormat()));
-							}
-								
+						  }
 						}
 						return result;
 					} catch (ReaderException re) {

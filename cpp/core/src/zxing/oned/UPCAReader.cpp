@@ -32,8 +32,8 @@ namespace zxing {
 		Ref<Result> UPCAReader::decodeRow(int rowNumber, Ref<BitArray> row, int startGuardRange[]){
 			return maybeReturnResult(ean13Reader.decodeRow(rowNumber, row, startGuardRange));
 		}
-		Ref<Result> UPCAReader::decode(Ref<BinaryBitmap> image){
-			return maybeReturnResult(ean13Reader.decode(image));
+		Ref<Result> UPCAReader::decode(Ref<BinaryBitmap> image, DecodeHints hints){
+			return maybeReturnResult(ean13Reader.decode(image, hints));
 		}
 		
 		int UPCAReader::decodeMiddle(Ref<BitArray> row, int startRange[], int startRangeLen, std::string& resultString){

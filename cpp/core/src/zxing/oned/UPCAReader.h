@@ -19,6 +19,7 @@
  */
 
 #include <zxing/oned/EAN13Reader.h>
+#include <zxing/DecodeHints.h>
 
 namespace zxing {
 	namespace oned {
@@ -35,7 +36,7 @@ namespace zxing {
 			
 			Ref<Result> decodeRow(int rowNumber, Ref<BitArray> row);														//throws ReaderException
 			Ref<Result> decodeRow(int rowNumber, Ref<BitArray> row, int startGuardRange[]);									//throws ReaderException
-			Ref<Result> decode(Ref<BinaryBitmap> image);
+			Ref<Result> decode(Ref<BinaryBitmap> image, DecodeHints hints);
 			
 			BarcodeFormat getBarcodeFormat();
 		};

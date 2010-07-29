@@ -23,6 +23,7 @@
 #include <zxing/Reader.h>
 #include <zxing/common/BitArray.h>
 #include <zxing/BinaryBitmap.h>
+#include <zxing/DecodeHints.h>
 
 namespace zxing {
 	namespace oned {
@@ -30,12 +31,12 @@ namespace zxing {
 		private:
 			static const int INTEGER_MATH_SHIFT = 8;
 			
-			Ref<Result> doDecode(Ref<BinaryBitmap> image);
+			Ref<Result> doDecode(Ref<BinaryBitmap> image, DecodeHints hints);
 		public:
 			static const int PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
 			
 			OneDReader();
-			virtual Ref<Result> decode(Ref<BinaryBitmap> image);
+			virtual Ref<Result> decode(Ref<BinaryBitmap> image, DecodeHints hints);
 			virtual Ref<Result> decodeRow(int rowNumber, Ref<BitArray> row) = 0;
 			
 			static unsigned int patternMatchVariance(int counters[], int countersSize, const int pattern[], int maxIndividualVariance);

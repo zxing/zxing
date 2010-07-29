@@ -31,7 +31,7 @@ DataMatrixReader::DataMatrixReader() :
     decoder_() {
 }
 
-Ref<Result> DataMatrixReader::decode(Ref<BinaryBitmap> image) {
+Ref<Result> DataMatrixReader::decode(Ref<BinaryBitmap> image, DecodeHints hints) {
 #ifdef DEBUG
   cout << "decoding image " << image.object_ << ":\n" << flush;
 #endif
