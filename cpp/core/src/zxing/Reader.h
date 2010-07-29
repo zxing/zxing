@@ -23,6 +23,7 @@
 
 #include <zxing/BinaryBitmap.h>
 #include <zxing/Result.h>
+#include <zxing/DecodeHints.h>
 
 namespace zxing {
 
@@ -30,7 +31,8 @@ namespace zxing {
   protected:
    Reader() {}
   public:
-   virtual Ref<Result> decode(Ref<BinaryBitmap> image) = 0;
+   Ref<Result> decode(Ref<BinaryBitmap> image);
+   virtual Ref<Result> decode(Ref<BinaryBitmap> image, DecodeHints hints) = 0;
    virtual ~Reader();
 };
 

@@ -34,10 +34,10 @@ namespace zxing {
 		readers.push_back(new zxing::oned::MultiFormatOneDReader());
 	}
 	
-	Ref<Result> MultiFormatReader::decode(Ref<BinaryBitmap> image){
+	Ref<Result> MultiFormatReader::decode(Ref<BinaryBitmap> image, DecodeHints hints){
 		for (unsigned int i = 0; i < readers.size(); i++) {
 			try {
-				return readers[i]->decode(image);
+				return readers[i]->decode(image, hints);
 			} catch (ReaderException re) {
 				// continue
 			}

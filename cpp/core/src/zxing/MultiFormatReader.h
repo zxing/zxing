@@ -23,6 +23,7 @@
 #include <zxing/Reader.h>
 #include <zxing/common/BitArray.h>
 #include <zxing/Result.h>
+#include <zxing/DecodeHints.h>
 
 namespace zxing {
 	class MultiFormatReader : public Reader {
@@ -32,7 +33,7 @@ namespace zxing {
 	public:
 		MultiFormatReader();
 		
-		Ref<Result> decode(Ref<BinaryBitmap> image);
+		Ref<Result> decode(Ref<BinaryBitmap> image, DecodeHints hints);
   
 		~MultiFormatReader();
 	};

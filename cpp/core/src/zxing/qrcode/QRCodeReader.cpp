@@ -30,8 +30,8 @@ namespace zxing {
 		
 		QRCodeReader::QRCodeReader() :decoder_() {
 		}
-		
-		Ref<Result> QRCodeReader::decode(Ref<BinaryBitmap> image) {
+		//TODO: see if any of the other files in the qrcode tree need tryHarder
+		Ref<Result> QRCodeReader::decode(Ref<BinaryBitmap> image, DecodeHints hints) {
 #ifdef DEBUG
 			cout << "decoding image " << image.object_ << ":\n" << flush;
 #endif
