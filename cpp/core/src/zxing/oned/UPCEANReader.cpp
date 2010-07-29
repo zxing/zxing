@@ -113,14 +113,13 @@ namespace zxing {
 			
 			int* endRange = decodeEnd(row, endStart);
 						
-#pragma mark QuietZone needs some change
 			// Make sure there is a quiet zone at least as big as the end pattern after the barcode. The
 			// spec might want more whitespace, but in practice this is the maximum we can count on.
-//			int end = endRange[1];
-//			int quietEnd = end + (end - endRange[0]);
-//			if (quietEnd >= row->getSize() || !row->isRange(end, quietEnd, false)) {
-//				throw ReaderException("Quiet zone asserrt fail.");
-//			}
+			size_t end = endRange[1];
+			size_t quietEnd = end + (end - endRange[0]);
+			if (quietEnd >= row->getSize() || !row->isRange(end, quietEnd, false)) {
+				throw ReaderException("Quiet zone asserrt fail.");
+			}
 			
 			if (!checkChecksum(tmpResultString)) {
 				if (startGuardRange!=NULL) {
