@@ -36,7 +36,9 @@ namespace zxing {
 		BarcodeFormat_CODE_39,
 		BarcodeFormat_ITF
 	} BarcodeFormat;
-	
+
+	/* if you update the enum, please update the name in BarcodeFormat.cpp */
+	extern const char *barcodeFormatNames[];
 }
 
 #endif // __BARCODE_FORMAT_H__
