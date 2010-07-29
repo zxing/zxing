@@ -28,6 +28,7 @@ import com.google.zxing.client.result.ResultParser;
 import com.google.zxing.common.BitArray;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.HybridBinarizer;
+import com.google.zxing.ResultPoint;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -238,6 +239,13 @@ public final class CommandLineRunner {
       System.out.println(uri.toString() + " (format: " + result.getBarcodeFormat() +
           ", type: " + parsedResult.getType() + "):\nRaw result:\n" + result.getText() +
           "\nParsed result:\n" + parsedResult.getDisplayResult());
+          
+      System.out.println("Also, there were " + result.getResultPoints().length + " result points.");
+      for (int i = 0; i < result.getResultPoints().length; i++) {
+        ResultPoint rp = result.getResultPoints()[i];
+        System.out.println("  Point " + i + ": (" + rp.getX() + "," + rp.getY() + ")");
+      }
+
       return result;
     } catch (NotFoundException nfe) {
       System.out.println(uri.toString() + ": No barcode found");
