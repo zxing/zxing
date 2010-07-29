@@ -72,9 +72,9 @@ namespace zxing {
 			int* endRange;
 			try {
 				endRange = decodeEnd(row);
-			} catch (ReaderException e) {
+			} catch (ReaderException re) {
 				delete [] startRange;
-				throw e;
+				throw re;
 			}
 			
 			std::string tmpResult;
@@ -215,9 +215,9 @@ namespace zxing {
 				endPattern[1] = row->getSize() - temp;
 				
 				return endPattern;
-			}catch (Exception e) {
+			} catch (ReaderException re) {
 				row->reverse();
-				throw e;
+				throw re;
 			} 
 		}
 		

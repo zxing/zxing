@@ -2,9 +2,7 @@
  *  GlobalHistogramBinarizer.h
  *  zxing
  *
- *  Created by Ralf Kistner on 16/10/2009.
- *  Copyright 2008 ZXing authors All rights reserved.
- *  Modified by Lukasz Warchol on 02/02/2010.
+ *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +29,7 @@ namespace zxing {
 	
 	class GlobalHistogramBinarizer : public Binarizer {
 	 private:
-      Ref<BitMatrix> cached_matrix_;
+    Ref<BitMatrix> cached_matrix_;
 	  Ref<BitArray> cached_row_;
 	  int cached_row_num_;
 
