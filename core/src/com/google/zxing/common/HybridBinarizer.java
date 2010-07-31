@@ -148,7 +148,13 @@ public final class HybridBinarizer extends GlobalHistogramBinarizer {
         // If the contrast is inadequate, use half the minimum, so that this block will be
         // treated as part of the white background, but won't drag down neighboring blocks
         // too much.
-        int average = (max - min > 24) ? (sum >> 6) : (min >> 1);
+        int average;
+        if (max - min > 24) {
+          average = sum >> 6;
+        } else {
+          // When min == max == 0, let average be 1 so all is black
+          average = max == 0 ? 1 : min >> 1;
+        }
         blackPoints[y][x] = average;
       }
     }
