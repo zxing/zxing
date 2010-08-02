@@ -39,17 +39,17 @@ public:
   ClosestToAverageComparator(float averageModuleSize) :
       averageModuleSize_(averageModuleSize) {
   }
-  int operator()(Ref<FinderPattern> a, Ref<FinderPattern> b) {
+  bool operator()(Ref<FinderPattern> a, Ref<FinderPattern> b) {
     float dA = abs(a->getEstimatedModuleSize() - averageModuleSize_);
     float dB = abs(b->getEstimatedModuleSize() - averageModuleSize_);
-    return dA < dB ? -1 : dA > dB ? 1 : 0;
+    return dA < dB;
   }
 };
 
 class CenterComparator {
 public:
-  int operator()(Ref<FinderPattern> a, Ref<FinderPattern> b) {
-    return b->getCount() - a->getCount();
+  bool operator()(Ref<FinderPattern> a, Ref<FinderPattern> b) {
+    return a->getCount() < b->getCount();
   }
 };
 
