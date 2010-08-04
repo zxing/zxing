@@ -1,8 +1,10 @@
+#ifndef __ONED_READER_H__
+#define __ONED_READER_H__
+
 /*
  *  OneDReader.h
  *  ZXing
  *
- *  Created by Lukasz Warchol on 10-01-15.
  *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,12 +20,7 @@
  * limitations under the License.
  */
 
-#pragma once
-
 #include <zxing/Reader.h>
-#include <zxing/common/BitArray.h>
-#include <zxing/BinaryBitmap.h>
-#include <zxing/DecodeHints.h>
 
 namespace zxing {
 	namespace oned {
@@ -45,3 +42,5 @@ namespace zxing {
 		};
 	}
 }
+
+#endif

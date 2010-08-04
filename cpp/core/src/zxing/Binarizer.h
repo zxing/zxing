@@ -1,10 +1,11 @@
+#ifndef BINARIZER_H_
+#define BINARIZER_H_
+
 /*
  *  Binarizer.h
  *  zxing
  *
- *  Created by Ralf Kistner on 16/10/2009.
- *  Copyright 2008 ZXing authors All rights reserved.
- *  Modified by Lukasz Warchol on 02/02/2010.
+ *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +19,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#ifndef BINARIZER_H_
-#define BINARIZER_H_
 
 #include <zxing/LuminanceSource.h>
 #include <zxing/common/BitArray.h>

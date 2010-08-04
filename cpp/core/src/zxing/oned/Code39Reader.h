@@ -1,8 +1,9 @@
+#ifndef __CODE_39_READER_H__
+#define __CODE_39_READER_H__
 /*
  *  Code39Reader.h
  *  ZXing
  *
- *  Created by Lukasz Warchol on 10-01-26.
  *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -53,3 +54,4 @@ namespace zxing {
 	}
 }
 
+#endif

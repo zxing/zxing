@@ -1,8 +1,10 @@
+#ifndef __ITF_READER_H__
+#define __ITF_READER_H__
+
 /*
  *  ITFReader.h
  *  ZXing
  *
- *  Created by Lukasz Warchol on 10-01-26.
  *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -51,3 +53,4 @@ namespace zxing {
 	}
 }
 
+#endif

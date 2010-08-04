@@ -1,3 +1,5 @@
+#ifndef __GREYSCALE_LUMINANCE_SOURCE__
+#define __GREYSCALE_LUMINANCE_SOURCE__
 /*
  *  GreyscaleLuminanceSource.h
  *  zxing
@@ -16,9 +18,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#ifndef __GREYSCALE_LUMINANCE_SOURCE__
-#define __GREYSCALE_LUMINANCE_SOURCE__
 
 #include <zxing/LuminanceSource.h>
 
