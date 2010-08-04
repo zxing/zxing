@@ -5,8 +5,7 @@
  *  Reader.h
  *  zxing
  *
- *  Created by Christian Brunschen on 13/05/2008.
- *  Copyright 2008 ZXing authors All rights reserved.
+ *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +30,7 @@ namespace zxing {
   protected:
    Reader() {}
   public:
-   Ref<Result> decode(Ref<BinaryBitmap> image);
+   virtual Ref<Result> decode(Ref<BinaryBitmap> image);
    virtual Ref<Result> decode(Ref<BinaryBitmap> image, DecodeHints hints) = 0;
    virtual ~Reader();
 };

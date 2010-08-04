@@ -1,8 +1,9 @@
+#ifndef __MULTI_FORMAT_UPC_EAN_READER_H__
+#define __MULTI_FORMAT_UPC_EAN_READER_H__
 /*
  *  MultiFormatUPCEANReader.h
  *  ZXing
  *
- *  Created by Lukasz Warchol on 10-01-25.
  *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,11 +19,7 @@
  * limitations under the License.
  */
  
- 
-
 #include <zxing/oned/OneDReader.h>
-#include <zxing/common/BitArray.h>
-#include <zxing/Result.h>
 
 namespace zxing {
 	namespace oned {
@@ -31,9 +28,11 @@ namespace zxing {
 		private:
 			std::vector<Ref<OneDReader> > readers;
 		public:
-			MultiFormatUPCEANReader();
+			MultiFormatUPCEANReader(DecodeHints hints);
 			
 			Ref<Result> decodeRow(int rowNumber, Ref<BitArray> row);
     };
 	}
 }
+
+#endif

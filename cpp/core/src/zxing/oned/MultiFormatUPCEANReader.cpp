@@ -22,6 +22,7 @@
 #include <zxing/oned/EAN13Reader.h>
 #include <zxing/oned/EAN8Reader.h>
 #include <zxing/oned/UPCEReader.h>
+#include <zxing/oned/UPCAReader.h>
 #include <zxing/oned/OneDResultPoint.h>
 #include <zxing/common/Array.h>
 #include <zxing/ReaderException.h>
@@ -30,13 +31,26 @@
 namespace zxing {
 	namespace oned {
 		
-		MultiFormatUPCEANReader::MultiFormatUPCEANReader() : readers() {
-			readers.push_back(Ref<OneDReader>(new EAN13Reader()));
-			// UPC-A is covered by EAN-13
-			readers.push_back(Ref<OneDReader>(new EAN8Reader()));
-			readers.push_back(Ref<OneDReader>(new UPCEReader()));
+		MultiFormatUPCEANReader::MultiFormatUPCEANReader(DecodeHints hints) : readers() {
+		  if (hints.containsFormat(BarcodeFormat_EAN_13)) {
+		    readers.push_back(Ref<OneDReader>(new EAN13Reader()));
+		  } else if (hints.containsFormat(BarcodeFormat_UPC_A)) {
+		    readers.push_back(Ref<OneDReader>(new UPCAReader()));
+		  }
+		  if (hints.containsFormat(BarcodeFormat_EAN_8)) {
+		    readers.push_back(Ref<OneDReader>(new EAN8Reader()));
+		  }
+		  if (hints.containsFormat(BarcodeFormat_UPC_E)) {
+		    readers.push_back(Ref<OneDReader>(new UPCEReader()));
+		  }
+		  if (readers.size() == 0) {
+	      readers.push_back(Ref<OneDReader>(new EAN13Reader()));
+	      // UPC-A is covered by EAN-13
+	      readers.push_back(Ref<OneDReader>(new EAN8Reader()));
+	      readers.push_back(Ref<OneDReader>(new UPCEReader()));
+		  }
 		}
-		
+
 		Ref<Result> MultiFormatUPCEANReader::decodeRow(int rowNumber, Ref<BitArray> row){			
 			// Compute this location once and reuse it on multiple implementations
 			int size = readers.size();

@@ -76,7 +76,7 @@ int test_image(Image& image, bool hybrid, string expected = "") {
       binarizer = new GlobalHistogramBinarizer(source);
     }
 
-    DecodeHints hints(hints.DEFAULT_HINTS);
+    DecodeHints hints(DecodeHints::DEFAULT_HINT);
     hints.setTryHarder(tryHarder);
     Ref<BinaryBitmap> binary(new BinaryBitmap(binarizer));
     Ref<Result> result(decode(binary, hints));
@@ -134,7 +134,11 @@ string get_expected(string imagefilename) {
   textfilename.replace(dotpos+1, textfilename.length() - dotpos - 1, "txt");
   char data[MAX_EXPECTED];
   FILE *fp = fopen(textfilename.data(), "rb");
-    
+
+  if (!fp) {
+    // could not open file
+    return "";
+  }
   // get file size
   fseek(fp, 0, SEEK_END);
   int toread = ftell(fp);

@@ -28,11 +28,28 @@
 
 namespace zxing {
 	namespace oned {
-		MultiFormatOneDReader::MultiFormatOneDReader() : readers() {
-			readers.push_back(Ref<OneDReader>(new MultiFormatUPCEANReader()));
-			readers.push_back(Ref<OneDReader>(new Code39Reader()));
-			readers.push_back(Ref<OneDReader>(new Code128Reader()));
-			readers.push_back(Ref<OneDReader>(new ITFReader()));
+		MultiFormatOneDReader::MultiFormatOneDReader(DecodeHints hints) : readers() {
+      if (hints.containsFormat(BarcodeFormat_EAN_13) ||
+          hints.containsFormat(BarcodeFormat_EAN_8) ||
+          hints.containsFormat(BarcodeFormat_UPC_A) ||
+          hints.containsFormat(BarcodeFormat_UPC_E)) {
+        readers.push_back(Ref<OneDReader>(new MultiFormatUPCEANReader(hints)));
+      }
+      if (hints.containsFormat(BarcodeFormat_CODE_39)) {
+        readers.push_back(Ref<OneDReader>(new Code39Reader()));
+      }
+      if (hints.containsFormat(BarcodeFormat_CODE_128)) {
+        readers.push_back(Ref<OneDReader>(new Code128Reader()));
+      }
+      if (hints.containsFormat(BarcodeFormat_ITF)) {
+        readers.push_back(Ref<OneDReader>(new ITFReader()));
+      }
+      if (readers.size() == 0) {
+        readers.push_back(Ref<OneDReader>(new MultiFormatUPCEANReader(hints)));
+        readers.push_back(Ref<OneDReader>(new Code39Reader()));
+        readers.push_back(Ref<OneDReader>(new Code128Reader()));
+        readers.push_back(Ref<OneDReader>(new ITFReader()));
+      }
 		}
 		
 		Ref<Result> MultiFormatOneDReader::decodeRow(int rowNumber, Ref<BitArray> row){
