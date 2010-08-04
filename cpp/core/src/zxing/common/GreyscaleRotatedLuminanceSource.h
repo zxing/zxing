@@ -1,3 +1,5 @@
+#ifndef __GREYSCALE_ROTATED_LUMINANCE_SOURCE__
+#define __GREYSCALE_ROTATED_LUMINANCE_SOURCE__
 /*
  *  GreyscaleRotatedLuminanceSource.h
  *  zxing
@@ -17,9 +19,6 @@
  * limitations under the License.
  */
 
-
-#ifndef __GREYSCALE_ROTATED_LUMINANCE_SOURCE__
-#define __GREYSCALE_ROTATED_LUMINANCE_SOURCE__
 
 #include <zxing/LuminanceSource.h>
 

@@ -1,8 +1,10 @@
+#ifndef __EAN_13_READER_H__
+#define __EAN_13_READER_H__
+
 /*
  *  EAN13Reader.h
  *  ZXing
  *
- *  Created by Lukasz Warchol on 10-01-22.
  *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -37,3 +39,5 @@ namespace zxing {
 		};
 	}
 }
+
+#endif

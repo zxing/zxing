@@ -1,3 +1,5 @@
+#ifndef __MAGICK_BITMAP_SOURCE_H_
+#define __MAGICK_BITMAP_SOURCE_H_
 /*
  *  MagickBitmapSource.h
  *  zxing
@@ -16,9 +18,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#ifndef MAGICKMONOCHROMEBITMAPSOURCE_H_
-#define MAGICKMONOCHROMEBITMAPSOURCE_H_
 
 #include <Magick++.h>
 #include <zxing/LuminanceSource.h>

@@ -1,8 +1,9 @@
+#ifndef __UPCA_READER_H__
+#define __UPCA_READER_H__
 /*
  *  UPCAReader.h
  *  ZXing
  *
- *  Created by Lukasz Warchol on 10-01-25.
  *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -42,3 +43,5 @@ namespace zxing {
 		};
 	}
 }
+
+#endif

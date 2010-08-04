@@ -1,8 +1,10 @@
+#ifndef __EAN_8_READER_H__
+#define __EAN_8_READER_H__
+
 /*
  *  EAN8Reader.h
  *  ZXing
  *
- *  Created by Lukasz Warchol on 10-01-25.
  *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,3 +36,5 @@ namespace zxing {
 		};
 	}
 }
+
+#endif

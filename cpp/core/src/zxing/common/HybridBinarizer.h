@@ -1,3 +1,5 @@
+#ifndef __HYBRIDBINARIZER_H__
+#define __HYBRIDBINARIZER_H__
 /*
  *  HybridBinarizer.h
  *  zxing
@@ -16,9 +18,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#ifndef HYBRIDBINARIZER_H_
-#define HYBRIDBINARIZER_H_
 
 #include <vector>
 #include <zxing/Binarizer.h>

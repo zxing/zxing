@@ -1,3 +1,5 @@
+#ifndef __GLOBALHISTOGRAMBINARIZER_H__
+#define __GLOBALHISTOGRAMBINARIZER_H__
 /*
  *  GlobalHistogramBinarizer.h
  *  zxing
@@ -16,9 +18,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#ifndef GLOBALHISTOGRAMBINARIZER_H_
-#define GLOBALHISTOGRAMBINARIZER_H_
 
 #include <vector>
 #include <zxing/Binarizer.h>
