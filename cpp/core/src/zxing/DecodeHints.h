@@ -1,3 +1,5 @@
+#ifndef __DECODEHINTS_H_
+#define __DECODEHINTS_H_
 /*
  *  DecodeHintType.h
  *  zxing
@@ -16,8 +18,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef DECODEHINTS_H_
-#define DECODEHINTS_H_
 
 #include <zxing/BarcodeFormat.h>
 
@@ -44,29 +44,13 @@ class DecodeHints {
 
  public:
 
-  static const DecodeHintType BARCODEFORMAT_PRODUCT_HINT =
-      BARCODEFORMAT_UPC_E_HINT |
-      BARCODEFORMAT_UPC_A_HINT |
-      BARCODEFORMAT_EAN_8_HINT |
-      BARCODEFORMAT_EAN_13_HINT;
-
-  static const DecodeHintType BARCODEFORMAT_ONED_HINT =
-      BARCODEFORMAT_PRODUCT_HINT |
-      BARCODEFORMAT_CODE_128_HINT |
-      BARCODEFORMAT_CODE_39_HINT |
-      BARCODEFORMAT_ITF_HINT;
-
-  static const DecodeHintType BARCODEFORMAT_ANY_HINT =
-      BARCODEFORMAT_ONED_HINT |
-// TODO: uncomment once this passes QA
-//      BARCODEFORMAT_DATA_MATRIX_HINT |
-      BARCODEFORMAT_QR_CODE_HINT;
-
-  static const DecodeHintType DEFAULT_HINTS = BARCODEFORMAT_ANY_HINT;
+  static const DecodeHints PRODUCT_HINT;
+  static const DecodeHints ONED_HINT;
+  static const DecodeHints DEFAULT_HINT;
 
   DecodeHints();
   DecodeHints(DecodeHintType init);
-  ~DecodeHints();
+
   void addFormat(BarcodeFormat toadd);
   bool containsFormat(BarcodeFormat tocheck) const;
   void setTryHarder(bool toset);

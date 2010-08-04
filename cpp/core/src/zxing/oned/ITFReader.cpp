@@ -214,6 +214,7 @@ namespace zxing {
 				endPattern[0] = row->getSize() - endPattern[1];
 				endPattern[1] = row->getSize() - temp;
 				
+				row->reverse();
 				return endPattern;
 			} catch (ReaderException re) {
 				row->reverse();

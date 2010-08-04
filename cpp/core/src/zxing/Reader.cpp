@@ -25,8 +25,7 @@ namespace zxing {
 Reader::~Reader() { }
 
 Ref<Result> Reader::decode(Ref<BinaryBitmap> image) {
-  DecodeHints hints(hints.DEFAULT_HINTS);
-  return decode(image, hints);
+  return decode(image, DecodeHints::DEFAULT_HINT);
 }
 
 }

@@ -21,16 +21,39 @@
 #include <zxing/common/IllegalArgumentException.h>
 namespace zxing {
 
+const DecodeHints DecodeHints::PRODUCT_HINT(
+    BARCODEFORMAT_UPC_E_HINT |
+    BARCODEFORMAT_UPC_A_HINT |
+    BARCODEFORMAT_EAN_8_HINT |
+    BARCODEFORMAT_EAN_13_HINT);
+
+const DecodeHints DecodeHints::ONED_HINT(
+    BARCODEFORMAT_UPC_E_HINT |
+    BARCODEFORMAT_UPC_A_HINT |
+    BARCODEFORMAT_EAN_8_HINT |
+    BARCODEFORMAT_EAN_13_HINT |
+    BARCODEFORMAT_CODE_128_HINT |
+    BARCODEFORMAT_CODE_39_HINT |
+    BARCODEFORMAT_ITF_HINT);
+
+const DecodeHints DecodeHints::DEFAULT_HINT(
+    BARCODEFORMAT_UPC_E_HINT |
+    BARCODEFORMAT_UPC_A_HINT |
+    BARCODEFORMAT_EAN_8_HINT |
+    BARCODEFORMAT_EAN_13_HINT |
+    BARCODEFORMAT_CODE_128_HINT |
+    BARCODEFORMAT_CODE_39_HINT |
+    BARCODEFORMAT_ITF_HINT |
+    // TODO: uncomment once this passes QA
+    // BARCODEFORMAT_DATA_MATRIX_HINT |
+    BARCODEFORMAT_QR_CODE_HINT);
+
 DecodeHints::DecodeHints() {
   hints = 0;
 }
 
 DecodeHints::DecodeHints(DecodeHintType init) {
   hints = init;
-}
-
-DecodeHints::~DecodeHints() {
-  // if DecodeHintType requires a destructor in the future, call it here
 }
 
 void DecodeHints::addFormat(BarcodeFormat toadd) {
