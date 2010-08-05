@@ -42,7 +42,7 @@ import java.util.Hashtable;
 public final class DataMatrixReader implements Reader {
 
   private static final ResultPoint[] NO_POINTS = new ResultPoint[0];
-  
+
   private final Decoder decoder = new Decoder();
 
   /**
@@ -70,7 +70,8 @@ public final class DataMatrixReader implements Reader {
       decoderResult = decoder.decode(detectorResult.getBits());
       points = detectorResult.getPoints();
     }
-    Result result = new Result(decoderResult.getText(), decoderResult.getRawBytes(), points, BarcodeFormat.DATAMATRIX);
+    Result result = new Result(decoderResult.getText(), decoderResult.getRawBytes(), points,
+        BarcodeFormat.DATA_MATRIX);
     if (decoderResult.getByteSegments() != null) {
       result.putMetadata(ResultMetadataType.BYTE_SEGMENTS, decoderResult.getByteSegments());
     }
@@ -90,7 +91,7 @@ public final class DataMatrixReader implements Reader {
    * around it. This is a specialized method that works exceptionally fast in this special
    * case.
    *
-   * @see com.google.zxing.qrcode.QRCodeReader#extractPureBits(BitMatrix) 
+   * @see com.google.zxing.qrcode.QRCodeReader#extractPureBits(BitMatrix)
    */
   private static BitMatrix extractPureBits(BitMatrix image) throws NotFoundException {
 
@@ -132,7 +133,7 @@ public final class DataMatrixReader implements Reader {
     int dimension = 2 + ((rowEndOfSymbol - x) / moduleSize);
 
     y += moduleSize;
-    
+
     // Push in the "border" by half the module width so that we start
     // sampling in the middle of the module. Just in case the image is a
     // little off, this will help recover.

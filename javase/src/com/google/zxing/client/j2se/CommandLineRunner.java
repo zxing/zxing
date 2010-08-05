@@ -114,14 +114,14 @@ public final class CommandLineRunner {
     vector.addElement(BarcodeFormat.UPC_E);
     vector.addElement(BarcodeFormat.EAN_13);
     vector.addElement(BarcodeFormat.EAN_8);
-    vector.addElement(BarcodeFormat.RSS14);    
+    vector.addElement(BarcodeFormat.RSS14);
     if (!productsOnly) {
       vector.addElement(BarcodeFormat.CODE_39);
-      vector.addElement(BarcodeFormat.CODE_93);      
+      vector.addElement(BarcodeFormat.CODE_93);
       vector.addElement(BarcodeFormat.CODE_128);
       vector.addElement(BarcodeFormat.ITF);
       vector.addElement(BarcodeFormat.QR_CODE);
-      vector.addElement(BarcodeFormat.DATAMATRIX);
+      vector.addElement(BarcodeFormat.DATA_MATRIX);
       vector.addElement(BarcodeFormat.PDF417);
       //vector.addElement(BarcodeFormat.CODABAR);
     }
@@ -239,7 +239,7 @@ public final class CommandLineRunner {
       System.out.println(uri.toString() + " (format: " + result.getBarcodeFormat() +
           ", type: " + parsedResult.getType() + "):\nRaw result:\n" + result.getText() +
           "\nParsed result:\n" + parsedResult.getDisplayResult());
-          
+
       System.out.println("Also, there were " + result.getResultPoints().length + " result points.");
       for (int i = 0; i < result.getResultPoints().length; i++) {
         ResultPoint rp = result.getResultPoints()[i];

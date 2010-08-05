@@ -107,13 +107,13 @@ public final class DecodeServlet extends HttpServlet {
     possibleFormats.add(BarcodeFormat.EAN_8);
     possibleFormats.add(BarcodeFormat.EAN_13);
     possibleFormats.add(BarcodeFormat.CODE_39);
-    possibleFormats.add(BarcodeFormat.CODE_93);    
+    possibleFormats.add(BarcodeFormat.CODE_93);
     possibleFormats.add(BarcodeFormat.CODE_128);
     //possibleFormats.add(BarcodeFormat.CODABAR);
     possibleFormats.add(BarcodeFormat.ITF);
-    possibleFormats.add(BarcodeFormat.RSS14);    
+    possibleFormats.add(BarcodeFormat.RSS14);
     possibleFormats.add(BarcodeFormat.QR_CODE);
-    possibleFormats.add(BarcodeFormat.DATAMATRIX);
+    possibleFormats.add(BarcodeFormat.DATA_MATRIX);
     possibleFormats.add(BarcodeFormat.PDF417);
     HINTS.put(DecodeHintType.POSSIBLE_FORMATS, possibleFormats);
     HINTS_PURE = new Hashtable<DecodeHintType, Object>(HINTS);
@@ -286,11 +286,11 @@ public final class DecodeServlet extends HttpServlet {
     }
     if (image == null) {
       response.sendRedirect("badimage.jspx");
-      return;      
+      return;
     }
     if (image.getHeight() <= 1 || image.getWidth() <= 1 ||
         image.getHeight() * image.getWidth() > MAX_PIXELS) {
-      log.fine("Dimensions too large: " + image.getWidth() + 'x' + image.getHeight());        
+      log.fine("Dimensions too large: " + image.getWidth() + 'x' + image.getHeight());
       response.sendRedirect("badimage.jspx");
       return;
     }

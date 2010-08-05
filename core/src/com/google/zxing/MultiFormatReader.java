@@ -104,7 +104,7 @@ public final class MultiFormatReader implements Reader {
               formats.contains(BarcodeFormat.CODE_93) ||
               formats.contains(BarcodeFormat.CODE_128) ||
               formats.contains(BarcodeFormat.ITF) ||
-              formats.contains(BarcodeFormat.RSS14) || 
+              formats.contains(BarcodeFormat.RSS14) ||
               formats.contains(BarcodeFormat.RSS_EXPANDED);
       // Put 1D readers upfront in "normal" mode
       if (addOneDReader && !tryHarder) {
@@ -113,7 +113,7 @@ public final class MultiFormatReader implements Reader {
       if (formats.contains(BarcodeFormat.QR_CODE)) {
         readers.addElement(new QRCodeReader());
       }
-      if (formats.contains(BarcodeFormat.DATAMATRIX)) {
+      if (formats.contains(BarcodeFormat.DATA_MATRIX)) {
         readers.addElement(new DataMatrixReader());
       }
       if (formats.contains(BarcodeFormat.PDF417)) {
@@ -129,13 +129,13 @@ public final class MultiFormatReader implements Reader {
         readers.addElement(new MultiFormatOneDReader(hints));
       }
       readers.addElement(new QRCodeReader());
-      
+
       // TODO re-enable once Data Matrix is ready
       // readers.addElement(new DataMatrixReader());
-      
+
       // TODO: Enable once PDF417 has passed QA
       //readers.addElement(new PDF417Reader());
-      
+
       if (tryHarder) {
         readers.addElement(new MultiFormatOneDReader(hints));
       }
