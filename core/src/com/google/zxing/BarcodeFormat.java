@@ -33,7 +33,7 @@ public final class BarcodeFormat {
   public static final BarcodeFormat QR_CODE = new BarcodeFormat("QR_CODE");
 
   /** DataMatrix 2D barcode format. */
-  public static final BarcodeFormat DATAMATRIX = new BarcodeFormat("DATAMATRIX");
+  public static final BarcodeFormat DATA_MATRIX = new BarcodeFormat("DATA_MATRIX");
 
   /** UPC-E 1D format. */
   public static final BarcodeFormat UPC_E = new BarcodeFormat("UPC_E");
@@ -58,7 +58,7 @@ public final class BarcodeFormat {
 
   /** Code 93 1D format. */
   public static final BarcodeFormat CODE_93 = new BarcodeFormat("CODE_93");
-  
+
   /** CODABAR 1D format. */
   public static final BarcodeFormat CODABAR = new BarcodeFormat("CODABAR");
 
@@ -70,7 +70,7 @@ public final class BarcodeFormat {
 
   /** PDF417 format. */
   public static final BarcodeFormat PDF417 = new BarcodeFormat("PDF417");
-  
+
   /** RSS EXPANDED */
   public static final BarcodeFormat RSS_EXPANDED = new BarcodeFormat("RSS_EXPANDED");
 
