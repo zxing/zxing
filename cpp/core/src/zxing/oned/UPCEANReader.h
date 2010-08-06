@@ -39,7 +39,7 @@ namespace zxing {
 			
 			static int* findStartGuardPattern(Ref<BitArray> row);																	//throws ReaderException
 			
-			int* decodeEnd(Ref<BitArray> row, int endStart);																		//throws ReaderException
+			virtual int* decodeEnd(Ref<BitArray> row, int endStart);																		//throws ReaderException
 			
 			static bool checkStandardUPCEANChecksum(std::string s);																	//throws ReaderException 
 		protected:
@@ -58,7 +58,7 @@ namespace zxing {
 			
 			static int decodeDigit(Ref<BitArray> row, int counters[], int countersLen, int rowOffset, UPC_EAN_PATTERNS patternType);	//throws ReaderException 
 			
-			bool checkChecksum(std::string s);																						//throws ReaderException
+			virtual bool checkChecksum(std::string s);																						//throws ReaderException
 			
 			virtual BarcodeFormat getBarcodeFormat() = 0;
 			virtual ~UPCEANReader();

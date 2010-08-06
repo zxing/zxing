@@ -95,7 +95,7 @@ namespace zxing {
 		 * @param upce UPC-E code as string of digits
 		 * @return equivalent UPC-A code as string of digits
 		 */
-		std::string& UPCEReader::convertUPCEtoUPCA(std::string upce) {			
+		std::string UPCEReader::convertUPCEtoUPCA(std::string upce) {
 			std::string result;
 			result.append(1, upce[0]);
 			char lastChar = upce[6];
@@ -125,8 +125,7 @@ namespace zxing {
 					break;
 			}
 			result.append(1, upce[7]);
-			std::string& returnResult = result;
-			return returnResult;
+			return result;
 		}
 		
 		
