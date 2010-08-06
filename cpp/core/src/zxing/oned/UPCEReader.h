@@ -37,7 +37,7 @@ namespace zxing {
 			UPCEReader();
 			
 			int decodeMiddle(Ref<BitArray> row, int startRange[], int startRangeLen, std::string& resultString);		//throws ReaderException
-			static std::string& convertUPCEtoUPCA(std::string upce);
+			static std::string convertUPCEtoUPCA(std::string upce);
 			
 			BarcodeFormat getBarcodeFormat();
 		};
