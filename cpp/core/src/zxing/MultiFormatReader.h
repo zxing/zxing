@@ -27,23 +27,23 @@
 #include <zxing/DecodeHints.h>
 
 namespace zxing {
-	class MultiFormatReader : public Reader {
-		
-	private:
-	  Ref<Result> decodeInternal(Ref<BinaryBitmap> image);
-	
-		std::vector<Reader*> readers_;
-		DecodeHints hints_;
+  class MultiFormatReader : public Reader {
+    
+  private:
+    Ref<Result> decodeInternal(Ref<BinaryBitmap> image);
+  
+    std::vector<Ref<Reader> > readers_;
+    DecodeHints hints_;
 
-	public:
-		MultiFormatReader();
-		
-		Ref<Result> decode(Ref<BinaryBitmap> image);
-		Ref<Result> decode(Ref<BinaryBitmap> image, DecodeHints hints);
+  public:
+    MultiFormatReader();
+    
+    Ref<Result> decode(Ref<BinaryBitmap> image);
+    Ref<Result> decode(Ref<BinaryBitmap> image, DecodeHints hints);
     Ref<Result> decodeWithState(Ref<BinaryBitmap> image);
     void setHints(DecodeHints hints);
-		~MultiFormatReader();
-	};
+    ~MultiFormatReader();
+  };
 }
 
 #endif
