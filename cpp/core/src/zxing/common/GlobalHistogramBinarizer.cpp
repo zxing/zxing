@@ -40,8 +40,7 @@ GlobalHistogramBinarizer::~GlobalHistogramBinarizer() {
 
 
 Ref<BitArray> GlobalHistogramBinarizer::getBlackRow(int y, Ref<BitArray> row) {
-
-  if (row == cached_row_num_) {
+  if (y == cached_row_num_) {
     return cached_row_;
   }
 
@@ -83,17 +82,18 @@ Ref<BitArray> GlobalHistogramBinarizer::getBlackRow(int y, Ref<BitArray> row) {
 
       cached_row_ = array_ref;
       cached_row_num_ = y;
-  
       delete [] row_pixels;
       return array_ref;
   } catch (IllegalArgumentException const& iae) {
+      // Cache the fact that this row failed.
+      cached_row_ = NULL;
+      cached_row_num_ = y;
       delete [] row_pixels;
       throw iae;
   }
 }
 
 Ref<BitMatrix> GlobalHistogramBinarizer::getBlackMatrix() {
-
   if (cached_matrix_ != NULL) {
     return cached_matrix_;
   }
@@ -103,7 +103,6 @@ Ref<BitMatrix> GlobalHistogramBinarizer::getBlackMatrix() {
   int width = source.getWidth();
   int height = source.getHeight();
   vector<int> histogram(LUMINANCE_BUCKETS, 0);
-
 
   // Quickly calculates the histogram by sampling four rows from the image.
   // This proved to be more robust on the blackbox tests than sampling a
@@ -141,7 +140,6 @@ Ref<BitMatrix> GlobalHistogramBinarizer::getBlackMatrix() {
 int GlobalHistogramBinarizer::estimate(vector<int> &histogram) {
   int numBuckets = histogram.size();
   int maxBucketCount = 0;
-
 
   // Find tallest peak in histogram
   int firstPeak = 0;
