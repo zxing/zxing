@@ -48,6 +48,7 @@ namespace zxing {
 		public:
 			Code39Reader();
 			Code39Reader(bool usingCheckDigit_);
+			Code39Reader(bool usingCheckDigit_, bool extendedMode_);
 			
 			Ref<Result> decodeRow(int rowNumber, Ref<BitArray> row);
     };
