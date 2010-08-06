@@ -27,16 +27,16 @@
 #include <zxing/ReaderException.h>
 
 namespace zxing {
-	MultiFormatReader::MultiFormatReader() {
+  MultiFormatReader::MultiFormatReader() {
 
-	}
-	
-	Ref<Result> MultiFormatReader::decode(Ref<BinaryBitmap> image) {
-	  setHints(DecodeHints::DEFAULT_HINT);
-	  return decodeInternal(image);
-	}
+  }
+  
+  Ref<Result> MultiFormatReader::decode(Ref<BinaryBitmap> image) {
+    setHints(DecodeHints::DEFAULT_HINT);
+    return decodeInternal(image);
+  }
 
-	Ref<Result> MultiFormatReader::decode(Ref<BinaryBitmap> image, DecodeHints hints) {
+  Ref<Result> MultiFormatReader::decode(Ref<BinaryBitmap> image, DecodeHints hints) {
     setHints(hints);
     return decodeInternal(image);
   }
@@ -62,43 +62,41 @@ namespace zxing {
                          hints.containsFormat(BarcodeFormat_CODE_39) ||
                          hints.containsFormat(BarcodeFormat_ITF);
     if (addOneDReader && !tryHarder) {
-      readers_.push_back(new zxing::oned::MultiFormatOneDReader(hints));
+      readers_.push_back(Ref<Reader>(new zxing::oned::MultiFormatOneDReader(hints)));
     }
     if (hints.containsFormat(BarcodeFormat_QR_CODE)) {
-      readers_.push_back(new zxing::qrcode::QRCodeReader());
+      readers_.push_back(Ref<Reader>(new zxing::qrcode::QRCodeReader()));
     }
     if (hints.containsFormat(BarcodeFormat_DATA_MATRIX)) {
-      readers_.push_back(new zxing::datamatrix::DataMatrixReader());
+      readers_.push_back(Ref<Reader>(new zxing::datamatrix::DataMatrixReader()));
     }
     //TODO: add PDF417 here once PDF417 reader is implemented
     if (addOneDReader && tryHarder) {
-      readers_.push_back(new zxing::oned::MultiFormatOneDReader(hints));
+      readers_.push_back(Ref<Reader>(new zxing::oned::MultiFormatOneDReader(hints)));
     }
     if (readers_.size() == 0) {
       if (!tryHarder) {
-        readers_.push_back(new zxing::oned::MultiFormatOneDReader(hints));
+        readers_.push_back(Ref<Reader>(new zxing::oned::MultiFormatOneDReader(hints)));
       }
-      readers_.push_back(new zxing::qrcode::QRCodeReader());
+      readers_.push_back(Ref<Reader>(new zxing::qrcode::QRCodeReader()));
       if (tryHarder) {
-        readers_.push_back(new zxing::oned::MultiFormatOneDReader(hints));
+        readers_.push_back(Ref<Reader>(new zxing::oned::MultiFormatOneDReader(hints)));
       }
     }
   }
 
-	Ref<Result> MultiFormatReader::decodeInternal(Ref<BinaryBitmap> image) {
-		for (unsigned int i = 0; i < readers_.size(); i++) {
-			try {
-				return readers_[i]->decode(image, hints_);
-			} catch (ReaderException re) {
-				// continue
-			}
-		}
-		throw ReaderException("No code detected");
-	}
-	
-	MultiFormatReader::~MultiFormatReader(){
-		for (unsigned int i = 0; i < readers_.size(); i++) {
-			delete readers_[i];
-		}
-	}
+  Ref<Result> MultiFormatReader::decodeInternal(Ref<BinaryBitmap> image) {
+    for (unsigned int i = 0; i < readers_.size(); i++) {
+      try {
+        return readers_[i]->decode(image, hints_);
+      } catch (ReaderException re) {
+        // continue
+      }
+    }
+    throw ReaderException("No code detected");
+  }
+  
+  MultiFormatReader::~MultiFormatReader() {
+
+  }
 }

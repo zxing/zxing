@@ -75,112 +75,108 @@ namespace oned {
   }
 
 
+  Code39Reader::Code39Reader(bool usingCheckDigit_, bool extendedMode_) :
+    alphabet_string(ALPHABET_STRING), 
+    usingCheckDigit(usingCheckDigit_),
+    extendedMode(extendedMode_) {
+  }
 
   Ref<Result> Code39Reader::decodeRow(int rowNumber, Ref<BitArray> row){
-    int* start = findAsteriskPattern(row);
-    int nextStart = start[1];
-    int end = row->getSize();
+    int* start = NULL;
+    try {
+      start = findAsteriskPattern(row);
+      int nextStart = start[1];
+      int end = row->getSize();
 
-    // Read off white space
-    while (nextStart < end && !row->get(nextStart)) {
-      nextStart++;
-    }
-
-    std::string tmpResultString;
-
-    int countersLen = 9;
-    int* counters = new int[countersLen];
-    for (int i=0; i<countersLen; i++) {
-      counters[i] = 0;
-    }
-    char decodedChar;
-    int lastStart;
-    do {
-      try {
-      recordPattern(row, nextStart, counters, countersLen);
-      } catch (ReaderException re) {
-        delete [] start;
-        throw re;
-      }
-      int pattern = toNarrowWidePattern(counters, countersLen);
-      if (pattern < 0) {
-        delete [] start;
-        throw ReaderException("pattern < 0");
-      }
-      decodedChar = patternToChar(pattern);
-      tmpResultString.append(1, decodedChar);
-      lastStart = nextStart;
-      for (int i = 0; i < countersLen; i++) {
-        nextStart += counters[i];
-      }
       // Read off white space
       while (nextStart < end && !row->get(nextStart)) {
         nextStart++;
       }
-    } while (decodedChar != '*');
-    tmpResultString.erase(tmpResultString.length()-1, 1);// remove asterisk
 
-    // Look for whitespace after pattern:
-    int lastPatternSize = 0;
-    for (int i = 0; i < countersLen; i++) {
-      lastPatternSize += counters[i];
-    }
-    // IS begin
-    delete [] counters;
-    // IS end
-    int whiteSpaceAfterEnd = nextStart - lastStart - lastPatternSize;
-    // If 50% of last pattern size, following last pattern, is not whitespace,
-    // fail (but if it's whitespace to the very end of the image, that's OK)
-    if (nextStart != end && whiteSpaceAfterEnd / 2 < lastPatternSize) {
-      delete [] start;
-      throw ReaderException("too short end white space");
-    }
+      std::string tmpResultString;
 
-    if (usingCheckDigit) {
-      int max = tmpResultString.length() - 1;
-      unsigned int total = 0;
-      for (int i = 0; i < max; i++) {
-        total += alphabet_string.find_first_of(tmpResultString[i], 0);
+      const int countersLen = 9;
+      int counters[countersLen];
+      for (int i = 0; i < countersLen; i++) {
+        counters[i] = 0;
       }
-      if (total % 43 != alphabet_string.find_first_of(tmpResultString[max], 0)) {
+      char decodedChar;
+      int lastStart;
+      do {
+        recordPattern(row, nextStart, counters, countersLen);
+        int pattern = toNarrowWidePattern(counters, countersLen);
+        if (pattern < 0) {
+          throw ReaderException("pattern < 0");
+        }
+        decodedChar = patternToChar(pattern);
+        tmpResultString.append(1, decodedChar);
+        lastStart = nextStart;
+        for (int i = 0; i < countersLen; i++) {
+          nextStart += counters[i];
+        }
+        // Read off white space
+        while (nextStart < end && !row->get(nextStart)) {
+          nextStart++;
+        }
+      } while (decodedChar != '*');
+      tmpResultString.erase(tmpResultString.length()-1, 1);// remove asterisk
+
+      // Look for whitespace after pattern:
+      int lastPatternSize = 0;
+      for (int i = 0; i < countersLen; i++) {
+        lastPatternSize += counters[i];
+      }
+      int whiteSpaceAfterEnd = nextStart - lastStart - lastPatternSize;
+      // If 50% of last pattern size, following last pattern, is not whitespace,
+      // fail (but if it's whitespace to the very end of the image, that's OK)
+      if (nextStart != end && whiteSpaceAfterEnd / 2 < lastPatternSize) {
+        throw ReaderException("too short end white space");
+      }
+
+      if (usingCheckDigit) {
+        int max = tmpResultString.length() - 1;
+        unsigned int total = 0;
+        for (int i = 0; i < max; i++) {
+          total += alphabet_string.find_first_of(tmpResultString[i], 0);
+        }
+        if (total % 43 != alphabet_string.find_first_of(tmpResultString[max], 0)) {
+          throw ReaderException("");
+        }
+        tmpResultString.erase(max, 1);
+      }
+
+      Ref<String> resultString(new String(tmpResultString));
+      if (extendedMode) {
+        resultString = decodeExtended(tmpResultString);
+      }
+
+      if (tmpResultString.length() == 0) {
+        // Almost surely a false positive
         throw ReaderException("");
       }
-      tmpResultString.erase(max, 1);
-    }
 
+      float left = (float) (start[1] + start[0]) / 2.0f;
+      float right = (float) (nextStart + lastStart) / 2.0f;
 
+      std::vector< Ref<ResultPoint> > resultPoints(2);
+      Ref<OneDResultPoint> resultPoint1(
+        new OneDResultPoint(left, (float) rowNumber));
+      Ref<OneDResultPoint> resultPoint2(
+        new OneDResultPoint(right, (float) rowNumber));
+      resultPoints[0] = resultPoint1;
+      resultPoints[1] = resultPoint2;
 
+      ArrayRef<unsigned char> resultBytes(1);
 
-    Ref<String> resultString(new String(tmpResultString));
-    if (extendedMode) {
-      delete resultString;
-      resultString = decodeExtended(tmpResultString);
-    }
+      Ref<Result> res(new Result(
+                        resultString, resultBytes, resultPoints, BarcodeFormat_CODE_39));
 
-    if (tmpResultString.length() == 0) {
       delete [] start;
-      // Almost surely a false positive
-      throw ReaderException("");
+      return res;
+    } catch (ReaderException const& re) {
+      delete [] start;
+      throw re;
     }
-
-    float left = (float) (start[1] + start[0]) / 2.0f;
-    float right = (float) (nextStart + lastStart) / 2.0f;
-
-    std::vector< Ref<ResultPoint> > resultPoints(2);
-    Ref<OneDResultPoint> resultPoint1(
-      new OneDResultPoint(left, (float) rowNumber));
-    Ref<OneDResultPoint> resultPoint2(
-      new OneDResultPoint(right, (float) rowNumber));
-    resultPoints[0] = resultPoint1;
-    resultPoints[1] = resultPoint2;
-
-    ArrayRef<unsigned char> resultBytes(1);
-
-    delete [] start;
-
-    Ref<Result> res(new Result(
-      resultString, resultBytes, resultPoints, BarcodeFormat_CODE_39));
-    return res;
   }
 
   int* Code39Reader::findAsteriskPattern(Ref<BitArray> row){
@@ -194,9 +190,9 @@ namespace oned {
     }
 
     int counterPosition = 0;
-    int countersLen = 9;
-    int* counters = new int[countersLen];
-    for (int i=0; i<countersLen; i++) {
+    const int countersLen = 9;
+    int counters[countersLen];
+    for (int i = 0; i < countersLen; i++) {
       counters[i] = 0;
     }
     int patternStart = rowOffset;
@@ -235,9 +231,6 @@ namespace oned {
         isWhite = !isWhite;
       }
     }
-    // IS begin
-    delete [] counters;
-    // IS end
     throw ReaderException("");
   }
 
