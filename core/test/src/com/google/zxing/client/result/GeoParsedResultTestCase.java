@@ -28,12 +28,17 @@ import junit.framework.TestCase;
 public final class GeoParsedResultTestCase extends TestCase {
 
   public void testGeo() {
-    doTest("geo:1,2", 1.0, 2.0, 0.0);
-    doTest("geo:80.33,-32.3344,3.35", 80.33, -32.3344, 3.35);
-    doTest("geo:-20.33,132.3344,0.01", -20.33, 132.3344, 0.01);
+    doTest("geo:1,2", 1.0, 2.0, 0.0, null);
+    doTest("geo:80.33,-32.3344,3.35", 80.33, -32.3344, 3.35, null);
+    doTest("geo:-20.33,132.3344,0.01", -20.33, 132.3344, 0.01, null);
+    doTest("geo:-20.33,132.3344,0.01?q=foobar", -20.33, 132.3344, 0.01, "q=foobar");
   }
 
-  private static void doTest(String contents, double latitude, double longitude, double altitude) {
+  private static void doTest(String contents,
+                             double latitude,
+                             double longitude,
+                             double altitude,
+                             String query) {
     Result fakeResult = new Result(contents, null, null, BarcodeFormat.QR_CODE);
     ParsedResult result = ResultParser.parseResult(fakeResult);
     assertSame(ParsedResultType.GEO, result.getType());
