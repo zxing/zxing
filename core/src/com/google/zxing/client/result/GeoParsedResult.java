@@ -24,12 +24,14 @@ public final class GeoParsedResult extends ParsedResult {
   private final double latitude;
   private final double longitude;
   private final double altitude;
+  private final String query;
 
-  GeoParsedResult(double latitude, double longitude, double altitude) {
+  GeoParsedResult(double latitude, double longitude, double altitude, String query) {
     super(ParsedResultType.GEO);
     this.latitude = latitude;
     this.longitude = longitude;
     this.altitude = altitude;
+    this.query = query;
   }
 
   public String getGeoURI() {
@@ -41,6 +43,10 @@ public final class GeoParsedResult extends ParsedResult {
     if (altitude > 0) {
       result.append(',');
       result.append(altitude);
+    }
+    if (query != null) {
+      result.append('?');
+      result.append(query);
     }
     return result.toString();
   }
@@ -66,8 +72,15 @@ public final class GeoParsedResult extends ParsedResult {
     return altitude;
   }
 
+  /**
+   * @return query string associated with geo URI or null if none exists
+   */
+  public String getQuery() {
+    return query;
+  }
+
   public String getDisplayResult() {
-    StringBuffer result = new StringBuffer();
+    StringBuffer result = new StringBuffer(20);
     result.append(latitude);
     result.append(", ");
     result.append(longitude);
@@ -75,6 +88,11 @@ public final class GeoParsedResult extends ParsedResult {
       result.append(", ");
       result.append(altitude);
       result.append('m');
+    }
+    if (query != null) {
+      result.append(" (");
+      result.append(query);
+      result.append(')');
     }
     return result.toString();
   }

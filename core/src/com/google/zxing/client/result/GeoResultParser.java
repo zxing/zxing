@@ -38,7 +38,15 @@ final class GeoResultParser extends ResultParser {
     }
     // Drop geo, query portion
     int queryStart = rawText.indexOf('?', 4);
-    String geoURIWithoutQuery = queryStart < 0 ? rawText.substring(4) : rawText.substring(4, queryStart);
+    String query;
+    String geoURIWithoutQuery;
+    if (queryStart < 0) {
+      query = null;
+      geoURIWithoutQuery = rawText.substring(4);
+    } else {
+      query = rawText.substring(queryStart + 1);
+      geoURIWithoutQuery = rawText.substring(4, queryStart);
+    }
     int latitudeEnd = geoURIWithoutQuery.indexOf(',');
     if (latitudeEnd < 0) {
       return null;
@@ -63,7 +71,7 @@ final class GeoResultParser extends ResultParser {
     } catch (NumberFormatException nfe) {
       return null;
     }
-    return new GeoParsedResult(latitude, longitude, altitude);
+    return new GeoParsedResult(latitude, longitude, altitude, query);
   }
 
 }
