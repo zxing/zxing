@@ -27,6 +27,9 @@
 #include <vector>
 
 namespace zxing {
+
+class DecodeHints;
+
 namespace qrcode {
 
 class FinderPatternFinder {
@@ -56,7 +59,7 @@ private:
 public:
   static float distance(Ref<ResultPoint> p1, Ref<ResultPoint> p2);
   FinderPatternFinder(Ref<BitMatrix> image);
-  Ref<FinderPatternInfo> find();
+  Ref<FinderPatternInfo> find(DecodeHints const& hints);
 };
 }
 }
