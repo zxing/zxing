@@ -43,7 +43,7 @@ namespace zxing {
 			cout << "(1) created detector " << &detector << "\n" << flush;
 #endif
 			
-			Ref<DetectorResult> detectorResult(detector.detect());
+			Ref<DetectorResult> detectorResult(detector.detect(hints));
 #ifdef DEBUG
 			cout << "(2) detected, have detectorResult " << detectorResult.object_ << "\n" << flush;
 #endif

@@ -27,6 +27,9 @@
 #include <zxing/common/PerspectiveTransform.h>
 
 namespace zxing {
+
+class DecodeHints;
+
 namespace qrcode {
 
 class Detector : public Counted {
@@ -51,7 +54,7 @@ public:
       ResultPoint > bottomLeft, Ref<ResultPoint> alignmentPattern, int dimension);
 
   Detector(Ref<BitMatrix> image);
-  Ref<DetectorResult> detect();
+  Ref<DetectorResult> detect(DecodeHints const& hints);
 };
 }
 }
