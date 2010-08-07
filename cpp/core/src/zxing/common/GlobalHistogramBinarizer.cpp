@@ -41,7 +41,11 @@ GlobalHistogramBinarizer::~GlobalHistogramBinarizer() {
 
 Ref<BitArray> GlobalHistogramBinarizer::getBlackRow(int y, Ref<BitArray> row) {
   if (y == cached_row_num_) {
-    return cached_row_;
+    if (cached_row_ != NULL) {
+      return cached_row_;
+    } else {
+      throw IllegalArgumentException("Too little dynamic range in luminance");
+    }
   }
 
   vector<int> histogram(LUMINANCE_BUCKETS, 0);
