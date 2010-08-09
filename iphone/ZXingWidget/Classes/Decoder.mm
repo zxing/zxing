@@ -28,7 +28,7 @@
 #include <zxing/ReaderException.h>
 #include <zxing/common/IllegalArgumentException.h>
 #include <zxing/common/GlobalHistogramBinarizer.h>
-#include "GrayBytesMonochromeBitmapSource.h"
+#include <zxing/common/GreyscaleLuminanceSource.h>
 
 using namespace zxing;
 
@@ -160,7 +160,8 @@ using namespace zxing;
   { 
     //NSSet *formatReaders = [FormatReader formatReaders];
     NSSet *formatReaders = self.readers;
-    Ref<LuminanceSource> source (new GrayBytesMonochromeBitmapSource(subsetData, subsetWidth, subsetHeight, subsetBytesPerRow));
+    Ref<LuminanceSource> source 
+           (new GreyscaleLuminanceSource(subsetData, subsetBytesPerRow, subsetHeight, 0, 0, subsetWidth, subsetHeight));
     Ref<Binarizer> binarizer (new GlobalHistogramBinarizer(source));
     Ref<BinaryBitmap> grayImage (new BinaryBitmap(binarizer));
 #ifdef DEBUG

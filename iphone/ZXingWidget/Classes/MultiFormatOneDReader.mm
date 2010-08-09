@@ -8,12 +8,12 @@
 
 #import "MultiFormatOneDReader.h"
 #import <zxing/oned/MultiFormatOneDReader.h>
-
+#include <zxing/DecodeHints.h>
 @implementation MultiFormatOneDReader
 
 
 - (id) init {
-  zxing::oned::MultiFormatOneDReader *reader = new   zxing::oned::MultiFormatOneDReader();
+  zxing::oned::MultiFormatOneDReader *reader = new   zxing::oned::MultiFormatOneDReader(zxing::DecodeHints::DEFAULT_HINT);
   return [super initWithReader:reader];
 }
 @end

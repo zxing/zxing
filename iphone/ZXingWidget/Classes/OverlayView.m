@@ -48,6 +48,7 @@ static const CGFloat kPadding = 10;
       
       [cancelButton addTarget:self action:@selector(cancel:) forControlEvents:UIControlEventTouchUpInside];
       [self addSubview:cancelButton];
+      [self addSubview:imageView];
     }
   }
 	return self;
@@ -157,23 +158,23 @@ static const CGFloat kPadding = 10;
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 /*
  - (void) setImage:(UIImage*)image {
- if( nil == _imageView ) {
- _imageView = [[UIImageView alloc] initWithImage:image];
- _imageView.alpha = 0.5;
- } else {
- _imageView.image = image;
- }
+ //if( nil == imageView ) {
+// imageView = [[UIImageView alloc] initWithImage:image];
+// imageView.alpha = 0.5;
+// } else {
+ imageView.image = image;
+ //}
  
- CGRect frame = _imageView.frame;
- frame.origin.x = self.cropRect.origin.x;
- frame.origin.y = self.cropRect.origin.y;
- _imageView.frame = frame;
+ //CGRect frame = imageView.frame;
+ //frame.origin.x = self.cropRect.origin.x;
+ //frame.origin.y = self.cropRect.origin.y;
+ //imageView.frame = CGRectMake(0,0, 30, 50);
  
- [_points release];
- _points = nil;
- self.backgroundColor = [UIColor clearColor];
+ //[_points release];
+ //_points = nil;
+ //self.backgroundColor = [UIColor clearColor];
  
- [self setNeedsDisplay];
+ //[self setNeedsDisplay];
  }
  */
 
@@ -195,6 +196,14 @@ static const CGFloat kPadding = 10;
 	}
 }
 
+/*
+- (void)viewDidLoad {
+  self.imageView = [[UIImageView alloc] init];
+  self.imageView.frame = CGRectMake(0, 0, 100, 100);
+  [self addSubview:self.imageView];
+	
+}
+*/
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 - (void) setPoints:(NSArray*)pnts {

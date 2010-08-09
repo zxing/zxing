@@ -256,6 +256,9 @@ CGImageRef UIGetScreenImage(void);
 
 - (void)takePicture:(NSTimer*)theTimer {
   CGImageRef capture = UIGetScreenImage();
+  static int cpt = 0;
+  if (cpt%10 == 0)
+    UIImageWriteToSavedPhotosAlbum([UIImage imageWithCGImage:capture], nil, nil,nil);
   CGRect cropRect = [overlayView cropRect];
   if (oneDMode) {
     // let's just give the decoder a vertical band right above the red line
