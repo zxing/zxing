@@ -35,11 +35,10 @@ class GreyscaleLuminanceSource : public LuminanceSource {
   int height_;
 
  public:
-  GreyscaleLuminanceSource(unsigned char* greyData, int dataWidth, int dataHeight, int left, int top,
-      int width, int height);
+  GreyscaleLuminanceSource(unsigned char* greyData, int dataWidth, int dataHeight, int left,
+      int top, int width, int height);
 
   unsigned char* getRow(int y, unsigned char* row);
-
   unsigned char* getMatrix();
 
   bool isRotateSupported() const {
@@ -55,7 +54,7 @@ class GreyscaleLuminanceSource : public LuminanceSource {
   }
 
   Ref<LuminanceSource> rotateCounterClockwise();
-  
+
 };
 
 } /* namespace */

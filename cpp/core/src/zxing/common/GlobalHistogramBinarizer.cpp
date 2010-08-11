@@ -56,44 +56,41 @@ Ref<BitArray> GlobalHistogramBinarizer::getBlackRow(int y, Ref<BitArray> row) {
   } else {
     row->clear();
   }
-  
+
   //TODO(flyashi): cache this instead of allocating and deleting per row
   unsigned char* row_pixels = NULL;
   try {
-      row_pixels = new unsigned char[width];
-      getLuminanceSource()->getRow(y,row_pixels);
-      for (int x = 0; x < width; x++) {
-          histogram[row_pixels[x] >> LUMINANCE_SHIFT]++;
+    row_pixels = new unsigned char[width];
+    row_pixels = getLuminanceSource()->getRow(y, row_pixels);
+    for (int x = 0; x < width; x++) {
+      histogram[row_pixels[x] >> LUMINANCE_SHIFT]++;
+    }
+    int blackPoint = estimate(histogram) << LUMINANCE_SHIFT;
+
+    BitArray& array = *row;
+    int left = row_pixels[0];
+    int center = row_pixels[1];
+    for (int x = 1; x < width - 1; x++) {
+      int right = row_pixels[x + 1];
+      // A simple -1 4 -1 box filter with a weight of 2.
+      int luminance = ((center << 2) - left - right) >> 1;
+      if (luminance < blackPoint) {
+        array.set(x);
       }
-      int blackPoint = estimate(histogram) << LUMINANCE_SHIFT;
+      left = center;
+      center = right;
+    }
 
-
-      Ref<BitArray> array_ref(new BitArray(width));
-      BitArray& array = *array_ref;
-
-      int left = row_pixels[0];
-      int center = row_pixels[1];
-      for (int x = 1; x < width - 1; x++) {
-          int right = row_pixels[x + 1];
-          // A simple -1 4 -1 box filter with a weight of 2.
-          int luminance = ((center << 2) - left - right) >> 1;
-          if (luminance < blackPoint) {
-              array.set(x);
-          }
-          left = center;
-          center = right;
-      }
-
-      cached_row_ = array_ref;
-      cached_row_num_ = y;
-      delete [] row_pixels;
-      return array_ref;
+    cached_row_ = row;
+    cached_row_num_ = y;
+    delete [] row_pixels;
+    return row;
   } catch (IllegalArgumentException const& iae) {
-      // Cache the fact that this row failed.
-      cached_row_ = NULL;
-      cached_row_num_ = y;
-      delete [] row_pixels;
-      throw iae;
+    // Cache the fact that this row failed.
+    cached_row_ = NULL;
+    cached_row_num_ = y;
+    delete [] row_pixels;
+    throw iae;
   }
 }
 
@@ -213,4 +210,3 @@ Ref<Binarizer> GlobalHistogramBinarizer::createBinarizer(Ref<LuminanceSource> so
 }
 
 } // namespace zxing
-
