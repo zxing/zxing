@@ -61,6 +61,7 @@ void HybridBinarizer::binarizeEntireImage() {
       cached_matrix_.reset(new BitMatrix(width,height));
       calculateThresholdForBlock(luminances, subWidth, subHeight, width, blackPoints, cached_matrix_);
       delete [] blackPoints;
+      delete [] luminances;
     } else {
       // If the image is too small, fall back to the global histogram approach.
       cached_matrix_.reset(GlobalHistogramBinarizer::getBlackMatrix());
