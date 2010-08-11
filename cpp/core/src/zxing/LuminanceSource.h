@@ -32,6 +32,7 @@ public:
   virtual int getWidth() const = 0;
   virtual int getHeight() const = 0;
 
+  // Callers take ownership of the returned memory and must call delete [] on it themselves.
   virtual unsigned char* getRow(int y, unsigned char* row) = 0;
   virtual unsigned char* getMatrix();
 

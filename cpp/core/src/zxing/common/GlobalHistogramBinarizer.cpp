@@ -61,7 +61,7 @@ Ref<BitArray> GlobalHistogramBinarizer::getBlackRow(int y, Ref<BitArray> row) {
   unsigned char* row_pixels = NULL;
   try {
     row_pixels = new unsigned char[width];
-    row_pixels = getLuminanceSource()->getRow(y, row_pixels);
+    row_pixels = source.getRow(y, row_pixels);
     for (int x = 0; x < width; x++) {
       histogram[row_pixels[x] >> LUMINANCE_SHIFT]++;
     }
@@ -113,7 +113,7 @@ Ref<BitMatrix> GlobalHistogramBinarizer::getBlackMatrix() {
     int rownum = height * y / 5;
     int right = (width << 2) / 5;
     int sdf;
-    getLuminanceSource()->getRow(rownum,row);
+    row = source.getRow(rownum, row);
     for (int x = width / 5; x < right; x++) {
       histogram[row[x] >> LUMINANCE_SHIFT]++;
       sdf = histogram[row[x] >> LUMINANCE_SHIFT];
@@ -125,7 +125,7 @@ Ref<BitMatrix> GlobalHistogramBinarizer::getBlackMatrix() {
   Ref<BitMatrix> matrix_ref(new BitMatrix(width, height));
   BitMatrix& matrix = *matrix_ref;
   for (int y = 0; y < height; y++) {
-    getLuminanceSource()->getRow(y,row);
+    row = source.getRow(y, row);
     for (int x = 0; x < width; x++) {
       if (row[x] <= blackPoint)
         matrix.set(x, y);
@@ -133,7 +133,6 @@ Ref<BitMatrix> GlobalHistogramBinarizer::getBlackMatrix() {
   }
 
   cached_matrix_ = matrix_ref;
-
   delete [] row;
   return matrix_ref;
 }

@@ -2,7 +2,6 @@
  *  LuminanceSource.cpp
  *  zxing
  *
- *  Created by Ralf Kistner on 16/10/2009.
  *  Copyright 2008 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,7 +34,7 @@ unsigned char* LuminanceSource::getMatrix() {
   unsigned char* matrix = new unsigned char[width * height];
   unsigned char* row = new unsigned char[width];
   for (int y = 0; y < height; y++) {
-    getRow(y, row);
+    row = getRow(y, row);
     memcpy(&matrix[y * width], row, width);
   }
   delete [] row;
