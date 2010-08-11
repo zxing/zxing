@@ -53,9 +53,9 @@ public final class ITFWriter extends UPCEANWriter {
       int one = Character.digit(contents.charAt(i), 10);
       int two = Character.digit(contents.charAt(i+1), 10);
       int[] encoding = new int[18];
-      for (int j = 0; j < 10; j += 2) {
-        encoding[j] = ITFReader.PATTERNS[one][j];
-        encoding[j + 1] = ITFReader.PATTERNS[two][j];
+      for (int j = 0; j < 5; j++) {
+        encoding[(j << 1)] = ITFReader.PATTERNS[one][j];
+        encoding[(j << 1) + 1] = ITFReader.PATTERNS[two][j];
       }
       pos += appendPattern(result, pos, encoding, 1);
     }
