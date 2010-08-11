@@ -186,8 +186,9 @@ public abstract class UPCEANReader extends OneDReader {
         format);
 
     try {
-      Result extensionResult = extensionReader.decodeRow(row, endRange[1]);
+      Result extensionResult = extensionReader.decodeRow(rowNumber, row, endRange[1]);
       decodeResult.putAllMetadata(extensionResult.getResultMetadata());
+      decodeResult.addResultPoints(extensionResult.getResultPoints());
     } catch (ReaderException re) {
       // continue
     }

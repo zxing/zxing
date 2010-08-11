@@ -22,6 +22,7 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.NotFoundException;
 import com.google.zxing.Result;
 import com.google.zxing.ResultMetadataType;
+import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitArray;
 
 final class UPCEANExtensionSupport {
@@ -34,18 +35,25 @@ final class UPCEANExtensionSupport {
   private final int[] decodeMiddleCounters = new int[4];
   private final StringBuffer decodeRowStringBuffer = new StringBuffer();
 
-  Result decodeRow(BitArray row, int rowOffset) throws NotFoundException {
+  Result decodeRow(int rowNumber, BitArray row, int rowOffset) throws NotFoundException {
 
     int[] extensionStartRange = UPCEANReader.findGuardPattern(row, rowOffset, false, EXTENSION_START_PATTERN);
 
     StringBuffer result = decodeRowStringBuffer;
     result.setLength(0);
-    decodeMiddle(row, extensionStartRange, result);
+    int end = decodeMiddle(row, extensionStartRange, result);
 
     String resultString = result.toString();
     Hashtable extensionData = parseExtensionString(resultString);
 
-    Result extensionResult = new Result(resultString, null, null, BarcodeFormat.UPC_EAN_EXTENSION);
+    Result extensionResult =
+        new Result(resultString,
+                   null,
+                   new ResultPoint[] {
+                       new ResultPoint((extensionStartRange[0] + extensionStartRange[1]) / 2.0f, (float) rowNumber),
+                       new ResultPoint((float) end, (float) rowNumber),
+                   },
+                   BarcodeFormat.UPC_EAN_EXTENSION);
     if (extensionData != null) {
       extensionResult.putAllMetadata(extensionData);
     }
@@ -72,12 +80,14 @@ final class UPCEANExtensionSupport {
       if (bestMatch >= 10) {
         lgPatternFound |= 1 << (4 - x);
       }
-      // Read off separator
-      while (rowOffset < end && !row.get(rowOffset)) {
-        rowOffset++;
-      }
-      while (rowOffset < end && row.get(rowOffset)) {
-        rowOffset++;
+      if (x != 4) {
+        // Read off separator if not last
+        while (rowOffset < end && !row.get(rowOffset)) {
+          rowOffset++;
+        }
+        while (rowOffset < end && row.get(rowOffset)) {
+          rowOffset++;
+        }
       }
     }
 
