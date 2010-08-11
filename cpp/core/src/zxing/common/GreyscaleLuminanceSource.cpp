@@ -23,9 +23,10 @@
 
 namespace zxing {
 
-GreyscaleLuminanceSource::GreyscaleLuminanceSource(unsigned char* greyData, int dataWidth, int dataHeight, int left, int top,
-      int width, int height) : greyData_(greyData), dataWidth_(dataWidth), dataHeight_(dataHeight),
-      left_(left), top_(top), width_(width), height_(height)  {
+GreyscaleLuminanceSource::GreyscaleLuminanceSource(unsigned char* greyData, int dataWidth,
+    int dataHeight, int left, int top, int width, int height) : greyData_(greyData),
+    dataWidth_(dataWidth), dataHeight_(dataHeight), left_(left), top_(top), width_(width),
+    height_(height) {
 
   if (left + width > dataWidth || top + height > dataHeight || top < 0 || left < 0) {
     throw IllegalArgumentException("Crop rectangle does not fit within image data.");
@@ -33,7 +34,6 @@ GreyscaleLuminanceSource::GreyscaleLuminanceSource(unsigned char* greyData, int 
 }
 
 unsigned char* GreyscaleLuminanceSource::getRow(int y, unsigned char* row) {
-
   if (y < 0 || y >= this->getHeight()) {
     throw IllegalArgumentException("Requested row is outside the image: " + y);
   }
@@ -44,10 +44,8 @@ unsigned char* GreyscaleLuminanceSource::getRow(int y, unsigned char* row) {
   }
   int offset = (y + top_) * dataWidth_ + left_;
   memcpy(row, &greyData_[offset], width);
-
   return row;
 }
-
 
 unsigned char* GreyscaleLuminanceSource::getMatrix() {
   return greyData_;
@@ -56,10 +54,8 @@ unsigned char* GreyscaleLuminanceSource::getMatrix() {
 Ref<LuminanceSource> GreyscaleLuminanceSource::rotateCounterClockwise() {
   // Intentionally flip the left, top, width, and height arguments as needed. dataWidth and
   // dataHeight are always kept unrotated.
-  return Ref<LuminanceSource> (new GreyscaleRotatedLuminanceSource(greyData_, dataWidth_, dataHeight_,
-                               top_, left_, height_, width_));
+  return Ref<LuminanceSource> (new GreyscaleRotatedLuminanceSource(greyData_, dataWidth_,
+      dataHeight_, top_, left_, height_, width_));
 }
 
-
 } /* namespace */
-

@@ -25,9 +25,10 @@ namespace zxing {
 
 // Note that dataWidth and dataHeight are not reversed, as we need to be able to traverse the
 // greyData correctly, which does not get rotated.
-GreyscaleRotatedLuminanceSource::GreyscaleRotatedLuminanceSource(unsigned char* greyData, int dataWidth, int dataHeight,
-      int left, int top, int width, int height) : greyData_(greyData), dataWidth_(dataWidth), dataHeight_(dataHeight),
-      left_(left), top_(top), width_(width), height_(height) {
+GreyscaleRotatedLuminanceSource::GreyscaleRotatedLuminanceSource(unsigned char* greyData,
+    int dataWidth, int dataHeight, int left, int top, int width, int height) : greyData_(greyData),
+    dataWidth_(dataWidth), dataHeight_(dataHeight), left_(left), top_(top), width_(width),
+    height_(height) {
 
   // Intentionally comparing to the opposite dimension since we're rotated.
   if (left + width > dataHeight || top + height > dataWidth) {
