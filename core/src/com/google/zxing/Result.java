@@ -28,7 +28,7 @@ public final class Result {
 
   private final String text;
   private final byte[] rawBytes;
-  private final ResultPoint[] resultPoints;
+  private ResultPoint[] resultPoints;
   private final BarcodeFormat format;
   private Hashtable resultMetadata;
   private final long timestamp;
@@ -114,6 +114,17 @@ public final class Result {
           resultMetadata.put(key, value);
         }
       }
+    }
+  }
+
+  public void addResultPoints(ResultPoint[] newPoints) {
+    if (resultPoints == null) {
+      resultPoints = newPoints;
+    } else if (newPoints != null && newPoints.length > 0) {
+      ResultPoint[] allPoints = new ResultPoint[resultPoints.length + newPoints.length];
+      System.arraycopy(resultPoints, 0, allPoints, 0, resultPoints.length);
+      System.arraycopy(newPoints, 0, allPoints, resultPoints.length, newPoints.length);
+      resultPoints = allPoints;
     }
   }
 

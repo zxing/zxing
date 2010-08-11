@@ -506,8 +506,13 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       paint.setColor(getResources().getColor(R.color.result_points));
       if (points.length == 2) {
         paint.setStrokeWidth(4.0f);
-        canvas.drawLine(points[0].getX(), points[0].getY(), points[1].getX(),
-            points[1].getY(), paint);
+        drawLine(canvas, paint, points[0], points[1]);
+      } else if (points.length == 4 &&
+                 (rawResult.getBarcodeFormat().equals(BarcodeFormat.UPC_A)) ||
+                 (rawResult.getBarcodeFormat().equals(BarcodeFormat.EAN_13))) {
+        // Hacky special case -- draw two lines, for the barcode and metadata
+        drawLine(canvas, paint, points[0], points[1]);
+        drawLine(canvas, paint, points[2], points[3]);
       } else {
         paint.setStrokeWidth(10.0f);
         for (ResultPoint point : points) {
@@ -515,6 +520,10 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         }
       }
     }
+  }
+
+  private static void drawLine(Canvas canvas, Paint paint, ResultPoint a, ResultPoint b) {
+    canvas.drawLine(a.getX(), a.getY(), b.getX(), b.getY(), paint);
   }
 
   // Put up our own UI for how to handle the decoded contents.
