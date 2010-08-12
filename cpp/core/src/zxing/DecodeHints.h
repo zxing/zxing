@@ -20,6 +20,7 @@
  */
 
 #include <zxing/BarcodeFormat.h>
+#include <zxing/ResultPointCallback.h>
 
 namespace zxing {
 
@@ -42,6 +43,8 @@ class DecodeHints {
 
   DecodeHintType hints;
 
+  Ref<ResultPointCallback> callback;
+
  public:
 
   static const DecodeHints PRODUCT_HINT;
@@ -55,6 +58,9 @@ class DecodeHints {
   bool containsFormat(BarcodeFormat tocheck) const;
   void setTryHarder(bool toset);
   bool getTryHarder() const;
+
+  void setResultPointCallback(Ref<ResultPointCallback> const&);
+  Ref<ResultPointCallback> getResultPointCallback() const;
 
 };
 

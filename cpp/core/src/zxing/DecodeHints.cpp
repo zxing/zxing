@@ -100,4 +100,12 @@ bool DecodeHints::getTryHarder() const {
   return (hints & TRYHARDER_HINT);
 }
 
+void DecodeHints::setResultPointCallback(Ref<ResultPointCallback> const& _callback) {
+    callback = _callback;
+}
+
+Ref<ResultPointCallback> DecodeHints::getResultPointCallback() const {
+    return callback;
+}
+
 } /* namespace */

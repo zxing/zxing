@@ -44,7 +44,8 @@ Ref<BitMatrix> Detector::getImage() {
 }
 
 Ref<DetectorResult> Detector::detect(DecodeHints const& hints) {
-  FinderPatternFinder finder(image_);
+  callback_ = hints.getResultPointCallback();
+  FinderPatternFinder finder(image_, hints.getResultPointCallback());
   Ref<FinderPatternInfo> info(finder.find(hints));
 
   Ref<FinderPattern> topLeft(info->getTopLeft());
@@ -271,7 +272,7 @@ Ref<AlignmentPattern> Detector::findAlignmentInRegion(float overallEstModuleSize
   int alignmentAreaBottomY = min((int)(image_->getHeight() - 1), estAlignmentY + allowance);
 
   AlignmentPatternFinder alignmentFinder(image_, alignmentAreaLeftX, alignmentAreaTopY, alignmentAreaRightX
-                                         - alignmentAreaLeftX, alignmentAreaBottomY - alignmentAreaTopY, overallEstModuleSize);
+                                         - alignmentAreaLeftX, alignmentAreaBottomY - alignmentAreaTopY, overallEstModuleSize, callback_);
   return alignmentFinder.find();
 }
 

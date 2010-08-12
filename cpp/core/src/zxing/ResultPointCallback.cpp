@@ -1,5 +1,5 @@
 /*
- *  ResultPoint.cpp
+ *  ResultPointCallback.cpp
  *  zxing
  *
  *  Created by Christian Brunschen on 13/05/2008.
@@ -18,10 +18,10 @@
  * limitations under the License.
  */
 
-#include <zxing/ResultPoint.h>
+#include <zxing/ResultPointCallback.h>
 
 namespace zxing {
 
-ResultPoint::~ResultPoint() {}
+ResultPointCallback::~ResultPointCallback() {}
 
 }

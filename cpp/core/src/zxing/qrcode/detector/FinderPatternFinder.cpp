@@ -236,6 +236,9 @@ bool FinderPatternFinder::handlePossibleCenter(int* stateCount, size_t i, size_t
       if (!found) {
         Ref<FinderPattern> newPattern(new FinderPattern(centerJ, centerI, estimatedModuleSize));
         possibleCenters_.push_back(newPattern);
+        if (callback_ != 0) {
+          callback_->foundPossibleResultPoint(*newPattern);
+        }
       }
       return true;
     }
@@ -384,8 +387,9 @@ float FinderPatternFinder::distance(Ref<ResultPoint> p1, Ref<ResultPoint> p2) {
   return (float)sqrt(dx * dx + dy * dy);
 }
 
-FinderPatternFinder::FinderPatternFinder(Ref<BitMatrix> image) :
-    image_(image), possibleCenters_(), hasSkipped_(false) {
+FinderPatternFinder::FinderPatternFinder(Ref<BitMatrix> image,
+                                           Ref<ResultPointCallback>const& callback) :
+    image_(image), possibleCenters_(), hasSkipped_(false), callback_(callback) {
 }
 
 Ref<FinderPatternInfo> FinderPatternFinder::find(DecodeHints const& hints) {

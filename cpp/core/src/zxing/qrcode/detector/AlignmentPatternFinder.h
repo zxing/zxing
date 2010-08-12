@@ -23,6 +23,7 @@
 #include "AlignmentPattern.h"
 #include <zxing/common/Counted.h>
 #include <zxing/common/BitMatrix.h>
+#include <zxing/ResultPointCallback.h>
 #include <vector>
 
 namespace zxing {
@@ -51,7 +52,7 @@ private:
 
 public:
   AlignmentPatternFinder(Ref<BitMatrix> image, size_t startX, size_t startY, size_t width, size_t height,
-                         float moduleSize);
+                         float moduleSize, Ref<ResultPointCallback>const& callback);
   ~AlignmentPatternFinder();
   Ref<AlignmentPattern> find();
   
@@ -59,6 +60,7 @@ private:
   AlignmentPatternFinder(const AlignmentPatternFinder&);
   AlignmentPatternFinder& operator =(const AlignmentPatternFinder&);
   
+  Ref<ResultPointCallback> callback_;
 };
 }
 }
