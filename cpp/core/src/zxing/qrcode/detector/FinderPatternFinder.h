@@ -24,6 +24,7 @@
 #include <zxing/qrcode/detector/FinderPatternInfo.h>
 #include <zxing/common/Counted.h>
 #include <zxing/common/BitMatrix.h>
+#include <zxing/ResultPointCallback.h>
 #include <vector>
 
 namespace zxing {
@@ -42,6 +43,8 @@ private:
   std::vector<Ref<FinderPattern> > possibleCenters_;
   bool hasSkipped_;
 
+  Ref<ResultPointCallback> callback_;
+
   /** stateCount must be int[5] */
   static float centerFromEnd(int* stateCount, int end);
   static bool foundPatternCross(int* stateCount);
@@ -55,10 +58,9 @@ private:
   bool haveMultiplyConfirmedCenters();
   std::vector<Ref<FinderPattern> > selectBestPatterns();
   static std::vector<Ref<FinderPattern> > orderBestPatterns(std::vector<Ref<FinderPattern> > patterns);
-
 public:
   static float distance(Ref<ResultPoint> p1, Ref<ResultPoint> p2);
-  FinderPatternFinder(Ref<BitMatrix> image);
+  FinderPatternFinder(Ref<BitMatrix> image, Ref<ResultPointCallback>const&);
   Ref<FinderPatternInfo> find(DecodeHints const& hints);
 };
 }

@@ -112,15 +112,19 @@ Ref<AlignmentPattern> AlignmentPatternFinder::handlePossibleCenter(vector<int> &
     // Hadn't found this before; save it
     tmp->retain();
     possibleCenters_->push_back(tmp);
+    if (callback_ != 0) {
+      callback_->foundPossibleResultPoint(*tmp);
+    }
   }
   Ref<AlignmentPattern> result;
   return result;
 }
 
 AlignmentPatternFinder::AlignmentPatternFinder(Ref<BitMatrix> image, size_t startX, size_t startY, size_t width,
-    size_t height, float moduleSize) :
+                                               size_t height, float moduleSize, 
+                                               Ref<ResultPointCallback>const& callback) :
     image_(image), possibleCenters_(new vector<AlignmentPattern *> ()), startX_(startX), startY_(startY),
-    width_(width), height_(height), moduleSize_(moduleSize) {
+    width_(width), height_(height), moduleSize_(moduleSize), callback_(callback) {
 }
 
 AlignmentPatternFinder::~AlignmentPatternFinder() {

@@ -28,6 +28,8 @@ class ResultPoint : public Counted {
 protected:
   ResultPoint() {}
 public:
+  virtual ~ResultPoint();
+
   virtual float getX() const = 0;
   virtual float getY() const = 0;
 };

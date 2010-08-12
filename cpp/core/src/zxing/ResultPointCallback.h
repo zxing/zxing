@@ -1,9 +1,11 @@
+#ifndef __RESULT_POINT_CALLBACK_H__
+#define __RESULT_POINT_CALLBACK_H__
+
 /*
- *  ResultPoint.cpp
+ *  ResultPointCallback.h
  *  zxing
  *
- *  Created by Christian Brunschen on 13/05/2008.
- *  Copyright 2008 ZXing authors All rights reserved.
+ *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,10 +20,20 @@
  * limitations under the License.
  */
 
-#include <zxing/ResultPoint.h>
+#include <zxing/common/Counted.h>
 
 namespace zxing {
 
-ResultPoint::~ResultPoint() {}
+class ResultPoint;
+
+class ResultPointCallback : public Counted {
+protected:
+  ResultPointCallback() {}
+public:
+  virtual void foundPossibleResultPoint(ResultPoint const& point) = 0;
+  virtual ~ResultPointCallback();
+};
 
 }
+
+#endif // __RESULT_POINT_CALLBACK_H__

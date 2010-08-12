@@ -25,6 +25,7 @@
 #include <zxing/common/BitMatrix.h>
 #include <zxing/qrcode/detector/AlignmentPattern.h>
 #include <zxing/common/PerspectiveTransform.h>
+#include <zxing/ResultPointCallback.h>
 
 namespace zxing {
 
@@ -35,6 +36,7 @@ namespace qrcode {
 class Detector : public Counted {
 private:
   Ref<BitMatrix> image_;
+  Ref<ResultPointCallback> callback_;
 
 protected:
   Ref<BitMatrix> getImage();
