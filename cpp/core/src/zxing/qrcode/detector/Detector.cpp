@@ -53,6 +53,9 @@ Ref<DetectorResult> Detector::detect(DecodeHints const& hints) {
   Ref<FinderPattern> bottomLeft(info->getBottomLeft());
 
   float moduleSize = calculateModuleSize(topLeft, topRight, bottomLeft);
+  if (moduleSize < 1.0f) {
+    throw zxing::ReaderException("bad module size");
+  }
   int dimension = computeDimension(topLeft, topRight, bottomLeft, moduleSize);
   Version *provisionalVersion = Version::getProvisionalVersionForDimension(dimension);
   int modulesBetweenFPCenters = provisionalVersion->getDimensionForVersion() - 7;
