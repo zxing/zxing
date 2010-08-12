@@ -69,11 +69,17 @@ public final class HybridBinarizer extends GlobalHistogramBinarizer {
         int width = source.getWidth();
         int height = source.getHeight();
         int subWidth = width >> 3;
+        if ((width & 0x07) != 0) {
+          subWidth++;
+        }
         int subHeight = height >> 3;
-        int[][] blackPoints = calculateBlackPoints(luminances, subWidth, subHeight, width);
+        if ((height & 0x07) != 0) {
+          subHeight++;
+        }
+        int[][] blackPoints = calculateBlackPoints(luminances, subWidth, subHeight, width, height);
 
         matrix = new BitMatrix(width, height);
-        calculateThresholdForBlock(luminances, subWidth, subHeight, width, blackPoints, matrix);
+        calculateThresholdForBlock(luminances, subWidth, subHeight, width, height, blackPoints, matrix);
       } else {
         // If the image is too small, fall back to the global histogram approach.
         matrix = super.getBlackMatrix();
@@ -82,13 +88,20 @@ public final class HybridBinarizer extends GlobalHistogramBinarizer {
   }
 
   // For each 8x8 block in the image, calculate the average black point using a 5x5 grid
-  // of the blocks around it. Also handles the corner cases, but will ignore up to 7 pixels
-  // on the right edge and 7 pixels at the bottom of the image if the overall dimensions are not
-  // multiples of eight. In practice, leaving those pixels white does not seem to be a problem.
+  // of the blocks around it. Also handles the corner cases (fractional blocks are computed based
+  // on the last 8 pixels in the row/column which are also used in the previous block).
   private static void calculateThresholdForBlock(byte[] luminances, int subWidth, int subHeight,
-      int stride, int[][] blackPoints, BitMatrix matrix) {
+      int width, int height, int[][] blackPoints, BitMatrix matrix) {
     for (int y = 0; y < subHeight; y++) {
+      int yoffset = y << 3;
+      if ((yoffset + 8) >= height) {
+        yoffset = height - 8;
+      }
       for (int x = 0; x < subWidth; x++) {
+        int xoffset = x << 3;
+        if ((xoffset + 8) >= width) {
+            xoffset = width - 8;
+        }
         int left = (x > 1) ? x : 2;
         left = (left < subWidth - 2) ? left : subWidth - 3;
         int top = (y > 1) ? y : 2;
@@ -103,7 +116,7 @@ public final class HybridBinarizer extends GlobalHistogramBinarizer {
           sum += blackRow[left + 2];
         }
         int average = sum / 25;
-        threshold8x8Block(luminances, x << 3, y << 3, average, stride, matrix);
+        threshold8x8Block(luminances, xoffset, yoffset, average, width, matrix);
       }
     }
   }
@@ -124,15 +137,23 @@ public final class HybridBinarizer extends GlobalHistogramBinarizer {
 
   // Calculates a single black point for each 8x8 block of pixels and saves it away.
   private static int[][] calculateBlackPoints(byte[] luminances, int subWidth, int subHeight,
-      int stride) {
+      int width, int height) {
     int[][] blackPoints = new int[subHeight][subWidth];
     for (int y = 0; y < subHeight; y++) {
+      int yoffset = y << 3;
+      if ((yoffset + 8) >= height) {
+        yoffset = height - 8;
+      }
       for (int x = 0; x < subWidth; x++) {
+        int xoffset = x << 3;
+        if ((xoffset + 8) >= width) {
+            xoffset = width - 8;
+        }
         int sum = 0;
         int min = 255;
         int max = 0;
         for (int yy = 0; yy < 8; yy++) {
-          int offset = ((y << 3) + yy) * stride + (x << 3);
+          int offset = (yoffset + yy) * width + xoffset;
           for (int xx = 0; xx < 8; xx++) {
             int pixel = luminances[offset + xx] & 0xff;
             sum += pixel;
