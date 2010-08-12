@@ -56,10 +56,16 @@ void HybridBinarizer::binarizeEntireImage() {
       int width = source->getWidth();
       int height = source->getHeight();
       int subWidth = width >> 3;
+      if (width & 0x07) {
+        subWidth++;
+      }
       int subHeight = height >> 3;
-      int *blackPoints = calculateBlackPoints(luminances, subWidth, subHeight, width);
+      if (height & 0x07) {
+        subHeight++;
+      }
+      int *blackPoints = calculateBlackPoints(luminances, subWidth, subHeight, width, height);
       cached_matrix_.reset(new BitMatrix(width,height));
-      calculateThresholdForBlock(luminances, subWidth, subHeight, width, blackPoints, cached_matrix_);
+      calculateThresholdForBlock(luminances, subWidth, subHeight, width, height, blackPoints, cached_matrix_);
       delete [] blackPoints;
       delete [] luminances;
     } else {
@@ -70,9 +76,17 @@ void HybridBinarizer::binarizeEntireImage() {
 }
 
 void HybridBinarizer::calculateThresholdForBlock(unsigned char* luminances, int subWidth, int subHeight,
-    int stride, int blackPoints[], Ref<BitMatrix> matrix) {
+    int width, int height, int blackPoints[], Ref<BitMatrix> matrix) {
   for (int y = 0; y < subHeight; y++) {
+    int yoffset = y << 3;
+    if (yoffset + 8 >= height) {
+      yoffset = height - 8;
+    }
     for (int x = 0; x < subWidth; x++) {
+      int xoffset = x << 3;
+      if (xoffset + 8 >= width) {
+        xoffset = width - 8;
+      }
       int left = (x > 1) ? x : 2;
       left = (left < subWidth - 2) ? left : subWidth - 3;
       int top = (y > 1) ? y : 2;
@@ -87,7 +101,7 @@ void HybridBinarizer::calculateThresholdForBlock(unsigned char* luminances, int 
         sum += blackRow[left + 2];
       }
       int average = sum / 25;
-      threshold8x8Block(luminances, x << 3, y << 3, average, stride, matrix);
+      threshold8x8Block(luminances, xoffset, yoffset, average, width, matrix);
     }
   }
 }
@@ -106,15 +120,23 @@ void HybridBinarizer::threshold8x8Block(unsigned char* luminances, int xoffset, 
 }
 
 int* HybridBinarizer::calculateBlackPoints(unsigned char* luminances, int subWidth, int subHeight,
-    int stride) {
+    int width, int height) {
   int *blackPoints = new int[subHeight * subWidth];
   for (int y = 0; y < subHeight; y++) {
+    int yoffset = y << 3;
+    if (yoffset + 8 >= height) {
+      yoffset = height - 8;
+    }
     for (int x = 0; x < subWidth; x++) {
+      int xoffset = x << 3;
+      if (xoffset + 8 >= width) {
+        xoffset = width - 8;
+      }
       int sum = 0;
       int min = 255;
       int max = 0;
       for (int yy = 0; yy < 8; yy++) {
-        int offset = ((y << 3) + yy) * stride + (x << 3);
+        int offset = (yoffset + yy) * width + xoffset;
         for (int xx = 0; xx < 8; xx++) {
           int pixel = luminances[offset + xx] & 0xff;
           sum += pixel;

@@ -43,9 +43,9 @@ namespace zxing {
     void binarizeEntireImage();
     // We'll be using one-D arrays because C++ can't dynamically allocate 2D arrays
     int* calculateBlackPoints(unsigned char* luminances, int subWidth, int subHeight,
-      int stride);
+      int width, int height);
     void calculateThresholdForBlock(unsigned char* luminances, int subWidth, int subHeight,
-      int stride, int blackPoints[], Ref<BitMatrix> matrix);
+      int width, int height, int blackPoints[], Ref<BitMatrix> matrix);
     void threshold8x8Block(unsigned char* luminances, int xoffset, int yoffset, int threshold,
       int stride, Ref<BitMatrix> matrix);
 	};
