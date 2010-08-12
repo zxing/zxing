@@ -185,9 +185,9 @@ float Detector::sizeOfBlackWhiteBlackRunBothWays(int fromX, int fromY, int toX, 
    if (otherToX < 0) {
      scale = (float) fromX / (float) (fromX - otherToX);
      otherToX = 0;
-   } else if (otherToX >= (int)image_->getWidth()) {
-     scale = (float) (image_->getWidth() - 1 - fromX) / (float) (otherToX - fromX);
-     otherToX = image_->getWidth() - 1;
+   } else if (otherToX > (int)image_->getWidth()) {
+     scale = (float) (image_->getWidth() - fromX) / (float) (otherToX - fromX);
+     otherToX = image_->getWidth();
    }
    int otherToY = (int) (fromY - (toY - fromY) * scale);
 
@@ -195,14 +195,14 @@ float Detector::sizeOfBlackWhiteBlackRunBothWays(int fromX, int fromY, int toX, 
    if (otherToY < 0) {
      scale = (float) fromY / (float) (fromY - otherToY);
      otherToY = 0;
-   } else if (otherToY >= (int)image_->getHeight()) {
-     scale = (float) (image_->getHeight() - 1 - fromY) / (float) (otherToY - fromY);
-     otherToY = image_->getHeight() - 1;
+   } else if (otherToY > (int)image_->getHeight()) {
+     scale = (float) (image_->getHeight() - fromY) / (float) (otherToY - fromY);
+     otherToY = image_->getHeight();
    }
    otherToX = (int) (fromX + (otherToX - fromX) * scale);
 
    result += sizeOfBlackWhiteBlackRun(fromX, fromY, otherToX, otherToY);
-   return result - 1.0f; // -1 because we counted the middle pixel twice
+   return result;
 }
 
 float Detector::sizeOfBlackWhiteBlackRun(int fromX, int fromY, int toX, int toY) {
@@ -241,6 +241,9 @@ float Detector::sizeOfBlackWhiteBlackRun(int fromX, int fromY, int toX, int toY)
     if (state == 3) { // Found black, white, black, and stumbled back onto white; done
       int diffX = x - fromX;
       int diffY = y - fromY;
+      if (xstep < 0) {
+          diffX++;
+      }
       return (float)sqrt((double)(diffX * diffX + diffY * diffY));
     }
     error += dy;

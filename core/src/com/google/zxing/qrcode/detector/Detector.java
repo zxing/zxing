@@ -266,9 +266,9 @@ public class Detector {
    if (otherToX < 0) {
      scale = (float) fromX / (float) (fromX - otherToX);
      otherToX = 0;
-   } else if (otherToX >= image.getWidth()) {
-     scale = (float) (image.getWidth() - 1 - fromX) / (float) (otherToX - fromX);
-     otherToX = image.getWidth() - 1;
+   } else if (otherToX > image.getWidth()) {
+     scale = (float) (image.getWidth() - fromX) / (float) (otherToX - fromX);
+     otherToX = image.getWidth();
    }
    int otherToY = (int) (fromY - (toY - fromY) * scale);
 
@@ -276,14 +276,14 @@ public class Detector {
    if (otherToY < 0) {
      scale = (float) fromY / (float) (fromY - otherToY);
      otherToY = 0;
-   } else if (otherToY >= image.getHeight()) {
-     scale = (float) (image.getHeight() - 1 - fromY) / (float) (otherToY - fromY);
-     otherToY = image.getHeight() - 1;
+   } else if (otherToY > image.getHeight()) {
+     scale = (float) (image.getHeight() - fromY) / (float) (otherToY - fromY);
+     otherToY = image.getHeight();
    }
    otherToX = (int) (fromX + (otherToX - fromX) * scale);
 
    result += sizeOfBlackWhiteBlackRun(fromX, fromY, otherToX, otherToY);
-   return result - 1.0f; // -1 because we counted the middle pixel twice
+   return result;
  }
 
   /**
@@ -330,6 +330,9 @@ public class Detector {
       if (state == 3) { // Found black, white, black, and stumbled back onto white; done
         int diffX = x - fromX;
         int diffY = y - fromY;
+        if (xstep < 0) {
+            diffX++;
+        }
         return (float) Math.sqrt((double) (diffX * diffX + diffY * diffY));
       }
       error += dy;
