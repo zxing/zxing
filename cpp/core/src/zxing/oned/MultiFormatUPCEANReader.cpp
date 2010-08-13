@@ -2,7 +2,6 @@
  *  MultiFormatUPCEANReader.cpp
  *  ZXing
  *
- *  Created by Lukasz Warchol on 10-01-25.
  *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,7 +29,7 @@
 
 namespace zxing {
 	namespace oned {
-		
+
 		MultiFormatUPCEANReader::MultiFormatUPCEANReader(DecodeHints hints) : readers() {
 		  if (hints.containsFormat(BarcodeFormat_EAN_13)) {
 		    readers.push_back(Ref<OneDReader>(new EAN13Reader()));
@@ -51,17 +50,16 @@ namespace zxing {
 		  }
 		}
 
-		Ref<Result> MultiFormatUPCEANReader::decodeRow(int rowNumber, Ref<BitArray> row){			
+		Ref<Result> MultiFormatUPCEANReader::decodeRow(int rowNumber, Ref<BitArray> row) {
 			// Compute this location once and reuse it on multiple implementations
 			int size = readers.size();
 			for (int i = 0; i < size; i++) {
 				Ref<OneDReader> reader = readers[i];
-				Ref<Result> result;
-				try {
-					result = reader->decodeRow(rowNumber, row);//decodeRow(rowNumber, row, startGuardPattern);
-				} catch (ReaderException re) {
-					continue;
+				Ref<Result> result = reader->decodeRow(rowNumber, row);
+				if (result.empty()) {
+				  continue;
 				}
+
 				// Special case: a 12-digit code encoded in UPC-A is identical to a "0"
 				// followed by those 12 digits encoded as EAN-13. Each will recognize such a code,
 				// UPC-A as a 12-digit string and EAN-13 as a 13-digit string starting with "0".
@@ -76,13 +74,14 @@ namespace zxing {
 					const std::string& text = (result->getText())->getText();
 					if (text[0] == '0') {
 						Ref<String> resultString(new String(text.substr(1)));
-						Ref<Result> res(new Result(resultString, result->getRawBytes(), result->getResultPoints(), BarcodeFormat_UPC_A));
+						Ref<Result> res(new Result(resultString, result->getRawBytes(),
+						    result->getResultPoints(), BarcodeFormat_UPC_A));
 						return res;
 					}
 				}
 				return result;
 			}
-			throw ReaderException("No EAN code detected");
+			return Ref<Result>();
 		}
 	}
 }

@@ -2,7 +2,6 @@
  *  OneDReader.cpp
  *  ZXing
  *
- *  Created by Lukasz Warchol on 10-01-15.
  *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,17 +26,15 @@
 namespace zxing {
 	namespace oned {
 		using namespace std;
-		
+
 		OneDReader::OneDReader() {
 		}
-		
-		Ref<Result> OneDReader::decode(Ref<BinaryBitmap> image, DecodeHints hints) {
 
+		Ref<Result> OneDReader::decode(Ref<BinaryBitmap> image, DecodeHints hints) {
 		  try {
 				return doDecode(image, hints);
-			}catch (ReaderException re) {
+			} catch (ReaderException re) {
 				if (hints.getTryHarder() && image->isRotateSupported()) {
-
 					Ref<BinaryBitmap> rotatedImage(image->rotateCounterClockwise());
 					Ref<Result> result(doDecode(rotatedImage, hints));
 					/*
@@ -63,8 +60,8 @@ namespace zxing {
 				}
 			}
 		}
-		
-		Ref<Result> OneDReader::doDecode(Ref<BinaryBitmap> image, DecodeHints hints){
+
+		Ref<Result> OneDReader::doDecode(Ref<BinaryBitmap> image, DecodeHints hints) {
 			int width = image->getWidth();
 			int height = image->getHeight();
 			Ref<BitArray> row(new BitArray(width));
@@ -77,9 +74,8 @@ namespace zxing {
 			} else {
         maxLines = 15; // 15 rows spaced 1/32 apart is roughly the middle half of the image
 			}
-			
+
 			for (int x = 0; x < maxLines; x++) {
-				
 				// Scanning from the middle out. Determine which row we're looking at next:
 				int rowStepsAboveOrBelow = (x + 1) >> 1;
 				bool isAbove = (x & 0x01) == 0; // i.e. is x even?
@@ -88,52 +84,49 @@ namespace zxing {
 					// Oops, if we run off the top or bottom, stop
 					break;
 				}
-					
+
 				// Estimate black point for this row and load it:
 				try {
 					row = image->getBlackRow(rowNumber, row);
-				}catch (ReaderException re) {
+				} catch (ReaderException re) {
 					continue;
-				}catch (IllegalArgumentException re) {
+				} catch (IllegalArgumentException re) {
           continue;
 				}
-				
+
 				// While we have the image data in a BitArray, it's fairly cheap to reverse it in place to
 				// handle decoding upside down barcodes.
 				for (int attempt = 0; attempt < 2; attempt++) {
 					if (attempt == 1) { // trying again?
 						row->reverse(); // reverse the row and continue
 					}
-					try {
-						// Look for a barcode
-						Ref<Result> result = decodeRow(rowNumber, row);
-						// We found our barcode
-						if (attempt == 1) {
-							//						// But it was upside down, so note that
-							//						result.putMetadata(ResultMetadataType.ORIENTATION, new Integer(180));
-							//						// And remember to flip the result points horizontally.
-						  std::vector<Ref<ResultPoint> > points(result->getResultPoints());
-						  // if there's exactly two points (which there should be), flip the x coordinate
-              // if there's not exactly 2, I don't know what do do with it
-						  if (points.size() == 2) {
-                Ref<ResultPoint> pointZero(new OneDResultPoint(width - points[0]->getX() - 1, points[0]->getY()));
-                points[0] = pointZero;
 
-                Ref<ResultPoint> pointOne(new OneDResultPoint(width - points[1]->getX() - 1, points[1]->getY()));
-                points[1] = pointOne;
+          // Look for a barcode
+          Ref<Result> result = decodeRow(rowNumber, row);
+          // We found our barcode
+          if (!result.empty()) {
+            //						// But it was upside down, so note that
+            //						result.putMetadata(ResultMetadataType.ORIENTATION, new Integer(180));
+            //						// And remember to flip the result points horizontally.
+            std::vector<Ref<ResultPoint> > points(result->getResultPoints());
+            // if there's exactly two points (which there should be), flip the x coordinate
+            // if there's not exactly 2, I don't know what do do with it
+            if (points.size() == 2) {
+              Ref<ResultPoint> pointZero(new OneDResultPoint(width - points[0]->getX() - 1, points[0]->getY()));
+              points[0] = pointZero;
 
-                result.reset(new Result(result->getText(),result->getRawBytes(),points,result->getBarcodeFormat()));
-						  }
-						}
-						return result;
-					} catch (ReaderException re) {
-						// continue -- just couldn't decode this row
-					}
+              Ref<ResultPoint> pointOne(new OneDResultPoint(width - points[1]->getX() - 1, points[1]->getY()));
+              points[1] = pointOne;
+
+              result.reset(new Result(result->getText(),result->getRawBytes(),points,result->getBarcodeFormat()));
+            }
+            return result;
+          }
 				}
 			}
 			throw ReaderException("doDecode() failed");
 		}
-		
+
 		unsigned int OneDReader::patternMatchVariance(int counters[], int countersSize, const int pattern[], int maxIndividualVariance) {
 			int numCounters = countersSize;
 			unsigned int total = 0;
@@ -152,7 +145,7 @@ namespace zxing {
 			// more "significant digits"
 			unsigned int unitBarWidth = (total << INTEGER_MATH_SHIFT) / patternLength;
 			maxIndividualVariance = (maxIndividualVariance * unitBarWidth) >> INTEGER_MATH_SHIFT;
-			
+
 			unsigned int totalVariance = 0;
 			for (int x = 0; x < numCounters; x++) {
 				int counter = counters[x] << INTEGER_MATH_SHIFT;
@@ -165,7 +158,7 @@ namespace zxing {
 			}
 			return totalVariance / total;
 		}
-		
+
 		void OneDReader::recordPattern(Ref<BitArray> row, int start, int counters[], int countersCount){
 			int numCounters = countersCount;//sizeof(counters) / sizeof(int);
 			for (int i = 0; i < numCounters; i++) {
@@ -199,7 +192,7 @@ namespace zxing {
 				throw ReaderException("recordPattern");
 			}
 		}
-		
+
 		OneDReader::~OneDReader() {
 		}
 	}

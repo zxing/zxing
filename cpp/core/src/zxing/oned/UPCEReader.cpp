@@ -2,7 +2,6 @@
  *  UPCEReader.cpp
  *  ZXing
  *
- *  Created by Lukasz Warchol on 10-01-26.
  *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,13 +22,13 @@
 
 namespace zxing {
 	namespace oned {
-		
+
 		/**
 		 * The pattern that marks the middle, and end, of a UPC-E pattern.
 		 * There is no "second half" to a UPC-E barcode.
 		 */
 		static const int MIDDLE_END_PATTERN[6] = {1, 1, 1, 1, 1, 1};
-		
+
 		/**
 		 * See {@link #L_AND_G_PATTERNS}; these values similarly represent patterns of
 		 * even-odd parity encodings of digits that imply both the number system (0 or 1)
@@ -39,20 +38,23 @@ namespace zxing {
 			{0x38, 0x34, 0x32, 0x31, 0x2C, 0x26, 0x23, 0x2A, 0x29, 0x25},
 			{0x07, 0x0B, 0x0D, 0x0E, 0x13, 0x19, 0x1C, 0x15, 0x16, 0x1A}
 		};
-		
-		UPCEReader::UPCEReader(){}
-		
-		int UPCEReader::decodeMiddle(Ref<BitArray> row, int startRange[], int startRangeLen, std::string& resultString){
+
+		UPCEReader::UPCEReader() {
+		}
+
+		int UPCEReader::decodeMiddle(Ref<BitArray> row, int startRange[], int startRangeLen,
+		    std::string& resultString) {
 			const int countersLen = 4;
 			int counters[countersLen] = { 0, 0, 0, 0 };
-			
+
 			int end = row->getSize();
 			int rowOffset = startRange[1];
-			
+
 			int lgPatternFound = 0;
-						
+
 			for (int x = 0; x < 6 && rowOffset < end; x++) {
-				int bestMatch = decodeDigit(row, counters, countersLen, rowOffset, UPC_EAN_PATTERNS_L_AND_G_PATTERNS);
+				int bestMatch = decodeDigit(row, counters, countersLen, rowOffset,
+				    UPC_EAN_PATTERNS_L_AND_G_PATTERNS);
 				resultString.append(1, (char) ('0' + bestMatch % 10));
 				for (int i = 0; i < countersLen; i++) {
 					rowOffset += counters[i];
@@ -61,22 +63,23 @@ namespace zxing {
 					lgPatternFound |= 1 << (5 - x);
 				}
 			}
-			
+
 			determineNumSysAndCheckDigit(resultString, lgPatternFound);
-			
+
 			return rowOffset;
 		}
-		
-		int* UPCEReader::decodeEnd(Ref<BitArray> row, int endStart){
-			return findGuardPattern(row, endStart, true, MIDDLE_END_PATTERN, sizeof(MIDDLE_END_PATTERN)/sizeof(int));
+
+		int* UPCEReader::decodeEnd(Ref<BitArray> row, int endStart) {
+			return findGuardPattern(row, endStart, true, MIDDLE_END_PATTERN,
+			    sizeof(MIDDLE_END_PATTERN) / sizeof(int));
 		}
-		
+
 		bool UPCEReader::checkChecksum(std::string s){
 			return UPCEANReader::checkChecksum(convertUPCEtoUPCA(s));
 		}
-		
-		
-		void UPCEReader::determineNumSysAndCheckDigit(std::string& resultString, int lgPatternFound){
+
+
+		void UPCEReader::determineNumSysAndCheckDigit(std::string& resultString, int lgPatternFound) {
 			for (int numSys = 0; numSys <= 1; numSys++) {
 				for (int d = 0; d < 10; d++) {
 					if (lgPatternFound == NUMSYS_AND_CHECK_DIGIT_PATTERNS[numSys][d]) {
@@ -88,7 +91,7 @@ namespace zxing {
 			}
 			throw ReaderException("determineNumSysAndCheckDigit exception");
 		}
-		
+
 		/**
 		 * Expands a UPC-E value back into its full, equivalent UPC-A code value.
 		 *
@@ -127,9 +130,9 @@ namespace zxing {
 			result.append(1, upce[7]);
 			return result;
 		}
-		
-		
-		BarcodeFormat UPCEReader::getBarcodeFormat(){
+
+
+		BarcodeFormat UPCEReader::getBarcodeFormat() {
 			return BarcodeFormat_UPC_E;
 		}
 	}

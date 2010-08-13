@@ -2,7 +2,6 @@
  *  UPCEANReader.cpp
  *  ZXing
  *
- *  Created by Lukasz Warchol on 10-01-21.
  *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,20 +20,21 @@
 #include "UPCEANReader.h"
 #include <zxing/oned/OneDResultPoint.h>
 #include <zxing/ReaderException.h>
+
 namespace zxing {
   namespace oned {
-    
+
     /**
      * Start/end guard pattern.
      */
     static const int START_END_PATTERN[3] = {1, 1, 1};
-    
+
     /**
      * Pattern marking the middle of a UPC/EAN pattern, separating the two halves.
      */
     static const int MIDDLE_PATTERN_LEN = 5;
     static const int MIDDLE_PATTERN[MIDDLE_PATTERN_LEN] = {1, 1, 1, 1, 1};
-    
+
     /**
      * "Odd", or "L" patterns used to encode UPC/EAN digits.
      */
@@ -52,7 +52,7 @@ namespace zxing {
       {1, 2, 1, 3}, // 8
       {3, 1, 1, 2}  // 9
     };
-    
+
     /**
      * As above but also including the "even", or "G" patterns used to encode UPC/EAN digits.
      */
@@ -80,19 +80,20 @@ namespace zxing {
       {3, 1, 2, 1}, // 18 reversed 8
       {2, 1, 1, 3}  // 19 reversed 9
     };
-    
 
-    const int UPCEANReader::getMIDDLE_PATTERN_LEN(){
+
+    const int UPCEANReader::getMIDDLE_PATTERN_LEN() {
       return MIDDLE_PATTERN_LEN;
     }
-    const int* UPCEANReader::getMIDDLE_PATTERN(){
+
+    const int* UPCEANReader::getMIDDLE_PATTERN() {
       return MIDDLE_PATTERN;
     }
-    
-    UPCEANReader::UPCEANReader(){
+
+    UPCEANReader::UPCEANReader() {
     }
-    
-    
+
+
     Ref<Result> UPCEANReader::decodeRow(int rowNumber, Ref<BitArray> row) {
 			int* start = NULL;
 			try {
@@ -102,22 +103,21 @@ namespace zxing {
 				return result;
 			} catch (ReaderException const& re) {
 				delete [] start;
-				throw re;
+				return Ref<Result>();
 			}
     }
-    
-    Ref<Result> UPCEANReader::decodeRow(int rowNumber, Ref<BitArray> row, int startGuardRange[]){
+
+    Ref<Result> UPCEANReader::decodeRow(int rowNumber, Ref<BitArray> row, int startGuardRange[]) {
       int* endRange = NULL;
       try {
 				std::string tmpResultString;
         std::string& tmpResultStringRef = tmpResultString;
-        int endStart;
-        endStart = decodeMiddle(row, startGuardRange, 2 /*reference findGuardPattern*/ , tmpResultStringRef);
-      
+        int endStart = decodeMiddle(row, startGuardRange, 2 /*reference findGuardPattern*/ ,
+            tmpResultStringRef);
         endRange = decodeEnd(row, endStart);
-                        
-        // Make sure there is a quiet zone at least as big as the end pattern after the barcode. The
-        // spec might want more whitespace, but in practice this is the maximum we can count on.
+
+        // Make sure there is a quiet zone at least as big as the end pattern after the barcode.
+        // The spec might want more whitespace, but in practice this is the maximum we can count on.
         size_t end = endRange[1];
         size_t quietEnd = end + (end - endRange[0]);
         if (quietEnd >= row->getSize() || !row->isRange(end, quietEnd, false)) {
@@ -127,20 +127,20 @@ namespace zxing {
         if (!checkChecksum(tmpResultString)) {
           throw ReaderException("Checksum fail.");
         }
-      
+
         Ref<String> resultString(new String(tmpResultString));
-      
+
         float left = (float) (startGuardRange[1] + startGuardRange[0]) / 2.0f;
         float right = (float) (endRange[1] + endRange[0]) / 2.0f;
-      
+
         std::vector< Ref<ResultPoint> > resultPoints(2);
         Ref<OneDResultPoint> resultPoint1(new OneDResultPoint(left, (float) rowNumber));
         Ref<OneDResultPoint> resultPoint2(new OneDResultPoint(right, (float) rowNumber));
         resultPoints[0] = resultPoint1;
         resultPoints[1] = resultPoint2;
-      
+
         ArrayRef<unsigned char> resultBytes(1);
-      
+
         Ref<Result> res(new Result(resultString, resultBytes, resultPoints, getBarcodeFormat()));
         delete [] endRange;
         return res;
@@ -148,19 +148,18 @@ namespace zxing {
         delete [] endRange;
 				throw re;
 			}
-
     }
-    
-    int* UPCEANReader::findStartGuardPattern(Ref<BitArray> row){
+
+    int* UPCEANReader::findStartGuardPattern(Ref<BitArray> row) {
       bool foundStart = false;
-      
       int* startRange = NULL;
       int nextStart = 0;
       try {
         while (!foundStart) {
           delete [] startRange;
           startRange = NULL;
-          startRange = findGuardPattern(row, nextStart, false, START_END_PATTERN, sizeof(START_END_PATTERN)/sizeof(int));
+          startRange = findGuardPattern(row, nextStart, false, START_END_PATTERN,
+              sizeof(START_END_PATTERN) / sizeof(int));
           int start = startRange[0];
           nextStart = startRange[1];
           // Make sure there is a quiet zone at least as big as the start pattern before the barcode.
@@ -177,9 +176,10 @@ namespace zxing {
         throw re;
       }
     }
-    
+
     // TODO(flyashi): Return a pair<int, int> for return value to avoid using the heap.
-    int* UPCEANReader::findGuardPattern(Ref<BitArray> row, int rowOffset, bool whiteFirst, const int pattern[], int patternLen){
+    int* UPCEANReader::findGuardPattern(Ref<BitArray> row, int rowOffset, bool whiteFirst,
+        const int pattern[], int patternLen) {
       int patternLength = patternLen;
       int counters[patternLength];
       int countersCount = sizeof(counters) / sizeof(int);
@@ -195,7 +195,7 @@ namespace zxing {
         }
         rowOffset++;
       }
-      
+
       int counterPosition = 0;
       int patternStart = rowOffset;
       for (int x = rowOffset; x < width; x++) {
@@ -204,7 +204,8 @@ namespace zxing {
           counters[counterPosition]++;
         } else {
           if (counterPosition == patternLength - 1) {
-            if (patternMatchVariance(counters, countersCount, pattern, MAX_INDIVIDUAL_VARIANCE) < MAX_AVG_VARIANCE) {
+            if (patternMatchVariance(counters, countersCount, pattern,
+                MAX_INDIVIDUAL_VARIANCE) < MAX_AVG_VARIANCE) {
               int* resultValue = new int[2];
               resultValue[0] = patternStart;
               resultValue[1] = x;
@@ -226,17 +227,19 @@ namespace zxing {
       }
       throw ReaderException("findGuardPattern");
     }
-    
-    int* UPCEANReader::decodeEnd(Ref<BitArray> row, int endStart){
-      return findGuardPattern(row, endStart, false, START_END_PATTERN, sizeof(START_END_PATTERN)/sizeof(int));
+
+    int* UPCEANReader::decodeEnd(Ref<BitArray> row, int endStart) {
+      return findGuardPattern(row, endStart, false, START_END_PATTERN,
+          sizeof(START_END_PATTERN) / sizeof(int));
     }
-    
-//    int UPCEANReader::decodeDigit(Ref<BitArray> row, int counters[], int countersLen, int rowOffset, int** patterns/*[][]*/, int paterns1Len, int paterns2Len)    
-    int UPCEANReader::decodeDigit(Ref<BitArray> row, int counters[], int countersLen, int rowOffset, UPC_EAN_PATTERNS patternType){
+
+//    int UPCEANReader::decodeDigit(Ref<BitArray> row, int counters[], int countersLen, int rowOffset, int** patterns/*[][]*/, int paterns1Len, int paterns2Len)
+    int UPCEANReader::decodeDigit(Ref<BitArray> row, int counters[], int countersLen, int rowOffset,
+        UPC_EAN_PATTERNS patternType) {
       recordPattern(row, rowOffset, counters, countersLen);
       unsigned int bestVariance = MAX_AVG_VARIANCE; // worst variance we'll accept
       int bestMatch = -1;
-      
+
       int max = 0;
       switch (patternType) {
         case UPC_EAN_PATTERNS_L_PATTERNS:
@@ -246,8 +249,9 @@ namespace zxing {
             for(int j = 0; j< countersLen; j++){
               pattern[j] = L_PATTERNS[i][j];
             }
-            
-            unsigned int variance = patternMatchVariance(counters, countersLen, pattern, MAX_INDIVIDUAL_VARIANCE);
+
+            unsigned int variance = patternMatchVariance(counters, countersLen, pattern,
+                MAX_INDIVIDUAL_VARIANCE);
             if (variance < bestVariance) {
               bestVariance = variance;
               bestMatch = i;
@@ -261,8 +265,9 @@ namespace zxing {
             for(int j = 0; j< countersLen; j++){
               pattern[j] = L_AND_G_PATTERNS[i][j];
             }
-            
-            unsigned int variance = patternMatchVariance(counters, countersLen, pattern, MAX_INDIVIDUAL_VARIANCE);
+
+            unsigned int variance = patternMatchVariance(counters, countersLen, pattern,
+                MAX_INDIVIDUAL_VARIANCE);
             if (variance < bestVariance) {
               bestVariance = variance;
               bestMatch = i;
@@ -278,15 +283,15 @@ namespace zxing {
         throw ReaderException("UPCEANReader::decodeDigit: No best mach");
       }
     }
-    
-    
+
+
     /**
      * @return {@link #checkStandardUPCEANChecksum(String)}
      */
-    bool UPCEANReader::checkChecksum(std::string s){
+    bool UPCEANReader::checkChecksum(std::string s) {
       return checkStandardUPCEANChecksum(s);
     }
-    
+
     /**
      * Computes the UPC/EAN checksum on a string of digits, and reports
      * whether the checksum is correct or not.
@@ -295,12 +300,12 @@ namespace zxing {
      * @return true iff string of digits passes the UPC/EAN checksum algorithm
      * @throws ReaderException if the string does not contain only digits
      */
-    bool UPCEANReader::checkStandardUPCEANChecksum(std::string s){
+    bool UPCEANReader::checkStandardUPCEANChecksum(std::string s) {
       int length = s.length();
       if (length == 0) {
         return false;
       }
-      
+
       int sum = 0;
       for (int i = length - 2; i >= 0; i -= 2) {
         int digit = (int) s[i] - (int) '0';
@@ -319,7 +324,8 @@ namespace zxing {
       }
       return sum % 10 == 0;
     }
-    UPCEANReader::~UPCEANReader(){
+
+    UPCEANReader::~UPCEANReader() {
     }
   }
 }

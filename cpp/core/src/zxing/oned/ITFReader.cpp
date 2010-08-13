@@ -2,7 +2,6 @@
  *  ITFReader.cpp
  *  ZXing
  *
- *  Created by Lukasz Warchol on 10-01-26.
  *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,12 +25,12 @@
 
 namespace zxing {
   namespace oned {
-    
+
     static const int W = 3; // Pixel width of a wide line
     static const int N = 1; // Pixed width of a narrow line
-    
+
     const int DEFAULT_ALLOWED_LENGTHS[4] = { 6, 10, 14, 44 };
-    
+
     /**
      * Start/end guard pattern.
      *
@@ -40,10 +39,10 @@ namespace zxing {
      */
     static const int START_PATTERN_LEN = 4;
     static const int START_PATTERN[START_PATTERN_LEN] = {N, N, N, N};
-    
+
     static const int END_PATTERN_REVERSED_LEN = 3;
     static const int END_PATTERN_REVERSED[END_PATTERN_REVERSED_LEN] = {N, N, W};
-    
+
     /**
      * Patterns of Wide / Narrow lines to indicate each digit
      */
@@ -60,62 +59,61 @@ namespace zxing {
       {W, N, N, W, N}, // 8
       {N, W, N, W, N}  // 9
     };
-    
-    
+
+
     ITFReader::ITFReader() : narrowLineWidth(-1) {
     }
-    
-    
-    Ref<Result> ITFReader::decodeRow(int rowNumber, Ref<BitArray> row){
-                        int* startRange = 0;
+
+
+    Ref<Result> ITFReader::decodeRow(int rowNumber, Ref<BitArray> row) {
+      int* startRange = 0;
       int* endRange = 0;
-                        try {
-              // Find out where the Middle section (payload) starts & ends
-              startRange = decodeStart(row);
+      try {
+        // Find out where the Middle section (payload) starts & ends
+        startRange = decodeStart(row);
         endRange = decodeEnd(row);
-      
-              std::string tmpResult;
-              decodeMiddle(row, startRange[1], endRange[0], tmpResult);
-      
-              // To avoid false positives with 2D barcodes (and other patterns), make
-              // an assumption that the decoded string must be 6, 10 or 14 digits.
-              int length = tmpResult.length();
-              bool lengthOK = false;
-                                if (length == 6 || length == 10 || length == 14) {
-                                        lengthOK = true;
-                                }
-              if (!lengthOK) {
-                throw ReaderException("not enough characters count");
-              }
-      
-              Ref<String> resultString(new String(tmpResult));
-      
-              std::vector< Ref<ResultPoint> > resultPoints(2);
-              Ref<OneDResultPoint> resultPoint1(new OneDResultPoint(startRange[1], (float) rowNumber));
-              Ref<OneDResultPoint> resultPoint2(new OneDResultPoint(endRange[0], (float) rowNumber));
-              resultPoints[0] = resultPoint1;
-              resultPoints[1] = resultPoint2;
-      
-              ArrayRef<unsigned char> resultBytes(1);
-                                
-                                Ref<Result> res(new Result(resultString, resultBytes, resultPoints, BarcodeFormat_ITF));
-                                delete [] startRange;
-              delete [] endRange;
-              return res;
+
+        std::string tmpResult;
+        decodeMiddle(row, startRange[1], endRange[0], tmpResult);
+
+        // To avoid false positives with 2D barcodes (and other patterns), make
+        // an assumption that the decoded string must be 6, 10 or 14 digits.
+        int length = tmpResult.length();
+        bool lengthOK = false;
+        if (length == 6 || length == 10 || length == 14) {
+          lengthOK = true;
+        }
+        if (!lengthOK) {
+          throw ReaderException("not enough characters count");
+        }
+
+        Ref<String> resultString(new String(tmpResult));
+
+        std::vector< Ref<ResultPoint> > resultPoints(2);
+        Ref<OneDResultPoint> resultPoint1(new OneDResultPoint(startRange[1], (float) rowNumber));
+        Ref<OneDResultPoint> resultPoint2(new OneDResultPoint(endRange[0], (float) rowNumber));
+        resultPoints[0] = resultPoint1;
+        resultPoints[1] = resultPoint2;
+
+        delete [] startRange;
+        delete [] endRange;
+        ArrayRef<unsigned char> resultBytes(1);
+        return Ref<Result>(new Result(resultString, resultBytes, resultPoints, BarcodeFormat_ITF));
       } catch (ReaderException re) {
         delete [] startRange;
         delete [] endRange;
-        throw re;
+        return Ref<Result>();
       }
     }
-    
+
     /**
      * @param row          row of black/white values to search
      * @param payloadStart offset of start pattern
      * @param resultString {@link StringBuffer} to append decoded chars to
      * @throws ReaderException if decoding could not complete successfully
      */
-    void ITFReader::decodeMiddle(Ref<BitArray> row, int payloadStart, int payloadEnd, std::string& resultString){
+    void ITFReader::decodeMiddle(Ref<BitArray> row, int payloadStart, int payloadEnd,
+        std::string& resultString) {
       // Digits are interleaved in pairs - 5 black lines for one digit, and the
       // 5
       // interleaved white lines for the second digit.
@@ -126,14 +124,14 @@ namespace zxing {
       for (int i=0; i<counterDigitPairLen; i++) {
         counterDigitPair[i] = 0;
       }
-      
+
       int counterBlack[5];
       int counterWhite[5];
       for (int i=0; i<5; i++) {
         counterBlack[i] = 0;
         counterWhite[i] = 0;
       }
-      
+
       while (payloadStart < payloadEnd) {
         // Get 10 runs of black/white.
         recordPattern(row, payloadStart, counterDigitPair, counterDigitPairLen);
@@ -143,18 +141,18 @@ namespace zxing {
           counterBlack[k] = counterDigitPair[twoK];
           counterWhite[k] = counterDigitPair[twoK + 1];
         }
-        
+
         int bestMatch = decodeDigit(counterBlack, 5);
         resultString.append(1, (char) ('0' + bestMatch));
         bestMatch = decodeDigit(counterWhite, 5);
         resultString.append(1, (char) ('0' + bestMatch));
-        
+
         for (int i = 0; i < counterDigitPairLen; i++) {
           payloadStart += counterDigitPair[i];
         }
       }
     }
-    
+
     /**
      * Identify where the start of the middle / payload section starts.
      *
@@ -163,27 +161,24 @@ namespace zxing {
      *         'start block'
      * @throws ReaderException
      */
-    int* ITFReader::decodeStart(Ref<BitArray> row){
+    int* ITFReader::decodeStart(Ref<BitArray> row) {
       int endStart = skipWhiteSpace(row);
-///      static int* findGuardPattern(Ref<BitArray> row, int rowOffset, bool whiteFirst, const int pattern[], int patternLen);
       int* startPattern = 0;
       try {
-                                startPattern = findGuardPattern(row, endStart, START_PATTERN, START_PATTERN_LEN);
-      
-              // Determine the width of a narrow line in pixels. We can do this by
-              // getting the width of the start pattern and dividing by 4 because its
-              // made up of 4 narrow lines.
-              narrowLineWidth = (startPattern[1] - startPattern[0]) >> 2;
-      
-                    validateQuietZone(row, startPattern[0]);
-      
-              return startPattern;
+          startPattern = findGuardPattern(row, endStart, START_PATTERN, START_PATTERN_LEN);
+
+          // Determine the width of a narrow line in pixels. We can do this by
+          // getting the width of the start pattern and dividing by 4 because its
+          // made up of 4 narrow lines.
+          narrowLineWidth = (startPattern[1] - startPattern[0]) >> 2;
+          validateQuietZone(row, startPattern[0]);
+          return startPattern;
       } catch (ReaderException re) {
-                                delete [] startPattern;
+          delete [] startPattern;
         throw re;
-      } 
+      }
     }
-    
+
     /**
      * Identify where the end of the middle / payload section ends.
      *
@@ -192,8 +187,8 @@ namespace zxing {
      *         block'
      * @throws ReaderException
      */
-    
-    int* ITFReader::decodeEnd(Ref<BitArray> row){
+
+    int* ITFReader::decodeEnd(Ref<BitArray> row) {
       // For convenience, reverse the row and then
       // search from 'the start' for the end block
       row->reverse();
@@ -201,28 +196,28 @@ namespace zxing {
       try {
         int endStart = skipWhiteSpace(row);
         endPattern = findGuardPattern(row, endStart, END_PATTERN_REVERSED, END_PATTERN_REVERSED_LEN);
-        
+
         // The start & end patterns must be pre/post fixed by a quiet zone. This
         // zone must be at least 10 times the width of a narrow line.
         // ref: http://www.barcode-1.net/i25code.html
         validateQuietZone(row, endPattern[0]);
-        
+
         // Now recalculate the indices of where the 'endblock' starts & stops to
         // accommodate
         // the reversed nature of the search
         int temp = endPattern[0];
         endPattern[0] = row->getSize() - endPattern[1];
         endPattern[1] = row->getSize() - temp;
-        
+
         row->reverse();
         return endPattern;
       } catch (ReaderException re) {
                                 delete [] endPattern;
         row->reverse();
         throw re;
-      } 
+      }
     }
-    
+
     /**
      * The start & end patterns must be pre/post fixed by a quiet zone. This
      * zone must be at least 10 times the width of a narrow line.  Scan back until
@@ -238,10 +233,10 @@ namespace zxing {
      * @param startPattern index into row of the start or end pattern.
      * @throws ReaderException if the quiet zone cannot be found, a ReaderException is thrown.
      */
-    void ITFReader::validateQuietZone(Ref<BitArray> row, int startPattern){
+    void ITFReader::validateQuietZone(Ref<BitArray> row, int startPattern) {
 //#pragma mark needs some corrections
 //      int quietCount = narrowLineWidth * 10;  // expect to find this many pixels of quiet zone
-//      
+//
 //      for (int i = startPattern - 1; quietCount > 0 && i >= 0; i--) {
 //        if (row->get(i)) {
 //          break;
@@ -253,7 +248,7 @@ namespace zxing {
 //        throw ReaderException("Unable to find the necessary number of quiet zone pixels");
 //      }
     }
-    
+
     /**
      * Skip all whitespace until we get to the first black line.
      *
@@ -261,7 +256,7 @@ namespace zxing {
      * @return index of the first black line.
      * @throws ReaderException Throws exception if no black lines are found in the row
      */
-    int ITFReader::skipWhiteSpace(Ref<BitArray> row){
+    int ITFReader::skipWhiteSpace(Ref<BitArray> row) {
       int width = row->getSize();
       int endStart = 0;
       while (endStart < width) {
@@ -275,7 +270,7 @@ namespace zxing {
       }
       return endStart;
     }
-    
+
     /**
      * @param row       row of black/white values to search
      * @param rowOffset position to start search
@@ -285,8 +280,8 @@ namespace zxing {
      *         ints
      * @throws ReaderException if pattern is not found
      */
-    
-    int* ITFReader::findGuardPattern(Ref<BitArray> row, int rowOffset, const int pattern[], int patternLen){
+    int* ITFReader::findGuardPattern(Ref<BitArray> row, int rowOffset, const int pattern[],
+        int patternLen) {
       // TODO: This is very similar to implementation in UPCEANReader. Consider if they can be
       // merged to a single method.
       int patternLength = patternLen;
@@ -296,7 +291,7 @@ namespace zxing {
       }
       int width = row->getSize();
       bool isWhite = false;
-      
+
       int counterPosition = 0;
       int patternStart = rowOffset;
       for (int x = rowOffset; x < width; x++) {
@@ -305,7 +300,8 @@ namespace zxing {
           counters[counterPosition]++;
         } else {
           if (counterPosition == patternLength - 1) {
-            if (patternMatchVariance(counters, patternLength, pattern, MAX_INDIVIDUAL_VARIANCE) < MAX_AVG_VARIANCE) {
+            if (patternMatchVariance(counters, patternLength, pattern,
+                MAX_INDIVIDUAL_VARIANCE) < MAX_AVG_VARIANCE) {
               int* resultValue = new int[2];
               resultValue[0] = patternStart;
               resultValue[1] = x;
@@ -327,7 +323,7 @@ namespace zxing {
       }
       throw ReaderException("");
     }
-    
+
     /**
      * Attempts to decode a sequence of ITF black/white lines into single
      * digit.
@@ -341,11 +337,12 @@ namespace zxing {
       int bestMatch = -1;
       int max = PATTERNS_LEN;
       for (int i = 0; i < max; i++) {
-        int pattern[countersLen];        
+        int pattern[countersLen];
         for(int ind = 0; ind<countersLen; ind++){
           pattern[ind] = PATTERNS[i][ind];
         }
-        unsigned int variance = patternMatchVariance(counters, countersLen, pattern, MAX_INDIVIDUAL_VARIANCE);
+        unsigned int variance = patternMatchVariance(counters, countersLen, pattern,
+            MAX_INDIVIDUAL_VARIANCE);
         if (variance < bestVariance) {
           bestVariance = variance;
           bestMatch = i;
@@ -357,8 +354,7 @@ namespace zxing {
         throw ReaderException("digit didint found");
       }
     }
-    
-    
+
     ITFReader::~ITFReader(){
     }
   }
