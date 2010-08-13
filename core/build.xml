@@ -148,7 +148,6 @@
       <assertions>
         <enable/>
       </assertions>
-      <jvmarg value="-Xint"/> <!-- works around weird JIT bug in Java 6 -->
       <batchtest>
         <fileset dir="test/src">
           <include name="**/${subdir}/*BlackBox*TestCase.java"/>

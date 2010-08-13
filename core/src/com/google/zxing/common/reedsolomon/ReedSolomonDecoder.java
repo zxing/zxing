@@ -172,8 +172,13 @@ public final class ReedSolomonDecoder {
       int denominator = 1;
       for (int j = 0; j < s; j++) {
         if (i != j) {
-          denominator = field.multiply(denominator,
-              GF256.addOrSubtract(1, field.multiply(errorLocations[j], xiInverse)));
+          //denominator = field.multiply(denominator,
+          //    GF256.addOrSubtract(1, field.multiply(errorLocations[j], xiInverse)));
+          // Above should work but fails on some Apple and Linux JDKs due to a Hotspot bug.
+          // Below is a funny-looking workaround from Steven Parkes
+          int term = field.multiply(errorLocations[j], xiInverse);
+          int termPlus1 = ((term & 0x1) == 0) ? (term | 1) : (term & ~1);
+          denominator = field.multiply(denominator, termPlus1);
         }
       }
       result[i] = field.multiply(errorEvaluator.evaluateAt(xiInverse),
