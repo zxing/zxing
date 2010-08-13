@@ -193,6 +193,10 @@ public:
     return x == 0 ? object_ != 0 : true;
   }
 
+  bool empty() const {
+    return object_ == 0;
+  }
+
   template<class Y>
   friend std::ostream& operator<<(std::ostream &out, Ref<Y>& ref);
 };

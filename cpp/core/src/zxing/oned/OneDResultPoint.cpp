@@ -2,7 +2,6 @@
  *  OneDResultPoint.cpp
  *  ZXing
  *
- *  Created by Lukasz Warchol on 10-01-20.
  *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,14 +21,14 @@
 
 namespace zxing {
 	namespace oned {
-		
-		OneDResultPoint::OneDResultPoint(float posX, float posY) : posX_(posX), posY_(posY){
+
+		OneDResultPoint::OneDResultPoint(float posX, float posY) : posX_(posX), posY_(posY) {
 		}
-		
+
 		float OneDResultPoint::getX() const {
 			return posX_;
 		}
-		
+
 		float OneDResultPoint::getY() const {
 			return posY_;
 		}

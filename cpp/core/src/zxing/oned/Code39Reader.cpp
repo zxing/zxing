@@ -2,7 +2,6 @@
  *  Code39Reader.cpp
  *  ZXing
  *
- *  Created by Lukasz Warchol on 10-01-26.
  *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -69,19 +68,19 @@ namespace oned {
    * digit, not data, and verify that the checksum passes.
    */
   Code39Reader::Code39Reader(bool usingCheckDigit_) :
-    alphabet_string(ALPHABET_STRING), 
+    alphabet_string(ALPHABET_STRING),
     usingCheckDigit(usingCheckDigit_),
     extendedMode(false) {
   }
 
 
   Code39Reader::Code39Reader(bool usingCheckDigit_, bool extendedMode_) :
-    alphabet_string(ALPHABET_STRING), 
+    alphabet_string(ALPHABET_STRING),
     usingCheckDigit(usingCheckDigit_),
     extendedMode(extendedMode_) {
   }
 
-  Ref<Result> Code39Reader::decodeRow(int rowNumber, Ref<BitArray> row){
+  Ref<Result> Code39Reader::decodeRow(int rowNumber, Ref<BitArray> row) {
     int* start = NULL;
     try {
       start = findAsteriskPattern(row);
@@ -175,7 +174,7 @@ namespace oned {
       return res;
     } catch (ReaderException const& re) {
       delete [] start;
-      throw re;
+      return Ref<Result>();
     }
   }
 

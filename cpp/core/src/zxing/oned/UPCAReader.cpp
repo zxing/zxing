@@ -2,7 +2,6 @@
  *  UPCAReader.cpp
  *  ZXing
  *
- *  Created by Lukasz Warchol on 10-01-25.
  *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,33 +24,38 @@ namespace zxing {
 	namespace oned {
 		UPCAReader::UPCAReader() : ean13Reader() {
 		}
-		
-		Ref<Result> UPCAReader::decodeRow(int rowNumber, Ref<BitArray> row){
-			return maybeReturnResult(ean13Reader.decodeRow(rowNumber, row)); 
+
+		Ref<Result> UPCAReader::decodeRow(int rowNumber, Ref<BitArray> row) {
+			return maybeReturnResult(ean13Reader.decodeRow(rowNumber, row));
 		}
-		Ref<Result> UPCAReader::decodeRow(int rowNumber, Ref<BitArray> row, int startGuardRange[]){
+
+		Ref<Result> UPCAReader::decodeRow(int rowNumber, Ref<BitArray> row, int startGuardRange[]) {
 			return maybeReturnResult(ean13Reader.decodeRow(rowNumber, row, startGuardRange));
 		}
-		Ref<Result> UPCAReader::decode(Ref<BinaryBitmap> image, DecodeHints hints){
+
+		Ref<Result> UPCAReader::decode(Ref<BinaryBitmap> image, DecodeHints hints) {
 			return maybeReturnResult(ean13Reader.decode(image, hints));
 		}
-		
-		int UPCAReader::decodeMiddle(Ref<BitArray> row, int startRange[], int startRangeLen, std::string& resultString){
+
+		int UPCAReader::decodeMiddle(Ref<BitArray> row, int startRange[], int startRangeLen,
+		    std::string& resultString) {
 			return ean13Reader.decodeMiddle(row, startRange, startRangeLen, resultString);
 		}
-		
-		Ref<Result> UPCAReader::maybeReturnResult(Ref<Result> result){
+
+		Ref<Result> UPCAReader::maybeReturnResult(Ref<Result> result) {
+		  if (result.empty()) {
+		    return result;
+		  }
 			const std::string& text = (result->getText())->getText();
 			if (text[0] == '0') {
 				Ref<String> resultString(new String(text.substr(1)));
-				Ref<Result> res(new Result(resultString, result->getRawBytes(), result->getResultPoints(), BarcodeFormat_UPC_A));
+				Ref<Result> res(new Result(resultString, result->getRawBytes(), result->getResultPoints(),
+				    BarcodeFormat_UPC_A));
 				return res;
-			} else {
-				throw ReaderException("Not UPC-A barcode.");
 			}
+			return Ref<Result>();
 		}
 
-		
 		BarcodeFormat UPCAReader::getBarcodeFormat(){
 			return BarcodeFormat_UPC_A;
 		}

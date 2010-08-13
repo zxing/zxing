@@ -2,7 +2,6 @@
  *  MultiFormatOneDReader.cpp
  *  ZXing
  *
- *  Created by Lukasz Warchol on 10-01-25.
  *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -51,18 +50,17 @@ namespace zxing {
         readers.push_back(Ref<OneDReader>(new ITFReader()));
       }
 		}
-		
-		Ref<Result> MultiFormatOneDReader::decodeRow(int rowNumber, Ref<BitArray> row){
+
+		Ref<Result> MultiFormatOneDReader::decodeRow(int rowNumber, Ref<BitArray> row) {
 			int size = readers.size();
 			for (int i = 0; i < size; i++) {
 				OneDReader* reader = readers[i];
-				try {
-					return reader->decodeRow(rowNumber, row);
-				} catch (ReaderException re) {
-					// continue
+				Ref<Result> result = reader->decodeRow(rowNumber, row);
+				if (!result.empty()) {
+				  return result;
 				}
 			}
-			throw ReaderException("No code detected");
+			return Ref<Result>();
 		}
 	}
 }
