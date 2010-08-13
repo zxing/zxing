@@ -20,6 +20,7 @@ import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitArray;
 import com.google.zxing.common.CharacterSetECI;
+import com.google.zxing.common.ECI;
 import com.google.zxing.common.reedsolomon.GF256;
 import com.google.zxing.common.reedsolomon.ReedSolomonEncoder;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
@@ -547,7 +548,7 @@ public final class Encoder {
     }
   }
 
-  private static void appendECI(CharacterSetECI eci, BitArray bits) {
+  private static void appendECI(ECI eci, BitArray bits) {
     bits.appendBits(Mode.ECI.getBits(), 4);
     // This is correct for values up to 127, which is all we need now.
     bits.appendBits(eci.getValue(), 8);

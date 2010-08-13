@@ -79,12 +79,10 @@ public final class Decoder {
    *
    * @param bits booleans representing white/black QR Code modules
    * @return text and bytes encoded within the QR Code
-   * @throws NotFoundException if the QR Code cannot be found
    * @throws FormatException if the QR Code cannot be decoded
    * @throws ChecksumException if error correction fails
    */
-  public DecoderResult decode(BitMatrix bits, Hashtable hints)
-      throws NotFoundException, FormatException, ChecksumException {
+  public DecoderResult decode(BitMatrix bits, Hashtable hints) throws FormatException, ChecksumException {
 
     // Construct a parser and read version, error-correction level
     BitMatrixParser parser = new BitMatrixParser(bits);

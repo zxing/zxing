@@ -186,7 +186,7 @@ final class ExpandedProductResultParser extends ResultParser {
         // We look for a new AI. If it doesn't exist (ERROR), we coninue
         // with the iteration
         if ("ERROR".equals(findAIvalue(index, rawTextAux))) {
-          buf.append(c);
+          buf.append('(');
         } else {
           break;
         }
