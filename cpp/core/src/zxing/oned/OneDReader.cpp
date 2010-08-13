@@ -112,13 +112,16 @@ namespace zxing {
             // if there's exactly two points (which there should be), flip the x coordinate
             // if there's not exactly 2, I don't know what do do with it
             if (points.size() == 2) {
-              Ref<ResultPoint> pointZero(new OneDResultPoint(width - points[0]->getX() - 1, points[0]->getY()));
+              Ref<ResultPoint> pointZero(new OneDResultPoint(width - points[0]->getX() - 1,
+                  points[0]->getY()));
               points[0] = pointZero;
 
-              Ref<ResultPoint> pointOne(new OneDResultPoint(width - points[1]->getX() - 1, points[1]->getY()));
+              Ref<ResultPoint> pointOne(new OneDResultPoint(width - points[1]->getX() - 1,
+                  points[1]->getY()));
               points[1] = pointOne;
 
-              result.reset(new Result(result->getText(),result->getRawBytes(),points,result->getBarcodeFormat()));
+              result.reset(new Result(result->getText(), result->getRawBytes(), points,
+                  result->getBarcodeFormat()));
             }
             return result;
           }
@@ -127,7 +130,8 @@ namespace zxing {
 			throw ReaderException("doDecode() failed");
 		}
 
-		unsigned int OneDReader::patternMatchVariance(int counters[], int countersSize, const int pattern[], int maxIndividualVariance) {
+		unsigned int OneDReader::patternMatchVariance(int counters[], int countersSize,
+		    const int pattern[], int maxIndividualVariance) {
 			int numCounters = countersSize;
 			unsigned int total = 0;
 			unsigned int patternLength = 0;
@@ -159,14 +163,14 @@ namespace zxing {
 			return totalVariance / total;
 		}
 
-		void OneDReader::recordPattern(Ref<BitArray> row, int start, int counters[], int countersCount){
+		bool OneDReader::recordPattern(Ref<BitArray> row, int start, int counters[], int countersCount) {
 			int numCounters = countersCount;//sizeof(counters) / sizeof(int);
 			for (int i = 0; i < numCounters; i++) {
 				counters[i] = 0;
 			}
 			int end = row->getSize();
 			if (start >= end) {
-				throw ReaderException("recordPattern: start >= end");
+				return false;
 			}
 			bool isWhite = !row->get(start);
 			int counterPosition = 0;
@@ -189,8 +193,9 @@ namespace zxing {
 			// If we read fully the last section of pixels and filled up our counters -- or filled
 			// the last counter but ran off the side of the image, OK. Otherwise, a problem.
 			if (!(counterPosition == numCounters || (counterPosition == numCounters - 1 && i == end))) {
-				throw ReaderException("recordPattern");
+				return false;
 			}
+			return true;
 		}
 
 		OneDReader::~OneDReader() {

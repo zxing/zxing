@@ -41,7 +41,7 @@ namespace zxing {
 
 			static unsigned int patternMatchVariance(int counters[], int countersSize,
 			    const int pattern[], int maxIndividualVariance);
-			static void recordPattern(Ref<BitArray> row, int start, int counters[], int countersCount);
+			static bool recordPattern(Ref<BitArray> row, int start, int counters[], int countersCount);
 			virtual ~OneDReader();
 		};
 	}
