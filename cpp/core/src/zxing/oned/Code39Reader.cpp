@@ -102,7 +102,9 @@ namespace oned {
       char decodedChar;
       int lastStart;
       do {
-        recordPattern(row, nextStart, counters, countersLen);
+        if (!recordPattern(row, nextStart, counters, countersLen)) {
+          throw ReaderException("");
+        }
         int pattern = toNarrowWidePattern(counters, countersLen);
         if (pattern < 0) {
           throw ReaderException("pattern < 0");

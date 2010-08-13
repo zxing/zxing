@@ -233,10 +233,11 @@ namespace zxing {
           sizeof(START_END_PATTERN) / sizeof(int));
     }
 
-//    int UPCEANReader::decodeDigit(Ref<BitArray> row, int counters[], int countersLen, int rowOffset, int** patterns/*[][]*/, int paterns1Len, int paterns2Len)
     int UPCEANReader::decodeDigit(Ref<BitArray> row, int counters[], int countersLen, int rowOffset,
         UPC_EAN_PATTERNS patternType) {
-      recordPattern(row, rowOffset, counters, countersLen);
+      if (!recordPattern(row, rowOffset, counters, countersLen)) {
+        throw ReaderException("");
+      }
       unsigned int bestVariance = MAX_AVG_VARIANCE; // worst variance we'll accept
       int bestMatch = -1;
 

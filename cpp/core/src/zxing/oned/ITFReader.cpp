@@ -134,7 +134,9 @@ namespace zxing {
 
       while (payloadStart < payloadEnd) {
         // Get 10 runs of black/white.
-        recordPattern(row, payloadStart, counterDigitPair, counterDigitPairLen);
+        if (!recordPattern(row, payloadStart, counterDigitPair, counterDigitPairLen)) {
+          throw ReaderException("");
+        }
         // Split them into each array
         for (int k = 0; k < 5; k++) {
           int twoK = k << 1;

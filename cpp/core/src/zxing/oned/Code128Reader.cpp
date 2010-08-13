@@ -205,8 +205,10 @@ namespace zxing {
 		}
 
 		int Code128Reader::decodeCode(Ref<BitArray> row, int counters[], int countersCount,
-		    int rowOffset){
-			recordPattern(row, rowOffset, counters, countersCount);
+		    int rowOffset) {
+		  if (!recordPattern(row, rowOffset, counters, countersCount)) {
+		    throw ReaderException("");
+		  }
 			unsigned int bestVariance = MAX_AVG_VARIANCE; // worst variance we'll accept
 			int bestMatch = -1;
 			for (int d = 0; d < CODE_PATTERNS_LENGTH; d++) {
