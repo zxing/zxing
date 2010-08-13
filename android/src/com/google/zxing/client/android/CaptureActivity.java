@@ -68,14 +68,11 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.text.DateFormat;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
-import java.util.regex.Pattern;
 
 /**
  * The barcode reader activity itself. This is loosely based on the CameraPreview
@@ -87,8 +84,6 @@ import java.util.regex.Pattern;
 public final class CaptureActivity extends Activity implements SurfaceHolder.Callback {
 
   private static final String TAG = CaptureActivity.class.getSimpleName();
-
-  private static final Pattern COMMA_PATTERN = Pattern.compile(",");
 
   private static final int SHARE_ID = Menu.FIRST;
   private static final int HISTORY_ID = Menu.FIRST + 1;
@@ -107,31 +102,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private static final String ZXING_URL = "http://zxing.appspot.com/scan";
   private static final String RETURN_CODE_PLACEHOLDER = "{CODE}";
   private static final String RETURN_URL_PARAM = "ret";
-
-  static final Vector<BarcodeFormat> PRODUCT_FORMATS;
-  static final Vector<BarcodeFormat> ONE_D_FORMATS;
-  static final Vector<BarcodeFormat> QR_CODE_FORMATS;
-  static final Vector<BarcodeFormat> ALL_FORMATS;
-
-  static {
-    PRODUCT_FORMATS = new Vector<BarcodeFormat>(5);
-    PRODUCT_FORMATS.add(BarcodeFormat.UPC_A);
-    PRODUCT_FORMATS.add(BarcodeFormat.UPC_E);
-    PRODUCT_FORMATS.add(BarcodeFormat.EAN_13);
-    PRODUCT_FORMATS.add(BarcodeFormat.EAN_8);
-    PRODUCT_FORMATS.add(BarcodeFormat.RSS14);
-    ONE_D_FORMATS = new Vector<BarcodeFormat>(PRODUCT_FORMATS.size() + 4);
-    ONE_D_FORMATS.addAll(PRODUCT_FORMATS);
-    ONE_D_FORMATS.add(BarcodeFormat.CODE_39);
-    ONE_D_FORMATS.add(BarcodeFormat.CODE_93);
-    ONE_D_FORMATS.add(BarcodeFormat.CODE_128);
-    ONE_D_FORMATS.add(BarcodeFormat.ITF);
-    QR_CODE_FORMATS = new Vector<BarcodeFormat>(1);
-    QR_CODE_FORMATS.add(BarcodeFormat.QR_CODE);
-    ALL_FORMATS = new Vector<BarcodeFormat>(ONE_D_FORMATS.size() + QR_CODE_FORMATS.size());
-    ALL_FORMATS.addAll(ONE_D_FORMATS);
-    ALL_FORMATS.addAll(QR_CODE_FORMATS);
-  }
 
   private static final Set<ResultMetadataType> DISPLAYABLE_METADATA_TYPES;
   static {
@@ -167,6 +137,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private String characterSet;
   private String versionName;
   private HistoryManager historyManager;
+  private InactivityTimer inactivityTimer;
 
   /**
    * When the beep has finished playing, rewind to queue up another one.
@@ -211,6 +182,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     hasSurface = false;
     historyManager = new HistoryManager(this);
     historyManager.trimHistory();
+    inactivityTimer = new InactivityTimer(this);
 
     showHelpOnFirstLaunch();
   }
@@ -239,13 +211,13 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       if (action.equals(Intents.Scan.ACTION)) {
         // Scan the formats the intent requested, and return the result to the calling activity.
         source = Source.NATIVE_APP_INTENT;
-        decodeFormats = parseDecodeFormats(intent);
+        decodeFormats = DecodeFormatManager.parseDecodeFormats(intent);
       } else if (dataString != null && dataString.contains(PRODUCT_SEARCH_URL_PREFIX) &&
           dataString.contains(PRODUCT_SEARCH_URL_SUFFIX)) {
         // Scan only products and send the result to mobile Product Search.
         source = Source.PRODUCT_SEARCH_LINK;
         sourceUrl = dataString;
-        decodeFormats = PRODUCT_FORMATS;
+        decodeFormats = DecodeFormatManager.PRODUCT_FORMATS;
       } else if (dataString != null && dataString.startsWith(ZXING_URL)) {
         // Scan formats requested in query string (all formats if none specified).
         // If a return URL is specified, send the results there. Otherwise, handle it ourselves.
@@ -253,7 +225,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         sourceUrl = dataString;
         Uri inputUri = Uri.parse(sourceUrl);
         returnUrlTemplate = inputUri.getQueryParameter(RETURN_URL_PARAM);
-        decodeFormats = parseDecodeFormats(inputUri);
+        decodeFormats = DecodeFormatManager.parseDecodeFormats(inputUri);
       } else {
         // Scan all formats and handle the results ourselves (launched from Home).
         source = Source.NONE;
@@ -280,50 +252,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     initBeepSound();
   }
 
-  private static Vector<BarcodeFormat> parseDecodeFormats(Intent intent) {
-    List<String> scanFormats = null;
-    String scanFormatsString = intent.getStringExtra(Intents.Scan.SCAN_FORMATS);
-    if (scanFormatsString != null) {
-      scanFormats = Arrays.asList(COMMA_PATTERN.split(scanFormatsString));
-    }
-    return parseDecodeFormats(scanFormats, intent.getStringExtra(Intents.Scan.MODE));
-  }
-
-  private static Vector<BarcodeFormat> parseDecodeFormats(Uri inputUri) {
-    List<String> formats = inputUri.getQueryParameters(Intents.Scan.SCAN_FORMATS);
-    if (formats != null && formats.size() == 1 && formats.get(0) != null){
-      formats = Arrays.asList(COMMA_PATTERN.split(formats.get(0)));
-    }
-    return parseDecodeFormats(formats, inputUri.getQueryParameter(Intents.Scan.MODE));
-  }
-
-  private static Vector<BarcodeFormat> parseDecodeFormats(List<String> scanFormats,
-                                                          String decodeMode) {
-    if (scanFormats != null) {
-      Vector<BarcodeFormat> formats = new Vector<BarcodeFormat>();
-      try {
-        for (String format : scanFormats) {
-          formats.add(BarcodeFormat.valueOf(format));
-        }
-        return formats;
-      } catch (IllegalArgumentException iae) {
-        // ignore it then
-      }
-    }
-    if (decodeMode != null) {
-      if (Intents.Scan.PRODUCT_MODE.equals(decodeMode)) {
-        return PRODUCT_FORMATS;
-      }
-      if (Intents.Scan.QR_CODE_MODE.equals(decodeMode)) {
-        return QR_CODE_FORMATS;
-      }
-      if (Intents.Scan.ONE_D_MODE.equals(decodeMode)) {
-        return ONE_D_FORMATS;
-      }
-    }
-    return null;
-  }
-
   @Override
   protected void onPause() {
     super.onPause();
@@ -332,6 +260,12 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       handler = null;
     }
     CameraManager.get().closeDriver();
+  }
+
+  @Override
+  protected void onDestroy() {
+    inactivityTimer.shutdown();
+    super.onDestroy();
   }
 
   @Override
@@ -449,6 +383,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
    * @param barcode   A greyscale bitmap of the camera data which was decoded.
    */
   public void handleDecode(Result rawResult, Bitmap barcode) {
+    inactivityTimer.onActivity();
     lastResult = rawResult;
     historyManager.addHistoryItem(rawResult);
     if (barcode == null) {

@@ -59,11 +59,11 @@ final class DecodeThread extends Thread {
       boolean decode1D = prefs.getBoolean(PreferencesActivity.KEY_DECODE_1D, true);
       boolean decodeQR = prefs.getBoolean(PreferencesActivity.KEY_DECODE_QR, true);
       if (decode1D && decodeQR) {
-        hints.put(DecodeHintType.POSSIBLE_FORMATS, CaptureActivity.ALL_FORMATS);
+        hints.put(DecodeHintType.POSSIBLE_FORMATS, DecodeFormatManager.ALL_FORMATS);
       } else if (decode1D) {
-        hints.put(DecodeHintType.POSSIBLE_FORMATS, CaptureActivity.ONE_D_FORMATS);
+        hints.put(DecodeHintType.POSSIBLE_FORMATS, DecodeFormatManager.ONE_D_FORMATS);
       } else if (decodeQR) {
-        hints.put(DecodeHintType.POSSIBLE_FORMATS, CaptureActivity.QR_CODE_FORMATS);
+        hints.put(DecodeHintType.POSSIBLE_FORMATS, DecodeFormatManager.QR_CODE_FORMATS);
       }
     } else {
       hints.put(DecodeHintType.POSSIBLE_FORMATS, decodeFormats);
