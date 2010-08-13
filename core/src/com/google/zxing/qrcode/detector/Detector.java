@@ -160,7 +160,7 @@ public class Detector {
       sourceBottomRightX = sourceBottomRightY = dimMinusThree;
     }
 
-    PerspectiveTransform transform = PerspectiveTransform.quadrilateralToQuadrilateral(
+    return PerspectiveTransform.quadrilateralToQuadrilateral(
         3.5f,
         3.5f,
         dimMinusThree,
@@ -177,8 +177,6 @@ public class Detector {
         bottomRightY,
         bottomLeft.getX(),
         bottomLeft.getY());
-
-    return transform;
   }
 
   private static BitMatrix sampleGrid(BitMatrix image,
