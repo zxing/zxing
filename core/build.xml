@@ -148,6 +148,7 @@
       <assertions>
         <enable/>
       </assertions>
+      <jvmarg value="-Djava.awt.headless=true"/>      
       <batchtest>
         <fileset dir="test/src">
           <include name="**/${subdir}/*BlackBox*TestCase.java"/>
@@ -169,7 +170,7 @@
       <assertions>
         <enable/>
       </assertions>
-      <jvmarg value="-Xint"/> <!-- works around weird JIT bug in Java 6 -->
+      <jvmarg value="-Djava.awt.headless=true"/>
       <batchtest>
         <fileset dir="test/src">
           <include name="**/*TestCase.java"/>
