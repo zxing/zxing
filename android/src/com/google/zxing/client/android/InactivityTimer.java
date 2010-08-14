@@ -29,7 +29,7 @@ import android.app.Activity;
  */
 final class InactivityTimer {
 
-  private static final int INACTIVITY_DELAY_MINUTES = 3;
+  private static final int INACTIVITY_DELAY_SECONDS = 5 * 60;
 
   private final ScheduledExecutorService inactivityTimer =
       Executors.newSingleThreadScheduledExecutor(new DaemonThreadFactory());
@@ -44,8 +44,8 @@ final class InactivityTimer {
   void onActivity() {
     cancel();
     inactivityFuture = inactivityTimer.schedule(new FinishListener(activity),
-                                                INACTIVITY_DELAY_MINUTES,
-                                                TimeUnit.MINUTES);
+                                                INACTIVITY_DELAY_SECONDS,
+                                                TimeUnit.SECONDS);
   }
 
   private void cancel() {
