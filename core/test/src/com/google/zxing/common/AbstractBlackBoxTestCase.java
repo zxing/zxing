@@ -29,6 +29,7 @@ import junit.framework.TestCase;
 
 import javax.imageio.ImageIO;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.awt.image.BufferedImageOp;
@@ -310,9 +311,25 @@ public abstract class AbstractBlackBoxTestCase extends TestCase {
     if (degrees == 0.0f) {
       return original;
     } else {
+      double radians = Math.toRadians(degrees);
+
+      // Transform simply to find out the new bounding box (don't actually run the image through it)
       AffineTransform at = new AffineTransform();
-      at.rotate(Math.toRadians(degrees), original.getWidth() / 2.0, original.getHeight() / 2.0);
+      at.rotate(radians, original.getWidth() / 2.0, original.getHeight() / 2.0);
       BufferedImageOp op = new AffineTransformOp(at, AffineTransformOp.TYPE_BICUBIC);
+
+      Rectangle2D r = op.getBounds2D(original);
+      int width = (int) Math.ceil(r.getWidth());
+      int height = (int) Math.ceil(r.getHeight());
+
+      // Real transform, now that we know the size of the new image and how to translate after we rotate
+      // to keep it centered
+      at = new AffineTransform();
+      at.rotate(radians, width / 2.0, height / 2.0);
+      at.translate(((width - original.getWidth()) / 2.0),
+                   ((height - original.getHeight()) / 2.0));
+      op = new AffineTransformOp(at, AffineTransformOp.TYPE_BICUBIC);
+
       return op.filter(original, null);
     }
   }
