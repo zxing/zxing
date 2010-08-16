@@ -132,11 +132,13 @@ public class FinderPatternFinder {
                     }
                   }
                 } else {
-                  // Advance to next black pixel
-                  do {
-                    j++;
-                  } while (j < maxJ && !image.get(j, i));
-                  j--; // back up to that last white pixel
+                  stateCount[0] = stateCount[2];
+                  stateCount[1] = stateCount[3];
+                  stateCount[2] = stateCount[4];
+                  stateCount[3] = 1;
+                  stateCount[4] = 0;
+                  currentState = 3;
+                  continue;
                 }
                 // Clear state to start looking again
                 currentState = 0;
@@ -502,13 +504,22 @@ public class FinderPatternFinder {
     if (startSize > 3) {
       // But we can only afford to do so if we have at least 4 possibilities to choose from
       float totalModuleSize = 0.0f;
+      float square = 0.0f;
       for (int i = 0; i < startSize; i++) {
-        totalModuleSize += ((FinderPattern) possibleCenters.elementAt(i)).getEstimatedModuleSize();
+        float size = ((FinderPattern) possibleCenters.elementAt(i)).getEstimatedModuleSize();
+        totalModuleSize += size;
+        square += size * size;
       }
       float average = totalModuleSize / (float) startSize;
+      float stdDev = (float) Math.sqrt(square / startSize - average * average);
+
+      Collections.insertionSort(possibleCenters, new FurthestFromAverageComparator(average));
+
+      float limit = Math.max(0.2f * average, stdDev);
+
       for (int i = 0; i < possibleCenters.size() && possibleCenters.size() > 3; i++) {
         FinderPattern pattern = (FinderPattern) possibleCenters.elementAt(i);
-        if (Math.abs(pattern.getEstimatedModuleSize() - average) > 0.2f * average) {
+        if (Math.abs(pattern.getEstimatedModuleSize() - average) > limit) {
           possibleCenters.removeElementAt(i);
           i--;
         }
@@ -517,7 +528,16 @@ public class FinderPatternFinder {
 
     if (possibleCenters.size() > 3) {
       // Throw away all but those first size candidate points we found.
-      Collections.insertionSort(possibleCenters, new CenterComparator());      
+
+      float totalModuleSize = 0.0f;
+      for (int i = 0; i < possibleCenters.size(); i++) {
+        totalModuleSize += ((FinderPattern) possibleCenters.elementAt(i)).getEstimatedModuleSize();
+      }
+
+      float average = totalModuleSize / (float) possibleCenters.size();
+
+      Collections.insertionSort(possibleCenters, new CenterComparator(average));
+
       possibleCenters.setSize(3);
     }
 
@@ -529,11 +549,36 @@ public class FinderPatternFinder {
   }
 
   /**
+   * <p>Orders by furthest from average</p>
+   */
+  private static class FurthestFromAverageComparator implements Comparator {
+    private final float average;
+    public FurthestFromAverageComparator(float f) {
+      average = f;
+    }
+    public int compare(Object center1, Object center2) {
+      float dA = Math.abs(((FinderPattern) center2).getEstimatedModuleSize() - average);
+      float dB = Math.abs(((FinderPattern) center1).getEstimatedModuleSize() - average);
+      return dA < dB ? -1 : (dA == dB ? 0 : 1);
+    }
+  }
+
+  /**
    * <p>Orders by {@link FinderPattern#getCount()}, descending.</p>
    */
   private static class CenterComparator implements Comparator {
+    private final float average;
+    public CenterComparator(float f) {
+      average = f;
+    }
     public int compare(Object center1, Object center2) {
-      return ((FinderPattern) center2).getCount() - ((FinderPattern) center1).getCount();
+      if (((FinderPattern) center2).getCount() != ((FinderPattern) center1).getCount()) {
+        return ((FinderPattern) center2).getCount() - ((FinderPattern) center1).getCount();
+      } else {
+        float dA = Math.abs(((FinderPattern) center2).getEstimatedModuleSize() - average);
+        float dB = Math.abs(((FinderPattern) center1).getEstimatedModuleSize() - average);
+        return dA < dB ? 1 : (dA == dB ? 0 : -1);
+      }
     }
   }
 
