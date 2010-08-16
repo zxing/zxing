@@ -67,6 +67,7 @@
           text = "(Not applicable)";
         } else {
           text = StringEscapeUtils.escapeXml(text);
+          text = text.replaceAll("\r?\n", "&lt;br/&gt;");
         }
 
         byte[] rawBytes = result.getRawBytes();
@@ -82,6 +83,7 @@
           displayResult = "(Not applicable)";
         } else {
           displayResult = StringEscapeUtils.escapeXml(displayResult);
+          displayResult = displayResult.replaceAll("\r?\n", "&lt;br/&gt;");
         }
     </jsp:scriptlet>
     <table>
