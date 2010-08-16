@@ -165,7 +165,7 @@ using namespace zxing;
     Ref<Binarizer> binarizer (new GlobalHistogramBinarizer(source));
     Ref<BinaryBitmap> grayImage (new BinaryBitmap(binarizer));
 #ifdef DEBUG
-    NSLog(@"created GrayBytesMonochromeBitmapSource", subsetWidth, subsetHeight);
+    NSLog(@"created GreyscaleLuminanceSource", subsetWidth, subsetHeight);
     NSLog(@"grayImage count = %d", grayImage->count());
 #endif
     
