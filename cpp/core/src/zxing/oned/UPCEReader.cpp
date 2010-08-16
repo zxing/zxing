@@ -49,12 +49,14 @@ namespace zxing {
 
 			int end = row->getSize();
 			int rowOffset = startRange[1];
-
 			int lgPatternFound = 0;
 
 			for (int x = 0; x < 6 && rowOffset < end; x++) {
 				int bestMatch = decodeDigit(row, counters, countersLen, rowOffset,
 				    UPC_EAN_PATTERNS_L_AND_G_PATTERNS);
+				if (bestMatch < 0) {
+          return -1;
+        }
 				resultString.append(1, (char) ('0' + bestMatch % 10));
 				for (int i = 0; i < countersLen; i++) {
 					rowOffset += counters[i];
@@ -64,8 +66,9 @@ namespace zxing {
 				}
 			}
 
-			determineNumSysAndCheckDigit(resultString, lgPatternFound);
-
+			if (!determineNumSysAndCheckDigit(resultString, lgPatternFound)) {
+        return -1;
+      }
 			return rowOffset;
 		}
 
@@ -79,17 +82,17 @@ namespace zxing {
 		}
 
 
-		void UPCEReader::determineNumSysAndCheckDigit(std::string& resultString, int lgPatternFound) {
+		bool UPCEReader::determineNumSysAndCheckDigit(std::string& resultString, int lgPatternFound) {
 			for (int numSys = 0; numSys <= 1; numSys++) {
 				for (int d = 0; d < 10; d++) {
 					if (lgPatternFound == NUMSYS_AND_CHECK_DIGIT_PATTERNS[numSys][d]) {
 						resultString.insert(0, 1, (char) ('0' + numSys));
 						resultString.append(1, (char) ('0' + d));
-						return;
+						return true;
 					}
 				}
 			}
-			throw ReaderException("determineNumSysAndCheckDigit exception");
+			return false;
 		}
 
 		/**

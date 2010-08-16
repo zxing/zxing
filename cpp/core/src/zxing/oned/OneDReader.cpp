@@ -31,13 +31,12 @@ namespace zxing {
 		}
 
 		Ref<Result> OneDReader::decode(Ref<BinaryBitmap> image, DecodeHints hints) {
-		  try {
-				return doDecode(image, hints);
-			} catch (ReaderException re) {
-				if (hints.getTryHarder() && image->isRotateSupported()) {
-					Ref<BinaryBitmap> rotatedImage(image->rotateCounterClockwise());
-					Ref<Result> result(doDecode(rotatedImage, hints));
-					/*
+		  Ref<Result> result = doDecode(image, hints);
+		  if (result.empty() && hints.getTryHarder() && image->isRotateSupported()) {
+		    Ref<BinaryBitmap> rotatedImage(image->rotateCounterClockwise());
+				result = doDecode(rotatedImage, hints);
+				if (!result.empty()) {
+				  /*
 					// Record that we found it rotated 90 degrees CCW / 270 degrees CW
 					Hashtable metadata = result.getResultMetadata();
 					int orientation = 270;
@@ -54,11 +53,12 @@ namespace zxing {
 					for (size_t i = 0; i < points.size(); i++) {
 						points[i].reset(new OneDResultPoint(height - points[i]->getY() - 1, points[i]->getX()));
 					}
-					return result;
-				} else {
-					throw re;
 				}
-			}
+		  }
+		  if (result.empty()) {
+		    throw ReaderException("");
+		  }
+		  return result;
 		}
 
 		Ref<Result> OneDReader::doDecode(Ref<BinaryBitmap> image, DecodeHints hints) {
@@ -127,7 +127,7 @@ namespace zxing {
           }
 				}
 			}
-			throw ReaderException("doDecode() failed");
+			return Ref<Result>();
 		}
 
 		unsigned int OneDReader::patternMatchVariance(int counters[], int countersSize,

@@ -36,21 +36,26 @@ namespace zxing {
       for (int x = 0; x < 4 && rowOffset < end; x++) {
         int bestMatch = decodeDigit(row, counters, countersLen, rowOffset,
             UPC_EAN_PATTERNS_L_PATTERNS);
+        if (bestMatch < 0) {
+          return -1;
+        }
         resultString.append(1, (char) ('0' + bestMatch));
         for (int i = 0; i < countersLen; i++) {
           rowOffset += counters[i];
         }
       }
 
-      int* middleRange = 0;
-      try {
-        middleRange = findGuardPattern(row, rowOffset, true, (int*)getMIDDLE_PATTERN(),
+      int* middleRange = findGuardPattern(row, rowOffset, true, (int*)getMIDDLE_PATTERN(),
             getMIDDLE_PATTERN_LEN());
+      if (middleRange != NULL) {
         rowOffset = middleRange[1];
-
         for (int x = 0; x < 4 && rowOffset < end; x++) {
           int bestMatch = decodeDigit(row, counters, countersLen, rowOffset,
               UPC_EAN_PATTERNS_L_PATTERNS);
+          if (bestMatch < 0) {
+            delete [] middleRange;
+            return -1;
+          }
           resultString.append(1, (char) ('0' + bestMatch));
           for (int i = 0; i < countersLen; i++) {
             rowOffset += counters[i];
@@ -59,10 +64,8 @@ namespace zxing {
 
         delete [] middleRange;
         return rowOffset;
-      } catch (ReaderException const& re) {
-        delete [] middleRange;
-        throw re;
       }
+      return -1;
     }
 
     BarcodeFormat EAN8Reader::getBarcodeFormat(){

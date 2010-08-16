@@ -30,7 +30,7 @@ namespace zxing {
     EAN13Reader::EAN13Reader() { }
 
     int EAN13Reader::decodeMiddle(Ref<BitArray> row, int startRange[], int startRangeLen,
-        std::string& resultString){
+        std::string& resultString) {
       const int countersLen = 4;
       int counters[countersLen] = { 0, 0, 0, 0 };
 
@@ -41,6 +41,9 @@ namespace zxing {
       for (int x = 0; x < 6 && rowOffset < end; x++) {
         int bestMatch = decodeDigit(row, counters, countersLen, rowOffset,
             UPC_EAN_PATTERNS_L_AND_G_PATTERNS);
+        if (bestMatch < 0) {
+          return -1;
+        }
         resultString.append(1, (char) ('0' + bestMatch % 10));
         for (int i = 0; i < countersLen; i++) {
           rowOffset += counters[i];
@@ -50,39 +53,41 @@ namespace zxing {
         }
       }
 
-      determineFirstDigit(resultString, lgPatternFound);
+      if (!determineFirstDigit(resultString, lgPatternFound)) {
+        return -1;
+      }
 
-      int* middleRange = 0;
-      try {
-        middleRange = findGuardPattern(row, rowOffset, true, (int*)getMIDDLE_PATTERN(),
+      int* middleRange = findGuardPattern(row, rowOffset, true, (int*)getMIDDLE_PATTERN(),
             getMIDDLE_PATTERN_LEN());
+      if (middleRange != NULL) {
         rowOffset = middleRange[1];
-
         for (int x = 0; x < 6 && rowOffset < end; x++) {
           int bestMatch = decodeDigit(row, counters, countersLen, rowOffset,
               UPC_EAN_PATTERNS_L_PATTERNS);
+          if (bestMatch < 0) {
+            delete [] middleRange;
+            return -1;
+          }
           resultString.append(1, (char) ('0' + bestMatch));
           for (int i = 0; i < countersLen; i++) {
-              rowOffset += counters[i];
+            rowOffset += counters[i];
           }
         }
 
         delete [] middleRange;
         return rowOffset;
-      } catch (ReaderException const& re) {
-          delete [] middleRange;
-          throw re;
       }
+      return -1;
     }
 
-    void EAN13Reader::determineFirstDigit(std::string& resultString, int lgPatternFound) {
+    bool EAN13Reader::determineFirstDigit(std::string& resultString, int lgPatternFound) {
       for (int d = 0; d < 10; d++) {
         if (lgPatternFound == FIRST_DIGIT_ENCODINGS[d]) {
           resultString.insert(0, 1, (char) ('0' + d));
-          return;
+          return true;
         }
       }
-      throw ReaderException("determineFirstDigit");
+      return false;
     }
 
     BarcodeFormat EAN13Reader::getBarcodeFormat(){
