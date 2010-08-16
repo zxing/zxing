@@ -48,14 +48,16 @@ unsigned char* GreyscaleLuminanceSource::getRow(int y, unsigned char* row) {
 }
 
 unsigned char* GreyscaleLuminanceSource::getMatrix() {
-  if (left_ != 0 || top_ != 0 || dataWidth_ != width_ || dataHeight_ != height_) {
-    unsigned char* cropped = new unsigned char[width_ * height_];
+  int size = width_ * height_;
+  unsigned char* result = new unsigned char[size];
+  if (left_ == 0 && top_ == 0 && dataWidth_ == width_ && dataHeight_ == height_) {
+    memcpy(result, greyData_, size);
+  } else {
     for (int row = 0; row < height_; row++) {
-      memcpy(cropped + row * width_, greyData_ + (top_ + row) * dataWidth_ + left_, width_);
+      memcpy(result + row * width_, greyData_ + (top_ + row) * dataWidth_ + left_, width_);
     }
-    return cropped;
   }
-  return greyData_;
+  return result;
 }
 
 Ref<LuminanceSource> GreyscaleLuminanceSource::rotateCounterClockwise() {
