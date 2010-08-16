@@ -95,86 +95,85 @@ namespace zxing {
 
 
     Ref<Result> UPCEANReader::decodeRow(int rowNumber, Ref<BitArray> row) {
-			int* start = NULL;
-			try {
-				start = findStartGuardPattern(row);
-				Ref<Result> result = decodeRow(rowNumber, row, start);
-				delete [] start;
-				return result;
-			} catch (ReaderException const& re) {
-				delete [] start;
-				return Ref<Result>();
+			int* start = findStartGuardPattern(row);
+			if (start != NULL) {
+        try {
+          Ref<Result> result = decodeRow(rowNumber, row, start);
+          delete [] start;
+          return result;
+        } catch (ReaderException const& re) {
+          delete [] start;
+        }
 			}
+			return Ref<Result>();
     }
 
     Ref<Result> UPCEANReader::decodeRow(int rowNumber, Ref<BitArray> row, int startGuardRange[]) {
-      int* endRange = NULL;
-      try {
-				std::string tmpResultString;
-        std::string& tmpResultStringRef = tmpResultString;
-        int endStart = decodeMiddle(row, startGuardRange, 2 /*reference findGuardPattern*/ ,
-            tmpResultStringRef);
-        endRange = decodeEnd(row, endStart);
+      std::string tmpResultString;
+      std::string& tmpResultStringRef = tmpResultString;
+      int endStart = decodeMiddle(row, startGuardRange, 2 /*reference findGuardPattern*/ ,
+          tmpResultStringRef);
+      if (endStart < 0) {
+        return Ref<Result>();
+      }
+      int* endRange = decodeEnd(row, endStart);
+      if (endRange == NULL) {
+        return Ref<Result>();
+      }
 
-        // Make sure there is a quiet zone at least as big as the end pattern after the barcode.
-        // The spec might want more whitespace, but in practice this is the maximum we can count on.
-        size_t end = endRange[1];
-        size_t quietEnd = end + (end - endRange[0]);
-        if (quietEnd >= row->getSize() || !row->isRange(end, quietEnd, false)) {
-          throw ReaderException("Quiet zone asserrt fail.");
-        }
-
-        if (!checkChecksum(tmpResultString)) {
-          throw ReaderException("Checksum fail.");
-        }
-
-        Ref<String> resultString(new String(tmpResultString));
-
-        float left = (float) (startGuardRange[1] + startGuardRange[0]) / 2.0f;
-        float right = (float) (endRange[1] + endRange[0]) / 2.0f;
-
-        std::vector< Ref<ResultPoint> > resultPoints(2);
-        Ref<OneDResultPoint> resultPoint1(new OneDResultPoint(left, (float) rowNumber));
-        Ref<OneDResultPoint> resultPoint2(new OneDResultPoint(right, (float) rowNumber));
-        resultPoints[0] = resultPoint1;
-        resultPoints[1] = resultPoint2;
-
-        ArrayRef<unsigned char> resultBytes(1);
-
-        Ref<Result> res(new Result(resultString, resultBytes, resultPoints, getBarcodeFormat()));
+      // Make sure there is a quiet zone at least as big as the end pattern after the barcode.
+      // The spec might want more whitespace, but in practice this is the maximum we can count on.
+      size_t end = endRange[1];
+      size_t quietEnd = end + (end - endRange[0]);
+      if (quietEnd >= row->getSize() || !row->isRange(end, quietEnd, false)) {
         delete [] endRange;
-        return res;
-      } catch (ReaderException const& re) {
+        return Ref<Result>();
+      }
+
+      if (!checkChecksum(tmpResultString)) {
         delete [] endRange;
-				throw re;
-			}
+        return Ref<Result>();
+      }
+
+      Ref<String> resultString(new String(tmpResultString));
+
+      float left = (float) (startGuardRange[1] + startGuardRange[0]) / 2.0f;
+      float right = (float) (endRange[1] + endRange[0]) / 2.0f;
+
+      std::vector< Ref<ResultPoint> > resultPoints(2);
+      Ref<OneDResultPoint> resultPoint1(new OneDResultPoint(left, (float) rowNumber));
+      Ref<OneDResultPoint> resultPoint2(new OneDResultPoint(right, (float) rowNumber));
+      resultPoints[0] = resultPoint1;
+      resultPoints[1] = resultPoint2;
+
+      ArrayRef<unsigned char> resultBytes(1);
+      Ref<Result> res(new Result(resultString, resultBytes, resultPoints, getBarcodeFormat()));
+      delete [] endRange;
+      return res;
     }
 
     int* UPCEANReader::findStartGuardPattern(Ref<BitArray> row) {
       bool foundStart = false;
       int* startRange = NULL;
       int nextStart = 0;
-      try {
-        while (!foundStart) {
-          delete [] startRange;
-          startRange = NULL;
-          startRange = findGuardPattern(row, nextStart, false, START_END_PATTERN,
-              sizeof(START_END_PATTERN) / sizeof(int));
-          int start = startRange[0];
-          nextStart = startRange[1];
-          // Make sure there is a quiet zone at least as big as the start pattern before the barcode.
-          // If this check would run off the left edge of the image, do not accept this barcode,
-          // as it is very likely to be a false positive.
-          int quietStart = start - (nextStart - start);
-          if (quietStart >= 0) {
-            foundStart = row->isRange(quietStart, start, false);
-          }
-        }
-        return startRange;
-      } catch (ReaderException const& re) {
+      while (!foundStart) {
         delete [] startRange;
-        throw re;
+        startRange = findGuardPattern(row, nextStart, false, START_END_PATTERN,
+            sizeof(START_END_PATTERN) / sizeof(int));
+        if (startRange == NULL) {
+          return NULL;
+        }
+        int start = startRange[0];
+        nextStart = startRange[1];
+        // Make sure there is a quiet zone at least as big as the start pattern before the barcode.
+        // If this check would run off the left edge of the image, do not accept this barcode,
+        // as it is very likely to be a false positive.
+        int quietStart = start - (nextStart - start);
+        if (quietStart >= 0) {
+          foundStart = row->isRange(quietStart, start, false);
+        }
       }
+      return startRange;
     }
 
     // TODO(flyashi): Return a pair<int, int> for return value to avoid using the heap.
@@ -225,7 +224,7 @@ namespace zxing {
           isWhite = !isWhite;
         }
       }
-      throw ReaderException("findGuardPattern");
+      return NULL;
     }
 
     int* UPCEANReader::decodeEnd(Ref<BitArray> row, int endStart) {
@@ -236,7 +235,7 @@ namespace zxing {
     int UPCEANReader::decodeDigit(Ref<BitArray> row, int counters[], int countersLen, int rowOffset,
         UPC_EAN_PATTERNS patternType) {
       if (!recordPattern(row, rowOffset, counters, countersLen)) {
-        throw ReaderException("");
+        return -1;
       }
       unsigned int bestVariance = MAX_AVG_VARIANCE; // worst variance we'll accept
       int bestMatch = -1;
@@ -278,13 +277,8 @@ namespace zxing {
         default:
           break;
       }
-      if (bestMatch >= 0) {
-        return bestMatch;
-      } else {
-        throw ReaderException("UPCEANReader::decodeDigit: No best mach");
-      }
+      return bestMatch;
     }
-
 
     /**
      * @return {@link #checkStandardUPCEANChecksum(String)}
@@ -299,7 +293,6 @@ namespace zxing {
      *
      * @param s string of digits to check
      * @return true iff string of digits passes the UPC/EAN checksum algorithm
-     * @throws ReaderException if the string does not contain only digits
      */
     bool UPCEANReader::checkStandardUPCEANChecksum(std::string s) {
       int length = s.length();
@@ -311,7 +304,7 @@ namespace zxing {
       for (int i = length - 2; i >= 0; i -= 2) {
         int digit = (int) s[i] - (int) '0';
         if (digit < 0 || digit > 9) {
-          throw ReaderException("checkStandardUPCEANChecksum");
+          return false;
         }
         sum += digit;
       }
@@ -319,7 +312,7 @@ namespace zxing {
       for (int i = length - 1; i >= 0; i -= 2) {
         int digit = (int) s[i] - (int) '0';
         if (digit < 0 || digit > 9) {
-          throw ReaderException("checkStandardUPCEANChecksum");
+          return false;
         }
         sum += digit;
       }

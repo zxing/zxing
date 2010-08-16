@@ -26,15 +26,16 @@
 namespace zxing {
 	namespace oned {
 		class EAN13Reader : public UPCEANReader {
-			
+
 		private:
-			static void determineFirstDigit(std::string& resultString, int lgPatternFound);								//throws ReaderException
-			
+			static bool determineFirstDigit(std::string& resultString, int lgPatternFound);
+
 		public:
 			EAN13Reader();
-			
-			int decodeMiddle(Ref<BitArray> row, int startRange[], int startRangeLen, std::string& resultString);			//throws ReaderException
-			
+
+			int decodeMiddle(Ref<BitArray> row, int startRange[], int startRangeLen,
+			    std::string& resultString);
+
 			BarcodeFormat getBarcodeFormat();
 		};
 	}

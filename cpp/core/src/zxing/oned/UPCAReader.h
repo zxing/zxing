@@ -25,20 +25,21 @@
 namespace zxing {
 	namespace oned {
 		class UPCAReader : public UPCEANReader {
-			
+
 		private:
 			EAN13Reader ean13Reader;
-			static Ref<Result> maybeReturnResult(Ref<Result> result);														//throws ReaderException
-			
+			static Ref<Result> maybeReturnResult(Ref<Result> result);
+
 		public:
 			UPCAReader();
-			
-			int decodeMiddle(Ref<BitArray> row, int startRange[], int startRangeLen, std::string& resultString);			//throws ReaderException
-			
-			Ref<Result> decodeRow(int rowNumber, Ref<BitArray> row);														//throws ReaderException
-			Ref<Result> decodeRow(int rowNumber, Ref<BitArray> row, int startGuardRange[]);									//throws ReaderException
+
+			int decodeMiddle(Ref<BitArray> row, int startRange[], int startRangeLen,
+			    std::string& resultString);
+
+			Ref<Result> decodeRow(int rowNumber, Ref<BitArray> row);
+			Ref<Result> decodeRow(int rowNumber, Ref<BitArray> row, int startGuardRange[]);
 			Ref<Result> decode(Ref<BinaryBitmap> image, DecodeHints hints);
-			
+
 			BarcodeFormat getBarcodeFormat();
 		};
 	}

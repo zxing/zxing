@@ -26,19 +26,19 @@
 namespace zxing {
 	namespace oned {
 		class UPCEReader : public UPCEANReader {
-			
+
 		private:
-			static void determineFirstDigit(std::string& resultString, int lgPatternFound);								//throws ReaderException
-			static void determineNumSysAndCheckDigit(std::string& resultString, int lgPatternFound);						//throws ReaderException
+			static bool determineNumSysAndCheckDigit(std::string& resultString, int lgPatternFound);
 		protected:
-			int* decodeEnd(Ref<BitArray> row, int endStart);															//throws ReaderException
-			bool checkChecksum(std::string s);																			//throws ReaderException 
+			int* decodeEnd(Ref<BitArray> row, int endStart);
+			bool checkChecksum(std::string s);
 		public:
 			UPCEReader();
-			
-			int decodeMiddle(Ref<BitArray> row, int startRange[], int startRangeLen, std::string& resultString);		//throws ReaderException
+
+			int decodeMiddle(Ref<BitArray> row, int startRange[], int startRangeLen,
+			    std::string& resultString);
 			static std::string convertUPCEtoUPCA(std::string upce);
-			
+
 			BarcodeFormat getBarcodeFormat();
 		};
 	}
