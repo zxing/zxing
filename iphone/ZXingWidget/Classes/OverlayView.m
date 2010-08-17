@@ -28,11 +28,21 @@ static const CGFloat kPadding = 10;
 @synthesize delegate, oneDMode;
 @synthesize points = _points;
 @synthesize cancelButton;
+@synthesize cropRect;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 - (id) initWithFrame:(CGRect)theFrame cancelEnabled:(BOOL)isCancelEnabled oneDMode:(BOOL)isOneDModeEnabled {
-	if( self = [super initWithFrame:theFrame] ) {
-		self.backgroundColor = [UIColor clearColor];
+  if( self = [super initWithFrame:theFrame] ) {
+
+    CGFloat rectSize = self.frame.size.width - kPadding * 2;
+    if (!oneDMode) {
+      cropRect = CGRectMake(kPadding, (self.frame.size.height - rectSize) / 2, rectSize, rectSize);
+    } else {
+      CGFloat rectSize2 = self.frame.size.height - kPadding * 2;
+      cropRect = CGRectMake(kPadding, kPadding, rectSize, rectSize2);		
+    }
+
+    self.backgroundColor = [UIColor clearColor];
     self.oneDMode = isOneDModeEnabled;
     if (isCancelEnabled) {
       UIButton *butt = [UIButton buttonWithType:UIButtonTypeRoundedRect]; 
@@ -51,7 +61,7 @@ static const CGFloat kPadding = 10;
       [self addSubview:imageView];
     }
   }
-	return self;
+  return self;
 }
 
 - (void)cancel:(id)sender {
@@ -64,9 +74,7 @@ static const CGFloat kPadding = 10;
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 - (void) dealloc {
 	[imageView release];
-	imageView = nil;
 	[_points release];
-	_points = nil;
 	[super dealloc];
 }
 
@@ -81,14 +89,41 @@ static const CGFloat kPadding = 10;
 	CGContextStrokePath(context);
 }
 
+- (CGPoint)map:(CGPoint)point {
+    CGPoint center;
+    center.x = cropRect.size.width/2;
+    center.y = cropRect.size.height/2;
+    float x = point.x - center.x;
+    float y = point.y - center.y;
+    int rotation = 90;
+    switch(rotation) {
+    case 0:
+        point.x = x;
+        point.y = y;
+        break;
+    case 90:
+        point.x = -y;
+        point.y = x;
+        break;
+    case 180:
+        point.x = -x;
+        point.y = -y;
+        break;
+    case 270:
+        point.x = y;
+        point.y = -x;
+        break;
+    }
+    point.x = point.x + center.x;
+    point.y = point.y + center.y;
+    return point;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)drawRect:(CGRect)rect {
 	[super drawRect:rect];
 	CGContextRef c = UIGraphicsGetCurrentContext();
   
-	CGRect cropRect = [self cropRect];
-	
 	if (nil != _points) {
     //		[imageView.image drawAtPoint:cropRect.origin];
 	}
@@ -135,8 +170,8 @@ static const CGFloat kPadding = 10;
 		CGContextSetStrokeColor(c, blue);
 		CGContextSetFillColor(c, blue);
 		if (oneDMode) {
-			CGPoint val1 = [[_points objectAtIndex:0] CGPointValue];
-			CGPoint val2 = [[_points objectAtIndex:1] CGPointValue];
+			CGPoint val1 = [self map:[[_points objectAtIndex:0] CGPointValue]];
+			CGPoint val2 = [self map:[[_points objectAtIndex:1] CGPointValue]];
 			CGContextMoveToPoint(c, offset, val1.x);
 			CGContextAddLineToPoint(c, offset, val2.x);
 			CGContextStrokePath(c);
@@ -144,7 +179,7 @@ static const CGFloat kPadding = 10;
 		else {
 			CGRect smallSquare = CGRectMake(0, 0, 10, 10);
 			for( NSValue* value in _points ) {
-				CGPoint point = [value CGPointValue];
+				CGPoint point = [self map:[value CGPointValue]];
 				smallSquare.origin = CGPointMake(
                                          cropRect.origin.x + point.x - smallSquare.size.width / 2,
                                          cropRect.origin.y + point.y - smallSquare.size.height / 2);
@@ -185,36 +220,26 @@ static const CGFloat kPadding = 10;
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-- (CGRect) cropRect {
-	CGFloat rectSize = self.frame.size.width - kPadding * 2;
-	if (!oneDMode) {
-		return CGRectMake(kPadding, (self.frame.size.height - rectSize) / 2, rectSize, rectSize);
-	}
-	else {
-		CGFloat rectSize2 = self.frame.size.height - kPadding * 2;
-		return CGRectMake(kPadding, kPadding, rectSize, rectSize2);		
-	}
+- (void) setPoints:(NSMutableArray*)pnts {
+    [pnts retain];
+    [_points release];
+    _points = pnts;
+	
+    if (pnts != nil) {
+        self.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.25];
+    }
+    [self setNeedsDisplay];
 }
 
-/*
-- (void)viewDidLoad {
-  self.imageView = [[UIImageView alloc] init];
-  self.imageView.frame = CGRectMake(0, 0, 100, 100);
-  [self addSubview:self.imageView];
-	
-}
-*/
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void) setPoints:(NSArray*)pnts {
-	[pnts retain];
-	[_points release];
-	_points = pnts;
-	
-	if (pnts != nil) {
-		self.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.25];
-	}
-	[self setNeedsDisplay];
+- (void) setPoint:(CGPoint)point {
+    if (!_points) {
+        _points = [[NSMutableArray alloc] init];
+    }
+    if (_points.count > 3) {
+        [_points removeObjectAtIndex:0];
+    }
+    [_points addObject:[NSValue valueWithCGPoint:point]];
+    [self setNeedsDisplay];
 }
 
 

@@ -85,13 +85,16 @@
 		1F3DB0FE11C61080009C581B /* MultiFormatOneDReader.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1F3DB0F811C61080009C581B /* MultiFormatOneDReader.mm */; };
 		1F3DB0FF11C61080009C581B /* MultiFormatUPCEANReader.h in Headers */ = {isa = PBXBuildFile; fileRef = 1F3DB0F911C61080009C581B /* MultiFormatUPCEANReader.h */; };
 		1F3DB10011C61080009C581B /* MultiFormatUPCEANReader.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1F3DB0FA11C61080009C581B /* MultiFormatUPCEANReader.mm */; };
-		1F56ECA612094AB400DFA8DD /* GreyscaleLuminanceSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F56ECA212094AB400DFA8DD /* GreyscaleLuminanceSource.cpp */; };
-		1F56ECA712094AB400DFA8DD /* GreyscaleLuminanceSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 1F56ECA312094AB400DFA8DD /* GreyscaleLuminanceSource.h */; };
-		1F56ECA812094AB400DFA8DD /* GreyscaleRotatedLuminanceSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F56ECA412094AB400DFA8DD /* GreyscaleRotatedLuminanceSource.cpp */; };
-		1F56ECA912094AB400DFA8DD /* GreyscaleRotatedLuminanceSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 1F56ECA512094AB400DFA8DD /* GreyscaleRotatedLuminanceSource.h */; };
-		1F56ED0012094D6400DFA8DD /* DecodeHints.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F56ECFF12094D6400DFA8DD /* DecodeHints.cpp */; };
-		1FCC1295120FBD12002C7978 /* HybridBinarizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FCC1293120FBD12002C7978 /* HybridBinarizer.cpp */; };
-		1FCC1296120FBD12002C7978 /* HybridBinarizer.h in Headers */ = {isa = PBXBuildFile; fileRef = 1FCC1294120FBD12002C7978 /* HybridBinarizer.h */; };
+		3B72D96F12130EF6007CEF32 /* ResultPointCallback.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B72D96D12130EF6007CEF32 /* ResultPointCallback.cpp */; };
+		3B72D97012130EF6007CEF32 /* ResultPointCallback.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B72D96E12130EF6007CEF32 /* ResultPointCallback.h */; };
+		3B81AAC5120F07E40022E5D4 /* DecodeHints.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B81AAC3120F07E40022E5D4 /* DecodeHints.cpp */; };
+		3B81AAC6120F07E40022E5D4 /* DecodeHints.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B81AAC4120F07E40022E5D4 /* DecodeHints.h */; };
+		3B81AAC9120F080D0022E5D4 /* GreyscaleLuminanceSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B81AAC7120F080D0022E5D4 /* GreyscaleLuminanceSource.cpp */; };
+		3B81AACA120F080D0022E5D4 /* GreyscaleLuminanceSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B81AAC8120F080D0022E5D4 /* GreyscaleLuminanceSource.h */; };
+		3B81AACD120F08170022E5D4 /* HybridBinarizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B81AACB120F08170022E5D4 /* HybridBinarizer.cpp */; };
+		3B81AACE120F08170022E5D4 /* HybridBinarizer.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B81AACC120F08170022E5D4 /* HybridBinarizer.h */; };
+		3B81AAF8120F0A7E0022E5D4 /* GreyscaleRotatedLuminanceSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B81AAF6120F0A7E0022E5D4 /* GreyscaleRotatedLuminanceSource.cpp */; };
+		3B81AAF9120F0A7E0022E5D4 /* GreyscaleRotatedLuminanceSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B81AAF7120F0A7E0022E5D4 /* GreyscaleRotatedLuminanceSource.h */; };
 		AA747D9F0F9514B9006C5449 /* ZXingWidget_Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = AA747D9E0F9514B9006C5449 /* ZXingWidget_Prefix.pch */; };
 		AACBBE4A0F95108600F1A2B1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AACBBE490F95108600F1A2B1 /* Foundation.framework */; };
 		E534594311987396000CB77F /* BarcodeFormat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E53458B511987396000CB77F /* BarcodeFormat.cpp */; };
@@ -309,13 +312,16 @@
 		1F3DB0F811C61080009C581B /* MultiFormatOneDReader.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MultiFormatOneDReader.mm; path = Classes/MultiFormatOneDReader.mm; sourceTree = "<group>"; };
 		1F3DB0F911C61080009C581B /* MultiFormatUPCEANReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MultiFormatUPCEANReader.h; path = Classes/MultiFormatUPCEANReader.h; sourceTree = "<group>"; };
 		1F3DB0FA11C61080009C581B /* MultiFormatUPCEANReader.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MultiFormatUPCEANReader.mm; path = Classes/MultiFormatUPCEANReader.mm; sourceTree = "<group>"; };
-		1F56ECA212094AB400DFA8DD /* GreyscaleLuminanceSource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GreyscaleLuminanceSource.cpp; sourceTree = "<group>"; };
-		1F56ECA312094AB400DFA8DD /* GreyscaleLuminanceSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GreyscaleLuminanceSource.h; sourceTree = "<group>"; };
-		1F56ECA412094AB400DFA8DD /* GreyscaleRotatedLuminanceSource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GreyscaleRotatedLuminanceSource.cpp; sourceTree = "<group>"; };
-		1F56ECA512094AB400DFA8DD /* GreyscaleRotatedLuminanceSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GreyscaleRotatedLuminanceSource.h; sourceTree = "<group>"; };
-		1F56ECFF12094D6400DFA8DD /* DecodeHints.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DecodeHints.cpp; sourceTree = "<group>"; };
-		1FCC1293120FBD12002C7978 /* HybridBinarizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HybridBinarizer.cpp; sourceTree = "<group>"; };
-		1FCC1294120FBD12002C7978 /* HybridBinarizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HybridBinarizer.h; sourceTree = "<group>"; };
+		3B72D96D12130EF6007CEF32 /* ResultPointCallback.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ResultPointCallback.cpp; sourceTree = "<group>"; };
+		3B72D96E12130EF6007CEF32 /* ResultPointCallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ResultPointCallback.h; sourceTree = "<group>"; };
+		3B81AAC3120F07E40022E5D4 /* DecodeHints.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DecodeHints.cpp; sourceTree = "<group>"; };
+		3B81AAC4120F07E40022E5D4 /* DecodeHints.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DecodeHints.h; sourceTree = "<group>"; };
+		3B81AAC7120F080D0022E5D4 /* GreyscaleLuminanceSource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GreyscaleLuminanceSource.cpp; sourceTree = "<group>"; };
+		3B81AAC8120F080D0022E5D4 /* GreyscaleLuminanceSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GreyscaleLuminanceSource.h; sourceTree = "<group>"; };
+		3B81AACB120F08170022E5D4 /* HybridBinarizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HybridBinarizer.cpp; sourceTree = "<group>"; };
+		3B81AACC120F08170022E5D4 /* HybridBinarizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HybridBinarizer.h; sourceTree = "<group>"; };
+		3B81AAF6120F0A7E0022E5D4 /* GreyscaleRotatedLuminanceSource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GreyscaleRotatedLuminanceSource.cpp; sourceTree = "<group>"; };
+		3B81AAF7120F0A7E0022E5D4 /* GreyscaleRotatedLuminanceSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GreyscaleRotatedLuminanceSource.h; sourceTree = "<group>"; };
 		AA747D9E0F9514B9006C5449 /* ZXingWidget_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXingWidget_Prefix.pch; sourceTree = SOURCE_ROOT; };
 		AACBBE490F95108600F1A2B1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D2AAC07E0554694100DB518D /* libZXingWidget.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libZXingWidget.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -554,7 +560,10 @@
 		E53458B411987396000CB77F /* zxing */ = {
 			isa = PBXGroup;
 			children = (
-				1F56ECFF12094D6400DFA8DD /* DecodeHints.cpp */,
+				3B72D96D12130EF6007CEF32 /* ResultPointCallback.cpp */,
+				3B72D96E12130EF6007CEF32 /* ResultPointCallback.h */,
+				3B81AAC3120F07E40022E5D4 /* DecodeHints.cpp */,
+				3B81AAC4120F07E40022E5D4 /* DecodeHints.h */,
 				E53458B511987396000CB77F /* BarcodeFormat.cpp */,
 				E53458B611987396000CB77F /* BarcodeFormat.h */,
 				E53458B711987396000CB77F /* Binarizer.cpp */,
@@ -586,12 +595,12 @@
 		E53458BB11987396000CB77F /* common */ = {
 			isa = PBXGroup;
 			children = (
-				1FCC1293120FBD12002C7978 /* HybridBinarizer.cpp */,
-				1FCC1294120FBD12002C7978 /* HybridBinarizer.h */,
-				1F56ECA212094AB400DFA8DD /* GreyscaleLuminanceSource.cpp */,
-				1F56ECA312094AB400DFA8DD /* GreyscaleLuminanceSource.h */,
-				1F56ECA412094AB400DFA8DD /* GreyscaleRotatedLuminanceSource.cpp */,
-				1F56ECA512094AB400DFA8DD /* GreyscaleRotatedLuminanceSource.h */,
+				3B81AAF6120F0A7E0022E5D4 /* GreyscaleRotatedLuminanceSource.cpp */,
+				3B81AAF7120F0A7E0022E5D4 /* GreyscaleRotatedLuminanceSource.h */,
+				3B81AACB120F08170022E5D4 /* HybridBinarizer.cpp */,
+				3B81AACC120F08170022E5D4 /* HybridBinarizer.h */,
+				3B81AAC7120F080D0022E5D4 /* GreyscaleLuminanceSource.cpp */,
+				3B81AAC8120F080D0022E5D4 /* GreyscaleLuminanceSource.h */,
 				E53458BC11987396000CB77F /* Array.cpp */,
 				E53458BD11987396000CB77F /* Array.h */,
 				E53458BE11987396000CB77F /* BitArray.cpp */,
@@ -965,9 +974,11 @@
 				1F3DB0FB11C61080009C581B /* DataMatrixReader.h in Headers */,
 				1F3DB0FD11C61080009C581B /* MultiFormatOneDReader.h in Headers */,
 				1F3DB0FF11C61080009C581B /* MultiFormatUPCEANReader.h in Headers */,
-				1F56ECA712094AB400DFA8DD /* GreyscaleLuminanceSource.h in Headers */,
-				1F56ECA912094AB400DFA8DD /* GreyscaleRotatedLuminanceSource.h in Headers */,
-				1FCC1296120FBD12002C7978 /* HybridBinarizer.h in Headers */,
+				3B81AAC6120F07E40022E5D4 /* DecodeHints.h in Headers */,
+				3B81AACA120F080D0022E5D4 /* GreyscaleLuminanceSource.h in Headers */,
+				3B81AACE120F08170022E5D4 /* HybridBinarizer.h in Headers */,
+				3B81AAF9120F0A7E0022E5D4 /* GreyscaleRotatedLuminanceSource.h in Headers */,
+				3B72D97012130EF6007CEF32 /* ResultPointCallback.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1118,10 +1129,11 @@
 				1F3DB0FC11C61080009C581B /* DataMatrixReader.mm in Sources */,
 				1F3DB0FE11C61080009C581B /* MultiFormatOneDReader.mm in Sources */,
 				1F3DB10011C61080009C581B /* MultiFormatUPCEANReader.mm in Sources */,
-				1F56ECA612094AB400DFA8DD /* GreyscaleLuminanceSource.cpp in Sources */,
-				1F56ECA812094AB400DFA8DD /* GreyscaleRotatedLuminanceSource.cpp in Sources */,
-				1F56ED0012094D6400DFA8DD /* DecodeHints.cpp in Sources */,
-				1FCC1295120FBD12002C7978 /* HybridBinarizer.cpp in Sources */,
+				3B81AAC5120F07E40022E5D4 /* DecodeHints.cpp in Sources */,
+				3B81AAC9120F080D0022E5D4 /* GreyscaleLuminanceSource.cpp in Sources */,
+				3B81AACD120F08170022E5D4 /* HybridBinarizer.cpp in Sources */,
+				3B81AAF8120F0A7E0022E5D4 /* GreyscaleRotatedLuminanceSource.cpp in Sources */,
+				3B72D96F12130EF6007CEF32 /* ResultPointCallback.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1132,10 +1144,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = YES;
-				DSTROOT = /tmp/ZXingWidget.dst;
 				EXPORTED_SYMBOLS_FILE = exportList;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
@@ -1146,7 +1156,6 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				HEADER_SEARCH_PATHS = ../../cpp/core/src;
 				INSTALL_PATH = /usr/local/lib;
-				IPHONEOS_DEPLOYMENT_TARGET = 3.1.3;
 				LD_GENERATE_MAP_FILE = YES;
 				LD_OPENMP_FLAGS = "-fopenmp";
 				MACH_O_TYPE = staticlib;
@@ -1156,10 +1165,8 @@
 				);
 				PRESERVE_DEAD_CODE_INITS_AND_TERMS = NO;
 				PRODUCT_NAME = ZXingWidget;
-				SDKROOT = iphoneos4.0;
 				SEPARATE_STRIP = NO;
 				SKIP_INSTALL = YES;
-				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
 			};
 			name = Debug;
 		};
@@ -1167,17 +1174,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				DSTROOT = /tmp/ZXingWidget.dst;
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = ZXingWidget_Prefix.pch;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				HEADER_SEARCH_PATHS = ../../cpp/core/src;
 				INSTALL_PATH = /usr/local/lib;
-				IPHONEOS_DEPLOYMENT_TARGET = 3.1.3;
 				PRODUCT_NAME = ZXingWidget;
-				SDKROOT = iphoneos4.0;
 			};
 			name = Release;
 		};
@@ -1190,10 +1193,11 @@
 				GCC_VERSION = "";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 3.1.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PREBINDING = NO;
 				SDKROOT = iphoneos4.0;
+				WARNING_CFLAGS = "-Werror";
 			};
 			name = Debug;
 		};
@@ -1205,10 +1209,11 @@
 				GCC_VERSION = "";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 3.1.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PREBINDING = NO;
 				SDKROOT = iphoneos4.0;
+				WARNING_CFLAGS = "-Werror";
 			};
 			name = Release;
 		};

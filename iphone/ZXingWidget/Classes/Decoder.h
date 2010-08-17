@@ -24,16 +24,15 @@
 #import "DecoderDelegate.h"
 
 @interface Decoder : NSObject {
-	NSSet *readers;
+  NSSet *readers;
   UIImage *image;
-	CGRect cropRect;
+  CGRect cropRect;
   UIImage *subsetImage;
   unsigned char *subsetData;
   size_t subsetWidth;
   size_t subsetHeight;
   size_t subsetBytesPerRow;
-	id<DecoderDelegate> delegate;
-  NSOperationQueue *operationQueue;
+  id<DecoderDelegate> delegate;
 }
 
 @property(nonatomic, retain) UIImage *image;
@@ -45,9 +44,9 @@
 @property(assign) size_t subsetHeight;
 @property(assign) size_t subsetBytesPerRow;
 @property(nonatomic, assign) id<DecoderDelegate> delegate;
-@property (nonatomic, retain) NSOperationQueue *operationQueue;
 
-- (void) decodeImage:(UIImage *)image;
-- (void) decodeImage:(UIImage *)image cropRect:(CGRect)cropRect;
+- (BOOL) decodeImage:(UIImage *)image;
+- (BOOL) decodeImage:(UIImage *)image cropRect:(CGRect)cropRect;
+- (void) resultPointCallback:(CGPoint)point;
 
 @end
