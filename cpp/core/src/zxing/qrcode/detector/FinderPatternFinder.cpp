@@ -31,27 +31,35 @@ namespace qrcode {
 
 using namespace std;
 
-class ClosestToAverageComparator {
+class FurthestFromAverageComparator {
 private:
-  float averageModuleSize_;
+  const float averageModuleSize_;
 public:
-  ClosestToAverageComparator() : averageModuleSize_(0.0f) { }
-  
-  ClosestToAverageComparator(float averageModuleSize) :
-      averageModuleSize_(averageModuleSize) {
+  FurthestFromAverageComparator(float averageModuleSize) :
+    averageModuleSize_(averageModuleSize) {
   }
   bool operator()(Ref<FinderPattern> a, Ref<FinderPattern> b) {
     float dA = abs(a->getEstimatedModuleSize() - averageModuleSize_);
     float dB = abs(b->getEstimatedModuleSize() - averageModuleSize_);
-    return dA < dB;
+    return dA > dB;
   }
 };
 
 class CenterComparator {
+  const float averageModuleSize_;
 public:
+  CenterComparator(float averageModuleSize) :
+    averageModuleSize_(averageModuleSize) {
+  }
   bool operator()(Ref<FinderPattern> a, Ref<FinderPattern> b) {
     // N.B.: we want the result in descending order ...
-    return a->getCount() > b->getCount();
+    if (a->getCount() != b->getCount()) {
+      return a->getCount() > b->getCount();
+    } else {
+      float dA = abs(a->getEstimatedModuleSize() - averageModuleSize_);
+      float dB = abs(b->getEstimatedModuleSize() - averageModuleSize_);
+      return dA < dB;
+    }
   }
 };
 
@@ -311,12 +319,21 @@ vector<Ref<FinderPattern> > FinderPatternFinder::selectBestPatterns() {
   if (startSize > 3) {
     // But we can only afford to do so if we have at least 4 possibilities to choose from
     float totalModuleSize = 0.0f;
+    float square = 0.0f;
     for (size_t i = 0; i < startSize; i++) {
-      totalModuleSize += possibleCenters_[i]->getEstimatedModuleSize();
+      float size = possibleCenters_[i]->getEstimatedModuleSize();
+      totalModuleSize += size;
+      square += size * size;
     }
     float average = totalModuleSize / (float) startSize;
+    float stdDev = (float)sqrt(square / startSize - average * average);
+
+    sort(possibleCenters_.begin(), possibleCenters_.end(), FurthestFromAverageComparator(average));
+    
+    float limit = max(0.2f * average, stdDev);
+
     for (size_t i = 0; i < possibleCenters_.size() && possibleCenters_.size() > 3; i++) {
-      if (abs(possibleCenters_[i]->getEstimatedModuleSize() - average) > 0.2f * average) {
+      if (abs(possibleCenters_[i]->getEstimatedModuleSize() - average) > limit) {
         possibleCenters_.erase(possibleCenters_.begin()+i);
         i--;
       }
@@ -325,7 +342,13 @@ vector<Ref<FinderPattern> > FinderPatternFinder::selectBestPatterns() {
 
   if (possibleCenters_.size() > 3) {
     // Throw away all but those first size candidate points we found.
-    sort(possibleCenters_.begin(), possibleCenters_.end(), CenterComparator());
+    float totalModuleSize = 0.0f;
+    for (size_t i = 0; i < startSize; i++) {
+      float size = possibleCenters_[i]->getEstimatedModuleSize();
+      totalModuleSize += size;
+    }
+    float average = totalModuleSize / (float) startSize;
+    sort(possibleCenters_.begin(), possibleCenters_.end(), CenterComparator(average));
   }
 
   if (possibleCenters_.size() > 3) {
@@ -464,11 +487,13 @@ Ref<FinderPatternInfo> FinderPatternFinder::find(DecodeHints const& hints) {
                   }
                 }
               } else {
-                // Advance to next black pixel
-                do {
-                  j++;
-                } while (j < maxJ && !image_->get(j, i));
-                j--; // back up to that last white pixel
+                stateCount[0] = stateCount[2];
+                stateCount[1] = stateCount[3];
+                stateCount[2] = stateCount[4];
+                stateCount[3] = 1;
+                stateCount[4] = 0;
+                currentState = 3;
+                continue;
               }
               // Clear state to start looking again
               currentState = 0;
