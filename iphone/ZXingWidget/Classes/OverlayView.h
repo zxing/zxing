@@ -20,19 +20,21 @@
 
 @interface OverlayView : UIView {
 	UIImageView *imageView;
-	NSArray *_points;
+	NSMutableArray *_points;
 	UIButton *cancelButton;
 	id<CancelDelegate> delegate;
 	BOOL oneDMode;
+        CGRect cropRect;
 }
 
-@property (nonatomic, retain) NSArray*  points;
+@property (nonatomic, retain) NSMutableArray*  points;
 @property (nonatomic, assign) id<CancelDelegate> delegate;
 @property (nonatomic, assign) BOOL oneDMode;
+@property (nonatomic, assign) CGRect cropRect;
 
 - (id)initWithFrame:(CGRect)theFrame cancelEnabled:(BOOL)isCancelEnabled oneDMode:(BOOL)isOneDModeEnabled;
 
-- (CGRect)cropRect;
+- (void)setPoint:(CGPoint)point;
 
 @end
 

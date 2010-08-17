@@ -27,8 +27,8 @@
 @protocol DecoderDelegate<NSObject>
 @optional
 - (void)decoder:(Decoder *)decoder willDecodeImage:(UIImage *)image usingSubset:(UIImage *)subset;
-- (void)decoder:(Decoder *)decoder decodingImage:(UIImage *)image usingSubset:(UIImage *)subset progress:(NSString *)message;
 - (void)decoder:(Decoder *)decoder didDecodeImage:(UIImage *)image usingSubset:(UIImage *)subset withResult:(TwoDDecoderResult *)result;
 - (void)decoder:(Decoder *)decoder failedToDecodeImage:(UIImage *)image usingSubset:(UIImage *)subset reason:(NSString *)reason;
+- (void)decoder:(Decoder *)decoder foundPossibleResultPoint:(CGPoint)point;
 
 @end

@@ -23,7 +23,8 @@
 
 - (void)viewDidLoad {
   [super viewDidLoad];
-	[self setTitle:@"ZXing"];
+  [self setTitle:@"ZXing"];
+  [resultsView setText:resultsToDisplay];
 }
 
 - (IBAction)scanPressed:(id)sender {
@@ -35,74 +36,31 @@
   widController.readers = readers;
   [readers release];
   NSBundle *mainBundle = [NSBundle mainBundle];
-	[widController setSoundToPlay:[[NSURL fileURLWithPath:[mainBundle pathForResource:@"beep-beep" ofType:@"aiff"] isDirectory:NO] retain]];
-  [self presentModalViewController:widController
-                          animated:YES];
+  widController.soundToPlay =
+      [NSURL fileURLWithPath:[mainBundle pathForResource:@"beep-beep" ofType:@"aiff"] isDirectory:NO];
+  [self presentModalViewController:widController animated:YES];
   [widController release];
 }
-
-
-- (void)viewWillAppear:(BOOL)animated {
-  [super viewWillAppear:animated];
-  if (resultsToDisplay)
-  {
-    [resultsView setText:resultsToDisplay];
-    [resultsView setNeedsDisplay];
-  }
-}
-
-/*
- - (void)viewDidAppear:(BOOL)animated {
- [super viewDidAppear:animated];
- }
- */
-/*
- - (void)viewWillDisappear:(BOOL)animated {
- [super viewWillDisappear:animated];
- }
- */
-/*
- - (void)viewDidDisappear:(BOOL)animated {
- [super viewDidDisappear:animated];
- }
- */
-
-/*
- // Override to allow orientations other than the default portrait orientation.
- - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
- // Return YES for supported orientations.
- return (interfaceOrientation == UIInterfaceOrientationPortrait);
- }
- */
 
 #pragma mark -
 #pragma mark ZXingDelegateMethods
 
 - (void)zxingController:(ZXingWidgetController*)controller didScanResult:(NSString *)result {
-  [self dismissModalViewControllerAnimated:NO];
   self.resultsToDisplay = result;
+  if (self.isViewLoaded) {
+    [resultsView setText:resultsToDisplay];
+    [resultsView setNeedsDisplay];
+  }
+  [self dismissModalViewControllerAnimated:NO];
 }
 
 - (void)zxingControllerDidCancel:(ZXingWidgetController*)controller {
   [self dismissModalViewControllerAnimated:YES];
 }
 
-
-#pragma mark -
-#pragma mark Memory management
-
-- (void)didReceiveMemoryWarning {
-  // Releases the view if it doesn't have a superview.
-  [super didReceiveMemoryWarning];
-  
-  // Relinquish ownership any cached data, images, etc that aren't in use.
-}
-
 - (void)viewDidUnload {
-  // Relinquish ownership of anything that can be recreated in viewDidLoad or on demand.
-  // For example: self.myOutlet = nil;
+  self.resultsView = nil;
 }
-
 
 - (void)dealloc {
   [resultsView release];

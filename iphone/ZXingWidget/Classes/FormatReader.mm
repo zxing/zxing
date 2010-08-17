@@ -62,4 +62,10 @@ static NSMutableSet *sFormatReaders = nil;
   return reader_->decode(grayImage);
 }
 
+- (zxing::Ref<zxing::Result>)decode:(zxing::Ref<zxing::BinaryBitmap>)grayImage andCallback:(zxing::Ref<zxing::ResultPointCallback>)callback {
+    zxing::DecodeHints hints;
+    hints.setResultPointCallback(callback);
+    return reader_->decode(grayImage, hints);
+}
+
 @end

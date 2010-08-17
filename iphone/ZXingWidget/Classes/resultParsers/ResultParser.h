@@ -20,7 +20,7 @@
  */
 
 #import <UIKit/UIKit.h>
-#import "ParsedResult.h"
+#import "../parsedResults/ParsedResult.h"
 
 @interface ResultParser : NSObject {
 
