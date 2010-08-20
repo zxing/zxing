@@ -1,13 +1,21 @@
 Decider('MD5')
 
-env = Environment()
+vars = Variables()
+vars.Add(BoolVariable('DEBUG', 'Set to disable optimizations', 1))
+vars.Add(BoolVariable('PIC', 'Set to 1 for to always generate PIC code', 0))
+env = Environment(variables = vars)
 
-debug = True
+debug = env['DEBUG']
 compile_options = {}
 flags = []
 if debug:
 	#compile_options['CPPDEFINES'] = "-DDEBUG"
-	flags.append("-O0 -g3 -Wall")
+	flags.append("-O0 -g3 -ggdb -Wall")
+else:
+	flags.append("-O -g3 -Wall")
+if env['PIC']:
+	flags.append("-fPIC")
+
 compile_options['CXXFLAGS'] = ' '.join(flags)
 
 
