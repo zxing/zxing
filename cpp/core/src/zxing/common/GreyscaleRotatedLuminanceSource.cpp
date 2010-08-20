@@ -55,8 +55,14 @@ unsigned char* GreyscaleRotatedLuminanceSource::getRow(int y, unsigned char* row
 }
 
 unsigned char* GreyscaleRotatedLuminanceSource::getMatrix() {
-  // FIXME(flyashi): fine for 1D scanning, need to implement for 2D scanning
-  return NULL;
+  unsigned char* result = new unsigned char[width_ * height_];
+  unsigned char* row = new unsigned char[width_];
+  for (int y = 0; y < height_; y++) {
+    row = getRow(y, row);
+    memcpy(result + y * width_, row, width_);
+  }
+  delete [] row;
+  return result;
 }
 
 } // namespace

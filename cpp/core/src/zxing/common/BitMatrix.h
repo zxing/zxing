@@ -21,6 +21,7 @@
  */
 
 #include <zxing/common/Counted.h>
+#include <zxing/common/BitArray.h>
 #include <limits>
 
 namespace zxing {
@@ -43,6 +44,7 @@ public:
   void flip(size_t x, size_t y);
   void clear();
   void setRegion(size_t left, size_t top, size_t width, size_t height);
+  Ref<BitArray> getRow(int y, Ref<BitArray> row);
 
   size_t getDimension() const;
   size_t getWidth() const;

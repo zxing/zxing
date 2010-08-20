@@ -20,11 +20,16 @@
 
 #include "BitMatrixTest.h"
 #include <limits>
+#include <stdlib.h>
 
 namespace zxing {
 using namespace std;
 
 CPPUNIT_TEST_SUITE_REGISTRATION(BitMatrixTest);
+
+BitMatrixTest::BitMatrixTest() {
+  srand(getpid());
+}
 
 void BitMatrixTest::testGetSet() {
   size_t bits = numeric_limits<unsigned int>::digits;
@@ -64,4 +69,39 @@ void BitMatrixTest::testGetBits() {
   CPPUNIT_ASSERT_EQUAL(8u, bits[1]);
 }
 
+void BitMatrixTest::testGetRow1() {
+  const int width = 98;
+  const int height = 76;
+  runBitMatrixGetRowTest(width, height);
+}
+
+void BitMatrixTest::testGetRow2() {
+  const int width = 320;
+  const int height = 320;
+  runBitMatrixGetRowTest(width, height);
+}
+
+void BitMatrixTest::testGetRow3() {
+  const int width = 17;
+  const int height = 23;
+  runBitMatrixGetRowTest(width, height);
+}
+
+void BitMatrixTest::runBitMatrixGetRowTest(int width, int height) {
+  BitMatrix mat(width, height);
+  for (int y = 0; y < height; y++) {
+    for (int x = 0; x < width; x++) {
+      if ((rand() & 0x01) != 0) {
+        mat.set(x, y);
+      }
+    }
+  }
+  Ref<BitArray> row(new BitArray(width));
+  for (int y = 0; y < height; y++) {
+    row = mat.getRow(y, row);
+    for (int x = 0; x < width; x++) {
+      CPPUNIT_ASSERT_EQUAL(row->get(x), mat.get(x,y));
+    }
+  }
+}
 }

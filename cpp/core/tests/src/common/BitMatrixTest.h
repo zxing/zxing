@@ -30,16 +30,24 @@ class BitMatrixTest : public CPPUNIT_NS::TestFixture {
   CPPUNIT_TEST(testGetSet);
   CPPUNIT_TEST(testSetRegion);
   CPPUNIT_TEST(testGetBits);
+  CPPUNIT_TEST(testGetRow1);
+  CPPUNIT_TEST(testGetRow2);
+  CPPUNIT_TEST(testGetRow3);
   CPPUNIT_TEST_SUITE_END();
 
 public:
+  BitMatrixTest();
 
 protected:
   void testGetSet();
   void testSetRegion();
   void testGetBits();
+  void testGetRow1();
+  void testGetRow2();
+  void testGetRow3();
 
 private:
+  void runBitMatrixGetRowTest(int width, int height);
 };
 }
 

@@ -113,6 +113,39 @@ void BitMatrix::setRegion(size_t left, size_t top, size_t width, size_t height) 
   }
 }
 
+Ref<BitArray> BitMatrix::getRow(int y, Ref<BitArray> row) {
+  if (row.empty() || row->getSize() < width_) {
+    row = new BitArray(width_);
+  } else {
+    row->clear();
+  }
+  size_t start = y * width_;
+  size_t end = start + width_ - 1; // end is inclusive
+  size_t firstWord = start >> logBits;
+  size_t lastWord = end >> logBits;
+  size_t bitOffset = start & bitsMask;
+  for (size_t i = firstWord; i <= lastWord; i++) {
+    size_t firstBit = i > firstWord ? 0 : start & bitsMask;
+    size_t lastBit = i < lastWord ? bitsPerWord - 1 : end & bitsMask;
+    unsigned int mask;
+    if (firstBit == 0 && lastBit == logBits) {
+      mask = numeric_limits<unsigned int>::max();
+    } else {
+      mask = 0;
+      for (size_t j = firstBit; j <= lastBit; j++) {
+        mask |= 1 << j;
+      }
+    }
+    row->setBulk((i - firstWord) << logBits, (bits_[i] & mask) >> bitOffset);
+    if (firstBit == 0 && bitOffset != 0) {
+      unsigned int prevBulk = row->getBitArray()[i - firstWord - 1];
+      prevBulk |= (bits_[i] & mask) << (bitsPerWord - bitOffset);
+      row->setBulk((i - firstWord - 1) << logBits, prevBulk);
+    }
+  }
+  return row;
+}
+
 size_t BitMatrix::getWidth() const {
   return width_;
 }
