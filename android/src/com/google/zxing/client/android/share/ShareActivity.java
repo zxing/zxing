@@ -151,6 +151,10 @@ public final class ShareActivity extends Activity {
   }
 
   private void showTextAsBarcode(String text) {
+    Log.i(TAG, "Showing text as barcode: " + text);    
+    if (text == null) {
+      return; // Show error?
+    }
     Intent intent = new Intent(Intents.Encode.ACTION);
     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
     intent.putExtra(Intents.Encode.TYPE, Contents.Type.TEXT);
@@ -167,6 +171,9 @@ public final class ShareActivity extends Activity {
    */
   private void showContactAsBarcode(Uri contactUri) {
     Log.i(TAG, "Showing contact URI as barcode: " + contactUri);
+    if (contactUri == null) {
+      return; // Show error?
+    }
     ContentResolver resolver = getContentResolver();
     Cursor contactCursor = resolver.query(contactUri, null, null, null, null);
     Bundle bundle = new Bundle();
