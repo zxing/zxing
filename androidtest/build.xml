@@ -20,7 +20,7 @@ limitations under the License.
   to find the SDK location, I've removed it and pointed us at the global ZXing build.properties. -->
   <property file="../build.properties"/>
   <!-- Parts of the Android build system insist on the name 'sdk-location', so alias it. -->
-  <property name="sdk-location" value="${android-home}"/>
+  <property name="sdk.dir" value="${android-home}"/>
 
   <!-- The build.properties file can be created by you and is never touched
   by the 'android' tool. This is the place to change some of the default property values
@@ -52,11 +52,11 @@ limitations under the License.
   <!-- Custom Android task to deal with the project target, and import the proper rules.
   This requires ant 1.6.0 or above. -->
   <path id="android.antlibs">
-    <pathelement path="${sdk-location}/tools/lib/anttasks.jar" />
-    <pathelement path="${sdk-location}/tools/lib/sdklib.jar" />
-    <pathelement path="${sdk-location}/tools/lib/androidprefs.jar" />
-    <pathelement path="${sdk-location}/tools/lib/apkbuilder.jar" />
-    <pathelement path="${sdk-location}/tools/lib/jarutils.jar" />
+    <pathelement path="${sdk.dir}/tools/lib/anttasks.jar" />
+    <pathelement path="${sdk.dir}/tools/lib/sdklib.jar" />
+    <pathelement path="${sdk.dir}/tools/lib/androidprefs.jar" />
+    <pathelement path="${sdk.dir}/tools/lib/apkbuilder.jar" />
+    <pathelement path="${sdk.dir}/tools/lib/jarutils.jar" />
   </path>
 
   <taskdef name="setup"
@@ -85,7 +85,7 @@ limitations under the License.
 
   <!-- Properties -->
 
-  <property name="android-tools" value="${sdk-location}/tools" />
+  <property name="android-tools" value="${sdk.dir}/tools" />
 
   <!-- Input directories -->
   <property name="source-folder" value="src" />
@@ -130,8 +130,9 @@ limitations under the License.
 
   <!-- rules -->
 
-  <!-- Create the output directories if they don't exist yet. -->
-  <target name="dirs">
+  <!-- Create the output directories if they don't exist yet. All builds do a clean first
+  to prevent stale resources and to make ProGuard happy. -->
+  <target name="dirs" depends="clean">
     <echo>Creating output directories if needed...</echo>
     <mkdir dir="${resource-folder}" />
     <mkdir dir="${external-libs-folder}" />
@@ -153,7 +154,7 @@ limitations under the License.
       <arg value="-S" />
       <arg path="${resource-folder}" />
       <arg value="-I" />
-      <arg path="${android-jar}" />
+      <arg path="${android.jar}" />
     </exec>
   </target>
 
@@ -172,13 +173,14 @@ limitations under the License.
 
   <!-- Compile this project's .java files into .class files. -->
   <target name="compile" depends="resource-src, aidl">
-    <javac encoding="ascii" target="1.5" debug="true" extdirs=""
+    <javac encoding="ascii" target="1.5" debug="false" extdirs=""
            destdir="${out-classes}"
            bootclasspathref="android.target.classpath">
       <src path="${source-folder}" />
       <src path="${gen-folder}" />
       <classpath>
         <fileset dir="${external-libs-folder}" includes="*.jar"/>
+        <!-- yeah, want to not use this mechanism above -->
         <pathelement path="../core/core.jar"/>
         <pathelement path="${main-out-classes}"/>
       </classpath>
@@ -201,6 +203,7 @@ limitations under the License.
       <arg value="-keep class com.google.zxing.client.androidtest.ViewfinderView { public * ; }"/>
       <arg value="-target 5"/>
       <arg value="-optimizationpasses 4"/>
+      <arg value="-optimizations !field/*,!class/merging/*"/> <!-- works around dex VerifyError -->
       <arg value="-dontshrink"/>
       <arg value="-dontobfuscate"/>
       <arg value="-dontskipnonpubliclibraryclasses"/>
@@ -235,10 +238,23 @@ limitations under the License.
               manifest="AndroidManifest.xml"
               resources="${resource-folder}"
               assets="${asset-folder}"
-              androidjar="${android-jar}"
+              androidjar="${android.jar}"
               outfolder="${out-folder}"
               basename="${ant.project.name}" />
   </target>
+
+  <!--
+  Getting an error like this?
+
+   [apply] UNEXPECTED TOP-LEVEL EXCEPTION:
+   [apply] com.android.dx.cf.code.SimException: local variable type
+   mismatch: attempt to set or access a value of type int using a local
+   variable of type com.google.zxing.qrcode.decoder.Version. This is
+   symptomatic of .class transformation tools that ignore local variable
+   information.
+
+  Build core/ with the 'build-no-debug' target. It's a long story.
+  -->
 
   <!-- Package the application and sign it with a debug key.
   This is the default target when building. It is used for debug. -->
@@ -253,6 +269,14 @@ limitations under the License.
       <jarfolder path="${external-libs-folder}" />
       <nativefolder path="${native-libs-folder}" />
     </apkbuilder>
+    <copy file="${out-folder}/ZXingTest-debug.apk" tofile="${out-folder}/temp.apk" overwrite="true"/>
+    <exec executable="${android-tools}/zipalign">
+      <arg value="-f"/>
+      <arg value="-v"/>
+      <arg value="4"/>
+      <arg value="${out-folder}/temp.apk"/>
+      <arg value="${out-folder}/ZXingTest-debug.apk"/>
+    </exec>
   </target>
 
   <!-- Package the application without signing it.
@@ -269,18 +293,11 @@ limitations under the License.
       <nativefolder path="${native-libs-folder}" />
     </apkbuilder>
     <echo>All generated packages need to be signed with jarsigner before they are published.</echo>
+    <echo>Also run zipalign -f -v 4 ZXingTest.apk ZXingTest-aligned.apk after signing</echo>
   </target>
 
-  <!-- Install the package on the default emulator -->
+  <!-- Install (or reinstall) the package on the default emulator -->
   <target name="install" depends="debug">
-    <echo>Installing ${out-debug-package} onto default emulator...</echo>
-    <exec executable="${adb}" failonerror="true">
-      <arg value="install" />
-      <arg path="${out-debug-package}" />
-    </exec>
-  </target>
-
-  <target name="reinstall" depends="debug">
     <echo>Installing ${out-debug-package} onto default emulator...</echo>
     <exec executable="${adb}" failonerror="true">
       <arg value="install" />
