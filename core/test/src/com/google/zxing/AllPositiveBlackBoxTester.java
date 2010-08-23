@@ -36,6 +36,7 @@ import com.google.zxing.oned.UPCABlackBox1TestCase;
 import com.google.zxing.oned.UPCABlackBox2TestCase;
 import com.google.zxing.oned.UPCABlackBox3ReflectiveTestCase;
 import com.google.zxing.oned.UPCABlackBox4TestCase;
+import com.google.zxing.oned.UPCABlackBox5TestCase;
 import com.google.zxing.oned.UPCEBlackBox1TestCase;
 import com.google.zxing.oned.UPCEBlackBox2TestCase;
 import com.google.zxing.oned.UPCEBlackBox3ReflectiveTestCase;
@@ -80,6 +81,7 @@ public final class AllPositiveBlackBoxTester {
     new UPCABlackBox2TestCase(),
     new UPCABlackBox3ReflectiveTestCase(),
     new UPCABlackBox4TestCase(),
+    new UPCABlackBox5TestCase(),
     new UPCEBlackBox1TestCase(),
     new UPCEBlackBox2TestCase(),
     new UPCEBlackBox3ReflectiveTestCase(),
@@ -115,6 +117,7 @@ public final class AllPositiveBlackBoxTester {
 //    new UPCABlackBox2TestCase(),
 //    new UPCABlackBox3ReflectiveTestCase(),
 //    new UPCABlackBox4TestCase(),
+//    new UPCABlackBox5TestCase(),
 //    new UPCEBlackBox1TestCase(),
 //    new UPCEBlackBox2TestCase(),
 //    new UPCEBlackBox3ReflectiveTestCase(),
