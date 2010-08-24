@@ -28,19 +28,6 @@ LuminanceSource::LuminanceSource() {
 LuminanceSource::~LuminanceSource() {
 }
 
-unsigned char* LuminanceSource::getMatrix() {
-  int width = getWidth();
-  int height =  getHeight();
-  unsigned char* matrix = new unsigned char[width * height];
-  unsigned char* row = new unsigned char[width];
-  for (int y = 0; y < height; y++) {
-    row = getRow(y, row);
-    memcpy(&matrix[y * width], row, width);
-  }
-  delete [] row;
-  return matrix;
-}
-
 bool LuminanceSource::isCropSupported() const {
   return false;
 }

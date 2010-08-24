@@ -42,7 +42,6 @@ unsigned char* GreyscaleRotatedLuminanceSource::getRow(int y, unsigned char* row
     throw IllegalArgumentException("Requested row is outside the image: " + y);
   }
   int width = getWidth();
-  // TODO(flyashi): determine if row has enough size.
   if (row == NULL) {
     row = new unsigned char[width];
   }
@@ -56,12 +55,10 @@ unsigned char* GreyscaleRotatedLuminanceSource::getRow(int y, unsigned char* row
 
 unsigned char* GreyscaleRotatedLuminanceSource::getMatrix() {
   unsigned char* result = new unsigned char[width_ * height_];
-  unsigned char* row = new unsigned char[width_];
+  // This depends on getRow() honoring its second parameter.
   for (int y = 0; y < height_; y++) {
-    row = getRow(y, row);
-    memcpy(result + y * width_, row, width_);
+    getRow(y, &result[y * width_]);
   }
-  delete [] row;
   return result;
 }
 
