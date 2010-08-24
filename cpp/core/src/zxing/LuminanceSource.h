@@ -34,7 +34,7 @@ public:
 
   // Callers take ownership of the returned memory and must call delete [] on it themselves.
   virtual unsigned char* getRow(int y, unsigned char* row) = 0;
-  virtual unsigned char* getMatrix();
+  virtual unsigned char* getMatrix() = 0;
 
   virtual bool isCropSupported() const;
   virtual Ref<LuminanceSource> crop(int left, int top, int width, int height);
