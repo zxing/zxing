@@ -2,8 +2,7 @@
  *  BitArray.cpp
  *  zxing
  *
- *  Created by Christian Brunschen on 09/05/2008.
- *  Copyright 2008 Google UK. All rights reserved.
+ *  Copyright 2010 ZXing authors. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +24,7 @@
 using namespace std;
 
 namespace zxing {
+
 static unsigned int logDigits(unsigned digits) {
   unsigned log = 0;
   unsigned val = 1;
@@ -34,9 +34,11 @@ static unsigned int logDigits(unsigned digits) {
   }
   return log;
 }
+
 const unsigned int BitArray::bitsPerWord_ = numeric_limits<unsigned int>::digits;
 const unsigned int BitArray::logBits_ = logDigits(bitsPerWord_);
 const unsigned int BitArray::bitsMask_ = (1 << logBits_) - 1;
+
 size_t BitArray::wordsForBits(size_t bits) {
   int arraySize = bits >> logBits_;
   if (bits - (arraySize << logBits_) != 0) {
@@ -48,26 +50,33 @@ size_t BitArray::wordsForBits(size_t bits) {
 BitArray::BitArray(size_t size) :
     size_(size), bits_(wordsForBits(size), (const unsigned int)0) {
 }
+
 BitArray::~BitArray() {
 }
+
 size_t BitArray::getSize() {
   return size_;
 }
+
 bool BitArray::get(size_t i) {
   return (bits_[i >> logBits_] & (1 << (i & bitsMask_))) != 0;
 }
+
 void BitArray::set(size_t i) {
   bits_[i >> logBits_] |= 1 << (i & bitsMask_);
 }
+
 void BitArray::setBulk(size_t i, unsigned int newBits) {
   bits_[i >> logBits_] = newBits;
 }
+
 void BitArray::clear() {
   size_t max = bits_.size();
   for (size_t i = 0; i < max; i++) {
     bits_[i] = 0;
   }
 }
+
 bool BitArray::isRange(size_t start, size_t end, bool value) {
   if (end < start) {
     throw IllegalArgumentException("end must be after start");
@@ -103,9 +112,11 @@ bool BitArray::isRange(size_t start, size_t end, bool value) {
   }
   return true;
 }
+
 vector<unsigned int>& BitArray::getBitArray() {
   return bits_;
 }
+
 void BitArray::reverse() {
   std::vector<unsigned int> newBits(bits_.size(),(const unsigned int) 0);
   for (size_t i = 0; i < size_; i++) {

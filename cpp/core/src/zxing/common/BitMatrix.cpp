@@ -2,8 +2,7 @@
  *  BitMatrix.cpp
  *  zxing
  *
- *  Created by Christian Brunschen on 12/05/2008.
- *  Copyright 2008 Google UK. All rights reserved.
+ *  Copyright 2010 ZXing authors. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,7 +36,6 @@ unsigned int logDigits(unsigned digits) {
   }
   return log;
 }
-
 
 const unsigned int bitsPerWord = numeric_limits<unsigned int>::digits;
 const unsigned int logBits = logDigits(bitsPerWord);
