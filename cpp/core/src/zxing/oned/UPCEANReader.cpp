@@ -40,7 +40,7 @@ namespace zxing {
      */
     const int L_PATTERNS_LEN = 10;
     const int L_PATTERNS_SUB_LEN = 4;
-    const int L_PATTERNS[10][4] = {
+    const int L_PATTERNS[L_PATTERNS_LEN][L_PATTERNS_SUB_LEN] = {
       {3, 2, 1, 1}, // 0
       {2, 2, 2, 1}, // 1
       {2, 1, 2, 2}, // 2
