@@ -29,13 +29,13 @@ namespace zxing {
 
     EAN13Reader::EAN13Reader() { }
 
-    int EAN13Reader::decodeMiddle(Ref<BitArray> row, int startRange[], int startRangeLen,
+    int EAN13Reader::decodeMiddle(Ref<BitArray> row, int startGuardBegin, int startGuardEnd,
         std::string& resultString) {
       const int countersLen = 4;
       int counters[countersLen] = { 0, 0, 0, 0 };
 
       int end = row->getSize();
-      int rowOffset = startRange[1];
+      int rowOffset = startGuardEnd;
       int lgPatternFound = 0;
 
       for (int x = 0; x < 6 && rowOffset < end; x++) {
@@ -57,15 +57,15 @@ namespace zxing {
         return -1;
       }
 
-      int* middleRange = findGuardPattern(row, rowOffset, true, (int*)getMIDDLE_PATTERN(),
-            getMIDDLE_PATTERN_LEN());
-      if (middleRange != NULL) {
-        rowOffset = middleRange[1];
+      int middleRangeStart;
+      int middleRangeEnd;
+      if (findGuardPattern(row, rowOffset, true, (int*)getMIDDLE_PATTERN(),
+            getMIDDLE_PATTERN_LEN(), &middleRangeStart, &middleRangeEnd)) {
+        rowOffset = middleRangeEnd;
         for (int x = 0; x < 6 && rowOffset < end; x++) {
           int bestMatch = decodeDigit(row, counters, countersLen, rowOffset,
               UPC_EAN_PATTERNS_L_PATTERNS);
           if (bestMatch < 0) {
-            delete [] middleRange;
             return -1;
           }
           resultString.append(1, (char) ('0' + bestMatch));
@@ -73,8 +73,6 @@ namespace zxing {
             rowOffset += counters[i];
           }
         }
-
-        delete [] middleRange;
         return rowOffset;
       }
       return -1;

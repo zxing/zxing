@@ -95,50 +95,46 @@ namespace zxing {
 
 
     Ref<Result> UPCEANReader::decodeRow(int rowNumber, Ref<BitArray> row) {
-			int* start = findStartGuardPattern(row);
-			if (start != NULL) {
+      int rangeStart;
+      int rangeEnd;
+			if (findStartGuardPattern(row, &rangeStart, &rangeEnd)) {
         try {
-          Ref<Result> result = decodeRow(rowNumber, row, start);
-          delete [] start;
-          return result;
+          return decodeRow(rowNumber, row, rangeStart, rangeEnd);
         } catch (ReaderException const& re) {
-          delete [] start;
         }
 			}
 			return Ref<Result>();
     }
 
-    Ref<Result> UPCEANReader::decodeRow(int rowNumber, Ref<BitArray> row, int startGuardRange[]) {
+    Ref<Result> UPCEANReader::decodeRow(int rowNumber, Ref<BitArray> row, int startGuardBegin,
+        int startGuardEnd) {
       std::string tmpResultString;
       std::string& tmpResultStringRef = tmpResultString;
-      int endStart = decodeMiddle(row, startGuardRange, 2 /*reference findGuardPattern*/ ,
-          tmpResultStringRef);
+      int endStart = decodeMiddle(row, startGuardBegin, startGuardEnd, tmpResultStringRef);
       if (endStart < 0) {
         return Ref<Result>();
       }
-      int* endRange = decodeEnd(row, endStart);
-      if (endRange == NULL) {
+
+      int endGuardBegin;
+      int endGuardEnd;
+      if (!decodeEnd(row, endStart, &endGuardBegin, &endGuardEnd)) {
         return Ref<Result>();
       }
 
       // Make sure there is a quiet zone at least as big as the end pattern after the barcode.
       // The spec might want more whitespace, but in practice this is the maximum we can count on.
-      size_t end = endRange[1];
-      size_t quietEnd = end + (end - endRange[0]);
-      if (quietEnd >= row->getSize() || !row->isRange(end, quietEnd, false)) {
-        delete [] endRange;
+      size_t quietEnd = endGuardEnd + (endGuardEnd - endGuardBegin);
+      if (quietEnd >= row->getSize() || !row->isRange(endGuardEnd, quietEnd, false)) {
         return Ref<Result>();
       }
 
       if (!checkChecksum(tmpResultString)) {
-        delete [] endRange;
         return Ref<Result>();
       }
 
       Ref<String> resultString(new String(tmpResultString));
-
-      float left = (float) (startGuardRange[1] + startGuardRange[0]) / 2.0f;
-      float right = (float) (endRange[1] + endRange[0]) / 2.0f;
+      float left = (float) (startGuardBegin + startGuardEnd) / 2.0f;
+      float right = (float) (endGuardBegin + endGuardEnd) / 2.0f;
 
       std::vector< Ref<ResultPoint> > resultPoints(2);
       Ref<OneDResultPoint> resultPoint1(new OneDResultPoint(left, (float) rowNumber));
@@ -147,38 +143,28 @@ namespace zxing {
       resultPoints[1] = resultPoint2;
 
       ArrayRef<unsigned char> resultBytes(1);
-      Ref<Result> res(new Result(resultString, resultBytes, resultPoints, getBarcodeFormat()));
-      delete [] endRange;
-      return res;
+      return Ref<Result>(new Result(resultString, resultBytes, resultPoints, getBarcodeFormat()));
     }
 
-    int* UPCEANReader::findStartGuardPattern(Ref<BitArray> row) {
-      bool foundStart = false;
-      int* startRange = NULL;
+    bool UPCEANReader::findStartGuardPattern(Ref<BitArray> row, int* rangeStart, int* rangeEnd) {
       int nextStart = 0;
-      while (!foundStart) {
-        delete [] startRange;
-        startRange = findGuardPattern(row, nextStart, false, START_END_PATTERN,
-            sizeof(START_END_PATTERN) / sizeof(int));
-        if (startRange == NULL) {
-          return NULL;
-        }
-        int start = startRange[0];
-        nextStart = startRange[1];
+      while (findGuardPattern(row, nextStart, false, START_END_PATTERN,
+          sizeof(START_END_PATTERN) / sizeof(int), rangeStart, rangeEnd)) {
+        int start = *rangeStart;
+        nextStart = *rangeEnd;
         // Make sure there is a quiet zone at least as big as the start pattern before the barcode.
         // If this check would run off the left edge of the image, do not accept this barcode,
         // as it is very likely to be a false positive.
         int quietStart = start - (nextStart - start);
-        if (quietStart >= 0) {
-          foundStart = row->isRange(quietStart, start, false);
+        if (quietStart >= 0 && row->isRange(quietStart, start, false)) {
+          return true;
         }
       }
-      return startRange;
+      return false;
     }
 
-    // TODO(flyashi): Return a pair<int, int> for return value to avoid using the heap.
-    int* UPCEANReader::findGuardPattern(Ref<BitArray> row, int rowOffset, bool whiteFirst,
-        const int pattern[], int patternLen) {
+    bool UPCEANReader::findGuardPattern(Ref<BitArray> row, int rowOffset, bool whiteFirst,
+        const int pattern[], int patternLen, int* start, int* end) {
       int patternLength = patternLen;
       int counters[patternLength];
       int countersCount = sizeof(counters) / sizeof(int);
@@ -205,10 +191,9 @@ namespace zxing {
           if (counterPosition == patternLength - 1) {
             if (patternMatchVariance(counters, countersCount, pattern,
                 MAX_INDIVIDUAL_VARIANCE) < MAX_AVG_VARIANCE) {
-              int* resultValue = new int[2];
-              resultValue[0] = patternStart;
-              resultValue[1] = x;
-              return resultValue;
+              *start = patternStart;
+              *end = x;
+              return true;
             }
             patternStart += counters[0] + counters[1];
             for (int y = 2; y < patternLength; y++) {
@@ -224,12 +209,13 @@ namespace zxing {
           isWhite = !isWhite;
         }
       }
-      return NULL;
+      return false;
     }
 
-    int* UPCEANReader::decodeEnd(Ref<BitArray> row, int endStart) {
+    bool UPCEANReader::decodeEnd(Ref<BitArray> row, int endStart, int* endGuardBegin,
+        int* endGuardEnd) {
       return findGuardPattern(row, endStart, false, START_END_PATTERN,
-          sizeof(START_END_PATTERN) / sizeof(int));
+          sizeof(START_END_PATTERN) / sizeof(int), endGuardBegin, endGuardEnd);
     }
 
     int UPCEANReader::decodeDigit(Ref<BitArray> row, int counters[], int countersLen, int rowOffset,

@@ -29,17 +29,19 @@ namespace zxing {
       return maybeReturnResult(ean13Reader.decodeRow(rowNumber, row));
     }
 
-    Ref<Result> UPCAReader::decodeRow(int rowNumber, Ref<BitArray> row, int startGuardRange[]) {
-      return maybeReturnResult(ean13Reader.decodeRow(rowNumber, row, startGuardRange));
+    Ref<Result> UPCAReader::decodeRow(int rowNumber, Ref<BitArray> row, int startGuardBegin,
+        int startGuardEnd) {
+      return maybeReturnResult(ean13Reader.decodeRow(rowNumber, row, startGuardBegin,
+          startGuardEnd));
     }
 
     Ref<Result> UPCAReader::decode(Ref<BinaryBitmap> image, DecodeHints hints) {
       return maybeReturnResult(ean13Reader.decode(image, hints));
     }
 
-    int UPCAReader::decodeMiddle(Ref<BitArray> row, int startRange[], int startRangeLen,
+    int UPCAReader::decodeMiddle(Ref<BitArray> row, int startGuardBegin, int startGuardEnd,
         std::string& resultString) {
-      return ean13Reader.decodeMiddle(row, startRange, startRangeLen, resultString);
+      return ean13Reader.decodeMiddle(row, startGuardBegin, startGuardEnd, resultString);
     }
 
     Ref<Result> UPCAReader::maybeReturnResult(Ref<Result> result) {
