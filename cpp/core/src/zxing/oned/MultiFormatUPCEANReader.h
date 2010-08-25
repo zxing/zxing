@@ -18,21 +18,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 #include <zxing/oned/OneDReader.h>
 
 namespace zxing {
-	namespace oned {
-		class MultiFormatUPCEANReader : public OneDReader {
-			
-		private:
-			std::vector<Ref<OneDReader> > readers;
-		public:
-			MultiFormatUPCEANReader(DecodeHints hints);
-			
-			Ref<Result> decodeRow(int rowNumber, Ref<BitArray> row);
+  namespace oned {
+    class MultiFormatUPCEANReader : public OneDReader {
+
+    private:
+      std::vector<Ref<OneDReader> > readers;
+    public:
+      MultiFormatUPCEANReader(DecodeHints hints);
+
+      Ref<Result> decodeRow(int rowNumber, Ref<BitArray> row);
     };
-	}
+  }
 }
 
 #endif

@@ -23,26 +23,26 @@
 #include <zxing/DecodeHints.h>
 
 namespace zxing {
-	namespace oned {
-		class UPCAReader : public UPCEANReader {
+  namespace oned {
+    class UPCAReader : public UPCEANReader {
 
-		private:
-			EAN13Reader ean13Reader;
-			static Ref<Result> maybeReturnResult(Ref<Result> result);
+    private:
+      EAN13Reader ean13Reader;
+      static Ref<Result> maybeReturnResult(Ref<Result> result);
 
-		public:
-			UPCAReader();
+    public:
+      UPCAReader();
 
-			int decodeMiddle(Ref<BitArray> row, int startRange[], int startRangeLen,
-			    std::string& resultString);
+      int decodeMiddle(Ref<BitArray> row, int startRange[], int startRangeLen,
+          std::string& resultString);
 
-			Ref<Result> decodeRow(int rowNumber, Ref<BitArray> row);
-			Ref<Result> decodeRow(int rowNumber, Ref<BitArray> row, int startGuardRange[]);
-			Ref<Result> decode(Ref<BinaryBitmap> image, DecodeHints hints);
+      Ref<Result> decodeRow(int rowNumber, Ref<BitArray> row);
+      Ref<Result> decodeRow(int rowNumber, Ref<BitArray> row, int startGuardRange[]);
+      Ref<Result> decode(Ref<BinaryBitmap> image, DecodeHints hints);
 
-			BarcodeFormat getBarcodeFormat();
-		};
-	}
+      BarcodeFormat getBarcodeFormat();
+    };
+  }
 }
 
 #endif
