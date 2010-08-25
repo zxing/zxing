@@ -42,13 +42,13 @@ namespace zxing {
     UPCEReader::UPCEReader() {
     }
 
-    int UPCEReader::decodeMiddle(Ref<BitArray> row, int startRange[], int startRangeLen,
+    int UPCEReader::decodeMiddle(Ref<BitArray> row, int startGuardBegin, int startGuardEnd,
         std::string& resultString) {
       const int countersLen = 4;
       int counters[countersLen] = { 0, 0, 0, 0 };
 
       int end = row->getSize();
-      int rowOffset = startRange[1];
+      int rowOffset = startGuardEnd;
       int lgPatternFound = 0;
 
       for (int x = 0; x < 6 && rowOffset < end; x++) {
@@ -72,9 +72,10 @@ namespace zxing {
       return rowOffset;
     }
 
-    int* UPCEReader::decodeEnd(Ref<BitArray> row, int endStart) {
+    bool UPCEReader::decodeEnd(Ref<BitArray> row, int endStart, int* endGuardBegin,
+        int* endGuardEnd) {
       return findGuardPattern(row, endStart, true, MIDDLE_END_PATTERN,
-          sizeof(MIDDLE_END_PATTERN) / sizeof(int));
+          sizeof(MIDDLE_END_PATTERN) / sizeof(int), endGuardBegin, endGuardEnd);
     }
 
     bool UPCEReader::checkChecksum(std::string s){

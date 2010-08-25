@@ -37,14 +37,14 @@ namespace zxing {
 			static const unsigned int MAX_AVG_VARIANCE = (unsigned int) (PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.42f);
 			static const int MAX_INDIVIDUAL_VARIANCE = (int) (PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.7f);
 
-			static int* findStartGuardPattern(Ref<BitArray> row);
+			static bool findStartGuardPattern(Ref<BitArray> row, int* rangeStart, int* rangeEnd);
 
-			virtual int* decodeEnd(Ref<BitArray> row, int endStart);
+			virtual bool decodeEnd(Ref<BitArray> row, int endStart, int* endGuardBegin, int* endGuardEnd);
 
 			static bool checkStandardUPCEANChecksum(std::string s);
 		protected:
-			static int* findGuardPattern(Ref<BitArray> row, int rowOffset, bool whiteFirst,
-			    const int pattern[], int patternLen);
+			static bool findGuardPattern(Ref<BitArray> row, int rowOffset, bool whiteFirst,
+			    const int pattern[], int patternLen, int* start, int* end);
 
 			virtual const int getMIDDLE_PATTERN_LEN();
 			virtual const int* getMIDDLE_PATTERN();
@@ -53,13 +53,14 @@ namespace zxing {
 			UPCEANReader();
 
       // Returns < 0 on failure, >= 0 on success.
-			virtual int decodeMiddle(Ref<BitArray> row, int startRange[], int startRangeLen,
+			virtual int decodeMiddle(Ref<BitArray> row, int startGuardBegin, int startGuardEnd,
 			    std::string& resultString) = 0;
 
 			Ref<Result> decodeRow(int rowNumber, Ref<BitArray> row);
 
 			// TODO(dswitkin): Should this be virtual so that UPCAReader can override it?
-			Ref<Result> decodeRow(int rowNumber, Ref<BitArray> row, int startGuardRange[]);
+			Ref<Result> decodeRow(int rowNumber, Ref<BitArray> row, int startGuardBegin,
+          int startGuardEnd);
 
       // Returns < 0 on failure, >= 0 on success.
 			static int decodeDigit(Ref<BitArray> row, int counters[], int countersLen, int rowOffset,

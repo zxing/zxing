@@ -33,11 +33,12 @@ namespace zxing {
     public:
       UPCAReader();
 
-      int decodeMiddle(Ref<BitArray> row, int startRange[], int startRangeLen,
+      int decodeMiddle(Ref<BitArray> row, int startGuardBegin, int startGuardEnd,
           std::string& resultString);
 
       Ref<Result> decodeRow(int rowNumber, Ref<BitArray> row);
-      Ref<Result> decodeRow(int rowNumber, Ref<BitArray> row, int startGuardRange[]);
+      Ref<Result> decodeRow(int rowNumber, Ref<BitArray> row, int startGuardBegin,
+          int startGuardEnd);
       Ref<Result> decode(Ref<BinaryBitmap> image, DecodeHints hints);
 
       BarcodeFormat getBarcodeFormat();

@@ -30,7 +30,7 @@ namespace zxing {
     public:
       EAN8Reader();
 
-      int decodeMiddle(Ref<BitArray> row, int startRange[], int startRangeLen,
+      int decodeMiddle(Ref<BitArray> row, int startGuardBegin, int startGuardEnd,
           std::string& resultString);
 
       BarcodeFormat getBarcodeFormat();

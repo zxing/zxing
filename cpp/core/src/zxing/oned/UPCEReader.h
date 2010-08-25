@@ -30,12 +30,12 @@ namespace zxing {
     private:
       static bool determineNumSysAndCheckDigit(std::string& resultString, int lgPatternFound);
     protected:
-      int* decodeEnd(Ref<BitArray> row, int endStart);
+      bool decodeEnd(Ref<BitArray> row, int endStart, int* endGuardBegin, int* endGuardEnd);
       bool checkChecksum(std::string s);
     public:
       UPCEReader();
 
-      int decodeMiddle(Ref<BitArray> row, int startRange[], int startRangeLen,
+      int decodeMiddle(Ref<BitArray> row, int startGuardBegin, int startGuardEnd,
           std::string& resultString);
       static std::string convertUPCEtoUPCA(std::string upce);
 
