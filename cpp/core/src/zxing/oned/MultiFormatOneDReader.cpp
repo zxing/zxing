@@ -26,8 +26,8 @@
 #include <zxing/ReaderException.h>
 
 namespace zxing {
-	namespace oned {
-		MultiFormatOneDReader::MultiFormatOneDReader(DecodeHints hints) : readers() {
+  namespace oned {
+    MultiFormatOneDReader::MultiFormatOneDReader(DecodeHints hints) : readers() {
       if (hints.containsFormat(BarcodeFormat_EAN_13) ||
           hints.containsFormat(BarcodeFormat_EAN_8) ||
           hints.containsFormat(BarcodeFormat_UPC_A) ||
@@ -49,18 +49,18 @@ namespace zxing {
         readers.push_back(Ref<OneDReader>(new Code128Reader()));
         readers.push_back(Ref<OneDReader>(new ITFReader()));
       }
-		}
+    }
 
-		Ref<Result> MultiFormatOneDReader::decodeRow(int rowNumber, Ref<BitArray> row) {
-			int size = readers.size();
-			for (int i = 0; i < size; i++) {
-				OneDReader* reader = readers[i];
-				Ref<Result> result = reader->decodeRow(rowNumber, row);
-				if (!result.empty()) {
-				  return result;
-				}
-			}
-			return Ref<Result>();
-		}
-	}
+    Ref<Result> MultiFormatOneDReader::decodeRow(int rowNumber, Ref<BitArray> row) {
+      int size = readers.size();
+      for (int i = 0; i < size; i++) {
+        OneDReader* reader = readers[i];
+        Ref<Result> result = reader->decodeRow(rowNumber, row);
+        if (!result.empty()) {
+          return result;
+        }
+      }
+      return Ref<Result>();
+    }
+  }
 }

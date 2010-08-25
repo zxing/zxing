@@ -24,18 +24,18 @@
 #include <zxing/Result.h>
 
 namespace zxing {
-	namespace oned {
-		class EAN8Reader : public UPCEANReader {
+  namespace oned {
+    class EAN8Reader : public UPCEANReader {
 
-		public:
-			EAN8Reader();
+    public:
+      EAN8Reader();
 
-			int decodeMiddle(Ref<BitArray> row, int startRange[], int startRangeLen,
-			    std::string& resultString);
+      int decodeMiddle(Ref<BitArray> row, int startRange[], int startRangeLen,
+          std::string& resultString);
 
-			BarcodeFormat getBarcodeFormat();
-		};
-	}
+      BarcodeFormat getBarcodeFormat();
+    };
+  }
 }
 
 #endif

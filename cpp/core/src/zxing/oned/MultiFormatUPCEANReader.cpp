@@ -28,60 +28,60 @@
 #include <math.h>
 
 namespace zxing {
-	namespace oned {
+  namespace oned {
 
-		MultiFormatUPCEANReader::MultiFormatUPCEANReader(DecodeHints hints) : readers() {
-		  if (hints.containsFormat(BarcodeFormat_EAN_13)) {
-		    readers.push_back(Ref<OneDReader>(new EAN13Reader()));
-		  } else if (hints.containsFormat(BarcodeFormat_UPC_A)) {
-		    readers.push_back(Ref<OneDReader>(new UPCAReader()));
-		  }
-		  if (hints.containsFormat(BarcodeFormat_EAN_8)) {
-		    readers.push_back(Ref<OneDReader>(new EAN8Reader()));
-		  }
-		  if (hints.containsFormat(BarcodeFormat_UPC_E)) {
-		    readers.push_back(Ref<OneDReader>(new UPCEReader()));
-		  }
-		  if (readers.size() == 0) {
-	      readers.push_back(Ref<OneDReader>(new EAN13Reader()));
-	      // UPC-A is covered by EAN-13
-	      readers.push_back(Ref<OneDReader>(new EAN8Reader()));
-	      readers.push_back(Ref<OneDReader>(new UPCEReader()));
-		  }
-		}
+    MultiFormatUPCEANReader::MultiFormatUPCEANReader(DecodeHints hints) : readers() {
+      if (hints.containsFormat(BarcodeFormat_EAN_13)) {
+        readers.push_back(Ref<OneDReader>(new EAN13Reader()));
+      } else if (hints.containsFormat(BarcodeFormat_UPC_A)) {
+        readers.push_back(Ref<OneDReader>(new UPCAReader()));
+      }
+      if (hints.containsFormat(BarcodeFormat_EAN_8)) {
+        readers.push_back(Ref<OneDReader>(new EAN8Reader()));
+      }
+      if (hints.containsFormat(BarcodeFormat_UPC_E)) {
+        readers.push_back(Ref<OneDReader>(new UPCEReader()));
+      }
+      if (readers.size() == 0) {
+        readers.push_back(Ref<OneDReader>(new EAN13Reader()));
+        // UPC-A is covered by EAN-13
+        readers.push_back(Ref<OneDReader>(new EAN8Reader()));
+        readers.push_back(Ref<OneDReader>(new UPCEReader()));
+      }
+    }
 
-		Ref<Result> MultiFormatUPCEANReader::decodeRow(int rowNumber, Ref<BitArray> row) {
-			// Compute this location once and reuse it on multiple implementations
-			int size = readers.size();
-			for (int i = 0; i < size; i++) {
-				Ref<OneDReader> reader = readers[i];
-				Ref<Result> result = reader->decodeRow(rowNumber, row);
-				if (result.empty()) {
-				  continue;
-				}
+    Ref<Result> MultiFormatUPCEANReader::decodeRow(int rowNumber, Ref<BitArray> row) {
+      // Compute this location once and reuse it on multiple implementations
+      int size = readers.size();
+      for (int i = 0; i < size; i++) {
+        Ref<OneDReader> reader = readers[i];
+        Ref<Result> result = reader->decodeRow(rowNumber, row);
+        if (result.empty()) {
+          continue;
+        }
 
-				// Special case: a 12-digit code encoded in UPC-A is identical to a "0"
-				// followed by those 12 digits encoded as EAN-13. Each will recognize such a code,
-				// UPC-A as a 12-digit string and EAN-13 as a 13-digit string starting with "0".
-				// Individually these are correct and their readers will both read such a code
-				// and correctly call it EAN-13, or UPC-A, respectively.
-				//
-				// In this case, if we've been looking for both types, we'd like to call it
-				// a UPC-A code. But for efficiency we only run the EAN-13 decoder to also read
-				// UPC-A. So we special case it here, and convert an EAN-13 result to a UPC-A
-				// result if appropriate.
-				if (result->getBarcodeFormat() == BarcodeFormat_EAN_13) {
-					const std::string& text = (result->getText())->getText();
-					if (text[0] == '0') {
-						Ref<String> resultString(new String(text.substr(1)));
-						Ref<Result> res(new Result(resultString, result->getRawBytes(),
-						    result->getResultPoints(), BarcodeFormat_UPC_A));
-						return res;
-					}
-				}
-				return result;
-			}
-			return Ref<Result>();
-		}
-	}
+        // Special case: a 12-digit code encoded in UPC-A is identical to a "0"
+        // followed by those 12 digits encoded as EAN-13. Each will recognize such a code,
+        // UPC-A as a 12-digit string and EAN-13 as a 13-digit string starting with "0".
+        // Individually these are correct and their readers will both read such a code
+        // and correctly call it EAN-13, or UPC-A, respectively.
+        //
+        // In this case, if we've been looking for both types, we'd like to call it
+        // a UPC-A code. But for efficiency we only run the EAN-13 decoder to also read
+        // UPC-A. So we special case it here, and convert an EAN-13 result to a UPC-A
+        // result if appropriate.
+        if (result->getBarcodeFormat() == BarcodeFormat_EAN_13) {
+          const std::string& text = (result->getText())->getText();
+          if (text[0] == '0') {
+            Ref<String> resultString(new String(text.substr(1)));
+            Ref<Result> res(new Result(resultString, result->getRawBytes(),
+                result->getResultPoints(), BarcodeFormat_UPC_A));
+            return res;
+          }
+        }
+        return result;
+      }
+      return Ref<Result>();
+    }
+  }
 }

@@ -24,24 +24,24 @@
 #include <zxing/Result.h>
 
 namespace zxing {
-	namespace oned {
-		class UPCEReader : public UPCEANReader {
+  namespace oned {
+    class UPCEReader : public UPCEANReader {
 
-		private:
-			static bool determineNumSysAndCheckDigit(std::string& resultString, int lgPatternFound);
-		protected:
-			int* decodeEnd(Ref<BitArray> row, int endStart);
-			bool checkChecksum(std::string s);
-		public:
-			UPCEReader();
+    private:
+      static bool determineNumSysAndCheckDigit(std::string& resultString, int lgPatternFound);
+    protected:
+      int* decodeEnd(Ref<BitArray> row, int endStart);
+      bool checkChecksum(std::string s);
+    public:
+      UPCEReader();
 
-			int decodeMiddle(Ref<BitArray> row, int startRange[], int startRangeLen,
-			    std::string& resultString);
-			static std::string convertUPCEtoUPCA(std::string upce);
+      int decodeMiddle(Ref<BitArray> row, int startRange[], int startRangeLen,
+          std::string& resultString);
+      static std::string convertUPCEtoUPCA(std::string upce);
 
-			BarcodeFormat getBarcodeFormat();
-		};
-	}
+      BarcodeFormat getBarcodeFormat();
+    };
+  }
 }
 
 #endif
