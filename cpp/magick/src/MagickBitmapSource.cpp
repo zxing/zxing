@@ -52,7 +52,9 @@ unsigned char* MagickBitmapSource::getRow(int y, unsigned char* row) {
   for (int x = 0; x < width; x++) {
     const PixelPacket* p = pixel_cache + y * width + x;
     // We assume 16 bit values here
-    row[x] = (unsigned char)((306 * ((int)p->red >> 8) + 601 * ((int)p->green >> 8) + 117 * ((int)p->blue >> 8)) >> 10);
+    // 0x200 = 1<<9, half an lsb of the result to force rounding
+    row[x] = (unsigned char)((306 * ((int)p->red >> 8) + 601 * ((int)p->green >> 8) +
+        117 * ((int)p->blue >> 8) + 0x200) >> 10);
   }
   return row;
 
@@ -67,7 +69,8 @@ unsigned char* MagickBitmapSource::getMatrix() {
   const Magick::PixelPacket* p = pixel_cache;
   for (int y = 0; y < height; y++) {
     for (int x = 0; x < width; x++) {
-      *m = (unsigned char)((306 * ((int)p->red >> 8) + 601 * ((int)p->green >> 8) + 117 * ((int)p->blue >> 8)) >> 10);
+      *m = (unsigned char)((306 * ((int)p->red >> 8) + 601 * ((int)p->green >> 8) +
+          117 * ((int)p->blue >> 8) + 0x200) >> 10);
       m++;
       p++;
     }
