@@ -54,7 +54,7 @@ static const int MAX_EXPECTED = 1024;
 
 Ref<Result> decode(Ref<BinaryBitmap> image, DecodeHints hints) {
   Ref<Reader> reader(new MultiFormatReader);
-  return Ref<Result> (new Result(*reader->decode(image, hints)));
+  return reader->decode(image, hints);
 }
 
 

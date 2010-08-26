@@ -90,9 +90,9 @@ bool BitArray::isRange(size_t start, size_t end, bool value) {
   size_t lastWord = end >> logBits_;
   for (size_t i = firstWord; i <= lastWord; i++) {
     size_t firstBit = i > firstWord ? 0 : start & bitsMask_;
-    size_t lastBit = i < lastWord ? logBits_ : end & bitsMask_;
+    size_t lastBit = i < lastWord ? bitsPerWord_ - 1: end & bitsMask_;
     unsigned int mask;
-    if (firstBit == 0 && lastBit == logBits_) {
+    if (firstBit == 0 && lastBit == bitsPerWord_ - 1) {
       mask = numeric_limits<unsigned int>::max();
     } else {
       mask = 0;
