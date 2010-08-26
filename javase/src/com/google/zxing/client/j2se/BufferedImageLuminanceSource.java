@@ -74,7 +74,8 @@ public final class BufferedImageLuminanceSource extends LuminanceSource {
       int pixel = rgbData[x];
       int luminance = (306 * ((pixel >> 16) & 0xFF) +
           601 * ((pixel >> 8) & 0xFF) +
-          117 * (pixel & 0xFF)) >> 10;
+          117 * (pixel & 0xFF) +
+          (0x200)) >> 10; // 0x200 = 1<<9, half an lsb of the result to force rounding
       row[x] = (byte) luminance;
     }
     return row;
