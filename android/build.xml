@@ -97,9 +97,6 @@ limitations under the License.
   <!-- folder for the 3rd party java libraries -->
   <!--<property name="external-libs-folder" value="../core" />-->
 
-  <!-- folder for the native libraries -->
-  <property name="native-libs-folder" value="libs" />
-
   <!-- Output directories -->
   <property name="gen-folder" value="gen" />
   <property name="out-folder" value="bin" />
@@ -268,7 +265,6 @@ limitations under the License.
       <file path="${intermediate-dex}" />
       <sourcefolder path="${source-folder}" />
       <jarfolder path="${external-libs-folder}" />
-      <nativefolder path="${native-libs-folder}" />
     </apkbuilder>
     <copy file="${out-folder}/BarcodeScanner-debug.apk" tofile="${out-folder}/temp.apk" overwrite="true"/>
     <exec executable="${android-tools}/zipalign">
@@ -291,7 +287,6 @@ limitations under the License.
       <file path="${intermediate-dex}" />
       <sourcefolder path="${source-folder}" />
       <jarfolder path="${external-libs-folder}" />
-      <nativefolder path="${native-libs-folder}" />
     </apkbuilder>
     <echo>All generated packages need to be signed with jarsigner before they are published.</echo>
     <echo>Also run zipalign -f -v 4 BarcodeScanner.apk BarcodeScanner-aligned.apk after signing</echo>
