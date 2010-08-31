@@ -374,6 +374,9 @@ public class Detector {
 
     int alignmentAreaTopY = Math.max(0, estAlignmentY - allowance);
     int alignmentAreaBottomY = Math.min(image.getHeight() - 1, estAlignmentY + allowance);
+    if (alignmentAreaBottomY - alignmentAreaTopY < overallEstModuleSize * 3) {
+      throw NotFoundException.getNotFoundInstance();
+    }
 
     AlignmentPatternFinder alignmentFinder =
         new AlignmentPatternFinder(

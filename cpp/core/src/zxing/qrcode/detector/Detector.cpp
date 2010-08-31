@@ -273,6 +273,9 @@ Ref<AlignmentPattern> Detector::findAlignmentInRegion(float overallEstModuleSize
   }
   int alignmentAreaTopY = max(0, estAlignmentY - allowance);
   int alignmentAreaBottomY = min((int)(image_->getHeight() - 1), estAlignmentY + allowance);
+  if (alignmentAreaBottomY - alignmentAreaTopY < overallEstModuleSize * 3) {
+      throw zxing::ReaderException("region too small to hold alignment pattern");
+  }
 
   AlignmentPatternFinder alignmentFinder(image_, alignmentAreaLeftX, alignmentAreaTopY, alignmentAreaRightX
                                          - alignmentAreaLeftX, alignmentAreaBottomY - alignmentAreaTopY, overallEstModuleSize, callback_);
