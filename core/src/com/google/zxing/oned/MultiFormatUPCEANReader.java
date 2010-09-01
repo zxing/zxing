@@ -85,10 +85,16 @@ public final class MultiFormatUPCEANReader extends OneDReader {
       // a UPC-A code. But for efficiency we only run the EAN-13 decoder to also read
       // UPC-A. So we special case it here, and convert an EAN-13 result to a UPC-A
       // result if appropriate.
-      if (result.getBarcodeFormat().equals(BarcodeFormat.EAN_13) &&
-          result.getText().charAt(0) == '0') {
-        return new Result(result.getText().substring(1), null, result.getResultPoints(),
-            BarcodeFormat.UPC_A);
+      //
+      // But, don't return UPC-A if UPC-A was not a requested format!
+      boolean ean13MayBeUPCA =
+          BarcodeFormat.EAN_13.equals(result.getBarcodeFormat()) &&
+          result.getText().charAt(0) == '0';
+      Vector possibleFormats = hints == null ? null : (Vector) hints.get(DecodeHintType.POSSIBLE_FORMATS);
+      boolean canReturnUPCA = possibleFormats == null || possibleFormats.contains(BarcodeFormat.UPC_A);
+
+      if (ean13MayBeUPCA && canReturnUPCA) {
+        return new Result(result.getText().substring(1), null, result.getResultPoints(), BarcodeFormat.UPC_A);
       }
       return result;
     }
