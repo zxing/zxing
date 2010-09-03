@@ -28,9 +28,9 @@ public final class DataMatrixBlackBox1TestCase extends AbstractBlackBoxTestCase 
     // TODO use MultiFormatReader here once Data Matrix decoder is done
     super("test/data/blackbox/datamatrix-1", new DataMatrixReader(), BarcodeFormat.DATA_MATRIX);
     addTest(7, 7, 0.0f);
-    addTest(4, 4, 90.0f);
-    addTest(6, 6, 180.0f);
-    addTest(6, 6, 270.0f);
+    addTest(7, 7, 90.0f);
+    addTest(7, 7, 180.0f);
+    addTest(7, 7, 270.0f);
   }
 
 }

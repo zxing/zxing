@@ -33,7 +33,6 @@ import com.google.zxing.common.BitMatrix;
 public final class WhiteRectangleDetector {
 
   private static final int INIT_SIZE = 40;
-  private static final int MIN_SIZE = 20;
 
   private final BitMatrix image;
   private final int height;
@@ -134,34 +133,91 @@ public final class WhiteRectangleDetector {
 
     if (!sizeExceeded && atLeastOneBlackPointFoundOnBorder) {
 
-      //     t            t
-      //z                      x
-      //      x    OR    z
-      // y                    y
+        ResultPoint x=null, y=null, z=null, t=null;
+        
+        final int max_size = right-left;
+        
+        for (int i = 1; i < max_size; i++){
+            ResultPoint a = new ResultPoint(left, down-i);
+            ResultPoint b = new ResultPoint(left+i, down);
+            z = getBlackPointOnSegment(a, b);
+            if (z != null){
+                break;
+            }
+        }
+        
+        if (z == null){
+            throw NotFoundException.getNotFoundInstance();
+        }
 
-      ResultPoint x = getBlackPoint(up, down, right - 1, false);
-      ResultPoint y = getBlackPoint(left, right, down - 1, true);
-      ResultPoint z = getBlackPoint(up, down, left + 1, false);
-      ResultPoint t = getBlackPoint(left, right, up + 1, true);
+        //go down right
+        for (int i = 1; i < max_size; i++){
+            ResultPoint a = new ResultPoint(left, up+i);
+            ResultPoint b = new ResultPoint(left+i, up);
+            t = getBlackPointOnSegment(a, b);
+            if (t != null){
+                break;
+            }
+        }
+        
+        if (t == null){
+            throw NotFoundException.getNotFoundInstance();
+        }
+        
+        //go down left
+        for (int i = 1; i < max_size; i++){
+            ResultPoint a = new ResultPoint(right, up+i);
+            ResultPoint b = new ResultPoint(right-i, up);
+            x = getBlackPointOnSegment(a, b);
+            if (x != null){
+                break;
+            }
+        }
+        
+        if (x == null){
+            throw NotFoundException.getNotFoundInstance();
+        }
+        
+        //go up left
+        for (int i = 1; i < max_size; i++){
+            ResultPoint a = new ResultPoint(right, down-i);
+            ResultPoint b = new ResultPoint(right-i, down);
+            y = getBlackPointOnSegment(a, b);
+            if (y != null){
+                break;
+            }
+        }
+        
+        if (y == null){
+            throw NotFoundException.getNotFoundInstance();
+        }
 
-      // if the rectangle if perfectly horizontal (mostly in test cases)
-      // then we end up with:
-      // zt     x
-      //
-      // y
-
-      if (distance(z, t) < MIN_SIZE) {
-        ResultPoint u = getBlackPointInverted(up, down, right - 1, false);
-        t = x;
-        x = u;
-      }
-
-      return centerEdges(y, z, x, t);
+        return centerEdges(y, z, x, t);
 
     } else {
-      throw NotFoundException.getNotFoundInstance();
+        throw NotFoundException.getNotFoundInstance();
     }
   }
+  
+
+    private ResultPoint getBlackPointOnSegment(ResultPoint a, ResultPoint b) {
+        int dist = distanceL2(a, b);
+        float xStep = (b.getX()-a.getX())/dist;
+        float yStep = (b.getY()-a.getY())/dist;
+        
+        for (int i = 0; i < dist; i++){
+            if (image.get(Math.round(a.getX()+i*xStep), Math.round(a.getY()+i*yStep))){
+                return new ResultPoint(Math.round(a.getX()+i*xStep), Math.round(a.getY()+i*yStep));
+            }
+        }
+        return null;
+    }
+
+    private static int distanceL2(ResultPoint a, ResultPoint b) {
+        return (int) Math.round(Math.sqrt((a.getX() - b.getX())
+                * (a.getX() - b.getX()) + (a.getY() - b.getY())
+                * (a.getY() - b.getY())));
+    }
 
   /**
    * recenters the points of a constant distance towards the center
@@ -201,89 +257,6 @@ public final class WhiteRectangleDetector {
           new ResultPoint(xi - corr, xj + corr),
           new ResultPoint(yi - corr, yj - corr)};
     }
-  }
-
-  // L1 distance (metropolitan distance)
-  private static float distance(ResultPoint a, ResultPoint b) {
-    return Math.abs(a.getX() - b.getX()) + Math.abs(a.getY() - b.getY());
-  }
-
-  /**
-   * Gets the coordinate of an extreme black point of a segment
-   *
-   * @param a          min value of the scanned coordinate
-   * @param b          max value of the scanned coordinate
-   * @param fixed      value of fixed coordinate
-   * @param horizontal set to true if scan must be horizontal, false if vertical
-   * @return {@link ResultPoint} describing the black point. If scan is horizontal,
-   *         the returned point is the first encountered if it is on the left of the image,
-   *         else the last one. If scan is vertical, the returned point is the first encountered
-   *         if it is on the top of the image, else the last one.
-   *         {@link ResultPoint} is null if not black point has been found
-   */
-  private ResultPoint getBlackPoint(int a, int b, int fixed, boolean horizontal) {
-
-    ResultPoint last = null;
-
-    if (horizontal) {
-      for (int x = a; x < b; x++) {
-        if (image.get(x, fixed)) {
-          if (x < width / 2) {
-            return new ResultPoint(x, fixed);
-          } else {
-            while (x < width && image.get(x, fixed)) {
-              x++;
-            }
-            x--;
-            last = new ResultPoint(x, fixed);
-          }
-        }
-      }
-    } else {
-      for (int y = a; y < b; y++) {
-        if (image.get(fixed, y)) {
-          if (y < height / 2) {
-            return new ResultPoint(fixed, y);
-          } else {
-            while (y < height && image.get(fixed, y)) {
-              y++;
-            }
-            y--;
-            last = new ResultPoint(fixed, y);
-          }
-        }
-      }
-    }
-
-    return last;
-  }
-
-  /**
-   * Same as getBlackPoint, but returned point is the last one found.
-   *
-   * @param a          min value of the scanned coordinate
-   * @param b          max value of the scanned coordinate
-   * @param fixed      value of fixed coordinate
-   * @param horizontal set to true if scan must be horizontal, false if vertical
-   * @return {@link ResultPoint} describing the black point.
-   */
-  private ResultPoint getBlackPointInverted(int a, int b, int fixed, boolean horizontal) {
-
-    if (horizontal) {
-      for (int x = b + 1; x >= a; x--) {
-        if (image.get(x, fixed)) {
-          return new ResultPoint(x, fixed);
-        }
-      }
-    } else {
-      for (int y = b + 1; y >= a; y--) {
-        if (image.get(fixed, y)) {
-          return new ResultPoint(fixed, y);
-        }
-      }
-    }
-
-    return null;
   }
 
   /**
