@@ -23,7 +23,7 @@ import com.google.zxing.common.Collections;
 import com.google.zxing.common.Comparator;
 import com.google.zxing.common.DetectorResult;
 import com.google.zxing.common.GridSampler;
-import com.google.zxing.common.detector.MonochromeRectangleDetector;
+import com.google.zxing.common.detector.WhiteRectangleDetector;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -37,7 +37,7 @@ import java.util.Vector;
  */
 public final class Detector {
 
-  //private static final int MAX_MODULES = 32;
+  private static final int MIN_GIVEUP_THRESHOLD = 3;
 
   // Trick to avoid creating new Integer objects below -- a sort of crude copy of
   // the Integer.valueOf(int) optimization added in Java 5, not in J2ME
@@ -46,17 +46,17 @@ public final class Detector {
   // No, can't use valueOf()
 
   private final BitMatrix image;
-  private final MonochromeRectangleDetector rectangleDetector;
+  private final WhiteRectangleDetector rectangleDetector;
 
   public Detector(BitMatrix image) {
     this.image = image;
-    rectangleDetector = new MonochromeRectangleDetector(image);
+    rectangleDetector = new WhiteRectangleDetector(image);
   }
 
   /**
    * <p>Detects a Data Matrix Code in an image.</p>
    *
-   * @return {@link DetectorResult} encapsulating results of detecting a QR Code
+   * @return {@link DetectorResult} encapsulating results of detecting a Data Matrix Code
    * @throws NotFoundException if no Data Matrix Code can be found
    */
   public DetectorResult detect() throws NotFoundException {
@@ -81,6 +81,12 @@ public final class Detector {
     // will be the two alternating black/white sides
     ResultPointsAndTransitions lSideOne = (ResultPointsAndTransitions) transitions.elementAt(0);
     ResultPointsAndTransitions lSideTwo = (ResultPointsAndTransitions) transitions.elementAt(1);
+
+    //give up if there is no chance we'll decode something...
+    if (lSideOne.transitions > MIN_GIVEUP_THRESHOLD ||
+        lSideTwo.transitions > MIN_GIVEUP_THRESHOLD) {
+      throw NotFoundException.getNotFoundInstance();
+    }
 
     // Figure out which point is their intersection by tallying up the number of times we see the
     // endpoints in the four endpoints. One will show up twice.
@@ -142,10 +148,8 @@ public final class Detector {
 
     // The top right point is actually the corner of a module, which is one of the two black modules
     // adjacent to the white module at the top right. Tracing to that corner from either the top left
-    // or bottom right should work here. The number of transitions could be higher than it should be
-    // due to noise. So we try both and take the min.
-
-    int dimension = Math.min(transitionsBetween(topLeft, topRight).getTransitions(), 
+    // or bottom right should work here.
+    int dimension = Math.max(transitionsBetween(topLeft, topRight).getTransitions(),
                              transitionsBetween(bottomRight, topRight).getTransitions());
     if ((dimension & 0x01) == 1) {
       // it can't be odd, so, round... up?
@@ -153,8 +157,79 @@ public final class Detector {
     }
     dimension += 2;
 
-    BitMatrix bits = sampleGrid(image, topLeft, bottomLeft, bottomRight, dimension);
-    return new DetectorResult(bits, new ResultPoint[] {pointA, pointB, pointC, pointD});
+    //correct top right point to match the white module
+    ResultPoint correctedTopRight = correctTopRight(bottomLeft, bottomRight, topLeft, topRight, dimension);
+
+    //We redetermine the dimension using the corrected top right point
+    int dimension2 = Math.min(transitionsBetween(topLeft, correctedTopRight).getTransitions(),
+                              transitionsBetween(bottomRight, correctedTopRight).getTransitions());
+    dimension2++;
+    if ((dimension2 & 0x01) == 1) {
+      dimension2++;
+    }
+
+    BitMatrix bits = sampleGrid(image, topLeft, bottomLeft, bottomRight, correctedTopRight, dimension2);
+
+    return new DetectorResult(bits, new ResultPoint[]{topLeft, bottomLeft, bottomRight, correctedTopRight});
+  }
+
+  /**
+   * Calculates the position of the white top right module using the output of the rectangle detector
+   */
+  private ResultPoint correctTopRight(ResultPoint bottomLeft,
+                                      ResultPoint bottomRight,
+                                      ResultPoint topLeft,
+                                      ResultPoint topRight,
+                                      int dimension) {
+    float corr = distance(bottomLeft, bottomRight) / (float) dimension;
+    float corrx = 0.0f;
+    float corry = 0.0f;
+    int norm = distance(topLeft, topRight);
+    float cos = (topRight.getX() - topLeft.getX()) / norm;
+    float sin = -(topRight.getY() - topLeft.getY()) / norm;
+
+    if (cos > 0.0f && sin > 0.0f) {
+      if (cos > sin) {
+        corrx = corr * cos;
+        corry = -corr * sin;
+      } else {
+        corrx = -corr * sin;
+        corry = -corr * cos;
+      }
+    } else if (cos > 0.0f && sin < 0.0f) {
+      if (cos > -sin) {
+        corrx = -corr * sin;
+        corry = -corr * cos;
+      } else {
+        corrx = corr * cos;
+        corry = -corr * sin;
+      }
+    } else if (cos < 0.0f && sin < 0.0f) {
+      if (-cos > -sin) {
+        corrx = corr * cos;
+        corry = -corr * sin;
+      } else {
+        corrx = -corr * sin;
+        corry = -corr * cos;
+      }
+    } else if (cos < 0.0f && sin > 0.0f) {
+      if (-cos > sin) {
+        corrx = -corr * sin;
+        corry = -corr * cos;
+      } else {
+        corrx = corr * cos;
+        corry = -corr * sin;
+      }
+    }
+
+    return new ResultPoint(topRight.getX() + corrx, topRight.getY() + corry);
+  }
+
+  // L2 distance
+  private static int distance(ResultPoint a, ResultPoint b) {
+    return (int) Math.round(Math.sqrt((a.getX() - b.getX())
+        * (a.getX() - b.getX()) + (a.getY() - b.getY())
+        * (a.getY() - b.getY())));
   }
 
   /**
@@ -169,36 +244,29 @@ public final class Detector {
                                       ResultPoint topLeft,
                                       ResultPoint bottomLeft,
                                       ResultPoint bottomRight,
+                                      ResultPoint topRight,
                                       int dimension) throws NotFoundException {
 
-    // We make up the top right point for now, based on the others.
-    // TODO: we actually found a fourth corner above and figured out which of two modules
-    // it was the corner of. We could use that here and adjust for perspective distortion.
-    float topRightX = (bottomRight.getX() - bottomLeft.getX()) + topLeft.getX();
-    float topRightY = (bottomRight.getY() - bottomLeft.getY()) + topLeft.getY();
-
-    // Note that unlike in the QR Code sampler, we didn't find the center of modules, but the
-    // very corners. So there is no 0.5f here; 0.0f is right.
     GridSampler sampler = GridSampler.getInstance();
-    return sampler.sampleGrid(
-        image,
-        dimension,
-        0.0f,
-        0.0f,
-        dimension,
-        0.0f,
-        dimension,
-        dimension,
-        0.0f,
-        dimension,
-        topLeft.getX(),
-        topLeft.getY(),
-        topRightX,
-        topRightY,
-        bottomRight.getX(),
-        bottomRight.getY(),
-        bottomLeft.getX(),
-        bottomLeft.getY());
+
+    return sampler.sampleGrid(image,
+                              dimension,
+                              0.5f,
+                              0.5f,
+                              dimension - 0.5f,
+                              0.5f,
+                              dimension - 0.5f,
+                              dimension - 0.5f,
+                              0.5f,
+                              dimension - 0.5f,
+                              topLeft.getX(),
+                              topLeft.getY(),
+                              topRight.getX(),
+                              topRight.getY(),
+                              bottomRight.getX(),
+                              bottomRight.getY(),
+                              bottomLeft.getX(),
+                              bottomLeft.getY());
   }
 
   /**
