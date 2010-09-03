@@ -37,8 +37,6 @@ import java.util.Vector;
  */
 public final class Detector {
 
-  private static final int MIN_GIVEUP_THRESHOLD = 3;
-
   // Trick to avoid creating new Integer objects below -- a sort of crude copy of
   // the Integer.valueOf(int) optimization added in Java 5, not in J2ME
   private static final Integer[] INTEGERS =
@@ -81,12 +79,6 @@ public final class Detector {
     // will be the two alternating black/white sides
     ResultPointsAndTransitions lSideOne = (ResultPointsAndTransitions) transitions.elementAt(0);
     ResultPointsAndTransitions lSideTwo = (ResultPointsAndTransitions) transitions.elementAt(1);
-
-    //give up if there is no chance we'll decode something...
-    if (lSideOne.transitions > MIN_GIVEUP_THRESHOLD ||
-        lSideTwo.transitions > MIN_GIVEUP_THRESHOLD) {
-      throw NotFoundException.getNotFoundInstance();
-    }
 
     // Figure out which point is their intersection by tallying up the number of times we see the
     // endpoints in the four endpoints. One will show up twice.
@@ -149,7 +141,7 @@ public final class Detector {
     // The top right point is actually the corner of a module, which is one of the two black modules
     // adjacent to the white module at the top right. Tracing to that corner from either the top left
     // or bottom right should work here.
-    int dimension = Math.max(transitionsBetween(topLeft, topRight).getTransitions(),
+    int dimension = Math.min(transitionsBetween(topLeft, topRight).getTransitions(),
                              transitionsBetween(bottomRight, topRight).getTransitions());
     if ((dimension & 0x01) == 1) {
       // it can't be odd, so, round... up?
@@ -161,7 +153,7 @@ public final class Detector {
     ResultPoint correctedTopRight = correctTopRight(bottomLeft, bottomRight, topLeft, topRight, dimension);
 
     //We redetermine the dimension using the corrected top right point
-    int dimension2 = Math.min(transitionsBetween(topLeft, correctedTopRight).getTransitions(),
+    int dimension2 = Math.max(transitionsBetween(topLeft, correctedTopRight).getTransitions(),
                               transitionsBetween(bottomRight, correctedTopRight).getTransitions());
     dimension2++;
     if ((dimension2 & 0x01) == 1) {
@@ -181,48 +173,29 @@ public final class Detector {
                                       ResultPoint topLeft,
                                       ResultPoint topRight,
                                       int dimension) {
-    float corr = distance(bottomLeft, bottomRight) / (float) dimension;
-    float corrx = 0.0f;
-    float corry = 0.0f;
-    int norm = distance(topLeft, topRight);
-    float cos = (topRight.getX() - topLeft.getX()) / norm;
-    float sin = -(topRight.getY() - topLeft.getY()) / norm;
+		
+		float corr = distance(bottomLeft, bottomRight) / (float)dimension;
+		int norm = distance(topLeft, topRight);
+		float cos = (topRight.getX() - topLeft.getX()) / norm;
+		float sin = (topRight.getY() - topLeft.getY()) / norm;
+		
+		ResultPoint c1 = new ResultPoint(topRight.getX()+corr*cos, topRight.getY()+corr*sin);
+	
+		corr = distance(bottomLeft, bottomRight) / (float)dimension;
+		norm = distance(bottomRight, topRight);
+		cos = (topRight.getX() - bottomRight.getX()) / norm;
+		sin = (topRight.getY() - bottomRight.getY()) / norm;
+		
+		ResultPoint c2 = new ResultPoint(topRight.getX()+corr*cos, topRight.getY()+corr*sin);
 
-    if (cos > 0.0f && sin > 0.0f) {
-      if (cos > sin) {
-        corrx = corr * cos;
-        corry = -corr * sin;
-      } else {
-        corrx = -corr * sin;
-        corry = -corr * cos;
-      }
-    } else if (cos > 0.0f && sin < 0.0f) {
-      if (cos > -sin) {
-        corrx = -corr * sin;
-        corry = -corr * cos;
-      } else {
-        corrx = corr * cos;
-        corry = -corr * sin;
-      }
-    } else if (cos < 0.0f && sin < 0.0f) {
-      if (-cos > -sin) {
-        corrx = corr * cos;
-        corry = -corr * sin;
-      } else {
-        corrx = -corr * sin;
-        corry = -corr * cos;
-      }
-    } else if (cos < 0.0f && sin > 0.0f) {
-      if (-cos > sin) {
-        corrx = -corr * sin;
-        corry = -corr * cos;
-      } else {
-        corrx = corr * cos;
-        corry = -corr * sin;
-      }
-    }
-
-    return new ResultPoint(topRight.getX() + corrx, topRight.getY() + corry);
+		int l1 = Math.abs(transitionsBetween(topLeft, c1).getTransitions() - transitionsBetween(bottomRight, c1).getTransitions());
+		int l2 = Math.abs(transitionsBetween(topLeft, c2).getTransitions() - transitionsBetween(bottomRight, c2).getTransitions());
+		
+		if (l1 <= l2){
+			return c1;
+		}
+		
+		return c2;
   }
 
   // L2 distance
