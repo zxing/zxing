@@ -151,6 +151,9 @@ public final class Detector {
 
     //correct top right point to match the white module
     ResultPoint correctedTopRight = correctTopRight(bottomLeft, bottomRight, topLeft, topRight, dimension);
+    if (correctedTopRight == null){
+    	correctedTopRight = topRight;
+    }
 
     //We redetermine the dimension using the corrected top right point
     int dimension2 = Math.max(transitionsBetween(topLeft, correctedTopRight).getTransitions(),
@@ -188,6 +191,15 @@ public final class Detector {
 		
 		ResultPoint c2 = new ResultPoint(topRight.getX()+corr*cos, topRight.getY()+corr*sin);
 
+		if (!isValid(c1)){
+			if (isValid(c2)){
+				return c2;
+			}
+			return null;
+		} else if (!isValid(c2)){
+			return c1;
+		}
+		
 		int l1 = Math.abs(transitionsBetween(topLeft, c1).getTransitions() - transitionsBetween(bottomRight, c1).getTransitions());
 		int l2 = Math.abs(transitionsBetween(topLeft, c2).getTransitions() - transitionsBetween(bottomRight, c2).getTransitions());
 		
@@ -198,7 +210,11 @@ public final class Detector {
 		return c2;
   }
 
-  // L2 distance
+  private boolean isValid(ResultPoint p) {
+	  return (p.getX() >= 0 && p.getX() < image.width && p.getY() > 0 && p.getY() < image.height);
+  }
+
+// L2 distance
   private static int distance(ResultPoint a, ResultPoint b) {
     return (int) Math.round(Math.sqrt((a.getX() - b.getX())
         * (a.getX() - b.getX()) + (a.getY() - b.getY())
