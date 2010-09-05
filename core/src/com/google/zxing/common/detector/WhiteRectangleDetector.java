@@ -287,18 +287,12 @@ public final class WhiteRectangleDetector {
 
     if (horizontal) {
       for (int x = a; x <= b; x++) {
-    	  if (x>=480 || x < 0 || fixed >= 360 || fixed < 0){
-    		  x++;
-    	  }
         if (image.get(x, fixed)) {
           return true;
         }
       }
     } else {
       for (int y = a; y <= b; y++) {
-    	  if (y>=360 || y < 0 || fixed >= 480 || fixed < 0){
-    		  y++;
-    	  }
         if (image.get(fixed, y)) {
           return true;
 				}
