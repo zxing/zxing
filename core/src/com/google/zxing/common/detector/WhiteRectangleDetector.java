@@ -83,10 +83,10 @@ public final class WhiteRectangleDetector {
           aBlackPointFoundOnBorder = true;
         }
       }
-      
+
       if (right >= width) {
-          sizeExceeded = true;
-          break;
+        sizeExceeded = true;
+        break;
       }
 
       // .....
@@ -100,10 +100,10 @@ public final class WhiteRectangleDetector {
           aBlackPointFoundOnBorder = true;
         }
       }
-      
+
       if (down >= height) {
-          sizeExceeded = true;
-          break;
+        sizeExceeded = true;
+        break;
       }
 
       // .....
@@ -117,10 +117,10 @@ public final class WhiteRectangleDetector {
           aBlackPointFoundOnBorder = true;
         }
       }
-      
+
       if (left < 0) {
-          sizeExceeded = true;
-          break;
+        sizeExceeded = true;
+        break;
       }
 
       // .___.
@@ -148,91 +148,85 @@ public final class WhiteRectangleDetector {
 
     if (!sizeExceeded && atLeastOneBlackPointFoundOnBorder) {
 
-        ResultPoint x=null, y=null, z=null, t=null;
-        
-        final int max_size = right-left;
-        
-        for (int i = 1; i < max_size; i++){
-            ResultPoint a = new ResultPoint(left, down-i);
-            ResultPoint b = new ResultPoint(left+i, down);
-            z = getBlackPointOnSegment(a, b);
-            if (z != null){
-                break;
-            }
-        }
-        
-        if (z == null){
-            throw NotFoundException.getNotFoundInstance();
-        }
+      ResultPoint x = null, y = null, z = null, t = null;
 
-        //go down right
-        for (int i = 1; i < max_size; i++){
-            ResultPoint a = new ResultPoint(left, up+i);
-            ResultPoint b = new ResultPoint(left+i, up);
-            t = getBlackPointOnSegment(a, b);
-            if (t != null){
-                break;
-            }
-        }
-        
-        if (t == null){
-            throw NotFoundException.getNotFoundInstance();
-        }
-        
-        //go down left
-        for (int i = 1; i < max_size; i++){
-            ResultPoint a = new ResultPoint(right, up+i);
-            ResultPoint b = new ResultPoint(right-i, up);
-            x = getBlackPointOnSegment(a, b);
-            if (x != null){
-                break;
-            }
-        }
-        
-        if (x == null){
-            throw NotFoundException.getNotFoundInstance();
-        }
-        
-        //go up left
-        for (int i = 1; i < max_size; i++){
-            ResultPoint a = new ResultPoint(right, down-i);
-            ResultPoint b = new ResultPoint(right-i, down);
-            y = getBlackPointOnSegment(a, b);
-            if (y != null){
-                break;
-            }
-        }
-        
-        if (y == null){
-            throw NotFoundException.getNotFoundInstance();
-        }
+      final int max_size = right - left;
 
-        return centerEdges(y, z, x, t);
+      for (int i = 1; i < max_size; i++) {
+        z = getBlackPointOnSegment(left, down - i, left + i, down);
+        if (z != null) {
+          break;
+        }
+      }
+
+      if (z == null) {
+        throw NotFoundException.getNotFoundInstance();
+      }
+
+      //go down right
+      for (int i = 1; i < max_size; i++) {
+        t = getBlackPointOnSegment(left, up + i, left + i, up);
+        if (t != null) {
+          break;
+        }
+      }
+
+      if (t == null) {
+        throw NotFoundException.getNotFoundInstance();
+      }
+
+      //go down left
+      for (int i = 1; i < max_size; i++) {
+        x = getBlackPointOnSegment(right, up + i, right - i, up);
+        if (x != null) {
+          break;
+        }
+      }
+
+      if (x == null) {
+        throw NotFoundException.getNotFoundInstance();
+      }
+
+      //go up left
+      for (int i = 1; i < max_size; i++) {
+        y = getBlackPointOnSegment(right, down - i, right - i, down);
+        if (y != null) {
+          break;
+        }
+      }
+
+      if (y == null) {
+        throw NotFoundException.getNotFoundInstance();
+      }
+
+      return centerEdges(y, z, x, t);
 
     } else {
-        throw NotFoundException.getNotFoundInstance();
+      throw NotFoundException.getNotFoundInstance();
     }
   }
-  
 
-    private ResultPoint getBlackPointOnSegment(ResultPoint a, ResultPoint b) {
-        int dist = distanceL2(a, b);
-        float xStep = (b.getX()-a.getX())/dist;
-        float yStep = (b.getY()-a.getY())/dist;
-        
-        for (int i = 0; i < dist; i++){
-            if (image.get(Math.round(a.getX()+i*xStep), Math.round(a.getY()+i*yStep))){
-                return new ResultPoint(Math.round(a.getX()+i*xStep), Math.round(a.getY()+i*yStep));
-            }
-        }
-        return null;
-    }
 
-    private static int distanceL2(ResultPoint a, ResultPoint b) {
-        return (int) Math.round(Math.sqrt((a.getX() - b.getX())
-                * (a.getX() - b.getX()) + (a.getY() - b.getY())
-                * (a.getY() - b.getY())));
+  private ResultPoint getBlackPointOnSegment(float aX, float aY, float bX, float bY) {
+    int dist = distanceL2(aX, aY, bX, bY);
+    float xStep = (bX - aX) / dist;
+    float yStep = (bY - aY) / dist;
+
+    for (int i = 0; i < dist; i++) {
+      int x = Math.round(aX + i * xStep);
+      int y = Math.round(aY + i * yStep);
+      if (image.get(x, y)) {
+        return new ResultPoint(x, y);
+      }
     }
+    return null;
+  }
+
+  private static int distanceL2(float aX, float aY, float bX, float bY) {
+    float xDiff = aX - bX;
+    float yDiff = aY - bY;
+    return (int) Math.round(Math.sqrt(xDiff * xDiff + yDiff * yDiff));
+  }
 
   /**
    * recenters the points of a constant distance towards the center
@@ -257,17 +251,25 @@ public final class WhiteRectangleDetector {
     //   y                    y
     //
 
-    float yi = y.getX(), yj = y.getY(), zi = z.getX(), zj = z.getY(), xi = x
-        .getX(), xj = x.getY(), ti = t.getX(), tj = t.getY();
+    float yi = y.getX();
+    float yj = y.getY();
+    float zi = z.getX();
+    float zj = z.getY();
+    float xi = x.getX();
+    float xj = x.getY();
+    float ti = t.getX();
+    float tj = t.getY();
 
     final int corr = 1;
     if (yi < width / 2) {
-      return new ResultPoint[]{new ResultPoint(ti - corr, tj + corr),
+      return new ResultPoint[]{
+          new ResultPoint(ti - corr, tj + corr),
           new ResultPoint(zi + corr, zj + corr),
           new ResultPoint(xi - corr, xj - corr),
           new ResultPoint(yi + corr, yj - corr)};
     } else {
-      return new ResultPoint[]{new ResultPoint(ti + corr, tj + corr),
+      return new ResultPoint[]{
+          new ResultPoint(ti + corr, tj + corr),
           new ResultPoint(zi + corr, zj - corr),
           new ResultPoint(xi - corr, xj + corr),
           new ResultPoint(yi - corr, yj - corr)};
@@ -295,11 +297,11 @@ public final class WhiteRectangleDetector {
       for (int y = a; y <= b; y++) {
         if (image.get(fixed, y)) {
           return true;
-				}
-		}
-	}
+        }
+      }
+    }
 
-	return false;
+    return false;
   }
 
 }
