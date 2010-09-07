@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (C) 2010 ZXing authors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<resources>
+  <string name="app_name">Barkod Tarayıcısı</string>
+  <string name="app_picker_name">Uygulamalar</string>
+  <string name="bookmark_picker_name">Yer imleri</string>
+  <string name="button_add_calendar">Takvime ekle</string>
+  <string name="button_add_contact">Kişi ekle</string>
+  <string name="button_back">Geri</string>
+  <string name="button_book_search">Kitap Arama</string>
+  <string name="button_cancel">İptal</string>
+  <string name="button_clipboard_empty">Pano boş</string>
+  <string name="button_custom_product_search">Özel arama</string>
+  <string name="button_dial">Numarayı ara</string>
+  <string name="button_done">Bitti</string>
+  <string name="button_email">E-posta gönder</string>
+  <string name="button_get_directions">Talimatları al</string>
+  <string name="button_google_shopper">Google Shopper</string>
+  <string name="button_mms">MMS gönder</string>
+  <string name="button_ok">Tamam</string>
+  <string name="button_open_browser">Tarayıcıyı aç</string>
+  <string name="button_product_search">Ürün Arama</string>
+  <string name="button_read_book">Kitabı tara</string>
+  <string name="button_search_book_contents">İçeriği ara</string>
+  <string name="button_share_app">Uygulama</string>
+  <string name="button_share_bookmark">Yer İşareti</string>
+  <string name="button_share_by_email">E-posta ile paylaş</string>
+  <string name="button_share_by_sms">SMS ile paylaş</string>
+  <string name="button_share_clipboard">Pano</string>
+  <string name="button_share_contact">Kişi adı</string>
+  <string name="button_show_map">Haritayı göster</string>
+  <string name="button_sms">SMS Gönder</string>
+  <string name="button_web_search">Web arama</string>
+  <string name="button_wifi">Bağlanmak için Network</string>
+  <string name="contents_contact">Kişi bilgisi</string>
+  <string name="contents_email">E-posta adresi</string>
+  <string name="contents_location">Coğrafi koordinatlar</string>
+  <string name="contents_phone">Telefon numarası</string>
+  <string name="contents_sms">SMS adresi</string>
+  <string name="contents_text">Düz Metin</string>
+  <string name="history_clear_text">Geçmişi temizle</string>
+  <string name="history_email_title">Barkod Tarayıcı geçmişi</string>
+  <string name="history_send">Geçmişi gönder</string>
+  <string name="history_title">Geçmiş</string>
+  <string name="menu_about">Hakkında</string>
+  <string name="menu_help">Yardım</string>
+  <string name="menu_history">Geçmiş</string>
+  <string name="menu_settings">Ayarlar</string>
+  <string name="menu_share">Paylaş</string>
+  <string name="msg_about">Açık kaynak ZXing Barkod Kitaplığı</string>
+  <string name="msg_buggy">Bu aygıtta, barkod tarama sorunlarına yol açtığı bilinen hatalar bulunmaktadır. Daha fazla bilgi için ziyaret http://code.google.com/p/zxing/wiki/FrequentlyAskedQuestions</string>
+  <string name="msg_bulk_mode_scanned">Toplu modu: barkod taranan ve kaydedilen</string>
+  <string name="msg_camera_framework_bug">Üzgünüz, Android kamera bir sorunla karşılaştı. Aygıtı yeniden başlatmanız gerekebilir.</string>
+  <string name="msg_default_contents">İçerik</string>
+  <string name="msg_default_format">Biçim</string>
+  <string name="msg_default_meta">Metadata</string>
+  <string name="msg_default_mms_subject">Merhaba</string>
+  <string name="msg_default_status">Tarayacağınız barkodu vizördeki dikdörtgenin içerisine yerleştirin.</string>
+  <string name="msg_default_time">Süre</string>
+  <string name="msg_default_type">Tür</string>
+  <string name="msg_encode_barcode_failed">İstenen barkod oluşturulamadı.</string>
+  <string name="msg_encode_contents_failed">Sağlanan verilerden bir barkod kodlanamadı.</string>
+  <string name="msg_google_shopper_missing">Google Shopper yüklü değil</string>
+  <string name="msg_install_google_shopper">Google Shopper, tarayıcıyı açmanıza gerek kalmadan barkod taramasını, fiyat, gözden geçirme ve daha birçok özellik ile bir araya getiriyor. Denemek ister misiniz?</string>
+  <string name="msg_intent_failed">Üzgünüz, istenen uygulama başlatılamadı. Barkod içerikleri geçersiz olabilir.</string>
+  <string name="msg_loading_apps">Uygulama listesi yükleniyor\u2026</string>
+  <string name="msg_not_our_results">Bu uygulamadan ayrılıyorsunuz. Göreceğiniz arama sonuçları, bu uygulama ile ilgili değil.</string>
+  <string name="msg_sbc_book_not_searchable">Üzgünüz, bu kitapta arama yapılamaz.</string>
+  <string name="msg_sbc_failed">Üzgünüz, aramada sorun çıktı.</string>
+  <string name="msg_sbc_no_page_returned">Sayfa çevrilmedi</string>
+  <string name="msg_sbc_page">Sayfa</string>
+  <string name="msg_sbc_searching_book">Kitabı arıyor\u2026</string>
+  <string name="msg_sbc_snippet_unavailable">Parçacık yok</string>
+  <string name="msg_sbc_unknown_page">Bilinmeyen sayfa</string>
+  <string name="msg_share_explanation">Ekranınızda barkodu görüntüleyip bu barkodu başka bir telefonda tarayarak verileri paylaşabilirsiniz.</string>
+  <string name="msg_share_subject_line">İşte taradığım barkodun içerikleri</string>
+  <string name="msg_unmount_usb">Devam etmek için USB depolama aygıtını kapatın.</string>
+  <string name="preferences_actions_title">Bir barkod bulunduğu zaman\u2026</string>
+  <string name="preferences_bulk_mode_summary">Tarama ve kaydetmek çok barkodlar sürekli</string>
+  <string name="preferences_bulk_mode_title">Toplu tarama modunu</string>
+  <string name="preferences_copy_to_clipboard_title">Panoya kopyala</string>
+  <string name="preferences_custom_product_search_summary">Ürün kimliği için yer tutucu olarak %s öğesini kullan</string>
+  <string name="preferences_custom_product_search_title">Özel arama URL</string>
+  <string name="preferences_decode_1D_title">1D barkodlarını çöz</string>
+  <string name="preferences_decode_QR_title">QR Kodlarını Çöz</string>
+  <string name="preferences_front_light_summary">Bazı telefonlarda düşük ışıkta taramayı geliştirir, ancak parlak ışığa neden olabilir</string>
+  <string name="preferences_front_light_title">Ön ışığı kullan</string>
+  <string name="preferences_general_title">Genel ayarlar</string>
+  <string name="preferences_name">Ayarlar</string>
+  <string name="preferences_play_beep_title">Bip</string>
+  <string name="preferences_result_title">Sonuç ayarları</string>
+  <string name="preferences_scanning_title">Ne zaman barkodlar \u2026 için tarama</string>
+  <string name="preferences_vibrate_title">Titret</string>
+  <string name="result_address_book">Bulunan kişi bilgisi</string>
+  <string name="result_calendar">Bulunan takvim etkinliği</string>
+  <string name="result_email_address">Bulunan e-posta adresi</string>
+  <string name="result_geo">Bulunan coğrafi koordinatlar</string>
+  <string name="result_isbn">Bulunan kitap</string>
+  <string name="result_product">Bulunan ürün</string>
+  <string name="result_sms">Bulunan SMS adresi</string>
+  <string name="result_tel">Bulunan telefon numarası</string>
+  <string name="result_text">Bulunan düz metin</string>
+  <string name="result_uri">Bulunan URL</string>
+  <string name="result_wifi">Bulunan Wifi Yapılandırma</string>
+  <string name="sbc_name">Google Kitap Arama</string>
+  <string name="share_name">Barkod ile paylaş</string>
+  <string name="title_about">Barkod Tarayıcı v</string>
+  <string name="wa_name">Wifi Bağlantı</string>
+  <string name="wifi_changing_network">Network değiştirme</string>
+  <string name="wifi_connect_failed">Ağ bağlantısı başarısız oldu</string>
+  <string name="wifi_connected">Bağlı</string>
+  <string name="wifi_creating_network">Yaratmak Network</string>
+  <string name="wifi_modifying_network">Network Değiştirme</string>
+  <string name="wifi_ssid_label">Ağ Adı</string>
+  <string name="wifi_ssid_missing">Ağ adı eksik</string>
+  <string name="wifi_type_incorrect">Ağ türü yanlış</string>
+  <string name="wifi_type_label">Tip</string>
+  <string name="zxing_url">http://code.google.com/p/zxing</string>
+</resources>
