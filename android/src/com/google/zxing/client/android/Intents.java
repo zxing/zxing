@@ -75,6 +75,11 @@ public final class Intents {
     public static final String QR_CODE_MODE = "QR_CODE_MODE";
 
     /**
+     * Decode only Data Matrix codes.
+     */
+    public static final String DATA_MATRIX_MODE = "DATA_MATRIX_MODE";
+
+    /**
      * If a barcode is found, Barcodes returns RESULT_OK to onActivityResult() of the app which
      * requested the scan via startSubActivity(). The barcodes contents can be retrieved with
      * intent.getStringExtra(RESULT). If the user presses Back, the result code will be

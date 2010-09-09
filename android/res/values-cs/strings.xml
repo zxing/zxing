@@ -96,6 +96,7 @@
   <string name="preferences_custom_product_search_summary">Použijte %s jako zástupný symbol pro ID produktu, a %f pro formát</string>
   <string name="preferences_custom_product_search_title">Vlastní vyhledávání URL.</string>
   <string name="preferences_decode_1D_title">Dekódovat 1D kódy</string>
+  <string name="preferences_decode_Data_Matrix_title">Dekódovat Data Matrix</string>
   <string name="preferences_decode_QR_title">Dekódovat QR kódy</string>
   <string name="preferences_front_light_summary">Zlepšuje skenování při slabém osvětlení na některých telefonech, ale může způsobit oslnění. Nefunguje na všech telefonech.</string>
   <string name="preferences_front_light_title">Přední světla</string>
@@ -121,13 +122,13 @@
   <string name="title_about">Barcode Scanner v</string>
   <string name="wa_name">Bezdrátová konfigurace</string>
   <string name="wifi_changing_network">Změna síť</string>
+  <string name="wifi_connect_failed">Síťové připojení se nezdařilo</string>
   <string name="wifi_connected">Připojeno</string>
   <string name="wifi_creating_network">Vytvoření sítě</string>
   <string name="wifi_modifying_network">Úprava sítě</string>
+  <string name="wifi_ssid_label">Jméno sítě</string>
   <string name="wifi_ssid_missing">Název sítě chybí</string>
   <string name="wifi_type_incorrect">Typ sítě nesprávné</string>
-  <string name="wifi_ssid_label">Jméno sítě</string>
   <string name="wifi_type_label">Typ</string>
-  <string name="wifi_connect_failed">Síťové připojení se nezdařilo</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

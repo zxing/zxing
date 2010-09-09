@@ -96,6 +96,7 @@
   <string name="preferences_custom_product_search_summary">Használja a %s helyktöltést a termék azonosító helyén, és %f esetében formátum</string>
   <string name="preferences_custom_product_search_title">Egyedi keresés URL</string>
   <string name="preferences_decode_1D_title">1D vonalkódok megfejtése</string>
+  <string name="preferences_decode_Data_Matrix_title">Data Matrix megfejtése</string>
   <string name="preferences_decode_QR_title">QR-kódok megfejtése</string>
   <string name="preferences_front_light_summary">Javítja a szkennelést kevés fény mellett néhány telefonon, de csillogást okozhat. Nem működik a telefon minden.</string>
   <string name="preferences_front_light_title">Elülső lámpa használata</string>
@@ -121,13 +122,13 @@
   <string name="title_about">Barcode Scanner v</string>
   <string name="wa_name">Hálózati konfiguráció</string>
   <string name="wifi_changing_network">Változó Hálózat</string>
+  <string name="wifi_connect_failed">Hálózati kapcsolat nem</string>
   <string name="wifi_connected">Összefüggő</string>
   <string name="wifi_creating_network">Hálózat létrehozása</string>
   <string name="wifi_modifying_network">Módosítása Hálózat</string>
+  <string name="wifi_ssid_label">Hálózat neve</string>
   <string name="wifi_ssid_missing">A hálózat neve hiányzik</string>
   <string name="wifi_type_incorrect">Hálózati típusú hibás</string>
-  <string name="wifi_ssid_label">Hálózat neve</string>
   <string name="wifi_type_label">Típusú</string>
-  <string name="wifi_connect_failed">Hálózati kapcsolat nem</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

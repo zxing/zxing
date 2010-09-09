@@ -96,6 +96,7 @@
   <string name="preferences_custom_product_search_summary">Użyj %s jako zamiennik dla ID produktu, a dla formatu %f</string>
   <string name="preferences_custom_product_search_title">Własny URL wyszukiwania</string>
   <string name="preferences_decode_1D_title">Dekoduj kody 1D</string>
+  <string name="preferences_decode_Data_Matrix_title">Dekoduj Decode Matrix</string>
   <string name="preferences_decode_QR_title">Dekoduj kody QR</string>
   <string name="preferences_front_light_summary">Polepsza skanowanie przy małej ilości światła w niektórych telefonach, ale może powodować odbłysk. Nie działa na wszystkich telefonach.</string>
   <string name="preferences_front_light_title">Używaj lampy frontowej</string>
@@ -121,13 +122,13 @@
   <string name="title_about">Skaner Kodów Paskowych v</string>
   <string name="wa_name">Konfiguracja sieci</string>
   <string name="wifi_changing_network">Zmiana sieci</string>
+  <string name="wifi_connect_failed">Połączenie sieciowe nie</string>
   <string name="wifi_connected">Połączony</string>
   <string name="wifi_creating_network">Tworzenie sieci</string>
   <string name="wifi_modifying_network">Modyfikowanie sieci</string>
+  <string name="wifi_ssid_label">Nazwa sieci</string>
   <string name="wifi_ssid_missing">Nazwa sieci brakuje</string>
   <string name="wifi_type_incorrect">Typ sieci nieprawidłowe</string>
-  <string name="wifi_ssid_label">Nazwa sieci</string>
   <string name="wifi_type_label">Typ</string>
-  <string name="wifi_connect_failed">Połączenie sieciowe nie</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

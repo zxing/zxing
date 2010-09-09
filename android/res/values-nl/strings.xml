@@ -96,6 +96,7 @@
   <string name="preferences_custom_product_search_summary">Gebruik %s voor de plaats van het product ID en %f voor het formaat</string>
   <string name="preferences_custom_product_search_title">Zoek aangepaste URL</string>
   <string name="preferences_decode_1D_title">Decodeer 1D barcodes</string>
+  <string name="preferences_decode_Data_Matrix_title">Decodeer Data Matrix</string>
   <string name="preferences_decode_QR_title">Decodeer QR codes</string>
   <string name="preferences_front_light_summary">Inschakelen van achtergrondlicht, indien beschikbaar. Dit kan in sommige gevallen leiden tot slechte herkenning van barcodes. Werkt niet op alle telefoons.</string>
   <string name="preferences_front_light_title">Achtergrondlicht</string>
@@ -121,13 +122,13 @@
   <string name="title_about">Barcode Scanner v</string>
   <string name="wa_name">Netwerkconfiguratie</string>
   <string name="wifi_changing_network">Veranderen van Netwerk</string>
+  <string name="wifi_connect_failed">Netwerk verbinding is mislukt</string>
   <string name="wifi_connected">Verbonden</string>
   <string name="wifi_creating_network">Netwerk creeren</string>
   <string name="wifi_modifying_network">Netwerk wijzigen</string>
+  <string name="wifi_ssid_label">Netwerknaam (SSID)</string>
   <string name="wifi_ssid_missing">Netwerk naam ontbreekt</string>
   <string name="wifi_type_incorrect">Onjuist netwerktype</string>
-  <string name="wifi_ssid_label">Netwerknaam (SSID)</string>
   <string name="wifi_type_label">Type</string>
-  <string name="wifi_connect_failed">Netwerk verbinding is mislukt</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

@@ -96,6 +96,7 @@
   <string name="preferences_custom_product_search_summary">%s будет заменён на ID товара, и %f для формата</string>
   <string name="preferences_custom_product_search_title">URL пользовательского поиска</string>
   <string name="preferences_decode_1D_title">Распознавать линейные штрих-коды</string>
+  <string name="preferences_decode_Data_Matrix_title">Распознавать Data Matrix</string>
   <string name="preferences_decode_QR_title">Распознавать QR-коды</string>
   <string name="preferences_front_light_summary">Включите свет, если передние доступно. Не работает на всех телефонах.</string>
   <string name="preferences_front_light_title">Передние омыватели</string>
@@ -121,13 +122,13 @@
   <string name="title_about">Сканер штрих-кодов версии </string>
   <string name="wa_name">конфигурации сети</string>
   <string name="wifi_changing_network">Изменение сети</string>
+  <string name="wifi_connect_failed">Подключение к сети не удалось</string>
   <string name="wifi_connected">Связанный</string>
   <string name="wifi_creating_network">Создание сети</string>
   <string name="wifi_modifying_network">Изменение сети</string>
+  <string name="wifi_ssid_label">Имя сети</string>
   <string name="wifi_ssid_missing">Сеть отсутствует имя</string>
   <string name="wifi_type_incorrect">Тип сети неправильный</string>
-  <string name="wifi_ssid_label">Имя сети</string>
   <string name="wifi_type_label">Тип</string>
-  <string name="wifi_connect_failed">Подключение к сети не удалось</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

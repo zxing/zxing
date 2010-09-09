@@ -96,6 +96,7 @@
   <string name="preferences_custom_product_search_summary">Uporabi %s kot prostor za ID produkta ter %f za format</string>
   <string name="preferences_custom_product_search_title">URL za iskanje po meri</string>
   <string name="preferences_decode_1D_title">Preberi 1D črtno kodo</string>
+  <string name="preferences_decode_Data_Matrix_title">Preberi Data Matrix</string>
   <string name="preferences_decode_QR_title">Preberi QR kodo</string>
   <string name="preferences_front_light_summary">Izboljša branje pri slabi svetlobi na nekaterih telefonih, a lahko povzroči blesk. Ne deluje na vseh telefonih.</string>
   <string name="preferences_front_light_title">Uporabite sprednjo luč</string>
@@ -121,13 +122,13 @@
   <string name="title_about">Barcode Scanner v</string>
   <string name="wa_name">Wifi povezava</string>
   <string name="wifi_changing_network">Menjam omrežje</string>
+  <string name="wifi_connect_failed">Napaka omrežne povezave</string>
   <string name="wifi_connected">Povezan</string>
   <string name="wifi_creating_network">Kreiram omrežje</string>
   <string name="wifi_modifying_network">Urejam omrežje</string>
+  <string name="wifi_ssid_label">Ime omrežja</string>
   <string name="wifi_ssid_missing">Manjka ime omrežja</string>
   <string name="wifi_type_incorrect">Nepravilen tip omrežja</string>
-  <string name="wifi_connect_failed">Napaka omrežne povezave</string>
-  <string name="wifi_ssid_label">Ime omrežja</string>
   <string name="wifi_type_label">Tip</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

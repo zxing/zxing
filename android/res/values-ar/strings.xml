@@ -96,6 +96,7 @@
   <string name="preferences_custom_product_search_summary">استخدم %s كعنصر نائب لمعرف المنتج</string>
   <string name="preferences_custom_product_search_title">عنوان بحث مخصص</string>
   <string name="preferences_decode_1D_title">فك الرموز الشريطية 1D</string>
+  <string name="preferences_decode_Data_Matrix_title">فك رموز البيانات ماتريكس</string>
   <string name="preferences_decode_QR_title">فك رموز QR</string>
   <string name="preferences_front_light_summary">تقوم بتحسين عملية المسح في إضاءة ضعيفة في بعض الهواتف، ولكن يمكن أن يتسبب في حدوث سطوع</string>
   <string name="preferences_front_light_title">استخدم إضاءة أمامية</string>
@@ -121,13 +122,13 @@
   <string name="title_about">إصدار ماسح الرمز الشريطي</string>
   <string name="wa_name">التكوين اللاسلك</string>
   <string name="wifi_changing_network">تغيير الشبكة</string>
+  <string name="wifi_connect_failed">فشل شبكة الاتصال</string>
   <string name="wifi_connected">متصل</string>
   <string name="wifi_creating_network">إنشاء شبكة</string>
   <string name="wifi_modifying_network">تعديل شبكة</string>
+  <string name="wifi_ssid_label">اسم الشبكة</string>
   <string name="wifi_ssid_missing">اسم الشبكة مفقود</string>
   <string name="wifi_type_incorrect">شبكة نوع غير صحيح</string>
-  <string name="wifi_ssid_label">اسم الشبكة</string>
   <string name="wifi_type_label">نوع</string>
-  <string name="wifi_connect_failed">فشل شبكة الاتصال</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

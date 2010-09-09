@@ -96,6 +96,7 @@
   <string name="preferences_custom_product_search_summary">Utilizza %s come segnaposto per l\'ID del prodotto, e per il formato %f</string>
   <string name="preferences_custom_product_search_title">URL ricerca prodotto personalizzata</string>
   <string name="preferences_decode_1D_title">Decodifica codice a barre 1D</string>
+  <string name="preferences_decode_Data_Matrix_title">Decodifica Data Matrix</string>
   <string name="preferences_decode_QR_title">Decodifica codici QR</string>
   <string name="preferences_front_light_summary">Consentire la luce anteriore, se disponibile, ma può provocare abbagliamento. Non funziona su tutti i telefoni.</string>
   <string name="preferences_front_light_title">Luce anteriore</string>
@@ -121,13 +122,13 @@
   <string name="title_about">Scansione codice a barre v</string>
   <string name="wa_name">Configurazione di rete</string>
   <string name="wifi_changing_network">Cambiare Network</string>
+  <string name="wifi_connect_failed">La connessione di rete non riuscita</string>
   <string name="wifi_connected">Collegato</string>
   <string name="wifi_creating_network">Creazione di rete</string>
   <string name="wifi_modifying_network">Modifica della rete</string>
+  <string name="wifi_ssid_label">Nome di rete</string>
   <string name="wifi_ssid_missing">Nome della rete mancante</string>
   <string name="wifi_type_incorrect">Tipo di rete non corretto</string>
-  <string name="wifi_ssid_label">Nome di rete</string>
   <string name="wifi_type_label">Tipo</string>
-  <string name="wifi_connect_failed">La connessione di rete non riuscita</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>
