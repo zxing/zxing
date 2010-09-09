@@ -96,6 +96,7 @@
   <string name="preferences_custom_product_search_summary">Käytä %s paikkana tuotetunnukselle tunnus ja %f muoto</string>
   <string name="preferences_custom_product_search_title">Mukautettu hakukone</string>
   <string name="preferences_decode_1D_title">Dekoodaa 1D viivakoodeja</string>
+  <string name="preferences_decode_Data_Matrix_title">Dekoodaa Data Matrix</string>
   <string name="preferences_decode_QR_title">Dekoodaa QR koodeja</string>
   <string name="preferences_front_light_summary">Activoi valo edessä, jos käytettävissä, mutta saattaa aiheuttaa häikäisyä. Ei toimi kaikissa puhelimissa.</string>
   <string name="preferences_front_light_title">Valo edessä</string>
@@ -121,13 +122,13 @@
   <string name="title_about">Viivakoodin lukija v</string>
   <string name="wa_name">Langattoman yhteyden</string>
   <string name="wifi_changing_network">Vaihtaminen Verkko</string>
+  <string name="wifi_connect_failed">Verkkoyhteys ei</string>
   <string name="wifi_connected">Kytketty</string>
   <string name="wifi_creating_network">Luominen verkoston</string>
   <string name="wifi_modifying_network">Muuttaminen Verkko</string>
+  <string name="wifi_ssid_label">Verkon nimi</string>
   <string name="wifi_ssid_missing">Verkon nimi puuttuu</string>
   <string name="wifi_type_incorrect">Verkon tyyppi virheellinen</string>
-  <string name="wifi_ssid_label">Verkon nimi</string>
   <string name="wifi_type_label">Tyyppi</string>
-  <string name="wifi_connect_failed">Verkkoyhteys ei</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

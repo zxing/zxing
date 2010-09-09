@@ -96,6 +96,7 @@
   <string name="preferences_custom_product_search_summary">使用％s作为产品ID占位</string>
   <string name="preferences_custom_product_search_title">自定义搜索网址</string>
   <string name="preferences_decode_1D_title">解码一维条码</string>
+  <string name="preferences_decode_Data_Matrix_title">数据矩阵码解码</string>
   <string name="preferences_decode_QR_title">解码QR条码</string>
   <string name="preferences_front_light_summary">使前灯如果可用</string>
   <string name="preferences_front_light_title">前灯</string>
@@ -121,13 +122,13 @@
   <string name="title_about">条码扫描器</string>
   <string name="wa_name">网络配置</string>
   <string name="wifi_changing_network">不断变化的网络</string>
+  <string name="wifi_connect_failed">网络连接失败</string>
   <string name="wifi_connected">连接的</string>
   <string name="wifi_creating_network">创建网络</string>
   <string name="wifi_modifying_network">修改网络</string>
+  <string name="wifi_ssid_label">网络名称</string>
   <string name="wifi_ssid_missing">网络实名失踪</string>
   <string name="wifi_type_incorrect">网络类型不正确</string>
-  <string name="wifi_ssid_label">网络名称</string>
   <string name="wifi_type_label">类型</string>
-  <string name="wifi_connect_failed">网络连接失败</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

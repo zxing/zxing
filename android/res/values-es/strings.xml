@@ -96,6 +96,7 @@
   <string name="preferences_custom_product_search_summary">Use %s como un marcador de posición para el identificador del producto, y %f para el formato</string>
   <string name="preferences_custom_product_search_title">Búsqueda de productos con URL personalizada</string>
   <string name="preferences_decode_1D_title">Descodificar códigos de barras 1D</string>
+  <string name="preferences_decode_Data_Matrix_title">Descodificar Data Matrix</string>
   <string name="preferences_decode_QR_title">Descodificar códigos QR</string>
   <string name="preferences_front_light_summary">Activar luz delantera si está disponible, pero puede causar deslumbramiento. No funciona en todos los teléfonos.</string>
   <string name="preferences_front_light_title">Luz delantera</string>
@@ -121,13 +122,13 @@
   <string name="title_about">Escáner de código de barras v</string>
   <string name="wa_name">Configuración de la red</string>
   <string name="wifi_changing_network">Cambio de la red</string>
+  <string name="wifi_connect_failed">Conexión de red no</string>
   <string name="wifi_connected">Conectado</string>
   <string name="wifi_creating_network">Creación de la Red</string>
   <string name="wifi_modifying_network">Modificación de la Red</string>
+  <string name="wifi_ssid_label">Nombre de red</string>
   <string name="wifi_ssid_missing">Nombre de la red desaparecidas</string>
   <string name="wifi_type_incorrect">Red de tipo incorrecto</string>
-  <string name="wifi_ssid_label">Nombre de red</string>
   <string name="wifi_type_label">Tipo</string>
-  <string name="wifi_connect_failed">Conexión de red no</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

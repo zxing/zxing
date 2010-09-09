@@ -96,6 +96,7 @@
   <string name="preferences_custom_product_search_summary">Verwenden Sie %s als Platzhalter für die Produkt-ID und %f für die Format</string>
   <string name="preferences_custom_product_search_title">Eigene Such-URL</string>
   <string name="preferences_decode_1D_title">Dekodiere 1D Barcodes</string>
+  <string name="preferences_decode_Data_Matrix_title">Dekodiere Data Matrix</string>
   <string name="preferences_decode_QR_title">Dekodiere QR Codes</string>
   <string name="preferences_front_light_summary">Erhöht Scannen bei schwachem Licht bei einigen Mobiltelefonen, kann aber Blendung verursachen. Funktioniert nicht auf allen Handys funktionieren.</string>
   <string name="preferences_front_light_title">Vor Licht</string>
@@ -120,14 +121,14 @@
   <string name="share_name">Weitergabe mittels Barcode</string>
   <string name="title_about">Barcode Scanner v</string>
   <string name="wa_name">Wifi konfiguration</string>
-  <string name="zxing_url">http://code.google.com/p/zxing</string>
   <string name="wifi_changing_network">Ändern der Netzwerkeinstellungen</string>
+  <string name="wifi_connect_failed">Network Verbindung fehlgeschlagen</string>
   <string name="wifi_connected">Verbunden</string>
   <string name="wifi_creating_network">Erstellen Network</string>
   <string name="wifi_modifying_network">Ändern Network</string>
+  <string name="wifi_ssid_label">Network Name</string>
   <string name="wifi_ssid_missing">Netzwerk-Name fehlt</string>
   <string name="wifi_type_incorrect">Netzwerk-Typ nicht korrekt</string>
-  <string name="wifi_ssid_label">Network Name</string>
   <string name="wifi_type_label">Typ</string>
-  <string name="wifi_connect_failed">Network Verbindung fehlgeschlagen</string>
+  <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

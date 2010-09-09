@@ -96,6 +96,7 @@
   <string name="preferences_custom_product_search_summary">使用％s作為佔位符的產品ID</string>
   <string name="preferences_custom_product_search_title">自定義搜索網址</string>
   <string name="preferences_decode_1D_title">解碼一維條碼</string>
+  <string name="preferences_decode_Data_Matrix_title">數據矩陣碼解碼</string>
   <string name="preferences_decode_QR_title">解碼QR條碼</string>
   <string name="preferences_front_light_summary">改善在低光源的環境下掃描的成功率, 但有可能造成過度曝光的現象</string>
   <string name="preferences_front_light_title">使用前光源</string>
@@ -121,13 +122,13 @@
   <string name="title_about">條碼掃描器</string>
   <string name="wa_name">網絡配置</string>
   <string name="wifi_changing_network">不斷變化的網絡</string>
+  <string name="wifi_connect_failed">網絡連接失敗</string>
   <string name="wifi_connected">連接的</string>
   <string name="wifi_creating_network">創建網絡</string>
   <string name="wifi_modifying_network">修改網絡</string>
+  <string name="wifi_ssid_label">網絡名稱</string>
   <string name="wifi_ssid_missing">網絡實名失踪</string>
   <string name="wifi_type_incorrect">網絡類型不正確</string>
-  <string name="wifi_ssid_label">網絡名稱</string>
   <string name="wifi_type_label">類型</string>
-  <string name="wifi_connect_failed">網絡連接失敗</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

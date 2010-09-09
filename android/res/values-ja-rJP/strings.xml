@@ -96,6 +96,7 @@
   <string name="preferences_custom_product_search_summary">URL中の「%s」はスキャン結果に置換される</string>
   <string name="preferences_custom_product_search_title">カスタム商品サーチ URL</string>
   <string name="preferences_decode_1D_title">1Dバーコードを読み取る</string>
+  <string name="preferences_decode_Data_Matrix_title">デコードデータマトリックスコード</string>
   <string name="preferences_decode_QR_title">QRコードを読み取る</string>
   <string name="preferences_front_light_summary">有効にするフロントライト可能な場合</string>
   <string name="preferences_front_light_title">フロントライト</string>
@@ -121,13 +122,13 @@
   <string name="title_about">>QRコードスキャナー v</string>
   <string name="wa_name">ネットワーク構成</string>
   <string name="wifi_changing_network">ネットワークを変更する</string>
+  <string name="wifi_connect_failed">ネットワーク接続が失敗しました。</string>
   <string name="wifi_connected">接続</string>
   <string name="wifi_creating_network">作成ネットワーク</string>
   <string name="wifi_modifying_network">ネットワークを変更する</string>
+  <string name="wifi_ssid_label">ネットワーク名</string>
   <string name="wifi_ssid_missing">ネットワーク名を欠いて</string>
   <string name="wifi_type_incorrect">ネットワーク型不正</string>
-  <string name="wifi_ssid_label">ネットワーク名</string>
   <string name="wifi_type_label">タイプ</string>
-  <string name="wifi_connect_failed">ネットワーク接続が失敗しました。</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

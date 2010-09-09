@@ -56,18 +56,18 @@ final class DecodeThread extends Thread {
     // The prefs can't change while the thread is running, so pick them up once here.
     if (decodeFormats == null || decodeFormats.isEmpty()) {
       SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
-      boolean decode1D = prefs.getBoolean(PreferencesActivity.KEY_DECODE_1D, true);
-      boolean decodeQR = prefs.getBoolean(PreferencesActivity.KEY_DECODE_QR, true);
-      if (decode1D && decodeQR) {
-        hints.put(DecodeHintType.POSSIBLE_FORMATS, DecodeFormatManager.ALL_FORMATS);
-      } else if (decode1D) {
-        hints.put(DecodeHintType.POSSIBLE_FORMATS, DecodeFormatManager.ONE_D_FORMATS);
-      } else if (decodeQR) {
-        hints.put(DecodeHintType.POSSIBLE_FORMATS, DecodeFormatManager.QR_CODE_FORMATS);
+      decodeFormats = new Vector<BarcodeFormat>();
+      if (prefs.getBoolean(PreferencesActivity.KEY_DECODE_1D, true)) {
+        decodeFormats.addAll(DecodeFormatManager.ONE_D_FORMATS);
       }
-    } else {
-      hints.put(DecodeHintType.POSSIBLE_FORMATS, decodeFormats);
+      if (prefs.getBoolean(PreferencesActivity.KEY_DECODE_QR, true)) {
+        decodeFormats.addAll(DecodeFormatManager.QR_CODE_FORMATS);
+      }
+      if (prefs.getBoolean(PreferencesActivity.KEY_DECODE_DATA_MATRIX, true)) {
+        decodeFormats.addAll(DecodeFormatManager.DATA_MATRIX_FORMATS);
+      }
     }
+    hints.put(DecodeHintType.POSSIBLE_FORMATS, decodeFormats);
 
     if (characterSet != null) {
       hints.put(DecodeHintType.CHARACTER_SET, characterSet);

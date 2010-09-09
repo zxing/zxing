@@ -96,6 +96,7 @@
   <string name="preferences_custom_product_search_summary">Ürün kimliği için yer tutucu olarak %s öğesini kullan</string>
   <string name="preferences_custom_product_search_title">Özel arama URL</string>
   <string name="preferences_decode_1D_title">1D barkodlarını çöz</string>
+  <string name="preferences_decode_Data_Matrix_title">Data Matrix Çöz</string>
   <string name="preferences_decode_QR_title">QR Kodlarını Çöz</string>
   <string name="preferences_front_light_summary">Bazı telefonlarda düşük ışıkta taramayı geliştirir, ancak parlak ışığa neden olabilir</string>
   <string name="preferences_front_light_title">Ön ışığı kullan</string>
