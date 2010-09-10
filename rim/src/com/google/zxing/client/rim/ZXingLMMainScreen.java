@@ -228,9 +228,9 @@ final class ZXingLMMainScreen extends MainScreen {
           }
           if (file != null && file.exists()) {
             if (file.isOpen()) {
+              file.delete();              
               file.close();
             }
-            file.delete();
             Log.info("Deleted image file.");
           }
         } catch (IOException ioe) {
