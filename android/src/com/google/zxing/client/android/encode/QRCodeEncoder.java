@@ -112,7 +112,6 @@ final class QRCodeEncoder {
     } catch (IllegalArgumentException iae) {
       // Ignore it then
       format = null;
-      formatString = null;
     }
     if (format == null || BarcodeFormat.QR_CODE.equals(format)) {
       String type = intent.getStringExtra(Intents.Encode.TYPE);
