@@ -127,7 +127,7 @@ public final class Intents {
      * it defaults to QR Code. Use Intent.putExtra(FORMAT, format), where
      * format is one of Contents.Format. 
      */
-    public static final String FORMAT = "com.google.zxing.client.android.ENCODE_FORMAT";
+    public static final String FORMAT = "ENCODE_FORMAT";
 
     private Encode() {
     }
