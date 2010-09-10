@@ -94,6 +94,11 @@ public abstract class ResultHandler {
     this.activity = activity;
     this.rawResult = rawResult;
     this.customProductSearch = parseCustomSearchURL();
+
+    // Make sure the Shopper button is hidden by default. Without this, scanning a product followed
+    // by a QR Code would leave the button on screen among the QR Code actions.
+    Button shopperButton = (Button) activity.findViewById(R.id.shopper_button);
+    shopperButton.setVisibility(View.GONE);
   }
 
   ParsedResult getResult() {
