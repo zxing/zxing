@@ -206,6 +206,13 @@ public final class WhiteRectangleDetector {
     }
   }
 
+  /**
+   * Ends up being a bit faster than Math.round(). This merely rounds its
+   * argument to the nearest int, where x.5 rounds up.
+   */
+  private static int round(float d) {
+    return (int) (d + 0.5f);
+  }
 
   private ResultPoint getBlackPointOnSegment(float aX, float aY, float bX, float bY) {
     int dist = distanceL2(aX, aY, bX, bY);
@@ -213,8 +220,8 @@ public final class WhiteRectangleDetector {
     float yStep = (bY - aY) / dist;
 
     for (int i = 0; i < dist; i++) {
-      int x = Math.round(aX + i * xStep);
-      int y = Math.round(aY + i * yStep);
+      int x = round(aX + i * xStep);
+      int y = round(aY + i * yStep);
       if (image.get(x, y)) {
         return new ResultPoint(x, y);
       }
@@ -225,7 +232,7 @@ public final class WhiteRectangleDetector {
   private static int distanceL2(float aX, float aY, float bX, float bY) {
     float xDiff = aX - bX;
     float yDiff = aY - bY;
-    return (int) Math.round(Math.sqrt(xDiff * xDiff + yDiff * yDiff));
+    return round((float) Math.sqrt(xDiff * xDiff + yDiff * yDiff));
   }
 
   /**
