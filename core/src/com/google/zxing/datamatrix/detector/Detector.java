@@ -214,9 +214,17 @@ public final class Detector {
 	  return (p.getX() >= 0 && p.getX() < image.width && p.getY() > 0 && p.getY() < image.height);
   }
 
+  /**
+   * Ends up being a bit faster than Math.round(). This merely rounds its
+   * argument to the nearest int, where x.5 rounds up.
+   */
+  private static int round(float d) {
+    return (int) (d + 0.5f);
+  }
+
 // L2 distance
   private static int distance(ResultPoint a, ResultPoint b) {
-    return (int) Math.round(Math.sqrt((a.getX() - b.getX())
+    return round((float) Math.sqrt((a.getX() - b.getX())
         * (a.getX() - b.getX()) + (a.getY() - b.getY())
         * (a.getY() - b.getY())));
   }
