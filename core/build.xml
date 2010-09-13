@@ -79,7 +79,7 @@
       <!-- Needed for Mac OS. -->
       <!--<arg value="-libraryjars ${java.home}/../Classes/classes.jar"/>-->
       <!-- Needed for other Android apps besides Barcode Scanner. -->
-      <!--<arg value="-libraryjars ${android-home}/platforms/android-1.6/android.jar"/>-->
+      <!--<arg value="-libraryjars ${android-home}/platforms/android-3/android.jar"/>-->
       <arg value="-keep class com.google.zxing.* {public protected *;}"/>
       <arg value="-keep class com.google.zxing.common.*Binarizer {public protected *;}"/>
       <!-- Remove this line is you only use the Result base object and want the smallest jar. -->
