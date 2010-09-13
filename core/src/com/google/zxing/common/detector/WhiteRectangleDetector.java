@@ -33,6 +33,7 @@ import com.google.zxing.common.BitMatrix;
 public final class WhiteRectangleDetector {
 
   private static final int INIT_SIZE = 40;
+  private static final int CORR = 1;
 
   private final BitMatrix image;
   private final int height;
@@ -60,10 +61,10 @@ public final class WhiteRectangleDetector {
    */
   public ResultPoint[] detect() throws NotFoundException {
 
-    int left = (width - INIT_SIZE) / 2;
-    int right = (width + INIT_SIZE) / 2;
-    int up = (height - INIT_SIZE) / 2;
-    int down = (height + INIT_SIZE) / 2;
+    int left = (width - INIT_SIZE) >> 1;
+    int right = (width + INIT_SIZE) >> 1;
+    int up = (height - INIT_SIZE) >> 1;
+    int down = (height + INIT_SIZE) >> 1;
     boolean sizeExceeded = false;
     boolean aBlackPointFoundOnBorder = true;
     boolean atLeastOneBlackPointFoundOnBorder = false;
@@ -148,11 +149,10 @@ public final class WhiteRectangleDetector {
 
     if (!sizeExceeded && atLeastOneBlackPointFoundOnBorder) {
 
-      ResultPoint x = null, y = null, z = null, t = null;
+      int maxSize = right - left;
 
-      final int max_size = right - left;
-
-      for (int i = 1; i < max_size; i++) {
+      ResultPoint z = null;
+      for (int i = 1; i < maxSize; i++) {
         z = getBlackPointOnSegment(left, down - i, left + i, down);
         if (z != null) {
           break;
@@ -163,8 +163,9 @@ public final class WhiteRectangleDetector {
         throw NotFoundException.getNotFoundInstance();
       }
 
+      ResultPoint t = null;
       //go down right
-      for (int i = 1; i < max_size; i++) {
+      for (int i = 1; i < maxSize; i++) {
         t = getBlackPointOnSegment(left, up + i, left + i, up);
         if (t != null) {
           break;
@@ -175,8 +176,9 @@ public final class WhiteRectangleDetector {
         throw NotFoundException.getNotFoundInstance();
       }
 
+      ResultPoint x = null;
       //go down left
-      for (int i = 1; i < max_size; i++) {
+      for (int i = 1; i < maxSize; i++) {
         x = getBlackPointOnSegment(right, up + i, right - i, up);
         if (x != null) {
           break;
@@ -187,8 +189,9 @@ public final class WhiteRectangleDetector {
         throw NotFoundException.getNotFoundInstance();
       }
 
+      ResultPoint y = null;
       //go up left
-      for (int i = 1; i < max_size; i++) {
+      for (int i = 1; i < maxSize; i++) {
         y = getBlackPointOnSegment(right, down - i, right - i, down);
         if (y != null) {
           break;
@@ -267,19 +270,18 @@ public final class WhiteRectangleDetector {
     float ti = t.getX();
     float tj = t.getY();
 
-    final int corr = 1;
     if (yi < width / 2) {
       return new ResultPoint[]{
-          new ResultPoint(ti - corr, tj + corr),
-          new ResultPoint(zi + corr, zj + corr),
-          new ResultPoint(xi - corr, xj - corr),
-          new ResultPoint(yi + corr, yj - corr)};
+          new ResultPoint(ti - CORR, tj + CORR),
+          new ResultPoint(zi + CORR, zj + CORR),
+          new ResultPoint(xi - CORR, xj - CORR),
+          new ResultPoint(yi + CORR, yj - CORR)};
     } else {
       return new ResultPoint[]{
-          new ResultPoint(ti + corr, tj + corr),
-          new ResultPoint(zi + corr, zj - corr),
-          new ResultPoint(xi - corr, xj + corr),
-          new ResultPoint(yi - corr, yj - corr)};
+          new ResultPoint(ti + CORR, tj + CORR),
+          new ResultPoint(zi + CORR, zj - CORR),
+          new ResultPoint(xi - CORR, xj + CORR),
+          new ResultPoint(yi - CORR, yj - CORR)};
     }
   }
 
