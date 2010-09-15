@@ -36,6 +36,7 @@ import android.widget.Button;
  * @author dswitkin@google.com (Daniel Switkin)
  */
 public final class HelpActivity extends Activity {
+
   private static final String TAG = HelpActivity.class.getSimpleName();
 
   // Actually guessing at the Desire's MODEL for now:
@@ -107,9 +108,9 @@ public final class HelpActivity extends Activity {
       webView.loadUrl(BASE_URL + DEFAULT_PAGE);
     }
 
-    backButton = (Button)findViewById(R.id.back_button);
+    backButton = (Button) findViewById(R.id.back_button);
     backButton.setOnClickListener(backListener);
-    Button doneButton = (Button)findViewById(R.id.done_button);
+    View doneButton = findViewById(R.id.done_button);
     doneButton.setOnClickListener(doneListener);
 
     if (!initialized) {

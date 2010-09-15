@@ -18,6 +18,7 @@ package com.google.zxing.client.android.share;
 
 import android.app.ListActivity;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Browser;
@@ -31,7 +32,7 @@ import java.util.List;
 public final class AppPickerActivity extends ListActivity {
 
   private final List<String[]> labelsPackages = new ArrayList<String[]>();
-  private ProgressDialog dialog;
+  private DialogInterface dialog;
 
   @Override
   protected void onCreate(Bundle icicle) {
@@ -58,7 +59,7 @@ public final class AppPickerActivity extends ListActivity {
     finish();
   }
 
-  ProgressDialog getProgressDialog() {
+  DialogInterface getProgressDialog() {
     return dialog;
   }
 

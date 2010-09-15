@@ -32,7 +32,8 @@ import com.google.zxing.client.android.R;
  * @author dswitkin@google.com (Daniel Switkin)
  */
 final class SearchBookContentsAdapter extends ArrayAdapter<SearchBookContentsResult> {
-  public SearchBookContentsAdapter(Context context, List<SearchBookContentsResult> items) {
+
+  SearchBookContentsAdapter(Context context, List<SearchBookContentsResult> items) {
     super(context, R.layout.search_book_contents_list_item, 0, items);
   }
 

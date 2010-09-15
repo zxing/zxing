@@ -22,6 +22,7 @@ import android.os.AsyncTask;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -65,11 +66,7 @@ final class LoadPackagesAsyncTask extends AsyncTask<List<String[]>,Void,List<Str
         }
       }
     }
-    Collections.sort(labelsPackages, new Comparator<String[]>() {
-      public int compare(String[] o1, String[] o2) {
-        return o1[0].compareTo(o2[0]);
-      }
-    });
+    Collections.sort(labelsPackages, new ByFirstStringComparator());
     return labelsPackages;
   }
 
@@ -100,6 +97,12 @@ final class LoadPackagesAsyncTask extends AsyncTask<List<String[]>,Void,List<Str
         appPickerActivity, android.R.layout.simple_list_item_1, labels);
     appPickerActivity.setListAdapter(listAdapter);
     appPickerActivity.getProgressDialog().dismiss();
+  }
+
+  private static class ByFirstStringComparator implements Comparator<String[]>, Serializable {
+    public int compare(String[] o1, String[] o2) {
+      return o1[0].compareTo(o2[0]);
+    }
   }
 
 }

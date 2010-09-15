@@ -40,7 +40,6 @@ import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.provider.Contacts;
 import android.view.View;
-import android.widget.Button;
 
 import java.text.DateFormat;
 import java.text.ParsePosition;
@@ -97,7 +96,7 @@ public abstract class ResultHandler {
 
     // Make sure the Shopper button is hidden by default. Without this, scanning a product followed
     // by a QR Code would leave the button on screen among the QR Code actions.
-    Button shopperButton = (Button) activity.findViewById(R.id.shopper_button);
+    View shopperButton = activity.findViewById(R.id.shopper_button);
     shopperButton.setVisibility(View.GONE);
   }
 
@@ -138,7 +137,7 @@ public abstract class ResultHandler {
    * @param listener The on click listener to install for this button.
    */
   protected void showGoogleShopperButton(View.OnClickListener listener) {
-    Button shopperButton = (Button) activity.findViewById(R.id.shopper_button);
+    View shopperButton = activity.findViewById(R.id.shopper_button);
     shopperButton.setVisibility(View.VISIBLE);
     shopperButton.setOnClickListener(listener);
   }

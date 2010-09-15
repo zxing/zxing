@@ -114,6 +114,7 @@ public final class CaptureActivityHandler extends Handler {
     try {
       decodeThread.join();
     } catch (InterruptedException e) {
+      // continue
     }
 
     // Be absolutely sure we don't send any queued up messages
