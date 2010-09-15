@@ -118,8 +118,7 @@ final class CameraConfigurationManager {
     return cameraResolution;
   }
 
-  private static Point findBestPreviewSizeValue(String previewSizeValueString,
-      Point screenResolution) {
+  private static Point findBestPreviewSizeValue(CharSequence previewSizeValueString, Point screenResolution) {
     int bestX = 0;
     int bestY = 0;
     int diff = Integer.MAX_VALUE;

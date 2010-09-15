@@ -72,7 +72,7 @@ public final class CalendarResultHandler extends ResultHandler {
   @Override
   public CharSequence getDisplayContents() {
     CalendarParsedResult calResult = (CalendarParsedResult) getResult();
-    StringBuffer result = new StringBuffer();
+    StringBuffer result = new StringBuffer(100);
     ParsedResult.maybeAppend(calResult.getSummary(), result);
     appendTime(calResult.getStart(), result);
 

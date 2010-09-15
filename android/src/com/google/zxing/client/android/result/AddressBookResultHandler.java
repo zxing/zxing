@@ -157,7 +157,7 @@ public final class AddressBookResultHandler extends ResultHandler {
   @Override
   public CharSequence getDisplayContents() {
     AddressBookParsedResult result = (AddressBookParsedResult) getResult();
-    StringBuffer contents = new StringBuffer();
+    StringBuffer contents = new StringBuffer(100);
     ParsedResult.maybeAppend(result.getNames(), contents);
     int namesLength = contents.length();
 

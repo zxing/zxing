@@ -204,8 +204,8 @@ final class QRCodeEncoder {
     } else if (type.equals(Contents.Type.CONTACT)) {
       Bundle bundle = intent.getBundleExtra(Intents.Encode.DATA);
       if (bundle != null) {
-        StringBuilder newContents = new StringBuilder();
-        StringBuilder newDisplayContents = new StringBuilder();
+        StringBuilder newContents = new StringBuilder(100);
+        StringBuilder newDisplayContents = new StringBuilder(100);
         newContents.append("MECARD:");
         String name = trim(bundle.getString(Contacts.Intents.Insert.NAME));
         if (name != null) {
@@ -258,8 +258,8 @@ final class QRCodeEncoder {
   }
 
   private boolean encodeQRCodeContents(AddressBookParsedResult contact) {
-    StringBuilder newContents = new StringBuilder();
-    StringBuilder newDisplayContents = new StringBuilder();
+    StringBuilder newContents = new StringBuilder(100);
+    StringBuilder newDisplayContents = new StringBuilder(100);
     newContents.append("MECARD:");
     String[] names = contact.getNames();
     if (names != null && names.length > 0) {
@@ -322,10 +322,10 @@ final class QRCodeEncoder {
                                BarcodeFormat format,
                                int desiredWidth,
                                int desiredHeight) throws WriterException {
-    Hashtable hints = null;
+    Hashtable<EncodeHintType,Object> hints = null;
     String encoding = guessAppropriateEncoding(contents);
     if (encoding != null) {
-      hints = new Hashtable(2);
+      hints = new Hashtable<EncodeHintType,Object>(2);
       hints.put(EncodeHintType.CHARACTER_SET, encoding);
     }
     MultiFormatWriter writer = new MultiFormatWriter();    
