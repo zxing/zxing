@@ -32,7 +32,7 @@ public final class BarcodeFormat {
   /** QR Code 2D barcode format. */
   public static final BarcodeFormat QR_CODE = new BarcodeFormat("QR_CODE");
 
-  /** DataMatrix 2D barcode format. */
+  /** Data Matrix 2D barcode format. */
   public static final BarcodeFormat DATA_MATRIX = new BarcodeFormat("DATA_MATRIX");
 
   /** UPC-E 1D format. */
