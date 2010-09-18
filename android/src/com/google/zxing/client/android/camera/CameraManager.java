@@ -107,7 +107,8 @@ public final class CameraManager {
     // Camera.setPreviewCallback() on 1.5 and earlier. For Donut and later, we need to use
     // the more efficient one shot callback, as the older one can swamp the system and cause it
     // to run out of memory. We can't use SDK_INT because it was introduced in the Donut SDK.
-    useOneShotPreviewCallback = SDK_INT > Build.VERSION_CODES.CUPCAKE;
+    //useOneShotPreviewCallback = Integer.parseInt(Build.VERSION.SDK) > Build.VERSION_CODES.CUPCAKE;
+    useOneShotPreviewCallback = Integer.parseInt(Build.VERSION.SDK) > 3; // 3 = Cupcake
 
     previewCallback = new PreviewCallback(configManager, useOneShotPreviewCallback);
     autoFocusCallback = new AutoFocusCallback();
