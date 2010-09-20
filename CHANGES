@@ -245,3 +245,22 @@
   - Preliminary RSS-14 support
   - Reconceived support for various image sources and thresholding
   - Other small bug fixes and performance improvements
+
+1.6 (20 Sept 2010)
+  - Many, many updates to C++, Symbian, iPhone ports
+  - RSS 14, Expanded support
+  - Code 93 support
+  - Codabar support
+  - Data Matrix support reaches release quality
+  - UPC/EAN +5 extension support
+  - Android app:
+    - Share history support
+    - Bulk scan mode
+    - Wi-fi configuration support
+    - Format available in callback for web-based integration
+    - Updated or new translations for:
+      Hungarian, Danish, Chinese, Arabic, Dutch, Slovenian, Turkish
+    - UI beautification
+  - Added ability to detect multiple barcodes per image
+  - Many small bug fixes and enhancements
+
