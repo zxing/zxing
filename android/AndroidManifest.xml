@@ -41,7 +41,8 @@ versionName is 2.31, 2.4, or 3.0. -->
     <activity android:name=".CaptureActivity"
               android:screenOrientation="landscape"
               android:configChanges="orientation|keyboardHidden"
-              android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+              android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+              android:windowSoftInputMode="stateAlwaysHidden">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
         <category android:name="android.intent.category.LAUNCHER"/>
