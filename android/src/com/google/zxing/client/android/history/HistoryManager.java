@@ -19,6 +19,7 @@ package com.google.zxing.client.android.history;
 import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -36,9 +37,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.ArrayList;
 
+import android.preference.PreferenceManager;
 import android.util.Log;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.client.android.Intents;
+import com.google.zxing.client.android.PreferencesActivity;
 import com.google.zxing.client.android.R;
 import com.google.zxing.client.android.CaptureActivity;
 import com.google.zxing.Result;
@@ -53,7 +56,7 @@ public final class HistoryManager {
   private static final String TAG = HistoryManager.class.getSimpleName();
 
   private static final int MAX_ITEMS = 50;
-  private static final String[] TEXT_COL_PROJECTION = { DBHelper.TEXT_COL };
+  //private static final String[] TEXT_COL_PROJECTION = { DBHelper.TEXT_COL };
   private static final String[] GET_ITEM_COL_PROJECTION = {
       DBHelper.TEXT_COL,
       DBHelper.FORMAT_COL,
@@ -124,11 +127,16 @@ public final class HistoryManager {
       return; // Do not save this item to the history.
     }
 
+    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+    boolean rememberDuplicates = prefs.getBoolean(PreferencesActivity.KEY_REMEMBER_DUPLICATES, false);
+
+    if (!rememberDuplicates) {
+      deletePrevious(result.getText());
+    }
+
     SQLiteOpenHelper helper = new DBHelper(activity);
     SQLiteDatabase db = helper.getWritableDatabase();
     try {
-      // Delete if already exists
-      db.delete(DBHelper.TABLE_NAME, DBHelper.TEXT_COL + "=?", new String[] { result.getText() });
       // Insert
       ContentValues values = new ContentValues();
       values.put(DBHelper.TEXT_COL, result.getText());
@@ -136,6 +144,16 @@ public final class HistoryManager {
       values.put(DBHelper.DISPLAY_COL, result.getText()); // TODO use parsed result display value?
       values.put(DBHelper.TIMESTAMP_COL, System.currentTimeMillis());
       db.insert(DBHelper.TABLE_NAME, DBHelper.TIMESTAMP_COL, values);
+    } finally {
+      db.close();
+    }
+  }
+
+  private void deletePrevious(String text) {
+    SQLiteOpenHelper helper = new DBHelper(activity);
+    SQLiteDatabase db = helper.getWritableDatabase();
+    try {
+      db.delete(DBHelper.TABLE_NAME, DBHelper.TEXT_COL + "=?", new String[] { text });
     } finally {
       db.close();
     }

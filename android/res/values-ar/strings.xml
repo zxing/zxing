@@ -103,6 +103,8 @@
   <string name="preferences_general_title">إعدادات عامة</string>
   <string name="preferences_name">إعدادات</string>
   <string name="preferences_play_beep_title">صوت تنبيه</string>
+  <string name="preferences_remember_duplicates_summary">بفحص مخزن متعددة من نفس الباركود في التاريخ</string>
+  <string name="preferences_remember_duplicates_title">تذكر التكرارات</string>
   <string name="preferences_result_title">إعدادات النتائج</string>
   <string name="preferences_scanning_title">عندما لمسح الباركود</string>
   <string name="preferences_vibrate_title">اهتزاز</string>

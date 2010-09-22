@@ -103,6 +103,8 @@
   <string name="preferences_general_title">Genel ayarlar</string>
   <string name="preferences_name">Ayarlar</string>
   <string name="preferences_play_beep_title">Bip</string>
+  <string name="preferences_remember_duplicates_summary">Tarih aynı barkod saklayın çoklu tarama</string>
+  <string name="preferences_remember_duplicates_title">Hatırla çiftleri</string>
   <string name="preferences_result_title">Sonuç ayarları</string>
   <string name="preferences_scanning_title">Ne zaman barkodlar \u2026 için tarama</string>
   <string name="preferences_vibrate_title">Titret</string>
