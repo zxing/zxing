@@ -96,7 +96,7 @@
   <string name="preferences_custom_product_search_summary">Utiliser %s à la place de l\'identifiant du produit, et %f pour le format</string>
   <string name="preferences_custom_product_search_title">URL de recherche personnalisée</string>
   <string name="preferences_decode_1D_title">Lire les codes-barres unidimensionnels (1D)</string>
-  <string name="preferences_decode_Data_Matrix_title">Lire Data Matrix</string>
+  <string name="preferences_decode_Data_Matrix_title">Lire les codes Data Matrix</string>
   <string name="preferences_decode_QR_title">Lire les codes QR</string>
   <string name="preferences_front_light_summary">Allumer la lampe derrière le téléphone quand la lumière ambiante est faible. Peut provoquer des reflets et ne fonctionne pas sur tous les téléphones.</string>
   <string name="preferences_front_light_title">Flash</string>
