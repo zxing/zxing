@@ -18,63 +18,78 @@
               android:id="@+id/encode_view"
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
-              android:gravity="center"
               android:background="@color/share_view"
-              android:orientation="vertical"
-              android:padding="16dip">
+              android:orientation="vertical">
 
-  <TextView
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:textColor="@color/share_text"
-      android:textSize="18sp"
-      android:text="@string/msg_share_explanation"
-      android:paddingBottom="24dip"/>
-
-  <ImageView
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:scaleType="center"
-      android:src="@drawable/share_via_barcode"
-      android:paddingBottom="24dip"/>
-
-  <LinearLayout
+  <!-- ScrollView wrapper is to accommodate small screens -->
+  <ScrollView
       android:layout_width="fill_parent"
-      android:layout_height="wrap_content"
-      android:orientation="horizontal"
-      android:paddingBottom="8dip">
+      android:layout_height="fill_parent">
 
-    <Button android:id="@+id/app_button"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/button_share_app"/>
+    <!-- Must wrap the rest in one layout -->
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="16dip">
 
-    <Button android:id="@+id/bookmark_button"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/button_share_bookmark"/>
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textColor="@color/share_text"
+          android:textSize="18sp"
+          android:text="@string/msg_share_explanation"
+          android:paddingBottom="24dip"/>
 
-  </LinearLayout>
+      <ImageView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:scaleType="center"
+          android:src="@drawable/share_via_barcode"
+          android:paddingBottom="24dip"/>
 
-  <LinearLayout
-      android:layout_width="fill_parent"
-      android:layout_height="wrap_content"
-      android:orientation="horizontal">
+      <LinearLayout
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:orientation="horizontal"
+          android:paddingBottom="8dip">
 
-    <Button android:id="@+id/contact_button"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/button_share_contact"/>
+        <Button android:id="@+id/app_button"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/button_share_app"/>
 
-    <Button android:id="@+id/clipboard_button"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/button_share_clipboard"/>
+        <Button android:id="@+id/bookmark_button"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/button_share_bookmark"/>
 
-  </LinearLayout>
+      </LinearLayout>
+
+      <LinearLayout
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:orientation="horizontal">
+
+        <Button android:id="@+id/contact_button"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/button_share_contact"/>
+
+        <Button android:id="@+id/clipboard_button"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/button_share_clipboard"/>
+
+      </LinearLayout>
+
+    </LinearLayout>
+
+  </ScrollView>
 
 </LinearLayout>
