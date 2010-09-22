@@ -103,6 +103,8 @@
   <string name="preferences_general_title">一般設置</string>
   <string name="preferences_name">設置</string>
   <string name="preferences_play_beep_title">提示音</string>
+  <string name="preferences_remember_duplicates_summary">存儲多個條碼掃描相同的歷史</string>
+  <string name="preferences_remember_duplicates_title">記住重複</string>
   <string name="preferences_result_title">結果設定</string>
   <string name="preferences_scanning_title">當掃描條形碼</string>
   <string name="preferences_vibrate_title">振動</string>

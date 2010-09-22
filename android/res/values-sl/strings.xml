@@ -103,6 +103,8 @@
   <string name="preferences_general_title">Splošne nastavitve</string>
   <string name="preferences_name">Nastavitve</string>
   <string name="preferences_play_beep_title">Pisk</string>
+  <string name="preferences_remember_duplicates_summary">Shranjevanje več skandiranje iste črtne kode v zgodovini</string>
+  <string name="preferences_remember_duplicates_title">Zapomni si dvojnikov</string>
   <string name="preferences_result_title">Nastavitve rezultatov branja</string>
   <string name="preferences_scanning_title">Ko berete črtne kode\u2026</string>
   <string name="preferences_vibrate_title">Vibriraj</string>

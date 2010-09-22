@@ -103,6 +103,8 @@
   <string name="preferences_general_title">一般設定</string>
   <string name="preferences_name">設定</string>
   <string name="preferences_play_beep_title">通知音</string>
+  <string name="preferences_remember_duplicates_summary">歴史の中で、同じバーコードのストア複数のスキャン</string>
+  <string name="preferences_remember_duplicates_title">覚えておいて重複</string>
   <string name="preferences_result_title">検索結果の設定</string>
   <string name="preferences_scanning_title">時バーコードスキャン</string>
   <string name="preferences_vibrate_title">バイブ</string>

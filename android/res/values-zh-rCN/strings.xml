@@ -103,6 +103,8 @@
   <string name="preferences_general_title">一般设置</string>
   <string name="preferences_name">设置</string>
   <string name="preferences_play_beep_title">提示音</string>
+  <string name="preferences_remember_duplicates_summary">在历史上同条码扫描店多</string>
+  <string name="preferences_remember_duplicates_title">记住重复</string>
   <string name="preferences_result_title">结果设置</string>
   <string name="preferences_scanning_title">当扫描条形码</string>
   <string name="preferences_vibrate_title">振动</string>

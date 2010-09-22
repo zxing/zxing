@@ -103,6 +103,8 @@
   <string name="preferences_general_title">Basisinstellingen</string>
   <string name="preferences_name">Instellingen</string>
   <string name="preferences_play_beep_title">Piepen</string>
+  <string name="preferences_remember_duplicates_summary">Onthoud meerdere scans van dezelfde barcode in de geschiedenis</string>
+  <string name="preferences_remember_duplicates_title">Onthoud duplicaten</string>
   <string name="preferences_result_title">Instellingen voor resultaat</string>
   <string name="preferences_scanning_title">Bij het scannen van barcodes voor de\u2026</string>
   <string name="preferences_vibrate_title">Trillen</string>
