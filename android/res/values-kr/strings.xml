@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (C) 2010 ZXing authors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<resources>
+  <string name="app_name">바코드 스캐너</string>
+  <string name="app_picker_name">어플리케이션</string>
+  <string name="bookmark_picker_name">즐겨찾기</string>
+  <string name="button_add_calendar">일정에 추가하기</string>
+  <string name="button_add_contact">연락처에 추가하기</string>
+  <string name="button_back">뒤로</string>
+  <string name="button_book_search">책 검색</string>
+  <string name="button_cancel">취소</string>
+  <string name="button_clipboard_empty">복사된 항목 없음</string>
+  <string name="button_custom_product_search">사용자 지정 검색</string>
+  <string name="button_dial">전화 걸기</string>
+  <string name="button_done">완료</string>
+  <string name="button_email">이메일 보내기</string>
+  <string name="button_get_directions">방향을 찾기</string>
+  <string name="button_google_shopper">Google Shopper</string>
+  <string name="button_mms">MMS 보내기</string>
+  <string name="button_ok">확인</string>
+  <string name="button_open_browser">웹브라우저로 열기</string>
+  <string name="button_product_search">제품 검색</string>
+  <string name="button_read_book">책 보기</string>
+  <string name="button_search_book_contents">책 내용 검색</string>
+  <string name="button_share_app">어플리케이션</string>
+  <string name="button_share_bookmark">즐겨찾기</string>
+  <string name="button_share_by_email">이메일로 공유</string>
+  <string name="button_share_by_sms">SMS로 공유</string>
+  <string name="button_share_clipboard">복사된 항목</string>
+  <string name="button_share_contact">연락처</string>
+  <string name="button_show_map">지도 보기</string>
+  <string name="button_sms">SMS 보내기</string>
+  <string name="button_web_search">인터넷 검색</string>
+  <string name="button_wifi">네트워크에 연결</string>
+  <string name="contents_contact">연락처 정보</string>
+  <string name="contents_email">이메일 주소</string>
+  <string name="contents_location">GPS 좌표</string>
+  <string name="contents_phone">전화번호</string>
+  <string name="contents_sms">전화번호</string>
+  <string name="contents_text">단문</string>
+  <string name="history_clear_text">기록 삭제</string>
+  <string name="history_email_title">바코드 스캐너 기록</string>
+  <string name="history_send">기록 보내기</string>
+  <string name="history_title">기록</string>
+  <string name="menu_about">정보</string>
+  <string name="menu_help">도움말</string>
+  <string name="menu_history">기록</string>
+  <string name="menu_settings">설정</string>
+  <string name="menu_share">공유</string>
+  <string name="msg_about">오픈소스 ZXing Barcode Library를 이용하여 제작된 어플</string>
+  <string name="msg_buggy">해당 기기는 바코드 스캐닝시 알려진 버그가 있습니다. 더 많은 정보를 얻기 위해서는 다음 주소를 방문하세요.(영문)http://code.google.com/p/zxing/wiki/FrequentlyAskedQuestions</string>
+  <string name="msg_bulk_mode_scanned">일괄 스캔 모드: 바코드가 읽히고 저장됩니다.</string>
+  <string name="msg_camera_framework_bug">죄송합니다. 기기의 카메라에 오류가 생겼습니다. 기기를 재시작 해야될 수도 있습니다.</string>
+  <string name="msg_default_contents">내용</string>
+  <string name="msg_default_format">포맷</string>
+  <string name="msg_default_meta">메타데이터</string>
+  <string name="msg_default_mms_subject">안녕하세요</string>
+  <string name="msg_default_status">바코드를 사각형 안에 비춰주세요.</string>
+  <string name="msg_default_time">시간</string>
+  <string name="msg_default_type">종류</string>
+  <string name="msg_encode_barcode_failed">요청된 바코드를 만들지 못하였습니다.</string>
+  <string name="msg_encode_contents_failed">주어진 데이터로 바코드를 만들지 못하였습니다.</string>
+  <string name="msg_google_shopper_missing">Google Shopper가 설치되어 있지 않습니다.</string>
+  <string name="msg_install_google_shopper">Google Shopper는 바코드 스캐닝을 이용하여 인터넷을 열지 않고 가격, 리뷰 등을 열람하는 기능을 제공합니다. 사용해 보시겠습니까?</string>
+  <string name="msg_intent_failed">죄송합니다. 어플리케이션이 실행되지 않습니다. 바코드 내용이 잘못 되었을 수도 있습니다.</string>
+  <string name="msg_loading_apps">설치된 어플리케이션을 불러옵니다\u2026</string>
+  <string name="msg_not_our_results">이 어플리케이션을 벗어나고 있습니다. 검색 결과는 이 어플리케이션과 관련이 없음을 미리 밝힙니다.</string>
+  <string name="msg_sbc_book_not_searchable">죄송합니다. 이 책은 검색이 되지 않습니다.</string>
+  <string name="msg_sbc_failed">죄송합니다. 검색 도중 문제가 발생했습니다.</string>
+  <string name="msg_sbc_no_page_returned">수신받은 페이지가 없습니다.</string>
+  <string name="msg_sbc_page">페이지</string>
+  <string name="msg_sbc_searching_book">책 검색중\u2026</string>
+  <string name="msg_sbc_snippet_unavailable">내용이 열람되지 않습니다.</string>
+  <string name="msg_sbc_unknown_page">알수 없는 페이지</string>
+  <string name="msg_share_explanation">해당 기기의 바코드를 다른 기기로 스캔해서 데이터를 공유할 수 있습니다.</string>
+  <string name="msg_share_subject_line">제가 스캔한 바코드 목록입니다.</string>
+  <string name="msg_unmount_usb">죄송합니다. SD카드를 사용할 수 없습니다.</string>
+  <string name="preferences_actions_title">바코드를 스캔했을때\u2026</string>
+  <string name="preferences_bulk_mode_summary">다수의 바코드를 스캔하고 저장합니다.</string>
+  <string name="preferences_bulk_mode_title">일괄 스캔 모드</string>
+  <string name="preferences_copy_to_clipboard_title">복사하기</string>
+  <string name="preferences_custom_product_search_summary">%s를 제품 ID로, %f를 포맷으로 입력하여 주세요.</string>
+  <string name="preferences_custom_product_search_title">사용자 지정 검색 주소</string>
+  <string name="preferences_decode_1D_title">1차원 바코드를 읽기</string>
+  <string name="preferences_decode_Data_Matrix_title">데이터 행렬(Data Matrix)을 해석하기</string>
+  <string name="preferences_decode_QR_title">QR 코드를 읽기</string>
+  <string name="preferences_front_light_summary">특정 기기에서는 어두운 환경에서의 스캐닝 기능을 향상 시키지만 너무 밝을 수도 있습니다. 모든 기기에서 작동되지 않습니다.</string>
+  <string name="preferences_front_light_title">플래시 사용하기</string>
+  <string name="preferences_general_title">일반 설정</string>
+  <string name="preferences_name">설정</string>
+  <string name="preferences_play_beep_title">전자음</string>
+  <string name="preferences_remember_duplicates_summary">복수의 같은 바코드를 기록에 저장</string>
+  <string name="preferences_remember_duplicates_title">중복된 바코드 저장</string>
+  <string name="preferences_result_title">결과 설정</string>
+  <string name="preferences_scanning_title">바코드 스캐닝 시\u2026</string>
+  <string name="preferences_vibrate_title">진동</string>
+  <string name="result_address_book">연락처 정보를 찾았습니다</string>
+  <string name="result_calendar">일정 이벤트를 찾았습니다</string>
+  <string name="result_email_address">이메일 주소를 찾았습니다</string>
+  <string name="result_geo">GPS 좌표를 찾았습니다</string>
+  <string name="result_isbn">책을 찾았습니다</string>
+  <string name="result_product">제품을 찾았습니</string>
+  <string name="result_sms">전화번호를 찾았습니다</string>
+  <string name="result_tel">전화번호를 찾았습니다</string>
+  <string name="result_text">단문을 찾았습니다</string>
+  <string name="result_uri">인터넷 주소를 찾았습니다</string>
+  <string name="result_wifi">WiFi 설정을 찾았습니다</string>
+  <string name="sbc_name">구글 책 검색</string>
+  <string name="share_name">바코드로 공유</string>
+  <string name="title_about">바코드 스캐너 v</string>
+  <string name="wa_name">WiFi 연결</string>
+  <string name="wifi_changing_network">연결을 변경중입니다</string>
+  <string name="wifi_connected">연결됨</string>
+  <string name="wifi_creating_network">네트워크를 만드는중</string>
+  <string name="wifi_modifying_network">네트워크를 수정중</string>
+  <string name="wifi_ssid_missing">네트워크 이름이 없습니다</string>
+  <string name="wifi_type_incorrect">네트워크 종류가 잘못 됬습니다</string>
+  <string name="wifi_connect_failed">네트워크 연결 실패</string>
+  <string name="wifi_ssid_label">네트워크 이름</string>
+  <string name="wifi_type_label">종류</string>
+  <string name="zxing_url">http://code.google.com/p/zxing</string>
+</resources>
