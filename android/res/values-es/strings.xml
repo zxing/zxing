@@ -95,9 +95,9 @@
   <string name="preferences_copy_to_clipboard_title">Copiar al portapapeles</string>
   <string name="preferences_custom_product_search_summary">Use %s como un marcador de posición para el identificador del producto, y %f para el formato</string>
   <string name="preferences_custom_product_search_title">Búsqueda de productos con URL personalizada</string>
-  <string name="preferences_decode_1D_title">Descodificar códigos de barras 1D</string>
-  <string name="preferences_decode_Data_Matrix_title">Descodificar Data Matrix</string>
-  <string name="preferences_decode_QR_title">Descodificar códigos QR</string>
+  <string name="preferences_decode_1D_title">Códigos de barras 1D</string>
+  <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>
+  <string name="preferences_decode_QR_title">Códigos QR</string>
   <string name="preferences_front_light_summary">Activar luz delantera si está disponible, pero puede causar deslumbramiento. No funciona en todos los teléfonos.</string>
   <string name="preferences_front_light_title">Luz delantera</string>
   <string name="preferences_general_title">Configuración general</string>
@@ -106,7 +106,7 @@
   <string name="preferences_remember_duplicates_summary">Guarde varios escáneres del mismo código de barras en la historia</string>
   <string name="preferences_remember_duplicates_title">Recuerde duplicados</string>
   <string name="preferences_result_title">Configuración de resultados</string>
-  <string name="preferences_scanning_title">Cuando escanea códigos de barras\u2026</string>
+  <string name="preferences_scanning_title">Al escanear códigos de barras, descodificar\u2026</string>
   <string name="preferences_vibrate_title">Vibrar</string>
   <string name="result_address_book">Información de contacto encontrado</string>
   <string name="result_calendar">Evento agendado encontrado</string>

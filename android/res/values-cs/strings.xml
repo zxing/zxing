@@ -95,9 +95,9 @@
   <string name="preferences_copy_to_clipboard_title">Kopírovat do schránky.</string>
   <string name="preferences_custom_product_search_summary">Použijte %s jako zástupný symbol pro ID produktu, a %f pro formát</string>
   <string name="preferences_custom_product_search_title">Vlastní vyhledávání URL.</string>
-  <string name="preferences_decode_1D_title">Dekódovat 1D kódy</string>
-  <string name="preferences_decode_Data_Matrix_title">Dekódovat Data Matrix</string>
-  <string name="preferences_decode_QR_title">Dekódovat QR kódy</string>
+  <string name="preferences_decode_1D_title">1D kódy</string>
+  <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>
+  <string name="preferences_decode_QR_title">QR kódy</string>
   <string name="preferences_front_light_summary">Zlepšuje skenování při slabém osvětlení na některých telefonech, ale může způsobit oslnění. Nefunguje na všech telefonech.</string>
   <string name="preferences_front_light_title">Přední světla</string>
   <string name="preferences_general_title">Hlavní nastavení</string>
@@ -106,7 +106,7 @@
   <string name="preferences_remember_duplicates_summary">Uložit více skenuje stejného čárového kódu v dějinách</string>
   <string name="preferences_remember_duplicates_title">Pamatujte duplikáty</string>
   <string name="preferences_result_title">Výsledek nastavení</string>
-  <string name="preferences_scanning_title">Při skenování pro čárové kódy\u2026</string>
+  <string name="preferences_scanning_title">Při skenování čárových kódů pro, dekódovat\u2026</string>
   <string name="preferences_vibrate_title">Vibrace</string>
   <string name="result_address_book">Našel jsem kontakt</string>
   <string name="result_calendar">Našel jsem kalendář</string>

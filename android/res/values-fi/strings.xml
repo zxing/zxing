@@ -95,9 +95,9 @@
   <string name="preferences_copy_to_clipboard_title">Kopioi leikepöydälle</string>
   <string name="preferences_custom_product_search_summary">Käytä %s paikkana tuotetunnukselle tunnus ja %f muoto</string>
   <string name="preferences_custom_product_search_title">Mukautettu hakukone</string>
-  <string name="preferences_decode_1D_title">Dekoodaa 1D viivakoodeja</string>
-  <string name="preferences_decode_Data_Matrix_title">Dekoodaa Data Matrix</string>
-  <string name="preferences_decode_QR_title">Dekoodaa QR koodeja</string>
+  <string name="preferences_decode_1D_title">1D viivakoodeja</string>
+  <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>
+  <string name="preferences_decode_QR_title">QR koodeja</string>
   <string name="preferences_front_light_summary">Activoi valo edessä, jos käytettävissä, mutta saattaa aiheuttaa häikäisyä. Ei toimi kaikissa puhelimissa.</string>
   <string name="preferences_front_light_title">Valo edessä</string>
   <string name="preferences_general_title">Yleiset asetukset</string>
@@ -106,7 +106,7 @@
   <string name="preferences_remember_duplicates_summary">Tallentaa useita kopioita samaa viivakoodia historiassa</string>
   <string name="preferences_remember_duplicates_title">Muista kaksoiskappaleet</string>
   <string name="preferences_result_title">Tuloksien asetukset</string>
-  <string name="preferences_scanning_title">Kun skannaus viivakoodia\u2026</string>
+  <string name="preferences_scanning_title">Kun skannaus viivakoodeja, dekoodaa\u2026</string>
   <string name="preferences_vibrate_title">Värinä</string>
   <string name="result_address_book">Läydettiin kontakti tietoja</string>
   <string name="result_calendar">Löydetty kalenteri tapahtuma</string>
