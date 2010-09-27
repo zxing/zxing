@@ -95,9 +95,9 @@
   <string name="preferences_copy_to_clipboard_title">Panoya kopyala</string>
   <string name="preferences_custom_product_search_summary">Ürün kimliği için yer tutucu olarak %s öğesini kullan</string>
   <string name="preferences_custom_product_search_title">Özel arama URL</string>
-  <string name="preferences_decode_1D_title">1D barkodlarını çöz</string>
-  <string name="preferences_decode_Data_Matrix_title">Data Matrix Çöz</string>
-  <string name="preferences_decode_QR_title">QR Kodlarını Çöz</string>
+  <string name="preferences_decode_1D_title">1D barkodlarını</string>
+  <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>
+  <string name="preferences_decode_QR_title">QR Kodlarını</string>
   <string name="preferences_front_light_summary">Bazı telefonlarda düşük ışıkta taramayı geliştirir, ancak parlak ışığa neden olabilir</string>
   <string name="preferences_front_light_title">Ön ışığı kullan</string>
   <string name="preferences_general_title">Genel ayarlar</string>
@@ -106,7 +106,7 @@
   <string name="preferences_remember_duplicates_summary">Tarih aynı barkod saklayın çoklu tarama</string>
   <string name="preferences_remember_duplicates_title">Hatırla çiftleri</string>
   <string name="preferences_result_title">Sonuç ayarları</string>
-  <string name="preferences_scanning_title">Ne zaman barkodlar \u2026 için tarama</string>
+  <string name="preferences_scanning_title">Ne zaman barkodlar için tarama, çöz\u2026</string>
   <string name="preferences_vibrate_title">Titret</string>
   <string name="result_address_book">Bulunan kişi bilgisi</string>
   <string name="result_calendar">Bulunan takvim etkinliği</string>

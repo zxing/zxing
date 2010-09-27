@@ -74,11 +74,12 @@ public final class StringsResourceTranslator {
       " limitations under the License.\n" +
       " -->\n";
 
-  private static final Map<String,String> LANGUAGE_CODE_MASSAGINGS = new HashMap<String,String>(4);
+  private static final Map<String,String> LANGUAGE_CODE_MASSAGINGS = new HashMap<String,String>(7);
   static {
     LANGUAGE_CODE_MASSAGINGS.put("ja-rJP", "ja");
     LANGUAGE_CODE_MASSAGINGS.put("zh-rCN", "zh-cn");
     LANGUAGE_CODE_MASSAGINGS.put("zh-rTW", "zh-tw");
+	  LANGUAGE_CODE_MASSAGINGS.put("kr",     "ko");
   }
 
   private StringsResourceTranslator() {}
