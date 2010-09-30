@@ -30,12 +30,12 @@ import com.google.zxing.NotFoundException;
 import com.google.zxing.common.BitArray;
 import com.google.zxing.oned.rss.expanded.BinaryUtil;
 
-import junit.framework.TestCase;
+import org.junit.Assert;
 
 /**
  * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
  */
-public abstract class AbstractDecoderTest extends TestCase {
+public abstract class AbstractDecoderTest extends Assert {
 
 	protected static final String numeric_10                     = "..X..XX";
 	protected static final String numeric_12                     = "..X.X.X";

@@ -16,6 +16,8 @@
 
 package com.google.zxing.common.reedsolomon;
 
+import org.junit.Test;
+
 import java.util.Random;
 
 /**
@@ -26,6 +28,7 @@ public final class ReedSolomonEncoderQRCodeTestCase extends AbstractReedSolomonT
   /**
    * Tests example given in ISO 18004, Annex I
    */
+  @Test
   public void testISO18004Example() {
     int[] dataBytes = {
       0x10, 0x20, 0x0C, 0x56, 0x61, 0x80, 0xEC, 0x11,
@@ -36,6 +39,7 @@ public final class ReedSolomonEncoderQRCodeTestCase extends AbstractReedSolomonT
     doTestQRCodeEncoding(dataBytes, expectedECBytes);
   }
 
+  @Test
   public void testQRCodeVersusDecoder() throws Exception {
     Random random = getRandom();
     ReedSolomonEncoder encoder = new ReedSolomonEncoder(GF256.QR_CODE_FIELD);

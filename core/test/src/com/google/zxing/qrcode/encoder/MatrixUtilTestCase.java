@@ -19,13 +19,14 @@ package com.google.zxing.qrcode.encoder;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitArray;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * @author satorux@google.com (Satoru Takabayashi) - creator
  * @author mysen@google.com (Chris Mysen) - ported from C++
  */
-public final class MatrixUtilTestCase extends TestCase {
+public final class MatrixUtilTestCase extends Assert {
   public void testtoString() {
     ByteMatrix array = new ByteMatrix(3, 3);
     array.set(0, 0, 0);
@@ -41,6 +42,7 @@ public final class MatrixUtilTestCase extends TestCase {
     assertEquals(expected, array.toString());
   }
 
+  @Test
   public void testClearMatrix() {
     ByteMatrix matrix = new ByteMatrix(2, 2);
     MatrixUtil.clearMatrix(matrix);
@@ -50,6 +52,7 @@ public final class MatrixUtilTestCase extends TestCase {
     assertEquals(-1, matrix.get(1, 1));
   }
 
+  @Test
   public void testEmbedBasicPatterns() throws WriterException {
     {
       // Version 1.
@@ -116,6 +119,7 @@ public final class MatrixUtilTestCase extends TestCase {
     }
   }
 
+  @Test
   public void testEmbedTypeInfo() throws WriterException {
     // Type info bits = 100000011001110.
     String expected =
@@ -146,6 +150,7 @@ public final class MatrixUtilTestCase extends TestCase {
     assertEquals(expected, matrix.toString());
   }
 
+  @Test
   public void testEmbedVersionInfo() throws WriterException {
     // Version info bits = 000111 110010 010100
     String expected =
@@ -178,6 +183,7 @@ public final class MatrixUtilTestCase extends TestCase {
     assertEquals(expected, matrix.toString());
   }
 
+  @Test
   public void testEmbedDataBits() throws WriterException {
     // Cells other than basic patterns should be filled with zero.
     String expected =
@@ -210,6 +216,7 @@ public final class MatrixUtilTestCase extends TestCase {
     assertEquals(expected, matrix.toString());
   }
 
+  @Test
   public void testBuildMatrix() throws WriterException {
     // From http://www.swetake.com/qr/qr7.html
     String expected =
@@ -249,6 +256,7 @@ public final class MatrixUtilTestCase extends TestCase {
                            matrix);
   }
 
+  @Test
   public void testFindMSBSet() {
     assertEquals(0, MatrixUtil.findMSBSet(0));
     assertEquals(1, MatrixUtil.findMSBSet(1));
@@ -256,6 +264,7 @@ public final class MatrixUtilTestCase extends TestCase {
     assertEquals(32, MatrixUtil.findMSBSet(0x80000000));
   }
 
+  @Test
   public void testCalculateBCHCode() {
     // Encoding of type information.
     // From Appendix C in JISX0510:2004 (p 65)
@@ -278,6 +287,7 @@ public final class MatrixUtilTestCase extends TestCase {
 
   // We don't test a lot of cases in this function since we've already
   // tested them in TEST(calculateBCHCode).
+  @Test
   public void testMakeVersionInfoBits() throws WriterException {
     // From Appendix D in JISX0510:2004 (p 68)
     BitArray bits = new BitArray();
@@ -287,6 +297,7 @@ public final class MatrixUtilTestCase extends TestCase {
 
   // We don't test a lot of cases in this function since we've already
   // tested them in TEST(calculateBCHCode).
+  @Test
   public void testMakeTypeInfoInfoBits() throws WriterException {
     // From Appendix C in JISX0510:2004 (p 65)
     BitArray bits = new BitArray();

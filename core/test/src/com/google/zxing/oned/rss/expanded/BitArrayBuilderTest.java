@@ -31,15 +31,17 @@ import java.util.Vector;
 import com.google.zxing.common.BitArray;
 import com.google.zxing.oned.rss.DataCharacter;
 
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
  * @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)
  */
-public final class BitArrayBuilderTest extends TestCase {
+public final class BitArrayBuilderTest extends Assert {
 
-  public void testBuildBitArray1(){
+  @Test
+  public void testBuildBitArray1() {
     int [][] pairValues = {
         { 19 },
         { 673, 16 }
@@ -50,13 +52,13 @@ public final class BitArrayBuilderTest extends TestCase {
     checkBinary(pairValues, expected);
   }
 
-  private void checkBinary(int[][] pairValues, String expected) {
+  private static void checkBinary(int[][] pairValues, String expected) {
     BitArray binary = buildBitArray(pairValues);
     assertEquals(expected, binary.toString());
   }
 
   private static BitArray buildBitArray(int[][] pairValues) {
-    Vector pairs = new Vector();
+    Vector<ExpandedPair> pairs = new Vector<ExpandedPair>();
     for(int i = 0; i < pairValues.length; ++i){
       int [] pair = pairValues[i];
 
@@ -80,7 +82,6 @@ public final class BitArrayBuilderTest extends TestCase {
       pairs.add(expandedPair);
     }
 
-    BitArray binary = BitArrayBuilder.buildBitArray(pairs);
-    return binary;
+    return BitArrayBuilder.buildBitArray(pairs);
   }
 }

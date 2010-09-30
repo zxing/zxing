@@ -18,7 +18,8 @@ package com.google.zxing.client.result;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Test;
 
 import java.util.Arrays;
 
@@ -27,8 +28,9 @@ import java.util.Arrays;
  *
  * @author Sean Owen
  */
-public final class AddressBookParsedResultTestCase extends TestCase {
+public final class AddressBookParsedResultTestCase extends Assert {
 
+  @Test
   public void testAddressBookDocomo() {
     doTest("MECARD:N:Sean Owen;;", null, new String[] {"Sean Owen"}, null, null, null, null, null, null, null, null);
     doTest("MECARD:NOTE:ZXing Team;N:Sean Owen;URL:google.com;EMAIL:srowen@example.org;;",
@@ -36,22 +38,26 @@ public final class AddressBookParsedResultTestCase extends TestCase {
         "google.com", null, "ZXing Team");
   }
 
+  @Test
   public void testAddressBookAU() {
     doTest("MEMORY:foo\r\nNAME1:Sean\r\nTEL1:+12125551212\r\n",
         null, new String[] {"Sean"}, null, null, null, new String[] {"+12125551212"}, null, null, null, "foo");
   }
 
+  @Test
   public void testVCard() {
     doTest("BEGIN:VCARD\r\nADR;HOME:123 Main St\r\nVERSION:2.1\r\nN:Owen;Sean\r\nEND:VCARD",
            null, new String[] {"Sean Owen"}, null, new String[] {"123 Main St"}, null, null, null, null, null, null);
   }
 
+  @Test
   public void testBizcard() {
     doTest("BIZCARD:N:Sean;X:Owen;C:Google;A:123 Main St;M:+12125551212;E:srowen@example.org;",
         null, new String[] {"Sean Owen"}, null, new String[] {"123 Main St"}, new String[] {"srowen@example.org"},
         new String[] {"+12125551212"}, "Google", null, null, null);
   }
 
+  @Test
   public void testSeveralAddresses() {
     doTest("MECARD:N:Foo Bar;ORG:Company;TEL:5555555555;EMAIL:foo.bar@xyz.com;ADR:City, 10001;" +
            "ADR:City, 10001;NOTE:This is the memo.;;",
@@ -60,6 +66,7 @@ public final class AddressBookParsedResultTestCase extends TestCase {
            new String[] {"5555555555" }, "Company", null, null, "This is the memo.");
   }
 
+  @Test
   public void testQuotedPrintable() {
     doTest("BEGIN:VCARD\r\nADR;HOME;CHARSET=UTF-8;ENCODING=QUOTED-PRINTABLE:;;" +
            "=35=38=20=4C=79=6E=62=72=6F=6F=6B=0D=0A=43=\r\n" +

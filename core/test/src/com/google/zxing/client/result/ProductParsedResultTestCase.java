@@ -18,15 +18,17 @@ package com.google.zxing.client.result;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * Tests {@link ProductParsedResult}.
  *
  * @author Sean Owen
  */
-public final class ProductParsedResultTestCase extends TestCase {
+public final class ProductParsedResultTestCase extends Assert {
 
+  @Test
   public void testProduct() {
     doTest("123456789012", "123456789012", BarcodeFormat.UPC_A);
     doTest("00393157", "00393157", BarcodeFormat.EAN_8);

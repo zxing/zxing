@@ -17,15 +17,17 @@
 package com.google.zxing.qrcode.decoder;
 
 import com.google.zxing.common.BitSourceBuilder;
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * Tests {@link com.google.zxing.qrcode.decoder.DecodedBitStreamParser}.
  *
  * @author Sean Owen
  */
-public final class DecodedBitStreamParserTestCase extends TestCase {
+public final class DecodedBitStreamParserTestCase extends Assert {
 
+  @Test
   public void testSimpleByteMode() throws Exception {
     BitSourceBuilder builder = new BitSourceBuilder();
     builder.write(0x04, 4); // Byte mode
@@ -38,6 +40,7 @@ public final class DecodedBitStreamParserTestCase extends TestCase {
     assertEquals("\u00f1\u00f2\u00f3", result);
   }
 
+  @Test
   public void testSimpleSJIS() throws Exception {
     BitSourceBuilder builder = new BitSourceBuilder();
     builder.write(0x04, 4); // Byte mode
@@ -51,6 +54,7 @@ public final class DecodedBitStreamParserTestCase extends TestCase {
     assertEquals("\uff61\uff62\uff63\uff90", result);
   }
 
+  @Test
   public void testECI() throws Exception {
     BitSourceBuilder builder = new BitSourceBuilder();
     builder.write(0x07, 4); // ECI mode

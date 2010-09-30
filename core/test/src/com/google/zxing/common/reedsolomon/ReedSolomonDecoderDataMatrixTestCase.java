@@ -16,6 +16,8 @@
 
 package com.google.zxing.common.reedsolomon;
 
+import org.junit.Test;
+
 import java.util.Random;
 
 /**
@@ -31,6 +33,7 @@ public final class ReedSolomonDecoderDataMatrixTestCase extends AbstractReedSolo
 
   private final ReedSolomonDecoder dmRSDecoder = new ReedSolomonDecoder(GF256.DATA_MATRIX_FIELD);
 
+  @Test
   public void testNoError() throws ReedSolomonException {
     int[] received = new int[DM_CODE_TEST_WITH_EC.length];
     System.arraycopy(DM_CODE_TEST_WITH_EC, 0, received, 0, received.length);
@@ -38,6 +41,7 @@ public final class ReedSolomonDecoderDataMatrixTestCase extends AbstractReedSolo
     checkQRRSDecode(received);
   }
 
+  @Test
   public void testOneError() throws ReedSolomonException {
     int[] received = new int[DM_CODE_TEST_WITH_EC.length];
     Random random = getRandom();
@@ -48,16 +52,18 @@ public final class ReedSolomonDecoderDataMatrixTestCase extends AbstractReedSolo
     }
   }
 
+  @Test
   public void testMaxErrors() throws ReedSolomonException {
     int[] received = new int[DM_CODE_TEST_WITH_EC.length];
     Random random = getRandom();
-    for (int i = 0; i < DM_CODE_TEST.length; i++) { // # iterations is kind of arbitrary
+    for (int test : DM_CODE_TEST) { // # iterations is kind of arbitrary
       System.arraycopy(DM_CODE_TEST_WITH_EC, 0, received, 0, received.length);
       corrupt(received, DM_CODE_CORRECTABLE, random);
       checkQRRSDecode(received);
     }
   }
 
+  @Test
   public void testTooManyErrors() {
     int[] received = new int[DM_CODE_TEST_WITH_EC.length];
     System.arraycopy(DM_CODE_TEST_WITH_EC, 0, received, 0, received.length);

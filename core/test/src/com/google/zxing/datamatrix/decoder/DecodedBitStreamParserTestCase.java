@@ -16,13 +16,15 @@
 
 package com.google.zxing.datamatrix.decoder;
 
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * @author bbrown@google.com (Brian Brown)
  */
-public final class DecodedBitStreamParserTestCase extends TestCase{
+public final class DecodedBitStreamParserTestCase extends Assert {
 
+  @Test
   public void testAsciiStandardDecode() throws Exception {
     // ASCII characters 0-127 are encoded as the value + 1
     byte[] bytes = {(byte) ('a' + 1), (byte) ('b' + 1), (byte) ('c' + 1),
@@ -30,7 +32,8 @@ public final class DecodedBitStreamParserTestCase extends TestCase{
     String decodedString = DecodedBitStreamParser.decode(bytes).getText();
     assertEquals("abcABC", decodedString);
   }
-  
+
+  @Test
   public void testAsciiDoubleDigitDecode() throws Exception{
     // ASCII double digit (00 - 99) Numeric Value + 130
     byte[] bytes = {(byte)       130 , (byte) ( 1 + 130),

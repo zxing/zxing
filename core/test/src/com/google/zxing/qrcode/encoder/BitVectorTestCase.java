@@ -17,13 +17,14 @@
 package com.google.zxing.qrcode.encoder;
 
 import com.google.zxing.common.BitArray;
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * @author satorux@google.com (Satoru Takabayashi) - creator
  * @author dswitkin@google.com (Daniel Switkin) - ported from C++
  */
-public class BitVectorTestCase extends TestCase {
+public class BitVectorTestCase extends Assert {
 
   private static long getUnsignedInt(BitArray v, int index) {
     long result = 0L;
@@ -35,6 +36,7 @@ public class BitVectorTestCase extends TestCase {
     return result;
   }
 
+  @Test
   public void testAppendBit() {
     BitArray v = new BitArray();
     assertEquals(0, v.getSizeInBytes());
@@ -80,6 +82,7 @@ public class BitVectorTestCase extends TestCase {
     assertEquals(0xaa800000L, getUnsignedInt(v, 0));
   }
 
+  @Test
   public void testAppendBits() {
     {
       BitArray v = new BitArray();
@@ -101,6 +104,7 @@ public class BitVectorTestCase extends TestCase {
     }
   }
 
+  @Test
   public void testNumBytes() {
     BitArray v = new BitArray();
     assertEquals(0, v.getSizeInBytes());
@@ -116,6 +120,7 @@ public class BitVectorTestCase extends TestCase {
     assertEquals(3, v.getSizeInBytes());
   }
 
+  @Test
   public void testAppendBitVector() {
     BitArray v1 = new BitArray();
     v1.appendBits(0xbe, 8);
@@ -126,6 +131,7 @@ public class BitVectorTestCase extends TestCase {
     assertEquals(" X.XXXXX. XXX.XXXX", v1.toString());
   }
 
+  @Test
   public void testXOR() {
     {
       BitArray v1 = new BitArray();
@@ -145,6 +151,7 @@ public class BitVectorTestCase extends TestCase {
     }
   }
 
+  @Test
   public void testAt() {
     BitArray v = new BitArray();
     v.appendBits(0xdead, 16);  // 1101 1110 1010 1101
@@ -169,6 +176,7 @@ public class BitVectorTestCase extends TestCase {
     assertTrue(v.get(15));
   }
 
+  @Test
   public void testToString() {
     BitArray v = new BitArray();
     v.appendBits(0xdead, 16);  // 1101 1110 1010 1101

@@ -27,6 +27,7 @@
 package com.google.zxing.oned.rss.expanded.decoders;
 
 import com.google.zxing.NotFoundException;
+import org.junit.Test;
 
 /**
  * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
@@ -34,7 +35,8 @@ import com.google.zxing.NotFoundException;
 public class AI01_3103_DecoderTest extends AbstractDecoderTest {
 	
 	private static final String header = "..X..";
-	
+
+  @Test
 	public void test01_3103_1() throws Exception {
 		String data = header + compressedGtin_900123456798908 + compressed15bitWeight_1750;
 		String expected = "(01)90012345678908(3103)001750";
@@ -42,13 +44,15 @@ public class AI01_3103_DecoderTest extends AbstractDecoderTest {
 		assertCorrectBinaryString(data, expected);
 	}
 
+  @Test
 	public void test01_3103_2() throws Exception {
 		String data = header + compressedGtin_900000000000008 + compressed15bitWeight_0;
 		String expected = "(01)90000000000003(3103)000000";
 		
 		assertCorrectBinaryString(data, expected);
 	}
-	
+
+  @Test
 	public void test01_3103_invalid() throws Exception {
 		String data = header + compressedGtin_900123456798908 + compressed15bitWeight_1750 + "..";
 		

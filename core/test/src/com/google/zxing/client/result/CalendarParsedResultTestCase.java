@@ -18,15 +18,17 @@ package com.google.zxing.client.result;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * Tests {@link CalendarParsedResult}.
  *
  * @author Sean Owen
  */
-public final class CalendarParsedResultTestCase extends TestCase {
+public final class CalendarParsedResultTestCase extends Assert {
 
+  @Test
   public void testStartEnd() {
     doTest(
         "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n" +
@@ -36,6 +38,7 @@ public final class CalendarParsedResultTestCase extends TestCase {
         null, null, null, "20080504T123456Z", "20080505T234555Z", null);
   }
 
+  @Test
   public void testStart() {
     doTest(
         "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n" +
@@ -44,6 +47,7 @@ public final class CalendarParsedResultTestCase extends TestCase {
         null, null, null, "20080504T123456Z", "20080504T123456Z", null);
   }
 
+  @Test
   public void testSummary() {
     doTest(
         "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n" +
@@ -53,6 +57,7 @@ public final class CalendarParsedResultTestCase extends TestCase {
         null, "foo", null, "20080504T123456Z", "20080504T123456Z", null);
   }
 
+  @Test
   public void testLocation() {
     doTest(
         "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n" +
@@ -62,6 +67,7 @@ public final class CalendarParsedResultTestCase extends TestCase {
         null, null, "Miami", "20080504T123456Z", "20080504T123456Z", null);
   }
 
+  @Test
   public void testDescription() {
     doTest(
         "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n" +

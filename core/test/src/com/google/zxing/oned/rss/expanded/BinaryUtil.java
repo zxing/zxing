@@ -78,6 +78,7 @@ public final class BinaryUtil {
     return buildBitArrayFromString(sb.toString());
   }
 
+  /*
   public static int extractNumericValueFromBitArray(BitArray information, int pos, int bits) {
     if(bits > 32) {
       throw new IllegalArgumentException("extractNumberValueFromBitArray can't handle more than 32 bits");
@@ -92,4 +93,5 @@ public final class BinaryUtil {
     numeric.reverse();
     return numeric.bits[0];
   }
+   */
 }

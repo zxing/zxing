@@ -27,24 +27,27 @@
 package com.google.zxing.oned.rss.expanded.decoders;
 
 import com.google.zxing.NotFoundException;
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
  * @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)
  */
-public class FieldParserTest extends TestCase{
+public class FieldParserTest extends Assert {
 	
 	private static void checkFields(String expected) throws NotFoundException {
 		String field  = expected.replace("(", "").replace(")","");
 		String actual = FieldParser.parseFieldsInGeneralPurpose(field);
 		assertEquals(expected, actual);
 	}
-	
+
+  @Test
 	public void testParseField() throws Exception{
 		checkFields("(15)991231(3103)001750(10)12A");
 	}
-	
+
+  @Test
 	public void testParseField2() throws Exception{
 		checkFields("(15)991231(15)991231(3103)001750(10)12A");
 	}

@@ -26,12 +26,16 @@
 
 package com.google.zxing.oned.rss.expanded.decoders;
 
+import org.junit.Test;
+
 /**
  * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
  */
 public class AI01_3202_3203_DecoderTest extends AbstractDecoderTest {
+
 	private static final String header = "..X.X";
-	
+
+  @Test
 	public void test01_3202_1() throws Exception {
 		String data = header + compressedGtin_900123456798908 + compressed15bitWeight_1750;
 		String expected = "(01)90012345678908(3202)001750";
@@ -39,6 +43,7 @@ public class AI01_3202_3203_DecoderTest extends AbstractDecoderTest {
 		assertCorrectBinaryString(data, expected);
 	}
 
+  @Test
 	public void test01_3203_1() throws Exception {
 		String data = header + compressedGtin_900123456798908 + compressed15bitWeight_11750;
 		String expected = "(01)90012345678908(3203)001750";

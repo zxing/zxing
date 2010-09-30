@@ -18,13 +18,16 @@ package com.google.zxing.qrcode.encoder;
 
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.google.zxing.qrcode.decoder.Mode;
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * @author satorux@google.com (Satoru Takabayashi) - creator
  * @author mysen@google.com (Chris Mysen) - ported from C++
  */
-public final class QRCodeTestCase extends TestCase {
+public final class QRCodeTestCase extends Assert {
+
+  @Test
   public void test() {
     QRCode qrCode = new QRCode();
     // Initially the QR Code should be invalid.
@@ -42,8 +45,8 @@ public final class QRCodeTestCase extends TestCase {
     qrCode.setNumECBytes(130);
     qrCode.setNumRSBlocks(5);
 
-    assertEquals(Mode.BYTE, qrCode.getMode());
-    assertEquals(ErrorCorrectionLevel.H, qrCode.getECLevel());
+    assertSame(Mode.BYTE, qrCode.getMode());
+    assertSame(ErrorCorrectionLevel.H, qrCode.getECLevel());
     assertEquals(7, qrCode.getVersion());
     assertEquals(45, qrCode.getMatrixWidth());
     assertEquals(3, qrCode.getMaskPattern());
@@ -79,6 +82,7 @@ public final class QRCodeTestCase extends TestCase {
     }
   }
 
+  @Test
   public void testToString() {
     {
       QRCode qrCode = new QRCode();
@@ -154,6 +158,7 @@ public final class QRCodeTestCase extends TestCase {
     }
   }
 
+  @Test
   public void testIsValidMaskPattern() {
     assertFalse(QRCode.isValidMaskPattern(-1));
     assertTrue(QRCode.isValidMaskPattern(0));

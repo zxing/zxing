@@ -18,20 +18,23 @@ package com.google.zxing.client.result;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * Tests {@link EmailAddressParsedResult}.
  *
  * @author Sean Owen
  */
-public final class EmailAddressParsedResultTestCase extends TestCase {
+public final class EmailAddressParsedResultTestCase extends Assert {
 
+  @Test
   public void testEmailAddress() {
     doTest("srowen@example.org", "srowen@example.org", null, null);
     doTest("mailto:srowen@example.org", "srowen@example.org", null, null);
   }
 
+  @Test
   public void testEmailDocomo() {
     doTest("MATMSG:TO:srowen@example.org;;", "srowen@example.org", null, null);
     doTest("MATMSG:TO:srowen@example.org;SUB:Stuff;;", "srowen@example.org", "Stuff", null);
@@ -39,6 +42,7 @@ public final class EmailAddressParsedResultTestCase extends TestCase {
         "Stuff", "This is some text");
   }
 
+  @Test
   public void testSMTP() {
     doTest("smtp:srowen@example.org", "srowen@example.org", null, null);
     doTest("SMTP:srowen@example.org", "srowen@example.org", null, null);
