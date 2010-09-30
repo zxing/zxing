@@ -28,13 +28,15 @@ package com.google.zxing.oned.rss.expanded;
 
 import com.google.zxing.common.BitArray;
 
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
  */
-public final class BinaryUtilTest extends TestCase{
+public final class BinaryUtilTest extends Assert {
 
+  @Test
   public void testBuildBitArrayFromString(){
 
     String data = " ..X..X.. ..XXX... XXXXXXXX ........";
@@ -58,10 +60,9 @@ public final class BinaryUtilTest extends TestCase{
     assertEquals(data, binary.toString());
   }
 
+  @Test
   public void testBuildBitArrayFromStringWithoutSpaces(){
-    String data;
-
-    data = " ..X..X.. ..XXX... XXXXXXXX ........";
+    String data = " ..X..X.. ..XXX... XXXXXXXX ........";
     checkWithoutSpaces(data);
 
     data = " XXX..X..";

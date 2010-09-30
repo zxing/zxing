@@ -18,21 +18,24 @@ package com.google.zxing.client.result;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * Tests {@link URIParsedResult}.
  *
  * @author Sean Owen
  */
-public final class URIParsedResultTestCase extends TestCase {
+public final class URIParsedResultTestCase extends Assert {
 
+  @Test
   public void testBookmarkDocomo() {
     doTest("MEBKM:URL:google.com;;", "http://google.com", null);
     doTest("MEBKM:URL:http://google.com;;", "http://google.com", null);    
     doTest("MEBKM:URL:google.com;TITLE:Google;", "http://google.com", "Google");
   }
 
+  @Test
   public void testURI() {
     doTest("google.com", "http://google.com", null);
     doTest("http://google.com", "http://google.com", null);
@@ -43,12 +46,14 @@ public final class URIParsedResultTestCase extends TestCase {
            null);
   }
 
+  @Test
   public void testURLTO() {
     doTest("urlto::bar.com", "http://bar.com", null);
     doTest("urlto::http://bar.com", "http://bar.com", null);    
     doTest("urlto:foo:bar.com", "http://bar.com", "foo");
   }
 
+  @Test
   public void testGarbage() {
     String text = "Da65cV1g^>%^f0bAbPn1CJB6lV7ZY8hs0Sm:DXU0cd]GyEeWBz8]bUHLB";
     Result fakeResult = new Result(text, null, null, BarcodeFormat.QR_CODE);
@@ -57,6 +62,7 @@ public final class URIParsedResultTestCase extends TestCase {
     assertEquals(text, result.getDisplayResult());
   }
 
+  @Test
   public void testIsPossiblyMalicious() {
     doTestIsPossiblyMalicious("http://google.com", false);
     doTestIsPossiblyMalicious("http://google.com@evil.com", true);

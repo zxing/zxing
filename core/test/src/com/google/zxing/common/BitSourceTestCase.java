@@ -16,13 +16,15 @@
 
 package com.google.zxing.common;
 
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * @author Sean Owen
  */
-public final class BitSourceTestCase extends TestCase {
+public final class BitSourceTestCase extends Assert {
 
+  @Test
   public void testSource() {
     byte[] bytes = {(byte) 1, (byte) 2, (byte) 3, (byte) 4, (byte) 5};
     BitSource source = new BitSource(bytes);

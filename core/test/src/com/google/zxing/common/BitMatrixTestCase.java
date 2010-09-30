@@ -16,14 +16,16 @@
 
 package com.google.zxing.common;
 
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * @author Sean Owen
  * @author dswitkin@google.com (Daniel Switkin)
  */
-public final class BitMatrixTestCase extends TestCase {
+public final class BitMatrixTestCase extends Assert {
 
+  @Test
   public void testGetSet() {
     BitMatrix matrix = new BitMatrix(33);
     assertEquals(33, matrix.getHeight());
@@ -41,6 +43,7 @@ public final class BitMatrixTestCase extends TestCase {
     }
   }
 
+  @Test
   public void testSetRegion() {
     BitMatrix matrix = new BitMatrix(5);
     matrix.setRegion(1, 1, 3, 3);
@@ -51,6 +54,7 @@ public final class BitMatrixTestCase extends TestCase {
     }
   }
 
+  @Test
   public void testRectangularMatrix() {
     BitMatrix matrix = new BitMatrix(75, 20);
     assertEquals(75, matrix.getWidth());
@@ -77,6 +81,7 @@ public final class BitMatrixTestCase extends TestCase {
     assertFalse(matrix.get(51, 3));
   }
 
+  @Test
   public void testRectangularSetRegion() {
     BitMatrix matrix = new BitMatrix(320, 240);
     assertEquals(320, matrix.getWidth());
@@ -91,6 +96,7 @@ public final class BitMatrixTestCase extends TestCase {
     }
   }
 
+  @Test
   public void testGetRow() {
     BitMatrix matrix = new BitMatrix(102, 5);
     for (int x = 0; x < 102; x++) {

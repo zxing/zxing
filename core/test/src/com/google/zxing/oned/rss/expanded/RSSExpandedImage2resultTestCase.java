@@ -33,12 +33,14 @@ package com.google.zxing.oned.rss.expanded;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.Hashtable;
 
 import javax.imageio.ImageIO;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
+import com.google.zxing.NotFoundException;
 import com.google.zxing.Result;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.client.result.ExpandedProductParsedResult;
@@ -47,23 +49,27 @@ import com.google.zxing.client.result.ResultParser;
 import com.google.zxing.common.BitArray;
 import com.google.zxing.common.GlobalHistogramBinarizer;
 
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
  * @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)
  */
-public final class RSSExpandedImage2resultTestCase extends TestCase {
+public final class RSSExpandedImage2resultTestCase extends Assert {
 
-  public void testDecodeRow2result_2() throws Exception{
+  @Test
+  public void testDecodeRow2result_2() throws Exception {
     // (01)90012345678908(3103)001750
     String path = "test/data/blackbox/rssexpanded-1/2.jpg";
-    ExpandedProductParsedResult expected = new ExpandedProductParsedResult("90012345678908", "-", "-", "-", "-", "-", "-", "001750", ExpandedProductParsedResult.KILOGRAM, "3", "-", "-", "-", new Hashtable());
+    ExpandedProductParsedResult expected =
+        new ExpandedProductParsedResult("90012345678908", "-", "-", "-", "-", "-", "-", "001750", ExpandedProductParsedResult.KILOGRAM, "3", "-", "-", "-", new Hashtable());
 
     assertCorrectImage2result(path, expected);
   }
 
-  private static void assertCorrectImage2result(String path, ExpandedProductParsedResult expected) throws Exception {
+  private static void assertCorrectImage2result(String path, ExpandedProductParsedResult expected)
+      throws IOException, NotFoundException {
     RSSExpandedReader rssExpandedReader = new RSSExpandedReader();
 
     BufferedImage image = ImageIO.read(new File(path));
@@ -73,7 +79,7 @@ public final class RSSExpandedImage2resultTestCase extends TestCase {
 
     Result theResult = rssExpandedReader.decodeRow(rowNumber, row, new Hashtable());
 
-    assertEquals(BarcodeFormat.RSS_EXPANDED, theResult.getBarcodeFormat());
+    assertSame(BarcodeFormat.RSS_EXPANDED, theResult.getBarcodeFormat());
 
     ParsedResult result = ResultParser.parseResult(theResult);
 

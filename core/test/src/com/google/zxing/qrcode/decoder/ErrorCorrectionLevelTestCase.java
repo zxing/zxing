@@ -16,18 +16,20 @@
 
 package com.google.zxing.qrcode.decoder;
 
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * @author Sean Owen
  */
-public final class ErrorCorrectionLevelTestCase extends TestCase {
+public final class ErrorCorrectionLevelTestCase extends Assert {
 
+  @Test
   public void testForBits() {
-    assertEquals(ErrorCorrectionLevel.M, ErrorCorrectionLevel.forBits(0));
-    assertEquals(ErrorCorrectionLevel.L, ErrorCorrectionLevel.forBits(1));
-    assertEquals(ErrorCorrectionLevel.H, ErrorCorrectionLevel.forBits(2));
-    assertEquals(ErrorCorrectionLevel.Q, ErrorCorrectionLevel.forBits(3));
+    assertSame(ErrorCorrectionLevel.M, ErrorCorrectionLevel.forBits(0));
+    assertSame(ErrorCorrectionLevel.L, ErrorCorrectionLevel.forBits(1));
+    assertSame(ErrorCorrectionLevel.H, ErrorCorrectionLevel.forBits(2));
+    assertSame(ErrorCorrectionLevel.Q, ErrorCorrectionLevel.forBits(3));
     try {
       ErrorCorrectionLevel.forBits(4);
       fail("Should have thrown an exception");

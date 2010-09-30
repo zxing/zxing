@@ -16,15 +16,17 @@
 
 package com.google.zxing.common;
 
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * @author Sean Owen
  */
-public final class PerspectiveTransformTestCase extends TestCase {
+public final class PerspectiveTransformTestCase extends Assert {
 
   private static final float EPSILON = 0.0001f;
 
+  @Test
   public void testSquareToQuadrilateral() {
     PerspectiveTransform pt = PerspectiveTransform.squareToQuadrilateral(
         2.0f, 3.0f, 10.0f, 4.0f, 16.0f, 15.0f, 4.0f, 9.0f);
@@ -36,6 +38,7 @@ public final class PerspectiveTransformTestCase extends TestCase {
     assertPointEquals(48.0f, 42.42857f, 1.5f, 1.5f, pt);
   }
 
+  @Test
   public void testQuadrilateralToQuadrilateral() {
     PerspectiveTransform pt = PerspectiveTransform.quadrilateralToQuadrilateral(
         2.0f, 3.0f, 10.0f, 4.0f, 16.0f, 15.0f, 4.0f, 9.0f,
@@ -48,7 +51,11 @@ public final class PerspectiveTransformTestCase extends TestCase {
     assertPointEquals(328.09116f, 334.16385f, 50.0f, 50.0f, pt);
   }
 
-  private static void assertPointEquals(float expectedX, float expectedY, float sourceX, float sourceY, PerspectiveTransform pt) {
+  private static void assertPointEquals(float expectedX,
+                                        float expectedY,
+                                        float sourceX,
+                                        float sourceY,
+                                        PerspectiveTransform pt) {
     float[] points = {sourceX, sourceY};
     pt.transformPoints(points);
     assertEquals(expectedX, points[0], EPSILON);

@@ -18,21 +18,21 @@ package com.google.zxing.client.result;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
-import junit.framework.TestCase;
-
-import java.util.Arrays;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * Tests {@link WifiParsedResult}.
  *
  * @author Vikram Aggarwal
  */
-public final class WifiParsedResultTestCase extends TestCase {
+public final class WifiParsedResultTestCase extends Assert {
   public void testNoPassword() {
     doTest("WIFI:S:NoPassword;P:;T:;;", "NoPassword", "", "");
     doTest("WIFI:S:No Password;P:;T:;;", "No Password", "", "");
   }
 
+  @Test
   public void testWep() {
     doTest("WIFI:S:TenChars;P:0123456789;T:WEP;;", "TenChars", "0123456789", "WEP");
     doTest("WIFI:S:TenChars;P:abcde56789;T:WEP;;", "TenChars", "abcde56789", "WEP");
@@ -47,7 +47,10 @@ public final class WifiParsedResultTestCase extends TestCase {
     // TODO(vikrama) Need a test for SB as well.
   }
 
-  // Put in checks for the length of the password for wep.
+  /**
+   * Put in checks for the length of the password for wep.
+   */
+  @Test
   public void testWpa() {
     doTest("WIFI:S:TenChars;P:wow;T:WPA;;", "TenChars", "wow", "WPA");
     doTest("WIFI:S:TenChars;P:space is silent;T:WPA;;", "TenChars", "space is silent", "WPA");
@@ -59,8 +62,9 @@ public final class WifiParsedResultTestCase extends TestCase {
     doTest("WIFI:S:TenChars;P:hello\\:there;T:WEP;;", "TenChars", "hello:there", "WEP");
   }
 
-  // Given the string contents for the barcode, check that it matches
-  // our expectations
+  /**
+   * Given the string contents for the barcode, check that it matches our expectations
+   */
   private static void doTest(String contents,
                              String ssid,
                              String password,

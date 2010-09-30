@@ -111,7 +111,7 @@
       <classpath>
         <pathelement location="core.jar"/>
         <pathelement location="../javase/javase.jar"/>
-        <pathelement location="lib/junit.jar"/>
+        <pathelement location="lib/junit-4.8.2.jar"/>
       </classpath>
     </javac>
   </target>
@@ -143,7 +143,7 @@
         <pathelement location="core.jar"/>
         <pathelement location="build-test"/>
         <pathelement location="../javase/javase.jar"/>
-        <pathelement location="lib/junit.jar"/>
+        <pathelement location="lib/junit-4.8.2.jar"/>
       </classpath>
       <assertions>
         <enable/>
@@ -165,7 +165,7 @@
         <pathelement location="core.jar"/>
         <pathelement location="build-test"/>
         <pathelement location="../javase/javase.jar"/>
-        <pathelement location="lib/junit.jar"/>
+        <pathelement location="lib/junit-4.8.2.jar"/>
       </classpath>
       <assertions>
         <enable/>

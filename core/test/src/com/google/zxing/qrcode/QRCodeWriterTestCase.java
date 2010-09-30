@@ -21,20 +21,20 @@ import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Test;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Hashtable;
 
 /**
  * @author satorux@google.com (Satoru Takabayashi) - creator
  * @author dswitkin@google.com (Daniel Switkin) - ported and expanded from C++
  */
-public final class QRCodeWriterTestCase extends TestCase {
+public final class QRCodeWriterTestCase extends Assert {
 
   private static final String BASE_IMAGE_PATH = "test/data/golden/qrcode/";
 
@@ -74,6 +74,7 @@ public final class QRCodeWriterTestCase extends TestCase {
     return matrix;
   }
 
+  @Test
   public void testQRCodeWriter() throws WriterException {
     // The QR should be multiplied up to fit, with extra padding if necessary
     int bigEnough = 256;
@@ -123,7 +124,8 @@ public final class QRCodeWriterTestCase extends TestCase {
 
   // Golden images are generated with "qrcode_sample.cc". The images are checked with both eye balls
   // and cell phones. We expect pixel-perfect results, because the error correction level is known,
-  // and the pixel dimensions matches exactly.
+  // and the pixel dimensions matches exactly. 
+  @Test
   public void testRegressionTest() throws WriterException {
     compareToGoldenFile("http://www.google.com/", ErrorCorrectionLevel.M, 99,
         "renderer-test-01.png");

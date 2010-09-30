@@ -40,15 +40,17 @@ import com.google.zxing.common.GlobalHistogramBinarizer;
 import com.google.zxing.oned.rss.DataCharacter;
 import com.google.zxing.oned.rss.FinderPattern;
 
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
  * @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)
  */
-public final class RSSExpandedInternalTestCase extends TestCase {
+public final class RSSExpandedInternalTestCase extends Assert {
 
-  public void testFindFinderPatterns() throws Exception{
+  @Test
+  public void testFindFinderPatterns() throws Exception {
     RSSExpandedReader rssExpandedReader = new RSSExpandedReader();
 
     String path = "test/data/blackbox/rssexpanded-1/2.jpg";
@@ -82,7 +84,8 @@ public final class RSSExpandedInternalTestCase extends TestCase {
     }
   }
 
-  public void testRetrieveNextPairPatterns() throws Exception{
+  @Test
+  public void testRetrieveNextPairPatterns() throws Exception {
     RSSExpandedReader rssExpandedReader = new RSSExpandedReader();
 
     String path = "test/data/blackbox/rssexpanded-1/3.jpg";
@@ -103,7 +106,8 @@ public final class RSSExpandedInternalTestCase extends TestCase {
     assertTrue(pair2.mayBeLast());
   }
 
-  public void testDecodeCheckCharacter() throws Exception{
+  @Test
+  public void testDecodeCheckCharacter() throws Exception {
     RSSExpandedReader rssExpandedReader = new RSSExpandedReader();
 
     String path = "test/data/blackbox/rssexpanded-1/3.jpg";
@@ -120,7 +124,8 @@ public final class RSSExpandedInternalTestCase extends TestCase {
     assertEquals(98, dataCharacter.getValue());
   }
 
-  public void testDecodeDataCharacter() throws Exception{
+  @Test
+  public void testDecodeDataCharacter() throws Exception {
     RSSExpandedReader rssExpandedReader = new RSSExpandedReader();
 
     String path = "test/data/blackbox/rssexpanded-1/3.jpg";

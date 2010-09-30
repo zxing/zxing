@@ -25,7 +25,8 @@ import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 import com.google.zxing.ResultMetadataType;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Test;
 
 import javax.imageio.ImageIO;
 import java.awt.geom.AffineTransform;
@@ -49,7 +50,7 @@ import java.util.Properties;
  * @author Sean Owen
  * @author dswitkin@google.com (Daniel Switkin)
  */
-public abstract class AbstractBlackBoxTestCase extends TestCase {
+public abstract class AbstractBlackBoxTestCase extends Assert {
 
   protected static final Hashtable<DecodeHintType, Object> TRY_HARDER_HINT;
   static {
@@ -161,6 +162,7 @@ public abstract class AbstractBlackBoxTestCase extends TestCase {
 
   // This workaround is used because AbstractNegativeBlackBoxTestCase overrides this method but does
   // not return SummaryResults.
+  @Test
   public void testBlackBox() throws IOException {
     testBlackBoxCountingResults(true);
   }

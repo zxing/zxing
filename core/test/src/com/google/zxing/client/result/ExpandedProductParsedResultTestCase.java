@@ -28,17 +28,18 @@ package com.google.zxing.client.result;
 
 import java.util.Hashtable;
 
-import junit.framework.TestCase;
-
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * @author Antonio Manuel Benjumea Conde, Servinform, S.A.
  * @author Agustín Delgado, Servinform, S.A.
  */
-public final class ExpandedProductParsedResultTestCase extends TestCase {
+public final class ExpandedProductParsedResultTestCase extends Assert {
 
+  @Test
   public void test_RSSExpanded() {
     String text = "(01)66546(13)001205(3932)4455(3102)6544(123)544654";
     String productID = "66546";
@@ -58,8 +59,7 @@ public final class ExpandedProductParsedResultTestCase extends TestCase {
     uncommonAIs.put("123", "544654");
 
     Result result = new Result(text, null, null, BarcodeFormat.RSS_EXPANDED);
-    ExpandedProductParsedResult o = ExpandedProductResultParser
-        .parse(result);
+    ExpandedProductParsedResult o = ExpandedProductResultParser.parse(result);
     assertEquals(productID, o.getProductID());
     assertEquals(sscc, o.getSscc());
     assertEquals(lotNumber, o.getLotNumber());

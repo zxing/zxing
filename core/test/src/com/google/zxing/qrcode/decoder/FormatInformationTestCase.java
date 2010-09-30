@@ -16,16 +16,18 @@
 
 package com.google.zxing.qrcode.decoder;
 
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * @author Sean Owen
  */
-public final class FormatInformationTestCase extends TestCase {
+public final class FormatInformationTestCase extends Assert {
 
   private static final int MASKED_TEST_FORMAT_INFO = 0x2BED;
   private static final int UNMASKED_TEST_FORMAT_INFO = MASKED_TEST_FORMAT_INFO ^ 0x5412;
 
+  @Test
   public void testBitsDiffering() {
     assertEquals(0, FormatInformation.numBitsDiffering(1, 1));
     assertEquals(1, FormatInformation.numBitsDiffering(0, 2));
@@ -33,6 +35,7 @@ public final class FormatInformationTestCase extends TestCase {
     assertEquals(32, FormatInformation.numBitsDiffering(-1, 0));
   }
 
+  @Test
   public void testDecode() {
     // Normal case
     FormatInformation expected =
@@ -44,6 +47,7 @@ public final class FormatInformationTestCase extends TestCase {
                  FormatInformation.decodeFormatInformation(UNMASKED_TEST_FORMAT_INFO, MASKED_TEST_FORMAT_INFO));
   }
 
+  @Test
   public void testDecodeWithBitDifference() {
     FormatInformation expected =
         FormatInformation.decodeFormatInformation(MASKED_TEST_FORMAT_INFO, MASKED_TEST_FORMAT_INFO);
@@ -58,6 +62,7 @@ public final class FormatInformationTestCase extends TestCase {
         MASKED_TEST_FORMAT_INFO ^ 0x0F, MASKED_TEST_FORMAT_INFO ^ 0x0F));
   }
 
+  @Test
   public void testDecodeWithMisread() {
     FormatInformation expected =
         FormatInformation.decodeFormatInformation(MASKED_TEST_FORMAT_INFO, MASKED_TEST_FORMAT_INFO);

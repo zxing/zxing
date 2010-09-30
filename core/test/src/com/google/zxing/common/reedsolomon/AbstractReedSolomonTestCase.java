@@ -16,7 +16,7 @@
 
 package com.google.zxing.common.reedsolomon;
 
-import junit.framework.TestCase;
+import org.junit.Assert;
 
 import java.util.BitSet;
 import java.util.Random;
@@ -24,7 +24,7 @@ import java.util.Random;
 /**
  * @author Sean Owen
  */
-abstract class AbstractReedSolomonTestCase extends TestCase {
+abstract class AbstractReedSolomonTestCase extends Assert {
 
   static void corrupt(int[] received, int howMany, Random random) {
     BitSet corrupted = new BitSet(received.length);

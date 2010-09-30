@@ -18,15 +18,19 @@ package com.google.zxing.client.result;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * Tests {@link com.google.zxing.client.result.GeoParsedResult}.
  *
  * @author Sean Owen
  */
-public final class GeoParsedResultTestCase extends TestCase {
+public final class GeoParsedResultTestCase extends Assert {
 
+  private static final double EPSILON = 0.0000000001;
+
+  @Test
   public void testGeo() {
     doTest("geo:1,2", 1.0, 2.0, 0.0, null);
     doTest("geo:80.33,-32.3344,3.35", 80.33, -32.3344, 3.35, null);
@@ -43,9 +47,10 @@ public final class GeoParsedResultTestCase extends TestCase {
     ParsedResult result = ResultParser.parseResult(fakeResult);
     assertSame(ParsedResultType.GEO, result.getType());
     GeoParsedResult geoResult = (GeoParsedResult) result;
-    assertEquals(latitude, geoResult.getLatitude());
-    assertEquals(longitude, geoResult.getLongitude());
-    assertEquals(altitude, geoResult.getAltitude());
+    assertEquals(latitude, geoResult.getLatitude(), EPSILON);
+    assertEquals(longitude, geoResult.getLongitude(), EPSILON);
+    assertEquals(altitude, geoResult.getAltitude(), EPSILON);
+    assertEquals(query, geoResult.getQuery());
   }
 
 }

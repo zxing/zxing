@@ -162,8 +162,8 @@ public final class AllPositiveBlackBoxTester {
     long now = System.currentTimeMillis();
     AbstractBlackBoxTestCase.SummaryResults results = new AbstractBlackBoxTestCase.SummaryResults();
 
-    for (int x = 0; x < TESTS.length; x++) {
-      results.add(TESTS[x].testBlackBoxCountingResults(false));
+    for (AbstractBlackBoxTestCase test : TESTS) {
+      results.add(test.testBlackBoxCountingResults(false));
     }
 
     // This threaded version can't be used yet because BlackPointEstimator (and possibly other code)

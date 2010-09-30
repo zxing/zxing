@@ -16,14 +16,17 @@
 
 package com.google.zxing.qrcode.encoder;
 
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * @author satorux@google.com (Satoru Takabayashi) - creator
  * @author mysen@google.com (Chris Mysen) - ported from C++
  */
 
-public final class MaskUtilTestCase extends TestCase {
+public final class MaskUtilTestCase extends Assert {
+
+  @Test
   public void testApplyMaskPenaltyRule1() {
     {
       ByteMatrix matrix = new ByteMatrix(4, 1);
@@ -59,6 +62,7 @@ public final class MaskUtilTestCase extends TestCase {
     }
   }
 
+  @Test
   public void testApplyMaskPenaltyRule2() {
     {
       ByteMatrix matrix = new ByteMatrix(1, 1);
@@ -97,6 +101,7 @@ public final class MaskUtilTestCase extends TestCase {
     }
   }
 
+  @Test
   public void testApplyMaskPenaltyRule3() {
     {
       // Horizontal 00001011101.
@@ -164,6 +169,7 @@ public final class MaskUtilTestCase extends TestCase {
     }
   }
 
+  @Test
   public void testApplyMaskPenaltyRule4() {
     {
       // Dark cell ratio = 0%
@@ -205,6 +211,7 @@ public final class MaskUtilTestCase extends TestCase {
   }
 
   // See mask patterns on the page 43 of JISX0510:2004.
+  @Test
   public void testGetDataMaskBit() {
     int[][] mask0 = {
       {1, 0, 1, 0, 1, 0},

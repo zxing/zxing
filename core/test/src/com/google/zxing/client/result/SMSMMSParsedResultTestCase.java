@@ -18,7 +18,8 @@ package com.google.zxing.client.result;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Test;
 
 import java.util.Arrays;
 
@@ -27,14 +28,16 @@ import java.util.Arrays;
  *
  * @author Sean Owen
  */
-public final class SMSMMSParsedResultTestCase extends TestCase {
-   
+public final class SMSMMSParsedResultTestCase extends Assert {
+
+  @Test
   public void testSMS() {
     doTest("sms:+15551212", "+15551212", null, null, null);
     doTest("sms:+15551212?subject=foo&body=bar", "+15551212", "foo", "bar", null);
     doTest("sms:+15551212;via=999333", "+15551212", null, null, "999333");
   }
 
+  @Test
   public void testMMS() {
     doTest("mms:+15551212", "+15551212", null, null, null);
     doTest("mms:+15551212?subject=foo&body=bar", "+15551212", "foo", "bar", null);

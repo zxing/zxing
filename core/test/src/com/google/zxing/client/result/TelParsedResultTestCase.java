@@ -18,15 +18,17 @@ package com.google.zxing.client.result;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * Tests {@link TelParsedResult}.
  *
  * @author Sean Owen
  */
-public final class TelParsedResultTestCase extends TestCase {
+public final class TelParsedResultTestCase extends Assert {
 
+  @Test
   public void testTel() {
     doTest("tel:+15551212", "+15551212", null);
     doTest("tel:2125551212", "2125551212", null);

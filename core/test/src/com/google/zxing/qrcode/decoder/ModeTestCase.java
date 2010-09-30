@@ -16,19 +16,21 @@
 
 package com.google.zxing.qrcode.decoder;
 
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * @author Sean Owen
  */
-public final class ModeTestCase extends TestCase {
+public final class ModeTestCase extends Assert {
 
+  @Test
   public void testForBits() {
-    assertEquals(Mode.TERMINATOR, Mode.forBits(0x00));
-    assertEquals(Mode.NUMERIC, Mode.forBits(0x01));
-    assertEquals(Mode.ALPHANUMERIC, Mode.forBits(0x02));
-    assertEquals(Mode.BYTE, Mode.forBits(0x04));
-    assertEquals(Mode.KANJI, Mode.forBits(0x08));
+    assertSame(Mode.TERMINATOR, Mode.forBits(0x00));
+    assertSame(Mode.NUMERIC, Mode.forBits(0x01));
+    assertSame(Mode.ALPHANUMERIC, Mode.forBits(0x02));
+    assertSame(Mode.BYTE, Mode.forBits(0x04));
+    assertSame(Mode.KANJI, Mode.forBits(0x08));
     try {
       Mode.forBits(0x10);
       fail("Should have thrown an exception");
@@ -37,6 +39,7 @@ public final class ModeTestCase extends TestCase {
     }
   }
 
+  @Test
   public void testCharacterCount() {
     // Spot check a few values
     assertEquals(10, Mode.NUMERIC.getCharacterCountBits(Version.getVersionForNumber(5)));

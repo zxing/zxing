@@ -18,15 +18,17 @@ package com.google.zxing.client.result;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * Tests {@link ISBNParsedResult}.
  *
  * @author Sean Owen
  */
-public final class ISBNParsedResultTestCase extends TestCase {
+public final class ISBNParsedResultTestCase extends Assert {
 
+  @Test
   public void testISBN() {
     doTest("9784567890123");
   }

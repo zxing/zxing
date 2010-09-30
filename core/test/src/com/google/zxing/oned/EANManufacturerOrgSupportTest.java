@@ -16,15 +16,17 @@
 
 package com.google.zxing.oned;
 
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * Tests {@link EANManufacturerOrgSupport}.
  * 
  * @author Sean Owen
  */
-public final class EANManufacturerOrgSupportTest extends TestCase {
+public final class EANManufacturerOrgSupportTest extends Assert {
 
+  @Test
   public void testLookup() {
     EANManufacturerOrgSupport support = new EANManufacturerOrgSupport();
     assertNull(support.lookupCountryIdentifier("472000"));

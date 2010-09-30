@@ -128,11 +128,11 @@ public final class RSSExpandedReader extends AbstractRSSReader{
       ExpandedPair nextPair = retrieveNextPair(row, this.pairs, rowNumber);
       this.pairs.addElement(nextPair);
 
-      if(nextPair.mayBeLast()){
-        if(checkChecksum()) {
+      if (nextPair.mayBeLast()) {
+        if (checkChecksum()) {
           return this.pairs;
         }
-        if(nextPair.mustBeLast()) {
+        if (nextPair.mustBeLast()) {
           throw NotFoundException.getNotFoundInstance();
         }
       }

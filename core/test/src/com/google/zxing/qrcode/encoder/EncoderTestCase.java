@@ -20,7 +20,8 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitArray;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.google.zxing.qrcode.decoder.Mode;
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Test;
 
 import java.io.UnsupportedEncodingException;
 
@@ -28,8 +29,9 @@ import java.io.UnsupportedEncodingException;
  * @author satorux@google.com (Satoru Takabayashi) - creator
  * @author mysen@google.com (Chris Mysen) - ported from C++
  */
-public final class EncoderTestCase extends TestCase {
+public final class EncoderTestCase extends Assert {
 
+  @Test
   public void testGetAlphanumericCode() {
     // The first ten code points are numbers.
     for (int i = 0; i < 10; ++i) {
@@ -58,6 +60,7 @@ public final class EncoderTestCase extends TestCase {
     assertEquals(-1, Encoder.getAlphanumericCode('\0'));
   }
 
+  @Test
   public void testChooseMode() throws WriterException {
     // Numeric mode.
     assertSame(Mode.NUMERIC, Encoder.chooseMode("0"));
@@ -85,6 +88,7 @@ public final class EncoderTestCase extends TestCase {
     assertSame(Mode.BYTE, Encoder.chooseMode(shiftJISString(new byte[]{0xe, 0x4, 0x9, 0x5, 0x9, 0x61})));
   }
 
+  @Test
   public void testEncode() throws WriterException {
     QRCode qrCode = new QRCode();
     Encoder.encode("ABCDEF", ErrorCorrectionLevel.H, qrCode);
@@ -126,12 +130,14 @@ public final class EncoderTestCase extends TestCase {
     assertEquals(expected, qrCode.toString());
   }
 
+  @Test
   public void testAppendModeInfo() {
     BitArray bits = new BitArray();
     Encoder.appendModeInfo(Mode.NUMERIC, bits);
     assertEquals(" ...X", bits.toString());
   }
 
+  @Test
   public void testAppendLengthInfo() throws WriterException {
     {
       BitArray bits = new BitArray();
@@ -167,6 +173,7 @@ public final class EncoderTestCase extends TestCase {
     }
   }
 
+  @Test
   public void testAppendBytes() throws WriterException {
     {
       // Should use appendNumericBytes.
@@ -206,6 +213,7 @@ public final class EncoderTestCase extends TestCase {
     }
   }
 
+  @Test
   public void testTerminateBits() throws WriterException {
     {
       BitArray v = new BitArray();
@@ -248,6 +256,7 @@ public final class EncoderTestCase extends TestCase {
     }
   }
 
+  @Test
   public void testGetNumDataBytesAndNumECBytesForBlockID() throws WriterException {
     int[] numDataBytes = new int[1];
     int[] numEcBytes = new int[1];
@@ -284,6 +293,7 @@ public final class EncoderTestCase extends TestCase {
     assertEquals(30, numEcBytes[0]);
   }
 
+  @Test
   public void testInterleaveWithECBytes() throws WriterException {
     {
       byte[] dataBytes = {32, 65, (byte)205, 69, 41, (byte)220, 46, (byte)128, (byte)236};
@@ -350,6 +360,7 @@ public final class EncoderTestCase extends TestCase {
     }
   }
 
+  @Test
   public void testAppendNumericBytes() {
     {
       // 1 = 01 = 0001 in 4 bits.
@@ -383,6 +394,7 @@ public final class EncoderTestCase extends TestCase {
     }
   }
 
+  @Test
   public void testAppendAlphanumericBytes() throws WriterException {
     {
       // A = 10 = 0xa = 001010 in 6 bits
@@ -419,6 +431,7 @@ public final class EncoderTestCase extends TestCase {
     }
   }
 
+  @Test
   public void testAppend8BitBytes() throws WriterException {
     {
       // 0x61, 0x62, 0x63
@@ -435,6 +448,7 @@ public final class EncoderTestCase extends TestCase {
   }
 
   // Numbers are from page 21 of JISX0510:2004
+  @Test
   public void testAppendKanjiBytes() throws WriterException {
     BitArray bits = new BitArray();
       Encoder.appendKanjiBytes(shiftJISString(new byte[] {(byte)0x93,0x5f}), bits);
@@ -445,6 +459,7 @@ public final class EncoderTestCase extends TestCase {
 
   // Numbers are from http://www.swetake.com/qr/qr3.html and
   // http://www.swetake.com/qr/qr9.html
+  @Test
   public void testGenerateECBytes() {
     {
       byte[] dataBytes = {32, 65, (byte)205, 69, 41, (byte)220, 46, (byte)128, (byte)236};
@@ -483,6 +498,7 @@ public final class EncoderTestCase extends TestCase {
     }
   }
 
+  @Test
   public void testBugInBitVectorNumBytes() throws WriterException {
     // There was a bug in BitVector.sizeInBytes() that caused it to return a
     // smaller-by-one value (ex. 1465 instead of 1466) if the number of bits

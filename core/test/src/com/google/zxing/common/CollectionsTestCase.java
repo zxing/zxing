@@ -16,7 +16,8 @@
 
 package com.google.zxing.common;
 
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Test;
 
 import java.util.Random;
 import java.util.Vector;
@@ -24,8 +25,9 @@ import java.util.Vector;
 /**
  * @author Sean Owen
  */
-public final class CollectionsTestCase extends TestCase {
+public final class CollectionsTestCase extends Assert {
 
+  @Test
   public void testSort() {
     Random r = new Random(0xDEADBEEFL);
     Vector<Integer> v = new Vector<Integer>(100);

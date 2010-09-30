@@ -16,13 +16,15 @@
 
 package com.google.zxing.common;
 
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * @author Sean Owen
  */
-public final class BitArrayTestCase extends TestCase {
+public final class BitArrayTestCase extends Assert {
 
+  @Test
   public void testGetSet() {
     BitArray array = new BitArray(33);
     for (int i = 0; i < 33; i++) {
@@ -32,6 +34,7 @@ public final class BitArrayTestCase extends TestCase {
     }
   }
 
+  @Test
   public void testSetBulk() {
     BitArray array = new BitArray(64);
     array.setBulk(32, 0xFFFF0000);
@@ -43,6 +46,7 @@ public final class BitArrayTestCase extends TestCase {
     }
   }
 
+  @Test
   public void testClear() {
     BitArray array = new BitArray(32);
     for (int i = 0; i < 32; i++) {
@@ -54,6 +58,7 @@ public final class BitArrayTestCase extends TestCase {
     }
   }
 
+  @Test
   public void testGetArray() {
     BitArray array = new BitArray(64);
     array.set(0);
@@ -63,6 +68,7 @@ public final class BitArrayTestCase extends TestCase {
     assertEquals(Integer.MIN_VALUE, ints[1]);
   }
 
+  @Test
   public void testIsRange() {
     BitArray array = new BitArray(64);
     assertTrue(array.isRange(0, 64, false));

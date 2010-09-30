@@ -16,13 +16,15 @@
 
 package com.google.zxing.qrcode.decoder;
 
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * @author Sean Owen
  */
-public final class VersionTestCase extends TestCase {
+public final class VersionTestCase extends Assert {
 
+  @Test
   public void testVersionForNumber() {
     try {
       Version.getVersionForNumber(0);
@@ -50,12 +52,14 @@ public final class VersionTestCase extends TestCase {
     assertNotNull(version.buildFunctionPattern());
   }
 
+  @Test
   public void testGetProvisionalVersionForDimension() throws Exception {
     for (int i = 1; i <= 40; i++) {
       assertEquals(i, Version.getProvisionalVersionForDimension(4*i + 17).getVersionNumber());
     }
   }
 
+  @Test
   public void testDecodeVersionInformation() {
     // Spot check
     assertEquals(7, Version.decodeVersionInformation(0x07C94).getVersionNumber());

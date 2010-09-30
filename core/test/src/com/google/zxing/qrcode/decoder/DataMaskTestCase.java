@@ -17,13 +17,15 @@
 package com.google.zxing.qrcode.decoder;
 
 import com.google.zxing.common.BitMatrix;
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * @author Sean Owen
  */
-public final class DataMaskTestCase extends TestCase {
+public final class DataMaskTestCase extends Assert {
 
+  @Test
   public void testMask0() {
     testMaskAcrossDimensions(0, new MaskCondition() {
       public boolean isMasked(int i, int j) {
@@ -32,6 +34,7 @@ public final class DataMaskTestCase extends TestCase {
     });
   }
 
+  @Test
   public void testMask1() {
     testMaskAcrossDimensions(1, new MaskCondition() {
       public boolean isMasked(int i, int j) {
@@ -40,6 +43,7 @@ public final class DataMaskTestCase extends TestCase {
     });
   }
 
+  @Test
   public void testMask2() {
     testMaskAcrossDimensions(2, new MaskCondition() {
       public boolean isMasked(int i, int j) {
@@ -48,6 +52,7 @@ public final class DataMaskTestCase extends TestCase {
     });
   }
 
+  @Test
   public void testMask3() {
     testMaskAcrossDimensions(3, new MaskCondition() {
       public boolean isMasked(int i, int j) {
@@ -56,6 +61,7 @@ public final class DataMaskTestCase extends TestCase {
     });
   }
 
+  @Test
   public void testMask4() {
     testMaskAcrossDimensions(4, new MaskCondition() {
       public boolean isMasked(int i, int j) {
@@ -64,6 +70,7 @@ public final class DataMaskTestCase extends TestCase {
     });
   }
 
+  @Test
   public void testMask5() {
     testMaskAcrossDimensions(5, new MaskCondition() {
       public boolean isMasked(int i, int j) {
@@ -72,6 +79,7 @@ public final class DataMaskTestCase extends TestCase {
     });
   }
 
+  @Test
   public void testMask6() {
     testMaskAcrossDimensions(6, new MaskCondition() {
       public boolean isMasked(int i, int j) {
@@ -80,6 +88,7 @@ public final class DataMaskTestCase extends TestCase {
     });
   }
 
+  @Test
   public void testMask7() {
     testMaskAcrossDimensions(7, new MaskCondition() {
       public boolean isMasked(int i, int j) {
@@ -88,8 +97,7 @@ public final class DataMaskTestCase extends TestCase {
     });
   }
 
-  private void testMaskAcrossDimensions(int reference,
-                                        MaskCondition condition) {
+  private static void testMaskAcrossDimensions(int reference, MaskCondition condition) {
     DataMask mask = DataMask.forReference(reference);
     for (int version = 1; version <= 40; version++) {
       int dimension = 17 + 4 * version;
@@ -97,7 +105,7 @@ public final class DataMaskTestCase extends TestCase {
     }
   }
 
-  private void testMask(DataMask mask, int dimension, MaskCondition condition) {
+  private static void testMask(DataMask mask, int dimension, MaskCondition condition) {
     BitMatrix bits = new BitMatrix(dimension);
     mask.unmaskBitMatrix(bits, dimension);
     for (int i = 0; i < dimension; i++) {

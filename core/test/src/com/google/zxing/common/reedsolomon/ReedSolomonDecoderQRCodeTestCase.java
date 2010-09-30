@@ -16,6 +16,8 @@
 
 package com.google.zxing.common.reedsolomon;
 
+import org.junit.Test;
+
 import java.util.Random;
 
 /**
@@ -36,6 +38,7 @@ public final class ReedSolomonDecoderQRCodeTestCase extends AbstractReedSolomonT
 
   private final ReedSolomonDecoder qrRSDecoder = new ReedSolomonDecoder(GF256.QR_CODE_FIELD);
 
+  @Test
   public void testNoError() throws ReedSolomonException {
     int[] received = new int[QR_CODE_TEST_WITH_EC.length];
     System.arraycopy(QR_CODE_TEST_WITH_EC, 0, received, 0, received.length);
@@ -43,6 +46,7 @@ public final class ReedSolomonDecoderQRCodeTestCase extends AbstractReedSolomonT
     checkQRRSDecode(received);
   }
 
+  @Test
   public void testOneError() throws ReedSolomonException {
     int[] received = new int[QR_CODE_TEST_WITH_EC.length];
     Random random = getRandom();
@@ -53,16 +57,18 @@ public final class ReedSolomonDecoderQRCodeTestCase extends AbstractReedSolomonT
     }
   }
 
+  @Test
   public void testMaxErrors() throws ReedSolomonException {
     int[] received = new int[QR_CODE_TEST_WITH_EC.length];
     Random random = getRandom();
-    for (int i = 0; i < QR_CODE_TEST.length; i++) { // # iterations is kind of arbitrary
+    for (int test : QR_CODE_TEST) { // # iterations is kind of arbitrary
       System.arraycopy(QR_CODE_TEST_WITH_EC, 0, received, 0, received.length);
       corrupt(received, QR_CODE_CORRECTABLE, random);
       checkQRRSDecode(received);
     }
   }
 
+  @Test
   public void testTooManyErrors() {
     int[] received = new int[QR_CODE_TEST_WITH_EC.length];
     System.arraycopy(QR_CODE_TEST_WITH_EC, 0, received, 0, received.length);
