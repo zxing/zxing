@@ -62,11 +62,7 @@ public final class LCDUIImageLuminanceSource extends LuminanceSource {
     }
     image.getRGB(rgbData, 0, width, 0, y, width, 1);
     for (int x = 0; x < width; x++) {
-      int pixel = rgbData[x];
-      int luminance = (((pixel & 0x00FF0000) >> 16) +
-                       ((pixel & 0x0000FF00) >>  7) +
-                        (pixel & 0x000000FF       )) >> 2;
-      row[x] = (byte) luminance;
+      row[x] = toLuminance(rgbData[x]);
     }
     return row;
   }
@@ -82,14 +78,76 @@ public final class LCDUIImageLuminanceSource extends LuminanceSource {
     for (int y = 0; y < height; y++) {
       int offset = y * width;
       for (int x = 0; x < width; x++) {
-        int pixel = rgb[offset + x];
-        int luminance = (((pixel & 0x00FF0000) >> 16) +
-                         ((pixel & 0x0000FF00) >>  7) +
-                          (pixel & 0x000000FF       )) >> 2;
-        matrix[offset + x] = (byte) luminance;
+        matrix[offset + x] = toLuminance(rgb[offset + x]);
       }
     }
     return matrix;
   }
 
+  public boolean isRotateSupported() {
+    return true;
+  }
+
+  public LuminanceSource rotateCounterClockwise() {
+    return new CCRotatedLCDUIImageLuminanceSource(image);
+  }
+
+  static byte toLuminance(int pixel) {
+    return (byte) ((((pixel & 0x00FF0000) >> 16) +
+                    ((pixel & 0x0000FF00) >>  7) +
+                     (pixel & 0x000000FF       )) >> 2);
+  }
+
+  /**
+   * A variant on {@link LCDUIImageLuminanceSource} that acts as if the input is rotated 90 degrees
+   * counter-clockwise.
+   */
+  private static final class CCRotatedLCDUIImageLuminanceSource extends LuminanceSource {
+
+    private final Image image;
+    private int[] rgbData;
+
+    private CCRotatedLCDUIImageLuminanceSource(Image image) {
+      super(image.getHeight(), image.getWidth());
+      this.image = image;
+    }
+
+    public byte[] getRow(int y, byte[] row) {
+      int height = getHeight();
+      if (y < 0 || y >= height) {
+        throw new IllegalArgumentException("Requested row is outside the image: " + y);
+      }
+      int width = getWidth();
+      if (row == null || row.length < width) {
+        row = new byte[width];
+      }
+
+      if (rgbData == null || rgbData.length < width) {
+        rgbData = new int[width];
+      }
+      image.getRGB(rgbData, 0, height, height - 1 - y, 0, 1, width);
+      for (int x = 0; x < width; x++) {
+        row[x] = toLuminance(rgbData[x]);
+      }
+      return row;
+    }
+
+    public byte[] getMatrix() {
+      int width = getWidth();
+      int height = getHeight();
+      int area = width * height;
+      byte[] matrix = new byte[area];
+
+      int[] rgb = new int[area];
+      image.getRGB(rgb, 0, width, 0, 0, width, height);
+      // This flips x/y in the target to result in a rotated image
+      int offset = height * (width - 1);
+      for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+          matrix[offset - height * x + y] = toLuminance(rgb[y * width + x]);
+        }
+      }
+      return matrix;
+    }
+  }
 }
