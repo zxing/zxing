@@ -238,7 +238,7 @@ public class CalendarEventGenerator implements GeneratorSource {
       throw new GeneratorException("Start and end dates must be set.");
     }
     if (date1.after(date2)) {
-      throw new GeneratorException("Ending date is after starting date.");
+      throw new GeneratorException("Start date is after end date.");
     }
     DateTimeFormat isoFormatter = DateTimeFormat.getFormat("yyyyMMdd");
     StringBuilder output = new StringBuilder();
