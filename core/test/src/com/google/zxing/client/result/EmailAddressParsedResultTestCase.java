@@ -39,6 +39,13 @@ public final class EmailAddressParsedResultTestCase extends TestCase {
         "Stuff", "This is some text");
   }
 
+  public void testSMTP() {
+    doTest("smtp:srowen@example.org", "srowen@example.org", null, null);
+    doTest("SMTP:srowen@example.org", "srowen@example.org", null, null);
+    doTest("smtp:srowen@example.org:foo", "srowen@example.org", "foo", null);
+    doTest("smtp:srowen@example.org:foo:bar", "srowen@example.org", "foo", "bar");
+  }
+
   private static void doTest(String contents, String email, String subject, String body) {
     Result fakeResult = new Result(contents, null, null, BarcodeFormat.QR_CODE);
     ParsedResult result = ResultParser.parseResult(fakeResult);
