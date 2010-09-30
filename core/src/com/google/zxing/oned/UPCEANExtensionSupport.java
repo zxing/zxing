@@ -160,7 +160,7 @@ final class UPCEANExtensionSupport {
   }
 
   private static String parseExtension5String(String raw) {
-    String currency = null;
+    String currency;
     switch (raw.charAt(0)) {
       case '0':
         currency = "£";
@@ -169,18 +169,28 @@ final class UPCEANExtensionSupport {
         currency = "$";
         break;
       case '9':
-        if ("99991".equals(raw)) {
+        // Reference: http://www.jollytech.com
+        if ("90000".equals(raw)) {
+          // No suggested retail price
+          return null;
+        } else if ("99991".equals(raw)) {
+          // Complementary
           return "0.00";
         } else if ("99990".equals(raw)) {
           return "Used";
         }
+        // Otherwise... unknown currency?
+        currency = "";
         break;
       default:
         currency = "";
         break;
     }
     int rawAmount = Integer.parseInt(raw.substring(1));
-    return currency + (rawAmount / 100) + '.' + (rawAmount % 100);
+    String unitsString = String.valueOf(rawAmount / 100);
+    int hundredths = rawAmount % 100;
+    String hundredthsString = hundredths < 10 ? "0" + hundredths : String.valueOf(hundredths);
+    return currency + unitsString + '.' + hundredthsString;
   }
 
 }
