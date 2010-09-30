@@ -55,6 +55,8 @@ public abstract class ResultParser {
       return result;
     } else if ((result = EmailAddressResultParser.parse(theResult)) != null) {
       return result;
+    } else if ((result = SMTPResultParser.parse(theResult)) != null) {
+      return result;
     } else if ((result = TelResultParser.parse(theResult)) != null) {
       return result;
     } else if ((result = SMSMMSResultParser.parse(theResult)) != null) {
