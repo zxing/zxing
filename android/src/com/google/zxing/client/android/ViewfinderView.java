@@ -89,7 +89,7 @@ public final class ViewfinderView extends View {
     if (resultBitmap != null) {
       // Draw the opaque result bitmap over the scanning rectangle
       paint.setAlpha(OPAQUE);
-      canvas.drawBitmap(resultBitmap, frame.left, frame.top, paint);
+      canvas.drawBitmap(resultBitmap, null, frame, paint);
     } else {
 
       // Draw a two pixel solid black border inside the framing rect
@@ -105,6 +105,10 @@ public final class ViewfinderView extends View {
       scannerAlpha = (scannerAlpha + 1) % SCANNER_ALPHA.length;
       int middle = frame.height() / 2 + frame.top;
       canvas.drawRect(frame.left + 2, middle - 1, frame.right - 1, middle + 2, paint);
+      
+      Rect previewFrame = CameraManager.get().getFramingRectInPreview();
+      float scaleX = frame.width() / (float) previewFrame.width();
+      float scaleY = frame.height() / (float) previewFrame.height();
 
       Collection<ResultPoint> currentPossible = possibleResultPoints;
       Collection<ResultPoint> currentLast = lastPossibleResultPoints;
@@ -116,14 +120,18 @@ public final class ViewfinderView extends View {
         paint.setAlpha(OPAQUE);
         paint.setColor(resultPointColor);
         for (ResultPoint point : currentPossible) {
-          canvas.drawCircle(frame.left + point.getX(), frame.top + point.getY(), 6.0f, paint);
+          canvas.drawCircle(frame.left + (int) (point.getX() * scaleX),
+                            frame.top + (int) (point.getY() * scaleY),
+                            6.0f, paint);
         }
       }
       if (currentLast != null) {
         paint.setAlpha(OPAQUE / 2);
         paint.setColor(resultPointColor);
         for (ResultPoint point : currentLast) {
-          canvas.drawCircle(frame.left + point.getX(), frame.top + point.getY(), 3.0f, paint);
+          canvas.drawCircle(frame.left + (int) (point.getX() * scaleX),
+                            frame.top + (int) (point.getY() * scaleY),
+                            3.0f, paint);
         }
       }
 
