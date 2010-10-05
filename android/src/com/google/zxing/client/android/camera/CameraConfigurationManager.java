@@ -58,7 +58,7 @@ final class CameraConfigurationManager {
     screenResolution = new Point(display.getWidth(), display.getHeight());
     Log.d(TAG, "Screen resolution: " + screenResolution);
     cameraResolution = getCameraResolution(parameters, screenResolution);
-    Log.d(TAG, "Camera resolution: " + screenResolution);
+    Log.d(TAG, "Camera resolution: " + cameraResolution);
   }
 
   /**
