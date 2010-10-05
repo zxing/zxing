@@ -92,6 +92,28 @@ public abstract class GridSampler {
                                        float p3FromX, float p3FromY,
                                        float p4FromX, float p4FromY) throws NotFoundException;
 
+  /**
+   * Samples an image for a rectangular matrix of bits of the given dimension.
+   * @param image image to sample
+   * @param dimensionX width of {@link BitMatrix} to sample from image
+   * @param dimensionY height of {@link BitMatrix} to sample from image
+   * @return {@link BitMatrix} representing a grid of points sampled from the image within a region
+   *   defined by the "from" parameters
+   * @throws NotFoundException if image can't be sampled, for example, if the transformation defined
+   *   by the given points is invalid or results in sampling outside the image boundaries
+   */
+  public abstract BitMatrix sampleGrid(BitMatrix image,
+          int dimensionX,
+          int dimensionY,
+          float p1ToX, float p1ToY,
+          float p2ToX, float p2ToY,
+          float p3ToX, float p3ToY,
+          float p4ToX, float p4ToY,
+          float p1FromX, float p1FromY,
+          float p2FromX, float p2FromY,
+          float p3FromX, float p3FromY,
+          float p4FromX, float p4FromY) throws NotFoundException;
+  
   public BitMatrix sampleGrid(BitMatrix image,
                               int dimension,
                               PerspectiveTransform transform) throws NotFoundException {

@@ -30,18 +30,17 @@ final class BitMatrixParser {
 
   /**
    * @param bitMatrix {@link BitMatrix} to parse
-   * @throws FormatException if dimension is < 10 or > 144 or not 0 mod 2
+   * @throws FormatException if dimension is < 8 or > 144 or not 0 mod 2
    */
   BitMatrixParser(BitMatrix bitMatrix) throws FormatException {
     int dimension = bitMatrix.getHeight();
-    if (dimension < 10 || dimension > 144 || (dimension & 0x01) != 0) {
+    if (dimension < 8 || dimension > 144 || (dimension & 0x01) != 0) {
       throw FormatException.getFormatInstance();
     }
     
     version = readVersion(bitMatrix);
     this.mappingBitMatrix = extractDataRegion(bitMatrix);
-    // TODO(bbrown): Make this work for rectangular symbols
-    this.readMappingMatrix = new BitMatrix(this.mappingBitMatrix.getHeight());
+    this.readMappingMatrix = new BitMatrix(this.mappingBitMatrix.getWidth(), this.mappingBitMatrix.getHeight());
   }
 
   /**
@@ -61,9 +60,8 @@ final class BitMatrixParser {
       return version;
     }
 
-    // TODO(bbrown): make this work for rectangular dimensions as well.
     int numRows = bitMatrix.getHeight();
-    int numColumns = numRows;
+    int numColumns = bitMatrix.getWidth();
     
     return Version.getVersionForDimensions(numRows, numColumns);
   }
@@ -83,9 +81,9 @@ final class BitMatrixParser {
     
     int row = 4;
     int column = 0;
-    // TODO(bbrown): Data Matrix can be rectangular, assuming square for now
+
     int numRows = mappingBitMatrix.getHeight();
-    int numColumns = numRows;
+    int numColumns = mappingBitMatrix.getWidth();
     
     boolean corner1Read = false;
     boolean corner2Read = false;
@@ -407,7 +405,6 @@ final class BitMatrixParser {
     int symbolSizeRows = version.getSymbolSizeRows();
     int symbolSizeColumns = version.getSymbolSizeColumns();
     
-    // TODO(bbrown): Make this work with rectangular codes
     if (bitMatrix.getHeight() != symbolSizeRows) {
       throw new IllegalArgumentException("Dimension of bitMarix must match the version size");
     }
@@ -419,10 +416,10 @@ final class BitMatrixParser {
     int numDataRegionsColumn = symbolSizeColumns / dataRegionSizeColumns;
     
     int sizeDataRegionRow = numDataRegionsRow * dataRegionSizeRows;
-    //int sizeDataRegionColumn = numDataRegionsColumn * dataRegionSizeColumns;
+    int sizeDataRegionColumn = numDataRegionsColumn * dataRegionSizeColumns;
     
     // TODO(bbrown): Make this work with rectangular codes
-    BitMatrix bitMatrixWithoutAlignment = new BitMatrix(sizeDataRegionRow);
+    BitMatrix bitMatrixWithoutAlignment = new BitMatrix(sizeDataRegionColumn, sizeDataRegionRow);
     for (int dataRegionRow = 0; dataRegionRow < numDataRegionsRow; ++dataRegionRow) {
       int dataRegionRowOffset = dataRegionRow * dataRegionSizeRows;
       for (int dataRegionColumn = 0; dataRegionColumn < numDataRegionsColumn; ++dataRegionColumn) {
