@@ -37,7 +37,6 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.protocol.BasicHttpContext;
-import org.apache.http.protocol.BasicHttpProcessor;
 import org.apache.http.protocol.HttpContext;
 
 import java.io.IOException;
@@ -54,24 +53,6 @@ import java.io.IOException;
  * </p>
  */
 public final class AndroidHttpClient implements HttpClient {
-
-  /**
-   * Set if HTTP requests are blocked from being executed on this thread
-   */
-  private static final ThreadLocal<Boolean> sThreadBlocked =
-      new ThreadLocal<Boolean>();
-
-  /**
-   * Interceptor throws an exception if the executing thread is blocked
-   */
-  private static final HttpRequestInterceptor sThreadCheckInterceptor =
-      new HttpRequestInterceptor() {
-        public void process(HttpRequest request, HttpContext context) {
-          if (Boolean.TRUE.equals(sThreadBlocked.get())) {
-            throw new RuntimeException("This thread forbids HTTP requests");
-          }
-        }
-      };
 
   /**
    * Create a new HttpClient with reasonable defaults (which you can update).
@@ -96,14 +77,13 @@ public final class AndroidHttpClient implements HttpClient {
     HttpClientParams.setRedirecting(params, false);
 
     // Set the specified user agent and register standard protocols.
-    HttpProtocolParams.setUserAgent(params, userAgent);
+    if (userAgent != null) {
+      HttpProtocolParams.setUserAgent(params, userAgent);
+    }
     SchemeRegistry schemeRegistry = new SchemeRegistry();
-    schemeRegistry.register(new Scheme("http",
-        PlainSocketFactory.getSocketFactory(), 80));
-    schemeRegistry.register(new Scheme("https",
-        SSLSocketFactory.getSocketFactory(), 443));
-    ClientConnectionManager manager =
-        new ThreadSafeClientConnManager(params, schemeRegistry);
+    schemeRegistry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
+    schemeRegistry.register(new Scheme("https", SSLSocketFactory.getSocketFactory(), 443));
+    ClientConnectionManager manager = new ThreadSafeClientConnManager(params, schemeRegistry);
 
     // We use a factory method to modify superclass initialization
     // parameters without the funny call-a-static-method dance.
@@ -114,26 +94,7 @@ public final class AndroidHttpClient implements HttpClient {
 
 
   private AndroidHttpClient(ClientConnectionManager ccm, HttpParams params) {
-    this.delegate = new DefaultHttpClient(ccm, params) {
-      @Override
-      protected BasicHttpProcessor createHttpProcessor() {
-        // Add interceptor to prevent making requests from main thread.
-        BasicHttpProcessor processor = super.createHttpProcessor();
-        processor.addRequestInterceptor(sThreadCheckInterceptor);
-        return processor;
-      }
-
-      @Override
-      protected HttpContext createHttpContext() {
-        // Same as DefaultHttpClient.createHttpContext() minus the
-        // cookie store.
-        HttpContext context = new BasicHttpContext();
-        context.setAttribute(ClientContext.AUTHSCHEME_REGISTRY, getAuthSchemes());
-        context.setAttribute(ClientContext.COOKIESPEC_REGISTRY, getCookieSpecs());
-        context.setAttribute(ClientContext.CREDS_PROVIDER, getCredentialsProvider());
-        return context;
-      }
-    };
+    this.delegate = new DelegateHttpClient(ccm, params);
   }
 
   /**
@@ -164,8 +125,7 @@ public final class AndroidHttpClient implements HttpClient {
     return delegate.execute(target, request);
   }
 
-  public HttpResponse execute(HttpHost target, HttpRequest request,
-                              HttpContext context) throws IOException {
+  public HttpResponse execute(HttpHost target, HttpRequest request, HttpContext context) throws IOException {
     return delegate.execute(target, request, context);
   }
 
@@ -185,9 +145,26 @@ public final class AndroidHttpClient implements HttpClient {
 
   public <T> T execute(HttpHost target, HttpRequest request,
                        ResponseHandler<? extends T> responseHandler,
-                       HttpContext context)
-      throws IOException {
+                       HttpContext context) throws IOException {
     return delegate.execute(target, request, responseHandler, context);
+  }
+
+  private static class DelegateHttpClient extends DefaultHttpClient {
+
+    private DelegateHttpClient(ClientConnectionManager ccm, HttpParams params) {
+      super(ccm, params);
+    }
+
+    @Override
+    protected HttpContext createHttpContext() {
+      // Same as DefaultHttpClient.createHttpContext() minus the
+      // cookie store.
+      HttpContext context = new BasicHttpContext();
+      context.setAttribute(ClientContext.AUTHSCHEME_REGISTRY, getAuthSchemes());
+      context.setAttribute(ClientContext.COOKIESPEC_REGISTRY, getCookieSpecs());
+      context.setAttribute(ClientContext.CREDS_PROVIDER, getCredentialsProvider());
+      return context;
+    }
   }
 
 }
