@@ -184,7 +184,7 @@ public class Detector {
                                       int dimension) throws NotFoundException {
 
     GridSampler sampler = GridSampler.getInstance();
-    return sampler.sampleGrid(image, dimension, transform);
+    return sampler.sampleGrid(image, dimension, dimension, transform);
   }
 
   /**
