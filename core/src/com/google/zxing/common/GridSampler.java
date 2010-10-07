@@ -59,40 +59,6 @@ public abstract class GridSampler {
   }
 
   /**
-   * <p>Samples an image for a square matrix of bits of the given dimension. This is used to extract
-   * the black/white modules of a 2D barcode like a QR Code found in an image. Because this barcode
-   * may be rotated or perspective-distorted, the caller supplies four points in the source image
-   * that define known points in the barcode, so that the image may be sampled appropriately.</p>
-   *
-   * <p>The last eight "from" parameters are four X/Y coordinate pairs of locations of points in
-   * the image that define some significant points in the image to be sample. For example,
-   * these may be the location of finder pattern in a QR Code.</p>
-   *
-   * <p>The first eight "to" parameters are four X/Y coordinate pairs measured in the destination
-   * {@link BitMatrix}, from the top left, where the known points in the image given by the "from"
-   * parameters map to.</p>
-   *
-   * <p>These 16 parameters define the transformation needed to sample the image.</p>
-   *
-   * @param image image to sample
-   * @param dimension width/height of {@link BitMatrix} to sample from image
-   * @return {@link BitMatrix} representing a grid of points sampled from the image within a region
-   *   defined by the "from" parameters
-   * @throws NotFoundException if image can't be sampled, for example, if the transformation defined
-   *   by the given points is invalid or results in sampling outside the image boundaries
-   */
-  public abstract BitMatrix sampleGrid(BitMatrix image,
-                                       int dimension,
-                                       float p1ToX, float p1ToY,
-                                       float p2ToX, float p2ToY,
-                                       float p3ToX, float p3ToY,
-                                       float p4ToX, float p4ToY,
-                                       float p1FromX, float p1FromY,
-                                       float p2FromX, float p2FromY,
-                                       float p3FromX, float p3FromY,
-                                       float p4FromX, float p4FromY) throws NotFoundException;
-
-  /**
    * Samples an image for a rectangular matrix of bits of the given dimension.
    * @param image image to sample
    * @param dimensionX width of {@link BitMatrix} to sample from image
@@ -103,23 +69,21 @@ public abstract class GridSampler {
    *   by the given points is invalid or results in sampling outside the image boundaries
    */
   public abstract BitMatrix sampleGrid(BitMatrix image,
-          int dimensionX,
-          int dimensionY,
-          float p1ToX, float p1ToY,
-          float p2ToX, float p2ToY,
-          float p3ToX, float p3ToY,
-          float p4ToX, float p4ToY,
-          float p1FromX, float p1FromY,
-          float p2FromX, float p2FromY,
-          float p3FromX, float p3FromY,
-          float p4FromX, float p4FromY) throws NotFoundException;
+                                       int dimensionX,
+                                       int dimensionY,
+                                       float p1ToX, float p1ToY,
+                                       float p2ToX, float p2ToY,
+                                       float p3ToX, float p3ToY,
+                                       float p4ToX, float p4ToY,
+                                       float p1FromX, float p1FromY,
+                                       float p2FromX, float p2FromY,
+                                       float p3FromX, float p3FromY,
+                                       float p4FromX, float p4FromY) throws NotFoundException;
   
-  public BitMatrix sampleGrid(BitMatrix image,
-                              int dimension,
-                              PerspectiveTransform transform) throws NotFoundException {
-    throw new IllegalStateException(); // Can't use UnsupportedOperationException
-  }
-  
+  public abstract BitMatrix sampleGrid(BitMatrix image,
+                                       int dimensionX,
+                                       int dimensionY,
+                                       PerspectiveTransform transform) throws NotFoundException;
 
   /**
    * <p>Checks a set of points that have been transformed to sample points on an image against
@@ -136,8 +100,7 @@ public abstract class GridSampler {
    * @param points actual points in x1,y1,...,xn,yn form
    * @throws NotFoundException if an endpoint is lies outside the image boundaries
    */
-  protected static void checkAndNudgePoints(BitMatrix image, float[] points)
-      throws NotFoundException {
+  protected static void checkAndNudgePoints(BitMatrix image, float[] points) throws NotFoundException {
     int width = image.getWidth();
     int height = image.getHeight();
     // Check and nudge points from start until we see some that are OK:

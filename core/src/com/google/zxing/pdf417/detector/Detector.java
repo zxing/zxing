@@ -377,7 +377,10 @@ public final class Detector {
     // very corners. So there is no 0.5f here; 0.0f is right.
     GridSampler sampler = GridSampler.getInstance();
 
-    return sampler.sampleGrid(matrix, dimension, 0.0f, // p1ToX
+    return sampler.sampleGrid(
+        matrix, 
+        dimension, dimension,
+        0.0f, // p1ToX
         0.0f, // p1ToY
         dimension, // p2ToX
         0.0f, // p2ToY

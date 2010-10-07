@@ -260,37 +260,35 @@ public final class Detector {
                                       ResultPoint topRight,
                                       int dimension) {
 		
-		float corr = distance(bottomLeft, bottomRight) / (float)dimension;
+		float corr = distance(bottomLeft, bottomRight) / (float) dimension;
 		int norm = distance(topLeft, topRight);
 		float cos = (topRight.getX() - topLeft.getX()) / norm;
 		float sin = (topRight.getY() - topLeft.getY()) / norm;
 		
-		ResultPoint c1 = new ResultPoint(topRight.getX()+corr*cos, topRight.getY()+corr*sin);
+		ResultPoint c1 = new ResultPoint(topRight.getX() + corr * cos, topRight.getY() + corr * sin);
 	
-		corr = distance(bottomLeft, bottomRight) / (float)dimension;
+		corr = distance(bottomLeft, bottomRight) / (float) dimension;
 		norm = distance(bottomRight, topRight);
 		cos = (topRight.getX() - bottomRight.getX()) / norm;
 		sin = (topRight.getY() - bottomRight.getY()) / norm;
 		
-		ResultPoint c2 = new ResultPoint(topRight.getX()+corr*cos, topRight.getY()+corr*sin);
+		ResultPoint c2 = new ResultPoint(topRight.getX() + corr * cos, topRight.getY() + corr * sin);
 
-		if (!isValid(c1)){
-			if (isValid(c2)){
+		if (!isValid(c1)) {
+			if (isValid(c2)) {
 				return c2;
 			}
 			return null;
-		} else if (!isValid(c2)){
+		} else if (!isValid(c2)) {
 			return c1;
 		}
 		
-		int l1 = Math.abs(transitionsBetween(topLeft, c1).getTransitions() - transitionsBetween(bottomRight, c1).getTransitions());
-		int l2 = Math.abs(transitionsBetween(topLeft, c2).getTransitions() - transitionsBetween(bottomRight, c2).getTransitions());
-		
-		if (l1 <= l2){
-			return c1;
-		}
-		
-		return c2;
+		int l1 = Math.abs(transitionsBetween(topLeft, c1).getTransitions() -
+                      transitionsBetween(bottomRight, c1).getTransitions());
+		int l2 = Math.abs(transitionsBetween(topLeft, c2).getTransitions() -
+                      transitionsBetween(bottomRight, c2).getTransitions());
+
+    return l1 <= l2 ? c1 : c2;
   }
 
   private boolean isValid(ResultPoint p) {

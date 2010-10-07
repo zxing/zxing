@@ -418,7 +418,6 @@ final class BitMatrixParser {
     int sizeDataRegionRow = numDataRegionsRow * dataRegionSizeRows;
     int sizeDataRegionColumn = numDataRegionsColumn * dataRegionSizeColumns;
     
-    // TODO(bbrown): Make this work with rectangular codes
     BitMatrix bitMatrixWithoutAlignment = new BitMatrix(sizeDataRegionColumn, sizeDataRegionRow);
     for (int dataRegionRow = 0; dataRegionRow < numDataRegionsRow; ++dataRegionRow) {
       int dataRegionRowOffset = dataRegionRow * dataRegionSizeRows;
