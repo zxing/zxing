@@ -158,13 +158,14 @@ public final class Detector {
       }
       dimensionRight += 2;
 
-    BitMatrix bits = null;
-    ResultPoint correctedTopRight = null;
+    BitMatrix bits;
+    ResultPoint correctedTopRight;
       
     if (dimensionTop >= dimensionRight * 2 || dimensionRight >= dimensionTop * 2){
     	//The matrix is rectangular
     	
-        correctedTopRight = correctTopRightRectangular(bottomLeft, bottomRight, topLeft, topRight, dimensionTop, dimensionRight);
+        correctedTopRight =
+            correctTopRightRectangular(bottomLeft, bottomRight, topLeft, topRight, dimensionTop, dimensionRight);
         if (correctedTopRight == null){
         	correctedTopRight = topRight;
         }
@@ -178,11 +179,11 @@ public final class Detector {
         }
         
         if ((dimensionRight & 0x01) == 1) {
-            // it can't be odd, so, round... up?
-            dimensionRight++;
-          }
-        
-          bits = sampleGrid(image, topLeft, bottomLeft, bottomRight, correctedTopRight, dimensionTop, dimensionRight);
+          // it can't be odd, so, round... up?
+          dimensionRight++;
+        }
+
+        bits = sampleGrid(image, topLeft, bottomLeft, bottomRight, correctedTopRight, dimensionTop, dimensionRight);
           
     } else {
     	//The matrix is square
@@ -202,7 +203,13 @@ public final class Detector {
           dimensionCorrected++;
         }
 
-        bits = sampleGrid(image, topLeft, bottomLeft, bottomRight, correctedTopRight, dimensionCorrected, dimensionCorrected);
+        bits = sampleGrid(image,
+                          topLeft,
+                          bottomLeft,
+                          bottomRight,
+                          correctedTopRight,
+                          dimensionCorrected,
+                          dimensionCorrected);
     }
 
 
@@ -210,7 +217,8 @@ public final class Detector {
   }
 
   /**
-   * Calculates the position of the white top right module using the output of the rectangle detector for a rectangular matrix
+   * Calculates the position of the white top right module using the output of the rectangle detector
+   * for a rectangular matrix
    */
   private ResultPoint correctTopRightRectangular(ResultPoint bottomLeft,
 		ResultPoint bottomRight, ResultPoint topLeft, ResultPoint topRight,
@@ -249,10 +257,11 @@ public final class Detector {
 		}
 		
 		return c2;
-}
+  }
 
-/**
-   * Calculates the position of the white top right module using the output of the rectangle detector for a square matrix
+  /**
+   * Calculates the position of the white top right module using the output of the rectangle detector
+   * for a square matrix
    */
   private ResultPoint correctTopRight(ResultPoint bottomLeft,
                                       ResultPoint bottomRight,
