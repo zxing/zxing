@@ -34,21 +34,16 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.content.res.AssetFileDescriptor;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
-import android.media.MediaPlayer.OnCompletionListener;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.text.ClipboardManager;
 import android.util.Log;
@@ -93,8 +88,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
   private static final long INTENT_RESULT_DURATION = 1500L;
   private static final long BULK_MODE_SCAN_DELAY_MS = 1000L;
-  private static final float BEEP_VOLUME = 0.10f;
-  private static final long VIBRATE_DURATION = 200L;
 
   private static final String PACKAGE_NAME = "com.google.zxing.client.android";
   private static final String PRODUCT_SEARCH_URL_PREFIX = "http://www.google";
@@ -120,15 +113,11 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   }
 
   private CaptureActivityHandler handler;
-
   private ViewfinderView viewfinderView;
   private TextView statusView;
   private View resultView;
-  private MediaPlayer mediaPlayer;
   private Result lastResult;
   private boolean hasSurface;
-  private boolean playBeep;
-  private boolean vibrate;
   private boolean copyToClipboard;
   private Source source;
   private String sourceUrl;
@@ -138,18 +127,9 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private String versionName;
   private HistoryManager historyManager;
   private InactivityTimer inactivityTimer;
+  private BeepManager beepManager;
 
-  /**
-   * When the beep has finished playing, rewind to queue up another one.
-   */
-  private final OnCompletionListener beepListener = new OnCompletionListener() {
-    public void onCompletion(MediaPlayer mediaPlayer) {
-      mediaPlayer.seekTo(0);
-    }
-  };
-
-  private final DialogInterface.OnClickListener aboutListener =
-      new DialogInterface.OnClickListener() {
+  private final DialogInterface.OnClickListener aboutListener = new DialogInterface.OnClickListener() {
     public void onClick(DialogInterface dialogInterface, int i) {
       Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.zxing_url)));
       intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
@@ -183,6 +163,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     historyManager = new HistoryManager(this);
     historyManager.trimHistory();
     inactivityTimer = new InactivityTimer(this);
+    beepManager = new BeepManager(this);
 
     showHelpOnFirstLaunch();
   }
@@ -239,17 +220,9 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     }
 
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-    playBeep = prefs.getBoolean(PreferencesActivity.KEY_PLAY_BEEP, true);
-    if (playBeep) {
-      // See if sound settings overrides this
-      AudioManager audioService = (AudioManager) getSystemService(AUDIO_SERVICE);
-      if (audioService.getRingerMode() != AudioManager.RINGER_MODE_NORMAL) {
-        playBeep = false;
-      }
-    }
-    vibrate = prefs.getBoolean(PreferencesActivity.KEY_VIBRATE, false);
     copyToClipboard = prefs.getBoolean(PreferencesActivity.KEY_COPY_TO_CLIPBOARD, true);
-    initBeepSound();
+
+    beepManager.updatePrefs();
   }
 
   @Override
@@ -390,7 +363,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       // This is from history -- no saved barcode
       handleDecodeInternally(rawResult, null);
     } else {
-      playBeepSoundAndVibrate();
+      beepManager.playBeepSoundAndVibrate();
       drawResultPoints(barcode, rawResult);
       switch (source) {
         case NATIVE_APP_INTENT:
@@ -607,42 +580,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       Log.w(TAG, e);
     }
     return false;
-  }
-
-  /**
-   * Creates the beep MediaPlayer in advance so that the sound can be triggered with the least
-   * latency possible.
-   */
-  private void initBeepSound() {
-    if (playBeep && mediaPlayer == null) {
-      // The volume on STREAM_SYSTEM is not adjustable, and users found it too loud,
-      // so we now play on the music stream.
-      setVolumeControlStream(AudioManager.STREAM_MUSIC);
-      mediaPlayer = new MediaPlayer();
-      mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-      mediaPlayer.setOnCompletionListener(beepListener);
-
-      AssetFileDescriptor file = getResources().openRawResourceFd(R.raw.beep);
-      try {
-        mediaPlayer.setDataSource(file.getFileDescriptor(), file.getStartOffset(),
-            file.getLength());
-        file.close();
-        mediaPlayer.setVolume(BEEP_VOLUME, BEEP_VOLUME);
-        mediaPlayer.prepare();
-      } catch (IOException e) {
-        mediaPlayer = null;
-      }
-    }
-  }
-
-  private void playBeepSoundAndVibrate() {
-    if (playBeep && mediaPlayer != null) {
-      mediaPlayer.start();
-    }
-    if (vibrate) {
-      Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
-      vibrator.vibrate(VIBRATE_DURATION);
-    }
   }
 
   private void initCamera(SurfaceHolder surfaceHolder) {
