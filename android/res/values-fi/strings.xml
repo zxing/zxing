@@ -79,6 +79,7 @@
   <string name="msg_intent_failed">Anteeksi, pyydettyä ohjelmaa ei voi käynnistää. Viivakoodin sisältö on voinut vahingoittua.</string>
   <string name="msg_loading_apps">Ladataan listaa ohjelmista\u2026</string>
   <string name="msg_not_our_results">Olet lähtemässä ohjelmasta. Hakutulokset jotka näet eivät välttämättä kuulu ohjelmaan.</string>
+  <string name="msg_redirect">Uudelleenohjaus</string>
   <string name="msg_sbc_book_not_searchable">Anteeksi, tämä kirja ei ole haettavissa.</string>
   <string name="msg_sbc_failed">Anteeksi, haussa tapahtui virhe.</string>
   <string name="msg_sbc_no_page_returned">Sivulta ei vastausta</string>
@@ -107,6 +108,8 @@
   <string name="preferences_remember_duplicates_title">Muista kaksoiskappaleet</string>
   <string name="preferences_result_title">Tuloksien asetukset</string>
   <string name="preferences_scanning_title">Kun skannaus viivakoodeja, dekoodaa\u2026</string>
+  <string name="preferences_supplemental_summary">Yritä hakea lisätietoja viivakoodin sisältö</string>
+  <string name="preferences_supplemental_title">Hae lisää tietoa</string>
   <string name="preferences_vibrate_title">Värinä</string>
   <string name="result_address_book">Läydettiin kontakti tietoja</string>
   <string name="result_calendar">Löydetty kalenteri tapahtuma</string>

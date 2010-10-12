@@ -79,6 +79,7 @@
   <string name="msg_intent_failed">抱歉，無法打開所需軟體。 條碼內容可能無效。</string>
   <string name="msg_loading_apps">載入應用程式</string>
   <string name="msg_not_our_results">離開此應用程式。搜尋結果: 無此應用程式。</string>
+  <string name="msg_redirect">重定向</string>
   <string name="msg_sbc_book_not_searchable">抱歉，無法找到此圖書。</string>
   <string name="msg_sbc_failed">抱歉，搜索時遇到錯誤。</string>
   <string name="msg_sbc_no_page_returned">沒有返回頁面</string>
@@ -107,6 +108,8 @@
   <string name="preferences_remember_duplicates_title">記住重複</string>
   <string name="preferences_result_title">結果設定</string>
   <string name="preferences_scanning_title">當掃描條形碼</string>
+  <string name="preferences_supplemental_summary">嘗試檢索更多的信息條碼內容</string>
+  <string name="preferences_supplemental_title">檢索更多的信息</string>
   <string name="preferences_vibrate_title">振動</string>
   <string name="result_address_book">找到聯絡人</string>
   <string name="result_calendar">找到日曆事件</string>

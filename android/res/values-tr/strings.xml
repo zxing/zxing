@@ -79,6 +79,7 @@
   <string name="msg_intent_failed">Üzgünüz, istenen uygulama başlatılamadı. Barkod içerikleri geçersiz olabilir.</string>
   <string name="msg_loading_apps">Uygulama listesi yükleniyor\u2026</string>
   <string name="msg_not_our_results">Bu uygulamadan ayrılıyorsunuz. Göreceğiniz arama sonuçları, bu uygulama ile ilgili değil.</string>
+  <string name="msg_redirect">Yönlendirme</string>
   <string name="msg_sbc_book_not_searchable">Üzgünüz, bu kitapta arama yapılamaz.</string>
   <string name="msg_sbc_failed">Üzgünüz, aramada sorun çıktı.</string>
   <string name="msg_sbc_no_page_returned">Sayfa çevrilmedi</string>
@@ -107,6 +108,8 @@
   <string name="preferences_remember_duplicates_title">Hatırla çiftleri</string>
   <string name="preferences_result_title">Sonuç ayarları</string>
   <string name="preferences_scanning_title">Ne zaman barkodlar için tarama, çöz\u2026</string>
+  <string name="preferences_supplemental_summary">Barkod içeriği hakkında daha fazla bilgi almak için çalışın</string>
+  <string name="preferences_supplemental_title">Almak daha fazla bilgi</string>
   <string name="preferences_vibrate_title">Titret</string>
   <string name="result_address_book">Bulunan kişi bilgisi</string>
   <string name="result_calendar">Bulunan takvim etkinliği</string>

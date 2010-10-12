@@ -100,7 +100,7 @@ public abstract class ResultHandler {
     shopperButton.setVisibility(View.GONE);
   }
 
-  ParsedResult getResult() {
+  public ParsedResult getResult() {
     return result;
   }
 

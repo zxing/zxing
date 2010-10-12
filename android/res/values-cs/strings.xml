@@ -79,6 +79,7 @@
   <string name="msg_intent_failed">Litujeme, požadovanou aplikaci nelze spustit. Čárový kód je nefunkční.</string>
   <string name="msg_loading_apps">Načítání seznamu aplikací\u2026</string>
   <string name="msg_not_our_results">Vypínáte tuto aplikaci. Výsledky hledání se netýkají této aplikace.</string>
+  <string name="msg_redirect">Přesměrování</string>
   <string name="msg_sbc_book_not_searchable">Omlouváme se, tato kniha nelze nalézt.</string>
   <string name="msg_sbc_failed">Omlouváme se, narazili jsme na problém.</string>
   <string name="msg_sbc_no_page_returned">Stránka nenalezena.</string>
@@ -107,6 +108,8 @@
   <string name="preferences_remember_duplicates_title">Pamatujte duplikáty</string>
   <string name="preferences_result_title">Výsledek nastavení</string>
   <string name="preferences_scanning_title">Při skenování čárových kódů pro, dekódovat\u2026</string>
+  <string name="preferences_supplemental_summary">Snažte se získat více informací o obsahu čárový kód</string>
+  <string name="preferences_supplemental_title">Získat více informací</string>
   <string name="preferences_vibrate_title">Vibrace</string>
   <string name="result_address_book">Našel jsem kontakt</string>
   <string name="result_calendar">Našel jsem kalendář</string>

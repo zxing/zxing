@@ -79,6 +79,7 @@
   <string name="msg_intent_failed">Lamentamos, não foi possível iniciar a aplicação pedida. Conteúdos do código de barras inválidos..</string>
   <string name="msg_loading_apps">Carregando lista de pedidos\u2026</string>
   <string name="msg_not_our_results">Você está deixando o presente pedido. Os resultados da pesquisa, você verá não estão ligadas a este pedido.</string>
+  <string name="msg_redirect">Redirecionar</string>
   <string name="msg_sbc_book_not_searchable">Lamentamos, não é possível pesquisar este livro.</string>
   <string name="msg_sbc_failed">Lamentamos, ocorreu um problema com a pesquisa.</string>
   <string name="msg_sbc_no_page_returned">Não foram encontradas páginas</string>
@@ -107,6 +108,8 @@
   <string name="preferences_remember_duplicates_title">Lembre-se de duplicatas</string>
   <string name="preferences_result_title">Definições de resultados</string>
   <string name="preferences_scanning_title">Quando a digitalização de códigos de barras, descodificar\u2026</string>
+  <string name="preferences_supplemental_summary">Tente obter mais informações sobre o conteúdo do código de barras</string>
+  <string name="preferences_supplemental_title">Obter mais informações</string>
   <string name="preferences_vibrate_title">Vibrar</string>
   <string name="result_address_book">Info de contacto encontrada</string>
   <string name="result_calendar">Evento de calendário encontrado </string>

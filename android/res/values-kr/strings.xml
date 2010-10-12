@@ -79,6 +79,7 @@
   <string name="msg_intent_failed">죄송합니다. 어플리케이션이 실행되지 않습니다. 바코드 내용이 잘못 되었을 수도 있습니다.</string>
   <string name="msg_loading_apps">설치된 어플리케이션을 불러옵니다\u2026</string>
   <string name="msg_not_our_results">이 어플리케이션을 벗어나고 있습니다. 검색 결과는 이 어플리케이션과 관련이 없음을 미리 밝힙니다.</string>
+  <string name="msg_redirect">리디렉션</string>
   <string name="msg_sbc_book_not_searchable">죄송합니다. 이 책은 검색이 되지 않습니다.</string>
   <string name="msg_sbc_failed">죄송합니다. 검색 도중 문제가 발생했습니다.</string>
   <string name="msg_sbc_no_page_returned">수신받은 페이지가 없습니다.</string>
@@ -107,6 +108,8 @@
   <string name="preferences_remember_duplicates_title">중복된 바코드 저장</string>
   <string name="preferences_result_title">결과 설정</string>
   <string name="preferences_scanning_title">바코드 스캐닝 시\u2026</string>
+  <string name="preferences_supplemental_summary">바코드 내용에 대한 자세한 정보를 검색하려고</string>
+  <string name="preferences_supplemental_title">검색 상세 정보</string>
   <string name="preferences_vibrate_title">진동</string>
   <string name="result_address_book">연락처 정보를 찾았습니다</string>
   <string name="result_calendar">일정 이벤트를 찾았습니다</string>
@@ -124,13 +127,13 @@
   <string name="title_about">바코드 스캐너 v</string>
   <string name="wa_name">WiFi 연결</string>
   <string name="wifi_changing_network">연결을 변경중입니다</string>
+  <string name="wifi_connect_failed">네트워크 연결 실패</string>
   <string name="wifi_connected">연결됨</string>
   <string name="wifi_creating_network">네트워크를 만드는중</string>
   <string name="wifi_modifying_network">네트워크를 수정중</string>
+  <string name="wifi_ssid_label">네트워크 이름</string>
   <string name="wifi_ssid_missing">네트워크 이름이 없습니다</string>
   <string name="wifi_type_incorrect">네트워크 종류가 잘못 됬습니다</string>
-  <string name="wifi_connect_failed">네트워크 연결 실패</string>
-  <string name="wifi_ssid_label">네트워크 이름</string>
   <string name="wifi_type_label">종류</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

@@ -79,6 +79,7 @@
   <string name="msg_intent_failed">Przepraszamy, żadana aplikacja nie może zostać uruchomiona. Zawartość kodu paskowego może być nieprawidłowa.</string>
   <string name="msg_loading_apps">Ładowanie listy aplikacji\u2026</string>
   <string name="msg_not_our_results">Opuszczasz tą aplikację. Rezultaty wyszukiwania które zobaczysz nie są związane z tą aplikacją.</string>
+  <string name="msg_redirect">Przekierowanie</string>
   <string name="msg_sbc_book_not_searchable">Przepraszamy, ta książka nie jest przeszukiwalna.</string>
   <string name="msg_sbc_failed">Przepraszamy, wyszukiwania napotkało problem.</string>
   <string name="msg_sbc_no_page_returned">Nie zwrócono żadnej strony</string>
@@ -107,6 +108,8 @@
   <string name="preferences_remember_duplicates_title">Pamiętaj, duplikaty</string>
   <string name="preferences_result_title">Ustawienia rezultatów</string>
   <string name="preferences_scanning_title">Podczas skanowania kodów kreskowych\u2026</string>
+  <string name="preferences_supplemental_summary">Prosimy spróbować wyszukać więcej informacji na temat kodów kreskowych treści</string>
+  <string name="preferences_supplemental_title">Pobierz więcej informacji</string>
   <string name="preferences_vibrate_title">Wibruj</string>
   <string name="result_address_book">Znaleziono dane kontaktu</string>
   <string name="result_calendar">Znaleziono wydarzenie kalendarza</string>

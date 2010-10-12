@@ -79,6 +79,7 @@
   <string name="msg_intent_failed">Spiacenti, l\'applicazione richiesta non può essere avviata. Il contenuto del codice a barre può essere non valido.</string>
   <string name="msg_loading_apps">Carico della lista delle applicazioni</string>
   <string name="msg_not_our_results">Si sta lasciando questa applicazione. I risultati della ricerca che verrà vedi non sono collegati a questa domanda.</string>
+  <string name="msg_redirect">Redirect</string>
   <string name="msg_sbc_book_not_searchable">Spiacenti, questo libro non è ricercabile.</string>
   <string name="msg_sbc_failed">Spiacenti, la ricerca ha avuto un problema.</string>
   <string name="msg_sbc_no_page_returned">Nessuna pagina restitiuta</string>
@@ -107,6 +108,8 @@
   <string name="preferences_remember_duplicates_title">Ricordate i duplicati</string>
   <string name="preferences_result_title">Impostazioni risultato</string>
   <string name="preferences_scanning_title">Durante la scansione di codici a barre, decodifica\u2026</string>
+  <string name="preferences_supplemental_summary">Prova a cercare ulteriori informazioni sul contenuto del codice a barre</string>
+  <string name="preferences_supplemental_title">Recuperare più informazioni</string>
   <string name="preferences_vibrate_title">Vibra</string>
   <string name="result_address_book">Info contatto trovata</string>
   <string name="result_calendar">Evento calendario trovato</string>

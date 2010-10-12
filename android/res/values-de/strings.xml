@@ -79,6 +79,7 @@
   <string name="msg_intent_failed">Die gewünschte Applikation kann nicht geöffnet werden. Der Barcode könnte ungültig sein.</string>
   <string name="msg_loading_apps">Anwendungs-Liste wird geladen\u2026</string>
   <string name="msg_not_our_results">Sie verlassen diese Anwendung. Die Suchergebnisse, die Sie gleich sehen, stehen nicht in Verbindung mit dieser Anwendung.</string>
+  <string name="msg_redirect">Umleiten</string>
   <string name="msg_sbc_book_not_searchable">Dieses Buch kann nicht durchsucht werden.</string>
   <string name="msg_sbc_failed">Bei der Suche ist ein Fehler aufgetreten.</string>
   <string name="msg_sbc_no_page_returned">Keine Seite zurückgeliefert.</string>
@@ -107,6 +108,8 @@
   <string name="preferences_remember_duplicates_title">Denken Sie daran, Duplikate</string>
   <string name="preferences_result_title">Ergebnis-Einstellungen</string>
   <string name="preferences_scanning_title">Beim Scannen von Barcodes, dekodieren\u2026</string>
+  <string name="preferences_supplemental_summary">Versuchen Sie, mehr Informationen über die Barcode-Inhalte abrufen</string>
+  <string name="preferences_supplemental_title">Rufen Sie weitere Informationen</string>
   <string name="preferences_vibrate_title">Vibrieren</string>
   <string name="result_address_book">Kontakt gefunden</string>
   <string name="result_calendar">Termin gefunden</string>

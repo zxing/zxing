@@ -79,6 +79,7 @@
   <string name="msg_intent_failed">Elnézést, a kért alkalmazást nem lehet elindítani. A vonalkód tartalma lehet, hogy érvénytelen.</string>
   <string name="msg_loading_apps">Alkalmazások listájának betöltése\u2026</string>
   <string name="msg_not_our_results">Elhagyja ezt az alkalmazást. A keresési találatok, amiket látni fog, nincsenek kapcsolatban az alkalmazással.</string>
+  <string name="msg_redirect">Redirect</string>
   <string name="msg_sbc_book_not_searchable">Elnézést, ez a könyv nem kereshető.</string>
   <string name="msg_sbc_failed">Elnézést, a keresés problémába ütközött.</string>
   <string name="msg_sbc_no_page_returned">Nincs visszakapott oldal</string>
@@ -107,6 +108,8 @@
   <string name="preferences_remember_duplicates_title">Emlékezzen duplázik</string>
   <string name="preferences_result_title">Találati beállítások</string>
   <string name="preferences_scanning_title">A szkennelés a vonalkódok, megfejtése\u2026</string>
+  <string name="preferences_supplemental_summary">Próbáld meg letölteni több információt a vonalkód tartalma</string>
+  <string name="preferences_supplemental_title">Letölt További információk</string>
   <string name="preferences_vibrate_title">Rezgés</string>
   <string name="result_address_book">Kapcsolat információ találat</string>
   <string name="result_calendar">Naptár esemény találat</string>
