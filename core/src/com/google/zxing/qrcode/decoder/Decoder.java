@@ -52,12 +52,10 @@ public final class Decoder {
    *
    * @param image booleans representing white/black QR Code modules
    * @return text and bytes encoded within the QR Code
-   * @throws NotFoundException if the QR Code cannot be found
    * @throws FormatException if the QR Code cannot be decoded
    * @throws ChecksumException if error correction fails
    */
-  public DecoderResult decode(boolean[][] image, Hashtable hints)
-      throws ChecksumException, FormatException, NotFoundException {
+  public DecoderResult decode(boolean[][] image, Hashtable hints) throws ChecksumException, FormatException {
     int dimension = image.length;
     BitMatrix bits = new BitMatrix(dimension);
     for (int i = 0; i < dimension; i++) {
@@ -70,7 +68,7 @@ public final class Decoder {
     return decode(bits, hints);
   }
 
-  public DecoderResult decode(BitMatrix bits) throws ChecksumException, FormatException, NotFoundException {
+  public DecoderResult decode(BitMatrix bits) throws ChecksumException, FormatException {
     return decode(bits, null);
   }
 

@@ -73,7 +73,7 @@ public final class Decoder {
 
     // Construct a parser and read version, error-correction level
     BitMatrixParser parser = new BitMatrixParser(bits);
-    Version version = parser.readVersion(bits);
+    Version version = parser.getVersion();
 
     // Read codewords
     byte[] codewords = parser.readCodewords();

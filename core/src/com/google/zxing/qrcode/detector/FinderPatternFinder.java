@@ -553,7 +553,7 @@ public class FinderPatternFinder {
    */
   private static class FurthestFromAverageComparator implements Comparator {
     private final float average;
-    public FurthestFromAverageComparator(float f) {
+    private FurthestFromAverageComparator(float f) {
       average = f;
     }
     public int compare(Object center1, Object center2) {
@@ -568,16 +568,16 @@ public class FinderPatternFinder {
    */
   private static class CenterComparator implements Comparator {
     private final float average;
-    public CenterComparator(float f) {
+    private CenterComparator(float f) {
       average = f;
     }
     public int compare(Object center1, Object center2) {
-      if (((FinderPattern) center2).getCount() != ((FinderPattern) center1).getCount()) {
-        return ((FinderPattern) center2).getCount() - ((FinderPattern) center1).getCount();
-      } else {
+      if (((FinderPattern) center2).getCount() == ((FinderPattern) center1).getCount()) {
         float dA = Math.abs(((FinderPattern) center2).getEstimatedModuleSize() - average);
         float dB = Math.abs(((FinderPattern) center1).getEstimatedModuleSize() - average);
         return dA < dB ? 1 : (dA == dB ? 0 : -1);
+      } else {
+        return ((FinderPattern) center2).getCount() - ((FinderPattern) center1).getCount();
       }
     }
   }
