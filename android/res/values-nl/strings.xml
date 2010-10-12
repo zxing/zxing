@@ -79,6 +79,7 @@
   <string name="msg_intent_failed">Sorry, de gevraagde applicatie kan niet gestart worden. De barcode kan verkeerd zijn.</string>
   <string name="msg_loading_apps">Lijst van applicaties aan het laden\u2026</string>
   <string name="msg_not_our_results">Je verlaat deze applicatie. De zoekresultaten die je ziet zijn niet gerelateerd aan deze applicatie.</string>
+  <string name="msg_redirect">Redirect</string>
   <string name="msg_sbc_book_not_searchable">Sorry, dit boek is niet zoekbaar.</string>
   <string name="msg_sbc_failed">Sorry, er was een probleem met zoeken</string>
   <string name="msg_sbc_no_page_returned">Geen pagina ontvangen</string>
@@ -107,6 +108,8 @@
   <string name="preferences_remember_duplicates_title">Onthoud duplicaten</string>
   <string name="preferences_result_title">Instellingen voor resultaat</string>
   <string name="preferences_scanning_title">Bij het scannen van barcodes, decodeer\u2026</string>
+  <string name="preferences_supplemental_summary">Proberen om meer informatie over de inhoud van barcode ophalen</string>
+  <string name="preferences_supplemental_title">Halen meer info</string>
   <string name="preferences_vibrate_title">Trillen</string>
   <string name="result_address_book">Contact informatie gevonden</string>
   <string name="result_calendar">Agendagebeurtenis gevonden</string>

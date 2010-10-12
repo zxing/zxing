@@ -79,6 +79,7 @@
   <string name="msg_intent_failed">Beklager, den ønskede applikation kunne ikke blive startet. Stregkodeindholdet er måsket ugyldigt.</string>
   <string name="msg_loading_apps">Indlæser liste over applikationer\u2026</string>
   <string name="msg_not_our_results">Du er ved at forlade denne applikation. Søgeresultaterne du ser er relateret til denne applikation.</string>
+  <string name="msg_redirect">Redirect</string>
   <string name="msg_sbc_book_not_searchable">Beklager, denne bog er ikke søgbar.</string>
   <string name="msg_sbc_failed">Beklager, søgningen er stødt på et problem.</string>
   <string name="msg_sbc_no_page_returned">Ingen side tilbage</string>
@@ -107,6 +108,8 @@
   <string name="preferences_remember_duplicates_title">Husk dubletter</string>
   <string name="preferences_result_title">Resultatindstillinger</string>
   <string name="preferences_scanning_title">Når der scannes efter stregkoder\u2026</string>
+  <string name="preferences_supplemental_summary">Prøv at hente mere information om stregkoden indholdet</string>
+  <string name="preferences_supplemental_title">Hent mere info</string>
   <string name="preferences_vibrate_title">Vibrér</string>
   <string name="result_address_book">Kontaktinfo fundet</string>
   <string name="result_calendar">Kalendarbegivenhed fundet</string>

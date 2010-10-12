@@ -79,6 +79,7 @@
   <string name="msg_intent_failed">Oprostite, zahtevana aplikacija se ne more zagnati. Lahko da gre za napačno vsebino črtne kode.</string>
   <string name="msg_loading_apps">Nalagam seznam aplikacij\u2026</string>
   <string name="msg_not_our_results">Zapuščate aplikacijo. Prikazani rezultati iskanja niso povezani s to aplikacijo.</string>
+  <string name="msg_redirect">Preusmeritev</string>
   <string name="msg_sbc_book_not_searchable">Oprostite, po tej knjigi se ne da iskati.</string>
   <string name="msg_sbc_failed">Oprostite, iskanje je naletelo na napako.</string>
   <string name="msg_sbc_no_page_returned">Brez vrnjene strani.</string>
@@ -107,6 +108,8 @@
   <string name="preferences_remember_duplicates_title">Zapomni si dvojnikov</string>
   <string name="preferences_result_title">Nastavitve rezultatov branja</string>
   <string name="preferences_scanning_title">Ko berete črtne kode, preberi\u2026</string>
+  <string name="preferences_supplemental_summary">Poskusite pridobiti več informacij o vsebini črtne kode</string>
+  <string name="preferences_supplemental_title">Naloži Več info</string>
   <string name="preferences_vibrate_title">Vibriraj</string>
   <string name="result_address_book">Najdene informacije o kontaktu</string>
   <string name="result_calendar">Najden koledarski dogodek</string>
