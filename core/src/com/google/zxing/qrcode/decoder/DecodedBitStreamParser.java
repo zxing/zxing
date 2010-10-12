@@ -45,6 +45,7 @@ final class DecodedBitStreamParser {
       'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
       ' ', '$', '%', '*', '+', '-', '.', '/', ':'
   };
+  private static final int GB2312_SUBSET = 1;
 
   private DecodedBitStreamParser() {
   }
@@ -85,24 +86,69 @@ final class DecodedBitStreamParser {
             throw FormatException.getFormatInstance();
           }
         } else {
-          // How many characters will follow, encoded in this mode?
-          int count = bits.readBits(mode.getCharacterCountBits(version));
-          if (mode.equals(Mode.NUMERIC)) {
-            decodeNumericSegment(bits, result, count);
-          } else if (mode.equals(Mode.ALPHANUMERIC)) {
-            decodeAlphanumericSegment(bits, result, count, fc1InEffect);
-          } else if (mode.equals(Mode.BYTE)) {
-            decodeByteSegment(bits, result, count, currentCharacterSetECI, byteSegments, hints);
-          } else if (mode.equals(Mode.KANJI)) {
-            decodeKanjiSegment(bits, result, count);
+          // First handle Hanzi mode which does not start with character count
+          if (mode.equals(Mode.HANZI)) {
+        		//chinese mode contains a sub set indicator right after mode indicator
+        		int subset = bits.readBits(4);
+        		int countHanzi = bits.readBits(mode.getCharacterCountBits(version));
+        		if (subset == GB2312_SUBSET) {
+        			decodeHanziSegment(bits, result, countHanzi);
+            }
           } else {
-            throw FormatException.getFormatInstance();
+            // "Normal" QR code modes:
+            // How many characters will follow, encoded in this mode?
+            int count = bits.readBits(mode.getCharacterCountBits(version));
+            if (mode.equals(Mode.NUMERIC)) {
+              decodeNumericSegment(bits, result, count);
+            } else if (mode.equals(Mode.ALPHANUMERIC)) {
+              decodeAlphanumericSegment(bits, result, count, fc1InEffect);
+            } else if (mode.equals(Mode.BYTE)) {
+              decodeByteSegment(bits, result, count, currentCharacterSetECI, byteSegments, hints);
+            } else if (mode.equals(Mode.KANJI)) {
+              decodeKanjiSegment(bits, result, count);
+            } else {
+              throw FormatException.getFormatInstance();
+            }
           }
         }
       }
     } while (!mode.equals(Mode.TERMINATOR));
 
     return new DecoderResult(bytes, result.toString(), byteSegments.isEmpty() ? null : byteSegments, ecLevel);
+  }
+
+  /**
+   * See specification GBT 18284-2000
+   */
+  private static void decodeHanziSegment(BitSource bits,
+                                         StringBuffer result,
+                                         int count) throws FormatException {
+    // Each character will require 2 bytes. Read the characters as 2-byte pairs
+    // and decode as GB2312 afterwards
+    byte[] buffer = new byte[2 * count];
+    int offset = 0;
+    while (count > 0) {
+      // Each 13 bits encodes a 2-byte character
+      int twoBytes = bits.readBits(13);
+      int assembledTwoBytes = ((twoBytes / 0x060) << 8) | (twoBytes % 0x060);
+      if (assembledTwoBytes < 0x003BF) {
+        // In the 0xA1A1 to 0xAAFE range
+        assembledTwoBytes += 0x0A1A1;
+      } else {
+        // In the 0xB0A1 to 0xFAFE range
+        assembledTwoBytes += 0x0A6A1;
+      }
+      buffer[offset] = (byte) ((assembledTwoBytes >> 8) & 0xFF);
+      buffer[offset + 1] = (byte) ((assembledTwoBytes) & 0xFF);
+      offset += 2;
+      count--;
+    }
+    
+    try {
+      result.append(new String(buffer, StringUtils.GB2312));
+    } catch (UnsupportedEncodingException uee) {
+      throw FormatException.getFormatInstance();
+    }
   }
 
   private static void decodeKanjiSegment(BitSource bits,
