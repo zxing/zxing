@@ -22,6 +22,7 @@ import com.google.zxing.oned.Code39Writer;
 import com.google.zxing.oned.EAN13Writer;
 import com.google.zxing.oned.EAN8Writer;
 import com.google.zxing.oned.ITFWriter;
+import com.google.zxing.oned.UPCAWriter;
 import com.google.zxing.qrcode.QRCodeWriter;
 
 import java.util.Hashtable;
@@ -48,6 +49,8 @@ public final class MultiFormatWriter implements Writer {
       writer = new EAN8Writer();
     } else if (format == BarcodeFormat.EAN_13) {
       writer = new EAN13Writer();
+    } else if (format == BarcodeFormat.UPC_A) {
+      writer = new UPCAWriter();
     } else if (format == BarcodeFormat.QR_CODE) {
       writer = new QRCodeWriter();
     } else if (format == BarcodeFormat.CODE_39) {
