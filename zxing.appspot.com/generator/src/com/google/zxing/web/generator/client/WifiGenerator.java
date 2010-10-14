@@ -61,7 +61,7 @@ public class WifiGenerator implements GeneratorSource {
   }
 
   private String getWifiString(String ssid, String password, String type) {
-    StringBuilder output = new StringBuilder();
+    StringBuilder output = new StringBuilder(100);
     output.append("WIFI:");
     output.append("S:").append(ssid).append(';');
     maybeAppend(output, "T:", type);
@@ -85,6 +85,9 @@ public class WifiGenerator implements GeneratorSource {
       throw new GeneratorException(name + " field must not contain \\n characters.");
     }
     input = input.replace(";", "\\;");
+    input = input.replace(":", "\\:");
+    input = input.replace("\\", "\\\\");
+    input = input.replace("/", "\\/");
     return input;
   }
   
@@ -101,8 +104,7 @@ public class WifiGenerator implements GeneratorSource {
   }
   
   private String getNetworkTypeField() throws GeneratorException {
-	String input = networkType.getValue(networkType.getSelectedIndex());
-	return input;
+    return networkType.getValue(networkType.getSelectedIndex());
   }
   
   public Grid getWidget() {
@@ -124,9 +126,15 @@ public class WifiGenerator implements GeneratorSource {
   }
 
   public void validate(Widget widget) throws GeneratorException {
-    if (widget == ssid) getSsidField();
-    if (widget == password) getPasswordField();
-    if (widget == networkType) getNetworkTypeField();
+    if (widget == ssid) {
+      getSsidField();
+    }
+    if (widget == password) {
+      getPasswordField();
+    }
+    if (widget == networkType) {
+      getNetworkTypeField();
+    }
   }
 
   public void setFocus() {
