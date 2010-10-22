@@ -1,7 +1,7 @@
-Zxing for iphone is a sub-project of zxing project partially maintened by 
-independent developers. As of 2nd of June 2010, it contains 3 iPhone projects:
-  - BarCodes: Original zxing iPhone app. Available on app store. However, the code is cirrently maintained
-  - ZXingWidget: a Library that can be included in any iPhone app
+ZXing for iOS is a sub-project of zxing project partially maintained by 
+independent developers. As of 2nd of June 2010, it contains 3 iOS projects:
+  - BarCodes: Original zxing iOS app. Available on app store. However, the code is currently not maintained
+  - ZXingWidget: a Library that can be included in any iOS app
   - ScanTest: a simple test app for ZXingWidget
 
 
@@ -41,13 +41,13 @@ How to include ZXingWidget in a easy and clean way:
 
 Know issues for above steps to include:
 ======================================
-  - It can happen that when trying to build your own project with ZXoingWidgetController you get linker errors like 
-    "undefined reference to". If this error looks like a c++ undefined reference, then renaming main.m into main.mm (Objectice-C++ source suffix)
+  - It can happen that when trying to build your own project with ZXingWidgetController you get linker errors like 
+    "undefined reference to". If this error looks like a c++ undefined reference, then renaming main.m into main.mm (Objective-C++ source suffix)
     may fix the problem
   
   - If you have building error like " ... : No such file or directory", then it is a classical error, it means that the path to includes is not well
-    specified. The best way to fix this is to look at the Build Command that failed. To do that, click on the lower right corner of your XCode project,
-    you should see the build command that failed. Click on it and expand it by cliking on the "more" symbols that just appeared. This will make appear
+    specified. The best way to fix this is to look at the Build Command that failed. To do that, click on the lower right corner of your Xcode project,
+    you should see the build command that failed. Click on it and expand it by clicking on the "more" symbols that just appeared. This will make appear
     the exact command line instruction that is ran and fails. You can then make sure that the Header search path you specified is there, and you can also
     copy/paste this line into your terminal and try to see if you can reproduce/fix the error by adding the right path to the compiler. Once is is fixed,
     you should have an idea of what's the problem and accordingly modify your Header Search Path.
