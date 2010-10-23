@@ -61,8 +61,7 @@ final class BitMatrixParser {
    */
   int[] readCodewords() throws FormatException {
     int width = bitMatrix.getWidth();
-    // TODO should be a rectangular matrix
-    int height = width;
+    int height = bitMatrix.getHeight();
 
     erasures = new int[MAX_CW_CAPACITY];
 
