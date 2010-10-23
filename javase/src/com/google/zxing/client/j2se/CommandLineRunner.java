@@ -250,7 +250,7 @@ public final class CommandLineRunner {
     } catch (NotFoundException nfe) {
       System.out.println(uri.toString() + ": No barcode found");
       return null;
-    } finally {
+    // } finally {
       // Uncomment these lines when turning on exception tracking in ReaderException.
       //System.out.println("Threw " + ReaderException.getExceptionCountAndReset() + " exceptions");
       //System.out.println("Throwers:\n" + ReaderException.getThrowersAndReset());

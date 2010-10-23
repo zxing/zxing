@@ -86,76 +86,71 @@ public final class DataMatrixReader implements Reader {
   }
 
   /**
-   * This method detects a Data Matrix code in a "pure" image -- that is, pure monochrome image
-   * which contains only an unrotated, unskewed, image of a Data Matrix code, with some white border
+   * This method detects a code in a "pure" image -- that is, pure monochrome image
+   * which contains only an unrotated, unskewed, image of a code, with some white border
    * around it. This is a specialized method that works exceptionally fast in this special
    * case.
    *
+   * @see com.google.zxing.pdf417.PDF417Reader#extractPureBits(BitMatrix)
    * @see com.google.zxing.qrcode.QRCodeReader#extractPureBits(BitMatrix)
    */
   private static BitMatrix extractPureBits(BitMatrix image) throws NotFoundException {
 
-    int height = image.getHeight();
-    int width = image.getWidth();
-    int minDimension = Math.min(height, width);
-
-    // And then keep tracking across the top-left black module to determine module size
-    //int moduleEnd = borderWidth;
     int[] leftTopBlack = image.getTopLeftOnBit();
-    if (leftTopBlack == null) {
-      throw NotFoundException.getNotFoundInstance();
-    }
-    int x = leftTopBlack[0];
-    int y = leftTopBlack[1];
-    while (x < minDimension && y < minDimension && image.get(x, y)) {
-      x++;
-    }
-    if (x == minDimension) {
+    int[] rightBottomBlack = image.getBottomRightOnBit();
+    if (leftTopBlack == null || rightBottomBlack == null) {
       throw NotFoundException.getNotFoundInstance();
     }
 
-    int moduleSize = x - leftTopBlack[0];
+    int moduleSize = moduleSize(leftTopBlack, image);
 
-    // And now find where the rightmost black module on the first row ends
-    int rowEndOfSymbol = width - 1;
-    while (rowEndOfSymbol >= 0 && !image.get(rowEndOfSymbol, y)) {
-      rowEndOfSymbol--;
-    }
-    if (rowEndOfSymbol < 0) {
+    int top = leftTopBlack[1];
+    int bottom = rightBottomBlack[1];
+    int left = leftTopBlack[0];
+    int right = rightBottomBlack[0];
+
+    int matrixWidth = (right - left + 1) / moduleSize;
+    int matrixHeight = (bottom - top + 1) / moduleSize;
+    if (matrixWidth == 0 || matrixHeight == 0) {
       throw NotFoundException.getNotFoundInstance();
     }
-    rowEndOfSymbol++;
-
-    // Make sure width of barcode is a multiple of module size
-    if ((rowEndOfSymbol - x) % moduleSize != 0) {
-      throw NotFoundException.getNotFoundInstance();
-    }
-    int dimension = 2 + ((rowEndOfSymbol - x) / moduleSize);
-
-    y += moduleSize;
 
     // Push in the "border" by half the module width so that we start
     // sampling in the middle of the module. Just in case the image is a
     // little off, this will help recover.
-    x -= moduleSize >> 1;
-    y -= moduleSize >> 1;
-
-    if ((x + (dimension - 1) * moduleSize) >= width ||
-        (y + (dimension - 1) * moduleSize) >= height) {
-      throw NotFoundException.getNotFoundInstance();
-    }
+    int nudge = moduleSize >> 1;
+    top += nudge;
+    left += nudge;
 
     // Now just read off the bits
-    BitMatrix bits = new BitMatrix(dimension);
-    for (int i = 0; i < dimension; i++) {
-      int iOffset = y + i * moduleSize;
-      for (int j = 0; j < dimension; j++) {
-        if (image.get(x + j * moduleSize, iOffset)) {
-          bits.set(j, i);
+    BitMatrix bits = new BitMatrix(matrixWidth, matrixHeight);
+    for (int y = 0; y < matrixHeight; y++) {
+      int iOffset = top + y * moduleSize;
+      for (int x = 0; x < matrixWidth; x++) {
+        if (image.get(left + x * moduleSize, iOffset)) {
+          bits.set(x, y);
         }
       }
     }
     return bits;
+  }
+
+  private static int moduleSize(int[] leftTopBlack, BitMatrix image) throws NotFoundException {
+    int width = image.getWidth();
+    int x = leftTopBlack[0];
+    int y = leftTopBlack[1];
+    while (x < width && image.get(x, y)) {
+      x++;
+    }
+    if (x == width) {
+      throw NotFoundException.getNotFoundInstance();
+    }
+
+    int moduleSize = x - leftTopBlack[0];
+    if (moduleSize == 0) {
+      throw NotFoundException.getNotFoundInstance();
+    }
+    return moduleSize;
   }
 
 }
