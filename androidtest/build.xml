@@ -175,7 +175,8 @@ limitations under the License.
   <target name="compile" depends="resource-src, aidl">
     <javac encoding="ascii" target="1.5" debug="false" extdirs=""
            destdir="${out-classes}"
-           bootclasspathref="android.target.classpath">
+           bootclasspathref="android.target.classpath"
+           includeantruntime="false">
       <src path="${source-folder}" />
       <src path="${gen-folder}" />
       <classpath>

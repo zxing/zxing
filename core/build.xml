@@ -33,7 +33,8 @@
            optimize="true"
            debug="${generate-debug}"
            deprecation="true"
-           fork="true"/>
+           fork="true"
+           includeantruntime="false"/>
     <jar jarfile="core.jar" basedir="build">
       <!-- These entries allow core.jar to function as an OSGi bundle, and also specifies
            additional attributes for compatibility with BugLabs's BUG platform.
@@ -107,7 +108,8 @@
     <javac srcdir="test/src"
            destdir="build-test"
            debug="true"
-           deprecation="true">
+           deprecation="true"
+           includeantruntime="false">
       <classpath>
         <pathelement location="core.jar"/>
         <pathelement location="../javase/javase.jar"/>

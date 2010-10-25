@@ -61,7 +61,8 @@
            target="1.5"
            optimize="true"
            debug="true"
-           deprecation="true">
+           deprecation="true"
+           includeantruntime="false">
       <classpath>
         <fileset dir="web/WEB-INF/lib">
           <include name="*.jar"/>

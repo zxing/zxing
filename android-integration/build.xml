@@ -32,7 +32,8 @@
            target="1.5"
            optimize="true"
            debug="true"
-           deprecation="true">
+           deprecation="true"
+           includeantruntime="false">
       <classpath>
         <pathelement location="${android-home}/platforms/android-3/android.jar"/>
       </classpath>
