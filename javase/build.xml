@@ -37,7 +37,8 @@
            target="1.5"
            optimize="true"
            debug="true"
-           deprecation="true">
+           deprecation="true"
+           includeantruntime="false">
       <classpath>
         <pathelement location="../core/core.jar"/>
       </classpath>
