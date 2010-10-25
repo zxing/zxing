@@ -17,14 +17,11 @@
 package com.google.zxing.client.android.share;
 
 import android.app.ListActivity;
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Browser;
 import android.view.View;
 import android.widget.ListView;
-import com.google.zxing.client.android.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,12 +29,10 @@ import java.util.List;
 public final class AppPickerActivity extends ListActivity {
 
   private final List<String[]> labelsPackages = new ArrayList<String[]>();
-  private DialogInterface dialog;
 
   @Override
   protected void onCreate(Bundle icicle) {
     super.onCreate(icicle);
-    dialog = ProgressDialog.show(this, "", getString(R.string.msg_loading_apps), true, true);
     if (labelsPackages.isEmpty()) {
       new LoadPackagesAsyncTask(this).execute(labelsPackages);
     }
@@ -57,10 +52,6 @@ public final class AppPickerActivity extends ListActivity {
       setResult(RESULT_CANCELED);
     }
     finish();
-  }
-
-  DialogInterface getProgressDialog() {
-    return dialog;
   }
 
 }

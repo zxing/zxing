@@ -16,11 +16,14 @@
 
 package com.google.zxing.client.android.share;
 
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
+import com.google.zxing.client.android.R;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -46,16 +49,30 @@ final class LoadPackagesAsyncTask extends AsyncTask<List<String[]>,Void,List<Str
   };
 
 
-  private final AppPickerActivity appPickerActivity;
+  private final AppPickerActivity activity;
+  private DialogInterface dialog;
 
-  LoadPackagesAsyncTask(AppPickerActivity appPickerActivity) {
-    this.appPickerActivity = appPickerActivity;
+  LoadPackagesAsyncTask(AppPickerActivity activity) {
+    this.activity = activity;
+  }
+
+  @Override
+  protected synchronized void onPreExecute() {
+    dialog = ProgressDialog.show(activity, "", activity.getString(R.string.msg_loading_apps), true, true);
+  }
+
+  @Override
+  protected synchronized void onCancelled() {
+    if (dialog != null) {
+      dialog.dismiss();
+      dialog = null;
+    }
   }
 
   @Override
   protected List<String[]> doInBackground(List<String[]>... objects) {
     List<String[]> labelsPackages = objects[0];
-    PackageManager packageManager = appPickerActivity.getPackageManager();
+    PackageManager packageManager = activity.getPackageManager();
     List<ApplicationInfo> appInfos = packageManager.getInstalledApplications(0);
     for (ApplicationInfo appInfo : appInfos) {
       CharSequence label = appInfo.loadLabel(packageManager);
@@ -88,15 +105,18 @@ final class LoadPackagesAsyncTask extends AsyncTask<List<String[]>,Void,List<Str
   }
 
   @Override
-  protected void onPostExecute(List<String[]> results) {
+  protected synchronized void onPostExecute(List<String[]> results) {
     List<String> labels = new ArrayList<String>(results.size());
     for (String[] result : results) {
       labels.add(result[0]);
     }
     ListAdapter listAdapter = new ArrayAdapter<String>(
-        appPickerActivity, android.R.layout.simple_list_item_1, labels);
-    appPickerActivity.setListAdapter(listAdapter);
-    appPickerActivity.getProgressDialog().dismiss();
+        activity, android.R.layout.simple_list_item_1, labels);
+    activity.setListAdapter(listAdapter);
+    if (dialog != null) {
+      dialog.dismiss();
+      dialog = null;
+    }
   }
 
   private static class ByFirstStringComparator implements Comparator<String[]>, Serializable {
