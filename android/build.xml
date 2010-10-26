@@ -284,10 +284,12 @@ limitations under the License.
   <target name="release" depends="dex, package-resources">
     <apkbuilder
         outfolder="${out-folder}"
-        basename="${ant.project.name}"
+        resourcefile="BarcodeScanner.ap_"
+        apkfilepath="${out-folder}/BarcodeScanner-unsigned.apk"
+        debug="false"
         signed="false"
         verbose="false">
-      <file path="${intermediate-dex}" />
+      <dex path="${intermediate-dex-location}" />
       <sourcefolder path="${source-folder}" />
       <jarfolder path="${external-libs-folder}" />
     </apkbuilder>
