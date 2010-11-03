@@ -175,6 +175,7 @@ final class DecodedBitStreamParser {
             // of the Text Compaction mode. Codeword 913 is only available
             // in Text Compaction mode; its use is described in 5.4.2.4.
             textCompactionData[index] = MODE_SHIFT_TO_BYTE_COMPACTION_MODE;
+            code = codewords[codeIndex++];            
             byteCompactionData[index] = code; //Integer.toHexString(code);
             index++;
             break;
@@ -274,8 +275,8 @@ final class DecodedBitStreamParser {
               subMode = PUNCT;
             } else if (subModeCh == 26) {
               ch = ' ';
-            } else if (subModeCh == AS) {
-              //mode_change = true;
+            } else if (subModeCh == LL) {
+              subMode = LOWER;
             } else if (subModeCh == AL) {
               subMode = ALPHA;
             } else if (subModeCh == PS) {
