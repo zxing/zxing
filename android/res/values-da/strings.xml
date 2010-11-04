@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <!--
  Copyright (C) 2010 ZXing authors
 
@@ -45,7 +45,7 @@
   <string name="button_show_map">Vis kort</string>
   <string name="button_sms">Send SMS</string>
   <string name="button_web_search">Internetsøgning</string>
-  <string name="button_wifi">Forbindelse til netværk</string>
+  <string name="button_wifi">Forbind til netværk</string>
   <string name="contents_contact">Kontaktinfo</string>
   <string name="contents_email">E-mailadresse</string>
   <string name="contents_location">Geografiske koordinater</string>
@@ -62,8 +62,8 @@
   <string name="menu_settings">Indstillinger</string>
   <string name="menu_share">Del</string>
   <string name="msg_about">Baseret på open source ZXing Barcode Library</string>
-  <string name="msg_buggy">Denne enhed har kendte fejl, der forårsage stregkodescanning problemer. For mere information, besøg http://code.google.com/p/zxing/wiki/FrequentlyAskedQuestions (på engelsk)</string>
-  <string name="msg_bulk_mode_scanned">Bulk tilstand: stregkode scannet og gemt</string>
+  <string name="msg_buggy">Denne enhed har kendte fejl, der forårsager stregkodescanningsproblemer. For mere information, besøg http://code.google.com/p/zxing/wiki/FrequentlyAskedQuestions (på engelsk)</string>
+  <string name="msg_bulk_mode_scanned">Massetilstand: stregkode scannet og gemt</string>
   <string name="msg_camera_framework_bug">Beklager, Android-kameraet er stødt på et problem. Du skal muligvis genstarte enheden.</string>
   <string name="msg_default_contents">Indhold</string>
   <string name="msg_default_format">Format</string>
@@ -79,7 +79,7 @@
   <string name="msg_intent_failed">Beklager, den ønskede applikation kunne ikke blive startet. Stregkodeindholdet er måsket ugyldigt.</string>
   <string name="msg_loading_apps">Indlæser liste over applikationer\u2026</string>
   <string name="msg_not_our_results">Du er ved at forlade denne applikation. Søgeresultaterne du ser er relateret til denne applikation.</string>
-  <string name="msg_redirect">Redirect</string>
+  <string name="msg_redirect">Omdirigér</string>
   <string name="msg_sbc_book_not_searchable">Beklager, denne bog er ikke søgbar.</string>
   <string name="msg_sbc_failed">Beklager, søgningen er stødt på et problem.</string>
   <string name="msg_sbc_no_page_returned">Ingen side tilbage</string>
@@ -87,12 +87,12 @@
   <string name="msg_sbc_searching_book">Søger bog\u2026</string>
   <string name="msg_sbc_snippet_unavailable">Uddragsvisning ikke tilgængelig</string>
   <string name="msg_sbc_unknown_page">Ukendt side</string>
-  <string name="msg_share_explanation">Du kan dele data ved at vise en stregkode på skærmen og derefter scanne den med en anden telefon.</string>
+  <string name="msg_share_explanation">Du kan dele data ved at vise en stregkode på denne skærm og derefter scanne den med en anden telefon.</string>
   <string name="msg_share_subject_line">Her er indholdet af en stregkode jeg har scannet.</string>
   <string name="msg_unmount_usb">Beklager, SD-kortet er ikke tilgængelig.</string>
   <string name="preferences_actions_title">Når en stregkode er fundet\u2026</string>
-  <string name="preferences_bulk_mode_summary">Scan og gem mange stregkoder kontinuerligt</string>
-  <string name="preferences_bulk_mode_title">Bulk scanningstilstand</string>
+  <string name="preferences_bulk_mode_summary">Scan og gem mange stregkoder uden afbrydelser</string>
+  <string name="preferences_bulk_mode_title">Massescanningstilstand</string>
   <string name="preferences_copy_to_clipboard_title">Kopiér til udklipsholder</string>
   <string name="preferences_custom_product_search_summary">Brug %s som en pladsholder for produkt-id, og %f for format</string>
   <string name="preferences_custom_product_search_title">Brugerdefineret søge-URL</string>
@@ -104,11 +104,11 @@
   <string name="preferences_general_title">Generelle indstillinger</string>
   <string name="preferences_name">Indstillinger</string>
   <string name="preferences_play_beep_title">Bip</string>
-  <string name="preferences_remember_duplicates_summary">Gemme flere scanninger af den samme stregkode i Historie</string>
+  <string name="preferences_remember_duplicates_summary">Gem flere scanninger af de samme stregkoder i historik</string>
   <string name="preferences_remember_duplicates_title">Husk dubletter</string>
   <string name="preferences_result_title">Resultatindstillinger</string>
   <string name="preferences_scanning_title">Når der scannes efter stregkoder\u2026</string>
-  <string name="preferences_supplemental_summary">Prøv at hente mere information om stregkoden indholdet</string>
+  <string name="preferences_supplemental_summary">Prøv at hente mere information om stregkodens indhold</string>
   <string name="preferences_supplemental_title">Hent mere info</string>
   <string name="preferences_vibrate_title">Vibrér</string>
   <string name="result_address_book">Kontaktinfo fundet</string>
@@ -126,14 +126,14 @@
   <string name="share_name">Del via stregkode</string>
   <string name="title_about">Barcode Scanner v</string>
   <string name="wa_name">Wifi-forbindelse</string>
-  <string name="wifi_changing_network">Ændring Network</string>
+  <string name="wifi_changing_network">Skifter netværk</string>
   <string name="wifi_connect_failed">Netværksforbindelse mislykkedes</string>
-  <string name="wifi_connected">Connected</string>
-  <string name="wifi_creating_network">Oprettelse af netværk</string>
-  <string name="wifi_modifying_network">Ændring Network</string>
+  <string name="wifi_connected">Forbundet</string>
+  <string name="wifi_creating_network">Opretter netværk</string>
+  <string name="wifi_modifying_network">Ændrer netværk</string>
   <string name="wifi_ssid_label">Netværksnavn</string>
-  <string name="wifi_ssid_missing">Netværk navn mangler</string>
-  <string name="wifi_type_incorrect">Netværk type forkert</string>
+  <string name="wifi_ssid_missing">Netværksnavn mangler</string>
+  <string name="wifi_type_incorrect">Netværkstype forkert</string>
   <string name="wifi_type_label">Type</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>
