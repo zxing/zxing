@@ -121,11 +121,11 @@
   <string name="result_tel">Najdena telefonska številka</string>
   <string name="result_text">Najden tekst</string>
   <string name="result_uri">Najden URL</string>
-  <string name="result_wifi">Najdene Wifi nastavitve</string>
+  <string name="result_wifi">Najdene WLAN nastavitve</string>
   <string name="sbc_name">Iskanje z Google Book Search</string>
   <string name="share_name">Deli preko črtne kode</string>
   <string name="title_about">Barcode Scanner v</string>
-  <string name="wa_name">Wifi povezava</string>
+  <string name="wa_name">WLAN povezava</string>
   <string name="wifi_changing_network">Menjam omrežje</string>
   <string name="wifi_connect_failed">Napaka omrežne povezave</string>
   <string name="wifi_connected">Povezan</string>
