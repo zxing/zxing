@@ -121,11 +121,11 @@
   <string name="result_tel">Telefonnummer fundet</string>
   <string name="result_text">Almindelig tekst fundet</string>
   <string name="result_uri">URL fundet</string>
-  <string name="result_wifi">Wifi-forbindelse fundet</string>
+  <string name="result_wifi">WLAN-forbindelse fundet</string>
   <string name="sbc_name">Google Bøger-søgning</string>
   <string name="share_name">Del via stregkode</string>
   <string name="title_about">Barcode Scanner v</string>
-  <string name="wa_name">Wifi-forbindelse</string>
+  <string name="wa_name">WLAN-forbindelse</string>
   <string name="wifi_changing_network">Skifter netværk</string>
   <string name="wifi_connect_failed">Netværksforbindelse mislykkedes</string>
   <string name="wifi_connected">Forbundet</string>

@@ -121,11 +121,11 @@
   <string name="result_tel">Found phone number</string>
   <string name="result_text">Found plain text</string>
   <string name="result_uri">Found URL</string>
-  <string name="result_wifi">Found Wifi Configuration</string>
+  <string name="result_wifi">Found WLAN Configuration</string>
   <string name="sbc_name">Google Book Search</string>
   <string name="share_name">Share via barcode</string>
   <string name="title_about">Barcode Scanner v</string>
-  <string name="wa_name">Wifi Connection</string>
+  <string name="wa_name">WLAN Connection</string>
   <string name="wifi_changing_network">Changing Network</string>
   <string name="wifi_connected">Connected</string>
   <string name="wifi_creating_network">Creating Network</string>
