@@ -51,8 +51,8 @@ public final class ViewfinderView extends View {
   private final int laserColor;
   private final int resultPointColor;
   private int scannerAlpha;
-  private Collection<ResultPoint> possibleResultPoints;
-  private Collection<ResultPoint> lastPossibleResultPoints;
+  private volatile Collection<ResultPoint> possibleResultPoints;
+  private volatile Collection<ResultPoint> lastPossibleResultPoints;
 
   // This constructor is used when the class is built from an XML resource.
   public ViewfinderView(Context context, AttributeSet attrs) {

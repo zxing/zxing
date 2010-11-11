@@ -22,6 +22,7 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.Cursor;
 import android.net.Uri;
@@ -33,6 +34,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 import java.text.DateFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.ArrayList;
@@ -80,7 +82,13 @@ public final class HistoryManager {
   List<Result> getHistoryItems() {
     SQLiteOpenHelper helper = new DBHelper(activity);
     List<Result> items = new ArrayList<Result>();
-    SQLiteDatabase db = helper.getReadableDatabase();
+    SQLiteDatabase db;
+    try {
+      db = helper.getWritableDatabase();
+    } catch (SQLiteException sqle) {
+      Log.w(TAG, "Error while opening database", sqle);
+      return Collections.emptyList();
+    }
     Cursor cursor = null;
     try {
       cursor = db.query(DBHelper.TABLE_NAME,
@@ -135,7 +143,13 @@ public final class HistoryManager {
     }
 
     SQLiteOpenHelper helper = new DBHelper(activity);
-    SQLiteDatabase db = helper.getWritableDatabase();
+    SQLiteDatabase db;
+    try {
+      db = helper.getWritableDatabase();
+    } catch (SQLiteException sqle) {
+      Log.w(TAG, "Error while opening database", sqle);
+      return;
+    }
     try {
       // Insert
       ContentValues values = new ContentValues();
@@ -151,7 +165,13 @@ public final class HistoryManager {
 
   private void deletePrevious(String text) {
     SQLiteOpenHelper helper = new DBHelper(activity);
-    SQLiteDatabase db = helper.getWritableDatabase();
+    SQLiteDatabase db;
+    try {
+      db = helper.getWritableDatabase();
+    } catch (SQLiteException sqle) {
+      Log.w(TAG, "Error while opening database", sqle);
+      return;
+    }
     try {
       db.delete(DBHelper.TABLE_NAME, DBHelper.TEXT_COL + "=?", new String[] { text });
     } finally {
@@ -161,7 +181,13 @@ public final class HistoryManager {
 
   public void trimHistory() {
     SQLiteOpenHelper helper = new DBHelper(activity);
-    SQLiteDatabase db = helper.getWritableDatabase();
+    SQLiteDatabase db;
+    try {
+      db = helper.getWritableDatabase();
+    } catch (SQLiteException sqle) {
+      Log.w(TAG, "Error while opening database", sqle);
+      return;
+    }
     Cursor cursor = null;
     try {
       cursor = db.query(DBHelper.TABLE_NAME,
@@ -200,7 +226,13 @@ public final class HistoryManager {
   CharSequence buildHistory() {
     StringBuilder historyText = new StringBuilder(1000);
     SQLiteOpenHelper helper = new DBHelper(activity);
-    SQLiteDatabase db = helper.getReadableDatabase();
+    SQLiteDatabase db;
+    try {
+      db = helper.getWritableDatabase();
+    } catch (SQLiteException sqle) {
+      Log.w(TAG, "Error while opening database", sqle);
+      return "";
+    }
     Cursor cursor = null;
     try {
       cursor = db.query(DBHelper.TABLE_NAME,
@@ -258,7 +290,13 @@ public final class HistoryManager {
 
   void clearHistory() {
     SQLiteOpenHelper helper = new DBHelper(activity);
-    SQLiteDatabase db = helper.getWritableDatabase();
+    SQLiteDatabase db;
+    try {
+      db = helper.getWritableDatabase();
+    } catch (SQLiteException sqle) {
+      Log.w(TAG, "Error while opening database", sqle);
+      return;
+    }
     try {
       db.delete(DBHelper.TABLE_NAME, null, null);
     } finally {
