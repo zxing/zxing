@@ -179,11 +179,15 @@ public final class ShareActivity extends Activity {
     Bundle bundle = new Bundle();
     if (contactCursor != null && contactCursor.moveToFirst()) {
       int nameColumn = contactCursor.getColumnIndex(Contacts.PeopleColumns.NAME);
-      String name = contactCursor.getString(nameColumn);
+      if (nameColumn >= 0) {
+        String name = contactCursor.getString(nameColumn);
 
-      // Don't require a name to be present, this contact might be just a phone number.
-      if (name != null && name.length() > 0) {
-        bundle.putString(Contacts.Intents.Insert.NAME, massageContactData(name));
+        // Don't require a name to be present, this contact might be just a phone number.
+        if (name != null && name.length() > 0) {
+          bundle.putString(Contacts.Intents.Insert.NAME, massageContactData(name));
+        }
+      } else {
+        Log.w(TAG, "Unable to find column? " + Contacts.PeopleColumns.NAME);
       }
       contactCursor.close();
 

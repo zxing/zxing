@@ -50,23 +50,9 @@ final class LoadPackagesAsyncTask extends AsyncTask<List<String[]>,Void,List<Str
 
 
   private final AppPickerActivity activity;
-  private DialogInterface dialog;
 
   LoadPackagesAsyncTask(AppPickerActivity activity) {
     this.activity = activity;
-  }
-
-  @Override
-  protected synchronized void onPreExecute() {
-    dialog = ProgressDialog.show(activity, "", activity.getString(R.string.msg_loading_apps), true, true);
-  }
-
-  @Override
-  protected synchronized void onCancelled() {
-    if (dialog != null) {
-      dialog.dismiss();
-      dialog = null;
-    }
   }
 
   @Override
@@ -110,13 +96,8 @@ final class LoadPackagesAsyncTask extends AsyncTask<List<String[]>,Void,List<Str
     for (String[] result : results) {
       labels.add(result[0]);
     }
-    ListAdapter listAdapter = new ArrayAdapter<String>(
-        activity, android.R.layout.simple_list_item_1, labels);
+    ListAdapter listAdapter = new ArrayAdapter<String>(activity, android.R.layout.simple_list_item_1, labels);
     activity.setListAdapter(listAdapter);
-    if (dialog != null) {
-      dialog.dismiss();
-      dialog = null;
-    }
   }
 
   private static class ByFirstStringComparator implements Comparator<String[]>, Serializable {
