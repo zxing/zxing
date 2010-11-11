@@ -119,19 +119,23 @@ public final class ViewfinderView extends View {
         lastPossibleResultPoints = currentPossible;
         paint.setAlpha(OPAQUE);
         paint.setColor(resultPointColor);
-        for (ResultPoint point : currentPossible) {
-          canvas.drawCircle(frame.left + (int) (point.getX() * scaleX),
-                            frame.top + (int) (point.getY() * scaleY),
-                            6.0f, paint);
+        synchronized (currentPossible) {
+          for (ResultPoint point : currentPossible) {
+            canvas.drawCircle(frame.left + (int) (point.getX() * scaleX),
+                              frame.top + (int) (point.getY() * scaleY),
+                              6.0f, paint);
+          }
         }
       }
       if (currentLast != null) {
         paint.setAlpha(OPAQUE / 2);
         paint.setColor(resultPointColor);
-        for (ResultPoint point : currentLast) {
-          canvas.drawCircle(frame.left + (int) (point.getX() * scaleX),
-                            frame.top + (int) (point.getY() * scaleY),
-                            3.0f, paint);
+        synchronized (currentLast) {
+          for (ResultPoint point : currentLast) {
+            canvas.drawCircle(frame.left + (int) (point.getX() * scaleX),
+                              frame.top + (int) (point.getY() * scaleY),
+                              3.0f, paint);
+          }
         }
       }
 
@@ -157,7 +161,9 @@ public final class ViewfinderView extends View {
   }
 
   public void addPossibleResultPoint(ResultPoint point) {
-    possibleResultPoints.add(point);
+    synchronized (possibleResultPoints) {
+      possibleResultPoints.add(point);
+    }
   }
 
 }
