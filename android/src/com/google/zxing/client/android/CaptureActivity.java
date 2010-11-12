@@ -491,14 +491,10 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     contentsTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, scaledSize);
 
     TextView supplementTextView = (TextView) findViewById(R.id.contents_supplement_text_view);
-    if (supplementTextView != null) {
-      supplementTextView.setText("");
-      supplementTextView.setOnClickListener(null);
-      if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(PreferencesActivity.KEY_SUPPLEMENTAL, true)) {
-        SupplementalInfoRetriever.maybeInvokeRetrieval(supplementTextView, resultHandler.getResult(), handler, this);
-      }
-    } else {
-      Log.w(TAG, "Unable to find supplement text view?");
+    supplementTextView.setText("");
+    supplementTextView.setOnClickListener(null);
+    if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(PreferencesActivity.KEY_SUPPLEMENTAL, true)) {
+      SupplementalInfoRetriever.maybeInvokeRetrieval(supplementTextView, resultHandler.getResult(), handler, this);
     }
 
     int buttonCount = resultHandler.getButtonCount();

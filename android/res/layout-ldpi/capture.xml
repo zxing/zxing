@@ -154,14 +154,31 @@
           android:layout_width="fill_parent"
           android:layout_height="wrap_content">
 
-        <TextView android:id="@+id/contents_text_view"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:textColor="@color/result_text"
-                  android:textColorLink="@color/result_text"
-                  android:textSize="22sp"
-                  android:paddingLeft="12dip"
-                  android:autoLink="web"/>
+        <LinearLayout
+          android:orientation="vertical"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content">
+
+          <TextView android:id="@+id/contents_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/result_text"
+                    android:textColorLink="@color/result_text"
+                    android:textSize="22sp"
+                    android:paddingLeft="12dip"
+                    android:autoLink="web"/>
+
+          <TextView android:id="@+id/contents_supplement_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/result_text"
+                    android:textColorLink="@color/result_text"
+                    android:textSize="14sp"
+                    android:padding="24dip"
+                    android:autoLink="web"
+                    android:clickable="true"/>
+
+        </LinearLayout>
 
       </ScrollView>
 
