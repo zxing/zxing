@@ -27,7 +27,7 @@
   <string name="button_custom_product_search">Пользовательский поиск</string>
   <string name="button_dial">Набрать номер</string>
   <string name="button_done">Готово</string>
-  <string name="button_email">Отправить по эл. почте</string>
+  <string name="button_email">Отправить e-mail</string>
   <string name="button_get_directions">Проложить маршрут</string>
   <string name="button_google_shopper">Google Shopper</string>
   <string name="button_mms">Послать MMS</string>
@@ -36,16 +36,16 @@
   <string name="button_product_search">Поиск товара</string>
   <string name="button_read_book">Открыть книгу</string>
   <string name="button_search_book_contents">Поиск содержания книги</string>
-  <string name="button_share_app">Поделиться программой</string>
-  <string name="button_share_bookmark">Поделиться закладкой</string>
+  <string name="button_share_app">Программа</string>
+  <string name="button_share_bookmark">Закладка</string>
   <string name="button_share_by_email">Поделиться через эл. почту</string>
   <string name="button_share_by_sms">Поделиться через SMS</string>
   <string name="button_share_clipboard">Буфер обмена</string>
-  <string name="button_share_contact">Отправить контакт</string>
+  <string name="button_share_contact">Контакт</string>
   <string name="button_show_map">Показать карту</string>
   <string name="button_sms">Послать SMS</string>
-  <string name="button_web_search">Поиск в Вебе</string>
-  <string name="button_wifi">Подключения к сети</string>
+  <string name="button_web_search">Поиск в интернете</string>
+  <string name="button_wifi">Подключиться к сети</string>
   <string name="contents_contact">Контактная информация</string>
   <string name="contents_email">Адрес эл. почты</string>
   <string name="contents_location">Географические координаты</string>
@@ -53,7 +53,7 @@
   <string name="contents_sms">Адрес для SMS</string>
   <string name="contents_text">Текст</string>
   <string name="history_clear_text">Очистить историю</string>
-  <string name="history_email_title">Сканер штрих-кодов: История</string>
+  <string name="history_email_title">История сканирования</string>
   <string name="history_send">Отправить историю</string>
   <string name="history_title">История</string>
   <string name="menu_about">О программе</string>
@@ -63,7 +63,7 @@
   <string name="menu_share">Поделиться</string>
   <string name="msg_about">Основано на свободной библиотеке штрих-кодов ZXing</string>
   <string name="msg_buggy">Это устройство имеет известные ошибки при сканировании штрих-кода. Для получения более подробной информации, посетите http://code.google.com/p/zxing/wiki/FrequentlyAskedQuestions</string>
-  <string name="msg_bulk_mode_scanned">Массовая режим: сохранять историю сканирования</string>
+  <string name="msg_bulk_mode_scanned">Массовый режим: сохранять историю сканирования</string>
   <string name="msg_camera_framework_bug">К сожалению, возникла ошибка камеры. Вам может потребоваться перезагрузка устройства.</string>
   <string name="msg_default_contents">Содержание</string>
   <string name="msg_default_format">Формат</string>
@@ -73,15 +73,15 @@
   <string name="msg_default_time">Время</string>
   <string name="msg_default_type">Тип</string>
   <string name="msg_encode_barcode_failed">Не получилось сгенерировать запрошенный штрих-код.</string>
-  <string name="msg_encode_contents_failed">Невозможно закодировать штрих-код от источника данных.</string>
+  <string name="msg_encode_contents_failed">Невозможно создать штрих-код из текущих данных.</string>
   <string name="msg_google_shopper_missing">Проложение "Google Shopper" не установлено</string>
-  <string name="msg_install_google_shopper">Приложение "Google Shopper" объединяет сканирование штрих-кодов с поиском товаров, цен, отзывам и т.д., не открывая браузер. Хотите попробовать?</string>
-  <string name="msg_intent_failed">К сожалению, запрошенное приложение не может быть запущенно. Содержимое штрих-кода может быть повреждено.</string>
-  <string name="msg_loading_apps">Загружаю список программ</string>
+  <string name="msg_install_google_shopper">Приложение "Google Shopper" объединяет сканирование штрих-кодов с online-поиском товаров, цен, отзывов и т.д., не открывая браузер. Хотите попробовать?</string>
+  <string name="msg_intent_failed">К сожалению, запрошенное приложение не может быть запущенно. Возможно, содержимое штрих-кода повреждено.</string>
+  <string name="msg_loading_apps">Загрузка списка приложений\u2026</string>
   <string name="msg_not_our_results">Вы покидаете это приложение. Результаты поиска, которые вы видите, не связанны с этим приложением.</string>
-  <string name="msg_redirect">Перенаправить</string>
+  <string name="msg_redirect">Переслать</string>
   <string name="msg_sbc_book_not_searchable">К сожалению, поиск книги не удался.</string>
-  <string name="msg_sbc_failed">К сожалению, у поиска возникли проблемы.</string>
+  <string name="msg_sbc_failed">К сожалению, возникла ошибка поиска.</string>
   <string name="msg_sbc_no_page_returned">Ни одна страница не возвращена.</string>
   <string name="msg_sbc_page">Страница</string>
   <string name="msg_sbc_searching_book">Поиск книги\u2026</string>
@@ -99,7 +99,7 @@
   <string name="preferences_decode_1D_title">Распознавать линейные штрих-коды</string>
   <string name="preferences_decode_Data_Matrix_title">Распознавать Data Matrix</string>
   <string name="preferences_decode_QR_title">Распознавать QR-коды</string>
-  <string name="preferences_front_light_summary">Включить фонарик (если доступно). Не работает на многих устройствах.</string>
+  <string name="preferences_front_light_summary">Улучшает распознавание в условиях низкой освещенности, но может вызвать блики. Работает не на всех устройствах.</string>
   <string name="preferences_front_light_title">Фонарик</string>
   <string name="preferences_general_title">Общие настройки</string>
   <string name="preferences_name">Настройки</string>
@@ -125,7 +125,7 @@
   <string name="sbc_name">Поиск книг Google</string>
   <string name="share_name">Поделиться штрих-кодом</string>
   <string name="title_about">Сканер штрих-кодов, версия </string>
-  <string name="wa_name">конфигурация сети</string>
+  <string name="wa_name">Подключение к сети</string>
   <string name="wifi_changing_network">Изменение сети</string>
   <string name="wifi_connect_failed">Подключение к сети не удалось</string>
   <string name="wifi_connected">Подключено</string>
@@ -137,3 +137,4 @@
   <string name="wifi_type_label">Тип</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>
+
