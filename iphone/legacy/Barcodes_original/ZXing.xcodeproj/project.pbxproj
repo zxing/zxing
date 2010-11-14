@@ -64,8 +64,6 @@
 		1F513C0711B4E19800E217E3 /* GridSampler.h in Headers */ = {isa = PBXBuildFile; fileRef = 1F513B7A11B4E19800E217E3 /* GridSampler.h */; };
 		1F513C0811B4E19800E217E3 /* IllegalArgumentException.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F513B7B11B4E19800E217E3 /* IllegalArgumentException.cpp */; };
 		1F513C0911B4E19800E217E3 /* IllegalArgumentException.h in Headers */ = {isa = PBXBuildFile; fileRef = 1F513B7C11B4E19800E217E3 /* IllegalArgumentException.h */; };
-		1F513C0A11B4E19800E217E3 /* LocalBlockBinarizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F513B7D11B4E19800E217E3 /* LocalBlockBinarizer.cpp */; };
-		1F513C0B11B4E19800E217E3 /* LocalBlockBinarizer.h in Headers */ = {isa = PBXBuildFile; fileRef = 1F513B7E11B4E19800E217E3 /* LocalBlockBinarizer.h */; };
 		1F513C0C11B4E19800E217E3 /* PerspectiveTransform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F513B7F11B4E19800E217E3 /* PerspectiveTransform.cpp */; };
 		1F513C0D11B4E19800E217E3 /* PerspectiveTransform.h in Headers */ = {isa = PBXBuildFile; fileRef = 1F513B8011B4E19800E217E3 /* PerspectiveTransform.h */; };
 		1F513C0E11B4E19800E217E3 /* Point.h in Headers */ = {isa = PBXBuildFile; fileRef = 1F513B8111B4E19800E217E3 /* Point.h */; };
@@ -376,8 +374,6 @@
 		1F513B7A11B4E19800E217E3 /* GridSampler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GridSampler.h; sourceTree = "<group>"; };
 		1F513B7B11B4E19800E217E3 /* IllegalArgumentException.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IllegalArgumentException.cpp; sourceTree = "<group>"; };
 		1F513B7C11B4E19800E217E3 /* IllegalArgumentException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IllegalArgumentException.h; sourceTree = "<group>"; };
-		1F513B7D11B4E19800E217E3 /* LocalBlockBinarizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LocalBlockBinarizer.cpp; sourceTree = "<group>"; };
-		1F513B7E11B4E19800E217E3 /* LocalBlockBinarizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalBlockBinarizer.h; sourceTree = "<group>"; };
 		1F513B7F11B4E19800E217E3 /* PerspectiveTransform.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PerspectiveTransform.cpp; sourceTree = "<group>"; };
 		1F513B8011B4E19800E217E3 /* PerspectiveTransform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PerspectiveTransform.h; sourceTree = "<group>"; };
 		1F513B8111B4E19800E217E3 /* Point.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Point.h; sourceTree = "<group>"; };
@@ -964,8 +960,6 @@
 				1F513B7A11B4E19800E217E3 /* GridSampler.h */,
 				1F513B7B11B4E19800E217E3 /* IllegalArgumentException.cpp */,
 				1F513B7C11B4E19800E217E3 /* IllegalArgumentException.h */,
-				1F513B7D11B4E19800E217E3 /* LocalBlockBinarizer.cpp */,
-				1F513B7E11B4E19800E217E3 /* LocalBlockBinarizer.h */,
 				1F513B7F11B4E19800E217E3 /* PerspectiveTransform.cpp */,
 				1F513B8011B4E19800E217E3 /* PerspectiveTransform.h */,
 				1F513B8111B4E19800E217E3 /* Point.h */,
@@ -1655,7 +1649,6 @@
 				1F513C0511B4E19800E217E3 /* GlobalHistogramBinarizer.h in Headers */,
 				1F513C0711B4E19800E217E3 /* GridSampler.h in Headers */,
 				1F513C0911B4E19800E217E3 /* IllegalArgumentException.h in Headers */,
-				1F513C0B11B4E19800E217E3 /* LocalBlockBinarizer.h in Headers */,
 				1F513C0D11B4E19800E217E3 /* PerspectiveTransform.h in Headers */,
 				1F513C0E11B4E19800E217E3 /* Point.h in Headers */,
 				1F513C1011B4E19800E217E3 /* GF256.h in Headers */,
@@ -1798,6 +1791,7 @@
 			isa = PBXProject;
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "ZXing" */;
 			compatibilityVersion = "Xcode 3.1";
+			developmentRegion = English;
 			hasScannedForEncodings = 1;
 			knownRegions = (
 				English,
@@ -1943,7 +1937,6 @@
 				1F513C0411B4E19800E217E3 /* GlobalHistogramBinarizer.cpp in Sources */,
 				1F513C0611B4E19800E217E3 /* GridSampler.cpp in Sources */,
 				1F513C0811B4E19800E217E3 /* IllegalArgumentException.cpp in Sources */,
-				1F513C0A11B4E19800E217E3 /* LocalBlockBinarizer.cpp in Sources */,
 				1F513C0C11B4E19800E217E3 /* PerspectiveTransform.cpp in Sources */,
 				1F513C0F11B4E19800E217E3 /* GF256.cpp in Sources */,
 				1F513C1111B4E19800E217E3 /* GF256Poly.cpp in Sources */,
@@ -2676,7 +2669,7 @@
 				HEADER_SEARCH_PATHS = ../../cpp/core/src;
 				ONLY_ACTIVE_ARCH = YES;
 				PREBINDING = NO;
-				SDKROOT = iphoneos3.1.2;
+				SDKROOT = iphoneos4.2;
 			};
 			name = Debug;
 		};

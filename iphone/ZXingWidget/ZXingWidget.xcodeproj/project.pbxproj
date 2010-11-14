@@ -85,6 +85,8 @@
 		1F3DB0FE11C61080009C581B /* MultiFormatOneDReader.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1F3DB0F811C61080009C581B /* MultiFormatOneDReader.mm */; };
 		1F3DB0FF11C61080009C581B /* MultiFormatUPCEANReader.h in Headers */ = {isa = PBXBuildFile; fileRef = 1F3DB0F911C61080009C581B /* MultiFormatUPCEANReader.h */; };
 		1F3DB10011C61080009C581B /* MultiFormatUPCEANReader.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1F3DB0FA11C61080009C581B /* MultiFormatUPCEANReader.mm */; };
+		1FB4319F12901C76002D63E8 /* UniversalResultParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 1FB4319D12901C76002D63E8 /* UniversalResultParser.h */; };
+		1FB431A012901C76002D63E8 /* UniversalResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FB4319E12901C76002D63E8 /* UniversalResultParser.m */; };
 		3B72D96F12130EF6007CEF32 /* ResultPointCallback.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B72D96D12130EF6007CEF32 /* ResultPointCallback.cpp */; };
 		3B72D97012130EF6007CEF32 /* ResultPointCallback.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B72D96E12130EF6007CEF32 /* ResultPointCallback.h */; };
 		3B81AAC5120F07E40022E5D4 /* DecodeHints.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B81AAC3120F07E40022E5D4 /* DecodeHints.cpp */; };
@@ -312,6 +314,8 @@
 		1F3DB0F811C61080009C581B /* MultiFormatOneDReader.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MultiFormatOneDReader.mm; path = Classes/MultiFormatOneDReader.mm; sourceTree = "<group>"; };
 		1F3DB0F911C61080009C581B /* MultiFormatUPCEANReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MultiFormatUPCEANReader.h; path = Classes/MultiFormatUPCEANReader.h; sourceTree = "<group>"; };
 		1F3DB0FA11C61080009C581B /* MultiFormatUPCEANReader.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MultiFormatUPCEANReader.mm; path = Classes/MultiFormatUPCEANReader.mm; sourceTree = "<group>"; };
+		1FB4319D12901C76002D63E8 /* UniversalResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UniversalResultParser.h; path = Classes/resultParsers/UniversalResultParser.h; sourceTree = "<group>"; };
+		1FB4319E12901C76002D63E8 /* UniversalResultParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UniversalResultParser.m; path = Classes/resultParsers/UniversalResultParser.m; sourceTree = "<group>"; };
 		3B72D96D12130EF6007CEF32 /* ResultPointCallback.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ResultPointCallback.cpp; sourceTree = "<group>"; };
 		3B72D96E12130EF6007CEF32 /* ResultPointCallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ResultPointCallback.h; sourceTree = "<group>"; };
 		3B81AAC3120F07E40022E5D4 /* DecodeHints.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DecodeHints.cpp; sourceTree = "<group>"; };
@@ -780,6 +784,8 @@
 		E53459D4119876A5000CB77F /* ResultParsers */ = {
 			isa = PBXGroup;
 			children = (
+				1FB4319D12901C76002D63E8 /* UniversalResultParser.h */,
+				1FB4319E12901C76002D63E8 /* UniversalResultParser.m */,
 				1F027FFB11A7BF06006B06DE /* BookmarkDoCoMoResultParser.h */,
 				1F027FFC11A7BF06006B06DE /* BookmarkDoCoMoResultParser.m */,
 				1F027FFD11A7BF06006B06DE /* DoCoMoResultParser.h */,
@@ -979,6 +985,7 @@
 				3B81AACE120F08170022E5D4 /* HybridBinarizer.h in Headers */,
 				3B81AAF9120F0A7E0022E5D4 /* GreyscaleRotatedLuminanceSource.h in Headers */,
 				3B72D97012130EF6007CEF32 /* ResultPointCallback.h in Headers */,
+				1FB4319F12901C76002D63E8 /* UniversalResultParser.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1141,6 +1148,7 @@
 				3B81AACD120F08170022E5D4 /* HybridBinarizer.cpp in Sources */,
 				3B81AAF8120F0A7E0022E5D4 /* GreyscaleRotatedLuminanceSource.cpp in Sources */,
 				3B72D96F12130EF6007CEF32 /* ResultPointCallback.cpp in Sources */,
+				1FB431A012901C76002D63E8 /* UniversalResultParser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
