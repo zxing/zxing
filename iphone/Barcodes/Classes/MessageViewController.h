@@ -22,20 +22,21 @@
 #import <UIKit/UIKit.h>
 
 @interface MessageViewController : UIViewController <UIWebViewDelegate> {
-  id callbackTarget;
-  SEL callbackSelectorSuccess;
-  SEL callbackSelectorFailure;
+//  id callbackTarget;
+//  SEL callbackSelectorSuccess;
+//  SEL callbackSelectorFailure;
   NSURL *contentURL;
+  IBOutlet UIWebView *webView;
 }
 
-@property (nonatomic, retain) id callbackTarget;
-@property (nonatomic, assign) SEL callbackSelectorSuccess;
-@property (nonatomic, assign) SEL callbackSelectorFailure;
+//@property (nonatomic, retain) id callbackTarget;
+//@property (nonatomic, assign) SEL callbackSelectorSuccess;
+//@property (nonatomic, assign) SEL callbackSelectorFailure;
 
-@property (nonatomic, readonly) UIWebView *webView;
+@property (nonatomic,retain) IBOutlet UIWebView *webView;
 
 @property (nonatomic, retain) NSURL *contentURL;
 
-- (id)initWithMessageFilename:(NSString *)filename target:(id)cbt onSuccess:(SEL)ss onFailure:(SEL)fs;
+- (id)initWithMessageFilename:(NSString *)filename;
 
 @end

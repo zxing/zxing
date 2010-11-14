@@ -24,23 +24,18 @@
 
 @implementation MessageViewController
 
-@synthesize callbackTarget;
-@synthesize callbackSelectorSuccess;
-@synthesize callbackSelectorFailure;
+//@synthesize callbackTarget;
+//@synthesize callbackSelectorSuccess;
+//@synthesize callbackSelectorFailure;
 @synthesize contentURL;
+@synthesize webView;
 
-- (UIWebView *)webView {
-  return (UIWebView *)self.view;
-}
+//- (UIWebView *)webView {
+//  return (UIWebView *)self.view;
+//}
 
-- (id)initWithMessageFilename:(NSString *)filename 
-                       target:(id)cbt
-                    onSuccess:(SEL)ss 
-                    onFailure:(SEL)fs  {
+- (id)initWithMessageFilename:(NSString *)filename {
 	if ((self = [super initWithNibName:@"Message" bundle:nil])) {
-    self.callbackTarget = cbt;
-    self.callbackSelectorSuccess = ss;
-    self.callbackSelectorFailure = fs;
     self.contentURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:filename 
                                                                              ofType:@"html"]];
 	}
@@ -70,6 +65,7 @@
 
 
 - (void)dealloc {
+  [webView release];
 	[super dealloc];
 }
 
@@ -89,19 +85,17 @@
   } else {
     // any other url:s are handed off to the system
     NSURL *url = [[request URL] retain];
-    [self performSelectorOnMainThread:@selector(openURL:) withObject:url waitUntilDone:false];
-    return false;
+    [self performSelectorOnMainThread:@selector(openURL:) withObject:url waitUntilDone:NO];
+    return NO;
   }
 }
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
   NSLog(@"failed to load content, performing failure callback");
-  [self.callbackTarget performSelector:self.callbackSelectorFailure withObject:self afterDelay:0.0];
 }
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
   NSLog(@"finished loading content, performing success callback");
-  [self.callbackTarget performSelector:self.callbackSelectorSuccess withObject:self afterDelay:0.0];
 }
 
 

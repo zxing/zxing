@@ -11,6 +11,7 @@
 #import <UniversalResultParser.h>
 #import <ParsedResult.h>
 #import <ResultAction.h>
+#import "MessageViewController.h"
 
 @implementation ZXMainViewController
 @synthesize resultParser;
@@ -61,8 +62,26 @@
   [widController release];
 }
 
-- (IBAction) info:(id)sender {
-  
+- (void) messageReady:(id)sender {
+  MessageViewController *messageController = sender;
+  [self presentModalViewController:messageController animated:YES];
+  [messageController release];
+}
+
+- (void) messageFailed:(id)sender {
+  MessageViewController *messageController = sender;
+  NSLog(@"Failed to load message!");
+  [messageController release];
+}
+
+- (IBAction)info:(id)sender {
+  MessageViewController *aboutController =
+  [[MessageViewController alloc] initWithMessageFilename:@"About"
+                                                 /* target:self
+                                               onSuccess:@selector(messageReady:)
+                                               onFailure:@selector(messageFailed:)*/];
+  [self presentModalViewController:aboutController animated:YES];
+  [aboutController release];
 }
 
 - (void)didReceiveMemoryWarning {
