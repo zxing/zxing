@@ -22,26 +22,27 @@ How to include ZXingWidget in a easy and clean way:
 	 application's target.  Under the "General" tab you will see a "Direct Dependencies" section. 
 	 Click the "+" button, select "ZXingWidget", and click "Add Target"
   
-  4. Finally, you need to tell your project where to find the ZXingWidget headers.  Open your
+  4. Headers search path 1: you need to tell your project where to find the ZXingWidget headers.  Open your
 	 "Project Settings" and go to the "Build" tab. Look for "Header Search Paths" and double-click
 	 it.  Add the relative path from your project's directory to the
-	 "zxing/iphone/ZXingWidget/Classes" directory. Make sure you click the checkbox "recursive path" !
-	
-	5. Import the following iOS frameworks: AVFoundation, AudioToolbox, CoreVideo, CoreMedia
- 
-  5. You're almost ready to go ..
-  
-  6. #import <ZXingWidgetController.h> from a file
-  
-  7. #import <QRCodeReader.h> for example because you will need to inject a barcode reader into ZXingWidgetController. 
+	 "zxing/iphone/ZXingWidget/Classes" directory. Make sure you click the checkbox "recursive path" ! 
+  5. Headers search path 2: You need to add zxing ccp headers to your headers search path, do this similarly as previous step to point the path to cpp/core/src/ where the 'zxing' directory is. You don't need to make this search path recursive so do not check the "recursive path" option
 
-  8. MAKE SURE the file in which you are using the code deader is a .mm because you are now silently including some c++ code. If you don't do so then
+	6. Import the following iOS frameworks: AVFoundation, AudioToolbox, CoreVideo, CoreMedia and libiconv
+ 
+  7. You're almost ready to go ..
+  
+  8. #import <ZXingWidgetController.h> from a file
+  
+  9. #import <QRCodeReader.h> for example because you will need to inject a barcode reader into ZXingWidgetController. 
+
+  10. MAKE SURE the file in which you are using the code deader is a .mm because you are now silently including some c++ code. If you don't do so then
      the compiler will cry as if it does not find some files !
 
-  9. It should work :)
+  11. It should work :)
   
 
-Know issues for above steps to include:
+Known issues for above steps to include:
 ======================================
   - It can happen that when trying to build your own project with ZXingWidgetController you get linker errors like 
     "undefined reference to". If this error looks like a c++ undefined reference, then renaming main.m into main.mm (Objective-C++ source suffix)
