@@ -22,6 +22,8 @@
 @property (nonatomic,assign) ParsedResult *result;
 
 - (IBAction)scan:(id)sender;
+- (IBAction)info:(id)sender;
+
 - (void)zxingController:(ZXingWidgetController*)controller didScanResult:(NSString *)result;
 - (void)zxingControllerDidCancel:(ZXingWidgetController*)controller;
 - (void)performResultAction;
