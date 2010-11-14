@@ -1,0 +1,141 @@
+﻿/* Add Contact? */
+"AddContactAction alert message" = "Kontaktinfo speichern?";
+
+/* Cancel */
+"AddContactAction cancel button title" = "Abbrechen";
+
+/* Add Contact */
+"AddContactAction confirm button title" = "Kontaktinfo speichern";
+
+/* Add Contact */
+"AddContactAction title" = "Kontaktinfo speichern";
+
+/* Call %@ */
+"CallAction action title" = "%@ Anrufen";
+
+/* Call */
+"CallAction alert button title" = "Anrufen";
+
+/* Call %@? */
+"CallAction alert message" = "%@ Anrufen?";
+
+/* Call */
+"CallAction alert title" = "Anrufen";
+
+/* Compose */
+"SMSAction alert title" = "Schreiben";
+
+/* Contact */
+"Contact Result Type Name" = "Kontakt";
+
+/* No barcode detected. */
+"Decoder BarcodeDetectionFailure" = "Kein Strichcode gefunden.";
+
+/* Decoding ... */
+"Decoder MessageWhileDecoding" = "Dekodiert ...";
+
+/* ZXing */
+"DecoderViewController AppTitle" = "Strichcodes";
+
+/* Cancel */
+"DecoderViewController cancel button title" = "Abbrechen";
+
+/* About */
+"DecoderViewController about button title" = "Info";
+
+/* Hints */
+"DecoderViewController Hints MessageViewController title" = "Tips";
+
+/* About */
+"DecoderViewController About MessageViewController title" = "Info";
+
+/* Decoding image (%.0fx%.0f) ... */
+"DecoderViewController MessageWhileDecodingWithDimensions" = "Dekodiert Bild (%.0fx%.0f) ...";
+
+/* Please take or choose a picture containing a barcode */
+"DecoderViewController take or choose picture" = "Bitte nehmen oder wählen Sie ein Bild mit Strichcode";
+
+/* Email %@ */
+"EmailAction action title" = "Email an %@";
+
+/* Compose */
+"EmailAction alert button title" = "Schreiben";
+
+/* Compose Email to %@? */
+"EmailAction alert message" = "Email an %@ schreiben?";
+
+/* Compose Email */
+"EmailAction alert title" = "Email schreiben";
+
+/* %@ */
+"EmailParsedResult Display: Body" = "%@";
+
+/* To: %@ */
+"EmailParsedResult Display: Recipient" = "An: %@";
+
+/* Subject: %@ */
+"EmailParsedResult Display: Subject" = "Betreff: %@";
+
+/* Email */
+"EmailParsedResult type name" = "Email";
+
+/* Geo: %@ */
+"GeoParsedResult display" = "Geo: %@";
+
+/* Geolocation */
+"GeoParsedResult type name" = "Platz";
+
+/* Open URL */
+"OpenURLAction action title" = "Link öffnen";
+
+/* Open */
+"OpenURLAction alert button title" = "Öffnen";
+
+/* Open URL <%@>? */
+"OpenURLAction alert message" = "Link <%@> öffnen?";
+
+/* Open URL */
+"OpenURLAction alert title" = "Link öffnen";
+
+/* Cancel */
+"OpenURLAction cancel button title" = "Abbrechen";
+
+/* Scan Archive */
+"ScanArchiveTitle" = "Scan Archiv";
+
+/* Scan */
+"ScanViewController title" = "Scan";
+
+/* Show on Map */
+"ShowMapAction action title" = "Auf der Karte zeigen";
+
+/* Show */
+"ShowMapAction alert button title" = "Zeigen";
+
+/* Show location %@ on Map ? */
+"ShowMapAction alert message" = "Platz %@ auf der Karte Zeigen?";
+
+/* Show on Map */
+"ShowMapAction alert title" = "Auf der Karte zeigen";
+
+/* Compose SMS to %@ */
+"SMSAction action title" = "SMS an %@ schreiben";
+
+/* Compose */
+"SMSAction alert button title" = "Schreiben";
+
+/* Compose SMS to %@? */
+"SMSAction alert message" = "SMS an %@ schreiben?";
+
+/* SMS */
+"SMSParsedResult type name" = "SMS";
+
+/* Tel */
+"TelParsedResult type name" = "Telefon";
+
+/* Text */
+"TextParsedResult type name" = "Text";
+
+/* URI */
+"URIParsedResult type name" = "Link";
+
