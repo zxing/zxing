@@ -107,6 +107,25 @@
 							<bytes key="NSWhite">MC41AA</bytes>
 						</object>
 					</object>
+					<object class="IBUIButton" id="528239131">
+						<reference key="NSNextResponder" ref="191373211"/>
+						<int key="NSvFlags">292</int>
+						<string key="NSFrame">{{96, 412}, {128, 28}}</string>
+						<reference key="NSSuperview" ref="191373211"/>
+						<bool key="IBUIOpaque">NO</bool>
+						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
+						<int key="IBUIContentHorizontalAlignment">0</int>
+						<int key="IBUIContentVerticalAlignment">0</int>
+						<reference key="IBUIFont" ref="50803580"/>
+						<int key="IBUIButtonType">1</int>
+						<string key="IBUINormalTitle">Archives</string>
+						<reference key="IBUIHighlightedTitleColor" ref="85817449"/>
+						<object class="NSColor" key="IBUINormalTitleColor">
+							<int key="NSColorSpace">1</int>
+							<bytes key="NSRGB">MC4xOTYwNzg0MzQ2IDAuMzA5ODAzOTMyOSAwLjUyMTU2ODY1NgA</bytes>
+						</object>
+						<reference key="IBUINormalTitleShadowColor" ref="931878472"/>
+					</object>
 					<object class="IBUIButton" id="171320148">
 						<reference key="NSNextResponder" ref="191373211"/>
 						<int key="NSvFlags">292</int>
@@ -166,6 +185,15 @@
 					</object>
 					<int key="connectionID">9</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchEventConnection" key="connection">
+						<string key="label">showArchive:</string>
+						<reference key="source" ref="528239131"/>
+						<reference key="destination" ref="372490531"/>
+						<int key="IBEventType">7</int>
+					</object>
+					<int key="connectionID">14</int>
+				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
@@ -182,9 +210,10 @@
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<reference ref="19193094"/>
-							<reference ref="1000547791"/>
-							<reference ref="1005126370"/>
 							<reference ref="171320148"/>
+							<reference ref="528239131"/>
+							<reference ref="1005126370"/>
+							<reference ref="1000547791"/>
 						</object>
 						<reference key="parent" ref="0"/>
 					</object>
@@ -205,8 +234,13 @@
 						<reference key="parent" ref="191373211"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">5</int>
-						<reference key="object" ref="1000547791"/>
+						<int key="objectID">8</int>
+						<reference key="object" ref="171320148"/>
+						<reference key="parent" ref="191373211"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">10</int>
+						<reference key="object" ref="528239131"/>
 						<reference key="parent" ref="191373211"/>
 					</object>
 					<object class="IBObjectRecord">
@@ -215,8 +249,8 @@
 						<reference key="parent" ref="191373211"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">8</int>
-						<reference key="object" ref="171320148"/>
+						<int key="objectID">5</int>
+						<reference key="object" ref="1000547791"/>
 						<reference key="parent" ref="191373211"/>
 					</object>
 				</object>
@@ -229,6 +263,8 @@
 					<string>-2.CustomClassName</string>
 					<string>1.IBEditorWindowLastContentRect</string>
 					<string>1.IBPluginDependency</string>
+					<string>10.IBPluginDependency</string>
+					<string>10.IBViewBoundsToFrameTransform</string>
 					<string>4.IBPluginDependency</string>
 					<string>4.IBViewBoundsToFrameTransform</string>
 					<string>5.IBPluginDependency</string>
@@ -242,19 +278,23 @@
 					<bool key="EncodedWithXMLCoder">YES</bool>
 					<string>ZXMainViewController</string>
 					<string>UIResponder</string>
-					<string>{{184, 249}, {320, 480}}</string>
+					<string>{{298, 248}, {320, 480}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
+					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
+					<object class="NSAffineTransform">
+						<bytes key="NSTransformStruct">AULAAABDzgAAA</bytes>
+					</object>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<object class="NSAffineTransform">
 						<bytes key="NSTransformStruct">P4AAAL+AAABCoAAAwzYAAA</bytes>
 					</object>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<object class="NSAffineTransform">
-						<bytes key="NSTransformStruct">P4AAAL+AAABCzAAAwgAAAA</bytes>
+						<bytes key="NSTransformStruct">AUKIAABB8AAAA</bytes>
 					</object>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<object class="NSAffineTransform">
-						<bytes key="NSTransformStruct">P4AAAL+AAABC+AAAw5CAAA</bytes>
+						<bytes key="NSTransformStruct">AULAAABDcAAAA</bytes>
 					</object>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<object class="NSAffineTransform">
@@ -278,7 +318,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">9</int>
+			<int key="maxID">14</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -292,9 +332,11 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>info:</string>
 							<string>scan:</string>
+							<string>showArchive:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 						</object>
@@ -305,6 +347,7 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>info:</string>
 							<string>scan:</string>
+							<string>showArchive:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
@@ -314,6 +357,10 @@
 							</object>
 							<object class="IBActionInfo">
 								<string key="name">scan:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">showArchive:</string>
 								<string key="candidateClassName">id</string>
 							</object>
 						</object>

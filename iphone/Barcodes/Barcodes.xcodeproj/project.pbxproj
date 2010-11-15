@@ -33,6 +33,24 @@
 		1FB432881290295C002D63E8 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1FB4327F1290295C002D63E8 /* MainWindow.xib */; };
 		1FB432891290295C002D63E8 /* Message.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1FB432811290295C002D63E8 /* Message.xib */; };
 		1FB4352E12904F56002D63E8 /* MessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FB4352D12904F56002D63E8 /* MessageViewController.m */; };
+		1FB4365712918DA9002D63E8 /* ArchiveController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FB4365412918DA9002D63E8 /* ArchiveController.m */; };
+		1FB4365812918DA9002D63E8 /* Database.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FB4365612918DA9002D63E8 /* Database.m */; };
+		1FB4366512918E90002D63E8 /* business-card.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FB4365A12918E90002D63E8 /* business-card.png */; };
+		1FB4366612918E90002D63E8 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FB4365B12918E90002D63E8 /* Default.png */; };
+		1FB4366712918E90002D63E8 /* email.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FB4365C12918E90002D63E8 /* email.png */; };
+		1FB4366812918E90002D63E8 /* filmroll-2.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FB4365D12918E90002D63E8 /* filmroll-2.png */; };
+		1FB4366912918E90002D63E8 /* link1.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FB4365E12918E90002D63E8 /* link1.png */; };
+		1FB4366A12918E90002D63E8 /* link2.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FB4365F12918E90002D63E8 /* link2.png */; };
+		1FB4366B12918E90002D63E8 /* map-pin.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FB4366012918E90002D63E8 /* map-pin.png */; };
+		1FB4366C12918E90002D63E8 /* phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FB4366112918E90002D63E8 /* phone.png */; };
+		1FB4366D12918E90002D63E8 /* photolib.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FB4366212918E90002D63E8 /* photolib.png */; };
+		1FB4366E12918E90002D63E8 /* sms.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FB4366312918E90002D63E8 /* sms.png */; };
+		1FB4366F12918E90002D63E8 /* text.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FB4366412918E90002D63E8 /* text.png */; };
+		1FB4367512918F63002D63E8 /* Scan.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FB4367412918F63002D63E8 /* Scan.m */; };
+		1FB4367D12918FAF002D63E8 /* ScanCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FB4367C12918FAF002D63E8 /* ScanCell.m */; };
+		1FB4369612918FF0002D63E8 /* ScanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FB4369512918FF0002D63E8 /* ScanViewController.m */; };
+		1FB4369A12919014002D63E8 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1FB4369912919014002D63E8 /* libsqlite3.dylib */; };
+		1FB436DF129194E7002D63E8 /* scans.db in Resources */ = {isa = PBXBuildFile; fileRef = 1FB436DE129194E7002D63E8 /* scans.db */; };
 		288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765FC0DF74451002DB57D /* CoreGraphics.framework */; };
 		28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD733E0D9D9553002E5188 /* MainWindow.xib */; };
 /* End PBXBuildFile section */
@@ -98,6 +116,29 @@
 		1FB4329712902973002D63E8 /* sv */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = sv; path = sv.lproj/Message.xib; sourceTree = "<group>"; };
 		1FB4352C12904F56002D63E8 /* MessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageViewController.h; sourceTree = "<group>"; };
 		1FB4352D12904F56002D63E8 /* MessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageViewController.m; sourceTree = "<group>"; };
+		1FB4365312918DA9002D63E8 /* ArchiveController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArchiveController.h; sourceTree = "<group>"; };
+		1FB4365412918DA9002D63E8 /* ArchiveController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ArchiveController.m; sourceTree = "<group>"; };
+		1FB4365512918DA9002D63E8 /* Database.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Database.h; sourceTree = "<group>"; };
+		1FB4365612918DA9002D63E8 /* Database.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Database.m; sourceTree = "<group>"; };
+		1FB4365A12918E90002D63E8 /* business-card.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "business-card.png"; path = "images/business-card.png"; sourceTree = "<group>"; };
+		1FB4365B12918E90002D63E8 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = images/Default.png; sourceTree = "<group>"; };
+		1FB4365C12918E90002D63E8 /* email.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = email.png; path = images/email.png; sourceTree = "<group>"; };
+		1FB4365D12918E90002D63E8 /* filmroll-2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "filmroll-2.png"; path = "images/filmroll-2.png"; sourceTree = "<group>"; };
+		1FB4365E12918E90002D63E8 /* link1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = link1.png; path = images/link1.png; sourceTree = "<group>"; };
+		1FB4365F12918E90002D63E8 /* link2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = link2.png; path = images/link2.png; sourceTree = "<group>"; };
+		1FB4366012918E90002D63E8 /* map-pin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "map-pin.png"; path = "images/map-pin.png"; sourceTree = "<group>"; };
+		1FB4366112918E90002D63E8 /* phone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = phone.png; path = images/phone.png; sourceTree = "<group>"; };
+		1FB4366212918E90002D63E8 /* photolib.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = photolib.png; path = images/photolib.png; sourceTree = "<group>"; };
+		1FB4366312918E90002D63E8 /* sms.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = sms.png; path = images/sms.png; sourceTree = "<group>"; };
+		1FB4366412918E90002D63E8 /* text.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = text.png; path = images/text.png; sourceTree = "<group>"; };
+		1FB4367312918F63002D63E8 /* Scan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Scan.h; sourceTree = "<group>"; };
+		1FB4367412918F63002D63E8 /* Scan.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Scan.m; sourceTree = "<group>"; };
+		1FB4367B12918FAF002D63E8 /* ScanCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScanCell.h; sourceTree = "<group>"; };
+		1FB4367C12918FAF002D63E8 /* ScanCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScanCell.m; sourceTree = "<group>"; };
+		1FB4369412918FF0002D63E8 /* ScanViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScanViewController.h; sourceTree = "<group>"; };
+		1FB4369512918FF0002D63E8 /* ScanViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScanViewController.m; sourceTree = "<group>"; };
+		1FB4369912919014002D63E8 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		1FB436DE129194E7002D63E8 /* scans.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = scans.db; sourceTree = "<group>"; };
 		288765FC0DF74451002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		28AD733E0D9D9553002E5188 /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
@@ -121,6 +162,7 @@
 				1FB43100129008B9002D63E8 /* CoreMedia.framework in Frameworks */,
 				1FB431AB12901D7D002D63E8 /* AddressBook.framework in Frameworks */,
 				1FB431B112901D8C002D63E8 /* AddressBookUI.framework in Frameworks */,
+				1FB4369A12919014002D63E8 /* libsqlite3.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -130,6 +172,16 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				1FB4369412918FF0002D63E8 /* ScanViewController.h */,
+				1FB4369512918FF0002D63E8 /* ScanViewController.m */,
+				1FB4367B12918FAF002D63E8 /* ScanCell.h */,
+				1FB4367C12918FAF002D63E8 /* ScanCell.m */,
+				1FB4367312918F63002D63E8 /* Scan.h */,
+				1FB4367412918F63002D63E8 /* Scan.m */,
+				1FB4365312918DA9002D63E8 /* ArchiveController.h */,
+				1FB4365412918DA9002D63E8 /* ArchiveController.m */,
+				1FB4365512918DA9002D63E8 /* Database.h */,
+				1FB4365612918DA9002D63E8 /* Database.m */,
 				1FB4352C12904F56002D63E8 /* MessageViewController.h */,
 				1FB4352D12904F56002D63E8 /* MessageViewController.m */,
 				1D3623240D0F684500981E51 /* BarcodesAppDelegate.h */,
@@ -168,6 +220,17 @@
 		1FB4302D128FFF46002D63E8 /* images */ = {
 			isa = PBXGroup;
 			children = (
+				1FB4365A12918E90002D63E8 /* business-card.png */,
+				1FB4365B12918E90002D63E8 /* Default.png */,
+				1FB4365C12918E90002D63E8 /* email.png */,
+				1FB4365D12918E90002D63E8 /* filmroll-2.png */,
+				1FB4365E12918E90002D63E8 /* link1.png */,
+				1FB4365F12918E90002D63E8 /* link2.png */,
+				1FB4366012918E90002D63E8 /* map-pin.png */,
+				1FB4366112918E90002D63E8 /* phone.png */,
+				1FB4366212918E90002D63E8 /* photolib.png */,
+				1FB4366312918E90002D63E8 /* sms.png */,
+				1FB4366412918E90002D63E8 /* text.png */,
 				1FB4303A129000B4002D63E8 /* ZxingLarge.png */,
 				1FB4302E128FFF56002D63E8 /* icon.png */,
 				1FB4302F128FFF56002D63E8 /* icon@2x.png */,
@@ -200,6 +263,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				1FB436DE129194E7002D63E8 /* scans.db */,
 				1FB432751290295C002D63E8 /* About.html */,
 				1FB432771290295C002D63E8 /* DecoderView.xib */,
 				1FB432791290295C002D63E8 /* Hints.html */,
@@ -228,6 +292,7 @@
 				1FB430FF129008B9002D63E8 /* CoreMedia.framework */,
 				1FB431AA12901D7D002D63E8 /* AddressBook.framework */,
 				1FB431B012901D8C002D63E8 /* AddressBookUI.framework */,
+				1FB4369912919014002D63E8 /* libsqlite3.dylib */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -314,6 +379,18 @@
 				1FB432871290295C002D63E8 /* Localizable.strings in Resources */,
 				1FB432881290295C002D63E8 /* MainWindow.xib in Resources */,
 				1FB432891290295C002D63E8 /* Message.xib in Resources */,
+				1FB4366512918E90002D63E8 /* business-card.png in Resources */,
+				1FB4366612918E90002D63E8 /* Default.png in Resources */,
+				1FB4366712918E90002D63E8 /* email.png in Resources */,
+				1FB4366812918E90002D63E8 /* filmroll-2.png in Resources */,
+				1FB4366912918E90002D63E8 /* link1.png in Resources */,
+				1FB4366A12918E90002D63E8 /* link2.png in Resources */,
+				1FB4366B12918E90002D63E8 /* map-pin.png in Resources */,
+				1FB4366C12918E90002D63E8 /* phone.png in Resources */,
+				1FB4366D12918E90002D63E8 /* photolib.png in Resources */,
+				1FB4366E12918E90002D63E8 /* sms.png in Resources */,
+				1FB4366F12918E90002D63E8 /* text.png in Resources */,
+				1FB436DF129194E7002D63E8 /* scans.db in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -328,6 +405,11 @@
 				1D3623260D0F684500981E51 /* BarcodesAppDelegate.m in Sources */,
 				1FB430371290002C002D63E8 /* ZXMainViewController.mm in Sources */,
 				1FB4352E12904F56002D63E8 /* MessageViewController.m in Sources */,
+				1FB4365712918DA9002D63E8 /* ArchiveController.m in Sources */,
+				1FB4365812918DA9002D63E8 /* Database.m in Sources */,
+				1FB4367512918F63002D63E8 /* Scan.m in Sources */,
+				1FB4367D12918FAF002D63E8 /* ScanCell.m in Sources */,
+				1FB4369612918FF0002D63E8 /* ScanViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

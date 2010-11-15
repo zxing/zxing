@@ -11,6 +11,8 @@
 #import <UniversalResultParser.h>
 #import <ParsedResult.h>
 #import <ResultAction.h>
+#import "ArchiveController.h"
+#import "Database.h"
 
 @implementation ZXMainViewController
 @synthesize resultParser;
@@ -84,6 +86,14 @@
   [aboutController release];
 }
 
+- (IBAction)showArchive:(id)sender {
+  ArchiveController *archiveController = [[ArchiveController alloc] init];
+  UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:archiveController];
+  [self presentModalViewController:navController animated:YES];
+  [navController release];
+  [archiveController release];
+}
+
 - (void)messageViewControllerWantsToBeDispissed:(MessageViewController *)controller {
   [self dismissModalViewControllerAnimated:YES];
 }
@@ -120,6 +130,7 @@
 #ifdef DEBUG
   NSLog(@"result has %d actions", actions ? 0 : actions.count);
 #endif
+  [[Database sharedDatabase] addScanWithText:resultString];
   [self performResultAction];
 }
 
