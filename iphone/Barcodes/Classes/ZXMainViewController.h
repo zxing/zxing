@@ -8,10 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import "ZXingWidgetController.h"
+#import "MessageViewController.h"
+
 @class UniversalResultParser;
 @class ParsedResult;
 
-@interface ZXMainViewController : UIViewController <ZXingDelegate,UIActionSheetDelegate> {
+
+@interface ZXMainViewController : UIViewController <ZXingDelegate,UIActionSheetDelegate,MessageViewControllerDelegate> {
   UniversalResultParser *resultParser;
   NSArray *actions;
   ParsedResult *result;

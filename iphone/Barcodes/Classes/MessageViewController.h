@@ -20,6 +20,11 @@
  */
 
 #import <UIKit/UIKit.h>
+@class MessageViewController;
+
+@protocol MessageViewControllerDelegate
+- (void)messageViewControllerWantsToBeDispissed:(MessageViewController *)controller;
+@end
 
 @interface MessageViewController : UIViewController <UIWebViewDelegate> {
 //  id callbackTarget;
@@ -27,6 +32,7 @@
 //  SEL callbackSelectorFailure;
   NSURL *contentURL;
   IBOutlet UIWebView *webView;
+  id<MessageViewControllerDelegate> delegate;
 }
 
 //@property (nonatomic, retain) id callbackTarget;
@@ -34,9 +40,10 @@
 //@property (nonatomic, assign) SEL callbackSelectorFailure;
 
 @property (nonatomic,retain) IBOutlet UIWebView *webView;
-
+@property (nonatomic,assign) id<MessageViewControllerDelegate> delegate;
 @property (nonatomic, retain) NSURL *contentURL;
 
 - (id)initWithMessageFilename:(NSString *)filename;
+- (IBAction)dismiss:(id)sender;
 
 @end

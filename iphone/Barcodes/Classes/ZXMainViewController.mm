@@ -11,7 +11,6 @@
 #import <UniversalResultParser.h>
 #import <ParsedResult.h>
 #import <ResultAction.h>
-#import "MessageViewController.h"
 
 @implementation ZXMainViewController
 @synthesize resultParser;
@@ -80,8 +79,13 @@
                                                  /* target:self
                                                onSuccess:@selector(messageReady:)
                                                onFailure:@selector(messageFailed:)*/];
+  aboutController.delegate = self;
   [self presentModalViewController:aboutController animated:YES];
   [aboutController release];
+}
+
+- (void)messageViewControllerWantsToBeDispissed:(MessageViewController *)controller {
+  [self dismissModalViewControllerAnimated:YES];
 }
 
 - (void)didReceiveMemoryWarning {
