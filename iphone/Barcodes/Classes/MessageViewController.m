@@ -29,6 +29,7 @@
 //@synthesize callbackSelectorFailure;
 @synthesize contentURL;
 @synthesize webView;
+@synthesize delegate;
 
 //- (UIWebView *)webView {
 //  return (UIWebView *)self.view;
@@ -40,6 +41,10 @@
                                                                              ofType:@"html"]];
 	}
 	return self;
+}
+
+- (IBAction)dismiss:(id)sender {
+  [delegate messageViewControllerWantsToBeDispissed:self];
 }
 
 - (void)loadView {
@@ -65,6 +70,7 @@
 
 
 - (void)dealloc {
+  delegate = nil;
   [webView release];
 	[super dealloc];
 }
