@@ -26,6 +26,7 @@
 
 - (IBAction)scan:(id)sender;
 - (IBAction)info:(id)sender;
+- (IBAction)showArchive:(id)sender;
 
 - (void)zxingController:(ZXingWidgetController*)controller didScanResult:(NSString *)result;
 - (void)zxingControllerDidCancel:(ZXingWidgetController*)controller;
