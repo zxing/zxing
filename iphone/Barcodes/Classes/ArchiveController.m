@@ -24,7 +24,6 @@
 #import "Scan.h"
 #import "ResultParser.h"
 #import "ParsedResult.h"
-//#import "DecoderViewController.h"
 #import "ScanViewController.h"
 #import "ScanCell.h"
 
@@ -32,7 +31,7 @@
 
 @synthesize scans;
 @synthesize results;
-//@synthesize decoderViewController;
+@synthesize delegate;
 @synthesize dateFormatter;
 
 - (id)init {
@@ -114,7 +113,7 @@
 - (void)dealloc {
   [scans release];
   [results release];
-  //[decoderViewController release];
+  delegate = nil;
   [dateFormatter release];
 	[super dealloc];
 }
@@ -124,16 +123,22 @@
 	[super viewDidLoad];
   self.title = NSLocalizedString(@"ScanArchiveTitle", @"Scan Archive");
   self.navigationItem.rightBarButtonItem = [self editButtonItem];
-}
-
-
-- (void)viewWillAppear:(BOOL)animated {
-	[super viewWillAppear:animated];
+  self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done:)] autorelease];
+  
   self.scans = [NSMutableArray arrayWithArray:[[Database sharedDatabase] scans]];
   self.results = [NSMutableArray arrayWithCapacity:self.scans.count];
   for (Scan *scan in scans) {
     [results addObject:[ResultParser parsedResultForString:scan.text]];
   }
+}
+
+-(void)done:(id)sender {
+  [delegate modalViewControllerWantsToBeDismissed:self];
+}
+
+
+- (void)viewWillAppear:(BOOL)animated {
+	[super viewWillAppear:animated];
 }
 
 - (void)viewDidAppear:(BOOL)animated {

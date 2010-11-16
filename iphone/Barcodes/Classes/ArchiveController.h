@@ -20,19 +20,18 @@
  */
 
 #import <UIKit/UIKit.h>
-
-//@class DecoderViewController;
+#import "ModalViewControllerDelegate.h"
 
 @interface ArchiveController : UITableViewController {
   NSMutableArray *scans;
   NSMutableArray *results;
-//  DecoderViewController *decoderViewController;
   NSDateFormatter *dateFormatter;
+  id<ModalViewControllerDelegate> delegate;
 }
 
 @property (nonatomic, retain) NSMutableArray *scans;
 @property (nonatomic, retain) NSMutableArray *results;
-//@property (nonatomic, retain) DecoderViewController *decoderViewController;
+@property (nonatomic, assign) id<ModalViewControllerDelegate> delegate;
 @property (nonatomic, retain) NSDateFormatter *dateFormatter;
 
 - (NSInteger)scanIndexForRow:(NSInteger)row;
