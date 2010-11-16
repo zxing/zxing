@@ -18,6 +18,7 @@
 @synthesize resultParser;
 @synthesize actions;
 @synthesize result;
+@synthesize resultView;
 
 // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
 /*
@@ -33,10 +34,14 @@
       
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
-    [super viewDidLoad];
- UniversalResultParser *parser = [[UniversalResultParser alloc] initWithDefaultParsers];
- self.resultParser = parser;
- [parser release];
+  [super viewDidLoad];
+  UniversalResultParser *parser = [[UniversalResultParser alloc] initWithDefaultParsers];
+  self.resultParser = parser;
+  [parser release];
+  NSString *lastResult = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastScan"];
+  if (!lastResult) lastResult = NSLocalizedString(@"MainViewLatestResultDefault",@"Last result will appear here once you have scanned a barcode at least once");
+  self.resultView.text = (NSString*)[[NSUserDefaults standardUserDefaults] objectForKey:@"lastScan"];
+    
 }
 
 
@@ -115,6 +120,7 @@
 
 - (void)dealloc {
   [resultParser release];
+  [resultView release];
   actions = nil;
   result = nil;
   [super dealloc];
@@ -131,7 +137,9 @@
 #ifdef DEBUG
   NSLog(@"result has %d actions", actions ? 0 : actions.count);
 #endif
+  self.resultView.text = resultString;
   [[Database sharedDatabase] addScanWithText:resultString];
+  [[NSUserDefaults standardUserDefaults] setObject:resultString forKey:@"lastScan"];
   [self performResultAction];
 }
 

@@ -11,6 +11,10 @@
 		1D60589B0D05DD56006BFB54 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.mm */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
+		1F91E0BF1292BAC9003A0BFD /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F91E0BE1292BAC9003A0BFD /* Default@2x.png */; };
+		1F91E0C11292BAD5003A0BFD /* LatestResultBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F91E0C01292BAD5003A0BFD /* LatestResultBackground.png */; };
+		1F91E0D71292CA8C003A0BFD /* LatestResultBackground@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F91E0D61292CA8C003A0BFD /* LatestResultBackground@2x.png */; };
+		1F91E0E31292D1DC003A0BFD /* clickHere.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F91E0E21292D1DC003A0BFD /* clickHere.png */; };
 		1FB4301D128FFDCF002D63E8 /* libZXingWidget.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1FB4301C128FFDCD002D63E8 /* libZXingWidget.a */; };
 		1FB43030128FFF56002D63E8 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FB4302E128FFF56002D63E8 /* icon.png */; };
 		1FB43031128FFF56002D63E8 /* icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FB4302F128FFF56002D63E8 /* icon@2x.png */; };
@@ -78,6 +82,10 @@
 		1D3623250D0F684500981E51 /* BarcodesAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BarcodesAppDelegate.m; sourceTree = "<group>"; };
 		1D6058910D05DD3D006BFB54 /* Barcodes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Barcodes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		1F91E0BE1292BAC9003A0BFD /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "images/Default@2x.png"; sourceTree = "<group>"; };
+		1F91E0C01292BAD5003A0BFD /* LatestResultBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = LatestResultBackground.png; path = images/LatestResultBackground.png; sourceTree = "<group>"; };
+		1F91E0D61292CA8C003A0BFD /* LatestResultBackground@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "LatestResultBackground@2x.png"; path = "images/LatestResultBackground@2x.png"; sourceTree = "<group>"; };
+		1F91E0E21292D1DC003A0BFD /* clickHere.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = clickHere.png; path = images/clickHere.png; sourceTree = "<group>"; };
 		1FB43017128FFDCD002D63E8 /* ZXingWidget.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ZXingWidget.xcodeproj; path = ../ZXingWidget/ZXingWidget.xcodeproj; sourceTree = SOURCE_ROOT; };
 		1FB4302E128FFF56002D63E8 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon.png; path = images/icon.png; sourceTree = "<group>"; };
 		1FB4302F128FFF56002D63E8 /* icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icon@2x.png"; path = "images/icon@2x.png"; sourceTree = "<group>"; };
@@ -222,6 +230,10 @@
 		1FB4302D128FFF46002D63E8 /* images */ = {
 			isa = PBXGroup;
 			children = (
+				1F91E0E21292D1DC003A0BFD /* clickHere.png */,
+				1F91E0D61292CA8C003A0BFD /* LatestResultBackground@2x.png */,
+				1F91E0C01292BAD5003A0BFD /* LatestResultBackground.png */,
+				1F91E0BE1292BAC9003A0BFD /* Default@2x.png */,
 				1FB4365A12918E90002D63E8 /* business-card.png */,
 				1FB4365B12918E90002D63E8 /* Default.png */,
 				1FB4365C12918E90002D63E8 /* email.png */,
@@ -393,6 +405,10 @@
 				1FB4366E12918E90002D63E8 /* sms.png in Resources */,
 				1FB4366F12918E90002D63E8 /* text.png in Resources */,
 				1FB436DF129194E7002D63E8 /* scans.db in Resources */,
+				1F91E0BF1292BAC9003A0BFD /* Default@2x.png in Resources */,
+				1F91E0C11292BAD5003A0BFD /* LatestResultBackground.png in Resources */,
+				1F91E0D71292CA8C003A0BFD /* LatestResultBackground@2x.png in Resources */,
+				1F91E0E31292D1DC003A0BFD /* clickHere.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
