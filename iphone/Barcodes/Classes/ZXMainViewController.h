@@ -19,7 +19,6 @@
   UniversalResultParser *resultParser;
   NSArray *actions;
   ParsedResult *result;
-  IBOutlet UILabel *latestResultLabel;
   IBOutlet UITextView *resultView;
 }
 
@@ -27,7 +26,6 @@
 @property (nonatomic,assign) NSArray *actions;
 @property (nonatomic,assign) ParsedResult *result;
 @property (nonatomic,retain) IBOutlet UITextView *resultView;
-@property (nonatomic,retain) IBOutlet UILabel *latestResultLabel;
 
 - (IBAction)scan:(id)sender;
 - (IBAction)info:(id)sender;

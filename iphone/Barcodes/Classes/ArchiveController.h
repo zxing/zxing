@@ -3,6 +3,7 @@
 //  UIShowcase
 //
 //  Created by Christian Brunschen on 29/05/2008.
+//  Modified by Romain Pechayre on 16/11/2010
 /*
  * Copyright 2008 ZXing authors
  *
