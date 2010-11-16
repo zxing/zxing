@@ -88,13 +88,14 @@
 
 - (IBAction)showArchive:(id)sender {
   ArchiveController *archiveController = [[ArchiveController alloc] init];
+  archiveController.delegate = self;
   UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:archiveController];
   [self presentModalViewController:navController animated:YES];
   [navController release];
   [archiveController release];
 }
 
-- (void)messageViewControllerWantsToBeDispissed:(MessageViewController *)controller {
+- (void)modalViewControllerWantsToBeDismissed:(UIViewController *)controller {
   [self dismissModalViewControllerAnimated:YES];
 }
 

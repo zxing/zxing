@@ -20,11 +20,10 @@
  */
 
 #import <UIKit/UIKit.h>
+#import "ModalViewControllerDelegate.h"
 @class MessageViewController;
 
-@protocol MessageViewControllerDelegate
-- (void)messageViewControllerWantsToBeDispissed:(MessageViewController *)controller;
-@end
+
 
 @interface MessageViewController : UIViewController <UIWebViewDelegate> {
 //  id callbackTarget;
@@ -32,7 +31,7 @@
 //  SEL callbackSelectorFailure;
   NSURL *contentURL;
   IBOutlet UIWebView *webView;
-  id<MessageViewControllerDelegate> delegate;
+  id<ModalViewControllerDelegate> delegate;
 }
 
 //@property (nonatomic, retain) id callbackTarget;
@@ -40,7 +39,7 @@
 //@property (nonatomic, assign) SEL callbackSelectorFailure;
 
 @property (nonatomic,retain) IBOutlet UIWebView *webView;
-@property (nonatomic,assign) id<MessageViewControllerDelegate> delegate;
+@property (nonatomic,assign) id<ModalViewControllerDelegate> delegate;
 @property (nonatomic, retain) NSURL *contentURL;
 
 - (id)initWithMessageFilename:(NSString *)filename;

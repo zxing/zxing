@@ -44,7 +44,7 @@
 }
 
 - (IBAction)dismiss:(id)sender {
-  [delegate messageViewControllerWantsToBeDispissed:self];
+  [delegate modalViewControllerWantsToBeDismissed:self];
 }
 
 - (void)loadView {
