@@ -103,6 +103,7 @@
     textView.font = bodyFont;
     [textView setTag:TEXT_VIEW_TAG];
     textView.editable = NO;
+    textView.dataDetectorTypes = UIDataDetectorTypeAll;
     [textView setAutoresizingMask:(UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight)];
     [cell.contentView addSubview:textView];
     [textView release];
