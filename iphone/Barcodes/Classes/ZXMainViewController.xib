@@ -42,7 +42,7 @@
 				<int key="NSvFlags">274</int>
 				<object class="NSMutableArray" key="NSSubviews">
 					<bool key="EncodedWithXMLCoder">YES</bool>
-					<object class="IBUIImageView" id="259877061">
+					<object class="IBUIImageView" id="912006692">
 						<reference key="NSNextResponder" ref="191373211"/>
 						<int key="NSvFlags">292</int>
 						<string key="NSFrame">{{199, 42}, {120, 66}}</string>
@@ -70,7 +70,7 @@
 							<double key="NSSize">17</double>
 							<int key="NSfFlags">16</int>
 						</object>
-						<object class="NSColor" key="IBUITextColor" id="970884007">
+						<object class="NSColor" key="IBUITextColor" id="642293943">
 							<int key="NSColorSpace">1</int>
 							<bytes key="NSRGB">MCAwIDAAA</bytes>
 						</object>
@@ -128,7 +128,7 @@
 						</object>
 						<reference key="IBUINormalTitleShadowColor" ref="931878472"/>
 					</object>
-					<object class="IBUIImageView" id="661006721">
+					<object class="IBUIImageView" id="466572544">
 						<reference key="NSNextResponder" ref="191373211"/>
 						<int key="NSvFlags">292</int>
 						<string key="NSFrame">{{4, 258}, {311, 152}}</string>
@@ -140,7 +140,7 @@
 							<string key="NSResourceName">LatestResultBackground.png</string>
 						</object>
 					</object>
-					<object class="IBUILabel" id="648791840">
+					<object class="IBUILabel" id="38308048">
 						<reference key="NSNextResponder" ref="191373211"/>
 						<int key="NSvFlags">292</int>
 						<string key="NSFrame">{{20, 269}, {94, 18}}</string>
@@ -156,12 +156,12 @@
 							<double key="NSSize">14</double>
 							<int key="NSfFlags">16</int>
 						</object>
-						<reference key="IBUITextColor" ref="970884007"/>
+						<reference key="IBUITextColor" ref="642293943"/>
 						<reference key="IBUIHighlightedColor" ref="85817449"/>
 						<int key="IBUIBaselineAdjustment">1</int>
 						<float key="IBUIMinimumFontSize">10</float>
 					</object>
-					<object class="IBUITextView" id="690161044">
+					<object class="IBUITextView" id="132134303">
 						<reference key="NSNextResponder" ref="191373211"/>
 						<int key="NSvFlags">292</int>
 						<string key="NSFrame">{{19, 292}, {280, 95}}</string>
@@ -182,7 +182,7 @@
 						</object>
 						<int key="IBUIDataDetectorTypes">15</int>
 					</object>
-					<object class="IBUIButton" id="15337837">
+					<object class="IBUIButton" id="865902498">
 						<reference key="NSNextResponder" ref="191373211"/>
 						<int key="NSvFlags">292</int>
 						<string key="NSFrame">{{13, 414}, {150, 35}}</string>
@@ -195,7 +195,7 @@
 						<int key="IBUIButtonType">1</int>
 						<string key="IBUINormalTitle">View Full Archive</string>
 						<reference key="IBUIHighlightedTitleColor" ref="85817449"/>
-						<reference key="IBUINormalTitleColor" ref="970884007"/>
+						<reference key="IBUINormalTitleColor" ref="642293943"/>
 						<reference key="IBUINormalTitleShadowColor" ref="931878472"/>
 					</object>
 				</object>
@@ -241,7 +241,7 @@
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchEventConnection" key="connection">
 						<string key="label">showArchive:</string>
-						<reference key="source" ref="15337837"/>
+						<reference key="source" ref="865902498"/>
 						<reference key="destination" ref="372490531"/>
 						<int key="IBEventType">7</int>
 					</object>
@@ -251,7 +251,7 @@
 					<object class="IBCocoaTouchOutletConnection" key="connection">
 						<string key="label">resultView</string>
 						<reference key="source" ref="372490531"/>
-						<reference key="destination" ref="690161044"/>
+						<reference key="destination" ref="132134303"/>
 					</object>
 					<int key="connectionID">16</int>
 				</object>
@@ -271,13 +271,13 @@
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<reference ref="171320148"/>
-							<reference ref="648791840"/>
-							<reference ref="661006721"/>
-							<reference ref="690161044"/>
+							<reference ref="38308048"/>
+							<reference ref="466572544"/>
+							<reference ref="132134303"/>
 							<reference ref="1000547791"/>
 							<reference ref="1005126370"/>
-							<reference ref="259877061"/>
-							<reference ref="15337837"/>
+							<reference ref="912006692"/>
+							<reference ref="865902498"/>
 						</object>
 						<reference key="parent" ref="0"/>
 					</object>
@@ -299,7 +299,7 @@
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">10</int>
-						<reference key="object" ref="15337837"/>
+						<reference key="object" ref="865902498"/>
 						<reference key="parent" ref="191373211"/>
 					</object>
 					<object class="IBObjectRecord">
@@ -314,22 +314,22 @@
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">15</int>
-						<reference key="object" ref="690161044"/>
+						<reference key="object" ref="132134303"/>
 						<reference key="parent" ref="191373211"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">17</int>
-						<reference key="object" ref="648791840"/>
+						<reference key="object" ref="38308048"/>
 						<reference key="parent" ref="191373211"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">19</int>
-						<reference key="object" ref="661006721"/>
+						<reference key="object" ref="466572544"/>
 						<reference key="parent" ref="191373211"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">20</int>
-						<reference key="object" ref="259877061"/>
+						<reference key="object" ref="912006692"/>
 						<reference key="parent" ref="191373211"/>
 					</object>
 				</object>
@@ -459,35 +459,14 @@
 						</object>
 					</object>
 					<object class="NSMutableDictionary" key="outlets">
-						<bool key="EncodedWithXMLCoder">YES</bool>
-						<object class="NSArray" key="dict.sortedKeys">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>latestResultLabel</string>
-							<string>resultView</string>
-						</object>
-						<object class="NSMutableArray" key="dict.values">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>UILabel</string>
-							<string>UITextView</string>
-						</object>
+						<string key="NS.key.0">resultView</string>
+						<string key="NS.object.0">UITextView</string>
 					</object>
 					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
-						<bool key="EncodedWithXMLCoder">YES</bool>
-						<object class="NSArray" key="dict.sortedKeys">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>latestResultLabel</string>
-							<string>resultView</string>
-						</object>
-						<object class="NSMutableArray" key="dict.values">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<object class="IBToOneOutletInfo">
-								<string key="name">latestResultLabel</string>
-								<string key="candidateClassName">UILabel</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">resultView</string>
-								<string key="candidateClassName">UITextView</string>
-							</object>
+						<string key="NS.key.0">resultView</string>
+						<object class="IBToOneOutletInfo" key="NS.object.0">
+							<string key="name">resultView</string>
+							<string key="candidateClassName">UITextView</string>
 						</object>
 					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">

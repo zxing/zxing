@@ -15,6 +15,7 @@
 		1F91E0C11292BAD5003A0BFD /* LatestResultBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F91E0C01292BAD5003A0BFD /* LatestResultBackground.png */; };
 		1F91E0D71292CA8C003A0BFD /* LatestResultBackground@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F91E0D61292CA8C003A0BFD /* LatestResultBackground@2x.png */; };
 		1F91E0E31292D1DC003A0BFD /* clickHere.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F91E0E21292D1DC003A0BFD /* clickHere.png */; };
+		1F91E1081292E397003A0BFD /* ZxingLarge@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F91E1071292E397003A0BFD /* ZxingLarge@2x.png */; };
 		1FB4301D128FFDCF002D63E8 /* libZXingWidget.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1FB4301C128FFDCD002D63E8 /* libZXingWidget.a */; };
 		1FB43030128FFF56002D63E8 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FB4302E128FFF56002D63E8 /* icon.png */; };
 		1FB43031128FFF56002D63E8 /* icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FB4302F128FFF56002D63E8 /* icon@2x.png */; };
@@ -86,6 +87,7 @@
 		1F91E0C01292BAD5003A0BFD /* LatestResultBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = LatestResultBackground.png; path = images/LatestResultBackground.png; sourceTree = "<group>"; };
 		1F91E0D61292CA8C003A0BFD /* LatestResultBackground@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "LatestResultBackground@2x.png"; path = "images/LatestResultBackground@2x.png"; sourceTree = "<group>"; };
 		1F91E0E21292D1DC003A0BFD /* clickHere.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = clickHere.png; path = images/clickHere.png; sourceTree = "<group>"; };
+		1F91E1071292E397003A0BFD /* ZxingLarge@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ZxingLarge@2x.png"; path = "images/ZxingLarge@2x.png"; sourceTree = "<group>"; };
 		1FB43017128FFDCD002D63E8 /* ZXingWidget.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ZXingWidget.xcodeproj; path = ../ZXingWidget/ZXingWidget.xcodeproj; sourceTree = SOURCE_ROOT; };
 		1FB4302E128FFF56002D63E8 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon.png; path = images/icon.png; sourceTree = "<group>"; };
 		1FB4302F128FFF56002D63E8 /* icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icon@2x.png"; path = "images/icon@2x.png"; sourceTree = "<group>"; };
@@ -230,6 +232,7 @@
 		1FB4302D128FFF46002D63E8 /* images */ = {
 			isa = PBXGroup;
 			children = (
+				1F91E1071292E397003A0BFD /* ZxingLarge@2x.png */,
 				1F91E0E21292D1DC003A0BFD /* clickHere.png */,
 				1F91E0D61292CA8C003A0BFD /* LatestResultBackground@2x.png */,
 				1F91E0C01292BAD5003A0BFD /* LatestResultBackground.png */,
@@ -409,6 +412,7 @@
 				1F91E0C11292BAD5003A0BFD /* LatestResultBackground.png in Resources */,
 				1F91E0D71292CA8C003A0BFD /* LatestResultBackground@2x.png in Resources */,
 				1F91E0E31292D1DC003A0BFD /* clickHere.png in Resources */,
+				1F91E1081292E397003A0BFD /* ZxingLarge@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
