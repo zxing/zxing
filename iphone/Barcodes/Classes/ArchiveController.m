@@ -139,6 +139,11 @@
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
+  self.scans = [NSMutableArray arrayWithArray:[[Database sharedDatabase] scans]];
+  self.results = [NSMutableArray arrayWithCapacity:self.scans.count];
+  for (Scan *scan in scans) {
+    [results addObject:[ResultParser parsedResultForString:scan.text]];
+  }
 }
 
 - (void)viewDidAppear:(BOOL)animated {
