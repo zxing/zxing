@@ -361,7 +361,7 @@ public final class Code128Reader extends OneDReader {
                 break;
               case CODE_SHIFT:
                 isNextShifted = true;
-                codeSet = CODE_CODE_C;
+                codeSet = CODE_CODE_A;
                 break;
               case CODE_CODE_A:
                 codeSet = CODE_CODE_A;
@@ -405,17 +405,7 @@ public final class Code128Reader extends OneDReader {
 
       // Unshift back to another code set if we were shifted
       if (unshift) {
-        switch (codeSet) {
-          case CODE_CODE_A:
-            codeSet = CODE_CODE_C;
-            break;
-          case CODE_CODE_B:
-            codeSet = CODE_CODE_A;
-            break;
-          case CODE_CODE_C:
-            codeSet = CODE_CODE_B;
-            break;
-        }
+        codeSet = codeSet == CODE_CODE_A ? CODE_CODE_B : CODE_CODE_A;
       }
 
     }
