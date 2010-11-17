@@ -23,6 +23,7 @@
 #import "Scan.h"
 #import "ParsedResult.h"
 #import "ResultParser.h"
+#import "UniversalResultParser.h"
 
 static NSDateFormatter *_makeDateFormatter(NSDateFormatterStyle dateStyle,
                                            NSDateFormatterStyle timeStyle) {
@@ -146,7 +147,7 @@ static NSString *_timeString(NSDate *date) {
     [scan release];
     scan = newScan;
     [result release];
-    result = [[ResultParser parsedResultForString:[scan text]] retain];
+     result = [[UniversalResultParser parsedResultForString:[scan text]] retain];
 
     imageView.image = [result icon];
     textView.text = [result stringForDisplay];

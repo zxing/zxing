@@ -22,7 +22,7 @@
 #import "ArchiveController.h"
 #import "Database.h"
 #import "Scan.h"
-#import "ResultParser.h"
+#import "UniversalResultParser.h"
 #import "ParsedResult.h"
 #import "ScanViewController.h"
 #import "ScanCell.h"
@@ -128,7 +128,8 @@
   self.scans = [NSMutableArray arrayWithArray:[[Database sharedDatabase] scans]];
   self.results = [NSMutableArray arrayWithCapacity:self.scans.count];
   for (Scan *scan in scans) {
-    [results addObject:[ResultParser parsedResultForString:scan.text]];
+    ParsedResult *res = [UniversalResultParser parsedResultForString:scan.text];
+    [results addObject:res];
   }
 }
 
@@ -142,7 +143,7 @@
   self.scans = [NSMutableArray arrayWithArray:[[Database sharedDatabase] scans]];
   self.results = [NSMutableArray arrayWithCapacity:self.scans.count];
   for (Scan *scan in scans) {
-    [results addObject:[ResultParser parsedResultForString:scan.text]];
+    [results addObject:[UniversalResultParser parsedResultForString:scan.text]];
   }
 }
 
