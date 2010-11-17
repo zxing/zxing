@@ -15,7 +15,7 @@
 #import "Database.h"
 
 @implementation ZXMainViewController
-@synthesize resultParser;
+//@synthesize resultParser;
 @synthesize actions;
 @synthesize result;
 @synthesize resultView;
@@ -35,13 +35,12 @@
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
   [super viewDidLoad];
-  UniversalResultParser *parser = [[UniversalResultParser alloc] initWithDefaultParsers];
-  self.resultParser = parser;
-  [parser release];
-  NSString *lastResult = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastScan"];
-  if (!lastResult) lastResult = NSLocalizedString(@"MainViewLatestResultDefault",@"Last result will appear here once you have scanned a barcode at least once");
-  self.resultView.text = (NSString*)[[NSUserDefaults standardUserDefaults] objectForKey:@"lastScan"];
-    
+  //UniversalResultParser *parser = [[UniversalResultParser alloc] initWithDefaultParsers];
+  //self.resultParser = parser;
+//  [parser release];
+  NSString *rawLatestResult = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastScan"];
+  if (!rawLatestResult) rawLatestResult = NSLocalizedString(@"MainViewLatestResultDefault",@"Last result will appear here once you have scanned a barcode at least once");
+  [self setResultViewWithText:rawLatestResult];
 }
 
 
@@ -82,10 +81,7 @@
 
 - (IBAction)info:(id)sender {
   MessageViewController *aboutController =
-  [[MessageViewController alloc] initWithMessageFilename:@"About"
-                                                 /* target:self
-                                               onSuccess:@selector(messageReady:)
-                                               onFailure:@selector(messageFailed:)*/];
+  [[MessageViewController alloc] initWithMessageFilename:@"About"];
   aboutController.delegate = self;
   [self presentModalViewController:aboutController animated:YES];
   [aboutController release];
@@ -119,25 +115,30 @@
 
 
 - (void)dealloc {
-  [resultParser release];
   [resultView release];
   actions = nil;
   result = nil;
   [super dealloc];
 }
 
+
+- (void)setResultViewWithText:(NSString*)theResult {
+  ParsedResult *parsedResult = [[UniversalResultParser parsedResultForString:theResult] retain];
+  NSString *displayString = [parsedResult stringForDisplay];
+  self.resultView.text = displayString; 
+}
+
 #pragma mark -
 #pragma mark ZXingDelegateMethods
-
 - (void)zxingController:(ZXingWidgetController*)controller didScanResult:(NSString *)resultString {
   [self dismissModalViewControllerAnimated:YES];
-  ParsedResult *theResult = [self.resultParser resultForString:resultString];
+  ParsedResult *theResult = [UniversalResultParser parsedResultForString:resultString];
   self.result = [theResult retain];
   self.actions = [self.result.actions retain];
-#ifdef DEBUG
+#ifdef DEBUG  
   NSLog(@"result has %d actions", actions ? 0 : actions.count);
 #endif
-  self.resultView.text = resultString;
+  [self setResultViewWithText:resultString];
   [[Database sharedDatabase] addScanWithText:resultString];
   [[NSUserDefaults standardUserDefaults] setObject:resultString forKey:@"lastScan"];
   [self performResultAction];

@@ -16,13 +16,11 @@
 
 
 @interface ZXMainViewController : UIViewController <ZXingDelegate,UIActionSheetDelegate,ModalViewControllerDelegate> {
-  UniversalResultParser *resultParser;
   NSArray *actions;
   ParsedResult *result;
   IBOutlet UITextView *resultView;
 }
 
-@property (nonatomic,retain) UniversalResultParser *resultParser;
 @property (nonatomic,assign) NSArray *actions;
 @property (nonatomic,assign) ParsedResult *result;
 @property (nonatomic,retain) IBOutlet UITextView *resultView;
@@ -34,6 +32,8 @@
 - (void)zxingController:(ZXingWidgetController*)controller didScanResult:(NSString *)result;
 - (void)zxingControllerDidCancel:(ZXingWidgetController*)controller;
 - (void)performResultAction;
+- (void)setResultViewWithText:(NSString*)theResult;
+
 
 
 @end
