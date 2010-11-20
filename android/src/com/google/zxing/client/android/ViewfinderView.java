@@ -28,8 +28,9 @@ import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.View;
 
-import java.util.Collection;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * This view is overlaid on top of the camera preview. It adds the viewfinder rectangle and partial
@@ -40,8 +41,9 @@ import java.util.HashSet;
 public final class ViewfinderView extends View {
 
   private static final int[] SCANNER_ALPHA = {0, 64, 128, 192, 255, 192, 128, 64};
-  private static final long ANIMATION_DELAY = 100L;
-  private static final int OPAQUE = 0xFF;
+  private static final long ANIMATION_DELAY = 80L;
+  private static final int CURRENT_POINT_OPACITY = 0xA0;
+  private static final int MAX_RESULT_POINTS = 20;
 
   private final Paint paint;
   private Bitmap resultBitmap;
@@ -51,8 +53,8 @@ public final class ViewfinderView extends View {
   private final int laserColor;
   private final int resultPointColor;
   private int scannerAlpha;
-  private volatile Collection<ResultPoint> possibleResultPoints;
-  private volatile Collection<ResultPoint> lastPossibleResultPoints;
+  private final AtomicReference<List<ResultPoint>> possibleResultPoints;
+  private final AtomicReference<List<ResultPoint>> lastPossibleResultPoints;
 
   // This constructor is used when the class is built from an XML resource.
   public ViewfinderView(Context context, AttributeSet attrs) {
@@ -67,7 +69,9 @@ public final class ViewfinderView extends View {
     laserColor = resources.getColor(R.color.viewfinder_laser);
     resultPointColor = resources.getColor(R.color.possible_result_points);
     scannerAlpha = 0;
-    possibleResultPoints = new HashSet<ResultPoint>(5);
+    possibleResultPoints = new AtomicReference<List<ResultPoint>>();
+    lastPossibleResultPoints = new AtomicReference<List<ResultPoint>>();
+    possibleResultPoints.set(new ArrayList<ResultPoint>(5));
   }
 
   @Override
@@ -88,7 +92,7 @@ public final class ViewfinderView extends View {
 
     if (resultBitmap != null) {
       // Draw the opaque result bitmap over the scanning rectangle
-      paint.setAlpha(OPAQUE);
+      paint.setAlpha(CURRENT_POINT_OPACITY);
       canvas.drawBitmap(resultBitmap, null, frame, paint);
     } else {
 
@@ -110,32 +114,28 @@ public final class ViewfinderView extends View {
       float scaleX = frame.width() / (float) previewFrame.width();
       float scaleY = frame.height() / (float) previewFrame.height();
 
-      Collection<ResultPoint> currentPossible = possibleResultPoints;
-      Collection<ResultPoint> currentLast = lastPossibleResultPoints;
+      List<ResultPoint> currentPossible = possibleResultPoints.get();
+      List<ResultPoint> currentLast = lastPossibleResultPoints.get();
       if (currentPossible.isEmpty()) {
-        lastPossibleResultPoints = null;
+        lastPossibleResultPoints.set(null);
       } else {
-        possibleResultPoints = new HashSet<ResultPoint>(5);
-        lastPossibleResultPoints = currentPossible;
-        paint.setAlpha(OPAQUE);
+        possibleResultPoints.set(new ArrayList<ResultPoint>(5));
+        lastPossibleResultPoints.set(currentPossible);
+        paint.setAlpha(CURRENT_POINT_OPACITY);
         paint.setColor(resultPointColor);
-        synchronized (currentPossible) {
-          for (ResultPoint point : currentPossible) {
-            canvas.drawCircle(frame.left + (int) (point.getX() * scaleX),
-                              frame.top + (int) (point.getY() * scaleY),
-                              6.0f, paint);
-          }
+        for (ResultPoint point : currentPossible) {
+          canvas.drawCircle(frame.left + (int) (point.getX() * scaleX),
+                            frame.top + (int) (point.getY() * scaleY),
+                            6.0f, paint);
         }
       }
       if (currentLast != null) {
-        paint.setAlpha(OPAQUE / 2);
+        paint.setAlpha(CURRENT_POINT_OPACITY / 2);
         paint.setColor(resultPointColor);
-        synchronized (currentLast) {
-          for (ResultPoint point : currentLast) {
-            canvas.drawCircle(frame.left + (int) (point.getX() * scaleX),
-                              frame.top + (int) (point.getY() * scaleY),
-                              3.0f, paint);
-          }
+        for (ResultPoint point : currentLast) {
+          canvas.drawCircle(frame.left + (int) (point.getX() * scaleX),
+                            frame.top + (int) (point.getY() * scaleY),
+                            3.0f, paint);
         }
       }
 
@@ -161,8 +161,11 @@ public final class ViewfinderView extends View {
   }
 
   public void addPossibleResultPoint(ResultPoint point) {
-    synchronized (possibleResultPoints) {
-      possibleResultPoints.add(point);
+    List<ResultPoint> points = possibleResultPoints.get();
+    points.add(point);
+    if (points.size() > MAX_RESULT_POINTS) {
+      // trim it
+      points.subList(0, points.size() - MAX_RESULT_POINTS / 2).clear();
     }
   }
 
