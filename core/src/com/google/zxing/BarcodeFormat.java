@@ -35,6 +35,9 @@ public final class BarcodeFormat {
   /** Data Matrix 2D barcode format. */
   public static final BarcodeFormat DATA_MATRIX = new BarcodeFormat("DATA_MATRIX");
 
+  /** Aztec 2D barcode format. */
+  public static final BarcodeFormat AZTEC = new BarcodeFormat("AZTEC");
+  
   /** UPC-E 1D format. */
   public static final BarcodeFormat UPC_E = new BarcodeFormat("UPC_E");
 
