@@ -20,7 +20,7 @@ import com.google.zxing.ChecksumException;
 import com.google.zxing.FormatException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.DecoderResult;
-import com.google.zxing.common.reedsolomon.GF256;
+import com.google.zxing.common.reedsolomon.GenericGF;
 import com.google.zxing.common.reedsolomon.ReedSolomonDecoder;
 import com.google.zxing.common.reedsolomon.ReedSolomonException;
 
@@ -35,7 +35,7 @@ public final class Decoder {
   private final ReedSolomonDecoder rsDecoder;
 
   public Decoder() {
-    rsDecoder = new ReedSolomonDecoder(GF256.DATA_MATRIX_FIELD);
+    rsDecoder = new ReedSolomonDecoder(GenericGF.DATA_MATRIX_FIELD_256);
   }
 
   /**
