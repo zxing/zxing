@@ -10,11 +10,11 @@
 #import "ResultParser.h"
 
 @interface UniversalResultParser : ResultParser {
-  NSMutableArray *parsers;
+  //NSMutableArray *parsers;
 }
 
-@property(nonatomic,retain) NSMutableArray *parsers;
+//@property(nonatomic,retain) NSMutableArray *parsers;
 
-- (id) initWithDefaultParsers;
-- (ParsedResult *)resultForString:(NSString *)theString;
++ (void)initWithDefaultParsers;
++ (ParsedResult *)parsedResultForString:(NSString *)theString;
 @end

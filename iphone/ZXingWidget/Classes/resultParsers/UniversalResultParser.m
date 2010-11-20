@@ -20,17 +20,31 @@
 #import "TextResultParser.h"
 
 @implementation UniversalResultParser
-@synthesize parsers;
+static NSMutableArray *sTheResultParsers = nil;
+//@synthesize parsers;
 
-- (void)addParserClass:(Class)klass {
-  [self.parsers addObject:klass];           
+//static NSMutableSet *sResultParsers = nil;
++(void) load {
+  [self initWithDefaultParsers];
 }
 
-- (id) initWithDefaultParsers {
-  NSMutableArray *set = [[NSMutableArray alloc] initWithCapacity:11];
-  self.parsers = set;
-  [set release];
++ (void)addParserClass:(Class)klass {
+  [sTheResultParsers addObject:klass];           
+}
+
++ (void) initWithDefaultParsers {
+  // NSMutableArray *set = [[NSMutableArray alloc] initWithCapacity:11];
+  // self.parsers = set;
+  // [set release];
+  // 
   
+  NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+  @synchronized(self) {
+    if (!sTheResultParsers) {
+      sTheResultParsers = [[NSMutableArray alloc] init];
+    }
+  }
+  [pool release];
   [self addParserClass:[SMSResultParser class]];
   [self addParserClass:[TelResultParser class]];
   [self addParserClass:[SMSTOResultParser class]];
@@ -42,14 +56,13 @@
   [self addParserClass:[BookmarkDoCoMoResultParser class]];
   [self addParserClass:[GeoResultParser class]];
   [self addParserClass:[TextResultParser class]];
-  return self;
 }
 
-- (ParsedResult *)resultForString:(NSString *)s {
++ (ParsedResult *)parsedResultForString:(NSString *)s {
 #ifdef DEBUG
   NSLog(@"parsing result:\n<<<\n%@\n>>>\n", s);
 #endif
-  for (Class c in parsers) {
+  for (Class c in sTheResultParsers) {
 #ifdef DEBUG
     NSLog(@"trying %@", NSStringFromClass(c));
 #endif
@@ -66,7 +79,6 @@
 
 
 -(void)dealloc {
-  [parsers release];
   [super dealloc];
 }
 @end
