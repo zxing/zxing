@@ -16,6 +16,7 @@
 
 package com.google.zxing;
 
+import com.google.zxing.aztec.AztecReader;
 import com.google.zxing.datamatrix.DataMatrixReader;
 import com.google.zxing.oned.MultiFormatOneDReader;
 import com.google.zxing.pdf417.PDF417Reader;
@@ -115,6 +116,9 @@ public final class MultiFormatReader implements Reader {
       }
       if (formats.contains(BarcodeFormat.DATA_MATRIX)) {
         readers.addElement(new DataMatrixReader());
+      }
+      if (formats.contains(BarcodeFormat.AZTEC)) {
+        readers.addElement(new AztecReader());
       }
       if (formats.contains(BarcodeFormat.PDF417)) {
          readers.addElement(new PDF417Reader());
