@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 ZXing authors
+ * Copyright 2010 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,6 @@ import com.google.zxing.ResultMetadataType;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.ResultPointCallback;
 import com.google.zxing.common.DecoderResult;
-import com.google.zxing.common.DetectorResult;
 import com.google.zxing.aztec.decoder.Decoder;
 import com.google.zxing.aztec.detector.Detector;
 
@@ -41,8 +40,6 @@ import java.util.Hashtable;
  */
 public final class AztecReader implements Reader {
 
-  private static final ResultPoint[] NO_POINTS = new ResultPoint[0];
-
   /**
    * Locates and decodes a Data Matrix code in an image.
    *
@@ -51,28 +48,26 @@ public final class AztecReader implements Reader {
    * @throws FormatException if a Data Matrix code cannot be decoded
    * @throws ChecksumException if error correction fails
    */
-  public Result decode(BinaryBitmap image) throws NotFoundException, ChecksumException, FormatException {
+  public Result decode(BinaryBitmap image) throws NotFoundException, FormatException {
     return decode(image, null);
   }
 
   public Result decode(BinaryBitmap image, Hashtable hints)
-      throws NotFoundException, ChecksumException, FormatException {
-    DecoderResult decoderResult;
-    ResultPoint[] points;
+      throws NotFoundException, FormatException {
 
     AztecDetectorResult detectorResult = new Detector(image.getBlackMatrix()).detect();
-    points = detectorResult.getPoints();
+    ResultPoint[] points = detectorResult.getPoints();
 
-    if (hints != null && detectorResult.getPoints() != null){
-    	ResultPointCallback rpcb = (ResultPointCallback) hints.get(DecodeHintType.NEED_RESULT_POINT_CALLBACK);
-    	if (rpcb != null){
-    		for (int i = 0; i < detectorResult.getPoints().length; i++){
-    			rpcb.foundPossibleResultPoint(detectorResult.getPoints()[i]);
-    		}
-    	}
+    if (hints != null && detectorResult.getPoints() != null) {
+      ResultPointCallback rpcb = (ResultPointCallback) hints.get(DecodeHintType.NEED_RESULT_POINT_CALLBACK);
+      if (rpcb != null) {
+        for (int i = 0; i < detectorResult.getPoints().length; i++) {
+          rpcb.foundPossibleResultPoint(detectorResult.getPoints()[i]);
+        }
+      }
     }
-    
-    decoderResult = new Decoder().decode(detectorResult);
+
+    DecoderResult decoderResult = new Decoder().decode(detectorResult);
 
     Result result = new Result(decoderResult.getText(), decoderResult.getRawBytes(), points, BarcodeFormat.AZTEC);
     
