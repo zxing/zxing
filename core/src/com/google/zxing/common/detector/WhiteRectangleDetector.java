@@ -32,25 +32,25 @@ import com.google.zxing.common.BitMatrix;
  */
 public final class WhiteRectangleDetector {
 
-  private final int INIT_SIZE = 30;
-  private final int CORR = 1;
+  private static final int INIT_SIZE = 30;
+  private static final int CORR = 1;
 
   private final BitMatrix image;
   private final int height;
   private final int width;
-  private final int left_init;
-  private final int right_init;
-  private final int down_init;
-  private final int up_init;
+  private final int leftInit;
+  private final int rightInit;
+  private final int downInit;
+  private final int upInit;
   
   public WhiteRectangleDetector(BitMatrix image) {
     this.image = image;
     height = image.getHeight();
     width = image.getWidth();
-    left_init = (width - INIT_SIZE) >> 1;
-    right_init = (width + INIT_SIZE) >> 1;
-    up_init = (height - INIT_SIZE) >> 1;
-    down_init = (height + INIT_SIZE) >> 1;
+    leftInit = (width - INIT_SIZE) >> 1;
+    rightInit = (width + INIT_SIZE) >> 1;
+    upInit = (height - INIT_SIZE) >> 1;
+    downInit = (height + INIT_SIZE) >> 1;
   }
   
   public WhiteRectangleDetector(BitMatrix image, int INIT_SIZE, int x, int y) {
@@ -58,10 +58,10 @@ public final class WhiteRectangleDetector {
 	    height = image.getHeight();
 	    width = image.getWidth();
 	    int halfsize = INIT_SIZE >> 1;
-	    left_init = x - halfsize;
-	    right_init = x + halfsize;
-	    up_init = y - halfsize;
-	    down_init = y + halfsize;
+	    leftInit = x - halfsize;
+	    rightInit = x + halfsize;
+	    upInit = y - halfsize;
+	    downInit = y + halfsize;
   }
 
   /**
@@ -80,10 +80,10 @@ public final class WhiteRectangleDetector {
    */
   public ResultPoint[] detect() throws NotFoundException {
 
-    int left = left_init;
-    int right = right_init;
-    int up = up_init;
-    int down = down_init;
+    int left = leftInit;
+    int right = rightInit;
+    int up = upInit;
+    int down = downInit;
     boolean sizeExceeded = false;
     boolean aBlackPointFoundOnBorder = true;
     boolean atLeastOneBlackPointFoundOnBorder = false;

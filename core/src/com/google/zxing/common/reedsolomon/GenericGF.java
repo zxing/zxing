@@ -85,7 +85,9 @@ public final class GenericGF {
   }
   
   private void checkInit(){
-  	if (!initialized) initialize();
+  	if (!initialized) {
+      initialize();
+    }
   }
   
   GenericGFPoly getZero() {
