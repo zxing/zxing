@@ -264,6 +264,7 @@ final class DecodedBitStreamParser {
     boolean upperShift = false;
 
     int[] cValues = new int[3];
+    int shift = 0;
     do {
       // If there is only one byte left then it will be encoded as ASCII
       if (bits.available() == 8) {
@@ -276,7 +277,6 @@ final class DecodedBitStreamParser {
 
       parseTwoBytes(firstByte, bits.readBits(8), cValues);
 
-      int shift = 0;
       for (int i = 0; i < 3; i++) {
         int cValue = cValues[i];
         switch (shift) {
