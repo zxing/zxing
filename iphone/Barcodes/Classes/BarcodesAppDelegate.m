@@ -7,12 +7,13 @@
 //
 
 #import "BarcodesAppDelegate.h"
-#import "ZXMainViewController.h"
 
 @implementation BarcodesAppDelegate
 
 @synthesize window;
-@synthesize rootController;
+@synthesize navigationController;
+//@synthesize rootController;
+
 
 #pragma mark -
 #pragma mark Application lifecycle
@@ -20,8 +21,9 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {    
     
     // Override point for customization after application launch.
-  [self.window addSubview:rootController.view];
+  [self.window addSubview:navigationController.view];
   [self.window makeKeyAndVisible];
+  
   return YES;
 }
 
@@ -75,7 +77,7 @@
 
 
 - (void)dealloc {
-  [rootController release];
+  [navigationController release];
   [window release];
   [super dealloc];
 }

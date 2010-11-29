@@ -123,7 +123,7 @@
 	[super viewDidLoad];
   self.title = NSLocalizedString(@"ScanArchiveTitle", @"Scan Archive");
   self.navigationItem.rightBarButtonItem = [self editButtonItem];
-  self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Back",@"Back") style:UIBarButtonItemStyleDone target:self action:@selector(done:)] autorelease];
+  //self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Back",@"Back") style:UIBarButtonItemStyleDone target:self action:@selector(done:)] autorelease];
   
   self.scans = [NSMutableArray arrayWithArray:[[Database sharedDatabase] scans]];
   self.results = [NSMutableArray arrayWithCapacity:self.scans.count];
