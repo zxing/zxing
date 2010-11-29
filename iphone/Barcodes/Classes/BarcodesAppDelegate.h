@@ -7,15 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
-@class ZXMainViewController;
 
 @interface BarcodesAppDelegate : NSObject <UIApplicationDelegate> {
   UIWindow *window;
-  ZXMainViewController *rootController;
+  UINavigationController *navigationController;
   
 }
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;
-@property (nonatomic, retain) IBOutlet ZXMainViewController *rootController;
+@property (nonatomic, retain) IBOutlet UINavigationController *navigationController;
 @end
 

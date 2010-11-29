@@ -35,6 +35,7 @@
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
   [super viewDidLoad];
+  self.navigationItem.title = @"ZXing Barcodes Scanner";
   NSString *rawLatestResult = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastScan"];
   if (!rawLatestResult) rawLatestResult = NSLocalizedString(@"Latest result will appear here once you have scanned a barcode at least once",@"Latest result will appear here once you have scanned a barcode at least once");
   [self setResultViewWithText:rawLatestResult];
@@ -64,13 +65,14 @@
   [widController release];
 }
 
-- (void) messageReady:(id)sender {
+- (void)messageReady:(id)sender {
   MessageViewController *messageController = sender;
-  [self presentModalViewController:messageController animated:YES];
+  //[self presentModalViewController:messageController animated:YES];
+  [self.navigationController pushViewController:messageController animated:YES];
   [messageController release];
 }
 
-- (void) messageFailed:(id)sender {
+- (void)messageFailed:(id)sender {
   MessageViewController *messageController = sender;
   NSLog(@"Failed to load message!");
   [messageController release];
@@ -80,16 +82,14 @@
   MessageViewController *aboutController =
   [[MessageViewController alloc] initWithMessageFilename:@"About"];
   aboutController.delegate = self;
-  [self presentModalViewController:aboutController animated:YES];
+  [self.navigationController pushViewController:aboutController animated:YES];
   [aboutController release];
 }
 
 - (IBAction)showArchive:(id)sender {
   ArchiveController *archiveController = [[ArchiveController alloc] init];
   archiveController.delegate = self;
-  UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:archiveController];
-  [self presentModalViewController:navController animated:YES];
-  [navController release];
+  [self.navigationController pushViewController:archiveController animated:YES];
   [archiveController release];
 }
 
