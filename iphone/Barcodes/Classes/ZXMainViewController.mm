@@ -15,10 +15,10 @@
 #import "Database.h"
 
 @implementation ZXMainViewController
-//@synthesize resultParser;
 @synthesize actions;
 @synthesize result;
 @synthesize resultView;
+@synthesize lastActionButton;
 
 // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
 /*
@@ -35,12 +35,10 @@
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
   [super viewDidLoad];
-  //UniversalResultParser *parser = [[UniversalResultParser alloc] initWithDefaultParsers];
-  //self.resultParser = parser;
-//  [parser release];
   NSString *rawLatestResult = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastScan"];
   if (!rawLatestResult) rawLatestResult = NSLocalizedString(@"MainViewLatestResultDefault",@"Last result will appear here once you have scanned a barcode at least once");
   [self setResultViewWithText:rawLatestResult];
+  
 }
 
 
@@ -53,7 +51,6 @@
 */
 
 - (IBAction)scan:(id)sender {
-	
   ZXingWidgetController *widController = [[ZXingWidgetController alloc] initWithDelegate:self showCancel:YES OneDMode:NO];
   QRCodeReader* qrcodeReader = [[QRCodeReader alloc] init];
   NSSet *readers = [[NSSet alloc ] initWithObjects:qrcodeReader,nil];
@@ -96,49 +93,73 @@
   [archiveController release];
 }
 
+- (IBAction)lastResultAction:(id)sender {
+  [self performResultAction];
+}
+
+
+- (void)performAction:(ResultAction *)action {
+  [action performActionWithController:self shouldConfirm:NO];
+}
+
 - (void)modalViewControllerWantsToBeDismissed:(UIViewController *)controller {
   [self dismissModalViewControllerAnimated:YES];
 }
 
 - (void)didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-    
-    // Release any cached data, images, etc. that aren't in use.
+  // Releases the view if it doesn't have a superview.
+  [super didReceiveMemoryWarning];
+  // Release any cached data, images, etc. that aren't in use.
 }
 
 - (void)viewDidUnload {
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
+  [super viewDidUnload];
+  // Release any retained subviews of the main view.
+  // e.g. self.myOutlet = nil;
 }
 
 
 - (void)dealloc {
   [resultView release];
+  [lastActionButton release];
   actions = nil;
   result = nil;
   [super dealloc];
 }
 
-
 - (void)setResultViewWithText:(NSString*)theResult {
   ParsedResult *parsedResult = [[UniversalResultParser parsedResultForString:theResult] retain];
   NSString *displayString = [parsedResult stringForDisplay];
-  self.resultView.text = displayString; 
+  self.resultView.text = displayString;
+  self.result = [parsedResult retain];
+  self.actions = [[parsedResult actions] retain];
+  NSString *buttonTitle;
+  if ([self.actions count] == 1) {
+    ResultAction *theAction = [self.actions objectAtIndex:0];
+    buttonTitle = [theAction title];
+    lastActionButton.userInteractionEnabled = YES;
+  } else if ([self.actions count] == 0) {
+    lastActionButton.userInteractionEnabled = NO;
+    buttonTitle = @"No Actions";
+  } else {
+    
+    lastActionButton.userInteractionEnabled = YES;
+    buttonTitle = @"Actions ...";
+  }
+  [lastActionButton setTitle:buttonTitle forState: UIControlStateNormal];
 }
 
 #pragma mark -
 #pragma mark ZXingDelegateMethods
 - (void)zxingController:(ZXingWidgetController*)controller didScanResult:(NSString *)resultString {
   [self dismissModalViewControllerAnimated:YES];
-  ParsedResult *theResult = [UniversalResultParser parsedResultForString:resultString];
-  self.result = [theResult retain];
-  self.actions = [self.result.actions retain];
+  //ParsedResult *theResult = [UniversalResultParser parsedResultForString:resultString];
+  //self.result = [theResult retain];
+  //self.actions = [self.result.actions retain];
+  [self setResultViewWithText:resultString];
 #ifdef DEBUG  
   NSLog(@"result has %d actions", actions ? 0 : actions.count);
 #endif
-  [self setResultViewWithText:resultString];
   [[Database sharedDatabase] addScanWithText:resultString];
   [[NSUserDefaults standardUserDefaults] setObject:resultString forKey:@"lastScan"];
   [self performResultAction];
