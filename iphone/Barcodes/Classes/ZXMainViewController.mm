@@ -36,7 +36,7 @@
 - (void)viewDidLoad {
   [super viewDidLoad];
   NSString *rawLatestResult = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastScan"];
-  if (!rawLatestResult) rawLatestResult = NSLocalizedString(@"MainViewLatestResultDefault",@"Last result will appear here once you have scanned a barcode at least once");
+  if (!rawLatestResult) rawLatestResult = NSLocalizedString(@"Latest result will appear here once you have scanned a barcode at least once",@"Latest result will appear here once you have scanned a barcode at least once");
   [self setResultViewWithText:rawLatestResult];
   
 }
@@ -140,11 +140,11 @@
     lastActionButton.userInteractionEnabled = YES;
   } else if ([self.actions count] == 0) {
     lastActionButton.userInteractionEnabled = NO;
-    buttonTitle = @"No Actions";
+    buttonTitle = NSLocalizedString(@"No Actions",@"No Actions");
   } else {
     
     lastActionButton.userInteractionEnabled = YES;
-    buttonTitle = @"Actions ...";
+    buttonTitle = NSLocalizedString(@"Actions ...",@"Actions ...");
   }
   [lastActionButton setTitle:buttonTitle forState: UIControlStateNormal];
 }
