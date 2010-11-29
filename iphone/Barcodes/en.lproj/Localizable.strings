@@ -139,3 +139,15 @@
 /* URI */
 "URIParsedResult type name" = "URI";
 
+/*Latest result will appear here once you have scanned a barcode at least once*/
+
+"Latest result will appear here once you have scanned a barcode at least once" = "Latest result will appear here once you have scanned a barcode at least once";
+
+/*Back*/
+"Back" = "Back";
+
+/*Button title when no action is available for latest results*/
+"No Actions" = "No Actions";
+
+/*Button title when multiple actions are available*/
+"Actions ..." = "Actions ...";
