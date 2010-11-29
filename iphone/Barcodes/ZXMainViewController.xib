@@ -288,13 +288,13 @@
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<reference ref="171320148"/>
-							<reference ref="38308048"/>
-							<reference ref="132134303"/>
 							<reference ref="1005126370"/>
-							<reference ref="912006692"/>
 							<reference ref="865902498"/>
+							<reference ref="38308048"/>
 							<reference ref="466572544"/>
+							<reference ref="132134303"/>
 							<reference ref="1000912642"/>
+							<reference ref="912006692"/>
 						</object>
 						<reference key="parent" ref="0"/>
 					</object>
@@ -315,18 +315,13 @@
 						<reference key="parent" ref="191373211"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">10</int>
-						<reference key="object" ref="865902498"/>
-						<reference key="parent" ref="191373211"/>
-					</object>
-					<object class="IBObjectRecord">
 						<int key="objectID">6</int>
 						<reference key="object" ref="1005126370"/>
 						<reference key="parent" ref="191373211"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">15</int>
-						<reference key="object" ref="132134303"/>
+						<int key="objectID">10</int>
+						<reference key="object" ref="865902498"/>
 						<reference key="parent" ref="191373211"/>
 					</object>
 					<object class="IBObjectRecord">
@@ -340,13 +335,18 @@
 						<reference key="parent" ref="191373211"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">20</int>
-						<reference key="object" ref="912006692"/>
+						<int key="objectID">15</int>
+						<reference key="object" ref="132134303"/>
 						<reference key="parent" ref="191373211"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">21</int>
 						<reference key="object" ref="1000912642"/>
+						<reference key="parent" ref="191373211"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">20</int>
+						<reference key="object" ref="912006692"/>
 						<reference key="parent" ref="191373211"/>
 					</object>
 				</object>
