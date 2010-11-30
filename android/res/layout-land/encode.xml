@@ -37,6 +37,8 @@
     <TextView android:id="@+id/contents_text_view"
               android:layout_width="wrap_content"
               android:layout_height="fill_parent"
+              android:layout_gravity="center_vertical"
+              android:gravity="center"
               android:textColor="@color/contents_text"
               android:textSize="18sp"
               android:paddingRight="8dip"
