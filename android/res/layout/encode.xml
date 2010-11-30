@@ -15,24 +15,25 @@
  limitations under the License.
  -->
 
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/encode_view"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:fillViewport="true"
-            android:background="@color/encode_view">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/encode_view"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:fillViewport="true"
+              android:background="@color/encode_view"
+              android:orientation="vertical"
+              android:gravity="center">
 
-  <LinearLayout android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:background="@color/encode_view"
-                android:orientation="vertical"
-                android:gravity="center">
+  <ImageView android:id="@+id/image_view"
+             android:layout_width="fill_parent"
+             android:layout_height="wrap_content"
+             android:layout_gravity="center_horizontal"
+             android:scaleType="center"/>
 
-    <ImageView android:id="@+id/image_view"
-               android:layout_width="fill_parent"
-               android:layout_height="wrap_content"
-               android:layout_gravity="center_horizontal"
-               android:scaleType="center"/>
+  <ScrollView android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center_horizontal"
+              android:gravity="center">
 
     <TextView android:id="@+id/contents_text_view"
               android:layout_width="fill_parent"
@@ -44,5 +45,7 @@
               android:paddingBottom="8dip"
               android:paddingLeft="8dip"
               android:paddingRight="8dip"/>
-  </LinearLayout>
-</ScrollView>
+
+  </ScrollView>
+
+</LinearLayout>
