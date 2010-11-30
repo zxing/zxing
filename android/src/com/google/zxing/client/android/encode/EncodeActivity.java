@@ -16,7 +16,9 @@
 
 package com.google.zxing.client.android.encode;
 
-import com.google.zxing.BarcodeFormat;
+import android.content.Context;
+import android.view.Display;
+import android.view.WindowManager;
 import com.google.zxing.WriterException;
 import com.google.zxing.client.android.FinishListener;
 import com.google.zxing.client.android.Intents;
@@ -28,14 +30,11 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Environment;
-import android.os.Message;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -54,57 +53,9 @@ public final class EncodeActivity extends Activity {
 
   private static final String TAG = EncodeActivity.class.getSimpleName();
 
-  private static final int SHARE_BARCODE_DIMENSION = 300;
   private static final int MAX_BARCODE_FILENAME_LENGTH = 24;
 
   private QRCodeEncoder qrCodeEncoder;
-  private boolean firstLayout;
-
-  /**
-   * This needs to be delayed until after the first layout so that the view dimensions will be
-   * available.
-   */
-  private final OnGlobalLayoutListener layoutListener = new OnGlobalLayoutListener() {
-    public void onGlobalLayout() {
-      if (firstLayout) {
-        View layout = findViewById(R.id.encode_view);
-        int width = layout.getWidth();
-        int height = layout.getHeight();
-        int smallerDimension = width < height ? width : height;
-        smallerDimension = smallerDimension * 7 / 8;
-
-        Intent intent = getIntent();
-        try {
-          qrCodeEncoder = new QRCodeEncoder(EncodeActivity.this, intent);
-          setTitle(getString(R.string.app_name) + " - " + qrCodeEncoder.getTitle());
-          qrCodeEncoder.requestBarcode(handler, smallerDimension);
-        } catch (IllegalArgumentException e) {
-          showErrorMessage(R.string.msg_encode_contents_failed);
-        }
-        firstLayout = false;
-      }
-    }
-  };
-
-  private final Handler handler = new Handler() {
-    @Override
-    public void handleMessage(Message message) {
-      switch (message.what) {
-        case R.id.encode_succeeded:
-          Bitmap image = (Bitmap) message.obj;
-          ImageView view = (ImageView) findViewById(R.id.image_view);
-          view.setImageBitmap(image);
-          TextView contents = (TextView) findViewById(R.id.contents_text_view);
-          contents.setText(qrCodeEncoder.getDisplayContents());
-          //qrCodeEncoder = null;
-          break;
-        case R.id.encode_failed:
-          showErrorMessage(R.string.msg_encode_barcode_failed);
-          qrCodeEncoder = null;
-          break;
-      }
-    }
-  };
 
   @Override
   public void onCreate(Bundle icicle) {
@@ -138,8 +89,7 @@ public final class EncodeActivity extends Activity {
     String contents = qrCodeEncoder.getContents();
     Bitmap bitmap;
     try {
-      bitmap = QRCodeEncoder.encodeAsBitmap(contents, BarcodeFormat.QR_CODE,
-          SHARE_BARCODE_DIMENSION, SHARE_BARCODE_DIMENSION);
+      bitmap = qrCodeEncoder.encodeAsBitmap();
     } catch (WriterException we) {
       Log.w(TAG, we);
       return true;
@@ -200,9 +150,32 @@ public final class EncodeActivity extends Activity {
   @Override
   protected void onResume() {
     super.onResume();
-    View layout = findViewById(R.id.encode_view);
-    layout.getViewTreeObserver().addOnGlobalLayoutListener(layoutListener);
-    firstLayout = true;
+    // This assumes the view is full screen, which is a good assumption
+    WindowManager manager = (WindowManager) getSystemService(WINDOW_SERVICE);
+    Display display = manager.getDefaultDisplay();
+    int width = display.getWidth();
+    int height = display.getHeight();
+    int smallerDimension = width < height ? width : height;
+    smallerDimension = smallerDimension * 7 / 8;
+
+    Intent intent = getIntent();
+    try {
+      qrCodeEncoder = new QRCodeEncoder(this, intent, smallerDimension);
+      setTitle(getString(R.string.app_name) + " - " + qrCodeEncoder.getTitle());
+      Bitmap bitmap = qrCodeEncoder.encodeAsBitmap();
+      ImageView view = (ImageView) findViewById(R.id.image_view);
+      view.setImageBitmap(bitmap);
+      TextView contents = (TextView) findViewById(R.id.contents_text_view);
+      contents.setText(qrCodeEncoder.getDisplayContents());
+    } catch (WriterException e) {
+      Log.e(TAG, "Could not encode barcode", e);
+      showErrorMessage(R.string.msg_encode_contents_failed);
+      qrCodeEncoder = null;
+    } catch (IllegalArgumentException e) {
+      Log.e(TAG, "Could not encode barcode", e);
+      showErrorMessage(R.string.msg_encode_contents_failed);
+      qrCodeEncoder = null;
+    }
   }
 
   private void showErrorMessage(int message) {

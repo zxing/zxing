@@ -34,7 +34,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.Contacts;
 import android.telephony.PhoneNumberUtils;
 import android.util.Log;
@@ -61,8 +60,9 @@ final class QRCodeEncoder {
   private String displayContents;
   private String title;
   private BarcodeFormat format;
+  private final int dimension;
 
-  QRCodeEncoder(Activity activity, Intent intent) {
+  QRCodeEncoder(Activity activity, Intent intent, int dimension) {
     this.activity = activity;
     if (intent == null) {
       throw new IllegalArgumentException("No valid data to encode.");
@@ -78,12 +78,8 @@ final class QRCodeEncoder {
         throw new IllegalArgumentException("No valid data to encode.");
       }
     }
-  }
 
-  public void requestBarcode(Handler handler, int pixelResolution) {
-    Thread encodeThread = new EncodeThread(contents, handler, pixelResolution,
-        format);
-    encodeThread.start();
+    this.dimension = dimension;
   }
 
   public String getContents() {
@@ -96,10 +92,6 @@ final class QRCodeEncoder {
 
   public String getTitle() {
     return title;
-  }
-
-  public String getFormat() {
-    return format.toString();
   }
 
   // It would be nice if the string encoding lived in the core ZXing library,
@@ -318,10 +310,7 @@ final class QRCodeEncoder {
     }
   }
 
-  static Bitmap encodeAsBitmap(String contents,
-                               BarcodeFormat format,
-                               int desiredWidth,
-                               int desiredHeight) throws WriterException {
+  Bitmap encodeAsBitmap() throws WriterException {
     Hashtable<EncodeHintType,Object> hints = null;
     String encoding = guessAppropriateEncoding(contents);
     if (encoding != null) {
@@ -329,7 +318,7 @@ final class QRCodeEncoder {
       hints.put(EncodeHintType.CHARACTER_SET, encoding);
     }
     MultiFormatWriter writer = new MultiFormatWriter();    
-    BitMatrix result = writer.encode(contents, format, desiredWidth, desiredHeight, hints);
+    BitMatrix result = writer.encode(contents, format, dimension, dimension, hints);
     int width = result.getWidth();
     int height = result.getHeight();
     int[] pixels = new int[width * height];
