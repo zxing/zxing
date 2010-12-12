@@ -85,6 +85,7 @@ public final class Decoder {
   private int numCodewords;
   private int codewordSize;
   private AztecDetectorResult ddata;
+  private int invertedBitCount;
 
   public DecoderResult decode(AztecDetectorResult detectorResult) throws FormatException {
     ddata = detectorResult;
@@ -113,7 +114,7 @@ public final class Decoder {
    */
   private String getEncodedData(boolean[] correctedBits) throws FormatException {
 
-    int endIndex = codewordSize * ddata.getNbDatablocks();
+    int endIndex = codewordSize * ddata.getNbDatablocks() - invertedBitCount;
     if (endIndex > correctedBits.length) {
       throw FormatException.getFormatInstance();
     }
@@ -303,6 +304,7 @@ public final class Decoder {
     }
 
     offset = 0;
+    invertedBitCount = 0;
 
     boolean[] correctedBits = new boolean[numDataCodewords*codewordSize];
     for (int i = 0; i < numDataCodewords; i ++) {
@@ -325,6 +327,7 @@ public final class Decoder {
           seriesColor = false;
           seriesCount = 0;
           offset++;
+          invertedBitCount++;
         } else {
 
           if (seriesColor == color) {
