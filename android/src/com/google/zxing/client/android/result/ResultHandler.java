@@ -16,6 +16,7 @@
 
 package com.google.zxing.client.android.result;
 
+import android.util.Log;
 import com.google.zxing.Result;
 import com.google.zxing.client.android.Contents;
 import com.google.zxing.client.android.Intents;
@@ -59,6 +60,9 @@ import java.util.GregorianCalendar;
  * @author dswitkin@google.com (Daniel Switkin)
  */
 public abstract class ResultHandler {
+
+  private static final String TAG = ResultHandler.class.getSimpleName();
+
   private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyyMMdd");
   private static final DateFormat DATE_TIME_FORMAT = new SimpleDateFormat("yyyyMMdd'T'HHmmss");
 
@@ -186,13 +190,19 @@ public abstract class ResultHandler {
     Intent intent = new Intent(Intent.ACTION_EDIT);
     intent.setType("vnd.android.cursor.item/event");
     intent.putExtra("beginTime", calculateMilliseconds(start));
-    if (start.length() == 8) {
+    boolean allDay = start.length() == 8;
+    if (allDay) {
       intent.putExtra("allDay", true);
     }
     if (end == null) {
       end = start;
     }
-    intent.putExtra("endTime", calculateMilliseconds(end));
+    long endMilliseconds = calculateMilliseconds(end);
+    if (allDay) {
+      // Possible workaround when allDay isn't used properly
+      endMilliseconds = lastSecondOfDay(endMilliseconds);
+    }
+    intent.putExtra("endTime", endMilliseconds);
     intent.putExtra("title", summary);
     intent.putExtra("eventLocation", location);
     intent.putExtra("description", description);
@@ -221,6 +231,15 @@ public abstract class ResultHandler {
       }
       return milliseconds;
     }
+  }
+
+  private static long lastSecondOfDay(long time) {
+    Calendar timeInDay = Calendar.getInstance();
+    timeInDay.setTimeInMillis(time);
+    timeInDay.set(Calendar.HOUR_OF_DAY, timeInDay.getActualMaximum(Calendar.HOUR_OF_DAY));
+    timeInDay.set(Calendar.MINUTE, timeInDay.getActualMaximum(Calendar.MINUTE));
+    timeInDay.set(Calendar.SECOND, timeInDay.getActualMaximum(Calendar.SECOND));
+    return timeInDay.getTimeInMillis();
   }
 
   final void addContact(String[] names, String[] phoneNumbers, String[] emails, String note,
@@ -395,6 +414,7 @@ public abstract class ResultHandler {
   void launchIntent(Intent intent) {
     if (intent != null) {
       intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+      Log.d(TAG, "Launching intent: " + intent + " with extras: " + intent.getExtras());
       try {
         activity.startActivity(intent);
       } catch (ActivityNotFoundException e) {
