@@ -103,7 +103,7 @@ public class WifiGenerator implements GeneratorSource {
 	return parseTextField("Password", password);
   }
   
-  private String getNetworkTypeField() throws GeneratorException {
+  private String getNetworkTypeField() {
     return networkType.getValue(networkType.getSelectedIndex());
   }
   

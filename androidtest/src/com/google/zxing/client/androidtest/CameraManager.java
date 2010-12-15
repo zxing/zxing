@@ -58,7 +58,7 @@ final class CameraManager {
   private boolean previewing;
   private int previewFormat;
   private String previewFormatString;
-  private boolean useOneShotPreviewCallback;
+  private final boolean useOneShotPreviewCallback;
 
   /**
    * Preview frames are delivered here, which we pass on to the registered handler. Make sure to
@@ -288,7 +288,7 @@ final class CameraManager {
   private String collectCameraParameters() {
     Camera.Parameters parameters = camera.getParameters();
     String[] params = parameters.flatten().split(";");
-    StringBuffer result = new StringBuffer();
+    StringBuilder result = new StringBuilder();
     result.append("Default camera parameters:");
     for (String param : params) {
       result.append("\n  ");

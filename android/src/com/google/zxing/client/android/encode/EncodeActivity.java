@@ -16,7 +16,6 @@
 
 package com.google.zxing.client.android.encode;
 
-import android.content.Context;
 import android.view.Display;
 import android.view.WindowManager;
 import com.google.zxing.WriterException;
@@ -34,7 +33,6 @@ import android.os.Environment;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 

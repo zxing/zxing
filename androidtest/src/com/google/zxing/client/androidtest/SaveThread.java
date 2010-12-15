@@ -63,7 +63,7 @@ final class SaveThread extends Thread {
 
   // Save the center rectangle of the Y channel as a greyscale PNG to the SD card.
   private void save(byte[] data, int width, int height) {
-    final Rect framingRect = CameraManager.get().getFramingRect();
+    Rect framingRect = CameraManager.get().getFramingRect();
     int framingWidth = framingRect.width();
     int framingHeight = framingRect.height();
     if (framingWidth > width || framingHeight > height) {

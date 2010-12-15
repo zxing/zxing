@@ -25,8 +25,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.util.List;
-
 public final class BenchmarkActivity extends Activity {
 
   private static final String PATH = "/sdcard/zxingbenchmark";
@@ -76,7 +74,7 @@ public final class BenchmarkActivity extends Activity {
   };
 
   private void handleBenchmarkDone(Message message) {
-    List<BenchmarkItem> items = (List<BenchmarkItem>) message.obj;
+    Iterable<BenchmarkItem> items = (Iterable<BenchmarkItem>) message.obj;
     int count = 0;
     int time = 0;
     for (BenchmarkItem item : items) {

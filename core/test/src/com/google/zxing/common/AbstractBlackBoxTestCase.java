@@ -246,7 +246,7 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
   private boolean decode(BinaryBitmap source,
                          float rotation,
                          String expectedText,
-                         Properties expectedMetadata,
+                         Map<Object,Object> expectedMetadata,
                          boolean tryHarder) {
     Result result;
     String suffix = " (" + (tryHarder ? "try harder, " : "") + "rotation: " + rotation + ')';
@@ -279,7 +279,7 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
       return false;
     }
 
-    Hashtable resultMetadata = result.getResultMetadata();
+    Hashtable<Object,Object> resultMetadata = result.getResultMetadata();
     for (Map.Entry<Object,Object> metadatum : expectedMetadata.entrySet()) {
       ResultMetadataType key = ResultMetadataType.valueOf(metadatum.getKey().toString());
       Object expectedValue = metadatum.getValue();

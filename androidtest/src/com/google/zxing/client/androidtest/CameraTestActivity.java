@@ -30,7 +30,6 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -148,7 +147,7 @@ public final class CameraTestActivity extends Activity implements SurfaceHolder.
   }
 
   private void collectStatsAndSendEmail(String parameters) {
-    StringBuffer result = new StringBuffer();
+    StringBuilder result = new StringBuilder();
     result.append("Device info:");
     result.append("\n  Board: ");
     result.append(Build.BOARD);
@@ -184,13 +183,11 @@ public final class CameraTestActivity extends Activity implements SurfaceHolder.
     result.append("\n\n");
     result.append(parameters);
 
-    File file = new File("/sdcard/CameraParameters.txt");
     try {
+      File file = new File("/sdcard/CameraParameters.txt");
       FileOutputStream stream = new FileOutputStream(file);
       stream.write(result.toString().getBytes());
       stream.close();
-    } catch (FileNotFoundException e) {
-
     } catch (IOException e) {
 
     }

@@ -122,7 +122,7 @@ public final class Decoder {
     int lastTable = UPPER;
     int table = UPPER;
     int startIndex = 0;
-    StringBuilder result = new StringBuilder(20);
+    StringBuffer result = new StringBuffer(20);
     boolean end = false;
     boolean shift = false;
     boolean switchShift = false;

@@ -84,16 +84,14 @@ class SplashThread extends Canvas implements Runnable {
    * Allows Early dismissal of the splash Screen, for example, when all background
    * initialisations are complete.
    */
-  public void stop() {
+  public synchronized void stop() {
     // Invoke the notify method of the Splash Object ("and the correct thread just
     // happens to be arbitrarily chosen as the thread to be awakened"), and thus
     // dismiss the Splash Screen. The current implementation only uses a single
     // thread, so invoking the notify method should work, however, the
     // implementation may change in the future. Thus lets' make use of the
     // notifyAll method of the Splash Object.
-    synchronized (this) {
-      notifyAll(); // Wake everyone up
-    }
+    notifyAll(); // Wake everyone up
   }
 
   /**
