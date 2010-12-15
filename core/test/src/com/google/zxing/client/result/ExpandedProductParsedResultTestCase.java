@@ -55,7 +55,7 @@ public final class ExpandedProductParsedResultTestCase extends Assert {
     String price = "5";
     String priceIncrement = "2";
     String priceCurrency = "445";
-    Hashtable uncommonAIs = new Hashtable();
+    Hashtable<Object,Object> uncommonAIs = new Hashtable<Object,Object>();
     uncommonAIs.put("123", "544654");
 
     Result result = new Result(text, null, null, BarcodeFormat.RSS_EXPANDED);

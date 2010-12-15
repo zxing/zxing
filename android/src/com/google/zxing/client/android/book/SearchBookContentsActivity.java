@@ -159,12 +159,6 @@ public final class SearchBookContentsActivity extends Activity {
     queryTextView.selectAll();
   }
 
-  @Override
-  public void onConfigurationChanged(Configuration config) {
-    // Do nothing, this is to prevent the activity from being restarted when the keyboard opens.
-    super.onConfigurationChanged(config);
-  }
-
   private void resetForNewQuery() {
     networkThread = null;
     queryTextView.setEnabled(true);

@@ -16,14 +16,11 @@
 
 package com.google.zxing.client.android.share;
 
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
-import com.google.zxing.client.android.R;
 
 import java.io.Serializable;
 import java.util.ArrayList;

@@ -18,7 +18,6 @@ package com.google.zxing.qrcode.decoder;
 
 import com.google.zxing.ChecksumException;
 import com.google.zxing.FormatException;
-import com.google.zxing.NotFoundException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.DecoderResult;
 import com.google.zxing.common.reedsolomon.GenericGF;
@@ -41,8 +40,7 @@ public final class Decoder {
     rsDecoder = new ReedSolomonDecoder(GenericGF.QR_CODE_FIELD_256);
   }
 
-  public DecoderResult decode(boolean[][] image)
-      throws ChecksumException, FormatException, NotFoundException {
+  public DecoderResult decode(boolean[][] image) throws ChecksumException, FormatException {
     return decode(image, null);
   }
 

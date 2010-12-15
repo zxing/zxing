@@ -19,7 +19,6 @@ package com.google.zxing.client.j2se;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.LuminanceSource;
 import com.google.zxing.NotFoundException;
-import com.google.zxing.ReaderException;
 import com.google.zxing.common.BitArray;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.HybridBinarizer;

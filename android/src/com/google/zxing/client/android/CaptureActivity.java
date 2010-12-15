@@ -35,7 +35,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -327,12 +326,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         break;
     }
     return super.onOptionsItemSelected(item);
-  }
-
-  @Override
-  public void onConfigurationChanged(Configuration config) {
-    // Do nothing, this is to prevent the activity from being restarted when the keyboard opens.
-    super.onConfigurationChanged(config);
   }
 
   public void surfaceCreated(SurfaceHolder holder) {
