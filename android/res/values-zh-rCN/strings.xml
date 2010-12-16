@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
  Copyright (C) 2010 ZXing authors
 
@@ -107,6 +107,8 @@
   <string name="preferences_remember_duplicates_summary">在历史记录中保存重复记录</string>
   <string name="preferences_remember_duplicates_title">记住重复</string>
   <string name="preferences_result_title">结果设置</string>
+  <string name="preferences_reverse_image_summary">设备上启用了前置摄像头只</string>
+  <string name="preferences_reverse_image_title">反转摄像机的图像</string>
   <string name="preferences_scanning_title">条码类型选择</string>
   <string name="preferences_supplemental_summary">尝试检索关于条码内容的更多信息</string>
   <string name="preferences_supplemental_title">检索更多信息</string>

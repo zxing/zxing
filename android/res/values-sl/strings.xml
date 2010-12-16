@@ -107,6 +107,8 @@
   <string name="preferences_remember_duplicates_summary">Shranjevanje več skandiranje iste črtne kode v zgodovini</string>
   <string name="preferences_remember_duplicates_title">Zapomni si dvojnikov</string>
   <string name="preferences_result_title">Nastavitve rezultatov branja</string>
+  <string name="preferences_reverse_image_summary">Omogoči na napravah z sprednjo kamero samo</string>
+  <string name="preferences_reverse_image_title">Zamenjano kamera slike</string>
   <string name="preferences_scanning_title">Ko berete črtne kode, preberi\u2026</string>
   <string name="preferences_supplemental_summary">Poskusite pridobiti več informacij o vsebini črtne kode</string>
   <string name="preferences_supplemental_title">Naloži Več info</string>

@@ -107,6 +107,8 @@
   <string name="preferences_remember_duplicates_summary">Conservare scansioni multiple del codice a barre stesso nella Cronologia</string>
   <string name="preferences_remember_duplicates_title">Ricordate i duplicati</string>
   <string name="preferences_result_title">Impostazioni risultato</string>
+  <string name="preferences_reverse_image_summary">Attiva su dispositivi con una fotocamera frontale solo</string>
+  <string name="preferences_reverse_image_title">Invertita dell\'immagine della fotocamera</string>
   <string name="preferences_scanning_title">Durante la scansione di codici a barre, decodifica\u2026</string>
   <string name="preferences_supplemental_summary">Prova a cercare ulteriori informazioni sul contenuto del codice a barre</string>
   <string name="preferences_supplemental_title">Recuperare più informazioni</string>

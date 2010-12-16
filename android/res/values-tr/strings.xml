@@ -107,6 +107,8 @@
   <string name="preferences_remember_duplicates_summary">Aynı kodlu barkodları hatırlama</string>
   <string name="preferences_remember_duplicates_title">Aynı barkodları hatırlar</string>
   <string name="preferences_result_title">Sonuç ayarları</string>
+  <string name="preferences_reverse_image_summary">sadece bir ön kamera ile cihazlarda etkinleştirin</string>
+  <string name="preferences_reverse_image_title">Ters kamera görüntüsü</string>
   <string name="preferences_scanning_title">Barkodlar taraması \u2026</string>
   <string name="preferences_supplemental_summary">Barkod içeriği hakkında daha fazla bilgi almak için</string>
   <string name="preferences_supplemental_title">Daha fazla bilgi</string>
