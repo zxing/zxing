@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
  Copyright (C) 2010 ZXing authors
 
@@ -107,6 +107,8 @@
   <string name="preferences_remember_duplicates_summary">Gem flere scanninger af de samme stregkoder i historik</string>
   <string name="preferences_remember_duplicates_title">Husk dubletter</string>
   <string name="preferences_result_title">Resultatindstillinger</string>
+  <string name="preferences_reverse_image_summary">Aktiver på enheder med en front kamera kun</string>
+  <string name="preferences_reverse_image_title">Tilbageført kamerabilledets</string>
   <string name="preferences_scanning_title">Når der scannes efter stregkoder\u2026</string>
   <string name="preferences_supplemental_summary">Prøv at hente mere information om stregkodens indhold</string>
   <string name="preferences_supplemental_title">Hent mere info</string>

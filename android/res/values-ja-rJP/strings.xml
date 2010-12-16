@@ -107,6 +107,8 @@
   <string name="preferences_remember_duplicates_summary">歴史の中で、同じバーコードのストア複数のスキャン</string>
   <string name="preferences_remember_duplicates_title">覚えておいて重複</string>
   <string name="preferences_result_title">検索結果の設定</string>
+  <string name="preferences_reverse_image_summary">唯一のフロントカメラを持つデバイスで有効にする</string>
+  <string name="preferences_reverse_image_title">逆カメラ画像</string>
   <string name="preferences_scanning_title">時バーコードスキャン</string>
   <string name="preferences_supplemental_summary">バーコード内容についての詳細情報を取得してみてください</string>
   <string name="preferences_supplemental_title">取得の詳細情報をもっと見る</string>

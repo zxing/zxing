@@ -31,14 +31,21 @@ import android.graphics.Bitmap;
  * @author dswitkin@google.com (Daniel Switkin)
  */
 public final class PlanarYUVLuminanceSource extends LuminanceSource {
+
   private final byte[] yuvData;
   private final int dataWidth;
   private final int dataHeight;
   private final int left;
   private final int top;
 
-  public PlanarYUVLuminanceSource(byte[] yuvData, int dataWidth, int dataHeight, int left, int top,
-      int width, int height) {
+  public PlanarYUVLuminanceSource(byte[] yuvData,
+                                  int dataWidth,
+                                  int dataHeight,
+                                  int left,
+                                  int top,
+                                  int width,
+                                  int height,
+                                  boolean reverseHorizontal) {
     super(width, height);
 
     if (left + width > dataWidth || top + height > dataHeight) {
@@ -50,6 +57,9 @@ public final class PlanarYUVLuminanceSource extends LuminanceSource {
     this.dataHeight = dataHeight;
     this.left = left;
     this.top = top;
+    if (reverseHorizontal) {
+      reverseHorizontal(width, height);
+    }
   }
 
   @Override
@@ -130,4 +140,17 @@ public final class PlanarYUVLuminanceSource extends LuminanceSource {
     bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
     return bitmap;
   }
+
+  private void reverseHorizontal(int width, int height) {
+    byte[] yuvData = this.yuvData;
+    for (int y = 0, rowStart = top * dataWidth + left; y < height; y++, rowStart += dataWidth) {
+      int middle = rowStart + width / 2;
+      for (int x1 = rowStart, x2 = rowStart + width - 1; x1 < middle; x1++, x2--) {
+        byte temp = yuvData[x1];
+        yuvData[x1] = yuvData[x2];
+        yuvData[x2] = temp;
+      }
+    }
+  }
+
 }

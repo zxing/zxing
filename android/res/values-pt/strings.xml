@@ -107,6 +107,8 @@
   <string name="preferences_remember_duplicates_summary">Armazenar vários scans do mesmo código de barras em História</string>
   <string name="preferences_remember_duplicates_title">Lembre-se de duplicatas</string>
   <string name="preferences_result_title">Definições de resultados</string>
+  <string name="preferences_reverse_image_summary">Use em dispositivos com uma câmera frontal só</string>
+  <string name="preferences_reverse_image_title">Invertida imagem da câmara</string>
   <string name="preferences_scanning_title">Quando a digitalização de códigos de barras, descodificar\u2026</string>
   <string name="preferences_supplemental_summary">Tente obter mais informações sobre o conteúdo do código de barras</string>
   <string name="preferences_supplemental_title">Obter mais informações</string>
