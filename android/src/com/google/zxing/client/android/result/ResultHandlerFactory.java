@@ -46,7 +46,7 @@ public final class ResultHandlerFactory {
     } else if (type.equals(ParsedResultType.WIFI)) {
       return new WifiResultHandler(activity, result);
     } else if (type.equals(ParsedResultType.TEXT)) {
-      return new TextResultHandler(activity, result);
+      return new TextResultHandler(activity, result, rawResult);
     } else if (type.equals(ParsedResultType.GEO)) {
       return new GeoResultHandler(activity, result);
     } else if (type.equals(ParsedResultType.TEL)) {
@@ -59,7 +59,7 @@ public final class ResultHandlerFactory {
       return new ISBNResultHandler(activity, result, rawResult);
     } else {
       // The TextResultHandler is the fallthrough for unsupported formats.
-      return new TextResultHandler(activity, result);
+      return new TextResultHandler(activity, result, rawResult);
     }
   }
 
