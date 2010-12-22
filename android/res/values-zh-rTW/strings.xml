@@ -94,7 +94,7 @@
   <string name="preferences_bulk_mode_summary">條碼掃描和挽救了許多人不斷</string>
   <string name="preferences_bulk_mode_title">批量掃描模式</string>
   <string name="preferences_copy_to_clipboard_title">復製到剪貼簿</string>
-  <string name="preferences_custom_product_search_summary">使用％s作為佔位符的產品ID</string>
+  <string name="preferences_custom_product_search_summary" formatted="false">使用％s作為佔位符的產品ID</string>
   <string name="preferences_custom_product_search_title">自定義搜索網址</string>
   <string name="preferences_decode_1D_title">解碼一維條碼</string>
   <string name="preferences_decode_Data_Matrix_title">數據矩陣碼解碼</string>

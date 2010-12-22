@@ -94,7 +94,7 @@
   <string name="preferences_bulk_mode_summary">スキャンして保存する多くのバーコード連続</string>
   <string name="preferences_bulk_mode_title">バルクモードでのスキャン</string>
   <string name="preferences_copy_to_clipboard_title">クリップボードにコピーする</string>
-  <string name="preferences_custom_product_search_summary">URL中の「%s」はスキャン結果に置換される</string>
+  <string name="preferences_custom_product_search_summary" formatted="false">URL中の「%s」はスキャン結果に置換される</string>
   <string name="preferences_custom_product_search_title">カスタム商品サーチ URL</string>
   <string name="preferences_decode_1D_title">1Dバーコードを読み取る</string>
   <string name="preferences_decode_Data_Matrix_title">デコードデータマトリックスコード</string>

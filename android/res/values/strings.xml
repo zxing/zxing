@@ -94,7 +94,7 @@
   <string name="preferences_bulk_mode_summary">Scan and save many barcodes continuously</string>
   <string name="preferences_bulk_mode_title">Bulk scan mode</string>
   <string name="preferences_copy_to_clipboard_title">Copy to clipboard</string>
-  <string name="preferences_custom_product_search_summary">Use %s as a placeholder for the product ID, and %f for format</string>
+  <string name="preferences_custom_product_search_summary" formatted="false">Use %s as a placeholder for the product ID, and %f for format</string>
   <string name="preferences_custom_product_search_title">Custom search URL</string>
   <string name="preferences_decode_1D_title">1D barcodes</string>
   <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>
