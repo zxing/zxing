@@ -33,7 +33,7 @@
 + (ParsedResult *)parsedResultForString:(NSString *)s {
   NSRange telRange = [s rangeOfString:PREFIX options:NSCaseInsensitiveSearch];
   if (telRange.location == 0) {
-    int restStart = telRange.location + telRange.length;
+    int restStart = /*telRange.location + */ telRange.length;
     return [[[TelParsedResult alloc] initWithNumber:[s substringFromIndex:restStart]]
             autorelease];
   }
