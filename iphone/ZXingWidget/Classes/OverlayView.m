@@ -32,7 +32,8 @@ static const CGFloat kPadding = 10;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 - (id) initWithFrame:(CGRect)theFrame cancelEnabled:(BOOL)isCancelEnabled oneDMode:(BOOL)isOneDModeEnabled {
-  if( self = [super initWithFrame:theFrame] ) {
+  self = [super initWithFrame:theFrame];
+  if( self ) {
 
     CGFloat rectSize = self.frame.size.width - kPadding * 2;
     if (!oneDMode) {

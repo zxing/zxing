@@ -34,7 +34,7 @@
   NSRange prefixRange = [s rangeOfString:PREFIX options:NSCaseInsensitiveSearch];
   if (prefixRange.location == 0) {
     int max = [s length];
-    int titleStart = prefixRange.location + prefixRange.length;
+    int titleStart = /*prefixRange.location + */ prefixRange.length;
     NSRange searchRange = NSMakeRange(titleStart, max - titleStart);
     NSRange colonRange = [s rangeOfString:@":" options:0 range:searchRange];
     if (colonRange.location != NSNotFound) {

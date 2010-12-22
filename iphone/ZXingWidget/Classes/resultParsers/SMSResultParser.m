@@ -34,7 +34,7 @@
   NSRange prefixRange = [s rangeOfString:PREFIX options:NSCaseInsensitiveSearch];
   if (prefixRange.location == 0) {
     int max = [s length];
-    int restStart = prefixRange.location + prefixRange.length;
+    int restStart = /*prefixRange.location + */ prefixRange.length;
     
     // initial presuption: everything after the prefix is the number, and there is no body
     NSRange numberRange = NSMakeRange(restStart, max - restStart);

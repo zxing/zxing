@@ -52,7 +52,8 @@
 
 
 - (id)initWithDelegate:(id<ZXingDelegate>)scanDelegate showCancel:(BOOL)shouldShowCancel OneDMode:(BOOL)shouldUseoOneDMode {
-  if (self = [super init]) {
+  self = [super init];
+  if (self) {
     [self setDelegate:scanDelegate];
     self.oneDMode = shouldUseoOneDMode;
     self.showCancel = shouldShowCancel;
@@ -112,7 +113,6 @@
 - (void)viewWillAppear:(BOOL)animated {
   [super viewWillAppear:animated];
   self.wantsFullScreenLayout = YES;
-  //[[UIApplication sharedApplication] setStatusBarHidden:YES];
   if ([self soundToPlay] != nil) {
     OSStatus error = AudioServicesCreateSystemSoundID((CFURLRef)[self soundToPlay], &beepSound);
     if (error != kAudioServicesNoError) {
@@ -124,14 +124,11 @@
 - (void)viewDidAppear:(BOOL)animated {
   [super viewDidAppear:animated];
   [[UIApplication sharedApplication] setStatusBarHidden:YES];
-  //self.wantsFullScreenLayout = YES;
 
   decoding = YES;
 
   [self initCapture];
   [self.view addSubview:overlayView];
-  // [self loadImagePicker];
-  // self.view = imagePicker.view;
   
   [overlayView setPoints:nil];
   wasCancelled = NO;
