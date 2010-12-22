@@ -94,7 +94,7 @@
   <string name="preferences_bulk_mode_summary">المسح الضوئي وحفظها بشكل مستمر العديد من الرموز الشريطية</string>
   <string name="preferences_bulk_mode_title">جل وضع المسح الضوئي</string>
   <string name="preferences_copy_to_clipboard_title">نسخ إلى الحافظة</string>
-  <string name="preferences_custom_product_search_summary">استخدم %s كعنصر نائب لمعرف المنتج</string>
+  <string name="preferences_custom_product_search_summary" formatted="false">استخدم %s كعنصر نائب لمعرف المنتج</string>
   <string name="preferences_custom_product_search_title">عنوان بحث مخصص</string>
   <string name="preferences_decode_1D_title">فك الرموز الشريطية 1D</string>
   <string name="preferences_decode_Data_Matrix_title">فك رموز البيانات ماتريكس</string>

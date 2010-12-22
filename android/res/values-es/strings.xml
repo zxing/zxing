@@ -94,7 +94,7 @@
   <string name="preferences_bulk_mode_summary">Escanear y guardar muchos códigos de barras de forma continua</string>
   <string name="preferences_bulk_mode_title">Bulk modo de exploración</string>
   <string name="preferences_copy_to_clipboard_title">Copiar al portapapeles</string>
-  <string name="preferences_custom_product_search_summary">Use %s como un marcador de posición para el identificador del producto, y %f para el formato</string>
+  <string name="preferences_custom_product_search_summary" formatted="false">Use %s como un marcador de posición para el identificador del producto, y %f para el formato</string>
   <string name="preferences_custom_product_search_title">Búsqueda de productos con URL personalizada</string>
   <string name="preferences_decode_1D_title">Códigos de barras 1D</string>
   <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>

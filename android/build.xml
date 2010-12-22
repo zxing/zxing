@@ -86,6 +86,7 @@ limitations under the License.
   <!-- Properties -->
 
   <property name="android-tools" value="${sdk.dir}/tools" />
+  <property name="platform-tools" value="${sdk.dir}/platform-tools" />
 
   <!-- Input directories -->
   <property name="source-folder" value="src" />
@@ -123,7 +124,7 @@ limitations under the License.
 
   <!-- Tools -->
   <condition property="exe" value=".exe" else=""><os family="windows"/></condition>
-  <property name="adb" value="${android-tools}/adb${exe}"/>
+  <property name="adb" value="${platform-tools}/adb${exe}"/>
 
   <!-- rules -->
 
@@ -235,11 +236,12 @@ limitations under the License.
     <aaptexec executable="${aapt}"
               command="package"
               manifest="AndroidManifest.xml"
-              resources="${resource-folder}"
               assets="${asset-folder}"
               androidjar="${android.jar}"
-              outfolder="${out-folder}"
-              basename="${ant.project.name}" />
+              apkfolder="${out-folder}"
+              resourcefilename="${ant.project.name}">
+      <res path="${resource-folder}"/>
+    </aaptexec>
   </target>
 
   <!--
@@ -260,10 +262,10 @@ limitations under the License.
   <target name="debug" depends="dex, package-resources">
     <apkbuilder
         outfolder="${out-folder}"
-        resourcefile="BarcodeScanner.ap_"
+        resourcefile="BarcodeScanner"
         apkfilepath="${out-folder}/BarcodeScanner-debug.apk"
-        debug="true"
-        signed="true"
+        debugpackaging="true"
+        debugsigning="true"
         verbose="false">
       <dex path="${intermediate-dex-location}" />
       <sourcefolder path="${source-folder}" />
@@ -284,10 +286,10 @@ limitations under the License.
   <target name="release" depends="dex, package-resources">
     <apkbuilder
         outfolder="${out-folder}"
-        resourcefile="BarcodeScanner.ap_"
+        resourcefile="BarcodeScanner_"
         apkfilepath="${out-folder}/BarcodeScanner-unsigned.apk"
-        debug="false"
-        signed="false"
+        debugpackaging="false"
+        debugsigning="false"
         verbose="false">
       <dex path="${intermediate-dex-location}" />
       <sourcefolder path="${source-folder}" />
