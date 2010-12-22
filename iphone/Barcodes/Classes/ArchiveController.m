@@ -34,14 +34,6 @@
 @synthesize delegate;
 @synthesize dateFormatter;
 
-- (id)init {
-	if ((self = [super initWithStyle:UITableViewStylePlain])) {
-    scans = [[NSMutableArray alloc] init];
-    results = [[NSMutableArray alloc] init];
-    dateFormatter = [[NSDateFormatter alloc] init];
-	}
-	return self;
-}
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
 	return 1;
@@ -121,6 +113,18 @@
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
+  NSMutableArray *theScans = [[NSMutableArray alloc] init];
+  self.scans = theScans;
+  [theScans release];
+  
+  NSMutableArray *theResults = [[NSMutableArray alloc] init];
+  self.results = theResults;
+  [theResults release];
+  
+  NSDateFormatter *theDateFormatter = [[NSDateFormatter alloc] init];
+  self.dateFormatter = theDateFormatter;
+  [theDateFormatter release];
+  
   self.title = NSLocalizedString(@"ScanArchiveTitle", @"Scan Archive");
   self.navigationItem.rightBarButtonItem = [self editButtonItem];
   //self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Back",@"Back") style:UIBarButtonItemStyleDone target:self action:@selector(done:)] autorelease];
@@ -139,12 +143,13 @@
 
 
 - (void)viewWillAppear:(BOOL)animated {
-	[super viewWillAppear:animated];
+  [super viewWillAppear:animated];
   self.scans = [NSMutableArray arrayWithArray:[[Database sharedDatabase] scans]];
   self.results = [NSMutableArray arrayWithCapacity:self.scans.count];
   for (Scan *scan in scans) {
     [results addObject:[UniversalResultParser parsedResultForString:scan.text]];
   }
+  [self.tableView reloadData];
 }
 
 - (void)viewDidAppear:(BOOL)animated {

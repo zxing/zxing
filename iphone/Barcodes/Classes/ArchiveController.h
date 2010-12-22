@@ -36,6 +36,5 @@
 @property (nonatomic, retain) NSDateFormatter *dateFormatter;
 
 - (NSInteger)scanIndexForRow:(NSInteger)row;
-- (id)init;
 
 @end

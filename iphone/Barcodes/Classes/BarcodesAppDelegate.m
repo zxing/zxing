@@ -11,9 +11,7 @@
 @implementation BarcodesAppDelegate
 
 @synthesize window;
-@synthesize navigationController;
-//@synthesize rootController;
-
+@synthesize tabBarController;
 
 #pragma mark -
 #pragma mark Application lifecycle
@@ -21,7 +19,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {    
     
     // Override point for customization after application launch.
-  [self.window addSubview:navigationController.view];
+  [self.window addSubview:tabBarController.view];
   [self.window makeKeyAndVisible];
   
   return YES;
@@ -77,7 +75,7 @@
 
 
 - (void)dealloc {
-  [navigationController release];
+  [tabBarController release];
   [window release];
   [super dealloc];
 }

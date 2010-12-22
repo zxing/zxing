@@ -149,7 +149,7 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-  UITableViewCell *cell;
+  UITableViewCell *cell = nil;
   
   if (indexPath.section == 0) {
     if (indexPath.row == 0) {

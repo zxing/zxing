@@ -83,12 +83,17 @@ static Database *sharedDatabase = nil;
   return sharedDatabase;
 }
 
-- (void)addScanWithText:(NSString *)text {
+- (Scan *)addScanWithText:(NSString *)text {
+  NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
   sqlite3_bind_int(insertStatement, 1, nextScanIdent++);
   sqlite3_bind_text(insertStatement, 2, [text UTF8String], -1, SQLITE_TRANSIENT);
-  sqlite3_bind_double(insertStatement, 3, [[NSDate date] timeIntervalSince1970]);
+  sqlite3_bind_double(insertStatement, 3, timeStamp);
   sqlite3_step(insertStatement);
   sqlite3_reset(insertStatement);
+  NSDate* theDate = [NSDate dateWithTimeIntervalSince1970:timeStamp];
+  Scan *scan = [[[Scan alloc] initWithIdent:nextScanIdent text:text stamp:theDate] autorelease];
+
+  return scan;
 }
 
 - (NSArray *)scans {

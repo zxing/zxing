@@ -13,6 +13,7 @@
 #import <ResultAction.h>
 #import "ArchiveController.h"
 #import "Database.h"
+#import "ScanViewController.h"
 
 @implementation ZXMainViewController
 @synthesize actions;
@@ -35,7 +36,7 @@
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
   [super viewDidLoad];
-  self.navigationItem.title = @"ZXing Barcodes Scanner";
+  self.navigationItem.title = @"Barcodes";
   NSString *rawLatestResult = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastScan"];
   if (!rawLatestResult) rawLatestResult = NSLocalizedString(@"Latest result will appear here once you have scanned a barcode at least once",@"Latest result will appear here once you have scanned a barcode at least once");
   [self setResultViewWithText:rawLatestResult];
@@ -68,6 +69,7 @@
 - (void)messageReady:(id)sender {
   MessageViewController *messageController = sender;
   //[self presentModalViewController:messageController animated:YES];
+  //TODO: change this
   [self.navigationController pushViewController:messageController animated:YES];
   [messageController release];
 }
@@ -82,6 +84,7 @@
   MessageViewController *aboutController =
   [[MessageViewController alloc] initWithMessageFilename:@"About"];
   aboutController.delegate = self;
+  //TODO: change this
   [self.navigationController pushViewController:aboutController animated:YES];
   [aboutController release];
 }
@@ -89,6 +92,7 @@
 - (IBAction)showArchive:(id)sender {
   ArchiveController *archiveController = [[ArchiveController alloc] init];
   archiveController.delegate = self;
+  //TODO: change this
   [self.navigationController pushViewController:archiveController animated:YES];
   [archiveController release];
 }
@@ -160,9 +164,20 @@
 #ifdef DEBUG  
   NSLog(@"result has %d actions", actions ? 0 : actions.count);
 #endif
-  [[Database sharedDatabase] addScanWithText:resultString];
+  Scan * scan = [[Database sharedDatabase] addScanWithText:resultString];
   [[NSUserDefaults standardUserDefaults] setObject:resultString forKey:@"lastScan"];
+
+  
+  //TODO: toggle view into result view that needs to be done.
+  ParsedResult *parsedResult = [[UniversalResultParser parsedResultForString:resultString] retain];
+  ScanViewController *scanViewController = [[ScanViewController alloc] initWithResult:parsedResult forScan:scan];
+  [self.navigationController pushViewController:scanViewController animated:NO];
+  [scanViewController release];
   [self performResultAction];
+}
+
+- (void)zxingControllerDidCancel:(ZXingWidgetController*)controller {
+  [self dismissModalViewControllerAnimated:YES];
 }
 
 - (void)confirmAndPerformAction:(ResultAction *)action {
@@ -208,9 +223,7 @@
   }
 }
 
-- (void)zxingControllerDidCancel:(ZXingWidgetController*)controller {
-  [self dismissModalViewControllerAnimated:YES];
-}
+
 
 
 @end
