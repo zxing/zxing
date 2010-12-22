@@ -34,7 +34,7 @@
 
 + (id)sharedDatabase;
 
-- (void)addScanWithText:(NSString *)text;
+- (Scan *)addScanWithText:(NSString *)text;
 - (NSArray *)scans;
 - (void)deleteScan:(Scan *)scan;
 

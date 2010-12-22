@@ -55,6 +55,8 @@
 		1FB4369612918FF0002D63E8 /* ScanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FB4369512918FF0002D63E8 /* ScanViewController.m */; };
 		1FB4369A12919014002D63E8 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1FB4369912919014002D63E8 /* libsqlite3.dylib */; };
 		1FB436DF129194E7002D63E8 /* scans.db in Resources */ = {isa = PBXBuildFile; fileRef = 1FB436DE129194E7002D63E8 /* scans.db */; };
+		1FCC10A912C15F68009040CF /* Scanning.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FCC10A712C15F68009040CF /* Scanning.png */; };
+		1FCC10AA12C15F68009040CF /* Scanning@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1FCC10A812C15F68009040CF /* Scanning@2x.png */; };
 		1FF80D1012A3AE5400FE297C /* ZXMainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1FF80D0F12A3AE5400FE297C /* ZXMainViewController.xib */; };
 		288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765FC0DF74451002DB57D /* CoreGraphics.framework */; };
 		28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD733E0D9D9553002E5188 /* MainWindow.xib */; };
@@ -149,6 +151,8 @@
 		1FB4369912919014002D63E8 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		1FB436DE129194E7002D63E8 /* scans.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = scans.db; sourceTree = "<group>"; };
 		1FB437B612928EDA002D63E8 /* ModalViewControllerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModalViewControllerDelegate.h; sourceTree = "<group>"; };
+		1FCC10A712C15F68009040CF /* Scanning.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Scanning.png; path = images/Scanning.png; sourceTree = "<group>"; };
+		1FCC10A812C15F68009040CF /* Scanning@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Scanning@2x.png"; path = "images/Scanning@2x.png"; sourceTree = "<group>"; };
 		1FF80CD712A3AB1B00FE297C /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = fr; path = fr.lproj/About.html; sourceTree = "<group>"; };
 		1FF80CD812A3AB1B00FE297C /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/DecoderView.xib; sourceTree = "<group>"; };
 		1FF80CD912A3AB1B00FE297C /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = fr; path = fr.lproj/Hints.html; sourceTree = "<group>"; };
@@ -238,6 +242,8 @@
 		1FB4302D128FFF46002D63E8 /* images */ = {
 			isa = PBXGroup;
 			children = (
+				1FCC10A712C15F68009040CF /* Scanning.png */,
+				1FCC10A812C15F68009040CF /* Scanning@2x.png */,
 				1F91E1071292E397003A0BFD /* ZxingLarge@2x.png */,
 				1F91E0E21292D1DC003A0BFD /* clickHere.png */,
 				1F91E0D61292CA8C003A0BFD /* LatestResultBackground@2x.png */,
@@ -421,6 +427,8 @@
 				1F91E0E31292D1DC003A0BFD /* clickHere.png in Resources */,
 				1F91E1081292E397003A0BFD /* ZxingLarge@2x.png in Resources */,
 				1FF80D1012A3AE5400FE297C /* ZXMainViewController.xib in Resources */,
+				1FCC10A912C15F68009040CF /* Scanning.png in Resources */,
+				1FCC10AA12C15F68009040CF /* Scanning@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -572,7 +580,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Romain Pechayre (2CQ4EGKG4S)";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
