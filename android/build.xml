@@ -286,7 +286,7 @@ limitations under the License.
   <target name="release" depends="dex, package-resources">
     <apkbuilder
         outfolder="${out-folder}"
-        resourcefile="BarcodeScanner_"
+        resourcefile="BarcodeScanner"
         apkfilepath="${out-folder}/BarcodeScanner-unsigned.apk"
         debugpackaging="false"
         debugsigning="false"
