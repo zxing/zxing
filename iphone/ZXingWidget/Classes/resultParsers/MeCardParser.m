@@ -46,6 +46,7 @@
   result.note = [s fieldWithPrefix:@"NOTE:"];
   result.urlString = [s fieldWithPrefix:@"URL:"];
   result.address = [s fieldWithPrefix:@"ADR:"];
+  result.organization = [s fieldWithPrefix:@"ORG:"];
   
   return [result autorelease];
 }

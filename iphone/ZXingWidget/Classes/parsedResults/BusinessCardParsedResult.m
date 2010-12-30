@@ -30,9 +30,11 @@
 @synthesize email;
 @synthesize urlString;
 @synthesize address;
+@synthesize organization;
 
 - (NSString *)stringForDisplay {
   NSMutableString *result = [NSMutableString stringWithString:self.name];
+  if (self.organization) [result appendFormat:@"\n%@",self.organization];
   if (self.phoneNumbers) {
     for (NSString *number in self.phoneNumbers) {
       [result appendFormat:@"\n%@", number];
@@ -60,7 +62,8 @@
                                                 email:self.email 
                                                   url:self.urlString 
                                               address:self.address 
-                                                 note:self.note]];
+                                                 note:self.note
+                                         organization:self.organization]];
 }
 
 - (void) dealloc {
@@ -70,6 +73,7 @@
   [urlString release];
   [address release];
   [note release];
+  [organization release];
   [super dealloc];
 }
 
