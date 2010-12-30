@@ -30,6 +30,7 @@
   NSString *email;
   NSString *urlString;
   NSString *address;
+  NSString *organization;
   
   UIViewController *viewController;
 }
@@ -40,12 +41,14 @@
 @property (nonatomic, copy) NSString *email;
 @property (nonatomic, copy) NSString *urlString;
 @property (nonatomic, copy) NSString *address;
+@property (nonatomic, copy) NSString *organization;
 
 + (id)actionWithName:(NSString *)n
         phoneNumbers:(NSArray *)nums
                email:(NSString *)em
                  url:(NSString *)us
              address:(NSString *)ad
-                note:(NSString *)nt;
+                note:(NSString *)nt
+        organization:(NSString *)org;
 
 @end

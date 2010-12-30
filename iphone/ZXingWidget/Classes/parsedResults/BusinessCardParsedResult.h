@@ -29,6 +29,7 @@
   NSString *email;
   NSString *urlString;
   NSString *address;
+  NSString *organization;
 }
 
 @property (nonatomic, copy) NSString *name;
@@ -37,5 +38,6 @@
 @property (nonatomic, copy) NSString *email;
 @property (nonatomic, copy) NSString *urlString;
 @property (nonatomic, copy) NSString *address;
+@property (nonatomic, copy) NSString *organization;
 
 @end

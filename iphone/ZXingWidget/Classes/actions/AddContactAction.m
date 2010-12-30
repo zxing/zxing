@@ -31,13 +31,15 @@
 @synthesize email;
 @synthesize urlString;
 @synthesize address;
+@synthesize organization;
 
 + (id)actionWithName:(NSString *)n
         phoneNumbers:(NSArray *)nums
                email:(NSString *)em
                  url:(NSString *)us
              address:(NSString *)ad
-                note:(NSString *)nt {
+                note:(NSString *)nt
+        organization:(NSString *)org {
   AddContactAction *aca = [[[self alloc] init] autorelease];
   aca.name = n;
   aca.phoneNumbers = nums;
@@ -45,6 +47,7 @@
   aca.urlString = us;
   aca.address = ad;
   aca.note = nt;
+  aca.organization = org;
   return aca;
 }
 
@@ -87,6 +90,10 @@
   
   if (self.note) {
     ABRecordSetValue(person, kABPersonNoteProperty, self.note, error);
+  }
+  
+  if (self.organization) {
+    ABRecordSetValue(person, kABPersonOrganizationProperty, (CFStringRef)self.organization, error);
   }
   
   if (self.phoneNumbers && self.phoneNumbers.count > 0) {
@@ -220,5 +227,15 @@
   if (person) {
     [self performSelector:@selector(dismissUnknownPersonViewController:) withObject:unknownPersonViewController afterDelay:0.0];
   }
+}
+
+- (void)dealloc {
+  [name release];
+  [phoneNumbers release];
+  [note release];
+  [email release];
+  [urlString release];
+  [address release];
+  [organization release];
 }
 @end
