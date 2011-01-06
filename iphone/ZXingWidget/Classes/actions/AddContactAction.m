@@ -70,7 +70,7 @@
                             stringByTrimmingCharactersInSet:whitespaceSet] 
                            componentsSeparatedByCharactersInSet:whitespaceSet];
     ABRecordSetValue(person, kABPersonFirstNameProperty, [firstNames objectAtIndex:0], error);
-    for (int i = 1; i < [firstNames count]; i++) {
+    for (unsigned i = 1; i < [firstNames count]; i++) {
       ABRecordSetValue(person, kABPersonMiddleNameProperty, [firstNames objectAtIndex:1], error);
     }
   } else {
@@ -237,5 +237,6 @@
   [urlString release];
   [address release];
   [organization release];
+  [super dealloc];
 }
 @end
