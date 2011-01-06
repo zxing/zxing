@@ -1214,7 +1214,12 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PREBINDING = NO;
 				SDKROOT = iphoneos4.2;
-				WARNING_CFLAGS = "-Werror";
+				WARNING_CFLAGS = (
+					"-Wall",
+					"-Wextra",
+					"-Werror",
+					"-Wno-unused-parameter",
+				);
 			};
 			name = Debug;
 		};
@@ -1223,7 +1228,6 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				GCC_C_LANGUAGE_STANDARD = c99;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = ../../cpp/core/src;
@@ -1231,7 +1235,12 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PREBINDING = NO;
 				SDKROOT = iphoneos4.2;
-				WARNING_CFLAGS = "-Werror";
+				WARNING_CFLAGS = (
+					"-Wall",
+					"-Wextra",
+					"-Werror",
+					"-Wno-unused-parameter",
+				);
 			};
 			name = Release;
 		};

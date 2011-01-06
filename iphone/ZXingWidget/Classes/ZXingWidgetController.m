@@ -72,7 +72,7 @@
 }
 
 - (void)dealloc {
-  if (beepSound != -1) {
+  if (beepSound != (SystemSoundID)-1) {
     AudioServicesDisposeSystemSoundID(beepSound);
   }
   
@@ -231,7 +231,7 @@
 
 - (void)presentResultForString:(NSString *)resultString {
   self.result = [ResultParser parsedResultForString:resultString];
-  if (beepSound != -1) {
+  if (beepSound != (SystemSoundID)-1) {
     AudioServicesPlaySystemSound(beepSound);
   }
 #ifdef DEBUG
