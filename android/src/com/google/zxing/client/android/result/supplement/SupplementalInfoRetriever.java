@@ -24,6 +24,7 @@ import android.text.Html;
 import android.text.Spanned;
 import android.view.View;
 import android.widget.TextView;
+import com.google.zxing.client.result.ISBNParsedResult;
 import com.google.zxing.client.result.ParsedResult;
 import com.google.zxing.client.result.ProductParsedResult;
 import com.google.zxing.client.result.URIParsedResult;
@@ -59,7 +60,9 @@ public abstract class SupplementalInfoRetriever implements Callable<Void> {
     if (result instanceof URIParsedResult) {
       retriever = new URIResultInfoRetriever(textView, (URIParsedResult) result, handler, context);
     } else if (result instanceof ProductParsedResult) {
-      retriever = new ProductResultInfoRetriever(textView, (ProductParsedResult) result, handler, context);
+      retriever = new ProductResultInfoRetriever(textView, ((ProductParsedResult) result).getProductID(), handler, context);
+    } else if (result instanceof ISBNParsedResult) {
+      retriever = new ProductResultInfoRetriever(textView, ((ISBNParsedResult) result).getISBN(), handler, context);
     }
     if (retriever != null) {
       ExecutorService executor = getExecutorService();
