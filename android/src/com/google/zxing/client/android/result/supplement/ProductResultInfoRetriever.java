@@ -22,7 +22,6 @@ import android.util.Log;
 import android.widget.TextView;
 import com.google.zxing.client.android.AndroidHttpClient;
 import com.google.zxing.client.android.LocaleManager;
-import com.google.zxing.client.result.ProductParsedResult;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -47,17 +46,16 @@ final class ProductResultInfoRetriever extends SupplementalInfoRetriever {
       Pattern.compile("owb63p\">([^<]+).+zdi3pb\">([^<]+)");
 
 
-  private final ProductParsedResult result;
+  private final String productID;
 
-  ProductResultInfoRetriever(TextView textView, ProductParsedResult result, Handler handler, Context context) {
+  ProductResultInfoRetriever(TextView textView, String productID, Handler handler, Context context) {
     super(textView, handler, context);
-    this.result = result;
+    this.productID = productID;
   }
 
   @Override
   void retrieveSupplementalInfo() throws IOException, InterruptedException {
 
-    String productID = result.getProductID();
     String encodedProductID = URLEncoder.encode(productID, "UTF-8");
     String uri = BASE_PRODUCT_URI + encodedProductID;
 
