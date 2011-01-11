@@ -17,6 +17,7 @@
 package com.google.zxing.datamatrix;
 
 import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatReader;
 import com.google.zxing.common.AbstractBlackBoxTestCase;
 
 /**
@@ -25,8 +26,7 @@ import com.google.zxing.common.AbstractBlackBoxTestCase;
 public final class DataMatrixBlackBox2TestCase extends AbstractBlackBoxTestCase {
 
   public DataMatrixBlackBox2TestCase() {
-    // TODO use MultiFormatReader here once Data Matrix decoder is done
-    super("test/data/blackbox/datamatrix-2", new DataMatrixReader(), BarcodeFormat.DATA_MATRIX);
+    super("test/data/blackbox/datamatrix-2", new MultiFormatReader(), BarcodeFormat.DATA_MATRIX);
     addTest(10, 10, 0.0f);
     addTest(13, 13, 90.0f);
     addTest(16, 16, 180.0f);
