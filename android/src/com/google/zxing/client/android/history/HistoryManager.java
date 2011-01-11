@@ -57,7 +57,7 @@ public final class HistoryManager {
 
   private static final String TAG = HistoryManager.class.getSimpleName();
 
-  private static final int MAX_ITEMS = 50;
+  private static final int MAX_ITEMS = 500;
   //private static final String[] TEXT_COL_PROJECTION = { DBHelper.TEXT_COL };
   private static final String[] GET_ITEM_COL_PROJECTION = {
       DBHelper.TEXT_COL,
