@@ -80,22 +80,24 @@ public final class Decoder {
     // Separate into data blocks
     DataBlock[] dataBlocks = DataBlock.getDataBlocks(codewords, version);
 
+    int dataBlocksCount = dataBlocks.length;
+
     // Count total number of data bytes
     int totalBytes = 0;
-    for (int i = 0; i < dataBlocks.length; i++) {
+    for (int i = 0; i < dataBlocksCount; i++) {
       totalBytes += dataBlocks[i].getNumDataCodewords();
     }
     byte[] resultBytes = new byte[totalBytes];
-    int resultOffset = 0;
 
     // Error-correct and copy data blocks together into a stream of bytes
-    for (int j = 0; j < dataBlocks.length; j++) {
+    for (int j = 0; j < dataBlocksCount; j++) {
       DataBlock dataBlock = dataBlocks[j];
       byte[] codewordBytes = dataBlock.getCodewords();
       int numDataCodewords = dataBlock.getNumDataCodewords();
       correctErrors(codewordBytes, numDataCodewords);
       for (int i = 0; i < numDataCodewords; i++) {
-        resultBytes[resultOffset++] = codewordBytes[i];
+        // De-interlace data blocks.
+        resultBytes[i * dataBlocksCount + j] = codewordBytes[i];
       }
     }
 
