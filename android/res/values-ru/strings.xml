@@ -107,8 +107,8 @@
   <string name="preferences_remember_duplicates_summary">Сохранять в истории результат сканирования одного и того же штрих-кода</string>
   <string name="preferences_remember_duplicates_title">Запоминать дубликаты</string>
   <string name="preferences_result_title">Настройки результатов</string>
-  <string name="preferences_reverse_image_summary">Включить на устройствах с фронтальной камеры только</string>
-  <string name="preferences_reverse_image_title">Обратный изображения камеры</string>
+  <string name="preferences_reverse_image_summary">Позволяет распознавать штрих-коды на устройствах с фронтальной камерой</string>
+  <string name="preferences_reverse_image_title">Отразить изображение</string>
   <string name="preferences_scanning_title">При сканировании штрих-кодов\u2026</string>
   <string name="preferences_supplemental_summary">Показывать подробную информацию о штрих-коде</string>
   <string name="preferences_supplemental_title">Подробности</string>
