@@ -35,7 +35,7 @@
            deprecation="true"
            includeantruntime="false">
       <classpath>
-        <pathelement location="${android-home}/platforms/android-3/android.jar"/>
+        <pathelement location="${android-home}/platforms/android-7/android.jar"/>
       </classpath>
     </javac>
     <jar jarfile="android-integration.jar" basedir="build"/>

@@ -74,6 +74,7 @@ import android.net.Uri;
  * @author Fred Lin
  * @author Isaac Potoczny-Jones
  * @author Brad Drehmer
+ * @author gcstang
  */
 public final class IntentIntegrator {
 
@@ -84,6 +85,8 @@ public final class IntentIntegrator {
       "This application requires Barcode Scanner. Would you like to install it?";
   public static final String DEFAULT_YES = "Yes";
   public static final String DEFAULT_NO = "No";
+
+  private static final String PACKAGE = "com.google.zxing.client.android";
 
   // supported barcode formats
   public static final String PRODUCT_CODE_TYPES = "UPC_A,UPC_E,EAN_8,EAN_13";
@@ -166,7 +169,8 @@ public final class IntentIntegrator {
                                          CharSequence stringButtonYes,
                                          CharSequence stringButtonNo,
                                          CharSequence stringDesiredBarcodeFormats) {
-    Intent intentScan = new Intent("com.google.zxing.client.android.SCAN");
+    Intent intentScan = new Intent(PACKAGE + ".SCAN");
+    intentScan.setPackage(PACKAGE);
     intentScan.addCategory(Intent.CATEGORY_DEFAULT);
 
     // check which types of codes to scan for
@@ -193,7 +197,7 @@ public final class IntentIntegrator {
     downloadDialog.setMessage(stringMessage);
     downloadDialog.setPositiveButton(stringButtonYes, new DialogInterface.OnClickListener() {
       public void onClick(DialogInterface dialogInterface, int i) {
-        Uri uri = Uri.parse("market://search?q=pname:com.google.zxing.client.android");
+        Uri uri = Uri.parse("market://search?q=pname:" + PACKAGE);
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         activity.startActivity(intent);
       }
@@ -272,7 +276,8 @@ public final class IntentIntegrator {
                                CharSequence stringButtonNo) {
 
     Intent intent = new Intent();
-    intent.setAction("com.google.zxing.client.android.ENCODE");
+    intent.setAction(PACKAGE + ".ENCODE");
+    intent.setPackage(PACKAGE);
     intent.putExtra("ENCODE_TYPE", "TEXT_TYPE");
     intent.putExtra("ENCODE_DATA", text);
     try {
