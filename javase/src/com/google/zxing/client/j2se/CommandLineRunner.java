@@ -16,20 +16,7 @@
 
 package com.google.zxing.client.j2se;
 
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.BinaryBitmap;
-import com.google.zxing.DecodeHintType;
-import com.google.zxing.LuminanceSource;
-import com.google.zxing.MultiFormatReader;
-import com.google.zxing.NotFoundException;
-import com.google.zxing.Result;
-import com.google.zxing.client.result.ParsedResult;
-import com.google.zxing.client.result.ResultParser;
-import com.google.zxing.common.BitArray;
-import com.google.zxing.common.BitMatrix;
-import com.google.zxing.common.HybridBinarizer;
-import com.google.zxing.ResultPoint;
-
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -44,13 +31,25 @@ import java.nio.charset.Charset;
 import java.util.Hashtable;
 import java.util.Vector;
 
-import javax.imageio.ImageIO;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.BinaryBitmap;
+import com.google.zxing.DecodeHintType;
+import com.google.zxing.LuminanceSource;
+import com.google.zxing.MultiFormatReader;
+import com.google.zxing.NotFoundException;
+import com.google.zxing.Result;
+import com.google.zxing.ResultPoint;
+import com.google.zxing.client.result.ParsedResult;
+import com.google.zxing.client.result.ResultParser;
+import com.google.zxing.common.BitArray;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.common.HybridBinarizer;
+import com.google.zxing.multi.GenericMultipleBarcodeReader;
 
 /**
- * <p>This simple command line utility decodes files, directories of files, or URIs which are passed
- * as arguments. By default it uses the normal decoding algorithms, but you can pass --try_harder to
- * request that hint. The raw text of each barcode is printed, and when running against directories,
- * summary statistics are also displayed.</p>
+ * <p>This simple command line utility decodes files, directories of files, or URIs which are passed as arguments. By
+ * default it uses the normal decoding algorithms, but you can pass --try_harder to request that hint. The raw text of
+ * each barcode is printed, and when running against directories, summary statistics are also displayed.</p>
  *
  * @author Sean Owen
  * @author dswitkin@google.com (Daniel Switkin)
@@ -71,6 +70,7 @@ public final class CommandLineRunner {
     boolean productsOnly = false;
     boolean dumpResults = false;
     boolean dumpBlackPoint = false;
+    boolean multi = false;
     int[] crop = null;
     for (String arg : args) {
       if ("--try_harder".equals(arg)) {
@@ -83,6 +83,8 @@ public final class CommandLineRunner {
         dumpResults = true;
       } else if ("--dump_black_point".equals(arg)) {
         dumpBlackPoint = true;
+      } else if ("--multi".equals(arg)) {
+        multi = true;
       } else if (arg.startsWith("--crop")) {
         crop = new int[4];
         String[] tokens = arg.substring(7).split(",");
@@ -99,7 +101,7 @@ public final class CommandLineRunner {
     Hashtable<DecodeHintType, Object> hints = buildHints(tryHarder, pureBarcode, productsOnly);
     for (String arg : args) {
       if (!arg.startsWith("--")) {
-        decodeOneArgument(arg, hints, dumpResults, dumpBlackPoint, crop);
+        decodeOneArgument(arg, hints, dumpResults, dumpBlackPoint, crop, multi);
       }
     }
   }
@@ -145,14 +147,15 @@ public final class CommandLineRunner {
     System.err.println("  --dump_results: Write the decoded contents to input.txt");
     System.err.println("  --dump_black_point: Compare black point algorithms as input.mono.png");
     System.err.println("  --crop=left,top,width,height: Only examine cropped region of input image(s)");
+    System.err.println("  --multi: Scans image for multiple barcodes");
   }
 
   private static void decodeOneArgument(String argument,
                                         Hashtable<DecodeHintType, Object> hints,
                                         boolean dumpResults,
                                         boolean dumpBlackPoint,
-                                        int[] crop) throws IOException,
-      URISyntaxException {
+                                        int[] crop,
+                                        boolean multi) throws IOException, URISyntaxException {
 
     File inputFile = new File(argument);
     if (inputFile.exists()) {
@@ -169,21 +172,38 @@ public final class CommandLineRunner {
           if (filename.contains(".mono.png")) {
             continue;
           }
-          Result result = decode(input.toURI(), hints, dumpBlackPoint, crop);
-          if (result != null) {
-            successful++;
-            if (dumpResults) {
-              dumpResult(input, result);
+          if (multi) {
+            Result[] results = decodeMulti(input.toURI(), hints, dumpBlackPoint, crop);
+            if (results != null) {
+              successful++;
+              if (dumpResults) {
+                dumpResultMulti(input, results);
+              }
+            }
+          } else {
+            Result result = decode(input.toURI(), hints, dumpBlackPoint, crop);
+            if (result != null) {
+              successful++;
+              if (dumpResults) {
+                dumpResult(input, result);
+              }
             }
           }
           total++;
         }
         System.out.println("\nDecoded " + successful + " files out of " + total +
-            " successfully (" + (successful * 100 / total) + "%)\n");
+                               " successfully (" + (successful * 100 / total) + "%)\n");
       } else {
-        Result result = decode(inputFile.toURI(), hints, dumpBlackPoint, crop);
-        if (dumpResults) {
-          dumpResult(inputFile, result);
+        if (multi) {
+          Result[] results = decodeMulti(inputFile.toURI(), hints, dumpBlackPoint, crop);
+          if (dumpResults) {
+            dumpResultMulti(inputFile, results);
+          }
+        } else {
+          Result result = decode(inputFile.toURI(), hints, dumpBlackPoint, crop);
+          if (dumpResults) {
+            dumpResult(inputFile, result);
+          }
         }
       }
     } else {
@@ -201,10 +221,33 @@ public final class CommandLineRunner {
     writeStringToFile(result.getText(), dump);
   }
 
+  private static void dumpResultMulti(File input, Result[] results) throws IOException {
+    String name = input.getAbsolutePath();
+    int pos = name.lastIndexOf('.');
+    if (pos > 0) {
+      name = name.substring(0, pos);
+    }
+    File dump = new File(name + ".txt");
+    writeResultsToFile(results, dump);
+  }
+
   private static void writeStringToFile(String value, File file) throws IOException {
     Writer out = new OutputStreamWriter(new FileOutputStream(file), Charset.forName("UTF8"));
     try {
       out.write(value);
+    } finally {
+      out.close();
+    }
+  }
+
+  private static void writeResultsToFile(Result[] results, File file) throws IOException {
+    String newline = System.getProperty("line.separator");
+    Writer out = new OutputStreamWriter(new FileOutputStream(file), Charset.forName("UTF8"));
+    try {
+      for (Result result : results) {
+        out.write(result.getText());
+        out.write(newline);
+      }
     } finally {
       out.close();
     }
@@ -238,23 +281,75 @@ public final class CommandLineRunner {
       Result result = new MultiFormatReader().decode(bitmap, hints);
       ParsedResult parsedResult = ResultParser.parseResult(result);
       System.out.println(uri.toString() + " (format: " + result.getBarcodeFormat() +
-          ", type: " + parsedResult.getType() + "):\nRaw result:\n" + result.getText() +
-          "\nParsed result:\n" + parsedResult.getDisplayResult());
+                             ", type: " + parsedResult.getType() + "):\nRaw result:\n" + result.getText() +
+                             "\nParsed result:\n" + parsedResult.getDisplayResult());
 
       System.out.println("Also, there were " + result.getResultPoints().length + " result points.");
       for (int i = 0; i < result.getResultPoints().length; i++) {
         ResultPoint rp = result.getResultPoints()[i];
-        System.out.println("  Point " + i + ": (" + rp.getX() + "," + rp.getY() + ")");
+        System.out.println("  Point " + i + ": (" + rp.getX() + ',' + rp.getY() + ')');
       }
 
       return result;
     } catch (NotFoundException nfe) {
       System.out.println(uri.toString() + ": No barcode found");
       return null;
-    // } finally {
+      // } finally {
       // Uncomment these lines when turning on exception tracking in ReaderException.
       //System.out.println("Threw " + ReaderException.getExceptionCountAndReset() + " exceptions");
       //System.out.println("Throwers:\n" + ReaderException.getThrowersAndReset());
+    }
+  }
+
+  private static Result[] decodeMulti(URI uri,
+                                      Hashtable<DecodeHintType, Object> hints,
+                                      boolean dumpBlackPoint,
+                                      int[] crop) throws IOException {
+    BufferedImage image;
+    try {
+      image = ImageIO.read(uri.toURL());
+    } catch (IllegalArgumentException iae) {
+      throw new FileNotFoundException("Resource not found: " + uri);
+    }
+    if (image == null) {
+      System.err.println(uri.toString() + ": Could not load image");
+      return null;
+    }
+    try {
+      LuminanceSource source;
+      if (crop == null) {
+        source = new BufferedImageLuminanceSource(image);
+      } else {
+        source = new BufferedImageLuminanceSource(image, crop[0],
+                                                  crop[1], crop[2], crop[3]);
+      }
+      BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+      if (dumpBlackPoint) {
+        dumpBlackPoint(uri, image, bitmap);
+      }
+
+      MultiFormatReader multiFormatReader = new MultiFormatReader();
+      GenericMultipleBarcodeReader reader = new GenericMultipleBarcodeReader(
+          multiFormatReader);
+      Result[] results = reader.decodeMultiple(bitmap, hints);
+
+      for (Result result : results) {
+        ParsedResult parsedResult = ResultParser.parseResult(result);
+        System.out.println(uri.toString() + " (format: "
+                               + result.getBarcodeFormat() + ", type: "
+                               + parsedResult.getType() + "):\nRaw result:\n"
+                               + result.getText() + "\nParsed result:\n"
+                               + parsedResult.getDisplayResult());
+        System.out.println("Also, there were " + result.getResultPoints().length + " result points.");
+        for (int i = 0; i < result.getResultPoints().length; i++) {
+          ResultPoint rp = result.getResultPoints()[i];
+          System.out.println("  Point " + i + ": (" + rp.getX() + ',' + rp.getY() + ')');
+        }
+      }
+      return results;
+    } catch (NotFoundException nfe) {
+      System.out.println(uri.toString() + ": No barcode found");
+      return null;
     }
   }
 
