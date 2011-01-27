@@ -31,6 +31,7 @@
   NSString *urlString;
   NSString *address;
   NSString *organization;
+  NSString *jobTitle;
   
   UIViewController *viewController;
 }
@@ -42,6 +43,7 @@
 @property (nonatomic, copy) NSString *urlString;
 @property (nonatomic, copy) NSString *address;
 @property (nonatomic, copy) NSString *organization;
+@property (nonatomic, copy) NSString *jobTitle;
 
 + (id)actionWithName:(NSString *)n
         phoneNumbers:(NSArray *)nums
@@ -49,6 +51,7 @@
                  url:(NSString *)us
              address:(NSString *)ad
                 note:(NSString *)nt
-        organization:(NSString *)org;
+        organization:(NSString *)org
+            jobTitle:(NSString *)title;
 
 @end

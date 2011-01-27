@@ -20,6 +20,7 @@ static const CGFloat kPadding = 10;
 
 @interface OverlayView()
 @property (nonatomic,assign) UIButton *cancelButton;
+@property (nonatomic,retain) UILabel *instructionsLabel;
 @end
 
 
@@ -29,6 +30,7 @@ static const CGFloat kPadding = 10;
 @synthesize points = _points;
 @synthesize cancelButton;
 @synthesize cropRect;
+@synthesize instructionsLabel;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 - (id) initWithFrame:(CGRect)theFrame cancelEnabled:(BOOL)isCancelEnabled oneDMode:(BOOL)isOneDModeEnabled {
@@ -61,6 +63,7 @@ static const CGFloat kPadding = 10;
       [self addSubview:cancelButton];
       [self addSubview:imageView];
     }
+    
   }
   return self;
 }
@@ -76,6 +79,7 @@ static const CGFloat kPadding = 10;
 - (void) dealloc {
 	[imageView release];
 	[_points release];
+  [instructionsLabel release];
 	[super dealloc];
 }
 

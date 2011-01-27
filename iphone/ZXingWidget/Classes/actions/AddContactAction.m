@@ -32,6 +32,7 @@
 @synthesize urlString;
 @synthesize address;
 @synthesize organization;
+@synthesize jobTitle;
 
 + (id)actionWithName:(NSString *)n
         phoneNumbers:(NSArray *)nums
@@ -39,7 +40,8 @@
                  url:(NSString *)us
              address:(NSString *)ad
                 note:(NSString *)nt
-        organization:(NSString *)org {
+        organization:(NSString *)org
+            jobTitle:(NSString *)title {
   AddContactAction *aca = [[[self alloc] init] autorelease];
   aca.name = n;
   aca.phoneNumbers = nums;
@@ -48,6 +50,7 @@
   aca.address = ad;
   aca.note = nt;
   aca.organization = org;
+  aca.jobTitle = title;
   return aca;
 }
 
@@ -94,6 +97,10 @@
   
   if (self.organization) {
     ABRecordSetValue(person, kABPersonOrganizationProperty, (CFStringRef)self.organization, error);
+  }
+  
+  if (self.jobTitle) {
+    ABRecordSetValue(person, kABPersonJobTitleProperty, (CFStringRef)self.jobTitle, error);
   }
   
   if (self.phoneNumbers && self.phoneNumbers.count > 0) {

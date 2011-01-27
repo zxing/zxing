@@ -160,7 +160,7 @@ public:
 - (BOOL)decode {
   NSAutoreleasePool* mainpool = [[NSAutoreleasePool alloc] init];
   TwoDDecoderResult *decoderResult = nil;
-    
+  BOOL returnCode = NO;
   { 
     //NSSet *formatReaders = [FormatReader formatReaders];
     NSSet *formatReaders = self.readers;
@@ -205,10 +205,13 @@ public:
             [points addObject:[NSValue valueWithCGPoint:p]];
           }
           
-          NSString *resultString = [NSString stringWithCString:cString
-                                                        encoding:NSUTF8StringEncoding];
-
-          decoderResult = [[TwoDDecoderResult resultWithText:resultString points:points] retain];
+          //NSString *resultString = [NSString stringWithCString:cString
+          //                                            encoding:NSUTF8StringEncoding];
+          NSString *resultString = [[NSString alloc] initWithCString:cString encoding:NSUTF8StringEncoding];
+          //decoderResult = [[TwoDDecoderResult resultWithText:resultString points:points] retain];
+          if (decoderResult) [decoderResult release];
+          decoderResult = [[TwoDDecoderResult alloc] initWithText:resultString points:points];
+          [resultString release];
           [points release];
         } catch (ReaderException &rex) {
           NSLog(@"failed to decode, caught ReaderException '%s'",
@@ -245,8 +248,10 @@ public:
 
     if (decoderResult) {
       [self performSelectorOnMainThread:@selector(didDecodeImage:)
-                   withObject:decoderResult
+                   withObject:[decoderResult copy]
                 waitUntilDone:NO];
+      [decoderResult release];
+      returnCode = YES;
     } else {
       [self performSelectorOnMainThread:@selector(failedToDecodeImage:)
                    withObject:NSLocalizedString(@"Decoder BarcodeDetectionFailure", @"No barcode detected.")
@@ -260,7 +265,7 @@ public:
 #endif
   [mainpool release];
 
-  return decoderResult == nil ? NO : YES;
+  return returnCode;
 }
 
 - (BOOL) decodeImage:(UIImage *)i {

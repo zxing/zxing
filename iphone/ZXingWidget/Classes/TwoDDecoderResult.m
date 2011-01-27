@@ -39,6 +39,15 @@
   return self;
 }
 
+- (id)copyWithZone:(NSZone *)zone {
+  TwoDDecoderResult *theCopy = [[TwoDDecoderResult allocWithZone:zone] initWithText:[text copyWithZone:zone] points:[points copyWithZone:zone]];
+  return theCopy;
+}
+
+- (id)copy {
+  return [self copyWithZone:nil];
+}
+
 - (void)dealloc {
   [text release];
   [points release];

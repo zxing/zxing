@@ -46,7 +46,11 @@
   result.note = [s fieldWithPrefix:@"NOTE:"];
   result.urlString = [s fieldWithPrefix:@"URL:"];
   result.address = [s fieldWithPrefix:@"ADR:"];
+  
+  //The following tags are not stricty parot of MECARD spec, but as their are standard in
+  //vcard, we honor them
   result.organization = [s fieldWithPrefix:@"ORG:"];
+  result.jobTitle = [s fieldWithPrefix:@"TITLE:"];
   
   return [result autorelease];
 }

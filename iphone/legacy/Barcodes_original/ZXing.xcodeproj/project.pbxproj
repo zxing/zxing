@@ -1517,7 +1517,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = ZXing_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
-				HEADER_SEARCH_PATHS = ../../cpp/core/src;
+				HEADER_SEARCH_PATHS = ../../../cpp/core/src;
 				INFOPLIST_FILE = Info.plist;
 				PRODUCT_NAME = Barcodes;
 			};
@@ -2005,7 +2005,7 @@
 				HEADER_SEARCH_PATHS = ../../../cpp/core/src;
 				ONLY_ACTIVE_ARCH = YES;
 				PREBINDING = NO;
-				SDKROOT = iphoneos4.2;
+				SDKROOT = iphoneos;
 			};
 			name = Debug;
 		};

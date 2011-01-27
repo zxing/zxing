@@ -22,9 +22,10 @@
 	UIImageView *imageView;
 	NSMutableArray *_points;
 	UIButton *cancelButton;
+  UILabel *instructionsLabel;
 	id<CancelDelegate> delegate;
 	BOOL oneDMode;
-        CGRect cropRect;
+  CGRect cropRect;
 }
 
 @property (nonatomic, retain) NSMutableArray*  points;

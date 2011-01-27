@@ -18,8 +18,6 @@
 @implementation ZXMainViewController
 @synthesize actions;
 @synthesize result;
-@synthesize resultView;
-@synthesize lastActionButton;
 
 // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
 /*
@@ -37,10 +35,6 @@
 - (void)viewDidLoad {
   [super viewDidLoad];
   self.navigationItem.title = @"Barcodes";
-  NSString *rawLatestResult = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastScan"];
-  if (!rawLatestResult) rawLatestResult = NSLocalizedString(@"Latest result will appear here once you have scanned a barcode at least once",@"Latest result will appear here once you have scanned a barcode at least once");
-  [self setResultViewWithText:rawLatestResult];
-  
 }
 
 
@@ -80,28 +74,6 @@
   [messageController release];
 }
 
-- (IBAction)info:(id)sender {
-  MessageViewController *aboutController =
-  [[MessageViewController alloc] initWithMessageFilename:@"About"];
-  aboutController.delegate = self;
-  //TODO: change this
-  [self.navigationController pushViewController:aboutController animated:YES];
-  [aboutController release];
-}
-
-- (IBAction)showArchive:(id)sender {
-  ArchiveController *archiveController = [[ArchiveController alloc] init];
-  archiveController.delegate = self;
-  //TODO: change this
-  [self.navigationController pushViewController:archiveController animated:YES];
-  [archiveController release];
-}
-
-- (IBAction)lastResultAction:(id)sender {
-  [self performResultAction];
-}
-
-
 - (void)performAction:(ResultAction *)action {
   [action performActionWithController:self shouldConfirm:NO];
 }
@@ -124,52 +96,24 @@
 
 
 - (void)dealloc {
-  [resultView release];
-  [lastActionButton release];
   actions = nil;
   result = nil;
   [super dealloc];
-}
-
-- (void)setResultViewWithText:(NSString*)theResult {
-  ParsedResult *parsedResult = [[UniversalResultParser parsedResultForString:theResult] retain];
-  NSString *displayString = [parsedResult stringForDisplay];
-  self.resultView.text = displayString;
-  self.result = [parsedResult retain];
-  self.actions = [[parsedResult actions] retain];
-  NSString *buttonTitle;
-  if ([self.actions count] == 1) {
-    ResultAction *theAction = [self.actions objectAtIndex:0];
-    buttonTitle = [theAction title];
-    lastActionButton.userInteractionEnabled = YES;
-  } else if ([self.actions count] == 0) {
-    lastActionButton.userInteractionEnabled = NO;
-    buttonTitle = NSLocalizedString(@"No Actions",@"No Actions");
-  } else {
-    
-    lastActionButton.userInteractionEnabled = YES;
-    buttonTitle = NSLocalizedString(@"Actions ...",@"Actions ...");
-  }
-  [lastActionButton setTitle:buttonTitle forState: UIControlStateNormal];
 }
 
 #pragma mark -
 #pragma mark ZXingDelegateMethods
 - (void)zxingController:(ZXingWidgetController*)controller didScanResult:(NSString *)resultString {
   [self dismissModalViewControllerAnimated:YES];
-  //ParsedResult *theResult = [UniversalResultParser parsedResultForString:resultString];
-  //self.result = [theResult retain];
-  //self.actions = [self.result.actions retain];
-  [self setResultViewWithText:resultString];
 #ifdef DEBUG  
   NSLog(@"result has %d actions", actions ? 0 : actions.count);
 #endif
   Scan * scan = [[Database sharedDatabase] addScanWithText:resultString];
   [[NSUserDefaults standardUserDefaults] setObject:resultString forKey:@"lastScan"];
 
-  
-  //TODO: toggle view into result view that needs to be done.
   ParsedResult *parsedResult = [[UniversalResultParser parsedResultForString:resultString] retain];
+  self.result = [parsedResult retain];
+  self.actions = [self.result.actions retain];
   ScanViewController *scanViewController = [[ScanViewController alloc] initWithResult:parsedResult forScan:scan];
   [self.navigationController pushViewController:scanViewController animated:NO];
   [scanViewController release];

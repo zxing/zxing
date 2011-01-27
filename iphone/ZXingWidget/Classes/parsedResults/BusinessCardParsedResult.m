@@ -31,6 +31,7 @@
 @synthesize urlString;
 @synthesize address;
 @synthesize organization;
+@synthesize jobTitle;
 
 - (NSString *)stringForDisplay {
   NSMutableString *result = [NSMutableString stringWithString:self.name];
@@ -63,7 +64,8 @@
                                                   url:self.urlString 
                                               address:self.address 
                                                  note:self.note
-                                         organization:self.organization]];
+                                         organization:self.organization
+                                             jobTitle:self.jobTitle]];
 }
 
 - (void) dealloc {
@@ -74,6 +76,7 @@
   [address release];
   [note release];
   [organization release];
+  [jobTitle release];
   [super dealloc];
 }
 

@@ -90,9 +90,9 @@ static Database *sharedDatabase = nil;
   sqlite3_bind_double(insertStatement, 3, timeStamp);
   sqlite3_step(insertStatement);
   sqlite3_reset(insertStatement);
-  NSDate* theDate = [NSDate dateWithTimeIntervalSince1970:timeStamp];
+  NSDate* theDate = [[NSDate alloc] initWithTimeIntervalSince1970:timeStamp];
   Scan *scan = [[[Scan alloc] initWithIdent:nextScanIdent text:text stamp:theDate] autorelease];
-
+  [theDate release];
   return scan;
 }
 
@@ -100,9 +100,11 @@ static Database *sharedDatabase = nil;
   NSMutableArray *scans = [NSMutableArray array];
   while (SQLITE_ROW == sqlite3_step(selectAllStatement)) {
     int ident = sqlite3_column_int(selectAllStatement, 0);
-    NSString *text = [NSString stringWithUTF8String:(char *)sqlite3_column_text(selectAllStatement, 1)];
-    NSDate *stamp = [NSDate dateWithTimeIntervalSince1970:sqlite3_column_double(selectAllStatement, 2)];
+    NSString *text = [[NSString alloc] initWithUTF8String:(char *)sqlite3_column_text(selectAllStatement, 1)];
+    NSDate *stamp = [[NSDate alloc] initWithTimeIntervalSince1970:sqlite3_column_double(selectAllStatement, 2)];
     Scan *scan = [[Scan alloc] initWithIdent:ident text:text stamp:stamp];
+    [text release];
+    [stamp release];
     [scans addObject:scan];
     [scan release];
   }

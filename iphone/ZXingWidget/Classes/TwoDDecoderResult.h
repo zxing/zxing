@@ -21,7 +21,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface TwoDDecoderResult : NSObject {
+@interface TwoDDecoderResult : NSObject<NSCopying> {
   NSString *text;
   NSArray *points;
 }
@@ -31,5 +31,7 @@
 
 + (id)resultWithText:(NSString *)text points:(NSArray *)points;
 - (id)initWithText:(NSString *)text points:(NSArray *)points;
+- (id)copyWithZone:(NSZone *)zone;
+- (id)copy;
 
 @end
