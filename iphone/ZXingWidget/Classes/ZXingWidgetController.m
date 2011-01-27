@@ -20,6 +20,7 @@
 #import "ResultParser.h"
 #import "ParsedResult.h"
 #import "ResultAction.h"
+#import "TwoDDecoderResult.h"
 #include <sys/types.h>
 #include <sys/sysctl.h>
 
@@ -239,11 +240,13 @@
 #endif
 }
 
-- (void)presentResultPoints:(NSMutableArray *)resultPoints
+- (void)presentResultPoints:(NSArray *)resultPoints
                    forImage:(UIImage *)image
                 usingSubset:(UIImage *)subset {
   // simply add the points to the image view
-  [overlayView setPoints:resultPoints];
+  NSMutableArray *mutableArray = [[NSMutableArray alloc] initWithArray:resultPoints];
+  [overlayView setPoints:mutableArray];
+  [mutableArray release];
 }
 
 - (void)decoder:(Decoder *)decoder didDecodeImage:(UIImage *)image usingSubset:(UIImage *)subset withResult:(TwoDDecoderResult *)twoDResult {

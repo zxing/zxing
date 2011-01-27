@@ -509,10 +509,10 @@
 		1FB4327D1290295C002D63E8 /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
+				1FF80CDB12A3AB1B00FE297C /* fr */,
 				1FB4327E1290295C002D63E8 /* de */,
 				1FB4328E12902968002D63E8 /* en */,
 				1FB4329512902973002D63E8 /* sv */,
-				1FF80CDB12A3AB1B00FE297C /* fr */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -551,6 +551,7 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Barcodes_Prefix.pch;
+				GCC_VERSION = 4.2;
 				INFOPLIST_FILE = "Barcodes-Info.plist";
 				OTHER_LDFLAGS = (
 					"-all_load",
@@ -567,6 +568,7 @@
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Barcodes_Prefix.pch;
+				GCC_VERSION = 4.2;
 				INFOPLIST_FILE = "Barcodes-Info.plist";
 				PRODUCT_NAME = Barcodes;
 				VALIDATE_PRODUCT = YES;
@@ -584,8 +586,8 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
-					"../ZXingWidget/Classes/**",
 					../../cpp/core/src,
+					"../ZXingWidget/Classes/**",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 4.1;
 				PREBINDING = NO;
@@ -602,6 +604,11 @@
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					../../cpp/core/src,
+					"../ZXingWidget/Classes/**",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 4.1;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PREBINDING = NO;
 				SDKROOT = iphoneos;

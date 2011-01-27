@@ -19,24 +19,16 @@
 @interface ZXMainViewController : UIViewController <ZXingDelegate,UIActionSheetDelegate,ModalViewControllerDelegate> {
   NSArray *actions;
   ParsedResult *result;
-  IBOutlet UITextView *resultView;
-  IBOutlet UIButton *lastActionButton;
 }
 
 @property (nonatomic,assign) NSArray *actions;
 @property (nonatomic,assign) ParsedResult *result;
-@property (nonatomic,retain) IBOutlet UITextView *resultView;
-@property (nonatomic,retain) IBOutlet UIButton *lastActionButton;
 
 - (IBAction)scan:(id)sender;
-- (IBAction)info:(id)sender;
-- (IBAction)showArchive:(id)sender;
-- (IBAction)lastResultAction:(id)sender;
 
 - (void)zxingController:(ZXingWidgetController*)controller didScanResult:(NSString *)result;
 - (void)zxingControllerDidCancel:(ZXingWidgetController*)controller;
 - (void)performResultAction;
-- (void)setResultViewWithText:(NSString*)theResult;
 
 
 

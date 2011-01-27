@@ -58,6 +58,7 @@
   int max = [self length];
   NSRange searchRange;
   NSRange foundRange;
+  NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
   while (i < max) {
     searchRange = NSMakeRange(i, max - i);
     foundRange = [self rangeOfString:prefix options:0 range:searchRange];
@@ -78,18 +79,20 @@
       } else {
         NSString *substring = [self substringWithRange:NSMakeRange(start, termRange.location - start)];
         NSString *unescaped = [substring backslashUnescaped];
+        NSString *toBeInArray = [[NSString alloc] initWithString:unescaped];
         if (result == nil) {
-          result = [NSMutableArray arrayWithObject:unescaped];
-        } else {
-          [result addObject:unescaped];
+          result = [[NSMutableArray alloc] initWithCapacity:1];
         }
+        [result addObject:toBeInArray];
+        [toBeInArray release];
         i = termRange.location + termRange.length;
         done = true;
       }
     }
   }
+  [pool release];
   
-  return result;
+  return [result autorelease];
 }
 
 - (NSString *)fieldWithPrefix:(NSString *)prefix {
