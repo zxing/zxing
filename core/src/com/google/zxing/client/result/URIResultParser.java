@@ -34,6 +34,9 @@ final class URIResultParser extends ResultParser {
     if (rawText != null && rawText.startsWith("URL:")) {
       rawText = rawText.substring(4);
     }
+    if (rawText != null) {
+      rawText = rawText.trim();
+    }
     if (!isBasicallyValidURI(rawText)) {
       return null;
     }
