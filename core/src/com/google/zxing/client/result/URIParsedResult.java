@@ -79,6 +79,7 @@ public final class URIParsedResult extends ParsedResult {
    * the protocol.
    */
   private static String massageURI(String uri) {
+    uri = uri.trim();
     int protocolEnd = uri.indexOf(':');
     if (protocolEnd < 0) {
       // No protocol, assume http
