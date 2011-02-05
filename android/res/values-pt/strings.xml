@@ -69,7 +69,7 @@
   <string name="msg_default_format">Formato</string>
   <string name="msg_default_meta">Metadados</string>
   <string name="msg_default_mms_subject">Olá</string>
-  <string name="msg_default_status">Coloque um código de barras dentro do retângulo do visor para verificar isso.</string>
+  <string name="msg_default_status">Coloque um código de barras dentro do retângulo do visor para decodificá-lo.</string>
   <string name="msg_default_time">Tempo</string>
   <string name="msg_default_type">Tipo</string>
   <string name="msg_encode_barcode_failed">Não foi possível criar código de barras pedido.</string>
