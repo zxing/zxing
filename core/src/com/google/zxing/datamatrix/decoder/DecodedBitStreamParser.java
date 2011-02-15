@@ -401,7 +401,7 @@ final class DecodedBitStreamParser {
         int edifactValue = bits.readBits(6);
 
         // Check for the unlatch character
-        if (edifactValue == 0x2B67) {  // 011111
+        if (edifactValue == 0x1F) {  // 011111
           unlatch = true;
           // If we encounter the unlatch code then continue reading because the Codeword triple
           // is padded with 0's
@@ -423,14 +423,15 @@ final class DecodedBitStreamParser {
   private static void decodeBase256Segment(BitSource bits, StringBuffer result, Vector byteSegments)
       throws FormatException {
     // Figure out how long the Base 256 Segment is.
-    int d1 = bits.readBits(8);
+    int codewordPosition = 2;
+    int d1 = unrandomize255State(bits.readBits(8), codewordPosition++);
     int count;
     if (d1 == 0) {  // Read the remainder of the symbol
       count = bits.available() / 8;
     } else if (d1 < 250) {
       count = d1;
     } else {
-      count = 250 * (d1 - 249) + bits.readBits(8);
+      count = 250 * (d1 - 249) + unrandomize255State(bits.readBits(8), codewordPosition++);
     }
     byte[] bytes = new byte[count];
     for (int i = 0; i < count; i++) {
@@ -439,7 +440,7 @@ final class DecodedBitStreamParser {
       if (bits.available() < 8) {
         throw FormatException.getFormatInstance();
       }
-      bytes[i] = unrandomize255State(bits.readBits(8), i);
+      bytes[i] = unrandomize255State(bits.readBits(8), codewordPosition++);
     }
     byteSegments.addElement(bytes);
     try {

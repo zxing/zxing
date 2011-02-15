@@ -252,7 +252,7 @@ final class DecodedBitStreamParser {
           } else {
             if (subModeCh == 26) {
               ch = ' ';
-            } else if (subModeCh == AL) {
+            } else if (subModeCh == AS) {
               subMode = ALPHA;
             } else if (subModeCh == ML) {
               subMode = MIXED;
