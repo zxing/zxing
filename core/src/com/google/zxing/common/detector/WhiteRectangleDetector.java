@@ -42,8 +42,11 @@ public final class WhiteRectangleDetector {
   private final int rightInit;
   private final int downInit;
   private final int upInit;
-  
-  public WhiteRectangleDetector(BitMatrix image) {
+
+  /**
+   * @throws NotFoundException if image is too small
+   */
+  public WhiteRectangleDetector(BitMatrix image) throws NotFoundException {
     this.image = image;
     height = image.getHeight();
     width = image.getWidth();
@@ -51,17 +54,26 @@ public final class WhiteRectangleDetector {
     rightInit = (width + INIT_SIZE) >> 1;
     upInit = (height - INIT_SIZE) >> 1;
     downInit = (height + INIT_SIZE) >> 1;
+    if (upInit < 0 || leftInit < 0 || downInit >= height || rightInit >= width) {
+      throw NotFoundException.getNotFoundInstance();
+    }
   }
-  
-  public WhiteRectangleDetector(BitMatrix image, int INIT_SIZE, int x, int y) {
-	    this.image = image;
-	    height = image.getHeight();
-	    width = image.getWidth();
-	    int halfsize = INIT_SIZE >> 1;
-	    leftInit = x - halfsize;
-	    rightInit = x + halfsize;
-	    upInit = y - halfsize;
-	    downInit = y + halfsize;
+
+  /**
+   * @throws NotFoundException if image is too small
+   */
+  public WhiteRectangleDetector(BitMatrix image, int initSize, int x, int y) throws NotFoundException {
+    this.image = image;
+    height = image.getHeight();
+    width = image.getWidth();
+    int halfsize = initSize >> 1;
+    leftInit = x - halfsize;
+    rightInit = x + halfsize;
+    upInit = y - halfsize;
+    downInit = y + halfsize;
+    if (upInit < 0 || leftInit < 0 || downInit >= height || rightInit >= width) {
+      throw NotFoundException.getNotFoundInstance();
+    }
   }
 
   /**
@@ -71,7 +83,7 @@ public final class WhiteRectangleDetector {
    * region until it finds a white rectangular region.
    * </p>
    *
-   * @return {@link ResultPoint}[] describing the corners of the rectangular
+   * @return {@link ResultPoint[]} describing the corners of the rectangular
    *         region. The first and last points are opposed on the diagonal, as
    *         are the second and third. The first point will be the topmost
    *         point and the last, the bottommost. The second point will be

@@ -46,7 +46,7 @@ public final class Detector {
   private final BitMatrix image;
   private final WhiteRectangleDetector rectangleDetector;
 
-  public Detector(BitMatrix image) {
+  public Detector(BitMatrix image) throws NotFoundException {
     this.image = image;
     rectangleDetector = new WhiteRectangleDetector(image);
   }

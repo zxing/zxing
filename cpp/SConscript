@@ -17,7 +17,7 @@ if env['PIC']:
 	flags.append("-fPIC")
 
 compile_options['CXXFLAGS'] = ' '.join(flags)
-
+compile_options['LINKFLAGS'] = "-ldl"
 
 def all_files(dir, ext='.cpp', level=5):
 	files = []
