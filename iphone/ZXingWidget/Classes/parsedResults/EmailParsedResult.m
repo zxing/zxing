@@ -53,9 +53,9 @@
     [parts addObject:@""];
     [parts addObject:[NSString stringWithFormat:NSLocalizedString(@"EmailParsedResult Display: Body", @"%@"), self.body]];
   }
-  NSString *res = [parts componentsJoinedByString:@"\n"];
+  NSString* string = [NSString stringWithString:[parts componentsJoinedByString:@"\n"]];
   [parts release];
-  return res;
+  return string;
 }
 
 + (NSString *)typeName {
