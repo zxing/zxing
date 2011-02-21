@@ -39,7 +39,7 @@ import android.net.Uri;
  * <p>There are a few steps to using this integration. First, your {@link Activity} must implement
  * the method {@link Activity#onActivityResult(int, int, Intent)} and include a line of code like this:</p>
  *
- * <p>{@code
+ * <pre>{@code
  * public void onActivityResult(int requestCode, int resultCode, Intent intent) {
  *   IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
  *   if (scanResult != null) {
@@ -48,12 +48,12 @@ import android.net.Uri;
  *   // else continue with any other code you need in the method
  *   ...
  * }
- * }</p>
+ * }</pre>
  *
  * <p>This is where you will handle a scan result.
  * Second, just call this in response to a user action somewhere to begin the scan process:</p>
  *
- * <p>{@code IntentIntegrator.initiateScan(yourActivity);}</p>
+ * <pre>{@code IntentIntegrator.initiateScan(yourActivity);}</pre>
  *
  * <p>You can use {@link #initiateScan(Activity, CharSequence, CharSequence, CharSequence, CharSequence)} or
  * {@link #initiateScan(Activity, int, int, int, int)} to customize the download prompt with
@@ -213,7 +213,7 @@ public final class IntentIntegrator {
    * <p>Call this from your {@link Activity}'s
    * {@link Activity#onActivityResult(int, int, Intent)} method.</p>
    *
-   * @return null if the event handled here was not related to {@link IntentIntegrator}, or
+   * @return null if the event handled here was not related to this class, or
    *  else an {@link IntentResult} containing the result of the scan. If the user cancelled scanning,
    *  the fields will be null.
    */
