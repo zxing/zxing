@@ -86,6 +86,7 @@ limitations under the License.
   <!-- Properties -->
 
   <property name="android-tools" value="${sdk.dir}/tools" />
+  <property name="platform-tools" value="${sdk.dir}/platform-tools" />
 
   <!-- Input directories -->
   <property name="source-folder" value="src" />
@@ -126,7 +127,7 @@ limitations under the License.
 
   <!-- Tools -->
   <condition property="exe" value=".exe" else=""><os family="windows"/></condition>
-  <property name="adb" value="${android-tools}/adb${exe}"/>
+  <property name="adb" value="${platform-tools}/adb${exe}"/>
 
   <!-- rules -->
 
@@ -203,7 +204,7 @@ limitations under the License.
       <arg value="-keep class com.google.zxing.client.androidtest.*Activity"/>
       <arg value="-keep class com.google.zxing.client.androidtest.ViewfinderView { public * ; }"/>
       <arg value="-target 5"/>
-      <arg value="-optimizationpasses 4"/>
+      <arg value="-optimizationpasses 5"/>
       <arg value="-optimizations !field/*,!class/merging/*"/> <!-- works around dex VerifyError -->
       <arg value="-dontshrink"/>
       <arg value="-dontobfuscate"/>
@@ -237,11 +238,12 @@ limitations under the License.
     <aaptexec executable="${aapt}"
               command="package"
               manifest="AndroidManifest.xml"
-              resources="${resource-folder}"
               assets="${asset-folder}"
               androidjar="${android.jar}"
-              outfolder="${out-folder}"
-              basename="${ant.project.name}" />
+              apkfolder="${out-folder}"
+              resourcefilename="${ant.project.name}">
+      <res path="${resource-folder}"/>
+    </aaptexec>
   </target>
 
   <!--
@@ -262,13 +264,14 @@ limitations under the License.
   <target name="debug" depends="dex, package-resources">
     <apkbuilder
         outfolder="${out-folder}"
-        basename="${ant.project.name}"
-        signed="true"
+        resourcefile="ZXingTest"
+        apkfilepath="${out-folder}/ZXingTest-debug.apk"
+        debugpackaging="true"
+        debugsigning="true"
         verbose="false">
-      <file path="${intermediate-dex}" />
+      <dex path="${intermediate-dex-location}" />
       <sourcefolder path="${source-folder}" />
       <jarfolder path="${external-libs-folder}" />
-      <nativefolder path="${native-libs-folder}" />
     </apkbuilder>
     <copy file="${out-folder}/ZXingTest-debug.apk" tofile="${out-folder}/temp.apk" overwrite="true"/>
     <exec executable="${android-tools}/zipalign">
@@ -285,13 +288,14 @@ limitations under the License.
   <target name="release" depends="dex, package-resources">
     <apkbuilder
         outfolder="${out-folder}"
-        basename="${ant.project.name}"
-        signed="false"
+        resourcefile="ZXingTest"
+        apkfilepath="${out-folder}/ZXingText-unsigned.apk"
+        debugpackaging="false"
+        debugsigning="false"
         verbose="false">
-      <file path="${intermediate-dex}" />
+      <dex path="${intermediate-dex-location}" />
       <sourcefolder path="${source-folder}" />
       <jarfolder path="${external-libs-folder}" />
-      <nativefolder path="${native-libs-folder}" />
     </apkbuilder>
     <echo>All generated packages need to be signed with jarsigner before they are published.</echo>
     <echo>Also run zipalign -f -v 4 ZXingTest.apk ZXingTest-aligned.apk after signing</echo>
