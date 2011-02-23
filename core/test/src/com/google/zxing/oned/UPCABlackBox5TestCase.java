@@ -27,8 +27,8 @@ public final class UPCABlackBox5TestCase extends AbstractBlackBoxTestCase {
 
   public UPCABlackBox5TestCase() {
     super("test/data/blackbox/upca-5", new MultiFormatReader(), BarcodeFormat.UPC_A);
-    addTest(19, 22, 0.0f);
-    addTest(21, 22, 180.0f);
+    addTest(19, 23, 0.0f);
+    addTest(20, 23, 180.0f);
   }
 
 }

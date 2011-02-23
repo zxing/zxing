@@ -21,14 +21,15 @@ import com.google.zxing.MultiFormatReader;
 import com.google.zxing.common.AbstractBlackBoxTestCase;
 
 /**
- * @author Sean Owen
+ * A set of blurry images taken with a fixed-focus device.
+ * @author dswitkin@google.com (Daniel Switkin)
  */
-public final class EAN13BlackBox1TestCase extends AbstractBlackBoxTestCase {
+public final class UPCABlackBox6BlurryTestCase extends AbstractBlackBoxTestCase {
 
-  public EAN13BlackBox1TestCase() {
-    super("test/data/blackbox/ean13-1", new MultiFormatReader(), BarcodeFormat.EAN_13);
-    addTest(29, 32, 0.0f);
-    addTest(28, 32, 180.0f);
+  public UPCABlackBox6BlurryTestCase() {
+    super("test/data/blackbox/upca-6", new MultiFormatReader(), BarcodeFormat.UPC_A);
+    addTest(0, 0, 0.0f);
+    addTest(0, 0, 180.0f);
   }
 
 }

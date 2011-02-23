@@ -1,5 +1,5 @@
 /*
- * Copyright 2008 ZXing authors
+ * Copyright 2011 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,14 +21,15 @@ import com.google.zxing.MultiFormatReader;
 import com.google.zxing.common.AbstractBlackBoxTestCase;
 
 /**
- * @author Sean Owen
+ * A set of blurry images taken with a fixed-focus device.
+ * @author dswitkin@google.com (Daniel Switkin)
  */
-public final class EAN13BlackBox1TestCase extends AbstractBlackBoxTestCase {
+public final class EAN13BlackBox5BlurryTestCase extends AbstractBlackBoxTestCase {
 
-  public EAN13BlackBox1TestCase() {
-    super("test/data/blackbox/ean13-1", new MultiFormatReader(), BarcodeFormat.EAN_13);
-    addTest(29, 32, 0.0f);
-    addTest(28, 32, 180.0f);
+  public EAN13BlackBox5BlurryTestCase() {
+    super("test/data/blackbox/ean13-5", new MultiFormatReader(), BarcodeFormat.EAN_13);
+    addTest(0, 0, 0.0f);
+    addTest(0, 0, 180.0f);
   }
 
 }
