@@ -118,6 +118,10 @@ public class QRCodeReader implements Reader {
     if (matrixWidth == 0 || matrixHeight == 0) {
       throw NotFoundException.getNotFoundInstance();
     }
+    if (matrixHeight != matrixWidth) {
+      // Only possibly decode square regions
+      throw NotFoundException.getNotFoundInstance();
+    }
 
     // Push in the "border" by half the module width so that we start
     // sampling in the middle of the module. Just in case the image is a
