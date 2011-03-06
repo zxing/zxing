@@ -30,14 +30,14 @@ import com.google.gwt.user.client.ui.Widget;
 public class ContactInfoGenerator implements GeneratorSource {
   Grid table = null;
   TextBox name = new TextBox();
-  //TextBox company = new TextBox();
+  TextBox company = new TextBox();
   TextBox tel = new TextBox();
   TextBox url = new TextBox();
   TextBox email = new TextBox();
   TextBox address = new TextBox();
   TextBox address2 = new TextBox();
   TextBox memo = new TextBox();
-  TextBox[] widgets = {name, tel, url, email, address, address2, memo};
+  TextBox[] widgets = {name, company, tel, url, email, address, address2, memo};
   
   public ContactInfoGenerator(ChangeListener changeListener,
       KeyPressHandler keyListener) {
@@ -53,7 +53,7 @@ public class ContactInfoGenerator implements GeneratorSource {
 
   public String getText() throws GeneratorException {
     String name = getNameField();
-    //String company = getCompanyField();
+    String company = getCompanyField();
     String tel = getTelField();
     String url = getUrlField();
     String email = getEmailField();
@@ -64,16 +64,16 @@ public class ContactInfoGenerator implements GeneratorSource {
     // Build the output with obtained data.
     // note that some informations may just be "" if they were not specified.
     //return getVCard(name, company, tel, url, email, address, memo);
-    return getMeCard(name, tel, url, email, address, address2, memo);
+    return getMeCard(name, company, tel, url, email, address, address2, memo);
   }
 
-  private String getMeCard(String name, String tel, String url,
+  private String getMeCard(String name, String company, String tel, String url,
       String email, String address, String address2, String memo) {
     StringBuilder output = new StringBuilder();
     output.append("MECARD:");
     name = name.replace(",", ""); // remove commas -- reserved char in MECARD
     output.append("N:").append(name).append(';');
-    //maybeAppend(output, "ORG:", company); // Not standard; don't generate
+    maybeAppend(output, "ORG:", company); // Not standard; don't generate
     maybeAppend(output, "TEL:", tel);
     maybeAppend(output, "URL:", url);
     maybeAppend(output, "EMAIL:", email);
@@ -141,9 +141,9 @@ public class ContactInfoGenerator implements GeneratorSource {
     return parseTextField("Name", name);
   }
   
-  //private String getCompanyField() throws GeneratorException {
-  //  return parseTextField("Company", company);
-  //}
+  private String getCompanyField() throws GeneratorException {
+    return parseTextField("Company", company);
+  }
 
   private String getTelField() throws GeneratorException {
     String input = Validators.filterNumber(tel.getText());
@@ -198,18 +198,20 @@ public class ContactInfoGenerator implements GeneratorSource {
     
     table.setText(0, 0, "Name");
     table.setWidget(0, 1, name);
-    table.setText(1, 0, "Phone number");
-    table.setWidget(1, 1, tel);
-    table.setText(2, 0, "Email");
-    table.setWidget(2, 1, email);
-    table.setText(3, 0, "Address");
-    table.setWidget(3, 1, address);
-    table.setText(4, 0, "Address 2");
-    table.setWidget(4, 1, address2);
-    table.setText(5, 0, "Website");
-    table.setWidget(5, 1, url);
-    table.setText(6, 0, "Memo");
-    table.setWidget(6, 1, memo);
+    table.setText(1, 0, "Company");
+    table.setWidget(1, 1, company);
+    table.setText(2, 0, "Phone number");
+    table.setWidget(2, 1, tel);
+    table.setText(3, 0, "Email");
+    table.setWidget(3, 1, email);
+    table.setText(4, 0, "Address");
+    table.setWidget(4, 1, address);
+    table.setText(5, 0, "Address 2");
+    table.setWidget(5, 1, address2);
+    table.setText(6, 0, "Website");
+    table.setWidget(6, 1, url);
+    table.setText(7, 0, "Memo");
+    table.setWidget(7, 1, memo);
     
     name.addStyleName(StylesDefs.INPUT_FIELD_REQUIRED);
     return table;
@@ -217,7 +219,7 @@ public class ContactInfoGenerator implements GeneratorSource {
 
   public void validate(Widget widget) throws GeneratorException {
     if (widget == name) getNameField();
-    //if (widget == company) getCompanyField();
+    if (widget == company) getCompanyField();
     if (widget == tel) getTelField();
     if (widget == email) getEmailField();
     if (widget == address) getAddressField();
