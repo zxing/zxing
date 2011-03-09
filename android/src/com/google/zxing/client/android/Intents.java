@@ -94,6 +94,12 @@ public final class Intents {
     public static final String RESULT_FORMAT = "SCAN_RESULT_FORMAT";
 
     /**
+     * Call intent.getByteArrayExtra(RESULT_BYTES) to get a {@link byte[]} of raw bytes in the
+     * barcode, if available.
+     */
+    public static final String RESULT_BYTES = "SCAN_RESULT_BYTES";
+
+    /**
      * Setting this to false will not save scanned codes in the history.
      */
     public static final String SAVE_HISTORY = "SAVE_HISTORY";

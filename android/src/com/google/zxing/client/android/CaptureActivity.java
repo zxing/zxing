@@ -532,6 +532,10 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
       intent.putExtra(Intents.Scan.RESULT, rawResult.toString());
       intent.putExtra(Intents.Scan.RESULT_FORMAT, rawResult.getBarcodeFormat().toString());
+      byte[] rawBytes = rawResult.getRawBytes();
+      if (rawBytes != null && rawBytes.length > 0) {
+        intent.putExtra(Intents.Scan.RESULT_BYTES, rawBytes);
+      }
       Message message = Message.obtain(handler, R.id.return_scan_result);
       message.obj = intent;
       handler.sendMessageDelayed(message, INTENT_RESULT_DURATION);
