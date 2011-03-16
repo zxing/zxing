@@ -1181,6 +1181,7 @@
 				);
 				PRESERVE_DEAD_CODE_INITS_AND_TERMS = NO;
 				PRODUCT_NAME = ZXingWidget;
+				SDKROOT = iphoneos;
 				SEPARATE_STRIP = NO;
 				SKIP_INSTALL = YES;
 			};
@@ -1198,6 +1199,7 @@
 				HEADER_SEARCH_PATHS = ../../cpp/core/src;
 				INSTALL_PATH = /usr/local/lib;
 				PRODUCT_NAME = ZXingWidget;
+				SDKROOT = iphoneos;
 			};
 			name = Release;
 		};
