@@ -40,7 +40,7 @@
 }
 
 - (id)copyWithZone:(NSZone *)zone {
-  TwoDDecoderResult *theCopy = [[TwoDDecoderResult allocWithZone:zone] initWithText:[text copyWithZone:zone] points:[points copyWithZone:zone]];
+  TwoDDecoderResult *theCopy = [[TwoDDecoderResult allocWithZone:zone] initWithText:[text retain] points:[points retain]];
   return theCopy;
 }
 
