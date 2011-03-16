@@ -34,6 +34,7 @@
 
 @property BOOL showCancel;
 @property BOOL oneDMode;
+@property BOOL isStatusBarHidden;
 
 - (void)initCapture;
 - (void)stopCapture;
@@ -48,7 +49,7 @@
 #endif
 @synthesize result, delegate, soundToPlay;
 @synthesize overlayView;
-@synthesize oneDMode, showCancel;
+@synthesize oneDMode, showCancel, isStatusBarHidden;
 @synthesize readers;
 
 
@@ -87,7 +88,10 @@
 
 - (void)cancelled {
   [self stopCapture];
-  [[UIApplication sharedApplication] setStatusBarHidden:NO];
+  if (!self.isStatusBarHidden) {
+    [[UIApplication sharedApplication] setStatusBarHidden:NO];
+  }
+
   wasCancelled = YES;
   if (delegate != nil) {
     [delegate zxingControllerDidCancel:self];
@@ -124,7 +128,9 @@
 
 - (void)viewDidAppear:(BOOL)animated {
   [super viewDidAppear:animated];
-  [[UIApplication sharedApplication] setStatusBarHidden:YES];
+  self.isStatusBarHidden = [[UIApplication sharedApplication] isStatusBarHidden];
+  if (!isStatusBarHidden)
+    [[UIApplication sharedApplication] setStatusBarHidden:YES];
 
   decoding = YES;
 
@@ -137,7 +143,8 @@
 
 - (void)viewDidDisappear:(BOOL)animated {
   [super viewDidDisappear:animated];
-  [[UIApplication sharedApplication] setStatusBarHidden:NO];
+  if (!isStatusBarHidden)
+    [[UIApplication sharedApplication] setStatusBarHidden:NO];
   [self.overlayView removeFromSuperview];
   [self stopCapture];
 }
@@ -257,8 +264,9 @@
   decoder.delegate = nil;
 }
 
-- (void)alertDelegate:(id)text {        
-  [[UIApplication sharedApplication] setStatusBarHidden:NO];
+- (void)alertDelegate:(id)text {
+  if (!isStatusBarHidden)
+    [[UIApplication sharedApplication] setStatusBarHidden:NO];
   if (delegate != nil) {
     [delegate zxingController:self didScanResult:text];
   }
