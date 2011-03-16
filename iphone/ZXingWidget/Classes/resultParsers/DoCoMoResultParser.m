@@ -77,9 +77,11 @@
       } else if ([self characterAtIndex:termRange.location-1] == (unichar)'\\') {
         i++;
       } else {
+        NSAutoreleasePool *secondaryPool = [[NSAutoreleasePool alloc] init];
         NSString *substring = [self substringWithRange:NSMakeRange(start, termRange.location - start)];
         NSString *unescaped = [substring backslashUnescaped];
         NSString *toBeInArray = [[NSString alloc] initWithString:unescaped];
+        [secondaryPool release];
         if (result == nil) {
           result = [[NSMutableArray alloc] initWithCapacity:1];
         }
