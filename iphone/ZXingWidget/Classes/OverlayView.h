@@ -26,12 +26,14 @@
 	id<CancelDelegate> delegate;
 	BOOL oneDMode;
   CGRect cropRect;
+  NSString *displayedMessage;
 }
 
 @property (nonatomic, retain) NSMutableArray*  points;
 @property (nonatomic, assign) id<CancelDelegate> delegate;
 @property (nonatomic, assign) BOOL oneDMode;
 @property (nonatomic, assign) CGRect cropRect;
+@property (nonatomic, copy) NSString *displayedMessage;
 
 - (id)initWithFrame:(CGRect)theFrame cancelEnabled:(BOOL)isCancelEnabled oneDMode:(BOOL)isOneDModeEnabled;
 

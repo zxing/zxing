@@ -31,6 +31,7 @@ static const CGFloat kPadding = 10;
 @synthesize cancelButton;
 @synthesize cropRect;
 @synthesize instructionsLabel;
+@synthesize displayedMessage;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 - (id) initWithFrame:(CGRect)theFrame cancelEnabled:(BOOL)isCancelEnabled oneDMode:(BOOL)isOneDModeEnabled {
@@ -63,7 +64,6 @@ static const CGFloat kPadding = 10;
       [self addSubview:cancelButton];
       [self addSubview:imageView];
     }
-    
   }
   return self;
 }
@@ -80,6 +80,7 @@ static const CGFloat kPadding = 10;
 	[imageView release];
 	[_points release];
   [instructionsLabel release];
+  [displayedMessage release];
 	[super dealloc];
 }
 
@@ -124,9 +125,14 @@ static const CGFloat kPadding = 10;
     return point;
 }
 
+#define kTextMargin 10
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)drawRect:(CGRect)rect {
 	[super drawRect:rect];
+  if (displayedMessage == nil) {
+    self.displayedMessage = @"Place a barcode inside the viewfinder rectangle to scan it.";
+  }
 	CGContextRef c = UIGraphicsGetCurrentContext();
   
 	if (nil != _points) {
@@ -149,13 +155,11 @@ static const CGFloat kPadding = 10;
 		CGContextShowTextAtPoint(c, 74.0, 285.0, text, 49);
 	}
 	else {
-		char *text = "Place a barcode inside the";
-		char *text2 = "viewfinder rectangle to scan it.";
-		CGContextSelectFont(c, "Helvetica", 18, kCGEncodingMacRoman);
-		CGContextScaleCTM(c, -1.0, 1.0);
-		CGContextRotateCTM(c, M_PI);
-		CGContextShowTextAtPoint(c, 48.0, -45.0, text, 26);
-		CGContextShowTextAtPoint(c, 33.0, -70.0, text2, 32);
+    UIFont *font = [UIFont systemFontOfSize:18];
+    CGSize constraint = CGSizeMake(rect.size.width  - 2 * kTextMargin, cropRect.origin.y);
+    CGSize displaySize = [displayedMessage sizeWithFont:font constrainedToSize:constraint];
+    CGRect displayRect = CGRectMake((rect.size.width - displaySize.width) / 2 , cropRect.origin.y - displaySize.height, displaySize.width, displaySize.height);
+    [self.displayedMessage drawInRect:displayRect withFont:font lineBreakMode:UILineBreakModeWordWrap alignment:UITextAlignmentCenter];
 	}
 	CGContextRestoreGState(c);
 	int offset = rect.size.width / 2;

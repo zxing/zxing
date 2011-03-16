@@ -284,6 +284,9 @@
 }
 */
 
+#pragma mark - 
+#pragma mark AVFoundation
+
 - (void)initCapture {
 #if HAS_AVFF
   AVCaptureDeviceInput *captureInput =
@@ -468,6 +471,41 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
   self.prevLayer = nil;
   self.captureSession = nil;
 #endif
+}
+
+#pragma mark - Torch
+
+- (void)setTorch:(BOOL)status {
+  Class captureDeviceClass = NSClassFromString(@"AVCaptureDevice");
+  if (captureDeviceClass != nil) {
+    
+    AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+    
+    [device lockForConfiguration:nil];
+    if ( [device hasTorch] ) {
+      if ( status ) {
+        [device setTorchMode:AVCaptureTorchModeOn];
+      } else {
+        [device setTorchMode:AVCaptureTorchModeOn];
+      }
+    }
+    [device unlockForConfiguration];
+    
+  }
+}
+
+- (BOOL)torchIsOn {
+  Class captureDeviceClass = NSClassFromString(@"AVCaptureDevice");
+  if (captureDeviceClass != nil) {
+    
+    AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+    
+    if ( [device hasTorch] ) {
+      return [device torchMode] == AVCaptureTorchModeOn;
+    }
+    [device unlockForConfiguration];
+  }
+  return NO;
 }
 
 @end

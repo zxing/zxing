@@ -35,6 +35,7 @@
 
 - (NSString *)stringForDisplay {
   NSMutableString *result = [NSMutableString stringWithString:self.name];
+  if (self.jobTitle) [result appendFormat:@"\n%@",self.jobTitle];
   if (self.organization) [result appendFormat:@"\n%@",self.organization];
   if (self.phoneNumbers) {
     for (NSString *number in self.phoneNumbers) {
