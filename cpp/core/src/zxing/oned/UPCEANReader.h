@@ -48,7 +48,7 @@ namespace zxing {
 			static bool findGuardPattern(Ref<BitArray> row, int rowOffset, bool whiteFirst,
 			    const int pattern[], int patternLen, int* start, int* end);
 
-			virtual const int getMIDDLE_PATTERN_LEN();
+			virtual int getMIDDLE_PATTERN_LEN();
 			virtual const int* getMIDDLE_PATTERN();
 
 		public:

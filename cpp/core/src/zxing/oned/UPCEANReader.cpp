@@ -82,7 +82,7 @@ namespace zxing {
     };
 
 
-    const int UPCEANReader::getMIDDLE_PATTERN_LEN() {
+    int UPCEANReader::getMIDDLE_PATTERN_LEN() {
       return MIDDLE_PATTERN_LEN;
     }
 
