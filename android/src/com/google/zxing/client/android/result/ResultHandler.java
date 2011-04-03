@@ -48,6 +48,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 /**
  * A base class for the Android-specific barcode handlers. These allow the app to polymorphically
@@ -63,7 +64,13 @@ public abstract class ResultHandler {
 
   private static final String TAG = ResultHandler.class.getSimpleName();
 
-  private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyyMMdd");
+  private static final DateFormat DATE_FORMAT;
+  static {
+    DATE_FORMAT = new SimpleDateFormat("yyyyMMdd");
+    // For dates without a time, for purposes of interacting with Android, the resulting timestamp needs to
+    // be midnight of that day in GMT (http://code.google.com/p/android/issues/detail?id=8330)
+    DATE_FORMAT.setTimeZone(TimeZone.getTimeZone("GMT"));
+  }
   private static final DateFormat DATE_TIME_FORMAT = new SimpleDateFormat("yyyyMMdd'T'HHmmss");
 
   private static final String GOOGLE_SHOPPER_PACKAGE = "com.google.android.apps.shopper";
@@ -193,16 +200,13 @@ public abstract class ResultHandler {
     boolean allDay = start.length() == 8;
     if (allDay) {
       intent.putExtra("allDay", true);
+    } else {
+      if (end == null) {
+        end = start;
+      }
+      long endMilliseconds = calculateMilliseconds(end);
+      intent.putExtra("endTime", endMilliseconds);
     }
-    if (end == null) {
-      end = start;
-    }
-    long endMilliseconds = calculateMilliseconds(end);
-    if (allDay) {
-      // Possible workaround when allDay isn't used properly
-      endMilliseconds = lastSecondOfDay(endMilliseconds);
-    }
-    intent.putExtra("endTime", endMilliseconds);
     intent.putExtra("title", summary);
     intent.putExtra("eventLocation", location);
     intent.putExtra("description", description);
@@ -216,6 +220,7 @@ public abstract class ResultHandler {
       synchronized (DATE_FORMAT) {
         date = DATE_FORMAT.parse(when, new ParsePosition(0));
       }
+      // Note this will be relative to GMT, not the local time zone
       return date.getTime();
     } else {
       // The when string can be local time, or UTC if it ends with a Z
