@@ -126,18 +126,17 @@ public final class CameraManager {
       if (camera == null) {
         throw new IOException();
       }
-      camera.setPreviewDisplay(holder);
+    }
+    camera.setPreviewDisplay(holder);
+    if (!initialized) {
+      initialized = true;
+      configManager.initFromCameraParameters(camera);
+    }
+    configManager.setDesiredCameraParameters(camera);
 
-      if (!initialized) {
-        initialized = true;
-        configManager.initFromCameraParameters(camera);
-      }
-      configManager.setDesiredCameraParameters(camera);
-
-      SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-      if (prefs.getBoolean(PreferencesActivity.KEY_FRONT_LIGHT, false)) {
-        FlashlightManager.enableFlashlight();
-      }
+    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+    if (prefs.getBoolean(PreferencesActivity.KEY_FRONT_LIGHT, false)) {
+      FlashlightManager.enableFlashlight();
     }
   }
 
