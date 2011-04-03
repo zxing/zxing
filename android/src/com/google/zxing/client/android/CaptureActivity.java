@@ -223,6 +223,8 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     copyToClipboard = prefs.getBoolean(PreferencesActivity.KEY_COPY_TO_CLIPBOARD, true);
 
     beepManager.updatePrefs();
+    
+    inactivityTimer.onResume();
   }
 
   @Override
@@ -232,6 +234,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       handler.quitSynchronously();
       handler = null;
     }
+    inactivityTimer.onPause();
     CameraManager.get().closeDriver();
   }
 
