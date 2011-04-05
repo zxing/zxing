@@ -190,32 +190,32 @@
                   android:layout_height="wrap_content"
                   android:gravity="center">
 
-      <Button android:layout_width="0sp"
+      <Button android:layout_width="0dip"
               android:layout_height="wrap_content"
               android:layout_weight="1"
               android:textSize="14sp"
               android:visibility="gone"/>
 
-      <Button android:layout_width="0sp"
+      <Button android:layout_width="0dip"
               android:layout_height="wrap_content"
               android:layout_weight="1"
               android:textSize="14sp"
               android:visibility="gone"/>
 
-      <Button android:layout_width="0sp"
+      <Button android:layout_width="0dip"
               android:layout_height="wrap_content"
               android:layout_weight="1"
               android:textSize="14sp"
               android:visibility="gone"/>
 
-      <Button android:layout_width="0sp"
+      <Button android:layout_width="0dip"
               android:layout_height="wrap_content"
               android:layout_weight="1"
               android:textSize="14sp"
               android:visibility="gone"/>
 
       <Button android:id="@+id/shopper_button"
-              android:layout_width="0sp"
+              android:layout_width="0dip"
               android:layout_height="wrap_content"
               android:layout_weight="1"
               android:textSize="14sp"
