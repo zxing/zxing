@@ -28,11 +28,6 @@
         android:key="preferences_decode_Data_Matrix"
         android:defaultValue="true"
         android:title="@string/preferences_decode_Data_Matrix_title"/>
-    <CheckBoxPreference
-        android:key="preferences_reverse_image"
-        android:defaultValue="false"
-        android:title="@string/preferences_reverse_image_title"
-        android:summary="@string/preferences_reverse_image_summary"/>
   </PreferenceCategory>
   <PreferenceCategory android:title="@string/preferences_actions_title">
     <CheckBoxPreference
@@ -64,7 +59,7 @@
         android:title="@string/preferences_custom_product_search_title"
         android:summary="@string/preferences_custom_product_search_summary"/>
   </PreferenceCategory>
-    <PreferenceCategory android:title="@string/preferences_general_title">
+  <PreferenceCategory android:title="@string/preferences_general_title">
     <CheckBoxPreference
         android:key="preferences_front_light"
         android:defaultValue="false"
@@ -75,5 +70,10 @@
         android:defaultValue="false"
         android:title="@string/preferences_bulk_mode_title"
         android:summary="@string/preferences_bulk_mode_summary"/>
+    <CheckBoxPreference
+        android:key="preferences_reverse_image"
+        android:defaultValue="false"
+        android:title="@string/preferences_reverse_image_title"
+        android:summary="@string/preferences_reverse_image_summary"/>
   </PreferenceCategory>
 </PreferenceScreen>

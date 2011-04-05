@@ -42,14 +42,14 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:gravity="top"
+        android:gravity="center"
         android:padding="12dip">
 
       <LinearLayout
           android:orientation="vertical"
           android:layout_width="wrap_content"
           android:layout_height="fill_parent"
-          android:gravity="right">
+          android:gravity="right|center_vertical">
 
         <ImageView android:id="@+id/barcode_image_view"
                    android:layout_width="160dip"
@@ -151,13 +151,13 @@
       </LinearLayout>
 
       <ScrollView
-          android:layout_width="fill_parent"
+          android:layout_width="wrap_content"
           android:layout_height="wrap_content">
 
         <LinearLayout
-          android:orientation="vertical"
           android:layout_width="wrap_content"
-          android:layout_height="wrap_content">
+          android:layout_height="wrap_content"
+          android:orientation="vertical">
 
           <TextView android:id="@+id/contents_text_view"
                     android:layout_width="wrap_content"
@@ -185,38 +185,39 @@
     </LinearLayout>
 
     <LinearLayout android:id="@+id/result_button_view"
-                  android:orientation="horizontal"
                   android:layout_width="fill_parent"
                   android:layout_height="wrap_content"
+                  android:orientation="horizontal"
                   android:gravity="center">
 
-      <Button android:layout_width="0sp"
+      <Button android:layout_width="0dip"
               android:layout_height="wrap_content"
               android:layout_weight="1"
               android:textSize="14sp"
               android:visibility="gone"/>
 
-      <Button android:layout_width="0sp"
+      <Button android:layout_width="0dip"
               android:layout_height="wrap_content"
               android:layout_weight="1"
               android:textSize="14sp"
               android:visibility="gone"/>
 
-      <Button android:layout_width="0sp"
+      <Button android:layout_width="0dip"
               android:layout_height="wrap_content"
               android:layout_weight="1"
               android:textSize="14sp"
               android:visibility="gone"/>
 
-      <Button android:layout_width="0sp"
+      <Button android:layout_width="0dip"
               android:layout_height="wrap_content"
               android:layout_weight="1"
               android:textSize="14sp"
               android:visibility="gone"/>
 
       <Button android:id="@+id/shopper_button"
-              android:layout_width="wrap_content"
+              android:layout_width="0dip"
               android:layout_height="wrap_content"
+              android:layout_weight="1"
               android:textSize="14sp"
               android:drawableLeft="@drawable/shopper_icon"
               android:drawablePadding="4dip"
