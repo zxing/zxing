@@ -38,6 +38,8 @@ How to include ZXingWidget in a easy and clean way (in XCode4):
 	   c. CoreVideo
 	   d. CoreMedia
 	   e. libiconv
+	   f. AddressBook
+     g. AddressBookUI
 	   This must be done by adding them in the 'Link Libraries with Binary' just like step 2.c.
  
   7. You're almost ready to go ..
