@@ -76,7 +76,7 @@ versionName is 2.31, 2.4, or 3.0. -->
     <activity android:name=".PreferencesActivity"
               android:label="@string/preferences_name">
     </activity>
-    <activity android:name=".encode.EncodeActivity">
+    <activity android:name=".encode.EncodeActivity" android:label="@string/share_name">
       <intent-filter>
         <action android:name="com.google.zxing.client.android.ENCODE"/>
         <category android:name="android.intent.category.DEFAULT"/>
@@ -86,6 +86,12 @@ versionName is 2.31, 2.4, or 3.0. -->
         <action android:name="android.intent.action.SEND"/>
         <category android:name="android.intent.category.DEFAULT"/>
         <data android:mimeType="text/x-vcard"/>
+      </intent-filter>
+      <!-- This allows us to handle sharing any plain text . -->
+      <intent-filter>
+        <action android:name="android.intent.action.SEND"/>
+        <category android:name="android.intent.category.DEFAULT"/>
+        <data android:mimeType="text/plain"/>
       </intent-filter>
     </activity>
     <activity android:name=".book.SearchBookContentsActivity"

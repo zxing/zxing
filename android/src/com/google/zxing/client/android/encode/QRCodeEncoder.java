@@ -123,8 +123,39 @@ final class QRCodeEncoder {
     return contents != null && contents.length() > 0;
   }
 
-  // Handles send intents from the Contacts app, retrieving a contact as a VCARD.
+  // Handles send intents from multitude of Android applications
   private boolean encodeContentsFromShareIntent(Intent intent) {
+    // Check if this is a plain text encoding, or contact
+    if (intent.hasExtra(Intent.EXTRA_TEXT)) {
+      return encodeContentsFromShareIntentPlainText(intent);
+    }
+    // Attempt default sharing.
+    return encodeContentsFromShareIntentDefault(intent);
+  }
+
+  private boolean encodeContentsFromShareIntentPlainText(Intent intent) {
+    // Notice: Google Maps shares both URL and details in one text, bummer!
+    contents = intent.getStringExtra(Intent.EXTRA_TEXT);
+    // We only support non-empty and non-blank texts.
+    // Trim text to avoid URL breaking.
+    if (contents == null) {
+      return false;
+    }
+    contents = contents.trim();
+    if (contents.length() == 0) {
+      return false;
+    }
+    // We only do QR code.
+    format = BarcodeFormat.QR_CODE;
+    // TODO: Consider using the Intent.EXTRA_SUBJECT or Intent.EXTRA_TITLE
+    displayContents = contents;
+    title = activity.getString(R.string.contents_text);
+    return true;
+  }
+
+  // Handles send intents from the Contacts app, retrieving a contact as a VCARD.
+  // Note: Does not work on HTC devices due to broken custom Contacts application.
+  private boolean encodeContentsFromShareIntentDefault(Intent intent) {
     format = BarcodeFormat.QR_CODE;
     try {
       Uri uri = (Uri)intent.getExtras().getParcelable(Intent.EXTRA_STREAM);
