@@ -61,7 +61,7 @@
   <string name="menu_history">Historique</string>
   <string name="menu_settings">Paramètres</string>
   <string name="menu_share">Partager</string>
-  <string name="msg_about">Basé sur la bibliothèque open source ZXing Barcode</string>
+  <string name="msg_about">L\'application Android officielle du projet libre ZXing.</string>
   <string name="msg_buggy">Cet appareil a rencontré un bogue entraînant des problèmes de lecture de codes-barres. Pour plus d\'informations, rendez-vous sur http://code.google.com/p/zxing/wiki/FrequentlyAskedQuestions</string>
   <string name="msg_bulk_mode_scanned">Mode lecture en rafale : code-barres scanné et enregistré</string>
   <string name="msg_camera_framework_bug">Désolé, la caméra Android rencontré un problème. Un redémarrage de l\'appareil est peut-être nécessaire.</string>
