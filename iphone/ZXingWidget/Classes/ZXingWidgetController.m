@@ -419,10 +419,11 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     cropRect.size.height = CGImageGetHeight(capture);
   }
 
-  // Won't work if the overlay becomes uncentered ...
-  // iOS always takes videos in landscape
-  // images are always 4x3; device is not
-  // iOS uses virtual pixels for non-image stuff
+  // N.B.
+  // - Won't work if the overlay becomes uncentered ...
+  // - iOS always takes videos in landscape
+  // - images are always 4x3; device is not
+  // - iOS uses virtual pixels for non-image stuff
 
   {
     float height = CGImageGetHeight(capture);
