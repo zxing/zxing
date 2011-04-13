@@ -40,8 +40,10 @@
 }
 
 - (id)copyWithZone:(NSZone *)zone {
-  TwoDDecoderResult *theCopy = [[TwoDDecoderResult allocWithZone:zone] initWithText:[text retain] points:[points retain]];
-  return theCopy;
+    NSArray* newPoints = [[[NSArray alloc] initWithArray:points] autorelease];
+    NSString* newText = [[[NSString alloc] initWithString:text] autorelease];
+    
+    return [[TwoDDecoderResult allocWithZone:zone] initWithText:newText points:newPoints];
 }
 
 - (id)copy {
