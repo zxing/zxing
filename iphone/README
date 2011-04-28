@@ -1,5 +1,5 @@
 ZXing for iOS is a sub-project of zxing project partially maintained by 
-independent developers. As of 26th of MArch 2011, it contains 3 iOS projects:
+independent developers. As of 26th of March 2011, it contains 3 iOS projects:
   - BarCodes:  Zxing iOS app. Available on app store. 
   - ZXingWidget: a Library that can be included in any iOS app
   - ScanTest: a simple demo app for ZXingWidget
