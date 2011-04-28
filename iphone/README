@@ -67,3 +67,4 @@ Known issues for above steps to include:
     copy/paste this line into your terminal and try to see if you can reproduce/fix the error by adding the right path to the compiler. Once is is fixed,
     you should have an idea of what's the problem and accordingly modify your Header Search Path.
     
+  - You could have issue of building AdHoc or release build in Xc4 with "No Packager exists for the type of archive" message - see http://stackoverflow.com/questions/5271496/xcode4-ios-4-3-no-packager-exists-for-the-type-of-archive/5322743#5322743
