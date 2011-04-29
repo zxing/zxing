@@ -220,7 +220,8 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     }
 
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-    copyToClipboard = prefs.getBoolean(PreferencesActivity.KEY_COPY_TO_CLIPBOARD, true);
+    copyToClipboard = prefs.getBoolean(PreferencesActivity.KEY_COPY_TO_CLIPBOARD, true)
+        && (intent == null || intent.getBooleanExtra(Intents.Scan.SAVE_HISTORY, true));
 
     beepManager.updatePrefs();
     
