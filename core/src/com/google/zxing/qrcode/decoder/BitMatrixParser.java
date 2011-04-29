@@ -70,12 +70,12 @@ final class BitMatrixParser {
     // Read the top-right/bottom-left pattern too
     int dimension = bitMatrix.getHeight();
     int formatInfoBits2 = 0;
-    int iMin = dimension - 8;
-    for (int i = dimension - 1; i >= iMin; i--) {
-      formatInfoBits2 = copyBit(i, 8, formatInfoBits2);
-    }
-    for (int j = dimension - 7; j < dimension; j++) {
+    int jMin = dimension - 7;
+    for (int j = dimension - 1; j >= jMin; j--) {
       formatInfoBits2 = copyBit(8, j, formatInfoBits2);
+    }
+    for (int i = dimension - 8; i < dimension; i++) {
+      formatInfoBits2 = copyBit(i, 8, formatInfoBits2);
     }
 
     parsedFormatInfo = FormatInformation.decodeFormatInformation(formatInfoBits1, formatInfoBits2);
