@@ -41,8 +41,8 @@ private:
 
 public:
   static int numBitsDiffering(unsigned int a, unsigned int b);
-  static Ref<FormatInformation> decodeFormatInformation(int rawFormatInfo);
-  static Ref<FormatInformation> doDecodeFormatInformation(int rawFormatInfo);
+  static Ref<FormatInformation> decodeFormatInformation(int maskedFormatInfo1, int maskedFormatInfo2);
+  static Ref<FormatInformation> doDecodeFormatInformation(int maskedFormatInfo1, int maskedFormatInfo2);
   ErrorCorrectionLevel &getErrorCorrectionLevel();
   unsigned char getDataMask();
   friend bool operator==(const FormatInformation &a, const FormatInformation &b);

@@ -43,36 +43,31 @@ Ref<FormatInformation> BitMatrixParser::readFormatInformation() {
   }
 
   // Read top-left format info bits
-  int formatInfoBits = 0;
-  for (int x = 0; x < 6; x++) {
-    formatInfoBits = copyBit(x, 8, formatInfoBits);
+  int formatInfoBits1 = 0;
+  for (int i = 0; i < 6; i++) {
+    formatInfoBits1 = copyBit(i, 8, formatInfoBits1);
   }
   // .. and skip a bit in the timing pattern ...
-  formatInfoBits = copyBit(7, 8, formatInfoBits);
-  formatInfoBits = copyBit(8, 8, formatInfoBits);
-  formatInfoBits = copyBit(8, 7, formatInfoBits);
+  formatInfoBits1 = copyBit(7, 8, formatInfoBits1);
+  formatInfoBits1 = copyBit(8, 8, formatInfoBits1);
+  formatInfoBits1 = copyBit(8, 7, formatInfoBits1);
   // .. and skip a bit in the timing pattern ...
-  for (int y = 5; y >= 0; y--) {
-    formatInfoBits = copyBit(8, y, formatInfoBits);
+  for (int j = 5; j >= 0; j--) {
+    formatInfoBits1 = copyBit(8, j, formatInfoBits1);
   }
 
-  parsedFormatInfo_ = FormatInformation::decodeFormatInformation(formatInfoBits);
-  if (parsedFormatInfo_ != 0) {
-    return parsedFormatInfo_;
-  }
-
-  // Hmm, failed. Try the top-right/bottom-left pattern
+  // Read the top-right/bottom-left pattern
   int dimension = bitMatrix_->getDimension();
-  formatInfoBits = 0;
-  int yMin = dimension - 8;
-  for (int y = dimension - 1; y >= yMin; y--) {
-    formatInfoBits = copyBit(8, y, formatInfoBits);
+  int formatInfoBits2 = 0;
+  int jMin = dimension - 7;
+  for (int j = dimension - 1; j >= jMin; j--) {
+    formatInfoBits2 = copyBit(8, j, formatInfoBits2);
   }
-  for (int x = dimension - 7; x < dimension; x++) {
-    formatInfoBits = copyBit(x, 8, formatInfoBits);
+  for (int i = dimension - 8; i < dimension; i++) {
+    formatInfoBits2 = copyBit(i, 8, formatInfoBits2);
   }
 
-  parsedFormatInfo_ = FormatInformation::decodeFormatInformation(formatInfoBits);
+  parsedFormatInfo_ = FormatInformation::decodeFormatInformation(formatInfoBits1,formatInfoBits2);
   if (parsedFormatInfo_ != 0) {
     return parsedFormatInfo_;
   }
