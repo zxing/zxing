@@ -40,8 +40,8 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Vector;
 
@@ -59,16 +59,95 @@ import javax.imageio.ImageIO;
 public final class CommandLineRunner {
 
   private static class Config {
+    public Hashtable<DecodeHintType, Object> hints = null;
     public boolean tryHarder = false;
     public boolean pureBarcode = false;
     public boolean productsOnly = false;
     public boolean dumpResults = false;
     public boolean dumpBlackPoint = false;
     public boolean multi = false;
+    public boolean brief = false;
     public int[] crop = null;
+    public int threads = 1;
+  }
+
+  // Represents the collection of all images files/URLs to decode.
+  private static class Inputs {
+    Vector<String> inputs = new Vector<String>(10);
+    int position = 0;
+
+    public synchronized void addInput(String pathOrUrl) {
+      inputs.add(pathOrUrl);
+    }
+
+    public synchronized String getNextInput() {
+      if (position < inputs.size()) {
+        String result = inputs.get(position);
+        position++;
+        return result;
+      } else {
+        return null;
+      }
+    }
+
+    public synchronized int getInputCount() {
+      return inputs.size();
+    }
+  }
+
+  // One of a pool of threads which pulls images off the Inputs queue and decodes them in parallel.
+  private static class DecodeThread extends Thread {
+    private int successful = 0;
+
+    @Override
+    public void run() {
+      while (true) {
+        String input = inputs.getNextInput();
+        if (input == null) {
+          break;
+        }
+
+        File inputFile = new File(input);
+        if (inputFile.exists()) {
+          try {
+            if (config.multi) {
+              Result[] results = decodeMulti(inputFile.toURI(), config.hints);
+              if (results != null) {
+                successful++;
+                if (config.dumpResults) {
+                  dumpResultMulti(inputFile, results);
+                }
+              }
+            } else {
+              Result result = decode(inputFile.toURI(), config.hints);
+              if (result != null) {
+                successful++;
+                if (config.dumpResults) {
+                  dumpResult(inputFile, result);
+                }
+              }
+            }
+          } catch (IOException e) {
+          }
+        } else {
+          try {
+            Result result = decode(new URI(input), config.hints);
+            if (result != null) {
+              successful++;
+            }
+          } catch (Exception e) {
+          }
+        }
+      }
+    }
+
+    public int getSuccessful() {
+      return successful;
+    }
   }
 
   private static Config config = new Config();
+  private static Inputs inputs = new Inputs();
 
   private CommandLineRunner() {
   }
@@ -92,11 +171,18 @@ public final class CommandLineRunner {
         config.dumpBlackPoint = true;
       } else if ("--multi".equals(arg)) {
         config.multi = true;
+      } else if ("--brief".equals(arg)) {
+        config.brief = true;
       } else if (arg.startsWith("--crop")) {
         config.crop = new int[4];
         String[] tokens = arg.substring(7).split(",");
         for (int i = 0; i < config.crop.length; i++) {
           config.crop[i] = Integer.parseInt(tokens[i]);
+        }
+      } else if (arg.startsWith("--threads") && arg.length() >= 10) {
+        int threads = Integer.parseInt(arg.substring(10));
+        if (threads > 1) {
+          config.threads = threads;
         }
       } else if (arg.startsWith("-")) {
         System.err.println("Unknown command line option " + arg);
@@ -104,12 +190,61 @@ public final class CommandLineRunner {
         return;
       }
     }
+    config.hints = buildHints();
 
-    Hashtable<DecodeHintType, Object> hints = buildHints();
     for (String arg : args) {
       if (!arg.startsWith("--")) {
-        decodeOneArgument(arg, hints);
+        addArgumentToInputs(arg);
       }
+    }
+
+    ArrayList<DecodeThread> threads = new ArrayList<DecodeThread>(config.threads);
+    for (int x = 0; x < config.threads; x++) {
+      DecodeThread thread = new DecodeThread();
+      threads.add(thread);
+      thread.start();
+    }
+
+    int successful = 0;
+    for (int x = 0; x < config.threads; x++) {
+      threads.get(x).join();
+      successful += threads.get(x).getSuccessful();
+    }
+    int total = inputs.getInputCount();
+    if (total > 1) {
+      System.out.println("\nDecoded " + successful + " files out of " + total +
+          " successfully (" + (successful * 100 / total) + "%)\n");
+    }
+  }
+
+  // Build all the inputs up front into a single flat list, so the threads can atomically pull
+  // paths/URLs off the queue.
+  private static void addArgumentToInputs(String argument) {
+    File inputFile = new File(argument);
+    if (inputFile.exists()) {
+      if (inputFile.isDirectory()) {
+        for (File singleFile : inputFile.listFiles()) {
+          if (singleFile.isDirectory()) {
+            // Recurse on nested directories.
+            addArgumentToInputs(singleFile.getAbsolutePath());
+            continue;
+          }
+          String filename = singleFile.getName().toLowerCase();
+          // Skip hidden files and text files (the latter is found in the blackbox tests).
+          if (filename.startsWith(".") || filename.endsWith(".txt")) {
+            continue;
+          }
+          // Skip the results of dumping the black point.
+          if (filename.contains(".mono.png")) {
+            continue;
+          }
+          inputs.addInput(singleFile.getAbsolutePath());
+        }
+      } else {
+        inputs.addInput(inputFile.getAbsolutePath());
+      }
+    } else {
+      inputs.addInput(argument);
     }
   }
 
@@ -151,65 +286,10 @@ public final class CommandLineRunner {
     System.err.println("  --products_only: Only decode the UPC and EAN families of barcodes");
     System.err.println("  --dump_results: Write the decoded contents to input.txt");
     System.err.println("  --dump_black_point: Compare black point algorithms as input.mono.png");
-    System.err.println("  --crop=left,top,width,height: Only examine cropped region of input image(s)");
     System.err.println("  --multi: Scans image for multiple barcodes");
-  }
-
-  private static void decodeOneArgument(String argument, Hashtable<DecodeHintType, Object> hints)
-      throws IOException, URISyntaxException {
-
-    File inputFile = new File(argument);
-    if (inputFile.exists()) {
-      if (inputFile.isDirectory()) {
-        int successful = 0;
-        int total = 0;
-        for (File input : inputFile.listFiles()) {
-          String filename = input.getName().toLowerCase();
-          // Skip hidden files and text files (the latter is found in the blackbox tests).
-          if (filename.startsWith(".") || filename.endsWith(".txt")) {
-            continue;
-          }
-          // Skip the results of dumping the black point.
-          if (filename.contains(".mono.png")) {
-            continue;
-          }
-          if (config.multi) {
-            Result[] results = decodeMulti(input.toURI(), hints);
-            if (results != null) {
-              successful++;
-              if (config.dumpResults) {
-                dumpResultMulti(input, results);
-              }
-            }
-          } else {
-            Result result = decode(input.toURI(), hints);
-            if (result != null) {
-              successful++;
-              if (config.dumpResults) {
-                dumpResult(input, result);
-              }
-            }
-          }
-          total++;
-        }
-        System.out.println("\nDecoded " + successful + " files out of " + total +
-                               " successfully (" + (successful * 100 / total) + "%)\n");
-      } else {
-        if (config.multi) {
-          Result[] results = decodeMulti(inputFile.toURI(), hints);
-          if (config.dumpResults) {
-            dumpResultMulti(inputFile, results);
-          }
-        } else {
-          Result result = decode(inputFile.toURI(), hints);
-          if (config.dumpResults) {
-            dumpResult(inputFile, result);
-          }
-        }
-      }
-    } else {
-      decode(new URI(argument), hints);
-    }
+    System.err.println("  --brief: Only output one line per file, omitting the contents");
+    System.err.println("  --crop=left,top,width,height: Only examine cropped region of input image(s)");
+    System.err.println("  --threads=n: The number of threads to use while decoding");
   }
 
   private static void dumpResult(File input, Result result) throws IOException {
@@ -279,15 +359,19 @@ public final class CommandLineRunner {
         dumpBlackPoint(uri, image, bitmap);
       }
       Result result = new MultiFormatReader().decode(bitmap, hints);
-      ParsedResult parsedResult = ResultParser.parseResult(result);
-      System.out.println(uri.toString() + " (format: " + result.getBarcodeFormat() + ", type: " +
-          parsedResult.getType() + "):\nRaw result:\n" + result.getText() + "\nParsed result:\n" +
-          parsedResult.getDisplayResult());
+      if (config.brief) {
+        System.out.println(uri.toString() + ": Success");
+      } else {
+        ParsedResult parsedResult = ResultParser.parseResult(result);
+        System.out.println(uri.toString() + " (format: " + result.getBarcodeFormat() + ", type: " +
+            parsedResult.getType() + "):\nRaw result:\n" + result.getText() + "\nParsed result:\n" +
+            parsedResult.getDisplayResult());
 
-      System.out.println("Also, there were " + result.getResultPoints().length + " result points.");
-      for (int i = 0; i < result.getResultPoints().length; i++) {
-        ResultPoint rp = result.getResultPoints()[i];
-        System.out.println("  Point " + i + ": (" + rp.getX() + ',' + rp.getY() + ')');
+        System.out.println("Found " + result.getResultPoints().length + " result points.");
+        for (int i = 0; i < result.getResultPoints().length; i++) {
+          ResultPoint rp = result.getResultPoints()[i];
+          System.out.println("  Point " + i + ": (" + rp.getX() + ',' + rp.getY() + ')');
+        }
       }
 
       return result;
@@ -331,17 +415,21 @@ public final class CommandLineRunner {
           multiFormatReader);
       Result[] results = reader.decodeMultiple(bitmap, hints);
 
-      for (Result result : results) {
-        ParsedResult parsedResult = ResultParser.parseResult(result);
-        System.out.println(uri.toString() + " (format: "
-                               + result.getBarcodeFormat() + ", type: "
-                               + parsedResult.getType() + "):\nRaw result:\n"
-                               + result.getText() + "\nParsed result:\n"
-                               + parsedResult.getDisplayResult());
-        System.out.println("Found " + result.getResultPoints().length + " result points.");
-        for (int i = 0; i < result.getResultPoints().length; i++) {
-          ResultPoint rp = result.getResultPoints()[i];
-          System.out.println("  Point " + i + ": (" + rp.getX() + ',' + rp.getY() + ')');
+      if (config.brief) {
+        System.out.println(uri.toString() + ": Success");
+      } else {
+        for (Result result : results) {
+          ParsedResult parsedResult = ResultParser.parseResult(result);
+          System.out.println(uri.toString() + " (format: "
+              + result.getBarcodeFormat() + ", type: "
+              + parsedResult.getType() + "):\nRaw result:\n"
+              + result.getText() + "\nParsed result:\n"
+              + parsedResult.getDisplayResult());
+          System.out.println("Found " + result.getResultPoints().length + " result points.");
+          for (int i = 0; i < result.getResultPoints().length; i++) {
+            ResultPoint rp = result.getResultPoints()[i];
+            System.out.println("  Point " + i + ": (" + rp.getX() + ',' + rp.getY() + ')');
+          }
         }
       }
       return results;
