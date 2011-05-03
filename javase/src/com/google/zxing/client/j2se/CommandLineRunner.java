@@ -16,21 +16,6 @@
 
 package com.google.zxing.client.j2se;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.nio.charset.Charset;
-import java.util.Hashtable;
-import java.util.Vector;
-
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.DecodeHintType;
@@ -46,15 +31,44 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.multi.GenericMultipleBarcodeReader;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.charset.Charset;
+import java.util.Hashtable;
+import java.util.Vector;
+
+import javax.imageio.ImageIO;
+
 /**
- * <p>This simple command line utility decodes files, directories of files, or URIs which are passed as arguments. By
- * default it uses the normal decoding algorithms, but you can pass --try_harder to request that hint. The raw text of
- * each barcode is printed, and when running against directories, summary statistics are also displayed.</p>
+ * This simple command line utility decodes files, directories of files, or URIs which are passed
+ * as arguments. By default it uses the normal decoding algorithms, but you can pass --try_harder
+ * to request that hint. The raw text of each barcode is printed, and when running against
+ * directories, summary statistics are also displayed.
  *
  * @author Sean Owen
  * @author dswitkin@google.com (Daniel Switkin)
  */
 public final class CommandLineRunner {
+
+  private static class Config {
+    public boolean tryHarder = false;
+    public boolean pureBarcode = false;
+    public boolean productsOnly = false;
+    public boolean dumpResults = false;
+    public boolean dumpBlackPoint = false;
+    public boolean multi = false;
+    public int[] crop = null;
+  }
+
+  private static Config config = new Config();
 
   private CommandLineRunner() {
   }
@@ -65,31 +79,24 @@ public final class CommandLineRunner {
       return;
     }
 
-    boolean tryHarder = false;
-    boolean pureBarcode = false;
-    boolean productsOnly = false;
-    boolean dumpResults = false;
-    boolean dumpBlackPoint = false;
-    boolean multi = false;
-    int[] crop = null;
     for (String arg : args) {
       if ("--try_harder".equals(arg)) {
-        tryHarder = true;
+        config.tryHarder = true;
       } else if ("--pure_barcode".equals(arg)) {
-        pureBarcode = true;
+        config.pureBarcode = true;
       } else if ("--products_only".equals(arg)) {
-        productsOnly = true;
+        config.productsOnly = true;
       } else if ("--dump_results".equals(arg)) {
-        dumpResults = true;
+        config.dumpResults = true;
       } else if ("--dump_black_point".equals(arg)) {
-        dumpBlackPoint = true;
+        config.dumpBlackPoint = true;
       } else if ("--multi".equals(arg)) {
-        multi = true;
+        config.multi = true;
       } else if (arg.startsWith("--crop")) {
-        crop = new int[4];
+        config.crop = new int[4];
         String[] tokens = arg.substring(7).split(",");
-        for (int i = 0; i < crop.length; i++) {
-          crop[i] = Integer.parseInt(tokens[i]);
+        for (int i = 0; i < config.crop.length; i++) {
+          config.crop[i] = Integer.parseInt(tokens[i]);
         }
       } else if (arg.startsWith("-")) {
         System.err.println("Unknown command line option " + arg);
@@ -98,18 +105,16 @@ public final class CommandLineRunner {
       }
     }
 
-    Hashtable<DecodeHintType, Object> hints = buildHints(tryHarder, pureBarcode, productsOnly);
+    Hashtable<DecodeHintType, Object> hints = buildHints();
     for (String arg : args) {
       if (!arg.startsWith("--")) {
-        decodeOneArgument(arg, hints, dumpResults, dumpBlackPoint, crop, multi);
+        decodeOneArgument(arg, hints);
       }
     }
   }
 
   // Manually turn on all formats, even those not yet considered production quality.
-  private static Hashtable<DecodeHintType, Object> buildHints(boolean tryHarder,
-                                                              boolean pureBarcode,
-                                                              boolean productsOnly) {
+  private static Hashtable<DecodeHintType, Object> buildHints() {
     Hashtable<DecodeHintType, Object> hints = new Hashtable<DecodeHintType, Object>(3);
     Vector<BarcodeFormat> vector = new Vector<BarcodeFormat>(8);
     vector.addElement(BarcodeFormat.UPC_A);
@@ -117,7 +122,7 @@ public final class CommandLineRunner {
     vector.addElement(BarcodeFormat.EAN_13);
     vector.addElement(BarcodeFormat.EAN_8);
     vector.addElement(BarcodeFormat.RSS14);
-    if (!productsOnly) {
+    if (!config.productsOnly) {
       vector.addElement(BarcodeFormat.CODE_39);
       vector.addElement(BarcodeFormat.CODE_93);
       vector.addElement(BarcodeFormat.CODE_128);
@@ -129,10 +134,10 @@ public final class CommandLineRunner {
       vector.addElement(BarcodeFormat.CODABAR);
     }
     hints.put(DecodeHintType.POSSIBLE_FORMATS, vector);
-    if (tryHarder) {
+    if (config.tryHarder) {
       hints.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
     }
-    if (pureBarcode) {
+    if (config.pureBarcode) {
       hints.put(DecodeHintType.PURE_BARCODE, Boolean.TRUE);
     }
     return hints;
@@ -150,12 +155,8 @@ public final class CommandLineRunner {
     System.err.println("  --multi: Scans image for multiple barcodes");
   }
 
-  private static void decodeOneArgument(String argument,
-                                        Hashtable<DecodeHintType, Object> hints,
-                                        boolean dumpResults,
-                                        boolean dumpBlackPoint,
-                                        int[] crop,
-                                        boolean multi) throws IOException, URISyntaxException {
+  private static void decodeOneArgument(String argument, Hashtable<DecodeHintType, Object> hints)
+      throws IOException, URISyntaxException {
 
     File inputFile = new File(argument);
     if (inputFile.exists()) {
@@ -172,19 +173,19 @@ public final class CommandLineRunner {
           if (filename.contains(".mono.png")) {
             continue;
           }
-          if (multi) {
-            Result[] results = decodeMulti(input.toURI(), hints, dumpBlackPoint, crop);
+          if (config.multi) {
+            Result[] results = decodeMulti(input.toURI(), hints);
             if (results != null) {
               successful++;
-              if (dumpResults) {
+              if (config.dumpResults) {
                 dumpResultMulti(input, results);
               }
             }
           } else {
-            Result result = decode(input.toURI(), hints, dumpBlackPoint, crop);
+            Result result = decode(input.toURI(), hints);
             if (result != null) {
               successful++;
-              if (dumpResults) {
+              if (config.dumpResults) {
                 dumpResult(input, result);
               }
             }
@@ -194,20 +195,20 @@ public final class CommandLineRunner {
         System.out.println("\nDecoded " + successful + " files out of " + total +
                                " successfully (" + (successful * 100 / total) + "%)\n");
       } else {
-        if (multi) {
-          Result[] results = decodeMulti(inputFile.toURI(), hints, dumpBlackPoint, crop);
-          if (dumpResults) {
+        if (config.multi) {
+          Result[] results = decodeMulti(inputFile.toURI(), hints);
+          if (config.dumpResults) {
             dumpResultMulti(inputFile, results);
           }
         } else {
-          Result result = decode(inputFile.toURI(), hints, dumpBlackPoint, crop);
-          if (dumpResults) {
+          Result result = decode(inputFile.toURI(), hints);
+          if (config.dumpResults) {
             dumpResult(inputFile, result);
           }
         }
       }
     } else {
-      decode(new URI(argument), hints, dumpBlackPoint, crop);
+      decode(new URI(argument), hints);
     }
   }
 
@@ -253,10 +254,8 @@ public final class CommandLineRunner {
     }
   }
 
-  private static Result decode(URI uri,
-                               Hashtable<DecodeHintType, Object> hints,
-                               boolean dumpBlackPoint,
-                               int[] crop) throws IOException {
+  private static Result decode(URI uri, Hashtable<DecodeHintType, Object> hints)
+      throws IOException {
     BufferedImage image;
     try {
       image = ImageIO.read(uri.toURL());
@@ -269,20 +268,21 @@ public final class CommandLineRunner {
     }
     try {
       LuminanceSource source;
-      if (crop == null) {
+      if (config.crop == null) {
         source = new BufferedImageLuminanceSource(image);
       } else {
-        source = new BufferedImageLuminanceSource(image, crop[0], crop[1], crop[2], crop[3]);
+        source = new BufferedImageLuminanceSource(image, config.crop[0], config.crop[1],
+            config.crop[2], config.crop[3]);
       }
       BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
-      if (dumpBlackPoint) {
+      if (config.dumpBlackPoint) {
         dumpBlackPoint(uri, image, bitmap);
       }
       Result result = new MultiFormatReader().decode(bitmap, hints);
       ParsedResult parsedResult = ResultParser.parseResult(result);
-      System.out.println(uri.toString() + " (format: " + result.getBarcodeFormat() +
-                             ", type: " + parsedResult.getType() + "):\nRaw result:\n" + result.getText() +
-                             "\nParsed result:\n" + parsedResult.getDisplayResult());
+      System.out.println(uri.toString() + " (format: " + result.getBarcodeFormat() + ", type: " +
+          parsedResult.getType() + "):\nRaw result:\n" + result.getText() + "\nParsed result:\n" +
+          parsedResult.getDisplayResult());
 
       System.out.println("Also, there were " + result.getResultPoints().length + " result points.");
       for (int i = 0; i < result.getResultPoints().length; i++) {
@@ -301,10 +301,8 @@ public final class CommandLineRunner {
     }
   }
 
-  private static Result[] decodeMulti(URI uri,
-                                      Hashtable<DecodeHintType, Object> hints,
-                                      boolean dumpBlackPoint,
-                                      int[] crop) throws IOException {
+  private static Result[] decodeMulti(URI uri, Hashtable<DecodeHintType, Object> hints)
+      throws IOException {
     BufferedImage image;
     try {
       image = ImageIO.read(uri.toURL());
@@ -317,14 +315,14 @@ public final class CommandLineRunner {
     }
     try {
       LuminanceSource source;
-      if (crop == null) {
+      if (config.crop == null) {
         source = new BufferedImageLuminanceSource(image);
       } else {
-        source = new BufferedImageLuminanceSource(image, crop[0],
-                                                  crop[1], crop[2], crop[3]);
+        source = new BufferedImageLuminanceSource(image, config.crop[0], config.crop[1],
+            config.crop[2], config.crop[3]);
       }
       BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
-      if (dumpBlackPoint) {
+      if (config.dumpBlackPoint) {
         dumpBlackPoint(uri, image, bitmap);
       }
 
@@ -340,7 +338,7 @@ public final class CommandLineRunner {
                                + parsedResult.getType() + "):\nRaw result:\n"
                                + result.getText() + "\nParsed result:\n"
                                + parsedResult.getDisplayResult());
-        System.out.println("Also, there were " + result.getResultPoints().length + " result points.");
+        System.out.println("Found " + result.getResultPoints().length + " result points.");
         for (int i = 0; i < result.getResultPoints().length; i++) {
           ResultPoint rp = result.getResultPoints()[i];
           System.out.println("  Point " + i + ": (" + rp.getX() + ',' + rp.getY() + ')');
@@ -415,6 +413,11 @@ public final class CommandLineRunner {
     } catch (NotFoundException nfe) {
     }
 
+    writeResultImage(stride, height, pixels, uri, inputName, ".mono.png");
+  }
+
+  private static void writeResultImage(int stride, int height, int[] pixels, URI uri,
+      String inputName, String suffix) {
     // Write the result
     BufferedImage result = new BufferedImage(stride, height, BufferedImage.TYPE_INT_ARGB);
     result.setRGB(0, 0, stride, height, pixels, 0, stride);
@@ -431,7 +434,7 @@ public final class CommandLineRunner {
     if (pos > 0) {
       resultName = resultName.substring(0, pos);
     }
-    resultName += ".mono.png";
+    resultName += suffix;
     OutputStream outStream = null;
     try {
       outStream = new FileOutputStream(resultName);
