@@ -67,6 +67,7 @@ public final class CommandLineRunner {
     public boolean dumpBlackPoint = false;
     public boolean multi = false;
     public boolean brief = false;
+    public boolean recursive = false;
     public int[] crop = null;
     public int threads = 1;
   }
@@ -173,6 +174,8 @@ public final class CommandLineRunner {
         config.multi = true;
       } else if ("--brief".equals(arg)) {
         config.brief = true;
+      } else if ("--recursive".equals(arg)) {
+        config.recursive = true;
       } else if (arg.startsWith("--crop")) {
         config.crop = new int[4];
         String[] tokens = arg.substring(7).split(",");
@@ -224,18 +227,20 @@ public final class CommandLineRunner {
     if (inputFile.exists()) {
       if (inputFile.isDirectory()) {
         for (File singleFile : inputFile.listFiles()) {
-          if (singleFile.isDirectory()) {
-            // Recurse on nested directories.
-            addArgumentToInputs(singleFile.getAbsolutePath());
-            continue;
-          }
           String filename = singleFile.getName().toLowerCase();
-          // Skip hidden files and text files (the latter is found in the blackbox tests).
-          if (filename.startsWith(".") || filename.endsWith(".txt")) {
+          // Skip hidden files and directories (e.g. svn stuff).
+          if (filename.startsWith(".")) {
             continue;
           }
-          // Skip the results of dumping the black point.
-          if (filename.contains(".mono.png")) {
+          // Recurse on nested directories if requested, otherwise skip them.
+          if (singleFile.isDirectory()) {
+            if (config.recursive) {
+              addArgumentToInputs(singleFile.getAbsolutePath());
+            }
+            continue;
+          }
+          // Skip text files and the results of dumping the black point.
+          if (filename.endsWith(".txt") || filename.contains(".mono.png")) {
             continue;
           }
           inputs.addInput(singleFile.getAbsolutePath());
@@ -288,6 +293,7 @@ public final class CommandLineRunner {
     System.err.println("  --dump_black_point: Compare black point algorithms as input.mono.png");
     System.err.println("  --multi: Scans image for multiple barcodes");
     System.err.println("  --brief: Only output one line per file, omitting the contents");
+    System.err.println("  --recursive: Descend into subdirectories");
     System.err.println("  --crop=left,top,width,height: Only examine cropped region of input image(s)");
     System.err.println("  --threads=n: The number of threads to use while decoding");
   }
