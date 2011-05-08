@@ -142,7 +142,6 @@ public final class Detector {
     // adjacent to the white module at the top right. Tracing to that corner from either the top left
     // or bottom right should work here.
     
-    
     int dimensionTop = transitionsBetween(topLeft, topRight).getTransitions();
     int dimensionRight = transitionsBetween(bottomRight, topRight).getTransitions();
     
@@ -153,65 +152,67 @@ public final class Detector {
     dimensionTop += 2;
     
     if ((dimensionRight & 0x01) == 1) {
-        // it can't be odd, so, round... up?
-        dimensionRight++;
-      }
-      dimensionRight += 2;
+      // it can't be odd, so, round... up?
+      dimensionRight++;
+    }
+    dimensionRight += 2;
 
     BitMatrix bits;
     ResultPoint correctedTopRight;
-      
-    if (dimensionTop >= dimensionRight * 2 || dimensionRight >= dimensionTop * 2){
-    	//The matrix is rectangular
-    	
-        correctedTopRight =
-            correctTopRightRectangular(bottomLeft, bottomRight, topLeft, topRight, dimensionTop, dimensionRight);
-        if (correctedTopRight == null){
-        	correctedTopRight = topRight;
-        }
-        
-        dimensionTop = transitionsBetween(topLeft, correctedTopRight).getTransitions();
-        dimensionRight = transitionsBetween(bottomRight, correctedTopRight).getTransitions();
-        
-        if ((dimensionTop & 0x01) == 1) {
-          // it can't be odd, so, round... up?
-          dimensionTop++;
-        }
-        
-        if ((dimensionRight & 0x01) == 1) {
-          // it can't be odd, so, round... up?
-          dimensionRight++;
-        }
 
-        bits = sampleGrid(image, topLeft, bottomLeft, bottomRight, correctedTopRight, dimensionTop, dimensionRight);
+    // Rectanguar symbols are 6x16, 6x28, 10x24, 10x32, 14x32, or 14x44. If one dimension is more
+    // than twice the other, it's certainly rectangular, but to cut a bit more slack we accept it as
+    // rectangular if the bigger side is at least 7/4 times the other:
+    if (4 * dimensionTop >= 7 * dimensionRight || 4 * dimensionRight >= 7 * dimensionTop) {
+    	// The matrix is rectangular
+    	
+      correctedTopRight =
+          correctTopRightRectangular(bottomLeft, bottomRight, topLeft, topRight, dimensionTop, dimensionRight);
+      if (correctedTopRight == null){
+        correctedTopRight = topRight;
+      }
+
+      dimensionTop = transitionsBetween(topLeft, correctedTopRight).getTransitions();
+      dimensionRight = transitionsBetween(bottomRight, correctedTopRight).getTransitions();
+
+      if ((dimensionTop & 0x01) == 1) {
+        // it can't be odd, so, round... up?
+        dimensionTop++;
+      }
+
+      if ((dimensionRight & 0x01) == 1) {
+        // it can't be odd, so, round... up?
+        dimensionRight++;
+      }
+
+      bits = sampleGrid(image, topLeft, bottomLeft, bottomRight, correctedTopRight, dimensionTop, dimensionRight);
           
     } else {
-    	//The matrix is square
+    	// The matrix is square
         
     	int dimension = Math.min(dimensionRight, dimensionTop);
-        //correct top right point to match the white module
-        correctedTopRight = correctTopRight(bottomLeft, bottomRight, topLeft, topRight, dimension);
-        if (correctedTopRight == null){
-        	correctedTopRight = topRight;
-        }
+      // correct top right point to match the white module
+      correctedTopRight = correctTopRight(bottomLeft, bottomRight, topLeft, topRight, dimension);
+      if (correctedTopRight == null){
+        correctedTopRight = topRight;
+      }
 
-        //We redetermine the dimension using the corrected top right point
-        int dimensionCorrected = Math.max(transitionsBetween(topLeft, correctedTopRight).getTransitions(),
-                                  transitionsBetween(bottomRight, correctedTopRight).getTransitions());
+      // Redetermine the dimension using the corrected top right point
+      int dimensionCorrected = Math.max(transitionsBetween(topLeft, correctedTopRight).getTransitions(),
+                                transitionsBetween(bottomRight, correctedTopRight).getTransitions());
+      dimensionCorrected++;
+      if ((dimensionCorrected & 0x01) == 1) {
         dimensionCorrected++;
-        if ((dimensionCorrected & 0x01) == 1) {
-          dimensionCorrected++;
-        }
+      }
 
-        bits = sampleGrid(image,
-                          topLeft,
-                          bottomLeft,
-                          bottomRight,
-                          correctedTopRight,
-                          dimensionCorrected,
-                          dimensionCorrected);
+      bits = sampleGrid(image,
+                        topLeft,
+                        bottomLeft,
+                        bottomRight,
+                        correctedTopRight,
+                        dimensionCorrected,
+                        dimensionCorrected);
     }
-
 
     return new DetectorResult(bits, new ResultPoint[]{topLeft, bottomLeft, bottomRight, correctedTopRight});
   }
