@@ -27,6 +27,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.util.Locale;
 
 import javax.imageio.ImageIO;
 
@@ -71,7 +72,7 @@ public final class ImageConverter {
       if (inputFile.exists()) {
         if (inputFile.isDirectory()) {
           for (File input : inputFile.listFiles()) {
-            String filename = input.getName().toLowerCase();
+            String filename = input.getName().toLowerCase(Locale.ENGLISH);
             // Skip hidden files and text files (the latter is found in the blackbox tests).
             if (filename.startsWith(".") || filename.endsWith(".txt")) {
               continue;
