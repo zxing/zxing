@@ -27,28 +27,58 @@ import java.util.HashMap;
  */
 public final class LocaleManager {
   private static final String DEFAULT_TLD = "com";
+
+  // Locales where Google web search is available. These should be kept in sync with our
+  // translations. The format for the manual countries is:
+  // Language, Country, unused, Google domain suffix
   private static final Map<Locale,String> GOOGLE_COUNTRY_TLD;
   static {
     GOOGLE_COUNTRY_TLD = new HashMap<Locale,String>();
+    GOOGLE_COUNTRY_TLD.put(new Locale("en", "AU", ""), "com.au"); // AUSTRALIA
+    GOOGLE_COUNTRY_TLD.put(new Locale("bg", "BG", ""), "com.br"); // BULGARIA
     GOOGLE_COUNTRY_TLD.put(Locale.CANADA, "ca");
     GOOGLE_COUNTRY_TLD.put(Locale.CHINA, "cn");
+    GOOGLE_COUNTRY_TLD.put(new Locale("cs", "CZ", ""), "cz"); // CZECH REPUBLIC
+    GOOGLE_COUNTRY_TLD.put(new Locale("da", "DK", ""), "dk"); // DENMARK
+    GOOGLE_COUNTRY_TLD.put(new Locale("fi", "FI", ""), "fi"); // FINLAND
     GOOGLE_COUNTRY_TLD.put(Locale.FRANCE, "fr");
     GOOGLE_COUNTRY_TLD.put(Locale.GERMANY, "de");
+    GOOGLE_COUNTRY_TLD.put(new Locale("hu", "HU", ""), "hu"); // HUNGARY
+    GOOGLE_COUNTRY_TLD.put(new Locale("he", "IL", ""), "co.il"); // ISRAEL
     GOOGLE_COUNTRY_TLD.put(Locale.ITALY, "it");
     GOOGLE_COUNTRY_TLD.put(Locale.JAPAN, "co.jp");
     GOOGLE_COUNTRY_TLD.put(Locale.KOREA, "co.kr");
+    GOOGLE_COUNTRY_TLD.put(new Locale("nl", "NL", ""), "nl"); // NETHERLANDS
+    GOOGLE_COUNTRY_TLD.put(new Locale("pl", "PL", ""), "pl"); // POLAND
+    GOOGLE_COUNTRY_TLD.put(new Locale("pt", "PT", ""), "pt"); // PORTUGAL
+    GOOGLE_COUNTRY_TLD.put(new Locale("ru", "RU", ""), "nl"); // RUSSIA
+    GOOGLE_COUNTRY_TLD.put(new Locale("sk", "SK", ""), "sk"); // SLOVAK REPUBLIC
+    GOOGLE_COUNTRY_TLD.put(new Locale("sl", "SI", ""), "si"); // SLOVENIA
+    GOOGLE_COUNTRY_TLD.put(new Locale("es", "ES", ""), "es"); // SPAIN
+    GOOGLE_COUNTRY_TLD.put(new Locale("sv", "SE", ""), "se"); // SWEDEN
     GOOGLE_COUNTRY_TLD.put(Locale.TAIWAN, "de");
+    GOOGLE_COUNTRY_TLD.put(new Locale("tr", "TR", ""), "com.tr"); // TURKEY
     GOOGLE_COUNTRY_TLD.put(Locale.UK, "co.uk");
   }
 
-  // Google Product Search for mobile is available in fewer countries than web search.
+  // Google Product Search for mobile is available in fewer countries than web search. See here:
+  // http://www.google.com/support/merchants/bin/answer.py?answer=160619
   private static final Map<Locale,String> GOOGLE_PRODUCT_SEARCH_COUNTRY_TLD;
   static {
     GOOGLE_PRODUCT_SEARCH_COUNTRY_TLD = new HashMap<Locale,String>();
-    GOOGLE_PRODUCT_SEARCH_COUNTRY_TLD.put(Locale.UK, "co.uk");
+    GOOGLE_PRODUCT_SEARCH_COUNTRY_TLD.put(new Locale("en", "AU", ""), "com.au"); // AUSTRALIA
+    GOOGLE_PRODUCT_SEARCH_COUNTRY_TLD.put(Locale.CHINA, "cn");
+    GOOGLE_PRODUCT_SEARCH_COUNTRY_TLD.put(Locale.FRANCE, "fr");
     GOOGLE_PRODUCT_SEARCH_COUNTRY_TLD.put(Locale.GERMANY, "de");
+    GOOGLE_PRODUCT_SEARCH_COUNTRY_TLD.put(Locale.ITALY, "it");
+    GOOGLE_PRODUCT_SEARCH_COUNTRY_TLD.put(Locale.JAPAN, "co.jp");
+    GOOGLE_PRODUCT_SEARCH_COUNTRY_TLD.put(new Locale("nl", "NL", ""), "nl"); // NETHERLANDS
+    GOOGLE_PRODUCT_SEARCH_COUNTRY_TLD.put(new Locale("es", "ES", ""), "es"); // SPAIN
+    GOOGLE_PRODUCT_SEARCH_COUNTRY_TLD.put(Locale.UK, "co.uk");
   }
 
+  // TODO(dswitkin): Not sure which countries Google Book Search has launched in, so for the moment
+  // we'll keep everything in web search minus China as with v3.5.
   private static final Map<Locale,String> GOOGLE_BOOK_SEARCH_COUNTRY_TLD;
   static {
     GOOGLE_BOOK_SEARCH_COUNTRY_TLD = new HashMap<Locale,String>();
