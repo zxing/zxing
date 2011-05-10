@@ -39,14 +39,14 @@ final class DecodedBitStreamParser {
    * The C40 Basic Character Set (*'s used for placeholders for the shift values)
    */
   private static final char[] C40_BASIC_SET_CHARS = {
-      '*', '*', '*', ' ', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-      'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
-      'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
+    '*', '*', '*', ' ', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
+    'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
   };
   
   private static final char[] C40_SHIFT2_SET_CHARS = {
-    '!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.',
-    '/', ':', ';', '<', '=', '>', '?', '@', '[', '\\', ']', '^', '_'
+    '!', '"', '#', '$', '%', '&', '\'', '(', ')', '*',  '+', ',', '-', '.',
+    '/', ':', ';', '<', '=', '>', '?',  '@', '[', '\\', ']', '^', '_'
   };
   
   /**
@@ -61,7 +61,7 @@ final class DecodedBitStreamParser {
   
   private static final char[] TEXT_SHIFT3_SET_CHARS = {
     '\'', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
-    'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '{', '|', '}', '~', (char) 127
+    'O',  'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '{', '|', '}', '~', (char) 127
   };
   
   private static final int PAD_ENCODE = 0;  // Not really an encoding
@@ -124,7 +124,7 @@ final class DecodedBitStreamParser {
       if (oneByte == 0) {
         throw FormatException.getFormatInstance();
       } else if (oneByte <= 128) {  // ASCII data (ASCII value + 1)
-        oneByte = upperShift ? (oneByte + 128) : oneByte;
+        oneByte = upperShift ? oneByte + 128 : oneByte;
         upperShift = false;
         result.append((char) (oneByte - 1));
         return ASCII_ENCODE;
@@ -140,15 +140,10 @@ final class DecodedBitStreamParser {
         return C40_ENCODE;
       } else if (oneByte == 231) {  // Latch to Base 256 encodation
         return BASE256_ENCODE;
-      } else if (oneByte == 232) {  // FNC1
+      } else if (oneByte == 232 || oneByte == 233 || oneByte == 234) {
+        // FNC1, Structured Append, Reader Programming
+        // Ignore these symbols for now
         //throw ReaderException.getInstance();
-        // Ignore this symbol for now
-      } else if (oneByte == 233) {  // Structured Append
-        //throw ReaderException.getInstance();
-        // Ignore this symbol for now
-      } else if (oneByte == 234) {  // Reader Programming
-        //throw ReaderException.getInstance();
-        // Ignore this symbol for now
       } else if (oneByte == 235) {  // Upper Shift (shift to Extended ASCII)
         upperShift = true;
       } else if (oneByte == 236) {  // 05 Macro
@@ -208,13 +203,16 @@ final class DecodedBitStreamParser {
           case 0:
             if (cValue < 3) {
               shift = cValue + 1;
-            } else {
+            } else if (cValue < C40_BASIC_SET_CHARS.length) {
+              char c40char = C40_BASIC_SET_CHARS[cValue];
               if (upperShift) {
-                result.append((char) (C40_BASIC_SET_CHARS[cValue] + 128));
+                result.append((char) (c40char + 128));
                 upperShift = false;
               } else {
-                result.append(C40_BASIC_SET_CHARS[cValue]);
+                result.append(c40char);
               }
+            } else {
+              throw FormatException.getFormatInstance();
             }
             break;
           case 1:
@@ -227,12 +225,13 @@ final class DecodedBitStreamParser {
             shift = 0;
             break;
           case 2:
-            if (cValue < 27) {
+            if (cValue < C40_SHIFT2_SET_CHARS.length) {
+              char c40char = C40_SHIFT2_SET_CHARS[cValue];
               if (upperShift) {
-                result.append((char) (C40_SHIFT2_SET_CHARS[cValue] + 128));
+                result.append((char) (c40char + 128));
                 upperShift = false;
               } else {
-                result.append(C40_SHIFT2_SET_CHARS[cValue]);
+                result.append(c40char);
               }
             } else if (cValue == 27) {  // FNC1
               throw FormatException.getFormatInstance();
@@ -288,13 +287,16 @@ final class DecodedBitStreamParser {
           case 0:
             if (cValue < 3) {
               shift = cValue + 1;
-            } else {
+            } else if (cValue < TEXT_BASIC_SET_CHARS.length) {
+              char textChar = TEXT_BASIC_SET_CHARS[cValue];
               if (upperShift) {
-                result.append((char) (TEXT_BASIC_SET_CHARS[cValue] + 128));
+                result.append((char) (textChar + 128));
                 upperShift = false;
               } else {
-                result.append(TEXT_BASIC_SET_CHARS[cValue]);
+                result.append(textChar);
               }
+            } else {
+              throw FormatException.getFormatInstance();
             }
             break;
           case 1:
@@ -308,12 +310,13 @@ final class DecodedBitStreamParser {
             break;
           case 2:
             // Shift 2 for Text is the same encoding as C40
-            if (cValue < 27) {
+            if (cValue < C40_SHIFT2_SET_CHARS.length) {
+              char c40char = C40_SHIFT2_SET_CHARS[cValue];
               if (upperShift) {
-                result.append((char) (C40_SHIFT2_SET_CHARS[cValue] + 128));
+                result.append((char) (c40char + 128));
                 upperShift = false;
               } else {
-                result.append(C40_SHIFT2_SET_CHARS[cValue]);
+                result.append(c40char);
               }
             } else if (cValue == 27) {  // FNC1
               throw FormatException.getFormatInstance();
@@ -325,13 +328,18 @@ final class DecodedBitStreamParser {
             shift = 0;
             break;
           case 3:
-            if (upperShift) {
-              result.append((char) (TEXT_SHIFT3_SET_CHARS[cValue] + 128));
-              upperShift = false;
+            if (cValue < TEXT_SHIFT3_SET_CHARS.length) {
+              char textChar = TEXT_SHIFT3_SET_CHARS[cValue];
+              if (upperShift) {
+                result.append((char) (textChar + 128));
+                upperShift = false;
+              } else {
+                result.append(textChar);
+              }
+              shift = 0;
             } else {
-              result.append(TEXT_SHIFT3_SET_CHARS[cValue]);
+              throw FormatException.getFormatInstance();
             }
-            shift = 0;
             break;
           default:
             throw FormatException.getFormatInstance();
@@ -462,7 +470,7 @@ final class DecodedBitStreamParser {
                                           int base256CodewordPosition) {
     int pseudoRandomNumber = ((149 * base256CodewordPosition) % 255) + 1;
     int tempVariable = randomizedBase256Codeword - pseudoRandomNumber;
-    return (byte) (tempVariable >= 0 ? tempVariable : (tempVariable + 256));
+    return (byte) (tempVariable >= 0 ? tempVariable : tempVariable + 256);
   }
   
 }
