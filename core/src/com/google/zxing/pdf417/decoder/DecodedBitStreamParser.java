@@ -40,7 +40,8 @@ final class DecodedBitStreamParser {
   private static final int LOWER = 1;
   private static final int MIXED = 2;
   private static final int PUNCT = 3;
-  private static final int PUNCT_SHIFT = 4;
+  private static final int ALPHA_SHIFT = 4;
+  private static final int PUNCT_SHIFT = 5;
 
   private static final int PL = 25;
   private static final int LL = 27;
@@ -88,34 +89,28 @@ final class DecodedBitStreamParser {
     int code = codewords[codeIndex++];
     while (codeIndex < codewords[0]) {
       switch (code) {
-        case TEXT_COMPACTION_MODE_LATCH: {
+        case TEXT_COMPACTION_MODE_LATCH:
           codeIndex = textCompaction(codewords, codeIndex, result);
           break;
-        }
-        case BYTE_COMPACTION_MODE_LATCH: {
+        case BYTE_COMPACTION_MODE_LATCH:
           codeIndex = byteCompaction(code, codewords, codeIndex, result);
           break;
-        }
-        case NUMERIC_COMPACTION_MODE_LATCH: {
+        case NUMERIC_COMPACTION_MODE_LATCH:
           codeIndex = numericCompaction(codewords, codeIndex, result);
           break;
-        }
-        case MODE_SHIFT_TO_BYTE_COMPACTION_MODE: {
+        case MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
           codeIndex = byteCompaction(code, codewords, codeIndex, result);
           break;
-        }
-        case BYTE_COMPACTION_MODE_LATCH_6: {
+        case BYTE_COMPACTION_MODE_LATCH_6:
           codeIndex = byteCompaction(code, codewords, codeIndex, result);
           break;
-        }
-        default: {
+        default:
           // Default to text compaction. During testing numerous barcodes
           // appeared to be missing the starting mode. In these cases defaulting
           // to text compaction seems to work.
           codeIndex--;
           codeIndex = textCompaction(codewords, codeIndex, result);
           break;
-        }
       }
       if (codeIndex < codewords.length) {
         code = codewords[codeIndex++];
@@ -152,22 +147,19 @@ final class DecodedBitStreamParser {
         index += 2;
       } else {
         switch (code) {
-          case TEXT_COMPACTION_MODE_LATCH: {
+          case TEXT_COMPACTION_MODE_LATCH:
             codeIndex--;
             end = true;
             break;
-          }
-          case BYTE_COMPACTION_MODE_LATCH: {
+          case BYTE_COMPACTION_MODE_LATCH:
             codeIndex--;
             end = true;
             break;
-          }
-          case NUMERIC_COMPACTION_MODE_LATCH: {
+          case NUMERIC_COMPACTION_MODE_LATCH:
             codeIndex--;
             end = true;
             break;
-          }
-          case MODE_SHIFT_TO_BYTE_COMPACTION_MODE: {
+          case MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
             // The Mode Shift codeword 913 shall cause a temporary
             // switch from Text Compaction mode to Byte Compaction mode.
             // This switch shall be in effect for only the next codeword,
@@ -175,16 +167,14 @@ final class DecodedBitStreamParser {
             // of the Text Compaction mode. Codeword 913 is only available
             // in Text Compaction mode; its use is described in 5.4.2.4.
             textCompactionData[index] = MODE_SHIFT_TO_BYTE_COMPACTION_MODE;
-            code = codewords[codeIndex++];            
+            code = codewords[codeIndex++];
             byteCompactionData[index] = code; //Integer.toHexString(code);
             index++;
             break;
-          }
-          case BYTE_COMPACTION_MODE_LATCH_6: {
+          case BYTE_COMPACTION_MODE_LATCH_6:
             codeIndex--;
             end = true;
             break;
-          }
         }
       }
     }
@@ -253,7 +243,9 @@ final class DecodedBitStreamParser {
             if (subModeCh == 26) {
               ch = ' ';
             } else if (subModeCh == AS) {
-              subMode = ALPHA;
+              // Shift to alpha
+              priorToShiftMode = subMode;
+              subMode = ALPHA_SHIFT;
             } else if (subModeCh == ML) {
               subMode = MIXED;
             } else if (subModeCh == PS) {
@@ -291,7 +283,7 @@ final class DecodedBitStreamParser {
 
         case PUNCT:
           // Punctuation
-          if (subModeCh < PS) {
+          if (subModeCh < PAL) {
             ch = PUNCT_CHARS[subModeCh];
           } else {
             if (subModeCh == PAL) {
@@ -302,10 +294,24 @@ final class DecodedBitStreamParser {
           }
           break;
 
+        case ALPHA_SHIFT:
+          // Restore sub-mode
+          subMode = priorToShiftMode;
+          if (subModeCh < 26) {
+            ch = (char) ('A' + subModeCh);
+          } else {
+            if (subModeCh == 26) {
+              ch = ' ';
+            } else {
+              // is this even possible?
+            }
+          }
+          break;
+
         case PUNCT_SHIFT:
           // Restore sub-mode
           subMode = priorToShiftMode;
-          if (subModeCh < PS) {
+          if (subModeCh < PAL) {
             ch = PUNCT_CHARS[subModeCh];
           } else {
             if (subModeCh == PAL) {
@@ -375,7 +381,7 @@ final class DecodedBitStreamParser {
       // If Byte Compaction mode is invoked with codeword 901,
       // the final group of codewords is interpreted directly
       // as one byte per codeword, without compaction.
-      for (int i = ((count / 5) * 5); i < count; i++) {
+      for (int i = (count / 5) * 5; i < count; i++) {
         result.append((char) byteCompactedCodewords[i]);
       }
 
