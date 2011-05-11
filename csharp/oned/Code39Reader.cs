@@ -32,7 +32,7 @@ namespace com.google.zxing.oned
 	public sealed class Code39Reader:OneDReader
 	{
 		
-		private const System.String ALPHABET_STRING = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. *$/+%";
+		internal const System.String ALPHABET_STRING = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. *$/+%";
 		//UPGRADE_NOTE: Final was removed from the declaration of 'ALPHABET '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
 		private static readonly char[] ALPHABET = ALPHABET_STRING.ToCharArray();
 		
@@ -41,7 +41,7 @@ namespace com.google.zxing.oned
 		/// with 1s representing "wide" and 0s representing narrow.
 		/// </summary>
 		//UPGRADE_NOTE: Final was removed from the declaration of 'CHARACTER_ENCODINGS'. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private static readonly int[] CHARACTER_ENCODINGS = new int[]{0x034, 0x121, 0x061, 0x160, 0x031, 0x130, 0x070, 0x025, 0x124, 0x064, 0x109, 0x049, 0x148, 0x019, 0x118, 0x058, 0x00D, 0x10C, 0x04C, 0x01C, 0x103, 0x043, 0x142, 0x013, 0x112, 0x052, 0x007, 0x106, 0x046, 0x016, 0x181, 0x0C1, 0x1C0, 0x091, 0x190, 0x0D0, 0x085, 0x184, 0x0C4, 0x094, 0x0A8, 0x0A2, 0x08A, 0x02A};
+		internal static readonly int[] CHARACTER_ENCODINGS = new int[]{0x034, 0x121, 0x061, 0x160, 0x031, 0x130, 0x070, 0x025, 0x124, 0x064, 0x109, 0x049, 0x148, 0x019, 0x118, 0x058, 0x00D, 0x10C, 0x04C, 0x01C, 0x103, 0x043, 0x142, 0x013, 0x112, 0x052, 0x007, 0x106, 0x046, 0x016, 0x181, 0x0C1, 0x1C0, 0x091, 0x190, 0x0D0, 0x085, 0x184, 0x0C4, 0x094, 0x0A8, 0x0A2, 0x08A, 0x02A};
 		
 		//UPGRADE_NOTE: Final was removed from the declaration of 'ASTERISK_ENCODING '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
 		private static readonly int ASTERISK_ENCODING = CHARACTER_ENCODINGS[39];
