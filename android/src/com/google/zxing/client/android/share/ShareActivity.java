@@ -16,23 +16,26 @@
 
 package com.google.zxing.client.android.share;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.client.android.Contents;
+import com.google.zxing.client.android.Intents;
+import com.google.zxing.client.android.R;
+
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.BaseColumns;
 import android.provider.Browser;
 import android.provider.Contacts;
-import android.provider.BaseColumns;
 import android.text.ClipboardManager;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.client.android.Intents;
-import com.google.zxing.client.android.Contents;
-import com.google.zxing.client.android.R;
+import android.widget.TextView;
 
 /**
  * Barcode Scanner can share data like contacts and bookmarks by displaying a QR Code on screen,
@@ -98,26 +101,44 @@ public final class ShareActivity extends Activity {
       ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
       // Should always be true, because we grey out the clipboard button in onResume() if it's empty
       if (clipboard.hasText()) {
-        Intent intent = new Intent(Intents.Encode.ACTION);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-        intent.putExtra(Intents.Encode.TYPE, Contents.Type.TEXT);
-        intent.putExtra(Intents.Encode.DATA, clipboard.getText().toString());
-        intent.putExtra(Intents.Encode.FORMAT, BarcodeFormat.QR_CODE.toString());
-        startActivity(intent);
+        launchSearch(clipboard.getText().toString());
       }
     }
   };
+
+  private final View.OnKeyListener textListener = new View.OnKeyListener() {
+    public boolean onKey(View view, int keyCode, KeyEvent event) {
+      if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
+        String text = ((TextView) view).getText().toString();
+        if (text != null && text.length() > 0) {
+          launchSearch(text);
+        }
+        return true;
+      }
+      return false;
+    }
+  };
+
+  private void launchSearch(String text) {
+    Intent intent = new Intent(Intents.Encode.ACTION);
+    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+    intent.putExtra(Intents.Encode.TYPE, Contents.Type.TEXT);
+    intent.putExtra(Intents.Encode.DATA, text);
+    intent.putExtra(Intents.Encode.FORMAT, BarcodeFormat.QR_CODE.toString());
+    startActivity(intent);
+  }
 
   @Override
   public void onCreate(Bundle icicle) {
     super.onCreate(icicle);
     setContentView(R.layout.share);
 
-    findViewById(R.id.contact_button).setOnClickListener(contactListener);
-    findViewById(R.id.bookmark_button).setOnClickListener(bookmarkListener);
-    findViewById(R.id.app_button).setOnClickListener(appListener);
-    clipboardButton = (Button) findViewById(R.id.clipboard_button);
+    findViewById(R.id.share_contact_button).setOnClickListener(contactListener);
+    findViewById(R.id.share_bookmark_button).setOnClickListener(bookmarkListener);
+    findViewById(R.id.share_app_button).setOnClickListener(appListener);
+    clipboardButton = (Button) findViewById(R.id.share_clipboard_button);
     clipboardButton.setOnClickListener(clipboardListener);
+    findViewById(R.id.share_text_view).setOnKeyListener(textListener);
   }
 
   @Override
@@ -151,7 +172,7 @@ public final class ShareActivity extends Activity {
   }
 
   private void showTextAsBarcode(String text) {
-    Log.i(TAG, "Showing text as barcode: " + text);    
+    Log.i(TAG, "Showing text as barcode: " + text);
     if (text == null) {
       return; // Show error?
     }
@@ -233,7 +254,7 @@ public final class ShareActivity extends Activity {
       }
 
       Intent intent = new Intent(Intents.Encode.ACTION);
-      intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);      
+      intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
       intent.putExtra(Intents.Encode.TYPE, Contents.Type.CONTACT);
       intent.putExtra(Intents.Encode.DATA, bundle);
       intent.putExtra(Intents.Encode.FORMAT, BarcodeFormat.QR_CODE.toString());
