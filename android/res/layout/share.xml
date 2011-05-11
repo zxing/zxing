@@ -32,7 +32,7 @@
         android:layout_height="fill_parent"
         android:gravity="center"
         android:orientation="vertical"
-        android:padding="16dip">
+        android:padding="8dip">
 
       <TextView
           android:layout_width="wrap_content"
@@ -40,14 +40,14 @@
           android:textColor="@color/share_text"
           android:textSize="18sp"
           android:text="@string/msg_share_explanation"
-          android:paddingBottom="24dip"/>
+          android:paddingBottom="8dip"/>
 
       <ImageView
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:scaleType="center"
           android:src="@drawable/share_via_barcode"
-          android:paddingBottom="24dip"/>
+          android:paddingBottom="8dip"/>
 
       <LinearLayout
           android:layout_width="fill_parent"
@@ -55,13 +55,13 @@
           android:orientation="horizontal"
           android:paddingBottom="8dip">
 
-        <Button android:id="@+id/app_button"
+        <Button android:id="@+id/share_app_button"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/button_share_app"/>
 
-        <Button android:id="@+id/bookmark_button"
+        <Button android:id="@+id/share_bookmark_button"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -72,21 +72,30 @@
       <LinearLayout
           android:layout_width="fill_parent"
           android:layout_height="wrap_content"
-          android:orientation="horizontal">
+          android:orientation="horizontal"
+          android:paddingBottom="8dip">
 
-        <Button android:id="@+id/contact_button"
+        <Button android:id="@+id/share_contact_button"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/button_share_contact"/>
 
-        <Button android:id="@+id/clipboard_button"
+        <Button android:id="@+id/share_clipboard_button"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/button_share_clipboard"/>
 
       </LinearLayout>
+
+      <EditText android:id="@+id/share_text_view"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:hint="@string/msg_share_text"
+                android:singleLine="true"
+                android:selectAllOnFocus="true"/>
 
     </LinearLayout>
 

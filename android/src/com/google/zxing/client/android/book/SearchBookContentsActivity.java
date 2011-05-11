@@ -100,7 +100,7 @@ public final class SearchBookContentsActivity extends Activity {
 
   private final View.OnKeyListener keyListener = new View.OnKeyListener() {
     public boolean onKey(View view, int keyCode, KeyEvent event) {
-      if (keyCode == KeyEvent.KEYCODE_ENTER) {
+      if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
         launchSearch();
         return true;
       }
