@@ -75,6 +75,7 @@ public final class CameraManager {
    * clear the handler so it will only receive one message.
    */
   private final PreviewCallback previewCallback;
+
   /** Autofocus callbacks arrive here, and are dispatched to the Handler which requested them. */
   private final AutoFocusCallback autoFocusCallback;
 
@@ -107,7 +108,6 @@ public final class CameraManager {
     // Camera.setPreviewCallback() on 1.5 and earlier. For Donut and later, we need to use
     // the more efficient one shot callback, as the older one can swamp the system and cause it
     // to run out of memory. We can't use SDK_INT because it was introduced in the Donut SDK.
-    //useOneShotPreviewCallback = Integer.parseInt(Build.VERSION.SDK) > Build.VERSION_CODES.CUPCAKE;
     useOneShotPreviewCallback = Integer.parseInt(Build.VERSION.SDK) > 3; // 3 = Cupcake
 
     previewCallback = new PreviewCallback(configManager, useOneShotPreviewCallback);
@@ -261,27 +261,6 @@ public final class CameraManager {
   }
 
   /**
-   * Converts the result points from still resolution coordinates to screen coordinates.
-   *
-   * @param points The points returned by the Reader subclass through Result.getResultPoints().
-   * @return An array of Points scaled to the size of the framing rect and offset appropriately
-   *         so they can be drawn in screen coordinates.
-   */
-  /*
-  public Point[] convertResultPoints(ResultPoint[] points) {
-    Rect frame = getFramingRectInPreview();
-    int count = points.length;
-    Point[] output = new Point[count];
-    for (int x = 0; x < count; x++) {
-      output[x] = new Point();
-      output[x].x = frame.left + (int) (points[x].getX() + 0.5f);
-      output[x].y = frame.top + (int) (points[x].getY() + 0.5f);
-    }
-    return output;
-  }
-   */
-
-  /**
    * A factory method to build the appropriate LuminanceSource object based on the format
    * of the preview buffers, as described by Camera.Parameters.
    *
@@ -295,7 +274,7 @@ public final class CameraManager {
     int previewFormat = configManager.getPreviewFormat();
     String previewFormatString = configManager.getPreviewFormatString();
     SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-    boolean reverseHorizontal = sharedPrefs.getBoolean(PreferencesActivity.KEY_REVERSE_IMAGE, false);
+    boolean reverseImage = sharedPrefs.getBoolean(PreferencesActivity.KEY_REVERSE_IMAGE, false);
 
     switch (previewFormat) {
       // This is the standard Android format which all devices are REQUIRED to support.
@@ -304,26 +283,14 @@ public final class CameraManager {
       // This format has never been seen in the wild, but is compatible as we only care
       // about the Y channel, so allow it.
       case PixelFormat.YCbCr_422_SP:
-        return new PlanarYUVLuminanceSource(data,
-                                            width,
-                                            height,
-                                            rect.left,
-                                            rect.top,
-                                            rect.width(),
-                                            rect.height(),
-                                            reverseHorizontal);
+        return new PlanarYUVLuminanceSource(data, width, height, rect.left, rect.top,
+            rect.width(), rect.height(), reverseImage);
       default:
         // The Samsung Moment incorrectly uses this variant instead of the 'sp' version.
         // Fortunately, it too has all the Y data up front, so we can read it.
         if ("yuv420p".equals(previewFormatString)) {
-          return new PlanarYUVLuminanceSource(data,
-                                              width,
-                                              height,
-                                              rect.left,
-                                              rect.top,
-                                              rect.width(),
-                                              rect.height(),
-                                              reverseHorizontal);
+          return new PlanarYUVLuminanceSource(data, width, height, rect.left, rect.top,
+              rect.width(), rect.height(), reverseImage);
         }
     }
     throw new IllegalArgumentException("Unsupported picture format: " +

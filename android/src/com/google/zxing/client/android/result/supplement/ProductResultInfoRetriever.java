@@ -48,7 +48,8 @@ final class ProductResultInfoRetriever extends SupplementalInfoRetriever {
 
   private final String productID;
 
-  ProductResultInfoRetriever(TextView textView, String productID, Handler handler, Context context) {
+  ProductResultInfoRetriever(TextView textView, String productID, Handler handler,
+      Context context) {
     super(textView, handler, context);
     this.productID = productID;
   }
@@ -106,6 +107,5 @@ final class ProductResultInfoRetriever extends SupplementalInfoRetriever {
       throw new IllegalStateException(uee);
     }
   }
-
 
 }

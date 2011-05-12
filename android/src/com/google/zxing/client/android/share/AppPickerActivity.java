@@ -36,8 +36,8 @@ public final class AppPickerActivity extends ListActivity {
     if (labelsPackages.isEmpty()) {
       new LoadPackagesAsyncTask(this).execute(labelsPackages);
     }
-    // otherwise use last copy we loaded -- apps don't change much, and it takes
-    // forever to load for some reason
+    // Otherwise use last copy we loaded -- apps don't change much, and it takes
+    // forever to load for some reason.
   }
 
   @Override
@@ -45,7 +45,7 @@ public final class AppPickerActivity extends ListActivity {
     if (position >= 0 && position < labelsPackages.size()) {
       String url = "market://search?q=pname:" + labelsPackages.get(position)[1];
       Intent intent = new Intent();
-      intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);      
+      intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
       intent.putExtra(Browser.BookmarkColumns.URL, url);
       setResult(RESULT_OK, intent);
     } else {

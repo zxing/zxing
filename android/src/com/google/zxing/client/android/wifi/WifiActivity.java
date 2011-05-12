@@ -34,7 +34,7 @@ import com.google.zxing.client.android.R;
 
 /**
  * A new activity showing the progress of Wifi connection
- * 
+ *
  * @author Vikram Aggarwal
  */
 public final class WifiActivity extends Activity  {
@@ -106,7 +106,8 @@ public final class WifiActivity extends Activity  {
 
   private WifiConfiguration changeNetworkCommon(NetworkSetting input){
     statusView.setText(R.string.wifi_creating_network);
-    Log.d(TAG, "Adding new configuration: \nSSID: " + input.getSsid() + "\nType: " + input.getNetworkType());
+    Log.d(TAG, "Adding new configuration: \nSSID: " + input.getSsid() + "\nType: " +
+        input.getNetworkType());
     WifiConfiguration config = new WifiConfiguration();
 
     config.allowedAuthAlgorithms.clear();
@@ -179,7 +180,8 @@ public final class WifiActivity extends Activity  {
   }
 
   /**
-   * If the given ssid name exists in the settings, then change its password to the one given here, and save
+   * If the given ssid name exists in the settings, then change its password to the one given here,
+   * and save
    * @param ssid
    */
   private WifiConfiguration findNetworkInExistingConfig(String ssid){

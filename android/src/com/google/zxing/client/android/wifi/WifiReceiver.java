@@ -39,7 +39,9 @@ final class WifiReceiver extends BroadcastReceiver {
   private final WifiActivity parent;
   private final TextView statusView;
 
-  WifiReceiver(WifiManager wifiManager, WifiActivity wifiActivity, TextView statusView, String ssid) {
+  // FIXME: Why is ssid ignored here?
+  WifiReceiver(WifiManager wifiManager, WifiActivity wifiActivity, TextView statusView,
+      String ssid) {
     this.parent = wifiActivity;
     this.statusView = statusView;
     this.mWifiManager = wifiManager;
@@ -52,9 +54,11 @@ final class WifiReceiver extends BroadcastReceiver {
           (SupplicantState) intent.getParcelableExtra(WifiManager.EXTRA_NEW_STATE),
           intent.hasExtra(WifiManager.EXTRA_SUPPLICANT_ERROR));
     } else if (intent.getAction().equals(WifiManager.NETWORK_STATE_CHANGED_ACTION)){
-      handleNetworkStateChanged((NetworkInfo) intent.getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO));
+      handleNetworkStateChanged((NetworkInfo) intent.getParcelableExtra(
+          WifiManager.EXTRA_NETWORK_INFO));
     } else if (intent.getAction().equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
-      ConnectivityManager con = (ConnectivityManager) parent.getSystemService(Context.CONNECTIVITY_SERVICE);
+      ConnectivityManager con = (ConnectivityManager) parent.getSystemService(
+          Context.CONNECTIVITY_SERVICE);
       NetworkInfo[] s = con.getAllNetworkInfo();
       for (NetworkInfo i : s){
         if (i.getTypeName().contentEquals("WIFI")){
