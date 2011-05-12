@@ -84,7 +84,8 @@ public final class PreferencesActivity extends PreferenceActivity
       checked.add(decodeDataMatrix);
     }
     boolean disable = checked.size() < 2;
-    for (CheckBoxPreference pref : new CheckBoxPreference[] {decode1D, decodeQR, decodeDataMatrix}) {
+    CheckBoxPreference[] checkBoxPreferences = {decode1D, decodeQR, decodeDataMatrix};
+    for (CheckBoxPreference pref : checkBoxPreferences) {
       pref.setEnabled(!(disable && checked.contains(pref)));
     }
   }

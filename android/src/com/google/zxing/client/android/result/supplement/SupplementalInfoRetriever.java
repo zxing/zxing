@@ -55,14 +55,17 @@ public abstract class SupplementalInfoRetriever implements Callable<Void> {
     return executorInstance;
   }
 
-  public static void maybeInvokeRetrieval(TextView textView, ParsedResult result, Handler handler, Context context) {
+  public static void maybeInvokeRetrieval(TextView textView, ParsedResult result, Handler handler,
+      Context context) {
     SupplementalInfoRetriever retriever = null;
     if (result instanceof URIParsedResult) {
       retriever = new URIResultInfoRetriever(textView, (URIParsedResult) result, handler, context);
     } else if (result instanceof ProductParsedResult) {
-      retriever = new ProductResultInfoRetriever(textView, ((ProductParsedResult) result).getProductID(), handler, context);
+      retriever = new ProductResultInfoRetriever(textView,
+          ((ProductParsedResult) result).getProductID(), handler, context);
     } else if (result instanceof ISBNParsedResult) {
-      retriever = new ProductResultInfoRetriever(textView, ((ISBNParsedResult) result).getISBN(), handler, context);
+      retriever = new ProductResultInfoRetriever(textView, ((ISBNParsedResult) result).getISBN(),
+          handler, context);
     }
     if (retriever != null) {
       ExecutorService executor = getExecutorService();

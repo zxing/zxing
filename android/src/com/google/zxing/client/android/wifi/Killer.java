@@ -42,6 +42,7 @@ final class Killer implements Runnable {
   Killer(Activity parent) {
     this.parent = parent;
   }
+
   void launchIntent(Intent intent) {
     if (intent != null) {
       intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);

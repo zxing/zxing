@@ -67,8 +67,9 @@ public abstract class ResultHandler {
   private static final DateFormat DATE_FORMAT;
   static {
     DATE_FORMAT = new SimpleDateFormat("yyyyMMdd");
-    // For dates without a time, for purposes of interacting with Android, the resulting timestamp needs to
-    // be midnight of that day in GMT (http://code.google.com/p/android/issues/detail?id=8330)
+    // For dates without a time, for purposes of interacting with Android, the resulting timestamp
+    // needs to be midnight of that day in GMT. See:
+    // http://code.google.com/p/android/issues/detail?id=8330
     DATE_FORMAT.setTimeZone(TimeZone.getTimeZone("GMT"));
   }
   private static final DateFormat DATE_TIME_FORMAT = new SimpleDateFormat("yyyyMMdd'T'HHmmss");
@@ -265,7 +266,8 @@ public abstract class ResultHandler {
   }
 
   final void shareByEmail(String contents) {
-    sendEmailFromUri("mailto:", null, activity.getString(R.string.msg_share_subject_line), contents);
+    sendEmailFromUri("mailto:", null, activity.getString(R.string.msg_share_subject_line),
+        contents);
   }
 
   final void sendEmail(String address, String subject, String body) {
@@ -447,7 +449,8 @@ public abstract class ResultHandler {
 
   private String parseCustomSearchURL() {
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
-    String customProductSearch = prefs.getString(PreferencesActivity.KEY_CUSTOM_PRODUCT_SEARCH, null);
+    String customProductSearch = prefs.getString(PreferencesActivity.KEY_CUSTOM_PRODUCT_SEARCH,
+        null);
     if (customProductSearch != null && customProductSearch.trim().length() == 0) {
       return null;
     }

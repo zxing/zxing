@@ -29,10 +29,7 @@ import java.util.regex.Pattern;
 final class CameraConfigurationManager {
 
   private static final String TAG = CameraConfigurationManager.class.getSimpleName();
-
   private static final int TEN_DESIRED_ZOOM = 27;
-  private static final int DESIRED_SHARPNESS = 30;
-
   private static final Pattern COMMA_PATTERN = Pattern.compile(",");
 
   private final Context context;
@@ -73,7 +70,6 @@ final class CameraConfigurationManager {
     parameters.setPreviewSize(cameraResolution.x, cameraResolution.y);
     setFlash(parameters);
     setZoom(parameters);
-    //setSharpness(parameters);
     camera.setParameters(parameters);
   }
 
@@ -118,7 +114,8 @@ final class CameraConfigurationManager {
     return cameraResolution;
   }
 
-  private static Point findBestPreviewSizeValue(CharSequence previewSizeValueString, Point screenResolution) {
+  private static Point findBestPreviewSizeValue(CharSequence previewSizeValueString,
+      Point screenResolution) {
     int bestX = 0;
     int bestY = 0;
     int diff = Integer.MAX_VALUE;
@@ -179,11 +176,8 @@ final class CameraConfigurationManager {
   }
 
   private void setFlash(Camera.Parameters parameters) {
-    // FIXME: This is a hack to turn the flash off on the Samsung Galaxy.
-    // And this is a hack-hack to work around a different value on the Behold II
-    // Restrict Behold II check to Cupcake, per Samsung's advice
-    //if (Build.MODEL.contains("Behold II") &&
-    //    CameraManager.SDK_INT == Build.VERSION_CODES.CUPCAKE) {
+    // FIXME: This is a hack to turn the flash off on the Samsung Galaxy and the Behold II
+    // as advised by Samsung, neither of which respected the official parameter.
     if (Build.MODEL.contains("Behold II") && CameraManager.SDK_INT == 3) { // 3 = Cupcake
       parameters.set("flash-value", 1);
     } else {
@@ -257,24 +251,4 @@ final class CameraConfigurationManager {
     }
   }
 
-  /*
-  private void setSharpness(Camera.Parameters parameters) {
-
-    int desiredSharpness = DESIRED_SHARPNESS;
-
-    String maxSharpnessString = parameters.get("sharpness-max");
-    if (maxSharpnessString != null) {
-      try {
-        int maxSharpness = Integer.parseInt(maxSharpnessString);
-        if (desiredSharpness > maxSharpness) {
-          desiredSharpness = maxSharpness;
-        }
-      } catch (NumberFormatException nfe) {
-        Log.w(TAG, "Bad sharpness-max: " + maxSharpnessString);
-      }
-    }
-
-    parameters.set("sharpness", desiredSharpness);
-  }
-   */
 }

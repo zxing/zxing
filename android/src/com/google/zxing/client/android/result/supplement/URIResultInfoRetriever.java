@@ -42,7 +42,8 @@ final class URIResultInfoRetriever extends SupplementalInfoRetriever {
   private final URIParsedResult result;
   private final String redirectString;
 
-  URIResultInfoRetriever(TextView textView, URIParsedResult result, Handler handler, Context context) {
+  URIResultInfoRetriever(TextView textView, URIParsedResult result, Handler handler,
+      Context context) {
     super(textView, handler, context);
     redirectString = context.getString(R.string.msg_redirect);
     this.result = result;

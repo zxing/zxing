@@ -25,7 +25,7 @@ import android.text.TextUtils;
  * http://chart.apis.google.com/chart?cht=qr&chs=240x240&chl=WIFI:S:linksys;P:mypass;T:WPA;;
  *
  * TODO(vikrama): Test with binary ssid or password.
- * 
+ *
  * @author Vikram Aggarwal
  */
 final class NetworkUtil {
@@ -38,7 +38,8 @@ final class NetworkUtil {
   /**
    * Encloses the incoming string inside double quotes, if it isn't already quoted.
    * @param string: the input string
-   * @return a quoted string, of the form "input".  If the input string is null, it returns null as well.
+   * @return a quoted string, of the form "input".  If the input string is null, it returns null
+   * as well.
    */
   static String convertToQuotedString(String string) {
     if (string == null){
@@ -57,7 +58,8 @@ final class NetworkUtil {
   /**
    * Check if wepKey is a valid hexadecimal string.
    * @param wepKey the input to be checked
-   * @return true if the input string is indeed hex or empty.  False if the input string is non-hex or null.
+   * @return true if the input string is indeed hex or empty.  False if the input string is non-hex
+   * or null.
    */
   static boolean isHexWepKey(CharSequence wepKey) {
     if (wepKey == null) {

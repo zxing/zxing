@@ -50,7 +50,7 @@ import com.google.zxing.Result;
 
 /**
  * <p>Manages functionality related to scan history.</p>
- * 
+ *
  * @author Sean Owen
  */
 public final class HistoryManager {
@@ -122,7 +122,8 @@ public final class HistoryManager {
     Resources res = activity.getResources();
     dialogItems[dialogItems.length - 2] = res.getString(R.string.history_send);
     dialogItems[dialogItems.length - 1] = res.getString(R.string.history_clear_text);
-    DialogInterface.OnClickListener clickListener = new HistoryClickListener(this, activity, dialogItems, items);
+    DialogInterface.OnClickListener clickListener = new HistoryClickListener(this, activity,
+        dialogItems, items);
     AlertDialog.Builder builder = new AlertDialog.Builder(activity);
     builder.setTitle(R.string.history_title);
     builder.setItems(dialogItems, clickListener);
@@ -136,9 +137,7 @@ public final class HistoryManager {
     }
 
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
-    boolean rememberDuplicates = prefs.getBoolean(PreferencesActivity.KEY_REMEMBER_DUPLICATES, false);
-
-    if (!rememberDuplicates) {
+    if (!prefs.getBoolean(PreferencesActivity.KEY_REMEMBER_DUPLICATES, false)) {
       deletePrevious(result.getText());
     }
 

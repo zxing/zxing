@@ -33,7 +33,7 @@ import java.util.List;
  *
  * @author Sean Owen
  */
-final class LoadPackagesAsyncTask extends AsyncTask<List<String[]>,Void,List<String[]>> {
+final class LoadPackagesAsyncTask extends AsyncTask<List<String[]>, Void, List<String[]>> {
 
   private static final String[] PKG_PREFIX_WHITELIST = {
       "com.google.android.apps.",
@@ -44,7 +44,6 @@ final class LoadPackagesAsyncTask extends AsyncTask<List<String[]>,Void,List<Str
       "com.google.android.",
       "com.htc",
   };
-
 
   private final AppPickerActivity activity;
 
@@ -93,7 +92,8 @@ final class LoadPackagesAsyncTask extends AsyncTask<List<String[]>,Void,List<Str
     for (String[] result : results) {
       labels.add(result[0]);
     }
-    ListAdapter listAdapter = new ArrayAdapter<String>(activity, android.R.layout.simple_list_item_1, labels);
+    ListAdapter listAdapter = new ArrayAdapter<String>(activity,
+        android.R.layout.simple_list_item_1, labels);
     activity.setListAdapter(listAdapter);
   }
 

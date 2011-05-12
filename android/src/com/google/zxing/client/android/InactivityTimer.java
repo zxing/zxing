@@ -49,16 +49,16 @@ final class InactivityTimer {
   void onActivity() {
     cancel();
     inactivityFuture = inactivityTimer.schedule(new FinishListener(activity),
-                                                INACTIVITY_DELAY_SECONDS,
-                                                TimeUnit.SECONDS);
+        INACTIVITY_DELAY_SECONDS,
+        TimeUnit.SECONDS);
   }
-  
+
   public void onPause(){
-  	activity.unregisterReceiver(powerStatusReceiver);
+    activity.unregisterReceiver(powerStatusReceiver);
   }
-  
+
   public void onResume(){
-  	activity.registerReceiver(powerStatusReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+    activity.registerReceiver(powerStatusReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
   }
 
   private void cancel() {
@@ -82,18 +82,18 @@ final class InactivityTimer {
   }
 
   private final class PowerStatusReceiver extends BroadcastReceiver {
-  	@Override
+    @Override
     public void onReceive(Context context, Intent intent){
-  		if (Intent.ACTION_BATTERY_CHANGED.equals(intent.getAction())) {
-  			// 0 indicates that we're on battery
+      if (Intent.ACTION_BATTERY_CHANGED.equals(intent.getAction())) {
+        // 0 indicates that we're on battery
         // In Android 2.0+, use BatteryManager.EXTRA_PLUGGED
         if (intent.getIntExtra("plugged", -1) == 0) {
           InactivityTimer.this.onActivity();
         } else {
           InactivityTimer.this.cancel();
         }
-  		}
-  	}
+      }
+    }
   }
 
 }

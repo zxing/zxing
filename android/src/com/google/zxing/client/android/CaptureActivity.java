@@ -129,7 +129,8 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private InactivityTimer inactivityTimer;
   private BeepManager beepManager;
 
-  private final DialogInterface.OnClickListener aboutListener = new DialogInterface.OnClickListener() {
+  private final DialogInterface.OnClickListener aboutListener =
+      new DialogInterface.OnClickListener() {
     public void onClick(DialogInterface dialogInterface, int i) {
       Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.zxing_url)));
       intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
@@ -224,7 +225,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         && (intent == null || intent.getBooleanExtra(Intents.Scan.SAVE_HISTORY, true));
 
     beepManager.updatePrefs();
-    
+
     inactivityTimer.onResume();
   }
 
@@ -490,8 +491,10 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     TextView supplementTextView = (TextView) findViewById(R.id.contents_supplement_text_view);
     supplementTextView.setText("");
     supplementTextView.setOnClickListener(null);
-    if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(PreferencesActivity.KEY_SUPPLEMENTAL, true)) {
-      SupplementalInfoRetriever.maybeInvokeRetrieval(supplementTextView, resultHandler.getResult(), handler, this);
+    if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(
+        PreferencesActivity.KEY_SUPPLEMENTAL, true)) {
+      SupplementalInfoRetriever.maybeInvokeRetrieval(supplementTextView, resultHandler.getResult(),
+          handler, this);
     }
 
     int buttonCount = resultHandler.getButtonCount();
