@@ -238,20 +238,12 @@ public abstract class ResultHandler {
     }
   }
 
-  private static long lastSecondOfDay(long time) {
-    Calendar timeInDay = Calendar.getInstance();
-    timeInDay.setTimeInMillis(time);
-    timeInDay.set(Calendar.HOUR_OF_DAY, timeInDay.getActualMaximum(Calendar.HOUR_OF_DAY));
-    timeInDay.set(Calendar.MINUTE, timeInDay.getActualMaximum(Calendar.MINUTE));
-    timeInDay.set(Calendar.SECOND, timeInDay.getActualMaximum(Calendar.SECOND));
-    return timeInDay.getTimeInMillis();
-  }
-
   final void addContact(String[] names, String[] phoneNumbers, String[] emails, String note,
                          String address, String org, String title) {
 
     // Only use the first name in the array, if present.
-    Intent intent = new Intent(Contacts.Intents.Insert.ACTION, Contacts.People.CONTENT_URI);
+    Intent intent = new Intent(Intent.ACTION_INSERT_OR_EDIT, Contacts.CONTENT_URI);
+    intent.setType(Contacts.People.CONTENT_ITEM_TYPE);
     putExtra(intent, Contacts.Intents.Insert.NAME, names != null ? names[0] : null);
 
     int phoneCount = Math.min((phoneNumbers != null) ? phoneNumbers.length : 0,
