@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-Copyright (C) 2011 ZXing authors
+ Copyright (C) 2010 ZXing authors
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
 
-     http://www.apache.org/licenses/LICENSE-2.0
+      http://www.apache.org/licenses/LICENSE-2.0
 
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
--->
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
 <resources>
   <string name="app_name">Barcode Scanner</string>
   <string name="app_picker_name">Aplikácie</string>
@@ -89,12 +89,12 @@ limitations under the License.
   <string name="msg_sbc_unknown_page">Neznáma stránka</string>
   <string name="msg_share_explanation">Môžete zdieľať dáta prostredníctvom čiarového kódu zobrazením na displeji a skenovaním s iným telefónom.</string>
   <string name="msg_share_subject_line">Tu je obsah naskenovaného čiarového kódu</string>
+  <string name="msg_share_text">Alebo zadajte nejaký text</string>
   <string name="msg_unmount_usb">Ospravedlňujeme sa, karta SD nie je prístupná.</string>
   <string name="preferences_actions_title">Keď sa zistí, čiarový kód...</string>
   <string name="preferences_bulk_mode_summary">Skenovať a ukladať veľa čiarových kódov bez prerušenia</string>
   <string name="preferences_bulk_mode_title">Hromadný režim skenovania</string>
   <string name="preferences_copy_to_clipboard_title">Kopírovať do schránky</string>
-  <string name="preferences_custom_product_search_summary">Použiť ako vlastníka pre ID produktu, a pre formát</string>
   <string name="preferences_custom_product_search_title">Vlastné vyhľadávanie URL</string>
   <string name="preferences_decode_1D_title">1D čiarové kódy</string>
   <string name="preferences_decode_Data_Matrix_title">Dáta Matrix</string>
@@ -106,9 +106,9 @@ limitations under the License.
   <string name="preferences_play_beep_title">Zvuky</string>
   <string name="preferences_remember_duplicates_summary">Uložiť viacnásobné skenovanie do jednej histórie čiarového kódu</string>
   <string name="preferences_remember_duplicates_title">Zapamätať si duplikáty</string>
+  <string name="preferences_result_title">Výsledok nastavenia</string>
   <string name="preferences_reverse_image_summary">Povoliť na zariadeniach iba s predným fotoaparátom</string>
   <string name="preferences_reverse_image_title">Obrátený obraz z fotoaparátu</string>
-  <string name="preferences_result_title">Výsledok nastavenia</string>
   <string name="preferences_scanning_title">Ak skenujem čiarové kódy, dekódujem...</string>
   <string name="preferences_supplemental_summary">Skúste získať viac informácií o obsahu čiarového kódu</string>
   <string name="preferences_supplemental_title">Získať viac informácií</string>
@@ -129,13 +129,13 @@ limitations under the License.
   <string name="title_about">Barcode Scanner v</string>
   <string name="wa_name">Pripojenie WLAN</string>
   <string name="wifi_changing_network">Mením sieťové pripojenie</string>
+  <string name="wifi_connect_failed">Pripojenie k sieti zlyhalo</string>
   <string name="wifi_connected">Pripojené</string>
   <string name="wifi_creating_network">Vytváram sieťové pripojenie</string>
   <string name="wifi_modifying_network">Upravujem sieťové pripojenie</string>
+  <string name="wifi_ssid_label">Názov sieťového pripojenia</string>
   <string name="wifi_ssid_missing">Chýba názov sieťového pripojenia</string>
   <string name="wifi_type_incorrect">Nesprávny typ sieťové pripojenie</string>
-  <string name="wifi_connect_failed">Pripojenie k sieti zlyhalo</string>
-  <string name="wifi_ssid_label">Názov sieťového pripojenia</string>
   <string name="wifi_type_label">Typ</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>
