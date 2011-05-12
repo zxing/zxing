@@ -89,12 +89,12 @@
   <string name="msg_sbc_unknown_page">Onbekende pagina</string>
   <string name="msg_share_explanation">Je kan data delen door een barcode op het scherm te laten zien, en deze door een andere telefoon te scannen.</string>
   <string name="msg_share_subject_line">Hier is de barcode die ik gescand heb</string>
+  <string name="msg_share_text">Of typ wat tekst</string>
   <string name="msg_unmount_usb">Sorry, de SD-kaart is niet toegankelijk.</string>
   <string name="preferences_actions_title">Als een barcode is gevonden\u2026</string>
   <string name="preferences_bulk_mode_summary">Scan continue barcodes en sla ze allemaal op</string>
   <string name="preferences_bulk_mode_title">Bulk scan modus</string>
   <string name="preferences_copy_to_clipboard_title">Kopieer naar plakbord</string>
-  <string name="preferences_custom_product_search_summary" formatted="false">Gebruik %s voor de plaats van het product ID en %f voor het formaat</string>
   <string name="preferences_custom_product_search_title">Zoek aangepaste URL</string>
   <string name="preferences_decode_1D_title">1D barcodes</string>
   <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>

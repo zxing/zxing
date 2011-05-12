@@ -89,12 +89,12 @@
   <string name="msg_sbc_unknown_page">Bilinmeyen sayfa</string>
   <string name="msg_share_explanation">Ekranınızda görüntülediğiniz barkodu başka bir telefonla tarayarak veri paylaşabilirsiniz.</string>
   <string name="msg_share_subject_line">Taranan barkodun içeriği</string>
+  <string name="msg_share_text">Veya yazın bazı metin</string>
   <string name="msg_unmount_usb">Lütfen USB depolamayı devre dışı bırakın.</string>
   <string name="preferences_actions_title">Bir barkod bulunduğu zaman\u2026</string>
   <string name="preferences_bulk_mode_summary">Birden fazla barkodu toplu olarak taramak ve kaydetmek için</string>
   <string name="preferences_bulk_mode_title">Toplu tarama modu</string>
   <string name="preferences_copy_to_clipboard_title">Panoya kopyala</string>
-  <string name="preferences_custom_product_search_summary" formatted="false">Yer tutucu olarak ürün kimliği için %s, biçim için %f öğesini kullan</string>
   <string name="preferences_custom_product_search_title">Özel arama adresi</string>
   <string name="preferences_decode_1D_title">1D barkodları</string>
   <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>
@@ -133,9 +133,9 @@
   <string name="wifi_connected">Bağlantı sağlandı</string>
   <string name="wifi_creating_network">Ağ oluşturma</string>
   <string name="wifi_modifying_network">Şebeke değiştirme</string>
+  <string name="wifi_ssid_label">Ağ adı</string>
   <string name="wifi_ssid_missing">Eksik Ağ adı</string>
   <string name="wifi_type_incorrect">Ağ tipi yanlış</string>
-  <string name="wifi_ssid_label">Ağ adı</string>
   <string name="wifi_type_label">Tip</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

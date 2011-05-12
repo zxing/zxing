@@ -89,12 +89,12 @@
   <string name="msg_sbc_unknown_page">Unbekannte Seite</string>
   <string name="msg_share_explanation">Sie können Daten weitergeben, indem Sie einen Barcode auf Ihrem Bilschirm anzeigen und mit einem anderen Telefon einscannen.</string>
   <string name="msg_share_subject_line">Hier ist der gescannte Barcode-Inhalt</string>
+  <string name="msg_share_text">Oder geben Sie einen Text</string>
   <string name="msg_unmount_usb">Leider kann nicht auf die SD-Karte zugegriffen werden.</string>
   <string name="preferences_actions_title">Wenn ein Barcode erkannt wurde\u2026</string>
   <string name="preferences_bulk_mode_summary">Scannt und speichert mehrere Barcodes nacheinander</string>
   <string name="preferences_bulk_mode_title">Bulk-Scan-Modus</string>
   <string name="preferences_copy_to_clipboard_title">In Zwischenablage kopieren</string>
-  <string name="preferences_custom_product_search_summary" formatted="false">Verwenden Sie %s als Platzhalter für die Produkt-ID und %f für das Format</string>
   <string name="preferences_custom_product_search_title">Eigene Such-URL</string>
   <string name="preferences_decode_1D_title">1D Barcodes</string>
   <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>

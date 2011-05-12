@@ -89,12 +89,12 @@
   <string name="msg_sbc_unknown_page">不明なページ</string>
   <string name="msg_share_explanation">画面にバーコードを表示させ、別の端末でスキャンすれば データを共有することができます。</string>
   <string name="msg_share_subject_line">スキャンしたバーコードの内容を送信します。</string>
+  <string name="msg_share_text">または一部のテキストを入力</string>
   <string name="msg_unmount_usb">申し訳ありませんが、SDカードにアクセスできません。</string>
   <string name="preferences_actions_title">バーコード発見時</string>
   <string name="preferences_bulk_mode_summary">多くのバーコード連続してスキャンし、保存する</string>
   <string name="preferences_bulk_mode_title">連続モードでのスキャン</string>
   <string name="preferences_copy_to_clipboard_title">クリップボードにコピーする</string>
-  <string name="preferences_custom_product_search_summary" formatted="false">URL中の「%s」はスキャン結果に置換されます</string>
   <string name="preferences_custom_product_search_title">カスタム商品サーチ URL</string>
   <string name="preferences_decode_1D_title">1Dバーコードを読み取る</string>
   <string name="preferences_decode_Data_Matrix_title">データマトリックスコードを読み取る</string>
