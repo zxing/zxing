@@ -1,5 +1,5 @@
 /*
- * Copyright 2008 ZXing authors
+ * Copyright 2011 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,15 +20,17 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.common.AbstractBlackBoxTestCase;
 
 /**
- * @author David Olivier
+ * A test of Aztec barcodes under real world lighting conditions, taken with a mobile phone.
+ *
+ * @author dswitkin@google.com (Daniel Switkin)
  */
 public final class AztecBlackBox2TestCase extends AbstractBlackBoxTestCase {
 
   public AztecBlackBox2TestCase() {
     super("test/data/blackbox/aztec-2", new AztecReader(), BarcodeFormat.AZTEC);
-    addTest(1, 1, 0.0f);
-    addTest(1, 1, 90.0f);
-    addTest(1, 1, 180.0f);
+    addTest(2, 2, 0.0f);
+    addTest(2, 2, 90.0f);
+    addTest(3, 3, 180.0f);
     addTest(1, 1, 270.0f);
   }
 
