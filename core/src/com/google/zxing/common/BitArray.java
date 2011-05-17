@@ -22,8 +22,7 @@ package com.google.zxing.common;
  * @author Sean Owen
  */
 public final class BitArray {
-
-  // TODO: I have changed these members to be public so ProGuard can inline get() and set(). Ideally
+  // I have changed these members to be public so ProGuard can inline get() and set(). Ideally
   // they'd be private and we'd use the -allowaccessmodification flag, but Dalvik rejects the
   // resulting binary at runtime on Android. If we find a solution to this, these should be changed
   // back to private.
@@ -119,7 +118,7 @@ public final class BitArray {
     if (end == start) {
       return true; // empty range matches
     }
-    end--; // will be easier to treat this as the last actually set bit -- inclusive    
+    end--; // will be easier to treat this as the last actually set bit -- inclusive
     int firstInt = start >> 5;
     int lastInt = end >> 5;
     for (int i = firstInt; i <= lastInt; i++) {
@@ -232,7 +231,7 @@ public final class BitArray {
   private static int[] makeArray(int size) {
     return new int[(size + 31) >> 5];
   }
-  
+
   public String toString() {
     StringBuffer result = new StringBuffer(size);
     for (int i = 0; i < size; i++) {

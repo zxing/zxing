@@ -172,8 +172,6 @@ public class GlobalHistogramBinarizer extends Binarizer {
 
     // If there is too little contrast in the image to pick a meaningful black point, throw rather
     // than waste time trying to decode the image, and risk false positives.
-    // TODO: It might be worth comparing the brightest and darkest pixels seen, rather than the
-    // two peaks, to determine the contrast.
     if (secondPeak - firstPeak <= numBuckets >> 4) {
       throw NotFoundException.getNotFoundInstance();
     }
