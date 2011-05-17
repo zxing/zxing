@@ -268,16 +268,13 @@ final class CameraManager {
     Log.v(TAG, "Default preview format: " + previewFormat + '/' + previewFormatString);
 
     // Ensure that the camera resolution is a multiple of 8, as the screen may not be.
-    // TODO: A better solution would be to request the supported preview resolutions
-    // and pick the best match, but this parameter is not standardized in Cupcake.
+    // IMPORTANT: Do not copy this old code. A much better and more robust solution can be found
+    // in Barcode Scanner under zxing/android.
     cameraResolution = new Point();
     cameraResolution.x = (screenResolution.x >> 3) << 3;
     cameraResolution.y = (screenResolution.y >> 3) << 3;
     Log.v(TAG, "Setting preview size: " + cameraResolution.x + ", " + cameraResolution.y);
     parameters.setPreviewSize(cameraResolution.x, cameraResolution.y);
-
-    // FIXME: This is a hack to turn the flash off on the Samsung Galaxy.
-    parameters.set("flash-value", 2);
 
     // This is the standard setting to turn the flash off that all devices should honor.
     parameters.set("flash-mode", "off");

@@ -131,7 +131,6 @@ public final class HistoryManager {
   }
 
   public void addHistoryItem(Result result) {
-
     if (!activity.getIntent().getBooleanExtra(Intents.Scan.SAVE_HISTORY, true)) {
       return; // Do not save this item to the history.
     }
@@ -154,7 +153,9 @@ public final class HistoryManager {
       ContentValues values = new ContentValues();
       values.put(DBHelper.TEXT_COL, result.getText());
       values.put(DBHelper.FORMAT_COL, result.getBarcodeFormat().toString());
-      values.put(DBHelper.DISPLAY_COL, result.getText()); // TODO use parsed result display value?
+      // It would be nice to use ParsedResult.getDisplayResult() instead, but we don't want to
+      // parse it twice, and it can be multiline which won't fit in the current UI.
+      values.put(DBHelper.DISPLAY_COL, result.getText());
       values.put(DBHelper.TIMESTAMP_COL, System.currentTimeMillis());
       db.insert(DBHelper.TABLE_NAME, DBHelper.TIMESTAMP_COL, values);
     } finally {
