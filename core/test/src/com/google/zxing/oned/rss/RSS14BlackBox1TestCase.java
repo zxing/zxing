@@ -26,7 +26,7 @@ import com.google.zxing.common.AbstractBlackBoxTestCase;
 public final class RSS14BlackBox1TestCase extends AbstractBlackBoxTestCase {
 
   public RSS14BlackBox1TestCase() {
-    super("test/data/blackbox/rss14-1", new MultiFormatReader(), BarcodeFormat.RSS14);
+    super("test/data/blackbox/rss14-1", new MultiFormatReader(), BarcodeFormat.RSS_14);
     addTest(6, 6, 0.0f);
     addTest(6, 6, 180.0f);
   }

@@ -105,7 +105,7 @@ public final class MultiFormatReader implements Reader {
               formats.contains(BarcodeFormat.CODE_93) ||
               formats.contains(BarcodeFormat.CODE_128) ||
               formats.contains(BarcodeFormat.ITF) ||
-              formats.contains(BarcodeFormat.RSS14) ||
+              formats.contains(BarcodeFormat.RSS_14) ||
               formats.contains(BarcodeFormat.RSS_EXPANDED);
       // Put 1D readers upfront in "normal" mode
       if (addOneDReader && !tryHarder) {
@@ -120,7 +120,7 @@ public final class MultiFormatReader implements Reader {
       if (formats.contains(BarcodeFormat.AZTEC)) {
         readers.addElement(new AztecReader());
       }
-      if (formats.contains(BarcodeFormat.PDF417)) {
+      if (formats.contains(BarcodeFormat.PDF_417)) {
          readers.addElement(new PDF417Reader());
        }
       // At end in "try harder" mode

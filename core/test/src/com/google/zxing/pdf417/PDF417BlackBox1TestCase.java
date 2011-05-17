@@ -32,16 +32,16 @@ import java.util.Vector;
 public final class PDF417BlackBox1TestCase extends AbstractBlackBoxTestCase {
 
   public PDF417BlackBox1TestCase() {
-    super("test/data/blackbox/pdf417", new MultiFormatReader(), BarcodeFormat.PDF417);
+    super("test/data/blackbox/pdf417", new MultiFormatReader(), BarcodeFormat.PDF_417);
     addTest(3, 3, 0.0f);
     addTest(3, 3, 180.0f);
   }
-  
+
   @Override
   protected Hashtable<DecodeHintType, Object> getHints() {
      Hashtable<DecodeHintType, Object> table = new Hashtable<DecodeHintType, Object>(3);
      Vector<BarcodeFormat> v = new Vector<BarcodeFormat>(1);
-     v.add(BarcodeFormat.PDF417);
+     v.add(BarcodeFormat.PDF_417);
      table.put(DecodeHintType.POSSIBLE_FORMATS, v);
      return table;
    }
