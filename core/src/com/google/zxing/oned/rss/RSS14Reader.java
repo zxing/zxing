@@ -136,7 +136,7 @@ public final class RSS14Reader extends AbstractRSSReader {
         String.valueOf(buffer.toString()),
         null,
         new ResultPoint[] { leftPoints[0], leftPoints[1], rightPoints[0], rightPoints[1], },
-        BarcodeFormat.RSS14);
+        BarcodeFormat.RSS_14);
   }
 
   private static boolean checkChecksum(Pair leftPair, Pair rightPair) {
@@ -488,7 +488,7 @@ public final class RSS14Reader extends AbstractRSSReader {
     if (decrementEven) {
       decrement(evenCounts, evenRoundingErrors);
     }
-    
+
   }
 
 }

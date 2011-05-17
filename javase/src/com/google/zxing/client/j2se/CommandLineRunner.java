@@ -151,7 +151,7 @@ public final class CommandLineRunner {
     vector.addElement(BarcodeFormat.UPC_E);
     vector.addElement(BarcodeFormat.EAN_13);
     vector.addElement(BarcodeFormat.EAN_8);
-    vector.addElement(BarcodeFormat.RSS14);
+    vector.addElement(BarcodeFormat.RSS_14);
     vector.addElement(BarcodeFormat.RSS_EXPANDED);
     if (!config.isProductsOnly()) {
       vector.addElement(BarcodeFormat.CODE_39);
@@ -161,7 +161,7 @@ public final class CommandLineRunner {
       vector.addElement(BarcodeFormat.QR_CODE);
       vector.addElement(BarcodeFormat.DATA_MATRIX);
       vector.addElement(BarcodeFormat.AZTEC);
-      vector.addElement(BarcodeFormat.PDF417);
+      vector.addElement(BarcodeFormat.PDF_417);
       vector.addElement(BarcodeFormat.CODABAR);
     }
     hints.put(DecodeHintType.POSSIBLE_FORMATS, vector);

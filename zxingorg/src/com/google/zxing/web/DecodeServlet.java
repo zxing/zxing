@@ -111,11 +111,11 @@ public final class DecodeServlet extends HttpServlet {
     possibleFormats.add(BarcodeFormat.CODE_128);
     possibleFormats.add(BarcodeFormat.CODABAR);
     possibleFormats.add(BarcodeFormat.ITF);
-    possibleFormats.add(BarcodeFormat.RSS14);
+    possibleFormats.add(BarcodeFormat.RSS_14);
     possibleFormats.add(BarcodeFormat.QR_CODE);
     possibleFormats.add(BarcodeFormat.DATA_MATRIX);
     possibleFormats.add(BarcodeFormat.AZTEC);
-    possibleFormats.add(BarcodeFormat.PDF417);
+    possibleFormats.add(BarcodeFormat.PDF_417);
     HINTS.put(DecodeHintType.POSSIBLE_FORMATS, possibleFormats);
     HINTS_PURE = new Hashtable<DecodeHintType, Object>(HINTS);
     HINTS_PURE.put(DecodeHintType.PURE_BARCODE, Boolean.TRUE);

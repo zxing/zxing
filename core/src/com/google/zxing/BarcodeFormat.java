@@ -19,7 +19,7 @@ package com.google.zxing;
 import java.util.Hashtable;
 
 /**
- * Enumerates barcode formats known to this package.
+ * Enumerates barcode formats known to this package. Please keep alphabetized.
  *
  * @author Sean Owen
  */
@@ -29,32 +29,11 @@ public final class BarcodeFormat {
 
   private static final Hashtable VALUES = new Hashtable();
 
-  /** QR Code 2D barcode format. */
-  public static final BarcodeFormat QR_CODE = new BarcodeFormat("QR_CODE");
-
-  /** Data Matrix 2D barcode format. */
-  public static final BarcodeFormat DATA_MATRIX = new BarcodeFormat("DATA_MATRIX");
-
   /** Aztec 2D barcode format. */
   public static final BarcodeFormat AZTEC = new BarcodeFormat("AZTEC");
-  
-  /** UPC-E 1D format. */
-  public static final BarcodeFormat UPC_E = new BarcodeFormat("UPC_E");
 
-  /** UPC-A 1D format. */
-  public static final BarcodeFormat UPC_A = new BarcodeFormat("UPC_A");
-
-  /** EAN-8 1D format. */
-  public static final BarcodeFormat EAN_8 = new BarcodeFormat("EAN_8");
-
-  /** EAN-13 1D format. */
-  public static final BarcodeFormat EAN_13 = new BarcodeFormat("EAN_13");
-
-  /** UPC/EAN extension format. Not a stand-alone format. */
-  public static final BarcodeFormat UPC_EAN_EXTENSION = new BarcodeFormat("UPC_EAN_EXTENSION");
-
-  /** Code 128 1D format. */
-  public static final BarcodeFormat CODE_128 = new BarcodeFormat("CODE_128");
+  /** CODABAR 1D format. */
+  public static final BarcodeFormat CODABAR = new BarcodeFormat("CODABAR");
 
   /** Code 39 1D format. */
   public static final BarcodeFormat CODE_39 = new BarcodeFormat("CODE_39");
@@ -62,20 +41,41 @@ public final class BarcodeFormat {
   /** Code 93 1D format. */
   public static final BarcodeFormat CODE_93 = new BarcodeFormat("CODE_93");
 
-  /** CODABAR 1D format. */
-  public static final BarcodeFormat CODABAR = new BarcodeFormat("CODABAR");
+  /** Code 128 1D format. */
+  public static final BarcodeFormat CODE_128 = new BarcodeFormat("CODE_128");
+
+  /** Data Matrix 2D barcode format. */
+  public static final BarcodeFormat DATA_MATRIX = new BarcodeFormat("DATA_MATRIX");
+
+  /** EAN-8 1D format. */
+  public static final BarcodeFormat EAN_8 = new BarcodeFormat("EAN_8");
+
+  /** EAN-13 1D format. */
+  public static final BarcodeFormat EAN_13 = new BarcodeFormat("EAN_13");
 
   /** ITF (Interleaved Two of Five) 1D format. */
   public static final BarcodeFormat ITF = new BarcodeFormat("ITF");
 
-  /** RSS 14 */
-  public static final BarcodeFormat RSS14 = new BarcodeFormat("RSS14");
-
   /** PDF417 format. */
-  public static final BarcodeFormat PDF417 = new BarcodeFormat("PDF417");
+  public static final BarcodeFormat PDF_417 = new BarcodeFormat("PDF_417");
+
+  /** QR Code 2D barcode format. */
+  public static final BarcodeFormat QR_CODE = new BarcodeFormat("QR_CODE");
+
+  /** RSS 14 */
+  public static final BarcodeFormat RSS_14 = new BarcodeFormat("RSS_14");
 
   /** RSS EXPANDED */
   public static final BarcodeFormat RSS_EXPANDED = new BarcodeFormat("RSS_EXPANDED");
+
+  /** UPC-A 1D format. */
+  public static final BarcodeFormat UPC_A = new BarcodeFormat("UPC_A");
+
+  /** UPC-E 1D format. */
+  public static final BarcodeFormat UPC_E = new BarcodeFormat("UPC_E");
+
+  /** UPC/EAN extension format. Not a stand-alone format. */
+  public static final BarcodeFormat UPC_EAN_EXTENSION = new BarcodeFormat("UPC_EAN_EXTENSION");
 
   private final String name;
 

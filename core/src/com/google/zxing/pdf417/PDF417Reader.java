@@ -67,7 +67,7 @@ public final class PDF417Reader implements Reader {
       points = detectorResult.getPoints();
     }
     return new Result(decoderResult.getText(), decoderResult.getRawBytes(), points,
-        BarcodeFormat.PDF417);
+        BarcodeFormat.PDF_417);
   }
 
   public void reset() {
