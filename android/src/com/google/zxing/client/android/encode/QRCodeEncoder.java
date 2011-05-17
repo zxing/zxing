@@ -147,8 +147,13 @@ final class QRCodeEncoder {
     }
     // We only do QR code.
     format = BarcodeFormat.QR_CODE;
-    // TODO: Consider using the Intent.EXTRA_SUBJECT or Intent.EXTRA_TITLE
-    displayContents = contents;
+    if (intent.hasExtra(Intent.EXTRA_SUBJECT)) {
+      displayContents = intent.getStringExtra(Intent.EXTRA_SUBJECT);
+    } else if (intent.hasExtra(Intent.EXTRA_TITLE)) {
+      displayContents = intent.getStringExtra(Intent.EXTRA_TITLE);
+    } else {
+      displayContents = contents;
+    }
     title = activity.getString(R.string.contents_text);
     return true;
   }
@@ -348,7 +353,7 @@ final class QRCodeEncoder {
       hints = new Hashtable<EncodeHintType,Object>(2);
       hints.put(EncodeHintType.CHARACTER_SET, encoding);
     }
-    MultiFormatWriter writer = new MultiFormatWriter();    
+    MultiFormatWriter writer = new MultiFormatWriter();
     BitMatrix result = writer.encode(contents, format, dimension, dimension, hints);
     int width = result.getWidth();
     int height = result.getHeight();
