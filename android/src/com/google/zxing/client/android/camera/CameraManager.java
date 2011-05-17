@@ -69,6 +69,7 @@ public final class CameraManager {
   private Rect framingRectInPreview;
   private boolean initialized;
   private boolean previewing;
+  private boolean reverseImage;
   private final boolean useOneShotPreviewCallback;
   /**
    * Preview frames are delivered here, which we pass on to the registered handler. Make sure to
@@ -135,6 +136,7 @@ public final class CameraManager {
     configManager.setDesiredCameraParameters(camera);
 
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+    reverseImage = prefs.getBoolean(PreferencesActivity.KEY_REVERSE_IMAGE, false);
     if (prefs.getBoolean(PreferencesActivity.KEY_FRONT_LIGHT, false)) {
       FlashlightManager.enableFlashlight();
     }
@@ -300,10 +302,6 @@ public final class CameraManager {
     Rect rect = getFramingRectInPreview();
     int previewFormat = configManager.getPreviewFormat();
     String previewFormatString = configManager.getPreviewFormatString();
-
-    // FIXME(dswitkin): Don't access the preferences on every scan, this is expensive!
-    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-    boolean reverseImage = sharedPrefs.getBoolean(PreferencesActivity.KEY_REVERSE_IMAGE, false);
 
     switch (previewFormat) {
       // This is the standard Android format which all devices are REQUIRED to support.
