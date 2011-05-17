@@ -36,27 +36,12 @@ public final class Intents {
     /**
      * By default, sending Scan.ACTION will decode all barcodes that we understand. However it
      * may be useful to limit scanning to certain formats. Use Intent.putExtra(MODE, value) with
-     * one of the values below ({@link #PRODUCT_MODE}, {@link #ONE_D_MODE}, {@link #QR_CODE_MODE}).
-     * Optional.
+     * one of the values below.
      *
-     * Setting this is effectively shorthnad for setting explicit formats with {@link #SCAN_FORMATS}.
+     * Setting this is effectively shorthand for setting explicit formats with {@link #FORMATS}.
      * It is overridden by that setting.
      */
     public static final String MODE = "SCAN_MODE";
-
-    /**
-     * Comma-separated list of formats to scan for. The values must match the names of
-     * {@link com.google.zxing.BarcodeFormat}s, such as {@link com.google.zxing.BarcodeFormat#EAN_13}.
-     * Example: "EAN_13,EAN_8,QR_CODE"
-     *
-     * This overrides {@link #MODE}.
-     */
-    public static final String SCAN_FORMATS = "SCAN_FORMATS";
-
-    /**
-     * @see com.google.zxing.DecodeHintType#CHARACTER_SET
-     */
-    public static final String CHARACTER_SET = "CHARACTER_SET";
 
     /**
      * Decode only UPC and EAN barcodes. This is the right choice for shopping apps which get
@@ -65,7 +50,7 @@ public final class Intents {
     public static final String PRODUCT_MODE = "PRODUCT_MODE";
 
     /**
-     * Decode only 1D barcodes (currently UPC, EAN, Code 39, and Code 128).
+     * Decode only 1D barcodes.
      */
     public static final String ONE_D_MODE = "ONE_D_MODE";
 
@@ -78,6 +63,28 @@ public final class Intents {
      * Decode only Data Matrix codes.
      */
     public static final String DATA_MATRIX_MODE = "DATA_MATRIX_MODE";
+
+    /**
+     * Comma-separated list of formats to scan for. The values must match the names of
+     * {@link com.google.zxing.BarcodeFormat}s, e.g. {@link com.google.zxing.BarcodeFormat#EAN_13}.
+     * Example: "EAN_13,EAN_8,QR_CODE"
+     *
+     * This overrides {@link #MODE}.
+     */
+    public static final String FORMATS = "SCAN_FORMATS";
+
+    /**
+     * @see com.google.zxing.DecodeHintType#CHARACTER_SET
+     */
+    public static final String CHARACTER_SET = "CHARACTER_SET";
+
+    /**
+     * Optional parameters to specify the width and height of the scanning rectangle in pixels.
+     * The app will try to honor these, but will clamp them to the size of the preview frame.
+     * You should specify both or neither, and pass the size as an int.
+     */
+    public static final String WIDTH = "SCAN_WIDTH";
+    public static final String HEIGHT = "SCAN_HEIGHT";
 
     /**
      * If a barcode is found, Barcodes returns RESULT_OK to onActivityResult() of the app which
@@ -127,11 +134,11 @@ public final class Intents {
      * Intent.putExtra(TYPE, type) with one of Contents.Type.
      */
     public static final String TYPE = "ENCODE_TYPE";
-    
+
     /**
-     * The barcode format to be displayed. If this isn't specified or is blank, 
+     * The barcode format to be displayed. If this isn't specified or is blank,
      * it defaults to QR Code. Use Intent.putExtra(FORMAT, format), where
-     * format is one of Contents.Format. 
+     * format is one of Contents.Format.
      */
     public static final String FORMAT = "ENCODE_FORMAT";
 
@@ -160,30 +167,29 @@ public final class Intents {
   }
 
   public static final class WifiConnect {
-	    /**
-	     * Internal intent used to trigger connection to a wi-fi network.
-	     */
-	    public static final String ACTION = "com.google.zxing.client.android.WIFI_CONNECT";
+    /**
+     * Internal intent used to trigger connection to a wi-fi network.
+     */
+    public static final String ACTION = "com.google.zxing.client.android.WIFI_CONNECT";
 
-	    /**
-	     * The network to connect to, all the configuration provided here.
-	     */
-	    public static final String SSID = "SSID";
+    /**
+     * The network to connect to, all the configuration provided here.
+     */
+    public static final String SSID = "SSID";
 
-	    /**
-	     * The network to connect to, all the configuration provided here.
-	     */
-	    public static final String TYPE = "TYPE";
+    /**
+     * The network to connect to, all the configuration provided here.
+     */
+    public static final String TYPE = "TYPE";
 
-	    /**
-	     * The network to connect to, all the configuration provided here.
-	     */
-	    public static final String PASSWORD = "PASSWORD";
+    /**
+     * The network to connect to, all the configuration provided here.
+     */
+    public static final String PASSWORD = "PASSWORD";
 
-	    private WifiConnect() {
-	    }
-	  }
-
+    private WifiConnect() {
+    }
+  }
 
   public static final class Share {
     /**

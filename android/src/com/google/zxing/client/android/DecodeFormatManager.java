@@ -56,7 +56,7 @@ final class DecodeFormatManager {
 
   static Vector<BarcodeFormat> parseDecodeFormats(Intent intent) {
     List<String> scanFormats = null;
-    String scanFormatsString = intent.getStringExtra(Intents.Scan.SCAN_FORMATS);
+    String scanFormatsString = intent.getStringExtra(Intents.Scan.FORMATS);
     if (scanFormatsString != null) {
       scanFormats = Arrays.asList(COMMA_PATTERN.split(scanFormatsString));
     }
@@ -64,7 +64,7 @@ final class DecodeFormatManager {
   }
 
   static Vector<BarcodeFormat> parseDecodeFormats(Uri inputUri) {
-    List<String> formats = inputUri.getQueryParameters(Intents.Scan.SCAN_FORMATS);
+    List<String> formats = inputUri.getQueryParameters(Intents.Scan.FORMATS);
     if (formats != null && formats.size() == 1 && formats.get(0) != null){
       formats = Arrays.asList(COMMA_PATTERN.split(formats.get(0)));
     }

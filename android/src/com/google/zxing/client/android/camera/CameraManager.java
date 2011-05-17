@@ -148,6 +148,11 @@ public final class CameraManager {
       FlashlightManager.disableFlashlight();
       camera.release();
       camera = null;
+
+      // Make sure to clear these each time we close the camera, so that any scanning rect
+      // requested by intent is forgotten.
+      framingRect = null;
+      framingRectInPreview = null;
     }
   }
 
@@ -217,11 +222,11 @@ public final class CameraManager {
    * @return The rectangle to draw on screen in window coordinates.
    */
   public Rect getFramingRect() {
-    Point screenResolution = configManager.getScreenResolution();
     if (framingRect == null) {
       if (camera == null) {
         return null;
       }
+      Point screenResolution = configManager.getScreenResolution();
       int width = screenResolution.x * 3 / 4;
       if (width < MIN_FRAME_WIDTH) {
         width = MIN_FRAME_WIDTH;
@@ -261,6 +266,28 @@ public final class CameraManager {
   }
 
   /**
+   * Allows third party apps to specify the scanning rectangle dimensions, rather than determine
+   * them automatically based on screen resolution.
+   *
+   * @param width The width in pixels to scan.
+   * @param height The height in pixels to scan.
+   */
+  public void setManualFramingRect(int width, int height) {
+    Point screenResolution = configManager.getScreenResolution();
+    if (width > screenResolution.x) {
+      width = screenResolution.x;
+    }
+    if (height > screenResolution.y) {
+      height = screenResolution.y;
+    }
+    int leftOffset = (screenResolution.x - width) / 2;
+    int topOffset = (screenResolution.y - height) / 2;
+    framingRect = new Rect(leftOffset, topOffset, leftOffset + width, topOffset + height);
+    Log.d(TAG, "Calculated manual framing rect: " + framingRect);
+    framingRectInPreview = null;
+  }
+
+  /**
    * A factory method to build the appropriate LuminanceSource object based on the format
    * of the preview buffers, as described by Camera.Parameters.
    *
@@ -273,6 +300,8 @@ public final class CameraManager {
     Rect rect = getFramingRectInPreview();
     int previewFormat = configManager.getPreviewFormat();
     String previewFormatString = configManager.getPreviewFormatString();
+
+    // FIXME(dswitkin): Don't access the preferences on every scan, this is expensive!
     SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
     boolean reverseImage = sharedPrefs.getBoolean(PreferencesActivity.KEY_REVERSE_IMAGE, false);
 
