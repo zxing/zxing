@@ -194,6 +194,13 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         // Scan the formats the intent requested, and return the result to the calling activity.
         source = Source.NATIVE_APP_INTENT;
         decodeFormats = DecodeFormatManager.parseDecodeFormats(intent);
+        if (intent.hasExtra(Intents.Scan.WIDTH) && intent.hasExtra(Intents.Scan.HEIGHT)) {
+          int width = intent.getIntExtra(Intents.Scan.WIDTH, 0);
+          int height = intent.getIntExtra(Intents.Scan.HEIGHT, 0);
+          if (width > 0 && height > 0) {
+            CameraManager.get().setManualFramingRect(width, height);
+          }
+        }
       } else if (dataString != null && dataString.contains(PRODUCT_SEARCH_URL_PREFIX) &&
           dataString.contains(PRODUCT_SEARCH_URL_SUFFIX)) {
         // Scan only products and send the result to mobile Product Search.
