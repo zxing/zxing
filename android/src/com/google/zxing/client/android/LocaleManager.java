@@ -77,13 +77,11 @@ public final class LocaleManager {
     GOOGLE_PRODUCT_SEARCH_COUNTRY_TLD.put(Locale.UK, "co.uk");
   }
 
-  // TODO(dswitkin): Not sure which countries Google Book Search has launched in, so for the moment
-  // we'll keep everything in web search minus China as with v3.5.
+  // Book search is offered everywhere that web search is available.
   private static final Map<Locale,String> GOOGLE_BOOK_SEARCH_COUNTRY_TLD;
   static {
     GOOGLE_BOOK_SEARCH_COUNTRY_TLD = new HashMap<Locale,String>();
     GOOGLE_BOOK_SEARCH_COUNTRY_TLD.putAll(GOOGLE_COUNTRY_TLD);
-    GOOGLE_BOOK_SEARCH_COUNTRY_TLD.remove(Locale.CHINA);
   }
 
   private LocaleManager() {}
