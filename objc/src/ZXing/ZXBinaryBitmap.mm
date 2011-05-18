@@ -15,8 +15,8 @@
  * limitations under the License.
  */
 
-#import <zxing/ZXBinaryBitmap.h>
-#import <zxing/ZXBinarizer.h>
+#import <ZXing/ZXBinaryBitmap.h>
+#import <ZXing/ZXBinarizer.h>
 
 @implementation ZXBinaryBitmap
 

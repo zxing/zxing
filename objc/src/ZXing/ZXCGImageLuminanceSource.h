@@ -15,8 +15,75 @@
  * limitations under the License.
  */
 
-#import <zxing/ZXLuminanceSource.h>
-#import <zxing/CGImageLuminanceSource.h>
+#import <ZXing/ZXLuminanceSource.h>
+#import <CoreVideo/CoreVideo.h>
+
+namespace zxing {
+
+class CGImageLuminanceSource : public LuminanceSource {
+
+ private:
+  CGImageRef image_;
+  CFDataRef data_;
+  int left_;
+  int top_;
+  int width_;
+  int height_;
+  int dataWidth_;
+  int dataHeight_;
+  int bytesPerRow_;
+
+ public:
+
+  static CGImageRef createImageFromBuffer(CVImageBufferRef);
+  static CGImageRef createImageFromBuffer(CVImageBufferRef,
+                                          int left,
+                                          int top,
+                                          int width,
+                                          int height);
+
+  CGImageLuminanceSource(CVPixelBufferRef buffer,
+                         int left,
+                         int top,
+                         int width,
+                         int height);
+  CGImageLuminanceSource(CVPixelBufferRef buffer);
+
+  CGImageLuminanceSource(CGImageRef image,
+                         int left,
+                         int top,
+                         int width,
+                         int height);
+  CGImageLuminanceSource(CGImageRef image);
+  ~CGImageLuminanceSource();
+
+  CGImageRef image() { return image_; }
+  CGImageRef image(size_t width, size_t height);
+
+  unsigned char* getRow(int y, unsigned char* row);
+  unsigned char* getMatrix();
+
+  bool isRotateSupported() const {
+    return true;
+  }
+
+  int getWidth() const {
+    return width_;
+  }
+
+  int getHeight() const {
+    return height_;
+  }
+
+  Ref<LuminanceSource> rotateCounterClockwise();
+
+ private:
+  
+  void init(CGImageRef image);
+  void init(CGImageRef image, int left, int top, int width, int height);
+};
+
+} /* namespace */
 
 @class ZXImage;
 

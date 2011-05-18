@@ -16,7 +16,7 @@
  */
 
 #import <zxing/Binarizer.h>
-#import <zxing/ZXLuminanceSource.h>
+#import <ZXing/ZXLuminanceSource.h>
 
 @interface ZXBinarizer : NSObject {
   zxing::Ref<zxing::Binarizer> native;

@@ -15,17 +15,17 @@
  * limitations under the License.
  */
 
-#include <zxing/ZXCapture.h>
+#include <ZXing/ZXCapture.h>
 
 #if !TARGET_IPHONE_SIMULATOR
-#include <zxing/ZXCGImageLuminanceSource.h>
-#include <zxing/ZXHybridBinarizer.h>
-#include <zxing/ZXBinaryBitmap.h>
-#include <zxing/ZXQRCodeReader.h>
-#include <zxing/ZXDecodeHints.h>
-#include <zxing/ZXResult.h>
-#include <zxing/ZXReaderException.h>
-#include <zxing/ZXIllegalArgumentException.h>
+#include <ZXing/ZXCGImageLuminanceSource.h>
+#include <ZXing/ZXHybridBinarizer.h>
+#include <ZXing/ZXBinaryBitmap.h>
+#include <ZXing/ZXQRCodeReader.h>
+#include <ZXing/ZXDecodeHints.h>
+#include <ZXing/ZXResult.h>
+#include <ZXing/ZXReaderException.h>
+#include <ZXing/ZXIllegalArgumentException.h>
 
 #if TARGET_OS_EMBEDDED || TARGET_IPHONE_SIMULATOR
 #define ZXCaptureDevice AVCaptureDevice

@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-#import <zxing/ZXImage.h>
+#import <ZXing/ZXImage.h>
 
 @implementation ZXImage
 

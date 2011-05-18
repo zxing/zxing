@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-#import <zxing/ZXDecodeHints.h>
+#import <ZXing/ZXDecodeHints.h>
 
 @implementation ZXDecodeHints
 

@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-#import <zxing/ZXResult.h>
+#import <ZXing/ZXResult.h>
 
 @implementation ZXResult
 

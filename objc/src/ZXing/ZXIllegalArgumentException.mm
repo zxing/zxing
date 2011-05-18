@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-#import <zxing/ZXIllegalArgumentException.h>
+#import <ZXing/ZXIllegalArgumentException.h>
 
 @implementation ZXIllegalArgumentException {
 }

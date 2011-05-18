@@ -15,8 +15,8 @@
  * limitations under the License.
  */
 
-#import <zxing/ZXCGImageLuminanceSource.h>
-#import <zxing/ZXImage.h>
+#import <ZXing/ZXCGImageLuminanceSource.h>
+#import <ZXing/ZXImage.h>
 
 @implementation ZXCGImageLuminanceSource
 
