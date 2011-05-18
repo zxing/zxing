@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-#import <zxing/ZXHybridBinarizer.h>
+#import <ZXing/ZXHybridBinarizer.h>
 
 @implementation ZXHybridBinarizer
 

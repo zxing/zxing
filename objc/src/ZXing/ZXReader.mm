@@ -15,14 +15,14 @@
  * limitations under the License.
  */
 
-#import <zxing/ZXReader.h>
-#import <zxing/ZXResult.h>
-#import <zxing/ZXBinaryBitmap.h>
-#import <zxing/ZXDecodeHints.h>
+#import <ZXing/ZXReader.h>
+#import <ZXing/ZXResult.h>
+#import <ZXing/ZXBinaryBitmap.h>
+#import <ZXing/ZXDecodeHints.h>
 #import <zxing/ReaderException.h>
-#import <zxing/ZXReaderException.h>
+#import <ZXing/ZXReaderException.h>
 #import <zxing/common/IllegalArgumentException.h>
-#import <zxing/ZXIllegalArgumentException.h>
+#import <ZXing/ZXIllegalArgumentException.h>
 
 @implementation ZXReader
 

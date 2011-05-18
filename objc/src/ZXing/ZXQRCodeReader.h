@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-#import <zxing/ZXReader.h>
+#import <ZXing/ZXReader.h>
 
 @interface ZXQRCodeReader : ZXReader {
 }

@@ -16,7 +16,7 @@
  */
 
 #import <zxing/MultiFormatReader.h>
-#import <zxing/ZXMultiFormatReader.h>
+#import <ZXing/ZXMultiFormatReader.h>
 
 @implementation ZXMultiFormatReader
 

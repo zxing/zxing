@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-#import <zxing/ZXBinarizer.h>
+#import <ZXing/ZXBinarizer.h>
 
 #if TARGET_OS_EMBEDDED || TARGET_IPHONE_SIMULATOR
 #define ZXBlack [[UIColor blackColor] CGColor]

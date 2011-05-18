@@ -30,6 +30,7 @@
 #define ZXCaptureDeviceInput AVCaptureDeviceInput
 #define ZXCaptureVideoOutput AVCaptureVideoDataOutput
 #else
+#import <QTKit/QTKit.h>
 #define ZX(x) x
 #define ZXAV(x)
 #define ZXAVC(x)

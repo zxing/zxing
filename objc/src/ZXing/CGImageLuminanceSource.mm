@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-#include <zxing/CGImageLuminanceSource.h>
+#import <ZXing/ZXCGImageLuminanceSource.h>
 #include <zxing/common/IllegalArgumentException.h>
 
 namespace zxing {

@@ -16,7 +16,7 @@
  */
 
 #import <zxing/qrcode/QRCodeReader.h>
-#import <zxing/ZXQRCodeReader.h>
+#import <ZXing/ZXQRCodeReader.h>
 
 @implementation ZXQRCodeReader
 

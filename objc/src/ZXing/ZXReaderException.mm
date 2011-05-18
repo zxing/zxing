@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-#import <zxing/ZXReaderException.h>
+#import <ZXing/ZXReaderException.h>
 
 @implementation ZXReaderException {
 }
