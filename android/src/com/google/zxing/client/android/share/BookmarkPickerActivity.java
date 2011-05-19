@@ -16,17 +16,13 @@
 
 package com.google.zxing.client.android.share;
 
-import com.google.zxing.client.android.R;
-
 import android.app.ListActivity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.Browser;
 import android.view.View;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 
 /**
  * This class is only needed because I can't successfully send an ACTION_PICK intent to
@@ -40,18 +36,13 @@ public final class BookmarkPickerActivity extends ListActivity {
       Browser.BookmarkColumns.URL
   };
 
-  private static final int[] TWO_LINE_VIEW_IDS = {
-      R.id.bookmark_title,
-      R.id.bookmark_url
-  };
-
-  private static final int TITLE_COLUMN = 0;
-  private static final int URL_COLUMN = 1;
+  static final int TITLE_COLUMN = 0;
+  static final int URL_COLUMN = 1;
 
   // Without this selection, we'd get all the history entries too
   private static final String BOOKMARK_SELECTION = "bookmark = 1";
 
-  private Cursor cursor;
+  private Cursor cursor = null;
 
   @Override
   protected void onCreate(Bundle icicle) {
@@ -60,10 +51,7 @@ public final class BookmarkPickerActivity extends ListActivity {
     cursor = getContentResolver().query(Browser.BOOKMARKS_URI, BOOKMARK_PROJECTION,
         BOOKMARK_SELECTION, null, null);
     startManagingCursor(cursor);
-
-    ListAdapter adapter = new SimpleCursorAdapter(this, R.layout.bookmark_picker_list_item,
-        cursor, BOOKMARK_PROJECTION, TWO_LINE_VIEW_IDS);
-    setListAdapter(adapter);
+    setListAdapter(new BookmarkAdapter(this, cursor));
   }
 
   @Override
