@@ -379,7 +379,7 @@ ZXAV(didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer)
 
   ZXQT({
   if (!reported_width || !reported_height) {
-    CGSize size = 
+    NSSize size = 
       [[[[input.device.formatDescriptions objectAtIndex:0]
           formatDescriptionAttributes] objectForKey:@"videoEncodedPixelsSize"] sizeValue];
     width = size.width;
