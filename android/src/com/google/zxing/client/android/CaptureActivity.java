@@ -604,19 +604,18 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private void initCamera(SurfaceHolder surfaceHolder) {
     try {
       CameraManager.get().openDriver(surfaceHolder);
+      // Creating the handler starts the preview, which can also throw a RuntimeException.
+      if (handler == null) {
+        handler = new CaptureActivityHandler(this, decodeFormats, characterSet);
+      }
     } catch (IOException ioe) {
       Log.w(TAG, ioe);
       displayFrameworkBugMessageAndExit();
-      return;
     } catch (RuntimeException e) {
       // Barcode Scanner has seen crashes in the wild of this variety:
       // java.?lang.?RuntimeException: Fail to connect to camera service
       Log.w(TAG, "Unexpected error initializating camera", e);
       displayFrameworkBugMessageAndExit();
-      return;
-    }
-    if (handler == null) {
-      handler = new CaptureActivityHandler(this, decodeFormats, characterSet);
     }
   }
 
