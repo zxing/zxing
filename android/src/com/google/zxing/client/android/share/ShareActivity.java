@@ -196,7 +196,13 @@ public final class ShareActivity extends Activity {
       return; // Show error?
     }
     ContentResolver resolver = getContentResolver();
-    Cursor contactCursor = resolver.query(contactUri, null, null, null, null);
+    Cursor contactCursor;
+    try {
+      // We're seeing about six reports a week of this exception although I don't understand why.
+      contactCursor = resolver.query(contactUri, null, null, null, null);
+    } catch (IllegalArgumentException e) {
+      return;
+    }
     Bundle bundle = new Bundle();
     if (contactCursor != null && contactCursor.moveToFirst()) {
       int nameColumn = contactCursor.getColumnIndex(Contacts.PeopleColumns.NAME);
