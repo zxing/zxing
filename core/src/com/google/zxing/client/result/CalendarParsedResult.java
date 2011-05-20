@@ -27,6 +27,8 @@ public final class CalendarParsedResult extends ParsedResult {
   private final String location;
   private final String attendee;
   private final String description;
+  private final double latitude;
+  private final double longitude;
 
   public CalendarParsedResult(String summary,
                               String start,
@@ -34,6 +36,17 @@ public final class CalendarParsedResult extends ParsedResult {
                               String location,
                               String attendee,
                               String description) {
+    this(summary, start, end, location, attendee, description, Double.NaN, Double.NaN);
+  }
+
+  public CalendarParsedResult(String summary,
+                              String start,
+                              String end,
+                              String location,
+                              String attendee,
+                              String description,
+                              double latitude,
+                              double longitude) {
     super(ParsedResultType.CALENDAR);
     // Start is required, end is not
     if (start == null) {
@@ -51,6 +64,8 @@ public final class CalendarParsedResult extends ParsedResult {
     this.location = location;
     this.attendee = attendee;
     this.description = description;
+    this.latitude = latitude;
+    this.longitude = longitude;
   }
 
   public String getSummary() {
@@ -85,6 +100,14 @@ public final class CalendarParsedResult extends ParsedResult {
 
   public String getDescription() {
     return description;
+  }
+
+  public double getLatitude() {
+    return latitude;
+  }
+
+  public double getLongitude() {
+    return longitude;
   }
 
   public String getDisplayResult() {
