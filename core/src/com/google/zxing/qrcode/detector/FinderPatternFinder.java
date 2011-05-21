@@ -559,7 +559,7 @@ public class FinderPatternFinder {
     public int compare(Object center1, Object center2) {
       float dA = Math.abs(((FinderPattern) center2).getEstimatedModuleSize() - average);
       float dB = Math.abs(((FinderPattern) center1).getEstimatedModuleSize() - average);
-      return dA < dB ? -1 : (dA == dB ? 0 : 1);
+      return dA < dB ? -1 : dA == dB ? 0 : 1;
     }
   }
 
@@ -575,7 +575,7 @@ public class FinderPatternFinder {
       if (((FinderPattern) center2).getCount() == ((FinderPattern) center1).getCount()) {
         float dA = Math.abs(((FinderPattern) center2).getEstimatedModuleSize() - average);
         float dB = Math.abs(((FinderPattern) center1).getEstimatedModuleSize() - average);
-        return dA < dB ? 1 : (dA == dB ? 0 : -1);
+        return dA < dB ? 1 : dA == dB ? 0 : -1;
       } else {
         return ((FinderPattern) center2).getCount() - ((FinderPattern) center1).getCount();
       }

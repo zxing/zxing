@@ -46,7 +46,7 @@ final class ExpandedProductResultParser extends ResultParser {
   // product barcodes with complementary data.
   public static ExpandedProductParsedResult parse(Result result) {
     BarcodeFormat format = result.getBarcodeFormat();
-    if (!(BarcodeFormat.RSS_EXPANDED.equals(format))) {
+    if (!BarcodeFormat.RSS_EXPANDED.equals(format)) {
       // ExtendedProductParsedResult NOT created. Not a RSS Expanded barcode
       return null;
     }

@@ -27,7 +27,9 @@ import org.junit.Test;
  * @author mysen@google.com (Chris Mysen) - ported from C++
  */
 public final class MatrixUtilTestCase extends Assert {
-  public void testtoString() {
+
+  @Test
+  public void testToString() {
     ByteMatrix array = new ByteMatrix(3, 3);
     array.set(0, 0, 0);
     array.set(1, 0, 1);
@@ -254,6 +256,7 @@ public final class MatrixUtilTestCase extends Assert {
                            1,  // Version 1
                            3,  // Mask pattern 3
                            matrix);
+    assertEquals(expected, matrix.toString());
   }
 
   @Test

@@ -95,11 +95,12 @@ public final class RSSUtils {
       }
       n -= elmWidth;
     }
-    return (val);
+    return val;
   }
 
   static int combins(int n, int r) {
-    int maxDenom, minDenom;
+    int maxDenom;
+    int minDenom;
     if (n - r > r) {
       minDenom = r;
       maxDenom = n - r;
@@ -120,7 +121,7 @@ public final class RSSUtils {
       val /= j;
       j++;
     }
-    return (val);
+    return val;
   }
 
   static int[] elements(int[] eDist, int N, int K) {

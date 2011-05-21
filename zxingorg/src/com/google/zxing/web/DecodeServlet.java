@@ -70,6 +70,7 @@ import java.util.Collection;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Vector;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
@@ -112,6 +113,7 @@ public final class DecodeServlet extends HttpServlet {
     possibleFormats.add(BarcodeFormat.CODABAR);
     possibleFormats.add(BarcodeFormat.ITF);
     possibleFormats.add(BarcodeFormat.RSS_14);
+    possibleFormats.add(BarcodeFormat.RSS_EXPANDED);
     possibleFormats.add(BarcodeFormat.QR_CODE);
     possibleFormats.add(BarcodeFormat.DATA_MATRIX);
     possibleFormats.add(BarcodeFormat.AZTEC);
@@ -163,7 +165,9 @@ public final class DecodeServlet extends HttpServlet {
     try {
       imageURI = new URI(imageURIString);
     } catch (URISyntaxException urise) {
-      log.fine("URI was not valid: " + imageURIString);
+      if (log.isLoggable(Level.FINE)) {
+        log.fine("URI was not valid: " + imageURIString);
+      }
       response.sendRedirect("badurl.jspx");
       return;
     }
@@ -181,7 +185,9 @@ public final class DecodeServlet extends HttpServlet {
         getResponse = client.execute(getRequest);
       } catch (IllegalArgumentException iae) {
         // Thrown if hostname is bad or null
-        log.fine(iae.toString());
+        if (log.isLoggable(Level.FINE)) {
+          log.fine(iae.toString());
+        }
         getRequest.abort();
         response.sendRedirect("badurl.jspx");
         return;
@@ -191,14 +197,18 @@ public final class DecodeServlet extends HttpServlet {
         //  javax.net.ssl.SSLPeerUnverifiedException,
         //  org.apache.http.NoHttpResponseException,
         //  org.apache.http.client.ClientProtocolException,
-        log.fine(ioe.toString());
+        if (log.isLoggable(Level.FINE)) {
+          log.fine(ioe.toString());
+        }
         getRequest.abort();
         response.sendRedirect("badurl.jspx");
         return;
       }
 
       if (getResponse.getStatusLine().getStatusCode() != HttpServletResponse.SC_OK) {
-        log.fine("Unsuccessful return code: " + getResponse.getStatusLine().getStatusCode());
+        if (log.isLoggable(Level.FINE)) {
+          log.fine("Unsuccessful return code: " + getResponse.getStatusLine().getStatusCode());
+        }
         response.sendRedirect("badurl.jspx");
         return;
       }
@@ -257,7 +267,9 @@ public final class DecodeServlet extends HttpServlet {
         }
       }
     } catch (FileUploadException fue) {
-      log.fine(fue.toString());
+      if (log.isLoggable(Level.FINE)) {
+        log.fine(fue.toString());
+      }
       response.sendRedirect("badimage.jspx");
     }
 
@@ -270,17 +282,23 @@ public final class DecodeServlet extends HttpServlet {
     try {
       image = ImageIO.read(is);
     } catch (IOException ioe) {
-      log.fine(ioe.toString());
+      if (log.isLoggable(Level.FINE)) {
+        log.fine(ioe.toString());
+      }
       // Includes javax.imageio.IIOException
       response.sendRedirect("badimage.jspx");
       return;
     } catch (CMMException cmme) {
-      log.fine(cmme.toString());
+      if (log.isLoggable(Level.FINE)) {
+        log.fine(cmme.toString());
+      }
       // Have seen this in logs
       response.sendRedirect("badimage.jspx");
       return;
     } catch (IllegalArgumentException iae) {
-      log.fine(iae.toString());
+      if (log.isLoggable(Level.FINE)) {
+        log.fine(iae.toString());
+      }
       // Have seen this in logs for some JPEGs
       response.sendRedirect("badimage.jspx");
       return;
@@ -291,7 +309,9 @@ public final class DecodeServlet extends HttpServlet {
     }
     if (image.getHeight() <= 1 || image.getWidth() <= 1 ||
         image.getHeight() * image.getWidth() > MAX_PIXELS) {
-      log.fine("Dimensions too large: " + image.getWidth() + 'x' + image.getHeight());
+      if (log.isLoggable(Level.FINE)) {
+        log.fine("Dimensions too large: " + image.getWidth() + 'x' + image.getHeight());
+      }
       response.sendRedirect("badimage.jspx");
       return;
     }

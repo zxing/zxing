@@ -18,7 +18,6 @@ package com.google.zxing.client.android.book;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -121,7 +120,7 @@ public final class SearchBookContentsActivity extends Activity {
     CookieManager.getInstance().removeExpiredCookie();
 
     Intent intent = getIntent();
-    if (intent == null || (!intent.getAction().equals(Intents.SearchBookContents.ACTION))) {
+    if (intent == null || !intent.getAction().equals(Intents.SearchBookContents.ACTION)) {
       finish();
       return;
     }

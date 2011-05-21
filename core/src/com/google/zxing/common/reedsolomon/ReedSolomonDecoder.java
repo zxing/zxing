@@ -177,7 +177,7 @@ public final class ReedSolomonDecoder {
           // Above should work but fails on some Apple and Linux JDKs due to a Hotspot bug.
           // Below is a funny-looking workaround from Steven Parkes
           int term = field.multiply(errorLocations[j], xiInverse);
-          int termPlus1 = ((term & 0x1) == 0) ? (term | 1) : (term & ~1);
+          int termPlus1 = (term & 0x1) == 0 ? term | 1 : term & ~1;
           denominator = field.multiply(denominator, termPlus1);
         }
       }

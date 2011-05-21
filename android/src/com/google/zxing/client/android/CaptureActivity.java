@@ -422,8 +422,8 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         paint.setStrokeWidth(4.0f);
         drawLine(canvas, paint, points[0], points[1]);
       } else if (points.length == 4 &&
-                 (rawResult.getBarcodeFormat().equals(BarcodeFormat.UPC_A)) ||
-                 (rawResult.getBarcodeFormat().equals(BarcodeFormat.EAN_13))) {
+                 (rawResult.getBarcodeFormat().equals(BarcodeFormat.UPC_A) ||
+                  rawResult.getBarcodeFormat().equals(BarcodeFormat.EAN_13))) {
         // Hacky special case -- draw two lines, for the barcode and metadata
         drawLine(canvas, paint, points[0], points[1]);
         drawLine(canvas, paint, points[2], points[3]);
@@ -590,7 +590,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         Intent intent = new Intent(this, HelpActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
         // Show the default page on a clean install, and the what's new page on an upgrade.
-        String page = (lastVersion == 0) ? HelpActivity.DEFAULT_PAGE : HelpActivity.WHATS_NEW_PAGE;
+        String page = lastVersion == 0 ? HelpActivity.DEFAULT_PAGE : HelpActivity.WHATS_NEW_PAGE;
         intent.putExtra(HelpActivity.REQUESTED_PAGE_KEY, page);
         startActivity(intent);
         return true;

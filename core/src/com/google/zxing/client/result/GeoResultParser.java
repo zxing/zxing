@@ -52,7 +52,9 @@ final class GeoResultParser extends ResultParser {
       return null;
     }
     int longitudeEnd = geoURIWithoutQuery.indexOf(',', latitudeEnd + 1);    
-    double latitude, longitude, altitude;
+    double latitude;
+    double longitude;
+    double altitude;
     try {
       latitude = Double.parseDouble(geoURIWithoutQuery.substring(0, latitudeEnd));
       if (latitude > 90.0 || latitude < -90.0) {

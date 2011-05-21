@@ -67,7 +67,7 @@ abstract class AI01decoder extends AbstractExpandedDecoder {
     int checkDigit = 0;
     for (int i = 0; i < 13; i++) {
       int digit = buf.charAt(i + currentPos) - '0';
-      checkDigit += (((i & 0x01) == 0) ? 3 * digit : digit);
+      checkDigit += (i & 0x01) == 0 ? 3 * digit : digit;
     }
 
     checkDigit = 10 - (checkDigit % 10);

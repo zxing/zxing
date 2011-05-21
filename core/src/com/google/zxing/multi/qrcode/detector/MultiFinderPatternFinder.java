@@ -157,7 +157,7 @@ final class MultiFinderPatternFinder extends FinderPatternFinder {
 
         // Compare the expected module sizes; if they are really off, skip
         float vModSize12 = (p1.getEstimatedModuleSize() - p2.getEstimatedModuleSize()) /
-            (Math.min(p1.getEstimatedModuleSize(), p2.getEstimatedModuleSize()));
+            Math.min(p1.getEstimatedModuleSize(), p2.getEstimatedModuleSize());
         float vModSize12A = Math.abs(p1.getEstimatedModuleSize() - p2.getEstimatedModuleSize());
         if (vModSize12A > DIFF_MODSIZE_CUTOFF && vModSize12 >= DIFF_MODSIZE_CUTOFF_PERCENT) {
           // break, since elements are ordered by the module size deviation there cannot be
@@ -173,7 +173,7 @@ final class MultiFinderPatternFinder extends FinderPatternFinder {
 
           // Compare the expected module sizes; if they are really off, skip
           float vModSize23 = (p2.getEstimatedModuleSize() - p3.getEstimatedModuleSize()) /
-              (Math.min(p2.getEstimatedModuleSize(), p3.getEstimatedModuleSize()));
+              Math.min(p2.getEstimatedModuleSize(), p3.getEstimatedModuleSize());
           float vModSize23A = Math.abs(p2.getEstimatedModuleSize() - p3.getEstimatedModuleSize());
           if (vModSize23A > DIFF_MODSIZE_CUTOFF && vModSize23 >= DIFF_MODSIZE_CUTOFF_PERCENT) {
             // break, since elements are ordered by the module size deviation there cannot be
@@ -191,14 +191,14 @@ final class MultiFinderPatternFinder extends FinderPatternFinder {
           float dB = ResultPoint.distance(info.getTopLeft(), info.getTopRight());
 
           // Check the sizes
-          float estimatedModuleCount = ((dA + dB) / p1.getEstimatedModuleSize()) / 2;
+          float estimatedModuleCount = (dA + dB) / (p1.getEstimatedModuleSize() * 2.0f);
           if (estimatedModuleCount > MAX_MODULE_COUNT_PER_EDGE ||
               estimatedModuleCount < MIN_MODULE_COUNT_PER_EDGE) {
             continue;
           }
 
           // Calculate the difference of the edge lengths in percent
-          float vABBC = Math.abs(((dA - dB) / Math.min(dA, dB)));
+          float vABBC = Math.abs((dA - dB) / Math.min(dA, dB));
           if (vABBC >= 0.1f) {
             continue;
           }
@@ -206,7 +206,7 @@ final class MultiFinderPatternFinder extends FinderPatternFinder {
           // Calculate the diagonal length by assuming a 90° angle at topleft
           float dCpy = (float) Math.sqrt(dA * dA + dB * dB);
           // Compare to the real distance in %
-          float vPyC = Math.abs(((dC - dCpy) / Math.min(dC, dCpy)));
+          float vPyC = Math.abs((dC - dCpy) / Math.min(dC, dCpy));
 
           if (vPyC >= 0.1f) {
             continue;

@@ -73,7 +73,9 @@ public class ResultPoint {
     float oneTwoDistance = distance(patterns[1], patterns[2]);
     float zeroTwoDistance = distance(patterns[0], patterns[2]);
 
-    ResultPoint pointA, pointB, pointC;
+    ResultPoint pointA;
+    ResultPoint pointB;
+    ResultPoint pointC;
     // Assume one closest to other two is B; A and C will just be guesses at first
     if (oneTwoDistance >= zeroOneDistance && oneTwoDistance >= zeroTwoDistance) {
       pointB = patterns[0];

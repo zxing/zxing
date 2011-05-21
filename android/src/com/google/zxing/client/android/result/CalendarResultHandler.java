@@ -106,7 +106,7 @@ public final class CalendarResultHandler extends ResultHandler {
       long milliseconds = date.getTime();
       if (when.length() == 16 && when.charAt(15) == 'Z') {
         Calendar calendar = new GregorianCalendar();
-        int offset = (calendar.get(Calendar.ZONE_OFFSET) + calendar.get(Calendar.DST_OFFSET));
+        int offset = calendar.get(Calendar.ZONE_OFFSET) + calendar.get(Calendar.DST_OFFSET);
         milliseconds += offset;
       }
       ParsedResult.maybeAppend(DateFormat.getDateTimeInstance().format(milliseconds), result);

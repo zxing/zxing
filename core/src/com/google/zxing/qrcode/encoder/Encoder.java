@@ -281,7 +281,7 @@ public final class Encoder {
     // If we have more space, we'll fill the space with padding patterns defined in 8.4.9 (p.24).
     int numPaddingBytes = numDataBytes - bits.getSizeInBytes();
     for (int i = 0; i < numPaddingBytes; ++i) {
-      bits.appendBits(((i & 0x01) == 0) ? 0xEC : 0x11, 8);
+      bits.appendBits((i & 0x01) == 0 ? 0xEC : 0x11, 8);
     }
     if (bits.getSize() != capacity) {
       throw new WriterException("Bits size does not equal capacity");

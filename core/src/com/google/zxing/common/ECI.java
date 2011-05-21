@@ -36,7 +36,7 @@ public abstract class ECI {
 
   /**
    * @param value ECI value
-   * @return {@link ECI} representing ECI of given value, or null if it is legal but unsupported
+   * @return ECI representing ECI of given value, or null if it is legal but unsupported
    * @throws IllegalArgumentException if ECI value is invalid
    */
   public static ECI getECIByValue(int value) {

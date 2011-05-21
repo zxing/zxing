@@ -36,7 +36,7 @@ public abstract class GridSampler {
   private static GridSampler gridSampler = new DefaultGridSampler();
 
   /**
-   * Sets the implementation of {@link GridSampler} used by the library. One global
+   * Sets the implementation of GridSampler used by the library. One global
    * instance is stored, which may sound problematic. But, the implementation provided
    * ought to be appropriate for the entire platform, and all uses of this library
    * in the whole lifetime of the JVM. For instance, an Android activity can swap in
@@ -52,7 +52,7 @@ public abstract class GridSampler {
   }
 
   /**
-   * @return the current implementation of {@link GridSampler}
+   * @return the current implementation of GridSampler
    */
   public static GridSampler getInstance() {
     return gridSampler;

@@ -138,7 +138,8 @@ public final class MaskUtil {
     if (!QRCode.isValidMaskPattern(maskPattern)) {
       throw new IllegalArgumentException("Invalid mask pattern");
     }
-    int intermediate, temp;
+    int intermediate;
+    int temp;
     switch (maskPattern) {
       case 0:
         intermediate = (y + x) & 0x1;
@@ -161,11 +162,11 @@ public final class MaskUtil {
         break;
       case 6:
         temp = y * x;
-        intermediate = (((temp & 0x1) + (temp % 3)) & 0x1);
+        intermediate = ((temp & 0x1) + (temp % 3)) & 0x1;
         break;
       case 7:
         temp = y * x;
-        intermediate = (((temp % 3) + ((y + x) & 0x1)) & 0x1);
+        intermediate = ((temp % 3) + ((y + x) & 0x1)) & 0x1;
         break;
       default:
         throw new IllegalArgumentException("Invalid mask pattern: " + maskPattern);

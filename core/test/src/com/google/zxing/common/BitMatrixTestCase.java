@@ -120,7 +120,7 @@ public final class BitMatrixTestCase extends Assert {
     assertEquals(200, array3.getSize());
 
     for (int x = 0; x < 102; x++) {
-      boolean on = ((x & 0x03) == 0);
+      boolean on = (x & 0x03) == 0;
       assertEquals(on, array.get(x));
       assertEquals(on, array2.get(x));
       assertEquals(on, array3.get(x));

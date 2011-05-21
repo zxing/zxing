@@ -56,8 +56,6 @@ final class CameraManager {
   private int autoFocusMessage;
   private boolean initialized;
   private boolean previewing;
-  private int previewFormat;
-  private String previewFormatString;
   private final boolean useOneShotPreviewCallback;
 
   /**
@@ -263,8 +261,8 @@ final class CameraManager {
     Camera.Parameters parameters = camera.getParameters();
     Camera.Size size = parameters.getPreviewSize();
     Log.v(TAG, "Default preview size: " + size.width + ", " + size.height);
-    previewFormat = parameters.getPreviewFormat();
-    previewFormatString = parameters.get("preview-format");
+    int previewFormat = parameters.getPreviewFormat();
+    String previewFormatString = parameters.get("preview-format");
     Log.v(TAG, "Default preview format: " + previewFormat + '/' + previewFormatString);
 
     // Ensure that the camera resolution is a multiple of 8, as the screen may not be.

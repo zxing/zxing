@@ -66,6 +66,7 @@ public final class RGBLuminanceSource extends LuminanceSource {
     }
   }
 
+  @Override
   public byte[] getRow(int y, byte[] row) {
     if (y < 0 || y >= getHeight()) {
       throw new IllegalArgumentException("Requested row is outside the image: " + y);
@@ -81,6 +82,7 @@ public final class RGBLuminanceSource extends LuminanceSource {
 
   // Since this class does not support cropping, the underlying byte array already contains
   // exactly what the caller is asking for, so give it to them without a copy.
+  @Override
   public byte[] getMatrix() {
     return luminances;
   }

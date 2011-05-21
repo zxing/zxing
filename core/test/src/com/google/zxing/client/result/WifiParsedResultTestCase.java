@@ -27,6 +27,8 @@ import org.junit.Test;
  * @author Vikram Aggarwal
  */
 public final class WifiParsedResultTestCase extends Assert {
+
+  @Test
   public void testNoPassword() {
     doTest("WIFI:S:NoPassword;P:;T:;;", "NoPassword", "", "");
     doTest("WIFI:S:No Password;P:;T:;;", "No Password", "", "");

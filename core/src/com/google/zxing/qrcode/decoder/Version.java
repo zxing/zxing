@@ -90,7 +90,7 @@ public final class Version {
    * <p>Deduces version information purely from QR Code dimensions.</p>
    *
    * @param dimension dimension in modules
-   * @return {@link Version} for a QR Code of that dimension
+   * @return Version for a QR Code of that dimension
    * @throws FormatException if dimension is not 1 mod 4
    */
   public static Version getProvisionalVersionForDimension(int dimension) throws FormatException {

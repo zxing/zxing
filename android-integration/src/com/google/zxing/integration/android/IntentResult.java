@@ -39,7 +39,7 @@ public final class IntentResult {
   }
 
   /**
-   * @return name of format, like "QR_CODE", "UPC_A". See <code>BarcodeFormat</code> for more format names.
+   * @return name of format, like "QR_CODE", "UPC_A". See {@code BarcodeFormat} for more format names.
    */
   public String getFormatName() {
     return formatName;

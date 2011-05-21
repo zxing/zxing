@@ -139,7 +139,7 @@ final class DecodedBitStreamParser {
         assembledTwoBytes += 0x0A6A1;
       }
       buffer[offset] = (byte) ((assembledTwoBytes >> 8) & 0xFF);
-      buffer[offset + 1] = (byte) ((assembledTwoBytes) & 0xFF);
+      buffer[offset + 1] = (byte) (assembledTwoBytes & 0xFF);
       offset += 2;
       count--;
     }

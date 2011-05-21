@@ -139,11 +139,11 @@ public class Detector {
     return new DetectorResult(bits, points);
   }
 
-  public PerspectiveTransform createTransform(ResultPoint topLeft,
-                                              ResultPoint topRight,
-                                              ResultPoint bottomLeft,
-                                              ResultPoint alignmentPattern,
-                                              int dimension) {
+  public static PerspectiveTransform createTransform(ResultPoint topLeft,
+                                                     ResultPoint topRight,
+                                                     ResultPoint bottomLeft,
+                                                     ResultPoint alignmentPattern,
+                                                     int dimension) {
     float dimMinusThree = (float) dimension - 3.5f;
     float bottomRightX;
     float bottomRightY;

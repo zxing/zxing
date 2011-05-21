@@ -132,7 +132,7 @@ public final class StringUtils {
           ((value >= 0xF0 && value <= 0xFF) || value == 0x80 || value == 0xA0)) {
         canBeShiftJIS = false;
       }
-      if (((value >= 0x81 && value <= 0x9F) || (value >= 0xE0 && value <= 0xEF))) {
+      if ((value >= 0x81 && value <= 0x9F) || (value >= 0xE0 && value <= 0xEF)) {
         // These start double-byte characters in Shift_JIS. Let's see if it's followed by a valid
         // second byte.
         if (lastWasPossibleDoubleByteStart) {

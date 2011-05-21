@@ -65,23 +65,22 @@ public final class ZXingTestActivity extends Activity {
 
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
-    switch (item.getItemId()) {
-      case ABOUT_ID:
-        int versionCode = 0;
-        String versionName = "unknown";
-        try {
-          PackageInfo info = getPackageManager().getPackageInfo(PACKAGE_NAME, 0);
-          versionCode = info.versionCode;
-          versionName = info.versionName;
-        } catch (PackageManager.NameNotFoundException e) {
-        }
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(getString(R.string.app_name) + " " + versionName + " (" + versionCode +
-            ")");
-        builder.setMessage(getString(R.string.about_message));
-        builder.setPositiveButton(R.string.ok_button, null);
-        builder.show();
-        break;
+    if (item.getItemId() == ABOUT_ID) {
+      int versionCode = 0;
+      String versionName = "unknown";
+      try {
+        PackageInfo info = getPackageManager().getPackageInfo(PACKAGE_NAME, 0);
+        versionCode = info.versionCode;
+        versionName = info.versionName;
+      } catch (PackageManager.NameNotFoundException e) {
+      }
+      AlertDialog.Builder builder = new AlertDialog.Builder(this);
+      builder.setTitle(
+          getString(R.string.app_name) + ' ' + versionName + " (" + versionCode + ')');
+      builder.setMessage(getString(R.string.about_message));
+      builder.setPositiveButton(R.string.ok_button, null);
+      builder.show();
+
     }
     return super.onOptionsItemSelected(item);
   }
@@ -215,7 +214,7 @@ public final class ZXingTestActivity extends Activity {
     }
   };
 
-  private void showDialog(int title, String message) {
+  private void showDialog(int title, CharSequence message) {
     AlertDialog.Builder builder = new AlertDialog.Builder(this);
     builder.setTitle(title);
     builder.setMessage(message);

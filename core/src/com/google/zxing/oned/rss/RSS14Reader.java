@@ -122,7 +122,7 @@ public final class RSS14Reader extends AbstractRSSReader {
     int checkDigit = 0;
     for (int i = 0; i < 13; i++) {
       int digit = buffer.charAt(i) - '0';
-      checkDigit += (((i & 0x01) == 0) ? 3 * digit : digit);
+      checkDigit += (i & 0x01) == 0 ? 3 * digit : digit;
     }
     checkDigit = 10 - (checkDigit % 10);
     if (checkDigit == 10) {
