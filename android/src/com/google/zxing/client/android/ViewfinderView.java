@@ -30,7 +30,6 @@ import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * This view is overlaid on top of the camera preview. It adds the viewfinder rectangle and partial
@@ -53,8 +52,8 @@ public final class ViewfinderView extends View {
   private final int laserColor;
   private final int resultPointColor;
   private int scannerAlpha;
-  private final AtomicReference<List<ResultPoint>> possibleResultPoints;
-  private final AtomicReference<List<ResultPoint>> lastPossibleResultPoints;
+  private List<ResultPoint> possibleResultPoints;
+  private List<ResultPoint> lastPossibleResultPoints;
 
   // This constructor is used when the class is built from an XML resource.
   public ViewfinderView(Context context, AttributeSet attrs) {
@@ -69,9 +68,8 @@ public final class ViewfinderView extends View {
     laserColor = resources.getColor(R.color.viewfinder_laser);
     resultPointColor = resources.getColor(R.color.possible_result_points);
     scannerAlpha = 0;
-    possibleResultPoints = new AtomicReference<List<ResultPoint>>();
-    lastPossibleResultPoints = new AtomicReference<List<ResultPoint>>();
-    possibleResultPoints.set(new ArrayList<ResultPoint>(5));
+    possibleResultPoints = new ArrayList<ResultPoint>(5);
+    lastPossibleResultPoints = null;
   }
 
   @Override
@@ -114,28 +112,32 @@ public final class ViewfinderView extends View {
       float scaleX = frame.width() / (float) previewFrame.width();
       float scaleY = frame.height() / (float) previewFrame.height();
 
-      List<ResultPoint> currentPossible = possibleResultPoints.get();
-      List<ResultPoint> currentLast = lastPossibleResultPoints.get();
+      List<ResultPoint> currentPossible = possibleResultPoints;
+      List<ResultPoint> currentLast = lastPossibleResultPoints;
       if (currentPossible.isEmpty()) {
-        lastPossibleResultPoints.set(null);
+        lastPossibleResultPoints = null;
       } else {
-        possibleResultPoints.set(new ArrayList<ResultPoint>(5));
-        lastPossibleResultPoints.set(currentPossible);
+        possibleResultPoints = new ArrayList<ResultPoint>(5);
+        lastPossibleResultPoints = currentPossible;
         paint.setAlpha(CURRENT_POINT_OPACITY);
         paint.setColor(resultPointColor);
-        for (ResultPoint point : currentPossible) {
-          canvas.drawCircle(frame.left + (int) (point.getX() * scaleX),
-                            frame.top + (int) (point.getY() * scaleY),
-                            6.0f, paint);
+        synchronized (currentPossible) {
+          for (ResultPoint point : currentPossible) {
+            canvas.drawCircle(frame.left + (int) (point.getX() * scaleX),
+                              frame.top + (int) (point.getY() * scaleY),
+                              6.0f, paint);
+          }
         }
       }
       if (currentLast != null) {
         paint.setAlpha(CURRENT_POINT_OPACITY / 2);
         paint.setColor(resultPointColor);
-        for (ResultPoint point : currentLast) {
-          canvas.drawCircle(frame.left + (int) (point.getX() * scaleX),
-                            frame.top + (int) (point.getY() * scaleY),
-                            3.0f, paint);
+        synchronized (currentLast) {
+          for (ResultPoint point : currentLast) {
+            canvas.drawCircle(frame.left + (int) (point.getX() * scaleX),
+                              frame.top + (int) (point.getY() * scaleY),
+                              3.0f, paint);
+          }
         }
       }
 
@@ -161,11 +163,14 @@ public final class ViewfinderView extends View {
   }
 
   public void addPossibleResultPoint(ResultPoint point) {
-    List<ResultPoint> points = possibleResultPoints.get();
-    points.add(point);
-    if (points.size() > MAX_RESULT_POINTS) {
-      // trim it
-      points.subList(0, points.size() - MAX_RESULT_POINTS / 2).clear();
+    List<ResultPoint> points = possibleResultPoints;
+    synchronized (point) {
+      points.add(point);
+      int size = points.size();
+      if (size > MAX_RESULT_POINTS) {
+        // trim it
+        points.subList(0, size - MAX_RESULT_POINTS / 2).clear();
+      }
     }
   }
 
