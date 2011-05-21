@@ -279,7 +279,7 @@ public final class RSSExpandedReader extends AbstractRSSReader{
     } else if (previousPairs.isEmpty()) {
       rowOffset = 0;
     } else{
-      ExpandedPair lastPair = ((ExpandedPair)previousPairs.lastElement());
+      ExpandedPair lastPair = (ExpandedPair) previousPairs.lastElement();
       rowOffset = lastPair.getFinderPattern().getStartEnd()[1];
     }
     boolean searchingEvenPair = previousPairs.size() % 2 != 0;

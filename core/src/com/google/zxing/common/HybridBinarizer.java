@@ -102,10 +102,10 @@ public final class HybridBinarizer extends GlobalHistogramBinarizer {
         if ((xoffset + 8) >= width) {
             xoffset = width - 8;
         }
-        int left = (x > 1) ? x : 2;
-        left = (left < subWidth - 2) ? left : subWidth - 3;
-        int top = (y > 1) ? y : 2;
-        top = (top < subHeight - 2) ? top : subHeight - 3;
+        int left = x > 1 ? x : 2;
+        left = left < subWidth - 2 ? left : subWidth - 3;
+        int top = y > 1 ? y : 2;
+        top = top < subHeight - 2 ? top : subHeight - 3;
         int sum = 0;
         for (int z = -2; z <= 2; z++) {
           int[] blackRow = blackPoints[top + z];

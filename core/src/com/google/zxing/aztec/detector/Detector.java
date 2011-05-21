@@ -152,7 +152,7 @@ public final class Detector {
 
   /**
    *
-   * <p> Gets the aztec code corners from the bull's eye corners and the parameters </p>
+   * <p>Gets the Aztec code corners from the bull's eye corners and the parameters </p>
    *
    * @param bullEyeCornerPoints the array of bull's eye corners
    * @return the array of aztec code corners
@@ -160,7 +160,8 @@ public final class Detector {
    */
   private ResultPoint[] getMatrixCornerPoints(Point[] bullEyeCornerPoints) throws NotFoundException {
 
-    float ratio = (2*nbLayers+(nbLayers>4?1:0)+(nbLayers-4)/8)/(2.0f*nbCenterLayers);
+    float ratio = (2 * nbLayers + (nbLayers > 4 ? 1 : 0) + (nbLayers - 4) / 8)
+        / (2.0f * nbCenterLayers);
 
     int dx = bullEyeCornerPoints[0].x-bullEyeCornerPoints[2].x;
     dx+=dx>0?1:-1;
@@ -609,7 +610,7 @@ public final class Detector {
   }
 
   private boolean isValid(int x, int y) {
-    return (x >= 0 && x < image.width && y > 0 && y < image.height);
+    return x >= 0 && x < image.width && y > 0 && y < image.height;
   }
 
   /**

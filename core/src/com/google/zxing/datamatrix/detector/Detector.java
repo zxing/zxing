@@ -302,7 +302,7 @@ public final class Detector {
   }
 
   private boolean isValid(ResultPoint p) {
-	  return (p.getX() >= 0 && p.getX() < image.width && p.getY() > 0 && p.getY() < image.height);
+	  return p.getX() >= 0 && p.getX() < image.width && p.getY() > 0 && p.getY() < image.height;
   }
 
   /**

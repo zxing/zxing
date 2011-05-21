@@ -328,8 +328,8 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
       // to keep it centered
       at = new AffineTransform();
       at.rotate(radians, width / 2.0, height / 2.0);
-      at.translate(((width - original.getWidth()) / 2.0),
-                   ((height - original.getHeight()) / 2.0));
+      at.translate((width - original.getWidth()) / 2.0,
+                   (height - original.getHeight()) / 2.0);
       op = new AffineTransformOp(at, AffineTransformOp.TYPE_BICUBIC);
 
       return op.filter(original, null);

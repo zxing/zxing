@@ -93,7 +93,7 @@ public final class Version {
    *
    * @param numRows Number of rows in modules
    * @param numColumns Number of columns in modules
-   * @return {@link Version} for a Data Matrix Code of those dimensions
+   * @return Version for a Data Matrix Code of those dimensions
    * @throws FormatException if dimensions do correspond to a valid Data Matrix size
    */
   public static Version getVersionForDimensions(int numRows, int numColumns) throws FormatException {

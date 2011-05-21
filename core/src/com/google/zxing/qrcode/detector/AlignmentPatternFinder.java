@@ -94,7 +94,7 @@ final class AlignmentPatternFinder {
     int[] stateCount = new int[3];
     for (int iGen = 0; iGen < height; iGen++) {
       // Search from middle outwards
-      int i = middleI + ((iGen & 0x01) == 0 ? ((iGen + 1) >> 1) : -((iGen + 1) >> 1));
+      int i = middleI + ((iGen & 0x01) == 0 ? (iGen + 1) >> 1 : -((iGen + 1) >> 1));
       stateCount[0] = 0;
       stateCount[1] = 0;
       stateCount[2] = 0;

@@ -365,9 +365,9 @@ public final class MatrixUtil {
 
   // Check if "value" is valid.
   private static boolean isValidValue(int value) {
-    return (value == -1 ||  // Empty.
+    return value == -1 ||  // Empty.
         value == 0 ||  // Light (white).
-        value == 1);  // Dark (black).
+        value == 1;  // Dark (black).
   }
 
   private static void embedTimingPatterns(ByteMatrix matrix) throws WriterException {

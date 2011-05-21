@@ -146,26 +146,30 @@ public abstract class ResultParser {
 
     for (int i = first; i < max; i++) {
       char c = escapedArray[i];
-      if (c == '+') {
-        // + is translated directly into a space
-        unescaped.append(' ');
-      } else if (c == '%') {
-        // Are there even two more chars? if not we will just copy the escaped sequence and be done
-        if (i >= max - 2) {
-          unescaped.append('%'); // append that % and move on
-        } else {
-          int firstDigitValue = parseHexDigit(escapedArray[++i]);
-          int secondDigitValue = parseHexDigit(escapedArray[++i]);
-          if (firstDigitValue < 0 || secondDigitValue < 0) {
-            // bad digit, just move on
-            unescaped.append('%');
-            unescaped.append(escapedArray[i-1]);
-            unescaped.append(escapedArray[i]);
+      switch (c) {
+        case '+':
+          // + is translated directly into a space
+          unescaped.append(' ');
+          break;
+        case '%':
+          // Are there even two more chars? if not we will just copy the escaped sequence and be done
+          if (i >= max - 2) {
+            unescaped.append('%'); // append that % and move on
+          } else {
+            int firstDigitValue = parseHexDigit(escapedArray[++i]);
+            int secondDigitValue = parseHexDigit(escapedArray[++i]);
+            if (firstDigitValue < 0 || secondDigitValue < 0) {
+              // bad digit, just move on
+              unescaped.append('%');
+              unescaped.append(escapedArray[i - 1]);
+              unescaped.append(escapedArray[i]);
+            }
+            unescaped.append((char) ((firstDigitValue << 4) + secondDigitValue));
           }
-          unescaped.append((char) ((firstDigitValue << 4) + secondDigitValue));
-        }
-      } else {
-        unescaped.append(c);
+          break;
+        default:
+          unescaped.append(c);
+          break;
       }
     }
     return unescaped.toString();

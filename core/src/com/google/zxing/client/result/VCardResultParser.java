@@ -106,11 +106,11 @@ final class VCardResultParser extends ResultParser {
             if (equals >= 0) {
               String key = metadata.substring(0, equals);
               String value = metadata.substring(equals+1);
-              if (key.equalsIgnoreCase("ENCODING")) {
-                if (value.equalsIgnoreCase("QUOTED-PRINTABLE")) {
+              if ("ENCODING".equalsIgnoreCase(key)) {
+                if ("QUOTED-PRINTABLE".equalsIgnoreCase(value)) {
                   quotedPrintable = true;
                 }
-              } else if (key.equalsIgnoreCase("CHARSET")) {
+              } else if ("CHARSET".equalsIgnoreCase(key)) {
                 quotedPrintableCharset = value;
               }
             }

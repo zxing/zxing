@@ -40,7 +40,7 @@ final class DataBlock {
    *
    * @param rawCodewords bytes as read directly from the Data Matrix Code
    * @param version version of the Data Matrix Code
-   * @return {@link DataBlock}s containing original bytes, "de-interleaved" from representation in the
+   * @return DataBlocks containing original bytes, "de-interleaved" from representation in the
    *         Data Matrix Code
    */
   static DataBlock[] getDataBlocks(byte[] rawCodewords,
@@ -95,7 +95,7 @@ final class DataBlock {
     int max = result[0].codewords.length;
     for (int i = longerBlocksNumDataCodewords; i < max; i++) {
       for (int j = 0; j < numResultBlocks; j++) {
-        int iOffset = (specialVersion && j > 7) ? i - 1 : i;
+        int iOffset = specialVersion && j > 7 ? i - 1 : i;
         result[j].codewords[iOffset] = rawCodewords[rawCodewordsOffset++];
       }
     }

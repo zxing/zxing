@@ -73,7 +73,7 @@ final class WifiReceiver extends BroadcastReceiver {
             delayKill.run();
           }
           if (state == NetworkInfo.State.DISCONNECTED){
-            Log.d(TAG, "Got state: " + state + " for ssid: " + ssid);
+            Log.d(TAG, "Got state Disconnected for ssid: " + ssid);
             parent.gotError();
           }
         }

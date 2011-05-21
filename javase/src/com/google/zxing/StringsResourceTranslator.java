@@ -45,7 +45,7 @@ import java.util.regex.Pattern;
  *
  * <p>Pass the Android client res/ directory as first argument, and optionally message keys
  * who should be forced to retranslate.
- * Usage: <code>StringsResourceTranslator android/res/ [key_1 ...]</p>
+ * Usage: {@code StringsResourceTranslator android/res/ [key_1 ...]}</p>
  *
  * @author Sean Owen
  */

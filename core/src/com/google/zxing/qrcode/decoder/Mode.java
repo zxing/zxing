@@ -50,7 +50,7 @@ public final class Mode {
 
   /**
    * @param bits four bits encoding a QR Code data mode
-   * @return {@link Mode} encoded by these bits
+   * @return Mode encoded by these bits
    * @throws IllegalArgumentException if bits do not correspond to a known mode
    */
   public static Mode forBits(int bits) {
@@ -84,7 +84,7 @@ public final class Mode {
   /**
    * @param version version in question
    * @return number of bits used, in this QR Code symbol {@link Version}, to encode the
-   *         count of characters that will follow encoded in this {@link Mode}
+   *         count of characters that will follow encoded in this Mode
    */
   public int getCharacterCountBits(Version version) {
     if (characterCountBitsForVersions == null) {

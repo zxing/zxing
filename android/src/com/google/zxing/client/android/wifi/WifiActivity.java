@@ -199,7 +199,7 @@ public final class WifiActivity extends Activity  {
     super.onCreate(savedInstanceState);
 
     Intent intent = getIntent();
-    if (intent == null || (!intent.getAction().equals(Intents.WifiConnect.ACTION))) {
+    if (intent == null || !intent.getAction().equals(Intents.WifiConnect.ACTION)) {
       finish();
       return;
     }
@@ -211,11 +211,11 @@ public final class WifiActivity extends Activity  {
     statusView = (TextView) findViewById(R.id.networkStatus);
 
     NetworkType networkT;
-    if (networkType.equals("WPA")) {
+    if ("WPA".equals(networkType)) {
       networkT = NetworkType.NETWORK_WPA;
-    } else if (networkType.equals("WEP")) {
+    } else if ("WEP".equals(networkType)) {
       networkT = NetworkType.NETWORK_WEP;
-    } else if (networkType.equals("nopass")) {
+    } else if ("nopass".equals(networkType)) {
      networkT = NetworkType.NETWORK_NOPASS;
     } else {
       doError(R.string.wifi_type_incorrect);

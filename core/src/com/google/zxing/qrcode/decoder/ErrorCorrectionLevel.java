@@ -73,7 +73,7 @@ public final class ErrorCorrectionLevel {
 
   /**
    * @param bits int containing the two bits encoding a QR Code's error correction level
-   * @return {@link ErrorCorrectionLevel} representing the encoded error correction level
+   * @return ErrorCorrectionLevel representing the encoded error correction level
    */
   public static ErrorCorrectionLevel forBits(int bits) {
     if (bits < 0 || bits >= FOR_BITS.length) {

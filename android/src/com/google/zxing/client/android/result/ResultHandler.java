@@ -247,13 +247,13 @@ public abstract class ResultHandler {
     intent.setType(Contacts.People.CONTENT_ITEM_TYPE);
     putExtra(intent, Contacts.Intents.Insert.NAME, names != null ? names[0] : null);
 
-    int phoneCount = Math.min((phoneNumbers != null) ? phoneNumbers.length : 0,
+    int phoneCount = Math.min(phoneNumbers != null ? phoneNumbers.length : 0,
         Contents.PHONE_KEYS.length);
     for (int x = 0; x < phoneCount; x++) {
       putExtra(intent, Contents.PHONE_KEYS[x], phoneNumbers[x]);
     }
 
-    int emailCount = Math.min((emails != null) ? emails.length : 0, Contents.EMAIL_KEYS.length);
+    int emailCount = Math.min(emails != null ? emails.length : 0, Contents.EMAIL_KEYS.length);
     for (int x = 0; x < emailCount; x++) {
       putExtra(intent, Contents.EMAIL_KEYS[x], emails[x]);
     }

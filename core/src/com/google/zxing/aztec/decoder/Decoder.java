@@ -147,7 +147,7 @@ public final class Decoder {
         code = readCode(correctedBits, startIndex, 8);
         startIndex += 8;
 
-        result.append((char)(code));
+        result.append((char) code);
         break;
 
       default:
