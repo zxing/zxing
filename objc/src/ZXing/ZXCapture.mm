@@ -120,12 +120,16 @@
   ZXCaptureDevice* zxd = [self device];
   ZXQT([zxd open:nil]);
 
-  input =
-    [ZXCaptureDeviceInput deviceInputWithDevice:zxd
-                                     ZXAV(error:nil)];
-  [input retain];
+  if (zxd) {
+    input =
+      [ZXCaptureDeviceInput deviceInputWithDevice:zxd
+                                       ZXAV(error:nil)];
+    [input retain];
+  }
   
-  [session addInput:input ZXQT(error:nil)];
+  if (input) {
+    [session addInput:input ZXQT(error:nil)];
+  }
 }
 
 - (ZXCaptureSession*)session {
