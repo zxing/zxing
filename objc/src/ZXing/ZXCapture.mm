@@ -145,7 +145,7 @@
   }
 
   if (true ZXAV(&& self.session.running)) {
-    NSLog(@"stop running");
+    // NSLog(@"stop running");
     [self.session stopRunning];
   } else {
     // NSLog(@"already stopped");
@@ -201,7 +201,7 @@
       abort();
     }
 
-    NSLog(@"start running");
+    // NSLog(@"start running");
     [self.session startRunning];
   }
   running = true;
