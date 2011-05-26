@@ -117,7 +117,7 @@ final class DecodedBitStreamParser {
     return new DecoderResult(bytes,
                              result.toString(),
                              byteSegments.isEmpty() ? null : byteSegments,
-                             ecLevel.toString());
+                             ecLevel == null ? null : ecLevel.toString());
   }
 
   /**
