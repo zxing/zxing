@@ -16,8 +16,6 @@
 
 package com.google.zxing.common;
 
-import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
-
 import java.util.Vector;
 
 /**
@@ -32,9 +30,9 @@ public final class DecoderResult {
   private final byte[] rawBytes;
   private final String text;
   private final Vector byteSegments;
-  private final ErrorCorrectionLevel ecLevel;
+  private final String ecLevel;
 
-  public DecoderResult(byte[] rawBytes, String text, Vector byteSegments, ErrorCorrectionLevel ecLevel) {
+  public DecoderResult(byte[] rawBytes, String text, Vector byteSegments, String ecLevel) {
     if (rawBytes == null && text == null) {
       throw new IllegalArgumentException();
     }
@@ -56,7 +54,7 @@ public final class DecoderResult {
     return byteSegments;
   }
 
-  public ErrorCorrectionLevel getECLevel() {
+  public String getECLevel() {
     return ecLevel;
   }
 
