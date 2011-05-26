@@ -114,7 +114,10 @@ final class DecodedBitStreamParser {
       }
     } while (!mode.equals(Mode.TERMINATOR));
 
-    return new DecoderResult(bytes, result.toString(), byteSegments.isEmpty() ? null : byteSegments, ecLevel);
+    return new DecoderResult(bytes,
+                             result.toString(),
+                             byteSegments.isEmpty() ? null : byteSegments,
+                             ecLevel.toString());
   }
 
   /**
