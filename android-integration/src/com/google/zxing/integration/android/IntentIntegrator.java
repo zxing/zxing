@@ -16,12 +16,16 @@
 
 package com.google.zxing.integration.android;
 
-import android.app.AlertDialog;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
 
 /**
  * <p>A utility class which helps ease integration with Barcode Scanner via {@link Intent}s. This is a simple
@@ -79,6 +83,7 @@ import android.net.Uri;
 public final class IntentIntegrator {
 
   public static final int REQUEST_CODE = 0x0ba7c0de; // get it?
+  private static final String TAG = IntentIntegrator.class.getSimpleName();
 
   public static final String DEFAULT_TITLE = "Install Barcode Scanner?";
   public static final String DEFAULT_MESSAGE =
@@ -94,6 +99,17 @@ public final class IntentIntegrator {
   public static final String QR_CODE_TYPES = "QR_CODE";
   public static final String ALL_CODE_TYPES = null;
 
+  public static final Method PACKAGE_SETTER;
+  static {
+    Method temp;
+    try {
+      temp = Intent.class.getMethod("setPackage", new Class[] {String.class});
+    } catch (NoSuchMethodException nsme) {
+      temp = null;
+    }
+    PACKAGE_SETTER = temp;
+  }
+  
   private IntentIntegrator() {
   }
 
@@ -170,7 +186,7 @@ public final class IntentIntegrator {
                                          CharSequence stringButtonNo,
                                          CharSequence stringDesiredBarcodeFormats) {
     Intent intentScan = new Intent(PACKAGE + ".SCAN");
-    intentScan.setPackage(PACKAGE);
+    setPackage(intentScan);
     intentScan.addCategory(Intent.CATEGORY_DEFAULT);
 
     // check which types of codes to scan for
@@ -274,16 +290,27 @@ public final class IntentIntegrator {
                                CharSequence stringMessage,
                                CharSequence stringButtonYes,
                                CharSequence stringButtonNo) {
-
     Intent intent = new Intent();
     intent.setAction(PACKAGE + ".ENCODE");
-    intent.setPackage(PACKAGE);
+    setPackage(intent);
     intent.putExtra("ENCODE_TYPE", "TEXT_TYPE");
     intent.putExtra("ENCODE_DATA", text);
     try {
       activity.startActivity(intent);
     } catch (ActivityNotFoundException e) {
       showDownloadDialog(activity, stringTitle, stringMessage, stringButtonYes, stringButtonNo);
+    }
+  }
+
+  private static void setPackage(Intent intent) {
+    if (PACKAGE_SETTER != null) {
+      try {
+        PACKAGE_SETTER.invoke(intent, PACKAGE);
+      } catch (InvocationTargetException ite) {
+        Log.w(TAG, ite.getTargetException());
+      } catch (IllegalAccessException iae) {
+        Log.w(TAG, iae);
+      }
     }
   }
 
