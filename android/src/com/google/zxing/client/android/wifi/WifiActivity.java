@@ -216,10 +216,9 @@ public final class WifiActivity extends Activity  {
     } else if ("WEP".equals(networkType)) {
       networkT = NetworkType.NETWORK_WEP;
     } else if ("nopass".equals(networkType)) {
-     networkT = NetworkType.NETWORK_NOPASS;
+      networkT = NetworkType.NETWORK_NOPASS;
     } else {
-      doError(R.string.wifi_type_incorrect);
-      return;
+      networkT = NetworkType.NETWORK_INVALID;
     }
 
     // This is not available before onCreate
