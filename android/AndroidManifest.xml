@@ -20,14 +20,15 @@ version to be published. The next versionCode will be 7, regardless of whether t
 versionName is 2.31, 2.4, or 3.0. -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.google.zxing.client.android"
-          android:versionName="3.6 beta 1"
-          android:versionCode="69"
+          android:versionName="3.6"
+          android:versionCode="70"
           android:installLocation="auto">
   <!-- We require Cupcake (Android 1.5) or later, but are really targeting Donut. -->
   <uses-sdk android:minSdkVersion="3"
             android:targetSdkVersion="4"/>
   <!-- Donut-specific flags which allow us to run on any dpi screens. -->
-  <supports-screens android:largeScreens="true"
+  <supports-screens android:xlargeScreens="true"
+                    android:largeScreens="true"
                     android:normalScreens="true"
                     android:smallScreens="true"
                     android:anyDensity="true"/>
@@ -110,7 +111,8 @@ versionName is 2.31, 2.4, or 3.0. -->
     </activity>
     <activity android:name=".share.ShareActivity"
               android:label="@string/share_name"
-              android:screenOrientation="user">
+              android:screenOrientation="user"
+              android:theme="@android:style/Theme.Light">
       <intent-filter>
         <action android:name="com.google.zxing.client.android.SHARE"/>
         <category android:name="android.intent.category.DEFAULT"/>

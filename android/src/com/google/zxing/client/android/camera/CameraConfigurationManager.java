@@ -90,7 +90,6 @@ final class CameraConfigurationManager {
   }
 
   private static Point getCameraResolution(Camera.Parameters parameters, Point screenResolution) {
-
     String previewSizeValueString = parameters.get("preview-size-values");
     // saw this on Xperia
     if (previewSizeValueString == null) {
@@ -188,7 +187,6 @@ final class CameraConfigurationManager {
   }
 
   private void setZoom(Camera.Parameters parameters) {
-
     String zoomSupportedString = parameters.get("zoom-supported");
     if (zoomSupportedString != null && !Boolean.parseBoolean(zoomSupportedString)) {
       return;
