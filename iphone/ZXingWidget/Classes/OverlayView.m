@@ -54,10 +54,14 @@ static const CGFloat kPadding = 10;
       [cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
       if (oneDMode) {
         [cancelButton setTransform:CGAffineTransformMakeRotation(M_PI/2)];
+        
         [cancelButton setFrame:CGRectMake(20, 175, 45, 130)];
       }
       else {
-        [cancelButton setFrame:CGRectMake(95, 420, 130, 45)];			
+        CGSize theSize = CGSizeMake(100, 50);
+        CGRect theRect = CGRectMake((theFrame.size.width - theSize.width) / 2, cropRect.origin.y + cropRect.size.height + 20, theSize.width, theSize.height);
+        [cancelButton setFrame:theRect];
+        
       }
       
       [cancelButton addTarget:self action:@selector(cancel:) forControlEvents:UIControlEventTouchUpInside];
