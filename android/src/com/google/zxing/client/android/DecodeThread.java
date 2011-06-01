@@ -72,7 +72,6 @@ final class DecodeThread extends Thread {
     if (characterSet != null) {
       hints.put(DecodeHintType.CHARACTER_SET, characterSet);
     }
-
     hints.put(DecodeHintType.NEED_RESULT_POINT_CALLBACK, resultPointCallback);
   }
 

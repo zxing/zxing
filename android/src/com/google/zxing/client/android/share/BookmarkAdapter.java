@@ -35,8 +35,7 @@ import android.widget.TextView;
  *
  * @author dswitkin@google.com (Daniel Switkin)
  */
-public final class BookmarkAdapter extends BaseAdapter {
-
+final class BookmarkAdapter extends BaseAdapter {
   private final Context context;
   private final Cursor cursor;
 

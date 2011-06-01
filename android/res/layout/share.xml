@@ -14,91 +14,85 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/encode_view"
-              android:layout_width="fill_parent"
-              android:layout_height="fill_parent"
-              android:background="@color/share_view"
-              android:orientation="vertical">
 
-  <!-- ScrollView wrapper is to accommodate small screens -->
-  <ScrollView
-      android:layout_width="fill_parent"
-      android:layout_height="fill_parent">
+<!-- ScrollView wrapper is to accommodate small screens. -->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center">
 
-    <!-- Must wrap the rest in one layout -->
+  <!-- Must wrap the rest in one layout -->
+  <LinearLayout
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:gravity="center"
+      android:orientation="vertical"
+      android:padding="8dip">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/share_text"
+        android:textSize="18sp"
+        android:text="@string/msg_share_explanation"
+        android:paddingBottom="8dip"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="center"
+        android:src="@drawable/share_via_barcode"
+        android:paddingBottom="8dip"/>
+
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="8dip">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="8dip">
 
-      <TextView
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:textColor="@color/share_text"
-          android:textSize="18sp"
-          android:text="@string/msg_share_explanation"
-          android:paddingBottom="8dip"/>
+      <Button android:id="@+id/share_app_button"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:layout_weight="1"
+              android:text="@string/button_share_app"/>
 
-      <ImageView
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:scaleType="center"
-          android:src="@drawable/share_via_barcode"
-          android:paddingBottom="8dip"/>
-
-      <LinearLayout
-          android:layout_width="fill_parent"
-          android:layout_height="wrap_content"
-          android:orientation="horizontal"
-          android:paddingBottom="8dip">
-
-        <Button android:id="@+id/share_app_button"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/button_share_app"/>
-
-        <Button android:id="@+id/share_bookmark_button"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/button_share_bookmark"/>
-
-      </LinearLayout>
-
-      <LinearLayout
-          android:layout_width="fill_parent"
-          android:layout_height="wrap_content"
-          android:orientation="horizontal"
-          android:paddingBottom="8dip">
-
-        <Button android:id="@+id/share_contact_button"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/button_share_contact"/>
-
-        <Button android:id="@+id/share_clipboard_button"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/button_share_clipboard"/>
-
-      </LinearLayout>
-
-      <EditText android:id="@+id/share_text_view"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:hint="@string/msg_share_text"
-                android:singleLine="true"
-                android:selectAllOnFocus="true"/>
+      <Button android:id="@+id/share_bookmark_button"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:layout_weight="1"
+              android:text="@string/button_share_bookmark"/>
 
     </LinearLayout>
 
-  </ScrollView>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="8dip">
 
-</LinearLayout>
+      <Button android:id="@+id/share_contact_button"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:layout_weight="1"
+              android:text="@string/button_share_contact"/>
+
+      <Button android:id="@+id/share_clipboard_button"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:layout_weight="1"
+              android:text="@string/button_share_clipboard"/>
+
+    </LinearLayout>
+
+    <EditText android:id="@+id/share_text_view"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:textSize="16sp"
+              android:hint="@string/msg_share_text"
+              android:singleLine="true"
+              android:selectAllOnFocus="true"/>
+
+  </LinearLayout>
+
+</ScrollView>
