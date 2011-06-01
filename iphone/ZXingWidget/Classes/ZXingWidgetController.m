@@ -444,7 +444,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
   Decoder *d = [[Decoder alloc] init];
   d.readers = readers;
   d.delegate = self;
-  cropRect.origin.x = 0.0;
+  cropRect.origin.x = 0.0;  
   cropRect.origin.y = 0.0;
   decoding = [d decodeImage:scrn cropRect:cropRect] == YES ? NO : YES;
   [d release];

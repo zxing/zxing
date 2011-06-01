@@ -68,13 +68,13 @@ public:
   if ([self.delegate respondsToSelector:@selector(decoder:didDecodeImage:usingSubset:withResult:)]) {
     [self.delegate decoder:self didDecodeImage:self.image usingSubset:self.subsetImage withResult:result];
   }
-	
   [result release];
 }
 
 - (void)failedToDecodeImage:(NSString *)reason {
-  if ([self.delegate respondsToSelector:@selector(decoder:failedToDecodeImage:usingSubset:reason:)]) {
-    [self.delegate decoder:self failedToDecodeImage:self.image usingSubset:self.subsetImage reason:reason];
+  if (!self) return;
+  if ([delegate respondsToSelector:@selector(decoder:failedToDecodeImage:usingSubset:reason:)]) {
+    [delegate decoder:self failedToDecodeImage:self.image usingSubset:self.subsetImage reason:reason];
   }
 }
 
@@ -279,6 +279,7 @@ public:
 }
 
 - (void) dealloc {
+  delegate = nil;
   [image release];
   [subsetImage release];
   free(subsetData);
