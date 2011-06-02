@@ -77,8 +77,6 @@
 		1F02802C11A7BF06006B06DE /* URLResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 1F02801211A7BF06006B06DE /* URLResultParser.m */; };
 		1F02802D11A7BF06006B06DE /* URLTOResultParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 1F02801311A7BF06006B06DE /* URLTOResultParser.h */; };
 		1F02802E11A7BF06006B06DE /* URLTOResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 1F02801411A7BF06006B06DE /* URLTOResultParser.m */; };
-		1F33FCD9133A52A90004D41D /* VCardResultParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 1F33FCD7133A52A90004D41D /* VCardResultParser.h */; };
-		1F33FCDA133A52A90004D41D /* VCardResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 1F33FCD8133A52A90004D41D /* VCardResultParser.m */; };
 		1F3DB0C211C60DB4009C581B /* QRCodeReader.h in Headers */ = {isa = PBXBuildFile; fileRef = 1F3DB0C011C60DB4009C581B /* QRCodeReader.h */; };
 		1F3DB0C311C60DB4009C581B /* QRCodeReader.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1F3DB0C111C60DB4009C581B /* QRCodeReader.mm */; };
 		1F3DB0FB11C61080009C581B /* DataMatrixReader.h in Headers */ = {isa = PBXBuildFile; fileRef = 1F3DB0F511C61080009C581B /* DataMatrixReader.h */; };
@@ -308,8 +306,6 @@
 		1F02801211A7BF06006B06DE /* URLResultParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = URLResultParser.m; path = Classes/resultParsers/URLResultParser.m; sourceTree = "<group>"; };
 		1F02801311A7BF06006B06DE /* URLTOResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = URLTOResultParser.h; path = Classes/resultParsers/URLTOResultParser.h; sourceTree = "<group>"; };
 		1F02801411A7BF06006B06DE /* URLTOResultParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = URLTOResultParser.m; path = Classes/resultParsers/URLTOResultParser.m; sourceTree = "<group>"; };
-		1F33FCD7133A52A90004D41D /* VCardResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VCardResultParser.h; sourceTree = "<group>"; };
-		1F33FCD8133A52A90004D41D /* VCardResultParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VCardResultParser.m; sourceTree = "<group>"; };
 		1F3DB0C011C60DB4009C581B /* QRCodeReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = QRCodeReader.h; path = Classes/QRCodeReader.h; sourceTree = "<group>"; };
 		1F3DB0C111C60DB4009C581B /* QRCodeReader.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = QRCodeReader.mm; path = Classes/QRCodeReader.mm; sourceTree = "<group>"; };
 		1F3DB0F511C61080009C581B /* DataMatrixReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DataMatrixReader.h; path = Classes/DataMatrixReader.h; sourceTree = "<group>"; };
@@ -816,8 +812,6 @@
 				1F02801211A7BF06006B06DE /* URLResultParser.m */,
 				1F02801311A7BF06006B06DE /* URLTOResultParser.h */,
 				1F02801411A7BF06006B06DE /* URLTOResultParser.m */,
-				1F33FCD7133A52A90004D41D /* VCardResultParser.h */,
-				1F33FCD8133A52A90004D41D /* VCardResultParser.m */,
 			);
 			name = ResultParsers;
 			sourceTree = "<group>";
@@ -992,7 +986,6 @@
 				3B81AAF9120F0A7E0022E5D4 /* GreyscaleRotatedLuminanceSource.h in Headers */,
 				3B72D97012130EF6007CEF32 /* ResultPointCallback.h in Headers */,
 				1FB4319F12901C76002D63E8 /* UniversalResultParser.h in Headers */,
-				1F33FCD9133A52A90004D41D /* VCardResultParser.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1156,7 +1149,6 @@
 				3B81AAF8120F0A7E0022E5D4 /* GreyscaleRotatedLuminanceSource.cpp in Sources */,
 				3B72D96F12130EF6007CEF32 /* ResultPointCallback.cpp in Sources */,
 				1FB431A012901C76002D63E8 /* UniversalResultParser.m in Sources */,
-				1F33FCDA133A52A90004D41D /* VCardResultParser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
