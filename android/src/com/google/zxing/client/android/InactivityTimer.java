@@ -17,6 +17,7 @@
 package com.google.zxing.client.android;
 
 import java.util.concurrent.Executors;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ThreadFactory;
@@ -48,9 +49,16 @@ final class InactivityTimer {
 
   void onActivity() {
     cancel();
-    inactivityFuture = inactivityTimer.schedule(new FinishListener(activity),
-        INACTIVITY_DELAY_SECONDS,
-        TimeUnit.SECONDS);
+    if (!inactivityTimer.isShutdown()) {
+      try {
+        inactivityFuture = inactivityTimer.schedule(new FinishListener(activity),
+            INACTIVITY_DELAY_SECONDS,
+            TimeUnit.SECONDS);
+      } catch (RejectedExecutionException ree) {
+        // surprising, but could be normal if for some reason the implementation just doesn't
+        // think it can shcedule again. Since this time-out is non-essential, just forget it
+      }
+    }
   }
 
   public void onPause(){
