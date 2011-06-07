@@ -76,6 +76,7 @@ public final class URIResultHandler extends ResultHandler {
   }
 
   private boolean isGoogleBooksURI() {
+    // FIXME(dswitkin): Should not hardcode Books URL. Also does not handle books.google.ca etc.
     return ((URIParsedResult) getResult()).getURI().startsWith("http://google.com/books?id=");
   }
 

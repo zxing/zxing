@@ -126,6 +126,7 @@ public final class SearchBookContentsActivity extends Activity {
     }
 
     isbn = intent.getStringExtra(Intents.SearchBookContents.ISBN);
+    // FIXME(dswitkin): Should not hardcode Books URL. Also does not handle books.google.ca etc.
     if (isbn.startsWith("http://google.com/books?id=")) {
       setTitle(getString(R.string.sbc_name));
     } else {
