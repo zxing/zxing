@@ -28,6 +28,11 @@ import android.app.Activity;
  * @author dswitkin@google.com (Daniel Switkin)
  */
 public final class URIResultHandler extends ResultHandler {
+  // URIs beginning with entries in this array will not be saved to history or copied to the
+  // clipboard for security.
+  private static final String[] SECURE_PROTOCOLS = new String[] {
+    "otpauth:"
+  };
 
   private static final int[] buttons = {
       R.string.button_open_browser,
@@ -75,9 +80,20 @@ public final class URIResultHandler extends ResultHandler {
     return R.string.result_uri;
   }
 
+  @Override
+  public boolean areContentsSecure() {
+    URIParsedResult uriResult = (URIParsedResult) getResult();
+    String uri = uriResult.getURI().toLowerCase();
+    for (String secure : SECURE_PROTOCOLS) {
+      if (uri.startsWith(secure)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   private boolean isGoogleBooksURI() {
     // FIXME(dswitkin): Should not hardcode Books URL. Also does not handle books.google.ca etc.
     return ((URIParsedResult) getResult()).getURI().startsWith("http://google.com/books?id=");
   }
-
 }

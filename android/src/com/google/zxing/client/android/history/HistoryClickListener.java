@@ -16,38 +16,39 @@
 
 package com.google.zxing.client.android.history;
 
-import java.util.List;
+import com.google.zxing.Result;
+import com.google.zxing.client.android.CaptureActivity;
+import com.google.zxing.client.android.R;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Message;
-import com.google.zxing.Result;
-import com.google.zxing.client.android.CaptureActivity;
-import com.google.zxing.client.android.R;
+
+import java.util.List;
 
 final class HistoryClickListener implements DialogInterface.OnClickListener {
 
   private final HistoryManager historyManager;
   private final CaptureActivity activity;
-  private final String[] dialogItems;
   private final List<Result> items;
 
-  HistoryClickListener(HistoryManager historyManager,
-                       CaptureActivity activity,
-                       String[] dialogItems,
-                       List<Result> items) {
+  /**
+   * Handles clicks in the History dialog.
+   *
+   * @author dswitkin@google.com (Daniel Switkin)
+   * @author Sean Owen
+   */
+  HistoryClickListener(HistoryManager historyManager, CaptureActivity activity, List<Result> items) {
     this.historyManager = historyManager;
     this.activity = activity;
-    this.dialogItems = dialogItems;
     this.items = items;
   }
 
   public void onClick(DialogInterface dialogInterface, int i) {
-    if (i == dialogItems.length - 1) {
-      historyManager.clearHistory();
-    } else if (i == dialogItems.length - 2) {
+    if (i == items.size()) {
+      // Share history.
       CharSequence history = historyManager.buildHistory();
       Uri historyFile = HistoryManager.saveHistory(history.toString());
       if (historyFile == null) {
@@ -65,7 +66,11 @@ final class HistoryClickListener implements DialogInterface.OnClickListener {
       intent.putExtra(Intent.EXTRA_STREAM, historyFile);
       intent.setType("text/csv");
       activity.startActivity(intent);
+    } else if (i == items.size() + 1) {
+      // Clear history.
+      historyManager.clearHistory();
     } else {
+      // Display a single history entry.
       Result result = items.get(i);
       Message message = Message.obtain(activity.getHandler(), R.id.decode_succeeded, result);
       message.sendToTarget();
