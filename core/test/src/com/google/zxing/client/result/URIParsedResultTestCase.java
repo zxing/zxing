@@ -31,7 +31,7 @@ public final class URIParsedResultTestCase extends Assert {
   @Test
   public void testBookmarkDocomo() {
     doTest("MEBKM:URL:google.com;;", "http://google.com", null);
-    doTest("MEBKM:URL:http://google.com;;", "http://google.com", null);    
+    doTest("MEBKM:URL:http://google.com;;", "http://google.com", null);
     doTest("MEBKM:URL:google.com;TITLE:Google;", "http://google.com", "Google");
   }
 
@@ -44,12 +44,15 @@ public final class URIParsedResultTestCase extends Assert {
     doTest("https://www.google.com/calendar/hosted/google.com/embed?mode=AGENDA&force_login=true&src=google.com_726f6f6d5f6265707075@resource.calendar.google.com",
            "https://www.google.com/calendar/hosted/google.com/embed?mode=AGENDA&force_login=true&src=google.com_726f6f6d5f6265707075@resource.calendar.google.com",
            null);
+    doTest("otpauth://remoteaccess?devaddr=00%a1b2%c3d4&devname=foo&key=bar",
+           "otpauth://remoteaccess?devaddr=00%a1b2%c3d4&devname=foo&key=bar",
+           null);
   }
 
   @Test
   public void testURLTO() {
     doTest("urlto::bar.com", "http://bar.com", null);
-    doTest("urlto::http://bar.com", "http://bar.com", null);    
+    doTest("urlto::http://bar.com", "http://bar.com", null);
     doTest("urlto:foo:bar.com", "http://bar.com", "foo");
   }
 
@@ -69,7 +72,7 @@ public final class URIParsedResultTestCase extends Assert {
     doTestIsPossiblyMalicious("http://google.com:@evil.com", true);
     doTestIsPossiblyMalicious("google.com:@evil.com", true);
     doTestIsPossiblyMalicious("https://google.com:443", false);
-    doTestIsPossiblyMalicious("http://google.com/foo@bar", false);    
+    doTestIsPossiblyMalicious("http://google.com/foo@bar", false);
   }
 
   private static void doTest(String contents, String uri, String title) {
