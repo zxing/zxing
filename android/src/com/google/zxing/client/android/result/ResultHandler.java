@@ -364,10 +364,10 @@ public abstract class ResultHandler {
     launchIntent(new Intent(Intent.ACTION_VIEW, uri));
   }
 
-  final void searchBookContents(String isbn) {
+  final void searchBookContents(String isbnOrUrl) {
     Intent intent = new Intent(Intents.SearchBookContents.ACTION);
     intent.setClassName(activity, SearchBookContentsActivity.class.getName());
-    putExtra(intent, Intents.SearchBookContents.ISBN, isbn);
+    putExtra(intent, Intents.SearchBookContents.ISBN, isbnOrUrl);
     launchIntent(intent);
   }
 
