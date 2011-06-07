@@ -364,23 +364,25 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   public void handleDecode(Result rawResult, Bitmap barcode) {
     inactivityTimer.onActivity();
     lastResult = rawResult;
-    historyManager.addHistoryItem(rawResult);
+    ResultHandler resultHandler = ResultHandlerFactory.makeResultHandler(this, rawResult);
+    historyManager.addHistoryItem(rawResult, resultHandler);
+
     if (barcode == null) {
       // This is from history -- no saved barcode
-      handleDecodeInternally(rawResult, null);
+      handleDecodeInternally(rawResult, resultHandler, null);
     } else {
       beepManager.playBeepSoundAndVibrate();
       drawResultPoints(barcode, rawResult);
       switch (source) {
         case NATIVE_APP_INTENT:
         case PRODUCT_SEARCH_LINK:
-          handleDecodeExternally(rawResult, barcode);
+          handleDecodeExternally(rawResult, resultHandler, barcode);
           break;
         case ZXING_LINK:
           if (returnUrlTemplate == null){
-            handleDecodeInternally(rawResult, barcode);
+            handleDecodeInternally(rawResult, resultHandler, barcode);
           } else {
-            handleDecodeExternally(rawResult, barcode);
+            handleDecodeExternally(rawResult, resultHandler, barcode);
           }
           break;
         case NONE:
@@ -393,7 +395,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
             }
             resetStatusView();
           } else {
-            handleDecodeInternally(rawResult, barcode);
+            handleDecodeInternally(rawResult, resultHandler, barcode);
           }
           break;
       }
@@ -441,7 +443,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   }
 
   // Put up our own UI for how to handle the decoded contents.
-  private void handleDecodeInternally(Result rawResult, Bitmap barcode) {
+  private void handleDecodeInternally(Result rawResult, ResultHandler resultHandler, Bitmap barcode) {
     statusView.setVisibility(View.GONE);
     viewfinderView.setVisibility(View.GONE);
     resultView.setVisibility(View.VISIBLE);
@@ -457,7 +459,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     TextView formatTextView = (TextView) findViewById(R.id.format_text_view);
     formatTextView.setText(rawResult.getBarcodeFormat().toString());
 
-    ResultHandler resultHandler = ResultHandlerFactory.makeResultHandler(this, rawResult);
     TextView typeTextView = (TextView) findViewById(R.id.type_text_view);
     typeTextView.setText(resultHandler.getType().toString());
 
@@ -518,23 +519,22 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       }
     }
 
-    if (copyToClipboard) {
+    if (copyToClipboard && !resultHandler.areContentsSecure()) {
       ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
       clipboard.setText(displayContents);
     }
   }
 
   // Briefly show the contents of the barcode, then handle the result outside Barcode Scanner.
-  private void handleDecodeExternally(Result rawResult, Bitmap barcode) {
+  private void handleDecodeExternally(Result rawResult, ResultHandler resultHandler, Bitmap barcode) {
     viewfinderView.drawResultBitmap(barcode);
 
     // Since this message will only be shown for a second, just tell the user what kind of
     // barcode was found (e.g. contact info) rather than the full contents, which they won't
     // have time to read.
-    ResultHandler resultHandler = ResultHandlerFactory.makeResultHandler(this, rawResult);
     statusView.setText(getString(resultHandler.getDisplayTitle()));
 
-    if (copyToClipboard) {
+    if (copyToClipboard && !resultHandler.areContentsSecure()) {
       ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
       clipboard.setText(resultHandler.getDisplayContents());
     }

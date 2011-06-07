@@ -144,6 +144,16 @@ public abstract class ResultHandler {
   public abstract void handleButtonPress(int index);
 
   /**
+   * Some barcode contents are considered secure, and should not be saved to history, copied to
+   * the clipboard, or otherwise persisted.
+   *
+   * @return If true, do not create any permanent record of these contents.
+   */
+  public boolean areContentsSecure() {
+    return false;
+  }
+
+  /**
    * The Google Shopper button is special and is not handled by the abstract button methods above.
    *
    * @param listener The on click listener to install for this button.

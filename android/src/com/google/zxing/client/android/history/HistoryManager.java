@@ -16,17 +16,27 @@
 
 package com.google.zxing.client.android.history;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.Result;
+import com.google.zxing.client.android.CaptureActivity;
+import com.google.zxing.client.android.Intents;
+import com.google.zxing.client.android.PreferencesActivity;
+import com.google.zxing.client.android.R;
+import com.google.zxing.client.android.result.ResultHandler;
+
 import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
+import android.preference.PreferenceManager;
+import android.util.Log;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -34,19 +44,9 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 import java.text.DateFormat;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.ArrayList;
-
-import android.preference.PreferenceManager;
-import android.util.Log;
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.client.android.Intents;
-import com.google.zxing.client.android.PreferencesActivity;
-import com.google.zxing.client.android.R;
-import com.google.zxing.client.android.CaptureActivity;
-import com.google.zxing.Result;
 
 /**
  * <p>Manages functionality related to scan history.</p>
@@ -54,13 +54,13 @@ import com.google.zxing.Result;
  * @author Sean Owen
  */
 public final class HistoryManager {
-
   private static final String TAG = HistoryManager.class.getSimpleName();
 
   private static final int MAX_ITEMS = 500;
-  //private static final String[] TEXT_COL_PROJECTION = { DBHelper.TEXT_COL };
+
   private static final String[] GET_ITEM_COL_PROJECTION = {
       DBHelper.TEXT_COL,
+      DBHelper.DISPLAY_COL,
       DBHelper.FORMAT_COL,
       DBHelper.TIMESTAMP_COL,
   };
@@ -79,60 +79,53 @@ public final class HistoryManager {
     this.activity = activity;
   }
 
-  List<Result> getHistoryItems() {
+  public AlertDialog buildAlert() {
     SQLiteOpenHelper helper = new DBHelper(activity);
     List<Result> items = new ArrayList<Result>();
-    SQLiteDatabase db;
-    try {
-      db = helper.getWritableDatabase();
-    } catch (SQLiteException sqle) {
-      Log.w(TAG, "Error while opening database", sqle);
-      return Collections.emptyList();
-    }
+    List<String> dialogItems = new ArrayList<String>();
+    SQLiteDatabase db = null;
     Cursor cursor = null;
     try {
-      cursor = db.query(DBHelper.TABLE_NAME,
-                        GET_ITEM_COL_PROJECTION,
-                        null, null, null, null,
-                        DBHelper.TIMESTAMP_COL + " DESC");
+      db = helper.getWritableDatabase();
+      cursor = db.query(DBHelper.TABLE_NAME, GET_ITEM_COL_PROJECTION, null, null, null, null,
+          DBHelper.TIMESTAMP_COL + " DESC");
       while (cursor.moveToNext()) {
-        Result result = new Result(cursor.getString(0),
-                                   null,
-                                   null,
-                                   BarcodeFormat.valueOf(cursor.getString(1)),
-                                   cursor.getLong(2));
+        Result result = new Result(cursor.getString(0), null, null,
+            BarcodeFormat.valueOf(cursor.getString(2)), cursor.getLong(3));
         items.add(result);
+        String display = cursor.getString(1);
+        if (display == null || display.length() == 0) {
+          display = result.getText();
+        }
+        dialogItems.add(display);
       }
+    } catch (SQLiteException sqle) {
+      Log.w(TAG, "Error while opening database", sqle);
     } finally {
       if (cursor != null) {
         cursor.close();
       }
-      db.close();
+      if (db != null) {
+        db.close();
+      }
     }
-    return items;
-  }
 
-  public AlertDialog buildAlert() {
-    List<Result> items = getHistoryItems();
-    int size = items.size();
-    String[] dialogItems = new String[size + 2];
-    for (int i = 0; i < size; i++) {
-      dialogItems[i] = items.get(i).getText();
-    }
     Resources res = activity.getResources();
-    dialogItems[dialogItems.length - 2] = res.getString(R.string.history_send);
-    dialogItems[dialogItems.length - 1] = res.getString(R.string.history_clear_text);
-    DialogInterface.OnClickListener clickListener = new HistoryClickListener(this, activity,
-        dialogItems, items);
+    dialogItems.add(res.getString(R.string.history_send));
+    dialogItems.add(res.getString(R.string.history_clear_text));
+    DialogInterface.OnClickListener clickListener = new HistoryClickListener(this, activity, items);
     AlertDialog.Builder builder = new AlertDialog.Builder(activity);
     builder.setTitle(R.string.history_title);
-    builder.setItems(dialogItems, clickListener);
+    builder.setItems(dialogItems.toArray(new String[dialogItems.size()]), clickListener);
     return builder.create();
   }
 
-  public void addHistoryItem(Result result) {
-    if (!activity.getIntent().getBooleanExtra(Intents.Scan.SAVE_HISTORY, true)) {
-      return; // Do not save this item to the history.
+  public void addHistoryItem(Result result, ResultHandler handler) {
+    // Do not save this item to the history if the preference is turned off, or the contents are
+    // considered secure.
+    if (!activity.getIntent().getBooleanExtra(Intents.Scan.SAVE_HISTORY, true) ||
+        handler.areContentsSecure()) {
+      return;
     }
 
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
@@ -149,13 +142,11 @@ public final class HistoryManager {
       return;
     }
     try {
-      // Insert
+      // Insert the new entry into the DB.
       ContentValues values = new ContentValues();
       values.put(DBHelper.TEXT_COL, result.getText());
       values.put(DBHelper.FORMAT_COL, result.getBarcodeFormat().toString());
-      // It would be nice to use ParsedResult.getDisplayResult() instead, but we don't want to
-      // parse it twice, and it can be multiline which won't fit in the current UI.
-      values.put(DBHelper.DISPLAY_COL, result.getText());
+      values.put(DBHelper.DISPLAY_COL, handler.getDisplayContents().toString());
       values.put(DBHelper.TIMESTAMP_COL, System.currentTimeMillis());
       db.insert(DBHelper.TABLE_NAME, DBHelper.TIMESTAMP_COL, values);
     } finally {

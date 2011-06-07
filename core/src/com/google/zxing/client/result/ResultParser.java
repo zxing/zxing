@@ -70,6 +70,7 @@ public abstract class ResultParser {
     } else if ((result = URLTOResultParser.parse(theResult)) != null) {
       return result;
     } else if ((result = URIResultParser.parse(theResult)) != null) {
+      // URI is a catch-all for protocol: contents that we don't handle explicitly above.
       return result;
     } else if ((result = ISBNResultParser.parse(theResult)) != null) {
       // We depend on ISBN parsing coming before UPC, as it is a subset.
@@ -126,7 +127,6 @@ public abstract class ResultParser {
   }
 
   private static String urlDecode(String escaped) {
-
     // No we can't use java.net.URLDecoder here. JavaME doesn't have it.
     if (escaped == null) {
       return null;
@@ -139,7 +139,7 @@ public abstract class ResultParser {
     }
 
     int max = escapedArray.length;
-    // final length is at most 2 less than original due to at least 1 unescaping
+    // Final length is at most 2 less than original due to at least 1 unescaping.
     StringBuffer unescaped = new StringBuffer(max - 2);
     // Can append everything up to first escape character
     unescaped.append(escapedArray, 0, first);
@@ -152,14 +152,14 @@ public abstract class ResultParser {
           unescaped.append(' ');
           break;
         case '%':
-          // Are there even two more chars? if not we will just copy the escaped sequence and be done
+          // Are there even two more chars? If not we'll just copy the escaped sequence and be done.
           if (i >= max - 2) {
             unescaped.append('%'); // append that % and move on
           } else {
             int firstDigitValue = parseHexDigit(escapedArray[++i]);
             int secondDigitValue = parseHexDigit(escapedArray[++i]);
             if (firstDigitValue < 0 || secondDigitValue < 0) {
-              // bad digit, just move on
+              // Bad digit, just move on.
               unescaped.append('%');
               unescaped.append(escapedArray[i - 1]);
               unescaped.append(escapedArray[i]);
