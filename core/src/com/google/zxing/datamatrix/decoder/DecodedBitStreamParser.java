@@ -43,12 +43,12 @@ final class DecodedBitStreamParser {
     'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
     'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
   };
-  
+
   private static final char[] C40_SHIFT2_SET_CHARS = {
     '!', '"', '#', '$', '%', '&', '\'', '(', ')', '*',  '+', ',', '-', '.',
     '/', ':', ';', '<', '=', '>', '?',  '@', '[', '\\', ']', '^', '_'
   };
-  
+
   /**
    * See ISO 16022:2006, Annex C Table C.2
    * The Text Basic Character Set (*'s used for placeholders for the shift values)
@@ -58,12 +58,12 @@ final class DecodedBitStreamParser {
     'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
     'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
   };
-  
+
   private static final char[] TEXT_SHIFT3_SET_CHARS = {
     '\'', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
     'O',  'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '{', '|', '}', '~', (char) 127
   };
-  
+
   private static final int PAD_ENCODE = 0;  // Not really an encoding
   private static final int ASCII_ENCODE = 1;
   private static final int C40_ENCODE = 2;
@@ -112,7 +112,7 @@ final class DecodedBitStreamParser {
     }
     return new DecoderResult(bytes, result.toString(), byteSegments.isEmpty() ? null : byteSegments, null);
   }
-  
+
   /**
    * See ISO 16022:2006, 5.2.3 and Annex C, Table C.2
    */
@@ -257,7 +257,7 @@ final class DecodedBitStreamParser {
       }
     } while (bits.available() > 0);
   }
-  
+
   /**
    * See ISO 16022:2006, 5.2.6 and Annex C, Table C.2
    */
@@ -347,7 +347,7 @@ final class DecodedBitStreamParser {
       }
     } while (bits.available() > 0);
   }
-  
+
   /**
    * See ISO 16022:2006, 5.2.7
    */
@@ -398,7 +398,7 @@ final class DecodedBitStreamParser {
     result[1] = temp;
     result[2] = fullBitValue - temp * 40;
   }
-  
+
   /**
    * See ISO 16022:2006, 5.2.8 and Annex C Table C.3
    */
@@ -419,7 +419,7 @@ final class DecodedBitStreamParser {
           // If we encounter the unlatch code then continue reading because the Codeword triple
           // is padded with 0's
         }
-        
+
         if (!unlatch) {
           if ((edifactValue & 32) == 0) {  // no 1 in the leading (6th) bit
             edifactValue |= 64;  // Add a leading 01 to the 6 bit binary value
@@ -429,7 +429,7 @@ final class DecodedBitStreamParser {
       }
     } while (!unlatch && bits.available() > 0);
   }
-  
+
   /**
    * See ISO 16022:2006, 5.2.9 and Annex B, B.2
    */
@@ -446,6 +446,12 @@ final class DecodedBitStreamParser {
     } else {
       count = 250 * (d1 - 249) + unrandomize255State(bits.readBits(8), codewordPosition++);
     }
+
+    // We're seeing NegativeArraySizeException errors from users.
+    if (count < 0) {
+      throw FormatException.getFormatInstance();
+    }
+
     byte[] bytes = new byte[count];
     for (int i = 0; i < count; i++) {
       // Have seen this particular error in the wild, such as at
@@ -462,7 +468,7 @@ final class DecodedBitStreamParser {
       throw new RuntimeException("Platform does not support required encoding: " + uee);
     }
   }
-  
+
   /**
    * See ISO 16022:2006, Annex B, B.2
    */
@@ -472,5 +478,5 @@ final class DecodedBitStreamParser {
     int tempVariable = randomizedBase256Codeword - pseudoRandomNumber;
     return (byte) (tempVariable >= 0 ? tempVariable : tempVariable + 256);
   }
-  
+
 }
