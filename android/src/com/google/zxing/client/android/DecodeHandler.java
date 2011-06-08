@@ -38,6 +38,7 @@ final class DecodeHandler extends Handler {
 
   private final CaptureActivity activity;
   private final MultiFormatReader multiFormatReader;
+  private boolean running = true;
 
   DecodeHandler(CaptureActivity activity, Hashtable<DecodeHintType, Object> hints) {
     multiFormatReader = new MultiFormatReader();
@@ -47,11 +48,15 @@ final class DecodeHandler extends Handler {
 
   @Override
   public void handleMessage(Message message) {
+    if (!running) {
+      return;
+    }
     switch (message.what) {
       case R.id.decode:
         decode((byte[]) message.obj, message.arg1, message.arg2);
         break;
       case R.id.quit:
+        running = false;
         Looper.myLooper().quit();
         break;
     }

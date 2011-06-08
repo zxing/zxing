@@ -126,6 +126,11 @@ final class DecodedBitStreamParser {
   private static void decodeHanziSegment(BitSource bits,
                                          StringBuffer result,
                                          int count) throws FormatException {
+    // Don't crash trying to read more bits than we have available.
+    if (count * 13 > bits.available()) {
+      throw FormatException.getFormatInstance();
+    }
+
     // Each character will require 2 bytes. Read the characters as 2-byte pairs
     // and decode as GB2312 afterwards
     byte[] buffer = new byte[2 * count];
@@ -146,7 +151,7 @@ final class DecodedBitStreamParser {
       offset += 2;
       count--;
     }
-    
+
     try {
       result.append(new String(buffer, StringUtils.GB2312));
     } catch (UnsupportedEncodingException uee) {
@@ -157,6 +162,11 @@ final class DecodedBitStreamParser {
   private static void decodeKanjiSegment(BitSource bits,
                                          StringBuffer result,
                                          int count) throws FormatException {
+    // Don't crash trying to read more bits than we have available.
+    if (count * 13 > bits.available()) {
+      throw FormatException.getFormatInstance();
+    }
+
     // Each character will require 2 bytes. Read the characters as 2-byte pairs
     // and decode as Shift_JIS afterwards
     byte[] buffer = new byte[2 * count];
@@ -191,10 +201,12 @@ final class DecodedBitStreamParser {
                                         CharacterSetECI currentCharacterSetECI,
                                         Vector byteSegments,
                                         Hashtable hints) throws FormatException {
-    byte[] readBytes = new byte[count];
+    // Don't crash trying to read more bits than we have available.
     if (count << 3 > bits.available()) {
       throw FormatException.getFormatInstance();
     }
+
+    byte[] readBytes = new byte[count];
     for (int i = 0; i < count; i++) {
       readBytes[i] = (byte) bits.readBits(8);
     }
@@ -289,7 +301,7 @@ final class DecodedBitStreamParser {
       result.append(toAlphaNumericChar(digitBits));
     }
   }
-  
+
   private static int parseECIValue(BitSource bits) {
     int firstByte = bits.readBits(8);
     if ((firstByte & 0x80) == 0) {

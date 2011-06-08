@@ -308,14 +308,19 @@ public class Detector {
     int dx = Math.abs(toX - fromX);
     int dy = Math.abs(toY - fromY);
     int error = -dx >> 1;
-    int ystep = fromY < toY ? 1 : -1;
     int xstep = fromX < toX ? 1 : -1;
-    int state = 0; // In black pixels, looking for white, first or second time
-    for (int x = fromX, y = fromY; x != toX; x += xstep) {
+    int ystep = fromY < toY ? 1 : -1;
 
+    // In black pixels, looking for white, first or second time.
+    int state = 0;
+    for (int x = fromX, y = fromY; x != toX; x += xstep) {
       int realX = steep ? y : x;
       int realY = steep ? x : y;
-      if (state == 1) { // In white pixels, looking for black
+
+      // In white pixels, looking for black.
+      // FIXME(dswitkin): This method seems to assume square images, which can cause these calls to
+      // BitMatrix.get() to throw ArrayIndexOutOfBoundsException.
+      if (state == 1) {
         if (image.get(realX, realY)) {
           state++;
         }
@@ -325,7 +330,8 @@ public class Detector {
         }
       }
 
-      if (state == 3) { // Found black, white, black, and stumbled back onto white; done
+      // Found black, white, black, and stumbled back onto white, so we're done.
+      if (state == 3) {
         int diffX = x - fromX;
         int diffY = y - fromY;
         if (xstep < 0) {
