@@ -264,3 +264,17 @@
   - Added ability to detect multiple barcodes per image
   - Many small bug fixes and enhancements
 
+1.7 (8 June 2011)
+  - Initial support for Aztec codes
+  - Added the ability to read rectangular DataMatrix codes
+  - Added new lengths for ITF
+  - Dozens of bug fixes to core decoding routines
+  - New C# port
+  - Android app:
+    - Tablet support
+    - Many translations added and updated
+    - Support for new Intent parameters
+    - Many bug fixes and small features
+  - Mostly rewritten iPhone port
+  - New ZXingWidget library to include scanning in any iOS app
+  - Made CommandLineRunner multithreaded and recursive
