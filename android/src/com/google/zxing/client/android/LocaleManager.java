@@ -110,6 +110,15 @@ public final class LocaleManager {
     return doGetTLD(GOOGLE_BOOK_SEARCH_COUNTRY_TLD);
   }
 
+  /**
+   * Does a given URL point to Google Book Search, regardless of domain.
+   *
+   * @param url The address to check.
+   * @return True if this is a Book Search URL.
+   */
+  public static boolean isBookSearchUrl(String url) {
+    return url.startsWith("http://google.com/books") || url.startsWith("http://books.google.");
+  }
 
   private static String doGetTLD(Map<Locale,String> map) {
     Locale locale = Locale.getDefault();

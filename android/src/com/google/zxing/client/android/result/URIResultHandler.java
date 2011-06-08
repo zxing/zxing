@@ -16,6 +16,7 @@
 
 package com.google.zxing.client.android.result;
 
+import com.google.zxing.client.android.LocaleManager;
 import com.google.zxing.client.android.R;
 import com.google.zxing.client.result.ParsedResult;
 import com.google.zxing.client.result.URIParsedResult;
@@ -47,7 +48,10 @@ public final class URIResultHandler extends ResultHandler {
 
   @Override
   public int getButtonCount() {
-    return isGoogleBooksURI() ? buttons.length : buttons.length - 1;
+    if (LocaleManager.isBookSearchUrl(((URIParsedResult) getResult()).getURI())) {
+      return buttons.length;
+    }
+    return buttons.length - 1;
   }
 
   @Override
@@ -90,10 +94,5 @@ public final class URIResultHandler extends ResultHandler {
       }
     }
     return false;
-  }
-
-  private boolean isGoogleBooksURI() {
-    // FIXME(dswitkin): Should not hardcode Books URL. Also does not handle books.google.ca etc.
-    return ((URIParsedResult) getResult()).getURI().startsWith("http://google.com/books?id=");
   }
 }
