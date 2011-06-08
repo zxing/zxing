@@ -48,6 +48,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import com.google.zxing.client.android.LocaleManager;
 import com.google.zxing.client.android.R;
 import com.google.zxing.client.android.Intents;
 import com.google.zxing.client.android.AndroidHttpClient;
@@ -58,7 +59,6 @@ import com.google.zxing.client.android.AndroidHttpClient;
  * @author dswitkin@google.com (Daniel Switkin)
  */
 public final class SearchBookContentsActivity extends Activity {
-
   private static final String TAG = SearchBookContentsActivity.class.getSimpleName();
 
   private static final String USER_AGENT = "ZXing (Android)";
@@ -126,8 +126,7 @@ public final class SearchBookContentsActivity extends Activity {
     }
 
     isbn = intent.getStringExtra(Intents.SearchBookContents.ISBN);
-    // FIXME(dswitkin): Should not hardcode Books URL. Also does not handle books.google.ca etc.
-    if (isbn.startsWith("http://google.com/books?id=")) {
+    if (LocaleManager.isBookSearchUrl(isbn)) {
       setTitle(getString(R.string.sbc_name));
     } else {
       setTitle(getString(R.string.sbc_name) + ": ISBN " + isbn);
