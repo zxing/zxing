@@ -343,11 +343,11 @@ vector<Ref<FinderPattern> > FinderPatternFinder::selectBestPatterns() {
   if (possibleCenters_.size() > 3) {
     // Throw away all but those first size candidate points we found.
     float totalModuleSize = 0.0f;
-    for (size_t i = 0; i < startSize; i++) {
+    for (size_t i = 0; i < possibleCenters_.size(); i++) {
       float size = possibleCenters_[i]->getEstimatedModuleSize();
       totalModuleSize += size;
     }
-    float average = totalModuleSize / (float) startSize;
+    float average = totalModuleSize / (float) possibleCenters_.size();
     sort(possibleCenters_.begin(), possibleCenters_.end(), CenterComparator(average));
   }
 
