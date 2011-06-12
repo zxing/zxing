@@ -61,7 +61,7 @@
   <string name="menu_history">Historik</string>
   <string name="menu_settings">Indstillinger</string>
   <string name="menu_share">Del</string>
-  <string name="msg_about">Baseret på open source ZXing Barcode Library</string>
+  <string name="msg_about">Open sourceprojektet ZXings officielle Android-app.</string>
   <string name="msg_buggy">Denne enhed har kendte fejl, der forårsager stregkodescanningsproblemer. For mere information, besøg http://code.google.com/p/zxing/wiki/FrequentlyAskedQuestions (på engelsk)</string>
   <string name="msg_bulk_mode_scanned">Massetilstand: stregkode scannet og gemt</string>
   <string name="msg_camera_framework_bug">Beklager, Android-kameraet er stødt på et problem. Du skal muligvis genstarte enheden.</string>
@@ -69,7 +69,7 @@
   <string name="msg_default_format">Format</string>
   <string name="msg_default_meta">Metadata</string>
   <string name="msg_default_mms_subject">Hej</string>
-  <string name="msg_default_status">Peg på en stregkode så den er inde i firkanten for at scanne den.</string>
+  <string name="msg_default_status">Placér en stregkode inden i firkanten for at aflæse den.</string>
   <string name="msg_default_time">Tid</string>
   <string name="msg_default_type">Type</string>
   <string name="msg_encode_barcode_failed">Kunne ikke generere den ønskede stregkode.</string>
@@ -78,7 +78,7 @@
   <string name="msg_install_google_shopper">Google Shopper kombinerer stregkodescanning med priser, anmeldelser og meget mere uden at åbne en browser. Kunne du tænke dig at prøve det?</string>
   <string name="msg_intent_failed">Beklager, den ønskede applikation kunne ikke blive startet. Stregkodeindholdet er måsket ugyldigt.</string>
   <string name="msg_loading_apps">Indlæser liste over applikationer\u2026</string>
-  <string name="msg_not_our_results">Du er ved at forlade denne applikation. Søgeresultaterne du ser er relateret til denne applikation.</string>
+  <string name="msg_not_our_results">Du er ved at forlade denne applikation. Søgeresultaterne, du ser, er relateret til denne applikation.</string>
   <string name="msg_redirect">Omdirigér</string>
   <string name="msg_sbc_book_not_searchable">Beklager, denne bog er ikke søgbar.</string>
   <string name="msg_sbc_failed">Beklager, søgningen er stødt på et problem.</string>
@@ -87,8 +87,8 @@
   <string name="msg_sbc_searching_book">Søger bog\u2026</string>
   <string name="msg_sbc_snippet_unavailable">Uddragsvisning ikke tilgængelig</string>
   <string name="msg_sbc_unknown_page">Ukendt side</string>
-  <string name="msg_share_explanation">Du kan dele data ved at vise en stregkode på denne skærm og derefter scanne den med en anden telefon.</string>
-  <string name="msg_share_subject_line">Her er indholdet af en stregkode jeg har scannet.</string>
+  <string name="msg_share_explanation">Du kan dele data ved at vise en stregkode på denne skærm, og derefter scanne den med en anden telefon.</string>
+  <string name="msg_share_subject_line">Her er indholdet af en stregkode, jeg har scannet.</string>
   <string name="msg_share_text">Eller skriv noget tekst</string>
   <string name="msg_unmount_usb">Beklager, SD-kortet er ikke tilgængelig.</string>
   <string name="preferences_actions_title">Når en stregkode er fundet\u2026</string>
@@ -96,10 +96,10 @@
   <string name="preferences_bulk_mode_title">Massescanningstilstand</string>
   <string name="preferences_copy_to_clipboard_title">Kopiér til udklipsholder</string>
   <string name="preferences_custom_product_search_title">Brugerdefineret søge-URL</string>
-  <string name="preferences_decode_1D_title">Oversæt 1D stregkoder</string>
-  <string name="preferences_decode_Data_Matrix_title">Oversæt Data Matrix</string>
-  <string name="preferences_decode_QR_title">Oversæt QR Koder</string>
-  <string name="preferences_front_light_summary">Forbedrer scanning i svagt lys på nogle telefoner, men kan forårsage blænding. Virker ikke på alle telefoner.</string>
+  <string name="preferences_decode_1D_title">Afkod 1D-stregkoder</string>
+  <string name="preferences_decode_Data_Matrix_title">Afkod Data Matrix</string>
+  <string name="preferences_decode_QR_title">Afkod QR-koder</string>
+  <string name="preferences_front_light_summary">Forbedrer aflæsning i svagt lys på nogle telefoner, men kan medføre genskær. Virker ikke på alle telefoner.</string>
   <string name="preferences_front_light_title">Brug frontlys</string>
   <string name="preferences_general_title">Generelle indstillinger</string>
   <string name="preferences_name">Indstillinger</string>
@@ -107,10 +107,10 @@
   <string name="preferences_remember_duplicates_summary">Gem flere scanninger af de samme stregkoder i historik</string>
   <string name="preferences_remember_duplicates_title">Husk dubletter</string>
   <string name="preferences_result_title">Resultatindstillinger</string>
-  <string name="preferences_reverse_image_summary">Aktiver på enheder med en front kamera kun</string>
-  <string name="preferences_reverse_image_title">Tilbageført kamerabilledets</string>
+  <string name="preferences_reverse_image_summary">Aktiver kun på enheder med et frontkamera</string>
+  <string name="preferences_reverse_image_title">Omvendt kamerabillede</string>
   <string name="preferences_scanning_title">Når der scannes efter stregkoder\u2026</string>
-  <string name="preferences_supplemental_summary">Prøv at hente mere information om stregkodens indhold</string>
+  <string name="preferences_supplemental_summary">Prøv at få mere information om stregkodens indhold</string>
   <string name="preferences_supplemental_title">Hent mere info</string>
   <string name="preferences_vibrate_title">Vibrér</string>
   <string name="result_address_book">Kontaktinfo fundet</string>
