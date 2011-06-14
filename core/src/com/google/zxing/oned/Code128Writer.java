@@ -38,10 +38,10 @@ public final class Code128Writer extends UPCEANWriter {
   private static final int CODE_STOP = 106;
 
   // Dummy characters used to specify control characters in input
-  private static final char ESCAPE_FNC_1 = 'ñ'; // 0xF1
-  private static final char ESCAPE_FNC_2 = 'ò'; // 0xF2
-  private static final char ESCAPE_FNC_3 = 'ó'; // 0xF3
-  private static final char ESCAPE_FNC_4 = 'ô'; // 0xF4
+  private static final char ESCAPE_FNC_1 = '\u00f1';
+  private static final char ESCAPE_FNC_2 = '\u00f2';
+  private static final char ESCAPE_FNC_3 = '\u00f3';
+  private static final char ESCAPE_FNC_4 = '\u00f4';
 
   private static final int CODE_FNC_1 = 102;   // Code A, Code B, Code C
   private static final int CODE_FNC_2 = 97;    // Code A, Code B
