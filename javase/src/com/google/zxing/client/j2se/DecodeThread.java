@@ -341,7 +341,9 @@ final class DecodeThread extends Thread {
     OutputStream outStream = null;
     try {
       outStream = new FileOutputStream(resultName);
-      ImageIO.write(result, "png", outStream);
+      if (!ImageIO.write(result, "png", outStream)) {
+        System.err.println("Could not encode an image to " + resultName);
+      }
     } catch (FileNotFoundException e) {
       System.err.println("Could not create " + resultName);
     } catch (IOException e) {
