@@ -37,6 +37,17 @@ public final class Code128Writer extends UPCEANWriter {
   private static final int CODE_CODE_C = 99;
   private static final int CODE_STOP = 106;
 
+  // Dummy characters used to specify control characters in input
+  private static final char ESCAPE_FNC_1 = 'ñ'; // 0xF1
+  private static final char ESCAPE_FNC_2 = 'ò'; // 0xF2
+  private static final char ESCAPE_FNC_3 = 'ó'; // 0xF3
+  private static final char ESCAPE_FNC_4 = 'ô'; // 0xF4
+
+  private static final int CODE_FNC_1 = 102;   // Code A, Code B, Code C
+  private static final int CODE_FNC_2 = 97;    // Code A, Code B
+  private static final int CODE_FNC_3 = 96;    // Code A, Code B
+  private static final int CODE_FNC_4_B = 100; // Code B
+
   public BitMatrix encode(String contents,
                           BarcodeFormat format,
                           int width,
@@ -59,7 +70,15 @@ public final class Code128Writer extends UPCEANWriter {
     for (int i = 0; i < length; i++) {
       char c = contents.charAt(i);
       if (c < ' ' || c > '~') {
-        throw new IllegalArgumentException("Contents should only contain characters between ' ' and '~'");
+        switch (c) {
+          case ESCAPE_FNC_1:
+          case ESCAPE_FNC_2:
+          case ESCAPE_FNC_3:
+          case ESCAPE_FNC_4:
+            break;
+          default:
+            throw new IllegalArgumentException("Bad character in input: " + c);
+        }
       }
     }
     
@@ -73,7 +92,7 @@ public final class Code128Writer extends UPCEANWriter {
       //Select code to use
       int requiredDigitCount = codeSet == CODE_CODE_C ? 2 : 4;
       int newCodeSet;
-      if (length - position >= requiredDigitCount && isDigits(contents, position, requiredDigitCount)) {
+      if (isDigits(contents, position, requiredDigitCount)) {
         newCodeSet = CODE_CODE_C;
       } else {
         newCodeSet = CODE_CODE_B;
@@ -87,8 +106,28 @@ public final class Code128Writer extends UPCEANWriter {
           patternIndex = contents.charAt(position) - ' ';
           position += 1;
         } else { // CODE_CODE_C
-          patternIndex = Integer.parseInt(contents.substring(position, position + 2));
-          position += 2;
+          switch (contents.charAt(position)) {
+            case ESCAPE_FNC_1:
+              patternIndex = CODE_FNC_1;
+              position++;
+              break;
+            case ESCAPE_FNC_2:
+              patternIndex = CODE_FNC_2;
+              position++;
+              break;
+            case ESCAPE_FNC_3:
+              patternIndex = CODE_FNC_3;
+              position++;
+              break;
+            case ESCAPE_FNC_4:
+              patternIndex = CODE_FNC_4_B; // FIXME if this ever outputs Code A
+              position++;
+              break;
+            default:
+              patternIndex = Integer.parseInt(contents.substring(position, position + 2));
+              position += 2;
+              break;
+          }
         }
       } else {
         // Should we change the current code?
@@ -149,13 +188,17 @@ public final class Code128Writer extends UPCEANWriter {
 
   private static boolean isDigits(String value, int start, int length) {
     int end = start + length;
-    for (int i = start; i < end; i++) {
+    int last = value.length();
+    for (int i = start; i < end && i < last; i++) {
       char c = value.charAt(i);
       if (c < '0' || c > '9') {
-        return false;
+        if (c != ESCAPE_FNC_1) {
+          return false;
+        }
+        end++; // ignore FNC_1
       }
     }
-    return true;
+    return end <= last; // end > last if we've run out of string
   }
 
 }
