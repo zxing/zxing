@@ -25,6 +25,7 @@ import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitArray;
 
 import java.util.Hashtable;
+import java.util.Vector;
 
 /**
  * <p>Decodes Code 128 barcodes.</p>
@@ -263,6 +264,8 @@ public final class Code128Reader extends OneDReader {
     boolean isNextShifted = false;
 
     StringBuffer result = new StringBuffer(20);
+    Vector rawCodes = new Vector(20);
+
     int lastStart = startPatternInfo[0];
     int nextStart = startPatternInfo[1];
     int[] counters = new int[6];
@@ -283,6 +286,8 @@ public final class Code128Reader extends OneDReader {
 
       // Decode another code from image
       code = decodeCode(row, counters, nextStart);
+
+      rawCodes.addElement(new Byte((byte) code));
 
       // Remember whether the last code was printable or not (excluding CODE_STOP)
       if (code != CODE_STOP) {
@@ -450,9 +455,16 @@ public final class Code128Reader extends OneDReader {
 
     float left = (float) (startPatternInfo[1] + startPatternInfo[0]) / 2.0f;
     float right = (float) (nextStart + lastStart) / 2.0f;
+
+    int rawCodesSize = rawCodes.size();
+    byte[] rawBytes = new byte[rawCodesSize];
+    for (int i = 0; i < rawCodesSize; i++) {
+      rawBytes[i] = ((Byte) rawCodes.elementAt(i)).byteValue();
+    }
+
     return new Result(
         resultString,
-        null,
+        rawBytes,
         new ResultPoint[]{
             new ResultPoint(left, (float) rowNumber),
             new ResultPoint(right, (float) rowNumber)},
