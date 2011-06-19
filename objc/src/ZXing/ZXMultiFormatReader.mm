@@ -15,8 +15,8 @@
  * limitations under the License.
  */
 
-#import <zxing/MultiFormatReader.h>
 #import <ZXing/ZXMultiFormatReader.h>
+#include <zxing/MultiFormatReader.h>
 
 @implementation ZXMultiFormatReader
 

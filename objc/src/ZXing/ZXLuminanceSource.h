@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-#import <zxing/LuminanceSource.h>
+#include <zxing/LuminanceSource.h>
 
 @interface ZXLuminanceSource : NSObject {
   zxing::Ref<zxing::LuminanceSource> native;
