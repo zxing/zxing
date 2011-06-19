@@ -16,12 +16,12 @@
  */
 
 #import <ZXing/ZXReader.h>
+#include <zxing/common/IllegalArgumentException.h>
+#include <zxing/ReaderException.h>
 #import <ZXing/ZXResult.h>
 #import <ZXing/ZXBinaryBitmap.h>
 #import <ZXing/ZXDecodeHints.h>
-#import <zxing/ReaderException.h>
 #import <ZXing/ZXReaderException.h>
-#import <zxing/common/IllegalArgumentException.h>
 #import <ZXing/ZXIllegalArgumentException.h>
 
 @implementation ZXReader

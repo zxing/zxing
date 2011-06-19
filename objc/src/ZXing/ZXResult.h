@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-#import <zxing/Result.h>
+#include <zxing/Result.h>
 
 @interface ZXResult : NSObject {
   zxing::Ref<zxing::Result> native;

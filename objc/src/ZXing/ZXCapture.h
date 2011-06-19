@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-#import <zxing/ZXCaptureDelegate.h>
+#import <ZXing/ZXCaptureDelegate.h>
 
 #if !TARGET_IPHONE_SIMULATOR
 #if TARGET_OS_EMBEDDED

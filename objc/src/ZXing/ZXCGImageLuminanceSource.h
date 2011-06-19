@@ -15,8 +15,8 @@
  * limitations under the License.
  */
 
-#import <ZXing/ZXLuminanceSource.h>
 #import <CoreVideo/CoreVideo.h>
+#import <ZXing/ZXLuminanceSource.h>
 
 namespace zxing {
 

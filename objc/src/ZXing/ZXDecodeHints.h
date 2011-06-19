@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-#import <zxing/DecodeHints.h>
+#include <zxing/DecodeHints.h>
 
 @interface ZXDecodeHints : NSObject {
   zxing::DecodeHints* native;

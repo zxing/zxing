@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-#import <zxing/Binarizer.h>
+#include <zxing/Binarizer.h>
 #import <ZXing/ZXLuminanceSource.h>
 
 @interface ZXBinarizer : NSObject {

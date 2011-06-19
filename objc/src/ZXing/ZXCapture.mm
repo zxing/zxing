@@ -562,6 +562,9 @@ ZXAV(didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer)
 @synthesize captureToFilename;
 
 - (id)init {
+  if ((self = [super init])) {
+    [self release];
+  }
   return 0;
 }
 

@@ -15,8 +15,8 @@
  * limitations under the License.
  */
 
-#import <zxing/qrcode/QRCodeReader.h>
 #import <ZXing/ZXQRCodeReader.h>
+#include <zxing/qrcode/QRCodeReader.h>
 
 @implementation ZXQRCodeReader
 

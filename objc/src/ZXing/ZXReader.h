@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-#import <zxing/Reader.h>
+#include <zxing/Reader.h>
 
 @class ZXBinaryBitmap;
 @class ZXDecodeHints;
