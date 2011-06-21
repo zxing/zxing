@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright (C) 2010 ZXing authors
+ Copyright (C) 2011 ZXing authors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -95,6 +95,7 @@
   <string name="preferences_bulk_mode_summary">连续扫描并保存多个条形码</string>
   <string name="preferences_bulk_mode_title">批量扫描模式</string>
   <string name="preferences_copy_to_clipboard_title">复制到剪切板</string>
+  <string name="preferences_custom_product_search_summary" formatted="false">使用%s作为产品ID占位符</string>
   <string name="preferences_custom_product_search_title">自定义搜索网址</string>
   <string name="preferences_decode_1D_title">扫描 一维条码</string>
   <string name="preferences_decode_Data_Matrix_title">扫描 DM码</string>

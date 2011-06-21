@@ -52,14 +52,14 @@ import java.util.regex.Pattern;
 public final class StringsResourceTranslator {
 
   private static final Charset UTF8 = Charset.forName("UTF-8");
-  private static final Pattern ENTRY_PATTERN = Pattern.compile("<string name=\"([^\"]+)\">([^<]+)</string>");
+  private static final Pattern ENTRY_PATTERN = Pattern.compile("<string name=\"([^\"]+)\".*>([^<]+)</string>");
   private static final Pattern STRINGS_FILE_NAME_PATTERN = Pattern.compile("values-(.+)");
   private static final Pattern TRANSLATE_RESPONSE_PATTERN = Pattern.compile(
       "\\{\"translatedText\":\"([^\"]+)\"\\}");
 
   private static final String APACHE_2_LICENSE =
       "<!--\n" +
-      " Copyright (C) 2010 ZXing authors\n" +
+      " Copyright (C) 2011 ZXing authors\n" +
       '\n' +
       " Licensed under the Apache License, Version 2.0 (the \"License\");\n" +
       " you may not use this file except in compliance with the License.\n" +
@@ -132,14 +132,20 @@ public final class StringsResourceTranslator {
 
       for (Map.Entry<String,String> englishEntry : english.entrySet()) {
         String key = englishEntry.getKey();
+        String value = englishEntry.getValue();
         out.write("  <string name=\"");
         out.write(key);
-        out.write("\">");
+        out.write('"');
+        if (value.contains("%s") || value.contains("%f")) {
+          // Need to specify that there's a value placeholder
+          out.write(" formatted=\"false\"");
+        }
+        out.write('>');
 
         String translatedString = translated.get(key);
         if (translatedString == null || forceRetranslation.contains(key)) {
           anyChange = true;
-          translatedString = translateString(englishEntry.getValue(), language);
+          translatedString = translateString(value, language);
         }
         out.write(translatedString);
 

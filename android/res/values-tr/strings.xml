@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright (C) 2010 ZXing authors
+ Copyright (C) 2011 ZXing authors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -95,6 +95,7 @@
   <string name="preferences_bulk_mode_summary">Birden fazla barkodu toplu olarak taramak ve kaydetmek için</string>
   <string name="preferences_bulk_mode_title">Toplu tarama modu</string>
   <string name="preferences_copy_to_clipboard_title">Panoya kopyala</string>
+  <string name="preferences_custom_product_search_summary" formatted="false">Yer tutucu olarak ürün kimliği için %s, biçim için %f öğesini kullan</string>
   <string name="preferences_custom_product_search_title">Özel arama adresi</string>
   <string name="preferences_decode_1D_title">1D barkodları</string>
   <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>

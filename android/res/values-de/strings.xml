@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright (C) 2010 ZXing authors
+ Copyright (C) 2011 ZXing authors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -95,6 +95,7 @@
   <string name="preferences_bulk_mode_summary">Scannt und speichert mehrere Barcodes nacheinander</string>
   <string name="preferences_bulk_mode_title">Bulk-Scan-Modus</string>
   <string name="preferences_copy_to_clipboard_title">In Zwischenablage kopieren</string>
+  <string name="preferences_custom_product_search_summary" formatted="false">Verwenden Sie %s als Platzhalter für die Produkt-ID und %f für das Format</string>
   <string name="preferences_custom_product_search_title">Eigene Such-URL</string>
   <string name="preferences_decode_1D_title">1D Barcodes</string>
   <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>

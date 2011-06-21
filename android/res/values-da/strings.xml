@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright (C) 2010 ZXing authors
+ Copyright (C) 2011 ZXing authors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -95,6 +95,7 @@
   <string name="preferences_bulk_mode_summary">Scan og gem mange stregkoder uden afbrydelser</string>
   <string name="preferences_bulk_mode_title">Massescanningstilstand</string>
   <string name="preferences_copy_to_clipboard_title">Kopiér til udklipsholder</string>
+  <string name="preferences_custom_product_search_summary" formatted="false">Brug %s som en pladsholder for produkt-id, og %f for format</string>
   <string name="preferences_custom_product_search_title">Brugerdefineret søge-URL</string>
   <string name="preferences_decode_1D_title">Afkod 1D-stregkoder</string>
   <string name="preferences_decode_Data_Matrix_title">Afkod Data Matrix</string>

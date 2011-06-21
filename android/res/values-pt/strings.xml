@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright (C) 2010 ZXing authors
+ Copyright (C) 2011 ZXing authors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -95,6 +95,7 @@
   <string name="preferences_bulk_mode_summary">Digitalizar e salvar muitas barras continuamente</string>
   <string name="preferences_bulk_mode_title">Bulk modo de digitalização</string>
   <string name="preferences_copy_to_clipboard_title">Copiar para a área de transferência</string>
+  <string name="preferences_custom_product_search_summary" formatted="false">Use %s como um espaço reservado para a identificação do produto, e para o formato %f</string>
   <string name="preferences_custom_product_search_title">URL de pesquisa personalizada </string>
   <string name="preferences_decode_1D_title">Código de barras 1D</string>
   <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>
