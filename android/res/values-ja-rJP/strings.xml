@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright (C) 2010 ZXing authors
+ Copyright (C) 2011 ZXing authors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -95,6 +95,7 @@
   <string name="preferences_bulk_mode_summary">多くのバーコード連続してスキャンし、保存する</string>
   <string name="preferences_bulk_mode_title">連続モードでのスキャン</string>
   <string name="preferences_copy_to_clipboard_title">クリップボードにコピーする</string>
+  <string name="preferences_custom_product_search_summary" formatted="false">URL中の「%s」はスキャン結果に置換されます</string>
   <string name="preferences_custom_product_search_title">カスタム商品サーチ URL</string>
   <string name="preferences_decode_1D_title">1Dバーコードを読み取る</string>
   <string name="preferences_decode_Data_Matrix_title">データマトリックスコードを読み取る</string>
@@ -126,7 +127,7 @@
   <string name="result_wifi">ネットワーク構成がヒットしました</string>
   <string name="sbc_name">Google ブックス</string>
   <string name="share_name">バーコードで共有する</string>
-  <string name="title_about">>QRコードスキャナー v</string>
+  <string name="title_about">QRコードスキャナー v</string>
   <string name="wa_name">ネットワーク構成</string>
   <string name="wifi_changing_network">ネットワークを変更する</string>
   <string name="wifi_connect_failed">ネットワーク接続が失敗しました。</string>

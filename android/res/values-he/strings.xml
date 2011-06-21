@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright (C) 2010 ZXing authors
+ Copyright (C) 2011 ZXing authors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -95,6 +95,7 @@
   <string name="preferences_bulk_mode_summary">סורק ושומר ברקודים באופן רציף</string>
   <string name="preferences_bulk_mode_title">מצב סריקה מרובה</string>
   <string name="preferences_copy_to_clipboard_title">העתק ללוח</string>
+  <string name="preferences_custom_product_search_summary" formatted="false">השתמש ב- %s כמציין מיקום עבור מזהה המוצר, וב- %f עבור הפורמט</string>
   <string name="preferences_custom_product_search_title">כתובת לחיפוש מותאם אישית</string>
   <string name="preferences_decode_1D_title">ברקודים חד מימדיים</string>
   <string name="preferences_decode_Data_Matrix_title">מטריצת נתונים</string>

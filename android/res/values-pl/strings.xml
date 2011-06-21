@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright (C) 2010 ZXing authors
+ Copyright (C) 2011 ZXing authors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -95,6 +95,7 @@
   <string name="preferences_bulk_mode_summary">Skanowanie i zapisywanie wielu kodów kreskowych ciągle</string>
   <string name="preferences_bulk_mode_title">Luzem tryb skanowania</string>
   <string name="preferences_copy_to_clipboard_title">Kopiuj do schowka</string>
+  <string name="preferences_custom_product_search_summary" formatted="false">Użyj %s jako zamiennik dla ID produktu, a dla formatu %f</string>
   <string name="preferences_custom_product_search_title">Własny URL wyszukiwania</string>
   <string name="preferences_decode_1D_title">Dekoduj kody 1D</string>
   <string name="preferences_decode_Data_Matrix_title">Dekoduj Decode Matrix</string>

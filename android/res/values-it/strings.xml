@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright (C) 2010 ZXing authors
+ Copyright (C) 2011 ZXing authors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -95,6 +95,7 @@
   <string name="preferences_bulk_mode_summary">Scansiona e salva diversi codici a barre in sequenza</string>
   <string name="preferences_bulk_mode_title">Modalità scansione di gruppo</string>
   <string name="preferences_copy_to_clipboard_title">Copia negli appunti</string>
+  <string name="preferences_custom_product_search_summary" formatted="false">Utilizza %s come segnalibro per l\'ID del prodotto e %f per il formato</string>
   <string name="preferences_custom_product_search_title">URL ricerca personalizzata</string>
   <string name="preferences_decode_1D_title">Codice a barre 1D</string>
   <string name="preferences_decode_Data_Matrix_title">Matrice dati</string>
