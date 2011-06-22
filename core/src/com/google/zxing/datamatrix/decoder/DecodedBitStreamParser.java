@@ -421,10 +421,10 @@ final class DecodedBitStreamParser {
         }
 
         if (!unlatch) {
-          if ((edifactValue & 32) == 0) {  // no 1 in the leading (6th) bit
-            edifactValue |= 64;  // Add a leading 01 to the 6 bit binary value
+          if ((edifactValue & 0x20) == 0) {  // no 1 in the leading (6th) bit
+            edifactValue |= 0x40;  // Add a leading 01 to the 6 bit binary value
           }
-          result.append(edifactValue);
+          result.append((char) edifactValue);
         }
       }
     } while (!unlatch && bits.available() > 0);
