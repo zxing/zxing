@@ -221,7 +221,7 @@ final class DecodedBitStreamParser {
               result.append((char) (cValue + 128));
               upperShift = false;
             } else {
-              result.append(cValue);
+              result.append((char) cValue);
             }
             shift = 0;
             break;
@@ -305,7 +305,7 @@ final class DecodedBitStreamParser {
               result.append((char) (cValue + 128));
               upperShift = false;
             } else {
-              result.append(cValue);
+              result.append((char) cValue);
             }
             shift = 0;
             break;
@@ -320,7 +320,7 @@ final class DecodedBitStreamParser {
                 result.append(c40char);
               }
             } else if (cValue == 27) {  // FNC1
-              throw FormatException.getFormatInstance();
+              // ignore
             } else if (cValue == 30) {  // Upper Shift
               upperShift = true;
             } else {
