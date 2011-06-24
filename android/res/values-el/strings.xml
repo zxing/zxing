@@ -70,7 +70,7 @@
   <string name="msg_default_meta">Metadata</string>
   <string name="msg_default_mms_subject">Γεια</string>
   <string name="msg_default_status">Τοποθετήστε ένα barcode μέσα στο πλαίσιο για να το σκανάρετε.</string>
-  <string name="msg_default_time">'Ωρα</string>
+  <string name="msg_default_time">Ωρα</string>
   <string name="msg_default_type">Τύπος</string>
   <string name="msg_encode_barcode_failed">Σφάλμα στην παραγωγή του barcode.</string>
   <string name="msg_encode_contents_failed">Δεν γίνεται να παραχθεί barcode από τα δεδομένα αυτά.</string>
