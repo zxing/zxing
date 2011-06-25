@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (C) 2011 ZXing authors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<resources>
+  <string name="app_name">סורק ברקודים</string>
+  <string name="app_picker_name">יישומים</string>
+  <string name="bookmark_picker_name">סימניות</string>
+  <string name="button_add_calendar">הוסף ללוח שנה</string>
+  <string name="button_add_contact">הוספת איש קשר</string>
+  <string name="button_back">חזרה</string>
+  <string name="button_book_search">חיפוש ספר</string>
+  <string name="button_cancel">ביטול</string>
+  <string name="button_clipboard_empty">לוח העריכה ריק</string>
+  <string name="button_custom_product_search">חיפוש מותאם אישית</string>
+  <string name="button_dial">חייג מספר</string>
+  <string name="button_done">סיים</string>
+  <string name="button_email">שלח דואר אלקטרוני</string>
+  <string name="button_get_directions">קבל הוראות הגעה</string>
+  <string name="button_google_shopper">Google Shopper</string>
+  <string name="button_mms">שלח הודעת מולטימדיה</string>
+  <string name="button_ok">אישור</string>
+  <string name="button_open_browser">פתח את הדפדפן</string>
+  <string name="button_product_search">חיפוש מוצר</string>
+  <string name="button_read_book">עיין בספר</string>
+  <string name="button_search_book_contents">חיפוש בתוכן</string>
+  <string name="button_share_app">יישום</string>
+  <string name="button_share_bookmark">סימניה</string>
+  <string name="button_share_by_email">שתף בדואר אלקטרוני</string>
+  <string name="button_share_by_sms">שתף בהודעה</string>
+  <string name="button_share_clipboard">לוח עריכה</string>
+  <string name="button_share_contact">איש קשר</string>
+  <string name="button_show_map">הצג מפה</string>
+  <string name="button_sms">שלח הודעה</string>
+  <string name="button_web_search">חיפוש באינטרנט</string>
+  <string name="button_wifi">התחבר לרשת</string>
+  <string name="contents_contact">פרטי איש קשר</string>
+  <string name="contents_email">כתובת דואר אלקטרוני</string>
+  <string name="contents_location">קואורדינטות גאוגרפיות</string>
+  <string name="contents_phone">מספר טלפון</string>
+  <string name="contents_sms">כתובת SMS</string>
+  <string name="contents_text">טקסט רגיל</string>
+  <string name="history_clear_text">נקה היסטוריה</string>
+  <string name="history_email_title">היסטוריית סורק הברקודים</string>
+  <string name="history_send">שלח היסטוריה</string>
+  <string name="history_title">היסטוריה</string>
+  <string name="menu_about">אודות</string>
+  <string name="menu_help">עזרה</string>
+  <string name="menu_history">היסטוריה</string>
+  <string name="menu_settings">הגדרות</string>
+  <string name="menu_share">שתף</string>
+  <string name="msg_about">מבוסס עם ספריית הקוד הפתוח ZXing Barcode Library</string>
+  <string name="msg_buggy">במכשיר זה יופיעו תקלות ידועות שיגרמו לבעיות בסריקת ברקודים. לקבלת מידע נוסף, בקר http://code.google.com/p/zxing/wiki/FrequentlyAskedQuestions</string>
+  <string name="msg_bulk_mode_scanned">מצב קבוצה: ברקוד נסרק ונשמר</string>
+  <string name="msg_camera_framework_bug">סליחה, מצלמת האנדרואיד נתקלה בבעיה. ייתכן שיהיה עליך להפעיל מחדש את המכשיר.</string>
+  <string name="msg_default_contents">תוכן</string>
+  <string name="msg_default_format">פורמט</string>
+  <string name="msg_default_meta">מטה-נתונים</string>
+  <string name="msg_default_mms_subject">היי</string>
+  <string name="msg_default_status">הצב ברקוד בתוך המלבן כדי לסרוק אותו.</string>
+  <string name="msg_default_time">זמן</string>
+  <string name="msg_default_type">סוג</string>
+  <string name="msg_encode_barcode_failed">לא ניתן ליצור את הברקוד המבוקש.</string>
+  <string name="msg_encode_contents_failed">לא היתה אפשרות לקודד ברקוד מהנתונים שסופקו.</string>
+  <string name="msg_google_shopper_missing">Google Shopper לא מותקן.</string>
+  <string name="msg_install_google_shopper">Google Shopper משלבת סריקת ברקודים עם מחירים מקוונים, חוות דעת ועוד בלי לפתוח את הדפדפן. האם ברצונך לנסות זאת?</string>
+  <string name="msg_intent_failed">סליחה, לא ניתן להפעיל את היישום המבוקש. ייתכן שתוכן הברקוד לא תקין.</string>
+  <string name="msg_loading_apps">טוען רשימה של יישומים...</string>
+  <string name="msg_not_our_results">אתה עוזב יישום זה. תוצאות החיפוש שיוצגו בפניך אינן קשורות ליישום זה.</string>
+  <string name="msg_redirect">נתב מחדש</string>
+  <string name="msg_sbc_book_not_searchable">סליחה, ספר זה אינו ניתן לחיפוש.</string>
+  <string name="msg_sbc_failed">סליחה, החיפוש נתקל בבעיה.</string>
+  <string name="msg_sbc_no_page_returned">לא הוחזר דף</string>
+  <string name="msg_sbc_page">דף</string>
+  <string name="msg_sbc_searching_book">מחפש ספר...</string>
+  <string name="msg_sbc_snippet_unavailable">גזיר לא זמין</string>
+  <string name="msg_sbc_unknown_page">דף לא ידוע</string>
+  <string name="msg_share_explanation">באפשרותך לשתף נתונים על-ידי הצגת ברקוד על המסך וסריקתו עם טלפון אחר.</string>
+  <string name="msg_share_subject_line">הנה התוכן של הברקוד שסרקתי</string>
+  <string name="msg_share_text">או הקלד טקסט כלשהו</string>
+  <string name="msg_unmount_usb">סליחה, כרטיס הזכרון אינו נגיש.</string>
+  <string name="preferences_actions_title">כאשר ברקוד נמצא...</string>
+  <string name="preferences_bulk_mode_summary">סורק ושומר ברקודים באופן רציף</string>
+  <string name="preferences_bulk_mode_title">מצב סריקה מרובה</string>
+  <string name="preferences_copy_to_clipboard_title">העתק ללוח</string>
+  <string name="preferences_custom_product_search_summary" formatted="false">השתמש ב- %s כמציין מיקום עבור מזהה המוצר, וב- %f עבור הפורמט</string>
+  <string name="preferences_custom_product_search_title">כתובת לחיפוש מותאם אישית</string>
+  <string name="preferences_decode_1D_title">ברקודים חד מימדיים</string>
+  <string name="preferences_decode_Data_Matrix_title">מטריצת נתונים</string>
+  <string name="preferences_decode_QR_title">קודי QR</string>
+  <string name="preferences_front_light_summary">משפר את הסריקה בתאורה נמוכה בטלפונים מסוימים, אך עשוי לגרום לסנוור. לא עובד בכל הטלפונים.</string>
+  <string name="preferences_front_light_title">השתמש באור הקדמי</string>
+  <string name="preferences_general_title">הגדרות כלליות</string>
+  <string name="preferences_name">הגדרות</string>
+  <string name="preferences_play_beep_title">צפצוף</string>
+  <string name="preferences_remember_duplicates_summary">אחסן מספר סריקות של אותו הברקוד בהיסטוריה</string>
+  <string name="preferences_remember_duplicates_title">זכור כפילויות</string>
+  <string name="preferences_result_title">הגדרות תוצאה</string>
+  <string name="preferences_reverse_image_summary">אפשר בהתקנים עם מצלמה קדמית בלבד</string>
+  <string name="preferences_reverse_image_title">תמונת מצלמה הפוכה</string>
+  <string name="preferences_scanning_title">בעת סריקת ברקודים, קודד...</string>
+  <string name="preferences_supplemental_summary">נסה למצא מידע נוסף על תוכן הברקוד</string>
+  <string name="preferences_supplemental_title">מצא מידע נוסף</string>
+  <string name="preferences_vibrate_title">רטט</string>
+  <string name="result_address_book">נמצא מידע של איש קשר</string>
+  <string name="result_calendar">נמצא אירוע</string>
+  <string name="result_email_address">נמצאה כתובת דוא"ל</string>
+  <string name="result_geo">נמצאו קואורדינטות גיאוגרפיות</string>
+  <string name="result_isbn">נמצא ספר</string>
+  <string name="result_product">נמצא מוצר</string>
+  <string name="result_sms">נמצאה כתובת הודעה</string>
+  <string name="result_tel">נמצא מספר טלפון</string>
+  <string name="result_text">נמצא טקסט</string>
+  <string name="result_uri">נמצאה כתובת אינטרנט</string>
+  <string name="result_wifi">נמצאו הגדרות רשת אל חוטית</string>
+  <string name="sbc_name">Google חיפוש ספרים</string>
+  <string name="share_name">שתף באמצעות ברקוד</string>
+  <string name="title_about">סורק ברקודים</string>
+  <string name="wa_name">חיבור רשת אל חוטית</string>
+  <string name="wifi_changing_network">מחליף רשת</string>
+  <string name="wifi_connect_failed">חיבור לרשת נכשל</string>
+  <string name="wifi_connected">מחובר</string>
+  <string name="wifi_creating_network">יוצר רשת</string>
+  <string name="wifi_modifying_network">משנה רשת</string>
+  <string name="wifi_ssid_label">שם רשת</string>
+  <string name="wifi_ssid_missing">שם הרשת חסר</string>
+  <string name="wifi_type_incorrect">סוג הרשת שגוי</string>
+  <string name="wifi_type_label">סוג</string>
+  <string name="zxing_url">http://code.google.com/p/zxing</string>
+</resources>
