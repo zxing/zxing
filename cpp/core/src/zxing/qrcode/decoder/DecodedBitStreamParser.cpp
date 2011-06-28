@@ -144,6 +144,9 @@ namespace zxing {
       // Read three digits at a time
       while (count >= 3) {
         // Each 10 bits encodes three digits
+        if (bits->available() < 10) {
+          throw ReaderException("format exception");
+        }
         int threeDigitsBits = bits->readBits(10);
         if (threeDigitsBits >= 1000) {
           ostringstream s;
@@ -157,6 +160,9 @@ namespace zxing {
         count -= 3;
       }
       if (count == 2) {
+        if (bits->available() < 7) {
+          throw ReaderException("format exception");
+        }
         // Two digits left over to read, encoded in 7 bits
         int twoDigitsBits = bits->readBits(7);
         if (twoDigitsBits >= 100) {
@@ -168,6 +174,9 @@ namespace zxing {
         bytes[i++] = ALPHANUMERIC_CHARS[twoDigitsBits / 10];
         bytes[i++] = ALPHANUMERIC_CHARS[twoDigitsBits % 10];
       } else if (count == 1) {
+        if (bits->available() < 4) {
+          throw ReaderException("format exception");
+        }
         // One digit left over to read
         int digitBits = bits->readBits(4);
         if (digitBits >= 10) {
