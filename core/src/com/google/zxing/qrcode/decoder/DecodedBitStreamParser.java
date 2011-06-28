@@ -275,6 +275,9 @@ final class DecodedBitStreamParser {
     // Read three digits at a time
     while (count >= 3) {
       // Each 10 bits encodes three digits
+      if (bits.available() < 10) {
+        throw FormatException.getFormatInstance();
+      }
       int threeDigitsBits = bits.readBits(10);
       if (threeDigitsBits >= 1000) {
         throw FormatException.getFormatInstance();
@@ -286,6 +289,9 @@ final class DecodedBitStreamParser {
     }
     if (count == 2) {
       // Two digits left over to read, encoded in 7 bits
+      if (bits.available() < 7) {
+        throw FormatException.getFormatInstance();
+      }
       int twoDigitsBits = bits.readBits(7);
       if (twoDigitsBits >= 100) {
         throw FormatException.getFormatInstance();
@@ -294,6 +300,9 @@ final class DecodedBitStreamParser {
       result.append(toAlphaNumericChar(twoDigitsBits % 10));
     } else if (count == 1) {
       // One digit left over to read
+      if (bits.available() < 4) {
+        throw FormatException.getFormatInstance();
+      }
       int digitBits = bits.readBits(4);
       if (digitBits >= 10) {
         throw FormatException.getFormatInstance();
