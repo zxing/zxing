@@ -14,17 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
 -->
-<project name="youtube-as3-player-helper" default="build" basedir="../">
+<project name="ZXing" default="build" basedir="../">
   <property environment="env" />
   <property file="${basedir}/build.properties.local" />
-  <property file="${basedir}/../../build.properties"/>
+  <property file="${basedir}/../build.properties"/>
   <property name="FLEX_HOME" location="${env.FLEX_HOME}" />
-  <property name="dist" location="${basedir}/bin" />
-  <property name="src" location="${basedir}/src" />
+  <property name="dist" location="${basedir}/core/bin" />
+  <property name="src" location="${basedir}/core/src" />
+  <property name="test" location="${basedir}/core/test" />
+  <property name="assets" location="${basedir}/../core/test/data" />
+  <property name="libs" location="${basedir}/core/libs" />
+  <property name="output" location="${basedir}/core/bin/output" />
+  <property name="report" location="${basedir}/core/bin/report" />
 
   <fail unless="FLEX_HOME"
         message="Error: define FLEX_HOME env. var. with a path to Flex4 SDK" />
-
   <fail unless="version"
         message="Error: version is undefined." />
 
@@ -32,6 +36,8 @@
 
   <taskdef resource="flexTasks.tasks"
            classpath="${FLEX_HOME}/ant/lib/flexTasks.jar" />
+  <taskdef resource="flexUnitTasks.tasks"
+           classpath="${libs}/flexUnitTasks-4.1.0-8.jar" />
 
   <target name="clean">
     <delete>
@@ -44,19 +50,46 @@
   </target>
 
   <target name="build" depends="init">
-    <fileset id="srcFiles" dir="src">
+    <fileset id="srcFiles" dir="${src}">
       <include name="**/*.as"/>
     </fileset>
-
     <pathconvert property="classes" pathsep="," refid="srcFiles">
       <chainedmapper>
-        <globmapper from="${basedir}/src/*" to="*"></globmapper>
+        <globmapper from="${src}/*" to="*"></globmapper>
         <mapper type="package" from="*.as" to="*"/>
       </chainedmapper>
     </pathconvert>
-
     <compc output="${dist}/${libraryName}" include-classes="${classes}">
       <source-path path-element="${src}"/>
     </compc>
   </target>
+
+  <target name="compile.tests" depends="build">
+    <mxmlc file="${test}/com/google/zxing/testrunner/ZXingTestsRunner.mxml"
+           output="${output}/ZXingTestsRunner.swf"
+           debug="true">
+      <library-path dir="${dist}" append="true">
+        <include name="*.swc"/>
+      </library-path>
+      <library-path dir="${libs}" append="true">
+        <include name="*.swc"/>
+      </library-path>
+      <library-path dir="${FLEX_HOME}/frameworks/libs/air" append="true">
+        <include name="*.swc"/>
+      </library-path>
+      <library-path dir="${FLEX_HOME}/frameworks/libs" append="true">
+        <include name="framework.swc"/>
+      </library-path>
+      <source-path path-element="${test}" />
+      <source-path path-element="${assets}" />
+      <compiler.verbose-stacktraces>true</compiler.verbose-stacktraces>
+			<compiler.headless-server>true</compiler.headless-server>
+    </mxmlc>
+    <copy todir="${output}">
+      <fileset dir="${test}/com/google/zxing/testrunner">
+        <include name="zxing*.xml" />
+      </fileset>
+    </copy>
+  </target>
+
 </project>
