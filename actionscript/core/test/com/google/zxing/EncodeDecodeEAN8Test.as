@@ -69,17 +69,20 @@ package com.google.zxing {
     }
 
     [Test(description="Encode a number, decode it, and compare.")]
-    public function encodedEAN8shouldBeDecodedSuccessfully():void {
+    public function testEncodedEAN8shouldBeDecodedSuccessfully():void {
       var testCode:Number = 48512343;
       var decodedNumber:Number = encodeAndDecode(testCode);
       assertEquals(testCode, decodedNumber);
     }
 
-    [Test(description="Bug: Endoding and decoding 1 fails")]
-    public function shouldEncodeAndDecodeAnyValidEAN8number():void {
-      var testCode:Number = 12345678;
-      var decodedNumber:Number = encodeAndDecode(testCode);
-      assertEquals(testCode, decodedNumber);
+    [Test(description="Encodes EAN8 from 0 to 9999999.")]
+    public function testEncodeAndDecodeAnyValidEAN8Number():void {
+      for (var testCode:Number = 9999999; testCode >= 0; testCode -= 1111111) {
+        var checkSum:Number = calculateEANChecksumDigit(testCode);
+        var testCodeWithCheckSum:Number = testCode * 10 + checkSum;
+        var decodedNumber:Number = encodeAndDecode(testCodeWithCheckSum);
+        assertEquals(testCodeWithCheckSum, decodedNumber);
+      }
     }
 
     private function encodeAndDecode(testCode:Number):Number {
@@ -125,7 +128,6 @@ package com.google.zxing {
 
     private function generateImage(resultBits:Array, imageWidth:Number,
         imageHeight:Number):Bitmap {
-      // generate an image
       var bitmapData:BitmapData = new BitmapData(imageWidth, imageHeight, false,
           0xFFFFFF);
       var bitmap:Bitmap = new Bitmap(bitmapData);
@@ -175,6 +177,23 @@ package com.google.zxing {
         contents = "0" + contents;
       }
       return contents;
+    }
+
+    public function calculateEANChecksumDigit(number:Number):Number {
+      var checksum:Number = 0;
+      var weightedSumOfDigits:Number = 0;
+      var weight:Number = 3;
+      while (number > 0) {
+        var lastDigit:int = number % 10;
+        weightedSumOfDigits = weightedSumOfDigits + lastDigit * weight;
+        number = (number - lastDigit) / 10;
+        weight = weight == 3 ? 1 : 3;
+      }
+      var additionToTen:Number = weightedSumOfDigits % 10;
+      if (additionToTen > 0) {
+        checksum = 10 - additionToTen;
+      }
+      return checksum;
     }
   }
 }
