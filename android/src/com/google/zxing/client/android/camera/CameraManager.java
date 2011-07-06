@@ -71,6 +71,9 @@ public final class CameraManager {
   private boolean previewing;
   private boolean reverseImage;
   private final boolean useOneShotPreviewCallback;
+  private int requestedFramingRectWidth;
+  private int requestedFramingRectHeight;
+
   /**
    * Preview frames are delivered here, which we pass on to the registered handler. Make sure to
    * clear the handler so it will only receive one message.
@@ -132,6 +135,11 @@ public final class CameraManager {
     if (!initialized) {
       initialized = true;
       configManager.initFromCameraParameters(camera);
+      if (requestedFramingRectWidth > 0 && requestedFramingRectHeight > 0) {
+        setManualFramingRect(requestedFramingRectWidth, requestedFramingRectHeight);
+        requestedFramingRectWidth = 0;
+        requestedFramingRectHeight = 0;
+      }
     }
     configManager.setDesiredCameraParameters(camera);
 
@@ -275,18 +283,23 @@ public final class CameraManager {
    * @param height The height in pixels to scan.
    */
   public void setManualFramingRect(int width, int height) {
-    Point screenResolution = configManager.getScreenResolution();
-    if (width > screenResolution.x) {
-      width = screenResolution.x;
+    if (initialized) {
+      Point screenResolution = configManager.getScreenResolution();
+      if (width > screenResolution.x) {
+        width = screenResolution.x;
+      }
+      if (height > screenResolution.y) {
+        height = screenResolution.y;
+      }
+      int leftOffset = (screenResolution.x - width) / 2;
+      int topOffset = (screenResolution.y - height) / 2;
+      framingRect = new Rect(leftOffset, topOffset, leftOffset + width, topOffset + height);
+      Log.d(TAG, "Calculated manual framing rect: " + framingRect);
+      framingRectInPreview = null;
+    } else {
+      requestedFramingRectWidth = width;
+      requestedFramingRectHeight = height;
     }
-    if (height > screenResolution.y) {
-      height = screenResolution.y;
-    }
-    int leftOffset = (screenResolution.x - width) / 2;
-    int topOffset = (screenResolution.y - height) / 2;
-    framingRect = new Rect(leftOffset, topOffset, leftOffset + width, topOffset + height);
-    Log.d(TAG, "Calculated manual framing rect: " + framingRect);
-    framingRectInPreview = null;
   }
 
   /**
