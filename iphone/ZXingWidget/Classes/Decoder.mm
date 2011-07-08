@@ -210,11 +210,15 @@ public:
           if (decoderResult) [decoderResult release];
           decoderResult = [[TwoDDecoderResult alloc] initWithText:resultString points:points];
         } catch (ReaderException &rex) {
+#ifdef DEBUG
           NSLog(@"failed to decode, caught ReaderException '%s'",
               rex.what());
+#endif
         } catch (IllegalArgumentException &iex) {
+#ifdef DEBUG
           NSLog(@"failed to decode, caught IllegalArgumentException '%s'", 
               iex.what());
+#endif
         } catch (...) {
           NSLog(@"Caught unknown exception!");
         }
