@@ -66,6 +66,15 @@ public final class URIParsedResultTestCase extends Assert {
   }
 
   @Test
+  public void testGarbage2() {
+    String text = "DEA\u0003\u0019M\u0006\u0000\b√•\u0000¬áHO\u0000X$\u0001\u0000\u001Fwfc\u0007!√æ¬ì¬ò\u0013\u0013¬æZ{√π√é√ù√ö¬óZ¬ß¬®+y_zb√±k\u00117¬∏\u000E¬Ü√ú\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000¬£.ux";
+    Result fakeResult = new Result(text, null, null, BarcodeFormat.QR_CODE);
+    ParsedResult result = ResultParser.parseResult(fakeResult);
+    assertSame(ParsedResultType.TEXT, result.getType());
+    assertEquals(text, result.getDisplayResult());
+  }
+
+  @Test
   public void testIsPossiblyMalicious() {
     doTestIsPossiblyMalicious("http://google.com", false);
     doTestIsPossiblyMalicious("http://google.com@evil.com", true);

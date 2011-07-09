@@ -49,17 +49,25 @@ final class URIResultParser extends ResultParser {
    * need to know when a string is obviously not a URI.
    */
   static boolean isBasicallyValidURI(String uri) {
-    if (uri == null || uri.indexOf(' ') >= 0 || uri.indexOf('\n') >= 0) {
+    if (uri == null) {
       return false;
+    }
+    int period = -1;
+    int colon = -1;
+    int length = uri.length();
+    for (int i = length - 1; i >= 0; i--) {
+      char c = uri.charAt(i);
+      if (c <= ' ') { // covers space, newline, and more
+        return false;
+      } else if (c == '.') {
+        period = i;
+      } else if (c == ':') {
+        colon = i;
+      }
     }
     // Look for period in a domain but followed by at least a two-char TLD
     // Forget strings that don't have a valid-looking protocol
-    int period = uri.indexOf('.');
-    if (period >= uri.length() - 2) {
-      return false;
-    }
-    int colon = uri.indexOf(':');
-    if (period < 0 && colon < 0) {
+    if (period >= uri.length() - 2 || (period < 0 && colon < 0)) {
       return false;
     }
     if (colon >= 0) {
