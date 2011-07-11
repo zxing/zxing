@@ -94,8 +94,8 @@ public final class Encoder {
     BitArray dataBits = new BitArray();
     appendBytes(content, mode, dataBits, encoding);
     // Step 3: Initialize QR code that can contain "dataBits".
-    int numInputBytes = dataBits.getSizeInBytes();
-    initQRCode(numInputBytes, ecLevel, mode, qrCode);
+    int numInputBits = dataBits.getSize();
+    initQRCode(numInputBits, ecLevel, mode, qrCode);
 
     // Step 4: Build another bit vector that contains header and data.
     BitArray headerAndDataBits = new BitArray();
@@ -219,10 +219,10 @@ public final class Encoder {
   }
 
   /**
-   * Initialize "qrCode" according to "numInputBytes", "ecLevel", and "mode". On success,
+   * Initialize "qrCode" according to "numInputBits", "ecLevel", and "mode". On success,
    * modify "qrCode".
    */
-  private static void initQRCode(int numInputBytes, ErrorCorrectionLevel ecLevel, Mode mode,
+  private static void initQRCode(int numInputBits, ErrorCorrectionLevel ecLevel, Mode mode,
       QRCode qrCode) throws WriterException {
     qrCode.setECLevel(ecLevel);
     qrCode.setMode(mode);
@@ -241,8 +241,8 @@ public final class Encoder {
       int numDataBytes = numBytes - numEcBytes;
       // We want to choose the smallest version which can contain data of "numInputBytes" + some
       // extra bits for the header (mode info and length info). The header can be three bytes
-      // (precisely 4 + 16 bits) at most. Hence we do +3 here.
-      if (numDataBytes >= numInputBytes + 3) {
+      // (precisely 4 + 16 bits) at most.
+      if (numDataBytes >= getTotalInputBytes(numInputBits, version, mode)) {
         // Yay, we found the proper rs block info!
         qrCode.setVersion(versionNum);
         qrCode.setNumTotalBytes(numBytes);
@@ -256,6 +256,15 @@ public final class Encoder {
       }
     }
     throw new WriterException("Cannot find proper rs block info (input data too big?)");
+  }
+  
+  private static int getTotalInputBytes(int numInputBits, Version version, Mode mode) {
+    int modeInfoBits = 4;
+    int charCountBits = mode.getCharacterCountBits(version);
+    int headerBits = modeInfoBits + charCountBits;
+    int totalBits = numInputBits + headerBits;
+      
+    return (totalBits + 7) / 8;
   }
 
   /**
