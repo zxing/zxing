@@ -16,5 +16,6 @@
 //@property(nonatomic,retain) NSMutableArray *parsers;
 
 + (void)initWithDefaultParsers;
-+ (ParsedResult *)parsedResultForString:(NSString *)theString;
++ (ParsedResult *)parsedResultForString:(NSString *)s
+                                 format:(BarcodeFormat)format;
 @end

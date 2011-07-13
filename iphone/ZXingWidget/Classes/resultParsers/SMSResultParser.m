@@ -21,6 +21,7 @@
 
 #import "SMSResultParser.h"
 #import "SMSParsedResult.h"
+#import "CBarcodeFormat.h"
 
 #define PREFIX @"sms:"
 
@@ -30,7 +31,8 @@
   [ResultParser registerResultParserClass:self];
 }
 
-+ (ParsedResult *)parsedResultForString:(NSString *)s {
++ (ParsedResult *)parsedResultForString:(NSString *)s
+                                 format:(BarcodeFormat)format {
   NSRange prefixRange = [s rangeOfString:PREFIX options:NSCaseInsensitiveSearch];
   if (prefixRange.location == 0) {
     int max = [s length];

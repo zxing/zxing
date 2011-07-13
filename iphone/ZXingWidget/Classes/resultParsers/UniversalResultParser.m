@@ -18,12 +18,12 @@
 #import "BookmarkDoCoMoResultParser.h"
 #import "GeoResultParser.h"
 #import "TextResultParser.h"
+#import "CBarcodeFormat.h"
 
 @implementation UniversalResultParser
 static NSMutableArray *sTheResultParsers = nil;
 //@synthesize parsers;
 
-//static NSMutableSet *sResultParsers = nil;
 +(void) load {
   [self initWithDefaultParsers];
 }
@@ -33,11 +33,6 @@ static NSMutableArray *sTheResultParsers = nil;
 }
 
 + (void) initWithDefaultParsers {
-  // NSMutableArray *set = [[NSMutableArray alloc] initWithCapacity:11];
-  // self.parsers = set;
-  // [set release];
-  // 
-  
   NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
   @synchronized(self) {
     if (!sTheResultParsers) {
@@ -58,7 +53,8 @@ static NSMutableArray *sTheResultParsers = nil;
   [self addParserClass:[TextResultParser class]];
 }
 
-+ (ParsedResult *)parsedResultForString:(NSString *)s {
++ (ParsedResult *)parsedResultForString:(NSString *)s
+                                 format:(BarcodeFormat)format {
 #ifdef DEBUG
   NSLog(@"parsing result:\n<<<\n%@\n>>>\n", s);
 #endif
@@ -66,7 +62,7 @@ static NSMutableArray *sTheResultParsers = nil;
 #ifdef DEBUG
     NSLog(@"trying %@", NSStringFromClass(c));
 #endif
-    ParsedResult *result = [c parsedResultForString:s];
+    ParsedResult *result = [c parsedResultForString:s format:format];
     if (result != nil) {
 #ifdef DEBUG
       NSLog(@"parsed as %@ %@", NSStringFromClass([result class]), result);
@@ -77,6 +73,9 @@ static NSMutableArray *sTheResultParsers = nil;
   return nil;
 }
 
++ (ParsedResult *)parsedResultForString:(NSString *)theString {
+  return [self parsedResultForString:theString format:BarcodeFormat_None];
+}
 
 -(void)dealloc {
   [super dealloc];

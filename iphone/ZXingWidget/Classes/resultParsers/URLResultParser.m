@@ -21,6 +21,7 @@
 
 #import "URLResultParser.h"
 #import "URIParsedResult.h"
+#import "CBarcodeFormat.h"
 
 @implementation NSString (ZXingURLExtensions)
 
@@ -59,7 +60,8 @@
   [ResultParser registerResultParserClass:self];
 }
 
-+ (ParsedResult *)parsedResultForString:(NSString *)s {
++ (ParsedResult *)parsedResultForString:(NSString *)s
+                                 format:(BarcodeFormat)format {
   
   NSAutoreleasePool *myPool = [[NSAutoreleasePool alloc] init];
   ParsedResult *result = nil;

@@ -20,6 +20,7 @@
  */
 
 #import "ResultParser.h"
+#import "TextResultParser.h"
 
 @implementation ResultParser
 
@@ -44,7 +45,8 @@ static NSMutableSet *sResultParsers = nil;
   return resultParsers;
 }
 
-+ (ParsedResult *)parsedResultForString:(NSString *)s {
++ (ParsedResult *)parsedResultForString:(NSString *)s
+                                 format:(BarcodeFormat)barcodeFormat {
 #ifdef DEBUG
   NSLog(@"parsing result:\n<<<\n%@\n>>>\n", s);
 #endif
@@ -52,7 +54,7 @@ static NSMutableSet *sResultParsers = nil;
 #ifdef DEBUG
     NSLog(@"trying %@", NSStringFromClass(c));
 #endif
-    ParsedResult *result = [c parsedResultForString:s];
+    ParsedResult *result = [c parsedResultForString:s format:barcodeFormat];
     if (result != nil) {
 #ifdef DEBUG
       NSLog(@"parsed as %@ %@", NSStringFromClass([result class]), result);
@@ -60,7 +62,15 @@ static NSMutableSet *sResultParsers = nil;
       return result;
     }
   }
-  return nil;
+
+#ifdef DEBUG
+  NSLog(@"No result parsers matched. Falling back to text.");
+#endif
+  return [TextResultParser parsedResultForString:s format:barcodeFormat];
+}
+
++ (ParsedResult *)parsedResultForString:(NSString *)s {
+  return [ResultParser parsedResultForString:s format:BarcodeFormat_None];
 }
 
 @end
