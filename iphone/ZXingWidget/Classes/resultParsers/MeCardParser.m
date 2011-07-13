@@ -21,6 +21,7 @@
 
 #import "MeCardParser.h"
 #import "BusinessCardParsedResult.h"
+#import "CBarcodeFormat.h"
 
 @implementation MeCardParser
 
@@ -28,7 +29,8 @@
   [ResultParser registerResultParserClass:self];
 }
 
-+ (ParsedResult *)parsedResultForString:(NSString *)s {
++ (ParsedResult *)parsedResultForString:(NSString *)s
+                                 format:(BarcodeFormat)format {
   NSRange foundRange = [s rangeOfString:@"MECARD:"];
   if (foundRange.location == NSNotFound) {
     return nil;

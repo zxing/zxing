@@ -21,6 +21,7 @@
 
 #import "GeoResultParser.h"
 #import "GeoParsedResult.h"
+#import "CBarcodeFormat.h"
 
 #define PREFIX @"geo:"
 
@@ -30,7 +31,8 @@
   [ResultParser registerResultParserClass:self];
 }
 
-+ (ParsedResult *)parsedResultForString:(NSString *)s {
++ (ParsedResult *)parsedResultForString:(NSString *)s
+                                 format:(BarcodeFormat)format {
   NSRange prefixRange = [s rangeOfString:PREFIX options:NSCaseInsensitiveSearch];
   if (prefixRange.location == 0) {
     int restStart = /*prefixRange.location + */ prefixRange.length;

@@ -21,6 +21,7 @@
 
 #import "EmailDoCoMoResultParser.h"
 #import "EmailParsedResult.h"
+#import "CBarcodeFormat.h"
 
 @implementation EmailDoCoMoResultParser
 
@@ -28,7 +29,8 @@
   [ResultParser registerResultParserClass:self];
 }
 
-+ (ParsedResult *)parsedResultForString:(NSString *)s {
++ (ParsedResult *)parsedResultForString:(NSString *)s
+                                 format:(BarcodeFormat)format {
   NSRange foundRange = [s rangeOfString:@"MATMSG:"];
   if (foundRange.location == NSNotFound) {
     return nil;

@@ -21,14 +21,12 @@
 
 #import "TextResultParser.h"
 #import "TextParsedResult.h"
+#import "CBarcodeFormat.h"
 
 @implementation TextResultParser
 
-+ (void)load {
-  [ResultParser registerResultParserClass:self];
-}
-
-+ (ParsedResult *)parsedResultForString:(NSString *)s {
++ (ParsedResult *)parsedResultForString:(NSString *)s
+                                 format:(BarcodeFormat)format {
   return [[[TextParsedResult alloc] initWithString:s] autorelease];
 }
 

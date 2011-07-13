@@ -21,6 +21,7 @@
 
 #import "PlainEmailResultParser.h"
 #import "EmailParsedResult.h"
+#import "CBarcodeFormat.h"
 
 @implementation PlainEmailResultParser
 
@@ -28,7 +29,8 @@
   [ResultParser registerResultParserClass:self];
 }
 
-+ (ParsedResult *)parsedResultForString:(NSString *)s {
++ (ParsedResult *)parsedResultForString:(NSString *)s
+                                 format:(BarcodeFormat)format {
   if ([EmailParsedResult looksLikeAnEmailAddress:s]) {
     EmailParsedResult *result = [[[EmailParsedResult alloc] init] autorelease];
     [result setTo:s];

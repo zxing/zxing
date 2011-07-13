@@ -21,6 +21,7 @@
 
 #import "TelResultParser.h"
 #import "TelParsedResult.h"
+#import "CBarcodeFormat.h"
 
 #define PREFIX @"tel:"
 
@@ -30,7 +31,8 @@
   [ResultParser registerResultParserClass:self];
 }
 
-+ (ParsedResult *)parsedResultForString:(NSString *)s {
++ (ParsedResult *)parsedResultForString:(NSString *)s
+                                 format:(BarcodeFormat)format {
   NSRange telRange = [s rangeOfString:PREFIX options:NSCaseInsensitiveSearch];
   if (telRange.location == 0) {
     int restStart = /*telRange.location + */ telRange.length;
