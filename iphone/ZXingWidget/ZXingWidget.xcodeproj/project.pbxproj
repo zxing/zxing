@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1DFA090C13CE1A3900599044 /* CBarcodeFormat.h in Headers */ = {isa = PBXBuildFile; fileRef = 1DFA090A13CE1A3900599044 /* CBarcodeFormat.h */; };
+		1DFA090D13CE1A3900599044 /* CBarcodeFormat.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1DFA090B13CE1A3900599044 /* CBarcodeFormat.mm */; };
 		1F027FAB11A7BEAF006B06DE /* Decoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 1F027F9F11A7BEAF006B06DE /* Decoder.h */; };
 		1F027FAC11A7BEAF006B06DE /* Decoder.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1F027FA011A7BEAF006B06DE /* Decoder.mm */; };
 		1F027FAD11A7BEAF006B06DE /* DecoderDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 1F027FA111A7BEAF006B06DE /* DecoderDelegate.h */; };
@@ -236,6 +238,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1DFA090A13CE1A3900599044 /* CBarcodeFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CBarcodeFormat.h; path = Classes/CBarcodeFormat.h; sourceTree = "<group>"; };
+		1DFA090B13CE1A3900599044 /* CBarcodeFormat.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CBarcodeFormat.mm; path = Classes/CBarcodeFormat.mm; sourceTree = "<group>"; };
 		1F027F9F11A7BEAF006B06DE /* Decoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Decoder.h; path = Classes/Decoder.h; sourceTree = "<group>"; };
 		1F027FA011A7BEAF006B06DE /* Decoder.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Decoder.mm; path = Classes/Decoder.mm; sourceTree = "<group>"; };
 		1F027FA111A7BEAF006B06DE /* DecoderDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DecoderDelegate.h; path = Classes/DecoderDelegate.h; sourceTree = "<group>"; };
@@ -515,6 +519,8 @@
 		08FB77AEFE84172EC02AAC07 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				1DFA090A13CE1A3900599044 /* CBarcodeFormat.h */,
+				1DFA090B13CE1A3900599044 /* CBarcodeFormat.mm */,
 				1F3DB0F511C61080009C581B /* DataMatrixReader.h */,
 				1F3DB0F611C61080009C581B /* DataMatrixReader.mm */,
 				1F3DB0F711C61080009C581B /* MultiFormatOneDReader.h */,
@@ -986,6 +992,7 @@
 				3B81AAF9120F0A7E0022E5D4 /* GreyscaleRotatedLuminanceSource.h in Headers */,
 				3B72D97012130EF6007CEF32 /* ResultPointCallback.h in Headers */,
 				1FB4319F12901C76002D63E8 /* UniversalResultParser.h in Headers */,
+				1DFA090C13CE1A3900599044 /* CBarcodeFormat.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1149,6 +1156,7 @@
 				3B81AAF8120F0A7E0022E5D4 /* GreyscaleRotatedLuminanceSource.cpp in Sources */,
 				3B72D96F12130EF6007CEF32 /* ResultPointCallback.cpp in Sources */,
 				1FB431A012901C76002D63E8 /* UniversalResultParser.m in Sources */,
+				1DFA090D13CE1A3900599044 /* CBarcodeFormat.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1251,45 +1259,6 @@
 			};
 			name = Release;
 		};
-		3B3173B113BE422C0082266B /* Distribution */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				GCC_C_LANGUAGE_STANDARD = c99;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = ../../cpp/core/src;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
-				OTHER_LDFLAGS = "-ObjC";
-				PREBINDING = NO;
-				SDKROOT = iphoneos4.2;
-				WARNING_CFLAGS = (
-					"-Wall",
-					"-Wextra",
-					"-Werror",
-					"-Wno-unused-parameter",
-				);
-			};
-			name = Distribution;
-		};
-		3B3173B213BE422C0082266B /* Distribution */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				GCC_MODEL_TUNING = G5;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = ZXingWidget_Prefix.pch;
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GCC_VERSION = 4.2;
-				HEADER_SEARCH_PATHS = ../../cpp/core/src;
-				INSTALL_PATH = /usr/local/lib;
-				PRODUCT_NAME = ZXingWidget;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-			};
-			name = Distribution;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1298,7 +1267,6 @@
 			buildConfigurations = (
 				1DEB921F08733DC00010E9CD /* Debug */,
 				1DEB922008733DC00010E9CD /* Release */,
-				3B3173B213BE422C0082266B /* Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1308,7 +1276,6 @@
 			buildConfigurations = (
 				1DEB922308733DC00010E9CD /* Debug */,
 				1DEB922408733DC00010E9CD /* Release */,
-				3B3173B113BE422C0082266B /* Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
