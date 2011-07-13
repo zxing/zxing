@@ -46,7 +46,6 @@
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>still-camera</string>
-		<string>video-camera</string>
 	</array>
 	<key>UIStatusBarHidden</key>
 	<false/>
