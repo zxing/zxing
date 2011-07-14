@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		1DFA090C13CE1A3900599044 /* CBarcodeFormat.h in Headers */ = {isa = PBXBuildFile; fileRef = 1DFA090A13CE1A3900599044 /* CBarcodeFormat.h */; };
 		1DFA090D13CE1A3900599044 /* CBarcodeFormat.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1DFA090B13CE1A3900599044 /* CBarcodeFormat.mm */; };
+		1DFA092413CE251600599044 /* ProductParsedResult.h in Headers */ = {isa = PBXBuildFile; fileRef = 1DFA092213CE251600599044 /* ProductParsedResult.h */; };
+		1DFA092513CE251600599044 /* ProductParsedResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DFA092313CE251600599044 /* ProductParsedResult.m */; };
+		1DFA092A13CE252300599044 /* ProductResultParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 1DFA092813CE252300599044 /* ProductResultParser.h */; };
+		1DFA092B13CE252300599044 /* ProductResultParser.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1DFA092913CE252300599044 /* ProductResultParser.mm */; };
 		1F027FAB11A7BEAF006B06DE /* Decoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 1F027F9F11A7BEAF006B06DE /* Decoder.h */; };
 		1F027FAC11A7BEAF006B06DE /* Decoder.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1F027FA011A7BEAF006B06DE /* Decoder.mm */; };
 		1F027FAD11A7BEAF006B06DE /* DecoderDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 1F027FA111A7BEAF006B06DE /* DecoderDelegate.h */; };
@@ -240,6 +244,10 @@
 /* Begin PBXFileReference section */
 		1DFA090A13CE1A3900599044 /* CBarcodeFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CBarcodeFormat.h; path = Classes/CBarcodeFormat.h; sourceTree = "<group>"; };
 		1DFA090B13CE1A3900599044 /* CBarcodeFormat.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CBarcodeFormat.mm; path = Classes/CBarcodeFormat.mm; sourceTree = "<group>"; };
+		1DFA092213CE251600599044 /* ProductParsedResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProductParsedResult.h; path = Classes/parsedResults/ProductParsedResult.h; sourceTree = "<group>"; };
+		1DFA092313CE251600599044 /* ProductParsedResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProductParsedResult.m; path = Classes/parsedResults/ProductParsedResult.m; sourceTree = "<group>"; };
+		1DFA092813CE252300599044 /* ProductResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProductResultParser.h; path = Classes/resultParsers/ProductResultParser.h; sourceTree = "<group>"; };
+		1DFA092913CE252300599044 /* ProductResultParser.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ProductResultParser.mm; path = Classes/resultParsers/ProductResultParser.mm; sourceTree = "<group>"; };
 		1F027F9F11A7BEAF006B06DE /* Decoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Decoder.h; path = Classes/Decoder.h; sourceTree = "<group>"; };
 		1F027FA011A7BEAF006B06DE /* Decoder.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Decoder.mm; path = Classes/Decoder.mm; sourceTree = "<group>"; };
 		1F027FA111A7BEAF006B06DE /* DecoderDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DecoderDelegate.h; path = Classes/DecoderDelegate.h; sourceTree = "<group>"; };
@@ -804,6 +812,8 @@
 				1F02800411A7BF06006B06DE /* MeCardParser.m */,
 				1F02800511A7BF06006B06DE /* PlainEmailResultParser.h */,
 				1F02800611A7BF06006B06DE /* PlainEmailResultParser.m */,
+				1DFA092813CE252300599044 /* ProductResultParser.h */,
+				1DFA092913CE252300599044 /* ProductResultParser.mm */,
 				1F02800711A7BF06006B06DE /* ResultParser.h */,
 				1F02800811A7BF06006B06DE /* ResultParser.m */,
 				1F02800911A7BF06006B06DE /* SMSResultParser.h */,
@@ -833,6 +843,8 @@
 				1F027FE011A7BEEB006B06DE /* GeoParsedResult.m */,
 				1F027FE111A7BEEB006B06DE /* ParsedResult.h */,
 				1F027FE211A7BEEB006B06DE /* ParsedResult.m */,
+				1DFA092213CE251600599044 /* ProductParsedResult.h */,
+				1DFA092313CE251600599044 /* ProductParsedResult.m */,
 				1F027FE311A7BEEB006B06DE /* SMSParsedResult.h */,
 				1F027FE411A7BEEB006B06DE /* SMSParsedResult.m */,
 				1F027FE511A7BEEB006B06DE /* TelParsedResult.h */,
@@ -993,6 +1005,8 @@
 				3B72D97012130EF6007CEF32 /* ResultPointCallback.h in Headers */,
 				1FB4319F12901C76002D63E8 /* UniversalResultParser.h in Headers */,
 				1DFA090C13CE1A3900599044 /* CBarcodeFormat.h in Headers */,
+				1DFA092413CE251600599044 /* ProductParsedResult.h in Headers */,
+				1DFA092A13CE252300599044 /* ProductResultParser.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1157,6 +1171,8 @@
 				3B72D96F12130EF6007CEF32 /* ResultPointCallback.cpp in Sources */,
 				1FB431A012901C76002D63E8 /* UniversalResultParser.m in Sources */,
 				1DFA090D13CE1A3900599044 /* CBarcodeFormat.mm in Sources */,
+				1DFA092513CE251600599044 /* ProductParsedResult.m in Sources */,
+				1DFA092B13CE252300599044 /* ProductResultParser.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

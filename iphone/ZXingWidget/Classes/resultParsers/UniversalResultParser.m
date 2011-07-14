@@ -19,6 +19,7 @@
 #import "GeoResultParser.h"
 #import "TextResultParser.h"
 #import "CBarcodeFormat.h"
+#import "ProductResultParser.h"
 
 @implementation UniversalResultParser
 static NSMutableArray *sTheResultParsers = nil;
@@ -50,6 +51,7 @@ static NSMutableArray *sTheResultParsers = nil;
   [self addParserClass:[EmailDoCoMoResultParser class]];
   [self addParserClass:[BookmarkDoCoMoResultParser class]];
   [self addParserClass:[GeoResultParser class]];
+  [self addParserClass:[ProductResultParser class]];
   [self addParserClass:[TextResultParser class]];
 }
 
