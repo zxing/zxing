@@ -376,11 +376,14 @@ namespace zxing {
               }
               break;
             case CODE_CODE_C:
-            // the code read in this case is the number encoded directly
+              tmpResultSStr.str(std::string());
+              // the code read in this case is the number encoded directly
               if (code < 100) {
-                if (code < 10)
-                tmpResultSStr << '0';
-              tmpResultSStr << code;
+                if (code < 10) {
+ 					        tmpResultSStr << '0';
+ 				        }
+                tmpResultSStr << code;
+ 				        tmpResultString.append(tmpResultSStr.str());
               } else {
                 if (code != CODE_STOP) {
                   lastCharacterWasPrintable = false;
@@ -437,9 +440,6 @@ namespace zxing {
         if (checksumTotal % 103 != lastCode) {
           throw ReaderException("");
         }
-
-        if (codeSet == CODE_CODE_C)
-          tmpResultString.append(tmpResultSStr.str());
 
         // Need to pull out the check digits from string
         int resultLength = tmpResultString.length();
