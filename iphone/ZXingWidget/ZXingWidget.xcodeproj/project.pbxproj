@@ -13,6 +13,8 @@
 		1DFA092513CE251600599044 /* ProductParsedResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DFA092313CE251600599044 /* ProductParsedResult.m */; };
 		1DFA092A13CE252300599044 /* ProductResultParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 1DFA092813CE252300599044 /* ProductResultParser.h */; };
 		1DFA092B13CE252300599044 /* ProductResultParser.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1DFA092913CE252300599044 /* ProductResultParser.mm */; };
+		1DFA09A013CE5C0300599044 /* AddressBookAUResultParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 1DFA099E13CE5C0300599044 /* AddressBookAUResultParser.h */; };
+		1DFA09A113CE5C0300599044 /* AddressBookAUResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DFA099F13CE5C0300599044 /* AddressBookAUResultParser.m */; };
 		1F027FAB11A7BEAF006B06DE /* Decoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 1F027F9F11A7BEAF006B06DE /* Decoder.h */; };
 		1F027FAC11A7BEAF006B06DE /* Decoder.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1F027FA011A7BEAF006B06DE /* Decoder.mm */; };
 		1F027FAD11A7BEAF006B06DE /* DecoderDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 1F027FA111A7BEAF006B06DE /* DecoderDelegate.h */; };
@@ -248,6 +250,8 @@
 		1DFA092313CE251600599044 /* ProductParsedResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProductParsedResult.m; path = Classes/parsedResults/ProductParsedResult.m; sourceTree = "<group>"; };
 		1DFA092813CE252300599044 /* ProductResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProductResultParser.h; path = Classes/resultParsers/ProductResultParser.h; sourceTree = "<group>"; };
 		1DFA092913CE252300599044 /* ProductResultParser.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ProductResultParser.mm; path = Classes/resultParsers/ProductResultParser.mm; sourceTree = "<group>"; };
+		1DFA099E13CE5C0300599044 /* AddressBookAUResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AddressBookAUResultParser.h; path = Classes/resultParsers/AddressBookAUResultParser.h; sourceTree = "<group>"; };
+		1DFA099F13CE5C0300599044 /* AddressBookAUResultParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AddressBookAUResultParser.m; path = Classes/resultParsers/AddressBookAUResultParser.m; sourceTree = "<group>"; };
 		1F027F9F11A7BEAF006B06DE /* Decoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Decoder.h; path = Classes/Decoder.h; sourceTree = "<group>"; };
 		1F027FA011A7BEAF006B06DE /* Decoder.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Decoder.mm; path = Classes/Decoder.mm; sourceTree = "<group>"; };
 		1F027FA111A7BEAF006B06DE /* DecoderDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DecoderDelegate.h; path = Classes/DecoderDelegate.h; sourceTree = "<group>"; };
@@ -800,6 +804,8 @@
 			children = (
 				1FB4319D12901C76002D63E8 /* UniversalResultParser.h */,
 				1FB4319E12901C76002D63E8 /* UniversalResultParser.m */,
+				1DFA099E13CE5C0300599044 /* AddressBookAUResultParser.h */,
+				1DFA099F13CE5C0300599044 /* AddressBookAUResultParser.m */,
 				1F027FFB11A7BF06006B06DE /* BookmarkDoCoMoResultParser.h */,
 				1F027FFC11A7BF06006B06DE /* BookmarkDoCoMoResultParser.m */,
 				1F027FFD11A7BF06006B06DE /* DoCoMoResultParser.h */,
@@ -1007,6 +1013,7 @@
 				1DFA090C13CE1A3900599044 /* CBarcodeFormat.h in Headers */,
 				1DFA092413CE251600599044 /* ProductParsedResult.h in Headers */,
 				1DFA092A13CE252300599044 /* ProductResultParser.h in Headers */,
+				1DFA09A013CE5C0300599044 /* AddressBookAUResultParser.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1173,6 +1180,7 @@
 				1DFA090D13CE1A3900599044 /* CBarcodeFormat.mm in Sources */,
 				1DFA092513CE251600599044 /* ProductParsedResult.m in Sources */,
 				1DFA092B13CE252300599044 /* ProductResultParser.mm in Sources */,
+				1DFA09A113CE5C0300599044 /* AddressBookAUResultParser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

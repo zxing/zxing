@@ -23,6 +23,27 @@
 #import "BusinessCardParsedResult.h"
 #import "CBarcodeFormat.h"
 
+@interface MeCardParser (Private)
+
++ (BOOL)isWellFormedBirthday:(NSString *)birthday;
+
+@end
+
+@implementation MeCardParser (Private)
+
++ (BOOL)isWellFormedBirthday:(NSString *)birthday {
+  if ([birthday length] != 8) {
+    return NO;
+  }
+  NSCharacterSet* nonDigits =
+      [[NSCharacterSet characterSetWithCharactersInString:@"0123456789"]
+       invertedSet];
+  NSRange range = [birthday rangeOfCharacterFromSet:nonDigits];
+  return range.location == NSNotFound;
+}
+
+@end
+
 @implementation MeCardParser
 
 + (void)load {
@@ -36,22 +57,28 @@
     return nil;
   }
   
-  NSString *name = [s fieldWithPrefix:@"N:"];
+  NSString *name = [[s fieldWithPrefix:@"N:"] stringWithTrimmedWhitespace];
   if (name == nil) {
     return nil;
   }
   
   BusinessCardParsedResult *result = [[BusinessCardParsedResult alloc] init];
-  result.name = name;
-  result.phoneNumbers = [s fieldsWithPrefix:@"TEL:"];
-  result.email = [s fieldWithPrefix:@"EMAIL:"];
+  result.names = [NSArray arrayWithObject:name];
+  result.pronunciation = [[s fieldWithPrefix:@"SOUND:"] stringWithTrimmedWhitespace];
+  result.phoneNumbers = [[s fieldsWithPrefix:@"TEL:"] stringArrayWithTrimmedWhitespace];
+  result.emails = [[s fieldsWithPrefix:@"EMAIL:"] stringArrayWithTrimmedWhitespace];
   result.note = [s fieldWithPrefix:@"NOTE:"];
-  result.urlString = [s fieldWithPrefix:@"URL:"];
-  result.address = [s fieldWithPrefix:@"ADR:"];
-  
-  //The following tags are not stricty parot of MECARD spec, but as their are standard in
-  //vcard, we honor them
-  result.organization = [s fieldWithPrefix:@"ORG:"];
+  result.addresses = [[s fieldsWithPrefix:@"ADR:"] stringArrayWithTrimmedWhitespace];
+  result.birthday = [[s fieldWithPrefix:@"BDAY:"] stringWithTrimmedWhitespace];
+  if (result.birthday != nil && ![MeCardParser isWellFormedBirthday:result.birthday]) {
+      // No reason to throw out the whole card because the birthday is formatted wrong.
+      result.birthday = nil;
+  }
+
+  // The following tags are not stricty part of MECARD spec, but as they are standard in
+  // vcard, we honor them.
+  result.url = [[s fieldWithPrefix:@"URL:"] stringWithTrimmedWhitespace];
+  result.organization = [[s fieldWithPrefix:@"ORG:"] stringWithTrimmedWhitespace];
   result.jobTitle = [s fieldWithPrefix:@"TITLE:"];
   
   return [result autorelease];

@@ -23,23 +23,27 @@
 #import "ParsedResult.h"
 
 @interface BusinessCardParsedResult : ParsedResult {
-  NSString *name;
+  NSArray *names;
+  NSString *pronunciation;
   NSArray *phoneNumbers;
+  NSArray *emails;
   NSString *note;
-  NSString *email;
-  NSString *urlString;
-  NSString *address;
+  NSArray *addresses;
   NSString *organization;
+  NSString *birthday;
   NSString *jobTitle;
+  NSString *url;
 }
 
-@property (nonatomic, copy) NSString *name;
+@property (nonatomic, retain) NSArray *names;
+@property (nonatomic, copy) NSString *pronunciation;
 @property (nonatomic, retain) NSArray *phoneNumbers;
+@property (nonatomic, retain) NSArray *emails;
 @property (nonatomic, copy) NSString *note;
-@property (nonatomic, copy) NSString *email;
-@property (nonatomic, copy) NSString *urlString;
-@property (nonatomic, copy) NSString *address;
+@property (nonatomic, retain) NSArray *addresses;
 @property (nonatomic, copy) NSString *organization;
+@property (nonatomic, copy) NSString *birthday;
 @property (nonatomic, copy) NSString *jobTitle;
+@property (nonatomic, copy) NSString *url;
 
 @end

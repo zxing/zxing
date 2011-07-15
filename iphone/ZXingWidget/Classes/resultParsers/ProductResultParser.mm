@@ -58,8 +58,9 @@
         normalizedProductID = s;
     }
 
-    return [[ProductParsedResult alloc] initWithProductID:s
-                                      normalizedProductID:normalizedProductID];
+    return [[[ProductParsedResult alloc] initWithProductID:s
+                                       normalizedProductID:normalizedProductID]
+               autorelease];
 }
 
 @end
