@@ -29,7 +29,7 @@
   if (backslashRange.location == NSNotFound) {
     return self;
   }
-  
+
   int max = [self length];
   int startLocation = 0;
   NSMutableString *result = [NSMutableString stringWithCapacity:[self length]];
@@ -53,7 +53,7 @@
 
 - (NSArray *)fieldsWithPrefix:(NSString *)prefix terminator:(NSString *)term {
   NSMutableArray *result = nil;
-  
+
   int i = 0;
   int max = [self length];
   NSRange searchRange;
@@ -65,7 +65,7 @@
     if(foundRange.location == NSNotFound) {
       break;
     }
-    
+
     int start = i = foundRange.location + foundRange.length;
     bool done = false;
     while (!done) {
@@ -93,7 +93,7 @@
     }
   }
   [pool release];
-  
+
   return [result autorelease];
 }
 
@@ -107,6 +107,31 @@
     return nil;
   } else {
     return [fields lastObject];
+  }
+}
+
+- (NSString *)stringWithTrimmedWhitespace {
+  return [self stringByTrimmingCharactersInSet:
+      [NSCharacterSet whitespaceCharacterSet]];
+}
+
+@end
+
+@implementation NSArray (DoCoMoStringArray)
+
+- (NSArray*)stringArrayWithTrimmedWhitespace {
+  NSMutableArray* trimmed = [NSMutableArray arrayWithCapacity:[self count]];
+  for (NSString* s in self) {
+    [trimmed addObject:[s stringWithTrimmedWhitespace]];
+  }
+  return trimmed;
+}
+
++ (NSArray*)arrayWithStringIfNotNil:(NSString *)string {
+  if (string != nil) {
+    return [NSArray arrayWithObject:string];
+  } else {
+    return nil;
   }
 }
 

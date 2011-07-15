@@ -20,6 +20,7 @@
 #import "TextResultParser.h"
 #import "CBarcodeFormat.h"
 #import "ProductResultParser.h"
+#import "AddressBookAUResultParser.h"
 
 @implementation UniversalResultParser
 static NSMutableArray *sTheResultParsers = nil;
@@ -41,16 +42,17 @@ static NSMutableArray *sTheResultParsers = nil;
     }
   }
   [pool release];
-  [self addParserClass:[SMSResultParser class]];
-  [self addParserClass:[TelResultParser class]];
-  [self addParserClass:[SMSTOResultParser class]];
-  [self addParserClass:[MeCardParser class]];
-  [self addParserClass:[URLResultParser class]];
-  [self addParserClass:[URLTOResultParser class]];
-  [self addParserClass:[PlainEmailResultParser class]];
-  [self addParserClass:[EmailDoCoMoResultParser class]];
   [self addParserClass:[BookmarkDoCoMoResultParser class]];
+  [self addParserClass:[MeCardParser class]];
+  [self addParserClass:[EmailDoCoMoResultParser class]];
+  [self addParserClass:[AddressBookAUResultParser class]];
+  [self addParserClass:[PlainEmailResultParser class]];
+  [self addParserClass:[TelResultParser class]];
+  [self addParserClass:[SMSResultParser class]];
+  [self addParserClass:[SMSTOResultParser class]];
   [self addParserClass:[GeoResultParser class]];
+  [self addParserClass:[URLTOResultParser class]];
+  [self addParserClass:[URLResultParser class]];
   [self addParserClass:[ProductResultParser class]];
   [self addParserClass:[TextResultParser class]];
 }

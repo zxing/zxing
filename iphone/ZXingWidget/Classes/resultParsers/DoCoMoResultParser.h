@@ -22,12 +22,20 @@
 #import <UIKit/UIKit.h>
 #import "ResultParser.h"
 
-@interface NSString (DoCoMoFieldParsing) 
+@interface NSString (DoCoMoFieldParsing)
 - (NSString *)backslashUnescaped;
 - (NSArray *)fieldsWithPrefix:(NSString *)prefix;
 - (NSArray *)fieldsWithPrefix:(NSString *)prefix terminator:(NSString *)term;
 - (NSString *)fieldWithPrefix:(NSString *)prefix;
 - (NSString *)fieldWithPrefix:(NSString *)prefix terminator:(NSString *)term;
+- (NSString *)stringWithTrimmedWhitespace;
+@end
+
+@interface NSArray (DoCoMoStringArray)
+
+- (NSArray*)stringArrayWithTrimmedWhitespace;
++ (NSArray*)arrayWithStringIfNotNil:(NSString *)string;
+
 @end
 
 
