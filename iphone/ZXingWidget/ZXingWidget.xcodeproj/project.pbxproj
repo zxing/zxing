@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1D0CBDF913D0DD5D003D0F8D /* BizcardResultParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 1D0CBDF713D0DD5D003D0F8D /* BizcardResultParser.h */; };
+		1D0CBDFA13D0DD5D003D0F8D /* BizcardResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D0CBDF813D0DD5D003D0F8D /* BizcardResultParser.m */; };
 		1DFA090C13CE1A3900599044 /* CBarcodeFormat.h in Headers */ = {isa = PBXBuildFile; fileRef = 1DFA090A13CE1A3900599044 /* CBarcodeFormat.h */; };
 		1DFA090D13CE1A3900599044 /* CBarcodeFormat.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1DFA090B13CE1A3900599044 /* CBarcodeFormat.mm */; };
 		1DFA092413CE251600599044 /* ProductParsedResult.h in Headers */ = {isa = PBXBuildFile; fileRef = 1DFA092213CE251600599044 /* ProductParsedResult.h */; };
@@ -244,6 +246,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1D0CBDF713D0DD5D003D0F8D /* BizcardResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BizcardResultParser.h; path = Classes/resultParsers/BizcardResultParser.h; sourceTree = "<group>"; };
+		1D0CBDF813D0DD5D003D0F8D /* BizcardResultParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BizcardResultParser.m; path = Classes/resultParsers/BizcardResultParser.m; sourceTree = "<group>"; };
 		1DFA090A13CE1A3900599044 /* CBarcodeFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CBarcodeFormat.h; path = Classes/CBarcodeFormat.h; sourceTree = "<group>"; };
 		1DFA090B13CE1A3900599044 /* CBarcodeFormat.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CBarcodeFormat.mm; path = Classes/CBarcodeFormat.mm; sourceTree = "<group>"; };
 		1DFA092213CE251600599044 /* ProductParsedResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProductParsedResult.h; path = Classes/parsedResults/ProductParsedResult.h; sourceTree = "<group>"; };
@@ -806,6 +810,8 @@
 				1FB4319E12901C76002D63E8 /* UniversalResultParser.m */,
 				1DFA099E13CE5C0300599044 /* AddressBookAUResultParser.h */,
 				1DFA099F13CE5C0300599044 /* AddressBookAUResultParser.m */,
+				1D0CBDF713D0DD5D003D0F8D /* BizcardResultParser.h */,
+				1D0CBDF813D0DD5D003D0F8D /* BizcardResultParser.m */,
 				1F027FFB11A7BF06006B06DE /* BookmarkDoCoMoResultParser.h */,
 				1F027FFC11A7BF06006B06DE /* BookmarkDoCoMoResultParser.m */,
 				1F027FFD11A7BF06006B06DE /* DoCoMoResultParser.h */,
@@ -1014,6 +1020,7 @@
 				1DFA092413CE251600599044 /* ProductParsedResult.h in Headers */,
 				1DFA092A13CE252300599044 /* ProductResultParser.h in Headers */,
 				1DFA09A013CE5C0300599044 /* AddressBookAUResultParser.h in Headers */,
+				1D0CBDF913D0DD5D003D0F8D /* BizcardResultParser.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1181,6 +1188,7 @@
 				1DFA092513CE251600599044 /* ProductParsedResult.m in Sources */,
 				1DFA092B13CE252300599044 /* ProductResultParser.mm in Sources */,
 				1DFA09A113CE5C0300599044 /* AddressBookAUResultParser.m in Sources */,
+				1D0CBDFA13D0DD5D003D0F8D /* BizcardResultParser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
