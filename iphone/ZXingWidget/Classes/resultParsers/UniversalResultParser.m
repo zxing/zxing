@@ -20,7 +20,7 @@
 #import "TextResultParser.h"
 #import "CBarcodeFormat.h"
 #import "ProductResultParser.h"
-#import "AddressBookAUResultParser.h"
+#import "BizcardResultParser.h"
 
 @implementation UniversalResultParser
 static NSMutableArray *sTheResultParsers = nil;
@@ -31,7 +31,7 @@ static NSMutableArray *sTheResultParsers = nil;
 }
 
 + (void)addParserClass:(Class)klass {
-  [sTheResultParsers addObject:klass];           
+  [sTheResultParsers addObject:klass];
 }
 
 + (void) initWithDefaultParsers {
@@ -45,7 +45,7 @@ static NSMutableArray *sTheResultParsers = nil;
   [self addParserClass:[BookmarkDoCoMoResultParser class]];
   [self addParserClass:[MeCardParser class]];
   [self addParserClass:[EmailDoCoMoResultParser class]];
-  [self addParserClass:[AddressBookAUResultParser class]];
+  [self addParserClass:[BizcardResultParser class]];
   [self addParserClass:[PlainEmailResultParser class]];
   [self addParserClass:[TelResultParser class]];
   [self addParserClass:[SMSResultParser class]];
