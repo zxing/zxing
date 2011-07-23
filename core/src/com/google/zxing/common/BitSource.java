@@ -20,7 +20,7 @@ package com.google.zxing.common;
  * <p>This provides an easy abstraction to read bits at a time from a sequence of bytes, where the
  * number of bits read is not often a multiple of 8.</p>
  *
- * <p>This class is thread-safe but not reentrant. Unless the caller modifies the bytes array
+ * <p>This class is thread-safe but not reentrant -- unless the caller modifies the bytes array
  * it passed in, in which case all bets are off.</p>
  *
  * @author Sean Owen
@@ -37,6 +37,13 @@ public final class BitSource {
    */
   public BitSource(byte[] bytes) {
     this.bytes = bytes;
+  }
+
+  /**
+   * @return index of next byte in input byte array which would be read by the next call to {@link #readBits(int)}.
+   */
+  public int getByteOffset() {
+    return byteOffset;
   }
 
   /**

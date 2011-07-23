@@ -235,7 +235,7 @@ final class DecodedBitStreamParser {
                 result.append(c40char);
               }
             } else if (cValue == 27) {  // FNC1
-              throw FormatException.getFormatInstance();
+              // ignore
             } else if (cValue == 30) {  // Upper Shift
               upperShift = true;
             } else {
@@ -437,7 +437,7 @@ final class DecodedBitStreamParser {
   private static void decodeBase256Segment(BitSource bits, StringBuffer result, Vector byteSegments)
       throws FormatException {
     // Figure out how long the Base 256 Segment is.
-    int codewordPosition = 2;
+    int codewordPosition = 1 + bits.getByteOffset(); // position is 1-indexed
     int d1 = unrandomize255State(bits.readBits(8), codewordPosition++);
     int count;
     if (d1 == 0) {  // Read the remainder of the symbol
