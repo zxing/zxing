@@ -29,7 +29,8 @@ namespace zxing {
     static const int W = 3; // Pixel width of a wide line
     static const int N = 1; // Pixed width of a narrow line
 
-    const int DEFAULT_ALLOWED_LENGTHS[4] = { 6, 10, 14, 44 };
+    const int DEFAULT_ALLOWED_LENGTHS_LEN = 10;
+    const int DEFAULT_ALLOWED_LENGTHS[DEFAULT_ALLOWED_LENGTHS_LEN] = { 44, 24, 20, 18, 16, 14, 12, 10, 8, 6 };
 
     /**
      * Start/end guard pattern.
@@ -77,11 +78,14 @@ namespace zxing {
         decodeMiddle(row, startRange[1], endRange[0], tmpResult);
 
         // To avoid false positives with 2D barcodes (and other patterns), make
-        // an assumption that the decoded string must be 6, 10 or 14 digits.
+        // an assumption that the decoded string must be a known length
         int length = tmpResult.length();
         bool lengthOK = false;
-        if (length == 6 || length == 10 || length == 14) {
-          lengthOK = true;
+        for (int i = 0; i < DEFAULT_ALLOWED_LENGTHS_LEN; i++) {
+          if (length == DEFAULT_ALLOWED_LENGTHS[i]) {
+            lengthOK = true;
+            break;
+          }
         }
         if (!lengthOK) {
           throw ReaderException("not enough characters count");
