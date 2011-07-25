@@ -101,7 +101,7 @@ public final class Intents {
     public static final String RESULT_FORMAT = "SCAN_RESULT_FORMAT";
 
     /**
-     * Call intent.getByteArrayExtra(RESULT_BYTES) to get a {@link byte[]} of raw bytes in the
+     * Call intent.getByteArrayExtra(RESULT_BYTES) to get a {@code byte[]} of raw bytes in the
      * barcode, if available.
      */
     public static final String RESULT_BYTES = "SCAN_RESULT_BYTES";

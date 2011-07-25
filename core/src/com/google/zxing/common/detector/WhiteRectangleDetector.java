@@ -83,7 +83,7 @@ public final class WhiteRectangleDetector {
    * region until it finds a white rectangular region.
    * </p>
    *
-   * @return {@link ResultPoint[]} describing the corners of the rectangular
+   * @return {@link ResultPoint}[] describing the corners of the rectangular
    *         region. The first and last points are opposed on the diagonal, as
    *         are the second and third. The first point will be the topmost
    *         point and the last, the bottommost. The second point will be
