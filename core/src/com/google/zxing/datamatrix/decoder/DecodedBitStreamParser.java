@@ -140,8 +140,11 @@ final class DecodedBitStreamParser {
         return C40_ENCODE;
       } else if (oneByte == 231) {  // Latch to Base 256 encodation
         return BASE256_ENCODE;
-      } else if (oneByte == 232 || oneByte == 233 || oneByte == 234) {
-        // FNC1, Structured Append, Reader Programming
+      } else if (oneByte == 232) {
+        // FNC1
+        result.append((char) 29); // translate as ASCII 29
+      } else if (oneByte == 233 || oneByte == 234) {
+        // Structured Append, Reader Programming
         // Ignore these symbols for now
         //throw ReaderException.getInstance();
       } else if (oneByte == 235) {  // Upper Shift (shift to Extended ASCII)
@@ -235,7 +238,7 @@ final class DecodedBitStreamParser {
                 result.append(c40char);
               }
             } else if (cValue == 27) {  // FNC1
-              // ignore
+              result.append((char) 29); // translate as ASCII 29
             } else if (cValue == 30) {  // Upper Shift
               upperShift = true;
             } else {
@@ -320,7 +323,7 @@ final class DecodedBitStreamParser {
                 result.append(c40char);
               }
             } else if (cValue == 27) {  // FNC1
-              // ignore
+              result.append((char) 29); // translate as ASCII 29
             } else if (cValue == 30) {  // Upper Shift
               upperShift = true;
             } else {
