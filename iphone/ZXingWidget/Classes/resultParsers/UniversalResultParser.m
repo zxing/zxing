@@ -21,6 +21,8 @@
 #import "CBarcodeFormat.h"
 #import "ProductResultParser.h"
 #import "BizcardResultParser.h"
+#import "AddressBookAUResultParser.h"
+#import "VCardResultParser.h"
 
 @implementation UniversalResultParser
 static NSMutableArray *sTheResultParsers = nil;
@@ -45,6 +47,8 @@ static NSMutableArray *sTheResultParsers = nil;
   [self addParserClass:[BookmarkDoCoMoResultParser class]];
   [self addParserClass:[MeCardParser class]];
   [self addParserClass:[EmailDoCoMoResultParser class]];
+  [self addParserClass:[AddressBookAUResultParser class]];
+  [self addParserClass:[VCardResultParser class]];
   [self addParserClass:[BizcardResultParser class]];
   [self addParserClass:[PlainEmailResultParser class]];
   [self addParserClass:[TelResultParser class]];
@@ -81,7 +85,4 @@ static NSMutableArray *sTheResultParsers = nil;
   return [self parsedResultForString:theString format:BarcodeFormat_None];
 }
 
--(void)dealloc {
-  [super dealloc];
-}
 @end

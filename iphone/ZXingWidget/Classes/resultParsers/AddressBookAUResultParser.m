@@ -22,7 +22,7 @@
 #import "AddressBookAUResultParser.h"
 #import "BusinessCardParsedResult.h"
 #import "CBarcodeFormat.h"
-#import "DoCoMoResultParser.h"
+#import "ArrayAndStringCategories.h"
 
 @interface NSString (AddressBookAUResultParser)
 
@@ -73,6 +73,10 @@
 //
 + (ParsedResult *)parsedResultForString:(NSString *)rawText
                                  format:(BarcodeFormat)format {
+    // Force objects in ArrayAndStringCategories.m to be loaded from static
+    // library to work around a linker bug.
+    ForceArrayAndStringCategoriesToLoad();
+
     // MEMORY is mandatory; seems like a decent indicator, as does
     // end-of-record separator CR/LF
     if (rawText == nil ||

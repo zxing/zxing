@@ -1,5 +1,5 @@
 //
-//  DoCoMoResultParser.h
+//  ArrayAndStringCategories.h
 //  ZXing
 //
 //  Created by Christian Brunschen on 25/06/2008.
@@ -39,8 +39,6 @@
 @end
 
 
-@interface DoCoMoResultParser : ResultParser {
-
-}
-
-@end
+// This works around the linker bug described here:
+// http://developer.apple.com/library/mac/#qa/qa1490/_index.html
+void ForceArrayAndStringCategoriesToLoad(void);

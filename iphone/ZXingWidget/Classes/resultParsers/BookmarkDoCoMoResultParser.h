@@ -20,9 +20,9 @@
  */
 
 #import <UIKit/UIKit.h>
-#import "DoCoMoResultParser.h"
+#import "ResultParser.h"
 
-@interface BookmarkDoCoMoResultParser : DoCoMoResultParser {
+@interface BookmarkDoCoMoResultParser : ResultParser {
 
 }
 

@@ -22,6 +22,7 @@
 #import "MeCardParser.h"
 #import "BusinessCardParsedResult.h"
 #import "CBarcodeFormat.h"
+#import "ArrayAndStringCategories.h"
 
 @interface MeCardParser (Private)
 
@@ -56,12 +57,12 @@
   if (foundRange.location == NSNotFound) {
     return nil;
   }
-  
+
   NSString *name = [[s fieldWithPrefix:@"N:"] stringWithTrimmedWhitespace];
   if (name == nil) {
     return nil;
   }
-  
+
   BusinessCardParsedResult *result = [[BusinessCardParsedResult alloc] init];
   result.names = [NSArray arrayWithObject:name];
   result.pronunciation = [[s fieldWithPrefix:@"SOUND:"] stringWithTrimmedWhitespace];
@@ -80,7 +81,7 @@
   result.url = [[s fieldWithPrefix:@"URL:"] stringWithTrimmedWhitespace];
   result.organization = [[s fieldWithPrefix:@"ORG:"] stringWithTrimmedWhitespace];
   result.jobTitle = [s fieldWithPrefix:@"TITLE:"];
-  
+
   return [result autorelease];
 }
 

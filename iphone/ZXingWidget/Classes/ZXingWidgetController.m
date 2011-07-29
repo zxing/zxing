@@ -482,35 +482,39 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 #pragma mark - Torch
 
 - (void)setTorch:(BOOL)status {
+#if HAS_AVFF
   Class captureDeviceClass = NSClassFromString(@"AVCaptureDevice");
   if (captureDeviceClass != nil) {
     
-    AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+    AVCaptureDevice *device = [captureDeviceClass defaultDeviceWithMediaType:AVMediaTypeVideo];
     
     [device lockForConfiguration:nil];
     if ( [device hasTorch] ) {
       if ( status ) {
         [device setTorchMode:AVCaptureTorchModeOn];
       } else {
-        [device setTorchMode:AVCaptureTorchModeOff];
+        [device setTorchMode:AVCaptureTorchModeOn];
       }
     }
     [device unlockForConfiguration];
     
   }
+#endif
 }
 
 - (BOOL)torchIsOn {
+#if HAS_AVFF
   Class captureDeviceClass = NSClassFromString(@"AVCaptureDevice");
   if (captureDeviceClass != nil) {
     
-    AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+    AVCaptureDevice *device = [captureDeviceClass defaultDeviceWithMediaType:AVMediaTypeVideo];
     
     if ( [device hasTorch] ) {
       return [device torchMode] == AVCaptureTorchModeOn;
     }
     [device unlockForConfiguration];
   }
+#endif
   return NO;
 }
 
