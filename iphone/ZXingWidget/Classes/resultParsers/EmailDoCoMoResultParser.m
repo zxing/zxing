@@ -22,6 +22,7 @@
 #import "EmailDoCoMoResultParser.h"
 #import "EmailParsedResult.h"
 #import "CBarcodeFormat.h"
+#import "ArrayAndStringCategories.h"
 
 @implementation EmailDoCoMoResultParser
 
@@ -35,17 +36,17 @@
   if (foundRange.location == NSNotFound) {
     return nil;
   }
-  
+
   NSString *to = [s fieldWithPrefix:@"TO:"];
   if (to == nil) {
     return nil;
   }
-  
+
   EmailParsedResult *result = [[EmailParsedResult alloc] init];
   result.to = to;
   result.subject = [s fieldWithPrefix:@"SUB:"];
   result.body = [s fieldWithPrefix:@"BODY:"];
-  
+
   return [result autorelease];
 }
 

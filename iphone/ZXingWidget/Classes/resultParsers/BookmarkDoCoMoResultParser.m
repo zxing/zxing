@@ -22,6 +22,7 @@
 #import "BookmarkDoCoMoResultParser.h"
 #import "URIParsedResult.h"
 #import "CBarcodeFormat.h"
+#import "ArrayAndStringCategories.h"
 
 @implementation BookmarkDoCoMoResultParser
 
@@ -35,15 +36,15 @@
   if (foundRange.location == NSNotFound) {
     return nil;
   }
-  
+
   NSString *urlString = [s fieldWithPrefix:@"URL:"];
   if (urlString == nil) {
     return nil;
   }
-  
+
   NSString *title = [s fieldWithPrefix:@"TITLE:"];
-  
-  return [[[URIParsedResult alloc] initWithURLString:urlString 
+
+  return [[[URIParsedResult alloc] initWithURLString:urlString
                                                title:title] autorelease];
 }
 

@@ -22,7 +22,7 @@
 #import "BizcardResultParser.h"
 #import "BusinessCardParsedResult.h"
 #import "CBarcodeFormat.h"
-#import "DoCoMoResultParser.h"
+#import "ArrayAndStringCategories.h"
 
 @implementation BizcardResultParser
 

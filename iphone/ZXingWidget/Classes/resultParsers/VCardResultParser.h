@@ -1,10 +1,10 @@
 //
-//  EmailDoCoMoResultParser.h
+//  VCardResultParser.h
 //  ZXing
 //
-//  Created by Christian Brunschen on 25/06/2008.
+//  Created by George Nachman on 7/7/2011.
 /*
- * Copyright 2008 ZXing authors
+ * Copyright 2011 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,8 +22,9 @@
 #import <UIKit/UIKit.h>
 #import "ResultParser.h"
 
-@interface EmailDoCoMoResultParser : ResultParser {
-
+@interface VCardResultParser : ResultParser {
 }
 
 @end
+
+
