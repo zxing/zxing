@@ -204,7 +204,7 @@ public class GeoLocationGenerator implements GeneratorSource, ChangeListener {
 
   protected void fillWithMaps() {
     String link = mapsLink.getText();
-    if (!link.matches("http://maps.google.com/.*")) {
+    if (!link.startsWith("http://maps.google.")) {
       return;
     }
     String q = "";
