@@ -25,6 +25,16 @@
 		1D603D7913E0B60D006F4B51 /* VCardResultParserTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D603D7313E0B60D006F4B51 /* VCardResultParserTests.m */; };
 		1D603E6413E20AF1006F4B51 /* ArrayAndStringCategories.h in Headers */ = {isa = PBXBuildFile; fileRef = 1D603E6213E20AF1006F4B51 /* ArrayAndStringCategories.h */; };
 		1D603E6513E20AF1006F4B51 /* ArrayAndStringCategories.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D603E6313E20AF1006F4B51 /* ArrayAndStringCategories.m */; };
+		1D60411613E36BF8006F4B51 /* EmailAddressResultParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 1D60411013E36BF8006F4B51 /* EmailAddressResultParser.h */; };
+		1D60411713E36BF8006F4B51 /* EmailAddressResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D60411113E36BF8006F4B51 /* EmailAddressResultParser.m */; };
+		1D60411813E36BF8006F4B51 /* ISBNResultParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 1D60411213E36BF8006F4B51 /* ISBNResultParser.h */; };
+		1D60411913E36BF8006F4B51 /* ISBNResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D60411313E36BF8006F4B51 /* ISBNResultParser.m */; };
+		1D60411A13E36BF8006F4B51 /* SMTPResultParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 1D60411413E36BF8006F4B51 /* SMTPResultParser.h */; };
+		1D60411B13E36BF8006F4B51 /* SMTPResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D60411513E36BF8006F4B51 /* SMTPResultParser.m */; };
+		1D60412313E36C2D006F4B51 /* ISBNParsedResult.h in Headers */ = {isa = PBXBuildFile; fileRef = 1D60412113E36C2D006F4B51 /* ISBNParsedResult.h */; };
+		1D60412413E36C2D006F4B51 /* ISBNParsedResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D60412213E36C2D006F4B51 /* ISBNParsedResult.m */; };
+		1D60412A13E36C55006F4B51 /* ISBNResultParserTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D60412713E36C55006F4B51 /* ISBNResultParserTests.m */; };
+		1D60412B13E36C55006F4B51 /* SMTPResultParserTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D60412813E36C55006F4B51 /* SMTPResultParserTests.m */; };
 		1DFA090C13CE1A3900599044 /* CBarcodeFormat.h in Headers */ = {isa = PBXBuildFile; fileRef = 1DFA090A13CE1A3900599044 /* CBarcodeFormat.h */; };
 		1DFA090D13CE1A3900599044 /* CBarcodeFormat.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1DFA090B13CE1A3900599044 /* CBarcodeFormat.mm */; };
 		1DFA092413CE251600599044 /* ProductParsedResult.h in Headers */ = {isa = PBXBuildFile; fileRef = 1DFA092213CE251600599044 /* ProductParsedResult.h */; };
@@ -286,6 +296,16 @@
 		1D603E6213E20AF1006F4B51 /* ArrayAndStringCategories.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ArrayAndStringCategories.h; path = Classes/ArrayAndStringCategories.h; sourceTree = "<group>"; };
 		1D603E6313E20AF1006F4B51 /* ArrayAndStringCategories.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ArrayAndStringCategories.m; path = Classes/ArrayAndStringCategories.m; sourceTree = "<group>"; };
 		1D6040C413E3393B006F4B51 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		1D60411013E36BF8006F4B51 /* EmailAddressResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EmailAddressResultParser.h; path = Classes/resultParsers/EmailAddressResultParser.h; sourceTree = "<group>"; };
+		1D60411113E36BF8006F4B51 /* EmailAddressResultParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EmailAddressResultParser.m; path = Classes/resultParsers/EmailAddressResultParser.m; sourceTree = "<group>"; };
+		1D60411213E36BF8006F4B51 /* ISBNResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ISBNResultParser.h; path = Classes/resultParsers/ISBNResultParser.h; sourceTree = "<group>"; };
+		1D60411313E36BF8006F4B51 /* ISBNResultParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ISBNResultParser.m; path = Classes/resultParsers/ISBNResultParser.m; sourceTree = "<group>"; };
+		1D60411413E36BF8006F4B51 /* SMTPResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SMTPResultParser.h; path = Classes/resultParsers/SMTPResultParser.h; sourceTree = "<group>"; };
+		1D60411513E36BF8006F4B51 /* SMTPResultParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SMTPResultParser.m; path = Classes/resultParsers/SMTPResultParser.m; sourceTree = "<group>"; };
+		1D60412113E36C2D006F4B51 /* ISBNParsedResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ISBNParsedResult.h; path = Classes/parsedResults/ISBNParsedResult.h; sourceTree = "<group>"; };
+		1D60412213E36C2D006F4B51 /* ISBNParsedResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ISBNParsedResult.m; path = Classes/parsedResults/ISBNParsedResult.m; sourceTree = "<group>"; };
+		1D60412713E36C55006F4B51 /* ISBNResultParserTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ISBNResultParserTests.m; path = Tests/ISBNResultParserTests.m; sourceTree = "<group>"; };
+		1D60412813E36C55006F4B51 /* SMTPResultParserTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SMTPResultParserTests.m; path = Tests/SMTPResultParserTests.m; sourceTree = "<group>"; };
 		1DFA090A13CE1A3900599044 /* CBarcodeFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CBarcodeFormat.h; path = Classes/CBarcodeFormat.h; sourceTree = "<group>"; };
 		1DFA090B13CE1A3900599044 /* CBarcodeFormat.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CBarcodeFormat.mm; path = Classes/CBarcodeFormat.mm; sourceTree = "<group>"; };
 		1DFA092213CE251600599044 /* ProductParsedResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProductParsedResult.h; path = Classes/parsedResults/ProductParsedResult.h; sourceTree = "<group>"; };
@@ -627,7 +647,9 @@
 				1D603D6B13E0B60D006F4B51 /* BizcardResultParserTests.m */,
 				1D603D6D13E0B60D006F4B51 /* BookmarkDoCoMoTests.m */,
 				1D603D6F13E0B60D006F4B51 /* EmailDoCoMoResultParserTests.m */,
+				1D60412713E36C55006F4B51 /* ISBNResultParserTests.m */,
 				1D603D7113E0B60D006F4B51 /* MeCardParserTests.m */,
+				1D60412813E36C55006F4B51 /* SMTPResultParserTests.m */,
 				1D603D7313E0B60D006F4B51 /* VCardResultParserTests.m */,
 			);
 			name = Tests;
@@ -881,10 +903,14 @@
 				1D0CBDF813D0DD5D003D0F8D /* BizcardResultParser.m */,
 				1F027FFB11A7BF06006B06DE /* BookmarkDoCoMoResultParser.h */,
 				1F027FFC11A7BF06006B06DE /* BookmarkDoCoMoResultParser.m */,
+				1D60411013E36BF8006F4B51 /* EmailAddressResultParser.h */,
+				1D60411113E36BF8006F4B51 /* EmailAddressResultParser.m */,
 				1F027FFF11A7BF06006B06DE /* EmailDoCoMoResultParser.h */,
 				1F02800011A7BF06006B06DE /* EmailDoCoMoResultParser.m */,
 				1F02800111A7BF06006B06DE /* GeoResultParser.h */,
 				1F02800211A7BF06006B06DE /* GeoResultParser.m */,
+				1D60411213E36BF8006F4B51 /* ISBNResultParser.h */,
+				1D60411313E36BF8006F4B51 /* ISBNResultParser.m */,
 				1F02800311A7BF06006B06DE /* MeCardParser.h */,
 				1F02800411A7BF06006B06DE /* MeCardParser.m */,
 				1F02800511A7BF06006B06DE /* PlainEmailResultParser.h */,
@@ -897,6 +923,8 @@
 				1F02800A11A7BF06006B06DE /* SMSResultParser.m */,
 				1F02800B11A7BF06006B06DE /* SMSTOResultParser.h */,
 				1F02800C11A7BF06006B06DE /* SMSTOResultParser.m */,
+				1D60411413E36BF8006F4B51 /* SMTPResultParser.h */,
+				1D60411513E36BF8006F4B51 /* SMTPResultParser.m */,
 				1F02800D11A7BF06006B06DE /* TelResultParser.h */,
 				1F02800E11A7BF06006B06DE /* TelResultParser.m */,
 				1F02800F11A7BF06006B06DE /* TextResultParser.h */,
@@ -920,6 +948,8 @@
 				1F027FDE11A7BEEB006B06DE /* EmailParsedResult.m */,
 				1F027FDF11A7BEEB006B06DE /* GeoParsedResult.h */,
 				1F027FE011A7BEEB006B06DE /* GeoParsedResult.m */,
+				1D60412113E36C2D006F4B51 /* ISBNParsedResult.h */,
+				1D60412213E36C2D006F4B51 /* ISBNParsedResult.m */,
 				1F027FE111A7BEEB006B06DE /* ParsedResult.h */,
 				1F027FE211A7BEEB006B06DE /* ParsedResult.m */,
 				1DFA092213CE251600599044 /* ProductParsedResult.h */,
@@ -1088,6 +1118,10 @@
 				1D0CBDF913D0DD5D003D0F8D /* BizcardResultParser.h in Headers */,
 				1D4F11FB13D89EFD0032F754 /* VCardResultParser.h in Headers */,
 				1D603E6413E20AF1006F4B51 /* ArrayAndStringCategories.h in Headers */,
+				1D60411613E36BF8006F4B51 /* EmailAddressResultParser.h in Headers */,
+				1D60411813E36BF8006F4B51 /* ISBNResultParser.h in Headers */,
+				1D60411A13E36BF8006F4B51 /* SMTPResultParser.h in Headers */,
+				1D60412313E36C2D006F4B51 /* ISBNParsedResult.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1193,6 +1227,8 @@
 				1D603D7713E0B60D006F4B51 /* EmailDoCoMoResultParserTests.m in Sources */,
 				1D603D7813E0B60D006F4B51 /* MeCardParserTests.m in Sources */,
 				1D603D7913E0B60D006F4B51 /* VCardResultParserTests.m in Sources */,
+				1D60412A13E36C55006F4B51 /* ISBNResultParserTests.m in Sources */,
+				1D60412B13E36C55006F4B51 /* SMTPResultParserTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1315,6 +1351,10 @@
 				1D0CBDFA13D0DD5D003D0F8D /* BizcardResultParser.m in Sources */,
 				1D4F11FC13D89EFD0032F754 /* VCardResultParser.m in Sources */,
 				1D603E6513E20AF1006F4B51 /* ArrayAndStringCategories.m in Sources */,
+				1D60411713E36BF8006F4B51 /* EmailAddressResultParser.m in Sources */,
+				1D60411913E36BF8006F4B51 /* ISBNResultParser.m in Sources */,
+				1D60411B13E36BF8006F4B51 /* SMTPResultParser.m in Sources */,
+				1D60412413E36C2D006F4B51 /* ISBNParsedResult.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

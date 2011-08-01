@@ -22,6 +22,12 @@
 #import "ResultParser.h"
 #import "TextResultParser.h"
 
+@interface ResultParser(Private)
+
++ (NSString *)urlDecode:(NSString *)str;
+
+@end
+
 @implementation ResultParser
 
 static NSMutableSet *sResultParsers = nil;
@@ -71,6 +77,36 @@ static NSMutableSet *sResultParsers = nil;
 
 + (ParsedResult *)parsedResultForString:(NSString *)s {
   return [ResultParser parsedResultForString:s format:BarcodeFormat_None];
+}
+
++ (NSDictionary*)dictionaryForQueryString:(NSString *)queryString {
+    NSMutableDictionary *result = [NSMutableDictionary dictionary];
+    NSArray *keyValuePairs = [queryString componentsSeparatedByString:@"&"];
+    for (NSString *kvp in keyValuePairs) {
+        NSRange equals = [kvp rangeOfString:@"="];
+        if (equals.location != NSNotFound) {
+            NSString *key =
+                [kvp substringWithRange:NSMakeRange(0, equals.location)];
+            NSUInteger i = equals.location + 1;
+            NSString *value =
+                [kvp substringWithRange:NSMakeRange(i, [kvp length] - i)];
+            [result setObject:[self urlDecode:value]
+                       forKey:[self urlDecode:key]];
+        }
+    }
+    return result;
+}
+
+@end
+
+@implementation ResultParser(Private)
+
++ (NSString *)urlDecode:(NSString *)str {
+    // Obj-C's url decoder does everything except + to space conversion.
+    NSString *result = [str stringByReplacingOccurrencesOfString:@"+"
+                                                      withString:@" "];
+    return [result stringByReplacingPercentEscapesUsingEncoding:
+        NSUTF8StringEncoding];
 }
 
 @end
