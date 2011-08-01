@@ -1,8 +1,8 @@
 //
-//  ResultParser.h
+//  EmailAddressResultParser.h
 //  ZXing
 //
-//  Created by Christian Brunschen on 25/06/2008.
+//  Ported to Objective C by George Nachman on 8/1/2011
 /*
  * Copyright 2008 ZXing authors
  *
@@ -20,16 +20,12 @@
  */
 
 #import <UIKit/UIKit.h>
-#import "../parsedResults/ParsedResult.h"
-#import "CBarcodeFormat.h"
+#import "ResultParser.h"
 
-@interface ResultParser : NSObject {
+@interface EmailAddressResultParser : ResultParser {
 
 }
-+ (void)registerResultParserClass:(Class)resultParser;
-+ (ParsedResult *)parsedResultForString:(NSString *)s;
-+ (ParsedResult *)parsedResultForString:(NSString *)s
-                                 format:(BarcodeFormat)barcodeFormat;
-+ (NSDictionary*)dictionaryForQueryString:(NSString *)uri;
+
++ (BOOL)isBasicallyValidEmailAddress:(NSString *)address;
 
 @end

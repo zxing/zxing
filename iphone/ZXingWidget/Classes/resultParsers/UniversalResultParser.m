@@ -23,6 +23,9 @@
 #import "BizcardResultParser.h"
 #import "AddressBookAUResultParser.h"
 #import "VCardResultParser.h"
+#import "SMTPResultParser.h"
+#import "ISBNResultParser.h"
+#import "EmailAddressResultParser.h"
 
 @implementation UniversalResultParser
 static NSMutableArray *sTheResultParsers = nil;
@@ -50,13 +53,16 @@ static NSMutableArray *sTheResultParsers = nil;
   [self addParserClass:[AddressBookAUResultParser class]];
   [self addParserClass:[VCardResultParser class]];
   [self addParserClass:[BizcardResultParser class]];
+  [self addParserClass:[EmailAddressResultParser class]];
   [self addParserClass:[PlainEmailResultParser class]];
+  [self addParserClass:[SMTPResultParser class]];
   [self addParserClass:[TelResultParser class]];
   [self addParserClass:[SMSResultParser class]];
   [self addParserClass:[SMSTOResultParser class]];
   [self addParserClass:[GeoResultParser class]];
   [self addParserClass:[URLTOResultParser class]];
   [self addParserClass:[URLResultParser class]];
+  [self addParserClass:[ISBNResultParser class]];
   [self addParserClass:[ProductResultParser class]];
   [self addParserClass:[TextResultParser class]];
 }
