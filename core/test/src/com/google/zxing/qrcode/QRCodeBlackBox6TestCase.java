@@ -1,5 +1,5 @@
 /*
- * Copyright 2008 ZXing authors
+ * Copyright 2009 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,18 +21,17 @@ import com.google.zxing.MultiFormatReader;
 import com.google.zxing.common.AbstractBlackBoxTestCase;
 
 /**
- * Tests of various QR Codes from t-shirts, which are notoriously not flat.
- *
- * @author dswitkin@google.com (Daniel Switkin)
+ * These tests are supplied by Tim Gernat and test finder pattern detection at small size and under
+ * rotation, which was a weak spot.
  */
-public final class QRCodeBlackBox4TestCase extends AbstractBlackBoxTestCase {
+public final class QRCodeBlackBox6TestCase extends AbstractBlackBoxTestCase {
 
-  public QRCodeBlackBox4TestCase() {
-    super("test/data/blackbox/qrcode-4", new MultiFormatReader(), BarcodeFormat.QR_CODE);
-    addTest(36, 36, 0.0f);
-    addTest(35, 35, 90.0f);
-    addTest(35, 35, 180.0f);
-    addTest(34, 34, 270.0f);
+  public QRCodeBlackBox6TestCase() {
+    super("test/data/blackbox/qrcode-6", new MultiFormatReader(), BarcodeFormat.QR_CODE);
+    addTest(14, 14, 0.0f);
+    addTest(13, 13, 90.0f);
+    addTest(11, 12, 180.0f);
+    addTest(13, 13, 270.0f);
   }
 
 }

@@ -404,7 +404,7 @@ public class FinderPatternFinder {
           FinderPattern center = (FinderPattern) possibleCenters.elementAt(index);
           // Look for about the same center and module size:
           if (center.aboutEquals(estimatedModuleSize, centerI, centerJ)) {
-            center.incrementCount();
+            possibleCenters.setElementAt(center.combineEstimate(centerI, centerJ, estimatedModuleSize), index);
             found = true;
             break;
           }
