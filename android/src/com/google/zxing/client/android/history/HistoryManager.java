@@ -266,19 +266,29 @@ public final class HistoryManager {
     }
     Cursor cursor = null;
     try {
+
       cursor = db.query(DBHelper.TABLE_NAME,
                         COLUMNS,
                         null, null, null, null,
                         DBHelper.TIMESTAMP_COL + " DESC");
+
       while (cursor.moveToNext()) {
-        for (int col = 0; col < COLUMNS.length; col++) {
-          historyText.append('"').append(massageHistoryField(cursor.getString(col))).append("\",");
-        }
+
+        historyText.append('"').append(massageHistoryField(cursor.getString(0))).append("\",");
+        historyText.append('"').append(massageHistoryField(cursor.getString(1))).append("\",");
+        historyText.append('"').append(massageHistoryField(cursor.getString(2))).append("\",");
+        historyText.append('"').append(massageHistoryField(cursor.getString(3))).append("\",");
+
         // Add timestamp again, formatted
         long timestamp = cursor.getLong(3);
         historyText.append('"').append(massageHistoryField(
-            EXPORT_DATE_TIME_FORMAT.format(new Date(timestamp)))).append("\"\r\n");
+            EXPORT_DATE_TIME_FORMAT.format(new Date(timestamp)))).append("\",");
+
+        // Above we're preserving the old ordering of columns which had formatted data in position 5
+
+        historyText.append('"').append(massageHistoryField(cursor.getString(4))).append("\"\r\n");
       }
+
     } finally {
       if (cursor != null) {
         cursor.close();
