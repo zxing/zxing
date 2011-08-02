@@ -19,6 +19,7 @@ package com.google.zxing.client.android.result.supplement;
 import android.content.Context;
 import android.os.Handler;
 import android.widget.TextView;
+import com.google.zxing.client.android.history.HistoryManager;
 import com.google.zxing.client.android.AndroidHttpClient;
 import com.google.zxing.client.android.R;
 import com.google.zxing.client.result.URIParsedResult;
@@ -42,9 +43,12 @@ final class URIResultInfoRetriever extends SupplementalInfoRetriever {
   private final URIParsedResult result;
   private final String redirectString;
 
-  URIResultInfoRetriever(TextView textView, URIParsedResult result, Handler handler,
-      Context context) {
-    super(textView, handler, context);
+  URIResultInfoRetriever(TextView textView,
+                         URIParsedResult result,
+                         Handler handler,
+                         HistoryManager historyManager,
+                         Context context) {
+    super(textView, handler, historyManager, context);
     redirectString = context.getString(R.string.msg_redirect);
     this.result = result;
   }
@@ -55,7 +59,7 @@ final class URIResultInfoRetriever extends SupplementalInfoRetriever {
     String newURI = unredirect(oldURI);
     int count = 0;
     while (count < 3 && !oldURI.equals(newURI)) {
-      append(redirectString + ": " + newURI);
+      append(result.getDisplayResult(), redirectString + " : " + newURI);
       count++;
       oldURI = newURI;
       newURI = unredirect(newURI);

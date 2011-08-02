@@ -21,13 +21,13 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Handler;
 import android.text.Html;
-import android.text.Spanned;
 import android.view.View;
 import android.widget.TextView;
 import com.google.zxing.client.result.ISBNParsedResult;
 import com.google.zxing.client.result.ParsedResult;
 import com.google.zxing.client.result.ProductParsedResult;
 import com.google.zxing.client.result.URIParsedResult;
+import com.google.zxing.client.android.history.HistoryManager;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -55,17 +55,26 @@ public abstract class SupplementalInfoRetriever implements Callable<Void> {
     return executorInstance;
   }
 
-  public static void maybeInvokeRetrieval(TextView textView, ParsedResult result, Handler handler,
-      Context context) {
+  public static void maybeInvokeRetrieval(TextView textView,
+                                          ParsedResult result,
+                                          Handler handler,
+                                          HistoryManager historyManager,
+                                          Context context) {
     SupplementalInfoRetriever retriever = null;
     if (result instanceof URIParsedResult) {
-      retriever = new URIResultInfoRetriever(textView, (URIParsedResult) result, handler, context);
+      retriever = new URIResultInfoRetriever(textView, (URIParsedResult) result, handler, historyManager, context);
     } else if (result instanceof ProductParsedResult) {
       retriever = new ProductResultInfoRetriever(textView,
-          ((ProductParsedResult) result).getProductID(), handler, context);
+                                                 ((ProductParsedResult) result).getProductID(),
+                                                 handler,
+                                                 historyManager,
+                                                 context);
     } else if (result instanceof ISBNParsedResult) {
-      retriever = new ProductResultInfoRetriever(textView, ((ISBNParsedResult) result).getISBN(),
-          handler, context);
+      retriever = new ProductResultInfoRetriever(textView,
+                                                 ((ISBNParsedResult) result).getISBN(),
+                                                 handler,
+                                                 historyManager,
+                                                 context);
     }
     if (retriever != null) {
       ExecutorService executor = getExecutorService();
@@ -78,11 +87,13 @@ public abstract class SupplementalInfoRetriever implements Callable<Void> {
   private final WeakReference<TextView> textViewRef;
   private final Handler handler;
   private final Context context;
+  private final HistoryManager historyManager;
 
-  SupplementalInfoRetriever(TextView textView, Handler handler, Context context) {
+  SupplementalInfoRetriever(TextView textView, Handler handler, HistoryManager historyManager, Context context) {
     this.textViewRef = new WeakReference<TextView>(textView);
     this.handler = handler;
     this.context = context;
+    this.historyManager = historyManager;
   }
 
   public final Void call() throws IOException, InterruptedException {
@@ -92,17 +103,18 @@ public abstract class SupplementalInfoRetriever implements Callable<Void> {
 
   abstract void retrieveSupplementalInfo() throws IOException, InterruptedException;
 
-  final void append(final String newText) throws InterruptedException {
+  final void append(String itemID, final String newText) throws InterruptedException {
     final TextView textView = textViewRef.get();
     if (textView == null) {
       throw new InterruptedException();
     }
     handler.post(new Runnable() {
       public void run() {
-        Spanned html = Html.fromHtml(newText + '\n');
-        textView.append(html);
+        textView.append(Html.fromHtml(newText + '\n'));
       }
     });
+    // Add the text to the history.
+    historyManager.addHistoryItemDetails(itemID, newText);
   }
 
   final void setLink(final String uri) {

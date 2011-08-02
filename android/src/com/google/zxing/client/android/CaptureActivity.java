@@ -501,8 +501,11 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     supplementTextView.setOnClickListener(null);
     if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(
         PreferencesActivity.KEY_SUPPLEMENTAL, true)) {
-      SupplementalInfoRetriever.maybeInvokeRetrieval(supplementTextView, resultHandler.getResult(),
-          handler, this);
+      SupplementalInfoRetriever.maybeInvokeRetrieval(supplementTextView,
+                                                     resultHandler.getResult(),
+                                                     handler,
+                                                     historyManager,
+                                                     this);
     }
 
     int buttonCount = resultHandler.getButtonCount();
