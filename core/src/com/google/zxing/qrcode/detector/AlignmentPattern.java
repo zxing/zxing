@@ -40,9 +40,20 @@ public final class AlignmentPattern extends ResultPoint {
   boolean aboutEquals(float moduleSize, float i, float j) {
     if (Math.abs(i - getY()) <= moduleSize && Math.abs(j - getX()) <= moduleSize) {
       float moduleSizeDiff = Math.abs(moduleSize - estimatedModuleSize);
-      return moduleSizeDiff <= 1.0f || moduleSizeDiff / estimatedModuleSize <= 1.0f;
+      return moduleSizeDiff <= 1.0f || moduleSizeDiff <= estimatedModuleSize;
     }
     return false;
+  }
+
+  /**
+   * Combines this object's current estimate of a finder pattern position and module size
+   * with a new estimate. It returns a new {@code FinderPattern} containing an average of the two.
+   */
+  AlignmentPattern combineEstimate(float i, float j, float newModuleSize) {
+    float combinedX = (getX() + j) / 2.0f;
+    float combinedY = (getY() + i) / 2.0f;
+    float combinedModuleSize = (estimatedModuleSize + newModuleSize) / 2.0f;
+    return new AlignmentPattern(combinedX, combinedY, combinedModuleSize);
   }
 
 }

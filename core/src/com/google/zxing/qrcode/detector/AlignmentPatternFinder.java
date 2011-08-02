@@ -263,7 +263,7 @@ final class AlignmentPatternFinder {
         AlignmentPattern center = (AlignmentPattern) possibleCenters.elementAt(index);
         // Look for about the same center and module size:
         if (center.aboutEquals(estimatedModuleSize, centerI, centerJ)) {
-          return new AlignmentPattern(centerJ, centerI, estimatedModuleSize);
+          return center.combineEstimate(centerI, centerJ, estimatedModuleSize);
         }
       }
       // Hadn't found this before; save it
