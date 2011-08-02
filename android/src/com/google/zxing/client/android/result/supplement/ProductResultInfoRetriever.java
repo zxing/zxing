@@ -20,6 +20,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.TextView;
+import com.google.zxing.client.android.history.HistoryManager;
 import com.google.zxing.client.android.AndroidHttpClient;
 import com.google.zxing.client.android.LocaleManager;
 import org.apache.http.HttpEntity;
@@ -48,9 +49,12 @@ final class ProductResultInfoRetriever extends SupplementalInfoRetriever {
 
   private final String productID;
 
-  ProductResultInfoRetriever(TextView textView, String productID, Handler handler,
-      Context context) {
-    super(textView, handler, context);
+  ProductResultInfoRetriever(TextView textView,
+                             String productID,
+                             Handler handler,
+                             HistoryManager historyManager,
+                             Context context) {
+    super(textView, handler, historyManager, context);
     this.productID = productID;
   }
 
@@ -71,8 +75,8 @@ final class ProductResultInfoRetriever extends SupplementalInfoRetriever {
     String content = consume(response.getEntity());
     Matcher matcher = PRODUCT_NAME_PRICE_PATTERN.matcher(content);
     if (matcher.find()) {
-      append(matcher.group(1));
-      append(matcher.group(2));
+      String details = matcher.group(1) + ' ' + matcher.group(2);
+      append(productID, details);
     }
     setLink(uri);
   }
