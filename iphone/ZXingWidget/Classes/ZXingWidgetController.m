@@ -80,6 +80,7 @@
   
   [self stopCapture];
 
+  [result release];
   [soundToPlay release];
   [overlayView release];
   [readers release];
