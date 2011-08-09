@@ -366,7 +366,7 @@ public final class RSSExpandedReader extends AbstractRSSReader{
       start = this.startEnd[0];
 
       int firstElementStart = this.startEnd[1] + 1;
-      while(row.get(firstElementStart) && firstElementStart < row.size) {
+      while (firstElementStart < row.size && row.get(firstElementStart)) {
         firstElementStart++;
       }
 
