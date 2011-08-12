@@ -61,7 +61,7 @@ namespace com.google.zxing.client.result.optional
 			{
 				prefix = URI_PREFIXES[identifierCode];
 			}
-			System.String restOfURI = bytesToString(payload, 1, payload.Length - 1, "UTF8");
+			System.String restOfURI = bytesToString(payload, 1, payload.Length - 1, "UTF-8");
 			return prefix == null?restOfURI:prefix + restOfURI;
 		}
 	}

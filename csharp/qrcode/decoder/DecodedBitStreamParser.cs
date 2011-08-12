@@ -40,7 +40,7 @@ namespace com.google.zxing.qrcode.decoder
 		private const System.String SHIFT_JIS = "SJIS";
 		private const System.String EUC_JP = "EUC_JP";
 		private static bool ASSUME_SHIFT_JIS;
-		private const System.String UTF8 = "UTF8";
+		private const System.String UTF8 = "UTF-8";
         // Redivivus.in Java to c# Porting update
         // 30/01/2010 
         // Commented & Added        

@@ -57,7 +57,7 @@ namespace com.google.zxing.client.result.optional
 			int languageLength = statusByte & 0x1F;
 			// language is always ASCII-encoded:
 			System.String language = bytesToString(payload, 1, languageLength, "US-ASCII");
-			System.String encoding = isUTF16?"UTF-16":"UTF8";
+			System.String encoding = isUTF16?"UTF-16":"UTF-8";
 			System.String text = bytesToString(payload, 1 + languageLength, payload.Length - languageLength - 1, encoding);
 			return new System.String[]{language, text};
 		}
