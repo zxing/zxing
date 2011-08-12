@@ -278,6 +278,19 @@ final class QRCodeEncoder {
           newDisplayContents.append('\n').append(email);
         }
 
+        String url = trim(bundle.getString(Contents.URL_KEY));
+        if (url != null) {
+          // escapeMECARD(url) -> wrong escape e.g. http\://zxing.google.com
+          newContents.append("URL:").append(url).append(';');
+          newDisplayContents.append('\n').append(url);
+        }
+
+        String note = trim(bundle.getString(Contents.NOTE_KEY));
+        if (note != null) {
+          newContents.append("NOTE:").append(escapeMECARD(note)).append(';');
+          newDisplayContents.append('\n').append(note);
+        }
+
         // Make sure we've encoded at least one field.
         if (newDisplayContents.length() > 0) {
           newContents.append(';');

@@ -79,6 +79,10 @@ public final class Contents {
     }
   }
 
+  public static final String URL_KEY = "URL_KEY";
+
+  public static final String NOTE_KEY = "NOTE_KEY";
+
   /**
    * When using Type.CONTACT, these arrays provide the keys for adding or retrieving multiple
    * phone numbers and addresses.
