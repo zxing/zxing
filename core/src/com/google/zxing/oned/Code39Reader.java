@@ -150,7 +150,7 @@ public final class Code39Reader extends OneDReader {
       result.deleteCharAt(max);
     }
 
-    if (result.length() == 0) {
+    if (result.length() < 4) {
       // Almost surely a false positive
       throw NotFoundException.getNotFoundInstance();
     }
