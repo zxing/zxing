@@ -72,7 +72,13 @@ public final class RSSExpandedImage2resultTestCase extends Assert {
       throws IOException, NotFoundException {
     RSSExpandedReader rssExpandedReader = new RSSExpandedReader();
 
-    BufferedImage image = ImageIO.read(new File(path));
+    File file = new File(path);
+    if (!file.exists()) {
+      // Support running from project root too
+      file = new File("core", path);
+    }
+
+    BufferedImage image = ImageIO.read(file);
     BinaryBitmap binaryMap = new BinaryBitmap(new GlobalHistogramBinarizer(new BufferedImageLuminanceSource(image)));
     int rowNumber = binaryMap.getHeight() / 2;
     BitArray row = binaryMap.getBlackRow(rowNumber, null);

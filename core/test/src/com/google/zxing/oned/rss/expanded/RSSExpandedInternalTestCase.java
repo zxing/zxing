@@ -54,7 +54,13 @@ public final class RSSExpandedInternalTestCase extends Assert {
     RSSExpandedReader rssExpandedReader = new RSSExpandedReader();
 
     String path = "test/data/blackbox/rssexpanded-1/2.jpg";
-    BufferedImage image = ImageIO.read(new File(path));
+    File file = new File(path);
+    if (!file.exists()) {
+      // Support running from project root too
+      file = new File("core", path);
+    }
+
+    BufferedImage image = ImageIO.read(file);
     BinaryBitmap binaryMap = new BinaryBitmap(new GlobalHistogramBinarizer(new BufferedImageLuminanceSource(image)));
     int rowNumber = binaryMap.getHeight() / 2;
     BitArray row = binaryMap.getBlackRow(rowNumber, null);
@@ -89,7 +95,13 @@ public final class RSSExpandedInternalTestCase extends Assert {
     RSSExpandedReader rssExpandedReader = new RSSExpandedReader();
 
     String path = "test/data/blackbox/rssexpanded-1/3.jpg";
-    BufferedImage image = ImageIO.read(new File(path));
+    File file = new File(path);
+    if (!file.exists()) {
+      // Support running from project root too
+      file = new File("core", path);
+    }
+
+    BufferedImage image = ImageIO.read(file);
     BinaryBitmap binaryMap = new BinaryBitmap(new GlobalHistogramBinarizer(new BufferedImageLuminanceSource(image)));
     int rowNumber = binaryMap.getHeight() / 2;
     BitArray row = binaryMap.getBlackRow(rowNumber, null);
@@ -111,7 +123,13 @@ public final class RSSExpandedInternalTestCase extends Assert {
     RSSExpandedReader rssExpandedReader = new RSSExpandedReader();
 
     String path = "test/data/blackbox/rssexpanded-1/3.jpg";
-    BufferedImage image = ImageIO.read(new File(path));
+    File file = new File(path);
+    if (!file.exists()) {
+      // Support running from project root too
+      file = new File("core", path);
+    }
+
+    BufferedImage image = ImageIO.read(file);
     BinaryBitmap binaryMap = new BinaryBitmap(new GlobalHistogramBinarizer(new BufferedImageLuminanceSource(image)));
     BitArray row = binaryMap.getBlackRow(binaryMap.getHeight() / 2, null);
 
@@ -129,7 +147,13 @@ public final class RSSExpandedInternalTestCase extends Assert {
     RSSExpandedReader rssExpandedReader = new RSSExpandedReader();
 
     String path = "test/data/blackbox/rssexpanded-1/3.jpg";
-    BufferedImage image = ImageIO.read(new File(path));
+    File file = new File(path);
+    if (!file.exists()) {
+      // Support running from project root too
+      file = new File("core", path);
+    }
+
+    BufferedImage image = ImageIO.read(file);
     BinaryBitmap binaryMap = new BinaryBitmap(new GlobalHistogramBinarizer(new BufferedImageLuminanceSource(image)));
     BitArray row = binaryMap.getBlackRow(binaryMap.getHeight() / 2, null);
 
