@@ -109,8 +109,8 @@ public final class Detector {
     // Deskew and sample image.
     BitMatrix bits = sampleGrid(matrix, vertices[4], vertices[5],
         vertices[6], vertices[7], dimension);
-    return new DetectorResult(bits, new ResultPoint[]{vertices[4],
-        vertices[5], vertices[6], vertices[7]});
+    return new DetectorResult(bits, new ResultPoint[]{vertices[5],
+        vertices[4], vertices[6], vertices[7]});
   }
 
   /**
