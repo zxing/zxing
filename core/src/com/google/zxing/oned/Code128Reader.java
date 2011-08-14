@@ -448,7 +448,7 @@ public final class Code128Reader extends OneDReader {
 
     String resultString = result.toString();
 
-    if (resultString.length() == 0) {
+    if (resultString.length() < 2) {
       // Almost surely a false positive
       throw FormatException.getFormatInstance();
     }
