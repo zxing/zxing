@@ -92,7 +92,7 @@ public final class Code93Reader extends OneDReader {
       throw NotFoundException.getNotFoundInstance();
     }
 
-    if (result.length() < 2) {
+    if (result.length() < 4) {
       // Almost surely a false positive
       throw NotFoundException.getNotFoundInstance();
     }
