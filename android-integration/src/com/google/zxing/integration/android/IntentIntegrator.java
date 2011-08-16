@@ -215,7 +215,12 @@ public final class IntentIntegrator {
       public void onClick(DialogInterface dialogInterface, int i) {
         Uri uri = Uri.parse("market://search?q=pname:" + PACKAGE);
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-        activity.startActivity(intent);
+        try {
+          activity.startActivity(intent);
+        } catch (ActivityNotFoundException anfe) {
+          // Hmm, market is not installed
+          Log.w(TAG, "Android Market is not installed; cannot install Barcode Scanner");
+        }
       }
     });
     downloadDialog.setNegativeButton(stringButtonNo, new DialogInterface.OnClickListener() {
