@@ -494,7 +494,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
       if ( status ) {
         [device setTorchMode:AVCaptureTorchModeOn];
       } else {
-        [device setTorchMode:AVCaptureTorchModeOn];
+        [device setTorchMode:AVCaptureTorchModeOff];
       }
     }
     [device unlockForConfiguration];
