@@ -34,7 +34,7 @@ import android.os.Handler;
 import com.google.zxing.client.android.history.HistoryManager;
 
 /**
- * @author kamilkaczm
+ * @author Kamil Kaczmarczyk
  * @author Sean Owen
  */
 public final class BookResultInfoRetriever extends SupplementalInfoRetriever {
