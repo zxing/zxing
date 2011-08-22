@@ -74,6 +74,8 @@
   <string name="msg_default_type">Tür</string>
   <string name="msg_encode_barcode_failed">İstenen barkod oluşturulamadı.</string>
   <string name="msg_encode_contents_failed">Sağlanan verilerden bir barkod kodlanamadı.</string>
+  <string name="msg_google_books">Google Kitap Arama</string>
+  <string name="msg_google_product">Google Ürün Arama</string>
   <string name="msg_google_shopper_missing">Google Shopper yüklü değil</string>
   <string name="msg_install_google_shopper">Google Shopper, tarayıcıyı açmanıza gerek kalmadan barkod taraması, çevrimiçi ve yerel fiyatlar ile gözden geçirme ve diğer özellikten yararlanmanızı sağlar. Denemek ister misiniz?</string>
   <string name="msg_intent_failed">Üzgünüz, istenen uygulama başlatılamadı. Barkod içeriği geçersiz olabilir.</string>

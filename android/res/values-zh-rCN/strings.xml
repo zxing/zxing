@@ -74,6 +74,8 @@
   <string name="msg_default_type">类型</string>
   <string name="msg_encode_barcode_failed">无法生成条码。</string>
   <string name="msg_encode_contents_failed">无法根据已有数据生成条码。   </string>
+  <string name="msg_google_books">谷歌图书</string>
+  <string name="msg_google_product">谷歌购物</string>
   <string name="msg_google_shopper_missing">谷歌购物未安装</string>
   <string name="msg_install_google_shopper">谷歌购物是一款将条码扫描和商品比价相结合的应用，谷歌购物不使用浏览器，您想尝试吗？</string>
   <string name="msg_intent_failed">抱歉，无法打开所需软件。 条码内容可能无效。</string>

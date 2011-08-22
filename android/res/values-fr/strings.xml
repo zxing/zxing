@@ -74,6 +74,8 @@
   <string name="msg_default_type">Type</string>
   <string name="msg_encode_barcode_failed">Impossible de générer le code-barres demandé.</string>
   <string name="msg_encode_contents_failed">Impossible de créer le code-barres à partir des données fournies.</string>
+  <string name="msg_google_books">Google Livres</string>
+  <string name="msg_google_product">Google Shopping</string>
   <string name="msg_google_shopper_missing">Google Shopper n\'est pas installé</string>
   <string name="msg_install_google_shopper">Google Shopper associe la lecture de codes-barres avec des prix, des commentaires et plus encore sans ouvrir le navigateur. Désirez-vous l\'essayer maintenant ?</string>
   <string name="msg_intent_failed">Désolé, l\'application demandée n\'a pas pu être lancée. Le contenu du code-barres est peut-être invalide.</string>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright (C) 2010 ZXing authors
+ Copyright (C) 2011 ZXing authors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -74,6 +74,8 @@
   <string name="msg_default_type">Typ</string>
   <string name="msg_encode_barcode_failed">Nie je možné vygenerovať požadovaný čiarový kód.</string>
   <string name="msg_encode_contents_failed">Nie je možné zakódovať čiarový kód z poskytnutých údajov.</string>
+  <string name="msg_google_books">Google Books</string>
+  <string name="msg_google_product">Google Product Search</string>
   <string name="msg_google_shopper_missing">Nie je nainštalovaný Google Shopper.</string>
   <string name="msg_install_google_shopper">Google Shopper kombinuje v sebe skenovanie čiarových kódov s miestnymi cenami on-line, recenzie a oveľa viac bez otvorenia prehliadača. Chceli by ste ho vyskúšať?</string>
   <string name="msg_intent_failed">Ospravedlňujeme sa, požadovanú aplikáciu nemohla byť spustená. Obsah čiarového kódu je možno neplatný.</string>
