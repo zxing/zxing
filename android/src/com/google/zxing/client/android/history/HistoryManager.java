@@ -68,6 +68,7 @@ public final class HistoryManager {
   };
 
   private static final String[] ID_COL_PROJECTION = { DBHelper.ID_COL };
+  private static final String[] ID_DETAIL_COL_PROJECTION = { DBHelper.ID_COL, DBHelper.DETAILS_COL };
   private static final DateFormat EXPORT_DATE_TIME_FORMAT = DateFormat.getDateTimeInstance();
 
   private final CaptureActivity activity;
@@ -174,9 +175,6 @@ public final class HistoryManager {
     // As we're going to do an update only we don't need need to worry
     // about the preferences; if the item wasn't saved it won't be udpated
 
-    ContentValues values = new ContentValues();
-    values.put(DBHelper.DETAILS_COL, itemDetails);
-
     SQLiteOpenHelper helper = new DBHelper(activity);
     SQLiteDatabase db;
     try {
@@ -187,8 +185,34 @@ public final class HistoryManager {
     }
 
     try {
-      // Update the details for the ID entry into the DB.
-      db.update(DBHelper.TABLE_NAME, values, DBHelper.TEXT_COL + "=?", new String[] {itemID});
+      
+      Cursor cursor = null;
+      String oldID = null;
+      String oldDetails = null;
+      try {
+        cursor = db.query(DBHelper.TABLE_NAME,
+                          ID_DETAIL_COL_PROJECTION,
+                          DBHelper.TEXT_COL + "=?",
+                          new String[] { itemID },
+                          null,
+                          null,
+                          DBHelper.TIMESTAMP_COL + " DESC");
+        if (cursor.moveToNext()) {
+          oldID = cursor.getString(0);
+          oldDetails = cursor.getString(1);
+        }
+      } finally {
+        if (cursor != null) {
+          cursor.close();
+        }
+      }
+
+      String newDetails = oldDetails == null ? itemDetails : oldDetails + " : " + itemDetails;
+      ContentValues values = new ContentValues();
+      values.put(DBHelper.DETAILS_COL, newDetails);
+
+      db.update(DBHelper.TABLE_NAME, values, DBHelper.ID_COL + "=?", new String[] { oldID });
+
     } finally {
       db.close();
     }
