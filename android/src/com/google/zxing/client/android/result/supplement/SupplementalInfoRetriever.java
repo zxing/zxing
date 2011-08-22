@@ -120,10 +120,10 @@ public abstract class SupplementalInfoRetriever implements Callable<Void> {
     StringBuilder newTextCombined = new StringBuilder();
 
     if (source != null) {
-      newTextCombined.append(source).append('\n');
+      newTextCombined.append(source).append(" : ");
     }
 
-    int spanStart = newTextCombined.length();
+    int linkStart = newTextCombined.length();
 
     boolean first = true;
     for (String newText : newTexts) {
@@ -137,14 +137,12 @@ public abstract class SupplementalInfoRetriever implements Callable<Void> {
       }
     }
 
-    int spanEnd = newTextCombined.length();
-
-    newTextCombined.append("\n\n");
+    int linkEnd = newTextCombined.length();
 
     String newText = newTextCombined.toString();
-    final Spannable content = new SpannableString(newText);
+    final Spannable content = new SpannableString(newText + "\n\n");
     if (linkURL != null) {
-      content.setSpan(new URLSpan(linkURL), spanStart, spanEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+      content.setSpan(new URLSpan(linkURL), linkStart, linkEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
 
     handler.post(new Runnable() {
