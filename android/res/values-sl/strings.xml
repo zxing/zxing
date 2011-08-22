@@ -74,6 +74,8 @@
   <string name="msg_default_type">Tip</string>
   <string name="msg_encode_barcode_failed">Ni bilo mogoče generirati željene črtne kode</string>
   <string name="msg_encode_contents_failed">Ni bilo mogoče narediti črtne kode iz podanih podatkov</string>
+  <string name="msg_google_books">Google Books</string>
+  <string name="msg_google_product">Google Product Search</string>
   <string name="msg_google_shopper_missing">Google Shopper ni nameščen</string>
   <string name="msg_install_google_shopper">Google Shopper kombinira branje črtnih kod s cenami lokalnih ter spletnih trgovin, ocenami izdelkov in več brez odpiranja spletnega brskalnika. Ga želite preizkusiti?</string>
   <string name="msg_intent_failed">Oprostite, zahtevana aplikacija se ne more zagnati. Lahko da gre za napačno vsebino črtne kode.</string>

@@ -48,7 +48,7 @@ final class URIResultInfoRetriever extends SupplementalInfoRetriever {
                          Handler handler,
                          HistoryManager historyManager,
                          Context context) {
-    super(textView, handler, historyManager, context);
+    super(textView, handler, historyManager);
     redirectString = context.getString(R.string.msg_redirect);
     this.result = result;
   }
@@ -59,12 +59,11 @@ final class URIResultInfoRetriever extends SupplementalInfoRetriever {
     String newURI = unredirect(oldURI);
     int count = 0;
     while (count < 3 && !oldURI.equals(newURI)) {
-      append(result.getDisplayResult(), redirectString + " : " + newURI);
+      append(result.getDisplayResult(), null, new String[] { redirectString + " : " + newURI }, newURI);
       count++;
       oldURI = newURI;
       newURI = unredirect(newURI);
     }
-    setLink(newURI);
   }
 
   private static String unredirect(String uri) throws IOException {

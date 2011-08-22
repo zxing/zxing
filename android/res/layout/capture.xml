@@ -175,8 +175,7 @@
                     android:textColorLink="@color/result_text"
                     android:textSize="14sp"
                     android:padding="24dip"
-                    android:autoLink="web"
-                    android:clickable="true"/>
+                    android:autoLink="web"/>
 
         </LinearLayout>
 

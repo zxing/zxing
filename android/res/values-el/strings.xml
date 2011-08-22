@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright (C) 2010 ZXing authors
+ Copyright (C) 2011 ZXing authors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -74,6 +74,8 @@
   <string name="msg_default_type">Τύπος</string>
   <string name="msg_encode_barcode_failed">Σφάλμα στην παραγωγή του barcode.</string>
   <string name="msg_encode_contents_failed">Δεν γίνεται να παραχθεί barcode από τα δεδομένα αυτά.</string>
+  <string name="msg_google_books">Google Books</string>
+  <string name="msg_google_product">Αναζήτηση προϊόντων Google</string>
   <string name="msg_google_shopper_missing">Το Google Shopper is not installedδεν είναι εγκατεστημένο.</string>
   <string name="msg_install_google_shopper">Το Google Shopper συνδυάζει σκανάρισμα barcode με online και τοπικές τιμές, αξιολογήσεις και άλλα χωρίς να ανοίξετε τον browser. Θέλετε να το δοκιμάσετε;</string>
   <string name="msg_intent_failed">Συγνώμη, η ζητούμενη εφαρμογή δεν μπορεί να εκιννηθεί. Τα δεδομληνα του barcode ίσως δεν είναι έγκυρα.</string>
@@ -107,9 +109,9 @@
   <string name="preferences_play_beep_title">Μπιπ</string>
   <string name="preferences_remember_duplicates_summary">Αποθήκευση ολλαπλών σκαναρισμάτων του ίδιου barcode στο ιστορικό</string>
   <string name="preferences_remember_duplicates_title">Απομνημόνευση διπλών</string>
+  <string name="preferences_result_title">Ρυθμίσεις αποτελεσμάτων</string>
   <string name="preferences_reverse_image_summary">Ενεργοποιήστε σε συσκευές με μόνο μπροστινή κάμερα</string>
   <string name="preferences_reverse_image_title">Ανάποδη εικόνα κάμερας</string>
-  <string name="preferences_result_title">Ρυθμίσεις αποτελεσμάτων</string>
   <string name="preferences_scanning_title">Όταν σκανάρεις barcodes, ψάχνε για\u2026</string>
   <string name="preferences_supplemental_summary">Προσπάθησε να βρείς περισσότερες πληροφορίες για τα περιεχόμενα του barcode</string>
   <string name="preferences_supplemental_title">Ψάχνε επιπλέον πληροφορίες</string>
@@ -130,13 +132,13 @@
   <string name="title_about">Barcode Scanner v</string>
   <string name="wa_name">Σύνδεση WLAN</string>
   <string name="wifi_changing_network">Αλλαγή Δικτύου</string>
+  <string name="wifi_connect_failed">Σφάλμα στην σύνδεση Δικτύου</string>
   <string name="wifi_connected">Συνδέθηκε</string>
   <string name="wifi_creating_network">Δημιουργία Δικτύου</string>
   <string name="wifi_modifying_network">Επεξεργασία Δικτύου</string>
+  <string name="wifi_ssid_label">Όνομα Δικτύου</string>
   <string name="wifi_ssid_missing">Λείπει όνομα Δικτύου</string>
   <string name="wifi_type_incorrect">Λάθος τύπος Δικτύου</string>
-  <string name="wifi_connect_failed">Σφάλμα στην σύνδεση Δικτύου</string>
-  <string name="wifi_ssid_label">Όνομα Δικτύου</string>
   <string name="wifi_type_label">Τύπος</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>
