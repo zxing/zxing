@@ -194,7 +194,7 @@ public class ContactInfoGenerator implements GeneratorSource {
       // early termination if the table has already been constructed
       return table;
     }
-    table = new Grid(7, 2);
+    table = new Grid(8, 2);
     
     table.setText(0, 0, "Name");
     table.setWidget(0, 1, name);
