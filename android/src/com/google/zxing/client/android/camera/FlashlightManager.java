@@ -40,12 +40,8 @@ final class FlashlightManager {
   private static final Method setFlashEnabledMethod;
   static {
     iHardwareService = getHardwareService();
+    Log.v(TAG, "This device does " + (iHardwareService == null ? "not" : "") + " support control of a flashlight");
     setFlashEnabledMethod = getSetFlashEnabledMethod(iHardwareService);
-    if (iHardwareService == null) {
-      Log.v(TAG, "This device does supports control of a flashlight");
-    } else {
-      Log.v(TAG, "This device does not support control of a flashlight");
-    }
   }
 
   private FlashlightManager() {
