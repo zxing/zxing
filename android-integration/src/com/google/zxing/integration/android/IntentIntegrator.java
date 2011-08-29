@@ -82,7 +82,7 @@ import android.util.Log;
  */
 public final class IntentIntegrator {
 
-  public static final int REQUEST_CODE = 0x0ba7c0de; // get it?
+  public static final int REQUEST_CODE = 0x0000c0de; // Only use bottom 16 bits
   private static final String TAG = IntentIntegrator.class.getSimpleName();
 
   public static final String DEFAULT_TITLE = "Install Barcode Scanner?";
