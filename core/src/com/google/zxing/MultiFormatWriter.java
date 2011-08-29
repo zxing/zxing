@@ -23,6 +23,7 @@ import com.google.zxing.oned.EAN13Writer;
 import com.google.zxing.oned.EAN8Writer;
 import com.google.zxing.oned.ITFWriter;
 import com.google.zxing.oned.UPCAWriter;
+import com.google.zxing.pdf417.encoder.PDF417Writer;
 import com.google.zxing.qrcode.QRCodeWriter;
 
 import java.util.Hashtable;
@@ -59,6 +60,8 @@ public final class MultiFormatWriter implements Writer {
       writer = new Code128Writer();
     } else if (format == BarcodeFormat.ITF) {
       writer = new ITFWriter();
+    } else if (format == BarcodeFormat.PDF_417) {
+      writer = new PDF417Writer();
     } else {
       throw new IllegalArgumentException("No encoder available for format " + format);
     }
