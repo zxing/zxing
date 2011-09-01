@@ -92,6 +92,7 @@
   <string name="msg_share_explanation">画面にバーコードを表示させ、別の端末でスキャンすれば データを共有することができます。</string>
   <string name="msg_share_subject_line">スキャンしたバーコードの内容を送信します。</string>
   <string name="msg_share_text">または一部のテキストを入力</string>
+  <string name="msg_sure">よろしいですか？</string>
   <string name="msg_unmount_usb">申し訳ありませんが、SDカードにアクセスできません。</string>
   <string name="preferences_actions_title">バーコード発見時</string>
   <string name="preferences_bulk_mode_summary">多くのバーコード連続してスキャンし、保存する</string>

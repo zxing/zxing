@@ -92,6 +92,7 @@
   <string name="msg_share_explanation">Pode partilhar dados exibindo um código de barras no ecrã e digitalizando-o com outro telefone.</string>
   <string name="msg_share_subject_line">Aqui está o conteúdo de um código de barras que digitalizei</string>
   <string name="msg_share_text">Ou digite algum texto</string>
+  <string name="msg_sure">Você tem certeza?</string>
   <string name="msg_unmount_usb">Desculpa, o cartão SD não está acessível.</string>
   <string name="preferences_actions_title">Quando um código de barras é encontrado\u2026</string>
   <string name="preferences_bulk_mode_summary">Digitalizar e salvar muitas barras continuamente</string>

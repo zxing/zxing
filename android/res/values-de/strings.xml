@@ -92,6 +92,7 @@
   <string name="msg_share_explanation">Sie können Daten weitergeben, indem Sie einen Barcode auf Ihrem Bilschirm anzeigen und mit einem anderen Telefon einscannen.</string>
   <string name="msg_share_subject_line">Hier ist der gescannte Barcode-Inhalt</string>
   <string name="msg_share_text">Oder geben Sie einen Text</string>
+  <string name="msg_sure">Sind Sie sicher?</string>
   <string name="msg_unmount_usb">Leider kann nicht auf die SD-Karte zugegriffen werden.</string>
   <string name="preferences_actions_title">Wenn ein Barcode erkannt wurde\u2026</string>
   <string name="preferences_bulk_mode_summary">Scannt und speichert mehrere Barcodes nacheinander</string>

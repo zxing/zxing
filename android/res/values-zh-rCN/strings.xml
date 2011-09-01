@@ -92,6 +92,7 @@
   <string name="msg_share_explanation">您可以通过在自己的手机上显示条码，并使用其它手机扫描此条码的方式进行分享</string>
   <string name="msg_share_subject_line">这是我所扫描条码的内容</string>
   <string name="msg_share_text">或键入一些文字</string>
+  <string name="msg_sure">你肯定吗？</string>
   <string name="msg_unmount_usb">抱歉，SD卡不可访问。</string>
   <string name="preferences_actions_title">找到条码时</string>
   <string name="preferences_bulk_mode_summary">连续扫描并保存多个条形码</string>

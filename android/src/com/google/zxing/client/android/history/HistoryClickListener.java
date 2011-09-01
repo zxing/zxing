@@ -67,8 +67,16 @@ final class HistoryClickListener implements DialogInterface.OnClickListener {
       intent.setType("text/csv");
       activity.startActivity(intent);
     } else if (i == items.size() + 1) {
-      // Clear history.
-      historyManager.clearHistory();
+      AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+      builder.setMessage(R.string.msg_sure);
+      builder.setCancelable(true);
+      builder.setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
+        public void onClick(DialogInterface dialogInterface2, int i2) {
+          historyManager.clearHistory();
+        }
+      });
+      builder.setNegativeButton(R.string.button_cancel, null);
+      builder.show();
     } else {
       // Display a single history entry.
       Result result = items.get(i);
