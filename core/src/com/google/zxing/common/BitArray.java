@@ -93,6 +93,38 @@ public final class BitArray {
   }
 
   /**
+   * Sets a range of bits.
+   *
+   * @param start start of range, inclusive.
+   * @param end end of range, exclusive
+   */
+  public void setRange(int start, int end) {
+    if (end < start) {
+      throw new IllegalArgumentException();
+    }
+    if (end == start) {
+      return;
+    }
+    end--; // will be easier to treat this as the last actually set bit -- inclusive
+    int firstInt = start >> 5;
+    int lastInt = end >> 5;
+    for (int i = firstInt; i <= lastInt; i++) {
+      int firstBit = i > firstInt ? 0 : start & 0x1F;
+      int lastBit = i < lastInt ? 31 : end & 0x1F;
+      int mask;
+      if (firstBit == 0 && lastBit == 31) {
+        mask = -1;
+      } else {
+        mask = 0;
+        for (int j = firstBit; j <= lastBit; j++) {
+          mask |= 1 << j;
+        }
+      }
+      bits[i] |= mask;
+    }
+  }
+
+  /**
    * Clears all bits (sets to false).
    */
   public void clear() {
