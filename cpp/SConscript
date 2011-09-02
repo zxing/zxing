@@ -4,6 +4,7 @@ vars = Variables()
 vars.Add(BoolVariable('DEBUG', 'Set to disable optimizations', 1))
 vars.Add(BoolVariable('PIC', 'Set to 1 for to always generate PIC code', 0))
 env = Environment(variables = vars)
+# env.Replace(CXX = "clang++") 
 
 debug = env['DEBUG']
 compile_options = {}
