@@ -35,12 +35,13 @@ final class BrowseBookListener implements AdapterView.OnItemClickListener {
   }
 
   public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-    // HACK(jbreiden) I have no idea where the heck our pageId off by one
-    // error is coming from. I should not have to put in this position - 1
-    // kludge.
+    if (position < 1) {
+      // Clicked header, ignore it
+      return;
+    }
     String pageId = items.get(position - 1).getPageId();
     String query = SearchBookContentsResult.getQuery();
-    if (activity.getISBN().startsWith("http://google.com/books?id=") && (pageId.length() > 0)) {
+    if (LocaleManager.isBookSearchUrl(activity.getISBN()) && pageId.length() > 0) {
       String uri = activity.getISBN();
       int equals = uri.indexOf('=');
       String volumeId = uri.substring(equals + 1);
