@@ -259,7 +259,7 @@ public final class SearchBookContentsActivity extends Activity {
         // break or disappear at any time in the future. Since this is an API call rather than a
         // website, we don't use LocaleManager to change the TLD.
         URI uri;
-        if (isbn.startsWith("http://google.com/books?id=")) {
+        if (LocaleManager.isBookSearchUrl(isbn)) {
           int equals = isbn.indexOf('=');
           String volumeId = isbn.substring(equals + 1);
           uri = new URI("http", null, "www.google.com", -1, "/books", "id=" + volumeId +
