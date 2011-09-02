@@ -239,7 +239,7 @@ float Detector::sizeOfBlackWhiteBlackRun(int fromX, int fromY, int toX, int toY)
       int realY = steep ? x : y;
 
       // Does current pixel mean we have moved white to black or vice versa?
-      if (!(state == 1 ^ image_->get(realX, realY))) {
+      if (!((state == 1) ^ image_->get(realX, realY))) {
         if (state == 2) {
           int diffX = x - fromX;
           int diffY = y - fromY;
