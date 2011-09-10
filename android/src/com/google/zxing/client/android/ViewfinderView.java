@@ -60,7 +60,7 @@ public final class ViewfinderView extends View {
     super(context, attrs);
 
     // Initialize these once for performance rather than calling them every time in onDraw().
-    paint = new Paint();
+    paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     Resources resources = getResources();
     maskColor = resources.getColor(R.color.viewfinder_mask);
     resultColor = resources.getColor(R.color.result_view);

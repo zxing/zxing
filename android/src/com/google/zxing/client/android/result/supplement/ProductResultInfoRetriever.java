@@ -18,6 +18,7 @@ package com.google.zxing.client.android.result.supplement;
 
 import android.content.Context;
 import android.os.Handler;
+import android.text.Html;
 import android.widget.TextView;
 import com.google.zxing.client.android.R;
 import com.google.zxing.client.android.history.HistoryManager;
@@ -59,8 +60,15 @@ final class ProductResultInfoRetriever extends SupplementalInfoRetriever {
 
     Matcher matcher = PRODUCT_NAME_PRICE_PATTERN.matcher(content);
     if (matcher.find()) {
-      append(productID, source, new String[] { matcher.group(1), matcher.group(2) }, uri);
+      append(productID,
+             source,
+             new String[] { unescapeHTML(matcher.group(1)), unescapeHTML(matcher.group(2)) },
+             uri);
     }
+  }
+
+  private static String unescapeHTML(String raw) {
+    return Html.fromHtml(raw).toString();
   }
 
 }
