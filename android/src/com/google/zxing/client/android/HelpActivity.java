@@ -55,7 +55,8 @@ public final class HelpActivity extends Activity {
   public static final String DEFAULT_PAGE = "index.html";
   public static final String WHATS_NEW_PAGE = "whatsnew.html";
 
-  private static final String BASE_URL = "file:///android_asset/html/";
+  private static final String BASE_URL =
+      "file:///android_asset/html-" + LocaleManager.getTranslatedAssetLanguage() + '/';
   private static final String WEBVIEW_STATE_PRESENT = "webview_state_present";
 
   private static boolean initialized = false;
