@@ -16,6 +16,8 @@
 
 package com.google.zxing.client.android;
 
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
 import java.util.HashMap;
@@ -29,11 +31,14 @@ public final class LocaleManager {
 
   private static final String DEFAULT_TLD = "com";
   private static final String DEFAULT_COUNTRY = "US";
+  private static final String DEFAULT_LANGUAGE = "en";
 
   private static final String COUNTRY;
+  private static final String LANGUAGE;
   static {
     Locale locale = Locale.getDefault();
     COUNTRY = locale == null ? DEFAULT_COUNTRY : locale.getCountry();
+    LANGUAGE = locale == null ? DEFAULT_LANGUAGE : locale.getLanguage();
   }
 
   /**
@@ -45,7 +50,8 @@ public final class LocaleManager {
     GOOGLE_COUNTRY_TLD = new HashMap<String,String>();
     GOOGLE_COUNTRY_TLD.put("AR", "com.ar"); // ARGENTINA
     GOOGLE_COUNTRY_TLD.put("AU", "com.au"); // AUSTRALIA
-    GOOGLE_COUNTRY_TLD.put("BG", "com.br"); // BULGARIA
+    GOOGLE_COUNTRY_TLD.put("BR", "com.br"); // BRAZIL
+    GOOGLE_COUNTRY_TLD.put("BG", "bg"); // BULGARIA
     GOOGLE_COUNTRY_TLD.put(Locale.CANADA.getCountry(), "ca");
     GOOGLE_COUNTRY_TLD.put(Locale.CHINA.getCountry(), "cn");
     GOOGLE_COUNTRY_TLD.put("CZ", "cz"); // CZECH REPUBLIC
@@ -98,6 +104,12 @@ public final class LocaleManager {
    */
   private static final Map<String,String> GOOGLE_BOOK_SEARCH_COUNTRY_TLD = GOOGLE_COUNTRY_TLD;
 
+  private static final Collection<String> TRANSLATED_HELP_ASSET_LANGUAGES;
+  static {
+    TRANSLATED_HELP_ASSET_LANGUAGES = new HashSet<String>();
+    TRANSLATED_HELP_ASSET_LANGUAGES.add("en");
+  }
+
   private LocaleManager() {}
 
   /**
@@ -132,6 +144,10 @@ public final class LocaleManager {
    */
   public static boolean isBookSearchUrl(String url) {
     return url.startsWith("http://google.com/books") || url.startsWith("http://books.google.");
+  }
+
+  public static String getTranslatedAssetLanguage() {
+    return TRANSLATED_HELP_ASSET_LANGUAGES.contains(LANGUAGE) ? LANGUAGE : DEFAULT_LANGUAGE;
   }
 
   private static String doGetTLD(Map<String,String> map) {

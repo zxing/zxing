@@ -51,6 +51,8 @@ import java.util.regex.Pattern;
  */
 public final class StringsResourceTranslator {
 
+  private static final long MIN_API_CALL_INTERVAL_MS = 5 * 1000L;
+
   private static final Charset UTF8 = Charset.forName("UTF-8");
   private static final Pattern ENTRY_PATTERN = Pattern.compile("<string name=\"([^\"]+)\".*>([^<]+)</string>");
   private static final Pattern STRINGS_FILE_NAME_PATTERN = Pattern.compile("values-(.+)");
@@ -81,6 +83,8 @@ public final class StringsResourceTranslator {
     LANGUAGE_CODE_MASSAGINGS.put("zh-rTW", "zh-tw");
 	  LANGUAGE_CODE_MASSAGINGS.put("kr",     "ko");
   }
+
+  private static long nextAllowedAPICallTime = System.currentTimeMillis();
 
   private StringsResourceTranslator() {}
 
@@ -166,8 +170,22 @@ public final class StringsResourceTranslator {
     }
   }
 
-  private static String translateString(String english, String language) throws IOException {
+  static String translateString(String english, String language) throws IOException {
+    if ("en".equals(language)) {
+      return english;
+    }
     System.out.println("  Need translation for " + english);
+
+    long now = System.currentTimeMillis();
+    if (now < nextAllowedAPICallTime) {
+      try {
+        Thread.sleep(nextAllowedAPICallTime - now);
+      } catch (InterruptedException ie) {
+        // continue
+      }
+    }
+    nextAllowedAPICallTime = now + MIN_API_CALL_INTERVAL_MS;
+
     URL translateURL = new URL(
         "http://ajax.googleapis.com/ajax/services/language/translate?v=1.0&q=" +
         URLEncoder.encode(english, "UTF-8") +
@@ -186,10 +204,16 @@ public final class StringsResourceTranslator {
     }
     Matcher m = TRANSLATE_RESPONSE_PATTERN.matcher(translateResult);
     if (!m.find()) {
-      throw new IOException("No translate result");
+      System.err.println("No translate result");
+      return english;
     }
     String translation = m.group(1);
     System.out.println("  Got translation " + translation);
+
+    // This is a little crude; unescape some common escapes in the raw response
+    translation = translation.replaceAll("\\\\u0026quot;", "\"");
+    translation = translation.replaceAll("\\\\u0026#39;", "'");
+
     return translation;
   }
 
