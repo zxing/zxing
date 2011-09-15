@@ -22,7 +22,6 @@
 
   <target name="build">
     <ant dir="core" target="build"/>
-    <ant dir="javame" target="build"/>
     <ant dir="javase" target="build"/>
     <ant dir="android" target="compile"/>
     <ant dir="androidtest" target="compile"/>
@@ -37,7 +36,6 @@
 
   <target name="clean">
     <ant dir="core" target="clean"/>
-    <ant dir="javame" target="clean"/>
     <ant dir="javase" target="clean"/>
     <ant dir="android" target="clean"/>
     <ant dir="androidtest" target="clean"/>
