@@ -32,14 +32,14 @@ import com.google.zxing.common.BitArray;
 public final class CodaBarReader extends OneDReader {
 
   private static final String ALPHABET_STRING = "0123456789-$:/.+ABCDTN";
-  private static final char[] ALPHABET = ALPHABET_STRING.toCharArray();
+  protected static final char[] ALPHABET = ALPHABET_STRING.toCharArray();
 
   /**
    * These represent the encodings of characters, as patterns of wide and narrow bars. The 7 least-significant bits of
    * each int correspond to the pattern of wide and narrow, with 1s representing "wide" and 0s representing narrow. NOTE
    * : c is equal to the  * pattern NOTE : d is equal to the e pattern
    */
-  private static final int[] CHARACTER_ENCODINGS = {
+  protected static final int[] CHARACTER_ENCODINGS = {
       0x003, 0x006, 0x009, 0x060, 0x012, 0x042, 0x021, 0x024, 0x030, 0x048, // 0-9
       0x00c, 0x018, 0x045, 0x051, 0x054, 0x015, 0x01A, 0x029, 0x00B, 0x00E, // -$:/.+ABCD
       0x01A, 0x029 //TN
@@ -208,7 +208,7 @@ public final class CodaBarReader extends OneDReader {
     throw NotFoundException.getNotFoundInstance();
   }
 
-  private static boolean arrayContains(char[] array, char key) {
+  protected static boolean arrayContains(char[] array, char key) {
     if (array != null) {
       for (int i = 0; i < array.length; i++) {
         if (array[i] == key) {
