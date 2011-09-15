@@ -33,11 +33,9 @@ public class CodaBarWriter extends OneDimensionalCodeWriter {
   }
 
   /*
-   * @see com.google.zxing.oned.OneDimensionalCodeWriter#encode(java.lang.String)
+   * @see OneDimensionalCodeWriter#encode(java.lang.String)
    */
   public byte[] encode(String contents) {
-    int resultLength;
-    int position = 0;
 
     // Verify input and calculate decoded length.
     if (!CodaBarReader.arrayContains(
@@ -46,32 +44,32 @@ public class CodaBarWriter extends OneDimensionalCodeWriter {
           "Codabar should start with one of the following: 'A', 'B', 'C' or 'D'");
     }
     if (!CodaBarReader.arrayContains(new char[]{'T', 'N', '*', 'E'},
-        Character.toUpperCase(contents.charAt(contents.length() - 1)))) {
+                                     Character.toUpperCase(contents.charAt(contents.length() - 1)))) {
       throw new IllegalArgumentException(
           "Codabar should end with one of the following: 'T', 'N', '*' or 'E'");
     }
     // The start character and the end character are decoded to 10 length each.
-    resultLength = 20;
-    char[] charsWhichAreTenLengthEachAfterDecoded = new char[]{'/', ':', '+', '.'};
-    for (int i = 1; i < contents.length()-1; i++) {
-      if (Character.isDigit(contents.charAt(i))  || contents.charAt(i) == '-'
+    int resultLength = 20;
+    char[] charsWhichAreTenLengthEachAfterDecoded = {'/', ':', '+', '.'};
+    for (int i = 1; i < contents.length() - 1; i++) {
+      if (Character.isDigit(contents.charAt(i)) || contents.charAt(i) == '-'
           || contents.charAt(i) == '$') {
         resultLength += 9;
-      } else if(CodaBarReader.arrayContains(
+      } else if (CodaBarReader.arrayContains(
           charsWhichAreTenLengthEachAfterDecoded, contents.charAt(i))) {
         resultLength += 10;
       } else {
-        throw new IllegalArgumentException("Cannot encode : '" + contents.charAt(i) + "'");
+        throw new IllegalArgumentException("Cannot encode : '" + contents.charAt(i) + '\'');
       }
     }
     // A blank is placed between each character.
     resultLength += contents.length() - 1;
 
     byte[] result = new byte[resultLength];
+    int position = 0;
     for (int index = 0; index < contents.length(); index++) {
       char c = Character.toUpperCase(contents.charAt(index));
-      int code = 0;
-      if (index == contents.length() - 1){
+      if (index == contents.length() - 1) {
         // Neither * nor E are in the CodaBarReader.ALPHABET.
         // * is equal to the  c pattern, and e is equal to the d pattern
         if (c == '*') {
@@ -80,6 +78,7 @@ public class CodaBarWriter extends OneDimensionalCodeWriter {
           c = 'D';
         }
       }
+      int code = 0;
       for (int i = 0; i < CodaBarReader.ALPHABET.length; i++) {
         // Found any, because I checked above.
         if (c == CodaBarReader.ALPHABET[i]) {
@@ -87,14 +86,13 @@ public class CodaBarWriter extends OneDimensionalCodeWriter {
           break;
         }
       }
-      boolean isBlack = true;
       byte color = 1;
       int counter = 0;
       int bit = 0;
-      while (bit < 7){ // A character consists of 7 digit.
+      while (bit < 7) { // A character consists of 7 digit.
         result[position] = color;
         position++;
-        if (((code >> (6-bit)) & 1) == 0 || counter == 1){
+        if (((code >> (6 - bit)) & 1) == 0 || counter == 1) {
           color ^= 1; // Flip the color.
           bit++;
           counter = 0;

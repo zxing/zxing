@@ -32,14 +32,14 @@ import com.google.zxing.common.BitArray;
 public final class CodaBarReader extends OneDReader {
 
   private static final String ALPHABET_STRING = "0123456789-$:/.+ABCDTN";
-  protected static final char[] ALPHABET = ALPHABET_STRING.toCharArray();
+  static final char[] ALPHABET = ALPHABET_STRING.toCharArray();
 
   /**
    * These represent the encodings of characters, as patterns of wide and narrow bars. The 7 least-significant bits of
    * each int correspond to the pattern of wide and narrow, with 1s representing "wide" and 0s representing narrow. NOTE
    * : c is equal to the  * pattern NOTE : d is equal to the e pattern
    */
-  protected static final int[] CHARACTER_ENCODINGS = {
+  static final int[] CHARACTER_ENCODINGS = {
       0x003, 0x006, 0x009, 0x060, 0x012, 0x042, 0x021, 0x024, 0x030, 0x048, // 0-9
       0x00c, 0x018, 0x045, 0x051, 0x054, 0x015, 0x01A, 0x029, 0x00B, 0x00E, // -$:/.+ABCD
       0x01A, 0x029 //TN
@@ -72,12 +72,13 @@ public final class CodaBarReader extends OneDReader {
     }
 
     StringBuffer result = new StringBuffer();
-    //int[] counters = new int[7];
-    int[] counters;
+    int[] counters = new int[7];
     int lastStart;
 
     do {
-      counters = new int[]{0, 0, 0, 0, 0, 0, 0}; // reset counters
+      for (int i = 0; i < counters.length; i++) {
+        counters[i] = 0;
+      }
       recordPattern(row, nextStart, counters);
 
       char decodedChar = toNarrowWidePattern(counters);
@@ -109,44 +110,36 @@ public final class CodaBarReader extends OneDReader {
       throw NotFoundException.getNotFoundInstance();
     }
 
-	// valid result?
-	if (result.length() < 2)
-	{
-		throw NotFoundException.getNotFoundInstance();
-	}
-	
-	char startchar = result.charAt(0);
-	if (!arrayContains(STARTEND_ENCODING, startchar))
-	{
-		//invalid start character
-		throw NotFoundException.getNotFoundInstance();
-	}
-    
-	// find stop character
-    for (int k = 1;k < result.length() ;k++) 
-	{
-      if (result.charAt(k) == startchar) 
-	  {
-        // found stop character -> discard rest of the string
-		if ((k+1) != result.length())
-		{
-			result.delete(k+1,result.length()-1);
-			k = result.length();// break out of loop
-		} 
-	  }
+    // valid result?
+    if (result.length() < 2) {
+      throw NotFoundException.getNotFoundInstance();
     }
 
-    // remove stop/start characters character and check if a string longer than 5 characters is contained
-    if (result.length() > minCharacterLength) 
-	{ 
-		result.deleteCharAt(result.length()-1); 
-		result.deleteCharAt(0); 
-	}
-	else
-	{
-		// Almost surely a false positive ( start + stop + at least 1 character)
-		throw NotFoundException.getNotFoundInstance();
-	}
+    char startchar = result.charAt(0);
+    if (!arrayContains(STARTEND_ENCODING, startchar)) {
+      // invalid start character
+      throw NotFoundException.getNotFoundInstance();
+    }
+
+    // find stop character
+    for (int k = 1; k < result.length(); k++) {
+      if (result.charAt(k) == startchar) {
+        // found stop character -> discard rest of the string
+        if (k + 1 != result.length()) {
+          result.delete(k + 1, result.length() - 1);
+          break;
+        }
+      }
+    }
+
+  // remove stop/start characters character and check if a string longer than 5 characters is contained
+    if (result.length() <= minCharacterLength) {
+      // Almost surely a false positive ( start + stop + at least 1 character)
+      throw NotFoundException.getNotFoundInstance();
+    }
+
+    result.deleteCharAt(result.length() - 1);
+    result.deleteCharAt(0);
 
     float left = (float) (start[1] + start[0]) / 2.0f;
     float right = (float) (nextStart + lastStart) / 2.0f;
@@ -208,7 +201,7 @@ public final class CodaBarReader extends OneDReader {
     throw NotFoundException.getNotFoundInstance();
   }
 
-  protected static boolean arrayContains(char[] array, char key) {
+  static boolean arrayContains(char[] array, char key) {
     if (array != null) {
       for (int i = 0; i < array.length; i++) {
         if (array[i] == key) {
