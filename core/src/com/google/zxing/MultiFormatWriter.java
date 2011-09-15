@@ -17,6 +17,7 @@
 package com.google.zxing;
 
 import com.google.zxing.common.BitMatrix;
+import com.google.zxing.oned.CodaBarWriter;
 import com.google.zxing.oned.Code128Writer;
 import com.google.zxing.oned.Code39Writer;
 import com.google.zxing.oned.EAN13Writer;
@@ -62,6 +63,8 @@ public final class MultiFormatWriter implements Writer {
       writer = new ITFWriter();
     } else if (format == BarcodeFormat.PDF_417) {
       writer = new PDF417Writer();
+    } else if (format == BarcodeFormat.CODABAR) {
+      writer = new CodaBarWriter();
     } else {
       throw new IllegalArgumentException("No encoder available for format " + format);
     }
