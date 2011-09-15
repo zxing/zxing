@@ -25,8 +25,10 @@ package com.google.zxing.oned;
  * @author dsbnatut@gmail.com (Kazuki Nishiura)
  */
 public abstract class UPCEANWriter extends OneDimensionalCodeWriter {
-  public UPCEANWriter() {
+
+  protected UPCEANWriter() {
     super(UPCEANReader.START_END_PATTERN.length << 1);
   }
+
 }
 
