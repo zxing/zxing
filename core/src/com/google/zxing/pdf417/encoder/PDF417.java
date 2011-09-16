@@ -518,11 +518,11 @@ final class PDF417 {
   private int maxRows;
   private int minRows;
 
-  public PDF417() {
+  PDF417() {
     this(false);
   }
   
-  public PDF417(boolean compact) {
+  PDF417(boolean compact) {
     this.compact = compact;
     minCols = 2;
     maxCols = 30;
