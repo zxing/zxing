@@ -143,12 +143,13 @@ final class PDF417HighLevelEncoder {
 
   /**
    * Performs high-level encoding of a PDF417 message using the algorithm described in annex P
-   * of ISO/IEC 15438:2001(E).
+   * of ISO/IEC 15438:2001(E).  If byte compaction has been selected, then only byte compaction
+   * is used.
    *
    * @param msg the message
    * @return the encoded message (the char values range from 0 to 928)
    */
-  static String encodeHighLevel(String msg) throws WriterException {
+  static String encodeHighLevel(String msg, boolean byteCompaction) throws WriterException {
     byte[] bytes = null; //Fill later and only if needed
 
     //the codewords 0..928 are encoded as Unicode characters
@@ -158,42 +159,67 @@ final class PDF417HighLevelEncoder {
     int p = 0;
     int encodingMode = TEXT_COMPACTION; //Default mode, see 4.4.2.1
     int textSubMode = SUBMODE_ALPHA;
-    while (p < len) {
-      int n = determineConsecutiveDigitCount(msg, p);
-      if (n >= 13) {
-        sb.append((char) LATCH_TO_NUMERIC);
-        encodingMode = NUMERIC_COMPACTION;
-        textSubMode = SUBMODE_ALPHA; //Reset after latch
-        encodeNumeric(msg, p, n, sb);
-        p += n;
-      } else {
-        int t = determineConsecutiveTextCount(msg, p);
-        if (t >= 5 || n == len) {
-          if (encodingMode != TEXT_COMPACTION) {
-            sb.append((char) LATCH_TO_TEXT);
-            encodingMode = TEXT_COMPACTION;
-            textSubMode = SUBMODE_ALPHA; //start with submode alpha after latch
-          }
-          textSubMode = encodeText(msg, p, t, sb, textSubMode);
-          p += t;
+
+    if (byteCompaction) { // Can choose only byte compaction
+      encodingMode = BYTE_COMPACTION;
+      while (p < len) {
+
+        if (bytes == null) {
+          bytes = getBytesForMessage(msg);
+        }
+        int b = determineConsecutiveBinaryCount(msg, bytes, p);
+        if (b == 0) {
+          b = 1;
+        }
+        if (b == 1 && encodingMode == TEXT_COMPACTION) {
+          //Switch for one byte (instead of latch)
+          encodeBinary(bytes, p, 1, TEXT_COMPACTION, sb);
         } else {
-          if (bytes == null) {
-            bytes = getBytesForMessage(msg);
-          }
-          int b = determineConsecutiveBinaryCount(msg, bytes, p);
-          if (b == 0) {
-            b = 1;
-          }
-          if (b == 1 && encodingMode == TEXT_COMPACTION) {
-            //Switch for one byte (instead of latch)
-            encodeBinary(bytes, p, 1, TEXT_COMPACTION, sb);
+          //Mode latch performed by encodeBinary()
+          encodeBinary(bytes, p, b, encodingMode, sb);
+          encodingMode = BYTE_COMPACTION;
+          textSubMode = SUBMODE_ALPHA; //Reset after latch
+        }
+        p += b;
+      }
+    } else {
+      while (p < len) {
+        int n = determineConsecutiveDigitCount(msg, p);
+        if (n >= 13) {
+          sb.append((char) LATCH_TO_NUMERIC);
+          encodingMode = NUMERIC_COMPACTION;
+          textSubMode = SUBMODE_ALPHA; //Reset after latch
+          encodeNumeric(msg, p, n, sb);
+          p += n;
+        } else {
+          int t = determineConsecutiveTextCount(msg, p);
+          if (t >= 5 || n == len) {
+            if (encodingMode != TEXT_COMPACTION) {
+              sb.append((char) LATCH_TO_TEXT);
+              encodingMode = TEXT_COMPACTION;
+              textSubMode = SUBMODE_ALPHA; //start with submode alpha after latch
+            }
+            textSubMode = encodeText(msg, p, t, sb, textSubMode);
+            p += t;
           } else {
-            //Mode latch performed by encodeBinary()
-            encodeBinary(bytes, p, b, encodingMode, sb);
-            encodingMode = BYTE_COMPACTION;
-            textSubMode = SUBMODE_ALPHA; //Reset after latch
+            if (bytes == null) {
+              bytes = getBytesForMessage(msg);
+            }
+            int b = determineConsecutiveBinaryCount(msg, bytes, p);
+            if (b == 0) {
+              b = 1;
+            }
+            if (b == 1 && encodingMode == TEXT_COMPACTION) {
+              //Switch for one byte (instead of latch)
+              encodeBinary(bytes, p, 1, TEXT_COMPACTION, sb);
+            } else {
+              //Mode latch performed by encodeBinary()
+              encodeBinary(bytes, p, b, encodingMode, sb);
+              encodingMode = BYTE_COMPACTION;
+              textSubMode = SUBMODE_ALPHA; //Reset after latch
+            }
+            p += b;
           }
-          p += b;
         }
       }
     }

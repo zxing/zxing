@@ -34,25 +34,52 @@ public final class PDF417Writer implements Writer {
   }
 
   public BitMatrix encode(String contents, BarcodeFormat format, int width, int height) throws WriterException {
-
+    PDF417 encoder = initializeEncoder(format, false);
+    return bitMatrixFromEncoder(encoder, contents, width, height);
+  }
+  
+  public BitMatrix encode(String contents,
+                          BarcodeFormat format,
+                          boolean compact,
+                          int width,
+                          int height,
+                          int minCols,
+                          int maxCols,
+                          int minRows,
+                          int maxRows,
+                          boolean byteCompaction) throws WriterException {
+    PDF417 encoder = initializeEncoder(format, compact);
+    
+    // Set options: dimensions and byte compaction
+    encoder.setDimensions(maxCols, minCols, maxRows, minRows);
+    encoder.setByteCompaction(byteCompaction);
+    
+    return bitMatrixFromEncoder(encoder, contents, width, height);
+  }
+  
+  /**
+   * Initializes the encoder based on the format (whether it's compact or not)
+   */
+  private PDF417 initializeEncoder(BarcodeFormat format, boolean compact) {
     if (format != BarcodeFormat.PDF_417) {
       throw new IllegalArgumentException("Can only encode PDF_417, but got " + format);
     }
 
     PDF417 encoder = new PDF417();
+    encoder.setCompact(compact);
+    return encoder;
+  }
 
-    //No error correction at the moment
-    int errorCorrectionLevel = 3;
+  /**
+   * Takes encoder, accounts for width/height, and retrieves bit matrix
+   */
+  private BitMatrix bitMatrixFromEncoder(PDF417 encoder, String contents, int width, int height)
+      throws WriterException {
+    int errorCorrectionLevel = 2;
     encoder.generateBarcodeLogic(contents, errorCorrectionLevel);
-
-    // Give it data to be encoded
-    //encoderExt.setData(content.getBytes());
-    // Find the Error correction level automatically
-
-    //encoderExt.encode();
-    //encoderExt.createArray();
-    int lineThickness = 3;
-    int aspectRatio = 8;
+    
+    int lineThickness = 2;
+    int aspectRatio = 4;
     byte[][] originalScale = encoder.getBarcodeMatrix().getScaledMatrix(lineThickness, aspectRatio * lineThickness);
     boolean rotated = false;
     if ((height > width) ^ (originalScale[0].length < originalScale.length)) {
@@ -80,7 +107,7 @@ public final class PDF417Writer implements Writer {
     }
     return bitMatrixFrombitArray(originalScale);
   }
-
+  
   /**
    * This takes an array holding the values of the PDF 417
    *

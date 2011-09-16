@@ -506,16 +506,30 @@ final class PDF417 {
           0x107a4, 0x107a2, 0x10396, 0x107b6, 0x187d4, 0x187d2,
           0x10794, 0x10fb4, 0x10792, 0x10fb2, 0x1c7ea}};
 
-  private static final int MIN_COLS = 2;
-  private static final int MAX_COLS = 30;
-  private static final int MAX_ROWS = 30;
-  private static final int MIN_ROWS = 2;
   private static final float DEFAULT_MODULE_WIDTH = 0.357f; //1px in mm
-  private static final float HEIGHT = 16.0f; //mm
+  private static final float HEIGHT = 2.0f; //mm
 
   private int errorCorrectionLevel;
   private BarcodeMatrix barcodeMatrix;
+  private boolean compact;
+  private boolean byteCompaction;
+  private int minCols;
+  private int maxCols;
+  private int maxRows;
+  private int minRows;
 
+  public PDF417() {
+    this(false);
+  }
+  
+  public PDF417(boolean compact) {
+    this.compact = compact;
+    minCols = 2;
+    maxCols = 30;
+    maxRows = 30;
+    minRows = 2;
+  }
+  
   BarcodeMatrix getBarcodeMatrix() {
     return barcodeMatrix;
   }
@@ -548,7 +562,7 @@ final class PDF417 {
     }
     return r;
   }
-
+  
   /**
    * Calculates the necessary number of rows as described in annex Q of ISO/IEC 15438:2001(E).
    *
@@ -650,10 +664,14 @@ final class PDF417 {
         idx++;
       }
 
-      pattern = CODEWORD_TABLE[cluster][right];
-      encodeChar(pattern, 17, logic.getCurrentRow());
-
-      encodeChar(STOP_PATTERN, 18, logic.getCurrentRow());
+      if (compact) {
+        encodeChar(STOP_PATTERN, 1, logic.getCurrentRow()); // encodes stop line for compact pdf417
+      } else {
+        pattern = CODEWORD_TABLE[cluster][right];
+        encodeChar(pattern, 17, logic.getCurrentRow());
+  
+        encodeChar(STOP_PATTERN, 18, logic.getCurrentRow());
+      }
     }
   }
 
@@ -666,7 +684,7 @@ final class PDF417 {
 
     //1. step: High-level encoding
     int errorCorrectionCodeWords = PDF417ErrorCorrection.getErrorCorrectionCodewordCount(errorCorrectionLevel);
-    String highLevel = PDF417HighLevelEncoder.encodeHighLevel(msg);
+    String highLevel = PDF417HighLevelEncoder.encodeHighLevel(msg, byteCompaction);
     int sourceCodeWords = highLevel.length();
 
     int[] dimension = determineDimensions(sourceCodeWords);
@@ -717,15 +735,15 @@ final class PDF417 {
     int[] dimension = null;
     int errorCorrectionCodeWords = PDF417ErrorCorrection.getErrorCorrectionCodewordCount(errorCorrectionLevel);
 
-    for (int cols = MIN_COLS; cols <= MAX_COLS; cols++) {
+    for (int cols = minCols; cols <= maxCols; cols++) {
 
       int rows = calculateNumberOfRows(sourceCodeWords, errorCorrectionCodeWords, cols);
 
-      if (rows < MIN_ROWS) {
+      if (rows < minRows) {
         break;
       }
 
-      if (rows > MAX_ROWS) {
+      if (rows > maxRows) {
         continue;
       }
 
@@ -742,6 +760,32 @@ final class PDF417 {
     }
 
     return dimension;
+  }
+  
+  /**
+   * Sets max/min row/col values
+   */
+  void setDimensions(int maxCols, int minCols, int maxRows, int minRows) {
+    this.maxCols = maxCols;
+    this.minCols = minCols;
+    this.maxRows = maxRows;
+    this.minRows = minRows;
+  }
+  
+  /**
+   * Sets byte compaction to be true or false
+   * @param byteCompaction
+   */
+  void setByteCompaction(boolean byteCompaction) {
+    this.byteCompaction = byteCompaction;
+  }
+  
+  /**
+   * Sets compact to be true or false
+   * @param compact
+   */
+  void setCompact(boolean compact) {
+    this.compact = compact;
   }
 
 }
