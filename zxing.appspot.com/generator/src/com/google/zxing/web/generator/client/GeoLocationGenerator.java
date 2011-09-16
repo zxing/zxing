@@ -48,7 +48,6 @@ public class GeoLocationGenerator implements GeneratorSource, ChangeListener {
   TextBox latitude = new TextBox();
   TextBox longitude = new TextBox();
   TextBox query = new TextBox();
-  TextBox mapsLink = new TextBox();
   MapWidget map = new MapWidget();
   Marker mapMarker = null;
   private ChangeListener changeListener;
@@ -126,7 +125,7 @@ public class GeoLocationGenerator implements GeneratorSource, ChangeListener {
     if (table != null) {
       return table;
     }
-    table = new Grid(7, 2);
+    table = new Grid(6, 2);
     
     table.setText(0, 0, "Latitude");
     table.setWidget(0, 1, latitude);
@@ -136,16 +135,6 @@ public class GeoLocationGenerator implements GeneratorSource, ChangeListener {
     table.setWidget(2, 1, query);
     table.setText(3, 0, "OR");
     table.setText(3, 1, "enter a Google Maps link and click Fill:");
-    // looks like this:
-    // http://maps.google.com/?ie=UTF8&ll=40.741404,-74.00322&spn=0.001484,0.003101&z=18
-    Button fill = new Button("Fill &uarr;");
-    fill.addClickListener(new ClickListener() {
-      public void onClick(Widget sender) {
-        fillWithMaps();
-      }
-    });
-    table.setWidget(4, 0, fill);
-    table.setWidget(4, 1, mapsLink);
     
     map.setSize("256px", "256px");
     map.addControl(new SmallMapControl());
@@ -155,11 +144,11 @@ public class GeoLocationGenerator implements GeneratorSource, ChangeListener {
         mapClick(event);
       }
     });
-    table.setText(5, 0, "OR");
-    table.setText(5, 1, "use the map to select a location:");
+    table.setText(4, 0, "OR");
+    table.setText(4, 1, "use the map to select a location:");
     SimplePanel sp = new SimplePanel();
     sp.add(map);
-    table.setWidget(6, 1, sp);
+    table.setWidget(5, 1, sp);
     return table;
   }
 
@@ -200,56 +189,6 @@ public class GeoLocationGenerator implements GeneratorSource, ChangeListener {
       });
     }
     map.addOverlay(mapMarker);  
-  }
-
-  protected void fillWithMaps() {
-    String link = mapsLink.getText();
-    if (!link.startsWith("http://maps.google.")) {
-      return;
-    }
-    String q = "";
-    if (link.matches(".*&q=[^&]*&.*")) {
-      StringBuilder qBuilder = new StringBuilder();
-      for (int i = link.indexOf("&q=") + 3;
-          i < link.length() && link.charAt(i) != '&'; ++i) {
-        qBuilder.append(link.charAt(i));
-      }
-      q = qBuilder.toString();
-      // special cases:
-      q = q.replace("+", " ");
-      q = q.replace("%26", "&");
-    }
-    
-    StringBuilder lat = new StringBuilder();
-    StringBuilder lon = new StringBuilder();
-    if (link.matches(".*&s?ll=[^&]*&.*")) {
-      int start;
-      if (link.indexOf("&sll=") == -1) {
-        start = link.indexOf("&ll=") + 4;
-      } else {
-        start = link.indexOf("&sll=") + 5;
-      }
-      boolean beforeComma = true;
-      for (int i = start; i < link.length() && link.charAt(i) != '&'; ++i) {
-        char c = link.charAt(i);
-        if (beforeComma) {
-          if (c == ',') {
-            beforeComma = false;
-          } else {
-            lat.append(c);
-          }
-        } else {
-          lon.append(c);
-        }
-      }
-    }
-    
-    query.setText(URL.decode(q));
-    latitude.setText(lat.toString());
-    longitude.setText(lon.toString());
-    changeListener.onChange(latitude);
-    changeListener.onChange(longitude);
-    this.onChange(latitude);
   }
 
   public void validate(Widget widget) throws GeneratorException {
