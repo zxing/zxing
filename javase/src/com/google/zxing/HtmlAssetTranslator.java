@@ -24,11 +24,15 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.bootstrap.DOMImplementationRegistry;
 import org.w3c.dom.ls.DOMImplementationLS;
 import org.w3c.dom.ls.LSSerializer;
+import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -39,10 +43,11 @@ import java.util.Queue;
  * Google Translate.</p>
  *
  * <p>Pass the Android client assets/ directory as first argument, and the language to translate to second.
+ * Specify "all" for language to try to translate for all existing translations.
  * Optionally, you can specify the files to translate individually.
  * Usage: {@code HtmlAssetTranslator android/assets/ es [file1.html file2.html ...]}</p>
  *
- * <p>This will translate all .html files in subdirectory html-en to directory html-es, for example.
+ * <p>This will translate .html files in subdirectory html-en to directory html-es, for example.
  * Note that only text nodes in the HTML document are translated. Any text that is a child of a node
  * with {@code class="notranslate"} will not be translated. It will also add a note at the end of
  * the translated page that indicates it was automatically translated.</p>
@@ -54,77 +59,142 @@ public final class HtmlAssetTranslator {
   private HtmlAssetTranslator() {}
 
   public static void main(String[] args) throws Exception {
-
     File assetsDir = new File(args[0]);
-    File englishHtmlDir = new File(assetsDir, "html-en");
-    String language = args[1];
-    File targetHtmlDir = new File(assetsDir, "html-" + language);
-    targetHtmlDir.mkdirs();
+    Collection<String> languagesToTranslate = parseLanguagesToTranslate(assetsDir, args[1]);
+    Collection<String> filesToTranslate = parseFilesToTranslate(args);
+    for (String language : languagesToTranslate) {
+      translateOneLanguage(assetsDir, language, filesToTranslate);
+    }
+  }
 
-    final Collection<String> fileNamesToTranslate = new ArrayList<String>();
+  private static Collection<String> parseLanguagesToTranslate(File assetsDir, String languageArg) {
+    Collection<String> languages = new ArrayList<String>();
+    if ("all".equals(languageArg)) {
+      FileFilter fileFilter = new FileFilter() {
+        public boolean accept(File file) {
+          return file.isDirectory() && file.getName().startsWith("html-") && !"html-en".equals(file.getName());
+        }
+      };
+      for (File languageDir : assetsDir.listFiles(fileFilter)) {
+        languages.add(languageDir.getName().substring(5));
+      }
+    } else {
+      languages.add(languageArg);
+    }
+    return languages;
+  }
+
+  private static Collection<String> parseFilesToTranslate(String[] args) {
+    Collection<String> fileNamesToTranslate = new ArrayList<String>();
     for (int i = 2; i < args.length; i++) {
       fileNamesToTranslate.add(args[i]);
     }
+    return fileNamesToTranslate;
+  }
+
+  private static void translateOneLanguage(File assetsDir,
+                                           String language,
+                                           final Collection<String> filesToTranslate) throws IOException {
+    File targetHtmlDir = new File(assetsDir, "html-" + language);
+    targetHtmlDir.mkdirs();
+    File englishHtmlDir = new File(assetsDir, "html-en");
+
+    String translationTextTranslated =
+        StringsResourceTranslator.translateString("Translated by Google Translate.", language);
 
     File[] sourceFiles = englishHtmlDir.listFiles(new FilenameFilter() {
       public boolean accept(File dir, String name) {
-        return name.endsWith(".html") && (fileNamesToTranslate.isEmpty() || fileNamesToTranslate.contains(name));
+        return name.endsWith(".html") && (filesToTranslate.isEmpty() || filesToTranslate.contains(name));
       }
     });
 
     for (File sourceFile : sourceFiles) {
-
-      File destFile = new File(targetHtmlDir, sourceFile.getName());
-
-      DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-      DocumentBuilder builder = factory.newDocumentBuilder();
-      Document document = builder.parse(sourceFile);
-
-      Element rootElement = document.getDocumentElement();
-      rootElement.normalize();
-
-      Queue<Node> nodes = new LinkedList<Node>();
-      nodes.add(rootElement);
-
-      while (!nodes.isEmpty()) {
-        Node node = nodes.poll();
-        if (shouldTranslate(node)) {
-          NodeList children = node.getChildNodes();
-          for (int i = 0; i < children.getLength(); i++) {
-            nodes.add(children.item(i));
-          }
-        }
-        if (node.getNodeType() == Node.TEXT_NODE) {
-          String text = node.getTextContent();
-          if (text.trim().length() > 0) {
-            text = StringsResourceTranslator.translateString(text, language);
-            node.setTextContent(' ' + text + ' ');
-          }
-        }
-      }
-
-      String translationTextTranslated =
-          StringsResourceTranslator.translateString("Translated by Google Translate.", language);
-      Node translateText = document.createTextNode(translationTextTranslated);
-      Node paragraph = document.createElement("p");
-      paragraph.appendChild(translateText);
-      Node body = rootElement.getElementsByTagName("body").item(0);
-      body.appendChild(paragraph);
-
-      DOMImplementationRegistry registry = DOMImplementationRegistry.newInstance();
-      DOMImplementationLS impl = (DOMImplementationLS) registry.getDOMImplementation("LS");
-      LSSerializer writer = impl.createLSSerializer();
-      writer.writeToURI(document, destFile.toURI().toString());
+      translateOneFile(language, targetHtmlDir, sourceFile, translationTextTranslated);
     }
   }
 
-  private static boolean shouldTranslate(Node node) {
-    NamedNodeMap attributes = node.getAttributes();
-    if (attributes == null) {
-      return true;
+  private static void translateOneFile(String language,
+                                       File targetHtmlDir,
+                                       File sourceFile,
+                                       String translationTextTranslated) throws IOException {
+
+    File destFile = new File(targetHtmlDir, sourceFile.getName());
+
+    DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+    Document document;
+    try {
+      DocumentBuilder builder = factory.newDocumentBuilder();
+      document = builder.parse(sourceFile);
+    } catch (ParserConfigurationException pce) {
+      throw new IllegalStateException(pce);
+    } catch (SAXException sae) {
+      throw new IOException(sae.toString());
     }
-    Node classAttribute = attributes.getNamedItem("class");
-    return classAttribute == null || !"notranslate".equals(classAttribute.getTextContent());
+
+    Element rootElement = document.getDocumentElement();
+    rootElement.normalize();
+
+    Queue<Node> nodes = new LinkedList<Node>();
+    nodes.add(rootElement);
+
+    while (!nodes.isEmpty()) {
+      Node node = nodes.poll();
+      if (shouldTranslate(node)) {
+        NodeList children = node.getChildNodes();
+        for (int i = 0; i < children.getLength(); i++) {
+          nodes.add(children.item(i));
+        }
+      }
+      if (node.getNodeType() == Node.TEXT_NODE) {
+        String text = node.getTextContent();
+        if (text.trim().length() > 0) {
+          text = StringsResourceTranslator.translateString(text, language);
+          node.setTextContent(' ' + text + ' ');
+        }
+      }
+    }
+
+    Node translateText = document.createTextNode(translationTextTranslated);
+    Node paragraph = document.createElement("p");
+    paragraph.appendChild(translateText);
+    Node body = rootElement.getElementsByTagName("body").item(0);
+    body.appendChild(paragraph);
+
+    DOMImplementationRegistry registry;
+    try {
+      registry = DOMImplementationRegistry.newInstance();
+    } catch (ClassNotFoundException cnfe) {
+      throw new IllegalStateException(cnfe);
+    } catch (InstantiationException ie) {
+      throw new IllegalStateException(ie);
+    } catch (IllegalAccessException iae) {
+      throw new IllegalStateException(iae);
+    }
+    
+    DOMImplementationLS impl = (DOMImplementationLS) registry.getDOMImplementation("LS");
+    LSSerializer writer = impl.createLSSerializer();
+    writer.writeToURI(document, destFile.toURI().toString());
+  }
+
+  private static boolean shouldTranslate(Node node) {
+    // Ignore "notranslate" nodes
+    NamedNodeMap attributes = node.getAttributes();
+    if (attributes != null) {
+      Node classAttribute = attributes.getNamedItem("class");
+      if (classAttribute != null && "notranslate".equals(classAttribute.getTextContent())) {
+        return false;
+      }
+    }
+    // Ignore non-text snippets
+    String textContent = node.getTextContent();
+    if (textContent != null) {
+      for (int i = 0; i < textContent.length(); i++) {
+        if (Character.isLetter(textContent.charAt(i))) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
 }
