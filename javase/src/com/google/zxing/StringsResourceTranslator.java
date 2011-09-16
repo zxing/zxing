@@ -81,7 +81,6 @@ public final class StringsResourceTranslator {
     LANGUAGE_CODE_MASSAGINGS.put("ja-rJP", "ja");
     LANGUAGE_CODE_MASSAGINGS.put("zh-rCN", "zh-cn");
     LANGUAGE_CODE_MASSAGINGS.put("zh-rTW", "zh-tw");
-	  LANGUAGE_CODE_MASSAGINGS.put("kr",     "ko");
   }
 
   private static long nextAllowedAPICallTime = System.currentTimeMillis();
@@ -173,6 +172,10 @@ public final class StringsResourceTranslator {
   static String translateString(String english, String language) throws IOException {
     if ("en".equals(language)) {
       return english;
+    }
+    String massagedLanguage = LANGUAGE_CODE_MASSAGINGS.get(language);
+    if (massagedLanguage != null) {
+      language = massagedLanguage;
     }
     System.out.println("  Need translation for " + english);
 
