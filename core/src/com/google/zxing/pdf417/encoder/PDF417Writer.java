@@ -60,7 +60,7 @@ public final class PDF417Writer implements Writer {
   /**
    * Initializes the encoder based on the format (whether it's compact or not)
    */
-  private PDF417 initializeEncoder(BarcodeFormat format, boolean compact) {
+  private static PDF417 initializeEncoder(BarcodeFormat format, boolean compact) {
     if (format != BarcodeFormat.PDF_417) {
       throw new IllegalArgumentException("Can only encode PDF_417, but got " + format);
     }
@@ -73,7 +73,7 @@ public final class PDF417Writer implements Writer {
   /**
    * Takes encoder, accounts for width/height, and retrieves bit matrix
    */
-  private BitMatrix bitMatrixFromEncoder(PDF417 encoder, String contents, int width, int height)
+  private static BitMatrix bitMatrixFromEncoder(PDF417 encoder, String contents, int width, int height)
       throws WriterException {
     int errorCorrectionLevel = 2;
     encoder.generateBarcodeLogic(contents, errorCorrectionLevel);
