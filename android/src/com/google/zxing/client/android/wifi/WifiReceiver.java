@@ -50,13 +50,16 @@ final class WifiReceiver extends BroadcastReceiver {
   @Override
   public void onReceive(Context context, Intent intent) {
     if (intent.getAction().equals(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION)) {
+      // Wifi supplicant (WPA client software) changed state.
       handleChange(
           (SupplicantState) intent.getParcelableExtra(WifiManager.EXTRA_NEW_STATE),
           intent.hasExtra(WifiManager.EXTRA_SUPPLICANT_ERROR));
     } else if (intent.getAction().equals(WifiManager.NETWORK_STATE_CHANGED_ACTION)){
+      // The network state changed.
       handleNetworkStateChanged((NetworkInfo) intent.getParcelableExtra(
           WifiManager.EXTRA_NETWORK_INFO));
     } else if (intent.getAction().equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
+      // We might be connected.
       ConnectivityManager con = (ConnectivityManager) parent.getSystemService(
           Context.CONNECTIVITY_SERVICE);
       NetworkInfo[] s = con.getAllNetworkInfo();
@@ -66,6 +69,9 @@ final class WifiReceiver extends BroadcastReceiver {
           String ssid = mWifiManager.getConnectionInfo().getSSID();
 
           if (state == NetworkInfo.State.CONNECTED && ssid != null){
+            // Yes, we connected to the network specified in the barcode.
+            // Let's save the configuration, since we know it works. Then,
+            // we stop this application by calling the killer.
             mWifiManager.saveConfiguration();
             String label = parent.getString(R.string.wifi_connected);
             statusView.setText(label + '\n' + ssid);
@@ -73,6 +79,8 @@ final class WifiReceiver extends BroadcastReceiver {
             delayKill.run();
           }
           if (state == NetworkInfo.State.DISCONNECTED){
+            // We couldn't connect to the specified network. Let the parent
+            // know that we were unsuccessful.
             Log.d(TAG, "Got state Disconnected for ssid: " + ssid);
             parent.gotError();
           }
