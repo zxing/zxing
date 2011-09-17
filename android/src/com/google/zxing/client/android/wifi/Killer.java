@@ -29,12 +29,13 @@ import android.net.Uri;
 import android.os.Handler;
 
 /**
- * Close the parent after a delay.
+ * Start a browser after a delay to let the user read the informative
+ * message.
  * @author Vikram Aggarwal
  */
 final class Killer implements Runnable {
 
-  // Three full seconds
+  // Wait for this long, to enable the user to read the status.
   private static final long DELAY_MS = 3 * 1000L;
 
   private final Activity parent;
@@ -66,9 +67,7 @@ final class Killer implements Runnable {
       public void run() {
         handler.post(new Runnable() {
           public void run() {
-            // This will kill the parent, a bad idea.
-//            parent.finish();
-            // This will start the browser, a better idea
+            // This will start the browser.
             launchIntent(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com/")));
           }
         });
