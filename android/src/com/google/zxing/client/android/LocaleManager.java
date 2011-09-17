@@ -16,8 +16,8 @@
 
 package com.google.zxing.client.android;
 
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
 import java.util.HashMap;
@@ -38,7 +38,12 @@ public final class LocaleManager {
   static {
     Locale locale = Locale.getDefault();
     COUNTRY = locale == null ? DEFAULT_COUNTRY : locale.getCountry();
-    LANGUAGE = locale == null ? DEFAULT_LANGUAGE : locale.getLanguage();
+    String language = locale == null ? DEFAULT_LANGUAGE : locale.getLanguage();
+    // Special case Chinese
+    if (Locale.SIMPLIFIED_CHINESE.getLanguage().equals(language)) {
+      language += "-r" + COUNTRY;
+    }
+    LANGUAGE = language;
   }
 
   /**
@@ -104,11 +109,8 @@ public final class LocaleManager {
    */
   private static final Map<String,String> GOOGLE_BOOK_SEARCH_COUNTRY_TLD = GOOGLE_COUNTRY_TLD;
 
-  private static final Collection<String> TRANSLATED_HELP_ASSET_LANGUAGES;
-  static {
-    TRANSLATED_HELP_ASSET_LANGUAGES = new HashSet<String>();
-    TRANSLATED_HELP_ASSET_LANGUAGES.add("en");
-  }
+  private static final Collection<String> TRANSLATED_HELP_ASSET_LANGUAGES =
+      Arrays.asList("en");
 
   private LocaleManager() {}
 

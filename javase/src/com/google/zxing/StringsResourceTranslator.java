@@ -51,7 +51,7 @@ import java.util.regex.Pattern;
  */
 public final class StringsResourceTranslator {
 
-  private static final long MIN_API_CALL_INTERVAL_MS = 5 * 1000L;
+  private static final long MIN_API_CALL_INTERVAL_MS = 10 * 1000L;
 
   private static final Charset UTF8 = Charset.forName("UTF-8");
   private static final Pattern ENTRY_PATTERN = Pattern.compile("<string name=\"([^\"]+)\".*>([^<]+)</string>");
@@ -76,9 +76,8 @@ public final class StringsResourceTranslator {
       " limitations under the License.\n" +
       " -->\n";
 
-  private static final Map<String,String> LANGUAGE_CODE_MASSAGINGS = new HashMap<String,String>(7);
+  private static final Map<String,String> LANGUAGE_CODE_MASSAGINGS = new HashMap<String,String>(3);
   static {
-    LANGUAGE_CODE_MASSAGINGS.put("ja-rJP", "ja");
     LANGUAGE_CODE_MASSAGINGS.put("zh-rCN", "zh-cn");
     LANGUAGE_CODE_MASSAGINGS.put("zh-rTW", "zh-tw");
   }
@@ -216,6 +215,7 @@ public final class StringsResourceTranslator {
     // This is a little crude; unescape some common escapes in the raw response
     translation = translation.replaceAll("\\\\u0026quot;", "\"");
     translation = translation.replaceAll("\\\\u0026#39;", "'");
+    translation = translation.replaceAll("\\\\u200b", "");
 
     return translation;
   }
