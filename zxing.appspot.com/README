@@ -1,0 +1,14 @@
+To compile:
+----------
+Run 'ant' in this directory. You might get a lot of warnings with
+[WARN] but you should not get any errors.
+
+
+To test:
+-------
+View the file "build/site/generator/index.html" in any browser. You can do
+this from the commandline with:
+
+firefox build/site/generator/index.html
+
+Now you can try out your changes.
