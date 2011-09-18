@@ -39,9 +39,7 @@ final class WifiReceiver extends BroadcastReceiver {
   private final WifiActivity parent;
   private final TextView statusView;
 
-  // FIXME: Why is ssid ignored here?
-  WifiReceiver(WifiManager wifiManager, WifiActivity wifiActivity, TextView statusView,
-      String ssid) {
+  WifiReceiver(WifiManager wifiManager, WifiActivity wifiActivity, TextView statusView) {
     this.parent = wifiActivity;
     this.statusView = statusView;
     this.mWifiManager = wifiManager;
