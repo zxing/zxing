@@ -227,7 +227,7 @@ public final class WifiActivity extends Activity  {
     wifiManager.setWifiEnabled(true);
 
     // So we know when the network changes
-    wifiReceiver = new WifiReceiver(wifiManager, this, statusView, ssid);
+    wifiReceiver = new WifiReceiver(wifiManager, this, statusView);
 
     // The order matters!
     mWifiStateFilter = new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION);
