@@ -34,22 +34,22 @@ import com.google.zxing.common.BitArray;
  */
 abstract class AI013x0xDecoder extends AI01weightDecoder {
 
-  private static final int headerSize = 4 + 1;
-  private static final int weightSize = 15;
+  private static final int HEADER_SIZE = 4 + 1;
+  private static final int WEIGHT_SIZE = 15;
 
   AI013x0xDecoder(BitArray information) {
     super(information);
   }
 
   public String parseInformation() throws NotFoundException {
-    if (this.information.size != headerSize + gtinSize + weightSize) {
+    if (this.information.size != HEADER_SIZE + GTIN_SIZE + WEIGHT_SIZE) {
       throw NotFoundException.getNotFoundInstance();
     }
 
     StringBuffer buf = new StringBuffer();
 
-    encodeCompressedGtin(buf, headerSize);
-    encodeCompressedWeight(buf, headerSize + gtinSize, weightSize);
+    encodeCompressedGtin(buf, HEADER_SIZE);
+    encodeCompressedWeight(buf, HEADER_SIZE + GTIN_SIZE, WEIGHT_SIZE);
 
     return buf.toString();
   }

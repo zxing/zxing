@@ -30,7 +30,7 @@ import java.util.Hashtable;
  */
 public final class EAN13Writer extends UPCEANWriter {
 
-  private static final int codeWidth = 3 + // start guard
+  private static final int CODE_WIDTH = 3 + // start guard
       (7 * 6) + // left bars
       5 + // middle guard
       (7 * 6) + // right bars
@@ -53,7 +53,7 @@ public final class EAN13Writer extends UPCEANWriter {
 
     int firstDigit = Integer.parseInt(contents.substring(0, 1));
     int parities = EAN13Reader.FIRST_DIGIT_ENCODINGS[firstDigit];
-    byte[] result = new byte[codeWidth];
+    byte[] result = new byte[CODE_WIDTH];
     int pos = 0;
 
     pos += appendPattern(result, pos, UPCEANReader.START_END_PATTERN, 1);

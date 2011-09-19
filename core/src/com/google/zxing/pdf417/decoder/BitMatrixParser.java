@@ -29,6 +29,8 @@ import com.google.zxing.common.BitMatrix;
  */
 final class BitMatrixParser {
 
+  private static final int[] NO_ERRORS = new int[0];
+
   private static final int MAX_ROW_DIFFERENCE = 6;
   private static final int MAX_ROWS = 90;
   //private static final int MAX_COLUMNS = 30;
@@ -43,7 +45,7 @@ final class BitMatrixParser {
   private int leftColumnECData = 0;
   private int rightColumnECData = 0;
   private int eraseCount = 0;
-  private int[] erasures = null;
+  private int[] erasures;
   private int ecLevel = -1;
 
   BitMatrixParser(BitMatrix bitMatrix) {
@@ -80,8 +82,7 @@ final class BitMatrixParser {
       if (rowNumber >= MAX_ROWS) {
         // Something is wrong, since we have exceeded
         // the maximum rows in the specification.
-        // TODO Maybe return error code
-        return null;
+        throw FormatException.getFormatInstance();
       }
       int rowDifference = 0;
       // Scan a line of modules and check the
@@ -117,8 +118,7 @@ final class BitMatrixParser {
           if (next == -1) {
             // Something is wrong, since we have exceeded
             // the maximum columns in the specification.
-            // TODO Maybe return error code
-            return null;
+            throw FormatException.getFormatInstance();
           }
           // Reinitialize the row counters.
           for (int j = 0; j < rowCounters.length; j++) {
@@ -138,8 +138,7 @@ final class BitMatrixParser {
       if (rowNumber >= MAX_ROWS) {
         // Something is wrong, since we have exceeded
         // the maximum rows in the specification.
-        // TODO Maybe return error code
-        return null;
+        throw FormatException.getFormatInstance();
       }
       next = processRow(rowCounters, rowNumber, rowHeight, codewords, next);
       rowNumber++;
@@ -157,15 +156,15 @@ final class BitMatrixParser {
    * @return the new trimmed array
    */
   private static int[] trimArray(int[] array, int size) {
-    if (size > 0) {
-      int[] a = new int[size];
-      for (int i = 0; i < size; i++) {
-        a[i] = array[i];
-      }
-      return a;
-    } else {
-      return null;
+    if (size < 0) {
+      throw new IllegalArgumentException();
     }
+    if (size == 0) {
+      return NO_ERRORS;
+    }
+    int[] a = new int[size];
+    System.arraycopy(array, 0, a, 0, size);
+    return a;
   }
 
   /**
@@ -311,8 +310,7 @@ final class BitMatrixParser {
    * @return the codeword corresponding to the symbol.
    */
   private static int getCodeword(long symbol) {
-    long sym = symbol;
-    sym &= 0x3ffff;
+    long sym = symbol & 0x3FFFF;
     int i = findCodewordIndex(sym);
     if (i == -1) {
       return -1;

@@ -35,16 +35,16 @@ public abstract class AbstractRSSReader extends OneDReader {
   protected final int[] evenCounts;
 
   protected AbstractRSSReader(){
-      decodeFinderCounters = new int[4];
-      dataCharacterCounters = new int[8];
-      oddRoundingErrors = new float[4];
-      evenRoundingErrors = new float[4];
-      oddCounts = new int[dataCharacterCounters.length / 2];
-      evenCounts = new int[dataCharacterCounters.length / 2];
+    decodeFinderCounters = new int[4];
+    dataCharacterCounters = new int[8];
+    oddRoundingErrors = new float[4];
+    evenRoundingErrors = new float[4];
+    oddCounts = new int[dataCharacterCounters.length / 2];
+    evenCounts = new int[dataCharacterCounters.length / 2];
   }
 
 
-  protected static int parseFinderValue(int[] counters, int [][] finderPatterns) throws NotFoundException {
+  protected static int parseFinderValue(int[] counters, int[][] finderPatterns) throws NotFoundException {
     for (int value = 0; value < finderPatterns.length; value++) {
       if (patternMatchVariance(counters, finderPatterns[value], MAX_INDIVIDUAL_VARIANCE) <
           MAX_AVG_VARIANCE) {

@@ -43,12 +43,12 @@ public final class ExpandedProductParsedResultTestCase extends Assert {
   public void test_RSSExpanded() {
     String text = "(01)66546(13)001205(3932)4455(3102)6544(123)544654";
     String productID = "66546";
-    String sscc = "-";
-    String lotNumber = "-";
-    String productionDate = "-";
+    String sscc = null;
+    String lotNumber = null;
+    String productionDate = null;
     String packagingDate = "001205";
-    String bestBeforeDate = "-";
-    String expirationDate = "-";
+    String bestBeforeDate = null;
+    String expirationDate = null;
     String weight = "6544";
     String weightType = "KG";
     String weightIncrement = "2";

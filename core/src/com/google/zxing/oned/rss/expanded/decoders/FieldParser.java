@@ -191,7 +191,7 @@ final class FieldParser {
 
   static String parseFieldsInGeneralPurpose(String rawInformation) throws NotFoundException{
     if(rawInformation.length() == 0) {
-      return "";
+      return null;
     }
 
     // Processing 2-digit AIs
@@ -267,7 +267,9 @@ final class FieldParser {
 
     String field = rawInformation.substring(aiSize, aiSize + fieldSize);
     String remaining = rawInformation.substring(aiSize + fieldSize);
-    return '(' + ai + ')' + field + parseFieldsInGeneralPurpose(remaining);
+    String result = '(' + ai + ')' + field;
+    String parsedAI = parseFieldsInGeneralPurpose(remaining);
+    return parsedAI == null ? result : result + parsedAI;
   }
 
   private static String processVariableAI(int aiSize, int variableFieldSize, String rawInformation) throws NotFoundException {
@@ -280,6 +282,8 @@ final class FieldParser {
     }
     String field = rawInformation.substring(aiSize, maxSize);
     String remaining = rawInformation.substring(maxSize);
-    return '(' + ai + ')' + field + parseFieldsInGeneralPurpose(remaining);
+    String result = '(' + ai + ')' + field;
+    String parsedAI = parseFieldsInGeneralPurpose(remaining);
+    return parsedAI == null ? result : result + parsedAI;
   }
 }
