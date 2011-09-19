@@ -1,322 +1,354 @@
-#include "QCameraControllerWidget.h"
-#include <QPainter>
+/****************************************************************************
+**
+** Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the demonstration applications of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:BSD$
+** You may use this file under the terms of the BSD license as follows:
+**
+** "Redistribution and use in source and binary forms, with or without
+** modification, are permitted provided that the following conditions are
+** met:
+**   * Redistributions of source code must retain the above copyright
+**     notice, this list of conditions and the following disclaimer.
+**   * Redistributions in binary form must reproduce the above copyright
+**     notice, this list of conditions and the following disclaimer in
+**     the documentation and/or other materials provided with the
+**     distribution.
+**   * Neither the name of Nokia Corporation and its Subsidiary(-ies) nor
+**     the names of its contributors may be used to endorse or promote
+**     products derived from this software without specific prior written
+**     permission.
+**
+** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+** "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+** LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+** A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+** OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+** SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+** LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+** DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+** THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+** (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+** $QT_END_LICENSE$
+**
+****************************************************************************/
 
-QCameraControllerWidget::QCameraControllerWidget(QWidget* parent) : QWidget(parent),
-iCameraWrapper(NULL), iBackBuffer(NULL), iBackBufferDevice(NULL), iBackBufferContext(NULL)
+#include "QCameraControllerWidget.h"
+//#include <QDebug>
+
+
+/*****************************************************************************
+* QCameraControllerWidget
+*/
+QCameraControllerWidget::QCameraControllerWidget(QWidget *parent) :
+    QWidget(parent)
 {
-    timer = new QTimer(this);
-    connect(timer, SIGNAL(timeout()), this, SLOT(sendBackbufferToDecode()));
-    timer->start(500);
+    setWindowTitle("QCameraControllerWidget");
+
+    // Opitimizations for screen update and drawing qwidget
+    setAutoFillBackground(false);
+
+    // Prevent to screensaver to activate
+//    m_systemScreenSaver = new QSystemScreenSaver(this);
+//    m_systemScreenSaver->setScreenSaverInhibit();
+
+    m_myVideoSurface = 0;
+    pictureCaptured = false;
+    showViewFinder = false;
+    m_focusing = false;
+
+    // Black background
+    QPalette palette = this->palette();
+    palette.setColor(QPalette::Background, Qt::black);
+    setPalette(palette);
+
+    // Main widget & layout
+   // QWidget* mainWidget = new QWidget(this);
+    setPalette(palette);
+
+    QHBoxLayout* hboxl = new QHBoxLayout;
+    hboxl->setSpacing(0);
+    hboxl->setMargin(0);
+
+    // UI stack
+    m_stackedWidget = new QStackedWidget();
+    m_stackedWidget->setPalette(palette);
+
+    // First widget to stack
+    m_videoWidget = new QWidget();
+    m_videoWidget->setPalette(palette);
+    m_stackedWidget->addWidget(m_videoWidget);
+
+    // Second widget to stack
+    QWidget* secondWidget = new QWidget(this);
+    secondWidget->setPalette(palette);
+    m_stackedWidget->addWidget(secondWidget);
+    m_stackedWidget->setCurrentIndex(0);
+
+    hboxl->addWidget(m_stackedWidget);
+
+    // Buttons
+    QSize iconSize(80, 80);
+    QVBoxLayout* vboxl = new QVBoxLayout;
+    vboxl->setSpacing(0);
+    vboxl->setMargin(0);
+
+    // Exit button
+    m_exit = new Button(this);
+    QObject::connect(m_exit, SIGNAL(pressed()), qApp, SLOT(quit()));
+    QPixmap p = QPixmap(":/icons/exit.png");
+    m_exit->setPixmap(p.scaled(iconSize, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    vboxl->addWidget(m_exit);
+    vboxl->setAlignment(m_exit,Qt::AlignHCenter | Qt::AlignTop);
+
+    // Camera button
+    m_cameraBtn = new Button(this);
+    QObject::connect(m_cameraBtn, SIGNAL(pressed()), this, SLOT(searchAndLock()));
+    p = QPixmap(":/icons/camera.png");
+    m_cameraBtn->setPixmap(p.scaled(iconSize, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    vboxl->addWidget(m_cameraBtn);
+    vboxl->setAlignment(m_cameraBtn, Qt::AlignBottom);
+
+    hboxl->addLayout(vboxl);
+    setLayout(hboxl);
+
+    // Enable camera after 1s, so that the application is started
+    // and widget is created to landscape orientation
+    QTimer::singleShot(1000,this,SLOT(enableCamera()));
 }
 
 QCameraControllerWidget::~QCameraControllerWidget()
 {
-    if (iCameraWrapper)
-    {
-        iCameraWrapper->ReleaseAndPowerOff();
-    }
-
-    delete iCameraWrapper;
-
-    if(timer)
-    {
-        delete timer;
-        timer = NULL;
-    }
-
-    ReleaseBackBuffer();
+if (m_myVideoSurface)
+    m_myVideoSurface->stop();
+    m_camera->stop();
+    delete m_stackedWidget;
+    delete m_stillImageCapture;
+    delete m_camera;
 }
 
-void QCameraControllerWidget::CaptureImage()
+
+void QCameraControllerWidget::enableCamera()
 {
-    if (iCameraWrapper && iCameraWrapper->State() == CCameraEngine::EEngineViewFinding)
-    {
-        emit logMessage("Capturing picture");
-        iCameraWrapper->StopViewFinder();
-        TRAPD(err,iCameraWrapper->CaptureL());
-        if (err)
-        {
-            emit logMessage("Camera capture error");                    
+    m_camera = new QCamera();
+    m_camera->setCaptureMode(QCamera::CaptureStillImage);
+    connect(m_camera, SIGNAL(error(QCamera::Error)), this, SLOT(error(QCamera::Error)));
+    connect(m_camera, SIGNAL(lockStatusChanged(QCamera::LockStatus,QCamera::LockChangeReason)), this, SLOT(lockStatusChanged(QCamera::LockStatus,QCamera::LockChangeReason)));
+
+    // Own video output drawing that shows camera view finder pictures
+    //! [0]
+    QMediaService* ms = m_camera->service();
+    QVideoRendererControl* vrc = ms->requestControl<QVideoRendererControl*>();
+    m_myVideoSurface = new MyVideoSurface(this,this,this);
+    vrc->setSurface(m_myVideoSurface);
+//! [0]
+    // Image capturer
+    m_stillImageCapture = new QCameraImageCapture(m_camera);
+    connect(m_stillImageCapture, SIGNAL(imageCaptured(int,QImage)), this, SLOT(onImageCaptured(int,QImage)));
+
+    // Start camera
+    if (m_camera->state() == QCamera::ActiveState) {
+        m_camera->stop();
+    }
+    m_videoWidget->show();
+    m_camera->start();
+    showViewFinder = true;
+}
+
+void QCameraControllerWidget::mousePressEvent(QMouseEvent *event)
+{
+    QWidget::mousePressEvent(event);
+
+    if (pictureCaptured) {
+        // Starting view finder
+        pictureCaptured = false;
+        m_stackedWidget->setCurrentIndex(0);
+        if (m_myVideoSurface) {
+            showViewFinder = true;
         }
     }
 }
 
-void QCameraControllerWidget::paintEvent(QPaintEvent* event)
+void QCameraControllerWidget::searchAndLock()
 {
-    if(iBackBuffer)
-    {
-        QPainter paint(this);
-        paint.drawPixmap(0,0,QPixmap::fromSymbianCFbsBitmap(iBackBuffer));
-    }
-}
+    m_focusing = false;
+    m_focusMessage.clear();
 
-void QCameraControllerWidget::resizeEvent(QResizeEvent* event)
-{
-    static int savedWidth = 0;
-    static int savedHeight = 0;
-    
-    if(!savedWidth || !savedHeight)
-    {
-        InitializeCamera();
-        savedWidth = geometry().width();
-        savedHeight = geometry().height();
-    }
-}
-
-void QCameraControllerWidget::InitializeCamera()
-{
-    // Create camera wrapper class here because
-    // whole camera wrapper and all handles have to reset
-    // while orientatio of the application changes.
-    if (iCameraWrapper)
-    {
-        // Power off camera if it is on
-        iCameraWrapper->StopViewFinder();
-        iCameraWrapper->ReleaseAndPowerOff();
-        delete iCameraWrapper; iCameraWrapper = NULL;
-    }
-    TInt camErr(KErrNotSupported);
-    if(CCameraEngine::CamerasAvailable() > 0)
-    {
-        TRAP(camErr, iCameraWrapper = CCameraEngine::NewL(0,0,this));
-    }
-
-    // iViewFinderSize is picture size for viewfinder.
-    // iCaptureSize is picture size for capturing picture.
-    // We want fill whole screen
-    if (geometry().width() > geometry().height())
-    {
-        iViewFinderSize = TSize(geometry().width(),geometry().width());
-        iCaptureSize = TSize(geometry().width(),geometry().width()); // Captured picture size
-    }
-    else
-    {
-        iViewFinderSize = TSize(geometry().height(), geometry().height());
-        iCaptureSize = TSize(geometry().height(),geometry().height()); // Captured picture size
-    }
-
-    // Create back buffer where recieved camera pictures are copied
-    ReleaseBackBuffer();
-    CreateBackBufferL();
-
-    // Power on camera, start viewfinder when MceoCameraReady() received
-    if(camErr == KErrNone)
-    {
-        iCameraWrapper->ReserveAndPowerOn();    
-        emit logMessage("Camera power on");
-    }
-    else
-    {
-        emit logMessage("no camera found");
-    }
-}
-
-void QCameraControllerWidget::CreateBackBufferL()
-{
-    // create back buffer bitmap
-    iBackBuffer = q_check_ptr(new CFbsBitmap);
-
-    try{
-        TSize size;
-        size.iHeight = this->geometry().height();
-        size.iWidth = this->geometry().width();
-        QT_TRAP_THROWING( iBackBuffer->Create(size,EColor64K));
-    }
-    catch(std::exception& e)
-    {
-
-    }
-
-    // create back buffer graphics context
-    iBackBufferDevice = CFbsBitmapDevice::NewL(iBackBuffer);
-    User::LeaveIfError(iBackBufferDevice->CreateContext(iBackBufferContext));
-    iBackBufferContext->SetPenStyle(CGraphicsContext::ESolidPen);
-
-    iBackBufferContext->SetBrushColor(KRgbBlack);
-    iBackBufferContext->Clear();
-}
-
-void QCameraControllerWidget::ReleaseBackBuffer()
-{
-    if (iBackBufferContext)
-    {
-        delete iBackBufferContext;
-        iBackBufferContext = NULL;
-    }
-    if (iBackBufferDevice)
-    {
-        delete iBackBufferDevice;
-        iBackBufferDevice = NULL;
-    }
-    if (iBackBuffer)
-    {
-        delete iBackBuffer;
-        iBackBuffer = NULL;
-    }
-}
-
-void QCameraControllerWidget::MceoCameraReady()
-{
-    if (iCameraWrapper->State() == CCameraEngine::EEngineIdle)
-    {
-        // Prepare camera
-        TSize imageSize;
-        imageSize.iHeight = 480;
-        imageSize.iWidth = 640;
-
-        CCamera::TFormat format = CCamera::EFormatFbsBitmapColor64K;
-
-        TRAPD(err,iCameraWrapper->PrepareL(imageSize, format));
-        if (err)
-        {
-            emit logMessage("Camera prepare error");
-            return;
-        }
-
-        // Start viewfinder. Viewfinder pictures starts coming into MceoViewFinderFrameReady();
-
-        TSize finderSize;
-        finderSize.iHeight = this->geometry().height();
-        finderSize.iWidth = this->geometry().width();
-        TRAPD(err2,iCameraWrapper->StartViewFinderL(finderSize));
-        if (err2)
-        {
-            emit logMessage("Camera start viewfinder error");
-            return;
-        }
-
-        emit logMessage("Camera viewfinder started");
-    }
-}
-
-void QCameraControllerWidget::MceoFocusComplete()
-{
-    // CameraEngine state is EEngineIdle
-    emit logMessage("Focused");
-
-    // Capture picture after it has focused
-    iCameraWrapper->StopViewFinder();
-    TRAPD(err,iCameraWrapper->CaptureL());
-    if (err)
-    {
-        emit logMessage("Camera capture error");
-    }
-}
-
-void QCameraControllerWidget::MceoCapturedDataReady( TDesC8* aData )
-{
-
-}
-
-void QCameraControllerWidget::MceoCapturedBitmapReady( CFbsBitmap* aBitmap )
-{
-    if (iBackBufferContext)
-    {
-        emit logMessage("Succesfull capture");
-
-        QPixmap pix(QPixmap::fromSymbianCFbsBitmap(aBitmap));
-        emit imageCaptured(pix.toImage());
-
-        TSize finderSize;
-        finderSize.iHeight = this->geometry().height();
-        finderSize.iWidth = this->geometry().width();
-        TRAPD(err2,iCameraWrapper->StartViewFinderL(finderSize));
-        if (err2)
-        {
-            emit logMessage("Camera start viewfinder error");
-            return;
+    if (pictureCaptured) {
+        // Starting view finder again
+        pictureCaptured = false;
+        m_stackedWidget->setCurrentIndex(0);
+        if (m_myVideoSurface) {
+            showViewFinder = true;
         }
     }
-    if (iCameraWrapper)
-        iCameraWrapper->ReleaseImageBuffer();
+    else {
+        // Search and lock picture (=focus)
+        if (m_camera->supportedLocks() & QCamera::LockFocus) {
+            m_focusing = true;
+            m_focusMessage = "Focusing...";
+            m_camera->searchAndLock(QCamera::LockFocus);
+        } else {
+        // No focus functionality, take picture right away
+            captureImage();
+        }
+    }
 }
 
-void QCameraControllerWidget::MceoViewFinderFrameReady( CFbsBitmap& aFrame )
+void QCameraControllerWidget::lockStatusChanged(QCamera::LockStatus status, QCamera::LockChangeReason reason)
 {
-    if (iBackBufferContext)
-    {
-        TSize bmpSizeInPixels = aFrame.SizeInPixels();
-        TInt xDelta = 0;
-        TInt yDelta = 0;
-        TPoint pos( xDelta, yDelta );
-
-        // Copy received viewfinder picture to back buffer
-        iBackBufferContext->BitBlt( pos, &aFrame, TRect( TPoint( 0, 0 ), bmpSizeInPixels ));
-
-        // Update backbuffer into screen 
-        update();
+    if (status == QCamera::Locked) {
+        if (reason == QCamera::LockAcquired) {
+            // Focus locked
+            m_focusMessage.clear();
+            m_focusing = false;
+            // Capture new image
+            captureImage();
+            // Unlock camera
+            m_camera->unlock();
+        } else {
+            if (m_focusing)
+                m_focusMessage = "No focus, try again";
+        }
+    } else if (status == QCamera::Unlocked && m_focusing) {
+        m_focusMessage = "No focus, try again";
     }
-    if (iCameraWrapper)
-        iCameraWrapper->ReleaseViewFinderBuffer();
 }
 
-void QCameraControllerWidget::MceoHandleError( TCameraEngineError aErrorType, TInt aError )
+void QCameraControllerWidget::captureImage()
 {
-    // NOTE: CameraEngine state seems to go into CCameraEngine::EEngineIdle state
+    if (pictureCaptured) {
+        // Starting view finder again
+        pictureCaptured = false;
+        m_stackedWidget->setCurrentIndex(0);
+        showViewFinder = true;
+    }
+    else {
+        // Capturing image
+        showViewFinder = false;
+        // Get picture location where to store captured images
+        QString path(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+        QDir dir(path);
 
-    if (aErrorType == EErrReserve)
-    {
-        return; //-18 comes on application startup, but everything works ok
+        // Get next filename
+        QStringList files = dir.entryList(QStringList() << "camera_*.jpg");
+        int lastImage = 0;
+        foreach ( QString fileName, files ) {
+                int imgNumber = fileName.mid(7, fileName.size() - 11).toInt();
+                lastImage = qMax(lastImage, imgNumber);
+            }
+        // Capture image
+        if (m_stillImageCapture->isReadyForCapture()) {
+            m_imageName = QString("camera_%1.jpg").arg(lastImage+1);
+            m_stillImageCapture->capture(m_imageName);
+        }
     }
+}
 
-    switch (aErrorType)
+void QCameraControllerWidget::onImageCaptured(int id, const QImage &preview)
+{
+    m_stillImageCapture->cancelCapture();
+    showViewFinder = false;
+    m_focusing = false;
+
+    // Image captured, show it to the user
+    m_stackedWidget->setCurrentIndex(1);
+
+    // Get picture location
+    QString path(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+    m_imageName.prepend(path + "/");
+
+    m_capturedImage = preview;
+
+    // Set suitable size to the image
+    QSize s = m_videoWidget->size();
+    s = s - QSize(20, 20);
+    m_capturedImage = m_capturedImage.scaled(s, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+
+    emit imageCaptured(preview);
+
+    pictureCaptured = true;
+    update();
+}
+
+void QCameraControllerWidget::error(QCamera::Error e)
+{
+    switch (e) {
+    case QCamera::NoError:
     {
-    case EErrReserve:
-    {
-        emit logMessage("Camera reserved error");
         break;
     }
-    case EErrPowerOn:
+    case QCamera::CameraError:
     {
-        emit logMessage("Camera power on error");
+        QMessageBox::warning(this, "QCameraControllerWidget", "General Camera error");
         break;
     }
-    case EErrViewFinderReady:
+    case QCamera::InvalidRequestError:
     {
-        emit logMessage("Camera viewfinder error");
+        QMessageBox::warning(this, "QCameraControllerWidget", "Camera invalid request error");
         break;
     }
-    case EErrImageReady:
+    case QCamera::ServiceMissingError:
     {
-        emit logMessage("Camera image ready error");
+        QMessageBox::warning(this, "QCameraControllerWidget", "Camera service missing error");
         break;
     }
-    case EErrAutoFocusInit:
-    case EErrAutoFocusMode:
-    case EErrAutoFocusArea:
-    case EErrAutoFocusRange:
-    case EErrAutoFocusType:
-    case EErrOptimisedFocusComplete:
+    case QCamera::NotSupportedFeatureError :
     {
-        //emit logMessage("Try focusing again");
-        break;
-    }
-    default:
-    {
-        emit logMessage("Unknown error");
+        QMessageBox::warning(this, "QCameraControllerWidget", "Camera not supported error");
         break;
     }
     };
-
-    // Try handle error
-    //CancelCapturedPicture(EFalse);
-    //    iAppUi->UseOptionsExitCbaL();
 }
 
-void QCameraControllerWidget::MceoHandleOtherEvent( const TECAMEvent& /*aEvent*/ )
+void QCameraControllerWidget::updateVideo()
 {
+    if (showViewFinder) {
+        repaint();
+    }
 }
 
-//Timer slot
-void QCameraControllerWidget::sendBackbufferToDecode()
+void QCameraControllerWidget::paintEvent(QPaintEvent *event)
 {
-    if(!iBackBuffer)
-        return;
+    //QMainWindow::paintEvent(event);
 
-    QPixmap pix(QPixmap::fromSymbianCFbsBitmap(iBackBuffer));
-    emit imageCaptured(pix.toImage());
+    QPainter painter(this);
+    QRect r = this->rect();
 
-    if(timer)
-        timer->start(500);
+    QFont font = painter.font();
+    font.setPixelSize(20);
+    painter.setFont(font);
+    painter.setPen(Qt::white);
+
+    if (showViewFinder && m_myVideoSurface && m_myVideoSurface->isActive()) {
+        // Show view finder
+        m_myVideoSurface->paint(&painter);
+
+        // Paint focus message
+        if (!m_focusMessage.isEmpty())
+            painter.drawText(r, Qt::AlignCenter, m_focusMessage);
+
+    } else {
+        // Draw black
+        painter.fillRect(event->rect(), palette().background());
+        // Show captured image
+        if (pictureCaptured) {
+            // Paint captured image
+            QPoint centerPic((qAbs(r.size().width() - m_capturedImage.size().width())) / 2, (qAbs(
+                r.size().height() - m_capturedImage.size().height())) / 2);
+
+            painter.drawImage(centerPic, m_capturedImage);
+
+            // Paint filename
+           // painter.drawText(r, Qt::AlignBottom | Qt::AlignCenter, m_imageName);
+        }
+    }
+
 }
+
 

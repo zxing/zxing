@@ -22,6 +22,7 @@
  */
 
 #include <zxing/Reader.h>
+#include <zxing/DecodeHints.h>
 #include <zxing/datamatrix/decoder/Decoder.h>
 
 namespace zxing {
@@ -33,7 +34,7 @@ private:
 
 public:
   DataMatrixReader();
-  virtual Ref<Result> decode(Ref<BinaryBitmap> image);
+  virtual Ref<Result> decode(Ref<BinaryBitmap> image, DecodeHints hints);
   virtual ~DataMatrixReader();
 
 };

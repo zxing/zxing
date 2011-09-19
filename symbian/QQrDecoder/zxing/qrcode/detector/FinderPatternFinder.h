@@ -5,8 +5,7 @@
  *  FinderPatternFinder.h
  *  zxing
  *
- *  Created by Christian Brunschen on 13/05/2008.
- *  Copyright 2008 ZXing authors All rights reserved.
+ *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,9 +24,13 @@
 #include <zxing/qrcode/detector/FinderPatternInfo.h>
 #include <zxing/common/Counted.h>
 #include <zxing/common/BitMatrix.h>
+#include <zxing/ResultPointCallback.h>
 #include <vector>
 
 namespace zxing {
+
+class DecodeHints;
+
 namespace qrcode {
 
 class FinderPatternFinder {
@@ -39,6 +42,8 @@ private:
   Ref<BitMatrix> image_;
   std::vector<Ref<FinderPattern> > possibleCenters_;
   bool hasSkipped_;
+
+  Ref<ResultPointCallback> callback_;
 
   /** stateCount must be int[5] */
   static float centerFromEnd(int* stateCount, int end);
@@ -53,11 +58,10 @@ private:
   bool haveMultiplyConfirmedCenters();
   std::vector<Ref<FinderPattern> > selectBestPatterns();
   static std::vector<Ref<FinderPattern> > orderBestPatterns(std::vector<Ref<FinderPattern> > patterns);
-
 public:
   static float distance(Ref<ResultPoint> p1, Ref<ResultPoint> p2);
-  FinderPatternFinder(Ref<BitMatrix> image);
-  Ref<FinderPatternInfo> find();
+  FinderPatternFinder(Ref<BitMatrix> image, Ref<ResultPointCallback>const&);
+  Ref<FinderPatternInfo> find(DecodeHints const& hints);
 };
 }
 }

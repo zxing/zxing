@@ -20,6 +20,7 @@
 
 #include <zxing/qrcode/detector/FinderPatternFinder.h>
 #include <zxing/ReaderException.h>
+#include <zxing/DecodeHints.h>
 #include <vector>
 #include <cmath>
 #include <cstdlib>
@@ -30,26 +31,35 @@ namespace qrcode {
 
 using namespace std;
 
-class ClosestToAverageComparator {
+class FurthestFromAverageComparator {
 private:
-  float averageModuleSize_;
+  const float averageModuleSize_;
 public:
-  ClosestToAverageComparator() : averageModuleSize_(0.0f) { }
-  
-  ClosestToAverageComparator(float averageModuleSize) :
-      averageModuleSize_(averageModuleSize) {
+  FurthestFromAverageComparator(float averageModuleSize) :
+    averageModuleSize_(averageModuleSize) {
   }
-  int operator()(Ref<FinderPattern> a, Ref<FinderPattern> b) {
+  bool operator()(Ref<FinderPattern> a, Ref<FinderPattern> b) {
     float dA = abs(a->getEstimatedModuleSize() - averageModuleSize_);
     float dB = abs(b->getEstimatedModuleSize() - averageModuleSize_);
-    return dA < dB ? -1 : dA > dB ? 1 : 0;
+    return dA > dB;
   }
 };
 
 class CenterComparator {
+  const float averageModuleSize_;
 public:
-  int operator()(Ref<FinderPattern> a, Ref<FinderPattern> b) {
-    return b->getCount() - a->getCount();
+  CenterComparator(float averageModuleSize) :
+    averageModuleSize_(averageModuleSize) {
+  }
+  bool operator()(Ref<FinderPattern> a, Ref<FinderPattern> b) {
+    // N.B.: we want the result in descending order ...
+    if (a->getCount() != b->getCount()) {
+      return a->getCount() > b->getCount();
+    } else {
+      float dA = abs(a->getEstimatedModuleSize() - averageModuleSize_);
+      float dB = abs(b->getEstimatedModuleSize() - averageModuleSize_);
+      return dA < dB;
+    }
   }
 };
 
@@ -234,6 +244,9 @@ bool FinderPatternFinder::handlePossibleCenter(int* stateCount, size_t i, size_t
       if (!found) {
         Ref<FinderPattern> newPattern(new FinderPattern(centerJ, centerI, estimatedModuleSize));
         possibleCenters_.push_back(newPattern);
+        if (callback_ != 0) {
+          callback_->foundPossibleResultPoint(*newPattern);
+        }
       }
       return true;
     }
@@ -260,7 +273,7 @@ int FinderPatternFinder::findRowSkip() {
         // This is the case where you find top left first. Draw it out.
         hasSkipped_ = true;
         return (int)(abs(firstConfirmedCenter->getX() - center->getX()) - abs(firstConfirmedCenter->getY()
-                     - center->getY()));
+                     - center->getY()))/2;
       }
     }
   }
@@ -284,51 +297,63 @@ bool FinderPatternFinder::haveMultiplyConfirmedCenters() {
   // OK, we have at least 3 confirmed centers, but, it's possible that one is a "false positive"
   // and that we need to keep looking. We detect this by asking if the estimated module sizes
   // vary too much. We arbitrarily say that when the total deviation from average exceeds
-  // 15% of the total module size estimates, it's too much.
+  // 5% of the total module size estimates, it's too much.
   float average = totalModuleSize / max;
   float totalDeviation = 0.0f;
   for (size_t i = 0; i < max; i++) {
     Ref<FinderPattern> pattern = possibleCenters_[i];
     totalDeviation += abs(pattern->getEstimatedModuleSize() - average);
   }
-  return totalDeviation <= 0.15f * totalModuleSize;
+  return totalDeviation <= 0.05f * totalModuleSize;
 }
 
 vector<Ref<FinderPattern> > FinderPatternFinder::selectBestPatterns() {
-  sort(possibleCenters_.begin(), possibleCenters_.end(), CenterComparator());
-  size_t size = 0;
-  size_t max = possibleCenters_.size();
-  while (size < max) {
-    if (possibleCenters_[size]->getCount() < CENTER_QUORUM) {
-      break;
-    }
-    size++;
-  }
+  size_t startSize = possibleCenters_.size();
 
-  if (size < 3) {
+  if (startSize < 3) {
     // Couldn't find enough finder patterns
     throw zxing::ReaderException("Could not find three finder patterns");
   }
 
-  if (size == 3) {
-    // Found just enough -- hope these are good!
-    vector<Ref<FinderPattern> > result(3);
-    result[0] = possibleCenters_[0];
-    result[1] = possibleCenters_[1];
-    result[2] = possibleCenters_[2];
-    return result;
+  // Filter outlier possibilities whose module size is too different
+  if (startSize > 3) {
+    // But we can only afford to do so if we have at least 4 possibilities to choose from
+    float totalModuleSize = 0.0f;
+    float square = 0.0f;
+    for (size_t i = 0; i < startSize; i++) {
+      float size = possibleCenters_[i]->getEstimatedModuleSize();
+      totalModuleSize += size;
+      square += size * size;
+    }
+    float average = totalModuleSize / (float) startSize;
+    float stdDev = (float)sqrt(square / startSize - average * average);
+
+    sort(possibleCenters_.begin(), possibleCenters_.end(), FurthestFromAverageComparator(average));
+    
+    float limit = max(0.2f * average, stdDev);
+
+    for (size_t i = 0; i < possibleCenters_.size() && possibleCenters_.size() > 3; i++) {
+      if (abs(possibleCenters_[i]->getEstimatedModuleSize() - average) > limit) {
+        possibleCenters_.erase(possibleCenters_.begin()+i);
+        i--;
+      }
+    }
   }
 
-  // Hmm, multiple found. We need to pick the best three. Find the most
-  // popular ones whose module size is nearest the average
-  // This does not work for multiple qr codes in the same image
-  float averageModuleSize = 0.0f;
-  for (size_t i = 0; i < size; i++) {
-    averageModuleSize += possibleCenters_[i]->getEstimatedModuleSize();
+  if (possibleCenters_.size() > 3) {
+    // Throw away all but those first size candidate points we found.
+    float totalModuleSize = 0.0f;
+    for (size_t i = 0; i < possibleCenters_.size(); i++) {
+      float size = possibleCenters_[i]->getEstimatedModuleSize();
+      totalModuleSize += size;
+    }
+    float average = totalModuleSize / (float) possibleCenters_.size();
+    sort(possibleCenters_.begin(), possibleCenters_.end(), CenterComparator(average));
   }
-  averageModuleSize /= (float)size;
 
-  sort(possibleCenters_.begin(), possibleCenters_.end(), ClosestToAverageComparator(averageModuleSize));
+  if (possibleCenters_.size() > 3) {
+    possibleCenters_.erase(possibleCenters_.begin()+3,possibleCenters_.end());
+  }
 
   vector<Ref<FinderPattern> > result(3);
   result[0] = possibleCenters_[0];
@@ -385,11 +410,14 @@ float FinderPatternFinder::distance(Ref<ResultPoint> p1, Ref<ResultPoint> p2) {
   return (float)sqrt(dx * dx + dy * dy);
 }
 
-FinderPatternFinder::FinderPatternFinder(Ref<BitMatrix> image) :
-    image_(image), possibleCenters_(), hasSkipped_(false) {
+FinderPatternFinder::FinderPatternFinder(Ref<BitMatrix> image,
+                                           Ref<ResultPointCallback>const& callback) :
+    image_(image), possibleCenters_(), hasSkipped_(false), callback_(callback) {
 }
 
-Ref<FinderPatternInfo> FinderPatternFinder::find() {
+Ref<FinderPatternInfo> FinderPatternFinder::find(DecodeHints const& hints) {
+  bool tryHarder = hints.getTryHarder();
+
   size_t maxI = image_->getHeight();
   size_t maxJ = image_->getWidth();
 
@@ -407,7 +435,10 @@ Ref<FinderPatternInfo> FinderPatternFinder::find() {
   // modules in size. This gives the smallest number of pixels the center
   // could be, so skip this often. When trying harder, look for all
   // QR versions regardless of how dense they are.
-  size_t iSkip = MIN_SKIP;
+  int iSkip = (3 * maxI) / (4 * MAX_MODULES);
+  if (iSkip < MIN_SKIP || tryHarder) {
+      iSkip = MIN_SKIP;
+  }
 
   // This is slightly faster than using the Ref. Efficiency is important here
   BitMatrix& matrix = *image_;
@@ -434,7 +465,9 @@ Ref<FinderPatternInfo> FinderPatternFinder::find() {
             if (foundPatternCross(stateCount)) { // Yes
               bool confirmed = handlePossibleCenter(stateCount, i, j);
               if (confirmed) {
-                iSkip = 1; // Go back to examining each line
+                // Start examining every other line. Checking each line turned out to be too
+                // expensive and didn't improve performance.
+                iSkip = 2;
                 if (hasSkipped_) {
                   done = haveMultiplyConfirmedCenters();
                 } else {
@@ -454,11 +487,13 @@ Ref<FinderPatternInfo> FinderPatternFinder::find() {
                   }
                 }
               } else {
-                // Advance to next black pixel
-                do {
-                  j++;
-                } while (j < maxJ && !image_->get(j, i));
-                j--; // back up to that last white pixel
+                stateCount[0] = stateCount[2];
+                stateCount[1] = stateCount[3];
+                stateCount[2] = stateCount[4];
+                stateCount[3] = 1;
+                stateCount[4] = 0;
+                currentState = 3;
+                continue;
               }
               // Clear state to start looking again
               currentState = 0;

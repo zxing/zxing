@@ -5,8 +5,7 @@
  *  FormatInformation.h
  *  zxing
  *
- *  Created by Christian Brunschen on 18/05/2008.
- *  Copyright 2008 ZXing authors All rights reserved.
+ *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,8 +41,8 @@ private:
 
 public:
   static int numBitsDiffering(unsigned int a, unsigned int b);
-  static Ref<FormatInformation> decodeFormatInformation(int rawFormatInfo);
-  static Ref<FormatInformation> doDecodeFormatInformation(int rawFormatInfo);
+  static Ref<FormatInformation> decodeFormatInformation(int maskedFormatInfo1, int maskedFormatInfo2);
+  static Ref<FormatInformation> doDecodeFormatInformation(int maskedFormatInfo1, int maskedFormatInfo2);
   ErrorCorrectionLevel &getErrorCorrectionLevel();
   unsigned char getDataMask();
   friend bool operator==(const FormatInformation &a, const FormatInformation &b);

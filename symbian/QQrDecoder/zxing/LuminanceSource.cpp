@@ -2,7 +2,6 @@
  *  LuminanceSource.cpp
  *  zxing
  *
- *  Created by Ralf Kistner on 16/10/2009.
  *  Copyright 2008 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,6 +18,7 @@
  */
 
 #include <zxing/LuminanceSource.h>
+#include <zxing/common/IllegalArgumentException.h>
 
 namespace zxing {
 
@@ -28,16 +28,20 @@ LuminanceSource::LuminanceSource() {
 LuminanceSource::~LuminanceSource() {
 }
 
-unsigned char* LuminanceSource::copyMatrix() {
-  int width = getWidth();
-  int height =  getHeight();
-  unsigned char* matrix = new unsigned char[width*height];
-  for (int y = 0; y < height; y++) {
-    for (int x = 0; x < width; x++) {
-      matrix[y*width+x] = getPixel(x, y);
-    }
-  }
-  return matrix;
+bool LuminanceSource::isCropSupported() const {
+  return false;
+}
+
+Ref<LuminanceSource> LuminanceSource::crop(int left, int top, int width, int height) {
+  throw IllegalArgumentException("This luminance source does not support cropping.");
+}
+
+bool LuminanceSource::isRotateSupported() const {
+  return false;
+}
+
+Ref<LuminanceSource> LuminanceSource::rotateCounterClockwise() {
+  throw IllegalArgumentException("This luminance source does not support rotation.");
 }
 
 }

@@ -5,8 +5,7 @@
  *  BitMatrix.h
  *  zxing
  *
- *  Created by Christian Brunschen on 12/05/2008.
- *  Copyright 2008 Google UK. All rights reserved.
+ *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +21,7 @@
  */
 
 #include <zxing/common/Counted.h>
+#include <zxing/common/BitArray.h>
 #include <limits>
 
 namespace zxing {
@@ -44,6 +44,7 @@ public:
   void flip(size_t x, size_t y);
   void clear();
   void setRegion(size_t left, size_t top, size_t width, size_t height);
+  Ref<BitArray> getRow(int y, Ref<BitArray> row);
 
   size_t getDimension() const;
   size_t getWidth() const;

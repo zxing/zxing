@@ -20,3 +20,8 @@
 
 #include <zxing/ResultPoint.h>
 
+namespace zxing {
+
+ResultPoint::~ResultPoint() {}
+
+}

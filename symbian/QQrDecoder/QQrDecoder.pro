@@ -2,10 +2,20 @@ TEMPLATE = app
 TARGET = QQrDecoder
 QT += core \
     gui
+
+VERSION = 1.1.0
+
+CONFIG += mobility
+MOBILITY = multimedia #\
+    #systeminfo
+
+RESOURCES +=  resources.qrc
+
 HEADERS += CameraImageWrapper.h \
     zxing/BarcodeFormat.h \
     zxing/Binarizer.h \
     zxing/BinaryBitmap.h \
+    zxing/DecodeHints.h \
     zxing/Exception.h \
     zxing/LuminanceSource.h \
     zxing/MultiFormatReader.h \
@@ -13,6 +23,7 @@ HEADERS += CameraImageWrapper.h \
     zxing/ReaderException.h \
     zxing/Result.h \
     zxing/ResultPoint.h \
+    zxing/ResultPointCallback.h \
     zxing/common/Array.h \
     zxing/common/BitArray.h \
     zxing/common/BitMatrix.h \
@@ -22,9 +33,11 @@ HEADERS += CameraImageWrapper.h \
     zxing/common/DetectorResult.h \
     zxing/common/EdgeDetector.h \
     zxing/common/GlobalHistogramBinarizer.h \
+    zxing/common/GreyscaleLuminanceSource.h \
+    zxing/common/GreyscaleRotatedLuminanceSource.h \
     zxing/common/GridSampler.h \
+    zxing/common/HybridBinarizer.h \
     zxing/common/IllegalArgumentException.h \
-    zxing/common/LocalBlockBinarizer.h \
     zxing/common/PerspectiveTransform.h \
     zxing/common/Point.h \
     zxing/common/Str.h \
@@ -61,11 +74,15 @@ HEADERS += CameraImageWrapper.h \
     zxing/qrcode/detector/FinderPatternFinder.h \
     zxing/qrcode/detector/FinderPatternInfo.h \
     zxing/qrcode/detector/QREdgeDetector.h \
-    QQrDecoder.h
+    QQrDecoder.h \
+    QCameraControllerWidget.h \
+    button.h \
+    myvideosurface.h
 SOURCES += CameraImageWrapper.cpp \
     zxing/BarcodeFormat.cpp \
     zxing/Binarizer.cpp \
     zxing/BinaryBitmap.cpp \
+    zxing/DecodeHints.cpp \
     zxing/Exception.cpp \
     zxing/LuminanceSource.cpp \
     zxing/MultiFormatReader.cpp \
@@ -73,6 +90,7 @@ SOURCES += CameraImageWrapper.cpp \
     zxing/ReaderException.cpp \
     zxing/Result.cpp \
     zxing/ResultPoint.cpp \
+    zxing/ResultPointCallback.cpp \
     zxing/common/Array.cpp \
     zxing/common/BitArray.cpp \
     zxing/common/BitMatrix.cpp \
@@ -82,9 +100,11 @@ SOURCES += CameraImageWrapper.cpp \
     zxing/common/DetectorResult.cpp \
     zxing/common/EdgeDetector.cpp \
     zxing/common/GlobalHistogramBinarizer.cpp \
+    zxing/common/GreyscaleLuminanceSource.cpp \
+    zxing/common/GreyscaleRotatedLuminanceSource.cpp \
     zxing/common/GridSampler.cpp \
+    zxing/common/HybridBinarizer.cpp \
     zxing/common/IllegalArgumentException.cpp \
-    zxing/common/LocalBlockBinarizer.cpp \
     zxing/common/PerspectiveTransform.cpp \
     zxing/common/Str.cpp \
     zxing/common/reedsolomon/GF256.cpp \
@@ -121,38 +141,37 @@ SOURCES += CameraImageWrapper.cpp \
     zxing/qrcode/detector/FinderPatternInfo.cpp \
     zxing/qrcode/detector/QREdgeDetector.cpp \
     main.cpp \
-    QQrDecoder.cpp
+    QQrDecoder.cpp \
+    QCameraControllerWidget.cpp \
+    button.cpp \
+    myvideosurface.cpp
 FORMS += QQrDecoder.ui
-RESOURCES += 
-symbian { 
-	TARGET.UID3 = 0xEF2CE79D
-	HEADERS += QCameraControllerWidget.h
-	SOURCES += QCameraControllerWidget.cpp
-	LIBS += -leuser \
-		-lapparc \
-		-lcone \
-		-leikcore \
-		-lavkon \
-		-lcommonengine \
-		-lefsrv \
-		-lestor \
-		-laknnotify \
-		-lfbscli \
-		-lbitgdi \
-		-leikcoctl \
-		-lbafl \ 	# BafUtils
-		-lecam \	# Camera
-		-lcamerawrapper
-	TARGET.CAPABILITY = UserEnvironment
-	
-	customrules.pkg_prerules  = \
-	";CameraWrapper" \
-	"@\"$(EPOCROOT)Epoc32\InstallToDevice\CameraWrapper\sis\camerawrapper.sisx\", (0x2001ec5f)" \
-	" "	
-	
-	DEPLOYMENT += customrules
+
+symbian{
+    TARGET.UID3 = 0xEF2CE79D
+    TARGET.EPOCSTACKSIZE = 0x14000
+    TARGET.EPOCHEAPSIZE = 0x20000 0x8000000
+
+    # Because landscape orientation lock
+    LIBS += -lcone -leikcore -lavkon
+
+    # Self-signing capabilities
+    TARGET.CAPABILITY += NetworkServices \
+        ReadUserData \
+        WriteUserData \
+        LocalServices \
+        UserEnvironment
 }
+else{
+    DEFINES += NO_ICONV
+}
+
 
 DEFINES += ZXING_ICONV_CONST
 
 ICON = QQrDecoder.svg
+
+
+
+
+

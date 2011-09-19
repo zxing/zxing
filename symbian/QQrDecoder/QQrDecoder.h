@@ -49,7 +49,6 @@ private:
     void InitializeSymbianCamera();
     
 protected slots:
-    void findAndDecode();
     void decodeImage(QImage originalImage);
     void reloadFormatedPicture(int x);
 

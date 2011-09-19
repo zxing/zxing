@@ -1,8 +1,10 @@
+#ifndef __UPC_E_READER_H__
+#define __UPC_E_READER_H__
+
 /*
  *  UPCEReader.h
  *  ZXing
  *
- *  Created by Lukasz Warchol on 10-01-26.
  *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,22 +24,24 @@
 #include <zxing/Result.h>
 
 namespace zxing {
-	namespace oned {
-		class UPCEReader : public UPCEANReader {
-			
-		private:
-			static void determineFirstDigit(std::string& resultString, int lgPatternFound);								//throws ReaderException
-			static void determineNumSysAndCheckDigit(std::string& resultString, int lgPatternFound);						//throws ReaderException
-		protected:
-			int* decodeEnd(Ref<BitArray> row, int endStart);															//throws ReaderException
-			bool checkChecksum(std::string s);																			//throws ReaderException 
-		public:
-			UPCEReader();
-			
-			int decodeMiddle(Ref<BitArray> row, int startRange[], int startRangeLen, std::string& resultString);		//throws ReaderException
-			static std::string& convertUPCEtoUPCA(std::string upce);
-			
-			BarcodeFormat getBarcodeFormat();
-		};
-	}
+  namespace oned {
+    class UPCEReader : public UPCEANReader {
+
+    private:
+      static bool determineNumSysAndCheckDigit(std::string& resultString, int lgPatternFound);
+    protected:
+      bool decodeEnd(Ref<BitArray> row, int endStart, int* endGuardBegin, int* endGuardEnd);
+      bool checkChecksum(std::string s);
+    public:
+      UPCEReader();
+
+      int decodeMiddle(Ref<BitArray> row, int startGuardBegin, int startGuardEnd,
+          std::string& resultString);
+      static std::string convertUPCEtoUPCA(std::string upce);
+
+      BarcodeFormat getBarcodeFormat();
+    };
+  }
 }
+
+#endif

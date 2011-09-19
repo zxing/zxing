@@ -1,10 +1,11 @@
+#ifndef BINARIZER_H_
+#define BINARIZER_H_
+
 /*
  *  Binarizer.h
  *  zxing
  *
- *  Created by Ralf Kistner on 16/10/2009.
- *  Copyright 2008 ZXing authors All rights reserved.
- *  Modified by Lukasz Warchol on 02/02/2010.
+ *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,9 +20,6 @@
  * limitations under the License.
  */
 
-#ifndef BINARIZER_H_
-#define BINARIZER_H_
-
 #include <zxing/LuminanceSource.h>
 #include <zxing/common/BitArray.h>
 #include <zxing/common/BitMatrix.h>
@@ -32,20 +30,16 @@ namespace zxing {
 class Binarizer : public Counted {
  private:
   Ref<LuminanceSource> source_;
-  Ref<BitArray> array_;
-  Ref<BitMatrix> matrix_;
-  int cached_y_;
 
  public:
   Binarizer(Ref<LuminanceSource> source);
   virtual ~Binarizer();
 
-  virtual Ref<BitArray> estimateBlackRow(int y, Ref<BitArray> row)=0;
-  Ref<BitArray> getBlackRow(int y, Ref<BitArray> row);
+  virtual Ref<BitArray> getBlackRow(int y, Ref<BitArray> row) = 0;
+  virtual Ref<BitMatrix> getBlackMatrix() = 0;
 
-  virtual Ref<BitMatrix> estimateBlackMatrix() = 0;
-  Ref<BitMatrix> getBlackMatrix();
-  Ref<LuminanceSource> getSource();
+  Ref<LuminanceSource> getLuminanceSource() const ;
+  virtual Ref<Binarizer> createBinarizer(Ref<LuminanceSource> source) = 0;
 };
 
 }

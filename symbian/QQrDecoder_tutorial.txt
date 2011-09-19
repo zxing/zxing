@@ -1,53 +1,50 @@
-This project is the same as ZXingBarcodeReader. The difference is that the GUI is 
-developed using Qt framework. This means that it can easily be ported to other platforms
-supported by Qt by simply changing the camera operations implemented in "QCameraControllerWidget"
-which is Symbian specific code.
+QQrDecoder project is developed entirely in Qt SDK + using the CPP part of the ZXing library.
+It supports the latest version of Qt in Symbian (4.7.x) and the camera is controled using the Camera APIs from Qt Mobility project.
+Thus we reasure the compatibility with future releases of Qt and the compatibility with newer device with Symbian^3, Belle and Anna (and S60 5th).
 
-Also the advantage of this implementation over "ZXingBarcodeReader" is that the code written is 
-more readable and familiar to users that have never used Qt framework or Symbian C++ before.
+The project's folder contains the code as well as the an installation file in case you want try it out without compiling the project.
 
-== Prerequisities ==
+NOTE: this project, since it uses Camera APIs from Qt Mobility breaks the backward compatibility with non touch-screen devices. So this project
+can't be used at device with OS: S60 3rd. 
 
-* Have at least one S60 SDK. One of the SDKs can be obtained from here:
-	http://www.forum.nokia.com/info/sw.nokia.com/id/ec866fab-4b76-49f6-b5a5-af0631419e9c/S60_All_in_One_SDKs.html
+== Prerequisities to compile ==
+
+* Have Qt SDK installed. This will give you all the tools needed such as the Qt SDK, Qt Mobility APIs and the Qt Creator IDE.
+	http://qt.nokia.com/downloads/
 	
-* After installing S60 SDK you have to install OpenC++.
-	http://www.forum.nokia.com/info/sw.nokia.com/id/91d89929-fb8c-4d66-bea0-227e42df9053/Open_C_SDK_Plug-In.html
+== Prerequisities to install and run to device ==
+
+* Have Qt 4.7.3 (and newer) binaries installed to the device. 
+* Have Qt Mobility 1.1.0 (and newer) binaries installed to the device.
+
+NOTE: those binaries, if Qt SDK is installed, can be found under the path \QtSDK\Symbian\sis\Symbian^X\
 	
-* Next step, have "Qt for Symbian" installed. It under LGLP licence.
-	http://qt.nokia.com/downloads/symbian-cpp
-	
-* (Optional) You can use Carbide C++ as IDE which makes the life a bit easier on creating applications for Symbian.
-	An alternative approach is to compile the program in command line but i am afraid i can help you here because i
-	have no idea :P
-or
-	You can use Qt Creator (see its tutorials on how to use it)
-	http://qt.nokia.com/products/developer-tools/developer-tools
-	
-== Create project ==
-If you have Carbide C++ IDE then go "File->Import->Qt->Qt Project",
-click "Browse" and find and select file "QQrDecoder\QQrDecoder.pro".
-Next step you select the S60 SDK to be compiled to and you are ready.
+== Importing the project ==
 
-== Build project ==
-Since the project is created, we can proceed to build it.
+For this step, Qt Creator IDE will be used (contained in Qt SDK). The project can be imported/opened with 2 ways.
 
-First in "QQrDecoder\camerawrapper" folder there is a folder named "epoc32".
-Copy this folder and paste it to the root folder of the S60 SDK that you are going to use
-(in my case: C:\S60\devices\S60_5th_Edition_SDK_v1.0). This step is important in order
-to use a Plug-In API for the easier manipulation of the camera.
+NOTE: The project folder must be placed under the same drive letter as the installed Qt SDK. For example "C:\QtSDK" and "C:\QtProjects\QQrDecoder"
 
-Now we are ready to compile. Since the camera is not supported in the Symbian emulator we
-will build the project directly to be installed on a devidce.
-Select "QQrDecoder" project in the "Project Explorer" view in Carbide, right click on it
-and select "Properties". Expand "Carbide.c++" field and select "Build Configurations".
-Being in the "SIS Builder" tab, select as Active Configuration the "Phone Degug (GCCE)".
-Then press "Add" button, and to select a PKG file click "Browse" button. Go to "QQrDecoder"
-folder and select "QQrDecoder_template.pkg" file. Make sure that "Self sign sis file" radio
-button is selected and press OK.
+# Go the the project's folder and double-click the QQrDecoder.pro file. This will result the Qt Creator to open. (This requires that Qt Creator is 
+	selected as the predefined program to open such files which is automatically set when installing Qt SDK.)
+# Alternatively, open Qt Creator manualy, and go under: "File" -> "Open File or Project...", go to the project's folder and select once again the 
+	QQrDecoder.pro.
 
-Now go "Project->Build Project" and if everything goes right, you will have 2 installation files
-in "QQrDecoder" folder. Install the .sisx file to your device and you are ready.
+Whichever step from the above you have followed, now you are led to screen named "Project Setup". Here you select the Target Platform.
+You can select "Symbian Device" to target directly for a physical device, or "Qt Simulator" to first test it to the build-in simulator.
+
+== Building the project ==
+
+At this point you have imported the project and you are ready to compile it. At the left toolbar in Qt Creator, above the green arrow you can see the
+current target platform selected. Press to select which you want. 
+
+Now by pressing Ctrl+B or the "hammer icon" on the left at the bottom. Normaly this should be completed without errors (might be lots of wrning though
+which we selectively reject them from our mind :P )
+
+This step compiles the project BUT doesn't produces the .sis file (the installation file). To create the installation file you have to press the "Run button".
+It that "Green arrow" on your left, or by simply pressing Ctrl+R. Regardless if you have a device or not, the .sis file will be created.
+
+Now you can install it to your device. 
 
 == Additional information ==
 For afew more details about the implementation you can see the following page:

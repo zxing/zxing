@@ -1,9 +1,10 @@
+#ifndef __LUMINANCESOURCE_H__
+#define __LUMINANCESOURCE_H__
 /*
  *  LuminanceSource.h
  *  zxing
  *
- *  Created by Ralf Kistner on 16/10/2009.
- *  Copyright 2008 ZXing authors All rights reserved.
+ *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,10 +19,8 @@
  * limitations under the License.
  */
 
-#ifndef LUMINANCESOURCE_H_
-#define LUMINANCESOURCE_H_
-
 #include <zxing/common/Counted.h>
+#include <string.h>
 
 namespace zxing {
 
@@ -33,8 +32,16 @@ public:
   virtual int getWidth() const = 0;
   virtual int getHeight() const = 0;
 
-  virtual unsigned char getPixel(int x, int y) const = 0;
-  virtual unsigned char* copyMatrix();
+  // Callers take ownership of the returned memory and must call delete [] on it themselves.
+  virtual unsigned char* getRow(int y, unsigned char* row) = 0;
+  virtual unsigned char* getMatrix() = 0;
+
+  virtual bool isCropSupported() const;
+  virtual Ref<LuminanceSource> crop(int left, int top, int width, int height);
+
+  virtual bool isRotateSupported() const;
+  virtual Ref<LuminanceSource> rotateCounterClockwise();
+
 };
 
 }

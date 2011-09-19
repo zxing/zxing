@@ -5,8 +5,7 @@
  *  Counted.h
  *  zxing
  *
- *  Created by Christian Brunschen on 07/05/2008.
- *  Copyright 2008 Google UK. All rights reserved.
+ *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -192,6 +191,10 @@ public:
 
   bool operator!=(const int x) {
     return x == 0 ? object_ != 0 : true;
+  }
+
+  bool empty() const {
+    return object_ == 0;
   }
 
   template<class Y>

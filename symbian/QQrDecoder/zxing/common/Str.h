@@ -1,12 +1,11 @@
-#ifndef __COMMON__STRING_H__
-#define __COMMON__STRING_H__
+#ifndef __STR_H__
+#define __STR_H__
 
 /*
- *  String.h
+ *  Str.h
  *  zxing
  *
- *  Created by Christian Brunschen on 20/05/2008.
- *  Copyright 2008 ZXing authors All rights reserved.
+ *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
