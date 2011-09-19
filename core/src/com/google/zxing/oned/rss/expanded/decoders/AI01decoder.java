@@ -34,7 +34,7 @@ import com.google.zxing.common.BitArray;
  */
 abstract class AI01decoder extends AbstractExpandedDecoder {
 
-  protected static final int gtinSize   = 40;
+  protected static final int GTIN_SIZE = 40;
 
   AI01decoder(BitArray information) {
     super(information);

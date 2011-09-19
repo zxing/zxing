@@ -29,7 +29,7 @@ import java.util.Hashtable;
  */
 public final class EAN8Writer extends UPCEANWriter {
 
-  private static final int codeWidth = 3 + // start guard
+  private static final int CODE_WIDTH = 3 + // start guard
       (7 * 4) + // left bars
       5 + // middle guard
       (7 * 4) + // right bars
@@ -52,7 +52,7 @@ public final class EAN8Writer extends UPCEANWriter {
           "Requested contents should be 8 digits long, but got " + contents.length());
     }
 
-    byte[] result = new byte[codeWidth];
+    byte[] result = new byte[CODE_WIDTH];
     int pos = 0;
 
     pos += appendPattern(result, pos, UPCEANReader.START_END_PATTERN, 1);

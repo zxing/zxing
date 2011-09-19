@@ -35,9 +35,9 @@ import com.google.zxing.common.BitArray;
  */
 final class AI013x0x1xDecoder extends AI01weightDecoder {
 
-  private static final int headerSize = 7 + 1;
-  private static final int weightSize = 20;
-  private static final int dateSize   = 16;
+  private static final int HEADER_SIZE = 7 + 1;
+  private static final int WEIGHT_SIZE = 20;
+  private static final int DATE_SIZE = 16;
 
   private final String dateCode;
   private final String firstAIdigits;
@@ -49,21 +49,21 @@ final class AI013x0x1xDecoder extends AI01weightDecoder {
   }
 
   public String parseInformation() throws NotFoundException {
-    if (this.information.size != headerSize + gtinSize + weightSize + dateSize) {
+    if (this.information.size != HEADER_SIZE + GTIN_SIZE + WEIGHT_SIZE + DATE_SIZE) {
       throw NotFoundException.getNotFoundInstance();
     }
 
     StringBuffer buf = new StringBuffer();
 
-    encodeCompressedGtin(buf, headerSize);
-    encodeCompressedWeight(buf, headerSize + gtinSize, weightSize);
-    encodeCompressedDate(buf, headerSize + gtinSize + weightSize);
+    encodeCompressedGtin(buf, HEADER_SIZE);
+    encodeCompressedWeight(buf, HEADER_SIZE + GTIN_SIZE, WEIGHT_SIZE);
+    encodeCompressedDate(buf, HEADER_SIZE + GTIN_SIZE + WEIGHT_SIZE);
 
     return buf.toString();
   }
 
   private void encodeCompressedDate(StringBuffer buf, int currentPos) {
-    int numericDate = this.generalDecoder.extractNumericValueFromBitArray(currentPos, dateSize);
+    int numericDate = this.generalDecoder.extractNumericValueFromBitArray(currentPos, DATE_SIZE);
     if(numericDate == 38400) {
       return;
     }

@@ -38,18 +38,14 @@ public final class QRCodeWriterTestCase extends Assert {
 
   private static final String BASE_IMAGE_PATH = "test/data/golden/qrcode/";
 
-  private static BufferedImage loadImage(String fileName) {
-    try {
-      File file = new File(BASE_IMAGE_PATH + fileName);
-      if (!file.exists()) {
-        // try starting with 'core' since the test base is often given as the project root
-        file = new File("core/" + BASE_IMAGE_PATH + fileName);
-      }
-      assertTrue("Please run from the 'core' directory", file.exists());
-      return ImageIO.read(file);
-    } catch (IOException e) {
-      return null;
+  private static BufferedImage loadImage(String fileName) throws IOException {
+    File file = new File(BASE_IMAGE_PATH + fileName);
+    if (!file.exists()) {
+      // try starting with 'core' since the test base is often given as the project root
+      file = new File("core/" + BASE_IMAGE_PATH + fileName);
     }
+    assertTrue("Please run from the 'core' directory", file.exists());
+    return ImageIO.read(file);
   }
 
   // In case the golden images are not monochromatic, convert the RGB values to greyscale.
@@ -104,7 +100,7 @@ public final class QRCodeWriterTestCase extends Assert {
   }
 
   private static void compareToGoldenFile(String contents, ErrorCorrectionLevel ecLevel,
-      int resolution, String fileName) throws WriterException {
+      int resolution, String fileName) throws WriterException, IOException {
 
     BufferedImage image = loadImage(fileName);
     assertNotNull(image);
@@ -126,7 +122,7 @@ public final class QRCodeWriterTestCase extends Assert {
   // and cell phones. We expect pixel-perfect results, because the error correction level is known,
   // and the pixel dimensions matches exactly. 
   @Test
-  public void testRegressionTest() throws WriterException {
+  public void testRegressionTest() throws Exception {
     compareToGoldenFile("http://www.google.com/", ErrorCorrectionLevel.M, 99,
         "renderer-test-01.png");
 

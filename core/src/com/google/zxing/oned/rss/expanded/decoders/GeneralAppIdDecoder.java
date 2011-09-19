@@ -49,7 +49,9 @@ final class GeneralAppIdDecoder {
     do{
       DecodedInformation info = this.decodeGeneralPurposeField(currentPosition, remaining);
       String parsedFields = FieldParser.parseFieldsInGeneralPurpose(info.getNewString());
-      buff.append(parsedFields);
+      if (parsedFields != null) {
+        buff.append(parsedFields);
+      }
       if(info.isRemaining()) {
         remaining = String.valueOf(info.getRemainingValue());
       } else {

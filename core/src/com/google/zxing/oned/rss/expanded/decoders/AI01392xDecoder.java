@@ -34,30 +34,30 @@ import com.google.zxing.common.BitArray;
  */
 final class AI01392xDecoder extends AI01decoder {
 
-  private static final int headerSize = 5 + 1 + 2;
-  private static final int lastDigitSize = 2;
+  private static final int HEADER_SIZE = 5 + 1 + 2;
+  private static final int LAST_DIGIT_SIZE = 2;
 
   AI01392xDecoder(BitArray information) {
     super(information);
   }
 
   public String parseInformation() throws NotFoundException {
-    if (this.information.size < headerSize + gtinSize) {
+    if (this.information.size < HEADER_SIZE + GTIN_SIZE) {
       throw NotFoundException.getNotFoundInstance();
     }
 
     StringBuffer buf = new StringBuffer();
 
-    encodeCompressedGtin(buf, headerSize);
+    encodeCompressedGtin(buf, HEADER_SIZE);
 
     int lastAIdigit =
-        this.generalDecoder.extractNumericValueFromBitArray(headerSize + gtinSize, lastDigitSize);
+        this.generalDecoder.extractNumericValueFromBitArray(HEADER_SIZE + GTIN_SIZE, LAST_DIGIT_SIZE);
     buf.append("(392");
     buf.append(lastAIdigit);
     buf.append(')');
 
     DecodedInformation decodedInformation =
-        this.generalDecoder.decodeGeneralPurposeField(headerSize + gtinSize + lastDigitSize, null);
+        this.generalDecoder.decodeGeneralPurposeField(HEADER_SIZE + GTIN_SIZE + LAST_DIGIT_SIZE, null);
     buf.append(decodedInformation.getNewString());
 
     return buf.toString();
