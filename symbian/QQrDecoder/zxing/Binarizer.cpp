@@ -23,27 +23,13 @@
 
 namespace zxing {
 	
-	Binarizer::Binarizer(Ref<LuminanceSource> source) : source_(source), array_(NULL), matrix_(NULL), cached_y_(-1) {
+	Binarizer::Binarizer(Ref<LuminanceSource> source) : source_(source) {
 	}
 	
 	Binarizer::~Binarizer() {
 	}
 	
-	Ref<BitArray> Binarizer::getBlackRow(int y, Ref<BitArray> row){
-		if (array_ == NULL && cached_y_ != y) {
-			array_ = estimateBlackRow(y, row);
-			cached_y_ = y;
-		}
-		return array_;
-	}
-	
-	Ref<BitMatrix> Binarizer::getBlackMatrix() {
-		if (matrix_ == NULL)
-			matrix_ = estimateBlackMatrix();
-		return matrix_;
-	}
-	
-	Ref<LuminanceSource> Binarizer::getSource() {
+	Ref<LuminanceSource> Binarizer::getLuminanceSource() const {
 		return source_;
 	}
 	

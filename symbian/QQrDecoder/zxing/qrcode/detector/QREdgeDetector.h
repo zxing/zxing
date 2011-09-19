@@ -1,9 +1,10 @@
+#ifndef __QREDGEDETECTOR_H__
+#define __QREDGEDETECTOR_H__
 /*
  *  QREdgeDetector.h
  *  zxing
  *
- *  Created by Ralf Kistner on 7/12/2009.
- *  Copyright 2008 ZXing authors All rights reserved.
+ *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +19,7 @@
  * limitations under the License.
  */
 
-#ifndef QREDGEDETECTOR_H_
-#define QREDGEDETECTOR_H_
+
 
 #include <zxing/qrcode/detector/Detector.h>
 #include <zxing/common/Point.h>

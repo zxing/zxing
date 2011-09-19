@@ -1,8 +1,10 @@
+#ifndef __ONED_READER_H__
+#define __ONED_READER_H__
+
 /*
  *  OneDReader.h
  *  ZXing
  *
- *  Created by Lukasz Warchol on 10-01-15.
  *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,29 +20,31 @@
  * limitations under the License.
  */
 
-#pragma once
-
 #include <zxing/Reader.h>
-#include <zxing/common/BitArray.h>
-#include <zxing/BinaryBitmap.h>
 
 namespace zxing {
 	namespace oned {
 		class OneDReader : public Reader {
 		private:
 			static const int INTEGER_MATH_SHIFT = 8;
-			
-			Ref<Result> doDecode(Ref<BinaryBitmap> image);
+
+			Ref<Result> doDecode(Ref<BinaryBitmap> image, DecodeHints hints);
 		public:
 			static const int PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
-			
+
 			OneDReader();
-			virtual Ref<Result> decode(Ref<BinaryBitmap> image);
+			virtual Ref<Result> decode(Ref<BinaryBitmap> image, DecodeHints hints);
+
+			// Implementations must not throw any exceptions. If a barcode is not found on this row,
+			// a empty ref should be returned e.g. return Ref<Result>();
 			virtual Ref<Result> decodeRow(int rowNumber, Ref<BitArray> row) = 0;
-			
-			static unsigned int patternMatchVariance(int counters[], int countersSize, const int pattern[], int maxIndividualVariance);
-			static void recordPattern(Ref<BitArray> row, int start, int counters[], int countersCount);
+
+			static unsigned int patternMatchVariance(int counters[], int countersSize,
+			    const int pattern[], int maxIndividualVariance);
+			static bool recordPattern(Ref<BitArray> row, int start, int counters[], int countersCount);
 			virtual ~OneDReader();
 		};
 	}
 }
+
+#endif

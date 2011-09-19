@@ -5,8 +5,7 @@
  *  Detector.h
  *  zxing
  *
- *  Created by Christian Brunschen on 14/05/2008.
- *  Copyright 2008 ZXing authors All rights reserved.
+ *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,13 +25,18 @@
 #include <zxing/common/BitMatrix.h>
 #include <zxing/qrcode/detector/AlignmentPattern.h>
 #include <zxing/common/PerspectiveTransform.h>
+#include <zxing/ResultPointCallback.h>
 
 namespace zxing {
+
+class DecodeHints;
+
 namespace qrcode {
 
 class Detector : public Counted {
 private:
   Ref<BitMatrix> image_;
+  Ref<ResultPointCallback> callback_;
 
 protected:
   Ref<BitMatrix> getImage();
@@ -52,7 +56,7 @@ public:
       ResultPoint > bottomLeft, Ref<ResultPoint> alignmentPattern, int dimension);
 
   Detector(Ref<BitMatrix> image);
-  Ref<DetectorResult> detect();
+  Ref<DetectorResult> detect(DecodeHints const& hints);
 };
 }
 }

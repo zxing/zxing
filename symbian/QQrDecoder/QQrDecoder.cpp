@@ -40,6 +40,7 @@
 #include <QPainter>
 #include <QPoint>
 #include <QPixmap>
+#include <QMessageBox>
 
 using namespace zxing;
 //using namespace zxing::qrcode;
@@ -47,9 +48,7 @@ using namespace zxing;
 QQrDecoder::QQrDecoder(QWidget *parent): QMainWindow(parent)
 {
     ui.setupUi(this);
-    connect(ui.startDecode, SIGNAL(clicked()), this, SLOT(findAndDecode()));
-    connect(ui.cameraWidget, SIGNAL(imageCaptured(QImage)), this, SLOT(decodeImage(QImage)));
-    connect(ui.cameraWidget, SIGNAL(logMessage(QString)), ui.resultLabel, SLOT(setText(QString)));
+    connect(ui.centralwidget, SIGNAL(imageCaptured(QImage)), this, SLOT(decodeImage(QImage)));
 }
 
 QQrDecoder::~QQrDecoder()
@@ -59,11 +58,6 @@ QQrDecoder::~QQrDecoder()
 void QQrDecoder::InitializeSymbianCamera()
 {
 
-}
-
-void QQrDecoder::findAndDecode()
-{
-    ui.cameraWidget->CaptureImage();
 }
 
 void QQrDecoder::decodeImage(QImage originalImage)
@@ -86,11 +80,11 @@ void QQrDecoder::decodeImage(QImage originalImage)
         res = decoder.decode(ref);
 
         QString string = QString(res->getText()->getText().c_str());
-        ui.resultLabel->setText(string);
+        QMessageBox::information((QWidget*)ui.centralwidget, QString("Decoding result") ,string);
     }
     catch(zxing::Exception& e)
     {
-        ui.resultLabel->setText("Error");
+       // QMessageBox::information((QWidget*)ui.centralwidget, QString("Decoding result"), QString("Error"));
     }
 }
 

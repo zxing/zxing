@@ -59,32 +59,42 @@ int FormatInformation::numBitsDiffering(unsigned int a, unsigned int b) {
          + BITS_SET_IN_HALF_BYTE[(a >> 28 & 0x0F)];
 }
 
-Ref<FormatInformation> FormatInformation::decodeFormatInformation(int rawFormatInfo) {
-  Ref<FormatInformation> result(doDecodeFormatInformation(rawFormatInfo));
+Ref<FormatInformation> FormatInformation::decodeFormatInformation(int maskedFormatInfo1, int maskedFormatInfo2) {
+  Ref<FormatInformation> result(doDecodeFormatInformation(maskedFormatInfo1, maskedFormatInfo2));
   if (result != 0) {
     return result;
   }
-  return doDecodeFormatInformation(rawFormatInfo ^ FORMAT_INFO_MASK_QR);
+  // Should return null, but, some QR codes apparently
+  // do not mask this info. Try again by actually masking the pattern
+  // first
+  return doDecodeFormatInformation(maskedFormatInfo1 ^ FORMAT_INFO_MASK_QR,
+                                   maskedFormatInfo2  ^ FORMAT_INFO_MASK_QR);
 }
-Ref<FormatInformation> FormatInformation::doDecodeFormatInformation(int rawFormatInfo) {
-  // Unmask:
-  int unmaskedFormatInfo = rawFormatInfo ^ FORMAT_INFO_MASK_QR;
+Ref<FormatInformation> FormatInformation::doDecodeFormatInformation(int maskedFormatInfo1, int maskedFormatInfo2) {
   // Find the int in FORMAT_INFO_DECODE_LOOKUP with fewest bits differing
   int bestDifference = numeric_limits<int>::max();
   int bestFormatInfo = 0;
   for (int i = 0; i < N_FORMAT_INFO_DECODE_LOOKUPS; i++) {
     int* decodeInfo = FORMAT_INFO_DECODE_LOOKUP[i];
     int targetInfo = decodeInfo[0];
-    if (targetInfo == unmaskedFormatInfo) {
+    if (targetInfo == maskedFormatInfo1 || targetInfo == maskedFormatInfo2) {
       // Found an exact match
       Ref<FormatInformation> result(new FormatInformation(decodeInfo[1]));
       return result;
     }
-    int bitsDifference = numBitsDiffering(unmaskedFormatInfo, targetInfo);
+    int bitsDifference = numBitsDiffering(maskedFormatInfo1, targetInfo);
     if (bitsDifference < bestDifference) {
       bestFormatInfo = decodeInfo[1];
       bestDifference = bitsDifference;
     }
+    if (maskedFormatInfo1 != maskedFormatInfo2) {
+        // also try the other option
+        bitsDifference = numBitsDiffering(maskedFormatInfo2, targetInfo);
+        if (bitsDifference < bestDifference) {
+            bestFormatInfo = decodeInfo[1];
+          bestDifference = bitsDifference;
+        }
+      }
   }
   if (bestDifference <= 3) {
     Ref<FormatInformation> result(new FormatInformation(bestFormatInfo));

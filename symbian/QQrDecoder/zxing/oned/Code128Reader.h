@@ -1,8 +1,9 @@
+#ifndef __CODE_128_READER_H__
+#define __CODE_128_READER_H__
 /*
  *  Code128Reader.h
  *  ZXing
  *
- *  Created by Lukasz Warchol on 10-01-15.
  *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,9 +28,10 @@ namespace zxing {
 		class Code128Reader : public OneDReader {
 			
 		private:
-			static const unsigned int MAX_AVG_VARIANCE = (unsigned int) (PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.25f);
-			static const int MAX_INDIVIDUAL_VARIANCE = (int) (PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.7f);
-			
+			//static const unsigned int MAX_AVG_VARIANCE = (unsigned int) (PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.25f);
+      enum {MAX_AVG_VARIANCE = (unsigned int) (PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.25f)};
+			//static const int MAX_INDIVIDUAL_VARIANCE = (int) (PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.7f);
+      enum {MAX_INDIVIDUAL_VARIANCE = (int) (PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.7f)};
 			static const int CODE_SHIFT = 98;
 			
 			static const int CODE_CODE_C = 99;
@@ -59,3 +61,4 @@ namespace zxing {
 	}
 }
 
+#endif

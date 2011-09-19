@@ -1,8 +1,10 @@
+#ifndef __EAN_8_READER_H__
+#define __EAN_8_READER_H__
+
 /*
  *  EAN8Reader.h
  *  ZXing
  *
- *  Created by Lukasz Warchol on 10-01-25.
  *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,15 +24,18 @@
 #include <zxing/Result.h>
 
 namespace zxing {
-	namespace oned {
-		class EAN8Reader : public UPCEANReader {
-			
-		public:
-			EAN8Reader();
-			
-			int decodeMiddle(Ref<BitArray> row, int startRange[], int startRangeLen, std::string& resultString);			//throws ReaderException
-			
-			BarcodeFormat getBarcodeFormat();
-		};
-	}
+  namespace oned {
+    class EAN8Reader : public UPCEANReader {
+
+    public:
+      EAN8Reader();
+
+      int decodeMiddle(Ref<BitArray> row, int startGuardBegin, int startGuardEnd,
+          std::string& resultString);
+
+      BarcodeFormat getBarcodeFormat();
+    };
+  }
 }
+
+#endif

@@ -1,10 +1,10 @@
+#ifndef __GLOBALHISTOGRAMBINARIZER_H__
+#define __GLOBALHISTOGRAMBINARIZER_H__
 /*
  *  GlobalHistogramBinarizer.h
  *  zxing
  *
- *  Created by Ralf Kistner on 16/10/2009.
- *  Copyright 2008 ZXing authors All rights reserved.
- *  Modified by Lukasz Warchol on 02/02/2010.
+ *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,9 +19,6 @@
  * limitations under the License.
  */
 
-#ifndef GLOBALHISTOGRAMBINARIZER_H_
-#define GLOBALHISTOGRAMBINARIZER_H_
-
 #include <vector>
 #include <zxing/Binarizer.h>
 #include <zxing/common/BitArray.h>
@@ -30,13 +27,19 @@
 namespace zxing {
 	
 	class GlobalHistogramBinarizer : public Binarizer {
+	 private:
+    Ref<BitMatrix> cached_matrix_;
+	  Ref<BitArray> cached_row_;
+	  int cached_row_num_;
+
 	public:
 		GlobalHistogramBinarizer(Ref<LuminanceSource> source);
 		virtual ~GlobalHistogramBinarizer();
 		
-		virtual Ref<BitArray> estimateBlackRow(int y, Ref<BitArray> row);
-		virtual Ref<BitMatrix> estimateBlackMatrix();
+		virtual Ref<BitArray> getBlackRow(int y, Ref<BitArray> row);
+		virtual Ref<BitMatrix> getBlackMatrix();
 		static int estimate(std::vector<int> &histogram);
+		Ref<Binarizer> createBinarizer(Ref<LuminanceSource> source);
 	};
 	
 }

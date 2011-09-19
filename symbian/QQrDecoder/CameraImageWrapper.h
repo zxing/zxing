@@ -24,9 +24,16 @@ public:
     void setImage(QImage newImage);
     QImage grayScaleImage(QImage::Format f);
     QImage getOriginalImage();
+
+
+    // Callers take ownership of the returned memory and must call delete [] on it themselves.
+    unsigned char* getRow(int y, unsigned char* row);
+    unsigned char* getMatrix();
   
 private:
     QImage image;
+    unsigned char* pRow;
+    unsigned char* pMatrix;
 };
 
 #endif //CAMERAIMAGE_H

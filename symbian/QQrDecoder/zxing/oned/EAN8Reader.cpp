@@ -2,7 +2,6 @@
  *  EAN8Reader.cpp
  *  ZXing
  *
- *  Created by Lukasz Warchol on 10-01-25.
  *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,41 +21,53 @@
 #include <zxing/ReaderException.h>
 
 namespace zxing {
-	namespace oned {
-		
-		EAN8Reader::EAN8Reader(){ }
-		
-		int EAN8Reader::decodeMiddle(Ref<BitArray> row, int startRange[], int startRangeLen, std::string& resultString){
-			const int countersLen = 4;
-			int counters[countersLen] = { 0, 0, 0, 0 };
-			
-			int end = row->getSize();
-			int rowOffset = startRange[1];
-			
-			for (int x = 0; x < 4 && rowOffset < end; x++) {
-				int bestMatch = decodeDigit(row, counters, countersLen, rowOffset, UPC_EAN_PATTERNS_L_PATTERNS);
-				resultString.append(1, (char) ('0' + bestMatch));
-				for (int i = 0; i < countersLen; i++) {
-					rowOffset += counters[i];
-				}
-			}
-			
-			int* middleRange = findGuardPattern(row, rowOffset, true, (int*)getMIDDLE_PATTERN(), getMIDDLE_PATTERN_LEN());
-			rowOffset = middleRange[1];
-			
-			for (int x = 0; x < 4 && rowOffset < end; x++) {
-				int bestMatch = decodeDigit(row, counters, countersLen, rowOffset, UPC_EAN_PATTERNS_L_PATTERNS);
-				resultString.append(1, (char) ('0' + bestMatch));
-				for (int i = 0; i < countersLen; i++) {
-					rowOffset += counters[i];
-				}
-			}
-			
-			return rowOffset;
-		}
-		
-		BarcodeFormat EAN8Reader::getBarcodeFormat(){
-			return BarcodeFormat_EAN_8;
-		}
-	}
+  namespace oned {
+
+    EAN8Reader::EAN8Reader(){ }
+
+    int EAN8Reader::decodeMiddle(Ref<BitArray> row, int startGuardBegin, int startGuardEnd,
+        std::string& resultString){
+      const int countersLen = 4;
+      int counters[countersLen] = { 0, 0, 0, 0 };
+
+      int end = row->getSize();
+      int rowOffset = startGuardEnd;
+
+      for (int x = 0; x < 4 && rowOffset < end; x++) {
+        int bestMatch = decodeDigit(row, counters, countersLen, rowOffset,
+            UPC_EAN_PATTERNS_L_PATTERNS);
+        if (bestMatch < 0) {
+          return -1;
+        }
+        resultString.append(1, (char) ('0' + bestMatch));
+        for (int i = 0; i < countersLen; i++) {
+          rowOffset += counters[i];
+        }
+      }
+
+      int middleRangeStart;
+      int middleRangeEnd;
+      if (findGuardPattern(row, rowOffset, true, (int*)getMIDDLE_PATTERN(),
+            getMIDDLE_PATTERN_LEN(), &middleRangeStart, &middleRangeEnd)) {
+        rowOffset = middleRangeEnd;
+        for (int x = 0; x < 4 && rowOffset < end; x++) {
+          int bestMatch = decodeDigit(row, counters, countersLen, rowOffset,
+              UPC_EAN_PATTERNS_L_PATTERNS);
+          if (bestMatch < 0) {
+            return -1;
+          }
+          resultString.append(1, (char) ('0' + bestMatch));
+          for (int i = 0; i < countersLen; i++) {
+            rowOffset += counters[i];
+          }
+        }
+        return rowOffset;
+      }
+      return -1;
+    }
+
+    BarcodeFormat EAN8Reader::getBarcodeFormat(){
+      return BarcodeFormat_EAN_8;
+    }
+  }
 }

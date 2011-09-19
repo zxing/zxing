@@ -5,8 +5,7 @@
  *  AlignmentPatternFinder.h
  *  zxing
  *
- *  Created by Christian Brunschen on 14/05/2008.
- *  Copyright 2008 ZXing authors All rights reserved.
+ *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +23,7 @@
 #include "AlignmentPattern.h"
 #include <zxing/common/Counted.h>
 #include <zxing/common/BitMatrix.h>
+#include <zxing/ResultPointCallback.h>
 #include <vector>
 
 namespace zxing {
@@ -52,7 +52,7 @@ private:
 
 public:
   AlignmentPatternFinder(Ref<BitMatrix> image, size_t startX, size_t startY, size_t width, size_t height,
-                         float moduleSize);
+                         float moduleSize, Ref<ResultPointCallback>const& callback);
   ~AlignmentPatternFinder();
   Ref<AlignmentPattern> find();
   
@@ -60,6 +60,7 @@ private:
   AlignmentPatternFinder(const AlignmentPatternFinder&);
   AlignmentPatternFinder& operator =(const AlignmentPatternFinder&);
   
+  Ref<ResultPointCallback> callback_;
 };
 }
 }

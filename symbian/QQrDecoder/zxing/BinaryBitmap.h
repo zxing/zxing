@@ -1,10 +1,11 @@
+#ifndef __BINARYBITMAP_H__
+#define __BINARYBITMAP_H__
+
 /*
  *  BinaryBitmap.h
  *  zxing
  *
- *  Created by Ralf Kistner on 19/10/2009.
- *  Copyright 2008 ZXing authors All rights reserved.
- *  Modified by Lukasz Warchol on 02/02/2010.
+ *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +19,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef BINARYBITMAP_H_
-#define BINARYBITMAP_H_
 
 #include <zxing/common/Counted.h>
 #include <zxing/common/BitMatrix.h>
@@ -30,8 +29,6 @@ namespace zxing {
 	
 	class BinaryBitmap : public Counted {
 	private:
-		Ref<BitMatrix> bits_;
-		Ref<BitArray> array_bits_;
 		Ref<Binarizer> binarizer_;
 		int cached_y_;
 		
@@ -41,10 +38,18 @@ namespace zxing {
 		
 		Ref<BitArray> getBlackRow(int y, Ref<BitArray> row);
 		Ref<BitMatrix> getBlackMatrix();
-		Ref<LuminanceSource> getSource();
 		
-		int getWidth();
-		int getHeight();
+		Ref<LuminanceSource> getLuminanceSource() const;
+
+		int getWidth() const;
+		int getHeight() const;
+
+		bool isRotateSupported() const;
+		Ref<BinaryBitmap> rotateCounterClockwise();
+
+		bool isCropSupported() const;
+		Ref<BinaryBitmap> crop(int left, int top, int width, int height);
+
 	};
 	
 }

@@ -1,8 +1,9 @@
+#ifndef __ONED_RESULT_POINT_H__
+#define __ONED_RESULT_POINT_H__
 /*
  *  OneDResultPoint.h
  *  ZXing
  *
- *  Created by Lukasz Warchol on 10-01-20.
  *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,3 +36,5 @@ namespace zxing {
 		};
 	}
 }
+
+#endif

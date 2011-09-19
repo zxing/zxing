@@ -1,8 +1,10 @@
+#ifndef __EAN_13_READER_H__
+#define __EAN_13_READER_H__
+
 /*
  *  EAN13Reader.h
  *  ZXing
  *
- *  Created by Lukasz Warchol on 10-01-22.
  *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,18 +24,21 @@
 #include <zxing/Result.h>
 
 namespace zxing {
-	namespace oned {
-		class EAN13Reader : public UPCEANReader {
-			
-		private:
-			static void determineFirstDigit(std::string& resultString, int lgPatternFound);								//throws ReaderException
-			
-		public:
-			EAN13Reader();
-			
-			int decodeMiddle(Ref<BitArray> row, int startRange[], int startRangeLen, std::string& resultString);			//throws ReaderException
-			
-			BarcodeFormat getBarcodeFormat();
-		};
-	}
+  namespace oned {
+    class EAN13Reader : public UPCEANReader {
+
+    private:
+      static bool determineFirstDigit(std::string& resultString, int lgPatternFound);
+
+    public:
+      EAN13Reader();
+
+      int decodeMiddle(Ref<BitArray> row, int startGuardBegin, int startGuardEnd,
+          std::string& resultString);
+
+      BarcodeFormat getBarcodeFormat();
+    };
+  }
 }
+
+#endif
