@@ -90,7 +90,7 @@ QCameraControllerWidget::QCameraControllerWidget(QWidget *parent) :
     m_stackedWidget->addWidget(secondWidget);
     m_stackedWidget->setCurrentIndex(0);
 
-    hboxl->addWidget(m_stackedWidget);
+
 
     // Buttons
     QSize iconSize(80, 80);
@@ -98,23 +98,24 @@ QCameraControllerWidget::QCameraControllerWidget(QWidget *parent) :
     vboxl->setSpacing(0);
     vboxl->setMargin(0);
 
-    // Exit button
-    m_exit = new Button(this);
-    QObject::connect(m_exit, SIGNAL(pressed()), qApp, SLOT(quit()));
-    QPixmap p = QPixmap(":/icons/exit.png");
-    m_exit->setPixmap(p.scaled(iconSize, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-    vboxl->addWidget(m_exit);
-    vboxl->setAlignment(m_exit,Qt::AlignHCenter | Qt::AlignTop);
+    zoomIn = new Button(this);
+    QObject::connect(zoomIn, SIGNAL(pressed()), this, SLOT(onZoomIn()));
+    QPixmap p = QPixmap(":/icons/zoomIn");
+    zoomIn->setPixmap(p.scaled(iconSize, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    vboxl->addWidget(zoomIn);
+    vboxl->setAlignment(zoomIn,Qt::AlignTop | Qt::AlignHCenter);
 
-    // Camera button
-    m_cameraBtn = new Button(this);
-    QObject::connect(m_cameraBtn, SIGNAL(pressed()), this, SLOT(searchAndLock()));
-    p = QPixmap(":/icons/camera.png");
-    m_cameraBtn->setPixmap(p.scaled(iconSize, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-    vboxl->addWidget(m_cameraBtn);
-    vboxl->setAlignment(m_cameraBtn, Qt::AlignBottom);
+    zoomOut = new Button(this);
+    QObject::connect(zoomOut, SIGNAL(pressed()), this, SLOT(onZoomOut()));
+    p = QPixmap(":/icons/zoomOut");
+    zoomOut->setPixmap(p.scaled(iconSize, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    vboxl->addWidget(zoomOut);
+    vboxl->setAlignment(zoomOut, Qt::AlignBottom | Qt::AlignHCenter);
 
+    //hboxl->addLayout(vboxl);
+    hboxl->addWidget(m_stackedWidget);
     hboxl->addLayout(vboxl);
+
     setLayout(hboxl);
 
     // Enable camera after 1s, so that the application is started
@@ -139,6 +140,7 @@ void QCameraControllerWidget::enableCamera()
     m_camera->setCaptureMode(QCamera::CaptureStillImage);
     connect(m_camera, SIGNAL(error(QCamera::Error)), this, SLOT(error(QCamera::Error)));
     connect(m_camera, SIGNAL(lockStatusChanged(QCamera::LockStatus,QCamera::LockChangeReason)), this, SLOT(lockStatusChanged(QCamera::LockStatus,QCamera::LockChangeReason)));
+    connect(m_camera, SIGNAL(stateChanged( QCamera::State) ), this, SLOT(onStateChanged(QCamera::State)));
 
     // Own video output drawing that shows camera view finder pictures
     //! [0]
@@ -146,6 +148,9 @@ void QCameraControllerWidget::enableCamera()
     QVideoRendererControl* vrc = ms->requestControl<QVideoRendererControl*>();
     m_myVideoSurface = new MyVideoSurface(this,this,this);
     vrc->setSurface(m_myVideoSurface);
+
+    connect(m_myVideoSurface, SIGNAL(imageCaptured(QImage)), this, SLOT(redirectImageSignalFromVideoFinder(QImage)));
+
 //! [0]
     // Image capturer
     m_stillImageCapture = new QCameraImageCapture(m_camera);
@@ -158,6 +163,10 @@ void QCameraControllerWidget::enableCamera()
     m_videoWidget->show();
     m_camera->start();
     showViewFinder = true;
+
+    cameraFocus = m_camera->focus();
+  //  cameraFocus->setFocusMode(QCameraFocus::ContinuousFocus);
+  //  cameraFocus->setFocusPointMode(QCameraFocus::FocusPointAuto);
 }
 
 void QCameraControllerWidget::mousePressEvent(QMouseEvent *event)
@@ -337,18 +346,63 @@ void QCameraControllerWidget::paintEvent(QPaintEvent *event)
         // Draw black
         painter.fillRect(event->rect(), palette().background());
         // Show captured image
-        if (pictureCaptured) {
-            // Paint captured image
-            QPoint centerPic((qAbs(r.size().width() - m_capturedImage.size().width())) / 2, (qAbs(
-                r.size().height() - m_capturedImage.size().height())) / 2);
+//        if (pictureCaptured) {
+//            // Paint captured image
+//            QPoint centerPic((qAbs(r.size().width() - m_capturedImage.size().width())) / 2, (qAbs(
+//                r.size().height() - m_capturedImage.size().height())) / 2);
 
-            painter.drawImage(centerPic, m_capturedImage);
+//            painter.drawImage(centerPic, m_capturedImage);
 
-            // Paint filename
-           // painter.drawText(r, Qt::AlignBottom | Qt::AlignCenter, m_imageName);
-        }
+//            // Paint filename
+//           // painter.drawText(r, Qt::AlignBottom | Qt::AlignCenter, m_imageName);
+//        }
     }
+}
 
+void QCameraControllerWidget::redirectImageSignalFromVideoFinder(QImage image)
+{
+    emit imageCaptured(image);
 }
 
 
+void QCameraControllerWidget::onZoomIn()
+{
+    qreal optical = cameraFocus->opticalZoom();
+    qreal digital = cameraFocus->digitalZoom();
+
+    if(optical == cameraFocus->maximumOpticalZoom())
+        cameraFocus->zoomTo(optical, digital + 0.1);
+    else
+        cameraFocus->zoomTo(optical + 0.1, 1.0);
+}
+
+void QCameraControllerWidget::onZoomOut()
+{
+    qreal optical = cameraFocus->opticalZoom();
+    qreal digital = cameraFocus->digitalZoom();
+
+
+    if(optical == cameraFocus->maximumOpticalZoom() && digital != 0.0)
+    {
+        if(digital - 0.1 >= 1)
+            cameraFocus->zoomTo(optical, digital - 0.1);
+        else
+            cameraFocus->zoomTo(optical, 1.0);
+    }
+    else
+    {
+        if(optical - 0.1 >= 1)
+            cameraFocus->zoomTo(optical - 0.1, 1.0);
+        else
+            cameraFocus->zoomTo(1.0, 1.0);
+    }
+}
+
+void QCameraControllerWidget::onStateChanged(QCamera::State state)
+{
+    if(state == QCamera::ActiveState)
+    {
+  //      cameraFocus->setFocusMode(QCameraFocus::AutoFocus);
+  //      cameraFocus->setFocusPointMode(QCameraFocus::FocusPointAuto);
+    }
+}
