@@ -9,6 +9,7 @@
 #include <QVideoRendererControl>
 #include <QVideoSurfaceFormat>
 #include <QPainter>
+#include <QTimer>
 
 class VideoIF
 {
@@ -33,12 +34,19 @@ public:
 
     void paint(QPainter*);
 
+public slots:
+    void sendImageToDecode();
+
+signals:
+    void imageCaptured(QImage image);
+
 private:
     QWidget* m_targetWidget;
     VideoIF* m_target;
     QVideoFrame m_frame;
     QImage::Format m_imageFormat;
     QVideoSurfaceFormat m_videoFormat;
+    QTimer* timer;
 };
 
 #endif // MYVIDEOSURFACE_H

@@ -1,6 +1,8 @@
 <RCC>
     <qresource prefix="/icons">
-        <file alias="camera.png">icons/camera.png</file>
-        <file alias="exit.png">icons/exit.png</file>
+        <file alias="camera">icons/camera.png</file>
+        <file alias="exit">icons/exit.png</file>
+        <file alias="zoomIn">icons/zoomIn.png</file>
+        <file alias="zoomOut">icons/zoomOut.png</file>
     </qresource>
 </RCC>

@@ -6,6 +6,10 @@ MyVideoSurface::MyVideoSurface(QWidget* widget, VideoIF* target, QObject* parent
     m_targetWidget = widget;
     m_target = target;
     m_imageFormat = QImage::Format_Invalid;
+
+    timer = new QTimer(this);
+    connect(timer, SIGNAL(timeout()), this, SLOT(sendImageToDecode()));
+    timer->start(500);
 }
 
 MyVideoSurface::~MyVideoSurface()
@@ -74,6 +78,23 @@ QList<QVideoFrame::PixelFormat> MyVideoSurface::supportedPixelFormats(
                 << QVideoFrame::Format_RGB555;
     } else {
         return QList<QVideoFrame::PixelFormat>();
+    }
+}
+
+void MyVideoSurface::sendImageToDecode()
+{
+    if (m_frame.map(QAbstractVideoBuffer::ReadOnly)) {
+        QImage image(
+                m_frame.bits(),
+                m_frame.width(),
+                m_frame.height(),
+                m_frame.bytesPerLine(),
+                m_imageFormat);
+
+        if (!image.isNull())
+            emit imageCaptured(image);
+
+        m_frame.unmap();
     }
 }
 

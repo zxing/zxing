@@ -48,6 +48,7 @@
 // the Multimedia API is not in the QtMobility namespace "QTM_USE_NAMESPACE"
 #include <QCamera>
 #include <QCameraImageCapture>
+#include <QCameraFocus>
 
 // QtMobility API
 //#include <QSystemScreenSaver>
@@ -78,6 +79,11 @@ public slots:
     void captureImage();
     void onImageCaptured(int id, const QImage &preview);
     void error(QCamera::Error);
+    void redirectImageSignalFromVideoFinder(QImage image);
+
+    void onStateChanged(QCamera::State state) ;
+    void onZoomIn();
+    void onZoomOut();
 
 
 signals:
@@ -85,13 +91,13 @@ signals:
 
 private:
     QWidget*                m_videoWidget;
+    QWidget*                zoomButtons;
     QCamera*                m_camera;
     QCameraImageCapture*    m_stillImageCapture;
 
     QStackedWidget*         m_stackedWidget;
-    Button*                 m_exit;
-    Button*                 m_cameraBtn;
-    Button*                 m_mms;
+    Button*                 zoomIn;
+    Button*                 zoomOut;
     QImage                  m_capturedImage;
     QString                 m_imageName;
     QString                 m_focusMessage;
@@ -102,7 +108,7 @@ private:
     bool                    pictureCaptured;
     bool                    showViewFinder;
     MyVideoSurface*         m_myVideoSurface;
-    //QSystemScreenSaver*     m_systemScreenSaver;
+    QCameraFocus*           cameraFocus;
 };
 
 #endif // QCAMERA_H
