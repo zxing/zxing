@@ -116,13 +116,23 @@ public final class AddressBookResultHandler extends ResultHandler {
     AddressBookParsedResult addressResult = (AddressBookParsedResult) getResult();
     String[] addresses = addressResult.getAddresses();
     String address1 = addresses == null || addresses.length < 1 ? null : addresses[0];
+    String[] addressTypes = addressResult.getAddressTypes();
+    String address1Type = addressTypes == null || addressTypes.length < 1 ? null : addressTypes[0];
     int action = mapIndexToAction(index);
     switch (action) {
       case 0:
-        addContact(addressResult.getNames(), addressResult.getPhoneNumbers(),
-            addressResult.getEmails(), addressResult.getNote(),
-            address1, addressResult.getOrg(),
-            addressResult.getTitle());
+        addContact(addressResult.getNames(),
+                   addressResult.getPronunciation(),
+                   addressResult.getPhoneNumbers(),
+                   addressResult.getPhoneTypes(),
+                   addressResult.getEmails(),
+                   addressResult.getEmailTypes(),
+                   addressResult.getNote(),
+                   addressResult.getInstantMessenger(),
+                   address1,
+                   address1Type,
+                   addressResult.getOrg(),
+                   addressResult.getTitle());
         break;
       case 1:
         String[] names = addressResult.getNames();

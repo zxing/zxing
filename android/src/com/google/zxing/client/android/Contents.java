@@ -93,9 +93,22 @@ public final class Contents {
       Contacts.Intents.Insert.TERTIARY_PHONE
   };
 
+  public static final String[] PHONE_TYPE_KEYS = {
+      Contacts.Intents.Insert.PHONE_TYPE,
+      Contacts.Intents.Insert.SECONDARY_PHONE_TYPE,
+      Contacts.Intents.Insert.TERTIARY_PHONE_TYPE
+  };
+
   public static final String[] EMAIL_KEYS = {
       Contacts.Intents.Insert.EMAIL,
       Contacts.Intents.Insert.SECONDARY_EMAIL,
       Contacts.Intents.Insert.TERTIARY_EMAIL
   };
+
+  public static final String[] EMAIL_TYPE_KEYS = {
+      Contacts.Intents.Insert.EMAIL_TYPE,
+      Contacts.Intents.Insert.SECONDARY_EMAIL_TYPE,
+      Contacts.Intents.Insert.TERTIARY_EMAIL_TYPE
+  };
+
 }

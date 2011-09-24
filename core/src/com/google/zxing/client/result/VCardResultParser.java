@@ -41,33 +41,49 @@ final class VCardResultParser extends ResultParser {
     if (rawText == null || !rawText.startsWith("BEGIN:VCARD")) {
       return null;
     }
-    String[] names = matchVCardPrefixedField("FN", rawText, true);
+    Vector names = matchVCardPrefixedField("FN", rawText, true);
     if (names == null) {
       // If no display names found, look for regular name fields and format them
       names = matchVCardPrefixedField("N", rawText, true);
       formatNames(names);
     }
-    String[] phoneNumbers = matchVCardPrefixedField("TEL", rawText, true);
-    String[] emails = matchVCardPrefixedField("EMAIL", rawText, true);
-    String note = matchSingleVCardPrefixedField("NOTE", rawText, false);
-    String[] addresses = matchVCardPrefixedField("ADR", rawText, true);
+    Vector phoneNumbers = matchVCardPrefixedField("TEL", rawText, true);
+    Vector emails = matchVCardPrefixedField("EMAIL", rawText, true);
+    Vector note = matchSingleVCardPrefixedField("NOTE", rawText, false);
+    Vector addresses = matchVCardPrefixedField("ADR", rawText, true);
     if (addresses != null) {
-      for (int i = 0; i < addresses.length; i++) {
-        addresses[i] = formatAddress(addresses[i]);
+      for (int i = 0; i < addresses.size(); i++) {
+        Vector list = (Vector) addresses.elementAt(i);
+        list.setElementAt(formatAddress((String) list.elementAt(0)), 0);
       }
     }
-    String org = matchSingleVCardPrefixedField("ORG", rawText, true);
-    String birthday = matchSingleVCardPrefixedField("BDAY", rawText, true);
-    if (!isLikeVCardDate(birthday)) {
+    Vector org = matchSingleVCardPrefixedField("ORG", rawText, true);
+    Vector birthday = matchSingleVCardPrefixedField("BDAY", rawText, true);
+    if (birthday != null && !isLikeVCardDate((String) birthday.elementAt(0))) {
       birthday = null;
     }
-    String title = matchSingleVCardPrefixedField("TITLE", rawText, true);
-    String url = matchSingleVCardPrefixedField("URL", rawText, true);
-    return new AddressBookParsedResult(names, null, phoneNumbers, emails, note, addresses, org,
-        birthday, title, url);
+    Vector title = matchSingleVCardPrefixedField("TITLE", rawText, true);
+    Vector url = matchSingleVCardPrefixedField("URL", rawText, true);
+    Vector instantMessenger = matchSingleVCardPrefixedField("IMPP", rawText, true);
+    return new AddressBookParsedResult(toPrimaryValues(names), 
+                                       null, 
+                                       toPrimaryValues(phoneNumbers), 
+                                       toTypes(phoneNumbers),
+                                       toPrimaryValues(emails),
+                                       toTypes(emails),
+                                       toPrimaryValue(instantMessenger),
+                                       toPrimaryValue(note),
+                                       toPrimaryValues(addresses),
+                                       toTypes(addresses),
+                                       toPrimaryValue(org),
+                                       toPrimaryValue(birthday),
+                                       toPrimaryValue(title),
+                                       toPrimaryValue(url));
   }
 
-  private static String[] matchVCardPrefixedField(String prefix, String rawText, boolean trim) {
+  private static Vector matchVCardPrefixedField(String prefix, 
+                                                String rawText,
+                                                boolean trim) {
     Vector matches = null;
     int i = 0;
     int max = rawText.length();
@@ -94,18 +110,23 @@ final class VCardResultParser extends ResultParser {
         i++;
       }
 
+      Vector metadata = null;
       boolean quotedPrintable = false;
       String quotedPrintableCharset = null;
       if (i > metadataStart) {
         // There was something after the tag, before colon
-        int j = metadataStart+1;
-        while (j <= i) {
-          if (rawText.charAt(j) == ';' || rawText.charAt(j) == ':') {
-            String metadata = rawText.substring(metadataStart+1, j);
-            int equals = metadata.indexOf('=');
+        for (int j = metadataStart + 1; j <= i; j++) {
+          char c = rawText.charAt(j);
+          if (c == ';' || c == ':') {
+            String metadatum = rawText.substring(metadataStart+1, j);
+            if (metadata == null) {
+              metadata = new Vector(1);
+            }
+            metadata.addElement(metadatum);
+            int equals = metadatum.indexOf('=');
             if (equals >= 0) {
-              String key = metadata.substring(0, equals);
-              String value = metadata.substring(equals+1);
+              String key = metadatum.substring(0, equals);
+              String value = metadatum.substring(equals+1);
               if ("ENCODING".equalsIgnoreCase(key)) {
                 if ("QUOTED-PRINTABLE".equalsIgnoreCase(value)) {
                   quotedPrintable = true;
@@ -116,7 +137,6 @@ final class VCardResultParser extends ResultParser {
             }
             metadataStart = j;
           }
-          j++;
         }
       }
 
@@ -158,7 +178,14 @@ final class VCardResultParser extends ResultParser {
         } else {
           element = stripContinuationCRLF(element);
         }
-        matches.addElement(element);
+        if (metadata == null) {
+          Vector match = new Vector(1);
+          match.addElement(element);
+          matches.addElement(match);
+        } else {
+          metadata.insertElementAt(element, 0);
+          matches.addElement(metadata);
+        }
         i++;
       } else {
         i++;
@@ -169,7 +196,7 @@ final class VCardResultParser extends ResultParser {
     if (matches == null || matches.isEmpty()) {
       return null;
     }
-    return toStringArray(matches);
+    return matches;
   }
 
   private static String stripContinuationCRLF(String value) {
@@ -235,9 +262,11 @@ final class VCardResultParser extends ResultParser {
   private static int toHexValue(char c) {
     if (c >= '0' && c <= '9') {
       return c - '0';
-    } else if (c >= 'A' && c <= 'F') {
+    }
+    if (c >= 'A' && c <= 'F') {
       return c - 'A' + 10;
-    } else if (c >= 'a' && c <= 'f') {
+    }
+    if (c >= 'a' && c <= 'f') {
       return c - 'a' + 10;
     }
     throw new IllegalArgumentException();
@@ -264,9 +293,53 @@ final class VCardResultParser extends ResultParser {
     }
   }
 
-  static String matchSingleVCardPrefixedField(String prefix, String rawText, boolean trim) {
-    String[] values = matchVCardPrefixedField(prefix, rawText, trim);
-    return values == null ? null : values[0];
+  static Vector matchSingleVCardPrefixedField(String prefix, 
+                                              String rawText,
+                                              boolean trim) {
+    Vector values = matchVCardPrefixedField(prefix, rawText, trim);
+    return values == null || values.isEmpty() ? null : (Vector) values.elementAt(0);
+  }
+  
+  private static String toPrimaryValue(Vector list) {
+    return list == null || list.isEmpty() ? null : (String) list.elementAt(0);
+  }
+  
+  private static String[] toPrimaryValues(Vector lists) {
+    if (lists == null || lists.isEmpty()) {
+      return null;
+    }
+    Vector result = new Vector(lists.size());
+    for (int i = 0; i < lists.size(); i++) {
+      Vector list = (Vector) lists.elementAt(i);
+      result.addElement(list.elementAt(0));
+    }
+    return toStringArray(result);
+  }
+  
+  private static String[] toTypes(Vector lists) {
+    if (lists == null || lists.isEmpty()) {
+      return null;
+    }
+    Vector result = new Vector(lists.size());
+    for (int j = 0; j < lists.size(); j++) {
+      Vector list = (Vector) lists.elementAt(j);
+      String type = null;
+      for (int i = 1; i < list.size(); i++) {
+        String metadatum = (String) list.elementAt(i);
+        int equals = metadatum.indexOf('=');
+        if (equals < 0) {
+          // take the whole thing as a usable label
+          type = metadatum;
+          break;
+        }
+        if ("TYPE".equalsIgnoreCase(metadatum.substring(0, equals))) {
+          type = metadatum.substring(equals + 1);
+          break;
+        }
+      }
+      result.addElement(type);
+    }
+    return toStringArray(result);
   }
 
   private static boolean isLikeVCardDate(String value) {
@@ -311,10 +384,11 @@ final class VCardResultParser extends ResultParser {
    *
    * @param names name values to format, in place
    */
-  private static void formatNames(String[] names) {
+  private static void formatNames(Vector names) {
     if (names != null) {
-      for (int i = 0; i < names.length; i++) {
-        String name = names[i];
+      for (int i = 0; i < names.size(); i++) {
+        Vector list = (Vector) names.elementAt(i);
+        String name = (String) list.elementAt(0);
         String[] components = new String[5];
         int start = 0;
         int end;
@@ -331,7 +405,7 @@ final class VCardResultParser extends ResultParser {
         maybeAppendComponent(components, 2, newName);
         maybeAppendComponent(components, 0, newName);
         maybeAppendComponent(components, 4, newName);
-        names[i] = newName.toString().trim();
+        list.setElementAt(newName.toString().trim(), 0);
       }
     }
   }
