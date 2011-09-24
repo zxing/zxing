@@ -79,6 +79,26 @@ public abstract class ResultHandler {
   private static final String MARKET_REFERRER_SUFFIX =
       "&referrer=utm_source%3Dbarcodescanner%26utm_medium%3Dapps%26utm_campaign%3Dscan";
 
+  private static final String[] EMAIL_TYPE_STRINGS = {"home", "work"};
+  private static final String[] PHONE_TYPE_STRINGS = {"home", "work", "mobile", "fax", "pager"};
+  private static final String[] ADDRESS_TYPE_STRINGS = {"home", "work"};
+  private static final int[] EMAIL_TYPE_VALUES = {
+      Contacts.ContactMethodsColumns.TYPE_HOME,
+      Contacts.ContactMethodsColumns.TYPE_WORK,
+  };
+  private static final int[] PHONE_TYPE_VALUES = {
+      Contacts.PhonesColumns.TYPE_HOME,
+      Contacts.PhonesColumns.TYPE_WORK,
+      Contacts.PhonesColumns.TYPE_MOBILE,
+      Contacts.PhonesColumns.TYPE_FAX_WORK,
+      Contacts.PhonesColumns.TYPE_PAGER,
+  };
+  private static final int[] ADDRESS_TYPE_VALUES = {
+      Contacts.ContactMethodsColumns.TYPE_HOME,
+      Contacts.ContactMethodsColumns.TYPE_WORK,
+  };
+  private static final int NO_TYPE = -1;
+
   public static final int MAX_BUTTON_COUNT = 4;
 
   private final ParsedResult result;
@@ -251,30 +271,94 @@ public abstract class ResultHandler {
     }
   }
 
-  final void addContact(String[] names, String[] phoneNumbers, String[] emails, String note,
-                         String address, String org, String title) {
+  final void addPhoneOnlyContact(String[] phoneNumbers,String[] phoneTypes) {
+    addContact(null, null, phoneNumbers, phoneTypes, null, null, null, null, null, null, null, null);
+  }
+
+  final void addEmailOnlyContact(String[] emails, String[] emailTypes) {
+    addContact(null, null, null, null, emails, emailTypes, null, null, null, null, null, null);
+  }
+
+  final void addContact(String[] names,
+                        String pronunciation,
+                        String[] phoneNumbers,
+                        String[] phoneTypes,
+                        String[] emails,
+                        String[] emailTypes,
+                        String note,
+                        String instantMessenger,
+                        String address,
+                        String addressType,
+                        String org,
+                        String title) {
 
     // Only use the first name in the array, if present.
     Intent intent = new Intent(Intent.ACTION_INSERT_OR_EDIT, Contacts.CONTENT_URI);
     intent.setType(Contacts.People.CONTENT_ITEM_TYPE);
     putExtra(intent, Contacts.Intents.Insert.NAME, names != null ? names[0] : null);
 
+    putExtra(intent, Contacts.Intents.Insert.PHONETIC_NAME, pronunciation);
+
     int phoneCount = Math.min(phoneNumbers != null ? phoneNumbers.length : 0,
         Contents.PHONE_KEYS.length);
     for (int x = 0; x < phoneCount; x++) {
       putExtra(intent, Contents.PHONE_KEYS[x], phoneNumbers[x]);
+      if (phoneTypes != null && x < phoneTypes.length) {
+        int type = toPhoneContractType(phoneTypes[x]);
+        if (type >= 0) {
+          intent.putExtra(Contents.PHONE_TYPE_KEYS[x], type);
+        }
+      }
     }
 
     int emailCount = Math.min(emails != null ? emails.length : 0, Contents.EMAIL_KEYS.length);
     for (int x = 0; x < emailCount; x++) {
       putExtra(intent, Contents.EMAIL_KEYS[x], emails[x]);
+      if (emailTypes != null && x < emailTypes.length) {
+        int type = toEmailContractType(emailTypes[x]);
+        if (type >= 0) {
+          intent.putExtra(Contents.EMAIL_TYPE_KEYS[x], type);
+        }
+      }
     }
 
     putExtra(intent, Contacts.Intents.Insert.NOTES, note);
+    putExtra(intent, Contacts.Intents.Insert.IM_HANDLE, instantMessenger);
     putExtra(intent, Contacts.Intents.Insert.POSTAL, address);
+    if (addressType != null) {
+      int type = toAddressContractType(addressType);
+      if (type >= 0) {
+        intent.putExtra(Contacts.Intents.Insert.POSTAL_TYPE, type);
+      }
+    }
     putExtra(intent, Contacts.Intents.Insert.COMPANY, org);
     putExtra(intent, Contacts.Intents.Insert.JOB_TITLE, title);
     launchIntent(intent);
+  }
+
+  private static int toEmailContractType(String typeString) {
+    return doToContractType(typeString, EMAIL_TYPE_STRINGS, EMAIL_TYPE_VALUES);
+  }
+
+  private static int toPhoneContractType(String typeString) {
+    return doToContractType(typeString, PHONE_TYPE_STRINGS, PHONE_TYPE_VALUES);
+  }
+
+  private static int toAddressContractType(String typeString) {
+    return doToContractType(typeString, ADDRESS_TYPE_STRINGS, ADDRESS_TYPE_VALUES);
+  }
+
+  private static int doToContractType(String typeString, String[] types, int[] values) {
+    if (typeString == null) {
+      return NO_TYPE;
+    }
+    for (int i = 0; i < types.length; i++) {
+      String type = types[i];
+      if (typeString.startsWith(type) || typeString.startsWith(type.toUpperCase())) {
+        return values[i];
+      }
+    }
+    return NO_TYPE;
   }
 
   final void shareByEmail(String contents) {
@@ -350,10 +434,10 @@ public abstract class ResultHandler {
    * @param address The address to find
    * @param title An optional title, e.g. the name of the business at this address
    */
-  final void searchMap(String address, String title) {
+  final void searchMap(String address, CharSequence title) {
     String query = address;
     if (title != null && title.length() > 0) {
-      query = query + " (" + title + ')';
+      query += " (" + title + ')';
     }
     launchIntent(new Intent(Intent.ACTION_VIEW, Uri.parse("geo:0,0?q=" + Uri.encode(query))));
   }

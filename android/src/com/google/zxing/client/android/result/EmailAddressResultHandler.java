@@ -60,7 +60,7 @@ public final class EmailAddressResultHandler extends ResultHandler {
       case 1:
         String[] addresses = new String[1];
         addresses[0] = emailResult.getEmailAddress();
-        addContact(null, null, addresses, null, null, null, null);
+        addEmailOnlyContact(addresses, null);
         break;
     }
   }

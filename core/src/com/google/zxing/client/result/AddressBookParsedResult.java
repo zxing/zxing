@@ -24,9 +24,13 @@ public final class AddressBookParsedResult extends ParsedResult {
   private final String[] names;
   private final String pronunciation;
   private final String[] phoneNumbers;
+  private final String[] phoneTypes;
   private final String[] emails;
+  private final String[] emailTypes;
+  private final String instantMessenger;
   private final String note;
   private final String[] addresses;
+  private final String[] addressTypes;
   private final String org;
   private final String birthday;
   private final String title;
@@ -35,9 +39,13 @@ public final class AddressBookParsedResult extends ParsedResult {
   public AddressBookParsedResult(String[] names,
                                  String pronunciation,
                                  String[] phoneNumbers,
+                                 String[] phoneTypes,
                                  String[] emails,
+                                 String[] emailTypes,
+                                 String instantMessenger,
                                  String note,
                                  String[] addresses,
+                                 String[] addressTypes,
                                  String org,
                                  String birthday,
                                  String title,
@@ -46,9 +54,13 @@ public final class AddressBookParsedResult extends ParsedResult {
     this.names = names;
     this.pronunciation = pronunciation;
     this.phoneNumbers = phoneNumbers;
+    this.phoneTypes = phoneTypes;
     this.emails = emails;
+    this.emailTypes = emailTypes;
+    this.instantMessenger = instantMessenger;
     this.note = note;
     this.addresses = addresses;
+    this.addressTypes = addressTypes;
     this.org = org;
     this.birthday = birthday;
     this.title = title;
@@ -73,8 +85,28 @@ public final class AddressBookParsedResult extends ParsedResult {
     return phoneNumbers;
   }
 
+  /**
+   * @return optional descriptions of the type of each phone number. It could be like "HOME", but,
+   *  there is no guaranteed or standard format.
+   */
+  public String[] getPhoneTypes() {
+    return phoneTypes;
+  }
+
   public String[] getEmails() {
     return emails;
+  }
+
+  /**
+   * @return optional descriptions of the type of each e-mail. It could be like "WORK", but,
+   *  there is no guaranteed or standard format.
+   */
+  public String[] getEmailTypes() {
+    return emailTypes;
+  }
+
+  public String getInstantMessenger() {
+    return instantMessenger;
   }
 
   public String getNote() {
@@ -83,6 +115,14 @@ public final class AddressBookParsedResult extends ParsedResult {
 
   public String[] getAddresses() {
     return addresses;
+  }
+
+  /**
+   * @return optional descriptions of the type of each e-mail. It could be like "WORK", but,
+   *  there is no guaranteed or standard format.
+   */
+  public String[] getAddressTypes() {
+    return addressTypes;
   }
 
   public String getTitle() {
@@ -113,6 +153,7 @@ public final class AddressBookParsedResult extends ParsedResult {
     maybeAppend(addresses, result);
     maybeAppend(phoneNumbers, result);
     maybeAppend(emails, result);
+    maybeAppend(instantMessenger, result);
     maybeAppend(url, result);
     maybeAppend(birthday, result);
     maybeAppend(note, result);

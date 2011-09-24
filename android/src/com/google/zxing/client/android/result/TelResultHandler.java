@@ -58,7 +58,7 @@ public final class TelResultHandler extends ResultHandler {
       case 1:
         String[] numbers = new String[1];
         numbers[0] = telResult.getNumber();
-        addContact(null, numbers, null, null, null, null, null);
+        addPhoneOnlyContact(numbers, null);
         break;
     }
   }
