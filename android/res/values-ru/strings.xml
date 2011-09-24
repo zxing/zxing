@@ -131,15 +131,8 @@
   <string name="sbc_name">Поиск книг Google</string>
   <string name="share_name">Поделиться штрих-кодом</string>
   <string name="title_about">Сканер штрих-кодов, версия </string>
-  <string name="wa_name">Подключение к сети</string>
   <string name="wifi_changing_network">Изменение сети</string>
-  <string name="wifi_connect_failed">Подключение к сети не удалось</string>
-  <string name="wifi_connected">Подключено</string>
-  <string name="wifi_creating_network">Создание сети</string>
-  <string name="wifi_modifying_network">Изменение сети</string>
   <string name="wifi_ssid_label">Имя сети</string>
-  <string name="wifi_ssid_missing">Отсутствует имя сети (SSID)</string>
-  <string name="wifi_type_incorrect">Некорректный тип сети</string>
   <string name="wifi_type_label">Тип</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

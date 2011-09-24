@@ -131,15 +131,8 @@
   <string name="sbc_name">Google 圖書搜尋</string>
   <string name="share_name">透過條碼分享</string>
   <string name="title_about">條碼掃描器</string>
-  <string name="wa_name">無線區網設定</string>
   <string name="wifi_changing_network">更改網路連接中</string>
-  <string name="wifi_connect_failed">網路連接失敗</string>
-  <string name="wifi_connected">已連接</string>
-  <string name="wifi_creating_network">建立網路連接中</string>
-  <string name="wifi_modifying_network">修改網絡連接中</string>
   <string name="wifi_ssid_label">網路名稱</string>
-  <string name="wifi_ssid_missing">找不到該網路名稱</string>
-  <string name="wifi_type_incorrect">網路類型不正確</string>
   <string name="wifi_type_label">類型</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

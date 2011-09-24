@@ -131,15 +131,8 @@
   <string name="sbc_name">Google Kitap Arama</string>
   <string name="share_name">Barkod ile paylaş</string>
   <string name="title_about">Barkod Tarayıcı</string>
-  <string name="wa_name">Wi-Fi Bağlantısı</string>
   <string name="wifi_changing_network">Ağ değişimi</string>
-  <string name="wifi_connect_failed">Ağ bağlantısı başarısız</string>
-  <string name="wifi_connected">Bağlantı sağlandı</string>
-  <string name="wifi_creating_network">Ağ oluşturma</string>
-  <string name="wifi_modifying_network">Şebeke değiştirme</string>
   <string name="wifi_ssid_label">Ağ adı</string>
-  <string name="wifi_ssid_missing">Eksik Ağ adı</string>
-  <string name="wifi_type_incorrect">Ağ tipi yanlış</string>
   <string name="wifi_type_label">Tip</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

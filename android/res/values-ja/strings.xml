@@ -131,15 +131,8 @@
   <string name="sbc_name">Google ブックス</string>
   <string name="share_name">バーコードで共有する</string>
   <string name="title_about">QRコードスキャナー v</string>
-  <string name="wa_name">ネットワーク構成</string>
   <string name="wifi_changing_network">ネットワークを変更する</string>
-  <string name="wifi_connect_failed">ネットワーク接続が失敗しました。</string>
-  <string name="wifi_connected">接続</string>
-  <string name="wifi_creating_network">ネットワーク作成</string>
-  <string name="wifi_modifying_network">ネットワークを変更する</string>
   <string name="wifi_ssid_label">ネットワーク名</string>
-  <string name="wifi_ssid_missing">SSIDがありません</string>
-  <string name="wifi_type_incorrect">ネットワーク種類が不正</string>
   <string name="wifi_type_label">タイプ</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

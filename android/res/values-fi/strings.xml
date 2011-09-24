@@ -131,15 +131,8 @@
   <string name="sbc_name">Google kirja haku</string>
   <string name="share_name">Jaa viivakoodilla</string>
   <string name="title_about">Viivakoodin lukija v</string>
-  <string name="wa_name">Langattoman yhteyden</string>
   <string name="wifi_changing_network">Vaihtaminen Verkko</string>
-  <string name="wifi_connect_failed">Verkkoyhteys ei</string>
-  <string name="wifi_connected">Kytketty</string>
-  <string name="wifi_creating_network">Luominen verkoston</string>
-  <string name="wifi_modifying_network">Muuttaminen Verkko</string>
   <string name="wifi_ssid_label">Verkon nimi</string>
-  <string name="wifi_ssid_missing">Verkon nimi puuttuu</string>
-  <string name="wifi_type_incorrect">Verkon tyyppi virheellinen</string>
   <string name="wifi_type_label">Tyyppi</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

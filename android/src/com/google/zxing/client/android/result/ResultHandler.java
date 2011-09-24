@@ -24,10 +24,8 @@ import com.google.zxing.client.android.LocaleManager;
 import com.google.zxing.client.android.PreferencesActivity;
 import com.google.zxing.client.android.R;
 import com.google.zxing.client.android.book.SearchBookContentsActivity;
-import com.google.zxing.client.android.wifi.WifiActivity;
 import com.google.zxing.client.result.ParsedResult;
 import com.google.zxing.client.result.ParsedResultType;
-import com.google.zxing.client.result.WifiParsedResult;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -118,6 +116,10 @@ public abstract class ResultHandler {
 
   boolean hasCustomProductSearch() {
     return customProductSearch != null;
+  }
+
+  Activity getActivity() {
+    return activity;
   }
 
   /**
@@ -378,15 +380,6 @@ public abstract class ResultHandler {
     Intent intent = new Intent(Intents.SearchBookContents.ACTION);
     intent.setClassName(activity, SearchBookContentsActivity.class.getName());
     putExtra(intent, Intents.SearchBookContents.ISBN, isbnOrUrl);
-    launchIntent(intent);
-  }
-
-  final void wifiConnect(WifiParsedResult wifiResult) {
-    Intent intent = new Intent(Intents.WifiConnect.ACTION);
-    intent.setClassName(activity, WifiActivity.class.getName());
-    putExtra(intent, Intents.WifiConnect.SSID, wifiResult.getSsid());
-    putExtra(intent, Intents.WifiConnect.TYPE, wifiResult.getNetworkEncryption());
-    putExtra(intent, Intents.WifiConnect.PASSWORD, wifiResult.getPassword());
     launchIntent(intent);
   }
 

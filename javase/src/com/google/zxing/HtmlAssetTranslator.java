@@ -181,9 +181,16 @@ public final class HtmlAssetTranslator {
     NamedNodeMap attributes = node.getAttributes();
     if (attributes != null) {
       Node classAttribute = attributes.getNamedItem("class");
-      if (classAttribute != null && "notranslate".equals(classAttribute.getTextContent())) {
-        return false;
+      if (classAttribute != null) {
+        String textContent = classAttribute.getTextContent();
+        if (textContent != null && textContent.contains("notranslate")) {
+          return false;
+        }
       }
+    }
+    String nodeName = node.getNodeName();
+    if ("script".equalsIgnoreCase(nodeName)) {
+      return false;
     }
     // Ignore non-text snippets
     String textContent = node.getTextContent();

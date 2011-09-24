@@ -131,15 +131,8 @@
   <string name="sbc_name">Ricerca Google Book</string>
   <string name="share_name">Condividi tramite codice a barre</string>
   <string name="title_about">Scansione codice a barre v</string>
-  <string name="wa_name">Configurazione WLAN</string>
   <string name="wifi_changing_network">Cambio rete</string>
-  <string name="wifi_connect_failed">Connessione di rete fallita</string>
-  <string name="wifi_connected">Connesso</string>
-  <string name="wifi_creating_network">Creazione rete</string>
-  <string name="wifi_modifying_network">Modifica rete</string>
   <string name="wifi_ssid_label">Nome rete</string>
-  <string name="wifi_ssid_missing">Nome di rete mancante</string>
-  <string name="wifi_type_incorrect">Tipo di rete non corretto</string>
   <string name="wifi_type_label">Tipo</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>
