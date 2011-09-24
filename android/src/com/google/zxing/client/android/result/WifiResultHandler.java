@@ -17,7 +17,11 @@
 package com.google.zxing.client.android.result;
 
 import android.app.Activity;
+import android.content.Context;
+import android.net.wifi.WifiManager;
+import android.widget.Toast;
 import com.google.zxing.client.android.R;
+import com.google.zxing.client.android.wifi.WifiConfigManager;
 import com.google.zxing.client.result.ParsedResult;
 import com.google.zxing.client.result.WifiParsedResult;
 
@@ -54,7 +58,15 @@ public final class WifiResultHandler extends ResultHandler {
     // Get the underlying wifi config
     WifiParsedResult wifiResult = (WifiParsedResult) getResult();
     if (index == 0) {
-      wifiConnect(wifiResult);
+      String ssid = wifiResult.getSsid();
+      if (ssid == null || ssid.length() == 0) {
+        return;
+      }
+      String password = wifiResult.getPassword();
+      String networkType = wifiResult.getNetworkEncryption();
+      WifiManager wifiManager = (WifiManager) getActivity().getSystemService(Context.WIFI_SERVICE);
+      Toast.makeText(getActivity(), R.string.wifi_changing_network, Toast.LENGTH_LONG).show();
+      WifiConfigManager.configure(wifiManager, ssid, password, networkType);
     }
   }
 

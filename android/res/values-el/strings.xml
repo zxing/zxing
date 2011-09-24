@@ -131,15 +131,8 @@
   <string name="sbc_name">Αναζήτηση βιβλίων Google</string>
   <string name="share_name">Κοινή χρήση μέσω barcode</string>
   <string name="title_about">Barcode Scanner v</string>
-  <string name="wa_name">Σύνδεση WLAN</string>
   <string name="wifi_changing_network">Αλλαγή Δικτύου</string>
-  <string name="wifi_connect_failed">Σφάλμα στην σύνδεση Δικτύου</string>
-  <string name="wifi_connected">Συνδέθηκε</string>
-  <string name="wifi_creating_network">Δημιουργία Δικτύου</string>
-  <string name="wifi_modifying_network">Επεξεργασία Δικτύου</string>
   <string name="wifi_ssid_label">Όνομα Δικτύου</string>
-  <string name="wifi_ssid_missing">Λείπει όνομα Δικτύου</string>
-  <string name="wifi_type_incorrect">Λάθος τύπος Δικτύου</string>
   <string name="wifi_type_label">Τύπος</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

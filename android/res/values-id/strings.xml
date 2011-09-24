@@ -131,15 +131,8 @@
   <string name="sbc_name">Pencarian Google Book</string>
   <string name="share_name">Bagian melalui barcode</string>
   <string name="title_about">Barcode Scanner v</string>
-  <string name="wa_name">Koneksi WLAN</string>
   <string name="wifi_changing_network">Ubah Koneksi</string>
-  <string name="wifi_connect_failed">Koneksi ke jaringan gagal</string>
-  <string name="wifi_connected">Terhubung</string>
-  <string name="wifi_creating_network">Buat Koneksi</string>
-  <string name="wifi_modifying_network">Perbarui Jaringan</string>
   <string name="wifi_ssid_label">Nama Jaringan</string>
-  <string name="wifi_ssid_missing">Nama jaringan hilang</string>
-  <string name="wifi_type_incorrect">Jenis jaringan salah</string>
   <string name="wifi_type_label">Tipe</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

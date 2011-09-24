@@ -131,15 +131,8 @@
   <string name="sbc_name">Google图书搜索</string>
   <string name="share_name">通过条码分享</string>
   <string name="title_about">条码扫描器</string>
-  <string name="wa_name">网络配置</string>
   <string name="wifi_changing_network">不稳定的网络</string>
-  <string name="wifi_connect_failed">网络连接失败</string>
-  <string name="wifi_connected">已连接</string>
-  <string name="wifi_creating_network">创建网络</string>
-  <string name="wifi_modifying_network">修改网络</string>
   <string name="wifi_ssid_label">网络SSID</string>
-  <string name="wifi_ssid_missing">未找到SSID名称</string>
-  <string name="wifi_type_incorrect">网络类型不正确</string>
   <string name="wifi_type_label">类型</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

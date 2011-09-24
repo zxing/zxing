@@ -103,11 +103,6 @@ versionName is 2.31, 2.4, or 3.0. -->
         <category android:name="android.intent.category.DEFAULT"/>
       </intent-filter>
     </activity>
-    <activity android:name=".wifi.WifiActivity"
-              android:label="@string/wa_name"
-              android:screenOrientation="landscape"
-              android:configChanges="orientation|keyboardHidden">
-    </activity>
     <activity android:name=".share.ShareActivity"
               android:label="@string/share_name"
               android:screenOrientation="user"

@@ -131,15 +131,8 @@
   <string name="sbc_name">Google חיפוש ספרים</string>
   <string name="share_name">שתף באמצעות ברקוד</string>
   <string name="title_about">סורק ברקודים</string>
-  <string name="wa_name">חיבור רשת אל חוטית</string>
   <string name="wifi_changing_network">מחליף רשת</string>
-  <string name="wifi_connect_failed">חיבור לרשת נכשל</string>
-  <string name="wifi_connected">מחובר</string>
-  <string name="wifi_creating_network">יוצר רשת</string>
-  <string name="wifi_modifying_network">משנה רשת</string>
   <string name="wifi_ssid_label">שם רשת</string>
-  <string name="wifi_ssid_missing">שם הרשת חסר</string>
-  <string name="wifi_type_incorrect">סוג הרשת שגוי</string>
   <string name="wifi_type_label">סוג</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

@@ -131,15 +131,8 @@
   <string name="sbc_name">Google vyhľadávanie kníh</string>
   <string name="share_name">Zdieľať cez čiarový kód</string>
   <string name="title_about">Barcode Scanner v</string>
-  <string name="wa_name">Pripojenie WLAN</string>
   <string name="wifi_changing_network">Mením sieťové pripojenie</string>
-  <string name="wifi_connect_failed">Pripojenie k sieti zlyhalo</string>
-  <string name="wifi_connected">Pripojené</string>
-  <string name="wifi_creating_network">Vytváram sieťové pripojenie</string>
-  <string name="wifi_modifying_network">Upravujem sieťové pripojenie</string>
   <string name="wifi_ssid_label">Názov sieťového pripojenia</string>
-  <string name="wifi_ssid_missing">Chýba názov sieťového pripojenia</string>
-  <string name="wifi_type_incorrect">Nesprávny typ sieťové pripojenie</string>
   <string name="wifi_type_label">Typ</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

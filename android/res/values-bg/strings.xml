@@ -131,15 +131,8 @@
   <string name="sbc_name">Гугъл търсене на книга</string>
   <string name="share_name">Сподели чрез баркод</string>
   <string name="title_about">Баркод Скенер v</string>
-  <string name="wa_name">WLAN Връзка</string>
   <string name="wifi_changing_network">Смяна на мрежата</string>
-  <string name="wifi_connect_failed">Неуспешно свързване с мрежата</string>
-  <string name="wifi_connected">Свързан</string>
-  <string name="wifi_creating_network">Създаване на мрежата</string>
-  <string name="wifi_modifying_network">Промяна на мрежата</string>
   <string name="wifi_ssid_label">Име на мрежата</string>
-  <string name="wifi_ssid_missing">Липсва име на мрежата</string>
-  <string name="wifi_type_incorrect">Некоректен тип мрежа</string>
   <string name="wifi_type_label">Тип</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>
