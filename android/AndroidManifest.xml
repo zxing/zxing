@@ -26,6 +26,11 @@ versionName is 2.31, 2.4, or 3.0. -->
   <!-- We require Cupcake (Android 1.5) or later, but are really targeting Donut. -->
   <uses-sdk android:minSdkVersion="3"
             android:targetSdkVersion="4"/>
+  <uses-configuration android:reqFiveWayNav="false"
+                      android:reqHardKeyboard="false"
+                      android:reqKeyboardType="nokeys"
+                      android:reqNavigation="nonav"
+                      android:reqTouchScreen="notouch"/>
   <!-- Donut-specific flags which allow us to run on any dpi screens. -->
   <supports-screens android:xlargeScreens="true"
                     android:largeScreens="true"
@@ -135,20 +140,32 @@ versionName is 2.31, 2.4, or 3.0. -->
       </intent-filter>
     </activity>
   </application>
+  <permission-group android:name="com.google.zxing.client.android.SHARE_PERMISSIONS"
+                    android:label="@string/permission_share"
+                    android:description="@string/permission_share_desc"/>
+  <permission-group android:name="com.google.zxing.client.android.WIFI_PERMISSIONS"
+                    android:label="@string/permission_wifi"
+                    android:description="@string/permission_wifi_desc"/>
   <uses-permission android:name="android.permission.CAMERA"/>
-  <uses-permission android:name="android.permission.READ_CONTACTS"/>
-  <uses-permission android:name="android.permission.WRITE_CONTACTS"/>
   <uses-permission android:name="android.permission.INTERNET"/>
-  <uses-permission android:name="com.android.browser.permission.READ_HISTORY_BOOKMARKS"/>
   <uses-permission android:name="android.permission.VIBRATE"/>
   <uses-permission android:name="android.permission.FLASHLIGHT"/>
-  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-
-  <!-- Wifi related  -->
-  <uses-permission android:name="android.permission.WRITE_SETTINGS" />
-  <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-  <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-  <uses-permission android:name="android.permission.WAKE_LOCK" />
-
+  <uses-permission android:name="android.permission.READ_CONTACTS"
+                   android:permissionGroup="com.google.zxing.client.android.SHARE_PERMISSIONS"/>
+  <uses-permission android:name="android.permission.WRITE_CONTACTS"
+                   android:permissionGroup="com.google.zxing.client.android.SHARE_PERMISSIONS"/>
+  <uses-permission android:name="com.android.browser.permission.READ_HISTORY_BOOKMARKS"
+                   android:permissionGroup="com.google.zxing.client.android.SHARE_PERMISSIONS"/>
+  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+                   android:permissionGroup="com.google.zxing.client.android.SHARE_PERMISSIONS"/>
+  <uses-permission android:name="android.permission.WRITE_SETTINGS"
+                   android:permissionGroup="com.google.zxing.client.android.WIFI_PERMISSIONS"/>
+  <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"
+                   android:permissionGroup="com.google.zxing.client.android.WIFI_PERMISSIONS"/>
+  <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"
+                   android:permissionGroup="com.google.zxing.client.android.WIFI_PERMISSIONS"/>
+  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"
+                   android:permissionGroup="com.google.zxing.client.android.WIFI_PERMISSIONS"/>
+  <uses-permission android:name="android.permission.WAKE_LOCK"
+                   android:permissionGroup="com.google.zxing.client.android.WIFI_PERMISSIONS"/>
 </manifest>

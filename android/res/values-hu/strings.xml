@@ -94,6 +94,10 @@
   <string name="msg_share_text">Vagy írja be a szöveget</string>
   <string name="msg_sure">Biztos vagy benne?</string>
   <string name="msg_unmount_usb">Sajnáljuk, az SD kártya nem elérhető.</string>
+  <string name="permission_share">Ossza meg a vonalkód</string>
+  <string name="permission_share_desc">Lehetővé teszi, hogy megosszák és adjunk hozzá kapcsolatokat és könyvjelzők jelenít meg, vagy szkennelés a vonalkód és az export beolvasott adatokat.</string>
+  <string name="permission_wifi">Állítsa be wi-fi a vonalkód</string>
+  <string name="permission_wifi_desc">Lehetővé teszi, hogy konfigurálja wi-fi hálózati kapcsolat szkennelés a vonalkód.</string>
   <string name="preferences_actions_title">Amikor a vonalkód megvan\u2026</string>
   <string name="preferences_bulk_mode_summary">Beolvasni és elmenteni több vonalkód folyamatosan</string>
   <string name="preferences_bulk_mode_title">Tömeges scan üzemmód</string>

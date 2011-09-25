@@ -94,6 +94,10 @@
   <string name="msg_share_text">입력하거나 텍스트</string>
   <string name="msg_sure">계속하시겠습니까?</string>
   <string name="msg_unmount_usb">죄송합니다. SD카드를 사용할 수 없습니다.</string>
+  <string name="permission_share">바코드에 의해 공유</string>
+  <string name="permission_share_desc">당신이 공유하고 바코드를 표시하거나 검색하여 연락처와 북마크를 추가하고, 스캔한 정보를 내보낼 수 있습니다.</string>
+  <string name="permission_wifi">바코드로 와이파이를 구성</string>
+  <string name="permission_wifi_desc">당신이 바코드를 스캔하여 Wi - Fi 네트워크 연결을 구성할 수 있습니다.</string>
   <string name="preferences_actions_title">바코드를 스캔했을때\u2026</string>
   <string name="preferences_bulk_mode_summary">다수의 바코드를 스캔하고 저장합니다.</string>
   <string name="preferences_bulk_mode_title">일괄 스캔 모드</string>
