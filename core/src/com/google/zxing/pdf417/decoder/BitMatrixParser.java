@@ -199,10 +199,11 @@ final class BitMatrixParser {
       }
       if (columnNumber > 0) {
         int cw = getCodeword(symbol);
-        // if (debug) System.out.println(" " + Long.toBinaryString(symbol) +
-        // " cw=" +cw + " ColumnNumber=" +columnNumber + "i=" +i);
         if (cw < 0 && i < width - MODULES_IN_SYMBOL) {
           // Skip errors on the Right row indicator column
+          if (eraseCount >= erasures.length) {
+            throw FormatException.getFormatInstance();
+          }
           erasures[eraseCount] = next;
           next++;
           eraseCount++;
@@ -212,8 +213,6 @@ final class BitMatrixParser {
       } else {
         // Left row indicator column
         int cw = getCodeword(symbol);
-        // if (debug) System.out.println(" " + Long.toBinaryString(symbol) +
-        // " cw=" +cw + " ColumnNumber=" +columnNumber + "i=" +i);
         if (ecLevel < 0) {
           switch (rowNumber % 3) {
             case 0:
