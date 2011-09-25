@@ -18,7 +18,6 @@ package com.google.zxing.client.android.wifi;
 
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
-import android.text.TextUtils;
 
 import java.util.List;
 import java.util.regex.Pattern;
@@ -29,7 +28,6 @@ import java.util.regex.Pattern;
  */
 public final class WifiConfigManager {
 
-  private static final Pattern HEX_DIGITS_64 = Pattern.compile("[0-9A-Fa-f]{64}");
   private static final Pattern HEX_DIGITS = Pattern.compile("[0-9A-Fa-f]+");
 
   private WifiConfigManager() {
@@ -93,25 +91,21 @@ public final class WifiConfigManager {
     config.allowedPairwiseCiphers.clear();
     config.allowedProtocols.clear();
     // Android API insists that an ascii SSID must be quoted to be correctly handled.
-    config.SSID = convertToQuotedString(ssid);
+    config.SSID = quoteNonHex(ssid);
     return config;
   }
 
   // Adding a WEP network
   private static void changeNetworkWEP(WifiManager wifiManager, String ssid, String password) {
     WifiConfiguration config = changeNetworkCommon(ssid);
-    if (isHexWepKey(password)) {
-      config.wepKeys[0] = password;
-    } else {
-      config.wepKeys[0] = convertToQuotedString(password);
-    }
+    config.wepKeys[0] = quoteNonHex(password, 10, 26, 58);
+    config.wepTxKeyIndex = 0;
     config.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.SHARED);
-    config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
+    config.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
     config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
+    config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
     config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP40);
     config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP104);
-    config.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
-    config.wepTxKeyIndex = 0;
     updateNetwork(wifiManager, config);
   }
 
@@ -119,30 +113,23 @@ public final class WifiConfigManager {
   private static void changeNetworkWPA(WifiManager wifiManager, String ssid, String password) {
     WifiConfiguration config = changeNetworkCommon(ssid);
     // Hex passwords that are 64 bits long are not to be quoted.
-    if (HEX_DIGITS_64.matcher(password).matches()) {
-      config.preSharedKey = password;
-    } else {
-      config.preSharedKey = convertToQuotedString(password);
-    }
+    config.preSharedKey = quoteNonHex(password, 64);
     config.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.OPEN);
-    // For WPA
-    config.allowedProtocols.set(WifiConfiguration.Protocol.WPA);
-    // For WPA2
+    config.allowedProtocols.set(WifiConfiguration.Protocol.WPA); // For WPA
+    config.allowedProtocols.set(WifiConfiguration.Protocol.RSN); // For WPA2
     config.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_PSK);
+    config.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_EAP);
     config.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.TKIP);
     config.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
     config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
     config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
-    config.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
     updateNetwork(wifiManager, config);
   }
 
   // Adding an open, unsecured network
   private static void changeNetworkUnEncrypted(WifiManager wifiManager, String ssid) {
     WifiConfiguration config = changeNetworkCommon(ssid);
-    config.wepKeys[0] = "";
     config.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
-    config.wepTxKeyIndex = 0;
     updateNetwork(wifiManager, config);
   }
 
@@ -156,6 +143,10 @@ public final class WifiConfigManager {
     return null;
   }
 
+  private static String quoteNonHex(String value, int... allowedLengths) {
+    return isHexOfLength(value, allowedLengths) ? value : convertToQuotedString(value);
+  }
+
   /**
    * Encloses the incoming string inside double quotes, if it isn't already quoted.
    * @param string the input string
@@ -163,32 +154,35 @@ public final class WifiConfigManager {
    * as well.
    */
   private static String convertToQuotedString(String string) {
-    if (string == null){
+    if (string == null || string.length() == 0) {
       return null;
     }
-    if (TextUtils.isEmpty(string)) {
-      return "";
-    }
-    int lastPos = string.length() - 1;
-    if (lastPos < 0 || (string.charAt(0) == '"' && string.charAt(lastPos) == '"')) {
+    // If already quoted, return as-is
+    if (string.charAt(0) == '"' && string.charAt(string.length() - 1) == '"') {
       return string;
     }
     return '\"' + string + '\"';
   }
 
   /**
-   * Check if wepKey is a valid hexadecimal string.
-   * @param wepKey the input to be checked
-   * @return true if the input string is indeed hex or empty.  False if the input string is non-hex
-   * or null.
+   * @param value input to check
+   * @param allowedLengths allowed lengths, if any
+   * @return true if value is a non-null, non-empty string of hex digits, and if allowed lengths are given, has
+   *  an allowed length
    */
-  private static boolean isHexWepKey(CharSequence wepKey) {
-    if (wepKey == null) {
+  private static boolean isHexOfLength(CharSequence value, int... allowedLengths) {
+    if (value == null || !HEX_DIGITS.matcher(value).matches()) {
       return false;
     }
-    int length = wepKey.length();
-    // WEP-40, WEP-104, and some vendors using 256-bit WEP (WEP-232?)
-    return (length == 10 || length == 26 || length == 58) && HEX_DIGITS.matcher(wepKey).matches();
+    if (allowedLengths.length == 0) {
+      return true;
+    }
+    for (int length : allowedLengths) {
+      if (value.length() == length) {
+        return true;
+      }
+    }
+    return false;
   }
 
 }
