@@ -94,6 +94,10 @@
   <string name="msg_share_text">Ou digite algum texto</string>
   <string name="msg_sure">Você tem certeza?</string>
   <string name="msg_unmount_usb">Desculpa, o cartão SD não está acessível.</string>
+  <string name="permission_share">Compartilhar por código de barras</string>
+  <string name="permission_share_desc">Permite que você compartilhe e adicionar contatos e favoritos, exibindo ou digitalização de um código de barras, e para exportar as informações digitalizadas.</string>
+  <string name="permission_wifi">Configurar wi-fi por código de barras</string>
+  <string name="permission_wifi_desc">Permite configurar uma conexão de rede wi-fi, digitalizando um código de barras.</string>
   <string name="preferences_actions_title">Quando um código de barras é encontrado\u2026</string>
   <string name="preferences_bulk_mode_summary">Digitalizar e salvar muitas barras continuamente</string>
   <string name="preferences_bulk_mode_title">Bulk modo de digitalização</string>

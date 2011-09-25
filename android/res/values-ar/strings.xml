@@ -94,6 +94,10 @@
   <string name="msg_share_text">أو اكتب بعض النص</string>
   <string name="msg_sure">هل أنت متأكد؟</string>
   <string name="msg_unmount_usb">رجاء إيقاف التخزين على USB للمتابعة.</string>
+  <string name="permission_share">سهم الباركود</string>
+  <string name="permission_share_desc">يسمح لك لتبادل وإضافة الأسماء والعناوين من خلال عرض أو مسح الباركود ، وتصدير المعلومات الممسوحة ضوئيا.</string>
+  <string name="permission_wifi">تكوين واي فاي عن طريق الباركود</string>
+  <string name="permission_wifi_desc">يسمح لك تكوين اتصال شبكة واي فاي عن طريق مسح الباركود.</string>
   <string name="preferences_actions_title">عند العثور على رمز شريطي</string>
   <string name="preferences_bulk_mode_summary">المسح الضوئي وحفظها بشكل مستمر العديد من الرموز الشريطية</string>
   <string name="preferences_bulk_mode_title">جل وضع المسح الضوئي</string>

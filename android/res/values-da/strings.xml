@@ -94,6 +94,10 @@
   <string name="msg_share_text">Eller skriv noget tekst</string>
   <string name="msg_sure">Er du sikker?</string>
   <string name="msg_unmount_usb">Beklager, SD-kortet er ikke tilgængelig.</string>
+  <string name="permission_share">Andel af stregkode</string>
+  <string name="permission_share_desc">Giver dig mulighed for at dele og tilføje kontaktpersoner og bogmærker ved at vise eller scanne en stregkode, og at eksportere scannede oplysninger.</string>
+  <string name="permission_wifi">Konfigurere Wi-Fi af stregkode</string>
+  <string name="permission_wifi_desc">Lader dig konfigurere en wi-fi netværksforbindelse ved at scanne en stregkode.</string>
   <string name="preferences_actions_title">Når en stregkode er fundet\u2026</string>
   <string name="preferences_bulk_mode_summary">Scan og gem mange stregkoder uden afbrydelser</string>
   <string name="preferences_bulk_mode_title">Massescanningstilstand</string>
