@@ -40,7 +40,7 @@ final class GenericGFPoly {
    * constant polynomial (that is, it is not the monomial "0")
    */
   GenericGFPoly(GenericGF field, int[] coefficients) {
-    if (coefficients == null || coefficients.length == 0) {
+    if (coefficients.length == 0) {
       throw new IllegalArgumentException();
     }
     this.field = field;

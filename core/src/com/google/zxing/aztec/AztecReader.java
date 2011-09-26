@@ -32,6 +32,7 @@ import com.google.zxing.aztec.decoder.Decoder;
 import com.google.zxing.aztec.detector.Detector;
 
 import java.util.Hashtable;
+import java.util.Vector;
 
 /**
  * This implementation can detect and decode Aztec codes in an image.
@@ -58,11 +59,11 @@ public final class AztecReader implements Reader {
     AztecDetectorResult detectorResult = new Detector(image.getBlackMatrix()).detect();
     ResultPoint[] points = detectorResult.getPoints();
 
-    if (hints != null && detectorResult.getPoints() != null) {
+    if (hints != null) {
       ResultPointCallback rpcb = (ResultPointCallback) hints.get(DecodeHintType.NEED_RESULT_POINT_CALLBACK);
       if (rpcb != null) {
-        for (int i = 0; i < detectorResult.getPoints().length; i++) {
-          rpcb.foundPossibleResultPoint(detectorResult.getPoints()[i]);
+        for (int i = 0; i < points.length; i++) {
+          rpcb.foundPossibleResultPoint(points[i]);
         }
       }
     }
@@ -71,11 +72,13 @@ public final class AztecReader implements Reader {
 
     Result result = new Result(decoderResult.getText(), decoderResult.getRawBytes(), points, BarcodeFormat.AZTEC);
     
-    if (decoderResult.getByteSegments() != null) {
-      result.putMetadata(ResultMetadataType.BYTE_SEGMENTS, decoderResult.getByteSegments());
+    Vector byteSegments = decoderResult.getByteSegments();
+    if (byteSegments != null) {
+      result.putMetadata(ResultMetadataType.BYTE_SEGMENTS, byteSegments);
     }
-    if (decoderResult.getECLevel() != null) {
-      result.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, decoderResult.getECLevel().toString());
+    String ecLevel = decoderResult.getECLevel();
+    if (ecLevel != null) {
+      result.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, ecLevel);
     }
     
     return result;

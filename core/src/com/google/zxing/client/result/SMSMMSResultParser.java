@@ -43,9 +43,6 @@ final class SMSMMSResultParser extends ResultParser {
 
   public static SMSParsedResult parse(Result result) {
     String rawText = result.getText();
-    if (rawText == null) {
-      return null;
-    }
     if (!(rawText.startsWith("sms:") || rawText.startsWith("SMS:") ||
           rawText.startsWith("mms:") || rawText.startsWith("MMS:"))) {
       return null;

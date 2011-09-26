@@ -55,10 +55,10 @@ public final class Detector {
   public AztecDetectorResult detect() throws NotFoundException {
 
     // 1. Get the center of the aztec matrix
-     Point pCenter = getMatrixCenter();
+    Point pCenter = getMatrixCenter();
 
      // 2. Get the corners of the center bull's eye
-     Point[] bullEyeCornerPoints = getBullEyeCornerPoints(pCenter);
+    Point[] bullEyeCornerPoints = getBullEyeCornerPoints(pCenter);
 
      // 3. Get the size of the matrix from the bull's eye
     extractParameters(bullEyeCornerPoints);
@@ -514,19 +514,19 @@ public final class Detector {
 
     int c = getColor(p1, p2);
 
-    if (c!=cInit || c == 0) {
+    if (c != cInit) {
       return false;
     }
 
     c = getColor(p2, p3);
 
-    if (c!=cInit || c == 0) {
+    if (c != cInit) {
       return false;
     }
 
     c = getColor(p3, p4);
 
-    return c == cInit && c != 0;
+    return c == cInit;
 
   }
 

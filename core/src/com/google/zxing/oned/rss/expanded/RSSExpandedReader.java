@@ -156,7 +156,7 @@ public final class RSSExpandedReader extends AbstractRSSReader{
       );
   }
 
-  private boolean checkChecksum(){
+  private boolean checkChecksum() {
     ExpandedPair firstPair = (ExpandedPair)this.pairs.elementAt(0);
     DataCharacter checkCharacter = firstPair.getLeftChar();
     DataCharacter firstCharacter = firstPair.getRightChar();
@@ -168,8 +168,9 @@ public final class RSSExpandedReader extends AbstractRSSReader{
       ExpandedPair currentPair = (ExpandedPair)this.pairs.elementAt(i);
       checksum += currentPair.getLeftChar().getChecksumPortion();
       S++;
-      if(currentPair.getRightChar() != null){
-        checksum += currentPair.getRightChar().getChecksumPortion();
+      DataCharacter currentRightChar = currentPair.getRightChar();
+      if (currentRightChar != null) {
+        checksum += currentRightChar.getChecksumPortion();
         S++;
       }
     }

@@ -36,7 +36,7 @@ import java.util.Vector;
 public final class MultiFormatReader implements Reader {
 
   private Hashtable hints;
-  private Vector readers;
+  private final Vector readers = new Vector();
 
   /**
    * This version of decode honors the intent of Reader.decode(BinaryBitmap) in that it
@@ -75,7 +75,7 @@ public final class MultiFormatReader implements Reader {
    */
   public Result decodeWithState(BinaryBitmap image) throws NotFoundException {
     // Make sure to set up the default state so we don't crash
-    if (readers == null) {
+    if (readers.isEmpty()) {
       setHints(null);
     }
     return decodeInternal(image);
@@ -93,7 +93,7 @@ public final class MultiFormatReader implements Reader {
 
     boolean tryHarder = hints != null && hints.containsKey(DecodeHintType.TRY_HARDER);
     Vector formats = hints == null ? null : (Vector) hints.get(DecodeHintType.POSSIBLE_FORMATS);
-    readers = new Vector();
+    readers.clear();
     if (formats != null) {
       boolean addOneDReader =
           formats.contains(BarcodeFormat.UPC_A) ||

@@ -45,9 +45,6 @@ public final class Result {
                 ResultPoint[] resultPoints,
                 BarcodeFormat format,
                 long timestamp) {
-    if (text == null && rawBytes == null) {
-      throw new IllegalArgumentException("Text and bytes are null");
-    }
     this.text = text;
     this.rawBytes = rawBytes;
     this.resultPoints = resultPoints;
@@ -57,7 +54,7 @@ public final class Result {
   }
 
   /**
-   * @return raw text encoded by the barcode, if applicable, otherwise <code>null</code>
+   * @return raw text encoded by the barcode
    */
   public String getText() {
     return text;
@@ -118,12 +115,13 @@ public final class Result {
   }
 
   public void addResultPoints(ResultPoint[] newPoints) {
-    if (resultPoints == null) {
+    ResultPoint[] oldResultPoints = resultPoints;
+    if (oldResultPoints == null) {
       resultPoints = newPoints;
     } else if (newPoints != null && newPoints.length > 0) {
-      ResultPoint[] allPoints = new ResultPoint[resultPoints.length + newPoints.length];
-      System.arraycopy(resultPoints, 0, allPoints, 0, resultPoints.length);
-      System.arraycopy(newPoints, 0, allPoints, resultPoints.length, newPoints.length);
+      ResultPoint[] allPoints = new ResultPoint[oldResultPoints.length + newPoints.length];
+      System.arraycopy(oldResultPoints, 0, allPoints, 0, oldResultPoints.length);
+      System.arraycopy(newPoints, 0, allPoints, oldResultPoints.length, newPoints.length);
       resultPoints = allPoints;
     }
   }
@@ -133,11 +131,7 @@ public final class Result {
   }
 
   public String toString() {
-    if (text == null) {
-      return "[" + rawBytes.length + " bytes]";
-    } else {
-      return text;
-    }
+    return text;
   }
 
 }

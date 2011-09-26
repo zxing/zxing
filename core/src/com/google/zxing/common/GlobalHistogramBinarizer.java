@@ -38,7 +38,7 @@ public class GlobalHistogramBinarizer extends Binarizer {
   private static final int LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
 
   private byte[] luminances = null;
-  private int[] buckets = null;
+  private final int[] buckets = new int[LUMINANCE_BUCKETS];
 
   public GlobalHistogramBinarizer(LuminanceSource source) {
     super(source);
@@ -125,12 +125,8 @@ public class GlobalHistogramBinarizer extends Binarizer {
     if (luminances == null || luminances.length < luminanceSize) {
       luminances = new byte[luminanceSize];
     }
-    if (buckets == null) {
-      buckets = new int[LUMINANCE_BUCKETS];
-    } else {
-      for (int x = 0; x < LUMINANCE_BUCKETS; x++) {
-        buckets[x] = 0;
-      }
+    for (int x = 0; x < LUMINANCE_BUCKETS; x++) {
+      buckets[x] = 0;
     }
   }
 

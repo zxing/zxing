@@ -37,9 +37,6 @@ public class ISBNResultParser extends ResultParser {
       return null;
     }
     String rawText = result.getText();
-    if (rawText == null) {
-      return null;
-    }
     int length = rawText.length();
     if (length != 13) {
       return null;

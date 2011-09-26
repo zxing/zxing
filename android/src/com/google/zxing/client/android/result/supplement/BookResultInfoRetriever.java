@@ -66,7 +66,7 @@ public final class BookResultInfoRetriever extends SupplementalInfoRetriever {
 
     String title;
     String pages;
-    Collection<String> authors;
+    Collection<String> authors = null;
 
     try {
 
@@ -84,9 +84,9 @@ public final class BookResultInfoRetriever extends SupplementalInfoRetriever {
       title = volumeInfo.optString("title");
       pages = volumeInfo.optString("pageCount");
 
-      authors = new ArrayList<String>();
       JSONArray authorsArray = volumeInfo.optJSONArray("authors");
       if (authorsArray != null && !authorsArray.isNull(0)) {
+        authors = new ArrayList<String>();
         for (int i = 0; i < authorsArray.length(); i++) {
           authors.add(authorsArray.getString(i));
         }

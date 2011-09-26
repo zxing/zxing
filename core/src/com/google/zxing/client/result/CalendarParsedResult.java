@@ -48,10 +48,6 @@ public final class CalendarParsedResult extends ParsedResult {
                               double latitude,
                               double longitude) {
     super(ParsedResultType.CALENDAR);
-    // Start is required, end is not
-    if (start == null) {
-      throw new IllegalArgumentException();
-    }
     validateDate(start);
     if (end == null) {
       end = start;

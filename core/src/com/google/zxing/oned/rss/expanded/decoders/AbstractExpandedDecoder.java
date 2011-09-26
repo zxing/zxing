@@ -48,7 +48,8 @@ public abstract class AbstractExpandedDecoder {
   public static AbstractExpandedDecoder createDecoder(BitArray information){
     if (information.get(1)) {
       return new AI01AndOtherAIs(information);
-    } else if (!information.get(2)) {
+    }
+    if (!information.get(2)) {
       return new AnyAIDecoder(information);
     }
 

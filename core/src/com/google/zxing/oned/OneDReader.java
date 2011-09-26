@@ -67,9 +67,11 @@ public abstract class OneDReader implements Reader {
         result.putMetadata(ResultMetadataType.ORIENTATION, new Integer(orientation));
         // Update result points
         ResultPoint[] points = result.getResultPoints();
-        int height = rotatedImage.getHeight();
-        for (int i = 0; i < points.length; i++) {
-          points[i] = new ResultPoint(height - points[i].getY() - 1, points[i].getX());
+        if (points != null) {
+          int height = rotatedImage.getHeight();
+          for (int i = 0; i < points.length; i++) {
+            points[i] = new ResultPoint(height - points[i].getY() - 1, points[i].getX());
+          }
         }
         return result;
       } else {
@@ -159,8 +161,10 @@ public abstract class OneDReader implements Reader {
             result.putMetadata(ResultMetadataType.ORIENTATION, new Integer(180));
             // And remember to flip the result points horizontally.
             ResultPoint[] points = result.getResultPoints();
-            points[0] = new ResultPoint(width - points[0].getX() - 1, points[0].getY());
-            points[1] = new ResultPoint(width - points[1].getX() - 1, points[1].getY());
+            if (points != null) {
+              points[0] = new ResultPoint(width - points[0].getX() - 1, points[0].getY());
+              points[1] = new ResultPoint(width - points[1].getX() - 1, points[1].getY());
+            }
           }
           return result;
         } catch (ReaderException re) {

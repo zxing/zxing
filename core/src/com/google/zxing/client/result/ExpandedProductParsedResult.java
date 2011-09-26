@@ -189,6 +189,6 @@ public class ExpandedProductParsedResult extends ParsedResult {
   }
 
   public String getDisplayResult() {
-    return productID;
+    return String.valueOf(productID);
   }
 }

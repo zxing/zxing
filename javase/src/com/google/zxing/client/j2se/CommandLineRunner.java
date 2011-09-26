@@ -68,7 +68,7 @@ public final class CommandLineRunner {
       } else if (arg.startsWith("--crop")) {
         int[] crop = new int[4];
         String[] tokens = arg.substring(7).split(",");
-        for (int i = 0; i < config.getCrop().length; i++) {
+        for (int i = 0; i < crop.length; i++) {
           crop[i] = Integer.parseInt(tokens[i]);
         }
         config.setCrop(crop);

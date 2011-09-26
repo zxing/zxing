@@ -35,15 +35,20 @@ final class WifiResultParser extends ResultParser {
   public static WifiParsedResult parse(Result result) {
     String rawText = result.getText();
 
-    if (rawText == null || !rawText.startsWith("WIFI:")) {
+    if (!rawText.startsWith("WIFI:")) {
       return null;
     }
-
     // Don't remove leading or trailing whitespace
     boolean trim = false;
     String ssid = matchSinglePrefixedField("S:", rawText, ';', trim);
+    if (ssid == null || ssid.length() == 0) {
+      return null;
+    }
     String pass = matchSinglePrefixedField("P:", rawText, ';', trim);
     String type = matchSinglePrefixedField("T:", rawText, ';', trim);
+    if (type == null) {
+      type = "nopass";
+    }
 
     return new WifiParsedResult(type, ssid, pass);
   }

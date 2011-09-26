@@ -34,32 +34,23 @@ public final class WifiConfigManager {
   }
 
   public static void configure(WifiManager wifiManager, String ssid, String password, String networkTypeString) {
-    // If the SSID is empty, throw an error and return
-    if (ssid == null || ssid.length() == 0) {
-      throw new IllegalArgumentException();
-    }
-    NetworkType networkType;
-    if (password == null || password.length() == 0 || networkTypeString == null) {
-      networkType = NetworkType.NO_PASSWORD;
-    } else {
-      networkType = NetworkType.forIntentValue(networkTypeString);
-    }
-
     // Start WiFi, otherwise nothing will work
     if (!wifiManager.isWifiEnabled()) {
       wifiManager.setWifiEnabled(true);
     }
 
-    switch (networkType) {
-      case WEP:
+    NetworkType networkType = NetworkType.forIntentValue(networkTypeString);
+    if (networkType == NetworkType.NO_PASSWORD) {
+      changeNetworkUnEncrypted(wifiManager, ssid);
+    } else {
+      if (password == null || password.length() == 0) {
+        throw new IllegalArgumentException();
+      }
+      if (networkType == NetworkType.WEP) {
         changeNetworkWEP(wifiManager, ssid, password);
-        break;
-      case WPA:
+      } else if (networkType == NetworkType.WPA) {
         changeNetworkWPA(wifiManager, ssid, password);
-        break;
-      case NO_PASSWORD:
-        changeNetworkUnEncrypted(wifiManager, ssid);
-        break;
+      }
     }
   }
 

@@ -33,7 +33,7 @@ final class AddressBookAUResultParser extends ResultParser {
   public static AddressBookParsedResult parse(Result result) {
     String rawText = result.getText();
     // MEMORY is mandatory; seems like a decent indicator, as does end-of-record separator CR/LF
-    if (rawText == null || rawText.indexOf("MEMORY") < 0 || rawText.indexOf("\r\n") < 0) {
+    if (rawText.indexOf("MEMORY") < 0 || rawText.indexOf("\r\n") < 0) {
       return null;
     }
 
@@ -63,8 +63,10 @@ final class AddressBookAUResultParser extends ResultParser {
                                        null);
   }
 
-  private static String[] matchMultipleValuePrefix(String prefix, int max, String rawText,
-      boolean trim) {
+  private static String[] matchMultipleValuePrefix(String prefix,
+                                                   int max,
+                                                   String rawText,
+                                                   boolean trim) {
     Vector values = null;
     for (int i = 1; i <= max; i++) {
       String value = matchSinglePrefixedField(prefix + i + ':', rawText, '\r', trim);

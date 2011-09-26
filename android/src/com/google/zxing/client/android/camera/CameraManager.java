@@ -73,7 +73,6 @@ public final class CameraManager {
   private final boolean useOneShotPreviewCallback;
   private int requestedFramingRectWidth;
   private int requestedFramingRectHeight;
-
   /**
    * Preview frames are delivered here, which we pass on to the registered handler. Make sure to
    * clear the handler so it will only receive one message.
@@ -125,23 +124,25 @@ public final class CameraManager {
    * @throws IOException Indicates the camera driver failed to open.
    */
   public void openDriver(SurfaceHolder holder) throws IOException {
-    if (camera == null) {
-      camera = Camera.open();
-      if (camera == null) {
+    Camera theCamera = camera;
+    if (theCamera == null) {
+      theCamera = Camera.open();
+      if (theCamera == null) {
         throw new IOException();
       }
+      camera = theCamera;
     }
-    camera.setPreviewDisplay(holder);
+    theCamera.setPreviewDisplay(holder);
     if (!initialized) {
       initialized = true;
-      configManager.initFromCameraParameters(camera);
+      configManager.initFromCameraParameters(theCamera);
       if (requestedFramingRectWidth > 0 && requestedFramingRectHeight > 0) {
         setManualFramingRect(requestedFramingRectWidth, requestedFramingRectHeight);
         requestedFramingRectWidth = 0;
         requestedFramingRectHeight = 0;
       }
     }
-    configManager.setDesiredCameraParameters(camera);
+    configManager.setDesiredCameraParameters(theCamera);
 
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
     reverseImage = prefs.getBoolean(PreferencesActivity.KEY_REVERSE_IMAGE, false);
@@ -170,8 +171,9 @@ public final class CameraManager {
    * Asks the camera hardware to begin drawing preview frames to the screen.
    */
   public void startPreview() {
-    if (camera != null && !previewing) {
-      camera.startPreview();
+    Camera theCamera = camera;
+    if (theCamera != null && !previewing) {
+      theCamera.startPreview();
       previewing = true;
     }
   }
@@ -200,12 +202,13 @@ public final class CameraManager {
    * @param message The what field of the message to be sent.
    */
   public void requestPreviewFrame(Handler handler, int message) {
-    if (camera != null && previewing) {
+    Camera theCamera = camera;
+    if (theCamera != null && previewing) {
       previewCallback.setHandler(handler, message);
       if (useOneShotPreviewCallback) {
-        camera.setOneShotPreviewCallback(previewCallback);
+        theCamera.setOneShotPreviewCallback(previewCallback);
       } else {
-        camera.setPreviewCallback(previewCallback);
+        theCamera.setPreviewCallback(previewCallback);
       }
     }
   }
@@ -313,6 +316,9 @@ public final class CameraManager {
    */
   public PlanarYUVLuminanceSource buildLuminanceSource(byte[] data, int width, int height) {
     Rect rect = getFramingRectInPreview();
+    if (rect == null) {
+      throw new IllegalStateException();
+    }
     int previewFormat = configManager.getPreviewFormat();
     String previewFormatString = configManager.getPreviewFormatString();
 

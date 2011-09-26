@@ -173,10 +173,12 @@ final class UPCEANExtensionSupport {
         if ("90000".equals(raw)) {
           // No suggested retail price
           return null;
-        } else if ("99991".equals(raw)) {
+        }
+        if ("99991".equals(raw)) {
           // Complementary
           return "0.00";
-        } else if ("99990".equals(raw)) {
+        }
+        if ("99990".equals(raw)) {
           return "Used";
         }
         // Otherwise... unknown currency?

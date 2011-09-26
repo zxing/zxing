@@ -79,15 +79,21 @@ public final class EncodeActivity extends Activity {
 
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
-    if (qrCodeEncoder == null) { // Odd
+    QRCodeEncoder encoder = qrCodeEncoder;
+    if (encoder == null) { // Odd
       Log.w(TAG, "No existing barcode to send?");
       return true;
     }
 
-    String contents = qrCodeEncoder.getContents();
+    String contents = encoder.getContents();
+    if (contents == null) {
+      Log.w(TAG, "No existing barcode to send?");
+      return true;
+    }
+
     Bitmap bitmap;
     try {
-      bitmap = qrCodeEncoder.encodeAsBitmap();
+      bitmap = encoder.encodeAsBitmap();
     } catch (WriterException we) {
       Log.w(TAG, we);
       return true;
@@ -121,9 +127,8 @@ public final class EncodeActivity extends Activity {
     }
 
     Intent intent = new Intent(Intent.ACTION_SEND, Uri.parse("mailto:"));
-    intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name) + " - " +
-        qrCodeEncoder.getTitle());
-    intent.putExtra(Intent.EXTRA_TEXT, qrCodeEncoder.getContents());
+    intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name) + " - " + encoder.getTitle());
+    intent.putExtra(Intent.EXTRA_TEXT, encoder.getContents());
     intent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + barcodeFile.getAbsolutePath()));
     intent.setType("image/png");
     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
@@ -157,6 +162,9 @@ public final class EncodeActivity extends Activity {
     smallerDimension = smallerDimension * 7 / 8;
 
     Intent intent = getIntent();
+    if (intent == null) {
+      return;
+    }
     try {
       qrCodeEncoder = new QRCodeEncoder(this, intent, smallerDimension);
       setTitle(getString(R.string.app_name) + " - " + qrCodeEncoder.getTitle());

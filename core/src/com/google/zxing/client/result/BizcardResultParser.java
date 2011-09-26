@@ -35,7 +35,7 @@ final class BizcardResultParser extends AbstractDoCoMoResultParser {
 
   public static AddressBookParsedResult parse(Result result) {
     String rawText = result.getText();
-    if (rawText == null || !rawText.startsWith("BIZCARD:")) {
+    if (!rawText.startsWith("BIZCARD:")) {
       return null;
     }
     String firstName = matchSingleDoCoMoPrefixedField("N:", rawText, true);

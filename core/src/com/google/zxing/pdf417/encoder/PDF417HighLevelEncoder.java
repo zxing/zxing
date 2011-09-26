@@ -171,14 +171,17 @@ final class PDF417HighLevelEncoder {
         if (b == 0) {
           b = 1;
         }
-        if (b == 1 && encodingMode == TEXT_COMPACTION) {
+        // I don't see how this ever takes value TEXT_COMPACTION?
+        //if (b == 1 && encodingMode == TEXT_COMPACTION) {
+        if (b == 1) {
           //Switch for one byte (instead of latch)
           encodeBinary(bytes, p, 1, TEXT_COMPACTION, sb);
         } else {
           //Mode latch performed by encodeBinary()
           encodeBinary(bytes, p, b, encodingMode, sb);
-          encodingMode = BYTE_COMPACTION;
-          textSubMode = SUBMODE_ALPHA; //Reset after latch
+          // ... so this is redundant?
+          //encodingMode = BYTE_COMPACTION;
+          //textSubMode = SUBMODE_ALPHA; //Reset after latch
         }
         p += b;
       }

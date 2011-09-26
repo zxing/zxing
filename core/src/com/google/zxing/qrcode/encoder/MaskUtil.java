@@ -20,7 +20,7 @@ package com.google.zxing.qrcode.encoder;
  * @author satorux@google.com (Satoru Takabayashi) - creator
  * @author dswitkin@google.com (Daniel Switkin) - ported from C++
  */
-public final class MaskUtil {
+final class MaskUtil {
 
   private MaskUtil() {
     // do nothing
@@ -28,13 +28,13 @@ public final class MaskUtil {
 
   // Apply mask penalty rule 1 and return the penalty. Find repetitive cells with the same color and
   // give penalty to them. Example: 00000 or 11111.
-  public static int applyMaskPenaltyRule1(ByteMatrix matrix) {
+  static int applyMaskPenaltyRule1(ByteMatrix matrix) {
     return applyMaskPenaltyRule1Internal(matrix, true) + applyMaskPenaltyRule1Internal(matrix, false);
   }
 
   // Apply mask penalty rule 2 and return the penalty. Find 2x2 blocks with the same color and give
   // penalty to them.
-  public static int applyMaskPenaltyRule2(ByteMatrix matrix) {
+  static int applyMaskPenaltyRule2(ByteMatrix matrix) {
     int penalty = 0;
     byte[][] array = matrix.getArray();
     int width = matrix.getWidth();
@@ -53,7 +53,7 @@ public final class MaskUtil {
   // Apply mask penalty rule 3 and return the penalty. Find consecutive cells of 00001011101 or
   // 10111010000, and give penalty to them.  If we find patterns like 000010111010000, we give
   // penalties twice (i.e. 40 * 2).
-  public static int applyMaskPenaltyRule3(ByteMatrix matrix) {
+  static int applyMaskPenaltyRule3(ByteMatrix matrix) {
     int penalty = 0;
     byte[][] array = matrix.getArray();
     int width = matrix.getWidth();
@@ -115,7 +115,7 @@ public final class MaskUtil {
   // -  55% =>  10
   // -  55% =>  20
   // - 100% => 100
-  public static int applyMaskPenaltyRule4(ByteMatrix matrix) {
+  static int applyMaskPenaltyRule4(ByteMatrix matrix) {
     int numDarkCells = 0;
     byte[][] array = matrix.getArray();
     int width = matrix.getWidth();
@@ -134,7 +134,7 @@ public final class MaskUtil {
 
   // Return the mask bit for "getMaskPattern" at "x" and "y". See 8.8 of JISX0510:2004 for mask
   // pattern conditions.
-  public static boolean getDataMaskBit(int maskPattern, int x, int y) {
+  static boolean getDataMaskBit(int maskPattern, int x, int y) {
     if (!QRCode.isValidMaskPattern(maskPattern)) {
       throw new IllegalArgumentException("Invalid mask pattern");
     }

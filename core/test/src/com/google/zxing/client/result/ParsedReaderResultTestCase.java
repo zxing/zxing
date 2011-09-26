@@ -316,7 +316,7 @@ public final class ParsedReaderResultTestCase extends Assert {
    */
 
   private static void doTestResult(String contents, String goldenResult, ParsedResultType type) {
-    doTestResult(contents, goldenResult, type, null);
+    doTestResult(contents, goldenResult, type, BarcodeFormat.QR_CODE); // QR code is arbitrary
   }
 
   private static void doTestResult(String contents, String goldenResult, ParsedResultType type,

@@ -46,8 +46,9 @@ final class PreviewCallback implements Camera.PreviewCallback {
     if (!useOneShotPreviewCallback) {
       camera.setPreviewCallback(null);
     }
-    if (previewHandler != null) {
-      Message message = previewHandler.obtainMessage(previewMessage, cameraResolution.x,
+    Handler thePreviewHandler = previewHandler;
+    if (thePreviewHandler != null) {
+      Message message = thePreviewHandler.obtainMessage(previewMessage, cameraResolution.x,
           cameraResolution.y, data);
       message.sendToTarget();
       previewHandler = null;

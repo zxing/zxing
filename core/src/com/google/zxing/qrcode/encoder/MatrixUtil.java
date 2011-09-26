@@ -24,7 +24,7 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
  * @author satorux@google.com (Satoru Takabayashi) - creator
  * @author dswitkin@google.com (Daniel Switkin) - ported from C++
  */
-public final class MatrixUtil {
+final class MatrixUtil {
 
   private MatrixUtil() {
     // do nothing
@@ -130,14 +130,17 @@ public final class MatrixUtil {
   //
   // JAVAPORT: We shouldn't need to do this at all. The code should be rewritten to begin encoding
   // with the ByteMatrix initialized all to zero.
-  public static void clearMatrix(ByteMatrix matrix) {
+  static void clearMatrix(ByteMatrix matrix) {
     matrix.clear((byte) -1);
   }
 
   // Build 2D matrix of QR Code from "dataBits" with "ecLevel", "version" and "getMaskPattern". On
   // success, store the result in "matrix" and return true.
-  public static void buildMatrix(BitArray dataBits, ErrorCorrectionLevel ecLevel, int version,
-      int maskPattern, ByteMatrix matrix) throws WriterException {
+  static void buildMatrix(BitArray dataBits,
+                          ErrorCorrectionLevel ecLevel,
+                          int version,
+                          int maskPattern,
+                          ByteMatrix matrix) throws WriterException {
     clearMatrix(matrix);
     embedBasicPatterns(version, matrix);
     // Type information appear with any version.
@@ -154,7 +157,7 @@ public final class MatrixUtil {
   // - Timing patterns
   // - Dark dot at the left bottom corner
   // - Position adjustment patterns, if need be
-  public static void embedBasicPatterns(int version, ByteMatrix matrix) throws WriterException {
+  static void embedBasicPatterns(int version, ByteMatrix matrix) throws WriterException {
     // Let's get started with embedding big squares at corners.
     embedPositionDetectionPatternsAndSeparators(matrix);
     // Then, embed the dark dot at the left bottom corner.
@@ -167,7 +170,7 @@ public final class MatrixUtil {
   }
 
   // Embed type information. On success, modify the matrix.
-  public static void embedTypeInfo(ErrorCorrectionLevel ecLevel, int maskPattern, ByteMatrix matrix)
+  static void embedTypeInfo(ErrorCorrectionLevel ecLevel, int maskPattern, ByteMatrix matrix)
       throws WriterException {
     BitArray typeInfoBits = new BitArray();
     makeTypeInfoBits(ecLevel, maskPattern, typeInfoBits);
@@ -198,7 +201,7 @@ public final class MatrixUtil {
 
   // Embed version information if need be. On success, modify the matrix and return true.
   // See 8.10 of JISX0510:2004 (p.47) for how to embed version information.
-  public static void maybeEmbedVersionInfo(int version, ByteMatrix matrix) throws WriterException {
+  static void maybeEmbedVersionInfo(int version, ByteMatrix matrix) throws WriterException {
     if (version < 7) {  // Version info is necessary if version >= 7.
       return;  // Don't need version info.
     }
@@ -222,7 +225,7 @@ public final class MatrixUtil {
   // Embed "dataBits" using "getMaskPattern". On success, modify the matrix and return true.
   // For debugging purposes, it skips masking process if "getMaskPattern" is -1.
   // See 8.7 of JISX0510:2004 (p.38) for how to embed data bits.
-  public static void embedDataBits(BitArray dataBits, int maskPattern, ByteMatrix matrix)
+  static void embedDataBits(BitArray dataBits, int maskPattern, ByteMatrix matrix)
       throws WriterException {
     int bitIndex = 0;
     int direction = -1;
@@ -276,7 +279,7 @@ public final class MatrixUtil {
   // - findMSBSet(0) => 0
   // - findMSBSet(1) => 1
   // - findMSBSet(255) => 8
-  public static int findMSBSet(int value) {
+  static int findMSBSet(int value) {
     int numDigits = 0;
     while (value != 0) {
       value >>>= 1;
@@ -310,7 +313,7 @@ public final class MatrixUtil {
   //
   // Since all coefficients in the polynomials are 1 or 0, we can do the calculation by bit
   // operations. We don't care if cofficients are positive or negative.
-  public static int calculateBCHCode(int value, int poly) {
+  static int calculateBCHCode(int value, int poly) {
     // If poly is "1 1111 0010 0101" (version info poly), msbSetInPoly is 13. We'll subtract 1
     // from 13 to make it 12.
     int msbSetInPoly = findMSBSet(poly);
@@ -326,7 +329,7 @@ public final class MatrixUtil {
   // Make bit vector of type information. On success, store the result in "bits" and return true.
   // Encode error correction level and mask pattern. See 8.9 of
   // JISX0510:2004 (p.45) for details.
-  public static void makeTypeInfoBits(ErrorCorrectionLevel ecLevel, int maskPattern, BitArray bits)
+  static void makeTypeInfoBits(ErrorCorrectionLevel ecLevel, int maskPattern, BitArray bits)
       throws WriterException {
     if (!QRCode.isValidMaskPattern(maskPattern)) {
       throw new WriterException("Invalid mask pattern");
@@ -348,7 +351,7 @@ public final class MatrixUtil {
 
   // Make bit vector of version information. On success, store the result in "bits" and return true.
   // See 8.10 of JISX0510:2004 (p.45) for details.
-  public static void makeVersionInfoBits(int version, BitArray bits) throws WriterException {
+  static void makeVersionInfoBits(int version, BitArray bits) throws WriterException {
     bits.appendBits(version, 6);
     int bchCode = calculateBCHCode(version, VERSION_INFO_POLY);
     bits.appendBits(bchCode, 12);

@@ -45,9 +45,10 @@ public final class ReedSolomonEncoderQRCodeTestCase extends AbstractReedSolomonT
     ReedSolomonEncoder encoder = new ReedSolomonEncoder(GenericGF.QR_CODE_FIELD_256);
     ReedSolomonDecoder decoder = new ReedSolomonDecoder(GenericGF.QR_CODE_FIELD_256);
     for (int i = 0; i < 100; i++) {
-      int size = random.nextInt(1000);
+      int size = 1 + random.nextInt(1000);
       int[] toEncode = new int[size];
       int ecBytes = 1 + random.nextInt(2 * (1 + size / 8));
+      ecBytes = Math.min(ecBytes, size - 1);
       int dataBytes = size - ecBytes;
       for (int j = 0; j < dataBytes; j++) {
         toEncode[j] = random.nextInt(256);

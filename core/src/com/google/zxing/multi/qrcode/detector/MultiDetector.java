@@ -46,7 +46,7 @@ public final class MultiDetector extends Detector {
     MultiFinderPatternFinder finder = new MultiFinderPatternFinder(image);
     FinderPatternInfo[] info = finder.findMulti(hints);
 
-    if (info == null || info.length == 0) {
+    if (info.length == 0) {
       throw NotFoundException.getNotFoundInstance();
     }
 

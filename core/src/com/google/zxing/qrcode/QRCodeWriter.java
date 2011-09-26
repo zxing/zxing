@@ -46,7 +46,7 @@ public final class QRCodeWriter implements Writer {
   public BitMatrix encode(String contents, BarcodeFormat format, int width, int height,
       Hashtable hints) throws WriterException {
 
-    if (contents == null || contents.length() == 0) {
+    if (contents.length() == 0) {
       throw new IllegalArgumentException("Found empty contents");
     }
 
@@ -76,6 +76,9 @@ public final class QRCodeWriter implements Writer {
   // 0 == black, 255 == white (i.e. an 8 bit greyscale bitmap).
   private static BitMatrix renderResult(QRCode code, int width, int height) {
     ByteMatrix input = code.getMatrix();
+    if (input == null) {
+      throw new IllegalStateException();
+    }
     int inputWidth = input.getWidth();
     int inputHeight = input.getHeight();
     int qrWidth = inputWidth + (QUIET_ZONE_SIZE << 1);

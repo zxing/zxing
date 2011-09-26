@@ -27,6 +27,8 @@ import android.util.AttributeSet;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.Locale;
+
 /**
  * A list item which displays the page number and snippet of this search result.
  *
@@ -56,8 +58,8 @@ public final class SearchBookContentsListItem extends LinearLayout {
     String snippet = result.getSnippet();
     if (snippet.length() > 0) {
       if (result.getValidSnippet()) {
-        String lowerQuery = SearchBookContentsResult.getQuery().toLowerCase();
-        String lowerSnippet = snippet.toLowerCase();
+        String lowerQuery = SearchBookContentsResult.getQuery().toLowerCase(Locale.getDefault());
+        String lowerSnippet = snippet.toLowerCase(Locale.getDefault());
         Spannable styledSnippet = new SpannableString(snippet);
         StyleSpan boldSpan = new StyleSpan(Typeface.BOLD);
         int queryLength = lowerQuery.length();
