@@ -114,6 +114,8 @@ public final class ViewfinderView extends View {
 
       List<ResultPoint> currentPossible = possibleResultPoints;
       List<ResultPoint> currentLast = lastPossibleResultPoints;
+      int frameLeft = frame.left;
+      int frameTop = frame.top;
       if (currentPossible.isEmpty()) {
         lastPossibleResultPoints = null;
       } else {
@@ -123,8 +125,8 @@ public final class ViewfinderView extends View {
         paint.setColor(resultPointColor);
         synchronized (currentPossible) {
           for (ResultPoint point : currentPossible) {
-            canvas.drawCircle(frame.left + (int) (point.getX() * scaleX),
-                              frame.top + (int) (point.getY() * scaleY),
+            canvas.drawCircle(frameLeft + (int) (point.getX() * scaleX),
+                              frameTop + (int) (point.getY() * scaleY),
                               6.0f, paint);
           }
         }
@@ -134,8 +136,8 @@ public final class ViewfinderView extends View {
         paint.setColor(resultPointColor);
         synchronized (currentLast) {
           for (ResultPoint point : currentLast) {
-            canvas.drawCircle(frame.left + (int) (point.getX() * scaleX),
-                              frame.top + (int) (point.getY() * scaleY),
+            canvas.drawCircle(frameLeft + (int) (point.getX() * scaleX),
+                              frameTop + (int) (point.getY() * scaleY),
                               3.0f, paint);
           }
         }

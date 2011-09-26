@@ -62,12 +62,18 @@ public final class VersionTestCase extends Assert {
   @Test
   public void testDecodeVersionInformation() {
     // Spot check
-    assertEquals(7, Version.decodeVersionInformation(0x07C94).getVersionNumber());
-    assertEquals(12, Version.decodeVersionInformation(0x0C762).getVersionNumber());
-    assertEquals(17, Version.decodeVersionInformation(0x1145D).getVersionNumber());
-    assertEquals(22, Version.decodeVersionInformation(0x168C9).getVersionNumber());
-    assertEquals(27, Version.decodeVersionInformation(0x1B08E).getVersionNumber());
-    assertEquals(32, Version.decodeVersionInformation(0x209D5).getVersionNumber());    
+    doTestVersion(7, 0x07C94);
+    doTestVersion(12, 0x0C762);
+    doTestVersion(17, 0x1145D);
+    doTestVersion(22, 0x168C9);
+    doTestVersion(27, 0x1B08E);
+    doTestVersion(32, 0x209D5);
+  }
+
+  private static void doTestVersion(int expectedVersion, int mask) {
+    Version version = Version.decodeVersionInformation(mask);
+    assertNotNull(version);
+    assertEquals(expectedVersion, version.getVersionNumber());
   }
 
 }

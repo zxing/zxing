@@ -33,9 +33,6 @@ final class SMTPResultParser {
 
   public static EmailAddressParsedResult parse(Result result) {
     String rawText = result.getText();
-    if (rawText == null) {
-      return null;
-    }
     if (!(rawText.startsWith("smtp:") || rawText.startsWith("SMTP:"))) {
       return null;
     }

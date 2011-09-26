@@ -60,6 +60,7 @@ public final class ExpandedProductParsedResultTestCase extends Assert {
 
     Result result = new Result(text, null, null, BarcodeFormat.RSS_EXPANDED);
     ExpandedProductParsedResult o = ExpandedProductResultParser.parse(result);
+    assertNotNull(o);
     assertEquals(productID, o.getProductID());
     assertEquals(sscc, o.getSscc());
     assertEquals(lotNumber, o.getLotNumber());

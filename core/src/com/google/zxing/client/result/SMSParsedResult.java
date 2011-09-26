@@ -53,7 +53,7 @@ public final class SMSParsedResult extends ParsedResult {
         result.append(',');
       }
       result.append(numbers[i]);
-      if (vias[i] != null) {
+      if (vias != null && vias[i] != null) {
         result.append(";via=");
         result.append(vias[i]);
       }

@@ -87,9 +87,6 @@ public final class Mode {
    *         count of characters that will follow encoded in this Mode
    */
   public int getCharacterCountBits(Version version) {
-    if (characterCountBitsForVersions == null) {
-      throw new IllegalArgumentException("Character count doesn't apply to this mode");
-    }
     int number = version.getVersionNumber();
     int offset;
     if (number <= 9) {

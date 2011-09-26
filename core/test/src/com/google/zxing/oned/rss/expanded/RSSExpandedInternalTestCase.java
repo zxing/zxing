@@ -68,17 +68,23 @@ public final class RSSExpandedInternalTestCase extends Assert {
 
     ExpandedPair pair1 = rssExpandedReader.retrieveNextPair(row, previousPairs, rowNumber);
     previousPairs.add(pair1);
-    assertEquals(0, pair1.getFinderPattern().getValue());
+    FinderPattern finderPattern = pair1.getFinderPattern();
+    assertNotNull(finderPattern);
+    assertEquals(0, finderPattern.getValue());
     assertFalse(pair1.mayBeLast());
 
     ExpandedPair pair2 = rssExpandedReader.retrieveNextPair(row, previousPairs, rowNumber);
     previousPairs.add(pair2);
-    assertEquals(1, pair2.getFinderPattern().getValue());
+    finderPattern = pair2.getFinderPattern();
+    assertNotNull(finderPattern);
+    assertEquals(1, finderPattern.getValue());
     assertFalse(pair2.mayBeLast());
 
     ExpandedPair pair3 = rssExpandedReader.retrieveNextPair(row, previousPairs, rowNumber);
     previousPairs.add(pair3);
-    assertEquals(1, pair3.getFinderPattern().getValue());
+    finderPattern = pair3.getFinderPattern();
+    assertNotNull(finderPattern);
+    assertEquals(1, finderPattern.getValue());
     assertTrue(pair3.mayBeLast());
 
     try{
@@ -109,12 +115,16 @@ public final class RSSExpandedInternalTestCase extends Assert {
 
     ExpandedPair pair1 = rssExpandedReader.retrieveNextPair(row, previousPairs, rowNumber);
     previousPairs.add(pair1);
-    assertEquals(0, pair1.getFinderPattern().getValue());
+    FinderPattern finderPattern = pair1.getFinderPattern();
+    assertNotNull(finderPattern);
+    assertEquals(0, finderPattern.getValue());
     assertFalse(pair1.mayBeLast());
 
     ExpandedPair pair2 = rssExpandedReader.retrieveNextPair(row, previousPairs, rowNumber);
     previousPairs.add(pair2);
-    assertEquals(0, pair2.getFinderPattern().getValue());
+    finderPattern = pair2.getFinderPattern();
+    assertNotNull(finderPattern);
+    assertEquals(0, finderPattern.getValue());
     assertTrue(pair2.mayBeLast());
   }
 

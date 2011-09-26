@@ -31,12 +31,10 @@ final class URIResultParser extends ResultParser {
   public static URIParsedResult parse(Result result) {
     String rawText = result.getText();
     // We specifically handle the odd "URL" scheme here for simplicity
-    if (rawText != null && rawText.startsWith("URL:")) {
+    if (rawText.startsWith("URL:")) {
       rawText = rawText.substring(4);
     }
-    if (rawText != null) {
-      rawText = rawText.trim();
-    }
+    rawText = rawText.trim();
     if (!isBasicallyValidURI(rawText)) {
       return null;
     }

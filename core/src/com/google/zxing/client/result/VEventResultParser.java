@@ -43,6 +43,9 @@ final class VEventResultParser extends ResultParser {
 
     String summary = matchSingleVCardPrefixedField("SUMMARY", rawText, true);
     String start = matchSingleVCardPrefixedField("DTSTART", rawText, true);
+    if (start == null) {
+      return null;
+    }
     String end = matchSingleVCardPrefixedField("DTEND", rawText, true);
     String location = matchSingleVCardPrefixedField("LOCATION", rawText, true);
     String description = matchSingleVCardPrefixedField("DESCRIPTION", rawText, true);
@@ -69,9 +72,9 @@ final class VEventResultParser extends ResultParser {
     }
   }
 
-  static String matchSingleVCardPrefixedField(String prefix,
-                                              String rawText,
-                                              boolean trim) {
+  private static String matchSingleVCardPrefixedField(String prefix,
+                                                      String rawText,
+                                                      boolean trim) {
     Vector values = VCardResultParser.matchSingleVCardPrefixedField(prefix, rawText, trim);
     return values == null || values.isEmpty() ? null : (String) values.elementAt(0);
   }

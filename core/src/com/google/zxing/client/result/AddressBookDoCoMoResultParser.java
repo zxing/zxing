@@ -37,7 +37,7 @@ final class AddressBookDoCoMoResultParser extends AbstractDoCoMoResultParser {
 
   public static AddressBookParsedResult parse(Result result) {
     String rawText = result.getText();
-    if (rawText == null || !rawText.startsWith("MECARD:")) {
+    if (!rawText.startsWith("MECARD:")) {
       return null;
     }
     String[] rawName = matchDoCoMoPrefixedField("N:", rawText, true);

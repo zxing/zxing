@@ -98,7 +98,7 @@ public final class RSSUtils {
     return val;
   }
 
-  static int combins(int n, int r) {
+  private static int combins(int n, int r) {
     int maxDenom;
     int minDenom;
     if (n - r > r) {

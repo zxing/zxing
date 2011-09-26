@@ -114,9 +114,10 @@ final class BitMatrixParser {
       }
     }
 
-    parsedVersion = Version.decodeVersionInformation(versionBits);
-    if (parsedVersion != null && parsedVersion.getDimensionForVersion() == dimension) {
-      return parsedVersion;
+    Version theParsedVersion = Version.decodeVersionInformation(versionBits);
+    if (theParsedVersion != null && theParsedVersion.getDimensionForVersion() == dimension) {
+      parsedVersion = theParsedVersion;
+      return theParsedVersion;
     }
 
     // Hmm, failed. Try bottom left: 6 wide by 3 tall
@@ -127,9 +128,10 @@ final class BitMatrixParser {
       }
     }
 
-    parsedVersion = Version.decodeVersionInformation(versionBits);
-    if (parsedVersion != null && parsedVersion.getDimensionForVersion() == dimension) {
-      return parsedVersion;
+    theParsedVersion = Version.decodeVersionInformation(versionBits);
+    if (theParsedVersion != null && theParsedVersion.getDimensionForVersion() == dimension) {
+      parsedVersion = theParsedVersion;
+      return theParsedVersion;
     }
     throw FormatException.getFormatInstance();
   }

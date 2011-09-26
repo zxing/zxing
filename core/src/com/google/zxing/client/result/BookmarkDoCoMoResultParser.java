@@ -28,7 +28,7 @@ final class BookmarkDoCoMoResultParser extends AbstractDoCoMoResultParser {
 
   public static URIParsedResult parse(Result result) {
     String rawText = result.getText();
-    if (rawText == null || !rawText.startsWith("MEBKM:")) {
+    if (!rawText.startsWith("MEBKM:")) {
       return null;
     }
     String title = matchSingleDoCoMoPrefixedField("TITLE:", rawText, true);

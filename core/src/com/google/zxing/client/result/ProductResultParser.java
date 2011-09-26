@@ -37,12 +37,7 @@ final class ProductResultParser extends ResultParser {
           BarcodeFormat.EAN_8.equals(format) || BarcodeFormat.EAN_13.equals(format))) {
       return null;
     }
-    // Really neither of these should happen:
     String rawText = result.getText();
-    if (rawText == null) {
-      return null;
-    }
-
     int length = rawText.length();
     for (int x = 0; x < length; x++) {
       char c = rawText.charAt(x);

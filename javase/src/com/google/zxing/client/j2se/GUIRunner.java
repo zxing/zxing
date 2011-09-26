@@ -102,7 +102,7 @@ public final class GUIRunner extends JFrame {
     } catch (ReaderException re) {
       return re.toString();
     }
-    return result.getText();
+    return String.valueOf(result.getText());
   }
 
 }

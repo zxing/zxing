@@ -33,9 +33,6 @@ public final class DecoderResult {
   private final String ecLevel;
 
   public DecoderResult(byte[] rawBytes, String text, Vector byteSegments, String ecLevel) {
-    if (rawBytes == null && text == null) {
-      throw new IllegalArgumentException();
-    }
     this.rawBytes = rawBytes;
     this.text = text;
     this.byteSegments = byteSegments;

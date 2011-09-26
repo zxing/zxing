@@ -23,6 +23,9 @@ enum NetworkType {
   NO_PASSWORD;
 
   static NetworkType forIntentValue(String networkTypeString) {
+    if (networkTypeString == null) {
+      return NO_PASSWORD;
+    }
     if ("WPA".equals(networkTypeString)) {
       return WPA;
     }

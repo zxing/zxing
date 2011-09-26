@@ -77,8 +77,8 @@ final class BarcodeRow {
    */
   byte[] getScaledRow(int scale) {
     byte[] output = new byte[row.length * scale];
-    for (int ii = 0; ii < row.length * scale; ii++) {
-      output[ii] = row[ii / scale];
+    for (int i = 0; i < output.length; i++) {
+      output[i] = row[i / scale];
     }
     return output;
   }

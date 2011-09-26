@@ -26,10 +26,9 @@ import java.util.Hashtable;
  */
 public final class CharacterSetECI extends ECI {
 
-  private static Hashtable VALUE_TO_ECI;
-  private static Hashtable NAME_TO_ECI;
-
-  private static void initialize() {
+  private static final Hashtable VALUE_TO_ECI;
+  private static final Hashtable NAME_TO_ECI;
+  static {
     VALUE_TO_ECI = new Hashtable(29);
     NAME_TO_ECI = new Hashtable(29);
     // TODO figure out if these values are even right!
@@ -86,9 +85,6 @@ public final class CharacterSetECI extends ECI {
    * @throws IllegalArgumentException if ECI value is invalid
    */
   public static CharacterSetECI getCharacterSetECIByValue(int value) {
-    if (VALUE_TO_ECI == null) {
-      initialize();
-    }
     if (value < 0 || value >= 900) {
       throw new IllegalArgumentException("Bad ECI value: " + value);
     }
@@ -101,9 +97,6 @@ public final class CharacterSetECI extends ECI {
    *   but unsupported
    */
   public static CharacterSetECI getCharacterSetECIByName(String name) {
-    if (NAME_TO_ECI == null) {
-      initialize();
-    }
     return (CharacterSetECI) NAME_TO_ECI.get(name);
   }
 

@@ -40,6 +40,7 @@ public final class FormatInformationTestCase extends Assert {
     // Normal case
     FormatInformation expected =
         FormatInformation.decodeFormatInformation(MASKED_TEST_FORMAT_INFO, MASKED_TEST_FORMAT_INFO);
+    assertNotNull(expected);
     assertEquals((byte) 0x07, expected.getDataMask());
     assertSame(ErrorCorrectionLevel.Q, expected.getErrorCorrectionLevel());
     // where the code forgot the mask!

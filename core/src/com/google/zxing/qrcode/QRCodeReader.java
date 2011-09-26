@@ -33,6 +33,7 @@ import com.google.zxing.qrcode.decoder.Decoder;
 import com.google.zxing.qrcode.detector.Detector;
 
 import java.util.Hashtable;
+import java.util.Vector;
 
 /**
  * This implementation can detect and decode QR Codes in an image.
@@ -76,11 +77,13 @@ public class QRCodeReader implements Reader {
     }
 
     Result result = new Result(decoderResult.getText(), decoderResult.getRawBytes(), points, BarcodeFormat.QR_CODE);
-    if (decoderResult.getByteSegments() != null) {
-      result.putMetadata(ResultMetadataType.BYTE_SEGMENTS, decoderResult.getByteSegments());
+    Vector byteSegments = decoderResult.getByteSegments();
+    if (byteSegments != null) {
+      result.putMetadata(ResultMetadataType.BYTE_SEGMENTS, byteSegments);
     }
-    if (decoderResult.getECLevel() != null) {
-      result.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, decoderResult.getECLevel().toString());
+    String ecLevel = decoderResult.getECLevel();
+    if (ecLevel != null) {
+      result.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, ecLevel);
     }
     return result;
   }

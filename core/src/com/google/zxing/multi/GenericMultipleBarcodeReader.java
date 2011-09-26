@@ -144,6 +144,9 @@ public final class GenericMultipleBarcodeReader implements MultipleBarcodeReader
 
   private static Result translateResultPoints(Result result, int xOffset, int yOffset) {
     ResultPoint[] oldResultPoints = result.getResultPoints();
+    if (oldResultPoints == null) {
+      return result;
+    }
     ResultPoint[] newResultPoints = new ResultPoint[oldResultPoints.length];
     for (int i = 0; i < oldResultPoints.length; i++) {
       ResultPoint oldPoint = oldResultPoints[i];

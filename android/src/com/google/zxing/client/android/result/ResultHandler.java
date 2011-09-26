@@ -43,10 +43,7 @@ import android.view.View;
 import java.text.DateFormat;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.TimeZone;
+import java.util.*;
 
 /**
  * A base class for the Android-specific barcode handlers. These allow the app to polymorphically
@@ -354,7 +351,7 @@ public abstract class ResultHandler {
     }
     for (int i = 0; i < types.length; i++) {
       String type = types[i];
-      if (typeString.startsWith(type) || typeString.startsWith(type.toUpperCase())) {
+      if (typeString.startsWith(type) || typeString.startsWith(type.toUpperCase(Locale.ENGLISH))) {
         return values[i];
       }
     }
@@ -545,6 +542,9 @@ public abstract class ResultHandler {
   }
 
   String fillInCustomSearchURL(String text) {
+    if (customProductSearch == null) {
+      return text; // ?
+    }
     String url = customProductSearch.replace("%s", text);
     if (rawResult != null) {
       url = url.replace("%f", rawResult.getBarcodeFormat().toString());

@@ -59,9 +59,6 @@ public final class WifiResultHandler extends ResultHandler {
     WifiParsedResult wifiResult = (WifiParsedResult) getResult();
     if (index == 0) {
       String ssid = wifiResult.getSsid();
-      if (ssid == null || ssid.length() == 0) {
-        return;
-      }
       String password = wifiResult.getPassword();
       String networkType = wifiResult.getNetworkEncryption();
       WifiManager wifiManager = (WifiManager) getActivity().getSystemService(Context.WIFI_SERVICE);

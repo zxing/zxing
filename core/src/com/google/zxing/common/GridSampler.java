@@ -45,9 +45,6 @@ public abstract class GridSampler {
    * @param newGridSampler The platform-specific object to install.
    */
   public static void setGridSampler(GridSampler newGridSampler) {
-    if (newGridSampler == null) {
-      throw new IllegalArgumentException();
-    }
     gridSampler = newGridSampler;
   }
 

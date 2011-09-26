@@ -35,9 +35,6 @@ final class SMSTOMMSTOResultParser extends ResultParser {
 
   public static SMSParsedResult parse(Result result) {
     String rawText = result.getText();
-    if (rawText == null) {
-      return null;
-    }
     if (!(rawText.startsWith("smsto:") || rawText.startsWith("SMSTO:") ||
           rawText.startsWith("mmsto:") || rawText.startsWith("MMSTO:"))) {
       return null;

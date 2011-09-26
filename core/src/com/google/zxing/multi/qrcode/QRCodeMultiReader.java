@@ -55,11 +55,13 @@ public final class QRCodeMultiReader extends QRCodeReader implements MultipleBar
         ResultPoint[] points = detectorResult[i].getPoints();
         Result result = new Result(decoderResult.getText(), decoderResult.getRawBytes(), points,
             BarcodeFormat.QR_CODE);
-        if (decoderResult.getByteSegments() != null) {
-          result.putMetadata(ResultMetadataType.BYTE_SEGMENTS, decoderResult.getByteSegments());
+        Vector byteSegments = decoderResult.getByteSegments();
+        if (byteSegments != null) {
+          result.putMetadata(ResultMetadataType.BYTE_SEGMENTS, byteSegments);
         }
-        if (decoderResult.getECLevel() != null) {
-          result.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, decoderResult.getECLevel().toString());
+        String ecLevel = decoderResult.getECLevel();
+        if (ecLevel != null) {
+          result.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, ecLevel);
         }
         results.addElement(result);
       } catch (ReaderException re) {

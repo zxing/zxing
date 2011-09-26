@@ -30,9 +30,6 @@ final class EmailAddressResultParser extends ResultParser {
 
   public static EmailAddressParsedResult parse(Result result) {
     String rawText = result.getText();
-    if (rawText == null) {
-      return null;
-    }
     String emailAddress;
     if (rawText.startsWith("mailto:") || rawText.startsWith("MAILTO:")) {
       // If it starts with mailto:, assume it is definitely trying to be an email address

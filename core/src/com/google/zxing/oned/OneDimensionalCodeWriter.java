@@ -53,7 +53,7 @@ public abstract class OneDimensionalCodeWriter implements Writer {
                           int width,
                           int height,
                           Hashtable hints) throws WriterException {
-    if (contents == null || contents.length() == 0) {
+    if (contents.length() == 0) {
       throw new IllegalArgumentException("Found empty contents");
     }
 

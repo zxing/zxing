@@ -67,10 +67,6 @@ final class QRCodeEncoder {
 
   QRCodeEncoder(Activity activity, Intent intent, int dimension) {
     this.activity = activity;
-    if (intent == null) {
-      throw new IllegalArgumentException("No valid data to encode.");
-    }
-
     String action = intent.getAction();
     if (action.equals(Intents.Encode.ACTION)) {
       if (!encodeContentsFromZXingIntent(intent)) {
@@ -138,16 +134,17 @@ final class QRCodeEncoder {
 
   private boolean encodeContentsFromShareIntentPlainText(Intent intent) {
     // Notice: Google Maps shares both URL and details in one text, bummer!
-    contents = intent.getStringExtra(Intent.EXTRA_TEXT);
+    String theContents = intent.getStringExtra(Intent.EXTRA_TEXT);
     // We only support non-empty and non-blank texts.
     // Trim text to avoid URL breaking.
-    if (contents == null) {
+    if (theContents == null) {
       return false;
     }
-    contents = contents.trim();
-    if (contents.length() == 0) {
+    theContents = theContents.trim();
+    if (theContents.length() == 0) {
       return false;
     }
+    contents = theContents;
     // We only do QR code.
     format = BarcodeFormat.QR_CODE;
     if (intent.hasExtra(Intent.EXTRA_SUBJECT)) {
@@ -420,8 +417,8 @@ final class QRCodeEncoder {
     if (s == null) {
       return null;
     }
-    s = s.trim();
-    return s.length() == 0 ? null : s;
+    String result = s.trim();
+    return result.length() == 0 ? null : result;
   }
 
   private static String escapeMECARD(String input) {

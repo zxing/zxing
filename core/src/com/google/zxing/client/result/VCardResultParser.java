@@ -38,7 +38,7 @@ final class VCardResultParser extends ResultParser {
     // to throw out everything else we parsed just because this was omitted. In fact, Eclair
     // is doing just that, and we can't parse its contacts without this leniency.
     String rawText = result.getText();
-    if (rawText == null || !rawText.startsWith("BEGIN:VCARD")) {
+    if (!rawText.startsWith("BEGIN:VCARD")) {
       return null;
     }
     Vector names = matchVCardPrefixedField("FN", rawText, true);

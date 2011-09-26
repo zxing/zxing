@@ -32,7 +32,7 @@ final class EmailDoCoMoResultParser extends AbstractDoCoMoResultParser {
 
   public static EmailAddressParsedResult parse(Result result) {
     String rawText = result.getText();
-    if (rawText == null || !rawText.startsWith("MATMSG:")) {
+    if (!rawText.startsWith("MATMSG:")) {
       return null;
     }
     String[] rawTo = matchDoCoMoPrefixedField("TO:", rawText, true);

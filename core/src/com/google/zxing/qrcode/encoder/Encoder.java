@@ -124,12 +124,10 @@ public final class Encoder {
 
     // Step 7: Choose the mask pattern and set to "qrCode".
     ByteMatrix matrix = new ByteMatrix(qrCode.getMatrixWidth(), qrCode.getMatrixWidth());
-    qrCode.setMaskPattern(chooseMaskPattern(finalBits, qrCode.getECLevel(), qrCode.getVersion(),
-        matrix));
+    qrCode.setMaskPattern(chooseMaskPattern(finalBits, qrCode.getECLevel(), qrCode.getVersion(), matrix));
 
     // Step 8.  Build the matrix and set it to "qrCode".
-    MatrixUtil.buildMatrix(finalBits, qrCode.getECLevel(), qrCode.getVersion(),
-        qrCode.getMaskPattern(), matrix);
+    MatrixUtil.buildMatrix(finalBits, qrCode.getECLevel(), qrCode.getVersion(), qrCode.getMaskPattern(), matrix);
     qrCode.setMatrix(matrix);
     // Step 9.  Make sure we have a valid QR Code.
     if (!qrCode.isValid()) {
@@ -156,7 +154,7 @@ public final class Encoder {
    * Choose the best mode by examining the content. Note that 'encoding' is used as a hint;
    * if it is Shift_JIS, and the input is only double-byte Kanji, then we return {@link Mode#KANJI}.
    */
-  public static Mode chooseMode(String content, String encoding) {
+  private static Mode chooseMode(String content, String encoding) {
     if ("Shift_JIS".equals(encoding)) {
       // Choose Kanji mode if all input are double-byte characters
       return isOnlyDoubleByteKanji(content) ? Mode.KANJI : Mode.BYTE;
@@ -175,7 +173,8 @@ public final class Encoder {
     }
     if (hasAlphanumeric) {
       return Mode.ALPHANUMERIC;
-    } else if (hasNumeric) {
+    }
+    if (hasNumeric) {
       return Mode.NUMERIC;
     }
     return Mode.BYTE;

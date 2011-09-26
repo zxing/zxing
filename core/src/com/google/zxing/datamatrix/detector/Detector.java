@@ -239,16 +239,17 @@ public final class Detector {
 		
 		ResultPoint c2 = new ResultPoint(topRight.getX()+corr*cos, topRight.getY()+corr*sin);
 
-		if (!isValid(c1)){
-			if (isValid(c2)){
-				return c2;
-			}
-			return null;
-		} else if (!isValid(c2)){
-			return c1;
-		}
-		
-		int l1 = Math.abs(dimensionTop - transitionsBetween(topLeft, c1).getTransitions()) + 
+    if (!isValid(c1)) {
+      if (isValid(c2)) {
+        return c2;
+      }
+      return null;
+    }
+    if (!isValid(c2)){
+      return c1;
+    }
+
+    int l1 = Math.abs(dimensionTop - transitionsBetween(topLeft, c1).getTransitions()) +
 					Math.abs(dimensionRight - transitionsBetween(bottomRight, c1).getTransitions());
 		int l2 = Math.abs(dimensionTop - transitionsBetween(topLeft, c2).getTransitions()) + 
 		Math.abs(dimensionRight - transitionsBetween(bottomRight, c2).getTransitions());
@@ -284,16 +285,17 @@ public final class Detector {
 		
 		ResultPoint c2 = new ResultPoint(topRight.getX() + corr * cos, topRight.getY() + corr * sin);
 
-		if (!isValid(c1)) {
-			if (isValid(c2)) {
-				return c2;
-			}
-			return null;
-		} else if (!isValid(c2)) {
-			return c1;
-		}
-		
-		int l1 = Math.abs(transitionsBetween(topLeft, c1).getTransitions() -
+    if (!isValid(c1)) {
+      if (isValid(c2)) {
+        return c2;
+      }
+      return null;
+    }
+    if (!isValid(c2)) {
+      return c1;
+    }
+
+    int l1 = Math.abs(transitionsBetween(topLeft, c1).getTransitions() -
                       transitionsBetween(bottomRight, c1).getTransitions());
 		int l2 = Math.abs(transitionsBetween(topLeft, c2).getTransitions() -
                       transitionsBetween(bottomRight, c2).getTransitions());
@@ -313,7 +315,7 @@ public final class Detector {
     return (int) (d + 0.5f);
   }
 
-// L2 distance
+  // L2 distance
   private static int distance(ResultPoint a, ResultPoint b) {
     return round((float) Math.sqrt((a.getX() - b.getX())
         * (a.getX() - b.getX()) + (a.getY() - b.getY())
@@ -415,10 +417,10 @@ public final class Detector {
       this.to = to;
       this.transitions = transitions;
     }
-    public ResultPoint getFrom() {
+    ResultPoint getFrom() {
       return from;
     }
-    public ResultPoint getTo() {
+    ResultPoint getTo() {
       return to;
     }
     public int getTransitions() {

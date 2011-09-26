@@ -73,7 +73,7 @@ public final class Decoder {
     // Construct a parser to read the data codewords and error-correction level
     BitMatrixParser parser = new BitMatrixParser(bits);
     int[] codewords = parser.readCodewords();
-    if (codewords == null || codewords.length == 0) {
+    if (codewords.length == 0) {
       throw FormatException.getFormatInstance();
     }
 
@@ -126,7 +126,7 @@ public final class Decoder {
    * @throws ChecksumException if error correction fails
    */
   private static int correctErrors(int[] codewords, int[] erasures, int numECCodewords) throws FormatException {
-    if ((erasures != null && erasures.length > numECCodewords / 2 + MAX_ERRORS) ||
+    if (erasures.length > numECCodewords / 2 + MAX_ERRORS ||
         numECCodewords < 0 || numECCodewords > MAX_EC_CODEWORDS) {
       // Too many errors or EC Codewords is corrupted
       throw FormatException.getFormatInstance();
@@ -134,15 +134,13 @@ public final class Decoder {
     // Try to correct the errors
     // TODO enable error correction
     int result = 0; // rsDecoder.correctErrors(codewords, numECCodewords);
-    if (erasures != null) {
-      int numErasures = erasures.length;
-      if (result > 0) {
-        numErasures -= result;
-      }
-      if (numErasures > MAX_ERRORS) {
-        // Still too many errors
-        throw FormatException.getFormatInstance();
-      }
+    int numErasures = erasures.length;
+    if (result > 0) {
+      numErasures -= result;
+    }
+    if (numErasures > MAX_ERRORS) {
+      // Still too many errors
+      throw FormatException.getFormatInstance();
     }
     return result;
   }
