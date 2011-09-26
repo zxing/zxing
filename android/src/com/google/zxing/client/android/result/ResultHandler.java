@@ -75,7 +75,7 @@ public abstract class ResultHandler {
   private static final String GOOGLE_SHOPPER_PACKAGE = "com.google.android.apps.shopper";
   private static final String GOOGLE_SHOPPER_ACTIVITY = GOOGLE_SHOPPER_PACKAGE +
       ".results.SearchResultsActivity";
-  private static final String MARKET_URI_PREFIX = "market://search?q=pname:";
+  private static final String MARKET_URI_PREFIX = "market://details?id=";
   private static final String MARKET_REFERRER_SUFFIX =
       "&referrer=utm_source%3Dbarcodescanner%26utm_medium%3Dapps%26utm_campaign%3Dscan";
 
