@@ -59,7 +59,7 @@ final class BookmarkAdapter extends BaseAdapter {
 
   public View getView(int index, View view, ViewGroup viewGroup) {
     LinearLayout layout;
-    if (view == null || !(view instanceof LinearLayout)) {
+    if (!(view instanceof LinearLayout)) {
       LayoutInflater factory = LayoutInflater.from(context);
       layout = (LinearLayout) factory.inflate(R.layout.bookmark_picker_list_item, viewGroup, false);
     } else {

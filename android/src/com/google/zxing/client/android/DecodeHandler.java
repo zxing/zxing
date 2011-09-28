@@ -83,18 +83,23 @@ final class DecodeHandler extends Handler {
       multiFormatReader.reset();
     }
 
+    Handler handler = activity.getHandler();
     if (rawResult != null) {
       // Don't log the barcode contents for security.
       long end = System.currentTimeMillis();
       Log.d(TAG, "Found barcode in " + (end - start) + " ms");
-      Message message = Message.obtain(activity.getHandler(), R.id.decode_succeeded, rawResult);
-      Bundle bundle = new Bundle();
-      bundle.putParcelable(DecodeThread.BARCODE_BITMAP, source.renderCroppedGreyscaleBitmap());
-      message.setData(bundle);
-      message.sendToTarget();
+      if (handler != null) {
+        Message message = Message.obtain(handler, R.id.decode_succeeded, rawResult);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(DecodeThread.BARCODE_BITMAP, source.renderCroppedGreyscaleBitmap());
+        message.setData(bundle);
+        message.sendToTarget();
+      }
     } else {
-      Message message = Message.obtain(activity.getHandler(), R.id.decode_failed);
-      message.sendToTarget();
+      if (handler != null) {
+        Message message = Message.obtain(handler, R.id.decode_failed);
+        message.sendToTarget();
+      }
     }
   }
 

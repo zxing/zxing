@@ -125,7 +125,7 @@ final class DecodedBitStreamParser {
         throw FormatException.getFormatInstance();
       } else if (oneByte <= 128) {  // ASCII data (ASCII value + 1)
         oneByte = upperShift ? oneByte + 128 : oneByte;
-        upperShift = false;
+        //upperShift = false;
         result.append((char) (oneByte - 1));
         return ASCII_ENCODE;
       } else if (oneByte == 129) {  // Pad
