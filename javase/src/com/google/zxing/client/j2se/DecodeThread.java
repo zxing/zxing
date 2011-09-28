@@ -91,8 +91,7 @@ final class DecodeThread extends Thread {
         }
       } else {
         try {
-          Result result = decode(new URI(input), config.getHints());
-          if (result != null) {
+          if (decode(new URI(input), config.getHints()) != null) {
             successful++;
           }
         } catch (Exception e) {
