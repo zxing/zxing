@@ -18,6 +18,7 @@ package com.google.zxing.client.android.wifi;
 
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
+import android.util.Log;
 
 import java.util.List;
 import java.util.regex.Pattern;
@@ -28,30 +29,60 @@ import java.util.regex.Pattern;
  */
 public final class WifiConfigManager {
 
+  private static final String TAG = WifiConfigManager.class.getSimpleName();
+
   private static final Pattern HEX_DIGITS = Pattern.compile("[0-9A-Fa-f]+");
 
   private WifiConfigManager() {
   }
 
-  public static void configure(WifiManager wifiManager, String ssid, String password, String networkTypeString) {
-    // Start WiFi, otherwise nothing will work
-    if (!wifiManager.isWifiEnabled()) {
-      wifiManager.setWifiEnabled(true);
-    }
-
-    NetworkType networkType = NetworkType.forIntentValue(networkTypeString);
-    if (networkType == NetworkType.NO_PASSWORD) {
-      changeNetworkUnEncrypted(wifiManager, ssid);
-    } else {
-      if (password == null || password.length() == 0) {
-        throw new IllegalArgumentException();
+  public static void configure(final WifiManager wifiManager, 
+                               final String ssid, 
+                               final String password, 
+                               final String networkTypeString) {
+    Runnable configureRunnable = new Runnable() {
+      public void run() {
+        // Start WiFi, otherwise nothing will work
+        if (!wifiManager.isWifiEnabled()) {
+          Log.i(TAG, "Enabling wi-fi...");
+          if (wifiManager.setWifiEnabled(true)) {
+            Log.i(TAG, "Wi-fi enabled");
+          } else {
+            Log.w(TAG, "Wi-fi could not be enabled!");
+            return;
+          }
+          // This happens very quickly, but need to wait for it to enable. A little busy wait?
+          int count = 0;
+          while (!wifiManager.isWifiEnabled()) {
+            if (count >= 10) {
+              Log.i(TAG, "Took too long to enable wi-fi, quitting");
+              return;
+            }
+            Log.i(TAG, "Still waiting for wi-fi to enable...");
+            try {
+              Thread.sleep(1000L);
+            } catch (InterruptedException ie) {
+              // continue
+            }
+            count++;
+          }
+        }
+        NetworkType networkType = NetworkType.forIntentValue(networkTypeString);
+        if (networkType == NetworkType.NO_PASSWORD) {
+          changeNetworkUnEncrypted(wifiManager, ssid);
+        } else {
+          if (password == null || password.length() == 0) {
+            throw new IllegalArgumentException();
+          }
+          if (networkType == NetworkType.WEP) {
+            changeNetworkWEP(wifiManager, ssid, password);
+          } else if (networkType == NetworkType.WPA) {
+            changeNetworkWPA(wifiManager, ssid, password);
+          }
+        }
       }
-      if (networkType == NetworkType.WEP) {
-        changeNetworkWEP(wifiManager, ssid, password);
-      } else if (networkType == NetworkType.WPA) {
-        changeNetworkWPA(wifiManager, ssid, password);
-      }
-    }
+    };
+    new Thread(configureRunnable).start();
   }
 
   /**
@@ -62,6 +93,7 @@ public final class WifiConfigManager {
   private static void updateNetwork(WifiManager wifiManager, WifiConfiguration config) {
     Integer foundNetworkID = findNetworkInExistingConfig(wifiManager, config.SSID);
     if (foundNetworkID != null) {
+      Log.i(TAG, "Removing old configuration for network " + config.SSID);
       wifiManager.removeNetwork(foundNetworkID);
       wifiManager.saveConfiguration();
     }
@@ -69,8 +101,12 @@ public final class WifiConfigManager {
     if (networkId >= 0) {
       // Try to disable the current network and start a new one.
       if (wifiManager.enableNetwork(networkId, true)) {
-        wifiManager.reassociate();
+        Log.i(TAG, "Associating to network " + config.SSID);
+      } else {
+        Log.w(TAG, "Failed to enable network " + config.SSID);
       }
+    } else {
+      Log.w(TAG, "Unable to add network " + config.SSID);
     }
   }
 
