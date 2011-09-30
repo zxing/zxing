@@ -167,13 +167,9 @@ versionName is 2.31, 2.4, or 3.0. -->
                    android:permissionGroup="com.google.zxing.client.android.SHARE_PERMISSIONS"/>
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
                    android:permissionGroup="com.google.zxing.client.android.SHARE_PERMISSIONS"/>
-  <uses-permission android:name="android.permission.WRITE_SETTINGS"
-                   android:permissionGroup="com.google.zxing.client.android.WIFI_PERMISSIONS"/>
   <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"
                    android:permissionGroup="com.google.zxing.client.android.WIFI_PERMISSIONS"/>
   <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"
-                   android:permissionGroup="com.google.zxing.client.android.WIFI_PERMISSIONS"/>
-  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"
                    android:permissionGroup="com.google.zxing.client.android.WIFI_PERMISSIONS"/>
   <uses-permission android:name="android.permission.WAKE_LOCK"
                    android:permissionGroup="com.google.zxing.client.android.WIFI_PERMISSIONS"/>
