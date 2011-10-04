@@ -163,6 +163,7 @@ public final class CommandLineRunner {
       vector.addElement(BarcodeFormat.AZTEC);
       vector.addElement(BarcodeFormat.PDF_417);
       vector.addElement(BarcodeFormat.CODABAR);
+      vector.addElement(BarcodeFormat.MAXICODE);
     }
     hints.put(DecodeHintType.POSSIBLE_FORMATS, vector);
     if (config.isTryHarder()) {

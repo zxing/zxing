@@ -56,6 +56,9 @@ public final class BarcodeFormat {
   /** ITF (Interleaved Two of Five) 1D format. */
   public static final BarcodeFormat ITF = new BarcodeFormat("ITF");
 
+  /** MaxiCode 2D barcode format. */
+  public static final BarcodeFormat MAXICODE = new BarcodeFormat("MAXICODE");
+
   /** PDF417 format. */
   public static final BarcodeFormat PDF_417 = new BarcodeFormat("PDF_417");
 

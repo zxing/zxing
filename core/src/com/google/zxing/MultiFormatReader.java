@@ -21,6 +21,7 @@ import com.google.zxing.datamatrix.DataMatrixReader;
 import com.google.zxing.oned.MultiFormatOneDReader;
 import com.google.zxing.pdf417.PDF417Reader;
 import com.google.zxing.qrcode.QRCodeReader;
+import com.google.zxing.maxicode.MaxiCodeReader;
 
 import java.util.Hashtable;
 import java.util.Vector;
@@ -122,7 +123,10 @@ public final class MultiFormatReader implements Reader {
       }
       if (formats.contains(BarcodeFormat.PDF_417)) {
          readers.addElement(new PDF417Reader());
-       }
+      }
+      if (formats.contains(BarcodeFormat.MAXICODE)) {
+         readers.addElement(new MaxiCodeReader());
+      }
       // At end in "try harder" mode
       if (addOneDReader && tryHarder) {
         readers.addElement(new MultiFormatOneDReader(hints));
@@ -137,6 +141,7 @@ public final class MultiFormatReader implements Reader {
       readers.addElement(new DataMatrixReader());
       readers.addElement(new AztecReader());
       readers.addElement(new PDF417Reader());
+      readers.addElement(new MaxiCodeReader());
 
       if (tryHarder) {
         readers.addElement(new MultiFormatOneDReader(hints));
