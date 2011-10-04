@@ -145,6 +145,59 @@ public final class BitMatrix {
   }
 
   /**
+   * This is useful in detecting the enclosing rectangle of a 'pure' barcode.
+   *
+   * @return {left,top,width,height} enclosing rectangle of all 1 bits, or null if it is all white
+   */
+  public int[] getEnclosingRectangle() {
+    int left = width;
+    int top = height;
+    int right = -1;
+    int bottom = -1;
+    
+    for (int y = 0; y < height; y++) {
+      for (int x32 = 0; x32 < rowSize; x32++) {
+        int theBits = bits[y * rowSize + x32];
+        if (theBits != 0) {
+          if (y < top) {
+            top = y;
+          }
+          if (y > bottom) {
+            bottom = y;
+          }
+          if (x32 * 32 < left) {
+            int bit = 0;
+            while ((theBits << (31 - bit)) == 0) {
+              bit++;
+            }
+            if ((x32 * 32 + bit) < left) {
+              left = x32 * 32 + bit;
+            }
+          }
+          if (x32 * 32 + 31 > right) {
+            int bit = 31;
+            while ((theBits >>> bit) == 0) {
+              bit--;
+            }
+            if ((x32 * 32 + bit) > right) {
+              right = x32 * 32 + bit;
+            }
+          }
+        }
+      }
+    }
+    
+    int width = right - left;
+    int height = bottom - top;
+    
+    if (width < 0 || height < 0) {
+      return null;
+    }
+    
+    return new int[] {left, top, width, height};
+  }
+
+  /**
    * This is useful in detecting a corner of a 'pure' barcode.
    *
    * @return {x,y} coordinate of top-left-most 1 bit, or null if it is all white
