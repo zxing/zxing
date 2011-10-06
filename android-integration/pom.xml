@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright (C) 2010 ZXing authors
+ Copyright (C) 2011 ZXing authors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -17,12 +17,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.google.zxing</groupId>
-  <artifactId>javase</artifactId>
+  <artifactId>android-integration</artifactId>
   <packaging>jar</packaging>
-  <name>ZXing Java SE extensions</name>
+  <name>ZXing Android Integration lib</name>
   <version>1.6-SNAPSHOT</version>
-  <description>Java SE-specific extensions to core ZXing library</description>
-  <url>http://code.google.com/p/zxing</url>
+  <description>Integration helper classes for Android applications wanting to create/scan bar codes</description>
+  <url>http://code.google.com/p/zxing/</url>
   <inceptionYear>2007</inceptionYear>
   <issueManagement>
     <system>Google Code</system>
@@ -45,9 +45,10 @@
   </properties>
   <dependencies>
     <dependency>
-      <groupId>com.google.zxing</groupId>
-      <artifactId>core</artifactId>
-      <version>1.6-SNAPSHOT</version>
+      <groupId>com.google.android</groupId>
+      <artifactId>android</artifactId>
+      <scope>provided</scope>
+      <version>1.6_r2</version>
     </dependency>
   </dependencies>
   <build>
