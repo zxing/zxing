@@ -81,7 +81,7 @@ namespace com.google.zxing.multi
 			{
 				result = delegate_Renamed.decode(image, hints);
 			}
-			catch (ReaderException re)
+			catch (ReaderException)
 			{
 				return ;
 			}

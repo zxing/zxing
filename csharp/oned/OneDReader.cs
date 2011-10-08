@@ -139,7 +139,7 @@ namespace com.google.zxing.oned
 				{
 					row = image.getBlackRow(rowNumber, row);
 				}
-				catch (ReaderException re)
+				catch (ReaderException)
 				{
 					continue;
 				}
@@ -189,7 +189,7 @@ namespace com.google.zxing.oned
 						}
 						return result;
 					}
-					catch (ReaderException re)
+					catch (ReaderException)
 					{
 						// continue -- just couldn't decode this row
 					}

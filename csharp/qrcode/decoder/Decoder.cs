@@ -138,7 +138,7 @@ namespace com.google.zxing.qrcode.decoder
 			{
 				rsDecoder.decode(codewordsInts, numECCodewords);
 			}
-			catch (ReedSolomonException rse)
+			catch (ReedSolomonException)
 			{
 				throw ReaderException.Instance;
 			}

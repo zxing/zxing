@@ -82,7 +82,7 @@ namespace com.google.zxing.oned
 				{
 					result = reader.decodeRow(rowNumber, row, startGuardPattern, hints);
 				}
-				catch (ReaderException re)
+				catch (ReaderException)
 				{
 					continue;
 				}

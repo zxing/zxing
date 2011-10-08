@@ -72,7 +72,7 @@ namespace com.google.zxing.qrcode.decoder
 					{
 						mode = Mode.forBits(bits.readBits(4)); // mode is encoded by 4 bits
 					}
-					catch (System.ArgumentException iae)
+					catch (System.ArgumentException)
 					{
 						throw ReaderException.Instance;
 					}
@@ -164,7 +164,7 @@ namespace com.google.zxing.qrcode.decoder
 				//UPGRADE_TODO: The differences in the Format  of parameters for constructor 'java.lang.String.String'  may cause compilation errors.  "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1092'"
 				result.Append(System.Text.Encoding.GetEncoding(SHIFT_JIS).GetString(SupportClass.ToByteArray(buffer)));
 			}
-			catch (System.IO.IOException uee)
+			catch (System.IO.IOException)
 			{
 				throw ReaderException.Instance;
 			}
@@ -200,7 +200,7 @@ namespace com.google.zxing.qrcode.decoder
 				//UPGRADE_TODO: The differences in the Format  of parameters for constructor 'java.lang.String.String'  may cause compilation errors.  "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1092'"
 				result.Append(System.Text.Encoding.GetEncoding(encoding).GetString(SupportClass.ToByteArray(readBytes)));
 			}
-			catch (System.IO.IOException uce)
+			catch (System.IO.IOException)
 			{
 				throw ReaderException.Instance;
 			}

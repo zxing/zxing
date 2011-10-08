@@ -59,7 +59,7 @@ namespace com.google.zxing.multi
 			{
 				return delegate_Renamed.decode(topLeft, hints);
 			}
-			catch (ReaderException re)
+			catch (ReaderException)
 			{
 				// continue
 			}
@@ -69,7 +69,7 @@ namespace com.google.zxing.multi
 			{
 				return delegate_Renamed.decode(topRight, hints);
 			}
-			catch (ReaderException re)
+			catch (ReaderException)
 			{
 				// continue
 			}
@@ -79,7 +79,7 @@ namespace com.google.zxing.multi
 			{
 				return delegate_Renamed.decode(bottomLeft, hints);
 			}
-			catch (ReaderException re)
+			catch (ReaderException)
 			{
 				// continue
 			}
@@ -89,7 +89,7 @@ namespace com.google.zxing.multi
 			{
 				return delegate_Renamed.decode(bottomRight, hints);
 			}
-			catch (ReaderException re)
+			catch (ReaderException)
 			{
 				// continue
 			}

@@ -118,7 +118,7 @@ namespace com.google.zxing.qrcode.decoder
 			{
 				return getVersionForNumber((dimension - 17) >> 2);
 			}
-			catch (System.ArgumentException iae)
+			catch (System.ArgumentException)
 			{
 				throw ReaderException.Instance;
 			}

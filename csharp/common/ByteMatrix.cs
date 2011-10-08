@@ -149,7 +149,7 @@ namespace com.google.zxing.common
         int offset = y * width;
         for (int x = 0; x < width; x++)
         {
-           ixels[offset + x] = array[y][x] == 0 ? BLACK : WHITE;
+           pixels[offset + x] = array[y][x] == 0 ? BLACK : WHITE;
         }
       }
 

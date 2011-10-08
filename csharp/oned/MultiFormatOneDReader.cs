@@ -77,7 +77,7 @@ namespace com.google.zxing.oned
 				{
 					return reader.decodeRow(rowNumber, row, hints);
 				}
-				catch (ReaderException re)
+				catch (ReaderException)
 				{
 					// continue
 				}
