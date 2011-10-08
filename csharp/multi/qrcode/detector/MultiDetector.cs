@@ -61,7 +61,7 @@ namespace com.google.zxing.multi.qrcode.detector
 				{
 					result.Add(processFinderPatternInfo(info[i]));
 				}
-				catch (ReaderException e)
+				catch (ReaderException)
 				{
 					// ignore
 				}

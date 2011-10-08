@@ -68,7 +68,7 @@ namespace com.google.zxing.client.result
 					altitude = System.Double.Parse(geoURIWithoutQuery.Substring(longitudeEnd + 1));
 				}
 			}
-			catch (System.FormatException nfe)
+			catch (System.FormatException)
 			{
 				return null;
 			}

@@ -70,7 +70,7 @@ namespace com.google.zxing.multi.qrcode
 					}
 					results.Add(result);
 				}
-				catch (ReaderException re)
+				catch (ReaderException)
 				{
 					// ignore and continue 
 				}

@@ -135,7 +135,7 @@ namespace com.google.zxing.qrcode.detector
 						alignmentPattern = findAlignmentInRegion(moduleSize, estAlignmentX, estAlignmentY, (float) i);
 						break;
 					}
-					catch (ReaderException re)
+					catch (ReaderException)
 					{
 						// try next round
 					}

@@ -163,7 +163,7 @@ namespace com.google.zxing
 				{
 					return reader.decode(image, hints);
 				}
-				catch (ReaderException re)
+				catch (ReaderException)
 				{
 					// continue
 				}

@@ -58,7 +58,7 @@ namespace com.google.zxing.client.result
 			{
 				return new CalendarParsedResult(summary, start, end, null, null, null);
 			}
-			catch (System.ArgumentException iae)
+			catch (System.ArgumentException)
 			{
 				return null;
 			}

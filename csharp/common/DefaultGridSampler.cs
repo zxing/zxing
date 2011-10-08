@@ -64,7 +64,7 @@ namespace com.google.zxing.common
 						}
 					}
 				}
-				catch (System.IndexOutOfRangeException aioobe)
+				catch (System.IndexOutOfRangeException)
 				{
 					// This feels wrong, but, sometimes if the finder patterns are misidentified, the resulting
 					// transform gets "twisted" such that it maps a straight line of points to a set of points
