@@ -108,11 +108,11 @@ ZX(<CAAction ZXAVC(AVCaptureVideoDataOutputSampleBufferDelegate)>) {
 @property (nonatomic) CGAffineTransform transform;
 @property (nonatomic, readonly) void* output;
 @property (nonatomic, readonly) CALayer* layer;
-@property (nonatomic, readonly) CALayer* luminance;
-@property (nonatomic, readonly) CALayer* binary;
 
 - (id)init;
+- (CALayer*)luminance;
 - (void)setLuminance:(BOOL)on_off;
+- (CALayer*)binary;
 - (void)setBinary:(BOOL)on_off;
 - (void)start;
 - (void)stop;
