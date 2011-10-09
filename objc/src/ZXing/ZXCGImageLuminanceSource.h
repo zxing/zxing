@@ -97,29 +97,29 @@ class CGImageLuminanceSource : public LuminanceSource {
                               width:(size_t)width
                              height:(size_t)height;
 
-- (ZXCGImageLuminanceSource*)initWithZXImage:(ZXImage*)image
-                                      left:(size_t)left
-                                       top:(size_t)top
-                                     width:(size_t)width
+- (id)initWithZXImage:(ZXImage*)image
+                 left:(size_t)left
+                  top:(size_t)top
+                width:(size_t)width
                                     height:(size_t)height;
 
-- (ZXCGImageLuminanceSource*)initWithZXImage:(ZXImage*)image;
+- (id)initWithZXImage:(ZXImage*)image;
 
-- (ZXCGImageLuminanceSource*)initWithCGImage:(CGImageRef)image
-                                      left:(size_t)left
-                                       top:(size_t)top
-                                     width:(size_t)width
-                                    height:(size_t)height;
+- (id)initWithCGImage:(CGImageRef)image
+                 left:(size_t)left
+                  top:(size_t)top
+                width:(size_t)width
+               height:(size_t)height;
 
-- (ZXCGImageLuminanceSource*)initWithCGImage:(CGImageRef)image;
+- (id)initWithCGImage:(CGImageRef)image;
 
-- (ZXCGImageLuminanceSource*)initWithBuffer:(CVPixelBufferRef)buffer
-                                      left:(size_t)left
-                                       top:(size_t)top
-                                     width:(size_t)width
-                                    height:(size_t)height;
+- (id)initWithBuffer:(CVPixelBufferRef)buffer
+                left:(size_t)left
+                 top:(size_t)top
+               width:(size_t)width
+              height:(size_t)height;
 
-- (ZXCGImageLuminanceSource*)initWithBuffer:(CVPixelBufferRef)buffer;
+- (id)initWithBuffer:(CVPixelBufferRef)buffer;
 
 - (CGImageRef)image;
 

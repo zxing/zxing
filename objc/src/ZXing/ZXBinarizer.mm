@@ -27,7 +27,7 @@
 
 @implementation ZXBinarizer
 
-- (ZXBinarizer*)initWithNative:(zxing::Binarizer*)binarizer {
+- (id)initWithNative:(zxing::Binarizer*)binarizer {
   if ((self = [super init])) {
     native = binarizer;
   }

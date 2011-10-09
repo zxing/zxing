@@ -20,9 +20,9 @@
 
 @implementation ZXQRCodeReader
 
-- (ZXQRCodeReader*)init {
+- (id)init {
   zxing::qrcode::QRCodeReader* multi = new zxing::qrcode::QRCodeReader();
-  [super initWithReader:multi];
+  self = [super initWithReader:multi];
   return self;
 }
 
