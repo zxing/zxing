@@ -20,6 +20,6 @@
 @interface ZXQRCodeReader : ZXReader {
 }
 
-- (ZXQRCodeReader*)init;
+- (id)init;
 
 @end

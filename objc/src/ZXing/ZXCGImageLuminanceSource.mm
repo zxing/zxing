@@ -33,45 +33,45 @@
     (buffer, left, top, width, height);
 }
 
-- (ZXCGImageLuminanceSource*)initWithZXImage:(ZXImage*)image 
-                                      left:(size_t)left
-                                       top:(size_t)top
-                                     width:(size_t)width
-                                    height:(size_t)height {
-  [super initWithNative:new zxing::CGImageLuminanceSource(image.cgimage, left, top, width, height)];
+- (id)initWithZXImage:(ZXImage*)image 
+                 left:(size_t)left
+                  top:(size_t)top
+                width:(size_t)width
+               height:(size_t)height {
+  self = [super initWithNative:new zxing::CGImageLuminanceSource(image.cgimage, left, top, width, height)];
   return self;
 }
 
-- (ZXCGImageLuminanceSource*)initWithZXImage:(ZXImage*)image {
-  [super initWithNative:new zxing::CGImageLuminanceSource(image.cgimage)];
+- (id)initWithZXImage:(ZXImage*)image {
+  self = [super initWithNative:new zxing::CGImageLuminanceSource(image.cgimage)];
   return self;
 }
 
-- (ZXCGImageLuminanceSource*)initWithCGImage:(CGImageRef)image 
-                                      left:(size_t)left
-                                       top:(size_t)top
-                                     width:(size_t)width
-                                    height:(size_t)height {
-  [super initWithNative:new zxing::CGImageLuminanceSource(image, left, top, width, height)];
+- (id)initWithCGImage:(CGImageRef)image 
+                 left:(size_t)left
+                  top:(size_t)top
+                width:(size_t)width
+               height:(size_t)height {
+  self = [super initWithNative:new zxing::CGImageLuminanceSource(image, left, top, width, height)];
   return self;
 }
 
-- (ZXCGImageLuminanceSource*)initWithCGImage:(CGImageRef)image {
-  [super initWithNative:new zxing::CGImageLuminanceSource(image)];
+- (id)initWithCGImage:(CGImageRef)image {
+  self = [super initWithNative:new zxing::CGImageLuminanceSource(image)];
   return self;
 }
 
-- (ZXCGImageLuminanceSource*)initWithBuffer:(CVPixelBufferRef)buffer
-                                      left:(size_t)left
-                                       top:(size_t)top
-                                     width:(size_t)width
-                                    height:(size_t)height {
-  [super initWithNative:new zxing::CGImageLuminanceSource(buffer, left, top, width, height)];
+- (id)initWithBuffer:(CVPixelBufferRef)buffer
+                left:(size_t)left
+                 top:(size_t)top
+               width:(size_t)width
+              height:(size_t)height {
+  self = [super initWithNative:new zxing::CGImageLuminanceSource(buffer, left, top, width, height)];
   return self;
 }
 
-- (ZXCGImageLuminanceSource*)initWithBuffer:(CVPixelBufferRef)buffer {
-  [super initWithNative:new zxing::CGImageLuminanceSource(buffer)];
+- (id)initWithBuffer:(CVPixelBufferRef)buffer {
+  self = [super initWithNative:new zxing::CGImageLuminanceSource(buffer)];
   return self;
 }
 

@@ -25,7 +25,7 @@
   zxing::Ref<zxing::Reader> reader;
 }
 
-- (ZXReader*)initWithReader:(zxing::Reader*)reader;
+- (id)initWithReader:(zxing::Reader*)reader;
 - (ZXResult*)decode:(ZXBinaryBitmap*)bitmap hints:(ZXDecodeHints*)hints;
 
 @end

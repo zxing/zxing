@@ -19,7 +19,7 @@
 
 @implementation ZXLuminanceSource
 
-- (ZXLuminanceSource*)initWithNative:(zxing::LuminanceSource*)_native {
+- (id)initWithNative:(zxing::LuminanceSource*)_native {
   native = _native;
   return self;
 }

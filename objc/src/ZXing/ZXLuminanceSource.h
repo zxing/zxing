@@ -21,7 +21,7 @@
   zxing::Ref<zxing::LuminanceSource> native;
 }
 
-- (ZXLuminanceSource*)initWithNative:(zxing::LuminanceSource*)native;
+- (id)initWithNative:(zxing::LuminanceSource*)native;
 - (zxing::LuminanceSource*)native;
 
 @end
