@@ -1473,6 +1473,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = (
+					i386,
 					armv6,
 					armv7,
 				);
@@ -1498,6 +1499,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = (
+					i386,
 					armv6,
 					armv7,
 				);
