@@ -1,3 +1,4 @@
+// -*- Mode: ObjC; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*-
 //
 //  ZXMainViewController.m
 //  Barcodes
@@ -96,8 +97,8 @@
 
 
 - (void)dealloc {
-  actions = nil;
-  result = nil;
+  [actions release];
+  [result release];
   [super dealloc];
 }
 
@@ -111,7 +112,7 @@
   Scan * scan = [[Database sharedDatabase] addScanWithText:resultString];
   [[NSUserDefaults standardUserDefaults] setObject:resultString forKey:@"lastScan"];
 
-  ParsedResult *parsedResult = [[UniversalResultParser parsedResultForString:resultString] retain];
+  ParsedResult *parsedResult = [UniversalResultParser parsedResultForString:resultString];
   self.result = [parsedResult retain];
   self.actions = [self.result.actions retain];
   ScanViewController *scanViewController = [[ScanViewController alloc] initWithResult:parsedResult forScan:scan];

@@ -1,3 +1,4 @@
+// -*- Mode: ObjC; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*-
 //
 //  ScanViewController.m
 //  ZXing
@@ -71,7 +72,7 @@
 - (UITableViewCell *)cellWithIdentifier:(NSString *)identifier inTableView:(UITableView *)tableView {
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
 	if (cell == nil) {
-		cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:identifier] autorelease];
+                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault  reuseIdentifier:identifier] autorelease];
 	}
   return cell;
 }
@@ -85,7 +86,8 @@
 	static NSString *DatetimeIdentifier = @"ScanViewDatetimeIdentifier";
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:DatetimeIdentifier];
 	if (cell == nil) {
-		cell = [[[UITableViewCell alloc] initWithFrame:CGRectMake(0, 0, 320, 34) reuseIdentifier:DatetimeIdentifier] autorelease];
+		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:DatetimeIdentifier] autorelease];
+    cell.frame = CGRectMake(0, 0, 320, 34);
     UILabel *label = [cell textLabel];
     label.font = [UIFont systemFontOfSize:[UIFont systemFontSize] * 2.0 / 3.0];
     label.textColor = [UIColor grayColor];
@@ -98,7 +100,8 @@
 	static NSString *BodyIdentifier = @"ScanViewBodyIdentifier";
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:BodyIdentifier];
 	if (cell == nil) {
-		cell = [[[UITableViewCell alloc] initWithFrame:CGRectMake(0, 0, 320, BODY_HEIGHT) reuseIdentifier:BodyIdentifier] autorelease];
+		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:BodyIdentifier] autorelease];
+    cell.frame = CGRectMake(0, 0, 320, BODY_HEIGHT);
     UITextView *textView = [[UITextView alloc] initWithFrame:CGRectInset(cell.contentView.bounds, 6, 6)];
     textView.font = bodyFont;
     [textView setTag:TEXT_VIEW_TAG];
@@ -115,7 +118,8 @@
 	static NSString *ButtonIdentifier = @"ScanViewButtonIdentifier";
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ButtonIdentifier];
 	if (cell == nil) {
-		cell = [[[UITableViewCell alloc] initWithFrame:CGRectMake(0, 0, 320, 44) reuseIdentifier:ButtonIdentifier] autorelease];
+		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ButtonIdentifier] autorelease];
+    cell.frame = CGRectMake(0, 0, 320, 44);
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectInset(cell.contentView.bounds, 6, 6)];
     label.font = [UIFont boldSystemFontOfSize:[UIFont systemFontSize]];
     [label setTag:BUTTON_LABEL_TAG];

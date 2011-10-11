@@ -52,7 +52,7 @@
 	
 	ScanCell *cell = (ScanCell *)[tableView dequeueReusableCellWithIdentifier:ScanIdentifier];
 	if (cell == nil) {
-		cell = [[[ScanCell alloc] initWithFrame:CGRectZero reuseIdentifier:ScanIdentifier] autorelease];
+		cell = [[[ScanCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ScanIdentifier] autorelease];
 	}
   
 	// Configure the cell
