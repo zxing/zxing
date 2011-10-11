@@ -306,8 +306,7 @@
   NSNumber* value = [NSNumber numberWithUnsignedInt:kCVPixelFormatType_32BGRA]; 
   NSDictionary* videoSettings = [NSDictionary dictionaryWithObject:value forKey:key]; 
   [captureOutput setVideoSettings:videoSettings]; 
-  self.captureSession = [[AVCaptureSession alloc] init];
-  [self.captureSession release];
+  self.captureSession = [[[AVCaptureSession alloc] init] autorelease];
   self.captureSession.sessionPreset = AVCaptureSessionPresetMedium; // 480x360 on a 4
 
   [self.captureSession addInput:captureInput];
