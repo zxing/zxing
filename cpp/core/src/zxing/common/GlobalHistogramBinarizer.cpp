@@ -110,11 +110,9 @@ Ref<BitMatrix> GlobalHistogramBinarizer::getBlackMatrix() {
   for (int y = 1; y < 5; y++) {
     int rownum = height * y / 5;
     int right = (width << 2) / 5;
-    int sdf;
     row = source.getRow(rownum, row);
     for (int x = width / 5; x < right; x++) {
       histogram[row[x] >> LUMINANCE_SHIFT]++;
-      sdf = histogram[row[x] >> LUMINANCE_SHIFT];
     }
   }
 
