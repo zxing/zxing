@@ -1,3 +1,4 @@
+// -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
 /*
  *  FinderPatternFinder.cpp
  *  zxing
@@ -236,7 +237,7 @@ bool FinderPatternFinder::handlePossibleCenter(int* stateCount, size_t i, size_t
         Ref<FinderPattern> center = possibleCenters_[index];
         // Look for about the same center and module size:
         if (center->aboutEquals(estimatedModuleSize, centerI, centerJ)) {
-          center->incrementCount();
+          possibleCenters_[index] = center->combineEstimate(centerI, centerJ, estimatedModuleSize);
           found = true;
           break;
         }
