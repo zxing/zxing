@@ -20,6 +20,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.text.Html;
 import android.widget.TextView;
+import com.google.zxing.client.android.HttpHelper;
 import com.google.zxing.client.android.R;
 import com.google.zxing.client.android.history.HistoryManager;
 import com.google.zxing.client.android.LocaleManager;
@@ -56,7 +57,7 @@ final class ProductResultInfoRetriever extends SupplementalInfoRetriever {
 
     String encodedProductID = URLEncoder.encode(productID, "UTF-8");
     String uri = BASE_PRODUCT_URI + encodedProductID;
-    String content = downloadViaHttp(uri);
+    String content = HttpHelper.downloadViaHttp(uri, HttpHelper.ContentType.HTML);
 
     Matcher matcher = PRODUCT_NAME_PRICE_PATTERN.matcher(content);
     if (matcher.find()) {

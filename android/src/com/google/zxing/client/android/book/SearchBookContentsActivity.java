@@ -31,19 +31,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import org.apache.http.Header;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpHead;
-import org.apache.http.client.methods.HttpUriRequest;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -51,7 +42,6 @@ import java.util.regex.Pattern;
 import com.google.zxing.client.android.LocaleManager;
 import com.google.zxing.client.android.R;
 import com.google.zxing.client.android.Intents;
-import com.google.zxing.client.android.AndroidHttpClient;
 
 /**
  * Uses Google Book Search to find a word or phrase in the requested book.
@@ -59,16 +49,16 @@ import com.google.zxing.client.android.AndroidHttpClient;
  * @author dswitkin@google.com (Daniel Switkin)
  */
 public final class SearchBookContentsActivity extends Activity {
+
   private static final String TAG = SearchBookContentsActivity.class.getSimpleName();
 
-  private static final String USER_AGENT = "ZXing (Android)";
   private static final Pattern TAG_PATTERN = Pattern.compile("\\<.*?\\>");
   private static final Pattern LT_ENTITY_PATTERN = Pattern.compile("&lt;");
   private static final Pattern GT_ENTITY_PATTERN = Pattern.compile("&gt;");
   private static final Pattern QUOTE_ENTITY_PATTERN = Pattern.compile("&#39;");
   private static final Pattern QUOT_ENTITY_PATTERN = Pattern.compile("&quot;");
 
-  private NetworkThread networkThread;
+  private Thread networkThread;
   private String isbn;
   private EditText queryTextView;
   private Button queryButton;
@@ -169,7 +159,7 @@ public final class SearchBookContentsActivity extends Activity {
     if (networkThread == null) {
       String query = queryTextView.getText().toString();
       if (query != null && query.length() > 0) {
-        networkThread = new NetworkThread(isbn, query, handler);
+        networkThread = new Thread(new NetworkWorker(isbn, query, handler));
         networkThread.start();
         headerView.setText(R.string.msg_sbc_searching_book);
         resultListView.setAdapter(null);
@@ -240,105 +230,4 @@ public final class SearchBookContentsActivity extends Activity {
     }
   }
 
-  private static final class NetworkThread extends Thread {
-    private final String isbn;
-    private final String query;
-    private final Handler handler;
-
-    NetworkThread(String isbn, String query, Handler handler) {
-      this.isbn = isbn;
-      this.query = query;
-      this.handler = handler;
-    }
-
-    @Override
-    public void run() {
-      AndroidHttpClient client = null;
-      try {
-        // These return a JSON result which describes if and where the query was found. This API may
-        // break or disappear at any time in the future. Since this is an API call rather than a
-        // website, we don't use LocaleManager to change the TLD.
-        URI uri;
-        if (LocaleManager.isBookSearchUrl(isbn)) {
-          int equals = isbn.indexOf('=');
-          String volumeId = isbn.substring(equals + 1);
-          uri = new URI("http", null, "www.google.com", -1, "/books", "id=" + volumeId +
-                        "&jscmd=SearchWithinVolume2&q=" + query, null);
-        } else {
-          uri = new URI("http", null, "www.google.com", -1, "/books", "vid=isbn" + isbn +
-                        "&jscmd=SearchWithinVolume2&q=" + query, null);
-        }
-        HttpUriRequest get = new HttpGet(uri);
-        get.setHeader("cookie", getCookie(uri.toString()));
-        client = AndroidHttpClient.newInstance(USER_AGENT);
-        HttpResponse response = client.execute(get);
-        if (response.getStatusLine().getStatusCode() == 200) {
-          HttpEntity entity = response.getEntity();
-          ByteArrayOutputStream jsonHolder = new ByteArrayOutputStream();
-          entity.writeTo(jsonHolder);
-          jsonHolder.flush();
-          JSONObject json = new JSONObject(jsonHolder.toString(getEncoding(entity)));
-          jsonHolder.close();
-
-          Message message = Message.obtain(handler, R.id.search_book_contents_succeeded);
-          message.obj = json;
-          message.sendToTarget();
-        } else {
-          Log.w(TAG, "HTTP returned " + response.getStatusLine().getStatusCode() + " for " + uri);
-          Message message = Message.obtain(handler, R.id.search_book_contents_failed);
-          message.sendToTarget();
-        }
-      } catch (Exception e) {
-        Log.w(TAG, "Error accessing book search", e);
-        Message message = Message.obtain(handler, R.id.search_book_contents_failed);
-        message.sendToTarget();
-      } finally {
-        if (client != null) {
-          client.close();
-        }
-      }
-    }
-
-    // Book Search requires a cookie to work, which we store persistently. If the cookie does
-    // not exist, this could be the first search or it has expired. Either way, do a quick HEAD
-    // request to fetch it, save it via the CookieSyncManager to flash, then return it.
-    private static String getCookie(String url) {
-      String cookie = CookieManager.getInstance().getCookie(url);
-      if (cookie == null || cookie.length() == 0) {
-        Log.d(TAG, "Book Search cookie was missing or expired");
-        HttpUriRequest head = new HttpHead(url);
-        AndroidHttpClient client = AndroidHttpClient.newInstance(USER_AGENT);
-        try {
-          HttpResponse response = client.execute(head);
-          if (response.getStatusLine().getStatusCode() == 200) {
-            Header[] cookies = response.getHeaders("set-cookie");
-            for (Header theCookie : cookies) {
-              CookieManager.getInstance().setCookie(url, theCookie.getValue());
-            }
-            CookieSyncManager.getInstance().sync();
-            cookie = CookieManager.getInstance().getCookie(url);
-          }
-        } catch (IOException e) {
-          Log.w(TAG, "Error setting book search cookie", e);
-        }
-        client.close();
-      }
-      return cookie;
-    }
-
-    private static String getEncoding(HttpEntity entity) {
-      // FIXME: The server is returning ISO-8859-1 but the content is actually windows-1252.
-      // Once Jeff fixes the HTTP response, remove this hardcoded value and go back to getting
-      // the encoding dynamically.
-      return "windows-1252";
-//            HeaderElement[] elements = entity.getContentType().getElements();
-//            if (elements != null && elements.length > 0) {
-//                String encoding = elements[0].getParameterByName("charset").getValue();
-//                if (encoding != null && encoding.length() > 0) {
-//                    return encoding;
-//                }
-//            }
-//            return "UTF-8";
-    }
-  }
 }

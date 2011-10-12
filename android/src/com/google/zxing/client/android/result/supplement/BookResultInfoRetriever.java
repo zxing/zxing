@@ -22,6 +22,7 @@ import java.util.Collection;
 
 import android.content.Context;
 import android.widget.TextView;
+import com.google.zxing.client.android.HttpHelper;
 import com.google.zxing.client.android.LocaleManager;
 import com.google.zxing.client.android.R;
 import org.json.JSONArray;
@@ -58,7 +59,8 @@ public final class BookResultInfoRetriever extends SupplementalInfoRetriever {
   @Override
   void retrieveSupplementalInfo() throws IOException, InterruptedException {
 
-    String contents = downloadViaHttp("https://www.googleapis.com/books/v1/volumes?q=isbn:" + isbn);
+    String contents = HttpHelper.downloadViaHttp("https://www.googleapis.com/books/v1/volumes?q=isbn:" + isbn,
+                                                 HttpHelper.ContentType.JSON);
 
     if (contents.length() == 0) {
       return;

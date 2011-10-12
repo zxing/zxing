@@ -24,21 +24,13 @@ import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.text.style.URLSpan;
 import android.widget.TextView;
-import com.google.zxing.client.android.AndroidHttpClient;
 import com.google.zxing.client.result.ISBNParsedResult;
 import com.google.zxing.client.result.ParsedResult;
 import com.google.zxing.client.result.ProductParsedResult;
 import com.google.zxing.client.result.URIParsedResult;
 import com.google.zxing.client.android.history.HistoryManager;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpUriRequest;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -154,44 +146,6 @@ public abstract class SupplementalInfoRetriever implements Callable<Void> {
 
     // Add the text to the history.
     historyManager.addHistoryItemDetails(itemID, newText);
-  }
-
-  protected static String downloadViaHttp(String uri) throws IOException {
-    HttpUriRequest get = new HttpGet(uri);
-    AndroidHttpClient client = AndroidHttpClient.newInstance(null);
-    HttpResponse response = client.execute(get);
-    int status = response.getStatusLine().getStatusCode();
-    if (status != 200) {
-      throw new IOException();
-    }
-    return consume(response.getEntity());
-  }
-
-  private static String consume(HttpEntity entity) throws IOException {
-    ByteArrayOutputStream out = new ByteArrayOutputStream();
-    InputStream in = null;
-    try {
-      in = entity.getContent();
-      byte[] buffer = new byte[1024];
-      int bytesRead;
-      while ((bytesRead = in.read(buffer)) > 0) {
-        out.write(buffer, 0, bytesRead);
-      }
-    } finally {
-      if (in != null) {
-        try {
-          in.close();
-        } catch (IOException ioe) {
-          // continue
-        }
-      }
-    }
-    try {
-      return new String(out.toByteArray(), "UTF-8");
-    } catch (UnsupportedEncodingException uee) {
-      // can't happen
-      throw new IllegalStateException(uee);
-    }
   }
 
 }
