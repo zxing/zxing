@@ -1,3 +1,4 @@
+// -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
 /*
  *  Binarizer.cpp
  *  zxing
@@ -24,7 +25,7 @@
 namespace zxing {
 	
 	Binarizer::Binarizer(Ref<LuminanceSource> source) : source_(source) {
-	}
+  }
 	
 	Binarizer::~Binarizer() {
 	}
