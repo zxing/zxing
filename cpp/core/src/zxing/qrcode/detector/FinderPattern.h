@@ -1,3 +1,4 @@
+// -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
 #ifndef __FINDER_PATTERN_H__
 #define __FINDER_PATTERN_H__
 
@@ -31,16 +32,18 @@ namespace zxing {
 			float posX_;
 			float posY_;
 			float estimatedModuleSize_;
-			int counter_;
+			int count_;
 			
 		public:
 			FinderPattern(float posX, float posY, float estimatedModuleSize);
+			FinderPattern(float posX, float posY, float estimatedModuleSize, int count);
 			float getX() const;
 			float getY() const;
 			int getCount() const;
 			float getEstimatedModuleSize() const;
 			void incrementCount();
 			bool aboutEquals(float moduleSize, float i, float j) const;
+			Ref<FinderPattern> combineEstimate(float i, float j, float newModuleSize) const;
 		};
 	}
 }

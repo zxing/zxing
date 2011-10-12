@@ -1,3 +1,4 @@
+// -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
 /*
  *  FinderPattern.cpp
  *  zxing
@@ -26,7 +27,11 @@ namespace zxing {
 		using namespace std;
 		
 		FinderPattern::FinderPattern(float posX, float posY, float estimatedModuleSize) :
-		posX_(posX), posY_(posY), estimatedModuleSize_(estimatedModuleSize), counter_(1) {
+		posX_(posX), posY_(posY), estimatedModuleSize_(estimatedModuleSize), count_(1) {
+		}
+		
+		FinderPattern::FinderPattern(float posX, float posY, float estimatedModuleSize, int count) :
+		posX_(posX), posY_(posY), estimatedModuleSize_(estimatedModuleSize), count_(count) {
 		}
 		
 		float FinderPattern::getX() const {
@@ -38,7 +43,7 @@ namespace zxing {
 		}
 		
 		int FinderPattern::getCount() const {
-			return counter_;
+			return count_;
 		}
 		
 		float FinderPattern::getEstimatedModuleSize() const {
@@ -46,13 +51,29 @@ namespace zxing {
 		}
 		
 		void FinderPattern::incrementCount() {
-			counter_++;
+			count_++;
 		}
 		
+/*
 		bool FinderPattern::aboutEquals(float moduleSize, float i, float j) const {
 			return abs(i - posY_) <= moduleSize && abs(j - posX_) <= moduleSize && (abs(moduleSize - estimatedModuleSize_)
 																					<= 1.0f || abs(moduleSize - estimatedModuleSize_) / estimatedModuleSize_ <= 0.1f);
 		}
+*/
+    bool FinderPattern::aboutEquals(float moduleSize, float i, float j) const {
+      if (abs(i - getY()) <= moduleSize && abs(j - getX()) <= moduleSize) {
+        float moduleSizeDiff = abs(moduleSize - estimatedModuleSize_);
+        return moduleSizeDiff <= 1.0f || moduleSizeDiff <= estimatedModuleSize_;
+      }
+      return false;
+    }
 		
+    Ref<FinderPattern> FinderPattern::combineEstimate(float i, float j, float newModuleSize) const {
+      int combinedCount = count_ + 1;
+      float combinedX = (count_ * getX() + j) / combinedCount;
+      float combinedY = (count_ * getY() + i) / combinedCount;
+      float combinedModuleSize = (count_ * getEstimatedModuleSize() + newModuleSize) / combinedCount;
+      return Ref<FinderPattern>(new FinderPattern(combinedX, combinedY, combinedModuleSize, combinedCount));
+    }
 	}
 }

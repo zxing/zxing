@@ -1,3 +1,4 @@
+// -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
 /*
  *  AlignmentPatternFinder.cpp
  *  zxing
@@ -104,8 +105,7 @@ Ref<AlignmentPattern> AlignmentPatternFinder::handlePossibleCenter(vector<int> &
       Ref<AlignmentPattern> center((*possibleCenters_)[index]);
       // Look for about the same center and module size:
       if (center->aboutEquals(estimatedModuleSize, centerI, centerJ)) {
-        Ref<AlignmentPattern> result(new AlignmentPattern(centerJ, centerI, estimatedModuleSize));
-        return result;
+        return center->combineEstimate(centerI, centerJ, estimatedModuleSize);
       }
     }
     AlignmentPattern *tmp = new AlignmentPattern(centerJ, centerI, estimatedModuleSize);
