@@ -1,3 +1,4 @@
+// -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
 /*
  *  Mode.cpp
  *  zxing
@@ -24,19 +25,23 @@
 #include <zxing/qrcode/Version.h>
 #include <sstream>
 
-namespace zxing {
-namespace qrcode {
-using namespace std;
+using zxing::qrcode::Mode;
+using std::ostringstream;
 
-Mode Mode::TERMINATOR(0, 0, 0);
-Mode Mode::NUMERIC(10, 12, 14);
-Mode Mode::ALPHANUMERIC(9, 11, 13);
-Mode Mode::BYTE(8, 16, 16);
-Mode Mode::KANJI(8, 10, 12);
+Mode Mode::TERMINATOR(0, 0, 0, 0x00, "TERMINATOR");
+Mode Mode::NUMERIC(10, 12, 14, 0x01, "NUMERIC");
+Mode Mode::ALPHANUMERIC(9, 11, 13, 0x02, "ALPHANUMERIC");
+Mode Mode::STRUCTURED_APPEND(0, 0, 0, 0x03, "STRUCTURED_APPEND");
+Mode Mode::BYTE(8, 16, 16, 0x04, "BYTE");
+Mode Mode::ECI(0, 0, 0, 0x07, "ECI");
+Mode Mode::KANJI(8, 10, 12, 0x08, "KANJI");
+Mode Mode::FNC1_FIRST_POSITION(0, 0, 0, 0x05, "FNC1_FIRST_POSITION");
+Mode Mode::FNC1_SECOND_POSITION(0, 0, 0, 0x09, "FNC1_SECOND_POSITION");
+Mode Mode::HANZI(8, 10, 12, 0x0D, "HANZI");
 
-Mode::Mode(int cbv0_9, int cbv10_26, int cbv27) :
+Mode::Mode(int cbv0_9, int cbv10_26, int cbv27, int bits, char const* name) :
     characterCountBitsForVersions0To9_(cbv0_9), characterCountBitsForVersions10To26_(cbv10_26),
-    characterCountBitsForVersions27AndHigher_(cbv27) {
+    characterCountBitsForVersions27AndHigher_(cbv27), bits_(bits), name_(name) {
 }
 
 Mode& Mode::forBits(int bits) {
@@ -67,7 +72,4 @@ int Mode::getCharacterCountBits(Version *version) {
   } else {
     return characterCountBitsForVersions27AndHigher_;
   }
-}
-
-}
 }
