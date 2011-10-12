@@ -1,3 +1,4 @@
+// -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
 #ifndef __BIT_ARRAY_H__
 #define __BIT_ARRAY_H__
 
@@ -44,6 +45,7 @@ public:
   bool get(size_t i);
   void set(size_t i);
   void setBulk(size_t i, unsigned int newBits);
+  void setRange(int start, int end);
   void clear();
   bool isRange(size_t start, size_t end, bool value);
   std::vector<unsigned int>& getBitArray();
