@@ -1,3 +1,4 @@
+// -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
 #ifndef __HYBRIDBINARIZER_H__
 #define __HYBRIDBINARIZER_H__
 /*
@@ -29,7 +30,7 @@ namespace zxing {
 	
 	class HybridBinarizer : public GlobalHistogramBinarizer {
 	 private:
-    Ref<BitMatrix> cached_matrix_;
+    Ref<BitMatrix> matrix_;
 	  Ref<BitArray> cached_row_;
 	  int cached_row_num_;
 
@@ -40,7 +41,6 @@ namespace zxing {
 		virtual Ref<BitMatrix> getBlackMatrix();
 		Ref<Binarizer> createBinarizer(Ref<LuminanceSource> source);
   private:
-    void binarizeEntireImage();
     // We'll be using one-D arrays because C++ can't dynamically allocate 2D arrays
     int* calculateBlackPoints(unsigned char* luminances, int subWidth, int subHeight,
       int width, int height);

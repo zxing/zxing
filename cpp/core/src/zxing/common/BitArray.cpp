@@ -73,7 +73,7 @@ void BitArray::setBulk(size_t i, unsigned int newBits) {
 
 void BitArray::setRange(int start, int end) {
   if (end < start) {
-    throw new IllegalArgumentException("invalid call to BitArray::setRange");
+    throw IllegalArgumentException("invalid call to BitArray::setRange");
   }
   if (end == start) {
     return;

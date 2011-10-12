@@ -1,3 +1,4 @@
+// -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
 /*
  *  HybridBinarizer.cpp
  *  zxing
@@ -31,7 +32,7 @@ static const int LUMINANCE_SHIFT = 8 - LUMINANCE_BITS;
 static const int LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
 
 HybridBinarizer::HybridBinarizer(Ref<LuminanceSource> source) :
-  GlobalHistogramBinarizer(source), cached_matrix_(NULL), cached_row_(NULL), cached_row_num_(-1) {
+  GlobalHistogramBinarizer(source), matrix_(NULL), cached_row_(NULL), cached_row_num_(-1) {
 
 }
 
@@ -39,40 +40,43 @@ HybridBinarizer::~HybridBinarizer() {
 }
 
 
-Ref<BitMatrix> HybridBinarizer::getBlackMatrix() {
-  binarizeEntireImage();
-  return cached_matrix_;
-}
-
 Ref<Binarizer> HybridBinarizer::createBinarizer(Ref<LuminanceSource> source) {
   return Ref<Binarizer> (new HybridBinarizer(source));
 }
 
-void HybridBinarizer::binarizeEntireImage() {
-  if (cached_matrix_ == NULL) {
-    Ref<LuminanceSource> source = getLuminanceSource();
-    if (source->getWidth() >= MINIMUM_DIMENSION && source->getHeight() >= MINIMUM_DIMENSION) {
-      unsigned char* luminances = source->getMatrix();
-      int width = source->getWidth();
-      int height = source->getHeight();
-      int subWidth = width >> 3;
-      if (width & 0x07) {
-        subWidth++;
-      }
-      int subHeight = height >> 3;
-      if (height & 0x07) {
-        subHeight++;
-      }
-      int *blackPoints = calculateBlackPoints(luminances, subWidth, subHeight, width, height);
-      cached_matrix_.reset(new BitMatrix(width,height));
-      calculateThresholdForBlock(luminances, subWidth, subHeight, width, height, blackPoints, cached_matrix_);
-      delete [] blackPoints;
-      delete [] luminances;
-    } else {
-      // If the image is too small, fall back to the global histogram approach.
-      cached_matrix_.reset(GlobalHistogramBinarizer::getBlackMatrix());
-    }
+Ref<BitMatrix> HybridBinarizer::getBlackMatrix() {
+  // Calculates the final BitMatrix once for all requests. This could be called once from the
+  // constructor instead, but there are some advantages to doing it lazily, such as making
+  // profiling easier, and not doing heavy lifting when callers don't expect it.
+  if (matrix_) {
+    return matrix_;
   }
+  LuminanceSource& source = *getLuminanceSource();
+  if (source.getWidth() >= MINIMUM_DIMENSION && source.getHeight() >= MINIMUM_DIMENSION) {
+    unsigned char* luminances = source.getMatrix();
+    int width = source.getWidth();
+    int height = source.getHeight();
+    int subWidth = width >> 3;
+    if ((width & 0x07) != 0) {
+      subWidth++;
+    }
+    int subHeight = height >> 3;
+    if ((height & 0x07) != 0) {
+      subHeight++;
+    }
+    int* blackPoints = calculateBlackPoints(luminances, subWidth, subHeight, width, height);
+
+    Ref<BitMatrix> newMatrix (new BitMatrix(width, height));
+    calculateThresholdForBlock(luminances, subWidth, subHeight, width, height, blackPoints, newMatrix);
+    matrix_ = newMatrix;
+
+    delete [] blackPoints;
+    delete [] luminances;
+  } else {
+    // If the image is too small, fall back to the global histogram approach.
+    matrix_ = GlobalHistogramBinarizer::getBlackMatrix();
+  }
+  return matrix_;
 }
 
 void HybridBinarizer::calculateThresholdForBlock(unsigned char* luminances, int subWidth, int subHeight,
