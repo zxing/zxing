@@ -19,26 +19,18 @@ package com.google.zxing.client.android.result.supplement;
 import android.content.Context;
 import android.os.Handler;
 import android.widget.TextView;
+import com.google.zxing.client.android.HttpHelper;
 import com.google.zxing.client.android.history.HistoryManager;
-import com.google.zxing.client.android.AndroidHttpClient;
 import com.google.zxing.client.android.R;
 import com.google.zxing.client.result.URIParsedResult;
-import org.apache.http.Header;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpHead;
-import org.apache.http.client.methods.HttpUriRequest;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 final class URIResultInfoRetriever extends SupplementalInfoRetriever {
 
-  private static final String[] REDIRECTOR_HOSTS = {
-    "http://bit.ly/",
-    "http://tinyurl.com/",
-    "http://tr.im/",
-    "http://goo.gl/",
-    "http://ow.ly/",
-  };
+  private static final int MAX_REDIRECTS = 5;
 
   private final URIParsedResult result;
   private final String redirectString;
@@ -55,44 +47,22 @@ final class URIResultInfoRetriever extends SupplementalInfoRetriever {
 
   @Override
   void retrieveSupplementalInfo() throws IOException, InterruptedException {
-    String oldURI = result.getURI();
-    String newURI = unredirect(oldURI);
+    URI oldURI;
+    try {
+      oldURI = new URI(result.getURI());
+    } catch (URISyntaxException e) {
+      return;
+    }
+    URI newURI = HttpHelper.unredirect(oldURI);
     int count = 0;
-    while (count < 3 && !oldURI.equals(newURI)) {
-      append(result.getDisplayResult(), null, new String[] { redirectString + " : " + newURI }, newURI);
-      count++;
+    while (count++ < MAX_REDIRECTS && !oldURI.equals(newURI)) {
+      append(result.getDisplayResult(), 
+             null, 
+             new String[] { redirectString + " : " + newURI }, 
+             newURI.toString());
       oldURI = newURI;
-      newURI = unredirect(newURI);
+      newURI = HttpHelper.unredirect(newURI);
     }
-  }
-
-  private static String unredirect(String uri) throws IOException {
-    if (!isRedirector(uri)) {
-      return uri;
-    }
-    HttpUriRequest head = new HttpHead(uri);
-    AndroidHttpClient client = AndroidHttpClient.newInstance(null);
-    HttpResponse response = client.execute(head);
-    int status = response.getStatusLine().getStatusCode();
-    if (status == 301 || status == 302) {
-      Header redirect = response.getFirstHeader("Location");
-      if (redirect != null) {
-        String location = redirect.getValue();
-        if (location != null) {
-          return location;
-        }
-      }
-    }
-    return uri;
-  }
-
-  private static boolean isRedirector(String uri) {
-    for (String redirectorHost : REDIRECTOR_HOSTS) {
-      if (uri.startsWith(redirectorHost)) {
-        return true;
-      }
-    }
-    return false;
   }
 
 }
