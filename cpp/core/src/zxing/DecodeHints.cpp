@@ -21,6 +21,8 @@
 #include <zxing/common/IllegalArgumentException.h>
 namespace zxing {
 
+const DecodeHintType DecodeHints::CHARACTER_SET;
+
 const DecodeHints DecodeHints::PRODUCT_HINT(
     BARCODEFORMAT_UPC_E_HINT |
     BARCODEFORMAT_UPC_A_HINT |

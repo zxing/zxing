@@ -279,7 +279,7 @@ namespace zxing {
           // Decode another code from image
           try {
             code = decodeCode(row, counters, sizeof(counters)/sizeof(int), nextStart);
-          } catch (ReaderException re) {
+          } catch (ReaderException const& re) {
             throw re;
           }
 

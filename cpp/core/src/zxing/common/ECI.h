@@ -1,10 +1,10 @@
 // -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
+
+#ifndef __ECI__
+#define __ECI__
+
 /*
- *  ReaderException.cpp
- *  zxing
- *
- *  Created by Christian Brunschen on 13/05/2008.
- *  Copyright 2008-2011 ZXing authors All rights reserved.
+ * Copyright 2008-2011 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,17 +19,22 @@
  * limitations under the License.
  */
 
-#include <zxing/ReaderException.h>
-
 namespace zxing {
-
-ReaderException::ReaderException() {}
-
-ReaderException::ReaderException(const char *msg) :
-    Exception(msg) {
+  namespace common {
+    class ECI;
+  }
 }
+class zxing::common::ECI {
+private:
+  const int value;
 
-ReaderException::~ReaderException() throw() {
-}
+protected:
+  ECI(int value);
 
-}
+public:
+  int getValue() const;
+
+  static ECI* getECIByValue(int value);
+};
+
+#endif

@@ -20,6 +20,9 @@
  */
 
 #include <zxing/qrcode/decoder/DecodedBitStreamParser.h>
+#include <zxing/common/CharacterSetECI.h>
+#include <zxing/FormatException.h>
+#include <zxing/common/StringUtils.h>
 #include <iostream>
 #ifndef NO_ICONV
 #include <iconv.h>
@@ -38,6 +41,7 @@
 using namespace std;
 using namespace zxing;
 using namespace zxing::qrcode;
+using namespace zxing::common;
 
 const char DecodedBitStreamParser::ALPHANUMERIC_CHARS[] =
 { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B',
@@ -46,19 +50,29 @@ const char DecodedBitStreamParser::ALPHANUMERIC_CHARS[] =
   'Y', 'Z', ' ', '$', '%', '*', '+', '-', '.', '/', ':'
 };
 
-const char *DecodedBitStreamParser::ASCII = "ASCII";
-const char *DecodedBitStreamParser::ISO88591 = "ISO-8859-1";
-const char *DecodedBitStreamParser::UTF8 = "UTF-8";
-const char *DecodedBitStreamParser::SHIFT_JIS = "SHIFT_JIS";
-const char *DecodedBitStreamParser::EUC_JP = "EUC-JP";
+namespace {int GB2312_SUBSET = 1;}
 
-void DecodedBitStreamParser::append(std::string &result, const unsigned char *bufIn, size_t nIn, const char *src) {
+void DecodedBitStreamParser::append(std::string &result,
+                                    string const& in,
+                                    const char *src) {
+  append(result, (unsigned char const*)in.c_str(), in.length(), src);
+}
+
+void DecodedBitStreamParser::append(std::string &result,
+                                    const unsigned char *bufIn,
+                                    size_t nIn,
+                                    const char *src) {
 #ifndef NO_ICONV
   if (nIn == 0) {
     return;
   }
 
-  iconv_t cd = iconv_open(UTF8, src);
+  iconv_t cd = iconv_open(StringUtils::UTF8, src);
+  if (cd == (iconv_t)-1) {
+    result.append((const char *)bufIn, nIn);
+    return;
+  }
+
   const int maxOut = 4 * nIn + 1;
   unsigned char* bufOut = new unsigned char[maxOut];
 
@@ -86,6 +100,47 @@ void DecodedBitStreamParser::append(std::string &result, const unsigned char *bu
 #endif
 }
 
+void DecodedBitStreamParser::decodeHanziSegment(Ref<BitSource> bits_,
+                                                string& result,
+                                                int count) {
+    BitSource& bits (*bits_);
+    // Don't crash trying to read more bits than we have available.
+    if (count * 13 > bits.available()) {
+      throw FormatException();
+    }
+
+    // Each character will require 2 bytes. Read the characters as 2-byte pairs
+    // and decode as GB2312 afterwards
+    size_t nBytes = 2 * count;
+    unsigned char* buffer = new unsigned char[nBytes];
+    int offset = 0;
+    while (count > 0) {
+      // Each 13 bits encodes a 2-byte character
+      int twoBytes = bits.readBits(13);
+      int assembledTwoBytes = ((twoBytes / 0x060) << 8) | (twoBytes % 0x060);
+      if (assembledTwoBytes < 0x003BF) {
+        // In the 0xA1A1 to 0xAAFE range
+        assembledTwoBytes += 0x0A1A1;
+      } else {
+        // In the 0xB0A1 to 0xFAFE range
+        assembledTwoBytes += 0x0A6A1;
+      }
+      buffer[offset] = (unsigned char) ((assembledTwoBytes >> 8) & 0xFF);
+      buffer[offset + 1] = (unsigned char) (assembledTwoBytes & 0xFF);
+      offset += 2;
+      count--;
+    }
+
+    try {
+      append(result, buffer, nBytes, StringUtils::GB2312);
+    } catch (ReaderException const& re) {
+      delete [] buffer;
+      throw FormatException();
+    }
+
+    delete [] buffer;
+  }
+
 void DecodedBitStreamParser::decodeKanjiSegment(Ref<BitSource> bits, std::string &result, int count) {
   // Each character will require 2 bytes. Read the characters as 2-byte pairs
   // and decode as Shift_JIS afterwards
@@ -110,30 +165,45 @@ void DecodedBitStreamParser::decodeKanjiSegment(Ref<BitSource> bits, std::string
     count--;
   }
 
-  append(result, buffer, nBytes, SHIFT_JIS);
+  append(result, buffer, nBytes, StringUtils::SHIFT_JIS);
   delete[] buffer;
 }
 
-void DecodedBitStreamParser::decodeByteSegment(Ref<BitSource> bits, std::string &result, int count) {
+void DecodedBitStreamParser::decodeByteSegment(Ref<BitSource> bits_,
+                                               string& result,
+                                               int count,
+                                               CharacterSetECI* currentCharacterSetECI,
+                                               ArrayRef< ArrayRef<unsigned char> >& byteSegments,
+                                               Hashtable const& hints) {
   int nBytes = count;
-  unsigned char* readBytes = new unsigned char[nBytes];
-  if (count << 3 > bits->available()) {
-    ostringstream s;
-    s << "Count too large: " << count;
-    delete[] readBytes;
-    throw ReaderException(s.str().c_str());
+  BitSource& bits (*bits_);
+  // Don't crash trying to read more bits than we have available.
+  if (count << 3 > bits.available()) {
+    throw FormatException();
   }
+
+  ArrayRef<unsigned char> bytes_ (count);
+  unsigned char* readBytes = &(*bytes_)[0];
   for (int i = 0; i < count; i++) {
-    readBytes[i] = (unsigned char)bits->readBits(8);
+    readBytes[i] = (unsigned char) bits.readBits(8);
   }
-  // The spec isn't clear on this mode; see
-  // section 6.4.5: t does not say which encoding to assuming
-  // upon decoding. I have seen ISO-8859-1 used as well as
-  // Shift_JIS -- without anything like an ECI designator to
-  // give a hint.
-  const char *encoding = guessEncoding(readBytes, nBytes);
-  append(result, readBytes, nBytes, encoding);
-  delete[] readBytes;
+  string encoding;
+  if (currentCharacterSetECI == 0) {
+    // The spec isn't clear on this mode; see
+    // section 6.4.5: t does not say which encoding to assuming
+    // upon decoding. I have seen ISO-8859-1 used as well as
+    // Shift_JIS -- without anything like an ECI designator to
+    // give a hint.
+    encoding = StringUtils::guessEncoding(readBytes, count, hints);
+  } else {
+    encoding = currentCharacterSetECI->getEncodingName();
+  }
+  try {
+    append(result, readBytes, nBytes, encoding.c_str());
+  } catch (ReaderException const& re) {
+    throw FormatException();
+  }
+  byteSegments->values().push_back(bytes_);
 }
 
 void DecodedBitStreamParser::decodeNumericSegment(Ref<BitSource> bits, std::string &result, int count) {
@@ -186,249 +256,147 @@ void DecodedBitStreamParser::decodeNumericSegment(Ref<BitSource> bits, std::stri
     }
     bytes[i++] = ALPHANUMERIC_CHARS[digitBits];
   }
-  append(result, bytes, nBytes, ASCII);
+  append(result, bytes, nBytes, StringUtils::ASCII);
   delete[] bytes;
 }
 
-void DecodedBitStreamParser::decodeAlphanumericSegment(Ref<BitSource> bits, std::string &result, int count) {
-  int nBytes = count;
-  unsigned char* bytes = new unsigned char[nBytes];
-  int i = 0;
+char DecodedBitStreamParser::toAlphaNumericChar(size_t value) {
+  if (value >= sizeof(DecodedBitStreamParser::ALPHANUMERIC_CHARS)) {
+    throw FormatException();
+  }
+  return ALPHANUMERIC_CHARS[value];
+}
+
+void DecodedBitStreamParser::decodeAlphanumericSegment(Ref<BitSource> bits_,
+                                                       string& result,
+                                                       int count,
+                                                       bool fc1InEffect) {
+  BitSource& bits (*bits_);
+  ostringstream bytes;
   // Read two characters at a time
   while (count > 1) {
-    int nextTwoCharsBits = bits->readBits(11);
-    bytes[i++] = ALPHANUMERIC_CHARS[nextTwoCharsBits / 45];
-    bytes[i++] = ALPHANUMERIC_CHARS[nextTwoCharsBits % 45];
+    int nextTwoCharsBits = bits.readBits(11);
+    bytes << toAlphaNumericChar(nextTwoCharsBits / 45);
+    bytes << toAlphaNumericChar(nextTwoCharsBits % 45);
     count -= 2;
   }
   if (count == 1) {
-    bytes[i++] = ALPHANUMERIC_CHARS[bits->readBits(6)];
+    // special case: one character left
+    bytes << toAlphaNumericChar(bits.readBits(6));
   }
-  append(result, bytes, nBytes, ASCII);
-  delete[] bytes;
-}
-
-const char *
-DecodedBitStreamParser::guessEncoding(unsigned char *bytes, int length) {
-  const bool ASSUME_SHIFT_JIS = false;
-  char const* const PLATFORM_DEFAULT_ENCODING="UTF-8";
-
-  // Does it start with the UTF-8 byte order mark? then guess it's UTF-8
-  if (length > 3 && bytes[0] == (unsigned char)0xEF && bytes[1] == (unsigned char)0xBB && bytes[2]
-      == (unsigned char)0xBF) {
-    return UTF8;
-  }
-  // For now, merely tries to distinguish ISO-8859-1, UTF-8 and Shift_JIS,
-  // which should be by far the most common encodings. ISO-8859-1
-  // should not have bytes in the 0x80 - 0x9F range, while Shift_JIS
-  // uses this as a first byte of a two-byte character. If we see this
-  // followed by a valid second byte in Shift_JIS, assume it is Shift_JIS.
-  // If we see something else in that second byte, we'll make the risky guess
-  // that it's UTF-8.
-  bool canBeISO88591 = true;
-  bool canBeShiftJIS = true;
-  bool canBeUTF8 = true;
-  int utf8BytesLeft = 0;
-  int maybeDoubleByteCount = 0;
-  int maybeSingleByteKatakanaCount = 0;
-  bool sawLatin1Supplement = false;
-  bool sawUTF8Start = false;
-  bool lastWasPossibleDoubleByteStart = false;
-  for (int i = 0;
-       i < length && (canBeISO88591 || canBeShiftJIS || canBeUTF8);
-       i++) {
-    int value = bytes[i] & 0xFF;
-
-    // UTF-8 stuff
-    if (value >= 0x80 && value <= 0xBF) {
-      if (utf8BytesLeft > 0) {
-        utf8BytesLeft--;
-      }
-    } else {
-      if (utf8BytesLeft > 0) {
-        canBeUTF8 = false;
-      }
-      if (value >= 0xC0 && value <= 0xFD) {
-        sawUTF8Start = true;
-        int valueCopy = value;
-        while ((valueCopy & 0x40) != 0) {
-          utf8BytesLeft++;
-          valueCopy <<= 1;
-        }
-      }
-    }
-
-    // Shift_JIS stuff
-
-    if (value >= 0xA1 && value <= 0xDF) {
-      // count the number of characters that might be a Shift_JIS single-byte Katakana character
-      if (!lastWasPossibleDoubleByteStart) {
-        maybeSingleByteKatakanaCount++;
-      }
-    }
-    if (!lastWasPossibleDoubleByteStart &&
-        ((value >= 0xF0 && value <= 0xFF) || value == 0x80 || value == 0xA0)) {
-      canBeShiftJIS = false;
-    }
-    if (((value >= 0x81 && value <= 0x9F) || (value >= 0xE0 && value <= 0xEF))) {
-      // These start double-byte characters in Shift_JIS. Let's see if it's followed by a valid
-      // second byte.
-      if (lastWasPossibleDoubleByteStart) {
-        // If we just checked this and the last byte for being a valid double-byte
-        // char, don't check starting on this byte. If this and the last byte
-        // formed a valid pair, then this shouldn't be checked to see if it starts
-        // a double byte pair of course.
-        lastWasPossibleDoubleByteStart = false;
+  // See section 6.4.8.1, 6.4.8.2
+  string s = bytes.str();
+  if (fc1InEffect) {
+    // We need to massage the result a bit if in an FNC1 mode:
+    ostringstream r;
+    for (size_t i = 0; i < s.length(); i++) {
+      if (s[i] != '%') {
+        r << s[i];
       } else {
-        // ... otherwise do check to see if this plus the next byte form a valid
-        // double byte pair encoding a character.
-        lastWasPossibleDoubleByteStart = true;
-        if (i >= length - 1) {
-          canBeShiftJIS = false;
+        if (i < s.length() - 1 && s[i + 1] == '%') {
+          // %% is rendered as %
+          r << s[i++];
         } else {
-          int nextValue = bytes[i + 1] & 0xFF;
-          if (nextValue < 0x40 || nextValue > 0xFC) {
-            canBeShiftJIS = false;
-          } else {
-            maybeDoubleByteCount++;
-          }
-          // There is some conflicting information out there about which bytes can follow which in
-          // double-byte Shift_JIS characters. The rule above seems to be the one that matches practice.
+          // In alpha mode, % should be converted to FNC1 separator 0x1D
+          r << (char)0x1D;
         }
       }
-    } else {
-      lastWasPossibleDoubleByteStart = false;
     }
+    s = r.str();
   }
-  if (utf8BytesLeft > 0) {
-    canBeUTF8 = false;
-  }
-
-  // Easy -- if assuming Shift_JIS and no evidence it can't be, done
-  if (canBeShiftJIS && ASSUME_SHIFT_JIS) {
-    return SHIFT_JIS;
-  }
-  if (canBeUTF8 && sawUTF8Start) {
-    return UTF8;
-  }
-  // Distinguishing Shift_JIS and ISO-8859-1 can be a little tough. The crude heuristic is:
-  // - If we saw
-  //   - at least 3 bytes that starts a double-byte value (bytes that are rare in ISO-8859-1), or
-  //   - over 5% of bytes could be single-byte Katakana (also rare in ISO-8859-1),
-  // - and, saw no sequences that are invalid in Shift_JIS, then we conclude Shift_JIS
-  if (canBeShiftJIS && (maybeDoubleByteCount >= 3 || 20 * maybeSingleByteKatakanaCount > length)) {
-    return SHIFT_JIS;
-  }
-  // Otherwise, we default to ISO-8859-1 unless we know it can't be
-  if (!sawLatin1Supplement && canBeISO88591) {
-    return ISO88591;
-  }
-  // Otherwise, we take a wild guess with platform encoding
-  return PLATFORM_DEFAULT_ENCODING;
+  append(result, s, StringUtils::ASCII);
 }
 
-/*
-string DecodedBitStreamParser::decode(ArrayRef<unsigned char> bytes, Version *version) {
+namespace {
+  int parseECIValue(BitSource bits) {
+    int firstByte = bits.readBits(8);
+    if ((firstByte & 0x80) == 0) {
+      // just one byte
+      return firstByte & 0x7F;
+    }
+    if ((firstByte & 0xC0) == 0x80) {
+      // two bytes
+      int secondByte = bits.readBits(8);
+      return ((firstByte & 0x3F) << 8) | secondByte;
+    }
+    if ((firstByte & 0xE0) == 0xC0) {
+      // three bytes
+      int secondThirdBytes = bits.readBits(16);
+      return ((firstByte & 0x1F) << 16) | secondThirdBytes;
+    }
+    throw IllegalArgumentException("Bad ECI bits starting with byte " + firstByte);
+  }
+}
+
+Ref<DecoderResult>
+DecodedBitStreamParser::decode(ArrayRef<unsigned char> bytes,
+                               Version* version,
+                               ErrorCorrectionLevel const& ecLevel,
+                               Hashtable const& hints) {
+  Ref<BitSource> bits_ (new BitSource(bytes));
+  BitSource& bits (*bits_);
   string result;
-  Ref<BitSource> bits(new BitSource(bytes));
-  Mode *mode = &Mode::TERMINATOR;
-  do {
-    // While still another segment to read...
-    if (bits->available() < 4) {
-      // OK, assume we're done. Really, a TERMINATOR mode should have been recorded here
-      mode = &Mode::TERMINATOR;
-    } else {
-      mode = &Mode::forBits(bits->readBits(4)); // mode is encoded by 4 bits
-    }
-    if (mode != &Mode::TERMINATOR) {
-      // How many characters will follow, encoded in this mode?
-      int count = bits->readBits(mode->getCharacterCountBits(version));
-      if (mode == &Mode::NUMERIC) {
-        decodeNumericSegment(bits, result, count);
-      } else if (mode == &Mode::ALPHANUMERIC) {
-        decodeAlphanumericSegment(bits, result, count);
-      } else if (mode == &Mode::BYTE) {
-        decodeByteSegment(bits, result, count);
-      } else if (mode == &Mode::KANJI) {
-        decodeKanjiSegment(bits, result, count);
-      } else {
-        throw ReaderException("Unsupported mode indicator");
-      }
-    }
-  } while (mode != &Mode::TERMINATOR);
-  return result;
-}
-*/
-
-DecoderResult DecodedBitStreamParser::decode(ArrayRef<unsigned char> bytes,
-                                             Version* version,
-                                             ErrorCorrectionLevel ecLevel,
-                                             Hashtable hints) {
-  BitSource bits = new BitSource(bytes);
-  StringBuffer result = new StringBuffer(50);
-  CharacterSetECI currentCharacterSetECI = null;
-  boolean fc1InEffect = false;
-  Vector byteSegments = new Vector(1);
-  Mode mode;
+  CharacterSetECI* currentCharacterSetECI = 0;
+  bool fc1InEffect = false;
+  ArrayRef< ArrayRef<unsigned char> > byteSegments (size_t(0));
+  Mode* mode = 0;
   do {
     // While still another segment to read...
     if (bits.available() < 4) {
       // OK, assume we're done. Really, a TERMINATOR mode should have been recorded here
-      mode = Mode.TERMINATOR;
+      mode = &Mode::TERMINATOR;
     } else {
       try {
-        mode = Mode.forBits(bits.readBits(4)); // mode is encoded by 4 bits
-      } catch (IllegalArgumentException iae) {
-        throw FormatException.getFormatInstance();
+        mode = &Mode::forBits(bits.readBits(4)); // mode is encoded by 4 bits
+      } catch (IllegalArgumentException const& iae) {
+        throw iae;
+        // throw FormatException.getFormatInstance();
       }
     }
-    if (!mode.equals(Mode.TERMINATOR)) {
-      if (mode.equals(Mode.FNC1_FIRST_POSITION) || mode.equals(Mode.FNC1_SECOND_POSITION)) {
+    if (mode != &Mode::TERMINATOR) {
+      if ((mode == &Mode::FNC1_FIRST_POSITION) || (mode == &Mode::FNC1_SECOND_POSITION)) {
         // We do little with FNC1 except alter the parsed result a bit according to the spec
         fc1InEffect = true;
-      } else if (mode.equals(Mode.STRUCTURED_APPEND)) {
+      } else if (mode == &Mode::STRUCTURED_APPEND) {
         // not really supported; all we do is ignore it
         // Read next 8 bits (symbol sequence #) and 8 bits (parity data), then continue
         bits.readBits(16);
-      } else if (mode.equals(Mode.ECI)) {
+      } else if (mode == &Mode::ECI) {
         // Count doesn't apply to ECI
         int value = parseECIValue(bits);
-        currentCharacterSetECI = CharacterSetECI.getCharacterSetECIByValue(value);
-        if (currentCharacterSetECI == null) {
-          throw FormatException.getFormatInstance();
+        currentCharacterSetECI = CharacterSetECI::getCharacterSetECIByValue(value);
+        if (currentCharacterSetECI == 0) {
+          throw FormatException();
         }
       } else {
         // First handle Hanzi mode which does not start with character count
-        if (mode.equals(Mode.HANZI)) {
+        if (mode == &Mode::HANZI) {
           //chinese mode contains a sub set indicator right after mode indicator
           int subset = bits.readBits(4);
-          int countHanzi = bits.readBits(mode.getCharacterCountBits(version));
+          int countHanzi = bits.readBits(mode->getCharacterCountBits(version));
           if (subset == GB2312_SUBSET) {
-            decodeHanziSegment(bits, result, countHanzi);
+            decodeHanziSegment(bits_, result, countHanzi);
           }
         } else {
           // "Normal" QR code modes:
           // How many characters will follow, encoded in this mode?
-          int count = bits.readBits(mode.getCharacterCountBits(version));
-          if (mode.equals(Mode.NUMERIC)) {
-            decodeNumericSegment(bits, result, count);
-          } else if (mode.equals(Mode.ALPHANUMERIC)) {
-            decodeAlphanumericSegment(bits, result, count, fc1InEffect);
-          } else if (mode.equals(Mode.BYTE)) {
-            decodeByteSegment(bits, result, count, currentCharacterSetECI, byteSegments, hints);
-          } else if (mode.equals(Mode.KANJI)) {
-            decodeKanjiSegment(bits, result, count);
+          int count = bits.readBits(mode->getCharacterCountBits(version));
+          if (mode == &Mode::NUMERIC) {
+            decodeNumericSegment(bits_, result, count);
+          } else if (mode == &Mode::ALPHANUMERIC) {
+            decodeAlphanumericSegment(bits_, result, count, fc1InEffect);
+          } else if (mode == &Mode::BYTE) {
+            decodeByteSegment(bits_, result, count, currentCharacterSetECI, byteSegments, hints);
+          } else if (mode == &Mode::KANJI) {
+            decodeKanjiSegment(bits_, result, count);
           } else {
-            throw FormatException.getFormatInstance();
+            throw FormatException();
           }
         }
       }
     }
-  } while (!mode.equals(Mode.TERMINATOR));
+  } while (mode != &Mode::TERMINATOR);
 
-  return new DecoderResult(bytes,
-                           result.toString(),
-                           byteSegments.isEmpty() ? null : byteSegments,
-                           ecLevel == null ? null : ecLevel.toString());
+  return Ref<DecoderResult>(new DecoderResult(bytes, Ref<String>(new String(result)), byteSegments, (string)ecLevel));
 }
 

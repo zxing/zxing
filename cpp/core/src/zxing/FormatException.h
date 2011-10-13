@@ -1,10 +1,11 @@
-// -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
+#ifndef __FORMAT_EXCEPTION_H__
+#define __FORMAT_EXCEPTION_H__
+
 /*
- *  ReaderException.cpp
+ *  FormatException.h
  *  zxing
  *
- *  Created by Christian Brunschen on 13/05/2008.
- *  Copyright 2008-2011 ZXing authors All rights reserved.
+ *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,13 +24,12 @@
 
 namespace zxing {
 
-ReaderException::ReaderException() {}
-
-ReaderException::ReaderException(const char *msg) :
-    Exception(msg) {
-}
-
-ReaderException::~ReaderException() throw() {
-}
+class FormatException : public ReaderException {
+public:
+  FormatException();
+  FormatException(const char *msg);
+  ~FormatException() throw();
+};
 
 }
+#endif // __FORMAT_EXCEPTION_H__

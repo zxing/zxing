@@ -28,7 +28,7 @@ def all_files(dir, ext='.cpp', level=5):
 
 
 
-magick_include = ['/usr/include/ImageMagick/']
+magick_include = ['/usr/include/ImageMagick/', '/opt/local/include/ImageMagick/']
 magick_libs = ['Magick++', 'MagickWand', 'MagickCore']
 
 cppunit_libs = ['cppunit']

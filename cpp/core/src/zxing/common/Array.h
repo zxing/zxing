@@ -93,7 +93,7 @@ public:
   }
 };
 
-template<typename T> class ArrayRef {
+template<typename T> class ArrayRef : public Counted {
 private:
 public:
   Array<T> *array_;

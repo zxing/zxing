@@ -89,7 +89,7 @@ namespace zxing {
     for (unsigned int i = 0; i < readers_.size(); i++) {
       try {
         return readers_[i]->decode(image, hints_);
-      } catch (ReaderException re) {
+      } catch (ReaderException const& re) {
         // continue
       }
     }

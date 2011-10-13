@@ -1,10 +1,6 @@
 // -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
 /*
- *  ReaderException.cpp
- *  zxing
- *
- *  Created by Christian Brunschen on 13/05/2008.
- *  Copyright 2008-2011 ZXing authors All rights reserved.
+ * Copyright 2008-2011 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,17 +15,25 @@
  * limitations under the License.
  */
 
-#include <zxing/ReaderException.h>
+#include <zxing/common/ECI.h>
+#include <zxing/common/CharacterSetECI.h>
+#include <zxing/common/IllegalArgumentException.h>
 
-namespace zxing {
+using zxing::common::ECI;
+using zxing::IllegalArgumentException;
 
-ReaderException::ReaderException() {}
+ECI::ECI(int value_) : value(value_) {}
 
-ReaderException::ReaderException(const char *msg) :
-    Exception(msg) {
+int ECI::getValue() const {
+  return value;
 }
 
-ReaderException::~ReaderException() throw() {
-}
-
+ECI* ECI::getECIByValue(int value) {
+  if (value < 0 || value > 999999) {
+    throw IllegalArgumentException("Bad ECI value: " + value);
+  }
+  if (value < 900) { // Character set ECIs use 000000 - 000899
+    return CharacterSetECI::getCharacterSetECIByValue(value);
+  }
+  return 0;
 }

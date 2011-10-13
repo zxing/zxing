@@ -1,9 +1,10 @@
+// -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
 /*
  *  DecoderResult.cpp
  *  zxing
  *
  *  Created by Christian Brunschen on 20/05/2008.
- *  Copyright 2008 ZXing authors All rights reserved.
+ *  Copyright 2008-2011 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,11 +21,21 @@
 
 #include <zxing/common/DecoderResult.h>
 
-namespace zxing {
+using namespace std;
+using namespace zxing;
 
-DecoderResult::DecoderResult(ArrayRef<unsigned char> rawBytes, Ref<String> text) :
-    rawBytes_(rawBytes), text_(text) {
-}
+DecoderResult::DecoderResult(ArrayRef<unsigned char> rawBytes,
+                             Ref<String> text,
+                             ArrayRef< ArrayRef<unsigned char> >& byteSegments,
+                             string const& ecLevel) :
+  rawBytes_(rawBytes),
+  text_(text),
+  byteSegments_(byteSegments),
+  ecLevel_(ecLevel) {}
+
+DecoderResult::DecoderResult(ArrayRef<unsigned char> rawBytes,
+                             Ref<String> text)
+  : rawBytes_(rawBytes), text_(text) {}
 
 ArrayRef<unsigned char> DecoderResult::getRawBytes() {
   return rawBytes_;
@@ -32,6 +43,4 @@ ArrayRef<unsigned char> DecoderResult::getRawBytes() {
 
 Ref<String> DecoderResult::getText() {
   return text_;
-}
-
 }

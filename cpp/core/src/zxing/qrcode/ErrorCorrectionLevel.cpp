@@ -1,9 +1,10 @@
+// -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
 /*
  *  ErrorCorrectionLevel.cpp
  *  zxing
  *
  *  Created by Christian Brunschen on 15/05/2008.
- *  Copyright 2008 ZXing authors All rights reserved.
+ *  Copyright 2008-2011 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,15 +21,30 @@
 
 #include <zxing/qrcode/ErrorCorrectionLevel.h>
 
+using std::string;
+
 namespace zxing {
 namespace qrcode {
 
-ErrorCorrectionLevel::ErrorCorrectionLevel(int inOrdinal) :
-    ordinal_(inOrdinal) {
+ErrorCorrectionLevel::ErrorCorrectionLevel(int inOrdinal,
+                                           int bits,
+                                           char const* name) :
+  ordinal_(inOrdinal), bits_(bits), name_(name) {}
+
+int ErrorCorrectionLevel::ordinal() const {
+  return ordinal_;
 }
 
-int ErrorCorrectionLevel::ordinal() {
-  return ordinal_;
+int ErrorCorrectionLevel::bits() const {
+  return bits_;
+}
+
+string const& ErrorCorrectionLevel::name() const {
+  return name_;
+}
+
+ErrorCorrectionLevel::operator string const& () const {
+  return name_;
 }
 
 ErrorCorrectionLevel& ErrorCorrectionLevel::forBits(int bits) {
@@ -38,10 +54,10 @@ ErrorCorrectionLevel& ErrorCorrectionLevel::forBits(int bits) {
   return *FOR_BITS[bits];
 }
 
-ErrorCorrectionLevel ErrorCorrectionLevel::L(0);
-ErrorCorrectionLevel ErrorCorrectionLevel::M(1);
-ErrorCorrectionLevel ErrorCorrectionLevel::Q(2);
-ErrorCorrectionLevel ErrorCorrectionLevel::H(3);
+  ErrorCorrectionLevel ErrorCorrectionLevel::L(0, 0x01, "L");
+  ErrorCorrectionLevel ErrorCorrectionLevel::M(1, 0x00, "M");
+  ErrorCorrectionLevel ErrorCorrectionLevel::Q(2, 0x03, "Q");
+  ErrorCorrectionLevel ErrorCorrectionLevel::H(3, 0x02, "H");
 ErrorCorrectionLevel *ErrorCorrectionLevel::FOR_BITS[] = { &M, &L, &H, &Q };
 int ErrorCorrectionLevel::N_LEVELS = 4;
 

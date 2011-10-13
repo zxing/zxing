@@ -46,7 +46,7 @@ void Decoder::correctErrors(ArrayRef<unsigned char> codewordBytes, int numDataCo
 
   try {
     rsDecoder_.decode(codewordInts, numECCodewords);
-  } catch (ReedSolomonException ex) {
+  } catch (ReedSolomonException const& ex) {
     ReaderException rex(ex.what());
     throw rex;
   }
