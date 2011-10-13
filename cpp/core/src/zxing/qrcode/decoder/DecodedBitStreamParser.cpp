@@ -327,6 +327,7 @@ DecodedBitStreamParser::guessEncoding(unsigned char *bytes, int length) {
   return PLATFORM_DEFAULT_ENCODING;
 }
 
+/*
 string DecodedBitStreamParser::decode(ArrayRef<unsigned char> bytes, Version *version) {
   string result;
   Ref<BitSource> bits(new BitSource(bytes));
@@ -357,3 +358,77 @@ string DecodedBitStreamParser::decode(ArrayRef<unsigned char> bytes, Version *ve
   } while (mode != &Mode::TERMINATOR);
   return result;
 }
+*/
+
+DecoderResult DecodedBitStreamParser::decode(ArrayRef<unsigned char> bytes,
+                                             Version* version,
+                                             ErrorCorrectionLevel ecLevel,
+                                             Hashtable hints) {
+  BitSource bits = new BitSource(bytes);
+  StringBuffer result = new StringBuffer(50);
+  CharacterSetECI currentCharacterSetECI = null;
+  boolean fc1InEffect = false;
+  Vector byteSegments = new Vector(1);
+  Mode mode;
+  do {
+    // While still another segment to read...
+    if (bits.available() < 4) {
+      // OK, assume we're done. Really, a TERMINATOR mode should have been recorded here
+      mode = Mode.TERMINATOR;
+    } else {
+      try {
+        mode = Mode.forBits(bits.readBits(4)); // mode is encoded by 4 bits
+      } catch (IllegalArgumentException iae) {
+        throw FormatException.getFormatInstance();
+      }
+    }
+    if (!mode.equals(Mode.TERMINATOR)) {
+      if (mode.equals(Mode.FNC1_FIRST_POSITION) || mode.equals(Mode.FNC1_SECOND_POSITION)) {
+        // We do little with FNC1 except alter the parsed result a bit according to the spec
+        fc1InEffect = true;
+      } else if (mode.equals(Mode.STRUCTURED_APPEND)) {
+        // not really supported; all we do is ignore it
+        // Read next 8 bits (symbol sequence #) and 8 bits (parity data), then continue
+        bits.readBits(16);
+      } else if (mode.equals(Mode.ECI)) {
+        // Count doesn't apply to ECI
+        int value = parseECIValue(bits);
+        currentCharacterSetECI = CharacterSetECI.getCharacterSetECIByValue(value);
+        if (currentCharacterSetECI == null) {
+          throw FormatException.getFormatInstance();
+        }
+      } else {
+        // First handle Hanzi mode which does not start with character count
+        if (mode.equals(Mode.HANZI)) {
+          //chinese mode contains a sub set indicator right after mode indicator
+          int subset = bits.readBits(4);
+          int countHanzi = bits.readBits(mode.getCharacterCountBits(version));
+          if (subset == GB2312_SUBSET) {
+            decodeHanziSegment(bits, result, countHanzi);
+          }
+        } else {
+          // "Normal" QR code modes:
+          // How many characters will follow, encoded in this mode?
+          int count = bits.readBits(mode.getCharacterCountBits(version));
+          if (mode.equals(Mode.NUMERIC)) {
+            decodeNumericSegment(bits, result, count);
+          } else if (mode.equals(Mode.ALPHANUMERIC)) {
+            decodeAlphanumericSegment(bits, result, count, fc1InEffect);
+          } else if (mode.equals(Mode.BYTE)) {
+            decodeByteSegment(bits, result, count, currentCharacterSetECI, byteSegments, hints);
+          } else if (mode.equals(Mode.KANJI)) {
+            decodeKanjiSegment(bits, result, count);
+          } else {
+            throw FormatException.getFormatInstance();
+          }
+        }
+      }
+    }
+  } while (!mode.equals(Mode.TERMINATOR));
+
+  return new DecoderResult(bytes,
+                           result.toString(),
+                           byteSegments.isEmpty() ? null : byteSegments,
+                           ecLevel == null ? null : ecLevel.toString());
+}
+

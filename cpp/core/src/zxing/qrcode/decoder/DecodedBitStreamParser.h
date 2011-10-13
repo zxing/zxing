@@ -1,3 +1,5 @@
+// -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
+
 #ifndef __DECODED_BIT_STREAM_PARSER_H__
 #define __DECODED_BIT_STREAM_PARSER_H__
 
@@ -27,8 +29,6 @@
 #include <zxing/common/Counted.h>
 #include <zxing/common/Array.h>
 
-
-
 namespace zxing {
 namespace qrcode {
 
@@ -50,7 +50,7 @@ private:
   static void append(std::string &ost, const unsigned char *bufIn, size_t nIn, const char *src);
 
 public:
-  static std::string decode(ArrayRef<unsigned char> bytes, Version *version);
+  static DecoderResulta decode(ArrayRef<unsigned char> bytes, Version *version);
 };
 
 }
