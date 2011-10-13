@@ -1,3 +1,4 @@
+// -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
 #ifndef __QR_CODE_READER_H__
 #define __QR_CODE_READER_H__
 

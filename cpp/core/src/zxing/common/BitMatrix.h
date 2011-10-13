@@ -1,3 +1,4 @@
+// -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
 #ifndef __BIT_MATRIX_H__
 #define __BIT_MATRIX_H__
 
