@@ -26,6 +26,10 @@ import android.view.WindowManager;
 
 import java.util.regex.Pattern;
 
+/**
+ * A class which deals with reading, parsing, and setting the camera parameters which are used to
+ * configure the camera hardware.
+ */
 final class CameraConfigurationManager {
 
   private static final String TAG = CameraConfigurationManager.class.getSimpleName();
@@ -91,13 +95,13 @@ final class CameraConfigurationManager {
 
   private static Point getCameraResolution(Camera.Parameters parameters, Point screenResolution) {
     String previewSizeValueString = parameters.get("preview-size-values");
-    // saw this on Xperia
+
+    // This string is wrong but was seen on the Sony Xperia.
     if (previewSizeValueString == null) {
       previewSizeValueString = parameters.get("preview-size-value");
     }
 
     Point cameraResolution = null;
-
     if (previewSizeValueString != null) {
       Log.d(TAG, "preview-size-values parameter: " + previewSizeValueString);
       cameraResolution = findBestPreviewSizeValue(previewSizeValueString, screenResolution);
@@ -105,11 +109,8 @@ final class CameraConfigurationManager {
 
     if (cameraResolution == null) {
       // Ensure that the camera resolution is a multiple of 8, as the screen may not be.
-      cameraResolution = new Point(
-          (screenResolution.x >> 3) << 3,
-          (screenResolution.y >> 3) << 3);
+      cameraResolution = new Point((screenResolution.x >> 3) << 3, (screenResolution.y >> 3) << 3);
     }
-
     return cameraResolution;
   }
 
@@ -119,7 +120,6 @@ final class CameraConfigurationManager {
     int bestY = 0;
     int diff = Integer.MAX_VALUE;
     for (String previewSize : COMMA_PATTERN.split(previewSizeValueString)) {
-
       previewSize = previewSize.trim();
       int dimPosition = previewSize.indexOf('x');
       if (dimPosition < 0) {
@@ -147,7 +147,6 @@ final class CameraConfigurationManager {
         bestY = newY;
         diff = newDiff;
       }
-
     }
 
     if (bestX > 0 && bestY > 0) {
@@ -193,7 +192,6 @@ final class CameraConfigurationManager {
     }
 
     int tenDesiredZoom = TEN_DESIRED_ZOOM;
-
     String maxZoomString = parameters.get("max-zoom");
     if (maxZoomString != null) {
       try {
@@ -236,14 +234,14 @@ final class CameraConfigurationManager {
       }
     }
 
-    // Set zoom. This helps encourage the user to pull back.
-    // Some devices like the Behold have a zoom parameter
+    // Sets the zoom which helps encourage the user to pull back.
+    // Some devices like the Behold have a zoom parameter.
     if (maxZoomString != null || motZoomValuesString != null) {
       parameters.set("zoom", String.valueOf(tenDesiredZoom / 10.0));
     }
 
     // Most devices, like the Hero, appear to expose this zoom parameter.
-    // It takes on values like "27" which appears to mean 2.7x zoom
+    // It takes on values like "27" which appears to mean 2.7x zoom.
     if (takingPictureZoomMaxString != null) {
       parameters.set("taking-picture-zoom", tenDesiredZoom);
     }
