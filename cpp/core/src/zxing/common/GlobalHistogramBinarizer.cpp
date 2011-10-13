@@ -19,8 +19,8 @@
  */
 
 #include <zxing/common/GlobalHistogramBinarizer.h>
-
 #include <zxing/common/IllegalArgumentException.h>
+#include <zxing/common/Array.h>
 
 namespace zxing {
 using namespace std;
@@ -107,7 +107,8 @@ Ref<BitMatrix> GlobalHistogramBinarizer::getBlackMatrix() {
   // Quickly calculates the histogram by sampling four rows from the image.
   // This proved to be more robust on the blackbox tests than sampling a
   // diagonal as we used to do.
-  unsigned char* row = new unsigned char[width];
+  ArrayRef<unsigned char> ref (width);
+  unsigned char* row = &ref[0];
   for (int y = 1; y < 5; y++) {
     int rownum = height * y / 5;
     int right = (width << 2) / 5;
@@ -130,7 +131,7 @@ Ref<BitMatrix> GlobalHistogramBinarizer::getBlackMatrix() {
   }
 
   cached_matrix_ = matrix_ref;
-  delete [] row;
+  // delete [] row;
   return matrix_ref;
 }
 

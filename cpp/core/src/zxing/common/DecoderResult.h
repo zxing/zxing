@@ -31,9 +31,17 @@ class DecoderResult : public Counted {
 private:
   ArrayRef<unsigned char> rawBytes_;
   Ref<String> text_;
+  ArrayRef< ArrayRef<unsigned char> > byteSegments_;
+  std::string ecLevel_;
 
 public:
+  DecoderResult(ArrayRef<unsigned char> rawBytes,
+                Ref<String> text,
+                ArrayRef< ArrayRef<unsigned char> >& byteSegments,
+                std::string const& ecLevel);
+
   DecoderResult(ArrayRef<unsigned char> rawBytes, Ref<String> text);
+
   ArrayRef<unsigned char> getRawBytes();
   Ref<String> getText();
 };

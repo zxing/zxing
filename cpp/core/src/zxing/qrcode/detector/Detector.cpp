@@ -82,7 +82,7 @@ Ref<DetectorResult> Detector::detect(DecodeHints const& hints) {
       try {
         alignmentPattern = findAlignmentInRegion(moduleSize, estAlignmentX, estAlignmentY, (float)i);
         break;
-      } catch (zxing::ReaderException re) {
+      } catch (zxing::ReaderException const& re) {
         // try next round
       }
     }

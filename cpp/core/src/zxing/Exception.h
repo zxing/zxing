@@ -30,6 +30,7 @@ private:
   std::string message;
 
 public:
+  Exception();
   Exception(const char *msg);
   virtual const char* what() const throw();
   virtual ~Exception() throw();

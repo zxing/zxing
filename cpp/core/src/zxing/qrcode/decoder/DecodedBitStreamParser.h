@@ -24,33 +24,46 @@
 
 #include <string>
 #include <sstream>
+#include <map>
 #include <zxing/qrcode/decoder/Mode.h>
 #include <zxing/common/BitSource.h>
 #include <zxing/common/Counted.h>
 #include <zxing/common/Array.h>
+#include <zxing/common/DecoderResult.h>
+#include <zxing/common/CharacterSetECI.h>
+#include <zxing/DecodeHints.h>
 
 namespace zxing {
 namespace qrcode {
 
 class DecodedBitStreamParser {
+public:
+  typedef std::map<DecodeHintType, std::string> Hashtable;
+
 private:
-  static const char ALPHANUMERIC_CHARS[];
+  static char const ALPHANUMERIC_CHARS[];
+  static char toAlphaNumericChar(size_t value);
 
-  static const char *ASCII;
-  static const char *ISO88591;
-  static const char *UTF8;
-  static const char *SHIFT_JIS;
-  static const char *EUC_JP;
-
+  static void decodeHanziSegment(Ref<BitSource> bits, std::string &result, int count);
   static void decodeKanjiSegment(Ref<BitSource> bits, std::string &result, int count);
   static void decodeByteSegment(Ref<BitSource> bits, std::string &result, int count);
-  static void decodeAlphanumericSegment(Ref<BitSource> bits, std::string &result, int count);
+  static void decodeByteSegment(Ref<BitSource> bits_,
+                                std::string& result,
+                                int count,
+                                zxing::common::CharacterSetECI* currentCharacterSetECI,
+                                ArrayRef< ArrayRef<unsigned char> >& byteSegments,
+                                Hashtable const& hints);
+  static void decodeAlphanumericSegment(Ref<BitSource> bits, std::string &result, int count, bool fc1InEffect);
   static void decodeNumericSegment(Ref<BitSource> bits, std::string &result, int count);
-  static const char *guessEncoding(unsigned char *bytes, int length);
+
   static void append(std::string &ost, const unsigned char *bufIn, size_t nIn, const char *src);
+  static void append(std::string &ost, std::string const& in, const char *src);
 
 public:
-  static DecoderResulta decode(ArrayRef<unsigned char> bytes, Version *version);
+  static Ref<DecoderResult> decode(ArrayRef<unsigned char> bytes,
+                                   Version *version,
+                                   ErrorCorrectionLevel const& ecLevel,
+                                   Hashtable const& hints);
 };
 
 }

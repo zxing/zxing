@@ -26,6 +26,7 @@ namespace zxing {
 
 class ReaderException : public Exception {
 public:
+  ReaderException();
   ReaderException(const char *msg);
   ~ReaderException() throw();
 };

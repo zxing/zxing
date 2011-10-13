@@ -103,7 +103,7 @@ namespace zxing {
         delete [] endRange;
         ArrayRef<unsigned char> resultBytes(1);
         return Ref<Result>(new Result(resultString, resultBytes, resultPoints, BarcodeFormat_ITF));
-      } catch (ReaderException re) {
+      } catch (ReaderException const& re) {
         delete [] startRange;
         delete [] endRange;
         return Ref<Result>();
@@ -179,7 +179,7 @@ namespace zxing {
           narrowLineWidth = (startPattern[1] - startPattern[0]) >> 2;
           validateQuietZone(row, startPattern[0]);
           return startPattern;
-      } catch (ReaderException re) {
+      } catch (ReaderException const& re) {
           delete [] startPattern;
         throw re;
       }
@@ -217,7 +217,7 @@ namespace zxing {
 
         row->reverse();
         return endPattern;
-      } catch (ReaderException re) {
+      } catch (ReaderException const& re) {
                                 delete [] endPattern;
         row->reverse();
         throw re;

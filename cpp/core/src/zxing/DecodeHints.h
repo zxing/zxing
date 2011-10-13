@@ -30,6 +30,12 @@ class DecodeHints {
 
  private:
 
+  DecodeHintType hints;
+
+  Ref<ResultPointCallback> callback;
+
+ public:
+
   static const DecodeHintType BARCODEFORMAT_QR_CODE_HINT = 1 << BarcodeFormat_QR_CODE;
   static const DecodeHintType BARCODEFORMAT_DATA_MATRIX_HINT = 1 << BarcodeFormat_DATA_MATRIX;
   static const DecodeHintType BARCODEFORMAT_UPC_E_HINT = 1 << BarcodeFormat_UPC_E;
@@ -39,13 +45,8 @@ class DecodeHints {
   static const DecodeHintType BARCODEFORMAT_CODE_128_HINT = 1 << BarcodeFormat_CODE_128;
   static const DecodeHintType BARCODEFORMAT_CODE_39_HINT = 1 << BarcodeFormat_CODE_39;
   static const DecodeHintType BARCODEFORMAT_ITF_HINT = 1 << BarcodeFormat_ITF;
+  static const DecodeHintType CHARACTER_SET = 1 << 30;
   static const DecodeHintType TRYHARDER_HINT = 1 << 31;
-
-  DecodeHintType hints;
-
-  Ref<ResultPointCallback> callback;
-
- public:
 
   static const DecodeHints PRODUCT_HINT;
   static const DecodeHints ONED_HINT;

@@ -46,7 +46,7 @@ void Decoder::correctErrors(ArrayRef<unsigned char> codewordBytes, int numDataCo
 
   try {
     rsDecoder_.decode(codewordInts, numECCodewords);
-  } catch (ReedSolomonException ex) {
+  } catch (ReedSolomonException const& ex) {
     ReaderException rex(ex.what());
     throw rex;
   }
@@ -92,11 +92,10 @@ Ref<DecoderResult> Decoder::decode(Ref<BitMatrix> bits) {
     }
   }
 
-  // Decode the contents of that stream of bytes
-  Ref<String> text(new String(DecodedBitStreamParser::decode(resultBytes, version)));
-
-  Ref<DecoderResult> result(new DecoderResult(resultBytes, text));
-  return result;
+  return DecodedBitStreamParser::decode(resultBytes,
+                                        version,
+                                        ecLevel,
+                                        DecodedBitStreamParser::Hashtable());
 }
 
 }

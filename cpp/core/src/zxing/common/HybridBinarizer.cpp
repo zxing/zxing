@@ -70,6 +70,9 @@ Ref<BitMatrix> HybridBinarizer::getBlackMatrix() {
     calculateThresholdForBlock(luminances, subWidth, subHeight, width, height, blackPoints, newMatrix);
     matrix_ = newMatrix;
 
+    // N.B.: these deletes are inadequate if anything between the new and this point can throw.
+    // As of this writing, it doesn't look like they do.
+
     delete [] blackPoints;
     delete [] luminances;
   } else {
