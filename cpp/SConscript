@@ -13,7 +13,7 @@ if debug:
 	#compile_options['CPPDEFINES'] = "-DDEBUG"
 	flags.append("-O0 -g3 -ggdb -Wall")
 else:
-	flags.append("-O -g3 -Wall")
+	flags.append("-Os -g3 -Wall")
 if env['PIC']:
 	flags.append("-fPIC")
 
