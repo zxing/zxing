@@ -25,7 +25,6 @@
 #include <sstream>
 #include <string>
 
-using std::numeric_limits;
 using std::ostream;
 using std::ostringstream;
 
@@ -34,21 +33,9 @@ using zxing::BitArray;
 using zxing::Ref;
 
 namespace {
-  unsigned int logDigits(unsigned digits) {
-    unsigned log = 0;
-    unsigned val = 1;
-    while (val < digits) {
-      log++;
-      val <<= 1;
-    }
-    return log;
-  }
-
-  const unsigned int bitsPerWord = numeric_limits<unsigned int>::digits;
-  const unsigned int logBits = logDigits(bitsPerWord);
-  const unsigned int bitsMask = (1 << logBits) - 1;
-
-  size_t wordsForSize(size_t width, size_t height) {
+  size_t wordsForSize(size_t width,
+                      size_t height,
+                      unsigned int logBits) {
     size_t bits = width * height;
     int arraySize = bits >> logBits;
     if (bits - (arraySize << logBits) != 0) {
@@ -60,16 +47,14 @@ namespace {
 
 BitMatrix::BitMatrix(size_t dimension) :
   width_(dimension), height_(dimension), words_(0), bits_(NULL) {
-
-  words_ = wordsForSize(width_, height_);
+  words_ = wordsForSize(width_, height_, logBits);
   bits_ = new unsigned int[words_];
   clear();
 }
 
 BitMatrix::BitMatrix(size_t width, size_t height) :
   width_(width), height_(height), words_(0), bits_(NULL) {
-
-  words_ = wordsForSize(width_, height_);
+  words_ = wordsForSize(width_, height_, logBits);
   bits_ = new unsigned int[words_];
   clear();
 }
@@ -78,16 +63,6 @@ BitMatrix::~BitMatrix() {
   delete[] bits_;
 }
 
-
-bool BitMatrix::get(size_t x, size_t y) const {
-  size_t offset = x + width_ * y;
-  return ((bits_[offset >> logBits] >> (offset & bitsMask)) & 0x01) != 0;
-}
-
-void BitMatrix::set(size_t x, size_t y) {
-  size_t offset = x + width_ * y;
-  bits_[offset >> logBits] |= 1 << (offset & bitsMask);
-}
 
 void BitMatrix::flip(size_t x, size_t y) {
   size_t offset = x + width_ * y;
@@ -135,7 +110,7 @@ Ref<BitArray> BitMatrix::getRow(int y, Ref<BitArray> row) {
     size_t lastBit = i < lastWord ? bitsPerWord - 1 : end & bitsMask;
     unsigned int mask;
     if (firstBit == 0 && lastBit == logBits) {
-      mask = numeric_limits<unsigned int>::max();
+      mask = std::numeric_limits<unsigned int>::max();
     } else {
       mask = 0;
       for (size_t j = firstBit; j <= lastBit; j++) {

@@ -21,7 +21,6 @@
  */
 
 //#define DEBUG_COUNTING
-//using namespace std;
 
 #include <iostream>
 
@@ -45,7 +44,7 @@ public:
   }
   virtual ~Counted() {
   }
-  virtual Counted *retain() {
+  Counted *retain() {
 #ifdef DEBUG_COUNTING
     cout << "retaining " << typeid(*this).name() << " " << this <<
          " @ " << count_;
@@ -56,7 +55,7 @@ public:
 #endif
     return this;
   }
-  virtual void release() {
+  void release() {
 #ifdef DEBUG_COUNTING
     cout << "releasing " << typeid(*this).name() << " " << this <<
          " @ " << count_;

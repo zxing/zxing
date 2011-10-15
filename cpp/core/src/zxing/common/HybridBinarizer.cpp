@@ -44,19 +44,22 @@ HybridBinarizer::~HybridBinarizer() {
 }
 
 
-Ref<Binarizer> HybridBinarizer::createBinarizer(Ref<LuminanceSource> source) {
+Ref<Binarizer>
+HybridBinarizer::createBinarizer(Ref<LuminanceSource> source) {
   return Ref<Binarizer> (new HybridBinarizer(source));
 }
 
 Ref<BitMatrix> HybridBinarizer::getBlackMatrix() {
-  // Calculates the final BitMatrix once for all requests. This could be called once from the
-  // constructor instead, but there are some advantages to doing it lazily, such as making
-  // profiling easier, and not doing heavy lifting when callers don't expect it.
+  // Calculates the final BitMatrix once for all requests. This could
+  // be called once from the constructor instead, but there are some
+  // advantages to doing it lazily, such as making profiling easier,
+  // and not doing heavy lifting when callers don't expect it.
   if (matrix_) {
     return matrix_;
   }
   LuminanceSource& source = *getLuminanceSource();
-  if (source.getWidth() >= MINIMUM_DIMENSION && source.getHeight() >= MINIMUM_DIMENSION) {
+  if (source.getWidth() >= MINIMUM_DIMENSION &&
+      source.getHeight() >= MINIMUM_DIMENSION) {
     unsigned char* luminances = source.getMatrix();
     int width = source.getWidth();
     int height = source.getHeight();
@@ -68,14 +71,22 @@ Ref<BitMatrix> HybridBinarizer::getBlackMatrix() {
     if ((height & BLOCK_SIZE_MASK) != 0) {
       subHeight++;
     }
-    int* blackPoints = calculateBlackPoints(luminances, subWidth, subHeight, width, height);
+    int* blackPoints =
+      calculateBlackPoints(luminances, subWidth, subHeight, width, height);
 
     Ref<BitMatrix> newMatrix (new BitMatrix(width, height));
-    calculateThresholdForBlock(luminances, subWidth, subHeight, width, height, blackPoints, newMatrix);
+    calculateThresholdForBlock(luminances,
+                               subWidth,
+                               subHeight,
+                               width,
+                               height,
+                               blackPoints,
+                               newMatrix);
     matrix_ = newMatrix;
 
-    // N.B.: these deletes are inadequate if anything between the new and this point can throw.
-    // As of this writing, it doesn't look like they do.
+    // N.B.: these deletes are inadequate if anything between the new
+    // and this point can throw.  As of this writing, it doesn't look
+    // like they do.
 
     delete [] blackPoints;
     delete [] luminances;
@@ -86,8 +97,14 @@ Ref<BitMatrix> HybridBinarizer::getBlackMatrix() {
   return matrix_;
 }
 
-void HybridBinarizer::calculateThresholdForBlock(unsigned char* luminances, int subWidth, int subHeight,
-    int width, int height, int blackPoints[], Ref<BitMatrix> matrix) {
+void
+HybridBinarizer::calculateThresholdForBlock(unsigned char* luminances,
+                                            int subWidth,
+                                            int subHeight,
+                                            int width,
+                                            int height,
+                                            int blackPoints[],
+                                            Ref<BitMatrix> const& matrix) {
   for (int y = 0; y < subHeight; y++) {
     int yoffset = y << BLOCK_SIZE_POWER;
     if (yoffset + BLOCK_SIZE >= height) {
@@ -117,8 +134,12 @@ void HybridBinarizer::calculateThresholdForBlock(unsigned char* luminances, int 
   }
 }
 
-void HybridBinarizer::threshold8x8Block(unsigned char* luminances, int xoffset, int yoffset, int threshold,
-    int stride, Ref<BitMatrix> matrix) {
+void HybridBinarizer::threshold8x8Block(unsigned char* luminances,
+                                        int xoffset,
+                                        int yoffset,
+                                        int threshold,
+                                        int stride,
+                                        Ref<BitMatrix> const& matrix) {
   for (int y = 0, offset = yoffset * stride + xoffset;
        y < BLOCK_SIZE;
        y++,  offset += stride) {

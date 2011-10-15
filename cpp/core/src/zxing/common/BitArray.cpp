@@ -59,14 +59,6 @@ size_t BitArray::getSize() {
   return size_;
 }
 
-bool BitArray::get(size_t i) {
-  return (bits_[i >> logBits_] & (1 << (i & bitsMask_))) != 0;
-}
-
-void BitArray::set(size_t i) {
-  bits_[i >> logBits_] |= 1 << (i & bitsMask_);
-}
-
 void BitArray::setBulk(size_t i, unsigned int newBits) {
   bits_[i >> logBits_] = newBits;
 }

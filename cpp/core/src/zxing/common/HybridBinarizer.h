@@ -41,15 +41,28 @@ namespace zxing {
 		virtual Ref<BitMatrix> getBlackMatrix();
 		Ref<Binarizer> createBinarizer(Ref<LuminanceSource> source);
   private:
-    // We'll be using one-D arrays because C++ can't dynamically allocate 2D arrays
-    int* calculateBlackPoints(unsigned char* luminances, int subWidth, int subHeight,
-      int width, int height);
-    void calculateThresholdForBlock(unsigned char* luminances, int subWidth, int subHeight,
-      int width, int height, int blackPoints[], Ref<BitMatrix> matrix);
-    void threshold8x8Block(unsigned char* luminances, int xoffset, int yoffset, int threshold,
-      int stride, Ref<BitMatrix> matrix);
+    // We'll be using one-D arrays because C++ can't dynamically allocate 2D
+    // arrays
+    int* calculateBlackPoints(unsigned char* luminances,
+                              int subWidth,
+                              int subHeight,
+                              int width,
+                              int height);
+    void calculateThresholdForBlock(unsigned char* luminances,
+                                    int subWidth,
+                                    int subHeight,
+                                    int width,
+                                    int height,
+                                    int blackPoints[],
+                                    Ref<BitMatrix> const& matrix);
+    void threshold8x8Block(unsigned char* luminances,
+                           int xoffset,
+                           int yoffset,
+                           int threshold,
+                           int stride,
+                           Ref<BitMatrix> const& matrix);
 	};
 
 }
 
-#endif /* GLOBALHISTOGRAMBINARIZER_H_ */
+#endif
