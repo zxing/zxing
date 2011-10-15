@@ -42,8 +42,15 @@ public:
   BitArray(size_t size);
   ~BitArray();
   size_t getSize();
-  bool get(size_t i);
-  void set(size_t i);
+
+  bool get(size_t i) {
+    return (bits_[i >> logBits_] & (1 << (i & bitsMask_))) != 0;
+  }
+
+  void set(size_t i) {
+    bits_[i >> logBits_] |= 1 << (i & bitsMask_);
+  }
+
   void setBulk(size_t i, unsigned int newBits);
   void setRange(int start, int end);
   void clear();

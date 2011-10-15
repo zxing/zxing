@@ -34,14 +34,35 @@ private:
   size_t words_;
   unsigned int* bits_;
 
+#define ZX_LOG_DIGITS(digits) \
+    ((digits == 8) ? 3 : \
+     ((digits == 16) ? 4 : \
+      ((digits == 32) ? 5 : \
+       ((digits == 64) ? 6 : \
+        ((digits == 128) ? 7 : \
+         (-1))))))
+
+  static const unsigned int bitsPerWord =
+    std::numeric_limits<unsigned int>::digits;
+  static const unsigned int logBits = ZX_LOG_DIGITS(bitsPerWord);
+  static const unsigned int bitsMask = (1 << logBits) - 1;
+
 public:
   BitMatrix(size_t dimension);
   BitMatrix(size_t width, size_t height);
 
   ~BitMatrix();
-  // Inlining this does not really improve performance.
-  bool get(size_t x, size_t y) const;
-  void set(size_t x, size_t y);
+
+  bool get(size_t x, size_t y) const {
+    size_t offset = x + width_ * y;
+    return ((bits_[offset >> logBits] >> (offset & bitsMask)) & 0x01) != 0;
+  }
+
+  void set(size_t x, size_t y) {
+    size_t offset = x + width_ * y;
+    bits_[offset >> logBits] |= 1 << (offset & bitsMask);
+  }
+
   void flip(size_t x, size_t y);
   void clear();
   void setRegion(size_t left, size_t top, size_t width, size_t height);
