@@ -1,4 +1,3 @@
-// -*- mode:java; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
 /*
  * Copyright 2009 ZXing authors
  *
