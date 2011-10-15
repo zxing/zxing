@@ -38,7 +38,6 @@ namespace {
 
 HybridBinarizer::HybridBinarizer(Ref<LuminanceSource> source) :
   GlobalHistogramBinarizer(source), matrix_(NULL), cached_row_(NULL), cached_row_num_(-1) {
-
 }
 
 HybridBinarizer::~HybridBinarizer() {
@@ -125,10 +124,18 @@ void HybridBinarizer::threshold8x8Block(unsigned char* luminances, int xoffset, 
        y++,  offset += stride) {
     for (int x = 0; x < BLOCK_SIZE; x++) {
       int pixel = luminances[offset + x] & 0xff;
-      if (pixel < threshold) {
+      if (pixel <= threshold) {
         matrix->set(xoffset + x, yoffset + y);
       }
     }
+  }
+}
+
+namespace {
+  inline int getBlackPointFromNeighbors(int* blackPoints, int subWidth, int x, int y) {
+    return (blackPoints[(y-1)*subWidth+x] +
+            2*blackPoints[y*subWidth+x-1] +
+            blackPoints[(y-1)*subWidth+x-1]) >> 2;
   }
 }
 
@@ -162,15 +169,18 @@ int* HybridBinarizer::calculateBlackPoints(unsigned char* luminances, int subWid
           }
         }
       }
-
-      // If the contrast is inadequate, use half the minimum, so that this block will be
-      // treated as part of the white background, but won't drag down neighboring blocks
-      // too much.
-      int average;
-      if (max - min > 24) {
-          average = (sum >> 6);
-      } else {
-        average = max == 0 ? 1 : (min >> 1);
+      
+      // See
+      // http://groups.google.com/group/zxing/browse_thread/thread/d06efa2c35a7ddc0
+      int average = sum >> 6;
+      if (max - min <= 24) {
+        average = min >> 1;
+        if (y > 0 && x > 0) {
+          int bp = getBlackPointFromNeighbors(blackPoints, subWidth, x, y);
+          if (min < bp) {
+            average = bp;
+          }
+        }
       }
       blackPoints[y * subWidth + x] = average;
     }
