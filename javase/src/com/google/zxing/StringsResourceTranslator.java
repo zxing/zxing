@@ -28,6 +28,7 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.net.URL;
+import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.util.Arrays;
@@ -51,13 +52,12 @@ import java.util.regex.Pattern;
  */
 public final class StringsResourceTranslator {
 
-  private static final long MIN_API_CALL_INTERVAL_MS = 10 * 1000L;
-
+  private static final String API_KEY = "INSERT-YOUR-KEY";
+  
   private static final Charset UTF8 = Charset.forName("UTF-8");
   private static final Pattern ENTRY_PATTERN = Pattern.compile("<string name=\"([^\"]+)\".*>([^<]+)</string>");
   private static final Pattern STRINGS_FILE_NAME_PATTERN = Pattern.compile("values-(.+)");
-  private static final Pattern TRANSLATE_RESPONSE_PATTERN = Pattern.compile(
-      "\\{\"translatedText\":\"([^\"]+)\"\\}");
+  private static final Pattern TRANSLATE_RESPONSE_PATTERN = Pattern.compile("translatedText\":\\s*\"([^\"]+)\"");
 
   private static final String APACHE_2_LICENSE =
       "<!--\n" +
@@ -82,8 +82,6 @@ public final class StringsResourceTranslator {
     LANGUAGE_CODE_MASSAGINGS.put("zh-rTW", "zh-tw");
   }
 
-  private static long nextAllowedAPICallTime = System.currentTimeMillis();
-
   private StringsResourceTranslator() {}
 
   public static void main(String[] args) throws IOException {
@@ -94,6 +92,7 @@ public final class StringsResourceTranslator {
     Collection<String> forceRetranslation = Arrays.asList(args).subList(1, args.length);
 
     File[] translatedValuesDirs = resDir.listFiles(new FileFilter() {
+      @Override
       public boolean accept(File file) {
         return file.isDirectory() && file.getName().startsWith("values-");
       }
@@ -178,35 +177,15 @@ public final class StringsResourceTranslator {
     }
     System.out.println("  Need translation for " + english);
 
-    long now = System.currentTimeMillis();
-    if (now < nextAllowedAPICallTime) {
-      try {
-        Thread.sleep(nextAllowedAPICallTime - now);
-      } catch (InterruptedException ie) {
-        // continue
-      }
-    }
-    nextAllowedAPICallTime = now + MIN_API_CALL_INTERVAL_MS;
-
     URL translateURL = new URL(
-        "http://ajax.googleapis.com/ajax/services/language/translate?v=1.0&q=" +
+        "https://www.googleapis.com/language/translate/v2?key=" + API_KEY + "&q=" +
         URLEncoder.encode(english, "UTF-8") +
-        "&langpair=en%7C" + language);
-    StringBuilder translateResult = new StringBuilder();
-    Reader in = null;
-    try {
-      in = new InputStreamReader(translateURL.openStream(), UTF8);
-      char[] buffer = new char[1024];
-      int charsRead;
-      while ((charsRead = in.read(buffer)) > 0) {
-        translateResult.append(buffer, 0, charsRead);
-      }
-    } finally {
-      quietClose(in);
-    }
+        "&source=en&target=" + language);
+    CharSequence translateResult = fetch(translateURL);
     Matcher m = TRANSLATE_RESPONSE_PATTERN.matcher(translateResult);
     if (!m.find()) {
       System.err.println("No translate result");
+      System.err.println(translateResult);
       return english;
     }
     String translation = m.group(1);
@@ -218,6 +197,24 @@ public final class StringsResourceTranslator {
     translation = translation.replaceAll("\\\\u200b", "");
 
     return translation;
+  }
+
+  private static CharSequence fetch(URL translateURL) throws IOException {
+    URLConnection connection = translateURL.openConnection();
+    connection.connect();
+    StringBuilder translateResult = new StringBuilder(200);
+    Reader in = null;
+    try {
+      in = new InputStreamReader(connection.getInputStream(), UTF8);
+      char[] buffer = new char[1024];
+      int charsRead;
+      while ((charsRead = in.read(buffer)) > 0) {
+        translateResult.append(buffer, 0, charsRead);
+      }
+    } finally {
+      quietClose(in);
+    }
+    return translateResult;
   }
 
   private static SortedMap<String,String> readLines(File file) throws IOException {
