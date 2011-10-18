@@ -70,8 +70,9 @@ import java.util.Set;
 import java.util.Vector;
 
 /**
- * The barcode reader activity itself. This is loosely based on the CameraPreview
- * example included in the Android SDK.
+ * This activity opens the camera and does the actual scanning on a background thread. It draws a
+ * viewfinder to help the user place the barcode correctly, shows feedback as the image processing
+ * is happening, and then overlays the results when a scan is successful.
  *
  * @author dswitkin@google.com (Daniel Switkin)
  * @author Sean Owen
@@ -154,7 +155,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     setContentView(R.layout.capture);
 
-    CameraManager.init(getApplication());
     viewfinderView = (ViewfinderView) findViewById(R.id.viewfinder_view);
     resultView = findViewById(R.id.result_view);
     statusView = (TextView) findViewById(R.id.status_view);
@@ -172,6 +172,13 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   @Override
   protected void onResume() {
     super.onResume();
+
+    // CameraManager must be initialized here, not in onCreate(). This is necessary because we don't
+    // want to open the camera driver and measure the screen size if we're going to show the help on
+    // first launch. That led to bugs where the scanning rectangle was the wrong size and partially
+    // off screen.
+    CameraManager.init(getApplication());
+
     resetStatusView();
 
     SurfaceView surfaceView = (SurfaceView) findViewById(R.id.preview_view);
@@ -245,6 +252,12 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     }
     inactivityTimer.onPause();
     CameraManager.get().closeDriver();
+  }
+
+  @Override
+  protected void onStop() {
+    super.onStop();
+    CameraManager.destroy();
   }
 
   @Override
@@ -341,6 +354,9 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   }
 
   public void surfaceCreated(SurfaceHolder holder) {
+    if (holder == null) {
+      Log.e(TAG, "*** WARNING *** surfaceCreated() gave us a null surface!");
+    }
     if (!hasSurface) {
       hasSurface = true;
       initCamera(holder);
@@ -619,7 +635,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     } catch (RuntimeException e) {
       // Barcode Scanner has seen crashes in the wild of this variety:
       // java.?lang.?RuntimeException: Fail to connect to camera service
-      Log.w(TAG, "Unexpected error initializating camera", e);
+      Log.w(TAG, "Unexpected error initializing camera", e);
       displayFrameworkBugMessageAndExit();
     }
   }
