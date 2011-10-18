@@ -75,7 +75,8 @@ public final class HybridBinarizer extends GlobalHistogramBinarizer {
       int[][] blackPoints = calculateBlackPoints(luminances, subWidth, subHeight, width, height);
 
       BitMatrix newMatrix = new BitMatrix(width, height);
-      calculateThresholdForBlock(luminances, subWidth, subHeight, width, height, blackPoints, newMatrix);
+      calculateThresholdForBlock(luminances, subWidth, subHeight, width, height, blackPoints,
+          newMatrix);
       matrix = newMatrix;
     } else {
       // If the image is too small, fall back to the global histogram approach.
@@ -91,13 +92,8 @@ public final class HybridBinarizer extends GlobalHistogramBinarizer {
   // For each 8x8 block in the image, calculate the average black point using a 5x5 grid
   // of the blocks around it. Also handles the corner cases (fractional blocks are computed based
   // on the last 8 pixels in the row/column which are also used in the previous block).
-  private static void calculateThresholdForBlock(byte[] luminances,
-                                                 int subWidth,
-                                                 int subHeight,
-                                                 int width,
-                                                 int height,
-                                                 int[][] blackPoints,
-                                                 BitMatrix matrix) {
+  private static void calculateThresholdForBlock(byte[] luminances, int subWidth, int subHeight,
+      int width, int height, int[][] blackPoints, BitMatrix matrix) {
     for (int y = 0; y < subHeight; y++) {
       int yoffset = y << BLOCK_SIZE_POWER;
       if ((yoffset + BLOCK_SIZE) >= height) {
@@ -115,7 +111,8 @@ public final class HybridBinarizer extends GlobalHistogramBinarizer {
         int sum = 0;
         for (int z = -2; z <= 2; z++) {
           int[] blackRow = blackPoints[top + z];
-          sum += blackRow[left - 2] + blackRow[left - 1] + blackRow[left] + blackRow[left + 1] + blackRow[left + 2];
+          sum += blackRow[left - 2] + blackRow[left - 1] + blackRow[left] + blackRow[left + 1] +
+              blackRow[left + 2];
         }
         int average = sum / 25;
         threshold8x8Block(luminances, xoffset, yoffset, average, width, matrix);
@@ -124,15 +121,11 @@ public final class HybridBinarizer extends GlobalHistogramBinarizer {
   }
 
   // Applies a single threshold to an 8x8 block of pixels.
-  private static void threshold8x8Block(byte[] luminances,
-                                        int xoffset,
-                                        int yoffset,
-                                        int threshold,
-                                        int stride,
-                                        BitMatrix matrix) {
+  private static void threshold8x8Block(byte[] luminances, int xoffset, int yoffset, int threshold,
+      int stride, BitMatrix matrix) {
     for (int y = 0, offset = yoffset * stride + xoffset; y < BLOCK_SIZE; y++, offset += stride) {
       for (int x = 0; x < BLOCK_SIZE; x++) {
-        // Comparison needs to be <= so that black == 0 pixels are black even if the threshold is 0
+        // Comparison needs to be <= so that black == 0 pixels are black even if the threshold is 0.
         if ((luminances[offset + x] & 0xFF) <= threshold) {
           matrix.set(xoffset + x, yoffset + y);
         }
@@ -140,19 +133,11 @@ public final class HybridBinarizer extends GlobalHistogramBinarizer {
     }
   }
 
-  // Esimates blackPoint from previously calculated neighbor esitmates
-  private static int getBlackPointFromNeighbors(int[][] blackPoints, int x, int y) {
-    return (blackPoints[y-1][x] +
-            2*blackPoints[y][x-1] +
-            blackPoints[y-1][x-1]) >> 2;
-  }
-
   // Calculates a single black point for each 8x8 block of pixels and saves it away.
-  private static int[][] calculateBlackPoints(byte[] luminances,
-                                              int subWidth,
-                                              int subHeight,
-                                              int width,
-                                              int height) {
+  // See the following thread for a discussion of this algorithm:
+  // http://groups.google.com/group/zxing/browse_thread/thread/d06efa2c35a7ddc0
+  private static int[][] calculateBlackPoints(byte[] luminances, int subWidth, int subHeight,
+      int width, int height) {
     int[][] blackPoints = new int[subHeight][subWidth];
     for (int y = 0; y < subHeight; y++) {
       int yoffset = y << BLOCK_SIZE_POWER;
@@ -180,36 +165,29 @@ public final class HybridBinarizer extends GlobalHistogramBinarizer {
           }
         }
 
-        // See
-        // http://groups.google.com/group/zxing/browse_thread/thread/d06efa2c35a7ddc0
-
-        // The default estimate is the average of the values in the block
+        // The default estimate is the average of the values in the block.
         int average = sum >> 6;
-
         if (max - min <= 24) {
-          // If variation wihthin the block is low, assume this is a
-          // block with only light or only dark pixels.
-
-          // The default assumption is that the block is light/background.
-          // Since no estimate for the level of dark pixels
-          // exists locally, use half the min for the block.
+          // If variation within the block is low, assume this is a block with only light or only
+          // dark pixels. In that case we do not want to use the average, as it would divide this
+          // low contrast area into black and white pixels, essentially creating data out of noise.
+          //
+          // The default assumption is that the block is light/background. Since no estimate for
+          // the level of dark pixels exists locally, use half the min for the block.
           average = min >> 1;
-          
-          if (y > 0 && x > 0) {
-            // Correct the "white/background" assumption for blocks
-            // that have neighbors by comparing the pixels in this
-            // block to the previously calculated blackpoints. This is
-            // based on the fact that dark barcode symbology is always
-            // surrounded by some amount of light background for which
-            // reasonable blackpoint esimates were made. The bp estimated
-            // at the bondaries is used for the interior.
-          
-            // The (min < bp) seems pretty arbitrary but works better than
-            // other heurstics that were tried.
 
-            int bp = getBlackPointFromNeighbors(blackPoints, x, y);
-            if (min < bp) {
-              average = bp;
+          if (y > 0 && x > 0) {
+            // Correct the "white background" assumption for blocks that have neighbors by comparing
+            // the pixels in this block to the previously calculated black points. This is based on
+            // the fact that dark barcode symbology is always surrounded by some amount of light
+            // background for which reasonable black point estimates were made. The bp estimated at
+            // the boundaries is used for the interior.
+
+            // The (min < bp) is arbitrary but works better than other heuristics that were tried.
+            int averageNeighborBlackPoint = (blackPoints[y - 1][x] + (2 * blackPoints[y][x - 1]) +
+                blackPoints[y - 1][x - 1]) >> 2;
+            if (min < averageNeighborBlackPoint) {
+              average = averageNeighborBlackPoint;
             }
           }
         }
