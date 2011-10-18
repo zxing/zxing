@@ -83,7 +83,9 @@ public final class CameraManager {
   private final AutoFocusCallback autoFocusCallback;
 
   /**
-   * Initializes this static object with the Context of the calling Activity.
+   * Initializes this static object with the Context of the calling Activity. The caller of this
+   * method relies on the ability to harmlessly call it multiple times and only have the object
+   * built once, the first time.
    *
    * @param context The Activity which wants to use the camera.
    */
@@ -91,6 +93,13 @@ public final class CameraManager {
     if (cameraManager == null) {
       cameraManager = new CameraManager(context);
     }
+  }
+
+  /**
+   * Deletes all state. We don't want to keep global variables around from one launch to another.
+   */
+  public static void destroy() {
+    cameraManager = null;
   }
 
   /**
@@ -133,6 +142,7 @@ public final class CameraManager {
       camera = theCamera;
     }
     theCamera.setPreviewDisplay(holder);
+
     if (!initialized) {
       initialized = true;
       configManager.initFromCameraParameters(theCamera);
