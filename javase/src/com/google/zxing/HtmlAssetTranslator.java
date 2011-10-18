@@ -34,9 +34,11 @@ import java.io.FileFilter;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.regex.Pattern;
 
 /**
  * <p>A utility which auto-translates the English-language text in a directory of HTML documents using
@@ -56,9 +58,11 @@ import java.util.Queue;
  */
 public final class HtmlAssetTranslator {
 
+  private static final Pattern COMMA = Pattern.compile(",");
+
   private HtmlAssetTranslator() {}
 
-  public static void main(String[] args) throws Exception {
+  public static void main(String[] args) throws IOException {
     File assetsDir = new File(args[0]);
     Collection<String> languagesToTranslate = parseLanguagesToTranslate(assetsDir, args[1]);
     Collection<String> filesToTranslate = parseFilesToTranslate(args);
@@ -71,6 +75,7 @@ public final class HtmlAssetTranslator {
     Collection<String> languages = new ArrayList<String>();
     if ("all".equals(languageArg)) {
       FileFilter fileFilter = new FileFilter() {
+        @Override
         public boolean accept(File file) {
           return file.isDirectory() && file.getName().startsWith("html-") && !"html-en".equals(file.getName());
         }
@@ -79,7 +84,7 @@ public final class HtmlAssetTranslator {
         languages.add(languageDir.getName().substring(5));
       }
     } else {
-      languages.add(languageArg);
+      languages.addAll(Arrays.asList(COMMA.split(languageArg)));
     }
     return languages;
   }
@@ -103,6 +108,7 @@ public final class HtmlAssetTranslator {
         StringsResourceTranslator.translateString("Translated by Google Translate.", language);
 
     File[] sourceFiles = englishHtmlDir.listFiles(new FilenameFilter() {
+      @Override
       public boolean accept(File dir, String name) {
         return name.endsWith(".html") && (filesToTranslate.isEmpty() || filesToTranslate.contains(name));
       }
@@ -128,7 +134,7 @@ public final class HtmlAssetTranslator {
     } catch (ParserConfigurationException pce) {
       throw new IllegalStateException(pce);
     } catch (SAXException sae) {
-      throw new IOException(sae.toString());
+      throw new IOException(sae);
     }
 
     Element rootElement = document.getDocumentElement();
