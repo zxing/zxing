@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (C) 2011 ZXing authors
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<resources>
+  <string name="app_name">बारकोड स्कैनर</string>
+  <string name="app_picker_name">अनुप्रयोगों</string>
+  <string name="bookmark_picker_name">बुकमार्क्स</string>
+  <string name="button_add_calendar">कैलेंडर के लिए जोड़ें</string>
+  <string name="button_add_contact">संपर्क जोड़ें</string>
+  <string name="button_back">वापस</string>
+  <string name="button_book_search">पुस्तक खोज</string>
+  <string name="button_cancel">रद्द करना</string>
+  <string name="button_clipboard_empty">खाली क्लिपबोर्ड</string>
+  <string name="button_custom_product_search">कस्टम खोज</string>
+  <string name="button_dial">डायल नंबर</string>
+  <string name="button_done">ठीक है</string>
+  <string name="button_email">ईमेल भेजें</string>
+  <string name="button_get_directions">निर्देश प्राप्त करें</string>
+  <string name="button_google_shopper">गूगल शॉपर</string>
+  <string name="button_mms">एमएमएस भेजें</string>
+  <string name="button_ok">ठीक है</string>
+  <string name="button_open_browser">ओपन ब्राउज़र</string>
+  <string name="button_product_search">उत्पाद खोज</string>
+  <string name="button_read_book">पुस्तक ब्राउज़ करें</string>
+  <string name="button_search_book_contents">खोज सामग्री</string>
+  <string name="button_share_app">आवेदन</string>
+  <string name="button_share_bookmark">बुकमार्क</string>
+  <string name="button_share_by_email">ईमेल के माध्यम से साझा करें</string>
+  <string name="button_share_by_sms">एसएमएस के जरिए शेयर</string>
+  <string name="button_share_clipboard">क्लिपबोर्ड</string>
+  <string name="button_share_contact">संपर्क</string>
+  <string name="button_show_map">नक्शा दिखाएँ</string>
+  <string name="button_sms">एसएमएस भेजें</string>
+  <string name="button_web_search">वेब खोज</string>
+  <string name="button_wifi">नेटवर्क कनेक्ट करें</string>
+  <string name="contents_contact">संपर्क जानकारी</string>
+  <string name="contents_email">ईमेल पता</string>
+  <string name="contents_location">भौगोलिक निर्देशांक</string>
+  <string name="contents_phone">फ़ोन नंबर</string>
+  <string name="contents_sms">एसएमएस पता</string>
+  <string name="contents_text">सादा पाठ</string>
+  <string name="history_clear_text">सुस्पष्ट इतिहास</string>
+  <string name="history_email_title">बारकोड स्कैनर इतिहास</string>
+  <string name="history_send">इतिहास भेजें</string>
+  <string name="history_title">इतिहास</string>
+  <string name="menu_about">के बारे में</string>
+  <string name="menu_help">मदद</string>
+  <string name="menu_history">इतिहास</string>
+  <string name="menu_settings">सेटिंग्स</string>
+  <string name="menu_share">शेयर</string>
+  <string name="msg_about">खुला स्रोत ZXing बारकोड परियोजना के आधिकारिक Android के बॉक्स.</string>
+  <string name="msg_buggy">इस डिवाइस कीड़े कि बारकोड स्कैनिंग समस्याओं के कारण जाना जाता है. अधिक जानकारी के लिए, http://code.google.com/p/zxing/wiki/FrequentlyAskedQuestions यात्रा</string>
+  <string name="msg_bulk_mode_scanned">थोक मोड: बारकोड स्कैन और बचाया</string>
+  <string name="msg_camera_framework_bug">क्षमा करें, Android कैमरा एक समस्या का सामना करना पड़ा. आप डिवाइस को पुनरारंभ करने की आवश्यकता हो सकती है.</string>
+  <string name="msg_default_contents">सामग्री</string>
+  <string name="msg_default_format">प्रारूप</string>
+  <string name="msg_default_meta">मेटाडाटा</string>
+  <string name="msg_default_mms_subject">हाय</string>
+  <string name="msg_default_status">दृश्यदर्शी आयत के अंदर एक बारकोड प्लेस इसे स्कैन.</string>
+  <string name="msg_default_time">समय</string>
+  <string name="msg_default_type">टाइप</string>
+  <string name="msg_encode_barcode_failed">अनुरोध बारकोड उत्पन्न नहीं किया जा सका.</string>
+  <string name="msg_encode_contents_failed">उपलब्ध कराए गए आंकड़ों से एक बारकोड सांकेतिक शब्दों में बदलना नहीं कर सका.</string>
+  <string name="msg_google_books">Google पुस्तक</string>
+  <string name="msg_google_product">Google उत्पाद खोज</string>
+  <string name="msg_google_shopper_missing">गूगल शॉपर्स स्थापित नहीं है</string>
+  <string name="msg_install_google_shopper">Google शॉपर्स ब्राउज़र खोले बिना ऑनलाइन और स्थानीय कीमतों, समीक्षाएँ और अधिक के साथ स्कैनिंग बारकोड को जोड़ती है. तुम यह कोशिश करना चाहेंगे?</string>
+  <string name="msg_intent_failed">क्षमा करें, अनुरोध आवेदन शुरू नहीं किया जा सका. बारकोड सामग्री अमान्य हो सकता है.</string>
+  <string name="msg_loading_apps">आवेदनों की लोड हो रहा है सूची\u2026</string>
+  <string name="msg_not_our_results">आप इस आवेदन छोड़ने कर रहे हैं. खोज परिणामों आप देखेंगे इस आवेदन के लिए संबंधित नहीं हैं.</string>
+  <string name="msg_redirect">पुनर्निर्देशन</string>
+  <string name="msg_sbc_book_not_searchable">क्षमा करें, इस किताब को खोजा नहीं है.</string>
+  <string name="msg_sbc_failed">क्षमा करें, खोज एक समस्या का सामना करना पड़ा.</string>
+  <string name="msg_sbc_no_page_returned">कोई पृष्ठ लौटे</string>
+  <string name="msg_sbc_page">पेज</string>
+  <string name="msg_sbc_searching_book">खोज पुस्तक\u2026</string>
+  <string name="msg_sbc_snippet_unavailable">उपलब्ध स्निपेट नहीं</string>
+  <string name="msg_sbc_unknown_page">अज्ञात पृष्ठ</string>
+  <string name="msg_share_explanation">आप अपनी स्क्रीन पर प्रदर्शित बारकोड और यह अन्य फोन के साथ स्कैनिंग द्वारा डेटा साझा कर सकते हैं.</string>
+  <string name="msg_share_subject_line">यहाँ मैं एक बारकोड स्कैन की सामग्री</string>
+  <string name="msg_share_text">या कुछ पाठ टाइप करें और प्रेस दर्ज करें</string>
+  <string name="msg_sure">तुम्हें यकीन है?</string>
+  <string name="msg_unmount_usb">क्षमा करें, एसडी कार्ड सुलभ नहीं है.</string>
+  <string name="permission_share">बारकोड द्वारा शेयर</string>
+  <string name="permission_share_desc">क्या आप साझा करने के लिए और प्रदर्शित या बारकोड स्कैनिंग के द्वारा संपर्क और बुकमार्क्स जोड़ने के लिए, और स्कैन जानकारी निर्यात की अनुमति देता है.</string>
+  <string name="permission_wifi">बारकोड द्वारा वाई - फाई कॉन्फ़िगर</string>
+  <string name="permission_wifi_desc">आप एक बारकोड स्कैनिंग के द्वारा वाई - फाई कनेक्शन नेटवर्क कॉन्फ़िगर करने के लिए अनुमति देता है.</string>
+  <string name="preferences_actions_title">जब एक बारकोड पाया जाता है\u2026</string>
+  <string name="preferences_bulk_mode_summary">स्कैन और कई बारकोड लगातार बचाने के</string>
+  <string name="preferences_bulk_mode_title">थोक स्कैन मोड</string>
+  <string name="preferences_copy_to_clipboard_title">क्लिपबोर्ड पर कॉपी</string>
+  <string name="preferences_custom_product_search_summary" formatted="false">उत्पाद ID के लिए एक प्लेसहोल्डर के रूप में% का प्रयोग करें, और स्वरूप के लिए% च</string>
+  <string name="preferences_custom_product_search_title">कस्टम खोज यूआरएल</string>
+  <string name="preferences_decode_1D_title">1D बारकोड</string>
+  <string name="preferences_decode_Data_Matrix_title">डाटा मैट्रिक्स</string>
+  <string name="preferences_decode_QR_title">QR कोड</string>
+  <string name="preferences_front_light_summary">कुछ फोन पर कम रोशनी में स्कैनिंग बढ़ाता है, लेकिन चमक का कारण हो सकता है. सभी फोन पर काम नहीं करता.</string>
+  <string name="preferences_front_light_title">सामने प्रकाश का उपयोग करें</string>
+  <string name="preferences_general_title">सामान्य सेटिंग्स</string>
+  <string name="preferences_name">सेटिंग्स</string>
+  <string name="preferences_play_beep_title">भोंपू</string>
+  <string name="preferences_remember_duplicates_summary">इतिहास में एक ही बारकोड के स्टोर एकाधिक स्कैन</string>
+  <string name="preferences_remember_duplicates_title">डुप्लिकेट याद रखें</string>
+  <string name="preferences_result_title">नतीजे सेटिंग्स</string>
+  <string name="preferences_reverse_image_summary">सामने एक कैमरा के साथ ही उपकरणों पर सक्षम</string>
+  <string name="preferences_reverse_image_title">उलट कैमरा छवि</string>
+  <string name="preferences_scanning_title">जब बारकोड स्कैनिंग के लिए व्याख्या करना\u2026</string>
+  <string name="preferences_supplemental_summary">बारकोड सामग्री के बारे में में अधिक जानकारी पुनः प्राप्त करने की कोशिश करो</string>
+  <string name="preferences_supplemental_title">अधिक जानकारी पुनर्प्राप्त</string>
+  <string name="preferences_vibrate_title">कांपना</string>
+  <string name="result_address_book">मिला संपर्क जानकारी</string>
+  <string name="result_calendar">मिला कैलेंडर घटना</string>
+  <string name="result_email_address">मिला ईमेल पते</string>
+  <string name="result_geo">मिला भौगोलिक निर्देशांक</string>
+  <string name="result_isbn">मिला किताब</string>
+  <string name="result_product">मिला उत्पाद</string>
+  <string name="result_sms">मिला एसएमएस पता</string>
+  <string name="result_tel">मिला फोन नंबर</string>
+  <string name="result_text">मिला सादा पाठ</string>
+  <string name="result_uri">मिला यूआरएल</string>
+  <string name="result_wifi">मिला WLAN विन्यास</string>
+  <string name="sbc_name">Google पुस्तक खोज</string>
+  <string name="share_name">बारकोड के माध्यम से साझा करें</string>
+  <string name="title_about">बारकोड स्कैनर v</string>
+  <string name="wifi_changing_network">नेटवर्क बदलना</string>
+  <string name="wifi_ssid_label">नेटवर्क नाम</string>
+  <string name="wifi_type_label">टाइप</string>
+  <string name="zxing_url">http://code.google.com/p/zxing</string>
+</resources>
