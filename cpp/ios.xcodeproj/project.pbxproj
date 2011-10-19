@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		3B15E73A12CE996800DC7062 /* LuminanceSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B15E73912CE996800DC7062 /* LuminanceSource.cpp */; };
 		3B15E78612CE9BF900DC7062 /* Exception.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B15E78512CE9BF900DC7062 /* Exception.cpp */; };
+		3B1EEEC7144F1F5F0051C6A5 /* FormatException.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B1EEEC6144F1F5F0051C6A5 /* FormatException.cpp */; };
+		3B1EEECF144F1FBE0051C6A5 /* CharacterSetECI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B1EEECC144F1FBE0051C6A5 /* CharacterSetECI.cpp */; };
+		3B1EEED0144F1FBE0051C6A5 /* ECI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B1EEECD144F1FBE0051C6A5 /* ECI.cpp */; };
+		3B1EEED1144F1FBE0051C6A5 /* StringUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B1EEECE144F1FBE0051C6A5 /* StringUtils.cpp */; };
 		3B2A325212CE9D31001D9945 /* IllegalArgumentException.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B2A325112CE9D31001D9945 /* IllegalArgumentException.cpp */; };
 		3B2A32B012CEA202001D9945 /* HybridBinarizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B2A32AF12CEA202001D9945 /* HybridBinarizer.cpp */; };
 		3B2A32B412CEA238001D9945 /* GlobalHistogramBinarizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B2A32B312CEA238001D9945 /* GlobalHistogramBinarizer.cpp */; };
@@ -54,6 +58,10 @@
 /* Begin PBXFileReference section */
 		3B15E73912CE996800DC7062 /* LuminanceSource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LuminanceSource.cpp; path = core/src/zxing/LuminanceSource.cpp; sourceTree = "<group>"; };
 		3B15E78512CE9BF900DC7062 /* Exception.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Exception.cpp; path = core/src/zxing/Exception.cpp; sourceTree = "<group>"; };
+		3B1EEEC6144F1F5F0051C6A5 /* FormatException.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FormatException.cpp; path = core/src/zxing/FormatException.cpp; sourceTree = "<group>"; };
+		3B1EEECC144F1FBE0051C6A5 /* CharacterSetECI.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CharacterSetECI.cpp; path = core/src/zxing/common/CharacterSetECI.cpp; sourceTree = "<group>"; };
+		3B1EEECD144F1FBE0051C6A5 /* ECI.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ECI.cpp; path = core/src/zxing/common/ECI.cpp; sourceTree = "<group>"; };
+		3B1EEECE144F1FBE0051C6A5 /* StringUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = StringUtils.cpp; path = core/src/zxing/common/StringUtils.cpp; sourceTree = "<group>"; };
 		3B2A325112CE9D31001D9945 /* IllegalArgumentException.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IllegalArgumentException.cpp; path = core/src/zxing/common/IllegalArgumentException.cpp; sourceTree = "<group>"; };
 		3B2A32AF12CEA202001D9945 /* HybridBinarizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HybridBinarizer.cpp; path = core/src/zxing/common/HybridBinarizer.cpp; sourceTree = "<group>"; };
 		3B2A32B312CEA238001D9945 /* GlobalHistogramBinarizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GlobalHistogramBinarizer.cpp; path = core/src/zxing/common/GlobalHistogramBinarizer.cpp; sourceTree = "<group>"; };
@@ -139,6 +147,10 @@
 		08FB77AEFE84172EC02AAC07 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				3B1EEECC144F1FBE0051C6A5 /* CharacterSetECI.cpp */,
+				3B1EEECD144F1FBE0051C6A5 /* ECI.cpp */,
+				3B1EEECE144F1FBE0051C6A5 /* StringUtils.cpp */,
+				3B1EEEC6144F1F5F0051C6A5 /* FormatException.cpp */,
 				3BBCB72312DD10DC00B5936D /* Reader.cpp */,
 				3BBCB71F12DD10BC00B5936D /* QRCodeReader.cpp */,
 				3BBCB71D12DD108300B5936D /* Result.cpp */,
@@ -295,6 +307,10 @@
 				3BBCB71E12DD108300B5936D /* Result.cpp in Sources */,
 				3BBCB72012DD10BC00B5936D /* QRCodeReader.cpp in Sources */,
 				3BBCB72412DD10DC00B5936D /* Reader.cpp in Sources */,
+				3B1EEEC7144F1F5F0051C6A5 /* FormatException.cpp in Sources */,
+				3B1EEECF144F1FBE0051C6A5 /* CharacterSetECI.cpp in Sources */,
+				3B1EEED0144F1FBE0051C6A5 /* ECI.cpp in Sources */,
+				3B1EEED1144F1FBE0051C6A5 /* StringUtils.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
