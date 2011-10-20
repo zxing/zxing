@@ -36,6 +36,8 @@ namespace qrcode {
 class FinderPatternFinder {
 private:
   static int CENTER_QUORUM;
+
+protected:
   static int MIN_SKIP;
   static int MAX_MODULES;
 

@@ -1,12 +1,8 @@
-// -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
-#ifndef __RESULT_POINT_H__
-#define __RESULT_POINT_H__
+#ifndef __MULTI_DETECTOR_H__
+#define __MULTI_DETECTOR_H__
 
 /*
- *  ResultPoint.h
- *  zxing
- *
- *  Copyright 2010 ZXing authors All rights reserved.
+ *  Copyright 2011 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,24 +17,19 @@
  * limitations under the License.
  */
 
-#include <zxing/common/Counted.h>
+#include <zxing/qrcode/detector/Detector.h>
+#include <zxing/common/DetectorResult.h>
+#include <zxing/DecodeHints.h>
 
 namespace zxing {
-
-class ResultPoint : public Counted {
-protected:
-  float posX_;
-  float posY_;
-  
-public:
-  ResultPoint();
-  ResultPoint(float x, float y);
-  virtual ~ResultPoint();
-
-  virtual float getX() const;
-  virtual float getY() const;
+namespace multi {
+class MultiDetector : public zxing::qrcode::Detector {
+  public:
+    MultiDetector(Ref<BitMatrix> image);
+    virtual ~MultiDetector();
+    virtual std::vector<Ref<DetectorResult> > detectMulti(DecodeHints hints);
 };
+} // End zxing::multi namespace
+} // End zxing namespace
 
-}
-
-#endif // __RESULT_POINT_H__
+#endif // __MULTI_DETECTOR_H__

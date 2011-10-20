@@ -1,12 +1,5 @@
-// -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
-#ifndef __RESULT_POINT_H__
-#define __RESULT_POINT_H__
-
 /*
- *  ResultPoint.h
- *  zxing
- *
- *  Copyright 2010 ZXing authors All rights reserved.
+ *  Copyright 2011 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,24 +14,16 @@
  * limitations under the License.
  */
 
-#include <zxing/common/Counted.h>
+#include <zxing/multi/MultipleBarcodeReader.h>
 
 namespace zxing {
+namespace multi {
 
-class ResultPoint : public Counted {
-protected:
-  float posX_;
-  float posY_;
-  
-public:
-  ResultPoint();
-  ResultPoint(float x, float y);
-  virtual ~ResultPoint();
+MultipleBarcodeReader::~MultipleBarcodeReader() { }
 
-  virtual float getX() const;
-  virtual float getY() const;
-};
-
+std::vector<Ref<Result> > MultipleBarcodeReader::decodeMultiple(Ref<BinaryBitmap> image) {
+  return decodeMultiple(image, DecodeHints::DEFAULT_HINT);
 }
 
-#endif // __RESULT_POINT_H__
+} // End zxing::multi namespace
+} // End zxing namespace

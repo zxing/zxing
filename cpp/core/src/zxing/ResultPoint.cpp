@@ -22,6 +22,18 @@
 
 namespace zxing {
 
+ResultPoint::ResultPoint() : posX_(0), posY_(0) {}
+
+ResultPoint::ResultPoint(float x, float y) : posX_(x), posY_(y) {}
+  
 ResultPoint::~ResultPoint() {}
+
+float ResultPoint::getX() const {
+  return posX_;
+}
+    
+float ResultPoint::getY() const {
+  return posY_;
+}
 
 }

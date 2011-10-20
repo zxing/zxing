@@ -27,15 +27,7 @@ namespace qrcode {
 using namespace std;
 
 AlignmentPattern::AlignmentPattern(float posX, float posY, float estimatedModuleSize) :
-    posX_(posX), posY_(posY), estimatedModuleSize_(estimatedModuleSize) {
-}
-
-float AlignmentPattern::getX() const {
-  return posX_;
-}
-
-float AlignmentPattern::getY() const {
-  return posY_;
+    ResultPoint(posX,posY), estimatedModuleSize_(estimatedModuleSize) {
 }
 
 bool AlignmentPattern::aboutEquals(float moduleSize, float i, float j) const {

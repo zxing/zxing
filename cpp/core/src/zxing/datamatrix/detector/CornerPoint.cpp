@@ -27,15 +27,7 @@ namespace zxing {
 		using namespace std;
 		
 		CornerPoint::CornerPoint(float posX, float posY) :
-		  posX_(posX), posY_(posY), counter_(0) {
-		}
-		
-		float CornerPoint::getX() const {
-			return posX_;
-		}
-		
-		float CornerPoint::getY() const {
-			return posY_;
+		  ResultPoint(posX,posY), counter_(0) {
 		}
 		
 		int CornerPoint::getCount() const {

@@ -27,19 +27,11 @@ namespace zxing {
 		using namespace std;
 		
 		FinderPattern::FinderPattern(float posX, float posY, float estimatedModuleSize) :
-		posX_(posX), posY_(posY), estimatedModuleSize_(estimatedModuleSize), count_(1) {
+		ResultPoint(posX,posY), estimatedModuleSize_(estimatedModuleSize), count_(1) {
 		}
 		
 		FinderPattern::FinderPattern(float posX, float posY, float estimatedModuleSize, int count) :
-		posX_(posX), posY_(posY), estimatedModuleSize_(estimatedModuleSize), count_(count) {
-		}
-		
-		float FinderPattern::getX() const {
-			return posX_;
-		}
-		
-		float FinderPattern::getY() const {
-			return posY_;
+		ResultPoint(posX,posY), estimatedModuleSize_(estimatedModuleSize), count_(count) {
 		}
 		
 		int FinderPattern::getCount() const {

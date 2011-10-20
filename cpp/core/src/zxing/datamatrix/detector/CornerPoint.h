@@ -29,14 +29,10 @@ namespace zxing {
 			
 		class CornerPoint : public ResultPoint {
 		private:
-			float posX_;
-			float posY_;
 			int counter_;
 			
 		public:
 			CornerPoint(float posX, float posY);
-			float getX() const;
-			float getY() const;
 			int getCount() const;
 			void incrementCount();
 			bool equals(Ref<CornerPoint> other) const;
