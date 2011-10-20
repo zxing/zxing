@@ -30,7 +30,7 @@ How to include ZXingWidget in a easy and clean way (in XCode4):
 	 it.  Add the relative path from your project's directory to the
 	 "zxing/iphone/ZXingWidget/Classes" directory. Make sure you click the checkbox "recursive path" ! 
   
-  5. Headers search path 2: You need to add zxing cpp headers to your headers search path, do this similarly as previous step to point the path to cpp/core/src/ where the 'zxing' directory is. You don't need to make this search path recursive so do not check the "recursive path" option
+  5. Headers search path 2: You need to add zxing cpp headers to your headers search path, do this similarly as previous step to point the path to cpp/core/src/ where the 'zxing' directory is. Do not check the "recursive path" option for this path.
 
 	6. Import the following iOS frameworks: 
 	   a. AVFoundation
