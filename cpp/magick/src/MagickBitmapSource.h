@@ -1,10 +1,7 @@
 #ifndef __MAGICK_BITMAP_SOURCE_H_
 #define __MAGICK_BITMAP_SOURCE_H_
 /*
- *  MagickBitmapSource.h
- *  zxing
- *
- *  Copyright 2010 ZXing authors All rights reserved.
+ *  Copyright 2010-2011 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,10 +23,9 @@ namespace zxing {
 
 class MagickBitmapSource : public LuminanceSource {
 private:
-  Magick::Image& image_;
+  Magick::Image image_;
   int width;
   int height;
-  const Magick::PixelPacket* pixel_cache;
 
 public:
   MagickBitmapSource(Magick::Image& image);
@@ -40,6 +36,8 @@ public:
   int getHeight() const;
   unsigned char* getRow(int y, unsigned char* row);
   unsigned char* getMatrix();
+  bool isCropSupported() const;
+  Ref<LuminanceSource> crop(int left, int top, int width, int height);
   bool isRotateSupported() const;
   Ref<LuminanceSource> rotateCounterClockwise();
 };

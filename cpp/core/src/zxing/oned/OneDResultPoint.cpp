@@ -22,15 +22,7 @@
 namespace zxing {
 	namespace oned {
 
-		OneDResultPoint::OneDResultPoint(float posX, float posY) : posX_(posX), posY_(posY) {
-		}
-
-		float OneDResultPoint::getX() const {
-			return posX_;
-		}
-
-		float OneDResultPoint::getY() const {
-			return posY_;
+		OneDResultPoint::OneDResultPoint(float posX, float posY) : ResultPoint(posX,posY) {
 		}
 	}
 }

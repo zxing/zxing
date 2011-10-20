@@ -29,16 +29,12 @@ namespace zxing {
 		
 		class FinderPattern : public ResultPoint {
 		private:
-			float posX_;
-			float posY_;
 			float estimatedModuleSize_;
 			int count_;
 			
 		public:
 			FinderPattern(float posX, float posY, float estimatedModuleSize);
 			FinderPattern(float posX, float posY, float estimatedModuleSize, int count);
-			float getX() const;
-			float getY() const;
 			int getCount() const;
 			float getEstimatedModuleSize() const;
 			void incrementCount();

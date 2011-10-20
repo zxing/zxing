@@ -25,14 +25,9 @@ namespace zxing {
 	namespace oned {
 		
 		class OneDResultPoint : public ResultPoint {
-		private:
-			float posX_;
-			float posY_;
 			
 		public:
 			OneDResultPoint(float posX, float posY);
-			float getX() const;
-			float getY() const;
 		};
 	}
 }

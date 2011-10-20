@@ -1,9 +1,6 @@
 // -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
 /*
- *  main.cpp
- *  zxing
- *
- *  Copyright 2010 ZXing authors All rights reserved.
+ *  Copyright 2010-2011 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +21,6 @@
 #include <Magick++.h>
 #include "MagickBitmapSource.h"
 #include <zxing/common/Counted.h>
-//#include <zxing/qrcode/QRCodeReader.h>
 #include <zxing/Binarizer.h>
 #include <zxing/MultiFormatReader.h>
 #include <zxing/Result.h>
@@ -37,6 +33,12 @@
 #include <zxing/BinaryBitmap.h>
 #include <zxing/DecodeHints.h>
 
+#include <zxing/qrcode/QRCodeReader.h>
+#include <zxing/multi/qrcode/QRCodeMultiReader.h>
+#include <zxing/multi/ByQuadrantReader.h>
+#include <zxing/multi/MultipleBarcodeReader.h>
+#include <zxing/multi/GenericMultipleBarcodeReader.h>
+
 //#include <zxing/qrcode/detector/Detector.h>
 //#include <zxing/qrcode/detector/QREdgeDetector.h>
 //#include <zxing/qrcode/decoder/Decoder.h>
@@ -44,18 +46,30 @@
 using namespace Magick;
 using namespace std;
 using namespace zxing;
-//using namespace zxing::qrcode;
+using namespace zxing::multi;
+using namespace zxing::qrcode;
 
 static bool raw_dump = false;
 static bool show_format = false;
 static bool tryHarder = false;
 static bool show_filename = false;
+static bool search_multi = false;
 
 static const int MAX_EXPECTED = 1024;
 
 Ref<Result> decode(Ref<BinaryBitmap> image, DecodeHints hints) {
   Ref<Reader> reader(new MultiFormatReader);
   return reader->decode(image, hints);
+}
+
+vector<Ref<Result> > decodeMultiple(Ref<BinaryBitmap> image, DecodeHints hints){
+  MultiFormatReader delegate;
+//   MultiFormatReader mformat;
+//   ByQuadrantReader delegate(mformat);
+
+  GenericMultipleBarcodeReader reader(delegate);
+//   QRCodeMultiReader reader;
+  return reader.decodeMultiple(image,hints);
 }
 
 
@@ -101,14 +115,13 @@ int test_image(Image& image, bool hybrid, string expected = "") {
   if (cell_result.compare(expected)) {
     res = -6;
     if (!raw_dump) {
-        cout << (hybrid ? "Hybrid" : "Global") << " binarizer failed:\n";
-        if (expected.length() >= 0) {
-          cout << "  Expected: " << expected << "\n";
-        }
-        cout << "  Detected: " << cell_result << endl;
+      cout << (hybrid ? "Hybrid" : "Global") << " binarizer failed:\n";
+      if (expected.length() >= 0) {
+        cout << "  Expected: " << expected << "\n";
+      }
+      cout << "  Detected: " << cell_result << endl;
     }
   }
-
 
   if (raw_dump && !hybrid) {/* don't print twice, and global is a bit better */
     cout << cell_result;
@@ -116,7 +129,6 @@ int test_image(Image& image, bool hybrid, string expected = "") {
       cout << " " << result_format;
     }
     cout << endl;
-
   }
   return res;
 }
@@ -127,6 +139,64 @@ int test_image_hybrid(Image& image, string expected = "") {
 
 int test_image_global(Image& image, string expected = "") {
   return test_image(image, false, expected);
+}
+
+int test_image_multi(Image& image, bool hybrid){
+  vector<Ref<Result> > results;
+  string cell_result;
+  int res = -1;
+
+  Ref<BitMatrix> matrix(NULL);
+  Ref<Binarizer> binarizer(NULL);
+
+  try {
+    Ref<MagickBitmapSource> source(new MagickBitmapSource(image));
+
+    if (hybrid) {
+      binarizer = new HybridBinarizer(source);
+    } else {
+      binarizer = new GlobalHistogramBinarizer(source);
+    }
+    DecodeHints hints(DecodeHints::DEFAULT_HINT);
+    hints.setTryHarder(tryHarder);
+    Ref<BinaryBitmap> binary(new BinaryBitmap(binarizer));
+    results = decodeMultiple(binary, hints);
+    res = 0;
+  } catch (ReaderException e) {
+    cell_result = "zxing::ReaderException: " + string(e.what());
+    res = -2;
+  } catch (zxing::IllegalArgumentException& e) {
+    cell_result = "zxing::IllegalArgumentException: " + string(e.what());
+    res = -3;
+  } catch (zxing::Exception& e) {
+    cell_result = "zxing::Exception: " + string(e.what());
+    res = -4;
+  } catch (std::exception& e) {
+    cell_result = "std::exception: " + string(e.what());
+    res = -5;
+  }
+  cout << (hybrid ? "Hybrid" : "Global");
+  if (res != 0){
+    cout<<" binarizer failed: "<<cell_result<<endl;
+  } else {
+    cout<<" binarizer succeeded: "<<endl;
+    for (unsigned int i = 0; i < results.size(); i++){
+      cout << "    "<<results[i]->getText()->getText();
+      if (show_format) {
+        cout << " " << barcodeFormatNames[results[i]->getBarcodeFormat()];
+      }
+      cout << endl;
+    }
+  }
+  return res;
+}
+
+int test_image_multi_hybrid(Image& image){
+  return test_image_multi(image, true);
+}
+
+int test_image_multi_global(Image& image){
+  return test_image_multi(image, false);
 }
 
 string get_expected(string imagefilename) {
@@ -144,14 +214,14 @@ string get_expected(string imagefilename) {
   fseek(fp, 0, SEEK_END);
   int toread = ftell(fp);
   rewind(fp);
-  
+
   if (toread > MAX_EXPECTED) {
-  	cerr << "MAX_EXPECTED = " << MAX_EXPECTED << " but file '" << textfilename << "' has " << toread
-  	     << " bytes! Skipping..." << endl;
+    cerr << "MAX_EXPECTED = " << MAX_EXPECTED << " but file '" << textfilename << "' has " << toread
+    << " bytes! Skipping..." << endl;
     fclose(fp);
     return "";
   }
-  
+
   int nread = fread(data, sizeof(char), toread, fp);
   if (nread != toread) {
     cerr << "Could not read entire contents of file '" << textfilename << "'! Skipping..." << endl;
@@ -166,7 +236,7 @@ string get_expected(string imagefilename) {
 
 int main(int argc, char** argv) {
   if (argc <= 1) {
-    cout << "Usage: " << argv[0] << " [--dump-raw] [--show-format] [--try-harder] [--show-filename] <filename1> [<filename2> ...]" << endl;
+    cout << "Usage: " << argv[0] << " [--dump-raw] [--show-format] [--try-harder] [--search_multi] [--show-filename] <filename1> [<filename2> ...]" << endl;
     return 1;
   }
 
@@ -199,6 +269,10 @@ int main(int argc, char** argv) {
       show_filename = true;
       continue;
     }
+    if (infilename.compare("--search_multi") == 0){
+      search_multi = true;
+      continue;
+    }
     if (!raw_dump)
       cerr << "Processing: " << infilename << endl;
     if (show_filename)
@@ -214,27 +288,39 @@ int main(int argc, char** argv) {
     string expected;
     expected = get_expected(infilename);
 
-    int gresult = 1;
-    int hresult = 1;
+    if (search_multi){
+      int gresult = 1;
+      int hresult = 1;
+      gresult = test_image_multi_global(image);
+      hresult = test_image_multi_hybrid(image);
+      gresult = gresult == 0;
+      hresult = hresult == 0;
+      gonly += gresult && !hresult;
+      honly += hresult && !gresult;
+      both += gresult && hresult;
+      neither += !gresult && !hresult;
+      total = total + 1;
+    } else {
+      int gresult = 1;
+      int hresult = 1;
+      hresult = test_image_hybrid(image, expected);
+      gresult = test_image_global(image, expected);
+      gresult = gresult == 0;
+      hresult = hresult == 0;
 
-    hresult = test_image_hybrid(image, expected);
-    gresult = test_image_global(image, expected);
-
-    gresult = gresult == 0;
-    hresult = hresult == 0;
-
-    gonly += gresult && !hresult;
-    honly += hresult && !gresult;
-    both += gresult && hresult;
-    neither += !gresult && !hresult;
-    total = total + 1;
+      gonly += gresult && !hresult;
+      honly += hresult && !gresult;
+      both += gresult && hresult;
+      neither += !gresult && !hresult;
+      total = total + 1;
+    }
   }
 
   if (!raw_dump)
     cout << (honly+both)  << " passed hybrid, " << (gonly+both) << " passed global, "
-      << both << " pass both, " << neither << " pass neither, " << honly
-      << " passed only hybrid, " << gonly << " passed only global, of " << total
-      << " total." << endl;
+    << both << " pass both, " << neither << " pass neither, " << honly
+    << " passed only hybrid, " << gonly << " passed only global, of " << total
+    << " total." << endl;
 
   return 0;
 }

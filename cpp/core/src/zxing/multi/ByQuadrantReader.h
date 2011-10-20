@@ -1,12 +1,8 @@
-// -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
-#ifndef __QR_CODE_READER_H__
-#define __QR_CODE_READER_H__
+#ifndef __BY_QUADRANT_READER_H__
+#define __BY_QUADRANT_READER_H__
 
 /*
- *  QRCodeReader.h
- *  zxing
- *
- *  Copyright 2010 ZXing authors All rights reserved.
+ *  Copyright 2011 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,26 +18,23 @@
  */
 
 #include <zxing/Reader.h>
-#include <zxing/qrcode/decoder/Decoder.h>
+#include <zxing/BinaryBitmap.h>
+#include <zxing/Result.h>
 #include <zxing/DecodeHints.h>
 
 namespace zxing {
-	namespace qrcode {
-		
-		class QRCodeReader : public Reader {
-		private:
-			Decoder decoder_;
-			
-    protected:
-      Decoder& getDecoder();
+namespace multi {
+class ByQuadrantReader : public Reader {
+  private:
+    Reader& delegate_;
 
-		public:
-			QRCodeReader();
-			virtual Ref<Result> decode(Ref<BinaryBitmap> image, DecodeHints hints);
-			virtual ~QRCodeReader();
-			
-		};
-	}
-}
+  public:
+    ByQuadrantReader(Reader& delegate);
+    virtual ~ByQuadrantReader();
+    virtual Ref<Result> decode(Ref<BinaryBitmap> image);
+    virtual Ref<Result> decode(Ref<BinaryBitmap> image, DecodeHints hints);
+};
+} // End zxing::multi namespace
+} // End zxing namespace
 
-#endif // __QR_CODE_READER_H__
+#endif // __BY_QUADRANT_READER_H__

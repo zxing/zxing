@@ -1,3 +1,4 @@
+// -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
 /*
  *  Detector.cpp
  *  zxing
@@ -47,7 +48,10 @@ Ref<DetectorResult> Detector::detect(DecodeHints const& hints) {
   callback_ = hints.getResultPointCallback();
   FinderPatternFinder finder(image_, hints.getResultPointCallback());
   Ref<FinderPatternInfo> info(finder.find(hints));
+  return processFinderPatternInfo(info);
+}
 
+Ref<DetectorResult> Detector::processFinderPatternInfo(Ref<FinderPatternInfo> info){
   Ref<FinderPattern> topLeft(info->getTopLeft());
   Ref<FinderPattern> topRight(info->getTopRight());
   Ref<FinderPattern> bottomLeft(info->getBottomLeft());

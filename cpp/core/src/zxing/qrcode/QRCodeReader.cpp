@@ -79,5 +79,8 @@ namespace zxing {
 		QRCodeReader::~QRCodeReader() {
 		}
 		
+    Decoder& QRCodeReader::getDecoder() {
+        return decoder_;
+    }
 	}
 }
