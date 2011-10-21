@@ -171,8 +171,13 @@ public final class EncodeActivity extends Activity {
       Bitmap bitmap = qrCodeEncoder.encodeAsBitmap();
       ImageView view = (ImageView) findViewById(R.id.image_view);
       view.setImageBitmap(bitmap);
+
       TextView contents = (TextView) findViewById(R.id.contents_text_view);
-      contents.setText(qrCodeEncoder.getDisplayContents());
+      if (intent.getBooleanExtra(Intents.Encode.SHOW_CONTENTS, true)) {
+        contents.setText(qrCodeEncoder.getDisplayContents());
+      } else {
+        contents.setText("");
+      }
     } catch (WriterException e) {
       Log.e(TAG, "Could not encode barcode", e);
       showErrorMessage(R.string.msg_encode_contents_failed);
