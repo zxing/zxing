@@ -29,6 +29,7 @@
   <string name="encode_bad_data">Encode bad data</string>
   <string name="encode_contact">Encode contact</string>
   <string name="encode_email">Encode email</string>
+  <string name="encode_hidden_data">Encode hidden data</string>
   <string name="encode_location">Encode location</string>
   <string name="encode_phone">Encode phone</string>
   <string name="encode_sms">Encode SMS</string>

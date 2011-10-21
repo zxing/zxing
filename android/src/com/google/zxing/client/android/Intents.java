@@ -142,6 +142,12 @@ public final class Intents {
      */
     public static final String FORMAT = "ENCODE_FORMAT";
 
+    /**
+     * Normally the contents of the barcode are displayed to the user in a TextView. Setting this
+     * boolean to false will hide that TextView, showing only the encode barcode.
+     */
+    public static final String SHOW_CONTENTS = "ENCODE_SHOW_CONTENTS";
+
     private Encode() {
     }
   }

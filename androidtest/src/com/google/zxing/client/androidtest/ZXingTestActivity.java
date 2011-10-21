@@ -40,7 +40,6 @@ public final class ZXingTestActivity extends Activity {
 
     findViewById(R.id.take_test_photos).setOnClickListener(takeTestPhotos);
     findViewById(R.id.get_camera_parameters).setOnClickListener(getCameraParameters);
-    findViewById(R.id.run_benchmark).setOnClickListener(runBenchmark);
     findViewById(R.id.scan_product).setOnClickListener(scanProduct);
     findViewById(R.id.scan_qr_code).setOnClickListener(scanQRCode);
     findViewById(R.id.scan_anything).setOnClickListener(scanAnything);
@@ -51,8 +50,10 @@ public final class ZXingTestActivity extends Activity {
     findViewById(R.id.encode_sms).setOnClickListener(encodeSMS);
     findViewById(R.id.encode_contact).setOnClickListener(encodeContact);
     findViewById(R.id.encode_location).setOnClickListener(encodeLocation);
+    findViewById(R.id.encode_hidden_data).setOnClickListener(encodeHiddenData);
     findViewById(R.id.encode_bad_data).setOnClickListener(encodeBadData);
     findViewById(R.id.share_via_barcode).setOnClickListener(shareViaBarcode);
+    findViewById(R.id.run_benchmark).setOnClickListener(runBenchmark);
   }
 
   @Override
@@ -199,6 +200,16 @@ public final class ZXingTestActivity extends Activity {
       bundle.putFloat("LAT", 40.829208f);
       bundle.putFloat("LONG", -74.191279f);
       encodeBarcode("LOCATION_TYPE", bundle);
+    }
+  };
+
+  public final Button.OnClickListener encodeHiddenData = new Button.OnClickListener() {
+    public void onClick(View v) {
+      Intent intent = new Intent("com.google.zxing.client.android.ENCODE");
+      intent.putExtra("ENCODE_TYPE", "TEXT_TYPE");
+      intent.putExtra("ENCODE_DATA", "SURPRISE!");
+      intent.putExtra("ENCODE_SHOW_CONTENTS", false);
+      startActivity(intent);
     }
   };
 

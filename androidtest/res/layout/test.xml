@@ -80,16 +80,20 @@
             android:text="@string/encode_location"/>
   </TableRow>
   <TableRow>
+    <Button android:id="@+id/encode_hidden_data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/encode_hidden_data"/>
     <Button android:id="@+id/encode_bad_data"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/encode_bad_data"/>
+  </TableRow>
+  <TableRow>
     <Button android:id="@+id/share_via_barcode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/share_via_barcode"/>
-  </TableRow>
-  <TableRow>
     <Button android:id="@+id/run_benchmark"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
