@@ -34,9 +34,9 @@ public final class Intents {
     public static final String ACTION = "com.google.zxing.client.android.SCAN";
 
     /**
-     * By default, sending Scan.ACTION will decode all barcodes that we understand. However it
-     * may be useful to limit scanning to certain formats. Use Intent.putExtra(MODE, value) with
-     * one of the values below.
+     * By default, sending this will decode all barcodes that we understand. However it
+     * may be useful to limit scanning to certain formats. Use
+     * {@link android.content.Intent#putExtra(String, String)} with one of the values below.
      *
      * Setting this is effectively shorthand for setting explicit formats with {@link #FORMATS}.
      * It is overridden by that setting.
@@ -87,9 +87,13 @@ public final class Intents {
     public static final String HEIGHT = "SCAN_HEIGHT";
 
     /**
-     * If a barcode is found, Barcodes returns RESULT_OK to onActivityResult() of the app which
-     * requested the scan via startSubActivity(). The barcodes contents can be retrieved with
-     * intent.getStringExtra(RESULT). If the user presses Back, the result code will be
+     * If a barcode is found, Barcodes returns RESULT_OK to 
+     * {@link android.app.Activity#onActivityResult(int, int, android.content.Intent)}
+     * of the app which requested the scan via
+     * {@link android.app.Activity#startActivityForResult(android.content.Intent, int)}
+     * The barcodes contents can be retrieved with
+     * {@link android.content.Intent#getStringExtra(String)}. 
+     * If the user presses Back, the result code will be
      * RESULT_CANCELED.
      */
     public static final String RESULT = "SCAN_RESULT";
@@ -123,22 +127,23 @@ public final class Intents {
     public static final String ACTION = "com.google.zxing.client.android.ENCODE";
 
     /**
-     * The data to encode. Use Intent.putExtra(DATA, data) where data is either a String or a
-     * Bundle, depending on the type and format specified. Non-QR Code formats should
+     * The data to encode. Use {@link android.content.Intent#putExtra(String, String)} or
+     * {@link android.content.Intent#putExtra(String, android.os.Bundle)}, 
+     * depending on the type and format specified. Non-QR Code formats should
      * just use a String here. For QR Code, see Contents for details.
      */
     public static final String DATA = "ENCODE_DATA";
 
     /**
      * The type of data being supplied if the format is QR Code. Use
-     * Intent.putExtra(TYPE, type) with one of Contents.Type.
+     * {@link android.content.Intent#putExtra(String, String)} with one of {@link Contents.Type}.
      */
     public static final String TYPE = "ENCODE_TYPE";
 
     /**
      * The barcode format to be displayed. If this isn't specified or is blank,
-     * it defaults to QR Code. Use Intent.putExtra(FORMAT, format), where
-     * format is one of Contents.Format.
+     * it defaults to QR Code. Use {@link android.content.Intent#putExtra(String, String)}, where
+     * format is one of {@link com.google.zxing.BarcodeFormat}.
      */
     public static final String FORMAT = "ENCODE_FORMAT";
 
