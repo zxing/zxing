@@ -167,7 +167,6 @@ public final class EncodeActivity extends Activity {
     }
     try {
       qrCodeEncoder = new QRCodeEncoder(this, intent, smallerDimension);
-      setTitle(getString(R.string.app_name) + " - " + qrCodeEncoder.getTitle());
       Bitmap bitmap = qrCodeEncoder.encodeAsBitmap();
       ImageView view = (ImageView) findViewById(R.id.image_view);
       view.setImageBitmap(bitmap);
@@ -175,8 +174,10 @@ public final class EncodeActivity extends Activity {
       TextView contents = (TextView) findViewById(R.id.contents_text_view);
       if (intent.getBooleanExtra(Intents.Encode.SHOW_CONTENTS, true)) {
         contents.setText(qrCodeEncoder.getDisplayContents());
+        setTitle(getString(R.string.app_name) + " - " + qrCodeEncoder.getTitle());
       } else {
         contents.setText("");
+        setTitle(getString(R.string.app_name));
       }
     } catch (WriterException e) {
       Log.e(TAG, "Could not encode barcode", e);
