@@ -33,7 +33,7 @@
   <string name="button_mms">Изпрати MMS</string>
   <string name="button_ok">ОК</string>
   <string name="button_open_browser">Отвори браузър</string>
-  <string name="button_product_search">Търси продукт</string>
+  <string name="button_product_search">Търсене на продукт</string>
   <string name="button_read_book">Четене на книга</string>
   <string name="button_search_book_contents">Търси в книга</string>
   <string name="button_share_app">Приложение</string>
@@ -44,7 +44,7 @@
   <string name="button_share_contact">Контакт</string>
   <string name="button_show_map">Покажи карта</string>
   <string name="button_sms">Изпрати SMS</string>
-  <string name="button_web_search">Уеб търсене</string>
+  <string name="button_web_search">Интернет търсене</string>
   <string name="button_wifi">Свържи се в мрежата</string>
   <string name="contents_contact">Информация за контакт</string>
   <string name="contents_email">Електронна поща</string>
