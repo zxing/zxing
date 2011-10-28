@@ -189,7 +189,7 @@ int Version::buildVersions() {
 					              new ECBlocks(14, new ECB(1, 16)))));
   VERSIONS.push_back(Ref<Version>(new Version(28, 12, 36, 10, 16,
 					              new ECBlocks(18, new ECB(1, 22)))));
-  VERSIONS.push_back(Ref<Version>(new Version(29, 16, 36, 10, 16,
+  VERSIONS.push_back(Ref<Version>(new Version(29, 16, 36, 14, 16,
 					              new ECBlocks(24, new ECB(1, 32)))));
   VERSIONS.push_back(Ref<Version>(new Version(30, 16, 48, 14, 22,
 					              new ECBlocks(28, new ECB(1, 49)))));

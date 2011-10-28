@@ -43,54 +43,52 @@ void Decoder::correctErrors(ArrayRef<unsigned char> codewordBytes, int numDataCo
     codewordInts[i] = codewordBytes[i] & 0xff;
   }
   int numECCodewords = numCodewords - numDataCodewords;
-
   try {
     rsDecoder_.decode(codewordInts, numECCodewords);
   } catch (ReedSolomonException const& ex) {
     ReaderException rex(ex.what());
     throw rex;
   }
-
+  // Copy back into array of bytes -- only need to worry about the bytes that were data
+  // We don't care about errors in the error-correction codewords
   for (int i = 0; i < numDataCodewords; i++) {
     codewordBytes[i] = (unsigned char)codewordInts[i];
   }
 }
 
 Ref<DecoderResult> Decoder::decode(Ref<BitMatrix> bits) {
-    // Construct a parser and read version, error-correction level
-    BitMatrixParser parser(bits);
-    Version *version = parser.readVersion(bits);
+  // Construct a parser and read version, error-correction level
+  BitMatrixParser parser(bits);
+  Version *version = parser.readVersion(bits);
 
-    // Read codewords
-    ArrayRef<unsigned char> codewords(parser.readCodewords());
-    // Separate into data blocks
-    std::vector<Ref<DataBlock> > dataBlocks = DataBlock::getDataBlocks(codewords, version);
+  // Read codewords
+  ArrayRef<unsigned char> codewords(parser.readCodewords());
+  // Separate into data blocks
+  std::vector<Ref<DataBlock> > dataBlocks = DataBlock::getDataBlocks(codewords, version);
 
-    // Count total number of data bytes
-    int totalBytes = 0;
-    for (unsigned int i = 0; i < dataBlocks.size(); i++) {
-      totalBytes += dataBlocks[i]->getNumDataCodewords();
+  int dataBlocksCount = dataBlocks.size();
+
+  // Count total number of data bytes
+  int totalBytes = 0;
+  for (int i = 0; i < dataBlocksCount; i++) {
+    totalBytes += dataBlocks[i]->getNumDataCodewords();
+  }
+  ArrayRef<unsigned char> resultBytes(totalBytes);
+
+  // Error-correct and copy data blocks together into a stream of bytes
+  for (int j = 0; j < dataBlocksCount; j++) {
+    Ref<DataBlock> dataBlock(dataBlocks[j]);
+    ArrayRef<unsigned char> codewordBytes = dataBlock->getCodewords();
+    int numDataCodewords = dataBlock->getNumDataCodewords();
+    correctErrors(codewordBytes, numDataCodewords);
+    for (int i = 0; i < numDataCodewords; i++) {
+      // De-interlace data blocks.
+      resultBytes[i * dataBlocksCount + j] = codewordBytes[i];
     }
-    ArrayRef<unsigned char> resultBytes(totalBytes);
-    int resultOffset = 0;
-
-    // Error-correct and copy data blocks together into a stream of bytes
-    for (unsigned int j = 0; j < dataBlocks.size(); j++) {
-      Ref<DataBlock> dataBlock(dataBlocks[j]);
-      ArrayRef<unsigned char> codewordBytes = dataBlock->getCodewords();
-      int numDataCodewords = dataBlock->getNumDataCodewords();
-      correctErrors(codewordBytes, numDataCodewords);
-      for (int i = 0; i < numDataCodewords; i++) {
-        resultBytes[resultOffset++] = codewordBytes[i];
-      }
-    }
-
+  }
   // Decode the contents of that stream of bytes
   DecodedBitStreamParser decodedBSParser;
-  Ref<String> text(new String(decodedBSParser.decode(resultBytes)));
-
-  Ref<DecoderResult> result(new DecoderResult(resultBytes, text));
-  return result;
+  return Ref<DecoderResult> (decodedBSParser.decode(resultBytes));
 }
 }
 }

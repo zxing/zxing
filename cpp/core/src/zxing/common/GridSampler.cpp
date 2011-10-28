@@ -53,6 +53,27 @@ Ref<BitMatrix> GridSampler::sampleGrid(Ref<BitMatrix> image, int dimension, Ref<
   return bits;
 }
 
+Ref<BitMatrix> GridSampler::sampleGrid(Ref<BitMatrix> image, int dimensionX, int dimensionY, Ref<PerspectiveTransform> transform) {
+  Ref<BitMatrix> bits(new BitMatrix(dimensionX, dimensionY));
+  vector<float> points(dimensionX << 1, (const float)0.0f);
+  for (int y = 0; y < dimensionY; y++) {
+    int max = points.size();
+    float yValue = (float)y + 0.5f;
+    for (int x = 0; x < max; x += 2) {
+      points[x] = (float)(x >> 1) + 0.5f;
+      points[x + 1] = yValue;
+    }
+    transform->transformPoints(points);
+    checkAndNudgePoints(image, points);
+    for (int x = 0; x < max; x += 2) {
+      if (image->get((int)points[x], (int)points[x + 1])) {
+        bits->set(x >> 1, y);
+      }
+    }
+  }
+  return bits;
+}
+
 Ref<BitMatrix> GridSampler::sampleGrid(Ref<BitMatrix> image, int dimension, float p1ToX, float p1ToY, float p2ToX,
                                        float p2ToY, float p3ToX, float p3ToY, float p4ToX, float p4ToY, float p1FromX, float p1FromY, float p2FromX,
                                        float p2FromY, float p3FromX, float p3FromY, float p4FromX, float p4FromY) {
