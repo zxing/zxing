@@ -49,7 +49,7 @@ namespace zxing {
           result.putMetadata(ResultMetadataType.ORIENTATION, new Integer(orientation));
           */
           // Update result points
-          std::vector<Ref<ResultPoint> > points (result->getResultPoints());
+          std::vector<Ref<ResultPoint> >& points (result->getResultPoints());
           int height = rotatedImage->getHeight();
           for (size_t i = 0; i < points.size(); i++) {
             points[i].reset(new OneDResultPoint(height - points[i]->getY() - 1, points[i]->getX()));
