@@ -55,7 +55,7 @@ static bool tryHarder = false;
 static bool show_filename = false;
 static bool search_multi = false;
 
-static const int MAX_EXPECTED = 1024;
+static const int MAX_EXPECTED = 4096;
 
 Ref<Result> decode(Ref<BinaryBitmap> image, DecodeHints hints) {
   Ref<Reader> reader(new MultiFormatReader);

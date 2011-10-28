@@ -47,6 +47,9 @@ public:
       bytes_(bytes), byteOffset_(0), bitOffset_(0) {
   }
 
+  int getByteOffset() {
+    return byteOffset_;
+  }
 
   /**
    * @param numBits number of bits to read

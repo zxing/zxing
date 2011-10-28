@@ -32,7 +32,6 @@ int BitSource::readBits(int numBits) {
 
   int result = 0;
 
-
   // First, read remainder from current byte
   if (bitOffset_ > 0) {
     int bitsLeft = 8 - bitOffset_;

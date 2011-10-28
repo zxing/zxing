@@ -46,8 +46,7 @@ const DecodeHints DecodeHints::DEFAULT_HINT(
     BARCODEFORMAT_CODE_128_HINT |
     BARCODEFORMAT_CODE_39_HINT |
     BARCODEFORMAT_ITF_HINT |
-    // TODO: uncomment once this passes QA
-    // BARCODEFORMAT_DATA_MATRIX_HINT |
+    BARCODEFORMAT_DATA_MATRIX_HINT |
     BARCODEFORMAT_QR_CODE_HINT);
 
 DecodeHints::DecodeHints() {
