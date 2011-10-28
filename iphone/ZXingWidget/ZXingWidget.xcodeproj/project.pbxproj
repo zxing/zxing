@@ -119,6 +119,9 @@
 		1F3DB10011C61080009C581B /* MultiFormatUPCEANReader.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1F3DB0FA11C61080009C581B /* MultiFormatUPCEANReader.mm */; };
 		1FB4319F12901C76002D63E8 /* UniversalResultParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 1FB4319D12901C76002D63E8 /* UniversalResultParser.h */; };
 		1FB431A012901C76002D63E8 /* UniversalResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FB4319E12901C76002D63E8 /* UniversalResultParser.m */; };
+		3B117EF1145B220A0035037B /* MonochromeRectangleDetector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B117EEF145B220A0035037B /* MonochromeRectangleDetector.cpp */; };
+		3B117EF2145B220A0035037B /* WhiteRectangleDetector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B117EF0145B220A0035037B /* WhiteRectangleDetector.cpp */; };
+		3B117EF5145B221D0035037B /* NotFoundException.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B117EF4145B221D0035037B /* NotFoundException.cpp */; };
 		3B27C5D8144735CE005157C4 /* FormatException.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B27C5D6144735CE005157C4 /* FormatException.cpp */; };
 		3B27C5D9144735CE005157C4 /* FormatException.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B27C5D7144735CE005157C4 /* FormatException.h */; };
 		3B27C5E1144735E6005157C4 /* CharacterSetECI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B27C5DB144735E6005157C4 /* CharacterSetECI.cpp */; };
@@ -398,6 +401,9 @@
 		1F3DB0FA11C61080009C581B /* MultiFormatUPCEANReader.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MultiFormatUPCEANReader.mm; path = Classes/MultiFormatUPCEANReader.mm; sourceTree = "<group>"; };
 		1FB4319D12901C76002D63E8 /* UniversalResultParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UniversalResultParser.h; path = Classes/resultParsers/UniversalResultParser.h; sourceTree = "<group>"; };
 		1FB4319E12901C76002D63E8 /* UniversalResultParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UniversalResultParser.m; path = Classes/resultParsers/UniversalResultParser.m; sourceTree = "<group>"; };
+		3B117EEF145B220A0035037B /* MonochromeRectangleDetector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MonochromeRectangleDetector.cpp; path = detector/MonochromeRectangleDetector.cpp; sourceTree = "<group>"; };
+		3B117EF0145B220A0035037B /* WhiteRectangleDetector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = WhiteRectangleDetector.cpp; path = detector/WhiteRectangleDetector.cpp; sourceTree = "<group>"; };
+		3B117EF4145B221D0035037B /* NotFoundException.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NotFoundException.cpp; sourceTree = "<group>"; };
 		3B27C5D6144735CE005157C4 /* FormatException.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FormatException.cpp; sourceTree = "<group>"; };
 		3B27C5D7144735CE005157C4 /* FormatException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FormatException.h; sourceTree = "<group>"; };
 		3B27C5DB144735E6005157C4 /* CharacterSetECI.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CharacterSetECI.cpp; sourceTree = "<group>"; };
@@ -691,6 +697,7 @@
 		E53458B411987396000CB77F /* zxing */ = {
 			isa = PBXGroup;
 			children = (
+				3B117EF4145B221D0035037B /* NotFoundException.cpp */,
 				3B27C5D6144735CE005157C4 /* FormatException.cpp */,
 				3B27C5D7144735CE005157C4 /* FormatException.h */,
 				3B72D96D12130EF6007CEF32 /* ResultPointCallback.cpp */,
@@ -728,6 +735,8 @@
 		E53458BB11987396000CB77F /* common */ = {
 			isa = PBXGroup;
 			children = (
+				3B117EEF145B220A0035037B /* MonochromeRectangleDetector.cpp */,
+				3B117EF0145B220A0035037B /* WhiteRectangleDetector.cpp */,
 				3B27C5DB144735E6005157C4 /* CharacterSetECI.cpp */,
 				3B27C5DC144735E6005157C4 /* CharacterSetECI.h */,
 				3B27C5DD144735E6005157C4 /* ECI.cpp */,
@@ -1390,6 +1399,9 @@
 				3B27C5E1144735E6005157C4 /* CharacterSetECI.cpp in Sources */,
 				3B27C5E3144735E6005157C4 /* ECI.cpp in Sources */,
 				3B27C5E5144735E6005157C4 /* StringUtils.cpp in Sources */,
+				3B117EF1145B220A0035037B /* MonochromeRectangleDetector.cpp in Sources */,
+				3B117EF2145B220A0035037B /* WhiteRectangleDetector.cpp in Sources */,
+				3B117EF5145B221D0035037B /* NotFoundException.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
