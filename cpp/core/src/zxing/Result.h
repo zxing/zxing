@@ -44,6 +44,7 @@ public:
   Ref<String> getText();
   ArrayRef<unsigned char> getRawBytes();
   const std::vector<Ref<ResultPoint> >& getResultPoints() const;
+  std::vector<Ref<ResultPoint> >& getResultPoints();
   BarcodeFormat getBarcodeFormat() const;
 
   friend std::ostream& operator<<(std::ostream &out, Result& result);

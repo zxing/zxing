@@ -44,6 +44,10 @@ const std::vector<Ref<ResultPoint> >& Result::getResultPoints() const {
   return resultPoints_;
 }
 
+std::vector<Ref<ResultPoint> >& Result::getResultPoints() {
+  return resultPoints_;
+}
+
 BarcodeFormat Result::getBarcodeFormat() const {
   return format_;
 }
