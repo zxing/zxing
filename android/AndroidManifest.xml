@@ -21,16 +21,11 @@ versionName is 2.31, 2.4, or 3.0. -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.google.zxing.client.android"
           android:versionName="3.7"
-          android:versionCode="73"
+          android:versionCode="74"
           android:installLocation="auto">
   <!-- We require Cupcake (Android 1.5) or later, but are really targeting Donut. -->
   <uses-sdk android:minSdkVersion="3"
             android:targetSdkVersion="4"/>
-  <uses-configuration android:reqFiveWayNav="false"
-                      android:reqHardKeyboard="false"
-                      android:reqKeyboardType="nokeys"
-                      android:reqNavigation="nonav"
-                      android:reqTouchScreen="notouch"/>
   <!-- Donut-specific flags which allow us to run on any dpi screens. -->
   <supports-screens android:xlargeScreens="true"
                     android:largeScreens="true"
