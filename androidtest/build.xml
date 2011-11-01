@@ -289,7 +289,7 @@ limitations under the License.
     <apkbuilder
         outfolder="${out-folder}"
         resourcefile="ZXingTest"
-        apkfilepath="${out-folder}/ZXingText-unsigned.apk"
+        apkfilepath="${out-folder}/ZXingTest-unsigned.apk"
         debugpackaging="false"
         debugsigning="false"
         verbose="false">
