@@ -155,7 +155,11 @@ public final class ViewfinderView extends View {
   }
 
   public void drawViewfinder() {
-    resultBitmap = null;
+    Bitmap resultBitmap = this.resultBitmap;
+    this.resultBitmap = null;
+    if (resultBitmap != null) {
+      resultBitmap.recycle();
+    }
     invalidate();
   }
 
