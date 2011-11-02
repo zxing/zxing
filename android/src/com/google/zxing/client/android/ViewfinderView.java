@@ -75,7 +75,11 @@ public final class ViewfinderView extends View {
 
   @Override
   public void onDraw(Canvas canvas) {
-    Rect frame = CameraManager.get().getFramingRect();
+    CameraManager cameraManager = CameraManager.get();
+    if (cameraManager == null) {
+      return;
+    }
+    Rect frame = cameraManager.getFramingRect();
     if (frame == null) {
       return;
     }
@@ -109,7 +113,7 @@ public final class ViewfinderView extends View {
       int middle = frame.height() / 2 + frame.top;
       canvas.drawRect(frame.left + 2, middle - 1, frame.right - 1, middle + 2, paint);
       
-      Rect previewFrame = CameraManager.get().getFramingRectInPreview();
+      Rect previewFrame = cameraManager.getFramingRectInPreview();
       float scaleX = frame.width() / (float) previewFrame.width();
       float scaleY = frame.height() / (float) previewFrame.height();
 
