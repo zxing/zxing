@@ -32,15 +32,13 @@ import java.util.regex.Pattern;
 
 final class ProductResultInfoRetriever extends SupplementalInfoRetriever {
 
-  private static final String BASE_PRODUCT_URI =
-      "http://www.google." + LocaleManager.getProductSearchCountryTLD() +
-          "/m/products?ie=utf8&oe=utf8&scoring=p&source=zxing&q=";
   private static final Pattern PRODUCT_NAME_PRICE_PATTERN =
       Pattern.compile("owb63p\">([^<]+).+zdi3pb\">([^<]+)");
 
 
   private final String productID;
   private final String source;
+  private final Context context;
 
   ProductResultInfoRetriever(TextView textView,
                              String productID,
@@ -50,13 +48,15 @@ final class ProductResultInfoRetriever extends SupplementalInfoRetriever {
     super(textView, handler, historyManager);
     this.productID = productID;
     this.source = context.getString(R.string.msg_google_product);
+    this.context = context;
   }
 
   @Override
   void retrieveSupplementalInfo() throws IOException, InterruptedException {
 
     String encodedProductID = URLEncoder.encode(productID, "UTF-8");
-    String uri = BASE_PRODUCT_URI + encodedProductID;
+    String uri = "http://www.google." + LocaleManager.getProductSearchCountryTLD(context)
+            + "/m/products?ie=utf8&oe=utf8&scoring=p&source=zxing&q=" + encodedProductID;
     String content = HttpHelper.downloadViaHttp(uri, HttpHelper.ContentType.HTML);
 
     Matcher matcher = PRODUCT_NAME_PRICE_PATTERN.matcher(content);

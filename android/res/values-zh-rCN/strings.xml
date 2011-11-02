@@ -118,6 +118,7 @@
   <string name="preferences_reverse_image_summary">设备上启用了前置摄像头只</string>
   <string name="preferences_reverse_image_title">反转摄像机的图像</string>
   <string name="preferences_scanning_title">条码类型选择</string>
+  <string name="preferences_search_country">搜索国家</string>
   <string name="preferences_supplemental_summary">尝试检索关于条码内容的更多信息</string>
   <string name="preferences_supplemental_title">检索更多信息</string>
   <string name="preferences_vibrate_title">振动</string>

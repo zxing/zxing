@@ -75,5 +75,11 @@
         android:defaultValue="false"
         android:title="@string/preferences_reverse_image_title"
         android:summary="@string/preferences_reverse_image_summary"/>
+    <ListPreference
+        android:key="preferences_search_country"
+        android:defaultValue="-"
+        android:entries="@array/country_codes"
+        android:entryValues="@array/country_codes"
+        android:title="@string/preferences_search_country"/>
   </PreferenceCategory>
 </PreferenceScreen>

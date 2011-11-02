@@ -118,6 +118,7 @@
   <string name="preferences_reverse_image_summary">Attiva solo su dispositivi con fotocamera frontale</string>
   <string name="preferences_reverse_image_title">Immagine fotocamera invertita</string>
   <string name="preferences_scanning_title">Durante la scansione di codici a barre, decodifica\u2026</string>
+  <string name="preferences_search_country">Cerca paese</string>
   <string name="preferences_supplemental_summary">Prova a cercare ulteriori informazioni sul contenuto del codice a barre</string>
   <string name="preferences_supplemental_title">Recupera altre informazioni</string>
   <string name="preferences_vibrate_title">Vibra</string>

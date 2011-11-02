@@ -118,6 +118,7 @@
   <string name="preferences_reverse_image_summary">Povolit na zařízeních s pouze přední fotoaparát</string>
   <string name="preferences_reverse_image_title">Obrácený obraz z kamery</string>
   <string name="preferences_scanning_title">Při skenování čárových kódů pro, dekódovat\u2026</string>
+  <string name="preferences_search_country">Hledání země</string>
   <string name="preferences_supplemental_summary">Získat více informací o obsahu čárového kódu</string>
   <string name="preferences_supplemental_title">Získat více informací</string>
   <string name="preferences_vibrate_title">Vibrace</string>

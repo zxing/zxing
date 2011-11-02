@@ -118,6 +118,7 @@
   <string name="preferences_reverse_image_summary">Staat op apparaten met een camera aan de voorkant alleen</string>
   <string name="preferences_reverse_image_title">Omgekeerd beeld van de camera</string>
   <string name="preferences_scanning_title">Bij het scannen van barcodes, decodeer\u2026</string>
+  <string name="preferences_search_country">Zoeken op land</string>
   <string name="preferences_supplemental_summary">Proberen om meer informatie over de inhoud van barcode ophalen</string>
   <string name="preferences_supplemental_title">Halen meer info</string>
   <string name="preferences_vibrate_title">Trillen</string>

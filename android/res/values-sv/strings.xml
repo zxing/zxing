@@ -118,6 +118,7 @@
   <string name="preferences_reverse_image_summary">Aktivera på enheter med en främre kamera</string>
   <string name="preferences_reverse_image_title">Återförda kamerabilden</string>
   <string name="preferences_scanning_title">När du skannar för streckkoder, avkoda\u2026</string>
+  <string name="preferences_search_country">Sök land</string>
   <string name="preferences_supplemental_summary">Försök att hämta mer information om streckkoden innehåll</string>
   <string name="preferences_supplemental_title">Hämta mer info</string>
   <string name="preferences_vibrate_title">Vibrera</string>

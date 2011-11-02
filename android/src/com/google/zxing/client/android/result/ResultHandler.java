@@ -446,18 +446,18 @@ public abstract class ResultHandler {
 
   final void getDirections(double latitude, double longitude) {
     launchIntent(new Intent(Intent.ACTION_VIEW, Uri.parse("http://maps.google." +
-        LocaleManager.getCountryTLD() + "/maps?f=d&daddr=" + latitude + ',' + longitude)));
+        LocaleManager.getCountryTLD(getActivity()) + "/maps?f=d&daddr=" + latitude + ',' + longitude)));
   }
 
   // Uses the mobile-specific version of Product Search, which is formatted for small screens.
   final void openProductSearch(String upc) {
-    Uri uri = Uri.parse("http://www.google." + LocaleManager.getProductSearchCountryTLD() +
+    Uri uri = Uri.parse("http://www.google." + LocaleManager.getProductSearchCountryTLD(getActivity()) +
         "/m/products?q=" + upc + "&source=zxing");
     launchIntent(new Intent(Intent.ACTION_VIEW, uri));
   }
 
   final void openBookSearch(String isbn) {
-    Uri uri = Uri.parse("http://books.google." + LocaleManager.getBookSearchCountryTLD() +
+    Uri uri = Uri.parse("http://books.google." + LocaleManager.getBookSearchCountryTLD(getActivity()) +
         "/books?vid=isbn" + isbn);
     launchIntent(new Intent(Intent.ACTION_VIEW, uri));
   }

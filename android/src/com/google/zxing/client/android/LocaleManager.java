@@ -16,6 +16,10 @@
 
 package com.google.zxing.client.android;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Locale;
@@ -118,24 +122,37 @@ public final class LocaleManager {
    * @return country-specific TLD suffix appropriate for the current default locale
    *  (e.g. "co.uk" for the United Kingdom)
    */
-  public static String getCountryTLD() {
-    return doGetTLD(GOOGLE_COUNTRY_TLD);
+  public static String getCountryTLD(Context context) {
+    return doGetTLD(GOOGLE_COUNTRY_TLD, context);
   }
 
   /**
    * The same as above, but specifically for Google Product Search.
    * @return The top-level domain to use.
    */
-  public static String getProductSearchCountryTLD() {
-    return doGetTLD(GOOGLE_PRODUCT_SEARCH_COUNTRY_TLD);
+  public static String getProductSearchCountryTLD(Context context) {
+    return doGetTLD(GOOGLE_PRODUCT_SEARCH_COUNTRY_TLD, context);
   }
 
   /**
    * The same as above, but specifically for Google Book Search.
    * @return The top-level domain to use.
    */
-  public static String getBookSearchCountryTLD() {
-    return doGetTLD(GOOGLE_BOOK_SEARCH_COUNTRY_TLD);
+  public static String getBookSearchCountryTLD(Context context) {
+    return doGetTLD(GOOGLE_BOOK_SEARCH_COUNTRY_TLD, context);
+  }
+  
+  private static String doGetTLD(Map<String,String> map, Context context) {
+    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+    String countryOverride = prefs.getString(PreferencesActivity.KEY_SEARCH_COUNTRY, null);
+    if (countryOverride != null && countryOverride.length() > 0 && !countryOverride.equals("-")) {
+      String tld = map.get(countryOverride);
+      if (tld != null) {
+        return tld;
+      }
+    }
+    String tld = map.get(COUNTRY);
+    return tld == null ? DEFAULT_TLD : tld;
   }
 
   /**

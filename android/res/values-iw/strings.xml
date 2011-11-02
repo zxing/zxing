@@ -118,6 +118,7 @@
   <string name="preferences_reverse_image_summary">אפשר בהתקנים עם מצלמה קדמית בלבד</string>
   <string name="preferences_reverse_image_title">תמונת מצלמה הפוכה</string>
   <string name="preferences_scanning_title">בעת סריקת ברקודים, קודד...</string>
+  <string name="preferences_search_country">חיפוש הארץ</string>
   <string name="preferences_supplemental_summary">נסה למצא מידע נוסף על תוכן הברקוד</string>
   <string name="preferences_supplemental_title">מצא מידע נוסף</string>
   <string name="preferences_vibrate_title">רטט</string>
