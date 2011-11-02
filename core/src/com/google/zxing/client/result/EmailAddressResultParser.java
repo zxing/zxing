@@ -18,7 +18,7 @@ package com.google.zxing.client.result;
 
 import com.google.zxing.Result;
 
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * Represents a result that encodes an e-mail address, either as a plain address
@@ -26,9 +26,10 @@ import java.util.Hashtable;
  *
  * @author Sean Owen
  */
-final class EmailAddressResultParser extends ResultParser {
+public final class EmailAddressResultParser extends ResultParser {
 
-  public static EmailAddressParsedResult parse(Result result) {
+  @Override
+  public EmailAddressParsedResult parse(Result result) {
     String rawText = result.getText();
     String emailAddress;
     if (rawText.startsWith("mailto:") || rawText.startsWith("MAILTO:")) {
@@ -38,15 +39,15 @@ final class EmailAddressResultParser extends ResultParser {
       if (queryStart >= 0) {
         emailAddress = emailAddress.substring(0, queryStart);
       }
-      Hashtable nameValues = parseNameValuePairs(rawText);
+      Map<String,String> nameValues = parseNameValuePairs(rawText);
       String subject = null;
       String body = null;
       if (nameValues != null) {
         if (emailAddress.length() == 0) {
-          emailAddress = (String) nameValues.get("to");
+          emailAddress = nameValues.get("to");
         }
-        subject = (String) nameValues.get("subject");
-        body = (String) nameValues.get("body");
+        subject = nameValues.get("subject");
+        body = nameValues.get("body");
       }
       return new EmailAddressParsedResult(emailAddress, subject, body, rawText);
     } else {

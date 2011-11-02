@@ -54,7 +54,8 @@ public final class UPCEReader extends UPCEANReader {
     decodeMiddleCounters = new int[4];
   }
 
-  protected int decodeMiddle(BitArray row, int[] startRange, StringBuffer result)
+  @Override
+  protected int decodeMiddle(BitArray row, int[] startRange, StringBuilder result)
       throws NotFoundException {
     int[] counters = decodeMiddleCounters;
     counters[0] = 0;
@@ -69,8 +70,8 @@ public final class UPCEReader extends UPCEANReader {
     for (int x = 0; x < 6 && rowOffset < end; x++) {
       int bestMatch = decodeDigit(row, counters, rowOffset, L_AND_G_PATTERNS);
       result.append((char) ('0' + bestMatch % 10));
-      for (int i = 0; i < counters.length; i++) {
-        rowOffset += counters[i];
+      for (int counter : counters) {
+        rowOffset += counter;
       }
       if (bestMatch >= 10) {
         lgPatternFound |= 1 << (5 - x);
@@ -82,15 +83,17 @@ public final class UPCEReader extends UPCEANReader {
     return rowOffset;
   }
 
+  @Override
   protected int[] decodeEnd(BitArray row, int endStart) throws NotFoundException {
     return findGuardPattern(row, endStart, true, MIDDLE_END_PATTERN);
   }
 
+  @Override
   protected boolean checkChecksum(String s) throws FormatException, ChecksumException {
     return super.checkChecksum(convertUPCEtoUPCA(s));
   }
 
-  private static void determineNumSysAndCheckDigit(StringBuffer resultString, int lgPatternFound)
+  private static void determineNumSysAndCheckDigit(StringBuilder resultString, int lgPatternFound)
       throws NotFoundException {
 
     for (int numSys = 0; numSys <= 1; numSys++) {
@@ -105,6 +108,7 @@ public final class UPCEReader extends UPCEANReader {
     throw NotFoundException.getNotFoundInstance();
   }
 
+  @Override
   BarcodeFormat getBarcodeFormat() {
     return BarcodeFormat.UPC_E;
   }
@@ -118,7 +122,7 @@ public final class UPCEReader extends UPCEANReader {
   public static String convertUPCEtoUPCA(String upce) {
     char[] upceChars = new char[6];
     upce.getChars(1, 7, upceChars, 0);
-    StringBuffer result = new StringBuffer(12);
+    StringBuilder result = new StringBuilder(12);
     result.append(upce.charAt(0));
     char lastChar = upceChars[5];
     switch (lastChar) {

@@ -34,6 +34,7 @@ public final class ResultButtonListener implements Button.OnClickListener {
     this.index = index;
   }
 
+  @Override
   public void onClick(View view) {
     resultHandler.handleButtonPress(index);
   }

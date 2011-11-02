@@ -18,13 +18,18 @@ package com.google.zxing.client.result;
 
 import com.google.zxing.Result;
 
-import java.util.Hashtable;
-import java.util.Vector;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * <p>Abstract class representing the result of decoding a barcode, as more than
  * a String -- as some type of structured data. This might be a subclass which represents
- * a URL, or an e-mail address. {@link #parseResult(com.google.zxing.Result)} will turn a raw
+ * a URL, or an e-mail address. {@link #parseResult(Result)} will turn a raw
  * decoded string into the most appropriate type of structured representation.</p>
  *
  * <p>Thanks to Jeff Griffin for proposing rewrite of these classes that relies less
@@ -34,67 +39,62 @@ import java.util.Vector;
  */
 public abstract class ResultParser {
 
+  private static final ResultParser[] PARSERS = {
+      new BookmarkDoCoMoResultParser(),
+      new AddressBookDoCoMoResultParser(),
+      new EmailDoCoMoResultParser(),
+      new AddressBookAUResultParser(),
+      new VCardResultParser(),
+      new BizcardResultParser(),
+      new VEventResultParser(),
+      new EmailAddressResultParser(),
+      new SMTPResultParser(),
+      new TelResultParser(),
+      new SMSMMSResultParser(),
+      new SMSTOMMSTOResultParser(),
+      new GeoResultParser(),
+      new WifiResultParser(),
+      new URLTOResultParser(),
+      new URIResultParser(),
+      new ISBNResultParser(),
+      new ProductResultParser(),
+      new ExpandedProductResultParser(),
+  };
+
+  private static final Pattern DIGITS = Pattern.compile("\\d*");
+  private static final Pattern ALPHANUM = Pattern.compile("[a-zA-Z0-9]*");
+  private static final Pattern AMPERSAND = Pattern.compile("&");
+  private static final Pattern EQUALS = Pattern.compile("=");
+
+  /**
+   * Attempts to parse the raw {@link Result}'s contents as a particular type
+   * of information (email, URL, etc.) and return a {@link ParsedResult} encapsulating
+   * the result of parsing.
+   */
+  public abstract ParsedResult parse(Result theResult);
+
   public static ParsedResult parseResult(Result theResult) {
-    // This is a bit messy, but given limited options in MIDP / CLDC, this may well be the simplest
-    // way to go about this. For example, we have no reflection available, really.
-    // Order is important here.
-    ParsedResult result;
-    if ((result = BookmarkDoCoMoResultParser.parse(theResult)) != null) {
-      return result;
-    } else if ((result = AddressBookDoCoMoResultParser.parse(theResult)) != null) {
-      return result;
-    } else if ((result = EmailDoCoMoResultParser.parse(theResult)) != null) {
-      return result;
-    } else if ((result = AddressBookAUResultParser.parse(theResult)) != null) {
-      return result;
-    } else if ((result = VCardResultParser.parse(theResult)) != null) {
-      return result;
-    } else if ((result = BizcardResultParser.parse(theResult)) != null) {
-      return result;
-    } else if ((result = VEventResultParser.parse(theResult)) != null) {
-      return result;
-    } else if ((result = EmailAddressResultParser.parse(theResult)) != null) {
-      return result;
-    } else if ((result = SMTPResultParser.parse(theResult)) != null) {
-      return result;
-    } else if ((result = TelResultParser.parse(theResult)) != null) {
-      return result;
-    } else if ((result = SMSMMSResultParser.parse(theResult)) != null) {
-      return result;
-    } else if ((result = SMSTOMMSTOResultParser.parse(theResult)) != null) {
-      return result;
-    } else if ((result = GeoResultParser.parse(theResult)) != null) {
-      return result;
-    } else if ((result = WifiResultParser.parse(theResult)) != null) {
-      return result;
-    } else if ((result = URLTOResultParser.parse(theResult)) != null) {
-      return result;
-    } else if ((result = URIResultParser.parse(theResult)) != null) {
-      // URI is a catch-all for protocol: contents that we don't handle explicitly above.
-      return result;
-    } else if ((result = ISBNResultParser.parse(theResult)) != null) {
-      // We depend on ISBN parsing coming before UPC, as it is a subset.
-      return result;
-    } else if ((result = ProductResultParser.parse(theResult)) != null) {
-      return result;
-    } else if ((result = ExpandedProductResultParser.parse(theResult)) != null) {
-      return result;
+    for (ResultParser parser : PARSERS) {
+      ParsedResult result = parser.parse(theResult);
+      if (result != null) {
+        return result;
+      }
     }
     return new TextParsedResult(theResult.getText(), null);
   }
 
-  protected static void maybeAppend(String value, StringBuffer result) {
+  protected static void maybeAppend(String value, StringBuilder result) {
     if (value != null) {
       result.append('\n');
       result.append(value);
     }
   }
 
-  protected static void maybeAppend(String[] value, StringBuffer result) {
+  protected static void maybeAppend(String[] value, StringBuilder result) {
     if (value != null) {
-      for (int i = 0; i < value.length; i++) {
+      for (String s : value) {
         result.append('\n');
-        result.append(value[i]);
+        result.append(s);
       }
     }
   }
@@ -109,7 +109,7 @@ public abstract class ResultParser {
       return escaped;
     }
     int max = escaped.length();
-    StringBuffer unescaped = new StringBuffer(max - 1);
+    StringBuilder unescaped = new StringBuilder(max - 1);
     unescaped.append(escaped.toCharArray(), 0, backslash);
     boolean nextIsEscaped = false;
     for (int i = backslash; i < max; i++) {
@@ -124,148 +124,68 @@ public abstract class ResultParser {
     return unescaped.toString();
   }
 
-  private static String urlDecode(String escaped) {
-    // No we can't use java.net.URLDecoder here. JavaME doesn't have it.
-    if (escaped == null) {
-      return null;
+  protected static int parseHexDigit(char c) {
+    if (c >= '0' && c <= '9') {
+      return c - '0';
     }
-    char[] escapedArray = escaped.toCharArray();
-
-    int first = findFirstEscape(escapedArray);
-    if (first < 0) {
-      return escaped;
+    if (c >= 'a' && c <= 'f') {
+      return 10 + (c - 'a');
     }
-
-    int max = escapedArray.length;
-    // Final length is at most 2 less than original due to at least 1 unescaping.
-    StringBuffer unescaped = new StringBuffer(max - 2);
-    // Can append everything up to first escape character
-    unescaped.append(escapedArray, 0, first);
-
-    for (int i = first; i < max; i++) {
-      char c = escapedArray[i];
-      switch (c) {
-        case '+':
-          // + is translated directly into a space
-          unescaped.append(' ');
-          break;
-        case '%':
-          // Are there even two more chars? If not we'll just copy the escaped sequence and be done.
-          if (i >= max - 2) {
-            unescaped.append('%'); // append that % and move on
-          } else {
-            int firstDigitValue = parseHexDigit(escapedArray[++i]);
-            int secondDigitValue = parseHexDigit(escapedArray[++i]);
-            if (firstDigitValue < 0 || secondDigitValue < 0) {
-              // Bad digit, just move on.
-              unescaped.append('%');
-              unescaped.append(escapedArray[i - 1]);
-              unescaped.append(escapedArray[i]);
-            }
-            unescaped.append((char) ((firstDigitValue << 4) + secondDigitValue));
-          }
-          break;
-        default:
-          unescaped.append(c);
-          break;
-      }
-    }
-    return unescaped.toString();
-  }
-
-  private static int findFirstEscape(char[] escapedArray) {
-    int max = escapedArray.length;
-    for (int i = 0; i < max; i++) {
-      char c = escapedArray[i];
-      if (c == '+' || c == '%') {
-        return i;
-      }
+    if (c >= 'A' && c <= 'F') {
+      return 10 + (c - 'A');
     }
     return -1;
   }
 
-  private static int parseHexDigit(char c) {
-    if (c >= 'a') {
-      if (c <= 'f') {
-        return 10 + (c - 'a');
-      }
-    } else if (c >= 'A') {
-      if (c <= 'F') {
-        return 10 + (c - 'A');
-      }
-    } else if (c >= '0') {
-      if (c <= '9') {
-        return c - '0';
-      }
-    }
-    return -1;
+  protected static boolean isStringOfDigits(CharSequence value, int length) {
+    return value != null && length == value.length() && DIGITS.matcher(value).matches();
   }
 
-  protected static boolean isStringOfDigits(String value, int length) {
+  protected static boolean isSubstringOfDigits(CharSequence value, int offset, int length) {
     if (value == null) {
       return false;
     }
-    int stringLength = value.length();
-    if (length != stringLength) {
-      return false;
-    }
-    for (int i = 0; i < length; i++) {
-      char c = value.charAt(i);
-      if (c < '0' || c > '9') {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  protected static boolean isSubstringOfDigits(String value, int offset, int length) {
-    if (value == null) {
-      return false;
-    }
-    int stringLength = value.length();
     int max = offset + length;
-    if (stringLength < max) {
-      return false;
-    }
-    for (int i = offset; i < max; i++) {
-      char c = value.charAt(i);
-      if (c < '0' || c > '9') {
-        return false;
-      }
-    }
-    return true;
+    return value.length() >= max && DIGITS.matcher(value.subSequence(offset, max)).matches();
   }
 
-  static Hashtable parseNameValuePairs(String uri) {
+  protected static boolean isSubstringOfAlphaNumeric(CharSequence value, int offset, int length) {
+    if (value == null) {
+      return false;
+    }
+    int max = offset + length;
+    return value.length() >= max && ALPHANUM.matcher(value.subSequence(offset, max)).matches();
+  }
+
+  static Map<String,String> parseNameValuePairs(String uri) {
     int paramStart = uri.indexOf('?');
     if (paramStart < 0) {
       return null;
     }
-    Hashtable result = new Hashtable(3);
-    paramStart++;
-    int paramEnd;
-    while ((paramEnd = uri.indexOf('&', paramStart)) >= 0) {
-      appendKeyValue(uri, paramStart, paramEnd, result);
-      paramStart = paramEnd + 1;
+    Map<String,String> result = new HashMap<String,String>(3);
+    for (String keyValue : AMPERSAND.split(uri.substring(paramStart + 1))) {
+      appendKeyValue(keyValue, result);
     }
-    appendKeyValue(uri, paramStart, uri.length(), result);
     return result;
   }
 
-  private static void appendKeyValue(String uri, int paramStart, int paramEnd, Hashtable result) {
-    int separator = uri.indexOf('=', paramStart);
-    if (separator >= 0) {
-      // key = value
-      String key = uri.substring(paramStart, separator);
-      String value = uri.substring(separator + 1, paramEnd);
-      value = urlDecode(value);
+  private static void appendKeyValue(CharSequence keyValue,
+                                     Map<String,String> result) {
+    String[] keyValueTokens = EQUALS.split(keyValue, 2);
+    if (keyValueTokens.length == 2) {
+      String key = keyValueTokens[0];
+      String value = keyValueTokens[1];
+      try {
+        value = URLDecoder.decode(value, "UTF-8");
+      } catch (UnsupportedEncodingException uee) {
+        throw new IllegalStateException(uee); // can't happen
+      }
       result.put(key, value);
     }
-    // Can't put key, null into a hashtable
   }
 
   static String[] matchPrefixedField(String prefix, String rawText, char endChar, boolean trim) {
-    Vector matches = null;
+    List<String> matches = null;
     int i = 0;
     int max = rawText.length();
     while (i < max) {
@@ -275,49 +195,40 @@ public abstract class ResultParser {
       }
       i += prefix.length(); // Skip past this prefix we found to start
       int start = i; // Found the start of a match here
-      boolean done = false;
-      while (!done) {
+      boolean more = true;
+      while (more) {
         i = rawText.indexOf((int) endChar, i);
         if (i < 0) {
           // No terminating end character? uh, done. Set i such that loop terminates and break
           i = rawText.length();
-          done = true;
+          more = false;
         } else if (rawText.charAt(i - 1) == '\\') {
           // semicolon was escaped so continue
           i++;
         } else {
           // found a match
           if (matches == null) {
-            matches = new Vector(3); // lazy init
+            matches = new ArrayList<String>(3); // lazy init
           }
           String element = unescapeBackslash(rawText.substring(start, i));
           if (trim) {
             element = element.trim();
           }
-          matches.addElement(element);
+          matches.add(element);
           i++;
-          done = true;
+          more = false;
         }
       }
     }
     if (matches == null || matches.isEmpty()) {
       return null;
     }
-    return toStringArray(matches);
+    return matches.toArray(new String[matches.size()]);
   }
 
   static String matchSinglePrefixedField(String prefix, String rawText, char endChar, boolean trim) {
     String[] matches = matchPrefixedField(prefix, rawText, endChar, trim);
     return matches == null ? null : matches[0];
-  }
-
-  static String[] toStringArray(Vector strings) {
-    int size = strings.size();
-    String[] result = new String[size];
-    for (int j = 0; j < size; j++) {
-      result[j] = (String) strings.elementAt(j);
-    }
-    return result;
   }
 
 }

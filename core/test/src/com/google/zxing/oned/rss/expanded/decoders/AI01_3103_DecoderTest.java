@@ -40,7 +40,6 @@ public class AI01_3103_DecoderTest extends AbstractDecoderTest {
 	public void test01_3103_1() throws Exception {
 		String data = header + compressedGtin_900123456798908 + compressed15bitWeight_1750;
 		String expected = "(01)90012345678908(3103)001750";
-		
 		assertCorrectBinaryString(data, expected);
 	}
 
@@ -48,19 +47,12 @@ public class AI01_3103_DecoderTest extends AbstractDecoderTest {
 	public void test01_3103_2() throws Exception {
 		String data = header + compressedGtin_900000000000008 + compressed15bitWeight_0;
 		String expected = "(01)90000000000003(3103)000000";
-		
 		assertCorrectBinaryString(data, expected);
 	}
 
-  @Test
+  @Test(expected = NotFoundException.class)
 	public void test01_3103_invalid() throws Exception {
-		String data = header + compressedGtin_900123456798908 + compressed15bitWeight_1750 + "..";
-		
-		try{
-			assertCorrectBinaryString(data, "");
-			fail(NotFoundException.class.getName() + " expected");
-		}catch(NotFoundException nfe){
-			// expected
-		}
+    String data = header + compressedGtin_900123456798908 + compressed15bitWeight_1750 + "..";
+    assertCorrectBinaryString(data, "");
 	}
 }

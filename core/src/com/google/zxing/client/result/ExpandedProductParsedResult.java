@@ -26,13 +26,13 @@
 
 package com.google.zxing.client.result;
 
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * @author Antonio Manuel Benjumea Conde, Servinform, S.A.
  * @author Agustín Delgado, Servinform, S.A.
  */
-public class ExpandedProductParsedResult extends ParsedResult {
+public final class ExpandedProductParsedResult extends ParsedResult {
 
   public static final String KILOGRAM = "KG";
   public static final String POUND = "LB";
@@ -51,7 +51,7 @@ public class ExpandedProductParsedResult extends ParsedResult {
   private final String priceIncrement;
   private final String priceCurrency;
   // For AIS that not exist in this object
-  private final Hashtable uncommonAIs;
+  private final Map<String,String> uncommonAIs;
 
   public ExpandedProductParsedResult(String productID,
                                      String sscc,
@@ -66,7 +66,7 @@ public class ExpandedProductParsedResult extends ParsedResult {
                                      String price,
                                      String priceIncrement,
                                      String priceCurrency,
-                                     Hashtable uncommonAIs) {
+                                     Map<String,String> uncommonAIs) {
     super(ParsedResultType.PRODUCT);
     this.productID = productID;
     this.sscc = sscc;
@@ -84,6 +84,7 @@ public class ExpandedProductParsedResult extends ParsedResult {
     this.uncommonAIs = uncommonAIs;
   }
 
+  @Override
   public boolean equals(Object o){
     if (!(o instanceof ExpandedProductParsedResult)) {
       return false;
@@ -110,6 +111,7 @@ public class ExpandedProductParsedResult extends ParsedResult {
     return o1 == null ? o2 == null : o1.equals(o2);
   }
 
+  @Override
   public int hashCode(){
     int hash = 0;
     hash ^= hashNotNull(productID);
@@ -184,10 +186,11 @@ public class ExpandedProductParsedResult extends ParsedResult {
     return priceCurrency;
   }
 
-  public Hashtable getUncommonAIs() {
+  public Map<String,String> getUncommonAIs() {
     return uncommonAIs;
   }
 
+  @Override
   public String getDisplayResult() {
     return String.valueOf(productID);
   }

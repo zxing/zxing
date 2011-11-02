@@ -26,7 +26,8 @@
 
 package com.google.zxing.client.result;
 
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
@@ -37,16 +38,12 @@ import com.google.zxing.Result;
  * @author Antonio Manuel Benjumea Conde, Servinform, S.A.
  * @author Agustín Delgado, Servinform, S.A.
  */
-final class ExpandedProductResultParser extends ResultParser {
+public final class ExpandedProductResultParser extends ResultParser {
 
-  private ExpandedProductResultParser() {
-  }
-
-  // Treat all RSS EXPANDED, in the sense that they are all
-  // product barcodes with complementary data.
-  public static ExpandedProductParsedResult parse(Result result) {
+  @Override
+  public ExpandedProductParsedResult parse(Result result) {
     BarcodeFormat format = result.getBarcodeFormat();
-    if (!BarcodeFormat.RSS_EXPANDED.equals(format)) {
+    if (format != BarcodeFormat.RSS_EXPANDED) {
       // ExtendedProductParsedResult NOT created. Not a RSS Expanded barcode
       return null;
     }
@@ -70,7 +67,7 @@ final class ExpandedProductResultParser extends ResultParser {
     String price = null;
     String priceIncrement = null;
     String priceCurrency = null;
-    Hashtable uncommonAIs = new Hashtable();
+    Map<String,String> uncommonAIs = new HashMap<String,String>();
 
     int i = 0;
 
@@ -153,7 +150,7 @@ final class ExpandedProductResultParser extends ResultParser {
   }
 
   private static String findAIvalue(int i, String rawText) {
-    StringBuffer buf = new StringBuffer();
+    StringBuilder buf = new StringBuilder();
     char c = rawText.charAt(i);
     // First character must be a open parenthesis.If not, ERROR
     if (c != '(') {
@@ -176,7 +173,7 @@ final class ExpandedProductResultParser extends ResultParser {
   }
 
   private static String findValue(int i, String rawText) {
-    StringBuffer buf = new StringBuffer();
+    StringBuilder buf = new StringBuilder();
     String rawTextAux = rawText.substring(i);
 
     for (int index = 0; index < rawTextAux.length(); index++) {

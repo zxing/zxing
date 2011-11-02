@@ -17,6 +17,7 @@
 package com.google.zxing.qrcode.decoder;
 
 import com.google.zxing.ChecksumException;
+import com.google.zxing.DecodeHintType;
 import com.google.zxing.FormatException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.DecoderResult;
@@ -24,7 +25,7 @@ import com.google.zxing.common.reedsolomon.GenericGF;
 import com.google.zxing.common.reedsolomon.ReedSolomonDecoder;
 import com.google.zxing.common.reedsolomon.ReedSolomonException;
 
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * <p>The main class which implements QR Code decoding -- as opposed to locating and extracting
@@ -53,7 +54,8 @@ public final class Decoder {
    * @throws FormatException if the QR Code cannot be decoded
    * @throws ChecksumException if error correction fails
    */
-  public DecoderResult decode(boolean[][] image, Hashtable hints) throws ChecksumException, FormatException {
+  public DecoderResult decode(boolean[][] image, Map<DecodeHintType,?> hints)
+      throws ChecksumException, FormatException {
     int dimension = image.length;
     BitMatrix bits = new BitMatrix(dimension);
     for (int i = 0; i < dimension; i++) {
@@ -78,7 +80,8 @@ public final class Decoder {
    * @throws FormatException if the QR Code cannot be decoded
    * @throws ChecksumException if error correction fails
    */
-  public DecoderResult decode(BitMatrix bits, Hashtable hints) throws FormatException, ChecksumException {
+  public DecoderResult decode(BitMatrix bits, Map<DecodeHintType,?> hints)
+      throws FormatException, ChecksumException {
 
     // Construct a parser and read version, error-correction level
     BitMatrixParser parser = new BitMatrixParser(bits);
@@ -92,15 +95,14 @@ public final class Decoder {
 
     // Count total number of data bytes
     int totalBytes = 0;
-    for (int i = 0; i < dataBlocks.length; i++) {
-      totalBytes += dataBlocks[i].getNumDataCodewords();
+    for (DataBlock dataBlock : dataBlocks) {
+      totalBytes += dataBlock.getNumDataCodewords();
     }
     byte[] resultBytes = new byte[totalBytes];
     int resultOffset = 0;
 
     // Error-correct and copy data blocks together into a stream of bytes
-    for (int j = 0; j < dataBlocks.length; j++) {
-      DataBlock dataBlock = dataBlocks[j];
+    for (DataBlock dataBlock : dataBlocks) {
       byte[] codewordBytes = dataBlock.getCodewords();
       int numDataCodewords = dataBlock.getNumDataCodewords();
       correctErrors(codewordBytes, numDataCodewords);

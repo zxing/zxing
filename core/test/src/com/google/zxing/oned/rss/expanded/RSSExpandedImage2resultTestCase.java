@@ -34,15 +34,15 @@ package com.google.zxing.oned.rss.expanded;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Hashtable;
+import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
+import com.google.zxing.BufferedImageLuminanceSource;
 import com.google.zxing.NotFoundException;
 import com.google.zxing.Result;
-import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.client.result.ExpandedProductParsedResult;
 import com.google.zxing.client.result.ParsedResult;
 import com.google.zxing.client.result.ResultParser;
@@ -63,9 +63,11 @@ public final class RSSExpandedImage2resultTestCase extends Assert {
     // (01)90012345678908(3103)001750
     String path = "test/data/blackbox/rssexpanded-1/2.jpg";
     ExpandedProductParsedResult expected =
-        new ExpandedProductParsedResult("90012345678908", null, null, null, null, null, null,
-                                        "001750", ExpandedProductParsedResult.KILOGRAM, "3",
-                                        null, null, null, new Hashtable());
+        new ExpandedProductParsedResult("90012345678908",
+                                        null, null, null, null, null, null,
+                                        "001750",
+                                        ExpandedProductParsedResult.KILOGRAM,
+                                        "3", null, null, null, new HashMap<String,String>());
 
     assertCorrectImage2result(path, expected);
   }
@@ -85,7 +87,7 @@ public final class RSSExpandedImage2resultTestCase extends Assert {
     int rowNumber = binaryMap.getHeight() / 2;
     BitArray row = binaryMap.getBlackRow(rowNumber, null);
 
-    Result theResult = rssExpandedReader.decodeRow(rowNumber, row, new Hashtable());
+    Result theResult = rssExpandedReader.decodeRow(rowNumber, row, null);
 
     assertSame(BarcodeFormat.RSS_EXPANDED, theResult.getBarcodeFormat());
 

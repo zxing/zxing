@@ -16,10 +16,12 @@
 
 package com.google.zxing.oned;
 
-import java.util.Hashtable;
 import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
+
+import java.util.Map;
 
 /**
  * This object renders a ITF code as a {@link BitMatrix}.
@@ -28,11 +30,12 @@ import com.google.zxing.common.BitMatrix;
  */
 public final class ITFWriter extends UPCEANWriter {
 
+  @Override
   public BitMatrix encode(String contents,
                           BarcodeFormat format,
                           int width,
                           int height,
-                          Hashtable hints) throws WriterException {
+                          Map<EncodeHintType,?> hints) throws WriterException {
     if (format != BarcodeFormat.ITF) {
       throw new IllegalArgumentException("Can only encode ITF, but got " + format);
     }
@@ -40,6 +43,7 @@ public final class ITFWriter extends UPCEANWriter {
     return super.encode(contents, format, width, height, hints);
   }
 
+  @Override
   public byte[] encode(String contents) {
     int length = contents.length();
     if (length > 80) {

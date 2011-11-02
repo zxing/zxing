@@ -24,7 +24,7 @@ import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitArray;
 
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * <p>Implements decoding of the ITF format, or Interleaved Two of Five.</p>
@@ -50,7 +50,7 @@ public final class ITFReader extends OneDReader {
   private static final int W = 3; // Pixel width of a wide line
   private static final int N = 1; // Pixed width of a narrow line
 
-  private static final int[] DEFAULT_ALLOWED_LENGTHS = { 48, 44, 24, 20, 18, 16, 14, 12, 10, 8, 6 };
+  private static final int[] DEFAULT_ALLOWED_LENGTHS = { 44, 24, 20, 18, 16, 14, 12, 10, 8, 6 };
 
   // Stores the actual narrow line width of the image being decoded.
   private int narrowLineWidth = -1;
@@ -80,13 +80,15 @@ public final class ITFReader extends OneDReader {
       {N, W, N, W, N}  // 9
   };
 
-  public Result decodeRow(int rowNumber, BitArray row, Hashtable hints) throws FormatException, NotFoundException {
+  @Override
+  public Result decodeRow(int rowNumber, BitArray row, Map<DecodeHintType,?> hints)
+      throws FormatException, NotFoundException {
 
     // Find out where the Middle section (payload) starts & ends
     int[] startRange = decodeStart(row);
     int[] endRange = decodeEnd(row);
 
-    StringBuffer result = new StringBuffer(20);
+    StringBuilder result = new StringBuilder(20);
     decodeMiddle(row, startRange[1], endRange[0], result);
     String resultString = result.toString();
 
@@ -103,12 +105,11 @@ public final class ITFReader extends OneDReader {
     // an assumption that the decoded string must be 6, 10 or 14 digits.
     int length = resultString.length();
     boolean lengthOK = false;
-    for (int i = 0; i < allowedLengths.length; i++) {
-      if (length == allowedLengths[i]) {
+    for (int allowedLength : allowedLengths) {
+      if (length == allowedLength) {
         lengthOK = true;
         break;
       }
-
     }
     if (!lengthOK) {
       throw FormatException.getFormatInstance();
@@ -125,11 +126,13 @@ public final class ITFReader extends OneDReader {
   /**
    * @param row          row of black/white values to search
    * @param payloadStart offset of start pattern
-   * @param resultString {@link StringBuffer} to append decoded chars to
+   * @param resultString {@link StringBuilder} to append decoded chars to
    * @throws NotFoundException if decoding could not complete successfully
    */
-  private static void decodeMiddle(BitArray row, int payloadStart, int payloadEnd,
-      StringBuffer resultString) throws NotFoundException {
+  private static void decodeMiddle(BitArray row,
+                                   int payloadStart,
+                                   int payloadEnd,
+                                   StringBuilder resultString) throws NotFoundException {
 
     // Digits are interleaved in pairs - 5 black lines for one digit, and the
     // 5
@@ -156,8 +159,8 @@ public final class ITFReader extends OneDReader {
       bestMatch = decodeDigit(counterWhite);
       resultString.append((char) ('0' + bestMatch));
 
-      for (int i = 0; i < counterDigitPair.length; i++) {
-        payloadStart += counterDigitPair[i];
+      for (int counterDigit : counterDigitPair) {
+        payloadStart += counterDigit;
       }
     }
   }
@@ -246,7 +249,6 @@ public final class ITFReader extends OneDReader {
    *         block'
    * @throws NotFoundException
    */
-
   int[] decodeEnd(BitArray row) throws NotFoundException {
 
     // For convenience, reverse the row and then
@@ -284,7 +286,9 @@ public final class ITFReader extends OneDReader {
    *         ints
    * @throws NotFoundException if pattern is not found
    */
-  private static int[] findGuardPattern(BitArray row, int rowOffset, int[] pattern) throws NotFoundException {
+  private static int[] findGuardPattern(BitArray row,
+                                        int rowOffset,
+                                        int[] pattern) throws NotFoundException {
 
     // TODO: This is very similar to implementation in UPCEANReader. Consider if they can be
     // merged to a single method.
@@ -305,9 +309,7 @@ public final class ITFReader extends OneDReader {
             return new int[]{patternStart, x};
           }
           patternStart += counters[0] + counters[1];
-          for (int y = 2; y < patternLength; y++) {
-            counters[y - 2] = counters[y];
-          }
+          System.arraycopy(counters, 2, counters, 0, patternLength - 2);
           counters[patternLength - 2] = 0;
           counters[patternLength - 1] = 0;
           counterPosition--;

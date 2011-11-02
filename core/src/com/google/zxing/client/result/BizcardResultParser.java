@@ -18,7 +18,8 @@ package com.google.zxing.client.result;
 
 import com.google.zxing.Result;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Implements the "BIZCARD" address book entry format, though this has been
@@ -27,13 +28,14 @@ import java.util.Vector;
  *
  * @author Sean Owen
  */
-final class BizcardResultParser extends AbstractDoCoMoResultParser {
+public final class BizcardResultParser extends AbstractDoCoMoResultParser {
 
   // Yes, we extend AbstractDoCoMoResultParser since the format is very much
   // like the DoCoMo MECARD format, but this is not technically one of 
   // DoCoMo's proposed formats
 
-  public static AddressBookParsedResult parse(Result result) {
+  @Override
+  public AddressBookParsedResult parse(Result result) {
     String rawText = result.getText();
     if (!rawText.startsWith("BIZCARD:")) {
       return null;
@@ -65,26 +67,24 @@ final class BizcardResultParser extends AbstractDoCoMoResultParser {
                                        null);
   }
 
-  private static String[] buildPhoneNumbers(String number1, String number2, String number3) {
-    Vector numbers = new Vector(3);
+  private static String[] buildPhoneNumbers(String number1,
+                                            String number2,
+                                            String number3) {
+    List<String> numbers = new ArrayList<String>(3);
     if (number1 != null) {
-      numbers.addElement(number1);
+      numbers.add(number1);
     }
     if (number2 != null) {
-      numbers.addElement(number2);
+      numbers.add(number2);
     }
     if (number3 != null) {
-      numbers.addElement(number3);
+      numbers.add(number3);
     }
     int size = numbers.size();
     if (size == 0) {
       return null;
     }
-    String[] result = new String[size];
-    for (int i = 0; i < size; i++) {
-      result[i] = (String) numbers.elementAt(i);
-    }
-    return result;
+    return numbers.toArray(new String[size]);
   }
 
   private static String buildName(String firstName, String lastName) {

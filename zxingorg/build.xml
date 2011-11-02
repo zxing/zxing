@@ -57,8 +57,8 @@
     <copy file="../javase/javase.jar" todir="web/WEB-INF/lib" overwrite="true"/>
     <javac srcdir="src"
            destdir="web/WEB-INF/classes"
-           source="1.5"
-           target="1.5"
+           source="6"
+           target="6"
            optimize="true"
            debug="true"
            deprecation="true"

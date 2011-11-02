@@ -163,7 +163,9 @@ public final class ReedSolomonDecoder {
     return result;
   }
 
-  private int[] findErrorMagnitudes(GenericGFPoly errorEvaluator, int[] errorLocations, boolean dataMatrix) {
+  private int[] findErrorMagnitudes(GenericGFPoly errorEvaluator,
+                                    int[] errorLocations,
+                                    boolean dataMatrix) {
     // This is directly applying Forney's Formula
     int s = errorLocations.length;
     int[] result = new int[s];

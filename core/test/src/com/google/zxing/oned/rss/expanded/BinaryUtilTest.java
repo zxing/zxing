@@ -31,10 +31,14 @@ import com.google.zxing.common.BitArray;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.regex.Pattern;
+
 /**
  * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
  */
 public final class BinaryUtilTest extends Assert {
+
+   private static final Pattern SPACE = Pattern.compile(" ");
 
   @Test
   public void testBuildBitArrayFromString(){
@@ -55,7 +59,7 @@ public final class BinaryUtilTest extends Assert {
     check(data);
   }
 
-  private static void check(String data){
+  private static void check(CharSequence data){
     BitArray binary = BinaryUtil.buildBitArrayFromString(data);
     assertEquals(data, binary.toString());
   }
@@ -78,8 +82,8 @@ public final class BinaryUtilTest extends Assert {
     checkWithoutSpaces(data);
   }
 
-  private static void checkWithoutSpaces(String data){
-    String dataWithoutSpaces = data.replaceAll(" ", "");
+  private static void checkWithoutSpaces(CharSequence data){
+    String dataWithoutSpaces = SPACE.matcher(data).replaceAll("");
     BitArray binary = BinaryUtil.buildBitArrayFromStringWithoutSpaces(dataWithoutSpaces);
     assertEquals(data, binary.toString());
   }

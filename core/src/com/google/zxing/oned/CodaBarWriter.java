@@ -35,6 +35,7 @@ public class CodaBarWriter extends OneDimensionalCodeWriter {
   /*
    * @see OneDimensionalCodeWriter#encode(java.lang.String)
    */
+  @Override
   public byte[] encode(String contents) {
 
     // Verify input and calculate decoded length.

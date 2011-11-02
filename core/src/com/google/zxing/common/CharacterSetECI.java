@@ -16,7 +16,8 @@
 
 package com.google.zxing.common;
 
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Encapsulates a Character Set ECI, according to "Extended Channel Interpretations" 5.3.1.1
@@ -24,58 +25,54 @@ import java.util.Hashtable;
  *
  * @author Sean Owen
  */
-public final class CharacterSetECI extends ECI {
+public enum CharacterSetECI {
 
-  private static final Hashtable VALUE_TO_ECI;
-  private static final Hashtable NAME_TO_ECI;
+  Cp437(new int[]{0,2}),
+  ISO8859_1(new int[]{1,3}, "ISO-8859-1"),
+  ISO8859_2(4),
+  ISO8859_3(5),
+  ISO8859_4(6),
+  ISO8859_5(7),
+  ISO8859_6(8),
+  ISO8859_7(9),
+  ISO8859_8(10),
+  ISO8859_9(11),
+  ISO8859_10(12),
+  ISO8859_11(13),
+  ISO8859_13(15),
+  ISO8859_14(16),
+  ISO8859_15(7),
+  ISO8859_16(18),
+  SJIS(new int[]{20}, "Shift_JIS");
+
+  private static final Map<Integer,CharacterSetECI> VALUE_TO_ECI = new HashMap<Integer,CharacterSetECI>();
+  private static final Map<String,CharacterSetECI> NAME_TO_ECI = new HashMap<String,CharacterSetECI>();
   static {
-    VALUE_TO_ECI = new Hashtable(29);
-    NAME_TO_ECI = new Hashtable(29);
-    // TODO figure out if these values are even right!
-    addCharacterSet(0, "Cp437");
-    addCharacterSet(1, new String[] {"ISO8859_1", "ISO-8859-1"});
-    addCharacterSet(2, "Cp437");
-    addCharacterSet(3, new String[] {"ISO8859_1", "ISO-8859-1"});
-    addCharacterSet(4, "ISO8859_2");
-    addCharacterSet(5, "ISO8859_3");
-    addCharacterSet(6, "ISO8859_4");
-    addCharacterSet(7, "ISO8859_5");
-    addCharacterSet(8, "ISO8859_6");
-    addCharacterSet(9, "ISO8859_7");
-    addCharacterSet(10, "ISO8859_8");
-    addCharacterSet(11, "ISO8859_9");
-    addCharacterSet(12, "ISO8859_10");
-    addCharacterSet(13, "ISO8859_11");
-    addCharacterSet(15, "ISO8859_13");
-    addCharacterSet(16, "ISO8859_14");
-    addCharacterSet(17, "ISO8859_15");
-    addCharacterSet(18, "ISO8859_16");
-    addCharacterSet(20, new String[] {"SJIS", "Shift_JIS"});
-  }
-
-  private final String encodingName;
-
-  private CharacterSetECI(int value, String encodingName) {
-    super(value);
-    this.encodingName = encodingName;
-  }
-
-  public String getEncodingName() {
-    return encodingName;
-  }
-
-  private static void addCharacterSet(int value, String encodingName) {
-    CharacterSetECI eci = new CharacterSetECI(value, encodingName);
-    VALUE_TO_ECI.put(new Integer(value), eci); // can't use valueOf
-    NAME_TO_ECI.put(encodingName, eci);
-  }
-
-  private static void addCharacterSet(int value, String[] encodingNames) {
-    CharacterSetECI eci = new CharacterSetECI(value, encodingNames[0]);
-    VALUE_TO_ECI.put(new Integer(value), eci); // can't use valueOf
-    for (int i = 0; i < encodingNames.length; i++) {
-      NAME_TO_ECI.put(encodingNames[i], eci);
+    for (CharacterSetECI eci : values()) {
+      for (int value : eci.values) {
+        VALUE_TO_ECI.put(value, eci);
+      }
+      NAME_TO_ECI.put(eci.name(), eci);
+      for (String name : eci.otherEncodingNames) {
+        NAME_TO_ECI.put(name, eci);
+      }
     }
+  }
+
+  private final int[] values;
+  private final String[] otherEncodingNames;
+
+  CharacterSetECI(int value) {
+    this(new int[] {value});
+  }
+
+  CharacterSetECI(int[] values, String... otherEncodingNames) {
+    this.values = values;
+    this.otherEncodingNames = otherEncodingNames;
+  }
+
+  public int getValue() {
+    return values[0];
   }
 
   /**
@@ -88,7 +85,7 @@ public final class CharacterSetECI extends ECI {
     if (value < 0 || value >= 900) {
       throw new IllegalArgumentException("Bad ECI value: " + value);
     }
-    return (CharacterSetECI) VALUE_TO_ECI.get(new Integer(value));
+    return VALUE_TO_ECI.get(value);
   }
 
   /**
@@ -97,7 +94,7 @@ public final class CharacterSetECI extends ECI {
    *   but unsupported
    */
   public static CharacterSetECI getCharacterSetECIByName(String name) {
-    return (CharacterSetECI) NAME_TO_ECI.get(name);
+    return NAME_TO_ECI.get(name);
   }
 
 }

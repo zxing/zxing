@@ -32,12 +32,14 @@ import com.google.zxing.common.reedsolomon.ReedSolomonException;
  */
 public final class Decoder {
 
-  private static final int UPPER = 0;
-  private static final int LOWER = 1;
-  private static final int MIXED = 2;
-  private static final int DIGIT = 3;
-  private static final int PUNCT = 4;
-  private static final int BINARY = 5;
+  private enum Table {
+    UPPER,
+    LOWER,
+    MIXED,
+    DIGIT,
+    PUNCT,
+    BINARY
+  }
 
   private static final int[] NB_BITS_COMPACT = {
       0, 104, 240, 408, 608
@@ -119,10 +121,10 @@ public final class Decoder {
       throw FormatException.getFormatInstance();
     }
 
-    int lastTable = UPPER;
-    int table = UPPER;
+    Table lastTable = Table.UPPER;
+    Table table = Table.UPPER;
     int startIndex = 0;
-    StringBuffer result = new StringBuffer(20);
+    StringBuilder result = new StringBuilder(20);
     boolean end = false;
     boolean shift = false;
     boolean switchShift = false;
@@ -153,7 +155,7 @@ public final class Decoder {
       default:
         int size = 5;
 
-        if (table == DIGIT) {
+        if (table == Table.DIGIT) {
           size = 4;
         }
 
@@ -194,31 +196,22 @@ public final class Decoder {
   /**
    * gets the table corresponding to the char passed
    */
-  private static int getTable(char t) {
-    int table = UPPER;
-
+  private static Table getTable(char t) {
     switch (t) {
-      case 'U':
-        table = UPPER;
-        break;
       case 'L':
-        table = LOWER;
-        break;
+        return Table.LOWER;
       case 'P':
-        table = PUNCT;
-        break;
+        return Table.PUNCT;
       case 'M':
-        table = MIXED;
-        break;
+        return Table.MIXED;
       case 'D':
-        table = DIGIT;
-        break;
+        return Table.DIGIT;
       case 'B':
-        table = BINARY;
-        break;
+        return Table.BINARY;
+      case 'U':
+      default:
+        return Table.UPPER;
     }
-
-    return table;
   }
   
   /**
@@ -228,7 +221,7 @@ public final class Decoder {
    * @param table the table used
    * @param code the code of the character
    */
-  private static String getCharacter(int table, int code) {
+  private static String getCharacter(Table table, int code) {
     switch (table) {
       case UPPER:
         return UPPER_TABLE[code];
@@ -373,7 +366,7 @@ public final class Decoder {
     }
 
     int layer = ddata.getNbLayers();
-    int size = matrix.height;
+    int size = matrix.getHeight();
     int rawbitsOffset = 0;
     int matrixOffset = 0;
 
@@ -407,21 +400,21 @@ public final class Decoder {
    * Transforms an Aztec code matrix by removing the control dashed lines
    */
   private static BitMatrix removeDashedLines(BitMatrix matrix) {
-    int nbDashed = 1+ 2* ((matrix.width - 1)/2 / 16);
-    BitMatrix newMatrix = new BitMatrix(matrix.width - nbDashed, matrix.height - nbDashed);
+    int nbDashed = 1 + 2 * ((matrix.getWidth() - 1) / 2 / 16);
+    BitMatrix newMatrix = new BitMatrix(matrix.getWidth() - nbDashed, matrix.getHeight() - nbDashed);
 
     int nx = 0;
 
-    for (int x = 0; x < matrix.width; x++) {
+    for (int x = 0; x < matrix.getWidth(); x++) {
 
-      if ((matrix.width / 2 - x)%16 == 0) {
+      if ((matrix.getWidth() / 2 - x) % 16 == 0) {
         continue;
       }
 
       int ny = 0;
-      for (int y = 0; y < matrix.height; y++) {
+      for (int y = 0; y < matrix.getHeight(); y++) {
 
-        if ((matrix.width / 2 - y)%16 == 0) {
+        if ((matrix.getWidth() / 2 - y) % 16 == 0) {
           continue;
         }
 

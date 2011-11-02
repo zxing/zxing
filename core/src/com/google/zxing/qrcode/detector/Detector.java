@@ -27,7 +27,7 @@ import com.google.zxing.common.GridSampler;
 import com.google.zxing.common.PerspectiveTransform;
 import com.google.zxing.qrcode.decoder.Version;
 
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * <p>Encapsulates logic that can detect a QR Code in an image, even if the QR Code
@@ -70,7 +70,7 @@ public class Detector {
    * @throws NotFoundException if QR Code cannot be found
    * @throws FormatException if a QR Code cannot be decoded
    */
-  public DetectorResult detect(Hashtable hints) throws NotFoundException, FormatException {
+  public DetectorResult detect(Map<DecodeHintType,?> hints) throws NotFoundException, FormatException {
 
     resultPointCallback = hints == null ? null :
         (ResultPointCallback) hints.get(DecodeHintType.NEED_RESULT_POINT_CALLBACK);
@@ -194,7 +194,7 @@ public class Detector {
   protected static int computeDimension(ResultPoint topLeft,
                                         ResultPoint topRight,
                                         ResultPoint bottomLeft,
-                                      float moduleSize) throws NotFoundException {
+                                        float moduleSize) throws NotFoundException {
     int tltrCentersDimension = round(ResultPoint.distance(topLeft, topRight) / moduleSize);
     int tlblCentersDimension = round(ResultPoint.distance(topLeft, bottomLeft) / moduleSize);
     int dimension = ((tltrCentersDimension + tlblCentersDimension) >> 1) + 7;
@@ -322,7 +322,9 @@ public class Detector {
       int realY = steep ? x : y;
 
       // Does current pixel mean we have moved white to black or vice versa?
-      if (!(state == 1 ^ image.get(realX, realY))) {
+      // Scanning black in state 0,2 and white in state 1, so if we find the wrong
+      // color, advance to next state or end if we are in state 2 already
+      if ((state == 1) == image.get(realX, realY)) {
         if (state == 2) {
           int diffX = x - fromX;
           int diffY = y - fromY;

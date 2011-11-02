@@ -25,12 +25,10 @@ import com.google.zxing.Result;
  *
  * @author Sean Owen
  */
-final class URLTOResultParser {
+public final class URLTOResultParser extends ResultParser {
 
-  private URLTOResultParser() {
-  }
-
-  public static URIParsedResult parse(Result result) {
+  @Override
+  public URIParsedResult parse(Result result) {
     String rawText = result.getText();
     if (!rawText.startsWith("urlto:") && !rawText.startsWith("URLTO:")) {
       return null;

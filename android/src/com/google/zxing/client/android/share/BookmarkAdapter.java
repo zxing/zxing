@@ -39,31 +39,35 @@ final class BookmarkAdapter extends BaseAdapter {
   private final Context context;
   private final Cursor cursor;
 
-  public BookmarkAdapter(Context context, Cursor cursor) {
+  BookmarkAdapter(Context context, Cursor cursor) {
     this.context = context;
     this.cursor = cursor;
   }
 
+  @Override
   public int getCount() {
     return cursor.getCount();
   }
 
+  @Override
   public Object getItem(int index) {
     // Not used, so no point in retrieving it.
     return null;
   }
 
+  @Override
   public long getItemId(int index) {
     return index;
   }
 
+  @Override
   public View getView(int index, View view, ViewGroup viewGroup) {
     LinearLayout layout;
-    if (!(view instanceof LinearLayout)) {
+    if (view instanceof LinearLayout) {
+      layout = (LinearLayout) view;
+    } else {
       LayoutInflater factory = LayoutInflater.from(context);
       layout = (LinearLayout) factory.inflate(R.layout.bookmark_picker_list_item, viewGroup, false);
-    } else {
-      layout = (LinearLayout) view;
     }
 
     cursor.moveToPosition(index);

@@ -20,7 +20,7 @@ import com.google.zxing.Result;
 
 /**
  * <p>Parses an "smsto:" URI result, whose format is not standardized but appears to be like:
- * <code>smsto:number(:body)</code>.</p>
+ * {@code smsto:number(:body)}.</p>
  *
  * <p>This actually also parses URIs starting with "smsto:", "mmsto:", "SMSTO:", and
  * "MMSTO:", and treats them all the same way, and effectively converts them to an "sms:" URI
@@ -28,12 +28,10 @@ import com.google.zxing.Result;
  *
  * @author Sean Owen
  */
-final class SMSTOMMSTOResultParser extends ResultParser {
+public final class SMSTOMMSTOResultParser extends ResultParser {
 
-  private SMSTOMMSTOResultParser() {
-  }
-
-  public static SMSParsedResult parse(Result result) {
+  @Override
+  public SMSParsedResult parse(Result result) {
     String rawText = result.getText();
     if (!(rawText.startsWith("smsto:") || rawText.startsWith("SMSTO:") ||
           rawText.startsWith("mmsto:") || rawText.startsWith("MMSTO:"))) {

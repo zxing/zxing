@@ -26,13 +26,14 @@
 
 package com.google.zxing.oned.rss.expanded;
 
-import java.util.Vector;
-
 import com.google.zxing.common.BitArray;
 import com.google.zxing.oned.rss.DataCharacter;
 
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
@@ -42,10 +43,7 @@ public final class BitArrayBuilderTest extends Assert {
 
   @Test
   public void testBuildBitArray1() {
-    int [][] pairValues = {
-        { 19 },
-        { 673, 16 }
-    };
+    int[][] pairValues = {{19}, {673, 16}};
 
     String expected = " .......X ..XX..X. X.X....X .......X ....";
 
@@ -58,7 +56,7 @@ public final class BitArrayBuilderTest extends Assert {
   }
 
   private static BitArray buildBitArray(int[][] pairValues) {
-    Vector<ExpandedPair> pairs = new Vector<ExpandedPair>();
+    List<ExpandedPair> pairs = new ArrayList<ExpandedPair>();
     for(int i = 0; i < pairValues.length; ++i){
       int [] pair = pairValues[i];
 

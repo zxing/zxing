@@ -25,8 +25,10 @@ import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 
-import java.util.Hashtable;
-import java.util.Vector;
+import java.util.Collection;
+import java.util.EnumMap;
+import java.util.EnumSet;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
 /**
@@ -39,24 +41,24 @@ final class DecodeThread extends Thread {
   public static final String BARCODE_BITMAP = "barcode_bitmap";
 
   private final CaptureActivity activity;
-  private final Hashtable<DecodeHintType, Object> hints;
+  private final Map<DecodeHintType,Object> hints;
   private Handler handler;
   private final CountDownLatch handlerInitLatch;
 
   DecodeThread(CaptureActivity activity,
-               Vector<BarcodeFormat> decodeFormats,
+               Collection<BarcodeFormat> decodeFormats,
                String characterSet,
                ResultPointCallback resultPointCallback) {
 
     this.activity = activity;
     handlerInitLatch = new CountDownLatch(1);
 
-    hints = new Hashtable<DecodeHintType, Object>(3);
+    hints = new EnumMap<DecodeHintType,Object>(DecodeHintType.class);
 
     // The prefs can't change while the thread is running, so pick them up once here.
     if (decodeFormats == null || decodeFormats.isEmpty()) {
       SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
-      decodeFormats = new Vector<BarcodeFormat>();
+      decodeFormats = EnumSet.noneOf(BarcodeFormat.class);
       if (prefs.getBoolean(PreferencesActivity.KEY_DECODE_1D, true)) {
         decodeFormats.addAll(DecodeFormatManager.ONE_D_FORMATS);
       }

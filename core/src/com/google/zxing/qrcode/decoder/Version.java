@@ -49,18 +49,14 @@ public final class Version {
 
   private Version(int versionNumber,
                   int[] alignmentPatternCenters,
-                  ECBlocks ecBlocks1,
-                  ECBlocks ecBlocks2,
-                  ECBlocks ecBlocks3,
-                  ECBlocks ecBlocks4) {
+                  ECBlocks... ecBlocks) {
     this.versionNumber = versionNumber;
     this.alignmentPatternCenters = alignmentPatternCenters;
-    this.ecBlocks = new ECBlocks[]{ecBlocks1, ecBlocks2, ecBlocks3, ecBlocks4};
+    this.ecBlocks = ecBlocks;
     int total = 0;
-    int ecCodewords = ecBlocks1.getECCodewordsPerBlock();
-    ECB[] ecbArray = ecBlocks1.getECBlocks();
-    for (int i = 0; i < ecbArray.length; i++) {
-      ECB ecBlock = ecbArray[i];
+    int ecCodewords = ecBlocks[0].getECCodewordsPerBlock();
+    ECB[] ecbArray = ecBlocks[0].getECBlocks();
+    for (ECB ecBlock : ecbArray) {
       total += ecBlock.getCount() * (ecBlock.getDataCodewords() + ecCodewords);
     }
     this.totalCodewords = total;
@@ -189,14 +185,9 @@ public final class Version {
     private final int ecCodewordsPerBlock;
     private final ECB[] ecBlocks;
 
-    ECBlocks(int ecCodewordsPerBlock, ECB ecBlocks) {
+    ECBlocks(int ecCodewordsPerBlock, ECB... ecBlocks) {
       this.ecCodewordsPerBlock = ecCodewordsPerBlock;
-      this.ecBlocks = new ECB[]{ecBlocks};
-    }
-
-    ECBlocks(int ecCodewordsPerBlock, ECB ecBlocks1, ECB ecBlocks2) {
-      this.ecCodewordsPerBlock = ecCodewordsPerBlock;
-      this.ecBlocks = new ECB[]{ecBlocks1, ecBlocks2};
+      this.ecBlocks = ecBlocks;
     }
 
     public int getECCodewordsPerBlock() {
@@ -205,8 +196,8 @@ public final class Version {
 
     public int getNumBlocks() {
       int total = 0;
-      for (int i = 0; i < ecBlocks.length; i++) {
-        total += ecBlocks[i].getCount();
+      for (ECB ecBlock : ecBlocks) {
+        total += ecBlock.getCount();
       }
       return total;
     }
@@ -243,6 +234,7 @@ public final class Version {
     }
   }
 
+  @Override
   public String toString() {
     return String.valueOf(versionNumber);
   }

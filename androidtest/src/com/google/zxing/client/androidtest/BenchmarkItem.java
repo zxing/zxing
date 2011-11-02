@@ -20,49 +20,44 @@ import com.google.zxing.BarcodeFormat;
 
 public final class BenchmarkItem {
 
-  private final String mPath;
-  private final int[] mTimes;
-  private int mPosition;
-  private boolean mDecoded;
-  private BarcodeFormat mFormat;
+  private final String path;
+  private final int[] times;
+  private int position;
+  private boolean decoded;
+  private BarcodeFormat format;
 
   public BenchmarkItem(String path, int runs) {
     if (runs <= 0) {
       throw new IllegalArgumentException();
     }
-    mPath = path;
-    mTimes = new int[runs];
-    mPosition = 0;
-    mDecoded = false;
-    mFormat = null;
+    this.path = path;
+    times = new int[runs];
+    position = 0;
+    decoded = false;
+    format = null;
   }
 
   public void addResult(int microseconds) {
-    mTimes[mPosition] = microseconds;
-    mPosition++;
+    times[position] = microseconds;
+    position++;
   }
 
   public void setDecoded(boolean decoded) {
-    mDecoded = decoded;
+    this.decoded = decoded;
   }
 
   public void setFormat(BarcodeFormat format) {
-    mFormat = format;
+    this.format = format;
   }
 
   @Override
   public String toString() {
-    StringBuilder result = new StringBuilder();
-    result.append(mDecoded ? ("DECODED " + mFormat.toString() + ": ") : "FAILED: ");
-    result.append(mPath);
+    StringBuilder result = new StringBuilder(30);
+    result.append(decoded ? "DECODED " + format.toString() + ": " : "FAILED: ");
+    result.append(path);
     result.append(" (");
     result.append(getAverageTime());
     result.append(" us average)");
-//    int size = mTimes.length;
-//    for (int x = 0; x < size; x++) {
-//      result.append(mTimes[x]);
-//      result.append(" ");
-//    }
     return result.toString();
   }
 
@@ -72,11 +67,11 @@ public final class BenchmarkItem {
    * @return The average decoding time in microseconds.
    */
   public int getAverageTime() {
-    int size = mTimes.length;
+    int size = times.length;
     int total = 0;
-    int max = mTimes[0];
+    int max = times[0];
     for (int x = 0; x < size; x++) {
-      int time = mTimes[x];
+      int time = times[x];
       total += time;
       if (time > max) {
         max = time;
@@ -84,11 +79,7 @@ public final class BenchmarkItem {
     }
     total -= max;
     size--;
-    if (size > 0) {
-      return total / size;
-    } else {
-      return 0;
-    }
+    return size > 0 ? total / size : 0;
   }
 
 }

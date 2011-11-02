@@ -34,43 +34,43 @@ import java.util.List;
 
 final class BenchmarkThread extends Thread {
 
-  private static final String TAG = "BenchmarkThread";
+  private static final String TAG = BenchmarkThread.class.getSimpleName();
   private static final int RUNS = 10;
 
-  private final BenchmarkActivity mActivity;
-  private final String mPath;
-  private MultiFormatReader mMultiFormatReader;
+  private final BenchmarkActivity activity;
+  private final String path;
+  private MultiFormatReader multiFormatReader;
 
   BenchmarkThread(BenchmarkActivity activity, String path) {
-    mActivity = activity;
-    mPath = path;
+    this.activity = activity;
+    this.path = path;
   }
 
   @Override
   public void run() {
-    mMultiFormatReader = new MultiFormatReader();
-    mMultiFormatReader.setHints(null);
+    multiFormatReader = new MultiFormatReader();
+    multiFormatReader.setHints(null);
     // Try to get in a known state before starting the benchmark
     System.gc();
 
     List<BenchmarkItem> items = new ArrayList<BenchmarkItem>();
-    walkTree(mPath, items);
-    Message message = Message.obtain(mActivity.mHandler, R.id.benchmark_done);
+    walkTree(path, items);
+    Message message = Message.obtain(activity.handler, R.id.benchmark_done);
     message.obj = items;
     message.sendToTarget();
   }
 
   // Recurse to allow subdirectories
-  private void walkTree(String path, List<BenchmarkItem> items) {
-    File file = new File(path);
+  private void walkTree(String currentPath, List<BenchmarkItem> items) {
+    File file = new File(currentPath);
     if (file.isDirectory()) {
       String[] files = file.list();
       Arrays.sort(files);
-      for (String f : files) {
-        walkTree(file.getAbsolutePath() + '/' + f, items);
+      for (String fileName : files) {
+        walkTree(file.getAbsolutePath() + '/' + fileName, items);
       }
     } else {
-      BenchmarkItem item = decode(path);
+      BenchmarkItem item = decode(currentPath);
       if (item != null) {
         items.add(item);
       }
@@ -95,7 +95,7 @@ final class BenchmarkThread extends Thread {
       long now = Debug.threadCpuTimeNanos();
       try {
         BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
-        result = mMultiFormatReader.decodeWithState(bitmap);
+        result = multiFormatReader.decodeWithState(bitmap);
         success = true;
       } catch (ReaderException e) {
         success = false;

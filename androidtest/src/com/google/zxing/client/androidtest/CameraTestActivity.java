@@ -22,6 +22,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -35,11 +36,13 @@ import java.io.IOException;
 
 public final class CameraTestActivity extends Activity implements SurfaceHolder.Callback {
 
+  private static final String TAG = CameraTestActivity.class.getSimpleName();
+
   public static final String GET_CAMERA_PARAMETERS = "GET_CAMERA_PARAMETERS";
   private static final String[] EMAIL_ADDRESS = {"zxing-external@google.com"};
 
-  private SaveThread mSaveThread = null;
-  private boolean mGetCameraParameters;
+  private SaveThread saveThread;
+  private boolean getCameraParameters;
 
   @Override
   public void onCreate(Bundle icicle) {
@@ -50,8 +53,8 @@ public final class CameraTestActivity extends Activity implements SurfaceHolder.
     window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-    mGetCameraParameters = getIntent().getBooleanExtra(GET_CAMERA_PARAMETERS, false);
-    if (mGetCameraParameters) {
+    getCameraParameters = getIntent().getBooleanExtra(GET_CAMERA_PARAMETERS, false);
+    if (getCameraParameters) {
       setContentView(R.layout.camera_parameters);
     } else {
       setContentView(R.layout.camera_test);
@@ -67,9 +70,9 @@ public final class CameraTestActivity extends Activity implements SurfaceHolder.
   @Override
   protected void onResume() {
     super.onResume();
-    if (mSaveThread == null && !mGetCameraParameters) {
-      mSaveThread = new SaveThread(this);
-      mSaveThread.start();
+    if (saveThread == null && !getCameraParameters) {
+      saveThread = new SaveThread(this);
+      saveThread.start();
     }
   }
 
@@ -78,19 +81,20 @@ public final class CameraTestActivity extends Activity implements SurfaceHolder.
     super.onPause();
 
     CameraManager.get().stopPreview();
-    if (mSaveThread != null) {
-      Message quit = Message.obtain(mSaveThread.mHandler, R.id.quit);
+    if (saveThread != null) {
+      Message quit = Message.obtain(saveThread.handler, R.id.quit);
       quit.sendToTarget();
       try {
-        mSaveThread.join();
+        saveThread.join();
       } catch (InterruptedException e) {
+        // continue
       }
-      mSaveThread = null;
+      saveThread = null;
     }
     CameraManager.get().closeDriver();
   }
 
-  public final Handler mHandler = new Handler() {
+  final Handler handler = new Handler() {
     @Override
     public void handleMessage(Message message) {
       switch (message.what) {
@@ -109,15 +113,15 @@ public final class CameraTestActivity extends Activity implements SurfaceHolder.
 
   @Override
   public boolean onKeyDown(int keyCode, KeyEvent event) {
-    if (!mGetCameraParameters) {
+    if (!getCameraParameters) {
       if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER) {
         if (event.getRepeatCount() == 0) {
-          CameraManager.get().requestAutoFocus(mHandler, R.id.auto_focus);
+          CameraManager.get().requestAutoFocus(handler, R.id.auto_focus);
         }
         return true;
       } else if (keyCode == KeyEvent.KEYCODE_CAMERA || keyCode == KeyEvent.KEYCODE_SEARCH) {
         if (event.getRepeatCount() == 0) {
-          CameraManager.get().requestPreviewFrame(mSaveThread.mHandler, R.id.save);
+          CameraManager.get().requestPreviewFrame(saveThread.handler, R.id.save);
         }
         return true;
       }
@@ -125,29 +129,29 @@ public final class CameraTestActivity extends Activity implements SurfaceHolder.
     return super.onKeyDown(keyCode, event);
   }
 
+  @Override
   public void surfaceCreated(SurfaceHolder holder) {
     try {
-      String parameters = CameraManager.get().openDriver(holder, mGetCameraParameters);
+      String parameters = CameraManager.get().openDriver(holder, getCameraParameters);
       CameraManager.get().startPreview();
-      if (mGetCameraParameters) {
+      if (getCameraParameters) {
         collectStatsAndSendEmail(parameters);
       }
     } catch (IOException e) {
-      // IOException clause added for Android 1.5
-      throw new RuntimeException(e);
+      throw new IllegalStateException(e);
     }
   }
 
+  @Override
   public void surfaceDestroyed(SurfaceHolder holder) {
-
   }
 
+  @Override
   public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-
   }
 
   private void collectStatsAndSendEmail(String parameters) {
-    StringBuilder result = new StringBuilder();
+    StringBuilder result = new StringBuilder(1000);
     result.append("Device info:");
     result.append("\n  Board: ");
     result.append(Build.BOARD);
@@ -183,13 +187,20 @@ public final class CameraTestActivity extends Activity implements SurfaceHolder.
     result.append("\n\n");
     result.append(parameters);
 
+    FileOutputStream stream = null;
     try {
-      File file = new File("/sdcard/CameraParameters.txt");
-      FileOutputStream stream = new FileOutputStream(file);
+      stream = new FileOutputStream(new File("/sdcard/CameraParameters.txt"));
       stream.write(result.toString().getBytes());
-      stream.close();
     } catch (IOException e) {
-
+      Log.e(TAG, "Cannot write parameters file ", e);
+    } finally {
+      if (stream != null) {
+        try {
+          stream.close();
+        } catch (IOException e) {
+          Log.w(TAG, e);
+        }
+      }
     }
 
     Intent intent = new Intent(Intent.ACTION_SEND);

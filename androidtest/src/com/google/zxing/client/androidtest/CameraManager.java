@@ -20,7 +20,6 @@ import android.content.Context;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.hardware.Camera;
-import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -29,6 +28,7 @@ import android.view.SurfaceHolder;
 import android.view.WindowManager;
 
 import java.io.IOException;
+import java.util.regex.Pattern;
 
 /**
  * This object wraps the Camera service object and expects to be the only one talking to it. The
@@ -38,13 +38,17 @@ import java.io.IOException;
  * @author dswitkin@google.com (Daniel Switkin)
  */
 final class CameraManager {
-  private static final String TAG = "CameraManager";
+
+  private static final String TAG = CameraManager.class.getSimpleName();
+
   private static final int MIN_FRAME_WIDTH = 240;
   private static final int MIN_FRAME_HEIGHT = 240;
   private static final int MAX_FRAME_WIDTH = 480;
   private static final int MAX_FRAME_HEIGHT = 360;
 
   private static CameraManager cameraManager;
+  private static final Pattern SEMICOLON = Pattern.compile(";");
+
   private Camera camera;
   private final Context context;
   private Point screenResolution;
@@ -56,17 +60,14 @@ final class CameraManager {
   private int autoFocusMessage;
   private boolean initialized;
   private boolean previewing;
-  private final boolean useOneShotPreviewCallback;
 
   /**
    * Preview frames are delivered here, which we pass on to the registered handler. Make sure to
    * clear the handler so it will only receive one message.
    */
   private final Camera.PreviewCallback previewCallback = new Camera.PreviewCallback() {
+    @Override
     public void onPreviewFrame(byte[] data, Camera camera) {
-      if (!useOneShotPreviewCallback) {
-        camera.setPreviewCallback(null);
-      }
       if (previewHandler != null) {
         Message message = previewHandler.obtainMessage(previewMessage, cameraResolution.x,
             cameraResolution.y, data);
@@ -80,6 +81,7 @@ final class CameraManager {
    * Autofocus callbacks arrive here, and are dispatched to the Handler which requested them.
    */
   private final Camera.AutoFocusCallback autoFocusCallback = new Camera.AutoFocusCallback() {
+    @Override
     public void onAutoFocus(boolean success, Camera camera) {
       if (autoFocusHandler != null) {
         Message message = autoFocusHandler.obtainMessage(autoFocusMessage, success);
@@ -116,13 +118,6 @@ final class CameraManager {
     camera = null;
     initialized = false;
     previewing = false;
-
-    // Camera.setOneShotPreviewCallback() has a race condition in Cupcake, so we use the older
-    // Camera.setPreviewCallback() on 1.5 and earlier. For Donut and later, we need to use
-    // the more efficient one shot callback, as the older one can swamp the system and cause it
-    // to run out of memory. We can't use SDK_INT because it was introduced in the Donut SDK.
-    //useOneShotPreviewCallback = Integer.parseInt(Build.VERSION.SDK) > Build.VERSION_CODES.CUPCAKE;
-    useOneShotPreviewCallback = Integer.parseInt(Build.VERSION.SDK) > 3; // 3 = Cupcake
   }
 
   /**
@@ -175,9 +170,6 @@ final class CameraManager {
    */
   public void stopPreview() {
     if (camera != null && previewing) {
-      if (!useOneShotPreviewCallback) {
-        camera.setPreviewCallback(null);
-      }
       camera.stopPreview();
       previewHandler = null;
       autoFocusHandler = null;
@@ -197,11 +189,7 @@ final class CameraManager {
     if (camera != null && previewing) {
       previewHandler = handler;
       previewMessage = message;
-      if (useOneShotPreviewCallback) {
-        camera.setOneShotPreviewCallback(previewCallback);
-      } else {
-        camera.setPreviewCallback(previewCallback);
-      }
+      camera.setOneShotPreviewCallback(previewCallback);
     }
   }
 
@@ -274,16 +262,13 @@ final class CameraManager {
     Log.v(TAG, "Setting preview size: " + cameraResolution.x + ", " + cameraResolution.y);
     parameters.setPreviewSize(cameraResolution.x, cameraResolution.y);
 
-    // This is the standard setting to turn the flash off that all devices should honor.
-    parameters.set("flash-mode", "off");
-
     camera.setParameters(parameters);
   }
 
   private String collectCameraParameters() {
     Camera.Parameters parameters = camera.getParameters();
-    String[] params = parameters.flatten().split(";");
-    StringBuilder result = new StringBuilder();
+    String[] params = SEMICOLON.split(parameters.flatten());
+    StringBuilder result = new StringBuilder(100);
     result.append("Default camera parameters:");
     for (String param : params) {
       result.append("\n  ");

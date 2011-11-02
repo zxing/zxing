@@ -17,6 +17,7 @@
 package com.google.zxing.maxicode.decoder;
 
 import com.google.zxing.ChecksumException;
+import com.google.zxing.DecodeHintType;
 import com.google.zxing.FormatException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.DecoderResult;
@@ -24,7 +25,7 @@ import com.google.zxing.common.reedsolomon.GenericGF;
 import com.google.zxing.common.reedsolomon.ReedSolomonDecoder;
 import com.google.zxing.common.reedsolomon.ReedSolomonException;
 
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * <p>The main class which implements MaxiCode decoding -- as opposed to locating and extracting
@@ -48,7 +49,8 @@ public final class Decoder {
     return decode(bits, null);
   }
 
-  public DecoderResult decode(BitMatrix bits, Hashtable hints) throws FormatException, ChecksumException {
+  public DecoderResult decode(BitMatrix bits,
+                              Map<DecodeHintType,?> hints) throws FormatException, ChecksumException {
     BitMatrixParser parser = new BitMatrixParser(bits);
     byte[] codewords = parser.readCodewords();
 
@@ -71,24 +73,20 @@ public final class Decoder {
       default:
         throw FormatException.getFormatInstance();
     }
-    
-    for (int i = 0; i < 10; i++) {
-      datawords[i] = codewords[i];
-    }
-    for (int i = 20; i < datawords.length + 10; i++) {
-      datawords[i - 10] = codewords[i];
-    }
+
+    System.arraycopy(codewords, 0, datawords, 0, 10);
+    System.arraycopy(codewords, 20, datawords, 10, datawords.length - 10);
 
     return DecodedBitStreamParser.decode(datawords, mode);
   }
-  
+
   private void correctErrors(byte[] codewordBytes,
                              int start,
                              int dataCodewords,
                              int ecCodewords,
                              int mode) throws ChecksumException {
     int codewords = dataCodewords + ecCodewords;
-    
+
     // in EVEN or ODD mode only half the codewords
     int divisor = mode == ALL ? 1 : 2;
 

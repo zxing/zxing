@@ -69,7 +69,7 @@ public final class VersionTestCase extends Assert {
     doTestVersion(27, 0x1B08E);
     doTestVersion(32, 0x209D5);
   }
-
+  
   private static void doTestVersion(int expectedVersion, int mask) {
     Version version = Version.decodeVersionInformation(mask);
     assertNotNull(version);

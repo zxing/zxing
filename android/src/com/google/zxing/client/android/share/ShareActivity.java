@@ -71,6 +71,7 @@ public final class ShareActivity extends Activity {
   private Button clipboardButton;
 
   private final Button.OnClickListener contactListener = new Button.OnClickListener() {
+    @Override
     public void onClick(View v) {
       Intent intent = new Intent(Intent.ACTION_PICK, Contacts.People.CONTENT_URI);
       intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
@@ -79,6 +80,7 @@ public final class ShareActivity extends Activity {
   };
 
   private final Button.OnClickListener bookmarkListener = new Button.OnClickListener() {
+    @Override
     public void onClick(View v) {
       Intent intent = new Intent(Intent.ACTION_PICK);
       intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
@@ -88,6 +90,7 @@ public final class ShareActivity extends Activity {
   };
 
   private final Button.OnClickListener appListener = new Button.OnClickListener() {
+    @Override
     public void onClick(View v) {
       Intent intent = new Intent(Intent.ACTION_PICK);
       intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
@@ -97,6 +100,7 @@ public final class ShareActivity extends Activity {
   };
 
   private final Button.OnClickListener clipboardListener = new Button.OnClickListener() {
+    @Override
     public void onClick(View v) {
       ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
       // Should always be true, because we grey out the clipboard button in onResume() if it's empty
@@ -107,6 +111,7 @@ public final class ShareActivity extends Activity {
   };
 
   private final View.OnKeyListener textListener = new View.OnKeyListener() {
+    @Override
     public boolean onKey(View view, int keyCode, KeyEvent event) {
       if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
         String text = ((TextView) view).getText().toString();

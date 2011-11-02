@@ -64,12 +64,14 @@ public final class HelpActivity extends Activity {
   private Button backButton;
 
   private final Button.OnClickListener backListener = new Button.OnClickListener() {
+    @Override
     public void onClick(View view) {
       webView.goBack();
     }
   };
 
   private final Button.OnClickListener doneListener = new Button.OnClickListener() {
+    @Override
     public void onClick(View view) {
       finish();
     }
@@ -77,6 +79,7 @@ public final class HelpActivity extends Activity {
 
   private final DialogInterface.OnClickListener groupsListener =
       new DialogInterface.OnClickListener() {
+    @Override
     public void onClick(DialogInterface dialogInterface, int i) {
       Intent intent = new Intent(Intent.ACTION_VIEW, BUGGY_URI);
       intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);

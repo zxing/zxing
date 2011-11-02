@@ -16,7 +16,6 @@
 
 package com.google.zxing.oned;
 
-
 /**
  * <p>Encapsulates functionality and implementation that is common to UPC and EAN families
  * of one-dimensional barcodes.</p>
@@ -31,4 +30,3 @@ public abstract class UPCEANWriter extends OneDimensionalCodeWriter {
   }
 
 }
-

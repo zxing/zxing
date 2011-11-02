@@ -522,7 +522,7 @@ final class PDF417 {
   PDF417() {
     this(false);
   }
-  
+
   PDF417(boolean compact) {
     this.compact = compact;
     minCols = 2;
@@ -530,7 +530,7 @@ final class PDF417 {
     maxRows = 30;
     minRows = 2;
   }
-  
+
   BarcodeMatrix getBarcodeMatrix() {
     return barcodeMatrix;
   }
@@ -563,7 +563,7 @@ final class PDF417 {
     }
     return r;
   }
-  
+
   /**
    * Calculates the necessary number of rows as described in annex Q of ISO/IEC 15438:2001(E).
    *
@@ -633,7 +633,11 @@ final class PDF417 {
     logic.addBar(last, width);
   }
 
-  private void encodeLowLevel(String fullCodewords, int c, int r, int errorCorrectionLevel, BarcodeMatrix logic) {
+  private void encodeLowLevel(CharSequence fullCodewords,
+                              int c,
+                              int r,
+                              int errorCorrectionLevel,
+                              BarcodeMatrix logic) {
 
     this.errorCorrectionLevel = errorCorrectionLevel;
 
@@ -670,7 +674,7 @@ final class PDF417 {
       } else {
         pattern = CODEWORD_TABLE[cluster][right];
         encodeChar(pattern, 17, logic.getCurrentRow());
-  
+
         encodeChar(STOP_PATTERN, 18, logic.getCurrentRow());
       }
     }
@@ -702,7 +706,7 @@ final class PDF417 {
           "Encoded message contains to many code words, message to big (" + msg.length() + " bytes)");
     }
 
-    StringBuffer sb = new StringBuffer(n);
+    StringBuilder sb = new StringBuilder(n);
     sb.append((char) n);
     sb.append(highLevel);
     for (int i = 0; i < pad; i++) {
@@ -760,7 +764,7 @@ final class PDF417 {
     }
     return dimension;
   }
-  
+
   /**
    * Sets max/min row/col values
    */
@@ -770,7 +774,7 @@ final class PDF417 {
     this.maxRows = maxRows;
     this.minRows = minRows;
   }
-  
+
   /**
    * Sets byte compaction to be true or false
    * @param byteCompaction
@@ -778,7 +782,7 @@ final class PDF417 {
   void setByteCompaction(boolean byteCompaction) {
     this.byteCompaction = byteCompaction;
   }
-  
+
   /**
    * Sets compact to be true or false
    * @param compact

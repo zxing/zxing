@@ -17,6 +17,7 @@
 package com.google.zxing;
 
 import com.google.zxing.common.AbstractBlackBoxTestCase;
+import com.google.zxing.common.SummaryResults;
 import com.google.zxing.datamatrix.DataMatrixBlackBox1TestCase;
 import com.google.zxing.datamatrix.DataMatrixBlackBox2TestCase;
 import com.google.zxing.oned.Code128BlackBox1TestCase;
@@ -94,89 +95,16 @@ public final class AllPositiveBlackBoxTester {
     new QRCodeBlackBox5TestCase()
   };
 
-//  private static final AbstractBlackBoxTestCase[] TESTS1 = {
-//    new DataMatrixBlackBox1TestCase(),
-//    new DataMatrixBlackBox2TestCase(),
-//    new Code128BlackBox1TestCase(),
-//    new Code128BlackBox2TestCase(),
-//    new Code128BlackBox3TestCase(),
-//    new Code39BlackBox1TestCase(),
-//    new Code39ExtendedBlackBox2TestCase(),
-//    new Code39BlackBox3TestCase(),
-//    new EAN13BlackBox1TestCase(),
-//    new EAN13BlackBox2TestCase(),
-//    new EAN13BlackBox3TestCase(),
-//    new EAN13BlackBox4TestCase(),
-//    new EAN8BlackBox1TestCase(),
-//    new ITFBlackBox1TestCase(),
-//    new ITFBlackBox2TestCase(),
-//  };
-//
-//  private static final AbstractBlackBoxTestCase[] TESTS2 = {
-//    new UPCABlackBox1TestCase(),
-//    new UPCABlackBox2TestCase(),
-//    new UPCABlackBox3ReflectiveTestCase(),
-//    new UPCABlackBox4TestCase(),
-//    new UPCABlackBox5TestCase(),
-//    new UPCEBlackBox1TestCase(),
-//    new UPCEBlackBox2TestCase(),
-//    new UPCEBlackBox3ReflectiveTestCase(),
-//    new QRCodeBlackBox1TestCase(),
-//    new QRCodeBlackBox2TestCase(),
-//    new QRCodeBlackBox3TestCase(),
-//    new QRCodeBlackBox4TestCase(),
-//    new QRCodeBlackBox5TestCase()
-//  };
-//
-//  private static class WorkerThread extends Thread {
-//
-//    private AbstractBlackBoxTestCase[] testCases;
-//    private AbstractBlackBoxTestCase.SummaryResults results;
-//
-//    public WorkerThread(AbstractBlackBoxTestCase[] tests) {
-//      testCases = tests;
-//    }
-//
-//    @Override
-//    public void run() {
-//      try {
-//        results = new AbstractBlackBoxTestCase.SummaryResults();
-//        for (int x = 0; x < testCases.length; x++) {
-//          results.add(testCases[x].testBlackBoxCountingResults());
-//        }
-//      } catch (IOException e) {
-//
-//      }
-//    }
-//
-//    public AbstractBlackBoxTestCase.SummaryResults getResults() {
-//      return results;
-//    }
-//  }
-
   private AllPositiveBlackBoxTester() {
-
   }
 
   public static void main(String[] args) throws Exception {
     long now = System.currentTimeMillis();
-    AbstractBlackBoxTestCase.SummaryResults results = new AbstractBlackBoxTestCase.SummaryResults();
+    SummaryResults results = new SummaryResults();
 
     for (AbstractBlackBoxTestCase test : TESTS) {
       results.add(test.testBlackBoxCountingResults(false));
     }
-
-    // This threaded version can't be used yet because BlackPointEstimator (and possibly other code)
-    // is not thread-safe. It's also pretty lame. It would be much better to spawn a group of
-    // threads which pull tests from a shared, locked list as needed.
-//    WorkerThread thread1 = new WorkerThread(TESTS1);
-//    WorkerThread thread2 = new WorkerThread(TESTS2);
-//    thread1.start();
-//    thread2.start();
-//    thread1.join();
-//    thread2.join();
-//    results.add(thread1.getResults());
-//    results.add(thread2.getResults());
 
     now = System.currentTimeMillis() - now;
     System.out.println(results.toString() + "\n  Total time: " + now + " ms");

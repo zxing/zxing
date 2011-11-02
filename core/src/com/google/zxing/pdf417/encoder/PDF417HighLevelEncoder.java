@@ -22,6 +22,9 @@ package com.google.zxing.pdf417.encoder;
 
 import com.google.zxing.WriterException;
 
+import java.math.BigInteger;
+import java.util.Arrays;
+
 /**
  * PDF417 high-level encoder following the algorithm described in ISO/IEC 15438:2001(E) in
  * annex P.
@@ -110,18 +113,14 @@ final class PDF417HighLevelEncoder {
 
   static {
     //Construct inverse lookups
-    for (int i = 0; i < MIXED.length; i++) {
-      MIXED[i] = -1;
-    }
+    Arrays.fill(MIXED, (byte) -1);
     for (byte i = 0; i < TEXT_MIXED_RAW.length; i++) {
       byte b = TEXT_MIXED_RAW[i];
       if (b > 0) {
         MIXED[b] = i;
       }
     }
-    for (int i = 0; i < PUNCTUATION.length; i++) {
-      PUNCTUATION[i] = -1;
-    }
+    Arrays.fill(PUNCTUATION, (byte) -1);
     for (byte i = 0; i < TEXT_PUNCTUATION_RAW.length; i++) {
       byte b = TEXT_PUNCTUATION_RAW[i];
       if (b > 0) {
@@ -143,7 +142,7 @@ final class PDF417HighLevelEncoder {
 
   /**
    * Performs high-level encoding of a PDF417 message using the algorithm described in annex P
-   * of ISO/IEC 15438:2001(E).  If byte compaction has been selected, then only byte compaction
+   * of ISO/IEC 15438:2001(E). If byte compaction has been selected, then only byte compaction
    * is used.
    *
    * @param msg the message
@@ -153,7 +152,7 @@ final class PDF417HighLevelEncoder {
     byte[] bytes = null; //Fill later and only if needed
 
     //the codewords 0..928 are encoded as Unicode characters
-    StringBuffer sb = new StringBuffer(msg.length());
+    StringBuilder sb = new StringBuilder(msg.length());
 
     int len = msg.length();
     int p = 0;
@@ -241,8 +240,12 @@ final class PDF417HighLevelEncoder {
    * @param initialSubmode should normally be SUBMODE_ALPHA
    * @return the text submode in which this method ends
    */
-  private static int encodeText(String msg, int startpos, int count, StringBuffer sb, int initialSubmode) {
-    StringBuffer tmp = new StringBuffer(count);
+  private static int encodeText(CharSequence msg,
+                                int startpos,
+                                int count,
+                                StringBuilder sb,
+                                int initialSubmode) {
+    StringBuilder tmp = new StringBuilder(count);
     int submode = initialSubmode;
     int idx = 0;
     while (true) {
@@ -363,7 +366,11 @@ final class PDF417HighLevelEncoder {
    * @param startmode the mode from which this method starts
    * @param sb        receives the encoded codewords
    */
-  private static void encodeBinary(byte[] bytes, int startpos, int count, int startmode, StringBuffer sb) {
+  private static void encodeBinary(byte[] bytes,
+                                   int startpos,
+                                   int count,
+                                   int startmode,
+                                   StringBuilder sb) {
     if (count == 1 && startmode == TEXT_COMPACTION) {
       sb.append((char) SHIFT_TO_BYTE);
     } else {
@@ -399,10 +406,9 @@ final class PDF417HighLevelEncoder {
     }
   }
 
-  /*
-  private static void encodeNumeric(String msg, int startpos, int count, StringBuffer sb) {
+  private static void encodeNumeric(String msg, int startpos, int count, StringBuilder sb) {
     int idx = 0;
-    StringBuffer tmp = new StringBuffer(count / 3 + 1);
+    StringBuilder tmp = new StringBuilder(count / 3 + 1);
     BigInteger num900 = BigInteger.valueOf(900);
     BigInteger num0 = BigInteger.valueOf(0);
     while (idx < count - 1) {
@@ -423,33 +429,7 @@ final class PDF417HighLevelEncoder {
       idx += len;
     }
   }
-   */
 
-  // TODO either this needs to reimplement BigInteger's functionality to properly handle very
-  // large numeric strings, even in Java ME, or, we give up Java ME and use the version above
-  // with BigInteger
-
-  private static void encodeNumeric(String msg, int startpos, int count, StringBuffer sb) {
-    int idx = 0;
-    StringBuffer tmp = new StringBuffer(count / 3 + 1);
-    while (idx < count - 1) {
-      tmp.setLength(0);
-      int len = Math.min(44, count - idx);
-      String part = '1' + msg.substring(startpos + idx, startpos + idx + len);
-      long bigint = Long.parseLong(part);
-      do {
-        long c = bigint % 900;
-        tmp.append((char) c);
-        bigint /= 900;
-      } while (bigint != 0);
-
-      //Reverse temporary string
-      for (int i = tmp.length() - 1; i >= 0; i--) {
-        sb.append(tmp.charAt(i));
-      }
-      idx += len;
-    }
-  }
 
   private static boolean isDigit(char ch) {
     return ch >= '0' && ch <= '9';
@@ -482,7 +462,7 @@ final class PDF417HighLevelEncoder {
    * @param startpos the start position within the message
    * @return the requested character count
    */
-  private static int determineConsecutiveDigitCount(String msg, int startpos) {
+  private static int determineConsecutiveDigitCount(CharSequence msg, int startpos) {
     int count = 0;
     int len = msg.length();
     int idx = startpos;
@@ -506,7 +486,7 @@ final class PDF417HighLevelEncoder {
    * @param startpos the start position within the message
    * @return the requested character count
    */
-  private static int determineConsecutiveTextCount(String msg, int startpos) {
+  private static int determineConsecutiveTextCount(CharSequence msg, int startpos) {
     int len = msg.length();
     int idx = startpos;
     while (idx < len) {
@@ -545,7 +525,8 @@ final class PDF417HighLevelEncoder {
    * @param startpos the start position within the message
    * @return the requested character count
    */
-  private static int determineConsecutiveBinaryCount(String msg, byte[] bytes, int startpos) throws WriterException {
+  private static int determineConsecutiveBinaryCount(CharSequence msg, byte[] bytes, int startpos)
+      throws WriterException {
     int len = msg.length();
     int idx = startpos;
     while (idx < len) {

@@ -40,7 +40,7 @@ final class InactivityTimer {
       Executors.newSingleThreadScheduledExecutor(new DaemonThreadFactory());
   private final Activity activity;
   private ScheduledFuture<?> inactivityFuture = null;
-  private final PowerStatusReceiver powerStatusReceiver = new PowerStatusReceiver();
+  private final BroadcastReceiver powerStatusReceiver = new PowerStatusReceiver();
 
   InactivityTimer(Activity activity) {
     this.activity = activity;
@@ -61,17 +61,20 @@ final class InactivityTimer {
     }
   }
 
-  public void onPause(){
+  public void onPause() {
+    cancel();
     activity.unregisterReceiver(powerStatusReceiver);
   }
 
   public void onResume(){
     activity.registerReceiver(powerStatusReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+    onActivity();
   }
 
   private void cancel() {
-    if (inactivityFuture != null) {
-      inactivityFuture.cancel(true);
+    ScheduledFuture<?> future = inactivityFuture;
+    if (future != null) {
+      future.cancel(true);
       inactivityFuture = null;
     }
   }
@@ -82,6 +85,7 @@ final class InactivityTimer {
   }
 
   private static final class DaemonThreadFactory implements ThreadFactory {
+    @Override
     public Thread newThread(Runnable runnable) {
       Thread thread = new Thread(runnable);
       thread.setDaemon(true);
@@ -95,9 +99,8 @@ final class InactivityTimer {
       if (Intent.ACTION_BATTERY_CHANGED.equals(intent.getAction())) {
         // 0 indicates that we're on battery
         // In Android 2.0+, use BatteryManager.EXTRA_PLUGGED
-        if (intent.getIntExtra("plugged", -1) == 0) {
-          InactivityTimer.this.onActivity();
-        } else {
+        int batteryPlugged = intent.getIntExtra("plugged", -1);
+        if (batteryPlugged > 0) {
           InactivityTimer.this.cancel();
         }
       }

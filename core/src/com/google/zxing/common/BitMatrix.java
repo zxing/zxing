@@ -32,11 +32,11 @@ package com.google.zxing.common;
  * @author dswitkin@google.com (Daniel Switkin)
  */
 public final class BitMatrix {
-  // Just like BitArray, these need to be public so ProGuard can inline them.
-  public final int width;
-  public final int height;
-  public final int rowSize;
-  public final int[] bits;
+
+  private final int width;
+  private final int height;
+  private final int rowSize;
+  private final int[] bits;
 
   // A helper to construct a square matrix.
   public BitMatrix(int dimension) {
@@ -154,7 +154,7 @@ public final class BitMatrix {
     int top = height;
     int right = -1;
     int bottom = -1;
-    
+
     for (int y = 0; y < height; y++) {
       for (int x32 = 0; x32 < rowSize; x32++) {
         int theBits = bits[y * rowSize + x32];
@@ -186,14 +186,14 @@ public final class BitMatrix {
         }
       }
     }
-    
+
     int width = right - left;
     int height = bottom - top;
-    
+
     if (width < 0 || height < 0) {
       return null;
     }
-    
+
     return new int[] {left, top, width, height};
   }
 
@@ -258,6 +258,7 @@ public final class BitMatrix {
     return height;
   }
 
+  @Override
   public boolean equals(Object o) {
     if (!(o instanceof BitMatrix)) {
       return false;
@@ -275,19 +276,21 @@ public final class BitMatrix {
     return true;
   }
 
+  @Override
   public int hashCode() {
     int hash = width;
     hash = 31 * hash + width;
     hash = 31 * hash + height;
     hash = 31 * hash + rowSize;
-    for (int i = 0; i < bits.length; i++) {
-      hash = 31 * hash + bits[i];
+    for (int bit : bits) {
+      hash = 31 * hash + bit;
     }
     return hash;
   }
 
+  @Override
   public String toString() {
-    StringBuffer result = new StringBuffer(height * (width + 1));
+    StringBuilder result = new StringBuilder(height * (width + 1));
     for (int y = 0; y < height; y++) {
       for (int x = 0; x < width; x++) {
         result.append(get(x, y) ? "X " : "  ");

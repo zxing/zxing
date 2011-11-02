@@ -28,10 +28,16 @@ package com.google.zxing.oned.rss.expanded;
 
 import com.google.zxing.common.BitArray;
 
+import java.util.regex.Pattern;
+
 /**
  * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
  */
 public final class BinaryUtil {
+
+  private static final Pattern ONE = Pattern.compile("1");
+  private static final Pattern ZERO = Pattern.compile("0");
+  private static final Pattern SPACE = Pattern.compile(" ");
 
   private BinaryUtil() {
   }
@@ -39,21 +45,21 @@ public final class BinaryUtil {
   /*
   * Constructs a BitArray from a String like the one returned from BitArray.toString()
   */
-  public static BitArray buildBitArrayFromString(String data){
-    String dotsAndXs = data.replaceAll("1", "X").replaceAll("0",".");
-    BitArray binary = new BitArray(dotsAndXs.replaceAll(" ", "").length());
+  public static BitArray buildBitArrayFromString(CharSequence data) {
+    String dotsAndXs = ZERO.matcher(ONE.matcher(data).replaceAll("X")).replaceAll(".");
+    BitArray binary = new BitArray(SPACE.matcher(dotsAndXs).replaceAll("").length());
     int counter = 0;
 
     for(int i = 0; i < dotsAndXs.length(); ++i){
-      if(i % 9 == 0){ // spaces
-        if(dotsAndXs.charAt(i) != ' ') {
+      if (i % 9 == 0) { // spaces
+        if (dotsAndXs.charAt(i) != ' ') {
           throw new IllegalStateException("space expected");
         }
         continue;
       }
 
       char currentChar = dotsAndXs.charAt(i);
-      if(currentChar == 'X' || currentChar == 'x') {
+      if (currentChar == 'X' || currentChar == 'x') {
         binary.set(counter);
       }
       counter++;
@@ -61,37 +67,18 @@ public final class BinaryUtil {
     return binary;
   }
 
-  public static BitArray buildBitArrayFromStringWithoutSpaces(String data){
+  public static BitArray buildBitArrayFromStringWithoutSpaces(CharSequence data) {
     StringBuilder sb = new StringBuilder();
-
-    String dotsAndXs = data.replaceAll("1", "X").replaceAll("0",".");
-
+    String dotsAndXs = ZERO.matcher(ONE.matcher(data).replaceAll("X")).replaceAll(".");
     int current = 0;
-    while(current < dotsAndXs.length()){
+    while (current < dotsAndXs.length()) {
       sb.append(' ');
-      for(int i = 0; i < 8 && current < dotsAndXs.length(); ++i){
+      for (int i = 0; i < 8 && current < dotsAndXs.length(); ++i) {
         sb.append(dotsAndXs.charAt(current));
         current++;
       }
     }
-
     return buildBitArrayFromString(sb.toString());
   }
 
-  /*
-  public static int extractNumericValueFromBitArray(BitArray information, int pos, int bits) {
-    if(bits > 32) {
-      throw new IllegalArgumentException("extractNumberValueFromBitArray can't handle more than 32 bits");
-    }
-
-    BitArray numeric = new BitArray(bits);
-    for(int i = 0; i < bits; ++i) {
-      if (information.get(pos + i)) {
-        numeric.set(i);
-      }
-    }
-    numeric.reverse();
-    return numeric.bits[0];
-  }
-   */
 }

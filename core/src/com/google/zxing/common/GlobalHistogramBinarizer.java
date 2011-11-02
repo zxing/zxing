@@ -37,14 +37,17 @@ public class GlobalHistogramBinarizer extends Binarizer {
   private static final int LUMINANCE_SHIFT = 8 - LUMINANCE_BITS;
   private static final int LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
 
-  private byte[] luminances = null;
-  private final int[] buckets = new int[LUMINANCE_BUCKETS];
+  private byte[] luminances;
+  private final int[] buckets;
 
   public GlobalHistogramBinarizer(LuminanceSource source) {
     super(source);
+    luminances = new byte[0];
+    buckets = new int[LUMINANCE_BUCKETS];
   }
 
   // Applies simple sharpening to the row data to improve performance of the 1D Readers.
+  @Override
   public BitArray getBlackRow(int y, BitArray row) throws NotFoundException {
     LuminanceSource source = getLuminanceSource();
     int width = source.getWidth();
@@ -79,6 +82,7 @@ public class GlobalHistogramBinarizer extends Binarizer {
   }
 
   // Does not sharpen the data, as this call is intended to only be used by 2D Readers.
+  @Override
   public BitMatrix getBlackMatrix() throws NotFoundException {
     LuminanceSource source = getLuminanceSource();
     int width = source.getWidth();
@@ -117,12 +121,13 @@ public class GlobalHistogramBinarizer extends Binarizer {
     return matrix;
   }
 
+  @Override
   public Binarizer createBinarizer(LuminanceSource source) {
     return new GlobalHistogramBinarizer(source);
   }
 
   private void initArrays(int luminanceSize) {
-    if (luminances == null || luminances.length < luminanceSize) {
+    if (luminances.length < luminanceSize) {
       luminances = new byte[luminanceSize];
     }
     for (int x = 0; x < LUMINANCE_BUCKETS; x++) {

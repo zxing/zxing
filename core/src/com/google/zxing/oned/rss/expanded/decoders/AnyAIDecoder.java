@@ -41,8 +41,9 @@ final class AnyAIDecoder extends AbstractExpandedDecoder {
     super(information);
   }
 
+  @Override
   public String parseInformation() throws NotFoundException {
-    StringBuffer buf = new StringBuffer();
-    return this.generalDecoder.decodeAllCodes(buf, HEADER_SIZE);
+    StringBuilder buf = new StringBuilder();
+    return this.getGeneralDecoder().decodeAllCodes(buf, HEADER_SIZE);
   }
 }

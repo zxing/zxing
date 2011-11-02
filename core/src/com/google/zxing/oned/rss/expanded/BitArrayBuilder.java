@@ -26,9 +26,9 @@
 
 package com.google.zxing.oned.rss.expanded;
 
-import java.util.Vector;
-
 import com.google.zxing.common.BitArray;
+
+import java.util.List;
 
 /**
  * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
@@ -39,9 +39,9 @@ final class BitArrayBuilder {
   private BitArrayBuilder() {
   }
 
-  static BitArray buildBitArray(Vector pairs) {
+  static BitArray buildBitArray(List<ExpandedPair> pairs) {
     int charNumber = (pairs.size() << 1) - 1;
-    if (((ExpandedPair) pairs.lastElement()).getRightChar() == null) {
+    if (pairs.get(pairs.size() - 1).getRightChar() == null) {
       charNumber -= 1;
     }
 
@@ -50,7 +50,7 @@ final class BitArrayBuilder {
     BitArray binary = new BitArray(size);
     int accPos = 0;
 
-    ExpandedPair firstPair = (ExpandedPair) pairs.elementAt(0);
+    ExpandedPair firstPair = pairs.get(0);
     int firstValue = firstPair.getRightChar().getValue();
     for(int i = 11; i >= 0; --i){
       if ((firstValue & (1 << i)) != 0) {
@@ -60,7 +60,7 @@ final class BitArrayBuilder {
     }
 
     for(int i = 1; i < pairs.size(); ++i){
-      ExpandedPair currentPair = (ExpandedPair) pairs.elementAt(i);
+      ExpandedPair currentPair = pairs.get(i);
 
       int leftValue = currentPair.getLeftChar().getValue();
       for(int j = 11; j >= 0; --j){

@@ -27,12 +27,12 @@ import android.widget.TextView;
 
 public final class BenchmarkActivity extends Activity {
 
+  private static final String TAG = BenchmarkActivity.class.getSimpleName();
   private static final String PATH = "/sdcard/zxingbenchmark";
-  private static final String TAG = "ZXingBenchmark";
 
-  private Button mRunBenchmarkButton;
-  private TextView mTextView;
-  private BenchmarkThread mBenchmarkThread;
+  private Button runBenchmarkButton;
+  private TextView textView;
+  private BenchmarkThread benchmarkThread;
 
   @Override
   public void onCreate(Bundle icicle) {
@@ -40,32 +40,33 @@ public final class BenchmarkActivity extends Activity {
 
     setContentView(R.layout.benchmark);
 
-    mRunBenchmarkButton = (Button) findViewById(R.id.benchmark_run);
-    mRunBenchmarkButton.setOnClickListener(mRunBenchmark);
-    mTextView = (TextView) findViewById(R.id.benchmark_help);
+    runBenchmarkButton = (Button) findViewById(R.id.benchmark_run);
+    runBenchmarkButton.setOnClickListener(runBenchmark);
+    textView = (TextView) findViewById(R.id.benchmark_help);
 
-    mBenchmarkThread = null;
+    benchmarkThread = null;
   }
 
-  public final Button.OnClickListener mRunBenchmark = new Button.OnClickListener() {
+  private final Button.OnClickListener runBenchmark = new Button.OnClickListener() {
+    @Override
     public void onClick(View v) {
-      if (mBenchmarkThread == null) {
-        mRunBenchmarkButton.setEnabled(false);
-        mTextView.setText(R.string.benchmark_running);
-        mBenchmarkThread = new BenchmarkThread(BenchmarkActivity.this, PATH);
-        mBenchmarkThread.start();
+      if (benchmarkThread == null) {
+        runBenchmarkButton.setEnabled(false);
+        textView.setText(R.string.benchmark_running);
+        benchmarkThread = new BenchmarkThread(BenchmarkActivity.this, PATH);
+        benchmarkThread.start();
       }
     }
   };
 
-  public final Handler mHandler = new Handler() {
+  final Handler handler = new Handler() {
     @Override
     public void handleMessage(Message message) {
       switch (message.what) {
         case R.id.benchmark_done:
           handleBenchmarkDone(message);
-          mBenchmarkThread = null;
-          mRunBenchmarkButton.setEnabled(true);
+          benchmarkThread = null;
+          runBenchmarkButton.setEnabled(true);
           break;
         default:
           break;
@@ -86,7 +87,7 @@ public final class BenchmarkActivity extends Activity {
     }
     String totals = "TOTAL: Decoded " + count + " images in " + time + " us";
     Log.v(TAG, totals);
-    mTextView.setText(totals + "\n\n" + getString(R.string.benchmark_help));
+    textView.setText(totals + "\n\n" + getString(R.string.benchmark_help));
   }
 
 }

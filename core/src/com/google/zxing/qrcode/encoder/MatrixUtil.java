@@ -403,8 +403,9 @@ final class MatrixUtil {
     matrix.set(8, matrix.getHeight() - 8, 1);
   }
 
-  private static void embedHorizontalSeparationPattern(int xStart, int yStart,
-      ByteMatrix matrix) throws WriterException {
+  private static void embedHorizontalSeparationPattern(int xStart,
+                                                       int yStart,
+                                                       ByteMatrix matrix) throws WriterException {
     // We know the width and height.
     if (HORIZONTAL_SEPARATION_PATTERN[0].length != 8 || HORIZONTAL_SEPARATION_PATTERN.length != 1) {
       throw new WriterException("Bad horizontal separation pattern");
@@ -417,8 +418,9 @@ final class MatrixUtil {
     }
   }
 
-  private static void embedVerticalSeparationPattern(int xStart, int yStart,
-      ByteMatrix matrix) throws WriterException {
+  private static void embedVerticalSeparationPattern(int xStart,
+                                                     int yStart,
+                                                     ByteMatrix matrix) throws WriterException {
     // We know the width and height.
     if (VERTICAL_SEPARATION_PATTERN[0].length != 1 || VERTICAL_SEPARATION_PATTERN.length != 7) {
       throw new WriterException("Bad vertical separation pattern");
@@ -434,8 +436,9 @@ final class MatrixUtil {
   // Note that we cannot unify the function with embedPositionDetectionPattern() despite they are
   // almost identical, since we cannot write a function that takes 2D arrays in different sizes in
   // C/C++. We should live with the fact.
-  private static void embedPositionAdjustmentPattern(int xStart, int yStart,
-      ByteMatrix matrix) throws WriterException {
+  private static void embedPositionAdjustmentPattern(int xStart,
+                                                     int yStart,
+                                                     ByteMatrix matrix) throws WriterException {
     // We know the width and height.
     if (POSITION_ADJUSTMENT_PATTERN[0].length != 5 || POSITION_ADJUSTMENT_PATTERN.length != 5) {
       throw new WriterException("Bad position adjustment");
@@ -450,8 +453,9 @@ final class MatrixUtil {
     }
   }
 
-  private static void embedPositionDetectionPattern(int xStart, int yStart,
-      ByteMatrix matrix) throws WriterException {
+  private static void embedPositionDetectionPattern(int xStart,
+                                                    int yStart,
+                                                    ByteMatrix matrix) throws WriterException {
     // We know the width and height.
     if (POSITION_DETECTION_PATTERN[0].length != 7 || POSITION_DETECTION_PATTERN.length != 7) {
       throw new WriterException("Bad position detection pattern");

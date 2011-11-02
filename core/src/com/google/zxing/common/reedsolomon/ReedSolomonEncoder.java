@@ -16,7 +16,8 @@
 
 package com.google.zxing.common.reedsolomon;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p>Implements Reed-Solomon enbcoding, as the name implies.</p>
@@ -27,27 +28,27 @@ import java.util.Vector;
 public final class ReedSolomonEncoder {
 
   private final GenericGF field;
-  private final Vector cachedGenerators;
+  private final List<GenericGFPoly> cachedGenerators;
 
   public ReedSolomonEncoder(GenericGF field) {
     if (!GenericGF.QR_CODE_FIELD_256.equals(field)) {
       throw new IllegalArgumentException("Only QR Code is supported at this time");
     }
     this.field = field;
-    this.cachedGenerators = new Vector();
-    cachedGenerators.addElement(new GenericGFPoly(field, new int[] { 1 }));
+    this.cachedGenerators = new ArrayList<GenericGFPoly>();
+    cachedGenerators.add(new GenericGFPoly(field, new int[]{1}));
   }
 
   private GenericGFPoly buildGenerator(int degree) {
     if (degree >= cachedGenerators.size()) {
-      GenericGFPoly lastGenerator = (GenericGFPoly) cachedGenerators.elementAt(cachedGenerators.size() - 1);
+      GenericGFPoly lastGenerator = cachedGenerators.get(cachedGenerators.size() - 1);
       for (int d = cachedGenerators.size(); d <= degree; d++) {
         GenericGFPoly nextGenerator = lastGenerator.multiply(new GenericGFPoly(field, new int[] { 1, field.exp(d - 1) }));
-        cachedGenerators.addElement(nextGenerator);
+        cachedGenerators.add(nextGenerator);
         lastGenerator = nextGenerator;
       }
     }
-    return (GenericGFPoly) cachedGenerators.elementAt(degree);    
+    return cachedGenerators.get(degree);
   }
 
   public void encode(int[] toEncode, int ecBytes) {

@@ -14,26 +14,30 @@
  * limitations under the License.
  */
 
-package com.google.zxing.client.j2me;
+package com.google.zxing.common;
 
-import javax.microedition.media.Controllable;
+final class TestResult {
 
-/**
- * <p>Implemented by {@link com.google.zxing.client.j2me.DefaultMultimediaManager} and
- * {@link com.google.zxing.client.j2me.AdvancedMultimediaManager} in order to dynamically
- * load support for JSR-234 APIs where possible.</p>
- *
- * @author Sean Owen
- * @author Paul Hackenberger
- */
-interface MultimediaManager {
+  private final int mustPassCount;
+  private final int tryHarderCount;
+  private final float rotation;
 
-  void setFocus(Controllable player);
+  TestResult(int mustPassCount, int tryHarderCount, float rotation) {
+    this.mustPassCount = mustPassCount;
+    this.tryHarderCount = tryHarderCount;
+    this.rotation = rotation;
+  }
 
-  void setZoom(Controllable player);
+  int getMustPassCount() {
+    return mustPassCount;
+  }
 
-  void setExposure(Controllable player);
+  int getTryHarderCount() {
+    return tryHarderCount;
+  }
 
-  void setFlash(Controllable player);
+  float getRotation() {
+    return rotation;
+  }
 
 }

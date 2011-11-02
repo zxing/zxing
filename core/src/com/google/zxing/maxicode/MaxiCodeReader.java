@@ -30,7 +30,7 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.DecoderResult;
 import com.google.zxing.maxicode.decoder.Decoder;
 
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This implementation can detect and decode a MaxiCode in an image.
@@ -55,11 +55,13 @@ public final class MaxiCodeReader implements Reader {
    * @throws FormatException if a MaxiCode cannot be decoded
    * @throws ChecksumException if error correction fails
    */
+  @Override
   public Result decode(BinaryBitmap image) throws NotFoundException, ChecksumException, FormatException {
     return decode(image, null);
   }
 
-  public Result decode(BinaryBitmap image, Hashtable hints)
+  @Override
+  public Result decode(BinaryBitmap image, Map<DecodeHintType,?> hints)
       throws NotFoundException, ChecksumException, FormatException {
     DecoderResult decoderResult;
     if (hints != null && hints.containsKey(DecodeHintType.PURE_BARCODE)) {
@@ -72,12 +74,14 @@ public final class MaxiCodeReader implements Reader {
     ResultPoint[] points = NO_POINTS;
     Result result = new Result(decoderResult.getText(), decoderResult.getRawBytes(), points, BarcodeFormat.MAXICODE);
 
-    if (decoderResult.getECLevel() != null) {
-      result.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, decoderResult.getECLevel());
+    String ecLevel = decoderResult.getECLevel();
+    if (ecLevel != null) {
+      result.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, ecLevel);
     }
     return result;
   }
 
+  @Override
   public void reset() {
     // do nothing
   }

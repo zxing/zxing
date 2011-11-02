@@ -16,6 +16,7 @@
 
 package com.google.zxing.multi.qrcode.detector;
 
+import com.google.zxing.DecodeHintType;
 import com.google.zxing.NotFoundException;
 import com.google.zxing.ReaderException;
 import com.google.zxing.common.BitMatrix;
@@ -23,8 +24,9 @@ import com.google.zxing.common.DetectorResult;
 import com.google.zxing.qrcode.detector.Detector;
 import com.google.zxing.qrcode.detector.FinderPatternInfo;
 
-import java.util.Hashtable;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>Encapsulates logic that can detect one or more QR Codes in an image, even if the QR Code
@@ -41,19 +43,19 @@ public final class MultiDetector extends Detector {
     super(image);
   }
 
-  public DetectorResult[] detectMulti(Hashtable hints) throws NotFoundException {
+  public DetectorResult[] detectMulti(Map<DecodeHintType,?> hints) throws NotFoundException {
     BitMatrix image = getImage();
     MultiFinderPatternFinder finder = new MultiFinderPatternFinder(image);
-    FinderPatternInfo[] info = finder.findMulti(hints);
+    FinderPatternInfo[] infos = finder.findMulti(hints);
 
-    if (info.length == 0) {
+    if (infos.length == 0) {
       throw NotFoundException.getNotFoundInstance();
     }
 
-    Vector result = new Vector();
-    for (int i = 0; i < info.length; i++) {
+    List<DetectorResult> result = new ArrayList<DetectorResult>();
+    for (FinderPatternInfo info : infos) {
       try {
-        result.addElement(processFinderPatternInfo(info[i]));
+        result.add(processFinderPatternInfo(info));
       } catch (ReaderException e) {
         // ignore
       }
@@ -61,11 +63,7 @@ public final class MultiDetector extends Detector {
     if (result.isEmpty()) {
       return EMPTY_DETECTOR_RESULTS;
     } else {
-      DetectorResult[] resultArray = new DetectorResult[result.size()];
-      for (int i = 0; i < result.size(); i++) {
-        resultArray[i] = (DetectorResult) result.elementAt(i);
-      }
-      return resultArray;
+      return result.toArray(new DetectorResult[result.size()]);
     }
   }
 

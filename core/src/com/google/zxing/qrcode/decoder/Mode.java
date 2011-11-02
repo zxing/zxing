@@ -22,30 +22,26 @@ package com.google.zxing.qrcode.decoder;
  *
  * @author Sean Owen
  */
-public final class Mode {
+public enum Mode {
 
-  // No, we can't use an enum here. J2ME doesn't support it.
-
-  public static final Mode TERMINATOR = new Mode(new int[]{0, 0, 0}, 0x00, "TERMINATOR"); // Not really a mode...
-  public static final Mode NUMERIC = new Mode(new int[]{10, 12, 14}, 0x01, "NUMERIC");
-  public static final Mode ALPHANUMERIC = new Mode(new int[]{9, 11, 13}, 0x02, "ALPHANUMERIC");
-  public static final Mode STRUCTURED_APPEND = new Mode(new int[]{0, 0, 0}, 0x03, "STRUCTURED_APPEND"); // Not supported
-  public static final Mode BYTE = new Mode(new int[]{8, 16, 16}, 0x04, "BYTE");
-  public static final Mode ECI = new Mode(new int[]{0, 0, 0}, 0x07, "ECI"); // character counts don't apply
-  public static final Mode KANJI = new Mode(new int[]{8, 10, 12}, 0x08, "KANJI");
-  public static final Mode FNC1_FIRST_POSITION = new Mode(new int[]{0, 0, 0}, 0x05, "FNC1_FIRST_POSITION");
-  public static final Mode FNC1_SECOND_POSITION = new Mode(new int[]{0, 0, 0}, 0x09, "FNC1_SECOND_POSITION");
+  TERMINATOR(new int[]{0, 0, 0}, 0x00), // Not really a mode...
+  NUMERIC(new int[]{10, 12, 14}, 0x01),
+  ALPHANUMERIC(new int[]{9, 11, 13}, 0x02),
+  STRUCTURED_APPEND(new int[]{0, 0, 0}, 0x03), // Not supported
+  BYTE(new int[]{8, 16, 16}, 0x04),
+  ECI(new int[]{0, 0, 0}, 0x07), // character counts don't apply
+  KANJI(new int[]{8, 10, 12}, 0x08),
+  FNC1_FIRST_POSITION(new int[]{0, 0, 0}, 0x05),
+  FNC1_SECOND_POSITION(new int[]{0, 0, 0}, 0x09),
   /** See GBT 18284-2000; "Hanzi" is a transliteration of this mode name. */
-  public static final Mode HANZI = new Mode(new int[]{8, 10, 12}, 0x0D, "HANZI");
+  HANZI(new int[]{8, 10, 12}, 0x0D);
 
   private final int[] characterCountBitsForVersions;
   private final int bits;
-  private final String name;
 
-  private Mode(int[] characterCountBitsForVersions, int bits, String name) {
+  Mode(int[] characterCountBitsForVersions, int bits) {
     this.characterCountBitsForVersions = characterCountBitsForVersions;
     this.bits = bits;
-    this.name = name;
   }
 
   /**
@@ -101,14 +97,6 @@ public final class Mode {
 
   public int getBits() {
     return bits;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public String toString() {
-    return name;
   }
 
 }

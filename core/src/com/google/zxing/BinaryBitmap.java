@@ -35,21 +35,20 @@ public final class BinaryBitmap {
       throw new IllegalArgumentException("Binarizer must be non-null.");
     }
     this.binarizer = binarizer;
-    matrix = null;
   }
 
   /**
    * @return The width of the bitmap.
    */
   public int getWidth() {
-    return binarizer.getLuminanceSource().getWidth();
+    return binarizer.getWidth();
   }
 
   /**
    * @return The height of the bitmap.
    */
   public int getHeight() {
-    return binarizer.getLuminanceSource().getHeight();
+    return binarizer.getHeight();
   }
 
   /**

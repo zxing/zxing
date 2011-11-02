@@ -41,24 +41,25 @@ final class AI01393xDecoder extends AI01decoder {
     super(information);
   }
 
+  @Override
   public String parseInformation() throws NotFoundException {
-    if(this.information.size < HEADER_SIZE + GTIN_SIZE) {
+    if(this.getInformation().getSize() < HEADER_SIZE + GTIN_SIZE) {
       throw NotFoundException.getNotFoundInstance();
     }
 
-    StringBuffer buf = new StringBuffer();
+    StringBuilder buf = new StringBuilder();
 
     encodeCompressedGtin(buf, HEADER_SIZE);
 
     int lastAIdigit =
-        this.generalDecoder.extractNumericValueFromBitArray(HEADER_SIZE + GTIN_SIZE, LAST_DIGIT_SIZE);
+        this.getGeneralDecoder().extractNumericValueFromBitArray(HEADER_SIZE + GTIN_SIZE, LAST_DIGIT_SIZE);
 
     buf.append("(393");
     buf.append(lastAIdigit);
     buf.append(')');
 
     int firstThreeDigits =
-        this.generalDecoder.extractNumericValueFromBitArray(HEADER_SIZE + GTIN_SIZE + LAST_DIGIT_SIZE, FIRST_THREE_DIGITS_SIZE);
+        this.getGeneralDecoder().extractNumericValueFromBitArray(HEADER_SIZE + GTIN_SIZE + LAST_DIGIT_SIZE, FIRST_THREE_DIGITS_SIZE);
     if(firstThreeDigits / 100 == 0) {
       buf.append('0');
     }
@@ -68,7 +69,7 @@ final class AI01393xDecoder extends AI01decoder {
     buf.append(firstThreeDigits);
 
     DecodedInformation generalInformation =
-        this.generalDecoder.decodeGeneralPurposeField(HEADER_SIZE + GTIN_SIZE + LAST_DIGIT_SIZE + FIRST_THREE_DIGITS_SIZE, null);
+        this.getGeneralDecoder().decodeGeneralPurposeField(HEADER_SIZE + GTIN_SIZE + LAST_DIGIT_SIZE + FIRST_THREE_DIGITS_SIZE, null);
     buf.append(generalInformation.getNewString());
 
     return buf.toString();

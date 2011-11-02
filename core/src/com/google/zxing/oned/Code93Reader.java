@@ -16,15 +16,16 @@
 
 package com.google.zxing.oned;
 
-import java.util.Hashtable;
-
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.ChecksumException;
+import com.google.zxing.DecodeHintType;
 import com.google.zxing.FormatException;
 import com.google.zxing.NotFoundException;
 import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitArray;
+
+import java.util.Map;
 
 /**
  * <p>Decodes Code 93 barcodes.</p>
@@ -52,7 +53,8 @@ public final class Code93Reader extends OneDReader {
   };
   private static final int ASTERISK_ENCODING = CHARACTER_ENCODINGS[47];
 
-  public Result decodeRow(int rowNumber, BitArray row, Hashtable hints)
+  @Override
+  public Result decodeRow(int rowNumber, BitArray row, Map<DecodeHintType,?> hints)
       throws NotFoundException, ChecksumException, FormatException {
 
     int[] start = findAsteriskPattern(row);
@@ -64,7 +66,7 @@ public final class Code93Reader extends OneDReader {
       nextStart++;
     }
 
-    StringBuffer result = new StringBuffer(20);
+    StringBuilder result = new StringBuilder(20);
     int[] counters = new int[6];
     char decodedChar;
     int lastStart;
@@ -77,8 +79,8 @@ public final class Code93Reader extends OneDReader {
       decodedChar = patternToChar(pattern);
       result.append(decodedChar);
       lastStart = nextStart;
-      for (int i = 0; i < counters.length; i++) {
-        nextStart += counters[i];
+      for (int counter : counters) {
+        nextStart += counter;
       }
       // Read off white space
       while (nextStart < end && !row.get(nextStart)) {
@@ -141,9 +143,7 @@ public final class Code93Reader extends OneDReader {
             return new int[]{patternStart, i};
           }
           patternStart += counters[0] + counters[1];
-          for (int y = 2; y < patternLength; y++) {
-            counters[y - 2] = counters[y];
-          }
+          System.arraycopy(counters, 2, counters, 0, patternLength - 2);
           counters[patternLength - 2] = 0;
           counters[patternLength - 1] = 0;
           counterPosition--;
@@ -193,9 +193,9 @@ public final class Code93Reader extends OneDReader {
     throw NotFoundException.getNotFoundInstance();
   }
 
-  private static String decodeExtended(StringBuffer encoded) throws FormatException {
+  private static String decodeExtended(CharSequence encoded) throws FormatException {
     int length = encoded.length();
-    StringBuffer decoded = new StringBuffer(length);
+    StringBuilder decoded = new StringBuilder(length);
     for (int i = 0; i < length; i++) {
       char c = encoded.charAt(i);
       if (c >= 'a' && c <= 'd') {
@@ -249,13 +249,13 @@ public final class Code93Reader extends OneDReader {
     return decoded.toString();
   }
 
-  private static void checkChecksums(StringBuffer result) throws ChecksumException {
+  private static void checkChecksums(CharSequence result) throws ChecksumException {
     int length = result.length();
     checkOneChecksum(result, length - 2, 20);
     checkOneChecksum(result, length - 1, 15);
   }
 
-  private static void checkOneChecksum(StringBuffer result, int checkPosition, int weightMax)
+  private static void checkOneChecksum(CharSequence result, int checkPosition, int weightMax)
       throws ChecksumException {
     int weight = 1;
     int total = 0;

@@ -34,6 +34,7 @@ final class BrowseBookListener implements AdapterView.OnItemClickListener {
     this.items = items;
   }
 
+  @Override
   public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
     if (position < 1) {
       // Clicked header, ignore it

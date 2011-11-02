@@ -17,13 +17,14 @@
 package com.google.zxing.pdf417.detector;
 
 import com.google.zxing.BinaryBitmap;
+import com.google.zxing.DecodeHintType;
 import com.google.zxing.NotFoundException;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.DetectorResult;
 import com.google.zxing.common.GridSampler;
 
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * <p>Encapsulates logic that can detect a PDF417 Code in an image, even if the
@@ -75,7 +76,7 @@ public final class Detector {
    * @return {@link DetectorResult} encapsulating results of detecting a PDF417 Code
    * @throws NotFoundException if no PDF417 Code can be found
    */
-  public DetectorResult detect(Hashtable hints) throws NotFoundException {
+  public DetectorResult detect(Map<DecodeHintType,?> hints) throws NotFoundException {
     // Fetch the 1 bit matrix once up front.
     BitMatrix matrix = image.getBlackMatrix();
 
@@ -353,25 +354,22 @@ public final class Detector {
    * @param moduleWidth estimated module size
    * @return the number of modules in a row.
    */
-  private static int computeDimension(ResultPoint topLeft, ResultPoint topRight,
-      ResultPoint bottomLeft, ResultPoint bottomRight, float moduleWidth) {
+  private static int computeDimension(ResultPoint topLeft,
+                                      ResultPoint topRight,
+                                      ResultPoint bottomLeft,
+                                      ResultPoint bottomRight,
+                                      float moduleWidth) {
     int topRowDimension = round(ResultPoint.distance(topLeft, topRight) / moduleWidth);
     int bottomRowDimension = round(ResultPoint.distance(bottomLeft, bottomRight) / moduleWidth);
     return ((((topRowDimension + bottomRowDimension) >> 1) + 8) / 17) * 17;
-    /*
-    * int topRowDimension = round(ResultPoint.distance(topLeft,
-    * topRight)); //moduleWidth); int bottomRowDimension =
-    * round(ResultPoint.distance(bottomLeft, bottomRight)); //
-    * moduleWidth); int dimension = ((topRowDimension + bottomRowDimension)
-    * >> 1); // Round up to nearest 17 modules i.e. there are 17 modules per
-    * codeword //int dimension = ((((topRowDimension + bottomRowDimension) >>
-    * 1) + 8) / 17) * 17; return dimension;
-    */
   }
 
-  private static BitMatrix sampleGrid(BitMatrix matrix, ResultPoint topLeft,
-      ResultPoint bottomLeft, ResultPoint topRight, ResultPoint bottomRight, int dimension)
-      throws NotFoundException {
+  private static BitMatrix sampleGrid(BitMatrix matrix,
+                                      ResultPoint topLeft,
+                                      ResultPoint bottomLeft,
+                                      ResultPoint topRight,
+                                      ResultPoint bottomRight,
+                                      int dimension) throws NotFoundException {
 
     // Note that unlike the QR Code sampler, we didn't find the center of modules, but the
     // very corners. So there is no 0.5f here; 0.0f is right.
@@ -415,8 +413,12 @@ public final class Detector {
    *                 being searched for as a pattern
    * @return start/end horizontal offset of guard pattern, as an array of two ints.
    */
-  private static int[] findGuardPattern(BitMatrix matrix, int column, int row, int width,
-      boolean whiteFirst, int[] pattern) {
+  private static int[] findGuardPattern(BitMatrix matrix,
+                                        int column,
+                                        int row,
+                                        int width,
+                                        boolean whiteFirst,
+                                        int[] pattern) {
     int patternLength = pattern.length;
     // TODO: Find a way to cache this array, as this method is called hundreds of times
     // per image, and we want to allocate as seldom as possible.
@@ -435,9 +437,7 @@ public final class Detector {
             return new int[]{patternStart, x};
           }
           patternStart += counters[0] + counters[1];
-          for (int y = 2; y < patternLength; y++) {
-            counters[y - 2] = counters[y];
-          }
+          System.arraycopy(counters, 2, counters, 0, patternLength - 2);
           counters[patternLength - 2] = 0;
           counters[patternLength - 1] = 0;
           counterPosition--;

@@ -17,12 +17,8 @@
 package com.google.zxing.pdf417;
 
 import com.google.zxing.BarcodeFormat;
-import com.google.zxing.DecodeHintType;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.common.AbstractBlackBoxTestCase;
-
-import java.util.Hashtable;
-import java.util.Vector;
 
 /**
  * This test contains 480x240 images captured from an Android device at preview resolution.
@@ -36,14 +32,5 @@ public final class PDF417BlackBox2TestCase extends AbstractBlackBoxTestCase {
     addTest(15, 15, 0.0f);
     addTest(14, 14, 180.0f);
   }
-
-  @Override
-  protected Hashtable<DecodeHintType, Object> getHints() {
-     Hashtable<DecodeHintType, Object> table = new Hashtable<DecodeHintType, Object>(3);
-     Vector<BarcodeFormat> v = new Vector<BarcodeFormat>(1);
-     v.add(BarcodeFormat.PDF_417);
-     table.put(DecodeHintType.POSSIBLE_FORMATS, v);
-     return table;
-   }
 
 }

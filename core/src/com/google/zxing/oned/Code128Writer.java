@@ -16,13 +16,14 @@
 
 package com.google.zxing.oned;
 
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Vector;
-
 import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Map;
 
 /**
  * This object renders a CODE128 code as a {@link BitMatrix}.
@@ -48,17 +49,19 @@ public final class Code128Writer extends UPCEANWriter {
   private static final int CODE_FNC_3 = 96;    // Code A, Code B
   private static final int CODE_FNC_4_B = 100; // Code B
 
+  @Override
   public BitMatrix encode(String contents,
                           BarcodeFormat format,
                           int width,
                           int height,
-                          Hashtable hints) throws WriterException {
+                          Map<EncodeHintType,?> hints) throws WriterException {
     if (format != BarcodeFormat.CODE_128) {
       throw new IllegalArgumentException("Can only encode CODE_128, but got " + format);
     }
     return super.encode(contents, format, width, height, hints);
   }
 
+  @Override
   public byte[] encode(String contents) {
     int length = contents.length();
     // Check length
@@ -82,7 +85,7 @@ public final class Code128Writer extends UPCEANWriter {
       }
     }
     
-    Vector patterns = new Vector(); // temporary storage for patterns
+    Collection<int[]> patterns = new ArrayList<int[]>(); // temporary storage for patterns
     int checkSum = 0;
     int checkWeight = 1;
     int codeSet = 0; // selected code (CODE_CODE_B or CODE_CODE_C)
@@ -148,7 +151,7 @@ public final class Code128Writer extends UPCEANWriter {
       }
       
       // Get the pattern
-      patterns.addElement(Code128Reader.CODE_PATTERNS[patternIndex]);
+      patterns.add(Code128Reader.CODE_PATTERNS[patternIndex]);
       
       // Compute checksum
       checkSum += patternIndex * checkWeight;
@@ -159,34 +162,30 @@ public final class Code128Writer extends UPCEANWriter {
     
     // Compute and append checksum
     checkSum %= 103;
-    patterns.addElement(Code128Reader.CODE_PATTERNS[checkSum]);
+    patterns.add(Code128Reader.CODE_PATTERNS[checkSum]);
     
     // Append stop code
-    patterns.addElement(Code128Reader.CODE_PATTERNS[CODE_STOP]);
+    patterns.add(Code128Reader.CODE_PATTERNS[CODE_STOP]);
     
     // Compute code width
     int codeWidth = 0;
-    Enumeration patternEnumeration = patterns.elements();
-    while (patternEnumeration.hasMoreElements()) {
-      int[] pattern = (int[]) patternEnumeration.nextElement();
-      for (int i = 0; i < pattern.length; i++) {
-        codeWidth += pattern[i];
+    for (int[] pattern : patterns) {
+      for (int width : pattern) {
+        codeWidth += width;
       }
     }
     
     // Compute result
     byte[] result = new byte[codeWidth];
-    patternEnumeration = patterns.elements();
     int pos = 0;
-    while (patternEnumeration.hasMoreElements()) {
-      int[] pattern = (int[]) patternEnumeration.nextElement();
+    for (int[] pattern : patterns) {
       pos += appendPattern(result, pos, pattern, 1);
     }
     
     return result;
   }
 
-  private static boolean isDigits(String value, int start, int length) {
+  private static boolean isDigits(CharSequence value, int start, int length) {
     int end = start + length;
     int last = value.length();
     for (int i = start; i < end && i < last; i++) {

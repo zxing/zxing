@@ -33,8 +33,10 @@ public final class EAN8Reader extends UPCEANReader {
     decodeMiddleCounters = new int[4];
   }
 
-  protected int decodeMiddle(BitArray row, int[] startRange, StringBuffer result)
-      throws NotFoundException {
+  @Override
+  protected int decodeMiddle(BitArray row,
+                             int[] startRange,
+                             StringBuilder result) throws NotFoundException {
     int[] counters = decodeMiddleCounters;
     counters[0] = 0;
     counters[1] = 0;
@@ -46,8 +48,8 @@ public final class EAN8Reader extends UPCEANReader {
     for (int x = 0; x < 4 && rowOffset < end; x++) {
       int bestMatch = decodeDigit(row, counters, rowOffset, L_PATTERNS);
       result.append((char) ('0' + bestMatch));
-      for (int i = 0; i < counters.length; i++) {
-        rowOffset += counters[i];
+      for (int counter : counters) {
+        rowOffset += counter;
       }
     }
 
@@ -57,14 +59,15 @@ public final class EAN8Reader extends UPCEANReader {
     for (int x = 0; x < 4 && rowOffset < end; x++) {
       int bestMatch = decodeDigit(row, counters, rowOffset, L_PATTERNS);
       result.append((char) ('0' + bestMatch));
-      for (int i = 0; i < counters.length; i++) {
-        rowOffset += counters[i];
+      for (int counter : counters) {
+        rowOffset += counter;
       }
     }
 
     return rowOffset;
   }
 
+  @Override
   BarcodeFormat getBarcodeFormat() {
     return BarcodeFormat.EAN_8;
   }

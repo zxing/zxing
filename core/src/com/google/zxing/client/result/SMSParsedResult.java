@@ -26,7 +26,10 @@ public final class SMSParsedResult extends ParsedResult {
   private final String subject;
   private final String body;
 
-  public SMSParsedResult(String number, String via, String subject, String body) {
+  public SMSParsedResult(String number,
+                         String via,
+                         String subject,
+                         String body) {
     super(ParsedResultType.SMS);
     this.numbers = new String[] {number};
     this.vias = new String[] {via};
@@ -34,7 +37,10 @@ public final class SMSParsedResult extends ParsedResult {
     this.body = body;
   }
 
-  public SMSParsedResult(String[] numbers, String[] vias, String subject, String body) {
+  public SMSParsedResult(String[] numbers,
+                         String[] vias,
+                         String subject,
+                         String body) {
     super(ParsedResultType.SMS);
     this.numbers = numbers;
     this.vias = vias;
@@ -43,7 +49,7 @@ public final class SMSParsedResult extends ParsedResult {
   }
 
   public String getSMSURI() {
-    StringBuffer result = new StringBuffer();
+    StringBuilder result = new StringBuilder();
     result.append("sms:");
     boolean first = true;
     for (int i = 0; i < numbers.length; i++) {
@@ -93,8 +99,9 @@ public final class SMSParsedResult extends ParsedResult {
     return body;
   }
 
+  @Override
   public String getDisplayResult() {
-    StringBuffer result = new StringBuffer(100);
+    StringBuilder result = new StringBuilder(100);
     maybeAppend(numbers, result);
     maybeAppend(subject, result);
     maybeAppend(body, result);

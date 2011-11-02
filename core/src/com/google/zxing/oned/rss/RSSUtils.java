@@ -26,7 +26,7 @@ public final class RSSUtils {
     int bar;
     int narrowMask = 0;
     for (bar = 0; bar < elements - 1; bar++) {
-      narrowMask |= (1 << bar);
+      narrowMask |= 1 << bar;
       int elmWidth = 1;
       int subVal;
       while (true) {
@@ -71,7 +71,7 @@ public final class RSSUtils {
     int narrowMask = 0;
     for (int bar = 0; bar < elements - 1; bar++) {
       int elmWidth;
-      for (elmWidth = 1, narrowMask |= (1 << bar);
+      for (elmWidth = 1, narrowMask |= 1 << bar;
            elmWidth < widths[bar];
            elmWidth++, narrowMask &= ~(1 << bar)) {
         int subVal = combins(n - elmWidth - 1, elements - bar - 2);

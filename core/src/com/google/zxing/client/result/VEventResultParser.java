@@ -18,7 +18,7 @@ package com.google.zxing.client.result;
 
 import com.google.zxing.Result;
 
-import java.util.Vector;
+import java.util.List;
 
 /**
  * Partially implements the iCalendar format's "VEVENT" format for specifying a
@@ -26,12 +26,10 @@ import java.util.Vector;
  *
  * @author Sean Owen
  */
-final class VEventResultParser extends ResultParser {
+public final class VEventResultParser extends ResultParser {
 
-  private VEventResultParser() {
-  }
-
-  public static CalendarParsedResult parse(Result result) {
+  @Override
+  public CalendarParsedResult parse(Result result) {
     String rawText = result.getText();
     if (rawText == null) {
       return null;
@@ -50,7 +48,8 @@ final class VEventResultParser extends ResultParser {
     String location = matchSingleVCardPrefixedField("LOCATION", rawText, true);
     String description = matchSingleVCardPrefixedField("DESCRIPTION", rawText, true);
 
-    String geoString = matchSingleVCardPrefixedField("GEO", rawText, true);    double latitude;
+    String geoString = matchSingleVCardPrefixedField("GEO", rawText, true);
+    double latitude;
     double longitude;
     if (geoString == null) {
       latitude = Double.NaN;
@@ -72,11 +71,11 @@ final class VEventResultParser extends ResultParser {
     }
   }
 
-  private static String matchSingleVCardPrefixedField(String prefix,
+  private static String matchSingleVCardPrefixedField(CharSequence prefix,
                                                       String rawText,
                                                       boolean trim) {
-    Vector values = VCardResultParser.matchSingleVCardPrefixedField(prefix, rawText, trim);
-    return values == null || values.isEmpty() ? null : (String) values.elementAt(0);
+    List<String> values = VCardResultParser.matchSingleVCardPrefixedField(prefix, rawText, trim);
+    return values == null || values.isEmpty() ? null : values.get(0);
   }
 
 }

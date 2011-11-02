@@ -71,7 +71,7 @@ public final class WifiResultHandler extends ResultHandler {
   @Override
   public CharSequence getDisplayContents() {
     WifiParsedResult wifiResult = (WifiParsedResult) getResult();
-    StringBuffer contents = new StringBuffer(50);
+    StringBuilder contents = new StringBuilder(50);
     String wifiLabel = parent.getString(R.string.wifi_ssid_label);
     ParsedResult.maybeAppend(wifiLabel + '\n' + wifiResult.getSsid(), contents);
     String typeLabel = parent.getString(R.string.wifi_type_label);

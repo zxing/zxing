@@ -28,8 +28,8 @@ import com.google.zxing.ResultMetadataType;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitArray;
 
-import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.EnumMap;
+import java.util.Map;
 
 /**
  * Encapsulates functionality and implementation that is common to all families
@@ -43,12 +43,15 @@ public abstract class OneDReader implements Reader {
   protected static final int INTEGER_MATH_SHIFT = 8;
   protected static final int PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
 
+  @Override
   public Result decode(BinaryBitmap image) throws NotFoundException, FormatException {
     return decode(image, null);
   }
 
   // Note that we don't try rotation without the try harder flag, even if rotation was supported.
-  public Result decode(BinaryBitmap image, Hashtable hints) throws NotFoundException, FormatException {
+  @Override
+  public Result decode(BinaryBitmap image,
+                       Map<DecodeHintType,?> hints) throws NotFoundException, FormatException {
     try {
       return doDecode(image, hints);
     } catch (NotFoundException nfe) {
@@ -57,14 +60,14 @@ public abstract class OneDReader implements Reader {
         BinaryBitmap rotatedImage = image.rotateCounterClockwise();
         Result result = doDecode(rotatedImage, hints);
         // Record that we found it rotated 90 degrees CCW / 270 degrees CW
-        Hashtable metadata = result.getResultMetadata();
+        Map<ResultMetadataType,?> metadata = result.getResultMetadata();
         int orientation = 270;
         if (metadata != null && metadata.containsKey(ResultMetadataType.ORIENTATION)) {
           // But if we found it reversed in doDecode(), add in that result here:
           orientation = (orientation +
-              ((Integer) metadata.get(ResultMetadataType.ORIENTATION)).intValue()) % 360;
+              (Integer) metadata.get(ResultMetadataType.ORIENTATION)) % 360;
         }
-        result.putMetadata(ResultMetadataType.ORIENTATION, new Integer(orientation));
+        result.putMetadata(ResultMetadataType.ORIENTATION, orientation);
         // Update result points
         ResultPoint[] points = result.getResultPoints();
         if (points != null) {
@@ -80,6 +83,7 @@ public abstract class OneDReader implements Reader {
     }
   }
 
+  @Override
   public void reset() {
     // do nothing
   }
@@ -98,7 +102,8 @@ public abstract class OneDReader implements Reader {
    * @return The contents of the decoded barcode
    * @throws NotFoundException Any spontaneous errors which occur
    */
-  private Result doDecode(BinaryBitmap image, Hashtable hints) throws NotFoundException {
+  private Result doDecode(BinaryBitmap image,
+                          Map<DecodeHintType,?> hints) throws NotFoundException {
     int width = image.getWidth();
     int height = image.getHeight();
     BitArray row = new BitArray(width);
@@ -141,14 +146,9 @@ public abstract class OneDReader implements Reader {
           // don't want to clutter with noise from every single row scan -- just the scans
           // that start on the center line.
           if (hints != null && hints.containsKey(DecodeHintType.NEED_RESULT_POINT_CALLBACK)) {
-            Hashtable newHints = new Hashtable(); // Can't use clone() in J2ME
-            Enumeration hintEnum = hints.keys();
-            while (hintEnum.hasMoreElements()) {
-              Object key = hintEnum.nextElement();
-              if (!key.equals(DecodeHintType.NEED_RESULT_POINT_CALLBACK)) {
-                newHints.put(key, hints.get(key));
-              }
-            }
+            Map<DecodeHintType,Object> newHints = new EnumMap<DecodeHintType,Object>(DecodeHintType.class);
+            newHints.putAll(hints);
+            newHints.remove(DecodeHintType.NEED_RESULT_POINT_CALLBACK);
             hints = newHints;
           }
         }
@@ -158,7 +158,7 @@ public abstract class OneDReader implements Reader {
           // We found our barcode
           if (attempt == 1) {
             // But it was upside down, so note that
-            result.putMetadata(ResultMetadataType.ORIENTATION, new Integer(180));
+            result.putMetadata(ResultMetadataType.ORIENTATION, 180);
             // And remember to flip the result points horizontally.
             ResultPoint[] points = result.getResultPoints();
             if (points != null) {
@@ -189,7 +189,9 @@ public abstract class OneDReader implements Reader {
    * @throws NotFoundException if counters cannot be filled entirely from row before running out
    *  of pixels
    */
-  protected static void recordPattern(BitArray row, int start, int[] counters) throws NotFoundException {
+  protected static void recordPattern(BitArray row,
+                                      int start,
+                                      int[] counters) throws NotFoundException {
     int numCounters = counters.length;
     for (int i = 0; i < numCounters; i++) {
       counters[i] = 0;
@@ -253,7 +255,9 @@ public abstract class OneDReader implements Reader {
    *  the total variance between counters and patterns equals the pattern length, higher values mean
    *  even more variance
    */
-  protected static int patternMatchVariance(int[] counters, int[] pattern, int maxIndividualVariance) {
+  protected static int patternMatchVariance(int[] counters,
+                                            int[] pattern,
+                                            int maxIndividualVariance) {
     int numCounters = counters.length;
     int total = 0;
     int patternLength = 0;
@@ -295,7 +299,7 @@ public abstract class OneDReader implements Reader {
    * @return {@link Result} containing encoded string and start/end of barcode
    * @throws NotFoundException if an error occurs or barcode cannot be found
    */
-  public abstract Result decodeRow(int rowNumber, BitArray row, Hashtable hints)
+  public abstract Result decodeRow(int rowNumber, BitArray row, Map<DecodeHintType,?> hints)
       throws NotFoundException, ChecksumException, FormatException;
 
 }

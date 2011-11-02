@@ -174,7 +174,7 @@ final class PDF417ErrorCorrection {
    * @param errorCorrectionLevel the error correction level (0-8)
    * @return the String representing the error correction codewords
    */
-  static String generateErrorCorrection(String dataCodewords, int errorCorrectionLevel) {
+  static String generateErrorCorrection(CharSequence dataCodewords, int errorCorrectionLevel) {
     int k = getErrorCorrectionCodewordCount(errorCorrectionLevel);
     char[] e = new char[k];
     int sld = dataCodewords.length();
@@ -191,7 +191,7 @@ final class PDF417ErrorCorrection {
       t3 = 929 - t2;
       e[0] = (char) (t3 % 929);
     }
-    StringBuffer sb = new StringBuffer(k);
+    StringBuilder sb = new StringBuilder(k);
     for (int j = k - 1; j >= 0; j--) {
       if (e[j] != 0) {
         e[j] = (char) (929 - e[j]);

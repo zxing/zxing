@@ -26,12 +26,13 @@
 
 package com.google.zxing.client.result;
 
-import java.util.Hashtable;
-
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Antonio Manuel Benjumea Conde, Servinform, S.A.
@@ -41,39 +42,25 @@ public final class ExpandedProductParsedResultTestCase extends Assert {
 
   @Test
   public void test_RSSExpanded() {
-    String text = "(01)66546(13)001205(3932)4455(3102)6544(123)544654";
-    String productID = "66546";
-    String sscc = null;
-    String lotNumber = null;
-    String productionDate = null;
-    String packagingDate = "001205";
-    String bestBeforeDate = null;
-    String expirationDate = null;
-    String weight = "6544";
-    String weightType = "KG";
-    String weightIncrement = "2";
-    String price = "5";
-    String priceIncrement = "2";
-    String priceCurrency = "445";
-    Hashtable<Object,Object> uncommonAIs = new Hashtable<Object,Object>();
+    Map<String,String> uncommonAIs = new HashMap<String,String>();
     uncommonAIs.put("123", "544654");
-
-    Result result = new Result(text, null, null, BarcodeFormat.RSS_EXPANDED);
-    ExpandedProductParsedResult o = ExpandedProductResultParser.parse(result);
+    Result result =
+        new Result("(01)66546(13)001205(3932)4455(3102)6544(123)544654", null, null, BarcodeFormat.RSS_EXPANDED);
+    ExpandedProductParsedResult o = new ExpandedProductResultParser().parse(result);
     assertNotNull(o);
-    assertEquals(productID, o.getProductID());
-    assertEquals(sscc, o.getSscc());
-    assertEquals(lotNumber, o.getLotNumber());
-    assertEquals(productionDate, o.getProductionDate());
-    assertEquals(packagingDate, o.getPackagingDate());
-    assertEquals(bestBeforeDate, o.getBestBeforeDate());
-    assertEquals(expirationDate, o.getExpirationDate());
-    assertEquals(weight, o.getWeight());
-    assertEquals(weightType, o.getWeightType());
-    assertEquals(weightIncrement, o.getWeightIncrement());
-    assertEquals(price, o.getPrice());
-    assertEquals(priceIncrement, o.getPriceIncrement());
-    assertEquals(priceCurrency, o.getPriceCurrency());
+    assertEquals("66546", o.getProductID());
+    assertNull(o.getSscc());
+    assertNull(o.getLotNumber());
+    assertNull(o.getProductionDate());
+    assertEquals("001205", o.getPackagingDate());
+    assertNull(o.getBestBeforeDate());
+    assertNull(o.getExpirationDate());
+    assertEquals("6544", o.getWeight());
+    assertEquals("KG", o.getWeightType());
+    assertEquals("2", o.getWeightIncrement());
+    assertEquals("5", o.getPrice());
+    assertEquals("2", o.getPriceIncrement());
+    assertEquals("445", o.getPriceCurrency());
     assertEquals(uncommonAIs, o.getUncommonAIs());
   }
 }

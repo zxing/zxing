@@ -16,13 +16,14 @@
 
 package com.google.zxing.oned;
 
-import java.util.Hashtable;
-
 import com.google.zxing.BarcodeFormat;
+import com.google.zxing.DecodeHintType;
 import com.google.zxing.NotFoundException;
 import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitArray;
+
+import java.util.Map;
 
 /**
  * <p>Decodes Codabar barcodes.</p>
@@ -60,7 +61,9 @@ public final class CodaBarReader extends OneDReader {
   // some industries use a checksum standard but this is not part of the original codabar standard
   // for more information see : http://www.mecsw.com/specs/codabar.html
 
-  public Result decodeRow(int rowNumber, BitArray row, Hashtable hints) throws NotFoundException {
+  @Override
+  public Result decodeRow(int rowNumber, BitArray row, Map<DecodeHintType,?> hints)
+      throws NotFoundException {
     int[] start = findAsteriskPattern(row);
     start[1] = 0; // BAS: settings this to 0 improves the recognition rate somehow?
     int nextStart = start[1];
@@ -71,7 +74,7 @@ public final class CodaBarReader extends OneDReader {
       nextStart++;
     }
 
-    StringBuffer result = new StringBuffer();
+    StringBuilder result = new StringBuilder();
     int[] counters = new int[7];
     int lastStart;
 
@@ -87,8 +90,8 @@ public final class CodaBarReader extends OneDReader {
       }
       result.append(decodedChar);
       lastStart = nextStart;
-      for (int i = 0; i < counters.length; i++) {
-        nextStart += counters[i];
+      for (int counter : counters) {
+        nextStart += counter;
       }
 
       // Read off white space
@@ -99,8 +102,8 @@ public final class CodaBarReader extends OneDReader {
 
     // Look for whitespace after pattern:
     int lastPatternSize = 0;
-    for (int i = 0; i < counters.length; i++) {
-      lastPatternSize += counters[i];
+    for (int counter : counters) {
+      lastPatternSize += counter;
     }
 
     int whiteSpaceAfterEnd = nextStart - lastStart - lastPatternSize;
@@ -185,9 +188,7 @@ public final class CodaBarReader extends OneDReader {
             // no match, continue
           }
           patternStart += counters[0] + counters[1];
-          for (int y = 2; y < patternLength; y++) {
-            counters[y - 2] = counters[y];
-          }
+          System.arraycopy(counters, 2, counters, 0, patternLength - 2);
           counters[patternLength - 2] = 0;
           counters[patternLength - 1] = 0;
           counterPosition--;
@@ -203,8 +204,8 @@ public final class CodaBarReader extends OneDReader {
 
   static boolean arrayContains(char[] array, char key) {
     if (array != null) {
-      for (int i = 0; i < array.length; i++) {
-        if (array[i] == key) {
+      for (char c : array) {
+        if (c == key) {
           return true;
         }
       }

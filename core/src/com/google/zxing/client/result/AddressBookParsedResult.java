@@ -104,7 +104,7 @@ public final class AddressBookParsedResult extends ParsedResult {
   public String[] getEmailTypes() {
     return emailTypes;
   }
-
+  
   public String getInstantMessenger() {
     return instantMessenger;
   }
@@ -144,8 +144,9 @@ public final class AddressBookParsedResult extends ParsedResult {
     return birthday;
   }
 
+  @Override
   public String getDisplayResult() {
-    StringBuffer result = new StringBuffer(100);
+    StringBuilder result = new StringBuilder(100);
     maybeAppend(names, result);
     maybeAppend(pronunciation, result);
     maybeAppend(title, result);

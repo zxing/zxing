@@ -18,6 +18,9 @@ package com.google.zxing.client.result;
 
 import com.google.zxing.Result;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * Parses a "geo:" URI result, which specifies a location on the surface of
  * the Earth as well as an optional altitude above the surface. See
@@ -26,49 +29,44 @@ import com.google.zxing.Result;
  *
  * @author Sean Owen
  */
-final class GeoResultParser extends ResultParser {
+public final class GeoResultParser extends ResultParser {
 
-  private GeoResultParser() {
-  }
-
-  public static GeoParsedResult parse(Result result) {
+  private static final Pattern GEO_URL_PATTERN = 
+      Pattern.compile("geo:([\\-0-9.]+),([\\-0-9.]+)(?:,([\\-0-9.]+))?(?:\\?(.*))?", Pattern.CASE_INSENSITIVE);
+  
+  @Override
+  public GeoParsedResult parse(Result result) {
     String rawText = result.getText();
-    if (rawText == null || (!rawText.startsWith("geo:") && !rawText.startsWith("GEO:"))) {
+    if (rawText == null) {
       return null;
     }
-    // Drop geo, query portion
-    int queryStart = rawText.indexOf('?', 4);
-    String query;
-    String geoURIWithoutQuery;
-    if (queryStart < 0) {
-      query = null;
-      geoURIWithoutQuery = rawText.substring(4);
-    } else {
-      query = rawText.substring(queryStart + 1);
-      geoURIWithoutQuery = rawText.substring(4, queryStart);
-    }
-    int latitudeEnd = geoURIWithoutQuery.indexOf(',');
-    if (latitudeEnd < 0) {
+
+    Matcher matcher = GEO_URL_PATTERN.matcher(rawText);
+    if (!matcher.matches()) {
       return null;
     }
-    int longitudeEnd = geoURIWithoutQuery.indexOf(',', latitudeEnd + 1);    
+
+    String query = matcher.group(4);
+
     double latitude;
     double longitude;
     double altitude;
     try {
-      latitude = Double.parseDouble(geoURIWithoutQuery.substring(0, latitudeEnd));
+      latitude = Double.parseDouble(matcher.group(1));
       if (latitude > 90.0 || latitude < -90.0) {
         return null;
       }
-      if (longitudeEnd < 0) {
-        longitude = Double.parseDouble(geoURIWithoutQuery.substring(latitudeEnd + 1));
+      longitude = Double.parseDouble(matcher.group(2));
+      if (longitude > 180.0 || longitude < -180.0) {
+        return null;
+      }
+      if (matcher.group(3) == null) {
         altitude = 0.0;
       } else {
-        longitude = Double.parseDouble(geoURIWithoutQuery.substring(latitudeEnd + 1, longitudeEnd));
-        altitude = Double.parseDouble(geoURIWithoutQuery.substring(longitudeEnd + 1));
-      }
-      if (longitude > 180.0 || longitude < -180.0 || altitude < 0) {
-        return null;
+        altitude = Double.parseDouble(matcher.group(3));
+        if (altitude < 0.0) {
+          return null;
+        }
       }
     } catch (NumberFormatException nfe) {
       return null;

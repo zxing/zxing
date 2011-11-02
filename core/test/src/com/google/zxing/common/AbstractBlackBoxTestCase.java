@@ -18,13 +18,13 @@ package com.google.zxing.common;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
+import com.google.zxing.BufferedImageLuminanceSource;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.LuminanceSource;
 import com.google.zxing.Reader;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 import com.google.zxing.ResultMetadataType;
-import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -38,11 +38,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 
@@ -52,69 +54,14 @@ import java.util.Properties;
  */
 public abstract class AbstractBlackBoxTestCase extends Assert {
 
-  protected static final Hashtable<DecodeHintType, Object> TRY_HARDER_HINT;
-  static {
-    TRY_HARDER_HINT = new Hashtable<DecodeHintType, Object>();
-    TRY_HARDER_HINT.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
-  }
-
   private static final FilenameFilter IMAGE_NAME_FILTER = new FilenameFilter() {
+    @Override
     public boolean accept(File dir, String name) {
-      String lowerCase = name.toLowerCase();
+      String lowerCase = name.toLowerCase(Locale.ENGLISH);
       return lowerCase.endsWith(".jpg") || lowerCase.endsWith(".jpeg") ||
              lowerCase.endsWith(".gif") || lowerCase.endsWith(".png");
     }
   };
-
-  public static class SummaryResults {
-    private int totalFound;
-    private int totalMustPass;
-    private int totalTests;
-
-    public SummaryResults() {
-      totalFound = 0;
-      totalMustPass = 0;
-      totalTests = 0;
-    }
-
-    public SummaryResults(int found, int mustPass, int total) {
-      totalFound = found;
-      totalMustPass = mustPass;
-      totalTests = total;
-    }
-
-    public void add(SummaryResults other) {
-      totalFound += other.totalFound;
-      totalMustPass += other.totalMustPass;
-      totalTests += other.totalTests;
-    }
-
-    public String toString() {
-      return "\nSUMMARY RESULTS:\n  Decoded " + totalFound + " images out of " + totalTests +
-        " (" + (totalFound * 100 / totalTests) + "%, " + totalMustPass + " required)";
-    }
-  }
-
-  private static class TestResult {
-    private final int mustPassCount;
-    private final int tryHarderCount;
-    private final float rotation;
-
-    TestResult(int mustPassCount, int tryHarderCount, float rotation) {
-      this.mustPassCount = mustPassCount;
-      this.tryHarderCount = tryHarderCount;
-      this.rotation = rotation;
-    }
-    public int getMustPassCount() {
-      return mustPassCount;
-    }
-    public int getTryHarderCount() {
-      return tryHarderCount;
-    }
-    public float getRotation() {
-      return rotation;
-    }
-  }
 
   private final File testBase;
   private final Reader barcodeReader;
@@ -156,10 +103,6 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
     return barcodeReader;
   }
 
-  protected Hashtable<DecodeHintType, Object> getHints() {
-    return null;
-  }
-
   // This workaround is used because AbstractNegativeBlackBoxTestCase overrides this method but does
   // not return SummaryResults.
   @Test
@@ -187,7 +130,12 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
       File expectedMetadataFile = new File(testBase, fileBaseName + ".metadata.txt");
       Properties expectedMetadata = new Properties();
       if (expectedMetadataFile.exists()) {
-        expectedMetadata.load(new FileInputStream(expectedMetadataFile));
+        InputStream expectedStream = new FileInputStream(expectedMetadataFile);
+        try {
+          expectedMetadata.load(expectedStream);
+        } finally {
+          expectedStream.close();
+        }
       }
 
       for (int x = 0; x < testCount; x++) {
@@ -246,27 +194,25 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
   private boolean decode(BinaryBitmap source,
                          float rotation,
                          String expectedText,
-                         Map<Object,Object> expectedMetadata,
+                         Map<?,?> expectedMetadata,
                          boolean tryHarder) {
-    Result result;
+
     String suffix = " (" + (tryHarder ? "try harder, " : "") + "rotation: " + rotation + ')';
 
+    Map<DecodeHintType,Object> hints = new EnumMap<DecodeHintType,Object>(DecodeHintType.class);
+    if (tryHarder) {
+      hints.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
+    }
+
+    Result result;
     try {
-      Hashtable<DecodeHintType, Object> hints = getHints();
-      if (tryHarder) {
-        if (hints == null) {
-          hints = TRY_HARDER_HINT;
-        } else {
-          hints.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
-        }
-      }
       result = barcodeReader.decode(source, hints);
     } catch (ReaderException re) {
       System.out.println(re + suffix);
       return false;
     }
 
-    if (!expectedFormat.equals(result.getBarcodeFormat())) {
+    if (expectedFormat != result.getBarcodeFormat()) {
       System.out.println("Format mismatch: expected '" + expectedFormat + "' but got '" +
           result.getBarcodeFormat() + '\'' + suffix);
       return false;
@@ -279,8 +225,8 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
       return false;
     }
 
-    Hashtable<Object,Object> resultMetadata = result.getResultMetadata();
-    for (Map.Entry<Object,Object> metadatum : expectedMetadata.entrySet()) {
+    Map<ResultMetadataType,?> resultMetadata = result.getResultMetadata();
+    for (Map.Entry<?,?> metadatum : expectedMetadata.entrySet()) {
       ResultMetadataType key = ResultMetadataType.valueOf(metadatum.getKey().toString());
       Object expectedValue = metadatum.getValue();
       Object actualValue = resultMetadata == null ? null : resultMetadata.get(key);
@@ -312,28 +258,27 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
   protected static BufferedImage rotateImage(BufferedImage original, float degrees) {
     if (degrees == 0.0f) {
       return original;
-    } else {
-      double radians = Math.toRadians(degrees);
-
-      // Transform simply to find out the new bounding box (don't actually run the image through it)
-      AffineTransform at = new AffineTransform();
-      at.rotate(radians, original.getWidth() / 2.0, original.getHeight() / 2.0);
-      BufferedImageOp op = new AffineTransformOp(at, AffineTransformOp.TYPE_BICUBIC);
-
-      Rectangle2D r = op.getBounds2D(original);
-      int width = (int) Math.ceil(r.getWidth());
-      int height = (int) Math.ceil(r.getHeight());
-
-      // Real transform, now that we know the size of the new image and how to translate after we rotate
-      // to keep it centered
-      at = new AffineTransform();
-      at.rotate(radians, width / 2.0, height / 2.0);
-      at.translate((width - original.getWidth()) / 2.0,
-                   (height - original.getHeight()) / 2.0);
-      op = new AffineTransformOp(at, AffineTransformOp.TYPE_BICUBIC);
-
-      return op.filter(original, null);
     }
+    double radians = Math.toRadians(degrees);
+
+    // Transform simply to find out the new bounding box (don't actually run the image through it)
+    AffineTransform at = new AffineTransform();
+    at.rotate(radians, original.getWidth() / 2.0, original.getHeight() / 2.0);
+    BufferedImageOp op = new AffineTransformOp(at, AffineTransformOp.TYPE_BICUBIC);
+
+    Rectangle2D r = op.getBounds2D(original);
+    int width = (int) Math.ceil(r.getWidth());
+    int height = (int) Math.ceil(r.getHeight());
+
+    // Real transform, now that we know the size of the new image and how to translate after we rotate
+    // to keep it centered
+    at = new AffineTransform();
+    at.rotate(radians, width / 2.0, height / 2.0);
+    at.translate((width - original.getWidth()) / 2.0,
+                 (height - original.getHeight()) / 2.0);
+    op = new AffineTransformOp(at, AffineTransformOp.TYPE_BICUBIC);
+
+    return op.filter(original, null);
   }
 
 }

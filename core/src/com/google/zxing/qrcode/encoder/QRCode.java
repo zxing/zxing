@@ -108,8 +108,7 @@ public final class QRCode {
     // The value must be zero or one.
     int value = matrix.get(x, y);
     if (!(value == 0 || value == 1)) {
-      // this is really like an assert... not sure what better exception to use?
-      throw new RuntimeException("Bad value");
+      throw new IllegalStateException("Bad value");
     }
     return value;
   }
@@ -139,8 +138,9 @@ public final class QRCode {
   }
 
   // Return debug String.
+  @Override
   public String toString() {
-    StringBuffer result = new StringBuffer(200);
+    StringBuilder result = new StringBuilder(200);
     result.append("<<\n");
     result.append(" mode: ");
     result.append(mode);

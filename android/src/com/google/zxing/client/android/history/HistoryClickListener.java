@@ -46,6 +46,7 @@ final class HistoryClickListener implements DialogInterface.OnClickListener {
     this.items = items;
   }
 
+  @Override
   public void onClick(DialogInterface dialogInterface, int i) {
     if (i == items.size()) {
       // Share history.
@@ -71,6 +72,7 @@ final class HistoryClickListener implements DialogInterface.OnClickListener {
       builder.setMessage(R.string.msg_sure);
       builder.setCancelable(true);
       builder.setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
+        @Override
         public void onClick(DialogInterface dialogInterface2, int i2) {
           historyManager.clearHistory();
         }

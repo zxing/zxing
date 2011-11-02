@@ -32,9 +32,9 @@ import java.util.Date;
 
 final class SaveThread extends Thread {
 
-  private static final String TAG = "SaveThread";
+  private static final String TAG = SaveThread.class.getSimpleName();
 
-  public Handler mHandler;
+  Handler handler;
 
   private final CameraTestActivity mActivity;
 
@@ -45,7 +45,7 @@ final class SaveThread extends Thread {
   @Override
   public void run() {
     Looper.prepare();
-    mHandler = new Handler() {
+    handler = new Handler() {
       @Override
       public void handleMessage(Message message) {
         switch (message.what) {
@@ -90,7 +90,7 @@ final class SaveThread extends Thread {
       bitmap.compress(Bitmap.CompressFormat.PNG, 100, outStream);
       try {
         outStream.close();
-        Message message = Message.obtain(mActivity.mHandler, R.id.save_succeeded);
+        Message message = Message.obtain(mActivity.handler, R.id.save_succeeded);
         message.sendToTarget();
         return;
       } catch (IOException e) {
@@ -98,7 +98,7 @@ final class SaveThread extends Thread {
       }
     }
 
-    Message message = Message.obtain(mActivity.mHandler, R.id.save_failed);
+    Message message = Message.obtain(mActivity.handler, R.id.save_failed);
     message.sendToTarget();
   }
 

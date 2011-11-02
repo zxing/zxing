@@ -17,11 +17,11 @@
 package com.google.zxing.qrcode.detector;
 
 import com.google.zxing.NotFoundException;
-import com.google.zxing.ResultPoint;
 import com.google.zxing.ResultPointCallback;
 import com.google.zxing.common.BitMatrix;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p>This class attempts to find alignment patterns in a QR Code. Alignment patterns look like finder
@@ -33,14 +33,14 @@ import java.util.Vector;
  * pasted and stripped down here for maximum performance but does unfortunately duplicate
  * some code.</p>
  *
- * <p>This class is thread-safe but not reentrant. Each thread must allocate its own object.
+ * <p>This class is thread-safe but not reentrant. Each thread must allocate its own object.</p>
  *
  * @author Sean Owen
  */
 final class AlignmentPatternFinder {
 
   private final BitMatrix image;
-  private final Vector possibleCenters;
+  private final List<AlignmentPattern> possibleCenters;
   private final int startX;
   private final int startY;
   private final int width;
@@ -67,7 +67,7 @@ final class AlignmentPatternFinder {
                          float moduleSize,
                          ResultPointCallback resultPointCallback) {
     this.image = image;
-    this.possibleCenters = new Vector(5);
+    this.possibleCenters = new ArrayList<AlignmentPattern>(5);
     this.startX = startX;
     this.startY = startY;
     this.width = width;
@@ -147,7 +147,7 @@ final class AlignmentPatternFinder {
     // Hmm, nothing we saw was observed and confirmed twice. If we had
     // any guess at all, return it.
     if (!possibleCenters.isEmpty()) {
-      return (AlignmentPattern) possibleCenters.elementAt(0);
+      return possibleCenters.get(0);
     }
 
     throw NotFoundException.getNotFoundInstance();
@@ -258,17 +258,15 @@ final class AlignmentPatternFinder {
     float centerI = crossCheckVertical(i, (int) centerJ, 2 * stateCount[1], stateCountTotal);
     if (!Float.isNaN(centerI)) {
       float estimatedModuleSize = (float) (stateCount[0] + stateCount[1] + stateCount[2]) / 3.0f;
-      int max = possibleCenters.size();
-      for (int index = 0; index < max; index++) {
-        AlignmentPattern center = (AlignmentPattern) possibleCenters.elementAt(index);
+      for (AlignmentPattern center : possibleCenters) {
         // Look for about the same center and module size:
         if (center.aboutEquals(estimatedModuleSize, centerI, centerJ)) {
           return center.combineEstimate(centerI, centerJ, estimatedModuleSize);
         }
       }
       // Hadn't found this before; save it
-      ResultPoint point = new AlignmentPattern(centerJ, centerI, estimatedModuleSize);
-      possibleCenters.addElement(point);
+      AlignmentPattern point = new AlignmentPattern(centerJ, centerI, estimatedModuleSize);
+      possibleCenters.add(point);
       if (resultPointCallback != null) {
         resultPointCallback.foundPossibleResultPoint(point);
       }

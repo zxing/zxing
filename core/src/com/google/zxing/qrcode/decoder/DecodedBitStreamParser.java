@@ -16,6 +16,7 @@
 
 package com.google.zxing.qrcode.decoder;
 
+import com.google.zxing.DecodeHintType;
 import com.google.zxing.FormatException;
 import com.google.zxing.common.BitSource;
 import com.google.zxing.common.CharacterSetECI;
@@ -23,8 +24,10 @@ import com.google.zxing.common.DecoderResult;
 import com.google.zxing.common.StringUtils;
 
 import java.io.UnsupportedEncodingException;
-import java.util.Hashtable;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>QR Codes can encode text as bits in one of several modes, and can use multiple modes
@@ -50,13 +53,15 @@ final class DecodedBitStreamParser {
   private DecodedBitStreamParser() {
   }
 
-  static DecoderResult decode(byte[] bytes, Version version, ErrorCorrectionLevel ecLevel, Hashtable hints)
-      throws FormatException {
+  static DecoderResult decode(byte[] bytes,
+                              Version version,
+                              ErrorCorrectionLevel ecLevel,
+                              Map<DecodeHintType,?> hints) throws FormatException {
     BitSource bits = new BitSource(bytes);
-    StringBuffer result = new StringBuffer(50);
+    StringBuilder result = new StringBuilder(50);
     CharacterSetECI currentCharacterSetECI = null;
     boolean fc1InEffect = false;
-    Vector byteSegments = new Vector(1);
+    List<byte[]> byteSegments = new ArrayList<byte[]>(1);
     Mode mode;
     do {
       // While still another segment to read...
@@ -70,15 +75,15 @@ final class DecodedBitStreamParser {
           throw FormatException.getFormatInstance();
         }
       }
-      if (!mode.equals(Mode.TERMINATOR)) {
-        if (mode.equals(Mode.FNC1_FIRST_POSITION) || mode.equals(Mode.FNC1_SECOND_POSITION)) {
+      if (mode != Mode.TERMINATOR) {
+        if (mode == Mode.FNC1_FIRST_POSITION || mode == Mode.FNC1_SECOND_POSITION) {
           // We do little with FNC1 except alter the parsed result a bit according to the spec
           fc1InEffect = true;
-        } else if (mode.equals(Mode.STRUCTURED_APPEND)) {
+        } else if (mode == Mode.STRUCTURED_APPEND) {
           // not really supported; all we do is ignore it
           // Read next 8 bits (symbol sequence #) and 8 bits (parity data), then continue
           bits.readBits(16);
-        } else if (mode.equals(Mode.ECI)) {
+        } else if (mode == Mode.ECI) {
           // Count doesn't apply to ECI
           int value = parseECIValue(bits);
           currentCharacterSetECI = CharacterSetECI.getCharacterSetECIByValue(value);
@@ -87,7 +92,7 @@ final class DecodedBitStreamParser {
           }
         } else {
           // First handle Hanzi mode which does not start with character count
-          if (mode.equals(Mode.HANZI)) {
+          if (mode == Mode.HANZI) {
         		//chinese mode contains a sub set indicator right after mode indicator
         		int subset = bits.readBits(4);
         		int countHanzi = bits.readBits(mode.getCharacterCountBits(version));
@@ -98,13 +103,13 @@ final class DecodedBitStreamParser {
             // "Normal" QR code modes:
             // How many characters will follow, encoded in this mode?
             int count = bits.readBits(mode.getCharacterCountBits(version));
-            if (mode.equals(Mode.NUMERIC)) {
+            if (mode == Mode.NUMERIC) {
               decodeNumericSegment(bits, result, count);
-            } else if (mode.equals(Mode.ALPHANUMERIC)) {
+            } else if (mode == Mode.ALPHANUMERIC) {
               decodeAlphanumericSegment(bits, result, count, fc1InEffect);
-            } else if (mode.equals(Mode.BYTE)) {
+            } else if (mode == Mode.BYTE) {
               decodeByteSegment(bits, result, count, currentCharacterSetECI, byteSegments, hints);
-            } else if (mode.equals(Mode.KANJI)) {
+            } else if (mode == Mode.KANJI) {
               decodeKanjiSegment(bits, result, count);
             } else {
               throw FormatException.getFormatInstance();
@@ -112,7 +117,7 @@ final class DecodedBitStreamParser {
           }
         }
       }
-    } while (!mode.equals(Mode.TERMINATOR));
+    } while (mode != Mode.TERMINATOR);
 
     return new DecoderResult(bytes,
                              result.toString(),
@@ -124,7 +129,7 @@ final class DecodedBitStreamParser {
    * See specification GBT 18284-2000
    */
   private static void decodeHanziSegment(BitSource bits,
-                                         StringBuffer result,
+                                         StringBuilder result,
                                          int count) throws FormatException {
     // Don't crash trying to read more bits than we have available.
     if (count * 13 > bits.available()) {
@@ -160,7 +165,7 @@ final class DecodedBitStreamParser {
   }
 
   private static void decodeKanjiSegment(BitSource bits,
-                                         StringBuffer result,
+                                         StringBuilder result,
                                          int count) throws FormatException {
     // Don't crash trying to read more bits than we have available.
     if (count * 13 > bits.available()) {
@@ -196,11 +201,11 @@ final class DecodedBitStreamParser {
   }
 
   private static void decodeByteSegment(BitSource bits,
-                                        StringBuffer result,
+                                        StringBuilder result,
                                         int count,
                                         CharacterSetECI currentCharacterSetECI,
-                                        Vector byteSegments,
-                                        Hashtable hints) throws FormatException {
+                                        Collection<byte[]> byteSegments,
+                                        Map<DecodeHintType,?> hints) throws FormatException {
     // Don't crash trying to read more bits than we have available.
     if (count << 3 > bits.available()) {
       throw FormatException.getFormatInstance();
@@ -212,21 +217,21 @@ final class DecodedBitStreamParser {
     }
     String encoding;
     if (currentCharacterSetECI == null) {
-    // The spec isn't clear on this mode; see
-    // section 6.4.5: t does not say which encoding to assuming
-    // upon decoding. I have seen ISO-8859-1 used as well as
-    // Shift_JIS -- without anything like an ECI designator to
-    // give a hint.
+      // The spec isn't clear on this mode; see
+      // section 6.4.5: t does not say which encoding to assuming
+      // upon decoding. I have seen ISO-8859-1 used as well as
+      // Shift_JIS -- without anything like an ECI designator to
+      // give a hint.
       encoding = StringUtils.guessEncoding(readBytes, hints);
     } else {
-      encoding = currentCharacterSetECI.getEncodingName();
+      encoding = currentCharacterSetECI.name();
     }
     try {
       result.append(new String(readBytes, encoding));
     } catch (UnsupportedEncodingException uce) {
       throw FormatException.getFormatInstance();
     }
-    byteSegments.addElement(readBytes);
+    byteSegments.add(readBytes);
   }
 
   private static char toAlphaNumericChar(int value) throws FormatException {
@@ -237,7 +242,7 @@ final class DecodedBitStreamParser {
   }
 
   private static void decodeAlphanumericSegment(BitSource bits,
-                                                StringBuffer result,
+                                                StringBuilder result,
                                                 int count,
                                                 boolean fc1InEffect) throws FormatException {
     // Read two characters at a time
@@ -270,7 +275,7 @@ final class DecodedBitStreamParser {
   }
 
   private static void decodeNumericSegment(BitSource bits,
-                                           StringBuffer result,
+                                           StringBuilder result,
                                            int count) throws FormatException {
     // Read three digits at a time
     while (count >= 3) {

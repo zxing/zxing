@@ -21,7 +21,6 @@ import com.google.zxing.FormatException;
 import com.google.zxing.NotFoundException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.DecoderResult;
-//import com.google.zxing.pdf417.reedsolomon.ReedSolomonDecoder;
 
 /**
  * <p>The main class which implements PDF417 Code decoding -- as
@@ -125,7 +124,9 @@ public final class Decoder {
    * @param codewords   data and error correction codewords
    * @throws ChecksumException if error correction fails
    */
-  private static int correctErrors(int[] codewords, int[] erasures, int numECCodewords) throws FormatException {
+  private static int correctErrors(int[] codewords,
+                                   int[] erasures,
+                                   int numECCodewords) throws FormatException {
     if (erasures.length > numECCodewords / 2 + MAX_ERRORS ||
         numECCodewords < 0 || numECCodewords > MAX_EC_CODEWORDS) {
       // Too many errors or EC Codewords is corrupted

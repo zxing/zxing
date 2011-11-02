@@ -24,16 +24,15 @@ import com.google.zxing.Result;
  * 
  * @author jbreiden@google.com (Jeff Breidenbach)
  */
-public class ISBNResultParser extends ResultParser {
+public final class ISBNResultParser extends ResultParser {
 
-  private ISBNResultParser() {
-  }
-
-  // ISBN-13 For Dummies 
-  // http://www.bisg.org/isbn-13/for.dummies.html
-  public static ISBNParsedResult parse(Result result) {
+  /**
+   * See <a href="http://www.bisg.org/isbn-13/for.dummies.html">ISBN-13 For Dummies</a>
+   */
+  @Override
+  public ISBNParsedResult parse(Result result) {
     BarcodeFormat format = result.getBarcodeFormat();
-    if (!BarcodeFormat.EAN_13.equals(format)) {
+    if (format != BarcodeFormat.EAN_13) {
       return null;
     }
     String rawText = result.getText();

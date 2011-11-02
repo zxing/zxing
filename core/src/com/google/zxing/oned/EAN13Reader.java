@@ -68,8 +68,10 @@ public final class EAN13Reader extends UPCEANReader {
     decodeMiddleCounters = new int[4];
   }
 
-  protected int decodeMiddle(BitArray row, int[] startRange, StringBuffer resultString)
-      throws NotFoundException {
+  @Override
+  protected int decodeMiddle(BitArray row,
+                             int[] startRange,
+                             StringBuilder resultString) throws NotFoundException {
     int[] counters = decodeMiddleCounters;
     counters[0] = 0;
     counters[1] = 0;
@@ -83,8 +85,8 @@ public final class EAN13Reader extends UPCEANReader {
     for (int x = 0; x < 6 && rowOffset < end; x++) {
       int bestMatch = decodeDigit(row, counters, rowOffset, L_AND_G_PATTERNS);
       resultString.append((char) ('0' + bestMatch % 10));
-      for (int i = 0; i < counters.length; i++) {
-        rowOffset += counters[i];
+      for (int counter : counters) {
+        rowOffset += counter;
       }
       if (bestMatch >= 10) {
         lgPatternFound |= 1 << (5 - x);
@@ -99,14 +101,15 @@ public final class EAN13Reader extends UPCEANReader {
     for (int x = 0; x < 6 && rowOffset < end; x++) {
       int bestMatch = decodeDigit(row, counters, rowOffset, L_PATTERNS);
       resultString.append((char) ('0' + bestMatch));
-      for (int i = 0; i < counters.length; i++) {
-        rowOffset += counters[i];
+      for (int counter : counters) {
+        rowOffset += counter;
       }
     }
 
     return rowOffset;
   }
 
+  @Override
   BarcodeFormat getBarcodeFormat() {
     return BarcodeFormat.EAN_13;
   }
@@ -121,7 +124,7 @@ public final class EAN13Reader extends UPCEANReader {
    *  encode digits
    * @throws NotFoundException if first digit cannot be determined
    */
-  private static void determineFirstDigit(StringBuffer resultString, int lgPatternFound)
+  private static void determineFirstDigit(StringBuilder resultString, int lgPatternFound)
       throws NotFoundException {
     for (int d = 0; d < 10; d++) {
       if (lgPatternFound == FIRST_DIGIT_ENCODINGS[d]) {

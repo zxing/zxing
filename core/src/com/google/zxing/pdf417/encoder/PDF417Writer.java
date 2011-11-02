@@ -17,27 +17,36 @@
 package com.google.zxing.pdf417.encoder;
 
 import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
 import com.google.zxing.Writer;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * @author Jacob Haynes
  */
 public final class PDF417Writer implements Writer {
 
-  public BitMatrix encode(String contents, BarcodeFormat format, int width, int height, Hashtable hints)
-      throws WriterException {
+  @Override
+  public BitMatrix encode(String contents,
+                          BarcodeFormat format,
+                          int width,
+                          int height,
+                          Map<EncodeHintType,?> hints) throws WriterException {
     return encode(contents, format, width, height);
   }
 
-  public BitMatrix encode(String contents, BarcodeFormat format, int width, int height) throws WriterException {
+  @Override
+  public BitMatrix encode(String contents,
+                          BarcodeFormat format,
+                          int width,
+                          int height) throws WriterException {
     PDF417 encoder = initializeEncoder(format, false);
     return bitMatrixFromEncoder(encoder, contents, width, height);
   }
-  
+
   public BitMatrix encode(String contents,
                           BarcodeFormat format,
                           boolean compact,
@@ -49,14 +58,14 @@ public final class PDF417Writer implements Writer {
                           int maxRows,
                           boolean byteCompaction) throws WriterException {
     PDF417 encoder = initializeEncoder(format, compact);
-    
+
     // Set options: dimensions and byte compaction
     encoder.setDimensions(maxCols, minCols, maxRows, minRows);
     encoder.setByteCompaction(byteCompaction);
-    
+
     return bitMatrixFromEncoder(encoder, contents, width, height);
   }
-  
+
   /**
    * Initializes the encoder based on the format (whether it's compact or not)
    */
@@ -73,11 +82,13 @@ public final class PDF417Writer implements Writer {
   /**
    * Takes encoder, accounts for width/height, and retrieves bit matrix
    */
-  private static BitMatrix bitMatrixFromEncoder(PDF417 encoder, String contents, int width, int height)
-      throws WriterException {
+  private static BitMatrix bitMatrixFromEncoder(PDF417 encoder,
+                                                String contents,
+                                                int width,
+                                                int height) throws WriterException {
     int errorCorrectionLevel = 2;
     encoder.generateBarcodeLogic(contents, errorCorrectionLevel);
-    
+
     int lineThickness = 2;
     int aspectRatio = 4;
     byte[][] originalScale = encoder.getBarcodeMatrix().getScaledMatrix(lineThickness, aspectRatio * lineThickness);
@@ -107,7 +118,7 @@ public final class PDF417Writer implements Writer {
     }
     return bitMatrixFrombitArray(originalScale);
   }
-  
+
   /**
    * This takes an array holding the values of the PDF 417
    *

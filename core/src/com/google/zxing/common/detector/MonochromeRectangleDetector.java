@@ -97,8 +97,15 @@ public final class MonochromeRectangleDetector {
    * @return a {@link com.google.zxing.ResultPoint} encapsulating the corner that was found
    * @throws NotFoundException if such a point cannot be found
    */
-  private ResultPoint findCornerFromCenter(int centerX, int deltaX, int left, int right,
-      int centerY, int deltaY, int top, int bottom, int maxWhiteRun) throws NotFoundException {
+  private ResultPoint findCornerFromCenter(int centerX,
+                                           int deltaX,
+                                           int left,
+                                           int right,
+                                           int centerY,
+                                           int deltaY,
+                                           int top,
+                                           int bottom,
+                                           int maxWhiteRun) throws NotFoundException {
     int[] lastRange = null;
     for (int y = centerY, x = centerX;
          y < bottom && y >= top && x < right && x >= left;
@@ -158,8 +165,7 @@ public final class MonochromeRectangleDetector {
    * @return int[] with start and end of found range, or null if no such range is found
    *  (e.g. only white was found)
    */
-  private int[] blackWhiteRange(int fixedDimension, int maxWhiteRun, int minDim, int maxDim,
-      boolean horizontal) {
+  private int[] blackWhiteRange(int fixedDimension, int maxWhiteRun, int minDim, int maxDim, boolean horizontal) {
 
     int center = (minDim + maxDim) >> 1;
 

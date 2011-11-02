@@ -23,57 +23,52 @@ package com.google.zxing;
  *
  * @author Sean Owen
  * @author dswitkin@google.com (Daniel Switkin)
- * @see Reader#decode(BinaryBitmap,java.util.Hashtable)
+ * @see Reader#decode(BinaryBitmap,java.util.Map)
  */
-public final class DecodeHintType {
-
-  // No, we can't use an enum here. J2ME doesn't support it.
+public enum DecodeHintType {
 
   /**
    * Unspecified, application-specific hint. Maps to an unspecified {@link Object}.
    */
-  public static final DecodeHintType OTHER = new DecodeHintType();
+ OTHER,
 
   /**
    * Image is a pure monochrome image of a barcode. Doesn't matter what it maps to;
    * use {@link Boolean#TRUE}.
    */
-  public static final DecodeHintType PURE_BARCODE = new DecodeHintType();
+  PURE_BARCODE,
 
   /**
    * Image is known to be of one of a few possible formats.
-   * Maps to a {@link java.util.Vector} of {@link BarcodeFormat}s.
+   * Maps to a {@link java.util.List} of {@link BarcodeFormat}s.
    */
-  public static final DecodeHintType POSSIBLE_FORMATS = new DecodeHintType();
+  POSSIBLE_FORMATS,
 
   /**
    * Spend more time to try to find a barcode; optimize for accuracy, not speed.
    * Doesn't matter what it maps to; use {@link Boolean#TRUE}.
    */
-  public static final DecodeHintType TRY_HARDER = new DecodeHintType();
+  TRY_HARDER,
 
   /**
    * Specifies what character encoding to use when decoding, where applicable (type String)
    */
-  public static final DecodeHintType CHARACTER_SET = new DecodeHintType();
+  CHARACTER_SET,
 
   /**
    * Allowed lengths of encoded data -- reject anything else. Maps to an int[].
    */
-  public static final DecodeHintType ALLOWED_LENGTHS = new DecodeHintType();
+  ALLOWED_LENGTHS,
 
   /**
    * Assume Code 39 codes employ a check digit. Maps to {@link Boolean}.
    */
-  public static final DecodeHintType ASSUME_CODE_39_CHECK_DIGIT = new DecodeHintType();
+  ASSUME_CODE_39_CHECK_DIGIT,
 
   /**
    * The caller needs to be notified via callback when a possible {@link ResultPoint}
    * is found. Maps to a {@link ResultPointCallback}.
    */
-  public static final DecodeHintType NEED_RESULT_POINT_CALLBACK = new DecodeHintType();
-
-  private DecodeHintType() {
-  }
+  NEED_RESULT_POINT_CALLBACK,
 
 }

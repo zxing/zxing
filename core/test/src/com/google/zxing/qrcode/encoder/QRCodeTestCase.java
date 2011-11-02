@@ -69,7 +69,7 @@ public final class QRCodeTestCase extends Assert {
 
     // Set the matrix.
     qrCode.setMatrix(matrix);
-    assertEquals(matrix, qrCode.getMatrix());
+    assertSame(matrix, qrCode.getMatrix());
 
     // Finally, it should be valid.
     assertTrue(qrCode.isValid());

@@ -32,7 +32,8 @@ import com.google.zxing.common.DetectorResult;
 import com.google.zxing.datamatrix.decoder.Decoder;
 import com.google.zxing.datamatrix.detector.Detector;
 
-import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
 
 /**
  * This implementation can detect and decode Data Matrix codes in an image.
@@ -53,11 +54,13 @@ public final class DataMatrixReader implements Reader {
    * @throws FormatException if a Data Matrix code cannot be decoded
    * @throws ChecksumException if error correction fails
    */
+  @Override
   public Result decode(BinaryBitmap image) throws NotFoundException, ChecksumException, FormatException {
     return decode(image, null);
   }
 
-  public Result decode(BinaryBitmap image, Hashtable hints)
+  @Override
+  public Result decode(BinaryBitmap image, Map<DecodeHintType,?> hints)
       throws NotFoundException, ChecksumException, FormatException {
     DecoderResult decoderResult;
     ResultPoint[] points;
@@ -72,15 +75,18 @@ public final class DataMatrixReader implements Reader {
     }
     Result result = new Result(decoderResult.getText(), decoderResult.getRawBytes(), points,
         BarcodeFormat.DATA_MATRIX);
-    if (decoderResult.getByteSegments() != null) {
-      result.putMetadata(ResultMetadataType.BYTE_SEGMENTS, decoderResult.getByteSegments());
+    List<byte[]> byteSegments = decoderResult.getByteSegments();
+    if (byteSegments != null) {
+      result.putMetadata(ResultMetadataType.BYTE_SEGMENTS, byteSegments);
     }
-    if (decoderResult.getECLevel() != null) {
-      result.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, decoderResult.getECLevel().toString());
+    String ecLevel = decoderResult.getECLevel();
+    if (ecLevel != null) {
+      result.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, ecLevel);
     }
     return result;
   }
 
+  @Override
   public void reset() {
     // do nothing
   }

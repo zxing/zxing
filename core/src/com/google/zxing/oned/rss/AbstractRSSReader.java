@@ -27,12 +27,12 @@ public abstract class AbstractRSSReader extends OneDReader {
   private static final float MIN_FINDER_PATTERN_RATIO = 9.5f / 12.0f;
   private static final float MAX_FINDER_PATTERN_RATIO = 12.5f / 14.0f;
 
-  protected final int[] decodeFinderCounters;
-  protected final int[] dataCharacterCounters;
-  protected final float[] oddRoundingErrors;
-  protected final float[] evenRoundingErrors;
-  protected final int[] oddCounts;
-  protected final int[] evenCounts;
+  private final int[] decodeFinderCounters;
+  private final int[] dataCharacterCounters;
+  private final float[] oddRoundingErrors;
+  private final float[] evenRoundingErrors;
+  private final int[] oddCounts;
+  private final int[] evenCounts;
 
   protected AbstractRSSReader(){
     decodeFinderCounters = new int[4];
@@ -43,8 +43,32 @@ public abstract class AbstractRSSReader extends OneDReader {
     evenCounts = new int[dataCharacterCounters.length / 2];
   }
 
+  protected int[] getDecodeFinderCounters() {
+    return decodeFinderCounters;
+  }
 
-  protected static int parseFinderValue(int[] counters, int[][] finderPatterns) throws NotFoundException {
+  protected int[] getDataCharacterCounters() {
+    return dataCharacterCounters;
+  }
+
+  protected float[] getOddRoundingErrors() {
+    return oddRoundingErrors;
+  }
+
+  protected float[] getEvenRoundingErrors() {
+    return evenRoundingErrors;
+  }
+
+  protected int[] getOddCounts() {
+    return oddCounts;
+  }
+
+  protected int[] getEvenCounts() {
+    return evenCounts;
+  }
+
+  protected static int parseFinderValue(int[] counters,
+                                        int[][] finderPatterns) throws NotFoundException {
     for (int value = 0; value < finderPatterns.length; value++) {
       if (patternMatchVariance(counters, finderPatterns[value], MAX_INDIVIDUAL_VARIANCE) <
           MAX_AVG_VARIANCE) {
@@ -56,8 +80,8 @@ public abstract class AbstractRSSReader extends OneDReader {
 
   protected static int count(int[] array) {
     int count = 0;
-    for (int i = 0; i < array.length; i++) {
-      count += array[i];
+    for (int a : array) {
+      count += a;
     }
     return count;
   }
@@ -94,8 +118,7 @@ public abstract class AbstractRSSReader extends OneDReader {
       // passes ratio test in spec, but see if the counts are unreasonable
       int minCounter = Integer.MAX_VALUE;
       int maxCounter = Integer.MIN_VALUE;
-      for (int i = 0; i < counters.length; i++) {
-        int counter = counters[i];
+      for (int counter : counters) {
         if (counter > maxCounter) {
           maxCounter = counter;
         }

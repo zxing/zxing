@@ -28,13 +28,14 @@ package com.google.zxing.oned.rss.expanded;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
 import com.google.zxing.BinaryBitmap;
+import com.google.zxing.BufferedImageLuminanceSource;
 import com.google.zxing.NotFoundException;
-import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.BitArray;
 import com.google.zxing.common.GlobalHistogramBinarizer;
 import com.google.zxing.oned.rss.DataCharacter;
@@ -64,7 +65,7 @@ public final class RSSExpandedInternalTestCase extends Assert {
     BinaryBitmap binaryMap = new BinaryBitmap(new GlobalHistogramBinarizer(new BufferedImageLuminanceSource(image)));
     int rowNumber = binaryMap.getHeight() / 2;
     BitArray row = binaryMap.getBlackRow(rowNumber, null);
-    Vector<ExpandedPair> previousPairs = new Vector<ExpandedPair>();
+    List<ExpandedPair> previousPairs = new ArrayList<ExpandedPair>();
 
     ExpandedPair pair1 = rssExpandedReader.retrieveNextPair(row, previousPairs, rowNumber);
     previousPairs.add(pair1);
@@ -111,7 +112,7 @@ public final class RSSExpandedInternalTestCase extends Assert {
     BinaryBitmap binaryMap = new BinaryBitmap(new GlobalHistogramBinarizer(new BufferedImageLuminanceSource(image)));
     int rowNumber = binaryMap.getHeight() / 2;
     BitArray row = binaryMap.getBlackRow(rowNumber, null);
-    Vector<ExpandedPair> previousPairs = new Vector<ExpandedPair>();
+    List<ExpandedPair> previousPairs = new ArrayList<ExpandedPair>();
 
     ExpandedPair pair1 = rssExpandedReader.retrieveNextPair(row, previousPairs, rowNumber);
     previousPairs.add(pair1);

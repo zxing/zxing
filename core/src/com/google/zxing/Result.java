@@ -16,8 +16,8 @@
 
 package com.google.zxing;
 
-import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.EnumMap;
+import java.util.Map;
 
 /**
  * <p>Encapsulates the result of decoding a barcode within an image.</p>
@@ -30,7 +30,7 @@ public final class Result {
   private final byte[] rawBytes;
   private ResultPoint[] resultPoints;
   private final BarcodeFormat format;
-  private Hashtable resultMetadata;
+  private Map<ResultMetadataType,Object> resultMetadata;
   private final long timestamp;
 
   public Result(String text,
@@ -61,7 +61,7 @@ public final class Result {
   }
 
   /**
-   * @return raw bytes encoded by the barcode, if applicable, otherwise <code>null</code>
+   * @return raw bytes encoded by the barcode, if applicable, otherwise {@code null}
    */
   public byte[] getRawBytes() {
     return rawBytes;
@@ -84,44 +84,39 @@ public final class Result {
   }
 
   /**
-   * @return {@link Hashtable} mapping {@link ResultMetadataType} keys to values. May be
-   *   <code>null</code>. This contains optional metadata about what was detected about the barcode,
+   * @return {@link Map} mapping {@link ResultMetadataType} keys to values. May be
+   *   {@code null}. This contains optional metadata about what was detected about the barcode,
    *   like orientation.
    */
-  public Hashtable getResultMetadata() {
+  public Map<ResultMetadataType,Object> getResultMetadata() {
     return resultMetadata;
   }
 
   public void putMetadata(ResultMetadataType type, Object value) {
     if (resultMetadata == null) {
-      resultMetadata = new Hashtable(3);
+      resultMetadata = new EnumMap<ResultMetadataType,Object>(ResultMetadataType.class);
     }
     resultMetadata.put(type, value);
   }
 
-  public void putAllMetadata(Hashtable metadata) {
+  public void putAllMetadata(Map<ResultMetadataType,Object> metadata) {
     if (metadata != null) {
       if (resultMetadata == null) {
         resultMetadata = metadata;
       } else {
-        Enumeration e = metadata.keys();
-        while (e.hasMoreElements()) {
-          ResultMetadataType key = (ResultMetadataType) e.nextElement();
-          Object value = metadata.get(key);
-          resultMetadata.put(key, value);
-        }
+        resultMetadata.putAll(metadata);
       }
     }
   }
 
   public void addResultPoints(ResultPoint[] newPoints) {
-    ResultPoint[] oldResultPoints = resultPoints;
-    if (oldResultPoints == null) {
+    ResultPoint[] oldPoints = resultPoints;
+    if (oldPoints == null) {
       resultPoints = newPoints;
     } else if (newPoints != null && newPoints.length > 0) {
-      ResultPoint[] allPoints = new ResultPoint[oldResultPoints.length + newPoints.length];
-      System.arraycopy(oldResultPoints, 0, allPoints, 0, oldResultPoints.length);
-      System.arraycopy(newPoints, 0, allPoints, oldResultPoints.length, newPoints.length);
+      ResultPoint[] allPoints = new ResultPoint[oldPoints.length + newPoints.length];
+      System.arraycopy(oldPoints, 0, allPoints, 0, oldPoints.length);
+      System.arraycopy(newPoints, 0, allPoints, oldPoints.length, newPoints.length);
       resultPoints = allPoints;
     }
   }
@@ -130,6 +125,7 @@ public final class Result {
     return timestamp;
   }
 
+  @Override
   public String toString() {
     return text;
   }

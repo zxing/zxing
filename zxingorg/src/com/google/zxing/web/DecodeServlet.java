@@ -55,6 +55,7 @@ import org.apache.http.impl.conn.SingleClientConnManager;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
+import org.apache.http.util.EntityUtils;
 
 import java.awt.color.CMMException;
 import java.awt.image.BufferedImage;
@@ -67,9 +68,10 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Hashtable;
+import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.List;
-import java.util.Vector;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -96,30 +98,14 @@ public final class DecodeServlet extends HttpServlet {
 
   private static final Logger log = Logger.getLogger(DecodeServlet.class.getName());
 
-  static final Hashtable<DecodeHintType, Object> HINTS;
-  static final Hashtable<DecodeHintType, Object> HINTS_PURE;
+  static final Map<DecodeHintType,Object> HINTS;
+  static final Map<DecodeHintType,Object> HINTS_PURE;
 
   static {
-    HINTS = new Hashtable<DecodeHintType, Object>(5);
+    HINTS = new EnumMap<DecodeHintType,Object>(DecodeHintType.class);
     HINTS.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
-    Collection<BarcodeFormat> possibleFormats = new Vector<BarcodeFormat>(17);
-    possibleFormats.add(BarcodeFormat.UPC_A);
-    possibleFormats.add(BarcodeFormat.UPC_E);
-    possibleFormats.add(BarcodeFormat.EAN_8);
-    possibleFormats.add(BarcodeFormat.EAN_13);
-    possibleFormats.add(BarcodeFormat.CODE_39);
-    possibleFormats.add(BarcodeFormat.CODE_93);
-    possibleFormats.add(BarcodeFormat.CODE_128);
-    possibleFormats.add(BarcodeFormat.CODABAR);
-    possibleFormats.add(BarcodeFormat.ITF);
-    possibleFormats.add(BarcodeFormat.RSS_14);
-    possibleFormats.add(BarcodeFormat.RSS_EXPANDED);
-    possibleFormats.add(BarcodeFormat.QR_CODE);
-    possibleFormats.add(BarcodeFormat.DATA_MATRIX);
-    possibleFormats.add(BarcodeFormat.AZTEC);
-    possibleFormats.add(BarcodeFormat.PDF_417);
-    HINTS.put(DecodeHintType.POSSIBLE_FORMATS, possibleFormats);
-    HINTS_PURE = new Hashtable<DecodeHintType, Object>(HINTS);
+    HINTS.put(DecodeHintType.POSSIBLE_FORMATS, EnumSet.allOf(BarcodeFormat.class));
+    HINTS_PURE = new EnumMap<DecodeHintType,Object>(HINTS);
     HINTS_PURE.put(DecodeHintType.PURE_BARCODE, Boolean.TRUE);
   }
 
@@ -137,8 +123,8 @@ public final class DecodeServlet extends HttpServlet {
     HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
 
     registry = new SchemeRegistry();
-    registry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
-    registry.register(new Scheme("https", SSLSocketFactory.getSocketFactory(), 443));
+    registry.register(new Scheme("http", 80, PlainSocketFactory.getSocketFactory()));
+    registry.register(new Scheme("https", 443, SSLSocketFactory.getSocketFactory()));
 
     diskFileItemFactory = new DiskFileItemFactory();
 
@@ -172,7 +158,7 @@ public final class DecodeServlet extends HttpServlet {
       return;
     }
 
-    ClientConnectionManager connectionManager = new SingleClientConnManager(params, registry);
+    ClientConnectionManager connectionManager = new SingleClientConnManager(registry);
     HttpClient client = new DefaultHttpClient(connectionManager, params);
 
     HttpUriRequest getRequest = new HttpGet(imageURI);
@@ -224,7 +210,7 @@ public final class DecodeServlet extends HttpServlet {
       try {
         processStream(is, request, response);
       } finally {
-        entity.consumeContent();
+        EntityUtils.consume(entity);
         is.close();
       }
 

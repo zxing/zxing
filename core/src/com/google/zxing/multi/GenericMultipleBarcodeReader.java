@@ -17,26 +17,28 @@
 package com.google.zxing.multi;
 
 import com.google.zxing.BinaryBitmap;
+import com.google.zxing.DecodeHintType;
 import com.google.zxing.NotFoundException;
 import com.google.zxing.Reader;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
 
-import java.util.Hashtable;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>Attempts to locate multiple barcodes in an image by repeatedly decoding portion of the image.
  * After one barcode is found, the areas left, above, right and below the barcode's
- * {@link com.google.zxing.ResultPoint}s are scanned, recursively.</p>
+ * {@link ResultPoint}s are scanned, recursively.</p>
  *
  * <p>A caller may want to also employ {@link ByQuadrantReader} when attempting to find multiple
  * 2D barcodes, like QR Codes, in an image, where the presence of multiple barcodes might prevent
  * detecting any one of them.</p>
  *
  * <p>That is, instead of passing a {@link Reader} a caller might pass
- * <code>new ByQuadrantReader(reader)</code>.</p>
+ * {@code new ByQuadrantReader(reader)}.</p>
  *
  * @author Sean Owen
  */
@@ -50,28 +52,25 @@ public final class GenericMultipleBarcodeReader implements MultipleBarcodeReader
     this.delegate = delegate;
   }
 
+  @Override
   public Result[] decodeMultiple(BinaryBitmap image) throws NotFoundException {
     return decodeMultiple(image, null);
   }
 
-  public Result[] decodeMultiple(BinaryBitmap image, Hashtable hints)
+  @Override
+  public Result[] decodeMultiple(BinaryBitmap image, Map<DecodeHintType,?> hints)
       throws NotFoundException {
-    Vector results = new Vector();
+    List<Result> results = new ArrayList<Result>();
     doDecodeMultiple(image, hints, results, 0, 0);
     if (results.isEmpty()) {
       throw NotFoundException.getNotFoundInstance();
     }
-    int numResults = results.size();
-    Result[] resultArray = new Result[numResults];
-    for (int i = 0; i < numResults; i++) {
-      resultArray[i] = (Result) results.elementAt(i);
-    }
-    return resultArray;
+    return results.toArray(new Result[results.size()]);
   }
 
   private void doDecodeMultiple(BinaryBitmap image,
-                                Hashtable hints,
-                                Vector results,
+                                Map<DecodeHintType,?> hints,
+                                List<Result> results,
                                 int xOffset,
                                 int yOffset) {
     Result result;
@@ -81,8 +80,7 @@ public final class GenericMultipleBarcodeReader implements MultipleBarcodeReader
       return;
     }
     boolean alreadyFound = false;
-    for (int i = 0; i < results.size(); i++) {
-      Result existingResult = (Result) results.elementAt(i);
+    for (Result existingResult : results) {
       if (existingResult.getText().equals(result.getText())) {
         alreadyFound = true;
         break;
@@ -91,7 +89,7 @@ public final class GenericMultipleBarcodeReader implements MultipleBarcodeReader
     if (alreadyFound) {
       return;
     }
-    results.addElement(translateResultPoints(result, xOffset, yOffset));
+    results.add(translateResultPoints(result, xOffset, yOffset));
     ResultPoint[] resultPoints = result.getResultPoints();
     if (resultPoints == null || resultPoints.length == 0) {
       return;
@@ -102,8 +100,7 @@ public final class GenericMultipleBarcodeReader implements MultipleBarcodeReader
     float minY = height;
     float maxX = 0.0f;
     float maxY = 0.0f;
-    for (int i = 0; i < resultPoints.length; i++) {
-      ResultPoint point = resultPoints[i];
+    for (ResultPoint point : resultPoints) {
       float x = point.getX();
       float y = point.getY();
       if (x < minX) {

@@ -27,7 +27,7 @@ import com.google.zxing.oned.UPCAWriter;
 import com.google.zxing.pdf417.encoder.PDF417Writer;
 import com.google.zxing.qrcode.QRCodeWriter;
 
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This is a factory class which finds the appropriate Writer subclass for the BarcodeFormat
@@ -37,36 +37,51 @@ import java.util.Hashtable;
  */
 public final class MultiFormatWriter implements Writer {
 
-  public BitMatrix encode(String contents, BarcodeFormat format, int width,
-      int height) throws WriterException {
-
+  @Override
+  public BitMatrix encode(String contents,
+                          BarcodeFormat format,
+                          int width,
+                          int height) throws WriterException {
     return encode(contents, format, width, height, null);
   }
 
-  public BitMatrix encode(String contents, BarcodeFormat format, int width, int height,
-      Hashtable hints) throws WriterException {
+  @Override
+  public BitMatrix encode(String contents,
+                          BarcodeFormat format,
+                          int width, int height,
+                          Map<EncodeHintType,?> hints) throws WriterException {
 
     Writer writer;
-    if (format == BarcodeFormat.EAN_8) {
-      writer = new EAN8Writer();
-    } else if (format == BarcodeFormat.EAN_13) {
-      writer = new EAN13Writer();
-    } else if (format == BarcodeFormat.UPC_A) {
-      writer = new UPCAWriter();
-    } else if (format == BarcodeFormat.QR_CODE) {
-      writer = new QRCodeWriter();
-    } else if (format == BarcodeFormat.CODE_39) {
-      writer = new Code39Writer();
-    } else if (format == BarcodeFormat.CODE_128) {
-      writer = new Code128Writer();
-    } else if (format == BarcodeFormat.ITF) {
-      writer = new ITFWriter();
-    } else if (format == BarcodeFormat.PDF_417) {
-      writer = new PDF417Writer();
-    } else if (format == BarcodeFormat.CODABAR) {
-      writer = new CodaBarWriter();
-    } else {
-      throw new IllegalArgumentException("No encoder available for format " + format);
+    switch (format) {
+      case EAN_8:
+        writer = new EAN8Writer();
+        break;
+      case EAN_13:
+        writer = new EAN13Writer();
+        break;
+      case UPC_A:
+        writer = new UPCAWriter();
+        break;
+      case QR_CODE:
+        writer = new QRCodeWriter();
+        break;
+      case CODE_39:
+        writer = new Code39Writer();
+        break;
+      case CODE_128:
+        writer = new Code128Writer();
+        break;
+      case ITF:
+        writer = new ITFWriter();
+        break;
+      case PDF_417:
+        writer = new PDF417Writer();
+        break;
+      case CODABAR:
+	      writer = new CodaBarWriter();
+        break;
+      default:
+        throw new IllegalArgumentException("No encoder available for format " + format);
     }
     return writer.encode(contents, format, width, height, hints);
   }

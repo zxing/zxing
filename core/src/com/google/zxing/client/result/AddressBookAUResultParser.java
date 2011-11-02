@@ -18,7 +18,8 @@ package com.google.zxing.client.result;
 
 import com.google.zxing.Result;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Implements KDDI AU's address book format. See
@@ -28,12 +29,13 @@ import java.util.Vector;
  *
  * @author Sean Owen
  */
-final class AddressBookAUResultParser extends ResultParser {
+public final class AddressBookAUResultParser extends ResultParser {
 
-  public static AddressBookParsedResult parse(Result result) {
+  @Override
+  public AddressBookParsedResult parse(Result result) {
     String rawText = result.getText();
     // MEMORY is mandatory; seems like a decent indicator, as does end-of-record separator CR/LF
-    if (rawText.indexOf("MEMORY") < 0 || rawText.indexOf("\r\n") < 0) {
+    if (!rawText.contains("MEMORY") || !rawText.contains("\r\n")) {
       return null;
     }
 
@@ -67,21 +69,21 @@ final class AddressBookAUResultParser extends ResultParser {
                                                    int max,
                                                    String rawText,
                                                    boolean trim) {
-    Vector values = null;
+    List<String> values = null;
     for (int i = 1; i <= max; i++) {
       String value = matchSinglePrefixedField(prefix + i + ':', rawText, '\r', trim);
       if (value == null) {
         break;
       }
       if (values == null) {
-        values = new Vector(max); // lazy init
+        values = new ArrayList<String>(max); // lazy init
       }
-      values.addElement(value);
+      values.add(value);
     }
     if (values == null) {
       return null;
     }
-    return toStringArray(values);
+    return values.toArray(new String[values.size()]);
   }
 
 }
