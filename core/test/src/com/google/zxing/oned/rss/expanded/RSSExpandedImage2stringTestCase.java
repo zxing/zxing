@@ -29,15 +29,14 @@ package com.google.zxing.oned.rss.expanded;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Hashtable;
 
 import javax.imageio.ImageIO;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
+import com.google.zxing.BufferedImageLuminanceSource;
 import com.google.zxing.NotFoundException;
 import com.google.zxing.Result;
-import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.BitArray;
 import com.google.zxing.common.GlobalHistogramBinarizer;
 import org.junit.Assert;
@@ -279,7 +278,7 @@ public final class RSSExpandedImage2stringTestCase extends Assert {
     int rowNumber = binaryMap.getHeight() / 2;
     BitArray row = binaryMap.getBlackRow(rowNumber, null);
 
-    Result result = rssExpandedReader.decodeRow(rowNumber, row, new Hashtable());
+    Result result = rssExpandedReader.decodeRow(rowNumber, row, null);
 
     assertSame(BarcodeFormat.RSS_EXPANDED, result.getBarcodeFormat());
     assertEquals(expected, result.getText());

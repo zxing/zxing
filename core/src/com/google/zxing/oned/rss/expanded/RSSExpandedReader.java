@@ -26,10 +26,8 @@
 
 package com.google.zxing.oned.rss.expanded;
 
-import java.util.Hashtable;
-import java.util.Vector;
-
 import com.google.zxing.BarcodeFormat;
+import com.google.zxing.DecodeHintType;
 import com.google.zxing.NotFoundException;
 import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
@@ -40,11 +38,15 @@ import com.google.zxing.oned.rss.FinderPattern;
 import com.google.zxing.oned.rss.RSSUtils;
 import com.google.zxing.oned.rss.expanded.decoders.AbstractExpandedDecoder;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 /**
  * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
  * @author Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)
  */
-public final class RSSExpandedReader extends AbstractRSSReader{
+public final class RSSExpandedReader extends AbstractRSSReader {
 
   private static final int[] SYMBOL_WIDEST = {7, 5, 4, 3, 1};
   private static final int[] EVEN_TOTAL_SUBSET = {4, 20, 52, 104, 204};
@@ -92,7 +94,7 @@ public final class RSSExpandedReader extends AbstractRSSReader{
   private static final int FINDER_PAT_E = 4;
   private static final int FINDER_PAT_F = 5;
 
-  private static final int [][] FINDER_PATTERN_SEQUENCES = {
+  private static final int[][] FINDER_PATTERN_SEQUENCES = {
     { FINDER_PAT_A, FINDER_PAT_A },
     { FINDER_PAT_A, FINDER_PAT_B, FINDER_PAT_B },
     { FINDER_PAT_A, FINDER_PAT_C, FINDER_PAT_B, FINDER_PAT_D },
@@ -108,25 +110,30 @@ public final class RSSExpandedReader extends AbstractRSSReader{
   private static final int LONGEST_SEQUENCE_SIZE = FINDER_PATTERN_SEQUENCES[FINDER_PATTERN_SEQUENCES.length - 1].length;
 
   private static final int MAX_PAIRS = 11;
-  private final Vector pairs = new Vector(MAX_PAIRS);
+
+  private final List<ExpandedPair> pairs = new ArrayList<ExpandedPair>(MAX_PAIRS);
   private final int [] startEnd = new int[2];
   private final int [] currentSequence = new int[LONGEST_SEQUENCE_SIZE];
 
-  public Result decodeRow(int rowNumber, BitArray row, Hashtable hints) throws NotFoundException {
+  @Override
+  public Result decodeRow(int rowNumber,
+                          BitArray row,
+                          Map<DecodeHintType,?> hints) throws NotFoundException {
     this.reset();
     decodeRow2pairs(rowNumber, row);
     return constructResult(this.pairs);
   }
 
+  @Override
   public void reset() {
-    this.pairs.setSize(0);
+    this.pairs.clear();
   }
 
   // Not private for testing
-  Vector decodeRow2pairs(int rowNumber, BitArray row) throws NotFoundException {
+  List<ExpandedPair> decodeRow2pairs(int rowNumber, BitArray row) throws NotFoundException {
     while(true){
       ExpandedPair nextPair = retrieveNextPair(row, this.pairs, rowNumber);
-      this.pairs.addElement(nextPair);
+      this.pairs.add(nextPair);
 
       if (nextPair.mayBeLast()) {
         if (checkChecksum()) {
@@ -139,14 +146,14 @@ public final class RSSExpandedReader extends AbstractRSSReader{
     }
   }
 
-  private static Result constructResult(Vector pairs) throws NotFoundException{
+  private static Result constructResult(List<ExpandedPair> pairs) throws NotFoundException{
     BitArray binary = BitArrayBuilder.buildBitArray(pairs);
 
     AbstractExpandedDecoder decoder = AbstractExpandedDecoder.createDecoder(binary);
     String resultingString = decoder.parseInformation();
 
-    ResultPoint [] firstPoints = ((ExpandedPair)pairs.elementAt(0)).getFinderPattern().getResultPoints();
-    ResultPoint [] lastPoints  = ((ExpandedPair)pairs.lastElement()).getFinderPattern().getResultPoints();
+    ResultPoint[] firstPoints = pairs.get(0).getFinderPattern().getResultPoints();
+    ResultPoint[] lastPoints  = pairs.get(pairs.size() - 1).getFinderPattern().getResultPoints();
 
     return new Result(
           resultingString,
@@ -157,27 +164,27 @@ public final class RSSExpandedReader extends AbstractRSSReader{
   }
 
   private boolean checkChecksum() {
-    ExpandedPair firstPair = (ExpandedPair)this.pairs.elementAt(0);
+    ExpandedPair firstPair = this.pairs.get(0);
     DataCharacter checkCharacter = firstPair.getLeftChar();
     DataCharacter firstCharacter = firstPair.getRightChar();
 
     int checksum = firstCharacter.getChecksumPortion();
-    int S = 2;
+    int s = 2;
 
     for(int i = 1; i < this.pairs.size(); ++i){
-      ExpandedPair currentPair = (ExpandedPair)this.pairs.elementAt(i);
+      ExpandedPair currentPair = this.pairs.get(i);
       checksum += currentPair.getLeftChar().getChecksumPortion();
-      S++;
+      s++;
       DataCharacter currentRightChar = currentPair.getRightChar();
       if (currentRightChar != null) {
         checksum += currentRightChar.getChecksumPortion();
-        S++;
+        s++;
       }
     }
 
     checksum %= 211;
 
-    int checkCharacterValue = 211 * (S - 4) + checksum;
+    int checkCharacterValue = 211 * (s - 4) + checksum;
 
     return checkCharacterValue == checkCharacter.getValue();
   }
@@ -186,12 +193,12 @@ public final class RSSExpandedReader extends AbstractRSSReader{
     int currentPos = initialPos;
     boolean current = row.get(currentPos);
 
-    while(currentPos < row.size && row.get(currentPos) == current) {
+    while(currentPos < row.getSize() && row.get(currentPos) == current) {
       currentPos++;
     }
 
     current = !current;
-    while(currentPos < row.size && row.get(currentPos) == current) {
+    while(currentPos < row.getSize() && row.get(currentPos) == current) {
       currentPos++;
     }
 
@@ -199,7 +206,8 @@ public final class RSSExpandedReader extends AbstractRSSReader{
   }
 
   // not private for testing
-  ExpandedPair retrieveNextPair(BitArray row, Vector previousPairs, int rowNumber) throws NotFoundException{
+  ExpandedPair retrieveNextPair(BitArray row, List<ExpandedPair> previousPairs, int rowNumber)
+      throws NotFoundException {
     boolean isOddPattern  = previousPairs.size() % 2 == 0;
 
     FinderPattern pattern;
@@ -233,30 +241,30 @@ public final class RSSExpandedReader extends AbstractRSSReader{
     return new ExpandedPair(leftChar, rightChar, pattern, mayBeLast);
   }
 
-  private boolean checkPairSequence(Vector previousPairs, FinderPattern pattern) throws NotFoundException{
+  private boolean checkPairSequence(List<ExpandedPair> previousPairs, FinderPattern pattern)
+      throws NotFoundException {
     int currentSequenceLength = previousPairs.size() + 1;
     if(currentSequenceLength > this.currentSequence.length) {
       throw NotFoundException.getNotFoundInstance();
     }
 
     for(int pos = 0; pos < previousPairs.size(); ++pos) {
-      this.currentSequence[pos] = ((ExpandedPair) previousPairs.elementAt(pos)).getFinderPattern().getValue();
+      this.currentSequence[pos] = previousPairs.get(pos).getFinderPattern().getValue();
     }
 
     this.currentSequence[currentSequenceLength - 1] = pattern.getValue();
 
-    for(int i = 0; i < FINDER_PATTERN_SEQUENCES.length; ++i){
-      int [] validSequence = FINDER_PATTERN_SEQUENCES[i];
-      if(validSequence.length >= currentSequenceLength){
+    for (int[] validSequence : FINDER_PATTERN_SEQUENCES) {
+      if (validSequence.length >= currentSequenceLength) {
         boolean valid = true;
-        for(int pos = 0; pos < currentSequenceLength; ++pos) {
+        for (int pos = 0; pos < currentSequenceLength; ++pos) {
           if (this.currentSequence[pos] != validSequence[pos]) {
             valid = false;
             break;
           }
         }
 
-        if(valid) {
+        if (valid) {
           return currentSequenceLength == validSequence.length;
         }
       }
@@ -265,8 +273,9 @@ public final class RSSExpandedReader extends AbstractRSSReader{
     throw NotFoundException.getNotFoundInstance();
   }
 
-  private void findNextPair(BitArray row, Vector previousPairs, int forcedOffset) throws NotFoundException{
-    int[] counters = this.decodeFinderCounters;
+  private void findNextPair(BitArray row, List<ExpandedPair> previousPairs, int forcedOffset)
+      throws NotFoundException {
+    int[] counters = this.getDecodeFinderCounters();
     counters[0] = 0;
     counters[1] = 0;
     counters[2] = 0;
@@ -280,7 +289,7 @@ public final class RSSExpandedReader extends AbstractRSSReader{
     } else if (previousPairs.isEmpty()) {
       rowOffset = 0;
     } else{
-      ExpandedPair lastPair = (ExpandedPair) previousPairs.lastElement();
+      ExpandedPair lastPair = previousPairs.get(previousPairs.size() - 1);
       rowOffset = lastPair.getFinderPattern().getStartEnd()[1];
     }
     boolean searchingEvenPair = previousPairs.size() % 2 != 0;
@@ -367,7 +376,7 @@ public final class RSSExpandedReader extends AbstractRSSReader{
       start = this.startEnd[0];
 
       int firstElementStart = this.startEnd[1] + 1;
-      while (firstElementStart < row.size && row.get(firstElementStart)) {
+      while (firstElementStart < row.getSize() && row.get(firstElementStart)) {
         firstElementStart++;
       }
 
@@ -376,10 +385,8 @@ public final class RSSExpandedReader extends AbstractRSSReader{
     }
 
     // Make 'counters' hold 1-4
-    int [] counters = this.decodeFinderCounters;
-    for (int i = counters.length - 1; i > 0; i--) {
-      counters[i] = counters[i - 1];
-    }
+    int [] counters = this.getDecodeFinderCounters();
+    System.arraycopy(counters, 0, counters, 1, counters.length - 1);
 
     counters[0] = firstCounter;
     int value;
@@ -391,9 +398,11 @@ public final class RSSExpandedReader extends AbstractRSSReader{
     return new FinderPattern(value, new int[] {start, end}, start, end, rowNumber);
   }
 
-  DataCharacter decodeDataCharacter(BitArray row, FinderPattern pattern, boolean isOddPattern, boolean leftChar)
-    throws NotFoundException {
-    int[] counters = this.dataCharacterCounters;
+  DataCharacter decodeDataCharacter(BitArray row,
+                                    FinderPattern pattern,
+                                    boolean isOddPattern,
+                                    boolean leftChar) throws NotFoundException {
+    int[] counters = this.getDataCharacterCounters();
     counters[0] = 0;
     counters[1] = 0;
     counters[2] = 0;
@@ -418,10 +427,10 @@ public final class RSSExpandedReader extends AbstractRSSReader{
     int numModules = 17; //left and right data characters have all the same length
     float elementWidth = (float) count(counters) / (float) numModules;
 
-    int[] oddCounts = this.oddCounts;
-    int[] evenCounts = this.evenCounts;
-    float[] oddRoundingErrors = this.oddRoundingErrors;
-    float[] evenRoundingErrors = this.evenRoundingErrors;
+    int[] oddCounts = this.getOddCounts();
+    int[] evenCounts = this.getEvenCounts();
+    float[] oddRoundingErrors = this.getOddRoundingErrors();
+    float[] evenRoundingErrors = this.getEvenRoundingErrors();
 
     for (int i = 0; i < counters.length; i++) {
       float value = 1.0f * counters[i] / elementWidth;
@@ -488,8 +497,8 @@ public final class RSSExpandedReader extends AbstractRSSReader{
 
   private void adjustOddEvenCounts(int numModules) throws NotFoundException {
 
-    int oddSum = count(this.oddCounts);
-    int evenSum = count(this.evenCounts);
+    int oddSum = count(this.getOddCounts());
+    int evenSum = count(this.getEvenCounts());
     int mismatch = oddSum + evenSum - numModules;
     boolean oddParityBad = (oddSum & 0x01) == 1;
     boolean evenParityBad = (evenSum & 0x01) == 0;
@@ -561,19 +570,19 @@ public final class RSSExpandedReader extends AbstractRSSReader{
       if (decrementOdd) {
         throw NotFoundException.getNotFoundInstance();
       }
-      increment(this.oddCounts, this.oddRoundingErrors);
+      increment(this.getOddCounts(), this.getOddRoundingErrors());
     }
     if (decrementOdd) {
-      decrement(this.oddCounts, this.oddRoundingErrors);
+      decrement(this.getOddCounts(), this.getOddRoundingErrors());
     }
     if (incrementEven) {
       if (decrementEven) {
         throw NotFoundException.getNotFoundInstance();
       }
-      increment(this.evenCounts, this.oddRoundingErrors);
+      increment(this.getEvenCounts(), this.getOddRoundingErrors());
     }
     if (decrementEven) {
-      decrement(this.evenCounts, this.evenRoundingErrors);
+      decrement(this.getEvenCounts(), this.getEvenRoundingErrors());
     }
   }
 }

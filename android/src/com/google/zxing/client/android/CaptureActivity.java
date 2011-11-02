@@ -63,11 +63,11 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.text.DateFormat;
+import java.util.Collection;
 import java.util.Date;
-import java.util.HashSet;
+import java.util.EnumSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.Vector;
 
 /**
  * This activity opens the camera and does the actual scanning on a background thread. It draws a
@@ -97,14 +97,11 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private static final String RETURN_CODE_PLACEHOLDER = "{CODE}";
   private static final String RETURN_URL_PARAM = "ret";
 
-  private static final Set<ResultMetadataType> DISPLAYABLE_METADATA_TYPES;
-  static {
-    DISPLAYABLE_METADATA_TYPES = new HashSet<ResultMetadataType>(5);
-    DISPLAYABLE_METADATA_TYPES.add(ResultMetadataType.ISSUE_NUMBER);
-    DISPLAYABLE_METADATA_TYPES.add(ResultMetadataType.SUGGESTED_PRICE);
-    DISPLAYABLE_METADATA_TYPES.add(ResultMetadataType.ERROR_CORRECTION_LEVEL);
-    DISPLAYABLE_METADATA_TYPES.add(ResultMetadataType.POSSIBLE_COUNTRY);
-  }
+  private static final Set<ResultMetadataType> DISPLAYABLE_METADATA_TYPES =
+      EnumSet.of(ResultMetadataType.ISSUE_NUMBER,
+                 ResultMetadataType.SUGGESTED_PRICE,
+                 ResultMetadataType.ERROR_CORRECTION_LEVEL,
+                 ResultMetadataType.POSSIBLE_COUNTRY);
 
   private enum Source {
     NATIVE_APP_INTENT,
@@ -123,7 +120,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private Source source;
   private String sourceUrl;
   private String returnUrlTemplate;
-  private Vector<BarcodeFormat> decodeFormats;
+  private Collection<BarcodeFormat> decodeFormats;
   private String characterSet;
   private String versionName;
   private HistoryManager historyManager;
@@ -132,6 +129,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
   private final DialogInterface.OnClickListener aboutListener =
       new DialogInterface.OnClickListener() {
+    @Override
     public void onClick(DialogInterface dialogInterface, int i) {
       Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.zxing_url)));
       intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
@@ -313,33 +311,25 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
+    Intent intent = new Intent(Intent.ACTION_VIEW);
+    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
     switch (item.getItemId()) {
-      case SHARE_ID: {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+      case SHARE_ID:
         intent.setClassName(this, ShareActivity.class.getName());
         startActivity(intent);
         break;
-      }
-      case HISTORY_ID: {
+      case HISTORY_ID:
         AlertDialog historyAlert = historyManager.buildAlert();
         historyAlert.show();
         break;
-      }
-      case SETTINGS_ID: {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+      case SETTINGS_ID:
         intent.setClassName(this, PreferencesActivity.class.getName());
         startActivity(intent);
         break;
-      }
-      case HELP_ID: {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+      case HELP_ID:
         intent.setClassName(this, HelpActivity.class.getName());
         startActivity(intent);
         break;
-      }
       case ABOUT_ID:
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getString(R.string.title_about) + versionName);
@@ -353,6 +343,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     return super.onOptionsItemSelected(item);
   }
 
+  @Override
   public void surfaceCreated(SurfaceHolder holder) {
     if (holder == null) {
       Log.e(TAG, "*** WARNING *** surfaceCreated() gave us a null surface!");
@@ -363,10 +354,12 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     }
   }
 
+  @Override
   public void surfaceDestroyed(SurfaceHolder holder) {
     hasSurface = false;
   }
 
+  @Override
   public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
 
   }
@@ -440,8 +433,8 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         paint.setStrokeWidth(4.0f);
         drawLine(canvas, paint, points[0], points[1]);
       } else if (points.length == 4 &&
-                 (rawResult.getBarcodeFormat().equals(BarcodeFormat.UPC_A) ||
-                  rawResult.getBarcodeFormat().equals(BarcodeFormat.EAN_13))) {
+                 (rawResult.getBarcodeFormat() == BarcodeFormat.UPC_A ||
+                  rawResult.getBarcodeFormat() == BarcodeFormat.EAN_13)) {
         // Hacky special case -- draw two lines, for the barcode and metadata
         drawLine(canvas, paint, points[0], points[1]);
         drawLine(canvas, paint, points[2], points[3]);
@@ -488,8 +481,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     View metaTextViewLabel = findViewById(R.id.meta_text_view_label);
     metaTextView.setVisibility(View.GONE);
     metaTextViewLabel.setVisibility(View.GONE);
-    Map<ResultMetadataType,Object> metadata =
-        (Map<ResultMetadataType,Object>) rawResult.getResultMetadata();
+    Map<ResultMetadataType,Object> metadata = rawResult.getResultMetadata();
     if (metadata != null) {
       StringBuilder metadataText = new StringBuilder(20);
       for (Map.Entry<ResultMetadataType,Object> entry : metadata.entrySet()) {

@@ -33,9 +33,10 @@ import com.google.zxing.Result;
  *
  * @author Sean Owen
  */
-final class AddressBookDoCoMoResultParser extends AbstractDoCoMoResultParser {
+public final class AddressBookDoCoMoResultParser extends AbstractDoCoMoResultParser {
 
-  public static AddressBookParsedResult parse(Result result) {
+  @Override
+  public AddressBookParsedResult parse(Result result) {
     String rawText = result.getText();
     if (!rawText.startsWith("MECARD:")) {
       return null;

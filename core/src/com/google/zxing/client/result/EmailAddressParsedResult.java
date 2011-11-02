@@ -26,7 +26,10 @@ public final class EmailAddressParsedResult extends ParsedResult {
   private final String body;
   private final String mailtoURI;
 
-  EmailAddressParsedResult(String emailAddress, String subject, String body, String mailtoURI) {
+  EmailAddressParsedResult(String emailAddress,
+                           String subject,
+                           String body,
+                           String mailtoURI) {
     super(ParsedResultType.EMAIL_ADDRESS);
     this.emailAddress = emailAddress;
     this.subject = subject;
@@ -50,8 +53,9 @@ public final class EmailAddressParsedResult extends ParsedResult {
     return mailtoURI;
   }
 
+  @Override
   public String getDisplayResult() {
-    StringBuffer result = new StringBuffer(30);
+    StringBuilder result = new StringBuilder(30);
     maybeAppend(emailAddress, result);
     maybeAppend(subject, result);
     maybeAppend(body, result);

@@ -18,13 +18,14 @@ package com.google.zxing.oned;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.ChecksumException;
+import com.google.zxing.DecodeHintType;
 import com.google.zxing.FormatException;
 import com.google.zxing.NotFoundException;
 import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitArray;
 
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * <p>Decodes Code 39 barcodes. This does not support "Full ASCII Code 39" yet.</p>
@@ -91,7 +92,8 @@ public final class Code39Reader extends OneDReader {
     this.extendedMode = extendedMode;
   }
 
-  public Result decodeRow(int rowNumber, BitArray row, Hashtable hints)
+  @Override
+  public Result decodeRow(int rowNumber, BitArray row, Map<DecodeHintType,?> hints)
       throws NotFoundException, ChecksumException, FormatException {
 
     int[] start = findAsteriskPattern(row);
@@ -103,7 +105,7 @@ public final class Code39Reader extends OneDReader {
       nextStart++;
     }
 
-    StringBuffer result = new StringBuffer(20);
+    StringBuilder result = new StringBuilder(20);
     int[] counters = new int[9];
     char decodedChar;
     int lastStart;
@@ -116,8 +118,8 @@ public final class Code39Reader extends OneDReader {
       decodedChar = patternToChar(pattern);
       result.append(decodedChar);
       lastStart = nextStart;
-      for (int i = 0; i < counters.length; i++) {
-        nextStart += counters[i];
+      for (int counter : counters) {
+        nextStart += counter;
       }
       // Read off white space
       while (nextStart < end && !row.get(nextStart)) {
@@ -128,8 +130,8 @@ public final class Code39Reader extends OneDReader {
 
     // Look for whitespace after pattern:
     int lastPatternSize = 0;
-    for (int i = 0; i < counters.length; i++) {
-      lastPatternSize += counters[i];
+    for (int counter : counters) {
+      lastPatternSize += counter;
     }
     int whiteSpaceAfterEnd = nextStart - lastStart - lastPatternSize;
     // If 50% of last pattern size, following last pattern, is not whitespace, fail
@@ -203,9 +205,7 @@ public final class Code39Reader extends OneDReader {
             }
           }
           patternStart += counters[0] + counters[1];
-          for (int y = 2; y < patternLength; y++) {
-            counters[y - 2] = counters[y];
-          }
+          System.arraycopy(counters, 2, counters, 0, patternLength - 2);
           counters[patternLength - 2] = 0;
           counters[patternLength - 1] = 0;
           counterPosition--;
@@ -274,9 +274,9 @@ public final class Code39Reader extends OneDReader {
     throw NotFoundException.getNotFoundInstance();
   }
 
-  private static String decodeExtended(StringBuffer encoded) throws FormatException {
+  private static String decodeExtended(CharSequence encoded) throws FormatException {
     int length = encoded.length();
-    StringBuffer decoded = new StringBuffer(length);
+    StringBuilder decoded = new StringBuilder(length);
     for (int i = 0; i < length; i++) {
       char c = encoded.charAt(i);
       if (c == '+' || c == '$' || c == '%' || c == '/') {

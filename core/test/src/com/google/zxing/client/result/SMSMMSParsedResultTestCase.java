@@ -44,11 +44,19 @@ public final class SMSMMSParsedResultTestCase extends Assert {
     doTest("mms:+15551212;via=999333", "+15551212", null, null, "999333");
   }
 
-  private static void doTest(String contents, String number, String subject, String body, String via) {
+  private static void doTest(String contents,
+                             String number,
+                             String subject,
+                             String body,
+                             String via) {
     doTest(contents, new String[] {number}, subject, body, new String[] {via});
   }
 
-  private static void doTest(String contents, String[] numbers, String subject, String body, String[] vias) {
+  private static void doTest(String contents,
+                             String[] numbers,
+                             String subject,
+                             String body,
+                             String[] vias) {
     Result fakeResult = new Result(contents, null, null, BarcodeFormat.QR_CODE);
     ParsedResult result = ResultParser.parseResult(fakeResult);
     assertSame(ParsedResultType.SMS, result.getType());

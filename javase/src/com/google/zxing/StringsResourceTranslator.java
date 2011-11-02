@@ -58,6 +58,7 @@ public final class StringsResourceTranslator {
   private static final Pattern ENTRY_PATTERN = Pattern.compile("<string name=\"([^\"]+)\".*>([^<]+)</string>");
   private static final Pattern STRINGS_FILE_NAME_PATTERN = Pattern.compile("values-(.+)");
   private static final Pattern TRANSLATE_RESPONSE_PATTERN = Pattern.compile("translatedText\":\\s*\"([^\"]+)\"");
+  private static final Pattern VALUES_DIR_PATTERN = Pattern.compile("values-[a-z]{2}(-[a-zA-Z]{2,3})?");
 
   private static final String APACHE_2_LICENSE =
       "<!--\n" +
@@ -94,7 +95,7 @@ public final class StringsResourceTranslator {
     File[] translatedValuesDirs = resDir.listFiles(new FileFilter() {
       @Override
       public boolean accept(File file) {
-        return file.isDirectory() && file.getName().startsWith("values-");
+        return file.isDirectory() && VALUES_DIR_PATTERN.matcher(file.getName()).matches();
       }
     });
     for (File translatedValuesDir : translatedValuesDirs) {
@@ -104,8 +105,9 @@ public final class StringsResourceTranslator {
 
   }
 
-  private static void translate(File englishFile, File translatedFile, Collection<String> forceRetranslation)
-      throws IOException {
+  private static void translate(File englishFile,
+                                File translatedFile,
+                                Collection<String> forceRetranslation) throws IOException {
 
     SortedMap<String,String> english = readLines(englishFile);
     SortedMap<String,String> translated = readLines(translatedFile);
@@ -195,7 +197,8 @@ public final class StringsResourceTranslator {
     translation = translation.replaceAll("\\\\u0026quot;", "\"");
     translation = translation.replaceAll("\\\\u0026#39;", "'");
     translation = translation.replaceAll("\\\\u200b", "");
-
+    translation = translation.replaceAll("&amp;quot;", "\"");
+    translation = translation.replaceAll("&amp;#39;", "'");
     return translation;
   }
 

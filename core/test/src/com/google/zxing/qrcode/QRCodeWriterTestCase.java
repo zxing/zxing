@@ -28,7 +28,8 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Hashtable;
+import java.util.EnumMap;
+import java.util.Map;
 
 /**
  * @author satorux@google.com (Satoru Takabayashi) - creator
@@ -99,8 +100,10 @@ public final class QRCodeWriterTestCase extends Assert {
     assertEquals(strangeHeight, matrix.getHeight());
   }
 
-  private static void compareToGoldenFile(String contents, ErrorCorrectionLevel ecLevel,
-      int resolution, String fileName) throws WriterException, IOException {
+  private static void compareToGoldenFile(String contents,
+                                          ErrorCorrectionLevel ecLevel,
+                                          int resolution,
+                                          String fileName) throws WriterException, IOException {
 
     BufferedImage image = loadImage(fileName);
     assertNotNull(image);
@@ -108,7 +111,7 @@ public final class QRCodeWriterTestCase extends Assert {
     assertNotNull(goldenResult);
 
     QRCodeWriter writer = new QRCodeWriter();
-    Hashtable<EncodeHintType,Object> hints = new Hashtable<EncodeHintType,Object>();
+    Map<EncodeHintType,Object> hints = new EnumMap<EncodeHintType,Object>(EncodeHintType.class);
     hints.put(EncodeHintType.ERROR_CORRECTION, ecLevel);
     BitMatrix generatedResult = writer.encode(contents, BarcodeFormat.QR_CODE, resolution,
         resolution, hints);

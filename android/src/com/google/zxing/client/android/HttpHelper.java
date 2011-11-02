@@ -24,6 +24,7 @@ import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -41,7 +42,7 @@ public final class HttpHelper {
 
   private HttpHelper() {
   }
-
+  
   public enum ContentType {
     /** HTML-like content type, including HTML, XHTML, etc. */
     HTML,
@@ -90,7 +91,7 @@ public final class HttpHelper {
     }
   }
 
-  private static String getEncoding(HttpURLConnection connection) {
+  private static String getEncoding(URLConnection connection) {
     String contentTypeHeader = connection.getHeaderField("Content-Type");
     if (contentTypeHeader != null) {
       int charsetStart = contentTypeHeader.indexOf("charset=");
@@ -101,7 +102,7 @@ public final class HttpHelper {
     return "UTF-8";
   }
 
-  private static String consume(HttpURLConnection connection) throws IOException {
+  private static String consume(URLConnection connection) throws IOException {
     String encoding = getEncoding(connection);
     ByteArrayOutputStream out = new ByteArrayOutputStream();
     InputStream in = connection.getInputStream();

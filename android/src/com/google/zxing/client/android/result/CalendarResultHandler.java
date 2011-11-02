@@ -28,6 +28,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 /**
  * Handles calendar entries encoded in QR Codes.
@@ -36,8 +37,8 @@ import java.util.GregorianCalendar;
  */
 public final class CalendarResultHandler extends ResultHandler {
 
-  private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyyMMdd");
-  private static final DateFormat DATE_TIME_FORMAT = new SimpleDateFormat("yyyyMMdd'T'HHmmss");
+  private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyyMMdd", Locale.ENGLISH);
+  private static final DateFormat DATE_TIME_FORMAT = new SimpleDateFormat("yyyyMMdd'T'HHmmss", Locale.ENGLISH);
 
   private static final int[] buttons = {
       R.string.button_add_calendar
@@ -72,7 +73,7 @@ public final class CalendarResultHandler extends ResultHandler {
   @Override
   public CharSequence getDisplayContents() {
     CalendarParsedResult calResult = (CalendarParsedResult) getResult();
-    StringBuffer result = new StringBuffer(100);
+    StringBuilder result = new StringBuilder(100);
     ParsedResult.maybeAppend(calResult.getSummary(), result);
     appendTime(calResult.getStart(), result);
 
@@ -89,7 +90,7 @@ public final class CalendarResultHandler extends ResultHandler {
     return result.toString();
   }
 
-  private static void appendTime(String when, StringBuffer result) {
+  private static void appendTime(String when, StringBuilder result) {
     if (when.length() == 8) {
       // Show only year/month/day
       Date date;

@@ -39,7 +39,10 @@ final class ExpandedPair {
   private final DataCharacter rightChar;
   private final FinderPattern finderPattern;
 
-  ExpandedPair(DataCharacter leftChar, DataCharacter rightChar, FinderPattern finderPattern, boolean mayBeLast) {
+  ExpandedPair(DataCharacter leftChar,
+               DataCharacter rightChar,
+               FinderPattern finderPattern,
+               boolean mayBeLast) {
     this.leftChar      = leftChar;
     this.rightChar     = rightChar;
     this.finderPattern = finderPattern;

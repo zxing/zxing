@@ -18,14 +18,16 @@ package com.google.zxing.oned;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.ChecksumException;
+import com.google.zxing.DecodeHintType;
 import com.google.zxing.FormatException;
 import com.google.zxing.NotFoundException;
 import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitArray;
 
-import java.util.Hashtable;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>Decodes Code 128 barcodes.</p>
@@ -204,9 +206,7 @@ public final class Code128Reader extends OneDReader {
             }
           }
           patternStart += counters[0] + counters[1];
-          for (int y = 2; y < patternLength; y++) {
-            counters[y - 2] = counters[y];
-          }
+          System.arraycopy(counters, 2, counters, 0, patternLength - 2);
           counters[patternLength - 2] = 0;
           counters[patternLength - 1] = 0;
           counterPosition--;
@@ -220,7 +220,8 @@ public final class Code128Reader extends OneDReader {
     throw NotFoundException.getNotFoundInstance();
   }
 
-  private static int decodeCode(BitArray row, int[] counters, int rowOffset) throws NotFoundException {
+  private static int decodeCode(BitArray row, int[] counters, int rowOffset)
+      throws NotFoundException {
     recordPattern(row, rowOffset, counters);
     int bestVariance = MAX_AVG_VARIANCE; // worst variance we'll accept
     int bestMatch = -1;
@@ -240,7 +241,8 @@ public final class Code128Reader extends OneDReader {
     }
   }
 
-  public Result decodeRow(int rowNumber, BitArray row, Hashtable hints)
+  @Override
+  public Result decodeRow(int rowNumber, BitArray row, Map<DecodeHintType,?> hints)
       throws NotFoundException, FormatException, ChecksumException {
 
     int[] startPatternInfo = findStartPattern(row);
@@ -263,8 +265,8 @@ public final class Code128Reader extends OneDReader {
     boolean done = false;
     boolean isNextShifted = false;
 
-    StringBuffer result = new StringBuffer(20);
-    Vector rawCodes = new Vector(20);
+    StringBuilder result = new StringBuilder(20);
+    List<Byte> rawCodes = new ArrayList<Byte>(20);
 
     int lastStart = startPatternInfo[0];
     int nextStart = startPatternInfo[1];
@@ -287,7 +289,7 @@ public final class Code128Reader extends OneDReader {
       // Decode another code from image
       code = decodeCode(row, counters, nextStart);
 
-      rawCodes.addElement(new Byte((byte) code));
+      rawCodes.add((byte) code);
 
       // Remember whether the last code was printable or not (excluding CODE_STOP)
       if (code != CODE_STOP) {
@@ -302,8 +304,8 @@ public final class Code128Reader extends OneDReader {
 
       // Advance to where the next code will to start
       lastStart = nextStart;
-      for (int i = 0; i < counters.length; i++) {
-        nextStart += counters[i];
+      for (int counter : counters) {
+        nextStart += counter;
       }
 
       // Take care of illegal start codes
@@ -459,7 +461,7 @@ public final class Code128Reader extends OneDReader {
     int rawCodesSize = rawCodes.size();
     byte[] rawBytes = new byte[rawCodesSize];
     for (int i = 0; i < rawCodesSize; i++) {
-      rawBytes[i] = ((Byte) rawCodes.elementAt(i)).byteValue();
+      rawBytes[i] = rawCodes.get(i);
     }
 
     return new Result(

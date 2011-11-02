@@ -16,14 +16,15 @@
 
 package com.google.zxing.oned;
 
-import java.util.Hashtable;
-
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.NotFoundException;
 import com.google.zxing.Result;
 import com.google.zxing.ResultMetadataType;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitArray;
+
+import java.util.EnumMap;
+import java.util.Map;
 
 final class UPCEANExtensionSupport {
 
@@ -33,18 +34,18 @@ final class UPCEANExtensionSupport {
   };
 
   private final int[] decodeMiddleCounters = new int[4];
-  private final StringBuffer decodeRowStringBuffer = new StringBuffer();
+  private final StringBuilder decodeRowStringBuffer = new StringBuilder();
 
   Result decodeRow(int rowNumber, BitArray row, int rowOffset) throws NotFoundException {
 
     int[] extensionStartRange = UPCEANReader.findGuardPattern(row, rowOffset, false, EXTENSION_START_PATTERN);
 
-    StringBuffer result = decodeRowStringBuffer;
+    StringBuilder result = decodeRowStringBuffer;
     result.setLength(0);
     int end = decodeMiddle(row, extensionStartRange, result);
 
     String resultString = result.toString();
-    Hashtable extensionData = parseExtensionString(resultString);
+    Map<ResultMetadataType,Object> extensionData = parseExtensionString(resultString);
 
     Result extensionResult =
         new Result(resultString,
@@ -60,7 +61,9 @@ final class UPCEANExtensionSupport {
     return extensionResult;
   }
 
-  int decodeMiddle(BitArray row, int[] startRange, StringBuffer resultString) throws NotFoundException {
+  int decodeMiddle(BitArray row,
+                   int[] startRange,
+                   StringBuilder resultString) throws NotFoundException {
     int[] counters = decodeMiddleCounters;
     counters[0] = 0;
     counters[1] = 0;
@@ -74,8 +77,8 @@ final class UPCEANExtensionSupport {
     for (int x = 0; x < 5 && rowOffset < end; x++) {
       int bestMatch = UPCEANReader.decodeDigit(row, counters, rowOffset, UPCEANReader.L_AND_G_PATTERNS);
       resultString.append((char) ('0' + bestMatch % 10));
-      for (int i = 0; i < counters.length; i++) {
-        rowOffset += counters[i];
+      for (int counter : counters) {
+        rowOffset += counter;
       }
       if (bestMatch >= 10) {
         lgPatternFound |= 1 << (4 - x);
@@ -103,7 +106,7 @@ final class UPCEANExtensionSupport {
     return rowOffset;
   }
 
-  private static int extensionChecksum(String s) {
+  private static int extensionChecksum(CharSequence s) {
     int length = s.length();
     int sum = 0;
     for (int i = length - 2; i >= 0; i -= 2) {
@@ -129,10 +132,10 @@ final class UPCEANExtensionSupport {
 
   /**
    * @param raw raw content of extension
-   * @return formatted interpretation of raw content as a {@link Hashtable} mapping
-   *  one {@link ResultMetadataType} to appropriate value, or <code>null</code> if not known
+   * @return formatted interpretation of raw content as a {@link Map} mapping
+   *  one {@link ResultMetadataType} to appropriate value, or {@code null} if not known
    */
-  private static Hashtable parseExtensionString(String raw) {
+  private static Map<ResultMetadataType,Object> parseExtensionString(String raw) {
     ResultMetadataType type;
     Object value;
     switch (raw.length()) {
@@ -150,7 +153,7 @@ final class UPCEANExtensionSupport {
     if (value == null) {
       return null;
     }
-    Hashtable result = new Hashtable(1);
+    Map<ResultMetadataType,Object> result = new EnumMap<ResultMetadataType,Object>(ResultMetadataType.class);
     result.put(type, value);
     return result;
   }

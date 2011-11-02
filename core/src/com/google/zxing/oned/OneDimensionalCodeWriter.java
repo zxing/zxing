@@ -17,11 +17,12 @@
 package com.google.zxing.oned;
 
 import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
 import com.google.zxing.Writer;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * <p>Encapsulates functionality and implementation that is common to one-dimensional barcodes.</p>
@@ -36,6 +37,7 @@ public abstract class OneDimensionalCodeWriter implements Writer {
     this.sidesMargin = sidesMargin;
   }
 
+  @Override
   public BitMatrix encode(String contents, BarcodeFormat format, int width, int height)
       throws WriterException {
     return encode(contents, format, width, height, null);
@@ -48,11 +50,12 @@ public abstract class OneDimensionalCodeWriter implements Writer {
    * {@code height} to zero to get minimum size barcode. If negative value is set to {@code width}
    * or {@code height}, {@code IllegalArgumentException} is thrown.
    */
+  @Override
   public BitMatrix encode(String contents,
                           BarcodeFormat format,
                           int width,
                           int height,
-                          Hashtable hints) throws WriterException {
+                          Map<EncodeHintType,?> hints) throws WriterException {
     if (contents.length() == 0) {
       throw new IllegalArgumentException("Found empty contents");
     }
@@ -103,8 +106,8 @@ public abstract class OneDimensionalCodeWriter implements Writer {
 
     byte color = (byte) startColor;
     int numAdded = 0;
-    for (int i = 0; i < pattern.length; i++) {
-      for (int j = 0; j < pattern[i]; j++) {
+    for (int len : pattern) {
+      for (int j = 0; j < len; j++) {
         target[pos] = color;
         pos += 1;
         numAdded += 1;

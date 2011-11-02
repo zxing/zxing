@@ -41,6 +41,7 @@ public final class WifiConfigManager {
                                final String password, 
                                final String networkTypeString) {
     Runnable configureRunnable = new Runnable() {
+      @Override
       public void run() {
         // Start WiFi, otherwise nothing will work
         if (!wifiManager.isWifiEnabled()) {

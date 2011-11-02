@@ -21,14 +21,16 @@ import com.google.zxing.NotFoundException;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.ResultPointCallback;
 import com.google.zxing.common.BitMatrix;
-import com.google.zxing.common.Collections;
-import com.google.zxing.common.Comparator;
 import com.google.zxing.qrcode.detector.FinderPattern;
 import com.google.zxing.qrcode.detector.FinderPatternFinder;
 import com.google.zxing.qrcode.detector.FinderPatternInfo;
 
-import java.util.Hashtable;
-import java.util.Vector;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>This class attempts to find finder patterns in a QR Code. Finder patterns are the square
@@ -74,10 +76,10 @@ final class MultiFinderPatternFinder extends FinderPatternFinder {
   /**
    * A comparator that orders FinderPatterns by their estimated module size.
    */
-  private static class ModuleSizeComparator implements Comparator {
-    public int compare(Object center1, Object center2) {
-      float value = ((FinderPattern) center2).getEstimatedModuleSize() -
-                    ((FinderPattern) center1).getEstimatedModuleSize();
+  private static class ModuleSizeComparator implements Comparator<FinderPattern>, Serializable {
+    @Override
+    public int compare(FinderPattern center1, FinderPattern center2) {
+      float value = center2.getEstimatedModuleSize() - center1.getEstimatedModuleSize();
       return value < 0.0 ? -1 : value > 0.0 ? 1 : 0;
     }
   }
@@ -101,8 +103,8 @@ final class MultiFinderPatternFinder extends FinderPatternFinder {
    *         size differs from the average among those patterns the least
    * @throws NotFoundException if 3 such finder patterns do not exist
    */
-  private FinderPattern[][] selectBestPatterns() throws NotFoundException {
-    Vector possibleCenters = getPossibleCenters();
+  private FinderPattern[][] selectMutipleBestPatterns() throws NotFoundException {
+    List<FinderPattern> possibleCenters = getPossibleCenters();
     int size = possibleCenters.size();
 
     if (size < 3) {
@@ -116,15 +118,15 @@ final class MultiFinderPatternFinder extends FinderPatternFinder {
     if (size == 3) {
       return new FinderPattern[][]{
           new FinderPattern[]{
-              (FinderPattern) possibleCenters.elementAt(0),
-              (FinderPattern) possibleCenters.elementAt(1),
-              (FinderPattern) possibleCenters.elementAt(2)
+              possibleCenters.get(0),
+              possibleCenters.get(1),
+              possibleCenters.get(2)
           }
       };
     }
 
     // Sort by estimated module size to speed up the upcoming checks
-    Collections.insertionSort(possibleCenters, new ModuleSizeComparator());
+    Collections.sort(possibleCenters, new ModuleSizeComparator());
 
     /*
      * Now lets start: build a list of tuples of three finder locations that
@@ -141,16 +143,16 @@ final class MultiFinderPatternFinder extends FinderPatternFinder {
      * So, if the layout seems right, lets have the decoder try to decode.     
      */
 
-    Vector results = new Vector(); // holder for the results
+     List<FinderPattern[]> results = new ArrayList<FinderPattern[]>(); // holder for the results
 
     for (int i1 = 0; i1 < (size - 2); i1++) {
-      FinderPattern p1 = (FinderPattern) possibleCenters.elementAt(i1);
+      FinderPattern p1 = possibleCenters.get(i1);
       if (p1 == null) {
         continue;
       }
 
       for (int i2 = i1 + 1; i2 < (size - 1); i2++) {
-        FinderPattern p2 = (FinderPattern) possibleCenters.elementAt(i2);
+        FinderPattern p2 = possibleCenters.get(i2);
         if (p2 == null) {
           continue;
         }
@@ -166,7 +168,7 @@ final class MultiFinderPatternFinder extends FinderPatternFinder {
         }
 
         for (int i3 = i2 + 1; i3 < size; i3++) {
-          FinderPattern p3 = (FinderPattern) possibleCenters.elementAt(i3);
+          FinderPattern p3 = possibleCenters.get(i3);
           if (p3 == null) {
             continue;
           }
@@ -213,24 +215,20 @@ final class MultiFinderPatternFinder extends FinderPatternFinder {
           }
 
           // All tests passed!
-          results.addElement(test);
+          results.add(test);
         } // end iterate p3
       } // end iterate p2
     } // end iterate p1
 
     if (!results.isEmpty()) {
-      FinderPattern[][] resultArray = new FinderPattern[results.size()][];
-      for (int i = 0; i < results.size(); i++) {
-        resultArray[i] = (FinderPattern[]) results.elementAt(i);
-      }
-      return resultArray;
+      return results.toArray(new FinderPattern[results.size()][]);
     }
 
     // Nothing found!
     throw NotFoundException.getNotFoundInstance();
   }
 
-  public FinderPatternInfo[] findMulti(Hashtable hints) throws NotFoundException {
+  public FinderPatternInfo[] findMulti(Map<DecodeHintType,?> hints) throws NotFoundException {
     boolean tryHarder = hints != null && hints.containsKey(DecodeHintType.TRY_HARDER);
     BitMatrix image = getImage();
     int maxI = image.getHeight();
@@ -302,22 +300,17 @@ final class MultiFinderPatternFinder extends FinderPatternFinder {
         handlePossibleCenter(stateCount, i, maxJ);
       } // end if foundPatternCross
     } // for i=iSkip-1 ...
-    FinderPattern[][] patternInfo = selectBestPatterns();
-    Vector result = new Vector();
-    for (int i = 0; i < patternInfo.length; i++) {
-      FinderPattern[] pattern = patternInfo[i];
+    FinderPattern[][] patternInfo = selectMutipleBestPatterns();
+    List<FinderPatternInfo> result = new ArrayList<FinderPatternInfo>();
+    for (FinderPattern[] pattern : patternInfo) {
       ResultPoint.orderBestPatterns(pattern);
-      result.addElement(new FinderPatternInfo(pattern));
+      result.add(new FinderPatternInfo(pattern));
     }
 
     if (result.isEmpty()) {
       return EMPTY_RESULT_ARRAY;
     } else {
-      FinderPatternInfo[] resultArray = new FinderPatternInfo[result.size()];
-      for (int i = 0; i < result.size(); i++) {
-        resultArray[i] = (FinderPatternInfo) result.elementAt(i);
-      }
-      return resultArray;
+      return result.toArray(new FinderPatternInfo[result.size()]);
     }
   }
 

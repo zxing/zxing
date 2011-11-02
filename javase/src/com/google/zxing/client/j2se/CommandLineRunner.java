@@ -20,11 +20,13 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.DecodeHintType;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.Collection;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Vector;
+import java.util.Map;
 
 /**
  * This simple command line utility decodes files, directories of files, or URIs which are passed
@@ -40,7 +42,7 @@ public final class CommandLineRunner {
   }
 
   public static void main(String[] args) throws Exception {
-    if (args == null || args.length == 0) {
+    if (args.length == 0) {
       printUsage();
       return;
     }
@@ -112,7 +114,7 @@ public final class CommandLineRunner {
 
   // Build all the inputs up front into a single flat list, so the threads can atomically pull
   // paths/URLs off the queue.
-  private static void addArgumentToInputs(String argument, Config config, Inputs inputs) {
+  private static void addArgumentToInputs(String argument, Config config, Inputs inputs) throws IOException {
     File inputFile = new File(argument);
     if (inputFile.exists()) {
       if (inputFile.isDirectory()) {
@@ -133,10 +135,10 @@ public final class CommandLineRunner {
           if (filename.endsWith(".txt") || filename.contains(".mono.png")) {
             continue;
           }
-          inputs.addInput(singleFile.getAbsolutePath());
+          inputs.addInput(singleFile.getCanonicalPath());
         }
       } else {
-        inputs.addInput(inputFile.getAbsolutePath());
+        inputs.addInput(inputFile.getCanonicalPath());
       }
     } else {
       inputs.addInput(argument);
@@ -144,26 +146,26 @@ public final class CommandLineRunner {
   }
 
   // Manually turn on all formats, even those not yet considered production quality.
-  private static Hashtable<DecodeHintType, Object> buildHints(Config config) {
-    Hashtable<DecodeHintType, Object> hints = new Hashtable<DecodeHintType, Object>(3);
-    Vector<BarcodeFormat> vector = new Vector<BarcodeFormat>(8);
-    vector.addElement(BarcodeFormat.UPC_A);
-    vector.addElement(BarcodeFormat.UPC_E);
-    vector.addElement(BarcodeFormat.EAN_13);
-    vector.addElement(BarcodeFormat.EAN_8);
-    vector.addElement(BarcodeFormat.RSS_14);
-    vector.addElement(BarcodeFormat.RSS_EXPANDED);
+  private static Map<DecodeHintType,?> buildHints(Config config) {
+    Map<DecodeHintType, Object> hints = new EnumMap<DecodeHintType,Object>(DecodeHintType.class);
+    Collection<BarcodeFormat> vector = new ArrayList<BarcodeFormat>(8);
+    vector.add(BarcodeFormat.UPC_A);
+    vector.add(BarcodeFormat.UPC_E);
+    vector.add(BarcodeFormat.EAN_13);
+    vector.add(BarcodeFormat.EAN_8);
+    vector.add(BarcodeFormat.RSS_14);
+    vector.add(BarcodeFormat.RSS_EXPANDED);
     if (!config.isProductsOnly()) {
-      vector.addElement(BarcodeFormat.CODE_39);
-      vector.addElement(BarcodeFormat.CODE_93);
-      vector.addElement(BarcodeFormat.CODE_128);
-      vector.addElement(BarcodeFormat.ITF);
-      vector.addElement(BarcodeFormat.QR_CODE);
-      vector.addElement(BarcodeFormat.DATA_MATRIX);
-      vector.addElement(BarcodeFormat.AZTEC);
-      vector.addElement(BarcodeFormat.PDF_417);
-      vector.addElement(BarcodeFormat.CODABAR);
-      vector.addElement(BarcodeFormat.MAXICODE);
+      vector.add(BarcodeFormat.CODE_39);
+      vector.add(BarcodeFormat.CODE_93);
+      vector.add(BarcodeFormat.CODE_128);
+      vector.add(BarcodeFormat.ITF);
+      vector.add(BarcodeFormat.QR_CODE);
+      vector.add(BarcodeFormat.DATA_MATRIX);
+      vector.add(BarcodeFormat.AZTEC);
+      vector.add(BarcodeFormat.PDF_417);
+      vector.add(BarcodeFormat.CODABAR);
+      vector.add(BarcodeFormat.MAXICODE);
     }
     hints.put(DecodeHintType.POSSIBLE_FORMATS, vector);
     if (config.isTryHarder()) {

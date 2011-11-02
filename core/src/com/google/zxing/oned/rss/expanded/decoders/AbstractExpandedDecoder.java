@@ -35,12 +35,20 @@ import com.google.zxing.common.BitArray;
  */
 public abstract class AbstractExpandedDecoder {
 
-  protected final BitArray information;
-  protected final GeneralAppIdDecoder generalDecoder;
+  private final BitArray information;
+  private final GeneralAppIdDecoder generalDecoder;
 
   AbstractExpandedDecoder(BitArray information){
-    this.information    = information;
+    this.information = information;
     this.generalDecoder = new GeneralAppIdDecoder(information);
+  }
+
+  protected BitArray getInformation() {
+    return information;
+  }
+
+  protected GeneralAppIdDecoder getGeneralDecoder() {
+    return generalDecoder;
   }
 
   public abstract String parseInformation() throws NotFoundException;
@@ -80,7 +88,5 @@ public abstract class AbstractExpandedDecoder {
 
     throw new IllegalStateException("unknown decoder: " + information);
   }
-
-
 
 }

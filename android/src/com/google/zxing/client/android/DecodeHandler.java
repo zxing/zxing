@@ -30,7 +30,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 
-import java.util.Hashtable;
+import java.util.Map;
 
 final class DecodeHandler extends Handler {
 
@@ -40,7 +40,7 @@ final class DecodeHandler extends Handler {
   private final MultiFormatReader multiFormatReader;
   private boolean running = true;
 
-  DecodeHandler(CaptureActivity activity, Hashtable<DecodeHintType, Object> hints) {
+  DecodeHandler(CaptureActivity activity, Map<DecodeHintType,Object> hints) {
     multiFormatReader = new MultiFormatReader();
     multiFormatReader.setHints(hints);
     this.activity = activity;

@@ -20,7 +20,7 @@ package com.google.zxing.common.reedsolomon;
  * <p>This class contains utility methods for performing mathematical operations over
  * the Galois Fields. Operations use a given primitive polynomial in calculations.</p>
  *
- * <p>Throughout this package, elements of the GF are represented as an <code>int</code>
+ * <p>Throughout this package, elements of the GF are represented as an {@code int}
  * for convenience and speed (but at the cost of memory).
  * </p>
  *
@@ -60,7 +60,7 @@ public final class GenericGF {
     this.size = size;
     
     if (size <= INITIALIZATION_THRESHOLD){
-      initialize();
+    	initialize();
     }
   }
 

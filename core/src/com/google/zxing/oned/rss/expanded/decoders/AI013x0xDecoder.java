@@ -41,12 +41,13 @@ abstract class AI013x0xDecoder extends AI01weightDecoder {
     super(information);
   }
 
+  @Override
   public String parseInformation() throws NotFoundException {
-    if (this.information.size != HEADER_SIZE + GTIN_SIZE + WEIGHT_SIZE) {
+    if (this.getInformation().getSize() != HEADER_SIZE + GTIN_SIZE + WEIGHT_SIZE) {
       throw NotFoundException.getNotFoundInstance();
     }
 
-    StringBuffer buf = new StringBuffer();
+    StringBuilder buf = new StringBuilder();
 
     encodeCompressedGtin(buf, HEADER_SIZE);
     encodeCompressedWeight(buf, HEADER_SIZE + GTIN_SIZE, WEIGHT_SIZE);

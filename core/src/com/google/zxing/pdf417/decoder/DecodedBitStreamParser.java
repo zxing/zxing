@@ -19,12 +19,23 @@ package com.google.zxing.pdf417.decoder;
 import com.google.zxing.FormatException;
 import com.google.zxing.common.DecoderResult;
 
+import java.math.BigInteger;
+
 /**
  * <p>This class contains the methods for decoding the PDF417 codewords.</p>
  *
  * @author SITA Lab (kevin.osullivan@sita.aero)
  */
 final class DecodedBitStreamParser {
+
+  private enum Mode {
+    ALPHA,
+    LOWER,
+    MIXED,
+    PUNCT,
+    ALPHA_SHIFT,
+    PUNCT_SHIFT
+  }
 
   private static final int TEXT_COMPACTION_MODE_LATCH = 900;
   private static final int BYTE_COMPACTION_MODE_LATCH = 901;
@@ -36,13 +47,6 @@ final class DecodedBitStreamParser {
   private static final int MODE_SHIFT_TO_BYTE_COMPACTION_MODE = 913;
   private static final int MAX_NUMERIC_CODEWORDS = 15;
 
-  private static final int ALPHA = 0;
-  private static final int LOWER = 1;
-  private static final int MIXED = 2;
-  private static final int PUNCT = 3;
-  private static final int ALPHA_SHIFT = 4;
-  private static final int PUNCT_SHIFT = 5;
-
   private static final int PL = 25;
   private static final int LL = 27;
   private static final int AS = 27;
@@ -51,39 +55,36 @@ final class DecodedBitStreamParser {
   private static final int PS = 29;
   private static final int PAL = 29;
 
-  private static final char[] PUNCT_CHARS = {';', '<', '>', '@', '[', 92, '}', '_', 96, '~', '!',
-      13, 9, ',', ':', 10, '-', '.', '$', '/', 34, '|', '*',
-      '(', ')', '?', '{', '}', 39};
+  private static final char[] PUNCT_CHARS = {
+      ';', '<', '>', '@', '[', '\\', '}', '_', '`', '~', '!',
+      '\r', '\t', ',', ':', '\n', '-', '.', '$', '/', '"', '|', '*',
+      '(', ')', '?', '{', '}', '\''};
 
-  private static final char[] MIXED_CHARS = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '&',
-      13, 9, ',', ':', '#', '-', '.', '$', '/', '+', '%', '*',
+  private static final char[] MIXED_CHARS = {
+      '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '&',
+      '\r', '\t', ',', ':', '#', '-', '.', '$', '/', '+', '%', '*',
       '=', '^'};
 
-  // Table containing values for the exponent of 900.
-  // This is used in the numeric compaction decode algorithm.
-  private static final String[] EXP900 =
-      {   "000000000000000000000000000000000000000000001",
-          "000000000000000000000000000000000000000000900",
-          "000000000000000000000000000000000000000810000",
-          "000000000000000000000000000000000000729000000",
-          "000000000000000000000000000000000656100000000",
-          "000000000000000000000000000000590490000000000",
-          "000000000000000000000000000531441000000000000",
-          "000000000000000000000000478296900000000000000",
-          "000000000000000000000430467210000000000000000",
-          "000000000000000000387420489000000000000000000",
-          "000000000000000348678440100000000000000000000",
-          "000000000000313810596090000000000000000000000",
-          "000000000282429536481000000000000000000000000",
-          "000000254186582832900000000000000000000000000",
-          "000228767924549610000000000000000000000000000",
-          "205891132094649000000000000000000000000000000"};
+  /**
+   * Table containing values for the exponent of 900.
+   * This is used in the numeric compaction decode algorithm.
+   */
+  private static final BigInteger[] EXP900;
+  static {
+    EXP900 = new BigInteger[16];
+    EXP900[0] = BigInteger.ONE;
+    BigInteger nineHundred = BigInteger.valueOf(900);
+    EXP900[1] = nineHundred;
+    for (int i = 2; i < EXP900.length; i++) {
+      EXP900[i] = EXP900[i - 1].multiply(nineHundred);
+    }
+  }
 
   private DecodedBitStreamParser() {
   }
 
   static DecoderResult decode(int[] codewords) throws FormatException {
-    StringBuffer result = new StringBuffer(100);
+    StringBuilder result = new StringBuilder(100);
     // Get compaction mode
     int codeIndex = 1;
     int code = codewords[codeIndex++];
@@ -131,7 +132,7 @@ final class DecodedBitStreamParser {
    * @param result    The decoded data is appended to the result.
    * @return The next index into the codeword array.
    */
-  private static int textCompaction(int[] codewords, int codeIndex, StringBuffer result) {
+  private static int textCompaction(int[] codewords, int codeIndex, StringBuilder result) {
     // 2 character per codeword
     int[] textCompactionData = new int[codewords[0] << 1];
     // Used to hold the byte compaction value if there is a mode shift
@@ -201,13 +202,13 @@ final class DecodedBitStreamParser {
   private static void decodeTextCompaction(int[] textCompactionData,
                                            int[] byteCompactionData,
                                            int length,
-                                           StringBuffer result) {
+                                           StringBuilder result) {
     // Beginning from an initial state of the Alpha sub-mode
     // The default compaction mode for PDF417 in effect at the start of each symbol shall always be Text
     // Compaction mode Alpha sub-mode (uppercase alphabetic). A latch codeword from another mode to the Text
     // Compaction mode shall always switch to the Text Compaction Alpha sub-mode.
-    int subMode = ALPHA;
-    int priorToShiftMode = ALPHA;
+    Mode subMode = Mode.ALPHA;
+    Mode priorToShiftMode = Mode.ALPHA;
     int i = 0;
     while (i < length) {
       int subModeCh = textCompactionData[i];
@@ -222,13 +223,13 @@ final class DecodedBitStreamParser {
             if (subModeCh == 26) {
               ch = ' ';
             } else if (subModeCh == LL) {
-              subMode = LOWER;
+              subMode = Mode.LOWER;
             } else if (subModeCh == ML) {
-              subMode = MIXED;
+              subMode = Mode.MIXED;
             } else if (subModeCh == PS) {
               // Shift to punctuation
               priorToShiftMode = subMode;
-              subMode = PUNCT_SHIFT;
+              subMode = Mode.PUNCT_SHIFT;
             } else if (subModeCh == MODE_SHIFT_TO_BYTE_COMPACTION_MODE) {
               result.append((char) byteCompactionData[i]);
             }
@@ -245,13 +246,13 @@ final class DecodedBitStreamParser {
             } else if (subModeCh == AS) {
               // Shift to alpha
               priorToShiftMode = subMode;
-              subMode = ALPHA_SHIFT;
+              subMode = Mode.ALPHA_SHIFT;
             } else if (subModeCh == ML) {
-              subMode = MIXED;
+              subMode = Mode.MIXED;
             } else if (subModeCh == PS) {
               // Shift to punctuation
               priorToShiftMode = subMode;
-              subMode = PUNCT_SHIFT;
+              subMode = Mode.PUNCT_SHIFT;
             } else if (subModeCh == MODE_SHIFT_TO_BYTE_COMPACTION_MODE) {
               result.append((char) byteCompactionData[i]);
             }
@@ -264,17 +265,17 @@ final class DecodedBitStreamParser {
             ch = MIXED_CHARS[subModeCh];
           } else {
             if (subModeCh == PL) {
-              subMode = PUNCT;
+              subMode = Mode.PUNCT;
             } else if (subModeCh == 26) {
               ch = ' ';
             } else if (subModeCh == LL) {
-              subMode = LOWER;
+              subMode = Mode.LOWER;
             } else if (subModeCh == AL) {
-              subMode = ALPHA;
+              subMode = Mode.ALPHA;
             } else if (subModeCh == PS) {
               // Shift to punctuation
               priorToShiftMode = subMode;
-              subMode = PUNCT_SHIFT;
+              subMode = Mode.PUNCT_SHIFT;
             } else if (subModeCh == MODE_SHIFT_TO_BYTE_COMPACTION_MODE) {
               result.append((char) byteCompactionData[i]);
             }
@@ -287,7 +288,7 @@ final class DecodedBitStreamParser {
             ch = PUNCT_CHARS[subModeCh];
           } else {
             if (subModeCh == PAL) {
-              subMode = ALPHA;
+              subMode = Mode.ALPHA;
             } else if (subModeCh == MODE_SHIFT_TO_BYTE_COMPACTION_MODE) {
               result.append((char) byteCompactionData[i]);
             }
@@ -315,7 +316,7 @@ final class DecodedBitStreamParser {
             ch = PUNCT_CHARS[subModeCh];
           } else {
             if (subModeCh == PAL) {
-              subMode = ALPHA;
+              subMode = Mode.ALPHA;
             }
           }
           break;
@@ -339,7 +340,7 @@ final class DecodedBitStreamParser {
    * @param result    The decoded data is appended to the result.
    * @return The next index into the codeword array.
    */
-  private static int byteCompaction(int mode, int[] codewords, int codeIndex, StringBuffer result) {
+  private static int byteCompaction(int mode, int[] codewords, int codeIndex, StringBuilder result) {
     if (mode == BYTE_COMPACTION_MODE_LATCH) {
       // Total number of Byte Compaction characters to be encoded
       // is not a multiple of 6
@@ -432,7 +433,7 @@ final class DecodedBitStreamParser {
    * @param result    The decoded data is appended to the result.
    * @return The next index into the codeword array.
    */
-  private static int numericCompaction(int[] codewords, int codeIndex, StringBuffer result) {
+  private static int numericCompaction(int[] codewords, int codeIndex, StringBuilder result) {
     int count = 0;
     boolean end = false;
 
@@ -464,7 +465,7 @@ final class DecodedBitStreamParser {
         // while in Numeric Compaction mode) serves  to terminate the
         // current Numeric Compaction mode grouping as described in 5.4.4.2,
         // and then to start a new one grouping.
-        String s = decodeBase900toBase10(numericCodewords, count);
+        BigInteger s = decodeBase900toBase10(numericCodewords, count);
         result.append(s);
         count = 0;
       }
@@ -514,123 +515,13 @@ final class DecodedBitStreamParser {
      632 x 900 power of 2 + 282 x 900 power of 1 + 200 x 900 power of 0 = 1000213298174000
 
      Remove leading 1 =>  Result is 000213298174000
-
-     As there are huge numbers involved here we must use fake out the maths using string
-     tokens for the numbers.
-     BigDecimal is not supported by J2ME.
    */
-  private static String decodeBase900toBase10(int[] codewords, int count) {
-    StringBuffer accum = null;
+  private static BigInteger decodeBase900toBase10(int[] codewords, int count) {
+    BigInteger result = BigInteger.ZERO;
     for (int i = 0; i < count; i++) {
-      StringBuffer value = multiply(EXP900[count - i - 1], codewords[i]);
-      if (accum == null) {
-        // First time in accum=0
-        accum = value;
-      } else {
-        accum = add(accum.toString(), value.toString());
-      }
-    }
-    String result = null;
-    // Remove leading '1' which was inserted to preserve
-    // leading zeros
-    for (int i = 0; i < accum.length(); i++) {
-      if (accum.charAt(i) == '1') {
-        //result = accum.substring(i + 1);
-        result = accum.toString().substring(i + 1);
-        break;
-      }
-    }
-    if (result == null) {
-      // No leading 1 => just write the converted number.
-      result = accum.toString();
+      result = result.add(EXP900[count - i - 1].multiply(BigInteger.valueOf(codewords[i])));
     }
     return result;
   }
 
-  /**
-   * Multiplies two String numbers
-   *
-   * @param value1 Any number represented as a string.
-   * @param value2 A number <= 999.
-   * @return the result of value1 * value2.
-   */
-  private static StringBuffer multiply(String value1, int value2) {
-    StringBuffer result = new StringBuffer(value1.length());
-    for (int i = 0; i < value1.length(); i++) {
-      // Put zeros into the result.
-      result.append('0');
-    }
-    int hundreds = value2 / 100;
-    int tens = (value2 / 10) % 10;
-    int ones = value2 % 10;
-    // Multiply by ones
-    for (int j = 0; j < ones; j++) {
-      result = add(result.toString(), value1);
-    }
-    // Multiply by tens
-    for (int j = 0; j < tens; j++) {
-      result = add(result.toString(), (value1 + '0').substring(1));
-    }
-    // Multiply by hundreds
-    for (int j = 0; j < hundreds; j++) {
-      result = add(result.toString(), (value1 + "00").substring(2));
-    }
-    return result;
-  }
-
-  /**
-   * Add two numbers which are represented as strings.
-   *
-   * @param value1
-   * @param value2
-   * @return the result of value1 + value2
-   */
-  private static StringBuffer add(String value1, String value2) {
-    StringBuffer temp1 = new StringBuffer(5);
-    StringBuffer temp2 = new StringBuffer(5);
-    StringBuffer result = new StringBuffer(value1.length());
-    for (int i = 0; i < value1.length(); i++) {
-      // Put zeros into the result.
-      result.append('0');
-    }
-    int carry = 0;
-    for (int i = value1.length() - 3; i > -1; i -= 3) {
-
-      temp1.setLength(0);
-      temp1.append(value1.charAt(i));
-      temp1.append(value1.charAt(i + 1));
-      temp1.append(value1.charAt(i + 2));
-
-      temp2.setLength(0);
-      temp2.append(value2.charAt(i));
-      temp2.append(value2.charAt(i + 1));
-      temp2.append(value2.charAt(i + 2));
-
-      int intValue1 = Integer.parseInt(temp1.toString());
-      int intValue2 = Integer.parseInt(temp2.toString());
-
-      int sumval = (intValue1 + intValue2 + carry) % 1000;
-      carry = (intValue1 + intValue2 + carry) / 1000;
-
-      result.setCharAt(i + 2, (char) ((sumval % 10) + '0'));
-      result.setCharAt(i + 1, (char) (((sumval / 10) % 10) + '0'));
-      result.setCharAt(i, (char) ((sumval / 100) + '0'));
-    }
-    return result;
-  }
-
-  /*
-   private static String decodeBase900toBase10(int codewords[], int count) {
-     BigInteger accum = BigInteger.valueOf(0);
-     BigInteger value = null;
-     for (int i = 0; i < count; i++) {
-       value = BigInteger.valueOf(900).pow(count - i - 1);
-       value = value.multiply(BigInteger.valueOf(codewords[i]));
-       accum = accum.add(value);
-     }
-     if (debug) System.out.println("Big Integer " + accum);
-     String result = accum.toString().substring(1);
-     return result;
-   }
-   */
 }

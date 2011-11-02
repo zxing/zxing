@@ -18,8 +18,10 @@ package com.google.zxing.client.result;
 
 import com.google.zxing.Result;
 
-import java.util.Hashtable;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>Parses an "sms:" URI result, which specifies a number to SMS.
@@ -36,12 +38,10 @@ import java.util.Vector;
  *
  * @author Sean Owen
  */
-final class SMSMMSResultParser extends ResultParser {
+public final class SMSMMSResultParser extends ResultParser {
 
-  private SMSMMSResultParser() {
-  }
-
-  public static SMSParsedResult parse(Result result) {
+  @Override
+  public SMSParsedResult parse(Result result) {
     String rawText = result.getText();
     if (!(rawText.startsWith("sms:") || rawText.startsWith("SMS:") ||
           rawText.startsWith("mms:") || rawText.startsWith("MMS:"))) {
@@ -49,13 +49,13 @@ final class SMSMMSResultParser extends ResultParser {
     }
 
     // Check up front if this is a URI syntax string with query arguments
-    Hashtable nameValuePairs = parseNameValuePairs(rawText);
+    Map<String,String> nameValuePairs = parseNameValuePairs(rawText);
     String subject = null;
     String body = null;
     boolean querySyntax = false;
     if (nameValuePairs != null && !nameValuePairs.isEmpty()) {
-      subject = (String) nameValuePairs.get("subject");
-      body = (String) nameValuePairs.get("body");
+      subject = nameValuePairs.get("subject");
+      body = nameValuePairs.get("body");
       querySyntax = true;
     }
 
@@ -71,8 +71,8 @@ final class SMSMMSResultParser extends ResultParser {
 
     int lastComma = -1;
     int comma;
-    Vector numbers = new Vector(1);
-    Vector vias = new Vector(1);
+    List<String> numbers = new ArrayList<String>(1);
+    List<String> vias = new ArrayList<String>(1);
     while ((comma = smsURIWithoutQuery.indexOf(',', lastComma + 1)) > lastComma) {
       String numberPart = smsURIWithoutQuery.substring(lastComma + 1, comma);
       addNumberVia(numbers, vias, numberPart);
@@ -80,16 +80,21 @@ final class SMSMMSResultParser extends ResultParser {
     }
     addNumberVia(numbers, vias, smsURIWithoutQuery.substring(lastComma + 1));    
 
-    return new SMSParsedResult(toStringArray(numbers), toStringArray(vias), subject, body);
+    return new SMSParsedResult(numbers.toArray(new String[numbers.size()]),
+                               vias.toArray(new String[vias.size()]),
+                               subject,
+                               body);
   }
 
-  private static void addNumberVia(Vector numbers, Vector vias, String numberPart) {
+  private static void addNumberVia(Collection<String> numbers,
+                                   Collection<String> vias,
+                                   String numberPart) {
     int numberEnd = numberPart.indexOf(';');
     if (numberEnd < 0) {
-      numbers.addElement(numberPart);
-      vias.addElement(null);
+      numbers.add(numberPart);
+      vias.add(null);
     } else {
-      numbers.addElement(numberPart.substring(0, numberEnd));
+      numbers.add(numberPart.substring(0, numberEnd));
       String maybeVia = numberPart.substring(numberEnd + 1);
       String via;
       if (maybeVia.startsWith("via=")) {
@@ -97,7 +102,7 @@ final class SMSMMSResultParser extends ResultParser {
       } else {
         via = null;
       }
-      vias.addElement(via);
+      vias.add(via);
     }
   }
 

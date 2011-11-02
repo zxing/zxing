@@ -29,13 +29,13 @@ package com.google.zxing.oned.rss.expanded;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Vector;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
 import com.google.zxing.BinaryBitmap;
+import com.google.zxing.BufferedImageLuminanceSource;
 import com.google.zxing.NotFoundException;
-import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.BitArray;
 import com.google.zxing.common.GlobalHistogramBinarizer;
 import org.junit.Assert;
@@ -235,7 +235,7 @@ public final class RSSExpandedImage2binaryTestCase extends Assert {
     int rowNumber = binaryMap.getHeight() / 2;
     BitArray row = binaryMap.getBlackRow(rowNumber, null);
 
-    Vector<ExpandedPair> pairs = rssExpandedReader.decodeRow2pairs(rowNumber, row);
+    List<ExpandedPair> pairs = rssExpandedReader.decodeRow2pairs(rowNumber, row);
     BitArray binary = BitArrayBuilder.buildBitArray(pairs);
     assertEquals(expected, binary.toString());
   }

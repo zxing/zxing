@@ -35,7 +35,7 @@ public final class GeoParsedResult extends ParsedResult {
   }
 
   public String getGeoURI() {
-    StringBuffer result = new StringBuffer();
+    StringBuilder result = new StringBuilder();
     result.append("geo:");
     result.append(latitude);
     result.append(',');
@@ -79,8 +79,9 @@ public final class GeoParsedResult extends ParsedResult {
     return query;
   }
 
+  @Override
   public String getDisplayResult() {
-    StringBuffer result = new StringBuffer(20);
+    StringBuilder result = new StringBuilder(20);
     result.append(latitude);
     result.append(", ");
     result.append(longitude);
@@ -96,37 +97,5 @@ public final class GeoParsedResult extends ParsedResult {
     }
     return result.toString();
   }
-
-  /**
-   * @return a URI link to Google Maps which display the point on the Earth described
-   *  by this instance, and sets the zoom level in a way that roughly reflects the
-   *  altitude, if specified
-   */
-  /*
-  public String getGoogleMapsURI() {
-    StringBuffer result = new StringBuffer(50);
-    result.append("http://maps.google.com/?ll=");
-    result.append(latitude);
-    result.append(',');
-    result.append(longitude);
-    if (altitude > 0.0f) {
-      // Map altitude to zoom level, cleverly. Roughly, zoom level 19 is like a
-      // view from 1000ft, 18 is like 2000ft, 17 like 4000ft, and so on.
-      double altitudeInFeet = altitude * 3.28;
-      int altitudeInKFeet = (int) (altitudeInFeet / 1000.0);
-      // No Math.log() available here, so compute log base 2 the old fashioned way
-      // Here logBaseTwo will take on a value between 0 and 18 actually
-      int logBaseTwo = 0;
-      while (altitudeInKFeet > 1 && logBaseTwo < 18) {
-        altitudeInKFeet >>= 1;
-        logBaseTwo++;
-      }
-      int zoom = 19 - logBaseTwo;
-      result.append("&z=");
-      result.append(zoom);
-    }
-    return result.toString();
-  }
-   */
 
 }

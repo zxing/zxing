@@ -21,17 +21,6 @@
 
   <distributable/>
 
-  <!--
-  <context-param>
-    <param-name>emailAddress</param-name>
-    <param-value>w@zxing.org</param-value>
-  </context-param>
-  <context-param>
-    <param-name>emailPassword</param-name>
-    <param-value>@EMAIL_PASSWORD@</param-value>
-  </context-param>
-  -->
-
   <filter>
     <filter-name>DoSFilter</filter-name>
     <filter-class>com.google.zxing.web.DoSFilter</filter-class>
@@ -45,11 +34,6 @@
   <listener>
     <listener-class>org.apache.commons.fileupload.servlet.FileCleanerCleanup</listener-class>
   </listener>
-  <!--
-  <listener>
-    <listener-class>com.google.zxing.web.DecodeEmailListener</listener-class>
-  </listener>
-  -->
 
   <servlet>
     <servlet-name>DecodeServlet</servlet-name>
@@ -65,11 +49,6 @@
     <servlet-name>jsp</servlet-name>
     <url-pattern>*.jspx</url-pattern>
   </servlet-mapping>
-
-  <mime-mapping>
-    <extension>cod</extension>
-    <mime-type>application/vnd.rim.cod</mime-type>
-  </mime-mapping>
 
   <welcome-file-list>
     <welcome-file>index.jspx</welcome-file>

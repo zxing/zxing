@@ -29,7 +29,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
-import java.util.Vector;
+import java.util.Collection;
 
 /**
  * This class handles all the messaging which comprises the state machine for capture.
@@ -50,7 +50,7 @@ public final class CaptureActivityHandler extends Handler {
     DONE
   }
 
-  CaptureActivityHandler(CaptureActivity activity, Vector<BarcodeFormat> decodeFormats,
+  CaptureActivityHandler(CaptureActivity activity, Collection<BarcodeFormat> decodeFormats,
       String characterSet) {
     this.activity = activity;
     decodeThread = new DecodeThread(activity, decodeFormats, characterSet,
@@ -112,7 +112,8 @@ public final class CaptureActivityHandler extends Handler {
     Message quit = Message.obtain(decodeThread.getHandler(), R.id.quit);
     quit.sendToTarget();
     try {
-      decodeThread.join();
+      // Wait at most half a second; should be enough time, and onPause() will timeout quickly
+      decodeThread.join(500L);
     } catch (InterruptedException e) {
       // continue
     }

@@ -26,21 +26,21 @@ import android.view.View;
 
 public final class ViewfinderView extends View {
 
-  private final Paint mPaint;
-  private final Rect mBox;
-  private final int mMaskColor;
-  private final int mFrameColor;
+  private final Paint paint;
+  private final Rect box;
+  private final int maskColor;
+  private final int frameColor;
 
   // This constructor is used when the class is built from an XML resource.
   public ViewfinderView(Context context, AttributeSet attrs) {
     super(context, attrs);
 
     // Initialize these once for performance rather than calling them every time in onDraw().
-    mPaint = new Paint();
-    mBox = new Rect();
+    paint = new Paint();
+    box = new Rect();
     Resources resources = getResources();
-    mMaskColor = resources.getColor(R.color.viewfinder_mask);
-    mFrameColor = resources.getColor(R.color.viewfinder_frame);
+    maskColor = resources.getColor(R.color.viewfinder_mask);
+    frameColor = resources.getColor(R.color.viewfinder_frame);
   }
 
   @Override
@@ -51,26 +51,26 @@ public final class ViewfinderView extends View {
 
     // Draw the exterior (i.e. outside the framing rect) darkened, in red to distinguish it from
     // the regular barcodes app
-    mPaint.setColor(mMaskColor);
-    mBox.set(0, 0, width, frame.top);
-    canvas.drawRect(mBox, mPaint);
-    mBox.set(0, frame.top, frame.left, frame.bottom + 1);
-    canvas.drawRect(mBox, mPaint);
-    mBox.set(frame.right + 1, frame.top, width, frame.bottom + 1);
-    canvas.drawRect(mBox, mPaint);
-    mBox.set(0, frame.bottom + 1, width, height);
-    canvas.drawRect(mBox, mPaint);
+    paint.setColor(maskColor);
+    box.set(0, 0, width, frame.top);
+    canvas.drawRect(box, paint);
+    box.set(0, frame.top, frame.left, frame.bottom + 1);
+    canvas.drawRect(box, paint);
+    box.set(frame.right + 1, frame.top, width, frame.bottom + 1);
+    canvas.drawRect(box, paint);
+    box.set(0, frame.bottom + 1, width, height);
+    canvas.drawRect(box, paint);
 
     // Draw a two pixel solid white border inside the framing rect
-    mPaint.setColor(mFrameColor);
-    mBox.set(frame.left, frame.top, frame.right + 1, frame.top + 2);
-    canvas.drawRect(mBox, mPaint);
-    mBox.set(frame.left, frame.top + 2, frame.left + 2, frame.bottom - 1);
-    canvas.drawRect(mBox, mPaint);
-    mBox.set(frame.right - 1, frame.top, frame.right + 1, frame.bottom - 1);
-    canvas.drawRect(mBox, mPaint);
-    mBox.set(frame.left, frame.bottom - 1, frame.right + 1, frame.bottom + 1);
-    canvas.drawRect(mBox, mPaint);
+    paint.setColor(frameColor);
+    box.set(frame.left, frame.top, frame.right + 1, frame.top + 2);
+    canvas.drawRect(box, paint);
+    box.set(frame.left, frame.top + 2, frame.left + 2, frame.bottom - 1);
+    canvas.drawRect(box, paint);
+    box.set(frame.right - 1, frame.top, frame.right + 1, frame.bottom - 1);
+    canvas.drawRect(box, paint);
+    box.set(frame.left, frame.bottom - 1, frame.right + 1, frame.bottom + 1);
+    canvas.drawRect(box, paint);
   }
 
 }

@@ -71,7 +71,8 @@ public final class HtmlAssetTranslator {
     }
   }
 
-  private static Collection<String> parseLanguagesToTranslate(File assetsDir, String languageArg) {
+  private static Collection<String> parseLanguagesToTranslate(File assetsDir,
+                                                              CharSequence languageArg) {
     Collection<String> languages = new ArrayList<String>();
     if ("all".equals(languageArg)) {
       FileFilter fileFilter = new FileFilter() {

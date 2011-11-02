@@ -55,10 +55,10 @@ public final class Detector {
   public AztecDetectorResult detect() throws NotFoundException {
 
     // 1. Get the center of the aztec matrix
-    Point pCenter = getMatrixCenter();
+     Point pCenter = getMatrixCenter();
 
      // 2. Get the corners of the center bull's eye
-    Point[] bullEyeCornerPoints = getBullEyeCornerPoints(pCenter);
+     Point[] bullEyeCornerPoints = getBullEyeCornerPoints(pCenter);
 
      // 3. Get the size of the matrix from the bull's eye
     extractParameters(bullEyeCornerPoints);
@@ -346,8 +346,8 @@ public final class Detector {
 
       // This exception can be in case the initial rectangle is white
       // In that case, surely in the bull's eye, we try to expand the rectangle.
-      int cx = image.width/2;
-      int cy = image.height/2;
+      int cx = image.getWidth()/2;
+      int cy = image.getHeight()/2;
       pointA = getFirstDifferent(new Point(cx+15/2, cy-15/2), false, 1, -1).toResultPoint();
       pointB = getFirstDifferent(new Point(cx+15/2, cy+15/2), false, 1, 1).toResultPoint();
       pointC = getFirstDifferent(new Point(cx-15/2, cy+15/2), false, -1, 1).toResultPoint();
@@ -390,10 +390,10 @@ public final class Detector {
    * Samples an Aztec matrix from an image
    */
   private BitMatrix sampleGrid(BitMatrix image,
-          ResultPoint topLeft,
-          ResultPoint bottomLeft,
-          ResultPoint bottomRight,
-          ResultPoint topRight) throws NotFoundException {
+                               ResultPoint topLeft,
+                               ResultPoint bottomLeft,
+                               ResultPoint bottomRight,
+                               ResultPoint topRight) throws NotFoundException {
 
     int dimension;
     if (compact) {
@@ -473,7 +473,7 @@ public final class Detector {
    * @param size number of bits
    * @return the array of bits
    */
-  private boolean[] sampleLine(Point p1, Point p2,int size) {
+  private boolean[] sampleLine(Point p1, Point p2, int size) {
 
     boolean[] res = new boolean[size];
     float d = distance(p1,p2);
@@ -497,7 +497,10 @@ public final class Detector {
    * @return true if the border of the rectangle passed in parameter is compound of white points only
    * or black points only
    */
-  private boolean isWhiteOrBlackRectangle(Point p1, Point p2, Point p3, Point p4) {
+  private boolean isWhiteOrBlackRectangle(Point p1,
+                                          Point p2,
+                                          Point p3,
+                                          Point p4) {
 
     int corr = 3;
 
@@ -610,7 +613,7 @@ public final class Detector {
   }
 
   private boolean isValid(int x, int y) {
-    return x >= 0 && x < image.width && y > 0 && y < image.height;
+    return x >= 0 && x < image.getWidth() && y > 0 && y < image.getHeight();
   }
 
   /**

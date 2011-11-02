@@ -27,14 +27,11 @@ import com.google.zxing.Result;
  *
  * @author Vikram Aggarwal
  */
-final class WifiResultParser extends ResultParser {
+public final class WifiResultParser extends ResultParser {
 
-  private WifiResultParser() {
-  }
-
-  public static WifiParsedResult parse(Result result) {
+  @Override
+  public WifiParsedResult parse(Result result) {
     String rawText = result.getText();
-
     if (!rawText.startsWith("WIFI:")) {
       return null;
     }

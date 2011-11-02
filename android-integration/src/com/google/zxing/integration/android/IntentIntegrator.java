@@ -103,7 +103,7 @@ public final class IntentIntegrator {
   static {
     Method temp;
     try {
-      temp = Intent.class.getMethod("setPackage", new Class[] {String.class});
+      temp = Intent.class.getMethod("setPackage", String.class);
     } catch (NoSuchMethodException nsme) {
       temp = null;
     }
@@ -212,6 +212,7 @@ public final class IntentIntegrator {
     downloadDialog.setTitle(stringTitle);
     downloadDialog.setMessage(stringMessage);
     downloadDialog.setPositiveButton(stringButtonYes, new DialogInterface.OnClickListener() {
+      @Override
       public void onClick(DialogInterface dialogInterface, int i) {
         Uri uri = Uri.parse("market://search?q=pname:" + PACKAGE);
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
@@ -224,6 +225,7 @@ public final class IntentIntegrator {
       }
     });
     downloadDialog.setNegativeButton(stringButtonNo, new DialogInterface.OnClickListener() {
+      @Override
       public void onClick(DialogInterface dialogInterface, int i) {}
     });
     return downloadDialog.show();

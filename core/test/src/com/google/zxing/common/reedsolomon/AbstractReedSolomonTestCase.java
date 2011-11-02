@@ -18,6 +18,7 @@ package com.google.zxing.common.reedsolomon;
 
 import org.junit.Assert;
 
+import java.security.SecureRandom;
 import java.util.BitSet;
 import java.util.Random;
 
@@ -48,10 +49,14 @@ abstract class AbstractReedSolomonTestCase extends Assert {
   }
 
   static Random getRandom() {
-    return new Random(0xDEADBEEF);
+    return new SecureRandom(new byte[] {(byte) 0xDE, (byte) 0xAD, (byte) 0xBE, (byte) 0xEF});
   }
 
-  static void assertArraysEqual(int[] expected, int expectedOffset, int[] actual, int actualOffset, int length) {
+  static void assertArraysEqual(int[] expected,
+                                int expectedOffset,
+                                int[] actual,
+                                int actualOffset,
+                                int length) {
     for (int i = 0; i < length; i++) {
       assertEquals(expected[expectedOffset + i], actual[actualOffset + i]);
     }

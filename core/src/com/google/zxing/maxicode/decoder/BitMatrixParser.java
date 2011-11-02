@@ -21,7 +21,7 @@ import com.google.zxing.common.BitMatrix;
 
 /**
  * @author mike32767
- * @author Manuel Kasten 
+ * @author Manuel Kasten
  */
 final class BitMatrixParser {
 
@@ -70,7 +70,7 @@ final class BitMatrixParser {
   BitMatrixParser(BitMatrix bitMatrix) {
     this.bitMatrix = bitMatrix;
   }
-  
+
   byte[] readCodewords() {
     byte[] result = new byte[144];
     int height = bitMatrix.getHeight();
@@ -86,5 +86,5 @@ final class BitMatrixParser {
     }
     return result;
   }
-  
+
 }

@@ -66,8 +66,8 @@ public abstract class AbstractDecoderTest extends Assert {
 	protected static final String compressedDate_March_12th_2010 = "....XXXX.X..XX..";
 	protected static final String compressedDate_End             = "X..X.XX.........";
 
-	protected static void assertCorrectBinaryString(String binaryString, String expectedNumber)
-      throws NotFoundException {
+	protected static void assertCorrectBinaryString(CharSequence binaryString,
+                                                  String expectedNumber) throws NotFoundException {
 		BitArray binary = BinaryUtil.buildBitArrayFromStringWithoutSpaces(binaryString);
 		AbstractExpandedDecoder decoder = AbstractExpandedDecoder.createDecoder(binary);
 		String result = decoder.parseInformation();

@@ -56,12 +56,14 @@ public final class DoSFilter implements Filter {
     bannedIPAddresses = Collections.synchronizedSet(new HashSet<String>());
   }
 
+  @Override
   public void init(FilterConfig filterConfig) {
     context = filterConfig.getServletContext();
     timer.scheduleAtFixedRate(new ResetTask(), 0L, MAX_ACCESS_INTERVAL_MSEC);
     timer.scheduleAtFixedRate(new UnbanTask(), 0L, UNBAN_INTERVAL_MSEC);
   }
 
+  @Override
   public void doFilter(ServletRequest request,
                        ServletResponse response,
                        FilterChain chain) throws IOException, ServletException {
@@ -93,6 +95,7 @@ public final class DoSFilter implements Filter {
     return false;
   }
 
+  @Override
   public void destroy() {
     timer.cancel();
     numRecentAccesses.clear();

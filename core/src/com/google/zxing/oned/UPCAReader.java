@@ -19,12 +19,13 @@ package com.google.zxing.oned;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.ChecksumException;
+import com.google.zxing.DecodeHintType;
 import com.google.zxing.FormatException;
 import com.google.zxing.NotFoundException;
 import com.google.zxing.Result;
 import com.google.zxing.common.BitArray;
 
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * <p>Implements decoding of the UPC-A format.</p>
@@ -36,29 +37,39 @@ public final class UPCAReader extends UPCEANReader {
 
   private final UPCEANReader ean13Reader = new EAN13Reader();
 
-  public Result decodeRow(int rowNumber, BitArray row, int[] startGuardRange, Hashtable hints)
+  @Override
+  public Result decodeRow(int rowNumber,
+                          BitArray row,
+                          int[] startGuardRange,
+                          Map<DecodeHintType,?> hints)
       throws NotFoundException, FormatException, ChecksumException {
     return maybeReturnResult(ean13Reader.decodeRow(rowNumber, row, startGuardRange, hints));
   }
 
-  public Result decodeRow(int rowNumber, BitArray row, Hashtable hints)
+  @Override
+  public Result decodeRow(int rowNumber, BitArray row, Map<DecodeHintType,?> hints)
       throws NotFoundException, FormatException, ChecksumException {
     return maybeReturnResult(ean13Reader.decodeRow(rowNumber, row, hints));
   }
 
+  @Override
   public Result decode(BinaryBitmap image) throws NotFoundException, FormatException {
     return maybeReturnResult(ean13Reader.decode(image));
   }
 
-  public Result decode(BinaryBitmap image, Hashtable hints) throws NotFoundException, FormatException {
+  @Override
+  public Result decode(BinaryBitmap image, Map<DecodeHintType,?> hints)
+      throws NotFoundException, FormatException {
     return maybeReturnResult(ean13Reader.decode(image, hints));
   }
 
+  @Override
   BarcodeFormat getBarcodeFormat() {
     return BarcodeFormat.UPC_A;
   }
 
-  protected int decodeMiddle(BitArray row, int[] startRange, StringBuffer resultString)
+  @Override
+  protected int decodeMiddle(BitArray row, int[] startRange, StringBuilder resultString)
       throws NotFoundException {
     return ean13Reader.decodeMiddle(row, startRange, resultString);
   }

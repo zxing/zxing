@@ -18,13 +18,14 @@ package com.google.zxing.maxicode.decoder;
 
 import com.google.zxing.common.DecoderResult;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 
 /**
  * <p>MaxiCodes can encode text or structured information as bits in one of several modes,
  * with multiple character sets in one code. This class decodes the bits back into text.</p>
  *
  * @author mike32767
- * @author Manuel Kasten 
+ * @author Manuel Kasten
  */
 final class DecodedBitStreamParser {
 
@@ -44,8 +45,8 @@ final class DecodedBitStreamParser {
   private static final char FS = '\u001C';
   private static final char GS = '\u001D';
   private static final char RS = '\u001E';
-  private static final DecimalFormat NINE_DIGITS = new DecimalFormat("000000000");
-  private static final DecimalFormat THREE_DIGITS = new DecimalFormat("000");
+  private static final NumberFormat NINE_DIGITS = new DecimalFormat("000000000");
+  private static final NumberFormat THREE_DIGITS = new DecimalFormat("000");
 
   private static final String[] SETS = {
     "\nABCDEFGHIJKLMNOPQRSTUVWXYZ"+ECI+FS+GS+RS+NS+' '+PAD+"\"#$%&'()*+,-./0123456789:"+SHIFTB+SHIFTC+SHIFTD+SHIFTE+LATCHB,
@@ -60,14 +61,14 @@ final class DecodedBitStreamParser {
   }
 
   static DecoderResult decode(byte[] bytes, int mode) {
-    StringBuffer result = new StringBuffer(144);
+    StringBuilder result = new StringBuilder(144);
     switch (mode) {
       case 2:
       case 3:
         String postcode;
         if (mode == 2) {
           int pc = getPostCode2(bytes);
-          DecimalFormat df = new DecimalFormat("0000000000".substring(0, getPostCode2Length(bytes)));
+          NumberFormat df = new DecimalFormat("0000000000".substring(0, getPostCode2Length(bytes)));
           postcode = df.format(pc);
         } else {
           postcode = getPostCode3(bytes);
@@ -135,7 +136,7 @@ final class DecodedBitStreamParser {
   }
 
   private static String getMessage(byte[] bytes, int start, int len) {
-    StringBuffer sb = new StringBuffer();
+    StringBuilder sb = new StringBuilder();
     int shift = -1;
     int set = 0;
     int lastset = 0;

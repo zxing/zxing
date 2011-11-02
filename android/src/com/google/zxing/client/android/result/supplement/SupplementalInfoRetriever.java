@@ -48,6 +48,7 @@ public abstract class SupplementalInfoRetriever implements Callable<Void> {
   private static synchronized ExecutorService getExecutorService() {
     if (executorInstance == null) {
       executorInstance = Executors.newCachedThreadPool(new ThreadFactory() {
+        @Override
         public Thread newThread(Runnable r) {
           Thread t = new Thread(r);
           t.setDaemon(true);
@@ -95,6 +96,7 @@ public abstract class SupplementalInfoRetriever implements Callable<Void> {
     this.historyManager = historyManager;
   }
 
+  @Override
   public final Void call() throws IOException, InterruptedException {
     retrieveSupplementalInfo();
     return null;
@@ -138,6 +140,7 @@ public abstract class SupplementalInfoRetriever implements Callable<Void> {
     }
 
     handler.post(new Runnable() {
+      @Override
       public void run() {
         textView.append(content);
         textView.setMovementMethod(LinkMovementMethod.getInstance());

@@ -44,16 +44,17 @@ final class AI013x0x1xDecoder extends AI01weightDecoder {
 
   AI013x0x1xDecoder(BitArray information, String firstAIdigits, String dateCode) {
     super(information);
-    this.dateCode      = dateCode;
+    this.dateCode = dateCode;
     this.firstAIdigits = firstAIdigits;
   }
 
+  @Override
   public String parseInformation() throws NotFoundException {
-    if (this.information.size != HEADER_SIZE + GTIN_SIZE + WEIGHT_SIZE + DATE_SIZE) {
+    if (this.getInformation().getSize() != HEADER_SIZE + GTIN_SIZE + WEIGHT_SIZE + DATE_SIZE) {
       throw NotFoundException.getNotFoundInstance();
     }
 
-    StringBuffer buf = new StringBuffer();
+    StringBuilder buf = new StringBuilder();
 
     encodeCompressedGtin(buf, HEADER_SIZE);
     encodeCompressedWeight(buf, HEADER_SIZE + GTIN_SIZE, WEIGHT_SIZE);
@@ -62,8 +63,8 @@ final class AI013x0x1xDecoder extends AI01weightDecoder {
     return buf.toString();
   }
 
-  private void encodeCompressedDate(StringBuffer buf, int currentPos) {
-    int numericDate = this.generalDecoder.extractNumericValueFromBitArray(currentPos, DATE_SIZE);
+  private void encodeCompressedDate(StringBuilder buf, int currentPos) {
+    int numericDate = this.getGeneralDecoder().extractNumericValueFromBitArray(currentPos, DATE_SIZE);
     if(numericDate == 38400) {
       return;
     }
@@ -92,7 +93,8 @@ final class AI013x0x1xDecoder extends AI01weightDecoder {
     buf.append(day);
   }
 
-  protected void addWeightCode(StringBuffer buf, int weight) {
+  @Override
+  protected void addWeightCode(StringBuilder buf, int weight) {
     int lastAI = weight / 100000;
     buf.append('(');
     buf.append(this.firstAIdigits);
@@ -100,6 +102,7 @@ final class AI013x0x1xDecoder extends AI01weightDecoder {
     buf.append(')');
   }
 
+  @Override
   protected int checkWeight(int weight) {
     return weight % 100000;
   }

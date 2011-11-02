@@ -18,11 +18,11 @@ package com.google.zxing.client.j2se;
 
 import com.google.zxing.DecodeHintType;
 
-import java.util.Hashtable;
+import java.util.Map;
 
 final class Config {
 
-  private Hashtable<DecodeHintType, Object> hints;
+  private Map<DecodeHintType,?> hints;
   private boolean tryHarder;
   private boolean pureBarcode;
   private boolean productsOnly;
@@ -34,11 +34,11 @@ final class Config {
   private int[] crop;
   private int threads = 1;
 
-  Hashtable<DecodeHintType, Object> getHints() {
+  Map<DecodeHintType,?> getHints() {
     return hints;
   }
 
-  void setHints(Hashtable<DecodeHintType, Object> hints) {
+  void setHints(Map<DecodeHintType,?> hints) {
     this.hints = hints;
   }
 

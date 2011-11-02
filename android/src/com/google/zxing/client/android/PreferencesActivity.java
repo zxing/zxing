@@ -68,6 +68,7 @@ public final class PreferencesActivity extends PreferenceActivity
     disableLastCheckedPref();
   }
 
+  @Override
   public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
     disableLastCheckedPref();
   }

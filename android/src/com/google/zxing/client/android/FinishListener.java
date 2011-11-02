@@ -33,14 +33,17 @@ public final class FinishListener
     this.activityToFinish = activityToFinish;
   }
 
+  @Override
   public void onCancel(DialogInterface dialogInterface) {
     run();
   }
 
+  @Override
   public void onClick(DialogInterface dialogInterface, int i) {
     run();
   }
 
+  @Override
   public void run() {
     activityToFinish.finish();
   }

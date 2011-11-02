@@ -59,21 +59,22 @@ public final class ZXingTestActivity extends Activity {
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     super.onCreateOptionsMenu(menu);
-    menu.add(0, ABOUT_ID, 0, R.string.about_menu)
-        .setIcon(android.R.drawable.ic_menu_info_details);
+    menu.add(0, ABOUT_ID, 0, R.string.about_menu).setIcon(android.R.drawable.ic_menu_info_details);
     return true;
   }
 
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
     if (item.getItemId() == ABOUT_ID) {
-      int versionCode = 0;
-      String versionName = "unknown";
+      int versionCode;
+      String versionName;
       try {
         PackageInfo info = getPackageManager().getPackageInfo(PACKAGE_NAME, 0);
         versionCode = info.versionCode;
         versionName = info.versionName;
       } catch (PackageManager.NameNotFoundException e) {
+        versionCode = 0;
+        versionName = "unknown";
       }
       AlertDialog.Builder builder = new AlertDialog.Builder(this);
       builder.setTitle(
@@ -86,7 +87,8 @@ public final class ZXingTestActivity extends Activity {
     return super.onOptionsItemSelected(item);
   }
 
-  public final Button.OnClickListener takeTestPhotos = new Button.OnClickListener() {
+  private final Button.OnClickListener takeTestPhotos = new Button.OnClickListener() {
+    @Override
     public void onClick(View v) {
       Intent intent = new Intent(Intent.ACTION_VIEW);
       intent.setClassName(ZXingTestActivity.this, CameraTestActivity.class.getName());
@@ -95,7 +97,8 @@ public final class ZXingTestActivity extends Activity {
     }
   };
 
-  public final Button.OnClickListener getCameraParameters = new Button.OnClickListener() {
+  private final Button.OnClickListener getCameraParameters = new Button.OnClickListener() {
+    @Override
     public void onClick(View v) {
       Intent intent = new Intent(Intent.ACTION_VIEW);
       intent.setClassName(ZXingTestActivity.this, CameraTestActivity.class.getName());
@@ -104,7 +107,8 @@ public final class ZXingTestActivity extends Activity {
     }
   };
 
-  public final Button.OnClickListener runBenchmark = new Button.OnClickListener() {
+  private final Button.OnClickListener runBenchmark = new Button.OnClickListener() {
+    @Override
     public void onClick(View v) {
       Intent intent = new Intent(Intent.ACTION_VIEW);
       intent.setClassName(ZXingTestActivity.this, BenchmarkActivity.class.getName());
@@ -112,7 +116,8 @@ public final class ZXingTestActivity extends Activity {
     }
   };
 
-  public final Button.OnClickListener scanProduct = new Button.OnClickListener() {
+  private final Button.OnClickListener scanProduct = new Button.OnClickListener() {
+    @Override
     public void onClick(View v) {
       Intent intent = new Intent("com.google.zxing.client.android.SCAN");
       intent.putExtra("SCAN_MODE", "PRODUCT_MODE");
@@ -122,7 +127,8 @@ public final class ZXingTestActivity extends Activity {
     }
   };
 
-  public final Button.OnClickListener scanQRCode = new Button.OnClickListener() {
+  private final Button.OnClickListener scanQRCode = new Button.OnClickListener() {
+    @Override
     public void onClick(View v) {
       Intent intent = new Intent("com.google.zxing.client.android.SCAN");
       intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
@@ -130,14 +136,16 @@ public final class ZXingTestActivity extends Activity {
     }
   };
 
-  public final Button.OnClickListener scanAnything = new Button.OnClickListener() {
+  private final Button.OnClickListener scanAnything = new Button.OnClickListener() {
+    @Override
     public void onClick(View v) {
       Intent intent = new Intent("com.google.zxing.client.android.SCAN");
       startActivityForResult(intent, 0);
     }
   };
 
-  public final Button.OnClickListener searchBookContents = new Button.OnClickListener() {
+  private final Button.OnClickListener searchBookContents = new Button.OnClickListener() {
+    @Override
     public void onClick(View v) {
       Intent intent = new Intent("com.google.zxing.client.android.SEARCH_BOOK_CONTENTS");
       intent.putExtra("ISBN", "9780441014989");
@@ -159,31 +167,36 @@ public final class ZXingTestActivity extends Activity {
     }
   }
 
-  public final Button.OnClickListener encodeURL = new Button.OnClickListener() {
+  private final Button.OnClickListener encodeURL = new Button.OnClickListener() {
+    @Override
     public void onClick(View v) {
       encodeBarcode("TEXT_TYPE", "http://www.nytimes.com");
     }
   };
 
-  public final Button.OnClickListener encodeEmail = new Button.OnClickListener() {
+  private final Button.OnClickListener encodeEmail = new Button.OnClickListener() {
+    @Override
     public void onClick(View v) {
       encodeBarcode("EMAIL_TYPE", "foo@example.com");
     }
   };
 
-  public final Button.OnClickListener encodePhone = new Button.OnClickListener() {
+  private final Button.OnClickListener encodePhone = new Button.OnClickListener() {
+    @Override
     public void onClick(View v) {
       encodeBarcode("PHONE_TYPE", "2125551212");
     }
   };
 
-  public final Button.OnClickListener encodeSMS = new Button.OnClickListener() {
+  private final Button.OnClickListener encodeSMS = new Button.OnClickListener() {
+    @Override
     public void onClick(View v) {
       encodeBarcode("SMS_TYPE", "2125551212");
     }
   };
 
-  public final Button.OnClickListener encodeContact = new Button.OnClickListener() {
+  private final Button.OnClickListener encodeContact = new Button.OnClickListener() {
+    @Override
     public void onClick(View v) {
       Bundle bundle = new Bundle();
       bundle.putString(Contacts.Intents.Insert.NAME, "Jenny");
@@ -194,7 +207,8 @@ public final class ZXingTestActivity extends Activity {
     }
   };
 
-  public final Button.OnClickListener encodeLocation = new Button.OnClickListener() {
+  private final Button.OnClickListener encodeLocation = new Button.OnClickListener() {
+    @Override
     public void onClick(View v) {
       Bundle bundle = new Bundle();
       bundle.putFloat("LAT", 40.829208f);
@@ -203,7 +217,8 @@ public final class ZXingTestActivity extends Activity {
     }
   };
 
-  public final Button.OnClickListener encodeHiddenData = new Button.OnClickListener() {
+  private final Button.OnClickListener encodeHiddenData = new Button.OnClickListener() {
+    @Override
     public void onClick(View v) {
       Intent intent = new Intent("com.google.zxing.client.android.ENCODE");
       intent.putExtra("ENCODE_TYPE", "TEXT_TYPE");
@@ -213,13 +228,15 @@ public final class ZXingTestActivity extends Activity {
     }
   };
 
-  public final Button.OnClickListener encodeBadData = new Button.OnClickListener() {
+  private final Button.OnClickListener encodeBadData = new Button.OnClickListener() {
+    @Override
     public void onClick(View v) {
       encodeBarcode(null, "bar");
     }
   };
 
-  public final Button.OnClickListener shareViaBarcode = new Button.OnClickListener() {
+  private final Button.OnClickListener shareViaBarcode = new Button.OnClickListener() {
+    @Override
     public void onClick(View v) {
       startActivity(new Intent("com.google.zxing.client.android.SHARE"));
     }

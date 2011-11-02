@@ -33,8 +33,8 @@
     <mkdir dir="build"/>
     <javac srcdir="src"
            destdir="build"
-           source="1.5"
-           target="1.5"
+           source="6"
+           target="6"
            optimize="true"
            debug="true"
            deprecation="true"

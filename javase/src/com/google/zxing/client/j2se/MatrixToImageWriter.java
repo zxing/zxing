@@ -60,7 +60,7 @@ public final class MatrixToImageWriter {
    * @see #toBufferedImage(BitMatrix)
    */
   public static void writeToFile(BitMatrix matrix, String format, File file)
-          throws IOException {
+      throws IOException {
     BufferedImage image = toBufferedImage(matrix);
     if (!ImageIO.write(image, format, file)) {
       throw new IOException("Could not write an image of format " + format + " to " + file);
@@ -73,7 +73,7 @@ public final class MatrixToImageWriter {
    * @see #toBufferedImage(BitMatrix)
    */
   public static void writeToStream(BitMatrix matrix, String format, OutputStream stream)
-          throws IOException {
+      throws IOException {
     BufferedImage image = toBufferedImage(matrix);
     if (!ImageIO.write(image, format, stream)) {
       throw new IOException("Could not write an image of format " + format);

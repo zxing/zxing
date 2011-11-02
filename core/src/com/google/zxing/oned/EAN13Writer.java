@@ -17,11 +17,11 @@
 package com.google.zxing.oned;
 
 import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 
-import java.util.Hashtable;
-
+import java.util.Map;
 
 /**
  * This object renders an EAN13 code as a {@link BitMatrix}.
@@ -36,8 +36,12 @@ public final class EAN13Writer extends UPCEANWriter {
       (7 * 6) + // right bars
       3; // end guard
 
-  public BitMatrix encode(String contents, BarcodeFormat format, int width, int height,
-      Hashtable hints) throws WriterException {
+  @Override
+  public BitMatrix encode(String contents,
+                          BarcodeFormat format,
+                          int width,
+                          int height,
+                          Map<EncodeHintType,?> hints) throws WriterException {
     if (format != BarcodeFormat.EAN_13) {
       throw new IllegalArgumentException("Can only encode EAN_13, but got " + format);
     }
@@ -45,6 +49,7 @@ public final class EAN13Writer extends UPCEANWriter {
     return super.encode(contents, format, width, height, hints);
   }
 
+  @Override
   public byte[] encode(String contents) {
     if (contents.length() != 13) {
       throw new IllegalArgumentException(

@@ -40,7 +40,7 @@ final class BlockParsedResult {
   }
 
   BlockParsedResult(DecodedInformation information, boolean finished) {
-    this.finished           = finished;
+    this.finished = finished;
     this.decodedInformation = information;
   }
 

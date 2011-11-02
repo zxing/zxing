@@ -42,8 +42,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.EnumMap;
 import java.util.HashSet;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * This class does the work of decoding the user's request and extracting all the data
@@ -104,7 +105,7 @@ final class QRCodeEncoder {
       // Ignore it then
       format = null;
     }
-    if (format == null || BarcodeFormat.QR_CODE.equals(format)) {
+    if (format == null || format == BarcodeFormat.QR_CODE) {
       String type = intent.getStringExtra(Intents.Encode.TYPE);
       if (type == null || type.length() == 0) {
         return false;
@@ -379,10 +380,10 @@ final class QRCodeEncoder {
   }
 
   Bitmap encodeAsBitmap() throws WriterException {
-    Hashtable<EncodeHintType,Object> hints = null;
+    Map<EncodeHintType,Object> hints = null;
     String encoding = guessAppropriateEncoding(contents);
     if (encoding != null) {
-      hints = new Hashtable<EncodeHintType,Object>(2);
+      hints = new EnumMap<EncodeHintType,Object>(EncodeHintType.class);
       hints.put(EncodeHintType.CHARACTER_SET, encoding);
     }
     MultiFormatWriter writer = new MultiFormatWriter();

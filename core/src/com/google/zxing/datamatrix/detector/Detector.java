@@ -19,15 +19,17 @@ package com.google.zxing.datamatrix.detector;
 import com.google.zxing.NotFoundException;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitMatrix;
-import com.google.zxing.common.Collections;
-import com.google.zxing.common.Comparator;
 import com.google.zxing.common.DetectorResult;
 import com.google.zxing.common.GridSampler;
 import com.google.zxing.common.detector.WhiteRectangleDetector;
 
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Vector;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>Encapsulates logic that can detect a Data Matrix Code in an image, even if the Data Matrix Code
@@ -36,12 +38,6 @@ import java.util.Vector;
  * @author Sean Owen
  */
 public final class Detector {
-
-  // Trick to avoid creating new Integer objects below -- a sort of crude copy of
-  // the Integer.valueOf(int) optimization added in Java 5, not in J2ME
-  private static final Integer[] INTEGERS =
-      { new Integer(0), new Integer(1), new Integer(2), new Integer(3), new Integer(4) };
-  // No, can't use valueOf()
 
   private final BitMatrix image;
   private final WhiteRectangleDetector rectangleDetector;
@@ -68,21 +64,21 @@ public final class Detector {
     // Point A and D are across the diagonal from one another,
     // as are B and C. Figure out which are the solid black lines
     // by counting transitions
-    Vector transitions = new Vector(4);
-    transitions.addElement(transitionsBetween(pointA, pointB));
-    transitions.addElement(transitionsBetween(pointA, pointC));
-    transitions.addElement(transitionsBetween(pointB, pointD));
-    transitions.addElement(transitionsBetween(pointC, pointD));
-    Collections.insertionSort(transitions, new ResultPointsAndTransitionsComparator());
+    List<ResultPointsAndTransitions> transitions = new ArrayList<ResultPointsAndTransitions>(4);
+    transitions.add(transitionsBetween(pointA, pointB));
+    transitions.add(transitionsBetween(pointA, pointC));
+    transitions.add(transitionsBetween(pointB, pointD));
+    transitions.add(transitionsBetween(pointC, pointD));
+    Collections.sort(transitions, new ResultPointsAndTransitionsComparator());
 
     // Sort by number of transitions. First two will be the two solid sides; last two
     // will be the two alternating black/white sides
-    ResultPointsAndTransitions lSideOne = (ResultPointsAndTransitions) transitions.elementAt(0);
-    ResultPointsAndTransitions lSideTwo = (ResultPointsAndTransitions) transitions.elementAt(1);
+    ResultPointsAndTransitions lSideOne = transitions.get(0);
+    ResultPointsAndTransitions lSideTwo = transitions.get(1);
 
     // Figure out which point is their intersection by tallying up the number of times we see the
     // endpoints in the four endpoints. One will show up twice.
-    Hashtable pointCount = new Hashtable();
+    Map<ResultPoint,Integer> pointCount = new HashMap<ResultPoint,Integer>();
     increment(pointCount, lSideOne.getFrom());
     increment(pointCount, lSideOne.getTo());
     increment(pointCount, lSideTwo.getFrom());
@@ -91,11 +87,10 @@ public final class Detector {
     ResultPoint maybeTopLeft = null;
     ResultPoint bottomLeft = null;
     ResultPoint maybeBottomRight = null;
-    Enumeration points = pointCount.keys();
-    while (points.hasMoreElements()) {
-      ResultPoint point = (ResultPoint) points.nextElement();
-      Integer value = (Integer) pointCount.get(point);
-      if (value.intValue() == 2) {
+    for (Map.Entry<ResultPoint,Integer> entry : pointCount.entrySet()) {
+      ResultPoint point = entry.getKey();
+      Integer value = entry.getValue();
+      if (value == 2) {
         bottomLeft = point; // this is definitely the bottom left, then -- end of two L sides
       } else {
         // Otherwise it's either top left or bottom right -- just assign the two arbitrarily now
@@ -222,8 +217,11 @@ public final class Detector {
    * for a rectangular matrix
    */
   private ResultPoint correctTopRightRectangular(ResultPoint bottomLeft,
-		ResultPoint bottomRight, ResultPoint topLeft, ResultPoint topRight,
-		int dimensionTop, int dimensionRight) {
+                                                 ResultPoint bottomRight,
+                                                 ResultPoint topLeft,
+                                                 ResultPoint topRight,
+                                                 int dimensionTop,
+                                                 int dimensionRight) {
 	  
 		float corr = distance(bottomLeft, bottomRight) / (float)dimensionTop;
 		int norm = distance(topLeft, topRight);
@@ -304,7 +302,7 @@ public final class Detector {
   }
 
   private boolean isValid(ResultPoint p) {
-	  return p.getX() >= 0 && p.getX() < image.width && p.getY() > 0 && p.getY() < image.height;
+	  return p.getX() >= 0 && p.getX() < image.getWidth() && p.getY() > 0 && p.getY() < image.getHeight();
   }
 
   /**
@@ -315,7 +313,7 @@ public final class Detector {
     return (int) (d + 0.5f);
   }
 
-  // L2 distance
+// L2 distance
   private static int distance(ResultPoint a, ResultPoint b) {
     return round((float) Math.sqrt((a.getX() - b.getX())
         * (a.getX() - b.getX()) + (a.getY() - b.getY())
@@ -325,9 +323,9 @@ public final class Detector {
   /**
    * Increments the Integer associated with a key by one.
    */
-  private static void increment(Hashtable table, ResultPoint key) {
-    Integer value = (Integer) table.get(key);
-    table.put(key, value == null ? INTEGERS[1] : INTEGERS[value.intValue() + 1]);
+  private static void increment(Map<ResultPoint,Integer> table, ResultPoint key) {
+    Integer value = table.get(key);
+    table.put(key, value == null ? 1 : value + 1);
   }
 
   private static BitMatrix sampleGrid(BitMatrix image,
@@ -409,23 +407,30 @@ public final class Detector {
    * Simply encapsulates two points and a number of transitions between them.
    */
   private static class ResultPointsAndTransitions {
+
     private final ResultPoint from;
     private final ResultPoint to;
     private final int transitions;
+
     private ResultPointsAndTransitions(ResultPoint from, ResultPoint to, int transitions) {
       this.from = from;
       this.to = to;
       this.transitions = transitions;
     }
+
     ResultPoint getFrom() {
       return from;
     }
+
     ResultPoint getTo() {
       return to;
     }
+
     public int getTransitions() {
       return transitions;
     }
+    
+    @Override
     public String toString() {
       return from + "/" + to + '/' + transitions;
     }
@@ -434,9 +439,11 @@ public final class Detector {
   /**
    * Orders ResultPointsAndTransitions by number of transitions, ascending.
    */
-  private static class ResultPointsAndTransitionsComparator implements Comparator {
-    public int compare(Object o1, Object o2) {
-      return ((ResultPointsAndTransitions) o1).getTransitions() - ((ResultPointsAndTransitions) o2).getTransitions();
+  private static class ResultPointsAndTransitionsComparator
+      implements Comparator<ResultPointsAndTransitions>, Serializable {
+    @Override
+    public int compare(ResultPointsAndTransitions o1, ResultPointsAndTransitions o2) {
+      return o1.getTransitions() - o2.getTransitions();
     }
   }
 

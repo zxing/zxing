@@ -91,7 +91,7 @@ public abstract class LuminanceSource {
    * @return A cropped version of this object.
    */
   public LuminanceSource crop(int left, int top, int width, int height) {
-    throw new RuntimeException("This luminance source does not support cropping.");
+    throw new UnsupportedOperationException("This luminance source does not support cropping.");
   }
 
   /**
@@ -107,12 +107,13 @@ public abstract class LuminanceSource {
    * @return A rotated version of this object.
    */
   public LuminanceSource rotateCounterClockwise() {
-    throw new RuntimeException("This luminance source does not support rotation.");
+    throw new UnsupportedOperationException("This luminance source does not support rotation.");
   }
 
+  @Override
   public String toString() {
     byte[] row = new byte[width];
-    StringBuffer result = new StringBuffer(height * (width + 1));
+    StringBuilder result = new StringBuilder(height * (width + 1));
     for (int y = 0; y < height; y++) {
       row = getRow(y, row);
       for (int x = 0; x < width; x++) {

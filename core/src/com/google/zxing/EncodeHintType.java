@@ -21,19 +21,16 @@ package com.google.zxing;
  *
  * @author dswitkin@google.com (Daniel Switkin)
  */
-public final class EncodeHintType {
+public enum EncodeHintType {
 
   /**
    * Specifies what degree of error correction to use, for example in QR Codes (type Integer).
    */
-  public static final EncodeHintType ERROR_CORRECTION = new EncodeHintType();
+  ERROR_CORRECTION,
 
   /**
    * Specifies what character encoding to use where applicable (type String)
    */
-  public static final EncodeHintType CHARACTER_SET = new EncodeHintType();
-
-  private EncodeHintType() {
-  }
+  CHARACTER_SET,
 
 }

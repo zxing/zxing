@@ -41,6 +41,7 @@ public final class ProductResultHandler extends ResultHandler {
   public ProductResultHandler(Activity activity, ParsedResult result, Result rawResult) {
     super(activity, result, rawResult);
     showGoogleShopperButton(new View.OnClickListener() {
+      @Override
       public void onClick(View view) {
         ProductParsedResult productResult = (ProductParsedResult) getResult();
         openGoogleShopper(productResult.getNormalizedProductID());
@@ -61,6 +62,7 @@ public final class ProductResultHandler extends ResultHandler {
   @Override
   public void handleButtonPress(final int index) {
     showNotOurResults(index, new AlertDialog.OnClickListener() {
+      @Override
       public void onClick(DialogInterface dialogInterface, int i) {
         ProductParsedResult productResult = (ProductParsedResult) getResult();
         switch (index) {

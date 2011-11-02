@@ -47,6 +47,14 @@ public final class URIParsedResultTestCase extends Assert {
     doTest("otpauth://remoteaccess?devaddr=00%a1b2%c3d4&devname=foo&key=bar",
            "otpauth://remoteaccess?devaddr=00%a1b2%c3d4&devname=foo&key=bar",
            null);
+    doTest("s3://amazon.com:8123", "s3://amazon.com:8123", null);
+  }
+
+  @Test
+  public void testNotURI() {
+    doTestNotUri("google.c");
+    doTestNotUri(".com");
+    doTestNotUri(":80/");
   }
 
   @Test
@@ -58,20 +66,11 @@ public final class URIParsedResultTestCase extends Assert {
 
   @Test
   public void testGarbage() {
-    String text = "Da65cV1g^>%^f0bAbPn1CJB6lV7ZY8hs0Sm:DXU0cd]GyEeWBz8]bUHLB";
-    Result fakeResult = new Result(text, null, null, BarcodeFormat.QR_CODE);
-    ParsedResult result = ResultParser.parseResult(fakeResult);
-    assertSame(ParsedResultType.TEXT, result.getType());
-    assertEquals(text, result.getDisplayResult());
-  }
-
-  @Test
-  public void testGarbage2() {
-    String text = "DEA\u0003\u0019M\u0006\u0000\b√•\u0000¬áHO\u0000X$\u0001\u0000\u001Fwfc\u0007!√æ¬ì¬ò\u0013\u0013¬æZ{√π√é√ù√ö¬óZ¬ß¬®+y_zb√±k\u00117¬∏\u000E¬Ü√ú\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000¬£.ux";
-    Result fakeResult = new Result(text, null, null, BarcodeFormat.QR_CODE);
-    ParsedResult result = ResultParser.parseResult(fakeResult);
-    assertSame(ParsedResultType.TEXT, result.getType());
-    assertEquals(text, result.getDisplayResult());
+    doTestNotUri("Da65cV1g^>%^f0bAbPn1CJB6lV7ZY8hs0Sm:DXU0cd]GyEeWBz8]bUHLB");
+    doTestNotUri("DEA\u0003\u0019M\u0006\u0000\b√•\u0000¬áHO\u0000X$\u0001\u0000\u001Fwfc\u0007!√æ¬ì¬ò" +
+                 "\u0013\u0013¬æZ{√π√é√ù√ö¬óZ¬ß¬®+y_zb√±k\u00117¬∏\u000E¬Ü√ú\u0000\u0000\u0000\u0000" +
+                 "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000" +
+                 "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000¬£.ux");
   }
 
   @Test
@@ -79,9 +78,12 @@ public final class URIParsedResultTestCase extends Assert {
     doTestIsPossiblyMalicious("http://google.com", false);
     doTestIsPossiblyMalicious("http://google.com@evil.com", true);
     doTestIsPossiblyMalicious("http://google.com:@evil.com", true);
-    doTestIsPossiblyMalicious("google.com:@evil.com", true);
+    doTestIsPossiblyMalicious("google.com:@evil.com", false);
     doTestIsPossiblyMalicious("https://google.com:443", false);
+    doTestIsPossiblyMalicious("https://google.com:443/", false);
+    doTestIsPossiblyMalicious("https://evil@google.com:443", true);
     doTestIsPossiblyMalicious("http://google.com/foo@bar", false);
+    doTestIsPossiblyMalicious("http://google.com/@@", false);
   }
 
   private static void doTest(String contents, String uri, String title) {
@@ -91,6 +93,13 @@ public final class URIParsedResultTestCase extends Assert {
     URIParsedResult uriResult = (URIParsedResult) result;
     assertEquals(uri, uriResult.getURI());
     assertEquals(title, uriResult.getTitle());
+  }
+  
+  private static void doTestNotUri(String text) {
+    Result fakeResult = new Result(text, null, null, BarcodeFormat.QR_CODE);
+    ParsedResult result = ResultParser.parseResult(fakeResult);
+    assertSame(ParsedResultType.TEXT, result.getType());
+    assertEquals(text, result.getDisplayResult());
   }
 
   private static void doTestIsPossiblyMalicious(String uri, boolean expected) {

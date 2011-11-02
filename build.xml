@@ -26,12 +26,6 @@
     <ant dir="android" target="compile"/>
     <ant dir="androidtest" target="compile"/>
     <ant dir="android-integration" target="build"/>
-    <!--<ant dir="zxingorg" target="build"/>-->
-  </target>
-
-  <target name="buildwithoutj2me">
-    <ant dir="core" target="build"/>
-    <ant dir="javase" target="build"/>
   </target>
 
   <target name="clean">
@@ -40,7 +34,6 @@
     <ant dir="android" target="clean"/>
     <ant dir="androidtest" target="clean"/>
     <ant dir="android-integration" target="clean"/>
-    <ant dir="zxingorg" target="clean"/>
     <delete dir="docs/javadoc"/>
   </target>
 
@@ -56,7 +49,6 @@
         <exclude name="**/*.iml"/>
         <include name="AUTHORS"/>
         <include name="COPYING"/>
-        <include name="README"/>
         <include name="CHANGES"/>
         <include name="build.xml"/>
         <include name="build.properties"/>
@@ -64,18 +56,14 @@
         <include name="android/**"/>
         <include name="android-integration/**"/>
         <include name="androidtest/**"/>
-        <include name="bug/**"/>
-        <exclude name="bug/lib/com.buglabs*"/> <!-- Cannot distributed GPLed libraries -->
         <include name="core/**"/>
         <include name="cpp/**"/>
         <include name="iphone/**"/>
         <include name="javame/**"/>
         <include name="javase/**"/>
-        <include name="rim/**"/>
         <include name="docs/**"/>
         <include name="zxing.appspot.com/**"/>
         <include name="zxingorg/**"/>
-        <exclude name="zxingorg/secrets.properties"/>
       </zipfileset>
     </zip>
   </target>
@@ -94,18 +82,7 @@
         <pathelement location="zxingorg/src"/>
       </sourcepath>
       <classpath>
-        <!-- These are used with WTK 2.5.x -->
-        <!--
-        <pathelement location="${WTK-home}/lib/cldcapi11.jar"/>
-        <pathelement location="${WTK-home}/lib/midpapi20.jar"/>
-        <pathelement location="${WTK-home}/lib/mmapi.jar"/>
-        <pathelement location="${WTK-home}/lib/jsr234.jar"/>
-        -->
-        <pathelement location="${WTK-home}/lib/cldc_1.1.jar"/>
-        <pathelement location="${WTK-home}/lib/midp_2.0.jar"/>
-        <pathelement location="${WTK-home}/lib/jsr135_1.2.jar"/>
-        <pathelement location="${WTK-home}/lib/jsr234_1.0.jar"/>
-        <pathelement location="${android-home}/platforms/android-3/android.jar"/>
+        <pathelement location="${android-home}/platforms/android-10/android.jar"/>
         <pathelement location="${tomcat-home}/lib/servlet-api.jar"/>
         <fileset dir="zxingorg/web/WEB-INF/lib">
           <include name="*.jar"/>

@@ -20,7 +20,6 @@ import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitArray;
 import com.google.zxing.common.CharacterSetECI;
-import com.google.zxing.common.ECI;
 import com.google.zxing.common.reedsolomon.GenericGF;
 import com.google.zxing.common.reedsolomon.ReedSolomonEncoder;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
@@ -28,8 +27,9 @@ import com.google.zxing.qrcode.decoder.Mode;
 import com.google.zxing.qrcode.decoder.Version;
 
 import java.io.UnsupportedEncodingException;
-import java.util.Hashtable;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Map;
 
 /**
  * @author satorux@google.com (Satoru Takabayashi) - creator
@@ -79,8 +79,10 @@ public final class Encoder {
     encode(content, ecLevel, null, qrCode);
   }
 
-  public static void encode(String content, ErrorCorrectionLevel ecLevel, Hashtable hints,
-      QRCode qrCode) throws WriterException {
+  public static void encode(String content,
+                            ErrorCorrectionLevel ecLevel,
+                            Map<EncodeHintType,?> hints,
+                            QRCode qrCode) throws WriterException {
 
     String encoding = hints == null ? null : (String) hints.get(EncodeHintType.CHARACTER_SET);
     if (encoding == null) {
@@ -110,7 +112,7 @@ public final class Encoder {
 
     appendModeInfo(mode, headerAndDataBits);
 
-    int numLetters = mode.equals(Mode.BYTE) ? dataBits.getSizeInBytes() : content.length();
+    int numLetters = mode == Mode.BYTE ? dataBits.getSizeInBytes() : content.length();
     appendLengthInfo(numLetters, qrCode.getVersion(), mode, headerAndDataBits);
     headerAndDataBits.appendBitArray(dataBits);
 
@@ -124,10 +126,10 @@ public final class Encoder {
 
     // Step 7: Choose the mask pattern and set to "qrCode".
     ByteMatrix matrix = new ByteMatrix(qrCode.getMatrixWidth(), qrCode.getMatrixWidth());
-    qrCode.setMaskPattern(chooseMaskPattern(finalBits, qrCode.getECLevel(), qrCode.getVersion(), matrix));
+    qrCode.setMaskPattern(chooseMaskPattern(finalBits, ecLevel, qrCode.getVersion(), matrix));
 
     // Step 8.  Build the matrix and set it to "qrCode".
-    MatrixUtil.buildMatrix(finalBits, qrCode.getECLevel(), qrCode.getVersion(), qrCode.getMaskPattern(), matrix);
+    MatrixUtil.buildMatrix(finalBits, ecLevel, qrCode.getVersion(), qrCode.getMaskPattern(), matrix);
     qrCode.setMatrix(matrix);
     // Step 9.  Make sure we have a valid QR Code.
     if (!qrCode.isValid()) {
@@ -200,8 +202,10 @@ public final class Encoder {
     return true;
   }
 
-  private static int chooseMaskPattern(BitArray bits, ErrorCorrectionLevel ecLevel, int version,
-      ByteMatrix matrix) throws WriterException {
+  private static int chooseMaskPattern(BitArray bits,
+                                       ErrorCorrectionLevel ecLevel,
+                                       int version,
+                                       ByteMatrix matrix) throws WriterException {
 
     int minPenalty = Integer.MAX_VALUE;  // Lower penalty is better.
     int bestMaskPattern = -1;
@@ -221,8 +225,10 @@ public final class Encoder {
    * Initialize "qrCode" according to "numInputBits", "ecLevel", and "mode". On success,
    * modify "qrCode".
    */
-  private static void initQRCode(int numInputBits, ErrorCorrectionLevel ecLevel, Mode mode,
-      QRCode qrCode) throws WriterException {
+  private static void initQRCode(int numInputBits,
+                                 ErrorCorrectionLevel ecLevel,
+                                 Mode mode,
+                                 QRCode qrCode) throws WriterException {
     qrCode.setECLevel(ecLevel);
     qrCode.setMode(mode);
 
@@ -301,9 +307,12 @@ public final class Encoder {
    * the result in "numDataBytesInBlock", and "numECBytesInBlock". See table 12 in 8.5.1 of
    * JISX0510:2004 (p.30)
    */
-  static void getNumDataBytesAndNumECBytesForBlockID(int numTotalBytes, int numDataBytes,
-      int numRSBlocks, int blockID, int[] numDataBytesInBlock,
-      int[] numECBytesInBlock) throws WriterException {
+  static void getNumDataBytesAndNumECBytesForBlockID(int numTotalBytes,
+                                                     int numDataBytes,
+                                                     int numRSBlocks,
+                                                     int blockID,
+                                                     int[] numDataBytesInBlock,
+                                                     int[] numECBytesInBlock) throws WriterException {
     if (blockID >= numRSBlocks) {
       throw new WriterException("Block ID too large");
     }
@@ -354,8 +363,11 @@ public final class Encoder {
    * Interleave "bits" with corresponding error correction bytes. On success, store the result in
    * "result". The interleave rule is complicated. See 8.6 of JISX0510:2004 (p.37) for details.
    */
-  static void interleaveWithECBytes(BitArray bits, int numTotalBytes,
-      int numDataBytes, int numRSBlocks, BitArray result) throws WriterException {
+  static void interleaveWithECBytes(BitArray bits,
+                                    int numTotalBytes,
+                                    int numDataBytes,
+                                    int numRSBlocks,
+                                    BitArray result) throws WriterException {
 
     // "bits" must have "getNumDataBytes" bytes of data.
     if (bits.getSizeInBytes() != numDataBytes) {
@@ -369,7 +381,7 @@ public final class Encoder {
     int maxNumEcBytes = 0;
 
     // Since, we know the number of reedsolmon blocks, we can initialize the vector with the number.
-    Vector blocks = new Vector(numRSBlocks);
+    Collection<BlockPair> blocks = new ArrayList<BlockPair>(numRSBlocks);
 
     for (int i = 0; i < numRSBlocks; ++i) {
       int[] numDataBytesInBlock = new int[1];
@@ -382,7 +394,7 @@ public final class Encoder {
       byte[] dataBytes = new byte[size];
       bits.toBytes(8*dataBytesOffset, dataBytes, 0, size);
       byte[] ecBytes = generateECBytes(dataBytes, numEcBytesInBlock[0]);
-      blocks.addElement(new BlockPair(dataBytes, ecBytes));
+      blocks.add(new BlockPair(dataBytes, ecBytes));
 
       maxNumDataBytes = Math.max(maxNumDataBytes, size);
       maxNumEcBytes = Math.max(maxNumEcBytes, ecBytes.length);
@@ -394,8 +406,8 @@ public final class Encoder {
 
     // First, place data blocks.
     for (int i = 0; i < maxNumDataBytes; ++i) {
-      for (int j = 0; j < blocks.size(); ++j) {
-        byte[] dataBytes = ((BlockPair) blocks.elementAt(j)).getDataBytes();
+      for (BlockPair block : blocks) {
+        byte[] dataBytes = block.getDataBytes();
         if (i < dataBytes.length) {
           result.appendBits(dataBytes[i], 8);
         }
@@ -403,8 +415,8 @@ public final class Encoder {
     }
     // Then, place error correction blocks.
     for (int i = 0; i < maxNumEcBytes; ++i) {
-      for (int j = 0; j < blocks.size(); ++j) {
-        byte[] ecBytes = ((BlockPair) blocks.elementAt(j)).getErrorCorrectionBytes();
+      for (BlockPair block : blocks) {
+        byte[] ecBytes = block.getErrorCorrectionBytes();
         if (i < ecBytes.length) {
           result.appendBits(ecBytes[i], 8);
         }
@@ -454,22 +466,29 @@ public final class Encoder {
   /**
    * Append "bytes" in "mode" mode (encoding) into "bits". On success, store the result in "bits".
    */
-  static void appendBytes(String content, Mode mode, BitArray bits, String encoding)
-      throws WriterException {
-    if (mode.equals(Mode.NUMERIC)) {
-      appendNumericBytes(content, bits);
-    } else if (mode.equals(Mode.ALPHANUMERIC)) {
-      appendAlphanumericBytes(content, bits);
-    } else if (mode.equals(Mode.BYTE)) {
-      append8BitBytes(content, bits, encoding);
-    } else if (mode.equals(Mode.KANJI)) {
-      appendKanjiBytes(content, bits);
-    } else {
-      throw new WriterException("Invalid mode: " + mode);
+  static void appendBytes(String content,
+                          Mode mode,
+                          BitArray bits,
+                          String encoding) throws WriterException {
+    switch (mode) {
+      case NUMERIC:
+        appendNumericBytes(content, bits);
+        break;
+      case ALPHANUMERIC:
+        appendAlphanumericBytes(content, bits);
+        break;
+      case BYTE:
+        append8BitBytes(content, bits, encoding);
+        break;
+      case KANJI:
+        appendKanjiBytes(content, bits);
+        break;
+      default:
+        throw new WriterException("Invalid mode: " + mode);
     }
   }
 
-  static void appendNumericBytes(String content, BitArray bits) {
+  static void appendNumericBytes(CharSequence content, BitArray bits) {
     int length = content.length();
     int i = 0;
     while (i < length) {
@@ -493,7 +512,7 @@ public final class Encoder {
     }
   }
 
-  static void appendAlphanumericBytes(String content, BitArray bits) throws WriterException {
+  static void appendAlphanumericBytes(CharSequence content, BitArray bits) throws WriterException {
     int length = content.length();
     int i = 0;
     while (i < length) {
@@ -525,8 +544,8 @@ public final class Encoder {
     } catch (UnsupportedEncodingException uee) {
       throw new WriterException(uee.toString());
     }
-    for (int i = 0; i < bytes.length; ++i) {
-      bits.appendBits(bytes[i], 8);
+    for (byte b : bytes) {
+      bits.appendBits(b, 8);
     }
   }
 
@@ -556,7 +575,7 @@ public final class Encoder {
     }
   }
 
-  private static void appendECI(ECI eci, BitArray bits) {
+  private static void appendECI(CharacterSetECI eci, BitArray bits) {
     bits.appendBits(Mode.ECI.getBits(), 4);
     // This is correct for values up to 127, which is all we need now.
     bits.appendBits(eci.getValue(), 8);

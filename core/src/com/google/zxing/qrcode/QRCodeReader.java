@@ -32,8 +32,8 @@ import com.google.zxing.common.DetectorResult;
 import com.google.zxing.qrcode.decoder.Decoder;
 import com.google.zxing.qrcode.detector.Detector;
 
-import java.util.Hashtable;
-import java.util.Vector;
+import java.util.List;
+import java.util.Map;
 
 /**
  * This implementation can detect and decode QR Codes in an image.
@@ -58,11 +58,13 @@ public class QRCodeReader implements Reader {
    * @throws FormatException if a QR code cannot be decoded
    * @throws ChecksumException if error correction fails
    */
+  @Override
   public Result decode(BinaryBitmap image) throws NotFoundException, ChecksumException, FormatException {
     return decode(image, null);
   }
 
-  public Result decode(BinaryBitmap image, Hashtable hints)
+  @Override
+  public Result decode(BinaryBitmap image, Map<DecodeHintType,?> hints)
       throws NotFoundException, ChecksumException, FormatException {
     DecoderResult decoderResult;
     ResultPoint[] points;
@@ -77,7 +79,7 @@ public class QRCodeReader implements Reader {
     }
 
     Result result = new Result(decoderResult.getText(), decoderResult.getRawBytes(), points, BarcodeFormat.QR_CODE);
-    Vector byteSegments = decoderResult.getByteSegments();
+    List<byte[]> byteSegments = decoderResult.getByteSegments();
     if (byteSegments != null) {
       result.putMetadata(ResultMetadataType.BYTE_SEGMENTS, byteSegments);
     }
@@ -88,6 +90,7 @@ public class QRCodeReader implements Reader {
     return result;
   }
 
+  @Override
   public void reset() {
     // do nothing
   }
@@ -115,7 +118,7 @@ public class QRCodeReader implements Reader {
     int bottom = rightBottomBlack[1];
     int left = leftTopBlack[0];
     int right = rightBottomBlack[0];
-    
+
     if (bottom - top != right - left) {
       // Special case, where bottom-right module wasn't black so we found something else in the last row
       // Assume it's a square, so use height as the width

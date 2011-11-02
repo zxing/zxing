@@ -41,23 +41,24 @@ final class AI01392xDecoder extends AI01decoder {
     super(information);
   }
 
+  @Override
   public String parseInformation() throws NotFoundException {
-    if (this.information.size < HEADER_SIZE + GTIN_SIZE) {
+    if (this.getInformation().getSize() < HEADER_SIZE + GTIN_SIZE) {
       throw NotFoundException.getNotFoundInstance();
     }
 
-    StringBuffer buf = new StringBuffer();
+    StringBuilder buf = new StringBuilder();
 
     encodeCompressedGtin(buf, HEADER_SIZE);
 
     int lastAIdigit =
-        this.generalDecoder.extractNumericValueFromBitArray(HEADER_SIZE + GTIN_SIZE, LAST_DIGIT_SIZE);
+        this.getGeneralDecoder().extractNumericValueFromBitArray(HEADER_SIZE + GTIN_SIZE, LAST_DIGIT_SIZE);
     buf.append("(392");
     buf.append(lastAIdigit);
     buf.append(')');
 
     DecodedInformation decodedInformation =
-        this.generalDecoder.decodeGeneralPurposeField(HEADER_SIZE + GTIN_SIZE + LAST_DIGIT_SIZE, null);
+        this.getGeneralDecoder().decodeGeneralPurposeField(HEADER_SIZE + GTIN_SIZE + LAST_DIGIT_SIZE, null);
     buf.append(decodedInformation.getNewString());
 
     return buf.toString();

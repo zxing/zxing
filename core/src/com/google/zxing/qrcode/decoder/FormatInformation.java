@@ -99,7 +99,7 @@ final class FormatInformation {
    * @param maskedFormatInfo1 format info indicator, with mask still applied
    * @param maskedFormatInfo2 second copy of same info; both are checked at the same time
    *  to establish best match
-   * @return information about the format it specifies, or <code>null</code>
+   * @return information about the format it specifies, or {@code null}
    *  if doesn't seem to match any known pattern
    */
   static FormatInformation decodeFormatInformation(int maskedFormatInfo1, int maskedFormatInfo2) {
@@ -118,8 +118,7 @@ final class FormatInformation {
     // Find the int in FORMAT_INFO_DECODE_LOOKUP with fewest bits differing
     int bestDifference = Integer.MAX_VALUE;
     int bestFormatInfo = 0;
-    for (int i = 0; i < FORMAT_INFO_DECODE_LOOKUP.length; i++) {
-      int[] decodeInfo = FORMAT_INFO_DECODE_LOOKUP[i];
+    for (int[] decodeInfo : FORMAT_INFO_DECODE_LOOKUP) {
       int targetInfo = decodeInfo[0];
       if (targetInfo == maskedFormatInfo1 || targetInfo == maskedFormatInfo2) {
         // Found an exact match
@@ -155,10 +154,12 @@ final class FormatInformation {
     return dataMask;
   }
 
+  @Override
   public int hashCode() {
     return (errorCorrectionLevel.ordinal() << 3) | (int) dataMask;
   }
 
+  @Override
   public boolean equals(Object o) {
     if (!(o instanceof FormatInformation)) {
       return false;

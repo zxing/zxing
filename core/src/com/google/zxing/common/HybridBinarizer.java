@@ -52,6 +52,7 @@ public final class HybridBinarizer extends GlobalHistogramBinarizer {
     super(source);
   }
 
+  @Override
   public BitMatrix getBlackMatrix() throws NotFoundException {
     // Calculates the final BitMatrix once for all requests. This could be called once from the
     // constructor instead, but there are some advantages to doing it lazily, such as making
@@ -85,6 +86,7 @@ public final class HybridBinarizer extends GlobalHistogramBinarizer {
     return matrix;
   }
 
+  @Override
   public Binarizer createBinarizer(LuminanceSource source) {
     return new HybridBinarizer(source);
   }

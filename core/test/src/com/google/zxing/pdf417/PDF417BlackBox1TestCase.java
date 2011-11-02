@@ -17,12 +17,8 @@
 package com.google.zxing.pdf417;
 
 import com.google.zxing.BarcodeFormat;
-import com.google.zxing.DecodeHintType;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.common.AbstractBlackBoxTestCase;
-
-import java.util.Hashtable;
-import java.util.Vector;
 
 /**
  * This test consists of perfect, computer-generated images. We should have 100% passing.
@@ -36,14 +32,5 @@ public final class PDF417BlackBox1TestCase extends AbstractBlackBoxTestCase {
     addTest(3, 3, 0.0f);
     addTest(3, 3, 180.0f);
   }
-
-  @Override
-  protected Hashtable<DecodeHintType, Object> getHints() {
-     Hashtable<DecodeHintType, Object> table = new Hashtable<DecodeHintType, Object>(3);
-     Vector<BarcodeFormat> v = new Vector<BarcodeFormat>(1);
-     v.add(BarcodeFormat.PDF_417);
-     table.put(DecodeHintType.POSSIBLE_FORMATS, v);
-     return table;
-   }
 
 }

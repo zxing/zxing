@@ -16,7 +16,7 @@
 
 package com.google.zxing;
 
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * Implementations of this interface can decode an image of a barcode in some format into
@@ -46,14 +46,15 @@ public interface Reader {
    * hints, each possibly associated to some data, which may help the implementation decode.
    *
    * @param image image of barcode to decode
-   * @param hints passed as a {@link java.util.Hashtable} from {@link com.google.zxing.DecodeHintType}
+   * @param hints passed as a {@link java.util.Map} from {@link com.google.zxing.DecodeHintType}
    * to arbitrary data. The
    * meaning of the data depends upon the hint type. The implementation may or may not do
    * anything with these hints.
    * @return String which the barcode encodes
    * @throws NotFoundException if the barcode cannot be located or decoded for any reason
    */
-  Result decode(BinaryBitmap image, Hashtable hints) throws NotFoundException, ChecksumException, FormatException;
+  Result decode(BinaryBitmap image, Map<DecodeHintType,?> hints)
+      throws NotFoundException, ChecksumException, FormatException;
 
   /**
    * Resets any internal state the implementation has after a decode, to prepare it

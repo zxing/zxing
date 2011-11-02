@@ -30,6 +30,7 @@ import java.text.DateFormat;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Handles address book entries.
@@ -39,10 +40,10 @@ import java.util.Date;
 public final class AddressBookResultHandler extends ResultHandler {
 
   private static final DateFormat[] DATE_FORMATS = {
-    new SimpleDateFormat("yyyyMMdd"),
-    new SimpleDateFormat("yyyyMMdd'T'HHmmss"),
-    new SimpleDateFormat("yyyy-MM-dd"),
-    new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss"),
+    new SimpleDateFormat("yyyyMMdd", Locale.ENGLISH),
+    new SimpleDateFormat("yyyyMMdd'T'HHmmss", Locale.ENGLISH),
+    new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH),
+    new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH),
   };
 
   private final boolean[] fields;
@@ -167,7 +168,7 @@ public final class AddressBookResultHandler extends ResultHandler {
   @Override
   public CharSequence getDisplayContents() {
     AddressBookParsedResult result = (AddressBookParsedResult) getResult();
-    StringBuffer contents = new StringBuffer(100);
+    StringBuilder contents = new StringBuilder(100);
     ParsedResult.maybeAppend(result.getNames(), contents);
     int namesLength = contents.length();
 

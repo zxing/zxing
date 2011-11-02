@@ -41,7 +41,7 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.URI;
 import java.nio.charset.Charset;
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * One of a pool of threads which pulls images off the Inputs queue and decodes them in parallel.
@@ -105,7 +105,7 @@ final class DecodeThread extends Thread {
   }
 
   private static void dumpResult(File input, Result result) throws IOException {
-    String name = input.getAbsolutePath();
+    String name = input.getCanonicalPath();
     int pos = name.lastIndexOf('.');
     if (pos > 0) {
       name = name.substring(0, pos);
@@ -115,7 +115,7 @@ final class DecodeThread extends Thread {
   }
 
   private static void dumpResultMulti(File input, Result[] results) throws IOException {
-    String name = input.getAbsolutePath();
+    String name = input.getCanonicalPath();
     int pos = name.lastIndexOf('.');
     if (pos > 0) {
       name = name.substring(0, pos);
@@ -124,7 +124,7 @@ final class DecodeThread extends Thread {
     writeResultsToFile(results, dump);
   }
 
-    private static void writeStringToFile(String value, File file) throws IOException {
+  private static void writeStringToFile(String value, File file) throws IOException {
     Writer out = new OutputStreamWriter(new FileOutputStream(file), Charset.forName("UTF8"));
     try {
       out.write(value);
@@ -146,8 +146,7 @@ final class DecodeThread extends Thread {
     }
   }
 
-  private Result decode(URI uri, Hashtable<DecodeHintType, Object> hints)
-      throws IOException {
+  private Result decode(URI uri, Map<DecodeHintType,?> hints) throws IOException {
     BufferedImage image;
     try {
       image = ImageIO.read(uri.toURL());
@@ -190,15 +189,10 @@ final class DecodeThread extends Thread {
     } catch (NotFoundException nfe) {
       System.out.println(uri.toString() + ": No barcode found");
       return null;
-      // } finally {
-      // Uncomment these lines when turning on exception tracking in ReaderException.
-      //System.out.println("Threw " + ReaderException.getExceptionCountAndReset() + " exceptions");
-      //System.out.println("Throwers:\n" + ReaderException.getThrowersAndReset());
     }
   }
 
-  private Result[] decodeMulti(URI uri, Hashtable<DecodeHintType, Object> hints)
-      throws IOException {
+  private Result[] decodeMulti(URI uri, Map<DecodeHintType,?> hints) throws IOException {
     BufferedImage image;
     try {
       image = ImageIO.read(uri.toURL());
@@ -318,8 +312,12 @@ final class DecodeThread extends Thread {
     writeResultImage(stride, height, pixels, uri, inputName, ".mono.png");
   }
 
-  private static void writeResultImage(int stride, int height, int[] pixels, URI uri,
-      String inputName, String suffix) {
+  private static void writeResultImage(int stride,
+                                       int height,
+                                       int[] pixels,
+                                       URI uri,
+                                       String inputName,
+                                       String suffix) {
     // Write the result
     BufferedImage result = new BufferedImage(stride, height, BufferedImage.TYPE_INT_ARGB);
     result.setRGB(0, 0, stride, height, pixels, 0, stride);

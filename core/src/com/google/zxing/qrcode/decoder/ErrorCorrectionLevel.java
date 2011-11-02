@@ -22,53 +22,27 @@ package com.google.zxing.qrcode.decoder;
  *
  * @author Sean Owen
  */
-public final class ErrorCorrectionLevel {
+public enum ErrorCorrectionLevel {
 
-  // No, we can't use an enum here. J2ME doesn't support it.
-
-  /**
-   * L = ~7% correction
-   */
-  public static final ErrorCorrectionLevel L = new ErrorCorrectionLevel(0, 0x01, "L");
-  /**
-   * M = ~15% correction
-   */
-  public static final ErrorCorrectionLevel M = new ErrorCorrectionLevel(1, 0x00, "M");
-  /**
-   * Q = ~25% correction
-   */
-  public static final ErrorCorrectionLevel Q = new ErrorCorrectionLevel(2, 0x03, "Q");
-  /**
-   * H = ~30% correction
-   */
-  public static final ErrorCorrectionLevel H = new ErrorCorrectionLevel(3, 0x02, "H");
+  /** L = ~7% correction */
+  L(0x01),
+  /** M = ~15% correction */
+  M(0x00),
+  /** Q = ~25% correction */
+  Q(0x03),
+  /** H = ~30% correction */
+  H(0x02);
 
   private static final ErrorCorrectionLevel[] FOR_BITS = {M, L, H, Q};
 
-  private final int ordinal;
   private final int bits;
-  private final String name;
 
-  private ErrorCorrectionLevel(int ordinal, int bits, String name) {
-    this.ordinal = ordinal;
+  ErrorCorrectionLevel(int bits) {
     this.bits = bits;
-    this.name = name;
-  }
-
-  public int ordinal() {
-    return ordinal;
   }
 
   public int getBits() {
     return bits;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public String toString() {
-    return name;
   }
 
   /**

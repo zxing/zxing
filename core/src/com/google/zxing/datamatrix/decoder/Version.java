@@ -53,8 +53,7 @@ public final class Version {
     int total = 0;
     int ecCodewords = ecBlocks.getECCodewords();
     ECB[] ecbArray = ecBlocks.getECBlocks();
-    for (int i = 0; i < ecbArray.length; i++) {
-      ECB ecBlock = ecbArray[i];
+    for (ECB ecBlock : ecbArray) {
       total += ecBlock.getCount() * (ecBlock.getDataCodewords() + ecCodewords);
     }
     this.totalCodewords = total;
@@ -167,6 +166,7 @@ public final class Version {
     }
   }
 
+  @Override
   public String toString() {
     return String.valueOf(versionNumber);
   }

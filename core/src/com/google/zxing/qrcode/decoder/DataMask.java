@@ -83,6 +83,7 @@ abstract class DataMask {
    * 000: mask bits for which (x + y) mod 2 == 0
    */
   private static class DataMask000 extends DataMask {
+    @Override
     boolean isMasked(int i, int j) {
       return ((i + j) & 0x01) == 0;
     }
@@ -92,6 +93,7 @@ abstract class DataMask {
    * 001: mask bits for which x mod 2 == 0
    */
   private static class DataMask001 extends DataMask {
+    @Override
     boolean isMasked(int i, int j) {
       return (i & 0x01) == 0;
     }
@@ -101,6 +103,7 @@ abstract class DataMask {
    * 010: mask bits for which y mod 3 == 0
    */
   private static class DataMask010 extends DataMask {
+    @Override
     boolean isMasked(int i, int j) {
       return j % 3 == 0;
     }
@@ -110,6 +113,7 @@ abstract class DataMask {
    * 011: mask bits for which (x + y) mod 3 == 0
    */
   private static class DataMask011 extends DataMask {
+    @Override
     boolean isMasked(int i, int j) {
       return (i + j) % 3 == 0;
     }
@@ -119,6 +123,7 @@ abstract class DataMask {
    * 100: mask bits for which (x/2 + y/3) mod 2 == 0
    */
   private static class DataMask100 extends DataMask {
+    @Override
     boolean isMasked(int i, int j) {
       return (((i >>> 1) + (j /3)) & 0x01) == 0;
     }
@@ -128,6 +133,7 @@ abstract class DataMask {
    * 101: mask bits for which xy mod 2 + xy mod 3 == 0
    */
   private static class DataMask101 extends DataMask {
+    @Override
     boolean isMasked(int i, int j) {
       int temp = i * j;
       return (temp & 0x01) + (temp % 3) == 0;
@@ -138,6 +144,7 @@ abstract class DataMask {
    * 110: mask bits for which (xy mod 2 + xy mod 3) mod 2 == 0
    */
   private static class DataMask110 extends DataMask {
+    @Override
     boolean isMasked(int i, int j) {
       int temp = i * j;
       return (((temp & 0x01) + (temp % 3)) & 0x01) == 0;
@@ -148,6 +155,7 @@ abstract class DataMask {
    * 111: mask bits for which ((x+y)mod 2 + xy mod 3) mod 2 == 0
    */
   private static class DataMask111 extends DataMask {
+    @Override
     boolean isMasked(int i, int j) {
       return ((((i + j) & 0x01) + ((i * j) % 3)) & 0x01) == 0;
     }

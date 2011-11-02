@@ -28,7 +28,7 @@ import com.google.zxing.ResultPoint;
 import com.google.zxing.ResultPointCallback;
 import com.google.zxing.common.BitArray;
 
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * <p>Encapsulates functionality and implementation that is common to UPC and EAN families
@@ -79,9 +79,7 @@ public abstract class UPCEANReader extends OneDReader {
 
   static {
     L_AND_G_PATTERNS = new int[20][];
-    for (int i = 0; i < 10; i++) {
-      L_AND_G_PATTERNS[i] = L_PATTERNS[i];
-    }
+    System.arraycopy(L_PATTERNS, 0, L_AND_G_PATTERNS, 0, 10);
     for (int i = 10; i < 20; i++) {
       int[] widths = L_PATTERNS[i - 10];
       int[] reversedWidths = new int[widths.length];
@@ -92,12 +90,12 @@ public abstract class UPCEANReader extends OneDReader {
     }
   }
 
-  private final StringBuffer decodeRowStringBuffer;
+  private final StringBuilder decodeRowStringBuffer;
   private final UPCEANExtensionSupport extensionReader;
   private final EANManufacturerOrgSupport eanManSupport;
 
   protected UPCEANReader() {
-    decodeRowStringBuffer = new StringBuffer(20);
+    decodeRowStringBuffer = new StringBuilder(20);
     extensionReader = new UPCEANExtensionSupport();
     eanManSupport = new EANManufacturerOrgSupport();
   }
@@ -121,17 +119,21 @@ public abstract class UPCEANReader extends OneDReader {
     return startRange;
   }
 
-  public Result decodeRow(int rowNumber, BitArray row, Hashtable hints)
+  @Override
+  public Result decodeRow(int rowNumber, BitArray row, Map<DecodeHintType,?> hints)
       throws NotFoundException, ChecksumException, FormatException {
     return decodeRow(rowNumber, row, findStartGuardPattern(row), hints);
   }
 
   /**
-   * <p>Like {@link #decodeRow(int, BitArray, java.util.Hashtable)}, but
+   * <p>Like {@link #decodeRow(int, BitArray, java.util.Map)}, but
    * allows caller to inform method about where the UPC/EAN start pattern is
    * found. This allows this to be computed once and reused across many implementations.</p>
    */
-  public Result decodeRow(int rowNumber, BitArray row, int[] startGuardRange, Hashtable hints)
+  public Result decodeRow(int rowNumber,
+                          BitArray row,
+                          int[] startGuardRange,
+                          Map<DecodeHintType,?> hints)
       throws NotFoundException, ChecksumException, FormatException {
 
     ResultPointCallback resultPointCallback = hints == null ? null :
@@ -143,7 +145,7 @@ public abstract class UPCEANReader extends OneDReader {
       ));
     }
 
-    StringBuffer result = decodeRowStringBuffer;
+    StringBuilder result = decodeRowStringBuffer;
     result.setLength(0);
     int endStart = decodeMiddle(row, startGuardRange, result);
 
@@ -193,7 +195,7 @@ public abstract class UPCEANReader extends OneDReader {
       // continue
     }
 
-    if (BarcodeFormat.EAN_13.equals(format) || BarcodeFormat.UPC_A.equals(format)) {
+    if (format == BarcodeFormat.EAN_13 || format == BarcodeFormat.UPC_A) {
       String countryID = eanManSupport.lookupCountryIdentifier(resultString);
       if (countryID != null) {
         decodeResult.putMetadata(ResultMetadataType.POSSIBLE_COUNTRY, countryID);
@@ -204,7 +206,7 @@ public abstract class UPCEANReader extends OneDReader {
   }
 
   /**
-   * @return {@link #checkStandardUPCEANChecksum(String)}
+   * @return {@link #checkStandardUPCEANChecksum(CharSequence)}
    */
   boolean checkChecksum(String s) throws ChecksumException, FormatException {
     return checkStandardUPCEANChecksum(s);
@@ -218,7 +220,7 @@ public abstract class UPCEANReader extends OneDReader {
    * @return true iff string of digits passes the UPC/EAN checksum algorithm
    * @throws FormatException if the string does not contain only digits
    */
-  private static boolean checkStandardUPCEANChecksum(String s) throws FormatException {
+  private static boolean checkStandardUPCEANChecksum(CharSequence s) throws FormatException {
     int length = s.length();
     if (length == 0) {
       return false;
@@ -257,8 +259,10 @@ public abstract class UPCEANReader extends OneDReader {
    * @return start/end horizontal offset of guard pattern, as an array of two ints
    * @throws NotFoundException if pattern is not found
    */
-  static int[] findGuardPattern(BitArray row, int rowOffset, boolean whiteFirst, int[] pattern)
-      throws NotFoundException {
+  static int[] findGuardPattern(BitArray row,
+                                int rowOffset,
+                                boolean whiteFirst,
+                                int[] pattern) throws NotFoundException {
     int patternLength = pattern.length;
     int[] counters = new int[patternLength];
     int width = row.getSize();
@@ -283,9 +287,7 @@ public abstract class UPCEANReader extends OneDReader {
             return new int[]{patternStart, x};
           }
           patternStart += counters[0] + counters[1];
-          for (int y = 2; y < patternLength; y++) {
-            counters[y - 2] = counters[y];
-          }
+          System.arraycopy(counters, 2, counters, 0, patternLength - 2);
           counters[patternLength - 2] = 0;
           counters[patternLength - 1] = 0;
           counterPosition--;
@@ -345,11 +347,12 @@ public abstract class UPCEANReader extends OneDReader {
    *
    * @param row row of black/white values to search
    * @param startRange start/end offset of start guard pattern
-   * @param resultString {@link StringBuffer} to append decoded chars to
+   * @param resultString {@link StringBuilder} to append decoded chars to
    * @return horizontal offset of first pixel after the "middle" that was decoded
    * @throws NotFoundException if decoding could not complete successfully
    */
-  protected abstract int decodeMiddle(BitArray row, int[] startRange, StringBuffer resultString)
-      throws NotFoundException;
+  protected abstract int decodeMiddle(BitArray row,
+                                      int[] startRange,
+                                      StringBuilder resultString) throws NotFoundException;
 
 }

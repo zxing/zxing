@@ -34,6 +34,7 @@ final class KillerCallable implements Callable<Void> {
     this.unit = unit;
   }
 
+  @Override
   public Void call() throws ExecutionException, InterruptedException {
     try {
       future.get(timeout, unit);

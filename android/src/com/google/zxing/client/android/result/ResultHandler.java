@@ -43,7 +43,11 @@ import android.view.View;
 import java.text.DateFormat;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * A base class for the Android-specific barcode handlers. These allow the app to polymorphically
@@ -61,13 +65,13 @@ public abstract class ResultHandler {
 
   private static final DateFormat DATE_FORMAT;
   static {
-    DATE_FORMAT = new SimpleDateFormat("yyyyMMdd");
+    DATE_FORMAT = new SimpleDateFormat("yyyyMMdd", Locale.ENGLISH);
     // For dates without a time, for purposes of interacting with Android, the resulting timestamp
     // needs to be midnight of that day in GMT. See:
     // http://code.google.com/p/android/issues/detail?id=8330
     DATE_FORMAT.setTimeZone(TimeZone.getTimeZone("GMT"));
   }
-  private static final DateFormat DATE_TIME_FORMAT = new SimpleDateFormat("yyyyMMdd'T'HHmmss");
+  private static final DateFormat DATE_TIME_FORMAT = new SimpleDateFormat("yyyyMMdd'T'HHmmss", Locale.ENGLISH);
 
   private static final String GOOGLE_SHOPPER_PACKAGE = "com.google.android.apps.shopper";
   private static final String GOOGLE_SHOPPER_ACTIVITY = GOOGLE_SHOPPER_PACKAGE +
@@ -105,6 +109,7 @@ public abstract class ResultHandler {
 
   private final DialogInterface.OnClickListener shopperMarketListener =
       new DialogInterface.OnClickListener() {
+    @Override
     public void onClick(DialogInterface dialogInterface, int which) {
       launchIntent(new Intent(Intent.ACTION_VIEW, Uri.parse(MARKET_URI_PREFIX +
           GOOGLE_SHOPPER_PACKAGE + MARKET_REFERRER_SUFFIX)));

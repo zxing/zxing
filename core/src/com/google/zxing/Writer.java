@@ -18,7 +18,7 @@ package com.google.zxing;
 
 import com.google.zxing.common.BitMatrix;
 
-import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * The base class for all objects which encode/generate a barcode image.
@@ -46,7 +46,11 @@ public interface Writer {
    * @param height The preferred height in pixels
    * @param hints Additional parameters to supply to the encoder
    */
-  BitMatrix encode(String contents, BarcodeFormat format, int width, int height, Hashtable hints)
+  BitMatrix encode(String contents,
+                   BarcodeFormat format,
+                   int width,
+                   int height,
+                   Map<EncodeHintType,?> hints)
       throws WriterException;
 
 }

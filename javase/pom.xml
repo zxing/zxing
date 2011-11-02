@@ -20,7 +20,7 @@
   <artifactId>javase</artifactId>
   <packaging>jar</packaging>
   <name>ZXing Java SE extensions</name>
-  <version>1.6-SNAPSHOT</version>
+  <version>2.0-SNAPSHOT</version>
   <description>Java SE-specific extensions to core ZXing library</description>
   <url>http://code.google.com/p/zxing</url>
   <inceptionYear>2007</inceptionYear>
@@ -47,7 +47,7 @@
     <dependency>
       <groupId>com.google.zxing</groupId>
       <artifactId>core</artifactId>
-      <version>1.6-SNAPSHOT</version>
+      <version>2.0-SNAPSHOT</version>
     </dependency>
   </dependencies>
   <build>
