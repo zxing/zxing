@@ -118,6 +118,7 @@
   <string name="preferences_reverse_image_summary">Povoliť na zariadeniach iba s predným fotoaparátom</string>
   <string name="preferences_reverse_image_title">Obrátený obraz z fotoaparátu</string>
   <string name="preferences_scanning_title">Ak skenujem čiarové kódy, dekódujem...</string>
+  <string name="preferences_search_country">Hľadanie krajiny</string>
   <string name="preferences_supplemental_summary">Skúste získať viac informácií o obsahu čiarového kódu</string>
   <string name="preferences_supplemental_title">Získať viac informácií</string>
   <string name="preferences_vibrate_title">Vibrovať</string>

@@ -118,6 +118,7 @@
   <string name="preferences_reverse_image_summary">如果您的設備上只有一個前置攝影機，請開啟此選項</string>
   <string name="preferences_reverse_image_title">反轉攝影機的圖像</string>
   <string name="preferences_scanning_title">當掃描條碼時</string>
+  <string name="preferences_search_country">搜索國家</string>
   <string name="preferences_supplemental_summary">嘗試透過條碼搜尋更多的資訊</string>
   <string name="preferences_supplemental_title">搜尋更多資訊</string>
   <string name="preferences_vibrate_title">震動</string>

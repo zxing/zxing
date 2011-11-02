@@ -118,6 +118,7 @@
   <string name="preferences_reverse_image_summary">Позволяет распознавать штрих-коды на устройствах с фронтальной камерой</string>
   <string name="preferences_reverse_image_title">Отразить изображение</string>
   <string name="preferences_scanning_title">При сканировании штрих-кодов\u2026</string>
+  <string name="preferences_search_country">Поиск страны</string>
   <string name="preferences_supplemental_summary">Показывать подробную информацию о штрих-коде</string>
   <string name="preferences_supplemental_title">Подробности</string>
   <string name="preferences_vibrate_title">Вибрировать</string>

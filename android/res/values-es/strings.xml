@@ -118,6 +118,7 @@
   <string name="preferences_reverse_image_summary">Activar en dispositivos con cámara frontal sólo</string>
   <string name="preferences_reverse_image_title">Imagen invertida de la cámara</string>
   <string name="preferences_scanning_title">Al escanear códigos de barras, descodificar\u2026</string>
+  <string name="preferences_search_country">País de buscar</string>
   <string name="preferences_supplemental_summary">Buscar más información sobre el contenido del código de barras</string>
   <string name="preferences_supplemental_title">Buscar más información</string>
   <string name="preferences_vibrate_title">Vibrar</string>

@@ -118,6 +118,7 @@
   <string name="preferences_reverse_image_summary">フロントカメラのみを持つデバイスで有効にする</string>
   <string name="preferences_reverse_image_title">カメラ画像の反転</string>
   <string name="preferences_scanning_title">バーコードスキャン時</string>
+  <string name="preferences_search_country">検索国</string>
   <string name="preferences_supplemental_summary">バーコード内容についての詳細情報を取得してみてください</string>
   <string name="preferences_supplemental_title">取得の詳細情報をもっと見る</string>
   <string name="preferences_vibrate_title">バイブ</string>

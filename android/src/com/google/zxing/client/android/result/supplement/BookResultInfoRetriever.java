@@ -40,11 +40,9 @@ import com.google.zxing.client.android.history.HistoryManager;
  */
 public final class BookResultInfoRetriever extends SupplementalInfoRetriever {
 
-  private static final String BASE_BOOK_URI =
-      "http://www.google." + LocaleManager.getBookSearchCountryTLD() + "/search?tbm=bks&source=zxing&q=";
-
   private final String isbn;
   private final String source;
+  private final Context context;
   
   BookResultInfoRetriever(TextView textView,
                           String isbn,
@@ -54,6 +52,7 @@ public final class BookResultInfoRetriever extends SupplementalInfoRetriever {
     super(textView, handler, historyManager);
     this.isbn = isbn;
     this.source = context.getString(R.string.msg_google_books);
+    this.context = context;
   }
 
   @Override
@@ -122,7 +121,11 @@ public final class BookResultInfoRetriever extends SupplementalInfoRetriever {
       newTexts.add(pages + "pp.");
     }
 
-    append(isbn, source, newTexts.toArray(new String[newTexts.size()]), BASE_BOOK_URI + isbn);
+    
+    String baseBookUri = "http://www.google." + LocaleManager.getBookSearchCountryTLD(context)
+        + "/search?tbm=bks&source=zxing&q=";
+
+    append(isbn, source, newTexts.toArray(new String[newTexts.size()]), baseBookUri + isbn);
   }
 
 }

@@ -118,6 +118,7 @@
   <string name="preferences_reverse_image_summary">Activer sur les appareils uniquement dotés d\'une caméra frontale</string>
   <string name="preferences_reverse_image_title">Retourner l\'image</string>
   <string name="preferences_scanning_title">Pendant la numérisation, lire les codes\u2026</string>
+  <string name="preferences_search_country">Pays Recherche</string>
   <string name="preferences_supplemental_summary">Essayer de trouver plus d\'informations sur le contenu des codes-barres scannés</string>
   <string name="preferences_supplemental_title">Trouver plus d\'informations</string>
   <string name="preferences_vibrate_title">Vibrer</string>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+  <array name="country_codes">
+    <item>-</item>
+    <item>AR</item>
+    <item>AU</item>
+    <item>BR</item>
+    <item>BG</item>
+    <item>CA</item>
+    <item>CN</item>
+    <item>CZ</item>
+    <item>DE</item>
+    <item>DK</item>
+    <item>ES</item>
+    <item>FI</item>
+    <item>FR</item>
+    <item>GB</item>
+    <item>GR</item>
+    <item>HU</item>
+    <item>ID</item>
+    <item>IT</item>
+    <item>JP</item>
+    <item>KR</item>
+    <item>NL</item>
+    <item>PL</item>
+    <item>PT</item>
+    <item>RU</item>
+    <item>SE</item>
+    <item>SK</item>
+    <item>SI</item>
+    <item>TR</item>
+    <item>TW</item>
+    <item>US</item>
+  </array>
+</resources>

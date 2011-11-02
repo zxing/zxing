@@ -118,6 +118,7 @@
   <string name="preferences_reverse_image_summary">단지 전면 카메라와 장치에 사용</string>
   <string name="preferences_reverse_image_title">반대로 카메라 이미지</string>
   <string name="preferences_scanning_title">바코드 스캐닝 시\u2026</string>
+  <string name="preferences_search_country">국가별 검색</string>
   <string name="preferences_supplemental_summary">바코드 내용에 대한 자세한 정보를 검색하려고</string>
   <string name="preferences_supplemental_title">검색 상세 정보</string>
   <string name="preferences_vibrate_title">진동</string>

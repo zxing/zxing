@@ -56,7 +56,7 @@
   <string name="history_email_title">Histórico do Barcode Scanner</string>
   <string name="history_send">Enviar histórico</string>
   <string name="history_title">Histórico</string>
-  <string name="menu_decode_image">Descodificar imagem</string>
+  <string name="menu_about">Sobre</string>
   <string name="menu_help">Ajuda</string>
   <string name="menu_history">Histórico</string>
   <string name="menu_settings">Definições</string>
@@ -118,6 +118,7 @@
   <string name="preferences_reverse_image_summary">Activar em dispositivos com câmera frontal apenas</string>
   <string name="preferences_reverse_image_title">Inverter a imagem da câmera</string>
   <string name="preferences_scanning_title">Quando procurar por códigos de barras, descodificar\u2026</string>
+  <string name="preferences_search_country">País busca</string>
   <string name="preferences_supplemental_summary">Tentar recuperar mais informação sobre os conteúdos dos códigos de barras</string>
   <string name="preferences_supplemental_title">Recuperar mais informação</string>
   <string name="preferences_vibrate_title">Vibrar</string>

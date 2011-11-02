@@ -47,6 +47,7 @@ public final class PreferencesActivity extends PreferenceActivity
   public static final String KEY_BULK_MODE = "preferences_bulk_mode";
   public static final String KEY_REMEMBER_DUPLICATES = "preferences_remember_duplicates";
   public static final String KEY_SUPPLEMENTAL = "preferences_supplemental";
+  public static final String KEY_SEARCH_COUNTRY = "preferences_search_country";
 
   public static final String KEY_HELP_VERSION_SHOWN = "preferences_help_version_shown";
   public static final String KEY_NOT_OUR_RESULTS_SHOWN = "preferences_not_out_results_shown";
