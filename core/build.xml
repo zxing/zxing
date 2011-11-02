@@ -24,76 +24,25 @@
     <tstamp/>
   </target>
 
-  <target name="compile" depends="init">
+  <target name="build" depends="init">
     <mkdir dir="build"/>
     <javac srcdir="src"
            destdir="build"
            source="6"
            target="6"
            optimize="true"
-           debug="${generate-debug}"
+           debug="true"
            deprecation="true"
            fork="true"
-           includeantruntime="false"/>
-    <jar jarfile="core.jar" basedir="build">
-      <!-- These entries allow core.jar to function as an OSGi bundle, and also specifies
-           additional attributes for compatibility with BugLabs's BUG platform.
-           Thanks to David Albert for this change. -->
-      <manifest>
-        <attribute name="Bundle-Name" value="ZXing"/>
-        <attribute name="Bundle-Vendor" value="ZXing Project"/>
-        <attribute name="Bundle-SymbolicName" value="ZXing"/>
-        <attribute name="Bundle-Version" value="${version}"/>
-        <attribute name="Export-Package" value="com.google.zxing,com.google.zxing.common,com.google.zxing.client.result"/>
-        <attribute name="Bug-Bundle-Type" value="Application"/>
-      </manifest>
-    </jar>
+           includeantruntime="false">
+    </javac>
+    <jar jarfile="core.jar" basedir="build"/>
   </target>
 
-  <target name="build" depends="clean">
-    <antcall target="compile">
-      <param name="generate-debug" value="true"/>
-    </antcall>
-  </target>
-
-  <!-- This target is needed for building a core.jar which the Android client can use and run
-       ProGuard on successfully, because dx doesn't like debugging info. -->
-  <target name="build-no-debug" depends="clean">
-    <antcall target="compile">
-      <param name="generate-debug" value="false"/>
-    </antcall>
-  </target>
-
-  <!-- This target builds an optimized core.jar using ProGuard. It is not intended for our Android
-  client - use build-no-debug intead, then build the client which runs ProGuard on everything. -->
-  <target name="build-optimized" depends="clean">
-    <antcall target="compile">
-      <param name="generate-debug" value="false"/>
-    </antcall>
-
-    <delete file="core.jar"/>
-    <mkdir dir="optimized"/>
-    <java jar="${proguard-jar}" fork="true" failonerror="true">
-      <jvmarg value="-Dmaximum.inlined.code.length=48"/>
-      <arg value="-injars build"/>
-      <arg value="-outjars optimized"/>
-      <!-- Needed for Mac OS. -->
-      <!--<arg value="-libraryjars ${java.home}/../Classes/classes.jar"/>-->
-      <!-- Needed for other Android apps besides Barcode Scanner. -->
-      <!--<arg value="-libraryjars ${android-home}/platforms/android-3/android.jar"/>-->
-      <arg value="-keep class com.google.zxing.* {public protected *;}"/>
-      <arg value="-keep class com.google.zxing.common.*Binarizer {public protected *;}"/>
-      <!-- Remove this line is you only use the Result base object and want the smallest jar. -->
-      <arg value="-keep class com.google.zxing.client.result.* {public protected *;}"/>
-      <!-- Contains a useful UPC-E to UPC-A method. -->
-      <arg value="-keep class com.google.zxing.oned.UPCEReader {public *;}"/>
-      <arg value="-target 1.2"/>
-      <arg value="-optimizationpasses 4"/>
-      <arg value="-dontobfuscate"/>
-      <arg value="-dontskipnonpubliclibraryclasses"/>
-      <arg value="-verbose"/>
-    </java>
-    <jar jarfile="core.jar" basedir="optimized"/>
+  <target name="export" depends="build">
+    <jar jarfile="core.jar" basedir="build"/>
+    <copy file="core.jar" todir="../android/libs" overwrite="true"/>
+    <copy file="core.jar" todir="../androidtest/libs" overwrite="true"/>
   </target>
 
   <target name="build-test" depends="init,build">
