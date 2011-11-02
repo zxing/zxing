@@ -148,7 +148,7 @@ final class PDF417HighLevelEncoder {
    * @param msg the message
    * @return the encoded message (the char values range from 0 to 928)
    */
-  static String encodeHighLevel(String msg, boolean byteCompaction) throws WriterException {
+  static String encodeHighLevel(String msg, Compaction compaction) throws WriterException {
     byte[] bytes = null; //Fill later and only if needed
 
     //the codewords 0..928 are encoded as Unicode characters
@@ -159,31 +159,20 @@ final class PDF417HighLevelEncoder {
     int encodingMode = TEXT_COMPACTION; //Default mode, see 4.4.2.1
     int textSubMode = SUBMODE_ALPHA;
 
-    if (byteCompaction) { // Can choose only byte compaction
-      encodingMode = BYTE_COMPACTION;
-      while (p < len) {
+    // User selected encoding mode
+    if (compaction == Compaction.TEXT) {
+      encodeText(msg, p, len, sb, textSubMode);
 
-        if (bytes == null) {
-          bytes = getBytesForMessage(msg);
-        }
-        int b = determineConsecutiveBinaryCount(msg, bytes, p);
-        if (b == 0) {
-          b = 1;
-        }
-        // I don't see how this ever takes value TEXT_COMPACTION?
-        //if (b == 1 && encodingMode == TEXT_COMPACTION) {
-        if (b == 1) {
-          //Switch for one byte (instead of latch)
-          encodeBinary(bytes, p, 1, TEXT_COMPACTION, sb);
-        } else {
-          //Mode latch performed by encodeBinary()
-          encodeBinary(bytes, p, b, encodingMode, sb);
-          // ... so this is redundant?
-          //encodingMode = BYTE_COMPACTION;
-          //textSubMode = SUBMODE_ALPHA; //Reset after latch
-        }
-        p += b;
-      }
+    } else if (compaction == Compaction.BYTE) {
+      encodingMode = BYTE_COMPACTION;
+      bytes = getBytesForMessage(msg);
+      encodeBinary(bytes, p, bytes.length, encodingMode, sb);
+
+    } else if (compaction == Compaction.NUMERIC) {
+      encodingMode = NUMERIC_COMPACTION;
+      sb.append((char) LATCH_TO_NUMERIC);
+      encodeNumeric(msg, p, len, sb);
+
     } else {
       while (p < len) {
         int n = determineConsecutiveDigitCount(msg, p);
@@ -373,33 +362,33 @@ final class PDF417HighLevelEncoder {
                                    StringBuilder sb) {
     if (count == 1 && startmode == TEXT_COMPACTION) {
       sb.append((char) SHIFT_TO_BYTE);
-    } else {
-      boolean sixpack = (count % 6) == 0;
-      if (sixpack) {
-        sb.append((char) LATCH_TO_BYTE);
-      } else {
-        sb.append((char) LATCH_TO_BYTE_PADDED);
-      }
     }
 
-    char[] chars = new char[5];
     int idx = startpos;
-    while ((startpos + count - idx) >= 6) {
-      long t = 0;
-      for (int i = 0; i < 6; i++) {
-        t <<= 8;
-        t += bytes[idx + i] & 0xff;
+    // Encode sixpacks
+    if (count >= 6) {
+      sb.append((char) LATCH_TO_BYTE);
+      char[] chars = new char[5];
+      while ((startpos + count - idx) >= 6) {
+        long t = 0;
+        for (int i = 0; i < 6; i++) {
+          t <<= 8;
+          t += bytes[idx + i] & 0xff;
+        }
+        for (int i = 0; i < 5; i++) {
+          chars[i] = (char) (t % 900);
+          t /= 900;
+        }
+        for (int i = chars.length - 1; i >= 0; i--) {
+          sb.append(chars[i]);
+        }
+        idx += 6;
       }
-      for (int i = 0; i < 5; i++) {
-        chars[i] = (char) (t % 900);
-        t /= 900;
-      }
-      for (int i = chars.length - 1; i >= 0; i--) {
-        sb.append(chars[i]);
-      }
-      idx += 6;
     }
     //Encode rest (remaining n<5 bytes if any)
+    if (idx < startpos + count) {
+      sb.append((char) LATCH_TO_BYTE_PADDED);
+    }
     for (int i = idx; i < startpos + count; i++) {
       int ch = bytes[i] & 0xff;
       sb.append((char) ch);

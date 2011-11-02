@@ -510,10 +510,9 @@ final class PDF417 {
   private static final float DEFAULT_MODULE_WIDTH = 0.357f; //1px in mm
   private static final float HEIGHT = 2.0f; //mm
 
-  private int errorCorrectionLevel;
   private BarcodeMatrix barcodeMatrix;
   private boolean compact;
-  private boolean byteCompaction;
+  private Compaction compaction;
   private int minCols;
   private int maxCols;
   private int maxRows;
@@ -525,6 +524,7 @@ final class PDF417 {
 
   PDF417(boolean compact) {
     this.compact = compact;
+    compaction = Compaction.AUTO;
     minCols = 2;
     maxCols = 30;
     maxRows = 30;
@@ -639,8 +639,6 @@ final class PDF417 {
                               int errorCorrectionLevel,
                               BarcodeMatrix logic) {
 
-    this.errorCorrectionLevel = errorCorrectionLevel;
-
     int idx = 0;
     for (int y = 0; y < r; y++) {
       int cluster = y % 3;
@@ -689,10 +687,10 @@ final class PDF417 {
 
     //1. step: High-level encoding
     int errorCorrectionCodeWords = PDF417ErrorCorrection.getErrorCorrectionCodewordCount(errorCorrectionLevel);
-    String highLevel = PDF417HighLevelEncoder.encodeHighLevel(msg, byteCompaction);
+    String highLevel = PDF417HighLevelEncoder.encodeHighLevel(msg, compaction);
     int sourceCodeWords = highLevel.length();
 
-    int[] dimension = determineDimensions(sourceCodeWords);
+    int[] dimension = determineDimensions(sourceCodeWords, errorCorrectionCodeWords);
 
     int cols = dimension[0];
     int rows = dimension[1];
@@ -700,12 +698,11 @@ final class PDF417 {
     int pad = getNumberOfPadCodewords(sourceCodeWords, errorCorrectionCodeWords, cols, rows);
 
     //2. step: construct data codewords
-    int n = getNumberOfDataCodewords(sourceCodeWords, errorCorrectionLevel, cols);
-    if (n > 929) {
+    if (sourceCodeWords + errorCorrectionCodeWords + 1 > 929) { // +1 for symbol length CW
       throw new WriterException(
           "Encoded message contains to many code words, message to big (" + msg.length() + " bytes)");
     }
-
+    int n = sourceCodeWords + pad + 1;
     StringBuilder sb = new StringBuilder(n);
     sb.append((char) n);
     sb.append(highLevel);
@@ -728,13 +725,12 @@ final class PDF417 {
    * codewords.
    *
    * @param sourceCodeWords number of code words
+   * @param errorCorrectionCodeWords number of error correction code words
    * @return dimension object containing cols as width and rows as height
    */
-  int[] determineDimensions(int sourceCodeWords) throws WriterException {
-
+  int[] determineDimensions(int sourceCodeWords, int errorCorrectionCodeWords) throws WriterException {
     float ratio = 0.0f;
     int[] dimension = null;
-    int errorCorrectionCodeWords = PDF417ErrorCorrection.getErrorCorrectionCodewordCount(errorCorrectionLevel);
 
     for (int cols = minCols; cols <= maxCols; cols++) {
 
@@ -759,9 +755,18 @@ final class PDF417 {
       dimension = new int[] {cols, rows};
     }
 
+     // Handle case when min values were larger than necessary
+     if (dimension == null) {
+       int rows = calculateNumberOfRows(sourceCodeWords, errorCorrectionCodeWords, minCols);
+       if (rows < minRows) {
+         dimension = new int[]{minCols, minRows};
+       }
+     }
+
     if (dimension == null) {
       throw new WriterException("Unable to fit message in columns");
     }
+
     return dimension;
   }
 
@@ -776,11 +781,10 @@ final class PDF417 {
   }
 
   /**
-   * Sets byte compaction to be true or false
-   * @param byteCompaction
+   * Sets compaction to values stored in {@link Compaction} enum
    */
-  void setByteCompaction(boolean byteCompaction) {
-    this.byteCompaction = byteCompaction;
+  void setCompaction(Compaction compaction) {
+    this.compaction = compaction;
   }
 
   /**

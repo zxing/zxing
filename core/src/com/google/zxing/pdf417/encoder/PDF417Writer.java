@@ -56,12 +56,12 @@ public final class PDF417Writer implements Writer {
                           int maxCols,
                           int minRows,
                           int maxRows,
-                          boolean byteCompaction) throws WriterException {
+                          Compaction compaction) throws WriterException {
     PDF417 encoder = initializeEncoder(format, compact);
 
     // Set options: dimensions and byte compaction
     encoder.setDimensions(maxCols, minCols, maxRows, minRows);
-    encoder.setByteCompaction(byteCompaction);
+    encoder.setCompaction(compaction);
 
     return bitMatrixFromEncoder(encoder, contents, width, height);
   }
