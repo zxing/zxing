@@ -231,17 +231,19 @@ public abstract class ResultHandler {
                               String description) {
     Intent intent = new Intent(Intent.ACTION_EDIT);
     intent.setType("vnd.android.cursor.item/event");
-    intent.putExtra("beginTime", calculateMilliseconds(start));
+    long startMilliseconds = calculateMilliseconds(start);
+    intent.putExtra("beginTime", startMilliseconds);
     boolean allDay = start.length() == 8;
     if (allDay) {
       intent.putExtra("allDay", true);
-    } else {
-      if (end == null) {
-        end = start;
-      }
-      long endMilliseconds = calculateMilliseconds(end);
-      intent.putExtra("endTime", endMilliseconds);
     }
+    long endMilliseconds;
+    if (end == null) {
+      endMilliseconds = allDay ? startMilliseconds + 86400 : startMilliseconds;
+    } else {
+      endMilliseconds = calculateMilliseconds(end);
+    }
+    intent.putExtra("endTime", endMilliseconds);
     intent.putExtra("title", summary);
     intent.putExtra("eventLocation", location);
     intent.putExtra("description", description);
