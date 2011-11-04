@@ -245,7 +245,11 @@ public final class CameraManager {
    */
   public Rect getFramingRectInPreview() {
     if (framingRectInPreview == null) {
-      Rect rect = new Rect(getFramingRect());
+      Rect framingRect = getFramingRect();
+      if (framingRect == null) {
+        return null;
+      }
+      Rect rect = new Rect(framingRect);
       Point cameraResolution = configManager.getCameraResolution();
       Point screenResolution = configManager.getScreenResolution();
       rect.left = rect.left * cameraResolution.x / screenResolution.x;
