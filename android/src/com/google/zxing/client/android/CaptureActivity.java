@@ -110,6 +110,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     NONE
   }
 
+  private CameraManager cameraManager;
   private CaptureActivityHandler handler;
   private ViewfinderView viewfinderView;
   private TextView statusView;
@@ -145,6 +146,10 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     return handler;
   }
 
+  CameraManager getCameraManager() {
+    return cameraManager;
+  }
+
   @Override
   public void onCreate(Bundle icicle) {
     super.onCreate(icicle);
@@ -153,7 +158,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     setContentView(R.layout.capture);
 
-    viewfinderView = (ViewfinderView) findViewById(R.id.viewfinder_view);
     resultView = findViewById(R.id.result_view);
     statusView = (TextView) findViewById(R.id.status_view);
     handler = null;
@@ -175,7 +179,10 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     // want to open the camera driver and measure the screen size if we're going to show the help on
     // first launch. That led to bugs where the scanning rectangle was the wrong size and partially
     // off screen.
-    CameraManager.init(getApplication());
+    cameraManager = new CameraManager(getApplication());
+
+    viewfinderView = (ViewfinderView) findViewById(R.id.viewfinder_view);
+    viewfinderView.setCameraManager(cameraManager);
 
     resetStatusView();
 
@@ -203,7 +210,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
           int width = intent.getIntExtra(Intents.Scan.WIDTH, 0);
           int height = intent.getIntExtra(Intents.Scan.HEIGHT, 0);
           if (width > 0 && height > 0) {
-            CameraManager.get().setManualFramingRect(width, height);
+            cameraManager.setManualFramingRect(width, height);
           }
         }
       } else if (dataString != null && dataString.contains(PRODUCT_SEARCH_URL_PREFIX) &&
@@ -249,13 +256,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       handler = null;
     }
     inactivityTimer.onPause();
-    CameraManager.get().closeDriver();
-  }
-
-  @Override
-  protected void onStop() {
-    super.onStop();
-    CameraManager.destroy();
+    cameraManager.closeDriver();
   }
 
   @Override
@@ -616,10 +617,10 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
   private void initCamera(SurfaceHolder surfaceHolder) {
     try {
-      CameraManager.get().openDriver(surfaceHolder);
+      cameraManager.openDriver(surfaceHolder);
       // Creating the handler starts the preview, which can also throw a RuntimeException.
       if (handler == null) {
-        handler = new CaptureActivityHandler(this, decodeFormats, characterSet);
+        handler = new CaptureActivityHandler(this, decodeFormats, characterSet, cameraManager);
       }
     } catch (IOException ioe) {
       Log.w(TAG, ioe);

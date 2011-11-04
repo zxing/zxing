@@ -21,7 +21,6 @@ import com.google.zxing.DecodeHintType;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
-import com.google.zxing.client.android.camera.CameraManager;
 import com.google.zxing.common.HybridBinarizer;
 
 import android.os.Bundle;
@@ -73,7 +72,7 @@ final class DecodeHandler extends Handler {
   private void decode(byte[] data, int width, int height) {
     long start = System.currentTimeMillis();
     Result rawResult = null;
-    PlanarYUVLuminanceSource source = CameraManager.get().buildLuminanceSource(data, width, height);
+    PlanarYUVLuminanceSource source = activity.getCameraManager().buildLuminanceSource(data, width, height);
     BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
     try {
       rawResult = multiFormatReader.decodeWithState(bitmap);
