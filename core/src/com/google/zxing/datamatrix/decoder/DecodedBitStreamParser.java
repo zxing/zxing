@@ -473,7 +473,7 @@ final class DecodedBitStreamParser {
       if (bits.available() < 8) {
         throw FormatException.getFormatInstance();
       }
-      bytes[i] = unrandomize255State(bits.readBits(8), codewordPosition++);
+      bytes[i] = (byte) unrandomize255State(bits.readBits(8), codewordPosition++);
     }
     byteSegments.add(bytes);
     try {
@@ -486,11 +486,11 @@ final class DecodedBitStreamParser {
   /**
    * See ISO 16022:2006, Annex B, B.2
    */
-  private static byte unrandomize255State(int randomizedBase256Codeword,
+  private static int unrandomize255State(int randomizedBase256Codeword,
                                           int base256CodewordPosition) {
     int pseudoRandomNumber = ((149 * base256CodewordPosition) % 255) + 1;
     int tempVariable = randomizedBase256Codeword - pseudoRandomNumber;
-    return (byte) (tempVariable >= 0 ? tempVariable : tempVariable + 256);
+    return tempVariable >= 0 ? tempVariable : tempVariable + 256;
   }
 
 }
