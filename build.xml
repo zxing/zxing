@@ -23,8 +23,8 @@
   <target name="build">
     <ant dir="core" target="build"/>
     <ant dir="javase" target="build"/>
-    <ant dir="android" target="compile"/>
-    <ant dir="androidtest" target="compile"/>
+    <ant dir="android" target="debug"/>
+    <ant dir="androidtest" target="debug"/>
     <ant dir="android-integration" target="build"/>
   </target>
 
