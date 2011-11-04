@@ -48,8 +48,6 @@ public final class CameraManager {
   private static final int MAX_FRAME_WIDTH = 600;
   private static final int MAX_FRAME_HEIGHT = 400;
 
-  private static CameraManager cameraManager;
-
   static final int SDK_INT; // Later we can use Build.VERSION.SDK_INT
   static {
     int sdkInt;
@@ -82,36 +80,7 @@ public final class CameraManager {
   /** Autofocus callbacks arrive here, and are dispatched to the Handler which requested them. */
   private final AutoFocusCallback autoFocusCallback;
 
-  /**
-   * Initializes this static object with the Context of the calling Activity. The caller of this
-   * method relies on the ability to harmlessly call it multiple times and only have the object
-   * built once, the first time.
-   *
-   * @param context The Activity which wants to use the camera.
-   */
-  public static void init(Context context) {
-    if (cameraManager == null) {
-      cameraManager = new CameraManager(context);
-    }
-  }
-
-  /**
-   * Deletes all state. We don't want to keep global variables around from one launch to another.
-   */
-  public static void destroy() {
-    cameraManager = null;
-  }
-
-  /**
-   * Gets the CameraManager singleton instance.
-   *
-   * @return A reference to the CameraManager singleton.
-   */
-  public static CameraManager get() {
-    return cameraManager;
-  }
-
-  private CameraManager(Context context) {
+  public CameraManager(Context context) {
 
     this.context = context;
     this.configManager = new CameraConfigurationManager(context);
