@@ -1,9 +1,10 @@
+// -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
+
 #ifndef __NOT_FOUND_EXCEPTION_H__
 #define __NOT_FOUND_EXCEPTION_H__
 
 /*
- *  NotFoundException.h
- *  zxing
+ * Copyright 20011 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,11 +23,11 @@
 
 namespace zxing {
 
-class NotFoundException : public Exception {
-public:
-  NotFoundException(const char *msg);
-  ~NotFoundException() throw();
-};
+  class NotFoundException : public Exception {
+  public:
+    NotFoundException(const char *msg);
+    ~NotFoundException() throw();
+  };
 
 }
 #endif // __NOT_FOUND_EXCEPTION_H__

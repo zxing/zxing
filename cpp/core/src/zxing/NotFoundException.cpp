@@ -1,6 +1,6 @@
+// -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
 /*
- *  NotFoundException.cpp
- *  zxing
+ * Copyright 20011 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,11 +19,11 @@
 
 namespace zxing {
 
-NotFoundException::NotFoundException(const char *msg) :
+  NotFoundException::NotFoundException(const char *msg) :
     Exception(msg) {
-}
+  }
 
-NotFoundException::~NotFoundException() throw() {
-}
+  NotFoundException::~NotFoundException() throw() {
+  }
 
 }
