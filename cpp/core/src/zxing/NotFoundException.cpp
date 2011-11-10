@@ -19,9 +19,8 @@
 
 namespace zxing {
 
-  NotFoundException::NotFoundException(const char *msg) :
-    Exception(msg) {
-  }
+  NotFoundException::NotFoundException(const char *msg)
+    : ReaderException(msg) {}
 
   NotFoundException::~NotFoundException() throw() {
   }
