@@ -37,6 +37,8 @@ public final class VCardResultParser extends ResultParser {
   private static final Pattern BEGIN_VCARD = Pattern.compile("BEGIN:VCARD", Pattern.CASE_INSENSITIVE);
   private static final Pattern VCARD_LIKE_DATE = Pattern.compile("\\d{4}-?\\d{2}-?\\d{2}");
   private static final Pattern CR_LF_SPACE_TAB = Pattern.compile("\r\n[ \t]");
+  private static final Pattern NEWLINE_ESCAPE = Pattern.compile("\\\\[nN]");
+  private static final Pattern VCARD_ESCAPES = Pattern.compile("\\\\([,;\\\\])");
   private static final Pattern EQUALS = Pattern.compile("=");
   private static final Pattern SEMICOLON = Pattern.compile(";");
 
@@ -62,7 +64,7 @@ public final class VCardResultParser extends ResultParser {
     List<List<String>> addresses = matchVCardPrefixedField("ADR", rawText, true);
     if (addresses != null) {
       for (List<String> list : addresses) {
-        list.set(0, formatAddress(list.get(0)));
+        list.set(0, list.get(0));
       }
     }
     List<String> org = matchSingleVCardPrefixedField("ORG", rawText, true);
@@ -165,6 +167,8 @@ public final class VCardResultParser extends ResultParser {
           element = decodeQuotedPrintable(element, quotedPrintableCharset);
         } else {
           element = CR_LF_SPACE_TAB.matcher(element).replaceAll("");
+          element = NEWLINE_ESCAPE.matcher(element).replaceAll("\n");
+          element = VCARD_ESCAPES.matcher(element).replaceAll("$1");
         }
         if (metadata == null) {
           List<String> match = new ArrayList<String>(1);
@@ -289,10 +293,6 @@ public final class VCardResultParser extends ResultParser {
 
   private static boolean isLikeVCardDate(CharSequence value) {
     return value == null || VCARD_LIKE_DATE.matcher(value).matches();
-  }
-
-  private static String formatAddress(String address) {
-    return address == null ? null : address.replace(';', ' ').trim();
   }
 
   /**
