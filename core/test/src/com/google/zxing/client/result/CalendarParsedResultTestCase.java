@@ -105,6 +105,30 @@ public final class CalendarParsedResultTestCase extends Assert {
         null, null, null, "20080504T123456Z", "20080504T123456Z", null, -12.345, -45.678);
   }
 
+  @Test
+  public void testVEventEscapes() {
+    doTest("BEGIN:VEVENT\n" +
+           "CREATED:20111109T110351Z\n" +
+           "LAST-MODIFIED:20111109T170034Z\n" +
+           "DTSTAMP:20111109T170034Z\n" +
+           "UID:0f6d14ef-6cb7-4484-9080-61447ccdf9c2\n" +
+           "SUMMARY:Summary line\n" +
+           "CATEGORIES:Private\n" +
+           "DTSTART;TZID=Europe/Vienna:20111110T110000\n" +
+           "DTEND;TZID=Europe/Vienna:20111110T120000\n" +
+           "LOCATION:Location\\, with\\, escaped\\, commas\n" +
+           "DESCRIPTION:Meeting with a friend\\nlook at homepage first\\n\\n\n" +
+           "  \\n\n" +
+           "SEQUENCE:1\n" +
+           "X-MOZ-GENERATION:1\n" +
+           "END:VEVENT",
+           "Meeting with a friend\nlook at homepage first\n\n\n  \n",
+           "Summary line",
+           "Location, with, escaped, commas",
+           "20111110T110000",
+           "20111110T120000");
+  }
+
   private static void doTest(String contents,
                              String description,
                              String summary,
