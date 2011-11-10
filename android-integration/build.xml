@@ -35,10 +35,14 @@
            deprecation="true"
            includeantruntime="false">
       <classpath>
-        <pathelement location="${android-home}/platforms/android-10/android.jar"/>
+        <pathelement location="${android-home}/platforms/android-7/android.jar"/>
       </classpath>
     </javac>
     <jar jarfile="android-integration.jar" basedir="build"/>
+  </target>
+  
+  <target name="export" depends="build">
+    <copy file="android-integration.jar" todir="../androidtest/libs"/>
   </target>
 
   <target name="clean">

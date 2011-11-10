@@ -21,24 +21,36 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.hardware.Camera;
+import android.os.Build;
 import android.os.Bundle;
-import android.provider.Contacts;
+import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.nio.charset.Charset;
+import java.util.Arrays;
 
 public final class ZXingTestActivity extends Activity {
 
+  private static final String TAG = ZXingTestActivity.class.getSimpleName();
   private static final int ABOUT_ID = Menu.FIRST;
-  private static final String PACKAGE_NAME = "com.google.zxing.client.androidtest";
+  private static final String PACKAGE_NAME = ZXingTestActivity.class.getPackage().getName();
 
   @Override
   public void onCreate(Bundle icicle) {
     super.onCreate(icicle);
     setContentView(R.layout.test);
-
-    findViewById(R.id.take_test_photos).setOnClickListener(takeTestPhotos);
     findViewById(R.id.get_camera_parameters).setOnClickListener(getCameraParameters);
     findViewById(R.id.scan_product).setOnClickListener(scanProduct);
     findViewById(R.id.scan_qr_code).setOnClickListener(scanQRCode);
@@ -86,23 +98,30 @@ public final class ZXingTestActivity extends Activity {
     }
     return super.onOptionsItemSelected(item);
   }
-
-  private final Button.OnClickListener takeTestPhotos = new Button.OnClickListener() {
-    @Override
-    public void onClick(View v) {
-      Intent intent = new Intent(Intent.ACTION_VIEW);
-      intent.setClassName(ZXingTestActivity.this, CameraTestActivity.class.getName());
-      intent.putExtra(CameraTestActivity.GET_CAMERA_PARAMETERS, false);
-      startActivity(intent);
+  
+  @Override
+  public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+    IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
+    if (result != null) {
+      String contents = result.getContents();
+      if (contents != null) {
+        showDialog(R.string.result_succeeded, "Format: " + result.getFormatName() + "\nContents: " + contents);
+      } else {
+        showDialog(R.string.result_failed, getString(R.string.result_failed_why));
+      }
     }
-  };
+  }
+  
 
   private final Button.OnClickListener getCameraParameters = new Button.OnClickListener() {
     @Override
     public void onClick(View v) {
-      Intent intent = new Intent(Intent.ACTION_VIEW);
-      intent.setClassName(ZXingTestActivity.this, CameraTestActivity.class.getName());
-      intent.putExtra(CameraTestActivity.GET_CAMERA_PARAMETERS, true);
+      String stats = collectStats();
+      Intent intent = new Intent(Intent.ACTION_SEND);
+      intent.putExtra(Intent.EXTRA_EMAIL, "zxing-external@google.com");
+      intent.putExtra(Intent.EXTRA_SUBJECT, "Camera parameters report");
+      intent.putExtra(Intent.EXTRA_TEXT, stats);
+      intent.setType("text/plain");
       startActivity(intent);
     }
   };
@@ -123,24 +142,23 @@ public final class ZXingTestActivity extends Activity {
       intent.putExtra("SCAN_MODE", "PRODUCT_MODE");
       intent.putExtra("SCAN_WIDTH", 800);
       intent.putExtra("SCAN_HEIGHT", 200);
-      startActivityForResult(intent, 0);
+      startActivityForResult(intent, IntentIntegrator.REQUEST_CODE);
     }
   };
 
   private final Button.OnClickListener scanQRCode = new Button.OnClickListener() {
     @Override
     public void onClick(View v) {
-      Intent intent = new Intent("com.google.zxing.client.android.SCAN");
-      intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
-      startActivityForResult(intent, 0);
+      IntentIntegrator integrator = new IntentIntegrator(ZXingTestActivity.this);
+      integrator.initiateScan(IntentIntegrator.QR_CODE_TYPES);
     }
   };
 
   private final Button.OnClickListener scanAnything = new Button.OnClickListener() {
     @Override
     public void onClick(View v) {
-      Intent intent = new Intent("com.google.zxing.client.android.SCAN");
-      startActivityForResult(intent, 0);
+      IntentIntegrator integrator = new IntentIntegrator(ZXingTestActivity.this);
+      integrator.initiateScan();
     }
   };
 
@@ -153,19 +171,6 @@ public final class ZXingTestActivity extends Activity {
       startActivity(intent);
     }
   };
-
-  @Override
-  public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-    if (requestCode == 0) {
-      if (resultCode == RESULT_OK) {
-        String contents = intent.getStringExtra("SCAN_RESULT");
-        String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
-        showDialog(R.string.result_succeeded, "Format: " + format + "\nContents: " + contents);
-      } else if (resultCode == RESULT_CANCELED) {
-        showDialog(R.string.result_failed, getString(R.string.result_failed_why));
-      }
-    }
-  }
 
   private final Button.OnClickListener encodeURL = new Button.OnClickListener() {
     @Override
@@ -199,10 +204,10 @@ public final class ZXingTestActivity extends Activity {
     @Override
     public void onClick(View v) {
       Bundle bundle = new Bundle();
-      bundle.putString(Contacts.Intents.Insert.NAME, "Jenny");
-      bundle.putString(Contacts.Intents.Insert.PHONE, "8675309");
-      bundle.putString(Contacts.Intents.Insert.EMAIL, "jenny@the80s.com");
-      bundle.putString(Contacts.Intents.Insert.POSTAL, "123 Fake St. San Francisco, CA 94102");
+      bundle.putString(ContactsContract.Intents.Insert.NAME, "Jenny");
+      bundle.putString(ContactsContract.Intents.Insert.PHONE, "8675309");
+      bundle.putString(ContactsContract.Intents.Insert.EMAIL, "jenny@the80s.com");
+      bundle.putString(ContactsContract.Intents.Insert.POSTAL, "123 Fake St. San Francisco, CA 94102");
       encodeBarcode("CONTACT_TYPE", bundle);
     }
   };
@@ -262,6 +267,77 @@ public final class ZXingTestActivity extends Activity {
     intent.putExtra("ENCODE_TYPE", type);
     intent.putExtra("ENCODE_DATA", data);
     startActivity(intent);
+  }
+
+  private static String getFlattenedParams() {
+    Camera camera = Camera.open();
+    if (camera == null) {
+      return null;
+    }
+    try {
+      Camera.Parameters parameters = camera.getParameters();
+      if (parameters == null) {
+        return null;
+      }
+      return parameters.flatten();
+    } finally {
+      camera.release();
+    }
+  }
+  
+  private static String collectStats() {
+    StringBuilder result = new StringBuilder(1000);
+    
+    result.append("BOARD=").append(Build.BOARD).append('\n');
+    result.append("BRAND=").append(Build.BRAND).append('\n');
+    result.append("CPU_ABI=").append(Build.CPU_ABI).append('\n');
+    result.append("DEVICE=").append(Build.DEVICE).append('\n');
+    result.append("DISPLAY=").append(Build.DISPLAY).append('\n');
+    result.append("FINGERPRINT=").append(Build.FINGERPRINT).append('\n');
+    result.append("HOST=").append(Build.HOST).append('\n');
+    result.append("ID=").append(Build.ID).append('\n');
+    result.append("MANUFACTURER=").append(Build.MANUFACTURER).append('\n');
+    result.append("MODEL=").append(Build.MODEL).append('\n');
+    result.append("PRODUCT=").append(Build.PRODUCT).append('\n');
+    result.append("TAGS=").append(Build.TAGS).append('\n');
+    result.append("TIME=").append(Build.TIME).append('\n');
+    result.append("TYPE=").append(Build.TYPE).append('\n');
+    result.append("USER=").append(Build.USER).append('\n');
+    result.append("VERSION.CODENAME=").append(Build.VERSION.CODENAME).append('\n');
+    result.append("VERSION.INCREMENTAL=").append(Build.VERSION.INCREMENTAL).append('\n');
+    result.append("VERSION.RELEASE=").append(Build.VERSION.RELEASE).append('\n');
+    result.append("VERSION.SDK_INT=").append(Build.VERSION.SDK_INT).append('\n');
+
+    String flattened = getFlattenedParams();
+    String[] params = flattened.split(";");
+    Arrays.sort(params);
+    for (String param : params) {
+      result.append(param).append('\n');
+    }
+
+    String resultString = result.toString();
+    writeStats(resultString);
+
+    return resultString;
+  }
+
+  private static void writeStats(String resultString) {
+    Writer out = null;
+    try {
+      out = new OutputStreamWriter(new FileOutputStream(new File("/sdcard/CameraParameters.txt")), 
+                                   Charset.forName("UTF-8"));
+      out.write(resultString);
+    } catch (IOException e) {
+      Log.e(TAG, "Cannot write parameters file ", e);
+    } finally {
+      if (out != null) {
+        try {
+          out.close();
+        } catch (IOException e) {
+          Log.w(TAG, e);
+        }
+      }
+    }
   }
 
 }
