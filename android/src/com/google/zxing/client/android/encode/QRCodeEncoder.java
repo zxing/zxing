@@ -99,11 +99,13 @@ final class QRCodeEncoder {
   private boolean encodeContentsFromZXingIntent(Intent intent) {
      // Default to QR_CODE if no format given.
     String formatString = intent.getStringExtra(Intents.Encode.FORMAT);
-    try {
-      format = BarcodeFormat.valueOf(formatString);
-    } catch (IllegalArgumentException iae) {
-      // Ignore it then
-      format = null;
+    format = null;
+    if (formatString != null) {
+      try {
+        format = BarcodeFormat.valueOf(formatString);
+      } catch (IllegalArgumentException iae) {
+        // Ignore it then
+      }
     }
     if (format == null || format == BarcodeFormat.QR_CODE) {
       String type = intent.getStringExtra(Intents.Encode.TYPE);
