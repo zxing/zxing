@@ -19,11 +19,11 @@
  * limitations under the License.
  */
 
-#include <zxing/Exception.h>
+#include <zxing/ReaderException.h>
 
 namespace zxing {
 
-  class NotFoundException : public Exception {
+  class NotFoundException : public ReaderException {
   public:
     NotFoundException(const char *msg);
     ~NotFoundException() throw();
