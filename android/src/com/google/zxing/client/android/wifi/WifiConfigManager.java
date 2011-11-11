@@ -103,6 +103,7 @@ public final class WifiConfigManager {
       // Try to disable the current network and start a new one.
       if (wifiManager.enableNetwork(networkId, true)) {
         Log.i(TAG, "Associating to network " + config.SSID);
+        wifiManager.saveConfiguration();
       } else {
         Log.w(TAG, "Failed to enable network " + config.SSID);
       }
