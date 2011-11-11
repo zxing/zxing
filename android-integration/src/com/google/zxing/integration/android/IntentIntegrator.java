@@ -233,6 +233,8 @@ public final class IntentIntegrator {
       return showDownloadDialog();
     }
     intentScan.setPackage(targetAppPackage);
+    intentScan.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+    intentScan.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
     activity.startActivityForResult(intentScan, REQUEST_CODE);
     return null;
   }
@@ -314,6 +316,8 @@ public final class IntentIntegrator {
       showDownloadDialog();
     } else {
       intent.setPackage(targetAppPackage);
+      intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+      intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
       activity.startActivity(intent);
     }
   }
