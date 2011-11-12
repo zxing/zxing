@@ -47,6 +47,18 @@ public final class BufferedImageLuminanceSource extends LuminanceSource {
     if (left + width > sourceWidth || top + height > sourceHeight) {
       throw new IllegalArgumentException("Crop rectangle does not fit within image data.");
     }
+
+    // The color of fully-transparent pixels is irrelevant. They are often, technically, fully-transparent
+    // black (0 alpha, and then 0 RGB). They are often used, of course as the "white" area in a
+    // barcode image. Force any such pixel to be white:
+    for (int i = top; i < top + height; i++) {
+      for (int j = left; j < left + width; j++) {
+        if ((image.getRGB(i, j) & 0xFF000000) == 0) {
+          image.setRGB(i, j, 0xFFFFFFFF); // = white
+        }
+      }
+    }
+
     // Create a grayscale copy, no need to calculate the luminance manually
     this.image = new BufferedImage(sourceWidth, sourceHeight, BufferedImage.TYPE_BYTE_GRAY);
     this.image.getGraphics().drawImage(image, 0, 0, null);
