@@ -14,66 +14,92 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<project name="zxing.appspot.com" default="build">
-  <property file="../build.properties"/>
+<project name="zxing.appspot.com" default="build" basedir=".">
 
-  <!-- Properties -->
-  <property name="outdir" value="build"/>
-  <property name="outdir-site" value="${outdir}/site"/>
-  <property name="yaml-file" value="app.yaml"/>
-  <property name="redirect-script" value="redirect.py"/>
-  <property name="generator-package" value="com.google.zxing.web.generator.Generator"/>
+  <loadproperties srcFile="../build.properties" />
 
-  <!-- Contains pre-built jars like gwt-incubator.jar -->
-  <property name="external-libs" value="generator/libs"/>
+  <!-- Arguments to gwtc and devmode targets -->
+  <property name="gwt.args" value="" />
 
-  <!-- Create the output directories if they don't exist yet. -->
-  <target name="create-dirs">
-    <echo>Creating output directories if needed...</echo>
-    <mkdir dir="${outdir}"/>
-    <mkdir dir="${outdir-site}"/>
+  <!-- Configure path to GWT SDK -->
+  <property name="gwt.sdk" location="${GWT-home}" />
+
+  <path id="project.class.path">
+    <pathelement location="war/WEB-INF/classes"/>
+    <pathelement location="${gwt.sdk}/gwt-user.jar"/>
+    <fileset dir="${gwt.sdk}" includes="gwt-dev*.jar"/>
+    <!-- Add any additional non-server libs (such as JUnit) -->
+    <fileset dir="war/WEB-INF/lib" includes="**/*.jar"/>
+  </path>
+
+  <target name="libs" description="Copy libs to WEB-INF/lib">
+    <mkdir dir="war/WEB-INF/lib" />
+    <copy todir="war/WEB-INF/lib" file="${gwt.sdk}/gwt-servlet.jar" />
+    <copy todir="war/WEB-INF/lib" file="${gwt.sdk}/gwt-servlet-deps.jar" />
+    <!-- Add any additional server libs that need to be copied -->
   </target>
 
-  <!-- Generate the HTML and JS from the Java source. -->
-  <target name="compile" depends="create-dirs">
-    <java classname="com.google.gwt.dev.GWTCompiler" fork="true" failonerror="true">
-      <jvmarg value="-Xmx256M"/>
-      <classpath>
-        <pathelement path="generator/src"/>
-        <fileset dir="${GWT-home}" includes="*.jar"/>
-        <fileset dir="${external-libs}" includes="*.jar"/>
-      </classpath>
-      <arg line="-out ${outdir-site}"/>
-      <arg value="${generator-package}"/>
-    </java>
-  </target>
-
-  <!-- Part of copying all the needed pieces into ${outdir-site} so it can be uploaded. -->
-  <target name="copy-static-files" depends="create-dirs">
-    <echo>Copying static files...</echo>
-    <copy file="${yaml-file}" todir="${outdir}"/>
-    <copy file="${redirect-script}" todir="${outdir}"/>
-    <copy todir="${outdir-site}">
-      <fileset dir="static"/>
+  <target name="javac" depends="libs" description="Compile java source to bytecode">
+    <mkdir dir="war/WEB-INF/classes"/>
+    <javac srcdir="src" includes="**" encoding="utf-8"
+        destdir="war/WEB-INF/classes"
+        source="6" target="6" nowarn="true"
+        debug="true" debuglevel="lines,vars,source"
+        includeantruntime="false">
+      <classpath refid="project.class.path"/>
+    </javac>
+    <copy todir="war/WEB-INF/classes">
+      <fileset dir="src" excludes="**/*.java"/>
     </copy>
   </target>
 
-  <!--
-  The GWTCompiler adds the package name to the output directory, but we want to change that to
-  mirror the user-perceived site layout. We also want to rename the main HTML file.
-  -->
-  <target name="rename-generator" depends="compile">
-    <echo>Renaming generator output...</echo>
-    <move file="${outdir-site}/${generator-package}" tofile="${outdir-site}/generator"/>
-    <move file="${outdir-site}/generator/Generator.html" tofile="${outdir-site}/generator/index.html"/>
+  <target name="gwtc" depends="javac" description="GWT compile to JavaScript (production mode)">
+    <java failonerror="true" fork="true" classname="com.google.gwt.dev.Compiler">
+      <classpath>
+        <pathelement location="src"/>
+        <path refid="project.class.path"/>
+        <pathelement location="${gwt.sdk}/validation-api-1.0.0.GA.jar" />
+        <pathelement location="${gwt.sdk}/validation-api-1.0.0.GA-sources.jar" />
+      </classpath>
+      <!-- add jvmarg -Xss16M or similar if you see a StackOverflowError -->
+      <jvmarg value="-Xmx256M"/>
+      <arg value="-strict"/>
+      <arg line="-war"/>
+      <arg value="war"/>
+      <!-- Additional arguments like -style PRETTY or -logLevel DEBUG -->
+      <arg line="${gwt.args}"/>
+      <arg value="com.google.zxing.web.generator.Generator"/>
+    </java>
   </target>
 
-  <target name="build" depends="compile,copy-static-files,rename-generator">
-
+  <target name="devmode" depends="javac" description="Run development mode">
+    <java failonerror="true" fork="true" classname="com.google.gwt.dev.DevMode">
+      <classpath>
+        <pathelement location="src"/>
+        <path refid="project.class.path"/>
+        <pathelement location="${gwt.sdk}/validation-api-1.0.0.GA.jar" />
+        <pathelement location="${gwt.sdk}/validation-api-1.0.0.GA-sources.jar" />
+      </classpath>
+      <jvmarg value="-Xmx256M"/>
+      <arg value="-startupUrl"/>
+      <arg value="Generator.html"/>
+      <arg line="-war"/>
+      <arg value="war"/>
+      <!-- Additional arguments like -style PRETTY or -logLevel DEBUG -->
+      <arg line="${gwt.args}"/>
+      <arg value="com.google.zxing.web.generator.Generator"/>
+    </java>
   </target>
 
-  <target name="clean">
-    <delete dir="${outdir}"/>
+  <target name="build" depends="gwtc" description="Build this project" />
+
+  <target name="war" depends="build" description="Create a war file">
+    <zip destfile="Generator.war" basedir="war"/>
+  </target>
+
+  <target name="clean" description="Cleans this project">
+    <delete dir="war/WEB-INF/classes" failonerror="false" />
+    <delete dir="war/generator" failonerror="false" />
   </target>
 
 </project>
