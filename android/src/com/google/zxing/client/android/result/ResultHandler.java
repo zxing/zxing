@@ -16,7 +16,6 @@
 
 package com.google.zxing.client.android.result;
 
-import android.util.Log;
 import com.google.zxing.Result;
 import com.google.zxing.client.android.Contents;
 import com.google.zxing.client.android.Intents;
@@ -37,7 +36,8 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.preference.PreferenceManager;
-import android.provider.Contacts;
+import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.View;
 
 import java.text.DateFormat;
@@ -80,23 +80,25 @@ public abstract class ResultHandler {
   private static final String MARKET_REFERRER_SUFFIX =
       "&referrer=utm_source%3Dbarcodescanner%26utm_medium%3Dapps%26utm_campaign%3Dscan";
 
-  private static final String[] EMAIL_TYPE_STRINGS = {"home", "work"};
-  private static final String[] PHONE_TYPE_STRINGS = {"home", "work", "mobile", "fax", "pager"};
+  private static final String[] EMAIL_TYPE_STRINGS = {"home", "work", "mobile"};
+  private static final String[] PHONE_TYPE_STRINGS = {"home", "work", "mobile", "fax", "pager", "main"};
   private static final String[] ADDRESS_TYPE_STRINGS = {"home", "work"};
   private static final int[] EMAIL_TYPE_VALUES = {
-      Contacts.ContactMethodsColumns.TYPE_HOME,
-      Contacts.ContactMethodsColumns.TYPE_WORK,
+      ContactsContract.CommonDataKinds.Email.TYPE_HOME,
+      ContactsContract.CommonDataKinds.Email.TYPE_WORK,
+      ContactsContract.CommonDataKinds.Email.TYPE_MOBILE,
   };
   private static final int[] PHONE_TYPE_VALUES = {
-      Contacts.PhonesColumns.TYPE_HOME,
-      Contacts.PhonesColumns.TYPE_WORK,
-      Contacts.PhonesColumns.TYPE_MOBILE,
-      Contacts.PhonesColumns.TYPE_FAX_WORK,
-      Contacts.PhonesColumns.TYPE_PAGER,
+      ContactsContract.CommonDataKinds.Phone.TYPE_HOME,
+      ContactsContract.CommonDataKinds.Phone.TYPE_WORK,
+      ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE,
+      ContactsContract.CommonDataKinds.Phone.TYPE_FAX_WORK,
+      ContactsContract.CommonDataKinds.Phone.TYPE_PAGER,
+      ContactsContract.CommonDataKinds.Phone.TYPE_MAIN,
   };
   private static final int[] ADDRESS_TYPE_VALUES = {
-      Contacts.ContactMethodsColumns.TYPE_HOME,
-      Contacts.ContactMethodsColumns.TYPE_WORK,
+      ContactsContract.CommonDataKinds.StructuredPostal.TYPE_HOME,
+      ContactsContract.CommonDataKinds.StructuredPostal.TYPE_WORK,
   };
   private static final int NO_TYPE = -1;
 
@@ -297,14 +299,13 @@ public abstract class ResultHandler {
                         String title) {
 
     // Only use the first name in the array, if present.
-    Intent intent = new Intent(Intent.ACTION_INSERT_OR_EDIT, Contacts.CONTENT_URI);
-    intent.setType(Contacts.People.CONTENT_ITEM_TYPE);
-    putExtra(intent, Contacts.Intents.Insert.NAME, names != null ? names[0] : null);
+    Intent intent = new Intent(Intent.ACTION_INSERT_OR_EDIT, ContactsContract.Contacts.CONTENT_URI);
+    intent.setType(ContactsContract.Contacts.CONTENT_ITEM_TYPE);
+    putExtra(intent, ContactsContract.Intents.Insert.NAME, names != null ? names[0] : null);
 
-    putExtra(intent, Contacts.Intents.Insert.PHONETIC_NAME, pronunciation);
+    putExtra(intent, ContactsContract.Intents.Insert.PHONETIC_NAME, pronunciation);
 
-    int phoneCount = Math.min(phoneNumbers != null ? phoneNumbers.length : 0,
-        Contents.PHONE_KEYS.length);
+    int phoneCount = Math.min(phoneNumbers != null ? phoneNumbers.length : 0, Contents.PHONE_KEYS.length);
     for (int x = 0; x < phoneCount; x++) {
       putExtra(intent, Contents.PHONE_KEYS[x], phoneNumbers[x]);
       if (phoneTypes != null && x < phoneTypes.length) {
@@ -326,17 +327,17 @@ public abstract class ResultHandler {
       }
     }
 
-    putExtra(intent, Contacts.Intents.Insert.NOTES, note);
-    putExtra(intent, Contacts.Intents.Insert.IM_HANDLE, instantMessenger);
-    putExtra(intent, Contacts.Intents.Insert.POSTAL, address);
+    putExtra(intent, ContactsContract.Intents.Insert.NOTES, note);
+    putExtra(intent, ContactsContract.Intents.Insert.IM_HANDLE, instantMessenger);
+    putExtra(intent, ContactsContract.Intents.Insert.POSTAL, address);
     if (addressType != null) {
       int type = toAddressContractType(addressType);
       if (type >= 0) {
-        intent.putExtra(Contacts.Intents.Insert.POSTAL_TYPE, type);
+        intent.putExtra(ContactsContract.Intents.Insert.POSTAL_TYPE, type);
       }
     }
-    putExtra(intent, Contacts.Intents.Insert.COMPANY, org);
-    putExtra(intent, Contacts.Intents.Insert.JOB_TITLE, title);
+    putExtra(intent, ContactsContract.Intents.Insert.COMPANY, org);
+    putExtra(intent, ContactsContract.Intents.Insert.JOB_TITLE, title);
     launchIntent(intent);
   }
 
@@ -448,18 +449,18 @@ public abstract class ResultHandler {
 
   final void getDirections(double latitude, double longitude) {
     launchIntent(new Intent(Intent.ACTION_VIEW, Uri.parse("http://maps.google." +
-        LocaleManager.getCountryTLD(getActivity()) + "/maps?f=d&daddr=" + latitude + ',' + longitude)));
+        LocaleManager.getCountryTLD(activity) + "/maps?f=d&daddr=" + latitude + ',' + longitude)));
   }
 
   // Uses the mobile-specific version of Product Search, which is formatted for small screens.
   final void openProductSearch(String upc) {
-    Uri uri = Uri.parse("http://www.google." + LocaleManager.getProductSearchCountryTLD(getActivity()) +
+    Uri uri = Uri.parse("http://www.google." + LocaleManager.getProductSearchCountryTLD(activity) +
         "/m/products?q=" + upc + "&source=zxing");
     launchIntent(new Intent(Intent.ACTION_VIEW, uri));
   }
 
   final void openBookSearch(String isbn) {
-    Uri uri = Uri.parse("http://books.google." + LocaleManager.getBookSearchCountryTLD(getActivity()) +
+    Uri uri = Uri.parse("http://books.google." + LocaleManager.getBookSearchCountryTLD(activity) +
         "/books?vid=isbn" + isbn);
     launchIntent(new Intent(Intent.ACTION_VIEW, uri));
   }

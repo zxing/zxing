@@ -16,6 +16,7 @@
 
 package com.google.zxing.client.android.share;
 
+import android.provider.ContactsContract;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.client.android.Contents;
 import com.google.zxing.client.android.Intents;
@@ -29,7 +30,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.BaseColumns;
 import android.provider.Browser;
-import android.provider.Contacts;
 import android.text.ClipboardManager;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -51,29 +51,12 @@ public final class ShareActivity extends Activity {
   private static final int PICK_CONTACT = 1;
   private static final int PICK_APP = 2;
 
-  //private static final int METHODS_ID_COLUMN = 0;
-  private static final int METHODS_KIND_COLUMN = 1;
-  private static final int METHODS_DATA_COLUMN = 2;
-
-  private static final String[] METHODS_PROJECTION = {
-      BaseColumns._ID, // 0
-      Contacts.ContactMethodsColumns.KIND, // 1
-      Contacts.ContactMethodsColumns.DATA, // 2
-  };
-
-  private static final int PHONES_NUMBER_COLUMN = 1;
-
-  private static final String[] PHONES_PROJECTION = {
-      BaseColumns._ID, // 0
-      Contacts.PhonesColumns.NUMBER // 1
-  };
-
   private Button clipboardButton;
 
   private final Button.OnClickListener contactListener = new Button.OnClickListener() {
     @Override
     public void onClick(View v) {
-      Intent intent = new Intent(Intent.ACTION_PICK, Contacts.People.CONTENT_URI);
+      Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
       intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
       startActivityForResult(intent, PICK_CONTACT);
     }
@@ -201,78 +184,106 @@ public final class ShareActivity extends Activity {
       return; // Show error?
     }
     ContentResolver resolver = getContentResolver();
-    Cursor contactCursor;
+    Bundle bundle = new Bundle();
+
+    Cursor cursor;
     try {
       // We're seeing about six reports a week of this exception although I don't understand why.
-      contactCursor = resolver.query(contactUri, null, null, null, null);
+      cursor = resolver.query(contactUri, null, null, null, null);
     } catch (IllegalArgumentException e) {
       return;
     }
-    Bundle bundle = new Bundle();
-    if (contactCursor != null && contactCursor.moveToFirst()) {
-      int nameColumn = contactCursor.getColumnIndex(Contacts.PeopleColumns.NAME);
-      if (nameColumn >= 0) {
-        String name = contactCursor.getString(nameColumn);
+    if (cursor == null) {
+      return;
+    }
 
-        // Don't require a name to be present, this contact might be just a phone number.
-        if (name != null && name.length() > 0) {
-          bundle.putString(Contacts.Intents.Insert.NAME, massageContactData(name));
-        }
-      } else {
-        Log.w(TAG, "Unable to find column? " + Contacts.PeopleColumns.NAME);
+    String id;
+    String name;
+    boolean hasPhone;
+    try {
+      if (!cursor.moveToFirst()) {
+        return;
       }
-      contactCursor.close();
 
-      Uri phonesUri = Uri.withAppendedPath(contactUri, Contacts.People.Phones.CONTENT_DIRECTORY);
-      Cursor phonesCursor = resolver.query(phonesUri, PHONES_PROJECTION, null, null, null);
+      id = cursor.getString(cursor.getColumnIndex(BaseColumns._ID));
+      name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+      hasPhone = cursor.getInt(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER)) > 0;
+
+
+    } finally {
+      cursor.close();
+    }
+
+    // Don't require a name to be present, this contact might be just a phone number.
+    if (name != null && name.length() > 0) {
+      bundle.putString(ContactsContract.Intents.Insert.NAME, massageContactData(name));
+    }
+
+    if (hasPhone) {
+      Cursor phonesCursor = resolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                                           null,
+                                           ContactsContract.CommonDataKinds.Phone.CONTACT_ID + '=' + id,
+                                           null,
+                                           null);
       if (phonesCursor != null) {
-        int foundPhone = 0;
-        while (phonesCursor.moveToNext()) {
-          String number = phonesCursor.getString(PHONES_NUMBER_COLUMN);
-          if (foundPhone < Contents.PHONE_KEYS.length) {
+        try {
+          int foundPhone = 0;
+          int phonesNumberColumn = phonesCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+          while (phonesCursor.moveToNext() && foundPhone < Contents.PHONE_KEYS.length) {
+            String number = phonesCursor.getString(phonesNumberColumn);
             bundle.putString(Contents.PHONE_KEYS[foundPhone], massageContactData(number));
             foundPhone++;
           }
+        } finally {
+          phonesCursor.close();
         }
-        phonesCursor.close();
       }
+    }
 
-      Uri methodsUri = Uri.withAppendedPath(contactUri,
-          Contacts.People.ContactMethods.CONTENT_DIRECTORY);
-      Cursor methodsCursor = resolver.query(methodsUri, METHODS_PROJECTION, null, null, null);
-      if (methodsCursor != null) {
-        int foundEmail = 0;
-        boolean foundPostal = false;
-        while (methodsCursor.moveToNext()) {
-          int kind = methodsCursor.getInt(METHODS_KIND_COLUMN);
-          String data = methodsCursor.getString(METHODS_DATA_COLUMN);
-          switch (kind) {
-            case Contacts.KIND_EMAIL:
-              if (foundEmail < Contents.EMAIL_KEYS.length) {
-                bundle.putString(Contents.EMAIL_KEYS[foundEmail], massageContactData(data));
-                foundEmail++;
-              }
-              break;
-            case Contacts.KIND_POSTAL:
-              if (!foundPostal) {
-                bundle.putString(Contacts.Intents.Insert.POSTAL, massageContactData(data));
-                foundPostal = true;
-              }
-              break;
-          }
+    Cursor methodsCursor = resolver.query(ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_URI,
+                                          null,
+                                          ContactsContract.CommonDataKinds.StructuredPostal.CONTACT_ID + '=' + id,
+                                          null,
+                                          null);
+    if (methodsCursor != null) {
+      try {
+        if (methodsCursor.moveToNext()) {
+          String data = methodsCursor.getString(
+              methodsCursor.getColumnIndex(ContactsContract.CommonDataKinds.StructuredPostal.FORMATTED_ADDRESS));
+          bundle.putString(ContactsContract.Intents.Insert.POSTAL, massageContactData(data));
         }
+      } finally {
         methodsCursor.close();
       }
-
-      Intent intent = new Intent(Intents.Encode.ACTION);
-      intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-      intent.putExtra(Intents.Encode.TYPE, Contents.Type.CONTACT);
-      intent.putExtra(Intents.Encode.DATA, bundle);
-      intent.putExtra(Intents.Encode.FORMAT, BarcodeFormat.QR_CODE.toString());
-
-      Log.i(TAG, "Sending bundle for encoding: " + bundle);
-      startActivity(intent);
     }
+
+    Cursor emailCursor = resolver.query(ContactsContract.CommonDataKinds.Email.CONTENT_URI,
+                                        null,
+                                        ContactsContract.CommonDataKinds.Email.CONTACT_ID + '=' + id,
+                                        null,
+                                        null);
+    if (emailCursor != null) {
+      try {
+        int foundEmail = 0;
+        int emailColumn = emailCursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA);
+        while (emailCursor.moveToNext() && foundEmail < Contents.EMAIL_KEYS.length) {
+          String email = emailCursor.getString(emailColumn);
+          bundle.putString(Contents.EMAIL_KEYS[foundEmail], massageContactData(email));
+          foundEmail++;
+        }
+      } finally {
+        emailCursor.close();
+      }
+    }
+
+    Intent intent = new Intent(Intents.Encode.ACTION);
+    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+    intent.putExtra(Intents.Encode.TYPE, Contents.Type.CONTACT);
+    intent.putExtra(Intents.Encode.DATA, bundle);
+    intent.putExtra(Intents.Encode.FORMAT, BarcodeFormat.QR_CODE.toString());
+
+    Log.i(TAG, "Sending bundle for encoding: " + bundle);
+    startActivity(intent);
   }
 
   private static String massageContactData(String data) {

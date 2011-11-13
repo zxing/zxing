@@ -16,6 +16,7 @@
 
 package com.google.zxing.client.android.encode;
 
+import android.provider.ContactsContract;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
@@ -34,7 +35,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Contacts;
 import android.telephony.PhoneNumberUtils;
 import android.util.Log;
 
@@ -242,13 +242,13 @@ final class QRCodeEncoder {
 
         newContents.append("MECARD:");
 
-        String name = trim(bundle.getString(Contacts.Intents.Insert.NAME));
+        String name = trim(bundle.getString(ContactsContract.Intents.Insert.NAME));
         if (name != null) {
           newContents.append("N:").append(escapeMECARD(name)).append(';');
           newDisplayContents.append(name);
         }
 
-        String address = trim(bundle.getString(Contacts.Intents.Insert.POSTAL));
+        String address = trim(bundle.getString(ContactsContract.Intents.Insert.POSTAL));
         if (address != null) {
           newContents.append("ADR:").append(escapeMECARD(address)).append(';');
           newDisplayContents.append('\n').append(address);
