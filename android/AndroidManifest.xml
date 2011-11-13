@@ -14,18 +14,13 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  -->
-
-<!-- versionCode is a monotonically increasing integer. I'm starting it at 6 because v2.3 is the 6th
-version to be published. The next versionCode will be 7, regardless of whether the user-visible
-versionName is 2.31, 2.4, or 3.0. -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.google.zxing.client.android"
-          android:versionName="3.7"
-          android:versionCode="74"
+          android:versionName="4.0"
+          android:versionCode="75"
           android:installLocation="auto">
-  <!-- We require Cupcake (Android 1.5) or later, but are really targeting Donut. -->
-  <uses-sdk android:minSdkVersion="3"
-            android:targetSdkVersion="4"/>
+  <uses-sdk android:minSdkVersion="7"
+            android:targetSdkVersion="7"/>
   <!-- Donut-specific flags which allow us to run on any dpi screens. -->
   <supports-screens android:xlargeScreens="true"
                     android:largeScreens="true"
