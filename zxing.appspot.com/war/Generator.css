@@ -93,7 +93,7 @@ body {
   background-color: #fffbcc;
 }
 .required {
-  background: #ffffff url(static/required-field-bg.png) repeat-y;
+  background: #ffffff url(/required-field-bg.png) repeat-y;
 }
 .errorMessage {
   padding-left: 110px;
