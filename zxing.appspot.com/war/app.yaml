@@ -1,0 +1,21 @@
+application: zxing
+version: 2
+runtime: python
+api_version: 1
+
+handlers:
+- url: /generator
+  static_files: Generator.html
+  upload: Generator.html
+
+- url: /scan
+  static_files: scan.html
+  upload: scan.html
+
+- url: /
+  static_files: index.html
+  upload: index.html
+
+- url: /(.*)
+  static_files: \1
+  upload: /
