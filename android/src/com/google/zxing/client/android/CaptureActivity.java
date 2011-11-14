@@ -62,6 +62,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.util.Collection;
 import java.util.Date;
@@ -578,8 +580,13 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       // with the scanned code. This allows both queries and REST-style URLs to work.
       if (returnUrlTemplate != null) {
         Message message = Message.obtain(handler, R.id.launch_product_query);
-        message.obj = returnUrlTemplate.replace(RETURN_CODE_PLACEHOLDER,
-                                                String.valueOf(resultHandler.getDisplayContents()));
+        String codeReplacement = String.valueOf(resultHandler.getDisplayContents());
+        try {
+          codeReplacement = URLEncoder.encode(codeReplacement, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+          // can't happen; UTF-8 is always supported. Continue, I guess, without encoding
+        }
+        message.obj = returnUrlTemplate.replace(RETURN_CODE_PLACEHOLDER, codeReplacement);
         handler.sendMessageDelayed(message, INTENT_RESULT_DURATION);
       }
     }
