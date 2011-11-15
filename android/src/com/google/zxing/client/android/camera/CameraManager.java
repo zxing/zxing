@@ -300,7 +300,7 @@ public final class CameraManager {
   public PlanarYUVLuminanceSource buildLuminanceSource(byte[] data, int width, int height) {
     Rect rect = getFramingRectInPreview();
     if (rect == null) {
-      throw new IllegalStateException();
+      return null;
     }
     int previewFormat = configManager.getPreviewFormat();
     String previewFormatString = configManager.getPreviewFormatString();
