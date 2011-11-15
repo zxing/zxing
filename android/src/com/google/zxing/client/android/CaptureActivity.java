@@ -252,13 +252,18 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
   @Override
   protected void onPause() {
-    super.onPause();
     if (handler != null) {
       handler.quitSynchronously();
       handler = null;
     }
     inactivityTimer.onPause();
     cameraManager.closeDriver();
+    if (!hasSurface) {
+      SurfaceView surfaceView = (SurfaceView) findViewById(R.id.preview_view);
+      SurfaceHolder surfaceHolder = surfaceView.getHolder();
+      surfaceHolder.removeCallback(this);
+    }
+    super.onPause();
   }
 
   @Override
