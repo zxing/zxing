@@ -69,7 +69,7 @@
   <string name="msg_default_format">Formato</string>
   <string name="msg_default_meta">Metadata</string>
   <string name="msg_default_mms_subject">Hola</string>
-  <string name="msg_default_status">Coloque un código de barras en el interior del rectángulo de el visor para escanear.</string>
+  <string name="msg_default_status">Coloque un código de barras en el interior del rectángulo del visor para escanear.</string>
   <string name="msg_default_time">Tiempo</string>
   <string name="msg_default_type">Tipo</string>
   <string name="msg_encode_barcode_failed">No se pudo generar el código de barras solicitado.</string>
@@ -90,7 +90,7 @@
   <string name="msg_sbc_snippet_unavailable">Fragmentos no están disponibles</string>
   <string name="msg_sbc_unknown_page">Página desconocida</string>
   <string name="msg_share_explanation">Usted puede compartir los datos mostrando un código de barras en su pantalla y escanear con otro teléfono.</string>
-  <string name="msg_share_subject_line">Aquí está el contenido de el código de barras que ha escaneado</string>
+  <string name="msg_share_subject_line">Aquí está el contenido del código de barras que ha escaneado</string>
   <string name="msg_share_text">O escriba algún texto</string>
   <string name="msg_sure">¿Está seguro?</string>
   <string name="msg_unmount_usb">Lo sentimos, la tarjeta SD no está accesible.</string>
