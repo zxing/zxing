@@ -51,10 +51,10 @@ public final class BufferedImageLuminanceSource extends LuminanceSource {
     // The color of fully-transparent pixels is irrelevant. They are often, technically, fully-transparent
     // black (0 alpha, and then 0 RGB). They are often used, of course as the "white" area in a
     // barcode image. Force any such pixel to be white:
-    for (int i = top; i < top + height; i++) {
-      for (int j = left; j < left + width; j++) {
-        if ((image.getRGB(i, j) & 0xFF000000) == 0) {
-          image.setRGB(i, j, 0xFFFFFFFF); // = white
+    for (int y = top; y < top + height; y++) {
+      for (int x = left; x < left + width; x++) {
+        if ((image.getRGB(x, y) & 0xFF000000) == 0) {
+          image.setRGB(x, y, 0xFFFFFFFF); // = white
         }
       }
     }
