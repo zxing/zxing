@@ -27,13 +27,11 @@ final class PreviewCallback implements Camera.PreviewCallback {
   private static final String TAG = PreviewCallback.class.getSimpleName();
 
   private final CameraConfigurationManager configManager;
-  private final boolean useOneShotPreviewCallback;
   private Handler previewHandler;
   private int previewMessage;
 
-  PreviewCallback(CameraConfigurationManager configManager, boolean useOneShotPreviewCallback) {
+  PreviewCallback(CameraConfigurationManager configManager) {
     this.configManager = configManager;
-    this.useOneShotPreviewCallback = useOneShotPreviewCallback;
   }
 
   void setHandler(Handler previewHandler, int previewMessage) {
@@ -44,9 +42,6 @@ final class PreviewCallback implements Camera.PreviewCallback {
   @Override
   public void onPreviewFrame(byte[] data, Camera camera) {
     Point cameraResolution = configManager.getCameraResolution();
-    if (!useOneShotPreviewCallback) {
-      camera.setPreviewCallback(null);
-    }
     Handler thePreviewHandler = previewHandler;
     if (thePreviewHandler != null) {
       Message message = thePreviewHandler.obtainMessage(previewMessage, cameraResolution.x,

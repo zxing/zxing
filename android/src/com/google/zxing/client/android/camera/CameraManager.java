@@ -18,11 +18,9 @@ package com.google.zxing.client.android.camera;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.hardware.Camera;
-import android.os.Build;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -48,18 +46,6 @@ public final class CameraManager {
   private static final int MAX_FRAME_WIDTH = 600;
   private static final int MAX_FRAME_HEIGHT = 400;
 
-  static final int SDK_INT; // Later we can use Build.VERSION.SDK_INT
-  static {
-    int sdkInt;
-    try {
-      sdkInt = Integer.parseInt(Build.VERSION.SDK);
-    } catch (NumberFormatException nfe) {
-      // Just to be safe
-      sdkInt = 10000;
-    }
-    SDK_INT = sdkInt;
-  }
-
   private final Context context;
   private final CameraConfigurationManager configManager;
   private Camera camera;
@@ -68,7 +54,6 @@ public final class CameraManager {
   private boolean initialized;
   private boolean previewing;
   private boolean reverseImage;
-  private final boolean useOneShotPreviewCallback;
   private int requestedFramingRectWidth;
   private int requestedFramingRectHeight;
   /**
@@ -76,22 +61,13 @@ public final class CameraManager {
    * clear the handler so it will only receive one message.
    */
   private final PreviewCallback previewCallback;
-
   /** Autofocus callbacks arrive here, and are dispatched to the Handler which requested them. */
   private final AutoFocusCallback autoFocusCallback;
 
   public CameraManager(Context context) {
-
     this.context = context;
     this.configManager = new CameraConfigurationManager(context);
-
-    // Camera.setOneShotPreviewCallback() has a race condition in Cupcake, so we use the older
-    // Camera.setPreviewCallback() on 1.5 and earlier. For Donut and later, we need to use
-    // the more efficient one shot callback, as the older one can swamp the system and cause it
-    // to run out of memory. We can't use SDK_INT because it was introduced in the Donut SDK.
-    useOneShotPreviewCallback = Integer.parseInt(Build.VERSION.SDK) > 3; // 3 = Cupcake
-
-    previewCallback = new PreviewCallback(configManager, useOneShotPreviewCallback);
+    previewCallback = new PreviewCallback(configManager);
     autoFocusCallback = new AutoFocusCallback();
   }
 
@@ -125,9 +101,6 @@ public final class CameraManager {
 
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
     reverseImage = prefs.getBoolean(PreferencesActivity.KEY_REVERSE_IMAGE, false);
-    if (prefs.getBoolean(PreferencesActivity.KEY_FRONT_LIGHT, false)) {
-      FlashlightManager.enableFlashlight();
-    }
   }
 
   /**
@@ -135,10 +108,8 @@ public final class CameraManager {
    */
   public void closeDriver() {
     if (camera != null) {
-      FlashlightManager.disableFlashlight();
       camera.release();
       camera = null;
-
       // Make sure to clear these each time we close the camera, so that any scanning rect
       // requested by intent is forgotten.
       framingRect = null;
@@ -162,9 +133,6 @@ public final class CameraManager {
    */
   public void stopPreview() {
     if (camera != null && previewing) {
-      if (!useOneShotPreviewCallback) {
-        camera.setPreviewCallback(null);
-      }
       camera.stopPreview();
       previewCallback.setHandler(null, 0);
       autoFocusCallback.setHandler(null, 0);
@@ -184,11 +152,7 @@ public final class CameraManager {
     Camera theCamera = camera;
     if (theCamera != null && previewing) {
       previewCallback.setHandler(handler, message);
-      if (useOneShotPreviewCallback) {
-        theCamera.setOneShotPreviewCallback(previewCallback);
-      } else {
-        theCamera.setPreviewCallback(previewCallback);
-      }
+      theCamera.setOneShotPreviewCallback(previewCallback);
     }
   }
 
@@ -201,7 +165,6 @@ public final class CameraManager {
   public void requestAutoFocus(Handler handler, int message) {
     if (camera != null && previewing) {
       autoFocusCallback.setHandler(handler, message);
-      //Log.d(TAG, "Requesting auto-focus callback");
       camera.autoFocus(autoFocusCallback);
     }
   }
@@ -302,28 +265,9 @@ public final class CameraManager {
     if (rect == null) {
       return null;
     }
-    int previewFormat = configManager.getPreviewFormat();
-    String previewFormatString = configManager.getPreviewFormatString();
-
-    switch (previewFormat) {
-      // This is the standard Android format which all devices are REQUIRED to support.
-      // In theory, it's the only one we should ever care about.
-      case PixelFormat.YCbCr_420_SP:
-      // This format has never been seen in the wild, but is compatible as we only care
-      // about the Y channel, so allow it.
-      case PixelFormat.YCbCr_422_SP:
-        return new PlanarYUVLuminanceSource(data, width, height, rect.left, rect.top,
-            rect.width(), rect.height(), reverseImage);
-      default:
-        // The Samsung Moment incorrectly uses this variant instead of the 'sp' version.
-        // Fortunately, it too has all the Y data up front, so we can read it.
-        if ("yuv420p".equals(previewFormatString)) {
-          return new PlanarYUVLuminanceSource(data, width, height, rect.left, rect.top,
-              rect.width(), rect.height(), reverseImage);
-        }
-    }
-    throw new IllegalArgumentException("Unsupported picture format: " +
-        previewFormat + '/' + previewFormatString);
+    // Go ahead and assume it's YUV rather than die.
+    return new PlanarYUVLuminanceSource(data, width, height, rect.left, rect.top,
+                                        rect.width(), rect.height(), reverseImage);
   }
 
 }
