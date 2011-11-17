@@ -241,7 +241,13 @@ public abstract class ResultHandler {
     }
     long endMilliseconds;
     if (end == null) {
-      endMilliseconds = allDay ? startMilliseconds + 86400 : startMilliseconds;
+      if (allDay) {
+        // + 1 day
+        endMilliseconds = startMilliseconds + 24 * 60 * 60 * 1000;
+      } else {
+        // + 1 hour
+        endMilliseconds = startMilliseconds + 60 * 60 * 1000;
+      }
     } else {
       endMilliseconds = calculateMilliseconds(end);
     }

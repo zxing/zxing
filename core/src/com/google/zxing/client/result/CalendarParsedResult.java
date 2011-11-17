@@ -49,14 +49,14 @@ public final class CalendarParsedResult extends ParsedResult {
                               double longitude) {
     super(ParsedResultType.CALENDAR);
     validateDate(start);
-    if (end == null) {
-      end = start;
-    } else {
-      validateDate(end);
-    }
     this.summary = summary;
     this.start = start;
-    this.end = end;
+    if (end != null) {
+      validateDate(end);
+      this.end = end;
+    } else {
+      this.end = null;
+    }
     this.location = location;
     this.attendee = attendee;
     this.description = description;

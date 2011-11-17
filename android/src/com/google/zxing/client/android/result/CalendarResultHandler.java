@@ -77,12 +77,10 @@ public final class CalendarResultHandler extends ResultHandler {
     ParsedResult.maybeAppend(calResult.getSummary(), result);
     appendTime(calResult.getStart(), result);
 
-    // The end can be null if the event has no duration, so use the start time.
     String endString = calResult.getEnd();
-    if (endString == null) {
-      endString = calResult.getStart();
+    if (endString != null) {
+      appendTime(endString, result);
     }
-    appendTime(endString, result);
 
     ParsedResult.maybeAppend(calResult.getLocation(), result);
     ParsedResult.maybeAppend(calResult.getAttendee(), result);

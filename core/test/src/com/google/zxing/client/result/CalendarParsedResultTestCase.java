@@ -56,7 +56,7 @@ public final class CalendarParsedResultTestCase extends Assert {
         "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n" +
         "DTSTART:20080504T123456Z\r\n" +
         "END:VEVENT\r\nEND:VCALENDAR",
-        null, null, null, "20080504T123456Z", "20080504T123456Z");
+        null, null, null, "20080504T123456Z", null);
   }
 
   @Test
@@ -66,7 +66,7 @@ public final class CalendarParsedResultTestCase extends Assert {
         "SUMMARY:foo\r\n" +
         "DTSTART:20080504T123456Z\r\n" +
         "END:VEVENT\r\nEND:VCALENDAR",
-        null, "foo", null, "20080504T123456Z", "20080504T123456Z");
+        null, "foo", null, "20080504T123456Z", null);
   }
 
   @Test
@@ -76,7 +76,7 @@ public final class CalendarParsedResultTestCase extends Assert {
         "LOCATION:Miami\r\n" +
         "DTSTART:20080504T123456Z\r\n" +
         "END:VEVENT\r\nEND:VCALENDAR",
-        null, null, "Miami", "20080504T123456Z", "20080504T123456Z");
+        null, null, "Miami", "20080504T123456Z", null);
   }
 
   @Test
@@ -86,13 +86,13 @@ public final class CalendarParsedResultTestCase extends Assert {
         "DTSTART:20080504T123456Z\r\n" +
         "DESCRIPTION:This is a test\r\n" +
         "END:VEVENT\r\nEND:VCALENDAR",
-        "This is a test", null, null, "20080504T123456Z", "20080504T123456Z");
+        "This is a test", null, null, "20080504T123456Z", null);
     doTest(
         "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n" +
         "DTSTART:20080504T123456Z\r\n" +
         "DESCRIPTION:This is a test\r\n\t with a continuation\r\n" +        
         "END:VEVENT\r\nEND:VCALENDAR",
-        "This is a test with a continuation", null, null, "20080504T123456Z", "20080504T123456Z");
+        "This is a test with a continuation", null, null, "20080504T123456Z", null);
   }
 
   @Test
@@ -102,7 +102,7 @@ public final class CalendarParsedResultTestCase extends Assert {
         "DTSTART:20080504T123456Z\r\n" +
         "GEO:-12.345;-45.678\r\n" +
         "END:VEVENT\r\nEND:VCALENDAR",
-        null, null, null, "20080504T123456Z", "20080504T123456Z", null, -12.345, -45.678);
+        null, null, null, "20080504T123456Z", null, null, -12.345, -45.678);
   }
 
   @Test
@@ -127,6 +127,15 @@ public final class CalendarParsedResultTestCase extends Assert {
            "Location, with, escaped, commas",
            "20111110T110000",
            "20111110T120000");
+  }
+
+  @Test
+  public void testAllDayValueDate() {
+    doTest("BEGIN:VEVENT\n" +
+           "DTSTART;VALUE=DATE:20111110\n" +
+           "DTEND;VALUE=DATE:20111110\n" +
+           "END:VEVENT",
+           null, null, null, "20111110", "20111110");
   }
 
   private static void doTest(String contents,
