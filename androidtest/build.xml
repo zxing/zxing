@@ -100,7 +100,9 @@ limitations under the License.
     <!-- These targets only exist so they will be visible in IntelliJ. -->
     <target name="ij-debug" depends="clean,debug"/>
     <target name="ij-release" depends="clean,release"/>
-    <target name="ij-install" depends="clean,install"/>
+    <target name="ij-install" depends="clean">
+      <exec command="ant debug install"/>
+    </target>
     <target name="ij-uninstall" depends="uninstall"/>
 
 </project>
