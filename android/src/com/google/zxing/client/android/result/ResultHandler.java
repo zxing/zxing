@@ -245,8 +245,7 @@ public abstract class ResultHandler {
         // + 1 day
         endMilliseconds = startMilliseconds + 24 * 60 * 60 * 1000;
       } else {
-        // + 1 hour
-        endMilliseconds = startMilliseconds + 60 * 60 * 1000;
+        endMilliseconds = startMilliseconds;
       }
     } else {
       endMilliseconds = calculateMilliseconds(end);

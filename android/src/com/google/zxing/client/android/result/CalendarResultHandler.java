@@ -75,11 +75,13 @@ public final class CalendarResultHandler extends ResultHandler {
     CalendarParsedResult calResult = (CalendarParsedResult) getResult();
     StringBuilder result = new StringBuilder(100);
     ParsedResult.maybeAppend(calResult.getSummary(), result);
-    appendTime(calResult.getStart(), result);
+    String startString = calResult.getStart();
+    appendTime(startString, result, false, false);
 
     String endString = calResult.getEnd();
     if (endString != null) {
-      appendTime(endString, result);
+      boolean sameStartEnd = startString.equals(endString);
+      appendTime(endString, result, true, sameStartEnd);
     }
 
     ParsedResult.maybeAppend(calResult.getLocation(), result);
@@ -88,12 +90,18 @@ public final class CalendarResultHandler extends ResultHandler {
     return result.toString();
   }
 
-  private static void appendTime(String when, StringBuilder result) {
+  private static void appendTime(String when, StringBuilder result, boolean end, boolean sameStartEnd) {
     if (when.length() == 8) {
       // Show only year/month/day
       Date date;
       synchronized (DATE_FORMAT) {
         date = DATE_FORMAT.parse(when, new ParsePosition(0));
+      }
+      // if it's all-day and this is the end date, it's exclusive, so show the user
+      // that it ends on the day before to make more intuitive sense.
+      // But don't do it if the event already (incorrectly?) specifies the same start/end
+      if (end && !sameStartEnd) {
+        date = new Date(date.getTime() - 24 * 60 * 60 * 1000);
       }
       ParsedResult.maybeAppend(DateFormat.getDateInstance().format(date.getTime()), result);
     } else {

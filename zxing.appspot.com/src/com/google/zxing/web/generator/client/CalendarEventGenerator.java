@@ -244,16 +244,18 @@ public final class CalendarEventGenerator implements GeneratorSource {
     if (date1 == null || date2 == null) {
       throw new GeneratorException("Start and end dates must be set.");
     }
-    if (date1.equals(date2) || date1.after(date2)) {
-      throw new GeneratorException("End date must be at least a day after start date.");
+    if (date1.after(date2)) {
+      throw new GeneratorException("End date cannot be before start date.");
     }
+    // Specify end date as +1 day since it's exclusive
+    Date date2PlusDay = new Date(date2.getTime() + 24 * 60 * 60 * 1000);
     DateTimeFormat isoFormatter = DateTimeFormat.getFormat("yyyyMMdd");
     StringBuilder output = new StringBuilder();
     output.append("DTSTART;VALUE=DATE:");
     output.append(isoFormatter.format(date1));
     output.append("\r\n");
     output.append("DTEND;VALUE=DATE:");
-    output.append(isoFormatter.format(date2));
+    output.append(isoFormatter.format(date2PlusDay));
     output.append("\r\n");
     return output.toString();
   }
@@ -273,8 +275,8 @@ public final class CalendarEventGenerator implements GeneratorSource {
     }
     Date dateTime1 = addMilliseconds(mergeDateAndTime(date1, time1), -diffTimeZone);
     Date dateTime2 = addMilliseconds(mergeDateAndTime(date2, time2), -diffTimeZone);
-    if (dateTime1.equals(dateTime2) || dateTime1.after(dateTime2)) {
-      throw new GeneratorException("Ending date/time must be after starting date.");
+    if (dateTime1.after(dateTime2)) {
+      throw new GeneratorException("Ending date/time cannot be before starting date/time.");
     }
     DateTimeFormat isoFormatter = DateTimeFormat.getFormat("yyyyMMdd'T'HHmmss'Z'");
     StringBuilder output = new StringBuilder();
