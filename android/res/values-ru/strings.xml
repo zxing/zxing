@@ -43,7 +43,7 @@
   <string name="button_share_clipboard">Буфер обмена</string>
   <string name="button_share_contact">Контакт</string>
   <string name="button_show_map">Показать карту</string>
-  <string name="button_sms">Послать SMS</string>
+  <string name="button_sms">Отправить SMS</string>
   <string name="button_web_search">Поиск в интернете</string>
   <string name="button_wifi">Подключиться к сети</string>
   <string name="contents_contact">Контактная информация</string>
@@ -76,11 +76,11 @@
   <string name="msg_encode_contents_failed">Невозможно создать штрих-код из текущих данных.</string>
   <string name="msg_google_books">Google Books</string>
   <string name="msg_google_product">Google Product Search</string>
-  <string name="msg_google_shopper_missing">Проложение "Google Shopper" не установлено</string>
+  <string name="msg_google_shopper_missing">Приложение "Google Shopper" не установлено</string>
   <string name="msg_install_google_shopper">Приложение "Google Shopper" объединяет сканирование штрих-кодов с online-поиском товаров, цен, отзывов и т.д., не открывая браузер. Хотите попробовать?</string>
   <string name="msg_intent_failed">К сожалению, запрошенное приложение не может быть запущенно. Возможно, содержимое штрих-кода повреждено.</string>
   <string name="msg_loading_apps">Загрузка списка приложений\u2026</string>
-  <string name="msg_not_our_results">Вы покидаете это приложение. Результаты поиска, которые вы видите, не связанны с этим приложением.</string>
+  <string name="msg_not_our_results">Вы покидаете это приложение. Результаты поиска, которые вы видите, не связаны с этим приложением.</string>
   <string name="msg_redirect">Переслать</string>
   <string name="msg_sbc_book_not_searchable">К сожалению, поиск книги не удался.</string>
   <string name="msg_sbc_failed">К сожалению, возникла ошибка поиска.</string>
@@ -94,8 +94,8 @@
   <string name="msg_share_text">Или введите текст</string>
   <string name="msg_sure">Вы уверены?</string>
   <string name="msg_unmount_usb">К сожалению, SD-карта не доступна.</string>
-  <string name="permission_share">Доля по штрих-коду</string>
-  <string name="permission_share_desc">Позволяет совместно использовать и добавлять контакты и закладки, отображая или сканирование штрих-кодов, а также экспортировать отсканированную информацию.</string>
+  <string name="permission_share">Поделиться штрих-кодом</string>
+  <string name="permission_share_desc">Позволяет делиться контактами и закладками через QR-код, а также экспортировать отсканированную информацию.</string>
   <string name="permission_wifi">Настройка Wi-Fi по штрих-коду</string>
   <string name="permission_wifi_desc">Позволяет настроить Wi-Fi сети, сканируя штрих-код.</string>
   <string name="preferences_actions_title">Когда штрих-код найден\u2026</string>
