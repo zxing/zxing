@@ -28,7 +28,6 @@ import com.google.zxing.oned.rss.expanded.RSSExpandedReader;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -37,14 +36,14 @@ import java.util.Map;
  */
 public final class MultiFormatOneDReader extends OneDReader {
 
-  private final List<OneDReader> readers;
+  private final OneDReader[] readers;
 
   public MultiFormatOneDReader(Map<DecodeHintType,?> hints) {
     Collection<BarcodeFormat> possibleFormats = hints == null ? null :
         (Collection<BarcodeFormat>) hints.get(DecodeHintType.POSSIBLE_FORMATS);
     boolean useCode39CheckDigit = hints != null &&
         hints.get(DecodeHintType.ASSUME_CODE_39_CHECK_DIGIT) != null;
-    readers = new ArrayList<OneDReader>();
+    Collection<OneDReader> readers = new ArrayList<OneDReader>();
     if (possibleFormats != null) {
       if (possibleFormats.contains(BarcodeFormat.EAN_13) ||
           possibleFormats.contains(BarcodeFormat.UPC_A) ||
@@ -84,6 +83,7 @@ public final class MultiFormatOneDReader extends OneDReader {
       readers.add(new RSS14Reader());
       readers.add(new RSSExpandedReader());
     }
+    this.readers = readers.toArray(new OneDReader[readers.size()]);
   }
 
   @Override

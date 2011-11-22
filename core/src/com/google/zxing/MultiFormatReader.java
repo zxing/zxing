@@ -25,7 +25,6 @@ import com.google.zxing.qrcode.QRCodeReader;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -39,7 +38,7 @@ import java.util.Map;
 public final class MultiFormatReader implements Reader {
 
   private Map<DecodeHintType,?> hints;
-  private final List<Reader> readers = new ArrayList<Reader>();
+  private Reader[] readers;
 
   /**
    * This version of decode honors the intent of Reader.decode(BinaryBitmap) in that it
@@ -80,7 +79,7 @@ public final class MultiFormatReader implements Reader {
    */
   public Result decodeWithState(BinaryBitmap image) throws NotFoundException {
     // Make sure to set up the default state so we don't crash
-    if (readers.isEmpty()) {
+    if (readers == null) {
       setHints(null);
     }
     return decodeInternal(image);
@@ -99,7 +98,7 @@ public final class MultiFormatReader implements Reader {
     boolean tryHarder = hints != null && hints.containsKey(DecodeHintType.TRY_HARDER);
     Collection<BarcodeFormat> formats =
         hints == null ? null : (Collection<BarcodeFormat>) hints.get(DecodeHintType.POSSIBLE_FORMATS);
-    readers.clear();
+    Collection<Reader> readers = new ArrayList<Reader>();
     if (formats != null) {
       boolean addOneDReader =
           formats.contains(BarcodeFormat.UPC_A) ||
@@ -152,21 +151,26 @@ public final class MultiFormatReader implements Reader {
         readers.add(new MultiFormatOneDReader(hints));
       }
     }
+    this.readers = readers.toArray(new Reader[readers.size()]);
   }
 
   @Override
   public void reset() {
-    for (Reader reader : readers) {
-      reader.reset();
+    if (readers != null) {
+      for (Reader reader : readers) {
+        reader.reset();
+      }
     }
   }
 
   private Result decodeInternal(BinaryBitmap image) throws NotFoundException {
-    for (Reader reader : readers) {
-      try {
-        return reader.decode(image, hints);
-      } catch (ReaderException re) {
-        // continue
+    if (readers != null) {
+      for (Reader reader : readers) {
+        try {
+          return reader.decode(image, hints);
+        } catch (ReaderException re) {
+          // continue
+        }
       }
     }
     throw NotFoundException.getNotFoundInstance();
