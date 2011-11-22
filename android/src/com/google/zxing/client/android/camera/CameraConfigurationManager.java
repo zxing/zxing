@@ -37,6 +37,7 @@ final class CameraConfigurationManager {
 
   private static final String TAG = "CameraConfiguration";
   private static final int MIN_PREVIEW_PIXELS = 320 * 240; // small screen
+  private static final int MAX_PREVIEW_PIXELS = 800 * 480; // large/HD screen
 
   private final Context context;
   private Point screenResolution;
@@ -53,7 +54,17 @@ final class CameraConfigurationManager {
     Camera.Parameters parameters = camera.getParameters();
     WindowManager manager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
     Display display = manager.getDefaultDisplay();
-    screenResolution = new Point(display.getWidth(), display.getHeight());
+    int width = display.getWidth();
+    int height = display.getHeight();
+    // We're landscape-only, and have apparently seen issues with display thinking it's portrait 
+    // when waking from sleep. If it's not landscape, assume it's mistaken and reverse them:
+    if (width < height) {
+      Log.i(TAG, "Display reports portrait orientation; assuming this is incorrect");
+      int temp = width;
+      width = height;
+      height = temp;
+    }
+    screenResolution = new Point(width, height);
     Log.i(TAG, "Screen resolution: " + screenResolution);
     cameraResolution = findBestPreviewSizeValue(parameters, screenResolution, false);
     Log.i(TAG, "Camera resolution: " + cameraResolution);
@@ -128,7 +139,8 @@ final class CameraConfigurationManager {
     Point bestSize = null;
     int diff = Integer.MAX_VALUE;
     for (Camera.Size supportedPreviewSize : parameters.getSupportedPreviewSizes()) {
-      if (supportedPreviewSize.height * supportedPreviewSize.width < MIN_PREVIEW_PIXELS) {
+      int pixels = supportedPreviewSize.height * supportedPreviewSize.width;
+      if (pixels < MIN_PREVIEW_PIXELS || pixels > MAX_PREVIEW_PIXELS) {
         continue;
       }
       int supportedWidth = portrait ? supportedPreviewSize.height : supportedPreviewSize.width;
