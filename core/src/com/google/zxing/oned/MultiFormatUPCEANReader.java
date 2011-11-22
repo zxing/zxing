@@ -26,7 +26,6 @@ import com.google.zxing.common.BitArray;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -38,12 +37,12 @@ import java.util.Map;
  */
 public final class MultiFormatUPCEANReader extends OneDReader {
 
-  private final List<UPCEANReader> readers;
+  private final UPCEANReader[] readers;
 
   public MultiFormatUPCEANReader(Map<DecodeHintType,?> hints) {
     Collection<BarcodeFormat> possibleFormats = hints == null ? null :
         (Collection<BarcodeFormat>) hints.get(DecodeHintType.POSSIBLE_FORMATS);
-    readers = new ArrayList<UPCEANReader>();
+    Collection<UPCEANReader> readers = new ArrayList<UPCEANReader>();
     if (possibleFormats != null) {
       if (possibleFormats.contains(BarcodeFormat.EAN_13)) {
         readers.add(new EAN13Reader());
@@ -63,6 +62,7 @@ public final class MultiFormatUPCEANReader extends OneDReader {
       readers.add(new EAN8Reader());
       readers.add(new UPCEReader());
     }
+    this.readers = readers.toArray(new UPCEANReader[readers.size()]);
   }
 
   @Override
