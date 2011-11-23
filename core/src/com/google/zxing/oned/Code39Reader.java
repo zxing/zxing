@@ -96,7 +96,8 @@ public final class Code39Reader extends OneDReader {
   public Result decodeRow(int rowNumber, BitArray row, Map<DecodeHintType,?> hints)
       throws NotFoundException, ChecksumException, FormatException {
 
-    int[] start = findAsteriskPattern(row);
+    int[] counters = new int[9];
+    int[] start = findAsteriskPattern(row, counters);
     int nextStart = start[1];
     int end = row.getSize();
 
@@ -106,7 +107,6 @@ public final class Code39Reader extends OneDReader {
     }
 
     StringBuilder result = new StringBuilder(20);
-    int[] counters = new int[9];
     char decodedChar;
     int lastStart;
     do {
@@ -176,7 +176,7 @@ public final class Code39Reader extends OneDReader {
 
   }
 
-  private static int[] findAsteriskPattern(BitArray row) throws NotFoundException {
+  private static int[] findAsteriskPattern(BitArray row, int[] counters) throws NotFoundException {
     int width = row.getSize();
     int rowOffset = 0;
     while (rowOffset < width) {
@@ -187,7 +187,6 @@ public final class Code39Reader extends OneDReader {
     }
 
     int counterPosition = 0;
-    int[] counters = new int[9];
     int patternStart = rowOffset;
     boolean isWhite = false;
     int patternLength = counters.length;

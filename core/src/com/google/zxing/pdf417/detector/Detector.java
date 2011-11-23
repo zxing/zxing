@@ -24,6 +24,7 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.DetectorResult;
 import com.google.zxing.common.GridSampler;
 
+import java.util.Arrays;
 import java.util.Map;
 
 /**
@@ -137,9 +138,11 @@ public final class Detector {
     ResultPoint[] result = new ResultPoint[8];
     boolean found = false;
 
+    int[] counters = new int[START_PATTERN.length];
+
     // Top Left
     for (int i = 0; i < height; i++) {
-      int[] loc = findGuardPattern(matrix, 0, i, width, false, START_PATTERN);
+      int[] loc = findGuardPattern(matrix, 0, i, width, false, START_PATTERN, counters);
       if (loc != null) {
         result[0] = new ResultPoint(loc[0], i);
         result[4] = new ResultPoint(loc[1], i);
@@ -151,7 +154,7 @@ public final class Detector {
     if (found) { // Found the Top Left vertex
       found = false;
       for (int i = height - 1; i > 0; i--) {
-        int[] loc = findGuardPattern(matrix, 0, i, width, false, START_PATTERN);
+        int[] loc = findGuardPattern(matrix, 0, i, width, false, START_PATTERN, counters);
         if (loc != null) {
           result[1] = new ResultPoint(loc[0], i);
           result[5] = new ResultPoint(loc[1], i);
@@ -160,11 +163,14 @@ public final class Detector {
         }
       }
     }
+
+    counters = new int[STOP_PATTERN.length];
+
     // Top right
     if (found) { // Found the Bottom Left vertex
       found = false;
       for (int i = 0; i < height; i++) {
-        int[] loc = findGuardPattern(matrix, 0, i, width, false, STOP_PATTERN);
+        int[] loc = findGuardPattern(matrix, 0, i, width, false, STOP_PATTERN, counters);
         if (loc != null) {
           result[2] = new ResultPoint(loc[1], i);
           result[6] = new ResultPoint(loc[0], i);
@@ -177,7 +183,7 @@ public final class Detector {
     if (found) { // Found the Top right vertex
       found = false;
       for (int i = height - 1; i > 0; i--) {
-        int[] loc = findGuardPattern(matrix, 0, i, width, false, STOP_PATTERN);
+        int[] loc = findGuardPattern(matrix, 0, i, width, false, STOP_PATTERN, counters);
         if (loc != null) {
           result[3] = new ResultPoint(loc[1], i);
           result[7] = new ResultPoint(loc[0], i);
@@ -216,9 +222,11 @@ public final class Detector {
     ResultPoint[] result = new ResultPoint[8];
     boolean found = false;
 
+    int[] counters = new int[START_PATTERN_REVERSE.length];
+    
     // Top Left
     for (int i = height - 1; i > 0; i--) {
-      int[] loc = findGuardPattern(matrix, halfWidth, i, halfWidth, true, START_PATTERN_REVERSE);
+      int[] loc = findGuardPattern(matrix, halfWidth, i, halfWidth, true, START_PATTERN_REVERSE, counters);
       if (loc != null) {
         result[0] = new ResultPoint(loc[1], i);
         result[4] = new ResultPoint(loc[0], i);
@@ -230,7 +238,7 @@ public final class Detector {
     if (found) { // Found the Top Left vertex
       found = false;
       for (int i = 0; i < height; i++) {
-        int[] loc = findGuardPattern(matrix, halfWidth, i, halfWidth, true, START_PATTERN_REVERSE);
+        int[] loc = findGuardPattern(matrix, halfWidth, i, halfWidth, true, START_PATTERN_REVERSE, counters);
         if (loc != null) {
           result[1] = new ResultPoint(loc[1], i);
           result[5] = new ResultPoint(loc[0], i);
@@ -239,11 +247,14 @@ public final class Detector {
         }
       }
     }
+    
+    counters = new int[STOP_PATTERN_REVERSE.length];
+    
     // Top Right
     if (found) { // Found the Bottom Left vertex
       found = false;
       for (int i = height - 1; i > 0; i--) {
-        int[] loc = findGuardPattern(matrix, 0, i, halfWidth, false, STOP_PATTERN_REVERSE);
+        int[] loc = findGuardPattern(matrix, 0, i, halfWidth, false, STOP_PATTERN_REVERSE, counters);
         if (loc != null) {
           result[2] = new ResultPoint(loc[0], i);
           result[6] = new ResultPoint(loc[1], i);
@@ -256,7 +267,7 @@ public final class Detector {
     if (found) { // Found the Top Right vertex
       found = false;
       for (int i = 0; i < height; i++) {
-        int[] loc = findGuardPattern(matrix, 0, i, halfWidth, false, STOP_PATTERN_REVERSE);
+        int[] loc = findGuardPattern(matrix, 0, i, halfWidth, false, STOP_PATTERN_REVERSE, counters);
         if (loc != null) {
           result[3] = new ResultPoint(loc[0], i);
           result[7] = new ResultPoint(loc[1], i);
@@ -411,6 +422,7 @@ public final class Detector {
    * @param width the number of pixels to search on this row
    * @param pattern pattern of counts of number of black and white pixels that are
    *                 being searched for as a pattern
+   * @param counters array of counters, as long as pattern, to re-use 
    * @return start/end horizontal offset of guard pattern, as an array of two ints.
    */
   private static int[] findGuardPattern(BitMatrix matrix,
@@ -418,11 +430,10 @@ public final class Detector {
                                         int row,
                                         int width,
                                         boolean whiteFirst,
-                                        int[] pattern) {
+                                        int[] pattern,
+                                        int[] counters) {
+    Arrays.fill(counters, 0, counters.length, 0);
     int patternLength = pattern.length;
-    // TODO: Find a way to cache this array, as this method is called hundreds of times
-    // per image, and we want to allocate as seldom as possible.
-    int[] counters = new int[patternLength];
     boolean isWhite = whiteFirst;
 
     int counterPosition = 0;
