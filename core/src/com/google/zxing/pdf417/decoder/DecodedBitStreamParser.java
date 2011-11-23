@@ -433,7 +433,7 @@ final class DecodedBitStreamParser {
    * @param result    The decoded data is appended to the result.
    * @return The next index into the codeword array.
    */
-  private static int numericCompaction(int[] codewords, int codeIndex, StringBuilder result) {
+  private static int numericCompaction(int[] codewords, int codeIndex, StringBuilder result) throws FormatException {
     int count = 0;
     boolean end = false;
 
@@ -465,7 +465,7 @@ final class DecodedBitStreamParser {
         // while in Numeric Compaction mode) serves  to terminate the
         // current Numeric Compaction mode grouping as described in 5.4.4.2,
         // and then to start a new one grouping.
-        BigInteger s = decodeBase900toBase10(numericCodewords, count);
+        String s = decodeBase900toBase10(numericCodewords, count);
         result.append(s);
         count = 0;
       }
@@ -516,12 +516,16 @@ final class DecodedBitStreamParser {
 
      Remove leading 1 =>  Result is 000213298174000
    */
-  private static BigInteger decodeBase900toBase10(int[] codewords, int count) {
+  private static String decodeBase900toBase10(int[] codewords, int count) throws FormatException {
     BigInteger result = BigInteger.ZERO;
     for (int i = 0; i < count; i++) {
       result = result.add(EXP900[count - i - 1].multiply(BigInteger.valueOf(codewords[i])));
     }
-    return result;
+    String resultString = result.toString();
+    if (resultString.charAt(0) != '1') {
+      throw FormatException.getFormatInstance();
+    }
+    return resultString.substring(1);
   }
 
 }
