@@ -28,6 +28,7 @@ import com.google.zxing.ResultPoint;
 import com.google.zxing.ResultPointCallback;
 import com.google.zxing.common.BitArray;
 
+import java.util.Arrays;
 import java.util.Map;
 
 /**
@@ -104,8 +105,10 @@ public abstract class UPCEANReader extends OneDReader {
     boolean foundStart = false;
     int[] startRange = null;
     int nextStart = 0;
+    int[] counters = new int[START_END_PATTERN.length];
     while (!foundStart) {
-      startRange = findGuardPattern(row, nextStart, false, START_END_PATTERN);
+      Arrays.fill(counters, 0, START_END_PATTERN.length, 0);
+      startRange = findGuardPattern(row, nextStart, false, START_END_PATTERN, counters);
       int start = startRange[0];
       nextStart = startRange[1];
       // Make sure there is a quiet zone at least as big as the start pattern before the barcode.
@@ -249,6 +252,13 @@ public abstract class UPCEANReader extends OneDReader {
     return findGuardPattern(row, endStart, false, START_END_PATTERN);
   }
 
+  static int[] findGuardPattern(BitArray row,
+                                int rowOffset,
+                                boolean whiteFirst,
+                                int[] pattern) throws NotFoundException {
+    return findGuardPattern(row, rowOffset, whiteFirst, pattern, new int[pattern.length]);
+  }
+
   /**
    * @param row row of black/white values to search
    * @param rowOffset position to start search
@@ -256,15 +266,16 @@ public abstract class UPCEANReader extends OneDReader {
    * pixel counts, otherwise, it is interpreted as black/white/black/...
    * @param pattern pattern of counts of number of black and white pixels that are being
    * searched for as a pattern
+   * @param counters array of counters, as long as pattern, to re-use
    * @return start/end horizontal offset of guard pattern, as an array of two ints
    * @throws NotFoundException if pattern is not found
    */
   static int[] findGuardPattern(BitArray row,
                                 int rowOffset,
                                 boolean whiteFirst,
-                                int[] pattern) throws NotFoundException {
+                                int[] pattern,
+                                int[] counters) throws NotFoundException {
     int patternLength = pattern.length;
-    int[] counters = new int[patternLength];
     int width = row.getSize();
     boolean isWhite = false;
     while (rowOffset < width) {

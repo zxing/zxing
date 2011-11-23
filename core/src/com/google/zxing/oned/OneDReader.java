@@ -28,6 +28,7 @@ import com.google.zxing.ResultMetadataType;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitArray;
 
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -193,9 +194,7 @@ public abstract class OneDReader implements Reader {
                                       int start,
                                       int[] counters) throws NotFoundException {
     int numCounters = counters.length;
-    for (int i = 0; i < numCounters; i++) {
-      counters[i] = 0;
-    }
+    Arrays.fill(counters, 0, numCounters, 0);
     int end = row.getSize();
     if (start >= end) {
       throw NotFoundException.getNotFoundInstance();
