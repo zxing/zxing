@@ -19,6 +19,9 @@ package com.google.zxing.common;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.security.SecureRandom;
+import java.util.Random;
+
 /**
  * @author Sean Owen
  */
@@ -35,29 +38,92 @@ public final class BitArrayTestCase extends Assert {
   }
 
   @Test
-  public void testGetNextSet() {
+  public void testGetNextSet1() {
     BitArray array = new BitArray(32);
-    assertEquals(32, array.getNextSet(0));
-    assertEquals(32, array.getNextSet(31));
-
+    for (int i = 0; i < array.getSize(); i++) {
+      assertEquals(String.valueOf(i), 32, array.getNextSet(i));
+    }
     array = new BitArray(33);
-    assertEquals(33, array.getNextSet(0));
-    assertEquals(33, array.getNextSet(31));
-    assertEquals(33, array.getNextSet(32));
-
+    for (int i = 0; i < array.getSize(); i++) {
+      assertEquals(String.valueOf(i), 33, array.getNextSet(i));
+    }
+  }
+  
+  @Test
+  public void testGetNextSet2() {
+    BitArray array = new BitArray(33);    
     array.set(31);
-    assertEquals(31, array.getNextSet(0));
-    assertEquals(31, array.getNextSet(30));
-    assertEquals(31, array.getNextSet(31));
-    assertEquals(33, array.getNextSet(32));
-
+    for (int i = 0; i < array.getSize(); i++) {
+      assertEquals(String.valueOf(i), i <= 31 ? 31 : 33, array.getNextSet(i));
+    }
     array = new BitArray(33);
     array.set(32);
-    assertEquals(32, array.getNextSet(0));
-    assertEquals(32, array.getNextSet(30));
-    assertEquals(32, array.getNextSet(31));
-    assertEquals(32, array.getNextSet(32));
+    for (int i = 0; i < array.getSize(); i++) {
+      assertEquals(String.valueOf(i), 32, array.getNextSet(i));
+    }
   }
+  
+  @Test
+  public void testGetNextSet3() {
+    BitArray array = new BitArray(63);    
+    array.set(31);
+    array.set(32);
+    for (int i = 0; i < array.getSize(); i++) {
+      int expected;
+      if (i <= 31) {
+        expected = 31;
+      } else if (i == 32) {
+        expected = 32;
+      } else {
+        expected = 63;
+      }
+      assertEquals(String.valueOf(i), expected, array.getNextSet(i));
+    }
+  }
+
+  @Test
+  public void testGetNextSet4() {
+    BitArray array = new BitArray(63);
+    array.set(33);
+    array.set(40);
+    for (int i = 0; i < array.getSize(); i++) {
+      int expected;
+      if (i <= 33) {
+        expected = 33;
+      } else if (i <= 40) {
+        expected = 40;
+      } else {
+        expected = 63;
+      }
+      assertEquals(String.valueOf(i), expected, array.getNextSet(i));
+    }
+  }
+  
+  @Test
+  public void testGetNextSet5() {
+    Random r = new SecureRandom(new byte[] {(byte) 0xDE, (byte) 0xAD, (byte) 0xBE, (byte) 0xEF});
+    for (int i = 0; i < 10; i++) {
+      BitArray array = new BitArray(1 + r.nextInt(100));
+      int numSet = r.nextInt(20);
+      for (int j = 0; j < numSet; j++) {
+        array.set(r.nextInt(array.getSize()));
+      }
+      int numQueries = r.nextInt(20);
+      for (int j = 0; j < numQueries; j++) {
+        int query = r.nextInt(array.getSize());
+        int expected = query;
+        while (expected < array.getSize() && !array.get(expected)) {
+          expected++;
+        }
+        int actual = array.getNextSet(query);
+        if (actual != expected) {
+          array.getNextSet(query);
+        }
+        assertEquals(expected, actual);
+      }
+    }
+  }
+
 
   @Test
   public void testSetBulk() {

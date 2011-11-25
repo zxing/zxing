@@ -277,15 +277,8 @@ public abstract class UPCEANReader extends OneDReader {
                                 int[] counters) throws NotFoundException {
     int patternLength = pattern.length;
     int width = row.getSize();
-    boolean isWhite = false;
-    while (rowOffset < width) {
-      isWhite = !row.get(rowOffset);
-      if (whiteFirst == isWhite) {
-        break;
-      }
-      rowOffset++;
-    }
-
+    boolean isWhite = whiteFirst;
+    rowOffset = whiteFirst ? row.getNextUnset(rowOffset) : row.getNextSet(rowOffset);
     int counterPosition = 0;
     int patternStart = rowOffset;
     for (int x = rowOffset; x < width; x++) {

@@ -190,18 +190,14 @@ public final class RSSExpandedReader extends AbstractRSSReader {
   }
 
   private static int getNextSecondBar(BitArray row, int initialPos){
-    int currentPos = initialPos;
-    boolean current = row.get(currentPos);
-
-    while(currentPos < row.getSize() && row.get(currentPos) == current) {
-      currentPos++;
+    int currentPos;
+    if (row.get(initialPos)) {
+      currentPos = row.getNextUnset(initialPos);
+      currentPos = row.getNextSet(currentPos);
+    } else {
+      currentPos = row.getNextSet(initialPos);
+      currentPos = row.getNextUnset(currentPos);
     }
-
-    current = !current;
-    while(currentPos < row.getSize() && row.get(currentPos) == current) {
-      currentPos++;
-    }
-
     return currentPos;
   }
 
@@ -237,7 +233,6 @@ public final class RSSExpandedReader extends AbstractRSSReader {
         throw nfe;
       }
     }
-
     return new ExpandedPair(leftChar, rightChar, pattern, mayBeLast);
   }
 
@@ -374,10 +369,7 @@ public final class RSSExpandedReader extends AbstractRSSReader {
 
       start = this.startEnd[0];
 
-      int firstElementStart = this.startEnd[1] + 1;
-      while (firstElementStart < row.getSize() && row.get(firstElementStart)) {
-        firstElementStart++;
-      }
+      int firstElementStart = row.getNextUnset(this.startEnd[1] + 1);
 
       end = firstElementStart;
       firstCounter = end - this.startEnd[1];

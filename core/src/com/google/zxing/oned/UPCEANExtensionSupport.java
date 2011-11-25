@@ -86,9 +86,7 @@ final class UPCEANExtensionSupport {
       if (x != 4) {
         // Read off separator if not last
         rowOffset = row.getNextSet(rowOffset);
-        while (rowOffset < end && row.get(rowOffset)) {
-          rowOffset++;
-        }
+        rowOffset = row.getNextUnset(rowOffset);
       }
     }
 
