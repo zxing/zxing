@@ -168,13 +168,7 @@ public final class Code128Reader extends OneDReader {
 
   private static int[] findStartPattern(BitArray row) throws NotFoundException {
     int width = row.getSize();
-    int rowOffset = 0;
-    while (rowOffset < width) {
-      if (row.get(rowOffset)) {
-        break;
-      }
-      rowOffset++;
-    }
+    int rowOffset = row.getNextSet(0);
 
     int counterPosition = 0;
     int[] counters = new int[6];
@@ -183,8 +177,7 @@ public final class Code128Reader extends OneDReader {
     int patternLength = counters.length;
 
     for (int i = rowOffset; i < width; i++) {
-      boolean pixel = row.get(i);
-      if (pixel ^ isWhite) {
+      if (row.get(i) ^ isWhite) {
         counters[counterPosition]++;
       } else {
         if (counterPosition == patternLength - 1) {

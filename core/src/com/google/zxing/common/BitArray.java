@@ -79,6 +79,32 @@ public final class BitArray {
   }
 
   /**
+   * @param from first bit to check
+   * @return index of first bit that is set, starting from the given index, or size if none are set
+   */
+  public int getNextSet(int from) {
+    int size = this.size;
+    if (from >= size) {
+      return size;
+    }
+    int bitsOffset = from >> 5;
+    int currentBits = bits[bitsOffset];
+    int mask = 1 << (from & 0x1F);
+    while ((currentBits & mask) == 0) {
+      if (++from >= size) {
+        break;
+      }
+      if (mask == 0x80000000) {
+        mask = 1;
+        currentBits = bits[++bitsOffset];
+      } else {
+        mask <<= 1;
+      }
+    }
+    return from;
+  }
+
+  /**
    * Sets a block of 32 bits, starting at bit i.
    *
    * @param i first bit to set

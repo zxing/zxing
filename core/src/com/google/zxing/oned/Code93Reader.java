@@ -58,13 +58,9 @@ public final class Code93Reader extends OneDReader {
       throws NotFoundException, ChecksumException, FormatException {
 
     int[] start = findAsteriskPattern(row);
-    int nextStart = start[1];
+    // Read off white space    
+    int nextStart = row.getNextSet(start[1]);
     int end = row.getSize();
-
-    // Read off white space
-    while (nextStart < end && !row.get(nextStart)) {
-      nextStart++;
-    }
 
     StringBuilder result = new StringBuilder(20);
     int[] counters = new int[6];
@@ -83,9 +79,7 @@ public final class Code93Reader extends OneDReader {
         nextStart += counter;
       }
       // Read off white space
-      while (nextStart < end && !row.get(nextStart)) {
-        nextStart++;
-      }
+      nextStart = row.getNextSet(nextStart);
     } while (decodedChar != '*');
     result.deleteCharAt(result.length() - 1); // remove asterisk
 
@@ -119,13 +113,7 @@ public final class Code93Reader extends OneDReader {
 
   private static int[] findAsteriskPattern(BitArray row) throws NotFoundException {
     int width = row.getSize();
-    int rowOffset = 0;
-    while (rowOffset < width) {
-      if (row.get(rowOffset)) {
-        break;
-      }
-      rowOffset++;
-    }
+    int rowOffset = row.getNextSet(0);
 
     int counterPosition = 0;
     int[] counters = new int[6];
@@ -134,8 +122,7 @@ public final class Code93Reader extends OneDReader {
     int patternLength = counters.length;
 
     for (int i = rowOffset; i < width; i++) {
-      boolean pixel = row.get(i);
-      if (pixel ^ isWhite) {
+      if (row.get(i) ^ isWhite) {
         counters[counterPosition]++;
       } else {
         if (counterPosition == patternLength - 1) {

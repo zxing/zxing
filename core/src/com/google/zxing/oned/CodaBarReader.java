@@ -66,13 +66,9 @@ public final class CodaBarReader extends OneDReader {
       throws NotFoundException {
     int[] start = findAsteriskPattern(row);
     start[1] = 0; // BAS: settings this to 0 improves the recognition rate somehow?
-    int nextStart = start[1];
+    // Read off white space    
+    int nextStart = row.getNextSet(start[1]);
     int end = row.getSize();
-
-    // Read off white space
-    while (nextStart < end && !row.get(nextStart)) {
-      nextStart++;
-    }
 
     StringBuilder result = new StringBuilder();
     int[] counters = new int[7];
@@ -95,9 +91,7 @@ public final class CodaBarReader extends OneDReader {
       }
 
       // Read off white space
-      while (nextStart < end && !row.get(nextStart)) {
-        nextStart++;
-      }
+      nextStart = row.getNextSet(nextStart);
     } while (nextStart < end); // no fixed end pattern so keep on reading while data is available
 
     // Look for whitespace after pattern:
@@ -157,13 +151,7 @@ public final class CodaBarReader extends OneDReader {
 
   private static int[] findAsteriskPattern(BitArray row) throws NotFoundException {
     int width = row.getSize();
-    int rowOffset = 0;
-    while (rowOffset < width) {
-      if (row.get(rowOffset)) {
-        break;
-      }
-      rowOffset++;
-    }
+    int rowOffset = row.getNextSet(0);
 
     int counterPosition = 0;
     int[] counters = new int[7];
@@ -172,8 +160,7 @@ public final class CodaBarReader extends OneDReader {
     int patternLength = counters.length;
 
     for (int i = rowOffset; i < width; i++) {
-      boolean pixel = row.get(i);
-      if (pixel ^ isWhite) {
+      if (row.get(i) ^ isWhite) {
         counters[counterPosition]++;
       } else {
         if (counterPosition == patternLength - 1) {

@@ -203,8 +203,7 @@ public abstract class OneDReader implements Reader {
     int counterPosition = 0;
     int i = start;
     while (i < end) {
-      boolean pixel = row.get(i);
-      if (pixel ^ isWhite) { // that is, exactly one is true
+      if (row.get(i) ^ isWhite) { // that is, exactly one is true
         counters[counterPosition]++;
       } else {
         counterPosition++;
