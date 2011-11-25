@@ -98,13 +98,9 @@ public final class Code39Reader extends OneDReader {
 
     int[] counters = new int[9];
     int[] start = findAsteriskPattern(row, counters);
-    int nextStart = start[1];
+    // Read off white space    
+    int nextStart = row.getNextSet(start[1]);
     int end = row.getSize();
-
-    // Read off white space
-    while (nextStart < end && !row.get(nextStart)) {
-      nextStart++;
-    }
 
     StringBuilder result = new StringBuilder(20);
     char decodedChar;
@@ -122,11 +118,9 @@ public final class Code39Reader extends OneDReader {
         nextStart += counter;
       }
       // Read off white space
-      while (nextStart < end && !row.get(nextStart)) {
-        nextStart++;
-      }
+      nextStart = row.getNextSet(nextStart);
     } while (decodedChar != '*');
-    result.deleteCharAt(result.length() - 1); // remove asterisk
+    result.setLength(result.length() - 1); // remove asterisk
 
     // Look for whitespace after pattern:
     int lastPatternSize = 0;
@@ -136,7 +130,7 @@ public final class Code39Reader extends OneDReader {
     int whiteSpaceAfterEnd = nextStart - lastStart - lastPatternSize;
     // If 50% of last pattern size, following last pattern, is not whitespace, fail
     // (but if it's whitespace to the very end of the image, that's OK)
-    if (nextStart != end && whiteSpaceAfterEnd / 2 < lastPatternSize) {
+    if (nextStart != end && (whiteSpaceAfterEnd >> 1) < lastPatternSize) {
       throw NotFoundException.getNotFoundInstance();
     }
 
@@ -149,7 +143,7 @@ public final class Code39Reader extends OneDReader {
       if (result.charAt(max) != ALPHABET[total % 43]) {
         throw ChecksumException.getChecksumInstance();
       }
-      result.deleteCharAt(max);
+      result.setLength(max);
     }
 
     if (result.length() < 4) {
@@ -178,13 +172,7 @@ public final class Code39Reader extends OneDReader {
 
   private static int[] findAsteriskPattern(BitArray row, int[] counters) throws NotFoundException {
     int width = row.getSize();
-    int rowOffset = 0;
-    while (rowOffset < width) {
-      if (row.get(rowOffset)) {
-        break;
-      }
-      rowOffset++;
-    }
+    int rowOffset = row.getNextSet(0);
 
     int counterPosition = 0;
     int patternStart = rowOffset;
@@ -192,14 +180,13 @@ public final class Code39Reader extends OneDReader {
     int patternLength = counters.length;
 
     for (int i = rowOffset; i < width; i++) {
-      boolean pixel = row.get(i);
-      if (pixel ^ isWhite) {
+      if (row.get(i) ^ isWhite) {
         counters[counterPosition]++;
       } else {
         if (counterPosition == patternLength - 1) {
           if (toNarrowWidePattern(counters) == ASTERISK_ENCODING) {
             // Look for whitespace before start pattern, >= 50% of width of start pattern
-            if (row.isRange(Math.max(0, patternStart - (i - patternStart) / 2), patternStart, false)) {
+            if (row.isRange(Math.max(0, patternStart - ((i - patternStart) >> 1)), patternStart, false)) {
               return new int[]{patternStart, i};
             }
           }

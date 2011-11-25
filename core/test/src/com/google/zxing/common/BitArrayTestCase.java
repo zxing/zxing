@@ -35,6 +35,31 @@ public final class BitArrayTestCase extends Assert {
   }
 
   @Test
+  public void testGetNextSet() {
+    BitArray array = new BitArray(32);
+    assertEquals(32, array.getNextSet(0));
+    assertEquals(32, array.getNextSet(31));
+
+    array = new BitArray(33);
+    assertEquals(33, array.getNextSet(0));
+    assertEquals(33, array.getNextSet(31));
+    assertEquals(33, array.getNextSet(32));
+
+    array.set(31);
+    assertEquals(31, array.getNextSet(0));
+    assertEquals(31, array.getNextSet(30));
+    assertEquals(31, array.getNextSet(31));
+    assertEquals(33, array.getNextSet(32));
+
+    array = new BitArray(33);
+    array.set(32);
+    assertEquals(32, array.getNextSet(0));
+    assertEquals(32, array.getNextSet(30));
+    assertEquals(32, array.getNextSet(31));
+    assertEquals(32, array.getNextSet(32));
+  }
+
+  @Test
   public void testSetBulk() {
     BitArray array = new BitArray(64);
     array.setBulk(32, 0xFFFF0000);

@@ -303,8 +303,7 @@ public final class RSS14Reader extends AbstractRSSReader {
     int counterPosition = 0;
     int patternStart = rowOffset;
     for (int x = rowOffset; x < width; x++) {
-      boolean pixel = row.get(x);
-      if (pixel ^ isWhite) {
+      if (row.get(x) ^ isWhite) {
         counters[counterPosition]++;
       } else {
         if (counterPosition == 3) {

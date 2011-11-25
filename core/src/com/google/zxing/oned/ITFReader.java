@@ -227,13 +227,7 @@ public final class ITFReader extends OneDReader {
    */
   private static int skipWhiteSpace(BitArray row) throws NotFoundException {
     int width = row.getSize();
-    int endStart = 0;
-    while (endStart < width) {
-      if (row.get(endStart)) {
-        break;
-      }
-      endStart++;
-    }
+    int endStart = row.getNextSet(0);
     if (endStart == width) {
       throw NotFoundException.getNotFoundInstance();
     }
@@ -300,8 +294,7 @@ public final class ITFReader extends OneDReader {
     int counterPosition = 0;
     int patternStart = rowOffset;
     for (int x = rowOffset; x < width; x++) {
-      boolean pixel = row.get(x);
-      if (pixel ^ isWhite) {
+      if (row.get(x) ^ isWhite) {
         counters[counterPosition]++;
       } else {
         if (counterPosition == patternLength - 1) {

@@ -145,6 +145,14 @@ public final class BitMatrix {
   }
 
   /**
+   * @param y row to set
+   * @param row {@link BitArray} to copy from
+   */
+  public void setRow(int y, BitArray row) {
+    System.arraycopy(row.getBitArray(), 0, bits, y * rowSize, rowSize);
+  }
+
+  /**
    * This is useful in detecting the enclosing rectangle of a 'pure' barcode.
    *
    * @return {left,top,width,height} enclosing rectangle of all 1 bits, or null if it is all white
