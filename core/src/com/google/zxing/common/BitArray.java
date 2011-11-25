@@ -81,27 +81,46 @@ public final class BitArray {
   /**
    * @param from first bit to check
    * @return index of first bit that is set, starting from the given index, or size if none are set
+   *  at or beyond this given index
+   * @see #getNextUnset(int)
    */
   public int getNextSet(int from) {
-    int size = this.size;
     if (from >= size) {
       return size;
     }
     int bitsOffset = from >> 5;
     int currentBits = bits[bitsOffset];
-    int mask = 1 << (from & 0x1F);
-    while ((currentBits & mask) == 0) {
-      if (++from >= size) {
-        break;
+    // mask off lesser bits first
+    currentBits &= ~((1 << (from & 0x1F)) - 1);
+    while (currentBits == 0) {
+      if (++bitsOffset == bits.length) {
+        return size;
       }
-      if (mask == 0x80000000) {
-        mask = 1;
-        currentBits = bits[++bitsOffset];
-      } else {
-        mask <<= 1;
-      }
+      currentBits = bits[bitsOffset];
     }
-    return from;
+    int result = (bitsOffset << 5) + Integer.numberOfTrailingZeros(currentBits);
+    return result > size ? size : result;
+  }
+
+  /**
+   * @see #getNextSet(int)
+   */
+  public int getNextUnset(int from) {
+    if (from >= size) {
+      return size;
+    }
+    int bitsOffset = from >> 5;
+    int currentBits = ~bits[bitsOffset];
+    // mask off lesser bits first
+    currentBits &= ~((1 << (from & 0x1F)) - 1);
+    while (currentBits == 0) {
+      if (++bitsOffset == bits.length) {
+        return size;
+      }
+      currentBits = ~bits[bitsOffset];
+    }
+    int result = (bitsOffset << 5) + Integer.numberOfTrailingZeros(currentBits);
+    return result > size ? size : result;
   }
 
   /**
