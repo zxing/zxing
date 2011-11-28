@@ -25,10 +25,16 @@ public final class IntentResult {
 
   private final String contents;
   private final String formatName;
+  private final byte[] rawBytes;
 
-  IntentResult(String contents, String formatName) {
+  IntentResult() {
+    this(null, null, null);
+  }
+
+  IntentResult(String contents, String formatName, byte[] rawBytes) {
     this.contents = contents;
     this.formatName = formatName;
+    this.rawBytes = rawBytes;
   }
 
   /**
@@ -43,6 +49,13 @@ public final class IntentResult {
    */
   public String getFormatName() {
     return formatName;
+  }
+
+  /**
+   * @return raw bytes of the barcode content, if applicable, or null otherwise
+   */
+  public byte[] getRawBytes() {
+    return rawBytes;
   }
 
 }

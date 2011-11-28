@@ -68,6 +68,7 @@ import java.text.DateFormat;
 import java.util.Collection;
 import java.util.Date;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -568,6 +569,25 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       byte[] rawBytes = rawResult.getRawBytes();
       if (rawBytes != null && rawBytes.length > 0) {
         intent.putExtra(Intents.Scan.RESULT_BYTES, rawBytes);
+      }
+      Map<ResultMetadataType,?> metadata = rawResult.getResultMetadata();
+      if (metadata != null) {
+        Integer orientation = (Integer) metadata.get(ResultMetadataType.ORIENTATION);
+        if (orientation != null) {
+          intent.putExtra(Intents.Scan.RESULT_ORIENTATION, orientation);
+        }
+        String ecLevel = (String) metadata.get(ResultMetadataType.ERROR_CORRECTION_LEVEL);
+        if (ecLevel != null) {
+          intent.putExtra(Intents.Scan.RESULT_ERROR_CORRECTION_LEVEL, ecLevel);
+        }
+        List<byte[]> byteSegments = (List<byte[]>) metadata.get(ResultMetadataType.BYTE_SEGMENTS);
+        if (byteSegments != null) {
+          int i = 0;
+          for (byte[] byteSegment : byteSegments) {
+            intent.putExtra(Intents.Scan.RESULT_BYTE_SEGMENTS_PREFIX + i, byteSegment);
+            i++;
+          }
+        }
       }
       Message message = Message.obtain(handler, R.id.return_scan_result);
       message.obj = intent;
