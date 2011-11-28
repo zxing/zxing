@@ -111,6 +111,25 @@ public final class Intents {
     public static final String RESULT_BYTES = "SCAN_RESULT_BYTES";
 
     /**
+     * Key for the value of {@link com.google.zxing.ResultMetadataType#ORIENTATION}, if available.
+     * Call intent.getIntExtra(RESULT_ORIENTATION).
+     */
+    public static final String RESULT_ORIENTATION = "SCAN_RESULT_ORIENTATION";
+
+    /**
+     * Key for the value of {@link com.google.zxing.ResultMetadataType#ERROR_CORRECTION_LEVEL}, if available.
+     * Call intent.getStringExtra(RESULT_ERROR_CORRECTION_LEVEL).
+     */
+    public static final String RESULT_ERROR_CORRECTION_LEVEL = "SCAN_RESULT_ERROR_CORRECTION_LEVEL";
+
+    /**
+     * Prefix for keys that map to the values of {@link com.google.zxing.ResultMetadataType#BYTE_SEGMENTS},
+     * if available. The actual values will be set under a series of keys formed by adding 0, 1, 2, ...
+     * to this prefix. So the first byte segment is under key "SCAN_RESULT_BYTE_SEGMENTS_0" for example.
+     */
+    public static final String RESULT_BYTE_SEGMENTS_PREFIX = "SCAN_RESULT_BYTE_SEGMENTS_";
+
+    /**
      * Setting this to false will not save scanned codes in the history.
      */
     public static final String SAVE_HISTORY = "SAVE_HISTORY";

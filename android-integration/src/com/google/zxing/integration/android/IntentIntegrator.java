@@ -291,9 +291,10 @@ public final class IntentIntegrator {
       if (resultCode == Activity.RESULT_OK) {
         String contents = intent.getStringExtra("SCAN_RESULT");
         String formatName = intent.getStringExtra("SCAN_RESULT_FORMAT");
-        return new IntentResult(contents, formatName);
+        byte[] rawBytes = intent.getByteArrayExtra("SCAN_RESULT_BYTES");
+        return new IntentResult(contents, formatName, rawBytes);
       }
-      return new IntentResult(null, null);
+      return new IntentResult();
     }
     return null;
   }
