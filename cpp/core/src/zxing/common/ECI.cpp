@@ -16,6 +16,7 @@
  */
 
 #include <zxing/common/ECI.h>
+#include <sstream>
 #include <zxing/common/CharacterSetECI.h>
 #include <zxing/common/IllegalArgumentException.h>
 
@@ -30,7 +31,9 @@ int ECI::getValue() const {
 
 ECI* ECI::getECIByValue(int value) {
   if (value < 0 || value > 999999) {
-    throw IllegalArgumentException("Bad ECI value: " + value);
+    std::ostringstream oss;
+    oss << "Bad ECI value: " << value;
+    throw IllegalArgumentException(oss.str().c_str());
   }
   if (value < 900) { // Character set ECIs use 000000 - 000899
     return CharacterSetECI::getCharacterSetECIByValue(value);
