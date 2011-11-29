@@ -19,6 +19,10 @@ else:
 if env['PIC']:
 	flags.append("-fPIC")
 
+flags.append("-Wextra -Werror")
+# Can't enable unless we get rid of the dynamic variable length arrays
+# flags.append("-pedantic")
+
 compile_options['CXXFLAGS'] = ' '.join(flags)
 compile_options['LINKFLAGS'] = "-ldl"
 

@@ -1,7 +1,5 @@
+// -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
 /*
- *  BarcodeFormat.cpp
- *  zxing
- *
  *  Created by Christian Brunschen on 13/05/2008.
  *  Copyright 2008 ZXing authors All rights reserved.
  *

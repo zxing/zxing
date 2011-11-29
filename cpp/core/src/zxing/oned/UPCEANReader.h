@@ -1,10 +1,8 @@
+// -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
 #ifndef __UPC_EAN_READER_H__
 #define __UPC_EAN_READER_H__
 
 /*
- *  UPCEANReader.h
- *  ZXing
- *
  *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,10 +32,8 @@ namespace zxing {
 		class UPCEANReader : public OneDReader {
 
 		private:
-			//static const unsigned int MAX_AVG_VARIANCE = (unsigned int) (PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.42f);
-      enum {MAX_AVG_VARIANCE = (unsigned int) (PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.42f)};
-			//static const int MAX_INDIVIDUAL_VARIANCE = (int) (PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.7f);
-      enum {MAX_INDIVIDUAL_VARIANCE = (int) (PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.7f)};
+      enum {MAX_AVG_VARIANCE = (unsigned int) (PATTERN_MATCH_RESULT_SCALE_FACTOR * 420/1000)};
+      enum {MAX_INDIVIDUAL_VARIANCE = (int) (PATTERN_MATCH_RESULT_SCALE_FACTOR * 700/1000)};
 
 			static bool findStartGuardPattern(Ref<BitArray> row, int* rangeStart, int* rangeEnd);
 

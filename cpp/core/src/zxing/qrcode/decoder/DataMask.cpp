@@ -70,7 +70,7 @@ public:
  */
 class DataMask001 : public DataMask {
 public:
-  bool isMasked(size_t x, size_t y) {
+  bool isMasked(size_t x, size_t) {
     //		return (x & 0x01) == 0;
     return (x % 2) == 0;
   }
@@ -81,7 +81,7 @@ public:
  */
 class DataMask010 : public DataMask {
 public:
-  bool isMasked(size_t x, size_t y) {
+  bool isMasked(size_t, size_t y) {
     return y % 3 == 0;
   }
 };

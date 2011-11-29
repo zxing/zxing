@@ -1,7 +1,5 @@
+// -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
 /*
- *  ITFReader.cpp
- *  ZXing
- *
  *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -240,6 +238,8 @@ namespace zxing {
      * @throws ReaderException if the quiet zone cannot be found, a ReaderException is thrown.
      */
     void ITFReader::validateQuietZone(Ref<BitArray> row, int startPattern) {
+      (void)row;
+      (void)startPattern;
 //#pragma mark needs some corrections
 //      int quietCount = narrowLineWidth * 10;  // expect to find this many pixels of quiet zone
 //
