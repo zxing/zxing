@@ -429,7 +429,7 @@ namespace zxing {
           nextStart++;
         }
         if (!row->isRange(nextStart,
-                          std::min(row->getSize(), nextStart + (nextStart - lastStart) / 2),
+                          std::min(width, nextStart + (nextStart - lastStart) / 2),
                           false)) {
           throw ReaderException("");
         }
