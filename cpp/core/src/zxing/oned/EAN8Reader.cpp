@@ -1,7 +1,5 @@
+// -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
 /*
- *  EAN8Reader.cpp
- *  ZXing
- *
  *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,6 +25,7 @@ namespace zxing {
 
     int EAN8Reader::decodeMiddle(Ref<BitArray> row, int startGuardBegin, int startGuardEnd,
         std::string& resultString){
+      (void)startGuardBegin;
       const int countersLen = 4;
       int counters[countersLen] = { 0, 0, 0, 0 };
 

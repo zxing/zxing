@@ -1,3 +1,4 @@
+// -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
 /*
  *  DataMatrixReader.cpp
  *  zxing
@@ -32,6 +33,7 @@ DataMatrixReader::DataMatrixReader() :
 }
 
 Ref<Result> DataMatrixReader::decode(Ref<BinaryBitmap> image, DecodeHints hints) {
+  (void)hints;
 #ifdef DEBUG
   cout << "decoding image " << image.object_ << ":\n" << flush;
 #endif
