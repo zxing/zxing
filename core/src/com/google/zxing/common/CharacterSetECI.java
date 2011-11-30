@@ -49,12 +49,12 @@ public enum CharacterSetECI {
   Cp1251(22, "windows-1251"),
   Cp1252(23, "windows-1252"),
   Cp1256(24, "windows-1256"),
-  UnicodeBigUnmarked(25, "UTF-16BE", "UTF-16"),
+  UnicodeBigUnmarked(25, "UTF-16BE", "UnicodeBig"),
   UTF8(26, "UTF-8"),
   ASCII(new int[] {27, 170}, "US-ASCII"),
   Big5(28),
-  EUC_CN(new int[] {29}, "GB2312", "GB18030"),
-  EUC_KR(new int[]{30}, "EUC-KR");
+  GB18030(29, "GB2312", "EUC_CN", "GBK"),
+  EUC_KR(30, "EUC-KR");
 
   private static final Map<Integer,CharacterSetECI> VALUE_TO_ECI = new HashMap<Integer,CharacterSetECI>();
   private static final Map<String,CharacterSetECI> NAME_TO_ECI = new HashMap<String,CharacterSetECI>();
