@@ -116,7 +116,7 @@ int test_image(Image& image, bool hybrid, string expected = "") {
     res = -6;
     if (!raw_dump) {
       cout << (hybrid ? "Hybrid" : "Global") << " binarizer failed:\n";
-      if (expected.length() >= 0) {
+      if (!expected.empty()) {
         cout << "  Expected: " << expected << "\n";
       }
       cout << "  Detected: " << cell_result << endl;

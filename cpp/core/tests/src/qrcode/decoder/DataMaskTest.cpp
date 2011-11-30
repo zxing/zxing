@@ -1,7 +1,5 @@
+// -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
 /*
- *  DataMaskTest.cpp
- *  zxing
- *
  *  Created by Christian Brunschen on 19/05/2008.
  *  Copyright 2008 ZXing authors All rights reserved.
  *
@@ -36,7 +34,7 @@ public:
 class Mask1Condition : public MaskCondition {
 public:
   Mask1Condition() { }
-  bool isMasked(int i, int j) {
+  bool isMasked(int i, int) {
     return i % 2 == 0;
   }
 };
@@ -44,7 +42,7 @@ public:
 class Mask2Condition : public MaskCondition {
 public:
   Mask2Condition() { }
-  bool isMasked(int i, int j) {
+  bool isMasked(int, int j) {
     return j % 3 == 0;
   }
 };
