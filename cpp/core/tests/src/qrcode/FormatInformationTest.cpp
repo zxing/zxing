@@ -30,11 +30,21 @@ namespace qrcode {
 
 CPPUNIT_TEST_SUITE_REGISTRATION(FormatInformationTest);
 
+static const int MASKED_TEST_FORMAT_INFO = 0x2BED;
+static const int UNMASKED_TEST_FORMAT_INFO = MASKED_TEST_FORMAT_INFO ^ 0x5412;
+
 static void assertEquals(Ref<FormatInformation> a,
                          Ref<FormatInformation> b) {
-  FormatInformation &aa = *a;
-  FormatInformation &bb = *b;
-  CPPUNIT_ASSERT_EQUAL(aa, bb);
+  if (a == NULL || b == NULL)
+  {
+	CPPUNIT_ASSERT_EQUAL(a, b);
+  }
+  else
+  {
+	FormatInformation &aa = *a;
+	FormatInformation &bb = *b;
+	CPPUNIT_ASSERT_EQUAL(aa, bb);
+  }
 }
 
 void FormatInformationTest::testBitsDiffering() {
@@ -48,23 +58,31 @@ void FormatInformationTest::testBitsDiffering() {
 void FormatInformationTest::testDecode() {
   // Normal case
   Ref<FormatInformation> expected =
-    FormatInformation::decodeFormatInformation(0x2BED ^ 0x5412);
+    FormatInformation::decodeFormatInformation(MASKED_TEST_FORMAT_INFO, MASKED_TEST_FORMAT_INFO);
   CPPUNIT_ASSERT_EQUAL((unsigned char) 0x07, expected->getDataMask());
   CPPUNIT_ASSERT_EQUAL(&ErrorCorrectionLevel::Q,
                        &expected->getErrorCorrectionLevel());
   // where the code forgot the mask!
   assertEquals(expected,
-               FormatInformation::decodeFormatInformation(0x2BED));
+               FormatInformation::decodeFormatInformation(UNMASKED_TEST_FORMAT_INFO, MASKED_TEST_FORMAT_INFO));
+
+  //TODO separate tests as in Java?
 
   // 1,2,3,4 bits difference
-  assertEquals(expected,
-               FormatInformation::decodeFormatInformation(0x2BEF ^ 0x5412));
-  assertEquals(expected,
-               FormatInformation::decodeFormatInformation(0x2BEE ^ 0x5412));
-  assertEquals(expected,
-               FormatInformation::decodeFormatInformation(0x2BEA ^ 0x5412));
-  CPPUNIT_ASSERT_EQUAL(true, FormatInformation::
-                       decodeFormatInformation(0x2BE2 ^ 0x5412) == 0);
+  assertEquals(expected, FormatInformation::decodeFormatInformation(
+	MASKED_TEST_FORMAT_INFO ^ 0x01, MASKED_TEST_FORMAT_INFO ^ 0x01));
+  assertEquals(expected, FormatInformation::decodeFormatInformation(
+	MASKED_TEST_FORMAT_INFO ^ 0x03, MASKED_TEST_FORMAT_INFO ^ 0x03));
+  assertEquals(expected, FormatInformation::decodeFormatInformation(
+	MASKED_TEST_FORMAT_INFO ^ 0x07, MASKED_TEST_FORMAT_INFO ^ 0x07));
+
+  Ref<FormatInformation> expectedNull(NULL);
+  assertEquals(expectedNull, FormatInformation::decodeFormatInformation(
+	MASKED_TEST_FORMAT_INFO ^ 0x0F, MASKED_TEST_FORMAT_INFO ^ 0x0F));
+
+  // WithMisread
+  assertEquals(expected, FormatInformation::decodeFormatInformation(
+	MASKED_TEST_FORMAT_INFO ^ 0x03, MASKED_TEST_FORMAT_INFO ^ 0x0F));
 }
 }
 }
