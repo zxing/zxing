@@ -68,7 +68,6 @@ import java.text.DateFormat;
 import java.util.Collection;
 import java.util.Date;
 import java.util.EnumSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -90,7 +89,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private static final int HELP_ID = Menu.FIRST + 3;
   private static final int ABOUT_ID = Menu.FIRST + 4;
 
-  private static final long INTENT_RESULT_DURATION = 1500L;
+  private static final long DEFAULT_INTENT_RESULT_DURATION_MS = 1500L;
   private static final long BULK_MODE_SCAN_DELAY_MS = 1000L;
 
   private static final String PACKAGE_NAME = "com.google.zxing.client.android";
@@ -106,13 +105,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
                  ResultMetadataType.ERROR_CORRECTION_LEVEL,
                  ResultMetadataType.POSSIBLE_COUNTRY);
 
-  private enum Source {
-    NATIVE_APP_INTENT,
-    PRODUCT_SEARCH_LINK,
-    ZXING_LINK,
-    NONE
-  }
-
   private CameraManager cameraManager;
   private CaptureActivityHandler handler;
   private ViewfinderView viewfinderView;
@@ -121,7 +113,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private Result lastResult;
   private boolean hasSurface;
   private boolean copyToClipboard;
-  private Source source;
+  private IntentSource source;
   private String sourceUrl;
   private String returnUrlTemplate;
   private Collection<BarcodeFormat> decodeFormats;
@@ -207,7 +199,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     if (intent != null && action != null) {
       if (action.equals(Intents.Scan.ACTION)) {
         // Scan the formats the intent requested, and return the result to the calling activity.
-        source = Source.NATIVE_APP_INTENT;
+        source = IntentSource.NATIVE_APP_INTENT;
         decodeFormats = DecodeFormatManager.parseDecodeFormats(intent);
         if (intent.hasExtra(Intents.Scan.WIDTH) && intent.hasExtra(Intents.Scan.HEIGHT)) {
           int width = intent.getIntExtra(Intents.Scan.WIDTH, 0);
@@ -219,25 +211,25 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       } else if (dataString != null && dataString.contains(PRODUCT_SEARCH_URL_PREFIX) &&
           dataString.contains(PRODUCT_SEARCH_URL_SUFFIX)) {
         // Scan only products and send the result to mobile Product Search.
-        source = Source.PRODUCT_SEARCH_LINK;
+        source = IntentSource.PRODUCT_SEARCH_LINK;
         sourceUrl = dataString;
         decodeFormats = DecodeFormatManager.PRODUCT_FORMATS;
       } else if (dataString != null && dataString.startsWith(ZXING_URL)) {
         // Scan formats requested in query string (all formats if none specified).
         // If a return URL is specified, send the results there. Otherwise, handle it ourselves.
-        source = Source.ZXING_LINK;
+        source = IntentSource.ZXING_LINK;
         sourceUrl = dataString;
         Uri inputUri = Uri.parse(sourceUrl);
         returnUrlTemplate = inputUri.getQueryParameter(RETURN_URL_PARAM);
         decodeFormats = DecodeFormatManager.parseDecodeFormats(inputUri);
       } else {
         // Scan all formats and handle the results ourselves (launched from Home).
-        source = Source.NONE;
+        source = IntentSource.NONE;
         decodeFormats = null;
       }
       characterSet = intent.getStringExtra(Intents.Scan.CHARACTER_SET);
     } else {
-      source = Source.NONE;
+      source = IntentSource.NONE;
       decodeFormats = null;
       characterSet = null;
     }
@@ -276,11 +268,11 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   @Override
   public boolean onKeyDown(int keyCode, KeyEvent event) {
     if (keyCode == KeyEvent.KEYCODE_BACK) {
-      if (source == Source.NATIVE_APP_INTENT) {
+      if (source == IntentSource.NATIVE_APP_INTENT) {
         setResult(RESULT_CANCELED);
         finish();
         return true;
-      } else if ((source == Source.NONE || source == Source.ZXING_LINK) && lastResult != null) {
+      } else if ((source == IntentSource.NONE || source == IntentSource.ZXING_LINK) && lastResult != null) {
         resetStatusView();
         if (handler != null) {
           handler.sendEmptyMessage(R.id.restart_preview);
@@ -559,7 +551,8 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       clipboard.setText(resultHandler.getDisplayContents());
     }
 
-    if (source == Source.NATIVE_APP_INTENT) {
+    if (source == IntentSource.NATIVE_APP_INTENT) {
+      
       // Hand back whatever action they requested - this can be changed to Intents.Scan.ACTION when
       // the deprecated intent is retired.
       Intent intent = new Intent(getIntent().getAction());
@@ -574,13 +567,13 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       if (metadata != null) {
         Integer orientation = (Integer) metadata.get(ResultMetadataType.ORIENTATION);
         if (orientation != null) {
-          intent.putExtra(Intents.Scan.RESULT_ORIENTATION, orientation);
+          intent.putExtra(Intents.Scan.RESULT_ORIENTATION, orientation.intValue());
         }
         String ecLevel = (String) metadata.get(ResultMetadataType.ERROR_CORRECTION_LEVEL);
         if (ecLevel != null) {
           intent.putExtra(Intents.Scan.RESULT_ERROR_CORRECTION_LEVEL, ecLevel);
         }
-        List<byte[]> byteSegments = (List<byte[]>) metadata.get(ResultMetadataType.BYTE_SEGMENTS);
+        Iterable<byte[]> byteSegments = (Iterable<byte[]>) metadata.get(ResultMetadataType.BYTE_SEGMENTS);
         if (byteSegments != null) {
           int i = 0;
           for (byte[] byteSegment : byteSegments) {
@@ -589,31 +582,42 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
           }
         }
       }
-      Message message = Message.obtain(handler, R.id.return_scan_result);
-      message.obj = intent;
-      handler.sendMessageDelayed(message, INTENT_RESULT_DURATION);
-    } else if (source == Source.PRODUCT_SEARCH_LINK) {
+      sendReplyMessage(R.id.return_scan_result, intent);
+      
+    } else if (source == IntentSource.PRODUCT_SEARCH_LINK) {
+      
       // Reformulate the URL which triggered us into a query, so that the request goes to the same
       // TLD as the scan URL.
-      Message message = Message.obtain(handler, R.id.launch_product_query);
       int end = sourceUrl.lastIndexOf("/scan");
-      message.obj = sourceUrl.substring(0, end) + "?q=" +
-          resultHandler.getDisplayContents().toString() + "&source=zxing";
-      handler.sendMessageDelayed(message, INTENT_RESULT_DURATION);
-    } else if (source == Source.ZXING_LINK) {
+      String replyURL = sourceUrl.substring(0, end) + "?q=" + resultHandler.getDisplayContents() + "&source=zxing";      
+      sendReplyMessage(R.id.launch_product_query, replyURL);
+      
+    } else if (source == IntentSource.ZXING_LINK) {
+      
       // Replace each occurrence of RETURN_CODE_PLACEHOLDER in the returnUrlTemplate
       // with the scanned code. This allows both queries and REST-style URLs to work.
       if (returnUrlTemplate != null) {
-        Message message = Message.obtain(handler, R.id.launch_product_query);
         String codeReplacement = String.valueOf(resultHandler.getDisplayContents());
         try {
           codeReplacement = URLEncoder.encode(codeReplacement, "UTF-8");
         } catch (UnsupportedEncodingException e) {
           // can't happen; UTF-8 is always supported. Continue, I guess, without encoding
         }
-        message.obj = returnUrlTemplate.replace(RETURN_CODE_PLACEHOLDER, codeReplacement);
-        handler.sendMessageDelayed(message, INTENT_RESULT_DURATION);
+        String replyURL = returnUrlTemplate.replace(RETURN_CODE_PLACEHOLDER, codeReplacement);
+        sendReplyMessage(R.id.launch_product_query, replyURL);
       }
+      
+    }
+  }
+  
+  private void sendReplyMessage(int id, Object arg) {
+    Message message = Message.obtain(handler, id, arg);
+    long resultDurationMS = getIntent().getLongExtra(Intents.Scan.RESULT_DISPLAY_DURATION_MS,
+                                                     DEFAULT_INTENT_RESULT_DURATION_MS);
+    if (resultDurationMS > 0L) {
+      handler.sendMessageDelayed(message, resultDurationMS);
+    } else {
+      handler.sendMessage(message);
     }
   }
 
