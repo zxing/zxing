@@ -87,6 +87,12 @@ public final class Intents {
     public static final String HEIGHT = "SCAN_HEIGHT";
 
     /**
+     * Desired duration in milliseconds for which to pause after a successful scan before
+     * returning to the calling intent. Specified as a long.
+     */
+    public static final String RESULT_DISPLAY_DURATION_MS = "RESULT_DISPLAY_DURATION_MS";
+
+    /**
      * If a barcode is found, Barcodes returns RESULT_OK to 
      * {@link android.app.Activity#onActivityResult(int, int, android.content.Intent)}
      * of the app which requested the scan via
