@@ -124,7 +124,7 @@ package com.google.zxing.qrcode.encoder
             }
             var numTotalCells:int = matrix.height() * matrix.width();
             var darkRatio:Number = numDarkCells / numTotalCells;
-            return Math.abs(Math.round(darkRatio * 100 - 50)) / 5 * 10;
+            return int(Math.abs(int(darkRatio * 100 - 50)) / 5) * 10;
         }
 
         // Return the mask bit for "getMaskPattern" at "x" and "y". See 8.8 of JISX0510:2004 for mask
@@ -146,7 +146,7 @@ package com.google.zxing.qrcode.encoder
                 case 3:
                     return ((y + x) % 3 == 0) ? 1 : 0;
                 case 4:
-                    return (((y / 2) + (x / 3)) % 2 == 0) ? 1 : 0;
+                    return ((int(y / 2) + int(x / 3)) % 2 == 0) ? 1 : 0;
                 case 5:
                     return (((y * x) % 2) + ((y * x) % 3) == 0) ? 1 : 0;
                 case 6:
