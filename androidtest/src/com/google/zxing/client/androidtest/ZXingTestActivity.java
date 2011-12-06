@@ -105,7 +105,7 @@ public final class ZXingTestActivity extends Activity {
     if (result != null) {
       String contents = result.getContents();
       if (contents != null) {
-        showDialog(R.string.result_succeeded, "Format: " + result.getFormatName() + "\nContents: " + contents);
+        showDialog(R.string.result_succeeded, result.toString());
       } else {
         showDialog(R.string.result_failed, getString(R.string.result_failed_why));
       }

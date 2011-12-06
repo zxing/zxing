@@ -292,7 +292,14 @@ public final class IntentIntegrator {
         String contents = intent.getStringExtra("SCAN_RESULT");
         String formatName = intent.getStringExtra("SCAN_RESULT_FORMAT");
         byte[] rawBytes = intent.getByteArrayExtra("SCAN_RESULT_BYTES");
-        return new IntentResult(contents, formatName, rawBytes);
+        int intentOrientation = intent.getIntExtra("SCAN_RESULT_ORIENTATION", Integer.MIN_VALUE);
+        Integer orientation = intentOrientation == Integer.MIN_VALUE ? null : intentOrientation;
+        String errorCorrectionLevel = intent.getStringExtra("SCAN_RESULT_ERROR_CORRECTION_LEVEL");
+        return new IntentResult(contents,
+                                formatName,
+                                rawBytes,
+                                orientation,
+                                errorCorrectionLevel);
       }
       return new IntentResult();
     }
