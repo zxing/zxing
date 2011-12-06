@@ -88,9 +88,15 @@ public final class Intents {
 
     /**
      * Desired duration in milliseconds for which to pause after a successful scan before
-     * returning to the calling intent. Specified as a long.
+     * returning to the calling intent. Specified as a long, not an integer!
+     * For example: 1000L, not 1000.
      */
     public static final String RESULT_DISPLAY_DURATION_MS = "RESULT_DISPLAY_DURATION_MS";
+
+    /**
+     * Prompt to show on-screen when scanning by intent. Specified as a {@link String}.
+     */
+    public static final String PROMPT_MESSAGE = "PROMPT_MESSAGE";
 
     /**
      * If a barcode is found, Barcodes returns RESULT_OK to 
