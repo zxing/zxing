@@ -153,10 +153,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     setContentView(R.layout.capture);
 
-    resultView = findViewById(R.id.result_view);
-    statusView = (TextView) findViewById(R.id.status_view);
-    handler = null;
-    lastResult = null;
     hasSurface = false;
     historyManager = new HistoryManager(this);
     historyManager.trimHistory();
@@ -179,6 +175,12 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     viewfinderView = (ViewfinderView) findViewById(R.id.viewfinder_view);
     viewfinderView.setCameraManager(cameraManager);
 
+    resultView = findViewById(R.id.result_view);
+    statusView = (TextView) findViewById(R.id.status_view);
+
+    handler = null;
+    lastResult = null;
+
     resetStatusView();
 
     SurfaceView surfaceView = (SurfaceView) findViewById(R.id.preview_view);
@@ -193,14 +195,31 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
     }
 
+    beepManager.updatePrefs();
+
+    inactivityTimer.onResume();
+
     Intent intent = getIntent();
-    String action = intent == null ? null : intent.getAction();
-    String dataString = intent == null ? null : intent.getDataString();
-    if (intent != null && action != null) {
-      if (action.equals(Intents.Scan.ACTION)) {
+
+    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+    copyToClipboard = prefs.getBoolean(PreferencesActivity.KEY_COPY_TO_CLIPBOARD, true)
+        && (intent == null || intent.getBooleanExtra(Intents.Scan.SAVE_HISTORY, true));
+
+    source = IntentSource.NONE;
+    decodeFormats = null;
+    characterSet = null;
+
+    if (intent != null) {
+
+      String action = intent.getAction();
+      String dataString = intent.getDataString();
+
+      if (Intents.Scan.ACTION.equals(action)) {
+
         // Scan the formats the intent requested, and return the result to the calling activity.
         source = IntentSource.NATIVE_APP_INTENT;
         decodeFormats = DecodeFormatManager.parseDecodeFormats(intent);
+
         if (intent.hasExtra(Intents.Scan.WIDTH) && intent.hasExtra(Intents.Scan.HEIGHT)) {
           int width = intent.getIntExtra(Intents.Scan.WIDTH, 0);
           int height = intent.getIntExtra(Intents.Scan.HEIGHT, 0);
@@ -208,13 +227,23 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
             cameraManager.setManualFramingRect(width, height);
           }
         }
-      } else if (dataString != null && dataString.contains(PRODUCT_SEARCH_URL_PREFIX) &&
-          dataString.contains(PRODUCT_SEARCH_URL_SUFFIX)) {
+        
+        String customPromptMessage = intent.getStringExtra(Intents.Scan.PROMPT_MESSAGE);
+        if (customPromptMessage != null) {
+          statusView.setText(customPromptMessage);
+        }
+
+      } else if (dataString != null &&
+                 dataString.contains(PRODUCT_SEARCH_URL_PREFIX) &&
+                 dataString.contains(PRODUCT_SEARCH_URL_SUFFIX)) {
+
         // Scan only products and send the result to mobile Product Search.
         source = IntentSource.PRODUCT_SEARCH_LINK;
         sourceUrl = dataString;
         decodeFormats = DecodeFormatManager.PRODUCT_FORMATS;
+
       } else if (dataString != null && dataString.startsWith(ZXING_URL)) {
+
         // Scan formats requested in query string (all formats if none specified).
         // If a return URL is specified, send the results there. Otherwise, handle it ourselves.
         source = IntentSource.ZXING_LINK;
@@ -222,25 +251,12 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         Uri inputUri = Uri.parse(sourceUrl);
         returnUrlTemplate = inputUri.getQueryParameter(RETURN_URL_PARAM);
         decodeFormats = DecodeFormatManager.parseDecodeFormats(inputUri);
-      } else {
-        // Scan all formats and handle the results ourselves (launched from Home).
-        source = IntentSource.NONE;
-        decodeFormats = null;
+
       }
+
       characterSet = intent.getStringExtra(Intents.Scan.CHARACTER_SET);
-    } else {
-      source = IntentSource.NONE;
-      decodeFormats = null;
-      characterSet = null;
+
     }
-
-    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-    copyToClipboard = prefs.getBoolean(PreferencesActivity.KEY_COPY_TO_CLIPBOARD, true)
-        && (intent == null || intent.getBooleanExtra(Intents.Scan.SAVE_HISTORY, true));
-
-    beepManager.updatePrefs();
-
-    inactivityTimer.onResume();
   }
 
   @Override

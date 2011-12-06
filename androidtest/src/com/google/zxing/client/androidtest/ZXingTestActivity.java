@@ -142,6 +142,8 @@ public final class ZXingTestActivity extends Activity {
       intent.putExtra("SCAN_MODE", "PRODUCT_MODE");
       intent.putExtra("SCAN_WIDTH", 800);
       intent.putExtra("SCAN_HEIGHT", 200);
+      intent.putExtra("RESULT_DISPLAY_DURATION_MS", 3000L);
+      intent.putExtra("PROMPT_MESSAGE", "Custom prompt to scan a product");
       startActivityForResult(intent, IntentIntegrator.REQUEST_CODE);
     }
   };
