@@ -1,6 +1,6 @@
 package com.google.zxing.common.flexdatatypes
 {
-	public class HashTable 
+	public class HashTable
 	{
 		// bas : made public for debugging
 		public var _arr:Array;
@@ -17,7 +17,7 @@ package com.google.zxing.common.flexdatatypes
 		
 		public function getIndexOf(key:Object):int
 		{
-			for (var i:int=0;i<this._arr.length;i++)
+			for (var i:String in this._arr)
 			{
 				if (this._arr[i][0] == key)
 				{
@@ -39,7 +39,7 @@ package com.google.zxing.common.flexdatatypes
 		
 		public function HashTable(siz:int=0)
 		{
-			this._arr = new Array(siz);	
+			this._arr = new Array(siz);
 		}
 		
 		public function Add(key:Object, value:Object):void
@@ -57,7 +57,7 @@ package com.google.zxing.common.flexdatatypes
 		
 		public function ContainsKey(key:Object):Boolean
 		{
-			for (var i:int=0;i<this._arr.length;i++)
+			for (var i:String in this._arr)
 			{
 				if (this._arr[i][0] == key) { return true; }
 			}
@@ -67,11 +67,11 @@ package com.google.zxing.common.flexdatatypes
 		public function getValuesByKey(key:Object):ArrayList
 		{
 			var al:ArrayList = new ArrayList();
-			for (var i:int=0;i<this._arr.length;i++)
+			for (var i:String in this._arr)
 			{
 				if (this._arr[i][0] == key)
 				{
-					al.Add(this._arr[i][1]);	
+					al.Add(this._arr[i][1]);
 				}
 			}
 			return al;
@@ -85,7 +85,7 @@ package com.google.zxing.common.flexdatatypes
 		public function getValueByKey(key:Object):Object
 		{
 			var al:ArrayList = new ArrayList();
-			for (var i:int=0;i<this._arr.length;i++)
+			for (var i:String in this._arr)
 			{
 				if (this._arr[i][0] == key)
 				{
@@ -97,7 +97,7 @@ package com.google.zxing.common.flexdatatypes
 
 		public function setValue(key:Object,value:Object):void
 		{
-			for (var i:int=0;i<this._arr.length;i++)
+			for (var i:String in this._arr)
 			{
 				if (this._arr[i][0] == key)
 				{
@@ -109,7 +109,7 @@ package com.google.zxing.common.flexdatatypes
 
 		public function getKeyByValue(value:Object):int
 		{
-			for (var i:int=0;i<this._arr.length;i++)
+			for (var i:String in this._arr)
 			{
 				if (this._arr[i][1] == value)
 				{
@@ -121,7 +121,7 @@ package com.google.zxing.common.flexdatatypes
 
 		public function containsKey(key:Object):Boolean
 		{
-			for (var i:int=0;i<this._arr.length;i++)
+			for (var i:String in this._arr)
 			{
 				if (this._arr[i][0] == key)
 				{
