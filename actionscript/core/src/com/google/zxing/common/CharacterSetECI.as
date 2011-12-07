@@ -26,8 +26,8 @@
     	import com.google.zxing.common.flexdatatypes.HashTable;
     	import com.google.zxing.common.flexdatatypes.IllegalArgumentException;
     	
-        private static var  VALUE_TO_ECI:HashTable = new HashTable(29);
-        private static var  NAME_TO_ECI:HashTable = new HashTable(29);
+        private static var  VALUE_TO_ECI:HashTable;
+        private static var  NAME_TO_ECI:HashTable;
 
   private static function initialize():void {
     VALUE_TO_ECI = new HashTable(29);

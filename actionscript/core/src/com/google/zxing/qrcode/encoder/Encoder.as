@@ -51,7 +51,7 @@ public final class Encoder {
 
   public static var DEFAULT_BYTE_MODE_ENCODING:String = "ISO-8859-1";
 
-  public function Encoder() 
+  public function Encoder()
   {
   }
 
@@ -85,7 +85,7 @@ public final class Encoder {
   public static function encode(content:String , ecLevel:ErrorCorrectionLevel,  qrCode:QRCode,hints:HashTable=null ):void
   {
     var encoding:String = hints == null ? null : (hints._get(EncodeHintType.CHARACTER_SET) as String);
-    if (encoding == null) 
+    if (encoding == null)
     {
       encoding = DEFAULT_BYTE_MODE_ENCODING;
     }
@@ -158,7 +158,7 @@ public final class Encoder {
    * @return the code point of the table used in alphanumeric mode or
    *  -1 if there is no corresponding code in the table.
    */
-  public static function getAlphanumericCode(code:int):int 
+  public static function getAlphanumericCode(code:int):int
   {
     if (code < Encoder.ALPHANUMERIC_TABLE.length) {
       return Encoder.ALPHANUMERIC_TABLE[code];
@@ -175,7 +175,7 @@ public final class Encoder {
    * if it is Shift_JIS then we assume the input is Kanji and return {@link Mode#KANJI}.
    */
   public static function chooseMode(content:String, encoding:String=null):Mode {
-    if (encoding == "Shift_JIS") 
+    if (encoding == "Shift_JIS")
     {
       return Mode.KANJI;
     }
@@ -206,12 +206,12 @@ public final class Encoder {
     var minPenalty:int = int.MAX_VALUE;  // Lower penalty is better.
     var bestMaskPattern:int = -1;
     // We try all mask patterns to choose the best one.
-    for (var maskPattern:int = 0; maskPattern < QRCode.NUM_MASK_PATTERNS; maskPattern++) 
+    for (var maskPattern:int = 0; maskPattern < QRCode.NUM_MASK_PATTERNS; maskPattern++)
     {
       MatrixUtil.buildMatrix(bits, ecLevel, version, maskPattern, matrix);
       var penalty:int = calculateMaskPenalty(matrix);
       
-      if (penalty < minPenalty) 
+      if (penalty < minPenalty)
       {
         minPenalty = penalty;
         bestMaskPattern = maskPattern;
@@ -225,7 +225,7 @@ public final class Encoder {
    * modify "qrCode".
    */
   private static function initQRCode(numInputBytes:int, ecLevel:ErrorCorrectionLevel, mode:Mode,
-       qrCode:QRCode):void 
+       qrCode:QRCode):void
    {
     qrCode.setECLevel(ecLevel);
     qrCode.setMode(mode);
@@ -264,7 +264,7 @@ public final class Encoder {
   /**
    * Terminate bits as described in 8.4.8 and 8.4.9 of JISX0510:2004 (p.24).
    */
-  public static function terminateBits(numDataBytes:int, bits:BitVector) :void 
+  public static function terminateBits(numDataBytes:int, bits:BitVector) :void
   {
     var capacity:int = numDataBytes << 3;
     if (bits.size() > capacity) {
@@ -380,7 +380,7 @@ public final class Encoder {
     //var blocks:ArrayList = new ArrayList(numRSBlocks);
     var blocks:ArrayList = new ArrayList();
 
-    for (var i4:int = 0; i4 < numRSBlocks; ++i4) 
+    for (var i4:int = 0; i4 < numRSBlocks; ++i4)
     {
       var numDataBytesInBlock:Array = new Array(1);
       var numEcBytesInBlock:Array = new Array(1);
@@ -433,7 +433,7 @@ public final class Encoder {
     new ReedSolomonEncoder(GF256.QR_CODE_FIELD).encode(toEncode, numEcBytesInBlock);
 
     var ecBytes:zxingByteArray = new zxingByteArray(numEcBytesInBlock);
-    for (var i4:int = 0; i4 < numEcBytesInBlock; i4++) 
+    for (var i4:int = 0; i4 < numEcBytesInBlock; i4++)
     {
       ecBytes.setByte(i4, toEncode[numDataBytes + i4]);
     }
@@ -478,7 +478,7 @@ public final class Encoder {
     }
   }
 
-  public static function appendNumericBytes(content:String , bits:BitVector):void 
+  public static function appendNumericBytes(content:String , bits:BitVector):void
   {
     var length:int = content.length;
     var i:int = 0;
@@ -503,7 +503,7 @@ public final class Encoder {
     }
   }
 
-  public static function appendAlphanumericBytes(content:String , bits:BitVector ):void 
+  public static function appendAlphanumericBytes(content:String , bits:BitVector ):void
   {
     var length:int = content.length;
     var i:int = 0;
@@ -548,6 +548,7 @@ public final class Encoder {
     	else if (encoding == "ISO8859_11"){ bytes.writeMultiByte(content, "iso-8859-11"); }
     	else if (encoding == "ISO8859_15"){ bytes.writeMultiByte(content, "iso-8859-15"); }
 		else if ((encoding == "ISO-8859-1") || (encoding == "ISO8859-1")) { bytes.writeMultiByte(content, "iso-8859-1"); }
+		else if ((encoding == "UTF-8") || (encoding == "UTF8")) { bytes.writeMultiByte(content, "utf-8"); }
 		else
 		{
 			//other encodings not supported
@@ -564,7 +565,7 @@ public final class Encoder {
     }
   }
 
-  public static function appendKanjiBytes(content:String , bits:BitVector ):void 
+  public static function appendKanjiBytes(content:String , bits:BitVector ):void
   {
     var bytes:ByteArray;
     try {
@@ -601,4 +602,5 @@ public final class Encoder {
     bits.appendBits(eci.getValue(), 8);
   }
 
-}}
+}
+}
