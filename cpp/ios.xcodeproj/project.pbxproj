@@ -376,6 +376,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				OTHER_LDFLAGS = "-ObjC";
 				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
 				WARNING_CFLAGS = (
 					"-Wno-unused-parameter",
 					"-Werror",
@@ -402,6 +403,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				OTHER_LDFLAGS = "-ObjC";
 				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
 				WARNING_CFLAGS = (
 					"-Wno-unused-parameter",
 					"-Werror",
@@ -411,6 +413,102 @@
 			};
 			name = Release;
 		};
+		3B6E55431491B89E00C0C401 /* Ad Hoc Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = (
+					armv7,
+					armv6,
+				);
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = core/src;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				OTHER_LDFLAGS = "-ObjC";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				WARNING_CFLAGS = (
+					"-Wno-unused-parameter",
+					"-Werror",
+					"-Wextra",
+					"-Wall",
+				);
+			};
+			name = "Ad Hoc Debug";
+		};
+		3B6E55441491B89E00C0C401 /* Ad Hoc Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				DSTROOT = /tmp/zxing.dst;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = ios_Prefix.pch;
+				INSTALL_PATH = /usr/local/lib;
+				PRODUCT_NAME = zxing;
+				WARNING_CFLAGS = (
+					"-Werror",
+					"-Wextra",
+					"-Wall",
+					"-Wno-unused-parameter",
+				);
+			};
+			name = "Ad Hoc Debug";
+		};
+		3B6E55451491B8A600C0C401 /* Ad Hoc Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = (
+					armv7,
+					armv6,
+				);
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = core/src;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				OTHER_LDFLAGS = "-ObjC";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				WARNING_CFLAGS = (
+					"-Wno-unused-parameter",
+					"-Werror",
+					"-Wextra",
+					"-Wall",
+				);
+			};
+			name = "Ad Hoc Release";
+		};
+		3B6E55461491B8A600C0C401 /* Ad Hoc Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				DSTROOT = /tmp/zxing.dst;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = ios_Prefix.pch;
+				INSTALL_PATH = /usr/local/lib;
+				PRODUCT_NAME = zxing;
+				WARNING_CFLAGS = (
+					"-Werror",
+					"-Wextra",
+					"-Wall",
+					"-Wno-unused-parameter",
+				);
+			};
+			name = "Ad Hoc Release";
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -418,7 +516,9 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1DEB921F08733DC00010E9CD /* Debug */,
+				3B6E55441491B89E00C0C401 /* Ad Hoc Debug */,
 				1DEB922008733DC00010E9CD /* Release */,
+				3B6E55461491B8A600C0C401 /* Ad Hoc Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -427,7 +527,9 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1DEB922308733DC00010E9CD /* Debug */,
+				3B6E55431491B89E00C0C401 /* Ad Hoc Debug */,
 				1DEB922408733DC00010E9CD /* Release */,
+				3B6E55451491B8A600C0C401 /* Ad Hoc Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
