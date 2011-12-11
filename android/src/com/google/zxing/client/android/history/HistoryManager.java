@@ -31,7 +31,6 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 import android.os.Environment;
@@ -114,15 +113,8 @@ public final class HistoryManager {
         dialogItems.add(displayResult.toString());
       }
 
-    } catch (SQLiteException sqle) {
-      Log.w(TAG, "Error while opening database", sqle);
     } finally {
-      if (cursor != null) {
-        cursor.close();
-      }
-      if (db != null) {
-        db.close();
-      }
+      close(cursor, db);
     }
 
     Resources res = activity.getResources();
@@ -155,56 +147,37 @@ public final class HistoryManager {
     values.put(DBHelper.TIMESTAMP_COL, System.currentTimeMillis());
 
     SQLiteOpenHelper helper = new DBHelper(activity);
-    SQLiteDatabase db;
+    SQLiteDatabase db = null;
     try {
-      db = helper.getWritableDatabase();
-    } catch (SQLiteException sqle) {
-      Log.w(TAG, "Error while opening database", sqle);
-      return;
-    }
-    try {
+      db = helper.getWritableDatabase();      
       // Insert the new entry into the DB.
       db.insert(DBHelper.TABLE_NAME, DBHelper.TIMESTAMP_COL, values);
     } finally {
-      db.close();
+      close(null, db);
     }
   }
 
   public void addHistoryItemDetails(String itemID, String itemDetails) {
-
     // As we're going to do an update only we don't need need to worry
     // about the preferences; if the item wasn't saved it won't be udpated
-
     SQLiteOpenHelper helper = new DBHelper(activity);
-    SQLiteDatabase db;
+    SQLiteDatabase db = null;    
+    Cursor cursor = null;
     try {
       db = helper.getWritableDatabase();
-    } catch (SQLiteException sqle) {
-      Log.w(TAG, "Error while opening database", sqle);
-      return;
-    }
-
-    try {
-      
-      Cursor cursor = null;
+      cursor = db.query(DBHelper.TABLE_NAME,
+                        ID_DETAIL_COL_PROJECTION,
+                        DBHelper.TEXT_COL + "=?",
+                        new String[] { itemID },
+                        null,
+                        null,
+                        DBHelper.TIMESTAMP_COL + " DESC",
+                        "1");
       String oldID = null;
       String oldDetails = null;
-      try {
-        cursor = db.query(DBHelper.TABLE_NAME,
-                          ID_DETAIL_COL_PROJECTION,
-                          DBHelper.TEXT_COL + "=?",
-                          new String[] { itemID },
-                          null,
-                          null,
-                          DBHelper.TIMESTAMP_COL + " DESC");
-        if (cursor.moveToNext()) {
-          oldID = cursor.getString(0);
-          oldDetails = cursor.getString(1);
-        }
-      } finally {
-        if (cursor != null) {
-          cursor.close();
-        }
+      if (cursor.moveToNext()) {
+        oldID = cursor.getString(0);
+        oldDetails = cursor.getString(1);
       }
 
       String newDetails = oldDetails == null ? itemDetails : oldDetails + " : " + itemDetails;
@@ -214,53 +187,37 @@ public final class HistoryManager {
       db.update(DBHelper.TABLE_NAME, values, DBHelper.ID_COL + "=?", new String[] { oldID });
 
     } finally {
-      db.close();
+      close(cursor, db);
     }
   }
 
   private void deletePrevious(String text) {
     SQLiteOpenHelper helper = new DBHelper(activity);
-    SQLiteDatabase db;
+    SQLiteDatabase db = null;
     try {
-      db = helper.getWritableDatabase();
-    } catch (SQLiteException sqle) {
-      Log.w(TAG, "Error while opening database", sqle);
-      return;
-    }
-    try {
+      db = helper.getWritableDatabase();      
       db.delete(DBHelper.TABLE_NAME, DBHelper.TEXT_COL + "=?", new String[] { text });
     } finally {
-      db.close();
+      close(null, db);
     }
   }
 
   public void trimHistory() {
     SQLiteOpenHelper helper = new DBHelper(activity);
-    SQLiteDatabase db;
-    try {
-      db = helper.getWritableDatabase();
-    } catch (SQLiteException sqle) {
-      Log.w(TAG, "Error while opening database", sqle);
-      return;
-    }
+    SQLiteDatabase db = null;
     Cursor cursor = null;
     try {
+      db = helper.getWritableDatabase();      
       cursor = db.query(DBHelper.TABLE_NAME,
                         ID_COL_PROJECTION,
                         null, null, null, null,
                         DBHelper.TIMESTAMP_COL + " DESC");
-      int count = 0;
-      while (count < MAX_ITEMS && cursor.moveToNext()) {
-        count++;
-      }
+      cursor.move(MAX_ITEMS);
       while (cursor.moveToNext()) {
         db.delete(DBHelper.TABLE_NAME, DBHelper.ID_COL + '=' + cursor.getString(0), null);
       }
     } finally {
-      if (cursor != null) {
-        cursor.close();
-      }
-      db.close();
+      close(cursor, db);
     }
   }
 
@@ -281,16 +238,10 @@ public final class HistoryManager {
   CharSequence buildHistory() {
     StringBuilder historyText = new StringBuilder(1000);
     SQLiteOpenHelper helper = new DBHelper(activity);
-    SQLiteDatabase db;
-    try {
-      db = helper.getWritableDatabase();
-    } catch (SQLiteException sqle) {
-      Log.w(TAG, "Error while opening database", sqle);
-      return "";
-    }
+    SQLiteDatabase db = null;
     Cursor cursor = null;
     try {
-
+      db = helper.getWritableDatabase();
       cursor = db.query(DBHelper.TABLE_NAME,
                         COLUMNS,
                         null, null, null, null,
@@ -312,14 +263,21 @@ public final class HistoryManager {
 
         historyText.append('"').append(massageHistoryField(cursor.getString(4))).append("\"\r\n");
       }
-
+      return historyText;
     } finally {
-      if (cursor != null) {
-        cursor.close();
-      }
-      db.close();
+      close(cursor, db);
     }
-    return historyText;
+  }
+  
+  void clearHistory() {
+    SQLiteOpenHelper helper = new DBHelper(activity);
+    SQLiteDatabase db = null;
+    try {
+      db = helper.getWritableDatabase();      
+      db.delete(DBHelper.TABLE_NAME, null, null);
+    } finally {
+      close(null, db);
+    }
   }
 
   static Uri saveHistory(String history) {
@@ -352,20 +310,13 @@ public final class HistoryManager {
   private static String massageHistoryField(String value) {
     return value == null ? "" : value.replace("\"","\"\"");
   }
-
-  void clearHistory() {
-    SQLiteOpenHelper helper = new DBHelper(activity);
-    SQLiteDatabase db;
-    try {
-      db = helper.getWritableDatabase();
-    } catch (SQLiteException sqle) {
-      Log.w(TAG, "Error while opening database", sqle);
-      return;
+  
+  private static void close(Cursor cursor, SQLiteDatabase database) {
+    if (cursor != null) {
+      cursor.close();
     }
-    try {
-      db.delete(DBHelper.TABLE_NAME, null, null);
-    } finally {
-      db.close();
+    if (database != null) {
+      database.close();
     }
   }
 

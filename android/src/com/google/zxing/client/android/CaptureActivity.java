@@ -356,8 +356,10 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         builder.setNegativeButton(R.string.button_cancel, null);
         builder.show();
         break;
+      default:
+        return super.onOptionsItemSelected(item);
     }
-    return super.onOptionsItemSelected(item);
+    return true;
   }
 
   @Override
