@@ -289,10 +289,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         finish();
         return true;
       } else if ((source == IntentSource.NONE || source == IntentSource.ZXING_LINK) && lastResult != null) {
-        resetStatusView();
-        if (handler != null) {
-          handler.sendEmptyMessage(R.id.restart_preview);
-        }
+        restartPreviewAfterDelay(0L);
         return true;
       }
     } else if (keyCode == KeyEvent.KEYCODE_FOCUS || keyCode == KeyEvent.KEYCODE_CAMERA) {
@@ -418,10 +415,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
           if (prefs.getBoolean(PreferencesActivity.KEY_BULK_MODE, false)) {
             Toast.makeText(this, R.string.msg_bulk_mode_scanned, Toast.LENGTH_SHORT).show();
             // Wait a moment or else it will scan the same barcode continuously about 3 times
-            if (handler != null) {
-              handler.sendEmptyMessageDelayed(R.id.restart_preview, BULK_MODE_SCAN_DELAY_MS);
-            }
-            resetStatusView();
+            restartPreviewAfterDelay(BULK_MODE_SCAN_DELAY_MS);
           } else {
             handleDecodeInternally(rawResult, resultHandler, barcode);
           }
@@ -694,6 +688,13 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     builder.setPositiveButton(R.string.button_ok, new FinishListener(this));
     builder.setOnCancelListener(new FinishListener(this));
     builder.show();
+  }
+
+  public void restartPreviewAfterDelay(long delayMS) {
+    if (handler != null) {
+      handler.sendEmptyMessageDelayed(R.id.restart_preview, delayMS);
+    }
+    resetStatusView();
   }
 
   private void resetStatusView() {

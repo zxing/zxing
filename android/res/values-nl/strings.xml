@@ -136,7 +136,7 @@
   <string name="sbc_name">Zoek boeken met Google Books</string>
   <string name="share_name">Deel via barcode</string>
   <string name="title_about">Barcode Scanner v</string>
-  <string name="wifi_changing_network">Veranderen van Netwerk</string>
+  <string name="wifi_changing_network">Het aanvragen van aansluiting op het netwerk\u2026</string>
   <string name="wifi_ssid_label">Netwerknaam (SSID)</string>
   <string name="wifi_type_label">Type</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
