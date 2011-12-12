@@ -151,8 +151,6 @@
   <uses-permission android:name="android.permission.FLASHLIGHT"/>
   <uses-permission android:name="android.permission.READ_CONTACTS"
                    android:permissionGroup="com.google.zxing.client.android.SHARE_PERMISSIONS"/>
-  <uses-permission android:name="android.permission.WRITE_CONTACTS"
-                   android:permissionGroup="com.google.zxing.client.android.SHARE_PERMISSIONS"/>
   <uses-permission android:name="com.android.browser.permission.READ_HISTORY_BOOKMARKS"
                    android:permissionGroup="com.google.zxing.client.android.SHARE_PERMISSIONS"/>
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
@@ -160,7 +158,5 @@
   <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"
                    android:permissionGroup="com.google.zxing.client.android.WIFI_PERMISSIONS"/>
   <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"
-                   android:permissionGroup="com.google.zxing.client.android.WIFI_PERMISSIONS"/>
-  <uses-permission android:name="android.permission.WAKE_LOCK"
                    android:permissionGroup="com.google.zxing.client.android.WIFI_PERMISSIONS"/>
 </manifest>
