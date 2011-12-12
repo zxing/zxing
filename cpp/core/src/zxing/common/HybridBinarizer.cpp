@@ -26,10 +26,6 @@ using namespace std;
 using namespace zxing;
 
 namespace {
-  const int LUMINANCE_BITS = 5;
-  const int LUMINANCE_SHIFT = 8 - LUMINANCE_BITS;
-  const int LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
-
   const int BLOCK_SIZE_POWER = 3;
   const int BLOCK_SIZE = 1 << BLOCK_SIZE_POWER;
   const int BLOCK_SIZE_MASK = BLOCK_SIZE - 1;

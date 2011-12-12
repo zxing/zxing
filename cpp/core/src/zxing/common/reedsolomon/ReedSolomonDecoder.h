@@ -39,7 +39,7 @@ public:
 private:
   std::vector<Ref<GF256Poly> > runEuclideanAlgorithm(Ref<GF256Poly> a, Ref<GF256Poly> b, int R);
   ArrayRef<int> findErrorLocations(Ref<GF256Poly> errorLocator);
-  ArrayRef<int> findErrorMagnitudes(Ref<GF256Poly> errorEvaluator, ArrayRef<int> errorLocations);
+  ArrayRef<int> findErrorMagnitudes(Ref<GF256Poly> errorEvaluator, ArrayRef<int> errorLocations, bool dataMatrix);
 };
 }
 

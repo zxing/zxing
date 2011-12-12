@@ -64,7 +64,7 @@ Ref<BitArray> GlobalHistogramBinarizer::getBlackRow(int y, Ref<BitArray> row) {
     for (int x = 0; x < width; x++) {
       histogram[row_pixels[x] >> LUMINANCE_SHIFT]++;
     }
-    int blackPoint = estimate(histogram) << LUMINANCE_SHIFT;
+    int blackPoint = estimate(histogram);
 
     BitArray& array = *row;
     int left = row_pixels[0];
@@ -118,14 +118,14 @@ Ref<BitMatrix> GlobalHistogramBinarizer::getBlackMatrix() {
     }
   }
 
-  int blackPoint = estimate(histogram) << LUMINANCE_SHIFT;
+  int blackPoint = estimate(histogram);
 
   Ref<BitMatrix> matrix_ref(new BitMatrix(width, height));
   BitMatrix& matrix = *matrix_ref;
   for (int y = 0; y < height; y++) {
     row = source.getRow(y, row);
     for (int x = 0; x < width; x++) {
-      if (row[x] <= blackPoint)
+      if (row[x] < blackPoint)
         matrix.set(x, y);
     }
   }
@@ -199,7 +199,7 @@ int GlobalHistogramBinarizer::estimate(vector<int> &histogram) {
     }
   }
 
-  return bestValley;
+  return bestValley << LUMINANCE_SHIFT;
 }
 
 Ref<Binarizer> GlobalHistogramBinarizer::createBinarizer(Ref<LuminanceSource> source) {

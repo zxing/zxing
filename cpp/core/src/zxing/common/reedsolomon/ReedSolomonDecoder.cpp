@@ -55,9 +55,10 @@ void ReedSolomonDecoder::decode(ArrayRef<int> received, int twoS) {
        syndromeCoefficients.array_ << "\n";
 #endif
 
+  bool dataMatrix = (&field == &GF256::DATA_MATRIX_FIELD);
   bool noError = true;
   for (int i = 0; i < twoS; i++) {
-    int eval = poly->evaluateAt(field.exp(i));
+    int eval = poly->evaluateAt(field.exp(dataMatrix ? i + 1 : i));
     syndromeCoefficients[syndromeCoefficients->size() - 1 - i] = eval;
     if (eval != 0) {
       noError = false;
@@ -71,7 +72,7 @@ void ReedSolomonDecoder::decode(ArrayRef<int> received, int twoS) {
   Ref<GF256Poly> monomial(field.buildMonomial(twoS, 1));
   vector<Ref<GF256Poly> > sigmaOmega(runEuclideanAlgorithm(monomial, syndrome, twoS));
   ArrayRef<int> errorLocations = findErrorLocations(sigmaOmega[0]);
-  ArrayRef<int> errorMagitudes = findErrorMagnitudes(sigmaOmega[1], errorLocations);
+  ArrayRef<int> errorMagitudes = findErrorMagnitudes(sigmaOmega[1], errorLocations, dataMatrix);
   for (unsigned i = 0; i < errorLocations->size(); i++) {
     int position = received->size() - 1 - field.log(errorLocations[i]);
     //TODO: check why the position would be invalid
@@ -173,7 +174,7 @@ ArrayRef<int> ReedSolomonDecoder::findErrorLocations(Ref<GF256Poly> errorLocator
   return result;
 }
 
-ArrayRef<int> ReedSolomonDecoder::findErrorMagnitudes(Ref<GF256Poly> errorEvaluator, ArrayRef<int> errorLocations) {
+ArrayRef<int> ReedSolomonDecoder::findErrorMagnitudes(Ref<GF256Poly> errorEvaluator, ArrayRef<int> errorLocations, bool dataMatrix) {
   // This is directly applying Forney's Formula
   int s = errorLocations.size();
   ArrayRef<int> result(s);
@@ -187,6 +188,10 @@ ArrayRef<int> ReedSolomonDecoder::findErrorMagnitudes(Ref<GF256Poly> errorEvalua
       }
     }
     result[i] = field.multiply(errorEvaluator->evaluateAt(xiInverse), field.inverse(denominator));
+
+    if (dataMatrix) {
+      result[i] = field.multiply(result[i], xiInverse);
+	}
   }
   return result;
 }
