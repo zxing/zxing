@@ -1,8 +1,5 @@
 // -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
 /*
- *  BitMatrix.cpp
- *  zxing
- *
  *  Copyright 2010 ZXing authors. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,26 +32,24 @@ using zxing::Ref;
 namespace {
   size_t wordsForSize(size_t width,
                       size_t height,
+                      unsigned int bitsPerWord,
                       unsigned int logBits) {
     size_t bits = width * height;
-    int arraySize = bits >> logBits;
-    if (bits - (arraySize << logBits) != 0) {
-      arraySize++;
-    }
+    int arraySize = (bits + bitsPerWord - 1) >> logBits;
     return arraySize;
   }
 }
 
 BitMatrix::BitMatrix(size_t dimension) :
   width_(dimension), height_(dimension), words_(0), bits_(NULL) {
-  words_ = wordsForSize(width_, height_, logBits);
+  words_ = wordsForSize(width_, height_, bitsPerWord, logBits);
   bits_ = new unsigned int[words_];
   clear();
 }
 
 BitMatrix::BitMatrix(size_t width, size_t height) :
   width_(width), height_(height), words_(0), bits_(NULL) {
-  words_ = wordsForSize(width_, height_, logBits);
+  words_ = wordsForSize(width_, height_, bitsPerWord, logBits);
   bits_ = new unsigned int[words_];
   clear();
 }
