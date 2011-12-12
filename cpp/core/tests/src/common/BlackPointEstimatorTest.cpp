@@ -30,7 +30,7 @@ void BlackPointEstimatorTest::testBasic() {
   int histogramRaw[] = { 0, 0, 11, 43, 37, 18, 3, 1, 0, 0, 13, 36, 24, 0, 11, 2 };
   vector<int> histogram(histogramRaw, histogramRaw+16);
   size_t point = GlobalHistogramBinarizer::estimate(histogram);
-  CPPUNIT_ASSERT_EQUAL((size_t)8, point);
+  CPPUNIT_ASSERT_EQUAL((size_t)64, point);
 }
 
 void BlackPointEstimatorTest::testTooLittleRange() {
