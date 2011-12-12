@@ -114,9 +114,9 @@
   <string name="preferences_play_beep_title">Sípolás</string>
   <string name="preferences_remember_duplicates_summary">Ugyanannak a vonalkódnak több szkennelt képét is tárolja az Előzményekben</string>
   <string name="preferences_remember_duplicates_title">Duplikációk megjegyzése</string>
+  <string name="preferences_result_title">Találati beállítások</string>
   <string name="preferences_reverse_image_summary">Engedélyezze a csak elülső kamerával rendelkező készülékeken</string>
   <string name="preferences_reverse_image_title">Fordított kamerakép</string>
-  <string name="preferences_result_title">Találati beállítások</string>
   <string name="preferences_scanning_title">Vonalkód szkennelésekor, dekódoláskor\u2026</string>
   <string name="preferences_search_country">Ország keresése</string>
   <string name="preferences_supplemental_summary">A vonalkóddal jelzett tartalomról megpróbál több információt letölteni.</string>
@@ -136,7 +136,7 @@
   <string name="sbc_name">Google Könyvek keresés</string>
   <string name="share_name">Megosztás vonalkóddal</string>
   <string name="title_about">Barcode Scanner v</string>
-  <string name="wifi_changing_network">Hálózat váltása</string>
+  <string name="wifi_changing_network">Kérése kapcsolat hálózati\u2026</string>
   <string name="wifi_ssid_label">Hálózat neve</string>
   <string name="wifi_type_label">Típus</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>

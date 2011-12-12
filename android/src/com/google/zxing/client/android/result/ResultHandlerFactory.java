@@ -17,10 +17,9 @@
 package com.google.zxing.client.android.result;
 
 import com.google.zxing.Result;
+import com.google.zxing.client.android.CaptureActivity;
 import com.google.zxing.client.result.ParsedResult;
 import com.google.zxing.client.result.ResultParser;
-
-import android.app.Activity;
 
 /**
  * Manufactures Android-specific handlers based on the barcode content's type.
@@ -31,7 +30,7 @@ public final class ResultHandlerFactory {
   private ResultHandlerFactory() {
   }
 
-  public static ResultHandler makeResultHandler(Activity activity, Result rawResult) {
+  public static ResultHandler makeResultHandler(CaptureActivity activity, Result rawResult) {
     ParsedResult result = parseResult(rawResult);
     switch (result.getType()) {
       case ADDRESSBOOK:
@@ -44,8 +43,6 @@ public final class ResultHandlerFactory {
         return new URIResultHandler(activity, result);
       case WIFI:
         return new WifiResultHandler(activity, result);
-      case TEXT:
-        return new TextResultHandler(activity, result, rawResult);
       case GEO:
         return new GeoResultHandler(activity, result);
       case TEL:
@@ -56,8 +53,9 @@ public final class ResultHandlerFactory {
         return new CalendarResultHandler(activity, result);
       case ISBN:
         return new ISBNResultHandler(activity, result, rawResult);
+      default:
+        return new TextResultHandler(activity, result, rawResult);
     }
-    return new TextResultHandler(activity, result, rawResult);
   }
 
   private static ParsedResult parseResult(Result rawResult) {

@@ -79,14 +79,14 @@
   <string name="msg_google_shopper_missing">Google Shopper לא מותקן.</string>
   <string name="msg_install_google_shopper">Google Shopper משלבת סריקת ברקודים עם מחירים מקוונים, חוות דעת ועוד בלי לפתוח את הדפדפן. האם ברצונך לנסות זאת?</string>
   <string name="msg_intent_failed">סליחה, לא ניתן להפעיל את היישום המבוקש. ייתכן שתוכן הברקוד לא תקין.</string>
-  <string name="msg_loading_apps">טוען רשימה של יישומים...</string>
+  <string name="msg_loading_apps">טוען רשימה של יישומים\u2026</string>
   <string name="msg_not_our_results">אתה עוזב יישום זה. תוצאות החיפוש שיוצגו בפניך אינן קשורות ליישום זה.</string>
   <string name="msg_redirect">נתב מחדש</string>
   <string name="msg_sbc_book_not_searchable">סליחה, ספר זה אינו ניתן לחיפוש.</string>
   <string name="msg_sbc_failed">סליחה, החיפוש נתקל בבעיה.</string>
   <string name="msg_sbc_no_page_returned">לא הוחזר דף</string>
   <string name="msg_sbc_page">דף</string>
-  <string name="msg_sbc_searching_book">מחפש ספר...</string>
+  <string name="msg_sbc_searching_book">מחפש ספר\u2026</string>
   <string name="msg_sbc_snippet_unavailable">גזיר לא זמין</string>
   <string name="msg_sbc_unknown_page">דף לא ידוע</string>
   <string name="msg_share_explanation">באפשרותך לשתף נתונים על-ידי הצגת ברקוד על המסך וסריקתו עם טלפון אחר.</string>
@@ -98,7 +98,7 @@
   <string name="permission_share_desc">מאפשר לך לשתף להוסיף אנשי קשר וסימניות ידי הצגת או סריקת ברקוד, ולייצא מידע סרק.</string>
   <string name="permission_wifi">הגדרת Wi-Fi על ידי ברקוד</string>
   <string name="permission_wifi_desc">מאפשר לך להגדיר חיבור רשת Wi-Fi על ידי סריקת ברקוד.</string>
-  <string name="preferences_actions_title">כאשר ברקוד נמצא...</string>
+  <string name="preferences_actions_title">כאשר ברקוד נמצא\u2026</string>
   <string name="preferences_bulk_mode_summary">סורק ושומר ברקודים באופן רציף</string>
   <string name="preferences_bulk_mode_title">מצב סריקה מרובה</string>
   <string name="preferences_copy_to_clipboard_title">העתק ללוח</string>
@@ -117,7 +117,7 @@
   <string name="preferences_result_title">הגדרות תוצאה</string>
   <string name="preferences_reverse_image_summary">אפשר בהתקנים עם מצלמה קדמית בלבד</string>
   <string name="preferences_reverse_image_title">תמונת מצלמה הפוכה</string>
-  <string name="preferences_scanning_title">בעת סריקת ברקודים, קודד...</string>
+  <string name="preferences_scanning_title">בעת סריקת ברקודים, קודד\u2026</string>
   <string name="preferences_search_country">חיפוש הארץ</string>
   <string name="preferences_supplemental_summary">נסה למצא מידע נוסף על תוכן הברקוד</string>
   <string name="preferences_supplemental_title">מצא מידע נוסף</string>
@@ -136,7 +136,7 @@
   <string name="sbc_name">Google חיפוש ספרים</string>
   <string name="share_name">שתף באמצעות ברקוד</string>
   <string name="title_about">סורק ברקודים</string>
-  <string name="wifi_changing_network">מחליף רשת</string>
+  <string name="wifi_changing_network">בקשת חיבור לרשת \u2026</string>
   <string name="wifi_ssid_label">שם רשת</string>
   <string name="wifi_type_label">סוג</string>
   <string name="zxing_url">http://code.google.com/p/zxing</string>
