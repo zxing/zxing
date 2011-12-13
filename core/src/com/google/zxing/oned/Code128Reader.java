@@ -439,13 +439,6 @@ public final class Code128Reader extends OneDReader {
       }
     }
 
-    String resultString = result.toString();
-
-    if (resultString.length() < 2) {
-      // Almost surely a false positive
-      throw FormatException.getFormatInstance();
-    }
-
     float left = (float) (startPatternInfo[1] + startPatternInfo[0]) / 2.0f;
     float right = (float) (nextStart + lastStart) / 2.0f;
 
@@ -456,7 +449,7 @@ public final class Code128Reader extends OneDReader {
     }
 
     return new Result(
-        resultString,
+        result.toString(),
         rawBytes,
         new ResultPoint[]{
             new ResultPoint(left, (float) rowNumber),
