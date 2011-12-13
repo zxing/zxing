@@ -32,6 +32,11 @@ class BitArrayTest : public CPPUNIT_NS::TestFixture {
   CPPUNIT_TEST(testClear);
   CPPUNIT_TEST(testGetArray);
   CPPUNIT_TEST(testIsRange);
+  CPPUNIT_TEST(testReverseHalves);
+  CPPUNIT_TEST(testReverseEven);
+  CPPUNIT_TEST(testReverseOdd);
+  CPPUNIT_TEST(testReverseSweep);
+  CPPUNIT_TEST(testReverseReverse);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -42,8 +47,14 @@ protected:
   void testClear();
   void testGetArray();
   void testIsRange();
+  void testReverseHalves();
+  void testReverseEven();
+  void testReverseOdd();
+  void testReverseSweep();
+  void testReverseReverse();
 
 private:
+  static void fillRandom(BitArray& test, BitArray& reference);
 };
 }
 
