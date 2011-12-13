@@ -1,5 +1,5 @@
 application: zxing
-version: 4
+version: 5
 runtime: python
 api_version: 1
 

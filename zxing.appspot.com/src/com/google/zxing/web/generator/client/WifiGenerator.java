@@ -86,11 +86,7 @@ public final class WifiGenerator implements GeneratorSource {
     if (input.contains("\n")) {
       throw new GeneratorException(name + " field must not contain \\n characters.");
     }
-    input = input.replace(";", "\\;");
-    input = input.replace(":", "\\:");
-    input = input.replace("\\", "\\\\");
-    input = input.replace("/", "\\/");
-    return input;
+    return input.replaceAll("([\\\\:;])", "\\\\$1");
   }
   
   private String getSsidField() throws GeneratorException {
