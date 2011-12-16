@@ -1,0 +1,139 @@
+This is a wrapper library of the C++ part of ZXing library.
+
+== Getting started ==
+This library is mented to be very simple and will provide as simple as possible the decoding operations. Thus my main purpose is not to support 
+extreme operations and complex techniques that ZXing library does support. Of course, the original ZXing code is still here for everyone interested 
+in using something beyond the already implemented (those of you willing to make more operations available, their code is always welcomed to be merged).
+
+Supported barcode types:
+* Qr Code
+* DataMatrix
+* UPC_E
+* UPC_A
+* EAN_8
+* EAN_13
+* CODE_128
+* CODE_39
+* ITF
+
+The only dependency of this project is the supported functions of the compiler. For instance all G++ based compilers are ok but on the other hand, 
+MSVC doesn't support them that is why at least for now only Mingw compiler is supported for Desktop targets along with Symbian versions.
+
+So, if you have a Qt project and your target is to decode a barcode contained in a QImage then this is how is done...
+
+== Prerequisites ==
+First you need to download the correct binary version of the library according to your needs. In the Symbian versions there are 2 versions of binaries 
+of each. The '''selfsigned''' and the '''signed'''. The selfsigned contains the appropriate Capabilities that makes your program selfsignable 
+(-lQZXing_selfsigned). But if you are planning to use additional Capabilities in your project other than those compling to selfsigning then you need 
+to select the singed version (-lQZXing). Be careful on that because if your application uses more capabilities than the library has, your application 
+will keep crashing. 
+
+Now that it is decided if you need selfsigned or signed version, next step is to select the Deploying target and Qt version.
+
+* symbian\QZXing\binary\Qt_4.6.3_Symbian: Use this if targeting for Qt versions lower than 4.7. This version 
+doesn't have dependency to the Qt Declarative. Also it contains a binary specially for S60 FP1 (selfsigned) which doesn't contain the ''Location'' 
+Capability (in the S60 FP1 Location capability is not selfsigned).
+
+* symbian\QZXing\binary\Qt_4.7.3_Symbian: This is the full featured version since it supports QML.
+
+* symbian\QZXing\binary\Harmattan-Maemo5: This is when targeting for Maemo platform.
+
+* symbian\QZXing\binary\Qt_4.7.4_Desktop_Mingw: If targeting for Desktop applications Mingw is the only compiler supported at the moment.
+
+Having selected one of the above 3, you download it.
+
+== Including the library ==
+
+=== Symbian Target ===
+In the downloaded package there are 3 folders (include, InstallToDevice, release). Those 3 folders you need to copy them to the EPOC32 root folder 
+of the Symbian SDK you are planing to use. For instance, by default QtSDK is installed under the path ''C:\QtSDK''. If we need to use Symbian^3 
+and Qt 4.7.4 we copy the 3 folders and paste them to the following path: ''C:\QtSDK\Symbian\SDKs\Symbian3Qt474\epoc32''. This will merge the folders
+and will add the library files needed for compiling and linking.
+
+Then in the .pro file of your project the following lines have to be added:
+symbian{
+    LIBS += -lqzxing
+    customrules.pkg_prerules  = \
+        ";QZXing" \
+        "@\"$$(EPOCROOT)Epoc32/InstallToDevice/QZXing_selfsigned.sis\",(0xE618743C)"\
+        " "
+    DEPLOYMENT += customrules
+}
+
+Pay attention to this line:
+	"@\"$$(EPOCROOT)Epoc32/InstallToDevice/QZXing_selfsigned.sis\",(0xE618743C)"\
+This is where you will define if you want the selfsigned or the signed version. If signed version needed you have to write:
+	"@\"$$(EPOCROOT)Epoc32/InstallToDevice/QZXing.sis\",(0xE618743C)"\
+
+=== Desktop Target ===
+Copy the contents of the package Qt_4.7.4_Desktop_Mingw to a folder in your project.
+
+Then add in the .pro file
+win32{
+    INCLUDEPATH += "absolute path of the folder where the files where placed" 
+    LIBS += -L"absolute path of the folder where the files where placed" \
+                 -lqzxing
+}
+
+
+== In the code ==
+Where the library needs to be used you have to include the header file: #include <qzxing.h>. 
+Now a QZXing object can be created. It is recommended (but not obligatory) to use one instance of it and decode any number of barcodes you decide.
+The class supports 3 methods:
+
+* ''setDecoder(DecoderFormat)'': DecoderFormat is an enumeration regarding the types of barcodes the decoder will try to identify to each decoding. 
+	By default all the types are enabled but hence that it is extra processing. If you want to identify specific barcode types you can disable the 
+	other. This will result to faster processing. Conjunctions of more than one types of barcodes are supported using logical OR over the enumeration. 
+	For example if we need to support both Qt Codes and EAN 13 we need to call the following: 
+	
+    QZXing decoder;
+    decoder.setDecoder( DecoderFormat_QR_CODE | DecoderFormat_EAN_13 );
+
+This enable/disable operation of the decoders can be done any time  needed.
+
+* ''registerQMLTypes()'': If you are planning to use the library in the QML then in the main function you need to call this static function. 
+It will register the QZXing library and make it visible to QML. After that, in the qml file you are planning to use the library you need to write 
+at the top: import QZXing 1.0
+
+* ''decodeImage(QImage)'': the method that initiates the decoding. It is made as a slot for convenience. It is blocking function thus if you need your 
+application to continue without freezing, you can call it to an other thread. Finally return the result of the decoding. If an error occurred it will 
+return an empty string "".
+
+* ''decodingStarted()'':  signal emitted when decoding starts
+* ''decodingFinished(bool succeeded)'': signal emitted when decoding finishes reporting the success with the boolean.
+* ''tagFound(QString tag)'': emitted upon successful decoding of a barcode.
+
+== Examples ==
+The repository contains 2 examples.
+
+* QQrDecoder: uses Qt Mobility 1.1.3 with QCamera , VideoFinder and QWidgets. It has minor issues that i hope will get fixed at some point:
+# No automatic focus thus the user needs to press a button to initiate focusing, capturing and eventually decoding.
+# A few were unable to use it because it constantly throughs various erros such as "General Camera error".
+
+* QMLBarcodeDecoder: Needs Qt Mobility 1.2 and Qt 4.7.4 because Camera qml component got supported from that version and on. Hope it will solve the 
+problems we had in the QQrDecoder. BUT it is not tested because i have no Symbian^3 device and Remote Device Access has problems regarding the 
+camera use. So the code in there is an estimation who the project should look. I hope it works without any change.
+
+And for the closing here is a small pretty QML code contained in the above project showing how it is used:
+Camera{
+        id:camera
+        onImageCaptured: decoder.decodeImage(preview)
+}
+
+QZXing{
+        id: decoder
+     
+        onDecodingStarted: console.log("Decoding of image started...")
+
+        onTagFound: console.log("Barcode data: " + tag)
+
+        onDecodingFinished: console.log("Decoding finished " + (succeeded==true ? "successfully" : "unsuccessfully") )
+}    
+
+== The End ==
+If anyone needs anything feel free to ask in the project's forum.
+
+Also your feedback is very important :)
+
+PS: this project is hosted here as well throughout its development process: https://projects.developer.nokia.com/QZXing. On major changes i update it 
+here as well. One more reference is here: http://www.developer.nokia.com/Community/Wiki/Qr_Decoder_in_Qt

@@ -1,0 +1,15 @@
+Source: qzxing
+Section: user/hidden
+Priority: optional
+Maintainer: unknown <>
+Build-Depends: debhelper (>= 5), libqt4-dev
+Standards-Version: 3.7.3
+Homepage: <insert the upstream URL, if relevant>
+
+Package: qzxing
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: <insert up to 60 chars description>
+ <insert long description, indented with spaces>
+XB-Maemo-Display-Name: QZXing
+XB-Maemo-Icon-26: 
