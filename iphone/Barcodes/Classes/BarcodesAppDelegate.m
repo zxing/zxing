@@ -12,11 +12,57 @@
 
 @synthesize window;
 @synthesize tabBarController;
+@synthesize viewController;
 
 #pragma mark -
 #pragma mark Application lifecycle
 
+- (BOOL)myOpenURL:(NSURL*)url {
+    if (!url) return NO;
+    if ([[url scheme] isEqualToString:@"zxing"]) {
+        if ([[url host] isEqualToString:@"scan"]) {
+            NSArray *pairs = [[url query] componentsSeparatedByString:@"&amp;"];
+        
+            for (NSString *pair in pairs) {
+                NSArray *elements = [pair componentsSeparatedByString:@"="];
+                NSString *key = [[elements objectAtIndex:0] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+                NSString *val = [[elements objectAtIndex:1] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+            
+                if ([key isEqualToString:@"ret"]) {
+                    [[NSUserDefaults standardUserDefaults] setObject:val forKey:@"returnURL"];
+                    [[NSUserDefaults standardUserDefaults] synchronize];
+                    [[self viewController] scan:nil];
+                }
+                if ([key isEqualToString:@"SCAN_FORMATS"]) {
+                    // Storing these, but they effect nothing yet.
+                    NSArray *formats = [val componentsSeparatedByString:@","];
+                    [[NSUserDefaults standardUserDefaults] setObject:formats forKey:@"scanFormats"];
+                    [[NSUserDefaults standardUserDefaults] synchronize];
+                }
+            }
+        }
+        return YES;
+    } else {
+        return NO;
+    }
+}
+
+- (void)registerView:(ZXMainViewController*)controller {
+    [self setViewController:controller];
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {    
+    
+  // Check if launching from URL
+  NSURL *url = [launchOptions objectForKey: UIApplicationLaunchOptionsURLKey];
+  if ([url isMemberOfClass: [NSURL class]]) {
+    return [self myOpenURL: url];
+  } else {
+    // Clear the return URL so the application goes back to working as normal...
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"returnURL"];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"scanFormats"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+  }
     
     // Override point for customization after application launch.
   [self.window addSubview:tabBarController.view];
@@ -25,6 +71,10 @@
   return YES;
 }
 
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url 
+{
+    return [self myOpenURL: url];
+}
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     /*
@@ -39,6 +89,11 @@
      Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
      If your application supports background execution, called instead of applicationWillTerminate: when the user quits.
      */
+    
+    // Clear the return URL so the application goes back to working as normal...
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"returnURL"];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"scanFormats"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 
