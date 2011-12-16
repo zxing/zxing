@@ -15,6 +15,7 @@
 #import "ArchiveController.h"
 #import "Database.h"
 #import "ScanViewController.h"
+#import "BarcodesAppDelegate.h"
 
 @implementation ZXMainViewController
 @synthesize actions;
@@ -36,6 +37,8 @@
 - (void)viewDidLoad {
   [super viewDidLoad];
   self.navigationItem.title = @"Barcodes";
+
+  [((BarcodesAppDelegate*)[[UIApplication sharedApplication] delegate]) registerView:self];
 }
 
 
@@ -111,7 +114,13 @@
 #endif
   Scan * scan = [[Database sharedDatabase] addScanWithText:resultString];
   [[NSUserDefaults standardUserDefaults] setObject:resultString forKey:@"lastScan"];
-
+  NSString *returnUrl = [[NSUserDefaults standardUserDefaults] stringForKey:@"returnURL"];
+  if (returnUrl != nil) {
+    NSURL *ourURL = [NSURL URLWithString:[returnUrl stringByReplacingOccurrencesOfString:@"{CODE}" withString:resultString]];
+    [[UIApplication sharedApplication] openURL:ourURL];
+    return;
+  }
+  
   ParsedResult *parsedResult = [UniversalResultParser parsedResultForString:resultString];
   self.result = [parsedResult retain];
   self.actions = [self.result.actions retain];
