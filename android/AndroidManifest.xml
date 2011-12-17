@@ -69,6 +69,13 @@
         <category android:name="android.intent.category.BROWSABLE"/>
         <data android:scheme="http" android:host="www.google.co.uk" android:path="/m/products/scan"/>
       </intent-filter>
+      <!-- Support zxing://scan/?... like iPhone app -->
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW"/>
+        <category android:name="android.intent.category.DEFAULT"/>
+        <category android:name="android.intent.category.BROWSABLE"/>
+        <data android:scheme="zxing" android:host="scan" android:path="/"/>
+      </intent-filter>
     </activity>
     <activity android:name=".PreferencesActivity"
               android:label="@string/preferences_name"

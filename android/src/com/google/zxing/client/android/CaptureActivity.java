@@ -95,7 +95,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private static final String PACKAGE_NAME = "com.google.zxing.client.android";
   private static final String PRODUCT_SEARCH_URL_PREFIX = "http://www.google";
   private static final String PRODUCT_SEARCH_URL_SUFFIX = "/m/products/scan";
-  private static final String ZXING_URL = "http://zxing.appspot.com/scan";
+  private static final String[] ZXING_URLS = { "http://zxing.appspot.com/scan", "zxing://scan/" };
   private static final String RETURN_CODE_PLACEHOLDER = "{CODE}";
   private static final String RETURN_URL_PARAM = "ret";
 
@@ -242,7 +242,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         sourceUrl = dataString;
         decodeFormats = DecodeFormatManager.PRODUCT_FORMATS;
 
-      } else if (dataString != null && dataString.startsWith(ZXING_URL)) {
+      } else if (isZXingURL(dataString)) {
 
         // Scan formats requested in query string (all formats if none specified).
         // If a return URL is specified, send the results there. Otherwise, handle it ourselves.
@@ -257,6 +257,18 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       characterSet = intent.getStringExtra(Intents.Scan.CHARACTER_SET);
 
     }
+  }
+  
+  private static boolean isZXingURL(String dataString) {
+    if (dataString == null) {
+      return false;
+    }
+    for (String url : ZXING_URLS) {
+      if (dataString.startsWith(url)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   @Override
