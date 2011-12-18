@@ -20,8 +20,7 @@
 
   <SurfaceView android:id="@+id/preview_view"
                android:layout_width="fill_parent"
-               android:layout_height="fill_parent"
-               android:layout_centerInParent="true"/>
+               android:layout_height="fill_parent"/>
 
   <com.google.zxing.client.android.ViewfinderView
       android:id="@+id/viewfinder_view"
@@ -35,7 +34,8 @@
                 android:layout_height="fill_parent"
                 android:background="@color/result_view"
                 android:visibility="gone"
-                android:padding="4dip">
+                android:padding="4dip"
+                android:baselineAligned="false">
 
     <LinearLayout
         android:orientation="horizontal"

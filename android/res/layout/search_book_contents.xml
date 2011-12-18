@@ -32,7 +32,8 @@
               android:layout_gravity="left|center_vertical"
               android:layout_weight="1"
               android:singleLine="true"
-              android:selectAllOnFocus="true"/>
+              android:selectAllOnFocus="true"
+              android:inputType="text"/>
 
     <Button android:id="@+id/query_button"
             android:layout_width="wrap_content"
