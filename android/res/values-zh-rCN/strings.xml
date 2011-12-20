@@ -90,10 +90,6 @@
   <string name="msg_share_text">或键入一些文字</string>
   <string name="msg_sure">你肯定吗？</string>
   <string name="msg_unmount_usb">抱歉，SD卡不可访问。</string>
-  <string name="permission_share">应占由条码</string>
-  <string name="permission_share_desc">允许您共享和显示或扫描条形码添加联系人和书签，并导出扫描的信息。</string>
-  <string name="permission_wifi">通过条形码配置的Wi - Fi</string>
-  <string name="permission_wifi_desc">允许您配置一个Wi - Fi网络连接，通过扫描条形码。</string>
   <string name="preferences_actions_title">找到条码时</string>
   <string name="preferences_bulk_mode_summary">连续扫描并保存多个条形码</string>
   <string name="preferences_bulk_mode_title">批量扫描模式</string>

@@ -90,10 +90,6 @@
   <string name="msg_share_text">Eller skriv in text</string>
   <string name="msg_sure">Är du säker?</string>
   <string name="msg_unmount_usb">Tyvärr är SD-kortet inte tillgänglig.</string>
-  <string name="permission_share">Dela med streckkod</string>
-  <string name="permission_share_desc">Tillåter dig att dela och lägga till kontakter och bokmärken genom att visa eller skanna en streckkod, och att exportera skannad information.</string>
-  <string name="permission_wifi">Konfigurera Wi-Fi med streckkod</string>
-  <string name="permission_wifi_desc">Här kan du konfigurera en Wi-Fi nätverksanslutning genom att skanna en streckkod.</string>
   <string name="preferences_actions_title">När en streckkod hittats\u2026</string>
   <string name="preferences_bulk_mode_summary">Skanna och spara många streckkoder kontinuerligt</string>
   <string name="preferences_bulk_mode_title">Bulk skanningsläget</string>

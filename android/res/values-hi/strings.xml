@@ -90,10 +90,6 @@
   <string name="msg_share_text">या कुछ पाठ टाइप करें और प्रेस दर्ज करें</string>
   <string name="msg_sure">तुम्हें यकीन है?</string>
   <string name="msg_unmount_usb">क्षमा करें, एसडी कार्ड सुलभ नहीं है.</string>
-  <string name="permission_share">बारकोड द्वारा शेयर</string>
-  <string name="permission_share_desc">क्या आप साझा करने के लिए और प्रदर्शित या बारकोड स्कैनिंग के द्वारा संपर्क और बुकमार्क्स जोड़ने के लिए, और स्कैन जानकारी निर्यात की अनुमति देता है.</string>
-  <string name="permission_wifi">बारकोड द्वारा वाई - फाई कॉन्फ़िगर</string>
-  <string name="permission_wifi_desc">आप एक बारकोड स्कैनिंग के द्वारा वाई - फाई कनेक्शन नेटवर्क कॉन्फ़िगर करने के लिए अनुमति देता है.</string>
   <string name="preferences_actions_title">जब एक बारकोड पाया जाता है\u2026</string>
   <string name="preferences_bulk_mode_summary">स्कैन और कई बारकोड लगातार बचाने के</string>
   <string name="preferences_bulk_mode_title">थोक स्कैन मोड</string>
