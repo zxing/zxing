@@ -90,10 +90,6 @@
   <string name="msg_share_text">Ή πληκτολογήστε εδώ κείμενο και πατήστε Enter</string>
   <string name="msg_sure">Είσαι σίγουρος;</string>
   <string name="msg_unmount_usb">Συγνώμη, η κάρτα SD δεν είναι προσβάσιμη.</string>
-  <string name="permission_share">Μερίδιο από το barcode</string>
-  <string name="permission_share_desc">Σας επιτρέπει να μοιράζονται και να προσθέσετε επαφές και σελιδοδείκτες, εμφανίζοντας ή σάρωση barcode και να εξάγει σαρωμένες πληροφορίες.</string>
-  <string name="permission_wifi">Διαμόρφωση wi-fi με barcode</string>
-  <string name="permission_wifi_desc">Σας επιτρέπει να ρυθμίσετε μια σύνδεση Wi-Fi δικτύου με σάρωση barcode.</string>
   <string name="preferences_actions_title">Όταν ένα barcode ανιχνεύεται\u2026</string>
   <string name="preferences_bulk_mode_summary">Σκανάρετε και αποθηκεύστε πολλά barcodes συνεχώς</string>
   <string name="preferences_bulk_mode_title">Λειτουργία μαζικού σκαναρίσματος</string>

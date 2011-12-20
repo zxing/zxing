@@ -90,10 +90,6 @@
   <string name="msg_share_text">או הקלד טקסט כלשהו</string>
   <string name="msg_sure">האם אתה בטוח?</string>
   <string name="msg_unmount_usb">סליחה, כרטיס הזכרון אינו נגיש.</string>
-  <string name="permission_share">שתף ידי ברקוד</string>
-  <string name="permission_share_desc">מאפשר לך לשתף להוסיף אנשי קשר וסימניות ידי הצגת או סריקת ברקוד, ולייצא מידע סרק.</string>
-  <string name="permission_wifi">הגדרת Wi-Fi על ידי ברקוד</string>
-  <string name="permission_wifi_desc">מאפשר לך להגדיר חיבור רשת Wi-Fi על ידי סריקת ברקוד.</string>
   <string name="preferences_actions_title">כאשר ברקוד נמצא\u2026</string>
   <string name="preferences_bulk_mode_summary">סורק ושומר ברקודים באופן רציף</string>
   <string name="preferences_bulk_mode_title">מצב סריקה מרובה</string>

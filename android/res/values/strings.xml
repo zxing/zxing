@@ -90,10 +90,6 @@
   <string name="msg_share_text">Or type some text and press Enter</string>
   <string name="msg_sure">Are you sure?</string>
   <string name="msg_unmount_usb">Sorry, the SD card is not accessible.</string>
-  <string name="permission_share">Share by barcode</string>
-  <string name="permission_share_desc">Allows you to share and add contacts and bookmarks by displaying or scanning a barcode, and to export scanned information.</string>
-  <string name="permission_wifi">Configure wi-fi by barcode</string>
-  <string name="permission_wifi_desc">Allows you to configure a wi-fi network connection by scanning a barcode.</string>
   <string name="preferences_actions_title">When a barcode is found\u2026</string>
   <string name="preferences_bulk_mode_summary">Scan and save many barcodes continuously</string>
   <string name="preferences_bulk_mode_title">Bulk scan mode</string>

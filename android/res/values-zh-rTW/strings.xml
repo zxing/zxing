@@ -90,10 +90,6 @@
   <string name="msg_share_text">或輸入一些文字並按 Enter</string>
   <string name="msg_sure">你確定嗎？</string>
   <string name="msg_unmount_usb">無法讀取 SD 卡。</string>
-  <string name="permission_share">應佔由條碼</string>
-  <string name="permission_share_desc">允許您共享和顯示或掃描條形碼添加聯繫人和書籤，並導出掃描的信息。</string>
-  <string name="permission_wifi">通過條形碼配置的Wi - Fi</string>
-  <string name="permission_wifi_desc">允許您配置一個 Wi - Fi網絡連接，通過掃描條形碼。</string>
   <string name="preferences_actions_title">找到條碼時</string>
   <string name="preferences_bulk_mode_summary">連續掃描並儲存多個條碼</string>
   <string name="preferences_bulk_mode_title">大量掃描模式</string>
