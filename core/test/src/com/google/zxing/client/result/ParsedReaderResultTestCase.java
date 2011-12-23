@@ -226,10 +226,9 @@ public final class ParsedReaderResultTestCase extends Assert {
     // Make sure illegal entries without newlines don't crash
     doTestResult(
         "BEGIN:VEVENTSUMMARY:EventDTSTART:20081030T122030ZDTEND:20081030T132030ZEND:VEVENT",
-        "begin:VEVENTSUMMARY:EventDTSTART:20081030T122030ZDTEND:20081030T132030ZEND:VEVENT",
-        ParsedResultType.URI);
-    // See above note on why this is URI
-    doTestResult("BEGIN:VEVENT", "begin:VEVENT", ParsedResultType.URI);
+        "BEGIN:VEVENTSUMMARY:EventDTSTART:20081030T122030ZDTEND:20081030T132030ZEND:VEVENT",
+        ParsedResultType.TEXT);
+    doTestResult("BEGIN:VEVENT", "BEGIN:VEVENT", ParsedResultType.TEXT);
   }
 
   @Test

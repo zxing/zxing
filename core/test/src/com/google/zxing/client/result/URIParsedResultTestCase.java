@@ -55,6 +55,7 @@ public final class URIParsedResultTestCase extends Assert {
     doTestNotUri("google.c");
     doTestNotUri(".com");
     doTestNotUri(":80/");
+    doTestNotUri("ABC,20.3,AB,AD");
   }
 
   @Test
