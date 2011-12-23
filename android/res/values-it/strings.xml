@@ -56,6 +56,8 @@
   <string name="history_send">Invia cronologia</string>
   <string name="history_title">Cronologia</string>
   <string name="menu_about">Info</string>
+  <string name="menu_encode_mecard">Usa MECARD</string>
+  <string name="menu_encode_vcard">Usa vCard</string>
   <string name="menu_help">Aiuto</string>
   <string name="menu_history">Cronologia</string>
   <string name="menu_settings">Impostazioni</string>

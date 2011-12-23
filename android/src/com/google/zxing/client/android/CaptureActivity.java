@@ -314,15 +314,15 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     super.onCreateOptionsMenu(menu);
-    menu.add(0, SHARE_ID, 0, R.string.menu_share)
+    menu.add(Menu.NONE, SHARE_ID, Menu.NONE, R.string.menu_share)
         .setIcon(android.R.drawable.ic_menu_share);
-    menu.add(0, HISTORY_ID, 0, R.string.menu_history)
+    menu.add(Menu.NONE, HISTORY_ID, Menu.NONE, R.string.menu_history)
         .setIcon(android.R.drawable.ic_menu_recent_history);
-    menu.add(0, SETTINGS_ID, 0, R.string.menu_settings)
+    menu.add(Menu.NONE, SETTINGS_ID, Menu.NONE, R.string.menu_settings)
         .setIcon(android.R.drawable.ic_menu_preferences);
-    menu.add(0, HELP_ID, 0, R.string.menu_help)
+    menu.add(Menu.NONE, HELP_ID, Menu.NONE, R.string.menu_help)
         .setIcon(android.R.drawable.ic_menu_help);
-    menu.add(0, ABOUT_ID, 0, R.string.menu_about)
+    menu.add(Menu.NONE, ABOUT_ID, Menu.NONE, R.string.menu_about)
         .setIcon(android.R.drawable.ic_menu_info_details);
     return true;
   }

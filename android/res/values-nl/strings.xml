@@ -56,6 +56,8 @@
   <string name="history_send">Verzend geschiedenis</string>
   <string name="history_title">Geschiedenis</string>
   <string name="menu_about">Over</string>
+  <string name="menu_encode_mecard">Gebruik MECARD</string>
+  <string name="menu_encode_vcard">Gebruik vCard</string>
   <string name="menu_help">Help</string>
   <string name="menu_history">Geschiedenis</string>
   <string name="menu_settings">Instellingen</string>

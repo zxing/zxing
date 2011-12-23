@@ -56,6 +56,8 @@
   <string name="history_send">发送历史</string>
   <string name="history_title">历史</string>
   <string name="menu_about">关于</string>
+  <string name="menu_encode_mecard">使用MECARD</string>
+  <string name="menu_encode_vcard">使用vCard</string>
   <string name="menu_help">帮助</string>
   <string name="menu_history">历史</string>
   <string name="menu_settings">设置</string>

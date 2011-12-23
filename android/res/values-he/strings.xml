@@ -56,6 +56,8 @@
   <string name="history_send">שלח היסטוריה</string>
   <string name="history_title">היסטוריה</string>
   <string name="menu_about">אודות</string>
+  <string name="menu_encode_mecard">השתמש MECARD</string>
+  <string name="menu_encode_vcard">השתמש vCard</string>
   <string name="menu_help">עזרה</string>
   <string name="menu_history">היסטוריה</string>
   <string name="menu_settings">הגדרות</string>

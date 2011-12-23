@@ -56,6 +56,8 @@
   <string name="history_send">Envia l\'historial</string>
   <string name="history_title">Historial</string>
   <string name="menu_about">Quant a</string>
+  <string name="menu_encode_mecard">Utilitza MECARD</string>
+  <string name="menu_encode_vcard">Utilitza vCard</string>
   <string name="menu_help">Ajuda</string>
   <string name="menu_history">Historial</string>
   <string name="menu_settings">Configuració</string>
