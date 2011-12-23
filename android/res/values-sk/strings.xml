@@ -56,6 +56,8 @@
   <string name="history_send">Poslať históriu</string>
   <string name="history_title">História</string>
   <string name="menu_about">O programe</string>
+  <string name="menu_encode_mecard">Použitie MECARD</string>
+  <string name="menu_encode_vcard">Použitie vCard</string>
   <string name="menu_help">Nápoveda</string>
   <string name="menu_history">História</string>
   <string name="menu_settings">Nastavenia</string>

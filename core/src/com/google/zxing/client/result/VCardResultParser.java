@@ -100,10 +100,13 @@ public final class VCardResultParser extends ResultParser {
 
     while (i < max) {
 
-      // At start or after newling, match prefix, followed by optional metadata 
+      // At start or after newline, match prefix, followed by optional metadata 
       // (led by ;) ultimately ending in colon
       Matcher matcher = Pattern.compile("(?:^|\n)" + prefix + "(?:;([^:]*))?:",
                                         Pattern.CASE_INSENSITIVE).matcher(rawText);
+      if (i > 0) {
+        i--; // Find from i-1 not i since looking at the preceding character
+      }
       if (!matcher.find(i)) {
         break;
       }

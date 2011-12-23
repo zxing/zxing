@@ -56,6 +56,8 @@
   <string name="history_send">Отправить историю</string>
   <string name="history_title">История</string>
   <string name="menu_about">О программе</string>
+  <string name="menu_encode_mecard">Используйте MECARD</string>
+  <string name="menu_encode_vcard">Используйте vCard</string>
   <string name="menu_help">Помощь</string>
   <string name="menu_history">История</string>
   <string name="menu_settings">Настройки</string>

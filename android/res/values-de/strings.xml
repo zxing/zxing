@@ -56,6 +56,8 @@
   <string name="history_send">Historie senden</string>
   <string name="history_title">Historie</string>
   <string name="menu_about">Info</string>
+  <string name="menu_encode_mecard">Verwenden Sie MECARD</string>
+  <string name="menu_encode_vcard">Verwenden Sie vCard</string>
   <string name="menu_help">Hilfe</string>
   <string name="menu_history">Historie</string>
   <string name="menu_settings">Einstellungen</string>

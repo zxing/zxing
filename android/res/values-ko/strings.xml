@@ -56,6 +56,8 @@
   <string name="history_send">기록 보내기</string>
   <string name="history_title">기록</string>
   <string name="menu_about">정보</string>
+  <string name="menu_encode_mecard">MECARD를 사용하여</string>
+  <string name="menu_encode_vcard">vCard를 사용하여</string>
   <string name="menu_help">도움말</string>
   <string name="menu_history">기록</string>
   <string name="menu_settings">설정</string>

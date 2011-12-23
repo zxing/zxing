@@ -1,5 +1,5 @@
 /*
- * Copyright 2008 ZXing authors
+ * Copyright (C) 2011 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,25 +14,15 @@
  * limitations under the License.
  */
 
-package com.google.zxing;
+package com.google.zxing.client.android.encode;
 
 /**
- * A base class which covers the range of exceptions which may occur when encoding a barcode using
- * the Writer framework.
+ * Encapsulates some simple formatting logic, to aid refactoring in {@link ContactEncoder}.
  *
- * @author dswitkin@google.com (Daniel Switkin)
+ * @author Sean Owen
  */
-public final class WriterException extends Exception {
-
-  public WriterException() {
-  }
-
-  public WriterException(String message) {
-    super(message);
-  }
+interface Formatter {
   
-  public WriterException(Throwable cause) {
-    super(cause);
-  }
-
+  String format(String source);
+  
 }

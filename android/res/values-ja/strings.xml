@@ -56,6 +56,8 @@
   <string name="history_send">履歴を送信</string>
   <string name="history_title">履歴</string>
   <string name="menu_about">詳細</string>
+  <string name="menu_encode_mecard">MECARDを使用してください</string>
+  <string name="menu_encode_vcard">vCardを使用してください</string>
   <string name="menu_help">ヘルプ</string>
   <string name="menu_history">履歴</string>
   <string name="menu_settings">設定</string>

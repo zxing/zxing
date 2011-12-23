@@ -56,6 +56,8 @@
   <string name="history_send">Send historik</string>
   <string name="history_title">Historik</string>
   <string name="menu_about">Om</string>
+  <string name="menu_encode_mecard">Brug MECARD</string>
+  <string name="menu_encode_vcard">Brug vCard</string>
   <string name="menu_help">Hjælp</string>
   <string name="menu_history">Historik</string>
   <string name="menu_settings">Indstillinger</string>

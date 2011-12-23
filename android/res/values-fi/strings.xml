@@ -56,6 +56,8 @@
   <string name="history_send">Lähetä historia</string>
   <string name="history_title">Historia</string>
   <string name="menu_about">Tietoja</string>
+  <string name="menu_encode_mecard">Käytä MECARD</string>
+  <string name="menu_encode_vcard">Käytä vCard</string>
   <string name="menu_help">Apua</string>
   <string name="menu_history">Historia</string>
   <string name="menu_settings">Asetukset</string>

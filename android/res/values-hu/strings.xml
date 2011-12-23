@@ -56,6 +56,8 @@
   <string name="history_send">Előzmények küldése</string>
   <string name="history_title">Előzmények</string>
   <string name="menu_about">Rólunk</string>
+  <string name="menu_encode_mecard">Használja MECARD</string>
+  <string name="menu_encode_vcard">Használja vCard</string>
   <string name="menu_help">Súgó</string>
   <string name="menu_history">Előzmények</string>
   <string name="menu_settings">Beállítások</string>

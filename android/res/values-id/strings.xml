@@ -56,6 +56,8 @@
   <string name="history_send">Kirim riwayat</string>
   <string name="history_title">Riwayat</string>
   <string name="menu_about">Tentang</string>
+  <string name="menu_encode_mecard">Gunakan MECARD</string>
+  <string name="menu_encode_vcard">Gunakan vCard</string>
   <string name="menu_help">Bantuan</string>
   <string name="menu_history">Riwayat</string>
   <string name="menu_settings">Pengaturan</string>
