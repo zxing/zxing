@@ -44,6 +44,7 @@ import java.text.DateFormat;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
@@ -488,14 +489,20 @@ public abstract class ResultHandler {
   }
 
   final void openGoogleShopper(String query) {
-    try {
-      activity.getPackageManager().getPackageInfo(GOOGLE_SHOPPER_PACKAGE, 0);
-      // If we didn't throw, Shopper is installed, so launch it.
-      Intent intent = new Intent(Intent.ACTION_SEARCH);
-      intent.setClassName(GOOGLE_SHOPPER_PACKAGE, GOOGLE_SHOPPER_ACTIVITY);
-      intent.putExtra(SearchManager.QUERY, query);
+
+    // Construct Intent to launch Shopper
+    Intent intent = new Intent(Intent.ACTION_SEARCH);
+    intent.setClassName(GOOGLE_SHOPPER_PACKAGE, GOOGLE_SHOPPER_ACTIVITY);
+    intent.putExtra(SearchManager.QUERY, query);
+
+    // Is it available?
+    PackageManager pm = activity.getPackageManager();
+    Collection<?> availableApps = pm.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+
+    if (availableApps != null && !availableApps.isEmpty()) {
+      // If something can handle it, start it
       activity.startActivity(intent);
-    } catch (PackageManager.NameNotFoundException e) {
+    } else {
       // Otherwise offer to install it from Market.
       AlertDialog.Builder builder = new AlertDialog.Builder(activity);
       builder.setTitle(R.string.msg_google_shopper_missing);
