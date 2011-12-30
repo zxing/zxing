@@ -28,7 +28,7 @@
 
 @property (nonatomic, copy) NSString *body;
 
-+ actionWithNumber:(NSString *)number body:(NSString *)body;
-+ actionWithNumber:(NSString *)number;
++ (id)actionWithNumber:(NSString *)number body:(NSString *)body;
++ (id)actionWithNumber:(NSString *)number;
 
 @end
