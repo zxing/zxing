@@ -35,6 +35,8 @@
 
   <uses-feature android:name="android.hardware.camera"/>
   <uses-feature android:name="android.hardware.camera.autofocus" android:required="false"/>
+  <uses-feature android:name="android.hardware.camera.flash" android:required="false"/>
+  <uses-feature android:name="android.hardware.screen.landscape"/>
   <uses-feature android:name="android.hardware.wifi" android:required="false"/>
   <uses-feature android:name="android.hardware.touchscreen" android:required="false"/>
 
