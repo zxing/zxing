@@ -159,6 +159,8 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     inactivityTimer = new InactivityTimer(this);
     beepManager = new BeepManager(this);
 
+    PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+
     showHelpOnFirstLaunch();
   }
 

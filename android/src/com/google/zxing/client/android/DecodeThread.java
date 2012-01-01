@@ -59,13 +59,13 @@ final class DecodeThread extends Thread {
     if (decodeFormats == null || decodeFormats.isEmpty()) {
       SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
       decodeFormats = EnumSet.noneOf(BarcodeFormat.class);
-      if (prefs.getBoolean(PreferencesActivity.KEY_DECODE_1D, true)) {
+      if (prefs.getBoolean(PreferencesActivity.KEY_DECODE_1D, false)) {
         decodeFormats.addAll(DecodeFormatManager.ONE_D_FORMATS);
       }
-      if (prefs.getBoolean(PreferencesActivity.KEY_DECODE_QR, true)) {
+      if (prefs.getBoolean(PreferencesActivity.KEY_DECODE_QR, false)) {
         decodeFormats.addAll(DecodeFormatManager.QR_CODE_FORMATS);
       }
-      if (prefs.getBoolean(PreferencesActivity.KEY_DECODE_DATA_MATRIX, true)) {
+      if (prefs.getBoolean(PreferencesActivity.KEY_DECODE_DATA_MATRIX, false)) {
         decodeFormats.addAll(DecodeFormatManager.DATA_MATRIX_FORMATS);
       }
     }
