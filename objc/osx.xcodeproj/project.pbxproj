@@ -374,7 +374,6 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = osx_Prefix.pch;
-				GCC_VERSION = 4.2;
 				INSTALL_PATH = /usr/local/lib;
 				PRODUCT_NAME = zxing;
 			};
@@ -390,7 +389,6 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = osx_Prefix.pch;
-				GCC_VERSION = 4.2;
 				INSTALL_PATH = /usr/local/lib;
 				PRODUCT_NAME = zxing;
 			};
