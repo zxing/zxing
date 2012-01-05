@@ -148,6 +148,12 @@
 		3B5B0F30121C52ED005698F8 /* ResultPoint.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B5B0EA3121C52ED005698F8 /* ResultPoint.h */; };
 		3B5B0F31121C52ED005698F8 /* ResultPointCallback.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B5B0EA4121C52ED005698F8 /* ResultPointCallback.cpp */; };
 		3B5B0F32121C52ED005698F8 /* ResultPointCallback.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B5B0EA5121C52ED005698F8 /* ResultPointCallback.h */; };
+		3BB87D4314B54C480078117F /* FormatException.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3BB87D4214B54C480078117F /* FormatException.cpp */; };
+		3BB87D4714B54C610078117F /* CharacterSetECI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3BB87D4414B54C610078117F /* CharacterSetECI.cpp */; };
+		3BB87D4814B54C610078117F /* ECI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3BB87D4514B54C610078117F /* ECI.cpp */; };
+		3BB87D4914B54C610078117F /* StringUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3BB87D4614B54C610078117F /* StringUtils.cpp */; };
+		3BB87D5014B54F1D0078117F /* WhiteRectangleDetector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3BB87D4F14B54F1D0078117F /* WhiteRectangleDetector.cpp */; };
+		3BB87D5214B54F3F0078117F /* NotFoundException.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3BB87D5114B54F3F0078117F /* NotFoundException.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -293,6 +299,12 @@
 		3B5B0EA3121C52ED005698F8 /* ResultPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ResultPoint.h; sourceTree = "<group>"; };
 		3B5B0EA4121C52ED005698F8 /* ResultPointCallback.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ResultPointCallback.cpp; sourceTree = "<group>"; };
 		3B5B0EA5121C52ED005698F8 /* ResultPointCallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ResultPointCallback.h; sourceTree = "<group>"; };
+		3BB87D4214B54C480078117F /* FormatException.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FormatException.cpp; sourceTree = "<group>"; };
+		3BB87D4414B54C610078117F /* CharacterSetECI.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CharacterSetECI.cpp; path = common/CharacterSetECI.cpp; sourceTree = "<group>"; };
+		3BB87D4514B54C610078117F /* ECI.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ECI.cpp; path = common/ECI.cpp; sourceTree = "<group>"; };
+		3BB87D4614B54C610078117F /* StringUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = StringUtils.cpp; path = common/StringUtils.cpp; sourceTree = "<group>"; };
+		3BB87D4F14B54F1D0078117F /* WhiteRectangleDetector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = WhiteRectangleDetector.cpp; path = common/detector/WhiteRectangleDetector.cpp; sourceTree = "<group>"; };
+		3BB87D5114B54F3F0078117F /* NotFoundException.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NotFoundException.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -528,6 +540,12 @@
 		3B5B0E0F121C52ED005698F8 /* zxing */ = {
 			isa = PBXGroup;
 			children = (
+				3BB87D5114B54F3F0078117F /* NotFoundException.cpp */,
+				3BB87D4F14B54F1D0078117F /* WhiteRectangleDetector.cpp */,
+				3BB87D4414B54C610078117F /* CharacterSetECI.cpp */,
+				3BB87D4514B54C610078117F /* ECI.cpp */,
+				3BB87D4614B54C610078117F /* StringUtils.cpp */,
+				3BB87D4214B54C480078117F /* FormatException.cpp */,
 				3B5B0E10121C52ED005698F8 /* BarcodeFormat.cpp */,
 				3B5B0E11121C52ED005698F8 /* BarcodeFormat.h */,
 				3B5B0E12121C52ED005698F8 /* Binarizer.cpp */,
@@ -944,6 +962,12 @@
 				3B5B0F2D121C52ED005698F8 /* Result.cpp in Sources */,
 				3B5B0F2F121C52ED005698F8 /* ResultPoint.cpp in Sources */,
 				3B5B0F31121C52ED005698F8 /* ResultPointCallback.cpp in Sources */,
+				3BB87D4314B54C480078117F /* FormatException.cpp in Sources */,
+				3BB87D4714B54C610078117F /* CharacterSetECI.cpp in Sources */,
+				3BB87D4814B54C610078117F /* ECI.cpp in Sources */,
+				3BB87D4914B54C610078117F /* StringUtils.cpp in Sources */,
+				3BB87D5014B54F1D0078117F /* WhiteRectangleDetector.cpp in Sources */,
+				3BB87D5214B54F3F0078117F /* NotFoundException.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -989,7 +1013,6 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_VERSION = 4.2;
 				INSTALL_PATH = /usr/local/lib;
 				OTHER_LDFLAGS = (
 					"-framework",
@@ -1008,7 +1031,6 @@
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_VERSION = 4.2;
 				INSTALL_PATH = /usr/local/lib;
 				OTHER_LDFLAGS = (
 					"-framework",
