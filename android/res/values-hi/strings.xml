@@ -51,8 +51,11 @@
   <string name="contents_phone">फ़ोन नंबर</string>
   <string name="contents_sms">एसएमएस पता</string>
   <string name="contents_text">सादा पाठ</string>
-  <string name="history_clear_text">सुस्पष्ट इतिहास</string>
+  <string name="history_clear_one_history_text">हटाएँ</string>
+  <string name="history_clear_text">इतिहास हटाएँ</string>
   <string name="history_email_title">बारकोड स्कैनर इतिहास</string>
+  <string name="history_empty">खाली</string>
+  <string name="history_empty_detail">अभी तक कोई बारकोड स्कैन दर्ज किया गया है</string>
   <string name="history_send">इतिहास भेजें</string>
   <string name="history_title">इतिहास</string>
   <string name="menu_about">के बारे में</string>

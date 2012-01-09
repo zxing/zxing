@@ -21,6 +21,7 @@ import com.google.zxing.Result;
 import com.google.zxing.ResultMetadataType;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.client.android.camera.CameraManager;
+import com.google.zxing.client.android.history.HistoryActivity;
 import com.google.zxing.client.android.history.HistoryManager;
 import com.google.zxing.client.android.result.ResultButtonListener;
 import com.google.zxing.client.android.result.ResultHandler;
@@ -98,6 +99,8 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private static final String[] ZXING_URLS = { "http://zxing.appspot.com/scan", "zxing://scan/" };
   private static final String RETURN_CODE_PLACEHOLDER = "{CODE}";
   private static final String RETURN_URL_PARAM = "ret";
+
+  public static final int HISTORY_REQUEST_CODE = 0x0000bacc;
 
   private static final Set<ResultMetadataType> DISPLAYABLE_METADATA_TYPES =
       EnumSet.of(ResultMetadataType.ISSUE_NUMBER,
@@ -347,8 +350,10 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         startActivity(intent);
         break;
       case HISTORY_ID:
-        AlertDialog historyAlert = historyManager.buildAlert();
-        historyAlert.show();
+        intent = new Intent(Intent.ACTION_VIEW);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+        intent.setClassName(this, HistoryActivity.class.getName());
+        startActivityForResult(intent, HISTORY_REQUEST_CODE);
         break;
       case SETTINGS_ID:
         intent.setClassName(this, PreferencesActivity.class.getName());

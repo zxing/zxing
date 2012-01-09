@@ -51,8 +51,11 @@
   <string name="contents_phone">Numer telefonu</string>
   <string name="contents_sms">Adres SMS</string>
   <string name="contents_text">Zwykły tekst</string>
+  <string name="history_clear_one_history_text">Wyczyść</string>
   <string name="history_clear_text">Wyczyść historię</string>
   <string name="history_email_title">Historia Skanera Kodów Paskowych</string>
+  <string name="history_empty">Pusty</string>
+  <string name="history_empty_detail">Brak skanowania kodów kreskowych zostały zarejestrowane</string>
   <string name="history_send">Wyślij historię</string>
   <string name="history_title">Historia</string>
   <string name="menu_about">O aplikacji</string>

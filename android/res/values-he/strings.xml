@@ -51,8 +51,11 @@
   <string name="contents_phone">מספר טלפון</string>
   <string name="contents_sms">כתובת SMS</string>
   <string name="contents_text">טקסט רגיל</string>
+  <string name="history_clear_one_history_text">נקה</string>
   <string name="history_clear_text">נקה היסטוריה</string>
   <string name="history_email_title">היסטוריית סורק הברקודים</string>
+  <string name="history_empty">ריק</string>
+  <string name="history_empty_detail">ברקודים לא נרשמו</string>
   <string name="history_send">שלח היסטוריה</string>
   <string name="history_title">היסטוריה</string>
   <string name="menu_about">אודות</string>

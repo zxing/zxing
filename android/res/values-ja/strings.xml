@@ -51,8 +51,11 @@
   <string name="contents_phone">電話番号</string>
   <string name="contents_sms">SMSアドレス</string>
   <string name="contents_text">テキストデータ</string>
+  <string name="history_clear_one_history_text">削除</string>
   <string name="history_clear_text">履歴の削除</string>
   <string name="history_email_title">QRコードスキャナー歴史</string>
+  <string name="history_empty">空っぽ</string>
+  <string name="history_empty_detail">にバーコードスキャンが記録されていない</string>
   <string name="history_send">履歴を送信</string>
   <string name="history_title">履歴</string>
   <string name="menu_about">詳細</string>

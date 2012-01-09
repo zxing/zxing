@@ -137,6 +137,14 @@
         <category android:name="android.intent.category.DEFAULT"/>
       </intent-filter>
     </activity>
+    <activity android:name=".history.HistoryActivity"
+              android:label="@string/history_title"
+              android:stateNotNeeded="true">
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW"/>
+        <category android:name="android.intent.category.DEFAULT"/>
+      </intent-filter>
+    </activity>
     <activity android:name=".share.BookmarkPickerActivity"
               android:label="@string/bookmark_picker_name"
               android:stateNotNeeded="true">

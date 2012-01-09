@@ -51,8 +51,11 @@
   <string name="contents_phone">전화번호</string>
   <string name="contents_sms">전화번호</string>
   <string name="contents_text">단문</string>
+  <string name="history_clear_one_history_text">삭제</string>
   <string name="history_clear_text">기록 삭제</string>
   <string name="history_email_title">바코드 스캐너 기록</string>
+  <string name="history_empty">빈</string>
+  <string name="history_empty_detail">아무 바코드 스캔이 기록되지 않았습니다</string>
   <string name="history_send">기록 보내기</string>
   <string name="history_title">기록</string>
   <string name="menu_about">정보</string>

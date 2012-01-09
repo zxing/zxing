@@ -51,8 +51,11 @@
   <string name="contents_phone">Telefonnummer</string>
   <string name="contents_sms">SMS-adress</string>
   <string name="contents_text">Ren text</string>
+  <string name="history_clear_one_history_text">Rensa</string>
   <string name="history_clear_text">Rensa historik</string>
   <string name="history_email_title">Streckkodsläsarens historik</string>
+  <string name="history_empty">Tomma</string>
+  <string name="history_empty_detail">Ingen streckkod skannar har registrerats</string>
   <string name="history_send">Skicka historik</string>
   <string name="history_title">Historik</string>
   <string name="menu_about">Om</string>

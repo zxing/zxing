@@ -51,8 +51,11 @@
   <string name="contents_phone">Telefonszám</string>
   <string name="contents_sms">SMS szám</string>
   <string name="contents_text">Egyszerű szöveg</string>
+  <string name="history_clear_one_history_text">Törlése</string>
   <string name="history_clear_text">Előzmények törlése</string>
   <string name="history_email_title">Barcode Scanner előzmények</string>
+  <string name="history_empty">Üres</string>
+  <string name="history_empty_detail">Nem vonalkód szkennelés lett felvéve még</string>
   <string name="history_send">Előzmények küldése</string>
   <string name="history_title">Előzmények</string>
   <string name="menu_about">Rólunk</string>

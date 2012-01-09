@@ -51,8 +51,11 @@
   <string name="contents_phone">Número de telèfon</string>
   <string name="contents_sms">Adreça SMS</string>
   <string name="contents_text">Text pla</string>
+  <string name="history_clear_one_history_text">Neteja</string>
   <string name="history_clear_text">Neteja l\'historial</string>
   <string name="history_email_title">Historial del Barcode Scanner</string>
+  <string name="history_empty">Buit</string>
+  <string name="history_empty_detail">No escaneja codis de barres s\'han registrat encara</string>
   <string name="history_send">Envia l\'historial</string>
   <string name="history_title">Historial</string>
   <string name="menu_about">Quant a</string>

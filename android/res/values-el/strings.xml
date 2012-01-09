@@ -51,8 +51,11 @@
   <string name="contents_phone">Τηλέφωνο</string>
   <string name="contents_sms">Διεύθνση SMS</string>
   <string name="contents_text">Απλό κείμενο</string>
+  <string name="history_clear_one_history_text">Διαγραφή</string>
   <string name="history_clear_text">Διαγραφή ιστορικού</string>
   <string name="history_email_title">Ιστορικό Barcode Scanner</string>
+  <string name="history_empty">Κενό</string>
+  <string name="history_empty_detail">Δεν έχουν σαρώνει barcode έχουν καταγραφεί</string>
   <string name="history_send">Αποστολή ιστορικού</string>
   <string name="history_title">Ιστορικό</string>
   <string name="menu_about">Σχετικά</string>

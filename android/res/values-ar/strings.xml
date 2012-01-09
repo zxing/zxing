@@ -51,8 +51,11 @@
   <string name="contents_phone">رقم الهاتف</string>
   <string name="contents_sms">عنوان SMS</string>
   <string name="contents_text">نص عادي</string>
+  <string name="history_clear_one_history_text">حذف</string>
   <string name="history_clear_text">مسح السجل</string>
   <string name="history_email_title">سجل ماسح الرموز الشريطية</string>
+  <string name="history_empty">فارغ</string>
+  <string name="history_empty_detail">لم تسجل حتى الآن بمسح الباركود</string>
   <string name="history_send">إرسال السجل</string>
   <string name="history_title">سجل</string>
   <string name="menu_about">حول</string>

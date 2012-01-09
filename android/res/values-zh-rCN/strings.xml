@@ -51,8 +51,11 @@
   <string name="contents_phone">电话号码</string>
   <string name="contents_sms">短信地址</string>
   <string name="contents_text">纯文本</string>
+  <string name="history_clear_one_history_text">删除</string>
   <string name="history_clear_text">删除历史</string>
   <string name="history_email_title">条码扫描器历史</string>
+  <string name="history_empty">空的</string>
+  <string name="history_empty_detail">没有条码扫描已记录</string>
   <string name="history_send">发送历史</string>
   <string name="history_title">历史</string>
   <string name="menu_about">关于</string>

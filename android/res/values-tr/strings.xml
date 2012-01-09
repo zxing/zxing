@@ -51,8 +51,11 @@
   <string name="contents_phone">Telefon numarası</string>
   <string name="contents_sms">SMS adresi</string>
   <string name="contents_text">Düz metin</string>
+  <string name="history_clear_one_history_text">Temizle</string>
   <string name="history_clear_text">Geçmişi temizle</string>
   <string name="history_email_title">Barkod Tarayıcı geçmişi</string>
+  <string name="history_empty">Boş</string>
+  <string name="history_empty_detail">Yok barkod taramaları kaydedildi</string>
   <string name="history_send">Geçmişi gönder</string>
   <string name="history_title">Geçmiş</string>
   <string name="menu_about">Hakkında</string>

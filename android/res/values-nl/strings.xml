@@ -51,8 +51,11 @@
   <string name="contents_phone">Telefoonnummer</string>
   <string name="contents_sms">SMSnummer</string>
   <string name="contents_text">Tekst</string>
+  <string name="history_clear_one_history_text">Leeg</string>
   <string name="history_clear_text">Leeg geschiedenis</string>
   <string name="history_email_title">Barcode Scanner geschiedenis</string>
+  <string name="history_empty">Leeg</string>
+  <string name="history_empty_detail">Geen barcode scans zijn opgenomen</string>
   <string name="history_send">Verzend geschiedenis</string>
   <string name="history_title">Geschiedenis</string>
   <string name="menu_about">Over</string>
