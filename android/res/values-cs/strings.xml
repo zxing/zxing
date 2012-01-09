@@ -51,8 +51,11 @@
   <string name="contents_phone">Telefonní číslo</string>
   <string name="contents_sms">SMS číslo</string>
   <string name="contents_text">Ostatní</string>
+  <string name="history_clear_one_history_text">Vyčistit</string>
   <string name="history_clear_text">Vyčistit historii</string>
   <string name="history_email_title">Barcode Scanner historie</string>
+  <string name="history_empty">Prázdný</string>
+  <string name="history_empty_detail">Žádný čárový kód vyšetření byly zaznamenány ještě</string>
   <string name="history_send">Poslat historii</string>
   <string name="history_title">Historie</string>
   <string name="menu_about">O</string>

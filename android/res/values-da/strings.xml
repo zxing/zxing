@@ -51,8 +51,11 @@
   <string name="contents_phone">Telefonnummer</string>
   <string name="contents_sms">SMS-adresse</string>
   <string name="contents_text">Almindelig tekst</string>
+  <string name="history_clear_one_history_text">Ryd</string>
   <string name="history_clear_text">Ryd historik</string>
   <string name="history_email_title">Barcode Scanner-historik</string>
+  <string name="history_empty">Tomme</string>
+  <string name="history_empty_detail">Ingen stregkode scanninger er blevet registreret endnu</string>
   <string name="history_send">Send historik</string>
   <string name="history_title">Historik</string>
   <string name="menu_about">Om</string>

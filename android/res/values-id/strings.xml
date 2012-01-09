@@ -51,8 +51,11 @@
   <string name="contents_phone">Nomor telepon</string>
   <string name="contents_sms">Alamat SMS</string>
   <string name="contents_text">Teks biasa</string>
+  <string name="history_clear_one_history_text">Hapus</string>
   <string name="history_clear_text">Hapus riwayat</string>
   <string name="history_email_title">Riwayat Barcode Scanner</string>
+  <string name="history_empty">Kosong</string>
+  <string name="history_empty_detail">Tidak ada scan barcode telah dicatat belum</string>
   <string name="history_send">Kirim riwayat</string>
   <string name="history_title">Riwayat</string>
   <string name="menu_about">Tentang</string>

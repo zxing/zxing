@@ -51,8 +51,11 @@
   <string name="contents_phone">Telefonnummer</string>
   <string name="contents_sms">SMS Adresse</string>
   <string name="contents_text">Text</string>
+  <string name="history_clear_one_history_text">Löschen</string>
   <string name="history_clear_text">Historie löschen</string>
   <string name="history_email_title">Barcode Scanner Historie</string>
+  <string name="history_empty">Leer</string>
+  <string name="history_empty_detail">Kein Barcode-Scans wurden aufgezeichnet</string>
   <string name="history_send">Historie senden</string>
   <string name="history_title">Historie</string>
   <string name="menu_about">Info</string>

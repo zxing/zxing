@@ -51,8 +51,11 @@
   <string name="contents_phone">Номер телефона</string>
   <string name="contents_sms">Адрес для SMS</string>
   <string name="contents_text">Текст</string>
+  <string name="history_clear_one_history_text">Очистить</string>
   <string name="history_clear_text">Очистить историю</string>
   <string name="history_email_title">История сканирования</string>
+  <string name="history_empty">Пустой</string>
+  <string name="history_empty_detail">Нет штрих-код сканирования были записаны</string>
   <string name="history_send">Отправить историю</string>
   <string name="history_title">История</string>
   <string name="menu_about">О программе</string>

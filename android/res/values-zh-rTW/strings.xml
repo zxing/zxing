@@ -51,8 +51,11 @@
   <string name="contents_phone">電話號碼</string>
   <string name="contents_sms">簡訊地址</string>
   <string name="contents_text">純文字</string>
+  <string name="history_clear_one_history_text">刪除</string>
   <string name="history_clear_text">刪除紀錄</string>
   <string name="history_email_title">條碼掃描器紀錄</string>
+  <string name="history_empty">空的</string>
+  <string name="history_empty_detail">沒有條碼掃描已記錄</string>
   <string name="history_send">發送紀錄</string>
   <string name="history_title">紀錄</string>
   <string name="menu_about">關於</string>

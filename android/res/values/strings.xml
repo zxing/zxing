@@ -52,7 +52,10 @@
   <string name="contents_sms">SMS address</string>
   <string name="contents_text">Plain text</string>
   <string name="history_clear_text">Clear history</string>
+  <string name="history_clear_one_history_text">Clear</string>
   <string name="history_email_title">Barcode Scanner history</string>
+  <string name="history_empty">Empty</string>
+  <string name="history_empty_detail">No barcode scans have been recorded</string>
   <string name="history_send">Send history</string>
   <string name="history_title">History</string>
   <string name="menu_about">About</string>

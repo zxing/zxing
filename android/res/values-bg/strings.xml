@@ -51,8 +51,11 @@
   <string name="contents_phone">Телефон</string>
   <string name="contents_sms">SMS адрес</string>
   <string name="contents_text">Чист текст</string>
+  <string name="history_clear_one_history_text">Изчисти</string>
   <string name="history_clear_text">Изчисти историята</string>
   <string name="history_email_title">История на Баркод Скенера</string>
+  <string name="history_empty">Празен</string>
+  <string name="history_empty_detail">Не баркод сканиране са записани още</string>
   <string name="history_send">Изпрати историята</string>
   <string name="history_title">История</string>
   <string name="menu_about">Относно</string>

@@ -51,8 +51,11 @@
   <string name="contents_phone">Puhelin numero</string>
   <string name="contents_sms">Tekstiviestin osoite</string>
   <string name="contents_text">Teksti</string>
+  <string name="history_clear_one_history_text">Tyhjennä</string>
   <string name="history_clear_text">Tyhjennä historia</string>
   <string name="history_email_title">Viivakoodin skanneri historia</string>
+  <string name="history_empty">Tyhjä</string>
+  <string name="history_empty_detail">Ei viivakoodi skannaa on kirjattu vielä</string>
   <string name="history_send">Lähetä historia</string>
   <string name="history_title">Historia</string>
   <string name="menu_about">Tietoja</string>

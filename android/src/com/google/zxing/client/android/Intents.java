@@ -150,6 +150,14 @@ public final class Intents {
     }
   }
 
+  public static final class History {
+
+    public static final String ITEM_NUMBER = "ITEM_NUMBER";
+
+    private History() {
+    }
+  }
+
   public static final class Encode {
     /**
      * Send this intent to encode a piece of data as a QR code and display it full screen, so

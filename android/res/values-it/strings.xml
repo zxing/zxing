@@ -51,8 +51,11 @@
   <string name="contents_phone">Numero di telefono</string>
   <string name="contents_sms">Numero SMS</string>
   <string name="contents_text">Testo puro</string>
+  <string name="history_clear_one_history_text">Cancella</string>
   <string name="history_clear_text">Cancella cronologia</string>
   <string name="history_email_title">Cronologia scansioni codici a barre</string>
+  <string name="history_empty">Vuoto</string>
+  <string name="history_empty_detail">Nessun scansioni di codici a barre sono stati registrati</string>
   <string name="history_send">Invia cronologia</string>
   <string name="history_title">Cronologia</string>
   <string name="menu_about">Info</string>
