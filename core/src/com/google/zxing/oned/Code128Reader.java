@@ -431,7 +431,7 @@ public final class Code128Reader extends OneDReader {
     int resultLength = result.length();
     if (resultLength == 0) {
       // false positive
-      throw ChecksumException.getChecksumInstance();
+      throw NotFoundException.getNotFoundInstance();
     }
 
     // Only bother if the result had at least one character, and if the checksum digit happened to
