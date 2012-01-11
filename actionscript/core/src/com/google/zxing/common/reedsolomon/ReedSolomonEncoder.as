@@ -13,69 +13,71 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.google.zxing.common.reedsolomon
 {
-	  public  class ReedSolomonEncoder
-    { 
-    	import com.google.zxing.common.flexdatatypes.ArrayList;
-    	import com.google.zxing.common.flexdatatypes.IllegalArgumentException;
-    	
-          private var Field:GF256 ;
-          private var cachedGenerators:ArrayList;
 
-          public function ReedSolomonEncoder(field:GF256 ) {
-            if (GF256.QR_CODE_FIELD != field) {
-              throw new IllegalArgumentException("Only QR Code is supported at this time");
-            }
-            this.Field = field;
-            this.cachedGenerators = new ArrayList();
-            cachedGenerators.Add(new GF256Poly(field, [ 1 ]));
-          }
+import com.google.zxing.common.flexdatatypes.ArrayList;
+import com.google.zxing.common.flexdatatypes.IllegalArgumentException;
+import com.google.zxing.common.flexdatatypes.Utils;
+/**
+ * <p>Implements Reed-Solomon enbcoding, as the name implies.</p>
+ *
+ * @author Sean Owen
+ * @author William Rucklidge
+ */
+public class ReedSolomonEncoder 
+{
 
-          private function buildGenerator(degree:int):GF256Poly {
-            if (degree >= cachedGenerators.Count) {
-                var lastGenerator:GF256Poly = cachedGenerators.getObjectByIndex(cachedGenerators.Count - 1) as GF256Poly;
-              for (var d:int = cachedGenerators.Count; d <= degree; d++)
-              {
-                  var nextGenerator:GF256Poly = lastGenerator.multiply(new GF256Poly(Field, [ 1, Field.exp(d - 1)]));
-                cachedGenerators.Add(nextGenerator);
-                lastGenerator = nextGenerator;
-              }
-            }
-            return (cachedGenerators.getObjectByIndex(degree) as GF256Poly);    
-          }
+  private var field:GenericGF;
+  private var cachedGenerators:ArrayList;
 
-          public function encode( toEncode:Array,  ecBytes:int) :void{
-            if (ecBytes == 0) {
-              throw new IllegalArgumentException("No error correction bytes");
-            }
-            var dataBytes:int = toEncode.length - ecBytes;
-            if (dataBytes <= 0) {
-              throw new IllegalArgumentException("No data bytes provided");
-            }
-            var generator:GF256Poly = buildGenerator(ecBytes);
-            var infoCoefficients:Array = new Array(dataBytes);
-            //System.Array.Copy(toEncode, 0, infoCoefficients, 0, dataBytes);
-            for (var ii:int=0;ii<dataBytes;ii++)
-            {
-            	infoCoefficients[ii] = toEncode[ii];
-            }
-            
-            var info:GF256Poly  = new GF256Poly(this.Field, infoCoefficients);
-            info = info.multiplyByMonomial(ecBytes, 1);
-            var  remainder:GF256Poly = info.divide(generator)[1];
-            var coefficients:Array = remainder.getCoefficients();
-            var numZeroCoefficients:int = ecBytes - coefficients.length;
-            for (var i:int = 0; i < numZeroCoefficients; i++) {
-              toEncode[dataBytes + i] = 0;
-            }
-            //System.Array.Copy(coefficients, 0, toEncode, dataBytes + numZeroCoefficients, coefficients.length);
-            for(var jj:int=0;jj < coefficients.length;jj++)
-            {
-            	toEncode[dataBytes + numZeroCoefficients + jj] = coefficients[jj]; 
-            }
-            
-          }
-    
+  public function ReedSolomonEncoder(field:GenericGF ) {
+    if (!GenericGF.QR_CODE_FIELD_256.Equals(field)) {
+      throw new IllegalArgumentException("Only QR Code is supported at this time");
     }
+    this.field = field;
+    this.cachedGenerators = new ArrayList();
+    cachedGenerators.addElement(new GenericGFPoly(field, [ 1 ]));
+  }
+
+  private function buildGenerator(degree:int):GenericGFPoly {
+    if (degree >= cachedGenerators.size()) {
+      var lastGenerator:GenericGFPoly= (cachedGenerators.elementAt(cachedGenerators.size() - 1) as GenericGFPoly);
+      for (var d:int = cachedGenerators.size(); d <= degree; d++) {
+        var nextGenerator:GenericGFPoly = lastGenerator.multiply(new GenericGFPoly(field, [ 1, field.exp(d - 1) ]));
+        cachedGenerators.addElement(nextGenerator);
+        lastGenerator = nextGenerator;
+      }
+    }
+    return (cachedGenerators.elementAt(degree) as GenericGFPoly)    
+  }
+
+  public function encode(toEncode:Array, ecBytes:int):void 
+  {
+    if (ecBytes == 0) 
+	{
+      throw new IllegalArgumentException("No error correction bytes");
+    }
+    var dataBytes:int = toEncode.length - ecBytes;
+    if (dataBytes <= 0) 
+	{
+      throw new IllegalArgumentException("No data bytes provided");
+    }
+    var generator:GenericGFPoly = buildGenerator(ecBytes);
+    var infoCoefficients:Array = new Array(dataBytes);
+    Utils.arraycopy(toEncode, 0, infoCoefficients, 0, dataBytes);
+    var info:GenericGFPoly = new GenericGFPoly(field, infoCoefficients);
+    info = info.multiplyByMonomial(ecBytes, 1);
+    var remainder:GenericGFPoly = info.divide(generator)[1];
+    var coefficients:Array = remainder.getCoefficients();
+    var numZeroCoefficients:int = ecBytes - coefficients.length;
+    for (var i:int = 0; i < numZeroCoefficients; i++) 
+	{
+      toEncode[dataBytes + i] = 0;
+    }
+    Utils.arraycopy(coefficients, 0, toEncode, dataBytes + numZeroCoefficients, coefficients.length);
+  }
+
+}
 }
