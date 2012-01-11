@@ -32,10 +32,10 @@ package com.google.zxing.qrcode.decoder
            */
           public function BitMatrixParser(bitMatrix:BitMatrix )
           {
-            var dimension:int = bitMatrix.getDimension();
+            var dimension:int = bitMatrix.getHeight();
             if ((dimension < 21) || ((dimension & 0x03) != 1)) 
             {
-              throw new ReaderException("BitMatrixParser : BitMatrixParser : dimension ("+dimension+" less tahn 21 or not a power of 3)");
+              throw new ReaderException("BitMatrixParser : BitMatrixParser : dimension ("+dimension+" less than 21 or not a power of 3)");
             }
             this.bitMatrix = bitMatrix;
           }
@@ -56,41 +56,34 @@ package com.google.zxing.qrcode.decoder
             }
 
             // Read top-left format info bits
-            var formatInfoBits:int = 0;
+            var formatInfoBits1:int = 0;
             for (var j:int = 0; j < 6; j++) 
             {
-              formatInfoBits = copyBit(8, j, formatInfoBits);
+              formatInfoBits1 = copyBit(j, 8, formatInfoBits1);
             }
             // .. and skip a bit in the timing pattern ...
-            formatInfoBits = copyBit(8, 7, formatInfoBits);
-            formatInfoBits = copyBit(8, 8, formatInfoBits);
-            formatInfoBits = copyBit(7, 8, formatInfoBits);
+            formatInfoBits1 = copyBit(7, 8, formatInfoBits1);
+            formatInfoBits1 = copyBit(8, 8, formatInfoBits1);
+            formatInfoBits1 = copyBit(8, 7, formatInfoBits1);
             // .. and skip a bit in the timing pattern ...
             for (var i:int = 5; i >= 0; i--) 
             {
-              formatInfoBits = copyBit(i, 8, formatInfoBits);
+              formatInfoBits1 = copyBit(8, i, formatInfoBits1);
             }
 
-            parsedFormatInfo = FormatInformation.decodeFormatInformation(formatInfoBits);
-            if (parsedFormatInfo != null) 
-            {
-              return parsedFormatInfo;
-            }
-
-            // Hmm, failed. Try the top-right/bottom-left pattern
-            var dimension:int = bitMatrix.getDimension();
-            formatInfoBits = 0;
-            var iMin:int = dimension - 8;
-            for (i = dimension - 1; i >= iMin; i--) 
-            {
-              formatInfoBits = copyBit(i, 8, formatInfoBits);
-            }
-            for (j = dimension - 7; j < dimension; j++) 
-            {
-              formatInfoBits = copyBit(8, j, formatInfoBits);
-            }
-
-            parsedFormatInfo = FormatInformation.decodeFormatInformation(formatInfoBits);
+            var dimension:int = bitMatrix.getHeight();
+            var formatInfoBits2:int = 0;
+            var jMin:int = dimension - 7;
+             for (var j1:int= dimension - 1; j1 >= jMin; j1--) 
+             {
+      			formatInfoBits2 = copyBit(8, j1, formatInfoBits2);
+    		 }
+    		for (var i1:int = dimension - 8; i1 < dimension; i1++) 
+    		{
+      			formatInfoBits2 = copyBit(i1, 8, formatInfoBits2);
+   			 }
+   			 
+            parsedFormatInfo = FormatInformation.decodeFormatInformation(formatInfoBits1,formatInfoBits2);
             if (parsedFormatInfo != null) 
             {
               return parsedFormatInfo;
@@ -113,7 +106,7 @@ package com.google.zxing.qrcode.decoder
               return parsedVersion;
             }
 
-            var dimension:int = bitMatrix.getDimension();
+            var dimension:int = bitMatrix.getHeight();
 
             var provisionalVersion:int = (dimension - 17) >> 2;
             if (provisionalVersion <= 6) 
@@ -123,34 +116,34 @@ package com.google.zxing.qrcode.decoder
 
             // Read top-right version info: 3 wide by 6 tall
             var versionBits:int = 0;
+			var jMin:int = dimension - 11;
             for (var i:int = 5; i >= 0; i--) 
             {
-              var jMin:int = dimension - 11;
               for (var j2:int = dimension - 9; j2 >= jMin; j2--) 
               {
-                versionBits = copyBit(i, j2, versionBits);
+                versionBits = copyBit(j2, i, versionBits);
               }
             }
 
             parsedVersion = Version.decodeVersionInformation(versionBits);
-            if (parsedVersion != null) 
+            if (parsedVersion != null && parsedVersion.getDimensionForVersion() == dimension)
             {
               return parsedVersion;
             }
 
             // Hmm, failed. Try bottom left: 6 wide by 3 tall
             versionBits = 0;
+			var iMin:int = dimension - 11;
             for (var j:int = 5; j >= 0; j--) 
             {
-              var iMin:int = dimension - 11;
-              for (var i2:int = dimension - 11; i2 >= iMin; i2--) 
+              for (var i2:int = dimension - 9; i2 >= iMin; i2--) 
               {
-                versionBits = copyBit(i2, j, versionBits);
+                versionBits = copyBit(j, i2, versionBits);
               }
             }
 
             parsedVersion = Version.decodeVersionInformation(versionBits);
-            if (parsedVersion != null) 
+            if (parsedVersion != null && parsedVersion.getDimensionForVersion() == dimension)
             {
               return parsedVersion;
             }
@@ -159,7 +152,7 @@ package com.google.zxing.qrcode.decoder
 
           private function copyBit(i:int, j:int, versionBits:int):int 
           {
-            return bitMatrix._get(j, i) ? (versionBits << 1) | 0x1 : versionBits << 1;
+            return bitMatrix._get(i, j) ? (versionBits << 1) | 0x1 : versionBits << 1;
           }
 
           /**
@@ -181,7 +174,7 @@ package com.google.zxing.qrcode.decoder
             var dataMask:DataMaskBase;
             var ref:int = formatInfo.getDataMask();
             dataMask = DataMask.forReference(ref);
-            var dimension:int = bitMatrix.getDimension();
+            var dimension:int = bitMatrix.getHeight();
             dataMask.unmaskBitMatrix(bitMatrix, dimension);
 
             var functionPattern:BitMatrix = version.buildFunctionPattern();

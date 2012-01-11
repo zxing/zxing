@@ -30,8 +30,9 @@ package com.google.zxing.common
  * @author Sean Owen
  *
  */
-   	import com.google.zxing.common.flexdatatypes.IllegalArgumentException;
    	import com.google.zxing.ReaderException;
+   	import com.google.zxing.common.flexdatatypes.IllegalArgumentException;
+   	import com.google.zxing.NotFoundException;
   
     public class GridSampler
     {
@@ -87,74 +88,68 @@ package com.google.zxing.common
    *   by the given points is invalid or results in sampling outside the image boundaries
    */
 
-        public  function sampleGrid(image:BitMatrix, 
-        									dimension:int, 
-        									p1ToX:Number, 
-        									p1ToY:Number, 
-        									p2ToX:Number,
-        									p2ToY:Number,
-        									p3ToX:Number,
-        									p3ToY:Number,
-        									p4ToX:Number,
-        									p4ToY:Number,
-        									p1FromX:Number,
-        									p1FromY:Number,
-        									p2FromX:Number,
-        									p2FromY:Number,
-        									p3FromX:Number,
-        									p3FromY:Number,
-        									p4FromX:Number,
-        									p4FromY:Number):BitMatrix 
-        {
-        	// BAS : originally in DefaultGridSampler
-            var transform:PerspectiveTransform  = PerspectiveTransform.quadrilateralToQuadrilateral(p1ToX, p1ToY, p2ToX, p2ToY, p3ToX, p3ToY, p4ToX, p4ToY, p1FromX, p1FromY, p2FromX, p2FromY, p3FromX, p3FromY, p4FromX, p4FromY);
-
-            var bits:BitMatrix  = new BitMatrix(dimension);
-            var points:Array  = new Array(dimension << 1);
-            for (var y:int = 0; y < dimension; y++)
-            {
-                var max:int = points.length;
-                var iValue:Number = Number(y + 0.5);
-                for (var x:int = 0; x < max; x += 2)
-                {
-                    points[x] = Number((x >> 1) + 0.5);
-                    points[x + 1] = iValue;
-                }
-                points = transform.transformPoints(points);
-                
-                // Quick check to see if points transformed to something inside the image;
-                // sufficent to check the endpoints
-                checkAndNudgePoints(image, points);
-                try
-                {
-                    for (var x2:int = 0; x2 < max; x2 += 2)
-                    {
-                        //UPGRADE_WARNING: Narrowing conversions may produce unexpected results in C#. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1042"'
-                        if (image._get( int(points[x2]), int(points[x2 + 1])))
-                        //if (image._get( Math.floor(points[x2]), Math.floor(points[x2 + 1])))
-                        {
-                            // Black(-ish) pixel
-                            bits._set(x2 >> 1,y );
-                        }
-                    }
-                }
-                catch (aioobe:RangeError )
-                {
-                    // This feels wrong, but, sometimes if the finder patterns are misidentified, the resulting
-                    // transform gets "twisted" such that it maps a straight line of points to a set of points
-                    // whose endpoints are in bounds, but others are not. There is probably some mathematical
-                    // way to detect this about the transformation that I don't know yet.
-                    // This results in an ugly runtime exception despite our clever checks above -- can't have that.
-                    // We could check each point's coordinates but that feels duplicative. We settle for
-                    // catching and wrapping ArrayIndexOutOfBoundsException.
-                    throw new ReaderException("DefautGridSampler : sampleGrid : "+aioobe.message);
-                }
-            }
-            return bits;
-
+   public function sampleGrid(image:BitMatrix ,
+                              dimensionX:int,
+                              dimensionY:int,
+                               transform:PerspectiveTransform):BitMatrix 
+   {
+        	// originally in DefaultGridSampler
+    if (dimensionX <= 0 || dimensionY <= 0) {
+      throw NotFoundException.getNotFoundInstance();      
+    }
+    var bits:BitMatrix  = new BitMatrix(dimensionX, dimensionY);
+    var points:Array = new Array(dimensionX << 1);
+    for (var y:int = 0; y < dimensionY; y++) {
+      var max:int = points.length;
+      var iValue:Number = Number(y + 0.5);
+      for (var x:int = 0; x < max; x += 2) {
+        points[x] = Number((x >> 1) + 0.5);
+        points[x + 1] = iValue;
       }
-
-        /**
+      transform.transformPoints(points);
+      // Quick check to see if points transformed to something inside the image;
+      // sufficient to check the endpoints
+      checkAndNudgePoints(image, points);
+      try {
+        for (x = 0; x < max; x += 2) {
+          if (image._get(int(points[x]), int( points[x + 1]))) {
+            // Black(-ish) pixel
+            bits._set(x >> 1, y);
+          }
+        }
+      } catch (aioobe:RangeError) {
+        // This feels wrong, but, sometimes if the finder patterns are misidentified, the resulting
+        // transform gets "twisted" such that it maps a straight line of points to a set of points
+        // whose endpoints are in bounds, but others are not. There is probably some mathematical
+        // way to detect this about the transformation that I don't know yet.
+        // This results in an ugly runtime exception despite our clever checks above -- can't have
+        // that. We could check each point's coordinates but that feels duplicative. We settle for
+        // catching and wrapping ArrayIndexOutOfBoundsException.
+        throw NotFoundException.getNotFoundInstance();
+      }
+    }
+    return bits;
+}
+ public function sampleGrid2(image:BitMatrix,
+                              dimensionX:int,
+                              dimensionY:int,
+                              p1ToX:Number,
+                              p1ToY:Number,
+                              p2ToX:Number, p2ToY:Number,
+                              p3ToX:Number, p3ToY:Number,
+                              p4ToX:Number, p4ToY:Number,
+                              p1FromX:Number, p1FromY:Number,
+                              p2FromX:Number, p2FromY:Number,
+                              p3FromX:Number, p3FromY:Number,
+                              p4FromX:Number, p4FromY:Number):BitMatrix 
+   {
+    	var transform:PerspectiveTransform  = PerspectiveTransform.quadrilateralToQuadrilateral(
+										        p1ToX, p1ToY, p2ToX, p2ToY, p3ToX, p3ToY, p4ToX, p4ToY,
+										        p1FromX, p1FromY, p2FromX, p2FromY, p3FromX, p3FromY, p4FromX, p4FromY);
+    	return sampleGrid(image, dimensionX, dimensionY, transform);
+  }
+      
+          /**
    * <p>Checks a set of points that have been transformed to sample points on an image against
    * the image's dimensions to see if the point are even within the image.</p>
    *

@@ -25,7 +25,6 @@ package com.google.zxing.datamatrix.decoder
 
 	public class Version
     {
-    	
           private static  var VERSIONS:Array = buildVersions();
           private  var versionNumber:int;
           private  var symbolSizeRows:int;
@@ -182,7 +181,7 @@ package com.google.zxing.datamatrix.decoder
                     new ECBlocks(14, new ECB(1, 16))),
                 new Version(28, 12, 36, 10, 16,
                     new ECBlocks(18, new ECB(1, 22))),
-                new Version(29, 16, 36, 10, 16,
+                new Version(29, 16, 36, 14, 16,
                     new ECBlocks(24, new ECB(1, 32))),
                 new Version(30, 16, 48, 14, 22,
                     new ECBlocks(28, new ECB(1, 49)))];

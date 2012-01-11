@@ -9,7 +9,7 @@ package com.google.zxing.qrcode.decoder
   {
 
     public override function isMasked(i:int, j:int):Boolean {
-      return ((((i + j) & 0x01) + ((i * j) % 3)) & 0x01) == 0;
+      return ((((i + j) & 0x01) + (int((i * j) % 3))) & 0x01) == 0;
     }
   }
 

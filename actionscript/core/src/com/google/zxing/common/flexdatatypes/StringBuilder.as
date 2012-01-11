@@ -32,7 +32,7 @@ package com.google.zxing.common.flexdatatypes
 			}
 			else
 			{
-				throw new ReaderException("StringBuilder : setLength : only 0 supported");
+				this._string = this._string.substr(0,l);
 			}
 		}
 
@@ -43,6 +43,10 @@ package com.google.zxing.common.flexdatatypes
 				if (o is Array)
 				{
 					this._string = this._string + (o as Array).join("");
+				}
+				else if (o is String)
+				{
+					this._string = this._string + o;
 				}
 				else
 				{
@@ -104,6 +108,21 @@ package com.google.zxing.common.flexdatatypes
 		{
 			return this._string;
 		}
+
+public function toHexString():String
+{
+	var r:String="";
+    var e:int=this._string.length;
+    var c:int=0;
+    var h:String;
+    while(c<e){
+        h=this._string.charCodeAt(c++).toString(16);
+        while(h.length<3) h="0"+h;
+        r+=h;
+    }
+    return r;
+	
+}
 		
 		public function deleteCharAt(index:int):void
 		{

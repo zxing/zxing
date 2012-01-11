@@ -24,7 +24,7 @@ package com.google.zxing.oned
  * 
  * @author aripollak@gmail.com (Ari Pollak)
  */
-public final class EAN13Writer extends AbstractUPCEANWriter {
+public final class EAN13Writer extends UPCEANWriter {
 
 	import com.google.zxing.common.flexdatatypes.HashTable;
 	import com.google.zxing.common.flexdatatypes.IllegalArgumentException;
@@ -47,7 +47,7 @@ public final class EAN13Writer extends AbstractUPCEANWriter {
 		}
 		else
 		{
-			return (this.encode_extended(contents,format,width,height,hints) as ByteMatrix);
+			return (this.encode_extended(contents,format,width,height,hints) as BitMatrix);
 		}
 	}
   
@@ -71,7 +71,7 @@ public final class EAN13Writer extends AbstractUPCEANWriter {
     var result:Array = new Array(codeWidth);
     var pos:int = 0;
 
-    pos += appendPattern(result, pos, AbstractUPCEANReader.START_END_PATTERN, 1);
+    pos += appendPattern(result, pos,UPCEANReader.START_END_PATTERN, 1);
 
     // See {@link #EAN13Reader} for a description of how the first digit & left bars are encoded
     for (var i:int = 1; i <= 6; i++) {
@@ -79,16 +79,16 @@ public final class EAN13Writer extends AbstractUPCEANWriter {
       if ((parities >> (6 - i) & 1) == 1) {
         digit += 10;
       }
-      pos += appendPattern(result, pos, AbstractUPCEANReader.L_AND_G_PATTERNS[digit], 0);
+      pos += appendPattern(result, pos, UPCEANReader.L_AND_G_PATTERNS[digit], 0);
     }
 
-    pos += appendPattern(result, pos, AbstractUPCEANReader.MIDDLE_PATTERN, 0);
+    pos += appendPattern(result, pos, UPCEANReader.MIDDLE_PATTERN, 0);
 
     for (var i2:int = 7; i2 <= 12; i2++) {
       var digit2:int = parseInt(contents.substring(i2, i2 + 1));
-      pos += appendPattern(result, pos, AbstractUPCEANReader.L_PATTERNS[digit2], 1);
+      pos += appendPattern(result, pos, UPCEANReader.L_PATTERNS[digit2], 1);
     }
-    pos += appendPattern(result, pos, AbstractUPCEANReader.START_END_PATTERN, 1);
+    pos += appendPattern(result, pos, UPCEANReader.START_END_PATTERN, 1);
 
     return result;
   }

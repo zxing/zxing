@@ -35,9 +35,9 @@ package com.google.zxing.common
     	import com.google.zxing.common.flexdatatypes.StringBuilder;
     	import com.google.zxing.common.flexdatatypes.IllegalArgumentException;
     	
-  		private var width:int;
-  		private var height:int;
-  		private var rowSize:int;
+  		public var width:int;
+  		public var height:int;
+  		public var rowSize:int;
         public var bits:Array;
  
 
@@ -59,14 +59,9 @@ package com.google.zxing.common
     		}
     		this.width = width;
     		this.height = height;
-    		var rowSize:int = width >> 5;
-    		if ((width & 0x1f) != 0) 
-    		{
-      			rowSize++;
-    		}
-    		this.rowSize = rowSize;
+    		this.rowSize = (width+31) >> 5;
     		bits = new Array(rowSize * height);
-    		// BAS : initialize the array
+    		// initialize the array
     		for (var i:int=0;i<bits.length;i++) { bits[i] = 0; }
     		
   		}
@@ -92,6 +87,7 @@ package com.google.zxing.common
     var offset:int = y * rowSize + (x >> 5);
     bits[offset] |= 1 << (x & 0x1f);
   }
+  
 
   /**
    * <p>Flips the given bit.</p>
@@ -160,13 +156,57 @@ package com.google.zxing.common
     }
     return row;
   }
+  
+   public function getTopLeftOnBit():Array {
+    var bitsOffset:int = 0;
+    while (bitsOffset < bits.length && bits[bitsOffset] == 0) {
+      bitsOffset++;
+    }
+    if (bitsOffset == bits.length) {
+      return null;
+    }
+    var y:int = bitsOffset / rowSize;
+    var x:int = (bitsOffset % rowSize) << 5;
 
-  /**
+    var theBits:int = bits[bitsOffset];
+    var bit:int = 0;
+    while ((theBits << (31-bit)) == 0) {
+      bit++;
+    }
+    x += bit;
+    return [x, y];
+  }
+    /**
    * @return The width of the matrix
    */
   public function getWidth():int {
     return width;
   }
+
+  public function getBottomRightOnBit():Array {
+    var bitsOffset:int = bits.length - 1;
+    while (bitsOffset >= 0 && bits[bitsOffset] == 0) {
+      bitsOffset--;
+    }
+    if (bitsOffset < 0) {
+      return null;
+    }
+
+    var y:int = bitsOffset / rowSize;
+    var x:int = (bitsOffset % rowSize) << 5;
+
+    var theBits:int = bits[bitsOffset];
+    var bit:int = 31;
+    while ((theBits >>> bit) == 0) {
+      bit--;
+    }
+    x += bit;
+
+    return [x, y];
+  }
+  
+
+
 
   /**
    * @return The height of the matrix
@@ -175,17 +215,88 @@ package com.google.zxing.common
     return height;
   }
 
-  /**
-   * This method is for compatibility with older code. It's only logical to call if the matrix
-   * is square, so I'm throwing if that's not the case.
-   *
-   * @return row/column dimension of this matrix
-   */
-  public function getDimension():int {
-    if (width != height) {
-      throw new Error("Common : BitMatrix : getDimension :Can't call getDimension() on a non-square matrix");
+ 
+   public function equals(o:Object):Boolean {
+    if (!(o is BitMatrix)) {
+      return false;
     }
-    return width;
+    var other:BitMatrix = BitMatrix(o);
+    if (width != other.width || height != other.height ||
+        rowSize != other.rowSize || bits.length != other.bits.length) {
+      return false;
+    }
+    for (var i:int = 0; i < bits.length; i++) {
+      if (bits[i] != other.bits[i]) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  public function  hashCode():int {
+    var hash:int = width;
+    hash = 31 * hash + width;
+    hash = 31 * hash + height;
+    hash = 31 * hash + rowSize;
+    for (var i:int = 0; i < bits.length; i++) {
+      hash = 31 * hash + bits[i];
+    }
+    return hash;
+  }
+  
+  /**
+   * This is useful in detecting the enclosing rectangle of a 'pure' barcode.
+   *
+   * @return {left,top,width,height} enclosing rectangle of all 1 bits, or null if it is all white
+   */
+  public function getEnclosingRectangle():Array 
+  {
+    var left:int = this.width;
+    var top:int = this.height;
+    var right:int = -1;
+    var bottom:int = -1;
+    var bit:int;
+    
+    for (var y:int = 0; y < this.height; y++) {
+      for (var x32:int = 0; x32 < rowSize; x32++) {
+        var theBits:int = bits[y * rowSize + x32];
+        if (theBits != 0) {
+          if (y < top) {
+            top = y;
+          }
+          if (y > bottom) {
+            bottom = y;
+          }
+          if (x32 * 32 < left) {
+            bit = 0;
+            while ((theBits << (31 - bit)) == 0) {
+              bit++;
+            }
+            if ((x32 * 32 + bit) < left) {
+              left = x32 * 32 + bit;
+            }
+          }
+          if (x32 * 32 + 31 > right) {
+             bit = 31;
+            while ((theBits >>> bit) == 0) {
+              bit--;
+            }
+            if ((x32 * 32 + bit) > right) {
+              right = x32 * 32 + bit;
+            }
+          }
+        }
+      }
+    }
+    
+    var width:int = right - left;
+    var height:int = bottom - top;
+    
+    if (width < 0 || height < 0) {
+      return null;
+    }
+    
+    return [left, top, width, height];
   }
 
   public function toString():String {
@@ -198,5 +309,29 @@ package com.google.zxing.common
     }
     return result.toString();
   }
+  
+  
+    public function toString2():String {
+    	var totalbits:int = 0;
+    var result:StringBuilder  = new StringBuilder(height * (width + 1));
+    for (var y:int = 0; y < height; y++) {
+      for (var x:int = 0; x < width; x++) {
+        result.Append(_get(x, y) ? "1" : "0");
+        if (_get(x, y)) { totalbits++;}
+      }
+    }
+    result.Append("\nsize:"+(this.width*this.height));
+    result.Append("\ntotalbits:"+totalbits);
+    return result.toString();
+  }
+  
+  public function fromByteArray(width:int,height:int,arr:Array):void
+  {
+  	this.bits = arr;  
+  	this.width = width;
+    this.height = height;
+    this.rowSize = (width+31) >> 5;
+  }
+  
 }
 }

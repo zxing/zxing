@@ -23,7 +23,7 @@ package com.google.zxing.pdf417.decoder
  *
  * @author SITA Lab (kevin.osullivan@sita.aero)
  */
-public final class DecodedBitStreamParser {
+public class DecodedBitStreamParser {
 
 import com.google.zxing.ReaderException;
 import com.google.zxing.common.DecoderResult;
@@ -43,7 +43,9 @@ import com.google.zxing.common.flexdatatypes.StringBuilder;
   private static var LOWER:int = 1;
   private static var MIXED:int = 2;
   private static var PUNCT:int = 3;
-  private static var PUNCT_SHIFT:int = 4;
+  private static var ALPHA_SHIFT:int = 4;
+  private static var PUNCT_SHIFT:int = 5;
+
 
   private static var PL:int = 25;
   private static var LL:int = 27;
@@ -55,7 +57,7 @@ import com.google.zxing.common.flexdatatypes.StringBuilder;
 
   private static var PUNCT_CHARS:Array = [';', '<', '>', '@', '[', String.fromCharCode(92), '}', '_', String.fromCharCode(96), '~', '!',
       String.fromCharCode(13), String.fromCharCode(9), ',', ':', String.fromCharCode(10), '-', '.', '$', '/', String.fromCharCode(34), '|', '*',
-      '(', ')', '?', '{', '}', 39];
+      '(', ')', '?', '{', '}', String.fromCharCode(39)];
 
   private static var MIXED_CHARS:Array = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '&',
       String.fromCharCode(13), String.fromCharCode(9), ',', ':', '#', '-', '.', '$', '/', '+', '%', '*',
@@ -150,14 +152,13 @@ import com.google.zxing.common.flexdatatypes.StringBuilder;
     for (var k:int=0;k<textCompactionData.length;k++) { textCompactionData[k]=0;byteCompactionData[k]=0;} 
 
     var index:int = 0;
-    var code:int = 0;
     var end:Boolean = false;
     while ((codeIndex < codewords[0]) && !end) 
     {
-      code = codewords[codeIndex++];
+      var code:int = codewords[codeIndex++];
       if (code < TEXT_COMPACTION_MODE_LATCH) 
       {
-        textCompactionData[index] = Math.floor(code / 30);
+        textCompactionData[index] = int(code / 30);
         textCompactionData[index + 1] = code % 30;
         index += 2;
       } 
@@ -188,6 +189,7 @@ import com.google.zxing.common.flexdatatypes.StringBuilder;
             // of the Text Compaction mode. Codeword 913 is only available
             // in Text Compaction mode; its use is described in 5.4.2.4.
             textCompactionData[index] = MODE_SHIFT_TO_BYTE_COMPACTION_MODE;
+			code = codewords[codeIndex++];
             byteCompactionData[index] = code; //Integer.toHexString(code);
             index++;
             break;
@@ -264,8 +266,9 @@ import com.google.zxing.common.flexdatatypes.StringBuilder;
           } else {
             if (subModeCh == 26) {
               ch = ' ';
-            } else if (subModeCh == AL) {
-              subMode = ALPHA;
+            } else if (subModeCh == AS) {
+			  priorToShiftMode = subMode;
+              subMode = ALPHA_SHIFT;
             } else if (subModeCh == ML) {
               subMode = MIXED;
             } else if (subModeCh == PS) {
@@ -287,8 +290,8 @@ import com.google.zxing.common.flexdatatypes.StringBuilder;
               subMode = PUNCT;
             } else if (subModeCh == 26) {
               ch = ' ';
-            } else if (subModeCh == AS) {
-              //mode_change = true;
+            } else if (subModeCh == LL) {
+              subMode = LOWER;
             } else if (subModeCh == AL) {
               subMode = ALPHA;
             } else if (subModeCh == PS) {
@@ -303,7 +306,7 @@ import com.google.zxing.common.flexdatatypes.StringBuilder;
 
         case PUNCT:
           // Punctuation
-          if (subModeCh < PS) {
+          if (subModeCh < PAL) {
             ch = PUNCT_CHARS[subModeCh];
           } else {
             if (subModeCh == PAL) {
@@ -314,10 +317,24 @@ import com.google.zxing.common.flexdatatypes.StringBuilder;
           }
           break;
 
+		case ALPHA_SHIFT:
+          // Restore sub-mode
+          subMode = priorToShiftMode;
+          if (subModeCh < 26) {
+            ch = String.fromCharCode(String('A').charCodeAt(0) + subModeCh);
+          } else {
+            if (subModeCh == 26) {
+              ch = ' ';
+            } else {
+              // is this even possible?
+            }
+          }
+          break;
+		  
         case PUNCT_SHIFT:
           // Restore sub-mode
           subMode = priorToShiftMode;
-          if (subModeCh < PS) {
+          if (subModeCh < PAL) {
             ch = PUNCT_CHARS[subModeCh];
           } else {
             if (subModeCh == PAL) {
@@ -326,6 +343,7 @@ import com.google.zxing.common.flexdatatypes.StringBuilder;
           }
           break;
       }
+
       if ((ch).charCodeAt(0) != 0) {
         // Append decoded character to result
         result.Append(ch);
@@ -349,7 +367,6 @@ import com.google.zxing.common.flexdatatypes.StringBuilder;
   {
     var count:int;
     var value:Number;
-    var code:int;
     var end:Boolean;
   
     if (mode == BYTE_COMPACTION_MODE_LATCH) {
@@ -358,20 +375,17 @@ import com.google.zxing.common.flexdatatypes.StringBuilder;
       count = 0;
       value = 0;
       var decodedData:Array = new Array(6);
-      var byteCompactedCodewords:Array = new Array(6);
-	  for (var k:int=0;k<6;k++) { decodedData[k]=0;byteCompactedCodewords[k]=0;}      
-      code = 0;
+      var byteCompactedCodewords:Array = new Array(6);for (var k:int=0;k<6;k++) { decodedData[k]=0;byteCompactedCodewords[k]=0;}      
       end = false;
       while ((codeIndex < codewords[0]) && !end) 
       {
-        code = codewords[codeIndex++];
+        var code:int = codewords[codeIndex++];
         if (code < TEXT_COMPACTION_MODE_LATCH) 
         {
           byteCompactedCodewords[count] = String.fromCharCode(code);
           count++;
           // Base 900
-          value = value * 900;
-          value = value + code;
+          value = value * 900 + code;
         } else {
           if ((code == TEXT_COMPACTION_MODE_LATCH) ||
               (code == BYTE_COMPACTION_MODE_LATCH) ||
@@ -401,7 +415,7 @@ import com.google.zxing.common.flexdatatypes.StringBuilder;
       // If Byte Compaction mode is invoked with codeword 901,
       // the group of codewords is interpreted directly
       // as one byte per codeword, without compaction.
-      for (var i:int = (Math.floor(count / 5) * 5); i < count; i++) 
+      for (var i:int = (int(count / 5) * 5); i < count; i++) 
       {
         result.Append( byteCompactedCodewords[i]);
       }
@@ -421,8 +435,7 @@ import com.google.zxing.common.flexdatatypes.StringBuilder;
         if (code < TEXT_COMPACTION_MODE_LATCH) {
           count += 1;
           // Base 900
-          value *= 900;
-          value += code;
+          value = value * 900 + code;
         } else {
           if ((code == TEXT_COMPACTION_MODE_LATCH) ||
               (code == BYTE_COMPACTION_MODE_LATCH) ||
@@ -439,12 +452,11 @@ import com.google.zxing.common.flexdatatypes.StringBuilder;
         {
           // Decode every 5 codewords
           // Convert to Base 256
-          var decodedData2:Array = new Array(6);
-          for (var kk:int=0;kk<decodedData2.length;kk++) { decodedData2[kk] = 0; }
+          var decodedData2:Array = new Array(6); for (var kk:int=0;kk<decodedData2.length;kk++) { decodedData2[kk] = 0; }
           for (var j2:int = 0; j2 < 6; ++j2) {
           	var chcode2:int = value - Math.floor(value / 256) * 256; // BAS : Actionscript can't handle modulo for values > int.MAX_VALUE	
             decodedData2[5 - j2] = String.fromCharCode(chcode2);// BAS : Actionscript can't handle modulo for values > int.MAX_VALUE
-            value = Math.floor(value / 256);
+            value  >>= 8;
           }
           result.Append(decodedData2);
         }
@@ -465,8 +477,7 @@ import com.google.zxing.common.flexdatatypes.StringBuilder;
     var count:int = 0;
     var end:Boolean = false;
 
-    var numericCodewords:Array = new Array(MAX_NUMERIC_CODEWORDS);
-    for (var kk:int=0;kk<numericCodewords.length;kk++) { numericCodewords[kk] = 0; }
+    var numericCodewords:Array = new Array(MAX_NUMERIC_CODEWORDS);for (var kk:int=0;kk<numericCodewords.length;kk++) { numericCodewords[kk] = 0; }
 
     while ((codeIndex < codewords.length) && !end) {
       var code:int = codewords[codeIndex++];
@@ -587,9 +598,9 @@ import com.google.zxing.common.flexdatatypes.StringBuilder;
       // Put zeros into the result.
       result.Append('0');
     }
-    var hundreds:int = value2 / 100;
-    var tens:int = (value2 / 10) % 10;
-    var ones:int = value2 % 10;
+    var hundreds:int = int(value2 / 100);
+    var tens:int = int(int(value2 / 10) % 10);
+    var ones:int = int(value2 % 10);
     // Multiply by ones
     for (var j:int = 0; j < ones; j++) {
       result = add(result.toString(), value1);
@@ -636,32 +647,17 @@ import com.google.zxing.common.flexdatatypes.StringBuilder;
       var intValue1:int = parseInt(temp1.toString());
       var intValue2:int = parseInt(temp2.toString());
 
-      var sumval:int = (intValue1 + intValue2 + carry) % 1000;
-      carry = (intValue1 + intValue2 + carry) / 1000;
+      var sumval:int = int((intValue1 + intValue2 + carry) % 1000);
+      carry = int((intValue1 + intValue2 + carry) / 1000);
 
-      result.setCharAt(i + 2, String.fromCharCode( ((sumval % 10) + ('0').charCodeAt(0))));
-      result.setCharAt(i + 1, String.fromCharCode( (((sumval / 10) % 10) + ('0').charCodeAt(0))));
-      result.setCharAt(i, String.fromCharCode( ((sumval / 100) + ('0').charCodeAt(0))));
+      result.setCharAt(i + 2, String.fromCharCode( (int(sumval % 10) + 0x30)));
+      result.setCharAt(i + 1, String.fromCharCode( (int(int(sumval / 10) % 10) + 0x30)));
+      result.setCharAt(i, String.fromCharCode( (int(sumval / 100) + 0x30)));
     }
     return result;
   }
 
-  /*
-   private static String decodeBase900toBase10(int codewords[], int count) {
-     BigInteger accum = BigInteger.valueOf(0);
-     BigInteger value = null;
-     for (int i = 0; i < count; i++) {
-       value = BigInteger.valueOf(900).pow(count - i - 1);
-       value = value.multiply(BigInteger.valueOf(codewords[i]));
-       accum = accum.add(value);
-     }
-     if (debug) System.out.println("Big Integer " + accum);
-     String result = accum.toString().substring(1);
-     return result;
-   }
-   */
-   
-   
+  
 }
 
 }

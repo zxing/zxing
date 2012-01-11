@@ -15,8 +15,10 @@
  */
 package com.google.zxing.oned
 {
+	import com.google.zxing.ResultMetadataType;
 	
- 	public class Code128Reader extends AbstractOneDReader
+	
+ 	public class Code128Reader extends OneDReader
     { 
 		import com.google.zxing.common.flexdatatypes.HashTable;
 		import com.google.zxing.common.flexdatatypes.StringBuilder;
@@ -25,9 +27,10 @@ package com.google.zxing.oned
 		import com.google.zxing.Result;
 		import com.google.zxing.ResultPoint;
 		import com.google.zxing.common.BitArray;
+		import com.google.zxing.BinaryBitmap;
 
 
-            private static  var CODE_PATTERNS:Array = [
+            public static  var CODE_PATTERNS:Array = [
               [2, 1, 2, 2, 2, 2], // 0
               [2, 2, 2, 1, 2, 2],
               [2, 2, 2, 2, 2, 1],
@@ -239,7 +242,7 @@ package com.google.zxing.oned
         }
       }
 
-      public override function decodeRow(rowNumber:int,  row:BitArray, hints:Object):Result {
+      public override function decodeRow(rowNumber:Object,  row:BitArray, hints:Object):Result {
 
         var startPatternInfo:Array = findStartPattern(row);
         var startCode:int = startPatternInfo[2];
@@ -405,14 +408,15 @@ package com.google.zxing.oned
           if (unshift) {
             switch (codeSet) {
               case CODE_CODE_A:
-                codeSet = CODE_CODE_C;
+                codeSet = CODE_CODE_B;
+               // codeSet = CODE_CODE_C;
                 break;
               case CODE_CODE_B:
                 codeSet = CODE_CODE_A;
                 break;
-              case CODE_CODE_C:
-                codeSet = CODE_CODE_B;
-                break;
+             // case CODE_CODE_C:
+              //  codeSet = CODE_CODE_B;
+              //  break;
             }
           }
 
@@ -463,6 +467,12 @@ package com.google.zxing.oned
             BarcodeFormat.CODE_128);
 
       }
+      
+       /* function decode(image:BinaryBitmap, hints:HashTable=null):Result 
+        { 
+        	return super.decode(image,hints); 
+        
+        }*/
     
     }
 

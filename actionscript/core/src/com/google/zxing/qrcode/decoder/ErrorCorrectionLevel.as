@@ -38,10 +38,9 @@ package com.google.zxing.qrcode.decoder
           public static  var H:ErrorCorrectionLevel = new ErrorCorrectionLevel(3, 0x02, "H");
 
           private static  var FOR_BITS:Array = [M, L, H, Q];
-
-          private var Ordinal:int;
-          private var bits:int;
-          private var name:String;
+          protected var Ordinal:int;
+          protected var bits:int;
+          protected var name:String;
 
           public function ErrorCorrectionLevel(ordinal:int, bits:int, name:String) {
             this.Ordinal = ordinal;

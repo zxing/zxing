@@ -146,7 +146,7 @@ package com.google.zxing.qrcode.encoder
                 case 3:
                     return ((y + x) % 3 == 0) ? 1 : 0;
                 case 4:
-                    return ((int(y / 2) + int(x / 3)) % 2 == 0) ? 1 : 0;
+                    return ((int(y / 2) + int(x / 3)) % 2 == 0) ? 1 : 0; // bas : fixed here
                 case 5:
                     return (((y * x) % 2) + ((y * x) % 3) == 0) ? 1 : 0;
                 case 6:
@@ -180,7 +180,6 @@ package com.google.zxing.qrcode.encoder
                 for (var j:int = 0; j < jLimit; ++j)
                 {
                     var bit:int = isHorizontal ? array[i][j] : array[j][i];
-                    //trace('['+i+']['+j+']:'+bit);
                     if (bit == prevBit)
                     {
                         numSameBitCells += 1;

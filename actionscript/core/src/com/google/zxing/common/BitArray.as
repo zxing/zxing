@@ -44,7 +44,31 @@ package com.google.zxing.common
       public function getSize():int {
         return Size;
       }
-
+ 	
+ 	  public  function getSizeInBytes():int 
+ 	  {
+    		return (this.Size + 7) >> 3;
+  	  }
+  	  
+  	  
+  private function ensureCapacity(size:int):void 
+  {
+    if (size > bits.length << 5) 
+    {
+        var newArray:Array = new Array(size);
+        if (bits != null)
+        {
+            //System.Array.Copy(bytes, 0, newArray, 0, bytes.length);
+            for (var i:int=0;i<bits.length;i++)
+            {
+            	newArray[i] = bits[i];
+            }
+        }
+      
+      this.bits = newArray;
+    }
+  }
+  	  
       /**
        * @param i bit to get
        * @return true iff bit i is set
@@ -132,6 +156,7 @@ package com.google.zxing.common
         return true;
       }
 
+	  
       /**
        * @return underlying array of ints. The first element holds the first 32 bits, and the least
        *         significant bit is bit 0.
@@ -140,8 +165,7 @@ package com.google.zxing.common
         return bits;
       }
 
-		// bas : for debugging purposes
-      public function setBitArray(a:Array):void {
+      private function setBitArray(a:Array):void {
         bits = a;
       }
      public function setSize(siz:int):void {
@@ -171,6 +195,7 @@ package com.google.zxing.common
         }
         return new Array(arraySize);
       }
+      
       public function toString():String 
       {
     	var result:StringBuilder = new StringBuilder(this.Size);
@@ -184,5 +209,88 @@ package com.google.zxing.common
     	}
     	return result.ToString();
   	}
+  	
+  	 public function appendBit(bit:Boolean):void 
+  	 {
+    	this.ensureCapacity(this.Size + 1);
+    	if (bit) 
+    	{
+      		this.bits[this.Size >> 5] |= (1 << (this.Size & 0x1F));
+    	}
+    	this.Size++;
+ 	 }
+
+  /**
+   * Appends the least-significant bits, from value, in order from most-significant to
+   * least-significant. For example, appending 6 bits from 0x000001E will append the bits
+   * 0, 1, 1, 1, 1, 0 in that order.
+   */
+  public function appendBits(value:int, numBits:int):void {
+    if (numBits < 0 || numBits > 32) {
+      throw new IllegalArgumentException("Num bits must be between 0 and 32");
+    }
+    this.ensureCapacity(this.Size + numBits);
+    for (var numBitsLeft:int = numBits; numBitsLeft > 0; numBitsLeft--) {
+      appendBit(((value >> (numBitsLeft - 1)) & 0x01) == 1);
+    }
+  }
+
+  public function appendBitArray(other:BitArray):void {
+    var otherSize:int = other.getSize();
+    this.ensureCapacity(this.Size + otherSize);
+    for (var i:int = 0; i < otherSize; i++) {
+      appendBit(other._get(i));
+    }
+  }
+
+  public function  xor(other:BitArray):void {
+    if (bits.length != other.bits.length) {
+      throw new IllegalArgumentException("Sizes don't match");
+    }
+    for (var i:int = 0; i < bits.length; i++) {
+      // The last byte could be incomplete (i.e. not have 8 bits in
+      // it) but there is no problem since 0 XOR 0 == 0.
+      bits[i] ^= other.bits[i];
+    }
+  }
+  /*
+  private static function makeArray(size:int):Array {
+    return new Array((size + 31) >> 5);
+  }
+  *
+/*
+  public function  toString():String {
+    var result:StringBuffer  = new StringBuffer(size);
+    for (var i:int = 0; i < size; i++) {
+      if ((i & 0x07) == 0) {
+        result.append(' ');
+      }
+      result.append(get(i) ? 'X' : '.');
+    }
+    return result.toString();
+  }
+  */
+  /**
+   *
+   * @param bitOffset first bit to start writing
+   * @param array array to write into. Bytes are written most-significant byte first. This is the opposite
+   *  of the internal representation, which is exposed by {@link #getBitArray()}
+   * @param offset position in array to start writing
+   * @param numBytes how many bytes to write
+   */
+  public function toBytes(bitOffset:int, array:Array, offset:int, numBytes:int):void 
+  {
+    for (var i:int = 0; i < numBytes; i++) {
+      var theByte:int = 0;
+      for (var j:int = 0; j < 8; j++) {
+        if (_get(bitOffset)) {
+          theByte |= 1 << (7 - j);
+        }
+        bitOffset++;
+      }
+      array[offset + i] = theByte;
+    }
+  }
+
 }
 }

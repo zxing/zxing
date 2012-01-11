@@ -43,11 +43,10 @@ package com.google.zxing.qrcode.decoder
           ];
 
           private static var VERSIONS:Array = buildVersions();
-
-          private var versionNumber:int;
-          private var alignmentPatternCenters:Array;
-          private var ecBlocks:Array;
-          private var totalCodewords:int;
+          protected var versionNumber:int;
+          protected var alignmentPatternCenters:Array;
+          protected var ecBlocks:Array;
+          protected var totalCodewords:int;
 
           public function Version(versionNumber:int,
                            			alignmentPatternCenters:Array,
@@ -90,11 +89,9 @@ package com.google.zxing.qrcode.decoder
             return 17 + 4 * versionNumber;
           }
 
-          public function getECBlocksForLevel(ecLevel:ErrorCorrectionLevel):ECBlocks 
+          public function getECBlocksForLevel(ecLevel:ErrorCorrectionLevel):ECBlocks
           {
-          	var ordinal:int = ecLevel.ordinal();
-          	var result:ECBlocks = ecBlocks[ordinal]  
-            return result;
+            return ecBlocks[ecLevel.ordinal()];
           }
 
           /**
@@ -163,9 +160,9 @@ package com.google.zxing.qrcode.decoder
             // Top left finder pattern + separator + format
             bitMatrix.setRegion(0, 0, 9, 9);
             // Top right finder pattern + separator + format
-            bitMatrix.setRegion(0, dimension - 8, 9, 8);
-            // Bottom left finder pattern + separator + format
             bitMatrix.setRegion(dimension - 8, 0, 8, 9);
+            // Bottom left finder pattern + separator + format
+            bitMatrix.setRegion(0, dimension - 8, 9, 8); // bas : hier zat een fout
 
             // Alignment patterns
             var max:int = alignmentPatternCenters.length;
@@ -178,20 +175,20 @@ package com.google.zxing.qrcode.decoder
                   // No alignment patterns near the three finder paterns
                   continue;
                 }
-                bitMatrix.setRegion(i, alignmentPatternCenters[y] - 2, 5, 5);
+                bitMatrix.setRegion(alignmentPatternCenters[y] - 2, i, 5, 5);
               }
             }
 
             // Vertical timing pattern
-            bitMatrix.setRegion(9, 6, dimension - 17, 1);
+            bitMatrix.setRegion(6, 9, 1,dimension - 17);
             // Horizontal timing pattern
-            bitMatrix.setRegion(6, 9, 1, dimension - 17);
+            bitMatrix.setRegion(9, 6,  dimension - 17,1);
 
             if (versionNumber > 6) {
               // Version info, top right
-              bitMatrix.setRegion(0, dimension - 11, 6, 3);
+              bitMatrix.setRegion(dimension - 11, 0,3,6);
               // Version info, bottom left
-              bitMatrix.setRegion(dimension - 11, 0, 3, 6);
+              bitMatrix.setRegion(0, dimension - 11, 6,3);
             }
 
             return bitMatrix;

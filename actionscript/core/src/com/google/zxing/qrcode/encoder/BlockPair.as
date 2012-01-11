@@ -4,9 +4,8 @@ package com.google.zxing.qrcode.encoder
       {
 		import com.google.zxing.common.zxingByteArray;
 		
-		// Bas : made public for debugging
-        public var dataBytes:zxingByteArray;
-        public var errorCorrectionBytes:zxingByteArray ;
+        protected var dataBytes:zxingByteArray;
+        protected var errorCorrectionBytes:zxingByteArray ;
 
         public function BlockPair(data:zxingByteArray,  errorCorrection:zxingByteArray) {
           dataBytes = data;

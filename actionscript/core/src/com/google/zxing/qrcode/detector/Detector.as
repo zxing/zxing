@@ -6,13 +6,19 @@ package com.google.zxing.qrcode.detector
 		import com.google.zxing.common.flexdatatypes.HashTable;
 		import com.google.zxing.common.DetectorResult;
 		import com.google.zxing.common.GridSampler;
+		import com.google.zxing.common.PerspectiveTransform;
 		import com.google.zxing.qrcode.decoder.Version;
 		import com.google.zxing.ResultPoint;
 		import com.google.zxing.common.BitMatrix;
 		import com.google.zxing.ReaderException;
+		import com.google.zxing.ResultPointCallback;
+		import com.google.zxing.DecodeHintType;
+		import com.google.zxing.NotFoundException;
+		import com.google.zxing.ResultPointCallback;
 		
 
           private var image:BitMatrix ;
+          private var resultPointCallback:ResultPointCallback ;
           
           protected function  getImage():BitMatrix 
           {
@@ -25,7 +31,12 @@ package com.google.zxing.qrcode.detector
             this.image = image;
           }
 
-          /**
+		  public function getResultPointCallback():ResultPointCallback 
+		  {
+		    return resultPointCallback;
+		  }
+		  
+		  /**
            * <p>Detects a QR Code in an image, simply.</p>
            *
            * @return {@link DetectorResult} encapsulating results of detecting a QR Code
@@ -46,69 +57,18 @@ package com.google.zxing.qrcode.detector
            * @return {@link DetectorResult} encapsulating results of detecting a QR Code
            * @throws ReaderException if no QR Code can be found
            */
-          public function detect(hints:HashTable=null):DetectorResult {
+          public function detect(hints:HashTable=null):DetectorResult 
+          {
+    		var resultPointCallback:ResultPointCallback = hints == null ? null : (hints._get(DecodeHintType.NEED_RESULT_POINT_CALLBACK) as ResultPointCallback);
 
-
-            var finder:FinderPatternFinder = new FinderPatternFinder(image);
+            var finder:FinderPatternFinder = new FinderPatternFinder(image,resultPointCallback);
             var info:FinderPatternInfo = finder.find(hints);
+            
+            var result:DetectorResult = processFinderPatternInfo(info);
+    		return result;
+		}
 
-            var topLeft:FinderPattern = info.getTopLeft();
-            var topRight:FinderPattern = info.getTopRight();
-            var bottomLeft:FinderPattern = info.getBottomLeft();
-
-            var moduleSize:Number = calculateModuleSize(topLeft, topRight, bottomLeft);
-            if (moduleSize < 1) {
-              throw new ReaderException("Detector : detect : moduleSize < 1");
-            }
-            var dimension:int = computeDimension(topLeft, topRight, bottomLeft, moduleSize);
-
-            var provisionalVersion:Version = Version.getProvisionalVersionForDimension(dimension);
-            var modulesBetweenFPCenters:int = provisionalVersion.getDimensionForVersion() - 7;
-
-            var alignmentPattern:AlignmentPattern  = null;
-            // Anything above version 1 has an alignment pattern
-            if (provisionalVersion.getAlignmentPatternCenters().length > 0) {
-
-              // Guess where a "bottom right" finder pattern would have been
-              var bottomRightX:Number = topRight.getX() - topLeft.getX() + bottomLeft.getX();
-              var bottomRightY:Number = topRight.getY() - topLeft.getY() + bottomLeft.getY();
-
-              // Estimate that alignment pattern is closer by 3 modules
-              // from "bottom right" to known top left location
-              var correctionToTopLeft:Number = 1 - 3 / Number( modulesBetweenFPCenters);
-              var estAlignmentX:int = int( (topLeft.getX() + correctionToTopLeft * (bottomRightX - topLeft.getX())));
-              var estAlignmentY:int = int( (topLeft.getY() + correctionToTopLeft * (bottomRightY - topLeft.getY())));
-
-              // Kind of arbitrary -- expand search radius before giving up
-              for (var i:int = 4; i <= 16; i <<= 1) {
-                try {
-                  alignmentPattern = findAlignmentInRegion(moduleSize,
-                      estAlignmentX,
-                      estAlignmentY,
-                      Number(i));
-                  break;
-                } catch (re:ReaderException) {
-                  // try next round
-                }
-              }
-              if (alignmentPattern == null) {
-                throw new ReaderException("Detector : detect : alignmentPattern == null");
-              }
-
-            }
-
-            var bits:BitMatrix  = sampleGrid(image, topLeft, topRight, bottomLeft, alignmentPattern, dimension);
-
-            var points:Array;
-            if (alignmentPattern == null) {
-              points = [bottomLeft, topLeft, topRight];
-            } else {
-              points = [bottomLeft, topLeft, topRight, alignmentPattern];
-            }
-            return new DetectorResult(bits, points);
-          }
-
-  protected function processFinderPatternInfo(info:FinderPatternInfo ):DetectorResult 
+  public function processFinderPatternInfo(info:FinderPatternInfo ):DetectorResult 
   {
 
     var topLeft:FinderPattern = info.getTopLeft();
@@ -145,14 +105,19 @@ package com.google.zxing.qrcode.detector
               estAlignmentY,
                i);
           break;
-        } catch (re:ReaderException) {
+        } 
+        catch (re:ReaderException) 
+        {
           // try next round
         }
       }
       // If we didn't find alignment pattern... well try anyway without it
     }
 
-    var bits:BitMatrix  = sampleGrid(image, topLeft, topRight, bottomLeft, alignmentPattern, dimension);
+    var transform:PerspectiveTransform  =
+        createTransform(topLeft, topRight, bottomLeft, alignmentPattern, dimension);
+
+    var bits:BitMatrix = sampleGrid(image, transform, dimension);
 
     var points:Array;
     if (alignmentPattern == null) {
@@ -164,52 +129,15 @@ package com.google.zxing.qrcode.detector
   }
 
 
+  private static function sampleGrid(image:BitMatrix ,
+                                      transform:PerspectiveTransform ,
+                                      dimension:int ):BitMatrix {
 
-          private static function sampleGrid(image:BitMatrix,
-                                              topLeft:ResultPoint,
-                                              topRight:ResultPoint,
-                                              bottomLeft:ResultPoint,
-                                              alignmentPattern:ResultPoint,
-                                              dimension:int):BitMatrix  {
-            var dimMinusThree:Number = Number( dimension - 3.5);
-            var bottomRightX:Number;
-            var bottomRightY:Number;
-            var sourceBottomRightX:Number;
-            var sourceBottomRightY:Number;
-            if (alignmentPattern != null) {
-              bottomRightX = alignmentPattern.getX();
-              bottomRightY = alignmentPattern.getY();
-              sourceBottomRightX = sourceBottomRightY = dimMinusThree - 3;
-            } else {
-              // Don't have an alignment pattern, just make up the bottom-right point
-              bottomRightX = (topRight.getX() - topLeft.getX()) + bottomLeft.getX();
-              bottomRightY = (topRight.getY() - topLeft.getY()) + bottomLeft.getY();
-              sourceBottomRightX = sourceBottomRightY = dimMinusThree;
-            }
-
-            var sampler:GridSampler = GridSampler.getGridSamplerInstance();
-            return sampler.sampleGrid(
-                image,
-                dimension,
-                3.5,
-                3.5,
-                dimMinusThree,
-                3.5,
-                sourceBottomRightX,
-                sourceBottomRightY,
-                3.5,
-                dimMinusThree,
-                topLeft.getX(),
-                topLeft.getY(),
-                topRight.getX(),
-                topRight.getY(),
-                bottomRightX,
-                bottomRightY,
-                bottomLeft.getX(),
-                bottomLeft.getY());
-          }
-
-          /**
+    var sampler:GridSampler  = GridSampler.getGridSamplerInstance();
+    return sampler.sampleGrid(image, dimension, dimension, transform);
+  }
+  
+            /**
            * <p>Computes the dimension (number of modules on a size) of the QR Code based on the position
            * of the finder patterns and estimated module size.</p>
            */
@@ -241,8 +169,10 @@ package com.google.zxing.qrcode.detector
            */
           private function calculateModuleSize(topLeft:ResultPoint , topRight:ResultPoint , bottomLeft:ResultPoint ):Number {
             // Take the average
-            return (calculateModuleSizeOneWay(topLeft, topRight) +
-                calculateModuleSizeOneWay(topLeft, bottomLeft)) / 2;
+            var num1:Number = calculateModuleSizeOneWay(topLeft, topRight);
+            var num2:Number = calculateModuleSizeOneWay(topLeft, bottomLeft);
+             var res:Number = (num1+num2) / 2;
+            return res;
           }
 
           /**
@@ -261,11 +191,11 @@ package com.google.zxing.qrcode.detector
                 int( pattern.getY()));
           
             if (isNaN(moduleSizeEst1)) {
-              return moduleSizeEst2;
+              return moduleSizeEst2 / 7;
             }
             if (isNaN(moduleSizeEst2))
             {
-              return moduleSizeEst1;
+              return moduleSizeEst1 / 7;
             }
             // Average them, and divide by 7 since we've counted the width of 3 black modules,
             // and 1 white and 1 black module on either side. Ergo, divide sum by 14.
@@ -282,20 +212,29 @@ package com.google.zxing.qrcode.detector
             var result:Number = sizeOfBlackWhiteBlackRun(fromX, fromY, toX, toY);
 
             // Now count other way -- don't run off image though of course
+			var scale:Number = 1;
             var otherToX:int = fromX - (toX - fromX);
             if (otherToX < 0) {
               // "to" should the be the first value not included, so, the first value off
               // the edge is -1
-              otherToX = -1;
+			  scale = fromX / (fromX - otherToX);
+              otherToX = 0;
             } else if (otherToX >= image.getWidth()) {
-              otherToX = image.getWidth();
+                scale = (image.getWidth() - 1 - fromX) / (otherToX - fromX);
+				otherToX = image.getWidth() - 1;
             }
-            var otherToY:int = fromY - (toY - fromY);
+            var otherToY:int = int(fromY - (toY - fromY) * scale);
+			
+			scale = 1;
             if (otherToY < 0) {
-              otherToY = -1;
+               scale = fromY / (fromY - otherToY);
+				otherToY = 0;
             } else if (otherToY >= image.getHeight()) {
-              otherToY = image.getHeight();
+               scale = (image.getHeight() - 1 - fromY) /  (otherToY - fromY);
+				otherToY = image.getHeight() - 1;
             }
+            otherToX = int(fromX + (otherToX - fromX) * scale);
+            
             result += sizeOfBlackWhiteBlackRun(fromX, fromY, otherToX, otherToY);
             return result - 1; // -1 because we counted the middle pixel twice
           }
@@ -326,40 +265,52 @@ package com.google.zxing.qrcode.detector
             var error:int = -dx >> 1;
             var ystep:int = fromY < toY ? 1 : -1;
             var xstep:int = fromX < toX ? 1 : -1;
-            var state:int = 0; // In black pixels, looking for white, first or second time
-            var diffX:int =0;
-            var diffY:int =0;
+            // In black pixels, looking for white, first or second time.
+			var state:int = 0;
+			// Loop up until x == toX, but not beyond
+			var xLimit:int = toX + xstep;
+			for (var x:int = fromX, y:int= fromY; x != xLimit; x += xstep) 
+			{
+				var realX:int = steep ? y : x;
+				var realY:int = steep ? x : y;
 
-            for (var x:int = fromX, y:int = fromY; x != toX; x += xstep) {
-
-              var realX:int = steep ? y : x;
-              var realY:int = steep ? x : y;
-              if (state == 1) { // In white pixels, looking for black
-                if (image._get(realX, realY)) {
-                  state++;
-                }
-              } else {
-                if (!image._get(realX, realY)) {
-                  state++;
-                }
-              }
-
-              if (state == 3) { // Found black, white, black, and stumbled back onto white; done
-                diffX = x - fromX;
-                diffY = y - fromY;
-                return Number( Math.sqrt(diffX * diffX + diffY * diffY));
-              }
-              error += dy;
-              if (error > 0) {
-                y += ystep;
-                error -= dx;
-              }
-            }
-
-            diffX = toX - fromX;
-            diffY = toY - fromY;
-            return Number( Math.sqrt(diffX * diffX + diffY * diffY));
-          }
+				// Does current pixel mean we have moved white to black or vice versa?
+				var pixl:Boolean = image._get(realX, realY);
+				if (((state == 0) && !pixl) ||
+				    ((state == 1) && pixl)   ||
+				    ((state == 2) && !pixl)) 
+				{
+					if (state == 2) 
+					{
+						var diffX:int = x - fromX;
+						var diffY:int = y - fromY;
+						return Math.sqrt(diffX * diffX + diffY * diffY);
+					}
+					state++;
+			}
+			
+			error += dy;
+			if (error > 0) 
+			{
+				if (y == toY) 
+				{
+					break;
+				}
+				y += ystep;
+				error -= dx;
+			}
+		}
+		// Found black-white-black; give the benefit of the doubt that the next pixel outside the image
+		// is "white" so this last point at (toX+xStep,toY) is the right ending. This is really a
+		// small approximation; (toX+xStep,toY+yStep) might be really correct. Ignore this.
+		if (state == 2) {
+		  var diffX1:int = toX + xstep - fromX;
+		  var diffY1:int = toY - fromY;
+		  return Math.sqrt(diffX1 * diffX1 + diffY1 * diffY1);
+		}
+		// else we didn't find even black-white-black; no estimate is really possible
+		return NaN;
+      }
 
           /**
            * <p>Attempts to locate an alignment pattern in a limited region of the image, which is
@@ -378,7 +329,8 @@ package com.google.zxing.qrcode.detector
                                                          allowanceFactor:Number):AlignmentPattern{
             // Look for an alignment pattern (3 modules in size) around where it
             // should be
-            var allowance:int = int((allowanceFactor * overallEstModuleSize));
+  
+         var allowance:int = int((allowanceFactor * overallEstModuleSize));
             var alignmentAreaLeftX:int = Math.max(0, estAlignmentX - allowance);
             var alignmentAreaRightX:int = Math.min(image.getWidth() - 1, estAlignmentX + allowance);
             if (alignmentAreaRightX - alignmentAreaLeftX < overallEstModuleSize * 3) {
@@ -387,6 +339,10 @@ package com.google.zxing.qrcode.detector
 
             var alignmentAreaTopY:int = Math.max(0, estAlignmentY - allowance);
             var alignmentAreaBottomY:int = Math.min(image.getHeight() - 1, estAlignmentY + allowance);
+	        if (alignmentAreaBottomY - alignmentAreaTopY < overallEstModuleSize * 3) 
+			{
+				throw NotFoundException.getNotFoundInstance();
+			}
 
             var alignmentFinder:AlignmentPatternFinder =
                 new AlignmentPatternFinder(
@@ -395,7 +351,8 @@ package com.google.zxing.qrcode.detector
                     alignmentAreaTopY,
                     alignmentAreaRightX - alignmentAreaLeftX,
                     alignmentAreaBottomY - alignmentAreaTopY,
-                    overallEstModuleSize);
+                    overallEstModuleSize,
+                    resultPointCallback);
             return alignmentFinder.find();
           }
 
@@ -407,5 +364,45 @@ package com.google.zxing.qrcode.detector
             return int(d + 0.5);
           }
     
+    public static function createTransform(topLeft:ResultPoint ,
+                                                     topRight:ResultPoint ,
+                                                     bottomLeft:ResultPoint ,
+                                                     alignmentPattern:ResultPoint ,
+                                                     dimension:int):PerspectiveTransform {
+    var dimMinusThree:Number = dimension - 3.5;
+    var bottomRightX:Number;
+    var bottomRightY:Number;
+    var sourceBottomRightX:Number;
+    var sourceBottomRightY:Number;
+    if (alignmentPattern != null) {
+      bottomRightX = alignmentPattern.getX();
+      bottomRightY = alignmentPattern.getY();
+      sourceBottomRightX = sourceBottomRightY = dimMinusThree - 3.0;
+    } else {
+      // Don't have an alignment pattern, just make up the bottom-right point
+      bottomRightX = (topRight.getX() - topLeft.getX()) + bottomLeft.getX();
+      bottomRightY = (topRight.getY() - topLeft.getY()) + bottomLeft.getY();
+      sourceBottomRightX = sourceBottomRightY = dimMinusThree;
+    }
+
+    return PerspectiveTransform.quadrilateralToQuadrilateral(
+        3.5,
+        3.5,
+        dimMinusThree,
+        3.5,
+        sourceBottomRightX,
+        sourceBottomRightY,
+        3.5,
+        dimMinusThree,
+        topLeft.getX(),
+        topLeft.getY(),
+        topRight.getX(),
+        topRight.getY(),
+        bottomRightX,
+        bottomRightY,
+        bottomLeft.getX(),
+        bottomLeft.getY());
+  }
+  
     }
 }

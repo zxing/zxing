@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actionScriptProperties mainApplicationPath="zxing_client.mxml" version="3">
+<compiler additionalCompilerArguments="-locale en_US" copyDependentFiles="true" enableModuleDebug="true" generateAccessible="false" htmlExpressInstall="true" htmlGenerate="true" htmlHistoryManagement="true" htmlPlayerVersion="10.0.0" htmlPlayerVersionCheck="true" outputFolderPath="bin-debug" sourceFolderPath="src" strict="true" useApolloConfig="false" verifyDigests="true" warn="true">
+<compilerSourcePath>
+<compilerSourcePathEntry kind="1" linkType="1" path="C:/Personal_projects/test/zxing/core/src"/>
+</compilerSourcePath>
+<libraryPath defaultLinkType="1">
+<libraryPathEntry kind="4" path=""/>
+</libraryPath>
+<sourceAttachmentPath/>
+</compiler>
+<applications>
+<application path="zxing_client.mxml"/>
+</applications>
+<modules/>
+<buildCSSFiles/>
+</actionScriptProperties>

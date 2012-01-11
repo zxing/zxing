@@ -34,6 +34,7 @@ package com.google.zxing.datamatrix.decoder
     	import com.google.zxing.common.flexdatatypes.StringBuilder;
     	import com.google.zxing.common.zxingByteArray;
     	import com.google.zxing.ReaderException;
+    	import com.google.zxing.FormatException;
            /**
            * See ISO 16022:2006, Annex C Table C.1
            * The C40 Basic Character Set (*'s used for placeholders for the shift values)
@@ -77,10 +78,10 @@ package com.google.zxing.datamatrix.decoder
 
           public static function  decode(bytes:Array ):DecoderResult {
             var bits:BitSource  = new BitSource(bytes);
-            var result:StringBuilder = new StringBuilder();
+            var result:StringBuilder = new StringBuilder(100);
             var resultTrailer:StringBuilder  = new StringBuilder(0);
             var  byteSegments:ArrayList = new ArrayList(1);
-            var mode:int = DecodedBitStreamParser.ASCII_ENCODE;
+            var mode:int = ASCII_ENCODE;
             do {
               if (mode == ASCII_ENCODE) {
                 mode = decodeAsciiSegment(bits, result, resultTrailer);
@@ -140,12 +141,13 @@ package com.google.zxing.datamatrix.decoder
 	    	        return C40_ENCODE;
 	            } else if (oneByte == 231) {  // Latch to Base 256 encodation
 	    	        return BASE256_ENCODE;
-	            } else if (oneByte == 232) {  // FNC1
-	    	        throw new ReaderException("DecodedBitStreamParser : decodeAsciiSegment : oneByte = 232 ");
-	            } else if (oneByte == 233) {  // Structured Append
-	    	        throw new ReaderException("DecodedBitStreamParser : decodeAsciiSegment : oneByte = 233");
-	            } else if (oneByte == 234) {  // Reader Programming
-	    	        throw new ReaderException("DecodedBitStreamParser : decodeAsciiSegment : oneByte = 234");
+	            } else if (oneByte == 232) {  
+					// FNC1
+	    	        String.fromCharCode(29);// translate as ASCII 29
+	            } else if ((oneByte == 233) || (oneByte == 234)) 
+				{   // Structured Append, Reader Programming
+					// Ignore these symbols for now
+					// throw new ReaderException("DecodedBitStreamParser : decodeAsciiSegment : oneByte = 234");
 	            } else if (oneByte == 235) {  // Upper Shift (shift to Extended ASCII)
 	    	        upperShift = true;
 	            } else if (oneByte == 236) {  // 05 Macro
@@ -161,11 +163,17 @@ package com.google.zxing.datamatrix.decoder
 	            } else if (oneByte == 240) {  // Latch to EDIFACT encodation
 	    	        return EDIFACT_ENCODE;
 	            } else if (oneByte == 241) {  // ECI Character
-	    	        // TODO(bbrown): I think we need to support ECI
-	    	        throw new ReaderException("DecodedBitStreamParser : decodeAsciiSegment : oneByte = 241");
+					// TODO(bbrown): I think we need to support ECI
+					//throw ReaderException.getInstance();
+					// Ignore this symbol for now
 	            } else if (oneByte >= 242) {  // Not to be used in ASCII encodation
-	    	        throw new ReaderException("DecodedBitStreamParser : decodeAsciiSegment : oneByte = 242");
-	            }
+					// ... but work around encoders that end with 254, latch back to ASCII
+					if (oneByte == 254 && bits.available() == 0) {
+					// Ignore
+					} else {
+						throw FormatException.getFormatInstance();
+				}
+      }
             } while (bits.available() > 0);
             return ASCII_ENCODE;
           }
@@ -226,7 +234,7 @@ package com.google.zxing.datamatrix.decoder
                         result.Append(C40_SHIFT2_SET_CHARS[cValue]);
                       }
                     } else if (cValue == 27) {  // FNC1
-                      throw new ReaderException("DecodedBitStreamParser : decodeC40Segment : cValue = 27");
+                      result.Append(String.fromCharCode(29)); // translate as ASCII 29
                     } else if (cValue == 30) {  // Upper Shift
                       upperShift = true;
                     } else {
@@ -277,17 +285,20 @@ package com.google.zxing.datamatrix.decoder
                 var cValue:int = cValues[i];
                 switch (shift) {
                   case 0:
-                    if (cValue < 3) {
-                      shift = cValue + 1;
-                    } else {
-                      if (upperShift) {
-                        result.Append(TEXT_BASIC_SET_CHARS[cValue]);
-                        upperShift = false;
-                      } else {
-                        result.Append(TEXT_BASIC_SET_CHARS[cValue]);
-                      }
-                    }
-                    break;
+							 if (cValue < 3) {
+								shift = cValue + 1;
+								} else if (cValue < TEXT_BASIC_SET_CHARS.length) {
+									var textChar:String = TEXT_BASIC_SET_CHARS[cValue];
+								if (upperShift) {
+								result.Append(String.fromCharCode(textChar.charCodeAt(0) + 128));
+								upperShift = false;
+							} else {
+								result.Append(textChar);
+							}
+								} else {
+								throw FormatException.getFormatInstance();
+							}
+						break;
                   case 1:
                     if (upperShift) {
                       result.Append(cValue + 128);
@@ -299,15 +310,16 @@ package com.google.zxing.datamatrix.decoder
                     break;
                   case 2:
                     // Shift 2 for Text is the same encoding as C40
-                    if (cValue < 27) {
+                    if (cValue < C40_SHIFT2_SET_CHARS.length) {
+						var c40char:String =C40_SHIFT2_SET_CHARS[cValue]; 
                       if (upperShift) {
-                        result.Append(C40_SHIFT2_SET_CHARS[cValue] + 128);
+                        result.Append(c40char + 128);
                         upperShift = false;
                       } else {
-                        result.Append(C40_SHIFT2_SET_CHARS[cValue]);
+                        result.Append(c40char);
                       }
                     } else if (cValue == 27) {  // FNC1
-                      throw new ReaderException( "DecodedBitStreamParser : decodeTextSegment : cValue = 27");
+                      result.Append(String.fromCharCode(29)); // translate as ASCII 29
                     } else if (cValue == 30) {  // Upper Shift
                       upperShift = true;
                     } else {
@@ -316,14 +328,23 @@ package com.google.zxing.datamatrix.decoder
                     shift = 0;
                     break;
                   case 3:
+				  if (cValue < TEXT_SHIFT3_SET_CHARS.length) 
+				  {
+					var textChar2:String = TEXT_SHIFT3_SET_CHARS[cValue];
                     if (upperShift) {
-                      result.Append(TEXT_SHIFT3_SET_CHARS[cValue] + 128);
+                      result.Append(textChar2 + 128);
                       upperShift = false;
                     } else {
-                      result.Append(TEXT_SHIFT3_SET_CHARS[cValue]);
+                      result.Append(textChar2);
                     }
                     shift = 0;
-                    break;
+                    
+					}
+					else
+					{
+						throw new ReaderException();
+					}
+					break;
                   default:
                     throw new ReaderException("DecodedBitStreamParser : decodeTextSegment : no match for shift"+shift);
                 }
@@ -404,8 +425,8 @@ package com.google.zxing.datamatrix.decoder
                 }
                 
                 if (!unlatch) {
-                  if ((edifactValue & 32) == 0) {  // no 1 in the leading (6th) bit
-                    edifactValue |= 64;  // Add a leading 01 to the 6 bit binary value
+                  if ((edifactValue & 0x20) == 0) {  // no 1 in the leading (6th) bit
+                    edifactValue |= 0x40;  // Add a leading 01 to the 6 bit binary value
                   }
                   result.Append(edifactValue);
                 }
@@ -416,37 +437,55 @@ package com.google.zxing.datamatrix.decoder
           /**
            * See ISO 16022:2006, 5.2.9 and Annex B, B.2
            */
-          private static function decodeBase256Segment(bits:BitSource, result:StringBuilder , byteSegments:ArrayList ):void {
+          private static function decodeBase256Segment(bits:BitSource, result:StringBuilder , byteSegments:ArrayList ):void 
+		  {
             // Figure out how long the Base 256 Segment is.
-            var d1:int = bits.readBits(8);
-            var count:int;
-            if (d1 == 0) {  // Read the remainder of the symbol
-              count = bits.available() / 8;
-            } else if (d1 < 250) {
-              count = d1;
-            } else {
-              count = 250 * (d1 - 249) + bits.readBits(8);
-            }
-            var bytes:Array = new Array(count);
-            for (var i:int = 0; i < count; i++) 
-            {
-              bytes[i] = unrandomize255State(bits.readBits(8), i);
-            }
-            byteSegments.Add(bytes);
-            try 
-            {
-                //result.Append(System.Text.Encoding.GetEncoding("iso-8859-1").GetString(bytes));
-                var str:String = "";
-                for(var i2:int=0;i2<bytes.length;i2++)
-                {
-                	str = str + String.fromCharCode(bytes[i2]);
-                }
-                result.Append(str);
+       // 	Figure out how long the Base 256 Segment is.
+			var codewordPosition:int = 1 + bits.getByteOffset(); // position is 1-indexed
+			var d1:int = unrandomize255State(bits.readBits(8), codewordPosition++);
+			var count:int;
+			if (d1 == 0) 
+			{  // Read the remainder of the symbol
+				count = bits.available() / 8;
+			} 
+			else if (d1 < 250) 
+			{
+				count = d1;
+			} 
+			else 
+			{
+				count = 250 * (d1 - 249) + unrandomize255State(bits.readBits(8), codewordPosition++);
+			}
 
-                
-            } catch (uee:Error ) {
-              throw new Error("Platform does not support required encoding: " + uee);
-            }
+			// We're seeing NegativeArraySizeException errors from users.
+			if (count < 0) 
+			{
+				throw FormatException.getFormatInstance();
+			}
+
+			var bytes:Array = new Array(count);
+			for (var i:int = 0; i < count; i++) 
+			{
+				// Have seen this particular error in the wild, such as at
+				// http://www.bcgen.com/demo/IDAutomationStreamingDataMatrix.aspx?MODE=3&D=Fred&PFMT=3&PT=F&X=0.3&O=0&LM=0.2
+				if (bits.available() < 8) 
+				{
+					throw FormatException.getFormatInstance();
+				}
+				bytes[i] = unrandomize255State(bits.readBits(8), codewordPosition++);
+			}
+			byteSegments.addElement(bytes);
+			/*try 
+			{
+					result.append(new String(bytes, "ISO8859_1"));
+			} catch (UnsupportedEncodingException uee) 
+			{
+				throw new RuntimeException("Platform does not support required encoding: " + uee);
+			}*/
+			for (var k:int=0;k<bytes.length;k++)
+			{
+				result.Append(String.fromCharCode(bytes[k])); // BAS :Flex does not support encodings
+			}
           }
           
           /**

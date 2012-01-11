@@ -15,7 +15,7 @@
  */
 package com.google.zxing.oned
 {
-	public class MultiFormatUPCEANReader extends AbstractOneDReader
+	public class MultiFormatUPCEANReader extends OneDReader
     { 
     	import com.google.zxing.common.BitArray;
     	import com.google.zxing.common.flexdatatypes.ArrayList;
@@ -52,11 +52,11 @@ package com.google.zxing.oned
             }
           }
 
-          public override function decodeRow(rowNumber:int, row:BitArray,hints:Object):Result 
+          public override  function decodeRow(rowNumber:Object, row:BitArray,hints:Object):Result 
           {
             // Compute this location once and reuse it on multiple implementations
 
-            var startGuardPattern:Array = AbstractUPCEANReader.findStartGuardPattern(row);
+            var startGuardPattern:Array = UPCEANReader.findStartGuardPattern(row);
             var size:int = readers.Count;
             for (var i:int = 0; i < size; i++) {
             	

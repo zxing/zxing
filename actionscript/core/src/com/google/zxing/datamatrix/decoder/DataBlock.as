@@ -82,8 +82,7 @@ package com.google.zxing.datamatrix.decoder
             for (var i2:int = 0; i2 < shorterBlocksNumDataCodewords; i2++) {
               for (var j2:int = 0; j2 < numResultBlocks; j2++) 
               {
-                result[j2].codewords[i2] = rawCodewords[rawCodewordsOffset];
-                rawCodewordsOffset++;
+                result[j2].codewords[i2] = rawCodewords[rawCodewordsOffset++];
               }
             }
             
@@ -91,8 +90,7 @@ package com.google.zxing.datamatrix.decoder
             var specialVersion:Boolean = version.getVersionNumber() == 24;
             var numLongerBlocks:int = specialVersion ? 8 : numResultBlocks;
             for (var j3:int = 0; j3 < numLongerBlocks; j3++) {
-              result[j3].codewords[longerBlocksNumDataCodewords - 1] = rawCodewords[rawCodewordsOffset];
-              rawCodewordsOffset++;
+              result[j3].codewords[longerBlocksNumDataCodewords - 1] = rawCodewords[rawCodewordsOffset++];
             }
             
             // Now add in error correction blocks
@@ -100,8 +98,7 @@ package com.google.zxing.datamatrix.decoder
             for (var i4:int = longerBlocksNumDataCodewords; i4 < max; i4++) {
               for (var j4:int = 0; j4 < numResultBlocks; j4++) {              	
                 var iOffset:int = (specialVersion && j4 > 7) ? i4 - 1 : i4;
-                result[j4].codewords[iOffset] = rawCodewords[rawCodewordsOffset];
-                rawCodewordsOffset++;
+                result[j4].codewords[iOffset] = rawCodewords[rawCodewordsOffset++];
               }
             }
 

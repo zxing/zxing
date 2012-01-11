@@ -28,6 +28,13 @@ package com.google.zxing.common
           public function BitSource( bytes:Array) {
             this.bytes = bytes;
           }
+          
+        /**
+		   * @return index of next byte in input byte array which would be read by the next call to {@link #readBits(int)}.
+		   */
+		  public function getByteOffset():int {
+		    return byteOffset;
+		  }
 
           /**
            * @param numBits number of bits to read

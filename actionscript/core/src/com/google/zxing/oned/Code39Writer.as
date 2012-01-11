@@ -1,0 +1,85 @@
+/*
+ * Copyright 2010 ZXing authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.zxing.oned{
+
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.common.flexdatatypes.HashTable;
+import com.google.zxing.common.flexdatatypes.IllegalArgumentException;
+import com.google.zxing.oned.Code39Reader
+
+/**
+ * This object renders a CODE39 code as a {@link BitMatrix}.
+ * 
+ * @author erik.barbara@gmail.com (Erik Barbara)
+ */
+public  class Code39Writer extends UPCEANWriter {
+
+  public override function  encode(contents:String ,
+                           format:BarcodeFormat = null,
+                           width:int = 0,
+                           height:int = 0,
+                           hints:HashTable = null):Object 
+   {
+	if (format != null)
+		{
+       if (format != BarcodeFormat.CODE_39) {
+      throw new IllegalArgumentException("Can only encode CODE_39, but got " + format);
+    }
+    // returns a bitmatrix
+    return super.encode(contents, format, width, height, hints);
+     }
+	// this part returns an array
+    var length:int = contents.length;
+    if (length > 80) {
+      throw new IllegalArgumentException(
+          "Requested contents should be less than 80 digits long, but got " + length);
+    }
+
+    var widths:Array = new Array(9);
+    var codeWidth:int = 24 + 1 + length;
+    for (var i:int = 0; i < length; i++) {
+      var indexInString:int = Code39Reader.ALPHABET_STRING.indexOf(contents.charAt(i));
+      toIntArray(Code39Reader.CHARACTER_ENCODINGS[indexInString], widths);
+      for(var j:int = 0; j < widths.length; j++) {
+        codeWidth += widths[j];
+      }
+    }
+   var result:Array = new Array(codeWidth);
+    toIntArray(Code39Reader.CHARACTER_ENCODINGS[39], widths);
+    var pos:int = appendPattern(result, 0, widths, 1);
+    var narrowWhite:Array = [1];
+    pos += appendPattern(result, pos, narrowWhite, 0);
+    //append next character to bytematrix
+    for(i = length-1; i >= 0; i--) {
+      indexInString = Code39Reader.ALPHABET_STRING.indexOf(contents.charAt(i));
+      toIntArray(Code39Reader.CHARACTER_ENCODINGS[indexInString], widths);
+      pos += appendPattern(result, pos, widths, 1);
+      pos += appendPattern(result, pos, narrowWhite, 0);
+    }
+    toIntArray(Code39Reader.CHARACTER_ENCODINGS[39], widths);
+    pos += appendPattern(result, pos, widths, 1);
+    return result;
+  }
+
+  private static function  toIntArray(a:int, toReturn:Array):void {
+    for (var i:int = 0; i < 9; i++) {
+      var temp:int = a & (1 << i);
+      toReturn[i] = temp == 0 ? 1 : 2;
+    }
+  }
+}
+}

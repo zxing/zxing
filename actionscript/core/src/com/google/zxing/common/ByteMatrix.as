@@ -27,7 +27,6 @@ package com.google.zxing.common
      public class ByteMatrix
     {
     	import com.google.zxing.common.flexdatatypes.StringBuilder;
-    	
         private var bytes:Array;
         private var Height:int;
         private var Width:int;
@@ -127,7 +126,31 @@ package com.google.zxing.common
                 result.Append('\n');
             }
             return result.ToString();
-        }        
+        }   
+        
+        public function toString2():String
+        {
+            var result:StringBuilder  = new StringBuilder();
+            for (var y:int = 0; y < Height; ++y)
+            {
+                for (var x:int = 0; x < Width; ++x)
+                {
+                    switch (bytes[y][x])
+                    {
+                        case 0:
+                            result.Append("0");
+                            break;
+                        case 1:
+                            result.Append("1");
+                            break;
+                        default:
+                            result.Append("_");
+                            break;
+                    }
+                }
+            }
+            return result.ToString();
+        }     
     }
 
 }

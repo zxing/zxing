@@ -29,10 +29,18 @@ package com.google.zxing.datamatrix
 	import com.google.zxing.datamatrix.decoder.Decoder;
 	import com.google.zxing.datamatrix.detector.Detector;
 	import com.google.zxing.common.flexdatatypes.HashTable;
+	import com.google.zxing.NotFoundException;
 
+	 
+
+  
 	 public class DataMatrixReader implements Reader
     {
     
+
+  	public function reset():void {
+    // do nothing
+  }
     /**
  * This implementation can detect and decode Data Matrix codes in an image.
  *
@@ -91,71 +99,74 @@ package com.google.zxing.datamatrix
            * around it. This is a specialized method that works exceptionally fast in this special
            * case.
            */
-          private static function extractPureBits(image:BitMatrix ):BitMatrix {
-            // Now need to determine module size in pixels
+           private static function extractPureBits(image:BitMatrix):BitMatrix
+		   {
+				var leftTopBlack:Array = image.getTopLeftOnBit();
+				var rightBottomBlack:Array = image.getBottomRightOnBit();
+				if (leftTopBlack == null || rightBottomBlack == null) 
+				{
+					throw NotFoundException.getNotFoundInstance();
+				}
+				
+				var moduleSize:int = moduleSize(leftTopBlack, image);
 
-            var height:int = image.getHeight();
-            var width:int = image.getWidth();
-            var minDimension:int = Math.min(height, width);
+				var top:int = leftTopBlack[1];
+				var bottom:int = rightBottomBlack[1];
+				var left:int = leftTopBlack[0];
+				var right:int = rightBottomBlack[0];
 
-            // First, skip white border by tracking diagonally from the top left down and to the right:
-            var borderWidth:int = 0;
-            while (borderWidth < minDimension && !image._get(borderWidth, borderWidth)) {
-              borderWidth++;
-            }
-            if (borderWidth == minDimension) {
-              throw new ReaderException("DataMatrixReader : extractPureBits : borderWidth == minDimension");
-            }
+				var matrixWidth:int = (right - left + 1) / moduleSize;
+				var matrixHeight:int = (bottom - top + 1) / moduleSize;
+				if (matrixWidth <= 0 || matrixHeight <= 0) 
+				{
+					throw NotFoundException.getNotFoundInstance();
+				}
 
-            // And then keep tracking across the top-left black module to determine module size
-            var moduleEnd:int = borderWidth + 1;
-            while (moduleEnd < width && image._get(moduleEnd, borderWidth)) {
-              moduleEnd++;
-            }
-            if (moduleEnd == width) {
-              throw new ReaderException("DataMatrixReader : extractPureBits : moduleEnd == width");
-            }
+				// Push in the "border" by half the module width so that we start
+				// sampling in the middle of the module. Just in case the image is a
+				// little off, this will help recover.
+				var nudge:int = moduleSize >> 1;
+				top += nudge;
+				left += nudge;
 
-            var moduleSize:int = moduleEnd - borderWidth;
+				// Now just read off the bits
+				var bits:BitMatrix = new BitMatrix(matrixWidth, matrixHeight);
+				for (var y:int = 0; y < matrixHeight; y++) 
+				{
+					var iOffset:int = top + y * moduleSize;
+					for (var x:int = 0; x < matrixWidth; x++) 
+					{
+						if (image._get(left + x * moduleSize, iOffset)) 
+						{
+							bits._set(x, y);
+						}
+					}
+				}
+				
+				return bits;
+			}
 
-            // And now find where the bottommost black module on the first column ends
-            var columnEndOfSymbol:int = height - 1;
-            while (columnEndOfSymbol >= 0 && !image._get(borderWidth, columnEndOfSymbol)) {
-    	        columnEndOfSymbol--;
-            }
-            if (columnEndOfSymbol < 0) {
-              throw new ReaderException("DataMatrixReader : extractPureBits : columnEndOfSymbol < 0");
-            }
-            columnEndOfSymbol++;
+		private static function moduleSize(leftTopBlack:Array, image:BitMatrix):int
+		{
+			var width:int = image.getWidth();
+			var x:int = leftTopBlack[0];
+			var y:int = leftTopBlack[1];
+			while (x < width && image._get(x, y)) 
+			{
+				x++;
+			}
+			if (x == width) 
+			{
+				throw NotFoundException.getNotFoundInstance();
+			}
 
-            // Make sure width of barcode is a multiple of module size
-            if ((columnEndOfSymbol - borderWidth) % moduleSize != 0) {
-              throw new ReaderException("DataMatrixReader : extractPureBits : barcode width is not a multiple of module size");
-            }
-            var dimension:int = (columnEndOfSymbol - borderWidth) / moduleSize;
-
-            // Push in the "border" by half the module width so that we start
-            // sampling in the middle of the module. Just in case the image is a
-            // little off, this will help recover.
-            borderWidth += moduleSize >> 1;
-
-            var sampleDimension:int = borderWidth + (dimension - 1) * moduleSize;
-            if (sampleDimension >= width || sampleDimension >= height) {
-              throw new ReaderException("DataMatrixReader : extractPureBits : sampleDimension ("+sampleDimension+") is large than width ("+width+") or height ("+height+")");
-            }
-
-            // Now just read off the bits
-            var bits:BitMatrix = new BitMatrix(dimension);
-            for (var i:int = 0; i < dimension; i++) {
-              var iOffset:int = borderWidth + i * moduleSize;
-              for (var j:int = 0; j < dimension; j++) {
-                if (image._get(borderWidth + j * moduleSize, iOffset)) {
-                  bits._set(j, i);
-                }
-              }
-            }
-            return bits;
-          }
+			var moduleSize:int = x - leftTopBlack[0];
+			if (moduleSize == 0) 
+			{
+				throw NotFoundException.getNotFoundInstance();
+			}
+			return moduleSize;
+		}
     }
 
 }

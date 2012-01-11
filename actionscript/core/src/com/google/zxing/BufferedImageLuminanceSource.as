@@ -123,7 +123,6 @@ public final class BufferedImageLuminanceSource extends LuminanceSource
 
   public override function crop(left:int, top:int, width:int, height:int):LuminanceSource 
   {
-  	// BAS : todo
     return new BufferedImageLuminanceSource(image, left, top, width, height);
   }
 
@@ -133,7 +132,6 @@ public final class BufferedImageLuminanceSource extends LuminanceSource
   public override function isRotateSupported():Boolean 
   {
   	return false;
-  	//Bas : TOO 
     //return image.getType() != BufferedImage.TYPE_CUSTOM;
   }
 
@@ -144,7 +142,7 @@ public final class BufferedImageLuminanceSource extends LuminanceSource
     {
       throw new Error("Rotate not supported");
     }
-    // Bas : todo
+    // todo
     return null; 
     /*
     var sourceWidth:int = image.getWidth();

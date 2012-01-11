@@ -33,15 +33,14 @@ package com.google.zxing.datamatrix.decoder
            * @throws ReaderException if dimension is < 10 or > 144 or not 0 mod 2
            */
           public function BitMatrixParser(bitMatrix:BitMatrix) {
-            var dimension:int = bitMatrix.getDimension();
-            if (dimension < 10 || dimension > 144 || (dimension & 0x01) != 0) {
+            var dimension:int = bitMatrix.getHeight();
+            if (dimension < 8 || dimension > 144 || (dimension & 0x01) != 0) {
               throw new ReaderException("BitMatrixParser : Dimension out of range :"+dimension+" range 11~143 or uneven number");
             }
             
             version = readVersion(bitMatrix);
             this.mappingBitMatrix = extractDataRegion(bitMatrix);
-            // TODO(bbrown): Make this work for rectangular symbols
-            this.readMappingMatrix = new BitMatrix(this.mappingBitMatrix.getDimension());
+			this.readMappingMatrix = new BitMatrix(this.mappingBitMatrix.getWidth(), this.mappingBitMatrix.getHeight());
           }
 
           /**
@@ -55,16 +54,11 @@ package com.google.zxing.datamatrix.decoder
            * @throws ReaderException if the dimensions of the mapping matrix are not valid
            * Data Matrix dimensions.
            */
-          public function readVersion(bitMatrix:BitMatrix ):Version {
-
-            if (version != null) {
-              return version;
-            }
-
-            // TODO(bbrown): make this work for rectangular dimensions as well.
-            var numRows:int = bitMatrix.getDimension();
-            var numColumns:int = numRows;
-            return Version.getVersionForDimensions(numRows, numColumns);;
+          public function readVersion(bitMatrix:BitMatrix ):Version 
+		  {
+		    var numRows:int = bitMatrix.getHeight();
+    		var numColumns:int = bitMatrix.getWidth();
+    		return Version.getVersionForDimensions(numRows, numColumns);
           }
 
           /**
@@ -82,9 +76,9 @@ package com.google.zxing.datamatrix.decoder
             
             var row:int = 4;
             var column:int = 0;
-            // TODO(bbrown): Data Matrix can be rectangular, assuming square for now
-            var numRows:int = mappingBitMatrix.getDimension();
-            var numColumns:int = numRows;
+            
+            var numRows:int = mappingBitMatrix.getHeight();
+            var numColumns:int = mappingBitMatrix.getWidth();
             
             var corner1Read:Boolean = false;
             var corner2Read:Boolean = false;
@@ -142,7 +136,8 @@ package com.google.zxing.datamatrix.decoder
             if (resultOffset != version.getTotalCodewords()) {
               throw new ReaderException("BitMatrixParser : readCodewords : resultOffset != version.getTotalCodewords() : "+resultOffset +" - "+ version.getTotalCodewords());
             }
-            // BAS : extra code for Flex : result should be a signed byte array (bit 7 = sign)
+            
+			// extra code for Flex : result should be a signed byte array (bit 7 = sign)
             for (var jj:int=0;jj<result.length;jj++)
             {
             	if ((result[jj] & 128) > 0 )
@@ -164,11 +159,13 @@ package com.google.zxing.datamatrix.decoder
            */
           public function readModule(row:int , column:int , numRows:int , numColumns:int ):Boolean {
             // Adjust the row and column indices based on boundary wrapping
-            if (row < 0) {
+            if (row < 0) 
+            {
               row += numRows;
               column += 4 - ((numRows + 4) & 0x07);
             }
-            if (column < 0) {
+            if (column < 0) 
+            {
               column += numColumns;
               row += 4 - ((numColumns + 4) & 0x07);
             }
@@ -191,7 +188,7 @@ package com.google.zxing.datamatrix.decoder
           {
             var currentByte:int = 0;
             if (readModule(row - 2, column - 2, numRows, numColumns)) 
-            {
+            {	
               currentByte |= 1;
             }
             currentByte <<= 1;
@@ -416,8 +413,7 @@ package com.google.zxing.datamatrix.decoder
              var symbolSizeRows:int = version.getSymbolSizeRows();
              var symbolSizeColumns:int = version.getSymbolSizeColumns();
             
-            // TODO(bbrown): Make this work with rectangular codes
-            if (bitMatrix.getDimension() != symbolSizeRows) {
+            if (bitMatrix.getHeight() != symbolSizeRows) {
               throw new IllegalArgumentException("Dimension of bitMarix must match the version size");
             }
             
@@ -428,10 +424,10 @@ package com.google.zxing.datamatrix.decoder
             var numDataRegionsColumn:int = symbolSizeColumns / dataRegionSizeColumns;
             
             var sizeDataRegionRow:int = numDataRegionsRow * dataRegionSizeRows;
-            //int sizeDataRegionColumn = numDataRegionsColumn * dataRegionSizeColumns;
+            var sizeDataRegionColumn:int = numDataRegionsColumn * dataRegionSizeColumns;
             
             // TODO(bbrown): Make this work with rectangular codes
-            var bitMatrixWithoutAlignment:BitMatrix = new BitMatrix(sizeDataRegionRow);
+            var bitMatrixWithoutAlignment:BitMatrix = new BitMatrix(sizeDataRegionColumn,sizeDataRegionRow);
 			    for (var dataRegionRow:int = 0; dataRegionRow < numDataRegionsRow; ++dataRegionRow) {
 			      var dataRegionRowOffset:int = dataRegionRow * dataRegionSizeRows;
 			      for (var dataRegionColumn:int = 0; dataRegionColumn < numDataRegionsColumn; ++dataRegionColumn) {
