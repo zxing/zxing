@@ -48,6 +48,7 @@ public final class URIParsedResultTestCase extends Assert {
            "otpauth://remoteaccess?devaddr=00%a1b2%c3d4&devname=foo&key=bar",
            null);
     doTest("s3://amazon.com:8123", "s3://amazon.com:8123", null);
+    doTest("HTTP://R.BEETAGG.COM/?12345", "http://R.BEETAGG.COM/?12345", null);
   }
 
   @Test
