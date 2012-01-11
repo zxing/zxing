@@ -165,7 +165,12 @@ public final class CameraManager {
   public void requestAutoFocus(Handler handler, int message) {
     if (camera != null && previewing) {
       autoFocusCallback.setHandler(handler, message);
-      camera.autoFocus(autoFocusCallback);
+      try {
+        camera.autoFocus(autoFocusCallback);
+      } catch (RuntimeException re) {
+        // Have heard RuntimeException reported in Android 4.0.x+; continue?
+        Log.w(TAG, "Unexpected exception while focusing", re);
+      }
     }
   }
 
