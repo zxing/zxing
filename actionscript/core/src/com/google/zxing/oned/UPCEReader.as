@@ -26,13 +26,17 @@ package com.google.zxing.oned
      */
 
 
-    public  class UPCEReader extends AbstractUPCEANReader
+    public  class UPCEReader extends UPCEANReader
     { 
 
 			import com.google.zxing.common.flexdatatypes.StringBuilder;
+			import com.google.zxing.common.flexdatatypes.HashTable;
 			import com.google.zxing.common.BitArray;
 			import com.google.zxing.ReaderException;
 			import com.google.zxing.BarcodeFormat;
+			import com.google.zxing.Result;
+			import com.google.zxing.BinaryBitmap;
+			import com.google.zxing.NotFoundException;
 
 
            /**
@@ -52,6 +56,8 @@ package com.google.zxing.oned
           ];
 
           private var decodeMiddleCounters:Array;
+
+		// function decode(image:BinaryBitmap, hints:HashTable=null):Result { return null; }
 
           public function UPCEReader() {
             decodeMiddleCounters = new Array(4);
@@ -107,7 +113,7 @@ package com.google.zxing.oned
             throw new ReaderException("UPCEReader : determineNumSysAndCheckDigit : could not determine numsys");
           }
 
-          public override function getBarcodeFormat():BarcodeFormat {
+          public  override function getBarcodeFormat():BarcodeFormat {
             return BarcodeFormat.UPC_E;  
           }
 
@@ -151,6 +157,40 @@ package com.google.zxing.oned
           }
     
     
+    
+    
+  /**
+   * Attempts to decode a single UPC/EAN-encoded digit.
+   *
+   * @param row row of black/white values to decode
+   * @param counters the counts of runs of observed black/white/black/... values
+   * @param rowOffset horizontal offset to start decoding from
+   * @param patterns the set of patterns to use to decode -- sometimes different encodings
+   * for the digits 0-9 are used, and this indicates the encodings for 0 to 9 that should
+   * be used
+   * @return horizontal offset of first pixel beyond the decoded digit
+   * @throws NotFoundException if digit cannot be decoded
+   */
+  public static function decodeDigit(row:BitArray , counters:Array, rowOffset:int,patterns:Array):int {
+    recordPattern(row, rowOffset, counters);
+    var bestVariance:int = MAX_AVG_VARIANCE; // worst variance we'll accept
+    var bestMatch:int = -1;
+    var max:int = patterns.length;
+    for (var i:int = 0; i < max; i++) {
+      var pattern:Array = patterns[i];
+      var variance:int = patternMatchVariance(counters, pattern, MAX_INDIVIDUAL_VARIANCE);
+      if (variance < bestVariance) {
+        bestVariance = variance;
+        bestMatch = i;
+      }
+    }
+    if (bestMatch >= 0) {
+      return bestMatch;
+    } else {
+      throw NotFoundException.getNotFoundInstance();
+    }
+  }
+  
     }
 
 

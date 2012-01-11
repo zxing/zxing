@@ -45,5 +45,6 @@ package com.google.zxing
    * @throws ReaderException if the barcode cannot be located or decoded for any reason
    */
   function decode(image:BinaryBitmap, hints:HashTable=null):Result;
+  function reset():void;
 }
 }

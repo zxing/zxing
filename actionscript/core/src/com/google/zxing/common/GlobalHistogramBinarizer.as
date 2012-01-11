@@ -29,7 +29,7 @@ import com.google.zxing.ReaderException;
  * @author dswitkin@google.com (Daniel Switkin)
  * @author Sean Owen
  */
-public final class GlobalHistogramBinarizer extends Binarizer {
+public class GlobalHistogramBinarizer extends Binarizer {
 
 
   private static var LUMINANCE_BITS:int = 5;
@@ -45,6 +45,7 @@ public final class GlobalHistogramBinarizer extends Binarizer {
 
   // Applies simple sharpening to the row data to improve performance of the 1D Readers.
   public override function getBlackRow(y:int , row:BitArray ):BitArray {
+
     var source:LuminanceSource  = getLuminanceSource();
     var width:int = source.getWidth();
     if (row == null || row.getSize() < width) {
@@ -81,7 +82,8 @@ public final class GlobalHistogramBinarizer extends Binarizer {
   }
 
   // Does not sharpen the data, as this call is intended to only be used by 2D Readers.
-  public override function getBlackMatrix():BitMatrix {
+  public override function getBlackMatrix():BitMatrix 
+  {
     var source:LuminanceSource  = getLuminanceSource();
     var width:int = source.getWidth();
     var height:int = source.getHeight();
@@ -94,10 +96,10 @@ public final class GlobalHistogramBinarizer extends Binarizer {
     var localBuckets:Array = buckets;//assign empty array
     for (var y2:int = 1; y2 < 5; y2++) 
     {
-      var row:int = height * y2 / 5;
+      var row:int = int(height * y2 / 5);
       _localLuminances = source.getRow(row, luminances);
-      var right:int = (width << 2) / 5;
-      for (var x:int = width / 5; x < right; x++) 
+      var right:int = int((width << 2) / 5);
+      for (var x:int = int(width / 5); x < right; x++) 
       {
         var pixel:int = _localLuminances[x] & 0xff;
         var index:int = Math.floor(pixel >> LUMINANCE_SHIFT);

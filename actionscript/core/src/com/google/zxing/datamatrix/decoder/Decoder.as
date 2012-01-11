@@ -29,13 +29,13 @@ package com.google.zxing.datamatrix.decoder
 	import com.google.zxing.common.DecoderResult;
 	import com.google.zxing.common.reedsolomon.ReedSolomonDecoder;
 	import com.google.zxing.common.reedsolomon.ReedSolomonException;
-	import com.google.zxing.common.reedsolomon.GF256;
+	import com.google.zxing.common.reedsolomon.GenericGF;
 	import com.google.zxing.ReaderException;
 
  
           private var rsDecoder:ReedSolomonDecoder;
           public function Decoder() {
-            rsDecoder = new ReedSolomonDecoder(GF256.DATA_MATRIX_FIELD);
+            rsDecoder = new ReedSolomonDecoder(GenericGF.DATA_MATRIX_FIELD_256);
           }
 
           /**
@@ -94,16 +94,18 @@ package com.google.zxing.datamatrix.decoder
             var resultOffset:int = 0;
 
             // Error-correct and copy data blocks together into a stream of bytes
-            for (var j:int = 0; j < dataBlocks.length; j++) {
+            for (var j:int = 0; j < dataBlocks.length; j++) 
+            {
               var dataBlock:DataBlock = dataBlocks[j];
               var codewordBytes:Array = dataBlock.getCodewords();
               var numDataCodewords:int = dataBlock.getNumDataCodewords();
               correctErrors(codewordBytes, numDataCodewords);
-              for (var ii:int = 0; ii < numDataCodewords; ii++) {
-                resultBytes[resultOffset++] = codewordBytes[ii];
+              for (var i5:int = 0; i5 < numDataCodewords; i5++) 
+              {
+        			// De-interlace data blocks.
+        			resultBytes[i5 * dataBlocks.length + j] = codewordBytes[i5];
               }
             }
-
             // Decode the contents of that stream of bytes
             return DecodedBitStreamParser.decode(resultBytes);
           }
@@ -131,8 +133,10 @@ package com.google.zxing.datamatrix.decoder
             }
             // Copy back into array of bytes -- only need to worry about the bytes that were data
             // We don't care about errors in the error-correction codewords
-            for (var ii:int = 0; ii < numDataCodewords; ii++) {
-              codewordBytes[ii] = int( codewordsInts[ii]);
+            for (var ii:int = 0; ii < numDataCodewords; ii++) 
+            {
+            	
+              codewordBytes[ii] = (codewordsInts[ii]>127)?codewordsInts[ii]-256:codewordsInts[ii];
             }
           }
 

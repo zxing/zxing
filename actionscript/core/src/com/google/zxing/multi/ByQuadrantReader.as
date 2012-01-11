@@ -76,11 +76,14 @@ public final class ByQuadrantReader implements Reader {
       // continue
     }
 
-    var quarterWidth:int = halfWidth / 2;
-    var quarterHeight:int = halfHeight / 2;
-    var center:BinaryBitmap = image.crop(quarterWidth, quarterHeight, width - quarterWidth,
-        height - quarterHeight);
+    var quarterWidth:int = Math.floor(halfWidth / 2);
+    var quarterHeight:int = Math.floor(halfHeight / 2);
+    var center:BinaryBitmap = image.crop(quarterWidth, quarterHeight, halfWidth, halfHeight);
     return delegate.decode(center, hints);
+  }
+  
+    public function reset():void {
+    delegate.reset();
   }
 
 }

@@ -2,8 +2,7 @@ package com.google.zxing.common.flexdatatypes
 {
 	public class HashTable
 	{
-		// bas : made public for debugging
-		public var _arr:Array;
+		private var _arr:Array;
 		
 		public function isEmpty():Boolean
 		{
@@ -57,6 +56,7 @@ package com.google.zxing.common.flexdatatypes
 		
 		public function ContainsKey(key:Object):Boolean
 		{
+			//for (var i:int=0;i<this._arr.length;i++)
 			for (var i:String in this._arr)
 			{
 				if (this._arr[i][0] == key) { return true; }
@@ -67,6 +67,7 @@ package com.google.zxing.common.flexdatatypes
 		public function getValuesByKey(key:Object):ArrayList
 		{
 			var al:ArrayList = new ArrayList();
+			//for (var i:int=0;i<this._arr.length;i++)
 			for (var i:String in this._arr)
 			{
 				if (this._arr[i][0] == key)
@@ -85,18 +86,20 @@ package com.google.zxing.common.flexdatatypes
 		public function getValueByKey(key:Object):Object
 		{
 			var al:ArrayList = new ArrayList();
-			for (var i:String in this._arr)
+			//for (var i:int=0;i<this._arr.length;i++)
+			for (var i:String in this._arr) 
 			{
 				if (this._arr[i][0] == key)
 				{
 					return this._arr[i][1];	
 				}
 			}
-			return al;
+			return null;
 		}
 
 		public function setValue(key:Object,value:Object):void
 		{
+			//for (var i:int=0;i<this._arr.length;i++)
 			for (var i:String in this._arr)
 			{
 				if (this._arr[i][0] == key)
@@ -109,6 +112,7 @@ package com.google.zxing.common.flexdatatypes
 
 		public function getKeyByValue(value:Object):int
 		{
+			//for (var i:int=0;i<this._arr.length;i++)
 			for (var i:String in this._arr)
 			{
 				if (this._arr[i][1] == value)
@@ -121,14 +125,27 @@ package com.google.zxing.common.flexdatatypes
 
 		public function containsKey(key:Object):Boolean
 		{
+			//for (var i:int=0;i<this._arr.length;i++)
 			for (var i:String in this._arr)
 			{
 				if (this._arr[i][0] == key)
 				{
 					return true;
 				}
+				
 			}
 			return false;
+		}
+		
+		public function keys():Array
+		{
+			var result:Array = new Array(this._arr.length);
+			//for (var i:int=0;i<this._arr.length;i++)
+			for (var i:String in this._arr)
+			{
+				result[i] = this._arr[i][0];
+			}
+			return result;
 		}
 
 

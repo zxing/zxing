@@ -11,7 +11,7 @@ package com.google.zxing.qrcode.decoder
     public override function isMasked(i:int, j:int):Boolean 
     {
       var temp:int = i * j;
-      return (((temp & 0x01) + (temp % 3)) & 0x01) == 0;
+      return (((temp & 0x01) + (int(temp % 3))) & 0x01) == 0;
     }
   }
 

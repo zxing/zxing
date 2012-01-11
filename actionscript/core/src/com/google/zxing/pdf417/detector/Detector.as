@@ -93,7 +93,11 @@ import com.google.zxing.common.flexdatatypes.HashTable;
       correctCodeWordVertices(vertices, false);
     }
 
-    if (vertices != null) {
+    if (vertices == null) 
+	{
+      throw new ReaderException("pdf417 : Detector : detect : no vertices");
+    }
+	
       var moduleWidth:Number = computeModuleWidth(vertices);
       if (moduleWidth < 1) {
         throw new ReaderException("pdf417 : Detector : detect : module width < 1");
@@ -104,9 +108,7 @@ import com.google.zxing.common.flexdatatypes.HashTable;
       // Deskew and sample image.
       var bits:BitMatrix = sampleGrid(matrix, vertices[4], vertices[5],vertices[6], vertices[7], dimension);
       return new DetectorResult(bits, [vertices[4],vertices[5], vertices[6], vertices[7]]);
-    } else {
-      throw new ReaderException("pdf417 : Detector : detect : no vertices");
-    }
+  
   }
 
   /**
@@ -132,13 +134,13 @@ import com.google.zxing.common.flexdatatypes.HashTable;
     var width:int = matrix.getWidth();
     var halfWidth:int = width >> 1;
 
-    var result:Array = new Array(8);
+    var result:Array = new Array(8); for(var kk:int=0;kk<result.length;kk++){result[kk]=0;}
     var found:Boolean = false;
 
     var loc:Array = null;
     // Top Left
     for (var i:int = 0; i < height; i++) {
-      loc = findGuardPattern(matrix, 0, i, halfWidth, false, START_PATTERN);
+      loc = findGuardPattern(matrix, 0, i, width, false, START_PATTERN);
       if (loc != null) {
         result[0] = new ResultPoint(loc[0], i);
         result[4] = new ResultPoint(loc[1], i);
@@ -150,7 +152,7 @@ import com.google.zxing.common.flexdatatypes.HashTable;
     if (found) { // Found the Top Left vertex
       found = false;
       for (var i2:int = height - 1; i2 > 0; i2--) {
-        loc = findGuardPattern(matrix, 0, i2, halfWidth, false, START_PATTERN);
+        loc = findGuardPattern(matrix, 0, i2, width, false, START_PATTERN);
         if (loc != null) {
           result[1] = new ResultPoint(loc[0], i2);
           result[5] = new ResultPoint(loc[1], i2);
@@ -163,7 +165,7 @@ import com.google.zxing.common.flexdatatypes.HashTable;
     if (found) { // Found the Bottom Left vertex
       found = false;
       for (var i3:int = 0; i3 < height; i3++) {
-        loc = findGuardPattern(matrix, halfWidth, i3, halfWidth, false, STOP_PATTERN);
+        loc = findGuardPattern(matrix, 0, i3, width, false, STOP_PATTERN);
         if (loc != null) {
           result[2] = new ResultPoint(loc[1], i3);
           result[6] = new ResultPoint(loc[0], i3);
@@ -176,7 +178,7 @@ import com.google.zxing.common.flexdatatypes.HashTable;
     if (found) { // Found the Top right vertex
       found = false;
       for (var i4:int = height - 1; i4 > 0; i4--) {
-        loc = findGuardPattern(matrix, halfWidth, i4, halfWidth, false, STOP_PATTERN);
+        loc = findGuardPattern(matrix, 0, i4, width, false, STOP_PATTERN);
         if (loc != null) {
           result[3] = new ResultPoint(loc[1], i4);
           result[7] = new ResultPoint(loc[0], i4);
@@ -212,7 +214,7 @@ import com.google.zxing.common.flexdatatypes.HashTable;
     var width:int = matrix.getWidth();
     var halfWidth:int = width >> 1;
 
-    var result:Array = new Array(8);
+    var result:Array = new Array(8);for(var kk:int=0;kk<result.length;kk++){result[kk]=0;}
     var found:Boolean = false;
 
     var loc:Array = null;
@@ -361,9 +363,9 @@ import com.google.zxing.common.flexdatatypes.HashTable;
    */
   private static function computeDimension(topLeft:ResultPoint, topRight:ResultPoint,bottomLeft:ResultPoint, bottomRight:ResultPoint, moduleWidth:Number):int 
   {
-    var topRowDimension:int = Math.floor((ResultPoint.distance(topLeft, topRight) / moduleWidth));
-    var bottomRowDimension:int = Math.floor(ResultPoint.distance(bottomLeft, bottomRight) / moduleWidth);
-    return Math.floor((((topRowDimension + bottomRowDimension) >> 1) + 8) / 17) * 17;
+    var topRowDimension:int = Math.round((ResultPoint.distance(topLeft, topRight) / moduleWidth));
+    var bottomRowDimension:int = Math.round(ResultPoint.distance(bottomLeft, bottomRight) / moduleWidth);
+    return int((((topRowDimension + bottomRowDimension) >> 1) + 8) / 17) * 17;
     /*
     * int topRowDimension = round(ResultPoint.distance(topLeft,
     * topRight)); //moduleWidth); int bottomRowDimension =
@@ -383,7 +385,11 @@ import com.google.zxing.common.flexdatatypes.HashTable;
     // very corners. So there is no 0.5f here; 0.0f is right.
     var sampler:GridSampler = GridSampler.getGridSamplerInstance();
 
-    return sampler.sampleGrid(matrix, dimension, 0, // p1ToX
+    return sampler.sampleGrid2(
+    	matrix, 
+        dimension, 
+        dimension,
+        0, // p1ToX
         0, // p1ToY
         dimension, // p2ToX
         0, // p2ToY
@@ -423,8 +429,7 @@ import com.google.zxing.common.flexdatatypes.HashTable;
     var patternLength:int = pattern.length;
     // TODO: Find a way to cache this array, as this method is called hundreds of times
     // per image, and we want to allocate as seldom as possible.
-    var counters:Array = new Array(patternLength);
-    for (var k:int=0;k<counters.length;k++){counters[k] = 0; }
+    var counters:Array = new Array(patternLength);for (var k:int=0;k<counters.length;k++){counters[k] = 0; }
     var isWhite:Boolean = whiteFirst;
 
     var counterPosition:int = 0;
@@ -488,7 +493,7 @@ import com.google.zxing.common.flexdatatypes.HashTable;
     // We're going to fake floating-point math in integers. We just need to use more bits.
     // Scale up patternLength so that intermediate values below like scaledCounter will have
     // more "significant digits".
-    var unitBarWidth:int = (total << 8) / patternLength;
+    var unitBarWidth:int = int((total << 8) / patternLength);
     maxIndividualVariance = (maxIndividualVariance * unitBarWidth) >> 8;
 
     var totalVariance:int = 0;
@@ -501,7 +506,7 @@ import com.google.zxing.common.flexdatatypes.HashTable;
       }
       totalVariance += variance;
     }
-    return totalVariance / total;
+    return int(totalVariance / total);
   }
 
 }

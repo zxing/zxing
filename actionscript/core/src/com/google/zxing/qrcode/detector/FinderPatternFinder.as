@@ -5,10 +5,12 @@ package com.google.zxing.qrcode.detector
     	  import com.google.zxing.common.flexdatatypes.HashTable;
     	  import com.google.zxing.common.flexdatatypes.ArrayList;
     	  import com.google.zxing.ResultPoint;
+    	  import com.google.zxing.ResultPointCallback;
     	  import com.google.zxing.common.BitArray;
     	  import com.google.zxing.common.BitMatrix;
     	  import com.google.zxing.DecodeHintType;
     	  import com.google.zxing.ReaderException;
+    	  import com.google.zxing.NotFoundException;
     	  
           private static var CENTER_QUORUM:int = 2;
           protected static var MIN_SKIP:int = 3; // 1 pixel/module times 3 modules/center
@@ -19,6 +21,7 @@ package com.google.zxing.qrcode.detector
           private var possibleCenters:ArrayList;
           private var hasSkipped:Boolean;
           private var crossCheckStateCount:Array;
+          private var resultPointCallback:ResultPointCallback;
           
           protected function getImage():BitMatrix 
           {
@@ -36,12 +39,14 @@ package com.google.zxing.qrcode.detector
            *
            * @param image image to search
            */
-          public function FinderPatternFinder(image:BitMatrix) 
+          public function FinderPatternFinder(image:BitMatrix, resultPointCallback:ResultPointCallback) 
           {
             this.image = image;
             this.possibleCenters = new ArrayList();
             this.crossCheckStateCount = new Array(5);
+            this.resultPointCallback = resultPointCallback;
           }
+          
 
           public function find(hints:HashTable):FinderPatternInfo 
           {
@@ -55,7 +60,7 @@ package com.google.zxing.qrcode.detector
             // image, and then account for the center being 3 modules in size. This gives the smallest
             // number of pixels the center could be, so skip this often. When trying harder, look for all
             // QR versions regardless of how dense they are.
-            var iSkip:int = int(maxI / (MAX_MODULES * 4) * 3);
+            var iSkip:int = int((3 * maxI) / (4 * MAX_MODULES));
             if (iSkip < MIN_SKIP || tryHarder) {
               iSkip = MIN_SKIP;
             }
@@ -63,107 +68,116 @@ package com.google.zxing.qrcode.detector
             var done:Boolean = false;
             var stateCount:Array = new Array(5);
               // Get a row of black/white values
-            for (var i:int = iSkip - 1; i < maxI && !done; i += iSkip) {
+
+            for (var i:int = iSkip - 1; i < maxI && !done; i += iSkip) 
+            {
+
               stateCount[0] = 0;
               stateCount[1] = 0;
               stateCount[2] = 0;
               stateCount[3] = 0;
               stateCount[4] = 0;
               var currentState:int = 0;
-              for (var j:int = 0; j < maxJ; j++) {
-                if (image._get(j,i)) 
-                {
-                  // Black pixel
-                  if ((currentState & 1) == 1) 
-                  { // Counting white pixels
-                    currentState++;
-                  }
-                  stateCount[currentState] = stateCount[currentState] + 1;
-                } 
-                else 
-                { // White pixel
-                  if ((currentState & 1) == 0) 
-                  { // Counting black pixels
-                    if (currentState == 4) 
-                    { // A winner?
-                      if (foundPatternCross(stateCount)) 
-                      { // Yes
-                        var confirmed:Boolean = handlePossibleCenter(stateCount, i, j);
-                        if (confirmed) 
-                        {
-                          // Start examining every other line. Checking each line turned out to be too
-                          // expensive and didn't improve performance.
-                          iSkip = 2;
-                          if (hasSkipped) {
-                            done = haveMulitplyConfirmedCenters();
-                          } else {
-                            var rowSkip:int = findRowSkip();
-                            if (rowSkip > stateCount[2]) {
-                              // Skip rows between row of lower confirmed center
-                              // and top of presumed third confirmed center
-                              // but back up a bit to get a full chance of detecting
-                              // it, entire width of center of finder pattern
+              //var a:String = "line:"+i+";line=";
+              //for (var j1:int = 0; j1 < maxJ; j1++) {if (image._get(j1, i)) { a+="0"; } else { a+="1"; }} 
+              //var ajsdgsfd:int=3;
+		      for (var j:int = 0; j < maxJ; j++) 
+		      {
+		      	
+if (i==68 && j==105)
+{
+	var c:int=45;
+}
+		        if (image._get(j, i)) 
+		        {
+		          // Black pixel
+		          if ((currentState & 1) == 1) { // Counting white pixels
+		            currentState++;
+		          }
+		          stateCount[currentState]++;
+		        } else { // White pixel
+		          if ((currentState & 1) == 0) { // Counting black pixels
+		            if (currentState == 4) { // A winner?
+		            var fpc:Boolean = foundPatternCross(stateCount);
+		            
+		              if (fpc) 
+		              { 
+		              
+		              // Yes
+		                var confirmed:Boolean = handlePossibleCenter(stateCount, i, j);
+		                if (confirmed) {
+		                  // Start examining every other line. Checking each line turned out to be too
+		                  // expensive and didn't improve performance.
+		                  iSkip = 2;
+		                  if (hasSkipped) {
+		                    done = haveMultiplyConfirmedCenters();
+		                  } else {
+		                    var rowSkip:int = findRowSkip();
+		                    if (rowSkip > stateCount[2]) {
+		                      // Skip rows between row of lower confirmed center
+		                      // and top of presumed third confirmed center
+		                      // but back up a bit to get a full chance of detecting
+		                      // it, entire width of center of finder pattern
+		
+		                      // Skip by rowSkip, but back off by stateCount[2] (size of last center
+		                      // of pattern we saw) to be conservative, and also back off by iSkip which
+		                      // is about to be re-added
+		                      i += rowSkip - stateCount[2] - iSkip;
+		                      j = maxJ - 1;
+		                    }
+		                  }
+		                } else {
+		                  stateCount[0] = stateCount[2];
+		                  stateCount[1] = stateCount[3];
+		                  stateCount[2] = stateCount[4];
+		                  stateCount[3] = 1;
+		                  stateCount[4] = 0;
+		                  currentState = 3;
+		                  continue;
+		                }
+		                // Clear state to start looking again
+		                currentState = 0;
+		                stateCount[0] = 0;
+		                stateCount[1] = 0;
+		                stateCount[2] = 0;
+		                stateCount[3] = 0;
+		                stateCount[4] = 0;
+		              } 
+		              else 
+		              { // No, shift counts back by two
+		                stateCount[0] = stateCount[2];
+		                stateCount[1] = stateCount[3];
+		                stateCount[2] = stateCount[4];
+		                stateCount[3] = 1;
+		                stateCount[4] = 0;
+		                currentState = 3;
+		              }
+		            } else {
+		              stateCount[++currentState]++;
+		            }
+		          } else { // Counting white pixels
+		            stateCount[currentState]++;
+		          }
+		        }
+		      }
+		      if (foundPatternCross(stateCount)) {
+		        var confirmed2:Boolean = handlePossibleCenter(stateCount, i, maxJ);
+		        if (confirmed2) {
+		          iSkip = stateCount[0];
+		          if (hasSkipped) {
+		            // Found a third one
+		            done = haveMultiplyConfirmedCenters();
+		          }
+		        }
+		      }
+			  
+		    }
+		
+		    var patternInfo:Array = selectBestPatterns();
+		    		    ResultPoint.orderBestPatterns(patternInfo);
+		
+		    return new FinderPatternInfo(patternInfo);
 
-                              // Skip by rowSkip, but back off by stateCount[2] (size of last center
-                              // of pattern we saw) to be conservative, and also back off by iSkip which
-                              // is about to be re-added
-                              i += (rowSkip - stateCount[2] - iSkip);
-                              j = maxJ - 1;
-                            }
-                          }
-                        } else {
-                          // Advance to next black pixel
-                          do {
-                            j++;
-                          } while (j < maxJ && !image._get(j,i));
-                          j--; // back up to that last white pixel
-                        }
-                        // Clear state to start looking again
-                        currentState = 0;
-                        stateCount[0] = 0;
-                        stateCount[1] = 0;
-                        stateCount[2] = 0;
-                        stateCount[3] = 0;
-                        stateCount[4] = 0;
-                      } 
-                      else 
-                      { // No, shift counts back by two
-                        stateCount[0] = stateCount[2];
-                        stateCount[1] = stateCount[3];
-                        stateCount[2] = stateCount[4];
-                        stateCount[3] = 1;
-                        stateCount[4] = 0;
-                        currentState = 3;
-                      }
-                    } 
-                    else 
-                    {
-                      currentState++;
-                      stateCount[currentState] = stateCount[currentState] + 1;
-                    }
-                  } else 
-                  { // Counting white pixels
-                    stateCount[currentState] = stateCount[currentState] + 1;
-                  }
-                }
-              }
-              
-              if (foundPatternCross(stateCount)) {
-                var confirmed3:Boolean = handlePossibleCenter(stateCount, i, maxJ);
-                if (confirmed3) {
-                  iSkip = stateCount[0];
-                  if (hasSkipped) {
-                    // Found a third one
-                    done = haveMulitplyConfirmedCenters();
-                  }
-                }
-              }
-            }
-
-            var patternInfo:Array = selectBestPatterns();
-            ResultPoint.orderBestPatterns(patternInfo);
-
-            return new FinderPatternInfo(patternInfo);
           }
 
           /**
@@ -191,14 +205,16 @@ package com.google.zxing.qrcode.detector
             if (totalModuleSize < 7) {
               return false;
             }
-            var moduleSize:int = (totalModuleSize << INTEGER_MATH_SHIFT) / 7;
-            var maxVariance:int = moduleSize / 2;
+            var moduleSize:int = int((totalModuleSize << INTEGER_MATH_SHIFT) / 7);
+            var maxVariance:int = int(moduleSize / 2);
             // Allow less than 50% variance from 1-1-3-1-1 proportions
-            return Math.abs(moduleSize - (stateCount[0] << INTEGER_MATH_SHIFT)) < maxVariance &&
+            var res:Boolean = Math.abs(moduleSize - (stateCount[0] << INTEGER_MATH_SHIFT)) < maxVariance &&
                 Math.abs(moduleSize - (stateCount[1] << INTEGER_MATH_SHIFT)) < maxVariance &&
                 Math.abs(3 * moduleSize - (stateCount[2] << INTEGER_MATH_SHIFT)) < 3 * maxVariance &&
                 Math.abs(moduleSize - (stateCount[3] << INTEGER_MATH_SHIFT)) < maxVariance &&
                 Math.abs(moduleSize - (stateCount[4] << INTEGER_MATH_SHIFT)) < maxVariance;
+       
+            return res;
           }
 
           private function getCrossCheckStateCount():Array 
@@ -280,7 +296,7 @@ package com.google.zxing.qrcode.detector
             // If we found a finder-pattern-like section, but its size is more than 20% different than
             // the original, assume it's a false positive
             var stateCountTotal:int = stateCount[0] + stateCount[1] + stateCount[2] + stateCount[3] + stateCount[4];
-            if (5 * Math.abs(stateCountTotal - originalStateCountTotal) >= originalStateCountTotal) {
+            if (5 * Math.abs(stateCountTotal - originalStateCountTotal) >= 2 * originalStateCountTotal) {
               return Number.NaN;
             }
 
@@ -381,21 +397,30 @@ package com.google.zxing.qrcode.detector
               centerJ = crossCheckHorizontal(int(centerJ), int(centerI), stateCount[2], stateCountTotal);
               if (!isNaN(centerJ))
               {
-                var estimatedModuleSize:Number = Number(stateCountTotal / 7);
+                var estimatedModuleSize:Number = stateCountTotal / 7;
                 var found:Boolean = false;
                 var max:int = possibleCenters.Count;
                 for (var index:int = 0; index < max; index++) {
-                  var center:FinderPattern = FinderPattern(possibleCenters.getObjectByIndex(index));
-                  // Look for about the same center and module size:
-                  if (center.aboutEquals(estimatedModuleSize, centerI, centerJ)) {
-                    center.incrementCount();
-                    found = true;
-                    break;
-                  }
-                }
-                if (!found) {
-                  possibleCenters.Add(new FinderPattern(centerJ, centerI, estimatedModuleSize));
-                }
+		          var center:FinderPattern = (possibleCenters.elementAt(index) as FinderPattern);
+		          // Look for about the same center and module size:
+		          var aer:Boolean = center.aboutEquals(estimatedModuleSize, centerI, centerJ);
+		          if (aer) 
+		          {
+		          	var resp:ResultPoint = center.combineEstimate(centerI, centerJ, estimatedModuleSize);
+		            possibleCenters.setElementAt(resp, index);
+		            found = true;
+		            break;
+		          }
+		        }
+		        if (!found) 
+		        {
+		          var point:ResultPoint = new FinderPattern(centerJ, centerI, estimatedModuleSize);
+		          possibleCenters.addElement(point);
+		          if (resultPointCallback != null) 
+		          {
+		            resultPointCallback.foundPossibleResultPoint(point);
+		          }
+		        }
                 return true;
               }
             }
@@ -463,7 +488,7 @@ package com.google.zxing.qrcode.detector
               var pattern2:FinderPattern = FinderPattern(possibleCenters.getObjectByIndex(i2));
               totalDeviation += Math.abs(pattern2.getEstimatedModuleSize() - average);
             }
-            return totalDeviation <= 0.15 * totalModuleSize;
+            return totalDeviation <= 0.05 * totalModuleSize;
           }
 
           /**
@@ -474,65 +499,103 @@ package com.google.zxing.qrcode.detector
            */
           private function selectBestPatterns():Array
           {
-          	possibleCenters.sort_CenterComparator();
-            //Collections.insertionSort(possibleCenters, new CenterComparator());
-          
-            var size:int = 0;
-            var max:int = possibleCenters.Count;
-            while (size < max) {
-              if ((FinderPattern( possibleCenters.getObjectByIndex(size))).getCount() < CENTER_QUORUM) {
-                break;
-              }
-              size++;
-            }
+			var startSize:int = possibleCenters.size();
+		    if (startSize < 3) {
+		      // Couldn't find enough finder patterns
+		      throw NotFoundException.getNotFoundInstance();
+		    }
 
-            if (size < 3) {
-              // Couldn't find enough finder patterns
-              throw new ReaderException("FinderPatternFinder : selectBestPatterns : Couldn't find enough finder patterns");
-            }
+		    // Filter outlier possibilities whose module size is too different
+    		if (startSize > 3) 
+    		{
+      			// But we can only afford to do so if we have at least 4 possibilities to choose from
+			      var totalModuleSize:Number = 0;
+			      var square:Number = 0;
+			      for (var i:int = 0; i < startSize; i++) 
+			      {
+			        var size:Number = ((possibleCenters.elementAt(i)) as FinderPattern).getEstimatedModuleSize();
+			        totalModuleSize += size;
+			        square += size * size;
+			      }
+			      var average:Number = totalModuleSize / startSize;
+			      var stdDev:Number = Math.sqrt(square / startSize - average * average);
 
-            if (size > 3) 
-            {
-              // Throw away all but those first size candidate points we found.
-               // SupportClass.SetCapacity(possibleCenters, size);
-              //  We need to pick the best three. Find the most
-              // popular ones whose module size is nearest the average
-              var averageModuleSize:Number = 0;
-              for (var i:int = 0; i < size; i++) {
-                averageModuleSize += (FinderPattern(possibleCenters.getObjectByIndex(i))).getEstimatedModuleSize();
-              }
-              averageModuleSize /= Number(size);
-              // We don't have java.util.Collections in J2ME
-              //Collections.insertionSort(possibleCenters, new ClosestToAverageComparator(averageModuleSize));
-              var listlength:int = possibleCenters.length;
-              var temp:Object;
-              for (var position:int=listlength-1;position>=0;position--)
-              {
-              	for(var scan:int = 0;scan < position -1; scan++)
-              	{
-              		if (Math.abs(FinderPattern( possibleCenters.getObjectByIndex(scan)).getEstimatedModuleSize() - averageModuleSize) < 
-              		    Math.abs(FinderPattern( possibleCenters.getObjectByIndex(scan+1)).getEstimatedModuleSize() - averageModuleSize)
-              		    )
-              		{
-              			temp = possibleCenters.getObjectByIndex(scan);
-              			possibleCenters.setObjectByIndex(scan,possibleCenters.getObjectByIndex(scan+1));
-              			possibleCenters.setObjectByIndex(scan+1,temp);
-              		}
-              	}
-              }
-            }
+      //Collections.insertionSort(possibleCenters, new FurthestFromAverageComparator(average));
+      //possibleCenters.sort_CenterComparator();
+      possibleCenters.sort_FurthestFromAverageComparator(average);
+ 
+      var limit:Number = Math.max(0.2 * average, stdDev);
 
-            return [
-                FinderPattern( possibleCenters.getObjectByIndex(0)),
-                FinderPattern( possibleCenters.getObjectByIndex(1)),
-                FinderPattern( possibleCenters.getObjectByIndex(2))];
-          }
+      for (var i2:int = 0; i2 < possibleCenters.size() && possibleCenters.size() > 3; i2++) {
+        var pattern:FinderPattern = (possibleCenters.elementAt(i2) as FinderPattern);
+        if (Math.abs(pattern.getEstimatedModuleSize() - average) > limit) {
+          possibleCenters.removeElementAt(i2);
+          i2--;
+        }
+      }
+    }
+
+    if (possibleCenters.size() > 3) {
+      // Throw away all but those first size candidate points we found.
+
+      var totalModuleSize2:Number = 0;
+      for (var i3:int = 0; i3 < possibleCenters.size(); i3++) {
+        totalModuleSize2 += (possibleCenters.elementAt(i3) as FinderPattern).getEstimatedModuleSize();
+      }
+
+      var average3:Number = totalModuleSize2 / possibleCenters.size();
+
+      //Collections.insertionSort(possibleCenters, new CenterComparator(average));
+      possibleCenters.sort_CenterComparator(average3);
+      possibleCenters.setSize(3);
+    }
+
+    return [
+        (possibleCenters.elementAt(0) as FinderPattern),
+        (possibleCenters.elementAt(1) as FinderPattern),
+        (possibleCenters.elementAt(2) as FinderPattern)];
+            }
           
            public function compare(center1:Object, center2:Object,averageModuleSize:Number):int
             {
               return (Math.abs(FinderPattern( center1).getEstimatedModuleSize() - averageModuleSize) < Math.abs(FinderPattern( center2).getEstimatedModuleSize() - averageModuleSize)) ? -1 : 1;
             }
 
+    
+    
+    /**
+   * @return true iff we have found at least 3 finder patterns that have been detected
+   *         at least {@link #CENTER_QUORUM} times each, and, the estimated module size of the
+   *         candidates is "pretty similar"
+   */
+  private function haveMultiplyConfirmedCenters():Boolean 
+  {
+    var confirmedCount:int = 0;
+    var totalModuleSize:Number = 0;
+    var max:int = possibleCenters.size();
+    for (var i:int = 0; i < max; i++) {
+      var pattern:FinderPattern = (possibleCenters.elementAt(i) as FinderPattern);
+      if (pattern.getCount() >= CENTER_QUORUM) {
+        confirmedCount++;
+        totalModuleSize += pattern.getEstimatedModuleSize();
+      }
     }
+    if (confirmedCount < 3) {
+      return false;
+    }
+    // OK, we have at least 3 confirmed centers, but, it's possible that one is a "false positive"
+    // and that we need to keep looking. We detect this by asking if the estimated module sizes
+    // vary too much. We arbitrarily say that when the total deviation from average exceeds
+    // 5% of the total module size estimates, it's too much.
+    var average:Number = totalModuleSize / max;
+    var totalDeviation:Number = 0;
+    for (var i4:int = 0; i4 < max; i4++) {
+      var pattern2:FinderPattern = (possibleCenters.elementAt(i4) as  FinderPattern);
+      totalDeviation += Math.abs(pattern2.getEstimatedModuleSize() - average);
+    }
+    return totalDeviation <= 0.05 * totalModuleSize;
+  }
 
+
+    }
 }

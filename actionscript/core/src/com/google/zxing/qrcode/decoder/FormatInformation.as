@@ -96,43 +96,52 @@ package com.google.zxing.qrcode.decoder
            * @param rawFormatInfo
            * @return
            */
-          public static function decodeFormatInformation(rawFormatInfo:int):FormatInformation
+          public static function decodeFormatInformation(maskedFormatInfo1:int, maskedFormatInfo2:int):FormatInformation
           {
-                var formatInfo:FormatInformation = doDecodeFormatInformation(rawFormatInfo);
-                if (formatInfo != null) 
-                {
-                  return formatInfo;
-                }
-                // Should return null, but, some QR codes apparently
-                // do not mask this info. Try again, first masking the raw bits so
-                // the function will unmask
-                return doDecodeFormatInformation(rawFormatInfo ^ FORMAT_INFO_MASK_QR);
+            var formatInfo:FormatInformation = doDecodeFormatInformation(maskedFormatInfo1, maskedFormatInfo2);
+			if (formatInfo != null) {
+				return formatInfo;
+				}
+				// Should return null, but, some QR codes apparently
+				// do not mask this info. Try again by actually masking the pattern
+				// first
+				return doDecodeFormatInformation(maskedFormatInfo1 ^ FORMAT_INFO_MASK_QR,
+											maskedFormatInfo2 ^ FORMAT_INFO_MASK_QR);
           }
 
-          private static function doDecodeFormatInformation(rawFormatInfo:int):FormatInformation {
-            // Unmask:
-            var unmaskedFormatInfo:int = rawFormatInfo ^ FORMAT_INFO_MASK_QR;
-            // Find the int in FORMAT_INFO_DECODE_LOOKUP with fewest bits differing
-            var bestDifference:int = int.MAX_VALUE;
-            var bestFormatInfo:int = 0;
-            for (var i:int = 0; i < FORMAT_INFO_DECODE_LOOKUP.length; i++) {
-              var decodeInfo:Array = FORMAT_INFO_DECODE_LOOKUP[i];
-              var targetInfo:int = decodeInfo[0];
-              if (targetInfo == unmaskedFormatInfo) {
-                // Found an exact match
-                return new FormatInformation(decodeInfo[1]);
-              }
-              var bitsDifference:int = numBitsDiffering(unmaskedFormatInfo, targetInfo);
-              if (bitsDifference < bestDifference) {
-                bestFormatInfo = decodeInfo[1];
-                bestDifference = bitsDifference;
-              }
-            }
-            if (bestDifference <= 3) {
-              return new FormatInformation(bestFormatInfo);
-            }
-            return null;
-          }
+       private static function doDecodeFormatInformation(maskedFormatInfo1:int, maskedFormatInfo2:int):FormatInformation
+	   {
+			// Find the int in FORMAT_INFO_DECODE_LOOKUP with fewest bits differing
+			var bestDifference:int = int.MAX_VALUE;
+			var bestFormatInfo:int = 0;
+			for (var i:int = 0; i < FORMAT_INFO_DECODE_LOOKUP.length; i++) {
+			  var decodeInfo:Array = FORMAT_INFO_DECODE_LOOKUP[i];
+			  var targetInfo:int = decodeInfo[0];
+			  if (targetInfo == maskedFormatInfo1 || targetInfo == maskedFormatInfo2) {
+				// Found an exact match
+				return new FormatInformation(decodeInfo[1]);
+			  }
+			  var bitsDifference:int = numBitsDiffering(maskedFormatInfo1, targetInfo);
+			  if (bitsDifference < bestDifference) {
+				bestFormatInfo = decodeInfo[1];
+				bestDifference = bitsDifference;
+			  }
+			  if (maskedFormatInfo1 != maskedFormatInfo2) {
+				// also try the other option
+				bitsDifference = numBitsDiffering(maskedFormatInfo2, targetInfo);
+				if (bitsDifference < bestDifference) {
+				  bestFormatInfo = decodeInfo[1];
+				  bestDifference = bitsDifference;
+				}
+			  }
+			}
+			// Hamming distance of the 32 masked codes is 7, by construction, so <= 3 bits
+			// differing means we found a match
+			if (bestDifference <= 3) {
+			  return new FormatInformation(bestFormatInfo);
+			}
+			return null;
+		}
 
           public function getErrorCorrectionLevel():ErrorCorrectionLevel {
             return errorCorrectionLevel;

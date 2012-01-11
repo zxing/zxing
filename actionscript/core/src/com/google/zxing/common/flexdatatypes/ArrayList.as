@@ -3,12 +3,12 @@ package com.google.zxing.common.flexdatatypes
 	// these comparators should reside in the classes but that didn's work for some reason.
 	import com.google.zxing.datamatrix.detector.ResultPointsAndTransitionsComparator;
 	import com.google.zxing.qrcode.detector.CenterComparator;
+	import com.google.zxing.qrcode.detector.FurthestFromAverageComparator;
 
 	
 	public class ArrayList
 	{
-		//BAS : made public for debugging
-		public var _array:Array;
+		private var _array:Array;
 		public function ArrayList(siz:int=0)
 		{
 			this._array = new Array(siz);
@@ -63,6 +63,35 @@ package com.google.zxing.common.flexdatatypes
 			return this._array.indexOf(o);	
 		}
 		
+		public function removeElementAt(index:int):void
+		{
+			var newArray:Array = new Array();
+			for(var i:int=0;i<this._array.length;i++)
+			{
+				if (i != index) { newArray.push(this._array[i]); }
+			}
+			this._array = newArray;
+		}
+		
+		public function setElementAt(elem:Object, index:int):void
+		{
+			this._array[index] = elem;
+		}
+		
+		// limit size of array
+		public function setSize(size:int):void
+		{
+			var newArray:Array = new Array();
+			if (this._array.length > size)
+			{
+				for (var i:int=0;i<size;i++)
+				{
+					newArray[i] = this._array[i];	// bas : fixed .push
+				}
+				this._array = newArray;
+			}
+		}
+		
 		public function RemoveRange(newSize:int,itemsToRemove:int):void
 		{
 			// remove the items
@@ -101,10 +130,17 @@ package com.google.zxing.common.flexdatatypes
 			//this._array.sort(args);
 		}
 		
-		public function sort_CenterComparator():void
+		public function sort_CenterComparator(average:Number):void
 		{
+			CenterComparator.setAverage(average);
 			this._array.sort(CenterComparator.compare);
 		}
+		
+		public function sort_FurthestFromAverageComparator(average:Number):void
+		{
+			FurthestFromAverageComparator.setAverage(average);
+			this._array.sort(FurthestFromAverageComparator.compare);
+		}		
 		
 		public function size():int
 		{
@@ -126,6 +162,21 @@ package com.google.zxing.common.flexdatatypes
 			{
 				return false;
 			}
+		}
+		
+		public function clearAll():void
+		{
+			this._array = new Array();
+		}
+		
+		public function elements():Array
+		{
+			return this._array;
+		}
+		
+		public function lastElement():Object
+		{
+			return this._array[this._array.length-1]; // bas : fixed this
 		}
 	
 	}

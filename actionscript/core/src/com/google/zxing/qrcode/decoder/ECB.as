@@ -7,9 +7,8 @@ package com.google.zxing.qrcode.decoder
            */
           public class ECB 
           {
-          	// bas : made public for debugging
-            public var count:int;
-            public var dataCodewords:int;
+            protected var count:int;
+            protected var dataCodewords:int;
 
             public function ECB(count:int, dataCodewords:int) 
             {

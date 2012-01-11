@@ -15,6 +15,8 @@
  */
 package com.google.zxing.qrcode.decoder
 {
+	import com.google.zxing.common.flexdatatypes.HashTable;
+	
 	
     public class Decoder
     { 
@@ -22,7 +24,7 @@ package com.google.zxing.qrcode.decoder
 		import com.google.zxing.common.DecoderResult;
     	import com.google.zxing.common.reedsolomon.ReedSolomonDecoder;
     	import com.google.zxing.common.reedsolomon.ReedSolomonException;
-    	import com.google.zxing.common.reedsolomon.GF256;
+    	import com.google.zxing.common.reedsolomon.GenericGF;
     	import com.google.zxing.common.zxingByteArray;
     	import com.google.zxing.ReaderException;
 
@@ -36,7 +38,7 @@ package com.google.zxing.qrcode.decoder
           private var rsDecoder:ReedSolomonDecoder;
 
           public function Decoder() {
-            rsDecoder = new ReedSolomonDecoder(GF256.QR_CODE_FIELD);
+            rsDecoder = new ReedSolomonDecoder(GenericGF.QR_CODE_FIELD_256);
           }
 
           /**
@@ -48,14 +50,14 @@ package com.google.zxing.qrcode.decoder
            * @throws ReaderException if the QR Code cannot be decoded
            */
            
-          public function decode(image:Object):DecoderResult
+          public function decode(image:Object,hints:HashTable=null):DecoderResult
           {
-          	if (image is Array) { return decode_Array(image as Array);}
-          	else if (image is BitMatrix) { return decode_BitMatrix(image as BitMatrix);}
+          	if (image is Array) { return decode_Array(image as Array,hints);}
+          	else if (image is BitMatrix) { return decode_BitMatrix(image as BitMatrix,hints);}
           	else { throw new Error('Decoder : decode : unknown type of image');} 
           }
           
-          public function decode_Array(image:Array):DecoderResult {
+          public function decode_Array(image:Array, hints:HashTable):DecoderResult {
                 var dimension:int = image.length;
                 var bits:BitMatrix = new BitMatrix(dimension);
                 for (var i:int = 0; i < dimension; i++) {
@@ -65,7 +67,7 @@ package com.google.zxing.qrcode.decoder
                     }
                   }
                 }
-                return decode(bits);
+                return decode(bits,hints);
           }
 
           /**
@@ -75,7 +77,7 @@ package com.google.zxing.qrcode.decoder
            * @return text and bytes encoded within the QR Code
            * @throws ReaderException if the QR Code cannot be decoded
            */
-          public function decode_BitMatrix(bits:BitMatrix ):DecoderResult{
+          public function decode_BitMatrix(bits:BitMatrix, hints:HashTable ):DecoderResult{
               try{
                 // Construct a parser and read version, error-correction level
                 var parser:BitMatrixParser = new BitMatrixParser(bits);
@@ -109,7 +111,7 @@ package com.google.zxing.qrcode.decoder
                 }
 
                 // Decode the contents of that stream of bytes
-                return DecodedBitStreamParser.decode(resultBytes, version,ecLevel);
+                return DecodedBitStreamParser.decode(resultBytes, version,ecLevel,hints);
               }catch(e:ReedSolomonException){
                 throw new ReaderException(e.message);
               }
@@ -146,9 +148,9 @@ package com.google.zxing.qrcode.decoder
                   // We don't care about errors in the error-correction codewords
                   for (var i3:int = 0; i3 < numDataCodewords; i3++)
                   {
-                      codewordBytes[i3] = int(codewordsInts[i3]);
+                      codewordBytes[i3] = Math.floor(codewordsInts[i3]);
                       // Flex : make bytes
-                      if (codewordBytes[i3] > 127) { codewordBytes[i3] = (256-codewordBytes[i3])*-1; }
+                      if (codewordBytes[i3] > 127) { codewordBytes[i3] = (256-(Math.floor(codewordBytes[i3])))*-1; }
                   }
           }
     }

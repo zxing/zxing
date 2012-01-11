@@ -15,7 +15,7 @@
  */
 package com.google.zxing.oned
 {
-   public class Code39Reader extends AbstractOneDReader 
+   public class Code39Reader extends OneDReader 
     { 
     	
     	import com.google.zxing.common.BitArray;
@@ -25,16 +25,17 @@ package com.google.zxing.oned
 		import com.google.zxing.ResultPoint;
     	import com.google.zxing.common.flexdatatypes.HashTable;
     	import com.google.zxing.common.flexdatatypes.StringBuilder;
+    	import com.google.zxing.BinaryBitmap;
     	
-          private static  var ALPHABET_STRING:String = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. *$/+%";
-          private static  var ALPHABET:Array = ALPHABET_STRING.split("");
+          public static  var ALPHABET_STRING:String = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. *$/+%";
+          public static  var ALPHABET:Array = ALPHABET_STRING.split("");
 
           /**
            * These represent the encodings of characters, as patterns of wide and narrow bars.
            * The 9 least-significant bits of each int correspond to the pattern of wide and narrow,
            * with 1s representing "wide" and 0s representing narrow.
            */
-          private static var CHARACTER_ENCODINGS:Array = [
+          public static var CHARACTER_ENCODINGS:Array = [
               0x034, 0x121, 0x061, 0x160, 0x031, 0x130, 0x070, 0x025, 0x124, 0x064, // 0-9
               0x109, 0x049, 0x148, 0x019, 0x118, 0x058, 0x00D, 0x10C, 0x04C, 0x01C, // A-J
               0x103, 0x043, 0x142, 0x013, 0x112, 0x052, 0x007, 0x106, 0x046, 0x016, // K-T
@@ -42,7 +43,7 @@ package com.google.zxing.oned
               0x0A8, 0x0A2, 0x08A, 0x02A // $-%
           ];
 
-          private static  var ASTERISK_ENCODING:int = CHARACTER_ENCODINGS[39];
+          public static  var ASTERISK_ENCODING:int = CHARACTER_ENCODINGS[39];
 
           private  var usingCheckDigit:Boolean;
           private  var extendedMode:Boolean;
@@ -60,6 +61,9 @@ package com.google.zxing.oned
            * data, and verify that the checksum passes.
            */
 
+
+	//	function decode(image:BinaryBitmap, hints:HashTable=null):Result { return null; }
+	
           /**
            * Creates a reader that can be configured to check the last character as a check digit,
            * or optionally attempt to decode "extended Code 39" sequences that are used to encode
@@ -91,7 +95,7 @@ package com.google.zxing.oned
            }
           }
 
-          public override function decodeRow(rowNumber:int,  row:BitArray, hints:Object):Result {
+          public override function decodeRow(rowNumber:Object,  row:BitArray, hints:Object):Result {
 
             var start:Array = findAsteriskPattern(row);
             var nextStart:int = start[1];
@@ -139,11 +143,11 @@ package com.google.zxing.oned
               var max:int = result.length - 1;
               var total:int = 0;
               for (var i3:int = 0; i3 < max; i3++) {
-                total += ALPHABET_STRING.indexOf(result[i3]);
+                total += ALPHABET_STRING.indexOf(result.charAt(i3));
               }
-              if (total % 43 != ALPHABET_STRING.indexOf(result[max]))
-              {
-                throw new ReaderException("Code39Reader : decodeRow : total % 43 != ALPHABET_STRING.indexOf(result[max])");
+             if (result.charAt(max) != ALPHABET[total % 43]) 
+             {
+                throw new ReaderException("Code39Reader : decodeRow : checkDigit incorrect)");
               }
               result.Remove(max,1);
             }

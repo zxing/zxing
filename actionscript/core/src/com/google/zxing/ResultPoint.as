@@ -26,9 +26,8 @@ package com.google.zxing
  
     public class ResultPoint
     {
-    	
-        private var x:Number;
-  		private var y:Number;
+        protected var x:Number;
+  		protected var y:Number;
 
   		public function ResultPoint(x:Number, y:Number) 
   		{

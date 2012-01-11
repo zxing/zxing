@@ -26,15 +26,16 @@ package com.google.zxing
     	import com.google.zxing.common.ByteMatrix;
     	import com.google.zxing.common.flexdatatypes.HashTable;
     	
-  /**
-   *
-   * @param contents The contents to encode in the barcode
-   * @param format The barcode format to generate
-   * @param width The preferred width in pixels
-   * @param height The preferred height in pixels
-   * @param hints Additional parameters to supply to the encoder
-   * @return The generated barcode as a Matrix of unsigned bytes (0 == black, 255 == white)
-   */
-    function encode(contents:String,  format:BarcodeFormat=null, width:int=0, height:int=0, hints:HashTable=null):Object
-    }
+	  /**
+	   *
+	   * @param contents The contents to encode in the barcode
+	   * @param format The barcode format to generate
+	   * @param width The preferred width in pixels
+	   * @param height The preferred height in pixels
+	   * @param hints Additional parameters to supply to the encoder
+	   * @return The generated barcode as a Matrix of unsigned bytes (0 == black, 255 == white)
+	   */
+	    function encode(contents:String,  format:BarcodeFormat=null, width:int=0, height:int=0, hints:HashTable=null):Object;
+	    
+	}
 }

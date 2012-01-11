@@ -17,20 +17,20 @@ package com.google.zxing.qrcode.encoder
  */
 
 
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.WriterException;
 import com.google.zxing.common.ByteMatrix;
 import com.google.zxing.common.CharacterSetECI;
 import com.google.zxing.common.flexdatatypes.ArrayList;
 import com.google.zxing.common.flexdatatypes.HashTable;
-import com.google.zxing.common.reedsolomon.GF256;
+import com.google.zxing.common.reedsolomon.GenericGF;
 import com.google.zxing.common.reedsolomon.ReedSolomonEncoder;
 import com.google.zxing.common.zxingByteArray;
-import com.google.zxing.WriterException;
-
 import com.google.zxing.qrcode.decoder.ECBlocks;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.google.zxing.qrcode.decoder.Mode;
 import com.google.zxing.qrcode.decoder.Version;
-import com.google.zxing.EncodeHintType;
+
 import flash.utils.ByteArray;
 
 /**
@@ -97,6 +97,7 @@ public final class Encoder {
     var dataBits:BitVector = new BitVector();
     appendBytes(content, mode, dataBits, encoding);
     
+    
 	// Step 3: Initialize QR code that can contain "dataBits".
     var numInputBytes:int = dataBits.sizeInBytes();
     initQRCode(numInputBytes, ecLevel, mode, qrCode);
@@ -128,7 +129,7 @@ public final class Encoder {
     interleaveWithECBytes(headerAndDataBits, qrCode.getNumTotalBytes(), qrCode.getNumDataBytes(), qrCode.getNumRSBlocks(), finalBits);
 
     finalBits.makeByteArray();// make byte array 
-//inhoud final bits klopt alleen is array te lang
+
     // Step 7: Choose the mask pattern and set to "qrCode".
     var matrix:ByteMatrix = new ByteMatrix(qrCode.getMatrixWidth(), qrCode.getMatrixWidth());
     
@@ -139,15 +140,12 @@ public final class Encoder {
     
     var maskpattern:int = chooseMaskPattern(finalBits, qrCode.getECLevel(), qrCode.getVersion(), matrix)
     qrCode.setMaskPattern(maskpattern);
-
-
-
-
+    
     // Step 8.  Build the matrix and set it to "qrCode".
     MatrixUtil.buildMatrix(finalBits, qrCode.getECLevel(), qrCode.getVersion(), qrCode.getMaskPattern(), matrix);
     
-    //trace(matrix.toString());
     qrCode.setMatrix(matrix);
+    var A:String = matrix.toString2();
     // Step 9.  Make sure we have a valid QR Code.
     if (!qrCode.isValid()) {
       throw new WriterException("Invalid QR code: " + qrCode.toString());
@@ -430,7 +428,7 @@ public final class Encoder {
     for (var i:int = 0; i < numDataBytes; i++) {
       toEncode[i] = dataBytes.at(i);
     }
-    new ReedSolomonEncoder(GF256.QR_CODE_FIELD).encode(toEncode, numEcBytesInBlock);
+    new ReedSolomonEncoder(GenericGF.QR_CODE_FIELD_256).encode(toEncode, numEcBytesInBlock);
 
     var ecBytes:zxingByteArray = new zxingByteArray(numEcBytesInBlock);
     for (var i4:int = 0; i4 < numEcBytesInBlock; i4++)

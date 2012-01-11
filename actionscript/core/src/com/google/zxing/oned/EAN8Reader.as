@@ -19,7 +19,7 @@ package com.google.zxing.oned
  	 import com.google.zxing.common.flexdatatypes.StringBuilder;
 	 import com.google.zxing.BarcodeFormat;
 
-	 public class EAN8Reader extends AbstractUPCEANReader 
+	 public class EAN8Reader extends UPCEANReader 
 	 {
 	 	
           private var decodeMiddleCounters:Array;
@@ -28,7 +28,8 @@ package com.google.zxing.oned
             decodeMiddleCounters = new Array(4);
           }
 
-          protected override function decodeMiddle(row:BitArray, startRange:Array,  result:StringBuilder):int {
+          protected override function decodeMiddle(row:BitArray, startRange:Array,  result:StringBuilder):int 
+          {
             var counters:Array = decodeMiddleCounters;
             counters[0] = 0;
             counters[1] = 0;
@@ -59,7 +60,7 @@ package com.google.zxing.oned
             return rowOffset;
           }
 
-          public override function getBarcodeFormat():BarcodeFormat {
+          public  override function getBarcodeFormat():BarcodeFormat {
             return BarcodeFormat.EAN_8;  
           }
             

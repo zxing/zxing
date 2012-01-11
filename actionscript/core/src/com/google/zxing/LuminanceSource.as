@@ -13,8 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+ 
 package com.google.zxing
 {
+	
+	 import com.google.zxing.common.flexdatatypes.StringBuilder;
+	 
 	public class LuminanceSource
 	{
 		/**
@@ -109,6 +114,32 @@ package com.google.zxing
   public function rotateCounterClockwise():LuminanceSource {
     throw new Error("This luminance source does not support rotation.");
   }
+  
+   public function toString():String 
+   {
+    var row:Array = new Array(width);
+    var result:StringBuilder  = new StringBuilder(height * (width + 1));
+    for (var y:int = 0; y < height; y++) {
+      row = getRow(y, row);
+      for (var x:int = 0; x < width; x++) {
+        var luminance:int = row[x] & 0xFF;
+        var c:String;
+        if (luminance < 0x40) {
+          c = '#';
+        } else if (luminance < 0x80) {
+          c = '+';
+        } else if (luminance < 0xC0) {
+          c = '.';
+        } else {
+          c = ' ';
+        }
+        result.Append(c);
+      }
+      result.Append('\n');
+    }
+    return result.ToString();
+  }
+
 
 
 	}

@@ -3,9 +3,8 @@ package com.google.zxing.qrcode.decoder
 	      public class ECBlocks 
           {
           	
-          	// bas : made public for debugging
-            public var  ecCodewordsPerBlock:int;
-            public var  ecBlocks:Array;
+            protected var  ecCodewordsPerBlock:int;
+            protected var  ecBlocks:Array;
 
             //public function ECBlocks(ecCodewordsPerBlock, ECB ecBlocks) 
             //{

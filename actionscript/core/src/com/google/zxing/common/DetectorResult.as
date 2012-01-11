@@ -28,12 +28,13 @@ package com.google.zxing.common
  */
     public  class DetectorResult
     {
-          private  var bits:BitMatrix;
+    	  private  var bits:BitMatrix;
           private  var points:Array;
 
           public function DetectorResult( bits:BitMatrix, points:Array ) {
             this.bits = bits;
             this.points = points;
+         
           }
 
           public function getBits():BitMatrix {

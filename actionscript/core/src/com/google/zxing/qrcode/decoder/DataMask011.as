@@ -8,7 +8,7 @@ package com.google.zxing.qrcode.decoder
   public class DataMask011 extends DataMaskBase 
   {
      public override function isMasked(i:int, j:int):Boolean {
-      return (i + j) % 3 == 0;
+      return int((i + j) % 3) == 0;
     }
   }
 

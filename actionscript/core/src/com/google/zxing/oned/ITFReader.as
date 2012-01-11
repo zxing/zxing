@@ -16,25 +16,27 @@
 package com.google.zxing.oned
 {
 
-    public class ITFReader extends AbstractOneDReader
+    public class ITFReader extends OneDReader
     { 
     	import com.google.zxing.common.BitArray;
     	import com.google.zxing.ResultPoint;
     	import com.google.zxing.common.flexdatatypes.StringBuilder;
+    	import com.google.zxing.common.flexdatatypes.HashTable;
     	
     	import com.google.zxing.BarcodeFormat;
 		import com.google.zxing.ReaderException;
 		import com.google.zxing.Result;
 		import com.google.zxing.DecodeHintType;
+		import com.google.zxing.BinaryBitmap;
     	
-          private static  var MAX_AVG_VARIANCE:int = int(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.42);
-          private static  var MAX_INDIVIDUAL_VARIANCE:int = int(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.8);
+          public static  var MAX_AVG_VARIANCE:int = int(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.42);
+          public static  var MAX_INDIVIDUAL_VARIANCE:int = int(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.8);
 
-          private static  var W:int = 3; // Pixel width of a wide line
-          private static  var N:int = 1; // Pixed width of a narrow line
+          public static  var W:int = 3; // Pixel width of a wide line
+          public static  var N:int = 1; // Pixed width of a narrow line
 
           // Stores the actual narrow line width of the image being decoded.
-          private var narrowLineWidth:int = -1;
+          public var narrowLineWidth:int = -1;
 
           /**
            * Start/end guard pattern.
@@ -42,14 +44,14 @@ package com.google.zxing.oned
            * Note: The end pattern is reversed because the row is reversed before
            * searching for the END_PATTERN
            */
-          private static  var START_PATTERN:Array = [N, N, N, N];
-          private static  var END_PATTERN_REVERSED:Array = [N, N, W];
+          public static  var START_PATTERN:Array = [N, N, N, N];
+          public static  var END_PATTERN_REVERSED:Array = [N, N, W];
 			
-		  private static var DEFAULT_ALLOWED_LENGTHS:Array = [ 6, 10, 14 ];
+		  public static var DEFAULT_ALLOWED_LENGTHS:Array = [ 6, 10, 14 ];
           /**
            * Patterns of Wide / Narrow lines to indicate each digit
            */
-          private static  var PATTERNS:Array = [
+         public static  var PATTERNS:Array = [
               [N, N, W, W, N], // 0
               [W, N, N, N, W], // 1
               [N, W, N, N, W], // 2
@@ -62,7 +64,9 @@ package com.google.zxing.oned
               [N, W, N, W, N]  // 9
           ];
 
-          public override function  decodeRow(rowNumber:int, row:BitArray,  hints:Object):Result 
+		//function decode(image:BinaryBitmap, hints:HashTable=null):Result { return null; }
+
+          public  override function  decodeRow(rowNumber:Object, row:BitArray,  hints:Object):Result 
           {
             // Find out where the Middle section (payload) starts & ends
             var startRange:Array = decodeStart(row);

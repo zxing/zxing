@@ -121,18 +121,18 @@ package com.google.zxing.qrcode.encoder
           public static function buildMatrix( dataBits:BitVector,  ecLevel:ErrorCorrectionLevel,  version:int, maskPattern:int,  matrix:ByteMatrix):void 
           {
                     clearMatrix(matrix);
-				    //trace(matrix.toString()); 
+				    var result:String = matrix.toString2(); 
                     embedBasicPatterns(version, matrix);
-                    //trace(matrix.toString()); 
+                    result = matrix.toString2();
                     // Type information appear with any version.
                     embedTypeInfo(ecLevel, maskPattern, matrix);
-                    //trace(matrix.toString()); 
+                    result = matrix.toString2(); 
                     // Version info appear if version >= 7.
                     maybeEmbedVersionInfo(version, matrix);
-                    //trace(matrix.toString()); 
+                    result = matrix.toString2();
                     // Data should be embedded at end.
                     embedDataBits(dataBits, maskPattern, matrix);
-                    //trace(matrix.toString()); 
+                    result = matrix.toString2();
                     
           }
 
@@ -148,18 +148,14 @@ package com.google.zxing.qrcode.encoder
               {
                     // Let's get started with embedding big squares at corners.
                     embedPositionDetectionPatternsAndSeparators(matrix);
-                    //trace(matrix.toString());
                     // Then, embed the dark dot at the left bottom corner.
                     embedDarkDotAtLeftBottomCorner(matrix);
-//trace(matrix.toString());
                     
                     // Position adjustment patterns appear if version >= 2.
                     maybeEmbedPositionAdjustmentPatterns(version, matrix);
-                    //trace(matrix.toString());
                     
                     // Timing patterns should be embedded after position adj. patterns.
                     embedTimingPatterns(matrix);
-              		//trace(matrix.toString());
                     
               }catch(e:Error){
                 throw new WriterException (e.message);
@@ -231,7 +227,6 @@ package com.google.zxing.qrcode.encoder
             var y:int = matrix.height() - 1;
             while (x > 0) 
             {
-            	//trace('x:'+x);
               // Skip the vertical timing pattern.
               if (x == 6) 
               {
@@ -240,17 +235,14 @@ package com.google.zxing.qrcode.encoder
               
               while (y >= 0 && y < matrix.height()) 
               {
-              	//trace('y:'+y);
               	var n:int = 0;
                 for (var i:int = 0; i < 2; ++i) 
                 {
                   var xx:int = x - i;
                   // Skip the cell if it's not empty.
                   var cellval:int = matrix._get(xx, y);
-                  //trace('cellval:'+cellval);
                   if (!isEmpty(cellval)) 
                   {
-                  	//trace('continue');
                     continue;
                   }
                   var bit:int;
@@ -258,7 +250,6 @@ package com.google.zxing.qrcode.encoder
                   {
                     bit = dataBits.at(bitIndex);
                     ++bitIndex;
-                    //trace('bitIndex:'+bitIndex);
                   } 
                   else 
                   {
@@ -275,7 +266,6 @@ package com.google.zxing.qrcode.encoder
 		              bit ^= 0x1;
 		            }
                   }
-                  //trace('_set ['+xx+']['+y+']'+bit);
                   matrix._set(xx, y, bit);
                 }
                 y += direction;

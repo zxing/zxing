@@ -15,13 +15,16 @@
  */
 package com.google.zxing
 {
-  import com.google.zxing.common.flexdatatypes.HashTable;
+  import com.google.zxing.aztec.AztecReader;
   import com.google.zxing.common.flexdatatypes.ArrayList;
+  import com.google.zxing.common.flexdatatypes.HashTable;
+  import com.google.zxing.datamatrix.DataMatrixReader;
   import com.google.zxing.oned.MultiFormatOneDReader;
   import com.google.zxing.pdf417.PDF417Reader;
   import com.google.zxing.qrcode.QRCodeReader;
-  import com.google.zxing.datamatrix.DataMatrixReader;
-  import com.google.zxing.Reader;
+  import com.google.zxing.maxicode.MaxiCodeReader;
+  import com.google.zxing.common.flexdatatypes.ArrayList;
+
 	/**
  * MultiFormatReader is a convenience class and the main entry point into the library for most uses.
  * By default it attempts to decode all barcode formats that the library supports. Optionally, you
@@ -86,10 +89,14 @@ package com.google.zxing
                   var addOneDReader:Boolean =
                       (formats.indexOf(BarcodeFormat.UPC_A) != -1)||
                       (formats.indexOf(BarcodeFormat.UPC_E) != -1)||
+                      (formats.indexOf(BarcodeFormat.CODABAR) != -1)||
                       (formats.indexOf(BarcodeFormat.ITF) != -1)||
                       (formats.indexOf(BarcodeFormat.EAN_13) != -1)||
                       (formats.indexOf(BarcodeFormat.EAN_8) != -1)||
+                      (formats.indexOf(BarcodeFormat.RSS_14) != -1)||
+                      (formats.indexOf(BarcodeFormat.RSS_EXPANDED) != -1)||
                       (formats.indexOf(BarcodeFormat.CODE_39) != -1)||
+                      (formats.indexOf(BarcodeFormat.CODE_93) != -1)||
                       (formats.indexOf(BarcodeFormat.CODE_128) != -1);
                   // Put 1D readers upfront in "normal" mode
 
@@ -105,11 +112,17 @@ package com.google.zxing
 			      if (formats.indexOf(BarcodeFormat.PDF417) != -1) {
 			         readers.addElement(new PDF417Reader());
 			       }
-
+			      if (formats.indexOf(BarcodeFormat.AZTEC) != -1) {
+			         readers.addElement(new AztecReader());
+			       }
                   // TODO re-enable once Data Matrix is ready
                   if (formats.indexOf(BarcodeFormat.DATAMATRIX) != -1) {
                     readers.Add(new DataMatrixReader());
                   }
+                  if (formats.Contains(BarcodeFormat.MAXICODE)) {
+  				       readers.addElement(new MaxiCodeReader());
+      			  }
+   
                   // At end in "try harder" mode
                   if (addOneDReader && tryHarder)
                   {
@@ -125,11 +138,10 @@ package com.google.zxing
                       	readers.Add(reader);
                   }
                   readers.Add(new QRCodeReader());
-                  // TODO re-enable once Data Matrix is ready
                   readers.Add(new DataMatrixReader());
-
-		      	  // TODO: Enable once PDF417 has passed QA
-      			  readers.addElement(new PDF417Reader());
+      			  readers.Add(new AztecReader());
+      			  readers.Add(new PDF417Reader());
+      			  readers.Add(new MaxiCodeReader());
 
                   if (tryHarder)
                   {
@@ -138,6 +150,15 @@ package com.google.zxing
               }
 
           }
+            public function reset():void 
+            {
+    			var size:int = readers.size();
+    			for (var i:int = 0; i < size; i++) 
+    			{
+      				var reader:Reader  = Reader(readers.elementAt(i));
+     				 reader.reset();
+   			 	}
+  			}
 
           private function decodeInternal( image:BinaryBitmap):Result 
           {
@@ -145,6 +166,7 @@ package com.google.zxing
                   for (var i:int = 0; i < size; i++)
                   {
                       var reader:Reader = (readers.getObjectByIndex(i)) as Reader;
+                      try{
                       try
                       {
                       	  var res:Result = reader.decode(image, hints); 
@@ -153,8 +175,15 @@ package com.google.zxing
                       catch ( re:ReaderException)
                       {
                           // continue
-                           var a:int=0;
+                          var a:int =3;
                       }
+                      }
+                      catch (e:Error)
+                      {
+                      		var b:int = 4;
+                      }
+                      	
+                      
                   }
 
               // no decoder could decode the barcode

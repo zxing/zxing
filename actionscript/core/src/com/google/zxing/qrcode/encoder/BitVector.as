@@ -5,9 +5,9 @@ package com.google.zxing.qrcode.encoder
     
     		import com.google.zxing.common.flexdatatypes.StringBuilder;
     		import com.google.zxing.common.flexdatatypes.IllegalArgumentException;
-    		
-          private var sizeInBits:int;
-          private var array:Array;
+
+          protected var sizeInBits:int;
+          protected var array:Array;
 
           // For efficiency, start out with some room to work.
           private static var DEFAULT_SIZE_IN_BYTES:int = 32;

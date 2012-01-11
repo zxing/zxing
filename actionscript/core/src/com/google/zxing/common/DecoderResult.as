@@ -34,9 +34,9 @@ package com.google.zxing.common
           private var rawBytes:Array;
           private var text:String ;
           private var byteSegments:ArrayList;
-          private var ecLevel:ErrorCorrectionLevel;
+          private var ecLevel:String;
 
-          public function DecoderResult(rawBytes:Array, text:String,  byteSegments:ArrayList, ecLevel:ErrorCorrectionLevel)
+          public function DecoderResult(rawBytes:Array, text:String,  byteSegments:ArrayList, ecLevel:String)
           {
             if (rawBytes == null && text == null) 
             {
@@ -61,7 +61,7 @@ package com.google.zxing.common
             return byteSegments;
           }
 	
-	      public function getECLevel():ErrorCorrectionLevel 
+	      public function getECLevel():String 
 	      {
     		return ecLevel;
     	  }

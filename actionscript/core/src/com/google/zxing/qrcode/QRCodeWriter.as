@@ -26,6 +26,7 @@ package com.google.zxing.qrcode
 	import com.google.zxing.EncodeHintType;
 	import com.google.zxing.Writer;
 	import com.google.zxing.WriterException;
+	import com.google.zxing.common.BitMatrix;
 	
     public class QRCodeWriter implements Writer
     { 
@@ -65,7 +66,7 @@ package com.google.zxing.qrcode
 
           // Note that the input matrix uses 0 == white, 1 == black, while the output matrix uses
           // 0 == black, 255 == white (i.e. an 8 bit greyscale bitmap).
-          private static function renderResult( code:QRCode, width:int, height:int):ByteMatrix {
+          private static function renderResult( code:QRCode, width:int, height:int):BitMatrix {
             var input:ByteMatrix  = code.getMatrix();
             var inputWidth:int = input.width();
             var inputHeight:int = input.height();
@@ -82,61 +83,16 @@ package com.google.zxing.qrcode
             var leftPadding:int = (outputWidth - (inputWidth * multiple)) / 2;
             var topPadding:int = (outputHeight - (inputHeight * multiple)) / 2;
 
-            var output:ByteMatrix = new ByteMatrix(outputHeight, outputWidth);
-            var outputArray:Array = output.getArray(); //sbyte[][]
+            var output:BitMatrix = new BitMatrix(outputHeight, outputWidth);
 
-            // We could be tricky and use the first row in each set of multiple as the temporary storage,
-            // instead of allocating this separate array.
-            var row:Array = new Array(outputWidth);
-
-            // 1. Write the white lines at the top
-            for (var y:int = 0; y < topPadding; y++) {
-              setRowColor(outputArray[y], 255);
-            }
-
-            // 2. Expand the QR image to the multiple
-            var inputArray:Array = input.getArray();
-            for (var y2:int = 0; y2 < inputHeight; y2++) {
-              // a. Write the white pixels at the left of each row
-              for (var x2:int = 0; x2 < leftPadding; x2++) {
-                row[x2] = 255;
-              }
-
-              // b. Write the contents of this row of the barcode
-              var offset:int = leftPadding;
-              for (var x3:int = 0; x3 < inputWidth; x3++) {
-                var value:int = (inputArray[y2][x3] == 1) ? 0 : 255;
-                for (var z:int = 0; z < multiple; z++) {
-                  row[offset + z] = value;
-                }
-                offset += multiple;
-              }
-
-              // c. Write the white pixels at the right of each row
-              offset = leftPadding + (inputWidth * multiple);
-              for (var x4:int = offset; x4 < outputWidth; x4++) {
-                row[x4] = 255;
-              }
-
-              // d. Write the completed row multiple times
-              offset = topPadding + (y2 * multiple);
-              for (var z2:int = 0; z2 < multiple; z2++) 
-              {
-              	//System.Array.Copy(row, 0, outputArray[offset + z], 0, outputWidth);
-              	for (var ii:int=0;ii<outputWidth;ii++)
-              	{
-              		outputArray[offset + z2][ii] = row[ii];
-              	}
-                
-              }
-            }
-
-            // 3. Write the white lines at the bottom
-            var offset2:int = topPadding + (inputHeight * multiple);
-            for (var y3:int = offset2; y3 < outputHeight; y3++)
-            {
-              setRowColor(outputArray[y3], 255);
-            }
+			 for (var inputY:int = 0, outputY:int = topPadding; inputY < inputHeight; inputY++, outputY += multiple) {
+				  // Write the contents of this row of the barcode
+				  for (var inputX:int = 0, outputX:int = leftPadding; inputX < inputWidth; inputX++, outputX += multiple) {
+					if (input._get(inputX, inputY) == 1) {
+					  output.setRegion(outputX, outputY, multiple, multiple);
+					}
+				  }
+				}
             return output;
           }
 

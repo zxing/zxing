@@ -7,6 +7,8 @@ package com.google.zxing.qrcode.detector
     	import com.google.zxing.common.BitArray;
     	import com.google.zxing.common.BitMatrix;
     	import com.google.zxing.ReaderException;
+    	import com.google.zxing.ResultPointCallback;
+    	import com.google.zxing.ResultPoint;
     	
     	
           private  var image:BitMatrix;
@@ -17,6 +19,7 @@ package com.google.zxing.qrcode.detector
           private  var height:int;
           private  var moduleSize:Number;
           private  var crossCheckStateCount:Array;
+		  private  var resultPointCallback:ResultPointCallback;
          
 
           /**
@@ -34,15 +37,17 @@ package com.google.zxing.qrcode.detector
                                  startY:int,
                                  width:int,
                                  height:int,
-                                 moduleSize:Number) {
+                                 moduleSize:Number,
+								 resultPointCallback:ResultPointCallback) {
             this.image = image;
-            this.possibleCenters = new ArrayList(5);
+            this.possibleCenters = new ArrayList(); // no fixed length : was 5
             this.startX = startX;
             this.startY = startY;
             this.width = width;
             this.height = height;
             this.moduleSize = moduleSize;
             this.crossCheckStateCount = new Array(3);
+			this.resultPointCallback = resultPointCallback;
           }
 
           /**
@@ -60,7 +65,9 @@ package com.google.zxing.qrcode.detector
             // We are looking for black/white/black modules in 1:1:1 ratio;
             // this tracks the number of black/white/black modules seen so far
             var stateCount:Array = new Array(3);
-            for (var iGen:int = 0; iGen < height; iGen++) {
+            for (var iGen:int = 0; iGen < height; iGen++) 
+            {
+            	
               // Search from middle outwards
               var i:int = middleI + ((iGen & 0x01) == 0 ? ((iGen + 1) >> 1) : -((iGen + 1) >> 1));
               stateCount[0] = 0;
@@ -76,6 +83,12 @@ package com.google.zxing.qrcode.detector
               var currentState:int = 0;
               while (j < maxJ) 
               {
+         /*     	
+if (i==140 && j==210)
+{
+	var wop:int=0;
+}           
+*/   	
                 if (image._get(j,i)) 
                 {
                   // Black pixel
@@ -103,8 +116,7 @@ package com.google.zxing.qrcode.detector
                     } 
                     else 
                     {
-                    	currentState++;
-                    	stateCount[currentState] = stateCount[currentState] + 1;
+                    	stateCount[++currentState]++;
                     }
                   }
                 } 
@@ -112,7 +124,7 @@ package com.google.zxing.qrcode.detector
                   if (currentState == 1) { // Counting black pixels
                     currentState++;
                   }
-                  stateCount[currentState] = stateCount[currentState] + 1;
+                  stateCount[currentState]++;
                 }
                 j++;
               }
@@ -138,8 +150,9 @@ package com.google.zxing.qrcode.detector
            * Given a count of black/white/black pixels just seen and an end position,
            * figures the location of the center of this black/white/black run.
            */
-          private static function centerFromEnd(stateCount:Array, end:int):Number {
-            return Number( (end - stateCount[2]) - stateCount[1] / 2);
+          private static function centerFromEnd(stateCount:Array, end:int):Number 
+          {
+            return (end - stateCount[2]) - stateCount[1] / 2;
           }
 
           /**
@@ -181,7 +194,7 @@ package com.google.zxing.qrcode.detector
             // Start counting up from center
             var i:int = startI;
             while (i >= 0 && image._get(centerJ, i) && stateCount[1] <= maxCount) {
-              stateCount[1] = stateCount[1] + 1;
+              stateCount[1]++;
               i--;
             }
             // If already too many modules in this state or ran off the edge:
@@ -199,14 +212,14 @@ package com.google.zxing.qrcode.detector
             // Now also count down from center
             i = startI + 1;
             while (i < maxI && image._get(centerJ, i) && stateCount[1] <= maxCount) {
-              stateCount[1] = stateCount[1] + 1;
+              stateCount[1]++;
               i++;
             }
             if (i == maxI || stateCount[1] > maxCount) {
                 return Number.NaN;
             }
             while (i < maxI && !image._get(centerJ, i) && stateCount[2] <= maxCount) {
-              stateCount[2] = stateCount[2] + 1;
+              stateCount[2]++;
               i++;
             }
             if (stateCount[2] > maxCount) {
@@ -214,11 +227,11 @@ package com.google.zxing.qrcode.detector
             }
 
             var stateCountTotal:int = stateCount[0] + stateCount[1] + stateCount[2];
-            if (5 * Math.abs(stateCountTotal - originalStateCountTotal) >= originalStateCountTotal) {
+            if (5 * Math.abs(stateCountTotal - originalStateCountTotal) >= 2*originalStateCountTotal) {
                 return Number.NaN;
             }
 
-            return foundPatternCross(stateCount) ? centerFromEnd(stateCount, i) : NaN;
+            return foundPatternCross(stateCount) ? centerFromEnd(stateCount, i) : Number.NaN;
           }
 
           /**
@@ -232,7 +245,8 @@ package com.google.zxing.qrcode.detector
            * @param j end of possible alignment pattern in row
            * @return {@link AlignmentPattern} if we have found the same pattern twice, or null if not
            */
-          private function handlePossibleCenter(stateCount:Array, i:int, j:int):AlignmentPattern {
+          private function handlePossibleCenter(stateCount:Array, i:int, j:int):AlignmentPattern 
+		  {
             var stateCountTotal:int = stateCount[0] + stateCount[1] + stateCount[2];
             var centerJ:Number = centerFromEnd(stateCount, j);
             var centerI:Number = crossCheckVertical(i, int(centerJ), 2 * stateCount[1], stateCountTotal);
@@ -242,21 +256,23 @@ package com.google.zxing.qrcode.detector
               var max:int = possibleCenters.Count;
               for (var index:int = 0; index < max; index++) 
               {
-              	var tmp:Object = possibleCenters.getObjectByIndex(index);
-              	if (tmp != null)
-              	{
-                	var center:AlignmentPattern = AlignmentPattern( tmp);
+              		var center:AlignmentPattern = (possibleCenters.getObjectByIndex(index) as AlignmentPattern);
                 	// Look for about the same center and module size:
-                	if (center.aboutEquals(estimatedModuleSize, centerI, centerJ)) {
-                  	return new AlignmentPattern(centerJ, centerI, estimatedModuleSize);
+                	if ((center != null) && (center.aboutEquals(estimatedModuleSize, centerI, centerJ))) {
+						return center.combineEstimate(centerI, centerJ, estimatedModuleSize);
                 	}
-               }
               }
               // Hadn't found this before; save it
-              possibleCenters.Add(new AlignmentPattern(centerJ, centerI, estimatedModuleSize));
-            }
-            return null;s
+			  var point:ResultPoint = new AlignmentPattern(centerJ, centerI, estimatedModuleSize);
+			  possibleCenters.addElement(point);
+		      if (resultPointCallback != null) 
+			  {
+				resultPointCallback.foundPossibleResultPoint(point);
+				}
+			}
+			return null;
           }
+		  
     
     
     }

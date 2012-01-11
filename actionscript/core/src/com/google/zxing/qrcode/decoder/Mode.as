@@ -37,10 +37,12 @@ package com.google.zxing.qrcode.decoder
           public static var KANJI:Mode = new Mode([8, 10, 12], 0x08, "KANJI");
           public static var FNC1_FIRST_POSITION:Mode = new Mode(null, 0x05, "FNC1_FIRST_POSITION");
           public static var FNC1_SECOND_POSITION:Mode = new Mode(null, 0x09, "FNC1_SECOND_POSITION");
+            /** See GBT 18284-2000; "Hanzi" is a transliteration of this mode name. */
+		  public static var HANZI:Mode = new Mode([8, 10, 12], 0x0D, "HANZI");
 
-          private var characterCountBitsForVersions:Array;
-          private var bits:int;
-          private var name:String;
+          protected var characterCountBitsForVersions:Array;
+          protected var bits:int;
+          protected var name:String;
 
           public function Mode(characterCountBitsForVersions:Array, bits:int, name:String) 
           {
@@ -74,6 +76,9 @@ package com.google.zxing.qrcode.decoder
                 return KANJI;
               case 0x9:
                 return FNC1_SECOND_POSITION;
+ 		      case 0xD:
+		          // 0xD is defined in GBT 18284-2000, may not be supported in foreign country
+		        return HANZI;
               default:
                 throw new IllegalArgumentException("Mode : forBits : bits does not match any format : "+bits);
             }

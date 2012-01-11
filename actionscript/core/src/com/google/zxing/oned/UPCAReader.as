@@ -28,7 +28,7 @@ package com.google.zxing.oned
 
           private var ean13Reader:EAN13Reader = new EAN13Reader();
 
-		  public function decodeRow(rowNumber:Object, row:BitArray, o:Object):Result
+		  public override function decodeRow(rowNumber:Object, row:BitArray, o:Object):Result
 		  {
 		  	if (rowNumber is int)
 		  	{

@@ -25,7 +25,6 @@
     
         private static var INITIAL_SIZE:int = 32;
         
-        // BAS : made public for debugging
         private var bytes:Array;
         private var Size:int;
 

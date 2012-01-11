@@ -21,13 +21,15 @@ package com.google.zxing.oned
  * 
  * @author aripollak@gmail.com (Ari Pollak)
  */
-public final class EAN8Writer extends AbstractUPCEANWriter {
+public final class EAN8Writer extends UPCEANWriter {
 
 import com.google.zxing.common.flexdatatypes.HashTable;
 import com.google.zxing.common.flexdatatypes.IllegalArgumentException;
+import com.google.zxing.common.BitMatrix;
+
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
-import com.google.zxing.common.ByteMatrix;
+
 
 
   private static var  codeWidth:int = 3 + // start guard
@@ -44,19 +46,19 @@ import com.google.zxing.common.ByteMatrix;
 		}
 		else
 		{
-			return (this.encode_extended(contents,format,width,height,hints) as ByteMatrix);
+			return (this.encode_extended(contents,format,width,height,hints) as BitMatrix);
 		}
 		
 	}
 
 
-  public function encode_extended(contents:String, format:BarcodeFormat, width:int , height:int, hints:HashTable):ByteMatrix
+  public function encode_extended(contents:String, format:BarcodeFormat, width:int , height:int, hints:HashTable):BitMatrix
   {
     if (format != BarcodeFormat.EAN_8) {
       throw new IllegalArgumentException("Can only encode EAN_8, but got " + format);
     }
     
-    return (super.encode(contents, format, width, height, hints) as ByteMatrix);
+    return (super.encode(contents, format, width, height, hints) as BitMatrix);
   }
 
   /** @return a byte array of horizontal pixels (0 = white, 1 = black) */
@@ -69,20 +71,20 @@ import com.google.zxing.common.ByteMatrix;
     var result:Array = new Array(codeWidth);
     var pos:int = 0;
 
-    pos += appendPattern(result, pos, AbstractUPCEANReader.START_END_PATTERN, 1);
+    pos += appendPattern(result, pos, UPCEANReader.START_END_PATTERN, 1);
 
     for (var i:int = 0; i <= 3; i++) {
       var digit:int = parseInt(contents.substring(i, i + 1));
-      pos += appendPattern(result, pos, AbstractUPCEANReader.L_PATTERNS[digit], 0);
+      pos += appendPattern(result, pos, UPCEANReader.L_PATTERNS[digit], 0);
     }
 
-    pos += appendPattern(result, pos, AbstractUPCEANReader.MIDDLE_PATTERN, 0);
+    pos += appendPattern(result, pos, UPCEANReader.MIDDLE_PATTERN, 0);
 
     for (var i2:int = 4; i2 <= 7; i2++) {
       var digit2:int = parseInt(contents.substring(i2, i2 + 1));
-      pos += appendPattern(result, pos, AbstractUPCEANReader.L_PATTERNS[digit2], 1);
+      pos += appendPattern(result, pos, UPCEANReader.L_PATTERNS[digit2], 1);
     }
-    pos += appendPattern(result, pos, AbstractUPCEANReader.START_END_PATTERN, 1);
+    pos += appendPattern(result, pos, UPCEANReader.START_END_PATTERN, 1);
 
     return result;
   }

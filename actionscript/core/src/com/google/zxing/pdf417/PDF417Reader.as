@@ -36,6 +36,7 @@ import com.google.zxing.common.DetectorResult;
 import com.google.zxing.pdf417.decoder.Decoder;
 import com.google.zxing.pdf417.detector.Detector;
 import com.google.zxing.common.flexdatatypes.HashTable;
+import com.google.zxing.NotFoundException;
 
 public final class PDF417Reader implements Reader {
 
@@ -56,12 +57,16 @@ public final class PDF417Reader implements Reader {
   }
 */
 
+  public function  reset():void {
+    // do nothing
+  }
+  
   public function decode(image:BinaryBitmap ,  hints:HashTable=null):Result 
     {
     var decoderResult:DecoderResult ;
     var points:Array ;
     if (hints != null && hints.ContainsKey(DecodeHintType.PURE_BARCODE)) {
-      var bits:BitMatrix  = extractPureBits(image);
+      var bits:BitMatrix  = extractPureBits(image.getBlackMatrix());
       decoderResult = decoder.decode(bits);
       points = NO_POINTS;
     } else {
@@ -69,9 +74,10 @@ public final class PDF417Reader implements Reader {
       decoderResult = decoder.decode(detectorResult.getBits());
       points = detectorResult.getPoints();
     }
-    return new Result(decoderResult.getText(), decoderResult.getRawBytes(), points,
-        BarcodeFormat.PDF417);
+    return new Result(decoderResult.getText(), decoderResult.getRawBytes(), points,BarcodeFormat.PDF417,0);
   }
+  
+                        			
 
   /**
    * This method detects a barcode in a "pure" image -- that is, pure monochrome image
@@ -79,70 +85,112 @@ public final class PDF417Reader implements Reader {
    * around it. This is a specialized method that works exceptionally fast in this special
    * case.
    */
-  private static function extractPureBits(image:BinaryBitmap ):BitMatrix {
-    // Now need to determine module size in pixels
-    var matrix:BitMatrix  = image.getBlackMatrix();
-    var height:int = matrix.getHeight();
-    var width:int = matrix.getWidth();
-    var minDimension:int = Math.min(height, width);
+  private static function extractPureBits(image:BitMatrix):BitMatrix {
 
-    // First, skip white border by tracking diagonally from the top left down and to the right:
-    var borderWidth:int = 0;
-    while (borderWidth < minDimension && !matrix._get(borderWidth, borderWidth)) {
-      borderWidth++;
-    }
-    if (borderWidth == minDimension) {
-      throw new ReaderException("PDF417Reader : extractPureBits");
+    var leftTopBlack:Array = image.getTopLeftOnBit();
+    var rightBottomBlack:Array = image.getBottomRightOnBit();
+    if (leftTopBlack == null || rightBottomBlack == null) {
+      throw NotFoundException.getNotFoundInstance();
     }
 
-    // And then keep tracking across the top-left black module to determine module size
-    var moduleEnd:int = borderWidth;
-    while (moduleEnd < minDimension && matrix._get(moduleEnd, moduleEnd)) {
-      moduleEnd++;
-    }
-    if (moduleEnd == minDimension) {
-      throw new ReaderException("PDF417Reader : extractPureBits");
-    }
+    var moduleSize:int = moduleSize(leftTopBlack, image);
 
-    var moduleSize:int = moduleEnd - borderWidth;
+    var top:int = leftTopBlack[1];
+    var bottom:int = rightBottomBlack[1];
+    var left:int = findPatternStart(leftTopBlack[0], top, image);
+    var right:int = findPatternEnd(leftTopBlack[0], top, image);
 
-    // And now find where the rightmost black module on the first row ends
-    var rowEndOfSymbol:int = width - 1;
-    while (rowEndOfSymbol >= 0 && !matrix._get(rowEndOfSymbol, borderWidth)) {
-      rowEndOfSymbol--;
+    var matrixWidth:int = (right - left + 1) / moduleSize;
+    var matrixHeight:int = (bottom - top + 1) / moduleSize;
+    if (matrixWidth <= 0 || matrixHeight <= 0) {
+      throw NotFoundException.getNotFoundInstance();
     }
-    if (rowEndOfSymbol < 0) {
-      throw new ReaderException("PDF417Reader : extractPureBits");
-    }
-    rowEndOfSymbol++;
-
-    // Make sure width of barcode is a multiple of module size
-    if ((rowEndOfSymbol - borderWidth) % moduleSize != 0) {
-      throw new ReaderException("PDF417Reader : extractPureBits");
-    }
-    var dimension:int = (rowEndOfSymbol - borderWidth) / moduleSize;
 
     // Push in the "border" by half the module width so that we start
     // sampling in the middle of the module. Just in case the image is a
     // little off, this will help recover.
-    borderWidth += moduleSize >> 1;
-
-    var sampleDimension:int = borderWidth + (dimension - 1) * moduleSize;
-    if (sampleDimension >= width || sampleDimension >= height) {
-      throw new ReaderException("PDF417Reader : extractPureBits");
-    }
+    var nudge:int = moduleSize >> 1;
+    top += nudge;
+    left += nudge;
 
     // Now just read off the bits
-    var bits:BitMatrix = new BitMatrix(dimension);
-    for (var y:int = 0; y < dimension; y++) {
-      var iOffset:int = borderWidth + y * moduleSize;
-      for (var x:int = 0; x < dimension; x++) {
-        if (matrix._get(borderWidth + x * moduleSize, iOffset)) {
+    var bits:BitMatrix  = new BitMatrix(matrixWidth, matrixHeight);
+    for (var y:int = 0; y < matrixHeight; y++) {
+      var iOffset:int = top + y * moduleSize;
+      for (var x:int = 0; x < matrixWidth; x++) {
+        if (image._get(left + x * moduleSize, iOffset)) {
           bits._set(x, y);
         }
       }
     }
     return bits;
   }
+  
+  private static function moduleSize(leftTopBlack:Array , image:BitMatrix ):int 
+  {
+    var x:int = leftTopBlack[0];
+    var y:int = leftTopBlack[1];
+    var width:int = image.getWidth();
+    while (x < width && image._get(x, y)) {
+      x++;
+    }
+    if (x == width) {
+      throw NotFoundException.getNotFoundInstance();
+    }
+
+    var moduleSize:int = (x - leftTopBlack[0]) >>> 3; // We've crossed left first bar, which is 8x
+    if (moduleSize == 0) {
+      throw NotFoundException.getNotFoundInstance();
+    }
+
+    return moduleSize;
+  }
+
+  private static function findPatternStart(x:int, y:int, image:BitMatrix):int {
+    var width:int = image.getWidth();
+    var start:int = x;
+    // start should be on black
+    var transitions:int = 0;
+    var black:Boolean = true;
+    while (start < width - 1 && transitions < 8) {
+      start++;
+      var newBlack:Boolean = image._get(start, y);
+      if (black != newBlack) {
+        transitions++;
+      }
+      black = newBlack;
+    }
+    if (start == width - 1) {
+      throw NotFoundException.getNotFoundInstance();
+    }
+    return start;
+  }
+
+  private static function findPatternEnd(x:int, y:int, image:BitMatrix):int {
+    var width:int = image.getWidth();
+    var end:int = width - 1;
+    // end should be on black
+    while (end > x && !image._get(end, y)) {
+      end--;
+    }
+    var transitions:int = 0;
+    var black:Boolean = true;
+    while (end > x && transitions < 9) {
+      end--;
+      var newBlack:Boolean = image._get(end, y);
+      if (black != newBlack) {
+        transitions++;
+      }
+      black = newBlack;
+    }
+    if (end == x) {
+      throw NotFoundException.getNotFoundInstance();
+    }
+    return end;
+  }
+
+
+  
+  
 }
 }

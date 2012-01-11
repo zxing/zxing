@@ -24,27 +24,33 @@ package com.google.zxing
 	{
 		import com.google.zxing.common.flexdatatypes.HashTable;
 		import com.google.zxing.common.flexdatatypes.IllegalArgumentException;
+		import com.google.zxing.common.flexdatatypes.Enumeration;
 		
-		//BAS : made public for debugging
-		  private var text:String;
-          private var rawBytes:Array;
-          private var resultPoints:Array;
-          private var format:BarcodeFormat;
-          private var resultMetadata:HashTable;
+		  protected var text:String;
+          protected var rawBytes:Array;
+          protected var resultPoints:Array;
+          protected var format:BarcodeFormat;
+          protected var resultMetadata:HashTable;
+          protected var timestamp:Number;
 
           public function Result( text:String,
                          		  	rawBytes:Array,
                         			resultPoints:Array,
-                        			format:BarcodeFormat) 
+                        			format:BarcodeFormat,
+                        			timestamp:Number = 0) 
           {
             if (text == null && rawBytes == null) {
               throw new IllegalArgumentException("Result : Text and bytes are both null");
             }
+            
+
+            if (timestamp == 0) { timestamp = Math.round((new Date()).getTime()/1000); }
             this.text = text;
             this.rawBytes = rawBytes;
             this.resultPoints = resultPoints;
             this.format = format;
             this.resultMetadata = null;
+             this.timestamp = timestamp;
           }
 
           /**
@@ -99,7 +105,51 @@ package com.google.zxing
               return text;
             }
           }
-    
+          
+          public function putAllMetadata(metadata:HashTable ):void  
+          {
+    		if (metadata != null) {
+     			if (resultMetadata == null) {
+       			 resultMetadata = metadata;
+   				   } else {
+    		    var e:Enumeration  = new Enumeration(metadata.keys());
+        			while (e.hasMoreElement()) {
+		          var key:ResultMetadataType  =  (e.nextElement() as ResultMetadataType);
+		          var value:Object  = metadata._get(key);
+		          resultMetadata._put(key, value);
+		        }
+		      }
+		    }
+		  }
+		  
+		 public function addResultPoints(newPoints:Array):void 
+		 {
+    		if (resultPoints == null) {
+      			resultPoints = newPoints;
+    			} else if (newPoints != null && newPoints.length > 0) {
+		      var allPoints:Array = new Array(resultPoints.length + newPoints.length);
+		      //System.arraycopy(resultPoints, 0, allPoints, 0, resultPoints.length);
+		      for (var i:int=0;i<resultPoints.length;i++)
+		      {
+		      	allPoints[i] = resultPoints[i];
+		      }
+		      for (var j:int=0;j<newPoints.length;j++)
+		      {
+		      	allPoints[i + resultPoints.length] = newPoints[i];
+		      }
+		      
+		      //System.arraycopy(newPoints, 0, allPoints, resultPoints.length, newPoints.length);     
+		      resultPoints = allPoints;
+		    }
+		  }
+		  
+	    public function  getTimestamp():Number 
+	    {
+			return timestamp;
+  		}
+		  
+		  
+		    
  
 	}
 }

@@ -62,28 +62,21 @@ import com.google.zxing.common.BitMatrix;
    */
   public function readCodewords():Array 
   {
-     var width:int = bitMatrix.getDimension();
-    // TODO should be a rectangular matrix
-    var height:int = width;
-
-    erasures = new Array(MAX_CW_CAPACITY);
-	for (var k:int=0;k<erasures.length;k++) { erasures[k]=0; }
+    var width:int = bitMatrix.getWidth();
+    var height:int = bitMatrix.getHeight();
+	
+    erasures = new Array(MAX_CW_CAPACITY);for (var k:int=0;k<erasures.length;k++) { erasures[k]=0; }
 	
     // Get the number of pixels in a module across the X dimension
     //float moduleWidth = bitMatrix.getModuleWidth();
     var moduleWidth:Number = 1.0; // Image has been sampled and reduced
-
-    var rowCounters:Array = new Array(width);
-    for (var n:int=0;n<rowCounters.length;n++) { rowCounters[n] = 0;}
-    var codewords:Array = new Array(MAX_CW_CAPACITY);
-    for(var m:int=0;m<codewords.length;m++){codewords[m]=0;}
-
+    var rowCounters:Array = new Array(width);for (var n:int=0;n<rowCounters.length;n++) { rowCounters[n] = 0;}
+    var codewords:Array = new Array(MAX_CW_CAPACITY);for(var m:int=0;m<codewords.length;m++){codewords[m]=0;}
     var next:int = 0;
     var matchingConsecutiveScans:int = 0;
     var rowInProgress:Boolean = false;
     var rowNumber:int = 0;
-    var rowHeight:int = 0;
-    
+    var rowHeight:int = 0;    
     for (var i:int = 1; i < height; i++) {
       if (rowNumber >= MAX_ROWS) {
         // Something is wrong, since we have exceeded
@@ -193,7 +186,7 @@ import com.google.zxing.common.BitMatrix;
    *         this row.
    */
   public function processRow(rowCounters:Array, rowNumber:int, rowHeight:int, codewords:Array, next:int):int {
-    var width:int = bitMatrix.getDimension();
+    var width:int = bitMatrix.getWidth();
     var columnNumber:int = 0;
     var symbol:Number = 0;
     for (var i:int = 0; i < width; i += MODULES_IN_SYMBOL) 
@@ -263,7 +256,7 @@ import com.google.zxing.common.BitMatrix;
             if (rightColumnECData == leftColumnECData
                 && leftColumnECData != 0) 
             {
-              ecLevel = ((rightColumnECData % 30) - rows % 3) / 3;
+              ecLevel = int(((rightColumnECData % 30) - rows % 3) / 3);
             }
             break;
         }
@@ -386,158 +379,7 @@ import com.google.zxing.common.BitMatrix;
     return ecLevel;
   }
 
-  /**
-   * Convert the symbols in the row to codewords.
-   * Each PDF417 symbol character consists of four bar elements and four space
-   * elements, each of which can be one to six modules wide. The four bar and
-   * four space elements shall measure 17 modules in total.
-   *
-   * @param rowCounters an array containing the counts of black pixels for each column
-   *                    in the row.
-   * @param rowNumber   the current row number of codewords.
-   * @param rowHeight   the height of this row in pixels.
-   * @param moduleWidth the size of a module in pixels.
-   * @param codewords   the codeword array to save codewords into.
-   * @param next        the next available index into the codewords array.
-   * @return the next available index into the codeword array after processing
-   *         this row.
-   * @throws ReaderException
-   */
-  /*
-  int processRow1(int[] rowCounters, int rowNumber, int rowHeight,
-                  float moduleWidth, int[] codewords, int next) {
-    int width = bitMatrix.getDimension();
-    int firstBlack = 0;
-
-    for (firstBlack = 0; firstBlack < width; firstBlack++) {
-      // Step forward until we find the first black pixels
-      if (rowCounters[firstBlack] >= rowHeight >>> 1) {
-        break;
-      }
-    }
-
-    int[] counters = new int[8];
-    int state = 0; // In black pixels, looking for white, first or second time
-    long symbol = 0;
-    int columnNumber = 0;
-    for (int i = firstBlack; i < width; i++) {
-      if (state == 1 || state == 3 || state == 5 || state == 7) { // In white
-        // pixels,
-        // looking
-        // for
-        // black
-        // If more than half the column is black
-        if (rowCounters[i] >= rowHeight >>> 1 || i == width - 1) {
-          if (i == width - 1) {
-            counters[state]++;
-          }
-          // In black pixels or the end of a row
-          state++;
-          if (state < 8) {
-            // Don't count the last one
-            counters[state]++;
-          }
-        } else {
-          counters[state]++;
-        }
-      } else {
-        if (rowCounters[i] < rowHeight >>> 1) {
-          // Found white pixels
-          state++;
-          if (state == 7 && i == width - 1) {
-            // Its found white pixels at the end of the row,
-            // give it a chance to exit gracefully
-            i--;
-          } else {
-            // Found white pixels
-            counters[state]++;
-          }
-        } else {
-          if (state < 8) {
-            // Still in black pixels
-            counters[state]++;
-          }
-        }
-      }
-      if (state == 8) { // Found black, white, black, white, black, white,
-        // black, white and stumbled back onto black; done
-        if (columnNumber >= MAX_COLUMNS) {
-          // Something is wrong, since we have exceeded
-          // the maximum columns in the specification.
-          // TODO Maybe return error code
-          return -1;
-        }
-        if (columnNumber > 0) {
-          symbol = getSymbol(counters, moduleWidth);
-          int cw = getCodeword(symbol);
-          // if (debug) System.out.println(" " +
-          // Long.toBinaryString(symbol) + " cw=" +cw + " ColumnNumber="
-          // +columnNumber + "i=" +i);
-          if (cw < 0) {
-            erasures[eraseCount] = next;
-            next++;
-            eraseCount++;
-          } else {
-            codewords[next++] = cw;
-          }
-        } else {
-          // Left row indicator column
-          symbol = getSymbol(counters, moduleWidth);
-          int cw = getCodeword(symbol);
-          if (ecLevel < 0) {
-            switch (rowNumber % 3) {
-              case 0:
-                break;
-              case 1:
-                leftColumnECData = cw;
-                break;
-              case 2:
-                break;
-            }
-          }
-        }
-        // Step back so that this pixel can be examined during the next
-        // pass.
-        i--;
-        counters = new int[8];
-        columns = columnNumber;
-        columnNumber++;
-        // Introduce some errors if (rowNumber == 0 && columnNumber == 4)
-        // { codewords[next-1] = 0; erasures[eraseCount] = next-1;
-        // eraseCount++; } if (rowNumber == 0 && columnNumber == 6) {
-        // codewords[next-1] = 10; erasures[eraseCount] = next-1;
-        // eraseCount++; } if (rowNumber == 0 && columnNumber == 8) {
-        // codewords[next-1] = 10; erasures[eraseCount] = next-1;
-        // eraseCount++; }
-        state = 0;
-        symbol = 0;
-      }
-    }
-    if (columnNumber > 1) {
-      // Right row indicator column is in codeword[next]
-      columns--;
-      // Overwrite the last codeword i.e. Right Row Indicator
-      --next;
-      if (ecLevel < 0) {
-        switch (rowNumber % 3) {
-          case 0:
-            break;
-          case 1:
-            break;
-          case 2:
-            rightColumnECData = codewords[next];
-            if (rightColumnECData == leftColumnECData
-                && leftColumnECData != 0) {
-              ecLevel = ((rightColumnECData % 30) - rows % 3) / 3;
-            }
-            break;
-        }
-      }
-      codewords[next] = 0;
-    }
-    return next;
-  }
-   */
+ 
 
   /**
    * The sorted table of all possible symbols. Extracted from the PDF417

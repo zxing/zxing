@@ -21,20 +21,37 @@ package com.google.zxing
 		import com.google.zxing.common.flexdatatypes.HashTable;
 		import com.google.zxing.common.flexdatatypes.IllegalArgumentException;
 		import com.google.zxing.qrcode.QRCodeWriter
+		import com.google.zxing.oned.Code128Writer;
+		import com.google.zxing.oned.Code39Writer;
 		import com.google.zxing.oned.EAN13Writer;
 		import com.google.zxing.oned.EAN8Writer;
+		import com.google.zxing.oned.ITFWriter;
+		import com.google.zxing.oned.UPCAWriter;
+		import com.google.zxing.pdf417.encoder.PDF417Writer;
 
         public function  encode(contents:String,  format:BarcodeFormat=null,width:int=0,height:int=0, hints:HashTable=null):Object{
 	
+		var writer:Writer;
 	    if (format == BarcodeFormat.EAN_8) {
-	      return (new EAN8Writer()).encode(contents, format, width, height, hints);
+	      writer = new EAN8Writer();
 	    } else if (format == BarcodeFormat.EAN_13) {
-	      return (new EAN13Writer()).encode(contents, format, width, height, hints);
+	      writer = new EAN13Writer();
+	    } else if (format == BarcodeFormat.UPC_A) {
+	      writer = new UPCAWriter();
+	    } else if (format == BarcodeFormat.CODE_39) {
+	      writer = new Code39Writer();
+	    } else if (format == BarcodeFormat.CODE_128) {
+	      writer = new Code128Writer();
+	    } else if (format == BarcodeFormat.ITF) {
+	      writer = new ITFWriter();
+	    } else if (format == BarcodeFormat.PDF417) {
+	      writer = new PDF417Writer();
 	    } else if (format == BarcodeFormat.QR_CODE) {
-              return (new QRCodeWriter()).encode(contents, format, width, height, hints);
+              writer = new QRCodeWriter();
         } else {
           throw new IllegalArgumentException("No encoder available for format " + format);
         }
+        return writer.encode(contents, format, width, height, hints);
         }   
     }
 

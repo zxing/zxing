@@ -11,17 +11,16 @@ package com.google.zxing.qrcode.encoder
     	
     	    	
           public static var NUM_MASK_PATTERNS:int = 8;
-
-          private var mode:Mode;
-          private var ecLevel:ErrorCorrectionLevel;
-          private var version:int;
-          private var matrixWidth:int;
-          private var maskPattern:int;
-          private var numTotalBytes:int;
-          private var numDataBytes:int;
-          private var numECBytes:int;
-          private var numRSBlocks:int;
-          private var matrix:ByteMatrix;
+          protected var mode:Mode;
+          protected var ecLevel:ErrorCorrectionLevel;
+          protected var version:int;
+          protected var matrixWidth:int;
+          protected var maskPattern:int;
+          protected var numTotalBytes:int;
+          protected var numDataBytes:int;
+          protected var numECBytes:int;
+          protected var numRSBlocks:int;
+          protected var matrix:ByteMatrix;
 
           public function QRCode() {
             mode = null;

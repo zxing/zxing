@@ -17,7 +17,7 @@
 package com.google.zxing.oned
 {
 	
-	 public class EAN13Reader extends AbstractUPCEANReader 
+	 public class EAN13Reader extends UPCEANReader 
     {
 		import com.google.zxing.common.flexdatatypes.StringBuilder;
 		import com.google.zxing.ReaderException;
@@ -101,7 +101,7 @@ package com.google.zxing.oned
             return rowOffset;
           }
 
-          public override function  getBarcodeFormat():BarcodeFormat {
+          public  override function  getBarcodeFormat():BarcodeFormat {
             return BarcodeFormat.EAN_13;
           }
 
