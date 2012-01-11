@@ -146,8 +146,8 @@ public final class Code39Reader extends OneDReader {
       result.setLength(max);
     }
 
-    if (result.length() < 4) {
-      // Almost surely a false positive
+    if (result.length() == 0) {
+      // false positive
       throw NotFoundException.getNotFoundInstance();
     }
 
