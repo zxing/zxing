@@ -1,6 +1,8 @@
 # -*- python -*-
 
 Decider('MD5')
+import fnmatch
+import os
 
 vars = Variables()
 vars.Add(BoolVariable('DEBUG', 'Set to disable optimizations', 1))
@@ -35,7 +37,16 @@ def all_files(dir, ext='.cpp', level=6):
 
 
 magick_include = ['/usr/include/ImageMagick/', '/opt/local/include/ImageMagick/']
-magick_libs = ['Magick++', 'MagickWand', 'MagickCore', 'iconv']
+magick_libs = ['Magick++', 'MagickWand', 'MagickCore']
+
+# check for existence of libiconv and add it to magick_libs if possible
+matches = []
+for root, dirnames, filenames in os.walk('/usr/lib/'):
+  for filename in fnmatch.filter(filenames, 'libiconv.*'):
+      matches.append(os.path.join(root, filename))
+
+if matches:
+	magick_libs.append('iconv')
 
 cppunit_include = ['/opt/local/include/']
 cppunit_libs = ['cppunit']
