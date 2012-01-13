@@ -27,10 +27,10 @@ public final class PartialBlackBoxTestCase extends AbstractNegativeBlackBoxTestC
 
   public PartialBlackBoxTestCase() {
     super("test/data/blackbox/partial");
-    addTest(1, 0.0f);
-    addTest(1, 90.0f);
-    addTest(1, 180.0f);
-    addTest(1, 270.0f);
+    addTest(2, 0.0f);
+    addTest(2, 90.0f);
+    addTest(2, 180.0f);
+    addTest(2, 270.0f);
   }
 
 }
