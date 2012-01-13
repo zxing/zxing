@@ -20,11 +20,15 @@ final class TestResult {
 
   private final int mustPassCount;
   private final int tryHarderCount;
+  private final int maxMisreads;
+  private final int maxTryHarderMisreads;
   private final float rotation;
 
-  TestResult(int mustPassCount, int tryHarderCount, float rotation) {
+  TestResult(int mustPassCount, int tryHarderCount, int maxMisreads, int maxTryHarderMisreads, float rotation) {
     this.mustPassCount = mustPassCount;
     this.tryHarderCount = tryHarderCount;
+    this.maxMisreads = maxMisreads;
+    this.maxTryHarderMisreads = maxTryHarderMisreads;
     this.rotation = rotation;
   }
 
@@ -34,6 +38,14 @@ final class TestResult {
 
   int getTryHarderCount() {
     return tryHarderCount;
+  }
+  
+  int getMaxMisreads() {
+    return maxMisreads;
+  }
+  
+  int getMaxTryHarderMisreads() {
+    return maxTryHarderMisreads;
   }
 
   float getRotation() {

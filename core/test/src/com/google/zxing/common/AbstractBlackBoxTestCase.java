@@ -83,15 +83,26 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
     testResults = new ArrayList<TestResult>();
   }
 
+  protected void addTest(int mustPassCount, int tryHarderCount, float rotation) {
+    addTest(mustPassCount, tryHarderCount, 0, 0, rotation);
+  }
+
   /**
    * Adds a new test for the current directory of images.
    *
    * @param mustPassCount The number of images which must decode for the test to pass.
    * @param tryHarderCount The number of images which must pass using the try harder flag.
+   * @param maxMisreads Maximum number of images which can fail due to successfully reading the wrong contents
+   * @param maxTryHarderMisreads Maximum number of images which can fail due to successfully
+   *                             reading the wrong contents using the try harder flag
    * @param rotation The rotation in degrees clockwise to use for this test.
    */
-  protected void addTest(int mustPassCount, int tryHarderCount, float rotation) {
-    testResults.add(new TestResult(mustPassCount, tryHarderCount, rotation));
+  protected void addTest(int mustPassCount,
+                         int tryHarderCount,
+                         int maxMisreads,
+                         int maxTryHarderMisreads,
+                         float rotation) {
+    testResults.add(new TestResult(mustPassCount, tryHarderCount, maxMisreads, maxTryHarderMisreads, rotation));
   }
 
   protected File[] getImageFiles() {
@@ -115,10 +126,14 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
 
     File[] imageFiles = getImageFiles();
     int testCount = testResults.size();
+
     int[] passedCounts = new int[testCount];
+    int[] misreadCounts = new int[testCount];
     int[] tryHarderCounts = new int[testCount];
+    int[] tryHaderMisreadCounts = new int[testCount];
+
     for (File testImage : imageFiles) {
-      System.out.println("Starting " + testImage.getAbsolutePath());
+      System.out.printf("Starting %s\n", testImage.getAbsolutePath());
 
       BufferedImage image = ImageIO.read(testImage);
 
@@ -143,11 +158,23 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
         BufferedImage rotatedImage = rotateImage(image, rotation);
         LuminanceSource source = new BufferedImageLuminanceSource(rotatedImage);
         BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
-        if (decode(bitmap, rotation, expectedText, expectedMetadata, false)) {
-          passedCounts[x]++;
+        try {
+          if (decode(bitmap, rotation, expectedText, expectedMetadata, false)) {
+            passedCounts[x]++;
+          } else {
+            misreadCounts[x]++;
+          }
+        } catch (ReaderException re) {
+          // continue
         }
-        if (decode(bitmap, rotation, expectedText, expectedMetadata, true)) {
-          tryHarderCounts[x]++;
+        try {
+          if (decode(bitmap, rotation, expectedText, expectedMetadata, true)) {
+            tryHarderCounts[x]++;
+          } else {
+            tryHaderMisreadCounts[x]++;
+          }
+        } catch (ReaderException re) {
+          // continue
         }
       }
     }
@@ -155,37 +182,59 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
     // Print the results of all tests first
     int totalFound = 0;
     int totalMustPass = 0;
-    for (int x = 0; x < testCount; x++) {
-      System.out.println("Rotation " + testResults.get(x).getRotation() + " degrees:");
-      System.out.println("  " + passedCounts[x] + " of " + imageFiles.length + " images passed ("
-          + testResults.get(x).getMustPassCount() + " required)");
-      System.out.println("  " + tryHarderCounts[x] + " of " + imageFiles.length +
-          " images passed with try harder (" + testResults.get(x).getTryHarderCount() +
-          " required)");
-      totalFound += passedCounts[x];
-      totalFound += tryHarderCounts[x];
-      totalMustPass += testResults.get(x).getMustPassCount();
-      totalMustPass += testResults.get(x).getTryHarderCount();
+    int totalMisread = 0;
+    int totalMaxMisread = 0;
+
+    for (int x = 0; x < testResults.size(); x++) {
+      TestResult testResult = testResults.get(x);
+      System.out.printf("Rotation %d degrees:\n", (int) testResult.getRotation());
+      System.out.printf("  %d of %d images passed (%d required)\n",
+                        passedCounts[x], imageFiles.length, testResult.getMustPassCount());
+      int failed = imageFiles.length - passedCounts[x];
+      System.out.printf("    %d failed due to misreads, %d not detected\n",
+                        misreadCounts[x], failed - misreadCounts[x]);
+      System.out.printf("  %d of %d images passed with try harder (%d required)\n",
+                        tryHarderCounts[x], imageFiles.length, testResult.getTryHarderCount());
+      failed = imageFiles.length - tryHarderCounts[x];
+      System.out.printf("    %d failed due to misreads, %d not detected\n",
+                        tryHaderMisreadCounts[x], failed - tryHaderMisreadCounts[x]);
+      totalFound += passedCounts[x] + tryHarderCounts[x];
+      totalMustPass += testResult.getMustPassCount() + testResult.getTryHarderCount();
+      totalMisread += misreadCounts[x] + tryHaderMisreadCounts[x];
+      totalMaxMisread += testResult.getMaxMisreads() + testResult.getMaxTryHarderMisreads();
     }
 
     int totalTests = imageFiles.length * testCount * 2;
-    System.out.println("TOTALS:\n  Decoded " + totalFound + " images out of " + totalTests +
-      " (" + (totalFound * 100 / totalTests) + "%, " + totalMustPass + " required)");
+    System.out.printf("TOTALS:\nDecoded %d images out of %d (%d%%, %d required)\n",
+                      totalFound, totalTests, totalFound * 100 / totalTests, totalMustPass);
     if (totalFound > totalMustPass) {
-      System.out.println("  *** Test too lax by " + (totalFound - totalMustPass) + " images");
+      System.out.printf("  +++ Test too lax by %d images\n", totalFound - totalMustPass);
     } else if (totalFound < totalMustPass) {
-      System.out.println("  *** Test failed by " + (totalMustPass - totalFound) + " images");
+      System.out.printf("  --- Test failed by %d images\n", totalMustPass - totalFound);
     }
+
+    if (totalMisread < totalMaxMisread) {
+      System.out.printf("  +++ Test expects too many misreads by %d images\n", totalMaxMisread - totalMisread);
+    } else if (totalMisread > totalMaxMisread) {
+      System.out.printf("  --- Test had too many misreads by %d images\n", totalMisread - totalMaxMisread);
+    }
+
+    System.out.flush();
 
     // Then run through again and assert if any failed
     if (assertOnFailure) {
       for (int x = 0; x < testCount; x++) {
-        assertTrue("Rotation " + testResults.get(x).getRotation() +
-            " degrees: Too many images failed",
-            passedCounts[x] >= testResults.get(x).getMustPassCount());
-        assertTrue("Try harder, Rotation " + testResults.get(x).getRotation() +
-            " degrees: Too many images failed",
-            tryHarderCounts[x] >= testResults.get(x).getTryHarderCount());
+        TestResult testResult = testResults.get(x);
+        String label = "Rotation " + testResult.getRotation() + " degrees: Too many images failed";
+        assertTrue(label,
+                   passedCounts[x] >= testResult.getMustPassCount());
+        assertTrue("Try harder, " + label,
+                   tryHarderCounts[x] >= testResult.getTryHarderCount());
+        label = "Rotation " + testResult.getRotation() + " degrees: Too many images misread";
+        assertTrue(label,
+                   misreadCounts[x] <= testResult.getMaxMisreads());
+        assertTrue("Try harder, " + label,
+                   tryHaderMisreadCounts[x] <= testResult.getMaxTryHarderMisreads());
       }
     }
     return new SummaryResults(totalFound, totalMustPass, totalTests);
@@ -195,33 +244,27 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
                          float rotation,
                          String expectedText,
                          Map<?,?> expectedMetadata,
-                         boolean tryHarder) {
+                         boolean tryHarder) throws ReaderException {
 
-    String suffix = " (" + (tryHarder ? "try harder, " : "") + "rotation: " + rotation + ')';
+    String suffix = String.format(" (%srotation: %d)", tryHarder ? "try harder, " : "", (int) rotation);
 
     Map<DecodeHintType,Object> hints = new EnumMap<DecodeHintType,Object>(DecodeHintType.class);
     if (tryHarder) {
       hints.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
     }
 
-    Result result;
-    try {
-      result = barcodeReader.decode(source, hints);
-    } catch (ReaderException re) {
-      System.out.println(re + suffix);
-      return false;
-    }
+    Result result = barcodeReader.decode(source, hints);
 
     if (expectedFormat != result.getBarcodeFormat()) {
-      System.out.println("Format mismatch: expected '" + expectedFormat + "' but got '" +
-          result.getBarcodeFormat() + '\'' + suffix);
+      System.out.printf("Format mismatch: expected '%s' but got '%s'%s\n",
+                        expectedFormat, result.getBarcodeFormat(), suffix);
       return false;
     }
 
     String resultText = result.getText();
     if (!expectedText.equals(resultText)) {
-      System.out.println("Mismatch: expected '" + expectedText + "' but got '" + resultText +
-          '\'' +  suffix);
+      System.out.printf("Content mismatch: expected '%s' but got '%s'%s\n", 
+                        expectedText, resultText, suffix);
       return false;
     }
 
@@ -231,8 +274,8 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
       Object expectedValue = metadatum.getValue();
       Object actualValue = resultMetadata == null ? null : resultMetadata.get(key);
       if (!expectedValue.equals(actualValue)) {
-        System.out.println("Metadata mismatch: for key '" + key + "' expected '" + expectedValue +
-            "' but got '" + actualValue + '\'');
+        System.out.printf("Metadata mismatch for key '%s': expected '%s' but got '%s'\n",
+                          key, expectedValue, actualValue);
         return false;
       }
     }
