@@ -46,6 +46,9 @@ public final class ITFWriter extends UPCEANWriter {
   @Override
   public byte[] encode(String contents) {
     int length = contents.length();
+    if (length % 2 != 0) {
+      throw new IllegalArgumentException("The lenght of the input should be even");
+    }
     if (length > 80) {
       throw new IllegalArgumentException(
           "Requested contents should be less than 80 digits long, but got " + length);
