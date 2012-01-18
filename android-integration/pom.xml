@@ -60,7 +60,7 @@
       <groupId>com.google.android</groupId>
       <artifactId>android</artifactId>
       <scope>provided</scope>
-      <version>2.1.2</version>
+      <version>4.0.1.2</version>
     </dependency>
   </dependencies>
   <build>

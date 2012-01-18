@@ -92,7 +92,7 @@ import android.util.Log;
  * @author Brad Drehmer
  * @author gcstang
  */
-public final class IntentIntegrator {
+public class IntentIntegrator {
 
   public static final int REQUEST_CODE = 0x0000c0de; // Only use bottom 16 bits
   private static final String TAG = IntentIntegrator.class.getSimpleName();
@@ -235,8 +235,22 @@ public final class IntentIntegrator {
     intentScan.setPackage(targetAppPackage);
     intentScan.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
     intentScan.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-    activity.startActivityForResult(intentScan, REQUEST_CODE);
+    startActivityForResult(intentScan, REQUEST_CODE);
     return null;
+  }
+
+  /**
+   * Start an activity.<br>
+   * This method is defined to allow different methods of activity starting for
+   * newer versions of Android and for compatibility library.
+   *
+   * @param intent Intent to start.
+   * @param code Request code for the activity
+   * @see android.app.Activity#startActivityForResult(Intent, int)
+   * @see android.app.Fragment#startActivityForResult(Intent, int)
+   */
+  protected void startActivityForResult(Intent intent, int code) {
+    activity.startActivityForResult(intent, code);
   }
   
   private String findTargetAppPackage(Intent intent) {
