@@ -282,11 +282,11 @@ final class QRCodeEncoder {
 
   private void encodeQRCodeContents(AddressBookParsedResult contact) {
     ContactEncoder encoder = useVCard ? new VCardContactEncoder() : new MECARDContactEncoder();
-    String[] encoded = encoder.encode(Arrays.asList(contact.getNames()),
+    String[] encoded = encoder.encode(toIterable(contact.getNames()),
                                       contact.getOrg(),
-                                      Arrays.asList(contact.getAddresses()),
-                                      Arrays.asList(contact.getPhoneNumbers()),
-                                      Arrays.asList(contact.getEmails()),
+                                      toIterable(contact.getAddresses()),
+                                      toIterable(contact.getPhoneNumbers()),
+                                      toIterable(contact.getEmails()),
                                       contact.getURL(),
                                       null);
     // Make sure we've encoded at least one field.
@@ -295,6 +295,10 @@ final class QRCodeEncoder {
       displayContents = encoded[1];
       title = activity.getString(R.string.contents_contact);
     }
+  }
+
+  private static Iterable<String> toIterable(String[] values) {
+    return values == null ? null : Arrays.asList(values);
   }
 
   Bitmap encodeAsBitmap() throws WriterException {
