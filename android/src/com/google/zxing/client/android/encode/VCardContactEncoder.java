@@ -27,7 +27,7 @@ import java.util.regex.Pattern;
  */
 final class VCardContactEncoder extends ContactEncoder {
 
-  private static final Pattern RESERVED_VCARD_CHARS = Pattern.compile("([\\\\:;])");
+  private static final Pattern RESERVED_VCARD_CHARS = Pattern.compile("([\\\\,;])");
   private static final Pattern NEWLINE = Pattern.compile("\\n");
   private static final Formatter VCARD_FIELD_FORMATTER = new Formatter() {
     @Override
