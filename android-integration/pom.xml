@@ -54,13 +54,25 @@
   </developers>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <!-- I wish the project properties plugin could be used here -->
+    <android-home>FILL IN YOUR PATH HERE</android-home>
   </properties>
   <dependencies>
     <dependency>
       <groupId>com.google.android</groupId>
       <artifactId>android</artifactId>
-      <scope>provided</scope>
-      <version>4.0.1.2</version>
+      <version>3.0</version>
+      <type>jar</type>
+      <scope>system</scope>
+      <systemPath>/${android-home}/platforms/android-13/android.jar</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>com.google.android</groupId>
+      <artifactId>support</artifactId>
+      <type>jar</type>
+      <version>v4</version>
+      <scope>system</scope>
+      <systemPath>/${android-home}/extras/android/compatibility/v4/android-support-v4.jar</systemPath>
     </dependency>
   </dependencies>
   <build>
@@ -99,6 +111,47 @@
             <goals>
               <goal>jar</goal>
             </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <!-- By default exclude the Honeycomb and Support classes. -->
+          <excludes>
+            <exclude>**/IntentIntegratorV30*</exclude>
+            <exclude>**/IntentIntegratorSupportV4*</exclude>
+          </excludes>
+        </configuration>
+        <executions>
+          <!-- Build a Honeycomb classifier and exclude the Support classes. -->
+          <execution>
+            <id>honeycomb</id>
+            <phase>package</phase>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+            <configuration>
+              <classifier>honeycomb</classifier>
+              <excludes>
+                <exclude>**/IntentIntegratorSupportV4*</exclude>
+              </excludes>
+            </configuration>
+          </execution>
+          <!-- Build a SupportV4 classifier and exclude the Honeycomb classes. -->
+          <execution>
+            <id>supportv4</id>
+            <phase>package</phase>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+            <configuration>
+              <classifier>supportv4</classifier>
+              <excludes>
+                <exclude>**/IntentIntegratorV30*</exclude>
+              </excludes>
+            </configuration>
           </execution>
         </executions>
       </plugin>

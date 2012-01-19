@@ -22,25 +22,67 @@
 
   <target name="init">
     <tstamp/>
+    <mkdir dir="build"/>
   </target>
 
-  <target name="build" depends="init">
-    <mkdir dir="build"/>
+  <target name="build" depends="init,build.legacy,build.honeycomb,build.supportv4">
+  </target>
+
+  <target name="build.legacy" depends="init">
+    <mkdir dir="build/legacy"/>
     <javac srcdir="src"
-           destdir="build"
+           destdir="build/legacy"
            source="6"
            target="6"
            optimize="true"
            debug="true"
            deprecation="true"
+           excludes="**/IntentIntegratorV30.java,**/IntentIntegratorSupportV4.java"
            includeantruntime="false">
       <classpath>
-        <pathelement location="${android-home}/platforms/android-15/android.jar"/>
+        <pathelement location="${android-home}/platforms/android-10/android.jar"/>
       </classpath>
     </javac>
-    <jar jarfile="android-integration.jar" basedir="build"/>
+    <jar jarfile="android-integration.jar" basedir="build/legacy"/>
   </target>
-  
+
+  <target name="build.honeycomb" depends="init">
+    <mkdir dir="build/honeycomb"/>
+    <javac srcdir="src"
+           destdir="build/honeycomb"
+           source="6"
+           target="6"
+           optimize="true"
+           debug="true"
+           deprecation="true"
+           excludes="**/IntentIntegratorSupportV4.java"
+           includeantruntime="false">
+      <classpath>
+        <pathelement location="${android-home}/platforms/android-13/android.jar"/>
+      </classpath>
+    </javac>
+    <jar jarfile="android-integration-honeycomb.jar" basedir="build/honeycomb"/>
+  </target>
+
+  <target name="build.supportv4" depends="init">
+    <mkdir dir="build/supportv4"/>
+    <javac srcdir="src"
+           destdir="build/supportv4"
+           source="6"
+           target="6"
+           optimize="true"
+           debug="true"
+           deprecation="true"
+           excludes="**/IntentIntegratorV30.java"
+           includeantruntime="false">
+      <classpath>
+        <pathelement location="${android-home}/platforms/android-10/android.jar"/>
+        <pathelement location="${android-home}/extras/android/compatibility/v4/android-support-v4.jar"/>
+      </classpath>
+    </javac>
+    <jar jarfile="android-integration-supportv4.jar" basedir="build/supportv4"/>
+  </target>
+
   <target name="export" depends="build">
     <copy file="android-integration.jar" todir="../androidtest/libs"/>
   </target>
@@ -48,6 +90,8 @@
   <target name="clean">
     <delete dir="build"/>
     <delete file="android-integration.jar"/>
+    <delete file="android-integration-honeycomb.jar"/>
+    <delete file="android-integration-supportv4.jar"/>
   </target>
 
 </project>
