@@ -440,12 +440,12 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     inactivityTimer.onActivity();
     lastResult = rawResult;
     ResultHandler resultHandler = ResultHandlerFactory.makeResultHandler(this, rawResult);
+    historyManager.addHistoryItem(rawResult, resultHandler);
 
     if (barcode == null) {
       // This is from history -- no saved barcode
       handleDecodeInternally(rawResult, resultHandler, null);
     } else {
-      historyManager.addHistoryItem(rawResult, resultHandler);
       beepManager.playBeepSoundAndVibrate();
       drawResultPoints(barcode, rawResult);
       switch (source) {
