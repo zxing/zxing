@@ -99,7 +99,7 @@
   <string name="preferences_bulk_mode_summary">Scanner et enregistrer plusieurs codes-barres d\'affilée</string>
   <string name="preferences_bulk_mode_title">Mode de lecture en rafale</string>
   <string name="preferences_copy_to_clipboard_title">Copier dans le presse papier</string>
-  <string name="preferences_custom_product_search_summary" formatted="false">Utiliser %s à la place de l\'identifiant du produit, et %f pour le format</string>
+  <string name="preferences_custom_product_search_summary" formatted="false">Remplacements: %s = contenu, %f = le format, %t = type</string>
   <string name="preferences_custom_product_search_title">URL de recherche personnalisée</string>
   <string name="preferences_decode_1D_title">Unidimensionnels (1D)</string>
   <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>

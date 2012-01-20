@@ -99,7 +99,7 @@
   <string name="preferences_bulk_mode_summary">Több vonalkód folyamatos szkennelése és mentése</string>
   <string name="preferences_bulk_mode_title">Tömeges beolvasás</string>
   <string name="preferences_copy_to_clipboard_title">Másolás a vágólapra</string>
-  <string name="preferences_custom_product_search_summary" formatted="false">Használjon %s-t a termék-azonosító helyén, %f-et pedig a formátum helyén</string>
+  <string name="preferences_custom_product_search_summary" formatted="false">Használjon: %s = tartalom, %f = formátum, %t = típus</string>
   <string name="preferences_custom_product_search_title">Egyedi kereső URL</string>
   <string name="preferences_decode_1D_title">1D vonalkódok</string>
   <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>

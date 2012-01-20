@@ -99,7 +99,7 @@
   <string name="preferences_bulk_mode_summary">Escaneja i desa molts codis de barres de forma contínua</string>
   <string name="preferences_bulk_mode_title">Mode d\'escaneig en bloc</string>
   <string name="preferences_copy_to_clipboard_title">Copia al porta-retalls</string>
-  <string name="preferences_custom_product_search_summary" formatted="false">Useu %s com a indicador de l\'identificador del producte, i %f per al format</string>
+  <string name="preferences_custom_product_search_summary" formatted="false">Substitucions: %s = contingut, %f = format, %t = tipus</string>
   <string name="preferences_custom_product_search_title">URL de cerca personalitzat</string>
   <string name="preferences_decode_1D_title">Codis de barres 1D</string>
   <string name="preferences_decode_Data_Matrix_title">Matriu de dades</string>

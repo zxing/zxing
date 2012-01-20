@@ -99,7 +99,7 @@
   <string name="preferences_bulk_mode_summary">다수의 바코드를 스캔하고 저장합니다.</string>
   <string name="preferences_bulk_mode_title">일괄 스캔 모드</string>
   <string name="preferences_copy_to_clipboard_title">복사하기</string>
-  <string name="preferences_custom_product_search_summary" formatted="false">%s를 제품 ID로, %f를 포맷으로 입력하여 주세요.</string>
+  <string name="preferences_custom_product_search_summary" formatted="false">자리 표시자: %s = 내용, %f = 포맷, %t = 유형</string>
   <string name="preferences_custom_product_search_title">사용자 지정 검색 주소</string>
   <string name="preferences_decode_1D_title">1차원 바코드를 읽기</string>
   <string name="preferences_decode_Data_Matrix_title">데이터 행렬(Data Matrix)을 해석하기</string>

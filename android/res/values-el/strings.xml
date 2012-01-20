@@ -99,7 +99,7 @@
   <string name="preferences_bulk_mode_summary">Σκανάρετε και αποθηκεύστε πολλά barcodes συνεχώς</string>
   <string name="preferences_bulk_mode_title">Λειτουργία μαζικού σκαναρίσματος</string>
   <string name="preferences_copy_to_clipboard_title">Αντιγραφή στο πρόχειρο</string>
-  <string name="preferences_custom_product_search_summary" formatted="false">Βάλτε %s σαν σύμβολο κράτησης θέσης για το ID προϊόντος, και %f για τη διαμόρφωση</string>
+  <string name="preferences_custom_product_search_summary" formatted="false">Αντικαταστάσεις: %s = περιεχόμενο, %f = μορφή, %t = τύπος</string>
   <string name="preferences_custom_product_search_title">Σύνθετη αναζήτηση</string>
   <string name="preferences_decode_1D_title">1D barcodes</string>
   <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>

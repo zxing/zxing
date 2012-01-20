@@ -99,7 +99,7 @@
   <string name="preferences_bulk_mode_summary">Scan continue barcodes en sla ze allemaal op</string>
   <string name="preferences_bulk_mode_title">Bulk scan modus</string>
   <string name="preferences_copy_to_clipboard_title">Kopieer naar plakbord</string>
-  <string name="preferences_custom_product_search_summary" formatted="false">Gebruik %s voor de plaats van het product ID en %f voor het formaat</string>
+  <string name="preferences_custom_product_search_summary" formatted="false">Vervangingen: %s = inhoud, %f = formaat, %t = type</string>
   <string name="preferences_custom_product_search_title">Zoek aangepaste URL</string>
   <string name="preferences_decode_1D_title">1D barcodes</string>
   <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>
