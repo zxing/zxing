@@ -66,7 +66,6 @@
   <string name="menu_settings">सेटिंग्स</string>
   <string name="menu_share">शेयर</string>
   <string name="msg_about">खुला स्रोत ZXing बारकोड परियोजना के आधिकारिक Android के बॉक्स.</string>
-  <string name="msg_buggy">इस डिवाइस कीड़े कि बारकोड स्कैनिंग समस्याओं के कारण जाना जाता है. अधिक जानकारी के लिए, http://code.google.com/p/zxing/wiki/FrequentlyAskedQuestions यात्रा</string>
   <string name="msg_bulk_mode_scanned">थोक मोड: बारकोड स्कैन और बचाया</string>
   <string name="msg_camera_framework_bug">क्षमा करें, Android कैमरा एक समस्या का सामना करना पड़ा. आप डिवाइस को पुनरारंभ करने की आवश्यकता हो सकती है.</string>
   <string name="msg_default_format">प्रारूप</string>

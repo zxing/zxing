@@ -66,7 +66,6 @@
   <string name="menu_settings">Nastavitve</string>
   <string name="menu_share">Deli</string>
   <string name="msg_about">Temelji na odprtokodni ZXing Barcode knjižnici</string>
-  <string name="msg_buggy">Ta naprava ima znane hrošče, ki povzročajo težave z branjem črtih kod. Za več informacij obiščite http://code.google.com/p/zxing/wiki/FrequentlyAskedQuestions</string>
   <string name="msg_bulk_mode_scanned">Slikanje na debelo: črtna koda prebrana in shranjena</string>
   <string name="msg_camera_framework_bug">Oprostite, Android kamera je naletela na težave. Mogoče boste morali ponovno zagnati napravo.</string>
   <string name="msg_default_format">Format</string>

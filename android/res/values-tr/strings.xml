@@ -66,7 +66,6 @@
   <string name="menu_settings">Ayarlar</string>
   <string name="menu_share">Paylaş</string>
   <string name="msg_about">Açık kaynak ZXing Barkod Kitaplığı temellidir</string>
-  <string name="msg_buggy">Bu cihaz barkod tarama sorunlarına yol açtığı bilinen hatalar içermektedir. Daha fazla bilgi için şu adresi ziyaret edin: http://code.google.com/p/zxing/wiki/FrequentlyAskedQuestions</string>
   <string name="msg_bulk_mode_scanned">Toplu modu: taranan ve kaydedilen barkodlar</string>
   <string name="msg_camera_framework_bug">Üzgünüz, Android kamera bir sorunla karşılaştı. Cihazı yeniden başlatmanız gerekebilir.</string>
   <string name="msg_default_format">Biçim</string>

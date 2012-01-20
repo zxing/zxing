@@ -66,7 +66,6 @@
   <string name="menu_settings">Beállítások</string>
   <string name="menu_share">Megosztás</string>
   <string name="msg_about">A nyílt forráskódú ZXing vonalkód projekt hivatalos Android alkalmazása.</string>
-  <string name="msg_buggy">Ennek a készüléknek vannak ismert hibái, melyek vonalkód olvasási problémákat okoznak. További információkért látogassa meg a http://code.google.com/p/zxing/wiki/FrequentlyAskedQuestions weboldalt</string>
   <string name="msg_bulk_mode_scanned">Tömeges beolvasás: vonalkód beszkennelve és mentve</string>
   <string name="msg_camera_framework_bug">Android kamera hiba. Lehet, hogy újra kell indítania a készüléket.</string>
   <string name="msg_default_format">Formátum</string>

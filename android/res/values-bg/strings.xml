@@ -66,7 +66,6 @@
   <string name="menu_settings">Настройки</string>
   <string name="menu_share">Сподели</string>
   <string name="msg_about">Базирано на библиотеката с отворен код\nZXing Barcode</string>
-  <string name="msg_buggy">Това устройство демонстрира проблеми при сканиране на баркодове. За повече информация посетете http://code.google.com/p/zxing/wiki/FrequentlyAskedQuestions</string>
   <string name="msg_bulk_mode_scanned">Масов режим: баркодът е сканиран и записан</string>
   <string name="msg_camera_framework_bug">Съжаляваме, срещнахме проблем с камерата. Може да се наложи да рестартирате устройството си.</string>
   <string name="msg_default_format">Формат</string>

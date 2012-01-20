@@ -66,7 +66,6 @@
   <string name="menu_settings">Inställningar</string>
   <string name="menu_share">Dela</string>
   <string name="msg_about">Baserad på ZXing Barcode Library som är öppen källkod</string>
-  <string name="msg_buggy">Den här enheten har kända buggar som medför problem med skanning av streckkoder. För mer information, besök http://code.google.com/p/zxing/wiki/FrequentlyAskedQuestions</string>
   <string name="msg_bulk_mode_scanned">Bulk-läge: streckkod skannas och sparas</string>
   <string name="msg_camera_framework_bug">Tyvärr, Androidens kamera fick problem. Du kan behöva starta om enheten.</string>
   <string name="msg_default_format">Format</string>

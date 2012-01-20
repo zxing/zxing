@@ -66,7 +66,6 @@
   <string name="menu_settings">Configuración</string>
   <string name="menu_share">Compartir</string>
   <string name="msg_about">La aplicación oficial de Android del proyecto de código de barras de código abierto ZXing.</string>
-  <string name="msg_buggy">Este dispositivo tiene errores conocidos que causan problemas de escaneado de código de barras. Para más información, visite http://code.google.com/p/zxing/wiki/FrequentlyAskedQuestions</string>
   <string name="msg_bulk_mode_scanned">Modo Masivo: código de barras escaneado y guardado</string>
   <string name="msg_camera_framework_bug">Lo sentimos, la cámara de Android ha encontrado un problema. Es posible que necesite reiniciar el dispositivo.</string>
   <string name="msg_default_format">Formato</string>

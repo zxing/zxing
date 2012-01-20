@@ -22,6 +22,7 @@ import com.google.zxing.ResultMetadataType;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.client.android.camera.CameraManager;
 import com.google.zxing.client.android.history.HistoryActivity;
+import com.google.zxing.client.android.history.HistoryItem;
 import com.google.zxing.client.android.history.HistoryManager;
 import com.google.zxing.client.android.result.ResultButtonListener;
 import com.google.zxing.client.android.result.ResultHandler;
@@ -110,6 +111,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
   private CameraManager cameraManager;
   private CaptureActivityHandler handler;
+  private Result savedResultToShow;
   private ViewfinderView viewfinderView;
   private TextView statusView;
   private View resultView;
@@ -379,6 +381,35 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   }
 
   @Override
+  public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+    if (resultCode == RESULT_OK) {
+      if (requestCode == HISTORY_REQUEST_CODE) {
+        int itemNumber = intent.getIntExtra(Intents.History.ITEM_NUMBER, -1);
+        if (itemNumber >= 0) {
+          HistoryItem historyItem = historyManager.buildHistoryItem(itemNumber);
+          decodeOrStoreSavedBitmap(null, historyItem.getResult());
+        }
+      }
+    }
+  }
+
+  private void decodeOrStoreSavedBitmap(Bitmap bitmap, Result result) {
+    // Bitmap isn't used yet -- will be used soon
+    if (handler == null) {
+      savedResultToShow = result;
+    } else {
+      if (result != null) {
+        savedResultToShow = result;
+      }
+      if (savedResultToShow != null) {
+        Message message = Message.obtain(handler, R.id.decode_succeeded, savedResultToShow);
+        handler.sendMessage(message);
+      }
+      savedResultToShow = null;
+    }
+  }
+
+  @Override
   public void surfaceCreated(SurfaceHolder holder) {
     if (holder == null) {
       Log.e(TAG, "*** WARNING *** surfaceCreated() gave us a null surface!");
@@ -409,12 +440,12 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     inactivityTimer.onActivity();
     lastResult = rawResult;
     ResultHandler resultHandler = ResultHandlerFactory.makeResultHandler(this, rawResult);
-    historyManager.addHistoryItem(rawResult, resultHandler);
 
     if (barcode == null) {
       // This is from history -- no saved barcode
       handleDecodeInternally(rawResult, resultHandler, null);
     } else {
+      historyManager.addHistoryItem(rawResult, resultHandler);
       beepManager.playBeepSoundAndVibrate();
       drawResultPoints(barcode, rawResult);
       switch (source) {
@@ -689,6 +720,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       if (handler == null) {
         handler = new CaptureActivityHandler(this, decodeFormats, characterSet, cameraManager);
       }
+      decodeOrStoreSavedBitmap(null, null);
     } catch (IOException ioe) {
       Log.w(TAG, ioe);
       displayFrameworkBugMessageAndExit();

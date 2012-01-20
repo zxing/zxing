@@ -66,7 +66,6 @@
   <string name="menu_settings">Instellingen</string>
   <string name="menu_share">Deel</string>
   <string name="msg_about">Gebaseerd op de open source ZXing Barcodebibliotheek</string>
-  <string name="msg_buggy">Dit apparaat heeft bekende bugs die ervoor zorgen dat er zich problemen voor kunnen doen bij het scannen. Voor meer informatie, bezoek http://code.google.com/p/zxing/wiki/FrequentlyAskedQuestions</string>
   <string name="msg_bulk_mode_scanned">Bulk mode: barcode gescand en opgeslagen</string>
   <string name="msg_camera_framework_bug">Sorry, er is een probleem met de Androidcamera. Probeer je telefoon te herstarten.</string>
   <string name="msg_default_format">Formaat</string>

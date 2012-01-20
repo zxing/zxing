@@ -66,7 +66,6 @@
   <string name="menu_settings">Indstillinger</string>
   <string name="menu_share">Del</string>
   <string name="msg_about">Open sourceprojektet ZXings officielle Android-app.</string>
-  <string name="msg_buggy">Denne enhed har kendte fejl, der forårsager stregkodescanningsproblemer. For mere information, besøg http://code.google.com/p/zxing/wiki/FrequentlyAskedQuestions (på engelsk)</string>
   <string name="msg_bulk_mode_scanned">Massetilstand: stregkode scannet og gemt</string>
   <string name="msg_camera_framework_bug">Beklager, Android-kameraet er stødt på et problem. Du skal muligvis genstarte enheden.</string>
   <string name="msg_default_format">Format</string>
