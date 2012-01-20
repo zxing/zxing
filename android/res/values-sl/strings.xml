@@ -99,7 +99,7 @@
   <string name="preferences_bulk_mode_summary">Beri in shrani več črtnih kod zaporedoma</string>
   <string name="preferences_bulk_mode_title">Branje črtnih kod na debelo</string>
   <string name="preferences_copy_to_clipboard_title">Kopiraj v beležnico</string>
-  <string name="preferences_custom_product_search_summary" formatted="false">Uporabi %s kot prostor za ID produkta ter %f za format</string>
+  <string name="preferences_custom_product_search_summary" formatted="false">Zamenjave: %s = vsebin, %f = format, %t = vrsta</string>
   <string name="preferences_custom_product_search_title">URL za iskanje po meri</string>
   <string name="preferences_decode_1D_title">1D črtno kodo</string>
   <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>

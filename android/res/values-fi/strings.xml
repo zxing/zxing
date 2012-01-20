@@ -99,7 +99,7 @@
   <string name="preferences_bulk_mode_summary">Skannaa ja tallenna monet viivakoodeja jatkuvasti</string>
   <string name="preferences_bulk_mode_title">Bulk skannaustilassa</string>
   <string name="preferences_copy_to_clipboard_title">Kopioi leikepöydälle</string>
-  <string name="preferences_custom_product_search_summary" formatted="false">Käytä %s paikkana tuotetunnukselle tunnus ja %f muoto</string>
+  <string name="preferences_custom_product_search_summary" formatted="false">Korvaaminen: %s = sisältö, %f = formaatti, %t = tyyppi</string>
   <string name="preferences_custom_product_search_title">Mukautettu hakukone</string>
   <string name="preferences_decode_1D_title">1D viivakoodeja</string>
   <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>

@@ -99,7 +99,7 @@
   <string name="preferences_bulk_mode_summary">Pindai dan simpan beberapa barcode terus-menerus</string>
   <string name="preferences_bulk_mode_title">Mode pemindaian bulk</string>
   <string name="preferences_copy_to_clipboard_title">Salin ke clipboard</string>
-  <string name="preferences_custom_product_search_summary" formatted="false">Gunakan %s sebagai tempat ID produk, dan %f untuk format</string>
+  <string name="preferences_custom_product_search_summary" formatted="false">Substitusi: %s = isi, %f = format, %t = jenis</string>
   <string name="preferences_custom_product_search_title">Pencarian URL kustom</string>
   <string name="preferences_decode_1D_title">1D barcode</string>
   <string name="preferences_decode_Data_Matrix_title">Data Matriks</string>

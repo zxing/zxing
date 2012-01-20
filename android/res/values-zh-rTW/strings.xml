@@ -99,7 +99,7 @@
   <string name="preferences_bulk_mode_summary">連續掃描並儲存多個條碼</string>
   <string name="preferences_bulk_mode_title">大量掃描模式</string>
   <string name="preferences_copy_to_clipboard_title">複製到剪貼簿</string>
-  <string name="preferences_custom_product_search_summary" formatted="false">請在網址上填寫 %s 做為產品編號，%f 做為格式</string>
+  <string name="preferences_custom_product_search_summary" formatted="false">替換：％s=內容，％f=格式，％t=類型</string>
   <string name="preferences_custom_product_search_title">自訂搜尋網址</string>
   <string name="preferences_decode_1D_title">解碼一維條碼</string>
   <string name="preferences_decode_Data_Matrix_title">解碼 Data Matrix 條碼</string>

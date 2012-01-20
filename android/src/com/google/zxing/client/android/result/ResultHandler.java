@@ -25,6 +25,7 @@ import com.google.zxing.client.android.R;
 import com.google.zxing.client.android.book.SearchBookContentsActivity;
 import com.google.zxing.client.result.ParsedResult;
 import com.google.zxing.client.result.ParsedResultType;
+import com.google.zxing.client.result.ResultParser;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -568,6 +569,10 @@ public abstract class ResultHandler {
     String url = customProductSearch.replace("%s", text);
     if (rawResult != null) {
       url = url.replace("%f", rawResult.getBarcodeFormat().toString());
+      if (url.contains("%t")) {
+        ParsedResult parsedResultAgain = ResultParser.parseResult(rawResult);
+        url = url.replace("%t", parsedResultAgain.getType().toString());
+      }
     }
     return url;
   }

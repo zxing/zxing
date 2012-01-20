@@ -99,7 +99,7 @@
   <string name="preferences_bulk_mode_summary">स्कैन और कई बारकोड लगातार बचाने के</string>
   <string name="preferences_bulk_mode_title">थोक स्कैन मोड</string>
   <string name="preferences_copy_to_clipboard_title">क्लिपबोर्ड पर कॉपी</string>
-  <string name="preferences_custom_product_search_summary" formatted="false">उत्पाद ID के लिए एक प्लेसहोल्डर के रूप में% का प्रयोग करें, और स्वरूप के लिए% च</string>
+  <string name="preferences_custom_product_search_summary" formatted="false">स्थानापन्न: %s = सामग्री, %f = प्रारूप, %t = टाइप</string>
   <string name="preferences_custom_product_search_title">कस्टम खोज यूआरएल</string>
   <string name="preferences_decode_1D_title">1D बारकोड</string>
   <string name="preferences_decode_Data_Matrix_title">डाटा मैट्रिक्स</string>

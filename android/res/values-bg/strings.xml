@@ -99,7 +99,7 @@
   <string name="preferences_bulk_mode_summary">Сканирай и запомняй множество баркодове без прекъсване</string>
   <string name="preferences_bulk_mode_title">Масово сканиране</string>
   <string name="preferences_copy_to_clipboard_title">Копиране в клипборда</string>
-  <string name="preferences_custom_product_search_summary" formatted="false">Използвайте %s за идентификатора и %f за формата</string>
+  <string name="preferences_custom_product_search_summary" formatted="false">Използвайте: %s = съдържанието,%f = форматa, %t = тип</string>
   <string name="preferences_custom_product_search_title">Потребителски адрес за търсене</string>
   <string name="preferences_decode_1D_title">1D Баркодове</string>
   <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>

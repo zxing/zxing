@@ -99,7 +99,7 @@
   <string name="preferences_bulk_mode_summary">Skenovať a ukladať veľa čiarových kódov bez prerušenia</string>
   <string name="preferences_bulk_mode_title">Hromadný režim skenovania</string>
   <string name="preferences_copy_to_clipboard_title">Kopírovať do schránky</string>
-  <string name="preferences_custom_product_search_summary" formatted="false">Použiť ako vlastníka pre ID produktu, a pre formát</string>
+  <string name="preferences_custom_product_search_summary" formatted="false">Striedanie: %s = obsah, %f = format, %t = typ</string>
   <string name="preferences_custom_product_search_title">Vlastné vyhľadávanie URL</string>
   <string name="preferences_decode_1D_title">1D čiarové kódy</string>
   <string name="preferences_decode_Data_Matrix_title">Dáta Matrix</string>

@@ -99,7 +99,7 @@
   <string name="preferences_bulk_mode_summary">Ler e guardar códigos de barras continuamente</string>
   <string name="preferences_bulk_mode_title">Modo em massa</string>
   <string name="preferences_copy_to_clipboard_title">Copiar para a área de transferência</string>
-  <string name="preferences_custom_product_search_summary" formatted="false">Usar %s como espaço reservado para a identificação do produto, e %f para o formato</string>
+  <string name="preferences_custom_product_search_summary" formatted="false">Substituições: %s = conteúdos, %f = formato, %t = tipo</string>
   <string name="preferences_custom_product_search_title">Pesquisa personalizada de URL</string>
   <string name="preferences_decode_1D_title">Código de barras 1D</string>
   <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>
