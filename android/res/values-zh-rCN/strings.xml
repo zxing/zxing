@@ -66,7 +66,6 @@
   <string name="menu_settings">设置</string>
   <string name="menu_share">分享</string>
   <string name="msg_about">基于ZXing开源条码引擎</string>
-  <string name="msg_buggy">此设备存在已知问题，将导致条码扫描器出错。更多信息，请访问 http://code.google.com/p/zxing/wiki/FrequentlyAskedQuestions</string>
   <string name="msg_bulk_mode_scanned">批量扫描：找到条码，已保存</string>
   <string name="msg_camera_framework_bug">抱歉，Android相机出现问题。您可能需要重启设备。</string>
   <string name="msg_default_format">格式</string>

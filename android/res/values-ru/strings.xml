@@ -66,7 +66,6 @@
   <string name="menu_settings">Настройки</string>
   <string name="menu_share">Поделиться</string>
   <string name="msg_about">Основано на свободной библиотеке штрих-кодов ZXing</string>
-  <string name="msg_buggy">Это устройство имеет известные ошибки при сканировании штрих-кода. Для получения более подробной информации, посетите http://code.google.com/p/zxing/wiki/FrequentlyAskedQuestions</string>
   <string name="msg_bulk_mode_scanned">Массовый режим: сохранять историю сканирования</string>
   <string name="msg_camera_framework_bug">К сожалению, возникла ошибка камеры. Вам может потребоваться перезагрузка устройства.</string>
   <string name="msg_default_format">Формат</string>

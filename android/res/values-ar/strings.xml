@@ -66,7 +66,6 @@
   <string name="menu_settings">إعدادات</string>
   <string name="menu_share">مشاركة</string>
   <string name="msg_about">حسب مكتبة الرمز الشريطي ZXing مفتوحة المصادر</string>
-  <string name="msg_buggy">يوجد بالهاتف أخطاء معروفة تتسبب في حدوث مشكلات في مسح الرمز الشريطي. لمزيد من المعلومات، قم بزيارة http://code.google.com/p/zxing/wiki/FrequentlyAskedQuestions</string>
   <string name="msg_bulk_mode_scanned">معظم الدراسي : الباركود الممسوحة ضوئيا وحفظها</string>
   <string name="msg_camera_framework_bug">عفوا، حدثت مشكلة في كاميرا جهاز Android. قد تحتاج إلى إعادة تشغيل الجهاز.</string>
   <string name="msg_default_format">التنسيق</string>

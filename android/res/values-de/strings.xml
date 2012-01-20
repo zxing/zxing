@@ -66,7 +66,6 @@
   <string name="menu_settings">Einstellungen</string>
   <string name="menu_share">Senden</string>
   <string name="msg_about">Basiert auf der Open Source ZXing Barcode Bibliothek </string>
-  <string name="msg_buggy">Bei diesem Gerät sind Fehler bekannt, die beim Barcode-Scanning Probleme bereiten. Weitere Informationen auf http://code.google.com/p/zxing/wiki/FrequentlyAskedQuestions</string>
   <string name="msg_bulk_mode_scanned">Bulk-Modus: Barcode gescannt und gespeichert</string>
   <string name="msg_camera_framework_bug">Bei der Android-Kamera ist leider ein Fehler aufgetreten. Es könnte sein, dass Sie das Gerät neu starten müssen.</string>
   <string name="msg_default_format">Format</string>

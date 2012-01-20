@@ -66,7 +66,6 @@
   <string name="menu_settings">設定</string>
   <string name="menu_share">共有</string>
   <string name="msg_about">オープンソースのバーコード ライブラリ、ZXing を使用しています</string>
-  <string name="msg_buggy">このデバイスでは、バーコードのスキャンに問題があります。 詳細については、http://code.google.com/p/zxing/wiki/FrequentlyAskedQuestions を参照してください </string>
   <string name="msg_bulk_mode_scanned">連続モード：バーコードスキャンして保存</string>
   <string name="msg_camera_framework_bug">申し訳ありませんが、Androidのカメラに問題が発生しました。デバイスを再起動する必要があります。</string>
   <string name="msg_default_format">フォーマット</string>

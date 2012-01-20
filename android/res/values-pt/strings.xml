@@ -66,7 +66,6 @@
   <string name="menu_settings">Definições</string>
   <string name="menu_share">Partilhar</string>
   <string name="msg_about">Baseado na biblioteca de código de barras de código aberto ZXing</string>
-  <string name="msg_buggy">Este dispositivo tem bugs conhecidos que causam problemas de varredura de código de barras. Para obter mais informações, visite http://code.google.com/p/zxing/wiki/FrequentlyAskedQuestions</string>
   <string name="msg_bulk_mode_scanned">Modo em massa: código de barras lido e guardado</string>
   <string name="msg_camera_framework_bug">Desculpe, a câmera do Android encontrou um problema. Poderá precisar de reiniciar o dispositivo.</string>
   <string name="msg_default_format">Formato</string>

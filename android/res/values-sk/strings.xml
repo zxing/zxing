@@ -66,7 +66,6 @@
   <string name="menu_settings">Nastavenia</string>
   <string name="menu_share">Zdieľať</string>
   <string name="msg_about">Založené na otvorených zdrojových kódoch knižnice čiarových kódov ZXing</string>
-  <string name="msg_buggy">Toto zariadenie má známe chyby, ktoré spôsobujú problémy skenovania čiarových kódov. Pre viac informácií navštívte http://code.google.com/p/zxing/wiki/FrequentlyAskedQuestions</string>
   <string name="msg_bulk_mode_scanned">Hromadný mód: čiarový kód naskenovaný a uložený</string>
   <string name="msg_camera_framework_bug">Ospravedlňujeme sa, fotoaparát narazil na problém. Možno bude potrebné reštartovať zariadenie.</string>
   <string name="msg_default_format">Formát</string>

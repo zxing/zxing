@@ -66,7 +66,6 @@
   <string name="menu_settings">設定</string>
   <string name="menu_share">分享</string>
   <string name="msg_about">ZXing 開放原始碼條碼掃描專案的官方 Android 應用程式</string>
-  <string name="msg_buggy">該裝置有已知的錯誤導致條碼掃描有問題。如需更多資訊，請至 http://code.google.com/p/zxing/wiki/FrequentlyAskedQuestions</string>
   <string name="msg_bulk_mode_scanned">大量掃描模式：條碼掃描並儲存</string>
   <string name="msg_camera_framework_bug">很抱歉，相機出現問題。您可能需要重新啟動設備。</string>
   <string name="msg_default_format">格式</string>

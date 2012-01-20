@@ -66,7 +66,6 @@
   <string name="menu_settings">Ustawienia</string>
   <string name="menu_share">Udostępnij</string>
   <string name="msg_about">Bazowane na bibliotece kodów paskowych ZXing o otwartym źródle</string>
-  <string name="msg_buggy">To urządzenie wykazuje znane błędy które powodują problemy podczas skanowania kodów paskowych. W celu otrzymania dalszych informacji, odwiedź http://code.google.com/p/zxing/wiki/FrequentlyAskedQuestions</string>
   <string name="msg_bulk_mode_scanned">Tryb zbiorcze: skanowania kodów kreskowych i zapisaniu</string>
   <string name="msg_camera_framework_bug">Przepraszamy, aparat Android napotkał problem. Może wystąpić potrzeba ponownego uruchomienia urządzenia.</string>
   <string name="msg_default_format">Format</string>
