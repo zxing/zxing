@@ -285,11 +285,11 @@ public abstract class ResultHandler {
   }
 
   final void addPhoneOnlyContact(String[] phoneNumbers,String[] phoneTypes) {
-    addContact(null, null, phoneNumbers, phoneTypes, null, null, null, null, null, null, null, null);
+    addContact(null, null, phoneNumbers, phoneTypes, null, null, null, null, null, null, null, null, null, null);
   }
 
   final void addEmailOnlyContact(String[] emails, String[] emailTypes) {
-    addContact(null, null, null, null, emails, emailTypes, null, null, null, null, null, null);
+    addContact(null, null, null, null, emails, emailTypes, null, null, null, null, null, null, null, null);
   }
 
   final void addContact(String[] names,
@@ -303,7 +303,9 @@ public abstract class ResultHandler {
                         String address,
                         String addressType,
                         String org,
-                        String title) {
+                        String title,
+                        String url,
+                        String birthday) {
 
     // Only use the first name in the array, if present.
     Intent intent = new Intent(Intent.ACTION_INSERT_OR_EDIT, ContactsContract.Contacts.CONTENT_URI);
@@ -334,7 +336,20 @@ public abstract class ResultHandler {
       }
     }
 
-    putExtra(intent, ContactsContract.Intents.Insert.NOTES, note);
+    // No field for URL, birthday; use notes
+    StringBuilder aggregatedNotes = new StringBuilder();
+    for (String aNote : new String[] { url, birthday, note }) {
+      if (aNote != null) {
+        if (aggregatedNotes.length() > 0) {
+          aggregatedNotes.append('\n');
+        }
+        aggregatedNotes.append(aNote);
+      }
+    }
+    if (aggregatedNotes.length() > 0) {
+      putExtra(intent, ContactsContract.Intents.Insert.NOTES, aggregatedNotes.toString());
+    }
+    
     putExtra(intent, ContactsContract.Intents.Insert.IM_HANDLE, instantMessenger);
     putExtra(intent, ContactsContract.Intents.Insert.POSTAL, address);
     if (addressType != null) {

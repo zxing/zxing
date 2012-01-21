@@ -127,7 +127,9 @@ public final class AddressBookResultHandler extends ResultHandler {
                    address1,
                    address1Type,
                    addressResult.getOrg(),
-                   addressResult.getTitle());
+                   addressResult.getTitle(),
+                   addressResult.getURL(),
+                   addressResult.getBirthday());
         break;
       case 1:
         String[] names = addressResult.getNames();
