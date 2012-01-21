@@ -80,7 +80,6 @@
   <string name="msg_google_shopper_missing">A Google Shopper nincs telepítve</string>
   <string name="msg_install_google_shopper">A Google Shopper kombinálja a vonalkód szkennelést árakkal, értékelésekkel és más dolgokkal, böngésző megnyitása nélkül. Ki szeretné próbálni?</string>
   <string name="msg_intent_failed">A kért alkalmazást nem lehet elindítani. A vonalkód tartalma lehet, hogy érvénytelen.</string>
-  <string name="msg_not_our_results">Kilépés az alkalmazásból. A keresési találatok, amiket látni fog, nincsenek kapcsolatban az alkalmazással.</string>
   <string name="msg_redirect">Átirányítás</string>
   <string name="msg_sbc_book_not_searchable">Ez a könyv nem kereshető.</string>
   <string name="msg_sbc_failed">A keresés problémába ütközött.</string>

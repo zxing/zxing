@@ -80,7 +80,6 @@
   <string name="msg_google_shopper_missing">Google Shopper non è installato</string>
   <string name="msg_install_google_shopper">Google Shopper combina la scansione dei codici a barre con prezzi locali e online, recensioni e altro senza dover aprire il browser. Vuoi provare?</string>
   <string name="msg_intent_failed">Spiacenti, l\'applicazione richiesta non può essere avviata. Il contenuto del codice a barre può essere non valido.</string>
-  <string name="msg_not_our_results">Stai uscendo da questo programma. I risultati della ricerca che vedrai non sono collegati a questa applicazione.</string>
   <string name="msg_redirect">Inoltra</string>
   <string name="msg_sbc_book_not_searchable">Spiacenti, questo libro non è ricercabile.</string>
   <string name="msg_sbc_failed">Spiacenti, la ricerca ha avuto un problema.</string>

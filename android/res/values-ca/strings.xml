@@ -80,7 +80,6 @@
   <string name="msg_google_shopper_missing">Google Shopper no es troba instal·lat</string>
   <string name="msg_install_google_shopper">Google Shopper combina l\'escaneig de codis de barres amb preus en línia i locals, comentaris de productes i molt més sense obrir el navegador. Moleu provar-lo?</string>
   <string name="msg_intent_failed">No es pot executar l\'aplicació sol·licitada. És possible que el contingut del codi de barres no sigui vàlid.</string>
-  <string name="msg_not_our_results">Esteu deixant aquesta aplicació. Els resultats de la cerca que veureu no estan relacionats amb aquesta aplicació.</string>
   <string name="msg_redirect">Redirecciona</string>
   <string name="msg_sbc_book_not_searchable">No es pot cercar en aquest llibre.</string>
   <string name="msg_sbc_failed">Hi ha hagut un problema en fer la cerca.</string>

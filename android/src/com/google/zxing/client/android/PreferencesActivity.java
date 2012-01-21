@@ -50,7 +50,6 @@ public final class PreferencesActivity extends PreferenceActivity
   public static final String KEY_SEARCH_COUNTRY = "preferences_search_country";
 
   public static final String KEY_HELP_VERSION_SHOWN = "preferences_help_version_shown";
-  public static final String KEY_NOT_OUR_RESULTS_SHOWN = "preferences_not_out_results_shown";
 
   private CheckBoxPreference decode1D;
   private CheckBoxPreference decodeQR;

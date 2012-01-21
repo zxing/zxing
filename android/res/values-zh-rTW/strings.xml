@@ -80,7 +80,6 @@
   <string name="msg_google_shopper_missing">未安裝 Google 購物</string>
   <string name="msg_install_google_shopper">Google 購物結合條碼掃描價格，評論，無需打開瀏覽器。您想試用嗎？</string>
   <string name="msg_intent_failed">抱歉，無法打開所需軟體。條碼內容可能無效。</string>
-  <string name="msg_not_our_results">即將離開此應用程式，您即將看到的搜尋結果與本程式無關。</string>
   <string name="msg_redirect">重定向</string>
   <string name="msg_sbc_book_not_searchable">無法找到此圖書。</string>
   <string name="msg_sbc_failed">搜尋時發生錯誤。</string>

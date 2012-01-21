@@ -80,7 +80,6 @@
   <string name="msg_google_shopper_missing">Google Shopper가 설치되어 있지 않습니다.</string>
   <string name="msg_install_google_shopper">Google Shopper는 바코드 스캐닝을 이용하여 인터넷을 열지 않고 가격, 리뷰 등을 열람하는 기능을 제공합니다. 사용해 보시겠습니까?</string>
   <string name="msg_intent_failed">죄송합니다. 어플리케이션이 실행되지 않습니다. 바코드 내용이 잘못 되었을 수도 있습니다.</string>
-  <string name="msg_not_our_results">이 어플리케이션을 벗어나고 있습니다. 검색 결과는 이 어플리케이션과 관련이 없음을 미리 밝힙니다.</string>
   <string name="msg_redirect">리디렉션</string>
   <string name="msg_sbc_book_not_searchable">죄송합니다. 이 책은 검색이 되지 않습니다.</string>
   <string name="msg_sbc_failed">죄송합니다. 검색 도중 문제가 발생했습니다.</string>

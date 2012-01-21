@@ -80,7 +80,6 @@
   <string name="msg_google_shopper_missing">Приложение "Google Shopper" не установлено</string>
   <string name="msg_install_google_shopper">Приложение "Google Shopper" объединяет сканирование штрих-кодов с online-поиском товаров, цен, отзывов и т.д., не открывая браузер. Хотите попробовать?</string>
   <string name="msg_intent_failed">К сожалению, запрошенное приложение не может быть запущенно. Возможно, содержимое штрих-кода повреждено.</string>
-  <string name="msg_not_our_results">Вы покидаете это приложение. Результаты поиска, которые вы видите, не связаны с этим приложением.</string>
   <string name="msg_redirect">Переслать</string>
   <string name="msg_sbc_book_not_searchable">К сожалению, поиск книги не удался.</string>
   <string name="msg_sbc_failed">К сожалению, возникла ошибка поиска.</string>

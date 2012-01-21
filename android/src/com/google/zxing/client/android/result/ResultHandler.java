@@ -186,7 +186,7 @@ public abstract class ResultHandler {
    *
    * @param listener The on click listener to install for this button.
    */
-  protected void showGoogleShopperButton(View.OnClickListener listener) {
+  void showGoogleShopperButton(View.OnClickListener listener) {
     View shopperButton = activity.findViewById(R.id.shopper_button);
     shopperButton.setVisibility(View.VISIBLE);
     shopperButton.setOnClickListener(listener);
@@ -534,21 +534,6 @@ public abstract class ResultHandler {
   private static void putExtra(Intent intent, String key, String value) {
     if (value != null && value.length() > 0) {
       intent.putExtra(key, value);
-    }
-  }
-
-  protected void showNotOurResults(int index, AlertDialog.OnClickListener proceedListener) {
-    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
-    if (prefs.getBoolean(PreferencesActivity.KEY_NOT_OUR_RESULTS_SHOWN, false)) {
-      // already seen it, just proceed
-      proceedListener.onClick(null, index);
-    } else {
-      // note the user has seen it
-      prefs.edit().putBoolean(PreferencesActivity.KEY_NOT_OUR_RESULTS_SHOWN, true).commit();
-      AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-      builder.setMessage(R.string.msg_not_our_results);
-      builder.setPositiveButton(R.string.button_ok, proceedListener);
-      builder.show();
     }
   }
 
