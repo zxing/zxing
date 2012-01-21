@@ -80,7 +80,6 @@
   <string name="msg_google_shopper_missing">Google Shopper ni nameščen</string>
   <string name="msg_install_google_shopper">Google Shopper kombinira branje črtnih kod s cenami lokalnih ter spletnih trgovin, ocenami izdelkov in več brez odpiranja spletnega brskalnika. Ga želite preizkusiti?</string>
   <string name="msg_intent_failed">Oprostite, zahtevana aplikacija se ne more zagnati. Lahko da gre za napačno vsebino črtne kode.</string>
-  <string name="msg_not_our_results">Zapuščate aplikacijo. Prikazani rezultati iskanja niso povezani s to aplikacijo.</string>
   <string name="msg_redirect">Preusmeritev</string>
   <string name="msg_sbc_book_not_searchable">Oprostite, po tej knjigi se ne da iskati.</string>
   <string name="msg_sbc_failed">Oprostite, iskanje je naletelo na napako.</string>

@@ -22,8 +22,6 @@ import com.google.zxing.client.result.ParsedResult;
 import com.google.zxing.client.result.ProductParsedResult;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.view.View;
 
 /**
@@ -60,24 +58,19 @@ public final class ProductResultHandler extends ResultHandler {
   }
 
   @Override
-  public void handleButtonPress(final int index) {
-    showNotOurResults(index, new AlertDialog.OnClickListener() {
-      @Override
-      public void onClick(DialogInterface dialogInterface, int i) {
-        ProductParsedResult productResult = (ProductParsedResult) getResult();
-        switch (index) {
-          case 0:
-            openProductSearch(productResult.getNormalizedProductID());
-            break;
-          case 1:
-            webSearch(productResult.getNormalizedProductID());
-            break;
-          case 2:
-            openURL(fillInCustomSearchURL(productResult.getNormalizedProductID()));
-            break;
-        }
-      }
-    });
+  public void handleButtonPress(int index) {
+    ProductParsedResult productResult = (ProductParsedResult) getResult();
+    switch (index) {
+      case 0:
+        openProductSearch(productResult.getNormalizedProductID());
+        break;
+      case 1:
+        webSearch(productResult.getNormalizedProductID());
+        break;
+      case 2:
+        openURL(fillInCustomSearchURL(productResult.getNormalizedProductID()));
+        break;
+    }
   }
 
   @Override

@@ -80,7 +80,6 @@
   <string name="msg_google_shopper_missing">Гугъл Магазин не е инсталиран</string>
   <string name="msg_install_google_shopper">Гугъл Магазин комбинира сканирането на баркодове с онлайн и локални цени, отзиви и още много неща без да отваряте браузър. Желаете ли да опитате?</string>
   <string name="msg_intent_failed">Съжаляваме, но нужното приложение не успя да се стартира. Възможно е баркода или съдържанието му да са невалидни.</string>
-  <string name="msg_not_our_results">Напускате това приложение. Резултатите от търсенето, които ще видите, не са свързани с това приложение.</string>
   <string name="msg_redirect">Пренасочване</string>
   <string name="msg_sbc_book_not_searchable">Съжаляваме, тази книга не може да се претърсва.</string>
   <string name="msg_sbc_failed">Съжаляваме, срещнахме проблем при търсенето.</string>

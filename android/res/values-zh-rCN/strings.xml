@@ -80,7 +80,6 @@
   <string name="msg_google_shopper_missing">谷歌购物未安装</string>
   <string name="msg_install_google_shopper">谷歌购物是一款将条码扫描和商品比价相结合的应用，谷歌购物不使用浏览器，您想尝试吗？</string>
   <string name="msg_intent_failed">抱歉，无法打开所需软件。 条码内容可能无效。</string>
-  <string name="msg_not_our_results">您将离开此应用程序，得到的搜索结果与此应用程序无关</string>
   <string name="msg_redirect">重定向</string>
   <string name="msg_sbc_book_not_searchable">抱歉，无法找到此图书。</string>
   <string name="msg_sbc_failed">抱歉，搜索时遇到错误。</string>

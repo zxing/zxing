@@ -80,7 +80,6 @@
   <string name="msg_google_shopper_missing">Google ショッパーがインストールされていません</string>
   <string name="msg_install_google_shopper">Google ショッパーは、ブラウザを使わなくても、価格やレビューなどを見ることができます。試しますか？</string>
   <string name="msg_intent_failed">指定されたアプリケーションを起動できませんでした。バーコードの内容が無効である可能性があります。</string>
-  <string name="msg_not_our_results">このアプリケーションを終了します。この後に表示される検索結果は、このアプリケーションとは関係ありません。</string>
   <string name="msg_redirect">リダイレクト</string>
   <string name="msg_sbc_book_not_searchable">この書籍は検索できません。</string>
   <string name="msg_sbc_failed">検索中に問題が発生しました。</string>
