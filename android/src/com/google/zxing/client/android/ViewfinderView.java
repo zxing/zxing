@@ -141,10 +141,11 @@ public final class ViewfinderView extends View {
         paint.setAlpha(CURRENT_POINT_OPACITY / 2);
         paint.setColor(resultPointColor);
         synchronized (currentLast) {
+          float radius = POINT_SIZE / 2.0f;
           for (ResultPoint point : currentLast) {
             canvas.drawCircle(frameLeft + (int) (point.getX() * scaleX),
                               frameTop + (int) (point.getY() * scaleY),
-                              POINT_SIZE / 2, paint);
+                              radius, paint);
           }
         }
       }

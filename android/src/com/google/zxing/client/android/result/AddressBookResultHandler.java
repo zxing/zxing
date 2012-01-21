@@ -45,6 +45,12 @@ public final class AddressBookResultHandler extends ResultHandler {
     new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH),
     new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH),
   };
+  private static final int[] BUTTON_TEXTS = {
+    R.string.button_add_contact,
+    R.string.button_show_map,
+    R.string.button_dial,
+    R.string.button_email,
+  };
 
   private final boolean[] fields;
   private int buttonCount;
@@ -97,19 +103,7 @@ public final class AddressBookResultHandler extends ResultHandler {
 
   @Override
   public int getButtonText(int index) {
-    int action = mapIndexToAction(index);
-    switch (action) {
-      case 0:
-        return R.string.button_add_contact;
-      case 1:
-        return R.string.button_show_map;
-      case 2:
-        return R.string.button_dial;
-      case 3:
-        return R.string.button_email;
-      default:
-        throw new ArrayIndexOutOfBoundsException();
-    }
+    return BUTTON_TEXTS[mapIndexToAction(index)];
   }
 
   @Override

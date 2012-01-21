@@ -47,10 +47,7 @@ public final class WifiResultHandler extends ResultHandler {
 
   @Override
   public int getButtonText(int index) {
-    if (index == 0) {
-      return R.string.button_wifi;
-    }
-    throw new ArrayIndexOutOfBoundsException();
+    return R.string.button_wifi;
   }
 
   @Override

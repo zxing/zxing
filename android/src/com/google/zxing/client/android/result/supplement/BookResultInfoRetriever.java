@@ -38,7 +38,7 @@ import com.google.zxing.client.android.history.HistoryManager;
  * @author Kamil Kaczmarczyk
  * @author Sean Owen
  */
-public final class BookResultInfoRetriever extends SupplementalInfoRetriever {
+final class BookResultInfoRetriever extends SupplementalInfoRetriever {
 
   private final String isbn;
   private final String source;
