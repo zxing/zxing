@@ -31,7 +31,7 @@ import java.io.IOException;
 /**
  * Manages beeps and vibrations for {@link CaptureActivity}.
  */
-public final class BeepManager {
+final class BeepManager {
 
   private static final String TAG = BeepManager.class.getSimpleName();
 
