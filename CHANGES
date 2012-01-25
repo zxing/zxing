@@ -278,3 +278,19 @@
   - Mostly rewritten iPhone port
   - New ZXingWidget library to include scanning in any iOS app
   - Made CommandLineRunner multithreaded and recursive
+
+2.0 (3 Feb 2012)
+
+  - core/ has been rewritten to work with Java 6
+  - core/ has new functionality:
+    - PDF 417 encoding (from Barcode4J)
+    - Codabar encoding
+    - partial Maxicode decoding support
+  - android/ and androidtest/ have been rewritten to work with Android 2.1+
+    - Uses new camera APIs
+    - Uses new contact APIs too
+    - (See separate Barcode Scanner release notes for version 4.0)
+  - zxing.appspot.com/ has been rewritten to work with GWT 2.4
+  - cpp/, objc/ and iphone/ have received many ports of fixes and other functionality from Java, and changes to work with more recent iOS
+  - bug/, rim/, and javame/ have been removed
+  - Many, many small bug fixes and optimizations, mostly to core/ and android/
