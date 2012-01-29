@@ -122,6 +122,9 @@ public final class EncodeActivity extends Activity {
       Log.w(TAG, we);
       return;
     }
+    if (bitmap == null) {
+      return;
+    }
 
     File bsRoot = new File(Environment.getExternalStorageDirectory(), "BarcodeScanner");
     File barcodesRoot = new File(bsRoot, "Barcodes");
@@ -182,10 +185,18 @@ public final class EncodeActivity extends Activity {
     if (intent == null) {
       return;
     }
+
     try {
       boolean useVCard = intent.getBooleanExtra(USE_VCARD_KEY, false);
       qrCodeEncoder = new QRCodeEncoder(this, intent, smallerDimension, useVCard);
       Bitmap bitmap = qrCodeEncoder.encodeAsBitmap();
+      if (bitmap == null) {
+        Log.w(TAG, "Could not encode barcode");
+        showErrorMessage(R.string.msg_encode_contents_failed);
+        qrCodeEncoder = null;
+        return;
+      }
+
       ImageView view = (ImageView) findViewById(R.id.image_view);
       view.setImageBitmap(bitmap);
 
