@@ -302,14 +302,18 @@ final class QRCodeEncoder {
   }
 
   Bitmap encodeAsBitmap() throws WriterException {
+    String contentsToEncode = contents;
+    if (contentsToEncode == null) {
+      return null;
+    }
     Map<EncodeHintType,Object> hints = null;
-    String encoding = guessAppropriateEncoding(contents);
+    String encoding = guessAppropriateEncoding(contentsToEncode);
     if (encoding != null) {
       hints = new EnumMap<EncodeHintType,Object>(EncodeHintType.class);
       hints.put(EncodeHintType.CHARACTER_SET, encoding);
     }
     MultiFormatWriter writer = new MultiFormatWriter();
-    BitMatrix result = writer.encode(contents, format, dimension, dimension, hints);
+    BitMatrix result = writer.encode(contentsToEncode, format, dimension, dimension, hints);
     int width = result.getWidth();
     int height = result.getHeight();
     int[] pixels = new int[width * height];
