@@ -55,7 +55,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <!-- I wish the project properties plugin could be used here -->
-    <android-home>FILL IN YOUR PATH HERE</android-home>
+    <android-home>/Users/srowen/Applications/android-sdk-mac_x86/</android-home>
   </properties>
   <dependencies>
     <dependency>
