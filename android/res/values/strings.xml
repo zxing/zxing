@@ -102,6 +102,9 @@
   <string name="preferences_decode_1D_title">1D barcodes</string>
   <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>
   <string name="preferences_decode_QR_title">QR Codes</string>
+  <string name="preferences_device_bug_workarounds_title">Device Bug Workarounds</string>
+  <string name="preferences_force_preview_to_screen_size_summary">Only enable if screen is black</string>
+  <string name="preferences_force_preview_to_screen_size_title">Force preview size to screen size</string>
   <string name="preferences_front_light_summary">Improves scanning in low light on some phones, but may cause glare. Does not work on all phones.</string>
   <string name="preferences_front_light_title">Use front light</string>
   <string name="preferences_general_title">General settings</string>

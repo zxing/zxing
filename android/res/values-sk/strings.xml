@@ -102,6 +102,9 @@
   <string name="preferences_decode_1D_title">1D čiarové kódy</string>
   <string name="preferences_decode_Data_Matrix_title">Dáta Matrix</string>
   <string name="preferences_decode_QR_title">QR kódy</string>
+  <string name="preferences_device_bug_workarounds_title">Možno zástupná riešenie chyby zariadenia</string>
+  <string name="preferences_force_preview_to_screen_size_summary">Povoliť len v prípade obrazovka je čierna</string>
+  <string name="preferences_force_preview_to_screen_size_title">Sila veľkosť náhľadu k veľkosti displeja</string>
   <string name="preferences_front_light_summary">Na niektorých telefónoch zlepšuje snímanie za zhoršených svetelných podmienok, ale môže spôsobiť odlesk. Nefunguje na všetkých telefónoch.</string>
   <string name="preferences_front_light_title">Použiť prisvetlenie</string>
   <string name="preferences_general_title">Všeobecné nastavenia</string>

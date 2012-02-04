@@ -28,6 +28,7 @@ import android.view.WindowManager;
 import com.google.zxing.client.android.PreferencesActivity;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * A class which deals with reading, parsing, and setting the camera parameters which are used to
@@ -66,7 +67,7 @@ final class CameraConfigurationManager {
     }
     screenResolution = new Point(width, height);
     Log.i(TAG, "Screen resolution: " + screenResolution);
-    cameraResolution = findBestPreviewSizeValue(parameters, screenResolution, false);
+    cameraResolution = findBestPreviewSizeValue(parameters, screenResolution);
     Log.i(TAG, "Camera resolution: " + cameraResolution);
   }
 
@@ -133,32 +134,69 @@ final class CameraConfigurationManager {
     }
   }
 
-  private static Point findBestPreviewSizeValue(Camera.Parameters parameters,
-                                                Point screenResolution,
-                                                boolean portrait) {
-    Point bestSize = null;
-    int diff = Integer.MAX_VALUE;
-    for (Camera.Size supportedPreviewSize : parameters.getSupportedPreviewSizes()) {
-      int pixels = supportedPreviewSize.height * supportedPreviewSize.width;
-      if (pixels < MIN_PREVIEW_PIXELS || pixels > MAX_PREVIEW_PIXELS) {
-        continue;
+  private Point findBestPreviewSizeValue(Camera.Parameters parameters, Point screenResolution) {
+
+    List<Camera.Size> supportedPreviewSizes = parameters.getSupportedPreviewSizes();
+
+    if (Log.isLoggable(TAG, Log.INFO)) {
+      StringBuilder previewSizesString = new StringBuilder();
+      for (Camera.Size supportedPreviewSize : supportedPreviewSizes) {
+        previewSizesString.append(supportedPreviewSize.width).append('x')
+            .append(supportedPreviewSize.height).append(' ');
       }
-      int supportedWidth = portrait ? supportedPreviewSize.height : supportedPreviewSize.width;
-      int supportedHeight = portrait ? supportedPreviewSize.width : supportedPreviewSize.height;
-      int newDiff = Math.abs(screenResolution.x * supportedHeight - supportedWidth * screenResolution.y);
-      if (newDiff == 0) {
-        bestSize = new Point(supportedWidth, supportedHeight);
-        break;
-      }
-      if (newDiff < diff) {
-        bestSize = new Point(supportedWidth, supportedHeight);
-        diff = newDiff;
-      }
+      Log.i(TAG, "Supported preview sizes: " + previewSizesString);
     }
+
+    Point bestSize = null;
+
+    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+    if (prefs.getBoolean(PreferencesActivity.KEY_FORCE_PREVIEW_TO_SCREEN_SIZE, false)) {
+
+      Log.i(TAG, "Forcing to screen size");
+      for (Camera.Size supportedPreviewSize : supportedPreviewSizes) {
+        int realWidth = supportedPreviewSize.width;
+        int realHeight = supportedPreviewSize.height;
+        boolean isCandidatePortrait = realWidth < realHeight;
+        int maybeFlippedWidth = isCandidatePortrait ? realHeight : realWidth;
+        int maybeFlippedHeight = isCandidatePortrait ? realWidth : realHeight;
+        if (maybeFlippedWidth == screenResolution.x && maybeFlippedHeight == screenResolution.y) {
+          bestSize = new Point(realWidth, realHeight);
+          break;
+        }
+      }
+
+    } else {
+
+      int diff = Integer.MAX_VALUE;
+      for (Camera.Size supportedPreviewSize : supportedPreviewSizes) {
+        int realWidth = supportedPreviewSize.width;
+        int realHeight = supportedPreviewSize.height;
+        int pixels = realWidth * realHeight;
+        if (pixels < MIN_PREVIEW_PIXELS || pixels > MAX_PREVIEW_PIXELS) {
+          continue;
+        }
+        boolean isCandidatePortrait = realWidth < realHeight;
+        int maybeFlippedWidth = isCandidatePortrait ? realHeight : realWidth;
+        int maybeFlippedHeight = isCandidatePortrait ? realWidth : realHeight;
+        int newDiff = Math.abs(screenResolution.x * maybeFlippedHeight - screenResolution.y * maybeFlippedWidth);
+        if (newDiff == 0) {
+          bestSize = new Point(realWidth, realHeight);
+          break;
+        }
+        if (newDiff < diff) {
+          bestSize = new Point(realWidth, realHeight);
+          diff = newDiff;
+        }
+      }
+
+    }
+
     if (bestSize == null) {
       Camera.Size defaultSize = parameters.getPreviewSize();
       bestSize = new Point(defaultSize.width, defaultSize.height);
+      Log.i(TAG, "No suitable preview sizes, using default: " + bestSize);
     }
+
     return bestSize;
   }
 

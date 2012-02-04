@@ -102,6 +102,9 @@
   <string name="preferences_decode_1D_title">Codice a barre 1D</string>
   <string name="preferences_decode_Data_Matrix_title">Matrice dati</string>
   <string name="preferences_decode_QR_title">Codici QR</string>
+  <string name="preferences_device_bug_workarounds_title">Dispositivo Bug Soluzioni alternative</string>
+  <string name="preferences_force_preview_to_screen_size_summary">Solo se abilitare schermo è nero</string>
+  <string name="preferences_force_preview_to_screen_size_title">Esigere dimensioni di anteprima a dimensioni dello schermo</string>
   <string name="preferences_front_light_summary">Migliora la scansione con poca luminosità su alcuni telefoni, ma può provocare abbagliamento. Non funziona su tutti i telefoni.</string>
   <string name="preferences_front_light_title">Usa luce frontale</string>
   <string name="preferences_general_title">Impostazioni generali</string>

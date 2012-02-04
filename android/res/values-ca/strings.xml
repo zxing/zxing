@@ -102,6 +102,9 @@
   <string name="preferences_decode_1D_title">Codis de barres 1D</string>
   <string name="preferences_decode_Data_Matrix_title">Matriu de dades</string>
   <string name="preferences_decode_QR_title">Codis QR</string>
+  <string name="preferences_device_bug_workarounds_title">Solucions provisionals de dispositiu Bug</string>
+  <string name="preferences_force_preview_to_screen_size_summary">Només permeten si la pantalla és de color negre</string>
+  <string name="preferences_force_preview_to_screen_size_title">Força de mida de vista prèvia a mida de pantalla</string>
   <string name="preferences_front_light_summary">Millora l\'escaneig amb poca llum en alguns dispositius, però pot produir enlluernament. No funciona en tots els dispositius.</string>
   <string name="preferences_front_light_title">Usa el llum frontal</string>
   <string name="preferences_general_title">Configuració general</string>
