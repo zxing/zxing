@@ -71,12 +71,20 @@ public class CodaBarWriter extends OneDimensionalCodeWriter {
     for (int index = 0; index < contents.length(); index++) {
       char c = Character.toUpperCase(contents.charAt(index));
       if (index == contents.length() - 1) {
-        // Neither * nor E are in the CodaBarReader.ALPHABET.
-        // * is equal to the  c pattern, and e is equal to the d pattern
-        if (c == '*') {
-          c = 'C';
-        } else if (c == 'E') {
-          c = 'D';
+        // The end chars are not in the CodaBarReader.ALPHABET.
+        switch (c) {
+          case 'T':
+            c = 'A';
+            break;
+          case 'N':
+            c = 'B';
+            break;
+          case '*':
+            c = 'C';
+            break;
+          case 'E':
+            c = 'D';
+            break;
         }
       }
       int code = 0;

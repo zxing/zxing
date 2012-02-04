@@ -76,7 +76,7 @@ public final class MultiFormatOneDReader extends OneDReader {
     if (readers.isEmpty()) {
       readers.add(new MultiFormatUPCEANReader(hints));
       readers.add(new Code39Reader());
-      //readers.add(new CodaBarReader());
+      readers.add(new CodaBarReader());
       readers.add(new Code93Reader());
       readers.add(new Code128Reader());
       readers.add(new ITFReader());
