@@ -16,52 +16,35 @@
  limitations under the License.
 -->
 
-<project name="ZXing" default="build">
+<project name="ZXing" default="release">
 
   <property file="build.properties"/>
 
-  <target name="build">
-    <ant dir="core" target="build"/>
-    <ant dir="javase" target="build"/>
-    <ant dir="android" target="debug"/>
-    <ant dir="androidtest" target="debug"/>
-    <ant dir="android-integration" target="build"/>
-  </target>
-
-  <target name="clean">
-    <ant dir="core" target="clean"/>
-    <ant dir="javase" target="clean"/>
-    <ant dir="android" target="clean"/>
-    <ant dir="androidtest" target="clean"/>
-    <ant dir="android-integration" target="clean"/>
-    <delete dir="docs/javadoc"/>
-  </target>
-
-  <target name="test">
-    <ant dir="core" target="test"/>
-  </target>
-
-  <target name="release" depends="build,clean,javadoc">
+  <target name="release" depends="javadoc">
     <zip file="ZXing-${version}.zip">
       <zipfileset dir="." prefix="zxing-${version}">
         <exclude name="**/.*"/> <!-- exclude hidden files -->
         <exclude name="**/.svn"/>
         <exclude name="**/*.iml"/>
         <include name="AUTHORS"/>
-        <include name="COPYING"/>
         <include name="CHANGES"/>
+        <include name="COPYING"/>
+        <include name="NOTICE"/>
         <include name="build.xml"/>
         <include name="build.properties"/>
+        <include name="docs/**"/>
         <include name="actionscript/**"/>
         <include name="android/**"/>
         <include name="android-integration/**"/>
         <include name="androidtest/**"/>
         <include name="core/**"/>
         <include name="cpp/**"/>
+        <include name="csharp/**"/>
         <include name="iphone/**"/>
-        <include name="javame/**"/>
         <include name="javase/**"/>
-        <include name="docs/**"/>
+        <include name="jruby/**"/>
+        <include name="objc/**"/>
+        <include name="symbian/**"/>
         <include name="zxing.appspot.com/**"/>
         <include name="zxingorg/**"/>
       </zipfileset>
