@@ -81,7 +81,7 @@ public final class Decoder {
   };
 
   private static final String[] DIGIT_TABLE = {
-    "CTRL_PS", " ", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", ",", ".", "CTRL_UL", "CTRL_US"
+      "CTRL_PS", " ", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", ",", ".", "CTRL_UL", "CTRL_US"
   };
 
   private int numCodewords;
@@ -106,9 +106,7 @@ public final class Decoder {
     return new DecoderResult(null, result, null, null);
   }
 
-  
   /**
-   *
    * Gets the string encoded in the aztec code bits
    *
    * @return the decoded string
@@ -128,9 +126,10 @@ public final class Decoder {
     boolean end = false;
     boolean shift = false;
     boolean switchShift = false;
+    boolean binaryShift = false;
 
     while (!end) {
- 
+
       if (shift) {
         // the table is for the next character only
         switchShift = true;
@@ -140,46 +139,75 @@ public final class Decoder {
       }
 
       int code;
-      switch (table) {
-      case BINARY:
-        if (endIndex - startIndex < 8) {
-          end = true;
-          break;
-        }
-        code = readCode(correctedBits, startIndex, 8);
-        startIndex += 8;
-
-        result.append((char) code);
-        break;
-
-      default:
-        int size = 5;
-
-        if (table == Table.DIGIT) {
-          size = 4;
-        }
-
-        if (endIndex - startIndex < size) {
-          end = true;
+      if (binaryShift) {
+        if (endIndex - startIndex < 5) {
           break;
         }
 
-        code = readCode(correctedBits, startIndex, size);
-        startIndex += size;
-
-        String str = getCharacter(table, code);
-        if (str.startsWith("CTRL_")) {
-          // Table changes
-          table = getTable(str.charAt(5));
-
-          if (str.charAt(6) == 'S') {
-            shift = true;
+        int length = readCode(correctedBits, startIndex, 5);
+        startIndex += 5;
+        if (length == 0) {
+          if (endIndex - startIndex < 11) {
+            break;
           }
-        } else {
-          result.append(str);
-        }
 
-        break;
+          length = readCode(correctedBits, startIndex, 11) + 31;
+          startIndex += 11;
+        }
+        for (int charCount = 0; charCount < length; charCount++) {
+          if (endIndex - startIndex < 8) {
+            end = true;
+            break;
+          }
+
+          code = readCode(correctedBits, startIndex, 8);
+          result.append((char) code);
+          startIndex += 8;
+        }
+        binaryShift = false;
+      } else {
+        if (table == Table.BINARY) {
+          if (endIndex - startIndex < 8) {
+            end = true;
+            break;
+          }
+          code = readCode(correctedBits, startIndex, 8);
+          startIndex += 8;
+
+          result.append((char) code);
+
+        } else {
+          int size = 5;
+
+          if (table == Table.DIGIT) {
+            size = 4;
+          }
+
+          if (endIndex - startIndex < size) {
+            end = true;
+            break;
+          }
+
+          code = readCode(correctedBits, startIndex, size);
+          startIndex += size;
+
+          String str = getCharacter(table, code);
+          if (str.startsWith("CTRL_")) {
+            // Table changes
+            table = getTable(str.charAt(5));
+
+            if (str.charAt(6) == 'S') {
+              shift = true;
+              if (str.charAt(5) == 'B') {
+                binaryShift = true;
+              }
+            }
+          } else {
+            result.append(str);
+          }
+
+
+        }
       }
 
       if (switchShift) {
@@ -213,9 +241,8 @@ public final class Decoder {
         return Table.UPPER;
     }
   }
-  
+
   /**
-   *
    * Gets the character (or string) corresponding to the passed code in the given table
    *
    * @param table the table used
@@ -239,8 +266,7 @@ public final class Decoder {
   }
 
   /**
-   *
-   * <p> performs RS error correction on an array of bits </p>
+   * <p>Performs RS error correction on an array of bits.</p>
    *
    * @return the corrected array
    * @throws FormatException if the input contains too many errors
@@ -267,10 +293,10 @@ public final class Decoder {
     int offset;
 
     if (ddata.isCompact()) {
-      offset = NB_BITS_COMPACT[ddata.getNbLayers()] - numCodewords*codewordSize;
+      offset = NB_BITS_COMPACT[ddata.getNbLayers()] - numCodewords * codewordSize;
       numECCodewords = NB_DATABLOCK_COMPACT[ddata.getNbLayers()] - numDataCodewords;
     } else {
-      offset = NB_BITS[ddata.getNbLayers()] - numCodewords*codewordSize;
+      offset = NB_BITS[ddata.getNbLayers()] - numCodewords * codewordSize;
       numECCodewords = NB_DATABLOCK[ddata.getNbLayers()] - numDataCodewords;
     }
 
@@ -278,7 +304,7 @@ public final class Decoder {
     for (int i = 0; i < numCodewords; i++) {
       int flag = 1;
       for (int j = 1; j <= codewordSize; j++) {
-        if (rawbits[codewordSize*i + codewordSize - j + offset]) {
+        if (rawbits[codewordSize * i + codewordSize - j + offset]) {
           dataWords[i] += flag;
         }
         flag <<= 1;
@@ -299,8 +325,8 @@ public final class Decoder {
     offset = 0;
     invertedBitCount = 0;
 
-    boolean[] correctedBits = new boolean[numDataCodewords*codewordSize];
-    for (int i = 0; i < numDataCodewords; i ++) {
+    boolean[] correctedBits = new boolean[numDataCodewords * codewordSize];
+    for (int i = 0; i < numDataCodewords; i++) {
 
       boolean seriesColor = false;
       int seriesCount = 0;
@@ -342,7 +368,6 @@ public final class Decoder {
   }
 
   /**
-   *
    * Gets the array of bits from an Aztec Code matrix
    *
    * @return the array of bits
@@ -373,28 +398,29 @@ public final class Decoder {
     while (layer != 0) {
 
       int flip = 0;
-      for (int i = 0; i < 2*size - 4; i++) {
-        rawbits[rawbitsOffset+i] = matrix.get(matrixOffset + flip, matrixOffset + i/2);
-        rawbits[rawbitsOffset+2*size - 4 + i] = matrix.get(matrixOffset + i/2, matrixOffset + size-1-flip);
-        flip = (flip + 1)%2;
+      for (int i = 0; i < 2 * size - 4; i++) {
+        rawbits[rawbitsOffset + i] = matrix.get(matrixOffset + flip, matrixOffset + i / 2);
+        rawbits[rawbitsOffset + 2 * size - 4 + i] = matrix.get(matrixOffset + i / 2, matrixOffset + size - 1 - flip);
+        flip = (flip + 1) % 2;
       }
 
       flip = 0;
-      for (int i = 2*size+1; i > 5; i--) {
-        rawbits[rawbitsOffset+4*size - 8 + (2*size-i) + 1] = matrix.get(matrixOffset + size-1-flip, matrixOffset + i/2 - 1);
-        rawbits[rawbitsOffset+6*size - 12 + (2*size-i) + 1] = matrix.get(matrixOffset + i/2 - 1, matrixOffset + flip);
-        flip = (flip + 1)%2;
+      for (int i = 2 * size + 1; i > 5; i--) {
+        rawbits[rawbitsOffset + 4 * size - 8 + (2 * size - i) + 1] =
+            matrix.get(matrixOffset + size - 1 - flip, matrixOffset + i / 2 - 1);
+        rawbits[rawbitsOffset + 6 * size - 12 + (2 * size - i) + 1] =
+            matrix.get(matrixOffset + i / 2 - 1, matrixOffset + flip);
+        flip = (flip + 1) % 2;
       }
 
       matrixOffset += 2;
-      rawbitsOffset += 8*size-16;
+      rawbitsOffset += 8 * size - 16;
       layer--;
       size -= 4;
     }
 
     return rawbits;
   }
-  
 
   /**
    * Transforms an Aztec code matrix by removing the control dashed lines
