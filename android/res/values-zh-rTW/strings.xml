@@ -102,6 +102,9 @@
   <string name="preferences_decode_1D_title">解碼一維條碼</string>
   <string name="preferences_decode_Data_Matrix_title">解碼 Data Matrix 條碼</string>
   <string name="preferences_decode_QR_title">解碼 QR Code</string>
+  <string name="preferences_device_bug_workarounds_title">設備問題的變通辦法</string>
+  <string name="preferences_force_preview_to_screen_size_summary">僅啟用如果屏幕是黑的</string>
+  <string name="preferences_force_preview_to_screen_size_title">部隊預覽屏幕尺寸的大小</string>
   <string name="preferences_front_light_summary">改善在低光源的環境下掃描的成功率，但有可能造成過度曝光的現象</string>
   <string name="preferences_front_light_title">使用前光源</string>
   <string name="preferences_general_title">一般設定</string>

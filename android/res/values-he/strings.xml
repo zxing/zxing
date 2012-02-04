@@ -102,6 +102,9 @@
   <string name="preferences_decode_1D_title">ברקודים חד מימדיים</string>
   <string name="preferences_decode_Data_Matrix_title">מטריצת נתונים</string>
   <string name="preferences_decode_QR_title">קודי QR</string>
+  <string name="preferences_device_bug_workarounds_title">באג התקן דרכים לעקיפת</string>
+  <string name="preferences_force_preview_to_screen_size_summary">לאפשר רק אם מסך שחור</string>
+  <string name="preferences_force_preview_to_screen_size_title">חיל גודל התצוגה לגודל המסך</string>
   <string name="preferences_front_light_summary">משפר את הסריקה בתאורה נמוכה בטלפונים מסוימים, אך עשוי לגרום לסנוור. לא עובד בכל הטלפונים.</string>
   <string name="preferences_front_light_title">השתמש באור הקדמי</string>
   <string name="preferences_general_title">הגדרות כלליות</string>

@@ -100,6 +100,9 @@
   <string name="preferences_decode_1D_title">1D-viivakoodeja</string>
   <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>
   <string name="preferences_decode_QR_title">QR-koodeja</string>
+  <string name="preferences_device_bug_workarounds_title">Laitteen Bug Kiertotapoja</string>
+  <string name="preferences_force_preview_to_screen_size_summary">Käyttöön vain, jos näyttö on musta</string>
+  <string name="preferences_force_preview_to_screen_size_title">Kræver esikatselukokoa näytön koon</string>
   <string name="preferences_front_light_summary">Salamavalon käyttö saattaa auttaa hämärässä, mutta se saattaa aiheuttaa myös häikäisyä. Ei toimi kaikissa puhelimissa.</string>
   <string name="preferences_front_light_title">Käytä valoa</string>
   <string name="preferences_general_title">Yleiset asetukset</string>

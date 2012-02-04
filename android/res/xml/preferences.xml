@@ -82,4 +82,11 @@
         android:entryValues="@array/country_codes"
         android:title="@string/preferences_search_country"/>
   </PreferenceCategory>
+  <PreferenceCategory android:title="@string/preferences_device_bug_workarounds_title">
+    <CheckBoxPreference
+        android:key="preferences_force_preview_to_screen_size"
+        android:defaultValue="false"
+        android:title="@string/preferences_force_preview_to_screen_size_title"
+        android:summary="@string/preferences_force_preview_to_screen_size_summary"/>
+  </PreferenceCategory>
 </PreferenceScreen>

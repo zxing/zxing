@@ -102,6 +102,9 @@
   <string name="preferences_decode_1D_title">1D barcode</string>
   <string name="preferences_decode_Data_Matrix_title">Data Matriks</string>
   <string name="preferences_decode_QR_title">QR Codes</string>
+  <string name="preferences_device_bug_workarounds_title">Kamera solusi</string>
+  <string name="preferences_force_preview_to_screen_size_summary">Hanya memungkinkan jika layar berwarna hitam</string>
+  <string name="preferences_force_preview_to_screen_size_title">Angkatan pratinjau ukuran untuk ukuran layar</string>
   <string name="preferences_front_light_summary">Meningkatkan scanning dalam cahaya rendah pada beberapa ponsel, namun dapat menyebabkan silau. Tidak bekerja pada semua ponsel.</string>
   <string name="preferences_front_light_title">Gunakan lampu depan</string>
   <string name="preferences_general_title">Pengaturan umum</string>

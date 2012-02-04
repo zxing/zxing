@@ -102,6 +102,9 @@
   <string name="preferences_decode_1D_title">1D barcodes</string>
   <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>
   <string name="preferences_decode_QR_title">QR Codes</string>
+  <string name="preferences_device_bug_workarounds_title">Υπάρχει κάποια λύση Bug συσκευής</string>
+  <string name="preferences_force_preview_to_screen_size_summary">Μόνο αν μπορέσει η οθόνη είναι μαύρη</string>
+  <string name="preferences_force_preview_to_screen_size_title">Δύναμη μέγεθος προεπισκόπησης για το μέγεθος της οθόνης</string>
   <string name="preferences_front_light_summary">Βελτιώνει το σκανάρισμα με χαμηλο φωτισμό σε μερικά κινητά, ίσως όμως προκαλέσει λάμψη. Δουλεύει σε μερικά κινητά.</string>
   <string name="preferences_front_light_title">Χρήση μπροστινού φακού</string>
   <string name="preferences_general_title">Γενικές ρυθμίσεις</string>

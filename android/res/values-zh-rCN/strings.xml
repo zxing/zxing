@@ -102,6 +102,9 @@
   <string name="preferences_decode_1D_title">扫描 一维条码</string>
   <string name="preferences_decode_Data_Matrix_title">扫描 DM码</string>
   <string name="preferences_decode_QR_title">扫描 QR码</string>
+  <string name="preferences_device_bug_workarounds_title">设备问题的变通办法</string>
+  <string name="preferences_force_preview_to_screen_size_summary">仅启用如果屏幕是黑的</string>
+  <string name="preferences_force_preview_to_screen_size_title">部队预览屏幕尺寸的大小</string>
   <string name="preferences_front_light_summary">前灯可用时，打开前灯</string>
   <string name="preferences_front_light_title">前灯</string>
   <string name="preferences_general_title">一般设置</string>

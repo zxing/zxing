@@ -102,6 +102,9 @@
   <string name="preferences_decode_1D_title">1D Barcodes</string>
   <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>
   <string name="preferences_decode_QR_title">QR Codes</string>
+  <string name="preferences_device_bug_workarounds_title">Geräte-Bug Workarounds</string>
+  <string name="preferences_force_preview_to_screen_size_summary">Nur aktivieren, wenn Bildschirm schwarz ist</string>
+  <string name="preferences_force_preview_to_screen_size_title">Force-Vorschau Größe der Größe des Displays</string>
   <string name="preferences_front_light_summary">Verbessert bei einigen Mobiltelefonen das Scannen bei schwachem Licht, kann aber Überbelichtung verursachen. Funktioniert nicht mit allen Handys.</string>
   <string name="preferences_front_light_title">Blitzlicht</string>
   <string name="preferences_general_title">Allgemeine Einstellungen</string>

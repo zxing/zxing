@@ -102,6 +102,9 @@
   <string name="preferences_decode_1D_title">1D kódy</string>
   <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>
   <string name="preferences_decode_QR_title">QR kódy</string>
+  <string name="preferences_device_bug_workarounds_title">Možná zástupná řešení chyby zařízení</string>
+  <string name="preferences_force_preview_to_screen_size_summary">Povolit jen v případě obrazovka je černá</string>
+  <string name="preferences_force_preview_to_screen_size_title">Síla velikost náhledu k velikosti displeje</string>
   <string name="preferences_front_light_summary">Zlepšuje skenování při slabém osvětlení na některých telefonech, ale může způsobit oslnění. Nefunguje na všech telefonech.</string>
   <string name="preferences_front_light_title">Použít světlo</string>
   <string name="preferences_general_title">Hlavní nastavení</string>

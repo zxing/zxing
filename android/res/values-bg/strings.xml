@@ -102,6 +102,9 @@
   <string name="preferences_decode_1D_title">1D Баркодове</string>
   <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>
   <string name="preferences_decode_QR_title">QR Баркодове</string>
+  <string name="preferences_device_bug_workarounds_title">Заобикаляне устройството грешки</string>
+  <string name="preferences_force_preview_to_screen_size_summary">Само да се даде възможност, ако екранът е черен</string>
+  <string name="preferences_force_preview_to_screen_size_title">Изискват предварителен преглед размер размера на екрана</string>
   <string name="preferences_front_light_summary">Подобрява четенето при лошо осветление, но предизвиква отблясъци. Само за някои модели.</string>
   <string name="preferences_front_light_title">Използвай фенерче</string>
   <string name="preferences_general_title">Общи настройки</string>

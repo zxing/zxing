@@ -102,6 +102,9 @@
   <string name="preferences_decode_1D_title">1D barkodları</string>
   <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>
   <string name="preferences_decode_QR_title">QR barkodları</string>
+  <string name="preferences_device_bug_workarounds_title">Aygıt Hata Geçici Çözümler</string>
+  <string name="preferences_force_preview_to_screen_size_summary">Sadece ekranı siyah etkinleştirmek</string>
+  <string name="preferences_force_preview_to_screen_size_title">Istemek önizleme boyutunu ekran boyutuna</string>
   <string name="preferences_front_light_summary">Bazı telefonlarda düşük ışıkta taramayı iyileştirir, ancak parlamaya neden olabilir. Tüm telefonlarda sonuç vermez.</string>
   <string name="preferences_front_light_title">Ön ışığı kullan</string>
   <string name="preferences_general_title">Genel ayarlar</string>

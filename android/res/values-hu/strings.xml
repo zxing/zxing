@@ -102,6 +102,9 @@
   <string name="preferences_decode_1D_title">1D vonalkódok</string>
   <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>
   <string name="preferences_decode_QR_title">QR kódok</string>
+  <string name="preferences_device_bug_workarounds_title">Eszköz Bug Lehetséges megoldások</string>
+  <string name="preferences_force_preview_to_screen_size_summary">Csak hogy ha a képernyő fekete</string>
+  <string name="preferences_force_preview_to_screen_size_title">Megkövetelése előnézet mérete képernyőméret</string>
   <string name="preferences_front_light_summary">Javítja a szkennelést kevés fény mellett néhány telefonon, de csillogást okozhat. Nem minden telefonon működik.</string>
   <string name="preferences_front_light_title">Kamera LED használata</string>
   <string name="preferences_general_title">Általános beállítások</string>

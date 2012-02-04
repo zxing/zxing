@@ -102,6 +102,9 @@
   <string name="preferences_decode_1D_title">1D steckkod</string>
   <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>
   <string name="preferences_decode_QR_title">QR-koder</string>
+  <string name="preferences_device_bug_workarounds_title">Enhet Bug Lösningar</string>
+  <string name="preferences_force_preview_to_screen_size_summary">Endast möjligt om skärmen är svart</string>
+  <string name="preferences_force_preview_to_screen_size_title">Kräv storleken på förhandstitt på skärmstorlek</string>
   <string name="preferences_front_light_summary">Aktivera ljuset framför, om det finns. Fungerar inte på alla telefoner.</string>
   <string name="preferences_front_light_title">Ljuset framför</string>
   <string name="preferences_general_title">Grundläggande inställningar</string>
