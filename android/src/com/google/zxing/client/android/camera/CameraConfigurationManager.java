@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.hardware.Camera;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Display;
@@ -150,6 +151,17 @@ final class CameraConfigurationManager {
     Point bestSize = null;
 
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+
+    // Force this on every time for Optimus, since we know it has this problem
+    if (Build.MODEL.contains("optimus") || Build.MODEL.contains("Optimus") ||
+        Build.DEVICE.contains("optimus") || Build.DEVICE.contains("Optimus")) {
+      if (!prefs.getBoolean(PreferencesActivity.KEY_FORCE_PREVIEW_TO_SCREEN_SIZE, false)) {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(PreferencesActivity.KEY_FORCE_PREVIEW_TO_SCREEN_SIZE, true);
+        editor.commit();
+      }
+    }
+
     if (prefs.getBoolean(PreferencesActivity.KEY_FORCE_PREVIEW_TO_SCREEN_SIZE, false)) {
 
       Log.i(TAG, "Forcing to screen size");
