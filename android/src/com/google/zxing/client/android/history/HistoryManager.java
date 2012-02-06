@@ -16,6 +16,7 @@
 
 package com.google.zxing.client.android.history;
 
+import android.database.sqlite.SQLiteException;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
 import com.google.zxing.client.android.Intents;
@@ -237,6 +238,12 @@ public final class HistoryManager {
       while (cursor.moveToNext()) {
         db.delete(DBHelper.TABLE_NAME, DBHelper.ID_COL + '=' + cursor.getString(0), null);
       }
+    } catch (SQLiteException sqle) {
+      // We're seeing an error here when called in CaptureActivity.onCreate() in rare cases
+      // and don't understand it. First theory is that it's transient so can be safely ignored.
+      // TODO revisit this after live in a future version to see if it 'worked'
+      Log.w(TAG, sqle);
+      // continue
     } finally {
       close(cursor, db);
     }
