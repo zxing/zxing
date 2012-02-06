@@ -93,11 +93,11 @@
   <string name="msg_share_text">Alebo zadajte nejaký text</string>
   <string name="msg_sure">Ste si istí?</string>
   <string name="msg_unmount_usb">Ospravedlňujeme sa, karta SD nie je prístupná.</string>
-  <string name="preferences_actions_title">Keď sa zistí, čiarový kód\u2026</string>
+  <string name="preferences_actions_title">Pri zistení čiarového kódu</string>
   <string name="preferences_bulk_mode_summary">Skenovať a ukladať veľa čiarových kódov bez prerušenia</string>
   <string name="preferences_bulk_mode_title">Hromadný režim skenovania</string>
   <string name="preferences_copy_to_clipboard_title">Kopírovať do schránky</string>
-  <string name="preferences_custom_product_search_summary" formatted="false">Striedanie: %s = obsah, %f = format, %t = typ</string>
+  <string name="preferences_custom_product_search_summary" formatted="false">Nahradiť: %s = obsah, %f = formát, %t = typ</string>
   <string name="preferences_custom_product_search_title">Vlastné vyhľadávanie URL</string>
   <string name="preferences_decode_1D_title">1D čiarové kódy</string>
   <string name="preferences_decode_Data_Matrix_title">Dáta Matrix</string>
@@ -109,17 +109,17 @@
   <string name="preferences_front_light_title">Použiť prisvetlenie</string>
   <string name="preferences_general_title">Všeobecné nastavenia</string>
   <string name="preferences_name">Nastavenia</string>
-  <string name="preferences_play_beep_title">Zvuky</string>
+  <string name="preferences_play_beep_title">Zvuká signalizácia</string>
   <string name="preferences_remember_duplicates_summary">Uložiť viacnásobné skenovanie do jednej histórie čiarového kódu</string>
   <string name="preferences_remember_duplicates_title">Zapamätať si duplikáty</string>
   <string name="preferences_result_title">Výsledok nastavenia</string>
   <string name="preferences_reverse_image_summary">Povoliť na zariadeniach iba s predným fotoaparátom</string>
   <string name="preferences_reverse_image_title">Obrátený obraz z fotoaparátu</string>
-  <string name="preferences_scanning_title">Ak skenujem čiarové kódy, dekódujem\u2026</string>
-  <string name="preferences_search_country">Hľadanie krajiny</string>
-  <string name="preferences_supplemental_summary">Skúste získať viac informácií o obsahu čiarového kódu</string>
+  <string name="preferences_scanning_title">Dekódovať čiarové kódy</string>
+  <string name="preferences_search_country">Vyhľadávanie pre krajinu</string>
+  <string name="preferences_supplemental_summary">Skúsiť získať viac informácií o obsahu čiarového kódu</string>
   <string name="preferences_supplemental_title">Získať viac informácií</string>
-  <string name="preferences_vibrate_title">Vibrovať</string>
+  <string name="preferences_vibrate_title">Vibrácia</string>
   <string name="result_address_book">Nájdená informácia o kontakte</string>
   <string name="result_calendar">Nájdená udalosť kalendára</string>
   <string name="result_email_address">Nájdená e-mailová adresa</string>
