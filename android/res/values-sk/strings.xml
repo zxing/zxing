@@ -109,7 +109,7 @@
   <string name="preferences_front_light_title">Použiť prisvetlenie</string>
   <string name="preferences_general_title">Všeobecné nastavenia</string>
   <string name="preferences_name">Nastavenia</string>
-  <string name="preferences_play_beep_title">Zvuká signalizácia</string>
+  <string name="preferences_play_beep_title">Zvuková signalizácia</string>
   <string name="preferences_remember_duplicates_summary">Uložiť viacnásobné skenovanie do jednej histórie čiarového kódu</string>
   <string name="preferences_remember_duplicates_title">Zapamätať si duplikáty</string>
   <string name="preferences_result_title">Výsledok nastavenia</string>
