@@ -463,7 +463,9 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         case NONE:
           SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
           if (prefs.getBoolean(PreferencesActivity.KEY_BULK_MODE, false)) {
-            Toast.makeText(this, R.string.msg_bulk_mode_scanned, Toast.LENGTH_SHORT).show();
+            String message = getResources().getString(R.string.msg_bulk_mode_scanned)
+                + " (" + rawResult.getText() + ')';
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
             // Wait a moment or else it will scan the same barcode continuously about 3 times
             restartPreviewAfterDelay(BULK_MODE_SCAN_DELAY_MS);
           } else {
