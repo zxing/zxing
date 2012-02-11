@@ -32,7 +32,7 @@ public final class URIResultParser extends ResultParser {
       "(:\\d{1,5})?" + // maybe port
       "(/|\\?|$)"; // query, path or nothing
   private static final Pattern URL_WITH_PROTOCOL_PATTERN = Pattern.compile(
-      "[a-zA-Z0-9]{2,}://" + // protocol
+      "[a-zA-Z0-9]{2,}:(/)*" + // protocol
       "[a-zA-Z0-9\\-]+(\\.[a-zA-Z0-9\\-]+)*" + // host name elements
       PATTERN_END);
   private static final Pattern URL_WITHOUT_PROTOCOL_PATTERN = Pattern.compile(
