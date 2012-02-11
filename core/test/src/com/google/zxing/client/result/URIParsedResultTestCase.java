@@ -88,6 +88,11 @@ public final class URIParsedResultTestCase extends Assert {
     doTestIsPossiblyMalicious("http://google.com/@@", false);
   }
 
+  @Test
+  public void testExotic() {
+    doTest("bitcoin:mySD89iqpmptrK3PhHFW9fa7BXiP7ANy3Y", "bitcoin:mySD89iqpmptrK3PhHFW9fa7BXiP7ANy3Y", null);
+  }
+
   private static void doTest(String contents, String uri, String title) {
     Result fakeResult = new Result(contents, null, null, BarcodeFormat.QR_CODE);
     ParsedResult result = ResultParser.parseResult(fakeResult);
