@@ -248,6 +248,9 @@ final class DecodedBitStreamParser {
     // Read two characters at a time
     int start = result.length();
     while (count > 1) {
+      if (bits.available() < 11) {
+        throw FormatException.getFormatInstance();
+      }
       int nextTwoCharsBits = bits.readBits(11);
       result.append(toAlphaNumericChar(nextTwoCharsBits / 45));
       result.append(toAlphaNumericChar(nextTwoCharsBits % 45));
@@ -316,7 +319,7 @@ final class DecodedBitStreamParser {
     }
   }
 
-  private static int parseECIValue(BitSource bits) {
+  private static int parseECIValue(BitSource bits) throws FormatException {
     int firstByte = bits.readBits(8);
     if ((firstByte & 0x80) == 0) {
       // just one byte
@@ -332,7 +335,7 @@ final class DecodedBitStreamParser {
       int secondThirdBytes = bits.readBits(16);
       return ((firstByte & 0x1F) << 16) | secondThirdBytes;
     }
-    throw new IllegalArgumentException("Bad ECI bits starting with byte " + firstByte);
+    throw FormatException.getFormatInstance();
   }
 
 }
