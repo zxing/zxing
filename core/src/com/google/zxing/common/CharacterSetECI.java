@@ -16,6 +16,8 @@
 
 package com.google.zxing.common;
 
+import com.google.zxing.FormatException;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -97,9 +99,9 @@ public enum CharacterSetECI {
    *   unsupported
    * @throws IllegalArgumentException if ECI value is invalid
    */
-  public static CharacterSetECI getCharacterSetECIByValue(int value) {
+  public static CharacterSetECI getCharacterSetECIByValue(int value) throws FormatException {
     if (value < 0 || value >= 900) {
-      throw new IllegalArgumentException("Bad ECI value: " + value);
+      throw FormatException.getFormatInstance();
     }
     return VALUE_TO_ECI.get(value);
   }
