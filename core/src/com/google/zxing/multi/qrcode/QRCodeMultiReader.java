@@ -55,7 +55,7 @@ public final class QRCodeMultiReader extends QRCodeReader implements MultipleBar
     DetectorResult[] detectorResults = new MultiDetector(image.getBlackMatrix()).detectMulti(hints);
     for (DetectorResult detectorResult : detectorResults) {
       try {
-        DecoderResult decoderResult = getDecoder().decode(detectorResult.getBits());
+        DecoderResult decoderResult = getDecoder().decode(detectorResult.getBits(), hints);
         ResultPoint[] points = detectorResult.getPoints();
         Result result = new Result(decoderResult.getText(), decoderResult.getRawBytes(), points,
                                    BarcodeFormat.QR_CODE);
