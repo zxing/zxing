@@ -629,6 +629,10 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       }
       Map<ResultMetadataType,?> metadata = rawResult.getResultMetadata();
       if (metadata != null) {
+        if (metadata.containsKey(ResultMetadataType.UPC_EAN_EXTENSION)) {
+          intent.putExtra(Intents.Scan.RESULT_UPC_EAN_EXTENSION,
+                          metadata.get(ResultMetadataType.UPC_EAN_EXTENSION).toString());
+        }
         Integer orientation = (Integer) metadata.get(ResultMetadataType.ORIENTATION);
         if (orientation != null) {
           intent.putExtra(Intents.Scan.RESULT_ORIENTATION, orientation.intValue());

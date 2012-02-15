@@ -192,6 +192,7 @@ public abstract class UPCEANReader extends OneDReader {
 
     try {
       Result extensionResult = extensionReader.decodeRow(rowNumber, row, endRange[1]);
+      decodeResult.putMetadata(ResultMetadataType.UPC_EAN_EXTENSION, extensionResult.getText());
       decodeResult.putAllMetadata(extensionResult.getResultMetadata());
       decodeResult.addResultPoints(extensionResult.getResultPoints());
     } catch (ReaderException re) {

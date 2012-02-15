@@ -117,6 +117,11 @@ public final class Intents {
     public static final String RESULT_FORMAT = "SCAN_RESULT_FORMAT";
 
     /**
+     * Call intent.getStringExtra(RESULT_UPC_EAN_EXTENSION) to return any scanned additional barcode
+     */
+    public static final String RESULT_UPC_EAN_EXTENSION = "SCAN_RESULT_UPC_EAN_EXTENSION";
+
+    /**
      * Call intent.getByteArrayExtra(RESULT_BYTES) to get a {@code byte[]} of raw bytes in the
      * barcode, if available.
      */
