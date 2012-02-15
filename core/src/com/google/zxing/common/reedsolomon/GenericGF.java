@@ -163,26 +163,18 @@ public final class GenericGF {
   }
 
   /**
-   * @param a
-   * @param b
    * @return product of a and b in GF(size)
    */
   int multiply(int a, int b) {
   	checkInit();
-  	
+
     if (a == 0 || b == 0) {
       return 0;
     }
-    
-    if (a<0 || b <0 || a>=size || b >=size){
-    	a++;
-    }
-    
-    int logSum = logTable[a] + logTable[b];
-    return expTable[(logSum % size) + logSum / size];
+    return expTable[(logTable[a] + logTable[b]) % (size - 1)];
   }
 
-  public int getSize(){
+  public int getSize() {
   	return size;
   }
   
