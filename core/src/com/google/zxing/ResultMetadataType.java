@@ -70,6 +70,11 @@ public enum ResultMetadataType {
    * For some products, the possible country of manufacture as a {@link String} denoting the
    * ISO country code. Some map to multiple possible countries, like "US/CA".
    */
-  POSSIBLE_COUNTRY
+  POSSIBLE_COUNTRY,
+
+  /**
+   * For some products, the extension text
+   */
+  UPC_EAN_EXTENSION,
 
 }
