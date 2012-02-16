@@ -20,7 +20,7 @@ package com.google.zxing.common.flexdatatypes
 			{
 				if (this._arr[i][0] == key)
 				{
-					return i;
+					return (i as int);
 				}
 			}
 			return undefined;
