@@ -113,8 +113,6 @@
   <string name="preferences_remember_duplicates_summary">Przechowywanie wielu skanowanie kodów kreskowych w tej samej historii</string>
   <string name="preferences_remember_duplicates_title">Pamiętaj, duplikaty</string>
   <string name="preferences_result_title">Ustawienia rezultatów</string>
-  <string name="preferences_reverse_image_summary">Włącz na urządzeniach z przedniej kamery tylko</string>
-  <string name="preferences_reverse_image_title">Odwrócony obraz z kamery</string>
   <string name="preferences_scanning_title">Podczas skanowania kodów kreskowych\u2026</string>
   <string name="preferences_search_country">Szukaj kraju</string>
   <string name="preferences_supplemental_summary">Prosimy spróbować wyszukać więcej informacji na temat kodów kreskowych treści</string>

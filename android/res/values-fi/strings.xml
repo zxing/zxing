@@ -111,8 +111,6 @@
   <string name="preferences_remember_duplicates_summary">Tallentaa useita kopioita samaa viivakoodia historiassa</string>
   <string name="preferences_remember_duplicates_title">Muista kaksoiskappaleet</string>
   <string name="preferences_result_title">Tuloksien asetukset</string>
-  <string name="preferences_reverse_image_summary">Käytä laitteissa, joissa on kamera vain edessä</string>
-  <string name="preferences_reverse_image_title">Käänteinen kameran kuva</string>
   <string name="preferences_scanning_title">Kun skannataan viivakoodeja, dekoodaa\u2026</string>
   <string name="preferences_search_country">Etsi maasta</string>
   <string name="preferences_supplemental_summary">Yritä hakea lisätietoja viivakoodin sisältö</string>

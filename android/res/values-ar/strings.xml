@@ -113,8 +113,6 @@
   <string name="preferences_remember_duplicates_summary">بفحص مخزن متعددة من نفس الباركود في التاريخ</string>
   <string name="preferences_remember_duplicates_title">تذكر التكرارات</string>
   <string name="preferences_result_title">إعدادات النتائج</string>
-  <string name="preferences_reverse_image_summary">تمكين على الأجهزة مع كاميرا أمامية فقط</string>
-  <string name="preferences_reverse_image_title">عكس الكاميرا صورة</string>
   <string name="preferences_scanning_title">عندما لمسح الباركود</string>
   <string name="preferences_search_country">ابحث عن بلد</string>
   <string name="preferences_supplemental_summary">محاولة لاسترداد مزيد من المعلومات حول محتويات الباركود</string>

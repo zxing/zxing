@@ -113,8 +113,6 @@
   <string name="preferences_remember_duplicates_summary">Simpan beberapa pindaian dari barcode yang sama di dalam Riwayat</string>
   <string name="preferences_remember_duplicates_title">Ingat duplikasi</string>
   <string name="preferences_result_title">Hasil pengaturan</string>
-  <string name="preferences_reverse_image_summary">Aktifkan perangkat hanya dengan kamera depan</string>
-  <string name="preferences_reverse_image_title">Gambar kamera terbalik</string>
   <string name="preferences_scanning_title">Ketika memindai barcode, decode\u2026</string>
   <string name="preferences_search_country">Pencarian negara</string>
   <string name="preferences_supplemental_summary">Mencoba mendapatkan beberapa informasi mengenai isi barcode</string>

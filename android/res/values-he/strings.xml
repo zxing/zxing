@@ -113,8 +113,6 @@
   <string name="preferences_remember_duplicates_summary">אחסן מספר סריקות של אותו הברקוד בהיסטוריה</string>
   <string name="preferences_remember_duplicates_title">זכור כפילויות</string>
   <string name="preferences_result_title">הגדרות תוצאה</string>
-  <string name="preferences_reverse_image_summary">אפשר בהתקנים עם מצלמה קדמית בלבד</string>
-  <string name="preferences_reverse_image_title">תמונת מצלמה הפוכה</string>
   <string name="preferences_scanning_title">בעת סריקת ברקודים, קודד\u2026</string>
   <string name="preferences_search_country">חיפוש הארץ</string>
   <string name="preferences_supplemental_summary">נסה למצא מידע נוסף על תוכן הברקוד</string>

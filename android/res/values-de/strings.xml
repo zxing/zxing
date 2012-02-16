@@ -113,8 +113,6 @@
   <string name="preferences_remember_duplicates_summary">Speichern mehrerer Scans des gleichen Barcodes in der Historie</string>
   <string name="preferences_remember_duplicates_title">Duplikate speichern</string>
   <string name="preferences_result_title">Ergebnis-Einstellungen</string>
-  <string name="preferences_reverse_image_summary">Bei Geräten nur mit Frontkamera aktivieren</string>
-  <string name="preferences_reverse_image_title">Umgekehrtes Kamerabild</string>
   <string name="preferences_scanning_title">Beim Scannen von Barcodes, dekodieren\u2026</string>
   <string name="preferences_search_country">Suche Land</string>
   <string name="preferences_supplemental_summary">Versuchen, weitere Informationen über Barcode-Inhalte abzurufen</string>

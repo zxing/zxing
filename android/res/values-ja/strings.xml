@@ -113,8 +113,6 @@
   <string name="preferences_remember_duplicates_summary">履歴に、同じバーコードを複数記録する</string>
   <string name="preferences_remember_duplicates_title">重複する履歴の記録</string>
   <string name="preferences_result_title">検索結果の設定</string>
-  <string name="preferences_reverse_image_summary">フロントカメラのみを持つデバイスで有効にする</string>
-  <string name="preferences_reverse_image_title">カメラ画像の反転</string>
   <string name="preferences_scanning_title">バーコードスキャン時</string>
   <string name="preferences_search_country">検索国</string>
   <string name="preferences_supplemental_summary">バーコード内容についての詳細情報を取得してみてください</string>

@@ -113,8 +113,6 @@
   <string name="preferences_remember_duplicates_summary">Almacenar múltiples escáneres del mismo código de barras en el Historial.</string>
   <string name="preferences_remember_duplicates_title">Recuerde duplicados</string>
   <string name="preferences_result_title">Configuración de resultados</string>
-  <string name="preferences_reverse_image_summary">Activar en dispositivos con solo cámara frontal.</string>
-  <string name="preferences_reverse_image_title">Imagen invertida de la cámara</string>
   <string name="preferences_scanning_title">Al escanear códigos de barras, descodificar\u2026</string>
   <string name="preferences_search_country">Buscar país</string>
   <string name="preferences_supplemental_summary">Trata de recuperar más información sobre el contenido del código de barras.</string>

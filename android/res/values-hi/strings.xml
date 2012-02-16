@@ -113,8 +113,6 @@
   <string name="preferences_remember_duplicates_summary">इतिहास में एक ही बारकोड के स्टोर एकाधिक स्कैन</string>
   <string name="preferences_remember_duplicates_title">डुप्लिकेट याद रखें</string>
   <string name="preferences_result_title">नतीजे सेटिंग्स</string>
-  <string name="preferences_reverse_image_summary">सामने एक कैमरा के साथ ही उपकरणों पर सक्षम</string>
-  <string name="preferences_reverse_image_title">उलट कैमरा छवि</string>
   <string name="preferences_scanning_title">जब बारकोड स्कैनिंग के लिए व्याख्या करना\u2026</string>
   <string name="preferences_search_country">खोज देश</string>
   <string name="preferences_supplemental_summary">बारकोड सामग्री के बारे में में अधिक जानकारी पुनः प्राप्त करने की कोशिश करो</string>

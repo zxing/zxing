@@ -70,11 +70,6 @@
         android:defaultValue="false"
         android:title="@string/preferences_bulk_mode_title"
         android:summary="@string/preferences_bulk_mode_summary"/>
-    <CheckBoxPreference
-        android:key="preferences_reverse_image"
-        android:defaultValue="false"
-        android:title="@string/preferences_reverse_image_title"
-        android:summary="@string/preferences_reverse_image_summary"/>
     <ListPreference
         android:key="preferences_search_country"
         android:defaultValue="-"
