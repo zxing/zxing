@@ -18,6 +18,7 @@ package com.google.zxing.pdf417;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
+import com.google.zxing.ChecksumException;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.FormatException;
 import com.google.zxing.NotFoundException;
@@ -51,13 +52,13 @@ public final class PDF417Reader implements Reader {
    * @throws FormatException if a PDF417 cannot be decoded
    */
   @Override
-  public Result decode(BinaryBitmap image) throws NotFoundException, FormatException {
+  public Result decode(BinaryBitmap image) throws NotFoundException, FormatException, ChecksumException {
     return decode(image, null);
   }
 
   @Override
-  public Result decode(BinaryBitmap image,
-                       Map<DecodeHintType,?> hints) throws NotFoundException, FormatException {
+  public Result decode(BinaryBitmap image, Map<DecodeHintType,?> hints)
+      throws NotFoundException, FormatException, ChecksumException {
     DecoderResult decoderResult;
     ResultPoint[] points;
     if (hints != null && hints.containsKey(DecodeHintType.PURE_BARCODE)) {
