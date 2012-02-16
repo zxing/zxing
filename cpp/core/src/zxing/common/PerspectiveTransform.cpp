@@ -42,17 +42,17 @@ Ref<PerspectiveTransform> PerspectiveTransform::quadrilateralToQuadrilateral(flo
 
 Ref<PerspectiveTransform> PerspectiveTransform::squareToQuadrilateral(float x0, float y0, float x1, float y1, float x2,
     float y2, float x3, float y3) {
-  float dy2 = y3 - y2;
+  float dx3 = x0 - x1 + x2 - x3;
   float dy3 = y0 - y1 + y2 - y3;
-  if (dy2 == 0.0f && dy3 == 0.0f) {
+  if (dx3 == 0.0f && dy3 == 0.0f) {
     Ref<PerspectiveTransform> result(new PerspectiveTransform(x1 - x0, x2 - x1, x0, y1 - y0, y2 - y1, y0, 0.0f,
                                      0.0f, 1.0f));
     return result;
   } else {
     float dx1 = x1 - x2;
     float dx2 = x3 - x2;
-    float dx3 = x0 - x1 + x2 - x3;
     float dy1 = y1 - y2;
+    float dy2 = y3 - y2;
     float denominator = dx1 * dy2 - dx2 * dy1;
     float a13 = (dx3 * dy2 - dx2 * dy3) / denominator;
     float a23 = (dx1 * dy3 - dx3 * dy1) / denominator;
