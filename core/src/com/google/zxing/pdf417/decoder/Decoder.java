@@ -18,9 +18,9 @@ package com.google.zxing.pdf417.decoder;
 
 import com.google.zxing.ChecksumException;
 import com.google.zxing.FormatException;
-import com.google.zxing.NotFoundException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.DecoderResult;
+import com.google.zxing.pdf417.decoder.ec.ErrorCorrection;
 
 /**
  * <p>The main class which implements PDF417 Code decoding -- as
@@ -32,11 +32,10 @@ public final class Decoder {
 
   private static final int MAX_ERRORS = 3;
   private static final int MAX_EC_CODEWORDS = 512;
-  //private final ReedSolomonDecoder rsDecoder;
+  private final ErrorCorrection errorCorrection;
 
   public Decoder() {
-    // TODO MGMG
-    //rsDecoder = new ReedSolomonDecoder();
+    errorCorrection = new ErrorCorrection();
   }
 
   /**
@@ -45,9 +44,8 @@ public final class Decoder {
    *
    * @param image booleans representing white/black PDF417 modules
    * @return text and bytes encoded within the PDF417 Code
-   * @throws NotFoundException if the PDF417 Code cannot be decoded
    */
-  public DecoderResult decode(boolean[][] image) throws FormatException {
+  public DecoderResult decode(boolean[][] image) throws FormatException, ChecksumException {
     int dimension = image.length;
     BitMatrix bits = new BitMatrix(dimension);
     for (int i = 0; i < dimension; i++) {
@@ -68,7 +66,7 @@ public final class Decoder {
    * @return text and bytes encoded within the PDF417 Code
    * @throws FormatException if the PDF417 Code cannot be decoded
    */
-  public DecoderResult decode(BitMatrix bits) throws FormatException {
+  public DecoderResult decode(BitMatrix bits) throws FormatException, ChecksumException {
     // Construct a parser to read the data codewords and error-correction level
     BitMatrixParser parser = new BitMatrixParser(bits);
     int[] codewords = parser.readCodewords();
@@ -80,7 +78,7 @@ public final class Decoder {
     int numECCodewords = 1 << (ecLevel + 1);
     int[] erasures = parser.getErasures();
 
-    correctErrors(codewords, erasures, numECCodewords);
+    correctErrors(codewords, erasures.length, numECCodewords);
     verifyCodewordCount(codewords, numECCodewords);
 
     // Decode the codewords
@@ -92,7 +90,6 @@ public final class Decoder {
    *
    * @param codewords
    * @return an index to the first data codeword.
-   * @throws FormatException
    */
   private static void verifyCodewordCount(int[] codewords, int numECCodewords) throws FormatException {
     if (codewords.length < 4) {
@@ -119,31 +116,20 @@ public final class Decoder {
 
   /**
    * <p>Given data and error-correction codewords received, possibly corrupted by errors, attempts to
-   * correct the errors in-place using Reed-Solomon error correction.</p>
+   * correct the errors in-place.</p>
    *
    * @param codewords   data and error correction codewords
    * @throws ChecksumException if error correction fails
    */
-  private static int correctErrors(int[] codewords,
-                                   int[] erasures,
-                                   int numECCodewords) throws FormatException {
-    if (erasures.length > numECCodewords / 2 + MAX_ERRORS ||
+  private void correctErrors(int[] codewords,
+                             int numErasures,
+                             int numECCodewords) throws ChecksumException {
+    if (numErasures > numECCodewords / 2 + MAX_ERRORS ||
         numECCodewords < 0 || numECCodewords > MAX_EC_CODEWORDS) {
       // Too many errors or EC Codewords is corrupted
-      throw FormatException.getFormatInstance();
+      throw ChecksumException.getChecksumInstance();
     }
-    // Try to correct the errors
-    // TODO enable error correction
-    int result = 0; // rsDecoder.correctErrors(codewords, numECCodewords);
-    int numErasures = erasures.length;
-    if (result > 0) {
-      numErasures -= result;
-    }
-    if (numErasures > MAX_ERRORS) {
-      // Still too many errors
-      throw FormatException.getFormatInstance();
-    }
-    return result;
+    errorCorrection.decode(codewords, numECCodewords);
   }
 
 }
