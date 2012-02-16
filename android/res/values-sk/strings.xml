@@ -113,8 +113,6 @@
   <string name="preferences_remember_duplicates_summary">Uložiť viacnásobné skenovanie do jednej histórie čiarového kódu</string>
   <string name="preferences_remember_duplicates_title">Zapamätať si duplikáty</string>
   <string name="preferences_result_title">Výsledok nastavenia</string>
-  <string name="preferences_reverse_image_summary">Povoliť na zariadeniach iba s predným fotoaparátom</string>
-  <string name="preferences_reverse_image_title">Obrátený obraz z fotoaparátu</string>
   <string name="preferences_scanning_title">Dekódovať čiarové kódy</string>
   <string name="preferences_search_country">Vyhľadávanie pre krajinu</string>
   <string name="preferences_supplemental_summary">Skúsiť získať viac informácií o obsahu čiarového kódu</string>

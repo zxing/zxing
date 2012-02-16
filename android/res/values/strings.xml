@@ -112,8 +112,6 @@
   <string name="preferences_play_beep_title">Beep</string>
   <string name="preferences_remember_duplicates_summary">Store multiple scans of the same barcode in History</string>
   <string name="preferences_remember_duplicates_title">Remember duplicates</string>
-  <string name="preferences_reverse_image_summary">Enable on devices with a front camera only</string>
-  <string name="preferences_reverse_image_title">Reversed camera image</string>
   <string name="preferences_result_title">Result settings</string>
   <string name="preferences_scanning_title">When scanning for barcodes, decode\u2026</string>
   <string name="preferences_search_country">Search country</string>

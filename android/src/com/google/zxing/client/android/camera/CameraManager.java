@@ -17,16 +17,13 @@
 package com.google.zxing.client.android.camera;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.hardware.Camera;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import com.google.zxing.client.android.PlanarYUVLuminanceSource;
-import com.google.zxing.client.android.PreferencesActivity;
 
 import java.io.IOException;
 
@@ -46,14 +43,12 @@ public final class CameraManager {
   private static final int MAX_FRAME_WIDTH = 600;
   private static final int MAX_FRAME_HEIGHT = 400;
 
-  private final Context context;
   private final CameraConfigurationManager configManager;
   private Camera camera;
   private Rect framingRect;
   private Rect framingRectInPreview;
   private boolean initialized;
   private boolean previewing;
-  private boolean reverseImage;
   private int requestedFramingRectWidth;
   private int requestedFramingRectHeight;
   /**
@@ -65,7 +60,6 @@ public final class CameraManager {
   private final AutoFocusCallback autoFocusCallback;
 
   public CameraManager(Context context) {
-    this.context = context;
     this.configManager = new CameraConfigurationManager(context);
     previewCallback = new PreviewCallback(configManager);
     autoFocusCallback = new AutoFocusCallback();
@@ -98,9 +92,6 @@ public final class CameraManager {
       }
     }
     configManager.setDesiredCameraParameters(theCamera);
-
-    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-    reverseImage = prefs.getBoolean(PreferencesActivity.KEY_REVERSE_IMAGE, false);
   }
 
   /**
@@ -272,7 +263,7 @@ public final class CameraManager {
     }
     // Go ahead and assume it's YUV rather than die.
     return new PlanarYUVLuminanceSource(data, width, height, rect.left, rect.top,
-                                        rect.width(), rect.height(), reverseImage);
+                                        rect.width(), rect.height(), false);
   }
 
 }

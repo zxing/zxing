@@ -113,8 +113,6 @@
   <string name="preferences_remember_duplicates_summary">Gem flere scanninger af de samme stregkoder i Historik</string>
   <string name="preferences_remember_duplicates_title">Husk dubletter</string>
   <string name="preferences_result_title">Resultatindstillinger</string>
-  <string name="preferences_reverse_image_summary">Aktivér kun på enheder med et frontkamera</string>
-  <string name="preferences_reverse_image_title">Omvendt kamerabillede</string>
   <string name="preferences_scanning_title">Når der scannes efter stregkoder\u2026</string>
   <string name="preferences_search_country">Søg efter land</string>
   <string name="preferences_supplemental_summary">Prøv at få flere oplysninger om stregkodens indhold</string>

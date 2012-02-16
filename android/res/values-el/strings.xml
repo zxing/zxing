@@ -113,8 +113,6 @@
   <string name="preferences_remember_duplicates_summary">Αποθήκευση ολλαπλών σκαναρισμάτων του ίδιου barcode στο ιστορικό</string>
   <string name="preferences_remember_duplicates_title">Απομνημόνευση διπλών</string>
   <string name="preferences_result_title">Ρυθμίσεις αποτελεσμάτων</string>
-  <string name="preferences_reverse_image_summary">Ενεργοποιήστε σε συσκευές με μόνο μπροστινή κάμερα</string>
-  <string name="preferences_reverse_image_title">Ανάποδη εικόνα κάμερας</string>
   <string name="preferences_scanning_title">Όταν σκανάρεις barcodes, ψάχνε για\u2026</string>
   <string name="preferences_search_country">Χώρα Αναζήτηση</string>
   <string name="preferences_supplemental_summary">Προσπάθησε να βρείς περισσότερες πληροφορίες για τα περιεχόμενα του barcode</string>

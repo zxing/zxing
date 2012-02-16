@@ -113,8 +113,6 @@
   <string name="preferences_remember_duplicates_summary">Записвай множество сканирания на един и същи баркод в историята</string>
   <string name="preferences_remember_duplicates_title">Запомняне на повторенията</string>
   <string name="preferences_result_title">Настройки за резултата</string>
-  <string name="preferences_reverse_image_summary">Включете го за устройства само с предна камера</string>
-  <string name="preferences_reverse_image_title">Обърнато изображение</string>
   <string name="preferences_scanning_title">При сканиране да се декодират\u2026</string>
   <string name="preferences_search_country">Държава при търсене</string>
   <string name="preferences_supplemental_summary">Опитай да получиш повече информация за баркода</string>
