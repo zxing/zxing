@@ -33,6 +33,7 @@
 @interface ZXingWidgetController ()
 
 @property BOOL showCancel;
+@property BOOL showLicense;
 @property BOOL oneDMode;
 @property BOOL isStatusBarHidden;
 
@@ -49,22 +50,29 @@
 #endif
 @synthesize result, delegate, soundToPlay;
 @synthesize overlayView;
-@synthesize oneDMode, showCancel, isStatusBarHidden;
+@synthesize oneDMode, showCancel, showLicense, isStatusBarHidden;
 @synthesize readers;
 
 
 - (id)initWithDelegate:(id<ZXingDelegate>)scanDelegate showCancel:(BOOL)shouldShowCancel OneDMode:(BOOL)shouldUseoOneDMode {
+  
+    return [self initWithDelegate:scanDelegate showCancel:shouldShowCancel OneDMode:shouldUseoOneDMode showLicense:YES];
+}
+
+- (id)initWithDelegate:(id<ZXingDelegate>)scanDelegate showCancel:(BOOL)shouldShowCancel OneDMode:(BOOL)shouldUseoOneDMode showLicense:(BOOL)shouldShowLicense {
   self = [super init];
   if (self) {
     [self setDelegate:scanDelegate];
     self.oneDMode = shouldUseoOneDMode;
     self.showCancel = shouldShowCancel;
+    self.showLicense = shouldShowLicense;
     self.wantsFullScreenLayout = YES;
     beepSound = -1;
     decoding = NO;
     OverlayView *theOverLayView = [[OverlayView alloc] initWithFrame:[UIScreen mainScreen].bounds 
                                                        cancelEnabled:showCancel 
-                                                            oneDMode:oneDMode];
+                                                            oneDMode:oneDMode
+                                                         showLicense:shouldShowLicense];
     [theOverLayView setDelegate:self];
     self.overlayView = theOverLayView;
     [theOverLayView release];

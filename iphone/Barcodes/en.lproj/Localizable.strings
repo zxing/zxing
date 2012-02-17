@@ -1,4 +1,4 @@
-﻿/* Add Contact? */
+/* Add Contact? */
 "AddContactAction alert message" = "Add Contact?";
 
 /* Cancel */
@@ -151,3 +151,24 @@
 
 /*Button title when multiple actions are available*/
 "Actions ..." = "Actions ...";
+
+/* Place a red line over the bar code to be scanned. */
+"OverlayView 1d instructions" = "Place a red line over the bar code to be scanned.";
+
+/* Cancel */
+"OverlayView cancel button title" = "Cancel";
+
+/* Place a barcode inside the viewfinder rectangle to scan it. */
+"OverlayView displayed message" = "Place a barcode inside the viewfinder rectangle to scan it.";
+
+/* Cancel */
+"OverlayView license alert cancel title" = "Cancel";
+
+/* Scanning functionality provided by ZXing library, licensed under Apache License version 2.0. */
+"OverlayView license alert message" = "Scanning functionality provided by ZXing library, licensed under Apache License version 2.0.";
+
+/* License */
+"OverlayView license alert title" = "License";
+
+/* View License */
+"OverlayView license alert view title" = "View License";
