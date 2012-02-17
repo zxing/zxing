@@ -196,7 +196,7 @@ void DecodedBitStreamParser::decodeByteSegment(Ref<BitSource> bits_,
     // give a hint.
     encoding = StringUtils::guessEncoding(readBytes, count, hints);
   } else {
-    encoding = currentCharacterSetECI->getEncodingName();
+    encoding = currentCharacterSetECI->name();
   }
   try {
     append(result, readBytes, nBytes, encoding.c_str());
