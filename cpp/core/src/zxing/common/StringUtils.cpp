@@ -35,34 +35,40 @@ char const* const StringUtils::ISO88591 = "ISO8859-1";
 const bool StringUtils::ASSUME_SHIFT_JIS = false;
 
 string
-StringUtils::guessEncoding(unsigned char* bytes, int length, Hashtable const& hints) {
+StringUtils::guessEncoding(unsigned char* bytes, int length,
+                           Hashtable const& hints) {
   Hashtable::const_iterator i = hints.find(DecodeHints::CHARACTER_SET);
   if (i != hints.end()) {
     return i->second;
   }
-  // Does it start with the UTF-8 byte order mark? then guess it's UTF-8
-  if (length > 3 &&
-      bytes[0] == (unsigned char) 0xEF &&
-      bytes[1] == (unsigned char) 0xBB &&
-      bytes[2] == (unsigned char) 0xBF) {
-    return UTF8;
-  }
+  typedef bool boolean;
   // For now, merely tries to distinguish ISO-8859-1, UTF-8 and Shift_JIS,
-  // which should be by far the most common encodings. ISO-8859-1
-  // should not have bytes in the 0x80 - 0x9F range, while Shift_JIS
-  // uses this as a first byte of a two-byte character. If we see this
-  // followed by a valid second byte in Shift_JIS, assume it is Shift_JIS.
-  // If we see something else in that second byte, we'll make the risky guess
-  // that it's UTF-8.
-  bool canBeISO88591 = true;
-  bool canBeShiftJIS = true;
-  bool canBeUTF8 = true;
+  // which should be by far the most common encodings.
+  boolean canBeISO88591 = true;
+  boolean canBeShiftJIS = true;
+  boolean canBeUTF8 = true;
   int utf8BytesLeft = 0;
-  int maybeDoubleByteCount = 0;
-  int maybeSingleByteKatakanaCount = 0;
-  bool sawLatin1Supplement = false;
-  bool sawUTF8Start = false;
-  bool lastWasPossibleDoubleByteStart = false;
+  //int utf8LowChars = 0;
+  int utf2BytesChars = 0;
+  int utf3BytesChars = 0;
+  int utf4BytesChars = 0;
+  int sjisBytesLeft = 0;
+  //int sjisLowChars = 0;
+  int sjisKatakanaChars = 0;
+  //int sjisDoubleBytesChars = 0;
+  int sjisCurKatakanaWordLength = 0;
+  int sjisCurDoubleBytesWordLength = 0;
+  int sjisMaxKatakanaWordLength = 0;
+  int sjisMaxDoubleBytesWordLength = 0;
+  //int isoLowChars = 0;
+  //int isoHighChars = 0;
+  int isoHighOther = 0;
+
+  typedef unsigned char byte;
+  boolean utf8bom = length > 3 &&
+    bytes[0] == (byte) 0xEF &&
+    bytes[1] == (byte) 0xBB &&
+    bytes[2] == (byte) 0xBF;
 
   for (int i = 0;
        i < length && (canBeISO88591 || canBeShiftJIS || canBeUTF8);
@@ -71,104 +77,121 @@ StringUtils::guessEncoding(unsigned char* bytes, int length, Hashtable const& hi
     int value = bytes[i] & 0xFF;
 
     // UTF-8 stuff
-    if (value >= 0x80 && value <= 0xBF) {
+    if (canBeUTF8) {
       if (utf8BytesLeft > 0) {
-        utf8BytesLeft--;
-      }
-    } else {
-      if (utf8BytesLeft > 0) {
-        canBeUTF8 = false;
-      }
-      if (value >= 0xC0 && value <= 0xFD) {
-        sawUTF8Start = true;
-        int valueCopy = value;
-        while ((valueCopy & 0x40) != 0) {
-          utf8BytesLeft++;
-          valueCopy <<= 1;
+        if ((value & 0x80) == 0) {
+          canBeUTF8 = false;
+        } else {
+          utf8BytesLeft--;
         }
-      }
+      } else if ((value & 0x80) != 0) {
+        if ((value & 0x40) == 0) {
+          canBeUTF8 = false;
+        } else {
+          utf8BytesLeft++;
+          if ((value & 0x20) == 0) {
+            utf2BytesChars++;
+          } else {
+            utf8BytesLeft++;
+            if ((value & 0x10) == 0) {
+              utf3BytesChars++;
+            } else {
+              utf8BytesLeft++;
+              if ((value & 0x08) == 0) {
+                utf4BytesChars++;
+              } else {
+                canBeUTF8 = false;
+              }
+            }
+          }
+        }
+      } //else {
+      //utf8LowChars++;
+      //}
     }
 
     // ISO-8859-1 stuff
-
-    if ((value == 0xC2 || value == 0xC3) && i < length - 1) {
-      // This is really a poor hack. The slightly more exotic characters people might want to put in
-      // a QR Code, by which I mean the Latin-1 supplement characters (e.g. u-umlaut) have encodings
-      // that start with 0xC2 followed by [0xA0,0xBF], or start with 0xC3 followed by [0x80,0xBF].
-      int nextValue = bytes[i + 1] & 0xFF;
-      if (nextValue <= 0xBF &&
-          ((value == 0xC2 && nextValue >= 0xA0) || (value == 0xC3 && nextValue >= 0x80))) {
-        sawLatin1Supplement = true;
-      }
-    }
-    if (value >= 0x7F && value <= 0x9F) {
-      canBeISO88591 = false;
+    if (canBeISO88591) {
+      if (value > 0x7F && value < 0xA0) {
+        canBeISO88591 = false;
+      } else if (value > 0x9F) {
+        if (value < 0xC0 || value == 0xD7 || value == 0xF7) {
+          isoHighOther++;
+        } //else {
+        //isoHighChars++;
+        //}
+      } //else {
+      //isoLowChars++;
+      //}
     }
 
     // Shift_JIS stuff
-
-    if (value >= 0xA1 && value <= 0xDF) {
-      // count the number of characters that might be a Shift_JIS single-byte Katakana character
-      if (!lastWasPossibleDoubleByteStart) {
-        maybeSingleByteKatakanaCount++;
-      }
-    }
-    if (!lastWasPossibleDoubleByteStart &&
-        ((value >= 0xF0 && value <= 0xFF) || value == 0x80 || value == 0xA0)) {
-      canBeShiftJIS = false;
-    }
-    if ((value >= 0x81 && value <= 0x9F) || (value >= 0xE0 && value <= 0xEF)) {
-      // These start double-byte characters in Shift_JIS. Let's see if it's followed by a valid
-      // second byte.
-      if (lastWasPossibleDoubleByteStart) {
-        // If we just checked this and the last byte for being a valid double-byte
-        // char, don't check starting on this byte. If this and the last byte
-        // formed a valid pair, then this shouldn't be checked to see if it starts
-        // a double byte pair of course.
-        lastWasPossibleDoubleByteStart = false;
-      } else {
-        // ... otherwise do check to see if this plus the next byte form a valid
-        // double byte pair encoding a character.
-        lastWasPossibleDoubleByteStart = true;
-        if (i >= length - 1) {
+    if (canBeShiftJIS) {
+      if (sjisBytesLeft > 0) {
+        if (value < 0x40 || value == 0x7F || value > 0xFC) {
           canBeShiftJIS = false;
         } else {
-          int nextValue = bytes[i + 1] & 0xFF;
-          if (nextValue < 0x40 || nextValue > 0xFC) {
-            canBeShiftJIS = false;
-          } else {
-            maybeDoubleByteCount++;
-          }
-          // There is some conflicting information out there about which bytes can follow which in
-          // double-byte Shift_JIS characters. The rule above seems to be the one that matches practice.
+          sjisBytesLeft--;
         }
+      } else if (value == 0x80 || value == 0xA0 || value > 0xEF) {
+        canBeShiftJIS = false;
+      } else if (value > 0xA0 && value < 0xE0) {
+        sjisKatakanaChars++;
+        sjisCurDoubleBytesWordLength = 0;
+        sjisCurKatakanaWordLength++;
+        if (sjisCurKatakanaWordLength > sjisMaxKatakanaWordLength) {
+          sjisMaxKatakanaWordLength = sjisCurKatakanaWordLength;
+        }
+      } else if (value > 0x7F) {
+        sjisBytesLeft++;
+        //sjisDoubleBytesChars++;
+        sjisCurKatakanaWordLength = 0;
+        sjisCurDoubleBytesWordLength++;
+        if (sjisCurDoubleBytesWordLength > sjisMaxDoubleBytesWordLength) {
+          sjisMaxDoubleBytesWordLength = sjisCurDoubleBytesWordLength;
+        }
+      } else {
+        //sjisLowChars++;
+        sjisCurKatakanaWordLength = 0;
+        sjisCurDoubleBytesWordLength = 0;
       }
-    } else {
-      lastWasPossibleDoubleByteStart = false;
     }
   }
-  if (utf8BytesLeft > 0) {
+
+  if (canBeUTF8 && utf8BytesLeft > 0) {
     canBeUTF8 = false;
   }
-
-  // Easy -- if assuming Shift_JIS and no evidence it can't be, done
-  if (canBeShiftJIS && ASSUME_SHIFT_JIS) {
-    return SHIFT_JIS;
+  if (canBeShiftJIS && sjisBytesLeft > 0) {
+    canBeShiftJIS = false;
   }
-  if (canBeUTF8 && sawUTF8Start) {
+
+  // Easy -- if there is BOM or at least 1 valid not-single byte character (and no evidence it can't be UTF-8), done
+  if (canBeUTF8 && (utf8bom || utf2BytesChars + utf3BytesChars + utf4BytesChars > 0)) {
     return UTF8;
   }
-  // Distinguishing Shift_JIS and ISO-8859-1 can be a little tough. The crude heuristic is:
-  // - If we saw
-  //   - at least 3 bytes that starts a double-byte value (bytes that are rare in ISO-8859-1), or
-  //   - over 5% of bytes could be single-byte Katakana (also rare in ISO-8859-1),
-  // - and, saw no sequences that are invalid in Shift_JIS, then we conclude Shift_JIS
-  if (canBeShiftJIS && (maybeDoubleByteCount >= 3 || 20 * maybeSingleByteKatakanaCount > length)) {
+  // Easy -- if assuming Shift_JIS or at least 3 valid consecutive not-ascii characters (and no evidence it can't be), done
+  if (canBeShiftJIS && (ASSUME_SHIFT_JIS || sjisMaxKatakanaWordLength >= 3 || sjisMaxDoubleBytesWordLength >= 3)) {
     return SHIFT_JIS;
   }
-  // Otherwise, we default to ISO-8859-1 unless we know it can't be
-  if (!sawLatin1Supplement && canBeISO88591) {
+  // Distinguishing Shift_JIS and ISO-8859-1 can be a little tough for short words. The crude heuristic is:
+  // - If we saw
+  //   - only two consecutive katakana chars in the whole text, or
+  //   - at least 10% of bytes that could be "upper" not-alphanumeric Latin1,
+  // - then we conclude Shift_JIS, else ISO-8859-1
+  if (canBeISO88591 && canBeShiftJIS) {
+    return (sjisMaxKatakanaWordLength == 2 && sjisKatakanaChars == 2) || isoHighOther * 10 >= length
+      ? SHIFT_JIS : ISO88591;
+  }
+
+  // Otherwise, try in order ISO-8859-1, Shift JIS, UTF-8 and fall back to default platform encoding
+  if (canBeISO88591) {
     return ISO88591;
+  }
+  if (canBeShiftJIS) {
+    return SHIFT_JIS;
+  }
+  if (canBeUTF8) {
+    return UTF8;
   }
   // Otherwise, we take a wild guess with platform encoding
   return PLATFORM_DEFAULT_ENCODING;
