@@ -32,7 +32,7 @@ for format in $formats; do
 		tmp="${tmp%PNG}";
 		txt="${tmp}txt";
 		expected=`cat "$txt"`;
-		actual=`build/zxing $pic`;
+		actual=`$VALGRIND build/zxing $pic`;
 		if [ "$expected" == "$actual" ]; then
 			echo "passed."
 			passed=$((passed+1));
