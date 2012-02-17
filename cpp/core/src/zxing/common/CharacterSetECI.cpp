@@ -16,8 +16,8 @@
  */
 
 #include <zxing/common/CharacterSetECI.h>
-#include <sstream>
 #include <zxing/common/IllegalArgumentException.h>
+#include <zxing/FormatException.h>
 
 using std::string;
 
@@ -94,9 +94,7 @@ void CharacterSetECI::addCharacterSet(int const* values, char const* const* name
 
 CharacterSetECI* CharacterSetECI::getCharacterSetECIByValue(int value) {
   if (value < 0 || value >= 900) {
-    std::ostringstream oss;
-    oss << "Bad ECI value: " << value;
-    throw IllegalArgumentException(oss.str().c_str());
+    throw FormatException();
   }
   return VALUE_TO_ECI[value];
 }

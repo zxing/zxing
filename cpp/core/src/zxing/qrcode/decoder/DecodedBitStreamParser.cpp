@@ -275,6 +275,9 @@ void DecodedBitStreamParser::decodeAlphanumericSegment(Ref<BitSource> bits_,
   ostringstream bytes;
   // Read two characters at a time
   while (count > 1) {
+    if (bits.available() < 11) {
+      throw FormatException();
+    }
     int nextTwoCharsBits = bits.readBits(11);
     bytes << toAlphaNumericChar(nextTwoCharsBits / 45);
     bytes << toAlphaNumericChar(nextTwoCharsBits % 45);
@@ -324,7 +327,7 @@ namespace {
       int secondThirdBytes = bits.readBits(16);
       return ((firstByte & 0x1F) << 16) | secondThirdBytes;
     }
-    throw IllegalArgumentException("Bad ECI bits starting with byte " + firstByte);
+    throw FormatException();
   }
 }
 
