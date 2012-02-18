@@ -1003,3 +1003,78 @@ Processing: ../core/test/data/blackbox/qrcode-6/7.png ... passed.
 Processing: ../core/test/data/blackbox/qrcode-6/8.png ... passed.
 Processing: ../core/test/data/blackbox/qrcode-6/9.png ... passed.
 ***** qrcode-6 finished - 15 of 15 passed **** ***** ******* ***** *********************
+Processing: ../core/test/data/blackbox/aztec-1/7.png ... passed.
+Processing: ../core/test/data/blackbox/aztec-1/Historico.gif ... passed.
+Processing: ../core/test/data/blackbox/aztec-1/HistoricoLong.gif ... passed.
+Processing: ../core/test/data/blackbox/aztec-1/abc-19x19C.png ... passed.
+Processing: ../core/test/data/blackbox/aztec-1/abc-37x37.png ... passed.
+Processing: ../core/test/data/blackbox/aztec-1/lorem-075x075.png ... passed.
+Processing: ../core/test/data/blackbox/aztec-1/lorem-105x105.png ... passed.
+Processing: ../core/test/data/blackbox/aztec-1/lorem-151x151.png ... passed.
+Processing: ../core/test/data/blackbox/aztec-1/tableShifts.png ... passed.
+Processing: ../core/test/data/blackbox/aztec-1/tag.png ... passed.
+Processing: ../core/test/data/blackbox/aztec-1/texte.png ... passed.
+***** aztec-1 finished - 11 of 11 passed **** ***** ******* ***** *********************
+Processing: ../core/test/data/blackbox/aztec-2/01.png ... FAILED
+   Expected: This is a real world Aztec barcode test.
+   Detected: zxing::ReaderException: No code detected
+Processing: ../core/test/data/blackbox/aztec-2/02.png ... passed.
+Processing: ../core/test/data/blackbox/aztec-2/03.png ... FAILED
+   Expected: This is a real world Aztec barcode test.
+   Detected: zxing::ReaderException: No code detected
+Processing: ../core/test/data/blackbox/aztec-2/04.png ... FAILED
+   Expected: This is a real world Aztec barcode test.
+   Detected: zxing::ReaderException: No code detected
+Processing: ../core/test/data/blackbox/aztec-2/05.png ... FAILED
+   Expected: This is a real world Aztec barcode test.
+   Detected: zxing::ReaderException: No code detected
+Processing: ../core/test/data/blackbox/aztec-2/06.png ... FAILED
+   Expected: This is a real world Aztec barcode test.
+   Detected: zxing::ReaderException: No code detected
+Processing: ../core/test/data/blackbox/aztec-2/07.png ... FAILED
+   Expected: This is a real world Aztec barcode test.
+   Detected: zxing::ReaderException: No code detected
+Processing: ../core/test/data/blackbox/aztec-2/08.png ... FAILED
+   Expected: This is a real world Aztec barcode test.
+   Detected: zxing::ReaderException: No code detected
+Processing: ../core/test/data/blackbox/aztec-2/09.png ... FAILED
+   Expected: mailto:zxing@googlegroups.com
+   Detected: zxing::IllegalArgumentException: Invalid position (ReedSolomonDecoder)
+Processing: ../core/test/data/blackbox/aztec-2/10.png ... FAILED
+   Expected: mailto:zxing@googlegroups.com
+   Detected: zxing::ReaderException: No code detected
+Processing: ../core/test/data/blackbox/aztec-2/11.png ... FAILED
+   Expected: mailto:zxing@googlegroups.com
+   Detected: zxing::IllegalArgumentException: Invalid position (ReedSolomonDecoder)
+Processing: ../core/test/data/blackbox/aztec-2/12.png ... FAILED
+   Expected: mailto:zxing@googlegroups.com
+   Detected: zxing::ReaderException: No code detected
+Processing: ../core/test/data/blackbox/aztec-2/13.png ... FAILED
+   Expected: mailto:zxing@googlegroups.com
+   Detected: zxing::ReaderException: No code detected
+Processing: ../core/test/data/blackbox/aztec-2/14.png ... FAILED
+   Expected: mailto:zxing@googlegroups.com
+   Detected: zxing::ReaderException: No code detected
+Processing: ../core/test/data/blackbox/aztec-2/15.png ... FAILED
+   Expected: mailto:zxing@googlegroups.com
+   Detected: zxing::ReaderException: No code detected
+Processing: ../core/test/data/blackbox/aztec-2/16.png ... FAILED
+   Expected: http://code.google.com/p/zxing/source/browse/trunk/android/src/com/google/zxing/client/android/result/URIResultHandler.java
+   Detected: zxing::ReaderException: No code detected
+Processing: ../core/test/data/blackbox/aztec-2/17.png ... FAILED
+   Expected: http://code.google.com/p/zxing/source/browse/trunk/android/src/com/google/zxing/client/android/result/URIResultHandler.java
+   Detected: zxing::ReaderException: No code detected
+Processing: ../core/test/data/blackbox/aztec-2/18.png ... passed.
+Processing: ../core/test/data/blackbox/aztec-2/19.png ... FAILED
+   Expected: http://code.google.com/p/zxing/source/browse/trunk/android/src/com/google/zxing/client/android/result/URIResultHandler.java
+   Detected: zxing::ReaderException: No code detected
+Processing: ../core/test/data/blackbox/aztec-2/20.png ... FAILED
+   Expected: http://code.google.com/p/zxing/source/browse/trunk/android/src/com/google/zxing/client/android/result/URIResultHandler.java
+   Detected: zxing::ReaderException: No code detected
+Processing: ../core/test/data/blackbox/aztec-2/21.png ... FAILED
+   Expected: http://code.google.com/p/zxing/source/browse/trunk/android/src/com/google/zxing/client/android/result/URIResultHandler.java
+   Detected: zxing::ReaderException: No code detected
+Processing: ../core/test/data/blackbox/aztec-2/22.png ... FAILED
+   Expected: http://code.google.com/p/zxing/source/browse/trunk/android/src/com/google/zxing/client/android/result/URIResultHandler.java
+   Detected: zxing::ReaderException: No code detected
+***** aztec-2 finished - 2 of 22 passed **** ***** ******* ***** *********************

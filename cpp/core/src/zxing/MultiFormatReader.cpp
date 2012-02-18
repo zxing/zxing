@@ -22,6 +22,7 @@
 #include <zxing/MultiFormatReader.h>
 #include <zxing/qrcode/QRCodeReader.h>
 #include <zxing/datamatrix/DataMatrixReader.h>
+#include <zxing/aztec/AztecReader.h>
 #include <zxing/oned/MultiFormatUPCEANReader.h>
 #include <zxing/oned/MultiFormatOneDReader.h>
 #include <zxing/ReaderException.h>
@@ -69,6 +70,9 @@ namespace zxing {
     }
     if (hints.containsFormat(BarcodeFormat_DATA_MATRIX)) {
       readers_.push_back(Ref<Reader>(new zxing::datamatrix::DataMatrixReader()));
+    }
+    if (hints.containsFormat(BarcodeFormat_AZTEC)) {
+      readers_.push_back(Ref<Reader>(new zxing::aztec::AztecReader()));
     }
     //TODO: add PDF417 here once PDF417 reader is implemented
     if (addOneDReader && tryHarder) {

@@ -232,7 +232,7 @@ Ref<DetectorResult> Detector::detect() {
   points[1].reset(bottomLeft);
   points[2].reset(correctedTopRight);
   points[3].reset(bottomRight);
-  Ref<DetectorResult> detectorResult(new DetectorResult(bits, points, transform));
+  Ref<DetectorResult> detectorResult(new DetectorResult(bits, points));
   return detectorResult;
 }
 

@@ -1,10 +1,10 @@
 // -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
 /*
- *  DetectorResult.cpp
+ *  AtztecDetecorResult.h
  *  zxing
  *
- *  Created by Christian Brunschen on 14/05/2008.
- *  Copyright 2008 ZXing authors All rights reserved.
+ *  Created by Lukas Stabe on 08/02/2012.
+ *  Copyright 2012 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,18 +21,22 @@
 
 #include <zxing/common/DetectorResult.h>
 
+#ifndef ZXingWidget_AtztecDetecorResult_h
+#define ZXingWidget_AtztecDetecorResult_h
+
 namespace zxing {
-
-DetectorResult::DetectorResult(Ref<BitMatrix> bits, std::vector<Ref<ResultPoint> > points) :
-  bits_(bits), points_(points) {
+    namespace aztec {
+        class AztecDetectorResult : public DetectorResult {
+        private:
+            bool compact_;
+            int nbDatablocks_, nbLayers_;
+        public:
+            AztecDetectorResult(Ref<BitMatrix> bits, std::vector<Ref<ResultPoint> > points, bool compact, int nbDatablocks, int nbLayers);
+            bool isCompact();
+            int getNBDatablocks();
+            int getNBLayers();
+        };
+    }
 }
 
-Ref<BitMatrix> DetectorResult::getBits() {
-  return bits_;
-}
-
-std::vector<Ref<ResultPoint> > DetectorResult::getPoints() {
-  return points_;
-}
-
-}
+#endif

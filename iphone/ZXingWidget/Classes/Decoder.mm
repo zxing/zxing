@@ -1,11 +1,6 @@
-//
-//  Decoder.m
-//  ZXing
-//
-//  Created by Christian Brunschen on 31/03/2008.
-//
+// -*- Mode: ObjC; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*-
 /*
- * Copyright 2008 ZXing authors
+ * Copyright 2008-2012 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +31,7 @@ class ZXingWidgetControllerCallback : public zxing::ResultPointCallback {
 private:
   Decoder* decoder;
 public:
-  ZXingWidgetControllerCallback(Decoder* _decoder) : decoder(_decoder) {}
+ZXingWidgetControllerCallback(Decoder* _decoder) : decoder(_decoder) {}
   void foundPossibleResultPoint(ResultPoint const& result) {
     CGPoint point;
     point.x = result.getX();
@@ -89,7 +84,7 @@ public:
   CGSize size = [image size];
 #ifdef DEBUG
   NSLog(@"decoding: image is (%.1f x %.1f), cropRect is (%.1f,%.1f)x(%.1f,%.1f)", size.width, size.height,
-      cropRect.origin.x, cropRect.origin.y, cropRect.size.width, cropRect.size.height);
+        cropRect.origin.x, cropRect.origin.y, cropRect.size.width, cropRect.size.height);
 #endif
   float scale = fminf(1.0f, fmaxf(SUBSET_SIZE / cropRect.size.width, SUBSET_SIZE / cropRect.size.height));
   CGPoint offset = CGPointMake(-cropRect.origin.x, -cropRect.origin.y);
@@ -113,9 +108,9 @@ public:
   CGColorSpaceRef grayColorSpace = CGColorSpaceCreateDeviceGray();
   
   CGContextRef ctx = 
-  CGBitmapContextCreate(subsetData, subsetWidth, subsetHeight, 
-              8, subsetBytesPerRow, grayColorSpace, 
-              kCGImageAlphaNone);
+    CGBitmapContextCreate(subsetData, subsetWidth, subsetHeight, 
+                          8, subsetBytesPerRow, grayColorSpace, 
+                          kCGImageAlphaNone);
   CGColorSpaceRelease(grayColorSpace);
   CGContextSetInterpolationQuality(ctx, kCGInterpolationNone);
   CGContextSetAllowsAntialiasing(ctx, false);
@@ -165,7 +160,7 @@ public:
     //NSSet *formatReaders = [FormatReader formatReaders];
     NSSet *formatReaders = self.readers;
     Ref<LuminanceSource> source 
-        (new GreyscaleLuminanceSource(subsetData, subsetBytesPerRow, subsetHeight, 0, 0, subsetWidth, subsetHeight));
+      (new GreyscaleLuminanceSource(subsetData, subsetBytesPerRow, subsetHeight, 0, 0, subsetWidth, subsetHeight));
 
     Ref<Binarizer> binarizer (new HybridBinarizer(source));
     source = 0;
@@ -185,15 +180,15 @@ public:
         NSMutableArray *points = nil;
         NSString *resultString = nil;
         try {
-  #ifdef DEBUG
+#ifdef DEBUG
           NSLog(@"decoding gray image");
-  #endif  
+#endif  
           ResultPointCallback* callback_pointer(new ZXingWidgetControllerCallback(self));
           Ref<ResultPointCallback> callback(callback_pointer);
           Ref<Result> result([reader decode:grayImage andCallback:callback]);
-  #ifdef DEBUG
+#ifdef DEBUG
           NSLog(@"gray image decoded");
-  #endif
+#endif
           
           Ref<String> resultText(result->getText());
           const char *cString = resultText->getText().c_str();
@@ -212,12 +207,12 @@ public:
         } catch (ReaderException &rex) {
 #ifdef DEBUG
           NSLog(@"failed to decode, caught ReaderException '%s'",
-              rex.what());
+                rex.what());
 #endif
         } catch (IllegalArgumentException &iex) {
 #ifdef DEBUG
           NSLog(@"failed to decode, caught IllegalArgumentException '%s'", 
-              iex.what());
+                iex.what());
 #endif
         } catch (...) {
           NSLog(@"Caught unknown exception!");
@@ -240,24 +235,24 @@ public:
     }
 #endif
 	  
-	free(subsetData);
-	self.subsetData = NULL;
+    free(subsetData);
+    self.subsetData = NULL;
 	  
-        // DONT COMMIT
-        // [decoderResult release];
-        // decoderResult = nil;
+    // DONT COMMIT
+    // [decoderResult release];
+    // decoderResult = nil;
         
 
     if (decoderResult) {
       [self performSelectorOnMainThread:@selector(didDecodeImage:)
-                   withObject:[decoderResult copy]
-                waitUntilDone:NO];
+                             withObject:[decoderResult copy]
+                          waitUntilDone:NO];
       [decoderResult release];
       returnCode = YES;
     } else {
       [self performSelectorOnMainThread:@selector(failedToDecodeImage:)
-                   withObject:NSLocalizedString(@"Decoder BarcodeDetectionFailure", @"No barcode detected.")
-                waitUntilDone:NO];
+                             withObject:NSLocalizedString(@"Decoder BarcodeDetectionFailure", @"No barcode detected.")
+                          waitUntilDone:NO];
     }
   }
   

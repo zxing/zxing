@@ -106,7 +106,7 @@ Ref<DetectorResult> Detector::processFinderPatternInfo(Ref<FinderPatternInfo> in
     points[3].reset(alignmentPattern);
   }
 
-  Ref<DetectorResult> result(new DetectorResult(bits, points, transform));
+            Ref<DetectorResult> result(new DetectorResult(bits, points));
   return result;
 }
 

@@ -30,7 +30,8 @@ const char *barcodeFormatNames[] = {
     "EAN_13",
     "CODE_128",
     "CODE_39",
-    "ITF"
+    "ITF",
+    "AZTEC"
 };
 
 }

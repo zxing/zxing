@@ -33,7 +33,7 @@ namespace qrcode {
 using namespace std;
 
 Decoder::Decoder() :
-    rsDecoder_(GF256::QR_CODE_FIELD) {
+    rsDecoder_(GenericGF::QR_CODE_FIELD_256) {
 }
 
 void Decoder::correctErrors(ArrayRef<unsigned char> codewordBytes, int numDataCodewords) {

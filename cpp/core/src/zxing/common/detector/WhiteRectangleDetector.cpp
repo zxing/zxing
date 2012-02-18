@@ -33,6 +33,30 @@ int WhiteRectangleDetector::CORR = 1;
 WhiteRectangleDetector::WhiteRectangleDetector(Ref<BitMatrix> image) : image_(image) {
   width_ = image->getWidth();
   height_ = image->getHeight();
+  
+  leftInit_ = (width_ - INIT_SIZE) >> 1;
+  rightInit_ = (width_ + INIT_SIZE) >> 1;
+  upInit_ = (height_ - INIT_SIZE) >> 1;
+  downInit_ = (height_ + INIT_SIZE) >> 1;
+  
+  if (upInit_ < 0 || leftInit_ < 0 || downInit_ >= height_ || rightInit_ >= width_) {
+    throw NotFoundException("Invalid dimensions WhiteRectangleDetector");
+}
+}
+
+WhiteRectangleDetector::WhiteRectangleDetector(Ref<BitMatrix> image, int initSize, int x, int y) : image_(image) {
+  width_ = image->getWidth();
+  height_ = image->getHeight();
+  
+  int halfsize = initSize >> 1;
+  leftInit_ = x - halfsize;
+  rightInit_ = x + halfsize;
+  upInit_ = y - halfsize;
+  downInit_ = y + halfsize;
+  
+  if (upInit_ < 0 || leftInit_ < 0 || downInit_ >= height_ || rightInit_ >= width_) {
+    throw NotFoundException("Invalid dimensions WhiteRectangleDetector");
+  }
 }
 
 /**
@@ -50,13 +74,10 @@ WhiteRectangleDetector::WhiteRectangleDetector(Ref<BitMatrix> image) : image_(im
  * @throws NotFoundException if no Data Matrix Code can be found
 */
 std::vector<Ref<ResultPoint> > WhiteRectangleDetector::detect() {
-  int left = (width_ - INIT_SIZE) >> 1;
-  int right = (width_ + INIT_SIZE) >> 1;
-  int up = (height_ - INIT_SIZE) >> 1;
-  int down = (height_ + INIT_SIZE) >> 1;
-  if (up < 0 || left < 0 || down >= height_ || right >= width_) {
-    throw NotFoundException("Invalid dimensions WhiteRectangleDetector");
-  }
+  int left = leftInit_;
+  int right = rightInit_;
+  int up = upInit_;
+  int down = downInit_;
 
   bool sizeExceeded = false;
   bool aBlackPointFoundOnBorder = true;

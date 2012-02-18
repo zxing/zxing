@@ -122,12 +122,24 @@
 		3B117EF1145B220A0035037B /* MonochromeRectangleDetector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B117EEF145B220A0035037B /* MonochromeRectangleDetector.cpp */; };
 		3B117EF2145B220A0035037B /* WhiteRectangleDetector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B117EF0145B220A0035037B /* WhiteRectangleDetector.cpp */; };
 		3B117EF5145B221D0035037B /* NotFoundException.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B117EF4145B221D0035037B /* NotFoundException.cpp */; };
+		3B248F7D14EF3A660065F0DA /* GenericGF.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B248F7914EF3A660065F0DA /* GenericGF.cpp */; };
+		3B248F7E14EF3A660065F0DA /* GenericGF.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B248F7A14EF3A660065F0DA /* GenericGF.h */; };
+		3B248F7F14EF3A660065F0DA /* GenericGFPoly.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B248F7B14EF3A660065F0DA /* GenericGFPoly.cpp */; };
+		3B248F8014EF3A660065F0DA /* GenericGFPoly.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B248F7C14EF3A660065F0DA /* GenericGFPoly.h */; };
+		3B248F8E14EF3A980065F0DA /* AztecDetectorResult.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B248F8414EF3A980065F0DA /* AztecDetectorResult.cpp */; };
+		3B248F8F14EF3A980065F0DA /* AztecDetectorResult.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B248F8514EF3A980065F0DA /* AztecDetectorResult.h */; };
+		3B248F9014EF3A980065F0DA /* AztecReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B248F8614EF3A980065F0DA /* AztecReader.cpp */; };
+		3B248F9114EF3A980065F0DA /* AztecReader.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B248F8714EF3A980065F0DA /* AztecReader.h */; };
+		3B248F9214EF3A980065F0DA /* Decoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B248F8914EF3A980065F0DA /* Decoder.cpp */; };
+		3B248F9314EF3A980065F0DA /* Decoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B248F8A14EF3A980065F0DA /* Decoder.h */; };
+		3B248F9414EF3A980065F0DA /* Detector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B248F8C14EF3A980065F0DA /* Detector.cpp */; };
+		3B248F9514EF3A980065F0DA /* Detector.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B248F8D14EF3A980065F0DA /* Detector.h */; };
+		3B248F9814EF3AF80065F0DA /* AztecReader.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B248F9614EF3AF80065F0DA /* AztecReader.h */; };
+		3B248F9914EF3AF80065F0DA /* AztecReader.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3B248F9714EF3AF80065F0DA /* AztecReader.mm */; };
 		3B27C5D8144735CE005157C4 /* FormatException.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B27C5D6144735CE005157C4 /* FormatException.cpp */; };
 		3B27C5D9144735CE005157C4 /* FormatException.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B27C5D7144735CE005157C4 /* FormatException.h */; };
 		3B27C5E1144735E6005157C4 /* CharacterSetECI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B27C5DB144735E6005157C4 /* CharacterSetECI.cpp */; };
 		3B27C5E2144735E6005157C4 /* CharacterSetECI.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B27C5DC144735E6005157C4 /* CharacterSetECI.h */; };
-		3B27C5E3144735E6005157C4 /* ECI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B27C5DD144735E6005157C4 /* ECI.cpp */; };
-		3B27C5E4144735E6005157C4 /* ECI.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B27C5DE144735E6005157C4 /* ECI.h */; };
 		3B27C5E5144735E6005157C4 /* StringUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B27C5DF144735E6005157C4 /* StringUtils.cpp */; };
 		3B27C5E6144735E6005157C4 /* StringUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B27C5E0144735E6005157C4 /* StringUtils.h */; };
 		3B72D96F12130EF6007CEF32 /* ResultPointCallback.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B72D96D12130EF6007CEF32 /* ResultPointCallback.cpp */; };
@@ -173,10 +185,6 @@
 		E534596111987396000CB77F /* PerspectiveTransform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E53458D411987396000CB77F /* PerspectiveTransform.cpp */; };
 		E534596211987396000CB77F /* PerspectiveTransform.h in Headers */ = {isa = PBXBuildFile; fileRef = E53458D511987396000CB77F /* PerspectiveTransform.h */; };
 		E534596311987396000CB77F /* Point.h in Headers */ = {isa = PBXBuildFile; fileRef = E53458D611987396000CB77F /* Point.h */; };
-		E534596411987396000CB77F /* GF256.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E53458D811987396000CB77F /* GF256.cpp */; };
-		E534596511987396000CB77F /* GF256.h in Headers */ = {isa = PBXBuildFile; fileRef = E53458D911987396000CB77F /* GF256.h */; };
-		E534596611987396000CB77F /* GF256Poly.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E53458DA11987396000CB77F /* GF256Poly.cpp */; };
-		E534596711987396000CB77F /* GF256Poly.h in Headers */ = {isa = PBXBuildFile; fileRef = E53458DB11987396000CB77F /* GF256Poly.h */; };
 		E534596811987396000CB77F /* ReedSolomonDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E53458DC11987396000CB77F /* ReedSolomonDecoder.cpp */; };
 		E534596911987396000CB77F /* ReedSolomonDecoder.h in Headers */ = {isa = PBXBuildFile; fileRef = E53458DD11987396000CB77F /* ReedSolomonDecoder.h */; };
 		E534596A11987396000CB77F /* ReedSolomonException.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E53458DE11987396000CB77F /* ReedSolomonException.cpp */; };
@@ -404,12 +412,24 @@
 		3B117EEF145B220A0035037B /* MonochromeRectangleDetector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MonochromeRectangleDetector.cpp; path = detector/MonochromeRectangleDetector.cpp; sourceTree = "<group>"; };
 		3B117EF0145B220A0035037B /* WhiteRectangleDetector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = WhiteRectangleDetector.cpp; path = detector/WhiteRectangleDetector.cpp; sourceTree = "<group>"; };
 		3B117EF4145B221D0035037B /* NotFoundException.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NotFoundException.cpp; sourceTree = "<group>"; };
+		3B248F7914EF3A660065F0DA /* GenericGF.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GenericGF.cpp; sourceTree = "<group>"; };
+		3B248F7A14EF3A660065F0DA /* GenericGF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GenericGF.h; sourceTree = "<group>"; };
+		3B248F7B14EF3A660065F0DA /* GenericGFPoly.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GenericGFPoly.cpp; sourceTree = "<group>"; };
+		3B248F7C14EF3A660065F0DA /* GenericGFPoly.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GenericGFPoly.h; sourceTree = "<group>"; };
+		3B248F8414EF3A980065F0DA /* AztecDetectorResult.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AztecDetectorResult.cpp; sourceTree = "<group>"; };
+		3B248F8514EF3A980065F0DA /* AztecDetectorResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AztecDetectorResult.h; sourceTree = "<group>"; };
+		3B248F8614EF3A980065F0DA /* AztecReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AztecReader.cpp; sourceTree = "<group>"; };
+		3B248F8714EF3A980065F0DA /* AztecReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AztecReader.h; sourceTree = "<group>"; };
+		3B248F8914EF3A980065F0DA /* Decoder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Decoder.cpp; sourceTree = "<group>"; };
+		3B248F8A14EF3A980065F0DA /* Decoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Decoder.h; sourceTree = "<group>"; };
+		3B248F8C14EF3A980065F0DA /* Detector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Detector.cpp; sourceTree = "<group>"; };
+		3B248F8D14EF3A980065F0DA /* Detector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Detector.h; sourceTree = "<group>"; };
+		3B248F9614EF3AF80065F0DA /* AztecReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AztecReader.h; path = Classes/AztecReader.h; sourceTree = "<group>"; };
+		3B248F9714EF3AF80065F0DA /* AztecReader.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AztecReader.mm; path = Classes/AztecReader.mm; sourceTree = "<group>"; };
 		3B27C5D6144735CE005157C4 /* FormatException.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FormatException.cpp; sourceTree = "<group>"; };
 		3B27C5D7144735CE005157C4 /* FormatException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FormatException.h; sourceTree = "<group>"; };
 		3B27C5DB144735E6005157C4 /* CharacterSetECI.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CharacterSetECI.cpp; sourceTree = "<group>"; };
 		3B27C5DC144735E6005157C4 /* CharacterSetECI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CharacterSetECI.h; sourceTree = "<group>"; };
-		3B27C5DD144735E6005157C4 /* ECI.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ECI.cpp; sourceTree = "<group>"; };
-		3B27C5DE144735E6005157C4 /* ECI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECI.h; sourceTree = "<group>"; };
 		3B27C5DF144735E6005157C4 /* StringUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StringUtils.cpp; sourceTree = "<group>"; };
 		3B27C5E0144735E6005157C4 /* StringUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StringUtils.h; sourceTree = "<group>"; };
 		3B72D96D12130EF6007CEF32 /* ResultPointCallback.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ResultPointCallback.cpp; sourceTree = "<group>"; };
@@ -456,10 +476,6 @@
 		E53458D411987396000CB77F /* PerspectiveTransform.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PerspectiveTransform.cpp; sourceTree = "<group>"; };
 		E53458D511987396000CB77F /* PerspectiveTransform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PerspectiveTransform.h; sourceTree = "<group>"; };
 		E53458D611987396000CB77F /* Point.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Point.h; sourceTree = "<group>"; };
-		E53458D811987396000CB77F /* GF256.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GF256.cpp; sourceTree = "<group>"; };
-		E53458D911987396000CB77F /* GF256.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GF256.h; sourceTree = "<group>"; };
-		E53458DA11987396000CB77F /* GF256Poly.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GF256Poly.cpp; sourceTree = "<group>"; };
-		E53458DB11987396000CB77F /* GF256Poly.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GF256Poly.h; sourceTree = "<group>"; };
 		E53458DC11987396000CB77F /* ReedSolomonDecoder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ReedSolomonDecoder.cpp; sourceTree = "<group>"; };
 		E53458DD11987396000CB77F /* ReedSolomonDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReedSolomonDecoder.h; sourceTree = "<group>"; };
 		E53458DE11987396000CB77F /* ReedSolomonException.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ReedSolomonException.cpp; sourceTree = "<group>"; };
@@ -630,6 +646,8 @@
 		08FB77AEFE84172EC02AAC07 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				3B248F9614EF3AF80065F0DA /* AztecReader.h */,
+				3B248F9714EF3AF80065F0DA /* AztecReader.mm */,
 				1D603E6213E20AF1006F4B51 /* ArrayAndStringCategories.h */,
 				1D603E6313E20AF1006F4B51 /* ArrayAndStringCategories.m */,
 				1DFA090A13CE1A3900599044 /* CBarcodeFormat.h */,
@@ -685,6 +703,37 @@
 			name = "Other Sources";
 			sourceTree = "<group>";
 		};
+		3B248F8314EF3A980065F0DA /* aztec */ = {
+			isa = PBXGroup;
+			children = (
+				3B248F8414EF3A980065F0DA /* AztecDetectorResult.cpp */,
+				3B248F8514EF3A980065F0DA /* AztecDetectorResult.h */,
+				3B248F8614EF3A980065F0DA /* AztecReader.cpp */,
+				3B248F8714EF3A980065F0DA /* AztecReader.h */,
+				3B248F8814EF3A980065F0DA /* decoder */,
+				3B248F8B14EF3A980065F0DA /* detector */,
+			);
+			path = aztec;
+			sourceTree = "<group>";
+		};
+		3B248F8814EF3A980065F0DA /* decoder */ = {
+			isa = PBXGroup;
+			children = (
+				3B248F8914EF3A980065F0DA /* Decoder.cpp */,
+				3B248F8A14EF3A980065F0DA /* Decoder.h */,
+			);
+			path = decoder;
+			sourceTree = "<group>";
+		};
+		3B248F8B14EF3A980065F0DA /* detector */ = {
+			isa = PBXGroup;
+			children = (
+				3B248F8C14EF3A980065F0DA /* Detector.cpp */,
+				3B248F8D14EF3A980065F0DA /* Detector.h */,
+			);
+			path = detector;
+			sourceTree = "<group>";
+		};
 		E53458B311987396000CB77F /* CoreSrc */ = {
 			isa = PBXGroup;
 			children = (
@@ -697,6 +746,7 @@
 		E53458B411987396000CB77F /* zxing */ = {
 			isa = PBXGroup;
 			children = (
+				3B248F8314EF3A980065F0DA /* aztec */,
 				3B117EF4145B221D0035037B /* NotFoundException.cpp */,
 				3B27C5D6144735CE005157C4 /* FormatException.cpp */,
 				3B27C5D7144735CE005157C4 /* FormatException.h */,
@@ -739,8 +789,6 @@
 				3B117EF0145B220A0035037B /* WhiteRectangleDetector.cpp */,
 				3B27C5DB144735E6005157C4 /* CharacterSetECI.cpp */,
 				3B27C5DC144735E6005157C4 /* CharacterSetECI.h */,
-				3B27C5DD144735E6005157C4 /* ECI.cpp */,
-				3B27C5DE144735E6005157C4 /* ECI.h */,
 				3B27C5DF144735E6005157C4 /* StringUtils.cpp */,
 				3B27C5E0144735E6005157C4 /* StringUtils.h */,
 				3B81AAF6120F0A7E0022E5D4 /* GreyscaleRotatedLuminanceSource.cpp */,
@@ -784,10 +832,10 @@
 		E53458D711987396000CB77F /* reedsolomon */ = {
 			isa = PBXGroup;
 			children = (
-				E53458D811987396000CB77F /* GF256.cpp */,
-				E53458D911987396000CB77F /* GF256.h */,
-				E53458DA11987396000CB77F /* GF256Poly.cpp */,
-				E53458DB11987396000CB77F /* GF256Poly.h */,
+				3B248F7914EF3A660065F0DA /* GenericGF.cpp */,
+				3B248F7A14EF3A660065F0DA /* GenericGF.h */,
+				3B248F7B14EF3A660065F0DA /* GenericGFPoly.cpp */,
+				3B248F7C14EF3A660065F0DA /* GenericGFPoly.h */,
 				E53458DC11987396000CB77F /* ReedSolomonDecoder.cpp */,
 				E53458DD11987396000CB77F /* ReedSolomonDecoder.h */,
 				E53458DE11987396000CB77F /* ReedSolomonException.cpp */,
@@ -1051,8 +1099,6 @@
 				E534595E11987396000CB77F /* IllegalArgumentException.h in Headers */,
 				E534596211987396000CB77F /* PerspectiveTransform.h in Headers */,
 				E534596311987396000CB77F /* Point.h in Headers */,
-				E534596511987396000CB77F /* GF256.h in Headers */,
-				E534596711987396000CB77F /* GF256Poly.h in Headers */,
 				E534596911987396000CB77F /* ReedSolomonDecoder.h in Headers */,
 				E534596B11987396000CB77F /* ReedSolomonException.h in Headers */,
 				E534596D11987396000CB77F /* Str.h in Headers */,
@@ -1157,8 +1203,14 @@
 				1D60412313E36C2D006F4B51 /* ISBNParsedResult.h in Headers */,
 				3B27C5D9144735CE005157C4 /* FormatException.h in Headers */,
 				3B27C5E2144735E6005157C4 /* CharacterSetECI.h in Headers */,
-				3B27C5E4144735E6005157C4 /* ECI.h in Headers */,
 				3B27C5E6144735E6005157C4 /* StringUtils.h in Headers */,
+				3B248F7E14EF3A660065F0DA /* GenericGF.h in Headers */,
+				3B248F8014EF3A660065F0DA /* GenericGFPoly.h in Headers */,
+				3B248F8F14EF3A980065F0DA /* AztecDetectorResult.h in Headers */,
+				3B248F9114EF3A980065F0DA /* AztecReader.h in Headers */,
+				3B248F9314EF3A980065F0DA /* Decoder.h in Headers */,
+				3B248F9514EF3A980065F0DA /* Detector.h in Headers */,
+				3B248F9814EF3AF80065F0DA /* AztecReader.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1291,8 +1343,6 @@
 				E534595B11987396000CB77F /* GridSampler.cpp in Sources */,
 				E534595D11987396000CB77F /* IllegalArgumentException.cpp in Sources */,
 				E534596111987396000CB77F /* PerspectiveTransform.cpp in Sources */,
-				E534596411987396000CB77F /* GF256.cpp in Sources */,
-				E534596611987396000CB77F /* GF256Poly.cpp in Sources */,
 				E534596811987396000CB77F /* ReedSolomonDecoder.cpp in Sources */,
 				E534596A11987396000CB77F /* ReedSolomonException.cpp in Sources */,
 				E534596C11987396000CB77F /* Str.cpp in Sources */,
@@ -1397,11 +1447,17 @@
 				1D60412413E36C2D006F4B51 /* ISBNParsedResult.m in Sources */,
 				3B27C5D8144735CE005157C4 /* FormatException.cpp in Sources */,
 				3B27C5E1144735E6005157C4 /* CharacterSetECI.cpp in Sources */,
-				3B27C5E3144735E6005157C4 /* ECI.cpp in Sources */,
 				3B27C5E5144735E6005157C4 /* StringUtils.cpp in Sources */,
 				3B117EF1145B220A0035037B /* MonochromeRectangleDetector.cpp in Sources */,
 				3B117EF2145B220A0035037B /* WhiteRectangleDetector.cpp in Sources */,
 				3B117EF5145B221D0035037B /* NotFoundException.cpp in Sources */,
+				3B248F7D14EF3A660065F0DA /* GenericGF.cpp in Sources */,
+				3B248F7F14EF3A660065F0DA /* GenericGFPoly.cpp in Sources */,
+				3B248F8E14EF3A980065F0DA /* AztecDetectorResult.cpp in Sources */,
+				3B248F9014EF3A980065F0DA /* AztecReader.cpp in Sources */,
+				3B248F9214EF3A980065F0DA /* Decoder.cpp in Sources */,
+				3B248F9414EF3A980065F0DA /* Detector.cpp in Sources */,
+				3B248F9914EF3AF80065F0DA /* AztecReader.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1426,9 +1482,9 @@
 					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
 					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
 				);
-				"GCC_THUMB_SUPPORT[arch=armv6]" = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				"GCC_THUMB_SUPPORT[arch=armv6]" = NO;
 				INFOPLIST_FILE = "ZXingTests-Info.plist";
 				OTHER_LDFLAGS = (
 					"-framework",
@@ -1453,8 +1509,8 @@
 					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
 					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
 				);
-				"GCC_THUMB_SUPPORT[arch=armv6]" = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				"GCC_THUMB_SUPPORT[arch=armv6]" = NO;
 				INFOPLIST_FILE = "ZXingTests-Info.plist";
 				OTHER_LDFLAGS = (
 					"-framework",
@@ -1477,12 +1533,12 @@
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = YES;
 				EXPORTED_SYMBOLS_FILE = exportList;
-				"GCC_THUMB_SUPPORT[arch=armv6]" = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = ZXingWidget_Prefix.pch;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				"GCC_THUMB_SUPPORT[arch=armv6]" = NO;
 				HEADER_SEARCH_PATHS = ../../cpp/core/src;
 				INSTALL_PATH = /usr/local/lib;
 				LD_GENERATE_MAP_FILE = YES;
@@ -1503,11 +1559,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				"GCC_THUMB_SUPPORT[arch=armv6]" = NO;
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = ZXingWidget_Prefix.pch;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				"GCC_THUMB_SUPPORT[arch=armv6]" = NO;
 				HEADER_SEARCH_PATHS = ../../cpp/core/src;
 				INSTALL_PATH = /usr/local/lib;
 				PRODUCT_NAME = ZXingWidget;
@@ -1523,9 +1579,9 @@
 					armv6,
 					armv7,
 				);
-				"GCC_THUMB_SUPPORT[arch=armv6]" = NO;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				"GCC_THUMB_SUPPORT[arch=armv6]" = NO;
 				GCC_VERSION = "";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
@@ -1551,8 +1607,8 @@
 					armv6,
 					armv7,
 				);
-				"GCC_THUMB_SUPPORT[arch=armv6]" = NO;
 				GCC_C_LANGUAGE_STANDARD = c99;
+				"GCC_THUMB_SUPPORT[arch=armv6]" = NO;
 				GCC_VERSION = "";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
