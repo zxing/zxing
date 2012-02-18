@@ -5,7 +5,7 @@ blackboxpath="../core/test/data/blackbox"
 if [ "$*" != "" ]; then
 	formats="$*"
 else
-	formats="ean13 ean8 upce upca qrcode"
+	formats="ean13 ean8 upce upca qrcode aztec"
 fi
 
 passed=0;

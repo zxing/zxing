@@ -38,9 +38,14 @@ class WhiteRectangleDetector : public Counted {
     Ref<BitMatrix> image_;
     int width_;
     int height_;
+    int leftInit_;
+    int rightInit_;
+    int downInit_;
+    int upInit_;
 
   public:
     WhiteRectangleDetector(Ref<BitMatrix> image);
+    WhiteRectangleDetector(Ref<BitMatrix> image, int initSize, int x, int y);
     std::vector<Ref<ResultPoint> > detect();
 
   private: 

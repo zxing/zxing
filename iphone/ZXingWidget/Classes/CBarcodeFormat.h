@@ -1,3 +1,5 @@
+// -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*-
+
 #ifndef __CBARCODE_FORMAT_H__
 #define __CBARCODE_FORMAT_H__
 
@@ -22,16 +24,17 @@
 
 // This must remain parallel to zxing::BarcodeFormat.
 typedef enum BarcodeFormat {
-        BarcodeFormat_None = 0,
-        BarcodeFormat_QR_CODE,
-        BarcodeFormat_DATA_MATRIX,
-        BarcodeFormat_UPC_E,
-        BarcodeFormat_UPC_A,
-        BarcodeFormat_EAN_8,
-        BarcodeFormat_EAN_13,
-        BarcodeFormat_CODE_128,
-        BarcodeFormat_CODE_39,
-        BarcodeFormat_ITF
+    BarcodeFormat_None = 0,
+    BarcodeFormat_QR_CODE,
+    BarcodeFormat_DATA_MATRIX,
+    BarcodeFormat_UPC_E,
+    BarcodeFormat_UPC_A,
+    BarcodeFormat_EAN_8,
+    BarcodeFormat_EAN_13,
+    BarcodeFormat_CODE_128,
+    BarcodeFormat_CODE_39,
+    BarcodeFormat_ITF,
+    BarcodeFormat_AZTEC
 } BarcodeFormat;
 
 #endif // __CBARCODE_FORMAT_H__

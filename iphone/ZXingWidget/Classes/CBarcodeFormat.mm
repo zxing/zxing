@@ -1,3 +1,4 @@
+// -*- Mode: ObjC; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*-
 /**
  * Copyright 2011 Google, Inc.
  *
@@ -22,28 +23,30 @@ BarcodeFormat CBarcodeFormatConvert(zxing::BarcodeFormat value);
 // The purpose of this function is to issue a warning when a value is added to
 // zxing::BarcodeFormat.
 BarcodeFormat CBarcodeFormatConvert(zxing::BarcodeFormat value) {
-    switch (value) {
-    case zxing::BarcodeFormat_None:
-        return BarcodeFormat_None;
-    case zxing::BarcodeFormat_QR_CODE:
-        return BarcodeFormat_QR_CODE;
-    case zxing::BarcodeFormat_DATA_MATRIX:
-        return BarcodeFormat_DATA_MATRIX;
-    case zxing::BarcodeFormat_UPC_E:
-        return BarcodeFormat_UPC_E;
-    case zxing::BarcodeFormat_UPC_A:
-        return BarcodeFormat_UPC_A;
-    case zxing::BarcodeFormat_EAN_8:
-        return BarcodeFormat_EAN_8;
-    case zxing::BarcodeFormat_EAN_13:
-        return BarcodeFormat_EAN_13;
-    case zxing::BarcodeFormat_CODE_128:
-        return BarcodeFormat_CODE_128;
-    case zxing::BarcodeFormat_CODE_39:
-        return BarcodeFormat_CODE_39;
-    case zxing::BarcodeFormat_ITF:
-        return BarcodeFormat_ITF;
-    }
+  switch (value) {
+  case zxing::BarcodeFormat_None:
+    return BarcodeFormat_None;
+  case zxing::BarcodeFormat_QR_CODE:
+    return BarcodeFormat_QR_CODE;
+  case zxing::BarcodeFormat_DATA_MATRIX:
+    return BarcodeFormat_DATA_MATRIX;
+  case zxing::BarcodeFormat_UPC_E:
+    return BarcodeFormat_UPC_E;
+  case zxing::BarcodeFormat_UPC_A:
+    return BarcodeFormat_UPC_A;
+  case zxing::BarcodeFormat_EAN_8:
+    return BarcodeFormat_EAN_8;
+  case zxing::BarcodeFormat_EAN_13:
+    return BarcodeFormat_EAN_13;
+  case zxing::BarcodeFormat_CODE_128:
+    return BarcodeFormat_CODE_128;
+  case zxing::BarcodeFormat_CODE_39:
+    return BarcodeFormat_CODE_39;
+  case zxing::BarcodeFormat_ITF:
+    return BarcodeFormat_ITF;
+  case zxing::BarcodeFormat_AZTEC:
+    return BarcodeFormat_AZTEC;
+  }
 
   return BarcodeFormat_None;
 }

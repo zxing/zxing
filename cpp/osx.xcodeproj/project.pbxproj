@@ -44,10 +44,6 @@
 		3B5B0EC8121C52ED005698F8 /* PerspectiveTransform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B5B0E33121C52ED005698F8 /* PerspectiveTransform.cpp */; };
 		3B5B0EC9121C52ED005698F8 /* PerspectiveTransform.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B5B0E34121C52ED005698F8 /* PerspectiveTransform.h */; };
 		3B5B0ECA121C52ED005698F8 /* Point.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B5B0E35121C52ED005698F8 /* Point.h */; };
-		3B5B0ECB121C52ED005698F8 /* GF256.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B5B0E37121C52ED005698F8 /* GF256.cpp */; };
-		3B5B0ECC121C52ED005698F8 /* GF256.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B5B0E38121C52ED005698F8 /* GF256.h */; };
-		3B5B0ECD121C52ED005698F8 /* GF256Poly.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B5B0E39121C52ED005698F8 /* GF256Poly.cpp */; };
-		3B5B0ECE121C52ED005698F8 /* GF256Poly.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B5B0E3A121C52ED005698F8 /* GF256Poly.h */; };
 		3B5B0ECF121C52ED005698F8 /* ReedSolomonDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B5B0E3B121C52ED005698F8 /* ReedSolomonDecoder.cpp */; };
 		3B5B0ED0121C52ED005698F8 /* ReedSolomonDecoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B5B0E3C121C52ED005698F8 /* ReedSolomonDecoder.h */; };
 		3B5B0ED1121C52ED005698F8 /* ReedSolomonException.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B5B0E3D121C52ED005698F8 /* ReedSolomonException.cpp */; };
@@ -150,10 +146,21 @@
 		3B5B0F32121C52ED005698F8 /* ResultPointCallback.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B5B0EA5121C52ED005698F8 /* ResultPointCallback.h */; };
 		3BB87D4314B54C480078117F /* FormatException.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3BB87D4214B54C480078117F /* FormatException.cpp */; };
 		3BB87D4714B54C610078117F /* CharacterSetECI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3BB87D4414B54C610078117F /* CharacterSetECI.cpp */; };
-		3BB87D4814B54C610078117F /* ECI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3BB87D4514B54C610078117F /* ECI.cpp */; };
 		3BB87D4914B54C610078117F /* StringUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3BB87D4614B54C610078117F /* StringUtils.cpp */; };
 		3BB87D5014B54F1D0078117F /* WhiteRectangleDetector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3BB87D4F14B54F1D0078117F /* WhiteRectangleDetector.cpp */; };
 		3BB87D5214B54F3F0078117F /* NotFoundException.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3BB87D5114B54F3F0078117F /* NotFoundException.cpp */; };
+		E105A91214EC35860011473C /* GenericGF.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E105A90E14EC35860011473C /* GenericGF.cpp */; };
+		E105A91314EC35860011473C /* GenericGF.h in Headers */ = {isa = PBXBuildFile; fileRef = E105A90F14EC35860011473C /* GenericGF.h */; };
+		E105A91414EC35860011473C /* GenericGFPoly.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E105A91014EC35860011473C /* GenericGFPoly.cpp */; };
+		E105A91514EC35860011473C /* GenericGFPoly.h in Headers */ = {isa = PBXBuildFile; fileRef = E105A91114EC35860011473C /* GenericGFPoly.h */; };
+		E105A92114EC35AA0011473C /* AztecDetectorResult.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E105A91714EC35AA0011473C /* AztecDetectorResult.cpp */; };
+		E105A92214EC35AA0011473C /* AztecDetectorResult.h in Headers */ = {isa = PBXBuildFile; fileRef = E105A91814EC35AA0011473C /* AztecDetectorResult.h */; };
+		E105A92314EC35AA0011473C /* AztecReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E105A91914EC35AA0011473C /* AztecReader.cpp */; };
+		E105A92414EC35AA0011473C /* AztecReader.h in Headers */ = {isa = PBXBuildFile; fileRef = E105A91A14EC35AA0011473C /* AztecReader.h */; };
+		E105A92514EC35AA0011473C /* Decoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E105A91C14EC35AA0011473C /* Decoder.cpp */; };
+		E105A92614EC35AA0011473C /* Decoder.h in Headers */ = {isa = PBXBuildFile; fileRef = E105A91D14EC35AA0011473C /* Decoder.h */; };
+		E105A92714EC35AA0011473C /* Detector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E105A91F14EC35AA0011473C /* Detector.cpp */; };
+		E105A92814EC35AA0011473C /* Detector.h in Headers */ = {isa = PBXBuildFile; fileRef = E105A92014EC35AA0011473C /* Detector.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -195,10 +202,6 @@
 		3B5B0E33121C52ED005698F8 /* PerspectiveTransform.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PerspectiveTransform.cpp; sourceTree = "<group>"; };
 		3B5B0E34121C52ED005698F8 /* PerspectiveTransform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PerspectiveTransform.h; sourceTree = "<group>"; };
 		3B5B0E35121C52ED005698F8 /* Point.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Point.h; sourceTree = "<group>"; };
-		3B5B0E37121C52ED005698F8 /* GF256.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GF256.cpp; sourceTree = "<group>"; };
-		3B5B0E38121C52ED005698F8 /* GF256.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GF256.h; sourceTree = "<group>"; };
-		3B5B0E39121C52ED005698F8 /* GF256Poly.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GF256Poly.cpp; sourceTree = "<group>"; };
-		3B5B0E3A121C52ED005698F8 /* GF256Poly.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GF256Poly.h; sourceTree = "<group>"; };
 		3B5B0E3B121C52ED005698F8 /* ReedSolomonDecoder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ReedSolomonDecoder.cpp; sourceTree = "<group>"; };
 		3B5B0E3C121C52ED005698F8 /* ReedSolomonDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReedSolomonDecoder.h; sourceTree = "<group>"; };
 		3B5B0E3D121C52ED005698F8 /* ReedSolomonException.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ReedSolomonException.cpp; sourceTree = "<group>"; };
@@ -301,10 +304,21 @@
 		3B5B0EA5121C52ED005698F8 /* ResultPointCallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ResultPointCallback.h; sourceTree = "<group>"; };
 		3BB87D4214B54C480078117F /* FormatException.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FormatException.cpp; sourceTree = "<group>"; };
 		3BB87D4414B54C610078117F /* CharacterSetECI.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CharacterSetECI.cpp; path = common/CharacterSetECI.cpp; sourceTree = "<group>"; };
-		3BB87D4514B54C610078117F /* ECI.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ECI.cpp; path = common/ECI.cpp; sourceTree = "<group>"; };
 		3BB87D4614B54C610078117F /* StringUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = StringUtils.cpp; path = common/StringUtils.cpp; sourceTree = "<group>"; };
 		3BB87D4F14B54F1D0078117F /* WhiteRectangleDetector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = WhiteRectangleDetector.cpp; path = common/detector/WhiteRectangleDetector.cpp; sourceTree = "<group>"; };
 		3BB87D5114B54F3F0078117F /* NotFoundException.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NotFoundException.cpp; sourceTree = "<group>"; };
+		E105A90E14EC35860011473C /* GenericGF.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GenericGF.cpp; sourceTree = "<group>"; };
+		E105A90F14EC35860011473C /* GenericGF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GenericGF.h; sourceTree = "<group>"; };
+		E105A91014EC35860011473C /* GenericGFPoly.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GenericGFPoly.cpp; sourceTree = "<group>"; };
+		E105A91114EC35860011473C /* GenericGFPoly.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GenericGFPoly.h; sourceTree = "<group>"; };
+		E105A91714EC35AA0011473C /* AztecDetectorResult.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AztecDetectorResult.cpp; path = aztec/AztecDetectorResult.cpp; sourceTree = "<group>"; };
+		E105A91814EC35AA0011473C /* AztecDetectorResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AztecDetectorResult.h; path = aztec/AztecDetectorResult.h; sourceTree = "<group>"; };
+		E105A91914EC35AA0011473C /* AztecReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AztecReader.cpp; path = aztec/AztecReader.cpp; sourceTree = "<group>"; };
+		E105A91A14EC35AA0011473C /* AztecReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AztecReader.h; path = aztec/AztecReader.h; sourceTree = "<group>"; };
+		E105A91C14EC35AA0011473C /* Decoder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Decoder.cpp; sourceTree = "<group>"; };
+		E105A91D14EC35AA0011473C /* Decoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Decoder.h; sourceTree = "<group>"; };
+		E105A91F14EC35AA0011473C /* Detector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Detector.cpp; sourceTree = "<group>"; };
+		E105A92014EC35AA0011473C /* Detector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Detector.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -350,8 +364,6 @@
 			isa = PBXGroup;
 			children = (
 				3B5B0E0F121C52ED005698F8 /* zxing */,
-				3B5B0C8C121C4F61005698F8 /* zxing */,
-				3B5B0B5F121C4EC3005698F8 /* zxing */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -377,173 +389,13 @@
 			name = "Other Sources";
 			sourceTree = "<group>";
 		};
-		3B5B0B5F121C4EC3005698F8 /* zxing */ = {
-			isa = PBXGroup;
-			children = (
-				3B5B0B66121C4EC3005698F8 /* common */,
-				3B5B0B91121C4EC3005698F8 /* datamatrix */,
-				3B5B0BAE121C4EC3005698F8 /* oned */,
-				3B5B0BC7121C4EC3005698F8 /* qrcode */,
-			);
-			name = zxing;
-			path = core/src/zxing;
-			sourceTree = "<group>";
-		};
-		3B5B0B66121C4EC3005698F8 /* common */ = {
-			isa = PBXGroup;
-			children = (
-				3B5B0B86121C4EC3005698F8 /* reedsolomon */,
-			);
-			path = common;
-			sourceTree = "<group>";
-		};
-		3B5B0B86121C4EC3005698F8 /* reedsolomon */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = reedsolomon;
-			sourceTree = "<group>";
-		};
-		3B5B0B91121C4EC3005698F8 /* datamatrix */ = {
-			isa = PBXGroup;
-			children = (
-				3B5B0B94121C4EC3005698F8 /* decoder */,
-				3B5B0B9D121C4EC3005698F8 /* detector */,
-			);
-			path = datamatrix;
-			sourceTree = "<group>";
-		};
-		3B5B0B94121C4EC3005698F8 /* decoder */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = decoder;
-			sourceTree = "<group>";
-		};
-		3B5B0B9D121C4EC3005698F8 /* detector */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = detector;
-			sourceTree = "<group>";
-		};
-		3B5B0BAE121C4EC3005698F8 /* oned */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = oned;
-			sourceTree = "<group>";
-		};
-		3B5B0BC7121C4EC3005698F8 /* qrcode */ = {
-			isa = PBXGroup;
-			children = (
-				3B5B0BC8121C4EC3005698F8 /* decoder */,
-				3B5B0BD5121C4EC3005698F8 /* detector */,
-			);
-			path = qrcode;
-			sourceTree = "<group>";
-		};
-		3B5B0BC8121C4EC3005698F8 /* decoder */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = decoder;
-			sourceTree = "<group>";
-		};
-		3B5B0BD5121C4EC3005698F8 /* detector */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = detector;
-			sourceTree = "<group>";
-		};
-		3B5B0C8C121C4F61005698F8 /* zxing */ = {
-			isa = PBXGroup;
-			children = (
-				3B5B0C93121C4F61005698F8 /* common */,
-				3B5B0CBE121C4F61005698F8 /* datamatrix */,
-				3B5B0CDB121C4F61005698F8 /* oned */,
-				3B5B0CF4121C4F61005698F8 /* qrcode */,
-			);
-			name = zxing;
-			path = core/src/zxing;
-			sourceTree = "<group>";
-		};
-		3B5B0C93121C4F61005698F8 /* common */ = {
-			isa = PBXGroup;
-			children = (
-				3B5B0CB3121C4F61005698F8 /* reedsolomon */,
-			);
-			path = common;
-			sourceTree = "<group>";
-		};
-		3B5B0CB3121C4F61005698F8 /* reedsolomon */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = reedsolomon;
-			sourceTree = "<group>";
-		};
-		3B5B0CBE121C4F61005698F8 /* datamatrix */ = {
-			isa = PBXGroup;
-			children = (
-				3B5B0CC1121C4F61005698F8 /* decoder */,
-				3B5B0CCA121C4F61005698F8 /* detector */,
-			);
-			path = datamatrix;
-			sourceTree = "<group>";
-		};
-		3B5B0CC1121C4F61005698F8 /* decoder */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = decoder;
-			sourceTree = "<group>";
-		};
-		3B5B0CCA121C4F61005698F8 /* detector */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = detector;
-			sourceTree = "<group>";
-		};
-		3B5B0CDB121C4F61005698F8 /* oned */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = oned;
-			sourceTree = "<group>";
-		};
-		3B5B0CF4121C4F61005698F8 /* qrcode */ = {
-			isa = PBXGroup;
-			children = (
-				3B5B0CF5121C4F61005698F8 /* decoder */,
-				3B5B0D02121C4F61005698F8 /* detector */,
-			);
-			path = qrcode;
-			sourceTree = "<group>";
-		};
-		3B5B0CF5121C4F61005698F8 /* decoder */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = decoder;
-			sourceTree = "<group>";
-		};
-		3B5B0D02121C4F61005698F8 /* detector */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = detector;
-			sourceTree = "<group>";
-		};
 		3B5B0E0F121C52ED005698F8 /* zxing */ = {
 			isa = PBXGroup;
 			children = (
+				E105A91614EC35980011473C /* aztec */,
 				3BB87D5114B54F3F0078117F /* NotFoundException.cpp */,
 				3BB87D4F14B54F1D0078117F /* WhiteRectangleDetector.cpp */,
 				3BB87D4414B54C610078117F /* CharacterSetECI.cpp */,
-				3BB87D4514B54C610078117F /* ECI.cpp */,
 				3BB87D4614B54C610078117F /* StringUtils.cpp */,
 				3BB87D4214B54C480078117F /* FormatException.cpp */,
 				3B5B0E10121C52ED005698F8 /* BarcodeFormat.cpp */,
@@ -623,10 +475,10 @@
 		3B5B0E36121C52ED005698F8 /* reedsolomon */ = {
 			isa = PBXGroup;
 			children = (
-				3B5B0E37121C52ED005698F8 /* GF256.cpp */,
-				3B5B0E38121C52ED005698F8 /* GF256.h */,
-				3B5B0E39121C52ED005698F8 /* GF256Poly.cpp */,
-				3B5B0E3A121C52ED005698F8 /* GF256Poly.h */,
+				E105A90E14EC35860011473C /* GenericGF.cpp */,
+				E105A90F14EC35860011473C /* GenericGF.h */,
+				E105A91014EC35860011473C /* GenericGFPoly.cpp */,
+				E105A91114EC35860011473C /* GenericGFPoly.h */,
 				3B5B0E3B121C52ED005698F8 /* ReedSolomonDecoder.cpp */,
 				3B5B0E3C121C52ED005698F8 /* ReedSolomonDecoder.h */,
 				3B5B0E3D121C52ED005698F8 /* ReedSolomonException.cpp */,
@@ -764,6 +616,39 @@
 			path = detector;
 			sourceTree = "<group>";
 		};
+		E105A91614EC35980011473C /* aztec */ = {
+			isa = PBXGroup;
+			children = (
+				E105A91714EC35AA0011473C /* AztecDetectorResult.cpp */,
+				E105A91814EC35AA0011473C /* AztecDetectorResult.h */,
+				E105A91914EC35AA0011473C /* AztecReader.cpp */,
+				E105A91A14EC35AA0011473C /* AztecReader.h */,
+				E105A91B14EC35AA0011473C /* decoder */,
+				E105A91E14EC35AA0011473C /* detector */,
+			);
+			name = aztec;
+			sourceTree = "<group>";
+		};
+		E105A91B14EC35AA0011473C /* decoder */ = {
+			isa = PBXGroup;
+			children = (
+				E105A91C14EC35AA0011473C /* Decoder.cpp */,
+				E105A91D14EC35AA0011473C /* Decoder.h */,
+			);
+			name = decoder;
+			path = aztec/decoder;
+			sourceTree = "<group>";
+		};
+		E105A91E14EC35AA0011473C /* detector */ = {
+			isa = PBXGroup;
+			children = (
+				E105A91F14EC35AA0011473C /* Detector.cpp */,
+				E105A92014EC35AA0011473C /* Detector.h */,
+			);
+			name = detector;
+			path = aztec/detector;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -790,8 +675,6 @@
 				3B5B0EC7121C52ED005698F8 /* IllegalArgumentException.h in Headers */,
 				3B5B0EC9121C52ED005698F8 /* PerspectiveTransform.h in Headers */,
 				3B5B0ECA121C52ED005698F8 /* Point.h in Headers */,
-				3B5B0ECC121C52ED005698F8 /* GF256.h in Headers */,
-				3B5B0ECE121C52ED005698F8 /* GF256Poly.h in Headers */,
 				3B5B0ED0121C52ED005698F8 /* ReedSolomonDecoder.h in Headers */,
 				3B5B0ED2121C52ED005698F8 /* ReedSolomonException.h in Headers */,
 				3B5B0ED4121C52ED005698F8 /* Str.h in Headers */,
@@ -842,6 +725,12 @@
 				3B5B0F2E121C52ED005698F8 /* Result.h in Headers */,
 				3B5B0F30121C52ED005698F8 /* ResultPoint.h in Headers */,
 				3B5B0F32121C52ED005698F8 /* ResultPointCallback.h in Headers */,
+				E105A91314EC35860011473C /* GenericGF.h in Headers */,
+				E105A91514EC35860011473C /* GenericGFPoly.h in Headers */,
+				E105A92214EC35AA0011473C /* AztecDetectorResult.h in Headers */,
+				E105A92414EC35AA0011473C /* AztecReader.h in Headers */,
+				E105A92614EC35AA0011473C /* Decoder.h in Headers */,
+				E105A92814EC35AA0011473C /* Detector.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -910,8 +799,6 @@
 				3B5B0EC4121C52ED005698F8 /* HybridBinarizer.cpp in Sources */,
 				3B5B0EC6121C52ED005698F8 /* IllegalArgumentException.cpp in Sources */,
 				3B5B0EC8121C52ED005698F8 /* PerspectiveTransform.cpp in Sources */,
-				3B5B0ECB121C52ED005698F8 /* GF256.cpp in Sources */,
-				3B5B0ECD121C52ED005698F8 /* GF256Poly.cpp in Sources */,
 				3B5B0ECF121C52ED005698F8 /* ReedSolomonDecoder.cpp in Sources */,
 				3B5B0ED1121C52ED005698F8 /* ReedSolomonException.cpp in Sources */,
 				3B5B0ED3121C52ED005698F8 /* Str.cpp in Sources */,
@@ -964,10 +851,15 @@
 				3B5B0F31121C52ED005698F8 /* ResultPointCallback.cpp in Sources */,
 				3BB87D4314B54C480078117F /* FormatException.cpp in Sources */,
 				3BB87D4714B54C610078117F /* CharacterSetECI.cpp in Sources */,
-				3BB87D4814B54C610078117F /* ECI.cpp in Sources */,
 				3BB87D4914B54C610078117F /* StringUtils.cpp in Sources */,
 				3BB87D5014B54F1D0078117F /* WhiteRectangleDetector.cpp in Sources */,
 				3BB87D5214B54F3F0078117F /* NotFoundException.cpp in Sources */,
+				E105A91214EC35860011473C /* GenericGF.cpp in Sources */,
+				E105A91414EC35860011473C /* GenericGFPoly.cpp in Sources */,
+				E105A92114EC35AA0011473C /* AztecDetectorResult.cpp in Sources */,
+				E105A92314EC35AA0011473C /* AztecReader.cpp in Sources */,
+				E105A92514EC35AA0011473C /* Decoder.cpp in Sources */,
+				E105A92714EC35AA0011473C /* Detector.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

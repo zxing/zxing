@@ -19,8 +19,6 @@
  */
 
 #include "ReedSolomonTest.h"
-#include <zxing/common/reedsolomon/GF256.h>
-#include <zxing/common/reedsolomon/GF256Poly.h>
 #include <zxing/common/reedsolomon/ReedSolomonDecoder.h>
 #include <zxing/common/reedsolomon/ReedSolomonException.h>
 #include <zxing/common/IllegalArgumentException.h>
@@ -56,7 +54,7 @@ void ReedSolomonTest::setUp() {
   qrCodeCorrectable_ =
     (qrCodeTestWithEc_->size() - qrCodeTest_->size()) / 2;
 
-  qrRSDecoder_ = new ReedSolomonDecoder(GF256::QR_CODE_FIELD);
+  qrRSDecoder_ = new ReedSolomonDecoder(GenericGF::QR_CODE_FIELD_256);
 }
 
 void ReedSolomonTest::tearDown() {

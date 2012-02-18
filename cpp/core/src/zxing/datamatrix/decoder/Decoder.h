@@ -22,7 +22,6 @@
  */
 
 #include <zxing/common/reedsolomon/ReedSolomonDecoder.h>
-#include <zxing/common/reedsolomon/GF256.h>
 #include <zxing/common/Counted.h>
 #include <zxing/common/Array.h>
 #include <zxing/common/DecoderResult.h>

@@ -32,7 +32,7 @@ namespace datamatrix {
 using namespace std;
 
 Decoder::Decoder() :
-    rsDecoder_(GF256::DATA_MATRIX_FIELD) {
+    rsDecoder_(GenericGF::DATA_MATRIX_FIELD_256) {
 }
 
 
