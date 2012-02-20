@@ -139,15 +139,9 @@ int GenericGF::multiply(int a, int b) {
     return 0;
   }
     
-  if (a < 0 || b < 0 || a >= size_ || b >= size_) {
-    a++;
+  return expTable_[(logTable_[a] + logTable_[b]) % (size_ - 1)];
   }
     
-  int logSum = logTable_[a] + logTable_[b];
-    
-  return expTable_[(logSum % size_) + logSum / size_];
-}
-  
 int GenericGF::getSize() {
   return size_;
 }
