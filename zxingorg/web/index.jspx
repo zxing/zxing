@@ -18,24 +18,13 @@
 <jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="1.2">
 <jsp:directive.page contentType="application/xhtml+xml" session="false"/>
 <jsp:scriptlet>response.setHeader("Cache-Control", "public");</jsp:scriptlet>
-<jsp:text><![CDATA[<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.1//EN" "http://www.openmobilealliance.org/tech/DTD/xhtml-mobile11.dtd">]]></jsp:text>
+<jsp:text><![CDATA[<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">]]></jsp:text>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
   <head>
-    <title>Download ZXing Reader</title>
+    <title>Redirect</title>
+    <meta http-equiv="Refresh" content="0;url=decode.jspx"/>
   </head>
   <body>
-    <h1><img src="zxing-icon.png" height="32" width="32" alt=""/> Download ZXing Reader</h1>
-    <p>
-      <a href="market://search?q=pname%3Acom.google.zxing.client.android">Download</a> the Android client.
-    </p>
-    <p>
-      <a href="BarcodeReader.jad">Download</a> the Barcode Reader for J2ME.
-    </p>
-    <p>
-      (<a href="basic/BarcodeReader.jad">Download</a> the alternate "basic" version for J2ME.)
-    </p> 
-    <p>Copyright 2008 and onwards ZXing authors</p>
-    <jsp:include page="analytics.jspx"/>
   </body>
 </html>
 </jsp:root>
