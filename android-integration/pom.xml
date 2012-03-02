@@ -54,24 +54,17 @@
   </developers>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <android-home>${env.ANDROID_HOME}</android-home>
   </properties>
   <dependencies>
     <dependency>
       <groupId>com.google.android</groupId>
       <artifactId>android</artifactId>
-      <version>3.0</version>
-      <type>jar</type>
-      <scope>system</scope>
-      <systemPath>/${android-home}/platforms/android-13/android.jar</systemPath>
+      <version>4.0.1.2</version>
     </dependency>
     <dependency>
       <groupId>com.google.android</groupId>
-      <artifactId>support</artifactId>
-      <type>jar</type>
-      <version>v4</version>
-      <scope>system</scope>
-      <systemPath>/${android-home}/extras/android/compatibility/v4/android-support-v4.jar</systemPath>
+      <artifactId>support-v4</artifactId>
+      <version>r6</version>
     </dependency>
   </dependencies>
   <build>
