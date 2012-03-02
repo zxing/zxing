@@ -149,8 +149,8 @@ final class DecodedBitStreamParser {
       } else {
         switch (code) {
           case TEXT_COMPACTION_MODE_LATCH:
-            codeIndex--;
-            end = true;
+            // reinitialize text compaction mode to alpha sub mode
+            textCompactionData[index++] = TEXT_COMPACTION_MODE_LATCH;
             break;
           case BYTE_COMPACTION_MODE_LATCH:
             codeIndex--;
@@ -232,9 +232,7 @@ final class DecodedBitStreamParser {
               subMode = Mode.PUNCT_SHIFT;
             } else if (subModeCh == MODE_SHIFT_TO_BYTE_COMPACTION_MODE) {
               result.append((char) byteCompactionData[i]);
-              // the pdf417 specs say we have to return to the last latched
-              // sub-mode. But I checked different encoder implementations and
-              // all of them return to alpha sub-mode after Shift-to-Byte
+            } else if (subModeCh == TEXT_COMPACTION_MODE_LATCH) {
               subMode = Mode.ALPHA;
             }
           }
@@ -263,6 +261,8 @@ final class DecodedBitStreamParser {
               // sub-mode. But I checked different encoder implementations and
               // all of them return to alpha sub-mode after Shift-to-Byte
               subMode = Mode.ALPHA;
+            } else if (subModeCh == TEXT_COMPACTION_MODE_LATCH) {
+              subMode = Mode.ALPHA;
             }
           }
           break;
@@ -286,9 +286,7 @@ final class DecodedBitStreamParser {
               subMode = Mode.PUNCT_SHIFT;
             } else if (subModeCh == MODE_SHIFT_TO_BYTE_COMPACTION_MODE) {
               result.append((char) byteCompactionData[i]);
-              // the pdf417 specs say we have to return to the last latched
-              // sub-mode. But I checked different encoder implementations and
-              // all of them return to alpha sub-mode after Shift-to-Byte
+            } else if (subModeCh == TEXT_COMPACTION_MODE_LATCH) {
               subMode = Mode.ALPHA;
             }
           }
@@ -303,9 +301,7 @@ final class DecodedBitStreamParser {
               subMode = Mode.ALPHA;
             } else if (subModeCh == MODE_SHIFT_TO_BYTE_COMPACTION_MODE) {
               result.append((char) byteCompactionData[i]);
-              // the pdf417 specs say we have to return to the last latched
-              // sub-mode. But I checked different encoder implementations and
-              // all of them return to alpha sub-mode after Shift-to-Byte
+            } else if (subModeCh == TEXT_COMPACTION_MODE_LATCH) {
               subMode = Mode.ALPHA;
             }
           }
@@ -319,6 +315,8 @@ final class DecodedBitStreamParser {
           } else {
             if (subModeCh == 26) {
               ch = ' ';
+            } else if (subModeCh == TEXT_COMPACTION_MODE_LATCH) {
+              subMode = Mode.ALPHA;
             } else {
               // is this even possible?
             }
@@ -340,6 +338,8 @@ final class DecodedBitStreamParser {
               // the pdf417 specs say we have to return to the last latched
               // sub-mode. But I checked different encoder implementations and
               // all of them return to alpha sub-mode after Shift-to-Byte
+              subMode = Mode.ALPHA;
+            } else if (subModeCh == TEXT_COMPACTION_MODE_LATCH) {
               subMode = Mode.ALPHA;
             }
           }
