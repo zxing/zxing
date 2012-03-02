@@ -41,6 +41,7 @@ public final class VCardResultParser extends ResultParser {
   private static final Pattern VCARD_ESCAPES = Pattern.compile("\\\\([,;\\\\])");
   private static final Pattern EQUALS = Pattern.compile("=");
   private static final Pattern SEMICOLON = Pattern.compile(";");
+  private static final Pattern SEMICOLONS = Pattern.compile(";+");
 
   @Override
   public AddressBookParsedResult parse(Result result) {
@@ -64,7 +65,10 @@ public final class VCardResultParser extends ResultParser {
     List<List<String>> addresses = matchVCardPrefixedField("ADR", rawText, true);
     if (addresses != null) {
       for (List<String> list : addresses) {
-        list.set(0, list.get(0));
+        String adr = list.get(0);
+        // Semicolon separators -- just make them a newline
+        adr = SEMICOLONS.matcher(adr).replaceAll("\n").trim();
+        list.set(0, adr);
       }
     }
     List<String> org = matchSingleVCardPrefixedField("ORG", rawText, true);
