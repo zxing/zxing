@@ -54,6 +54,8 @@ import java.util.Properties;
  */
 public abstract class AbstractBlackBoxTestCase extends Assert {
 
+  private static final Charset UTF8 = Charset.forName("UTF-8");
+  private static final Charset ISO88591 = Charset.forName("ISO-8859-1");
   private static final FilenameFilter IMAGE_NAME_FILTER = new FilenameFilter() {
     @Override
     public boolean accept(File dir, String name) {
@@ -140,7 +142,14 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
       String testImageFileName = testImage.getName();
       String fileBaseName = testImageFileName.substring(0, testImageFileName.indexOf('.'));
       File expectedTextFile = new File(testBase, fileBaseName + ".txt");
-      String expectedText = readFileAsString(expectedTextFile);
+      String expectedText;
+      if (expectedTextFile.exists()) {
+        expectedText = readFileAsString(expectedTextFile, UTF8);
+      } else {
+        expectedTextFile = new File(testBase, fileBaseName + ".bin");
+        assertTrue(expectedTextFile.exists());
+        expectedText = readFileAsString(expectedTextFile, ISO88591);
+      }
 
       File expectedMetadataFile = new File(testBase, fileBaseName + ".metadata.txt");
       Properties expectedMetadata = new Properties();
@@ -283,9 +292,9 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
     return true;
   }
 
-  private static String readFileAsString(File file) throws IOException {
+  private static String readFileAsString(File file, Charset charset) throws IOException {
     StringBuilder result = new StringBuilder((int) file.length());
-    InputStreamReader reader = new InputStreamReader(new FileInputStream(file), Charset.forName("UTF8"));
+    InputStreamReader reader = new InputStreamReader(new FileInputStream(file), charset);
     try {
       char[] buffer = new char[256];
       int charsRead;
