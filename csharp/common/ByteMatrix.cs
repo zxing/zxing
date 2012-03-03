@@ -131,44 +131,44 @@ namespace com.google.zxing.common
 			return result.ToString();
 		}
 
-    /// <summary>
-    /// Converts this ByteMatrix to a black and white bitmap.
-    /// </summary>
-    /// <returns>A black and white bitmap converted from this ByteMatrix.</returns>
-    public Bitmap ToBitmap()
-    {
-      const byte BLACK = 0;
-      const byte WHITE = 255;
-      sbyte[][] array = this.Array;
-      int width = this.Width;
-      int height = this.Height;
-      byte[] pixels = new byte[width * height];
+		/// <summary>
+		/// Converts this ByteMatrix to a black and white bitmap.
+		/// </summary>
+		/// <returns>A black and white bitmap converted from this ByteMatrix.</returns>
+		public Bitmap ToBitmap()
+		{
+			 const byte BLACK = 0;
+			 const byte WHITE = 255;
+			 int width = Width;
+			 int height = Height;
 
-      for (int y = 0; y < height; y++)
-      {
-        int offset = y * width;
-        for (int x = 0; x < width; x++)
-        {
-           pixels[offset + x] = array[y][x] == 0 ? BLACK : WHITE;
-        }
-      }
+			 // create the bitmap and lock the bits because we need the stride
+			 // which is the width of the image and possible padding bytes
+			 var bmp = new Bitmap(width, height, PixelFormat.Format8bppIndexed);
+			 var bmpData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.WriteOnly, bmp.PixelFormat);
+			 try
+			 {
+				var pixels = new byte[bmpData.Stride*height];
 
-      //Here create the Bitmap to the known height, width and format
-      Bitmap bmp = new Bitmap(width, height, PixelFormat.Format8bppIndexed);
+				for (int y = 0; y < height; y++)
+				{
+				   var offset = y*bmpData.Stride;
+				   for (var x = 0; x < width; x++)
+				   {
+					  pixels[offset + x] = this[x, y] ? BLACK : WHITE;
+				   }
+				}
 
-      //Create a BitmapData and Lock all pixels to be written
-      BitmapData bmpData =
-        bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height),
-                     ImageLockMode.WriteOnly, bmp.PixelFormat);
+				//Copy the data from the byte array into BitmapData.Scan0
+				Marshal.Copy(pixels, 0, bmpData.Scan0, pixels.Length);
+			 }
+			 finally
+			 {
+				//Unlock the pixels
+				bmp.UnlockBits(bmpData);
+			 }
 
-      //Copy the data from the byte array into BitmapData.Scan0
-      Marshal.Copy(pixels, 0, bmpData.Scan0, pixels.Length);
-
-      //Unlock the pixels
-      bmp.UnlockBits(bmpData);
-
-      //Return the bitmap
-      return bmp;
-    }
+			 return bmp;
+		}
 	}
 }
