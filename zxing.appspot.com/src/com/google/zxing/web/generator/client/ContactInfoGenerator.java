@@ -27,6 +27,7 @@ import com.google.gwt.user.client.ui.Widget;
  * A Generator for contact informations, output is in MeCard format.
  * 
  * @author Yohann Coppel
+ * @author Sean Owen
  */
 public final class ContactInfoGenerator implements GeneratorSource {
 
@@ -34,6 +35,7 @@ public final class ContactInfoGenerator implements GeneratorSource {
   private final ListBox encoding = new ListBox();
   private final TextBox name = new TextBox();
   private final TextBox company = new TextBox();
+  private final TextBox title = new TextBox();
   private final TextBox tel = new TextBox();
   private final TextBox url = new TextBox();
   private final TextBox email = new TextBox();
@@ -61,6 +63,7 @@ public final class ContactInfoGenerator implements GeneratorSource {
   public String getText() throws GeneratorException {
     String name = getNameField();
     String company = getCompanyField();
+    String title = getTitleField();
     String tel = getTelField();
     String url = getUrlField();
     String email = getEmailField();
@@ -71,13 +74,20 @@ public final class ContactInfoGenerator implements GeneratorSource {
     // Build the output with obtained data.
     // note that some informations may just be "" if they were not specified.
     if ("vCard".equals(encoding.getValue(encoding.getSelectedIndex()))) {
-      return getVCard(name, company, tel, url, email, address, address2, memo);
+      return getVCard(name, company, title, tel, url, email, address, address2, memo);
     }
-    return getMeCard(name, company, tel, url, email, address, address2, memo);
+    return getMeCard(name, company, title, tel, url, email, address, address2, memo);
   }
 
-  private static String getMeCard(String name, String company, String tel, String url,
-                                  String email, String address, String address2, String memo) {
+  private static String getMeCard(String name,
+                                  String company,
+                                  String title,
+                                  String tel,
+                                  String url,
+                                  String email,
+                                  String address,
+                                  String address2,
+                                  String memo) {
     StringBuilder output = new StringBuilder(100);
     output.append("MECARD:");
     maybeAppendMECARD(output, "N", name.replace(",", ""));
@@ -86,38 +96,56 @@ public final class ContactInfoGenerator implements GeneratorSource {
     maybeAppendMECARD(output, "URL", url);
     maybeAppendMECARD(output, "EMAIL", email);
     maybeAppendMECARD(output, "ADR", buildAddress(address, address2));
-    maybeAppendMECARD(output, "NOTE", memo);
+    StringBuilder memoContents = new StringBuilder();
+    if (memo != null) {
+      memoContents.append(memo);
+    }
+    if (title != null) {
+      if (memoContents.length() > 0) {
+        memoContents.append('\n');
+      }
+      memoContents.append(title);
+    }
+    maybeAppendMECARD(output, "NOTE", memoContents.toString());
     output.append(';');
     return output.toString();
   }
   
   private static String buildAddress(String address, String address2) {
-    if (address.length() > 0) {
-      if (address2.length() > 0) {
+    if (!address.isEmpty()) {
+      if (!address2.isEmpty()) {
         return address + ' ' + address2;
       }
       return address;
     }
-    if (address2.length() > 0) {
+    if (!address2.isEmpty()) {
       return address2;
     }
     return "";
   }
 
   private static void maybeAppendMECARD(StringBuilder output, String prefix, String value) {
-    if (value.length() > 0) {
+    if (!value.isEmpty()) {
       value = value.replaceAll("([\\\\:;])", "\\\\$1");
       value = value.replaceAll("\\n", "");
       output.append(prefix).append(':').append(value).append(';');
     }
   }
   
-  private static String getVCard(String name, String company, String tel, String url,
-                                 String email, String address, String address2, String memo) {
+  private static String getVCard(String name,
+                                 String company,
+                                 String title,
+                                 String tel,
+                                 String url,
+                                 String email,
+                                 String address,
+                                 String address2,
+                                 String memo) {
     StringBuilder output = new StringBuilder(100);
     output.append("BEGIN:VCARD\n");
     maybeAppendvCard(output, "N", name);
     maybeAppendvCard(output, "ORG", company);
+    maybeAppendvCard(output, "TITLE", title);
     maybeAppendvCard(output, "TEL", tel);
     maybeAppendvCard(output, "URL", url);
     maybeAppendvCard(output, "EMAIL", email);
@@ -128,7 +156,7 @@ public final class ContactInfoGenerator implements GeneratorSource {
   }
   
   private static void maybeAppendvCard(StringBuilder output, String prefix, String value) {
-    if (value.length() > 0) {
+    if (!value.isEmpty()) {
       value = value.replaceAll("([\\\\,;])", "\\\\$1");
       value = value.replaceAll("\\n", "\\\\n");
       output.append(prefix).append(':').append(value).append('\n');
@@ -147,6 +175,10 @@ public final class ContactInfoGenerator implements GeneratorSource {
     return company.getText();
   }
 
+  private String getTitleField() {
+    return title.getText();
+  }
+
   private String getTelField() throws GeneratorException {
     String input = Validators.filterNumber(tel.getText());
     if (input.length() < 1) {
@@ -161,7 +193,7 @@ public final class ContactInfoGenerator implements GeneratorSource {
   
   private String getUrlField() throws GeneratorException {
     String input = url.getText();
-    if (input != null && input.length() > 0) {
+    if (input != null && !input.isEmpty()) {
       Validators.validateUrl(input);
     }
     return input;
@@ -197,26 +229,28 @@ public final class ContactInfoGenerator implements GeneratorSource {
       // early termination if the table has already been constructed
       return table;
     }
-    table = new Grid(9, 2);
+    table = new Grid(10, 2);
     
     table.setText(0, 0, "Name");
     table.setWidget(0, 1, name);
     table.setText(1, 0, "Company");
     table.setWidget(1, 1, company);
-    table.setText(2, 0, "Phone number");
-    table.setWidget(2, 1, tel);
-    table.setText(3, 0, "Email");
-    table.setWidget(3, 1, email);
-    table.setText(4, 0, "Address");
-    table.setWidget(4, 1, address);
-    table.setText(5, 0, "Address 2");
-    table.setWidget(5, 1, address2);
-    table.setText(6, 0, "Website");
-    table.setWidget(6, 1, url);
-    table.setText(7, 0, "Memo");
-    table.setWidget(7, 1, memo);
-    table.setText(8, 0, "Encoding");
-    table.setWidget(8, 1, encoding);
+    table.setText(2, 0, "Title");
+    table.setWidget(2, 1, title);
+    table.setText(3, 0, "Phone number");
+    table.setWidget(3, 1, tel);
+    table.setText(4, 0, "Email");
+    table.setWidget(4, 1, email);
+    table.setText(5, 0, "Address");
+    table.setWidget(5, 1, address);
+    table.setText(6, 0, "Address 2");
+    table.setWidget(6, 1, address2);
+    table.setText(7, 0, "Website");
+    table.setWidget(7, 1, url);
+    table.setText(8, 0, "Memo");
+    table.setWidget(8, 1, memo);
+    table.setText(9, 0, "Encoding");
+    table.setWidget(9, 1, encoding);
     
     name.addStyleName(StylesDefs.INPUT_FIELD_REQUIRED);
     return table;
@@ -229,6 +263,9 @@ public final class ContactInfoGenerator implements GeneratorSource {
     }
     if (widget == company) {
       getCompanyField();
+    }
+    if (widget == title) {
+      getTitleField();
     }
     if (widget == tel) {
       getTelField();
