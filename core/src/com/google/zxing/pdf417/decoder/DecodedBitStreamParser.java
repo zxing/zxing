@@ -119,6 +119,9 @@ final class DecodedBitStreamParser {
         throw FormatException.getFormatInstance();
       }
     }
+    if (result.length() == 0) {
+      throw FormatException.getFormatInstance();
+    }
     return new DecoderResult(null, result.toString(), null, null);
   }
 
