@@ -41,7 +41,7 @@ public final class VCardResultParser extends ResultParser {
   private static final Pattern VCARD_ESCAPES = Pattern.compile("\\\\([,;\\\\])");
   private static final Pattern EQUALS = Pattern.compile("=");
   private static final Pattern SEMICOLON = Pattern.compile(";");
-  private static final Pattern SEMICOLONS = Pattern.compile(";+");
+  private static final Pattern UNESCAPED_SEMICOLONS = Pattern.compile("(?<!\\\\);+");
 
   @Override
   public AddressBookParsedResult parse(Result result) {
@@ -53,32 +53,24 @@ public final class VCardResultParser extends ResultParser {
     if (!m.find() || m.start() != 0) {
       return null;
     }
-    List<List<String>> names = matchVCardPrefixedField("FN", rawText, true);
+    List<List<String>> names = matchVCardPrefixedField("FN", rawText, true, false);
     if (names == null) {
       // If no display names found, look for regular name fields and format them
-      names = matchVCardPrefixedField("N", rawText, true);
+      names = matchVCardPrefixedField("N", rawText, true, false);
       formatNames(names);
     }
-    List<List<String>> phoneNumbers = matchVCardPrefixedField("TEL", rawText, true);
-    List<List<String>> emails = matchVCardPrefixedField("EMAIL", rawText, true);
-    List<String> note = matchSingleVCardPrefixedField("NOTE", rawText, false);
-    List<List<String>> addresses = matchVCardPrefixedField("ADR", rawText, true);
-    if (addresses != null) {
-      for (List<String> list : addresses) {
-        String adr = list.get(0);
-        // Semicolon separators -- just make them a newline
-        adr = SEMICOLONS.matcher(adr).replaceAll("\n").trim();
-        list.set(0, adr);
-      }
-    }
-    List<String> org = matchSingleVCardPrefixedField("ORG", rawText, true);
-    List<String> birthday = matchSingleVCardPrefixedField("BDAY", rawText, true);
+    List<List<String>> phoneNumbers = matchVCardPrefixedField("TEL", rawText, true, false);
+    List<List<String>> emails = matchVCardPrefixedField("EMAIL", rawText, true, false);
+    List<String> note = matchSingleVCardPrefixedField("NOTE", rawText, false, false);
+    List<List<String>> addresses = matchVCardPrefixedField("ADR", rawText, true, true);
+    List<String> org = matchSingleVCardPrefixedField("ORG", rawText, true, false);
+    List<String> birthday = matchSingleVCardPrefixedField("BDAY", rawText, true, false);
     if (birthday != null && !isLikeVCardDate(birthday.get(0))) {
       birthday = null;
     }
-    List<String> title = matchSingleVCardPrefixedField("TITLE", rawText, true);
-    List<String> url = matchSingleVCardPrefixedField("URL", rawText, true);
-    List<String> instantMessenger = matchSingleVCardPrefixedField("IMPP", rawText, true);
+    List<String> title = matchSingleVCardPrefixedField("TITLE", rawText, true, false);
+    List<String> url = matchSingleVCardPrefixedField("URL", rawText, true, false);
+    List<String> instantMessenger = matchSingleVCardPrefixedField("IMPP", rawText, true, false);
     return new AddressBookParsedResult(toPrimaryValues(names), 
                                        null, 
                                        toPrimaryValues(phoneNumbers), 
@@ -97,7 +89,8 @@ public final class VCardResultParser extends ResultParser {
 
   private static List<List<String>> matchVCardPrefixedField(CharSequence prefix,
                                                             String rawText,
-                                                            boolean trim) {
+                                                            boolean trim,
+                                                            boolean parseFieldDivider) {
     List<List<String>> matches = null;
     int i = 0;
     int max = rawText.length();
@@ -172,7 +165,13 @@ public final class VCardResultParser extends ResultParser {
         }
         if (quotedPrintable) {
           element = decodeQuotedPrintable(element, quotedPrintableCharset);
+          if (parseFieldDivider) {
+            element = UNESCAPED_SEMICOLONS.matcher(element).replaceAll("\n").trim();
+          }
         } else {
+          if (parseFieldDivider) {
+            element = UNESCAPED_SEMICOLONS.matcher(element).replaceAll("\n").trim();
+          }
           element = CR_LF_SPACE_TAB.matcher(element).replaceAll("");
           element = NEWLINE_ESCAPE.matcher(element).replaceAll("\n");
           element = VCARD_ESCAPES.matcher(element).replaceAll("$1");
@@ -253,8 +252,9 @@ public final class VCardResultParser extends ResultParser {
 
   static List<String> matchSingleVCardPrefixedField(CharSequence prefix,
                                                     String rawText,
-                                                    boolean trim) {
-    List<List<String>> values = matchVCardPrefixedField(prefix, rawText, trim);
+                                                    boolean trim,
+                                                    boolean parseFieldDivider) {
+    List<List<String>> values = matchVCardPrefixedField(prefix, rawText, trim, parseFieldDivider);
     return values == null || values.isEmpty() ? null : values.get(0);
   }
   
