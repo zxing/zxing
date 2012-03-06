@@ -38,7 +38,7 @@ using zxing::Ref;
 using std::string;
 
 namespace {
-  void add(string& result, uint8_t character) {
+  void add(string& result, unsigned char character) {
     char s[] = { character & 0xff };
     char* ss = s;
     size_t sl = sizeof(s);

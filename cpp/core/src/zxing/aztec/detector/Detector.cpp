@@ -380,19 +380,6 @@ Ref<BitMatrix> Detector::sampleGrid(Ref<zxing::BitMatrix> image,
 }
         
 void Detector::getParameters(Ref<zxing::BitArray> parameterData) {
-            
-  if (false) {
-    printf("getting parameters from: ");
-    for (int i = 0; i < (int)parameterData->getSize(); i++) {
-      if (parameterData->get(i)) {
-        printf("1");
-      } else {
-        printf("0");
-      }
-    }
-    printf("\n");
-  }
-            
   nbLayers_ = 0;
   nbDataBlocks_ = 0;
             
