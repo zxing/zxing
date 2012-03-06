@@ -20,7 +20,9 @@
  */
 
 #include <zxing/aztec/decoder/Decoder.h>
+#ifndef NO_ICONV
 #include <iconv.h>
+#endif
 #include <iostream>
 #include <zxing/FormatException.h>
 #include <zxing/common/reedsolomon/ReedSolomonDecoder.h>
@@ -39,6 +41,7 @@ using std::string;
 
 namespace {
   void add(string& result, unsigned char character) {
+#ifndef NO_ICONV
     char s[] = { character & 0xff };
     char* ss = s;
     size_t sl = sizeof(s);
@@ -50,6 +53,9 @@ namespace {
     iconv_close(ic);
     d[sizeof(d)-dl] = 0;
     result.append(d);
+#else
+    result.push_back(character);
+#endif
   }
 
   const int NB_BITS_COMPACT[] = {
