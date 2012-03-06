@@ -21,7 +21,7 @@
 
 #include <zxing/common/DecoderResult.h>
 #include <zxing/common/BitMatrix.h>
-#include <zxing/common/str.h>
+#include <zxing/common/Str.h>
 #include <zxing/aztec/AztecDetectorResult.h>
 
 namespace zxing {
