@@ -54,8 +54,8 @@
   <string name="history_clear_one_history_text">Очистить</string>
   <string name="history_clear_text">Очистить историю</string>
   <string name="history_email_title">История сканирования</string>
-  <string name="history_empty">Пустой</string>
-  <string name="history_empty_detail">Нет штрих-код сканирования были записаны</string>
+  <string name="history_empty">Пусто</string>
+  <string name="history_empty_detail">Нет сохраненных штрих-кодов</string>
   <string name="history_send">Отправить историю</string>
   <string name="history_title">История</string>
   <string name="menu_about">О программе</string>
