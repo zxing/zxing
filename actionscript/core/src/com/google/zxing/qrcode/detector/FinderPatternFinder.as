@@ -1,16 +1,18 @@
 package com.google.zxing.qrcode.detector
 {
+	import com.google.zxing.DecodeHintType;
+	import com.google.zxing.NotFoundException;
+	import com.google.zxing.ReaderException;
+	import com.google.zxing.ResultPoint;
+	import com.google.zxing.common.BitArray;
+	import com.google.zxing.common.BitMatrix;
+	import com.google.zxing.common.ResultPointCallback;
+	import com.google.zxing.common.flexdatatypes.ArrayList;
+	import com.google.zxing.common.flexdatatypes.HashTable;
+
     public  class FinderPatternFinder
     { 
-    	  import com.google.zxing.common.flexdatatypes.HashTable;
-    	  import com.google.zxing.common.flexdatatypes.ArrayList;
-    	  import com.google.zxing.ResultPoint;
-    	  import com.google.zxing.ResultPointCallback;
-    	  import com.google.zxing.common.BitArray;
-    	  import com.google.zxing.common.BitMatrix;
-    	  import com.google.zxing.DecodeHintType;
-    	  import com.google.zxing.ReaderException;
-    	  import com.google.zxing.NotFoundException;
+    	 
     	  
           private static var CENTER_QUORUM:int = 2;
           protected static var MIN_SKIP:int = 3; // 1 pixel/module times 3 modules/center

@@ -1,5 +1,7 @@
 package com.google.zxing.qrcode.detector
 {
+	import com.google.zxing.common.ResultPointCallback;
+
     public class AlignmentPatternFinder
     { 
     	
@@ -7,7 +9,6 @@ package com.google.zxing.qrcode.detector
     	import com.google.zxing.common.BitArray;
     	import com.google.zxing.common.BitMatrix;
     	import com.google.zxing.ReaderException;
-    	import com.google.zxing.ResultPointCallback;
     	import com.google.zxing.ResultPoint;
     	
     	

@@ -41,7 +41,7 @@ public final class MultiDetector extends Detector {
 
   public function detectMulti(hints:HashTable):Array {
     var image:BitMatrix  = getImage();
-    var finder:MultiFinderPatternFinder = new MultiFinderPatternFinder(image);
+    var finder:MultiFinderPatternFinder = new MultiFinderPatternFinder(image, null);
     var info:Array = finder.findMulti(hints);
 
     if (info == null || info.length == 0) {
