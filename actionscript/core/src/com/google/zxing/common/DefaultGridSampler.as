@@ -27,7 +27,7 @@ public class DefaultGridSampler extends GridSampler
 
  	
 
-  public function sampleGrid2(image:BitMatrix,
+ override public function sampleGrid2(image:BitMatrix,
                               dimensionX:int,
                               dimensionY:int,
                               p1ToX:Number,
@@ -73,7 +73,7 @@ public class DefaultGridSampler extends GridSampler
             bits._set(x >> 1, y);
           }
         }
-      } catch (aioobe:ArrayIndexOutOfBoundsException) {
+      } catch (aioobe:Error) {
         // This feels wrong, but, sometimes if the finder patterns are misidentified, the resulting
         // transform gets "twisted" such that it maps a straight line of points to a set of points
         // whose endpoints are in bounds, but others are not. There is probably some mathematical

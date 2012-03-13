@@ -1,20 +1,21 @@
 package com.google.zxing.qrcode.detector
 {
+	import com.google.zxing.common.ResultPointCallback;
+	import com.google.zxing.common.BitMatrix;
+	import com.google.zxing.common.flexdatatypes.HashTable;
+	import com.google.zxing.common.DetectorResult;
+	import com.google.zxing.common.GridSampler;
+	import com.google.zxing.common.PerspectiveTransform;
+	import com.google.zxing.qrcode.decoder.Version;
+	import com.google.zxing.ResultPoint;
+	import com.google.zxing.common.BitMatrix;
+	import com.google.zxing.ReaderException;
+	import com.google.zxing.DecodeHintType;
+	import com.google.zxing.NotFoundException;
+	
 	public class Detector
     { 
-		import com.google.zxing.common.BitMatrix;
-		import com.google.zxing.common.flexdatatypes.HashTable;
-		import com.google.zxing.common.DetectorResult;
-		import com.google.zxing.common.GridSampler;
-		import com.google.zxing.common.PerspectiveTransform;
-		import com.google.zxing.qrcode.decoder.Version;
-		import com.google.zxing.ResultPoint;
-		import com.google.zxing.common.BitMatrix;
-		import com.google.zxing.ReaderException;
-		import com.google.zxing.ResultPointCallback;
-		import com.google.zxing.DecodeHintType;
-		import com.google.zxing.NotFoundException;
-		import com.google.zxing.ResultPointCallback;
+		
 		
 
           private var image:BitMatrix ;

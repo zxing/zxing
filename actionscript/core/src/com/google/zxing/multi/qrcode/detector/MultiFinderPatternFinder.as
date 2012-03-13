@@ -18,15 +18,16 @@ package com.google.zxing.multi.qrcode.detector
 {
 
 import com.google.zxing.DecodeHintType;
+import com.google.zxing.ReaderException;
+import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.Collections;
+import com.google.zxing.common.ResultPointCallback;
 import com.google.zxing.common.flexdatatypes.ArrayList;
 import com.google.zxing.common.flexdatatypes.HashTable;
-import com.google.zxing.ResultPoint;
 import com.google.zxing.qrcode.detector.FinderPattern;
 import com.google.zxing.qrcode.detector.FinderPatternFinder;
 import com.google.zxing.qrcode.detector.FinderPatternInfo;
-import com.google.zxing.ReaderException;
 
 /**
  * <p>This class attempts to find finder patterns in a QR Code. Finder patterns are the square
@@ -75,8 +76,8 @@ public final class MultiFinderPatternFinder extends FinderPatternFinder {
    *
    * @param image image to search
    */
-  public function MultiFinderPatternFinder(image:BitMatrix) {
-    super(image);
+  public function MultiFinderPatternFinder(image:BitMatrix, resultPointCallback:ResultPointCallback) {
+    super(image, resultPointCallback);
   }
 
   /**
