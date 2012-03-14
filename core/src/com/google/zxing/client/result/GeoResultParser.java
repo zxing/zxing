@@ -36,11 +36,7 @@ public final class GeoResultParser extends ResultParser {
   
   @Override
   public GeoParsedResult parse(Result result) {
-    String rawText = result.getText();
-    if (rawText == null) {
-      return null;
-    }
-
+    String rawText = getMassagedText(result);
     Matcher matcher = GEO_URL_PATTERN.matcher(rawText);
     if (!matcher.matches()) {
       return null;

@@ -48,7 +48,7 @@ public final class VCardResultParser extends ResultParser {
     // Although we should insist on the raw text ending with "END:VCARD", there's no reason
     // to throw out everything else we parsed just because this was omitted. In fact, Eclair
     // is doing just that, and we can't parse its contacts without this leniency.
-    String rawText = result.getText();
+    String rawText = getMassagedText(result);
     Matcher m = BEGIN_VCARD.matcher(rawText);
     if (!m.find() || m.start() != 0) {
       return null;

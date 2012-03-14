@@ -32,7 +32,7 @@ public final class SMSTOMMSTOResultParser extends ResultParser {
 
   @Override
   public SMSParsedResult parse(Result result) {
-    String rawText = result.getText();
+    String rawText = getMassagedText(result);
     if (!(rawText.startsWith("smsto:") || rawText.startsWith("SMSTO:") ||
           rawText.startsWith("mmsto:") || rawText.startsWith("MMSTO:"))) {
       return null;

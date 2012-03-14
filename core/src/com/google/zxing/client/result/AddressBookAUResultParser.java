@@ -33,7 +33,7 @@ public final class AddressBookAUResultParser extends ResultParser {
 
   @Override
   public AddressBookParsedResult parse(Result result) {
-    String rawText = result.getText();
+    String rawText = getMassagedText(result);
     // MEMORY is mandatory; seems like a decent indicator, as does end-of-record separator CR/LF
     if (!rawText.contains("MEMORY") || !rawText.contains("\r\n")) {
       return null;

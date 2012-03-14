@@ -35,7 +35,7 @@ public final class ProductResultParser extends ResultParser {
           format == BarcodeFormat.EAN_8 || format == BarcodeFormat.EAN_13)) {
       return null;
     }
-    String rawText = result.getText();
+    String rawText = getMassagedText(result);
     int length = rawText.length();
     for (int x = 0; x < length; x++) {
       char c = rawText.charAt(x);

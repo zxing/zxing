@@ -48,7 +48,7 @@ public final class ExpandedProductResultParser extends ResultParser {
       return null;
     }
     // Really neither of these should happen:
-    String rawText = result.getText();
+    String rawText = getMassagedText(result);
     if (rawText == null) {
       // ExtendedProductParsedResult NOT created. Input text is NULL
       return null;

@@ -35,7 +35,7 @@ public final class ISBNResultParser extends ResultParser {
     if (format != BarcodeFormat.EAN_13) {
       return null;
     }
-    String rawText = result.getText();
+    String rawText = getMassagedText(result);
     int length = rawText.length();
     if (length != 13) {
       return null;
