@@ -17,7 +17,7 @@
 package com.google.zxing.aztec
 {
 	import com.google.zxing.Reader;
-	import com.google.zxing.common.ResultPointCallback;
+	import com.google.zxing.ResultPointCallback;
 	
 	public final class AztecReader implements Reader 
 	{
