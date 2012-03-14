@@ -33,7 +33,7 @@ public final class EmailDoCoMoResultParser extends AbstractDoCoMoResultParser {
 
   @Override
   public EmailAddressParsedResult parse(Result result) {
-    String rawText = result.getText();
+    String rawText = getMassagedText(result);
     if (!rawText.startsWith("MATMSG:")) {
       return null;
     }

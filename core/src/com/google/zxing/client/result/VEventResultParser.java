@@ -30,10 +30,7 @@ public final class VEventResultParser extends ResultParser {
 
   @Override
   public CalendarParsedResult parse(Result result) {
-    String rawText = result.getText();
-    if (rawText == null) {
-      return null;
-    }
+    String rawText = getMassagedText(result);
     int vEventStart = rawText.indexOf("BEGIN:VEVENT");
     if (vEventStart < 0) {
       return null;

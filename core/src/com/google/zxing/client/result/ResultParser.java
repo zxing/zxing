@@ -65,6 +65,7 @@ public abstract class ResultParser {
   private static final Pattern ALPHANUM = Pattern.compile("[a-zA-Z0-9]*");
   private static final Pattern AMPERSAND = Pattern.compile("&");
   private static final Pattern EQUALS = Pattern.compile("=");
+  private static final String BYTE_ORDER_MARK = "\ufeff";
 
   /**
    * Attempts to parse the raw {@link Result}'s contents as a particular type
@@ -72,6 +73,14 @@ public abstract class ResultParser {
    * the result of parsing.
    */
   public abstract ParsedResult parse(Result theResult);
+
+  protected static String getMassagedText(Result result) {
+    String text = result.getText();
+    if (text.startsWith(BYTE_ORDER_MARK)) {
+      text = text.substring(1);
+    }
+    return text;
+  }
 
   public static ParsedResult parseResult(Result theResult) {
     for (ResultParser parser : PARSERS) {

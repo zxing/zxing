@@ -37,7 +37,7 @@ public final class AddressBookDoCoMoResultParser extends AbstractDoCoMoResultPar
 
   @Override
   public AddressBookParsedResult parse(Result result) {
-    String rawText = result.getText();
+    String rawText = getMassagedText(result);
     if (!rawText.startsWith("MECARD:")) {
       return null;
     }

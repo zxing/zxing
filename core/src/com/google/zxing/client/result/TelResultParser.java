@@ -27,7 +27,7 @@ public final class TelResultParser extends ResultParser {
 
   @Override
   public TelParsedResult parse(Result result) {
-    String rawText = result.getText();
+    String rawText = getMassagedText(result);
     if (!rawText.startsWith("tel:") && !rawText.startsWith("TEL:")) {
       return null;
     }

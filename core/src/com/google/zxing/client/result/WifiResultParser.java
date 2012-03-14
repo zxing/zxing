@@ -31,7 +31,7 @@ public final class WifiResultParser extends ResultParser {
 
   @Override
   public WifiParsedResult parse(Result result) {
-    String rawText = result.getText();
+    String rawText = getMassagedText(result);
     if (!rawText.startsWith("WIFI:")) {
       return null;
     }

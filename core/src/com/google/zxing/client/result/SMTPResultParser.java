@@ -30,7 +30,7 @@ public final class SMTPResultParser extends ResultParser {
 
   @Override
   public EmailAddressParsedResult parse(Result result) {
-    String rawText = result.getText();
+    String rawText = getMassagedText(result);
     if (!(rawText.startsWith("smtp:") || rawText.startsWith("SMTP:"))) {
       return null;
     }

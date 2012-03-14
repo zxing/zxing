@@ -41,7 +41,7 @@ public final class URIResultParser extends ResultParser {
 
   @Override
   public URIParsedResult parse(Result result) {
-    String rawText = result.getText();
+    String rawText = getMassagedText(result);
     // We specifically handle the odd "URL" scheme here for simplicity
     if (rawText.startsWith("URL:")) {
       rawText = rawText.substring(4);
