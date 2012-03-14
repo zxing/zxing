@@ -23,7 +23,7 @@ package com.google.zxing.oned.rss
 	import com.google.zxing.Result;
 	import com.google.zxing.ResultPoint;
 	import com.google.zxing.common.BitArray;
-	import com.google.zxing.common.ResultPointCallback;
+	import com.google.zxing.ResultPointCallback;
 	import com.google.zxing.common.flexdatatypes.ArrayList;
 	import com.google.zxing.common.flexdatatypes.Enumeration;
 	import com.google.zxing.common.flexdatatypes.HashTable;

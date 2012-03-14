@@ -1,6 +1,6 @@
 package com.google.zxing.qrcode.detector
 {
-	import com.google.zxing.common.ResultPointCallback;
+	import com.google.zxing.ResultPointCallback;
 	import com.google.zxing.common.BitMatrix;
 	import com.google.zxing.common.flexdatatypes.HashTable;
 	import com.google.zxing.common.DetectorResult;
