@@ -100,6 +100,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private static final String[] ZXING_URLS = { "http://zxing.appspot.com/scan", "zxing://scan/" };
   private static final String RETURN_CODE_PLACEHOLDER = "{CODE}";
   private static final String RETURN_URL_PARAM = "ret";
+  private static final String RAW_PARAM = "raw";
 
   public static final int HISTORY_REQUEST_CODE = 0x0000bacc;
 
@@ -121,6 +122,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private IntentSource source;
   private String sourceUrl;
   private String returnUrlTemplate;
+  private boolean returnRaw;
   private Collection<BarcodeFormat> decodeFormats;
   private String characterSet;
   private String versionName;
@@ -130,13 +132,13 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
   private final DialogInterface.OnClickListener aboutListener =
       new DialogInterface.OnClickListener() {
-    @Override
-    public void onClick(DialogInterface dialogInterface, int i) {
-      Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.zxing_url)));
-      intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-      startActivity(intent);
-    }
-  };
+        @Override
+        public void onClick(DialogInterface dialogInterface, int i) {
+          Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.zxing_url)));
+          intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+          startActivity(intent);
+        }
+      };
 
   ViewfinderView getViewfinderView() {
     return viewfinderView;
@@ -257,6 +259,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         sourceUrl = dataString;
         Uri inputUri = Uri.parse(sourceUrl);
         returnUrlTemplate = inputUri.getQueryParameter(RETURN_URL_PARAM);
+        returnRaw = inputUri.getQueryParameter(RAW_PARAM) != null;
         decodeFormats = DecodeFormatManager.parseDecodeFormats(inputUri);
 
       }
@@ -663,9 +666,9 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       // Replace each occurrence of RETURN_CODE_PLACEHOLDER in the returnUrlTemplate
       // with the scanned code. This allows both queries and REST-style URLs to work.
       if (returnUrlTemplate != null) {
-        String codeReplacement = String.valueOf(resultHandler.getDisplayContents());
+        CharSequence codeReplacement = returnRaw ? rawResult.getText() : resultHandler.getDisplayContents();
         try {
-          codeReplacement = URLEncoder.encode(codeReplacement, "UTF-8");
+          codeReplacement = URLEncoder.encode(codeReplacement.toString(), "UTF-8");
         } catch (UnsupportedEncodingException e) {
           // can't happen; UTF-8 is always supported. Continue, I guess, without encoding
         }
