@@ -94,7 +94,8 @@ public final class WifiGenerator implements GeneratorSource {
     if (input.length() < 1) {
       throw new GeneratorException("SSID must be at least 1 character.");
     }
-    return parseTextField("SSID", ssid);
+    String parsed = parseTextField("SSID", ssid);
+    return quoteHex(parsed); // Android needs hex-like SSIDs quoted or will be read as hex
   }
   
   private String getPasswordField() throws GeneratorException {
@@ -141,4 +142,15 @@ public final class WifiGenerator implements GeneratorSource {
   public void setFocus() {
     ssid.setFocus(true);
   }
+
+  private static String quoteHex(String value) {
+    if (value != null && value.matches("[0-9A-Fa-f]+")) {
+      if (value.charAt(0) == '"' && value.charAt(value.length() - 1) == '"') {
+        return value;
+      }
+      return '\"' + value + '\"';
+    }
+    return value;
+  }
+
 }
