@@ -102,9 +102,6 @@
   <string name="preferences_decode_1D_title">Afkod 1D-stregkoder</string>
   <string name="preferences_decode_Data_Matrix_title">Afkod Data Matrix</string>
   <string name="preferences_decode_QR_title">Afkod QR-koder</string>
-  <string name="preferences_device_bug_workarounds_title">Enhedfejlløsninger</string>
-  <string name="preferences_force_preview_to_screen_size_summary">Kun muligt, hvis skærmen er sort</string>
-  <string name="preferences_force_preview_to_screen_size_title">Tving forhåndsvisningsstørrelsen til skærmstørrelsen</string>
   <string name="preferences_front_light_summary">Forbedrer aflæsning i svagt lys på nogle telefoner, men kan medføre genskær. Virker ikke på alle telefoner.</string>
   <string name="preferences_front_light_title">Brug frontlys</string>
   <string name="preferences_general_title">Generelle indstillinger</string>

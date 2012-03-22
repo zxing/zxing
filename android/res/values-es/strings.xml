@@ -102,9 +102,6 @@
   <string name="preferences_decode_1D_title">Códigos de barras 1D</string>
   <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>
   <string name="preferences_decode_QR_title">Códigos QR</string>
-  <string name="preferences_device_bug_workarounds_title">Soluciones provisionales de dispositivo</string>
-  <string name="preferences_force_preview_to_screen_size_summary">Sólo permiten si la pantalla es de color negro</string>
-  <string name="preferences_force_preview_to_screen_size_title">Exigir tamaño de vista previa a tamaño de pantalla</string>
   <string name="preferences_front_light_summary">Mejora la exploración en condiciones de poca luz en algunos teléfonos, pero puede causar deslumbramiento. No funciona en todos los teléfonos.</string>
   <string name="preferences_front_light_title">Utilizar luz delantera</string>
   <string name="preferences_general_title">Configuración general</string>

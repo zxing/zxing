@@ -102,9 +102,6 @@
   <string name="preferences_decode_1D_title">1D črtno kodo</string>
   <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>
   <string name="preferences_decode_QR_title">QR kodo</string>
-  <string name="preferences_device_bug_workarounds_title">Device Bug Rešitve</string>
-  <string name="preferences_force_preview_to_screen_size_summary">Le če bi zaslon je črn</string>
-  <string name="preferences_force_preview_to_screen_size_title">Zahtevaj predogled velikost na velikost zaslona</string>
   <string name="preferences_front_light_summary">Izboljša branje pri slabi svetlobi na nekaterih telefonih, a lahko povzroči blesk. Ne deluje na vseh telefonih.</string>
   <string name="preferences_front_light_title">Uporabite sprednjo luč</string>
   <string name="preferences_general_title">Splošne nastavitve</string>

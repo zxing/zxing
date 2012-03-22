@@ -102,9 +102,6 @@
   <string name="preferences_decode_1D_title">1Dバーコードを読み取る</string>
   <string name="preferences_decode_Data_Matrix_title">データマトリックスコードを読み取る</string>
   <string name="preferences_decode_QR_title">QRコードを読み取る</string>
-  <string name="preferences_device_bug_workarounds_title">デバイスのバグの回避策</string>
-  <string name="preferences_force_preview_to_screen_size_summary">画面が黒の場合のみ有効</string>
-  <string name="preferences_force_preview_to_screen_size_title">画面サイズにプレビューのサイズを強制的に</string>
   <string name="preferences_front_light_summary">可能な場合、フロントライトを有効にする</string>
   <string name="preferences_front_light_title">フロントライト</string>
   <string name="preferences_general_title">一般設定</string>

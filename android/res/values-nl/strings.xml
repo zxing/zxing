@@ -102,9 +102,6 @@
   <string name="preferences_decode_1D_title">1D barcodes</string>
   <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>
   <string name="preferences_decode_QR_title">QR Codes</string>
-  <string name="preferences_device_bug_workarounds_title">Apparaat Bug Tijdelijke oplossingen</string>
-  <string name="preferences_force_preview_to_screen_size_summary">Alleen schakelen als het scherm zwart is</string>
-  <string name="preferences_force_preview_to_screen_size_title">Vereisen voorbeeldformaat de schermgrootte</string>
   <string name="preferences_front_light_summary">Inschakelen van achtergrondlicht, indien beschikbaar. Dit kan in sommige gevallen leiden tot slechte herkenning van barcodes. Werkt niet op alle telefoons.</string>
   <string name="preferences_front_light_title">Achtergrondlicht</string>
   <string name="preferences_general_title">Basisinstellingen</string>
