@@ -102,9 +102,6 @@
   <string name="preferences_decode_1D_title">1차원 바코드를 읽기</string>
   <string name="preferences_decode_Data_Matrix_title">데이터 행렬(Data Matrix)을 해석하기</string>
   <string name="preferences_decode_QR_title">QR 코드를 읽기</string>
-  <string name="preferences_device_bug_workarounds_title">장치 버그 해결</string>
-  <string name="preferences_force_preview_to_screen_size_summary">화면이 검은 경우에만 사용</string>
-  <string name="preferences_force_preview_to_screen_size_title">화면 크기에 강제로 미리보기 크기</string>
   <string name="preferences_front_light_summary">특정 기기에서는 어두운 환경에서의 스캐닝 기능을 향상 시키지만 너무 밝을 수도 있습니다. 모든 기기에서 작동되지 않습니다.</string>
   <string name="preferences_front_light_title">플래시 사용하기</string>
   <string name="preferences_general_title">일반 설정</string>

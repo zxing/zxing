@@ -102,9 +102,6 @@
   <string name="preferences_decode_1D_title">Unidimensionnels (1D)</string>
   <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>
   <string name="preferences_decode_QR_title">QR</string>
-  <string name="preferences_device_bug_workarounds_title">Solutions de contournement périphérique</string>
-  <string name="preferences_force_preview_to_screen_size_summary">Seuls les activer si l\'écran est noir</string>
-  <string name="preferences_force_preview_to_screen_size_title">Exiger taille de l\'aperçu vigueur au taille de l\'écran</string>
   <string name="preferences_front_light_summary">Allumer la lampe derrière le téléphone quand la lumière ambiante est faible. Peut provoquer des reflets et ne fonctionne pas sur tous les téléphones.</string>
   <string name="preferences_front_light_title">Flash</string>
   <string name="preferences_general_title">Paramètres généraux</string>
