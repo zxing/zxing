@@ -60,12 +60,11 @@
         <pathelement location="android/src"/>
         <pathelement location="android/gen"/>        
         <pathelement location="core/src"/>
-        <pathelement location="javame/src"/>
         <pathelement location="javase/src"/>
         <pathelement location="zxingorg/src"/>
       </sourcepath>
       <classpath>
-        <pathelement location="${android-home}/platforms/android-10/android.jar"/>
+        <pathelement location="${android-home}/platforms/android-15/android.jar"/>
         <pathelement location="${tomcat-home}/lib/servlet-api.jar"/>
         <fileset dir="zxingorg/web/WEB-INF/lib">
           <include name="*.jar"/>
