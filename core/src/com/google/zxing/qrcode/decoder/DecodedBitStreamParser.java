@@ -258,6 +258,9 @@ final class DecodedBitStreamParser {
     }
     if (count == 1) {
       // special case: one character left
+      if (bits.available() < 6) {
+        throw FormatException.getFormatInstance();
+      }
       result.append(toAlphaNumericChar(bits.readBits(6)));
     }
     // See section 6.4.8.1, 6.4.8.2
