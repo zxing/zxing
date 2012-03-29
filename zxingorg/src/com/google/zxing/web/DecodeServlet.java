@@ -40,21 +40,12 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.http.Header;
 import org.apache.http.HttpMessage;
 import org.apache.http.HttpResponse;
-import org.apache.http.HttpVersion;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.conn.scheme.PlainSocketFactory;
-import org.apache.http.conn.scheme.Scheme;
-import org.apache.http.conn.scheme.SchemeRegistry;
-import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.conn.SingleClientConnManager;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpParams;
-import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.util.EntityUtils;
 
 import java.awt.color.CMMException;
@@ -72,6 +63,7 @@ import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -109,25 +101,15 @@ public final class DecodeServlet extends HttpServlet {
     HINTS_PURE.put(DecodeHintType.PURE_BARCODE, Boolean.TRUE);
   }
 
-  private HttpParams params;
-  private SchemeRegistry registry;
   private DiskFileItemFactory diskFileItemFactory;
+  private HttpClient client;
 
   @Override
   public void init(ServletConfig servletConfig) {
-
     Logger logger = Logger.getLogger("com.google.zxing");
     logger.addHandler(new ServletContextLogHandler(servletConfig.getServletContext()));
-
-    params = new BasicHttpParams();
-    HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
-
-    registry = new SchemeRegistry();
-    registry.register(new Scheme("http", 80, PlainSocketFactory.getSocketFactory()));
-    registry.register(new Scheme("https", 443, SSLSocketFactory.getSocketFactory()));
-
     diskFileItemFactory = new DiskFileItemFactory();
-
+    client = new DefaultHttpClient();
     log.info("DecodeServlet configured");
   }
 
@@ -135,7 +117,7 @@ public final class DecodeServlet extends HttpServlet {
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
     String imageURIString = request.getParameter("u");
-    if (imageURIString == null || imageURIString.length() == 0) {
+    if (imageURIString == null || imageURIString.isEmpty()) {
       log.fine("URI was empty");
       response.sendRedirect("badurl.jspx");
       return;
@@ -157,9 +139,6 @@ public final class DecodeServlet extends HttpServlet {
       response.sendRedirect("badurl.jspx");
       return;
     }
-
-    ClientConnectionManager connectionManager = new SingleClientConnManager(registry);
-    HttpClient client = new DefaultHttpClient(connectionManager, params);
 
     HttpUriRequest getRequest = new HttpGet(imageURI);
     getRequest.addHeader("Connection", "close"); // Avoids CLOSE_WAIT socket issue?
@@ -215,14 +194,16 @@ public final class DecodeServlet extends HttpServlet {
       }
 
     } finally {
-      connectionManager.shutdown();
+      ClientConnectionManager connectionManager = client.getConnectionManager();
+      connectionManager.closeExpiredConnections();
+      connectionManager.closeIdleConnections(1, TimeUnit.SECONDS);
     }
 
   }
 
   @Override
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
-          throws ServletException, IOException {
+      throws ServletException, IOException {
 
     if (!ServletFileUpload.isMultipartContent(request)) {
       log.fine("File upload was not multipart");
@@ -409,6 +390,7 @@ public final class DecodeServlet extends HttpServlet {
   @Override
   public void destroy() {
     log.config("DecodeServlet shutting down...");
+    client.getConnectionManager().shutdown();
   }
 
 }
