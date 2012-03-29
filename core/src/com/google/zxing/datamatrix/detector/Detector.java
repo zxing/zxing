@@ -276,7 +276,7 @@ public final class Detector {
 		
 		ResultPoint c1 = new ResultPoint(topRight.getX() + corr * cos, topRight.getY() + corr * sin);
 	
-		corr = distance(bottomLeft, bottomRight) / (float) dimension;
+		corr = distance(bottomLeft, topLeft) / (float) dimension;
 		norm = distance(bottomRight, topRight);
 		cos = (topRight.getX() - bottomRight.getX()) / norm;
 		sin = (topRight.getY() - bottomRight.getY()) / norm;
