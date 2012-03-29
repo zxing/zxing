@@ -46,6 +46,10 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.conn.BasicClientConnectionManager;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.CoreConnectionPNames;
+import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
 
 import java.awt.color.CMMException;
@@ -63,7 +67,6 @@ import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -102,14 +105,12 @@ public final class DecodeServlet extends HttpServlet {
   }
 
   private DiskFileItemFactory diskFileItemFactory;
-  private HttpClient client;
 
   @Override
   public void init(ServletConfig servletConfig) {
     Logger logger = Logger.getLogger("com.google.zxing");
     logger.addHandler(new ServletContextLogHandler(servletConfig.getServletContext()));
     diskFileItemFactory = new DiskFileItemFactory();
-    client = new DefaultHttpClient();
     log.info("DecodeServlet configured");
   }
 
@@ -143,6 +144,14 @@ public final class DecodeServlet extends HttpServlet {
     HttpUriRequest getRequest = new HttpGet(imageURI);
     getRequest.addHeader("Connection", "close"); // Avoids CLOSE_WAIT socket issue?
 
+    HttpParams params = new BasicHttpParams();
+    DefaultHttpClient.setDefaultHttpParams(params);
+    params.setIntParameter(CoreConnectionPNames.SO_LINGER, 5); // Avoids CLOSE_WAIT socket issue?
+    params.setIntParameter(CoreConnectionPNames.SO_TIMEOUT, 5000);
+    params.setIntParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, 5000);
+
+    ClientConnectionManager connectionManager = new BasicClientConnectionManager();
+    HttpClient client = new DefaultHttpClient(connectionManager, params);
     try {
 
       HttpResponse getResponse;
@@ -194,9 +203,7 @@ public final class DecodeServlet extends HttpServlet {
       }
 
     } finally {
-      ClientConnectionManager connectionManager = client.getConnectionManager();
-      connectionManager.closeExpiredConnections();
-      connectionManager.closeIdleConnections(1, TimeUnit.SECONDS);
+      connectionManager.shutdown();
     }
 
   }
@@ -390,7 +397,6 @@ public final class DecodeServlet extends HttpServlet {
   @Override
   public void destroy() {
     log.config("DecodeServlet shutting down...");
-    client.getConnectionManager().shutdown();
   }
 
 }

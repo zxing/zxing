@@ -24,6 +24,10 @@
   <filter>
     <filter-name>DoSFilter</filter-name>
     <filter-class>com.google.zxing.web.DoSFilter</filter-class>
+    <init-param>
+      <param-name>bad.ips</param-name>
+      <param-value>69.89.31.60,2.95.142.74</param-value> <!-- Causes weird CLOSE_WAIT thread hangs -->
+    </init-param>
   </filter>
 
   <filter-mapping>
