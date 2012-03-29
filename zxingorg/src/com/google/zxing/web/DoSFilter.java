@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -44,9 +45,11 @@ public final class DoSFilter implements Filter {
   private static final int MAX_ACCESSES_PER_IP_PER_TIME = 10;
   private static final long MAX_ACCESS_INTERVAL_MSEC = 10L * 1000L;
   private static final long UNBAN_INTERVAL_MSEC = 60L * 60L * 1000L;
+  public static final String BAD_IPS_INIT_PARAM = "bad.ips";
 
   private final IPTrie numRecentAccesses;
   private final Timer timer;
+  private final Set<String> badIPAddresses;
   private final Set<String> bannedIPAddresses;
   private ServletContext context;
 
@@ -54,6 +57,7 @@ public final class DoSFilter implements Filter {
     numRecentAccesses = new IPTrie();
     timer = new Timer("DosFilter reset timer");
     bannedIPAddresses = Collections.synchronizedSet(new HashSet<String>());
+    badIPAddresses = new HashSet<String>();
   }
 
   @Override
@@ -61,6 +65,11 @@ public final class DoSFilter implements Filter {
     context = filterConfig.getServletContext();
     timer.scheduleAtFixedRate(new ResetTask(), 0L, MAX_ACCESS_INTERVAL_MSEC);
     timer.scheduleAtFixedRate(new UnbanTask(), 0L, UNBAN_INTERVAL_MSEC);
+    badIPAddresses.clear();
+    String badIPsString = filterConfig.getInitParameter(BAD_IPS_INIT_PARAM);
+    if (badIPsString != null) {
+      badIPAddresses.addAll(Arrays.asList(badIPsString.split(",")));
+    }
   }
 
   @Override
@@ -77,7 +86,7 @@ public final class DoSFilter implements Filter {
 
   private boolean isBanned(ServletRequest request) {
     String remoteIPAddressString = request.getRemoteAddr();
-    if (bannedIPAddresses.contains(remoteIPAddressString)) {
+    if (bannedIPAddresses.contains(remoteIPAddressString) || badIPAddresses.contains(remoteIPAddressString)) {
       return true;
     }
     InetAddress remoteIPAddress;
@@ -100,6 +109,7 @@ public final class DoSFilter implements Filter {
     timer.cancel();
     numRecentAccesses.clear();
     bannedIPAddresses.clear();
+    badIPAddresses.clear();
   }
 
   private final class ResetTask extends TimerTask {
