@@ -11,11 +11,10 @@ Apache License. Contributors are listed under:
 http://barcode4j.sourceforge.net/contributors.html
 
 --------------------------------------------------------------------------------
-NOTICES FOR APACHE HTTPCOMPONENTS, COMMONS IO, COMMONS LANG,
- COMMONS LOGGING, COMMONS FILEUPLOAD
+NOTICES FOR APACHE COMMONS FILEUPLOAD, IO, LANG
 --------------------------------------------------------------------------------
 
-Copyright 1999-2012 The Apache Software Foundation
+Copyright 2002-2010 The Apache Software Foundation
 
 This product includes software developed by
 The Apache Software Foundation (http://www.apache.org/).

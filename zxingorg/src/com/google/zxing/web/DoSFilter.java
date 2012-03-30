@@ -45,7 +45,7 @@ public final class DoSFilter implements Filter {
   private static final int MAX_ACCESSES_PER_IP_PER_TIME = 10;
   private static final long MAX_ACCESS_INTERVAL_MSEC = 10L * 1000L;
   private static final long UNBAN_INTERVAL_MSEC = 60L * 60L * 1000L;
-  public static final String BAD_IPS_INIT_PARAM = "bad.ips";
+  private static final String BAD_IPS_INIT_PARAM = "bad.ips";
 
   private final IPTrie numRecentAccesses;
   private final Timer timer;
