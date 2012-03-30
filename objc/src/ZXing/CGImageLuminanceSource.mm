@@ -48,7 +48,7 @@ CGImageRef CGImageLuminanceSource::createImageFromBuffer
     memcpy(bytes, baseAddress+top*bytesPerRow, size);
   } else {
     for(int y=0; y<height; y++) {
-      memcpy(bytes+y*bytesPerRow,
+      memcpy(bytes+y*newBytesPerRow,
              baseAddress+left*4+(top+y)*bytesPerRow,
              bytesPerRow);
     }
