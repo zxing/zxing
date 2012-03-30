@@ -285,6 +285,9 @@ void DecodedBitStreamParser::decodeAlphanumericSegment(Ref<BitSource> bits_,
   }
   if (count == 1) {
     // special case: one character left
+    if (bits.available() < 6) {
+      throw FormatException();
+    }
     bytes << toAlphaNumericChar(bits.readBits(6));
   }
   // See section 6.4.8.1, 6.4.8.2
