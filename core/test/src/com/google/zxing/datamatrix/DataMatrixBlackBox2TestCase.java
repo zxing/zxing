@@ -30,7 +30,7 @@ public final class DataMatrixBlackBox2TestCase extends AbstractBlackBoxTestCase 
     addTest(8, 8, 0, 1, 0.0f);
     addTest(14, 14, 0, 1, 90.0f);
     addTest(14, 14, 0, 1, 180.0f);
-    addTest(12, 12, 0, 1, 270.0f);
+    addTest(13, 13, 0, 1, 270.0f);
   }
 
 }
