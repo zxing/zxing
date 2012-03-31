@@ -83,27 +83,45 @@ public final class QRCodeTestCase extends Assert {
   }
 
   @Test
-  public void testToString() {
-    {
-      QRCode qrCode = new QRCode();
-      String expected =
-        "<<\n" +
-        " mode: null\n" +
-        " ecLevel: null\n" +
-        " version: -1\n" +
-        " matrixWidth: -1\n" +
-        " maskPattern: -1\n" +
-        " numTotalBytes: -1\n" +
-        " numDataBytes: -1\n" +
-        " numECBytes: -1\n" +
-        " numRSBlocks: -1\n" +
-        " matrix: null\n" +
-        ">>\n";
-      assertEquals(expected, qrCode.toString());
+  public void testToString1() {
+    QRCode qrCode = new QRCode();
+    String expected =
+      "<<\n" +
+      " mode: null\n" +
+      " ecLevel: null\n" +
+      " version: -1\n" +
+      " matrixWidth: -1\n" +
+      " maskPattern: -1\n" +
+      " numTotalBytes: -1\n" +
+      " numDataBytes: -1\n" +
+      " numECBytes: -1\n" +
+      " numRSBlocks: -1\n" +
+      " matrix: null\n" +
+      ">>\n";
+    assertEquals(expected, qrCode.toString());
+  }
+
+  @Test
+  public void testToString2() {
+    QRCode qrCode = new QRCode();
+    qrCode.setMode(Mode.BYTE);
+    qrCode.setECLevel(ErrorCorrectionLevel.H);
+    qrCode.setVersion(1);
+    qrCode.setMatrixWidth(21);
+    qrCode.setMaskPattern(3);
+    qrCode.setNumTotalBytes(26);
+    qrCode.setNumDataBytes(9);
+    qrCode.setNumECBytes(17);
+    qrCode.setNumRSBlocks(1);
+    ByteMatrix matrix = new ByteMatrix(21, 21);
+    for (int y = 0; y < 21; ++y) {
+      for (int x = 0; x < 21; ++x) {
+        matrix.set(x, y, (y + x) % 2);
+      }
     }
-    {
-      String expected =
-        "<<\n" +
+    qrCode.setMatrix(matrix);
+    assertTrue(qrCode.isValid());
+    String expected = "<<\n" +
         " mode: BYTE\n" +
         " ecLevel: H\n" +
         " version: 1\n" +
@@ -136,26 +154,7 @@ public final class QRCodeTestCase extends Assert {
         " 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n" +
         " 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n" +
         ">>\n";
-      QRCode qrCode = new QRCode();
-      qrCode.setMode(Mode.BYTE);
-      qrCode.setECLevel(ErrorCorrectionLevel.H);
-      qrCode.setVersion(1);
-      qrCode.setMatrixWidth(21);
-      qrCode.setMaskPattern(3);
-      qrCode.setNumTotalBytes(26);
-      qrCode.setNumDataBytes(9);
-      qrCode.setNumECBytes(17);
-      qrCode.setNumRSBlocks(1);
-      ByteMatrix matrix = new ByteMatrix(21, 21);
-      for (int y = 0; y < 21; ++y) {
-        for (int x = 0; x < 21; ++x) {
-          matrix.set(x, y, (y + x) % 2);
-        }
-      }
-      qrCode.setMatrix(matrix);
-      assertTrue(qrCode.isValid());
-      assertEquals(expected, qrCode.toString());
-    }
+    assertEquals(expected, qrCode.toString());
   }
 
   @Test

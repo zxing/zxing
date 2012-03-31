@@ -213,8 +213,7 @@ public final class Code39Reader extends OneDReader {
     int wideCounters;
     do {
       int minCounter = Integer.MAX_VALUE;
-      for (int i = 0; i < numCounters; i++) {
-        int counter = counters[i];
+      for (int counter : counters) {
         if (counter < minCounter && counter > maxNarrowCounter) {
           minCounter = counter;
         }
