@@ -84,8 +84,8 @@ public final class Decoder {
 
     // Count total number of data bytes
     int totalBytes = 0;
-    for (int i = 0; i < dataBlocksCount; i++) {
-      totalBytes += dataBlocks[i].getNumDataCodewords();
+    for (DataBlock db : dataBlocks) {
+      totalBytes += db.getNumDataCodewords();
     }
     byte[] resultBytes = new byte[totalBytes];
 

@@ -64,8 +64,8 @@ public final class RSSUtils {
   public static int getRSSvalue(int[] widths, int maxWidth, boolean noNarrow) {
     int elements = widths.length;
     int n = 0;
-    for (int i = 0; i < elements; i++) {
-      n += widths[i];
+    for (int width : widths) {
+      n += width;
     }
     int val = 0;
     int narrowMask = 0;

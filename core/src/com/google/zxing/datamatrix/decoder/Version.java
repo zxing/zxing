@@ -99,13 +99,8 @@ public final class Version {
     if ((numRows & 0x01) != 0 || (numColumns & 0x01) != 0) {
       throw FormatException.getFormatInstance();
     }
-    
-    // TODO(bbrown): This is doing a linear search through the array of versions.
-    // If we interleave the rectangular versions with the square versions we could
-    // do a binary search.
-    int numVersions = VERSIONS.length;
-    for (int i = 0; i < numVersions; ++i){
-      Version version = VERSIONS[i];
+
+    for (Version version : VERSIONS) {
       if (version.symbolSizeRows == numRows && version.symbolSizeColumns == numColumns) {
         return version;
       }

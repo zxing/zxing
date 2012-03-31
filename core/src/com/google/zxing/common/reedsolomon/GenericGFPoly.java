@@ -103,8 +103,8 @@ final class GenericGFPoly {
     if (a == 1) {
       // Just the sum of the coefficients
       int result = 0;
-      for (int i = 0; i < size; i++) {
-        result = GenericGF.addOrSubtract(result, coefficients[i]);
+      for (int coefficient : coefficients) {
+        result = GenericGF.addOrSubtract(result, coefficient);
       }
       return result;
     }

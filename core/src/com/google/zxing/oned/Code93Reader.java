@@ -147,8 +147,8 @@ public final class Code93Reader extends OneDReader {
   private static int toPattern(int[] counters) {
     int max = counters.length;
     int sum = 0;
-    for (int i = 0; i < max; i++) {
-      sum += counters[i];
+    for (int counter : counters) {
+      sum += counter;
     }
     int pattern = 0;
     for (int i = 0; i < max; i++) {

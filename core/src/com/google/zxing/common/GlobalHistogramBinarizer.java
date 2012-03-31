@@ -36,13 +36,14 @@ public class GlobalHistogramBinarizer extends Binarizer {
   private static final int LUMINANCE_BITS = 5;
   private static final int LUMINANCE_SHIFT = 8 - LUMINANCE_BITS;
   private static final int LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
+  private static final byte[] EMPTY = new byte[0];
 
   private byte[] luminances;
   private final int[] buckets;
 
   public GlobalHistogramBinarizer(LuminanceSource source) {
     super(source);
-    luminances = new byte[0];
+    luminances = EMPTY;
     buckets = new int[LUMINANCE_BUCKETS];
   }
 
