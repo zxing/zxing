@@ -35,7 +35,7 @@ GreyscaleLuminanceSource::GreyscaleLuminanceSource(unsigned char* greyData, int 
 
 unsigned char* GreyscaleLuminanceSource::getRow(int y, unsigned char* row) {
   if (y < 0 || y >= this->getHeight()) {
-    throw IllegalArgumentException("Requested row is outside the image: " + y);
+    throw IllegalArgumentException("Requested row is outside the image.");
   }
   int width = getWidth();
   // TODO(flyashi): determine if row has enough size.
