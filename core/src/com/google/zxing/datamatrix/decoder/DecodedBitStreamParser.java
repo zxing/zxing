@@ -174,9 +174,7 @@ final class DecodedBitStreamParser {
         // Ignore this symbol for now
       } else if (oneByte >= 242) {  // Not to be used in ASCII encodation
         // ... but work around encoders that end with 254, latch back to ASCII
-        if (oneByte == 254 && bits.available() == 0) {
-          // Ignore
-        } else {
+        if (oneByte != 254 || bits.available() != 0) {
           throw FormatException.getFormatInstance();
         }
       }

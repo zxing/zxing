@@ -16,7 +16,6 @@
 
 package com.google.zxing.maxicode.decoder;
 
-import com.google.zxing.FormatException;
 import com.google.zxing.common.BitMatrix;
 
 /**
@@ -65,7 +64,6 @@ final class BitMatrixParser {
 
   /**
    * @param bitMatrix {@link BitMatrix} to parse
-   * @throws FormatException if height is not 33 or width is not 30
    */
   BitMatrixParser(BitMatrix bitMatrix) {
     this.bitMatrix = bitMatrix;

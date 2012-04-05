@@ -93,11 +93,11 @@ final class DecodedBitStreamParser {
         } else {
           // First handle Hanzi mode which does not start with character count
           if (mode == Mode.HANZI) {
-        		//chinese mode contains a sub set indicator right after mode indicator
-        		int subset = bits.readBits(4);
-        		int countHanzi = bits.readBits(mode.getCharacterCountBits(version));
-        		if (subset == GB2312_SUBSET) {
-        			decodeHanziSegment(bits, result, countHanzi);
+            //chinese mode contains a sub set indicator right after mode indicator
+            int subset = bits.readBits(4);
+            int countHanzi = bits.readBits(mode.getCharacterCountBits(version));
+            if (subset == GB2312_SUBSET) {
+              decodeHanziSegment(bits, result, countHanzi);
             }
           } else {
             // "Normal" QR code modes:

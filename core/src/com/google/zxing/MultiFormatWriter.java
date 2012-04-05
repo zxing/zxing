@@ -78,7 +78,7 @@ public final class MultiFormatWriter implements Writer {
         writer = new PDF417Writer();
         break;
       case CODABAR:
-	      writer = new CodaBarWriter();
+        writer = new CodaBarWriter();
         break;
       default:
         throw new IllegalArgumentException("No encoder available for format " + format);

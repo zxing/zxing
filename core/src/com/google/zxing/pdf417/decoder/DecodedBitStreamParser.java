@@ -316,8 +316,6 @@ final class DecodedBitStreamParser {
               ch = ' ';
             } else if (subModeCh == TEXT_COMPACTION_MODE_LATCH) {
               subMode = Mode.ALPHA;
-            } else {
-              // is this even possible?
             }
           }
           break;

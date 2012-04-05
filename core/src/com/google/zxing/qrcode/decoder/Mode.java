@@ -70,7 +70,7 @@ public enum Mode {
       case 0x9:
         return FNC1_SECOND_POSITION;
       case 0xD:
-    	  // 0xD is defined in GBT 18284-2000, may not be supported in foreign country
+        // 0xD is defined in GBT 18284-2000, may not be supported in foreign country
         return HANZI;
       default:
         throw new IllegalArgumentException();

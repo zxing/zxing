@@ -207,9 +207,7 @@ public final class VCardResultParser extends ResultParser {
         case '=':
           if (i < length - 2) {
             char nextChar = value.charAt(i+1);
-            if (nextChar == '\r' || nextChar == '\n') {
-              // Ignore, it's just a continuation symbol
-            } else {
+            if (nextChar != '\r' && nextChar != '\n') {
               char nextNextChar = value.charAt(i+2);
               int firstDigit = parseHexDigit(nextChar);
               int secondDigit = parseHexDigit(nextNextChar);
