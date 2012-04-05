@@ -152,12 +152,14 @@ public class Detector {
     if (alignmentPattern != null) {
       bottomRightX = alignmentPattern.getX();
       bottomRightY = alignmentPattern.getY();
-      sourceBottomRightX = sourceBottomRightY = dimMinusThree - 3.0f;
+      sourceBottomRightX = dimMinusThree - 3.0f;
+      sourceBottomRightY = sourceBottomRightX;
     } else {
       // Don't have an alignment pattern, just make up the bottom-right point
       bottomRightX = (topRight.getX() - topLeft.getX()) + bottomLeft.getX();
       bottomRightY = (topRight.getY() - topLeft.getY()) + bottomLeft.getY();
-      sourceBottomRightX = sourceBottomRightY = dimMinusThree;
+      sourceBottomRightX = dimMinusThree;
+      sourceBottomRightY = dimMinusThree;
     }
 
     return PerspectiveTransform.quadrilateralToQuadrilateral(

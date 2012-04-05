@@ -67,7 +67,7 @@ public final class ITFWriter extends UPCEANWriter {
       pos += appendPattern(result, pos, encoding, 1);
     }
     int[] end = {3, 1, 1};
-    pos += appendPattern(result, pos, end, 1);
+    appendPattern(result, pos, end, 1);
 
     return result;
   }

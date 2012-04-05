@@ -191,12 +191,10 @@ public final class Code128Reader extends OneDReader {
               bestMatch = startCode;
             }
           }
-          if (bestMatch >= 0) {
-            // Look for whitespace before start pattern, >= 50% of width of start pattern
-            if (row.isRange(Math.max(0, patternStart - (i - patternStart) / 2), patternStart,
-                false)) {
-              return new int[]{patternStart, i, bestMatch};
-            }
+          // Look for whitespace before start pattern, >= 50% of width of start pattern
+          if (bestMatch >= 0 &&
+              row.isRange(Math.max(0, patternStart - (i - patternStart) / 2), patternStart, false)) {
+            return new int[]{patternStart, i, bestMatch};
           }
           patternStart += counters[0] + counters[1];
           System.arraycopy(counters, 2, counters, 0, patternLength - 2);

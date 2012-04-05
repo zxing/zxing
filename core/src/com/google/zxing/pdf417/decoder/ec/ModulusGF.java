@@ -33,7 +33,7 @@ public final class ModulusGF {
   private final int modulus;
 
   public ModulusGF(int modulus, int generator) {
-  	this.modulus = modulus;
+    this.modulus = modulus;
     expTable = new int[modulus];
     logTable = new int[modulus];
     int x = 1;

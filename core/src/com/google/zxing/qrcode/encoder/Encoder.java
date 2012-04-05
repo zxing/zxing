@@ -542,7 +542,7 @@ public final class Encoder {
     try {
       bytes = content.getBytes(encoding);
     } catch (UnsupportedEncodingException uee) {
-      throw new WriterException(uee.toString());
+      throw new WriterException(uee);
     }
     for (byte b : bytes) {
       bits.appendBits(b, 8);
@@ -554,7 +554,7 @@ public final class Encoder {
     try {
       bytes = content.getBytes("Shift_JIS");
     } catch (UnsupportedEncodingException uee) {
-      throw new WriterException(uee.toString());
+      throw new WriterException(uee);
     }
     int length = bytes.length;
     for (int i = 0; i < length; i += 2) {

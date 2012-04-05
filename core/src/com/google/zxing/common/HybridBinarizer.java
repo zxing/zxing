@@ -168,14 +168,14 @@ public final class HybridBinarizer extends GlobalHistogramBinarizer {
             }
           }
           // short-circuit min/max tests once dynamic range is met
-	        if (max - min > MIN_DYNAMIC_RANGE) {
-	          // finish the rest of the rows quickly
-	          for (yy++, offset += width; yy < BLOCK_SIZE; yy++, offset += width) {
-	            for (int xx = 0; xx < BLOCK_SIZE; xx++) {
-	              sum += luminances[offset + xx] & 0xFF;
-	            }
-	          }
-	        }
+          if (max - min > MIN_DYNAMIC_RANGE) {
+            // finish the rest of the rows quickly
+            for (yy++, offset += width; yy < BLOCK_SIZE; yy++, offset += width) {
+              for (int xx = 0; xx < BLOCK_SIZE; xx++) {
+                sum += luminances[offset + xx] & 0xFF;
+              }
+            }
+          }
         }
 
         // The default estimate is the average of the values in the block.
