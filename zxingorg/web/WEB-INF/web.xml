@@ -32,7 +32,7 @@
 
   <filter-mapping>
     <filter-name>DoSFilter</filter-name>
-    <url-pattern>/*</url-pattern>
+    <url-pattern>/decode</url-pattern>
   </filter-mapping>
 
   <listener>
