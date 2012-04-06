@@ -211,6 +211,8 @@ public final class DecodeServlet extends HttpServlet {
       }
     } catch (IOException ioe) {
       // continue
+    } catch (IndexOutOfBoundsException ioobe) {
+      // sun.net.www.http.ChunkedInputStream.read is throwing this, continue
     }
   }
 
