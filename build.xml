@@ -52,10 +52,21 @@
   </target>
 
   <target name="javadoc">
+    <delete dir="docs/javadoc"/>
     <mkdir dir="docs/javadoc"/>
-    <javadoc destdir="docs/javadoc"
-             useexternalfile="true"
-             footer="&lt;script type=&quot;text/javascript&quot;&gt; var gaJsHost = ((&quot;https:&quot; == document.location.protocol) ?  &quot;https://ssl.&quot; : &quot;http://www.&quot;); document.write(unescape(&quot;%3Cscript src='&quot; + gaJsHost + &quot;google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E&quot;)); &lt;/script&gt; &lt;script type=&quot;text/javascript&quot;&gt; var pageTracker = _gat._getTracker(&quot;UA-788492-5&quot;); pageTracker._initData(); pageTracker._trackPageview(); &lt;/script&gt;">
+    <javadoc failonerror="true"
+             destdir="docs/javadoc"
+             footer="
+               &lt;script type=&quot;text/javascript&quot;&gt;;
+               var _gaq = _gaq || [];
+               _gaq.push(['_setAccount', 'UA-788492-5']);
+               _gaq.push(['_trackPageview']);
+               (function() {
+                 var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                 ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+               })();
+               &lt;/script&gt;">
       <sourcepath>
         <pathelement location="android/src"/>
         <pathelement location="android/gen"/>        
