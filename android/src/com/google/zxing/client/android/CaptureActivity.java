@@ -442,38 +442,35 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     lastResult = rawResult;
     ResultHandler resultHandler = ResultHandlerFactory.makeResultHandler(this, rawResult);
     historyManager.addHistoryItem(rawResult, resultHandler);
+    beepManager.playBeepSoundAndVibrate();
 
-    if (barcode == null) {
-      // This is from history -- no saved barcode
-      handleDecodeInternally(rawResult, resultHandler, null);
-    } else {
-      beepManager.playBeepSoundAndVibrate();
+    if (barcode != null) {
       drawResultPoints(barcode, rawResult);
-      switch (source) {
-        case NATIVE_APP_INTENT:
-        case PRODUCT_SEARCH_LINK:
+    }
+    switch (source) {
+      case NATIVE_APP_INTENT:
+      case PRODUCT_SEARCH_LINK:
+        handleDecodeExternally(rawResult, resultHandler, barcode);
+        break;
+      case ZXING_LINK:
+        if (returnUrlTemplate == null){
+          handleDecodeInternally(rawResult, resultHandler, barcode);
+        } else {
           handleDecodeExternally(rawResult, resultHandler, barcode);
-          break;
-        case ZXING_LINK:
-          if (returnUrlTemplate == null){
-            handleDecodeInternally(rawResult, resultHandler, barcode);
-          } else {
-            handleDecodeExternally(rawResult, resultHandler, barcode);
-          }
-          break;
-        case NONE:
-          SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-          if (prefs.getBoolean(PreferencesActivity.KEY_BULK_MODE, false)) {
-            String message = getResources().getString(R.string.msg_bulk_mode_scanned)
-                + " (" + rawResult.getText() + ')';
-            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-            // Wait a moment or else it will scan the same barcode continuously about 3 times
-            restartPreviewAfterDelay(BULK_MODE_SCAN_DELAY_MS);
-          } else {
-            handleDecodeInternally(rawResult, resultHandler, barcode);
-          }
-          break;
-      }
+        }
+        break;
+      case NONE:
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        if (prefs.getBoolean(PreferencesActivity.KEY_BULK_MODE, false)) {
+          String message = getResources().getString(R.string.msg_bulk_mode_scanned)
+              + " (" + rawResult.getText() + ')';
+          Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+          // Wait a moment or else it will scan the same barcode continuously about 3 times
+          restartPreviewAfterDelay(BULK_MODE_SCAN_DELAY_MS);
+        } else {
+          handleDecodeInternally(rawResult, resultHandler, barcode);
+        }
+        break;
     }
   }
 
@@ -604,7 +601,10 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
   // Briefly show the contents of the barcode, then handle the result outside Barcode Scanner.
   private void handleDecodeExternally(Result rawResult, ResultHandler resultHandler, Bitmap barcode) {
-    viewfinderView.drawResultBitmap(barcode);
+
+    if (barcode != null) {
+      viewfinderView.drawResultBitmap(barcode);
+    }
 
     // Since this message will only be shown for a second, just tell the user what kind of
     // barcode was found (e.g. contact info) rather than the full contents, which they won't
