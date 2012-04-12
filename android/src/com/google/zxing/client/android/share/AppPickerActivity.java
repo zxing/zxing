@@ -18,7 +18,7 @@ package com.google.zxing.client.android.share;
 
 import android.app.ListActivity;
 import android.content.Intent;
-import android.os.Bundle;
+import android.os.AsyncTask;
 import android.provider.Browser;
 import android.view.View;
 import android.widget.ListView;
@@ -29,15 +29,23 @@ import java.util.List;
 public final class AppPickerActivity extends ListActivity {
 
   private final List<String[]> labelsPackages = new ArrayList<String[]>();
+  private LoadPackagesAsyncTask backgroundTask;
 
   @Override
-  protected void onCreate(Bundle icicle) {
-    super.onCreate(icicle);
-    if (labelsPackages.isEmpty()) {
-      new LoadPackagesAsyncTask(this).execute(labelsPackages);
+  protected void onResume() {
+    super.onResume();
+    labelsPackages.clear();
+    backgroundTask = new LoadPackagesAsyncTask(this);
+    backgroundTask.execute(labelsPackages);
+  }
+
+  @Override
+  protected void onPause() {
+    if (backgroundTask.getStatus() != AsyncTask.Status.FINISHED) {
+      backgroundTask.cancel(true);
     }
-    // Otherwise use last copy we loaded -- apps don't change much, and it takes
-    // forever to load for some reason.
+    backgroundTask = null;
+    super.onPause();
   }
 
   @Override
