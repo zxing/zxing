@@ -86,6 +86,13 @@ import android.util.Log;
  *
  * <p>Some code, particularly download integration, was contributed from the Anobiit application.</p>
  *
+ * <h2>Enabling experimental barcode formats</h2>
+ *
+ * <p>Some formats are not enabled by default even when scanning with {@link #ALL_CODE_TYPES}, such as
+ * {@link com.google.zxing.BarcodeFormat#PDF_417}. Use {@link #initiateScan(java.util.Collection)} with
+ * a collection containing the names of formats to scan for explicitly, like "PDF_417", to use such
+ * formats.</p>
+ *
  * @author Sean Owen
  * @author Fred Lin
  * @author Isaac Potoczny-Jones
