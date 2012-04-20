@@ -20,9 +20,11 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Iterator;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.os.Bundle;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -30,6 +32,8 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.util.Log;
+
+
 
 /**
  * <p>A utility class which helps ease integration with Barcode Scanner via {@link Intent}s. This is a simple
@@ -238,6 +242,39 @@ public class IntentIntegrator {
     startActivityForResult(intentScan, REQUEST_CODE);
     return null;
   }
+    public AlertDialog initiateScan(Collection<String> desiredBarcodeFormats, Bundle extras) {
+    Intent intentScan = new Intent(BS_PACKAGE + ".SCAN");
+    intentScan.addCategory(Intent.CATEGORY_DEFAULT);
+
+    // check which types of codes to scan for
+    if (desiredBarcodeFormats != null) {
+      // set the desired barcode types
+      StringBuilder joinedByComma = new StringBuilder();
+      for (String format : desiredBarcodeFormats) {
+        if (joinedByComma.length() > 0) {
+          joinedByComma.append(',');
+        }
+        joinedByComma.append(format);
+      }
+      intentScan.putExtra("SCAN_FORMATS", joinedByComma.toString());
+    }
+    /*String key;
+    for (Iterator i = extras.keySet.Iterator(); i.hasNext();) {
+	key = extras.keySet(i) ;
+	intentScan.putExtra(key,extras.get(key));
+   } 
+    */
+    intentScan.putExtras(extras);
+    String targetAppPackage = findTargetAppPackage(intentScan);
+    if (targetAppPackage == null) {
+      return showDownloadDialog();
+    }
+    intentScan.setPackage(targetAppPackage);
+    intentScan.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+    intentScan.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+    startActivityForResult(intentScan, REQUEST_CODE);
+    return null;
+  }
 
   /**
    * Start an activity.<br>
@@ -333,6 +370,38 @@ public class IntentIntegrator {
     intent.setAction(BS_PACKAGE + ".ENCODE");
     intent.putExtra("ENCODE_TYPE", "TEXT_TYPE");
     intent.putExtra("ENCODE_DATA", text);
+    String targetAppPackage = findTargetAppPackage(intent);
+    if (targetAppPackage == null) {
+	showDownloadDialog();
+    } else {
+	intent.setPackage(targetAppPackage);
+	intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+	intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+	activity.startActivity(intent);
+    }
+  }
+  public void shareText(String type, String data) {
+    Intent intent = new Intent();
+    intent.addCategory(Intent.CATEGORY_DEFAULT);
+    intent.setAction(BS_PACKAGE + ".ENCODE");
+    intent.putExtra("ENCODE_TYPE", type);
+    intent.putExtra("ENCODE_DATA", data);
+    String targetAppPackage = findTargetAppPackage(intent);
+    if (targetAppPackage == null) {
+      showDownloadDialog();
+    } else {
+      intent.setPackage(targetAppPackage);
+      intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+      intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+      activity.startActivity(intent);
+    }
+  }
+    public void shareText(String type,Bundle data) {
+    Intent intent = new Intent();
+    intent.addCategory(Intent.CATEGORY_DEFAULT);
+    intent.setAction(BS_PACKAGE + ".ENCODE");
+    intent.putExtra("ENCODE_TYPE", type);
+    intent.putExtra("ENCODE_DATA", data);
     String targetAppPackage = findTargetAppPackage(intent);
     if (targetAppPackage == null) {
       showDownloadDialog();

@@ -40,6 +40,7 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
 import java.util.Arrays;
+import java.util.ArrayList;
 
 public final class ZXingTestActivity extends Activity {
 
@@ -138,13 +139,16 @@ public final class ZXingTestActivity extends Activity {
   private final Button.OnClickListener scanProduct = new Button.OnClickListener() {
     @Override
     public void onClick(View v) {
-      Intent intent = new Intent("com.google.zxing.client.android.SCAN");
-      intent.putExtra("SCAN_MODE", "PRODUCT_MODE");
-      intent.putExtra("SCAN_WIDTH", 800);
-      intent.putExtra("SCAN_HEIGHT", 200);
-      intent.putExtra("RESULT_DISPLAY_DURATION_MS", 3000L);
-      intent.putExtra("PROMPT_MESSAGE", "Custom prompt to scan a product");
-      startActivityForResult(intent, IntentIntegrator.REQUEST_CODE);
+	IntentIntegrator integrator = new IntentIntegrator(ZXingTestActivity.this);
+	ArrayList<String> scanModes = new ArrayList<String>();
+	scanModes.add("PRODUCT");
+	
+	Bundle extras = new Bundle();
+	extras.putInt("SCAN_WIDTH",800);
+	extras.putInt("SCAN_HEIGHT",200);
+	extras.putLong("RESULT_DISPLAY_DURATION_ms",3000L);
+	extras.putString("PROMPT_MESSAGE","Custom prompt to scan a product");
+	integrator.initiateScan(scanModes,extras);
     }
   };
 
@@ -258,17 +262,13 @@ public final class ZXingTestActivity extends Activity {
   }
 
   private void encodeBarcode(String type, String data) {
-    Intent intent = new Intent("com.google.zxing.client.android.ENCODE");
-    intent.putExtra("ENCODE_TYPE", type);
-    intent.putExtra("ENCODE_DATA", data);
-    startActivity(intent);
+    IntentIntegrator integrator = new IntentIntegrator(ZXingTestActivity.this);
+    integrator.shareText(type,data);
   }
 
   private void encodeBarcode(String type, Bundle data) {
-    Intent intent = new Intent("com.google.zxing.client.android.ENCODE");
-    intent.putExtra("ENCODE_TYPE", type);
-    intent.putExtra("ENCODE_DATA", data);
-    startActivity(intent);
+    IntentIntegrator integrator = new IntentIntegrator(ZXingTestActivity.this);
+    integrator.shareText(type,data);
   }
 
   private static String getFlattenedParams() {
