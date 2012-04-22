@@ -38,8 +38,14 @@ public final class PlanarYUVLuminanceSource extends LuminanceSource {
   private final int left;
   private final int top;
 
-  public PlanarYUVLuminanceSource(byte[] yuvData, int dataWidth, int dataHeight, int left, int top,
-      int width, int height, boolean reverseHorizontal) {
+  public PlanarYUVLuminanceSource(byte[] yuvData,
+                                  int dataWidth,
+                                  int dataHeight,
+                                  int left,
+                                  int top,
+                                  int width,
+                                  int height,
+                                  boolean reverseHorizontal) {
     super(width, height);
 
     if (left + width > dataWidth || top + height > dataHeight) {
@@ -104,6 +110,18 @@ public final class PlanarYUVLuminanceSource extends LuminanceSource {
   @Override
   public boolean isCropSupported() {
     return true;
+  }
+
+  @Override
+  public LuminanceSource crop(int left, int top, int width, int height) {
+    return new PlanarYUVLuminanceSource(yuvData,
+                                        dataWidth,
+                                        dataHeight,
+                                        this.left + left,
+                                        this.top + top,
+                                        width,
+                                        height,
+                                        false);
   }
 
   public Bitmap renderCroppedGreyscaleBitmap() {
