@@ -721,6 +721,9 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   }
 
   private void initCamera(SurfaceHolder surfaceHolder) {
+    if (surfaceHolder == null) {
+      throw new IllegalStateException("No SurfaceHolder provided");
+    }
     try {
       cameraManager.openDriver(surfaceHolder);
       // Creating the handler starts the preview, which can also throw a RuntimeException.
