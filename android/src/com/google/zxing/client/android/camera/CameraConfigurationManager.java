@@ -27,7 +27,10 @@ import android.view.WindowManager;
 
 import com.google.zxing.client.android.PreferencesActivity;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -37,8 +40,12 @@ import java.util.List;
 final class CameraConfigurationManager {
 
   private static final String TAG = "CameraConfiguration";
-  private static final int MIN_PREVIEW_PIXELS = 320 * 240; // small screen
-  private static final int MAX_PREVIEW_PIXELS = 854 * 480; // large/HD screen (Droid 2 in particular)
+
+  // This is bigger than the size of a small screen, which is still supported. The routine
+  // below will still select the default (presumably 320x240) size for these. This prevents
+  // accidental selection of very low resolution on some devices.
+  private static final int MIN_PREVIEW_PIXELS = 470 * 320; // normal screen
+  private static final int MAX_PREVIEW_PIXELS = 800 * 600; // more than large/HD screen
 
   private final Context context;
   private Point screenResolution;
@@ -136,7 +143,22 @@ final class CameraConfigurationManager {
 
   private Point findBestPreviewSizeValue(Camera.Parameters parameters, Point screenResolution) {
 
-    List<Camera.Size> supportedPreviewSizes = parameters.getSupportedPreviewSizes();
+    // Sort by size, descending
+    List<Camera.Size> supportedPreviewSizes = new ArrayList<Camera.Size>(parameters.getSupportedPreviewSizes());
+    Collections.sort(supportedPreviewSizes, new Comparator<Camera.Size>() {
+      @Override
+      public int compare(Camera.Size a, Camera.Size b) {
+        int aPixels = a.height * a.width;
+        int bPixels = b.height * b.width;
+        if (bPixels < aPixels) {
+          return -1;
+        }
+        if (bPixels > aPixels) {
+          return 1;
+        }
+        return 0;
+      }
+    });
 
     if (Log.isLoggable(TAG, Log.INFO)) {
       StringBuilder previewSizesString = new StringBuilder();
@@ -147,6 +169,10 @@ final class CameraConfigurationManager {
       Log.i(TAG, "Supported preview sizes: " + previewSizesString);
     }
 
+    Point bestSize = null;
+    float screenAspectRatio = (float) screenResolution.x / (float) screenResolution.y;
+
+    float diff = Float.POSITIVE_INFINITY;
     for (Camera.Size supportedPreviewSize : supportedPreviewSizes) {
       int realWidth = supportedPreviewSize.width;
       int realHeight = supportedPreviewSize.height;
@@ -158,27 +184,12 @@ final class CameraConfigurationManager {
       int maybeFlippedWidth = isCandidatePortrait ? realHeight : realWidth;
       int maybeFlippedHeight = isCandidatePortrait ? realWidth : realHeight;
       if (maybeFlippedWidth == screenResolution.x && maybeFlippedHeight == screenResolution.y) {
-        return new Point(realWidth, realHeight);
+        Point exactPoint = new Point(realWidth, realHeight);
+        Log.i(TAG, "Found preview size exactly matching screen size: " + exactPoint);
+        return exactPoint;
       }
-    }
-
-    Point bestSize = null;
-
-    int diff = Integer.MAX_VALUE;
-    for (Camera.Size supportedPreviewSize : supportedPreviewSizes) {
-      int realWidth = supportedPreviewSize.width;
-      int realHeight = supportedPreviewSize.height;
-      int pixels = realWidth * realHeight;
-      if (pixels < MIN_PREVIEW_PIXELS || pixels > MAX_PREVIEW_PIXELS) {
-        continue;
-      }
-      boolean isCandidatePortrait = realWidth < realHeight;
-      int maybeFlippedWidth = isCandidatePortrait ? realHeight : realWidth;
-      int maybeFlippedHeight = isCandidatePortrait ? realWidth : realHeight;
-      int newDiff = Math.abs(screenResolution.x * maybeFlippedHeight - screenResolution.y * maybeFlippedWidth);
-      if (newDiff == 0) {
-        return new Point(realWidth, realHeight);
-      }
+      float aspectRatio = (float) maybeFlippedWidth / (float) maybeFlippedHeight;
+      float newDiff = Math.abs(aspectRatio - screenAspectRatio);
       if (newDiff < diff) {
         bestSize = new Point(realWidth, realHeight);
         diff = newDiff;
@@ -191,6 +202,7 @@ final class CameraConfigurationManager {
       Log.i(TAG, "No suitable preview sizes, using default: " + bestSize);
     }
 
+    Log.i(TAG, "Found best approximate preview size: " + bestSize);
     return bestSize;
   }
 
