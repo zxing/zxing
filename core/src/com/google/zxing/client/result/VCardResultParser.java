@@ -140,8 +140,8 @@ public final class VCardResultParser extends ResultParser {
              rawText.charAt(i+1) == '\t')) {
           i += 2; // Skip \n and continutation whitespace
         } else if (quotedPrintable &&             // If preceded by = in quoted printable
-                   (rawText.charAt(i-1) == '=' || // this is a continuation
-                    rawText.charAt(i-2) == '=')) {
+                   ((i >= 1 && rawText.charAt(i-1) == '=') || // this is a continuation
+                    (i >= 2 && rawText.charAt(i-2) == '='))) {
           i++; // Skip \n
         } else {
           break;
@@ -156,7 +156,7 @@ public final class VCardResultParser extends ResultParser {
         if (matches == null) {
           matches = new ArrayList<List<String>>(1); // lazy init
         }
-        if (rawText.charAt(i-1) == '\r') {
+        if (i >= 1 && rawText.charAt(i-1) == '\r') {
           i--; // Back up over \r, which really should be there
         }
         String element = rawText.substring(matchStart, i);
