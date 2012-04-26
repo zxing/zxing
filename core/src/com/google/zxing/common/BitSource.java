@@ -50,11 +50,11 @@ public final class BitSource {
    * @param numBits number of bits to read
    * @return int representing the bits read. The bits will appear as the least-significant
    *         bits of the int
-   * @throws IllegalArgumentException if numBits isn't in [1,32]
+   * @throws IllegalArgumentException if numBits isn't in [1,32] or more than is available
    */
   public int readBits(int numBits) {
-    if (numBits < 1 || numBits > 32) {
-      throw new IllegalArgumentException();
+    if (numBits < 1 || numBits > 32 || numBits > available()) {
+      throw new IllegalArgumentException(String.valueOf(numBits));
     }
 
     int result = 0;
