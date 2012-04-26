@@ -63,16 +63,17 @@ public final class EncodeActivity extends Activity {
   @Override
   public void onCreate(Bundle icicle) {
     super.onCreate(icicle);
-
     Intent intent = getIntent();
-    if (intent != null) {
+    if (intent == null) {
+      finish();
+    } else {
       String action = intent.getAction();
-      if (action.equals(Intents.Encode.ACTION) || action.equals(Intent.ACTION_SEND)) {
+      if (Intents.Encode.ACTION.equals(action) || Intent.ACTION_SEND.equals(action)) {
         setContentView(R.layout.encode);
-        return;
+      } else {
+        finish();
       }
     }
-    finish();
   }
 
   @Override
