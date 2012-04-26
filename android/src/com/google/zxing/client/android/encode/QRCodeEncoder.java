@@ -38,6 +38,7 @@ import android.os.Bundle;
 import android.telephony.PhoneNumberUtils;
 import android.util.Log;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -174,16 +175,14 @@ final class QRCodeEncoder {
     String vcardString;
     try {
       InputStream stream = activity.getContentResolver().openInputStream(uri);
-      int length = stream.available();
-      if (length <= 0) {
-        throw new WriterException("Content stream is empty");
+      ByteArrayOutputStream baos = new ByteArrayOutputStream();
+      byte[] buffer = new byte[2048];
+      int bytesRead;
+      while ((bytesRead = stream.read(buffer)) > 0) {
+        baos.write(buffer, 0, bytesRead);
       }
-      vcard = new byte[length];
-      int bytesRead = stream.read(vcard, 0, length);
-      if (bytesRead < length) {
-        throw new WriterException("Unable to fully read available bytes from content stream");
-      }
-      vcardString = new String(vcard, 0, bytesRead, "UTF-8");
+      vcard = baos.toByteArray();
+      vcardString = new String(vcard, 0, vcard.length, "UTF-8");
     } catch (IOException ioe) {
       throw new WriterException(ioe);
     }
