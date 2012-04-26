@@ -313,7 +313,13 @@ final class QRCodeEncoder {
       hints.put(EncodeHintType.CHARACTER_SET, encoding);
     }
     MultiFormatWriter writer = new MultiFormatWriter();
-    BitMatrix result = writer.encode(contentsToEncode, format, dimension, dimension, hints);
+    BitMatrix result;
+    try {
+      result = writer.encode(contentsToEncode, format, dimension, dimension, hints);
+    } catch (IllegalArgumentException iae) {
+      // Unsupported format
+      return null;
+    }
     int width = result.getWidth();
     int height = result.getHeight();
     int[] pixels = new int[width * height];
