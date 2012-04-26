@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.Browser;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 
@@ -31,6 +32,9 @@ import android.widget.ListView;
  * @author dswitkin@google.com (Daniel Switkin)
  */
 public final class BookmarkPickerActivity extends ListActivity {
+
+  private static final String TAG = BookmarkPickerActivity.class.getSimpleName();
+
   private static final String[] BOOKMARK_PROJECTION = {
       Browser.BookmarkColumns.TITLE,
       Browser.BookmarkColumns.URL
@@ -50,8 +54,13 @@ public final class BookmarkPickerActivity extends ListActivity {
 
     cursor = getContentResolver().query(Browser.BOOKMARKS_URI, BOOKMARK_PROJECTION,
         BOOKMARK_SELECTION, null, null);
-    startManagingCursor(cursor);
-    setListAdapter(new BookmarkAdapter(this, cursor));
+    if (cursor == null) {
+      Log.w(TAG, "No cursor returned for bookmark query");
+      finish();
+    } else {
+      startManagingCursor(cursor);
+      setListAdapter(new BookmarkAdapter(this, cursor));
+    }
   }
 
   @Override
