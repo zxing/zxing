@@ -68,7 +68,13 @@ public final class WifiConfigManager {
             count++;
           }
         }
-        NetworkType networkType = NetworkType.forIntentValue(networkTypeString);
+        NetworkType networkType;
+        try {
+          networkType = NetworkType.forIntentValue(networkTypeString);
+        } catch (IllegalArgumentException iae) {
+          Log.w(TAG, "Bad network type; see NetworkType values: " + networkTypeString);
+          return;
+        }
         if (networkType == NetworkType.NO_PASSWORD) {
           changeNetworkUnEncrypted(wifiManager, ssid);
         } else {
