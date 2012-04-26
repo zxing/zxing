@@ -81,7 +81,9 @@ public final class HistoryActivity extends ListActivity {
                                   View v,
                                   ContextMenu.ContextMenuInfo menuInfo) {
     int position = ((AdapterView.AdapterContextMenuInfo) menuInfo).position;
-    menu.add(Menu.NONE, position, position, R.string.history_clear_one_history_text);
+    if (position >= adapter.getCount() || adapter.getItem(position).getResult() != null) {
+      menu.add(Menu.NONE, position, position, R.string.history_clear_one_history_text);
+    } // else it's just that dummy "Empty" message
   }
 
   @Override
