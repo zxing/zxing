@@ -138,13 +138,12 @@ public final class ZXingTestActivity extends Activity {
   private final Button.OnClickListener scanProduct = new Button.OnClickListener() {
     @Override
     public void onClick(View v) {
-      Intent intent = new Intent("com.google.zxing.client.android.SCAN");
-      intent.putExtra("SCAN_MODE", "PRODUCT_MODE");
-      intent.putExtra("SCAN_WIDTH", 800);
-      intent.putExtra("SCAN_HEIGHT", 200);
-      intent.putExtra("RESULT_DISPLAY_DURATION_MS", 3000L);
-      intent.putExtra("PROMPT_MESSAGE", "Custom prompt to scan a product");
-      startActivityForResult(intent, IntentIntegrator.REQUEST_CODE);
+      IntentIntegrator integrator = new IntentIntegrator(ZXingTestActivity.this);
+      integrator.addExtra("SCAN_WIDTH", 800);
+      integrator.addExtra("SCAN_HEIGHT", 200);
+      integrator.addExtra("RESULT_DISPLAY_DURATION_MS", 3000L);
+      integrator.addExtra("PROMPT_MESSAGE", "Custom prompt to scan a product");
+      integrator.initiateScan(IntentIntegrator.PRODUCT_CODE_TYPES);
     }
   };
 
@@ -227,11 +226,9 @@ public final class ZXingTestActivity extends Activity {
   private final Button.OnClickListener encodeHiddenData = new Button.OnClickListener() {
     @Override
     public void onClick(View v) {
-      Intent intent = new Intent("com.google.zxing.client.android.ENCODE");
-      intent.putExtra("ENCODE_TYPE", "TEXT_TYPE");
-      intent.putExtra("ENCODE_DATA", "SURPRISE!");
-      intent.putExtra("ENCODE_SHOW_CONTENTS", false);
-      startActivity(intent);
+      IntentIntegrator integrator = new IntentIntegrator(ZXingTestActivity.this);
+      integrator.addExtra("ENCODE_SHOW_CONTENTS", false);
+      integrator.shareText("SURPRISE!");
     }
   };
 
@@ -257,18 +254,15 @@ public final class ZXingTestActivity extends Activity {
     builder.show();
   }
 
-  private void encodeBarcode(String type, String data) {
-    Intent intent = new Intent("com.google.zxing.client.android.ENCODE");
-    intent.putExtra("ENCODE_TYPE", type);
-    intent.putExtra("ENCODE_DATA", data);
-    startActivity(intent);
+  private void encodeBarcode(CharSequence type, CharSequence data) {
+    IntentIntegrator integrator = new IntentIntegrator(this);
+    integrator.shareText(data, type);
   }
 
-  private void encodeBarcode(String type, Bundle data) {
-    Intent intent = new Intent("com.google.zxing.client.android.ENCODE");
-    intent.putExtra("ENCODE_TYPE", type);
-    intent.putExtra("ENCODE_DATA", data);
-    startActivity(intent);
+  private void encodeBarcode(CharSequence type, Bundle data) {
+    IntentIntegrator integrator = new IntentIntegrator(this);
+    integrator.addExtra("ENCODE_DATA", data);
+    integrator.shareText(data.toString(), type); // data.toString() isn't used
   }
 
   private static String getFlattenedParams() {
