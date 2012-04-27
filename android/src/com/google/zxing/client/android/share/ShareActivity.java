@@ -231,7 +231,9 @@ public final class ShareActivity extends Activity {
           int phonesNumberColumn = phonesCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
           while (phonesCursor.moveToNext() && foundPhone < Contents.PHONE_KEYS.length) {
             String number = phonesCursor.getString(phonesNumberColumn);
-            bundle.putString(Contents.PHONE_KEYS[foundPhone], massageContactData(number));
+            if (number != null && number.length() > 0) {
+              bundle.putString(Contents.PHONE_KEYS[foundPhone], massageContactData(number));
+            }
             foundPhone++;
           }
         } finally {
@@ -250,7 +252,9 @@ public final class ShareActivity extends Activity {
         if (methodsCursor.moveToNext()) {
           String data = methodsCursor.getString(
               methodsCursor.getColumnIndex(ContactsContract.CommonDataKinds.StructuredPostal.FORMATTED_ADDRESS));
-          bundle.putString(ContactsContract.Intents.Insert.POSTAL, massageContactData(data));
+          if (data != null && data.length() > 0) {
+            bundle.putString(ContactsContract.Intents.Insert.POSTAL, massageContactData(data));
+          }
         }
       } finally {
         methodsCursor.close();
@@ -268,7 +272,9 @@ public final class ShareActivity extends Activity {
         int emailColumn = emailCursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA);
         while (emailCursor.moveToNext() && foundEmail < Contents.EMAIL_KEYS.length) {
           String email = emailCursor.getString(emailColumn);
-          bundle.putString(Contents.EMAIL_KEYS[foundEmail], massageContactData(email));
+          if (email != null && email.length() > 0) {
+            bundle.putString(Contents.EMAIL_KEYS[foundEmail], massageContactData(email));
+          }
           foundEmail++;
         }
       } finally {
