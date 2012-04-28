@@ -71,7 +71,7 @@ public final class CameraManager {
    * @param holder The surface object which the camera will draw preview frames into.
    * @throws IOException Indicates the camera driver failed to open.
    */
-  public void openDriver(SurfaceHolder holder) throws IOException {
+  public synchronized void openDriver(SurfaceHolder holder) throws IOException {
     Camera theCamera = camera;
     if (theCamera == null) {
       theCamera = Camera.open();
@@ -97,7 +97,7 @@ public final class CameraManager {
   /**
    * Closes the camera driver if still in use.
    */
-  public void closeDriver() {
+  public synchronized void closeDriver() {
     if (camera != null) {
       camera.release();
       camera = null;
@@ -111,7 +111,7 @@ public final class CameraManager {
   /**
    * Asks the camera hardware to begin drawing preview frames to the screen.
    */
-  public void startPreview() {
+  public synchronized void startPreview() {
     Camera theCamera = camera;
     if (theCamera != null && !previewing) {
       theCamera.startPreview();
@@ -122,7 +122,7 @@ public final class CameraManager {
   /**
    * Tells the camera to stop drawing preview frames.
    */
-  public void stopPreview() {
+  public synchronized void stopPreview() {
     if (camera != null && previewing) {
       camera.stopPreview();
       previewCallback.setHandler(null, 0);
@@ -139,7 +139,7 @@ public final class CameraManager {
    * @param handler The handler to send the message to.
    * @param message The what field of the message to be sent.
    */
-  public void requestPreviewFrame(Handler handler, int message) {
+  public synchronized void requestPreviewFrame(Handler handler, int message) {
     Camera theCamera = camera;
     if (theCamera != null && previewing) {
       previewCallback.setHandler(handler, message);
@@ -153,7 +153,7 @@ public final class CameraManager {
    * @param handler The Handler to notify when the autofocus completes.
    * @param message The message to deliver.
    */
-  public void requestAutoFocus(Handler handler, int message) {
+  public synchronized void requestAutoFocus(Handler handler, int message) {
     if (camera != null && previewing) {
       autoFocusCallback.setHandler(handler, message);
       try {
@@ -172,7 +172,7 @@ public final class CameraManager {
    *
    * @return The rectangle to draw on screen in window coordinates.
    */
-  public Rect getFramingRect() {
+  public synchronized Rect getFramingRect() {
     if (framingRect == null) {
       if (camera == null) {
         return null;
@@ -206,7 +206,7 @@ public final class CameraManager {
    * Like {@link #getFramingRect} but coordinates are in terms of the preview frame,
    * not UI / screen.
    */
-  public Rect getFramingRectInPreview() {
+  public synchronized Rect getFramingRectInPreview() {
     if (framingRectInPreview == null) {
       Rect framingRect = getFramingRect();
       if (framingRect == null) {
@@ -235,7 +235,7 @@ public final class CameraManager {
    * @param width The width in pixels to scan.
    * @param height The height in pixels to scan.
    */
-  public void setManualFramingRect(int width, int height) {
+  public synchronized void setManualFramingRect(int width, int height) {
     if (initialized) {
       Point screenResolution = configManager.getScreenResolution();
       if (width > screenResolution.x) {
