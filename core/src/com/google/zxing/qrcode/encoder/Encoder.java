@@ -92,23 +92,25 @@ public final class Encoder {
     // Step 1: Choose the mode (encoding).
     Mode mode = chooseMode(content, encoding);
 
-    // Step 2: Append "bytes" into "dataBits" in appropriate encoding.
     BitArray dataBits = new BitArray();
+
+    // Step 1.5: Append ECI message if applicable
+    if (mode == Mode.BYTE && !DEFAULT_BYTE_MODE_ENCODING.equals(encoding)) {
+      CharacterSetECI eci = CharacterSetECI.getCharacterSetECIByName(encoding);
+      if (eci != null) {
+        appendECI(eci, dataBits);
+      }
+    }
+
+    // Step 2: Append "bytes" into "dataBits" in appropriate encoding.
     appendBytes(content, mode, dataBits, encoding);
+
     // Step 3: Initialize QR code that can contain "dataBits".
     int numInputBits = dataBits.getSize();
     initQRCode(numInputBits, ecLevel, mode, qrCode);
 
     // Step 4: Build another bit vector that contains header and data.
     BitArray headerAndDataBits = new BitArray();
-
-    // Step 4.5: Append ECI message if applicable
-    if (mode == Mode.BYTE && !DEFAULT_BYTE_MODE_ENCODING.equals(encoding)) {
-      CharacterSetECI eci = CharacterSetECI.getCharacterSetECIByName(encoding);
-      if (eci != null) {
-        appendECI(eci, headerAndDataBits);
-      }
-    }
 
     appendModeInfo(mode, headerAndDataBits);
 
