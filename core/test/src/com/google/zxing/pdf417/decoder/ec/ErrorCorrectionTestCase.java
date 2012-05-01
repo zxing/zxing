@@ -32,7 +32,12 @@ public final class ErrorCorrectionTestCase extends AbstractErrorCorrectionTestCa
   private static final int[] PDF417_TEST_WITH_EC =
       { 5, 453, 178, 121, 239, 452, 327, 657, 619 };
   private static final int ECC_BYTES = PDF417_TEST_WITH_EC.length - PDF417_TEST.length;
-  private static final int CORRECTABLE = ECC_BYTES / 2;
+  // Example is EC level 1 (s=1). The number of erasures (l) and substitutions (f) must obey:
+  // l + 2f <= 2^(s+1) - 3
+  private static final int EC_LEVEL = 1;
+  private static final int ERROR_LIMIT = (1 << (EC_LEVEL + 1)) - 3;
+  private static final int MAX_ERRORS = ERROR_LIMIT / 2;
+  private static final int MAX_ERASURES = ERROR_LIMIT;
 
   private final ErrorCorrection ec = new ErrorCorrection();
 
@@ -58,7 +63,7 @@ public final class ErrorCorrectionTestCase extends AbstractErrorCorrectionTestCa
     Random random = getRandom();
     for (int test : PDF417_TEST) { // # iterations is kind of arbitrary
       int[] received = PDF417_TEST_WITH_EC.clone();
-      corrupt(received, CORRECTABLE, random);
+      corrupt(received, MAX_ERRORS, random);
       checkDecode(received);
     }
   }
@@ -67,7 +72,7 @@ public final class ErrorCorrectionTestCase extends AbstractErrorCorrectionTestCa
   public void testTooManyErrors() {
     int[] received = PDF417_TEST_WITH_EC.clone();
     Random random = getRandom();
-    corrupt(received, CORRECTABLE + 1, random);
+    corrupt(received, MAX_ERRORS + 3, random); // +3 since the algo can actually correct 2 more than it should here
     try {
       checkDecode(received);
       fail("Should not have decoded");
@@ -76,8 +81,53 @@ public final class ErrorCorrectionTestCase extends AbstractErrorCorrectionTestCa
     }
   }
 
+  @Test
+  public void testMaxErasures() throws ChecksumException {
+    Random random = getRandom();
+    for (int test : PDF417_TEST) { // # iterations is kind of arbitrary
+      int[] received = PDF417_TEST_WITH_EC.clone();
+      int[] erasures = erase(received, MAX_ERASURES, random);
+      checkDecode(received, erasures);
+    }
+  }
+
+  @Test
+  public void testTooManyErasures() {
+    Random random = getRandom();
+    int[] received = PDF417_TEST_WITH_EC.clone();
+    int[] erasures = erase(received, MAX_ERASURES + 1, random);
+    try {
+      checkDecode(received, erasures);
+      fail("Should not have decoded");
+    } catch (ChecksumException ce) {
+      // good
+    }
+  }
+
+  @Test
+  public void testErasureAndError() throws ChecksumException {
+    // Not sure this is valid according to the spec but it's correctable
+    Random random = getRandom();
+    for (int i = 0; i < PDF417_TEST_WITH_EC.length; i++) {
+      int[] received = PDF417_TEST_WITH_EC.clone();
+      received[i] = random.nextInt(256);
+      for (int j = 0; j < PDF417_TEST_WITH_EC.length; j++) {
+        if (i == j) {
+          continue;
+        }
+        received[j] = 0;
+        int[] erasures = {j};
+        checkDecode(received, erasures);
+      }
+    }
+  }
+
   private void checkDecode(int[] received) throws ChecksumException {
-    ec.decode(received, ECC_BYTES);
+    checkDecode(received, new int[0]);
+  }
+
+  private void checkDecode(int[] received, int[] erasures) throws ChecksumException {
+    ec.decode(received, ECC_BYTES, erasures);
     for (int i = 0; i < PDF417_TEST.length; i++) {
       assertEquals(received[i], PDF417_TEST[i]);
     }
