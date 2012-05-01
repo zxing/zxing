@@ -35,7 +35,10 @@ public final class ErrorCorrection {
     this.field = ModulusGF.PDF417_GF;
   }
 
-  public void decode(int[] received, int numECCodewords) throws ChecksumException {
+  public void decode(int[] received,
+                     int numECCodewords,
+                     int[] erasures) throws ChecksumException {
+
     ModulusPoly poly = new ModulusPoly(field, received);
     int[] S = new int[numECCodewords];
     boolean error = false;
@@ -46,15 +49,30 @@ public final class ErrorCorrection {
         error = true;
       }
     }
+
     if (error) {
+
+      ModulusPoly knownErrors = field.getOne();
+      for (int erasure : erasures) {
+        int b = field.exp(received.length - 1 - erasure);
+        // Add (1 - bx) term:
+        ModulusPoly term = new ModulusPoly(field, new int[] { field.subtract(0, b), 1 });
+        knownErrors = knownErrors.multiply(term);
+      }
+
       ModulusPoly syndrome = new ModulusPoly(field, S);
-      ErrorCorrection ec = new ErrorCorrection();
+      syndrome = syndrome.multiply(knownErrors);
+
       ModulusPoly[] sigmaOmega =
-          ec.runEuclideanAlgorithm(field.buildMonomial(numECCodewords, 1), syndrome, numECCodewords);
+          runEuclideanAlgorithm(field.buildMonomial(numECCodewords, 1), syndrome, numECCodewords);
       ModulusPoly sigma = sigmaOmega[0];
       ModulusPoly omega = sigmaOmega[1];
-      int[] errorLocations = ec.findErrorLocations(sigma);
-      int[] errorMagnitudes = ec.findErrorMagnitudes(omega, sigma, errorLocations);
+
+      sigma = sigma.multiply(knownErrors);
+
+      int[] errorLocations = findErrorLocations(sigma);
+      int[] errorMagnitudes = findErrorMagnitudes(omega, sigma, errorLocations);
+
       for (int i = 0; i < errorLocations.length; i++) {
         int position = received.length - 1 - field.log(errorLocations[i]);
         if (position < 0) {

@@ -78,7 +78,7 @@ public final class Decoder {
     int numECCodewords = 1 << (ecLevel + 1);
     int[] erasures = parser.getErasures();
 
-    correctErrors(codewords, erasures.length, numECCodewords);
+    correctErrors(codewords, erasures, numECCodewords);
     verifyCodewordCount(codewords, numECCodewords);
 
     // Decode the codewords
@@ -119,17 +119,19 @@ public final class Decoder {
    * correct the errors in-place.</p>
    *
    * @param codewords   data and error correction codewords
+   * @param erasures positions of any known erasures
+   * @param numECCodewords number of error correction codewards that were available in codewords
    * @throws ChecksumException if error correction fails
    */
   private void correctErrors(int[] codewords,
-                             int numErasures,
+                             int[] erasures,
                              int numECCodewords) throws ChecksumException {
-    if (numErasures > numECCodewords / 2 + MAX_ERRORS ||
+    if (erasures.length > numECCodewords / 2 + MAX_ERRORS ||
         numECCodewords < 0 || numECCodewords > MAX_EC_CODEWORDS) {
       // Too many errors or EC Codewords is corrupted
       throw ChecksumException.getChecksumInstance();
     }
-    errorCorrection.decode(codewords, numECCodewords);
+    errorCorrection.decode(codewords, numECCodewords, erasures);
   }
 
 }

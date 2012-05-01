@@ -40,6 +40,23 @@ abstract class AbstractErrorCorrectionTestCase extends Assert {
     }
   }
 
+  static int[] erase(int[] received, int howMany, Random random) {
+    BitSet erased = new BitSet(received.length);
+    int[] erasures = new int[howMany];
+    int erasureOffset = 0;
+    for (int j = 0; j < howMany; j++) {
+      int location = random.nextInt(received.length);
+      if (erased.get(location)) {
+        j--;
+      } else {
+        erased.set(location);
+        received[location] = 0;
+        erasures[erasureOffset++] = location;
+      }
+    }
+    return erasures;
+  }
+
   static Random getRandom() {
     return new SecureRandom(new byte[] {(byte) 0xDE, (byte) 0xAD, (byte) 0xBE, (byte) 0xEF});
   }
