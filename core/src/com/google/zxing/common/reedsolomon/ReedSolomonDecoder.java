@@ -98,18 +98,14 @@ public final class ReedSolomonDecoder {
 
     GenericGFPoly rLast = a;
     GenericGFPoly r = b;
-    GenericGFPoly sLast = field.getOne();
-    GenericGFPoly s = field.getZero();
     GenericGFPoly tLast = field.getZero();
     GenericGFPoly t = field.getOne();
 
     // Run Euclidean algorithm until r's degree is less than R/2
     while (r.getDegree() >= R / 2) {
       GenericGFPoly rLastLast = rLast;
-      GenericGFPoly sLastLast = sLast;
       GenericGFPoly tLastLast = tLast;
       rLast = r;
-      sLast = s;
       tLast = t;
 
       // Divide rLastLast by rLast, with quotient in q and remainder in r
@@ -128,7 +124,6 @@ public final class ReedSolomonDecoder {
         r = r.addOrSubtract(rLast.multiplyByMonomial(degreeDiff, scale));
       }
 
-      s = q.multiply(sLast).addOrSubtract(sLastLast);
       t = q.multiply(tLast).addOrSubtract(tLastLast);
     }
 
