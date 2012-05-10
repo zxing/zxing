@@ -45,8 +45,10 @@ import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -129,10 +131,16 @@ public final class DecodeServlet extends HttpServlet {
       imageURIString = "http://" + imageURIString;
     }
 
-    URI imageURI;
+    URL imageURL;
     try {
-      imageURI = new URI(imageURIString);
+      imageURL = new URI(imageURIString).toURL();
     } catch (URISyntaxException urise) {
+      if (log.isLoggable(Level.FINE)) {
+        log.fine("URI was not valid: " + imageURIString);
+      }
+      response.sendRedirect("badurl.jspx");
+      return;
+    } catch (MalformedURLException mue) {
       if (log.isLoggable(Level.FINE)) {
         log.fine("URI was not valid: " + imageURIString);
       }
@@ -140,7 +148,17 @@ public final class DecodeServlet extends HttpServlet {
       return;
     }
 
-    HttpURLConnection connection = (HttpURLConnection) imageURI.toURL().openConnection();
+    HttpURLConnection connection;
+    try {
+      connection = (HttpURLConnection) imageURL.openConnection();
+    } catch (IllegalArgumentException iae) {
+      if (log.isLoggable(Level.FINE)) {
+        log.fine("URI could not be opened: " + imageURL);
+      }
+      response.sendRedirect("badurl.jspx");
+      return;
+    }
+
     connection.setAllowUserInteraction(false);
     connection.setReadTimeout(5000);
     connection.setConnectTimeout(5000);
@@ -182,7 +200,7 @@ public final class DecodeServlet extends HttpServlet {
           return;
         }
 
-        log.info("Decoding " + imageURI);
+        log.info("Decoding " + imageURL);
         processStream(is, request, response);
 
       } catch (IOException ioe) {
