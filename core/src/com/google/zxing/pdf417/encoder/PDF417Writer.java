@@ -88,7 +88,7 @@ public final class PDF417Writer implements Writer {
     Map<EncodeHintType, Object> hints = new EnumMap<EncodeHintType,Object>(EncodeHintType.class);
     hints.put(EncodeHintType.PDF417_COMPACT, compact);
     hints.put(EncodeHintType.PDF417_COMPACTION, compaction);
-    hints.put(EncodeHintType.PDF417_DIMENSIONS, new Dimensions(maxCols, minCols, maxRows, minRows));
+    hints.put(EncodeHintType.PDF417_DIMENSIONS, new Dimensions(minCols, maxCols, minRows, maxRows));
     return encode(contents, format, width, height, hints);
   }
 
