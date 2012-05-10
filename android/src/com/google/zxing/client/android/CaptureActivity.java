@@ -305,18 +305,29 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
   @Override
   public boolean onKeyDown(int keyCode, KeyEvent event) {
-    if (keyCode == KeyEvent.KEYCODE_BACK) {
-      if (source == IntentSource.NATIVE_APP_INTENT) {
-        setResult(RESULT_CANCELED);
-        finish();
+    switch (keyCode) {
+      case KeyEvent.KEYCODE_BACK:
+        if (source == IntentSource.NATIVE_APP_INTENT) {
+          setResult(RESULT_CANCELED);
+          finish();
+          return true;
+        }
+        if ((source == IntentSource.NONE || source == IntentSource.ZXING_LINK) && lastResult != null) {
+          restartPreviewAfterDelay(0L);
+          return true;
+        }
+        break;
+      case KeyEvent.KEYCODE_FOCUS:
+      case KeyEvent.KEYCODE_CAMERA:
+        // Handle these events so they don't launch the Camera app
         return true;
-      } else if ((source == IntentSource.NONE || source == IntentSource.ZXING_LINK) && lastResult != null) {
-        restartPreviewAfterDelay(0L);
+      // Use volume up/down to turn on light
+      case KeyEvent.KEYCODE_VOLUME_DOWN:
+        cameraManager.setTorch(false);
         return true;
-      }
-    } else if (keyCode == KeyEvent.KEYCODE_FOCUS || keyCode == KeyEvent.KEYCODE_CAMERA) {
-      // Handle these events so they don't launch the Camera app
-      return true;
+      case KeyEvent.KEYCODE_VOLUME_UP:
+        cameraManager.setTorch(true);
+        return true;
     }
     return super.onKeyDown(keyCode, event);
   }
