@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright (C) 2011 ZXing authors
+ Copyright (C) 2012 ZXing authors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -94,6 +94,7 @@
   <string name="msg_sure">Czy na pewno?</string>
   <string name="msg_unmount_usb">Niestety, karta SD nie jest dostępny.</string>
   <string name="preferences_actions_title">Kiedy kod paskowy zostaje odnaleziony\u2026</string>
+  <string name="preferences_auto_focus_title">Ustawić ostrość</string>
   <string name="preferences_bulk_mode_summary">Skanowanie i zapisywanie wielu kodów kreskowych ciągle</string>
   <string name="preferences_bulk_mode_title">Luzem tryb skanowania</string>
   <string name="preferences_copy_to_clipboard_title">Kopiuj do schowka</string>

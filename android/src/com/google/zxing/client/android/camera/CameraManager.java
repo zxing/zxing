@@ -43,8 +43,10 @@ public final class CameraManager {
   private static final int MAX_FRAME_WIDTH = 600;
   private static final int MAX_FRAME_HEIGHT = 400;
 
+  private final Context context;
   private final CameraConfigurationManager configManager;
   private Camera camera;
+  private AutoFocusManager autoFocusManager;
   private Rect framingRect;
   private Rect framingRectInPreview;
   private boolean initialized;
@@ -56,13 +58,11 @@ public final class CameraManager {
    * clear the handler so it will only receive one message.
    */
   private final PreviewCallback previewCallback;
-  /** Autofocus callbacks arrive here, and are dispatched to the Handler which requested them. */
-  private final AutoFocusCallback autoFocusCallback;
 
   public CameraManager(Context context) {
+    this.context = context;
     this.configManager = new CameraConfigurationManager(context);
     previewCallback = new PreviewCallback(configManager);
-    autoFocusCallback = new AutoFocusCallback();
   }
 
   /**
@@ -116,6 +116,7 @@ public final class CameraManager {
     if (theCamera != null && !previewing) {
       theCamera.startPreview();
       previewing = true;
+      autoFocusManager = new AutoFocusManager(context, camera);
     }
   }
 
@@ -123,10 +124,13 @@ public final class CameraManager {
    * Tells the camera to stop drawing preview frames.
    */
   public synchronized void stopPreview() {
+    if (autoFocusManager != null) {
+      autoFocusManager.stop();
+      autoFocusManager = null;
+    }
     if (camera != null && previewing) {
       camera.stopPreview();
       previewCallback.setHandler(null, 0);
-      autoFocusCallback.setHandler(null, 0);
       previewing = false;
     }
   }
@@ -144,24 +148,6 @@ public final class CameraManager {
     if (theCamera != null && previewing) {
       previewCallback.setHandler(handler, message);
       theCamera.setOneShotPreviewCallback(previewCallback);
-    }
-  }
-
-  /**
-   * Asks the camera hardware to perform an autofocus.
-   *
-   * @param handler The Handler to notify when the autofocus completes.
-   * @param message The message to deliver.
-   */
-  public synchronized void requestAutoFocus(Handler handler, int message) {
-    if (camera != null && previewing) {
-      autoFocusCallback.setHandler(handler, message);
-      try {
-        camera.autoFocus(autoFocusCallback);
-      } catch (RuntimeException re) {
-        // Have heard RuntimeException reported in Android 4.0.x+; continue?
-        Log.w(TAG, "Unexpected exception while focusing", re);
-      }
     }
   }
 

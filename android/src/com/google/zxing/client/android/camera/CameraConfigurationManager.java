@@ -89,9 +89,17 @@ final class CameraConfigurationManager {
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
     initializeTorch(parameters, prefs);
-    String focusMode = findSettableValue(parameters.getSupportedFocusModes(),
-                                         Camera.Parameters.FOCUS_MODE_AUTO,
-                                         Camera.Parameters.FOCUS_MODE_MACRO);
+    String focusMode = null;
+    if (prefs.getBoolean(PreferencesActivity.KEY_AUTO_FOCUS, true)) {
+      focusMode = findSettableValue(parameters.getSupportedFocusModes(),
+                                    Camera.Parameters.FOCUS_MODE_AUTO);
+    }
+    // Maybe selected auto-focus but not available, so fall through here:
+    if (focusMode == null) {
+      focusMode = findSettableValue(parameters.getSupportedFocusModes(),
+                                    Camera.Parameters.FOCUS_MODE_MACRO,
+                                    "edof"); // Camera.Parameters.FOCUS_MODE_EDOF in 2.2+
+    }
     if (focusMode != null) {
       parameters.setFocusMode(focusMode);
     }

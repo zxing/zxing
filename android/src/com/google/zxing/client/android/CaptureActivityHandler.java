@@ -70,14 +70,6 @@ public final class CaptureActivityHandler extends Handler {
   @Override
   public void handleMessage(Message message) {
     switch (message.what) {
-      case R.id.auto_focus:
-        //Log.d(TAG, "Got auto-focus message");
-        // When one auto focus pass finishes, start another. This is the closest thing to
-        // continuous AF. It does seem to hunt a bit, but I'm not sure what else to do.
-        if (state == State.PREVIEW) {
-          cameraManager.requestAutoFocus(this, R.id.auto_focus);
-        }
-        break;
       case R.id.restart_preview:
         Log.d(TAG, "Got restart preview message");
         restartPreviewAndDecode();
@@ -131,7 +123,6 @@ public final class CaptureActivityHandler extends Handler {
     if (state == State.SUCCESS) {
       state = State.PREVIEW;
       cameraManager.requestPreviewFrame(decodeThread.getHandler(), R.id.decode);
-      cameraManager.requestAutoFocus(this, R.id.auto_focus);
       activity.drawViewfinder();
     }
   }

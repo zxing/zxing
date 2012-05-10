@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright (C) 2011 ZXing authors
+ Copyright (C) 2012 ZXing authors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -94,6 +94,7 @@
   <string name="msg_sure">你確定嗎？</string>
   <string name="msg_unmount_usb">無法讀取 SD 卡。</string>
   <string name="preferences_actions_title">找到條碼時</string>
+  <string name="preferences_auto_focus_title">使用自動對焦</string>
   <string name="preferences_bulk_mode_summary">連續掃描並儲存多個條碼</string>
   <string name="preferences_bulk_mode_title">大量掃描模式</string>
   <string name="preferences_copy_to_clipboard_title">複製到剪貼簿</string>

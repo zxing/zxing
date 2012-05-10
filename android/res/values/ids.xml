@@ -15,8 +15,6 @@
  limitations under the License.
  -->
 <resources>
-  <!-- Messages IDs -->
-  <item type="id" name="auto_focus"/>
   <item type="id" name="decode"/>
   <item type="id" name="decode_failed"/>
   <item type="id" name="decode_succeeded"/>

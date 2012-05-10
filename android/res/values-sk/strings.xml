@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright (C) 2011 ZXing authors
+ Copyright (C) 2012 ZXing authors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -94,6 +94,7 @@
   <string name="msg_sure">Ste si istí?</string>
   <string name="msg_unmount_usb">Ospravedlňujeme sa, karta SD nie je prístupná.</string>
   <string name="preferences_actions_title">Pri zistení čiarového kódu</string>
+  <string name="preferences_auto_focus_title">Automatické zaostrenie</string>
   <string name="preferences_bulk_mode_summary">Skenovať a ukladať veľa čiarových kódov bez prerušenia</string>
   <string name="preferences_bulk_mode_title">Hromadný režim skenovania</string>
   <string name="preferences_copy_to_clipboard_title">Kopírovať do schránky</string>
