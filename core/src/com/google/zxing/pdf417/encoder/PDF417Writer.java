@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 ZXing authors
+ * Copyright 2012 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,10 +22,12 @@ import com.google.zxing.Writer;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 
+import java.util.EnumMap;
 import java.util.Map;
 
 /**
  * @author Jacob Haynes
+ * @author qwandor@google.com (Andrew Walbran)
  */
 public final class PDF417Writer implements Writer {
 
@@ -35,7 +37,29 @@ public final class PDF417Writer implements Writer {
                           int width,
                           int height,
                           Map<EncodeHintType,?> hints) throws WriterException {
-    return encode(contents, format, width, height);
+    if (format != BarcodeFormat.PDF_417) {
+      throw new IllegalArgumentException("Can only encode PDF_417, but got " + format);
+    }
+
+    PDF417 encoder = new PDF417();
+
+    if (hints != null) {
+      if (hints.containsKey(EncodeHintType.PDF417_COMPACT)) {
+        encoder.setCompact((Boolean) hints.get(EncodeHintType.PDF417_COMPACT));
+      }
+      if (hints.containsKey(EncodeHintType.PDF417_COMPACTION)) {
+        encoder.setCompaction((Compaction) hints.get(EncodeHintType.PDF417_COMPACTION));
+      }
+      if (hints.containsKey(EncodeHintType.PDF417_DIMENSIONS)) {
+        Dimensions dimensions = (Dimensions) hints.get(EncodeHintType.PDF417_DIMENSIONS);
+        encoder.setDimensions(dimensions.getMaxCols(),
+                              dimensions.getMinCols(),
+                              dimensions.getMaxRows(),
+                              dimensions.getMinRows());
+      }
+    }
+
+    return bitMatrixFromEncoder(encoder, contents, width, height);
   }
 
   @Override
@@ -43,10 +67,14 @@ public final class PDF417Writer implements Writer {
                           BarcodeFormat format,
                           int width,
                           int height) throws WriterException {
-    PDF417 encoder = initializeEncoder(format, false);
-    return bitMatrixFromEncoder(encoder, contents, width, height);
+    return encode(contents, format, width, height, null);
   }
 
+  /**
+   * @deprecated Use {@link #encode(String, BarcodeFormat, int, int, Map)} instead, with hints to
+   * specify the encoding options.
+   */
+  @Deprecated
   public BitMatrix encode(String contents,
                           BarcodeFormat format,
                           boolean compact,
@@ -57,26 +85,11 @@ public final class PDF417Writer implements Writer {
                           int minRows,
                           int maxRows,
                           Compaction compaction) throws WriterException {
-    PDF417 encoder = initializeEncoder(format, compact);
-
-    // Set options: dimensions and byte compaction
-    encoder.setDimensions(maxCols, minCols, maxRows, minRows);
-    encoder.setCompaction(compaction);
-
-    return bitMatrixFromEncoder(encoder, contents, width, height);
-  }
-
-  /**
-   * Initializes the encoder based on the format (whether it's compact or not)
-   */
-  private static PDF417 initializeEncoder(BarcodeFormat format, boolean compact) {
-    if (format != BarcodeFormat.PDF_417) {
-      throw new IllegalArgumentException("Can only encode PDF_417, but got " + format);
-    }
-
-    PDF417 encoder = new PDF417();
-    encoder.setCompact(compact);
-    return encoder;
+    Map<EncodeHintType, Object> hints = new EnumMap<EncodeHintType,Object>(EncodeHintType.class);
+    hints.put(EncodeHintType.PDF417_COMPACT, compact);
+    hints.put(EncodeHintType.PDF417_COMPACTION, compaction);
+    hints.put(EncodeHintType.PDF417_DIMENSIONS, new Dimensions(maxCols, minCols, maxRows, minRows));
+    return encode(contents, format, width, height, hints);
   }
 
   /**
@@ -126,10 +139,10 @@ public final class PDF417Writer implements Writer {
    * @return BitMatrix of the input
    */
   private static BitMatrix bitMatrixFrombitArray(byte[][] input) {
-    //Creates a small whitespace boarder around the barcode
+    // Creates a small whitespace border around the barcode
     int whiteSpace = 30;
 
-    //Creates the bitmatrix with extra space for whtespace
+    // Creates the bitmatrix with extra space for whitespace
     BitMatrix output = new BitMatrix(input.length + 2 * whiteSpace, input[0].length + 2 * whiteSpace);
     output.clear();
     for (int ii = 0; ii < input.length; ii++) {
