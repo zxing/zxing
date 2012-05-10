@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright (C) 2011 ZXing authors
+ Copyright (C) 2012 ZXing authors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -94,6 +94,7 @@
   <string name="msg_sure">계속하시겠습니까?</string>
   <string name="msg_unmount_usb">죄송합니다. SD카드를 사용할 수 없습니다.</string>
   <string name="preferences_actions_title">바코드를 스캔했을때\u2026</string>
+  <string name="preferences_auto_focus_title">자동 초점을 사용하여</string>
   <string name="preferences_bulk_mode_summary">다수의 바코드를 스캔하고 저장합니다.</string>
   <string name="preferences_bulk_mode_title">일괄 스캔 모드</string>
   <string name="preferences_copy_to_clipboard_title">복사하기</string>

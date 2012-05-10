@@ -66,6 +66,10 @@
         android:title="@string/preferences_front_light_title"
         android:summary="@string/preferences_front_light_summary"/>
     <CheckBoxPreference
+        android:key="preferences_auto_focus"
+        android:defaultValue="true"
+        android:title="@string/preferences_auto_focus_title"/>
+    <CheckBoxPreference
         android:key="preferences_bulk_mode"
         android:defaultValue="false"
         android:title="@string/preferences_bulk_mode_title"
