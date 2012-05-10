@@ -136,6 +136,21 @@ public final class CameraManager {
   }
 
   /**
+   * Convenience method for {@link com.srowen.bs.android.CaptureActivity}
+   */
+  public synchronized void setTorch(boolean newSetting) {
+    if (camera != null) {
+      if (autoFocusManager != null) {
+        autoFocusManager.stop();
+      }
+      configManager.setTorch(camera, newSetting);
+      if (autoFocusManager != null) {
+        autoFocusManager.start();
+      }
+    }
+  }
+
+  /**
    * A single preview frame will be returned to the handler supplied. The data will arrive as byte[]
    * in the message.obj field, with width and height encoded as message.arg1 and message.arg2,
    * respectively.
