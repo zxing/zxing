@@ -36,72 +36,28 @@ namespace com.google.zxing.client.result
 		
 		public static ParsedResult parseResult(Result theResult)
 		{
-			// This is a bit messy, but given limited options in MIDP / CLDC, this may well be the simplest
-			// way to go about this. For example, we have no reflection available, really.
-			// Order is important here.
-			ParsedResult result;
-			if ((result = BookmarkDoCoMoResultParser.parse(theResult)) != null)
-			{
-				return result;
-			}
-			else if ((result = AddressBookDoCoMoResultParser.parse(theResult)) != null)
-			{
-				return result;
-			}
-			else if ((result = EmailDoCoMoResultParser.parse(theResult)) != null)
-			{
-				return result;
-			}
-			else if ((result = AddressBookAUResultParser.parse(theResult)) != null)
-			{
-				return result;
-			}
-			else if ((result = VCardResultParser.parse(theResult)) != null)
-			{
-				return result;
-			}
-			else if ((result = BizcardResultParser.parse(theResult)) != null)
-			{
-				return result;
-			}
-			else if ((result = VEventResultParser.parse(theResult)) != null)
-			{
-				return result;
-			}
-			else if ((result = EmailAddressResultParser.parse(theResult)) != null)
-			{
-				return result;
-			}
-			else if ((result = TelResultParser.parse(theResult)) != null)
-			{
-				return result;
-			}
-			else if ((result = SMSMMSResultParser.parse(theResult)) != null)
-			{
-				return result;
-			}
-			else if ((result = GeoResultParser.parse(theResult)) != null)
-			{
-				return result;
-			}
-			else if ((result = URLTOResultParser.parse(theResult)) != null)
-			{
-				return result;
-			}
-			else if ((result = URIResultParser.parse(theResult)) != null)
-			{
-				return result;
-			}
-			else if ((result = ISBNResultParser.parse(theResult)) != null)
-			{
-				// We depend on ISBN parsing coming before UPC, as it is a subset.
-				return result;
-			}
-			else if ((result = ProductResultParser.parse(theResult)) != null)
-			{
-				return result;
-			}
-			return new TextParsedResult(theResult.Text, null);
+			// Simplification of original if - if else logic using Null Coalescing operator ??
+			//
+			// ?? Simply checks from left to right for a non null object
+			// when an object evaluates to null the next object after the ?? is evaluated
+			// This continues until a non null value is found or the last object is evaluated
+			return
+				BookmarkDoCoMoResultParser.parse(theResult) as ParsedResult ??
+				AddressBookDoCoMoResultParser.parse(theResult) as ParsedResult ??
+				EmailDoCoMoResultParser.parse(theResult) as ParsedResult ??
+				AddressBookAUResultParser.parse(theResult) as ParsedResult ??
+				VCardResultParser.parse(theResult) as ParsedResult ??
+				BizcardResultParser.parse(theResult) as ParsedResult ??
+				VEventResultParser.parse(theResult) as ParsedResult ??
+				EmailAddressResultParser.parse(theResult) as ParsedResult ??
+				TelResultParser.parse(theResult) as ParsedResult ??
+				SMSMMSResultParser.parse(theResult) as ParsedResult ??
+				GeoResultParser.parse(theResult) as ParsedResult ??
+				URLTOResultParser.parse(theResult) as ParsedResult ??
+				URIResultParser.parse(theResult) as ParsedResult ??
+				ISBNResultParser.parse(theResult) as ParsedResult ??
+				ProductResultParser.parse(theResult) as ParsedResult ??
+				new TextParsedResult(theResult.Text, null) as ParsedResult;
 		}
 		
 		protected internal static void  maybeAppend(System.String value_Renamed, System.Text.StringBuilder result)
