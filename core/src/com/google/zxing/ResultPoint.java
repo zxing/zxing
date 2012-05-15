@@ -16,6 +16,8 @@
 
 package com.google.zxing;
 
+import com.google.zxing.common.detector.MathUtils;
+
 /**
  * <p>Encapsulates a point of interest in an image containing a barcode. Typically, this
  * would be the location of a finder pattern or the corner of the barcode, for example.</p>
@@ -114,9 +116,7 @@ public class ResultPoint {
    * @return distance between two points
    */
   public static float distance(ResultPoint pattern1, ResultPoint pattern2) {
-    float xDiff = pattern1.x - pattern2.x;
-    float yDiff = pattern1.y - pattern2.y;
-    return (float) Math.sqrt((double) (xDiff * xDiff + yDiff * yDiff));
+    return MathUtils.distance(pattern1.x, pattern1.y, pattern2.x, pattern2.y);
   }
 
   /**
