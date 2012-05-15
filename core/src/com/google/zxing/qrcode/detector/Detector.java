@@ -25,6 +25,7 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.DetectorResult;
 import com.google.zxing.common.GridSampler;
 import com.google.zxing.common.PerspectiveTransform;
+import com.google.zxing.common.detector.MathUtils;
 import com.google.zxing.qrcode.decoder.Version;
 
 import java.util.Map;
@@ -197,8 +198,8 @@ public class Detector {
                                         ResultPoint topRight,
                                         ResultPoint bottomLeft,
                                         float moduleSize) throws NotFoundException {
-    int tltrCentersDimension = round(ResultPoint.distance(topLeft, topRight) / moduleSize);
-    int tlblCentersDimension = round(ResultPoint.distance(topLeft, bottomLeft) / moduleSize);
+    int tltrCentersDimension = MathUtils.round(ResultPoint.distance(topLeft, topRight) / moduleSize);
+    int tlblCentersDimension = MathUtils.round(ResultPoint.distance(topLeft, bottomLeft) / moduleSize);
     int dimension = ((tltrCentersDimension + tlblCentersDimension) >> 1) + 7;
     switch (dimension & 0x03) { // mod 4
       case 0:
@@ -328,9 +329,7 @@ public class Detector {
       // color, advance to next state or end if we are in state 2 already
       if ((state == 1) == image.get(realX, realY)) {
         if (state == 2) {
-          int diffX = x - fromX;
-          int diffY = y - fromY;
-          return (float) Math.sqrt((double) (diffX * diffX + diffY * diffY));
+          return MathUtils.distance(x, y, fromX, fromY);
         }
         state++;
       }
@@ -348,9 +347,7 @@ public class Detector {
     // is "white" so this last point at (toX+xStep,toY) is the right ending. This is really a
     // small approximation; (toX+xStep,toY+yStep) might be really correct. Ignore this.
     if (state == 2) {
-      int diffX = toX + xstep - fromX;
-      int diffY = toY - fromY;
-      return (float) Math.sqrt((double) (diffX * diffX + diffY * diffY));
+      return MathUtils.distance(toX + xstep, toY, fromX, fromY);
     }
     // else we didn't find even black-white-black; no estimate is really possible
     return Float.NaN;
@@ -399,11 +396,4 @@ public class Detector {
     return alignmentFinder.find();
   }
 
-  /**
-   * Ends up being a bit faster than Math.round(). This merely rounds its argument to the nearest int,
-   * where x.5 rounds up.
-   */
-  private static int round(float d) {
-    return (int) (d + 0.5f);
-  }
 }

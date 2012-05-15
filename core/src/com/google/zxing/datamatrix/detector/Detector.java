@@ -21,6 +21,7 @@ import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.DetectorResult;
 import com.google.zxing.common.GridSampler;
+import com.google.zxing.common.detector.MathUtils;
 import com.google.zxing.common.detector.WhiteRectangleDetector;
 
 import java.io.Serializable;
@@ -305,19 +306,8 @@ public final class Detector {
     return p.getX() >= 0 && p.getX() < image.getWidth() && p.getY() > 0 && p.getY() < image.getHeight();
   }
 
-  /**
-   * Ends up being a bit faster than Math.round(). This merely rounds its
-   * argument to the nearest int, where x.5 rounds up.
-   */
-  private static int round(float d) {
-    return (int) (d + 0.5f);
-  }
-
-// L2 distance
   private static int distance(ResultPoint a, ResultPoint b) {
-    return round((float) Math.sqrt((a.getX() - b.getX())
-        * (a.getX() - b.getX()) + (a.getY() - b.getY())
-        * (a.getY() - b.getY())));
+    return MathUtils.round(ResultPoint.distance(a, b));
   }
 
   /**

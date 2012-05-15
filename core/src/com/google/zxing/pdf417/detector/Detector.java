@@ -23,6 +23,7 @@ import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.DetectorResult;
 import com.google.zxing.common.GridSampler;
+import com.google.zxing.common.detector.MathUtils;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -393,8 +394,8 @@ public final class Detector {
                                       ResultPoint bottomLeft,
                                       ResultPoint bottomRight,
                                       float moduleWidth) {
-    int topRowDimension = round(ResultPoint.distance(topLeft, topRight) / moduleWidth);
-    int bottomRowDimension = round(ResultPoint.distance(bottomLeft, bottomRight) / moduleWidth);
+    int topRowDimension = MathUtils.round(ResultPoint.distance(topLeft, topRight) / moduleWidth);
+    int bottomRowDimension = MathUtils.round(ResultPoint.distance(bottomLeft, bottomRight) / moduleWidth);
     return ((((topRowDimension + bottomRowDimension) >> 1) + 8) / 17) * 17;
   }
 
@@ -428,14 +429,6 @@ public final class Detector {
         bottomRight.getY(), // p3FromY
         bottomLeft.getX(), // p4FromX
         bottomLeft.getY()); // p4FromY
-  }
-
-  /**
-   * Ends up being a bit faster than Math.round(). This merely rounds its
-   * argument to the nearest int, where x.5 rounds up.
-   */
-  private static int round(float d) {
-    return (int) (d + 0.5f);
   }
 
   /**
