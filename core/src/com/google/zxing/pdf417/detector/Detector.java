@@ -113,8 +113,11 @@ public final class Detector {
       throw NotFoundException.getNotFoundInstance();
     }
 
+    int ydimension = computeYDimension(vertices[4], vertices[6], vertices[5], vertices[7], moduleWidth);
+    ydimension = ydimension > dimension ? ydimension : dimension;
+
     // Deskew and sample image.
-    BitMatrix bits = sampleGrid(matrix, vertices[4], vertices[5], vertices[6], vertices[7], dimension);
+    BitMatrix bits = sampleGrid(matrix, vertices[4], vertices[5], vertices[6], vertices[7], dimension, ydimension);
     return new DetectorResult(bits, new ResultPoint[]{vertices[5], vertices[4], vertices[6], vertices[7]});
   }
 
@@ -399,12 +402,34 @@ public final class Detector {
     return ((((topRowDimension + bottomRowDimension) >> 1) + 8) / 17) * 17;
   }
 
+  /**
+   * Computes the y dimension (number of modules in a column) of the PDF417 Code
+   * based on vertices of the codeword area and estimated module size.
+   *
+   * @param topLeft     of codeword area
+   * @param topRight    of codeword area
+   * @param bottomLeft  of codeword area
+   * @param bottomRight of codeword are
+   * @param moduleWidth estimated module size
+   * @return the number of modules in a row.
+   */
+  private static int computeYDimension(ResultPoint topLeft,
+                                      ResultPoint topRight,
+                                      ResultPoint bottomLeft,
+                                      ResultPoint bottomRight,
+                                      float moduleWidth) {
+    int leftColumnDimension = MathUtils.round(ResultPoint.distance(topLeft, bottomLeft) / moduleWidth);
+    int rightColumnDimension = MathUtils.round(ResultPoint.distance(topRight, bottomRight) / moduleWidth);
+    return (leftColumnDimension + rightColumnDimension) >> 1;
+  }
+
   private static BitMatrix sampleGrid(BitMatrix matrix,
                                       ResultPoint topLeft,
                                       ResultPoint bottomLeft,
                                       ResultPoint topRight,
                                       ResultPoint bottomRight,
-                                      int dimension) throws NotFoundException {
+                                      int xdimension,
+                                      int ydimension) throws NotFoundException {
 
     // Note that unlike the QR Code sampler, we didn't find the center of modules, but the
     // very corners. So there is no 0.5f here; 0.0f is right.
@@ -412,15 +437,15 @@ public final class Detector {
 
     return sampler.sampleGrid(
         matrix, 
-        dimension, dimension,
+        xdimension, ydimension,
         0.0f, // p1ToX
         0.0f, // p1ToY
-        dimension, // p2ToX
+        xdimension, // p2ToX
         0.0f, // p2ToY
-        dimension, // p3ToX
-        dimension, // p3ToY
+        xdimension, // p3ToX
+        ydimension, // p3ToY
         0.0f, // p4ToX
-        dimension, // p4ToY
+        ydimension, // p4ToY
         topLeft.getX(), // p1FromX
         topLeft.getY(), // p1FromY
         topRight.getX(), // p2FromX
