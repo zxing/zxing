@@ -71,6 +71,7 @@ QList<QVideoFrame::PixelFormat> MyVideoSurface::supportedPixelFormats(
 {
     if (handleType == QAbstractVideoBuffer::NoHandle) {
         return QList<QVideoFrame::PixelFormat>()
+                << QVideoFrame::Format_UYVY
                 << QVideoFrame::Format_RGB32
                 << QVideoFrame::Format_ARGB32
                 << QVideoFrame::Format_ARGB32_Premultiplied

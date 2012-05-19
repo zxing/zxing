@@ -1,7 +1,5 @@
+// -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
 /*
- *  Code128Reader.cpp
- *  ZXing
- *
  *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -178,14 +176,8 @@ namespace zxing {
 						}
 						if (bestMatch >= 0) {
 							// Look for whitespace before start pattern, >= 50% of width of start pattern
-                                                    long maxResult = 0;
-#ifndef NOFMAXL
-                                                    maxResult = fmaxl(0, patternStart - (i - patternStart) / 2);
-#else
-                                                    maxResult = fmax(0, patternStart - (i - patternStart) / 2);
-#endif
-                                                        if (row->isRange(maxResult, patternStart,
-                                                            false)) {
+              if (row->isRange(std::max(0, patternStart - (i - patternStart) / 2), patternStart,
+							    false)) {
 								int* resultValue = new int[3];
 								resultValue[0] = patternStart;
 								resultValue[1] = i;
@@ -436,13 +428,9 @@ namespace zxing {
         while (nextStart < width && row->get(nextStart)) {
           nextStart++;
         }
-        long minResult = 0;
-#ifndef NOFMAXL
-        minResult = fminl(width, nextStart + (nextStart - lastStart)/ 2);
-#else
-        minResult = fmin(width, nextStart + (nextStart - lastStart)/ 2);
-#endif
-        if (!row->isRange(nextStart, minResult, false)) {
+        if (!row->isRange(nextStart,
+                          std::min(width, nextStart + (nextStart - lastStart) / 2),
+                          false)) {
           throw ReaderException("");
         }
 

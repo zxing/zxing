@@ -17,6 +17,7 @@
 
 #include <zxing/common/CharacterSetECI.h>
 #include <zxing/common/IllegalArgumentException.h>
+#include <zxing/FormatException.h>
 
 using std::string;
 
@@ -28,56 +29,72 @@ std::map<std::string, CharacterSetECI*> CharacterSetECI::NAME_TO_ECI;
 
 const bool CharacterSetECI::inited = CharacterSetECI::init_tables();
 
+#define ADD_CHARACTER_SET(VALUES, STRINGS) \
+  { static int values[] = {VALUES, -1}; \
+    static char const* strings[] = {STRINGS, 0}; \
+    addCharacterSet(values, strings); }
+
+#define XC ,
+
 bool CharacterSetECI::init_tables() {
-  addCharacterSet(0, "Cp437");
-  { char const* s[] = {"ISO8859_1", "ISO-8859-1", 0};
-    addCharacterSet(1, s); }
-  addCharacterSet(2, "Cp437");
-  { char const* s[] = {"ISO8859_1", "ISO-8859-1", 0};
-    addCharacterSet(3, s); }
-  addCharacterSet(4, "ISO8859_2");
-  addCharacterSet(5, "ISO8859_3");
-  addCharacterSet(6, "ISO8859_4");
-  addCharacterSet(7, "ISO8859_5");
-  addCharacterSet(8, "ISO8859_6");
-  addCharacterSet(9, "ISO8859_7");
-  addCharacterSet(10, "ISO8859_8");
-  addCharacterSet(11, "ISO8859_9");
-  addCharacterSet(12, "ISO8859_10");
-  addCharacterSet(13, "ISO8859_11");
-  addCharacterSet(15, "ISO8859_13");
-  addCharacterSet(16, "ISO8859_14");
-  addCharacterSet(17, "ISO8859_15");
-  addCharacterSet(18, "ISO8859_16");
-  { char const* s[] = {"SJIS", "Shift_JIS", 0};
-    addCharacterSet(20, s ); }
+  ADD_CHARACTER_SET(0 XC 2, "Cp437");
+  ADD_CHARACTER_SET(1 XC 3, "ISO8859_1" XC "ISO-8859-1");
+  ADD_CHARACTER_SET(4, "ISO8859_2" XC "ISO-8859-2");
+  ADD_CHARACTER_SET(5, "ISO8859_3" XC "ISO-8859-3");
+  ADD_CHARACTER_SET(6, "ISO8859_4" XC "ISO-8859-4");
+  ADD_CHARACTER_SET(7, "ISO8859_5" XC "ISO-8859-5");
+  ADD_CHARACTER_SET(8, "ISO8859_6" XC "ISO-8859-6");
+  ADD_CHARACTER_SET(9, "ISO8859_7" XC "ISO-8859-7");
+  ADD_CHARACTER_SET(10, "ISO8859_8" XC "ISO-8859-8");
+  ADD_CHARACTER_SET(11, "ISO8859_9" XC "ISO-8859-9");
+  ADD_CHARACTER_SET(12, "ISO8859_10" XC "ISO-8859-10");
+  ADD_CHARACTER_SET(13, "ISO8859_11" XC "ISO-8859-11");
+  ADD_CHARACTER_SET(15, "ISO8859_13" XC "ISO-8859-13");
+  ADD_CHARACTER_SET(16, "ISO8859_14" XC "ISO-8859-14");
+  ADD_CHARACTER_SET(17, "ISO8859_15" XC "ISO-8859-15");
+  ADD_CHARACTER_SET(18, "ISO8859_16" XC "ISO-8859-16");
+  ADD_CHARACTER_SET(20, "SJIS" XC "Shift_JIS");
+  ADD_CHARACTER_SET(21, "Cp1250" XC "windows-1250");
+  ADD_CHARACTER_SET(22, "Cp1251" XC "windows-1251");
+  ADD_CHARACTER_SET(23, "Cp1252" XC "windows-1252");
+  ADD_CHARACTER_SET(24, "Cp1256" XC "windows-1256");
+  ADD_CHARACTER_SET(25, "UnicodeBigUnmarked" XC "UTF-16BE" XC "UnicodeBig");
+  ADD_CHARACTER_SET(26, "UTF8" XC "UTF-8");
+  ADD_CHARACTER_SET(27 XC 170, "ASCII" XC "US-ASCII");
+  ADD_CHARACTER_SET(28, "Big5");
+  ADD_CHARACTER_SET(29, "GB18030" XC "GB2312" XC "EUC_CN" XC "GBK");
+  ADD_CHARACTER_SET(30, "EUC_KR" XC "EUC-KR");
   return true;
 }
 
-CharacterSetECI::CharacterSetECI(int value, char const* encodingName_) 
-  : ECI(value), encodingName(encodingName_) {}
+#undef XC
 
-char const* CharacterSetECI::getEncodingName() {
-  return encodingName;
-}
-
-void CharacterSetECI::addCharacterSet(int value, char const* encodingName) {
-  CharacterSetECI* eci = new CharacterSetECI(value, encodingName);
-  VALUE_TO_ECI[value] = eci; // can't use valueOf
-  NAME_TO_ECI[string(encodingName)] = eci;
-}
-
-void CharacterSetECI::addCharacterSet(int value, char const* const* encodingNames) {
-  CharacterSetECI* eci = new CharacterSetECI(value, encodingNames[0]);
-  VALUE_TO_ECI[value] = eci;
-  for (int i = 0; encodingNames[i]; i++) {
-    NAME_TO_ECI[string(encodingNames[i])] = eci;
+CharacterSetECI::CharacterSetECI(int const* values,
+                                 char const* const* names) 
+  : values_(values), names_(names) {
+  for(int const* values = values_; *values != -1; values++) {
+    VALUE_TO_ECI[*values] = this;
   }
+  for(char const* const* names = names_; *names; names++) {
+    NAME_TO_ECI[string(*names)] = this;
+  }
+}
+
+char const* CharacterSetECI::name() const {
+  return names_[0];
+}
+
+int CharacterSetECI::getValue() const {
+  return values_[0];
+}
+
+void CharacterSetECI::addCharacterSet(int const* values, char const* const* names) {
+  new CharacterSetECI(values, names);
 }
 
 CharacterSetECI* CharacterSetECI::getCharacterSetECIByValue(int value) {
   if (value < 0 || value >= 900) {
-    throw IllegalArgumentException("Bad ECI value: " + value);
+    throw FormatException();
   }
   return VALUE_TO_ECI[value];
 }

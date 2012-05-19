@@ -44,7 +44,7 @@ QQrDecoder::QQrDecoder(QWidget *parent): QMainWindow(parent), decoder(this)
 	
 	//by default all decoders available are enabled
     //decoder.setDecoder( QZXing::DecoderFormat_DATA_MATRIX);
-	//decoder.setDecoder( DecoderFormat_QR_CODE | DecoderFormat_EAN_13 );
+    //decoder.setDecoder( QZXing::DecoderFormat_Aztec );
 }
 
 QQrDecoder::~QQrDecoder()

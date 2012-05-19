@@ -27,10 +27,10 @@ class MultiFinderPatternFinder : zxing::qrcode::FinderPatternFinder {
   private:
     std::vector<std::vector<Ref<zxing::qrcode::FinderPattern> > > selectBestPatterns();
 
-    static const float MAX_MODULE_COUNT_PER_EDGE = 180;
-    static const float MIN_MODULE_COUNT_PER_EDGE = 9;
-    static const float DIFF_MODSIZE_CUTOFF_PERCENT = 0.05f;
-    static const float DIFF_MODSIZE_CUTOFF = 0.5f;
+    static const float MAX_MODULE_COUNT_PER_EDGE;
+    static const float MIN_MODULE_COUNT_PER_EDGE;
+    static const float DIFF_MODSIZE_CUTOFF_PERCENT;
+    static const float DIFF_MODSIZE_CUTOFF;
 
   public:
     MultiFinderPatternFinder(Ref<BitMatrix> image, Ref<ResultPointCallback> resultPointCallback);

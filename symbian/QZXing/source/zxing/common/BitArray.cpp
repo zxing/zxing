@@ -1,8 +1,5 @@
 // -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
 /*
- *  BitArray.cpp
- *  zxing
- *
  *  Copyright 2010 ZXing authors. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,32 +16,14 @@
  */
 
 #include <zxing/common/BitArray.h>
-#include <iostream>
-#include <limits>
 
 using namespace std;
 
 namespace zxing {
 
-static unsigned int logDigits(unsigned digits) {
-  unsigned log = 0;
-  unsigned val = 1;
-  while (val < digits) {
-    log++;
-    val <<= 1;
-  }
-  return log;
-}
-
-const unsigned int BitArray::bitsPerWord_ = numeric_limits<unsigned int>::digits;
-const unsigned int BitArray::logBits_ = logDigits(bitsPerWord_);
-const unsigned int BitArray::bitsMask_ = (1 << logBits_) - 1;
 
 size_t BitArray::wordsForBits(size_t bits) {
-  int arraySize = bits >> logBits_;
-  if (bits - (arraySize << logBits_) != 0) {
-    arraySize++;
-  }
+  int arraySize = (bits + bitsPerWord_ - 1) >> logBits_;
   return arraySize;
 }
 

@@ -1,0 +1,70 @@
+AutoGenerateAegisFile
+<!-- Aegis manifest declares the security credentials required by an
+     application to run correctly. By default, a manifest file will be
+     created or updated automatically as a part of build.
+
+     The detection of required credentials is based on static scan of
+     application binaries. In some cases, the scan may not be able to
+     detect the correct set of permissions. If this is the case, you must
+     declare the credentials required by your application in this file.
+
+     To create a manifest file automatically as a part of build (DEFAULT):
+
+      * Make sure this file starts with the string "AutoGenerateAegisFile" (without quotes).
+      * Alternatively, it can also be completely empty.
+
+     To provide a manifest yourself:
+
+      * List the correct credentials for the application in this file.
+      * Some commented-out examples of often required tokens are provided.
+      * Ensure the path to your application binary given in
+        '<for path="/path/to/app" />' is correct.
+      * Please do not request more credentials than what your application
+        actually requires.
+
+     To disable manifest file:
+
+      * Replace this file with a file starting with the string "NoAegisFile" (without quotes).
+      * Final application package will not contain a manifest.
+
+-->
+<aegis>
+	<request policy="add">
+
+		<!-- Make a GSM call, send text messages (SMS). -->
+	<!--
+		<credential name="Cellular" />
+	-->
+
+		<!-- Access Facebook social data. -->
+	<!--
+		<credential name="FacebookSocial" />
+	-->
+
+		<!-- Read access to data stored in tracker. -->
+	<!--
+		<credential name="TrackerReadAccess" />
+	-->
+
+		<!-- Read and write access to data stored in tracker. -->
+	<!--
+		<credential name="TrackerWriteAccess" />
+	-->
+
+		<!-- Read Location information. -->
+	<!--
+		<credential name="Location" />
+	-->
+
+		<!-- Access to Audio, Multimedia and Camera. -->
+	<!--
+		<credential name="GRP::pulse-access" />
+		<credential name="GRP::video" />
+		<credential name="GRP::audio" />
+	-->
+
+	</request>
+
+	<for path="/opt/QZXing/bin/QZXing" />
+	<for path="applauncherd-launcher::/usr/bin/applauncherd.bin" id="" />
+</aegis>

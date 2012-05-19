@@ -1,3 +1,4 @@
+// -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
 #ifndef __BARCODE_FORMAT_H__
 #define __BARCODE_FORMAT_H__
 
@@ -22,21 +23,22 @@
 
 namespace zxing {
 	
-	typedef enum BarcodeFormat {
-		BarcodeFormat_None = 0, 
-		BarcodeFormat_QR_CODE,
-		BarcodeFormat_DATA_MATRIX,
-		BarcodeFormat_UPC_E,
-		BarcodeFormat_UPC_A,
-		BarcodeFormat_EAN_8,
-		BarcodeFormat_EAN_13,
-		BarcodeFormat_CODE_128,
-		BarcodeFormat_CODE_39,
-		BarcodeFormat_ITF
-	} BarcodeFormat;
+    typedef enum BarcodeFormat {
+        BarcodeFormat_None = 0, 
+        BarcodeFormat_QR_CODE,
+        BarcodeFormat_DATA_MATRIX,
+        BarcodeFormat_UPC_E,
+        BarcodeFormat_UPC_A,
+        BarcodeFormat_EAN_8,
+        BarcodeFormat_EAN_13,
+        BarcodeFormat_CODE_128,
+        BarcodeFormat_CODE_39,
+        BarcodeFormat_ITF,
+        BarcodeFormat_AZTEC
+    } BarcodeFormat;
 
-	/* if you update the enum, please update the name in BarcodeFormat.cpp */
-	extern const char *barcodeFormatNames[];
+    /* if you update the enum, please update the name in BarcodeFormat.cpp */
+    extern const char *barcodeFormatNames[];
 }
 
 #endif // __BARCODE_FORMAT_H__

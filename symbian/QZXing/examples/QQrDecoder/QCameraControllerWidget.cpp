@@ -153,6 +153,8 @@ QCameraControllerWidget::~QCameraControllerWidget()
 
 void QCameraControllerWidget::enableCamera()
 {
+
+    //QVideoFrame::Format_UYVY;
     m_camera = new QCamera();
     m_camera->setCaptureMode(QCamera::CaptureStillImage);
     connect(m_camera, SIGNAL(error(QCamera::Error)), this, SLOT(error(QCamera::Error)));

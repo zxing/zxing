@@ -1,1 +1,0 @@
-QZXing1.rar is compressed to save space. Decompress to use.
