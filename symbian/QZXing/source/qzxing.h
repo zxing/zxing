@@ -32,7 +32,8 @@ public:
                     DecoderFormat_EAN_13 = 32,
                     DecoderFormat_CODE_128 = 64,
                     DecoderFormat_CODE_39 = 128,
-                    DecoderFormat_ITF = 256
+                    DecoderFormat_ITF = 256,
+                    DecoderFormat_Aztec = 512
             } ;
     typedef unsigned int DecoderFormatType;
 
@@ -49,7 +50,7 @@ public:
 #if QT_VERSION >= 0x040700
     static void registerQMLTypes()
     {
-        qmlRegisterType<QZXing>("QZXing", 1, 0, "QZXing");
+        qmlRegisterType<QZXing>("QZXing", 1, 2, "QZXing");
     }
 #endif
 
@@ -60,6 +61,19 @@ public slots:
       */
     QString decodeImage(QImage image);
 
+    /**
+      * The decoding function accessible from QML
+      */
+    QString decodeImageQML(QObject *item);
+
+    /**
+      * The decoding function accessible from QML. Able to set the decoding
+      * of a portion of the image.
+      */
+    QString decodeSubImageQML(QObject* item,
+                              const double offsetX = 0 , const double offsetY = 0,
+                              const double width = 0, const double height = 0);
+
 signals:
     void decodingStarted();
     void decodingFinished(bool succeeded);
@@ -68,6 +82,7 @@ signals:
 private:
     void* decoder;
     DecoderFormatType supportedFormats;
+    QObject* imageHandler;
 };
 
 #endif // QZXING_H

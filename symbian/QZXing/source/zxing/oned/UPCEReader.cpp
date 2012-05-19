@@ -1,7 +1,5 @@
+// -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
 /*
- *  UPCEReader.cpp
- *  ZXing
- *
  *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,6 +17,7 @@
 
 #include "UPCEReader.h"
 #include <zxing/ReaderException.h>
+#include <qglobal.h>
 
 namespace zxing {
   namespace oned {
@@ -44,6 +43,7 @@ namespace zxing {
 
     int UPCEReader::decodeMiddle(Ref<BitArray> row, int startGuardBegin, int startGuardEnd,
         std::string& resultString) {
+      (void)startGuardBegin;
       const int countersLen = 4;
       int counters[countersLen] = { 0, 0, 0, 0 };
 
@@ -87,8 +87,12 @@ namespace zxing {
       for (int numSys = 0; numSys <= 1; numSys++) {
         for (int d = 0; d < 10; d++) {
           if (lgPatternFound == NUMSYS_AND_CHECK_DIGIT_PATTERNS[numSys][d]) {
-            resultString.insert((size_t)0, (size_t)1, (char) ('0' + numSys));
-            resultString.append((size_t)1, (char) ('0' + d));
+#if defined(Q_OS_SYMBIAN)
+            resultString.insert((char*)0, 1, (char) ((int)'0' + numSys));
+#else
+            resultString.insert(/*(char*)*/0, 1, (char) ((int)'0' + numSys));
+#endif
+            resultString.append(1, (char) ('0' + d));
             return true;
           }
         }

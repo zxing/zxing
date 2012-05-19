@@ -1,0 +1,14 @@
+moc/
+obj/
+rcc/
+tmp/
+ui/
+.make.cache
+*.BAT
+*.inf
+Makefile
+*.mk
+*.loc
+*.user
+*.mmp
+*.pkg

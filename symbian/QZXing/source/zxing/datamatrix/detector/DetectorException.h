@@ -5,8 +5,8 @@
  *      Author: luiz
  */
 
-#ifndef DETECTOREXCEPTION_DM_H_
-#define DETECTOREXCEPTION_DM_H_
+#ifndef DETECTOREXCEPTION_H_
+#define DETECTOREXCEPTION_H_
 
 #include <zxing/Exception.h>
 
@@ -20,4 +20,4 @@ class DetectorException : public Exception {
 };
 } /* namespace nexxera */
 } /* namespace zxing */
-#endif /* DETECTOREXCEPTION_DM_H_ */
+#endif /* DETECTOREXCEPTION_H_ */

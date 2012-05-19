@@ -1,7 +1,5 @@
+// -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
 /*
- *  QREdgeDetector.cpp
- *  zxing
- *
  *  Created by Ralf Kistner on 7/12/2009.
  *  Copyright 2008 ZXing authors All rights reserved.
  *
@@ -61,6 +59,7 @@ Ref<PerspectiveTransform> QREdgeDetector::createTransform(Ref<ResultPoint> topLe
 
 
 Point QREdgeDetector::findCorner(const BitMatrix& image, Point topLeft, Point topRight, Point bottomLeft, int dimension) {
+  (void)dimension;
   Point bottomRight = guessLastPattern(topLeft, topRight, bottomLeft);
 
   Line bottomEst = findPatternEdge(image, bottomLeft, topLeft, bottomRight, false);

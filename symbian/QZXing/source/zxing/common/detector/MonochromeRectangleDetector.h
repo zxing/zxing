@@ -42,7 +42,7 @@ private:
   Ref<BitMatrix> image_;
 
 public:
-  MonochromeRectangleDetector(Ref<BitMatrix> image) : image_(image) {  }
+  MonochromeRectangleDetector(Ref<BitMatrix> image) : image_(image) {  };
 
   std::vector<Ref<ResultPoint> > detect();
 
@@ -53,7 +53,7 @@ private:
   Ref<TwoInts> blackWhiteRange(int fixedDimension, int maxWhiteRun, int minDim, int maxDim,
       bool horizontal);
 
-  int max(int a, float b) { return (float) a > b ? a : (int) b;}
+  int max(int a, float b) { return (float) a > b ? a : (int) b;};
 };
 }
 

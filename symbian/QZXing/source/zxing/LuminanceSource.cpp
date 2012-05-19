@@ -35,6 +35,10 @@ bool LuminanceSource::isCropSupported() const {
 }
 
 Ref<LuminanceSource> LuminanceSource::crop(int left, int top, int width, int height) {
+  (void)left;
+  (void)top;
+  (void)width;
+  (void)height;
   throw IllegalArgumentException("This luminance source does not support cropping.");
 }
 

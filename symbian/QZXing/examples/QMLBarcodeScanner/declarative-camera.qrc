@@ -1,0 +1,27 @@
+<RCC>
+    <qresource prefix="/">
+        <file>declarative-camera.qml</file>
+        <file>CameraButton.qml</file>
+        <file>CameraPropertyPopup.qml</file>
+        <file>CameraPropertyButton.qml</file>
+        <file>CaptureControls.qml</file>
+        <file>ExposureCompensationButton.qml</file>
+        <file>FlickableList.qml</file>
+        <file>FocusButton.qml</file>
+        <file>PhotoPreview.qml</file>
+        <file>ZoomControl.qml</file>
+        <file>images/camera_auto_mode.png</file>
+        <file>images/camera_camera_setting.png</file>
+        <file>images/camera_flash_auto.png</file>
+        <file>images/camera_flash_fill.png</file>
+        <file>images/camera_flash_off.png</file>
+        <file>images/camera_flash_redeye.png</file>
+        <file>images/camera_white_balance_cloudy.png</file>
+        <file>images/camera_white_balance_flourescent.png</file>
+        <file>images/camera_white_balance_incandescent.png</file>
+        <file>images/camera_white_balance_sunny.png</file>
+        <file>images/toolbutton.png</file>
+        <file>images/toolbutton.sci</file>
+        <file>MessageDialog.qml</file>
+    </qresource>
+</RCC>

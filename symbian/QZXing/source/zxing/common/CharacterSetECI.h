@@ -20,7 +20,6 @@
  */
 
 #include <map>
-#include <zxing/common/ECI.h>
 #include <zxing/DecodeHints.h>
 
 namespace zxing {
@@ -29,22 +28,23 @@ namespace zxing {
   }
 }
 
-class zxing::common::CharacterSetECI : public ECI {
+class zxing::common::CharacterSetECI {
 private:
   static std::map<int, CharacterSetECI*> VALUE_TO_ECI;
   static std::map<std::string, CharacterSetECI*> NAME_TO_ECI;
   static const bool inited;
   static bool init_tables();
 
-  char const* const encodingName;
+  int const* const values_;
+  char const* const* const names_;
 
-  CharacterSetECI(int value, char const* encodingName);
+  CharacterSetECI(int const* values, char const* const* names);
 
-  static void addCharacterSet(int value, char const* encodingName);
-  static void addCharacterSet(int value, char const* const* encodingNames);
+  static void addCharacterSet(int const* value, char const* const* encodingNames);
 
 public:
-  char const* getEncodingName();
+  char const* name() const;
+  int getValue() const;
 
   static CharacterSetECI* getCharacterSetECIByValue(int value);
   static CharacterSetECI* getCharacterSetECIByName(std::string const& name);

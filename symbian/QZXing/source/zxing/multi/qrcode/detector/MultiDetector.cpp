@@ -34,7 +34,7 @@ std::vector<Ref<DetectorResult> > MultiDetector::detectMulti(DecodeHints hints){
   for(unsigned int i = 0; i < info.size(); i++){
     try{
       result.push_back(processFinderPatternInfo(info[i]));
-    } catch (ReaderException e){
+    } catch (ReaderException& e){
       // ignore
     }
   }

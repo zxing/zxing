@@ -26,10 +26,6 @@ using namespace std;
 using namespace zxing;
 
 namespace {
-  const int LUMINANCE_BITS = 5;
-  const int LUMINANCE_SHIFT = 8 - LUMINANCE_BITS;
-  const int LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
-
   const int BLOCK_SIZE_POWER = 3;
   const int BLOCK_SIZE = 1 << BLOCK_SIZE_POWER;
   const int BLOCK_SIZE_MASK = BLOCK_SIZE - 1;
@@ -160,8 +156,11 @@ namespace {
   }
 }
 
+
 int* HybridBinarizer::calculateBlackPoints(unsigned char* luminances, int subWidth, int subHeight,
     int width, int height) {
+  const int minDynamicRange = 24;
+
   int *blackPoints = new int[subHeight * subWidth];
   for (int y = 0; y < subHeight; y++) {
     int yoffset = y << BLOCK_SIZE_POWER;
@@ -182,6 +181,7 @@ int* HybridBinarizer::calculateBlackPoints(unsigned char* luminances, int subWid
         for (int xx = 0; xx < BLOCK_SIZE; xx++) {
           int pixel = luminances[offset + xx] & 0xFF;
           sum += pixel;
+          // still looking for good contrast
           if (pixel < min) {
             min = pixel;
           }
@@ -189,12 +189,22 @@ int* HybridBinarizer::calculateBlackPoints(unsigned char* luminances, int subWid
             max = pixel;
           }
         }
+
+        // short-circuit min/max tests once dynamic range is met
+        if (max - min > minDynamicRange) {
+          // finish the rest of the rows quickly
+          for (yy++, offset += width; yy < BLOCK_SIZE; yy++, offset += width) {
+            for (int xx = 0; xx < BLOCK_SIZE; xx += 2) {
+              sum += luminances[offset + xx] & 0xFF;
+              sum += luminances[offset + xx + 1] & 0xFF;
+            }
+          }
+        }
       }
-      
       // See
       // http://groups.google.com/group/zxing/browse_thread/thread/d06efa2c35a7ddc0
-      int average = sum >> 6;
-      if (max - min <= 24) {
+      int average = sum >> (BLOCK_SIZE_POWER * 2);
+      if (max - min <= minDynamicRange) {
         average = min >> 1;
         if (y > 0 && x > 0) {
           int bp = getBlackPointFromNeighbors(blackPoints, subWidth, x, y);

@@ -25,6 +25,11 @@ namespace zxing{
 namespace multi {
 using namespace zxing::qrcode;
 
+const float MultiFinderPatternFinder::MAX_MODULE_COUNT_PER_EDGE = 180;
+const float MultiFinderPatternFinder::MIN_MODULE_COUNT_PER_EDGE = 9;
+const float MultiFinderPatternFinder::DIFF_MODSIZE_CUTOFF_PERCENT = 0.05f;
+const float MultiFinderPatternFinder::DIFF_MODSIZE_CUTOFF = 0.5f;
+
 bool compareModuleSize(Ref<FinderPattern> a, Ref<FinderPattern> b){
     float value = a->getEstimatedModuleSize() - b->getEstimatedModuleSize();
     return value < 0.0;

@@ -1,1 +1,0 @@
-libQZXing.rar is compressed to save space. Decompress to use.

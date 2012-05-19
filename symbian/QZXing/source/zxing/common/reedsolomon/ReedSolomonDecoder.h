@@ -24,22 +24,24 @@
 #include <vector>
 #include <zxing/common/Counted.h>
 #include <zxing/common/Array.h>
+#include <zxing/common/reedsolomon/GenericGFPoly.h>
+#include <zxing/common/reedsolomon/GenericGF.h>
 
 namespace zxing {
-class GF256;
-class GF256Poly;
+class GenericGFPoly;
+class GenericGF;
 
 class ReedSolomonDecoder {
 private:
-  GF256 &field;
+  Ref<GenericGF> field;
 public:
-  ReedSolomonDecoder(GF256 &fld);
+  ReedSolomonDecoder(Ref<GenericGF> fld);
   ~ReedSolomonDecoder();
   void decode(ArrayRef<int> received, int twoS);
 private:
-  std::vector<Ref<GF256Poly> > runEuclideanAlgorithm(Ref<GF256Poly> a, Ref<GF256Poly> b, int R);
-  ArrayRef<int> findErrorLocations(Ref<GF256Poly> errorLocator);
-  ArrayRef<int> findErrorMagnitudes(Ref<GF256Poly> errorEvaluator, ArrayRef<int> errorLocations);
+  std::vector<Ref<GenericGFPoly> > runEuclideanAlgorithm(Ref<GenericGFPoly> a, Ref<GenericGFPoly> b, int R);
+  ArrayRef<int> findErrorLocations(Ref<GenericGFPoly> errorLocator);
+  ArrayRef<int> findErrorMagnitudes(Ref<GenericGFPoly> errorEvaluator, ArrayRef<int> errorLocations, bool dataMatrix);
 };
 }
 

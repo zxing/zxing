@@ -12,4 +12,3 @@ Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: <insert up to 60 chars description>
  <insert long description, indented with spaces>
 XSBC-Maemo-Display-Name: QZXing
-XB-Maemo-Icon-26: 
