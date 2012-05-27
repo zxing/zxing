@@ -55,7 +55,7 @@
   <string name="history_clear_text">Vider l\'historique</string>
   <string name="history_email_title">Historique de Barcode Scanner</string>
   <string name="history_empty">Vide</string>
-  <string name="history_empty_detail">Pas de code à barres scanne ont encore été enregistrées</string>
+  <string name="history_empty_detail">Aucun code-barres scanné a encore été enregistré</string>
   <string name="history_send">Envoyer historique</string>
   <string name="history_title">Historique</string>
   <string name="menu_about">A propos</string>
