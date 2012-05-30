@@ -1,3 +1,4 @@
+// -*- mode:objc; c-basic-offset:2; indent-tabs-mode:nil -*-
 /**
  * Copyright 2009 Jeff Verkoeyen
  *
@@ -301,12 +302,30 @@
 #pragma mark - 
 #pragma mark AVFoundation
 
+#include <sys/types.h>
+#include <sys/sysctl.h>
+
+// Gross, I know, but ...
+static bool isIPad() {
+  static int is_ipad = -1;
+  if (is_ipad < 0) {
+    size_t size;
+    sysctlbyname("hw.machine", NULL, &size, NULL, 0); // Get size of data to be returned.
+    char *name = malloc(size);
+    sysctlbyname("hw.machine", name, &size, NULL, 0);
+    NSString *machine = [NSString stringWithCString:name encoding:NSASCIIStringEncoding];
+    free(name);
+    is_ipad = [machine hasPrefix:@"iPad"];
+  }
+  return !!is_ipad;
+}
+    
 - (void)initCapture {
 #if HAS_AVFF
+  AVCaptureDevice* inputDevice =
+    [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
   AVCaptureDeviceInput *captureInput =
-    [AVCaptureDeviceInput deviceInputWithDevice:
-            [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo] 
-                                          error:nil];
+    [AVCaptureDeviceInput deviceInputWithDevice:inputDevice error:nil];
   AVCaptureVideoDataOutput *captureOutput = [[AVCaptureVideoDataOutput alloc] init]; 
   captureOutput.alwaysDiscardsLateVideoFrames = YES; 
   [captureOutput setSampleBufferDelegate:self queue:dispatch_get_main_queue()];
@@ -315,7 +334,21 @@
   NSDictionary* videoSettings = [NSDictionary dictionaryWithObject:value forKey:key]; 
   [captureOutput setVideoSettings:videoSettings]; 
   self.captureSession = [[[AVCaptureSession alloc] init] autorelease];
-  self.captureSession.sessionPreset = AVCaptureSessionPresetMedium; // 480x360 on a 4
+
+  NSString* preset = 0;
+  if (NSClassFromString(@"NSOrderedSet") && // Proxy for "is this iOS 5" ...
+      [UIScreen mainScreen].scale > 1 &&
+      isIPad() && 
+      [inputDevice
+        supportsAVCaptureSessionPreset:AVCaptureSessionPresetiFrame960x540]) {
+    NSLog(@"960");
+    preset = AVCaptureSessionPresetiFrame960x540;
+  }
+  if (!preset) {
+    NSLog(@"MED");
+    preset = AVCaptureSessionPresetMedium;
+  }
+  self.captureSession.sessionPreset = preset;
 
   [self.captureSession addInput:captureInput];
   [self.captureSession addOutput:captureOutput];

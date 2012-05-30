@@ -39,6 +39,10 @@
 #define ZXMediaTypeVideo QTMediaTypeVideo
 #endif
 
+#if ZXAV(1)+0
+static bool isIPad();
+#endif
+
 @implementation ZXCapture
 
 @synthesize delegate;
@@ -128,6 +132,21 @@
   }
   
   if (input) {
+    ZXAV({
+        NSString* preset = 0;
+        if (NSClassFromString(@"NSOrderedSet") && // Proxy for "is this iOS 5" ...
+            [UIScreen mainScreen].scale > 1 &&
+            isIPad() && 
+            [zxd supportsAVCaptureSessionPreset:AVCaptureSessionPresetiFrame960x540]) {
+          // NSLog(@"960");
+          preset = AVCaptureSessionPresetiFrame960x540;
+        }
+        if (!preset) {
+          // NSLog(@"MED");
+          preset = AVCaptureSessionPresetMedium;
+        }
+        session.sessionPreset = preset;
+      });
     [session addInput:input ZXQT(error:nil)];
   }
 }
@@ -135,7 +154,6 @@
 - (ZXCaptureSession*)session {
   if (session == 0) {
     session = [[ZXCaptureSession alloc] init];
-    ZXAV({session.sessionPreset = AVCaptureSessionPresetMedium;});
     [self replaceInput];
   }
   return session;
@@ -377,7 +395,7 @@ ZXAV(didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer)
   // NSLog(@"received frame");
 
   ZXAV(CVImageBufferRef videoFrame = CMSampleBufferGetImageBuffer(sampleBuffer));
-
+  
   // NSLog(@"%d %d", CVPixelBufferGetWidth(videoFrame), CVPixelBufferGetHeight(videoFrame));
   // NSLog(@"delegate %@", delegate);
 
@@ -553,6 +571,28 @@ ZXAV(didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer)
 
 @end
 
+// If you try to define this higher, there (seem to be) clashes with something(s) defined
+// in the includes ...
+
+#if ZXAV(1)+0
+#include <sys/types.h>
+#include <sys/sysctl.h>
+// Gross, I know, but ...
+static bool isIPad() {
+  static int is_ipad = -1;
+  if (is_ipad < 0) {
+    size_t size;
+    sysctlbyname("hw.machine", NULL, &size, NULL, 0); // Get size of data to be returned.
+    char* name = (char*)malloc(size);
+    sysctlbyname("hw.machine", name, &size, NULL, 0);
+    NSString *machine = [NSString stringWithCString:name encoding:NSASCIIStringEncoding];
+    free(name);
+    is_ipad = [machine hasPrefix:@"iPad"];
+  }
+  return !!is_ipad;
+}
+#endif
+    
 #else
 
 @implementation ZXCapture
