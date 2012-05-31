@@ -20,9 +20,9 @@ package com.google.zxing.multi.qrcode.detector
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.ReaderException;
 import com.google.zxing.ResultPoint;
+import com.google.zxing.ResultPointCallback;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.Collections;
-import com.google.zxing.common.ResultPointCallback;
 import com.google.zxing.common.flexdatatypes.ArrayList;
 import com.google.zxing.common.flexdatatypes.HashTable;
 import com.google.zxing.qrcode.detector.FinderPattern;
