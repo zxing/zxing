@@ -67,7 +67,7 @@ public class DefaultGridSampler extends GridSampler
       // sufficient to check the endpoints
       checkAndNudgePoints(image, points);
       try {
-        for (var x:int = 0; x < max; x += 2) {
+        for (x = 0; x < max; x += 2) {
           if (image._get(int(points[x]), int( points[x + 1]))) {
             // Black(-ish) pixel
             bits._set(x >> 1, y);
