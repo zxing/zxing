@@ -39,8 +39,10 @@ How to include ZXingWidget in a easy and clean way (in XCode4):
 	   d. CoreMedia
 	   e. libiconv
 	   f. AddressBook
-     g. AddressBookUI
-	   This must be done by adding them in the 'Link Libraries with Binary' just like step 2.c.
+           g. AddressBookUI
+	   This must be done by adding them in the 'Link Libraries with Binary' just like step 2.c. If you are
+           supporting iOS 4, for AVFoundation, you must select 'Optional' in the pull down to the right in order to
+           weak link the framework. (Some symbols used in ZXing didn't exist before iOS 5.)
  
   7. You're almost ready to go ..
   
