@@ -371,6 +371,12 @@ static bool isIPad();
 }
 
 - (void)dealloc {
+  if (input && session) {
+    [session removeInput:input];
+  }
+  if (output && session) {
+    [session removeOutput:output];
+  }
   [captureToFilename release];
   [binary release];
   [luminance release];
