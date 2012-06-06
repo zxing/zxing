@@ -94,6 +94,10 @@ public final class CameraManager {
     configManager.setDesiredCameraParameters(theCamera);
   }
 
+  public synchronized boolean isOpen() {
+    return camera != null;
+  }
+
   /**
    * Closes the camera driver if still in use.
    */
@@ -136,7 +140,7 @@ public final class CameraManager {
   }
 
   /**
-   * Convenience method for {@link com.srowen.bs.android.CaptureActivity}
+   * Convenience method for {@link com.google.zxing.client.android.CaptureActivity}
    */
   public synchronized void setTorch(boolean newSetting) {
     if (camera != null) {
