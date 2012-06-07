@@ -307,7 +307,7 @@
 
 // Gross, I know. But you can't use the device idiom because it's not iPad when running
 // in zoomed iphone mode but the camera still acts like an ipad.
-
+#if HAS_AVFF
 static bool isIPad() {
   static int is_ipad = -1;
   if (is_ipad < 0) {
@@ -321,6 +321,7 @@ static bool isIPad() {
   }
   return !!is_ipad;
 }
+#endif
     
 - (void)initCapture {
 #if HAS_AVFF
