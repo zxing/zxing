@@ -1,1 +1,3 @@
-No docs at this point but there's an example macruby app at https://github.com/smparkes/zxing.app.
+No docs at this point but there's an example macruby app at
+https://github.com/smparkes/zxing.app and a cocoa example (moderately
+modified) at https://github.com/smparkes/zxing-objc-demo-app.
