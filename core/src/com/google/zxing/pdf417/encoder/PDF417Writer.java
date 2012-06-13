@@ -143,13 +143,13 @@ public final class PDF417Writer implements Writer {
     int whiteSpace = 30;
 
     // Creates the bitmatrix with extra space for whitespace
-    BitMatrix output = new BitMatrix(input.length + 2 * whiteSpace, input[0].length + 2 * whiteSpace);
+    BitMatrix output = new BitMatrix(input[0].length + 2 * whiteSpace, input.length + 2 * whiteSpace);
     output.clear();
-    for (int ii = 0; ii < input.length; ii++) {
-      for (int jj = 0; jj < input[0].length; jj++) {
+    for (int y = 0; y < input.length; y++) {
+      for (int x = 0; x < input[0].length; x++) {
         // Zero is white in the bytematrix
-        if (input[ii][jj] == 1) {
-          output.set(ii + whiteSpace, jj + whiteSpace);
+        if (input[y][x] == 1) {
+          output.set(x + whiteSpace, y + whiteSpace);
         }
       }
     }
