@@ -26,6 +26,51 @@
           click on the hyperlink which brought you here.</p>
         </td>
       </tr>
+
+      <script type="text/javascript">
+       <!--
+        function getQueryParameter(name) {
+          var query;
+          query = window.location.search.substring(1);
+          if (query.length <= 0)
+            return null;
+          name = name + "=";
+          var head;
+          head = query.indexOf(name);
+          if (head < 0)
+            return null;
+          head += name.length;
+          var tail;
+          tail = query.indexOf ( "&" , head );
+          if (tail < 0)
+            tail = query.length;
+          return unescape(query.substring(head, tail));
+        }
+        function process(form) {
+          if (window.ret == null)
+            return false;
+          var code;
+          code = form['{CODE}'].value;
+          if (code == null || code.length == 0)
+            return false;
+          var url;
+          url = window.ret.replace('{CODE}', encodeURIComponent(code));
+          window.location = url;
+          return false;
+        }
+        window.ret = getQueryParameter("ret");
+        // We COULD allow any protocol, but this is a we
+        if (window.ret != null && window.ret.indexOf("http") == 0) {
+          document.write('<tr><td valign="top"></td><td valign="top">');
+          document.write('<form onsubmit="process(this); return false">');
+          document.write('<input type="text" name="{CODE}" size="13"/>');
+          document.write('<input type="submit" value="Enter Manually"/>');
+          document.write('</form>');
+          document.write('</td></tr>');
+        }
+       // -->
+      </script>
+
     </table>
     
     <div id="footer">
