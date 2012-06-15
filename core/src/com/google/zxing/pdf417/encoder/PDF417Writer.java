@@ -145,11 +145,11 @@ public final class PDF417Writer implements Writer {
     // Creates the bitmatrix with extra space for whitespace
     BitMatrix output = new BitMatrix(input[0].length + 2 * whiteSpace, input.length + 2 * whiteSpace);
     output.clear();
-    for (int y = 0; y < input.length; y++) {
+    for (int y = 0, yOutput = output.getHeight() - whiteSpace; y < input.length; y++, yOutput--) {
       for (int x = 0; x < input[0].length; x++) {
         // Zero is white in the bytematrix
         if (input[y][x] == 1) {
-          output.set(x + whiteSpace, y + whiteSpace);
+          output.set(x + whiteSpace, yOutput);
         }
       }
     }
