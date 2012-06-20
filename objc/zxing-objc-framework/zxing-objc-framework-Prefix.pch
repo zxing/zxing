@@ -1,0 +1,7 @@
+//
+// Prefix header for all source files of the 'zxing-objc-framework' target in the 'zxing-objc-framework' project
+//
+
+#ifdef __OBJC__
+    #import <Cocoa/Cocoa.h>
+#endif

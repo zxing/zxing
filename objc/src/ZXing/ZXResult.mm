@@ -16,24 +16,44 @@
  */
 
 #import <ZXing/ZXResult.h>
+#include <zxing/result.h>
+
+@interface ZXResultInternal : NSObject {
+  zxing::Ref<zxing::Result> native;
+}
+- (id)init:(void*)native;
+- (zxing::Ref<zxing::Result> const&) native;
+@end
+@implementation ZXResultInternal
+- (id)init:(void*)native_ {
+  if ((self = [super init])) {
+    native = (zxing::Result*)native_;
+  }
+  return self;
+}
+- (zxing::Ref<zxing::Result> const&)native {
+  return native;
+}
+@end
 
 @implementation ZXResult
 
-- (ZXResult*)initWithNative:(zxing::Result*)result {
+- (ZXResult*)initWithNative:(void*)native {
   if ((self = [super init])) {
-    native = result;
+    state_ = [[ZXResultInternal alloc] init:native];
   }
   return self;
 }
 
 - (void)dealloc {
-  native = 0;
+  [state_ release];
   [super dealloc];
 }
 
 - (NSString*)text {
-  return [NSString stringWithCString:native->getText()->getText().c_str()
-                            encoding:NSUTF8StringEncoding];
+  return [NSString 
+           stringWithCString:[state_ native]->getText()->getText().c_str()
+                    encoding:NSUTF8StringEncoding];
 }
 
 @end

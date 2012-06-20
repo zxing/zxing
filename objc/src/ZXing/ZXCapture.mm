@@ -28,14 +28,12 @@
 #include <ZXing/ZXIllegalArgumentException.h>
 
 #if TARGET_OS_EMBEDDED || TARGET_IPHONE_SIMULATOR
-#define ZXCaptureDevice AVCaptureDevice
 #define ZXCaptureOutput AVCaptureOutput
 #define ZXMediaTypeVideo AVMediaTypeVideo
 #define ZXCaptureConnection AVCaptureConnection
 #else
 #define ZXCaptureOutput QTCaptureOutput
 #define ZXCaptureConnection QTCaptureConnection
-#define ZXCaptureDevice QTCaptureDevice
 #define ZXMediaTypeVideo QTMediaTypeVideo
 #endif
 
@@ -57,7 +55,8 @@ static bool isIPad();
     width = 1920;
     height = 1080;
     hard_stop = false;
-    device = -1;
+    capture_device = 0;
+    capture_device_index = -1;
     order_in_skip = 0;
     order_out_skip = 0;
     transform = CGAffineTransformIdentity;
@@ -68,11 +67,31 @@ static bool isIPad();
   return self;
 }
 
+- (BOOL)running {return running;}
+
+- (BOOL)mirror {
+  return mirror;
+}
+
+- (void)setMirror:(BOOL)mirror_ {
+  if (mirror != mirror_) {
+    mirror = mirror_;
+    if (layer) {
+      transform.a = -transform.a;
+      [layer setAffineTransform:transform];
+    }
+  }
+}
+
 - (void)order_skip {
   order_out_skip = order_in_skip = 1;
 }
 
 - (ZXCaptureDevice*)device {
+  if (capture_device) {
+    return capture_device;
+  }
+
   ZXCaptureDevice* zxd = nil;
 
 #if ZXAV(1)+0
@@ -82,7 +101,7 @@ static bool isIPad();
       ZXQT(inputDevicesWithMediaType:) ZXMediaTypeVideo];
 
   if ([devices count] > 0) {
-    if (device == -1) {
+    if (capture_device_index == -1) {
       AVCaptureDevicePosition position = AVCaptureDevicePositionBack;
       if (camera == self.front) {
         position = AVCaptureDevicePositionFront;
@@ -91,15 +110,15 @@ static bool isIPad();
       for(unsigned int i=0; i < [devices count]; ++i) {
         ZXCaptureDevice* dev = [devices objectAtIndex:i];
         if (dev.position == position) {
-          device = i;
+          capture_device_index = i;
           zxd = dev;
           break;
         }
       }
     }
     
-    if (!zxd && device != -1) {
-      zxd = [devices objectAtIndex:device];
+    if (!zxd && capture_device_index != -1) {
+      zxd = [devices objectAtIndex:capture_device_index];
     }
   }
 #endif
@@ -111,9 +130,31 @@ static bool isIPad();
         ZXQT(defaultInputDeviceWithMediaType:) ZXMediaTypeVideo];
   }
 
+  capture_device = [zxd retain];
+
   return zxd;
 }
 
+- (ZXCaptureDevice*)captureDevice {
+  return capture_device;
+}
+
+- (void)setCaptureDevice:(ZXCaptureDevice*)device {
+  if (device == capture_device) {
+    return;
+  }
+
+  if(capture_device) {
+    ZXQT({
+        if ([capture_device isOpen]) {
+          [capture_device close];
+        }});
+    [capture_device release];
+  }
+  
+  capture_device = [device retain];
+}
+	
 - (void)replaceInput {
   if (session && input) {
     [session removeInput:input];
@@ -134,7 +175,8 @@ static bool isIPad();
   if (input) {
     ZXAV({
         NSString* preset = 0;
-        if (NSClassFromString(@"NSOrderedSet") && // Proxy for "is this iOS 5" ...
+        if (!preset &&
+            NSClassFromString(@"NSOrderedSet") && // Proxy for "is this iOS 5" ...
             [UIScreen mainScreen].scale > 1 &&
             isIPad() && 
             [zxd supportsAVCaptureSessionPreset:AVCaptureSessionPresetiFrame960x540]) {
@@ -181,7 +223,7 @@ static bool isIPad();
     NSMutableDictionary* attributes =
       [NSMutableDictionary dictionaryWithObject:value forKey:key]; 
     key = (NSString*)kCVPixelBufferWidthKey;
-    value = [NSNumber numberWithUnsignedInt:width]; 
+    value = [NSNumber numberWithUnsignedInt:width];
     [attributes setObject:value forKey:key]; 
     key = (NSString*)kCVPixelBufferHeightKey;
     value = [NSNumber numberWithUnsignedInt:height];
@@ -402,7 +444,7 @@ ZXAV(didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer)
 
   ZXAV(CVImageBufferRef videoFrame = CMSampleBufferGetImageBuffer(sampleBuffer));
   
-  // NSLog(@"%d %d", CVPixelBufferGetWidth(videoFrame), CVPixelBufferGetHeight(videoFrame));
+  // NSLog(@"%ld %ld", CVPixelBufferGetWidth(videoFrame), CVPixelBufferGetHeight(videoFrame));
   // NSLog(@"delegate %@", delegate);
 
   ZXQT({
@@ -412,12 +454,15 @@ ZXAV(didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer)
           formatDescriptionAttributes] objectForKey:@"videoEncodedPixelsSize"] sizeValue];
     width = size.width;
     height = size.height;
+    // NSLog(@"reported: %f x %f", size.width, size.height);
     [self performSelectorOnMainThread:@selector(setOutputAttributes) withObject:nil waitUntilDone:NO];
     reported_width = size.width;
     reported_height = size.height;
-    [delegate captureSize:self
-                    width:[NSNumber numberWithFloat:size.width]
-                   height:[NSNumber numberWithFloat:size.height]];
+    if ([delegate  respondsTo:@selector(captureSize:width:height:)]) {
+      [delegate captureSize:self
+                      width:[NSNumber numberWithFloat:size.width]
+                     height:[NSNumber numberWithFloat:size.height]];
+    }
   }});
 
   (void)sampleBuffer;
@@ -545,7 +590,9 @@ ZXAV(didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer)
 - (void)setCamera:(int)camera_ {
   if (camera  != camera_) {
     camera = camera_;
-    device = -1;
+    capture_device_index = -1;
+    [capture_device release];
+    capture_device = 0;
     if (running) {
       [self replaceInput];
     }
@@ -606,6 +653,7 @@ static bool isIPad() {
 @synthesize delegate;
 @synthesize transform;
 @synthesize captureToFilename;
+@synthesize mirror;
 
 - (id)init {
   if ((self = [super init])) {
@@ -613,6 +661,8 @@ static bool isIPad() {
   }
   return 0;
 }
+
+- (BOOL)running {return NO;}
 
 - (CALayer*)layer {
   return 0;

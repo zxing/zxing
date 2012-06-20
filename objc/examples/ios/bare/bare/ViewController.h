@@ -15,14 +15,13 @@
  * limitations under the License.
  */
 
-@class ZXResultInternal;
+#import <UIKit/UIKit.h>
+#import <ZXing/ZXCaptureDelegate.h>
 
-@interface ZXResult : NSObject {
-  ZXResultInternal* state_;
+@class ZXCapture;
+
+@interface ViewController : UIViewController <ZXCaptureDelegate> {
+  ZXCapture* capture;
+  UIButton* swap;
 }
-
-@property (readonly) NSString* text;
-
-- (ZXResult*)initWithNative:(void*)native;
-
 @end
