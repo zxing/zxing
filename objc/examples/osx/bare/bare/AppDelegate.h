@@ -1,6 +1,6 @@
 // -*- mode:objc; c-basic-offset:2; indent-tabs-mode:nil -*-
 /*
- * Copyright 2011 ZXing authors
+ * Copyright 2012 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,14 +15,28 @@
  * limitations under the License.
  */
 
-@class ZXCapture;
-@class ZXResult;
+#import <ZXing/ZXCaptureDelegate.h>
 
-@protocol ZXCaptureDelegate <NSObject>
+@class ZXCapture;
+
+@interface AppDelegate : NSObject <NSApplicationDelegate,
+                                     NSWindowDelegate,
+                                     ZXCaptureDelegate>
+
+@property (retain) NSWindow* window;
+@property (retain) NSUserDefaults* prefs;
+@property (retain) ZXCapture* capture;
+@property (retain) CALayer* layer;
+@property (retain) NSTextView* text;
+@property (assign) CGRect text_frame;
+@property (assign) double width;
+@property (assign) double height;
+@property (readonly) BOOL show_luminance;
+@property (readonly) BOOL show_binary;
+
+- (void)cancel;
 
 - (void)captureResult:(ZXCapture*)capture result:(ZXResult*)result;
-
-@optional
 - (void)captureSize:(ZXCapture*)capture
               width:(NSNumber*)width
              height:(NSNumber*)height;

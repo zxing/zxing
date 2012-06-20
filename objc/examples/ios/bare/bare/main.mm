@@ -15,14 +15,13 @@
  * limitations under the License.
  */
 
-@class ZXResultInternal;
+#import <UIKit/UIKit.h>
 
-@interface ZXResult : NSObject {
-  ZXResultInternal* state_;
+#import "AppDelegate.h"
+
+int main(int argc, char *argv[])
+{
+    @autoreleasepool {
+        return UIApplicationMain(argc, argv, nil, NSStringFromClass([AppDelegate class]));
+    }
 }
-
-@property (readonly) NSString* text;
-
-- (ZXResult*)initWithNative:(void*)native;
-
-@end

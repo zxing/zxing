@@ -1,0 +1,23 @@
+//
+// Prefix header for all source files of the 'demo' target in the 'demo' project
+//
+
+#ifdef __OBJC__
+    #import <Cocoa/Cocoa.h>
+#endif
+
+#ifndef __DEBUG_LOGGING__
+#define __DEBUG_LOGGING__
+#endif
+
+#ifdef __DEBUG_LOGGING_CAPTURE__
+#undef __DEBUG_LOGGING_CAPTURE__
+#endif
+
+#ifdef __SHOW_OVERLAY_LAYER__
+#undef __SHOW_OVERLAY_LAYER__
+#endif
+
+#ifndef __SEE_INTERMEDIATE_LAYERS__
+#define __SEE_INTERMEDIATE_LAYERS__
+#endif

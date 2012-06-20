@@ -1,0 +1,354 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		3B5D0F191590F12B00C33931 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B5D0F181590F12B00C33931 /* Cocoa.framework */; };
+		3B5D0F251590F12B00C33931 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3B5D0F241590F12B00C33931 /* main.mm */; };
+		3B5D0F2C1590F12C00C33931 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3B5D0F2B1590F12C00C33931 /* AppDelegate.mm */; };
+		3B5D0F541590F31A00C33931 /* zxing-objc-framework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B5D0F3E1590F2C400C33931 /* zxing-objc-framework.framework */; };
+		3B5D0F641590FF2E00C33931 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B5D0F631590FF2E00C33931 /* QuartzCore.framework */; };
+		3B5D0F66159100A700C33931 /* zxing-objc-framework.framework in Copy Files */ = {isa = PBXBuildFile; fileRef = 3B5D0F3E1590F2C400C33931 /* zxing-objc-framework.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		3B5D0F3B1590F2C400C33931 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3B5D0F351590F2C400C33931 /* zxing-objc.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3B83EB25158E6C5100A3B31F;
+			remoteInfo = "zxing-objc";
+		};
+		3B5D0F3D1590F2C400C33931 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3B5D0F351590F2C400C33931 /* zxing-objc.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3B83EB90158E71AD00A3B31F;
+			remoteInfo = "zxing-objc-framework";
+		};
+		3B5D0F521590F2F900C33931 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3B5D0F351590F2C400C33931 /* zxing-objc.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 3B83EB8F158E71AD00A3B31F;
+			remoteInfo = "zxing-objc-framework";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		3B5D0F651591006000C33931 /* Copy Files */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				3B5D0F66159100A700C33931 /* zxing-objc-framework.framework in Copy Files */,
+			);
+			name = "Copy Files";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		3B5D0F141590F12B00C33931 /* bare.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = bare.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3B5D0F181590F12B00C33931 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		3B5D0F1B1590F12B00C33931 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		3B5D0F1D1590F12B00C33931 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		3B5D0F201590F12B00C33931 /* bare-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "bare-Info.plist"; sourceTree = "<group>"; };
+		3B5D0F241590F12B00C33931 /* main.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
+		3B5D0F261590F12B00C33931 /* bare-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "bare-Prefix.pch"; sourceTree = "<group>"; };
+		3B5D0F2A1590F12B00C33931 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		3B5D0F2B1590F12C00C33931 /* AppDelegate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
+		3B5D0F351590F2C400C33931 /* zxing-objc.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "zxing-objc.xcodeproj"; path = "../../../zxing-objc.xcodeproj"; sourceTree = "<group>"; };
+		3B5D0F631590FF2E00C33931 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		3B5D0F111590F12B00C33931 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3B5D0F641590FF2E00C33931 /* QuartzCore.framework in Frameworks */,
+				3B5D0F541590F31A00C33931 /* zxing-objc-framework.framework in Frameworks */,
+				3B5D0F191590F12B00C33931 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		3B5D0F091590F12B00C33931 = {
+			isa = PBXGroup;
+			children = (
+				3B5D0F351590F2C400C33931 /* zxing-objc.xcodeproj */,
+				3B5D0F1E1590F12B00C33931 /* bare */,
+				3B5D0F171590F12B00C33931 /* Frameworks */,
+				3B5D0F151590F12B00C33931 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		3B5D0F151590F12B00C33931 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3B5D0F141590F12B00C33931 /* bare.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		3B5D0F171590F12B00C33931 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				3B5D0F631590FF2E00C33931 /* QuartzCore.framework */,
+				3B5D0F181590F12B00C33931 /* Cocoa.framework */,
+				3B5D0F1A1590F12B00C33931 /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		3B5D0F1A1590F12B00C33931 /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				3B5D0F1B1590F12B00C33931 /* AppKit.framework */,
+				3B5D0F1D1590F12B00C33931 /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		3B5D0F1E1590F12B00C33931 /* bare */ = {
+			isa = PBXGroup;
+			children = (
+				3B5D0F2A1590F12B00C33931 /* AppDelegate.h */,
+				3B5D0F2B1590F12C00C33931 /* AppDelegate.mm */,
+				3B5D0F1F1590F12B00C33931 /* Supporting Files */,
+			);
+			path = bare;
+			sourceTree = "<group>";
+		};
+		3B5D0F1F1590F12B00C33931 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				3B5D0F201590F12B00C33931 /* bare-Info.plist */,
+				3B5D0F241590F12B00C33931 /* main.mm */,
+				3B5D0F261590F12B00C33931 /* bare-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		3B5D0F361590F2C400C33931 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3B5D0F3C1590F2C400C33931 /* libzxing-objc.a */,
+				3B5D0F3E1590F2C400C33931 /* zxing-objc-framework.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		3B5D0F131590F12B00C33931 /* bare */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3B5D0F321590F12C00C33931 /* Build configuration list for PBXNativeTarget "bare" */;
+			buildPhases = (
+				3B5D0F101590F12B00C33931 /* Sources */,
+				3B5D0F111590F12B00C33931 /* Frameworks */,
+				3B5D0F121590F12B00C33931 /* Resources */,
+				3B5D0F651591006000C33931 /* Copy Files */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3B5D0F531590F2F900C33931 /* PBXTargetDependency */,
+			);
+			name = bare;
+			productName = bare;
+			productReference = 3B5D0F141590F12B00C33931 /* bare.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		3B5D0F0B1590F12B00C33931 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0430;
+			};
+			buildConfigurationList = 3B5D0F0E1590F12B00C33931 /* Build configuration list for PBXProject "bare" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 3B5D0F091590F12B00C33931;
+			productRefGroup = 3B5D0F151590F12B00C33931 /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 3B5D0F361590F2C400C33931 /* Products */;
+					ProjectRef = 3B5D0F351590F2C400C33931 /* zxing-objc.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				3B5D0F131590F12B00C33931 /* bare */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		3B5D0F3C1590F2C400C33931 /* libzxing-objc.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libzxing-objc.a";
+			remoteRef = 3B5D0F3B1590F2C400C33931 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		3B5D0F3E1590F2C400C33931 /* zxing-objc-framework.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = "zxing-objc-framework.framework";
+			remoteRef = 3B5D0F3D1590F2C400C33931 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXResourcesBuildPhase section */
+		3B5D0F121590F12B00C33931 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		3B5D0F101590F12B00C33931 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3B5D0F251590F12B00C33931 /* main.mm in Sources */,
+				3B5D0F2C1590F12C00C33931 /* AppDelegate.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		3B5D0F531590F2F900C33931 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "zxing-objc-framework";
+			targetProxy = 3B5D0F521590F2F900C33931 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		3B5D0F301590F12C00C33931 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		3B5D0F311590F12C00C33931 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		3B5D0F331590F12C00C33931 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "bare/bare-Prefix.pch";
+				HEADER_SEARCH_PATHS = (
+					objc/src,
+					objc/cpp/src,
+				);
+				INFOPLIST_FILE = "bare/bare-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				USER_HEADER_SEARCH_PATHS = "objc/src objc/cpp/core/src";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		3B5D0F341590F12C00C33931 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "bare/bare-Prefix.pch";
+				HEADER_SEARCH_PATHS = (
+					objc/src,
+					objc/cpp/src,
+				);
+				INFOPLIST_FILE = "bare/bare-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				USER_HEADER_SEARCH_PATHS = "objc/src objc/cpp/core/src";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		3B5D0F0E1590F12B00C33931 /* Build configuration list for PBXProject "bare" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3B5D0F301590F12C00C33931 /* Debug */,
+				3B5D0F311590F12C00C33931 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3B5D0F321590F12C00C33931 /* Build configuration list for PBXNativeTarget "bare" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3B5D0F331590F12C00C33931 /* Debug */,
+				3B5D0F341590F12C00C33931 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 3B5D0F0B1590F12B00C33931 /* Project object */;
+}

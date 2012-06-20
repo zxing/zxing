@@ -1,6 +1,6 @@
 // -*- mode:objc; c-basic-offset:2; indent-tabs-mode:nil -*-
 /*
- * Copyright 2011 ZXing authors
+ * Copyright 2012 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,14 +15,9 @@
  * limitations under the License.
  */
 
-@class ZXResultInternal;
+#import <Cocoa/Cocoa.h>
 
-@interface ZXResult : NSObject {
-  ZXResultInternal* state_;
+int main(int argc, char *argv[])
+{
+    return NSApplicationMain(argc, (const char **)argv);
 }
-
-@property (readonly) NSString* text;
-
-- (ZXResult*)initWithNative:(void*)native;
-
-@end

@@ -1,0 +1,1101 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		3B83E992158E66C600A3B31F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B83E991158E66C600A3B31F /* Foundation.framework */; };
+		3B83EA63158E679000A3B31F /* AztecDetectorResult.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83E9A4158E679000A3B31F /* AztecDetectorResult.cpp */; };
+		3B83EA64158E679000A3B31F /* AztecDetectorResult.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83E9A5158E679000A3B31F /* AztecDetectorResult.h */; };
+		3B83EA65158E679000A3B31F /* AztecReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83E9A6158E679000A3B31F /* AztecReader.cpp */; };
+		3B83EA66158E679000A3B31F /* AztecReader.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83E9A7158E679000A3B31F /* AztecReader.h */; };
+		3B83EA67158E679000A3B31F /* Decoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83E9A9158E679000A3B31F /* Decoder.cpp */; };
+		3B83EA68158E679000A3B31F /* Decoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83E9AA158E679000A3B31F /* Decoder.h */; };
+		3B83EA69158E679000A3B31F /* Detector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83E9AC158E679000A3B31F /* Detector.cpp */; };
+		3B83EA6A158E679000A3B31F /* Detector.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83E9AD158E679000A3B31F /* Detector.h */; };
+		3B83EA6B158E679000A3B31F /* BarcodeFormat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83E9AE158E679000A3B31F /* BarcodeFormat.cpp */; };
+		3B83EA6C158E679000A3B31F /* BarcodeFormat.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83E9AF158E679000A3B31F /* BarcodeFormat.h */; };
+		3B83EA6D158E679000A3B31F /* Binarizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83E9B0158E679000A3B31F /* Binarizer.cpp */; };
+		3B83EA6E158E679000A3B31F /* Binarizer.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83E9B1158E679000A3B31F /* Binarizer.h */; };
+		3B83EA6F158E679000A3B31F /* BinaryBitmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83E9B2158E679000A3B31F /* BinaryBitmap.cpp */; };
+		3B83EA70158E679000A3B31F /* BinaryBitmap.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83E9B3158E679000A3B31F /* BinaryBitmap.h */; };
+		3B83EA71158E679000A3B31F /* Array.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83E9B5158E679000A3B31F /* Array.cpp */; };
+		3B83EA72158E679000A3B31F /* Array.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83E9B6158E679000A3B31F /* Array.h */; };
+		3B83EA73158E679000A3B31F /* BitArray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83E9B7158E679000A3B31F /* BitArray.cpp */; };
+		3B83EA74158E679000A3B31F /* BitArray.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83E9B8158E679000A3B31F /* BitArray.h */; };
+		3B83EA75158E679000A3B31F /* BitMatrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83E9B9158E679000A3B31F /* BitMatrix.cpp */; };
+		3B83EA76158E679000A3B31F /* BitMatrix.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83E9BA158E679000A3B31F /* BitMatrix.h */; };
+		3B83EA77158E679000A3B31F /* BitSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83E9BB158E679000A3B31F /* BitSource.cpp */; };
+		3B83EA78158E679000A3B31F /* BitSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83E9BC158E679000A3B31F /* BitSource.h */; };
+		3B83EA79158E679000A3B31F /* CharacterSetECI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83E9BD158E679000A3B31F /* CharacterSetECI.cpp */; };
+		3B83EA7A158E679000A3B31F /* CharacterSetECI.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83E9BE158E679000A3B31F /* CharacterSetECI.h */; };
+		3B83EA7B158E679000A3B31F /* Counted.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83E9BF158E679000A3B31F /* Counted.cpp */; };
+		3B83EA7C158E679000A3B31F /* Counted.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83E9C0158E679000A3B31F /* Counted.h */; };
+		3B83EA7D158E679000A3B31F /* DecoderResult.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83E9C1158E679000A3B31F /* DecoderResult.cpp */; };
+		3B83EA7E158E679000A3B31F /* DecoderResult.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83E9C2158E679000A3B31F /* DecoderResult.h */; };
+		3B83EA7F158E679000A3B31F /* MonochromeRectangleDetector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83E9C4158E679000A3B31F /* MonochromeRectangleDetector.cpp */; };
+		3B83EA80158E679000A3B31F /* MonochromeRectangleDetector.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83E9C5158E679000A3B31F /* MonochromeRectangleDetector.h */; };
+		3B83EA81158E679000A3B31F /* WhiteRectangleDetector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83E9C6158E679000A3B31F /* WhiteRectangleDetector.cpp */; };
+		3B83EA82158E679000A3B31F /* WhiteRectangleDetector.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83E9C7158E679000A3B31F /* WhiteRectangleDetector.h */; };
+		3B83EA83158E679000A3B31F /* DetectorResult.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83E9C8158E679000A3B31F /* DetectorResult.cpp */; };
+		3B83EA84158E679000A3B31F /* DetectorResult.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83E9C9158E679000A3B31F /* DetectorResult.h */; };
+		3B83EA85158E679000A3B31F /* EdgeDetector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83E9CA158E679000A3B31F /* EdgeDetector.cpp */; };
+		3B83EA86158E679000A3B31F /* EdgeDetector.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83E9CB158E679000A3B31F /* EdgeDetector.h */; };
+		3B83EA87158E679000A3B31F /* GlobalHistogramBinarizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83E9CC158E679000A3B31F /* GlobalHistogramBinarizer.cpp */; };
+		3B83EA88158E679000A3B31F /* GlobalHistogramBinarizer.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83E9CD158E679000A3B31F /* GlobalHistogramBinarizer.h */; };
+		3B83EA89158E679000A3B31F /* GreyscaleLuminanceSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83E9CE158E679000A3B31F /* GreyscaleLuminanceSource.cpp */; };
+		3B83EA8A158E679000A3B31F /* GreyscaleLuminanceSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83E9CF158E679000A3B31F /* GreyscaleLuminanceSource.h */; };
+		3B83EA8B158E679000A3B31F /* GreyscaleRotatedLuminanceSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83E9D0158E679000A3B31F /* GreyscaleRotatedLuminanceSource.cpp */; };
+		3B83EA8C158E679000A3B31F /* GreyscaleRotatedLuminanceSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83E9D1158E679000A3B31F /* GreyscaleRotatedLuminanceSource.h */; };
+		3B83EA8D158E679000A3B31F /* GridSampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83E9D2158E679000A3B31F /* GridSampler.cpp */; };
+		3B83EA8E158E679000A3B31F /* GridSampler.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83E9D3158E679000A3B31F /* GridSampler.h */; };
+		3B83EA8F158E679000A3B31F /* HybridBinarizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83E9D4158E679000A3B31F /* HybridBinarizer.cpp */; };
+		3B83EA90158E679000A3B31F /* HybridBinarizer.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83E9D5158E679000A3B31F /* HybridBinarizer.h */; };
+		3B83EA91158E679000A3B31F /* IllegalArgumentException.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83E9D6158E679000A3B31F /* IllegalArgumentException.cpp */; };
+		3B83EA92158E679000A3B31F /* IllegalArgumentException.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83E9D7158E679000A3B31F /* IllegalArgumentException.h */; };
+		3B83EA93158E679000A3B31F /* PerspectiveTransform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83E9D8158E679000A3B31F /* PerspectiveTransform.cpp */; };
+		3B83EA94158E679000A3B31F /* PerspectiveTransform.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83E9D9158E679000A3B31F /* PerspectiveTransform.h */; };
+		3B83EA95158E679000A3B31F /* Point.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83E9DA158E679000A3B31F /* Point.h */; };
+		3B83EA96158E679000A3B31F /* GenericGF.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83E9DC158E679000A3B31F /* GenericGF.cpp */; };
+		3B83EA97158E679000A3B31F /* GenericGF.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83E9DD158E679000A3B31F /* GenericGF.h */; };
+		3B83EA98158E679000A3B31F /* GenericGFPoly.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83E9DE158E679000A3B31F /* GenericGFPoly.cpp */; };
+		3B83EA99158E679000A3B31F /* GenericGFPoly.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83E9DF158E679000A3B31F /* GenericGFPoly.h */; };
+		3B83EA9A158E679000A3B31F /* ReedSolomonDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83E9E0158E679000A3B31F /* ReedSolomonDecoder.cpp */; };
+		3B83EA9B158E679000A3B31F /* ReedSolomonDecoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83E9E1158E679000A3B31F /* ReedSolomonDecoder.h */; };
+		3B83EA9C158E679000A3B31F /* ReedSolomonException.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83E9E2158E679000A3B31F /* ReedSolomonException.cpp */; };
+		3B83EA9D158E679000A3B31F /* ReedSolomonException.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83E9E3158E679000A3B31F /* ReedSolomonException.h */; };
+		3B83EA9E158E679000A3B31F /* Str.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83E9E4158E679000A3B31F /* Str.cpp */; };
+		3B83EA9F158E679000A3B31F /* Str.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83E9E5158E679000A3B31F /* Str.h */; };
+		3B83EAA0158E679000A3B31F /* StringUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83E9E6158E679000A3B31F /* StringUtils.cpp */; };
+		3B83EAA1158E679000A3B31F /* StringUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83E9E7158E679000A3B31F /* StringUtils.h */; };
+		3B83EAA2158E679000A3B31F /* DataMatrixReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83E9E9158E679000A3B31F /* DataMatrixReader.cpp */; };
+		3B83EAA3158E679000A3B31F /* DataMatrixReader.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83E9EA158E679000A3B31F /* DataMatrixReader.h */; };
+		3B83EAA4158E679000A3B31F /* BitMatrixParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83E9EC158E679000A3B31F /* BitMatrixParser.cpp */; };
+		3B83EAA5158E679000A3B31F /* BitMatrixParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83E9ED158E679000A3B31F /* BitMatrixParser.h */; };
+		3B83EAA6158E679000A3B31F /* DataBlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83E9EE158E679000A3B31F /* DataBlock.cpp */; };
+		3B83EAA7158E679000A3B31F /* DataBlock.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83E9EF158E679000A3B31F /* DataBlock.h */; };
+		3B83EAA8158E679000A3B31F /* DecodedBitStreamParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83E9F0158E679000A3B31F /* DecodedBitStreamParser.cpp */; };
+		3B83EAA9158E679000A3B31F /* DecodedBitStreamParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83E9F1158E679000A3B31F /* DecodedBitStreamParser.h */; };
+		3B83EAAA158E679000A3B31F /* Decoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83E9F2158E679000A3B31F /* Decoder.cpp */; };
+		3B83EAAB158E679000A3B31F /* Decoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83E9F3158E679000A3B31F /* Decoder.h */; };
+		3B83EAAC158E679000A3B31F /* CornerPoint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83E9F5158E679000A3B31F /* CornerPoint.cpp */; };
+		3B83EAAD158E679000A3B31F /* CornerPoint.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83E9F6158E679000A3B31F /* CornerPoint.h */; };
+		3B83EAAE158E679000A3B31F /* Detector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83E9F7158E679000A3B31F /* Detector.cpp */; };
+		3B83EAAF158E679000A3B31F /* Detector.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83E9F8158E679000A3B31F /* Detector.h */; };
+		3B83EAB0158E679000A3B31F /* DetectorException.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83E9F9158E679000A3B31F /* DetectorException.cpp */; };
+		3B83EAB1158E679000A3B31F /* DetectorException.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83E9FA158E679000A3B31F /* DetectorException.h */; };
+		3B83EAB2158E679000A3B31F /* MonochromeRectangleDetector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83E9FB158E679000A3B31F /* MonochromeRectangleDetector.cpp */; };
+		3B83EAB3158E679000A3B31F /* MonochromeRectangleDetector.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83E9FC158E679000A3B31F /* MonochromeRectangleDetector.h */; };
+		3B83EAB4158E679000A3B31F /* Version.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83E9FD158E679000A3B31F /* Version.cpp */; };
+		3B83EAB5158E679000A3B31F /* Version.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83E9FE158E679000A3B31F /* Version.h */; };
+		3B83EAB6158E679000A3B31F /* DecodeHints.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83E9FF158E679000A3B31F /* DecodeHints.cpp */; };
+		3B83EAB7158E679000A3B31F /* DecodeHints.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83EA00158E679000A3B31F /* DecodeHints.h */; };
+		3B83EAB8158E679000A3B31F /* Exception.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83EA01158E679000A3B31F /* Exception.cpp */; };
+		3B83EAB9158E679000A3B31F /* Exception.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83EA02158E679000A3B31F /* Exception.h */; };
+		3B83EABA158E679000A3B31F /* FormatException.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83EA03158E679000A3B31F /* FormatException.cpp */; };
+		3B83EABB158E679000A3B31F /* FormatException.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83EA04158E679000A3B31F /* FormatException.h */; };
+		3B83EABC158E679000A3B31F /* LuminanceSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83EA05158E679000A3B31F /* LuminanceSource.cpp */; };
+		3B83EABD158E679000A3B31F /* LuminanceSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83EA06158E679000A3B31F /* LuminanceSource.h */; };
+		3B83EABE158E679000A3B31F /* ByQuadrantReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83EA08158E679000A3B31F /* ByQuadrantReader.cpp */; };
+		3B83EABF158E679000A3B31F /* ByQuadrantReader.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83EA09158E679000A3B31F /* ByQuadrantReader.h */; };
+		3B83EAC0158E679000A3B31F /* GenericMultipleBarcodeReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83EA0A158E679000A3B31F /* GenericMultipleBarcodeReader.cpp */; };
+		3B83EAC1158E679000A3B31F /* GenericMultipleBarcodeReader.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83EA0B158E679000A3B31F /* GenericMultipleBarcodeReader.h */; };
+		3B83EAC2158E679000A3B31F /* MultipleBarcodeReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83EA0C158E679000A3B31F /* MultipleBarcodeReader.cpp */; };
+		3B83EAC3158E679000A3B31F /* MultipleBarcodeReader.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83EA0D158E679000A3B31F /* MultipleBarcodeReader.h */; };
+		3B83EAC4158E679000A3B31F /* MultiDetector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83EA10158E679000A3B31F /* MultiDetector.cpp */; };
+		3B83EAC5158E679000A3B31F /* MultiDetector.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83EA11158E679000A3B31F /* MultiDetector.h */; };
+		3B83EAC6158E679000A3B31F /* MultiFinderPatternFinder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83EA12158E679000A3B31F /* MultiFinderPatternFinder.cpp */; };
+		3B83EAC7158E679000A3B31F /* MultiFinderPatternFinder.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83EA13158E679000A3B31F /* MultiFinderPatternFinder.h */; };
+		3B83EAC8158E679000A3B31F /* QRCodeMultiReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83EA14158E679000A3B31F /* QRCodeMultiReader.cpp */; };
+		3B83EAC9158E679000A3B31F /* QRCodeMultiReader.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83EA15158E679000A3B31F /* QRCodeMultiReader.h */; };
+		3B83EACA158E679000A3B31F /* MultiFormatReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83EA16158E679000A3B31F /* MultiFormatReader.cpp */; };
+		3B83EACB158E679000A3B31F /* MultiFormatReader.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83EA17158E679000A3B31F /* MultiFormatReader.h */; };
+		3B83EACC158E679000A3B31F /* NotFoundException.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83EA18158E679000A3B31F /* NotFoundException.cpp */; };
+		3B83EACD158E679000A3B31F /* NotFoundException.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83EA19158E679000A3B31F /* NotFoundException.h */; };
+		3B83EACE158E679000A3B31F /* Code128Reader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83EA1B158E679000A3B31F /* Code128Reader.cpp */; };
+		3B83EACF158E679000A3B31F /* Code128Reader.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83EA1C158E679000A3B31F /* Code128Reader.h */; };
+		3B83EAD0158E679000A3B31F /* Code39Reader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83EA1D158E679000A3B31F /* Code39Reader.cpp */; };
+		3B83EAD1158E679000A3B31F /* Code39Reader.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83EA1E158E679000A3B31F /* Code39Reader.h */; };
+		3B83EAD2158E679000A3B31F /* EAN13Reader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83EA1F158E679000A3B31F /* EAN13Reader.cpp */; };
+		3B83EAD3158E679000A3B31F /* EAN13Reader.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83EA20158E679000A3B31F /* EAN13Reader.h */; };
+		3B83EAD4158E679000A3B31F /* EAN8Reader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83EA21158E679000A3B31F /* EAN8Reader.cpp */; };
+		3B83EAD5158E679000A3B31F /* EAN8Reader.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83EA22158E679000A3B31F /* EAN8Reader.h */; };
+		3B83EAD6158E679000A3B31F /* ITFReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83EA23158E679000A3B31F /* ITFReader.cpp */; };
+		3B83EAD7158E679000A3B31F /* ITFReader.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83EA24158E679000A3B31F /* ITFReader.h */; };
+		3B83EAD8158E679000A3B31F /* MultiFormatOneDReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83EA25158E679000A3B31F /* MultiFormatOneDReader.cpp */; };
+		3B83EAD9158E679000A3B31F /* MultiFormatOneDReader.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83EA26158E679000A3B31F /* MultiFormatOneDReader.h */; };
+		3B83EADA158E679000A3B31F /* MultiFormatUPCEANReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83EA27158E679000A3B31F /* MultiFormatUPCEANReader.cpp */; };
+		3B83EADB158E679000A3B31F /* MultiFormatUPCEANReader.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83EA28158E679000A3B31F /* MultiFormatUPCEANReader.h */; };
+		3B83EADC158E679000A3B31F /* OneDReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83EA29158E679000A3B31F /* OneDReader.cpp */; };
+		3B83EADD158E679000A3B31F /* OneDReader.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83EA2A158E679000A3B31F /* OneDReader.h */; };
+		3B83EADE158E679000A3B31F /* OneDResultPoint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83EA2B158E679000A3B31F /* OneDResultPoint.cpp */; };
+		3B83EADF158E679000A3B31F /* OneDResultPoint.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83EA2C158E679000A3B31F /* OneDResultPoint.h */; };
+		3B83EAE0158E679000A3B31F /* UPCAReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83EA2D158E679000A3B31F /* UPCAReader.cpp */; };
+		3B83EAE1158E679000A3B31F /* UPCAReader.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83EA2E158E679000A3B31F /* UPCAReader.h */; };
+		3B83EAE2158E679000A3B31F /* UPCEANReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83EA2F158E679000A3B31F /* UPCEANReader.cpp */; };
+		3B83EAE3158E679000A3B31F /* UPCEANReader.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83EA30158E679000A3B31F /* UPCEANReader.h */; };
+		3B83EAE4158E679000A3B31F /* UPCEReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83EA31158E679000A3B31F /* UPCEReader.cpp */; };
+		3B83EAE5158E679000A3B31F /* UPCEReader.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83EA32158E679000A3B31F /* UPCEReader.h */; };
+		3B83EAE6158E679000A3B31F /* BitMatrixParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83EA35158E679000A3B31F /* BitMatrixParser.cpp */; };
+		3B83EAE7158E679000A3B31F /* BitMatrixParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83EA36158E679000A3B31F /* BitMatrixParser.h */; };
+		3B83EAE8158E679000A3B31F /* DataBlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83EA37158E679000A3B31F /* DataBlock.cpp */; };
+		3B83EAE9158E679000A3B31F /* DataBlock.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83EA38158E679000A3B31F /* DataBlock.h */; };
+		3B83EAEA158E679000A3B31F /* DataMask.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83EA39158E679000A3B31F /* DataMask.cpp */; };
+		3B83EAEB158E679000A3B31F /* DataMask.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83EA3A158E679000A3B31F /* DataMask.h */; };
+		3B83EAEC158E679000A3B31F /* DecodedBitStreamParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83EA3B158E679000A3B31F /* DecodedBitStreamParser.cpp */; };
+		3B83EAED158E679000A3B31F /* DecodedBitStreamParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83EA3C158E679000A3B31F /* DecodedBitStreamParser.h */; };
+		3B83EAEE158E679000A3B31F /* Decoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83EA3D158E679000A3B31F /* Decoder.cpp */; };
+		3B83EAEF158E679000A3B31F /* Decoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83EA3E158E679000A3B31F /* Decoder.h */; };
+		3B83EAF0158E679000A3B31F /* Mode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83EA3F158E679000A3B31F /* Mode.cpp */; };
+		3B83EAF1158E679000A3B31F /* Mode.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83EA40158E679000A3B31F /* Mode.h */; };
+		3B83EAF2158E679000A3B31F /* AlignmentPattern.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83EA42158E679000A3B31F /* AlignmentPattern.cpp */; };
+		3B83EAF3158E679000A3B31F /* AlignmentPattern.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83EA43158E679000A3B31F /* AlignmentPattern.h */; };
+		3B83EAF4158E679000A3B31F /* AlignmentPatternFinder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83EA44158E679000A3B31F /* AlignmentPatternFinder.cpp */; };
+		3B83EAF5158E679000A3B31F /* AlignmentPatternFinder.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83EA45158E679000A3B31F /* AlignmentPatternFinder.h */; };
+		3B83EAF6158E679000A3B31F /* Detector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83EA46158E679000A3B31F /* Detector.cpp */; };
+		3B83EAF7158E679000A3B31F /* Detector.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83EA47158E679000A3B31F /* Detector.h */; };
+		3B83EAF8158E679000A3B31F /* FinderPattern.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83EA48158E679000A3B31F /* FinderPattern.cpp */; };
+		3B83EAF9158E679000A3B31F /* FinderPattern.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83EA49158E679000A3B31F /* FinderPattern.h */; };
+		3B83EAFA158E679000A3B31F /* FinderPatternFinder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83EA4A158E679000A3B31F /* FinderPatternFinder.cpp */; };
+		3B83EAFB158E679000A3B31F /* FinderPatternFinder.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83EA4C158E679000A3B31F /* FinderPatternFinder.h */; };
+		3B83EAFC158E679000A3B31F /* FinderPatternInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83EA4D158E679000A3B31F /* FinderPatternInfo.cpp */; };
+		3B83EAFD158E679000A3B31F /* FinderPatternInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83EA4E158E679000A3B31F /* FinderPatternInfo.h */; };
+		3B83EAFE158E679000A3B31F /* QREdgeDetector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83EA4F158E679000A3B31F /* QREdgeDetector.cpp */; };
+		3B83EAFF158E679000A3B31F /* QREdgeDetector.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83EA50158E679000A3B31F /* QREdgeDetector.h */; };
+		3B83EB00158E679000A3B31F /* ErrorCorrectionLevel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83EA51158E679000A3B31F /* ErrorCorrectionLevel.cpp */; };
+		3B83EB01158E679000A3B31F /* ErrorCorrectionLevel.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83EA52158E679000A3B31F /* ErrorCorrectionLevel.h */; };
+		3B83EB02158E679000A3B31F /* FormatInformation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83EA53158E679000A3B31F /* FormatInformation.cpp */; };
+		3B83EB03158E679000A3B31F /* FormatInformation.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83EA54158E679000A3B31F /* FormatInformation.h */; };
+		3B83EB04158E679000A3B31F /* QRCodeReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83EA55158E679000A3B31F /* QRCodeReader.cpp */; };
+		3B83EB05158E679000A3B31F /* QRCodeReader.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83EA56158E679000A3B31F /* QRCodeReader.h */; };
+		3B83EB06158E679000A3B31F /* Version.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83EA57158E679000A3B31F /* Version.cpp */; };
+		3B83EB07158E679000A3B31F /* Version.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83EA58158E679000A3B31F /* Version.h */; };
+		3B83EB08158E679000A3B31F /* Reader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83EA59158E679000A3B31F /* Reader.cpp */; };
+		3B83EB09158E679000A3B31F /* Reader.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83EA5A158E679000A3B31F /* Reader.h */; };
+		3B83EB0A158E679000A3B31F /* ReaderException.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83EA5B158E679000A3B31F /* ReaderException.cpp */; };
+		3B83EB0B158E679000A3B31F /* ReaderException.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83EA5C158E679000A3B31F /* ReaderException.h */; };
+		3B83EB0C158E679000A3B31F /* Result.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83EA5D158E679000A3B31F /* Result.cpp */; };
+		3B83EB0D158E679000A3B31F /* Result.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83EA5E158E679000A3B31F /* Result.h */; };
+		3B83EB0E158E679000A3B31F /* ResultPoint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83EA5F158E679000A3B31F /* ResultPoint.cpp */; };
+		3B83EB0F158E679000A3B31F /* ResultPoint.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83EA60158E679000A3B31F /* ResultPoint.h */; };
+		3B83EB10158E679000A3B31F /* ResultPointCallback.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83EA61158E679000A3B31F /* ResultPointCallback.cpp */; };
+		3B83EB11158E679000A3B31F /* ResultPointCallback.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83EA62158E679000A3B31F /* ResultPointCallback.h */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		3B83E98E158E66C600A3B31F /* libzxing-cpp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libzxing-cpp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3B83E991158E66C600A3B31F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		3B83E9A4158E679000A3B31F /* AztecDetectorResult.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AztecDetectorResult.cpp; sourceTree = "<group>"; };
+		3B83E9A5158E679000A3B31F /* AztecDetectorResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AztecDetectorResult.h; sourceTree = "<group>"; };
+		3B83E9A6158E679000A3B31F /* AztecReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AztecReader.cpp; sourceTree = "<group>"; };
+		3B83E9A7158E679000A3B31F /* AztecReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AztecReader.h; sourceTree = "<group>"; };
+		3B83E9A9158E679000A3B31F /* Decoder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Decoder.cpp; sourceTree = "<group>"; };
+		3B83E9AA158E679000A3B31F /* Decoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Decoder.h; sourceTree = "<group>"; };
+		3B83E9AC158E679000A3B31F /* Detector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Detector.cpp; sourceTree = "<group>"; };
+		3B83E9AD158E679000A3B31F /* Detector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Detector.h; sourceTree = "<group>"; };
+		3B83E9AE158E679000A3B31F /* BarcodeFormat.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BarcodeFormat.cpp; sourceTree = "<group>"; };
+		3B83E9AF158E679000A3B31F /* BarcodeFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BarcodeFormat.h; sourceTree = "<group>"; };
+		3B83E9B0158E679000A3B31F /* Binarizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Binarizer.cpp; sourceTree = "<group>"; };
+		3B83E9B1158E679000A3B31F /* Binarizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Binarizer.h; sourceTree = "<group>"; };
+		3B83E9B2158E679000A3B31F /* BinaryBitmap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BinaryBitmap.cpp; sourceTree = "<group>"; };
+		3B83E9B3158E679000A3B31F /* BinaryBitmap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BinaryBitmap.h; sourceTree = "<group>"; };
+		3B83E9B5158E679000A3B31F /* Array.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Array.cpp; sourceTree = "<group>"; };
+		3B83E9B6158E679000A3B31F /* Array.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Array.h; sourceTree = "<group>"; };
+		3B83E9B7158E679000A3B31F /* BitArray.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BitArray.cpp; sourceTree = "<group>"; };
+		3B83E9B8158E679000A3B31F /* BitArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BitArray.h; sourceTree = "<group>"; };
+		3B83E9B9158E679000A3B31F /* BitMatrix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BitMatrix.cpp; sourceTree = "<group>"; };
+		3B83E9BA158E679000A3B31F /* BitMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BitMatrix.h; sourceTree = "<group>"; };
+		3B83E9BB158E679000A3B31F /* BitSource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BitSource.cpp; sourceTree = "<group>"; };
+		3B83E9BC158E679000A3B31F /* BitSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BitSource.h; sourceTree = "<group>"; };
+		3B83E9BD158E679000A3B31F /* CharacterSetECI.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CharacterSetECI.cpp; sourceTree = "<group>"; };
+		3B83E9BE158E679000A3B31F /* CharacterSetECI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CharacterSetECI.h; sourceTree = "<group>"; };
+		3B83E9BF158E679000A3B31F /* Counted.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Counted.cpp; sourceTree = "<group>"; };
+		3B83E9C0158E679000A3B31F /* Counted.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Counted.h; sourceTree = "<group>"; };
+		3B83E9C1158E679000A3B31F /* DecoderResult.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DecoderResult.cpp; sourceTree = "<group>"; };
+		3B83E9C2158E679000A3B31F /* DecoderResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DecoderResult.h; sourceTree = "<group>"; };
+		3B83E9C4158E679000A3B31F /* MonochromeRectangleDetector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MonochromeRectangleDetector.cpp; sourceTree = "<group>"; };
+		3B83E9C5158E679000A3B31F /* MonochromeRectangleDetector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MonochromeRectangleDetector.h; sourceTree = "<group>"; };
+		3B83E9C6158E679000A3B31F /* WhiteRectangleDetector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WhiteRectangleDetector.cpp; sourceTree = "<group>"; };
+		3B83E9C7158E679000A3B31F /* WhiteRectangleDetector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WhiteRectangleDetector.h; sourceTree = "<group>"; };
+		3B83E9C8158E679000A3B31F /* DetectorResult.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DetectorResult.cpp; sourceTree = "<group>"; };
+		3B83E9C9158E679000A3B31F /* DetectorResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetectorResult.h; sourceTree = "<group>"; };
+		3B83E9CA158E679000A3B31F /* EdgeDetector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EdgeDetector.cpp; sourceTree = "<group>"; };
+		3B83E9CB158E679000A3B31F /* EdgeDetector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EdgeDetector.h; sourceTree = "<group>"; };
+		3B83E9CC158E679000A3B31F /* GlobalHistogramBinarizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GlobalHistogramBinarizer.cpp; sourceTree = "<group>"; };
+		3B83E9CD158E679000A3B31F /* GlobalHistogramBinarizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GlobalHistogramBinarizer.h; sourceTree = "<group>"; };
+		3B83E9CE158E679000A3B31F /* GreyscaleLuminanceSource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GreyscaleLuminanceSource.cpp; sourceTree = "<group>"; };
+		3B83E9CF158E679000A3B31F /* GreyscaleLuminanceSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GreyscaleLuminanceSource.h; sourceTree = "<group>"; };
+		3B83E9D0158E679000A3B31F /* GreyscaleRotatedLuminanceSource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GreyscaleRotatedLuminanceSource.cpp; sourceTree = "<group>"; };
+		3B83E9D1158E679000A3B31F /* GreyscaleRotatedLuminanceSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GreyscaleRotatedLuminanceSource.h; sourceTree = "<group>"; };
+		3B83E9D2158E679000A3B31F /* GridSampler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GridSampler.cpp; sourceTree = "<group>"; };
+		3B83E9D3158E679000A3B31F /* GridSampler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GridSampler.h; sourceTree = "<group>"; };
+		3B83E9D4158E679000A3B31F /* HybridBinarizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HybridBinarizer.cpp; sourceTree = "<group>"; };
+		3B83E9D5158E679000A3B31F /* HybridBinarizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HybridBinarizer.h; sourceTree = "<group>"; };
+		3B83E9D6158E679000A3B31F /* IllegalArgumentException.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IllegalArgumentException.cpp; sourceTree = "<group>"; };
+		3B83E9D7158E679000A3B31F /* IllegalArgumentException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IllegalArgumentException.h; sourceTree = "<group>"; };
+		3B83E9D8158E679000A3B31F /* PerspectiveTransform.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PerspectiveTransform.cpp; sourceTree = "<group>"; };
+		3B83E9D9158E679000A3B31F /* PerspectiveTransform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PerspectiveTransform.h; sourceTree = "<group>"; };
+		3B83E9DA158E679000A3B31F /* Point.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Point.h; sourceTree = "<group>"; };
+		3B83E9DC158E679000A3B31F /* GenericGF.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GenericGF.cpp; sourceTree = "<group>"; };
+		3B83E9DD158E679000A3B31F /* GenericGF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GenericGF.h; sourceTree = "<group>"; };
+		3B83E9DE158E679000A3B31F /* GenericGFPoly.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GenericGFPoly.cpp; sourceTree = "<group>"; };
+		3B83E9DF158E679000A3B31F /* GenericGFPoly.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GenericGFPoly.h; sourceTree = "<group>"; };
+		3B83E9E0158E679000A3B31F /* ReedSolomonDecoder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ReedSolomonDecoder.cpp; sourceTree = "<group>"; };
+		3B83E9E1158E679000A3B31F /* ReedSolomonDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReedSolomonDecoder.h; sourceTree = "<group>"; };
+		3B83E9E2158E679000A3B31F /* ReedSolomonException.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ReedSolomonException.cpp; sourceTree = "<group>"; };
+		3B83E9E3158E679000A3B31F /* ReedSolomonException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReedSolomonException.h; sourceTree = "<group>"; };
+		3B83E9E4158E679000A3B31F /* Str.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Str.cpp; sourceTree = "<group>"; };
+		3B83E9E5158E679000A3B31F /* Str.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Str.h; sourceTree = "<group>"; };
+		3B83E9E6158E679000A3B31F /* StringUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StringUtils.cpp; sourceTree = "<group>"; };
+		3B83E9E7158E679000A3B31F /* StringUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StringUtils.h; sourceTree = "<group>"; };
+		3B83E9E9158E679000A3B31F /* DataMatrixReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DataMatrixReader.cpp; sourceTree = "<group>"; };
+		3B83E9EA158E679000A3B31F /* DataMatrixReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataMatrixReader.h; sourceTree = "<group>"; };
+		3B83E9EC158E679000A3B31F /* BitMatrixParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BitMatrixParser.cpp; sourceTree = "<group>"; };
+		3B83E9ED158E679000A3B31F /* BitMatrixParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BitMatrixParser.h; sourceTree = "<group>"; };
+		3B83E9EE158E679000A3B31F /* DataBlock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DataBlock.cpp; sourceTree = "<group>"; };
+		3B83E9EF158E679000A3B31F /* DataBlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataBlock.h; sourceTree = "<group>"; };
+		3B83E9F0158E679000A3B31F /* DecodedBitStreamParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DecodedBitStreamParser.cpp; sourceTree = "<group>"; };
+		3B83E9F1158E679000A3B31F /* DecodedBitStreamParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DecodedBitStreamParser.h; sourceTree = "<group>"; };
+		3B83E9F2158E679000A3B31F /* Decoder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Decoder.cpp; sourceTree = "<group>"; };
+		3B83E9F3158E679000A3B31F /* Decoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Decoder.h; sourceTree = "<group>"; };
+		3B83E9F5158E679000A3B31F /* CornerPoint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CornerPoint.cpp; sourceTree = "<group>"; };
+		3B83E9F6158E679000A3B31F /* CornerPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CornerPoint.h; sourceTree = "<group>"; };
+		3B83E9F7158E679000A3B31F /* Detector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Detector.cpp; sourceTree = "<group>"; };
+		3B83E9F8158E679000A3B31F /* Detector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Detector.h; sourceTree = "<group>"; };
+		3B83E9F9158E679000A3B31F /* DetectorException.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DetectorException.cpp; sourceTree = "<group>"; };
+		3B83E9FA158E679000A3B31F /* DetectorException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetectorException.h; sourceTree = "<group>"; };
+		3B83E9FB158E679000A3B31F /* MonochromeRectangleDetector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MonochromeRectangleDetector.cpp; sourceTree = "<group>"; };
+		3B83E9FC158E679000A3B31F /* MonochromeRectangleDetector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MonochromeRectangleDetector.h; sourceTree = "<group>"; };
+		3B83E9FD158E679000A3B31F /* Version.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Version.cpp; sourceTree = "<group>"; };
+		3B83E9FE158E679000A3B31F /* Version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Version.h; sourceTree = "<group>"; };
+		3B83E9FF158E679000A3B31F /* DecodeHints.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DecodeHints.cpp; sourceTree = "<group>"; };
+		3B83EA00158E679000A3B31F /* DecodeHints.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DecodeHints.h; sourceTree = "<group>"; };
+		3B83EA01158E679000A3B31F /* Exception.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Exception.cpp; sourceTree = "<group>"; };
+		3B83EA02158E679000A3B31F /* Exception.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Exception.h; sourceTree = "<group>"; };
+		3B83EA03158E679000A3B31F /* FormatException.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FormatException.cpp; sourceTree = "<group>"; };
+		3B83EA04158E679000A3B31F /* FormatException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FormatException.h; sourceTree = "<group>"; };
+		3B83EA05158E679000A3B31F /* LuminanceSource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LuminanceSource.cpp; sourceTree = "<group>"; };
+		3B83EA06158E679000A3B31F /* LuminanceSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LuminanceSource.h; sourceTree = "<group>"; };
+		3B83EA08158E679000A3B31F /* ByQuadrantReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ByQuadrantReader.cpp; sourceTree = "<group>"; };
+		3B83EA09158E679000A3B31F /* ByQuadrantReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ByQuadrantReader.h; sourceTree = "<group>"; };
+		3B83EA0A158E679000A3B31F /* GenericMultipleBarcodeReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GenericMultipleBarcodeReader.cpp; sourceTree = "<group>"; };
+		3B83EA0B158E679000A3B31F /* GenericMultipleBarcodeReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GenericMultipleBarcodeReader.h; sourceTree = "<group>"; };
+		3B83EA0C158E679000A3B31F /* MultipleBarcodeReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MultipleBarcodeReader.cpp; sourceTree = "<group>"; };
+		3B83EA0D158E679000A3B31F /* MultipleBarcodeReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MultipleBarcodeReader.h; sourceTree = "<group>"; };
+		3B83EA10158E679000A3B31F /* MultiDetector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MultiDetector.cpp; sourceTree = "<group>"; };
+		3B83EA11158E679000A3B31F /* MultiDetector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MultiDetector.h; sourceTree = "<group>"; };
+		3B83EA12158E679000A3B31F /* MultiFinderPatternFinder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MultiFinderPatternFinder.cpp; sourceTree = "<group>"; };
+		3B83EA13158E679000A3B31F /* MultiFinderPatternFinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MultiFinderPatternFinder.h; sourceTree = "<group>"; };
+		3B83EA14158E679000A3B31F /* QRCodeMultiReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = QRCodeMultiReader.cpp; sourceTree = "<group>"; };
+		3B83EA15158E679000A3B31F /* QRCodeMultiReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QRCodeMultiReader.h; sourceTree = "<group>"; };
+		3B83EA16158E679000A3B31F /* MultiFormatReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MultiFormatReader.cpp; sourceTree = "<group>"; };
+		3B83EA17158E679000A3B31F /* MultiFormatReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MultiFormatReader.h; sourceTree = "<group>"; };
+		3B83EA18158E679000A3B31F /* NotFoundException.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NotFoundException.cpp; sourceTree = "<group>"; };
+		3B83EA19158E679000A3B31F /* NotFoundException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotFoundException.h; sourceTree = "<group>"; };
+		3B83EA1B158E679000A3B31F /* Code128Reader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Code128Reader.cpp; sourceTree = "<group>"; };
+		3B83EA1C158E679000A3B31F /* Code128Reader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Code128Reader.h; sourceTree = "<group>"; };
+		3B83EA1D158E679000A3B31F /* Code39Reader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Code39Reader.cpp; sourceTree = "<group>"; };
+		3B83EA1E158E679000A3B31F /* Code39Reader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Code39Reader.h; sourceTree = "<group>"; };
+		3B83EA1F158E679000A3B31F /* EAN13Reader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EAN13Reader.cpp; sourceTree = "<group>"; };
+		3B83EA20158E679000A3B31F /* EAN13Reader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EAN13Reader.h; sourceTree = "<group>"; };
+		3B83EA21158E679000A3B31F /* EAN8Reader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EAN8Reader.cpp; sourceTree = "<group>"; };
+		3B83EA22158E679000A3B31F /* EAN8Reader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EAN8Reader.h; sourceTree = "<group>"; };
+		3B83EA23158E679000A3B31F /* ITFReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ITFReader.cpp; sourceTree = "<group>"; };
+		3B83EA24158E679000A3B31F /* ITFReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ITFReader.h; sourceTree = "<group>"; };
+		3B83EA25158E679000A3B31F /* MultiFormatOneDReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MultiFormatOneDReader.cpp; sourceTree = "<group>"; };
+		3B83EA26158E679000A3B31F /* MultiFormatOneDReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MultiFormatOneDReader.h; sourceTree = "<group>"; };
+		3B83EA27158E679000A3B31F /* MultiFormatUPCEANReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MultiFormatUPCEANReader.cpp; sourceTree = "<group>"; };
+		3B83EA28158E679000A3B31F /* MultiFormatUPCEANReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MultiFormatUPCEANReader.h; sourceTree = "<group>"; };
+		3B83EA29158E679000A3B31F /* OneDReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OneDReader.cpp; sourceTree = "<group>"; };
+		3B83EA2A158E679000A3B31F /* OneDReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OneDReader.h; sourceTree = "<group>"; };
+		3B83EA2B158E679000A3B31F /* OneDResultPoint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OneDResultPoint.cpp; sourceTree = "<group>"; };
+		3B83EA2C158E679000A3B31F /* OneDResultPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OneDResultPoint.h; sourceTree = "<group>"; };
+		3B83EA2D158E679000A3B31F /* UPCAReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UPCAReader.cpp; sourceTree = "<group>"; };
+		3B83EA2E158E679000A3B31F /* UPCAReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPCAReader.h; sourceTree = "<group>"; };
+		3B83EA2F158E679000A3B31F /* UPCEANReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UPCEANReader.cpp; sourceTree = "<group>"; };
+		3B83EA30158E679000A3B31F /* UPCEANReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPCEANReader.h; sourceTree = "<group>"; };
+		3B83EA31158E679000A3B31F /* UPCEReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UPCEReader.cpp; sourceTree = "<group>"; };
+		3B83EA32158E679000A3B31F /* UPCEReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPCEReader.h; sourceTree = "<group>"; };
+		3B83EA35158E679000A3B31F /* BitMatrixParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BitMatrixParser.cpp; sourceTree = "<group>"; };
+		3B83EA36158E679000A3B31F /* BitMatrixParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BitMatrixParser.h; sourceTree = "<group>"; };
+		3B83EA37158E679000A3B31F /* DataBlock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DataBlock.cpp; sourceTree = "<group>"; };
+		3B83EA38158E679000A3B31F /* DataBlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataBlock.h; sourceTree = "<group>"; };
+		3B83EA39158E679000A3B31F /* DataMask.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DataMask.cpp; sourceTree = "<group>"; };
+		3B83EA3A158E679000A3B31F /* DataMask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataMask.h; sourceTree = "<group>"; };
+		3B83EA3B158E679000A3B31F /* DecodedBitStreamParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DecodedBitStreamParser.cpp; sourceTree = "<group>"; };
+		3B83EA3C158E679000A3B31F /* DecodedBitStreamParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DecodedBitStreamParser.h; sourceTree = "<group>"; };
+		3B83EA3D158E679000A3B31F /* Decoder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Decoder.cpp; sourceTree = "<group>"; };
+		3B83EA3E158E679000A3B31F /* Decoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Decoder.h; sourceTree = "<group>"; };
+		3B83EA3F158E679000A3B31F /* Mode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Mode.cpp; sourceTree = "<group>"; };
+		3B83EA40158E679000A3B31F /* Mode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mode.h; sourceTree = "<group>"; };
+		3B83EA42158E679000A3B31F /* AlignmentPattern.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AlignmentPattern.cpp; sourceTree = "<group>"; };
+		3B83EA43158E679000A3B31F /* AlignmentPattern.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlignmentPattern.h; sourceTree = "<group>"; };
+		3B83EA44158E679000A3B31F /* AlignmentPatternFinder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AlignmentPatternFinder.cpp; sourceTree = "<group>"; };
+		3B83EA45158E679000A3B31F /* AlignmentPatternFinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlignmentPatternFinder.h; sourceTree = "<group>"; };
+		3B83EA46158E679000A3B31F /* Detector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Detector.cpp; sourceTree = "<group>"; };
+		3B83EA47158E679000A3B31F /* Detector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Detector.h; sourceTree = "<group>"; };
+		3B83EA48158E679000A3B31F /* FinderPattern.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FinderPattern.cpp; sourceTree = "<group>"; };
+		3B83EA49158E679000A3B31F /* FinderPattern.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FinderPattern.h; sourceTree = "<group>"; };
+		3B83EA4A158E679000A3B31F /* FinderPatternFinder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FinderPatternFinder.cpp; sourceTree = "<group>"; };
+		3B83EA4B158E679000A3B31F /* FinderPatternFinder.cpp.smp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = FinderPatternFinder.cpp.smp; sourceTree = "<group>"; };
+		3B83EA4C158E679000A3B31F /* FinderPatternFinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FinderPatternFinder.h; sourceTree = "<group>"; };
+		3B83EA4D158E679000A3B31F /* FinderPatternInfo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FinderPatternInfo.cpp; sourceTree = "<group>"; };
+		3B83EA4E158E679000A3B31F /* FinderPatternInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FinderPatternInfo.h; sourceTree = "<group>"; };
+		3B83EA4F158E679000A3B31F /* QREdgeDetector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = QREdgeDetector.cpp; sourceTree = "<group>"; };
+		3B83EA50158E679000A3B31F /* QREdgeDetector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QREdgeDetector.h; sourceTree = "<group>"; };
+		3B83EA51158E679000A3B31F /* ErrorCorrectionLevel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ErrorCorrectionLevel.cpp; sourceTree = "<group>"; };
+		3B83EA52158E679000A3B31F /* ErrorCorrectionLevel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ErrorCorrectionLevel.h; sourceTree = "<group>"; };
+		3B83EA53158E679000A3B31F /* FormatInformation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FormatInformation.cpp; sourceTree = "<group>"; };
+		3B83EA54158E679000A3B31F /* FormatInformation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FormatInformation.h; sourceTree = "<group>"; };
+		3B83EA55158E679000A3B31F /* QRCodeReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = QRCodeReader.cpp; sourceTree = "<group>"; };
+		3B83EA56158E679000A3B31F /* QRCodeReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QRCodeReader.h; sourceTree = "<group>"; };
+		3B83EA57158E679000A3B31F /* Version.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Version.cpp; sourceTree = "<group>"; };
+		3B83EA58158E679000A3B31F /* Version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Version.h; sourceTree = "<group>"; };
+		3B83EA59158E679000A3B31F /* Reader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Reader.cpp; sourceTree = "<group>"; };
+		3B83EA5A158E679000A3B31F /* Reader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reader.h; sourceTree = "<group>"; };
+		3B83EA5B158E679000A3B31F /* ReaderException.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ReaderException.cpp; sourceTree = "<group>"; };
+		3B83EA5C158E679000A3B31F /* ReaderException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReaderException.h; sourceTree = "<group>"; };
+		3B83EA5D158E679000A3B31F /* Result.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Result.cpp; sourceTree = "<group>"; };
+		3B83EA5E158E679000A3B31F /* Result.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Result.h; sourceTree = "<group>"; };
+		3B83EA5F158E679000A3B31F /* ResultPoint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ResultPoint.cpp; sourceTree = "<group>"; };
+		3B83EA60158E679000A3B31F /* ResultPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ResultPoint.h; sourceTree = "<group>"; };
+		3B83EA61158E679000A3B31F /* ResultPointCallback.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ResultPointCallback.cpp; sourceTree = "<group>"; };
+		3B83EA62158E679000A3B31F /* ResultPointCallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ResultPointCallback.h; sourceTree = "<group>"; };
+		3BC3D6A6158E8F790037CE30 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
+		3BC3D6A9158E8F790037CE30 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		3BC3D6AB158E8F790037CE30 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		3B83E98B158E66C600A3B31F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3B83E992158E66C600A3B31F /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		3B83E983158E66C600A3B31F = {
+			isa = PBXGroup;
+			children = (
+				3B83E9A2158E679000A3B31F /* zxing */,
+				3B83E990158E66C600A3B31F /* Frameworks */,
+				3B83E98F158E66C600A3B31F /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		3B83E98F158E66C600A3B31F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3B83E98E158E66C600A3B31F /* libzxing-cpp.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		3B83E990158E66C600A3B31F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				3B83E991158E66C600A3B31F /* Foundation.framework */,
+				3BC3D6A6158E8F790037CE30 /* Cocoa.framework */,
+				3BC3D6A8158E8F790037CE30 /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		3B83E9A2158E679000A3B31F /* zxing */ = {
+			isa = PBXGroup;
+			children = (
+				3B83E9A3158E679000A3B31F /* aztec */,
+				3B83E9AE158E679000A3B31F /* BarcodeFormat.cpp */,
+				3B83E9AF158E679000A3B31F /* BarcodeFormat.h */,
+				3B83E9B0158E679000A3B31F /* Binarizer.cpp */,
+				3B83E9B1158E679000A3B31F /* Binarizer.h */,
+				3B83E9B2158E679000A3B31F /* BinaryBitmap.cpp */,
+				3B83E9B3158E679000A3B31F /* BinaryBitmap.h */,
+				3B83E9B4158E679000A3B31F /* common */,
+				3B83E9E8158E679000A3B31F /* datamatrix */,
+				3B83E9FF158E679000A3B31F /* DecodeHints.cpp */,
+				3B83EA00158E679000A3B31F /* DecodeHints.h */,
+				3B83EA01158E679000A3B31F /* Exception.cpp */,
+				3B83EA02158E679000A3B31F /* Exception.h */,
+				3B83EA03158E679000A3B31F /* FormatException.cpp */,
+				3B83EA04158E679000A3B31F /* FormatException.h */,
+				3B83EA05158E679000A3B31F /* LuminanceSource.cpp */,
+				3B83EA06158E679000A3B31F /* LuminanceSource.h */,
+				3B83EA07158E679000A3B31F /* multi */,
+				3B83EA16158E679000A3B31F /* MultiFormatReader.cpp */,
+				3B83EA17158E679000A3B31F /* MultiFormatReader.h */,
+				3B83EA18158E679000A3B31F /* NotFoundException.cpp */,
+				3B83EA19158E679000A3B31F /* NotFoundException.h */,
+				3B83EA1A158E679000A3B31F /* oned */,
+				3B83EA33158E679000A3B31F /* qrcode */,
+				3B83EA59158E679000A3B31F /* Reader.cpp */,
+				3B83EA5A158E679000A3B31F /* Reader.h */,
+				3B83EA5B158E679000A3B31F /* ReaderException.cpp */,
+				3B83EA5C158E679000A3B31F /* ReaderException.h */,
+				3B83EA5D158E679000A3B31F /* Result.cpp */,
+				3B83EA5E158E679000A3B31F /* Result.h */,
+				3B83EA5F158E679000A3B31F /* ResultPoint.cpp */,
+				3B83EA60158E679000A3B31F /* ResultPoint.h */,
+				3B83EA61158E679000A3B31F /* ResultPointCallback.cpp */,
+				3B83EA62158E679000A3B31F /* ResultPointCallback.h */,
+			);
+			name = zxing;
+			path = core/src/zxing;
+			sourceTree = "<group>";
+		};
+		3B83E9A3158E679000A3B31F /* aztec */ = {
+			isa = PBXGroup;
+			children = (
+				3B83E9A4158E679000A3B31F /* AztecDetectorResult.cpp */,
+				3B83E9A5158E679000A3B31F /* AztecDetectorResult.h */,
+				3B83E9A6158E679000A3B31F /* AztecReader.cpp */,
+				3B83E9A7158E679000A3B31F /* AztecReader.h */,
+				3B83E9A8158E679000A3B31F /* decoder */,
+				3B83E9AB158E679000A3B31F /* detector */,
+			);
+			path = aztec;
+			sourceTree = "<group>";
+		};
+		3B83E9A8158E679000A3B31F /* decoder */ = {
+			isa = PBXGroup;
+			children = (
+				3B83E9A9158E679000A3B31F /* Decoder.cpp */,
+				3B83E9AA158E679000A3B31F /* Decoder.h */,
+			);
+			path = decoder;
+			sourceTree = "<group>";
+		};
+		3B83E9AB158E679000A3B31F /* detector */ = {
+			isa = PBXGroup;
+			children = (
+				3B83E9AC158E679000A3B31F /* Detector.cpp */,
+				3B83E9AD158E679000A3B31F /* Detector.h */,
+			);
+			path = detector;
+			sourceTree = "<group>";
+		};
+		3B83E9B4158E679000A3B31F /* common */ = {
+			isa = PBXGroup;
+			children = (
+				3B83E9B5158E679000A3B31F /* Array.cpp */,
+				3B83E9B6158E679000A3B31F /* Array.h */,
+				3B83E9B7158E679000A3B31F /* BitArray.cpp */,
+				3B83E9B8158E679000A3B31F /* BitArray.h */,
+				3B83E9B9158E679000A3B31F /* BitMatrix.cpp */,
+				3B83E9BA158E679000A3B31F /* BitMatrix.h */,
+				3B83E9BB158E679000A3B31F /* BitSource.cpp */,
+				3B83E9BC158E679000A3B31F /* BitSource.h */,
+				3B83E9BD158E679000A3B31F /* CharacterSetECI.cpp */,
+				3B83E9BE158E679000A3B31F /* CharacterSetECI.h */,
+				3B83E9BF158E679000A3B31F /* Counted.cpp */,
+				3B83E9C0158E679000A3B31F /* Counted.h */,
+				3B83E9C1158E679000A3B31F /* DecoderResult.cpp */,
+				3B83E9C2158E679000A3B31F /* DecoderResult.h */,
+				3B83E9C3158E679000A3B31F /* detector */,
+				3B83E9C8158E679000A3B31F /* DetectorResult.cpp */,
+				3B83E9C9158E679000A3B31F /* DetectorResult.h */,
+				3B83E9CA158E679000A3B31F /* EdgeDetector.cpp */,
+				3B83E9CB158E679000A3B31F /* EdgeDetector.h */,
+				3B83E9CC158E679000A3B31F /* GlobalHistogramBinarizer.cpp */,
+				3B83E9CD158E679000A3B31F /* GlobalHistogramBinarizer.h */,
+				3B83E9CE158E679000A3B31F /* GreyscaleLuminanceSource.cpp */,
+				3B83E9CF158E679000A3B31F /* GreyscaleLuminanceSource.h */,
+				3B83E9D0158E679000A3B31F /* GreyscaleRotatedLuminanceSource.cpp */,
+				3B83E9D1158E679000A3B31F /* GreyscaleRotatedLuminanceSource.h */,
+				3B83E9D2158E679000A3B31F /* GridSampler.cpp */,
+				3B83E9D3158E679000A3B31F /* GridSampler.h */,
+				3B83E9D4158E679000A3B31F /* HybridBinarizer.cpp */,
+				3B83E9D5158E679000A3B31F /* HybridBinarizer.h */,
+				3B83E9D6158E679000A3B31F /* IllegalArgumentException.cpp */,
+				3B83E9D7158E679000A3B31F /* IllegalArgumentException.h */,
+				3B83E9D8158E679000A3B31F /* PerspectiveTransform.cpp */,
+				3B83E9D9158E679000A3B31F /* PerspectiveTransform.h */,
+				3B83E9DA158E679000A3B31F /* Point.h */,
+				3B83E9DB158E679000A3B31F /* reedsolomon */,
+				3B83E9E4158E679000A3B31F /* Str.cpp */,
+				3B83E9E5158E679000A3B31F /* Str.h */,
+				3B83E9E6158E679000A3B31F /* StringUtils.cpp */,
+				3B83E9E7158E679000A3B31F /* StringUtils.h */,
+			);
+			path = common;
+			sourceTree = "<group>";
+		};
+		3B83E9C3158E679000A3B31F /* detector */ = {
+			isa = PBXGroup;
+			children = (
+				3B83E9C4158E679000A3B31F /* MonochromeRectangleDetector.cpp */,
+				3B83E9C5158E679000A3B31F /* MonochromeRectangleDetector.h */,
+				3B83E9C6158E679000A3B31F /* WhiteRectangleDetector.cpp */,
+				3B83E9C7158E679000A3B31F /* WhiteRectangleDetector.h */,
+			);
+			path = detector;
+			sourceTree = "<group>";
+		};
+		3B83E9DB158E679000A3B31F /* reedsolomon */ = {
+			isa = PBXGroup;
+			children = (
+				3B83E9DC158E679000A3B31F /* GenericGF.cpp */,
+				3B83E9DD158E679000A3B31F /* GenericGF.h */,
+				3B83E9DE158E679000A3B31F /* GenericGFPoly.cpp */,
+				3B83E9DF158E679000A3B31F /* GenericGFPoly.h */,
+				3B83E9E0158E679000A3B31F /* ReedSolomonDecoder.cpp */,
+				3B83E9E1158E679000A3B31F /* ReedSolomonDecoder.h */,
+				3B83E9E2158E679000A3B31F /* ReedSolomonException.cpp */,
+				3B83E9E3158E679000A3B31F /* ReedSolomonException.h */,
+			);
+			path = reedsolomon;
+			sourceTree = "<group>";
+		};
+		3B83E9E8158E679000A3B31F /* datamatrix */ = {
+			isa = PBXGroup;
+			children = (
+				3B83E9E9158E679000A3B31F /* DataMatrixReader.cpp */,
+				3B83E9EA158E679000A3B31F /* DataMatrixReader.h */,
+				3B83E9EB158E679000A3B31F /* decoder */,
+				3B83E9F4158E679000A3B31F /* detector */,
+				3B83E9FD158E679000A3B31F /* Version.cpp */,
+				3B83E9FE158E679000A3B31F /* Version.h */,
+			);
+			path = datamatrix;
+			sourceTree = "<group>";
+		};
+		3B83E9EB158E679000A3B31F /* decoder */ = {
+			isa = PBXGroup;
+			children = (
+				3B83E9EC158E679000A3B31F /* BitMatrixParser.cpp */,
+				3B83E9ED158E679000A3B31F /* BitMatrixParser.h */,
+				3B83E9EE158E679000A3B31F /* DataBlock.cpp */,
+				3B83E9EF158E679000A3B31F /* DataBlock.h */,
+				3B83E9F0158E679000A3B31F /* DecodedBitStreamParser.cpp */,
+				3B83E9F1158E679000A3B31F /* DecodedBitStreamParser.h */,
+				3B83E9F2158E679000A3B31F /* Decoder.cpp */,
+				3B83E9F3158E679000A3B31F /* Decoder.h */,
+			);
+			path = decoder;
+			sourceTree = "<group>";
+		};
+		3B83E9F4158E679000A3B31F /* detector */ = {
+			isa = PBXGroup;
+			children = (
+				3B83E9F5158E679000A3B31F /* CornerPoint.cpp */,
+				3B83E9F6158E679000A3B31F /* CornerPoint.h */,
+				3B83E9F7158E679000A3B31F /* Detector.cpp */,
+				3B83E9F8158E679000A3B31F /* Detector.h */,
+				3B83E9F9158E679000A3B31F /* DetectorException.cpp */,
+				3B83E9FA158E679000A3B31F /* DetectorException.h */,
+				3B83E9FB158E679000A3B31F /* MonochromeRectangleDetector.cpp */,
+				3B83E9FC158E679000A3B31F /* MonochromeRectangleDetector.h */,
+			);
+			path = detector;
+			sourceTree = "<group>";
+		};
+		3B83EA07158E679000A3B31F /* multi */ = {
+			isa = PBXGroup;
+			children = (
+				3B83EA08158E679000A3B31F /* ByQuadrantReader.cpp */,
+				3B83EA09158E679000A3B31F /* ByQuadrantReader.h */,
+				3B83EA0A158E679000A3B31F /* GenericMultipleBarcodeReader.cpp */,
+				3B83EA0B158E679000A3B31F /* GenericMultipleBarcodeReader.h */,
+				3B83EA0C158E679000A3B31F /* MultipleBarcodeReader.cpp */,
+				3B83EA0D158E679000A3B31F /* MultipleBarcodeReader.h */,
+				3B83EA0E158E679000A3B31F /* qrcode */,
+			);
+			path = multi;
+			sourceTree = "<group>";
+		};
+		3B83EA0E158E679000A3B31F /* qrcode */ = {
+			isa = PBXGroup;
+			children = (
+				3B83EA0F158E679000A3B31F /* detector */,
+				3B83EA14158E679000A3B31F /* QRCodeMultiReader.cpp */,
+				3B83EA15158E679000A3B31F /* QRCodeMultiReader.h */,
+			);
+			path = qrcode;
+			sourceTree = "<group>";
+		};
+		3B83EA0F158E679000A3B31F /* detector */ = {
+			isa = PBXGroup;
+			children = (
+				3B83EA10158E679000A3B31F /* MultiDetector.cpp */,
+				3B83EA11158E679000A3B31F /* MultiDetector.h */,
+				3B83EA12158E679000A3B31F /* MultiFinderPatternFinder.cpp */,
+				3B83EA13158E679000A3B31F /* MultiFinderPatternFinder.h */,
+			);
+			path = detector;
+			sourceTree = "<group>";
+		};
+		3B83EA1A158E679000A3B31F /* oned */ = {
+			isa = PBXGroup;
+			children = (
+				3B83EA1B158E679000A3B31F /* Code128Reader.cpp */,
+				3B83EA1C158E679000A3B31F /* Code128Reader.h */,
+				3B83EA1D158E679000A3B31F /* Code39Reader.cpp */,
+				3B83EA1E158E679000A3B31F /* Code39Reader.h */,
+				3B83EA1F158E679000A3B31F /* EAN13Reader.cpp */,
+				3B83EA20158E679000A3B31F /* EAN13Reader.h */,
+				3B83EA21158E679000A3B31F /* EAN8Reader.cpp */,
+				3B83EA22158E679000A3B31F /* EAN8Reader.h */,
+				3B83EA23158E679000A3B31F /* ITFReader.cpp */,
+				3B83EA24158E679000A3B31F /* ITFReader.h */,
+				3B83EA25158E679000A3B31F /* MultiFormatOneDReader.cpp */,
+				3B83EA26158E679000A3B31F /* MultiFormatOneDReader.h */,
+				3B83EA27158E679000A3B31F /* MultiFormatUPCEANReader.cpp */,
+				3B83EA28158E679000A3B31F /* MultiFormatUPCEANReader.h */,
+				3B83EA29158E679000A3B31F /* OneDReader.cpp */,
+				3B83EA2A158E679000A3B31F /* OneDReader.h */,
+				3B83EA2B158E679000A3B31F /* OneDResultPoint.cpp */,
+				3B83EA2C158E679000A3B31F /* OneDResultPoint.h */,
+				3B83EA2D158E679000A3B31F /* UPCAReader.cpp */,
+				3B83EA2E158E679000A3B31F /* UPCAReader.h */,
+				3B83EA2F158E679000A3B31F /* UPCEANReader.cpp */,
+				3B83EA30158E679000A3B31F /* UPCEANReader.h */,
+				3B83EA31158E679000A3B31F /* UPCEReader.cpp */,
+				3B83EA32158E679000A3B31F /* UPCEReader.h */,
+			);
+			path = oned;
+			sourceTree = "<group>";
+		};
+		3B83EA33158E679000A3B31F /* qrcode */ = {
+			isa = PBXGroup;
+			children = (
+				3B83EA34158E679000A3B31F /* decoder */,
+				3B83EA41158E679000A3B31F /* detector */,
+				3B83EA51158E679000A3B31F /* ErrorCorrectionLevel.cpp */,
+				3B83EA52158E679000A3B31F /* ErrorCorrectionLevel.h */,
+				3B83EA53158E679000A3B31F /* FormatInformation.cpp */,
+				3B83EA54158E679000A3B31F /* FormatInformation.h */,
+				3B83EA55158E679000A3B31F /* QRCodeReader.cpp */,
+				3B83EA56158E679000A3B31F /* QRCodeReader.h */,
+				3B83EA57158E679000A3B31F /* Version.cpp */,
+				3B83EA58158E679000A3B31F /* Version.h */,
+			);
+			path = qrcode;
+			sourceTree = "<group>";
+		};
+		3B83EA34158E679000A3B31F /* decoder */ = {
+			isa = PBXGroup;
+			children = (
+				3B83EA35158E679000A3B31F /* BitMatrixParser.cpp */,
+				3B83EA36158E679000A3B31F /* BitMatrixParser.h */,
+				3B83EA37158E679000A3B31F /* DataBlock.cpp */,
+				3B83EA38158E679000A3B31F /* DataBlock.h */,
+				3B83EA39158E679000A3B31F /* DataMask.cpp */,
+				3B83EA3A158E679000A3B31F /* DataMask.h */,
+				3B83EA3B158E679000A3B31F /* DecodedBitStreamParser.cpp */,
+				3B83EA3C158E679000A3B31F /* DecodedBitStreamParser.h */,
+				3B83EA3D158E679000A3B31F /* Decoder.cpp */,
+				3B83EA3E158E679000A3B31F /* Decoder.h */,
+				3B83EA3F158E679000A3B31F /* Mode.cpp */,
+				3B83EA40158E679000A3B31F /* Mode.h */,
+			);
+			path = decoder;
+			sourceTree = "<group>";
+		};
+		3B83EA41158E679000A3B31F /* detector */ = {
+			isa = PBXGroup;
+			children = (
+				3B83EA42158E679000A3B31F /* AlignmentPattern.cpp */,
+				3B83EA43158E679000A3B31F /* AlignmentPattern.h */,
+				3B83EA44158E679000A3B31F /* AlignmentPatternFinder.cpp */,
+				3B83EA45158E679000A3B31F /* AlignmentPatternFinder.h */,
+				3B83EA46158E679000A3B31F /* Detector.cpp */,
+				3B83EA47158E679000A3B31F /* Detector.h */,
+				3B83EA48158E679000A3B31F /* FinderPattern.cpp */,
+				3B83EA49158E679000A3B31F /* FinderPattern.h */,
+				3B83EA4A158E679000A3B31F /* FinderPatternFinder.cpp */,
+				3B83EA4B158E679000A3B31F /* FinderPatternFinder.cpp.smp */,
+				3B83EA4C158E679000A3B31F /* FinderPatternFinder.h */,
+				3B83EA4D158E679000A3B31F /* FinderPatternInfo.cpp */,
+				3B83EA4E158E679000A3B31F /* FinderPatternInfo.h */,
+				3B83EA4F158E679000A3B31F /* QREdgeDetector.cpp */,
+				3B83EA50158E679000A3B31F /* QREdgeDetector.h */,
+			);
+			path = detector;
+			sourceTree = "<group>";
+		};
+		3BC3D6A8158E8F790037CE30 /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				3BC3D6A9158E8F790037CE30 /* AppKit.framework */,
+				3BC3D6AB158E8F790037CE30 /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		3B83E98C158E66C600A3B31F /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3B83EA64158E679000A3B31F /* AztecDetectorResult.h in Headers */,
+				3B83EA66158E679000A3B31F /* AztecReader.h in Headers */,
+				3B83EA68158E679000A3B31F /* Decoder.h in Headers */,
+				3B83EA6A158E679000A3B31F /* Detector.h in Headers */,
+				3B83EA6C158E679000A3B31F /* BarcodeFormat.h in Headers */,
+				3B83EA6E158E679000A3B31F /* Binarizer.h in Headers */,
+				3B83EA70158E679000A3B31F /* BinaryBitmap.h in Headers */,
+				3B83EA72158E679000A3B31F /* Array.h in Headers */,
+				3B83EA74158E679000A3B31F /* BitArray.h in Headers */,
+				3B83EA76158E679000A3B31F /* BitMatrix.h in Headers */,
+				3B83EA78158E679000A3B31F /* BitSource.h in Headers */,
+				3B83EA7A158E679000A3B31F /* CharacterSetECI.h in Headers */,
+				3B83EA7C158E679000A3B31F /* Counted.h in Headers */,
+				3B83EA7E158E679000A3B31F /* DecoderResult.h in Headers */,
+				3B83EA80158E679000A3B31F /* MonochromeRectangleDetector.h in Headers */,
+				3B83EA82158E679000A3B31F /* WhiteRectangleDetector.h in Headers */,
+				3B83EA84158E679000A3B31F /* DetectorResult.h in Headers */,
+				3B83EA86158E679000A3B31F /* EdgeDetector.h in Headers */,
+				3B83EA88158E679000A3B31F /* GlobalHistogramBinarizer.h in Headers */,
+				3B83EA8A158E679000A3B31F /* GreyscaleLuminanceSource.h in Headers */,
+				3B83EA8C158E679000A3B31F /* GreyscaleRotatedLuminanceSource.h in Headers */,
+				3B83EA8E158E679000A3B31F /* GridSampler.h in Headers */,
+				3B83EA90158E679000A3B31F /* HybridBinarizer.h in Headers */,
+				3B83EA92158E679000A3B31F /* IllegalArgumentException.h in Headers */,
+				3B83EA94158E679000A3B31F /* PerspectiveTransform.h in Headers */,
+				3B83EA95158E679000A3B31F /* Point.h in Headers */,
+				3B83EA97158E679000A3B31F /* GenericGF.h in Headers */,
+				3B83EA99158E679000A3B31F /* GenericGFPoly.h in Headers */,
+				3B83EA9B158E679000A3B31F /* ReedSolomonDecoder.h in Headers */,
+				3B83EA9D158E679000A3B31F /* ReedSolomonException.h in Headers */,
+				3B83EA9F158E679000A3B31F /* Str.h in Headers */,
+				3B83EAA1158E679000A3B31F /* StringUtils.h in Headers */,
+				3B83EAA3158E679000A3B31F /* DataMatrixReader.h in Headers */,
+				3B83EAA5158E679000A3B31F /* BitMatrixParser.h in Headers */,
+				3B83EAA7158E679000A3B31F /* DataBlock.h in Headers */,
+				3B83EAA9158E679000A3B31F /* DecodedBitStreamParser.h in Headers */,
+				3B83EAAB158E679000A3B31F /* Decoder.h in Headers */,
+				3B83EAAD158E679000A3B31F /* CornerPoint.h in Headers */,
+				3B83EAAF158E679000A3B31F /* Detector.h in Headers */,
+				3B83EAB1158E679000A3B31F /* DetectorException.h in Headers */,
+				3B83EAB3158E679000A3B31F /* MonochromeRectangleDetector.h in Headers */,
+				3B83EAB5158E679000A3B31F /* Version.h in Headers */,
+				3B83EAB7158E679000A3B31F /* DecodeHints.h in Headers */,
+				3B83EAB9158E679000A3B31F /* Exception.h in Headers */,
+				3B83EABB158E679000A3B31F /* FormatException.h in Headers */,
+				3B83EABD158E679000A3B31F /* LuminanceSource.h in Headers */,
+				3B83EABF158E679000A3B31F /* ByQuadrantReader.h in Headers */,
+				3B83EAC1158E679000A3B31F /* GenericMultipleBarcodeReader.h in Headers */,
+				3B83EAC3158E679000A3B31F /* MultipleBarcodeReader.h in Headers */,
+				3B83EAC5158E679000A3B31F /* MultiDetector.h in Headers */,
+				3B83EAC7158E679000A3B31F /* MultiFinderPatternFinder.h in Headers */,
+				3B83EAC9158E679000A3B31F /* QRCodeMultiReader.h in Headers */,
+				3B83EACB158E679000A3B31F /* MultiFormatReader.h in Headers */,
+				3B83EACD158E679000A3B31F /* NotFoundException.h in Headers */,
+				3B83EACF158E679000A3B31F /* Code128Reader.h in Headers */,
+				3B83EAD1158E679000A3B31F /* Code39Reader.h in Headers */,
+				3B83EAD3158E679000A3B31F /* EAN13Reader.h in Headers */,
+				3B83EAD5158E679000A3B31F /* EAN8Reader.h in Headers */,
+				3B83EAD7158E679000A3B31F /* ITFReader.h in Headers */,
+				3B83EAD9158E679000A3B31F /* MultiFormatOneDReader.h in Headers */,
+				3B83EADB158E679000A3B31F /* MultiFormatUPCEANReader.h in Headers */,
+				3B83EADD158E679000A3B31F /* OneDReader.h in Headers */,
+				3B83EADF158E679000A3B31F /* OneDResultPoint.h in Headers */,
+				3B83EAE1158E679000A3B31F /* UPCAReader.h in Headers */,
+				3B83EAE3158E679000A3B31F /* UPCEANReader.h in Headers */,
+				3B83EAE5158E679000A3B31F /* UPCEReader.h in Headers */,
+				3B83EAE7158E679000A3B31F /* BitMatrixParser.h in Headers */,
+				3B83EAE9158E679000A3B31F /* DataBlock.h in Headers */,
+				3B83EAEB158E679000A3B31F /* DataMask.h in Headers */,
+				3B83EAED158E679000A3B31F /* DecodedBitStreamParser.h in Headers */,
+				3B83EAEF158E679000A3B31F /* Decoder.h in Headers */,
+				3B83EAF1158E679000A3B31F /* Mode.h in Headers */,
+				3B83EAF3158E679000A3B31F /* AlignmentPattern.h in Headers */,
+				3B83EAF5158E679000A3B31F /* AlignmentPatternFinder.h in Headers */,
+				3B83EAF7158E679000A3B31F /* Detector.h in Headers */,
+				3B83EAF9158E679000A3B31F /* FinderPattern.h in Headers */,
+				3B83EAFB158E679000A3B31F /* FinderPatternFinder.h in Headers */,
+				3B83EAFD158E679000A3B31F /* FinderPatternInfo.h in Headers */,
+				3B83EAFF158E679000A3B31F /* QREdgeDetector.h in Headers */,
+				3B83EB01158E679000A3B31F /* ErrorCorrectionLevel.h in Headers */,
+				3B83EB03158E679000A3B31F /* FormatInformation.h in Headers */,
+				3B83EB05158E679000A3B31F /* QRCodeReader.h in Headers */,
+				3B83EB07158E679000A3B31F /* Version.h in Headers */,
+				3B83EB09158E679000A3B31F /* Reader.h in Headers */,
+				3B83EB0B158E679000A3B31F /* ReaderException.h in Headers */,
+				3B83EB0D158E679000A3B31F /* Result.h in Headers */,
+				3B83EB0F158E679000A3B31F /* ResultPoint.h in Headers */,
+				3B83EB11158E679000A3B31F /* ResultPointCallback.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		3B83E98D158E66C600A3B31F /* zxing-cpp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3B83E99B158E66C600A3B31F /* Build configuration list for PBXNativeTarget "zxing-cpp" */;
+			buildPhases = (
+				3B83E98A158E66C600A3B31F /* Sources */,
+				3B83E98B158E66C600A3B31F /* Frameworks */,
+				3B83E98C158E66C600A3B31F /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "zxing-cpp";
+			productName = "zxing-cpp";
+			productReference = 3B83E98E158E66C600A3B31F /* libzxing-cpp.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		3B83E985158E66C600A3B31F /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0430;
+			};
+			buildConfigurationList = 3B83E988158E66C600A3B31F /* Build configuration list for PBXProject "zxing-cpp" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 3B83E983158E66C600A3B31F;
+			productRefGroup = 3B83E98F158E66C600A3B31F /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				3B83E98D158E66C600A3B31F /* zxing-cpp */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		3B83E98A158E66C600A3B31F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3B83EA63158E679000A3B31F /* AztecDetectorResult.cpp in Sources */,
+				3B83EA65158E679000A3B31F /* AztecReader.cpp in Sources */,
+				3B83EA67158E679000A3B31F /* Decoder.cpp in Sources */,
+				3B83EA69158E679000A3B31F /* Detector.cpp in Sources */,
+				3B83EA6B158E679000A3B31F /* BarcodeFormat.cpp in Sources */,
+				3B83EA6D158E679000A3B31F /* Binarizer.cpp in Sources */,
+				3B83EA6F158E679000A3B31F /* BinaryBitmap.cpp in Sources */,
+				3B83EA71158E679000A3B31F /* Array.cpp in Sources */,
+				3B83EA73158E679000A3B31F /* BitArray.cpp in Sources */,
+				3B83EA75158E679000A3B31F /* BitMatrix.cpp in Sources */,
+				3B83EA77158E679000A3B31F /* BitSource.cpp in Sources */,
+				3B83EA79158E679000A3B31F /* CharacterSetECI.cpp in Sources */,
+				3B83EA7B158E679000A3B31F /* Counted.cpp in Sources */,
+				3B83EA7D158E679000A3B31F /* DecoderResult.cpp in Sources */,
+				3B83EA7F158E679000A3B31F /* MonochromeRectangleDetector.cpp in Sources */,
+				3B83EA81158E679000A3B31F /* WhiteRectangleDetector.cpp in Sources */,
+				3B83EA83158E679000A3B31F /* DetectorResult.cpp in Sources */,
+				3B83EA85158E679000A3B31F /* EdgeDetector.cpp in Sources */,
+				3B83EA87158E679000A3B31F /* GlobalHistogramBinarizer.cpp in Sources */,
+				3B83EA89158E679000A3B31F /* GreyscaleLuminanceSource.cpp in Sources */,
+				3B83EA8B158E679000A3B31F /* GreyscaleRotatedLuminanceSource.cpp in Sources */,
+				3B83EA8D158E679000A3B31F /* GridSampler.cpp in Sources */,
+				3B83EA8F158E679000A3B31F /* HybridBinarizer.cpp in Sources */,
+				3B83EA91158E679000A3B31F /* IllegalArgumentException.cpp in Sources */,
+				3B83EA93158E679000A3B31F /* PerspectiveTransform.cpp in Sources */,
+				3B83EA96158E679000A3B31F /* GenericGF.cpp in Sources */,
+				3B83EA98158E679000A3B31F /* GenericGFPoly.cpp in Sources */,
+				3B83EA9A158E679000A3B31F /* ReedSolomonDecoder.cpp in Sources */,
+				3B83EA9C158E679000A3B31F /* ReedSolomonException.cpp in Sources */,
+				3B83EA9E158E679000A3B31F /* Str.cpp in Sources */,
+				3B83EAA0158E679000A3B31F /* StringUtils.cpp in Sources */,
+				3B83EAA2158E679000A3B31F /* DataMatrixReader.cpp in Sources */,
+				3B83EAA4158E679000A3B31F /* BitMatrixParser.cpp in Sources */,
+				3B83EAA6158E679000A3B31F /* DataBlock.cpp in Sources */,
+				3B83EAA8158E679000A3B31F /* DecodedBitStreamParser.cpp in Sources */,
+				3B83EAAA158E679000A3B31F /* Decoder.cpp in Sources */,
+				3B83EAAC158E679000A3B31F /* CornerPoint.cpp in Sources */,
+				3B83EAAE158E679000A3B31F /* Detector.cpp in Sources */,
+				3B83EAB0158E679000A3B31F /* DetectorException.cpp in Sources */,
+				3B83EAB2158E679000A3B31F /* MonochromeRectangleDetector.cpp in Sources */,
+				3B83EAB4158E679000A3B31F /* Version.cpp in Sources */,
+				3B83EAB6158E679000A3B31F /* DecodeHints.cpp in Sources */,
+				3B83EAB8158E679000A3B31F /* Exception.cpp in Sources */,
+				3B83EABA158E679000A3B31F /* FormatException.cpp in Sources */,
+				3B83EABC158E679000A3B31F /* LuminanceSource.cpp in Sources */,
+				3B83EABE158E679000A3B31F /* ByQuadrantReader.cpp in Sources */,
+				3B83EAC0158E679000A3B31F /* GenericMultipleBarcodeReader.cpp in Sources */,
+				3B83EAC2158E679000A3B31F /* MultipleBarcodeReader.cpp in Sources */,
+				3B83EAC4158E679000A3B31F /* MultiDetector.cpp in Sources */,
+				3B83EAC6158E679000A3B31F /* MultiFinderPatternFinder.cpp in Sources */,
+				3B83EAC8158E679000A3B31F /* QRCodeMultiReader.cpp in Sources */,
+				3B83EACA158E679000A3B31F /* MultiFormatReader.cpp in Sources */,
+				3B83EACC158E679000A3B31F /* NotFoundException.cpp in Sources */,
+				3B83EACE158E679000A3B31F /* Code128Reader.cpp in Sources */,
+				3B83EAD0158E679000A3B31F /* Code39Reader.cpp in Sources */,
+				3B83EAD2158E679000A3B31F /* EAN13Reader.cpp in Sources */,
+				3B83EAD4158E679000A3B31F /* EAN8Reader.cpp in Sources */,
+				3B83EAD6158E679000A3B31F /* ITFReader.cpp in Sources */,
+				3B83EAD8158E679000A3B31F /* MultiFormatOneDReader.cpp in Sources */,
+				3B83EADA158E679000A3B31F /* MultiFormatUPCEANReader.cpp in Sources */,
+				3B83EADC158E679000A3B31F /* OneDReader.cpp in Sources */,
+				3B83EADE158E679000A3B31F /* OneDResultPoint.cpp in Sources */,
+				3B83EAE0158E679000A3B31F /* UPCAReader.cpp in Sources */,
+				3B83EAE2158E679000A3B31F /* UPCEANReader.cpp in Sources */,
+				3B83EAE4158E679000A3B31F /* UPCEReader.cpp in Sources */,
+				3B83EAE6158E679000A3B31F /* BitMatrixParser.cpp in Sources */,
+				3B83EAE8158E679000A3B31F /* DataBlock.cpp in Sources */,
+				3B83EAEA158E679000A3B31F /* DataMask.cpp in Sources */,
+				3B83EAEC158E679000A3B31F /* DecodedBitStreamParser.cpp in Sources */,
+				3B83EAEE158E679000A3B31F /* Decoder.cpp in Sources */,
+				3B83EAF0158E679000A3B31F /* Mode.cpp in Sources */,
+				3B83EAF2158E679000A3B31F /* AlignmentPattern.cpp in Sources */,
+				3B83EAF4158E679000A3B31F /* AlignmentPatternFinder.cpp in Sources */,
+				3B83EAF6158E679000A3B31F /* Detector.cpp in Sources */,
+				3B83EAF8158E679000A3B31F /* FinderPattern.cpp in Sources */,
+				3B83EAFA158E679000A3B31F /* FinderPatternFinder.cpp in Sources */,
+				3B83EAFC158E679000A3B31F /* FinderPatternInfo.cpp in Sources */,
+				3B83EAFE158E679000A3B31F /* QREdgeDetector.cpp in Sources */,
+				3B83EB00158E679000A3B31F /* ErrorCorrectionLevel.cpp in Sources */,
+				3B83EB02158E679000A3B31F /* FormatInformation.cpp in Sources */,
+				3B83EB04158E679000A3B31F /* QRCodeReader.cpp in Sources */,
+				3B83EB06158E679000A3B31F /* Version.cpp in Sources */,
+				3B83EB08158E679000A3B31F /* Reader.cpp in Sources */,
+				3B83EB0A158E679000A3B31F /* ReaderException.cpp in Sources */,
+				3B83EB0C158E679000A3B31F /* Result.cpp in Sources */,
+				3B83EB0E158E679000A3B31F /* ResultPoint.cpp in Sources */,
+				3B83EB10158E679000A3B31F /* ResultPointCallback.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		3B83E999158E66C600A3B31F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = (
+					x86_64,
+					i386,
+					armv7,
+					armv6,
+				);
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"_DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_THUMB_SUPPORT = NO;
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = core/src;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx";
+				VALID_ARCHS = "armv6 armv7 x86_64 i386";
+				WARNING_CFLAGS = "-Wall";
+			};
+			name = Debug;
+		};
+		3B83E99A158E66C600A3B31F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = (
+					x86_64,
+					i386,
+					armv7,
+					armv6,
+				);
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_THUMB_SUPPORT = NO;
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = core/src;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx";
+				VALIDATE_PRODUCT = YES;
+				VALID_ARCHS = "armv6 armv7 x86_64 i386";
+				WARNING_CFLAGS = "-Wall";
+			};
+			name = Release;
+		};
+		3B83E99C158E66C600A3B31F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALTERNATE_PERMISSIONS_FILES = (
+					armv6,
+					armv7,
+					i386,
+					x86_64,
+				);
+				DSTROOT = /tmp/zxing_cpp.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "";
+				GCC_THUMB_SUPPORT = NO;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				"VALID_ARCHS[sdk=iphoneos*]" = "armv6 armv7";
+				"VALID_ARCHS[sdk=macosx*]" = "x86_64 i386";
+			};
+			name = Debug;
+		};
+		3B83E99D158E66C600A3B31F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALTERNATE_PERMISSIONS_FILES = (
+					armv6,
+					armv7,
+					i386,
+					x86_64,
+				);
+				DSTROOT = /tmp/zxing_cpp.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "";
+				GCC_THUMB_SUPPORT = NO;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				"VALID_ARCHS[sdk=iphoneos*]" = "armv6 armv7";
+				"VALID_ARCHS[sdk=macosx*]" = "x86_64 i386";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		3B83E988158E66C600A3B31F /* Build configuration list for PBXProject "zxing-cpp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3B83E999158E66C600A3B31F /* Debug */,
+				3B83E99A158E66C600A3B31F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3B83E99B158E66C600A3B31F /* Build configuration list for PBXNativeTarget "zxing-cpp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3B83E99C158E66C600A3B31F /* Debug */,
+				3B83E99D158E66C600A3B31F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 3B83E985158E66C600A3B31F /* Project object */;
+}
