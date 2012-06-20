@@ -45,6 +45,18 @@ public final class BufferedImageLuminanceSource extends LuminanceSource {
     if (left + width > sourceWidth || top + height > sourceHeight) {
       throw new IllegalArgumentException("Crop rectangle does not fit within image data.");
     }
+
+    // The color of fully-transparent pixels is irrelevant. They are often, technically, fully-transparent
+    // black (0 alpha, and then 0 RGB). They are often used, of course as the "white" area in a
+    // barcode image. Force any such pixel to be white:
+    for (int y = top; y < top + height; y++) {
+      for (int x = left; x < left + width; x++) {
+        if ((image.getRGB(x, y) & 0xFF000000) == 0) {
+          image.setRGB(x, y, 0xFFFFFFFF); // = white
+        }
+      }
+    }
+
     // Create a grayscale copy, no need to calculate the luminance manually
     this.image = new BufferedImage(sourceWidth, sourceHeight, BufferedImage.TYPE_BYTE_GRAY);
     this.image.getGraphics().drawImage(image, 0, 0, null);
@@ -99,9 +111,6 @@ public final class BufferedImageLuminanceSource extends LuminanceSource {
 
   @Override
   public LuminanceSource rotateCounterClockwise() {
-    //if (!isRotateSupported()) {
-    //  throw new IllegalStateException("Rotate not supported");
-    //}
     int sourceWidth = image.getWidth();
     int sourceHeight = image.getHeight();
 
@@ -119,6 +128,34 @@ public final class BufferedImageLuminanceSource extends LuminanceSource {
     // Maintain the cropped region, but rotate it too.
     int width = getWidth();
     return new BufferedImageLuminanceSource(rotatedImage, top, sourceWidth - (left + width), getHeight(), width);
+  }
+
+  @Override
+  public LuminanceSource rotateCounterClockwise45() {
+    int width = getWidth();
+    int height = getHeight();
+
+    int oldCenterX = left + width / 2;
+    int oldCenterY = top + height / 2;
+
+    // Rotate 45 degrees counterclockwise.
+    AffineTransform transform = AffineTransform.getRotateInstance(Math.toRadians(-45.0), oldCenterX, oldCenterY);
+
+    int sourceDimension = Math.max(image.getWidth(), image.getHeight());
+    BufferedImage rotatedImage = new BufferedImage(sourceDimension, sourceDimension, BufferedImage.TYPE_BYTE_GRAY);
+
+    // Draw the original image into rotated, via transformation
+    Graphics2D g = rotatedImage.createGraphics();
+    g.drawImage(image, transform, null);
+    g.dispose();
+
+    int halfDimension = Math.max(width, height) / 2;
+    int newLeft = Math.max(0, oldCenterX - halfDimension);
+    int newTop = Math.max(0, oldCenterY - halfDimension);
+    int newRight = Math.min(sourceDimension - 1, oldCenterX + halfDimension);
+    int newBottom = Math.min(sourceDimension - 1, oldCenterY + halfDimension);
+
+    return new BufferedImageLuminanceSource(rotatedImage, newLeft, newTop, newRight - newLeft, newBottom - newTop);
   }
 
 }

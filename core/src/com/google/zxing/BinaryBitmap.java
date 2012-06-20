@@ -115,12 +115,24 @@ public final class BinaryBitmap {
   }
 
   /**
-   * Returns a new object with rotated image data. Only callable if isRotateSupported() is true.
+   * Returns a new object with rotated image data by 90 degrees counterclockwise.
+   * Only callable if {@link #isRotateSupported()} is true.
    *
    * @return A rotated version of this object.
    */
   public BinaryBitmap rotateCounterClockwise() {
     LuminanceSource newSource = binarizer.getLuminanceSource().rotateCounterClockwise();
+    return new BinaryBitmap(binarizer.createBinarizer(newSource));
+  }
+
+  /**
+   * Returns a new object with rotated image data by 45 degrees counterclockwise.
+   * Only callable if {@link #isRotateSupported()} is true.
+   *
+   * @return A rotated version of this object.
+   */
+  public BinaryBitmap rotateCounterClockwise45() {
+    LuminanceSource newSource = binarizer.getLuminanceSource().rotateCounterClockwise45();
     return new BinaryBitmap(binarizer.createBinarizer(newSource));
   }
 

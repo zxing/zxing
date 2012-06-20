@@ -102,12 +102,23 @@ public abstract class LuminanceSource {
   }
 
   /**
-   * Returns a new object with rotated image data. Only callable if isRotateSupported() is true.
+   * Returns a new object with rotated image data by 90 degrees counterclockwise.
+   * Only callable if {@link #isRotateSupported()} is true.
    *
    * @return A rotated version of this object.
    */
   public LuminanceSource rotateCounterClockwise() {
-    throw new UnsupportedOperationException("This luminance source does not support rotation.");
+    throw new UnsupportedOperationException("This luminance source does not support rotation by 90 degrees.");
+  }
+
+  /**
+   * Returns a new object with rotated image data by 45 degrees counterclockwise.
+   * Only callable if {@link #isRotateSupported()} is true.
+   *
+   * @return A rotated version of this object.
+   */
+  public LuminanceSource rotateCounterClockwise45() {
+    throw new UnsupportedOperationException("This luminance source does not support rotation by 45 degrees.");
   }
 
   @Override
