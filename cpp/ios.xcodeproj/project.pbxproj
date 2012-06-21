@@ -265,7 +265,7 @@
 		0867D690FE84028FC02AAC07 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0430;
+				LastUpgradeCheck = 0450;
 			};
 			buildConfigurationList = 1DEB922208733DC00010E9CD /* Build configuration list for PBXProject "ios" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -357,6 +357,8 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = ios_Prefix.pch;
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				"GCC_THUMB_SUPPORT[arch=armv6]" = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INSTALL_PATH = /usr/local/lib;
 				PRODUCT_NAME = zxing;
 				WARNING_CFLAGS = (
@@ -377,6 +379,8 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = ios_Prefix.pch;
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				"GCC_THUMB_SUPPORT[arch=armv6]" = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INSTALL_PATH = /usr/local/lib;
 				PRODUCT_NAME = zxing;
 				WARNING_CFLAGS = (
@@ -487,6 +491,8 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = ios_Prefix.pch;
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				"GCC_THUMB_SUPPORT[arch=armv6]" = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INSTALL_PATH = /usr/local/lib;
 				PRODUCT_NAME = zxing;
 				WARNING_CFLAGS = (
@@ -536,6 +542,8 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = ios_Prefix.pch;
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				"GCC_THUMB_SUPPORT[arch=armv6]" = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INSTALL_PATH = /usr/local/lib;
 				PRODUCT_NAME = zxing;
 				WARNING_CFLAGS = (

@@ -185,7 +185,7 @@
 		3BA99649159122210056A230 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0430;
+				LastUpgradeCheck = 0450;
 			};
 			buildConfigurationList = 3BA9964C159122210056A230 /* Build configuration list for PBXProject "bare" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -307,6 +307,7 @@
 					"$(inherited)",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				"GCC_THUMB_SUPPORT[arch=armv6]" = NO;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -330,6 +331,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				"GCC_THUMB_SUPPORT[arch=armv6]" = NO;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -350,6 +352,7 @@
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "bare/bare-Prefix.pch";
+				"GCC_THUMB_SUPPORT[arch=armv6]" = NO;
 				HEADER_SEARCH_PATHS = (
 					objc/cpp/core/src,
 					objc/src,
@@ -360,6 +363,7 @@
 					"\"$(SRCROOT)/../../../../../../Library/Developer/Xcode/DerivedData/bare-ceenmvkaxbzcsubayrtaunypjmgx/Build/Products/Debug-iphoneos\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALID_ARCHS = "armv7 armv6";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -370,6 +374,7 @@
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "bare/bare-Prefix.pch";
+				"GCC_THUMB_SUPPORT[arch=armv6]" = NO;
 				HEADER_SEARCH_PATHS = (
 					objc/cpp/core/src,
 					objc/src,
@@ -380,6 +385,7 @@
 					"\"$(SRCROOT)/../../../../../../Library/Developer/Xcode/DerivedData/bare-ceenmvkaxbzcsubayrtaunypjmgx/Build/Products/Debug-iphoneos\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALID_ARCHS = "armv7 armv6";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
