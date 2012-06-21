@@ -35,10 +35,6 @@
 
 static NSMutableDictionary *iconsByClass = nil;
 
-+ (NSString *)typeName {
-  return NSStringFromClass(self);
-}
-
 - (NSString *)stringForDisplay {
   return @"{none}";
 }
@@ -46,11 +42,15 @@ static NSMutableDictionary *iconsByClass = nil;
 #define ICON_SIZE 40
 #define ICON_INSIDE 36
 
++ (NSString *)typeName {
+  return NSStringFromClass(self);
+}
+
 + (UIImage *)icon {
   if (iconsByClass == nil) {
     iconsByClass = [[NSMutableDictionary alloc] initWithCapacity:16];
   }
-  UIImage *icon = [iconsByClass objectForKey:[self class]];
+  UIImage *icon = [iconsByClass objectForKey:NSStringFromClass([self class])];
   if (icon == nil) {
     UIGraphicsBeginImageContext(CGSizeMake(ICON_SIZE, ICON_SIZE));
     CGContextRef ctx = UIGraphicsGetCurrentContext();
@@ -59,7 +59,7 @@ static NSMutableDictionary *iconsByClass = nil;
     UIRectFill(CGRectMake(0, 0, ICON_SIZE, ICON_SIZE));
     
     [[UIColor blackColor] set];
-    NSString *s = [[self class] typeName];
+    NSString *s = NSStringFromClass([self class]);
     UIFont *font = [UIFont systemFontOfSize:16];
     CGSize stringSize = [s sizeWithFont:font];
     float xScale = fminf(1.0, ICON_INSIDE / stringSize.width);
@@ -74,8 +74,11 @@ static NSMutableDictionary *iconsByClass = nil;
     
     [s drawAtPoint:CGPointMake(0, 0) withFont:font];
     
+    // N.B.: I think this is overretained but it's static so doesn't matter and
+    // I don't want to test right now. (smp)
+
     icon = [UIGraphicsGetImageFromCurrentImageContext() retain];
-    [iconsByClass setObject:icon forKey:[self class]];
+    [iconsByClass setObject:icon forKey:NSStringFromClass([self class])];
     UIGraphicsEndImageContext();
   }
   return icon;

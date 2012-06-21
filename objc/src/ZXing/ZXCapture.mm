@@ -223,10 +223,10 @@ static bool isIPad();
     NSMutableDictionary* attributes =
       [NSMutableDictionary dictionaryWithObject:value forKey:key]; 
     key = (NSString*)kCVPixelBufferWidthKey;
-    value = [NSNumber numberWithUnsignedInt:width];
+    value = [NSNumber numberWithUnsignedLong:width];
     [attributes setObject:value forKey:key]; 
     key = (NSString*)kCVPixelBufferHeightKey;
-    value = [NSNumber numberWithUnsignedInt:height];
+    value = [NSNumber numberWithUnsignedLong:height];
     [attributes setObject:value forKey:key]; 
     [output ZXQT(setPixelBufferAttributes:)ZXAV(setVideoSettings:)attributes];
 }
@@ -458,7 +458,7 @@ ZXAV(didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer)
     [self performSelectorOnMainThread:@selector(setOutputAttributes) withObject:nil waitUntilDone:NO];
     reported_width = size.width;
     reported_height = size.height;
-    if ([delegate  respondsTo:@selector(captureSize:width:height:)]) {
+    if ([delegate  respondsToSelector:@selector(captureSize:width:height:)]) {
       [delegate captureSize:self
                       width:[NSNumber numberWithFloat:size.width]
                      height:[NSNumber numberWithFloat:size.height]];

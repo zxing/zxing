@@ -230,14 +230,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		1FB43016128FFDBB002D63E8 /* dependencies */ = {
-			isa = PBXGroup;
-			children = (
-				1FB43017128FFDCD002D63E8 /* ZXingWidget.xcodeproj */,
-			);
-			name = dependencies;
-			sourceTree = "<group>";
-		};
 		1FB43018128FFDCD002D63E8 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -278,10 +270,10 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				1FB43017128FFDCD002D63E8 /* ZXingWidget.xcodeproj */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
-				1FB43016128FFDBB002D63E8 /* dependencies */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
 			);
@@ -362,7 +354,7 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0430;
+				LastUpgradeCheck = 0450;
 			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Barcodes" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -617,10 +609,17 @@
 					../../cpp/core/src,
 					"../ZXingWidget/Classes/**",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 4.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
+				VALID_ARCHS = "armv7 armv6";
+				WARNING_CFLAGS = (
+					"-Wall",
+					"-Wextra",
+					"-Werror",
+					"-Wno-unused-parameter",
+				);
 			};
 			name = Distribution;
 		};
@@ -661,9 +660,17 @@
 					../../cpp/core/src,
 					"../ZXingWidget/Classes/**",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 4.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				ONLY_ACTIVE_ARCH = YES;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
+				VALID_ARCHS = "armv7 armv6";
+				WARNING_CFLAGS = (
+					"-Wall",
+					"-Wextra",
+					"-Werror",
+					"-Wno-unused-parameter",
+				);
 			};
 			name = Debug;
 		};
@@ -685,10 +692,17 @@
 					../../cpp/core/src,
 					"../ZXingWidget/Classes/**",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 4.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
+				VALID_ARCHS = "armv7 armv6";
+				WARNING_CFLAGS = (
+					"-Wall",
+					"-Wextra",
+					"-Werror",
+					"-Wno-unused-parameter",
+				);
 			};
 			name = Release;
 		};

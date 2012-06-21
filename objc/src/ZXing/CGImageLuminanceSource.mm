@@ -23,9 +23,9 @@ namespace zxing {
 CGImageRef CGImageLuminanceSource::createImageFromBuffer
   (CVPixelBufferRef buffer, int left, int top, int width, int height)
 {
-  int bytesPerRow = CVPixelBufferGetBytesPerRow(buffer); 
-  int dataWidth = CVPixelBufferGetWidth(buffer); 
-  int dataHeight = CVPixelBufferGetHeight(buffer); 
+  int bytesPerRow = (int)CVPixelBufferGetBytesPerRow(buffer); 
+  int dataWidth = (int)CVPixelBufferGetWidth(buffer); 
+  int dataHeight = (int)CVPixelBufferGetHeight(buffer); 
     
   if (left + width > dataWidth ||
       top + height > dataHeight || 
@@ -82,8 +82,8 @@ CGImageRef CGImageLuminanceSource::createImageFromBuffer
     (buffer,
      0,
      0,
-     CVPixelBufferGetWidth(buffer),
-     CVPixelBufferGetHeight(buffer));
+     (int)CVPixelBufferGetWidth(buffer),
+     (int)CVPixelBufferGetHeight(buffer));
 }
 
 CGImageLuminanceSource::CGImageLuminanceSource(CVPixelBufferRef buffer) 
@@ -115,7 +115,8 @@ CGImageLuminanceSource::CGImageLuminanceSource
 void
 CGImageLuminanceSource::init(CGImageRef cgimage)
 {
-  init(cgimage, 0, 0, CGImageGetWidth(cgimage), CGImageGetHeight(cgimage));
+  init(cgimage,
+       0, 0, (int)CGImageGetWidth(cgimage), (int)CGImageGetHeight(cgimage));
 }
 
 void
@@ -127,8 +128,8 @@ CGImageLuminanceSource::init
   top_ = top;
   width_ = width;
   height_ = height;
-  dataWidth_ = CGImageGetWidth(image_);
-  dataHeight_ = CGImageGetHeight(image_);
+  dataWidth_ = (int)CGImageGetWidth(image_);
+  dataHeight_ = (int)CGImageGetHeight(image_);
 
   if (left_ + width_ > dataWidth_ ||
       top_ + height_ > dataHeight_ ||

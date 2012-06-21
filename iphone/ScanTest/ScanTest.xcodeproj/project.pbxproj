@@ -11,13 +11,13 @@
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		1F027F8511A7BB77006B06DE /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F027F8411A7BB77006B06DE /* libiconv.dylib */; };
-		1F5924BF128955A6006245C2 /* libZXingWidget.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F027F7E11A7BAD4006B06DE /* libZXingWidget.a */; };
 		1FF586FD11BBD81D00E8E868 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1FF586FC11BBD81D00E8E868 /* main.mm */; };
 		2892E4100DC94CBA00A64D0F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2892E40F0DC94CBA00A64D0F /* CoreGraphics.framework */; };
 		28AD73600D9D9599002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD735F0D9D9599002E5188 /* MainWindow.xib */; };
 		28C286E10D94DF7D0034E888 /* RootViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 28C286E00D94DF7D0034E888 /* RootViewController.mm */; };
 		28F335F11007B36200424DE2 /* RootViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28F335F01007B36200424DE2 /* RootViewController.xib */; };
 		3B0A5DB91444C492000EC568 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3B0A5DB81444C492000EC568 /* Icon.png */; };
+		3B43FDCB15939575001CD5C9 /* libZXingWidget.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F027F7E11A7BAD4006B06DE /* libZXingWidget.a */; };
 		3BCED5C8120F84C900131FA0 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BCED5C7120F84C900131FA0 /* AVFoundation.framework */; };
 		3BCED5CE120F84E000131FA0 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BCED5CD120F84E000131FA0 /* CoreVideo.framework */; };
 		3BCED5EB120F885C00131FA0 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BCED5EA120F885C00131FA0 /* CoreMedia.framework */; };
@@ -33,7 +33,7 @@
 			remoteGlobalIDString = D2AAC07E0554694100DB518D;
 			remoteInfo = ZXingWidget;
 		};
-		1F027F8011A7BB06006B06DE /* PBXContainerItemProxy */ = {
+		3B43FDC915939570001CD5C9 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 1F027F7611A7BAD4006B06DE /* ZXingWidget.xcodeproj */;
 			proxyType = 1;
@@ -79,6 +79,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3B43FDCB15939575001CD5C9 /* libZXingWidget.a in Frameworks */,
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
 				2892E4100DC94CBA00A64D0F /* CoreGraphics.framework in Frameworks */,
@@ -87,7 +88,6 @@
 				3BCED5C8120F84C900131FA0 /* AVFoundation.framework in Frameworks */,
 				3BCED5CE120F84E000131FA0 /* CoreVideo.framework in Frameworks */,
 				3BCED5EB120F885C00131FA0 /* CoreMedia.framework in Frameworks */,
-				1F5924BF128955A6006245C2 /* libZXingWidget.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -114,14 +114,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		1F027F6D11A7BAB1006B06DE /* Dependencies */ = {
-			isa = PBXGroup;
-			children = (
-				1F027F7611A7BAD4006B06DE /* ZXingWidget.xcodeproj */,
-			);
-			name = Dependencies;
-			sourceTree = "<group>";
-		};
 		1F027F7711A7BAD4006B06DE /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -134,10 +126,10 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				1F027F7611A7BAD4006B06DE /* ZXingWidget.xcodeproj */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
-				1F027F6D11A7BAB1006B06DE /* Dependencies */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
 			);
@@ -194,7 +186,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				1F027F8111A7BB06006B06DE /* PBXTargetDependency */,
+				3B43FDCA15939570001CD5C9 /* PBXTargetDependency */,
 			);
 			name = ScanTest;
 			productName = ScanTest;
@@ -207,7 +199,7 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0430;
+				LastUpgradeCheck = 0450;
 			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "ScanTest" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -280,10 +272,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		1F027F8111A7BB06006B06DE /* PBXTargetDependency */ = {
+		3B43FDCA15939570001CD5C9 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = ZXingWidget;
-			targetProxy = 1F027F8011A7BB06006B06DE /* PBXContainerItemProxy */;
+			targetProxy = 3B43FDC915939570001CD5C9 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -303,6 +295,7 @@
 				"GCC_THUMB_SUPPORT[arch=armv6]" = NO;
 				INFOPLIST_FILE = "ScanTest-Info.plist";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "";
 				PRESERVE_DEAD_CODE_INITS_AND_TERMS = YES;
 				PRODUCT_NAME = ScanTest;
