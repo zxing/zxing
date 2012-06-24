@@ -45,7 +45,7 @@ final class CameraConfigurationManager {
   // below will still select the default (presumably 320x240) size for these. This prevents
   // accidental selection of very low resolution on some devices.
   private static final int MIN_PREVIEW_PIXELS = 470 * 320; // normal screen
-  private static final int MAX_PREVIEW_PIXELS = 800 * 600; // more than large/HD screen
+  private static final int MAX_PREVIEW_PIXELS = 960 * 720; // uses full screen resolution on all 'large' screens
 
   private final Context context;
   private Point screenResolution;
