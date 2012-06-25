@@ -54,7 +54,8 @@
   <target name="javadoc">
     <delete dir="docs/javadoc"/>
     <mkdir dir="docs/javadoc"/>
-    <javadoc failonerror="true"
+    <javadoc executable="${java7.home}/bin/javadoc"
+             failonerror="true"
              destdir="docs/javadoc"
              footer="
                &lt;script type=&quot;text/javascript&quot;&gt;;
@@ -69,6 +70,7 @@
                &lt;/script&gt;">
       <sourcepath>
         <pathelement location="android/src"/>
+        <pathelement location="android-integration/src"/>
         <pathelement location="android/gen"/>        
         <pathelement location="core/src"/>
         <pathelement location="javase/src"/>
