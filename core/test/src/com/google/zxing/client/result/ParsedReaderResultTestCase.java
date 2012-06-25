@@ -39,7 +39,7 @@ public final class ParsedReaderResultTestCase extends Assert {
         ParsedResultType.TEXT);
     doTestResult("This: a test with lots of @ nearly-random punctuation! No? OK then.",
         "This: a test with lots of @ nearly-random punctuation! No? OK then.",
-        ParsedResultType.TEXT);
+        ParsedResultType.URI); // Yeah, it's OK that this is thought of as maybe a URI
   }
 
   @Test
@@ -50,7 +50,7 @@ public final class ParsedReaderResultTestCase extends Assert {
     doTestResult("MEBKM:TITLE:Google;URL:google.com;;", "Google\nhttp://google.com",
         ParsedResultType.URI);
     doTestResult("MEBKM:URL:http://google.com;;", "http://google.com", ParsedResultType.URI);
-    doTestResult("MEBKM:URL:HTTPS://google.com;;", "https://google.com", ParsedResultType.URI);
+    doTestResult("MEBKM:URL:HTTPS://google.com;;", "HTTPS://google.com", ParsedResultType.URI);
   }
 
   @Test
@@ -72,7 +72,8 @@ public final class ParsedReaderResultTestCase extends Assert {
     doTestResult("MATMSG:SUB:Stuff;BODY:This is some text;TO:srowen@example.org;;",
         "srowen@example.org\nStuff\nThis is some text", ParsedResultType.EMAIL_ADDRESS);
     doTestResult("TO:srowen@example.org;SUB:Stuff;BODY:This is some text;;",
-        "TO:srowen@example.org;SUB:Stuff;BODY:This is some text;;", ParsedResultType.TEXT);
+        "TO:srowen@example.org;SUB:Stuff;BODY:This is some text;;", ParsedResultType.URI);
+    // Yeah, it's OK that this is thought of as maybe a URI as long as it's not EMAIL_ADDRESS
   }
 
   @Test
@@ -152,7 +153,7 @@ public final class ParsedReaderResultTestCase extends Assert {
     doTestResult("http://google.com", "http://google.com", ParsedResultType.URI);
     doTestResult("google.com", "http://google.com", ParsedResultType.URI);
     doTestResult("https://google.com", "https://google.com", ParsedResultType.URI);
-    doTestResult("HTTP://google.com", "http://google.com", ParsedResultType.URI);
+    doTestResult("HTTP://google.com", "HTTP://google.com", ParsedResultType.URI);
     doTestResult("http://google.com/foobar", "http://google.com/foobar", ParsedResultType.URI);
     doTestResult("https://google.com:443/foobar", "https://google.com:443/foobar", ParsedResultType.URI);
     doTestResult("google.com:443", "http://google.com:443", ParsedResultType.URI);
@@ -222,12 +223,13 @@ public final class ParsedReaderResultTestCase extends Assert {
     doTestResult("BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504\r\nEND:VEVENT",
         "foo\n20080504", ParsedResultType.CALENDAR);
     doTestResult("BEGIN:VEVENT\r\nDTEND:20080505T\r\nEND:VEVENT",
-        "BEGIN:VEVENT\r\nDTEND:20080505T\r\nEND:VEVENT", ParsedResultType.TEXT);
+        "BEGIN:VEVENT\r\nDTEND:20080505T\r\nEND:VEVENT", ParsedResultType.URI);
+    // Yeah, it's OK that this is thought of as maybe a URI as long as it's not CALENDAR
     // Make sure illegal entries without newlines don't crash
     doTestResult(
         "BEGIN:VEVENTSUMMARY:EventDTSTART:20081030T122030ZDTEND:20081030T132030ZEND:VEVENT",
         "BEGIN:VEVENTSUMMARY:EventDTSTART:20081030T122030ZDTEND:20081030T132030ZEND:VEVENT",
-        ParsedResultType.TEXT);
+        ParsedResultType.URI);
   }
 
   @Test

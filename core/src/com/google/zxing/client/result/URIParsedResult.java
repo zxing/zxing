@@ -16,7 +16,6 @@
 
 package com.google.zxing.client.result;
 
-import java.util.Locale;
 import java.util.regex.Pattern;
 
 /**
@@ -78,7 +77,7 @@ public final class URIParsedResult extends ParsedResult {
       uri = "http://" + uri;
     } else {
       // Lowercase protocol to avoid problems
-      uri = uri.substring(0, protocolEnd).toLowerCase(Locale.ENGLISH) + uri.substring(protocolEnd);
+      uri = uri.substring(0, protocolEnd) + uri.substring(protocolEnd);
     }
     return uri;
   }
