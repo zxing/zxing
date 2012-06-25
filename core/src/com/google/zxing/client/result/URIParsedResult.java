@@ -75,9 +75,6 @@ public final class URIParsedResult extends ParsedResult {
     } else if (isColonFollowedByPortNumber(uri, protocolEnd)) {
       // Found a colon, but it looks like it is after the host, so the protocol is still missing
       uri = "http://" + uri;
-    } else {
-      // Lowercase protocol to avoid problems
-      uri = uri.substring(0, protocolEnd) + uri.substring(protocolEnd);
     }
     return uri;
   }
