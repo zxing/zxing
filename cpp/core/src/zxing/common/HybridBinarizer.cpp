@@ -27,8 +27,8 @@ using namespace zxing;
 
 namespace {
   const int BLOCK_SIZE_POWER = 3;
-  const int BLOCK_SIZE = 1 << BLOCK_SIZE_POWER;
-  const int BLOCK_SIZE_MASK = BLOCK_SIZE - 1;
+  const int BLOCK_SIZE = 1 << BLOCK_SIZE_POWER; // ...0100...00
+  const int BLOCK_SIZE_MASK = BLOCK_SIZE - 1;   // ...0011...11
   const int MINIMUM_DIMENSION = BLOCK_SIZE * 5;
 }
 
@@ -45,20 +45,21 @@ HybridBinarizer::createBinarizer(Ref<LuminanceSource> source) {
   return Ref<Binarizer> (new HybridBinarizer(source));
 }
 
+
+/**
+ * Calculates the final BitMatrix once for all requests. This could be called once from the
+ * constructor instead, but there are some advantages to doing it lazily, such as making
+ * profiling easier, and not doing heavy lifting when callers don't expect it.
+ */
 Ref<BitMatrix> HybridBinarizer::getBlackMatrix() {
-  // Calculates the final BitMatrix once for all requests. This could
-  // be called once from the constructor instead, but there are some
-  // advantages to doing it lazily, such as making profiling easier,
-  // and not doing heavy lifting when callers don't expect it.
   if (matrix_) {
     return matrix_;
   }
   LuminanceSource& source = *getLuminanceSource();
-  if (source.getWidth() >= MINIMUM_DIMENSION &&
-      source.getHeight() >= MINIMUM_DIMENSION) {
+  int width = source.getWidth();
+  int height = source.getHeight();
+  if (width >= MINIMUM_DIMENSION && height >= MINIMUM_DIMENSION) {
     unsigned char* luminances = source.getMatrix();
-    int width = source.getWidth();
-    int height = source.getHeight();
     int subWidth = width >> BLOCK_SIZE_POWER;
     if ((width & BLOCK_SIZE_MASK) != 0) {
       subWidth++;
@@ -93,6 +94,12 @@ Ref<BitMatrix> HybridBinarizer::getBlackMatrix() {
   return matrix_;
 }
 
+namespace {
+  inline int cap(int value, int min, int max) {
+    return value < min ? min : value > max ? max : value;
+  }
+}
+
 void
 HybridBinarizer::calculateThresholdForBlock(unsigned char* luminances,
                                             int subWidth,
@@ -103,18 +110,18 @@ HybridBinarizer::calculateThresholdForBlock(unsigned char* luminances,
                                             Ref<BitMatrix> const& matrix) {
   for (int y = 0; y < subHeight; y++) {
     int yoffset = y << BLOCK_SIZE_POWER;
-    if (yoffset + BLOCK_SIZE >= height) {
-      yoffset = height - BLOCK_SIZE;
+    int maxYOffset = height - BLOCK_SIZE;
+    if (yoffset > maxYOffset) {
+      yoffset = maxYOffset;
     }
     for (int x = 0; x < subWidth; x++) {
       int xoffset = x << BLOCK_SIZE_POWER;
-      if (xoffset + BLOCK_SIZE >= width) {
-        xoffset = width - BLOCK_SIZE;
+      int maxXOffset = width - BLOCK_SIZE;
+      if (xoffset > maxXOffset) {
+        xoffset = maxXOffset;
       }
-      int left = (x > 1) ? x : 2;
-      left = (left < subWidth - 2) ? left : subWidth - 3;
-      int top = (y > 1) ? y : 2;
-      top = (top < subHeight - 2) ? top : subHeight - 3;
+      int left = cap(x, 2, subWidth - 3);
+      int top = cap(y, 2, subHeight - 3);
       int sum = 0;
       for (int z = -2; z <= 2; z++) {
         int *blackRow = &blackPoints[(top + z) * subWidth];
@@ -125,17 +132,17 @@ HybridBinarizer::calculateThresholdForBlock(unsigned char* luminances,
         sum += blackRow[left + 2];
       }
       int average = sum / 25;
-      threshold8x8Block(luminances, xoffset, yoffset, average, width, matrix);
+      thresholdBlock(luminances, xoffset, yoffset, average, width, matrix);
     }
   }
 }
 
-void HybridBinarizer::threshold8x8Block(unsigned char* luminances,
-                                        int xoffset,
-                                        int yoffset,
-                                        int threshold,
-                                        int stride,
-                                        Ref<BitMatrix> const& matrix) {
+void HybridBinarizer::thresholdBlock(unsigned char* luminances,
+                                     int xoffset,
+                                     int yoffset,
+                                     int threshold,
+                                     int stride,
+                                     Ref<BitMatrix> const& matrix) {
   for (int y = 0, offset = yoffset * stride + xoffset;
        y < BLOCK_SIZE;
        y++,  offset += stride) {
@@ -157,20 +164,25 @@ namespace {
 }
 
 
-int* HybridBinarizer::calculateBlackPoints(unsigned char* luminances, int subWidth, int subHeight,
-    int width, int height) {
+int* HybridBinarizer::calculateBlackPoints(unsigned char* luminances,
+                                           int subWidth,
+                                           int subHeight,
+                                           int width,
+                                           int height) {
   const int minDynamicRange = 24;
 
   int *blackPoints = new int[subHeight * subWidth];
   for (int y = 0; y < subHeight; y++) {
     int yoffset = y << BLOCK_SIZE_POWER;
-    if (yoffset + BLOCK_SIZE >= height) {
-      yoffset = height - BLOCK_SIZE;
+    int maxYOffset = height - BLOCK_SIZE;
+    if (yoffset > maxYOffset) {
+      yoffset = maxYOffset;
     }
     for (int x = 0; x < subWidth; x++) {
       int xoffset = x << BLOCK_SIZE_POWER;
-      if (xoffset + BLOCK_SIZE >= width) {
-        xoffset = width - BLOCK_SIZE;
+      int maxXOffset = width - BLOCK_SIZE;
+      if (xoffset > maxXOffset) {
+        xoffset = maxXOffset;
       }
       int sum = 0;
       int min = 0xFF;
