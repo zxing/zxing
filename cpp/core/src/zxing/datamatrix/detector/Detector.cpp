@@ -288,7 +288,7 @@ Ref<ResultPoint> Detector::correctTopRight(Ref<ResultPoint> bottomLeft,
     Ref<ResultPoint> bottomRight, Ref<ResultPoint> topLeft, Ref<ResultPoint> topRight,
     int dimension) {
 
-  float corr = distance(bottomLeft, bottomRight) / (float) dimension;
+  float corr = distance(bottomLeft, topLeft) / (float) dimension;
   int norm = distance(topLeft, topRight);
   float cos = (topRight->getX() - topLeft->getX()) / norm;
   float sin = (topRight->getY() - topLeft->getY()) / norm;

@@ -266,7 +266,7 @@ Processing: ../core/test/data/blackbox/ean13-5/14.png ... FAILED
    Detected: zxing::ReaderException: No code detected
 Processing: ../core/test/data/blackbox/ean13-5/15.png ... FAILED
    Expected: 9780446579803
-   Detected: zxing::ReaderException: No code detected
+   Detected: zxing::IllegalArgumentException: Invalid position (ReedSolomonDecoder)
 Processing: ../core/test/data/blackbox/ean13-5/16.png ... FAILED
    Expected: 9780446579803
    Detected: zxing::ReaderException: No code detected
@@ -1039,13 +1039,13 @@ Processing: ../core/test/data/blackbox/aztec-2/08.png ... FAILED
    Detected: zxing::ReaderException: No code detected
 Processing: ../core/test/data/blackbox/aztec-2/09.png ... FAILED
    Expected: mailto:zxing@googlegroups.com
-   Detected: zxing::IllegalArgumentException: Invalid position (ReedSolomonDecoder)
+   Detected: zxing::ReaderException: No code detected
 Processing: ../core/test/data/blackbox/aztec-2/10.png ... FAILED
    Expected: mailto:zxing@googlegroups.com
    Detected: zxing::ReaderException: No code detected
 Processing: ../core/test/data/blackbox/aztec-2/11.png ... FAILED
    Expected: mailto:zxing@googlegroups.com
-   Detected: zxing::IllegalArgumentException: Invalid position (ReedSolomonDecoder)
+   Detected: zxing::ReaderException: No code detected
 Processing: ../core/test/data/blackbox/aztec-2/12.png ... FAILED
    Expected: mailto:zxing@googlegroups.com
    Detected: zxing::ReaderException: No code detected
