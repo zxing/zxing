@@ -204,15 +204,14 @@ namespace oned {
         counters[counterPosition]++;
       } else {
         if (counterPosition == patternLength - 1) {
-          if (toNarrowWidePattern(counters, countersLen) == ASTERISK_ENCODING) {
-            // Look for whitespace before start pattern, >= 50% of width of
-            // start pattern.
-            if (row->isRange(std::max(0, patternStart - ((i - patternStart) >> 1)), patternStart, false)) {
-              int* resultValue = new int[2];
-              resultValue[0] = patternStart;
-              resultValue[1] = i;
-              return resultValue;
-            }
+          // Look for whitespace before start pattern, >= 50% of width of
+          // start pattern.
+          if (toNarrowWidePattern(counters, countersLen) == ASTERISK_ENCODING &&
+              row->isRange(std::max(0, patternStart - ((i - patternStart) >> 1)), patternStart, false)) {
+            int* resultValue = new int[2];
+            resultValue[0] = patternStart;
+            resultValue[1] = i;
+            return resultValue;
           }
           patternStart += counters[0] + counters[1];
           for (int y = 2; y < patternLength; y++) {
