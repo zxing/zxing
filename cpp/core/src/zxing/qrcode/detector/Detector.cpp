@@ -121,12 +121,14 @@ Ref<PerspectiveTransform> Detector::createTransform(Ref<ResultPoint> topLeft, Re
   if (alignmentPattern != 0) {
     bottomRightX = alignmentPattern->getX();
     bottomRightY = alignmentPattern->getY();
-    sourceBottomRightX = sourceBottomRightY = dimMinusThree - 3.0f;
+    sourceBottomRightX = dimMinusThree - 3.0f;
+    sourceBottomRightY = sourceBottomRightX;
   } else {
     // Don't have an alignment pattern, just make up the bottom-right point
     bottomRightX = (topRight->getX() - topLeft->getX()) + bottomLeft->getX();
     bottomRightY = (topRight->getY() - topLeft->getY()) + bottomLeft->getY();
-    sourceBottomRightX = sourceBottomRightY = dimMinusThree;
+    sourceBottomRightX = dimMinusThree;
+    sourceBottomRightY = dimMinusThree;
   }
 
   Ref<PerspectiveTransform> transform(PerspectiveTransform::quadrilateralToQuadrilateral(3.5f, 3.5f, dimMinusThree, 3.5f, sourceBottomRightX,

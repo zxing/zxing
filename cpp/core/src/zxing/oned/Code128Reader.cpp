@@ -174,16 +174,15 @@ namespace zxing {
 								bestMatch = startCode;
 							}
 						}
-						if (bestMatch >= 0) {
-							// Look for whitespace before start pattern, >= 50% of width of start pattern
-              if (row->isRange(std::max(0, patternStart - (i - patternStart) / 2), patternStart,
+            // Look for whitespace before start pattern, >= 50% of width of start pattern
+						if (bestMatch >= 0 &&
+                row->isRange(std::max(0, patternStart - (i - patternStart) / 2), patternStart,
 							    false)) {
-								int* resultValue = new int[3];
-								resultValue[0] = patternStart;
-								resultValue[1] = i;
-								resultValue[2] = bestMatch;
-								return resultValue;
-							}
+              int* resultValue = new int[3];
+              resultValue[0] = patternStart;
+              resultValue[1] = i;
+              resultValue[2] = bestMatch;
+              return resultValue;
 						}
 						patternStart += counters[0] + counters[1];
 						for (int y = 2; y < patternLength; y++) {

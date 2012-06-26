@@ -1,3 +1,4 @@
+// -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
 /*
  *  DecodedBitStreamParser.cpp
  *  zxing
@@ -141,9 +142,7 @@ int DecodedBitStreamParser::decodeAsciiSegment(Ref<BitSource> bits, ostringstrea
       // Ignore this symbol for now
     } else if (oneByte >= 242) { // Not to be used in ASCII encodation
       // ... but work around encoders that end with 254, latch back to ASCII
-      if (oneByte == 254 && bits->available() == 0) {
-        // Ignore
-      } else {
+      if (oneByte != 254 || bits->available() != 0) {
         throw FormatException("Not to be used in ASCII encodation");
       }
     }
