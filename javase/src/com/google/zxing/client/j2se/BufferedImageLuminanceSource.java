@@ -51,18 +51,20 @@ public final class BufferedImageLuminanceSource extends LuminanceSource {
     // The color of fully-transparent pixels is irrelevant. They are often, technically, fully-transparent
     // black (0 alpha, and then 0 RGB). They are often used, of course as the "white" area in a
     // barcode image. Force any such pixel to be white:
-    int[] buffer = new int[width];
-    for (int y = top; y < top + height; y++) {
-      image.getRGB(left, y, width, 1, buffer, 0, sourceWidth);
-      boolean rowChanged = false;
-      for (int x = 0; x < width; x++) {
-        if ((buffer[x] & 0xFF000000) == 0) {
-          buffer[x] = 0xFFFFFFFF; // = white
-          rowChanged = true;
+    if (image.getAlphaRaster() != null) {
+      int[] buffer = new int[width];
+      for (int y = top; y < top + height; y++) {
+        image.getRGB(left, y, width, 1, buffer, 0, sourceWidth);
+        boolean rowChanged = false;
+        for (int x = 0; x < width; x++) {
+          if ((buffer[x] & 0xFF000000) == 0) {
+            buffer[x] = 0xFFFFFFFF; // = white
+            rowChanged = true;
+          }
         }
-      }
-      if (rowChanged) {
-        image.setRGB(left, y, width, 1, buffer, 0, sourceWidth);
+        if (rowChanged) {
+          image.setRGB(left, y, width, 1, buffer, 0, sourceWidth);
+        }
       }
     }
 
