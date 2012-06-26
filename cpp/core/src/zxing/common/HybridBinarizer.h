@@ -55,12 +55,12 @@ namespace zxing {
                                     int height,
                                     int blackPoints[],
                                     Ref<BitMatrix> const& matrix);
-    void threshold8x8Block(unsigned char* luminances,
-                           int xoffset,
-                           int yoffset,
-                           int threshold,
-                           int stride,
-                           Ref<BitMatrix> const& matrix);
+    void thresholdBlock(unsigned char* luminances,
+                        int xoffset,
+                        int yoffset,
+                        int threshold,
+                        int stride,
+                        Ref<BitMatrix> const& matrix);
 	};
 
 }
