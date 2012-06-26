@@ -94,8 +94,6 @@ vector<Ref<GenericGFPoly> > ReedSolomonDecoder::runEuclideanAlgorithm(Ref<Generi
 
   Ref<GenericGFPoly> rLast(a);
   Ref<GenericGFPoly> r(b);
-  Ref<GenericGFPoly> sLast(field->getOne());
-  Ref<GenericGFPoly> s(field->getZero());
   Ref<GenericGFPoly> tLast(field->getZero());
   Ref<GenericGFPoly> t(field->getOne());
 
@@ -103,10 +101,8 @@ vector<Ref<GenericGFPoly> > ReedSolomonDecoder::runEuclideanAlgorithm(Ref<Generi
   // Run Euclidean algorithm until r's degree is less than R/2
   while (r->getDegree() >= R / 2) {
     Ref<GenericGFPoly> rLastLast(rLast);
-    Ref<GenericGFPoly> sLastLast(sLast);
     Ref<GenericGFPoly> tLastLast(tLast);
     rLast = r;
-    sLast = s;
     tLast = t;
 
 
@@ -126,7 +122,6 @@ vector<Ref<GenericGFPoly> > ReedSolomonDecoder::runEuclideanAlgorithm(Ref<Generi
       r = r->addOrSubtract(rLast->multiplyByMonomial(degreeDiff, scale));
     }
 
-    s = q->multiply(sLast)->addOrSubtract(sLastLast);
     t = q->multiply(tLast)->addOrSubtract(tLastLast);
 
   }
