@@ -22,9 +22,11 @@
 #include <zxing/ResultPoint.h>
 #include <zxing/common/GridSampler.h>
 #include <zxing/datamatrix/detector/Detector.h>
-#include <cmath>
+#include <zxing/common/detector/math_utils.h>
 #include <sstream>
 #include <cstdlib>
+
+namespace math_utils = zxing::common::detector::math_utils;
 
 namespace zxing {
 namespace datamatrix {
@@ -327,12 +329,8 @@ bool Detector::isValid(Ref<ResultPoint> p) {
       && p->getY() < image_->getHeight();
 }
 
-// L2 distance
 int Detector::distance(Ref<ResultPoint> a, Ref<ResultPoint> b) {
-  return round(
-      (float) sqrt(
-          (double) (a->getX() - b->getX()) * (a->getX() - b->getX())
-              + (a->getY() - b->getY()) * (a->getY() - b->getY())));
+  return math_utils::round(ResultPoint::distance(a, b));
 }
 
 Ref<ResultPointsAndTransitions> Detector::transitionsBetween(Ref<ResultPoint> from,

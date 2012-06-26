@@ -28,8 +28,6 @@
 #include <zxing/DecodeHints.h>
 #include <zxing/aztec/AztecDetectorResult.h>
 
-#define ROUND(a) ((int)(a + 0.5f))
-
 namespace zxing {
     namespace aztec {
         
