@@ -1,3 +1,4 @@
+// -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
 /*
  *  WhiteRectangleDetector.cpp
  *  y_wmk
@@ -20,8 +21,10 @@
 
 #include <zxing/NotFoundException.h>
 #include <zxing/common/detector/WhiteRectangleDetector.h>
-#include <math.h>
+#include <zxing/common/detector/math_utils.h>
 #include <sstream>
+
+namespace math_utils = zxing::common::detector::math_utils;
 
 namespace zxing {
 using namespace std;
@@ -222,21 +225,14 @@ std::vector<Ref<ResultPoint> > WhiteRectangleDetector::detect() {
   }
 }
 
-/**
- * Ends up being a bit faster than Math.round(). This merely rounds its
- * argument to the nearest int, where x.5 rounds up.
- */
-int WhiteRectangleDetector::round(float d) {
-  return (int) (d + 0.5f);
-}
-
 Ref<ResultPoint> WhiteRectangleDetector::getBlackPointOnSegment(float aX, float aY, float bX, float bY) {
-  int dist = distanceL2(aX, aY, bX, bY);
+  int dist = math_utils::round(math_utils::distance(aX, aY, bX, bY));
   float xStep = (bX - aX) / dist;
   float yStep = (bY - aY) / dist;
+
   for (int i = 0; i < dist; i++) {
-    int x = round(aX + i * xStep);
-    int y = round(aY + i * yStep);
+    int x = math_utils::round(aX + i * xStep);
+    int y = math_utils::round(aY + i * yStep);
     if (image_->get(x, y)) {
       Ref<ResultPoint> point(new ResultPoint(x, y));
       return point;
@@ -244,12 +240,6 @@ Ref<ResultPoint> WhiteRectangleDetector::getBlackPointOnSegment(float aX, float 
   }
   Ref<ResultPoint> point(NULL);
   return point;
-}
-
-int WhiteRectangleDetector::distanceL2(float aX, float aY, float bX, float bY) {
-  float xDiff = aX - bX;
-  float yDiff = aY - bY;
-  return round((float)sqrt(xDiff * xDiff + yDiff * yDiff));
 }
 
 /**
