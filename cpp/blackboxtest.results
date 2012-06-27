@@ -95,7 +95,7 @@ Processing: ../core/test/data/blackbox/ean13-2/23.png ... FAILED
    Detected: zxing::ReaderException: No code detected
 Processing: ../core/test/data/blackbox/ean13-2/24.png ... FAILED
    Expected: 9784872348880
-   Detected: zxing::ReaderException: No code detected
+   Detected: zxing::IllegalArgumentException: Invalid position (ReedSolomonDecoder)
 Processing: ../core/test/data/blackbox/ean13-2/25.png ... FAILED
    Expected: 9784872348880
    Detected: zxing::ReaderException: No code detected
@@ -119,7 +119,7 @@ Processing: ../core/test/data/blackbox/ean13-3/09.jpg ... passed.
 Processing: ../core/test/data/blackbox/ean13-3/10.jpg ... passed.
 Processing: ../core/test/data/blackbox/ean13-3/11.jpg ... FAILED
    Expected: 9780596008574
-   Detected: zxing::ReaderException: No code detected
+   Detected: zxing::IllegalArgumentException: Invalid position (ReedSolomonDecoder)
 Processing: ../core/test/data/blackbox/ean13-3/12.jpg ... passed.
 Processing: ../core/test/data/blackbox/ean13-3/13.jpg ... passed.
 Processing: ../core/test/data/blackbox/ean13-3/14.jpg ... passed.
@@ -266,7 +266,7 @@ Processing: ../core/test/data/blackbox/ean13-5/14.png ... FAILED
    Detected: zxing::ReaderException: No code detected
 Processing: ../core/test/data/blackbox/ean13-5/15.png ... FAILED
    Expected: 9780446579803
-   Detected: zxing::IllegalArgumentException: Invalid position (ReedSolomonDecoder)
+   Detected: zxing::ReaderException: No code detected
 Processing: ../core/test/data/blackbox/ean13-5/16.png ... FAILED
    Expected: 9780446579803
    Detected: zxing::ReaderException: No code detected
@@ -593,7 +593,7 @@ Processing: ../core/test/data/blackbox/upca-4/6.jpg ... FAILED
    Detected: zxing::ReaderException: No code detected
 Processing: ../core/test/data/blackbox/upca-4/7.jpg ... FAILED
    Expected: 023942431015
-   Detected: zxing::ReaderException: No code detected
+   Detected: zxing::IllegalArgumentException: Invalid position (ReedSolomonDecoder)
 Processing: ../core/test/data/blackbox/upca-4/8.jpg ... passed.
 Processing: ../core/test/data/blackbox/upca-4/9.jpg ... FAILED
    Expected: 060410049235
@@ -1039,7 +1039,7 @@ Processing: ../core/test/data/blackbox/aztec-2/08.png ... FAILED
    Detected: zxing::ReaderException: No code detected
 Processing: ../core/test/data/blackbox/aztec-2/09.png ... FAILED
    Expected: mailto:zxing@googlegroups.com
-   Detected: zxing::ReaderException: No code detected
+   Detected: zxing::IllegalArgumentException: Invalid position (ReedSolomonDecoder)
 Processing: ../core/test/data/blackbox/aztec-2/10.png ... FAILED
    Expected: mailto:zxing@googlegroups.com
    Detected: zxing::ReaderException: No code detected
