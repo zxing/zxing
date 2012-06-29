@@ -80,6 +80,9 @@ public final class ViewfinderView extends View {
 
   @Override
   public void onDraw(Canvas canvas) {
+    if (cameraManager == null) {
+      return; // not ready yet, early draw before done configuring
+    }
     Rect frame = cameraManager.getFramingRect();
     if (frame == null) {
       return;
