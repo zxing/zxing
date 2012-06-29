@@ -19,7 +19,13 @@ package com.google.zxing.client.result;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * Tests {@link CalendarParsedResult}.
@@ -29,6 +35,17 @@ import org.junit.Test;
 public final class CalendarParsedResultTestCase extends Assert {
 
   private static final double EPSILON = 0.0000000001;
+
+  private static final DateFormat DATE_TIME_FORMAT = new SimpleDateFormat("yyyyMMdd'T'HHmmss'Z'", Locale.ENGLISH);
+  static {
+    DATE_TIME_FORMAT.setTimeZone(TimeZone.getTimeZone("GMT"));
+  }
+
+  @Before
+  public void setUp() {
+    Locale.setDefault(Locale.ENGLISH);
+    TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
+  }
 
   @Test
   public void testStartEnd() {
@@ -125,8 +142,8 @@ public final class CalendarParsedResultTestCase extends Assert {
            "Meeting with a friend\nlook at homepage first\n\n\n  \n",
            "Summary line",
            "Location, with, escaped, commas",
-           "20111110T110000",
-           "20111110T120000");
+           "20111110T110000Z",
+           "20111110T120000Z");
   }
 
   @Test
@@ -135,24 +152,24 @@ public final class CalendarParsedResultTestCase extends Assert {
            "DTSTART;VALUE=DATE:20111110\n" +
            "DTEND;VALUE=DATE:20111110\n" +
            "END:VEVENT",
-           null, null, null, "20111110", "20111110");
+           null, null, null, "20111110T000000Z", "20111110T000000Z");
   }
 
   private static void doTest(String contents,
                              String description,
                              String summary,
                              String location,
-                             String start,
-                             String end) {
-    doTest(contents, description, summary, location, start, end, null, Double.NaN, Double.NaN);
+                             String startString,
+                             String endString) {
+    doTest(contents, description, summary, location, startString, endString, null, Double.NaN, Double.NaN);
   }
 
   private static void doTest(String contents,
                              String description,
                              String summary,
                              String location,
-                             String start,
-                             String end,
+                             String startString,
+                             String endString,
                              String attendee,
                              double latitude,
                              double longitude) {
@@ -163,8 +180,8 @@ public final class CalendarParsedResultTestCase extends Assert {
     assertEquals(description, calResult.getDescription());
     assertEquals(summary, calResult.getSummary());
     assertEquals(location, calResult.getLocation());
-    assertEquals(start, calResult.getStart());
-    assertEquals(end, calResult.getEnd());
+    assertEquals(startString, DATE_TIME_FORMAT.format(calResult.getStart()));
+    assertEquals(endString, calResult.getEnd() == null ? null : DATE_TIME_FORMAT.format(calResult.getEnd()));
     assertEquals(attendee, calResult.getAttendee());
     assertEqualOrNaN(latitude, calResult.getLatitude());
     assertEqualOrNaN(longitude, calResult.getLongitude());

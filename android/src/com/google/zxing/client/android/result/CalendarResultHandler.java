@@ -23,22 +23,15 @@ import com.google.zxing.client.result.ParsedResult;
 import android.app.Activity;
 
 import java.text.DateFormat;
-import java.text.ParsePosition;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Locale;
 
 /**
  * Handles calendar entries encoded in QR Codes.
  *
  * @author dswitkin@google.com (Daniel Switkin)
+ * @author Sean Owen
  */
 public final class CalendarResultHandler extends ResultHandler {
-
-  private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyyMMdd", Locale.ENGLISH);
-  private static final DateFormat DATE_TIME_FORMAT = new SimpleDateFormat("yyyyMMdd'T'HHmmss", Locale.ENGLISH);
 
   private static final int[] buttons = {
       R.string.button_add_calendar
@@ -64,6 +57,7 @@ public final class CalendarResultHandler extends ResultHandler {
     if (index == 0) {
       addCalendarEvent(calendarResult.getSummary(),
                        calendarResult.getStart(),
+                       calendarResult.isStartAllDay(),
                        calendarResult.getEnd(),
                        calendarResult.getLocation(),
                        calendarResult.getDescription());
@@ -72,16 +66,25 @@ public final class CalendarResultHandler extends ResultHandler {
 
   @Override
   public CharSequence getDisplayContents() {
+
     CalendarParsedResult calResult = (CalendarParsedResult) getResult();
     StringBuilder result = new StringBuilder(100);
-    ParsedResult.maybeAppend(calResult.getSummary(), result);
-    String startString = calResult.getStart();
-    appendTime(startString, result, false, false);
 
-    String endString = calResult.getEnd();
-    if (endString != null) {
-      boolean sameStartEnd = startString.equals(endString);
-      appendTime(endString, result, true, sameStartEnd);
+    ParsedResult.maybeAppend(calResult.getSummary(), result);
+
+    Date start = calResult.getStart();
+    ParsedResult.maybeAppend(format(calResult.isStartAllDay(), start), result);
+
+    Date end = calResult.getEnd();
+    if (end != null) {
+      if (calResult.isEndAllDay() && !start.equals(end)) {
+        // Show only year/month/day
+        // if it's all-day and this is the end date, it's exclusive, so show the user
+        // that it ends on the day before to make more intuitive sense.
+        // But don't do it if the event already (incorrectly?) specifies the same start/end
+        end = new Date(end.getTime() - 24 * 60 * 60 * 1000);
+      }
+      ParsedResult.maybeAppend(format(calResult.isEndAllDay(), end), result);
     }
 
     ParsedResult.maybeAppend(calResult.getLocation(), result);
@@ -90,38 +93,14 @@ public final class CalendarResultHandler extends ResultHandler {
     return result.toString();
   }
 
-  private static void appendTime(String when, StringBuilder result, boolean end, boolean sameStartEnd) {
-    if (when.length() == 8) {
-      // Show only year/month/day
-      Date date;
-      synchronized (DATE_FORMAT) {
-        date = DATE_FORMAT.parse(when, new ParsePosition(0));
-      }
-      // if it's all-day and this is the end date, it's exclusive, so show the user
-      // that it ends on the day before to make more intuitive sense.
-      // But don't do it if the event already (incorrectly?) specifies the same start/end
-      if (end && !sameStartEnd) {
-        date = new Date(date.getTime() - 24 * 60 * 60 * 1000);
-      }
-      ParsedResult.maybeAppend(DateFormat.getDateInstance().format(date.getTime()), result);
-    } else {
-      // The when string can be local time, or UTC if it ends with a Z
-      Date date;
-      synchronized (DATE_TIME_FORMAT) {
-       date = DATE_TIME_FORMAT.parse(when.substring(0, 15), new ParsePosition(0));
-      }
-      long milliseconds = date.getTime();
-      if (when.length() == 16 && when.charAt(15) == 'Z') {
-        Calendar calendar = new GregorianCalendar();
-        // Account for time zone difference
-        milliseconds += calendar.get(Calendar.ZONE_OFFSET);
-        // Might need to correct for daylight savings time, but use target time since
-        // now might be in DST but not then, or vice versa
-        calendar.setTime(new Date(milliseconds));
-        milliseconds += calendar.get(Calendar.DST_OFFSET);
-      }
-      ParsedResult.maybeAppend(DateFormat.getDateTimeInstance().format(milliseconds), result);
+  private static String format(boolean allDay, Date date) {
+    if (date == null) {
+      return null;
     }
+    DateFormat format = allDay
+        ? DateFormat.getDateInstance(DateFormat.MEDIUM)
+        : DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM);
+    return format.format(date);
   }
 
   @Override

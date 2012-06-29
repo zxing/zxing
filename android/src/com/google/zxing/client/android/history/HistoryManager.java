@@ -67,7 +67,8 @@ public final class HistoryManager {
 
   private static final String[] ID_COL_PROJECTION = { DBHelper.ID_COL };
   private static final String[] ID_DETAIL_COL_PROJECTION = { DBHelper.ID_COL, DBHelper.DETAILS_COL };
-  private static final DateFormat EXPORT_DATE_TIME_FORMAT = DateFormat.getDateTimeInstance();
+  private static final DateFormat EXPORT_DATE_TIME_FORMAT =
+      DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM);
 
   private final Activity activity;
 

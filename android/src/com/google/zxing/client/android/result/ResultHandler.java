@@ -41,15 +41,9 @@ import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
 
-import java.text.DateFormat;
-import java.text.ParsePosition;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Locale;
-import java.util.TimeZone;
 
 /**
  * A base class for the Android-specific barcode handlers. These allow the app to polymorphically
@@ -60,20 +54,11 @@ import java.util.TimeZone;
  * instance is needed to launch an intent.
  *
  * @author dswitkin@google.com (Daniel Switkin)
+ * @author Sean Owen
  */
 public abstract class ResultHandler {
 
   private static final String TAG = ResultHandler.class.getSimpleName();
-
-  private static final DateFormat DATE_FORMAT;
-  static {
-    DATE_FORMAT = new SimpleDateFormat("yyyyMMdd", Locale.ENGLISH);
-    // For dates without a time, for purposes of interacting with Android, the resulting timestamp
-    // needs to be midnight of that day in GMT. See:
-    // http://code.google.com/p/android/issues/detail?id=8330
-    DATE_FORMAT.setTimeZone(TimeZone.getTimeZone("GMT"));
-  }
-  private static final DateFormat DATE_TIME_FORMAT = new SimpleDateFormat("yyyyMMdd'T'HHmmss", Locale.ENGLISH);
 
   private static final String GOOGLE_SHOPPER_PACKAGE = "com.google.android.apps.shopper";
   private static final String GOOGLE_SHOPPER_ACTIVITY = GOOGLE_SHOPPER_PACKAGE +
@@ -223,21 +208,22 @@ public abstract class ResultHandler {
    * versions of the system have a bug where the event title will not be filled out.
    *
    * @param summary A description of the event
-   * @param start   The start time as yyyyMMdd or yyyyMMdd'T'HHmmss or yyyyMMdd'T'HHmmss'Z'
-   * @param end     The end time as yyyyMMdd or yyyyMMdd'T'HHmmss or yyyyMMdd'T'HHmmss'Z'
+   * @param start   The start time
+   * @param allDay  if true, event is considered to be all day starting from start time
+   * @param end     The end time (optional)
    * @param location a text description of the event location
    * @param description a text description of the event itself
    */
   final void addCalendarEvent(String summary,
-                              String start,
-                              String end,
+                              Date start,
+                              boolean allDay,
+                              Date end,
                               String location,
                               String description) {
     Intent intent = new Intent(Intent.ACTION_EDIT);
     intent.setType("vnd.android.cursor.item/event");
-    long startMilliseconds = calculateMilliseconds(start);
+    long startMilliseconds = start.getTime();
     intent.putExtra("beginTime", startMilliseconds);
-    boolean allDay = start.length() == 8;
     if (allDay) {
       intent.putExtra("allDay", true);
     }
@@ -250,38 +236,13 @@ public abstract class ResultHandler {
         endMilliseconds = startMilliseconds;
       }
     } else {
-      endMilliseconds = calculateMilliseconds(end);
+      endMilliseconds = end.getTime();
     }
     intent.putExtra("endTime", endMilliseconds);
     intent.putExtra("title", summary);
     intent.putExtra("eventLocation", location);
     intent.putExtra("description", description);
     launchIntent(intent);
-  }
-
-  private static long calculateMilliseconds(String when) {
-    if (when.length() == 8) {
-      // Only contains year/month/day
-      Date date;
-      synchronized (DATE_FORMAT) {
-        date = DATE_FORMAT.parse(when, new ParsePosition(0));
-      }
-      // Note this will be relative to GMT, not the local time zone
-      return date.getTime();
-    } else {
-      // The when string can be local time, or UTC if it ends with a Z
-      Date date;
-      synchronized (DATE_TIME_FORMAT) {
-       date = DATE_TIME_FORMAT.parse(when.substring(0, 15), new ParsePosition(0));
-      }
-      long milliseconds = date.getTime();
-      if (when.length() == 16 && when.charAt(15) == 'Z') {
-        Calendar calendar = new GregorianCalendar();
-        int offset = calendar.get(Calendar.ZONE_OFFSET) + calendar.get(Calendar.DST_OFFSET);
-        milliseconds += offset;
-      }
-      return milliseconds;
-    }
   }
 
   final void addPhoneOnlyContact(String[] phoneNumbers,String[] phoneTypes) {
@@ -495,7 +456,12 @@ public abstract class ResultHandler {
   }
 
   final void openURL(String url) {
-    launchIntent(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+    try {
+      launchIntent(intent);
+    } catch (ActivityNotFoundException anfe) {
+      Log.w(TAG, "Nothing available to handle " + intent);
+    }
   }
 
   final void webSearch(String query) {
