@@ -19,7 +19,11 @@ package com.google.zxing.client.result;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
+
+import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * Tests {@link ParsedResult}.
@@ -28,6 +32,12 @@ import org.junit.Test;
  * @author dswitkin@google.com (Daniel Switkin)
  */
 public final class ParsedReaderResultTestCase extends Assert {
+
+  @Before
+  public void setUp() {
+    Locale.setDefault(Locale.ENGLISH);
+    TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
+  }
 
   @Test
   public void testTextType() {
@@ -203,25 +213,25 @@ public final class ParsedReaderResultTestCase extends Assert {
     // UTC times
     doTestResult("BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456Z\r\n" +
         "DTEND:20080505T234555Z\r\nEND:VEVENT\r\nEND:VCALENDAR",
-        "foo\n20080504T123456Z\n20080505T234555Z",
+        "foo\nMay 4, 2008 12:34:56 PM\nMay 5, 2008 11:45:55 PM",
         ParsedResultType.CALENDAR);
     doTestResult("BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456Z\r\n" +
-        "DTEND:20080505T234555Z\r\nEND:VEVENT", "foo\n20080504T123456Z\n20080505T234555Z",
+        "DTEND:20080505T234555Z\r\nEND:VEVENT", "foo\nMay 4, 2008 12:34:56 PM\nMay 5, 2008 11:45:55 PM",
         ParsedResultType.CALENDAR);
     // Local times
     doTestResult("BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456\r\n" +
-        "DTEND:20080505T234555\r\nEND:VEVENT", "foo\n20080504T123456\n20080505T234555",
+        "DTEND:20080505T234555\r\nEND:VEVENT", "foo\nMay 4, 2008 12:34:56 PM\nMay 5, 2008 11:45:55 PM",
         ParsedResultType.CALENDAR);
     // Date only (all day event)
     doTestResult("BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504\r\n" +
-        "DTEND:20080505\r\nEND:VEVENT", "foo\n20080504\n20080505", ParsedResultType.CALENDAR);
+        "DTEND:20080505\r\nEND:VEVENT", "foo\nMay 4, 2008\nMay 5, 2008", ParsedResultType.CALENDAR);
     // Start time only
     doTestResult("BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456Z\r\nEND:VEVENT",
-        "foo\n20080504T123456Z", ParsedResultType.CALENDAR);
+        "foo\nMay 4, 2008 12:34:56 PM", ParsedResultType.CALENDAR);
     doTestResult("BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456\r\nEND:VEVENT",
-        "foo\n20080504T123456", ParsedResultType.CALENDAR);
+        "foo\nMay 4, 2008 12:34:56 PM", ParsedResultType.CALENDAR);
     doTestResult("BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504\r\nEND:VEVENT",
-        "foo\n20080504", ParsedResultType.CALENDAR);
+        "foo\nMay 4, 2008", ParsedResultType.CALENDAR);
     doTestResult("BEGIN:VEVENT\r\nDTEND:20080505T\r\nEND:VEVENT",
         "BEGIN:VEVENT\r\nDTEND:20080505T\r\nEND:VEVENT", ParsedResultType.URI);
     // Yeah, it's OK that this is thought of as maybe a URI as long as it's not CALENDAR
