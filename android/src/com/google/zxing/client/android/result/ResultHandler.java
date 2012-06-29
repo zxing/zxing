@@ -42,7 +42,6 @@ import android.util.Log;
 import android.view.View;
 
 import java.util.Collection;
-import java.util.Date;
 import java.util.Locale;
 
 /**
@@ -201,48 +200,6 @@ public abstract class ResultHandler {
    */
   public final ParsedResultType getType() {
     return result.getType();
-  }
-
-  /**
-   * Sends an intent to create a new calendar event by prepopulating the Add Event UI. Older
-   * versions of the system have a bug where the event title will not be filled out.
-   *
-   * @param summary A description of the event
-   * @param start   The start time
-   * @param allDay  if true, event is considered to be all day starting from start time
-   * @param end     The end time (optional)
-   * @param location a text description of the event location
-   * @param description a text description of the event itself
-   */
-  final void addCalendarEvent(String summary,
-                              Date start,
-                              boolean allDay,
-                              Date end,
-                              String location,
-                              String description) {
-    Intent intent = new Intent(Intent.ACTION_EDIT);
-    intent.setType("vnd.android.cursor.item/event");
-    long startMilliseconds = start.getTime();
-    intent.putExtra("beginTime", startMilliseconds);
-    if (allDay) {
-      intent.putExtra("allDay", true);
-    }
-    long endMilliseconds;
-    if (end == null) {
-      if (allDay) {
-        // + 1 day
-        endMilliseconds = startMilliseconds + 24 * 60 * 60 * 1000;
-      } else {
-        endMilliseconds = startMilliseconds;
-      }
-    } else {
-      endMilliseconds = end.getTime();
-    }
-    intent.putExtra("endTime", endMilliseconds);
-    intent.putExtra("title", summary);
-    intent.putExtra("eventLocation", location);
-    intent.putExtra("description", description);
-    launchIntent(intent);
   }
 
   final void addPhoneOnlyContact(String[] phoneNumbers,String[] phoneTypes) {
