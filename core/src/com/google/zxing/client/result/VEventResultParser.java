@@ -43,6 +43,14 @@ public final class VEventResultParser extends ResultParser {
     }
     String end = matchSingleVCardPrefixedField("DTEND", rawText, true);
     String location = matchSingleVCardPrefixedField("LOCATION", rawText, true);
+    String organizer = stripMailto(matchSingleVCardPrefixedField("ORGANIZER", rawText, true));
+
+    String[] attendees = matchVCardPrefixedField("ATTENDEE", rawText, true);
+    if (attendees != null) {
+      for (int i = 0; i < attendees.length; i++) {
+        attendees[i] = stripMailto(attendees[i]);
+      }
+    }
     String description = matchSingleVCardPrefixedField("DESCRIPTION", rawText, true);
 
     String geoString = matchSingleVCardPrefixedField("GEO", rawText, true);
@@ -62,7 +70,15 @@ public final class VEventResultParser extends ResultParser {
     }
 
     try {
-      return new CalendarParsedResult(summary, start, end, location, null, description, latitude, longitude);
+      return new CalendarParsedResult(summary,
+                                      start,
+                                      end,
+                                      location,
+                                      organizer,
+                                      attendees,
+                                      description,
+                                      latitude,
+                                      longitude);
     } catch (IllegalArgumentException iae) {
       return null;
     }
@@ -73,6 +89,26 @@ public final class VEventResultParser extends ResultParser {
                                                       boolean trim) {
     List<String> values = VCardResultParser.matchSingleVCardPrefixedField(prefix, rawText, trim, false);
     return values == null || values.isEmpty() ? null : values.get(0);
+  }
+
+  private static String[] matchVCardPrefixedField(CharSequence prefix, String rawText, boolean trim) {
+    List<List<String>> values = VCardResultParser.matchVCardPrefixedField(prefix, rawText, trim, false);
+    if (values == null || values.isEmpty()) {
+      return null;
+    }
+    int size = values.size();
+    String[] result = new String[size];
+    for (int i = 0; i < size; i++) {
+      result[i] = values.get(i).get(0);
+    }
+    return result;
+  }
+
+  private static String stripMailto(String s) {
+    if (s != null && (s.startsWith("mailto:") || s.startsWith("MAILTO:"))) {
+      s = s.substring(7);
+    }
+    return s;
   }
 
 }
