@@ -54,14 +54,26 @@ public final class CalendarResultHandler extends ResultHandler {
 
   @Override
   public void handleButtonPress(int index) {
-    CalendarParsedResult calendarResult = (CalendarParsedResult) getResult();
     if (index == 0) {
+      CalendarParsedResult calendarResult = (CalendarParsedResult) getResult();
+
+      String description = calendarResult.getDescription();
+      String organizer = calendarResult.getOrganizer();
+      if (organizer != null) { // No separate Intent key, put in description
+        if (description == null) {
+          description = organizer;
+        } else {
+          description = description + '\n' + organizer;
+        }
+      }
+
       addCalendarEvent(calendarResult.getSummary(),
                        calendarResult.getStart(),
                        calendarResult.isStartAllDay(),
                        calendarResult.getEnd(),
                        calendarResult.getLocation(),
-                       calendarResult.getDescription());
+                       description,
+                       calendarResult.getAttendees());
     }
   }
 
@@ -75,13 +87,15 @@ public final class CalendarResultHandler extends ResultHandler {
    * @param end     The end time (optional)
    * @param location a text description of the event location
    * @param description a text description of the event itself
+   * @param attendees attendees to invite
    */
   private void addCalendarEvent(String summary,
                                 Date start,
                                 boolean allDay,
                                 Date end,
                                 String location,
-                                String description) {
+                                String description,
+                                String[] attendees) {
     Intent intent = new Intent(Intent.ACTION_INSERT);
     intent.setType("vnd.android.cursor.item/event");
     long startMilliseconds = start.getTime();
@@ -104,6 +118,10 @@ public final class CalendarResultHandler extends ResultHandler {
     intent.putExtra("title", summary);
     intent.putExtra("eventLocation", location);
     intent.putExtra("description", description);
+    if (attendees != null) {
+      intent.putExtra(Intent.EXTRA_EMAIL, attendees);
+      // Documentation says this is either a String[] or comma-separated String, which is right?
+    }
     launchIntent(intent);
   }
 
@@ -132,7 +150,8 @@ public final class CalendarResultHandler extends ResultHandler {
     }
 
     ParsedResult.maybeAppend(calResult.getLocation(), result);
-    ParsedResult.maybeAppend(calResult.getAttendee(), result);
+    ParsedResult.maybeAppend(calResult.getOrganizer(), result);
+    ParsedResult.maybeAppend(calResult.getAttendees(), result);
     ParsedResult.maybeAppend(calResult.getDescription(), result);
     return result.toString();
   }

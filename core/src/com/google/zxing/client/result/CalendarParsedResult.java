@@ -48,7 +48,8 @@ public final class CalendarParsedResult extends ParsedResult {
   private final Date end;
   private final boolean endAllDay;
   private final String location;
-  private final String attendee;
+  private final String organizer;
+  private final String[] attendees;
   private final String description;
   private final double latitude;
   private final double longitude;
@@ -57,7 +58,8 @@ public final class CalendarParsedResult extends ParsedResult {
                               String startString,
                               String endString,
                               String location,
-                              String attendee,
+                              String organizer,
+                              String[] attendees,
                               String description,
                               double latitude,
                               double longitude) {
@@ -72,7 +74,8 @@ public final class CalendarParsedResult extends ParsedResult {
     this.startAllDay = startString.length() == 8;
     this.endAllDay = endString != null && endString.length() == 8;
     this.location = location;
-    this.attendee = attendee;
+    this.organizer = organizer;
+    this.attendees = attendees;
     this.description = description;
     this.latitude = latitude;
     this.longitude = longitude;
@@ -115,8 +118,12 @@ public final class CalendarParsedResult extends ParsedResult {
     return location;
   }
 
-  public String getAttendee() {
-    return attendee;
+  public String getOrganizer() {
+    return organizer;
+  }
+
+  public String[] getAttendees() {
+    return attendees;
   }
 
   public String getDescription() {
@@ -138,7 +145,8 @@ public final class CalendarParsedResult extends ParsedResult {
     maybeAppend(format(startAllDay, start), result);
     maybeAppend(format(endAllDay, end), result);
     maybeAppend(location, result);
-    maybeAppend(attendee, result);
+    maybeAppend(organizer, result);
+    maybeAppend(attendees, result);
     maybeAppend(description, result);
     return result.toString();
   }

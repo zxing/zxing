@@ -87,10 +87,10 @@ public final class VCardResultParser extends ResultParser {
                                        toPrimaryValue(url));
   }
 
-  private static List<List<String>> matchVCardPrefixedField(CharSequence prefix,
-                                                            String rawText,
-                                                            boolean trim,
-                                                            boolean parseFieldDivider) {
+  static List<List<String>> matchVCardPrefixedField(CharSequence prefix,
+                                                    String rawText,
+                                                    boolean trim,
+                                                    boolean parseFieldDivider) {
     List<List<String>> matches = null;
     int i = 0;
     int max = rawText.length();

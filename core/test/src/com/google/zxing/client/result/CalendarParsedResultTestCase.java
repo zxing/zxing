@@ -24,6 +24,7 @@ import org.junit.Test;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -119,7 +120,29 @@ public final class CalendarParsedResultTestCase extends Assert {
         "DTSTART:20080504T123456Z\r\n" +
         "GEO:-12.345;-45.678\r\n" +
         "END:VEVENT\r\nEND:VCALENDAR",
-        null, null, null, "20080504T123456Z", null, null, -12.345, -45.678);
+        null, null, null, "20080504T123456Z", null, null, null, -12.345, -45.678);
+  }
+
+  @Test
+  public void testOrganizer() {
+    doTest(
+        "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n" +
+        "DTSTART:20080504T123456Z\r\n" +
+        "ORGANIZER:mailto:bob@example.org\r\n" +
+        "END:VEVENT\r\nEND:VCALENDAR",
+        null, null, null, "20080504T123456Z", null, "bob@example.org", null, Double.NaN, Double.NaN);
+  }
+
+  @Test
+  public void testAttendees() {
+    doTest(
+        "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n" +
+        "DTSTART:20080504T123456Z\r\n" +
+        "ATTENDEE:mailto:bob@example.org\r\n" +
+        "ATTENDEE:mailto:alice@example.org\r\n" +
+        "END:VEVENT\r\nEND:VCALENDAR",
+        null, null, null, "20080504T123456Z", null, null,
+        new String[] {"bob@example.org", "alice@example.org"}, Double.NaN, Double.NaN);
   }
 
   @Test
@@ -161,7 +184,7 @@ public final class CalendarParsedResultTestCase extends Assert {
                              String location,
                              String startString,
                              String endString) {
-    doTest(contents, description, summary, location, startString, endString, null, Double.NaN, Double.NaN);
+    doTest(contents, description, summary, location, startString, endString, null, null, Double.NaN, Double.NaN);
   }
 
   private static void doTest(String contents,
@@ -170,7 +193,8 @@ public final class CalendarParsedResultTestCase extends Assert {
                              String location,
                              String startString,
                              String endString,
-                             String attendee,
+                             String organizer,
+                             String[] attendees,
                              double latitude,
                              double longitude) {
     Result fakeResult = new Result(contents, null, null, BarcodeFormat.QR_CODE);
@@ -182,7 +206,9 @@ public final class CalendarParsedResultTestCase extends Assert {
     assertEquals(location, calResult.getLocation());
     assertEquals(startString, DATE_TIME_FORMAT.format(calResult.getStart()));
     assertEquals(endString, calResult.getEnd() == null ? null : DATE_TIME_FORMAT.format(calResult.getEnd()));
-    assertEquals(attendee, calResult.getAttendee());
+    assertEquals(organizer, calResult.getOrganizer());
+    assertTrue((attendees == null && calResult.getAttendees() == null) ||
+               Arrays.equals(attendees, calResult.getAttendees()));
     assertEqualOrNaN(latitude, calResult.getLatitude());
     assertEqualOrNaN(longitude, calResult.getLongitude());
   }
