@@ -16,14 +16,18 @@
 
 package com.google.zxing.qrcode.encoder;
 
+import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitArray;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.google.zxing.qrcode.decoder.Mode;
+import com.google.zxing.qrcode.decoder.Version;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.UnsupportedEncodingException;
+import java.util.EnumMap;
+import java.util.Map;
 
 /**
  * @author satorux@google.com (Satoru Takabayashi) - creator
@@ -90,20 +94,13 @@ public final class EncoderTestCase extends Assert {
 
   @Test
   public void testEncode() throws WriterException {
-    QRCode qrCode = new QRCode();
-    Encoder.encode("ABCDEF", ErrorCorrectionLevel.H, qrCode);
-    // The following is a valid QR Code that can be read by cell phones.
+    QRCode qrCode = Encoder.encode("ABCDEF", ErrorCorrectionLevel.H);
     String expected =
       "<<\n" +
       " mode: ALPHANUMERIC\n" +
       " ecLevel: H\n" +
       " version: 1\n" +
-      " matrixWidth: 21\n" +
       " maskPattern: 0\n" +
-      " numTotalBytes: 26\n" +
-      " numDataBytes: 9\n" +
-      " numECBytes: 17\n" +
-      " numRSBlocks: 1\n" +
       " matrix:\n" +
       " 1 1 1 1 1 1 1 0 1 1 1 1 0 0 1 1 1 1 1 1 1\n" +
       " 1 0 0 0 0 0 1 0 0 1 1 1 0 0 1 0 0 0 0 0 1\n" +
@@ -131,6 +128,43 @@ public final class EncoderTestCase extends Assert {
   }
 
   @Test
+  public void testSimpleUTF8ECI() throws WriterException {
+    Map<EncodeHintType,Object> hints = new EnumMap<EncodeHintType, Object>(EncodeHintType.class);
+    hints.put(EncodeHintType.CHARACTER_SET, "UTF8");
+    QRCode qrCode = Encoder.encode("hello", ErrorCorrectionLevel.H, hints);
+    String expected =
+      "<<\n" +
+      " mode: BYTE\n" +
+      " ecLevel: H\n" +
+      " version: 1\n" +
+      " maskPattern: 3\n" +
+      " matrix:\n" +
+      " 1 1 1 1 1 1 1 0 0 0 0 0 0 0 1 1 1 1 1 1 1\n" +
+      " 1 0 0 0 0 0 1 0 0 0 1 0 1 0 1 0 0 0 0 0 1\n" +
+      " 1 0 1 1 1 0 1 0 0 1 0 1 0 0 1 0 1 1 1 0 1\n" +
+      " 1 0 1 1 1 0 1 0 0 1 1 0 1 0 1 0 1 1 1 0 1\n" +
+      " 1 0 1 1 1 0 1 0 1 0 1 0 1 0 1 0 1 1 1 0 1\n" +
+      " 1 0 0 0 0 0 1 0 0 0 0 0 1 0 1 0 0 0 0 0 1\n" +
+      " 1 1 1 1 1 1 1 0 1 0 1 0 1 0 1 1 1 1 1 1 1\n" +
+      " 0 0 0 0 0 0 0 0 1 1 1 0 0 0 0 0 0 0 0 0 0\n" +
+      " 0 0 1 1 0 0 1 1 1 1 0 0 0 1 1 0 1 0 0 0 0\n" +
+      " 0 0 1 1 1 0 0 0 0 0 1 1 0 0 0 1 0 1 1 1 0\n" +
+      " 0 1 0 1 0 1 1 1 0 1 0 1 0 0 0 0 0 1 1 1 1\n" +
+      " 1 1 0 0 1 0 0 1 1 0 0 1 1 1 1 0 1 0 1 1 0\n" +
+      " 0 0 0 0 1 0 1 1 1 1 0 0 0 0 0 1 0 0 1 0 0\n" +
+      " 0 0 0 0 0 0 0 0 1 1 1 1 0 0 1 1 1 0 0 0 1\n" +
+      " 1 1 1 1 1 1 1 0 1 1 1 0 1 0 1 1 0 0 1 0 0\n" +
+      " 1 0 0 0 0 0 1 0 0 0 1 0 0 1 1 1 1 1 1 0 1\n" +
+      " 1 0 1 1 1 0 1 0 0 1 0 0 0 0 1 1 0 0 0 0 0\n" +
+      " 1 0 1 1 1 0 1 0 1 1 1 0 1 0 0 0 1 1 0 0 0\n" +
+      " 1 0 1 1 1 0 1 0 1 1 0 0 0 1 0 0 1 0 0 0 0\n" +
+      " 1 0 0 0 0 0 1 0 0 0 0 1 1 0 1 0 1 0 1 1 0\n" +
+      " 1 1 1 1 1 1 1 0 0 1 0 1 1 1 0 1 1 0 0 0 0\n" +
+      ">>\n";
+    assertEquals(expected, qrCode.toString());
+  }
+
+  @Test
   public void testAppendModeInfo() {
     BitArray bits = new BitArray();
     Encoder.appendModeInfo(Mode.NUMERIC, bits);
@@ -142,7 +176,7 @@ public final class EncoderTestCase extends Assert {
     {
       BitArray bits = new BitArray();
       Encoder.appendLengthInfo(1,  // 1 letter (1/1).
-                               1,  // version 1.
+                               Version.getVersionForNumber(1),
                                Mode.NUMERIC,
                                bits);
       assertEquals(" ........ .X", bits.toString());  // 10 bits.
@@ -150,7 +184,7 @@ public final class EncoderTestCase extends Assert {
     {
       BitArray bits = new BitArray();
       Encoder.appendLengthInfo(2,  // 2 letters (2/1).
-                               10,  // version 10.
+                               Version.getVersionForNumber(10),
                                Mode.ALPHANUMERIC,
                                bits);
       assertEquals(" ........ .X.", bits.toString());  // 11 bits.
@@ -158,7 +192,7 @@ public final class EncoderTestCase extends Assert {
     {
       BitArray bits = new BitArray();
       Encoder.appendLengthInfo(255,  // 255 letter (255/1).
-                               27,  // version 27.
+                               Version.getVersionForNumber(27),
                                Mode.BYTE,
                                bits);
       assertEquals(" ........ XXXXXXXX", bits.toString());  // 16 bits.
@@ -166,7 +200,7 @@ public final class EncoderTestCase extends Assert {
     {
       BitArray bits = new BitArray();
       Encoder.appendLengthInfo(512,  // 512 letters (1024/2).
-                               40,  // version 40.
+                               Version.getVersionForNumber(40),
                                Mode.KANJI,
                                bits);
       assertEquals(" ..X..... ....", bits.toString());  // 12 bits.
@@ -301,8 +335,7 @@ public final class EncoderTestCase extends Assert {
       for (byte dataByte: dataBytes) {
         in.appendBits(dataByte, 8);
       }
-      BitArray out = new BitArray();
-      Encoder.interleaveWithECBytes(in, 26, 9, 1, out);
+      BitArray out = Encoder.interleaveWithECBytes(in, 26, 9, 1);
       byte[] expected = {
           // Data bytes.
           32, 65, (byte)205, 69, 41, (byte)220, 46, (byte)128, (byte)236,
@@ -332,8 +365,8 @@ public final class EncoderTestCase extends Assert {
       for (byte dataByte: dataBytes) {
         in.appendBits(dataByte, 8);
       }
-      BitArray out = new BitArray();
-      Encoder.interleaveWithECBytes(in, 134, 62, 4, out);
+
+      BitArray out = Encoder.interleaveWithECBytes(in, 134, 62, 4);
       byte[] expected = {
           // Data bytes.
           67, (byte)230, 54, 55, 70, (byte)247, 70, 71, 22, 7, 86, 87, 38, 23, 102, 103, 54, 39,
@@ -532,8 +565,7 @@ public final class EncoderTestCase extends Assert {
     for (int x = 0; x < 3518; x++) {
       builder.append('0');
     }
-    QRCode qrCode = new QRCode();
-    Encoder.encode(builder.toString(), ErrorCorrectionLevel.L, qrCode);
+    Encoder.encode(builder.toString(), ErrorCorrectionLevel.L);
   }
 
   private static String shiftJISString(byte[] bytes) throws WriterException {
