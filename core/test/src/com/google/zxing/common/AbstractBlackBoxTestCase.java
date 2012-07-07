@@ -85,7 +85,7 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
     testResults = new ArrayList<TestResult>();
   }
 
-  protected void addTest(int mustPassCount, int tryHarderCount, float rotation) {
+  protected final void addTest(int mustPassCount, int tryHarderCount, float rotation) {
     addTest(mustPassCount, tryHarderCount, 0, 0, rotation);
   }
 
@@ -99,20 +99,20 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
    *                             reading the wrong contents using the try harder flag
    * @param rotation The rotation in degrees clockwise to use for this test.
    */
-  protected void addTest(int mustPassCount,
-                         int tryHarderCount,
-                         int maxMisreads,
-                         int maxTryHarderMisreads,
-                         float rotation) {
+  protected final void addTest(int mustPassCount,
+                               int tryHarderCount,
+                               int maxMisreads,
+                               int maxTryHarderMisreads,
+                               float rotation) {
     testResults.add(new TestResult(mustPassCount, tryHarderCount, maxMisreads, maxTryHarderMisreads, rotation));
   }
 
-  protected File[] getImageFiles() {
+  protected final File[] getImageFiles() {
     assertTrue("Please run from the 'core' directory", testBase.exists());
     return testBase.listFiles(IMAGE_NAME_FILTER);
   }
 
-  protected Reader getReader() {
+  protected final Reader getReader() {
     return barcodeReader;
   }
 
@@ -123,7 +123,7 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
     testBlackBoxCountingResults(true);
   }
 
-  public SummaryResults testBlackBoxCountingResults(boolean assertOnFailure) throws IOException {
+  public final SummaryResults testBlackBoxCountingResults(boolean assertOnFailure) throws IOException {
     assertFalse(testResults.isEmpty());
 
     File[] imageFiles = getImageFiles();

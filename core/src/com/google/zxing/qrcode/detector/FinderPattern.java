@@ -34,7 +34,7 @@ public final class FinderPattern extends ResultPoint {
     this(posX, posY, estimatedModuleSize, 1);
   }
 
-  FinderPattern(float posX, float posY, float estimatedModuleSize, int count) {
+  private FinderPattern(float posX, float posY, float estimatedModuleSize, int count) {
     super(posX, posY);
     this.estimatedModuleSize = estimatedModuleSize;
     this.count = count;

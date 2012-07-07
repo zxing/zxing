@@ -42,7 +42,7 @@ import java.util.Map;
  */
 public abstract class AbstractNegativeBlackBoxTestCase extends AbstractBlackBoxTestCase {
 
-  private static class TestResult {
+  private static final class TestResult {
     private final int falsePositivesAllowed;
     private final float rotation;
 

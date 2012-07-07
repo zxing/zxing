@@ -35,11 +35,11 @@ public class DetectorResult {
     this.points = points;
   }
 
-  public BitMatrix getBits() {
+  public final BitMatrix getBits() {
     return bits;
   }
 
-  public ResultPoint[] getPoints() {
+  public final ResultPoint[] getPoints() {
     return points;
   }
 

@@ -31,7 +31,7 @@ import org.junit.Test;
 /**
  * @author Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)
  */
-public class AI01_3X0X_1X_DecoderTest extends AbstractDecoderTest {
+public final class AI01_3X0X_1X_DecoderTest extends AbstractDecoderTest {
 	
 	private static final String header_310x_11 = "..XXX...";
 	private static final String header_320x_11 = "..XXX..X";

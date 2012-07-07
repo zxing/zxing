@@ -506,7 +506,7 @@ final class PDF417 {
           0x107a4, 0x107a2, 0x10396, 0x107b6, 0x187d4, 0x187d2,
           0x10794, 0x10fb4, 0x10792, 0x10fb2, 0x1c7ea}};
 
-  public static final float PREFERRED_RATIO = 3.0f;
+  private static final float PREFERRED_RATIO = 3.0f;
   private static final float DEFAULT_MODULE_WIDTH = 0.357f; //1px in mm
   private static final float HEIGHT = 2.0f; //mm
 

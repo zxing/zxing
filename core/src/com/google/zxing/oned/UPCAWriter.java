@@ -29,7 +29,7 @@ import java.util.Map;
  *
  * @author qwandor@google.com (Andrew Walbran)
  */
-public class UPCAWriter implements Writer {
+public final class UPCAWriter implements Writer {
 
   private final EAN13Writer subWriter = new EAN13Writer();
 

@@ -24,7 +24,7 @@ import org.junit.Test;
  * @author satorux@google.com (Satoru Takabayashi) - creator
  * @author dswitkin@google.com (Daniel Switkin) - ported from C++
  */
-public class BitVectorTestCase extends Assert {
+public final class BitVectorTestCase extends Assert {
 
   private static long getUnsignedInt(BitArray v, int index) {
     long result = 0L;

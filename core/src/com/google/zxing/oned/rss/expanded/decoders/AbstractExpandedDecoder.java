@@ -43,11 +43,11 @@ public abstract class AbstractExpandedDecoder {
     this.generalDecoder = new GeneralAppIdDecoder(information);
   }
 
-  protected BitArray getInformation() {
+  protected final BitArray getInformation() {
     return information;
   }
 
-  protected GeneralAppIdDecoder getGeneralDecoder() {
+  protected final GeneralAppIdDecoder getGeneralDecoder() {
     return generalDecoder;
   }
 
