@@ -43,27 +43,27 @@ public abstract class AbstractRSSReader extends OneDReader {
     evenCounts = new int[dataCharacterCounters.length / 2];
   }
 
-  protected int[] getDecodeFinderCounters() {
+  protected final int[] getDecodeFinderCounters() {
     return decodeFinderCounters;
   }
 
-  protected int[] getDataCharacterCounters() {
+  protected final int[] getDataCharacterCounters() {
     return dataCharacterCounters;
   }
 
-  protected float[] getOddRoundingErrors() {
+  protected final float[] getOddRoundingErrors() {
     return oddRoundingErrors;
   }
 
-  protected float[] getEvenRoundingErrors() {
+  protected final float[] getEvenRoundingErrors() {
     return evenRoundingErrors;
   }
 
-  protected int[] getOddCounts() {
+  protected final int[] getOddCounts() {
     return oddCounts;
   }
 
-  protected int[] getEvenCounts() {
+  protected final int[] getEvenCounts() {
     return evenCounts;
   }
 

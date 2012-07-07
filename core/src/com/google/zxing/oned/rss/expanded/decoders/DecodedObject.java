@@ -37,7 +37,7 @@ abstract class DecodedObject {
     this.newPosition = newPosition;
   }
 
-  int getNewPosition() {
+  final int getNewPosition() {
     return this.newPosition;
   }
 

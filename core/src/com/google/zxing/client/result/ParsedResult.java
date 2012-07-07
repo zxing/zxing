@@ -37,14 +37,14 @@ public abstract class ParsedResult {
     this.type = type;
   }
 
-  public ParsedResultType getType() {
+  public final ParsedResultType getType() {
     return type;
   }
 
   public abstract String getDisplayResult();
 
   @Override
-  public String toString() {
+  public final String toString() {
     return getDisplayResult();
   }
 

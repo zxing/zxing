@@ -353,23 +353,6 @@ public final class RSS14Reader extends AbstractRSSReader {
     return new FinderPattern(value, new int[] {firstElementStart, startEnd[1]}, start, end, rowNumber);
   }
 
-  /*
-  private static int[] normalizeE2SEValues(int[] counters) {
-    int p = 0;
-    for (int i = 0; i < counters.length; i++) {
-      p += counters[i];
-    }
-    int[] normalized = new int[counters.length - 2];
-    for (int i = 0; i < normalized.length; i++) {
-      int e = counters[i] + counters[i+1];
-      float eRatio = (float) e / (float) p;
-      float E = ((eRatio * 32.0f) + 1.0f) / 2.0f;
-      normalized[i] = (int) E;
-    }
-    return normalized;
-  }
-   */
-
   private void adjustOddEvenCounts(boolean outsideChar, int numModules) throws NotFoundException {
 
     int oddSum = count(getOddCounts());

@@ -429,7 +429,7 @@ public final class Detector {
   /**
    * Orders ResultPointsAndTransitions by number of transitions, ascending.
    */
-  private static class ResultPointsAndTransitionsComparator
+  private static final class ResultPointsAndTransitionsComparator
       implements Comparator<ResultPointsAndTransitions>, Serializable {
     @Override
     public int compare(ResultPointsAndTransitions o1, ResultPointsAndTransitions o2) {

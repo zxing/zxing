@@ -23,7 +23,7 @@ import com.google.zxing.common.BitMatrix;
  *
  * @author dsbnatut@gmail.com (Kazuki Nishiura)
  */
-public class CodaBarWriter extends OneDimensionalCodeWriter {
+public final class CodaBarWriter extends OneDimensionalCodeWriter {
 
   public CodaBarWriter() {
     // Super constructor requires the sum of the left and right margin length.

@@ -213,14 +213,8 @@ final class BitMatrixParser {
         // Left row indicator column
         int cw = getCodeword(symbol);
         if (ecLevel < 0) {
-          switch (rowNumber % 3) {
-            case 0:
-              break;
-            case 1:
-              leftColumnECData = cw;
-              break;
-            case 2:
-              break;
+          if (rowNumber % 3 == 1) {
+            leftColumnECData = cw;
           }
         }
       }
@@ -234,18 +228,11 @@ final class BitMatrixParser {
       // Overwrite the last codeword i.e. Right Row Indicator
       --next;
       if (ecLevel < 0) {
-        switch (rowNumber % 3) {
-          case 0:
-            break;
-          case 1:
-            break;
-          case 2:
-            rightColumnECData = codewords[next];
-            if (rightColumnECData == leftColumnECData
-                && leftColumnECData != 0) {
-              ecLevel = ((rightColumnECData % 30) - rows % 3) / 3;
-            }
-            break;
+        if (rowNumber % 3 == 2) {
+          rightColumnECData = codewords[next];
+          if (rightColumnECData == leftColumnECData && leftColumnECData != 0) {
+            ecLevel = ((rightColumnECData % 30) - rows % 3) / 3;
+          }
         }
       }
       codewords[next] = 0;

@@ -271,11 +271,11 @@ public abstract class UPCEANReader extends OneDReader {
    * @return start/end horizontal offset of guard pattern, as an array of two ints
    * @throws NotFoundException if pattern is not found
    */
-  static int[] findGuardPattern(BitArray row,
-                                int rowOffset,
-                                boolean whiteFirst,
-                                int[] pattern,
-                                int[] counters) throws NotFoundException {
+  private static int[] findGuardPattern(BitArray row,
+                                        int rowOffset,
+                                        boolean whiteFirst,
+                                        int[] pattern,
+                                        int[] counters) throws NotFoundException {
     int patternLength = pattern.length;
     int width = row.getSize();
     boolean isWhite = whiteFirst;

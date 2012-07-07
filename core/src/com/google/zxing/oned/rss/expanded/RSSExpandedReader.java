@@ -369,9 +369,7 @@ public final class RSSExpandedReader extends AbstractRSSReader {
 
       start = this.startEnd[0];
 
-      int firstElementStart = row.getNextUnset(this.startEnd[1] + 1);
-
-      end = firstElementStart;
+      end = row.getNextUnset(this.startEnd[1] + 1);
       firstCounter = end - this.startEnd[1];
     }
 

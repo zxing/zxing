@@ -122,7 +122,7 @@ public abstract class LuminanceSource {
   }
 
   @Override
-  public String toString() {
+  public final String toString() {
     byte[] row = new byte[width];
     StringBuilder result = new StringBuilder(height * (width + 1));
     for (int y = 0; y < height; y++) {

@@ -29,6 +29,8 @@ import java.awt.image.BufferedImage;
  */
 public final class BufferedImageLuminanceSource extends LuminanceSource {
 
+  private static final double MINUS_45_IN_RADIANS = -0.7853981633974483; // Math.toRadians(-45.0)
+
   private final BufferedImage image;
   private final int left;
   private final int top;
@@ -148,7 +150,7 @@ public final class BufferedImageLuminanceSource extends LuminanceSource {
     int oldCenterY = top + height / 2;
 
     // Rotate 45 degrees counterclockwise.
-    AffineTransform transform = AffineTransform.getRotateInstance(Math.toRadians(-45.0), oldCenterX, oldCenterY);
+    AffineTransform transform = AffineTransform.getRotateInstance(MINUS_45_IN_RADIANS, oldCenterX, oldCenterY);
 
     int sourceDimension = Math.max(image.getWidth(), image.getHeight());
     BufferedImage rotatedImage = new BufferedImage(sourceDimension, sourceDimension, BufferedImage.TYPE_BYTE_GRAY);

@@ -156,7 +156,6 @@ final class PDF417HighLevelEncoder {
 
     int len = msg.length();
     int p = 0;
-    int encodingMode = TEXT_COMPACTION; //Default mode, see 4.4.2.1
     int textSubMode = SUBMODE_ALPHA;
 
     // User selected encoding mode
@@ -164,16 +163,15 @@ final class PDF417HighLevelEncoder {
       encodeText(msg, p, len, sb, textSubMode);
 
     } else if (compaction == Compaction.BYTE) {
-      encodingMode = BYTE_COMPACTION;
       bytes = getBytesForMessage(msg);
-      encodeBinary(bytes, p, bytes.length, encodingMode, sb);
+      encodeBinary(bytes, p, bytes.length, BYTE_COMPACTION, sb);
 
     } else if (compaction == Compaction.NUMERIC) {
-      encodingMode = NUMERIC_COMPACTION;
       sb.append((char) LATCH_TO_NUMERIC);
       encodeNumeric(msg, p, len, sb);
 
     } else {
+      int encodingMode = TEXT_COMPACTION; //Default mode, see 4.4.2.1
       while (p < len) {
         int n = determineConsecutiveDigitCount(msg, p);
         if (n >= 13) {

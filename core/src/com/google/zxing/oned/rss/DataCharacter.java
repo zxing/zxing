@@ -26,11 +26,11 @@ public class DataCharacter {
     this.checksumPortion = checksumPortion;
   }
 
-  public int getValue() {
+  public final int getValue() {
     return value;
   }
 
-  public int getChecksumPortion() {
+  public final int getChecksumPortion() {
     return checksumPortion;
   }
 
