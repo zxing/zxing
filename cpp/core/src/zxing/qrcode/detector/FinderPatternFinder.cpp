@@ -537,5 +537,14 @@ Ref<FinderPatternInfo> FinderPatternFinder::find(DecodeHints const& hints) {
   Ref<FinderPatternInfo> result(new FinderPatternInfo(patternInfo));
   return result;
 }
+
+Ref<BitMatrix> FinderPatternFinder::getImage() {
+  return image_;
+}
+
+std::vector<Ref<FinderPattern> >& FinderPatternFinder::getPossibleCenters() {
+  return possibleCenters_;
+}
+
 }
 }

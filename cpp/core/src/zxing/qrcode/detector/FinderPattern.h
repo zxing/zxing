@@ -32,9 +32,10 @@ namespace zxing {
 			float estimatedModuleSize_;
 			int count_;
 			
+			FinderPattern(float posX, float posY, float estimatedModuleSize, int count);
+
 		public:
 			FinderPattern(float posX, float posY, float estimatedModuleSize);
-			FinderPattern(float posX, float posY, float estimatedModuleSize, int count);
 			int getCount() const;
 			float getEstimatedModuleSize() const;
 			void incrementCount();

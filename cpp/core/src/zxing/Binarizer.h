@@ -40,6 +40,10 @@ class Binarizer : public Counted {
 
   Ref<LuminanceSource> getLuminanceSource() const ;
   virtual Ref<Binarizer> createBinarizer(Ref<LuminanceSource> source) = 0;
+
+  int getWidth() const;
+  int getHeight() const;
+
 };
 
 }
