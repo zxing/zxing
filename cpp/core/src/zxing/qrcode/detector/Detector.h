@@ -1,3 +1,4 @@
+// -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
 #ifndef __DETECTOR_H__
 #define __DETECTOR_H__
 
@@ -40,7 +41,8 @@ private:
   Ref<ResultPointCallback> callback_;
 
 protected:
-  Ref<BitMatrix> getImage();
+  Ref<BitMatrix> getImage() const;
+  Ref<ResultPointCallback> getResultPointCallback() const;
 
   static Ref<BitMatrix> sampleGrid(Ref<BitMatrix> image, int dimension, Ref<PerspectiveTransform>);
   static int computeDimension(Ref<ResultPoint> topLeft, Ref<ResultPoint> topRight, Ref<ResultPoint> bottomLeft,
@@ -53,12 +55,13 @@ protected:
       float allowanceFactor);
   Ref<DetectorResult> processFinderPatternInfo(Ref<FinderPatternInfo> info);
 public:
-
   virtual Ref<PerspectiveTransform> createTransform(Ref<ResultPoint> topLeft, Ref<ResultPoint> topRight, Ref <
       ResultPoint > bottomLeft, Ref<ResultPoint> alignmentPattern, int dimension);
 
   Detector(Ref<BitMatrix> image);
   Ref<DetectorResult> detect(DecodeHints const& hints);
+
+
 };
 }
 }

@@ -42,8 +42,12 @@ Detector::Detector(Ref<BitMatrix> image) :
     image_(image) {
 }
 
-Ref<BitMatrix> Detector::getImage() {
+Ref<BitMatrix> Detector::getImage() const {
    return image_;
+}
+
+Ref<ResultPointCallback> Detector::getResultPointCallback() const {
+   return callback_;
 }
 
 Ref<DetectorResult> Detector::detect(DecodeHints const& hints) {
