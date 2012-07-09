@@ -104,8 +104,8 @@ final class BitMatrixParser {
         // that are more or less the same
         matchingConsecutiveScans++;
         // Height of a row is a multiple of the module size in pixels
-        // Usually at least 3 times the module size
-        if (matchingConsecutiveScans >= moduleWidth * 2) { // MGMG
+        // It's supposed to be >= 3x module width, but, accept anything >= 2x
+        if ((matchingConsecutiveScans + 1) >= 2.0f * moduleWidth) {
           // We have some previous matches as well as a match here
           // Set processing a unique row.
           rowInProgress = true;
