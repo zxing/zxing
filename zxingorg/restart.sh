@@ -1,5 +1,5 @@
 #!/bin/bash
-export CATALINA_OPTS="-server -da -dsa -Xmx80m -XX:+UseCompressedOops"
+export CATALINA_OPTS="-server -da -dsa -Xmx80m"
 while :
 do
         pkill -KILL java
