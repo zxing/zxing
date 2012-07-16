@@ -65,28 +65,33 @@ public final class QRCodeWriter implements Writer {
     }
 
     ErrorCorrectionLevel errorCorrectionLevel = ErrorCorrectionLevel.L;
+    int quietZone = QUIET_ZONE_SIZE;
     if (hints != null) {
       ErrorCorrectionLevel requestedECLevel = (ErrorCorrectionLevel) hints.get(EncodeHintType.ERROR_CORRECTION);
       if (requestedECLevel != null) {
         errorCorrectionLevel = requestedECLevel;
       }
+      Integer quietZoneInt = (Integer) hints.get(EncodeHintType.MARGIN);
+      if (quietZoneInt != null) {
+        quietZone = quietZoneInt;
+      }
     }
 
     QRCode code = Encoder.encode(contents, errorCorrectionLevel, hints);
-    return renderResult(code, width, height);
+    return renderResult(code, width, height, quietZone);
   }
 
   // Note that the input matrix uses 0 == white, 1 == black, while the output matrix uses
   // 0 == black, 255 == white (i.e. an 8 bit greyscale bitmap).
-  private static BitMatrix renderResult(QRCode code, int width, int height) {
+  private static BitMatrix renderResult(QRCode code, int width, int height, int quietZone) {
     ByteMatrix input = code.getMatrix();
     if (input == null) {
       throw new IllegalStateException();
     }
     int inputWidth = input.getWidth();
     int inputHeight = input.getHeight();
-    int qrWidth = inputWidth + (QUIET_ZONE_SIZE << 1);
-    int qrHeight = inputHeight + (QUIET_ZONE_SIZE << 1);
+    int qrWidth = inputWidth + (quietZone << 1);
+    int qrHeight = inputHeight + (quietZone << 1);
     int outputWidth = Math.max(width, qrWidth);
     int outputHeight = Math.max(height, qrHeight);
 

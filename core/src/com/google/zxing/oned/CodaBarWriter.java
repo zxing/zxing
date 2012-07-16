@@ -18,6 +18,8 @@ package com.google.zxing.oned;
 
 import com.google.zxing.common.BitMatrix;
 
+import java.util.Arrays;
+
 /**
  * This class renders CodaBar as {@link BitMatrix}.
  *
@@ -25,29 +27,23 @@ import com.google.zxing.common.BitMatrix;
  */
 public final class CodaBarWriter extends OneDimensionalCodeWriter {
 
-  public CodaBarWriter() {
-    // Super constructor requires the sum of the left and right margin length.
-    // CodaBar spec requires a side margin to be more than ten times wider than narrow space.
-    // In this implementation, narrow space has a unit length, so 20 is required minimum.
-    super(20);
-  }
+  private static final char[] START_CHARS = {'A', 'B', 'C', 'D'};
+  private static final char[] END_CHARS = {'T', 'N', '*', 'E'};
 
   /*
-   * @see OneDimensionalCodeWriter#encode(java.lang.String)
+   * @see OneDimensionalCodeWriter#encode(String)
    */
   @Override
-  public byte[] encode(String contents) {
+  public boolean[] encode(String contents) {
 
     // Verify input and calculate decoded length.
-    if (!CodaBarReader.arrayContains(
-        new char[]{'A', 'B', 'C', 'D'}, Character.toUpperCase(contents.charAt(0)))) {
+    if (!CodaBarReader.arrayContains(START_CHARS, Character.toUpperCase(contents.charAt(0)))) {
       throw new IllegalArgumentException(
-          "Codabar should start with one of the following: 'A', 'B', 'C' or 'D'");
+          "Codabar should start with one of the following: " + Arrays.toString(START_CHARS));
     }
-    if (!CodaBarReader.arrayContains(new char[]{'T', 'N', '*', 'E'},
-                                     Character.toUpperCase(contents.charAt(contents.length() - 1)))) {
+    if (!CodaBarReader.arrayContains(END_CHARS, Character.toUpperCase(contents.charAt(contents.length() - 1)))) {
       throw new IllegalArgumentException(
-          "Codabar should end with one of the following: 'T', 'N', '*' or 'E'");
+          "Codabar should end with one of the following: " + Arrays.toString(END_CHARS));
     }
     // The start character and the end character are decoded to 10 length each.
     int resultLength = 20;
@@ -66,7 +62,7 @@ public final class CodaBarWriter extends OneDimensionalCodeWriter {
     // A blank is placed between each character.
     resultLength += contents.length() - 1;
 
-    byte[] result = new byte[resultLength];
+    boolean[] result = new boolean[resultLength];
     int position = 0;
     for (int index = 0; index < contents.length(); index++) {
       char c = Character.toUpperCase(contents.charAt(index));
@@ -95,14 +91,14 @@ public final class CodaBarWriter extends OneDimensionalCodeWriter {
           break;
         }
       }
-      byte color = 1;
+      boolean color = true;
       int counter = 0;
       int bit = 0;
       while (bit < 7) { // A character consists of 7 digit.
         result[position] = color;
         position++;
         if (((code >> (6 - bit)) & 1) == 0 || counter == 1) {
-          color ^= 1; // Flip the color.
+          color = !color; // Flip the color.
           bit++;
           counter = 0;
         } else {
@@ -110,7 +106,7 @@ public final class CodaBarWriter extends OneDimensionalCodeWriter {
         }
       }
       if (index < contents.length() - 1) {
-        result[position] = 0;
+        result[position] = false;
         position++;
       }
     }
