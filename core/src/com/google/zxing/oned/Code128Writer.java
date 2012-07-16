@@ -30,7 +30,7 @@ import java.util.Map;
  * 
  * @author erik.barbara@gmail.com (Erik Barbara)
  */
-public final class Code128Writer extends UPCEANWriter {
+public final class Code128Writer extends OneDimensionalCodeWriter {
 
   private static final int CODE_START_B = 104;
   private static final int CODE_START_C = 105;
@@ -62,7 +62,7 @@ public final class Code128Writer extends UPCEANWriter {
   }
 
   @Override
-  public byte[] encode(String contents) {
+  public boolean[] encode(String contents) {
     int length = contents.length();
     // Check length
     if (length < 1 || length > 80) {
@@ -176,10 +176,10 @@ public final class Code128Writer extends UPCEANWriter {
     }
     
     // Compute result
-    byte[] result = new byte[codeWidth];
+    boolean[] result = new boolean[codeWidth];
     int pos = 0;
     for (int[] pattern : patterns) {
-      pos += appendPattern(result, pos, pattern, 1);
+      pos += appendPattern(result, pos, pattern, true);
     }
     
     return result;

@@ -28,7 +28,7 @@ import java.util.Map;
  * 
  * @author erik.barbara@gmail.com (Erik Barbara)
  */
-public final class Code39Writer extends UPCEANWriter {
+public final class Code39Writer extends OneDimensionalCodeWriter {
 
   @Override
   public BitMatrix encode(String contents,
@@ -43,7 +43,7 @@ public final class Code39Writer extends UPCEANWriter {
   }
 
   @Override
-  public byte[] encode(String contents) {
+  public boolean[] encode(String contents) {
     int length = contents.length();
     if (length > 80) {
       throw new IllegalArgumentException(
@@ -59,20 +59,20 @@ public final class Code39Writer extends UPCEANWriter {
         codeWidth += width;
       }
     }
-    byte[] result = new byte[codeWidth];
+    boolean[] result = new boolean[codeWidth];
     toIntArray(Code39Reader.CHARACTER_ENCODINGS[39], widths);
-    int pos = appendPattern(result, 0, widths, 1);
+    int pos = appendPattern(result, 0, widths, true);
     int[] narrowWhite = {1};
-    pos += appendPattern(result, pos, narrowWhite, 0);
+    pos += appendPattern(result, pos, narrowWhite, false);
     //append next character to bytematrix
     for(int i = length-1; i >= 0; i--) {
       int indexInString = Code39Reader.ALPHABET_STRING.indexOf(contents.charAt(i));
       toIntArray(Code39Reader.CHARACTER_ENCODINGS[indexInString], widths);
-      pos += appendPattern(result, pos, widths, 1);
-      pos += appendPattern(result, pos, narrowWhite, 0);
+      pos += appendPattern(result, pos, widths, true);
+      pos += appendPattern(result, pos, narrowWhite, false);
     }
     toIntArray(Code39Reader.CHARACTER_ENCODINGS[39], widths);
-    pos += appendPattern(result, pos, widths, 1);
+    pos += appendPattern(result, pos, widths, true);
     return result;
   }
 
