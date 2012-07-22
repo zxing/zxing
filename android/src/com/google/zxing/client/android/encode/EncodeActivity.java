@@ -17,6 +17,7 @@
 package com.google.zxing.client.android.encode;
 
 import android.view.Display;
+import android.view.MenuInflater;
 import android.view.WindowManager;
 import com.google.zxing.WriterException;
 import com.google.zxing.client.android.FinishListener;
@@ -52,8 +53,6 @@ public final class EncodeActivity extends Activity {
 
   private static final String TAG = EncodeActivity.class.getSimpleName();
 
-  private static final int SHARE_MENU = Menu.FIRST;
-  private static final int ENCODE_FORMAT_MENU = Menu.FIRST + 1;
   private static final int MAX_BARCODE_FILENAME_LENGTH = 24;
   private static final Pattern NOT_ALPHANUMERIC = Pattern.compile("[^A-Za-z0-9]");
   private static final String USE_VCARD_KEY = "USE_VCARD";
@@ -78,22 +77,22 @@ public final class EncodeActivity extends Activity {
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
-    super.onCreateOptionsMenu(menu);
-    menu.add(Menu.NONE, SHARE_MENU, Menu.NONE, R.string.menu_share).setIcon(android.R.drawable.ic_menu_share);
+    MenuInflater menuInflater = getMenuInflater();
+    menuInflater.inflate(R.menu.encode, menu);
     boolean useVcard = qrCodeEncoder != null && qrCodeEncoder.isUseVCard();
     int encodeNameResource = useVcard ? R.string.menu_encode_mecard : R.string.menu_encode_vcard;
-    menu.add(Menu.NONE, ENCODE_FORMAT_MENU, Menu.NONE, encodeNameResource)
-        .setIcon(android.R.drawable.ic_menu_sort_alphabetically);
-    return true;
+    MenuItem encodeItem = menu.getItem(1);
+    encodeItem.setTitle(encodeNameResource);
+    return super.onCreateOptionsMenu(menu);
   }
 
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
-      case SHARE_MENU:
+      case R.id.menu_share:
         share();
         return true;
-      case ENCODE_FORMAT_MENU:
+      case R.id.menu_encode:
         Intent intent = getIntent();
         intent.putExtra(USE_VCARD_KEY, !qrCodeEncoder.isUseVCard());
         startActivity(getIntent());
@@ -205,10 +204,10 @@ public final class EncodeActivity extends Activity {
       TextView contents = (TextView) findViewById(R.id.contents_text_view);
       if (intent.getBooleanExtra(Intents.Encode.SHOW_CONTENTS, true)) {
         contents.setText(qrCodeEncoder.getDisplayContents());
-        setTitle(getString(R.string.app_name) + " - " + qrCodeEncoder.getTitle());
+        setTitle(qrCodeEncoder.getTitle());
       } else {
         contents.setText("");
-        setTitle(getString(R.string.app_name));
+        setTitle("");
       }
     } catch (WriterException e) {
       Log.w(TAG, "Could not encode barcode", e);
