@@ -94,8 +94,11 @@ public final class EncodeActivity extends Activity {
         return true;
       case R.id.menu_encode:
         Intent intent = getIntent();
+        if (intent == null) {
+          return false;
+        }
         intent.putExtra(USE_VCARD_KEY, !qrCodeEncoder.isUseVCard());
-        startActivity(getIntent());
+        startActivity(intent);
         finish();
         return true;
       default:
