@@ -19,10 +19,12 @@ package com.google.zxing.client.android.history;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ListActivity;
+import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -37,6 +39,8 @@ import com.google.zxing.client.android.R;
 import java.util.List;
 
 public final class HistoryActivity extends ListActivity {
+
+  private static final String TAG = HistoryActivity.class.getSimpleName();
 
   private HistoryManager historyManager;
   private HistoryItemAdapter adapter;
@@ -120,7 +124,11 @@ public final class HistoryActivity extends ListActivity {
           intent.putExtra(Intent.EXTRA_TEXT, subject);
           intent.putExtra(Intent.EXTRA_STREAM, historyFile);
           intent.setType("text/csv");
-          startActivity(intent);
+          try {
+            startActivity(intent);
+          } catch (ActivityNotFoundException anfe) {
+            Log.w(TAG, anfe.toString());
+          }
         }
         break;
       case R.id.menu_history_clear_text:
