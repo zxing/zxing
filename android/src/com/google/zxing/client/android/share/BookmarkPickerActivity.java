@@ -65,7 +65,7 @@ public final class BookmarkPickerActivity extends ListActivity {
 
   @Override
   protected void onListItemClick(ListView l, View view, int position, long id) {
-    if (cursor.moveToPosition(position)) {
+    if (!cursor.isClosed() && cursor.moveToPosition(position)) {
       Intent intent = new Intent();
       intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
       intent.putExtra(Browser.BookmarkColumns.TITLE, cursor.getString(TITLE_COLUMN));

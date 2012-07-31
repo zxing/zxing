@@ -70,11 +70,13 @@ final class BookmarkAdapter extends BaseAdapter {
       layout = (LinearLayout) factory.inflate(R.layout.bookmark_picker_list_item, viewGroup, false);
     }
 
-    cursor.moveToPosition(index);
-    String title = cursor.getString(BookmarkPickerActivity.TITLE_COLUMN);
-    ((TextView) layout.findViewById(R.id.bookmark_title)).setText(title);
-    String url = cursor.getString(BookmarkPickerActivity.URL_COLUMN);
-    ((TextView) layout.findViewById(R.id.bookmark_url)).setText(url);
+    if (!cursor.isClosed()) {
+      cursor.moveToPosition(index);
+      String title = cursor.getString(BookmarkPickerActivity.TITLE_COLUMN);
+      ((TextView) layout.findViewById(R.id.bookmark_title)).setText(title);
+      String url = cursor.getString(BookmarkPickerActivity.URL_COLUMN);
+      ((TextView) layout.findViewById(R.id.bookmark_url)).setText(url);
+    } // Otherwise... just don't update as the object is shutting down
     return layout;
   }
 }
