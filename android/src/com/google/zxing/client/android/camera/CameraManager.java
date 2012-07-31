@@ -24,6 +24,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import com.google.zxing.client.android.PlanarYUVLuminanceSource;
+import com.google.zxing.client.android.camera.open.OpenCameraManager;
 
 import java.io.IOException;
 
@@ -74,7 +75,7 @@ public final class CameraManager {
   public synchronized void openDriver(SurfaceHolder holder) throws IOException {
     Camera theCamera = camera;
     if (theCamera == null) {
-      theCamera = Camera.open();
+      theCamera = new OpenCameraManager().build().open();
       if (theCamera == null) {
         throw new IOException();
       }
