@@ -14,11 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.zxing.client.android;
-
-import com.google.zxing.LuminanceSource;
-
-import android.graphics.Bitmap;
+package com.google.zxing;
 
 /**
  * This object extends LuminanceSource around an array of YUV data returned from the camera driver,
@@ -124,7 +120,7 @@ public final class PlanarYUVLuminanceSource extends LuminanceSource {
                                         false);
   }
 
-  public Bitmap renderCroppedGreyscaleBitmap() {
+  public int[] renderCroppedGreyscaleBitmap() {
     int width = getWidth();
     int height = getHeight();
     int[] pixels = new int[width * height];
@@ -139,10 +135,7 @@ public final class PlanarYUVLuminanceSource extends LuminanceSource {
       }
       inputOffset += dataWidth;
     }
-
-    Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-    bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
-    return bitmap;
+    return pixels;
   }
 
   private void reverseHorizontal(int width, int height) {

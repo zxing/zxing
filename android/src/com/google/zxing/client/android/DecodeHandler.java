@@ -16,9 +16,12 @@
 
 package com.google.zxing.client.android;
 
+import android.graphics.Bitmap;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.DecodeHintType;
+import com.google.zxing.LuminanceSource;
 import com.google.zxing.MultiFormatReader;
+import com.google.zxing.PlanarYUVLuminanceSource;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 import com.google.zxing.common.HybridBinarizer;
@@ -92,7 +95,8 @@ final class DecodeHandler extends Handler {
       if (handler != null) {
         Message message = Message.obtain(handler, R.id.decode_succeeded, rawResult);
         Bundle bundle = new Bundle();
-        bundle.putParcelable(DecodeThread.BARCODE_BITMAP, source.renderCroppedGreyscaleBitmap());
+        Bitmap grayscaleBitmap = toBitmap(source, source.renderCroppedGreyscaleBitmap());
+        bundle.putParcelable(DecodeThread.BARCODE_BITMAP, grayscaleBitmap);
         message.setData(bundle);
         message.sendToTarget();
       }
@@ -102,6 +106,14 @@ final class DecodeHandler extends Handler {
         message.sendToTarget();
       }
     }
+  }
+
+  private static Bitmap toBitmap(LuminanceSource source, int[] pixels) {
+    int width = source.getWidth();
+    int height = source.getHeight();
+    Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+    bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
+    return bitmap;
   }
 
 }
