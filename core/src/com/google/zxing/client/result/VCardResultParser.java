@@ -314,7 +314,7 @@ public final class VCardResultParser extends ResultParser {
         int start = 0;
         int end;
         int componentIndex = 0;
-        while ((end = name.indexOf(';', start)) > 0) {
+        while (componentIndex < components.length - 1 && (end = name.indexOf(';', start)) > 0) {
           components[componentIndex] = name.substring(start, end);
           componentIndex++;
           start = end + 1;
