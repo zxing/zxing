@@ -584,7 +584,9 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
     if (copyToClipboard && !resultHandler.areContentsSecure()) {
       ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-      clipboard.setText(displayContents);
+      if (displayContents != null) {
+        clipboard.setText(displayContents);
+      }
     }
   }
 
