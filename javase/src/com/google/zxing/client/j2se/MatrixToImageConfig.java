@@ -16,6 +16,8 @@
 
 package com.google.zxing.client.j2se;
 
+import java.awt.image.BufferedImage;
+
 /**
  * Encapsulates custom configuration used in methods of {@link MatrixToImageWriter}.
  */
@@ -50,6 +52,11 @@ public final class MatrixToImageConfig {
 
   public int getPixelOffColor() {
     return offColor;
+  }
+
+  int getBufferedImageColorModel() {
+    // Use faster BINARY if colors match default
+    return onColor == BLACK && offColor == WHITE ? BufferedImage.TYPE_BYTE_BINARY : BufferedImage.TYPE_INT_RGB;
   }
 
 }
