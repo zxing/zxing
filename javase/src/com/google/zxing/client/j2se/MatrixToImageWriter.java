@@ -51,7 +51,7 @@ public final class MatrixToImageWriter {
   public static BufferedImage toBufferedImage(BitMatrix matrix, MatrixToImageConfig config) {
     int width = matrix.getWidth();
     int height = matrix.getHeight();
-    BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+    BufferedImage image = new BufferedImage(width, height, config.getBufferedImageColorModel());
     int onColor = config.getPixelOnColor();
     int offColor = config.getPixelOffColor();
     for (int x = 0; x < width; x++) {
