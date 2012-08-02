@@ -1591,7 +1591,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				OTHER_LDFLAGS = "-ObjC";
 				SDKROOT = iphoneos;
-				VALID_ARCHS = "armv7 armv6";
+				VALID_ARCHS = "armv7 armv6 i386";
 				WARNING_CFLAGS = (
 					"-Wall",
 					"-Wextra",
@@ -1618,7 +1618,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				OTHER_LDFLAGS = "-ObjC";
 				SDKROOT = iphoneos;
-				VALID_ARCHS = "armv7 armv6";
+				VALID_ARCHS = "armv7 armv6 i386";
 				WARNING_CFLAGS = (
 					"-Wall",
 					"-Wextra",
