@@ -80,6 +80,9 @@ final class DecodedBitStreamParser {
           // We do little with FNC1 except alter the parsed result a bit according to the spec
           fc1InEffect = true;
         } else if (mode == Mode.STRUCTURED_APPEND) {
+          if (bits.available() < 16) {
+            throw FormatException.getFormatInstance();
+          }
           // not really supported; all we do is ignore it
           // Read next 8 bits (symbol sequence #) and 8 bits (parity data), then continue
           bits.readBits(16);
