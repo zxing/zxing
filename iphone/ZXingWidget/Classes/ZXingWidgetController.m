@@ -448,21 +448,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 
   CGRect cropRect = [overlayView cropRect];
   if (oneDMode) {
-    // let's just give the decoder a vertical band right above the red line
-    cropRect.origin.x = cropRect.origin.x + (cropRect.size.width / 2) - (ONE_D_BAND_HEIGHT + 1);
-    cropRect.size.width = ONE_D_BAND_HEIGHT;
-    // do a rotate
-    CGImageRef croppedImg = CGImageCreateWithImageInRect(capture, cropRect);
-    CGImageRelease(capture);
-    capture = [self CGImageRotated90:croppedImg];
-    capture = [self CGImageRotated180:capture];
-    //              UIImageWriteToSavedPhotosAlbum([UIImage imageWithCGImage:capture], nil, nil, nil);
-    CGImageRelease(croppedImg);
-    CGImageRetain(capture);
-    cropRect.origin.x = 0.0;
-    cropRect.origin.y = 0.0;
-    cropRect.size.width = CGImageGetWidth(capture);
-    cropRect.size.height = CGImageGetHeight(capture);
+    cropRect.size.height = ONE_D_BAND_HEIGHT;
   }
 
   // N.B.
