@@ -85,6 +85,7 @@
   <string name="msg_sbc_failed">죄송합니다. 검색 도중 문제가 발생했습니다.</string>
   <string name="msg_sbc_no_page_returned">수신받은 페이지가 없습니다.</string>
   <string name="msg_sbc_page">페이지</string>
+  <string name="msg_sbc_results">결과</string>
   <string name="msg_sbc_searching_book">책 검색중\u2026</string>
   <string name="msg_sbc_snippet_unavailable">내용이 열람되지 않습니다.</string>
   <string name="msg_sbc_unknown_page">알수 없는 페이지</string>

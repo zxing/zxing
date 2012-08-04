@@ -85,6 +85,7 @@
   <string name="msg_sbc_failed">搜尋時發生錯誤。</string>
   <string name="msg_sbc_no_page_returned">沒有取得頁面</string>
   <string name="msg_sbc_page">頁面</string>
+  <string name="msg_sbc_results">結果</string>
   <string name="msg_sbc_searching_book">搜尋圖書中\u2026</string>
   <string name="msg_sbc_snippet_unavailable">無法取得摘要</string>
   <string name="msg_sbc_unknown_page">未知的頁面</string>

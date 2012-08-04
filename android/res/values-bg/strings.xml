@@ -85,6 +85,7 @@
   <string name="msg_sbc_failed">Съжаляваме, срещнахме проблем при търсенето.</string>
   <string name="msg_sbc_no_page_returned">Няма страница</string>
   <string name="msg_sbc_page">Страница</string>
+  <string name="msg_sbc_results">Резултати</string>
   <string name="msg_sbc_searching_book">Търсене на книга\u2026</string>
   <string name="msg_sbc_snippet_unavailable">Изрезката не е достъпна</string>
   <string name="msg_sbc_unknown_page">Непозната страница</string>
