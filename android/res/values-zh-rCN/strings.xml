@@ -85,6 +85,7 @@
   <string name="msg_sbc_failed">抱歉，搜索时遇到错误。</string>
   <string name="msg_sbc_no_page_returned">无页面返回</string>
   <string name="msg_sbc_page">页面</string>
+  <string name="msg_sbc_results">结果</string>
   <string name="msg_sbc_searching_book">搜索图书…</string>
   <string name="msg_sbc_snippet_unavailable">摘录不可用</string>
   <string name="msg_sbc_unknown_page">未知页面</string>

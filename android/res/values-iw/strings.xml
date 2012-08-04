@@ -85,6 +85,7 @@
   <string name="msg_sbc_failed">סליחה, החיפוש נתקל בבעיה.</string>
   <string name="msg_sbc_no_page_returned">לא הוחזר דף</string>
   <string name="msg_sbc_page">דף</string>
+  <string name="msg_sbc_results">תוצאות</string>
   <string name="msg_sbc_searching_book">מחפש ספר\u2026</string>
   <string name="msg_sbc_snippet_unavailable">גזיר לא זמין</string>
   <string name="msg_sbc_unknown_page">דף לא ידוע</string>

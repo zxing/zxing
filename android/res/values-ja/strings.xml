@@ -85,6 +85,7 @@
   <string name="msg_sbc_failed">検索中に問題が発生しました。</string>
   <string name="msg_sbc_no_page_returned">検索結果はありません</string>
   <string name="msg_sbc_page">ページ</string>
+  <string name="msg_sbc_results">結果</string>
   <string name="msg_sbc_searching_book">書籍を検索中</string>
   <string name="msg_sbc_snippet_unavailable">要約文はありません</string>
   <string name="msg_sbc_unknown_page">不明なページ</string>

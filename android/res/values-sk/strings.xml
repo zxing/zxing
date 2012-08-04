@@ -85,6 +85,7 @@
   <string name="msg_sbc_failed">Ospravedlňujeme sa, vyhľadávanie narazilo na problém.</string>
   <string name="msg_sbc_no_page_returned">Nenašla sa žiadna stránka</string>
   <string name="msg_sbc_page">Stránka</string>
+  <string name="msg_sbc_results">Výsledky</string>
   <string name="msg_sbc_searching_book">Vyhľadáva sa kniha\u2026</string>
   <string name="msg_sbc_snippet_unavailable">Úryvok nie je k dispozícii</string>
   <string name="msg_sbc_unknown_page">Neznáma stránka</string>

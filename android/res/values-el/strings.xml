@@ -85,6 +85,7 @@
   <string name="msg_sbc_failed">Συγνώμη, η αναζήτηση παρουσίασε πρόβλημα.</string>
   <string name="msg_sbc_no_page_returned">Δεν βρέθηκε σελίδα</string>
   <string name="msg_sbc_page">Σελίδα</string>
+  <string name="msg_sbc_results">Αποτελέσματα</string>
   <string name="msg_sbc_searching_book">Άναζήτηση βιβλίου\u2026</string>
   <string name="msg_sbc_snippet_unavailable">Απόσπασμα μη διαθέσιμο</string>
   <string name="msg_sbc_unknown_page">Άγνωστη σελίδα</string>

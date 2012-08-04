@@ -85,6 +85,7 @@
   <string name="msg_sbc_failed">عفوا، حدثت مشكلة في عملية البحث.</string>
   <string name="msg_sbc_no_page_returned">لم يتم إرجاع أية صفحة</string>
   <string name="msg_sbc_page">الصفحة</string>
+  <string name="msg_sbc_results">النتائج</string>
   <string name="msg_sbc_searching_book">البحث في الكتاب</string>
   <string name="msg_sbc_snippet_unavailable">الأجزاء غير متاحة</string>
   <string name="msg_sbc_unknown_page">صفحة غير معروفة</string>

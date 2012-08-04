@@ -85,6 +85,7 @@
   <string name="msg_sbc_failed">Sorry, er is een fout opgetreden bij het zoeken.</string>
   <string name="msg_sbc_no_page_returned">Geen pagina ontvangen</string>
   <string name="msg_sbc_page">Pagina</string>
+  <string name="msg_sbc_results">Resultaten</string>
   <string name="msg_sbc_searching_book">Boek doorzoeken\u2026</string>
   <string name="msg_sbc_snippet_unavailable">Fragment niet beschikbaar</string>
   <string name="msg_sbc_unknown_page">Onbekende pagina</string>

@@ -176,7 +176,7 @@ public final class SearchBookContentsActivity extends Activity {
   private void handleSearchResults(JSONObject json) {
     try {
       int count = json.getInt("number_of_results");
-      headerView.setText("Found " + (count == 1 ? "1 result" : count + " results"));
+      headerView.setText(getString(R.string.msg_sbc_results) + " : " + count);
       if (count > 0) {
         JSONArray results = json.getJSONArray("search_results");
         SearchBookContentsResult.setQuery(queryTextView.getText().toString());
