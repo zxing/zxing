@@ -23,6 +23,8 @@ import android.util.Log;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import com.google.zxing.client.result.WifiParsedResult;
+
 /**
  * @author Vikram Aggarwal
  * @author Sean Owen
@@ -36,10 +38,7 @@ public final class WifiConfigManager {
   private WifiConfigManager() {
   }
 
-  public static void configure(final WifiManager wifiManager, 
-                               final String ssid, 
-                               final String password, 
-                               final String networkTypeString) {
+  public static void configure(final WifiManager wifiManager, final WifiParsedResult wifiResult) {
     Runnable configureRunnable = new Runnable() {
       @Override
       public void run() {
@@ -68,6 +67,7 @@ public final class WifiConfigManager {
             count++;
           }
         }
+        String networkTypeString = wifiResult.getNetworkEncryption();
         NetworkType networkType;
         try {
           networkType = NetworkType.forIntentValue(networkTypeString);
@@ -76,15 +76,16 @@ public final class WifiConfigManager {
           return;
         }
         if (networkType == NetworkType.NO_PASSWORD) {
-          changeNetworkUnEncrypted(wifiManager, ssid);
+          changeNetworkUnEncrypted(wifiManager, wifiResult);
         } else {
+          String password = wifiResult.getPassword();
           if (password == null || password.length() == 0) {
             throw new IllegalArgumentException();
           }
           if (networkType == NetworkType.WEP) {
-            changeNetworkWEP(wifiManager, ssid, password);
+            changeNetworkWEP(wifiManager, wifiResult);
           } else if (networkType == NetworkType.WPA) {
-            changeNetworkWPA(wifiManager, ssid, password);
+            changeNetworkWPA(wifiManager, wifiResult);
           }
         }
       }
@@ -118,7 +119,7 @@ public final class WifiConfigManager {
     }
   }
 
-  private static WifiConfiguration changeNetworkCommon(String ssid) {
+  private static WifiConfiguration changeNetworkCommon(WifiParsedResult wifiResult) {
     WifiConfiguration config = new WifiConfiguration();
     config.allowedAuthAlgorithms.clear();
     config.allowedGroupCiphers.clear();
@@ -126,14 +127,15 @@ public final class WifiConfigManager {
     config.allowedPairwiseCiphers.clear();
     config.allowedProtocols.clear();
     // Android API insists that an ascii SSID must be quoted to be correctly handled.
-    config.SSID = quoteNonHex(ssid);
+    config.SSID = quoteNonHex(wifiResult.getSsid());
+    config.hiddenSSID = wifiResult.isHidden();
     return config;
   }
 
   // Adding a WEP network
-  private static void changeNetworkWEP(WifiManager wifiManager, String ssid, String password) {
-    WifiConfiguration config = changeNetworkCommon(ssid);
-    config.wepKeys[0] = quoteNonHex(password, 10, 26, 58);
+  private static void changeNetworkWEP(WifiManager wifiManager, WifiParsedResult wifiResult) {
+    WifiConfiguration config = changeNetworkCommon(wifiResult);
+    config.wepKeys[0] = quoteNonHex(wifiResult.getPassword(), 10, 26, 58);
     config.wepTxKeyIndex = 0;
     config.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.SHARED);
     config.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
@@ -145,10 +147,10 @@ public final class WifiConfigManager {
   }
 
   // Adding a WPA or WPA2 network
-  private static void changeNetworkWPA(WifiManager wifiManager, String ssid, String password) {
-    WifiConfiguration config = changeNetworkCommon(ssid);
+  private static void changeNetworkWPA(WifiManager wifiManager, WifiParsedResult wifiResult) {
+    WifiConfiguration config = changeNetworkCommon(wifiResult);
     // Hex passwords that are 64 bits long are not to be quoted.
-    config.preSharedKey = quoteNonHex(password, 64);
+    config.preSharedKey = quoteNonHex(wifiResult.getPassword(), 64);
     config.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.OPEN);
     config.allowedProtocols.set(WifiConfiguration.Protocol.WPA); // For WPA
     config.allowedProtocols.set(WifiConfiguration.Protocol.RSN); // For WPA2
@@ -162,8 +164,8 @@ public final class WifiConfigManager {
   }
 
   // Adding an open, unsecured network
-  private static void changeNetworkUnEncrypted(WifiManager wifiManager, String ssid) {
-    WifiConfiguration config = changeNetworkCommon(ssid);
+  private static void changeNetworkUnEncrypted(WifiManager wifiManager, WifiParsedResult wifiResult) {
+    WifiConfiguration config = changeNetworkCommon(wifiResult);
     config.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
     updateNetwork(wifiManager, config);
   }
