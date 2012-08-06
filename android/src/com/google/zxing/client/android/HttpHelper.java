@@ -90,6 +90,7 @@ public final class HttpHelper {
       if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
         throw new IOException("Bad HTTP response: " + connection.getResponseCode());
       }
+      Log.i(TAG, "Consuming " + uri);
       return consume(connection);
     } finally {
       connection.disconnect();

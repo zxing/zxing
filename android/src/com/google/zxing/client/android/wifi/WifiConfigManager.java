@@ -18,6 +18,7 @@ package com.google.zxing.client.android.wifi;
 
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import java.util.List;
@@ -29,68 +30,68 @@ import com.google.zxing.client.result.WifiParsedResult;
  * @author Vikram Aggarwal
  * @author Sean Owen
  */
-public final class WifiConfigManager {
+public final class WifiConfigManager extends AsyncTask<WifiParsedResult,Void,Void> {
 
   private static final String TAG = WifiConfigManager.class.getSimpleName();
 
   private static final Pattern HEX_DIGITS = Pattern.compile("[0-9A-Fa-f]+");
 
-  private WifiConfigManager() {
+  private final WifiManager wifiManager;
+
+  public WifiConfigManager(WifiManager wifiManager) {
+    this.wifiManager = wifiManager;
   }
 
-  public static void configure(final WifiManager wifiManager, final WifiParsedResult wifiResult) {
-    Runnable configureRunnable = new Runnable() {
-      @Override
-      public void run() {
-        // Start WiFi, otherwise nothing will work
-        if (!wifiManager.isWifiEnabled()) {
-          Log.i(TAG, "Enabling wi-fi...");
-          if (wifiManager.setWifiEnabled(true)) {
-            Log.i(TAG, "Wi-fi enabled");
-          } else {
-            Log.w(TAG, "Wi-fi could not be enabled!");
-            return;
-          }
-          // This happens very quickly, but need to wait for it to enable. A little busy wait?
-          int count = 0;
-          while (!wifiManager.isWifiEnabled()) {
-            if (count >= 10) {
-              Log.i(TAG, "Took too long to enable wi-fi, quitting");
-              return;
-            }
-            Log.i(TAG, "Still waiting for wi-fi to enable...");
-            try {
-              Thread.sleep(1000L);
-            } catch (InterruptedException ie) {
-              // continue
-            }
-            count++;
-          }
-        }
-        String networkTypeString = wifiResult.getNetworkEncryption();
-        NetworkType networkType;
-        try {
-          networkType = NetworkType.forIntentValue(networkTypeString);
-        } catch (IllegalArgumentException iae) {
-          Log.w(TAG, "Bad network type; see NetworkType values: " + networkTypeString);
-          return;
-        }
-        if (networkType == NetworkType.NO_PASSWORD) {
-          changeNetworkUnEncrypted(wifiManager, wifiResult);
-        } else {
-          String password = wifiResult.getPassword();
-          if (password == null || password.length() == 0) {
-            throw new IllegalArgumentException();
-          }
-          if (networkType == NetworkType.WEP) {
-            changeNetworkWEP(wifiManager, wifiResult);
-          } else if (networkType == NetworkType.WPA) {
-            changeNetworkWPA(wifiManager, wifiResult);
-          }
-        }
+  @Override
+  protected Void doInBackground(WifiParsedResult... args) {
+    WifiParsedResult theWifiResult = args[0];
+    // Start WiFi, otherwise nothing will work
+    if (!wifiManager.isWifiEnabled()) {
+      Log.i(TAG, "Enabling wi-fi...");
+      if (wifiManager.setWifiEnabled(true)) {
+        Log.i(TAG, "Wi-fi enabled");
+      } else {
+        Log.w(TAG, "Wi-fi could not be enabled!");
+        return null;
       }
-    };
-    new Thread(configureRunnable).start();
+      // This happens very quickly, but need to wait for it to enable. A little busy wait?
+      int count = 0;
+      while (!wifiManager.isWifiEnabled()) {
+        if (count >= 10) {
+          Log.i(TAG, "Took too long to enable wi-fi, quitting");
+          return null;
+        }
+        Log.i(TAG, "Still waiting for wi-fi to enable...");
+        try {
+          Thread.sleep(1000L);
+        } catch (InterruptedException ie) {
+          // continue
+        }
+        count++;
+      }
+    }
+    String networkTypeString = theWifiResult.getNetworkEncryption();
+    NetworkType networkType;
+    try {
+      networkType = NetworkType.forIntentValue(networkTypeString);
+    } catch (IllegalArgumentException iae) {
+      Log.w(TAG, "Bad network type; see NetworkType values: " + networkTypeString);
+      return null;
+    }
+    if (networkType == NetworkType.NO_PASSWORD) {
+      changeNetworkUnEncrypted(wifiManager, theWifiResult);
+    } else {
+      String password = theWifiResult.getPassword();
+      if (password == null || password.length() == 0) {
+        throw new IllegalArgumentException();
+      }
+      if (networkType == NetworkType.WEP) {
+        changeNetworkWEP(wifiManager, theWifiResult);
+      } else if (networkType == NetworkType.WPA) {
+        changeNetworkWPA(wifiManager, theWifiResult);
+      }
+    }
+    return null;
   }
 
   /**
