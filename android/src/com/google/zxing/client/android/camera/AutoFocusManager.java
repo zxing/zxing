@@ -19,14 +19,13 @@ package com.google.zxing.client.android.camera;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.hardware.Camera;
+import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import com.google.zxing.client.android.PreferencesActivity;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Timer;
-import java.util.TimerTask;
 
 final class AutoFocusManager implements Camera.AutoFocusCallback {
 
@@ -43,12 +42,10 @@ final class AutoFocusManager implements Camera.AutoFocusCallback {
   private boolean active;
   private final boolean useAutoFocus;
   private final Camera camera;
-  private final Timer timer;
-  private TimerTask outstandingTask;
+  private AutoFocusTask outstandingTask;
 
   AutoFocusManager(Context context, Camera camera) {
     this.camera = camera;
-    timer = new Timer(true);
     SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
     String currentFocusMode = camera.getParameters().getFocusMode();
     useAutoFocus =
@@ -61,15 +58,7 @@ final class AutoFocusManager implements Camera.AutoFocusCallback {
   @Override
   public synchronized void onAutoFocus(boolean success, Camera theCamera) {
     if (active) {
-      outstandingTask = new TimerTask() {
-        @Override
-        public void run() {
-          if (active) {
-            start();
-          }
-        }
-      };
-      timer.schedule(outstandingTask, AUTO_FOCUS_INTERVAL_MS);
+      outstandingTask = new AutoFocusTask();
     }
   }
 
@@ -95,10 +84,27 @@ final class AutoFocusManager implements Camera.AutoFocusCallback {
       }
     }
     if (outstandingTask != null) {
-      outstandingTask.cancel();
+      outstandingTask.cancel(true);
       outstandingTask = null;
     }
     active = false;
+  }
+
+  private final class AutoFocusTask extends AsyncTask<Void,Void,Void> {
+    @Override
+    protected Void doInBackground(Void... voids) {
+      try {
+        Thread.sleep(AUTO_FOCUS_INTERVAL_MS);
+      } catch (InterruptedException e) {
+        // continue
+      }
+      synchronized (AutoFocusManager.this) {
+        if (active) {
+          start();
+        }
+      }
+      return null;
+    }
   }
 
 }
