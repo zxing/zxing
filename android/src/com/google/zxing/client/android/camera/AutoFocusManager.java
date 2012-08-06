@@ -59,6 +59,7 @@ final class AutoFocusManager implements Camera.AutoFocusCallback {
   public synchronized void onAutoFocus(boolean success, Camera theCamera) {
     if (active) {
       outstandingTask = new AutoFocusTask();
+      outstandingTask.execute();
     }
   }
 
