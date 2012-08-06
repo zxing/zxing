@@ -16,6 +16,8 @@
 
 package com.google.zxing.client.android;
 
+import android.util.Log;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,6 +36,8 @@ import java.util.HashSet;
  * in Android.
  */
 public final class HttpHelper {
+
+  private static final String TAG = HttpHelper.class.getSimpleName();
 
   private static final Collection<String> REDIRECTOR_DOMAINS = new HashSet<String>(Arrays.asList(
     "amzn.to", "bit.ly", "bitly.com", "fb.me", "goo.gl", "is.gd", "j.mp", "lnkd.in", "ow.ly",
@@ -75,6 +79,7 @@ public final class HttpHelper {
   }
 
   private static String downloadViaHttp(String uri, String contentTypes) throws IOException {
+    Log.i(TAG, "Downloading " + uri);
     URL url = new URL(uri);
     HttpURLConnection connection = (HttpURLConnection) url.openConnection();
     connection.setRequestProperty("Accept", contentTypes);
