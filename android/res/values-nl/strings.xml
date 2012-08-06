@@ -104,6 +104,9 @@
   <string name="preferences_decode_1D_title">1D-barcodes</string>
   <string name="preferences_decode_Data_Matrix_title">Datamatrix</string>
   <string name="preferences_decode_QR_title">QR-codes</string>
+  <string name="preferences_device_bug_workarounds_title">Apparaat Bug Tijdelijke oplossingen</string>
+  <string name="preferences_disable_continuous_focus_summary">Gebruik alleen standaard focus modus</string>
+  <string name="preferences_disable_continuous_focus_title">Geen continue focus</string>
   <string name="preferences_front_light_summary">Verbetert het scannen bij weinig licht bij sommige telefoons, maar kan schittering veroorzaken. Werkt niet op alle telefoons.</string>
   <string name="preferences_front_light_title">Flitser gebruiken</string>
   <string name="preferences_general_title">Algemene instellingen</string>

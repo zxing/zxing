@@ -104,6 +104,9 @@
   <string name="preferences_decode_1D_title">Dekoduj kody 1D</string>
   <string name="preferences_decode_Data_Matrix_title">Dekoduj Decode Matrix</string>
   <string name="preferences_decode_QR_title">Dekoduj kody QR</string>
+  <string name="preferences_device_bug_workarounds_title">Obejścia błędów urządzeń</string>
+  <string name="preferences_disable_continuous_focus_summary">Używaj tylko standardowego trybu ostrości</string>
+  <string name="preferences_disable_continuous_focus_title">Nie ciągły nacisk</string>
   <string name="preferences_front_light_summary">Polepsza skanowanie przy małej ilości światła w niektórych telefonach, ale może powodować odbłysk. Nie działa na wszystkich telefonach.</string>
   <string name="preferences_front_light_title">Używaj lampy frontowej</string>
   <string name="preferences_general_title">Ustawienia ogólne</string>

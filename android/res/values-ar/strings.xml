@@ -104,6 +104,9 @@
   <string name="preferences_decode_1D_title">فك الرموز الشريطية 1D</string>
   <string name="preferences_decode_Data_Matrix_title">فك رموز البيانات ماتريكس</string>
   <string name="preferences_decode_QR_title">فك رموز QR</string>
+  <string name="preferences_device_bug_workarounds_title">الحلول جهاز علة</string>
+  <string name="preferences_disable_continuous_focus_summary">استخدام وضع معيار التركيز فقط</string>
+  <string name="preferences_disable_continuous_focus_title">لا التركيز المستمر</string>
   <string name="preferences_front_light_summary">تقوم بتحسين عملية المسح في إضاءة ضعيفة في بعض الهواتف، ولكن يمكن أن يتسبب في حدوث سطوع</string>
   <string name="preferences_front_light_title">استخدم إضاءة أمامية</string>
   <string name="preferences_general_title">إعدادات عامة</string>

@@ -104,6 +104,9 @@
   <string name="preferences_decode_1D_title">扫描 一维条码</string>
   <string name="preferences_decode_Data_Matrix_title">扫描 DM码</string>
   <string name="preferences_decode_QR_title">扫描 QR码</string>
+  <string name="preferences_device_bug_workarounds_title">设备问题解决办法</string>
+  <string name="preferences_disable_continuous_focus_summary">只使用标准对焦模式</string>
+  <string name="preferences_disable_continuous_focus_title">没有持续关注</string>
   <string name="preferences_front_light_summary">前灯可用时，打开前灯</string>
   <string name="preferences_front_light_title">前灯</string>
   <string name="preferences_general_title">一般设置</string>

@@ -104,6 +104,9 @@
   <string name="preferences_decode_1D_title">1D बारकोड</string>
   <string name="preferences_decode_Data_Matrix_title">डाटा मैट्रिक्स</string>
   <string name="preferences_decode_QR_title">QR कोड</string>
+  <string name="preferences_device_bug_workarounds_title">युक्ति बग वर्कअराउन्ड</string>
+  <string name="preferences_disable_continuous_focus_summary">केवल मानक फोकस मोड का उपयोग करें</string>
+  <string name="preferences_disable_continuous_focus_title">कोई निरंतर ध्यान</string>
   <string name="preferences_front_light_summary">कुछ फोन पर कम रोशनी में स्कैनिंग बढ़ाता है, लेकिन चमक का कारण हो सकता है. सभी फोन पर काम नहीं करता.</string>
   <string name="preferences_front_light_title">सामने प्रकाश का उपयोग करें</string>
   <string name="preferences_general_title">सामान्य सेटिंग्स</string>
