@@ -104,6 +104,9 @@
   <string name="preferences_decode_1D_title">1D barra-kodeak</string>
   <string name="preferences_decode_Data_Matrix_title">Datu Matrizeak</string>
   <string name="preferences_decode_QR_title">QR Kodeak</string>
+  <string name="preferences_device_bug_workarounds_title">Gailuak Bug konponbidea</string>
+  <string name="preferences_disable_continuous_focus_summary">Erabili estandarrean soilik fokuaren modua</string>
+  <string name="preferences_disable_continuous_focus_title">Etengabeko foku No</string>
   <string name="preferences_front_light_summary">Eskaneatzea hobetzen du zenbait telefonotan argiztapena txikia denean, baina distirak eragin ditzake. Ez du telefono guztietan funtzionatzen.</string>
   <string name="preferences_front_light_title">Erabili aurreko argia</string>
   <string name="preferences_general_title">Ezarpen orokorrak</string>

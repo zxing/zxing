@@ -104,6 +104,9 @@
   <string name="preferences_decode_1D_title">1D Баркодове</string>
   <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>
   <string name="preferences_decode_QR_title">QR Баркодове</string>
+  <string name="preferences_device_bug_workarounds_title">Заобикаляне на устройствата за грешки</string>
+  <string name="preferences_disable_continuous_focus_summary">Използвайте само стандартен режим фокус</string>
+  <string name="preferences_disable_continuous_focus_title">Няма непрекъснато фокус</string>
   <string name="preferences_front_light_summary">Подобрява четенето при лошо осветление, но предизвиква отблясъци. Само за някои модели.</string>
   <string name="preferences_front_light_title">Използвай фенерче</string>
   <string name="preferences_general_title">Общи настройки</string>
