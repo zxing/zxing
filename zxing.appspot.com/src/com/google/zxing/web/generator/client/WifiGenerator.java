@@ -18,6 +18,7 @@ package com.google.zxing.web.generator.client;
 
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.KeyPressHandler;
+import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.TextBox;
@@ -28,6 +29,7 @@ import com.google.gwt.user.client.ui.Widget;
  * A Generator for Wifi networks.
  * 
  * @author Vikram Aggarwal
+ * @author Sean Owen
  */
 public final class WifiGenerator implements GeneratorSource {
 
@@ -35,6 +37,7 @@ public final class WifiGenerator implements GeneratorSource {
   private final TextBox ssid = new TextBox();
   private final TextBox password = new TextBox();
   private final ListBox networkType = new ListBox(false);
+  private final CheckBox hidden = new CheckBox();
 
   public WifiGenerator(ChangeHandler handler, KeyPressHandler keyListener) {
     networkType.addItem("WEP", "WEP");
@@ -57,23 +60,28 @@ public final class WifiGenerator implements GeneratorSource {
     String ssid = getSsidField();
     String password = getPasswordField();
     String networkType = getNetworkTypeField();
-    
+    boolean hidden = getHiddenField();
     // Build the output with obtained data.
-    return getWifiString(ssid, password, networkType);
+    return getWifiString(ssid, password, networkType, hidden);
   }
 
-  private static String getWifiString(String ssid, String password, String type) {
+  private static String getWifiString(String ssid, String password, String type, boolean hidden) {
     StringBuilder output = new StringBuilder(100);
     output.append("WIFI:");
     output.append("S:").append(ssid).append(';');
-    maybeAppend(output, "T:", type);
+    if (type != null && type.length() > 0 && !"nopass".equals(type)) {
+      maybeAppend(output, "T:", type);
+    }
     maybeAppend(output, "P:", password);
+    if (hidden) {
+      maybeAppend(output, "H:", "true");
+    }
     output.append(';');
     return output.toString();
   }
 
   private static void maybeAppend(StringBuilder output, String prefix, String value) {
-    if (value.length() > 0) {
+    if (value != null && value.length() > 0) {
       output.append(prefix).append(value).append(';');
     }
   }
@@ -105,6 +113,11 @@ public final class WifiGenerator implements GeneratorSource {
   private String getNetworkTypeField() {
     return networkType.getValue(networkType.getSelectedIndex());
   }
+
+  private boolean getHiddenField() {
+    Boolean value = hidden.getValue();
+    return value != null && value;
+  }
   
   @Override
   public Grid getWidget() {
@@ -112,7 +125,7 @@ public final class WifiGenerator implements GeneratorSource {
       // early termination if the table has already been constructed
       return table;
     }
-    table = new Grid(8, 2);
+    table = new Grid(4, 2);
     
     table.setText(0, 0, "SSID");
     table.setWidget(0, 1, ssid);
@@ -120,6 +133,8 @@ public final class WifiGenerator implements GeneratorSource {
     table.setWidget(1, 1, password);
     table.setText(2, 0, "Network Type");
     table.setWidget(2, 1, networkType);
+    table.setText(3, 0, "Hidden?");
+    table.setWidget(3, 1, hidden);
 
     ssid.addStyleName(StylesDefs.INPUT_FIELD_REQUIRED);
     return table;
@@ -135,6 +150,9 @@ public final class WifiGenerator implements GeneratorSource {
     }
     if (widget == networkType) {
       getNetworkTypeField();
+    }
+    if (widget == hidden) {
+      getHiddenField();
     }
   }
 
