@@ -57,7 +57,7 @@ public final class WifiResultHandler extends ResultHandler {
       WifiParsedResult wifiResult = (WifiParsedResult) getResult();
       WifiManager wifiManager = (WifiManager) getActivity().getSystemService(Context.WIFI_SERVICE);
       Toast.makeText(getActivity(), R.string.wifi_changing_network, Toast.LENGTH_LONG).show();
-      WifiConfigManager.configure(wifiManager, wifiResult);
+      new WifiConfigManager(wifiManager).execute(wifiResult);
       parent.restartPreviewAfterDelay(0L);
     }
   }

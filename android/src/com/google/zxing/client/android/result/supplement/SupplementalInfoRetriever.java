@@ -17,12 +17,14 @@
 package com.google.zxing.client.android.result.supplement;
 
 import android.content.Context;
-import android.os.Handler;
+import android.nfc.Tag;
+import android.os.AsyncTask;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.text.style.URLSpan;
+import android.util.Log;
 import android.widget.TextView;
 import com.google.zxing.client.result.ISBNParsedResult;
 import com.google.zxing.client.result.ParsedResult;
@@ -33,83 +35,70 @@ import com.google.zxing.client.android.history.HistoryManager;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.TimeUnit;
+import java.util.List;
 
-public abstract class SupplementalInfoRetriever implements Callable<Void> {
+public abstract class SupplementalInfoRetriever extends AsyncTask<Void,Void,Void> {
 
-  private static ExecutorService executorInstance = null;
-
-  private static synchronized ExecutorService getExecutorService() {
-    if (executorInstance == null) {
-      executorInstance = Executors.newCachedThreadPool(new ThreadFactory() {
-        @Override
-        public Thread newThread(Runnable r) {
-          Thread t = new Thread(r);
-          t.setDaemon(true);
-          return t;
-        }
-      });
-    }
-    return executorInstance;
-  }
+  private static final String TAG = "SupplementalInfo";
 
   public static void maybeInvokeRetrieval(TextView textView,
                                           ParsedResult result,
-                                          Handler handler,
                                           HistoryManager historyManager,
                                           Context context) {
-
-    Collection<SupplementalInfoRetriever> retrievers = new ArrayList<SupplementalInfoRetriever>(1);
-
     if (result instanceof URIParsedResult) {
-      retrievers.add(new URIResultInfoRetriever(textView, (URIParsedResult) result, handler, historyManager, context));
+      new URIResultInfoRetriever(textView, (URIParsedResult) result, historyManager, context).execute();
     } else if (result instanceof ProductParsedResult) {
       String productID = ((ProductParsedResult) result).getProductID();
-      retrievers.add(new ProductResultInfoRetriever(textView, productID, handler, historyManager, context));
+      new ProductResultInfoRetriever(textView, productID, historyManager, context).execute();
     } else if (result instanceof ISBNParsedResult) {
       String isbn = ((ISBNParsedResult) result).getISBN();
-      retrievers.add(new ProductResultInfoRetriever(textView, isbn, handler, historyManager, context));
-      retrievers.add(new BookResultInfoRetriever(textView, isbn, handler, historyManager, context));
-    }
-
-    for (SupplementalInfoRetriever retriever : retrievers) {
-      ExecutorService executor = getExecutorService();
-      Future<?> future = executor.submit(retriever);
-      // Make sure it's interrupted after a short time though
-      executor.submit(new KillerCallable(future, 10, TimeUnit.SECONDS));
+      new ProductResultInfoRetriever(textView, isbn, historyManager, context).execute();
+      new BookResultInfoRetriever(textView, isbn, historyManager, context).execute();
     }
   }
 
   private final WeakReference<TextView> textViewRef;
-  private final Handler handler;
-  private final HistoryManager historyManager;
+  private final WeakReference<HistoryManager> historyManagerRef;
+  private final List<Spannable> newContents;
+  private final List<String[]> newHistories;
 
-  SupplementalInfoRetriever(TextView textView, Handler handler, HistoryManager historyManager) {
-    this.textViewRef = new WeakReference<TextView>(textView);
-    this.handler = handler;
-    this.historyManager = historyManager;
+  SupplementalInfoRetriever(TextView textView, HistoryManager historyManager) {
+    textViewRef = new WeakReference<TextView>(textView);
+    historyManagerRef = new WeakReference<HistoryManager>(historyManager);
+    newContents = new ArrayList<Spannable>();
+    newHistories = new ArrayList<String[]>();
   }
 
   @Override
-  public final Void call() throws IOException, InterruptedException {
-    retrieveSupplementalInfo();
+  public final Void doInBackground(Void... args) {
+    try {
+      retrieveSupplementalInfo();
+    } catch (IOException e) {
+      Log.w(TAG, e);
+    }
     return null;
   }
 
-  abstract void retrieveSupplementalInfo() throws IOException, InterruptedException;
-
-  final void append(String itemID, String source, String[] newTexts, String linkURL) throws InterruptedException {
-
-    final TextView textView = textViewRef.get();
-    if (textView == null) {
-      throw new InterruptedException();
+  @Override
+  protected void onPostExecute(Void arg) {
+    TextView textView = textViewRef.get();
+    if (textView != null) {
+      for (Spannable content : newContents) {
+        textView.append(content);
+      }
+      textView.setMovementMethod(LinkMovementMethod.getInstance());
     }
+    HistoryManager historyManager = historyManagerRef.get();
+    if (historyManager != null) {
+      for (String[] text : newHistories) {
+        historyManager.addHistoryItemDetails(text[0], text[1]);
+      }
+    }
+  }
+
+  abstract void retrieveSupplementalInfo() throws IOException;
+
+  final void append(String itemID, String source, String[] newTexts, String linkURL) {
 
     StringBuilder newTextCombined = new StringBuilder();
 
@@ -134,21 +123,13 @@ public abstract class SupplementalInfoRetriever implements Callable<Void> {
     int linkEnd = newTextCombined.length();
 
     String newText = newTextCombined.toString();
-    final Spannable content = new SpannableString(newText + "\n\n");
+    Spannable content = new SpannableString(newText + "\n\n");
     if (linkURL != null) {
       content.setSpan(new URLSpan(linkURL), linkStart, linkEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
 
-    handler.post(new Runnable() {
-      @Override
-      public void run() {
-        textView.append(content);
-        textView.setMovementMethod(LinkMovementMethod.getInstance());
-      }
-    });
-
-    // Add the text to the history.
-    historyManager.addHistoryItemDetails(itemID, newText);
+    newContents.add(content);
+    newHistories.add(new String[] {itemID, newText});
   }
 
 }

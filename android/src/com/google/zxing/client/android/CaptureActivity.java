@@ -563,7 +563,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         PreferencesActivity.KEY_SUPPLEMENTAL, true)) {
       SupplementalInfoRetriever.maybeInvokeRetrieval(supplementTextView,
                                                      resultHandler.getResult(),
-                                                     handler,
                                                      historyManager,
                                                      this);
     }
