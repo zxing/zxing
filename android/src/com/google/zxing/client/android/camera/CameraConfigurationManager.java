@@ -26,6 +26,8 @@ import android.view.Display;
 import android.view.WindowManager;
 
 import com.google.zxing.client.android.PreferencesActivity;
+import com.google.zxing.client.android.camera.exposure.ExposureInterface;
+import com.google.zxing.client.android.camera.exposure.ExposureManager;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -50,9 +52,11 @@ final class CameraConfigurationManager {
   private final Context context;
   private Point screenResolution;
   private Point cameraResolution;
+  private final ExposureInterface exposure;
 
   CameraConfigurationManager(Context context) {
     this.context = context;
+    exposure = new ExposureManager().build();
   }
 
   /**
@@ -135,12 +139,12 @@ final class CameraConfigurationManager {
     }
   }
 
-  private static void initializeTorch(Camera.Parameters parameters, SharedPreferences prefs) {
+  private void initializeTorch(Camera.Parameters parameters, SharedPreferences prefs) {
     boolean currentSetting = prefs.getBoolean(PreferencesActivity.KEY_FRONT_LIGHT, false);
     doSetTorch(parameters, currentSetting);
   }
 
-  private static void doSetTorch(Camera.Parameters parameters, boolean newSetting) {
+  private void doSetTorch(Camera.Parameters parameters, boolean newSetting) {
     String flashMode;
     if (newSetting) {
       flashMode = findSettableValue(parameters.getSupportedFlashModes(),
@@ -153,6 +157,8 @@ final class CameraConfigurationManager {
     if (flashMode != null) {
       parameters.setFlashMode(flashMode);
     }
+
+    exposure.setExposure(parameters, newSetting);
   }
 
   private Point findBestPreviewSizeValue(Camera.Parameters parameters, Point screenResolution) {
