@@ -33,7 +33,7 @@ import java.util.List;
  *
  * @author Sean Owen
  */
-final class LoadPackagesAsyncTask extends AsyncTask<List<String[]>, Void, List<String[]>> {
+final class LoadPackagesAsyncTask extends AsyncTask<List<String[]>,Object,List<String[]>> {
 
   private static final String[] PKG_PREFIX_WHITELIST = {
       "com.google.android.apps.",

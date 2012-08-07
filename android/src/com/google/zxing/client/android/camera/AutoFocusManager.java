@@ -22,10 +22,13 @@ import android.hardware.Camera;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import com.google.zxing.client.android.PreferencesActivity;
 
 import java.util.ArrayList;
 import java.util.Collection;
+
+import com.google.zxing.client.android.PreferencesActivity;
+import com.google.zxing.client.android.common.executor.AsyncTaskExecInterface;
+import com.google.zxing.client.android.common.executor.AsyncTaskExecManager;
 
 final class AutoFocusManager implements Camera.AutoFocusCallback {
 
@@ -43,9 +46,11 @@ final class AutoFocusManager implements Camera.AutoFocusCallback {
   private final boolean useAutoFocus;
   private final Camera camera;
   private AutoFocusTask outstandingTask;
+  private final AsyncTaskExecInterface taskExec;
 
   AutoFocusManager(Context context, Camera camera) {
     this.camera = camera;
+    taskExec = new AsyncTaskExecManager().build();
     SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
     String currentFocusMode = camera.getParameters().getFocusMode();
     useAutoFocus =
@@ -59,7 +64,7 @@ final class AutoFocusManager implements Camera.AutoFocusCallback {
   public synchronized void onAutoFocus(boolean success, Camera theCamera) {
     if (active) {
       outstandingTask = new AutoFocusTask();
-      outstandingTask.execute();
+      taskExec.execute(outstandingTask);
     }
   }
 
@@ -91,9 +96,9 @@ final class AutoFocusManager implements Camera.AutoFocusCallback {
     active = false;
   }
 
-  private final class AutoFocusTask extends AsyncTask<Void,Void,Void> {
+  private final class AutoFocusTask extends AsyncTask<Object,Object,Object> {
     @Override
-    protected Void doInBackground(Void... voids) {
+    protected Object doInBackground(Object... voids) {
       try {
         Thread.sleep(AUTO_FOCUS_INTERVAL_MS);
       } catch (InterruptedException e) {

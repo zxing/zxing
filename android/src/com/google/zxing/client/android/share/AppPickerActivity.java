@@ -18,33 +18,42 @@ package com.google.zxing.client.android.share;
 
 import android.app.ListActivity;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.provider.Browser;
 import android.view.View;
 import android.widget.ListView;
+
+import com.google.zxing.client.android.common.executor.AsyncTaskExecInterface;
+import com.google.zxing.client.android.common.executor.AsyncTaskExecManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public final class AppPickerActivity extends ListActivity {
 
-  private final List<String[]> labelsPackages = new ArrayList<String[]>();
+  private final List<String[]> labelsPackages;
   private LoadPackagesAsyncTask backgroundTask;
+  private final AsyncTaskExecInterface taskExec;
+
+  public AppPickerActivity() {
+    labelsPackages = new ArrayList<String[]>();
+    taskExec = new AsyncTaskExecManager().build();
+  }
 
   @Override
   protected void onResume() {
     super.onResume();
     labelsPackages.clear();
     backgroundTask = new LoadPackagesAsyncTask(this);
-    backgroundTask.execute(labelsPackages);
+    taskExec.execute(backgroundTask, labelsPackages);
   }
 
   @Override
   protected void onPause() {
-    if (backgroundTask.getStatus() != AsyncTask.Status.FINISHED) {
-      backgroundTask.cancel(true);
+    LoadPackagesAsyncTask task = backgroundTask;
+    if (task != null) {
+      task.cancel(true);
+      backgroundTask = null;
     }
-    backgroundTask = null;
     super.onPause();
   }
 

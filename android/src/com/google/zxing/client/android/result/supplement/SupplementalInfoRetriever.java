@@ -17,7 +17,6 @@
 package com.google.zxing.client.android.result.supplement;
 
 import android.content.Context;
-import android.nfc.Tag;
 import android.os.AsyncTask;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -26,18 +25,21 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.URLSpan;
 import android.util.Log;
 import android.widget.TextView;
-import com.google.zxing.client.result.ISBNParsedResult;
-import com.google.zxing.client.result.ParsedResult;
-import com.google.zxing.client.result.ProductParsedResult;
-import com.google.zxing.client.result.URIParsedResult;
-import com.google.zxing.client.android.history.HistoryManager;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class SupplementalInfoRetriever extends AsyncTask<Void,Void,Void> {
+import com.google.zxing.client.android.common.executor.AsyncTaskExecInterface;
+import com.google.zxing.client.android.common.executor.AsyncTaskExecManager;
+import com.google.zxing.client.android.history.HistoryManager;
+import com.google.zxing.client.result.ISBNParsedResult;
+import com.google.zxing.client.result.ParsedResult;
+import com.google.zxing.client.result.ProductParsedResult;
+import com.google.zxing.client.result.URIParsedResult;
+
+public abstract class SupplementalInfoRetriever extends AsyncTask<Object,Object,Object> {
 
   private static final String TAG = "SupplementalInfo";
 
@@ -45,15 +47,16 @@ public abstract class SupplementalInfoRetriever extends AsyncTask<Void,Void,Void
                                           ParsedResult result,
                                           HistoryManager historyManager,
                                           Context context) {
+    AsyncTaskExecInterface taskExec = new AsyncTaskExecManager().build();
     if (result instanceof URIParsedResult) {
-      new URIResultInfoRetriever(textView, (URIParsedResult) result, historyManager, context).execute();
+      taskExec.execute(new URIResultInfoRetriever(textView, (URIParsedResult) result, historyManager, context));
     } else if (result instanceof ProductParsedResult) {
       String productID = ((ProductParsedResult) result).getProductID();
-      new ProductResultInfoRetriever(textView, productID, historyManager, context).execute();
+      taskExec.execute(new ProductResultInfoRetriever(textView, productID, historyManager, context));
     } else if (result instanceof ISBNParsedResult) {
       String isbn = ((ISBNParsedResult) result).getISBN();
-      new ProductResultInfoRetriever(textView, isbn, historyManager, context).execute();
-      new BookResultInfoRetriever(textView, isbn, historyManager, context).execute();
+      taskExec.execute(new ProductResultInfoRetriever(textView, isbn, historyManager, context));
+      taskExec.execute(new BookResultInfoRetriever(textView, isbn, historyManager, context));
     }
   }
 
@@ -70,7 +73,7 @@ public abstract class SupplementalInfoRetriever extends AsyncTask<Void,Void,Void
   }
 
   @Override
-  public final Void doInBackground(Void... args) {
+  public final Object doInBackground(Object... args) {
     try {
       retrieveSupplementalInfo();
     } catch (IOException e) {
@@ -80,7 +83,7 @@ public abstract class SupplementalInfoRetriever extends AsyncTask<Void,Void,Void
   }
 
   @Override
-  protected void onPostExecute(Void arg) {
+  protected void onPostExecute(Object arg) {
     TextView textView = textViewRef.get();
     if (textView != null) {
       for (Spannable content : newContents) {
