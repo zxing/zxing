@@ -54,13 +54,13 @@
   <string name="history_clear_one_history_text">Изчисти</string>
   <string name="history_clear_text">Изчисти историята</string>
   <string name="history_email_title">История на Баркод Скенера</string>
-  <string name="history_empty">Празен</string>
-  <string name="history_empty_detail">Не баркод сканиране са записани още</string>
+  <string name="history_empty">Празно</string>
+  <string name="history_empty_detail">Няма сканирани и записани бар-кодове все още</string>
   <string name="history_send">Изпрати историята</string>
   <string name="history_title">История</string>
   <string name="menu_about">Относно</string>
-  <string name="menu_encode_mecard">Използвайте MECARD</string>
-  <string name="menu_encode_vcard">Използвайте vCard</string>
+  <string name="menu_encode_mecard">Използвай MECARD формат</string>
+  <string name="menu_encode_vcard">Използвай vCard формат</string>
   <string name="menu_help">Помощ</string>
   <string name="menu_history">История</string>
   <string name="menu_settings">Настройки</string>
@@ -99,14 +99,14 @@
   <string name="preferences_bulk_mode_summary">Сканирай и запомняй множество баркодове без прекъсване</string>
   <string name="preferences_bulk_mode_title">Масово сканиране</string>
   <string name="preferences_copy_to_clipboard_title">Копиране в клипборда</string>
-  <string name="preferences_custom_product_search_summary" formatted="false">Използвайте: %s = съдържанието,%f = форматa, %t = тип</string>
+  <string name="preferences_custom_product_search_summary" formatted="false">Използвайте: %s за съдържанието,%f за форматa, %t за типа</string>
   <string name="preferences_custom_product_search_title">Потребителски адрес за търсене</string>
   <string name="preferences_decode_1D_title">1D Баркодове</string>
   <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>
   <string name="preferences_decode_QR_title">QR Баркодове</string>
-  <string name="preferences_device_bug_workarounds_title">Заобикаляне на устройствата за грешки</string>
-  <string name="preferences_disable_continuous_focus_summary">Използвайте само стандартен режим фокус</string>
-  <string name="preferences_disable_continuous_focus_title">Няма непрекъснато фокус</string>
+  <string name="preferences_device_bug_workarounds_title">Заобикаляне на проблеми</string>
+  <string name="preferences_disable_continuous_focus_summary">Използване само на стандартен режим за фокусиране</string>
+  <string name="preferences_disable_continuous_focus_title">Без непрекъснат фокус</string>
   <string name="preferences_front_light_summary">Подобрява четенето при лошо осветление, но предизвиква отблясъци. Само за някои модели.</string>
   <string name="preferences_front_light_title">Използвай фенерче</string>
   <string name="preferences_general_title">Общи настройки</string>

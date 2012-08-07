@@ -26,7 +26,7 @@ public final class DefaultAsyncTaskExecInterface implements AsyncTaskExecInterfa
 
   @Override
   public <T> void execute(AsyncTask<T,?,?> task, T... args) {
-    task.execute();
+    task.execute(args);
   }
 
 }
