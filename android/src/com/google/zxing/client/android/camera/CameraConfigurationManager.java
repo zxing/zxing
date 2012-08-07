@@ -100,7 +100,8 @@ final class CameraConfigurationManager {
                                       Camera.Parameters.FOCUS_MODE_AUTO);
       } else {
         focusMode = findSettableValue(parameters.getSupportedFocusModes(),
-                                      "continuous-picture", // Camera.Paramters.FOCUS_MODE_CONTINUOUS_PICTURE in 4.0+
+                                      "continuous-picture", // Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE in 4.0+
+                                      "continuous-video",   // Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO in 4.0+
                                       Camera.Parameters.FOCUS_MODE_AUTO);
       }
     }
