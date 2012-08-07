@@ -30,7 +30,7 @@ import com.google.zxing.client.result.WifiParsedResult;
  * @author Vikram Aggarwal
  * @author Sean Owen
  */
-public final class WifiConfigManager extends AsyncTask<WifiParsedResult,Void,Void> {
+public final class WifiConfigManager extends AsyncTask<WifiParsedResult,Object,Object> {
 
   private static final String TAG = WifiConfigManager.class.getSimpleName();
 
@@ -43,7 +43,7 @@ public final class WifiConfigManager extends AsyncTask<WifiParsedResult,Void,Voi
   }
 
   @Override
-  protected Void doInBackground(WifiParsedResult... args) {
+  protected Object doInBackground(WifiParsedResult... args) {
     WifiParsedResult theWifiResult = args[0];
     // Start WiFi, otherwise nothing will work
     if (!wifiManager.isWifiEnabled()) {

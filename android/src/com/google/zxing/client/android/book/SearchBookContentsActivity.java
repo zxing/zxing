@@ -30,7 +30,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import com.google.zxing.client.android.HttpHelper;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -40,9 +40,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import com.google.zxing.client.android.Intents;
+import com.google.zxing.client.android.HttpHelper;
 import com.google.zxing.client.android.LocaleManager;
 import com.google.zxing.client.android.R;
-import com.google.zxing.client.android.Intents;
+import com.google.zxing.client.android.common.executor.AsyncTaskExecInterface;
+import com.google.zxing.client.android.common.executor.AsyncTaskExecManager;
 
 /**
  * Uses Google Book Search to find a word or phrase in the requested book.
@@ -64,6 +67,12 @@ public final class SearchBookContentsActivity extends Activity {
   private Button queryButton;
   private ListView resultListView;
   private TextView headerView;
+  private NetworkTask networkTask;
+  private final AsyncTaskExecInterface taskExec;
+
+  public SearchBookContentsActivity() {
+    taskExec = new AsyncTaskExecManager().build();
+  }
 
   private final Button.OnClickListener buttonListener = new Button.OnClickListener() {
     @Override
@@ -134,11 +143,25 @@ public final class SearchBookContentsActivity extends Activity {
     queryTextView.selectAll();
   }
 
+  @Override
+  protected void onPause() {
+    NetworkTask oldTask = networkTask;
+    if (oldTask != null) {
+      oldTask.cancel(true);
+      networkTask = null;
+    }
+    super.onPause();
+  }
+
   private void launchSearch() {
     String query = queryTextView.getText().toString();
     if (query != null && query.length() > 0) {
-      NetworkTask networkTask = new NetworkTask();
-      networkTask.execute(query, isbn);
+      NetworkTask oldTask = networkTask;
+      if (oldTask != null) {
+        oldTask.cancel(true);
+      }
+      networkTask = new NetworkTask();
+      taskExec.execute(networkTask, query, isbn);
       headerView.setText(R.string.msg_sbc_searching_book);
       resultListView.setAdapter(null);
       queryTextView.setEnabled(false);
