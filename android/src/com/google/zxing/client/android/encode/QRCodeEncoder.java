@@ -131,18 +131,32 @@ final class QRCodeEncoder {
   // Handles send intents from multitude of Android applications
   private void encodeContentsFromShareIntent(Intent intent) throws WriterException {
     // Check if this is a plain text encoding, or contact
-    if (intent.hasExtra(Intent.EXTRA_TEXT)) {
-      encodeContentsFromShareIntentPlainText(intent);
+    if (intent.hasExtra(Intent.EXTRA_STREAM)) {
+      encodeFromStreamExtra(intent);
     } else {
-      // Attempt default sharing.
-      encodeContentsFromShareIntentDefault(intent);
+      encodeFromTextExtras(intent);
     }
   }
 
-  private void encodeContentsFromShareIntentPlainText(Intent intent) throws WriterException {
+  private void encodeFromTextExtras(Intent intent) throws WriterException {
     // Notice: Google Maps shares both URL and details in one text, bummer!
     String theContents = ContactEncoder.trim(intent.getStringExtra(Intent.EXTRA_TEXT));
-    // We only support non-empty and non-blank texts.
+    if (theContents == null) {
+      theContents = ContactEncoder.trim(intent.getStringExtra("android.intent.extra.HTML_TEXT"));
+      // Intent.EXTRA_HTML_TEXT
+      if (theContents == null) {
+        theContents = ContactEncoder.trim(intent.getStringExtra(Intent.EXTRA_SUBJECT));
+        if (theContents == null) {
+          String[] emails = intent.getStringArrayExtra(Intent.EXTRA_EMAIL);
+          if (emails != null) {
+            theContents = ContactEncoder.trim(emails[0]);
+          } else {
+            theContents = "?";
+          }
+        }
+      }
+    }
+
     // Trim text to avoid URL breaking.
     if (theContents == null || theContents.length() == 0) {
       throw new WriterException("Empty EXTRA_TEXT");
@@ -161,7 +175,7 @@ final class QRCodeEncoder {
   }
 
   // Handles send intents from the Contacts app, retrieving a contact as a VCARD.
-  private void encodeContentsFromShareIntentDefault(Intent intent) throws WriterException {
+  private void encodeFromStreamExtra(Intent intent) throws WriterException {
     format = BarcodeFormat.QR_CODE;
     Bundle bundle = intent.getExtras();
     if (bundle == null) {
