@@ -14,18 +14,11 @@
  * limitations under the License.
  */
 
-package com.google.zxing.client.androidtest;
-
-import com.google.zxing.LuminanceSource;
-
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-
-import java.io.FileNotFoundException;
+package com.google.zxing;
 
 /**
  * This class is used to help decode images from files which arrive as RGB data from
- * Android bitmaps. It does not support cropping or rotation.
+ * an ARGB pixel array. It does not support cropping or rotation.
  *
  * @author dswitkin@google.com (Daniel Switkin)
  */
@@ -33,18 +26,8 @@ public final class RGBLuminanceSource extends LuminanceSource {
 
   private final byte[] luminances;
 
-  public RGBLuminanceSource(String path) throws FileNotFoundException {
-    this(loadBitmap(path));
-  }
-
-  public RGBLuminanceSource(Bitmap bitmap) {
-    super(bitmap.getWidth(), bitmap.getHeight());
-
-    int width = bitmap.getWidth();
-    int height = bitmap.getHeight();
-    int[] pixels = new int[width * height];
-    bitmap.getPixels(pixels, 0, width, 0, 0, width, height);
-
+  public RGBLuminanceSource(int width, int height, int[] pixels) {
+    super(width, height);
     // In order to measure pure decoding speed, we convert the entire image to a greyscale array
     // up front, which is the same as the Y channel of the YUVLuminanceSource in the real app.
     luminances = new byte[width * height];
@@ -80,19 +63,13 @@ public final class RGBLuminanceSource extends LuminanceSource {
     return row;
   }
 
-  // Since this class does not support cropping, the underlying byte array already contains
-  // exactly what the caller is asking for, so give it to them without a copy.
+  /**
+   * Since this class does not support cropping, the underlying byte array already contains
+   * exactly what the caller is asking for, so give it to them without a copy.
+   */
   @Override
   public byte[] getMatrix() {
     return luminances;
-  }
-
-  private static Bitmap loadBitmap(String path) throws FileNotFoundException {
-    Bitmap bitmap = BitmapFactory.decodeFile(path);
-    if (bitmap == null) {
-      throw new FileNotFoundException("Couldn't open " + path);
-    }
-    return bitmap;
   }
 
 }
