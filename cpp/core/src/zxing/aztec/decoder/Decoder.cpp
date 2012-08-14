@@ -228,7 +228,6 @@ Ref<String> Decoder::getEncodedData(Ref<zxing::BitArray> correctedBits) {
     } else {
       if (table == BINARY) {
         if (endIndex - startIndex < 8) {
-          end = true;
           break;
         }
         code = readCode(correctedBits, startIndex, 8);
@@ -243,7 +242,6 @@ Ref<String> Decoder::getEncodedData(Ref<zxing::BitArray> correctedBits) {
         }
                         
         if (endIndex - startIndex < size) {
-          end = true;
           break;
         }
                         
