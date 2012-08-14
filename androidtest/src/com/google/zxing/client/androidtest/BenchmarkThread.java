@@ -16,8 +16,11 @@
 
 package com.google.zxing.client.androidtest;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.MultiFormatReader;
+import com.google.zxing.RGBLuminanceSource;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 import com.google.zxing.common.HybridBinarizer;
@@ -27,12 +30,11 @@ import android.os.Message;
 import android.util.Log;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-final class BenchmarkThread extends Thread {
+final class BenchmarkThread implements Runnable {
 
   private static final String TAG = BenchmarkThread.class.getSimpleName();
   private static final int RUNS = 10;
@@ -78,13 +80,19 @@ final class BenchmarkThread extends Thread {
   }
 
   private BenchmarkItem decode(String path) {
-    RGBLuminanceSource source;
-    try {
-      source = new RGBLuminanceSource(path);
-    } catch (FileNotFoundException e) {
-      Log.e(TAG, e.toString());
+
+    Bitmap imageBitmap = BitmapFactory.decodeFile(path);
+    if (imageBitmap == null) {
+      Log.e(TAG, "Couldn't open " + path);
       return null;
     }
+
+    int width = imageBitmap.getWidth();
+    int height = imageBitmap.getHeight();
+    int[] pixels = new int[width * height];
+    imageBitmap.getPixels(pixels, 0, width, 0, 0, width, height);
+
+    RGBLuminanceSource source = new RGBLuminanceSource(width, height, pixels);
 
     BenchmarkItem item = new BenchmarkItem(path, RUNS);
     for (int x = 0; x < RUNS; x++) {

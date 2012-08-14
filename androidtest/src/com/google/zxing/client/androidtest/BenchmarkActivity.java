@@ -32,7 +32,7 @@ public final class BenchmarkActivity extends Activity {
 
   private Button runBenchmarkButton;
   private TextView textView;
-  private BenchmarkThread benchmarkThread;
+  private Thread benchmarkThread;
 
   @Override
   public void onCreate(Bundle icicle) {
@@ -53,7 +53,7 @@ public final class BenchmarkActivity extends Activity {
       if (benchmarkThread == null) {
         runBenchmarkButton.setEnabled(false);
         textView.setText(R.string.benchmark_running);
-        benchmarkThread = new BenchmarkThread(BenchmarkActivity.this, PATH);
+        benchmarkThread = new Thread(new BenchmarkThread(BenchmarkActivity.this, PATH));
         benchmarkThread.start();
       }
     }
