@@ -18,16 +18,27 @@ package com.google.zxing;
 
 /**
  * This class is used to help decode images from files which arrive as RGB data from
- * an ARGB pixel array. It does not support cropping or rotation.
+ * an ARGB pixel array. It does not support rotation.
  *
  * @author dswitkin@google.com (Daniel Switkin)
+ * @author Betaminos
  */
 public final class RGBLuminanceSource extends LuminanceSource {
 
   private final byte[] luminances;
+  private final int dataWidth;
+  private final int dataHeight;
+  private final int left;
+  private final int top;
 
   public RGBLuminanceSource(int width, int height, int[] pixels) {
     super(width, height);
+
+    dataWidth = width;
+    dataHeight = height;
+    left = 0;
+    top = 0;
+
     // In order to measure pure decoding speed, we convert the entire image to a greyscale array
     // up front, which is the same as the Y channel of the YUVLuminanceSource in the real app.
     luminances = new byte[width * height];
@@ -48,6 +59,24 @@ public final class RGBLuminanceSource extends LuminanceSource {
       }
     }
   }
+  
+  private RGBLuminanceSource(byte[] pixels,
+                             int dataWidth,
+                             int dataHeight,
+                             int left,
+                             int top,
+                             int width,
+                             int height) {
+    super(width, height);
+    if (left + width > dataWidth || top + height > dataHeight) {
+      throw new IllegalArgumentException("Crop rectangle does not fit within image data.");
+    }
+    this.luminances = pixels;
+    this.dataWidth = dataWidth;
+    this.dataHeight = dataHeight;
+    this.left = left;
+    this.top = top;
+  }
 
   @Override
   public byte[] getRow(int y, byte[] row) {
@@ -58,18 +87,56 @@ public final class RGBLuminanceSource extends LuminanceSource {
     if (row == null || row.length < width) {
       row = new byte[width];
     }
-
-    System.arraycopy(luminances, y * width, row, 0, width);
+    int offset = (y + top) * dataWidth + left;
+    System.arraycopy(luminances, offset, row, 0, width);
     return row;
   }
 
-  /**
-   * Since this class does not support cropping, the underlying byte array already contains
-   * exactly what the caller is asking for, so give it to them without a copy.
-   */
   @Override
   public byte[] getMatrix() {
-    return luminances;
+    int width = getWidth();
+    int height = getHeight();
+
+    // If the caller asks for the entire underlying image, save the copy and give them the
+    // original data. The docs specifically warn that result.length must be ignored.
+    if (width == dataWidth && height == dataHeight) {
+      return luminances;
+    }
+
+    int area = width * height;
+    byte[] matrix = new byte[area];
+    int inputOffset = top * dataWidth + left;
+
+    // If the width matches the full width of the underlying data, perform a single copy.
+    if (width == dataWidth) {
+      System.arraycopy(luminances, inputOffset, matrix, 0, area);
+      return matrix;
+    }
+
+    // Otherwise copy one cropped row at a time.
+    byte[] rgb = luminances;
+    for (int y = 0; y < height; y++) {
+      int outputOffset = y * width;
+      System.arraycopy(rgb, inputOffset, matrix, outputOffset, width);
+      inputOffset += dataWidth;
+    }
+    return matrix;
+  }
+  
+  @Override
+  public boolean isCropSupported() {
+    return true;
+  }
+
+  @Override
+  public LuminanceSource crop(int left, int top, int width, int height) {
+    return new RGBLuminanceSource(luminances,
+                                  dataWidth,
+                                  dataHeight,
+                                  this.left + left,
+                                  this.top + top,
+                                  width,
+                                  height);
   }
 
 }
