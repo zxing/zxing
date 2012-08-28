@@ -19,14 +19,14 @@
   <string name="app_picker_name">Ohjelmat</string>
   <string name="bookmark_picker_name">Kirjanmerkit</string>
   <string name="button_add_calendar">Lisää kalenteriin</string>
-  <string name="button_add_contact">Lisää kontakti</string>
+  <string name="button_add_contact">Lisää yhteystieto</string>
   <string name="button_back">Takaisin</string>
   <string name="button_book_search">Kirjahaku</string>
   <string name="button_cancel">Peruuta</string>
   <string name="button_clipboard_empty">Leikepöytä on tyhjä</string>
   <string name="button_custom_product_search">Mukautettu haku</string>
   <string name="button_dial">Soita numeroon</string>
-  <string name="button_done">Tehty</string>
+  <string name="button_done">Valmis</string>
   <string name="button_email">Lähetä sähköpostia</string>
   <string name="button_get_directions">Hae ajo-ohjeet</string>
   <string name="button_google_shopper">Google Shopper</string>
@@ -45,7 +45,7 @@
   <string name="button_sms">Lähetä tekstiviesti</string>
   <string name="button_web_search">Verkkohaku</string>
   <string name="button_wifi">Yhdistä verkkoon</string>
-  <string name="contents_contact">Kontaktin tiedot</string>
+  <string name="contents_contact">Yhteystiedon tiedot</string>
   <string name="contents_email">Sähköpostiosoite</string>
   <string name="contents_location">Maantieteelliset koordinaatit</string>
   <string name="contents_phone">Puhelinnumero</string>
@@ -87,7 +87,7 @@
   <string name="msg_sbc_page">Sivu</string>
   <string name="msg_sbc_results">Tulokset</string>
   <string name="msg_sbc_searching_book">Haetaan kirjaa \u2026</string>
-  <string name="msg_sbc_snippet_unavailable">Snippetiä ei saatavilla</string>
+  <string name="msg_sbc_snippet_unavailable">Kappaletta ei saatavilla</string>
   <string name="msg_sbc_unknown_page">Tuntematon sivu</string>
   <string name="msg_share_explanation">Voit jakaa dataa näyttämällä viivakoodin laitteesi näytöllä ja lukemalla sen toisella laitteella.</string>
   <string name="msg_share_subject_line">Tässä on viivakoodin skannattu sisältö</string>
