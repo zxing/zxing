@@ -53,7 +53,7 @@ final class ProductResultInfoRetriever extends SupplementalInfoRetriever {
     String encodedProductID = URLEncoder.encode(productID, "UTF-8");
     String uri = "http://www.google." + LocaleManager.getProductSearchCountryTLD(context)
             + "/m/products?ie=utf8&oe=utf8&scoring=p&source=zxing&q=" + encodedProductID;
-    String content = HttpHelper.downloadViaHttp(uri, HttpHelper.ContentType.HTML);
+    CharSequence content = HttpHelper.downloadViaHttp(uri, HttpHelper.ContentType.HTML);
 
     for (Pattern p : PRODUCT_NAME_PRICE_PATTERNS) {
       Matcher matcher = p.matcher(content);
