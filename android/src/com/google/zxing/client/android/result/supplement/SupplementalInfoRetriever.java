@@ -50,6 +50,7 @@ public abstract class SupplementalInfoRetriever extends AsyncTask<Object,Object,
     AsyncTaskExecInterface taskExec = new AsyncTaskExecManager().build();
     if (result instanceof URIParsedResult) {
       taskExec.execute(new URIResultInfoRetriever(textView, (URIParsedResult) result, historyManager, context));
+      taskExec.execute(new TitleRetriever(textView, (URIParsedResult) result, historyManager));
     } else if (result instanceof ProductParsedResult) {
       String productID = ((ProductParsedResult) result).getProductID();
       taskExec.execute(new ProductResultInfoRetriever(textView, productID, historyManager, context));

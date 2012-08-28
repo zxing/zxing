@@ -18,10 +18,9 @@ package com.google.zxing.client.android;
 
 import android.util.Log;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -57,12 +56,22 @@ public final class HttpHelper {
   }
 
   /**
+   * Downloads the entire resource instead of part.
+   *
+   * @see #downloadViaHttp(String, HttpHelper.ContentType, int)
+   */
+  public static CharSequence downloadViaHttp(String uri, ContentType type) throws IOException {
+    return downloadViaHttp(uri, type, Integer.MAX_VALUE);
+  }
+
+  /**
    * @param uri URI to retrieve
    * @param type expected text-like MIME type of that content
+   * @param maxChars approximate maximum characters to read from the source
    * @return content as a {@code String}
    * @throws IOException if the content can't be retrieved because of a bad URI, network problem, etc.
    */
-  public static String downloadViaHttp(String uri, ContentType type) throws IOException {
+  public static CharSequence downloadViaHttp(String uri, ContentType type, int maxChars) throws IOException {
     String contentTypes;
     switch (type) {
       case HTML:
@@ -75,10 +84,10 @@ public final class HttpHelper {
       default:
         contentTypes = "text/*,*/*";
     }
-    return downloadViaHttp(uri, contentTypes);
+    return downloadViaHttp(uri, contentTypes, maxChars);
   }
 
-  private static String downloadViaHttp(String uri, String contentTypes) throws IOException {
+  private static CharSequence downloadViaHttp(String uri, String contentTypes, int maxChars) throws IOException {
     Log.i(TAG, "Downloading " + uri);
     URL url = new URL(uri);
     HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -91,7 +100,7 @@ public final class HttpHelper {
         throw new IOException("Bad HTTP response: " + connection.getResponseCode());
       }
       Log.i(TAG, "Consuming " + uri);
-      return consume(connection);
+      return consume(connection, maxChars);
     } finally {
       connection.disconnect();
     }
@@ -108,34 +117,27 @@ public final class HttpHelper {
     return "UTF-8";
   }
 
-  private static String consume(URLConnection connection) throws IOException {
+  private static CharSequence consume(URLConnection connection, int maxChars) throws IOException {
     String encoding = getEncoding(connection);
-    ByteArrayOutputStream out = new ByteArrayOutputStream();
-    InputStream in = connection.getInputStream();
+    StringBuilder out = new StringBuilder();
+    Reader in = null;
     try {
-      in = connection.getInputStream();
-      byte[] buffer = new byte[1024];
-      int bytesRead;
-      while ((bytesRead = in.read(buffer)) > 0) {
-        out.write(buffer, 0, bytesRead);
+      in = new InputStreamReader(connection.getInputStream(), encoding);
+      char[] buffer = new char[1024];
+      int charsRead;
+      while (out.length() < maxChars && (charsRead = in.read(buffer)) > 0) {
+        out.append(buffer, 0, charsRead);
       }
     } finally {
-      try {
-        in.close();
-      } catch (IOException ioe) {
-        // continue
+      if (in != null) {
+        try {
+          in.close();
+        } catch (IOException ioe) {
+          // continue
+        }
       }
     }
-    try {
-      return new String(out.toByteArray(), encoding);
-    } catch (UnsupportedEncodingException uee) {
-      try {
-        return new String(out.toByteArray(), "UTF-8");
-      } catch (UnsupportedEncodingException uee2) {
-        // can't happen
-        throw new IllegalStateException(uee2);
-      }
-    }
+    return out;
   }
 
   public static URI unredirect(URI uri) throws IOException {

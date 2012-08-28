@@ -52,8 +52,8 @@ final class BookResultInfoRetriever extends SupplementalInfoRetriever {
   @Override
   void retrieveSupplementalInfo() throws IOException {
 
-    String contents = HttpHelper.downloadViaHttp("https://www.googleapis.com/books/v1/volumes?q=isbn:" + isbn,
-                                                 HttpHelper.ContentType.JSON);
+    CharSequence contents = HttpHelper.downloadViaHttp("https://www.googleapis.com/books/v1/volumes?q=isbn:" + isbn,
+                                                       HttpHelper.ContentType.JSON);
 
     if (contents.length() == 0) {
       return;
@@ -65,7 +65,7 @@ final class BookResultInfoRetriever extends SupplementalInfoRetriever {
 
     try {
 
-      JSONObject topLevel = (JSONObject) new JSONTokener(contents).nextValue();
+      JSONObject topLevel = (JSONObject) new JSONTokener(contents.toString()).nextValue();
       JSONArray items = topLevel.optJSONArray("items");
       if (items == null || items.isNull(0)) {
         return;

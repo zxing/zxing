@@ -187,8 +187,8 @@ public final class SearchBookContentsActivity extends Activity {
         } else {
           uri = "http://www.google.com/books?vid=isbn" + theIsbn + "&jscmd=SearchWithinVolume2&q=" + theQuery;
         }
-        String content = HttpHelper.downloadViaHttp(uri, HttpHelper.ContentType.JSON);
-        return new JSONObject(content);
+        CharSequence content = HttpHelper.downloadViaHttp(uri, HttpHelper.ContentType.JSON);
+        return new JSONObject(content.toString());
       } catch (IOException ioe) {
         Log.w(TAG, "Error accessing book search", ioe);
         return null;
