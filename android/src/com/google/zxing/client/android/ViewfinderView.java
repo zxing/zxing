@@ -50,7 +50,6 @@ public final class ViewfinderView extends View {
   private Bitmap resultBitmap;
   private final int maskColor;
   private final int resultColor;
-  private final int frameColor;
   private final int laserColor;
   private final int resultPointColor;
   private int scannerAlpha;
@@ -66,7 +65,6 @@ public final class ViewfinderView extends View {
     Resources resources = getResources();
     maskColor = resources.getColor(R.color.viewfinder_mask);
     resultColor = resources.getColor(R.color.result_view);
-    frameColor = resources.getColor(R.color.viewfinder_frame);
     laserColor = resources.getColor(R.color.viewfinder_laser);
     resultPointColor = resources.getColor(R.color.possible_result_points);
     scannerAlpha = 0;
@@ -102,13 +100,6 @@ public final class ViewfinderView extends View {
       paint.setAlpha(CURRENT_POINT_OPACITY);
       canvas.drawBitmap(resultBitmap, null, frame, paint);
     } else {
-
-      // Draw a two pixel solid black border inside the framing rect
-      paint.setColor(frameColor);
-      canvas.drawRect(frame.left, frame.top, frame.right + 1, frame.top + 2, paint);
-      canvas.drawRect(frame.left, frame.top + 2, frame.left + 2, frame.bottom - 1, paint);
-      canvas.drawRect(frame.right - 1, frame.top, frame.right + 1, frame.bottom - 1, paint);
-      canvas.drawRect(frame.left, frame.bottom - 1, frame.right + 1, frame.bottom + 1, paint);
 
       // Draw a red "laser scanner" line through the middle to show decoding is active
       paint.setColor(laserColor);

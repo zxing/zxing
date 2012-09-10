@@ -17,8 +17,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="fill_parent"
-              android:layout_height="fill_parent"
-              android:background="@color/sbc_layout_view">
+              android:layout_height="fill_parent">
 
   <LinearLayout
       android:orientation="horizontal"
