@@ -64,7 +64,6 @@
   <string name="menu_history">Historial</string>
   <string name="menu_settings">Configuració</string>
   <string name="menu_share">Comparteix</string>
-  <string name="msg_about">L\'aplicació oficial per a l\'Android del projecte de codi obert de codis de barres ZXing.</string>
   <string name="msg_bulk_mode_scanned">Mode en bloc: codi de barres escanejat i desat</string>
   <string name="msg_camera_framework_bug">S\'ha produït un problema amb la càmera de l\'Android. Potser haureu de reiniciar el dispositiu.</string>
   <string name="msg_default_format">Format</string>
@@ -132,9 +131,7 @@
   <string name="result_wifi">S\'ha trobat configuració WLAN</string>
   <string name="sbc_name">Cerca a Google Llibres</string>
   <string name="share_name">Comparteix amb el codi de barres</string>
-  <string name="title_about">Barcode Scanner v</string>
   <string name="wifi_changing_network">Sollicitant connexió a la xarxa\u2026</string>
   <string name="wifi_ssid_label">Nom de la xarxa</string>
   <string name="wifi_type_label">Tipus</string>
-  <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

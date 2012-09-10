@@ -64,7 +64,6 @@
   <string name="menu_history">Historie</string>
   <string name="menu_settings">Nastavení</string>
   <string name="menu_share">Sdílet</string>
-  <string name="msg_about">Na bázi open source ZXing Barcode Library</string>
   <string name="msg_bulk_mode_scanned">Bulk režimu: čárový kód naskenované a uložené</string>
   <string name="msg_camera_framework_bug">Omlouváme se, fotoaparát má problém. Možná bude nutné restartovat zařízení</string>
   <string name="msg_default_format">Formát</string>
@@ -132,9 +131,7 @@
   <string name="result_wifi">Nalezeno bezdrátová konfigurace</string>
   <string name="sbc_name">Google Knihy hledání</string>
   <string name="share_name">Sdílet pomocí čárového kódu</string>
-  <string name="title_about">Barcode Scanner v</string>
   <string name="wifi_changing_network">Požadující připojení k síti\u2026</string>
   <string name="wifi_ssid_label">Jméno sítě</string>
   <string name="wifi_type_label">Typ</string>
-  <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

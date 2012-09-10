@@ -1,10 +1,10 @@
 body {
-  background-color: white;
-  color: black;
-  font-family: Arial sans-serif;
-  font-size: 12pt;
+  font-family:sans-serif;
 }
 ul.touchable li {
   padding-top:8px;
   padding-bottom:8px;
+}
+p.imgcenter {
+  text-align:center;
 }

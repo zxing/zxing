@@ -32,7 +32,6 @@ import com.google.zxing.client.android.share.ShareActivity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -41,7 +40,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -120,20 +118,9 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private boolean returnRaw;
   private Collection<BarcodeFormat> decodeFormats;
   private String characterSet;
-  private String versionName;
   private HistoryManager historyManager;
   private InactivityTimer inactivityTimer;
   private BeepManager beepManager;
-
-  private final DialogInterface.OnClickListener aboutListener =
-      new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(DialogInterface dialogInterface, int i) {
-          Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.zxing_url)));
-          intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-          startActivity(intent);
-        }
-      };
 
   ViewfinderView getViewfinderView() {
     return viewfinderView;
@@ -354,15 +341,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       case R.id.menu_help:
         intent.setClassName(this, HelpActivity.class.getName());
         startActivity(intent);
-        break;
-      case R.id.menu_about:
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(getString(R.string.title_about) + versionName);
-        builder.setMessage(getString(R.string.msg_about) + "\n\n" + getString(R.string.zxing_url));
-        builder.setIcon(R.drawable.launcher_icon);
-        builder.setPositiveButton(R.string.button_open_browser, aboutListener);
-        builder.setNegativeButton(R.string.button_cancel, null);
-        builder.show();
         break;
       default:
         return super.onOptionsItemSelected(item);
@@ -686,9 +664,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     try {
       PackageInfo info = getPackageManager().getPackageInfo(PACKAGE_NAME, 0);
       int currentVersion = info.versionCode;
-      // Since we're paying to talk to the PackageManager anyway, it makes sense to cache the app
-      // version name here for display in the about box later.
-      this.versionName = info.versionName;
       SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
       int lastVersion = prefs.getInt(PreferencesActivity.KEY_HELP_VERSION_SHOWN, 0);
       if (currentVersion > lastVersion) {

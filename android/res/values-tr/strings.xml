@@ -64,7 +64,6 @@
   <string name="menu_history">Geçmiş</string>
   <string name="menu_settings">Ayarlar</string>
   <string name="menu_share">Paylaş</string>
-  <string name="msg_about">Açık kaynak ZXing Barkod Kitaplığı temellidir</string>
   <string name="msg_bulk_mode_scanned">Toplu modu: taranan ve kaydedilen barkodlar</string>
   <string name="msg_camera_framework_bug">Üzgünüz, Android kamera bir sorunla karşılaştı. Cihazı yeniden başlatmanız gerekebilir.</string>
   <string name="msg_default_format">Biçim</string>
@@ -132,9 +131,7 @@
   <string name="result_wifi">Bulunan Wi-Fi konfigürasyonu</string>
   <string name="sbc_name">Google Kitap Arama</string>
   <string name="share_name">Barkod ile paylaş</string>
-  <string name="title_about">Barkod Tarayıcı</string>
   <string name="wifi_changing_network">Ağa bir bağlantı isteğinde\u2026</string>
   <string name="wifi_ssid_label">Ağ adı</string>
   <string name="wifi_type_label">Tip</string>
-  <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

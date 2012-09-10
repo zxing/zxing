@@ -64,7 +64,6 @@
   <string name="menu_history">Előzmények</string>
   <string name="menu_settings">Beállítások</string>
   <string name="menu_share">Megosztás</string>
-  <string name="msg_about">A nyílt forráskódú ZXing vonalkód projekt hivatalos Android alkalmazása.</string>
   <string name="msg_bulk_mode_scanned">Tömeges beolvasás: vonalkód beszkennelve és mentve</string>
   <string name="msg_camera_framework_bug">Android kamera hiba. Lehet, hogy újra kell indítania a készüléket.</string>
   <string name="msg_default_format">Formátum</string>
@@ -132,9 +131,7 @@
   <string name="result_wifi">WLAN konfiguráció találat</string>
   <string name="sbc_name">Google Könyvek keresés</string>
   <string name="share_name">Megosztás vonalkóddal</string>
-  <string name="title_about">Barcode Scanner v</string>
   <string name="wifi_changing_network">Kérése kapcsolat hálózati\u2026</string>
   <string name="wifi_ssid_label">Hálózat neve</string>
   <string name="wifi_type_label">Típus</string>
-  <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>
