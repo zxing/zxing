@@ -25,7 +25,6 @@
   <TextView
       android:layout_width="fill_parent"
       android:layout_height="wrap_content"
-      android:textColor="@color/share_text"
       android:textSize="18sp"
       android:text="@string/msg_share_explanation"
       android:paddingBottom="12dip"/>

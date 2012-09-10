@@ -474,12 +474,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     if (points != null && points.length > 0) {
       Canvas canvas = new Canvas(barcode);
       Paint paint = new Paint();
-      paint.setColor(getResources().getColor(R.color.result_image_border));
-      paint.setStrokeWidth(3.0f);
-      paint.setStyle(Paint.Style.STROKE);
-      Rect border = new Rect(2, 2, barcode.getWidth() - 2, barcode.getHeight() - 2);
-      canvas.drawRect(border, paint);
-
       paint.setColor(getResources().getColor(R.color.result_points));
       if (points.length == 2) {
         paint.setStrokeWidth(4.0f);

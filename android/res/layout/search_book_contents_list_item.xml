@@ -19,7 +19,6 @@
     android:orientation="horizontal"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:background="@color/sbc_list_item"
     android:padding="6dip">
 
   <TextView android:id="@+id/page_number_view"
@@ -27,7 +26,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="left|top"
             android:layout_marginRight="8dip"
-            android:textColor="@color/sbc_page_number_text"
             android:singleLine="false"
             android:textSize="14sp"
             android:textStyle="bold"/>
@@ -36,9 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left|top"
-            android:textColor="@color/sbc_snippet_text"
             android:singleLine="false"
-            android:textSize="14sp"
-            android:typeface="serif"/>
+            android:textSize="14sp"/>
 
 </com.google.zxing.client.android.book.SearchBookContentsListItem>
