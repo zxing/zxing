@@ -132,15 +132,8 @@ public final class ShareActivity extends Activity {
   @Override
   protected void onResume() {
     super.onResume();
-
     ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-    if (clipboard.hasText()) {
-      clipboardButton.setEnabled(true);
-      clipboardButton.setText(R.string.button_share_clipboard);
-    } else {
-      clipboardButton.setEnabled(false);
-      clipboardButton.setText(R.string.button_clipboard_empty);
-    }
+    clipboardButton.setEnabled(clipboard.hasText());
   }
 
   @Override

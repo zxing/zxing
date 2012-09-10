@@ -17,13 +17,13 @@
 <resources>
   <color name="contents_text">#ff000000</color>
   <color name="encode_view">#ffffffff</color>
-  <color name="possible_result_points">#c0ffff00</color>
+  <color name="possible_result_points">#c0ffbd21</color> <!-- Android standard ICS color -->
   <color name="result_minor_text">#ffc0c0c0</color>
-  <color name="result_points">#c000ff00</color>
+  <color name="result_points">#c099cc00</color> <!-- Android standard ICS color -->
   <color name="result_text">#ffffffff</color>
   <color name="result_view">#b0000000</color>
   <color name="status_text">#ffffffff</color>
   <color name="transparent">#00000000</color>
-  <color name="viewfinder_laser">#ffff0000</color>
+  <color name="viewfinder_laser">#ffcc0000</color> <!-- Android standard ICS color -->
   <color name="viewfinder_mask">#60000000</color>
 </resources>

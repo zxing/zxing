@@ -23,13 +23,12 @@
   <string name="button_back">Назад</string>
   <string name="button_book_search">Поиск книги</string>
   <string name="button_cancel">Отмена</string>
-  <string name="button_clipboard_empty">Очистить буфер обмена</string>
   <string name="button_custom_product_search">Пользовательский поиск</string>
   <string name="button_dial">Набрать номер</string>
   <string name="button_done">Готово</string>
   <string name="button_email">Отправить e-mail</string>
   <string name="button_get_directions">Проложить маршрут</string>
-  <string name="button_google_shopper">Google Shopper</string>
+  <string name="button_google_shopper">Shopper</string>
   <string name="button_mms">Послать MMS</string>
   <string name="button_ok">OK</string>
   <string name="button_open_browser">Открыть браузер</string>

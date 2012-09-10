@@ -19,22 +19,20 @@
     android:orientation="horizontal"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:padding="6dip">
+    android:padding="@dimen/standard_padding">
 
   <TextView android:id="@+id/page_number_view"
             android:layout_width="75dip"
             android:layout_height="wrap_content"
             android:layout_gravity="left|top"
-            android:layout_marginRight="8dip"
+            android:layout_marginRight="@dimen/standard_padding"
             android:singleLine="false"
-            android:textSize="14sp"
             android:textStyle="bold"/>
 
   <TextView android:id="@+id/snippet_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left|top"
-            android:singleLine="false"
-            android:textSize="14sp"/>
+            android:singleLine="false"/>
 
 </com.google.zxing.client.android.book.SearchBookContentsListItem>
