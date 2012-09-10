@@ -64,7 +64,6 @@
   <string name="menu_history">История</string>
   <string name="menu_settings">Настройки</string>
   <string name="menu_share">Поделиться</string>
-  <string name="msg_about">Основано на свободной библиотеке штрих-кодов ZXing</string>
   <string name="msg_bulk_mode_scanned">Массовый режим: сохранять историю сканирования</string>
   <string name="msg_camera_framework_bug">К сожалению, возникла ошибка камеры. Вам может потребоваться перезагрузка устройства.</string>
   <string name="msg_default_format">Формат</string>
@@ -132,9 +131,7 @@
   <string name="result_wifi">Найдена конфигурация сети</string>
   <string name="sbc_name">Поиск книг Google</string>
   <string name="share_name">Поделиться штрих-кодом</string>
-  <string name="title_about">Сканер штрих-кодов, версия </string>
   <string name="wifi_changing_network">Запрос подключения к сети\u2026</string>
   <string name="wifi_ssid_label">Имя сети</string>
   <string name="wifi_type_label">Тип</string>
-  <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

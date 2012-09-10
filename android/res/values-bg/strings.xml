@@ -64,7 +64,6 @@
   <string name="menu_history">История</string>
   <string name="menu_settings">Настройки</string>
   <string name="menu_share">Сподели</string>
-  <string name="msg_about">Базирано на библиотеката с отворен код\nZXing Barcode</string>
   <string name="msg_bulk_mode_scanned">Масов режим: баркодът е сканиран и записан</string>
   <string name="msg_camera_framework_bug">Съжаляваме, срещнахме проблем с камерата. Може да се наложи да рестартирате устройството си.</string>
   <string name="msg_default_format">Формат</string>
@@ -132,9 +131,7 @@
   <string name="result_wifi">Намерих настройки за безжична мрежа</string>
   <string name="sbc_name">Гугъл търсене на книга</string>
   <string name="share_name">Сподели чрез баркод</string>
-  <string name="title_about">Баркод Скенер v</string>
   <string name="wifi_changing_network">Запитване свързване към мрежата\u2026</string>
   <string name="wifi_ssid_label">Име на мрежата</string>
   <string name="wifi_type_label">Тип</string>
-  <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

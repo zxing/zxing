@@ -64,7 +64,6 @@
   <string name="menu_history">Histórico</string>
   <string name="menu_settings">Definições</string>
   <string name="menu_share">Partilhar</string>
-  <string name="msg_about">Baseado na biblioteca de código de barras de código aberto ZXing</string>
   <string name="msg_bulk_mode_scanned">Modo em massa: código de barras lido e guardado</string>
   <string name="msg_camera_framework_bug">Desculpe, a câmera do Android encontrou um problema. Poderá precisar de reiniciar o dispositivo.</string>
   <string name="msg_default_format">Formato</string>
@@ -132,9 +131,7 @@
   <string name="result_wifi">Configuração WLAN encontrados</string>
   <string name="sbc_name">Pesquisa Google Book</string>
   <string name="share_name">Partilhar por código de barras</string>
-  <string name="title_about">Scanner de código barras v</string>
   <string name="wifi_changing_network">Solicitando ligação à rede\u2026</string>
   <string name="wifi_ssid_label">Nome da Rede</string>
   <string name="wifi_type_label">Tipo</string>
-  <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

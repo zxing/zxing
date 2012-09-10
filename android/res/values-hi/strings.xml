@@ -64,7 +64,6 @@
   <string name="menu_history">इतिहास</string>
   <string name="menu_settings">सेटिंग्स</string>
   <string name="menu_share">शेयर</string>
-  <string name="msg_about">खुला स्रोत ZXing बारकोड परियोजना के आधिकारिक Android के बॉक्स.</string>
   <string name="msg_bulk_mode_scanned">थोक मोड: बारकोड स्कैन और बचाया</string>
   <string name="msg_camera_framework_bug">क्षमा करें, Android कैमरा एक समस्या का सामना करना पड़ा. आप डिवाइस को पुनरारंभ करने की आवश्यकता हो सकती है.</string>
   <string name="msg_default_format">प्रारूप</string>
@@ -132,9 +131,7 @@
   <string name="result_wifi">मिला WLAN विन्यास</string>
   <string name="sbc_name">Google पुस्तक खोज</string>
   <string name="share_name">बारकोड के माध्यम से साझा करें</string>
-  <string name="title_about">बारकोड स्कैनर v</string>
   <string name="wifi_changing_network">नेटवर्क के लिए कनेक्शन का अनुरोध कर रहा है \u2026</string>
   <string name="wifi_ssid_label">नेटवर्क नाम</string>
   <string name="wifi_type_label">टाइप</string>
-  <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

@@ -64,7 +64,6 @@
   <string name="menu_history">기록</string>
   <string name="menu_settings">설정</string>
   <string name="menu_share">공유</string>
-  <string name="msg_about">오픈소스 ZXing Barcode Library를 이용하여 제작된 어플</string>
   <string name="msg_bulk_mode_scanned">일괄 스캔 모드: 바코드가 읽히고 저장됩니다.</string>
   <string name="msg_camera_framework_bug">죄송합니다. 기기의 카메라에 오류가 생겼습니다. 기기를 재시작 해야될 수도 있습니다.</string>
   <string name="msg_default_format">포맷</string>
@@ -132,9 +131,7 @@
   <string name="result_wifi">WiFi 설정을 찾았습니다</string>
   <string name="sbc_name">구글 책 검색</string>
   <string name="share_name">바코드로 공유</string>
-  <string name="title_about">바코드 스캐너 v</string>
   <string name="wifi_changing_network">네트워크에 연결을 요청\u2026</string>
   <string name="wifi_ssid_label">네트워크 이름</string>
   <string name="wifi_type_label">종류</string>
-  <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

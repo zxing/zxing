@@ -64,7 +64,6 @@
   <string name="menu_history">Historik</string>
   <string name="menu_settings">Inställningar</string>
   <string name="menu_share">Dela</string>
-  <string name="msg_about">Baserad på ZXing Barcode Library som är öppen källkod</string>
   <string name="msg_bulk_mode_scanned">Bulk-läge: streckkod skannas och sparas</string>
   <string name="msg_camera_framework_bug">Tyvärr, Androidens kamera fick problem. Du kan behöva starta om enheten.</string>
   <string name="msg_default_format">Format</string>
@@ -132,9 +131,7 @@
   <string name="result_wifi">Hittade Wi-Fi inställningar</string>
   <string name="sbc_name">Google boksökning</string>
   <string name="share_name">Dela via streckkod</string>
-  <string name="title_about">Barcode Scanner v</string>
   <string name="wifi_changing_network">Begära anslutning till nätverk\u2026</string>
   <string name="wifi_ssid_label">Nätverksnamn</string>
   <string name="wifi_type_label">Typ</string>
-  <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

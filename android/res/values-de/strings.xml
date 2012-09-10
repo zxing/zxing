@@ -64,7 +64,6 @@
   <string name="menu_history">Historie</string>
   <string name="menu_settings">Einstellungen</string>
   <string name="menu_share">Senden</string>
-  <string name="msg_about">Basiert auf der Open Source ZXing Barcode Bibliothek </string>
   <string name="msg_bulk_mode_scanned">Bulk-Modus: Barcode gescannt und gespeichert</string>
   <string name="msg_camera_framework_bug">Bei der Android-Kamera ist leider ein Fehler aufgetreten. Es könnte sein, dass Sie das Gerät neu starten müssen.</string>
   <string name="msg_default_format">Format</string>
@@ -132,9 +131,7 @@
   <string name="result_wifi">WLAN-Konfiguration gefunden</string>
   <string name="sbc_name">Google Book Search</string>
   <string name="share_name">Weitergabe mittels Barcode</string>
-  <string name="title_about">Barcode Scanner v</string>
   <string name="wifi_changing_network">Anfordern Verbindung zum Netzwerk\u2026</string>
   <string name="wifi_ssid_label">Netzwerk-Name</string>
   <string name="wifi_type_label">Typ</string>
-  <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

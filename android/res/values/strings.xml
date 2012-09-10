@@ -64,7 +64,6 @@
   <string name="menu_history">History</string>
   <string name="menu_settings">Settings</string>
   <string name="menu_share">Share</string>
-  <string name="msg_about">The official Android app of the open source ZXing barcode project.</string>
   <string name="msg_bulk_mode_scanned">Bulk mode: barcode scanned and saved</string>
   <string name="msg_camera_framework_bug">Sorry, the Android camera encountered a problem. You may need to restart the device.</string>
   <string name="msg_default_format">Format</string>
@@ -132,9 +131,7 @@
   <string name="result_wifi">Found WLAN Configuration</string>
   <string name="sbc_name">Google Book Search</string>
   <string name="share_name">Share via barcode</string>
-  <string name="title_about">Barcode Scanner v</string>
   <string name="wifi_changing_network">Requesting connection to network\u2026</string>
   <string name="wifi_ssid_label">Network Name</string>
   <string name="wifi_type_label">Type</string>
-  <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

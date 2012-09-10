@@ -64,7 +64,6 @@
   <string name="menu_history">Historique</string>
   <string name="menu_settings">Paramètres</string>
   <string name="menu_share">Partager</string>
-  <string name="msg_about">L\'application Android officielle du projet libre ZXing.</string>
   <string name="msg_bulk_mode_scanned">Mode lecture en rafale : code-barres scanné et enregistré</string>
   <string name="msg_camera_framework_bug">Désolé, la caméra Android rencontré un problème. Un redémarrage de l\'appareil est peut-être nécessaire.</string>
   <string name="msg_default_format">Format</string>
@@ -132,9 +131,7 @@
   <string name="result_wifi">Configuration du réseau WLAN trouvée</string>
   <string name="sbc_name">Recherche Google Livres</string>
   <string name="share_name">Partager par code-barres</string>
-  <string name="title_about">Barcode Scanner v</string>
   <string name="wifi_changing_network">Demande de connexion au réseau\u2026</string>
   <string name="wifi_ssid_label">Nom du réseau WLAN</string>
   <string name="wifi_type_label">Type</string>
-  <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>
