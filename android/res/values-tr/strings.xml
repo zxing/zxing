@@ -23,13 +23,12 @@
   <string name="button_back">Geri</string>
   <string name="button_book_search">Kitap Arama</string>
   <string name="button_cancel">İptal</string>
-  <string name="button_clipboard_empty">Pano boş</string>
   <string name="button_custom_product_search">Özel arama</string>
   <string name="button_dial">Numaraya çağrı</string>
   <string name="button_done">Tamam</string>
   <string name="button_email">Email gönder</string>
   <string name="button_get_directions">Yön bilgisi al</string>
-  <string name="button_google_shopper">Google Shopper</string>
+  <string name="button_google_shopper">Shopper</string>
   <string name="button_mms">MMS gönder</string>
   <string name="button_ok">Tamam</string>
   <string name="button_open_browser">Tarayıcıyı aç</string>

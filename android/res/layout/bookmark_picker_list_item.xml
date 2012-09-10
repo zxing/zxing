@@ -19,19 +19,16 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:padding="4dip">
-
+    android:padding="@dimen/half_padding">
 
   <TextView android:id="@+id/bookmark_title"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
             android:singleLine="true"/>
 
   <TextView android:id="@+id/bookmark_url"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
             android:singleLine="false"/>
 
 </LinearLayout>

@@ -23,13 +23,12 @@
   <string name="button_back">뒤로</string>
   <string name="button_book_search">책 검색</string>
   <string name="button_cancel">취소</string>
-  <string name="button_clipboard_empty">복사된 항목 없음</string>
   <string name="button_custom_product_search">사용자 지정 검색</string>
   <string name="button_dial">전화 걸기</string>
   <string name="button_done">완료</string>
   <string name="button_email">이메일 보내기</string>
   <string name="button_get_directions">방향을 찾기</string>
-  <string name="button_google_shopper">Google Shopper</string>
+  <string name="button_google_shopper">Shopper</string>
   <string name="button_mms">MMS 보내기</string>
   <string name="button_ok">확인</string>
   <string name="button_open_browser">웹브라우저로 열기</string>

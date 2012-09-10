@@ -23,13 +23,12 @@
   <string name="button_back">חזרה</string>
   <string name="button_book_search">חיפוש ספר</string>
   <string name="button_cancel">ביטול</string>
-  <string name="button_clipboard_empty">לוח העריכה ריק</string>
   <string name="button_custom_product_search">חיפוש מותאם אישית</string>
   <string name="button_dial">חייג מספר</string>
   <string name="button_done">סיים</string>
   <string name="button_email">שלח דואר אלקטרוני</string>
   <string name="button_get_directions">קבל הוראות הגעה</string>
-  <string name="button_google_shopper">Google Shopper</string>
+  <string name="button_google_shopper">Shopper</string>
   <string name="button_mms">שלח הודעת מולטימדיה</string>
   <string name="button_ok">אישור</string>
   <string name="button_open_browser">פתח את הדפדפן</string>

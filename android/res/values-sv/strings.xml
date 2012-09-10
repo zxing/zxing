@@ -23,13 +23,12 @@
   <string name="button_back">Tillbaka</string>
   <string name="button_book_search">Boksökning</string>
   <string name="button_cancel">Avbryt</string>
-  <string name="button_clipboard_empty">Klippbordet är tomt</string>
   <string name="button_custom_product_search">Anpassad sökning</string>
   <string name="button_dial">Ring nummer</string>
   <string name="button_done">Klar</string>
   <string name="button_email">Skicka email</string>
   <string name="button_get_directions">Hämta instruktioner</string>
-  <string name="button_google_shopper">Google Shopper</string>
+  <string name="button_google_shopper">Shopper</string>
   <string name="button_mms">Skicka MMS</string>
   <string name="button_ok">OK</string>
   <string name="button_open_browser">Öppna webbläsare</string>

@@ -23,13 +23,12 @@
   <string name="button_back">Wstecz</string>
   <string name="button_book_search">Szukaj książek</string>
   <string name="button_cancel">Anuluj</string>
-  <string name="button_clipboard_empty">Schowek pusty</string>
   <string name="button_custom_product_search">Wyszukiwanie indywidualne</string>
   <string name="button_dial">Wykręć numer</string>
   <string name="button_done">Gotowe</string>
   <string name="button_email">Wyślij email</string>
   <string name="button_get_directions">Otrzymaj wskazówki</string>
-  <string name="button_google_shopper">Google Shopper</string>
+  <string name="button_google_shopper">Shopper</string>
   <string name="button_mms">Wyślij MMS</string>
   <string name="button_ok">OK</string>
   <string name="button_open_browser">Otwórz przeglądarkę</string>

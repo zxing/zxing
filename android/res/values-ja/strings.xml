@@ -23,7 +23,6 @@
   <string name="button_back">戻る</string>
   <string name="button_book_search">書籍を検索</string>
   <string name="button_cancel">キャンセル</string>
-  <string name="button_clipboard_empty">クリップボードは空です</string>
   <string name="button_custom_product_search">カスタム サーチ</string>
   <string name="button_dial">発信</string>
   <string name="button_done">完了</string>

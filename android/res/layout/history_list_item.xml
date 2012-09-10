@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:padding="8dip">
+    android:padding="@dimen/standard_padding">
 
   <TextView android:id="@+id/history_title"
             android:layout_width="fill_parent"
