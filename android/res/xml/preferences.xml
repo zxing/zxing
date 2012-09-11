@@ -88,4 +88,9 @@
         android:title="@string/preferences_disable_continuous_focus_title"
         android:summary="@string/preferences_disable_continuous_focus_summary"/>
   </PreferenceCategory>
+  <PreferenceCategory android:title="@string/preferences_try_bsplus">
+    <com.google.zxing.client.android.pref.BSPlusPreference
+        android:title="@string/preferences_try_bsplus"
+        android:summary="@string/preferences_try_bsplus_summary"/>
+  </PreferenceCategory>
 </PreferenceScreen>

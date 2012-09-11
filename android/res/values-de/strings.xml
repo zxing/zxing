@@ -117,6 +117,8 @@
   <string name="preferences_search_country">Suche Land</string>
   <string name="preferences_supplemental_summary">Versuchen, weitere Informationen über Barcode-Inhalte abzurufen</string>
   <string name="preferences_supplemental_title">Weitere Informationen abrufen</string>
+  <string name="preferences_try_bsplus">Versuchen Barcode Scanner+</string>
+  <string name="preferences_try_bsplus_summary">Angereichert mit neuen Features und Schnittstellen</string>
   <string name="preferences_vibrate_title">Vibrieren</string>
   <string name="result_address_book">Kontakt gefunden</string>
   <string name="result_calendar">Termin gefunden</string>
