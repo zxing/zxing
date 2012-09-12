@@ -568,10 +568,20 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       viewfinderView.drawResultBitmap(barcode);
     }
 
+    long resultDurationMS;
+    if (getIntent() == null) {
+      resultDurationMS = DEFAULT_INTENT_RESULT_DURATION_MS;
+    } else {
+      resultDurationMS = getIntent().getLongExtra(Intents.Scan.RESULT_DISPLAY_DURATION_MS,
+                                                  DEFAULT_INTENT_RESULT_DURATION_MS);
+    }
+
     // Since this message will only be shown for a second, just tell the user what kind of
     // barcode was found (e.g. contact info) rather than the full contents, which they won't
     // have time to read.
-    statusView.setText(getString(resultHandler.getDisplayTitle()));
+    if (resultDurationMS > 0) {
+      statusView.setText(getString(resultHandler.getDisplayTitle()));
+    }
 
     if (copyToClipboard && !resultHandler.areContentsSecure()) {
       ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
@@ -616,7 +626,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
           }
         }
       }
-      sendReplyMessage(R.id.return_scan_result, intent);
+      sendReplyMessage(R.id.return_scan_result, intent, resultDurationMS);
       
     } else if (source == IntentSource.PRODUCT_SEARCH_LINK) {
       
@@ -624,7 +634,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       // TLD as the scan URL.
       int end = sourceUrl.lastIndexOf("/scan");
       String replyURL = sourceUrl.substring(0, end) + "?q=" + resultHandler.getDisplayContents() + "&source=zxing";      
-      sendReplyMessage(R.id.launch_product_query, replyURL);
+      sendReplyMessage(R.id.launch_product_query, replyURL, resultDurationMS);
       
     } else if (source == IntentSource.ZXING_LINK) {
       
@@ -638,18 +648,16 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
           // can't happen; UTF-8 is always supported. Continue, I guess, without encoding
         }
         String replyURL = returnUrlTemplate.replace(RETURN_CODE_PLACEHOLDER, codeReplacement);
-        sendReplyMessage(R.id.launch_product_query, replyURL);
+        sendReplyMessage(R.id.launch_product_query, replyURL, resultDurationMS);
       }
       
     }
   }
   
-  private void sendReplyMessage(int id, Object arg) {
+  private void sendReplyMessage(int id, Object arg, long delayMS) {
     Message message = Message.obtain(handler, id, arg);
-    long resultDurationMS = getIntent().getLongExtra(Intents.Scan.RESULT_DISPLAY_DURATION_MS,
-                                                     DEFAULT_INTENT_RESULT_DURATION_MS);
-    if (resultDurationMS > 0L) {
-      handler.sendMessageDelayed(message, resultDurationMS);
+    if (delayMS > 0L) {
+      handler.sendMessageDelayed(message, delayMS);
     } else {
       handler.sendMessage(message);
     }
