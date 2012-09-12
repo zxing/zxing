@@ -118,7 +118,7 @@
   <string name="preferences_supplemental_summary">Essayer de trouver plus d\'informations sur le contenu des codes-barres scannés</string>
   <string name="preferences_supplemental_title">Trouver plus d\'informations</string>
   <string name="preferences_try_bsplus">Essayez Barcode Scanner+</string>
-  <string name="preferences_try_bsplus_summary">Amélioré avec de nouvelles fonctionnalités et de l&#39;interface</string>
+  <string name="preferences_try_bsplus_summary">Amélioré avec de nouvelles fonctionnalités et de l\'interface</string>
   <string name="preferences_vibrate_title">Vibrer</string>
   <string name="result_address_book">Information de contact trouvée</string>
   <string name="result_calendar">Événement de l\'agenda trouvé</string>
