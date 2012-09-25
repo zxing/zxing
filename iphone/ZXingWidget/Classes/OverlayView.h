@@ -25,8 +25,10 @@
   UILabel *instructionsLabel;
 	id<CancelDelegate> delegate;
 	BOOL oneDMode;
+  BOOL cancelEnabled;
   CGRect cropRect;
   NSString *displayedMessage;
+  NSString *cancelButtonTitle;
 }
 
 @property (nonatomic, retain) NSMutableArray*  points;
@@ -34,6 +36,8 @@
 @property (nonatomic, assign) BOOL oneDMode;
 @property (nonatomic, assign) CGRect cropRect;
 @property (nonatomic, copy) NSString *displayedMessage;
+@property (nonatomic, retain) NSString *cancelButtonTitle;
+@property (nonatomic, assign) BOOL cancelEnabled;
 
 - (id)initWithFrame:(CGRect)theFrame cancelEnabled:(BOOL)isCancelEnabled oneDMode:(BOOL)isOneDModeEnabled showLicense:(BOOL)shouldShowLicense;
 - (id)initWithFrame:(CGRect)theFrame cancelEnabled:(BOOL)isCancelEnabled oneDMode:(BOOL)isOneDModeEnabled;

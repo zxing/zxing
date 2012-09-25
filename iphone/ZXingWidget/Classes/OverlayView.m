@@ -37,6 +37,8 @@ static const CGFloat kLicenseButtonPadding = 10;
 @synthesize cropRect;
 @synthesize instructionsLabel;
 @synthesize displayedMessage;
+@synthesize cancelButtonTitle;
+@synthesize cancelEnabled;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithFrame:(CGRect)theFrame cancelEnabled:(BOOL)isCancelEnabled oneDMode:(BOOL)isOneDModeEnabled {
@@ -57,26 +59,6 @@ static const CGFloat kLicenseButtonPadding = 10;
 
     self.backgroundColor = [UIColor clearColor];
     self.oneDMode = isOneDModeEnabled;
-    if (isCancelEnabled) {
-      UIButton *butt = [UIButton buttonWithType:UIButtonTypeRoundedRect]; 
-      self.cancelButton = butt;
-      [cancelButton setTitle:NSLocalizedStringWithDefaultValue(@"OverlayView cancel button title", nil, [NSBundle mainBundle], @"Cancel", @"Cancel") forState:UIControlStateNormal];
-      if (oneDMode) {
-        [cancelButton setTransform:CGAffineTransformMakeRotation(M_PI/2)];
-        
-        [cancelButton setFrame:CGRectMake(20, 175, 45, 130)];
-      }
-      else {
-        CGSize theSize = CGSizeMake(100, 50);
-        CGRect theRect = CGRectMake((theFrame.size.width - theSize.width) / 2, cropRect.origin.y + cropRect.size.height + 20, theSize.width, theSize.height);
-        [cancelButton setFrame:theRect];
-        
-      }
-      
-      [cancelButton addTarget:self action:@selector(cancel:) forControlEvents:UIControlEventTouchUpInside];
-      [self addSubview:cancelButton];
-      [self addSubview:imageView];
-    }
       
     if (showLicenseButton) {
         self.licenseButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
@@ -89,6 +71,7 @@ static const CGFloat kLicenseButtonPadding = 10;
         
         [self addSubview:licenseButton];
     }
+    self.cancelEnabled = isCancelEnabled;
   }
   return self;
 }
@@ -123,6 +106,7 @@ static const CGFloat kLicenseButtonPadding = 10;
 	[_points release];
   [instructionsLabel release];
   [displayedMessage release];
+  [cancelButtonTitle release],
 	[super dealloc];
 }
 
@@ -241,6 +225,31 @@ static const CGFloat kLicenseButtonPadding = 10;
 			}
 		}
 	}
+  
+  if (self.cancelEnabled) {
+    UIButton *butt = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    self.cancelButton = butt;
+    if ([self.cancelButtonTitle length] > 0 ) {
+      [cancelButton setTitle:self.cancelButtonTitle forState:UIControlStateNormal];
+    } else {
+      [cancelButton setTitle:NSLocalizedStringWithDefaultValue(@"OverlayView cancel button title", nil, [NSBundle mainBundle], @"Cancel", @"Cancel") forState:UIControlStateNormal];
+    }
+    if (oneDMode) {
+      [cancelButton setTransform:CGAffineTransformMakeRotation(M_PI/2)];
+      
+      [cancelButton setFrame:CGRectMake(20, 175, 45, 130)];
+    }
+    else {
+      CGSize theSize = CGSizeMake(100, 50);
+      CGRect theRect = CGRectMake((rect.size.width - theSize.width) / 2, cropRect.origin.y + cropRect.size.height + 20, theSize.width, theSize.height);
+      [cancelButton setFrame:theRect];
+      
+    }
+    
+    [cancelButton addTarget:self action:@selector(cancel:) forControlEvents:UIControlEventTouchUpInside];
+    [self addSubview:cancelButton];
+    [self addSubview:imageView];
+  }
 }
 
 
