@@ -409,9 +409,10 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     lastResult = rawResult;
     ResultHandler resultHandler = ResultHandlerFactory.makeResultHandler(this, rawResult);
     historyManager.addHistoryItem(rawResult, resultHandler);
-    beepManager.playBeepSoundAndVibrate();
 
     if (barcode != null) {
+      // Then not from history, so beep/vibrate and we have an image to draw on
+      beepManager.playBeepSoundAndVibrate();
       drawResultPoints(barcode, rawResult);
     }
     switch (source) {
