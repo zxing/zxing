@@ -90,7 +90,11 @@ public final class HttpHelper {
   private static CharSequence downloadViaHttp(String uri, String contentTypes, int maxChars) throws IOException {
     Log.i(TAG, "Downloading " + uri);
     URL url = new URL(uri);
-    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+    URLConnection conn = url.openConnection();
+    if (!(conn instanceof HttpURLConnection)) {
+      throw new IOException();
+    }
+    HttpURLConnection connection = (HttpURLConnection) conn;
     connection.setRequestProperty("Accept", contentTypes);
     connection.setRequestProperty("Accept-Charset", "utf-8,*");
     connection.setRequestProperty("User-Agent", "ZXing (Android)");
@@ -151,7 +155,11 @@ public final class HttpHelper {
     }
     URL url = uri.toURL();
 
-    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+    URLConnection conn = url.openConnection();
+    if (!(conn instanceof HttpURLConnection)) {
+      throw new IOException();
+    }
+    HttpURLConnection connection = (HttpURLConnection) conn;
     connection.setInstanceFollowRedirects(false);
     connection.setDoInput(false);
     connection.setRequestMethod("HEAD");
