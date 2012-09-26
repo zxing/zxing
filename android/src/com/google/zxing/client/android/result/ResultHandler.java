@@ -413,6 +413,13 @@ public abstract class ResultHandler {
   }
 
   final void openURL(String url) {
+    // Strangely, some Android browsers don't seem to register to handle HTTP:// or HTTPS://.
+    // Lower-case these as it should always be OK to lower-case these schemes.
+    if (url.startsWith("HTTP://")) {
+      url = "http" + url.substring(4);
+    } else if (url.startsWith("HTTPS://")) {
+      url = "https" + url.substring(5);
+    }
     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
     try {
       launchIntent(intent);
