@@ -73,7 +73,7 @@
   <string name="msg_default_time">Čas</string>
   <string name="msg_default_type">Typ</string>
   <string name="msg_encode_contents_failed">Nie je možné zakódovať čiarový kód z poskytnutých údajov.</string>
-  <string name="msg_google_books">Google Books</string>
+  <string name="msg_google_books">Google Knihy</string>
   <string name="msg_google_product">Hľadať produkty Google</string>
   <string name="msg_google_shopper_missing">Nie je nainštalované Google Nakupovanie.</string>
   <string name="msg_install_google_shopper">Google Nakupovanie kombinuje v sebe skenovanie čiarových kódov s miestnymi cenami on-line, recenzie a oveľa viac bez otvorenia prehliadača. Chceli by ste ho vyskúšať?</string>
@@ -87,7 +87,7 @@
   <string name="msg_sbc_searching_book">Vyhľadáva sa kniha\u2026</string>
   <string name="msg_sbc_snippet_unavailable">Úryvok nie je k dispozícii</string>
   <string name="msg_sbc_unknown_page">Neznáma stránka</string>
-  <string name="msg_share_explanation">Môžete zdieľať dáta prostredníctvom čiarového kódu zobrazením na displeji a skenovaním s iným telefónom.</string>
+  <string name="msg_share_explanation">Môžete zdieľať dáta prostredníctvom čiarového kódu zobrazením na displeji a skenovaním s iným zariadením.</string>
   <string name="msg_share_subject_line">Tu je obsah naskenovaného čiarového kódu</string>
   <string name="msg_share_text">Alebo zadajte nejaký text</string>
   <string name="msg_sure">Ste si istí?</string>
@@ -102,9 +102,9 @@
   <string name="preferences_decode_1D_title">1D čiarové kódy</string>
   <string name="preferences_decode_Data_Matrix_title">Dáta Matrix</string>
   <string name="preferences_decode_QR_title">QR kódy</string>
-  <string name="preferences_device_bug_workarounds_title">Možno zástupná riešenie chýb zariadení</string>
-  <string name="preferences_disable_continuous_focus_summary">Používajte iba štandardné zaostrovanie</string>
-  <string name="preferences_disable_continuous_focus_title">Sústavné zameranie</string>
+  <string name="preferences_device_bug_workarounds_title">Možné chyby zariadenia</string>
+  <string name="preferences_disable_continuous_focus_summary">Používať iba štandardné zaostrovanie</string>
+  <string name="preferences_disable_continuous_focus_title">Nezaostrovať nepretržite</string>
   <string name="preferences_front_light_summary">Na niektorých telefónoch zlepšuje snímanie za zhoršených svetelných podmienok, ale môže spôsobiť odlesk. Nefunguje na všetkých telefónoch.</string>
   <string name="preferences_front_light_title">Použiť prisvetlenie</string>
   <string name="preferences_general_title">Všeobecné nastavenia</string>
@@ -112,14 +112,14 @@
   <string name="preferences_play_beep_title">Zvuková signalizácia</string>
   <string name="preferences_remember_duplicates_summary">Uložiť viacnásobné skenovanie do jednej histórie čiarového kódu</string>
   <string name="preferences_remember_duplicates_title">Zapamätať si duplikáty</string>
-  <string name="preferences_result_title">Výsledok nastavenia</string>
+  <string name="preferences_result_title">Nastavenia výsledku</string>
   <string name="preferences_scanning_title">Dekódovať čiarové kódy</string>
-  <string name="preferences_search_country">Vyhľadávanie pre krajinu</string>
+  <string name="preferences_search_country">Vyhľadávať pre krajinu</string>
   <string name="preferences_supplemental_summary">Skúsiť získať viac informácií o obsahu čiarového kódu</string>
   <string name="preferences_supplemental_title">Získať viac informácií</string>
   <string name="preferences_try_bsplus">Vyskúšajte Barcode Scanner+</string>
   <string name="preferences_try_bsplus_summary">Rozšírený o nové funkcie a prostredie</string>
-  <string name="preferences_vibrate_title">Vibrácia</string>
+  <string name="preferences_vibrate_title">Vibrovať</string>
   <string name="result_address_book">Nájdená informácia o kontakte</string>
   <string name="result_calendar">Nájdená udalosť kalendára</string>
   <string name="result_email_address">Nájdená e-mailová adresa</string>
@@ -131,9 +131,9 @@
   <string name="result_text">Nájdený obyčajný text</string>
   <string name="result_uri">Nájdená URL</string>
   <string name="result_wifi">Nájdená konfigurácia WLAN</string>
-  <string name="sbc_name">Google vyhľadávanie kníh</string>
+  <string name="sbc_name">Vyhľadať v Google Knihy</string>
   <string name="share_name">Zdieľať cez čiarový kód</string>
-  <string name="wifi_changing_network">Požadujúce pripojenie k sieti\u2026</string>
+  <string name="wifi_changing_network">Požiadavka na pripojenie k sieti\u2026</string>
   <string name="wifi_ssid_label">Názov sieťového pripojenia</string>
   <string name="wifi_type_label">Typ</string>
 </resources>
