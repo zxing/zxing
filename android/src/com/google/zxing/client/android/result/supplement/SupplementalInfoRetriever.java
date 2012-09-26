@@ -129,6 +129,13 @@ public abstract class SupplementalInfoRetriever extends AsyncTask<Object,Object,
     String newText = newTextCombined.toString();
     Spannable content = new SpannableString(newText + "\n\n");
     if (linkURL != null) {
+      // Strangely, some Android browsers don't seem to register to handle HTTP:// or HTTPS://.
+      // Lower-case these as it should always be OK to lower-case these schemes.
+      if (linkURL.startsWith("HTTP://")) {
+        linkURL = "http" + linkURL.substring(4);
+      } else if (linkURL.startsWith("HTTPS://")) {
+        linkURL = "https" + linkURL.substring(5);
+      }
       content.setSpan(new URLSpan(linkURL), linkStart, linkEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
 
