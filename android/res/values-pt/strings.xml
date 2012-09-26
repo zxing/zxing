@@ -57,7 +57,6 @@
   <string name="history_empty_detail">Não código de barras foram registrados</string>
   <string name="history_send">Enviar histórico</string>
   <string name="history_title">Histórico</string>
-  <string name="menu_about">Sobre</string>
   <string name="menu_encode_mecard">Usar MECARD</string>
   <string name="menu_encode_vcard">Usar vCard</string>
   <string name="menu_help">Ajuda</string>

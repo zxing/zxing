@@ -57,7 +57,6 @@
   <string name="history_empty_detail">Št črtne kode scans so bile zabeležene</string>
   <string name="history_send">Pošlji zgodovino</string>
   <string name="history_title">Zgodovina</string>
-  <string name="menu_about">O programu</string>
   <string name="menu_encode_mecard">Uporaba MECARD</string>
   <string name="menu_encode_vcard">Uporaba vCard</string>
   <string name="menu_help">Pomoč</string>

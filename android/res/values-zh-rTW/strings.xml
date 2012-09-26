@@ -57,7 +57,6 @@
   <string name="history_empty_detail">沒有條碼掃描已記錄</string>
   <string name="history_send">發送紀錄</string>
   <string name="history_title">紀錄</string>
-  <string name="menu_about">關於</string>
   <string name="menu_encode_mecard">使用MECARD</string>
   <string name="menu_encode_vcard">使用vCard</string>
   <string name="menu_help">說明</string>

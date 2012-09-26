@@ -57,7 +57,6 @@
   <string name="history_empty_detail">Žádný čárový kód vyšetření byly zaznamenány ještě</string>
   <string name="history_send">Poslat historii</string>
   <string name="history_title">Historie</string>
-  <string name="menu_about">O</string>
   <string name="menu_encode_mecard">Použití MECARD</string>
   <string name="menu_encode_vcard">Použití vCard</string>
   <string name="menu_help">Pomoc!</string>

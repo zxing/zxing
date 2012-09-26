@@ -57,7 +57,6 @@
   <string name="history_empty_detail">Няма сканирани и записани бар-кодове все още</string>
   <string name="history_send">Изпрати историята</string>
   <string name="history_title">История</string>
-  <string name="menu_about">Относно</string>
   <string name="menu_encode_mecard">Използвай MECARD формат</string>
   <string name="menu_encode_vcard">Използвай vCard формат</string>
   <string name="menu_help">Помощ</string>
