@@ -81,7 +81,7 @@ private:
    */
   void decodeBase256Segment(Ref<BitSource> bits, std::ostringstream &result, std::vector<unsigned char> byteSegments);
 
-  void parseTwoBytes(int firstByte, int secondByte, int*& result);
+  void parseTwoBytes(int firstByte, int secondByte, int* result);
   /**
    * See ISO 16022:2006, Annex B, B.2
    */
