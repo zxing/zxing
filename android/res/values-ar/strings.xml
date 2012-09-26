@@ -57,7 +57,6 @@
   <string name="history_empty_detail">لم تسجل حتى الآن بمسح الباركود</string>
   <string name="history_send">إرسال السجل</string>
   <string name="history_title">سجل</string>
-  <string name="menu_about">حول</string>
   <string name="menu_encode_mecard">استخدام MECARD</string>
   <string name="menu_encode_vcard">استخدام vCard</string>
   <string name="menu_help">تعليمات</string>

@@ -57,7 +57,6 @@
   <string name="history_empty_detail">Ei tallennettuja viivakoodeja</string>
   <string name="history_send">Lähetä historia</string>
   <string name="history_title">Historia</string>
-  <string name="menu_about">Tietoja</string>
   <string name="menu_encode_mecard">Käytä MECARD:ia</string>
   <string name="menu_encode_vcard">Käytä vCard:ia</string>
   <string name="menu_help">Ohje</string>

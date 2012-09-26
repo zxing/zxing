@@ -57,7 +57,6 @@
   <string name="history_empty_detail">Δεν έχουν καταγραφεί σαρώσεις barcode</string>
   <string name="history_send">Αποστολή ιστορικού</string>
   <string name="history_title">Ιστορικό</string>
-  <string name="menu_about">Σχετικά</string>
   <string name="menu_encode_mecard">Χρησιμοποιήστε MECARD</string>
   <string name="menu_encode_vcard">Χρησιμοποιήστε vCard</string>
   <string name="menu_help">Βοήθεια</string>

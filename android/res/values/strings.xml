@@ -57,7 +57,6 @@
   <string name="history_empty_detail">No barcode scans have been recorded</string>
   <string name="history_send">Send history</string>
   <string name="history_title">History</string>
-  <string name="menu_about">About</string>
   <string name="menu_encode_mecard">Use MECARD</string>
   <string name="menu_encode_vcard">Use vCard</string>
   <string name="menu_help">Help</string>

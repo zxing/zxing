@@ -57,7 +57,6 @@
   <string name="history_empty_detail">아무 바코드 스캔이 기록되지 않았습니다</string>
   <string name="history_send">기록 보내기</string>
   <string name="history_title">기록</string>
-  <string name="menu_about">정보</string>
   <string name="menu_encode_mecard">MECARD를 사용하여</string>
   <string name="menu_encode_vcard">vCard를 사용하여</string>
   <string name="menu_help">도움말</string>

@@ -57,7 +57,6 @@
   <string name="history_empty_detail">Er zijn geen barcodes gescand</string>
   <string name="history_send">Geschiedenis versturen</string>
   <string name="history_title">Geschiedenis</string>
-  <string name="menu_about">Over</string>
   <string name="menu_encode_mecard">MECARD gebruiken</string>
   <string name="menu_encode_vcard">vCard gebruiken</string>
   <string name="menu_help">Help</string>
