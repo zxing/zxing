@@ -95,7 +95,12 @@ public final class HttpHelper {
     connection.setRequestProperty("Accept-Charset", "utf-8,*");
     connection.setRequestProperty("User-Agent", "ZXing (Android)");
     try {
-      connection.connect();
+      try {
+        connection.connect();
+      } catch (NullPointerException npe) {
+        // this is an Android bug: http://code.google.com/p/android/issues/detail?id=16895
+        throw new IOException(npe);
+      }
       if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
         throw new IOException("Bad HTTP response: " + connection.getResponseCode());
       }
@@ -152,7 +157,12 @@ public final class HttpHelper {
     connection.setRequestMethod("HEAD");
     connection.setRequestProperty("User-Agent", "ZXing (Android)");
     try {
-      connection.connect();
+      try {
+        connection.connect();
+      } catch (NullPointerException npe) {
+        // this is an Android bug: http://code.google.com/p/android/issues/detail?id=16895
+        throw new IOException(npe);
+      }
       switch (connection.getResponseCode()) {
         case HttpURLConnection.HTTP_MULT_CHOICE:
         case HttpURLConnection.HTTP_MOVED_PERM:
