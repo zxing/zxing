@@ -20,10 +20,10 @@
 
   <property file="build.properties"/>
 
-  <target name="release" depends="javadoc">
-    <zip file="ZXing-${version}.zip">
-      <zipfileset dir="." prefix="zxing-${version}">
-        <exclude name="**/.*"/> <!-- exclude hidden files -->
+  <target name="release">
+    <zip file="ZXing-${version}.zip" level="9">
+      <zipfileset dir="." prefix="zxing-${version}" followsymlinks="false">
+        <exclude name="**/.*"/>
         <exclude name="**/.svn"/>
         <exclude name="**/*.iml"/>
         <include name="AUTHORS"/>
@@ -34,19 +34,40 @@
         <include name="build.properties"/>
         <include name="docs/**"/>
         <include name="actionscript/**"/>
+        <exclude name="**/local.properties"/>
         <include name="android/**"/>
+        <exclude name="android/bin/**"/>
+        <exclude name="android/libs/**"/>
         <include name="android-integration/**"/>
+        <exclude name="android-integration/build/**"/>
+        <exclude name="android-integration/target/**"/>
         <include name="androidtest/**"/>
+        <exclude name="androidtest/bin/**"/>
+        <exclude name="androidtest/libs/**"/>
         <include name="core/**"/>
+        <exclude name="core/build/**"/>
+        <exclude name="core/target/**"/>
+        <exclude name="core/test/data/**"/>
         <include name="cpp/**"/>
         <include name="csharp/**"/>
         <include name="iphone/**"/>
         <include name="javase/**"/>
+        <exclude name="javase/build/**"/>
+        <exclude name="javase/target/**"/>
         <include name="jruby/**"/>
         <include name="objc/**"/>
         <include name="symbian/**"/>
         <include name="zxing.appspot.com/**"/>
         <include name="zxingorg/**"/>
+        <exclude name="zxingorg/web/WEB-INF/classes/**"/>
+      </zipfileset>
+    </zip>
+    <!-- Separate out test data files now to make download more manageable -->
+    <zip file="ZXing-${version}-testdata.zip" level="9">
+      <zipfileset dir="." prefix="zxing-${version}" followsymlinks="false">
+        <exclude name="**/.*"/>
+        <exclude name="**/.svn"/>
+        <include name="core/test/data/**"/>
       </zipfileset>
     </zip>
   </target>
