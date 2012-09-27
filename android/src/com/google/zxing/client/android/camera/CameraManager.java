@@ -92,7 +92,23 @@ public final class CameraManager {
         requestedFramingRectHeight = 0;
       }
     }
-    configManager.setDesiredCameraParameters(theCamera);
+
+    Camera.Parameters parameters = theCamera.getParameters();
+    String parametersFlattened = parameters == null ? null : parameters.flatten(); // Save these, temporarily
+    try {
+      configManager.setDesiredCameraParameters(theCamera, false);
+    } catch (RuntimeException re) {
+      // Driver failed
+      Log.w(TAG, "Camera rejected parameters. Setting only minimal safe-mode parameters");
+      Log.i(TAG, "Resetting to saved camera params: " + parametersFlattened);
+      // Reset:
+      if (parametersFlattened != null) {
+        parameters.unflatten(parametersFlattened);
+      }
+      theCamera.setParameters(parameters);
+      configManager.setDesiredCameraParameters(theCamera, true);
+    }
+
   }
 
   public synchronized boolean isOpen() {
