@@ -460,19 +460,32 @@ public abstract class ResultHandler {
     }
   }
 
-  void launchIntent(Intent intent) {
+  /**
+   * Like {@link #launchIntent(Intent)} but will tell you if it is not handle-able
+   * via {@link ActivityNotFoundException}.
+   *
+   * @throws ActivityNotFoundException
+   */
+  void rawLaunchIntent(Intent intent) {
     if (intent != null) {
       intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
       Log.d(TAG, "Launching intent: " + intent + " with extras: " + intent.getExtras());
-      try {
-        activity.startActivity(intent);
-      } catch (ActivityNotFoundException e) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setTitle(R.string.app_name);
-        builder.setMessage(R.string.msg_intent_failed);
-        builder.setPositiveButton(R.string.button_ok, null);
-        builder.show();
-      }
+      activity.startActivity(intent);
+    }
+  }
+
+  /**
+   * Like {@link #rawLaunchIntent(Intent)} but will show a user dialog if nothing is available to handle.
+   */
+  void launchIntent(Intent intent) {
+    try {
+      rawLaunchIntent(intent);
+    } catch (ActivityNotFoundException e) {
+      AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+      builder.setTitle(R.string.app_name);
+      builder.setMessage(R.string.msg_intent_failed);
+      builder.setPositiveButton(R.string.button_ok, null);
+      builder.show();
     }
   }
 
