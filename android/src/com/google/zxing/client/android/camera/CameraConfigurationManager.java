@@ -26,8 +26,6 @@ import android.view.Display;
 import android.view.WindowManager;
 
 import com.google.zxing.client.android.PreferencesActivity;
-import com.google.zxing.client.android.camera.exposure.ExposureInterface;
-import com.google.zxing.client.android.camera.exposure.ExposureManager;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -164,6 +162,7 @@ final class CameraConfigurationManager {
       parameters.setFlashMode(flashMode);
     }
 
+    /*
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
     if (!prefs.getBoolean(PreferencesActivity.KEY_DISABLE_EXPOSURE, false)) {
       if (!safeMode) {
@@ -171,6 +170,7 @@ final class CameraConfigurationManager {
         exposure.setExposure(parameters, newSetting);
       }
     }
+     */
   }
 
   private Point findBestPreviewSizeValue(Camera.Parameters parameters, Point screenResolution) {
