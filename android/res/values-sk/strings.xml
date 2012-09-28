@@ -104,6 +104,7 @@
   <string name="preferences_device_bug_workarounds_title">Možné chyby zariadenia</string>
   <string name="preferences_disable_continuous_focus_summary">Používať iba štandardné zaostrovanie</string>
   <string name="preferences_disable_continuous_focus_title">Nezaostrovať nepretržite</string>
+  <string name="preferences_disable_exposure_title">No expozície</string>
   <string name="preferences_front_light_summary">Na niektorých telefónoch zlepšuje snímanie za zhoršených svetelných podmienok, ale môže spôsobiť odlesk. Nefunguje na všetkých telefónoch.</string>
   <string name="preferences_front_light_title">Použiť prisvetlenie</string>
   <string name="preferences_general_title">Všeobecné nastavenia</string>

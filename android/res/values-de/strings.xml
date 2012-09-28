@@ -104,6 +104,7 @@
   <string name="preferences_device_bug_workarounds_title">Geräte-Bug Problemumgehungen</string>
   <string name="preferences_disable_continuous_focus_summary">Verwenden Sie nur Standard-Fokus-Modus</string>
   <string name="preferences_disable_continuous_focus_title">Keine kontinuierliche Fokus</string>
+  <string name="preferences_disable_exposure_title">Keine Exposition</string>
   <string name="preferences_front_light_summary">Verbessert bei einigen Mobiltelefonen das Scannen bei schwachem Licht, kann aber Überbelichtung verursachen. Funktioniert nicht mit allen Handys.</string>
   <string name="preferences_front_light_title">Blitzlicht</string>
   <string name="preferences_general_title">Allgemeine Einstellungen</string>

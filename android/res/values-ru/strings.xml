@@ -104,6 +104,7 @@
   <string name="preferences_device_bug_workarounds_title">Обходные пути устройства ошибка</string>
   <string name="preferences_disable_continuous_focus_summary">Используйте только стандартный режим фокусировки</string>
   <string name="preferences_disable_continuous_focus_title">Нет постоянное внимание</string>
+  <string name="preferences_disable_exposure_title">Нет экспозиции</string>
   <string name="preferences_front_light_summary">Улучшает распознавание в условиях низкой освещенности, но может вызвать блики. Работает не на всех устройствах.</string>
   <string name="preferences_front_light_title">Фонарик</string>
   <string name="preferences_general_title">Общие настройки</string>

@@ -104,6 +104,7 @@
   <string name="preferences_device_bug_workarounds_title">デバイスバグの回避策</string>
   <string name="preferences_disable_continuous_focus_summary">のみ標準のフォーカスモードを使う</string>
   <string name="preferences_disable_continuous_focus_title">連続的な焦点を当てない</string>
+  <string name="preferences_disable_exposure_title">ばく露ません</string>
   <string name="preferences_front_light_summary">可能な場合、フロントライトを有効にする</string>
   <string name="preferences_front_light_title">フロントライト</string>
   <string name="preferences_general_title">一般設定</string>

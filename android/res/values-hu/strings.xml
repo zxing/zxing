@@ -104,6 +104,7 @@
   <string name="preferences_device_bug_workarounds_title">Eszköz Bug Lehetséges megoldások</string>
   <string name="preferences_disable_continuous_focus_summary">Csak a normál élességállítási mód</string>
   <string name="preferences_disable_continuous_focus_title">Nincs folyamatos fókusz</string>
+  <string name="preferences_disable_exposure_title">No expozíció</string>
   <string name="preferences_front_light_summary">Javítja a szkennelést kevés fény mellett néhány telefonon, de csillogást okozhat. Nem minden telefonon működik.</string>
   <string name="preferences_front_light_title">Kamera LED használata</string>
   <string name="preferences_general_title">Általános beállítások</string>
