@@ -104,6 +104,7 @@
   <string name="preferences_device_bug_workarounds_title">Možná zástupná řešení chyb zařízení</string>
   <string name="preferences_disable_continuous_focus_summary">Používejte pouze standardní zaostřování</string>
   <string name="preferences_disable_continuous_focus_title">Soustavné zaměření</string>
+  <string name="preferences_disable_exposure_title">No expozice</string>
   <string name="preferences_front_light_summary">Zlepšuje skenování při slabém osvětlení na některých telefonech, ale může způsobit oslnění. Nefunguje na všech telefonech.</string>
   <string name="preferences_front_light_title">Použít světlo</string>
   <string name="preferences_general_title">Hlavní nastavení</string>

@@ -104,6 +104,7 @@
   <string name="preferences_device_bug_workarounds_title">Laitteen Bug Kiertotapoja</string>
   <string name="preferences_disable_continuous_focus_summary">Käytä vain standardinmukaisia tarkennus</string>
   <string name="preferences_disable_continuous_focus_title">Ei jatkuva painopiste</string>
+  <string name="preferences_disable_exposure_title">Ei altistumisen</string>
   <string name="preferences_front_light_summary">Salamavalon käyttö saattaa auttaa hämärässä, mutta se saattaa aiheuttaa myös häikäisyä. Ei toimi kaikissa puhelimissa.</string>
   <string name="preferences_front_light_title">Käytä valoa</string>
   <string name="preferences_general_title">Yleiset asetukset</string>

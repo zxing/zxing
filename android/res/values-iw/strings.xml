@@ -104,6 +104,7 @@
   <string name="preferences_device_bug_workarounds_title">באג במכשיר דרכים לעקיפת הבעיה</string>
   <string name="preferences_disable_continuous_focus_summary">השתמש רק במצב רגיל פוקוס</string>
   <string name="preferences_disable_continuous_focus_title">המיקוד לא רציפה</string>
+  <string name="preferences_disable_exposure_title">אין חשיפה</string>
   <string name="preferences_front_light_summary">משפר את הסריקה בתאורה נמוכה בטלפונים מסוימים, אך עשוי לגרום לסנוור. לא עובד בכל הטלפונים.</string>
   <string name="preferences_front_light_title">השתמש באור הקדמי</string>
   <string name="preferences_general_title">הגדרות כלליות</string>

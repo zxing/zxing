@@ -164,9 +164,12 @@ final class CameraConfigurationManager {
       parameters.setFlashMode(flashMode);
     }
 
-    if (!safeMode) {
-      ExposureInterface exposure = new ExposureManager().build();
-      exposure.setExposure(parameters, newSetting);
+    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+    if (!prefs.getBoolean(PreferencesActivity.KEY_DISABLE_EXPOSURE, false)) {
+      if (!safeMode) {
+        ExposureInterface exposure = new ExposureManager().build();
+        exposure.setExposure(parameters, newSetting);
+      }
     }
   }
 
