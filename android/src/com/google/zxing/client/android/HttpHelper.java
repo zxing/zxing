@@ -103,7 +103,12 @@ public final class HttpHelper {
         connection.connect();
       } catch (NullPointerException npe) {
         // this is an Android bug: http://code.google.com/p/android/issues/detail?id=16895
+        Log.w(TAG, "Bad URI? " + uri);
         throw new IOException(npe);
+      } catch (IllegalArgumentException iae) {
+        // Also seen this in the wild, not sure what to make of it. Probably a bad URL
+        Log.w(TAG, "Bad URI? " + uri);
+        throw new IOException(iae);
       }
       if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
         throw new IOException("Bad HTTP response: " + connection.getResponseCode());
@@ -169,7 +174,12 @@ public final class HttpHelper {
         connection.connect();
       } catch (NullPointerException npe) {
         // this is an Android bug: http://code.google.com/p/android/issues/detail?id=16895
+        Log.w(TAG, "Bad URI? " + uri);
         throw new IOException(npe);
+      } catch (IllegalArgumentException iae) {
+        // Also seen this in the wild, not sure what to make of it. Probably a bad URL
+        Log.w(TAG, "Bad URI? " + uri);
+        throw new IOException(iae);
       }
       switch (connection.getResponseCode()) {
         case HttpURLConnection.HTTP_MULT_CHOICE:
