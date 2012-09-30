@@ -175,8 +175,15 @@ final class CameraConfigurationManager {
 
   private Point findBestPreviewSizeValue(Camera.Parameters parameters, Point screenResolution) {
 
+    List<Camera.Size> rawSupportedSizes = parameters.getSupportedPreviewSizes();
+    if (rawSupportedSizes == null) {
+      Log.w(TAG, "Device returned no supported preview sizes; using default");
+      Camera.Size defaultSize = parameters.getPreviewSize();
+      return new Point(defaultSize.width, defaultSize.height);
+    }
+
     // Sort by size, descending
-    List<Camera.Size> supportedPreviewSizes = new ArrayList<Camera.Size>(parameters.getSupportedPreviewSizes());
+    List<Camera.Size> supportedPreviewSizes = new ArrayList<Camera.Size>(rawSupportedSizes);
     Collections.sort(supportedPreviewSizes, new Comparator<Camera.Size>() {
       @Override
       public int compare(Camera.Size a, Camera.Size b) {
