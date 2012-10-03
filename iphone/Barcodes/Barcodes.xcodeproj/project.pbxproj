@@ -60,6 +60,7 @@
 		1FF80D1012A3AE5400FE297C /* ZXMainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1FF80D0F12A3AE5400FE297C /* ZXMainViewController.xib */; };
 		288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765FC0DF74451002DB57D /* CoreGraphics.framework */; };
 		28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD733E0D9D9553002E5188 /* MainWindow.xib */; };
+		3B331CFA161BB7FF007313B6 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3B331CF9161BB7FF007313B6 /* Default-568h@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -172,6 +173,7 @@
 		28AD733E0D9D9553002E5188 /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* Barcodes_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Barcodes_Prefix.pch; sourceTree = "<group>"; };
+		3B331CF9161BB7FF007313B6 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Barcodes-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Barcodes-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -270,6 +272,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				3B331CF9161BB7FF007313B6 /* Default-568h@2x.png */,
 				1FB43017128FFDCD002D63E8 /* ZXingWidget.xcodeproj */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
@@ -439,6 +442,7 @@
 				1FF80D1012A3AE5400FE297C /* ZXMainViewController.xib in Resources */,
 				1FCC10A912C15F68009040CF /* Scanning.png in Resources */,
 				1FCC10AA12C15F68009040CF /* Scanning@2x.png in Resources */,
+				3B331CFA161BB7FF007313B6 /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
