@@ -564,4 +564,14 @@ dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 12000000000), dispatch_get_main_
   return NO;
 }
 
+- (void)setTopLabelValue:(NSString *)topLabelValue {
+  if (topLabelValue != nil)
+    self.displayedMessage = topLabelValue;
+}
+
+- (void)setCancelButtonValue:(NSString *)cancelButtonValue {
+  if (cancelButtonValue != nil)
+    [self.cancelButton setTitle:cancelButtonValue forState:UIControlStateNormal];
+}
+
 @end
