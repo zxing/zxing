@@ -17,6 +17,7 @@
 		28C286E10D94DF7D0034E888 /* RootViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 28C286E00D94DF7D0034E888 /* RootViewController.mm */; };
 		28F335F11007B36200424DE2 /* RootViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28F335F01007B36200424DE2 /* RootViewController.xib */; };
 		3B0A5DB91444C492000EC568 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3B0A5DB81444C492000EC568 /* Icon.png */; };
+		3B331CEE161BB74E007313B6 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3B331CED161BB74E007313B6 /* Default-568h@2x.png */; };
 		3B43FDCB15939575001CD5C9 /* libZXingWidget.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F027F7E11A7BAD4006B06DE /* libZXingWidget.a */; };
 		3BCED5C8120F84C900131FA0 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BCED5C7120F84C900131FA0 /* AVFoundation.framework */; };
 		3BCED5CE120F84E000131FA0 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BCED5CD120F84E000131FA0 /* CoreVideo.framework */; };
@@ -65,6 +66,7 @@
 		28C286E00D94DF7D0034E888 /* RootViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RootViewController.mm; sourceTree = "<group>"; };
 		28F335F01007B36200424DE2 /* RootViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RootViewController.xib; sourceTree = "<group>"; };
 		3B0A5DB81444C492000EC568 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
+		3B331CED161BB74E007313B6 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		3BCED5C7120F84C900131FA0 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		3BCED5CD120F84E000131FA0 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		3BCED5EA120F885C00131FA0 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
@@ -126,6 +128,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				3B331CED161BB74E007313B6 /* Default-568h@2x.png */,
 				1F027F7611A7BAD4006B06DE /* ZXingWidget.xcodeproj */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
@@ -253,6 +256,7 @@
 				28F335F11007B36200424DE2 /* RootViewController.xib in Resources */,
 				E548755C119C62B9001CC0F8 /* beep-beep.aiff in Resources */,
 				3B0A5DB91444C492000EC568 /* Icon.png in Resources */,
+				3B331CEE161BB74E007313B6 /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
