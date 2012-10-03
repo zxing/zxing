@@ -65,7 +65,7 @@
   }
     
     // Override point for customization after application launch.
-  [self.window addSubview:tabBarController.view];
+  window.rootViewController = tabBarController;
   [self.window makeKeyAndVisible];
   
   return YES;
