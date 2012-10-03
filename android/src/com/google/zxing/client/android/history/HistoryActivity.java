@@ -58,6 +58,10 @@ public final class HistoryActivity extends ListActivity {
   @Override
   protected void onResume() {
     super.onResume();
+    reloadHistoryItems();
+  }
+
+  private void reloadHistoryItems() {
     List<HistoryItem> items = historyManager.buildHistoryItems();
     adapter.clear();
     for (HistoryItem item : items) {
@@ -92,7 +96,7 @@ public final class HistoryActivity extends ListActivity {
   public boolean onContextItemSelected(MenuItem item) {
     int position = item.getItemId();
     historyManager.deleteHistoryItem(position);
-    finish();
+    reloadHistoryItems();
     return true;
   }
 
