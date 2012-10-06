@@ -17,15 +17,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
-              android:background="@color/help_view"
               android:orientation="vertical">
 
   <WebView android:id="@+id/help_contents"
            android:layout_width="fill_parent"
            android:layout_height="wrap_content"
-           android:layout_weight="1"
-           android:fadingEdge="vertical"
-           android:fadingEdgeLength="12dip"/>
+           android:layout_weight="1"/>
 
   <LinearLayout
       android:layout_width="fill_parent"
@@ -33,9 +30,8 @@
       android:layout_weight="0"
       android:orientation="horizontal"
       android:gravity="center"
-      android:padding="4dip"
-      android:weightSum="1"
-      android:background="@color/help_button_view">
+      android:paddingTop="@dimen/half_padding"
+      android:weightSum="1">
 
     <Button android:id="@+id/back_button"
             android:layout_width="0dip"

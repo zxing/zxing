@@ -23,13 +23,12 @@
   <string name="button_back">뒤로</string>
   <string name="button_book_search">책 검색</string>
   <string name="button_cancel">취소</string>
-  <string name="button_clipboard_empty">복사된 항목 없음</string>
   <string name="button_custom_product_search">사용자 지정 검색</string>
   <string name="button_dial">전화 걸기</string>
   <string name="button_done">완료</string>
   <string name="button_email">이메일 보내기</string>
   <string name="button_get_directions">방향을 찾기</string>
-  <string name="button_google_shopper">Google Shopper</string>
+  <string name="button_google_shopper">Shopper</string>
   <string name="button_mms">MMS 보내기</string>
   <string name="button_ok">확인</string>
   <string name="button_open_browser">웹브라우저로 열기</string>
@@ -58,14 +57,12 @@
   <string name="history_empty_detail">아무 바코드 스캔이 기록되지 않았습니다</string>
   <string name="history_send">기록 보내기</string>
   <string name="history_title">기록</string>
-  <string name="menu_about">정보</string>
   <string name="menu_encode_mecard">MECARD를 사용하여</string>
   <string name="menu_encode_vcard">vCard를 사용하여</string>
   <string name="menu_help">도움말</string>
   <string name="menu_history">기록</string>
   <string name="menu_settings">설정</string>
   <string name="menu_share">공유</string>
-  <string name="msg_about">오픈소스 ZXing Barcode Library를 이용하여 제작된 어플</string>
   <string name="msg_bulk_mode_scanned">일괄 스캔 모드: 바코드가 읽히고 저장됩니다.</string>
   <string name="msg_camera_framework_bug">죄송합니다. 기기의 카메라에 오류가 생겼습니다. 기기를 재시작 해야될 수도 있습니다.</string>
   <string name="msg_default_format">포맷</string>
@@ -85,6 +82,7 @@
   <string name="msg_sbc_failed">죄송합니다. 검색 도중 문제가 발생했습니다.</string>
   <string name="msg_sbc_no_page_returned">수신받은 페이지가 없습니다.</string>
   <string name="msg_sbc_page">페이지</string>
+  <string name="msg_sbc_results">결과</string>
   <string name="msg_sbc_searching_book">책 검색중\u2026</string>
   <string name="msg_sbc_snippet_unavailable">내용이 열람되지 않습니다.</string>
   <string name="msg_sbc_unknown_page">알수 없는 페이지</string>
@@ -103,6 +101,10 @@
   <string name="preferences_decode_1D_title">1차원 바코드를 읽기</string>
   <string name="preferences_decode_Data_Matrix_title">데이터 행렬(Data Matrix)을 해석하기</string>
   <string name="preferences_decode_QR_title">QR 코드를 읽기</string>
+  <string name="preferences_device_bug_workarounds_title">장치 버그 해결</string>
+  <string name="preferences_disable_continuous_focus_summary">전용 표준 초점 모드를 사용</string>
+  <string name="preferences_disable_continuous_focus_title">아무 연속 초점 없음</string>
+  <string name="preferences_disable_exposure_title">더 노출하지</string>
   <string name="preferences_front_light_summary">특정 기기에서는 어두운 환경에서의 스캐닝 기능을 향상 시키지만 너무 밝을 수도 있습니다. 모든 기기에서 작동되지 않습니다.</string>
   <string name="preferences_front_light_title">플래시 사용하기</string>
   <string name="preferences_general_title">일반 설정</string>
@@ -115,6 +117,8 @@
   <string name="preferences_search_country">국가별 검색</string>
   <string name="preferences_supplemental_summary">바코드 내용에 대한 자세한 정보를 검색하려고</string>
   <string name="preferences_supplemental_title">검색 상세 정보</string>
+  <string name="preferences_try_bsplus">바코드 스캐너를 사용해보십시오 +</string>
+  <string name="preferences_try_bsplus_summary">새로운 기능 및 인터페이스 개선</string>
   <string name="preferences_vibrate_title">진동</string>
   <string name="result_address_book">연락처 정보를 찾았습니다</string>
   <string name="result_calendar">일정 이벤트를 찾았습니다</string>
@@ -129,9 +133,7 @@
   <string name="result_wifi">WiFi 설정을 찾았습니다</string>
   <string name="sbc_name">구글 책 검색</string>
   <string name="share_name">바코드로 공유</string>
-  <string name="title_about">바코드 스캐너 v</string>
   <string name="wifi_changing_network">네트워크에 연결을 요청\u2026</string>
   <string name="wifi_ssid_label">네트워크 이름</string>
   <string name="wifi_type_label">종류</string>
-  <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

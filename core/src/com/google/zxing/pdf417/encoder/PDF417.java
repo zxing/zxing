@@ -598,22 +598,6 @@ final class PDF417 {
     return n > m + 1 ? n - m - 1 : 0;
   }
 
-  /**
-   * Calculates the number of data codewords (equals the Symbol Length Descriptor).
-   *
-   * @param m                    the number of source codewords prior to the additional of the Symbol Length
-   *                             Descriptor and any pad codewords
-   * @param errorCorrectionLevel the error correction level (value between 0 and 8)
-   * @param c                    the number of columns in the symbol in the data region (excluding start, stop and
-   *                             row indicator codewords)
-   * @return the number of data codewords
-   */
-  private static int getNumberOfDataCodewords(int m, int errorCorrectionLevel, int c) throws WriterException {
-    int k = PDF417ErrorCorrection.getErrorCorrectionCodewordCount(errorCorrectionLevel);
-    int r = getNumberOfRows(m, k, c);
-    return c * r - k;
-  }
-
   private static void encodeChar(int pattern, int len, BarcodeRow logic) {
     int map = 1 << len - 1;
     boolean last = (pattern & map) != 0; //Initialize to inverse of first bit

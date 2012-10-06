@@ -203,11 +203,12 @@ public final class HistoryManager {
         oldDetails = cursor.getString(1);
       }
 
-      String newDetails = oldDetails == null ? itemDetails : oldDetails + " : " + itemDetails;
-      ContentValues values = new ContentValues();
-      values.put(DBHelper.DETAILS_COL, newDetails);
-
-      db.update(DBHelper.TABLE_NAME, values, DBHelper.ID_COL + "=?", new String[] { oldID });
+      if (oldID != null) {
+        String newDetails = oldDetails == null ? itemDetails : oldDetails + " : " + itemDetails;
+        ContentValues values = new ContentValues();
+        values.put(DBHelper.DETAILS_COL, newDetails);
+        db.update(DBHelper.TABLE_NAME, values, DBHelper.ID_COL + "=?", new String[] { oldID });
+      }
 
     } finally {
       close(cursor, db);

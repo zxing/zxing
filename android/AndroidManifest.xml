@@ -16,8 +16,8 @@
  -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.google.zxing.client.android"
-          android:versionName="4.2"
-          android:versionCode="84"
+          android:versionName="4.3.1"
+          android:versionCode="87"
           android:installLocation="auto">
 
   <uses-permission android:name="android.permission.CAMERA"/>
@@ -30,10 +30,11 @@
   <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
   <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
 
-  <uses-sdk android:minSdkVersion="7"
-            android:targetSdkVersion="10"/>
+  <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="10"/>
 
-  <uses-feature android:name="android.hardware.camera"/>
+  <!-- Don't require camera, as this requires a rear camera. This allows it to work on the Nexus 7 -->
+  <uses-feature android:name="android.hardware.camera" android:required="false"/>
+  <uses-feature android:name="android.hardware.camera.front" android:required="false"/>
   <uses-feature android:name="android.hardware.camera.autofocus" android:required="false"/>
   <uses-feature android:name="android.hardware.camera.flash" android:required="false"/>
   <uses-feature android:name="android.hardware.screen.landscape"/>

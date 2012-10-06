@@ -40,10 +40,9 @@
               android:layout_gravity="center_horizontal"
               android:gravity="center"
               android:textColor="@color/contents_text"
-              android:textSize="18sp"
-              android:paddingBottom="8dip"
-              android:paddingLeft="8dip"
-              android:paddingRight="8dip"/>
+              android:paddingBottom="@dimen/standard_padding"
+              android:paddingLeft="@dimen/standard_padding"
+              android:paddingRight="@dimen/standard_padding"/>
 
   </ScrollView>
 

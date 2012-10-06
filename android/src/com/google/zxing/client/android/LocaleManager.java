@@ -37,19 +37,6 @@ public final class LocaleManager {
   private static final String DEFAULT_COUNTRY = "US";
   private static final String DEFAULT_LANGUAGE = "en";
 
-  private static final String COUNTRY;
-  private static final String LANGUAGE;
-  static {
-    Locale locale = Locale.getDefault();
-    COUNTRY = locale == null ? DEFAULT_COUNTRY : locale.getCountry();
-    String language = locale == null ? DEFAULT_LANGUAGE : locale.getLanguage();
-    // Special case Chinese
-    if (Locale.SIMPLIFIED_CHINESE.getLanguage().equals(language)) {
-      language += "-r" + COUNTRY;
-    }
-    LANGUAGE = language;
-  }
-
   /**
    * Locales (well, countries) where Google web search is available.
    * These should be kept in sync with our translations.
@@ -114,7 +101,7 @@ public final class LocaleManager {
   private static final Map<String,String> GOOGLE_BOOK_SEARCH_COUNTRY_TLD = GOOGLE_COUNTRY_TLD;
 
   private static final Collection<String> TRANSLATED_HELP_ASSET_LANGUAGES =
-      Arrays.asList("en");
+      Arrays.asList("de", "en", "es", "fr", "it", "ja", "ko", "nl", "pt", "ru", "zh-rCN", "zh-rTW");
 
   private LocaleManager() {}
 
@@ -141,19 +128,6 @@ public final class LocaleManager {
   public static String getBookSearchCountryTLD(Context context) {
     return doGetTLD(GOOGLE_BOOK_SEARCH_COUNTRY_TLD, context);
   }
-  
-  private static String doGetTLD(Map<String,String> map, Context context) {
-    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-    String countryOverride = prefs.getString(PreferencesActivity.KEY_SEARCH_COUNTRY, null);
-    if (countryOverride != null && countryOverride.length() > 0 && !"-".equals(countryOverride)) {
-      String tld = map.get(countryOverride);
-      if (tld != null) {
-        return tld;
-      }
-    }
-    String tld = map.get(COUNTRY);
-    return tld == null ? DEFAULT_TLD : tld;
-  }
 
   /**
    * Does a given URL point to Google Book Search, regardless of domain.
@@ -165,12 +139,40 @@ public final class LocaleManager {
     return url.startsWith("http://google.com/books") || url.startsWith("http://books.google.");
   }
 
-  public static String getTranslatedAssetLanguage() {
-    return TRANSLATED_HELP_ASSET_LANGUAGES.contains(LANGUAGE) ? LANGUAGE : DEFAULT_LANGUAGE;
+  private static String getSystemCountry() {
+    Locale locale = Locale.getDefault();
+    return locale == null ? DEFAULT_COUNTRY : locale.getCountry();
   }
 
-  private static String doGetTLD(Map<String,String> map) {
-    String tld = map.get(COUNTRY);
+  private static String getSystemLanguage() {
+    Locale locale = Locale.getDefault();
+    if (locale == null) {
+      return DEFAULT_LANGUAGE;
+    }
+    String language = locale.getLanguage();
+    // Special case Chinese
+    if (Locale.SIMPLIFIED_CHINESE.getLanguage().equals(language)) {
+      return language + "-r" + getSystemCountry();
+    }
+    return language;
+  }
+
+  public static String getTranslatedAssetLanguage() {
+    String language = getSystemLanguage();
+    return TRANSLATED_HELP_ASSET_LANGUAGES.contains(language) ? language : DEFAULT_LANGUAGE;
+  }
+
+  private static String doGetTLD(Map<String,String> map, Context context) {
+    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+    String countryOverride = prefs.getString(PreferencesActivity.KEY_SEARCH_COUNTRY, null);
+    if (countryOverride != null && countryOverride.length() > 0 && !"-".equals(countryOverride)) {
+      String tld = map.get(countryOverride);
+      if (tld != null) {
+        return tld;
+      }
+    }
+    String tld = map.get(getSystemCountry());
     return tld == null ? DEFAULT_TLD : tld;
   }
+
 }

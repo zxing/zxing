@@ -1,12 +1,12 @@
 // -*- mode:objc; c-basic-offset:2; indent-tabs-mode:nil -*-
 /**
- * Copyright 2009 Jeff Verkoeyen
+ * Copyright 2009-2012 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *    http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -57,7 +57,7 @@
 
 - (id)initWithDelegate:(id<ZXingDelegate>)scanDelegate showCancel:(BOOL)shouldShowCancel OneDMode:(BOOL)shouldUseoOneDMode {
   
-    return [self initWithDelegate:scanDelegate showCancel:shouldShowCancel OneDMode:shouldUseoOneDMode showLicense:YES];
+  return [self initWithDelegate:scanDelegate showCancel:shouldShowCancel OneDMode:shouldUseoOneDMode showLicense:YES];
 }
 
 - (id)initWithDelegate:(id<ZXingDelegate>)scanDelegate showCancel:(BOOL)shouldShowCancel OneDMode:(BOOL)shouldUseoOneDMode showLicense:(BOOL)shouldShowLicense {
@@ -244,7 +244,7 @@
 
 - (void)decoder:(Decoder *)decoder
   decodingImage:(UIImage *)image
-     usingSubset:(UIImage *)subset {
+    usingSubset:(UIImage *)subset {
 }
 
 - (void)presentResultForString:(NSString *)resultString {
@@ -290,13 +290,13 @@
 }
 
 /*
-- (void)stopPreview:(NSNotification*)notification {
+  - (void)stopPreview:(NSNotification*)notification {
   // NSLog(@"stop preview");
-}
+  }
 
-- (void)notification:(NSNotification*)notification {
+  - (void)notification:(NSNotification*)notification {
   // NSLog(@"notification %@", notification.name);
-}
+  }
 */
 
 #pragma mark - 
@@ -360,40 +360,40 @@ static bool isIPad() {
 
 /*
   [[NSNotificationCenter defaultCenter]
-      addObserver:self
-         selector:@selector(stopPreview:)
-             name:AVCaptureSessionDidStopRunningNotification
-           object:self.captureSession];
+  addObserver:self
+  selector:@selector(stopPreview:)
+  name:AVCaptureSessionDidStopRunningNotification
+  object:self.captureSession];
 
   [[NSNotificationCenter defaultCenter]
-      addObserver:self
-         selector:@selector(notification:)
-             name:AVCaptureSessionDidStopRunningNotification
-           object:self.captureSession];
+  addObserver:self
+  selector:@selector(notification:)
+  name:AVCaptureSessionDidStopRunningNotification
+  object:self.captureSession];
 
   [[NSNotificationCenter defaultCenter]
-      addObserver:self
-         selector:@selector(notification:)
-             name:AVCaptureSessionRuntimeErrorNotification
-           object:self.captureSession];
+  addObserver:self
+  selector:@selector(notification:)
+  name:AVCaptureSessionRuntimeErrorNotification
+  object:self.captureSession];
 
   [[NSNotificationCenter defaultCenter]
-      addObserver:self
-         selector:@selector(notification:)
-             name:AVCaptureSessionDidStartRunningNotification
-           object:self.captureSession];
+  addObserver:self
+  selector:@selector(notification:)
+  name:AVCaptureSessionDidStartRunningNotification
+  object:self.captureSession];
 
   [[NSNotificationCenter defaultCenter]
-      addObserver:self
-         selector:@selector(notification:)
-             name:AVCaptureSessionWasInterruptedNotification
-           object:self.captureSession];
+  addObserver:self
+  selector:@selector(notification:)
+  name:AVCaptureSessionWasInterruptedNotification
+  object:self.captureSession];
 
   [[NSNotificationCenter defaultCenter]
-      addObserver:self
-         selector:@selector(notification:)
-             name:AVCaptureSessionInterruptionEndedNotification
-           object:self.captureSession];
+  addObserver:self
+  selector:@selector(notification:)
+  name:AVCaptureSessionInterruptionEndedNotification
+  object:self.captureSession];
 */
 
   if (!self.prevLayer) {
@@ -495,15 +495,15 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
   [self.prevLayer removeFromSuperlayer];
 
 /*
-  // heebee jeebees here ... is iOS still writing into the layer?
-  if (self.prevLayer) {
-    layer.session = nil;
-    AVCaptureVideoPreviewLayer* layer = prevLayer;
-    [self.prevLayer retain];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 12000000000), dispatch_get_main_queue(), ^{
-        [layer release];
-    });
-  }
+// heebee jeebees here ... is iOS still writing into the layer?
+if (self.prevLayer) {
+layer.session = nil;
+AVCaptureVideoPreviewLayer* layer = prevLayer;
+[self.prevLayer retain];
+dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 12000000000), dispatch_get_main_queue(), ^{
+[layer release];
+});
+}
 */
 
   self.prevLayer = nil;

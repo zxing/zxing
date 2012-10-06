@@ -17,24 +17,13 @@
 <resources>
   <color name="contents_text">#ff000000</color>
   <color name="encode_view">#ffffffff</color>
-  <color name="help_button_view">#ffcccccc</color>
-  <color name="help_view">#ff404040</color>
-  <color name="possible_result_points">#c0ffff00</color>
-  <color name="result_image_border">#ffffffff</color>
+  <color name="possible_result_points">#c0ffbd21</color> <!-- Android standard ICS color -->
   <color name="result_minor_text">#ffc0c0c0</color>
-  <color name="result_points">#c000ff00</color>
+  <color name="result_points">#c099cc00</color> <!-- Android standard ICS color -->
   <color name="result_text">#ffffffff</color>
   <color name="result_view">#b0000000</color>
-  <color name="sbc_header_text">#ff808080</color>
-  <color name="sbc_header_view">#ffffffff</color>
-  <color name="sbc_list_item">#fffff0e0</color>
-  <color name="sbc_layout_view">#ffffffff</color>
-  <color name="sbc_page_number_text">#ff000000</color>
-  <color name="sbc_snippet_text">#ff4b4b4b</color>
-  <color name="share_text">#ff000000</color>
   <color name="status_text">#ffffffff</color>
   <color name="transparent">#00000000</color>
-  <color name="viewfinder_frame">#ff000000</color>
-  <color name="viewfinder_laser">#ffff0000</color>
+  <color name="viewfinder_laser">#ffcc0000</color> <!-- Android standard ICS color -->
   <color name="viewfinder_mask">#60000000</color>
 </resources>

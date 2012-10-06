@@ -23,13 +23,12 @@
   <string name="button_back">Zpět</string>
   <string name="button_book_search">Hledat knihu</string>
   <string name="button_cancel">Zrušit</string>
-  <string name="button_clipboard_empty">Schránka je prázdná</string>
   <string name="button_custom_product_search">Vlastní vyhledávání</string>
   <string name="button_dial">Číselník</string>
   <string name="button_done">Hotovo</string>
   <string name="button_email">Poslat emailem</string>
   <string name="button_get_directions">Získat nastavení</string>
-  <string name="button_google_shopper">Google Shopper</string>
+  <string name="button_google_shopper">Shopper</string>
   <string name="button_mms">Poslat přes MMS</string>
   <string name="button_ok">OK</string>
   <string name="button_open_browser">Otevřít prohlížeč</string>
@@ -58,14 +57,12 @@
   <string name="history_empty_detail">Žádný čárový kód vyšetření byly zaznamenány ještě</string>
   <string name="history_send">Poslat historii</string>
   <string name="history_title">Historie</string>
-  <string name="menu_about">O</string>
   <string name="menu_encode_mecard">Použití MECARD</string>
   <string name="menu_encode_vcard">Použití vCard</string>
   <string name="menu_help">Pomoc!</string>
   <string name="menu_history">Historie</string>
   <string name="menu_settings">Nastavení</string>
   <string name="menu_share">Sdílet</string>
-  <string name="msg_about">Na bázi open source ZXing Barcode Library</string>
   <string name="msg_bulk_mode_scanned">Bulk režimu: čárový kód naskenované a uložené</string>
   <string name="msg_camera_framework_bug">Omlouváme se, fotoaparát má problém. Možná bude nutné restartovat zařízení</string>
   <string name="msg_default_format">Formát</string>
@@ -85,6 +82,7 @@
   <string name="msg_sbc_failed">Omlouváme se, narazili jsme na problém.</string>
   <string name="msg_sbc_no_page_returned">Stránka nenalezena.</string>
   <string name="msg_sbc_page">Stránka</string>
+  <string name="msg_sbc_results">Výsledky</string>
   <string name="msg_sbc_searching_book">Hledání knihy\u2026</string>
   <string name="msg_sbc_snippet_unavailable">Snippet není k dispozici</string>
   <string name="msg_sbc_unknown_page">Neznámá stránka</string>
@@ -103,6 +101,10 @@
   <string name="preferences_decode_1D_title">1D kódy</string>
   <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>
   <string name="preferences_decode_QR_title">QR kódy</string>
+  <string name="preferences_device_bug_workarounds_title">Možná zástupná řešení chyb zařízení</string>
+  <string name="preferences_disable_continuous_focus_summary">Používejte pouze standardní zaostřování</string>
+  <string name="preferences_disable_continuous_focus_title">Soustavné zaměření</string>
+  <string name="preferences_disable_exposure_title">No expozice</string>
   <string name="preferences_front_light_summary">Zlepšuje skenování při slabém osvětlení na některých telefonech, ale může způsobit oslnění. Nefunguje na všech telefonech.</string>
   <string name="preferences_front_light_title">Použít světlo</string>
   <string name="preferences_general_title">Hlavní nastavení</string>
@@ -115,6 +117,8 @@
   <string name="preferences_search_country">Hledání země</string>
   <string name="preferences_supplemental_summary">Získat více informací o obsahu čárového kódu</string>
   <string name="preferences_supplemental_title">Získat více informací</string>
+  <string name="preferences_try_bsplus">Zkuste Barcode Scanner+</string>
+  <string name="preferences_try_bsplus_summary">Obohacen o nové funkce a rozhraní</string>
   <string name="preferences_vibrate_title">Vibrace</string>
   <string name="result_address_book">Našel jsem kontakt</string>
   <string name="result_calendar">Našel jsem kalendář</string>
@@ -129,9 +133,7 @@
   <string name="result_wifi">Nalezeno bezdrátová konfigurace</string>
   <string name="sbc_name">Google Knihy hledání</string>
   <string name="share_name">Sdílet pomocí čárového kódu</string>
-  <string name="title_about">Barcode Scanner v</string>
   <string name="wifi_changing_network">Požadující připojení k síti\u2026</string>
   <string name="wifi_ssid_label">Jméno sítě</string>
   <string name="wifi_type_label">Typ</string>
-  <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

@@ -23,13 +23,12 @@
   <string name="button_back">Tilbage</string>
   <string name="button_book_search">Bogsøgning</string>
   <string name="button_cancel">Annullér</string>
-  <string name="button_clipboard_empty">Udklipsholder er tom</string>
   <string name="button_custom_product_search">Brugerdefineret søgning</string>
   <string name="button_dial">Ring til nummeret</string>
   <string name="button_done">Færdig</string>
   <string name="button_email">Send e-mail</string>
   <string name="button_get_directions">Få kørselsanvisninger</string>
-  <string name="button_google_shopper">Google Shopper</string>
+  <string name="button_google_shopper">Shopper</string>
   <string name="button_mms">Send MMS</string>
   <string name="button_ok">OK</string>
   <string name="button_open_browser">Åben browser</string>
@@ -58,14 +57,12 @@
   <string name="history_empty_detail">Ingen stregkodescanninger er blevet registreret endnu</string>
   <string name="history_send">Send historik</string>
   <string name="history_title">Historik</string>
-  <string name="menu_about">Om</string>
   <string name="menu_encode_mecard">Brug MECARD</string>
   <string name="menu_encode_vcard">Brug vCard</string>
   <string name="menu_help">Hjælp</string>
   <string name="menu_history">Historik</string>
   <string name="menu_settings">Indstillinger</string>
   <string name="menu_share">Del</string>
-  <string name="msg_about">Den officielle Android-app fra open source-stregkodeprojektet ZXing.</string>
   <string name="msg_bulk_mode_scanned">Massetilstand: stregkode scannet og gemt</string>
   <string name="msg_camera_framework_bug">Beklager, Android-kameraet er stødt på et problem. Du skal muligvis genstarte enheden.</string>
   <string name="msg_default_format">Format</string>
@@ -85,6 +82,7 @@
   <string name="msg_sbc_failed">Beklager, søgningen er stødt på et problem.</string>
   <string name="msg_sbc_no_page_returned">Ingen side returnerede</string>
   <string name="msg_sbc_page">Side</string>
+  <string name="msg_sbc_results">Resultater</string>
   <string name="msg_sbc_searching_book">Søger bog\u2026</string>
   <string name="msg_sbc_snippet_unavailable">Uddragsvisning ikke tilgængelig</string>
   <string name="msg_sbc_unknown_page">Ukendt side</string>
@@ -103,6 +101,10 @@
   <string name="preferences_decode_1D_title">Afkod 1D-stregkoder</string>
   <string name="preferences_decode_Data_Matrix_title">Afkod Data Matrix</string>
   <string name="preferences_decode_QR_title">Afkod QR-koder</string>
+  <string name="preferences_device_bug_workarounds_title">Device Bug Løsninger</string>
+  <string name="preferences_disable_continuous_focus_summary">Brug kun standard fokusindstilling</string>
+  <string name="preferences_disable_continuous_focus_title">Ingen løbende fokus</string>
+  <string name="preferences_disable_exposure_title">Ingen eksponering</string>
   <string name="preferences_front_light_summary">Forbedrer aflæsning i svagt lys på nogle telefoner, men kan medføre genskær. Virker ikke på alle telefoner.</string>
   <string name="preferences_front_light_title">Brug frontlys</string>
   <string name="preferences_general_title">Generelle indstillinger</string>
@@ -115,6 +117,8 @@
   <string name="preferences_search_country">Søg efter land</string>
   <string name="preferences_supplemental_summary">Prøv at få flere oplysninger om stregkodens indhold</string>
   <string name="preferences_supplemental_title">Hent mere info</string>
+  <string name="preferences_try_bsplus">Prøv Barcode Scanner+</string>
+  <string name="preferences_try_bsplus_summary">Forbedret med nye funktioner og grænseflade</string>
   <string name="preferences_vibrate_title">Vibrér</string>
   <string name="result_address_book">Kontaktinfo fundet</string>
   <string name="result_calendar">Kalendarbegivenhed fundet</string>
@@ -129,9 +133,7 @@
   <string name="result_wifi">WLAN-forbindelse fundet</string>
   <string name="sbc_name">Google Bøger-søgning</string>
   <string name="share_name">Del via stregkode</string>
-  <string name="title_about">Barcode Scanner v</string>
   <string name="wifi_changing_network">Anmoder om tilslutning til netværk\u2026</string>
   <string name="wifi_ssid_label">Netværksnavn</string>
   <string name="wifi_type_label">Type</string>
-  <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

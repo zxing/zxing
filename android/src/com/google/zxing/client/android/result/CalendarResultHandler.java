@@ -16,6 +16,8 @@
 
 package com.google.zxing.client.android.result;
 
+import android.content.ActivityNotFoundException;
+import android.util.Log;
 import com.google.zxing.client.android.R;
 import com.google.zxing.client.result.CalendarParsedResult;
 import com.google.zxing.client.result.ParsedResult;
@@ -33,6 +35,8 @@ import java.util.Date;
  * @author Sean Owen
  */
 public final class CalendarResultHandler extends ResultHandler {
+
+  private static final String TAG = CalendarResultHandler.class.getSimpleName();
 
   private static final int[] buttons = {
       R.string.button_add_calendar
@@ -122,7 +126,16 @@ public final class CalendarResultHandler extends ResultHandler {
       intent.putExtra(Intent.EXTRA_EMAIL, attendees);
       // Documentation says this is either a String[] or comma-separated String, which is right?
     }
-    launchIntent(intent);
+
+    try {
+      // Do this manually at first
+      rawLaunchIntent(intent);
+    } catch (ActivityNotFoundException anfe) {
+      Log.w(TAG, "No calendar app available that responds to " + Intent.ACTION_INSERT);
+      // For calendar apps that don't like "INSERT":
+      intent.setAction(Intent.ACTION_EDIT);
+      launchIntent(intent); // Fail here for real if nothing can handle it
+    }
   }
 
 

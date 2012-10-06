@@ -17,7 +17,6 @@
 package com.google.zxing.client.android.result.supplement;
 
 import android.content.Context;
-import android.os.Handler;
 import android.text.Html;
 import android.widget.TextView;
 import com.google.zxing.client.android.HttpHelper;
@@ -32,39 +31,39 @@ import java.util.regex.Pattern;
 
 final class ProductResultInfoRetriever extends SupplementalInfoRetriever {
 
-  private static final Pattern PRODUCT_NAME_PRICE_PATTERN =
-      Pattern.compile("owb63p\">([^<]+).+zdi3pb\">([^<]+)");
-
+  private static final Pattern[] PRODUCT_NAME_PRICE_PATTERNS = {
+    Pattern.compile(",event\\)\">([^<]+)</a></h3>.+<span class=psrp>([^<]+)</span>"),
+    Pattern.compile("owb63p\">([^<]+).+zdi3pb\">([^<]+)"),
+  };
 
   private final String productID;
   private final String source;
   private final Context context;
 
-  ProductResultInfoRetriever(TextView textView,
-                             String productID,
-                             Handler handler,
-                             HistoryManager historyManager,
-                             Context context) {
-    super(textView, handler, historyManager);
+  ProductResultInfoRetriever(TextView textView, String productID, HistoryManager historyManager, Context context) {
+    super(textView, historyManager);
     this.productID = productID;
     this.source = context.getString(R.string.msg_google_product);
     this.context = context;
   }
 
   @Override
-  void retrieveSupplementalInfo() throws IOException, InterruptedException {
+  void retrieveSupplementalInfo() throws IOException {
 
     String encodedProductID = URLEncoder.encode(productID, "UTF-8");
     String uri = "http://www.google." + LocaleManager.getProductSearchCountryTLD(context)
             + "/m/products?ie=utf8&oe=utf8&scoring=p&source=zxing&q=" + encodedProductID;
-    String content = HttpHelper.downloadViaHttp(uri, HttpHelper.ContentType.HTML);
+    CharSequence content = HttpHelper.downloadViaHttp(uri, HttpHelper.ContentType.HTML);
 
-    Matcher matcher = PRODUCT_NAME_PRICE_PATTERN.matcher(content);
-    if (matcher.find()) {
-      append(productID,
-             source,
-             new String[] { unescapeHTML(matcher.group(1)), unescapeHTML(matcher.group(2)) },
-             uri);
+    for (Pattern p : PRODUCT_NAME_PRICE_PATTERNS) {
+      Matcher matcher = p.matcher(content);
+      if (matcher.find()) {
+        append(productID,
+               source,
+               new String[] { unescapeHTML(matcher.group(1)), unescapeHTML(matcher.group(2)) },
+               uri);
+        break;
+      }
     }
   }
 

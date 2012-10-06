@@ -23,13 +23,12 @@
   <string name="button_back">Enrere</string>
   <string name="button_book_search">Cerca el llibre</string>
   <string name="button_cancel">Cancel·la</string>
-  <string name="button_clipboard_empty">el porta-retalls és buit</string>
   <string name="button_custom_product_search">Cerca personalitzada</string>
   <string name="button_dial">Marca el número</string>
   <string name="button_done">Fet</string>
   <string name="button_email">Envia un correu electrònic</string>
   <string name="button_get_directions">Obté direccions</string>
-  <string name="button_google_shopper">Google Shopper</string>
+  <string name="button_google_shopper">Shopper</string>
   <string name="button_mms">Envia MMS</string>
   <string name="button_ok">D\'acord</string>
   <string name="button_open_browser">Obre el navegador</string>
@@ -58,14 +57,12 @@
   <string name="history_empty_detail">No escaneja codis de barres s\'han registrat encara</string>
   <string name="history_send">Envia l\'historial</string>
   <string name="history_title">Historial</string>
-  <string name="menu_about">Quant a</string>
   <string name="menu_encode_mecard">Utilitza MECARD</string>
   <string name="menu_encode_vcard">Utilitza vCard</string>
   <string name="menu_help">Ajuda</string>
   <string name="menu_history">Historial</string>
   <string name="menu_settings">Configuració</string>
   <string name="menu_share">Comparteix</string>
-  <string name="msg_about">L\'aplicació oficial per a l\'Android del projecte de codi obert de codis de barres ZXing.</string>
   <string name="msg_bulk_mode_scanned">Mode en bloc: codi de barres escanejat i desat</string>
   <string name="msg_camera_framework_bug">S\'ha produït un problema amb la càmera de l\'Android. Potser haureu de reiniciar el dispositiu.</string>
   <string name="msg_default_format">Format</string>
@@ -85,6 +82,7 @@
   <string name="msg_sbc_failed">Hi ha hagut un problema en fer la cerca.</string>
   <string name="msg_sbc_no_page_returned">No s\'ha retornat cap pàgina</string>
   <string name="msg_sbc_page">Pàgina</string>
+  <string name="msg_sbc_results">Resultats</string>
   <string name="msg_sbc_searching_book">S\'està cercant el llibre\u2026</string>
   <string name="msg_sbc_snippet_unavailable">Fragment no disponible</string>
   <string name="msg_sbc_unknown_page">Pàgina desconeguda</string>
@@ -103,6 +101,10 @@
   <string name="preferences_decode_1D_title">Codis de barres 1D</string>
   <string name="preferences_decode_Data_Matrix_title">Matriu de dades</string>
   <string name="preferences_decode_QR_title">Codis QR</string>
+  <string name="preferences_device_bug_workarounds_title">Solucions provisionals de dispositius d\'errors</string>
+  <string name="preferences_disable_continuous_focus_summary">Utilitzeu només la manera d\'enfocament estàndard</string>
+  <string name="preferences_disable_continuous_focus_title">No enfocament continu</string>
+  <string name="preferences_disable_exposure_title">No hi ha exposició</string>
   <string name="preferences_front_light_summary">Millora l\'escaneig amb poca llum en alguns dispositius, però pot produir enlluernament. No funciona en tots els dispositius.</string>
   <string name="preferences_front_light_title">Usa el llum frontal</string>
   <string name="preferences_general_title">Configuració general</string>
@@ -115,6 +117,8 @@
   <string name="preferences_search_country">Cerca per país</string>
   <string name="preferences_supplemental_summary">Intenta obtenir més informació sobre els continguts del codi de barres</string>
   <string name="preferences_supplemental_title">Aconsegueix més informació</string>
+  <string name="preferences_try_bsplus">Intenta Barcode Scanner+</string>
+  <string name="preferences_try_bsplus_summary">Millorat amb noves característiques i la interfície de</string>
   <string name="preferences_vibrate_title">Vibració</string>
   <string name="result_address_book">S\'ha trobat informació de contacte</string>
   <string name="result_calendar">S\'ha trobat un esdeveniment</string>
@@ -129,9 +133,7 @@
   <string name="result_wifi">S\'ha trobat configuració WLAN</string>
   <string name="sbc_name">Cerca a Google Llibres</string>
   <string name="share_name">Comparteix amb el codi de barres</string>
-  <string name="title_about">Barcode Scanner v</string>
   <string name="wifi_changing_network">Sollicitant connexió a la xarxa\u2026</string>
   <string name="wifi_ssid_label">Nom de la xarxa</string>
   <string name="wifi_type_label">Tipus</string>
-  <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

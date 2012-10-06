@@ -23,13 +23,12 @@
   <string name="button_back">Wstecz</string>
   <string name="button_book_search">Szukaj książek</string>
   <string name="button_cancel">Anuluj</string>
-  <string name="button_clipboard_empty">Schowek pusty</string>
   <string name="button_custom_product_search">Wyszukiwanie indywidualne</string>
   <string name="button_dial">Wykręć numer</string>
   <string name="button_done">Gotowe</string>
   <string name="button_email">Wyślij email</string>
   <string name="button_get_directions">Otrzymaj wskazówki</string>
-  <string name="button_google_shopper">Google Shopper</string>
+  <string name="button_google_shopper">Shopper</string>
   <string name="button_mms">Wyślij MMS</string>
   <string name="button_ok">OK</string>
   <string name="button_open_browser">Otwórz przeglądarkę</string>
@@ -58,14 +57,12 @@
   <string name="history_empty_detail">Brak skanowania kodów kreskowych zostały zarejestrowane</string>
   <string name="history_send">Wyślij historię</string>
   <string name="history_title">Historia</string>
-  <string name="menu_about">O aplikacji</string>
   <string name="menu_encode_mecard">Użyj MECARD</string>
   <string name="menu_encode_vcard">Użyj vCard</string>
   <string name="menu_help">Pomoc</string>
   <string name="menu_history">Historia</string>
   <string name="menu_settings">Ustawienia</string>
   <string name="menu_share">Udostępnij</string>
-  <string name="msg_about">Bazowane na bibliotece kodów paskowych ZXing o otwartym źródle</string>
   <string name="msg_bulk_mode_scanned">Tryb zbiorcze: skanowania kodów kreskowych i zapisaniu</string>
   <string name="msg_camera_framework_bug">Przepraszamy, aparat Android napotkał problem. Może wystąpić potrzeba ponownego uruchomienia urządzenia.</string>
   <string name="msg_default_format">Format</string>
@@ -85,6 +82,7 @@
   <string name="msg_sbc_failed">Przepraszamy, wyszukiwania napotkało problem.</string>
   <string name="msg_sbc_no_page_returned">Nie zwrócono żadnej strony</string>
   <string name="msg_sbc_page">Strona</string>
+  <string name="msg_sbc_results">Wyniki</string>
   <string name="msg_sbc_searching_book">Przeszukiwanie książki\u2026</string>
   <string name="msg_sbc_snippet_unavailable">Wycinek niedostępny</string>
   <string name="msg_sbc_unknown_page">Nieznana strona</string>
@@ -103,6 +101,10 @@
   <string name="preferences_decode_1D_title">Dekoduj kody 1D</string>
   <string name="preferences_decode_Data_Matrix_title">Dekoduj Decode Matrix</string>
   <string name="preferences_decode_QR_title">Dekoduj kody QR</string>
+  <string name="preferences_device_bug_workarounds_title">Obejścia błędów urządzeń</string>
+  <string name="preferences_disable_continuous_focus_summary">Używaj tylko standardowego trybu ostrości</string>
+  <string name="preferences_disable_continuous_focus_title">Nie ciągły nacisk</string>
+  <string name="preferences_disable_exposure_title">Żadna ekspozycja</string>
   <string name="preferences_front_light_summary">Polepsza skanowanie przy małej ilości światła w niektórych telefonach, ale może powodować odbłysk. Nie działa na wszystkich telefonach.</string>
   <string name="preferences_front_light_title">Używaj lampy frontowej</string>
   <string name="preferences_general_title">Ustawienia ogólne</string>
@@ -115,6 +117,8 @@
   <string name="preferences_search_country">Szukaj kraju</string>
   <string name="preferences_supplemental_summary">Prosimy spróbować wyszukać więcej informacji na temat kodów kreskowych treści</string>
   <string name="preferences_supplemental_title">Pobierz więcej informacji</string>
+  <string name="preferences_try_bsplus">Spróbuj Barcode Scanner+</string>
+  <string name="preferences_try_bsplus_summary">Wzbogacony o nowe funkcje i interfejs</string>
   <string name="preferences_vibrate_title">Wibruj</string>
   <string name="result_address_book">Znaleziono dane kontaktu</string>
   <string name="result_calendar">Znaleziono wydarzenie kalendarza</string>
@@ -129,9 +133,7 @@
   <string name="result_wifi">Znaleziono konfiguracji sieci</string>
   <string name="sbc_name">Wyszukiwanie książek Google</string>
   <string name="share_name">Udostępnij przez kod paskowy</string>
-  <string name="title_about">Skaner Kodów Paskowych v</string>
   <string name="wifi_changing_network">Ubiegającymi się o przyłączenie do sieci\u2026</string>
   <string name="wifi_ssid_label">Nazwa sieci</string>
   <string name="wifi_type_label">Typ</string>
-  <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

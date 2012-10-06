@@ -23,13 +23,12 @@
   <string name="button_back">Voltar</string>
   <string name="button_book_search">Procurar livro</string>
   <string name="button_cancel">Cancelar</string>
-  <string name="button_clipboard_empty">Área de transferência vazia</string>
   <string name="button_custom_product_search">Pesquisa Personalizada</string>
   <string name="button_dial">Marcar número</string>
   <string name="button_done">Feito</string>
   <string name="button_email">Enviar e-mail</string>
   <string name="button_get_directions">Obter direcções</string>
-  <string name="button_google_shopper">Google Shopper</string>
+  <string name="button_google_shopper">Shopper</string>
   <string name="button_mms">Enviar MMS</string>
   <string name="button_ok">OK</string>
   <string name="button_open_browser">Abrir navegador</string>
@@ -58,14 +57,12 @@
   <string name="history_empty_detail">Não código de barras foram registrados</string>
   <string name="history_send">Enviar histórico</string>
   <string name="history_title">Histórico</string>
-  <string name="menu_about">Sobre</string>
   <string name="menu_encode_mecard">Usar MECARD</string>
   <string name="menu_encode_vcard">Usar vCard</string>
   <string name="menu_help">Ajuda</string>
   <string name="menu_history">Histórico</string>
   <string name="menu_settings">Definições</string>
   <string name="menu_share">Partilhar</string>
-  <string name="msg_about">Baseado na biblioteca de código de barras de código aberto ZXing</string>
   <string name="msg_bulk_mode_scanned">Modo em massa: código de barras lido e guardado</string>
   <string name="msg_camera_framework_bug">Desculpe, a câmera do Android encontrou um problema. Poderá precisar de reiniciar o dispositivo.</string>
   <string name="msg_default_format">Formato</string>
@@ -85,6 +82,7 @@
   <string name="msg_sbc_failed">Desculpe, foi encontrado um erro na pesquisa.</string>
   <string name="msg_sbc_no_page_returned">Nenhuma página obtida</string>
   <string name="msg_sbc_page">Página</string>
+  <string name="msg_sbc_results">Resultados</string>
   <string name="msg_sbc_searching_book">A procurar livro\u2026</string>
   <string name="msg_sbc_snippet_unavailable">Trecho não disponível</string>
   <string name="msg_sbc_unknown_page">Página desconhecida</string>
@@ -103,6 +101,10 @@
   <string name="preferences_decode_1D_title">Código de barras 1D</string>
   <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>
   <string name="preferences_decode_QR_title">QR Codes</string>
+  <string name="preferences_device_bug_workarounds_title">Soluções alternativas de dispositivos com erros</string>
+  <string name="preferences_disable_continuous_focus_summary">Use apenas o modo de focagem padrão</string>
+  <string name="preferences_disable_continuous_focus_title">No foco contínuo</string>
+  <string name="preferences_disable_exposure_title">Nenhuma exposição</string>
   <string name="preferences_front_light_summary">Melhora a leitura em luz fraca em alguns telefones, mas pode causar clarões. Não disponível em certos dispositivos.</string>
   <string name="preferences_front_light_title">Usar luz da frente</string>
   <string name="preferences_general_title">Definições Gerais</string>
@@ -115,6 +117,8 @@
   <string name="preferences_search_country">País busca</string>
   <string name="preferences_supplemental_summary">Tentar recuperar mais informação sobre os conteúdos dos códigos de barras</string>
   <string name="preferences_supplemental_title">Recuperar mais informação</string>
+  <string name="preferences_try_bsplus">Tente Barcode Scanner+</string>
+  <string name="preferences_try_bsplus_summary">Aprimorado com novos recursos e interface</string>
   <string name="preferences_vibrate_title">Vibrar</string>
   <string name="result_address_book">Info de contacto encontrada</string>
   <string name="result_calendar">Evento de calendário encontrado</string>
@@ -129,9 +133,7 @@
   <string name="result_wifi">Configuração WLAN encontrados</string>
   <string name="sbc_name">Pesquisa Google Book</string>
   <string name="share_name">Partilhar por código de barras</string>
-  <string name="title_about">Scanner de código barras v</string>
   <string name="wifi_changing_network">Solicitando ligação à rede\u2026</string>
   <string name="wifi_ssid_label">Nome da Rede</string>
   <string name="wifi_type_label">Tipo</string>
-  <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

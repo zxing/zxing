@@ -17,10 +17,7 @@
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
           android:layout_width="fill_parent"
           android:layout_height="wrap_content"
-          android:background="@color/sbc_header_view"
-          android:paddingLeft="8dip"
-          android:paddingBottom="4dip"
+          android:paddingLeft="@dimen/standard_padding"
+          android:paddingBottom="@dimen/half_padding"
           android:enabled="false"
-          android:textColor="@color/sbc_header_text"
-          android:singleLine="true"
-          android:textSize="14sp"/>
+          android:singleLine="true"/>

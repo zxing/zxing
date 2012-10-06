@@ -23,13 +23,12 @@
   <string name="button_back">السابق</string>
   <string name="button_book_search">بحث في الكتب</string>
   <string name="button_cancel">إلغاء</string>
-  <string name="button_clipboard_empty">الحافظة فارغة</string>
   <string name="button_custom_product_search">بحث مخصص</string>
   <string name="button_dial">طلب رقم</string>
   <string name="button_done">تم</string>
   <string name="button_email">إرسال بريد</string>
   <string name="button_get_directions">معرفة الاتجاهات</string>
-  <string name="button_google_shopper">Google Shopper</string>
+  <string name="button_google_shopper">Shopper</string>
   <string name="button_mms">إرسال MMS</string>
   <string name="button_ok">موافق</string>
   <string name="button_open_browser">فتح المتصفح</string>
@@ -58,14 +57,12 @@
   <string name="history_empty_detail">لم تسجل حتى الآن بمسح الباركود</string>
   <string name="history_send">إرسال السجل</string>
   <string name="history_title">سجل</string>
-  <string name="menu_about">حول</string>
   <string name="menu_encode_mecard">استخدام MECARD</string>
   <string name="menu_encode_vcard">استخدام vCard</string>
   <string name="menu_help">تعليمات</string>
   <string name="menu_history">سجل</string>
   <string name="menu_settings">إعدادات</string>
   <string name="menu_share">مشاركة</string>
-  <string name="msg_about">حسب مكتبة الرمز الشريطي ZXing مفتوحة المصادر</string>
   <string name="msg_bulk_mode_scanned">معظم الدراسي : الباركود الممسوحة ضوئيا وحفظها</string>
   <string name="msg_camera_framework_bug">عفوا، حدثت مشكلة في كاميرا جهاز Android. قد تحتاج إلى إعادة تشغيل الجهاز.</string>
   <string name="msg_default_format">التنسيق</string>
@@ -85,6 +82,7 @@
   <string name="msg_sbc_failed">عفوا، حدثت مشكلة في عملية البحث.</string>
   <string name="msg_sbc_no_page_returned">لم يتم إرجاع أية صفحة</string>
   <string name="msg_sbc_page">الصفحة</string>
+  <string name="msg_sbc_results">النتائج</string>
   <string name="msg_sbc_searching_book">البحث في الكتاب</string>
   <string name="msg_sbc_snippet_unavailable">الأجزاء غير متاحة</string>
   <string name="msg_sbc_unknown_page">صفحة غير معروفة</string>
@@ -103,6 +101,10 @@
   <string name="preferences_decode_1D_title">فك الرموز الشريطية 1D</string>
   <string name="preferences_decode_Data_Matrix_title">فك رموز البيانات ماتريكس</string>
   <string name="preferences_decode_QR_title">فك رموز QR</string>
+  <string name="preferences_device_bug_workarounds_title">الحلول جهاز علة</string>
+  <string name="preferences_disable_continuous_focus_summary">استخدام وضع معيار التركيز فقط</string>
+  <string name="preferences_disable_continuous_focus_title">لا التركيز المستمر</string>
+  <string name="preferences_disable_exposure_title">لا تعرض</string>
   <string name="preferences_front_light_summary">تقوم بتحسين عملية المسح في إضاءة ضعيفة في بعض الهواتف، ولكن يمكن أن يتسبب في حدوث سطوع</string>
   <string name="preferences_front_light_title">استخدم إضاءة أمامية</string>
   <string name="preferences_general_title">إعدادات عامة</string>
@@ -115,6 +117,8 @@
   <string name="preferences_search_country">ابحث عن بلد</string>
   <string name="preferences_supplemental_summary">محاولة لاسترداد مزيد من المعلومات حول محتويات الباركود</string>
   <string name="preferences_supplemental_title">استرداد مزيد من المعلومات</string>
+  <string name="preferences_try_bsplus">محاولة الباركود +</string>
+  <string name="preferences_try_bsplus_summary">معززة مع الميزات الجديدة واجهة</string>
   <string name="preferences_vibrate_title">اهتزاز</string>
   <string name="result_address_book">تم العثور على معلومات جهة الاتصال</string>
   <string name="result_calendar">تم العثور على حدث التقويم</string>
@@ -129,9 +133,7 @@
   <string name="result_wifi">العثور على التكوين اللاسلك</string>
   <string name="sbc_name">البحث في Google Book</string>
   <string name="share_name">مشاركة عبر الرمز الشريطي</string>
-  <string name="title_about">إصدار ماسح الرمز الشريطي</string>
   <string name="wifi_changing_network">طلب الاتصال بالشبكة\u2026</string>
   <string name="wifi_ssid_label">اسم الشبكة</string>
   <string name="wifi_type_label">نوع</string>
-  <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

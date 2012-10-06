@@ -25,8 +25,7 @@
   <com.google.zxing.client.android.ViewfinderView
       android:id="@+id/viewfinder_view"
       android:layout_width="fill_parent"
-      android:layout_height="fill_parent"
-      android:background="@color/transparent"/>
+      android:layout_height="fill_parent"/>
 
   <LinearLayout android:id="@+id/result_view"
                 android:orientation="vertical"
@@ -34,7 +33,6 @@
                 android:layout_height="fill_parent"
                 android:background="@color/result_view"
                 android:visibility="gone"
-                android:padding="4dip"
                 android:baselineAligned="false">
 
     <LinearLayout
@@ -43,7 +41,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:padding="12dip">
+        android:padding="@dimen/standard_padding">
 
       <LinearLayout
           android:orientation="vertical"
@@ -56,7 +54,7 @@
                    android:layout_height="wrap_content"
                    android:maxWidth="160dip"
                    android:maxHeight="160dip"
-                   android:layout_marginBottom="4dip"
+                   android:layout_marginBottom="@dimen/half_padding"
                    android:adjustViewBounds="true"
                    android:scaleType="centerInside"/>
 
@@ -70,14 +68,12 @@
                     android:text="@string/msg_default_format"
                     android:textColor="@color/result_minor_text"
                     android:textStyle="bold"
-                    android:textSize="14sp"
-                    android:paddingRight="4dip"/>
+                    android:paddingRight="@dimen/half_padding"/>
 
           <TextView android:id="@+id/format_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/result_minor_text"
-                    android:textSize="14sp"/>
+                    android:textColor="@color/result_minor_text"/>
 
         </LinearLayout>
 
@@ -91,14 +87,12 @@
                     android:text="@string/msg_default_type"
                     android:textColor="@color/result_minor_text"
                     android:textStyle="bold"
-                    android:textSize="14sp"
-                    android:paddingRight="4dip"/>
+                    android:paddingRight="@dimen/half_padding"/>
 
           <TextView android:id="@+id/type_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/result_minor_text"
-                    android:textSize="14sp"/>
+                    android:textColor="@color/result_minor_text"/>
 
         </LinearLayout>
 
@@ -112,14 +106,12 @@
                     android:text="@string/msg_default_time"
                     android:textColor="@color/result_minor_text"
                     android:textStyle="bold"
-                    android:textSize="14sp"
-                    android:paddingRight="4dip"/>
+                    android:paddingRight="@dimen/half_padding"/>
 
           <TextView android:id="@+id/time_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/result_minor_text"
-                    android:textSize="14sp"/>
+                    android:textColor="@color/result_minor_text"/>
 
         </LinearLayout>
 
@@ -134,14 +126,12 @@
                     android:text="@string/msg_default_meta"
                     android:textColor="@color/result_minor_text"
                     android:textStyle="bold"
-                    android:textSize="14sp"
-                    android:paddingRight="4dip"/>
+                    android:paddingRight="@dimen/half_padding"/>
 
           <TextView android:id="@+id/meta_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/result_minor_text"
-                    android:textSize="14sp"/>
+                    android:textColor="@color/result_minor_text"/>
 
         </LinearLayout>
 
@@ -170,8 +160,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/result_text"
                     android:textColorLink="@color/result_text"
-                    android:textSize="14sp"
-                    android:padding="24dip"
+                    android:paddingLeft="12dip"
                     android:autoLink="web"/>
 
         </LinearLayout>
@@ -189,34 +178,28 @@
       <Button android:layout_width="0dip"
               android:layout_height="wrap_content"
               android:layout_weight="1"
-              android:textSize="14sp"
               android:visibility="gone"/>
 
       <Button android:layout_width="0dip"
               android:layout_height="wrap_content"
               android:layout_weight="1"
-              android:textSize="14sp"
               android:visibility="gone"/>
 
       <Button android:layout_width="0dip"
               android:layout_height="wrap_content"
               android:layout_weight="1"
-              android:textSize="14sp"
               android:visibility="gone"/>
 
       <Button android:layout_width="0dip"
               android:layout_height="wrap_content"
               android:layout_weight="1"
-              android:textSize="14sp"
               android:visibility="gone"/>
 
       <Button android:id="@+id/shopper_button"
               android:layout_width="0dip"
               android:layout_height="wrap_content"
               android:layout_weight="1"
-              android:textSize="14sp"
               android:drawableLeft="@drawable/shopper_icon"
-              android:drawablePadding="4dip"
               android:text="@string/button_google_shopper"
               android:visibility="gone"/>
 
@@ -230,7 +213,6 @@
             android:layout_gravity="bottom|center_horizontal"
             android:background="@color/transparent"
             android:text="@string/msg_default_status"
-            android:textColor="@color/status_text"
-            android:textSize="14sp"/>
+            android:textColor="@color/status_text"/>
 
 </FrameLayout>

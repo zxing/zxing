@@ -111,9 +111,18 @@ public final class Encoder {
     appendBytes(content, mode, dataBits, encoding);
 
     // Hard part: need to know version to know how many bits length takes. But need to know how many
-    // bits it takes to know version. To pick version size assume length takes maximum bits
+    // bits it takes to know version. First we take a guess at version by assuming version will be
+    // the minimum, 1:
+
+    int provisionalBitsNeeded = headerBits.getSize()
+        + mode.getCharacterCountBits(Version.getVersionForNumber(1))
+        + dataBits.getSize();
+    Version provisionalVersion = chooseVersion(provisionalBitsNeeded, ecLevel);
+
+    // Use that guess to calculate the right version. I am still not sure this works in 100% of cases.
+
     int bitsNeeded = headerBits.getSize()
-        + mode.getCharacterCountBits(Version.getVersionForNumber(40))
+        + mode.getCharacterCountBits(provisionalVersion)
         + dataBits.getSize();
     Version version = chooseVersion(bitsNeeded, ecLevel);
 

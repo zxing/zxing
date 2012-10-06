@@ -23,13 +23,12 @@
   <string name="button_back">Regresar</string>
   <string name="button_book_search">Búsqueda de libros</string>
   <string name="button_cancel">Cancelar</string>
-  <string name="button_clipboard_empty">Vaciar portapapeles</string>
   <string name="button_custom_product_search">Búsqueda personalizada</string>
   <string name="button_dial">Marcar número</string>
   <string name="button_done">Terminar</string>
   <string name="button_email">Enviar correo electrónico</string>
   <string name="button_get_directions">Obtener direcciones</string>
-  <string name="button_google_shopper">Google Shopper</string>
+  <string name="button_google_shopper">Shopper</string>
   <string name="button_mms">Enviar MMS</string>
   <string name="button_ok">OK</string>
   <string name="button_open_browser">Abrir navegador</string>
@@ -58,14 +57,12 @@
   <string name="history_empty_detail">Ningún escanea de códigos de barras se han registrado aún</string>
   <string name="history_send">Enviar historial</string>
   <string name="history_title">Historial</string>
-  <string name="menu_about">Acerca de</string>
   <string name="menu_encode_mecard">Usar MECARD</string>
   <string name="menu_encode_vcard">Usar vCard</string>
   <string name="menu_help">Ayuda</string>
   <string name="menu_history">Historial</string>
   <string name="menu_settings">Configuración</string>
   <string name="menu_share">Compartir</string>
-  <string name="msg_about">La aplicación oficial de Android del proyecto de código de barras de código abierto ZXing.</string>
   <string name="msg_bulk_mode_scanned">Modo Masivo: código de barras escaneado y guardado</string>
   <string name="msg_camera_framework_bug">Lo sentimos, la cámara de Android ha encontrado un problema. Es posible que necesite reiniciar el dispositivo.</string>
   <string name="msg_default_format">Formato</string>
@@ -85,6 +82,7 @@
   <string name="msg_sbc_failed">Lo sentimos, la búsqueda ha detectado un problema.</string>
   <string name="msg_sbc_no_page_returned">Página no encontrada</string>
   <string name="msg_sbc_page">Página</string>
+  <string name="msg_sbc_results">Resultados</string>
   <string name="msg_sbc_searching_book">Buscando libro\u2026</string>
   <string name="msg_sbc_snippet_unavailable">Fragmentos no están disponibles</string>
   <string name="msg_sbc_unknown_page">Página desconocida</string>
@@ -103,6 +101,10 @@
   <string name="preferences_decode_1D_title">Códigos de barras 1D</string>
   <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>
   <string name="preferences_decode_QR_title">Códigos QR</string>
+  <string name="preferences_device_bug_workarounds_title">Soluciones provisionales para dispositivos con errores</string>
+  <string name="preferences_disable_continuous_focus_summary">Utilice sólo el modo de enfoque estándar</string>
+  <string name="preferences_disable_continuous_focus_title">No enfoque continuo</string>
+  <string name="preferences_disable_exposure_title">No exposición</string>
   <string name="preferences_front_light_summary">Mejora la exploración en condiciones de poca luz en algunos teléfonos, pero puede causar deslumbramiento. No funciona en todos los teléfonos.</string>
   <string name="preferences_front_light_title">Utilizar luz delantera</string>
   <string name="preferences_general_title">Configuración general</string>
@@ -115,6 +117,8 @@
   <string name="preferences_search_country">Buscar país</string>
   <string name="preferences_supplemental_summary">Trata de recuperar más información sobre el contenido del código de barras.</string>
   <string name="preferences_supplemental_title">Recuperar más información</string>
+  <string name="preferences_try_bsplus">Trate Barcode Scanner+</string>
+  <string name="preferences_try_bsplus_summary">Mejorado con nuevas características y la interfaz de</string>
   <string name="preferences_vibrate_title">Vibrar</string>
   <string name="result_address_book">Información de contacto encontrada</string>
   <string name="result_calendar">Evento de calendario encontrado</string>
@@ -129,9 +133,7 @@
   <string name="result_wifi">Configuración de WLAN encontrada</string>
   <string name="sbc_name">Búsqueda de libros de Google</string>
   <string name="share_name">Compartir por códigos de barras</string>
-  <string name="title_about">Escáner de código de barras v</string>
   <string name="wifi_changing_network">Solicitando conexión a la red\u2026</string>
   <string name="wifi_ssid_label">Nombre de red</string>
   <string name="wifi_type_label">Tipo</string>
-  <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

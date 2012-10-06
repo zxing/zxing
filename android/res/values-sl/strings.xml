@@ -23,13 +23,12 @@
   <string name="button_back">Nazaj</string>
   <string name="button_book_search">Išči knjigo</string>
   <string name="button_cancel">Prekliči</string>
-  <string name="button_clipboard_empty">Odložišče prazno</string>
   <string name="button_custom_product_search">Iskanje po meri</string>
   <string name="button_dial">Pokliči številko</string>
   <string name="button_done">Končano</string>
   <string name="button_email">Pošlji e-mail</string>
   <string name="button_get_directions">Dobi smer</string>
-  <string name="button_google_shopper">Google Shopper</string>
+  <string name="button_google_shopper">Shopper</string>
   <string name="button_mms">Pošlji MMS</string>
   <string name="button_ok">V redu</string>
   <string name="button_open_browser">Odpri brskalnik</string>
@@ -58,14 +57,12 @@
   <string name="history_empty_detail">Št črtne kode scans so bile zabeležene</string>
   <string name="history_send">Pošlji zgodovino</string>
   <string name="history_title">Zgodovina</string>
-  <string name="menu_about">O programu</string>
   <string name="menu_encode_mecard">Uporaba MECARD</string>
   <string name="menu_encode_vcard">Uporaba vCard</string>
   <string name="menu_help">Pomoč</string>
   <string name="menu_history">Zgodovina</string>
   <string name="menu_settings">Nastavitve</string>
   <string name="menu_share">Deli</string>
-  <string name="msg_about">Temelji na odprtokodni ZXing Barcode knjižnici</string>
   <string name="msg_bulk_mode_scanned">Slikanje na debelo: črtna koda prebrana in shranjena</string>
   <string name="msg_camera_framework_bug">Oprostite, Android kamera je naletela na težave. Mogoče boste morali ponovno zagnati napravo.</string>
   <string name="msg_default_format">Format</string>
@@ -85,6 +82,7 @@
   <string name="msg_sbc_failed">Oprostite, iskanje je naletelo na napako.</string>
   <string name="msg_sbc_no_page_returned">Brez vrnjene strani.</string>
   <string name="msg_sbc_page">Stran</string>
+  <string name="msg_sbc_results">Rezultati</string>
   <string name="msg_sbc_searching_book">Iščem knjigo\u2026</string>
   <string name="msg_sbc_snippet_unavailable">Košček ni na voljo</string>
   <string name="msg_sbc_unknown_page">Neznana stran</string>
@@ -103,6 +101,10 @@
   <string name="preferences_decode_1D_title">1D črtno kodo</string>
   <string name="preferences_decode_Data_Matrix_title">Data Matrix</string>
   <string name="preferences_decode_QR_title">QR kodo</string>
+  <string name="preferences_device_bug_workarounds_title">Naprava Bug Rešitve</string>
+  <string name="preferences_disable_continuous_focus_summary">Uporabljajte samo standardni način ostrenja</string>
+  <string name="preferences_disable_continuous_focus_title">Št stalna osredotočenost</string>
+  <string name="preferences_disable_exposure_title">Nobena izpostavljenost</string>
   <string name="preferences_front_light_summary">Izboljša branje pri slabi svetlobi na nekaterih telefonih, a lahko povzroči blesk. Ne deluje na vseh telefonih.</string>
   <string name="preferences_front_light_title">Uporabite sprednjo luč</string>
   <string name="preferences_general_title">Splošne nastavitve</string>
@@ -115,6 +117,8 @@
   <string name="preferences_search_country">Išči po državi</string>
   <string name="preferences_supplemental_summary">Poskusite pridobiti več informacij o vsebini črtne kode</string>
   <string name="preferences_supplemental_title">Naloži Več info</string>
+  <string name="preferences_try_bsplus">Poskusite Barcode Scanner+</string>
+  <string name="preferences_try_bsplus_summary">Izboljšan z novimi funkcijami in vmesnikom</string>
   <string name="preferences_vibrate_title">Vibriraj</string>
   <string name="result_address_book">Najdene informacije o kontaktu</string>
   <string name="result_calendar">Najden koledarski dogodek</string>
@@ -129,9 +133,7 @@
   <string name="result_wifi">Najdene WLAN nastavitve</string>
   <string name="sbc_name">Iskanje z Google Book Search</string>
   <string name="share_name">Deli preko črtne kode</string>
-  <string name="title_about">Barcode Scanner v</string>
   <string name="wifi_changing_network">Zahteva priključitev na omrežje\u2026</string>
   <string name="wifi_ssid_label">Ime omrežja</string>
   <string name="wifi_type_label">Tip</string>
-  <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

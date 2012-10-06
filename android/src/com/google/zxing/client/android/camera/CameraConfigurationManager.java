@@ -45,7 +45,7 @@ final class CameraConfigurationManager {
   // below will still select the default (presumably 320x240) size for these. This prevents
   // accidental selection of very low resolution on some devices.
   private static final int MIN_PREVIEW_PIXELS = 470 * 320; // normal screen
-  private static final int MAX_PREVIEW_PIXELS = 960 * 720; // uses full screen resolution on all 'large' screens
+  private static final int MAX_PREVIEW_PIXELS = 1280 * 720;
 
   private final Context context;
   private Point screenResolution;
@@ -78,7 +78,7 @@ final class CameraConfigurationManager {
     Log.i(TAG, "Camera resolution: " + cameraResolution);
   }
 
-  void setDesiredCameraParameters(Camera camera) {
+  void setDesiredCameraParameters(Camera camera, boolean safeMode) {
     Camera.Parameters parameters = camera.getParameters();
 
     if (parameters == null) {
@@ -86,17 +86,30 @@ final class CameraConfigurationManager {
       return;
     }
 
+    Log.i(TAG, "Initial camera parameters: " + parameters.flatten());
+
+    if (safeMode) {
+      Log.w(TAG, "In camera config safe mode -- most settings will not be honored");
+    }
+
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
-    initializeTorch(parameters, prefs);
+    initializeTorch(parameters, prefs, safeMode);
+
     String focusMode = null;
     if (prefs.getBoolean(PreferencesActivity.KEY_AUTO_FOCUS, true)) {
-      focusMode = findSettableValue(parameters.getSupportedFocusModes(),
-                                    "continuous-picture", // Camera.Paramters.FOCUS_MODE_CONTINUOUS_PICTURE in 4.0+
-                                    Camera.Parameters.FOCUS_MODE_AUTO);
+      if (safeMode || prefs.getBoolean(PreferencesActivity.KEY_DISABLE_CONTINUOUS_FOCUS, false)) {
+        focusMode = findSettableValue(parameters.getSupportedFocusModes(),
+                                      Camera.Parameters.FOCUS_MODE_AUTO);
+      } else {
+        focusMode = findSettableValue(parameters.getSupportedFocusModes(),
+                                      "continuous-picture", // Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE in 4.0+
+                                      "continuous-video",   // Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO in 4.0+
+                                      Camera.Parameters.FOCUS_MODE_AUTO);
+      }
     }
     // Maybe selected auto-focus but not available, so fall through here:
-    if (focusMode == null) {
+    if (!safeMode && focusMode == null) {
       focusMode = findSettableValue(parameters.getSupportedFocusModes(),
                                     Camera.Parameters.FOCUS_MODE_MACRO,
                                     "edof"); // Camera.Parameters.FOCUS_MODE_EDOF in 2.2+
@@ -119,7 +132,7 @@ final class CameraConfigurationManager {
 
   void setTorch(Camera camera, boolean newSetting) {
     Camera.Parameters parameters = camera.getParameters();
-    doSetTorch(parameters, newSetting);
+    doSetTorch(parameters, newSetting, false);
     camera.setParameters(parameters);
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
     boolean currentSetting = prefs.getBoolean(PreferencesActivity.KEY_FRONT_LIGHT, false);
@@ -130,12 +143,12 @@ final class CameraConfigurationManager {
     }
   }
 
-  private static void initializeTorch(Camera.Parameters parameters, SharedPreferences prefs) {
+  private void initializeTorch(Camera.Parameters parameters, SharedPreferences prefs, boolean safeMode) {
     boolean currentSetting = prefs.getBoolean(PreferencesActivity.KEY_FRONT_LIGHT, false);
-    doSetTorch(parameters, currentSetting);
+    doSetTorch(parameters, currentSetting, safeMode);
   }
 
-  private static void doSetTorch(Camera.Parameters parameters, boolean newSetting) {
+  private void doSetTorch(Camera.Parameters parameters, boolean newSetting, boolean safeMode) {
     String flashMode;
     if (newSetting) {
       flashMode = findSettableValue(parameters.getSupportedFlashModes(),
@@ -148,12 +161,29 @@ final class CameraConfigurationManager {
     if (flashMode != null) {
       parameters.setFlashMode(flashMode);
     }
+
+    /*
+    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+    if (!prefs.getBoolean(PreferencesActivity.KEY_DISABLE_EXPOSURE, false)) {
+      if (!safeMode) {
+        ExposureInterface exposure = new ExposureManager().build();
+        exposure.setExposure(parameters, newSetting);
+      }
+    }
+     */
   }
 
   private Point findBestPreviewSizeValue(Camera.Parameters parameters, Point screenResolution) {
 
+    List<Camera.Size> rawSupportedSizes = parameters.getSupportedPreviewSizes();
+    if (rawSupportedSizes == null) {
+      Log.w(TAG, "Device returned no supported preview sizes; using default");
+      Camera.Size defaultSize = parameters.getPreviewSize();
+      return new Point(defaultSize.width, defaultSize.height);
+    }
+
     // Sort by size, descending
-    List<Camera.Size> supportedPreviewSizes = new ArrayList<Camera.Size>(parameters.getSupportedPreviewSizes());
+    List<Camera.Size> supportedPreviewSizes = new ArrayList<Camera.Size>(rawSupportedSizes);
     Collections.sort(supportedPreviewSizes, new Comparator<Camera.Size>() {
       @Override
       public int compare(Camera.Size a, Camera.Size b) {

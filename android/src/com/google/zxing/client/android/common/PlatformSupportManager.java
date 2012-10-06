@@ -26,7 +26,7 @@ import java.util.TreeMap;
 
 /**
  * <p>Sometimes the application wants to access advanced functionality exposed by Android APIs that are only available
- * in later versions of the platform. While {@link Build.VERSION} can be used to determine the device's API level
+ * in later versions of the platform. While {@code Build.VERSION} can be used to determine the device's API level
  * and alter behavior accordingly, and it is possible to write code that uses both old and new APIs selectively,
  * such code would fail to load on older devices that do not have the new API methods.</p>
  *

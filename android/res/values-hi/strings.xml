@@ -23,7 +23,6 @@
   <string name="button_back">वापस</string>
   <string name="button_book_search">पुस्तक खोज</string>
   <string name="button_cancel">रद्द करना</string>
-  <string name="button_clipboard_empty">खाली क्लिपबोर्ड</string>
   <string name="button_custom_product_search">कस्टम खोज</string>
   <string name="button_dial">डायल नंबर</string>
   <string name="button_done">ठीक है</string>
@@ -58,14 +57,12 @@
   <string name="history_empty_detail">अभी तक कोई बारकोड स्कैन दर्ज किया गया है</string>
   <string name="history_send">इतिहास भेजें</string>
   <string name="history_title">इतिहास</string>
-  <string name="menu_about">के बारे में</string>
   <string name="menu_encode_mecard">MECARD का प्रयोग करें</string>
   <string name="menu_encode_vcard">vCard का प्रयोग करें</string>
   <string name="menu_help">मदद</string>
   <string name="menu_history">इतिहास</string>
   <string name="menu_settings">सेटिंग्स</string>
   <string name="menu_share">शेयर</string>
-  <string name="msg_about">खुला स्रोत ZXing बारकोड परियोजना के आधिकारिक Android के बॉक्स.</string>
   <string name="msg_bulk_mode_scanned">थोक मोड: बारकोड स्कैन और बचाया</string>
   <string name="msg_camera_framework_bug">क्षमा करें, Android कैमरा एक समस्या का सामना करना पड़ा. आप डिवाइस को पुनरारंभ करने की आवश्यकता हो सकती है.</string>
   <string name="msg_default_format">प्रारूप</string>
@@ -85,6 +82,7 @@
   <string name="msg_sbc_failed">क्षमा करें, खोज एक समस्या का सामना करना पड़ा.</string>
   <string name="msg_sbc_no_page_returned">कोई पृष्ठ लौटे</string>
   <string name="msg_sbc_page">पेज</string>
+  <string name="msg_sbc_results">परिणाम</string>
   <string name="msg_sbc_searching_book">खोज पुस्तक\u2026</string>
   <string name="msg_sbc_snippet_unavailable">उपलब्ध स्निपेट नहीं</string>
   <string name="msg_sbc_unknown_page">अज्ञात पृष्ठ</string>
@@ -103,6 +101,10 @@
   <string name="preferences_decode_1D_title">1D बारकोड</string>
   <string name="preferences_decode_Data_Matrix_title">डाटा मैट्रिक्स</string>
   <string name="preferences_decode_QR_title">QR कोड</string>
+  <string name="preferences_device_bug_workarounds_title">युक्ति बग वर्कअराउन्ड</string>
+  <string name="preferences_disable_continuous_focus_summary">केवल मानक फोकस मोड का उपयोग करें</string>
+  <string name="preferences_disable_continuous_focus_title">कोई निरंतर ध्यान</string>
+  <string name="preferences_disable_exposure_title">कोई जोखिम</string>
   <string name="preferences_front_light_summary">कुछ फोन पर कम रोशनी में स्कैनिंग बढ़ाता है, लेकिन चमक का कारण हो सकता है. सभी फोन पर काम नहीं करता.</string>
   <string name="preferences_front_light_title">सामने प्रकाश का उपयोग करें</string>
   <string name="preferences_general_title">सामान्य सेटिंग्स</string>
@@ -115,6 +117,8 @@
   <string name="preferences_search_country">खोज देश</string>
   <string name="preferences_supplemental_summary">बारकोड सामग्री के बारे में में अधिक जानकारी पुनः प्राप्त करने की कोशिश करो</string>
   <string name="preferences_supplemental_title">अधिक जानकारी पुनर्प्राप्त</string>
+  <string name="preferences_try_bsplus">बारकोड स्कैनर की कोशिश +</string>
+  <string name="preferences_try_bsplus_summary">नई सुविधाओं और इंटरफेस के साथ बढ़ाया</string>
   <string name="preferences_vibrate_title">कांपना</string>
   <string name="result_address_book">मिला संपर्क जानकारी</string>
   <string name="result_calendar">मिला कैलेंडर घटना</string>
@@ -129,9 +133,7 @@
   <string name="result_wifi">मिला WLAN विन्यास</string>
   <string name="sbc_name">Google पुस्तक खोज</string>
   <string name="share_name">बारकोड के माध्यम से साझा करें</string>
-  <string name="title_about">बारकोड स्कैनर v</string>
   <string name="wifi_changing_network">नेटवर्क के लिए कनेक्शन का अनुरोध कर रहा है \u2026</string>
   <string name="wifi_ssid_label">नेटवर्क नाम</string>
   <string name="wifi_type_label">टाइप</string>
-  <string name="zxing_url">http://code.google.com/p/zxing</string>
 </resources>

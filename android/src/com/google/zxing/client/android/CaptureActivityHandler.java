@@ -16,6 +16,7 @@
 
 package com.google.zxing.client.android;
 
+import android.content.ActivityNotFoundException;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
 import com.google.zxing.client.android.camera.CameraManager;
@@ -97,7 +98,11 @@ public final class CaptureActivityHandler extends Handler {
         String url = (String) message.obj;
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-        activity.startActivity(intent);
+        try {
+          activity.startActivity(intent);
+        } catch (ActivityNotFoundException anfe) {
+          Log.w(TAG, "Can't find anything to handle VIEW of URI " + url);
+        }
         break;
     }
   }
