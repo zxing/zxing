@@ -110,8 +110,16 @@ public final class HttpHelper {
         Log.w(TAG, "Bad URI? " + uri);
         throw new IOException(iae);
       }
-      if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
-        throw new IOException("Bad HTTP response: " + connection.getResponseCode());
+      int responseCode;
+      try {
+        responseCode = connection.getResponseCode();
+      } catch (NullPointerException npe) {
+        // this is maybe this Android bug: http://code.google.com/p/android/issues/detail?id=15554
+        Log.w(TAG, "Bad URI? " + uri);
+        throw new IOException(npe);
+      }
+      if (responseCode != HttpURLConnection.HTTP_OK) {
+        throw new IOException("Bad HTTP response: " + responseCode);
       }
       Log.i(TAG, "Consuming " + uri);
       return consume(connection, maxChars);
