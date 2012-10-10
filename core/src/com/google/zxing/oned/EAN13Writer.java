@@ -18,6 +18,7 @@ package com.google.zxing.oned;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
+import com.google.zxing.FormatException;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 
@@ -54,6 +55,13 @@ public final class EAN13Writer extends UPCEANWriter {
     if (contents.length() != 13) {
       throw new IllegalArgumentException(
           "Requested contents should be 13 digits long, but got " + contents.length());
+    }
+    try {
+      if (!UPCEANReader.checkStandardUPCEANChecksum(contents)) {
+        throw new IllegalArgumentException("Contents do not pass checksum");
+      }
+    } catch (FormatException fe) {
+      throw new IllegalArgumentException("Illegal contents");
     }
 
     int firstDigit = Integer.parseInt(contents.substring(0, 1));
