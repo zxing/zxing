@@ -408,13 +408,15 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     inactivityTimer.onActivity();
     lastResult = rawResult;
     ResultHandler resultHandler = ResultHandlerFactory.makeResultHandler(this, rawResult);
-    historyManager.addHistoryItem(rawResult, resultHandler);
 
-    if (barcode != null) {
+    boolean fromLiveScan = barcode != null;
+    if (fromLiveScan) {
+      historyManager.addHistoryItem(rawResult, resultHandler);
       // Then not from history, so beep/vibrate and we have an image to draw on
       beepManager.playBeepSoundAndVibrate();
       drawResultPoints(barcode, rawResult);
     }
+
     switch (source) {
       case NATIVE_APP_INTENT:
       case PRODUCT_SEARCH_LINK:
@@ -429,7 +431,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         break;
       case NONE:
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        if (prefs.getBoolean(PreferencesActivity.KEY_BULK_MODE, false)) {
+        if (fromLiveScan && prefs.getBoolean(PreferencesActivity.KEY_BULK_MODE, false)) {
           String message = getResources().getString(R.string.msg_bulk_mode_scanned)
               + " (" + rawResult.getText() + ')';
           Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
