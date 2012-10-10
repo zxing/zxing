@@ -224,7 +224,7 @@ public abstract class UPCEANReader extends OneDReader {
    * @return true iff string of digits passes the UPC/EAN checksum algorithm
    * @throws FormatException if the string does not contain only digits
    */
-  private static boolean checkStandardUPCEANChecksum(CharSequence s) throws FormatException {
+  static boolean checkStandardUPCEANChecksum(CharSequence s) throws FormatException {
     int length = s.length();
     if (length == 0) {
       return false;
