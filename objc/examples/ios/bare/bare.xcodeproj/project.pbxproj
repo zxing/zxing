@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3B1C7FA3159168AF0074F246 /* libzxing-objc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BA9968315913CE50056A230 /* libzxing-objc.a */; };
 		3BA99657159122210056A230 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BA99656159122210056A230 /* UIKit.framework */; };
 		3BA99659159122210056A230 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BA99658159122210056A230 /* Foundation.framework */; };
 		3BA9965B159122210056A230 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BA9965A159122210056A230 /* CoreGraphics.framework */; };
@@ -22,6 +21,8 @@
 		3BA9969415913DCE0056A230 /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BA9969315913DCE0056A230 /* libiconv.dylib */; };
 		3BA9969615913DFB0056A230 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BA9969515913DFB0056A230 /* CoreMedia.framework */; };
 		3BA996C5159165330056A230 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3BA996C4159165330056A230 /* main.mm */; };
+		3BBC20A5161BCA03002885A0 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3BBC20A4161BCA03002885A0 /* Default-568h@2x.png */; };
+		3BF2C0BF161BD54700DA3C5C /* libzxing-objc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BA9968315913CE50056A230 /* libzxing-objc.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,6 +70,7 @@
 		3BA9969315913DCE0056A230 /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
 		3BA9969515913DFB0056A230 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		3BA996C4159165330056A230 /* main.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
+		3BBC20A4161BCA03002885A0 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,7 +78,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3B1C7FA3159168AF0074F246 /* libzxing-objc.a in Frameworks */,
+				3BF2C0BF161BD54700DA3C5C /* libzxing-objc.a in Frameworks */,
 				3BA9969615913DFB0056A230 /* CoreMedia.framework in Frameworks */,
 				3BA9969415913DCE0056A230 /* libiconv.dylib in Frameworks */,
 				3BA9969015913D730056A230 /* QuartzCore.framework in Frameworks */,
@@ -94,6 +96,7 @@
 		3BA99647159122210056A230 = {
 			isa = PBXGroup;
 			children = (
+				3BBC20A4161BCA03002885A0 /* Default-568h@2x.png */,
 				3BA9967615913CE40056A230 /* zxing-objc.xcodeproj */,
 				3BA9965C159122210056A230 /* bare */,
 				3BA99655159122210056A230 /* Frameworks */,
@@ -235,6 +238,7 @@
 				3BA99661159122210056A230 /* InfoPlist.strings in Resources */,
 				3BA9966D159122210056A230 /* ViewController_iPhone.xib in Resources */,
 				3BA99670159122210056A230 /* ViewController_iPad.xib in Resources */,
+				3BBC20A5161BCA03002885A0 /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -295,7 +299,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = (
 					armv7,
-					armv6,
+					armv7s,
 				);
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
@@ -313,9 +317,10 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = "armv7 armv7s";
 				WARNING_CFLAGS = "-Wall";
 			};
 			name = Debug;
@@ -326,7 +331,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = (
 					armv7,
-					armv6,
+					armv7s,
 				);
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
@@ -337,11 +342,12 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
+				VALID_ARCHS = "armv7 armv7s";
 				WARNING_CFLAGS = "-Wall";
 			};
 			name = Release;
@@ -363,7 +369,6 @@
 					"\"$(SRCROOT)/../../../../../../Library/Developer/Xcode/DerivedData/bare-ceenmvkaxbzcsubayrtaunypjmgx/Build/Products/Debug-iphoneos\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				VALID_ARCHS = "armv7 armv6";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -385,7 +390,6 @@
 					"\"$(SRCROOT)/../../../../../../Library/Developer/Xcode/DerivedData/bare-ceenmvkaxbzcsubayrtaunypjmgx/Build/Products/Debug-iphoneos\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				VALID_ARCHS = "armv7 armv6";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

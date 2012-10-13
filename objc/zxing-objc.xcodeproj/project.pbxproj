@@ -504,7 +504,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = (
+					i386,
+					armv7s,
+					armv7,
+					x86_64,
+				);
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -525,11 +530,12 @@
 					../cpp/core/src,
 				);
 				INSTALL_PATH = "@executable_path/../Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx";
-				VALID_ARCHS = "armv6 armv7 x86_64 i386";
-				"VALID_ARCHS[sdk=iphoneos*]" = "armv6 armv7";
+				VALID_ARCHS = "armv7 armv7s x86_64 i386";
+				"VALID_ARCHS[sdk=iphoneos*]" = "armv7 armv7s";
+				"VALID_ARCHS[sdk=iphonesimulator*]" = i386;
 				"VALID_ARCHS[sdk=macosx*]" = "x86_64 i386";
 				WARNING_CFLAGS = "-Wall";
 			};
@@ -539,7 +545,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = (
+					i386,
+					armv7s,
+					armv7,
+					x86_64,
+				);
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -553,12 +564,13 @@
 					../cpp/core/src,
 				);
 				INSTALL_PATH = "@executable_path/../Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx";
 				VALIDATE_PRODUCT = YES;
-				VALID_ARCHS = "armv6 armv7 x86_64 i386";
-				"VALID_ARCHS[sdk=iphoneos*]" = "armv6 armv7";
+				VALID_ARCHS = "";
+				"VALID_ARCHS[sdk=iphoneos*]" = "armv7 armv7s";
+				"VALID_ARCHS[sdk=iphonesimulator*]" = i386;
 				"VALID_ARCHS[sdk=macosx*]" = "x86_64 i386";
 				WARNING_CFLAGS = "-Wall";
 			};
@@ -567,12 +579,6 @@
 		3B83EB33158E6C5100A3B31F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					x86_64,
-					i386,
-					armv7,
-					armv6,
-				);
 				DSTROOT = /tmp/zxing_objc.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = src/Prefix.pch;
@@ -586,12 +592,6 @@
 		3B83EB34158E6C5100A3B31F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					x86_64,
-					i386,
-					armv7,
-					armv6,
-				);
 				DSTROOT = /tmp/zxing_objc.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = src/Prefix.pch;

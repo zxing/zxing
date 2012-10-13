@@ -977,8 +977,8 @@
 				ARCHS = (
 					x86_64,
 					i386,
+					armv7s,
 					armv7,
-					armv6,
 				);
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -996,10 +996,13 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = core/src;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx";
-				VALID_ARCHS = "armv6 armv7 x86_64 i386";
+				VALID_ARCHS = "armv7 armv7s i386 x86_64";
+				"VALID_ARCHS[sdk=iphoneos*]" = "armv7 armv7s";
+				"VALID_ARCHS[sdk=iphonesimulator*]" = i386;
+				"VALID_ARCHS[sdk=macosx*]" = "i386 x86_64";
 				WARNING_CFLAGS = "-Wall";
 			};
 			name = Debug;
@@ -1011,8 +1014,8 @@
 				ARCHS = (
 					x86_64,
 					i386,
+					armv7s,
 					armv7,
-					armv6,
 				);
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -1023,11 +1026,14 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = core/src;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx";
 				VALIDATE_PRODUCT = YES;
-				VALID_ARCHS = "armv6 armv7 x86_64 i386";
+				VALID_ARCHS = "armv7 armv7s i386 x86_64";
+				"VALID_ARCHS[sdk=iphoneos*]" = "armv7 armv7s";
+				"VALID_ARCHS[sdk=iphonesimulator*]" = i386;
+				"VALID_ARCHS[sdk=macosx*]" = "i386 x86_64";
 				WARNING_CFLAGS = "-Wall";
 			};
 			name = Release;
@@ -1035,12 +1041,7 @@
 		3B83E99C158E66C600A3B31F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALTERNATE_PERMISSIONS_FILES = (
-					armv6,
-					armv7,
-					i386,
-					x86_64,
-				);
+				ALTERNATE_PERMISSIONS_FILES = "";
 				DSTROOT = /tmp/zxing_cpp.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
@@ -1048,20 +1049,13 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				"VALID_ARCHS[sdk=iphoneos*]" = "armv6 armv7";
-				"VALID_ARCHS[sdk=macosx*]" = "x86_64 i386";
 			};
 			name = Debug;
 		};
 		3B83E99D158E66C600A3B31F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALTERNATE_PERMISSIONS_FILES = (
-					armv6,
-					armv7,
-					i386,
-					x86_64,
-				);
+				ALTERNATE_PERMISSIONS_FILES = "";
 				DSTROOT = /tmp/zxing_cpp.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
@@ -1069,8 +1063,6 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				"VALID_ARCHS[sdk=iphoneos*]" = "armv6 armv7";
-				"VALID_ARCHS[sdk=macosx*]" = "x86_64 i386";
 			};
 			name = Release;
 		};
