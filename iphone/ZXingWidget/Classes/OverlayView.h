@@ -19,7 +19,6 @@
 @protocol CancelDelegate;
 
 @interface OverlayView : UIView {
-	UIImageView *imageView;
 	NSMutableArray *_points;
 	UIButton *cancelButton;
   UILabel *instructionsLabel;
