@@ -82,13 +82,12 @@ public final class WifiConfigManager extends AsyncTask<WifiParsedResult,Object,O
       changeNetworkUnEncrypted(wifiManager, theWifiResult);
     } else {
       String password = theWifiResult.getPassword();
-      if (password == null || password.length() == 0) {
-        throw new IllegalArgumentException();
-      }
-      if (networkType == NetworkType.WEP) {
-        changeNetworkWEP(wifiManager, theWifiResult);
-      } else if (networkType == NetworkType.WPA) {
-        changeNetworkWPA(wifiManager, theWifiResult);
+      if (password != null && password.length() != 0) {
+        if (networkType == NetworkType.WEP) {
+          changeNetworkWEP(wifiManager, theWifiResult);
+        } else if (networkType == NetworkType.WPA) {
+          changeNetworkWPA(wifiManager, theWifiResult);
+        }
       }
     }
     return null;

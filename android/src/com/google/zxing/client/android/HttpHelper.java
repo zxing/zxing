@@ -156,6 +156,8 @@ public final class HttpHelper {
           in.close();
         } catch (IOException ioe) {
           // continue
+        } catch (NullPointerException npe) {
+          // another apparent Android / Harmony bug; continue
         }
       }
     }
@@ -189,7 +191,15 @@ public final class HttpHelper {
         Log.w(TAG, "Bad URI? " + uri);
         throw new IOException(iae);
       }
-      switch (connection.getResponseCode()) {
+      int responseCode;
+      try {
+        responseCode = connection.getResponseCode();
+      } catch (NullPointerException npe) {
+        // this is maybe this Android bug: http://code.google.com/p/android/issues/detail?id=15554
+        Log.w(TAG, "Bad URI? " + uri);
+        throw new IOException(npe);
+      }
+      switch (responseCode) {
         case HttpURLConnection.HTTP_MULT_CHOICE:
         case HttpURLConnection.HTTP_MOVED_PERM:
         case HttpURLConnection.HTTP_MOVED_TEMP:
