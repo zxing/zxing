@@ -27,7 +27,7 @@
   <string name="button_dial">撥號</string>
   <string name="button_done">完成</string>
   <string name="button_email">發送電子郵件</string>
-  <string name="button_get_directions">取得地址</string>
+  <string name="button_get_directions">路線規劃</string>
   <string name="button_google_shopper">Google 購物</string>
   <string name="button_mms">發送 MMS</string>
   <string name="button_ok">確定</string>
@@ -54,7 +54,7 @@
   <string name="history_clear_text">刪除紀錄</string>
   <string name="history_email_title">條碼掃描器紀錄</string>
   <string name="history_empty">空的</string>
-  <string name="history_empty_detail">沒有條碼掃描已記錄</string>
+  <string name="history_empty_detail">沒有條碼掃描記錄</string>
   <string name="history_send">發送紀錄</string>
   <string name="history_title">紀錄</string>
   <string name="menu_encode_mecard">使用MECARD</string>
@@ -103,7 +103,7 @@
   <string name="preferences_decode_QR_title">解碼 QR Code</string>
   <string name="preferences_device_bug_workarounds_title">設備問題解決辦法</string>
   <string name="preferences_disable_continuous_focus_summary">只使用標準對焦模式</string>
-  <string name="preferences_disable_continuous_focus_title">沒有持續關注</string>
+  <string name="preferences_disable_continuous_focus_title">無連續對焦</string>
   <string name="preferences_disable_exposure_title">無曝光</string>
   <string name="preferences_front_light_summary">改善在低光源的環境下掃描的成功率，但有可能造成過度曝光的現象</string>
   <string name="preferences_front_light_title">使用前光源</string>
