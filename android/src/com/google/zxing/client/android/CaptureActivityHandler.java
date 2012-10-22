@@ -112,8 +112,8 @@ public final class CaptureActivityHandler extends Handler {
           Log.d(TAG, "Using browser in package " + browserPackageName);
         }
 
-        // Needed for default Android browser only apparently
-        if ("com.android.browser".equals(browserPackageName)) {
+        // Needed for default Android browser / Chrome only apparently
+        if ("com.android.browser".equals(browserPackageName) || "com.android.chrome".equals(browserPackageName)) {
           intent.setPackage(browserPackageName);
           intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
           intent.putExtra(Browser.EXTRA_APPLICATION_ID, browserPackageName);
