@@ -17,6 +17,9 @@
 package com.google.zxing.client.android;
 
 import android.content.ActivityNotFoundException;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.provider.Browser;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
 import com.google.zxing.client.android.camera.CameraManager;
@@ -96,8 +99,26 @@ public final class CaptureActivityHandler extends Handler {
       case R.id.launch_product_query:
         Log.d(TAG, "Got product query message");
         String url = (String) message.obj;
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+
+        Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+        intent.setData(Uri.parse(url));
+
+        ResolveInfo resolveInfo =
+            activity.getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
+        String browserPackageName = null;
+        if (resolveInfo.activityInfo != null) {
+          browserPackageName = resolveInfo.activityInfo.packageName;
+          Log.d(TAG, "Using browser in package " + browserPackageName);
+        }
+
+        // Needed for default Android browser only apparently
+        if ("com.android.browser".equals(browserPackageName)) {
+          intent.setPackage(browserPackageName);
+          intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+          intent.putExtra(Browser.EXTRA_APPLICATION_ID, browserPackageName);
+        }
+
         try {
           activity.startActivity(intent);
         } catch (ActivityNotFoundException anfe) {
