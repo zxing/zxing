@@ -294,3 +294,12 @@
   - cpp/, objc/ and iphone/ have received many ports of fixes and other functionality from Java, and changes to work with more recent iOS
   - bug/, rim/, and javame/ have been removed
   - Many, many small bug fixes and optimizations, mostly to core/ and android/
+
+2.1 (22 Oct 2012)
+
+  - Many small fixes to handling of QR code data formats, like exotic URLs, and contact info
+  - Many small fixes to decoding and detection common barcode formats, like PDF417, Aztec. Small improvements
+    too like partial error correction for PDF417
+  - Many small updates to the Android app, Barcode Scanner, including rare bug fixes and translation updates.
+    The 2.1 release corresponds substantially to v4.3.1.
+  - Many ports of Java updates to C++ port
