@@ -42,6 +42,7 @@ public final class VEventResultParser extends ResultParser {
       return null;
     }
     String end = matchSingleVCardPrefixedField("DTEND", rawText, true);
+    String duration = matchSingleVCardPrefixedField("DURATION", rawText, true);
     String location = matchSingleVCardPrefixedField("LOCATION", rawText, true);
     String organizer = stripMailto(matchSingleVCardPrefixedField("ORGANIZER", rawText, true));
 
@@ -73,6 +74,7 @@ public final class VEventResultParser extends ResultParser {
       return new CalendarParsedResult(summary,
                                       start,
                                       end,
+                                      duration,
                                       location,
                                       organizer,
                                       attendees,
