@@ -354,7 +354,6 @@ void DecodedBitStreamParser::parseTwoBytes(int firstByte, int secondByte, int* r
 }
   
 void DecodedBitStreamParser::decodeEdifactSegment(Ref<BitSource> bits, ostringstream & result) {
-  bool unlatch = false;
   do {
     // If there is only two or less bytes left then it will be encoded as ASCII
     if (bits->available() <= 16) {
@@ -365,20 +364,21 @@ void DecodedBitStreamParser::decodeEdifactSegment(Ref<BitSource> bits, ostringst
       int edifactValue = bits->readBits(6);
 
       // Check for the unlatch character
-      if (edifactValue == 0x2B67) {  // 011111
-        unlatch = true;
-        // If we encounter the unlatch code then continue reading because the Codeword triple
-        // is padded with 0's
+      if (edifactValue == 0x1f) {  // 011111
+        // Read rest of byte, which should be 0, and stop
+        int bitsLeft = 8 - bits->getBitOffset();
+        if (bitsLeft != 8) {
+          bits->readBits(bitsLeft);
+        }
+        return;
       }
 
-      if (!unlatch) {
-        if ((edifactValue & 0x20) == 0) {  // no 1 in the leading (6th) bit
-          edifactValue |= 0x40;  // Add a leading 01 to the 6 bit binary value
-        }
-        result << (char)(edifactValue);
+      if ((edifactValue & 0x20) == 0) {  // no 1 in the leading (6th) bit
+        edifactValue |= 0x40;  // Add a leading 01 to the 6 bit binary value
       }
+      result << (char)(edifactValue);
     }
-  } while (!unlatch && bits->available() > 0);
+  } while (bits->available() > 0);
 }
   
 void DecodedBitStreamParser::decodeBase256Segment(Ref<BitSource> bits, ostringstream& result, vector<unsigned char> byteSegments) {

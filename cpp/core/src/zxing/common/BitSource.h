@@ -47,6 +47,10 @@ public:
       bytes_(bytes), byteOffset_(0), bitOffset_(0) {
   }
 
+  int getBitOffset() {
+    return bitOffset_;
+  }
+
   int getByteOffset() {
     return byteOffset_;
   }
