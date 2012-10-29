@@ -1,3 +1,4 @@
+// -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
 /*
  *  Decoder.cpp
  *  zxing
@@ -27,13 +28,12 @@
 #include <zxing/ReaderException.h>
 #include <zxing/common/reedsolomon/ReedSolomonException.h>
 
-namespace zxing {
-namespace qrcode {
-
-using namespace std;
+using zxing::qrcode::Decoder;
+using zxing::DecoderResult;
+using zxing::Ref;
 
 Decoder::Decoder() :
-    rsDecoder_(GenericGF::QR_CODE_FIELD_256) {
+  rsDecoder_(GenericGF::QR_CODE_FIELD_256) {
 }
 
 void Decoder::correctErrors(ArrayRef<unsigned char> codewordBytes, int numDataCodewords) {
@@ -98,5 +98,3 @@ Ref<DecoderResult> Decoder::decode(Ref<BitMatrix> bits) {
                                         DecodedBitStreamParser::Hashtable());
 }
 
-}
-}
