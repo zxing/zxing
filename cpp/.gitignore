@@ -3,3 +3,4 @@
 xcuserdata
 callgrind.out.*
 contents.xcworkspacedata
+*.pyc

@@ -26,7 +26,7 @@ flags.append("-Wextra -Werror")
 # flags.append("-pedantic")
 
 compile_options['CXXFLAGS'] = ' '.join(flags)
-compile_options['LINKFLAGS'] = "-ldl -L/usr/lib -L/opt/local/lib"
+compile_options['LINKFLAGS'] = "-ldl -L/usr/lib -L/opt/local/lib -L/usr/local/lib"
 
 def all_files(dir, ext='.cpp', level=6):
 	files = []
@@ -36,7 +36,11 @@ def all_files(dir, ext='.cpp', level=6):
 
 
 
-magick_include = ['/usr/include/ImageMagick/', '/opt/local/include/ImageMagick/']
+magick_include = [
+ '/usr/include/ImageMagick/',
+ '/opt/local/include/ImageMagick/',
+ '/usr/local/include/ImageMagick/'
+]
 magick_libs = ['Magick++', 'MagickWand', 'MagickCore']
 
 # check for existence of libiconv and add it to magick_libs if possible
