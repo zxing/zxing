@@ -46,8 +46,6 @@ Detector::Detector(Ref<BitMatrix> image):
         
 }
         
-// using namespace std;
-
 Ref<AztecDetectorResult> Detector::detect() {
   Ref<Point> pCenter = getMatrixCenter();
             
@@ -330,7 +328,7 @@ Ref<Point> Detector::getMatrixCenter() {
                 
     pointA = getFirstDifferent(Ref<Point>(new Point(cx+15/2, cy-15/2)), false,  1, -1)->toResultPoint();
     pointB = getFirstDifferent(Ref<Point>(new Point(cx+15/2, cy+15/2)), false,  1,  1)->toResultPoint();
-    pointC = getFirstDifferent(Ref<Point>(new Point(cx-15/2, cy+15/2)), false, -1, -1)->toResultPoint();
+    pointC = getFirstDifferent(Ref<Point>(new Point(cx-15/2, cy+15/2)), false, -1, 1)->toResultPoint();
     pointD = getFirstDifferent(Ref<Point>(new Point(cx-15/2, cy-15/2)), false, -1, -1)->toResultPoint();
                 
   }
