@@ -28,8 +28,8 @@ namespace zxing {
 
 class ResultPoint : public Counted {
 protected:
-  float posX_;
-  float posY_;
+  const float posX_;
+  const float posY_;
   
 public:
   ResultPoint();

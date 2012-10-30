@@ -19,19 +19,33 @@
  * limitations under the License.
  */
 
+#include <map>
 #include <zxing/ResultPoint.h>
 #include <zxing/common/GridSampler.h>
 #include <zxing/datamatrix/detector/Detector.h>
 #include <zxing/common/detector/math_utils.h>
+#include <zxing/NotFoundException.h>
 #include <sstream>
 #include <cstdlib>
 
 namespace math_utils = zxing::common::detector::math_utils;
 
-namespace zxing {
-namespace datamatrix {
+using zxing::Ref;
+using zxing::BitMatrix;
+using zxing::ResultPoint;
+using zxing::DetectorResult;
+using zxing::PerspectiveTransform;
+using zxing::NotFoundException;
+using zxing::datamatrix::Detector;
+using zxing::datamatrix::ResultPointsAndTransitions;
 
-using namespace std;
+namespace {
+  typedef std::map<Ref<ResultPoint>, int> PointMap;
+  void increment(PointMap& table, Ref<ResultPoint> const& key) {
+    int& value = table[key];
+    value += 1;
+  }
+}
 
 ResultPointsAndTransitions::ResultPointsAndTransitions() {
   Ref<ResultPoint> ref(new ResultPoint(0, 0));
@@ -41,8 +55,8 @@ ResultPointsAndTransitions::ResultPointsAndTransitions() {
 }
 
 ResultPointsAndTransitions::ResultPointsAndTransitions(Ref<ResultPoint> from, Ref<ResultPoint> to,
-    int transitions)
-    : to_(to), from_(from), transitions_(transitions) {
+                                                       int transitions)
+  : to_(to), from_(from), transitions_(transitions) {
 }
 
 Ref<ResultPoint> ResultPointsAndTransitions::getFrom() {
@@ -58,7 +72,7 @@ int ResultPointsAndTransitions::getTransitions() {
 }
 
 Detector::Detector(Ref<BitMatrix> image)
-    : image_(image) {
+  : image_(image) {
 }
 
 Ref<BitMatrix> Detector::getImage() {
@@ -90,33 +104,35 @@ Ref<DetectorResult> Detector::detect() {
 
   // Figure out which point is their intersection by tallying up the number of times we see the
   // endpoints in the four endpoints. One will show up twice.
+  typedef std::map<Ref<ResultPoint>, int> PointMap;
+  PointMap pointCount;
+  increment(pointCount, lSideOne->getFrom());
+  increment(pointCount, lSideOne->getTo());
+  increment(pointCount, lSideTwo->getFrom());
+  increment(pointCount, lSideTwo->getTo());
+
+  // Figure out which point is their intersection by tallying up the number of times we see the
+  // endpoints in the four endpoints. One will show up twice.
   Ref<ResultPoint> maybeTopLeft;
   Ref<ResultPoint> bottomLeft;
   Ref<ResultPoint> maybeBottomRight;
-  if (lSideOne->getFrom()->equals(lSideOne->getTo())) {
-    bottomLeft = lSideOne->getFrom();
-    maybeTopLeft = lSideTwo->getFrom();
-    maybeBottomRight = lSideTwo->getTo();
-  } else if (lSideOne->getFrom()->equals(lSideTwo->getFrom())) {
-    bottomLeft = lSideOne->getFrom();
-    maybeTopLeft = lSideOne->getTo();
-    maybeBottomRight = lSideTwo->getTo();
-  } else if (lSideOne->getFrom()->equals(lSideTwo->getTo())) {
-    bottomLeft = lSideOne->getFrom();
-    maybeTopLeft = lSideOne->getTo();
-    maybeBottomRight = lSideTwo->getFrom();
-  } else if (lSideOne->getTo()->equals(lSideTwo->getFrom())) {
-    bottomLeft = lSideOne->getTo();
-    maybeTopLeft = lSideOne->getFrom();
-    maybeBottomRight = lSideTwo->getTo();
-  } else if (lSideOne->getTo()->equals(lSideTwo->getTo())) {
-    bottomLeft = lSideOne->getTo();
-    maybeTopLeft = lSideOne->getFrom();
-    maybeBottomRight = lSideTwo->getFrom();
-  } else {
-    bottomLeft = lSideTwo->getFrom();
-    maybeTopLeft = lSideOne->getTo();
-    maybeBottomRight = lSideOne->getFrom();
+  for (PointMap::const_iterator entry = pointCount.begin(), end = pointCount.end(); entry != end; ++entry) {
+    Ref<ResultPoint> const& point = entry->first;
+    int value = entry->second;
+    if (value == 2) {
+      bottomLeft = point; // this is definitely the bottom left, then -- end of two L sides
+    } else {
+      // Otherwise it's either top left or bottom right -- just assign the two arbitrarily now
+      if (maybeTopLeft == 0) {
+        maybeTopLeft = point;
+      } else {
+        maybeBottomRight = point;
+      }
+    }
+  }
+
+  if (maybeTopLeft == 0 || bottomLeft == 0 || maybeBottomRight == 0) {
+    throw NotFoundException();
   }
 
   // Bottom left is correct but top left and bottom right might be switched
@@ -138,10 +154,10 @@ Ref<DetectorResult> Detector::detect() {
   if (!(pointA->equals(bottomRight) || pointA->equals(bottomLeft) || pointA->equals(topLeft))) {
     topRight = pointA;
   } else if (!(pointB->equals(bottomRight) || pointB->equals(bottomLeft)
-      || pointB->equals(topLeft))) {
+               || pointB->equals(topLeft))) {
     topRight = pointB;
   } else if (!(pointC->equals(bottomRight) || pointC->equals(bottomLeft)
-      || pointC->equals(topLeft))) {
+               || pointC->equals(topLeft))) {
     topRight = pointC;
   } else {
     topRight = pointD;
@@ -184,7 +200,7 @@ Ref<DetectorResult> Detector::detect() {
   if (4 * dimensionTop >= 7 * dimensionRight || 4 * dimensionRight >= 7 * dimensionTop) {
     // The matrix is rectangular
     correctedTopRight = correctTopRightRectangular(bottomLeft, bottomRight, topLeft, topRight,
-        dimensionTop, dimensionRight);
+                                                   dimensionTop, dimensionRight);
     if (correctedTopRight == NULL) {
       correctedTopRight = topRight;
     }
@@ -203,7 +219,7 @@ Ref<DetectorResult> Detector::detect() {
     }
 
     transform = createTransform(topLeft, correctedTopRight, bottomLeft, bottomRight, dimensionTop,
-        dimensionRight);
+                                dimensionRight);
     bits = sampleGrid(image_, dimensionTop, dimensionRight, transform);
 
   } else {
@@ -217,15 +233,15 @@ Ref<DetectorResult> Detector::detect() {
     }
 
     // Redetermine the dimension using the corrected top right point
-    int dimensionCorrected = max(transitionsBetween(topLeft, correctedTopRight)->getTransitions(),
-        transitionsBetween(bottomRight, correctedTopRight)->getTransitions());
+    int dimensionCorrected = std::max(transitionsBetween(topLeft, correctedTopRight)->getTransitions(),
+                                      transitionsBetween(bottomRight, correctedTopRight)->getTransitions());
     dimensionCorrected++;
     if ((dimensionCorrected & 0x01) == 1) {
       dimensionCorrected++;
     }
 
     transform = createTransform(topLeft, correctedTopRight, bottomLeft, bottomRight,
-        dimensionCorrected, dimensionCorrected);
+                                dimensionCorrected, dimensionCorrected);
     bits = sampleGrid(image_, dimensionCorrected, dimensionCorrected, transform);
   }
 
@@ -243,8 +259,8 @@ Ref<DetectorResult> Detector::detect() {
  * for a rectangular matrix
  */
 Ref<ResultPoint> Detector::correctTopRightRectangular(Ref<ResultPoint> bottomLeft,
-    Ref<ResultPoint> bottomRight, Ref<ResultPoint> topLeft, Ref<ResultPoint> topRight,
-    int dimensionTop, int dimensionRight) {
+                                                      Ref<ResultPoint> bottomRight, Ref<ResultPoint> topLeft, Ref<ResultPoint> topRight,
+                                                      int dimensionTop, int dimensionRight) {
 
   float corr = distance(bottomLeft, bottomRight) / (float) dimensionTop;
   int norm = distance(topLeft, topRight);
@@ -252,7 +268,7 @@ Ref<ResultPoint> Detector::correctTopRightRectangular(Ref<ResultPoint> bottomLef
   float sin = (topRight->getY() - topLeft->getY()) / norm;
 
   Ref<ResultPoint> c1(
-      new ResultPoint(topRight->getX() + corr * cos, topRight->getY() + corr * sin));
+    new ResultPoint(topRight->getX() + corr * cos, topRight->getY() + corr * sin));
 
   corr = distance(bottomLeft, topLeft) / (float) dimensionRight;
   norm = distance(bottomRight, topRight);
@@ -260,7 +276,7 @@ Ref<ResultPoint> Detector::correctTopRightRectangular(Ref<ResultPoint> bottomLef
   sin = (topRight->getY() - bottomRight->getY()) / norm;
 
   Ref<ResultPoint> c2(
-      new ResultPoint(topRight->getX() + corr * cos, topRight->getY() + corr * sin));
+    new ResultPoint(topRight->getX() + corr * cos, topRight->getY() + corr * sin));
 
   if (!isValid(c1)) {
     if (isValid(c2)) {
@@ -273,9 +289,9 @@ Ref<ResultPoint> Detector::correctTopRightRectangular(Ref<ResultPoint> bottomLef
   }
 
   int l1 = abs(dimensionTop - transitionsBetween(topLeft, c1)->getTransitions())
-      + abs(dimensionRight - transitionsBetween(bottomRight, c1)->getTransitions());
+    + abs(dimensionRight - transitionsBetween(bottomRight, c1)->getTransitions());
   int l2 = abs(dimensionTop - transitionsBetween(topLeft, c2)->getTransitions())
-      + abs(dimensionRight - transitionsBetween(bottomRight, c2)->getTransitions());
+    + abs(dimensionRight - transitionsBetween(bottomRight, c2)->getTransitions());
 
   return l1 <= l2 ? c1 : c2;
 }
@@ -285,8 +301,8 @@ Ref<ResultPoint> Detector::correctTopRightRectangular(Ref<ResultPoint> bottomLef
  * for a square matrix
  */
 Ref<ResultPoint> Detector::correctTopRight(Ref<ResultPoint> bottomLeft,
-    Ref<ResultPoint> bottomRight, Ref<ResultPoint> topLeft, Ref<ResultPoint> topRight,
-    int dimension) {
+                                           Ref<ResultPoint> bottomRight, Ref<ResultPoint> topLeft, Ref<ResultPoint> topRight,
+                                           int dimension) {
 
   float corr = distance(bottomLeft, bottomRight) / (float) dimension;
   int norm = distance(topLeft, topRight);
@@ -294,7 +310,7 @@ Ref<ResultPoint> Detector::correctTopRight(Ref<ResultPoint> bottomLeft,
   float sin = (topRight->getY() - topLeft->getY()) / norm;
 
   Ref<ResultPoint> c1(
-      new ResultPoint(topRight->getX() + corr * cos, topRight->getY() + corr * sin));
+    new ResultPoint(topRight->getX() + corr * cos, topRight->getY() + corr * sin));
 
   corr = distance(bottomLeft, topLeft) / (float) dimension;
   norm = distance(bottomRight, topRight);
@@ -302,7 +318,7 @@ Ref<ResultPoint> Detector::correctTopRight(Ref<ResultPoint> bottomLeft,
   sin = (topRight->getY() - bottomRight->getY()) / norm;
 
   Ref<ResultPoint> c2(
-      new ResultPoint(topRight->getX() + corr * cos, topRight->getY() + corr * sin));
+    new ResultPoint(topRight->getX() + corr * cos, topRight->getY() + corr * sin));
 
   if (!isValid(c1)) {
     if (isValid(c2)) {
@@ -315,18 +331,18 @@ Ref<ResultPoint> Detector::correctTopRight(Ref<ResultPoint> bottomLeft,
   }
 
   int l1 = abs(
-      transitionsBetween(topLeft, c1)->getTransitions()
-          - transitionsBetween(bottomRight, c1)->getTransitions());
+    transitionsBetween(topLeft, c1)->getTransitions()
+    - transitionsBetween(bottomRight, c1)->getTransitions());
   int l2 = abs(
-      transitionsBetween(topLeft, c2)->getTransitions()
-          - transitionsBetween(bottomRight, c2)->getTransitions());
+    transitionsBetween(topLeft, c2)->getTransitions()
+    - transitionsBetween(bottomRight, c2)->getTransitions());
 
   return l1 <= l2 ? c1 : c2;
 }
 
 bool Detector::isValid(Ref<ResultPoint> p) {
   return p->getX() >= 0 && p->getX() < image_->getWidth() && p->getY() > 0
-      && p->getY() < image_->getHeight();
+    && p->getY() < image_->getHeight();
 }
 
 int Detector::distance(Ref<ResultPoint> a, Ref<ResultPoint> b) {
@@ -334,7 +350,7 @@ int Detector::distance(Ref<ResultPoint> a, Ref<ResultPoint> b) {
 }
 
 Ref<ResultPointsAndTransitions> Detector::transitionsBetween(Ref<ResultPoint> from,
-    Ref<ResultPoint> to) {
+                                                             Ref<ResultPoint> to) {
   // See QR Code Detector, sizeOfBlackWhiteBlackRun()
   int fromX = (int) from->getX();
   int fromY = (int) from->getY();
@@ -377,32 +393,32 @@ Ref<ResultPointsAndTransitions> Detector::transitionsBetween(Ref<ResultPoint> fr
 }
 
 Ref<PerspectiveTransform> Detector::createTransform(Ref<ResultPoint> topLeft,
-    Ref<ResultPoint> topRight, Ref<ResultPoint> bottomLeft, Ref<ResultPoint> bottomRight,
-    int dimensionX, int dimensionY) {
+                                                    Ref<ResultPoint> topRight, Ref<ResultPoint> bottomLeft, Ref<ResultPoint> bottomRight,
+                                                    int dimensionX, int dimensionY) {
 
   Ref<PerspectiveTransform> transform(
-      PerspectiveTransform::quadrilateralToQuadrilateral(
-          0.5f,
-          0.5f,
-          dimensionX - 0.5f,
-          0.5f,
-          dimensionX - 0.5f,
-          dimensionY - 0.5f,
-          0.5f,
-          dimensionY - 0.5f,
-          topLeft->getX(),
-          topLeft->getY(),
-          topRight->getX(),
-          topRight->getY(),
-          bottomRight->getX(),
-          bottomRight->getY(),
-          bottomLeft->getX(),
-          bottomLeft->getY()));
+    PerspectiveTransform::quadrilateralToQuadrilateral(
+      0.5f,
+      0.5f,
+      dimensionX - 0.5f,
+      0.5f,
+      dimensionX - 0.5f,
+      dimensionY - 0.5f,
+      0.5f,
+      dimensionY - 0.5f,
+      topLeft->getX(),
+      topLeft->getY(),
+      topRight->getX(),
+      topRight->getY(),
+      bottomRight->getX(),
+      bottomRight->getY(),
+      bottomLeft->getX(),
+      bottomLeft->getY()));
   return transform;
 }
 
 Ref<BitMatrix> Detector::sampleGrid(Ref<BitMatrix> image, int dimensionX, int dimensionY,
-    Ref<PerspectiveTransform> transform) {
+                                    Ref<PerspectiveTransform> transform) {
   GridSampler &sampler = GridSampler::getInstance();
   return sampler.sampleGrid(image, dimensionX, dimensionY, transform);
 }
@@ -427,6 +443,4 @@ void Detector::insertionSort(std::vector<Ref<ResultPointsAndTransitions> > &vect
 
 int Detector::compare(Ref<ResultPointsAndTransitions> a, Ref<ResultPointsAndTransitions> b) {
   return a->getTransitions() - b->getTransitions();
-}
-}
 }
