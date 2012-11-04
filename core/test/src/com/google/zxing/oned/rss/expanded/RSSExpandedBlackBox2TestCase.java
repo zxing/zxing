@@ -24,18 +24,17 @@
  *   http://www.piramidepse.com/
  */
 
-package com.google.zxing.oned;
+package com.google.zxing.oned.rss.expanded;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.common.AbstractBlackBoxTestCase;
 
-public final class RSSExpandedBlackBox3TestCase extends AbstractBlackBoxTestCase {
-    
-    public RSSExpandedBlackBox3TestCase() {
-        super("test/data/blackbox/rssexpanded-3", new MultiFormatReader(), BarcodeFormat.RSS_EXPANDED);
-        addTest(117, 117, 0.0f);
-        addTest(117, 117, 180.0f);
-    }
+public final class RSSExpandedBlackBox2TestCase extends AbstractBlackBoxTestCase {
+
+  public RSSExpandedBlackBox2TestCase() {
+    super("test/data/blackbox/rssexpanded-2", new MultiFormatReader(), BarcodeFormat.RSS_EXPANDED);
+    addTest(21, 23, 0.0f);
+    addTest(19, 23, 180.0f);
+  }
 }
-    

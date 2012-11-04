@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010 ZXing authors
+ * Copyright 2008 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,27 +14,21 @@
  * limitations under the License.
  */
 
-/*
- * These authors would like to acknowledge the Spanish Ministry of Industry,
- * Tourism and Trade, for the support in the project TSI020301-2008-2
- * "PIRAmIDE: Personalizable Interactions with Resources on AmI-enabled
- * Mobile Dynamic Environments", led by Treelogic
- * ( http://www.treelogic.com/ ):
- *
- *   http://www.piramidepse.com/
- */
-
-package com.google.zxing.oned;
+package com.google.zxing.oned.rss;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.common.AbstractBlackBoxTestCase;
 
-public final class RSSExpandedBlackBox2TestCase extends AbstractBlackBoxTestCase {
+/**
+ * @author Sean Owen
+ */
+public final class RSS14BlackBox2TestCase extends AbstractBlackBoxTestCase {
 
-  public RSSExpandedBlackBox2TestCase() {
-    super("test/data/blackbox/rssexpanded-2", new MultiFormatReader(), BarcodeFormat.RSS_EXPANDED);
-    addTest(21, 23, 0.0f);
-    addTest(19, 23, 180.0f);
+  public RSS14BlackBox2TestCase() {
+    super("test/data/blackbox/rss14-2", new MultiFormatReader(), BarcodeFormat.RSS_14);
+    addTest(4, 8, 1, 1, 0.0f);
+    addTest(2, 8, 0, 1, 180.0f);
   }
+
 }
