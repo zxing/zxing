@@ -25,6 +25,7 @@ import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitArray;
 
+import java.util.Arrays;
 import java.util.Map;
 
 /**
@@ -171,6 +172,9 @@ public final class Code39Reader extends OneDReader {
   }
 
   private static int[] findAsteriskPattern(BitArray row, int[] counters) throws NotFoundException {
+    // Should not be needed, but appears to work around a Java 7 JIT bug? This comes in corrupted
+    Arrays.fill(counters, 0);
+
     int width = row.getSize();
     int rowOffset = row.getNextSet(0);
 
@@ -223,7 +227,7 @@ public final class Code39Reader extends OneDReader {
       int pattern = 0;
       for (int i = 0; i < numCounters; i++) {
         int counter = counters[i];
-        if (counters[i] > maxNarrowCounter) {
+        if (counter > maxNarrowCounter) {
           pattern |= 1 << (numCounters - 1 - i);
           wideCounters++;
           totalWideCountersWidth += counter;
@@ -235,7 +239,7 @@ public final class Code39Reader extends OneDReader {
         // counter is more than 1.5 times the average:
         for (int i = 0; i < numCounters && wideCounters > 0; i++) {
           int counter = counters[i];
-          if (counters[i] > maxNarrowCounter) {
+          if (counter > maxNarrowCounter) {
             wideCounters--;
             // totalWideCountersWidth = 3 * average, so this checks if counter >= 3/2 * average
             if ((counter << 1) >= totalWideCountersWidth) {
