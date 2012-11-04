@@ -94,6 +94,7 @@
         <enable/>
       </assertions>
       <jvmarg value="-Djava.awt.headless=true"/>
+      <jvmarg value="-DexplicitLuminanceConversion=true"/>
       <batchtest>
         <fileset dir="test/src">
           <include name="**/${subdir}/*BlackBox*TestCase.java"/>
