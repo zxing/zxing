@@ -74,6 +74,12 @@
         <param name="subdir" value="oned"/>
       </antcall>
       <antcall target="test-blackbox-subset">
+        <param name="subdir" value="oned/rss"/>
+      </antcall>
+      <antcall target="test-blackbox-subset">
+        <param name="subdir" value="oned/rss/expanded"/>
+      </antcall>
+      <antcall target="test-blackbox-subset">
         <param name="subdir" value="pdf417"/>
       </antcall>
       <antcall target="test-blackbox-subset">
