@@ -404,7 +404,7 @@ public final class RSSExpandedReader extends AbstractRSSReader {
     if (leftChar) {
       recordPatternInReverse(row, pattern.getStartEnd()[0], counters);
     } else {
-      recordPattern(row, pattern.getStartEnd()[1] + 1, counters);
+      recordPattern(row, pattern.getStartEnd()[1], counters);
       // reverse it
       for (int i = 0, j = counters.length - 1; i < j; i++, j--) {
         int temp = counters[i];
