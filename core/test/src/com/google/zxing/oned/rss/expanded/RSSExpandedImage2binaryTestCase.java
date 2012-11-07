@@ -36,6 +36,7 @@ import javax.imageio.ImageIO;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.BufferedImageLuminanceSource;
 import com.google.zxing.NotFoundException;
+import com.google.zxing.ReaderException;
 import com.google.zxing.common.BitArray;
 import com.google.zxing.common.GlobalHistogramBinarizer;
 import org.junit.Assert;
@@ -235,7 +236,13 @@ public final class RSSExpandedImage2binaryTestCase extends Assert {
     int rowNumber = binaryMap.getHeight() / 2;
     BitArray row = binaryMap.getBlackRow(rowNumber, null);
 
-    List<ExpandedPair> pairs = rssExpandedReader.decodeRow2pairs(rowNumber, row);
+    List<ExpandedPair> pairs;
+    try {
+      pairs = rssExpandedReader.decodeRow2pairs(rowNumber, row);
+    } catch (ReaderException re) {
+      fail(re.toString());
+      return;
+    }
     BitArray binary = BitArrayBuilder.buildBitArray(pairs);
     assertEquals(expected, binary.toString());
   }
