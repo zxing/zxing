@@ -42,6 +42,7 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.BufferedImageLuminanceSource;
 import com.google.zxing.NotFoundException;
+import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 import com.google.zxing.client.result.ExpandedProductParsedResult;
 import com.google.zxing.client.result.ParsedResult;
@@ -87,7 +88,13 @@ public final class RSSExpandedImage2resultTestCase extends Assert {
     int rowNumber = binaryMap.getHeight() / 2;
     BitArray row = binaryMap.getBlackRow(rowNumber, null);
 
-    Result theResult = rssExpandedReader.decodeRow(rowNumber, row, null);
+    Result theResult;
+    try {
+      theResult = rssExpandedReader.decodeRow(rowNumber, row, null);
+    } catch (ReaderException re) {
+      fail(re.toString());
+      return;
+    }
 
     assertSame(BarcodeFormat.RSS_EXPANDED, theResult.getBarcodeFormat());
 
