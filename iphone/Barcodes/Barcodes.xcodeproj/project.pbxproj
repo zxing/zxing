@@ -572,6 +572,7 @@
 				GCC_PREFIX_HEADER = Barcodes_Prefix.pch;
 				"GCC_THUMB_SUPPORT[arch=armv6]" = NO;
 				INFOPLIST_FILE = "Barcodes-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				OTHER_LDFLAGS = (
 					"-all_load",
 					"-Objc",
@@ -596,6 +597,7 @@
 				GCC_PREFIX_HEADER = Barcodes_Prefix.pch;
 				"GCC_THUMB_SUPPORT[arch=armv6]" = NO;
 				INFOPLIST_FILE = "Barcodes-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				OTHER_LDFLAGS = (
 					"-all_load",
 					"-Objc",
@@ -653,6 +655,7 @@
 				GCC_PREFIX_HEADER = Barcodes_Prefix.pch;
 				"GCC_THUMB_SUPPORT[arch=armv6]" = NO;
 				INFOPLIST_FILE = "Barcodes-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				OTHER_LDFLAGS = (
 					"-all_load",
 					"-Objc",
