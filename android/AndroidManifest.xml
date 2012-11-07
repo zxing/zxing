@@ -35,11 +35,15 @@
   <!-- Don't require camera, as this requires a rear camera. This allows it to work on the Nexus 7 -->
   <uses-feature android:name="android.hardware.camera" android:required="false"/>
   <uses-feature android:name="android.hardware.camera.front" android:required="false"/>
+  <!-- TODO replace above two with next line after Android 4.2 -->
+  <!-- <uses-feature android:name="android.hardware.camera.any"/> -->
   <uses-feature android:name="android.hardware.camera.autofocus" android:required="false"/>
   <uses-feature android:name="android.hardware.camera.flash" android:required="false"/>
   <uses-feature android:name="android.hardware.screen.landscape"/>
   <uses-feature android:name="android.hardware.wifi" android:required="false"/>
-  <uses-feature android:name="android.hardware.touchscreen" android:required="false"/>
+  <!-- This excludes Google TV, which is unfortunately included by virtue of not requiring a camera -->
+  <uses-feature android:name="android.hardware.touchscreen"/>
+  <!-- TODO make this not required again after android.hardware.camera.any is available -->
 
   <!-- Donut-specific flags which allow us to run on any dpi screens. -->
   <supports-screens android:xlargeScreens="true"
