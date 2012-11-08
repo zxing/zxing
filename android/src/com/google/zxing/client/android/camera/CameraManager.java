@@ -166,13 +166,15 @@ public final class CameraManager {
    * Convenience method for {@link com.google.zxing.client.android.CaptureActivity}
    */
   public synchronized void setTorch(boolean newSetting) {
-    if (camera != null) {
-      if (autoFocusManager != null) {
-        autoFocusManager.stop();
-      }
-      configManager.setTorch(camera, newSetting);
-      if (autoFocusManager != null) {
-        autoFocusManager.start();
+    if (newSetting != configManager.getTorchSetting()) {
+      if (camera != null) {
+        if (autoFocusManager != null) {
+          autoFocusManager.stop();
+        }
+        configManager.setTorch(camera, newSetting);
+        if (autoFocusManager != null) {
+          autoFocusManager.start();
+        }
       }
     }
   }
