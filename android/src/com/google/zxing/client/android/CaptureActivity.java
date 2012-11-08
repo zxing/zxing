@@ -121,6 +121,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private HistoryManager historyManager;
   private InactivityTimer inactivityTimer;
   private BeepManager beepManager;
+  private AmbientLightManager ambientLightManager;
 
   ViewfinderView getViewfinderView() {
     return viewfinderView;
@@ -147,6 +148,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     historyManager.trimHistory();
     inactivityTimer = new InactivityTimer(this);
     beepManager = new BeepManager(this);
+    ambientLightManager = new AmbientLightManager(this);
 
     PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
@@ -187,6 +189,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     }
 
     beepManager.updatePrefs();
+    // ambientLightManager.start(cameraManager);
 
     inactivityTimer.onResume();
 
@@ -270,6 +273,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       handler = null;
     }
     inactivityTimer.onPause();
+    // ambientLightManager.stop();
     cameraManager.closeDriver();
     if (!hasSurface) {
       SurfaceView surfaceView = (SurfaceView) findViewById(R.id.preview_view);
