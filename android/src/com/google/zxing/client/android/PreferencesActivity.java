@@ -42,7 +42,7 @@ public final class PreferencesActivity extends PreferenceActivity
   public static final String KEY_PLAY_BEEP = "preferences_play_beep";
   public static final String KEY_VIBRATE = "preferences_vibrate";
   public static final String KEY_COPY_TO_CLIPBOARD = "preferences_copy_to_clipboard";
-  public static final String KEY_FRONT_LIGHT = "preferences_front_light";
+  public static final String KEY_FRONT_LIGHT_MODE = "preferences_front_light_mode";
   public static final String KEY_BULK_MODE = "preferences_bulk_mode";
   public static final String KEY_REMEMBER_DUPLICATES = "preferences_remember_duplicates";
   public static final String KEY_SUPPLEMENTAL = "preferences_supplemental";

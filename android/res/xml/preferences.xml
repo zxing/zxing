@@ -60,9 +60,11 @@
         android:summary="@string/preferences_custom_product_search_summary"/>
   </PreferenceCategory>
   <PreferenceCategory android:title="@string/preferences_general_title">
-    <CheckBoxPreference
-        android:key="preferences_front_light"
-        android:defaultValue="false"
+    <ListPreference
+        android:entries="@array/preferences_front_light_options"
+        android:entryValues="@array/preferences_front_light_values"
+        android:key="preferences_front_light_mode"
+        android:defaultValue="OFF"
         android:title="@string/preferences_front_light_title"
         android:summary="@string/preferences_front_light_summary"/>
     <CheckBoxPreference
