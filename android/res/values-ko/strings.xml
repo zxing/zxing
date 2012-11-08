@@ -105,6 +105,9 @@
   <string name="preferences_disable_continuous_focus_summary">전용 표준 초점 모드를 사용</string>
   <string name="preferences_disable_continuous_focus_title">아무 연속 초점 없음</string>
   <string name="preferences_disable_exposure_title">더 노출하지</string>
+  <string name="preferences_front_light_auto">자동적 인</string>
+  <string name="preferences_front_light_off">비활성</string>
+  <string name="preferences_front_light_on">활동적인</string>
   <string name="preferences_front_light_summary">특정 기기에서는 어두운 환경에서의 스캐닝 기능을 향상 시키지만 너무 밝을 수도 있습니다. 모든 기기에서 작동되지 않습니다.</string>
   <string name="preferences_front_light_title">플래시 사용하기</string>
   <string name="preferences_general_title">일반 설정</string>

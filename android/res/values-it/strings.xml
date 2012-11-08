@@ -105,6 +105,9 @@
   <string name="preferences_disable_continuous_focus_summary">Utilizzare solo modalità standard messa a fuoco</string>
   <string name="preferences_disable_continuous_focus_title">No continua attenzione</string>
   <string name="preferences_disable_exposure_title">Nessuna esposizione</string>
+  <string name="preferences_front_light_auto">Automatico</string>
+  <string name="preferences_front_light_off">Inattivo</string>
+  <string name="preferences_front_light_on">Attivo</string>
   <string name="preferences_front_light_summary">Migliora la scansione con poca luminosità su alcuni telefoni, ma può provocare abbagliamento. Non funziona su tutti i telefoni.</string>
   <string name="preferences_front_light_title">Usa luce frontale</string>
   <string name="preferences_general_title">Impostazioni generali</string>

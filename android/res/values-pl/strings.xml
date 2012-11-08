@@ -105,6 +105,9 @@
   <string name="preferences_disable_continuous_focus_summary">Używaj tylko standardowego trybu ostrości</string>
   <string name="preferences_disable_continuous_focus_title">Nie ciągły nacisk</string>
   <string name="preferences_disable_exposure_title">Żadna ekspozycja</string>
+  <string name="preferences_front_light_auto">Automatyczny</string>
+  <string name="preferences_front_light_off">Nieaktywny</string>
+  <string name="preferences_front_light_on">Aktywny</string>
   <string name="preferences_front_light_summary">Polepsza skanowanie przy małej ilości światła w niektórych telefonach, ale może powodować odbłysk. Nie działa na wszystkich telefonach.</string>
   <string name="preferences_front_light_title">Używaj lampy frontowej</string>
   <string name="preferences_general_title">Ustawienia ogólne</string>

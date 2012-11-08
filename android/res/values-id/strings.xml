@@ -105,6 +105,9 @@
   <string name="preferences_disable_continuous_focus_summary">Gunakan hanya modus fokus standar</string>
   <string name="preferences_disable_continuous_focus_title">Tidak ada fokus terus menerus</string>
   <string name="preferences_disable_exposure_title">Eksposur ada</string>
+  <string name="preferences_front_light_auto">Otomatis</string>
+  <string name="preferences_front_light_off">Non-aktif</string>
+  <string name="preferences_front_light_on">Aktif</string>
   <string name="preferences_front_light_summary">Meningkatkan scanning dalam cahaya rendah pada beberapa ponsel, namun dapat menyebabkan silau. Tidak bekerja pada semua ponsel.</string>
   <string name="preferences_front_light_title">Gunakan lampu depan</string>
   <string name="preferences_general_title">Pengaturan umum</string>
