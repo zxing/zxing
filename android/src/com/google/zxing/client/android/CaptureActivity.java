@@ -63,8 +63,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.util.Collection;
 import java.util.Date;
@@ -91,9 +89,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private static final String PRODUCT_SEARCH_URL_PREFIX = "http://www.google";
   private static final String PRODUCT_SEARCH_URL_SUFFIX = "/m/products/scan";
   private static final String[] ZXING_URLS = { "http://zxing.appspot.com/scan", "zxing://scan/" };
-  private static final String RETURN_CODE_PLACEHOLDER = "{CODE}";
-  private static final String RETURN_URL_PARAM = "ret";
-  private static final String RAW_PARAM = "raw";
 
   public static final int HISTORY_REQUEST_CODE = 0x0000bacc;
 
@@ -114,8 +109,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private boolean copyToClipboard;
   private IntentSource source;
   private String sourceUrl;
-  private String returnUrlTemplate;
-  private boolean returnRaw;
+  private ScanFromWebPageManager scanFromWebPageManager;
   private Collection<BarcodeFormat> decodeFormats;
   private String characterSet;
   private HistoryManager historyManager;
@@ -242,9 +236,8 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         // If a return URL is specified, send the results there. Otherwise, handle it ourselves.
         source = IntentSource.ZXING_LINK;
         sourceUrl = dataString;
-        Uri inputUri = Uri.parse(sourceUrl);
-        returnUrlTemplate = inputUri.getQueryParameter(RETURN_URL_PARAM);
-        returnRaw = inputUri.getQueryParameter(RAW_PARAM) != null;
+        Uri inputUri = Uri.parse(dataString);
+        scanFromWebPageManager = new ScanFromWebPageManager(inputUri);
         decodeFormats = DecodeFormatManager.parseDecodeFormats(inputUri);
 
       }
@@ -427,7 +420,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         handleDecodeExternally(rawResult, resultHandler, barcode);
         break;
       case ZXING_LINK:
-        if (returnUrlTemplate == null){
+        if (scanFromWebPageManager == null || !scanFromWebPageManager.isScanFromWebPage()) {
           handleDecodeInternally(rawResult, resultHandler, barcode);
         } else {
           handleDecodeExternally(rawResult, resultHandler, barcode);
@@ -644,17 +637,9 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       sendReplyMessage(R.id.launch_product_query, replyURL, resultDurationMS);
       
     } else if (source == IntentSource.ZXING_LINK) {
-      
-      // Replace each occurrence of RETURN_CODE_PLACEHOLDER in the returnUrlTemplate
-      // with the scanned code. This allows both queries and REST-style URLs to work.
-      if (returnUrlTemplate != null) {
-        CharSequence codeReplacement = returnRaw ? rawResult.getText() : resultHandler.getDisplayContents();
-        try {
-          codeReplacement = URLEncoder.encode(codeReplacement.toString(), "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-          // can't happen; UTF-8 is always supported. Continue, I guess, without encoding
-        }
-        String replyURL = returnUrlTemplate.replace(RETURN_CODE_PLACEHOLDER, codeReplacement);
+
+      if (scanFromWebPageManager != null && scanFromWebPageManager.isScanFromWebPage()) {
+        String replyURL = scanFromWebPageManager.buildReplyURL(rawResult, resultHandler);
         sendReplyMessage(R.id.launch_product_query, replyURL, resultDurationMS);
       }
       
