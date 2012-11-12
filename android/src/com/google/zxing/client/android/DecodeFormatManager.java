@@ -39,7 +39,8 @@ final class DecodeFormatManager {
                                  BarcodeFormat.UPC_E,
                                  BarcodeFormat.EAN_13,
                                  BarcodeFormat.EAN_8,
-                                 BarcodeFormat.RSS_14);
+                                 BarcodeFormat.RSS_14,
+                                 BarcodeFormat.RSS_EXPANDED);
     ONE_D_FORMATS = EnumSet.of(BarcodeFormat.CODE_39,
                                BarcodeFormat.CODE_93,
                                BarcodeFormat.CODE_128,
