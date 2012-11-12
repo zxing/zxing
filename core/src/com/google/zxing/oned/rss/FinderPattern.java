@@ -45,4 +45,18 @@ public final class FinderPattern {
     return resultPoints;
   }
 
+  @Override
+  public boolean equals(Object o) {
+    if(!(o instanceof FinderPattern)) {
+      return false;
+    }
+    FinderPattern that = (FinderPattern) o;
+    return value == that.value;
+  }
+
+  @Override
+  public int hashCode() {
+    return value;
+  }
+
 }
