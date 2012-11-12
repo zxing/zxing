@@ -545,6 +545,12 @@ public final class RSSExpandedReader extends AbstractRSSReader {
     int numModules = 17; //left and right data characters have all the same length
     float elementWidth = (float) count(counters) / (float) numModules;
 
+    // Sanity check: element width for pattern and the character should match
+    float expectedElementWidth = (pattern.getStartEnd()[1] - pattern.getStartEnd()[0]) / 15.0f;
+    if (Math.abs(elementWidth - expectedElementWidth) / expectedElementWidth > 0.3f) {
+      throw NotFoundException.getNotFoundInstance();
+    }
+
     int[] oddCounts = this.getOddCounts();
     int[] evenCounts = this.getEvenCounts();
     float[] oddRoundingErrors = this.getOddRoundingErrors();
@@ -554,8 +560,14 @@ public final class RSSExpandedReader extends AbstractRSSReader {
       float value = 1.0f * counters[i] / elementWidth;
       int count = (int) (value + 0.5f); // Round
       if (count < 1) {
+        if (value < 0.3f) {
+          throw NotFoundException.getNotFoundInstance();
+        }
         count = 1;
       } else if (count > 8) {
+        if (value > 8.7f) {
+          throw NotFoundException.getNotFoundInstance();
+        }
         count = 8;
       }
       int offset = i >> 1;
