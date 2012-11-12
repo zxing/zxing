@@ -64,7 +64,8 @@ public final class RSSExpandedImage2resultTestCase extends Assert {
     // (01)90012345678908(3103)001750
     String path = "test/data/blackbox/rssexpanded-1/2.jpg";
     ExpandedProductParsedResult expected =
-        new ExpandedProductParsedResult("90012345678908",
+        new ExpandedProductParsedResult("(01)90012345678908(3103)001750",
+                                        "90012345678908",
                                         null, null, null, null, null, null,
                                         "001750",
                                         ExpandedProductParsedResult.KILOGRAM,

@@ -37,6 +37,7 @@ public final class ExpandedProductParsedResult extends ParsedResult {
   public static final String KILOGRAM = "KG";
   public static final String POUND = "LB";
 
+  private final String rawText;
   private final String productID;
   private final String sscc;
   private final String lotNumber;
@@ -53,7 +54,8 @@ public final class ExpandedProductParsedResult extends ParsedResult {
   // For AIS that not exist in this object
   private final Map<String,String> uncommonAIs;
 
-  public ExpandedProductParsedResult(String productID,
+  public ExpandedProductParsedResult(String rawText,
+                                     String productID,
                                      String sscc,
                                      String lotNumber,
                                      String productionDate,
@@ -68,6 +70,7 @@ public final class ExpandedProductParsedResult extends ParsedResult {
                                      String priceCurrency,
                                      Map<String,String> uncommonAIs) {
     super(ParsedResultType.PRODUCT);
+    this.rawText = rawText;
     this.productID = productID;
     this.sscc = sscc;
     this.lotNumber = lotNumber;
@@ -134,6 +137,10 @@ public final class ExpandedProductParsedResult extends ParsedResult {
     return o == null ? 0 : o.hashCode();
   }
 
+  public String getRawText() {
+    return rawText;
+  }
+
   public String getProductID() {
     return productID;
   }
@@ -192,6 +199,6 @@ public final class ExpandedProductParsedResult extends ParsedResult {
 
   @Override
   public String getDisplayResult() {
-    return String.valueOf(productID);
+    return String.valueOf(rawText);
   }
 }

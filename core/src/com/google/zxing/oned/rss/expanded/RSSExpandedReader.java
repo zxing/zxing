@@ -39,6 +39,7 @@ import com.google.zxing.oned.rss.RSSUtils;
 import com.google.zxing.oned.rss.expanded.decoders.AbstractExpandedDecoder;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Collections;
@@ -88,6 +89,7 @@ public final class RSSExpandedReader extends AbstractRSSReader {
     { 45, 135, 194, 160,  58, 174, 100,  89}
   };
 
+  /*
   private static final int FINDER_PAT_A = 0;
   private static final int FINDER_PAT_B = 1;
   private static final int FINDER_PAT_C = 2;
@@ -109,13 +111,14 @@ public final class RSSExpandedReader extends AbstractRSSReader {
   };
 
   private static final int LONGEST_SEQUENCE_SIZE = FINDER_PATTERN_SEQUENCES[FINDER_PATTERN_SEQUENCES.length - 1].length;
+   */
 
   private static final int MAX_PAIRS = 11;
 
   private final List<ExpandedPair> pairs = new ArrayList<ExpandedPair>(MAX_PAIRS);
   private final List<ExpandedRow> rows = new ArrayList<ExpandedRow>();
   private final int [] startEnd = new int[2];
-  private final int [] currentSequence = new int[LONGEST_SEQUENCE_SIZE];
+  //private final int [] currentSequence = new int[LONGEST_SEQUENCE_SIZE];
   private boolean startFromEven = false;
 
   @Override
@@ -217,7 +220,7 @@ public final class RSSExpandedReader extends AbstractRSSReader {
         break;
       }
       prevIsSame = erow.isEquivalent(this.pairs);
-      insertPos += 1;
+      insertPos++;
     }
     if (nextIsSame || prevIsSame) {
       return;
@@ -239,11 +242,12 @@ public final class RSSExpandedReader extends AbstractRSSReader {
 
   // Remove all the rows that contains only specified pairs 
   private static void removePartialRows(List<ExpandedPair> pairs, List<ExpandedRow> rows) {
-    check:
-    for (ExpandedRow r : rows) {
+    for (Iterator<ExpandedRow> iterator = rows.iterator(); iterator.hasNext(); ) {
+      ExpandedRow r = iterator.next();
       if (r.getPairs().size() == pairs.size()) {
         continue;
       }
+      boolean allFound = true;
       for (ExpandedPair p : r.getPairs()) {
         boolean found = false;
         for (ExpandedPair pp : pairs) {
@@ -253,21 +257,23 @@ public final class RSSExpandedReader extends AbstractRSSReader {
           }
         }
         if (!found) {
-          continue check;
+          allFound = false;
+          break;
         }
       }
-      // 'pairs' contains all the pairs from the row 'r'
-      rows.remove(r);
-      // start from the begining
-      removePartialRows(pairs, rows);
-      return;
+      if (allFound) {
+        // 'pairs' contains all the pairs from the row 'r'
+        iterator.remove();
+        // start from the begining
+        removePartialRows(pairs, rows);
+      }
     }
   }
 
   // Returns true when one of the rows already contains all the pairs
   private static boolean isPartialRow(Iterable<ExpandedPair> pairs, Iterable<ExpandedRow> rows) {
-    check:
     for (ExpandedRow r : rows) {
+      boolean allFound = true;
       for (ExpandedPair p : pairs) {
         boolean found = false;
         for (ExpandedPair pp : r.getPairs()) {
@@ -277,11 +283,14 @@ public final class RSSExpandedReader extends AbstractRSSReader {
           }
         }
         if (!found) {
-          continue check;
+          allFound = false;
+          break;
         }
       }
-      // the row 'r' contain all the pairs from 'pairs'
-      return true;
+      if (allFound) {
+        // the row 'r' contain all the pairs from 'pairs'
+        return true;
+      }
     }
     return false;
   }
