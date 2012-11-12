@@ -133,7 +133,8 @@ public final class ExpandedProductResultParser extends ResultParser {
       }
     }
 
-    return new ExpandedProductParsedResult(productID,
+    return new ExpandedProductParsedResult(rawText,
+                                           productID,
                                            sscc,
                                            lotNumber,
                                            productionDate,
