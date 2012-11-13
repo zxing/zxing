@@ -264,8 +264,6 @@ public final class RSSExpandedReader extends AbstractRSSReader {
       if (allFound) {
         // 'pairs' contains all the pairs from the row 'r'
         iterator.remove();
-        // start from the begining
-        removePartialRows(pairs, rows);
       }
     }
   }

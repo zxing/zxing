@@ -56,14 +56,15 @@ public final class Code39Reader extends OneDReader {
 
   private final boolean usingCheckDigit;
   private final boolean extendedMode;
+  private final StringBuilder decodeRowResult;
+  private final int[] counters;
 
   /**
    * Creates a reader that assumes all encoded data is data, and does not treat the final
    * character as a check digit. It will not decoded "extended Code 39" sequences.
    */
   public Code39Reader() {
-    usingCheckDigit = false;
-    extendedMode = false;
+    this(false);
   }
 
   /**
@@ -74,8 +75,7 @@ public final class Code39Reader extends OneDReader {
    * data, and verify that the checksum passes.
    */
   public Code39Reader(boolean usingCheckDigit) {
-    this.usingCheckDigit = usingCheckDigit;
-    this.extendedMode = false;
+    this(usingCheckDigit, false);
   }
 
   /**
@@ -91,19 +91,22 @@ public final class Code39Reader extends OneDReader {
   public Code39Reader(boolean usingCheckDigit, boolean extendedMode) {
     this.usingCheckDigit = usingCheckDigit;
     this.extendedMode = extendedMode;
+    decodeRowResult = new StringBuilder(20);
+    counters = new int[9];
   }
 
   @Override
   public Result decodeRow(int rowNumber, BitArray row, Map<DecodeHintType,?> hints)
       throws NotFoundException, ChecksumException, FormatException {
 
-    int[] counters = new int[9];
+    Arrays.fill(counters, 0);
+    decodeRowResult.setLength(0);
+
     int[] start = findAsteriskPattern(row, counters);
     // Read off white space    
     int nextStart = row.getNextSet(start[1]);
     int end = row.getSize();
 
-    StringBuilder result = new StringBuilder(20);
     char decodedChar;
     int lastStart;
     do {
@@ -113,7 +116,7 @@ public final class Code39Reader extends OneDReader {
         throw NotFoundException.getNotFoundInstance();
       }
       decodedChar = patternToChar(pattern);
-      result.append(decodedChar);
+      decodeRowResult.append(decodedChar);
       lastStart = nextStart;
       for (int counter : counters) {
         nextStart += counter;
@@ -121,7 +124,7 @@ public final class Code39Reader extends OneDReader {
       // Read off white space
       nextStart = row.getNextSet(nextStart);
     } while (decodedChar != '*');
-    result.setLength(result.length() - 1); // remove asterisk
+    decodeRowResult.setLength(decodeRowResult.length() - 1); // remove asterisk
 
     // Look for whitespace after pattern:
     int lastPatternSize = 0;
@@ -136,27 +139,27 @@ public final class Code39Reader extends OneDReader {
     }
 
     if (usingCheckDigit) {
-      int max = result.length() - 1;
+      int max = decodeRowResult.length() - 1;
       int total = 0;
       for (int i = 0; i < max; i++) {
-        total += ALPHABET_STRING.indexOf(result.charAt(i));
+        total += ALPHABET_STRING.indexOf(decodeRowResult.charAt(i));
       }
-      if (result.charAt(max) != ALPHABET[total % 43]) {
+      if (decodeRowResult.charAt(max) != ALPHABET[total % 43]) {
         throw ChecksumException.getChecksumInstance();
       }
-      result.setLength(max);
+      decodeRowResult.setLength(max);
     }
 
-    if (result.length() == 0) {
+    if (decodeRowResult.length() == 0) {
       // false positive
       throw NotFoundException.getNotFoundInstance();
     }
 
     String resultString;
     if (extendedMode) {
-      resultString = decodeExtended(result);
+      resultString = decodeExtended(decodeRowResult);
     } else {
-      resultString = result.toString();
+      resultString = decodeRowResult.toString();
     }
 
     float left = (float) (start[1] + start[0]) / 2.0f;
@@ -172,9 +175,6 @@ public final class Code39Reader extends OneDReader {
   }
 
   private static int[] findAsteriskPattern(BitArray row, int[] counters) throws NotFoundException {
-    // Should not be needed, but appears to work around a Java 7 JIT bug? This comes in corrupted
-    Arrays.fill(counters, 0);
-
     int width = row.getSize();
     int rowOffset = row.getNextSet(0);
 

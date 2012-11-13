@@ -23,6 +23,7 @@ import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitArray;
 
+import java.util.Arrays;
 import java.util.Map;
 
 /**
@@ -78,6 +79,7 @@ public final class CodaBarReader extends OneDReader {
   @Override
   public Result decodeRow(int rowNumber, BitArray row, Map<DecodeHintType,?> hints) throws NotFoundException {
 
+    Arrays.fill(counters, 0);
     setCounters(row);
     int startOffset = findStartPattern();
     int nextStart = startOffset;
