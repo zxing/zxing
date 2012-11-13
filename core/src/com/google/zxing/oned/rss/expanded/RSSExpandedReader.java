@@ -89,7 +89,6 @@ public final class RSSExpandedReader extends AbstractRSSReader {
     { 45, 135, 194, 160,  58, 174, 100,  89}
   };
 
-  /*
   private static final int FINDER_PAT_A = 0;
   private static final int FINDER_PAT_B = 1;
   private static final int FINDER_PAT_C = 2;
@@ -110,8 +109,7 @@ public final class RSSExpandedReader extends AbstractRSSReader {
     { FINDER_PAT_A, FINDER_PAT_A, FINDER_PAT_B, FINDER_PAT_B, FINDER_PAT_C, FINDER_PAT_D, FINDER_PAT_D, FINDER_PAT_E, FINDER_PAT_E, FINDER_PAT_F, FINDER_PAT_F },
   };
 
-  private static final int LONGEST_SEQUENCE_SIZE = FINDER_PATTERN_SEQUENCES[FINDER_PATTERN_SEQUENCES.length - 1].length;
-   */
+  //private static final int LONGEST_SEQUENCE_SIZE = FINDER_PATTERN_SEQUENCES[FINDER_PATTERN_SEQUENCES.length - 1].length;
 
   private static final int MAX_PAIRS = 11;
 
@@ -188,24 +186,90 @@ public final class RSSExpandedReader extends AbstractRSSReader {
   }
 
   private List<ExpandedPair> checkRows(boolean reverse) {
+    // Limit number of rows we are checking
+    // We use recursive algorithm with pure complexity and don't want it to take forever
+    // Stacked barcode can have up to 11 rows, so 25 seems resonable enough
+    if (this.rows.size() > 25) {
+      this.rows.clear();  // We will never have a chance to get result, so clear it
+      return null;
+    }
+
     this.pairs.clear();
     if (reverse) {
       Collections.reverse(this.rows);
     }
 
-    for(ExpandedRow erow : this.rows) {
-      this.pairs.addAll(erow.getPairs());
-    }
-    //System.out.println(this.pairs.size()+" pairs on MULTIPLE ROWS: "+this.rows);
-    if (checkChecksum()) {
-      return this.pairs;
+    List<ExpandedPair> ps = null;
+    try {
+      ps = checkRows(new ArrayList<ExpandedRow>(), 0);
+    } catch (NotFoundException e) {
+      // OK
     }
 
     if (reverse) {
       Collections.reverse(this.rows);
     }
 
-    return null;
+    return ps;
+  }
+
+  // Try to construct a valid rows sequence
+  // Recursion is used to implement backtracking
+  private List<ExpandedPair> checkRows(List<ExpandedRow> collectedRows, int currentRow) throws NotFoundException {
+    for (int i = currentRow; i < rows.size(); i++) {
+      ExpandedRow row = rows.get(i);
+      this.pairs.clear();
+      int size = collectedRows.size();
+      for (int j = 0; j < size; j++) {
+        this.pairs.addAll(collectedRows.get(j).getPairs());
+      }
+      this.pairs.addAll(row.getPairs());
+
+      if (!isValidSequence(this.pairs)) {
+        continue;
+      }
+
+      if (checkChecksum()) {
+        return this.pairs;
+      }
+
+      List<ExpandedRow> rs = new ArrayList<ExpandedRow>();
+      rs.addAll(collectedRows);
+      rs.add(row);
+      try {
+        // Recursion: try to add more rows
+        return checkRows(rs, i + 1);
+      } catch (NotFoundException e) {
+        // We failed, try the next candidate
+        continue;
+      }
+    }
+
+    throw NotFoundException.getNotFoundInstance();
+  }
+
+  // Whether the pairs form a valid find pattern seqience,
+  // either complete or a prefix
+  private static boolean isValidSequence(List<ExpandedPair> pairs) {
+    for (int[] sequence : FINDER_PATTERN_SEQUENCES) {
+      if (pairs.size() > sequence.length) {
+        continue;
+      }
+
+      boolean stop = true;
+      for (int j = 0; j < pairs.size(); j++) {
+        if (pairs.get(j).getFinderPattern().getValue() != sequence[j]) {
+          stop = false;
+          break;
+        }
+      }
+
+      if (stop) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   private void storeRow(int rowNumber, boolean wasReversed) {

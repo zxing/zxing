@@ -25,6 +25,7 @@ import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitArray;
 
+import java.util.Arrays;
 import java.util.Map;
 
 /**
@@ -53,6 +54,14 @@ public final class Code93Reader extends OneDReader {
   };
   private static final int ASTERISK_ENCODING = CHARACTER_ENCODINGS[47];
 
+  private final StringBuilder decodeRowResult;
+  private final int[] counters;
+
+  public Code93Reader() {
+    decodeRowResult = new StringBuilder(20);
+    counters = new int[6];
+  }
+
   @Override
   public Result decodeRow(int rowNumber, BitArray row, Map<DecodeHintType,?> hints)
       throws NotFoundException, ChecksumException, FormatException {
@@ -62,20 +71,23 @@ public final class Code93Reader extends OneDReader {
     int nextStart = row.getNextSet(start[1]);
     int end = row.getSize();
 
-    StringBuilder result = new StringBuilder(20);
-    int[] counters = new int[6];
+    int[] theCounters = counters;
+    Arrays.fill(theCounters, 0);
+    StringBuilder result = decodeRowResult;
+    result.setLength(0);
+
     char decodedChar;
     int lastStart;
     do {
-      recordPattern(row, nextStart, counters);
-      int pattern = toPattern(counters);
+      recordPattern(row, nextStart, theCounters);
+      int pattern = toPattern(theCounters);
       if (pattern < 0) {
         throw NotFoundException.getNotFoundInstance();
       }
       decodedChar = patternToChar(pattern);
       result.append(decodedChar);
       lastStart = nextStart;
-      for (int counter : counters) {
+      for (int counter : theCounters) {
         nextStart += counter;
       }
       // Read off white space
@@ -111,33 +123,34 @@ public final class Code93Reader extends OneDReader {
 
   }
 
-  private static int[] findAsteriskPattern(BitArray row) throws NotFoundException {
+  private int[] findAsteriskPattern(BitArray row) throws NotFoundException {
     int width = row.getSize();
     int rowOffset = row.getNextSet(0);
 
-    int counterPosition = 0;
-    int[] counters = new int[6];
+    Arrays.fill(counters, 0);
+    int[] theCounters = counters;
     int patternStart = rowOffset;
     boolean isWhite = false;
-    int patternLength = counters.length;
+    int patternLength = theCounters.length;
 
+    int counterPosition = 0;
     for (int i = rowOffset; i < width; i++) {
       if (row.get(i) ^ isWhite) {
-        counters[counterPosition]++;
+        theCounters[counterPosition]++;
       } else {
         if (counterPosition == patternLength - 1) {
-          if (toPattern(counters) == ASTERISK_ENCODING) {
+          if (toPattern(theCounters) == ASTERISK_ENCODING) {
             return new int[]{patternStart, i};
           }
-          patternStart += counters[0] + counters[1];
-          System.arraycopy(counters, 2, counters, 0, patternLength - 2);
-          counters[patternLength - 2] = 0;
-          counters[patternLength - 1] = 0;
+          patternStart += theCounters[0] + theCounters[1];
+          System.arraycopy(theCounters, 2, theCounters, 0, patternLength - 2);
+          theCounters[patternLength - 2] = 0;
+          theCounters[patternLength - 1] = 0;
           counterPosition--;
         } else {
           counterPosition++;
         }
-        counters[counterPosition] = 1;
+        theCounters[counterPosition] = 1;
         isWhite = !isWhite;
       }
     }

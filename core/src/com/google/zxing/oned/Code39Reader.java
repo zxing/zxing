@@ -99,10 +99,12 @@ public final class Code39Reader extends OneDReader {
   public Result decodeRow(int rowNumber, BitArray row, Map<DecodeHintType,?> hints)
       throws NotFoundException, ChecksumException, FormatException {
 
-    Arrays.fill(counters, 0);
-    decodeRowResult.setLength(0);
+    int[] theCounters = counters;
+    Arrays.fill(theCounters, 0);
+    StringBuilder result = decodeRowResult;
+    result.setLength(0);
 
-    int[] start = findAsteriskPattern(row, counters);
+    int[] start = findAsteriskPattern(row, theCounters);
     // Read off white space    
     int nextStart = row.getNextSet(start[1]);
     int end = row.getSize();
@@ -110,25 +112,25 @@ public final class Code39Reader extends OneDReader {
     char decodedChar;
     int lastStart;
     do {
-      recordPattern(row, nextStart, counters);
-      int pattern = toNarrowWidePattern(counters);
+      recordPattern(row, nextStart, theCounters);
+      int pattern = toNarrowWidePattern(theCounters);
       if (pattern < 0) {
         throw NotFoundException.getNotFoundInstance();
       }
       decodedChar = patternToChar(pattern);
-      decodeRowResult.append(decodedChar);
+      result.append(decodedChar);
       lastStart = nextStart;
-      for (int counter : counters) {
+      for (int counter : theCounters) {
         nextStart += counter;
       }
       // Read off white space
       nextStart = row.getNextSet(nextStart);
     } while (decodedChar != '*');
-    decodeRowResult.setLength(decodeRowResult.length() - 1); // remove asterisk
+    result.setLength(result.length() - 1); // remove asterisk
 
     // Look for whitespace after pattern:
     int lastPatternSize = 0;
-    for (int counter : counters) {
+    for (int counter : theCounters) {
       lastPatternSize += counter;
     }
     int whiteSpaceAfterEnd = nextStart - lastStart - lastPatternSize;
@@ -139,27 +141,27 @@ public final class Code39Reader extends OneDReader {
     }
 
     if (usingCheckDigit) {
-      int max = decodeRowResult.length() - 1;
+      int max = result.length() - 1;
       int total = 0;
       for (int i = 0; i < max; i++) {
         total += ALPHABET_STRING.indexOf(decodeRowResult.charAt(i));
       }
-      if (decodeRowResult.charAt(max) != ALPHABET[total % 43]) {
+      if (result.charAt(max) != ALPHABET[total % 43]) {
         throw ChecksumException.getChecksumInstance();
       }
-      decodeRowResult.setLength(max);
+      result.setLength(max);
     }
 
-    if (decodeRowResult.length() == 0) {
+    if (result.length() == 0) {
       // false positive
       throw NotFoundException.getNotFoundInstance();
     }
 
     String resultString;
     if (extendedMode) {
-      resultString = decodeExtended(decodeRowResult);
+      resultString = decodeExtended(result);
     } else {
-      resultString = decodeRowResult.toString();
+      resultString = result.toString();
     }
 
     float left = (float) (start[1] + start[0]) / 2.0f;
