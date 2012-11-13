@@ -58,7 +58,7 @@
            excludes="**/IntentIntegratorSupportV4.java"
            includeantruntime="false">
       <classpath>
-        <pathelement location="${android-home}/platforms/android-13/android.jar"/>
+        <pathelement location="${android-home}/platforms/android-17/android.jar"/>
       </classpath>
     </javac>
     <jar jarfile="android-integration-honeycomb.jar" basedir="build/honeycomb"/>
@@ -76,7 +76,7 @@
            excludes="**/IntentIntegratorV30.java"
            includeantruntime="false">
       <classpath>
-        <pathelement location="${android-home}/platforms/android-10/android.jar"/>
+        <pathelement location="${android-home}/platforms/android-17/android.jar"/>
         <pathelement location="${android-home}/extras/android/compatibility/v4/android-support-v4.jar"/>
       </classpath>
     </javac>
