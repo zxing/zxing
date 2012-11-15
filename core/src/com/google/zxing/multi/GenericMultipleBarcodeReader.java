@@ -86,10 +86,9 @@ public final class GenericMultipleBarcodeReader implements MultipleBarcodeReader
         break;
       }
     }
-    if (alreadyFound) {
-      return;
+    if (!alreadyFound) {
+      results.add(translateResultPoints(result, xOffset, yOffset));
     }
-    results.add(translateResultPoints(result, xOffset, yOffset));
     ResultPoint[] resultPoints = result.getResultPoints();
     if (resultPoints == null || resultPoints.length == 0) {
       return;
