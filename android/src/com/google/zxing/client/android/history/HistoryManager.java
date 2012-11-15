@@ -53,7 +53,7 @@ public final class HistoryManager {
 
   private static final String TAG = HistoryManager.class.getSimpleName();
 
-  private static final int MAX_ITEMS = 500;
+  private static final int MAX_ITEMS = 2000;
 
   private static final String[] COLUMNS = {
       DBHelper.TEXT_COL,
@@ -238,7 +238,9 @@ public final class HistoryManager {
                         DBHelper.TIMESTAMP_COL + " DESC");
       cursor.move(MAX_ITEMS);
       while (cursor.moveToNext()) {
-        db.delete(DBHelper.TABLE_NAME, DBHelper.ID_COL + '=' + cursor.getString(0), null);
+        String id = cursor.getString(0);
+        Log.i(TAG, "Deleting scan history ID " + id);
+        db.delete(DBHelper.TABLE_NAME, DBHelper.ID_COL + '=' + id, null);
       }
     } catch (SQLiteException sqle) {
       // We're seeing an error here when called in CaptureActivity.onCreate() in rare cases
