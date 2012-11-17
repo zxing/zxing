@@ -42,67 +42,57 @@ import java.io.Writer;
 import java.net.URI;
 import java.nio.charset.Charset;
 import java.util.Map;
+import java.util.Queue;
+import java.util.concurrent.Callable;
 
 /**
  * One of a pool of threads which pulls images off the Inputs queue and decodes them in parallel.
  *
  * @see CommandLineRunner
  */
-final class DecodeThread extends Thread {
+final class DecodeWorker implements Callable<Integer> {
 
-  private int successful;
   private final Config config;
-  private final Inputs inputs;
+  private final Queue<String> inputs;
 
-  DecodeThread(Config config, Inputs inputs) {
+  DecodeWorker(Config config, Queue<String> inputs) {
     this.config = config;
     this.inputs = inputs;
   }
 
   @Override
-  public void run() {
-    while (true) {
-      String input = inputs.getNextInput();
-      if (input == null) {
-        break;
-      }
-
+  public Integer call() throws IOException {
+    int successful = 0;
+    String input;
+    while ((input = inputs.poll()) != null) {
       File inputFile = new File(input);
       if (inputFile.exists()) {
-        try {
-          if (config.isMulti()) {
-            Result[] results = decodeMulti(inputFile.toURI(), config.getHints());
-            if (results != null) {
-              successful++;
-              if (config.isDumpResults()) {
-                dumpResultMulti(inputFile, results);
-              }
-            }
-          } else {
-            Result result = decode(inputFile.toURI(), config.getHints());
-            if (result != null) {
-              successful++;
-              if (config.isDumpResults()) {
-                dumpResult(inputFile, result);
-              }
+        if (config.isMulti()) {
+          Result[] results = decodeMulti(inputFile.toURI(), config.getHints());
+          if (results != null) {
+            successful++;
+            if (config.isDumpResults()) {
+              dumpResultMulti(inputFile, results);
             }
           }
-        } catch (IOException e) {
+        } else {
+          Result result = decode(inputFile.toURI(), config.getHints());
+          if (result != null) {
+            successful++;
+            if (config.isDumpResults()) {
+              dumpResult(inputFile, result);
+            }
+          }
         }
       } else {
-        try {
-          if (decode(new URI(input), config.getHints()) != null) {
-            successful++;
-          }
-        } catch (Exception e) {
+        if (decode(URI.create(input), config.getHints()) != null) {
+          successful++;
         }
       }
     }
-  }
-
-  public int getSuccessful() {
     return successful;
   }
+
 
   private static void dumpResult(File input, Result result) throws IOException {
     String name = input.getCanonicalPath();

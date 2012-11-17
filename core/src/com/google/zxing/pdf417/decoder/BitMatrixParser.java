@@ -212,10 +212,8 @@ final class BitMatrixParser {
       } else {
         // Left row indicator column
         int cw = getCodeword(symbol);
-        if (ecLevel < 0) {
-          if (rowNumber % 3 == 1) {
-            leftColumnECData = cw;
-          }
+        if (ecLevel < 0 && rowNumber % 3 == 1) {
+          leftColumnECData = cw;
         }
       }
       symbol = 0;
@@ -227,12 +225,10 @@ final class BitMatrixParser {
       //columns--;
       // Overwrite the last codeword i.e. Right Row Indicator
       --next;
-      if (ecLevel < 0) {
-        if (rowNumber % 3 == 2) {
-          rightColumnECData = codewords[next];
-          if (rightColumnECData == leftColumnECData && leftColumnECData != 0) {
-            ecLevel = ((rightColumnECData % 30) - rows % 3) / 3;
-          }
+      if (ecLevel < 0 && rowNumber % 3 == 2) {
+        rightColumnECData = codewords[next];
+        if (rightColumnECData == leftColumnECData && leftColumnECData != 0) {
+          ecLevel = ((rightColumnECData % 30) - rows % 3) / 3;
         }
       }
       codewords[next] = 0;
@@ -243,7 +239,6 @@ final class BitMatrixParser {
   /**
    * Translate the symbol into a codeword.
    *
-   * @param symbol
    * @return the codeword corresponding to the symbol.
    */
   private static int getCodeword(long symbol) {

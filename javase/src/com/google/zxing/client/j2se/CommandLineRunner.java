@@ -27,6 +27,11 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 /**
  * This simple command line utility decodes files, directories of files, or URIs which are passed
@@ -48,7 +53,7 @@ public final class CommandLineRunner {
     }
 
     Config config = new Config();
-    Inputs inputs = new Inputs();
+    Queue<String> inputs = new ConcurrentLinkedQueue<String>();
 
     for (String arg : args) {
       if ("--try_harder".equals(arg)) {
@@ -74,11 +79,6 @@ public final class CommandLineRunner {
           crop[i] = Integer.parseInt(tokens[i]);
         }
         config.setCrop(crop);
-      } else if (arg.startsWith("--threads") && arg.length() >= 10) {
-        int threads = Integer.parseInt(arg.substring(10));
-        if (threads > 1) {
-          config.setThreads(threads);
-        }
       } else if (arg.startsWith("-")) {
         System.err.println("Unknown command line option " + arg);
         printUsage();
@@ -93,19 +93,20 @@ public final class CommandLineRunner {
       }
     }
 
-    List<DecodeThread> threads = new ArrayList<DecodeThread>(config.getThreads());
-    for (int x = 0; x < config.getThreads(); x++) {
-      DecodeThread thread = new DecodeThread(config, inputs);
-      threads.add(thread);
-      thread.start();
+    int numThreads = Runtime.getRuntime().availableProcessors();
+    ExecutorService executor = Executors.newFixedThreadPool(numThreads);
+    List<Future<Integer>> futures = new ArrayList<Future<Integer>>(numThreads);
+    for (int x = 0; x < numThreads; x++) {
+      futures.add(executor.submit(new DecodeWorker(config, inputs)));
     }
+    executor.shutdown();
 
     int successful = 0;
-    for (int x = 0; x < config.getThreads(); x++) {
-      threads.get(x).join();
-      successful += threads.get(x).getSuccessful();
+    for (Future<Integer> future : futures) {
+      successful += future.get();
     }
-    int total = inputs.getInputCount();
+
+    int total = inputs.size();
     if (total > 1) {
       System.out.println("\nDecoded " + successful + " files out of " + total +
           " successfully (" + (successful * 100 / total) + "%)\n");
@@ -114,7 +115,7 @@ public final class CommandLineRunner {
 
   // Build all the inputs up front into a single flat list, so the threads can atomically pull
   // paths/URLs off the queue.
-  private static void addArgumentToInputs(String argument, Config config, Inputs inputs) throws IOException {
+  private static void addArgumentToInputs(String argument, Config config, Queue<String> inputs) throws IOException {
     File inputFile = new File(argument);
     if (inputFile.exists()) {
       if (inputFile.isDirectory()) {
@@ -124,7 +125,7 @@ public final class CommandLineRunner {
           if (filename.startsWith(".")) {
             continue;
           }
-          // Recurse on nested directories if requested, otherwise skip them.
+          // Recur on nested directories if requested, otherwise skip them.
           if (singleFile.isDirectory()) {
             if (config.isRecursive()) {
               addArgumentToInputs(singleFile.getAbsolutePath(), config, inputs);
@@ -135,13 +136,13 @@ public final class CommandLineRunner {
           if (filename.endsWith(".txt") || filename.contains(".mono.png")) {
             continue;
           }
-          inputs.addInput(singleFile.getCanonicalPath());
+          inputs.add(singleFile.getCanonicalPath());
         }
       } else {
-        inputs.addInput(inputFile.getCanonicalPath());
+        inputs.add(inputFile.getCanonicalPath());
       }
     } else {
-      inputs.addInput(argument);
+      inputs.add(argument);
     }
   }
 

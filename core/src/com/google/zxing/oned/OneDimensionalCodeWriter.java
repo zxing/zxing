@@ -120,7 +120,7 @@ public abstract class OneDimensionalCodeWriter implements Writer {
   }
 
   /**
-   * Encode the contents to byte array expression of one-dimensional barcode.
+   * Encode the contents to boolean array expression of one-dimensional barcode.
    * Start code and end code should be included in result, and side margins should not be included.
    *
    * @return a {@code boolean[]} of horizontal pixels (false = white, true = black)

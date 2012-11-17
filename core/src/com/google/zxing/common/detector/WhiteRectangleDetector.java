@@ -287,7 +287,7 @@ public final class WhiteRectangleDetector {
     float ti = t.getX();
     float tj = t.getY();
 
-    if (yi < width / 2) {
+    if (yi < width / 2.0f) {
       return new ResultPoint[]{
           new ResultPoint(ti - CORR, tj + CORR),
           new ResultPoint(zi + CORR, zj + CORR),

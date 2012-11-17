@@ -449,10 +449,8 @@ public final class RSSExpandedReader extends AbstractRSSReader {
 
     DataCharacter leftChar  = this.decodeDataCharacter(row, pattern, isOddPattern, true);
     
-    if (!previousPairs.isEmpty()){
-      if (previousPairs.get(previousPairs.size()-1).mustBeLast()){
-        throw NotFoundException.getNotFoundInstance();
-      }
+    if (!previousPairs.isEmpty() && previousPairs.get(previousPairs.size()-1).mustBeLast()) {
+      throw NotFoundException.getNotFoundInstance();
     }
     
     DataCharacter rightChar;

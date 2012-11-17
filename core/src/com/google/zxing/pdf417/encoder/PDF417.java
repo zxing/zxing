@@ -545,35 +545,6 @@ final class PDF417 {
    *          row indicator codewords)
    * @return the number of rows in the symbol (r)
    */
-  private static int getNumberOfRows(int m, int k, int c) throws WriterException {
-    int r = calculateNumberOfRows(m, k, c);
-    if (r > 90) {
-      throw new WriterException(
-          "The message doesn't fit in the configured symbol size."
-              + " The resultant number of rows for this barcode exceeds 90."
-              + " Please increase the number of columns or decrease the error correction"
-              + " level to reduce the number of rows.");
-    }
-    if (r < 2) {
-      throw new WriterException(
-          "The message is too short for the configured symbol size."
-              + " The resultant number of rows is less than 3."
-              + " Please decrease the number of columns or increase the error correction"
-              + " level to increase the number of rows.");
-    }
-    return r;
-  }
-
-  /**
-   * Calculates the necessary number of rows as described in annex Q of ISO/IEC 15438:2001(E).
-   *
-   * @param m the number of source codewords prior to the additional of the Symbol Length
-   *          Descriptor and any pad codewords
-   * @param k the number of error correction codewords
-   * @param c the number of columns in the symbol in the data region (excluding start, stop and
-   *          row indicator codewords)
-   * @return the number of rows in the symbol (r)
-   */
   private static int calculateNumberOfRows(int m, int k, int c) {
     int r = ((m + 1 + k) / c) + 1;
     if (c * r >= (m + 1 + k + c)) {

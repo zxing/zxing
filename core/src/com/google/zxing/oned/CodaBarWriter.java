@@ -16,12 +16,10 @@
 
 package com.google.zxing.oned;
 
-import com.google.zxing.common.BitMatrix;
-
 import java.util.Arrays;
 
 /**
- * This class renders CodaBar as {@link BitMatrix}.
+ * This class renders CodaBar as {@code boolean[]}.
  *
  * @author dsbnatut@gmail.com (Kazuki Nishiura)
  */
@@ -30,9 +28,6 @@ public final class CodaBarWriter extends OneDimensionalCodeWriter {
   private static final char[] START_CHARS = {'A', 'B', 'C', 'D'};
   private static final char[] END_CHARS = {'T', 'N', '*', 'E'};
 
-  /*
-   * @see OneDimensionalCodeWriter#encode(String)
-   */
   @Override
   public boolean[] encode(String contents) {
 
