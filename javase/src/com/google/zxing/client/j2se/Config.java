@@ -32,7 +32,6 @@ final class Config {
   private boolean brief;
   private boolean recursive;
   private int[] crop;
-  private int threads = 1;
 
   Map<DecodeHintType,?> getHints() {
     return hints;
@@ -114,11 +113,4 @@ final class Config {
     this.crop = crop;
   }
 
-  int getThreads() {
-    return threads;
-  }
-
-  void setThreads(int threads) {
-    this.threads = threads;
-  }
 }

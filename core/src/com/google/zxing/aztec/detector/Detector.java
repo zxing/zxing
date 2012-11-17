@@ -28,8 +28,8 @@ import com.google.zxing.common.reedsolomon.ReedSolomonDecoder;
 import com.google.zxing.common.reedsolomon.ReedSolomonException;
 
 /**
- * <p>Encapsulates logic that can detect an Aztec Code in an image, even if the Aztec Code
- * is rotated or skewed, or partially obscured.</p>
+ * Encapsulates logic that can detect an Aztec Code in an image, even if the Aztec Code
+ * is rotated or skewed, or partially obscured.
  *
  * @author David Olivier
  */
@@ -48,7 +48,7 @@ public final class Detector {
   }
 
   /**
-   * <p>Detects an Aztec Code in an image.</p>
+   * Detects an Aztec Code in an image.
    *
    * @return {@link AztecDetectorResult} encapsulating results of detecting an Aztec Code
    * @throws NotFoundException if no Aztec Code can be found
@@ -74,28 +74,29 @@ public final class Detector {
   }
 
   /**
-   * <p> Extracts the number of data layers and data blocks from the layer around the bull's eye </p>
+   * Extracts the number of data layers and data blocks from the layer around the bull's eye.
    *
    * @param bullEyeCornerPoints the array of bull's eye corners
    * @throws NotFoundException in case of too many errors or invalid parameters
    */
-  private void extractParameters(Point[] bullEyeCornerPoints)
-      throws NotFoundException {
+  private void extractParameters(Point[] bullEyeCornerPoints) throws NotFoundException {
+
+    int twoCenterLayers = 2 * nbCenterLayers;
 
     // Get the bits around the bull's eye
-    boolean[] resab = sampleLine(bullEyeCornerPoints[0], bullEyeCornerPoints[1], 2*nbCenterLayers+1);
-    boolean[] resbc = sampleLine(bullEyeCornerPoints[1], bullEyeCornerPoints[2], 2*nbCenterLayers+1);
-    boolean[] rescd = sampleLine(bullEyeCornerPoints[2], bullEyeCornerPoints[3], 2*nbCenterLayers+1);
-    boolean[] resda = sampleLine(bullEyeCornerPoints[3], bullEyeCornerPoints[0], 2*nbCenterLayers+1);
+    boolean[] resab = sampleLine(bullEyeCornerPoints[0], bullEyeCornerPoints[1], twoCenterLayers+1);
+    boolean[] resbc = sampleLine(bullEyeCornerPoints[1], bullEyeCornerPoints[2], twoCenterLayers+1);
+    boolean[] rescd = sampleLine(bullEyeCornerPoints[2], bullEyeCornerPoints[3], twoCenterLayers+1);
+    boolean[] resda = sampleLine(bullEyeCornerPoints[3], bullEyeCornerPoints[0], twoCenterLayers+1);
 
     // Determine the orientation of the matrix
-    if (resab[0] && resab[2 * nbCenterLayers]) {
+    if (resab[0] && resab[twoCenterLayers]) {
       shift = 0;
-    } else if (resbc[0] && resbc[2 * nbCenterLayers]) {
+    } else if (resbc[0] && resbc[twoCenterLayers]) {
       shift = 1;
-    } else if (rescd[0] && rescd[2 * nbCenterLayers]) {
+    } else if (rescd[0] && rescd[twoCenterLayers]) {
       shift = 2;
-    } else if (resda[0] && resda[2 * nbCenterLayers]) {
+    } else if (resda[0] && resda[twoCenterLayers]) {
       shift = 3;
     } else {
       throw NotFoundException.getNotFoundInstance();
@@ -118,9 +119,9 @@ public final class Detector {
       }
         
       parameterData = new boolean[28];
-        for (int i = 0; i < 28; i++) {
-          parameterData[i] = shiftedParameterData[(i+shift*7)%28];
-        }
+      for (int i = 0; i < 28; i++) {
+        parameterData[i] = shiftedParameterData[(i+shift*7)%28];
+      }
     } else {
       shiftedParameterData = new boolean[40];
       for (int i = 0; i < 11; i++) {
@@ -132,16 +133,16 @@ public final class Detector {
         }
         if (i > 5) {
           shiftedParameterData[i-1] = resab[2+i];
-          shiftedParameterData[i+10-1] = resbc[2+i];
-          shiftedParameterData[i+20-1] = rescd[2+i];
-          shiftedParameterData[i+30-1] = resda[2+i];
+          shiftedParameterData[i+9] = resbc[2+i];
+          shiftedParameterData[i+19] = rescd[2+i];
+          shiftedParameterData[i+29] = resda[2+i];
         }
       }
         
       parameterData = new boolean[40];
-        for (int i = 0; i < 40; i++) {
-          parameterData[i] = shiftedParameterData[(i+shift*10)%40];
-        }
+      for (int i = 0; i < 40; i++) {
+        parameterData[i] = shiftedParameterData[(i+shift*10)%40];
+      }
     }
     
     // corrects the error using RS algorithm
@@ -152,8 +153,7 @@ public final class Detector {
   }
 
   /**
-   *
-   * <p>Gets the Aztec code corners from the bull's eye corners and the parameters </p>
+   * Gets the Aztec code corners from the bull's eye corners and the parameters.
    *
    * @param bullEyeCornerPoints the array of bull's eye corners
    * @return the array of aztec code corners
@@ -185,18 +185,25 @@ public final class Detector {
     int targetbx = MathUtils.round(bullEyeCornerPoints[1].x + ratio * dx);
     int targetby = MathUtils.round(bullEyeCornerPoints[1].y+ratio*dy);
     
-    if (!isValid(targetax, targetay) || !isValid(targetbx, targetby) || !isValid(targetcx, targetcy) || !isValid(targetdx, targetdy)) {
+    if (!isValid(targetax, targetay) ||
+        !isValid(targetbx, targetby) ||
+        !isValid(targetcx, targetcy) ||
+        !isValid(targetdx, targetdy)) {
       throw NotFoundException.getNotFoundInstance();
     }
     
-    return new ResultPoint[]{new ResultPoint(targetax, targetay), new ResultPoint(targetbx, targetby), new ResultPoint(targetcx, targetcy), new ResultPoint(targetdx, targetdy)}; 
+    return new ResultPoint[]{
+        new ResultPoint(targetax, targetay),
+        new ResultPoint(targetbx, targetby),
+        new ResultPoint(targetcx, targetcy),
+        new ResultPoint(targetdx, targetdy)
+    };
   }
 
   /**
+   * Corrects the parameter bits using Reed-Solomon algorithm.
    *
-   * <p> Corrects the parameter bits using Reed-Solomon algorithm </p>
-   *
-   * @param parameterData paremeter bits
+   * @param parameterData parameter bits
    * @param compact true if this is a compact Aztec code
    * @throws NotFoundException if the array contains too many errors
    */
@@ -235,17 +242,16 @@ public final class Detector {
     }
     
     for (int i = 0; i < numDataCodewords; i ++) {
-        int flag = 1;
-        for (int j = 1; j <= codewordSize; j++) {
-          parameterData[i*codewordSize+codewordSize-j] = (parameterWords[i] & flag) == flag;
-          flag <<= 1;
-        }
+      int flag = 1;
+      for (int j = 1; j <= codewordSize; j++) {
+        parameterData[i*codewordSize+codewordSize-j] = (parameterWords[i] & flag) == flag;
+        flag <<= 1;
+      }
     }
   }
   
   /**
-   * 
-   * <p> Finds the corners of a bull-eye centered on the passed point </p>
+   * Finds the corners of a bull-eye centered on the passed point.
    * 
    * @param pCenter Center point
    * @return The corners of the bull-eye
@@ -308,21 +314,22 @@ public final class Detector {
     int targetbx = MathUtils.round(pinb.x+ratio*dx);
     int targetby = MathUtils.round(pinb.y+ratio*dy);
     
-    if (!isValid(targetax, targetay) || !isValid(targetbx, targetby)
-        || !isValid(targetcx, targetcy) || !isValid(targetdx, targetdy)) {
+    if (!isValid(targetax, targetay) ||
+        !isValid(targetbx, targetby) ||
+        !isValid(targetcx, targetcy) ||
+        !isValid(targetdx, targetdy)) {
       throw NotFoundException.getNotFoundInstance();
     }
     
-    Point pa = new Point(targetax,targetay);
-    Point pb = new Point(targetbx,targetby);
-    Point pc = new Point(targetcx,targetcy);
-    Point pd = new Point(targetdx,targetdy);
-    
-    return new Point[]{pa, pb, pc, pd};
+    return new Point[] {
+        new Point(targetax,targetay),
+        new Point(targetbx,targetby),
+        new Point(targetcx,targetcy),
+        new Point(targetdx,targetdy)
+    };
   }
 
   /**
-   *
    * Finds a candidate center point of an Aztec code from an image
    *
    * @return the center point
@@ -349,16 +356,16 @@ public final class Detector {
       // In that case, surely in the bull's eye, we try to expand the rectangle.
       int cx = image.getWidth()/2;
       int cy = image.getHeight()/2;
-      pointA = getFirstDifferent(new Point(cx+15/2, cy-15/2), false, 1, -1).toResultPoint();
-      pointB = getFirstDifferent(new Point(cx+15/2, cy+15/2), false, 1, 1).toResultPoint();
-      pointC = getFirstDifferent(new Point(cx-15/2, cy+15/2), false, -1, 1).toResultPoint();
-      pointD = getFirstDifferent(new Point(cx-15/2, cy-15/2), false, -1, -1).toResultPoint();
+      pointA = getFirstDifferent(new Point(cx+7, cy-7), false, 1, -1).toResultPoint();
+      pointB = getFirstDifferent(new Point(cx+7, cy+7), false, 1, 1).toResultPoint();
+      pointC = getFirstDifferent(new Point(cx-7, cy+7), false, -1, 1).toResultPoint();
+      pointD = getFirstDifferent(new Point(cx-7, cy-7), false, -1, -1).toResultPoint();
 
     }
     
     //Compute the center of the rectangle
-    int cx = MathUtils.round((pointA.getX() + pointD.getX() + pointB.getX() + pointC.getX())/4);
-    int cy = MathUtils.round((pointA.getY() + pointD.getY() + pointB.getY() + pointC.getY())/4);
+    int cx = MathUtils.round((pointA.getX() + pointD.getX() + pointB.getX() + pointC.getX()) / 4.0f);
+    int cy = MathUtils.round((pointA.getY() + pointD.getY() + pointB.getY() + pointC.getY()) / 4.0f);
 
     // Redetermine the white rectangle starting from previously computed center.
     // This will ensure that we end up with a white rectangle in center bull's eye
@@ -373,16 +380,16 @@ public final class Detector {
 
       // This exception can be in case the initial rectangle is white
       // In that case we try to expand the rectangle.
-      pointA = getFirstDifferent(new Point(cx+15/2, cy-15/2), false, 1, -1).toResultPoint();
-      pointB = getFirstDifferent(new Point(cx+15/2, cy+15/2), false, 1, 1).toResultPoint();
-      pointC = getFirstDifferent(new Point(cx-15/2, cy+15/2), false, -1, 1).toResultPoint();
-      pointD = getFirstDifferent(new Point(cx-15/2, cy-15/2), false, -1, -1).toResultPoint();
+      pointA = getFirstDifferent(new Point(cx+7, cy-7), false, 1, -1).toResultPoint();
+      pointB = getFirstDifferent(new Point(cx+7, cy+7), false, 1, 1).toResultPoint();
+      pointC = getFirstDifferent(new Point(cx-7, cy+7), false, -1, 1).toResultPoint();
+      pointD = getFirstDifferent(new Point(cx-7, cy-7), false, -1, -1).toResultPoint();
 
     }
     
     // Recompute the center of the rectangle
-    cx = MathUtils.round((pointA.getX() + pointD.getX() + pointB.getX() + pointC.getX())/4);
-    cy = MathUtils.round((pointA.getY() + pointD.getY() + pointB.getY() + pointC.getY())/4);
+    cx = MathUtils.round((pointA.getX() + pointD.getX() + pointB.getX() + pointC.getX()) / 4.0f);
+    cy = MathUtils.round((pointA.getY() + pointD.getY() + pointB.getY() + pointC.getY()) / 4.0f);
 
     return new Point(cx, cy);
   }
@@ -431,7 +438,7 @@ public final class Detector {
   }
   
   /**
-   * Sets number of layers and number of datablocks from parameter bits
+   * Sets number of layers and number of data blocks from parameter bits
    */
   private void getParameters(boolean[] parameterData) {
 
@@ -449,24 +456,22 @@ public final class Detector {
     for (int i = 0; i < nbBitsForNbLayers; i++) {
       nbLayers <<= 1;
       if (parameterData[i]) {
-        nbLayers += 1;
+        nbLayers++;
       }
     }
 
     for (int i = nbBitsForNbLayers; i < nbBitsForNbLayers + nbBitsForNbDatablocks; i++) {
       nbDataBlocks <<= 1;
       if (parameterData[i]) {
-        nbDataBlocks += 1;
+        nbDataBlocks++;
       }
     }
 
-    nbLayers ++;
-    nbDataBlocks ++;
-
+    nbLayers++;
+    nbDataBlocks++;
   }
 
   /**
-   *
    * Samples a line
    *
    * @param p1 first point
@@ -487,8 +492,8 @@ public final class Detector {
 
     for (int i = 0; i < size; i++) {
       res[i] = image.get(MathUtils.round(px), MathUtils.round(py));
-      px+=dx;
-      py+=dy;
+      px += dx;
+      py += dy;
     }
 
     return res;
@@ -560,15 +565,11 @@ public final class Detector {
 
     float errRatio = (float)error/d;
 
-    if (errRatio > 0.1 && errRatio < 0.9) {
+    if (errRatio > 0.1f && errRatio < 0.9f) {
       return 0;
     }
 
-    if (errRatio <= 0.1) {
-      return colorModel?1:-1;
-    } else {
-      return colorModel?-1:1;
-    }
+    return (errRatio <= 0.1f) == colorModel ? 1 : -1;
   }
 
   /**
@@ -598,20 +599,6 @@ public final class Detector {
 
     return new Point(x,y);
   }
-  
-  private static final class Point {
-    public final int x;
-    public final int y;
-
-    public ResultPoint toResultPoint() {
-      return new ResultPoint(x, y);
-    }
-
-    private Point(int x, int y) {
-      this.x = x;
-      this.y = y;
-    }
-  }
 
   private boolean isValid(int x, int y) {
     return x >= 0 && x < image.getWidth() && y > 0 && y < image.getHeight();
@@ -619,6 +606,20 @@ public final class Detector {
 
   private static float distance(Point a, Point b) {
     return MathUtils.distance(a.x, a.y, b.x, b.y);
+  }
+
+  static final class Point {
+    final int x;
+    final int y;
+
+    ResultPoint toResultPoint() {
+      return new ResultPoint(x, y);
+    }
+
+    Point(int x, int y) {
+      this.x = x;
+      this.y = y;
+    }
   }
 
 }
