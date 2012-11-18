@@ -55,8 +55,17 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.10</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
   <build>
     <sourceDirectory>src</sourceDirectory>
+    <testSourceDirectory>test/src</testSourceDirectory>
     <outputDirectory>build</outputDirectory>
     <plugins>
       <plugin>
@@ -113,6 +122,17 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.12.4</version>
+        <configuration>
+          <!--<parallel>classes</parallel>-->
+          <systemPropertyVariables>
+            <explicitLuminanceConversion>true</explicitLuminanceConversion>
+          </systemPropertyVariables>
+        </configuration>
+       </plugin>
     </plugins>
   </build>
   <distributionManagement>
@@ -156,3 +176,4 @@
     </profile>
   </profiles>
 </project>
+
