@@ -97,7 +97,7 @@ final class LoadPackagesAsyncTask extends AsyncTask<List<String[]>,Object,List<S
     activity.setListAdapter(listAdapter);
   }
 
-  private static class ByFirstStringComparator implements Comparator<String[]>, Serializable {
+  private static final class ByFirstStringComparator implements Comparator<String[]>, Serializable {
     @Override
     public int compare(String[] o1, String[] o2) {
       return o1[0].compareTo(o2[0]);

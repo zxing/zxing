@@ -62,11 +62,11 @@ public abstract class PlatformSupportManager<T> {
     this.implementations = new TreeMap<Integer,String>(Collections.reverseOrder());
   }
   
-  protected void addImplementationClass(int minVersion, String className) {
+  protected final void addImplementationClass(int minVersion, String className) {
     implementations.put(minVersion, className);
   }
 
-  public T build() {
+  public final T build() {
     for (Integer minVersion : implementations.keySet()) {
       if (Build.VERSION.SDK_INT >= minVersion) {
         String className = implementations.get(minVersion);

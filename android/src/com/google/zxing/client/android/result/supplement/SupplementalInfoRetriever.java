@@ -84,7 +84,7 @@ public abstract class SupplementalInfoRetriever extends AsyncTask<Object,Object,
   }
 
   @Override
-  protected void onPostExecute(Object arg) {
+  protected final void onPostExecute(Object arg) {
     TextView textView = textViewRef.get();
     if (textView != null) {
       for (Spannable content : newContents) {
