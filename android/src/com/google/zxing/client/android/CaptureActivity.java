@@ -431,7 +431,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         if (fromLiveScan && prefs.getBoolean(PreferencesActivity.KEY_BULK_MODE, false)) {
           String message = getResources().getString(R.string.msg_bulk_mode_scanned)
               + " (" + rawResult.getText() + ')';
-          Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+          Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
           // Wait a moment or else it will scan the same barcode continuously about 3 times
           restartPreviewAfterDelay(BULK_MODE_SCAN_DELAY_MS);
         } else {
