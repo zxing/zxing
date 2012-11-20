@@ -46,13 +46,13 @@ final class AmbientLightManager implements SensorEventListener {
   }
 
   void start(CameraManager cameraManager) {
+    this.cameraManager = cameraManager;
     SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
     if (FrontLightMode.readPref(sharedPrefs) == FrontLightMode.AUTO) {
       SensorManager sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
       lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
       if (lightSensor != null) {
         sensorManager.registerListener(this, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
-        this.cameraManager = cameraManager;
       }
     }
   }
@@ -69,10 +69,12 @@ final class AmbientLightManager implements SensorEventListener {
   @Override
   public void onSensorChanged(SensorEvent sensorEvent) {
     float ambientLightLux = sensorEvent.values[0];
-    if (ambientLightLux <= TOO_DARK_LUX) {
-      cameraManager.setTorch(true);
-    } else if (ambientLightLux >= BRIGHT_ENOUGH_LUX) {
-      cameraManager.setTorch(false);
+    if (cameraManager != null) {
+      if (ambientLightLux <= TOO_DARK_LUX) {
+        cameraManager.setTorch(true);
+      } else if (ambientLightLux >= BRIGHT_ENOUGH_LUX) {
+        cameraManager.setTorch(false);
+      }
     }
   }
 
