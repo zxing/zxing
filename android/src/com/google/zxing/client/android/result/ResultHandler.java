@@ -120,15 +120,15 @@ public abstract class ResultHandler {
     shopperButton.setVisibility(View.GONE);
   }
 
-  public ParsedResult getResult() {
+  public final ParsedResult getResult() {
     return result;
   }
 
-  boolean hasCustomProductSearch() {
+  final boolean hasCustomProductSearch() {
     return customProductSearch != null;
   }
 
-  Activity getActivity() {
+  final Activity getActivity() {
     return activity;
   }
 
@@ -170,7 +170,7 @@ public abstract class ResultHandler {
    *
    * @param listener The on click listener to install for this button.
    */
-  void showGoogleShopperButton(View.OnClickListener listener) {
+  final void showGoogleShopperButton(View.OnClickListener listener) {
     View shopperButton = activity.findViewById(R.id.shopper_button);
     shopperButton.setVisibility(View.VISIBLE);
     shopperButton.setOnClickListener(listener);
@@ -466,7 +466,7 @@ public abstract class ResultHandler {
    *
    * @throws ActivityNotFoundException
    */
-  void rawLaunchIntent(Intent intent) {
+  final void rawLaunchIntent(Intent intent) {
     if (intent != null) {
       intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
       Log.d(TAG, "Launching intent: " + intent + " with extras: " + intent.getExtras());
@@ -477,7 +477,7 @@ public abstract class ResultHandler {
   /**
    * Like {@link #rawLaunchIntent(Intent)} but will show a user dialog if nothing is available to handle.
    */
-  void launchIntent(Intent intent) {
+  final void launchIntent(Intent intent) {
     try {
       rawLaunchIntent(intent);
     } catch (ActivityNotFoundException e) {
@@ -505,7 +505,7 @@ public abstract class ResultHandler {
     return customProductSearch;
   }
 
-  String fillInCustomSearchURL(String text) {
+  final String fillInCustomSearchURL(String text) {
     if (customProductSearch == null) {
       return text; // ?
     }

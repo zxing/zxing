@@ -245,7 +245,6 @@ public final class HistoryManager {
     } catch (SQLiteException sqle) {
       // We're seeing an error here when called in CaptureActivity.onCreate() in rare cases
       // and don't understand it. First theory is that it's transient so can be safely ignored.
-      // TODO revisit this after live in a future version to see if it 'worked'
       Log.w(TAG, sqle);
       // continue
     } finally {
