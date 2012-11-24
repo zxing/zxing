@@ -65,6 +65,7 @@
       <groupId>com.google.android</groupId>
       <artifactId>support-v4</artifactId>
       <version>r7</version>
+      <optional>true</optional>
     </dependency>
   </dependencies>
   <build>
