@@ -190,6 +190,10 @@ public final class HttpHelper {
         // Also seen this in the wild, not sure what to make of it. Probably a bad URL
         Log.w(TAG, "Bad URI? " + uri);
         throw new IOException(iae.toString());
+      } catch (SecurityException se) {
+        // due to bad VPN settings?
+        Log.w(TAG, "Restricted URI? " + uri);
+        throw new IOException(se);
       }
       int responseCode;
       try {
