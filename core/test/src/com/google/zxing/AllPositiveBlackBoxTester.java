@@ -49,6 +49,8 @@ import com.google.zxing.qrcode.QRCodeBlackBox3TestCase;
 import com.google.zxing.qrcode.QRCodeBlackBox4TestCase;
 import com.google.zxing.qrcode.QRCodeBlackBox5TestCase;
 
+import java.util.logging.Logger;
+
 /**
  * This is a quick and dirty way to get totals across all the positive black box tests. It is
  * necessary because we spawn multiple processes when using the standard test-blackbox Ant target.
@@ -58,6 +60,8 @@ import com.google.zxing.qrcode.QRCodeBlackBox5TestCase;
  * @author dswitkin@google.com (Daniel Switkin)
  */
 public final class AllPositiveBlackBoxTester {
+
+  private static final Logger log = Logger.getLogger(AllPositiveBlackBoxTester.class.getSimpleName());
 
   // This list has to be manually kept up to date. I don't know any automatic way to include every
   // subclass of AbstractBlackBoxTestCase, and furthermore to exclude subclasses of
@@ -96,17 +100,18 @@ public final class AllPositiveBlackBoxTester {
   };
 
   private AllPositiveBlackBoxTester() {
+    System.setProperty("java.util.logging.SimpleFormatter.format", "%4$s: %5$s%6$s%n");
   }
 
   public static void main(String[] args) throws Exception {
-    long now = System.currentTimeMillis();
+    long start = System.currentTimeMillis();
     SummaryResults results = new SummaryResults();
 
     for (AbstractBlackBoxTestCase test : TESTS) {
       results.add(test.testBlackBoxCountingResults(false));
     }
 
-    now = System.currentTimeMillis() - now;
-    System.out.println(results.toString() + "\n  Total time: " + now + " ms");
+    log.info(results.toString());
+    log.info(String.format("Total time: %d ms", System.currentTimeMillis() - start));
   }
 }

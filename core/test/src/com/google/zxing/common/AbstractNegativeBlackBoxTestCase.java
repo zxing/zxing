@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * This abstract class looks for negative results, i.e. it only allows a certain number of false
@@ -41,6 +42,8 @@ import java.util.Map;
  * @author dswitkin@google.com (Daniel Switkin)
  */
 public abstract class AbstractNegativeBlackBoxTestCase extends AbstractBlackBoxTestCase {
+
+  private static final Logger log = Logger.getLogger(AbstractNegativeBlackBoxTestCase.class.getSimpleName());
 
   private static final class TestResult {
     private final int falsePositivesAllowed;
@@ -80,8 +83,7 @@ public abstract class AbstractNegativeBlackBoxTestCase extends AbstractBlackBoxT
     File[] imageFiles = getImageFiles();
     int[] falsePositives = new int[testResults.size()];
     for (File testImage : imageFiles) {
-      System.out.printf("Starting %s\n", testImage.getAbsolutePath());
-
+      log.info(String.format("Starting %s", testImage.getAbsolutePath()));
       BufferedImage image = ImageIO.read(testImage);
       if (image == null) {
         throw new IOException("Could not read image: " + testImage);
@@ -104,16 +106,16 @@ public abstract class AbstractNegativeBlackBoxTestCase extends AbstractBlackBoxT
     }
 
     if (totalFalsePositives < totalAllowed) {
-      System.out.printf("  +++ Test too lax by %d images\n", totalAllowed - totalFalsePositives);
+      log.warning(String.format("+++ Test too lax by %d images", totalAllowed - totalFalsePositives));
     } else if (totalFalsePositives > totalAllowed) {
-      System.out.printf("  --- Test failed by %d images\n", totalFalsePositives - totalAllowed);
+      log.warning(String.format("--- Test failed by %d images", totalFalsePositives - totalAllowed));
     }
 
     for (int x = 0; x < testResults.size(); x++) {
       TestResult testResult = testResults.get(x);
-      System.out.printf("Rotation %d degrees: %d of %d images were false positives (%d allowed)\n",
-                        (int) testResult.getRotation(), falsePositives[x], imageFiles.length,
-                        testResult.getFalsePositivesAllowed());
+      log.info(String.format("Rotation %d degrees: %d of %d images were false positives (%d allowed)",
+                             (int) testResult.getRotation(), falsePositives[x], imageFiles.length,
+                             testResult.getFalsePositivesAllowed()));
       assertTrue("Rotation " + testResult.getRotation() + " degrees: Too many false positives found",
                  falsePositives[x] <= testResult.getFalsePositivesAllowed());
     }
@@ -133,10 +135,11 @@ public abstract class AbstractNegativeBlackBoxTestCase extends AbstractBlackBoxT
     Result result;
     try {
       result = getReader().decode(bitmap);
-      System.out.printf("Found false positive: '%s' with format '%s' (rotation: %d)\n",
-                        result.getText(), result.getBarcodeFormat(), (int) rotationInDegrees);
+      log.info(String.format("Found false positive: '%s' with format '%s' (rotation: %d)",
+                              result.getText(), result.getBarcodeFormat(), (int) rotationInDegrees));
       return false;
     } catch (ReaderException re) {
+      // continue
     }
 
     // Try "try harder" getMode
@@ -144,10 +147,11 @@ public abstract class AbstractNegativeBlackBoxTestCase extends AbstractBlackBoxT
     hints.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
     try {
       result = getReader().decode(bitmap, hints);
-      System.out.printf("Try harder found false positive: '%s' with format '%s' (rotation: %d)\n", 
-                        result.getText(), result.getBarcodeFormat(), (int) rotationInDegrees);
+      log.info(String.format("Try harder found false positive: '%s' with format '%s' (rotation: %d)",
+                              result.getText(), result.getBarcodeFormat(), (int) rotationInDegrees));
       return false;
     } catch (ReaderException re) {
+      // continue
     }
     return true;
   }
