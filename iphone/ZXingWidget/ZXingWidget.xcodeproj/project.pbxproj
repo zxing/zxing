@@ -1544,6 +1544,7 @@
 				LD_GENERATE_MAP_FILE = YES;
 				LD_OPENMP_FLAGS = "-fopenmp";
 				MACH_O_TYPE = staticlib;
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-M",
