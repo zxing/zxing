@@ -54,7 +54,7 @@
            includeantruntime="false">
       <classpath>
         <pathelement location="core.jar"/>
-        <pathelement location="lib/junit-4.10.jar"/>
+        <pathelement location="lib/junit-4.11.jar"/>
       </classpath>
     </javac>
   </target>
@@ -94,7 +94,7 @@
       <classpath>
         <pathelement location="core.jar"/>
         <pathelement location="build-test"/>
-        <pathelement location="lib/junit-4.10.jar"/>
+        <pathelement location="lib/junit-4.11.jar"/>
       </classpath>
       <assertions>
         <enable/>
@@ -116,7 +116,7 @@
       <classpath>
         <pathelement location="core.jar"/>
         <pathelement location="build-test"/>
-        <pathelement location="lib/junit-4.10.jar"/>
+        <pathelement location="lib/junit-4.11.jar"/>
       </classpath>
       <assertions>
         <enable/>
