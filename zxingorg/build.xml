@@ -17,7 +17,6 @@
 <project name="zxingorg" basedir="." default="build">
 
   <property file="../build.properties"/>
-  <!--<property file="secrets.properties"/>-->
 
   <target name="init">
     <tstamp/>
@@ -70,27 +69,17 @@
         <pathelement location="${tomcat-home}/lib/servlet-api.jar"/>
       </classpath>
     </javac>
-    <!--
-    <copy file="web/WEB-INF/web.xml" tofile="web/WEB-INF/web.xml" overwrite="true">
-      <filterset>
-        <filter token="EMAIL_PASSWORD" value="${emailPassword}"/>
-      </filterset>
+    <mkdir dir="web/w/docs"/>
+    <copy todir="web/w/docs">
+      <fileset dir="../docs"/>
     </copy>
-    -->
     <war warfile="w.war" webxml="web/WEB-INF/web.xml">
       <lib dir="web/WEB-INF/lib">
         <include name="*.jar"/>
       </lib>
       <classes dir="web/WEB-INF/classes"/>
       <fileset dir="web">
-        <include name="*.jspx"/>
-        <include name="*.png"/>
-        <include name="*.css"/>        
-        <include name="**/*.jad"/>
-        <include name="**/*.jar"/>
-      </fileset>
-      <fileset dir="..">
-        <include name="docs/**"/>
+        <exclude name="WEB-INF/**"/>
       </fileset>
     </war>
   </target>
@@ -99,6 +88,7 @@
     <delete dir="web/WEB-INF/classes"/>
     <delete file="web/WEB-INF/lib/core.jar"/>
     <delete file="web/WEB-INF/lib/javase.jar"/>
+    <delete dir="web/w/docs"/>
     <delete file="w.war"/>
   </target>
 
