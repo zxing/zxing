@@ -98,7 +98,7 @@
         <pathelement location="zxingorg/src"/>
       </sourcepath>
       <classpath>
-        <pathelement location="${android-home}/platforms/android-16/android.jar"/>
+        <pathelement location="${android-home}/platforms/android-17/android.jar"/>
         <pathelement location="${android-home}/extras/android/compatibility/v4/android-support-v4.jar"/>
         <pathelement location="${tomcat-home}/lib/servlet-api.jar"/>
         <fileset dir="zxingorg/web/WEB-INF/lib">
