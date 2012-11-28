@@ -34,8 +34,8 @@ import com.google.zxing.client.android.camera.FrontLightMode;
  */
 final class AmbientLightManager implements SensorEventListener {
 
-  private static final float TOO_DARK_LUX = 90.0f;
-  private static final float BRIGHT_ENOUGH_LUX = 225.0f;
+  private static final float TOO_DARK_LUX = 45.0f;
+  private static final float BRIGHT_ENOUGH_LUX = 450.0f;
 
   private final Context context;
   private CameraManager cameraManager;
