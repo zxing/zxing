@@ -1,7 +1,7 @@
-body{background-color:#e9eef3;font-family:Arial,sans-serif;font-size:12px}
-td{font-size:14px}
+body {background-color:#e9eef3;margin:0;padding:0;padding-top:10px;text-align:center}
+body,th,td,p{font-family:Arial,sans-serif}
+div#main{width:800px;text-align:left;border:0;padding:0;margin:0 auto}
+td{vertical-align:top}
+table#upload td{padding:12px;height:30px;background-color:#dde3e9}
 #header{background-color:#dde3e9;border-bottom:1px solid #f2f7fc}
-#header h1{font-size:15px;font-weight:bold;padding:12px;border-bottom:1px solid #c8d0d9}
-#header span{font-weight:normal;color:#5e6b75}
-#footer{width:100%;text-align:center;padding-top:12px}
-#footer a{text-decoration:none;color:#5e6b75}
+#header h1{font-size:24px;padding:12px;border-bottom:1px solid #c8d0d9}

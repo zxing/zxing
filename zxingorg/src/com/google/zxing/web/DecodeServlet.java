@@ -49,6 +49,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -56,7 +57,6 @@ import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
@@ -100,7 +100,6 @@ public final class DecodeServlet extends HttpServlet {
     Logger logger = Logger.getLogger("com.google.zxing");
     logger.addHandler(new ServletContextLogHandler(servletConfig.getServletContext()));
     diskFileItemFactory = new DiskFileItemFactory();
-    log.info("DecodeServlet configured");
   }
 
   @Override
@@ -343,10 +342,12 @@ public final class DecodeServlet extends HttpServlet {
       return;
     }
 
-    if (request.getParameter("full") == null) {
+    String fullParameter = request.getParameter("full");
+    boolean minimalOutput = fullParameter != null && !Boolean.parseBoolean(fullParameter);
+    if (minimalOutput) {
       response.setContentType("text/plain");
       response.setCharacterEncoding("UTF8");
-      Writer out = new OutputStreamWriter(response.getOutputStream(), "UTF8");
+      Writer out = new OutputStreamWriter(response.getOutputStream(), Charset.forName("UTF-8"));
       try {
         for (Result result : results) {
           out.write(result.getText());
@@ -375,11 +376,6 @@ public final class DecodeServlet extends HttpServlet {
       log.info("Unknown problem: " + re);
       response.sendRedirect("notfound.jspx");
     }
-  }
-
-  @Override
-  public void destroy() {
-    log.config("DecodeServlet shutting down...");
   }
 
 }

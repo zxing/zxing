@@ -14,8 +14,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  -->
-<!-- Author: Sean Owen -->
-<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="1.2">
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.2">
+<jsp:directive.page session="false"/>
 <script type="text/javascript">
   var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
   document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
