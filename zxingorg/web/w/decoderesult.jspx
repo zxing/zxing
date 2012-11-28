@@ -14,15 +14,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  -->
-<!-- Author: Sean Owen -->
-<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="1.2">
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.2">
 <jsp:directive.page import="
   java.util.List,
   com.google.zxing.Result,
   com.google.zxing.client.result.ResultParser,
   com.google.zxing.client.result.ParsedResult,
   org.apache.commons.lang.StringEscapeUtils"/>
-  <jsp:declaration>
+<jsp:declaration>
   private static String arrayToString(byte[] bytes) {
     int length = bytes.length;
     StringBuilder result = new StringBuilder(length &lt;&lt; 2);
@@ -47,9 +46,10 @@
 </jsp:declaration>
 <jsp:directive.page contentType="text/html" session="false"/>
 <jsp:scriptlet>response.setHeader("Cache-Control", "no-cache");</jsp:scriptlet>
-<jsp:text><![CDATA[<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">]]></jsp:text>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<jsp:text><![CDATA[<!DOCTYPE html>]]></jsp:text>
+<html>
   <head>
+    <meta charset="UTF-8"/>
     <title>Decode Succeeded</title>
     <link rel="stylesheet" href="style.css" type="text/css"/>    
     <style type="text/css">
@@ -57,6 +57,7 @@
     </style>
   </head>
   <body>
+    <div id="main">
     <div id="header"><h1><img src="zxing-icon.png" height="32" width="32" alt=""/> Decode Succeeded</h1></div>
     <jsp:scriptlet>
       for (Result result : (List&lt;Result&gt;) request.getAttribute("results")) {
@@ -112,7 +113,7 @@
     <jsp:scriptlet>
       }
     </jsp:scriptlet>
-    <div id="footer"><p>Copyright 2008 and onwards ZXing authors</p></div>
+    </div>
     <jsp:include page="analytics.jspx"/>
   </body>
 </html>

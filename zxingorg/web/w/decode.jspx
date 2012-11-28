@@ -14,39 +14,71 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  -->
-<!-- Author: Sean Owen -->
-<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="1.2">
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.2">
 <jsp:directive.page contentType="text/html" session="false"/>
 <jsp:scriptlet>response.setHeader("Cache-Control", "public");</jsp:scriptlet>
-<jsp:text><![CDATA[<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">]]></jsp:text>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<jsp:text><![CDATA[<!DOCTYPE html>]]></jsp:text>
+<html>
   <head>
+    <meta charset="UTF-8"/>
     <title>ZXing Decoder Online</title>
     <link rel="stylesheet" href="style.css" type="text/css"/>
   </head>
   <body>
-    <div id="header"><h1><img src="zxing-icon.png" height="32" width="32" alt=""/> ZXing Decoder Online</h1></div>
-    <p>This is a simple page that will let you decode a 1D or 2D barcode found
-      in an image online. Enter a URL below.
-    </p>
-    <form action="decode" method="get">
-      <p>
-        <input type="text" size="50" name="u"/>&amp;nbsp;<input type="submit"/>
-        <input type="hidden" name="full" value="true"/>
-      </p>
-    </form>
-    <p>Or try uploading a file:</p>
-    <form action="decode" method="post" enctype="multipart/form-data">
-      <p>
-        <input type="file" size="50" name="f"/>&amp;nbsp;<input type="submit"/>
-        <input type="hidden" name="full" value="true"/>
-      </p>
-    </form>
-    <p>See the
-      <a href="http://code.google.com/p/zxing">project page</a>
-      for details.
-    </p>
-    <div id="footer"><p>Copyright 2008 and onwards ZXing authors</p></div>
+    <div id="main">
+      <div id="header">
+        <h1><img src="zxing-icon.png" height="32" width="32" alt=""/> ZXing Decoder Online</h1>
+      </div>
+      <p>Decode a 1D or 2D barcode from an image on the web. Supported formats include:</p>
+      <table><tr>
+        <td><ul>
+          <li>UPC-A and UPC-E</li>
+          <li>EAN-8 and EAN-13</li>
+          <li>Code 39</li>
+        </ul></td>
+        <td><ul>
+          <li>Code 93</li>
+          <li>Code 128</li>
+          <li>ITF</li>
+        </ul></td>
+        <td><ul>
+          <li>Codabar</li>
+          <li>RSS-14 (all variants)</li>
+          <li>RSS Expanded (most variants)</li>
+          <li>QR Code</li>
+        </ul></td>
+        <td><ul>
+          <li>Data Matrix</li>
+          <li>Aztec ('beta' quality)</li>
+          <li>PDF 417 ('alpha' quality)</li>
+        </ul></td>
+      </tr></table>
+
+      <table id="upload">
+        <form action="decode" method="get">
+          <tr>
+            <td style="text-align:right">Enter an image URL:</td>
+            <td><input type="text" size="80" name="u"/></td>
+            <td><input type="submit"/></td>
+          </tr>
+        </form>
+        <form action="decode" method="post" enctype="multipart/form-data">
+          <tr>
+            <td style="text-align:right">Or upload a file (&amp;lt;2MB):</td>
+            <td><input type="file" name="f"/></td>
+            <td><input type="submit"/></td>
+          </tr>
+        </form>
+      </table>
+
+      <p>This web application is powered by the barcode scanning implementation in the
+        open source <a href="http://code.google.com/p/zxing">ZXing</a> project.</p>
+      <p>Android users may download the
+        <a href="https://play.google.com/store/apps/details?id=com.google.zxing.client.android">Barcode Scanner</a> or
+        <a href="https://play.google.com/store/apps/details?id=com.srowen.bs.android">Barcode Scanner+</a> application
+        to access the same decoding as a mobile application.</p>
+      <p style="font-style:italic">Copyright 2008 and onwards ZXing authors</p>
+    </div>
     <jsp:include page="analytics.jspx"/>
   </body>
 </html>
