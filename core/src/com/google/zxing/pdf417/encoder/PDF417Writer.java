@@ -22,7 +22,6 @@ import com.google.zxing.Writer;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 
-import java.util.EnumMap;
 import java.util.Map;
 
 /**
@@ -68,28 +67,6 @@ public final class PDF417Writer implements Writer {
                           int width,
                           int height) throws WriterException {
     return encode(contents, format, width, height, null);
-  }
-
-  /**
-   * @deprecated Use {@link #encode(String, BarcodeFormat, int, int, Map)} instead, with hints to
-   * specify the encoding options.
-   */
-  @Deprecated
-  public BitMatrix encode(String contents,
-                          BarcodeFormat format,
-                          boolean compact,
-                          int width,
-                          int height,
-                          int minCols,
-                          int maxCols,
-                          int minRows,
-                          int maxRows,
-                          Compaction compaction) throws WriterException {
-    Map<EncodeHintType, Object> hints = new EnumMap<EncodeHintType,Object>(EncodeHintType.class);
-    hints.put(EncodeHintType.PDF417_COMPACT, compact);
-    hints.put(EncodeHintType.PDF417_COMPACTION, compaction);
-    hints.put(EncodeHintType.PDF417_DIMENSIONS, new Dimensions(minCols, maxCols, minRows, maxRows));
-    return encode(contents, format, width, height, hints);
   }
 
   /**
