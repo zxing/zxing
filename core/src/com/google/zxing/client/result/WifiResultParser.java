@@ -45,7 +45,7 @@ public final class WifiResultParser extends ResultParser {
     if (type == null) {
       type = "nopass";
     }
-    boolean hidden = Boolean.parseBoolean(matchSinglePrefixedField("B:", rawText, ';', false));
+    boolean hidden = Boolean.parseBoolean(matchSinglePrefixedField("H:", rawText, ';', false));
     return new WifiParsedResult(type, ssid, pass, hidden);
   }
 }
