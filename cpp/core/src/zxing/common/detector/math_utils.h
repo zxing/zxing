@@ -19,6 +19,15 @@
 
 #include <math.h>
 
+#if defined(_WIN32) || defined(_WIN64)
+#include <float.h>
+#include <limits>
+#define isnan(a) _isnan(a)
+#define fmax max
+#define INFINITY (std::numeric_limits<float>::infinity())
+#define NAN (std::numeric_limits<float>::quiet_NaN())
+#endif
+
 namespace zxing { namespace common { namespace detector { namespace math_utils {
 
 /**
@@ -38,7 +47,7 @@ inline float distance(float aX, float aY, float bX, float bY) {
 inline float distance(int aX, int aY, int bX, int bY) {
   int xDiff = aX - bX;
   int yDiff = aY - bY;
-  return (float) sqrt(xDiff * xDiff + yDiff * yDiff);
+  return (float) sqrt((double)xDiff * xDiff + yDiff * yDiff);
 }
 
 }}}}

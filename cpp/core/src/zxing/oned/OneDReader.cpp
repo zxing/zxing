@@ -21,6 +21,7 @@
 #include "OneDReader.h"
 #include <zxing/ReaderException.h>
 #include <zxing/oned/OneDResultPoint.h>
+#include <zxing/common/detector/math_utils.h>
 #include <math.h>
 #include <limits.h>
 

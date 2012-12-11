@@ -28,6 +28,8 @@ using zxing::GenericGFPoly;
 using zxing::ArrayRef;
 using zxing::Ref;
 
+namespace zxing {
+
 GenericGFPoly::GenericGFPoly(Ref<GenericGF> field,
                              ArrayRef<int> coefficients)
   :  field_(field) {
@@ -212,4 +214,6 @@ std::vector<Ref<GenericGFPoly> > GenericGFPoly::divide(Ref<GenericGFPoly> other)
   returnValue[0] = quotient;
   returnValue[1] = remainder;
   return returnValue;
+}
+
 }

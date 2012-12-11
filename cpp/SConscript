@@ -1,6 +1,7 @@
 # -*- python -*-
 
 Decider('MD5')
+import platform
 import fnmatch
 import os
 
@@ -56,8 +57,10 @@ cppunit_include = ['/opt/local/include/']
 cppunit_libs = ['cppunit']
 
 zxing_files = all_files('core/src')
-
 zxing_include = ['core/src']
+if platform.system() is 'Windows':
+	zxing_files = all_files('win32')
+	zxing_include = ['win32']
 zxing_libs = env.Library('zxing', source=zxing_files, CPPPATH=zxing_include, **compile_options)
 
 app_files = ['magick/src/MagickBitmapSource.cpp', 'magick/src/main.cpp']

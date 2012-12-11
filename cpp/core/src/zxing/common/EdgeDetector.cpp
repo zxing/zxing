@@ -19,6 +19,7 @@
  */
 
 #include <zxing/common/EdgeDetector.h>
+#include <zxing/common/detector/math_utils.h>
 #include <algorithm>
 #include <cmath>
 
