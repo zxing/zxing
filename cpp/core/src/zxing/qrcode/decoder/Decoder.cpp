@@ -32,6 +32,9 @@ using zxing::qrcode::Decoder;
 using zxing::DecoderResult;
 using zxing::Ref;
 
+namespace zxing {
+namespace qrcode {
+
 Decoder::Decoder() :
   rsDecoder_(GenericGF::QR_CODE_FIELD_256) {
 }
@@ -98,3 +101,5 @@ Ref<DecoderResult> Decoder::decode(Ref<BitMatrix> bits) {
                                         DecodedBitStreamParser::Hashtable());
 }
 
+}
+}

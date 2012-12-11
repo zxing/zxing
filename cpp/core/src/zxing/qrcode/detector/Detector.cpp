@@ -36,7 +36,6 @@ namespace math_utils = zxing::common::detector::math_utils;
 using std::ostringstream;
 using std::min;
 using std::max;
-using std::isnan;
 using zxing::qrcode::Detector;
 using zxing::Ref;
 using zxing::BitMatrix;
@@ -44,6 +43,11 @@ using zxing::ResultPointCallback;
 using zxing::DetectorResult;
 using zxing::PerspectiveTransform;
 using zxing::qrcode::AlignmentPattern;
+
+namespace zxing {
+namespace qrcode {
+
+using namespace std;
 
 Detector::Detector(Ref<BitMatrix> image) :
   image_(image) {
@@ -305,4 +309,7 @@ Ref<AlignmentPattern> Detector::findAlignmentInRegion(float overallEstModuleSize
   AlignmentPatternFinder alignmentFinder(image_, alignmentAreaLeftX, alignmentAreaTopY, alignmentAreaRightX
                                          - alignmentAreaLeftX, alignmentAreaBottomY - alignmentAreaTopY, overallEstModuleSize, callback_);
   return alignmentFinder.find();
+}
+
+}
 }

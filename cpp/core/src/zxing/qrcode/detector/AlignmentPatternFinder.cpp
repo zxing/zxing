@@ -22,6 +22,7 @@
 #include "AlignmentPatternFinder.h"
 #include <zxing/ReaderException.h>
 #include <zxing/common/BitArray.h>
+#include <zxing/common/detector/math_utils.h>
 #include <vector>
 #include <cmath>
 #include <cstdlib>

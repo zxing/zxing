@@ -28,7 +28,7 @@ namespace zxing {
         compact_(compact),
         nbDatablocks_(nbDatablocks),
         nbLayers_(nbLayers) {
-        };
+        }
         
         bool AztecDetectorResult::isCompact() {
             return compact_;

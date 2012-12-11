@@ -166,7 +166,7 @@ namespace zxing {
     bool UPCEANReader::findGuardPattern(Ref<BitArray> row, int rowOffset, bool whiteFirst,
         const int pattern[], int patternLen, int* start, int* end) {
       int patternLength = patternLen;
-      int counters[patternLength];
+      std::vector<int> counters(patternLength);
       int countersCount = sizeof(counters) / sizeof(int);
       for (int i = 0; i < countersCount; i++) {
         counters[i] = 0;
@@ -189,7 +189,7 @@ namespace zxing {
           counters[counterPosition]++;
         } else {
           if (counterPosition == patternLength - 1) {
-            if (patternMatchVariance(counters, countersCount, pattern,
+            if (patternMatchVariance(&counters[0], countersCount, pattern,
                 MAX_INDIVIDUAL_VARIANCE) < MAX_AVG_VARIANCE) {
               *start = patternStart;
               *end = x;
@@ -231,12 +231,12 @@ namespace zxing {
         case UPC_EAN_PATTERNS_L_PATTERNS:
           max = L_PATTERNS_LEN;
           for (int i = 0; i < max; i++) {
-            int pattern[countersLen];
+            std::vector<int> pattern(countersLen);
             for(int j = 0; j< countersLen; j++){
               pattern[j] = L_PATTERNS[i][j];
             }
 
-            unsigned int variance = patternMatchVariance(counters, countersLen, pattern,
+            unsigned int variance = patternMatchVariance(counters, countersLen, &pattern[0],
                 MAX_INDIVIDUAL_VARIANCE);
             if (variance < bestVariance) {
               bestVariance = variance;
@@ -247,12 +247,12 @@ namespace zxing {
         case UPC_EAN_PATTERNS_L_AND_G_PATTERNS:
           max = L_AND_G_PATTERNS_LEN;
           for (int i = 0; i < max; i++) {
-            int pattern[countersLen];
+            std::vector<int> pattern(countersLen);
             for(int j = 0; j< countersLen; j++){
               pattern[j] = L_AND_G_PATTERNS[i][j];
             }
 
-            unsigned int variance = patternMatchVariance(counters, countersLen, pattern,
+            unsigned int variance = patternMatchVariance(counters, countersLen, &pattern[0],
                 MAX_INDIVIDUAL_VARIANCE);
             if (variance < bestVariance) {
               bestVariance = variance;

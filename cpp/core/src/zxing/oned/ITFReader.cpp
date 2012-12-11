@@ -121,7 +121,7 @@ namespace zxing {
       // interleaved white lines for the second digit.
       // Therefore, need to scan 10 lines and then
       // split these into two arrays
-      int counterDigitPairLen = 10;
+      const int counterDigitPairLen = 10;
       int counterDigitPair[counterDigitPairLen];
       for (int i=0; i<counterDigitPairLen; i++) {
         counterDigitPair[i] = 0;
@@ -291,7 +291,7 @@ namespace zxing {
       // TODO: This is very similar to implementation in UPCEANReader. Consider if they can be
       // merged to a single method.
       int patternLength = patternLen;
-      int counters[patternLength];
+      std::vector<int> counters(patternLength);
       for (int i=0; i<patternLength; i++) {
         counters[i] = 0;
       }
@@ -306,7 +306,7 @@ namespace zxing {
           counters[counterPosition]++;
         } else {
           if (counterPosition == patternLength - 1) {
-            if (patternMatchVariance(counters, patternLength, pattern,
+            if (patternMatchVariance(&counters[0], patternLength, pattern,
                 MAX_INDIVIDUAL_VARIANCE) < MAX_AVG_VARIANCE) {
               int* resultValue = new int[2];
               resultValue[0] = patternStart;
@@ -343,11 +343,11 @@ namespace zxing {
       int bestMatch = -1;
       int max = PATTERNS_LEN;
       for (int i = 0; i < max; i++) {
-        int pattern[countersLen];
+        std::vector<int> pattern(countersLen);
         for(int ind = 0; ind<countersLen; ind++){
           pattern[ind] = PATTERNS[i][ind];
         }
-        unsigned int variance = patternMatchVariance(counters, countersLen, pattern,
+        unsigned int variance = patternMatchVariance(counters, countersLen, &pattern[0],
             MAX_INDIVIDUAL_VARIANCE);
         if (variance < bestVariance) {
           bestVariance = variance;

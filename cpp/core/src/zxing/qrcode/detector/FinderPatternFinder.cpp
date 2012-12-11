@@ -20,6 +20,7 @@
  */
 
 #include <zxing/qrcode/detector/FinderPatternFinder.h>
+#include <zxing/common/detector/math_utils.h>
 #include <zxing/ReaderException.h>
 #include <zxing/DecodeHints.h>
 #include <vector>

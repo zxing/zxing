@@ -1,6 +1,7 @@
 # -*- python -*-
 
 Decider('MD5')
+import platform
 import fnmatch
 import os
 
@@ -8,31 +9,35 @@ vars = Variables()
 vars.Add(BoolVariable('DEBUG', 'Set to disable optimizations', 1))
 vars.Add(BoolVariable('PIC', 'Set to 1 for to always generate PIC code', 0))
 env = Environment(variables = vars)
-# env.Replace(CXX = "clang++") 
+# env.Replace(CXX = 'clang++') 
 
 debug = env['DEBUG']
 compile_options = {}
-flags = []
-if debug:
-	#compile_options['CPPDEFINES'] = "-DDEBUG"
-	flags.append("-O0 -g3 -ggdb -Wall")
+if platform.system() is 'Windows':
+  compile_options['CXXFLAGS'] = '-D_CRT_SECURE_NO_WARNINGS /fp:fast /EHsc'
 else:
-	flags.append("-Os -g3 -Wall")
-if env['PIC']:
-	flags.append("-fPIC")
-
-flags.append("-Wextra -Werror")
-# Can't enable unless we get rid of the dynamic variable length arrays
-# flags.append("-pedantic")
-
-compile_options['CXXFLAGS'] = ' '.join(flags)
-compile_options['LINKFLAGS'] = "-ldl -L/usr/lib -L/opt/local/lib -L/usr/local/lib"
+  cxxflags = []
+  if debug:
+    #compile_options['CPPDEFINES'] = '-DDEBUG'
+    cxxflags.append('-O0 -g3 -ggdb -Wall')
+  else:
+    cxxflags.append('-Os -g3 -Wall')
+  if env['PIC']:
+    cxxflags.append('-fPIC')
+  
+  cxxflags.append('-Wextra -Werror')
+  
+  # Force ANSI (C++98) to ensure compatibility with MSVC.
+  cxxflags.append('-ansi -pedantic')
+  
+  compile_options['CXXFLAGS'] = ' '.join(cxxflags)
+  compile_options['LINKFLAGS'] = '-ldl -L/usr/lib -L/opt/local/lib -L/usr/local/lib'
 
 def all_files(dir, ext='.cpp', level=6):
-	files = []
-	for i in range(1, level):
-		files += Glob(dir + ('/*' * i) + ext) 
-	return files
+  files = []
+  for i in range(1, level):
+    files += Glob(dir + ('/*' * i) + ext) 
+  return files
 
 
 
@@ -50,14 +55,16 @@ for root, dirnames, filenames in os.walk('/usr/lib/'):
       matches.append(os.path.join(root, filename))
 
 if matches:
-	magick_libs.append('iconv')
+  magick_libs.append('iconv')
 
 cppunit_include = ['/opt/local/include/']
 cppunit_libs = ['cppunit']
 
 zxing_files = all_files('core/src')
-
 zxing_include = ['core/src']
+if platform.system() is 'Windows':
+  zxing_files += all_files('win32')
+  zxing_include += ['win32']
 zxing_libs = env.Library('zxing', source=zxing_files, CPPPATH=zxing_include, **compile_options)
 
 app_files = ['magick/src/MagickBitmapSource.cpp', 'magick/src/main.cpp']
