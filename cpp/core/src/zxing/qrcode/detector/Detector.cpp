@@ -46,7 +46,9 @@ using zxing::qrcode::AlignmentPattern;
 
 namespace zxing {
 namespace qrcode {
-  
+
+using namespace std;
+
 Detector::Detector(Ref<BitMatrix> image) :
   image_(image) {
 }
