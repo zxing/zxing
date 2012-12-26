@@ -16,6 +16,7 @@
 
 package com.google.zxing.integration.android;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -84,7 +85,7 @@ import android.util.Log;
  * simplified API.</p>
  * 
  * <p>By default, this will only allow applications that are known to respond to this intent correctly
- * do so. The apps that are allowed to response can be set with {@link #setTargetApplications(Collection)}.
+ * do so. The apps that are allowed to response can be set with {@link #setTargetApplications(List)}.
  * For example, set to {@link #TARGET_BARCODE_SCANNER_ONLY} to only target the Barcode Scanner app itself.</p>
  *
  * <h2>Sharing text via barcode</h2>
@@ -130,8 +131,8 @@ public class IntentIntegrator {
 
   public static final Collection<String> ALL_CODE_TYPES = null;
   
-  public static final Collection<String> TARGET_BARCODE_SCANNER_ONLY = Collections.singleton(BS_PACKAGE);
-  public static final Collection<String> TARGET_ALL_KNOWN = list(
+  public static final List<String> TARGET_BARCODE_SCANNER_ONLY = Collections.singletonList(BS_PACKAGE);
+  public static final List<String> TARGET_ALL_KNOWN = list(
           BS_PACKAGE, // Barcode Scanner
           BSPLUS_PACKAGE, // Barcode Scanner+
           BSPLUS_PACKAGE + ".simple" // Barcode Scanner+ Simple
@@ -143,7 +144,7 @@ public class IntentIntegrator {
   private String message;
   private String buttonYes;
   private String buttonNo;
-  private Collection<String> targetApplications;
+  private List<String> targetApplications;
   private final Map<String,Object> moreExtras;
   
   public IntentIntegrator(Activity activity) {
@@ -207,13 +208,28 @@ public class IntentIntegrator {
   public Collection<String> getTargetApplications() {
     return targetApplications;
   }
-  
+
+  /**
+   * @deprecated call {@link #setTargetApplications(List)}
+   */
+  @Deprecated
   public void setTargetApplications(Collection<String> targetApplications) {
+    List<String> list = new ArrayList<String>(targetApplications.size());
+    for (String app : targetApplications) {
+      list.add(app);
+    }
+    setTargetApplications(list);
+  }
+  
+  public void setTargetApplications(List<String> targetApplications) {
+    if (targetApplications.isEmpty()) {
+      throw new IllegalArgumentException("No target applications");
+    }
     this.targetApplications = targetApplications;
   }
   
   public void setSingleTargetApplication(String targetApplication) {
-    this.targetApplications = Collections.singleton(targetApplication);
+    this.targetApplications = Collections.singletonList(targetApplication);
   }
 
   public Map<String,?> getMoreExtras() {
@@ -303,13 +319,14 @@ public class IntentIntegrator {
     downloadDialog.setPositiveButton(buttonYes, new DialogInterface.OnClickListener() {
       @Override
       public void onClick(DialogInterface dialogInterface, int i) {
-        Uri uri = Uri.parse("market://details?id=" + BS_PACKAGE);
+        String packageName = targetApplications.get(0);
+        Uri uri = Uri.parse("market://details?id=" + packageName);
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         try {
           activity.startActivity(intent);
         } catch (ActivityNotFoundException anfe) {
           // Hmm, market is not installed
-          Log.w(TAG, "Android Market is not installed; cannot install Barcode Scanner");
+          Log.w(TAG, "Google Play is not installed; cannot install " + packageName);
         }
       }
     });
@@ -385,8 +402,8 @@ public class IntentIntegrator {
     return null;
   }
   
-  private static Collection<String> list(String... values) {
-    return Collections.unmodifiableCollection(Arrays.asList(values));
+  private static List<String> list(String... values) {
+    return Collections.unmodifiableList(Arrays.asList(values));
   }
 
   private void attachMoreExtras(Intent intent) {
