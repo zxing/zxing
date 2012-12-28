@@ -143,6 +143,7 @@ public final class ContactInfoGenerator implements GeneratorSource {
                                  String memo) {
     StringBuilder output = new StringBuilder(100);
     output.append("BEGIN:VCARD\n");
+    output.append("VERSION:3.0\n");
     maybeAppendvCard(output, "N", name);
     maybeAppendvCard(output, "ORG", company);
     maybeAppendvCard(output, "TITLE", title);
