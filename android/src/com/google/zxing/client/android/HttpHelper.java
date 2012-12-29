@@ -99,25 +99,7 @@ public final class HttpHelper {
     connection.setRequestProperty("Accept-Charset", "utf-8,*");
     connection.setRequestProperty("User-Agent", "ZXing (Android)");
     try {
-      try {
-        connection.connect();
-      } catch (NullPointerException npe) {
-        // this is an Android bug: http://code.google.com/p/android/issues/detail?id=16895
-        Log.w(TAG, "Bad URI? " + uri);
-        throw new IOException(npe.toString());
-      } catch (IllegalArgumentException iae) {
-        // Also seen this in the wild, not sure what to make of it. Probably a bad URL
-        Log.w(TAG, "Bad URI? " + uri);
-        throw new IOException(iae.toString());
-      }
-      int responseCode;
-      try {
-        responseCode = connection.getResponseCode();
-      } catch (NullPointerException npe) {
-        // this is maybe this Android bug: http://code.google.com/p/android/issues/detail?id=15554
-        Log.w(TAG, "Bad URI? " + uri);
-        throw new IOException(npe.toString());
-      }
+      int responseCode = safelyConnect(uri, connection);
       if (responseCode != HttpURLConnection.HTTP_OK) {
         throw new IOException("Bad HTTP response: " + responseCode);
       }
@@ -180,29 +162,7 @@ public final class HttpHelper {
     connection.setRequestMethod("HEAD");
     connection.setRequestProperty("User-Agent", "ZXing (Android)");
     try {
-      try {
-        connection.connect();
-      } catch (NullPointerException npe) {
-        // this is an Android bug: http://code.google.com/p/android/issues/detail?id=16895
-        Log.w(TAG, "Bad URI? " + uri);
-        throw new IOException(npe.toString());
-      } catch (IllegalArgumentException iae) {
-        // Also seen this in the wild, not sure what to make of it. Probably a bad URL
-        Log.w(TAG, "Bad URI? " + uri);
-        throw new IOException(iae.toString());
-      } catch (SecurityException se) {
-        // due to bad VPN settings?
-        Log.w(TAG, "Restricted URI? " + uri);
-        throw new IOException(se);
-      }
-      int responseCode;
-      try {
-        responseCode = connection.getResponseCode();
-      } catch (NullPointerException npe) {
-        // this is maybe this Android bug: http://code.google.com/p/android/issues/detail?id=15554
-        Log.w(TAG, "Bad URI? " + uri);
-        throw new IOException(npe.toString());
-      }
+      int responseCode = safelyConnect(uri.toString(), connection);
       switch (responseCode) {
         case HttpURLConnection.HTTP_MULT_CHOICE:
         case HttpURLConnection.HTTP_MOVED_PERM:
@@ -221,6 +181,35 @@ public final class HttpHelper {
       return uri;
     } finally {
       connection.disconnect();
+    }
+  }
+
+  private static int safelyConnect(String uri, HttpURLConnection connection) throws IOException {
+    try {
+      connection.connect();
+    } catch (NullPointerException npe) {
+      // this is an Android bug: http://code.google.com/p/android/issues/detail?id=16895
+      Log.w(TAG, "Bad URI? " + uri);
+      throw new IOException(npe);
+    } catch (IllegalArgumentException iae) {
+      // Also seen this in the wild, not sure what to make of it. Probably a bad URL
+      Log.w(TAG, "Bad URI? " + uri);
+      throw new IOException(iae);
+    } catch (SecurityException se) {
+      // due to bad VPN settings?
+      Log.w(TAG, "Restricted URI? " + uri);
+      throw new IOException(se);
+    } catch (IndexOutOfBoundsException ioobe) {
+      // Another Android problem? https://groups.google.com/forum/?fromgroups#!topic/google-admob-ads-sdk/U-WfmYa9or0
+      Log.w(TAG, "Bad URI? " + uri);
+      throw new IOException(ioobe);
+    }
+    try {
+      return connection.getResponseCode();
+    } catch (NullPointerException npe) {
+      // this is maybe this Android bug: http://code.google.com/p/android/issues/detail?id=15554
+      Log.w(TAG, "Bad URI? " + uri);
+      throw new IOException(npe);
     }
   }
 
