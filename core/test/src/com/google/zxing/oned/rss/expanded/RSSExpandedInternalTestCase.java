@@ -54,7 +54,7 @@ public final class RSSExpandedInternalTestCase extends Assert {
   public void testFindFinderPatterns() throws Exception {
     RSSExpandedReader rssExpandedReader = new RSSExpandedReader();
 
-    String path = "test/data/blackbox/rssexpanded-1/2.jpg";
+    String path = "test/data/blackbox/rssexpanded-1/2.png";
     File file = new File(path);
     if (!file.exists()) {
       // Support running from project root too
@@ -98,7 +98,7 @@ public final class RSSExpandedInternalTestCase extends Assert {
   public void testRetrieveNextPairPatterns() throws Exception {
     RSSExpandedReader rssExpandedReader = new RSSExpandedReader();
 
-    String path = "test/data/blackbox/rssexpanded-1/3.jpg";
+    String path = "test/data/blackbox/rssexpanded-1/3.png";
     File file = new File(path);
     if (!file.exists()) {
       // Support running from project root too
@@ -128,7 +128,7 @@ public final class RSSExpandedInternalTestCase extends Assert {
   public void testDecodeCheckCharacter() throws Exception {
     RSSExpandedReader rssExpandedReader = new RSSExpandedReader();
 
-    String path = "test/data/blackbox/rssexpanded-1/3.jpg";
+    String path = "test/data/blackbox/rssexpanded-1/3.png";
     File file = new File(path);
     if (!file.exists()) {
       // Support running from project root too
@@ -152,7 +152,7 @@ public final class RSSExpandedInternalTestCase extends Assert {
   public void testDecodeDataCharacter() throws Exception {
     RSSExpandedReader rssExpandedReader = new RSSExpandedReader();
 
-    String path = "test/data/blackbox/rssexpanded-1/3.jpg";
+    String path = "test/data/blackbox/rssexpanded-1/3.png";
     File file = new File(path);
     if (!file.exists()) {
       // Support running from project root too

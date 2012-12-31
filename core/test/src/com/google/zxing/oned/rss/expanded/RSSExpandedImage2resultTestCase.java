@@ -62,7 +62,7 @@ public final class RSSExpandedImage2resultTestCase extends Assert {
   @Test
   public void testDecodeRow2result_2() throws Exception {
     // (01)90012345678908(3103)001750
-    String path = "test/data/blackbox/rssexpanded-1/2.jpg";
+    String path = "test/data/blackbox/rssexpanded-1/2.png";
     ExpandedProductParsedResult expected =
         new ExpandedProductParsedResult("(01)90012345678908(3103)001750",
                                         "90012345678908",
