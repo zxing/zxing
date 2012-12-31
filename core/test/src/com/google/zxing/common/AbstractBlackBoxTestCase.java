@@ -29,6 +29,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import javax.imageio.ImageIO;
+import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.AffineTransformOp;
@@ -314,6 +315,23 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
     if (degrees == 0.0f) {
       return original;
     }
+
+    switch(original.getType()) {
+    case BufferedImage.TYPE_BYTE_INDEXED:
+    case BufferedImage.TYPE_BYTE_BINARY:
+      BufferedImage argb = new BufferedImage(original.getWidth(),
+                                             original.getHeight(),
+                                             BufferedImage.TYPE_INT_ARGB);
+      Graphics2D g = argb.createGraphics();
+      g.drawImage(original, 0, 0, null);
+      g.dispose();
+      original = argb;
+      break;
+    default:
+      // nothing
+      break;
+    }
+
     double radians = Math.toRadians(degrees);
 
     // Transform simply to find out the new bounding box (don't actually run the image through it)
@@ -333,7 +351,7 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
                  (height - original.getHeight()) / 2.0);
     op = new AffineTransformOp(at, AffineTransformOp.TYPE_BICUBIC);
 
-    return op.filter(original, null);
+    return op.filter(original, new BufferedImage(width, height, original.getType()));
   }
 
 }
