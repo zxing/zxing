@@ -123,6 +123,7 @@ public final class AddressBookResultHandler extends ResultHandler {
     switch (action) {
       case 0:
         addContact(addressResult.getNames(),
+                   addressResult.getNicknames(),
                    addressResult.getPronunciation(),
                    addressResult.getPhoneNumbers(),
                    addressResult.getPhoneTypes(),
@@ -135,7 +136,8 @@ public final class AddressBookResultHandler extends ResultHandler {
                    addressResult.getOrg(),
                    addressResult.getTitle(),
                    addressResult.getURL(),
-                   addressResult.getBirthday());
+                   addressResult.getBirthday(),
+                   addressResult.getGeo());
         break;
       case 1:
         String[] names = addressResult.getNames();
