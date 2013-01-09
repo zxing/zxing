@@ -42,6 +42,8 @@ public final class VCardResultParser extends ResultParser {
   private static final Pattern EQUALS = Pattern.compile("=");
   private static final Pattern SEMICOLON = Pattern.compile(";");
   private static final Pattern UNESCAPED_SEMICOLONS = Pattern.compile("(?<!\\\\);+");
+  private static final Pattern COMMA = Pattern.compile(",");
+  private static final Pattern SEMICOLON_OR_COMMA = Pattern.compile("[;,]");
 
   @Override
   public AddressBookParsedResult parse(Result result) {
@@ -59,6 +61,8 @@ public final class VCardResultParser extends ResultParser {
       names = matchVCardPrefixedField("N", rawText, true, false);
       formatNames(names);
     }
+    List<String> nicknameString = matchSingleVCardPrefixedField("NICKNAME", rawText, true, false);
+    String[] nicknames = nicknameString == null ? null : COMMA.split(nicknameString.get(0));
     List<List<String>> phoneNumbers = matchVCardPrefixedField("TEL", rawText, true, false);
     List<List<String>> emails = matchVCardPrefixedField("EMAIL", rawText, true, false);
     List<String> note = matchSingleVCardPrefixedField("NOTE", rawText, false, false);
@@ -71,7 +75,13 @@ public final class VCardResultParser extends ResultParser {
     List<String> title = matchSingleVCardPrefixedField("TITLE", rawText, true, false);
     List<String> url = matchSingleVCardPrefixedField("URL", rawText, true, false);
     List<String> instantMessenger = matchSingleVCardPrefixedField("IMPP", rawText, true, false);
-    return new AddressBookParsedResult(toPrimaryValues(names), 
+    List<String> geoString = matchSingleVCardPrefixedField("GEO", rawText, true, false);
+    String[] geo = geoString == null ? null : SEMICOLON_OR_COMMA.split(geoString.get(0));
+    if (geo != null && geo.length != 2) {
+      geo = null;
+    }
+    return new AddressBookParsedResult(toPrimaryValues(names),
+                                       nicknames,
                                        null, 
                                        toPrimaryValues(phoneNumbers), 
                                        toTypes(phoneNumbers),
@@ -84,7 +94,8 @@ public final class VCardResultParser extends ResultParser {
                                        toPrimaryValue(org),
                                        toPrimaryValue(birthday),
                                        toPrimaryValue(title),
-                                       toPrimaryValue(url));
+                                       toPrimaryValue(url),
+                                       geo);
   }
 
   static List<List<String>> matchVCardPrefixedField(CharSequence prefix,

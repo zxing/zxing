@@ -203,14 +203,15 @@ public abstract class ResultHandler {
   }
 
   final void addPhoneOnlyContact(String[] phoneNumbers,String[] phoneTypes) {
-    addContact(null, null, phoneNumbers, phoneTypes, null, null, null, null, null, null, null, null, null, null);
+    addContact(null, null, null, phoneNumbers, phoneTypes, null, null, null, null, null, null, null, null, null, null, null);
   }
 
   final void addEmailOnlyContact(String[] emails, String[] emailTypes) {
-    addContact(null, null, null, null, emails, emailTypes, null, null, null, null, null, null, null, null);
+    addContact(null, null, null, null, null, emails, emailTypes, null, null, null, null, null, null, null, null, null);
   }
 
   final void addContact(String[] names,
+                        String[] nicknames,
                         String pronunciation,
                         String[] phoneNumbers,
                         String[] phoneTypes,
@@ -223,7 +224,8 @@ public abstract class ResultHandler {
                         String org,
                         String title,
                         String url,
-                        String birthday) {
+                        String birthday,
+                        String[] geo) {
 
     // Only use the first name in the array, if present.
     Intent intent = new Intent(Intent.ACTION_INSERT_OR_EDIT, ContactsContract.Contacts.CONTENT_URI);
@@ -258,14 +260,21 @@ public abstract class ResultHandler {
     StringBuilder aggregatedNotes = new StringBuilder();
     for (String aNote : new String[] { url, birthday, note }) {
       if (aNote != null) {
-        if (aggregatedNotes.length() > 0) {
-          aggregatedNotes.append('\n');
-        }
-        aggregatedNotes.append(aNote);
+        aggregatedNotes.append('\n').append(aNote);
       }
     }
+    if (nicknames != null) {
+      for (String nickname : nicknames) {
+        aggregatedNotes.append('\n').append(nickname);
+      }
+    }
+    if (geo != null) {
+      aggregatedNotes.append('\n').append(geo[0]).append(',').append(geo[1]);
+    }
+
     if (aggregatedNotes.length() > 0) {
-      putExtra(intent, ContactsContract.Intents.Insert.NOTES, aggregatedNotes.toString());
+      // Remove extra leading '\n'
+      putExtra(intent, ContactsContract.Intents.Insert.NOTES, aggregatedNotes.substring(1));
     }
     
     putExtra(intent, ContactsContract.Intents.Insert.IM_HANDLE, instantMessenger);

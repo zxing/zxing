@@ -63,6 +63,7 @@ public final class AddressBookDoCoMoResultParser extends AbstractDoCoMoResultPar
     String org = matchSingleDoCoMoPrefixedField("ORG:", rawText, true);
 
     return new AddressBookParsedResult(maybeWrap(name),
+                                       null,
                                        pronunciation,
                                        phoneNumbers,
                                        null,
@@ -75,7 +76,8 @@ public final class AddressBookDoCoMoResultParser extends AbstractDoCoMoResultPar
                                        org,
                                        birthday,
                                        null,
-                                       url);
+                                       url,
+                                       null);
   }
 
   private static String parseName(String name) {
