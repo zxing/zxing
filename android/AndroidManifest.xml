@@ -53,7 +53,10 @@
                     android:anyDensity="true"/>
 
   <application android:icon="@drawable/launcher_icon"
-               android:label="@string/app_name">
+               android:logo="@drawable/launcher_icon"
+               android:label="@string/app_name"
+               android:hardwareAccelerated="true"
+               android:allowBackup="true">
     <activity android:name=".CaptureActivity"
               android:screenOrientation="landscape"
               android:clearTaskOnLaunch="true"
