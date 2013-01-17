@@ -120,7 +120,7 @@ std::vector<Ref<FinderPatternInfo> > MultiFinderPatternFinder::findMulti(DecodeH
   std::vector<Ref<FinderPatternInfo> > result;
   for (unsigned int i = 0; i < patternInfo.size(); i++) {
     std::vector<Ref<FinderPattern> > pattern = patternInfo[i];
-    FinderPatternFinder::orderBestPatterns(pattern);
+    pattern = FinderPatternFinder::orderBestPatterns(pattern);
     result.push_back(Ref<FinderPatternInfo>(new FinderPatternInfo(pattern)));
   }
   return result;
@@ -191,7 +191,7 @@ std::vector<std::vector<Ref<FinderPattern> > > MultiFinderPatternFinder::selectB
         test.push_back(p1);
         test.push_back(p2);
         test.push_back(p3);
-        FinderPatternFinder::orderBestPatterns(test);
+        test = FinderPatternFinder::orderBestPatterns(test);
         // Calculate the distances: a = topleft-bottomleft, b=topleft-topright, c = diagonal
         Ref<FinderPatternInfo> info = Ref<FinderPatternInfo>(new FinderPatternInfo(test));
         float dA = FinderPatternFinder::distance(info->getTopLeft(), info->getBottomLeft());
