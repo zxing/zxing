@@ -1,112 +1,142 @@
+using System.Text;
+
 /*
-* Copyright 2008 ZXing authors
-*
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-*      http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-*/
-using System;
+ * Copyright 2008 ZXing authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 namespace com.google.zxing.client.result
 {
-	
-	/// <author>  Sean Owen
-	/// </author>
-	/// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
-	/// </author>
-	public sealed class SMSParsedResult:ParsedResult
+
+	/// <summary>
+	/// @author Sean Owen
+	/// </summary>
+	public sealed class SMSParsedResult : ParsedResult
 	{
-		public System.String SMSURI
-		{
-			get
+
+	  private readonly string[] numbers;
+	  private readonly string[] vias;
+	  private readonly string subject;
+	  private readonly string body;
+
+	  public SMSParsedResult(string number, string via, string subject, string body) : base(ParsedResultType.SMS)
+	  {
+		this.numbers = new string[] {number};
+		this.vias = new string[] {via};
+		this.subject = subject;
+		this.body = body;
+	  }
+
+	  public SMSParsedResult(string[] numbers, string[] vias, string subject, string body) : base(ParsedResultType.SMS)
+	  {
+		this.numbers = numbers;
+		this.vias = vias;
+		this.subject = subject;
+		this.body = body;
+	  }
+
+	  public string SMSURI
+	  {
+		  get
+		  {
+			StringBuilder result = new StringBuilder();
+			result.Append("sms:");
+			bool first = true;
+			for (int i = 0; i < numbers.Length; i++)
 			{
-				return smsURI;
+			  if (first)
+			  {
+				first = false;
+			  }
+			  else
+			  {
+				result.Append(',');
+			  }
+			  result.Append(numbers[i]);
+			  if (vias != null && vias[i] != null)
+			  {
+				result.Append(";via=");
+				result.Append(vias[i]);
+			  }
 			}
-			
-		}
-		public System.String Number
-		{
-			get
+			bool hasBody = body != null;
+			bool hasSubject = subject != null;
+			if (hasBody || hasSubject)
 			{
-				return number;
+			  result.Append('?');
+			  if (hasBody)
+			  {
+				result.Append("body=");
+				result.Append(body);
+			  }
+			  if (hasSubject)
+			  {
+				if (hasBody)
+				{
+				  result.Append('&');
+				}
+				result.Append("subject=");
+				result.Append(subject);
+			  }
 			}
-			
-		}
-		public System.String Via
-		{
-			get
-			{
-				return via;
-			}
-			
-		}
-		public System.String Subject
-		{
-			get
-			{
-				return subject;
-			}
-			
-		}
-		public System.String Body
-		{
-			get
-			{
-				return body;
-			}
-			
-		}
-		public System.String Title
-		{
-			get
-			{
-				return title;
-			}
-			
-		}
-		override public System.String DisplayResult
-		{
-			get
-			{
-				System.Text.StringBuilder result = new System.Text.StringBuilder(100);
-				maybeAppend(number, result);
-				maybeAppend(via, result);
-				maybeAppend(subject, result);
-				maybeAppend(body, result);
-				maybeAppend(title, result);
-				return result.ToString();
-			}
-			
-		}
-		
-		//UPGRADE_NOTE: Final was removed from the declaration of 'smsURI '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private System.String smsURI;
-		//UPGRADE_NOTE: Final was removed from the declaration of 'number '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private System.String number;
-		//UPGRADE_NOTE: Final was removed from the declaration of 'via '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private System.String via;
-		//UPGRADE_NOTE: Final was removed from the declaration of 'subject '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private System.String subject;
-		//UPGRADE_NOTE: Final was removed from the declaration of 'body '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private System.String body;
-		//UPGRADE_NOTE: Final was removed from the declaration of 'title '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private System.String title;
-		
-		public SMSParsedResult(System.String smsURI, System.String number, System.String via, System.String subject, System.String body, System.String title):base(ParsedResultType.SMS)
-		{
-			this.smsURI = smsURI;
-			this.number = number;
-			this.via = via;
-			this.subject = subject;
-			this.body = body;
-			this.title = title;
-		}
+			return result.ToString();
+		  }
+	  }
+
+	  public string[] Numbers
+	  {
+		  get
+		  {
+			return numbers;
+		  }
+	  }
+
+	  public string[] Vias
+	  {
+		  get
+		  {
+			return vias;
+		  }
+	  }
+
+	  public string Subject
+	  {
+		  get
+		  {
+			return subject;
+		  }
+	  }
+
+	  public string Body
+	  {
+		  get
+		  {
+			return body;
+		  }
+	  }
+
+	  public override string DisplayResult
+	  {
+		  get
+		  {
+			StringBuilder result = new StringBuilder(100);
+			maybeAppend(numbers, result);
+			maybeAppend(subject, result);
+			maybeAppend(body, result);
+			return result.ToString();
+		  }
+	  }
+
 	}
 }

@@ -1,172 +1,300 @@
-/*
-* Copyright 2008 ZXing authors
-*
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-*      http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-*/
 using System;
+using System.Text;
+using System.Text.RegularExpressions;
+
+/*
+ * Copyright 2008 ZXing authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 namespace com.google.zxing.client.result
 {
-	
-	/// <author>  Sean Owen
-	/// </author>
-	/// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
-	/// </author>
-	public sealed class CalendarParsedResult:ParsedResult
+
+
+	/// <summary>
+	/// @author Sean Owen
+	/// </summary>
+	public sealed class CalendarParsedResult : ParsedResult
 	{
-		public System.String Summary
+
+	  private static readonly string RFC2445_DURATION = "P(?:(\\d+)W)?(?:(\\d+)D)?(?:T(?:(\\d+)H)?(?:(\\d+)M)?(?:(\\d+)S)?)?";
+	  private static readonly long[] RFC2445_DURATION_FIELD_UNITS = {7 * 24 * 60 * 60 * 1000L, 24 * 60 * 60 * 1000L, 60 * 60 * 1000L, 60 * 1000L, 1000L};
+
+	  private static readonly string DATE_TIME = "[0-9]{8}(T[0-9]{6}Z?)?";
+
+	  private static readonly string DATE_FORMAT = "yyyyMMdd";
+	  static CalendarParsedResult()
+	  {
+		// For dates without a time, for purposes of interacting with Android, the resulting timestamp
+		// needs to be midnight of that day in GMT. See:
+		// http://code.google.com/p/android/issues/detail?id=8330
+		string DATE_FORMAT_TimeZone = "GMT";
+	  }
+	  private static readonly string DATE_TIME_FORMAT = "yyyyMMdd'T'HHmmss";
+
+	  private readonly string summary;
+	  private readonly DateTime start;
+	  private readonly bool startAllDay;
+	  private readonly DateTime? end;
+	  private readonly bool endAllDay;
+	  private readonly string location;
+	  private readonly string organizer;
+	  private readonly string[] attendees;
+	  private readonly string description;
+	  private readonly double latitude;
+	  private readonly double longitude;
+
+	  public CalendarParsedResult(string summary, string startString, string endString, string durationString, string location, string organizer, string[] attendees, string description, double latitude, double longitude) : base(ParsedResultType.CALENDAR)
+	  {
+		this.summary = summary;
+
+		try
 		{
-			get
-			{
-				return summary;
-			}
-			
+		  this.start = parseDate(startString);
 		}
-		/// <summary> <p>We would return the start and end date as a {@link java.util.Date} except that this code
-		/// needs to work under JavaME / MIDP and there is no date parsing library available there, such
-		/// as <code>java.text.SimpleDateFormat</code>.</p> See validateDate() for the return format.
-		/// 
-		/// </summary>
-		/// <returns> start time formatted as a RFC 2445 DATE or DATE-TIME.</p>
-		/// </returns>
-		public System.String Start
+		catch (FormatException pe)
 		{
-			get
-			{
-				return start;
-			}
-			
+		  throw new System.ArgumentException(pe.ToString());
 		}
-		/// <seealso cref="getStart(). May return null if the event has no duration.">
-		/// </seealso>
-		public System.String End
+
+		if (endString == null)
 		{
-			get
-			{
-				return end;
-			}
-			
+		  long durationMS = parseDurationMS(durationString);
+		  end = durationMS < 0L ? null :(DateTime?) start.AddMilliseconds( durationMS);
 		}
-		public System.String Location
+		else
 		{
-			get
-			{
-				return location;
-			}
-			
+		  try
+		  {
+			this.end = parseDate(endString);
+		  }
+		  catch (FormatException pe)
+		  {
+			throw new System.ArgumentException(pe.ToString());
+		  }
 		}
-		public System.String Attendee
+
+		this.startAllDay = startString.Length == 8;
+		this.endAllDay = endString != null && endString.Length == 8;
+
+		this.location = location;
+		this.organizer = organizer;
+		this.attendees = attendees;
+		this.description = description;
+		this.latitude = latitude;
+		this.longitude = longitude;
+	  }
+
+	  public string Summary
+	  {
+		  get
+		  {
+			return summary;
+		  }
+	  }
+
+	  /// <returns> start time </returns>
+	  public DateTime Start
+	  {
+		  get
+		  {
+			return start;
+		  }
+	  }
+
+	  /// <returns> true if start time was specified as a whole day </returns>
+	  public bool StartAllDay
+	  {
+		  get
+		  {
+			return startAllDay;
+		  }
+	  }
+
+	  /// <summary>
+	  /// May return null if the event has no duration. </summary>
+	  /// <seealso cref= #getStart() </seealso>
+	  public DateTime? End
+	  {
+		  get
+		  {
+			return end;
+		  }
+	  }
+
+	  /// <returns> true if end time was specified as a whole day </returns>
+	  public bool EndAllDay
+	  {
+		  get
+		  {
+			return endAllDay;
+		  }
+	  }
+
+	  public string Location
+	  {
+		  get
+		  {
+			return location;
+		  }
+	  }
+
+	  public string Organizer
+	  {
+		  get
+		  {
+			return organizer;
+		  }
+	  }
+
+	  public string[] Attendees
+	  {
+		  get
+		  {
+			return attendees;
+		  }
+	  }
+
+	  public string Description
+	  {
+		  get
+		  {
+			return description;
+		  }
+	  }
+
+	  public double Latitude
+	  {
+		  get
+		  {
+			return latitude;
+		  }
+	  }
+
+	  public double Longitude
+	  {
+		  get
+		  {
+			return longitude;
+		  }
+	  }
+
+	  public override string DisplayResult
+	  {
+		  get
+		  {
+			StringBuilder result = new StringBuilder(100);
+			maybeAppend(summary, result);
+			maybeAppend(format(startAllDay, start), result);
+			maybeAppend(format(endAllDay, end), result);
+			maybeAppend(location, result);
+			maybeAppend(organizer, result);
+			maybeAppend(attendees, result);
+			maybeAppend(description, result);
+			return result.ToString();
+		  }
+	  }
+
+	  /// <summary>
+	  /// Parses a string as a date. RFC 2445 allows the start and end fields to be of type DATE (e.g. 20081021)
+	  /// or DATE-TIME (e.g. 20081021T123000 for local time, or 20081021T123000Z for UTC).
+	  /// </summary>
+	  /// <param name="when"> The string to parse </param>
+	  /// <exception cref="FormatException"> if not able to parse as a date </exception>
+//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
+//ORIGINAL LINE: private static java.util.Date parseDate(String when) throws java.text.ParseException
+	  private static DateTime parseDate(string when)
+	  {
+		if (!(new Regex (DATE_TIME).IsMatch(when)))
 		{
-			get
-			{
-				return attendee;
-			}
-			
+            throw FormatException.FormatInstance;
 		}
-		public System.String Title
+		if (when.Length == 8)
 		{
-			get
-			{
-				return title;
-			}
-			
+		  // Show only year/month/day
+		  return DateTime.Parse(when);
 		}
-		override public System.String DisplayResult
+		else
 		{
-			get
-			{
-				System.Text.StringBuilder result = new System.Text.StringBuilder(100);
-				maybeAppend(summary, result);
-				maybeAppend(start, result);
-				maybeAppend(end, result);
-				maybeAppend(location, result);
-				maybeAppend(attendee, result);
-				maybeAppend(title, result);
-				return result.ToString();
-			}
-			
+		  // The when string can be local time, or UTC if it ends with a Z
+		  DateTime date;
+		  if (when.Length == 16 && when[15] == 'Z')
+		  {
+			date = DateTime.Parse(when.Substring(0, 15));
+            //DateTime calendar = new GregorianCalendar();
+            //  System.Globalization.GregorianCalendar calendar = new System.Globalization.GregorianCalendar()
+            //long milliseconds = date;
+            //// Account for time zone difference
+            //milliseconds += calendar.get(DateTime.ZONE_OFFSET);
+            //// Might need to correct for daylight savings time, but use target time since
+            //// now might be in DST but not then, or vice versa
+            //calendar = new DateTime(milliseconds);
+            //milliseconds += calendar.get(DateTime.DST_OFFSET);
+            TimeSpan offset = TimeZone.CurrentTimeZone.GetUtcOffset(date);
+
+            date = date + offset;
+		  }
+		  else
+		  {
+			date = DateTime.Parse(when);
+		  }
+		  return date;
 		}
-		
-		//UPGRADE_NOTE: Final was removed from the declaration of 'summary '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private System.String summary;
-		//UPGRADE_NOTE: Final was removed from the declaration of 'start '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private System.String start;
-		//UPGRADE_NOTE: Final was removed from the declaration of 'end '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private System.String end;
-		//UPGRADE_NOTE: Final was removed from the declaration of 'location '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private System.String location;
-		//UPGRADE_NOTE: Final was removed from the declaration of 'attendee '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private System.String attendee;
-		//UPGRADE_NOTE: Final was removed from the declaration of 'title '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private System.String title;
-		
-		public CalendarParsedResult(System.String summary, System.String start, System.String end, System.String location, System.String attendee, System.String title):base(ParsedResultType.CALENDAR)
+	  }
+
+      private static string format(bool allDay, DateTime? date)
+      {
+          if (date == null)
+          {
+              return null;
+          }
+          //DateFormat format = allDay ? DateFormat.getDateInstance(DateFormat.MEDIUM) : DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM);
+          //return format.format(date);
+          if (allDay)
+          {
+              return String.Format("dd-MMM-yyyy",date);
+          }
+          else
+          {
+              return String.Format("dd-MMM-yyyy hh:mm:ss tt",date);
+          }
+      }
+
+	  private static long parseDurationMS(string durationString)
+	  {
+		if (durationString == null)
 		{
-			// Start is required, end is not
-			if (start == null)
-			{
-				throw new System.ArgumentException();
-			}
-			validateDate(start);
-			validateDate(end);
-			this.summary = summary;
-			this.start = start;
-			this.end = end;
-			this.location = location;
-			this.attendee = attendee;
-			this.title = title;
+		  return -1L;
 		}
-		
-		/// <summary> RFC 2445 allows the start and end fields to be of type DATE (e.g. 20081021) or DATE-TIME
-		/// (e.g. 20081021T123000 for local time, or 20081021T123000Z for UTC).
-		/// 
-		/// </summary>
-		/// <param name="date">The string to validate
-		/// </param>
-		private static void  validateDate(System.String date)
+        Regex m = new Regex(RFC2445_DURATION);
+        Match match = m.Match(durationString);
+		if (!match.Success)
 		{
-			if (date != null)
-			{
-				int length = date.Length;
-				if (length != 8 && length != 15 && length != 16)
-				{
-					throw new System.ArgumentException();
-				}
-				for (int i = 0; i < 8; i++)
-				{
-					if (!System.Char.IsDigit(date[i]))
-					{
-						throw new System.ArgumentException();
-					}
-				}
-				if (length > 8)
-				{
-					if (date[8] != 'T')
-					{
-						throw new System.ArgumentException();
-					}
-					for (int i = 9; i < 15; i++)
-					{
-						if (!System.Char.IsDigit(date[i]))
-						{
-							throw new System.ArgumentException();
-						}
-					}
-					if (length == 16 && date[15] != 'Z')
-					{
-						throw new System.ArgumentException();
-					}
-				}
-			}
+		  return -1L;
 		}
+		long durationMS = 0L;
+		for (int i = 0; i < RFC2445_DURATION_FIELD_UNITS.Length; i++)
+		{
+		  string fieldValue = match.Groups[i + 1].Value;
+		  if (fieldValue != null)
+		  {
+			durationMS += RFC2445_DURATION_FIELD_UNITS[i] * Convert.ToInt32(fieldValue);
+		  }
+		}
+		return durationMS;
+	  }
+
 	}
+
 }
