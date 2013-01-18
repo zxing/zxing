@@ -1,371 +1,282 @@
-/*
-* Copyright 2007 ZXing authors
-*
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-*      http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-*/
 using System;
-using Result = com.google.zxing.Result;
+using System.Collections.Generic;
+using System.Text;
+
+/*
+ * Copyright 2007 ZXing authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 namespace com.google.zxing.client.result
 {
-	
-	/// <summary> <p>Abstract class representing the result of decoding a barcode, as more than
+
+	using Result = com.google.zxing.Result;
+    using System.Text.RegularExpressions;
+
+
+	/// <summary>
+	/// <p>Abstract class representing the result of decoding a barcode, as more than
 	/// a String -- as some type of structured data. This might be a subclass which represents
-	/// a URL, or an e-mail address. {@link #parseResult(com.google.zxing.Result)} will turn a raw
+	/// a URL, or an e-mail address. <seealso cref="#parseResult(Result)"/> will turn a raw
 	/// decoded string into the most appropriate type of structured representation.</p>
 	/// 
 	/// <p>Thanks to Jeff Griffin for proposing rewrite of these classes that relies less
 	/// on exception-based mechanisms during parsing.</p>
 	/// 
+	/// @author Sean Owen
 	/// </summary>
-	/// <author>  Sean Owen
-	/// </author>
-	/// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
-	/// </author>
 	public abstract class ResultParser
 	{
-		
-		public static ParsedResult parseResult(Result theResult)
+
+	  private static readonly ResultParser[] PARSERS = {new BookmarkDoCoMoResultParser(), new AddressBookDoCoMoResultParser(), new EmailDoCoMoResultParser(), new AddressBookAUResultParser(), new VCardResultParser(), new BizcardResultParser(), new VEventResultParser(), new EmailAddressResultParser(), new SMTPResultParser(), new TelResultParser(), new SMSMMSResultParser(), new SMSTOMMSTOResultParser(), new GeoResultParser(), new WifiResultParser(), new URLTOResultParser(), new URIResultParser(), new ISBNResultParser(), new ProductResultParser(), new ExpandedProductResultParser()};
+
+	  private static readonly string DIGITS = "\\d*";
+	  private static readonly string ALPHANUM = "[a-zA-Z0-9]*";
+	  private static readonly string AMPERSAND = "&";
+	  private static readonly string EQUALS = "=";
+	  private const string BYTE_ORDER_MARK = "\ufeff";
+
+	  /// <summary>
+	  /// Attempts to parse the raw <seealso cref="Result"/>'s contents as a particular type
+	  /// of information (email, URL, etc.) and return a <seealso cref="ParsedResult"/> encapsulating
+	  /// the result of parsing.
+	  /// </summary>
+	  public abstract ParsedResult parse(Result theResult);
+
+	  protected internal static string getMassagedText(Result result)
+	  {
+		string text = result.Text;
+		if (text.StartsWith(BYTE_ORDER_MARK))
 		{
-			// Simplification of original if - if else logic using Null Coalescing operator ??
-			//
-			// ?? Simply checks from left to right for a non null object
-			// when an object evaluates to null the next object after the ?? is evaluated
-			// This continues until a non null value is found or the last object is evaluated
-			return
-				BookmarkDoCoMoResultParser.parse(theResult) as ParsedResult ??
-				AddressBookDoCoMoResultParser.parse(theResult) as ParsedResult ??
-				EmailDoCoMoResultParser.parse(theResult) as ParsedResult ??
-				AddressBookAUResultParser.parse(theResult) as ParsedResult ??
-				VCardResultParser.parse(theResult) as ParsedResult ??
-				BizcardResultParser.parse(theResult) as ParsedResult ??
-				VEventResultParser.parse(theResult) as ParsedResult ??
-				EmailAddressResultParser.parse(theResult) as ParsedResult ??
-				TelResultParser.parse(theResult) as ParsedResult ??
-				SMSMMSResultParser.parse(theResult) as ParsedResult ??
-				GeoResultParser.parse(theResult) as ParsedResult ??
-				URLTOResultParser.parse(theResult) as ParsedResult ??
-				URIResultParser.parse(theResult) as ParsedResult ??
-				ISBNResultParser.parse(theResult) as ParsedResult ??
-				ProductResultParser.parse(theResult) as ParsedResult ??
-				new TextParsedResult(theResult.Text, null) as ParsedResult;
+		  text = text.Substring(1);
 		}
-		
-		protected internal static void  maybeAppend(System.String value_Renamed, System.Text.StringBuilder result)
+		return text;
+	  }
+
+	  public static ParsedResult parseResult(Result theResult)
+	  {
+		foreach (ResultParser parser in PARSERS)
 		{
-			if (value_Renamed != null)
-			{
-				result.Append('\n');
-				result.Append(value_Renamed);
-			}
-		}
-		
-		protected internal static void  maybeAppend(System.String[] value_Renamed, System.Text.StringBuilder result)
-		{
-			if (value_Renamed != null)
-			{
-				for (int i = 0; i < value_Renamed.Length; i++)
-				{
-					result.Append('\n');
-					result.Append(value_Renamed[i]);
-				}
-			}
-		}
-		
-		protected internal static System.String[] maybeWrap(System.String value_Renamed)
-		{
-			return value_Renamed == null?null:new System.String[]{value_Renamed};
-		}
-		
-		protected internal static System.String unescapeBackslash(System.String escaped)
-		{
-			if (escaped != null)
-			{
-				int backslash = escaped.IndexOf('\\');
-				if (backslash >= 0)
-				{
-					int max = escaped.Length;
-					System.Text.StringBuilder unescaped = new System.Text.StringBuilder(max - 1);
-					unescaped.Append(escaped.ToCharArray(), 0, backslash);
-					bool nextIsEscaped = false;
-					for (int i = backslash; i < max; i++)
-					{
-						char c = escaped[i];
-						if (nextIsEscaped || c != '\\')
-						{
-							unescaped.Append(c);
-							nextIsEscaped = false;
-						}
-						else
-						{
-							nextIsEscaped = true;
-						}
-					}
-					return unescaped.ToString();
-				}
-			}
-			return escaped;
-		}
-		
-		private static System.String urlDecode(System.String escaped)
-		{
-			
-			// No we can't use java.net.URLDecoder here. JavaME doesn't have it.
-			if (escaped == null)
-			{
-				return null;
-			}
-			char[] escapedArray = escaped.ToCharArray();
-			
-			int first = findFirstEscape(escapedArray);
-			if (first < 0)
-			{
-				return escaped;
-			}
-			
-			int max = escapedArray.Length;
-			// final length is at most 2 less than original due to at least 1 unescaping
-			System.Text.StringBuilder unescaped = new System.Text.StringBuilder(max - 2);
-			// Can append everything up to first escape character
-			unescaped.Append(escapedArray, 0, first);
-			
-			for (int i = first; i < max; i++)
-			{
-				char c = escapedArray[i];
-				if (c == '+')
-				{
-					// + is translated directly into a space
-					unescaped.Append(' ');
-				}
-				else if (c == '%')
-				{
-					// Are there even two more chars? if not we will just copy the escaped sequence and be done
-					if (i >= max - 2)
-					{
-						unescaped.Append('%'); // append that % and move on
-					}
-					else
-					{
-						int firstDigitValue = parseHexDigit(escapedArray[++i]);
-						int secondDigitValue = parseHexDigit(escapedArray[++i]);
-						if (firstDigitValue < 0 || secondDigitValue < 0)
-						{
-							// bad digit, just move on
-							unescaped.Append('%');
-							unescaped.Append(escapedArray[i - 1]);
-							unescaped.Append(escapedArray[i]);
-						}
-						unescaped.Append((char) ((firstDigitValue << 4) + secondDigitValue));
-					}
-				}
-				else
-				{
-					unescaped.Append(c);
-				}
-			}
-			return unescaped.ToString();
-		}
-		
-		private static int findFirstEscape(char[] escapedArray)
-		{
-			int max = escapedArray.Length;
-			for (int i = 0; i < max; i++)
-			{
-				char c = escapedArray[i];
-				if (c == '+' || c == '%')
-				{
-					return i;
-				}
-			}
-			return - 1;
-		}
-		
-		private static int parseHexDigit(char c)
-		{
-			if (c >= 'a')
-			{
-				if (c <= 'f')
-				{
-					return 10 + (c - 'a');
-				}
-			}
-			else if (c >= 'A')
-			{
-				if (c <= 'F')
-				{
-					return 10 + (c - 'A');
-				}
-			}
-			else if (c >= '0')
-			{
-				if (c <= '9')
-				{
-					return c - '0';
-				}
-			}
-			return - 1;
-		}
-		
-		protected internal static bool isStringOfDigits(System.String value_Renamed, int length)
-		{
-			if (value_Renamed == null)
-			{
-				return false;
-			}
-			int stringLength = value_Renamed.Length;
-			if (length != stringLength)
-			{
-				return false;
-			}
-			for (int i = 0; i < length; i++)
-			{
-				char c = value_Renamed[i];
-				if (c < '0' || c > '9')
-				{
-					return false;
-				}
-			}
-			return true;
-		}
-		
-		protected internal static bool isSubstringOfDigits(System.String value_Renamed, int offset, int length)
-		{
-			if (value_Renamed == null)
-			{
-				return false;
-			}
-			int stringLength = value_Renamed.Length;
-			int max = offset + length;
-			if (stringLength < max)
-			{
-				return false;
-			}
-			for (int i = offset; i < max; i++)
-			{
-				char c = value_Renamed[i];
-				if (c < '0' || c > '9')
-				{
-					return false;
-				}
-			}
-			return true;
-		}
-		
-		internal static System.Collections.Hashtable parseNameValuePairs(System.String uri)
-		{
-			int paramStart = uri.IndexOf('?');
-			if (paramStart < 0)
-			{
-				return null;
-			}
-			System.Collections.Hashtable result = System.Collections.Hashtable.Synchronized(new System.Collections.Hashtable(3));
-			paramStart++;
-			int paramEnd;
-			//UPGRADE_WARNING: Method 'java.lang.String.indexOf' was converted to 'System.String.IndexOf' which may throw an exception. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1101'"
-			while ((paramEnd = uri.IndexOf('&', paramStart)) >= 0)
-			{
-				appendKeyValue(uri, paramStart, paramEnd, result);
-				paramStart = paramEnd + 1;
-			}
-			appendKeyValue(uri, paramStart, uri.Length, result);
+		  ParsedResult result = parser.parse(theResult);
+		  if (result != null)
+		  {
 			return result;
+		  }
 		}
-		
-		private static void  appendKeyValue(System.String uri, int paramStart, int paramEnd, System.Collections.Hashtable result)
+		return new TextParsedResult(theResult.Text, null);
+	  }
+
+	  protected internal static void maybeAppend(string value, StringBuilder result)
+	  {
+		if (value != null)
 		{
-			//UPGRADE_WARNING: Method 'java.lang.String.indexOf' was converted to 'System.String.IndexOf' which may throw an exception. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1101'"
-			int separator = uri.IndexOf('=', paramStart);
-			if (separator >= 0)
-			{
-				// key = value
-				System.String key = uri.Substring(paramStart, (separator) - (paramStart));
-				System.String value_Renamed = uri.Substring(separator + 1, (paramEnd) - (separator + 1));
-				value_Renamed = urlDecode(value_Renamed);
-				result[key] = value_Renamed;
-			}
-			// Can't put key, null into a hashtable
+		  result.Append('\n');
+		  result.Append(value);
 		}
-		
-		internal static System.String[] matchPrefixedField(System.String prefix, System.String rawText, char endChar, bool trim)
+	  }
+
+	  protected internal static void maybeAppend(string[] value, StringBuilder result)
+	  {
+		if (value != null)
 		{
-			System.Collections.ArrayList matches = null;
-			int i = 0;
-			int max = rawText.Length;
-			while (i < max)
-			{
-				//UPGRADE_WARNING: Method 'java.lang.String.indexOf' was converted to 'System.String.IndexOf' which may throw an exception. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1101'"
-				i = rawText.IndexOf(prefix, i);
-				if (i < 0)
-				{
-					break;
-				}
-				i += prefix.Length; // Skip past this prefix we found to start
-				int start = i; // Found the start of a match here
-				bool done = false;
-				while (!done)
-				{
-					//UPGRADE_WARNING: Method 'java.lang.String.indexOf' was converted to 'System.String.IndexOf' which may throw an exception. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1101'"
-					i = rawText.IndexOf((System.Char) endChar, i);
-					if (i < 0)
-					{
-						// No terminating end character? uh, done. Set i such that loop terminates and break
-						i = rawText.Length;
-						done = true;
-					}
-					else if (rawText[i - 1] == '\\')
-					{
-						// semicolon was escaped so continue
-						i++;
-					}
-					else
-					{
-						// found a match
-						if (matches == null)
-						{
-							matches = System.Collections.ArrayList.Synchronized(new System.Collections.ArrayList(3)); // lazy init
-						}
-						System.String element = unescapeBackslash(rawText.Substring(start, (i) - (start)));
-						if (trim)
-						{
-							element = element.Trim();
-						}
-						matches.Add(element);
-						i++;
-						done = true;
-					}
-				}
-			}
-			if (matches == null || (matches.Count == 0))
-			{
-				return null;
-			}
-			return toStringArray(matches);
+		  foreach (string s in value)
+		  {
+			result.Append('\n');
+			result.Append(s);
+		  }
 		}
-		
-		internal static System.String matchSinglePrefixedField(System.String prefix, System.String rawText, char endChar, bool trim)
+	  }
+
+	  protected internal static string[] maybeWrap(string value)
+	  {
+		return value == null ? null : new string[] {value};
+	  }
+
+	  protected internal static string unescapeBackslash(string escaped)
+	  {
+		int backslash = (int) escaped.IndexOf('\\');
+		if (backslash < 0)
 		{
-			System.String[] matches = matchPrefixedField(prefix, rawText, endChar, trim);
-			return matches == null?null:matches[0];
+		  return escaped;
 		}
-		
-		internal static System.String[] toStringArray(System.Collections.ArrayList strings)
+		int max = escaped.Length;
+		StringBuilder unescaped = new StringBuilder(max - 1);
+		unescaped.Append(escaped.ToCharArray(), 0, backslash);
+		bool nextIsEscaped = false;
+		for (int i = backslash; i < max; i++)
 		{
-			int size = strings.Count;
-			System.String[] result = new System.String[size];
-			for (int j = 0; j < size; j++)
-			{
-				result[j] = ((System.String) strings[j]);
-			}
-			return result;
+		  char c = escaped[i];
+		  if (nextIsEscaped || c != '\\')
+		  {
+			unescaped.Append(c);
+			nextIsEscaped = false;
+		  }
+		  else
+		  {
+			nextIsEscaped = true;
+		  }
 		}
+		return unescaped.ToString();
+	  }
+
+	  protected internal static int parseHexDigit(char c)
+	  {
+		if (c >= '0' && c <= '9')
+		{
+		  return c - '0';
+		}
+		if (c >= 'a' && c <= 'f')
+		{
+		  return 10 + (c - 'a');
+		}
+		if (c >= 'A' && c <= 'F')
+		{
+		  return 10 + (c - 'A');
+		}
+		return -1;
+	  }
+
+	  protected internal static bool isStringOfDigits(string value, int length)
+	  {
+        //return value != null && length == value.Length && DIGITS.matcher(value).matches();
+
+		return value != null && length == value.Length && new Regex(DIGITS).IsMatch(value);
+	  }
+
+	  protected internal static bool isSubstringOfDigits(string value, int offset, int length)
+	  {
+		if (value == null)
+		{
+		  return false;
+		}
+		int max = offset + length;
+        string s = value.Substring(offset, length);
+        return isStringOfDigits(s, length);
+          //return  value.Length >= max && DIGITS.matcher(value.subSequence(offset, max)).matches();
+	  }
+
+	  protected internal static bool isSubstringOfAlphaNumeric(string value, int offset, int length)
+	  {
+		if (value == null)
+		{
+		  return false;
+		}
+		int max = offset + length;
+        string s = value.Substring(offset, length);
+        return length == s.Length && new Regex(ALPHANUM).IsMatch(s);
+        //return value.Length >= max && ALPHANUM.matcher(value.subSequence(offset, max)).matches();
+      }
+
+	  internal static IDictionary<string, string> parseNameValuePairs(string uri)
+	  {
+		int paramStart = uri.IndexOf('?');
+		if (paramStart < 0)
+		{
+		  return null;
+		}
+		IDictionary<string, string> result = new Dictionary<string, string>(3);
+		foreach (string keyValue in AMPERSAND.Split(new string[] {uri.Substring(paramStart + 1)},StringSplitOptions.None))
+		{
+		  appendKeyValue(keyValue, result);
+		}
+		return result;
+	  }
+
+	  private static void appendKeyValue(string keyValue, IDictionary<string, string> result)
+	  {
+		string[] keyValueTokens = EQUALS.Split(new string[] {keyValue}, 2,StringSplitOptions.None);
+		if (keyValueTokens.Length == 2)
+		{
+		  string key = keyValueTokens[0];
+		  string value = keyValueTokens[1];
+		  try
+		  {
+              //value = URLDecoder.decode(value, "UTF-8");
+              value = System.Web.HttpUtility.UrlDecode(value,Encoding.UTF8);
+              result[key] = value;
+		  }
+          //catch (UnsupportedEncodingException uee)
+          //{
+          //  throw new IllegalStateException(uee); // can't happen
+          //}
+		  catch (System.ArgumentException iae)
+		  {
+			// continue; invalid data such as an escape like %0t
+		  }
+		}
+	  }
+
+	  internal static string[] matchPrefixedField(string prefix, string rawText, char endChar, bool trim)
+	  {
+		List<string> matches = null;
+		int i = 0;
+		int max = rawText.Length;
+		while (i < max)
+		{
+		  i = rawText.IndexOf(prefix, i);
+		  if (i < 0)
+		  {
+			break;
+		  }
+		  i += prefix.Length; // Skip past this prefix we found to start
+		  int start = i; // Found the start of a match here
+		  bool more = true;
+		  while (more)
+		  {
+			i = (int)rawText.IndexOf( endChar, i);
+			if (i < 0)
+			{
+			  // No terminating end character? uh, done. Set i such that loop terminates and break
+			  i = rawText.Length;
+			  more = false;
+			}
+			else if (rawText[i - 1] == '\\')
+			{
+			  // semicolon was escaped so continue
+			  i++;
+			}
+			else
+			{
+			  // found a match
+			  if (matches == null)
+			  {
+				matches = new List<string>(3); // lazy init
+			  }
+			  string element = unescapeBackslash(rawText.Substring(start, i - start));
+			  if (trim)
+			  {
+				element = element.Trim();
+			  }
+			  matches.Add(element);
+			  i++;
+			  more = false;
+			}
+		  }
+		}
+		if (matches == null || matches.Count == 0)
+		{
+		  return null;
+		}
+		return matches.ToArray();
+	  }
+
+	  internal static string matchSinglePrefixedField(string prefix, string rawText, char endChar, bool trim)
+	  {
+		string[] matches = matchPrefixedField(prefix, rawText, endChar, trim);
+		return matches == null ? null : matches[0];
+	  }
+
 	}
+
 }

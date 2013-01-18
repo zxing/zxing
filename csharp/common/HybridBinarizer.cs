@@ -1,26 +1,28 @@
 /*
-* Copyright 2009 ZXing authors
-*
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-*      http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-*/
-using System;
-using Binarizer = com.google.zxing.Binarizer;
-using LuminanceSource = com.google.zxing.LuminanceSource;
-using ReaderException = com.google.zxing.ReaderException;
+ * Copyright 2009 ZXing authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 namespace com.google.zxing.common
 {
-	
-	/// <summary> This class implements a local thresholding algorithm, which while slower than the
+
+	using Binarizer = com.google.zxing.Binarizer;
+	using LuminanceSource = com.google.zxing.LuminanceSource;
+	using NotFoundException = com.google.zxing.NotFoundException;
+
+	/// <summary>
+	/// This class implements a local thresholding algorithm, which while slower than the
 	/// GlobalHistogramBinarizer, is fairly efficient for what it does. It is designed for
 	/// high frequency images of barcodes with black data on white backgrounds. For this application,
 	/// it does a much better job than a global blackpoint with severe shadows and gradients.
@@ -34,154 +36,229 @@ namespace com.google.zxing.common
 	/// 
 	/// This Binarizer is the default for the unit tests and the recommended class for library users.
 	/// 
+	/// @author dswitkin@google.com (Daniel Switkin)
 	/// </summary>
-	/// <author>  dswitkin@google.com (Daniel Switkin)
-	/// </author>
-	/// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
-	/// </author>
-	public sealed class HybridBinarizer:GlobalHistogramBinarizer
+	public sealed class HybridBinarizer : GlobalHistogramBinarizer
 	{
-		override public BitMatrix BlackMatrix
-		{
-			get
+
+	  // This class uses 5x5 blocks to compute local luminance, where each block is 8x8 pixels.
+	  // So this is the smallest dimension in each axis we can accept.
+	  private const int BLOCK_SIZE_POWER = 3;
+	  private static readonly int BLOCK_SIZE = 1 << BLOCK_SIZE_POWER; // ...0100...00
+	  private static readonly int BLOCK_SIZE_MASK = BLOCK_SIZE - 1; // ...0011...11
+	  private static readonly int MINIMUM_DIMENSION = BLOCK_SIZE * 5;
+	  private const int MIN_DYNAMIC_RANGE = 24;
+
+	  private BitMatrix matrix;
+
+	  public HybridBinarizer(LuminanceSource source) : base(source)
+	  {
+	  }
+
+	  /// <summary>
+	  /// Calculates the final BitMatrix once for all requests. This could be called once from the
+	  /// constructor instead, but there are some advantages to doing it lazily, such as making
+	  /// profiling easier, and not doing heavy lifting when callers don't expect it.
+	  /// </summary>
+//JAVA TO C# CONVERTER WARNING: Method 'throws' clauses are not available in .NET:
+//ORIGINAL LINE: public BitMatrix getBlackMatrix() throws com.google.zxing.NotFoundException
+	  public override BitMatrix BlackMatrix
+	  {
+		  get
+		  {
+			if (matrix != null)
 			{
-				binarizeEntireImage();
-				return matrix;
+			  return matrix;
 			}
-			
-		}
-		
-		// This class uses 5x5 blocks to compute local luminance, where each block is 8x8 pixels.
-		// So this is the smallest dimension in each axis we can accept.
-		private const int MINIMUM_DIMENSION = 40;
-		
-		private BitMatrix matrix = null;
-		
-		public HybridBinarizer(LuminanceSource source):base(source)
-		{
-		}
-		
-		public override Binarizer createBinarizer(LuminanceSource source)
-		{
-			return new HybridBinarizer(source);
-		}
-		
-		// Calculates the final BitMatrix once for all requests. This could be called once from the
-		// constructor instead, but there are some advantages to doing it lazily, such as making
-		// profiling easier, and not doing heavy lifting when callers don't expect it.
-		private void  binarizeEntireImage()
-		{
-			if (matrix == null)
+			LuminanceSource source = LuminanceSource;
+			int width = source.Width;
+			int height = source.Height;
+			if (width >= MINIMUM_DIMENSION && height >= MINIMUM_DIMENSION)
 			{
-				LuminanceSource source = LuminanceSource;
-				if (source.Width >= MINIMUM_DIMENSION && source.Height >= MINIMUM_DIMENSION)
+			  sbyte[] luminances = source.Matrix;
+			  int subWidth = width >> BLOCK_SIZE_POWER;
+			  if ((width & BLOCK_SIZE_MASK) != 0)
+			  {
+				subWidth++;
+			  }
+			  int subHeight = height >> BLOCK_SIZE_POWER;
+			  if ((height & BLOCK_SIZE_MASK) != 0)
+			  {
+				subHeight++;
+			  }
+			  int[][] blackPoints = calculateBlackPoints(luminances, subWidth, subHeight, width, height);
+    
+			  BitMatrix newMatrix = new BitMatrix(width, height);
+			  calculateThresholdForBlock(luminances, subWidth, subHeight, width, height, blackPoints, newMatrix);
+			  matrix = newMatrix;
+			}
+			else
+			{
+			  // If the image is too small, fall back to the global histogram approach.
+			  matrix = base.BlackMatrix;
+			}
+			return matrix;
+		  }
+	  }
+
+	  public override Binarizer createBinarizer(LuminanceSource source)
+	  {
+		return new HybridBinarizer(source);
+	  }
+
+	  /// <summary>
+	  /// For each block in the image, calculate the average black point using a 5x5 grid
+	  /// of the blocks around it. Also handles the corner cases (fractional blocks are computed based
+	  /// on the last pixels in the row/column which are also used in the previous block).
+	  /// </summary>
+	  private static void calculateThresholdForBlock(sbyte[] luminances, int subWidth, int subHeight, int width, int height, int[][] blackPoints, BitMatrix matrix)
+	  {
+		for (int y = 0; y < subHeight; y++)
+		{
+		  int yoffset = y << BLOCK_SIZE_POWER;
+		  int maxYOffset = height - BLOCK_SIZE;
+		  if (yoffset > maxYOffset)
+		  {
+			yoffset = maxYOffset;
+		  }
+		  for (int x = 0; x < subWidth; x++)
+		  {
+			int xoffset = x << BLOCK_SIZE_POWER;
+			int maxXOffset = width - BLOCK_SIZE;
+			if (xoffset > maxXOffset)
+			{
+			  xoffset = maxXOffset;
+			}
+			int left = cap(x, 2, subWidth - 3);
+			int top = cap(y, 2, subHeight - 3);
+			int sum = 0;
+			for (int z = -2; z <= 2; z++)
+			{
+			  int[] blackRow = blackPoints[top + z];
+			  sum += blackRow[left - 2] + blackRow[left - 1] + blackRow[left] + blackRow[left + 1] + blackRow[left + 2];
+			}
+			int average = sum / 25;
+			thresholdBlock(luminances, xoffset, yoffset, average, width, matrix);
+		  }
+		}
+	  }
+
+	  private static int cap(int value, int min, int max)
+	  {
+		return value < min ? min : value > max ? max : value;
+	  }
+
+	  /// <summary>
+	  /// Applies a single threshold to a block of pixels.
+	  /// </summary>
+	  private static void thresholdBlock(sbyte[] luminances, int xoffset, int yoffset, int threshold, int stride, BitMatrix matrix)
+	  {
+		for (int y = 0, offset = yoffset * stride + xoffset; y < BLOCK_SIZE; y++, offset += stride)
+		{
+		  for (int x = 0; x < BLOCK_SIZE; x++)
+		  {
+			// Comparison needs to be <= so that black == 0 pixels are black even if the threshold is 0.
+			if ((luminances[offset + x] & 0xFF) <= threshold)
+			{
+			  matrix.set(xoffset + x, yoffset + y);
+			}
+		  }
+		}
+	  }
+
+	  /// <summary>
+	  /// Calculates a single black point for each block of pixels and saves it away.
+	  /// See the following thread for a discussion of this algorithm:
+	  ///  http://groups.google.com/group/zxing/browse_thread/thread/d06efa2c35a7ddc0
+	  /// </summary>
+	  private static int[][] calculateBlackPoints(sbyte[] luminances, int subWidth, int subHeight, int width, int height)
+	  {
+//JAVA TO C# CONVERTER NOTE: The following call to the 'RectangularArrays' helper class reproduces the rectangular array initialization that is automatic in Java:
+//ORIGINAL LINE: int[][] blackPoints = new int[subHeight][subWidth];
+		int[][] blackPoints = RectangularArrays.ReturnRectangularIntArray(subHeight, subWidth);
+		for (int y = 0; y < subHeight; y++)
+		{
+		  int yoffset = y << BLOCK_SIZE_POWER;
+		  int maxYOffset = height - BLOCK_SIZE;
+		  if (yoffset > maxYOffset)
+		  {
+			yoffset = maxYOffset;
+		  }
+		  for (int x = 0; x < subWidth; x++)
+		  {
+			int xoffset = x << BLOCK_SIZE_POWER;
+			int maxXOffset = width - BLOCK_SIZE;
+			if (xoffset > maxXOffset)
+			{
+			  xoffset = maxXOffset;
+			}
+			int sum = 0;
+			int min = 0xFF;
+			int max = 0;
+			for (int yy = 0, offset = yoffset * width + xoffset; yy < BLOCK_SIZE; yy++, offset += width)
+			{
+			  for (int xx = 0; xx < BLOCK_SIZE; xx++)
+			  {
+				int pixel = luminances[offset + xx] & 0xFF;
+				sum += pixel;
+				// still looking for good contrast
+				if (pixel < min)
 				{
-					sbyte[] luminances = source.Matrix;
-					int width = source.Width;
-					int height = source.Height;
-					int subWidth = width >> 3;
-					int subHeight = height >> 3;
-					int[][] blackPoints = calculateBlackPoints(luminances, subWidth, subHeight, width);
-					
-					matrix = new BitMatrix(width, height);
-					calculateThresholdForBlock(luminances, subWidth, subHeight, width, blackPoints, matrix);
+				  min = pixel;
 				}
-				else
+				if (pixel > max)
 				{
-					// If the image is too small, fall back to the global histogram approach.
-					matrix = base.BlackMatrix;
+				  max = pixel;
 				}
-			}
-		}
-		
-		// For each 8x8 block in the image, calculate the average black point using a 5x5 grid
-		// of the blocks around it. Also handles the corner cases, but will ignore up to 7 pixels
-		// on the right edge and 7 pixels at the bottom of the image if the overall dimensions are not
-		// multiples of eight. In practice, leaving those pixels white does not seem to be a problem.
-		private static void  calculateThresholdForBlock(sbyte[] luminances, int subWidth, int subHeight, int stride, int[][] blackPoints, BitMatrix matrix)
-		{
-			for (int y = 0; y < subHeight; y++)
-			{
-				for (int x = 0; x < subWidth; x++)
+			  }
+			  // short-circuit min/max tests once dynamic range is met
+			  if (max - min > MIN_DYNAMIC_RANGE)
+			  {
+				// finish the rest of the rows quickly
+				for (yy++, offset += width; yy < BLOCK_SIZE; yy++, offset += width)
 				{
-					int left = (x > 1)?x:2;
-					left = (left < subWidth - 2)?left:subWidth - 3;
-					int top = (y > 1)?y:2;
-					top = (top < subHeight - 2)?top:subHeight - 3;
-					int sum = 0;
-					for (int z = - 2; z <= 2; z++)
-					{
-						int[] blackRow = blackPoints[top + z];
-						sum += blackRow[left - 2];
-						sum += blackRow[left - 1];
-						sum += blackRow[left];
-						sum += blackRow[left + 1];
-						sum += blackRow[left + 2];
-					}
-					int average = sum / 25;
-					threshold8x8Block(luminances, x << 3, y << 3, average, stride, matrix);
+				  for (int xx = 0; xx < BLOCK_SIZE; xx++)
+				  {
+					sum += luminances[offset + xx] & 0xFF;
+				  }
 				}
+			  }
 			}
-		}
-		
-		// Applies a single threshold to an 8x8 block of pixels.
-		private static void  threshold8x8Block(sbyte[] luminances, int xoffset, int yoffset, int threshold, int stride, BitMatrix matrix)
-		{
-			for (int y = 0; y < 8; y++)
+
+			// The default estimate is the average of the values in the block.
+			int average = sum >> (BLOCK_SIZE_POWER * 2);
+			if (max - min <= MIN_DYNAMIC_RANGE)
 			{
-				int offset = (yoffset + y) * stride + xoffset;
-				for (int x = 0; x < 8; x++)
+			  // If variation within the block is low, assume this is a block with only light or only
+			  // dark pixels. In that case we do not want to use the average, as it would divide this
+			  // low contrast area into black and white pixels, essentially creating data out of noise.
+			  //
+			  // The default assumption is that the block is light/background. Since no estimate for
+			  // the level of dark pixels exists locally, use half the min for the block.
+			  average = min >> 1;
+
+			  if (y > 0 && x > 0)
+			  {
+				// Correct the "white background" assumption for blocks that have neighbors by comparing
+				// the pixels in this block to the previously calculated black points. This is based on
+				// the fact that dark barcode symbology is always surrounded by some amount of light
+				// background for which reasonable black point estimates were made. The bp estimated at
+				// the boundaries is used for the interior.
+
+				// The (min < bp) is arbitrary but works better than other heuristics that were tried.
+				int averageNeighborBlackPoint = (blackPoints[y - 1][x] + (2 * blackPoints[y][x - 1]) + blackPoints[y - 1][x - 1]) >> 2;
+				if (min < averageNeighborBlackPoint)
 				{
-					int pixel = luminances[offset + x] & 0xff;
-					if (pixel < threshold)
-					{
-						matrix.set_Renamed(xoffset + x, yoffset + y);
-					}
+				  average = averageNeighborBlackPoint;
 				}
+			  }
 			}
+			blackPoints[y][x] = average;
+		  }
 		}
-		
-		// Calculates a single black point for each 8x8 block of pixels and saves it away.
-		private static int[][] calculateBlackPoints(sbyte[] luminances, int subWidth, int subHeight, int stride)
-		{
-			int[][] blackPoints = new int[subHeight][];
-			for (int i = 0; i < subHeight; i++)
-			{
-				blackPoints[i] = new int[subWidth];
-			}
-			for (int y = 0; y < subHeight; y++)
-			{
-				for (int x = 0; x < subWidth; x++)
-				{
-					int sum = 0;
-					int min = 255;
-					int max = 0;
-					for (int yy = 0; yy < 8; yy++)
-					{
-						int offset = ((y << 3) + yy) * stride + (x << 3);
-						for (int xx = 0; xx < 8; xx++)
-						{
-							int pixel = luminances[offset + xx] & 0xff;
-							sum += pixel;
-							if (pixel < min)
-							{
-								min = pixel;
-							}
-							if (pixel > max)
-							{
-								max = pixel;
-							}
-						}
-					}
-					
-					// If the contrast is inadequate, use half the minimum, so that this block will be
-					// treated as part of the white background, but won't drag down neighboring blocks
-					// too much.
-					int average = (max - min > 24)?(sum >> 6):(min >> 1);
-					blackPoints[y][x] = average;
-				}
-			}
-			return blackPoints;
-		}
+		return blackPoints;
+	  }
+
 	}
+
 }
