@@ -19,6 +19,7 @@ package com.google.zxing.client.android;
 import android.content.ActivityNotFoundException;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.BitmapFactory;
 import android.provider.Browser;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
@@ -82,9 +83,18 @@ public final class CaptureActivityHandler extends Handler {
         Log.d(TAG, "Got decode succeeded message");
         state = State.SUCCESS;
         Bundle bundle = message.getData();
-        Bitmap barcode = bundle == null ? null :
-            (Bitmap) bundle.getParcelable(DecodeThread.BARCODE_BITMAP);
-        activity.handleDecode((Result) message.obj, barcode);
+        Bitmap barcode = null;
+        float scaleFactor = 1.0f;
+        if (bundle != null) {
+          byte[] compressedBitmap = bundle.getByteArray(DecodeThread.BARCODE_BITMAP);
+          if (compressedBitmap != null) {
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inMutable = true;
+            barcode = BitmapFactory.decodeByteArray(compressedBitmap, 0, compressedBitmap.length, options);
+          }
+          scaleFactor = bundle.getFloat(DecodeThread.BARCODE_SCALED_FACTOR);          
+        }
+        activity.handleDecode((Result) message.obj, barcode, scaleFactor);
         break;
       case R.id.decode_failed:
         // We're decoding as fast as possible, so when one decode fails, start another.
