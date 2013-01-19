@@ -18,6 +18,7 @@ package com.google.zxing.client.android.result;
 
 import com.google.zxing.Result;
 import com.google.zxing.client.android.R;
+import com.google.zxing.client.result.ExpandedProductParsedResult;
 import com.google.zxing.client.result.ParsedResult;
 import com.google.zxing.client.result.ProductParsedResult;
 
@@ -59,16 +60,24 @@ public final class ProductResultHandler extends ResultHandler {
 
   @Override
   public void handleButtonPress(int index) {
-    ProductParsedResult productResult = (ProductParsedResult) getResult();
+    ParsedResult rawResult = getResult();
+    String productID;
+    if (rawResult instanceof ProductParsedResult) {
+      productID = ((ProductParsedResult) rawResult).getNormalizedProductID();
+    } else if (rawResult instanceof ExpandedProductParsedResult) {
+      productID = ((ExpandedProductParsedResult) rawResult).getRawText();
+    } else {
+      throw new IllegalArgumentException(rawResult.getClass().toString());
+    }
     switch (index) {
       case 0:
-        openProductSearch(productResult.getNormalizedProductID());
+        openProductSearch(productID);
         break;
       case 1:
-        webSearch(productResult.getNormalizedProductID());
+        webSearch(productID);
         break;
       case 2:
-        openURL(fillInCustomSearchURL(productResult.getNormalizedProductID()));
+        openURL(fillInCustomSearchURL(productID));
         break;
     }
   }
