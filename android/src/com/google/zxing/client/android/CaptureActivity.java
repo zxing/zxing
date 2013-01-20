@@ -598,7 +598,12 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
       CharSequence text = resultHandler.getDisplayContents();
       if (text != null) {
-        clipboard.setText(text);
+        try {
+          clipboard.setText(text);
+        } catch (NullPointerException npe) {
+          // Some kind of bug inside the clipboard implementation, not due to null input
+          Log.w(TAG, "Clipboard bug", npe);
+        }
       }
     }
 
