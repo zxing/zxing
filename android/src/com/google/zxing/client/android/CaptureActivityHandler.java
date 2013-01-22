@@ -88,9 +88,9 @@ public final class CaptureActivityHandler extends Handler {
         if (bundle != null) {
           byte[] compressedBitmap = bundle.getByteArray(DecodeThread.BARCODE_BITMAP);
           if (compressedBitmap != null) {
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inMutable = true;
-            barcode = BitmapFactory.decodeByteArray(compressedBitmap, 0, compressedBitmap.length, options);
+            barcode = BitmapFactory.decodeByteArray(compressedBitmap, 0, compressedBitmap.length, null);
+            // Mutable copy:
+            barcode = barcode.copy(Bitmap.Config.ARGB_8888, true);
           }
           scaleFactor = bundle.getFloat(DecodeThread.BARCODE_SCALED_FACTOR);          
         }
