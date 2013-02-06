@@ -39,7 +39,7 @@ Mode Mode::FNC1_FIRST_POSITION(0, 0, 0, 0x05, "FNC1_FIRST_POSITION");
 Mode Mode::FNC1_SECOND_POSITION(0, 0, 0, 0x09, "FNC1_SECOND_POSITION");
 Mode Mode::HANZI(8, 10, 12, 0x0D, "HANZI");
 
-Mode::Mode(int cbv0_9, int cbv10_26, int cbv27, int bits, char const* name) :
+Mode::Mode(int cbv0_9, int cbv10_26, int cbv27, int /* bits */, char const* name) :
     characterCountBitsForVersions0To9_(cbv0_9), characterCountBitsForVersions10To26_(cbv10_26),
     characterCountBitsForVersions27AndHigher_(cbv27), name_(name) {
 }
