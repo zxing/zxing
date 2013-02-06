@@ -33,7 +33,7 @@ namespace {
 }
 
 HybridBinarizer::HybridBinarizer(Ref<LuminanceSource> source) :
-  GlobalHistogramBinarizer(source), matrix_(NULL), cached_row_(NULL), cached_row_num_(-1) {
+  GlobalHistogramBinarizer(source), matrix_(NULL), cached_row_(NULL) {
 }
 
 HybridBinarizer::~HybridBinarizer() {
