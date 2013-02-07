@@ -90,11 +90,7 @@ public final class HttpHelper {
   private static CharSequence downloadViaHttp(String uri, String contentTypes, int maxChars) throws IOException {
     Log.i(TAG, "Downloading " + uri);
     URL url = new URL(uri);
-    URLConnection conn = url.openConnection();
-    if (!(conn instanceof HttpURLConnection)) {
-      throw new IOException();
-    }
-    HttpURLConnection connection = (HttpURLConnection) conn;
+    HttpURLConnection connection = safelyOpenConnection(url);
     connection.setRequestProperty("Accept", contentTypes);
     connection.setRequestProperty("Accept-Charset", "utf-8,*");
     connection.setRequestProperty("User-Agent", "ZXing (Android)");
@@ -151,12 +147,7 @@ public final class HttpHelper {
       return uri;
     }
     URL url = uri.toURL();
-
-    URLConnection conn = url.openConnection();
-    if (!(conn instanceof HttpURLConnection)) {
-      throw new IOException();
-    }
-    HttpURLConnection connection = (HttpURLConnection) conn;
+    HttpURLConnection connection = safelyOpenConnection(url);
     connection.setInstanceFollowRedirects(false);
     connection.setDoInput(false);
     connection.setRequestMethod("HEAD");
@@ -182,6 +173,21 @@ public final class HttpHelper {
     } finally {
       connection.disconnect();
     }
+  }
+  
+  private static HttpURLConnection safelyOpenConnection(URL url) throws IOException {
+    URLConnection conn;
+    try {
+      conn = url.openConnection();
+    } catch (NullPointerException npe) {
+      // Another strange bug in Android?
+      Log.w(TAG, "Bad URI? " + url);
+      throw new IOException(npe.toString());
+    }
+    if (!(conn instanceof HttpURLConnection)) {
+      throw new IOException();
+    }
+    return (HttpURLConnection) conn;
   }
 
   private static int safelyConnect(String uri, HttpURLConnection connection) throws IOException {
