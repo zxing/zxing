@@ -17,6 +17,7 @@
 package com.google.zxing;
 
 import com.google.zxing.common.BitMatrix;
+import com.google.zxing.datamatrix.DataMatrixWriter;
 import com.google.zxing.oned.CodaBarWriter;
 import com.google.zxing.oned.Code128Writer;
 import com.google.zxing.oned.Code39Writer;
@@ -79,6 +80,9 @@ public final class MultiFormatWriter implements Writer {
         break;
       case CODABAR:
         writer = new CodaBarWriter();
+        break;
+      case DATA_MATRIX:
+        writer = new DataMatrixWriter();
         break;
       default:
         throw new IllegalArgumentException("No encoder available for format " + format);

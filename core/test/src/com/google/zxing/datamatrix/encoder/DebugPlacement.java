@@ -1,0 +1,51 @@
+/*
+ * Copyright 2006 Jeremias Maerki
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.zxing.datamatrix.encoder;
+
+final class DebugPlacement extends DefaultPlacement {
+
+  DebugPlacement(String codewords, int numcols, int numrows) {
+    super(codewords, numcols, numrows);
+  }
+
+  public String toBitFieldString() {
+    byte[] bits = getBits();
+    StringBuilder sb = new StringBuilder(bits.length);
+    for (byte bit : bits) {
+      sb.append(bit == 1 ? '1' : '0');
+    }
+    return sb.toString();
+  }
+
+  String[] toBitFieldStringArray() {
+    byte[] bits = getBits();      
+    int numrows = getNumrows();
+    int numcols = getNumcols();
+    String[] array = new String[numrows];
+    int startpos = 0;
+    for (int row = 0; row < numrows; row++) {
+      StringBuilder sb = new StringBuilder(bits.length);
+      for (int i = 0; i < numcols; i++) {
+        sb.append(bits[startpos + i] == 1 ? '1' : '0');
+      }
+      array[row] = sb.toString();
+      startpos += numcols;
+    }
+    return array;
+  }
+
+}

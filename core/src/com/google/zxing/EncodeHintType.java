@@ -36,6 +36,21 @@ public enum EncodeHintType {
   CHARACTER_SET,
 
   /**
+   * Specifies the matrix shape for Data Matrix (type {@link com.google.zxing.datamatrix.encoder.SymbolShapeHint})
+   */
+  DATA_MATRIX_SHAPE,
+
+  /**
+   * Specifies a minimum barcode size (type {@link Dimension}). Only applicable to Data Matrix now.
+   */
+  MIN_SIZE,
+
+  /**
+   * Specifies a maximum barcode size (type {@link Dimension}). Only applicable to Data Matrix now.
+   */
+  MAX_SIZE,
+
+  /**
    * Specifies margin, in pixels, to use when generating the barcode. The meaning can vary
    * by format; for example it controls margin before and after the barcode horizontally for
    * most 1D formats. (Type {@link Integer}).
