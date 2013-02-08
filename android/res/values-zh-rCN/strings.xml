@@ -111,6 +111,8 @@
   <string name="preferences_front_light_summary">前灯可用时，打开前灯</string>
   <string name="preferences_front_light_title">前灯</string>
   <string name="preferences_general_title">一般设置</string>
+  <string name="preferences_invert_scan_summary">黑色背景上的白色条形码扫描。在某些设备上。</string>
+  <string name="preferences_invert_scan_title">反向扫描</string>
   <string name="preferences_name">设置</string>
   <string name="preferences_play_beep_title">提示音</string>
   <string name="preferences_remember_duplicates_summary">在历史记录中保存重复记录</string>

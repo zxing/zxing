@@ -111,6 +111,8 @@
   <string name="preferences_front_light_summary">Verbetert het scannen bij weinig licht bij sommige telefoons, maar kan schittering veroorzaken. Werkt niet op alle telefoons.</string>
   <string name="preferences_front_light_title">Flitser gebruiken</string>
   <string name="preferences_general_title">Algemene instellingen</string>
+  <string name="preferences_invert_scan_summary">Scan naar witte barcodes op een zwarte achtergrond. Niet beschikbaar op sommige apparaten.</string>
+  <string name="preferences_invert_scan_title">Scan omkeren</string>
   <string name="preferences_name">Instellingen</string>
   <string name="preferences_play_beep_title">Piepen</string>
   <string name="preferences_remember_duplicates_summary">Meerdere scans van dezelfde barcode opslaan in de geschiedenis</string>

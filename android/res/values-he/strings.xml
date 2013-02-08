@@ -111,6 +111,8 @@
   <string name="preferences_front_light_summary">משפר את הסריקה בתאורה נמוכה בטלפונים מסוימים, אך עשוי לגרום לסנוור. לא עובד בכל הטלפונים.</string>
   <string name="preferences_front_light_title">השתמש באור הקדמי</string>
   <string name="preferences_general_title">הגדרות כלליות</string>
+  <string name="preferences_invert_scan_summary">סרוק ברקודים לבן על רקע שחור. לא זמין על התקנים מסוימים.</string>
+  <string name="preferences_invert_scan_title">היפוך לסרוק</string>
   <string name="preferences_name">הגדרות</string>
   <string name="preferences_play_beep_title">צפצוף</string>
   <string name="preferences_remember_duplicates_summary">אחסן מספר סריקות של אותו הברקוד בהיסטוריה</string>

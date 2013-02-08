@@ -111,6 +111,8 @@
   <string name="preferences_front_light_summary">Polepsza skanowanie przy małej ilości światła w niektórych telefonach, ale może powodować odbłysk. Nie działa na wszystkich telefonach.</string>
   <string name="preferences_front_light_title">Używaj lampy frontowej</string>
   <string name="preferences_general_title">Ustawienia ogólne</string>
+  <string name="preferences_invert_scan_summary">Skanowanie kodów kreskowych białego na czarnym tle. Nie dostępne w niektórych urządzeniach.</string>
+  <string name="preferences_invert_scan_title">Odwróć skanowania</string>
   <string name="preferences_name">Ustawienia</string>
   <string name="preferences_play_beep_title">Piszcz</string>
   <string name="preferences_remember_duplicates_summary">Przechowywanie wielu skanowanie kodów kreskowych w tej samej historii</string>

@@ -47,6 +47,7 @@ public final class PreferencesActivity extends PreferenceActivity
   public static final String KEY_REMEMBER_DUPLICATES = "preferences_remember_duplicates";
   public static final String KEY_SUPPLEMENTAL = "preferences_supplemental";
   public static final String KEY_AUTO_FOCUS = "preferences_auto_focus";
+  public static final String KEY_INVERT_SCAN = "preferences_invert_scan";  
   public static final String KEY_SEARCH_COUNTRY = "preferences_search_country";
 
   public static final String KEY_DISABLE_CONTINUOUS_FOCUS = "preferences_disable_continuous_focus";

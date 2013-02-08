@@ -72,6 +72,11 @@
         android:defaultValue="true"
         android:title="@string/preferences_auto_focus_title"/>
     <CheckBoxPreference
+        android:key="preferences_invert_scan"
+        android:defaultValue="false"
+        android:title="@string/preferences_invert_scan_title"
+        android:summary="@string/preferences_invert_scan_summary"/>
+    <CheckBoxPreference
         android:key="preferences_bulk_mode"
         android:defaultValue="false"
         android:title="@string/preferences_bulk_mode_title"

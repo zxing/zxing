@@ -111,6 +111,8 @@
   <string name="preferences_front_light_summary">Izboljša branje pri slabi svetlobi na nekaterih telefonih, a lahko povzroči blesk. Ne deluje na vseh telefonih.</string>
   <string name="preferences_front_light_title">Uporabite sprednjo luč</string>
   <string name="preferences_general_title">Splošne nastavitve</string>
+  <string name="preferences_invert_scan_summary">Scan za beli črtne kode na črni podlagi. Ni na voljo na nekaterih napravah.</string>
+  <string name="preferences_invert_scan_title">Obrni skeniranje</string>
   <string name="preferences_name">Nastavitve</string>
   <string name="preferences_play_beep_title">Pisk</string>
   <string name="preferences_remember_duplicates_summary">Shranjevanje več skandiranje iste črtne kode v zgodovini</string>

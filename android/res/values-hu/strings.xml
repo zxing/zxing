@@ -111,6 +111,8 @@
   <string name="preferences_front_light_summary">Javítja a szkennelést kevés fény mellett néhány telefonon, de csillogást okozhat. Nem minden telefonon működik.</string>
   <string name="preferences_front_light_title">Kamera LED használata</string>
   <string name="preferences_general_title">Általános beállítások</string>
+  <string name="preferences_invert_scan_summary">Scan fehér vonalkódok a fekete háttér. Nem csak egyes eszközöket.</string>
+  <string name="preferences_invert_scan_title">Invert szkennelés</string>
   <string name="preferences_name">Beállítások</string>
   <string name="preferences_play_beep_title">Sípolás</string>
   <string name="preferences_remember_duplicates_summary">Ugyanannak a vonalkódnak több szkennelt képét is tárolja az Előzményekben</string>
