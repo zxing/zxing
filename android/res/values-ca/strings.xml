@@ -135,7 +135,6 @@
   <string name="result_uri">S\'ha trobat un URL</string>
   <string name="result_wifi">S\'ha trobat configuració WLAN</string>
   <string name="sbc_name">Cerca a Google Llibres</string>
-  <string name="share_name">Comparteix amb el codi de barres</string>
   <string name="wifi_changing_network">Sollicitant connexió a la xarxa\u2026</string>
   <string name="wifi_ssid_label">Nom de la xarxa</string>
   <string name="wifi_type_label">Tipus</string>

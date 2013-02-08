@@ -135,7 +135,6 @@
   <string name="result_uri">Znaleziono URL</string>
   <string name="result_wifi">Znaleziono konfiguracji sieci</string>
   <string name="sbc_name">Wyszukiwanie książek Google</string>
-  <string name="share_name">Udostępnij przez kod paskowy</string>
   <string name="wifi_changing_network">Ubiegającymi się o przyłączenie do sieci\u2026</string>
   <string name="wifi_ssid_label">Nazwa sieci</string>
   <string name="wifi_type_label">Typ</string>

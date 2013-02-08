@@ -135,7 +135,6 @@
   <string name="result_uri">URL ditemukan</string>
   <string name="result_wifi">Konfigurasi WLAN ditemukan</string>
   <string name="sbc_name">Pencarian Google Book</string>
-  <string name="share_name">Bagian melalui barcode</string>
   <string name="wifi_changing_network">Meminta koneksi ke jaringan\u2026</string>
   <string name="wifi_ssid_label">Nama Jaringan</string>
   <string name="wifi_type_label">Tipe</string>

@@ -135,7 +135,6 @@
   <string name="result_uri">Löydettin URL-osoite</string>
   <string name="result_wifi">Löydettiin asetukset langattomalle yhteydelle</string>
   <string name="sbc_name">Googlen kirjahaku</string>
-  <string name="share_name">Jaa viivakoodilla</string>
   <string name="wifi_changing_network">Pyydetään yhteyttä verkkoon\u2026</string>
   <string name="wifi_ssid_label">Verkon nimi</string>
   <string name="wifi_type_label">Tyyppi</string>

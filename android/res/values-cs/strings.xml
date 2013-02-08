@@ -135,7 +135,6 @@
   <string name="result_uri">Našel jsem URL</string>
   <string name="result_wifi">Nalezeno bezdrátová konfigurace</string>
   <string name="sbc_name">Google Knihy hledání</string>
-  <string name="share_name">Sdílet pomocí čárového kódu</string>
   <string name="wifi_changing_network">Požadující připojení k síti\u2026</string>
   <string name="wifi_ssid_label">Jméno sítě</string>
   <string name="wifi_type_label">Typ</string>

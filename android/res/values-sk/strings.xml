@@ -135,7 +135,6 @@
   <string name="result_uri">Nájdená URL</string>
   <string name="result_wifi">Nájdená konfigurácia WLAN</string>
   <string name="sbc_name">Vyhľadať v Google Knihy</string>
-  <string name="share_name">Zdieľať cez čiarový kód</string>
   <string name="wifi_changing_network">Požiadavka na pripojenie k sieti\u2026</string>
   <string name="wifi_ssid_label">Názov sieťového pripojenia</string>
   <string name="wifi_type_label">Typ</string>

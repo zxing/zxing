@@ -135,7 +135,6 @@
   <string name="result_uri">मिला यूआरएल</string>
   <string name="result_wifi">मिला WLAN विन्यास</string>
   <string name="sbc_name">Google पुस्तक खोज</string>
-  <string name="share_name">बारकोड के माध्यम से साझा करें</string>
   <string name="wifi_changing_network">नेटवर्क के लिए कनेक्शन का अनुरोध कर रहा है \u2026</string>
   <string name="wifi_ssid_label">नेटवर्क नाम</string>
   <string name="wifi_type_label">टाइप</string>

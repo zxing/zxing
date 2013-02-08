@@ -135,7 +135,6 @@
   <string name="result_uri">Найден URL</string>
   <string name="result_wifi">Найдена конфигурация сети</string>
   <string name="sbc_name">Поиск книг Google</string>
-  <string name="share_name">Поделиться штрих-кодом</string>
   <string name="wifi_changing_network">Запрос подключения к сети\u2026</string>
   <string name="wifi_ssid_label">Имя сети</string>
   <string name="wifi_type_label">Тип</string>

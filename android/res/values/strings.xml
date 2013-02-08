@@ -135,7 +135,6 @@
   <string name="result_uri">Found URL</string>
   <string name="result_wifi">Found WLAN Configuration</string>
   <string name="sbc_name">Google Book Search</string>
-  <string name="share_name">Share via barcode</string>
   <string name="wifi_changing_network">Requesting connection to network\u2026</string>
   <string name="wifi_ssid_label">Network Name</string>
   <string name="wifi_type_label">Type</string>
