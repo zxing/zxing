@@ -111,6 +111,8 @@
   <string name="preferences_front_light_summary">특정 기기에서는 어두운 환경에서의 스캐닝 기능을 향상 시키지만 너무 밝을 수도 있습니다. 모든 기기에서 작동되지 않습니다.</string>
   <string name="preferences_front_light_title">플래시 사용하기</string>
   <string name="preferences_general_title">일반 설정</string>
+  <string name="preferences_invert_scan_summary">검정 바탕에 흰색 바코드에 대한 스캔. 일부 장치에서 사용할 수 없습니다.</string>
+  <string name="preferences_invert_scan_title">스캔 반전</string>
   <string name="preferences_name">설정</string>
   <string name="preferences_play_beep_title">전자음</string>
   <string name="preferences_remember_duplicates_summary">복수의 같은 바코드를 기록에 저장</string>

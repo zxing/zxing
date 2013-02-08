@@ -111,6 +111,8 @@
   <string name="preferences_front_light_summary">Mejora la exploración en condiciones de poca luz en algunos teléfonos, pero puede causar deslumbramiento. No funciona en todos los teléfonos.</string>
   <string name="preferences_front_light_title">Utilizar luz delantera</string>
   <string name="preferences_general_title">Configuración general</string>
+  <string name="preferences_invert_scan_summary">Escanear códigos de barras blancas sobre fondo negro. No disponible en algunos dispositivos.</string>
+  <string name="preferences_invert_scan_title">Invertir exploración</string>
   <string name="preferences_name">Configuración</string>
   <string name="preferences_play_beep_title">Bip</string>
   <string name="preferences_remember_duplicates_summary">Almacenar múltiples escáneres del mismo código de barras en el Historial.</string>

@@ -111,6 +111,8 @@
   <string name="preferences_front_light_summary">改善在低光源的環境下掃描的成功率，但有可能造成過度曝光的現象</string>
   <string name="preferences_front_light_title">使用前光源</string>
   <string name="preferences_general_title">一般設定</string>
+  <string name="preferences_invert_scan_summary">條碼掃描白色背景上的黑色。某些設備上無法使用。</string>
+  <string name="preferences_invert_scan_title">反向掃描</string>
   <string name="preferences_name">設定</string>
   <string name="preferences_play_beep_title">提示音</string>
   <string name="preferences_remember_duplicates_summary">在紀錄中重複儲存相同的條碼</string>

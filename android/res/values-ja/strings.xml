@@ -111,6 +111,8 @@
   <string name="preferences_front_light_summary">暗い場所でのスキャンを向上させるためフロントライトを有効にします</string>
   <string name="preferences_front_light_title">フロントライト</string>
   <string name="preferences_general_title">一般設定</string>
+  <string name="preferences_invert_scan_summary">黒地に白のバーコードのスキャン。一部のデバイスでは使用できません。</string>
+  <string name="preferences_invert_scan_title">スキャンを反転</string>
   <string name="preferences_name">設定</string>
   <string name="preferences_play_beep_title">通知音</string>
   <string name="preferences_remember_duplicates_summary">同じQRコードでも履歴に記録する</string>

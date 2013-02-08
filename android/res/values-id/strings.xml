@@ -111,6 +111,8 @@
   <string name="preferences_front_light_summary">Meningkatkan scanning dalam cahaya rendah pada beberapa ponsel, namun dapat menyebabkan silau. Tidak bekerja pada semua ponsel.</string>
   <string name="preferences_front_light_title">Gunakan lampu depan</string>
   <string name="preferences_general_title">Pengaturan umum</string>
+  <string name="preferences_invert_scan_summary">Memindai barcode putih pada latar belakang hitam. Tidak tersedia pada beberapa perangkat.</string>
+  <string name="preferences_invert_scan_title">Balikkan memindai</string>
   <string name="preferences_name">Pengaturan</string>
   <string name="preferences_play_beep_title">Beep</string>
   <string name="preferences_remember_duplicates_summary">Simpan beberapa pindaian dari barcode yang sama di dalam Riwayat</string>

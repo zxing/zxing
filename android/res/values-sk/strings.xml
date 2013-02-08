@@ -111,6 +111,8 @@
   <string name="preferences_front_light_summary">Použiť prisvetlenie</string>
   <string name="preferences_front_light_title">Použite predné svetlo</string>
   <string name="preferences_general_title">Všeobecné nastavenia</string>
+  <string name="preferences_invert_scan_summary">Skenovať biele čiarové kódy na čiernom pozadí. Nie je k dispozícii na všetkých zariadeniach.</string>
+  <string name="preferences_invert_scan_title">Invertované skenovanie</string>
   <string name="preferences_name">Nastavenia</string>
   <string name="preferences_play_beep_title">Zvuková signalizácia</string>
   <string name="preferences_remember_duplicates_summary">Uložiť viacnásobné skenovanie do jednej histórie čiarového kódu</string>

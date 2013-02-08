@@ -111,6 +111,8 @@
   <string name="preferences_front_light_summary">Eskaneatzea hobetzen du zenbait telefonotan argiztapena txikia denean, baina distirak eragin ditzake. Ez du telefono guztietan funtzionatzen.</string>
   <string name="preferences_front_light_title">Erabili aurreko argia</string>
   <string name="preferences_general_title">Ezarpen orokorrak</string>
+  <string name="preferences_invert_scan_summary">Atzeko plano beltzean kodeak zuri eskaneatzeko. Zenbait gailuk ez dago eskuragarri.</string>
+  <string name="preferences_invert_scan_title">Alderantzikatu eskaneatzeko</string>
   <string name="preferences_name">Ezarpenak</string>
   <string name="preferences_play_beep_title">Soinu-seinalea</string>
   <string name="preferences_remember_duplicates_summary">Gorde barra-kode beraren hainbat eskaneatze Historian</string>

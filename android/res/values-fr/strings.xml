@@ -111,6 +111,8 @@
   <string name="preferences_front_light_summary">Allumer la lampe derrière le téléphone quand la lumière ambiante est faible. Peut provoquer des reflets et ne fonctionne pas sur tous les téléphones.</string>
   <string name="preferences_front_light_title">Flash</string>
   <string name="preferences_general_title">Paramètres généraux</string>
+  <string name="preferences_invert_scan_summary">Balayage pour les codes barres blanches sur fond noir. Non disponible sur certains appareils.</string>
+  <string name="preferences_invert_scan_title">Inverser scan</string>
   <string name="preferences_name">Paramètres</string>
   <string name="preferences_play_beep_title">Bip</string>
   <string name="preferences_remember_duplicates_summary">Enregistrer dans l\'historique les lectures multiples d\'un même code-barres</string>

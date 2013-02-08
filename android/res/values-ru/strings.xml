@@ -111,6 +111,8 @@
   <string name="preferences_front_light_summary">Улучшает распознавание в условиях низкой освещенности, но может вызвать блики. Работает не на всех устройствах.</string>
   <string name="preferences_front_light_title">Фонарик</string>
   <string name="preferences_general_title">Общие настройки</string>
+  <string name="preferences_invert_scan_summary">Сканирование штрих-кодов для белого на черном фоне. Не применяется на некоторых устройствах.</string>
+  <string name="preferences_invert_scan_title">Обратить сканирования</string>
   <string name="preferences_name">Настройки</string>
   <string name="preferences_play_beep_title">Пищать</string>
   <string name="preferences_remember_duplicates_summary">Сохранять в истории результат сканирования одного и того же штрих-кода</string>
