@@ -135,7 +135,6 @@
   <string name="result_uri">Hittade URL</string>
   <string name="result_wifi">Hittade WLAN-konfiguration</string>
   <string name="sbc_name">Google Book Search</string>
-  <string name="share_name">Dela via streckkod</string>
   <string name="wifi_changing_network">Begär anslutning till nätverk\u2026</string>
   <string name="wifi_ssid_label">Nätverksnamn</string>
   <string name="wifi_type_label">Typ</string>

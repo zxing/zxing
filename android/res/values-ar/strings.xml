@@ -135,7 +135,6 @@
   <string name="result_uri">تم العثور على العنوان</string>
   <string name="result_wifi">العثور على التكوين اللاسلك</string>
   <string name="sbc_name">البحث في Google Book</string>
-  <string name="share_name">مشاركة عبر الرمز الشريطي</string>
   <string name="wifi_changing_network">طلب الاتصال بالشبكة\u2026</string>
   <string name="wifi_ssid_label">اسم الشبكة</string>
   <string name="wifi_type_label">نوع</string>

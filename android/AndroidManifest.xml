@@ -106,7 +106,6 @@
               android:stateNotNeeded="true">
     </activity>
     <activity android:name=".encode.EncodeActivity"
-              android:label="@string/share_name"
               android:stateNotNeeded="true">
       <intent-filter>
         <action android:name="com.google.zxing.client.android.ENCODE"/>
@@ -136,7 +135,6 @@
       </intent-filter>
     </activity>
     <activity android:name=".share.ShareActivity"
-              android:label="@string/share_name"
               android:stateNotNeeded="true"
               android:screenOrientation="user"
               android:theme="@android:style/Theme.Light">

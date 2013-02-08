@@ -135,7 +135,6 @@
   <string name="result_uri">Bulunan URL</string>
   <string name="result_wifi">Bulunan Wi-Fi konfigürasyonu</string>
   <string name="sbc_name">Google Kitap Arama</string>
-  <string name="share_name">Barkod ile paylaş</string>
   <string name="wifi_changing_network">Ağa bir bağlantı isteğinde\u2026</string>
   <string name="wifi_ssid_label">Ağ adı</string>
   <string name="wifi_type_label">Tip</string>

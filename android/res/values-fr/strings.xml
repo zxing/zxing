@@ -135,7 +135,6 @@
   <string name="result_uri">URL trouvée</string>
   <string name="result_wifi">Configuration du réseau WLAN trouvée</string>
   <string name="sbc_name">Recherche Google Livres</string>
-  <string name="share_name">Partager par code-barres</string>
   <string name="wifi_changing_network">Demande de connexion au réseau\u2026</string>
   <string name="wifi_ssid_label">Nom du réseau WLAN</string>
   <string name="wifi_type_label">Type</string>

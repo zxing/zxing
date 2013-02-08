@@ -135,7 +135,6 @@
   <string name="result_uri">인터넷 주소를 찾았습니다</string>
   <string name="result_wifi">WiFi 설정을 찾았습니다</string>
   <string name="sbc_name">구글 책 검색</string>
-  <string name="share_name">바코드로 공유</string>
   <string name="wifi_changing_network">네트워크에 연결을 요청\u2026</string>
   <string name="wifi_ssid_label">네트워크 이름</string>
   <string name="wifi_type_label">종류</string>

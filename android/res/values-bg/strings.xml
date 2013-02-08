@@ -135,7 +135,6 @@
   <string name="result_uri">Намерих Интернет Адрес</string>
   <string name="result_wifi">Намерих настройки за безжична мрежа</string>
   <string name="sbc_name">Гугъл търсене на книга</string>
-  <string name="share_name">Сподели чрез баркод</string>
   <string name="wifi_changing_network">Запитване свързване към мрежата\u2026</string>
   <string name="wifi_ssid_label">Име на мрежата</string>
   <string name="wifi_type_label">Тип</string>

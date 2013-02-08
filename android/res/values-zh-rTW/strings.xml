@@ -135,7 +135,6 @@
   <string name="result_uri">找到 URL</string>
   <string name="result_wifi">找到網路設定</string>
   <string name="sbc_name">Google 圖書搜尋</string>
-  <string name="share_name">透過條碼分享</string>
   <string name="wifi_changing_network">請求連接到網絡\u2026</string>
   <string name="wifi_ssid_label">網路名稱</string>
   <string name="wifi_type_label">類型</string>

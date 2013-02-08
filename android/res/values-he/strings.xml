@@ -135,7 +135,6 @@
   <string name="result_uri">נמצאה כתובת אינטרנט</string>
   <string name="result_wifi">נמצאו הגדרות רשת אל חוטית</string>
   <string name="sbc_name">Google חיפוש ספרים</string>
-  <string name="share_name">שתף באמצעות ברקוד</string>
   <string name="wifi_changing_network">בקשת חיבור לרשת \u2026</string>
   <string name="wifi_ssid_label">שם רשת</string>
   <string name="wifi_type_label">סוג</string>

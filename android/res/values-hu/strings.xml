@@ -135,7 +135,6 @@
   <string name="result_uri">URL találat</string>
   <string name="result_wifi">WLAN konfiguráció találat</string>
   <string name="sbc_name">Google Könyvek keresés</string>
-  <string name="share_name">Megosztás vonalkóddal</string>
   <string name="wifi_changing_network">Kérése kapcsolat hálózati\u2026</string>
   <string name="wifi_ssid_label">Hálózat neve</string>
   <string name="wifi_type_label">Típus</string>
