@@ -56,30 +56,38 @@
 
 
 - (id)initWithDelegate:(id<ZXingDelegate>)scanDelegate showCancel:(BOOL)shouldShowCancel OneDMode:(BOOL)shouldUseoOneDMode {
-  
-  return [self initWithDelegate:scanDelegate showCancel:shouldShowCancel OneDMode:shouldUseoOneDMode showLicense:YES];
+    
+    return [self initWithDelegate:scanDelegate showCancel:shouldShowCancel OneDMode:shouldUseoOneDMode showLicense:YES];
 }
 
-- (id)initWithDelegate:(id<ZXingDelegate>)scanDelegate showCancel:(BOOL)shouldShowCancel OneDMode:(BOOL)shouldUseoOneDMode showLicense:(BOOL)shouldShowLicense {
-  self = [super init];
-  if (self) {
-    [self setDelegate:scanDelegate];
-    self.oneDMode = shouldUseoOneDMode;
-    self.showCancel = shouldShowCancel;
-    self.showLicense = shouldShowLicense;
-    self.wantsFullScreenLayout = YES;
-    beepSound = -1;
-    decoding = NO;
-    OverlayView *theOverLayView = [[OverlayView alloc] initWithFrame:[UIScreen mainScreen].bounds 
-                                                       cancelEnabled:showCancel 
-                                                            oneDMode:oneDMode
-                                                         showLicense:shouldShowLicense];
-    [theOverLayView setDelegate:self];
-    self.overlayView = theOverLayView;
-    [theOverLayView release];
-  }
-  
-  return self;
+- (id)initWithDelegate:(id<ZXingDelegate>)scanDelegate showCancel:(BOOL)shouldShowCancel OneDMode:(BOOL)shouldUseoOneDMode showLicense:(BOOL)shouldShowLicense
+{
+    return [self initWithDelegate:scanDelegate frame:CGRectNull showCancel:shouldShowCancel OneDMode:oneDMode showLicense:shouldShowLicense];
+}
+
+- (id)initWithDelegate:(id<ZXingDelegate>)scanDelegate frame:(CGRect)frame showCancel:(BOOL)shouldShowCancel OneDMode:(BOOL)shouldUseoOneDMode showLicense:(BOOL)shouldShowLicense {
+    self = [super init];
+    if (self) {
+        [self setDelegate:scanDelegate];
+        self.oneDMode = shouldUseoOneDMode;
+        self.showCancel = shouldShowCancel;
+        self.showLicense = shouldShowLicense;
+        if(CGRectEqualToRect(frame, CGRectNull)){
+            self.wantsFullScreenLayout = YES;
+            frame = [UIScreen mainScreen].bounds;
+        }
+        beepSound = -1;
+        decoding = NO;
+        OverlayView *theOverLayView = [[OverlayView alloc] initWithFrame:frame
+                                                           cancelEnabled:showCancel
+                                                                oneDMode:oneDMode
+                                                             showLicense:shouldShowLicense];
+        [theOverLayView setDelegate:self];
+        self.overlayView = theOverLayView;
+        [theOverLayView release];
+    }
+    
+    return self;
 }
 
 - (void)dealloc {
