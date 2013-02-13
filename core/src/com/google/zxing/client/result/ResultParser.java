@@ -184,13 +184,19 @@ public abstract class ResultParser {
       String key = keyValueTokens[0];
       String value = keyValueTokens[1];
       try {
-        value = URLDecoder.decode(value, "UTF-8");
+        value = urlDecode(value);
         result.put(key, value);
-      } catch (UnsupportedEncodingException uee) {
-        throw new IllegalStateException(uee); // can't happen
       } catch (IllegalArgumentException iae) {
         // continue; invalid data such as an escape like %0t
       }
+    }
+  }
+  
+  static String urlDecode(String encoded) {
+    try {
+      return URLDecoder.decode(encoded, "UTF-8");
+    } catch (UnsupportedEncodingException uee) {
+      throw new IllegalStateException(uee); // can't happen
     }
   }
 

@@ -39,6 +39,7 @@ public final class EmailAddressResultParser extends ResultParser {
       if (queryStart >= 0) {
         emailAddress = emailAddress.substring(0, queryStart);
       }
+      emailAddress = urlDecode(emailAddress);
       Map<String,String> nameValues = parseNameValuePairs(rawText);
       String subject = null;
       String body = null;
