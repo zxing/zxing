@@ -105,7 +105,7 @@ public abstract class LuminanceSource {
    * @return a wrapper of this {@code LuminanceSource} which inverts the luminances it returns -- black becomes
    *  white and vice versa, and each value becomes (255-value).
    */
-  public final LuminanceSource invert() {
+  public LuminanceSource invert() {
     return new InvertedLuminanceSource(this);
   }
 

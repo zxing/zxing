@@ -52,4 +52,37 @@ public final class InvertedLuminanceSource extends LuminanceSource {
     return invertedMatrix;
   }
   
+  @Override
+  public boolean isCropSupported() {
+    return delegate.isCropSupported();
+  }
+
+  @Override
+  public LuminanceSource crop(int left, int top, int width, int height) {
+    return new InvertedLuminanceSource(delegate.crop(left, top, width, height));
+  }
+
+  @Override
+  public boolean isRotateSupported() {
+    return delegate.isRotateSupported();
+  }
+
+  /**
+   * @return original delegate {@link LuminanceSource} since invert undoes itself
+   */
+  @Override
+  public LuminanceSource invert() {
+    return delegate;
+  }
+
+  @Override
+  public LuminanceSource rotateCounterClockwise() {
+    return new InvertedLuminanceSource(delegate.rotateCounterClockwise());
+  }
+
+  @Override
+  public LuminanceSource rotateCounterClockwise45() {
+    return new InvertedLuminanceSource(delegate.rotateCounterClockwise45());
+  }
+
 }
