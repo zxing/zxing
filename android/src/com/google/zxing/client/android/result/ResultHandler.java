@@ -41,6 +41,8 @@ import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Collection;
 import java.util.Locale;
 
@@ -517,6 +519,11 @@ public abstract class ResultHandler {
   final String fillInCustomSearchURL(String text) {
     if (customProductSearch == null) {
       return text; // ?
+    }
+    try {
+      text = URLEncoder.encode(text, "UTF-8");
+    } catch (UnsupportedEncodingException e) {
+      // can't happen; UTF-8 is always supported. Continue, I guess, without encoding      
     }
     String url = customProductSearch.replace("%s", text);
     if (rawResult != null) {
