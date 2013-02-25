@@ -24,7 +24,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Queue;
@@ -32,6 +31,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.regex.Pattern;
 
 /**
  * This simple command line utility decodes files, directories of files, or URIs which are passed
@@ -42,6 +42,8 @@ import java.util.concurrent.Future;
  * @author dswitkin@google.com (Daniel Switkin)
  */
 public final class CommandLineRunner {
+
+  private static final Pattern COMMA = Pattern.compile(",");
 
   private CommandLineRunner() {
   }
@@ -74,7 +76,7 @@ public final class CommandLineRunner {
         config.setRecursive(true);
       } else if (arg.startsWith("--crop")) {
         int[] crop = new int[4];
-        String[] tokens = arg.substring(7).split(",");
+        String[] tokens = COMMA.split(arg.substring(7));
         for (int i = 0; i < crop.length; i++) {
           crop[i] = Integer.parseInt(tokens[i]);
         }
@@ -95,7 +97,7 @@ public final class CommandLineRunner {
 
     int numThreads = Runtime.getRuntime().availableProcessors();
     ExecutorService executor = Executors.newFixedThreadPool(numThreads);
-    List<Future<Integer>> futures = new ArrayList<Future<Integer>>(numThreads);
+    Collection<Future<Integer>> futures = new ArrayList<Future<Integer>>(numThreads);
     for (int x = 0; x < numThreads; x++) {
       futures.add(executor.submit(new DecodeWorker(config, inputs)));
     }
@@ -179,7 +181,8 @@ public final class CommandLineRunner {
   }
 
   private static void printUsage() {
-    System.err.println("Decode barcode images using the ZXing library\n");
+    System.err.println("Decode barcode images using the ZXing library");
+    System.err.println();
     System.err.println("usage: CommandLineRunner { file | dir | url } [ options ]");
     System.err.println("  --try_harder: Use the TRY_HARDER hint, default is normal (mobile) mode");
     System.err.println("  --pure_barcode: Input image is a pure monochrome barcode image, not a photo");
@@ -190,7 +193,6 @@ public final class CommandLineRunner {
     System.err.println("  --brief: Only output one line per file, omitting the contents");
     System.err.println("  --recursive: Descend into subdirectories");
     System.err.println("  --crop=left,top,width,height: Only examine cropped region of input image(s)");
-    System.err.println("  --threads=n: The number of threads to use while decoding");
   }
 
 }
