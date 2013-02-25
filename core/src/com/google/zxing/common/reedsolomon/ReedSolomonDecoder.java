@@ -58,11 +58,9 @@ public final class ReedSolomonDecoder {
   public void decode(int[] received, int twoS) throws ReedSolomonException {
     GenericGFPoly poly = new GenericGFPoly(field, received);
     int[] syndromeCoefficients = new int[twoS];
-    boolean dataMatrix = field.equals(GenericGF.DATA_MATRIX_FIELD_256);
     boolean noError = true;
     for (int i = 0; i < twoS; i++) {
-      // Thanks to sanfordsquires for this fix:
-      int eval = poly.evaluateAt(field.exp(dataMatrix ? i + 1 : i));
+      int eval = poly.evaluateAt(field.exp(i + field.getGeneratorBase()));
       syndromeCoefficients[syndromeCoefficients.length - 1 - i] = eval;
       if (eval != 0) {
         noError = false;
@@ -77,7 +75,7 @@ public final class ReedSolomonDecoder {
     GenericGFPoly sigma = sigmaOmega[0];
     GenericGFPoly omega = sigmaOmega[1];
     int[] errorLocations = findErrorLocations(sigma);
-    int[] errorMagnitudes = findErrorMagnitudes(omega, errorLocations, dataMatrix);
+    int[] errorMagnitudes = findErrorMagnitudes(omega, errorLocations);
     for (int i = 0; i < errorLocations.length; i++) {
       int position = received.length - 1 - field.log(errorLocations[i]);
       if (position < 0) {
@@ -158,9 +156,7 @@ public final class ReedSolomonDecoder {
     return result;
   }
 
-  private int[] findErrorMagnitudes(GenericGFPoly errorEvaluator,
-                                    int[] errorLocations,
-                                    boolean dataMatrix) {
+  private int[] findErrorMagnitudes(GenericGFPoly errorEvaluator, int[] errorLocations) {
     // This is directly applying Forney's Formula
     int s = errorLocations.length;
     int[] result = new int[s];
@@ -180,8 +176,7 @@ public final class ReedSolomonDecoder {
       }
       result[i] = field.multiply(errorEvaluator.evaluateAt(xiInverse),
           field.inverse(denominator));
-      // Thanks to sanfordsquires for this fix:
-      if (dataMatrix) {
+      if (field.getGeneratorBase() != 0) {
         result[i] = field.multiply(result[i], xiInverse);
       }
     }
