@@ -16,7 +16,6 @@
 
 package com.google.zxing.aztec.encoder;
 
-import java.io.File;
 import java.nio.charset.Charset;
 import java.security.SecureRandom;
 import java.util.Random;
@@ -320,9 +319,8 @@ public final class EncoderTest extends Assert {
     assertEquals("Unexpected symbol format (compact)", compact, aztec.isCompact());
     assertEquals("Unexpected nr. of layers", layers, aztec.getLayers());
     BitMatrix matrix = aztec.getMatrix();
-    new File("target/tmp").mkdirs();
-    //ImageWriter.saveAsBWImageFile(matrix, new File("target/tmp/aztec-out-" + (compact ? "c-" : "f-") + layers + ".png"));
-    AztecDetectorResult r = new AztecDetectorResult(matrix, NO_POINTS, aztec.isCompact(), aztec.getCodeWords(), aztec.getLayers());
+    AztecDetectorResult r = 
+        new AztecDetectorResult(matrix, NO_POINTS, aztec.isCompact(), aztec.getCodeWords(), aztec.getLayers());
     DecoderResult res = new Decoder().decode(r);
     assertEquals(data, res.getText());
     // Check error correction by introducing a few minor errors
@@ -348,7 +346,9 @@ public final class EncoderTest extends Assert {
   private static void testStuffBits(int wordSize, String bits, String expected) {
     BitArray in = toBitArray(bits);
     BitArray stuffed = Encoder.stuffBits(in, wordSize);
-    assertEquals("stuffBits() failed for input string: " + bits, expected.replace(" ", ""), stuffed.toString().replace(" ", ""));
+    assertEquals("stuffBits() failed for input string: " + bits, 
+                 expected.replace(" ", ""), 
+                 stuffed.toString().replace(" ", ""));
   }
 
   private static BitArray toBitArray(CharSequence bits) {
