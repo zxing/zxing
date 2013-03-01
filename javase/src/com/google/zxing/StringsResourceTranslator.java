@@ -221,11 +221,11 @@ public final class StringsResourceTranslator {
   }
 
   private static SortedMap<String,String> readLines(File file) throws IOException {
-    SortedMap<String,String> entries = new TreeMap<String,String>();
     BufferedReader reader = null;
     try {
       reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), UTF8));
       String line;
+      SortedMap<String,String> entries = new TreeMap<String,String>();
       while ((line = reader.readLine()) != null) {
         Matcher m = ENTRY_PATTERN.matcher(line);
         if (m.find()) {

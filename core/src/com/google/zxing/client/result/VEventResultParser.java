@@ -65,7 +65,7 @@ public final class VEventResultParser extends ResultParser {
       try {
         latitude = Double.parseDouble(geoString.substring(0, semicolon));
         longitude = Double.parseDouble(geoString.substring(semicolon + 1));
-      } catch (NumberFormatException nfe) {
+      } catch (NumberFormatException ignored) {
         return null;
       }
     }
@@ -81,7 +81,7 @@ public final class VEventResultParser extends ResultParser {
                                       description,
                                       latitude,
                                       longitude);
-    } catch (IllegalArgumentException iae) {
+    } catch (IllegalArgumentException ignored) {
       return null;
     }
   }

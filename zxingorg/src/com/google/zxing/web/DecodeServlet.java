@@ -122,11 +122,11 @@ public final class DecodeServlet extends HttpServlet {
     URL imageURL;
     try {
       imageURL = new URI(imageURIString).toURL();
-    } catch (URISyntaxException urise) {
+    } catch (URISyntaxException ignored) {
       log.info("URI was not valid: " + imageURIString);
       response.sendRedirect("badurl.jspx");
       return;
-    } catch (MalformedURLException mue) {
+    } catch (MalformedURLException ignored) {
       log.info("URI was not valid: " + imageURIString);
       response.sendRedirect("badurl.jspx");
       return;
@@ -135,7 +135,7 @@ public final class DecodeServlet extends HttpServlet {
     HttpURLConnection connection;
     try {
       connection = (HttpURLConnection) imageURL.openConnection();
-    } catch (IllegalArgumentException iae) {
+    } catch (IllegalArgumentException ignored) {
       log.info("URI could not be opened: " + imageURL);
       response.sendRedirect("badurl.jspx");
       return;

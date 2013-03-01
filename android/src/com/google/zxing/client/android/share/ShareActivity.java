@@ -177,13 +177,12 @@ public final class ShareActivity extends Activity {
       return; // Show error?
     }
     ContentResolver resolver = getContentResolver();
-    Bundle bundle = new Bundle();
 
     Cursor cursor;
     try {
       // We're seeing about six reports a week of this exception although I don't understand why.
       cursor = resolver.query(contactUri, null, null, null, null);
-    } catch (IllegalArgumentException e) {
+    } catch (IllegalArgumentException ignored) {
       return;
     }
     if (cursor == null) {
@@ -208,6 +207,7 @@ public final class ShareActivity extends Activity {
     }
 
     // Don't require a name to be present, this contact might be just a phone number.
+    Bundle bundle = new Bundle();
     if (name != null && name.length() > 0) {
       bundle.putString(ContactsContract.Intents.Insert.NAME, massageContactData(name));
     }

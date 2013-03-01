@@ -189,10 +189,10 @@ public final class MatrixUtilTestCase extends Assert {
   @Test
   public void testEmbedDataBits() throws WriterException {
     // Cells other than basic patterns should be filled with zero.
-    BitArray bits = new BitArray();
     ByteMatrix matrix = new ByteMatrix(21, 21);
     MatrixUtil.clearMatrix(matrix);
     MatrixUtil.embedBasicPatterns(Version.getVersionForNumber(1), matrix);
+    BitArray bits = new BitArray();
     MatrixUtil.embedDataBits(bits, -1, matrix);
     String expected =
         " 1 1 1 1 1 1 1 0 0 0 0 0 0 0 1 1 1 1 1 1 1\n" +

@@ -105,7 +105,7 @@ final class BenchmarkThread implements Runnable {
         BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
         result = multiFormatReader.decodeWithState(bitmap);
         success = true;
-      } catch (ReaderException e) {
+      } catch (ReaderException ignored) {
         success = false;
       }
       now = Debug.threadCpuTimeNanos() - now;

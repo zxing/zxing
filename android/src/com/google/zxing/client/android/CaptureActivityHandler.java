@@ -131,7 +131,7 @@ public final class CaptureActivityHandler extends Handler {
 
         try {
           activity.startActivity(intent);
-        } catch (ActivityNotFoundException anfe) {
+        } catch (ActivityNotFoundException ignored) {
           Log.w(TAG, "Can't find anything to handle VIEW of URI " + url);
         }
         break;

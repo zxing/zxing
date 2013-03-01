@@ -181,7 +181,7 @@ final class QRCodeEncoder {
     if (bundle == null) {
       throw new WriterException("No extras");
     }
-    Uri uri = (Uri) bundle.getParcelable(Intent.EXTRA_STREAM);
+    Uri uri = bundle.getParcelable(Intent.EXTRA_STREAM);
     if (uri == null) {
       throw new WriterException("No EXTRA_STREAM");
     }

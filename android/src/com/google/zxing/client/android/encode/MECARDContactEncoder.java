@@ -47,8 +47,8 @@ final class MECARDContactEncoder extends ContactEncoder {
                          String url,
                          String note) {
     StringBuilder newContents = new StringBuilder(100);
-    StringBuilder newDisplayContents = new StringBuilder(100);
     newContents.append("MECARD:");
+    StringBuilder newDisplayContents = new StringBuilder(100);
     appendUpToUnique(newContents, newDisplayContents, "N", names, 1, new Formatter() {
       @Override
       public String format(String source) {

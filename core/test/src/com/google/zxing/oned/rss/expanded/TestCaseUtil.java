@@ -41,7 +41,7 @@ final class TestCaseUtil {
   private TestCaseUtil() {
   }
 
-  static BufferedImage getBufferedImage(String path) throws IOException {
+  private static BufferedImage getBufferedImage(String path) throws IOException {
     File file = new File(path);
     if (!file.exists()) {
       // Support running from project root too

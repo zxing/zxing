@@ -46,7 +46,7 @@ public class QRCodeReader implements Reader {
 
   private final Decoder decoder = new Decoder();
 
-  protected Decoder getDecoder() {
+  protected final Decoder getDecoder() {
     return decoder;
   }
 
@@ -64,7 +64,7 @@ public class QRCodeReader implements Reader {
   }
 
   @Override
-  public Result decode(BinaryBitmap image, Map<DecodeHintType,?> hints)
+  public final Result decode(BinaryBitmap image, Map<DecodeHintType,?> hints)
       throws NotFoundException, ChecksumException, FormatException {
     DecoderResult decoderResult;
     ResultPoint[] points;

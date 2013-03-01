@@ -60,7 +60,7 @@ public final class EAN13Writer extends UPCEANWriter {
       if (!UPCEANReader.checkStandardUPCEANChecksum(contents)) {
         throw new IllegalArgumentException("Contents do not pass checksum");
       }
-    } catch (FormatException fe) {
+    } catch (FormatException ignored) {
       throw new IllegalArgumentException("Illegal contents");
     }
 

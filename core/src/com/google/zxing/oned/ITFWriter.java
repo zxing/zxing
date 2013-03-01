@@ -63,7 +63,7 @@ public final class ITFWriter extends OneDimensionalCodeWriter {
       int two = Character.digit(contents.charAt(i+1), 10);
       int[] encoding = new int[18];
       for (int j = 0; j < 5; j++) {
-        encoding[(j << 1)] = ITFReader.PATTERNS[one][j];
+        encoding[j << 1] = ITFReader.PATTERNS[one][j];
         encoding[(j << 1) + 1] = ITFReader.PATTERNS[two][j];
       }
       pos += appendPattern(result, pos, encoding, true);

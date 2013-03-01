@@ -35,12 +35,12 @@ public class DataCharacter {
   }
 
   @Override
-  public String toString() {
+  public final String toString() {
     return value + "(" + checksumPortion + ')';
   }
   
   @Override
-  public boolean equals(Object o) {
+  public final boolean equals(Object o) {
     if(!(o instanceof DataCharacter)) {
       return false;
     }
@@ -49,7 +49,7 @@ public class DataCharacter {
   }
 
   @Override
-  public int hashCode() {
+  public final int hashCode() {
     return value ^ checksumPortion;
   }
 

@@ -266,7 +266,6 @@ public final class RSSExpandedImage2stringTestCase extends Assert {
   }
 
   private static void assertCorrectImage2string(String path, String expected) throws IOException, NotFoundException {
-    RSSExpandedReader rssExpandedReader = new RSSExpandedReader();
 
     File file = new File(path);
     if (!file.exists()) {
@@ -281,6 +280,7 @@ public final class RSSExpandedImage2stringTestCase extends Assert {
 
     Result result;
     try {
+      RSSExpandedReader rssExpandedReader = new RSSExpandedReader();
       result = rssExpandedReader.decodeRow(rowNumber, row, null);
     } catch (ReaderException re) {
       fail(re.toString());

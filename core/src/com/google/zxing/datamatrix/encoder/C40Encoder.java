@@ -111,9 +111,8 @@ class C40Encoder implements Encoder {
       }
       if (context.hasMoreCharacters()) {
         context.writeCodeword(HighLevelEncoder.C40_UNLATCH);
-      } else {
-        //No unlatch
       }
+      // else no unlatch
       context.pos--;
     } else if (rest == 0) {
       while (buffer.length() >= 3) {

@@ -241,7 +241,6 @@ public final class RSSExpandedReader extends AbstractRSSReader {
         return checkRows(rs, i + 1);
       } catch (NotFoundException e) {
         // We failed, try the next candidate
-        continue;
       }
     }
 
@@ -456,7 +455,7 @@ public final class RSSExpandedReader extends AbstractRSSReader {
     DataCharacter rightChar;
     try {
       rightChar = this.decodeDataCharacter(row, pattern, isOddPattern, false);
-    } catch(NotFoundException nfe) {
+    } catch(NotFoundException ignored) {
       rightChar = null;
     }
     boolean mayBeLast = true;
@@ -579,7 +578,7 @@ public final class RSSExpandedReader extends AbstractRSSReader {
     int value;
     try {
       value = parseFinderValue(counters, FINDER_PATTERNS);
-    } catch (NotFoundException nfe) {
+    } catch (NotFoundException ignored) {
       return null;
     }
     return new FinderPattern(value, new int[] {start, end}, start, end, rowNumber);

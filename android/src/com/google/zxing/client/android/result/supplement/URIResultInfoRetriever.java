@@ -45,7 +45,7 @@ final class URIResultInfoRetriever extends SupplementalInfoRetriever {
     URI oldURI;
     try {
       oldURI = new URI(result.getURI());
-    } catch (URISyntaxException e) {
+    } catch (URISyntaxException ignored) {
       return;
     }
     URI newURI = HttpHelper.unredirect(oldURI);

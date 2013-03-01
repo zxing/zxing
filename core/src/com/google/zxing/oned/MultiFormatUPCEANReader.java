@@ -75,7 +75,7 @@ public final class MultiFormatUPCEANReader extends OneDReader {
       Result result;
       try {
         result = reader.decodeRow(rowNumber, row, startGuardPattern, hints);
-      } catch (ReaderException re) {
+      } catch (ReaderException ignored) {
         continue;
       }
       // Special case: a 12-digit code encoded in UPC-A is identical to a "0"

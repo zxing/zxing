@@ -84,7 +84,7 @@ public final class ZXingTestActivity extends Activity {
         PackageInfo info = getPackageManager().getPackageInfo(PACKAGE_NAME, 0);
         versionCode = info.versionCode;
         versionName = info.versionName;
-      } catch (PackageManager.NameNotFoundException e) {
+      } catch (PackageManager.NameNotFoundException ignored) {
         versionCode = 0;
         versionName = "unknown";
       }

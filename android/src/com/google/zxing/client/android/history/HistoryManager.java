@@ -267,7 +267,6 @@ public final class HistoryManager {
    * </ul>
    */
   CharSequence buildHistory() {
-    StringBuilder historyText = new StringBuilder(1000);
     SQLiteOpenHelper helper = new DBHelper(activity);
     SQLiteDatabase db = null;
     Cursor cursor = null;
@@ -278,6 +277,7 @@ public final class HistoryManager {
                         null, null, null, null,
                         DBHelper.TIMESTAMP_COL + " DESC");
 
+      StringBuilder historyText = new StringBuilder(1000);
       while (cursor.moveToNext()) {
 
         historyText.append('"').append(massageHistoryField(cursor.getString(0))).append("\",");

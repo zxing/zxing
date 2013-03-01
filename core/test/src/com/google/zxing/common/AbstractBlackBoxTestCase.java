@@ -179,7 +179,7 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
           } else {
             misreadCounts[x]++;
           }
-        } catch (ReaderException re) {
+        } catch (ReaderException ignored) {
           log.fine(String.format("could not read at rotation %f", rotation));
         }
         try {
@@ -188,7 +188,7 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
           } else {
             tryHaderMisreadCounts[x]++;
           }
-        } catch (ReaderException re) {
+        } catch (ReaderException ignored) {
           log.fine(String.format("could not read at rotation %f w/TH", rotation));
         }
       }
