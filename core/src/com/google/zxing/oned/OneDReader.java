@@ -133,7 +133,7 @@ public abstract class OneDReader implements Reader {
       // Estimate black point for this row and load it:
       try {
         row = image.getBlackRow(rowNumber, row);
-      } catch (NotFoundException nfe) {
+      } catch (NotFoundException ignored) {
         continue;
       }
 

@@ -163,7 +163,7 @@ final class DecodedBitStreamParser {
 
     try {
       result.append(new String(buffer, StringUtils.GB2312));
-    } catch (UnsupportedEncodingException uee) {
+    } catch (UnsupportedEncodingException ignored) {
       throw FormatException.getFormatInstance();
     }
   }
@@ -199,7 +199,7 @@ final class DecodedBitStreamParser {
     // Shift_JIS may not be supported in some environments:
     try {
       result.append(new String(buffer, StringUtils.SHIFT_JIS));
-    } catch (UnsupportedEncodingException uee) {
+    } catch (UnsupportedEncodingException ignored) {
       throw FormatException.getFormatInstance();
     }
   }
@@ -232,7 +232,7 @@ final class DecodedBitStreamParser {
     }
     try {
       result.append(new String(readBytes, encoding));
-    } catch (UnsupportedEncodingException uce) {
+    } catch (UnsupportedEncodingException ignored) {
       throw FormatException.getFormatInstance();
     }
     byteSegments.add(readBytes);

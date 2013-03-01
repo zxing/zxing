@@ -123,7 +123,7 @@ public final class Decoder {
     int numECCodewords = codewordBytes.length - numDataCodewords;
     try {
       rsDecoder.decode(codewordsInts, numECCodewords);
-    } catch (ReedSolomonException rse) {
+    } catch (ReedSolomonException ignored) {
       throw ChecksumException.getChecksumInstance();
     }
     // Copy back into array of bytes -- only need to worry about the bytes that were data

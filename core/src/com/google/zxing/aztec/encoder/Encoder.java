@@ -138,7 +138,6 @@ public final class Encoder {
    * @return Aztec symbol matrix with metadata
    */
   public static AztecCode encode(byte[] data, int minECCPercent) {
-    AztecCode aztec = new AztecCode();
     
     // High-level encode
     BitArray bits = highLevelEncode(data);
@@ -266,6 +265,7 @@ public final class Encoder {
       }
     }
     
+    AztecCode aztec = new AztecCode();
     aztec.setCompact(compact);
     aztec.setSize(matrixSize);
     aztec.setLayers(layers);

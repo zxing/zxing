@@ -71,7 +71,7 @@ public abstract class AbstractNegativeBlackBoxTestCase extends AbstractBlackBoxT
     testResults = new ArrayList<TestResult>();
   }
 
-  protected void addTest(int falsePositivesAllowed, float rotation) {
+  protected final void addTest(int falsePositivesAllowed, float rotation) {
     testResults.add(new TestResult(falsePositivesAllowed, rotation));
   }
 

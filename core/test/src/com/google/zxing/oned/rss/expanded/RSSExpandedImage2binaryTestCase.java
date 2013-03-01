@@ -223,7 +223,6 @@ public final class RSSExpandedImage2binaryTestCase extends Assert {
   }
 
   private static void assertCorrectImage2binary(String path, String expected) throws IOException, NotFoundException {
-    RSSExpandedReader rssExpandedReader = new RSSExpandedReader();
 
     File file = new File(path);
     if (!file.exists()) {
@@ -238,6 +237,7 @@ public final class RSSExpandedImage2binaryTestCase extends Assert {
 
     List<ExpandedPair> pairs;
     try {
+      RSSExpandedReader rssExpandedReader = new RSSExpandedReader();
       pairs = rssExpandedReader.decodeRow2pairs(rowNumber, row);
     } catch (ReaderException re) {
       fail(re.toString());

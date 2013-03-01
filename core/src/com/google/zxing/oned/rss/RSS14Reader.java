@@ -143,11 +143,11 @@ public final class RSS14Reader extends AbstractRSSReader {
   }
 
   private static boolean checkChecksum(Pair leftPair, Pair rightPair) {
-    int leftFPValue = leftPair.getFinderPattern().getValue();
-    int rightFPValue = rightPair.getFinderPattern().getValue();
-    if ((leftFPValue == 0 && rightFPValue == 8) ||
-        (leftFPValue == 8 && rightFPValue == 0)) {
-    }
+    //int leftFPValue = leftPair.getFinderPattern().getValue();
+    //int rightFPValue = rightPair.getFinderPattern().getValue();
+    //if ((leftFPValue == 0 && rightFPValue == 8) ||
+    //    (leftFPValue == 8 && rightFPValue == 0)) {
+    //}
     int checkValue = (leftPair.getChecksumPortion() + 16 * rightPair.getChecksumPortion()) % 79;
     int targetCheckValue =
         9 * leftPair.getFinderPattern().getValue() + rightPair.getFinderPattern().getValue();
@@ -182,7 +182,7 @@ public final class RSS14Reader extends AbstractRSSReader {
       return new Pair(1597 * outside.getValue() + inside.getValue(),
                       outside.getChecksumPortion() + 4 * inside.getChecksumPortion(),
                       pattern);
-    } catch (NotFoundException re) {
+    } catch (NotFoundException ignored) {
       return null;
     }
   }

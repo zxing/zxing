@@ -55,7 +55,6 @@ public final class CommandLineRunner {
     }
 
     Config config = new Config();
-    Queue<String> inputs = new ConcurrentLinkedQueue<String>();
 
     for (String arg : args) {
       if ("--try_harder".equals(arg)) {
@@ -89,6 +88,7 @@ public final class CommandLineRunner {
     }
     config.setHints(buildHints(config));
 
+    Queue<String> inputs = new ConcurrentLinkedQueue<String>();
     for (String arg : args) {
       if (!arg.startsWith("--")) {
         addArgumentToInputs(arg, config, inputs);
@@ -150,7 +150,6 @@ public final class CommandLineRunner {
 
   // Manually turn on all formats, even those not yet considered production quality.
   private static Map<DecodeHintType,?> buildHints(Config config) {
-    Map<DecodeHintType, Object> hints = new EnumMap<DecodeHintType,Object>(DecodeHintType.class);
     Collection<BarcodeFormat> vector = new ArrayList<BarcodeFormat>(8);
     vector.add(BarcodeFormat.UPC_A);
     vector.add(BarcodeFormat.UPC_E);
@@ -170,6 +169,7 @@ public final class CommandLineRunner {
       vector.add(BarcodeFormat.CODABAR);
       vector.add(BarcodeFormat.MAXICODE);
     }
+    Map<DecodeHintType, Object> hints = new EnumMap<DecodeHintType, Object>(DecodeHintType.class);
     hints.put(DecodeHintType.POSSIBLE_FORMATS, vector);
     if (config.isTryHarder()) {
       hints.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);

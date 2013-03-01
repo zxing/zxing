@@ -434,7 +434,7 @@ public abstract class ResultHandler {
     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
     try {
       launchIntent(intent);
-    } catch (ActivityNotFoundException anfe) {
+    } catch (ActivityNotFoundException ignored) {
       Log.w(TAG, "Nothing available to handle " + intent);
     }
   }
@@ -491,7 +491,7 @@ public abstract class ResultHandler {
   final void launchIntent(Intent intent) {
     try {
       rawLaunchIntent(intent);
-    } catch (ActivityNotFoundException e) {
+    } catch (ActivityNotFoundException ignored) {
       AlertDialog.Builder builder = new AlertDialog.Builder(activity);
       builder.setTitle(R.string.app_name);
       builder.setMessage(R.string.msg_intent_failed);

@@ -12,12 +12,12 @@
       <h1>Zebra Crossing <span>from the ZXing Project</span></h1>
     </div>
     
-    <table cellpadding="4" cellspacing="8">
+    <table>
       <tr>
-        <td valign="top">
-          <img src="/zxingiconsmall.png" width="48" height="48"/>
+        <td style="vertical-align:top;padding:4px;margin:8px">
+          <img src="/zxingiconsmall.png" width="48" height="48" alt="ZXing"/>
         </td>
-        <td valign="top">
+        <td style="vertical-align:top;padding:4px;margin:8px">
           <p>A web page you are viewing would like to scan a barcode with your camera phone. To do
           this, you need to install a new application.</p>
           <p>If you are using an Android device,
@@ -44,7 +44,7 @@
           tail = query.indexOf ( "&" , head );
           if (tail < 0)
             tail = query.length;
-          return unescape(query.substring(head, tail));
+          return decodeURIComponent(query.substring(head, tail));
         }
         function process(form) {
           if (window.ret == null)

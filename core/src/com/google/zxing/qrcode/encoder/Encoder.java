@@ -214,7 +214,7 @@ public final class Encoder {
     byte[] bytes;
     try {
       bytes = content.getBytes("Shift_JIS");
-    } catch (UnsupportedEncodingException uee) {
+    } catch (UnsupportedEncodingException ignored) {
       return false;
     }
     int length = bytes.length;

@@ -22,7 +22,6 @@ import java.util.Map;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.Writer;
-import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 
 public final class AztecWriter implements Writer {
@@ -30,14 +29,13 @@ public final class AztecWriter implements Writer {
   private static final Charset LATIN_1 = Charset.forName("ISO-8859-1");
 
   @Override
-  public BitMatrix encode(String contents, BarcodeFormat format, int width, int height) throws WriterException {
+  public BitMatrix encode(String contents, BarcodeFormat format, int width, int height) {
     AztecCode aztec = Encoder.encode(contents.getBytes(LATIN_1), 30);
     return aztec.getMatrix();
   }
 
   @Override
-  public BitMatrix encode(String contents, BarcodeFormat format, int width, int height, Map<EncodeHintType, ?> hints)
-      throws WriterException {
+  public BitMatrix encode(String contents, BarcodeFormat format, int width, int height, Map<EncodeHintType, ?> hints) {
     return encode(contents, format, width, height);
   }
 

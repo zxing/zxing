@@ -221,7 +221,7 @@ public class IntentIntegrator {
     setTargetApplications(list);
   }
   
-  public void setTargetApplications(List<String> targetApplications) {
+  public final void setTargetApplications(List<String> targetApplications) {
     if (targetApplications.isEmpty()) {
       throw new IllegalArgumentException("No target applications");
     }
@@ -236,14 +236,14 @@ public class IntentIntegrator {
     return moreExtras;
   }
 
-  public void addExtra(String key, Object value) {
+  public final void addExtra(String key, Object value) {
     moreExtras.put(key, value);
   }
 
   /**
    * Initiates a scan for all known barcode types.
    */
-  public AlertDialog initiateScan() {
+  public final AlertDialog initiateScan() {
     return initiateScan(ALL_CODE_TYPES);
   }
 
@@ -255,7 +255,7 @@ public class IntentIntegrator {
    * @return the {@link AlertDialog} that was shown to the user prompting them to download the app
    *   if a prompt was needed, or null otherwise
    */
-  public AlertDialog initiateScan(Collection<String> desiredBarcodeFormats) {
+  public final AlertDialog initiateScan(Collection<String> desiredBarcodeFormats) {
     Intent intentScan = new Intent(BS_PACKAGE + ".SCAN");
     intentScan.addCategory(Intent.CATEGORY_DEFAULT);
 
@@ -371,7 +371,7 @@ public class IntentIntegrator {
    * Defaults to type "TEXT_TYPE".
    * @see #shareText(CharSequence, CharSequence)
    */
-  public AlertDialog shareText(CharSequence text) {
+  public final AlertDialog shareText(CharSequence text) {
     return shareText(text, "TEXT_TYPE");
   }
 
@@ -384,7 +384,7 @@ public class IntentIntegrator {
    * @return the {@link AlertDialog} that was shown to the user prompting them to download the app
    *   if a prompt was needed, or null otherwise
    */
-  public AlertDialog shareText(CharSequence text, CharSequence type) {
+  public final AlertDialog shareText(CharSequence text, CharSequence type) {
     Intent intent = new Intent();
     intent.addCategory(Intent.CATEGORY_DEFAULT);
     intent.setAction(BS_PACKAGE + ".ENCODE");

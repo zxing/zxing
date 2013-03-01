@@ -30,7 +30,7 @@ import java.util.Map;
  * <p>Implements decoding of the ITF format, or Interleaved Two of Five.</p>
  *
  * <p>This Reader will scan ITF barcodes of certain lengths only.
- * At the moment it reads length 6, 10, 12, 14, 16, 24, and 44 as these have appeared "in the wild". Not all
+ * At the moment it reads length 6, 8, 10, 12, 14, 16, 18, 20, 24, and 44 as these have appeared "in the wild". Not all
  * lengths are scanned, especially shorter ones, to avoid false positives. This in turn is due to a lack of
  * required checksum function.</p>
  *

@@ -316,7 +316,7 @@ public final class Decoder {
     try {
       ReedSolomonDecoder rsDecoder = new ReedSolomonDecoder(gf);
       rsDecoder.decode(dataWords, numECCodewords);
-    } catch (ReedSolomonException rse) {
+    } catch (ReedSolomonException ignored) {
       throw FormatException.getFormatInstance();
     }
 

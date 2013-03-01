@@ -140,7 +140,7 @@ final class DecodeWorker implements Callable<Integer> {
     BufferedImage image;
     try {
       image = ImageIO.read(uri.toURL());
-    } catch (IllegalArgumentException iae) {
+    } catch (IllegalArgumentException ignored) {
       throw new FileNotFoundException("Resource not found: " + uri);
     }
     if (image == null) {
@@ -176,7 +176,7 @@ final class DecodeWorker implements Callable<Integer> {
       }
 
       return result;
-    } catch (NotFoundException nfe) {
+    } catch (NotFoundException ignored) {
       System.out.println(uri.toString() + ": No barcode found");
       return null;
     }
@@ -186,7 +186,7 @@ final class DecodeWorker implements Callable<Integer> {
     BufferedImage image;
     try {
       image = ImageIO.read(uri.toURL());
-    } catch (IllegalArgumentException iae) {
+    } catch (IllegalArgumentException ignored) {
       throw new FileNotFoundException("Resource not found: " + uri);
     }
     if (image == null) {
@@ -229,7 +229,7 @@ final class DecodeWorker implements Callable<Integer> {
         }
       }
       return results;
-    } catch (NotFoundException nfe) {
+    } catch (NotFoundException ignored) {
       System.out.println(uri.toString() + ": No barcode found");
       return null;
     }
@@ -296,7 +296,8 @@ final class DecodeWorker implements Callable<Integer> {
           }
         }
       }
-    } catch (NotFoundException nfe) {
+    } catch (NotFoundException ignored) {
+      // continue
     }
 
     writeResultImage(stride, height, pixels, uri, inputName, ".mono.png");
@@ -331,9 +332,9 @@ final class DecodeWorker implements Callable<Integer> {
       if (!ImageIO.write(result, "png", outStream)) {
         System.err.println("Could not encode an image to " + resultName);
       }
-    } catch (FileNotFoundException e) {
+    } catch (FileNotFoundException ignored) {
       System.err.println("Could not create " + resultName);
-    } catch (IOException e) {
+    } catch (IOException ignored) {
       System.err.println("Could not write to " + resultName);
     } finally {
       try {

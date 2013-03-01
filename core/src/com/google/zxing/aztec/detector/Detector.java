@@ -237,7 +237,7 @@ public final class Detector {
     try {
       ReedSolomonDecoder rsDecoder = new ReedSolomonDecoder(GenericGF.AZTEC_PARAM);
       rsDecoder.decode(parameterWords, numECCodewords);
-    } catch (ReedSolomonException rse) {
+    } catch (ReedSolomonException ignored) {
       throw NotFoundException.getNotFoundInstance();
     }
     

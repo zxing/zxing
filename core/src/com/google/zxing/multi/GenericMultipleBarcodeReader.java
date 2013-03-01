@@ -76,7 +76,7 @@ public final class GenericMultipleBarcodeReader implements MultipleBarcodeReader
     Result result;
     try {
       result = delegate.decode(image, hints);
-    } catch (ReaderException re) {
+    } catch (ReaderException ignored) {
       return;
     }
     boolean alreadyFound = false;

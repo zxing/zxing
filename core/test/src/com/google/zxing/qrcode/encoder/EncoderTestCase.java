@@ -455,9 +455,8 @@ public final class EncoderTestCase extends Assert {
     }
     {
       // Invalid data.
-      BitArray bits = new BitArray();
       try {
-        Encoder.appendAlphanumericBytes("abc", bits);
+        Encoder.appendAlphanumericBytes("abc", new BitArray());
       } catch (WriterException we) {
         // good
       }

@@ -95,7 +95,7 @@ public final class Version {
     }
     try {
       return getVersionForNumber((dimension - 17) >> 2);
-    } catch (IllegalArgumentException iae) {
+    } catch (IllegalArgumentException ignored) {
       throw FormatException.getFormatInstance();
     }
   }

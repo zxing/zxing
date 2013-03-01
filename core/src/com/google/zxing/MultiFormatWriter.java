@@ -84,6 +84,7 @@ public final class MultiFormatWriter implements Writer {
         break;
       case DATA_MATRIX:
         writer = new DataMatrixWriter();
+        break;
       case AZTEC:
         writer = new AztecWriter();
         break;

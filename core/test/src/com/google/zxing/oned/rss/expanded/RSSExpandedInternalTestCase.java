@@ -52,7 +52,6 @@ public final class RSSExpandedInternalTestCase extends Assert {
 
   @Test
   public void testFindFinderPatterns() throws Exception {
-    RSSExpandedReader rssExpandedReader = new RSSExpandedReader();
 
     String path = "test/data/blackbox/rssexpanded-1/2.png";
     File file = new File(path);
@@ -67,6 +66,7 @@ public final class RSSExpandedInternalTestCase extends Assert {
     BitArray row = binaryMap.getBlackRow(rowNumber, null);
     List<ExpandedPair> previousPairs = new ArrayList<ExpandedPair>();
 
+    RSSExpandedReader rssExpandedReader = new RSSExpandedReader();
     ExpandedPair pair1 = rssExpandedReader.retrieveNextPair(row, previousPairs, rowNumber);
     previousPairs.add(pair1);
     FinderPattern finderPattern = pair1.getFinderPattern();
@@ -96,7 +96,6 @@ public final class RSSExpandedInternalTestCase extends Assert {
 
   @Test
   public void testRetrieveNextPairPatterns() throws Exception {
-    RSSExpandedReader rssExpandedReader = new RSSExpandedReader();
 
     String path = "test/data/blackbox/rssexpanded-1/3.png";
     File file = new File(path);
@@ -111,6 +110,7 @@ public final class RSSExpandedInternalTestCase extends Assert {
     BitArray row = binaryMap.getBlackRow(rowNumber, null);
     List<ExpandedPair> previousPairs = new ArrayList<ExpandedPair>();
 
+    RSSExpandedReader rssExpandedReader = new RSSExpandedReader();
     ExpandedPair pair1 = rssExpandedReader.retrieveNextPair(row, previousPairs, rowNumber);
     previousPairs.add(pair1);
     FinderPattern finderPattern = pair1.getFinderPattern();
@@ -126,7 +126,6 @@ public final class RSSExpandedInternalTestCase extends Assert {
 
   @Test
   public void testDecodeCheckCharacter() throws Exception {
-    RSSExpandedReader rssExpandedReader = new RSSExpandedReader();
 
     String path = "test/data/blackbox/rssexpanded-1/3.png";
     File file = new File(path);
@@ -143,6 +142,7 @@ public final class RSSExpandedInternalTestCase extends Assert {
     int value = 0;// A
     FinderPattern finderPatternA1 = new FinderPattern(value, startEnd, startEnd[0], startEnd[1], image.getHeight() / 2);
     //{1, 8, 4, 1, 1};
+    RSSExpandedReader rssExpandedReader = new RSSExpandedReader();
     DataCharacter dataCharacter = rssExpandedReader.decodeDataCharacter(row, finderPatternA1, true, true);
 
     assertEquals(98, dataCharacter.getValue());
@@ -150,7 +150,6 @@ public final class RSSExpandedInternalTestCase extends Assert {
 
   @Test
   public void testDecodeDataCharacter() throws Exception {
-    RSSExpandedReader rssExpandedReader = new RSSExpandedReader();
 
     String path = "test/data/blackbox/rssexpanded-1/3.png";
     File file = new File(path);
@@ -167,6 +166,7 @@ public final class RSSExpandedInternalTestCase extends Assert {
     int value = 0; // A
     FinderPattern finderPatternA1 = new FinderPattern(value, startEnd, startEnd[0], startEnd[1], image.getHeight() / 2);
     //{1, 8, 4, 1, 1};
+    RSSExpandedReader rssExpandedReader = new RSSExpandedReader();
     DataCharacter dataCharacter = rssExpandedReader.decodeDataCharacter(row, finderPatternA1, true, false);
 
     assertEquals(19, dataCharacter.getValue());
