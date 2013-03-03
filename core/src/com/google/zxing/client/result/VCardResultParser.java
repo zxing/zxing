@@ -73,7 +73,7 @@ public final class VCardResultParser extends ResultParser {
       birthday = null;
     }
     List<String> title = matchSingleVCardPrefixedField("TITLE", rawText, true, false);
-    List<String> url = matchSingleVCardPrefixedField("URL", rawText, true, false);
+    List<List<String>> urls = matchVCardPrefixedField("URL", rawText, true, false);
     List<String> instantMessenger = matchSingleVCardPrefixedField("IMPP", rawText, true, false);
     List<String> geoString = matchSingleVCardPrefixedField("GEO", rawText, true, false);
     String[] geo = geoString == null ? null : SEMICOLON_OR_COMMA.split(geoString.get(0));
@@ -94,7 +94,7 @@ public final class VCardResultParser extends ResultParser {
                                        toPrimaryValue(org),
                                        toPrimaryValue(birthday),
                                        toPrimaryValue(title),
-                                       toPrimaryValue(url),
+                                       toPrimaryValues(urls),
                                        geo);
   }
 
@@ -277,7 +277,10 @@ public final class VCardResultParser extends ResultParser {
     }
     List<String> result = new ArrayList<String>(lists.size());
     for (List<String> list : lists) {
-      result.add(list.get(0));
+      String value = list.get(0);
+      if (value != null && value.length() > 0) {
+        result.add(value);
+      }
     }
     return result.toArray(new String[lists.size()]);
   }

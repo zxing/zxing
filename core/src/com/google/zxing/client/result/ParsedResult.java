@@ -56,15 +56,10 @@ public abstract class ParsedResult {
     }
   }
 
-  public static void maybeAppend(String[] value, StringBuilder result) {
-    if (value != null) {
-      for (String s : value) {
-        if (s != null && s.length() > 0) {
-          if (result.length() > 0) {
-            result.append('\n');
-          }
-          result.append(s);
-        }
+  public static void maybeAppend(String[] values, StringBuilder result) {
+    if (values != null) {
+      for (String value : values) {
+        maybeAppend(value, result);
       }
     }
   }

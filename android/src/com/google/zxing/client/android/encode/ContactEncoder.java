@@ -36,7 +36,7 @@ abstract class ContactEncoder {
                            Iterable<String> addresses,
                            Iterable<String> phones,
                            Iterable<String> emails,
-                           String url,
+                           Iterable<String> urls,
                            String note);
 
   /**
@@ -78,7 +78,7 @@ abstract class ContactEncoder {
     Collection<String> uniques = new HashSet<String>(2);
     for (String value : values) {
       String trimmed = trim(value);
-      if (trimmed != null && !uniques.contains(trimmed)) {
+      if (trimmed != null && trimmed.length() > 0 && !uniques.contains(trimmed)) {
         newContents.append(prefix).append(':').append(fieldFormatter.format(trimmed)).append(terminator);
         String display = formatter == null ? trimmed : formatter.format(trimmed);
         newDisplayContents.append(display).append('\n');

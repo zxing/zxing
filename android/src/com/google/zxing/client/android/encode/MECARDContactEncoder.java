@@ -44,7 +44,7 @@ final class MECARDContactEncoder extends ContactEncoder {
                          Iterable<String> addresses,
                          Iterable<String> phones,
                          Iterable<String> emails,
-                         String url,
+                         Iterable<String> urls,
                          String note) {
     StringBuilder newContents = new StringBuilder(100);
     newContents.append("MECARD:");
@@ -64,7 +64,7 @@ final class MECARDContactEncoder extends ContactEncoder {
       }
     });
     appendUpToUnique(newContents, newDisplayContents, "EMAIL", emails, Integer.MAX_VALUE, null);
-    append(newContents, newDisplayContents, "URL", url);
+    appendUpToUnique(newContents, newDisplayContents, "URL", urls, Integer.MAX_VALUE, null);
     append(newContents, newDisplayContents, "NOTE", note);
     newContents.append(';');
     return new String[] { newContents.toString(), newDisplayContents.toString() };
