@@ -43,8 +43,8 @@ public final class BookmarkPickerActivity extends ListActivity {
   static final int TITLE_COLUMN = 0;
   static final int URL_COLUMN = 1;
 
-  // Without this selection, we'd get all the history entries too
-  private static final String BOOKMARK_SELECTION = "bookmark = 1";
+  private static final String BOOKMARK_SELECTION = 
+      Browser.BookmarkColumns.BOOKMARK + " = 1 AND " + Browser.BookmarkColumns.URL + " IS NOT NULL";
 
   private Cursor cursor = null;
 
