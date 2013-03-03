@@ -230,7 +230,9 @@ public abstract class ResultParser {
           if (trim) {
             element = element.trim();
           }
-          matches.add(element);
+          if (element.length() > 0) {
+            matches.add(element);
+          }
           i++;
           more = false;
         }

@@ -30,8 +30,8 @@ public final class WifiParsedResultTestCase extends Assert {
 
   @Test
   public void testNoPassword() {
-    doTest("WIFI:S:NoPassword;P:;T:;;", "NoPassword", "", "");
-    doTest("WIFI:S:No Password;P:;T:;;", "No Password", "", "");
+    doTest("WIFI:S:NoPassword;P:;T:;;", "NoPassword", null, "nopass");
+    doTest("WIFI:S:No Password;P:;T:;;", "No Password", null, "nopass");
   }
 
   @Test

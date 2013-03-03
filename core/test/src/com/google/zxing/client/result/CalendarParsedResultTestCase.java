@@ -24,7 +24,6 @@ import org.junit.Test;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -223,8 +222,7 @@ public final class CalendarParsedResultTestCase extends Assert {
     assertEquals(startString, DATE_TIME_FORMAT.format(calResult.getStart()));
     assertEquals(endString, calResult.getEnd() == null ? null : DATE_TIME_FORMAT.format(calResult.getEnd()));
     assertEquals(organizer, calResult.getOrganizer());
-    assertTrue((attendees == null && calResult.getAttendees() == null) ||
-               Arrays.equals(attendees, calResult.getAttendees()));
+    assertArrayEquals(attendees, calResult.getAttendees());
     assertEqualOrNaN(latitude, calResult.getLatitude());
     assertEqualOrNaN(longitude, calResult.getLongitude());
   }

@@ -21,8 +21,6 @@ import com.google.zxing.Result;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.Arrays;
-
 /**
  * Tests {@link AddressBookParsedResult}.
  *
@@ -35,7 +33,7 @@ public final class AddressBookParsedResultTestCase extends Assert {
     doTest("MECARD:N:Sean Owen;;", null, new String[] {"Sean Owen"}, null, null, null, null, null, null, null, null);
     doTest("MECARD:NOTE:ZXing Team;N:Sean Owen;URL:google.com;EMAIL:srowen@example.org;;",
         null, new String[] {"Sean Owen"}, null, null, new String[] {"srowen@example.org"}, null, null,
-        "google.com", null, "ZXing Team");
+        new String[] {"google.com"}, null, "ZXing Team");
   }
 
   @Test
@@ -108,7 +106,7 @@ public final class AddressBookParsedResultTestCase extends Assert {
                              String[] emails,
                              String[] phoneNumbers,
                              String org,
-                             String url,
+                             String[] urls,
                              String birthday,
                              String note) {
     Result fakeResult = new Result(contents, null, null, BarcodeFormat.QR_CODE);
@@ -116,13 +114,13 @@ public final class AddressBookParsedResultTestCase extends Assert {
     assertSame(ParsedResultType.ADDRESSBOOK, result.getType());
     AddressBookParsedResult addressResult = (AddressBookParsedResult) result;
     assertEquals(title, addressResult.getTitle());
-    assertTrue(Arrays.equals(names, addressResult.getNames()));
+    assertArrayEquals(names, addressResult.getNames());
     assertEquals(pronunciation, addressResult.getPronunciation());
-    assertTrue(Arrays.equals(addresses, addressResult.getAddresses()));
-    assertTrue(Arrays.equals(emails, addressResult.getEmails()));
-    assertTrue(Arrays.equals(phoneNumbers, addressResult.getPhoneNumbers()));
+    assertArrayEquals(addresses, addressResult.getAddresses());
+    assertArrayEquals(emails, addressResult.getEmails());
+    assertArrayEquals(phoneNumbers, addressResult.getPhoneNumbers());
     assertEquals(org, addressResult.getOrg());
-    assertEquals(url, addressResult.getURL());
+    assertArrayEquals(urls, addressResult.getURLs());
     assertEquals(birthday, addressResult.getBirthday());
     assertEquals(note, addressResult.getNote());
   }

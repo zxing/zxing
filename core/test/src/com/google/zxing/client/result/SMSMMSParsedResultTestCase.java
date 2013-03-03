@@ -21,8 +21,6 @@ import com.google.zxing.Result;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.Arrays;
-
 /**
  * Tests {@link SMSParsedResult}.
  *
@@ -61,10 +59,10 @@ public final class SMSMMSParsedResultTestCase extends Assert {
     ParsedResult result = ResultParser.parseResult(fakeResult);
     assertSame(ParsedResultType.SMS, result.getType());
     SMSParsedResult smsResult = (SMSParsedResult) result;
-    assertTrue(Arrays.equals(numbers, smsResult.getNumbers()));
+    assertArrayEquals(numbers, smsResult.getNumbers());
     assertEquals(subject, smsResult.getSubject());
     assertEquals(body, smsResult.getBody());
-    assertTrue(Arrays.equals(vias, smsResult.getVias()));
+    assertArrayEquals(vias, smsResult.getVias());
   }
 
 }

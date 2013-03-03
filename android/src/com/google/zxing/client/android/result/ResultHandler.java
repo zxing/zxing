@@ -225,7 +225,7 @@ public abstract class ResultHandler {
                         String addressType,
                         String org,
                         String title,
-                        String url,
+                        String[] urls,
                         String birthday,
                         String[] geo) {
 
@@ -260,14 +260,23 @@ public abstract class ResultHandler {
 
     // No field for URL, birthday; use notes
     StringBuilder aggregatedNotes = new StringBuilder();
-    for (String aNote : new String[] { url, birthday, note }) {
+    if (urls != null) {
+      for (String url : urls) {
+        if (url != null && url.length() > 0) {
+          aggregatedNotes.append('\n').append(url);
+        }
+      }
+    }
+    for (String aNote : new String[] { birthday, note }) {
       if (aNote != null) {
         aggregatedNotes.append('\n').append(aNote);
       }
     }
     if (nicknames != null) {
       for (String nickname : nicknames) {
-        aggregatedNotes.append('\n').append(nickname);
+        if (nickname != null && nickname.length() > 0) {
+          aggregatedNotes.append('\n').append(nickname);
+        }
       }
     }
     if (geo != null) {

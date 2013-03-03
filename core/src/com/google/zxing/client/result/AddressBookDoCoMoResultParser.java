@@ -56,7 +56,7 @@ public final class AddressBookDoCoMoResultParser extends AbstractDoCoMoResultPar
       // No reason to throw out the whole card because the birthday is formatted wrong.
       birthday = null;
     }
-    String url = matchSingleDoCoMoPrefixedField("URL:", rawText, true);
+    String[] urls = matchDoCoMoPrefixedField("URL:", rawText, true);
 
     // Although ORG may not be strictly legal in MECARD, it does exist in VCARD and we might as well
     // honor it when found in the wild.
@@ -76,7 +76,7 @@ public final class AddressBookDoCoMoResultParser extends AbstractDoCoMoResultPar
                                        org,
                                        birthday,
                                        null,
-                                       url,
+                                       urls,
                                        null);
   }
 
