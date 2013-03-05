@@ -95,17 +95,20 @@ public final class CommandLineRunner {
       }
     }
 
-    int numThreads = Runtime.getRuntime().availableProcessors();
-    ExecutorService executor = Executors.newFixedThreadPool(numThreads);
-    Collection<Future<Integer>> futures = new ArrayList<Future<Integer>>(numThreads);
-    for (int x = 0; x < numThreads; x++) {
-      futures.add(executor.submit(new DecodeWorker(config, inputs)));
-    }
-    executor.shutdown();
-
-    int successful = 0;
-    for (Future<Integer> future : futures) {
-      successful += future.get();
+    int numThreads = Math.min(inputs.size(), Runtime.getRuntime().availableProcessors());
+    int successful = 0;    
+    if (numThreads > 1) {
+      ExecutorService executor = Executors.newFixedThreadPool(numThreads);
+      Collection<Future<Integer>> futures = new ArrayList<Future<Integer>>(numThreads);
+      for (int x = 0; x < numThreads; x++) {
+        futures.add(executor.submit(new DecodeWorker(config, inputs)));
+      }
+      executor.shutdown();
+      for (Future<Integer> future : futures) {
+        successful += future.get();
+      }
+    } else {
+      successful += new DecodeWorker(config, inputs).call();
     }
 
     int total = inputs.size();
