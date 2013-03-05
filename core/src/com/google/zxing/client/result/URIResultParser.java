@@ -47,7 +47,11 @@ public final class URIResultParser extends ResultParser {
     return isBasicallyValidURI(rawText) ? new URIParsedResult(rawText, null) : null;
   }
 
-  static boolean isBasicallyValidURI(CharSequence uri) {
+  static boolean isBasicallyValidURI(String uri) {
+    if (uri.contains(" ")) {
+      // Quick hack check for a common case
+      return false;
+    }
     Matcher m = URL_WITH_PROTOCOL_PATTERN.matcher(uri);
     if (m.find() && m.start() == 0) { // match at start only
       return true;
