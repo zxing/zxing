@@ -27,6 +27,8 @@ public enum EncodeHintType {
    * Specifies what degree of error correction to use, for example in QR Codes.
    * Type depends on the encoder. For example for QR codes it's type
    * {@link com.google.zxing.qrcode.decoder.ErrorCorrectionLevel ErrorCorrectionLevel}.
+   * For Aztec it is of type {@link Integer}, representing the minimal percentage of error correction words. 
+   * Note: an Aztec symbol should have a minimum of 25% EC words.
    */
   ERROR_CORRECTION,
 

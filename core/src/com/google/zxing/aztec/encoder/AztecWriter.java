@@ -26,17 +26,29 @@ import com.google.zxing.common.BitMatrix;
 
 public final class AztecWriter implements Writer {
   
-  private static final Charset LATIN_1 = Charset.forName("ISO-8859-1");
+  private static final Charset DEFAULT_CHARSET = Charset.forName("ISO-8859-1");
 
   @Override
   public BitMatrix encode(String contents, BarcodeFormat format, int width, int height) {
-    AztecCode aztec = Encoder.encode(contents.getBytes(LATIN_1), 30);
-    return aztec.getMatrix();
+    return encode(contents, format, DEFAULT_CHARSET, Encoder.DEFAULT_EC_PERCENT);
   }
 
   @Override
-  public BitMatrix encode(String contents, BarcodeFormat format, int width, int height, Map<EncodeHintType, ?> hints) {
-    return encode(contents, format, width, height);
+  public BitMatrix encode(String contents, BarcodeFormat format, int width, int height, Map<EncodeHintType,?> hints) {
+    String charset = (String) hints.get(EncodeHintType.CHARACTER_SET);
+    Number eccPercent = (Number) hints.get(EncodeHintType.ERROR_CORRECTION);
+    return encode(contents, 
+                  format, 
+                  charset == null ? DEFAULT_CHARSET : Charset.forName(charset),
+                  eccPercent == null ? Encoder.DEFAULT_EC_PERCENT : eccPercent.intValue());
+  }
+
+  private static BitMatrix encode(String contents, BarcodeFormat format, Charset charset, int eccPercent) {
+    if (format != BarcodeFormat.AZTEC) {
+      throw new IllegalArgumentException("Can only encode QR_AZTECCODE, but got " + format);
+    }
+    AztecCode aztec = Encoder.encode(contents.getBytes(charset), eccPercent);
+    return aztec.getMatrix();
   }
 
 }
