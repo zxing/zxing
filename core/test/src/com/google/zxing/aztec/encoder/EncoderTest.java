@@ -18,12 +18,17 @@ package com.google.zxing.aztec.encoder;
 
 import java.nio.charset.Charset;
 import java.security.SecureRandom;
+import java.util.EnumMap;
+import java.util.Map;
 import java.util.Random;
 import java.util.regex.Pattern;
 
+import com.google.zxing.FormatException;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.aztec.AztecDetectorResult;
 import com.google.zxing.aztec.decoder.Decoder;
@@ -118,6 +123,23 @@ public final class EncoderTest extends Assert {
         "X   X   X X   X X X   X         X X     X X X X     X X   X   X     X   X       X \n" +
         "      X     X     X     X X     X   X X   X X   X         X X       X       X   X \n" +
         "X       X           X   X   X     X X   X               X     X     X X X         \n");
+  }
+  
+  @Test
+  public void testAztecWriter() throws Exception {
+    testWriter("\u20AC 1 sample data.", "ISO-8859-1", 25, true, 2);
+    testWriter("\u20AC 1 sample data.", "ISO-8859-15", 25, true, 2);
+    testWriter("\u20AC 1 sample data.", "UTF-8",  25, true, 2);
+    testWriter("\u20AC 1 sample data.", "UTF-8", 100, true, 3);
+    testWriter("\u20AC 1 sample data.", "UTF-8", 300, true, 4);
+    testWriter("\u20AC 1 sample data.", "UTF-8", 500, false, 5);
+    // Test AztecWriter defaults
+    String data = "In ut magna vel mauris malesuada";
+    AztecWriter writer = new AztecWriter();
+    BitMatrix matrix = writer.encode(data, BarcodeFormat.AZTEC, 0, 0);
+    AztecCode aztec = Encoder.encode(data.getBytes(LATIN_1), Encoder.DEFAULT_EC_PERCENT);
+    BitMatrix expectedMatrix = aztec.getMatrix();
+    assertEquals(matrix, expectedMatrix);
   }
   
   // synthetic tests (encode-decode round-trip)
@@ -277,7 +299,8 @@ public final class EncoderTest extends Assert {
     testHighLevelEncodeString("\0a\u00FF\u0080 A",
         "XXXXX ..X.. ........ .XX....X XXXXXXXX X....... ....X ...X.");
     // binary long form optimization into 2 short forms (saves 1 bit)
-    testHighLevelEncodeString("\0\0\0\0 \0\0\0\0 \0\0\0\0 \0\0\0\0 \0\0\0\0 \0\0\0\0 \u0082\u0084\u0088\0 \0\0\0\0 \0\0\0\0 ",
+    testHighLevelEncodeString(
+        "\0\0\0\0 \0\0\0\0 \0\0\0\0 \0\0\0\0 \0\0\0\0 \0\0\0\0 \u0082\u0084\u0088\0 \0\0\0\0 \0\0\0\0 ",
         "XXXXX XXXXX ........ ........ ........ ........ ..X....." +
         " ........ ........ ........ ........ ..X....." +
         " ........ ........ ........ ........ ..X....." +
@@ -288,7 +311,9 @@ public final class EncoderTest extends Assert {
         " ........ ........ ........ ........ ..X....." +
         " ........ ........ ........ ........ ..X.....");
     // binary long form
-    testHighLevelEncodeString("\0\0\0\0 \0\0\1\0 \0\0\2\0 \0\0\3\0 \0\0\4\0 \0\0\5\0 \0\0\6\0 \0\0\7\0 \0\0\u0008\0 \0\0\u0009\0 \0\0\u00F0\0 \0\0\u00F1\0 \0\0\u00F2\0A",
+    testHighLevelEncodeString(
+        "\0\0\0\0 \0\0\1\0 \0\0\2\0 \0\0\3\0 \0\0\4\0 \0\0\5\0 \0\0\6\0 \0\0\7\0 \0\0\u0008" +
+            "\0 \0\0\u0009\0 \0\0\u00F0\0 \0\0\u00F1\0 \0\0\u00F2\0A",
         "XXXXX ..... .....X...X. ........ ........ ........ ........ ..X....." +
         " ........ ........ .......X ........ ..X....." +
         " ........ ........ ......X. ........ ..X....." +
@@ -332,6 +357,46 @@ public final class EncoderTest extends Assert {
     r = new AztecDetectorResult(matrix, NO_POINTS, aztec.isCompact(), aztec.getCodeWords(), aztec.getLayers());
     res = new Decoder().decode(r);
     assertEquals(data, res.getText());
+  }
+
+  private static void testWriter(String data, 
+                                 String charset, 
+                                 int eccPercent, 
+                                 boolean compact, 
+                                 int layers) throws FormatException {
+    // 1. Perform an encode-decode round-trip because it can be lossy.
+    // 2. Aztec Decoder currently always decodes the data with a LATIN-1 charset:
+    String expectedData = new String(data.getBytes(Charset.forName(charset)), LATIN_1);
+    Map<EncodeHintType,Object> hints = new EnumMap<EncodeHintType,Object>(EncodeHintType.class);
+    hints.put(EncodeHintType.CHARACTER_SET, charset);
+    hints.put(EncodeHintType.ERROR_CORRECTION, eccPercent);
+    AztecWriter writer = new AztecWriter();
+    BitMatrix matrix = writer.encode(data, BarcodeFormat.AZTEC, 0, 0, hints);
+    AztecCode aztec = Encoder.encode(data.getBytes(Charset.forName(charset)), eccPercent);
+    assertEquals("Unexpected symbol format (compact)", compact, aztec.isCompact());
+    assertEquals("Unexpected nr. of layers", layers, aztec.getLayers());
+    BitMatrix matrix2 = aztec.getMatrix();
+    assertEquals(matrix, matrix2);
+    AztecDetectorResult r = 
+        new AztecDetectorResult(matrix, NO_POINTS, aztec.isCompact(), aztec.getCodeWords(), aztec.getLayers());
+    DecoderResult res = new Decoder().decode(r);
+    assertEquals(expectedData, res.getText());
+    // Check error correction by introducing up to eccPercent errors
+    int ecWords = aztec.getCodeWords() * eccPercent / 100;
+    Random random = getPseudoRandom();
+    for (int i = 0; i < ecWords; i++) {
+      // don't touch the core
+      int x = random.nextBoolean() ?
+                random.nextInt(aztec.getLayers() * 2)
+                : matrix.getWidth() - 1 - random.nextInt(aztec.getLayers() * 2);
+      int y = random.nextBoolean() ?
+                random.nextInt(aztec.getLayers() * 2)
+                : matrix.getHeight() - 1 - random.nextInt(aztec.getLayers() * 2);
+      matrix.flip(x, y);
+    }
+    r = new AztecDetectorResult(matrix, NO_POINTS, aztec.isCompact(), aztec.getCodeWords(), aztec.getLayers());
+    res = new Decoder().decode(r);
+    assertEquals(expectedData, res.getText());
   }
 
   static Random getPseudoRandom() {
