@@ -45,7 +45,7 @@ public final class AztecWriter implements Writer {
 
   private static BitMatrix encode(String contents, BarcodeFormat format, Charset charset, int eccPercent) {
     if (format != BarcodeFormat.AZTEC) {
-      throw new IllegalArgumentException("Can only encode QR_AZTECCODE, but got " + format);
+      throw new IllegalArgumentException("Can only encode AZTEC, but got " + format);
     }
     AztecCode aztec = Encoder.encode(contents.getBytes(charset), eccPercent);
     return aztec.getMatrix();
