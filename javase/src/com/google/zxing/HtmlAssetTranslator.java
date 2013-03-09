@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 import java.util.regex.Pattern;
 
@@ -44,15 +45,17 @@ import java.util.regex.Pattern;
  * <p>A utility which auto-translates the English-language text in a directory of HTML documents using
  * Google Translate.</p>
  *
- * <p>Pass the Android client assets/ directory as first argument, and the language to translate to second.
- * Specify "all" for language to try to translate for all existing translations.
- * Optionally, you can specify the files to translate individually.
- * Usage: {@code HtmlAssetTranslator android/assets/ es [file1.html file2.html ...]}</p>
+ * <p>Pass the Android client assets/ directory as first argument, and the language to translate to second
+ * as a comma-separated list. Specify "all" for language to try to translate for all existing translations.
+ * Each argument after this is the name of a file to translate; if the first one is "all", all files will
+ * be translated.</p>
+ * 
+ * <p>Usage: {@code HtmlAssetTranslator android/assets/ (all|lang1[,lang2 ...]) (all|file1.html[ file2.html ...])}</p>
  *
- * <p>This will translate .html files in subdirectory html-en to directory html-es, for example.
- * Note that only text nodes in the HTML document are translated. Any text that is a child of a node
- * with {@code class="notranslate"} will not be translated. It will also add a note at the end of
- * the translated page that indicates it was automatically translated.</p>
+ * <p>{@code android/assets/ es all} will translate .html files in subdirectory html-en to 
+ * directory html-es, for example. Note that only text nodes in the HTML document are translated. 
+ * Any text that is a child of a node with {@code class="notranslate"} will not be translated. It will 
+ * also add a note at the end of the translated page that indicates it was automatically translated.</p>
  *
  * @author Sean Owen
  */
@@ -63,16 +66,21 @@ public final class HtmlAssetTranslator {
   private HtmlAssetTranslator() {}
 
   public static void main(String[] args) throws IOException {
+    if (args.length < 3) {
+      System.err.println("Usage: HtmlAssetTranslator android/assets/ " +
+                         "(all|lang1[,lang2 ...]) (all|file1.html[ file2.html ...])");
+      return;
+    }
     File assetsDir = new File(args[0]);
     Collection<String> languagesToTranslate = parseLanguagesToTranslate(assetsDir, args[1]);
-    Collection<String> filesToTranslate = parseFilesToTranslate(args);
+    List<String> restOfArgs = Arrays.asList(args).subList(2, args.length);
+    Collection<String> fileNamesToTranslate = parseFileNamesToTranslate(assetsDir, restOfArgs);
     for (String language : languagesToTranslate) {
-      translateOneLanguage(assetsDir, language, filesToTranslate);
+      translateOneLanguage(assetsDir, language, fileNamesToTranslate);
     }
   }
 
-  private static Collection<String> parseLanguagesToTranslate(File assetsDir,
-                                                              CharSequence languageArg) {
+  private static Collection<String> parseLanguagesToTranslate(File assetsDir, CharSequence languageArg) {
     Collection<String> languages = new ArrayList<String>();
     if ("all".equals(languageArg)) {
       FileFilter fileFilter = new FileFilter() {
@@ -90,10 +98,23 @@ public final class HtmlAssetTranslator {
     return languages;
   }
 
-  private static Collection<String> parseFilesToTranslate(String[] args) {
+  private static Collection<String> parseFileNamesToTranslate(File assetsDir, List<String> restOfArgs) {
     Collection<String> fileNamesToTranslate = new ArrayList<String>();
-    for (int i = 2; i < args.length; i++) {
-      fileNamesToTranslate.add(args[i]);
+    if ("all".equals(restOfArgs.get(0))) {
+      File htmlEnAssetDir = new File(assetsDir, "html-en");
+      FileFilter fileFilter = new FileFilter() {
+        @Override
+        public boolean accept(File file) {
+          return file.isFile() && file.getName().endsWith(".html");
+        }
+      };
+      for (File file : htmlEnAssetDir.listFiles(fileFilter)) {
+        fileNamesToTranslate.add(file.getName());
+      }
+    } else {
+      for (String fileName : restOfArgs) {
+        fileNamesToTranslate.add(fileName);
+      }
     }
     return fileNamesToTranslate;
   }
@@ -154,7 +175,7 @@ public final class HtmlAssetTranslator {
       }
       if (node.getNodeType() == Node.TEXT_NODE) {
         String text = node.getTextContent();
-        if (text.trim().length() > 0) {
+        if (!text.trim().isEmpty()) {
           text = StringsResourceTranslator.translateString(text, language);
           node.setTextContent(' ' + text + ' ');
         }

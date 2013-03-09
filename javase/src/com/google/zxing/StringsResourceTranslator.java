@@ -17,6 +17,7 @@
 package com.google.zxing;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.Closeable;
 import java.io.File;
 import java.io.FileFilter;
@@ -62,7 +63,7 @@ public final class StringsResourceTranslator {
 
   private static final String APACHE_2_LICENSE =
       "<!--\n" +
-      " Copyright (C) 2011 ZXing authors\n" +
+      " Copyright (C) 2013 ZXing authors\n" +
       '\n' +
       " Licensed under the Apache License, Version 2.0 (the \"License\");\n" +
       " you may not use this file except in compliance with the License.\n" +
@@ -124,11 +125,12 @@ public final class StringsResourceTranslator {
     System.out.println("Translating " + language);
 
     File resultTempFile = File.createTempFile(parentName, ".xml");
+    resultTempFile.deleteOnExit();
 
     boolean anyChange = false;
     Writer out = null;
     try {
-      out = new OutputStreamWriter(new FileOutputStream(resultTempFile), UTF8);
+      out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(resultTempFile), UTF8));
       out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
       out.write(APACHE_2_LICENSE);
       out.write("<resources>\n");
@@ -166,6 +168,8 @@ public final class StringsResourceTranslator {
       System.out.println("  Writing translations");
       translatedFile.delete();
       resultTempFile.renameTo(translatedFile);
+    } else {
+      resultTempFile.delete();
     }
   }
 
@@ -208,7 +212,7 @@ public final class StringsResourceTranslator {
     StringBuilder translateResult = new StringBuilder(200);
     Reader in = null;
     try {
-      in = new InputStreamReader(connection.getInputStream(), UTF8);
+      in = new BufferedReader(new InputStreamReader(connection.getInputStream(), UTF8));
       char[] buffer = new char[1024];
       int charsRead;
       while ((charsRead = in.read(buffer)) > 0) {
@@ -221,11 +225,14 @@ public final class StringsResourceTranslator {
   }
 
   private static SortedMap<String,String> readLines(File file) throws IOException {
+    SortedMap<String,String> entries = new TreeMap<String,String>();    
+    if (!file.exists()) {
+      return entries;
+    }
     BufferedReader reader = null;
     try {
       reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), UTF8));
       String line;
-      SortedMap<String,String> entries = new TreeMap<String,String>();
       while ((line = reader.readLine()) != null) {
         Matcher m = ENTRY_PATTERN.matcher(line);
         if (m.find()) {
