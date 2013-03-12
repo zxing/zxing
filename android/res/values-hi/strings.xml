@@ -28,7 +28,7 @@
   <string name="button_done">ठीक है</string>
   <string name="button_email">ईमेल भेजें</string>
   <string name="button_get_directions">निर्देश प्राप्त करें</string>
-  <string name="button_google_shopper">गूगल शॉपर</string>
+  <string name="button_google_shopper">Shopper</string>
   <string name="button_mms">एमएमएस भेजें</string>
   <string name="button_ok">ठीक है</string>
   <string name="button_open_browser">ओपन ब्राउज़र</string>
@@ -74,8 +74,8 @@
   <string name="msg_encode_contents_failed">उपलब्ध कराए गए आंकड़ों से एक बारकोड सांकेतिक शब्दों में बदलना नहीं कर सका.</string>
   <string name="msg_google_books">Google पुस्तक</string>
   <string name="msg_google_product">Google उत्पाद खोज</string>
-  <string name="msg_google_shopper_missing">गूगल शॉपर्स स्थापित नहीं है</string>
-  <string name="msg_install_google_shopper">Google शॉपर्स ब्राउज़र खोले बिना ऑनलाइन और स्थानीय कीमतों, समीक्षाएँ और अधिक के साथ स्कैनिंग बारकोड को जोड़ती है. तुम यह कोशिश करना चाहेंगे?</string>
+  <string name="msg_google_shopper_missing">Google Shopper स्थापित नहीं है</string>
+  <string name="msg_install_google_shopper">Google Shopper ब्राउज़र खोले बिना ऑनलाइन और स्थानीय कीमतों, समीक्षाएँ और अधिक के साथ स्कैनिंग बारकोड को जोड़ती है. तुम यह कोशिश करना चाहेंगे?</string>
   <string name="msg_intent_failed">क्षमा करें, अनुरोध आवेदन शुरू नहीं किया जा सका. बारकोड सामग्री अमान्य हो सकता है.</string>
   <string name="msg_redirect">पुनर्निर्देशन</string>
   <string name="msg_sbc_book_not_searchable">क्षमा करें, इस किताब को खोजा नहीं है.</string>
