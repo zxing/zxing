@@ -28,7 +28,7 @@
   <string name="button_done">Готово</string>
   <string name="button_email">Изпрати поща</string>
   <string name="button_get_directions">Навигация</string>
-  <string name="button_google_shopper">Гугъл магазин</string>
+  <string name="button_google_shopper">Shopper</string>
   <string name="button_mms">Изпрати MMS</string>
   <string name="button_ok">ОК</string>
   <string name="button_open_browser">Отвори браузър</string>
@@ -74,8 +74,8 @@
   <string name="msg_encode_contents_failed">Неуспешно кодиране на подадените данни.</string>
   <string name="msg_google_books">Google Books</string>
   <string name="msg_google_product">Google Търсене на продукти</string>
-  <string name="msg_google_shopper_missing">Гугъл Магазин не е инсталиран</string>
-  <string name="msg_install_google_shopper">Гугъл Магазин комбинира сканирането на баркодове с онлайн и локални цени, отзиви и още много неща без да отваряте браузър. Желаете ли да опитате?</string>
+  <string name="msg_google_shopper_missing">Google Shopper не е инсталиран</string>
+  <string name="msg_install_google_shopper">Google Shopper комбинира сканирането на баркодове с онлайн и локални цени, отзиви и още много неща без да отваряте браузър. Желаете ли да опитате?</string>
   <string name="msg_intent_failed">Съжаляваме, но нужното приложение не успя да се стартира. Възможно е баркода или съдържанието му да са невалидни.</string>
   <string name="msg_redirect">Пренасочване</string>
   <string name="msg_sbc_book_not_searchable">Съжаляваме, тази книга не може да се претърсва.</string>
