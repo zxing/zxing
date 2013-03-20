@@ -322,6 +322,15 @@ public final class Code128Reader extends OneDReader {
             }
             switch (code) {
               case CODE_FNC_1:
+                if (result.length() == 0){
+                  // GS1 specification 5.4.3.7. and 5.4.6.4. If the first char after the start code
+                  // is FNC1 then this is GS1-128. We add the symbology identifier.
+                  result.append("]C1");
+                } else {
+                  // GS1 specification 5.4.7.5. Every subsequent FNC1 is returned as ASCII 29 (GS)
+                  result.append((char) 29);
+                }
+                break;
               case CODE_FNC_2:
               case CODE_FNC_3:
               case CODE_FNC_4_A:
