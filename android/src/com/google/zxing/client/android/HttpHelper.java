@@ -216,10 +216,10 @@ public final class HttpHelper {
       // this is maybe this Android bug: http://code.google.com/p/android/issues/detail?id=15554
       Log.w(TAG, "Bad URI? " + uri);
       throw new IOException(npe.toString());
-    } catch (NumberFormatException nfe) {
-      // Again seen this in the wild for bad header fields in the server response!
+    } catch (IllegalArgumentException iae) {
+      // Again seen this in the wild for bad header fields in the server response! or bad reads
       Log.w(TAG, "Bad server status? " + uri);
-      throw new IOException(nfe.toString());
+      throw new IOException(iae.toString());
     }
   }
 
