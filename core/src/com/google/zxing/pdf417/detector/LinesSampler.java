@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.zxing.NotFoundException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.pdf417.decoder.BitMatrixParser;
 
@@ -83,7 +84,7 @@ public final class LinesSampler {
    *
    * @return the potentially decodable bit matrix.
    */
-  public BitMatrix sample() {   
+  public BitMatrix sample() throws NotFoundException {   
     List<Float> symbolWidths = findSymbolWidths();
 
     int[][] codewords = new int[linesMatrix.getHeight()][];
@@ -176,7 +177,14 @@ public final class LinesSampler {
     return symbolWidths;
   }
 
-  private void linesMatrixToCodewords(int[][] codewords, int[][] clusterNumbers, List<Float> symbolWidths) {
+  private void linesMatrixToCodewords(int[][] codewords, int[][] clusterNumbers, List<Float> symbolWidths) 
+      throws NotFoundException {
+
+    // Not sure if this is the right way to handle this but avoids an error:
+    if (symbolsPerLine > symbolWidths.size()) {
+      throw NotFoundException.getNotFoundInstance();
+    }
+
     for (int y = 0; y < linesMatrix.getHeight(); y++) {
       codewords[y] = new int[symbolsPerLine];
       clusterNumbers[y] = new int [symbolsPerLine];
