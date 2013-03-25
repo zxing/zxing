@@ -113,6 +113,9 @@ public final class BitMatrixParser {
           next++;
           eraseCount++;
         } else {
+          if (next >= codewords.length) {
+            throw FormatException.getFormatInstance();
+          }
           codewords[next++] = cw;
         }
       } else {
