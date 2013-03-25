@@ -66,6 +66,13 @@ public enum DecodeHintType {
   ASSUME_CODE_39_CHECK_DIGIT,
 
   /**
+   * Assume the barcode is being processed as a GS1 barcode, and modify behavior as needed.
+   * For example this affects FNC1 handling for Code 128 (aka GS1-128). Doesn't matter what it maps to;
+   * use {@link Boolean#TRUE}.
+   */
+  ASSUME_GS1,
+
+  /**
    * The caller needs to be notified via callback when a possible {@link ResultPoint}
    * is found. Maps to a {@link ResultPointCallback}.
    */
