@@ -26,11 +26,8 @@ import com.google.zxing.common.BitMatrix;
  *
  * @author SITA Lab (kevin.osullivan@sita.aero)
  */
-final class BitMatrixParser {
+public final class BitMatrixParser {
 
-  private static final int[] NO_ERRORS = new int[0];
-
-  private static final int MAX_ROW_DIFFERENCE = 6;
   private static final int MAX_ROWS = 90;
   //private static final int MAX_COLUMNS = 30;
   // Maximum Codewords (Data + Error)
@@ -38,7 +35,7 @@ final class BitMatrixParser {
   private static final int MODULES_IN_SYMBOL = 17;
 
   private final BitMatrix bitMatrix;
-  private int rows = 0;
+  //private int rows = 0;
   //private int columns = 0;
 
   private int leftColumnECData = 0;
@@ -61,109 +58,26 @@ final class BitMatrixParser {
    * @return an array of codewords.
    */
   int[] readCodewords() throws FormatException {
-    int width = bitMatrix.getWidth();
+    //int width = bitMatrix.getWidth();
     int height = bitMatrix.getHeight();
 
     erasures = new int[MAX_CW_CAPACITY];
 
-    // Get the number of pixels in a module across the X dimension
-    //float moduleWidth = bitMatrix.getModuleWidth();
-    float moduleWidth = 1.0f; // Image has been sampled and reduced
-
-    int[] rowCounters = new int[width];
     int[] codewords = new int[MAX_CW_CAPACITY];
     int next = 0;
-    int matchingConsecutiveScans = 0;
-    boolean rowInProgress = false;
     int rowNumber = 0;
-    int rowHeight = 0;
-    for (int i = 1; i < height; i++) {
+    for (int i = 0; i < height; i++) {
       if (rowNumber >= MAX_ROWS) {
         // Something is wrong, since we have exceeded
         // the maximum rows in the specification.
         throw FormatException.getFormatInstance();
       }
-      int rowDifference = 0;
-      // Scan a line of modules and check the
-      // difference between this and the previous line
-      for (int j = 0; j < width; j++) {
-        // Accumulate differences between this line and the
-        // previous line.
-        if (bitMatrix.get(j, i) != bitMatrix.get(j, i - 1)) {
-          rowDifference++;
-        }
-      }
-      if (rowDifference <= moduleWidth * MAX_ROW_DIFFERENCE) {
-        for (int j = 0; j < width; j++) {
-          // Accumulate the black pixels on this line
-          if (bitMatrix.get(j, i)) {
-            rowCounters[j]++;
-          }
-        }
-        // Increment the number of consecutive rows of pixels
-        // that are more or less the same
-        matchingConsecutiveScans++;
-        // Height of a row is a multiple of the module size in pixels
-        // It's supposed to be >= 3x module width, but, accept anything >= 2x
-        if ((matchingConsecutiveScans + 1) >= 2.0f * moduleWidth) {
-          // We have some previous matches as well as a match here
-          // Set processing a unique row.
-          rowInProgress = true;
-        }
-      } else {
-        if (rowInProgress) {
-          // Process Row
-          next = processRow(rowCounters, rowNumber, rowHeight, codewords, next);
-          if (next == -1) {
-            // Something is wrong, since we have exceeded
-            // the maximum columns in the specification.
-            throw FormatException.getFormatInstance();
-          }
-          // Reinitialize the row counters.
-          for (int j = 0; j < rowCounters.length; j++) {
-            rowCounters[j] = 0;
-          }
-          rowNumber++;
-          rowHeight = 0;
-        }
-        matchingConsecutiveScans = 0;
-        rowInProgress = false;
-      }
-      rowHeight++;
-    }
-    // Check for a row that was in progress before we exited above.
-    if (rowInProgress) {
       // Process Row
-      if (rowNumber >= MAX_ROWS) {
-        // Something is wrong, since we have exceeded
-        // the maximum rows in the specification.
-        throw FormatException.getFormatInstance();
-      }
-      next = processRow(rowCounters, rowNumber, rowHeight, codewords, next);
+      next = processRow(rowNumber, codewords, next);
       rowNumber++;
-      rows = rowNumber;
-    }
+    }  
     erasures = trimArray(erasures, eraseCount);
     return trimArray(codewords, next);
-  }
-
-  /**
-   * Trim the array to the required size.
-   *
-   * @param array the array
-   * @param size  the size to trim it to
-   * @return the new trimmed array
-   */
-  private static int[] trimArray(int[] array, int size) {
-    if (size < 0) {
-      throw new IllegalArgumentException();
-    }
-    if (size == 0) {
-      return NO_ERRORS;
-    }
-    int[] a = new int[size];
-    System.arraycopy(array, 0, a, 0, size);
-    return a;
   }
 
   /**
@@ -172,27 +86,19 @@ final class BitMatrixParser {
    * elements, each of which can be one to six modules wide. The four bar and
    * four space elements shall measure 17 modules in total.
    *
-   * @param rowCounters an array containing the counts of black pixels for each column
-   *                    in the row.
    * @param rowNumber   the current row number of codewords.
-   * @param rowHeight   the height of this row in pixels.
    * @param codewords   the codeword array to save codewords into.
    * @param next        the next available index into the codewords array.
    * @return the next available index into the codeword array after processing
    *         this row.
    */
-  int processRow(int[] rowCounters, int rowNumber, int rowHeight, int[] codewords, int next)
-      throws FormatException {
+  int processRow(int rowNumber, int[] codewords, int next) throws FormatException {
     int width = bitMatrix.getWidth();
     int columnNumber = 0;
     long symbol = 0;
     for (int i = 0; i < width; i += MODULES_IN_SYMBOL) {
-      // This happens in real life and is almost surely a rare misdecode
-      if (i + MODULES_IN_SYMBOL > rowCounters.length) {
-        throw FormatException.getFormatInstance();
-      }
       for (int mask = MODULES_IN_SYMBOL - 1; mask >= 0; mask--) {
-        if (rowCounters[i + (MODULES_IN_SYMBOL - 1 - mask)] >= rowHeight >>> 1) {
+        if (bitMatrix.get(i + (MODULES_IN_SYMBOL - 1 - mask), rowNumber)) {
           symbol |= 1L << mask;
         }
       }
@@ -227,8 +133,9 @@ final class BitMatrixParser {
       --next;
       if (ecLevel < 0 && rowNumber % 3 == 2) {
         rightColumnECData = codewords[next];
-        if (rightColumnECData == leftColumnECData && leftColumnECData != 0) {
-          ecLevel = ((rightColumnECData % 30) - rows % 3) / 3;
+        if (rightColumnECData == leftColumnECData && leftColumnECData > 0) {
+          //ecLevel = ((rightColumnECData % 30) - rows % 3) / 3;          
+          ecLevel = (rightColumnECData % 30) / 3;
         }
       }
       codewords[next] = 0;
@@ -237,20 +144,33 @@ final class BitMatrixParser {
   }
 
   /**
+   * Trim the array to the required size.
+   *
+   * @param array the array
+   * @param size  the size to trim it to
+   * @return the new trimmed array
+   */
+  private static int[] trimArray(int[] array, int size) {
+    if (size < 0) {
+      throw new IllegalArgumentException();
+    }
+    int[] a = new int[size];
+    System.arraycopy(array, 0, a, 0, size);
+    return a;
+  }
+
+  /**
    * Translate the symbol into a codeword.
    *
    * @return the codeword corresponding to the symbol.
    */
-  private static int getCodeword(long symbol) {
+  public static int getCodeword(long symbol) {
     long sym = symbol & 0x3FFFF;
     int i = findCodewordIndex(sym);
     if (i == -1) {
       return -1;
-    } else {
-      long cw = CODEWORD_TABLE[i] - 1;
-      cw %= 929;
-      return (int) cw;
     }
+    return (CODEWORD_TABLE[i] - 1) % 929; 
   }
 
   /**
@@ -292,7 +212,7 @@ final class BitMatrixParser {
    * specification. The index of a symbol in this table corresponds to the
    * index into the codeword table.
    */
-  private static final int[] SYMBOL_TABLE = {0x1025e, 0x1027a, 0x1029e,
+  public static final int[] SYMBOL_TABLE = {0x1025e, 0x1027a, 0x1029e,
       0x102bc, 0x102f2, 0x102f4, 0x1032e, 0x1034e, 0x1035c, 0x10396,
       0x103a6, 0x103ac, 0x10422, 0x10428, 0x10436, 0x10442, 0x10444,
       0x10448, 0x10450, 0x1045e, 0x10466, 0x1046c, 0x1047a, 0x10482,

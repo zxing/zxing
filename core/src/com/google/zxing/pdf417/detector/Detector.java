@@ -23,6 +23,7 @@ import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.DetectorResult;
 import com.google.zxing.common.GridSampler;
+import com.google.zxing.common.PerspectiveTransform;
 import com.google.zxing.common.detector.MathUtils;
 
 import java.util.Arrays;
@@ -34,6 +35,8 @@ import java.util.Map;
  *
  * @author SITA Lab (kevin.osullivan@sita.aero)
  * @author dswitkin@google.com (Daniel Switkin)
+ * @author Schweers Informationstechnologie GmbH (hartmut.neubauer@schweers.de)
+ * @author creatale GmbH (christoph.schulz@creatale.de)
  */
 public final class Detector {
 
@@ -41,7 +44,6 @@ public final class Detector {
   private static final int PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
   private static final int MAX_AVG_VARIANCE = (int) (PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.42f);
   private static final int MAX_INDIVIDUAL_VARIANCE = (int) (PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.8f);
-  private static final int SKEW_THRESHOLD = 3;
 
   // B S B S B S B S Bar/Space pattern
   // 11111111 0 1 0 1 0 1 000
@@ -84,18 +86,17 @@ public final class Detector {
     // Fetch the 1 bit matrix once up front.
     BitMatrix matrix = image.getBlackMatrix();
 
-    boolean tryHarder = hints != null && hints.containsKey(DecodeHintType.TRY_HARDER);
-
     // Try to find the vertices assuming the image is upright.
-    ResultPoint[] vertices = findVertices(matrix, tryHarder);
+    int rowStep = 8;
+    ResultPoint[] vertices = findVertices(matrix, rowStep);
     if (vertices == null) {
       // Maybe the image is rotated 180 degrees?
-      vertices = findVertices180(matrix, tryHarder);
+      vertices = findVertices180(matrix, rowStep);
       if (vertices != null) {
-        correctCodeWordVertices(vertices, true);
+        correctVertices(matrix, vertices, true);
       }
     } else {
-      correctCodeWordVertices(vertices, false);
+      correctVertices(matrix, vertices, false);
     }
 
     if (vertices == null) {
@@ -107,18 +108,22 @@ public final class Detector {
       throw NotFoundException.getNotFoundInstance();
     }
 
-    int dimension = computeDimension(vertices[4], vertices[6],
-        vertices[5], vertices[7], moduleWidth);
+    int dimension = computeDimension(vertices[12], vertices[14],
+        vertices[13], vertices[15], moduleWidth);
     if (dimension < 1) {
       throw NotFoundException.getNotFoundInstance();
     }
 
-    int ydimension = computeYDimension(vertices[4], vertices[6], vertices[5], vertices[7], moduleWidth);
-    ydimension = ydimension > dimension ? ydimension : dimension;
+    int yDimension = Math.max(computeYDimension(vertices[12], vertices[14],
+        vertices[13], vertices[15], moduleWidth), dimension);
 
-    // Deskew and sample image.
-    BitMatrix bits = sampleGrid(matrix, vertices[4], vertices[5], vertices[6], vertices[7], dimension, ydimension);
-    return new DetectorResult(bits, new ResultPoint[]{vertices[5], vertices[4], vertices[6], vertices[7]});
+    // Deskew and over-sample image.
+    BitMatrix linesMatrix = sampleLines(vertices, dimension, yDimension);
+    BitMatrix linesGrid = new LinesSampler(linesMatrix, dimension).sample();
+
+    //TODO: verify vertex indices.
+    return new DetectorResult(linesGrid, new ResultPoint[]{ 
+        vertices[5], vertices[4], vertices[6], vertices[7]});
   }
 
   /**
@@ -126,6 +131,7 @@ public final class Detector {
    * and Stop patterns as locators.
    *
    * @param matrix the scanned barcode image.
+   * @param rowStep the step size for iterating rows (every n-th row).
    * @return an array containing the vertices:
    *           vertices[0] x, y top left barcode
    *           vertices[1] x, y bottom left barcode
@@ -136,16 +142,14 @@ public final class Detector {
    *           vertices[6] x, y top right codeword area
    *           vertices[7] x, y bottom right codeword area
    */
-  private static ResultPoint[] findVertices(BitMatrix matrix, boolean tryHarder) {
+  private static ResultPoint[] findVertices(BitMatrix matrix, int rowStep) {
     int height = matrix.getHeight();
     int width = matrix.getWidth();
 
-    ResultPoint[] result = new ResultPoint[8];
+    ResultPoint[] result = new ResultPoint[16];
     boolean found = false;
 
     int[] counters = new int[START_PATTERN.length];
-
-    int rowStep = Math.max(1, height >> (tryHarder ? 9 : 7));
 
     // Top Left
     for (int i = 0; i < height; i += rowStep) {
@@ -207,9 +211,9 @@ public final class Detector {
    * and Stop patterns as locators. This assumes that the image is rotated 180
    * degrees and if it locates the start and stop patterns at it will re-map
    * the vertices for a 0 degree rotation.
-   * TODO: Change assumption about barcode location.
    *
    * @param matrix the scanned barcode image.
+   * @param rowStep the step size for iterating rows (every n-th row).
    * @return an array containing the vertices:
    *           vertices[0] x, y top left barcode
    *           vertices[1] x, y bottom left barcode
@@ -220,17 +224,18 @@ public final class Detector {
    *           vertices[6] x, y top right codeword area
    *           vertices[7] x, y bottom right codeword area
    */
-  private static ResultPoint[] findVertices180(BitMatrix matrix, boolean tryHarder) {
+  private static ResultPoint[] findVertices180(BitMatrix matrix, int rowStep) {
+
+    // TODO: Change assumption about barcode location.
+
     int height = matrix.getHeight();
     int width = matrix.getWidth();
     int halfWidth = width >> 1;
 
-    ResultPoint[] result = new ResultPoint[8];
+    ResultPoint[] result = new ResultPoint[16];
     boolean found = false;
 
     int[] counters = new int[START_PATTERN_REVERSE.length];
-
-    int rowStep = Math.max(1, height >> (tryHarder ? 9 : 7));
 
     // Top Left
     for (int i = height - 1; i > 0; i -= rowStep) {
@@ -285,175 +290,6 @@ public final class Detector {
       }
     }
     return found ? result : null;
-  }
-
-  /**
-   * Because we scan horizontally to detect the start and stop patterns, the vertical component of
-   * the codeword coordinates will be slightly wrong if there is any skew or rotation in the image.
-   * This method moves those points back onto the edges of the theoretically perfect bounding
-   * quadrilateral if needed.
-   *
-   * @param vertices The eight vertices located by findVertices().
-   */
-  private static void correctCodeWordVertices(ResultPoint[] vertices, boolean upsideDown) {
-
-    float v0x = vertices[0].getX();
-    float v0y = vertices[0].getY();
-    float v2x = vertices[2].getX();
-    float v2y = vertices[2].getY();
-    float v4x = vertices[4].getX();
-    float v4y = vertices[4].getY();
-    float v6x = vertices[6].getX();
-    float v6y = vertices[6].getY();
-
-    float skew = v4y - v6y;
-    if (upsideDown) {
-      skew = -skew;
-    }
-    if (skew > SKEW_THRESHOLD) {
-      // Fix v4
-      float deltax = v6x - v0x;
-      float deltay = v6y - v0y;
-      float delta2 = deltax * deltax + deltay * deltay;
-      float correction = (v4x - v0x) * deltax / delta2;
-      vertices[4] = new ResultPoint(v0x + correction * deltax, v0y + correction * deltay);
-    } else if (-skew > SKEW_THRESHOLD) {
-      // Fix v6
-      float deltax = v2x - v4x;
-      float deltay = v2y - v4y;
-      float delta2 = deltax * deltax + deltay * deltay;
-      float correction = (v2x - v6x) * deltax / delta2;
-      vertices[6] = new ResultPoint(v2x - correction * deltax, v2y - correction * deltay);
-    }
-
-    float v1x = vertices[1].getX();
-    float v1y = vertices[1].getY();
-    float v3x = vertices[3].getX();
-    float v3y = vertices[3].getY();
-    float v5x = vertices[5].getX();
-    float v5y = vertices[5].getY();
-    float v7x = vertices[7].getX();
-    float v7y = vertices[7].getY();
-
-    skew = v7y - v5y;
-    if (upsideDown) {
-      skew = -skew;
-    }
-    if (skew > SKEW_THRESHOLD) {
-      // Fix v5
-      float deltax = v7x - v1x;
-      float deltay = v7y - v1y;
-      float delta2 = deltax * deltax + deltay * deltay;
-      float correction = (v5x - v1x) * deltax / delta2;
-      vertices[5] = new ResultPoint(v1x + correction * deltax, v1y + correction * deltay);
-    } else if (-skew > SKEW_THRESHOLD) {
-      // Fix v7
-      float deltax = v3x - v5x;
-      float deltay = v3y - v5y;
-      float delta2 = deltax * deltax + deltay * deltay;
-      float correction = (v3x - v7x) * deltax / delta2;
-      vertices[7] = new ResultPoint(v3x - correction * deltax, v3y - correction * deltay);
-    }
-  }
-
-  /**
-   * <p>Estimates module size (pixels in a module) based on the Start and End
-   * finder patterns.</p>
-   *
-   * @param vertices an array of vertices:
-   *           vertices[0] x, y top left barcode
-   *           vertices[1] x, y bottom left barcode
-   *           vertices[2] x, y top right barcode
-   *           vertices[3] x, y bottom right barcode
-   *           vertices[4] x, y top left codeword area
-   *           vertices[5] x, y bottom left codeword area
-   *           vertices[6] x, y top right codeword area
-   *           vertices[7] x, y bottom right codeword area
-   * @return the module size.
-   */
-  private static float computeModuleWidth(ResultPoint[] vertices) {
-    float pixels1 = ResultPoint.distance(vertices[0], vertices[4]);
-    float pixels2 = ResultPoint.distance(vertices[1], vertices[5]);
-    float moduleWidth1 = (pixels1 + pixels2) / (17 * 2.0f);
-    float pixels3 = ResultPoint.distance(vertices[6], vertices[2]);
-    float pixels4 = ResultPoint.distance(vertices[7], vertices[3]);
-    float moduleWidth2 = (pixels3 + pixels4) / (18 * 2.0f);
-    return (moduleWidth1 + moduleWidth2) / 2.0f;
-  }
-
-  /**
-   * Computes the dimension (number of modules in a row) of the PDF417 Code
-   * based on vertices of the codeword area and estimated module size.
-   *
-   * @param topLeft     of codeword area
-   * @param topRight    of codeword area
-   * @param bottomLeft  of codeword area
-   * @param bottomRight of codeword are
-   * @param moduleWidth estimated module size
-   * @return the number of modules in a row.
-   */
-  private static int computeDimension(ResultPoint topLeft,
-                                      ResultPoint topRight,
-                                      ResultPoint bottomLeft,
-                                      ResultPoint bottomRight,
-                                      float moduleWidth) {
-    int topRowDimension = MathUtils.round(ResultPoint.distance(topLeft, topRight) / moduleWidth);
-    int bottomRowDimension = MathUtils.round(ResultPoint.distance(bottomLeft, bottomRight) / moduleWidth);
-    return ((((topRowDimension + bottomRowDimension) >> 1) + 8) / 17) * 17;
-  }
-
-  /**
-   * Computes the y dimension (number of modules in a column) of the PDF417 Code
-   * based on vertices of the codeword area and estimated module size.
-   *
-   * @param topLeft     of codeword area
-   * @param topRight    of codeword area
-   * @param bottomLeft  of codeword area
-   * @param bottomRight of codeword are
-   * @param moduleWidth estimated module size
-   * @return the number of modules in a row.
-   */
-  private static int computeYDimension(ResultPoint topLeft,
-                                      ResultPoint topRight,
-                                      ResultPoint bottomLeft,
-                                      ResultPoint bottomRight,
-                                      float moduleWidth) {
-    int leftColumnDimension = MathUtils.round(ResultPoint.distance(topLeft, bottomLeft) / moduleWidth);
-    int rightColumnDimension = MathUtils.round(ResultPoint.distance(topRight, bottomRight) / moduleWidth);
-    return (leftColumnDimension + rightColumnDimension) >> 1;
-  }
-
-  private static BitMatrix sampleGrid(BitMatrix matrix,
-                                      ResultPoint topLeft,
-                                      ResultPoint bottomLeft,
-                                      ResultPoint topRight,
-                                      ResultPoint bottomRight,
-                                      int xdimension,
-                                      int ydimension) throws NotFoundException {
-
-    // Note that unlike the QR Code sampler, we didn't find the center of modules, but the
-    // very corners. So there is no 0.5f here; 0.0f is right.
-    GridSampler sampler = GridSampler.getInstance();
-
-    return sampler.sampleGrid(
-        matrix, 
-        xdimension, ydimension,
-        0.0f, // p1ToX
-        0.0f, // p1ToY
-        xdimension, // p2ToX
-        0.0f, // p2ToY
-        xdimension, // p3ToX
-        ydimension, // p3ToY
-        0.0f, // p4ToX
-        ydimension, // p4ToY
-        topLeft.getX(), // p1FromX
-        topLeft.getY(), // p1FromY
-        topRight.getX(), // p2FromX
-        topRight.getY(), // p2FromY
-        bottomRight.getX(), // p3FromX
-        bottomRight.getY(), // p3FromY
-        bottomLeft.getX(), // p4FromX
-        bottomLeft.getY()); // p4FromY
   }
 
   /**
@@ -548,6 +384,269 @@ public final class Detector {
       totalVariance += variance;
     }
     return totalVariance / total;
+  }
+
+  /**
+   * <p>Correct the vertices by searching for top and bottom vertices of wide
+   * bars, then locate the intersections between the upper and lower horizontal
+   * line and the inner vertices vertical lines.</p>
+   *
+   * @param matrix the scanned barcode image.
+   * @param vertices the vertices vector is extended and the new members are:
+   *           vertices[ 8] x,y point on upper border of left wide bar
+   *           vertices[ 9] x,y point on lower border of left wide bar
+   *           vertices[10] x,y point on upper border of right wide bar
+   *           vertices[11] x,y point on lower border of right wide bar
+   *           vertices[12] x,y final top left codeword area
+   *           vertices[13] x,y final bottom left codeword area
+   *           vertices[14] x,y final top right codeword area
+   *           vertices[15] x,y final bottom right codeword area
+   * @param upsideDown true if rotated by 180 degree.
+   */
+  private static void correctVertices(BitMatrix matrix,
+                                      ResultPoint[] vertices,
+                                      boolean upsideDown) throws NotFoundException {
+
+    boolean isLowLeft = Math.abs(vertices[4].getY() - vertices[5].getY()) < 20.0;
+    boolean isLowRight = Math.abs(vertices[6].getY() - vertices[7].getY()) < 20.0;
+    if (isLowLeft || isLowRight) {
+      throw NotFoundException.getNotFoundInstance();
+    } else {
+      findWideBarTopBottom(matrix, vertices, 0, 0,  8, 17, upsideDown ? 1 : -1);
+      findWideBarTopBottom(matrix, vertices, 1, 0,  8, 17, upsideDown ? -1 : 1);
+      findWideBarTopBottom(matrix, vertices, 2, 11, 7, 18, upsideDown ? 1 : -1);
+      findWideBarTopBottom(matrix, vertices, 3, 11, 7, 18, upsideDown ? -1 : 1);
+      findCrossingPoint(vertices, 12, 4, 5, 8, 10, matrix);
+      findCrossingPoint(vertices, 13, 4, 5, 9, 11, matrix);
+      findCrossingPoint(vertices, 14, 6, 7, 8, 10, matrix);
+      findCrossingPoint(vertices, 15, 6, 7, 9, 11, matrix);
+    }
+  }
+
+  /**
+   * <p>Locate the top or bottom of one of the two wide black bars of a guard pattern.</p>
+   *
+   * <p>Warning: it only searches along the y axis, so the return points would not be
+   * right if the barcode is too curved.</p>
+   *
+   * @param matrix The bit matrix.
+   * @param vertices The 16 vertices located by findVertices(); the result
+   *           points are stored into vertices[8], ... , vertices[11].
+   * @param offsetVertex The offset of the outer vertex and the inner
+   *           vertex (+ 4) to be corrected and (+ 8) where the result is stored.
+   * @param startWideBar start of a wide bar.
+   * @param lenWideBar length of wide bar.
+   * @param lenPattern length of the pattern.
+   * @param rowStep +1 if corner should be exceeded towards the bottom, -1 towards the top.
+   */
+  private static void findWideBarTopBottom(BitMatrix matrix,
+                                           ResultPoint[] vertices,
+                                           int offsetVertex,
+                                           int startWideBar,
+                                           int lenWideBar,
+                                           int lenPattern,
+                                           int rowStep) {
+    ResultPoint verticeStart = vertices[offsetVertex];
+    ResultPoint verticeEnd = vertices[offsetVertex + 4];
+
+    // Start horizontally at the middle of the bar.
+    int endWideBar = startWideBar + lenWideBar;
+    float barDiff = verticeEnd.getX() - verticeStart.getX();
+    float barStart = verticeStart.getX() + (barDiff * startWideBar) / lenPattern;
+    float barEnd = verticeStart.getX() + (barDiff * endWideBar) / lenPattern;
+    int x = Math.round((barStart + barEnd) / 2.0f);
+
+    // Start vertically between the preliminary vertices.
+    int yStart = Math.round(verticeStart.getY());
+    int y = yStart;
+
+    // Find offset of thin bar to the right as additional safeguard.
+    int nextBarX = (int)Math.max(barStart, barEnd) + 1;
+    while (nextBarX < matrix.getWidth()) {
+      if (!matrix.get(nextBarX - 1, y) && matrix.get(nextBarX, y)) {
+        break;
+      }
+      nextBarX++;
+    }
+    nextBarX -= x;
+
+    boolean isEnd = false;
+    while (!isEnd) {
+      if (matrix.get(x, y)) {
+        // If the thin bar to the right ended, stop as well
+        isEnd = !matrix.get(x + nextBarX, y) && !matrix.get(x + nextBarX + 1, y);
+        y += rowStep;
+        if (y <= 0 || y >= matrix.getHeight() - 1) {
+          // End of barcode image reached.
+          isEnd = true;
+        }
+      } else {
+        // Look sidewise whether black bar continues? (in the case the image is skewed)
+        if (x > 0 && matrix.get(x - 1, y)) {
+          x--;
+        } else if (x < matrix.getWidth() - 1 && matrix.get(x + 1, y)) {
+          x++;
+        } else {
+          // End of pattern regarding big bar and big gap reached.
+          isEnd = true;
+          if (y != yStart) {
+            // Turn back one step, because target has been exceeded.
+            y -= rowStep;
+          }
+        }
+      }
+    }
+
+    vertices[offsetVertex + 8] = new ResultPoint(x, y);
+  }
+
+  /**
+   * <p>Finds the intersection of two lines.</p>
+   *
+   * @param vertices The reference of the vertices vector
+   * @param idxResult Index of result point inside the vertices vector.
+   * @param idxLineA1
+   * @param idxLineA2 Indices two points inside the vertices vector that define the first line.
+   * @param idxLineB1
+   * @param idxLineB2 Indices two points inside the vertices vector that define the second line.
+   * @param matrix: bit matrix, here only for testing whether the result is inside the matrix.
+   * @return Returns true when the result is valid and lies inside the matrix. Otherwise throws an
+   * exception.
+   */
+  private static void findCrossingPoint(ResultPoint[] vertices,
+                                        int idxResult,
+                                        int idxLineA1, int idxLineA2,
+                                        int idxLineB1, int idxLineB2,
+                                        BitMatrix matrix) throws NotFoundException {
+    ResultPoint result = intersection(vertices[idxLineA1], vertices[idxLineA2],
+                                      vertices[idxLineB1], vertices[idxLineB2]);
+    if (result == null) {
+      throw NotFoundException.getNotFoundInstance();
+    }
+
+    int x = Math.round(result.getX());
+    int y = Math.round(result.getY());
+    if (x < 0 || x >= matrix.getWidth() || y < 0 || y >= matrix.getHeight()) {
+      throw NotFoundException.getNotFoundInstance();
+    }
+
+    vertices[idxResult] = result;
+  }
+
+  /**
+   * Computes the intersection between two lines.
+   */
+  private static ResultPoint intersection(ResultPoint a1, ResultPoint a2, ResultPoint b1, ResultPoint b2) {
+    float dxa = a1.getX() - a2.getX();
+    float dxb = b1.getX() - b2.getX();
+    float dya = a1.getY() - a2.getY();
+    float dyb = b1.getY() - b2.getY();
+
+    float p = a1.getX() * a2.getY() - a1.getY() * a2.getX();
+    float q = b1.getX() * b2.getY() - b1.getY() * b2.getX();
+    float denom = dxa * dyb - dya * dxb;
+    if (denom == 0) {
+      // Lines don't intersect
+      return null;
+    }
+
+    float x = (p * dxb - dxa * q) / denom;
+    float y = (p * dyb - dya * q) / denom;
+
+    return new ResultPoint(x, y);
+  }
+
+  /**
+   * <p>Estimates module size (pixels in a module) based on the Start and End
+   * finder patterns.</p>
+   *
+   * @param vertices an array of vertices:
+   *           vertices[0] x, y top left barcode
+   *           vertices[1] x, y bottom left barcode
+   *           vertices[2] x, y top right barcode
+   *           vertices[3] x, y bottom right barcode
+   *           vertices[4] x, y top left codeword area
+   *           vertices[5] x, y bottom left codeword area
+   *           vertices[6] x, y top right codeword area
+   *           vertices[7] x, y bottom right codeword area
+   * @return the module size.
+   */
+  private static float computeModuleWidth(ResultPoint[] vertices) {
+    float pixels1 = ResultPoint.distance(vertices[0], vertices[4]);
+    float pixels2 = ResultPoint.distance(vertices[1], vertices[5]);
+    float moduleWidth1 = (pixels1 + pixels2) / (17 * 2.0f);
+    float pixels3 = ResultPoint.distance(vertices[6], vertices[2]);
+    float pixels4 = ResultPoint.distance(vertices[7], vertices[3]);
+    float moduleWidth2 = (pixels3 + pixels4) / (18 * 2.0f);
+    return (moduleWidth1 + moduleWidth2) / 2.0f;
+  }
+
+  /**
+   * Computes the dimension (number of modules in a row) of the PDF417 Code
+   * based on vertices of the codeword area and estimated module size.
+   *
+   * @param topLeft     of codeword area
+   * @param topRight    of codeword area
+   * @param bottomLeft  of codeword area
+   * @param bottomRight of codeword are
+   * @param moduleWidth estimated module size
+   * @return the number of modules in a row.
+   */
+  private static int computeDimension(ResultPoint topLeft,
+                                      ResultPoint topRight,
+                                      ResultPoint bottomLeft,
+                                      ResultPoint bottomRight,
+                                      float moduleWidth) {
+    int topRowDimension = MathUtils.round(ResultPoint.distance(topLeft, topRight) / moduleWidth);
+    int bottomRowDimension = MathUtils.round(ResultPoint.distance(bottomLeft, bottomRight) / moduleWidth);
+    return ((((topRowDimension + bottomRowDimension) >> 1) + 8) / 17) * 17;
+  }
+
+  /**
+   * Computes the y dimension (number of modules in a column) of the PDF417 Code
+   * based on vertices of the codeword area and estimated module size.
+   *
+   * @param topLeft     of codeword area
+   * @param topRight    of codeword area
+   * @param bottomLeft  of codeword area
+   * @param bottomRight of codeword are
+   * @param moduleWidth estimated module size
+   * @return the number of modules in a row.
+   */
+  private static int computeYDimension(ResultPoint topLeft,
+                                       ResultPoint topRight,
+                                       ResultPoint bottomLeft,
+                                       ResultPoint bottomRight,
+                                       float moduleWidth) {
+    int leftColumnDimension = MathUtils.round(ResultPoint.distance(topLeft, bottomLeft) / moduleWidth);
+    int rightColumnDimension = MathUtils.round(ResultPoint.distance(topRight, bottomRight) / moduleWidth);
+    return (leftColumnDimension + rightColumnDimension) >> 1;
+  }
+
+  /**
+   * Deskew and over-sample image.
+   * 
+   * @param vertices   vertices from findVertices()
+   * @param dimension  x dimension
+   * @param yDimension y dimension
+   * @return an over-sampled BitMatrix.
+   */
+  private BitMatrix sampleLines(ResultPoint[] vertices, int dimension, int yDimension) throws NotFoundException {
+    int sampleDimensionX = dimension * 8;
+    int sampleDimensionY = yDimension * 4;
+
+    PerspectiveTransform transform = PerspectiveTransform
+        .quadrilateralToQuadrilateral(0.0f, 0.0f,
+            sampleDimensionX, 0.0f, 0.0f,
+            sampleDimensionY, sampleDimensionX,
+            sampleDimensionY, vertices[12].getX(),
+            vertices[12].getY(), vertices[14].getX(),
+            vertices[14].getY(), vertices[13].getX(),
+            vertices[13].getY(), vertices[15].getX(),
+            vertices[15].getY());
+
+    return GridSampler.getInstance().sampleGrid(image.getBlackMatrix(),
+        sampleDimensionX, sampleDimensionY, transform);
   }
 
 }
