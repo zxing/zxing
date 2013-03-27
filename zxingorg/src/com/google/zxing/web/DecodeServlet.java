@@ -36,10 +36,13 @@ import com.google.zxing.multi.MultipleBarcodeReader;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.FileCleanerCleanup;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.FileCleaningTracker;
 
 import java.awt.color.CMMException;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
@@ -55,12 +58,12 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumMap;
 import java.util.EnumSet;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServlet;
@@ -98,8 +101,12 @@ public final class DecodeServlet extends HttpServlet {
   @Override
   public void init(ServletConfig servletConfig) {
     Logger logger = Logger.getLogger("com.google.zxing");
-    logger.addHandler(new ServletContextLogHandler(servletConfig.getServletContext()));
-    diskFileItemFactory = new DiskFileItemFactory();
+    ServletContext context = servletConfig.getServletContext();
+    logger.addHandler(new ServletContextLogHandler(context));
+    File repository = (File) context.getAttribute("javax.servlet.context.tempdir");
+    FileCleaningTracker fileCleaningTracker = FileCleanerCleanup.getFileCleaningTracker(context);
+    diskFileItemFactory = new DiskFileItemFactory(1 << 16, repository);
+    diskFileItemFactory.setFileCleaningTracker(fileCleaningTracker);
   }
 
   @Override
@@ -225,7 +232,7 @@ public final class DecodeServlet extends HttpServlet {
 
     // Parse the request
     try {
-      for (FileItem item : (List<FileItem>) upload.parseRequest(request)) {
+      for (FileItem item : upload.parseRequest(request)) {
         if (!item.isFormField()) {
           if (item.getSize() <= MAX_IMAGE_SIZE) {
             log.info("Decoding uploaded file");
