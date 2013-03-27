@@ -20,7 +20,7 @@
   com.google.zxing.Result,
   com.google.zxing.client.result.ResultParser,
   com.google.zxing.client.result.ParsedResult,
-  org.apache.commons.lang.StringEscapeUtils"/>
+  org.apache.commons.lang3.StringEscapeUtils"/>
 <jsp:declaration>
   private static String arrayToString(byte[] bytes) {
     int length = bytes.length;
