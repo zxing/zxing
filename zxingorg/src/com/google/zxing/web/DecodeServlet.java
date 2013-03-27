@@ -79,8 +79,8 @@ public final class DecodeServlet extends HttpServlet {
 
   // No real reason to let people upload more than a 2MB image
   private static final long MAX_IMAGE_SIZE = 2000000L;
-  // No real reason to deal with more than maybe 2 megapixels
-  private static final int MAX_PIXELS = 1 << 21;
+  // No real reason to deal with more than maybe 8.3 megapixels
+  private static final int MAX_PIXELS = 1 << 23;
   private static final byte[] REMAINDER_BUFFER = new byte[8192];
   private static final Map<DecodeHintType,Object> HINTS;
   private static final Map<DecodeHintType,Object> HINTS_PURE;
