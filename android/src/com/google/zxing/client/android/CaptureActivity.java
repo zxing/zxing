@@ -17,6 +17,7 @@
 package com.google.zxing.client.android;
 
 import com.google.zxing.BarcodeFormat;
+import com.google.zxing.DecodeHintType;
 import com.google.zxing.Result;
 import com.google.zxing.ResultMetadataType;
 import com.google.zxing.ResultPoint;
@@ -111,6 +112,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private String sourceUrl;
   private ScanFromWebPageManager scanFromWebPageManager;
   private Collection<BarcodeFormat> decodeFormats;
+  private Map<DecodeHintType,?> decodeHints;
   private String characterSet;
   private HistoryManager historyManager;
   private InactivityTimer inactivityTimer;
@@ -207,6 +209,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         // Scan the formats the intent requested, and return the result to the calling activity.
         source = IntentSource.NATIVE_APP_INTENT;
         decodeFormats = DecodeFormatManager.parseDecodeFormats(intent);
+        decodeHints = DecodeHintManager.parseDecodeHints(intent);
 
         if (intent.hasExtra(Intents.Scan.WIDTH) && intent.hasExtra(Intents.Scan.HEIGHT)) {
           int width = intent.getIntExtra(Intents.Scan.WIDTH, 0);
@@ -239,6 +242,8 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         Uri inputUri = Uri.parse(dataString);
         scanFromWebPageManager = new ScanFromWebPageManager(inputUri);
         decodeFormats = DecodeFormatManager.parseDecodeFormats(inputUri);
+        // Allow a sub-set of the hints to be specified by the caller.
+        decodeHints = DecodeHintManager.parseDecodeHints(inputUri);
 
       }
 
@@ -710,7 +715,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       cameraManager.openDriver(surfaceHolder);
       // Creating the handler starts the preview, which can also throw a RuntimeException.
       if (handler == null) {
-        handler = new CaptureActivityHandler(this, decodeFormats, characterSet, cameraManager);
+        handler = new CaptureActivityHandler(this, decodeFormats, decodeHints, characterSet, cameraManager);
       }
       decodeOrStoreSavedBitmap(null, null);
     } catch (IOException ioe) {
