@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content">
+  
+  <ImageView android:id="@+id/app_picker_list_item_icon"
+             android:layout_width="64dip"
+             android:layout_height="64dip"
+             android:scaleType="centerInside"
+             android:padding="@dimen/half_padding"/>
+  
+  <TextView android:id="@+id/app_picker_list_item_label" 
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:gravity="center_vertical"
+            android:textAppearance="?android:attr/textAppearanceLarge"            
+            android:singleLine="true"
+            android:padding="@dimen/half_padding"/>
+  
+</LinearLayout>

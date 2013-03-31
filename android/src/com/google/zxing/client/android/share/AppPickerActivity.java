@@ -26,16 +26,17 @@ import com.google.zxing.client.android.common.executor.AsyncTaskExecInterface;
 import com.google.zxing.client.android.common.executor.AsyncTaskExecManager;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public final class AppPickerActivity extends ListActivity {
 
-  private final List<String[]> labelsPackages;
+  private final List<AppInfo> labelsPackages;
   private LoadPackagesAsyncTask backgroundTask;
   private final AsyncTaskExecInterface taskExec;
 
   public AppPickerActivity() {
-    labelsPackages = new ArrayList<String[]>();
+    labelsPackages = Collections.synchronizedList(new ArrayList<AppInfo>());
     taskExec = new AsyncTaskExecManager().build();
   }
 
@@ -60,13 +61,13 @@ public final class AppPickerActivity extends ListActivity {
   @Override
   protected void onListItemClick(ListView l, View view, int position, long id) {
     if (position >= 0 && position < labelsPackages.size()) {
-      String url = "market://details?id=" + labelsPackages.get(position)[1];
+      String packageName = labelsPackages.get(position).getPackageName();
       Intent intent = new Intent();
       intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-      intent.putExtra(Browser.BookmarkColumns.URL, url);
+      intent.putExtra(Browser.BookmarkColumns.URL, "market://details?id=" + packageName);
       setResult(RESULT_OK, intent);
     } else {
-      setResult(RESULT_CANCELED);
+      setResult(RESULT_CANCELED);      
     }
     finish();
   }
