@@ -58,6 +58,7 @@ void ReedSolomonTest::setUp() {
 }
 
 void ReedSolomonTest::tearDown() {
+  delete qrRSDecoder_;
 }
 
 void ReedSolomonTest::testNoError() {

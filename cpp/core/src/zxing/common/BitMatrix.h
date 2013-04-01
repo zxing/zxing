@@ -31,11 +31,14 @@ namespace zxing {
 }
 
 class zxing::BitMatrix : public Counted {
+public:
+  static const int bitsPerWord = std::numeric_limits<unsigned int>::digits;
+
 private:
-  int width_;
-  int height_;
-  int words_;
-  ArrayRef<int> bits_;
+  int width;
+  int height;
+  int rowSize;
+  ArrayRef<int> bits;
 
 #define ZX_LOG_DIGITS(digits) \
     ((digits == 8) ? 3 : \
@@ -45,8 +48,6 @@ private:
         ((digits == 128) ? 7 : \
          (-1))))))
 
-  static const int bitsPerWord =
-    std::numeric_limits<unsigned int>::digits;
   static const int logBits = ZX_LOG_DIGITS(bitsPerWord);
   static const int bitsMask = (1 << logBits) - 1;
 
@@ -57,13 +58,13 @@ public:
   ~BitMatrix();
 
   bool get(int x, int y) const {
-    int offset = x + width_ * y;
-    return ((bits_[offset >> logBits] >> (offset & bitsMask)) & 0x01) != 0;
+    int offset = y * rowSize + (x >> logBits);
+    return ((((unsigned)bits[offset]) >> (x & bitsMask)) & 1) != 0;
   }
 
   void set(int x, int y) {
-    int offset = x + width_ * y;
-    bits_[offset >> logBits] |= 1 << (offset & bitsMask);
+    int offset = y * rowSize + (x >> logBits);
+    bits[offset] |= 1 << (x & bitsMask);
   }
 
   void flip(int x, int y);
@@ -71,16 +72,17 @@ public:
   void setRegion(int left, int top, int width, int height);
   Ref<BitArray> getRow(int y, Ref<BitArray> row);
 
-  int getDimension() const;
   int getWidth() const;
   int getHeight() const;
 
-  ArrayRef<int> getBits() const;
+  // ArrayRef<int> getBits() const;
 
   friend std::ostream& operator<<(std::ostream &out, const BitMatrix &bm);
   const char *description();
 
 private:
+  inline void init(int, int);
+
   BitMatrix(const BitMatrix&);
   BitMatrix& operator =(const BitMatrix&);
 };

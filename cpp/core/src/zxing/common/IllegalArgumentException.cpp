@@ -20,12 +20,8 @@
 
 #include <zxing/common/IllegalArgumentException.h>
 
-namespace zxing {
+using zxing::IllegalArgumentException;
 
-IllegalArgumentException::IllegalArgumentException(const char *msg) :
-    Exception(msg) {
-}
-IllegalArgumentException::~IllegalArgumentException() throw() {
-
-}
-}
+IllegalArgumentException::IllegalArgumentException() : Exception() {}
+IllegalArgumentException::IllegalArgumentException(const char *msg) : Exception(msg) {}
+IllegalArgumentException::~IllegalArgumentException() throw() {}

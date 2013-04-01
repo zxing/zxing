@@ -31,7 +31,7 @@ int BitMatrixParser::copyBit(size_t x, size_t y, int versionBits) {
 
 BitMatrixParser::BitMatrixParser(Ref<BitMatrix> bitMatrix) :
     bitMatrix_(bitMatrix), parsedVersion_(0), parsedFormatInfo_() {
-  size_t dimension = bitMatrix->getDimension();
+  size_t dimension = bitMatrix->getHeight();
   if ((dimension < 21) || (dimension & 0x03) != 1) {
     throw ReaderException("Dimension must be 1 mod 4 and >= 21");
   }
@@ -57,7 +57,7 @@ Ref<FormatInformation> BitMatrixParser::readFormatInformation() {
   }
 
   // Read the top-right/bottom-left pattern
-  int dimension = bitMatrix_->getDimension();
+  int dimension = bitMatrix_->getHeight();
   int formatInfoBits2 = 0;
   int jMin = dimension - 7;
   for (int j = dimension - 1; j >= jMin; j--) {
@@ -79,7 +79,7 @@ Version *BitMatrixParser::readVersion() {
     return parsedVersion_;
   }
 
-  int dimension = bitMatrix_->getDimension();
+  int dimension = bitMatrix_->getHeight();
 
   int provisionalVersion = (dimension - 17) >> 2;
   if (provisionalVersion <= 6) {
@@ -121,14 +121,11 @@ ArrayRef<char> BitMatrixParser::readCodewords() {
   Version *version = readVersion();
 
 
-  //	cerr << *bitMatrix_ << endl;
-  //	cerr << bitMatrix_->getDimension() << endl;
-
   // Get the data mask for the format used in this QR Code. This will exclude
   // some bits from reading as we wind through the bit matrix.
   DataMask &dataMask = DataMask::forReference((int)formatInfo->getDataMask());
   //	cout << (int)formatInfo->getDataMask() << endl;
-  int dimension = bitMatrix_->getDimension();
+  int dimension = bitMatrix_->getHeight();
   dataMask.unmaskBitMatrix(*bitMatrix_, dimension);
 
 

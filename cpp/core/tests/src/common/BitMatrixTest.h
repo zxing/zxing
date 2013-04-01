@@ -29,7 +29,7 @@ class BitMatrixTest : public CPPUNIT_NS::TestFixture {
   CPPUNIT_TEST_SUITE(BitMatrixTest);
   CPPUNIT_TEST(testGetSet);
   CPPUNIT_TEST(testSetRegion);
-  CPPUNIT_TEST(testGetBits);
+  CPPUNIT_TEST(testGetRow0);
   CPPUNIT_TEST(testGetRow1);
   CPPUNIT_TEST(testGetRow2);
   CPPUNIT_TEST(testGetRow3);
@@ -41,7 +41,7 @@ public:
 protected:
   void testGetSet();
   void testSetRegion();
-  void testGetBits();
+  void testGetRow0();
   void testGetRow1();
   void testGetRow2();
   void testGetRow3();

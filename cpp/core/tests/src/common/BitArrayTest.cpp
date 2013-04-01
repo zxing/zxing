@@ -29,9 +29,9 @@ namespace zxing {
 CPPUNIT_TEST_SUITE_REGISTRATION(BitArrayTest);
 
 void BitArrayTest::testGetSet() {
-  size_t bits = numeric_limits<unsigned int>::digits + 1;
+  const int bits = BitArray::bitsPerWord + 1;
   BitArray array(bits);
-  for(size_t i = 0; i < bits; i++) {
+  for(int i = 0; i < bits; i++) {
     CPPUNIT_ASSERT_EQUAL(false, array.get(i));
     array.set(i);
     CPPUNIT_ASSERT_EQUAL(true, array.get(i));
@@ -50,19 +50,19 @@ void BitArrayTest::testSetBulk() {
 }
 
 void BitArrayTest::testClear() {
-  size_t bits = numeric_limits<unsigned int>::digits;
+  const int bits = BitArray::bitsPerWord;
   BitArray array(bits);
-  for(size_t i = 0; i < bits; i++) {
+  for(int i = 0; i < bits; i++) {
     array.set(i);
   }
   array.clear();
-  for(size_t i = 0; i < bits; i++) {
+  for(int i = 0; i < bits; i++) {
     CPPUNIT_ASSERT_EQUAL(false, array.get(i));
   }
 }
 
 void BitArrayTest::testGetArray() {
-  size_t bits = numeric_limits<unsigned int>::digits;
+  const int bits = BitArray::bitsPerWord;
   BitArray array(2 * bits);
   array.set(0);
   array.set(2 * bits - 1);
@@ -72,8 +72,8 @@ void BitArrayTest::testGetArray() {
 }
 
 void BitArrayTest::testIsRange() {
-  size_t bits = numeric_limits<unsigned int>::digits;
-  size_t bits2 = 2 * bits;
+  const int bits = BitArray::bitsPerWord;
+  int bits2 = 2 * bits;
   BitArray array(bits2);
   CPPUNIT_ASSERT_EQUAL(true, array.isRange(0, bits2, false));
   CPPUNIT_ASSERT_EQUAL(false, array.isRange(0, bits2, true));
@@ -83,7 +83,7 @@ void BitArrayTest::testIsRange() {
   CPPUNIT_ASSERT_EQUAL(true, array.isRange(bits - 1, bits + 1, true));
   array.set(bits + 2);
   CPPUNIT_ASSERT_EQUAL(false, array.isRange(bits - 1, bits + 3, true));
-  for(size_t i = 0; i < bits - 1; i++) {
+  for(int i = 0; i < bits - 1; i++) {
     array.set(i);
   }
   CPPUNIT_ASSERT_EQUAL(true, array.isRange(0, bits + 1, true));
@@ -108,39 +108,39 @@ void BitArrayTest::fillRandom(BitArray& test, BitArray& reference) {
 void BitArrayTest::testReverseHalves() {
   // one word test, split in half
   {
-    size_t bits = numeric_limits<unsigned int>::digits;
+    const int bits = BitArray::bitsPerWord;
     BitArray test(bits);
 
     test.clear();
-    for(size_t i = 0; i < bits / 2; ++i) {
+    for(int i = 0; i < bits / 2; ++i) {
       test.set(i);
     }
 
     test.reverse();
-    for(size_t i = 0; i < bits / 2; ++i) {
+    for(int i = 0; i < bits / 2; ++i) {
       CPPUNIT_ASSERT_EQUAL(test.get(i), !test.get(bits - 1 - i));
     }
   }
 
   // two word test
   {
-    size_t bits2 = numeric_limits<unsigned int>::digits * 2;
+    const int bits2 = BitArray::bitsPerWord * 2;
     BitArray test2(bits2);
 
     test2.clear();
-    for(size_t i = 0; i < bits2 / 2; ++i) {
+    for(int i = 0; i < bits2 / 2; ++i) {
       test2.set(i);
     }
 
     test2.reverse();
-    for(size_t i = 0; i < bits2 / 2; ++i) {
+    for(int i = 0; i < bits2 / 2; ++i) {
       CPPUNIT_ASSERT_EQUAL(test2.get(i), !test2.get(bits2 - 1 - i));
     }
   }
 }
 
 void BitArrayTest::testReverseEven() {
-  size_t bits = numeric_limits<unsigned int>::digits * 8;
+  const int bits = BitArray::bitsPerWord * 8;
   BitArray test(bits);
   BitArray reference(bits);
 
@@ -150,13 +150,13 @@ void BitArrayTest::testReverseEven() {
   fillRandom(test, reference);
 
   test.reverse();
-  for(size_t i = 0; i < bits; ++i) {
+  for(int i = 0; i < bits; ++i) {
     CPPUNIT_ASSERT_EQUAL(test.get(i), reference.get(bits - 1 - i));
   }
 }
 
 void BitArrayTest::testReverseOdd() {
-  size_t bits = numeric_limits<unsigned int>::digits * 6 + 11;
+  const int bits = BitArray::bitsPerWord * 6 + 11;
   BitArray test(bits);
   BitArray reference(bits);
 
@@ -166,14 +166,14 @@ void BitArrayTest::testReverseOdd() {
   fillRandom(test, reference);
 
   test.reverse();
-  for(size_t i = 0; i < bits; ++i) {
+  for(int i = 0; i < bits; ++i) {
     CPPUNIT_ASSERT_EQUAL(test.get(i), reference.get(bits - 1 - i));
   }
 }
 
 void BitArrayTest::testReverseSweep() {
-  size_t bits;
-  size_t bitsHigh = numeric_limits<unsigned int>::digits * 10;
+  int bits;
+  const int bitsHigh = BitArray::bitsPerWord * 10;
 
   for(bits = 1; bits < bitsHigh; ++bits) {
     BitArray test(bits);
@@ -185,14 +185,14 @@ void BitArrayTest::testReverseSweep() {
     fillRandom(test, reference);
 
     test.reverse();
-    for(size_t i = 0; i < bits; ++i) {
+    for(int i = 0; i < bits; ++i) {
       CPPUNIT_ASSERT_EQUAL(test.get(i), reference.get(bits - 1 - i));
     }
   }
 }
 
 void BitArrayTest::testReverseReverse() {
-  size_t bits = numeric_limits<unsigned int>::digits * 4 + 17;
+  const int bits = BitArray::bitsPerWord * 4 + 17;
   BitArray test(bits);
   BitArray reference(bits);
 
@@ -203,12 +203,12 @@ void BitArrayTest::testReverseReverse() {
 
   // flip it once and test
   test.reverse();
-  for(size_t i = 0; i < bits; ++i) {
+  for(int i = 0; i < bits; ++i) {
     CPPUNIT_ASSERT_EQUAL(test.get(i), reference.get(bits - 1 - i));
   }
   // flip it back and test
   test.reverse();
-  for(size_t i = 0; i < bits; ++i) {
+  for(int i = 0; i < bits; ++i) {
     CPPUNIT_ASSERT_EQUAL(test.get(i), reference.get(i));
   }
 }

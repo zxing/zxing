@@ -30,43 +30,58 @@ using zxing::BitArray;
 using zxing::ArrayRef;
 using zxing::Ref;
 
-namespace {
-  int wordsForSize(int width,
-                      int height,
-                      int bitsPerWord,
-                      int logBits) {
-    int bits = width * height;
-    int arraySize = (bits + bitsPerWord - 1) >> logBits;
-    return arraySize;
+void BitMatrix::init(int width, int height) {
+  if (width < 1 || height < 1) {
+    throw IllegalArgumentException("Both dimensions must be greater than 0");
   }
+  this->width = width;
+  this->height = height;
+  this->rowSize = (width + bitsPerWord - 1) >> logBits;
+  bits = ArrayRef<int>(rowSize * height);
 }
 
-BitMatrix::BitMatrix(int dimension) :
-  width_(dimension), height_(dimension), words_(0) {
-  words_ = wordsForSize(width_, height_, bitsPerWord, logBits);
-  bits_ = ArrayRef<int>(words_);
-  clear();
+BitMatrix::BitMatrix(int dimension) {
+  init(dimension, dimension);
 }
 
-BitMatrix::BitMatrix(int width, int height) :
-  width_(width), height_(height), words_(0) {
-  words_ = wordsForSize(width_, height_, bitsPerWord, logBits);
-  bits_ = ArrayRef<int>(words_);
-  clear();
+BitMatrix::BitMatrix(int width, int height) {
+  init(width, height);
 }
 
 BitMatrix::~BitMatrix() {}
 
-
 void BitMatrix::flip(int x, int y) {
-  int offset = x + width_ * y;
-  bits_[offset >> logBits] ^= 1 << (offset & bitsMask);
+  int offset = y * rowSize + (x >> logBits);
+  bits[offset] ^= 1 << (x & bitsMask);
 }
 
+/*
 void BitMatrix::clear() {
-  std::fill(&bits_[0], &bits_[words_], 0);
+  std::fill(&bits[0], &bits[rowSize], 0);
+}
+*/
+
+void BitMatrix::setRegion(int left, int top, int width, int height) {
+  if (top < 0 || left < 0) {
+    throw IllegalArgumentException("Left and top must be nonnegative");
+  }
+  if (height < 1 || width < 1) {
+    throw IllegalArgumentException("Height and width must be at least 1");
+  }
+  int right = left + width;
+  int bottom = top + height;
+  if (bottom > this->height || right > this->width) {
+    throw new IllegalArgumentException("The region must fit inside the matrix");
+  }
+  for (int y = top; y < bottom; y++) {
+    int offset = y * rowSize;
+    for (int x = left; x < right; x++) {
+      bits[offset + (x >> logBits)] |= 1 << (x & bitsMask);
+    }
+  }
 }
 
+/*
 void BitMatrix::setRegion(int left, int top, int width, int height) {
   if ((long)top < 0 || (long)left < 0) {
     throw IllegalArgumentException("topI and leftJ must be nonnegative");
@@ -76,71 +91,43 @@ void BitMatrix::setRegion(int left, int top, int width, int height) {
   }
   int right = left + width;
   int bottom = top + height;
-  if (right > width_ || bottom > height_) {
+  if (right > this->width || bottom > this->height) {
     throw IllegalArgumentException("top + height and left + width must be <= matrix dimension");
   }
   for (int y = top; y < bottom; y++) {
-    int yOffset = width_ * y;
+    int offset =  y * rowSize;
     for (int x = left; x < right; x++) {
       int offset = x + yOffset;
-      bits_[offset >> logBits] |= 1 << (offset & bitsMask);
+      bits[offset + (x >> 5)] |= 1 << (offset & bitsMask);
     }
   }
 }
+*/
 
 Ref<BitArray> BitMatrix::getRow(int y, Ref<BitArray> row) {
-  if (row.empty() || row->getSize() < width_) {
-    row = new BitArray(width_);
-  } else {
-    row->clear();
+  if (row.empty() || row->getSize() < width) {
+    row = new BitArray(width);
   }
-  int start = y * width_;
-  int end = start + width_ - 1; // end is inclusive
-  int firstWord = start >> logBits;
-  int lastWord = end >> logBits;
-  int bitOffset = start & bitsMask;
-  for (int i = firstWord; i <= lastWord; i++) {
-    int firstBit = i > firstWord ? 0 : start & bitsMask;
-    int lastBit = i < lastWord ? bitsPerWord - 1 : end & bitsMask;
-    int mask;
-    if (firstBit == 0 && lastBit == logBits) {
-      mask = std::numeric_limits<int>::max();
-    } else {
-      mask = 0;
-      for (int j = firstBit; j <= lastBit; j++) {
-        mask |= 1 << j;
-      }
-    }
-    row->setBulk((i - firstWord) << logBits, (bits_[i] & mask) >> bitOffset);
-    if (firstBit == 0 && bitOffset != 0) {
-      int prevBulk = row->getBitArray()[i - firstWord - 1];
-      prevBulk |= (bits_[i] & mask) << (bitsPerWord - bitOffset);
-      row->setBulk((i - firstWord - 1) << logBits, prevBulk);
-    }
+  int offset = y * rowSize;
+  for (int x = 0; x < rowSize; x++) {
+    row->setBulk(x << logBits, bits[offset + x]);
   }
   return row;
 }
 
 int BitMatrix::getWidth() const {
-  return width_;
+  return width;
 }
 
 int BitMatrix::getHeight() const {
-  return height_;
+  return height;
 }
 
-int BitMatrix::getDimension() const {
-  return width_;
-}
-
-ArrayRef<int> BitMatrix::getBits() const {
-  return bits_;
-}
-
+/*
 namespace zxing {
   ostream& operator<<(ostream &out, const BitMatrix &bm) {
-    for (int y = 0; y < bm.height_; y++) {
-      for (int x = 0; x < bm.width_; x++) {
+    for (int y = 0; y < bm.height; y++) {
+      for (int x = 0; x < bm.width; x++) {
         out << (bm.get(x, y) ? "X " : "  ");
       }
       out << "\n";
@@ -154,3 +141,5 @@ const char* BitMatrix::description() {
   out << *this;
   return out.str().c_str();
 }
+
+*/

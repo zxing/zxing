@@ -32,9 +32,9 @@ BitMatrixTest::BitMatrixTest() {
 }
 
 void BitMatrixTest::testGetSet() {
-  int bits = numeric_limits<int>::digits;
+  const int bits = BitMatrix::bitsPerWord;
   BitMatrix matrix(bits + 1);
-  CPPUNIT_ASSERT_EQUAL(bits + 1, matrix.getDimension());
+  CPPUNIT_ASSERT_EQUAL(bits + 1, matrix.getHeight());
   for (int i = 0; i < bits + 1; i++) {
     for (int j = 0; j < bits + 1; j++) {
       if (i * j % 3 == 0) {
@@ -60,13 +60,10 @@ void BitMatrixTest::testSetRegion() {
   }
 }
 
-void BitMatrixTest::testGetBits() {
-  BitMatrix matrix(6);
-  matrix.set(0, 0);
-  matrix.set(5, 5);
-  ArrayRef<int> bits = matrix.getBits();
-  CPPUNIT_ASSERT_EQUAL(1, bits[0]);
-  CPPUNIT_ASSERT_EQUAL(8, bits[1]);
+void BitMatrixTest::testGetRow0() {
+  const int width = 2;
+  const int height = 2;
+  runBitMatrixGetRowTest(width, height);
 }
 
 void BitMatrixTest::testGetRow1() {
@@ -91,7 +88,8 @@ void BitMatrixTest::runBitMatrixGetRowTest(int width, int height) {
   BitMatrix mat(width, height);
   for (int y = 0; y < height; y++) {
     for (int x = 0; x < width; x++) {
-      if ((rand() & 0x01) != 0) {
+      bool v = ((rand() & 0x01) != 0);
+      if (v) {
         mat.set(x, y);
       }
     }
