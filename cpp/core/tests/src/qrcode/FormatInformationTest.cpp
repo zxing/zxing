@@ -59,7 +59,7 @@ void FormatInformationTest::testDecode() {
   // Normal case
   Ref<FormatInformation> expected =
     FormatInformation::decodeFormatInformation(MASKED_TEST_FORMAT_INFO, MASKED_TEST_FORMAT_INFO);
-  CPPUNIT_ASSERT_EQUAL((unsigned char) 0x07, expected->getDataMask());
+  CPPUNIT_ASSERT_EQUAL((char)0x07, expected->getDataMask());
   CPPUNIT_ASSERT_EQUAL(&ErrorCorrectionLevel::Q,
                        &expected->getErrorCorrectionLevel());
   // where the code forgot the mask!

@@ -66,9 +66,9 @@ void BitArrayTest::testGetArray() {
   BitArray array(2 * bits);
   array.set(0);
   array.set(2 * bits - 1);
-  vector<unsigned> words(array.getBitArray());
-  CPPUNIT_ASSERT_EQUAL(1u, words[0]);
-  CPPUNIT_ASSERT_EQUAL((1u << (bits - 1)), words[1]);
+  vector<int> words(array.getBitArray());
+  CPPUNIT_ASSERT_EQUAL(1, words[0]);
+  CPPUNIT_ASSERT_EQUAL((1 << (bits - 1)), words[1]);
 }
 
 void BitArrayTest::testIsRange() {
@@ -97,7 +97,7 @@ void BitArrayTest::testIsRange() {
 // fills the two arrays with identical random bits
 void BitArrayTest::fillRandom(BitArray& test, BitArray& reference) {
   srandom(0xDEADBEEFL + test.getSize());
-  for(size_t i = 0; i < test.getSize(); ++i) {
+  for(int i = 0; i < test.getSize(); ++i) {
     if(random() & 0x1) {
       test.set(i);
       reference.set(i);

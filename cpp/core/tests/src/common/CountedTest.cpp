@@ -44,11 +44,15 @@ void CountedTest::test() {
   CPPUNIT_ASSERT_EQUAL(0, foo.count());
   foo.retain();
   CPPUNIT_ASSERT_EQUAL(1, foo.count());
+  Ref<Foo> foobar(new Foo);
+  CPPUNIT_ASSERT_EQUAL(1, foobar->count());
   {
-    Ref<Foo> fooRef(foo);
-    CPPUNIT_ASSERT_EQUAL(2, foo.count());
+    Ref<Foo> secondRef(foobar);
+    CPPUNIT_ASSERT_EQUAL(1, foo.count());
+    CPPUNIT_ASSERT_EQUAL(2, foobar->count());
   }
   CPPUNIT_ASSERT_EQUAL(1, foo.count());
+  CPPUNIT_ASSERT_EQUAL(1, foobar->count());
 }
 
 }

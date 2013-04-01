@@ -29,7 +29,8 @@ CPPUNIT_TEST_SUITE_REGISTRATION(BlackPointEstimatorTest);
 void BlackPointEstimatorTest::testBasic() {
   int histogramRaw[] = { 0, 0, 11, 43, 37, 18, 3, 1, 0, 0, 13, 36, 24, 0, 11, 2 };
   vector<int> histogram(histogramRaw, histogramRaw+16);
-  size_t point = GlobalHistogramBinarizer::estimate(histogram);
+  ArrayRef<int> array (new Array<int>(histogram));
+  size_t point = GlobalHistogramBinarizer::estimateBlackPoint(array);
   CPPUNIT_ASSERT_EQUAL((size_t)64, point);
 }
 
@@ -37,7 +38,8 @@ void BlackPointEstimatorTest::testTooLittleRange() {
   try {
     int histogramRaw[] = { 0, 0, 0, 0, 0, 0, 1, 43, 48, 18, 3, 1, 0, 0, 0, 0 };
     vector<int> histogram(histogramRaw, histogramRaw+16);
-    GlobalHistogramBinarizer::estimate(histogram);
+    ArrayRef<int> array (new Array<int>(histogram));
+    GlobalHistogramBinarizer::estimateBlackPoint(array);
     CPPUNIT_FAIL("Should have thrown an exception");
 
   } catch (IllegalArgumentException ie) {
