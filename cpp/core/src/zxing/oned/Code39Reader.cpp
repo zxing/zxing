@@ -89,41 +89,42 @@ Code39Reader::Code39Reader(bool usingCheckDigit_, bool extendedMode_) {
 }
 
 Ref<Result> Code39Reader::decodeRow(int rowNumber, Ref<BitArray> row) {
+  std::vector<int>& theCounters (counters);
   { // Arrays.fill(counters, 0);
-    int size = counters.size();
-    counters.resize(0);
-    counters.resize(size); }
-  decodeRowResult.clear();
+    int size = theCounters.size();
+    theCounters.resize(0);
+    theCounters.resize(size); }
+  std::string& result (decodeRowResult);
+  result.clear();
 
-  vector<int> start (findAsteriskPattern(row, counters));
-    // Read off white space
+  vector<int> start (findAsteriskPattern(row, theCounters));
+  // Read off white space
   int nextStart = row->getNextSet(start[1]);
   int end = row->getSize();
 
   char decodedChar;
   int lastStart;
   do {
-    recordPattern(row, nextStart, counters);
-    int pattern = toNarrowWidePattern(counters);
+    recordPattern(row, nextStart, theCounters);
+    int pattern = toNarrowWidePattern(theCounters);
     if (pattern < 0) {
       throw NotFoundException();;
     }
     decodedChar = patternToChar(pattern);
-    decodeRowResult.append(1, decodedChar);
+    result.append(1, decodedChar);
     lastStart = nextStart;
-    for (int i = 0, end=counters.size(); i < end; i++) {
-      nextStart += counters[i];
+    for (int i = 0, end=theCounters.size(); i < end; i++) {
+      nextStart += theCounters[i];
     }
     // Read off white space
-    
     nextStart = row->getNextSet(nextStart);
   } while (decodedChar != '*');
-  decodeRowResult.resize(decodeRowResult.length()-1);// remove asterisk
+  result.resize(decodeRowResult.length()-1);// remove asterisk
 
     // Look for whitespace after pattern:
   int lastPatternSize = 0;
-  for (int i = 0, e = counters.size(); i < e; i++) {
-    lastPatternSize += counters[i];
+  for (int i = 0, e = theCounters.size(); i < e; i++) {
+    lastPatternSize += theCounters[i];
   }
   int whiteSpaceAfterEnd = nextStart - lastStart - lastPatternSize;
   // If 50% of last pattern size, following last pattern, is not whitespace,
@@ -133,27 +134,27 @@ Ref<Result> Code39Reader::decodeRow(int rowNumber, Ref<BitArray> row) {
   }
 
   if (usingCheckDigit) {
-    int max = decodeRowResult.length() - 1;
+    int max = result.length() - 1;
     int total = 0;
     for (int i = 0; i < max; i++) {
       total += alphabet_string.find_first_of(decodeRowResult[i], 0);
     }
-    if (decodeRowResult[max] != ALPHABET[total % 43]) {
+    if (result[max] != ALPHABET[total % 43]) {
       throw ChecksumException();
     }
-    decodeRowResult.resize(max);
+    result.resize(max);
   }
   
-  if (decodeRowResult.length() == 0) {
+  if (result.length() == 0) {
     // Almost false positive
     throw NotFoundException();
   }
   
   Ref<String> resultString;
   if (extendedMode) {
-    resultString = decodeExtended(decodeRowResult);
+    resultString = decodeExtended(result);
   } else {
-    resultString = Ref<String>(new String(decodeRowResult));
+    resultString = Ref<String>(new String(result));
   }
 
   float left = (float) (start[1] + start[0]) / 2.0f;

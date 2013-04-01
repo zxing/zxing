@@ -56,27 +56,38 @@ namespace {
   const int ASTERISK_ENCODING = CHARACTER_ENCODINGS[47];
 }
 
+Code93Reader::Code93Reader() {
+  decodeRowResult.reserve(20);
+  counters.resize(6);
+}
+
 Ref<Result> Code93Reader::decodeRow(int rowNumber, Ref<BitArray> row) {
   Range start (findAsteriskPattern(row));
   // Read off white space    
   int nextStart = row->getNextSet(start[1]);
   int end = row->getSize();
 
-  string result;
-  vector<int> counters (6, 0);
+  vector<int>& theCounters (counters);
+  { // Arrays.fill(counters, 0);
+    int size = theCounters.size();
+    theCounters.resize(0);
+    theCounters.resize(size); }
+  string& result (decodeRowResult);
+  result.clear();
+
   char decodedChar;
   int lastStart;
   do {
-    recordPattern(row, nextStart, counters);
-    int pattern = toPattern(counters);
+    recordPattern(row, nextStart, theCounters);
+    int pattern = toPattern(theCounters);
     if (pattern < 0) {
       throw NotFoundException();
     }
     decodedChar = patternToChar(pattern);
     result.append(1, decodedChar);
     lastStart = nextStart;
-    for(int i=0, e=counters.size(); i < e; ++i) {
-      nextStart += counters[i];
+    for(int i=0, e=theCounters.size(); i < e; ++i) {
+      nextStart += theCounters[i];
     }
     // Read off white space
     nextStart = row->getNextSet(nextStart);
@@ -119,31 +130,36 @@ Code93Reader::Range Code93Reader::findAsteriskPattern(Ref<BitArray> row)  {
   int width = row->getSize();
   int rowOffset = row->getNextSet(0);
 
-  int counterPosition = 0;
-  vector<int> counters (6, 0);
+  { // Arrays.fill(counters, 0);
+    int size = counters.size();
+    counters.resize(0);
+    counters.resize(size); }
+  vector<int>& theCounters (counters);
+
   int patternStart = rowOffset;
   bool isWhite = false;
-  int patternLength = counters.size();
+  int patternLength = theCounters.size();
 
+  int counterPosition = 0;
   for (int i = rowOffset; i < width; i++) {
     if (row->get(i) ^ isWhite) {
-      counters[counterPosition]++;
+      theCounters[counterPosition]++;
     } else {
       if (counterPosition == patternLength - 1) {
-        if (toPattern(counters) == ASTERISK_ENCODING) {
+        if (toPattern(theCounters) == ASTERISK_ENCODING) {
           return Range(patternStart, i);
         }
-        patternStart += counters[0] + counters[1];
+        patternStart += theCounters[0] + theCounters[1];
         for (int y = 2; y < patternLength; y++) {
-          counters[y - 2] = counters[y];
+          theCounters[y - 2] = theCounters[y];
         }
-        counters[patternLength - 2] = 0;
-        counters[patternLength - 1] = 0;
+        theCounters[patternLength - 2] = 0;
+        theCounters[patternLength - 1] = 0;
         counterPosition--;
       } else {
         counterPosition++;
       }
-      counters[counterPosition] = 1;
+      theCounters[counterPosition] = 1;
       isWhite = !isWhite;
     }
   }
