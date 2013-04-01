@@ -78,3 +78,17 @@
    ...
    fun:atexit_register
 }
+
+{
+   osx
+   Memcheck:Value8
+   ...
+   fun:dlsym
+}
+
+{
+   osx
+   Memcheck:Cond
+   ...
+   fun:dlsym
+}

@@ -19,6 +19,7 @@
  * limitations under the License.
  */
 
+#include <zxing/ZXing.h>
 #include <zxing/qrcode/decoder/Mode.h>
 #include <zxing/common/Counted.h>
 #include <zxing/ReaderException.h>
@@ -40,38 +41,38 @@ Mode Mode::FNC1_SECOND_POSITION(0, 0, 0, 0x09, "FNC1_SECOND_POSITION");
 Mode Mode::HANZI(8, 10, 12, 0x0D, "HANZI");
 
 Mode::Mode(int cbv0_9, int cbv10_26, int cbv27, int /* bits */, char const* name) :
-    characterCountBitsForVersions0To9_(cbv0_9), characterCountBitsForVersions10To26_(cbv10_26),
-    characterCountBitsForVersions27AndHigher_(cbv27), name_(name) {
+  characterCountBitsForVersions0To9_(cbv0_9), characterCountBitsForVersions10To26_(cbv10_26),
+  characterCountBitsForVersions27AndHigher_(cbv27), name_(name) {
 }
 
 Mode& Mode::forBits(int bits) {
-    switch (bits) {
-    case 0x0:
-        return TERMINATOR;
-    case 0x1:
-        return NUMERIC;
-    case 0x2:
-        return ALPHANUMERIC;
-    case 0x3:
-        return STRUCTURED_APPEND;
-    case 0x4:
-        return BYTE;
-    case 0x5:
-        return FNC1_FIRST_POSITION;
-    case 0x7:
-        return ECI;
-    case 0x8:
-        return KANJI;
-    case 0x9:
-        return FNC1_SECOND_POSITION;
-    case 0xD:
-        // 0xD is defined in GBT 18284-2000, may not be supported in foreign country
-        return HANZI;
-    default:
-        ostringstream s;
-        s << "Illegal mode bits: " << bits;
-        throw ReaderException(s.str().c_str());
-    }
+  switch (bits) {
+  case 0x0:
+    return TERMINATOR;
+  case 0x1:
+    return NUMERIC;
+  case 0x2:
+    return ALPHANUMERIC;
+  case 0x3:
+    return STRUCTURED_APPEND;
+  case 0x4:
+    return BYTE;
+  case 0x5:
+    return FNC1_FIRST_POSITION;
+  case 0x7:
+    return ECI;
+  case 0x8:
+    return KANJI;
+  case 0x9:
+    return FNC1_SECOND_POSITION;
+  case 0xD:
+    // 0xD is defined in GBT 18284-2000, may not be supported in foreign country
+    return HANZI;
+  default:
+    ostringstream s;
+    s << "Illegal mode bits: " << bits;
+    throw ReaderException(s.str().c_str());
+  }
 }
 
 int Mode::getCharacterCountBits(Version *version) {
