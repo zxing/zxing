@@ -31,7 +31,11 @@ namespace zxing {
             bool compact_;
             int nbDatablocks_, nbLayers_;
         public:
-            AztecDetectorResult(Ref<BitMatrix> bits, std::vector<Ref<ResultPoint> > points, bool compact, int nbDatablocks, int nbLayers);
+            AztecDetectorResult(Ref<BitMatrix> bits, 
+                                ArrayRef< Ref<ResultPoint> > points,
+                                bool compact,
+                                int nbDatablocks,
+                                int nbLayers);
             bool isCompact();
             int getNBDatablocks();
             int getNBLayers();

@@ -1,3 +1,4 @@
+// -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
 #ifndef __UPCA_READER_H__
 #define __UPCA_READER_H__
 /*
@@ -24,26 +25,26 @@
 
 namespace zxing {
   namespace oned {
-    class UPCAReader : public UPCEANReader {
-
-    private:
-      EAN13Reader ean13Reader;
-      static Ref<Result> maybeReturnResult(Ref<Result> result);
-
-    public:
-      UPCAReader();
-
-      int decodeMiddle(Ref<BitArray> row, int startGuardBegin, int startGuardEnd,
-          std::string& resultString);
-
-      Ref<Result> decodeRow(int rowNumber, Ref<BitArray> row);
-      Ref<Result> decodeRow(int rowNumber, Ref<BitArray> row, int startGuardBegin,
-          int startGuardEnd);
-      Ref<Result> decode(Ref<BinaryBitmap> image, DecodeHints hints);
-
-      BarcodeFormat getBarcodeFormat();
-    };
+    class UPCAReader;
   }
 }
+
+class zxing::oned::UPCAReader : public UPCEANReader {
+
+private:
+  EAN13Reader ean13Reader;
+  static Ref<Result> maybeReturnResult(Ref<Result> result);
+
+public:
+  UPCAReader();
+
+  int decodeMiddle(Ref<BitArray> row, Range const& startRange, std::string& resultString);
+
+  Ref<Result> decodeRow(int rowNumber, Ref<BitArray> row);
+  Ref<Result> decodeRow(int rowNumber, Ref<BitArray> row, Range const& startGuardRange);
+  Ref<Result> decode(Ref<BinaryBitmap> image, DecodeHints hints);
+
+  BarcodeFormat getBarcodeFormat();
+};
 
 #endif

@@ -245,7 +245,7 @@ Ref<DetectorResult> Detector::detect() {
     bits = sampleGrid(image_, dimensionCorrected, dimensionCorrected, transform);
   }
 
-  std::vector<Ref<ResultPoint> > points(4);
+  ArrayRef< Ref<ResultPoint> > points (new Array< Ref<ResultPoint> >(4));
   points[0].reset(topLeft);
   points[1].reset(bottomLeft);
   points[2].reset(correctedTopRight);

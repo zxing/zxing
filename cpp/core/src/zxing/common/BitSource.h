@@ -33,7 +33,7 @@ namespace zxing {
  * @author christian.brunschen@gmail.com (Christian Brunschen)
  */
 class BitSource : public Counted {
-  typedef unsigned char byte;
+  typedef char byte;
 private:
   ArrayRef<byte> bytes_;
   int byteOffset_;

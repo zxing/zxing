@@ -22,8 +22,12 @@
 #include <zxing/common/IllegalArgumentException.h>
 #include <vector>
 #include <limits>
+#include <iostream>
 
 namespace zxing {
+  class BitArray;
+  std::ostream& operator << (std::ostream&, BitArray const&);
+}
 
 #define ZX_LOG_DIGITS(digits) \
     ((digits == 8) ? 3 : \
@@ -33,38 +37,49 @@ namespace zxing {
         ((digits == 128) ? 7 : \
          (-1))))))
 
-class BitArray : public Counted {
+class zxing::BitArray : public Counted {
 private:
-  size_t size_;
-  std::vector<unsigned int> bits_;
-  static const unsigned int bitsPerWord_ =
+  int size_;
+  std::vector<int> bits_;
+  static const int bitsPerWord_ =
     std::numeric_limits<unsigned int>::digits;
-  static const unsigned int logBits_ = ZX_LOG_DIGITS(bitsPerWord_);
-  static const unsigned int bitsMask_ = (1 << logBits_) - 1;
-  static size_t wordsForBits(size_t bits);
+  static const int logBits_ = ZX_LOG_DIGITS(bitsPerWord_);
+  static const int bitsMask_ = (1 << logBits_) - 1;
+  static int wordsForBits(int bits);
   explicit BitArray();
 
 public:
-  BitArray(size_t size);
+  BitArray(int size);
   ~BitArray();
-  size_t getSize();
+  int getSize() const;
 
-  bool get(size_t i) {
+  bool get(int i) const {
     return (bits_[i >> logBits_] & (1 << (i & bitsMask_))) != 0;
   }
 
-  void set(size_t i) {
+  void set(int i) {
     bits_[i >> logBits_] |= 1 << (i & bitsMask_);
   }
 
-  void setBulk(size_t i, unsigned int newBits);
+  int getNextSet(int from);
+  int getNextUnset(int from);
+
+  void setBulk(int i, int newBits);
   void setRange(int start, int end);
   void clear();
-  bool isRange(size_t start, size_t end, bool value);
-  std::vector<unsigned int>& getBitArray();
+  bool isRange(int start, int end, bool value);
+  std::vector<int>& getBitArray();
+  
   void reverse();
+  class Reverse;
 };
 
-}
+class zxing::BitArray::Reverse {
+private:
+  Ref<BitArray> array;
+public:
+  Reverse(Ref<BitArray> array);
+  ~Reverse();
+};
 
 #endif // __BIT_ARRAY_H__

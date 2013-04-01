@@ -19,14 +19,21 @@
 #include <zxing/oned/OneDResultPoint.h>
 #include <zxing/common/Array.h>
 #include <zxing/ReaderException.h>
+#include <zxing/NotFoundException.h>
+#include <zxing/ChecksumException.h>
 #include <math.h>
 #include <limits.h>
 
-namespace zxing {
-namespace oned {
+using std::vector;
+using zxing::Ref;
+using zxing::Result;
+using zxing::String;
+using zxing::NotFoundException;
+using zxing::ChecksumException;
+using zxing::oned::Code39Reader;
 
-  static const char* ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. *$/+%";
-
+namespace {
+  const char* ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. *$/+%";
 
   /**
    * These represent the encodings of characters, as patterns of wide and narrow
@@ -35,7 +42,7 @@ namespace oned {
    * and narrow, with 1s representing "wide" and 0s representing narrow.
    */
   const int CHARACTER_ENCODINGS_LEN = 44;
-  static int CHARACTER_ENCODINGS[CHARACTER_ENCODINGS_LEN] = {
+  int CHARACTER_ENCODINGS[CHARACTER_ENCODINGS_LEN] = {
     0x034, 0x121, 0x061, 0x160, 0x031, 0x130, 0x070, 0x025, 0x124, 0x064, // 0-9
     0x109, 0x049, 0x148, 0x019, 0x118, 0x058, 0x00D, 0x10C, 0x04C, 0x01C, // A-J
     0x103, 0x043, 0x142, 0x013, 0x112, 0x052, 0x007, 0x106, 0x046, 0x016, // K-T
@@ -43,305 +50,269 @@ namespace oned {
     0x0A8, 0x0A2, 0x08A, 0x02A // $-%
   };
 
-  static int ASTERISK_ENCODING = 0x094;
-  static const char* ALPHABET_STRING =
+  int ASTERISK_ENCODING = 0x094;
+  const char* ALPHABET_STRING =
     "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. *$/+%";
+}
+
+/**
+ * Creates a reader that assumes all encoded data is data, and does not treat
+ * the final character as a check digit. It will not decoded "extended
+ * Code 39" sequences.
+ */
+Code39Reader::Code39Reader() : alphabet_string(ALPHABET_STRING),
+                               usingCheckDigit(false),
+                               extendedMode(false) {
+}
+
+/**
+ * Creates a reader that can be configured to check the last character as a
+ * check digit. It will not decoded "extended Code 39" sequences.
+ *
+ * @param usingCheckDigit if true, treat the last data character as a check
+ * digit, not data, and verify that the checksum passes.
+ */
+Code39Reader::Code39Reader(bool usingCheckDigit_) :
+  alphabet_string(ALPHABET_STRING),
+  usingCheckDigit(usingCheckDigit_),
+  extendedMode(false) {
+}
 
 
-  /**
-   * Creates a reader that assumes all encoded data is data, and does not treat
-   * the final character as a check digit. It will not decoded "extended
-   * Code 39" sequences.
-   */
-  Code39Reader::Code39Reader() : alphabet_string(ALPHABET_STRING),
-                                 usingCheckDigit(false),
-                                 extendedMode(false) {
+Code39Reader::Code39Reader(bool usingCheckDigit_, bool extendedMode_) :
+  alphabet_string(ALPHABET_STRING),
+  usingCheckDigit(usingCheckDigit_),
+  extendedMode(extendedMode_) {
   }
 
-  /**
-   * Creates a reader that can be configured to check the last character as a
-   * check digit. It will not decoded "extended Code 39" sequences.
-   *
-   * @param usingCheckDigit if true, treat the last data character as a check
-   * digit, not data, and verify that the checksum passes.
-   */
-  Code39Reader::Code39Reader(bool usingCheckDigit_) :
-    alphabet_string(ALPHABET_STRING),
-    usingCheckDigit(usingCheckDigit_),
-    extendedMode(false) {
-  }
+Ref<Result> Code39Reader::decodeRow(int rowNumber, Ref<BitArray> row) {
+  vector<int> counters (9, 0);
+  vector<int> start (findAsteriskPattern(row, counters));
+    // Read off white space
+  int nextStart = row->getNextSet(start[1]);
+  int end = row->getSize();
 
-
-  Code39Reader::Code39Reader(bool usingCheckDigit_, bool extendedMode_) :
-    alphabet_string(ALPHABET_STRING),
-    usingCheckDigit(usingCheckDigit_),
-    extendedMode(extendedMode_) {
-  }
-
-  Ref<Result> Code39Reader::decodeRow(int rowNumber, Ref<BitArray> row) {
-    int* start = NULL;
-    try {
-      start = findAsteriskPattern(row);
-      int nextStart = start[1];
-      int end = row->getSize();
-
-      // Read off white space
-      while (nextStart < end && !row->get(nextStart)) {
-        nextStart++;
-      }
-
-      std::string tmpResultString;
-
-      const int countersLen = 9;
-      int counters[countersLen];
-      for (int i = 0; i < countersLen; i++) {
-        counters[i] = 0;
-      }
-      char decodedChar;
-      int lastStart;
-      do {
-        if (!recordPattern(row, nextStart, counters, countersLen)) {
-          throw ReaderException("");
-        }
-        int pattern = toNarrowWidePattern(counters, countersLen);
-        if (pattern < 0) {
-          throw ReaderException("pattern < 0");
-        }
-        decodedChar = patternToChar(pattern);
-        tmpResultString.append(1, decodedChar);
-        lastStart = nextStart;
-        for (int i = 0; i < countersLen; i++) {
-          nextStart += counters[i];
-        }
-        // Read off white space
-        while (nextStart < end && !row->get(nextStart)) {
-          nextStart++;
-        }
-      } while (decodedChar != '*');
-      tmpResultString.erase(tmpResultString.length()-1, 1);// remove asterisk
-
-      // Look for whitespace after pattern:
-      int lastPatternSize = 0;
-      for (int i = 0; i < countersLen; i++) {
-        lastPatternSize += counters[i];
-      }
-      int whiteSpaceAfterEnd = nextStart - lastStart - lastPatternSize;
-      // If 50% of last pattern size, following last pattern, is not whitespace,
-      // fail (but if it's whitespace to the very end of the image, that's OK)
-      if (nextStart != end && whiteSpaceAfterEnd / 2 < lastPatternSize) {
-        throw ReaderException("too short end white space");
-      }
-
-      if (usingCheckDigit) {
-        int max = tmpResultString.length() - 1;
-        unsigned int total = 0;
-        for (int i = 0; i < max; i++) {
-          total += alphabet_string.find_first_of(tmpResultString[i], 0);
-        }
-        if (total % 43 != alphabet_string.find_first_of(tmpResultString[max], 0)) {
-          throw ReaderException("");
-        }
-        tmpResultString.erase(max, 1);
-      }
-
-      Ref<String> resultString(new String(tmpResultString));
-      if (extendedMode) {
-        resultString = decodeExtended(tmpResultString);
-      }
-
-      if (tmpResultString.length() == 0) {
-        // Almost surely a false positive
-        throw ReaderException("");
-      }
-
-      float left = (float) (start[1] + start[0]) / 2.0f;
-      float right = (float) (nextStart + lastStart) / 2.0f;
-
-      std::vector< Ref<ResultPoint> > resultPoints(2);
-      Ref<OneDResultPoint> resultPoint1(
-        new OneDResultPoint(left, (float) rowNumber));
-      Ref<OneDResultPoint> resultPoint2(
-        new OneDResultPoint(right, (float) rowNumber));
-      resultPoints[0] = resultPoint1;
-      resultPoints[1] = resultPoint2;
-
-      ArrayRef<unsigned char> resultBytes(1);
-
-      Ref<Result> res(new Result(
-                        resultString, resultBytes, resultPoints, BarcodeFormat_CODE_39));
-
-      delete [] start;
-      return res;
-    } catch (ReaderException const& re) {
-      delete [] start;
-      return Ref<Result>();
+  std::string result;
+  char decodedChar;
+  int lastStart;
+  do {
+    recordPattern(row, nextStart, counters);
+    int pattern = toNarrowWidePattern(counters);
+    if (pattern < 0) {
+      throw NotFoundException();;
     }
+    decodedChar = patternToChar(pattern);
+    result.append(1, decodedChar);
+    lastStart = nextStart;
+    for (int i = 0, end=counters.size(); i < end; i++) {
+      nextStart += counters[i];
+    }
+    // Read off white space
+    
+    nextStart = row->getNextSet(nextStart);
+  } while (decodedChar != '*');
+  result.resize(result.length()-1);// remove asterisk
+
+    // Look for whitespace after pattern:
+  int lastPatternSize = 0;
+  for (int i = 0, e = counters.size(); i < e; i++) {
+    lastPatternSize += counters[i];
+  }
+  int whiteSpaceAfterEnd = nextStart - lastStart - lastPatternSize;
+  // If 50% of last pattern size, following last pattern, is not whitespace,
+  // fail (but if it's whitespace to the very end of the image, that's OK)
+  if (nextStart != end && (whiteSpaceAfterEnd >> 1) < lastPatternSize) {
+    throw NotFoundException();
   }
 
-  int* Code39Reader::findAsteriskPattern(Ref<BitArray> row){
-    int width = row->getSize();
-    int rowOffset = 0;
-    while (rowOffset < width) {
-      if (row->get(rowOffset)) {
-        break;
-      }
-      rowOffset++;
+  if (usingCheckDigit) {
+    int max = result.length() - 1;
+    int total = 0;
+    for (int i = 0; i < max; i++) {
+      total += alphabet_string.find_first_of(result[i], 0);
     }
-
-    int counterPosition = 0;
-    const int countersLen = 9;
-    int counters[countersLen];
-    for (int i = 0; i < countersLen; i++) {
-      counters[i] = 0;
+    if (result[max] != ALPHABET[total % 43]) {
+      throw ChecksumException();
     }
-    int patternStart = rowOffset;
-    bool isWhite = false;
-    int patternLength = countersLen;
+    result.resize(max);
+  }
+  
+  if (result.length() == 0) {
+    // Almost false positive
+    throw NotFoundException();
+  }
+  
+  Ref<String> resultString;
+  if (extendedMode) {
+    resultString = decodeExtended(result);
+  } else {
+    resultString = Ref<String>(new String(result));
+  }
 
-    for (int i = rowOffset; i < width; i++) {
-      bool pixel = row->get(i);
-      if (pixel ^ isWhite) {
-        counters[counterPosition]++;
+  float left = (float) (start[1] + start[0]) / 2.0f;
+  float right = (float) (nextStart + lastStart) / 2.0f;
+
+  ArrayRef< Ref<ResultPoint> > resultPoints (2);
+  resultPoints[0] = 
+    Ref<OneDResultPoint>(new OneDResultPoint(left, (float) rowNumber));
+  resultPoints[1] =
+    Ref<OneDResultPoint>(new OneDResultPoint(right, (float) rowNumber));
+  
+  return Ref<Result>(
+    new Result(resultString, ArrayRef<char>(), resultPoints, BarcodeFormat::CODE_39)
+    );
+}
+
+vector<int> Code39Reader::findAsteriskPattern(Ref<BitArray> row,
+                                              vector<int>& counters){
+  int width = row->getSize();
+  int rowOffset = row->getNextSet(0);
+
+  int counterPosition = 0;
+  int patternStart = rowOffset;
+  bool isWhite = false;
+  int patternLength = counters.size();
+
+  for (int i = rowOffset; i < width; i++) {
+    if (row->get(i) ^ isWhite) {
+      counters[counterPosition]++;
+    } else {
+      if (counterPosition == patternLength - 1) {
+        // Look for whitespace before start pattern, >= 50% of width of
+        // start pattern.
+        if (toNarrowWidePattern(counters) == ASTERISK_ENCODING &&
+            row->isRange(std::max(0, patternStart - ((i - patternStart) >> 1)), patternStart, false)) {
+          vector<int> resultValue (2, 0);
+          resultValue[0] = patternStart;
+          resultValue[1] = i;
+          return resultValue;
+        }
+        patternStart += counters[0] + counters[1];
+        for (int y = 2; y < patternLength; y++) {
+          counters[y - 2] = counters[y];
+        }
+        counters[patternLength - 2] = 0;
+        counters[patternLength - 1] = 0;
+        counterPosition--;
       } else {
-        if (counterPosition == patternLength - 1) {
-          // Look for whitespace before start pattern, >= 50% of width of
-          // start pattern.
-          if (toNarrowWidePattern(counters, countersLen) == ASTERISK_ENCODING &&
-              row->isRange(std::max(0, patternStart - ((i - patternStart) >> 1)), patternStart, false)) {
-            int* resultValue = new int[2];
-            resultValue[0] = patternStart;
-            resultValue[1] = i;
-            return resultValue;
-          }
-          patternStart += counters[0] + counters[1];
-          for (int y = 2; y < patternLength; y++) {
-            counters[y - 2] = counters[y];
-          }
-          counters[patternLength - 2] = 0;
-          counters[patternLength - 1] = 0;
-          counterPosition--;
-        } else {
-          counterPosition++;
-        }
-        counters[counterPosition] = 1;
-        isWhite = !isWhite;
+        counterPosition++;
+      }
+      counters[counterPosition] = 1;
+      isWhite = !isWhite;
+    }
+  }
+  throw NotFoundException();
+}
+
+// For efficiency, returns -1 on failure. Not throwing here saved as many as
+// 700 exceptions per image when using some of our blackbox images.
+int Code39Reader::toNarrowWidePattern(vector<int>& counters){
+  int numCounters = counters.size();
+  int maxNarrowCounter = 0;
+  int wideCounters;
+  do {
+    int minCounter = INT_MAX;
+    for (int i = 0; i < numCounters; i++) {
+      int counter = counters[i];
+      if (counter < minCounter && counter > maxNarrowCounter) {
+        minCounter = counter;
       }
     }
-    throw ReaderException("");
-  }
-
-  // For efficiency, returns -1 on failure. Not throwing here saved as many as
-  // 700 exceptions per image when using some of our blackbox images.
-  int Code39Reader::toNarrowWidePattern(int counters[], int countersLen){
-    int numCounters = countersLen;
-    int maxNarrowCounter = 0;
-    int wideCounters;
-    do {
-      int minCounter = INT_MAX;
-      for (int i = 0; i < numCounters; i++) {
-        int counter = counters[i];
-        if (counter < minCounter && counter > maxNarrowCounter) {
-          minCounter = counter;
-        }
+    maxNarrowCounter = minCounter;
+    wideCounters = 0;
+    int totalWideCountersWidth = 0;
+    int pattern = 0;
+    for (int i = 0; i < numCounters; i++) {
+      int counter = counters[i];
+      if (counters[i] > maxNarrowCounter) {
+        pattern |= 1 << (numCounters - 1 - i);
+        wideCounters++;
+        totalWideCountersWidth += counter;
       }
-      maxNarrowCounter = minCounter;
-      wideCounters = 0;
-      int totalWideCountersWidth = 0;
-      int pattern = 0;
-      for (int i = 0; i < numCounters; i++) {
+    }
+    if (wideCounters == 3) {
+      // Found 3 wide counters, but are they close enough in width?
+      // We can perform a cheap, conservative check to see if any individual
+      // counter is more than 1.5 times the average:
+      for (int i = 0; i < numCounters && wideCounters > 0; i++) {
         int counter = counters[i];
         if (counters[i] > maxNarrowCounter) {
-          pattern |= 1 << (numCounters - 1 - i);
-          wideCounters++;
-          totalWideCountersWidth += counter;
-        }
-      }
-      if (wideCounters == 3) {
-        // Found 3 wide counters, but are they close enough in width?
-        // We can perform a cheap, conservative check to see if any individual
-        // counter is more than 1.5 times the average:
-        for (int i = 0; i < numCounters && wideCounters > 0; i++) {
-          int counter = counters[i];
-          if (counters[i] > maxNarrowCounter) {
-            wideCounters--;
-            // totalWideCountersWidth = 3 * average, so this checks if
-            // counter >= 3/2 * average.
-            if ((counter << 1) >= totalWideCountersWidth) {
-              return -1;
-            }
+          wideCounters--;
+          // totalWideCountersWidth = 3 * average, so this checks if
+          // counter >= 3/2 * average.
+          if ((counter << 1) >= totalWideCountersWidth) {
+            return -1;
           }
         }
-        return pattern;
       }
-    } while (wideCounters > 3);
-    return -1;
-  }
-
-  char Code39Reader::patternToChar(int pattern){
-    for (int i = 0; i < CHARACTER_ENCODINGS_LEN; i++) {
-      if (CHARACTER_ENCODINGS[i] == pattern) {
-        return ALPHABET[i];
-      }
+      return pattern;
     }
-    throw ReaderException("");
-  }
+  } while (wideCounters > 3);
+  return -1;
+}
 
-  Ref<String> Code39Reader::decodeExtended(std::string encoded){
-    int length = encoded.length();
-    std::string tmpDecoded;
-    for (int i = 0; i < length; i++) {
-      char c = encoded[i];
-      if (c == '+' || c == '$' || c == '%' || c == '/') {
-        char next = encoded[i + 1];
-        char decodedChar = '\0';
-        switch (c) {
-          case '+':
-            // +A to +Z map to a to z
-            if (next >= 'A' && next <= 'Z') {
-              decodedChar = (char) (next + 32);
-            } else {
-              throw ReaderException("");
-            }
-            break;
-          case '$':
-            // $A to $Z map to control codes SH to SB
-            if (next >= 'A' && next <= 'Z') {
-              decodedChar = (char) (next - 64);
-            } else {
-              throw ReaderException("");
-            }
-            break;
-          case '%':
-            // %A to %E map to control codes ESC to US
-            if (next >= 'A' && next <= 'E') {
-              decodedChar = (char) (next - 38);
-            } else if (next >= 'F' && next <= 'W') {
-              decodedChar = (char) (next - 11);
-            } else {
-              throw ReaderException("");
-            }
-            break;
-          case '/':
-            // /A to /O map to ! to , and /Z maps to :
-            if (next >= 'A' && next <= 'O') {
-              decodedChar = (char) (next - 32);
-            } else if (next == 'Z') {
-              decodedChar = ':';
-            } else {
-              throw ReaderException("");
-            }
-            break;
+char Code39Reader::patternToChar(int pattern){
+  for (int i = 0; i < CHARACTER_ENCODINGS_LEN; i++) {
+    if (CHARACTER_ENCODINGS[i] == pattern) {
+      return ALPHABET[i];
+    }
+  }
+  throw ReaderException("");
+}
+
+Ref<String> Code39Reader::decodeExtended(std::string encoded){
+  int length = encoded.length();
+  std::string tmpDecoded;
+  for (int i = 0; i < length; i++) {
+    char c = encoded[i];
+    if (c == '+' || c == '$' || c == '%' || c == '/') {
+      char next = encoded[i + 1];
+      char decodedChar = '\0';
+      switch (c) {
+      case '+':
+        // +A to +Z map to a to z
+        if (next >= 'A' && next <= 'Z') {
+          decodedChar = (char) (next + 32);
+        } else {
+          throw ReaderException("");
         }
-        tmpDecoded.append(1, decodedChar);
-        // bump up i again since we read two characters
-        i++;
-      } else {
-        tmpDecoded.append(1, c);
+        break;
+      case '$':
+        // $A to $Z map to control codes SH to SB
+        if (next >= 'A' && next <= 'Z') {
+          decodedChar = (char) (next - 64);
+        } else {
+          throw ReaderException("");
+        }
+        break;
+      case '%':
+        // %A to %E map to control codes ESC to US
+        if (next >= 'A' && next <= 'E') {
+          decodedChar = (char) (next - 38);
+        } else if (next >= 'F' && next <= 'W') {
+          decodedChar = (char) (next - 11);
+        } else {
+          throw ReaderException("");
+        }
+        break;
+      case '/':
+        // /A to /O map to ! to , and /Z maps to :
+        if (next >= 'A' && next <= 'O') {
+          decodedChar = (char) (next - 32);
+        } else if (next == 'Z') {
+          decodedChar = ':';
+        } else {
+          throw ReaderException("");
+        }
+        break;
       }
+      tmpDecoded.append(1, decodedChar);
+      // bump up i again since we read two characters
+      i++;
+    } else {
+      tmpDecoded.append(1, c);
     }
-    Ref<String> decoded(new String(tmpDecoded));
-    return decoded;
   }
-} // namespace oned
-} // namespace zxing
-
+  Ref<String> decoded(new String(tmpDecoded));
+  return decoded;
+}

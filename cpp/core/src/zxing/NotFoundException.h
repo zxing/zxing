@@ -28,6 +28,8 @@ namespace zxing {
     NotFoundException();
     NotFoundException(const char *msg);
     ~NotFoundException() throw();
+
+    static NotFoundException const& getNotFoundInstance();
   };
 
 }

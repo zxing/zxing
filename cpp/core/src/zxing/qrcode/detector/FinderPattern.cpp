@@ -28,10 +28,13 @@ namespace zxing {
 		
 		FinderPattern::FinderPattern(float posX, float posY, float estimatedModuleSize) :
 		ResultPoint(posX,posY), estimatedModuleSize_(estimatedModuleSize), count_(1) {
+      // cerr << "fpc " << getX() << " " << getY() << " " << count_ << endl;
+      // cerr << "fp " << getX() << " " << getY() << endl;
 		}
 		
 		FinderPattern::FinderPattern(float posX, float posY, float estimatedModuleSize, int count) :
 		ResultPoint(posX,posY), estimatedModuleSize_(estimatedModuleSize), count_(count) {
+      // cerr << "fpc " << getX() << " " << getY() << " " << count << endl;
 		}
 		
 		int FinderPattern::getCount() const {
@@ -44,6 +47,7 @@ namespace zxing {
 		
 		void FinderPattern::incrementCount() {
 			count_++;
+      // cerr << "ic " << getX() << " " << getY() << " " << count_ << endl;
 		}
 		
 /*
@@ -61,6 +65,8 @@ namespace zxing {
     }
 		
     Ref<FinderPattern> FinderPattern::combineEstimate(float i, float j, float newModuleSize) const {
+      // fprintf(stderr, "ce %f %f %f\n", i, j, newModuleSize);
+
       int combinedCount = count_ + 1;
       float combinedX = (count_ * getX() + j) / combinedCount;
       float combinedY = (count_ * getY() + i) / combinedCount;

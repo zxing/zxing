@@ -29,6 +29,8 @@ public:
   FormatException();
   FormatException(const char *msg);
   ~FormatException() throw();
+
+  static FormatException const& getFormatInstance();
 };
 
 }

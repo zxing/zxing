@@ -37,13 +37,14 @@ template<typename T> class Array : public Counted {
 protected:
 public:
   std::vector<T> values_;
-  Array(size_t n) :
+  Array() {}
+  Array(int n) :
       Counted(), values_(n, T()) {
   }
-  Array(T *ts, size_t n) :
+  Array(T const* ts, int n) :
       Counted(), values_(ts, ts+n) {
   }
-  Array(T v, size_t n) :
+  Array(T v, int n) :
       Counted(), values_(n, v) {
   }
   Array(std::vector<T> &v) :
@@ -77,16 +78,19 @@ public:
 #endif
     return *this;
   }
-  T operator[](size_t i) const {
+  T operator[](int i) const {
     return values_[i];
   }
-  T& operator[](size_t i) {
+  T& operator[](int i) {
     return values_[i];
   }
-  size_t size() const {
+  int size() const {
     return values_.size();
   }
-  std::vector<T> values() const {
+  bool empty() const {
+    return values_.size() == 0;
+  }
+  std::vector<T> const& values() const {
     return values_;
   }
   std::vector<T>& values() {
@@ -104,14 +108,14 @@ public:
     cout << "instantiating empty ArrayRef " << this << "\n";
 #endif
   }
-  ArrayRef(size_t n) :
+  explicit ArrayRef(int n) :
       array_(0) {
 #ifdef DEBUG_COUNTING
     cout << "instantiating ArrayRef " << this << "with size " << n << "\n";
 #endif
     reset(new Array<T> (n));
   }
-  ArrayRef(T *ts, size_t n) :
+  ArrayRef(T *ts, int n) :
       array_(0) {
 #ifdef DEBUG_COUNTING
     cout << "instantiating ArrayRef " << this << "with " << n << " elements at " << (void *)ts << "\n";
@@ -160,13 +164,13 @@ public:
     array_ = 0;
   }
 
-  T operator[](size_t i) const {
+  T operator[](int i) const {
     return (*array_)[i];
   }
-  T& operator[](size_t i) {
+  T& operator[](int i) {
     return (*array_)[i];
   }
-  size_t size() const {
+  int size() const {
     return array_->size();
   }
 
@@ -200,6 +204,12 @@ public:
   }
   Array<T>* operator->() {
     return array_;
+  }
+  operator bool () const {
+    return array_ != 0;
+  }
+  bool operator ! () const {
+    return array_ == 0;
   }
 };
 

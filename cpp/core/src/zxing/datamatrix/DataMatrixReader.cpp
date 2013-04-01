@@ -50,7 +50,7 @@ Ref<Result> DataMatrixReader::decode(Ref<BinaryBitmap> image, DecodeHints hints)
   cout << "(2) detected, have detectorResult " << detectorResult.object_ << "\n" << flush;
 #endif
 
-  std::vector<Ref<ResultPoint> > points(detectorResult->getPoints());
+  ArrayRef< Ref<ResultPoint> > points(detectorResult->getPoints());
 
 
 #ifdef DEBUG
@@ -69,7 +69,7 @@ Ref<Result> DataMatrixReader::decode(Ref<BinaryBitmap> image, DecodeHints hints)
 #endif
 
   Ref<Result> result(
-    new Result(decoderResult->getText(), decoderResult->getRawBytes(), points, BarcodeFormat_DATA_MATRIX));
+    new Result(decoderResult->getText(), decoderResult->getRawBytes(), points, BarcodeFormat::DATA_MATRIX));
 #ifdef DEBUG
   cout << "(5) created result " << result.object_ << ", returning\n" << flush;
 #endif

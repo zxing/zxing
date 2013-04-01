@@ -36,10 +36,10 @@ std::vector<Ref<Result> > QRCodeMultiReader::decodeMultiple(Ref<BinaryBitmap> im
   for (unsigned int i = 0; i < detectorResult.size(); i++) {
     try {
       Ref<DecoderResult> decoderResult = getDecoder().decode(detectorResult[i]->getBits());
-      std::vector<Ref<ResultPoint> > points = detectorResult[i]->getPoints();
+      ArrayRef< Ref<ResultPoint> > points = detectorResult[i]->getPoints();
       Ref<Result> result = Ref<Result>(new Result(decoderResult->getText(),
       decoderResult->getRawBytes(), 
-      points, BarcodeFormat_QR_CODE));
+      points, BarcodeFormat::QR_CODE));
       // result->putMetadata(ResultMetadataType.BYTE_SEGMENTS, decoderResult->getByteSegments());
       // result->putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, decoderResult->getECLevel().toString());
       results.push_back(result);

@@ -39,19 +39,18 @@ int FormatInformation::N_FORMAT_INFO_DECODE_LOOKUPS = 32;
 int FormatInformation::BITS_SET_IN_HALF_BYTE[] = { 0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4 };
 
 FormatInformation::FormatInformation(int formatInfo) :
-    errorCorrectionLevel_(ErrorCorrectionLevel::forBits((formatInfo >> 3) & 0x03)), dataMask_(
-      (unsigned char)(formatInfo & 0x07)) {
+    errorCorrectionLevel_(ErrorCorrectionLevel::forBits((formatInfo >> 3) & 0x03)), dataMask_((char)(formatInfo & 0x07)) {
 }
 
 ErrorCorrectionLevel& FormatInformation::getErrorCorrectionLevel() {
   return errorCorrectionLevel_;
 }
 
-unsigned char FormatInformation::getDataMask() {
+char FormatInformation::getDataMask() {
   return dataMask_;
 }
 
-int FormatInformation::numBitsDiffering(unsigned int a, unsigned int b) {
+int FormatInformation::numBitsDiffering(int a, int b) {
   a ^= b;
   return BITS_SET_IN_HALF_BYTE[a & 0x0F] + BITS_SET_IN_HALF_BYTE[(a >> 4 & 0x0F)] + BITS_SET_IN_HALF_BYTE[(a >> 8
          & 0x0F)] + BITS_SET_IN_HALF_BYTE[(a >> 12 & 0x0F)] + BITS_SET_IN_HALF_BYTE[(a >> 16 & 0x0F)]

@@ -23,42 +23,41 @@
 #include <zxing/aztec/detector/Detector.h>
 #include <iostream>
 
-namespace zxing {
-  namespace aztec {
+using zxing::Ref;
+using zxing::ArrayRef;
+using zxing::Result;
+using zxing::aztec::AztecReader;
         
-    AztecReader::AztecReader() : decoder_() {
-      // nothing
-    };
+AztecReader::AztecReader() : decoder_() {
+  // nothing
+};
         
-    Ref<Result> AztecReader::decode(Ref<zxing::BinaryBitmap> image) {
-      Detector detector(image->getBlackMatrix());
+Ref<Result> AztecReader::decode(Ref<zxing::BinaryBitmap> image) {
+  Detector detector(image->getBlackMatrix());
             
-      Ref<AztecDetectorResult> detectorResult(detector.detect());
+  Ref<AztecDetectorResult> detectorResult(detector.detect());
             
-      std::vector<Ref<ResultPoint> > points(detectorResult->getPoints());
+  ArrayRef< Ref<ResultPoint> > points(detectorResult->getPoints());
             
-      Ref<DecoderResult> decoderResult(decoder_.decode(detectorResult));
+  Ref<DecoderResult> decoderResult(decoder_.decode(detectorResult));
             
-      Ref<Result> result(new Result(decoderResult->getText(),
-                                    decoderResult->getRawBytes(),
-                                    points,
-                                    BarcodeFormat_AZTEC));
+  Ref<Result> result(new Result(decoderResult->getText(),
+                                decoderResult->getRawBytes(),
+                                points,
+                                BarcodeFormat::AZTEC));
             
-      return result;
-    }
+  return result;
+}
         
-    Ref<Result> AztecReader::decode(Ref<BinaryBitmap> image, DecodeHints) {
-      //cout << "decoding with hints not supported for aztec" << "\n" << flush;
-      return this->decode(image);
-    }
+Ref<Result> AztecReader::decode(Ref<BinaryBitmap> image, DecodeHints) {
+  //cout << "decoding with hints not supported for aztec" << "\n" << flush;
+  return this->decode(image);
+}
         
-    AztecReader::~AztecReader() {
-      // nothing
-    }
+AztecReader::~AztecReader() {
+  // nothing
+}
         
-    Decoder& AztecReader::getDecoder() {
-      return decoder_;
-    }
-        
-  }
+zxing::aztec::Decoder& AztecReader::getDecoder() {
+  return decoder_;
 }

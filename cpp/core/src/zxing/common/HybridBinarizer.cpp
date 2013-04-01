@@ -59,7 +59,7 @@ Ref<BitMatrix> HybridBinarizer::getBlackMatrix() {
   int width = source.getWidth();
   int height = source.getHeight();
   if (width >= MINIMUM_DIMENSION && height >= MINIMUM_DIMENSION) {
-    unsigned char* luminances = source.getMatrix();
+    ArrayRef<char> luminances = source.getMatrix();
     int subWidth = width >> BLOCK_SIZE_POWER;
     if ((width & BLOCK_SIZE_MASK) != 0) {
       subWidth++;
@@ -68,7 +68,7 @@ Ref<BitMatrix> HybridBinarizer::getBlackMatrix() {
     if ((height & BLOCK_SIZE_MASK) != 0) {
       subHeight++;
     }
-    int* blackPoints =
+    ArrayRef<int> blackPoints =
       calculateBlackPoints(luminances, subWidth, subHeight, width, height);
 
     Ref<BitMatrix> newMatrix (new BitMatrix(width, height));
@@ -80,13 +80,6 @@ Ref<BitMatrix> HybridBinarizer::getBlackMatrix() {
                                blackPoints,
                                newMatrix);
     matrix_ = newMatrix;
-
-    // N.B.: these deletes are inadequate if anything between the new
-    // and this point can throw.  As of this writing, it doesn't look
-    // like they do.
-
-    delete [] blackPoints;
-    delete [] luminances;
   } else {
     // If the image is too small, fall back to the global histogram approach.
     matrix_ = GlobalHistogramBinarizer::getBlackMatrix();
@@ -101,12 +94,12 @@ namespace {
 }
 
 void
-HybridBinarizer::calculateThresholdForBlock(unsigned char* luminances,
+HybridBinarizer::calculateThresholdForBlock(ArrayRef<char> luminances,
                                             int subWidth,
                                             int subHeight,
                                             int width,
                                             int height,
-                                            int blackPoints[],
+                                            ArrayRef<int> blackPoints,
                                             Ref<BitMatrix> const& matrix) {
   for (int y = 0; y < subHeight; y++) {
     int yoffset = y << BLOCK_SIZE_POWER;
@@ -137,7 +130,7 @@ HybridBinarizer::calculateThresholdForBlock(unsigned char* luminances,
   }
 }
 
-void HybridBinarizer::thresholdBlock(unsigned char* luminances,
+void HybridBinarizer::thresholdBlock(ArrayRef<char> luminances,
                                      int xoffset,
                                      int yoffset,
                                      int threshold,
@@ -156,7 +149,7 @@ void HybridBinarizer::thresholdBlock(unsigned char* luminances,
 }
 
 namespace {
-  inline int getBlackPointFromNeighbors(int* blackPoints, int subWidth, int x, int y) {
+  inline int getBlackPointFromNeighbors(ArrayRef<int> blackPoints, int subWidth, int x, int y) {
     return (blackPoints[(y-1)*subWidth+x] +
             2*blackPoints[y*subWidth+x-1] +
             blackPoints[(y-1)*subWidth+x-1]) >> 2;
@@ -164,14 +157,14 @@ namespace {
 }
 
 
-int* HybridBinarizer::calculateBlackPoints(unsigned char* luminances,
-                                           int subWidth,
-                                           int subHeight,
-                                           int width,
-                                           int height) {
+ArrayRef<int> HybridBinarizer::calculateBlackPoints(ArrayRef<char> luminances,
+                                                    int subWidth,
+                                                    int subHeight,
+                                                    int width,
+                                                    int height) {
   const int minDynamicRange = 24;
 
-  int *blackPoints = new int[subHeight * subWidth];
+  ArrayRef<int> blackPoints (subHeight * subWidth);
   for (int y = 0; y < subHeight; y++) {
     int yoffset = y << BLOCK_SIZE_POWER;
     int maxYOffset = height - BLOCK_SIZE;

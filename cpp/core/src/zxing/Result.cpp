@@ -21,10 +21,15 @@
 
 #include <zxing/Result.h>
 
-namespace zxing {
-using namespace std;
+using zxing::Result;
+using zxing::Ref;
+using zxing::ArrayRef;
+using zxing::String;
+using zxing::ResultPoint;
 
-Result::Result(Ref<String> text, ArrayRef<unsigned char> rawBytes, std::vector<Ref<ResultPoint> > resultPoints,
+Result::Result(Ref<String> text,
+               ArrayRef<char> rawBytes,
+               ArrayRef< Ref<ResultPoint> > resultPoints,
                BarcodeFormat format) :
   text_(text), rawBytes_(rawBytes), resultPoints_(resultPoints), format_(format) {
 }
@@ -36,29 +41,18 @@ Ref<String> Result::getText() {
   return text_;
 }
 
-ArrayRef<unsigned char> Result::getRawBytes() {
+ArrayRef<char> Result::getRawBytes() {
   return rawBytes_;
 }
 
-const std::vector<Ref<ResultPoint> >& Result::getResultPoints() const {
+ArrayRef< Ref<ResultPoint> > const& Result::getResultPoints() const {
   return resultPoints_;
 }
 
-std::vector<Ref<ResultPoint> >& Result::getResultPoints() {
+ArrayRef< Ref<ResultPoint> >& Result::getResultPoints() {
   return resultPoints_;
 }
 
-BarcodeFormat Result::getBarcodeFormat() const {
+zxing::BarcodeFormat Result::getBarcodeFormat() const {
   return format_;
-}
-
-ostream& operator<<(ostream &out, Result& result) {
-  if (result.text_ != 0) {
-    out << result.text_->getText();
-  } else {
-    out << "[" << result.rawBytes_->size() << " bytes]";
-  }
-  return out;
-}
-
 }

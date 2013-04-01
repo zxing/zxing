@@ -22,54 +22,67 @@
 #include <zxing/common/BitArray.h>
 #include <zxing/Result.h>
 
-typedef enum UPC_EAN_PATTERNS {
-	UPC_EAN_PATTERNS_L_PATTERNS = 0,
-	UPC_EAN_PATTERNS_L_AND_G_PATTERNS
-} UPC_EAN_PATTERNS;
-
 namespace zxing {
 	namespace oned {
-		class UPCEANReader : public OneDReader {
-
-		private:
-      enum {MAX_AVG_VARIANCE = (unsigned int) (PATTERN_MATCH_RESULT_SCALE_FACTOR * 420/1000)};
-      enum {MAX_INDIVIDUAL_VARIANCE = (int) (PATTERN_MATCH_RESULT_SCALE_FACTOR * 700/1000)};
-
-			static bool findStartGuardPattern(Ref<BitArray> row, int* rangeStart, int* rangeEnd);
-
-			virtual bool decodeEnd(Ref<BitArray> row, int endStart, int* endGuardBegin, int* endGuardEnd);
-
-			static bool checkStandardUPCEANChecksum(std::string s);
-		protected:
-			static bool findGuardPattern(Ref<BitArray> row, int rowOffset, bool whiteFirst,
-			    const int pattern[], int patternLen, int* start, int* end);
-
-			virtual int getMIDDLE_PATTERN_LEN();
-			virtual const int* getMIDDLE_PATTERN();
-
-		public:
-			UPCEANReader();
-
-      // Returns < 0 on failure, >= 0 on success.
-			virtual int decodeMiddle(Ref<BitArray> row, int startGuardBegin, int startGuardEnd,
-			    std::string& resultString) = 0;
-
-			Ref<Result> decodeRow(int rowNumber, Ref<BitArray> row);
-
-			// TODO(dswitkin): Should this be virtual so that UPCAReader can override it?
-			Ref<Result> decodeRow(int rowNumber, Ref<BitArray> row, int startGuardBegin,
-          int startGuardEnd);
-
-      // Returns < 0 on failure, >= 0 on success.
-			static int decodeDigit(Ref<BitArray> row, int counters[], int countersLen, int rowOffset,
-			    UPC_EAN_PATTERNS patternType);
-
-			virtual bool checkChecksum(std::string s);
-
-			virtual BarcodeFormat getBarcodeFormat() = 0;
-			virtual ~UPCEANReader();
-		};
-	}
+    class MultiFormatUPCEANReader;
+		class UPCEANReader;
+  }
 }
+
+class zxing::oned::UPCEANReader : public OneDReader {
+  friend class MultiFormatUPCEANReader;
+private:
+  std::string decodeRowStringBuffer;
+  // UPCEANExtensionSupport extensionReader;
+  // EANManufacturerOrgSupport eanManSupport;
+
+  static const int MAX_AVG_VARIANCE;
+  static const int MAX_INDIVIDUAL_VARIANCE;
+
+  static Range findStartGuardPattern(Ref<BitArray> row);
+
+  virtual Range decodeEnd(Ref<BitArray> row, int endStart);
+
+  static bool checkStandardUPCEANChecksum(Ref<String> const& s);
+
+  static Range findGuardPattern(Ref<BitArray> row,
+                                int rowOffset,
+                                bool whiteFirst,
+                                std::vector<int> const& pattern,
+                                std::vector<int>& counters);
+
+
+protected:
+  static const std::vector<int> START_END_PATTERN;
+  static const std::vector<int> MIDDLE_PATTERN;
+
+  static const std::vector<int const*> L_PATTERNS;
+  static const std::vector<int const*> L_AND_G_PATTERNS;
+
+  static Range findGuardPattern(Ref<BitArray> row,
+                                int rowOffset,
+                                bool whiteFirst,
+                                std::vector<int> const& pattern);
+
+public:
+  UPCEANReader();
+
+  virtual int decodeMiddle(Ref<BitArray> row,
+                           Range const& startRange,
+                           std::string& resultString) = 0;
+
+  virtual Ref<Result> decodeRow(int rowNumber, Ref<BitArray> row);
+  virtual Ref<Result> decodeRow(int rowNumber, Ref<BitArray> row, Range const& range);
+
+  static int decodeDigit(Ref<BitArray> row,
+                         std::vector<int>& counters,
+                         int rowOffset,
+                         std::vector<int const*> const& patterns);
+
+  virtual bool checkChecksum(Ref<String> const& s);
+
+  virtual BarcodeFormat getBarcodeFormat() = 0;
+  virtual ~UPCEANReader();
+};
 
 #endif

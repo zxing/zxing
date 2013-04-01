@@ -1,3 +1,4 @@
+// -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
 #ifndef __CODE_39_READER_H__
 #define __CODE_39_READER_H__
 /*
@@ -24,35 +25,37 @@
 #include <zxing/Result.h>
 
 namespace zxing {
-	namespace oned {
-		
-		/**
-		 * <p>Decodes Code 39 barcodes. This does not support "Full ASCII Code 39" yet.</p>
-		 * Ported form Java (author Sean Owen)
-		 * @author Lukasz Warchol
-		 */
-		class Code39Reader : public OneDReader {
-			
-		private:
-			std::string alphabet_string;
-
-			bool usingCheckDigit;
-			bool extendedMode;
-			
-			static int* findAsteriskPattern(Ref<BitArray> row);														//throws ReaderException 
-			static int toNarrowWidePattern(int counters[], int countersLen);
-			static char patternToChar(int pattern);																	//throws ReaderException 
-			static Ref<String> decodeExtended(std::string encoded);													//throws ReaderException 
-			
-			void append(char* s, char c);
-		public:
-			Code39Reader();
-			Code39Reader(bool usingCheckDigit_);
-			Code39Reader(bool usingCheckDigit_, bool extendedMode_);
-			
-			Ref<Result> decodeRow(int rowNumber, Ref<BitArray> row);
-    };
-	}
+    namespace oned {
+        class Code39Reader;
+    }
 }
+
+/**
+ * <p>Decodes Code 39 barcodes. This does not support "Full ASCII Code 39" yet.</p>
+ * Ported form Java (author Sean Owen)
+ * @author Lukasz Warchol
+ */
+class zxing::oned::Code39Reader : public OneDReader {
+			
+private:
+    std::string alphabet_string;
+
+    bool usingCheckDigit;
+    bool extendedMode;
+			
+    static std::vector<int> findAsteriskPattern(Ref<BitArray> row,
+                                                std::vector<int>& counters);
+    static int toNarrowWidePattern(std::vector<int>& counters);
+    static char patternToChar(int pattern);
+    static Ref<String> decodeExtended(std::string encoded);
+			
+    void append(char* s, char c);
+public:
+    Code39Reader();
+    Code39Reader(bool usingCheckDigit_);
+    Code39Reader(bool usingCheckDigit_, bool extendedMode_);
+			
+    Ref<Result> decodeRow(int rowNumber, Ref<BitArray> row);
+};
 
 #endif

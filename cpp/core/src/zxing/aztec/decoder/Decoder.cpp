@@ -40,7 +40,7 @@ using zxing::Ref;
 using std::string;
 
 namespace {
-  void add(string& result, unsigned char character) {
+  void add(string& result, char character) {
 #ifndef NO_ICONV
     char s[] = { character & 0xff };
     char* ss = s;
@@ -163,9 +163,9 @@ Ref<DecoderResult> Decoder::decode(Ref<zxing::aztec::AztecDetectorResult> detect
   Ref<String> result = getEncodedData(aCorrectedBits);
             
   // std::printf("constructing array\n");
-  ArrayRef<unsigned char> arrayOut(aCorrectedBits->getSize());
+  ArrayRef<char> arrayOut(aCorrectedBits->getSize());
   for (int i = 0; i < aCorrectedBits->count(); i++) {
-    arrayOut[i] = (unsigned char)aCorrectedBits->get(i);
+    arrayOut[i] = (char)aCorrectedBits->get(i);
   }
             
   // std::printf("returning\n");
@@ -376,7 +376,7 @@ Ref<BitArray> Decoder::correctBits(Ref<zxing::BitArray> rawbits) {
                         
       }
                     
-      flag = (unsigned int)flag >> 1;
+      flag = ((unsigned int)flag) >> 1;
                     
     }
   }

@@ -21,11 +21,14 @@
  */
 
 #include <zxing/common/Counted.h>
+#include <zxing/common/Array.h>
 #include <string.h>
 
 namespace zxing {
+  class LuminanceSource;
+}
 
-class LuminanceSource : public Counted {
+class zxing::LuminanceSource : public Counted {
 public:
   LuminanceSource();
   virtual ~LuminanceSource();
@@ -34,8 +37,8 @@ public:
   virtual int getHeight() const = 0;
 
   // Callers take ownership of the returned memory and must call delete [] on it themselves.
-  virtual unsigned char* getRow(int y, unsigned char* row) = 0;
-  virtual unsigned char* getMatrix() = 0;
+  virtual ArrayRef<char> getRow(int y, ArrayRef<char> row) = 0;
+  virtual ArrayRef<char> getMatrix() = 0;
 
   virtual bool isCropSupported() const;
   virtual Ref<LuminanceSource> crop(int left, int top, int width, int height);
@@ -44,9 +47,7 @@ public:
   virtual Ref<LuminanceSource> rotateCounterClockwise();
 
   operator std::string (); // should be const but don't want to make sure a
-                           // large breaking change right now
+  // large breaking change right now
 };
-
-}
 
 #endif /* LUMINANCESOURCE_H_ */

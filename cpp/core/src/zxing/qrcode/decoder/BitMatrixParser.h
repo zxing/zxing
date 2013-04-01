@@ -42,7 +42,7 @@ public:
   BitMatrixParser(Ref<BitMatrix> bitMatrix);
   Ref<FormatInformation> readFormatInformation();
   Version *readVersion();
-  ArrayRef<unsigned char> readCodewords();
+  ArrayRef<char> readCodewords();
 
 private:
   BitMatrixParser(const BitMatrixParser&);
