@@ -28,6 +28,7 @@ import android.widget.ImageView;
 import android.widget.ListAdapter;
 import com.google.zxing.client.android.R;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -36,7 +37,7 @@ import java.util.List;
  *
  * @author Sean Owen
  */
-final class LoadPackagesAsyncTask extends AsyncTask<List<AppInfo>,Object,List<AppInfo>> {
+final class LoadPackagesAsyncTask extends AsyncTask<Void,Void,List<AppInfo>> {
 
   private static final String[] PKG_PREFIX_WHITELIST = {
       "com.google.android.apps.",
@@ -55,8 +56,8 @@ final class LoadPackagesAsyncTask extends AsyncTask<List<AppInfo>,Object,List<Ap
   }
 
   @Override
-  protected List<AppInfo> doInBackground(List<AppInfo>... objects) {
-    List<AppInfo> labelsPackages = objects[0];
+  protected List<AppInfo> doInBackground(Void... objects) {
+    List<AppInfo> labelsPackages = new ArrayList<AppInfo>();
     PackageManager packageManager = activity.getPackageManager();
     List<ApplicationInfo> appInfos = packageManager.getInstalledApplications(0);
     for (ApplicationInfo appInfo : appInfos) {
@@ -69,9 +70,7 @@ final class LoadPackagesAsyncTask extends AsyncTask<List<AppInfo>,Object,List<Ap
         }
       }
     }
-    synchronized (labelsPackages) {    
-      Collections.sort(labelsPackages);
-    }
+    Collections.sort(labelsPackages);
     return labelsPackages;
   }
 
