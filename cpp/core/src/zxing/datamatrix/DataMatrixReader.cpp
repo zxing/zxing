@@ -34,45 +34,15 @@ DataMatrixReader::DataMatrixReader() :
 
 Ref<Result> DataMatrixReader::decode(Ref<BinaryBitmap> image, DecodeHints hints) {
   (void)hints;
-#ifdef DEBUG
-  cout << "decoding image " << image.object_ << ":\n" << flush;
-#endif
-
   Detector detector(image->getBlackMatrix());
-
-
-#ifdef DEBUG
-  cout << "(1) created detector " << &detector << "\n" << flush;
-#endif
-
   Ref<DetectorResult> detectorResult(detector.detect());
-#ifdef DEBUG
-  cout << "(2) detected, have detectorResult " << detectorResult.object_ << "\n" << flush;
-#endif
-
   ArrayRef< Ref<ResultPoint> > points(detectorResult->getPoints());
 
 
-#ifdef DEBUG
-  cout << "(3) extracted points " << &points << "\n" << flush;
-  cout << "found " << points.size() << " points:\n";
-  for (size_t i = 0; i < points.size(); i++) {
-    cout << "   " << points[i]->getX() << "," << points[i]->getY() << "\n";
-  }
-  cout << "bits:\n";
-  cout << *(detectorResult->getBits()) << "\n";
-#endif
-
   Ref<DecoderResult> decoderResult(decoder_.decode(detectorResult->getBits()));
-#ifdef DEBUG
-  cout << "(4) decoded, have decoderResult " << decoderResult.object_ << "\n" << flush;
-#endif
 
   Ref<Result> result(
     new Result(decoderResult->getText(), decoderResult->getRawBytes(), points, BarcodeFormat::DATA_MATRIX));
-#ifdef DEBUG
-  cout << "(5) created result " << result.object_ << ", returning\n" << flush;
-#endif
 
   return result;
 }
