@@ -20,32 +20,26 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.provider.Browser;
 import android.view.View;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import com.google.zxing.client.android.common.executor.AsyncTaskExecInterface;
 import com.google.zxing.client.android.common.executor.AsyncTaskExecManager;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 public final class AppPickerActivity extends ListActivity {
 
-  private final List<AppInfo> labelsPackages;
   private LoadPackagesAsyncTask backgroundTask;
   private final AsyncTaskExecInterface taskExec;
 
   public AppPickerActivity() {
-    labelsPackages = Collections.synchronizedList(new ArrayList<AppInfo>());
     taskExec = new AsyncTaskExecManager().build();
   }
 
   @Override
   protected void onResume() {
     super.onResume();
-    labelsPackages.clear();
     backgroundTask = new LoadPackagesAsyncTask(this);
-    taskExec.execute(backgroundTask, labelsPackages);
+    taskExec.execute(backgroundTask);
   }
 
   @Override
@@ -60,8 +54,9 @@ public final class AppPickerActivity extends ListActivity {
 
   @Override
   protected void onListItemClick(ListView l, View view, int position, long id) {
-    if (position >= 0 && position < labelsPackages.size()) {
-      String packageName = labelsPackages.get(position).getPackageName();
+    ListAdapter adapter = getListAdapter();    
+    if (position >= 0 && position < adapter.getCount()) {
+      String packageName = ((AppInfo) adapter.getItem(position)).getPackageName();
       Intent intent = new Intent();
       intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
       intent.putExtra(Browser.BookmarkColumns.URL, "market://details?id=" + packageName);
