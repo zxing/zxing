@@ -37,10 +37,15 @@ namespace zxing {
  */
 class zxing::oned::Code93Reader : public OneDReader {
 public:
+  Code93Reader();
   Ref<Result> decodeRow(int rowNumber, Ref<BitArray> row);
 
 private:
-  static Range findAsteriskPattern(Ref<BitArray> row);
+  std::string decodeRowResult;
+  std::vector<int> counters;
+
+  Range findAsteriskPattern(Ref<BitArray> row);
+
   static int toPattern(std::vector<int>& counters);
   static char patternToChar(int pattern);
   static Ref<String> decodeExtended(std::string const& encoded);
