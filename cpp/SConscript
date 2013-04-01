@@ -22,7 +22,7 @@ if env['PIC']:
 	flags.append("-fPIC")
 
 flags.append("-Wextra -Werror")
-flags.append("-pedantic")
+# flags.append("-pedantic") # imagemagick ...
 
 compile_options['CXXFLAGS'] = ' '.join(flags)
 compile_options['LINKFLAGS'] = "-ldl -L/usr/lib -L/opt/local/lib -L/usr/local/lib"

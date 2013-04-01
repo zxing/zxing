@@ -314,7 +314,7 @@ void DecodedBitStreamParser::decodeAlphanumericSegment(Ref<BitSource> bits_,
 }
 
 namespace {
-  int parseECIValue(BitSource bits) {
+  int parseECIValue(BitSource& bits) {
     int firstByte = bits.readBits(8);
     if ((firstByte & 0x80) == 0) {
       // just one byte
