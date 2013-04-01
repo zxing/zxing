@@ -18,7 +18,8 @@
  * limitations under the License.
  */
 
-#include "UPCEANReader.h"
+#include <zxing/ZXing.h>
+#include <zxing/oned/UPCEANReader.h>
 #include <zxing/oned/OneDResultPoint.h>
 #include <zxing/ReaderException.h>
 #include <zxing/NotFoundException.h>
@@ -116,13 +117,8 @@ Ref<Result> UPCEANReader::decodeRow(int rowNumber, Ref<BitArray> row) {
 Ref<Result> UPCEANReader::decodeRow(int rowNumber,
                                     Ref<BitArray> row,
                                     Range const& startGuardRange) {
-  if (false) {
-    std::cerr << "dR " << rowNumber << " " << *row << " " 
-              << startGuardRange[0] << " " << startGuardRange[1] << std::endl;
-  }
   string& result = decodeRowStringBuffer;
   result.clear();
-  // cerr << "drx " << rowNumber << endl;
   int endStart = decodeMiddle(row, startGuardRange, result);
 
   Range endRange = decodeEnd(row, endStart);
@@ -135,7 +131,7 @@ Ref<Result> UPCEANReader::decodeRow(int rowNumber,
   if (quietEnd >= row->getSize() || !row->isRange(end, quietEnd, false)) {
     throw NotFoundException();
   }
-  
+
   Ref<String> resultString (new String(result));
   if (!checkChecksum(resultString)) {
     throw ChecksumException();

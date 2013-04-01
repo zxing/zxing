@@ -15,7 +15,8 @@
  * limitations under the License.
  */
 
-#include "ITFReader.h"
+#include <zxing/ZXing.h>
+#include <zxing/oned/ITFReader.h>
 #include <zxing/oned/OneDResultPoint.h>
 #include <zxing/common/Array.h>
 #include <zxing/ReaderException.h>
@@ -107,6 +108,7 @@ Ref<Result> ITFReader::decodeRow(int rowNumber, Ref<BitArray> row) {
       break;
     }
   }
+
   if (!lengthOK) {
     throw FormatException();
   }
@@ -114,6 +116,7 @@ Ref<Result> ITFReader::decodeRow(int rowNumber, Ref<BitArray> row) {
   ArrayRef< Ref<ResultPoint> > resultPoints(2);
   resultPoints[0] = Ref<OneDResultPoint>(new OneDResultPoint(startRange[1], (float) rowNumber));
   resultPoints[1] = Ref<OneDResultPoint>(new OneDResultPoint(endRange[0], (float) rowNumber));
+
   return Ref<Result>(new Result(resultString, ArrayRef<char>(), resultPoints, BarcodeFormat::ITF));
 }
 
@@ -227,21 +230,18 @@ ITFReader::Range ITFReader::decodeEnd(Ref<BitArray> row) {
  * @throws ReaderException if the quiet zone cannot be found, a ReaderException is thrown.
  */
 void ITFReader::validateQuietZone(Ref<BitArray> row, int startPattern) {
-  (void)row;
-  (void)startPattern;
-//#pragma mark needs some corrections
-//      int quietCount = narrowLineWidth * 10;  // expect to find this many pixels of quiet zone
-//
-//      for (int i = startPattern - 1; quietCount > 0 && i >= 0; i--) {
-//        if (row->get(i)) {
-//          break;
-//        }
-//        quietCount--;
-//      }
-//      if (quietCount != 0) {
-//        // Unable to find the necessary number of quiet zone pixels.
-//        throw ReaderException("Unable to find the necessary number of quiet zone pixels");
-//      }
+  int quietCount = this->narrowLineWidth * 10;  // expect to find this many pixels of quiet zone
+
+  for (int i = startPattern - 1; quietCount > 0 && i >= 0; i--) {
+    if (row->get(i)) {
+      break;
+    }
+    quietCount--;
+  }
+  if (quietCount != 0) {
+    // Unable to find the necessary number of quiet zone pixels.
+    throw NotFoundException();
+  }
 }
 
 /**
@@ -253,15 +253,9 @@ void ITFReader::validateQuietZone(Ref<BitArray> row, int startPattern) {
  */
 int ITFReader::skipWhiteSpace(Ref<BitArray> row) {
   int width = row->getSize();
-  int endStart = 0;
-  while (endStart < width) {
-    if (row->get(endStart)) {
-      break;
-    }
-    endStart++;
-  }
+  int endStart = row->getNextSet(0);
   if (endStart == width) {
-    throw ReaderException("");
+    throw NotFoundException();
   }
   return endStart;
 }
@@ -281,7 +275,7 @@ ITFReader::Range ITFReader::findGuardPattern(Ref<BitArray> row,
   // TODO: This is very similar to implementation in UPCEANReader. Consider if they can be
   // merged to a single method.
   int patternLength = pattern.size();
-  vector<int> counters(patternLength, 0);
+  vector<int> counters(patternLength);
   int width = row->getSize();
   bool isWhite = false;
 

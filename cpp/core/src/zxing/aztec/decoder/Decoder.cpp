@@ -328,13 +328,12 @@ Ref<BitArray> Decoder::correctBits(Ref<zxing::BitArray> rawbits) {
   }
             
   try {
-    // std::printf("trying reed solomon, numECCodewords:%d\n", numECCodewords);
     ReedSolomonDecoder rsDecoder(gf);
     rsDecoder.decode(dataWords, numECCodewords);
-  } catch (ReedSolomonException rse) {
+  } catch (ReedSolomonException const& ignored) {
     // std::printf("got reed solomon exception:%s, throwing formatexception\n", rse.what());
     throw FormatException("rs decoding failed");
-  } catch (IllegalArgumentException iae) {
+  } catch (IllegalArgumentException const& iae) {
     // std::printf("illegal argument exception: %s", iae.what());
   }
             

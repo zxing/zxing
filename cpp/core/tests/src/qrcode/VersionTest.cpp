@@ -56,7 +56,7 @@ void VersionTest::testVersionForNumber() {
   try {
     Version::getVersionForNumber(0);
     CPPUNIT_FAIL("Should have thrown an exception");
-  } catch (zxing::ReaderException re) {
+  } catch (zxing::ReaderException const& re) {
     // good
   }
   for (int i = 1; i <= 40; i++) {

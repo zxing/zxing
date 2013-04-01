@@ -31,13 +31,14 @@ namespace zxing {
   class GenericGF : public Counted {
     
   private:
-    std::vector<int> expTable_;
-    std::vector<int> logTable_;
-    Ref<GenericGFPoly> zero_;
-    Ref<GenericGFPoly> one_;
-    int size_;
-    int primitive_;
-    bool initialized_;
+    std::vector<int> expTable;
+    std::vector<int> logTable;
+    Ref<GenericGFPoly> zero;
+    Ref<GenericGFPoly> one;
+    int size;
+    int primitive;
+    int generatorBase;
+    bool initialized;
     
     void initialize();
     void checkInit();
@@ -50,12 +51,14 @@ namespace zxing {
     static Ref<GenericGF> AZTEC_PARAM;
     static Ref<GenericGF> QR_CODE_FIELD_256;
     static Ref<GenericGF> DATA_MATRIX_FIELD_256;
+    static Ref<GenericGF> MAXICODE_FIELD_64;
     
-    GenericGF(int primitive, int size);
+    GenericGF(int primitive, int size, int b);
     
     Ref<GenericGFPoly> getZero();
     Ref<GenericGFPoly> getOne();
     int getSize();
+    int getGeneratorBase();
     Ref<GenericGFPoly> buildMonomial(int degree, int coefficient);
     
     static int addOrSubtract(int a, int b);
@@ -63,14 +66,6 @@ namespace zxing {
     int log(int a);
     int inverse(int a);
     int multiply(int a, int b);
-      
-    bool operator==(GenericGF other) {
-      return (other.getSize() == this->size_ &&
-              other.primitive_ == this->primitive_);
-    }
-    
-    //#warning todo: add print method
-    
   };
 }
 

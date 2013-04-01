@@ -39,7 +39,7 @@ void ErrorCorrectionLevelTest::testForBits() {
   try {
     ErrorCorrectionLevel::forBits(4);
     CPPUNIT_FAIL("should have thrown an exception");
-  } catch (zxing::ReaderException ex) {
+  } catch (zxing::ReaderException const& ex) {
     // expected
   }
 }

@@ -34,12 +34,6 @@ EAN13Reader::EAN13Reader() : decodeMiddleCounters(4, 0) { }
 int EAN13Reader::decodeMiddle(Ref<BitArray> row,
                               Range const& startRange,
                               std::string& resultString) {
-  if (false) {
-  std::cerr << "ba "
-            << startRange[0] << " "
-            << startRange[1] << " "
-            << *row << std::endl;
-  }
   vector<int>& counters (decodeMiddleCounters);
   counters.clear();
   counters.resize(4);
@@ -83,7 +77,7 @@ void EAN13Reader::determineFirstDigit(std::string& resultString, int lgPatternFo
       return;
     }
   }
-  throw NotFoundException::getNotFoundInstance();
+  throw NotFoundException();
 }
 
 zxing::BarcodeFormat EAN13Reader::getBarcodeFormat(){

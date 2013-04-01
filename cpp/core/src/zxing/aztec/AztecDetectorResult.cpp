@@ -32,7 +32,7 @@ AztecDetectorResult::AztecDetectorResult(Ref<BitMatrix> bits,
     compact_(compact),
     nbDatablocks_(nbDatablocks),
     nbLayers_(nbLayers) {
-    };
+    }
         
 bool AztecDetectorResult::isCompact() {
   return compact_;

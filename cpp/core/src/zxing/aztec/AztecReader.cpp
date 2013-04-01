@@ -30,7 +30,7 @@ using zxing::aztec::AztecReader;
         
 AztecReader::AztecReader() : decoder_() {
   // nothing
-};
+}
         
 Ref<Result> AztecReader::decode(Ref<zxing::BinaryBitmap> image) {
   Detector detector(image->getBlackMatrix());

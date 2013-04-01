@@ -70,7 +70,7 @@ Ref<Result> Code93Reader::decodeRow(int rowNumber, Ref<BitArray> row) {
     recordPattern(row, nextStart, counters);
     int pattern = toPattern(counters);
     if (pattern < 0) {
-      throw NotFoundException::getNotFoundInstance();
+      throw NotFoundException();
     }
     decodedChar = patternToChar(pattern);
     result.append(1, decodedChar);
@@ -85,12 +85,12 @@ Ref<Result> Code93Reader::decodeRow(int rowNumber, Ref<BitArray> row) {
   
   // Should be at least one more black module
   if (nextStart == end || !row->get(nextStart)) {
-    throw NotFoundException::getNotFoundInstance();
+    throw NotFoundException();
   }
 
   if (result.length() < 2) {
     // false positive -- need at least 2 checksum digits
-    throw NotFoundException::getNotFoundInstance();
+    throw NotFoundException();
   }
 
   checkChecksums(result);
@@ -147,7 +147,7 @@ Code93Reader::Range Code93Reader::findAsteriskPattern(Ref<BitArray> row)  {
       isWhite = !isWhite;
     }
   }
-  throw NotFoundException::getNotFoundInstance();
+  throw NotFoundException();
 }
 
 int Code93Reader::toPattern(vector<int>& counters) {
@@ -183,7 +183,7 @@ char Code93Reader::patternToChar(int pattern)  {
       return ALPHABET[i];
     }
   }
-  throw NotFoundException::getNotFoundInstance();
+  throw NotFoundException();
 }
 
 Ref<String> Code93Reader::decodeExtended(string const& encoded)  {

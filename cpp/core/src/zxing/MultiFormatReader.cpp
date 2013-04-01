@@ -20,6 +20,7 @@
  * limitations under the License.
  */
 
+#include <zxing/ZXing.h>
 #include <zxing/MultiFormatReader.h>
 #include <zxing/qrcode/QRCodeReader.h>
 #include <zxing/datamatrix/DataMatrixReader.h>
@@ -111,7 +112,6 @@ void MultiFormatReader::setHints(DecodeHints hints) {
 Ref<Result> MultiFormatReader::decodeInternal(Ref<BinaryBitmap> image) {
   for (unsigned int i = 0; i < readers_.size(); i++) {
     try {
-      // std::cerr << "0 " << typeid(readers_[i]).name() << std::endl;
       return readers_[i]->decode(image, hints_);
     } catch (ReaderException const& re) {
       // continue

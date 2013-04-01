@@ -20,6 +20,7 @@
 
 #include <zxing/common/Counted.h>
 #include <zxing/common/IllegalArgumentException.h>
+#include <zxing/common/Array.h>
 #include <vector>
 #include <limits>
 #include <iostream>
@@ -43,7 +44,7 @@ public:
 
 private:
   int size;
-  std::vector<int> bits;
+  ArrayRef<int> bits;
   static const int logBits = ZX_LOG_DIGITS(bitsPerWord);
   static const int bitsMask = (1 << logBits) - 1;
 

@@ -1,3 +1,4 @@
+// -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
 #ifndef __EXCEPTION_H__
 #define __EXCEPTION_H__
 
@@ -24,17 +25,27 @@
 #include <exception>
 
 namespace zxing {
+  class Exception;
+}
 
-class Exception : public std::exception {
+class zxing::Exception : public std::exception {
 private:
-  std::string message;
+  char const* const message;
 
 public:
-  Exception();
-  Exception(const char *msg);
-  virtual const char* what() const throw();
-  virtual ~Exception() throw();
+  Exception() throw() : message(0) {}
+  Exception(const char* msg) throw() : message(copy(msg)) {}
+  Exception(Exception const& that) throw() : std::exception(that), message(copy(that.message)) {}
+  ~Exception() throw() {
+    if(message) {
+      deleteMessage();
+    }
+  }
+  char const* what() const throw() {return message ? message : "";}
+
+private:
+  static char const* copy(char const*);
+  void deleteMessage();
 };
 
-}
 #endif // __EXCEPTION_H__

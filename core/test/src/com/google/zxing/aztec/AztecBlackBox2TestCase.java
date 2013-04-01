@@ -31,7 +31,7 @@ public final class AztecBlackBox2TestCase extends AbstractBlackBoxTestCase {
     addTest(2, 2, 0.0f);
     addTest(2, 2, 90.0f);
     addTest(3, 3, 180.0f);
-    addTest(1, 1, 270.0f);
+    addTest(2, 2, 270.0f);
   }
 
 }

@@ -15,7 +15,8 @@
  * limitations under the License.
  */
 
-#include "CodaBarReader.h"
+#include <zxing/ZXing.h>
+#include <zxing/oned/CodaBarReader.h>
 #include <zxing/oned/OneDResultPoint.h>
 #include <zxing/common/Array.h>
 #include <zxing/ReaderException.h>
@@ -77,6 +78,7 @@ using namespace std;
 
 Ref<Result> CodaBarReader::decodeRow(int rowNumber,
                                      Ref<BitArray> row) {
+
   // cerr << "cbr " << rowNumber << " " << *row << endl;
   setCounters(row);
   int startOffset = findStartPattern();
@@ -86,7 +88,7 @@ Ref<Result> CodaBarReader::decodeRow(int rowNumber,
   do {
     int charOffset = toNarrowWidePattern(nextStart);
     if (charOffset == -1) {
-      throw NotFoundException::getNotFoundInstance();
+      throw NotFoundException();
     }
     // Hack: We store the position in the alphabet table into a
     // StringBuilder, so that we can access the decoded patterns in
@@ -111,7 +113,7 @@ Ref<Result> CodaBarReader::decodeRow(int rowNumber,
   // otherwise this is probably a false positive. The exception is if we are
   // at the end of the row. (I.e. the barcode barely fits.)
   if (nextStart < counterLength && trailingWhitespace < lastPatternSize / 2) {
-    throw NotFoundException::getNotFoundInstance();
+    throw NotFoundException();
   }
 
   validatePattern(startOffset);
@@ -123,21 +125,21 @@ Ref<Result> CodaBarReader::decodeRow(int rowNumber,
   // Ensure a valid start and end character
   char startchar = decodeRowResult[0];
   if (!arrayContains(STARTEND_ENCODING, startchar)) {
-    throw NotFoundException::getNotFoundInstance();
+    throw NotFoundException();
   }
   char endchar = decodeRowResult[decodeRowResult.length() - 1];
   if (!arrayContains(STARTEND_ENCODING, endchar)) {
-    throw NotFoundException::getNotFoundInstance();
+    throw NotFoundException();
   }
 
   // remove stop/start characters character and check if a long enough string is contained
   if ((int)decodeRowResult.length() <= MIN_CHARACTER_LENGTH) {
     // Almost surely a false positive ( start + stop + at least 1 character)
-    throw NotFoundException::getNotFoundInstance();
+    throw NotFoundException();
   }
 
-decodeRowResult.erase(decodeRowResult.length() - 1, 1);
-decodeRowResult.erase(0, 1);
+  decodeRowResult.erase(decodeRowResult.length() - 1, 1);
+  decodeRowResult.erase(0, 1);
 
   int runningCount = 0;
   for (int i = 0; i < startOffset; i++) {
@@ -155,13 +157,10 @@ decodeRowResult.erase(0, 1);
   resultPoints[1] =
     Ref<OneDResultPoint>(new OneDResultPoint(right, (float) rowNumber));
 
-  return Ref<Result>(
-    new Result(
-      Ref<String>(new String(decodeRowResult)),
-      ArrayRef<char>(),
-      resultPoints,
-      BarcodeFormat::CODABAR)
-    );
+  return Ref<Result>(new Result(Ref<String>(new String(decodeRowResult)),
+                                ArrayRef<char>(),
+                                resultPoints,
+                                BarcodeFormat::CODABAR));
 }
 
 void CodaBarReader::validatePattern(int start)  {
@@ -214,7 +213,7 @@ void CodaBarReader::validatePattern(int start)  {
       int category = (j & 1) + (pattern & 1) * 2;
       int size = counters[pos + j] << INTEGER_MATH_SHIFT;
       if (size < mins[category] || size > maxes[category]) {
-        throw NotFoundException::getNotFoundInstance();
+        throw NotFoundException();
       }
       pattern >>= 1;
     }
@@ -237,7 +236,7 @@ void CodaBarReader::setCounters(Ref<BitArray> row)  {
   int i = row->getNextUnset(0);
   int end = row->getSize();
   if (i >= end) {
-    throw NotFoundException::getNotFoundInstance();
+    throw NotFoundException();
   }
   bool isWhite = true;
   int count = 0;
@@ -277,49 +276,59 @@ int CodaBarReader::findStartPattern() {
       }
     }
   }
-  throw NotFoundException::getNotFoundInstance();
+  throw NotFoundException();
 }
 
 bool CodaBarReader::arrayContains(char const array[], char key) {
   return index(array, key) != 0;
 }
 
-// Assumes that counters[position] is a bar.
+
 int CodaBarReader::toNarrowWidePattern(int position) {
   int end = position + 7;
   if (end >= counterLength) {
     return -1;
   }
-  // First element is for bars, second is for spaces.
-  vector<int> maxes (2, 0);
-  vector<int> mins (2, std::numeric_limits<int>::max());
-  vector<int> thresholds (2, 0);
 
-  for (int i = 0; i < 2; i++) {
-    for (int j = position + i; j < end; j += 2) {
-      if (counters[j] < mins[i]) {
-        mins[i] = counters[j];
-      }
-      if (counters[j] > maxes[i]) {
-        maxes[i] = counters[j];
-      }
+  vector<int>& theCounters = counters;
+
+  int maxBar = 0;
+  int minBar = std::numeric_limits<int>::max();
+  for (int j = position; j < end; j += 2) {
+    int currentCounter = theCounters[j];
+    if (currentCounter < minBar) {
+      minBar = currentCounter;
     }
-    thresholds[i] = (mins[i] + maxes[i]) / 2;
+    if (currentCounter > maxBar) {
+      maxBar = currentCounter;
+    }
   }
+  int thresholdBar = (minBar + maxBar) / 2;
+
+  int maxSpace = 0;
+  int minSpace = std::numeric_limits<int>::max();
+  for (int j = position + 1; j < end; j += 2) {
+    int currentCounter = theCounters[j];
+    if (currentCounter < minSpace) {
+      minSpace = currentCounter;
+    }
+    if (currentCounter > maxSpace) {
+      maxSpace = currentCounter;
+    }
+  }
+  int thresholdSpace = (minSpace + maxSpace) / 2;
 
   int bitmask = 1 << 7;
   int pattern = 0;
   for (int i = 0; i < 7; i++) {
-    int barOrSpace = i & 1;
+    int threshold = (i & 1) == 0 ? thresholdBar : thresholdSpace;
     bitmask >>= 1;
-    if (counters[position + i] > thresholds[barOrSpace]) {
+    if (theCounters[position + i] > threshold) {
       pattern |= bitmask;
     }
   }
 
-  for (int i = 0;
-       i < (int)(sizeof(CHARACTER_ENCODINGS)/sizeof(CHARACTER_ENCODINGS[0]));
-       i++) {
+  for (int i = 0; i < ZXING_ARRAY_LEN(CHARACTER_ENCODINGS); i++) {
     if (CHARACTER_ENCODINGS[i] == pattern) {
       return i;
     }

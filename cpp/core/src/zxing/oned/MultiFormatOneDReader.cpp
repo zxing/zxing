@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#include "MultiFormatOneDReader.h"
-
+#include <zxing/ZXing.h>
+#include <zxing/oned/MultiFormatOneDReader.h>
 #include <zxing/oned/MultiFormatUPCEANReader.h>
 #include <zxing/oned/Code39Reader.h>
 #include <zxing/oned/Code128Reader.h>
@@ -84,15 +84,11 @@ Ref<Result> MultiFormatOneDReader::decodeRow(int rowNumber, Ref<BitArray> row) {
   for (int i = 0; i < size; i++) {
     OneDReader* reader = readers[i];
     try {
-      // std::cerr << "v 1 " << typeid(*reader).name() << " " << rowNumber << std::endl;
       Ref<Result> result = reader->decodeRow(rowNumber, row);
-      // std::cerr << "^ 1 " << typeid(*reader).name() << " " << rowNumber << std::endl;
       return result;
     } catch (ReaderException const& re) {
-      // std::cerr << "^ * " << typeid(*reader).name() << " " << rowNumber << std::endl;
       // continue
     }
   }
-  // std::cerr << "throwing nfe" << std::endl;
   throw NotFoundException();
 }

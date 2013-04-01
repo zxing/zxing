@@ -205,7 +205,7 @@ void Detector::correctParameterData(Ref<zxing::BitArray> parameterData, bool com
     // std::printf("parameter data reed solomon\n");
     ReedSolomonDecoder rsDecoder(GenericGF::AZTEC_PARAM);
     rsDecoder.decode(parameterWords, numECCodewords);
-  } catch (ReedSolomonException e) {
+  } catch (ReedSolomonException const& ignored) {
     // std::printf("reed solomon decoding failed\n");
     throw ReaderException("failed to decode parameter data");
   }
@@ -308,7 +308,7 @@ Ref<Point> Detector::getMatrixCenter() {
     pointC = cornerPoints[2];
     pointD = cornerPoints[3];
                 
-  } catch (NotFoundException e) {
+  } catch (NotFoundException const& e) {
                 
     int cx = image_->getWidth() / 2;
     int cy = image_->getHeight() / 2;
@@ -331,7 +331,7 @@ Ref<Point> Detector::getMatrixCenter() {
     pointC = cornerPoints[2];
     pointD = cornerPoints[3];
                 
-  } catch (NotFoundException e) {
+  } catch (NotFoundException const& e) {
                 
     pointA = getFirstDifferent(Ref<Point>(new Point(cx+15/2, cy-15/2)), false,  1, -1)->toResultPoint();
     pointB = getFirstDifferent(Ref<Point>(new Point(cx+15/2, cy+15/2)), false,  1,  1)->toResultPoint();

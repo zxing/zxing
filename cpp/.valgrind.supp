@@ -35,3 +35,46 @@
    ...
    fun:map_images
 }
+
+{
+   c++
+   Memcheck:Leak
+   ...
+   fun:__cxa_get_globals
+}
+
+{
+   stdio
+   Memcheck:Leak
+   ...
+   fun:sprintf
+}
+
+{
+   objc
+   Memcheck:Leak
+   ...
+   fun:prepareForMethodLookup
+   fun:lookUpMethod
+}
+
+{
+   os
+   Memcheck:Leak
+   ...
+   fun:dlopen
+}
+
+{
+   osx
+   Memcheck:Leak
+   ...
+   fun:map_images
+}
+
+{
+   at_exit
+   Memcheck:Leak
+   ...
+   fun:atexit_register
+}

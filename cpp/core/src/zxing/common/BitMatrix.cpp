@@ -71,7 +71,7 @@ void BitMatrix::setRegion(int left, int top, int width, int height) {
   int right = left + width;
   int bottom = top + height;
   if (bottom > this->height || right > this->width) {
-    throw new IllegalArgumentException("The region must fit inside the matrix");
+    throw IllegalArgumentException("The region must fit inside the matrix");
   }
   for (int y = top; y < bottom; y++) {
     int offset = y * rowSize;
