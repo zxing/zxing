@@ -70,20 +70,21 @@ Ref<AztecDetectorResult> Detector::detect() {
 }
         
 void Detector::extractParameters(std::vector<Ref<Point> > bullEyeCornerPoints) {
+  int twoCenterLayers = 2 * nbCenterLayers_;
   // get the bits around the bull's eye
-  Ref<BitArray> resab = sampleLine(bullEyeCornerPoints[0], bullEyeCornerPoints[1], 2*nbCenterLayers_+1);
-  Ref<BitArray> resbc = sampleLine(bullEyeCornerPoints[1], bullEyeCornerPoints[2], 2*nbCenterLayers_+1);
-  Ref<BitArray> rescd = sampleLine(bullEyeCornerPoints[2], bullEyeCornerPoints[3], 2*nbCenterLayers_+1);
-  Ref<BitArray> resda = sampleLine(bullEyeCornerPoints[3], bullEyeCornerPoints[0], 2*nbCenterLayers_+1);
+  Ref<BitArray> resab = sampleLine(bullEyeCornerPoints[0], bullEyeCornerPoints[1], twoCenterLayers+1);
+  Ref<BitArray> resbc = sampleLine(bullEyeCornerPoints[1], bullEyeCornerPoints[2], twoCenterLayers+1);
+  Ref<BitArray> rescd = sampleLine(bullEyeCornerPoints[2], bullEyeCornerPoints[3], twoCenterLayers+1);
+  Ref<BitArray> resda = sampleLine(bullEyeCornerPoints[3], bullEyeCornerPoints[0], twoCenterLayers+1);
         
   // determin the orientation of the matrix
-  if (resab->get(0) && resab->get(2 * nbCenterLayers_)) {
+  if (resab->get(0) && resab->get(twoCenterLayers)) {
     shift_ = 0;
-  } else if (resbc->get(0) && resbc->get(2 * nbCenterLayers_)) {
+  } else if (resbc->get(0) && resbc->get(twoCenterLayers)) {
     shift_ = 1;
-  } else if (rescd->get(0) && rescd->get(2 * nbCenterLayers_)) {
+  } else if (rescd->get(0) && rescd->get(twoCenterLayers)) {
     shift_ = 2;
-  } else if (resda->get(0) && resda->get(2 * nbCenterLayers_)) {
+  } else if (resda->get(0) && resda->get(twoCenterLayers)) {
     shift_ = 3;
   } else {
     // std::printf("could not detemine orientation\n");
@@ -119,9 +120,9 @@ void Detector::extractParameters(std::vector<Ref<Point> > bullEyeCornerPoints) {
       }
       if (i > 5) {
         if (resab->get(2+i)) shiftedParameterData->set(i-1);
-        if (resbc->get(2+i)) shiftedParameterData->set(i+10-1);
-        if (rescd->get(2+i)) shiftedParameterData->set(i+20-1);
-        if (resda->get(2+i)) shiftedParameterData->set(i+30-1);
+        if (resbc->get(2+i)) shiftedParameterData->set(i+9);
+        if (rescd->get(2+i)) shiftedParameterData->set(i+19);
+        if (resda->get(2+i)) shiftedParameterData->set(i+29);
       }
     }
     for (int i = 0; i < 40; i++) {
@@ -161,6 +162,7 @@ Detector::getMatrixCornerPoints(std::vector<Ref<Point> > bullEyeCornerPoints) {
             
   if (!isValid(targetax, targetay) ||
       !isValid(targetbx, targetby) ||
+
       !isValid(targetcx, targetcy) ||
       !isValid(targetdx, targetdy)) {
     throw ReaderException("matrix extends over image bounds");
@@ -313,15 +315,15 @@ Ref<Point> Detector::getMatrixCenter() {
     int cx = image_->getWidth() / 2;
     int cy = image_->getHeight() / 2;
                 
-    pointA = getFirstDifferent(Ref<Point>(new Point(cx+15/2, cy-15/2)), false,  1, -1)->toResultPoint();
-    pointB = getFirstDifferent(Ref<Point>(new Point(cx+15/2, cy+15/2)), false,  1,  1)->toResultPoint();
-    pointC = getFirstDifferent(Ref<Point>(new Point(cx-15/2, cy+15/2)), false, -1, -1)->toResultPoint();
-    pointD = getFirstDifferent(Ref<Point>(new Point(cx-15/2, cy-15/2)), false, -1, -1)->toResultPoint();
+    pointA = getFirstDifferent(Ref<Point>(new Point(cx+7, cy-7)), false,  1, -1)->toResultPoint();
+    pointB = getFirstDifferent(Ref<Point>(new Point(cx+7, cy+7)), false,  1,  1)->toResultPoint();
+    pointC = getFirstDifferent(Ref<Point>(new Point(cx-7, cy+7)), false, -1, -1)->toResultPoint();
+    pointD = getFirstDifferent(Ref<Point>(new Point(cx-7, cy-7)), false, -1, -1)->toResultPoint();
                                       
   }
             
-  int cx = math_utils::round((pointA->getX() + pointD->getX() + pointB->getX() + pointC->getX()) / 4);
-  int cy = math_utils::round((pointA->getY() + pointD->getY() + pointB->getY() + pointC->getY()) / 4);
+  int cx = math_utils::round((pointA->getX() + pointD->getX() + pointB->getX() + pointC->getX()) / 4.0f);
+  int cy = math_utils::round((pointA->getY() + pointD->getY() + pointB->getY() + pointC->getY()) / 4.0f);
             
   try {
                 
@@ -333,15 +335,15 @@ Ref<Point> Detector::getMatrixCenter() {
                 
   } catch (NotFoundException const& e) {
                 
-    pointA = getFirstDifferent(Ref<Point>(new Point(cx+15/2, cy-15/2)), false,  1, -1)->toResultPoint();
-    pointB = getFirstDifferent(Ref<Point>(new Point(cx+15/2, cy+15/2)), false,  1,  1)->toResultPoint();
-    pointC = getFirstDifferent(Ref<Point>(new Point(cx-15/2, cy+15/2)), false, -1, 1)->toResultPoint();
-    pointD = getFirstDifferent(Ref<Point>(new Point(cx-15/2, cy-15/2)), false, -1, -1)->toResultPoint();
+    pointA = getFirstDifferent(Ref<Point>(new Point(cx+7, cy-7)), false,  1, -1)->toResultPoint();
+    pointB = getFirstDifferent(Ref<Point>(new Point(cx+7, cy+7)), false,  1,  1)->toResultPoint();
+    pointC = getFirstDifferent(Ref<Point>(new Point(cx-7, cy+7)), false, -1, 1)->toResultPoint();
+    pointD = getFirstDifferent(Ref<Point>(new Point(cx-7, cy-7)), false, -1, -1)->toResultPoint();
                 
   }
             
-  cx = math_utils::round((pointA->getX() + pointD->getX() + pointB->getX() + pointC->getX()) / 4);
-  cy = math_utils::round((pointA->getY() + pointD->getY() + pointB->getY() + pointC->getY()) / 4);
+  cx = math_utils::round((pointA->getX() + pointD->getX() + pointB->getX() + pointC->getX()) / 4.0f);
+  cy = math_utils::round((pointA->getY() + pointD->getY() + pointB->getY() + pointC->getY()) / 4.0f);
             
   return Ref<Point>(new Point(cx, cy));
             
@@ -403,19 +405,19 @@ void Detector::getParameters(Ref<zxing::BitArray> parameterData) {
   for (int i = 0; i < nbBitsForNbLayers; i++) {
     nbLayers_ <<= 1;
     if (parameterData->get(i)) {
-      nbLayers_ += 1;
+      nbLayers_++;
     }
   }
             
   for (int i = nbBitsForNbLayers; i < nbBitsForNbLayers + nbBitsForNbDatablocks; i++) {
     nbDataBlocks_ <<= 1;
     if (parameterData->get(i)) {
-      nbDataBlocks_ += 1;
+      nbDataBlocks_++;
     }
   }
             
-  nbLayers_ ++;
-  nbDataBlocks_ ++;
+  nbLayers_++;
+  nbDataBlocks_++;
 }
         
 Ref<BitArray> Detector::sampleLine(Ref<zxing::aztec::Point> p1, Ref<zxing::aztec::Point> p2, int size) {
@@ -431,8 +433,8 @@ Ref<BitArray> Detector::sampleLine(Ref<zxing::aztec::Point> p1, Ref<zxing::aztec
             
   for (int i = 0; i < size; i++) {
     if (image_->get(math_utils::round(px), math_utils::round(py))) res->set(i);
-    px += dx;
-    py += dy;
+    px+=dx;
+    py+=dy;
   }
             
   return res;
@@ -500,15 +502,11 @@ int Detector::getColor(Ref<zxing::aztec::Point> p1, Ref<zxing::aztec::Point> p2)
   float errRatio = (float)error/d;
             
             
-  if (errRatio > 0.1 && errRatio < 0.9) {
+  if (errRatio > 0.1f && errRatio < 0.9f) {
     return 0;
   }
             
-  if (errRatio <= 0.1) {
-    return colorModel?1:-1;
-  } else {
-    return colorModel?-1:1;
-  }
+  return (errRatio <= 0.1) == colorModel ? 1 : -1;
 }
         
 Ref<Point> Detector::getFirstDifferent(Ref<zxing::aztec::Point> init, bool color, int dx, int dy) {
@@ -537,7 +535,7 @@ Ref<Point> Detector::getFirstDifferent(Ref<zxing::aztec::Point> init, bool color
             
   return Ref<Point>(new Point(x, y));
 }
-        
+
 bool Detector::isValid(int x, int y) {
   return x >= 0 && x < (int)image_->getWidth() && y > 0 && y < (int)image_->getHeight();
 }
