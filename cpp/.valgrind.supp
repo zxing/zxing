@@ -10,3 +10,28 @@
    Memcheck:Cond
    fun:_ZN4dyld9mkstringfEPKcz
 }
+
+{
+   osx
+   Memcheck:Leak
+   fun:malloc_zone_malloc
+   fun:recursive_mutex_init
+   fun:_objc_init
+   fun:libSystem_initializer
+}
+
+{
+   throws
+   Memcheck:Leak
+   fun:calloc
+   fun:__cxa_get_globals
+   fun:__cxa_throw
+}
+
+{
+   osx
+   Memcheck:Leak
+   fun:malloc_zone_calloc
+   ...
+   fun:map_images
+}

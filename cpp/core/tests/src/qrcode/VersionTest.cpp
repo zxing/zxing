@@ -48,7 +48,7 @@ static void checkVersion(Version *version, int number, int dimension) {
 CPPUNIT_TEST_SUITE_REGISTRATION(VersionTest);
 
 void VersionTest::testVersionForNumber() {
-  for (size_t i = 1; i <= Version::VERSIONS.size(); i++) {
+  for (int i = 1; i <= (int)Version::VERSIONS.size(); i++) {
     Version *v = Version::VERSIONS[i-1];
     CPPUNIT_ASSERT_EQUAL((int)i, v->getVersionNumber());
   }

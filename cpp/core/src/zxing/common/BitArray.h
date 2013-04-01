@@ -38,15 +38,14 @@ namespace zxing {
          (-1))))))
 
 class zxing::BitArray : public Counted {
+public:
+  static const int bitsPerWord = std::numeric_limits<unsigned int>::digits;
+
 private:
-  int size_;
-  std::vector<int> bits_;
-  static const int bitsPerWord_ =
-    std::numeric_limits<unsigned int>::digits;
-  static const int logBits_ = ZX_LOG_DIGITS(bitsPerWord_);
-  static const int bitsMask_ = (1 << logBits_) - 1;
-  static int wordsForBits(int bits);
-  explicit BitArray();
+  int size;
+  std::vector<int> bits;
+  static const int logBits = ZX_LOG_DIGITS(bitsPerWord);
+  static const int bitsMask = (1 << logBits) - 1;
 
 public:
   BitArray(int size);
@@ -54,11 +53,11 @@ public:
   int getSize() const;
 
   bool get(int i) const {
-    return (bits_[i >> logBits_] & (1 << (i & bitsMask_))) != 0;
+    return (bits[i >> logBits] & (1 << (i & bitsMask))) != 0;
   }
 
   void set(int i) {
-    bits_[i >> logBits_] |= 1 << (i & bitsMask_);
+    bits[i >> logBits] |= 1 << (i & bitsMask);
   }
 
   int getNextSet(int from);
@@ -72,6 +71,9 @@ public:
   
   void reverse();
   class Reverse;
+
+private:
+  static int makeArraySize(int size);
 };
 
 class zxing::BitArray::Reverse {

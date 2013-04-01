@@ -33,7 +33,7 @@ int BitMatrixParser::copyBit(size_t x, size_t y, int versionBits) {
 BitMatrixParser::BitMatrixParser(Ref<BitMatrix> bitMatrix) : bitMatrix_(NULL),
                                                              parsedVersion_(NULL),
                                                              readBitMatrix_(NULL) {
-  size_t dimension = bitMatrix->getDimension();
+  size_t dimension = bitMatrix->getHeight();
   if (dimension < 8 || dimension > 144 || (dimension & 0x01) != 0)
     throw ReaderException("Dimension must be even, > 8 < 144");
 
@@ -47,8 +47,8 @@ Ref<Version> BitMatrixParser::readVersion(Ref<BitMatrix> bitMatrix) {
     return parsedVersion_;
   }
 
-  int numRows = bitMatrix->getHeight();//getDimension();
-  int numColumns = bitMatrix->getWidth();//numRows;
+  int numRows = bitMatrix->getHeight();
+  int numColumns = bitMatrix->getWidth();
 
   Ref<Version> version = parsedVersion_->getVersionForDimensions(numRows, numColumns);
   if (version != 0) {
