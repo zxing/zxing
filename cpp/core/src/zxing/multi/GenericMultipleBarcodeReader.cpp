@@ -55,11 +55,10 @@ void GenericMultipleBarcodeReader::doDecodeMultiple(Ref<BinaryBitmap> image,
       break;
     }
   }
-  if (alreadyFound) {
-    return;
+  if (!alreadyFound) {
+    results.push_back(translateResultPoints(result, xOffset, yOffset));
   }
   
-  results.push_back(translateResultPoints(result, xOffset, yOffset));
   ArrayRef< Ref<ResultPoint> > resultPoints = result->getResultPoints();
   if (resultPoints->empty()) {
     return;
