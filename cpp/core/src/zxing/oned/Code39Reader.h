@@ -25,9 +25,9 @@
 #include <zxing/Result.h>
 
 namespace zxing {
-    namespace oned {
-        class Code39Reader;
-    }
+  namespace oned {
+    class Code39Reader;
+  }
 }
 
 /**
@@ -36,26 +36,28 @@ namespace zxing {
  * @author Lukasz Warchol
  */
 class zxing::oned::Code39Reader : public OneDReader {
-			
 private:
-    std::string alphabet_string;
+  bool usingCheckDigit;
+  bool extendedMode;
+  std::string decodeRowResult;
+  std::vector<int> counters;
+			
+  void init(bool usingCheckDigit = false, bool extendedMode = false);
 
-    bool usingCheckDigit;
-    bool extendedMode;
+  static std::vector<int> findAsteriskPattern(Ref<BitArray> row,
+                                              std::vector<int>& counters);
+  static int toNarrowWidePattern(std::vector<int>& counters);
+  static char patternToChar(int pattern);
+  static Ref<String> decodeExtended(std::string encoded);
 			
-    static std::vector<int> findAsteriskPattern(Ref<BitArray> row,
-                                                std::vector<int>& counters);
-    static int toNarrowWidePattern(std::vector<int>& counters);
-    static char patternToChar(int pattern);
-    static Ref<String> decodeExtended(std::string encoded);
-			
-    void append(char* s, char c);
+  void append(char* s, char c);
+
 public:
-    Code39Reader();
-    Code39Reader(bool usingCheckDigit_);
-    Code39Reader(bool usingCheckDigit_, bool extendedMode_);
+  Code39Reader();
+  Code39Reader(bool usingCheckDigit_);
+  Code39Reader(bool usingCheckDigit_, bool extendedMode_);
 			
-    Ref<Result> decodeRow(int rowNumber, Ref<BitArray> row);
+  Ref<Result> decodeRow(int rowNumber, Ref<BitArray> row);
 };
 
 #endif

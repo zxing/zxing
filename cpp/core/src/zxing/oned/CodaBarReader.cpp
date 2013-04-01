@@ -74,12 +74,13 @@ const int CodaBarReader::PADDING =
 CodaBarReader::CodaBarReader() 
   : counters(80, 0), counterLength(0) {}
 
-using namespace std;
+Ref<Result> CodaBarReader::decodeRow(int rowNumber, Ref<BitArray> row) {
 
-Ref<Result> CodaBarReader::decodeRow(int rowNumber,
-                                     Ref<BitArray> row) {
+  { // Arrays.fill(counters, 0);
+    int size = counters.size();
+    counters.resize(0);
+    counters.resize(size); }
 
-  // cerr << "cbr " << rowNumber << " " << *row << endl;
   setCounters(row);
   int startOffset = findStartPattern();
   int nextStart = startOffset;
