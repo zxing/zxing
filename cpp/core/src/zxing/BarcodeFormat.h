@@ -28,6 +28,7 @@ namespace zxing {
 class zxing::BarcodeFormat {
 public:
   enum Value {
+    NONE,
     AZTEC,
     CODABAR,
     CODE_39,

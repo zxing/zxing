@@ -37,7 +37,7 @@ public:
   explicit String(const std::string &text);
   char charAt(int) const;
   Ref<String> substring(int) const;
-  const std::string &getText() const;
+  const std::string& getText() const;
   int size() const;
   int length() const;
   friend std::ostream& zxing::operator << (std::ostream& out, String const& s);

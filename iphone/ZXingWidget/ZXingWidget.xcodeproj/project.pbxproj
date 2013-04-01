@@ -121,7 +121,6 @@
 		1FB431A012901C76002D63E8 /* UniversalResultParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FB4319E12901C76002D63E8 /* UniversalResultParser.m */; };
 		3B117EF1145B220A0035037B /* MonochromeRectangleDetector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B117EEF145B220A0035037B /* MonochromeRectangleDetector.cpp */; };
 		3B117EF2145B220A0035037B /* WhiteRectangleDetector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B117EF0145B220A0035037B /* WhiteRectangleDetector.cpp */; };
-		3B117EF5145B221D0035037B /* NotFoundException.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B117EF4145B221D0035037B /* NotFoundException.cpp */; };
 		3B248F7D14EF3A660065F0DA /* GenericGF.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B248F7914EF3A660065F0DA /* GenericGF.cpp */; };
 		3B248F7E14EF3A660065F0DA /* GenericGF.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B248F7A14EF3A660065F0DA /* GenericGF.h */; };
 		3B248F7F14EF3A660065F0DA /* GenericGFPoly.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B248F7B14EF3A660065F0DA /* GenericGFPoly.cpp */; };
@@ -142,6 +141,12 @@
 		3B27C5E2144735E6005157C4 /* CharacterSetECI.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B27C5DC144735E6005157C4 /* CharacterSetECI.h */; };
 		3B27C5E5144735E6005157C4 /* StringUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B27C5DF144735E6005157C4 /* StringUtils.cpp */; };
 		3B27C5E6144735E6005157C4 /* StringUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B27C5E0144735E6005157C4 /* StringUtils.h */; };
+		3B6C805717090ED300D22AB2 /* CodaBarReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B6C805317090ED300D22AB2 /* CodaBarReader.cpp */; };
+		3B6C805817090ED300D22AB2 /* CodaBarReader.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B6C805417090ED300D22AB2 /* CodaBarReader.h */; };
+		3B6C805917090ED300D22AB2 /* Code93Reader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B6C805517090ED300D22AB2 /* Code93Reader.cpp */; };
+		3B6C805A17090ED300D22AB2 /* Code93Reader.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B6C805617090ED300D22AB2 /* Code93Reader.h */; };
+		3B6C805D17090EFC00D22AB2 /* ChecksumException.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B6C805B17090EFC00D22AB2 /* ChecksumException.cpp */; };
+		3B6C805E17090EFC00D22AB2 /* ChecksumException.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B6C805C17090EFC00D22AB2 /* ChecksumException.h */; };
 		3B72D96F12130EF6007CEF32 /* ResultPointCallback.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B72D96D12130EF6007CEF32 /* ResultPointCallback.cpp */; };
 		3B72D97012130EF6007CEF32 /* ResultPointCallback.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B72D96E12130EF6007CEF32 /* ResultPointCallback.h */; };
 		3B81AAC5120F07E40022E5D4 /* DecodeHints.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B81AAC3120F07E40022E5D4 /* DecodeHints.cpp */; };
@@ -275,7 +280,6 @@
 		E53459BF11987396000CB77F /* Version.h in Headers */ = {isa = PBXBuildFile; fileRef = E534593A11987396000CB77F /* Version.h */; };
 		E53459C011987396000CB77F /* Reader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E534593B11987396000CB77F /* Reader.cpp */; };
 		E53459C111987396000CB77F /* Reader.h in Headers */ = {isa = PBXBuildFile; fileRef = E534593C11987396000CB77F /* Reader.h */; };
-		E53459C211987396000CB77F /* ReaderException.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E534593D11987396000CB77F /* ReaderException.cpp */; };
 		E53459C311987396000CB77F /* ReaderException.h in Headers */ = {isa = PBXBuildFile; fileRef = E534593E11987396000CB77F /* ReaderException.h */; };
 		E53459C411987396000CB77F /* Result.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E534593F11987396000CB77F /* Result.cpp */; };
 		E53459C511987396000CB77F /* Result.h in Headers */ = {isa = PBXBuildFile; fileRef = E534594011987396000CB77F /* Result.h */; };
@@ -411,7 +415,6 @@
 		1FB4319E12901C76002D63E8 /* UniversalResultParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UniversalResultParser.m; path = Classes/resultParsers/UniversalResultParser.m; sourceTree = "<group>"; };
 		3B117EEF145B220A0035037B /* MonochromeRectangleDetector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MonochromeRectangleDetector.cpp; path = detector/MonochromeRectangleDetector.cpp; sourceTree = "<group>"; };
 		3B117EF0145B220A0035037B /* WhiteRectangleDetector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = WhiteRectangleDetector.cpp; path = detector/WhiteRectangleDetector.cpp; sourceTree = "<group>"; };
-		3B117EF4145B221D0035037B /* NotFoundException.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NotFoundException.cpp; sourceTree = "<group>"; };
 		3B248F7914EF3A660065F0DA /* GenericGF.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GenericGF.cpp; sourceTree = "<group>"; };
 		3B248F7A14EF3A660065F0DA /* GenericGF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GenericGF.h; sourceTree = "<group>"; };
 		3B248F7B14EF3A660065F0DA /* GenericGFPoly.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GenericGFPoly.cpp; sourceTree = "<group>"; };
@@ -432,6 +435,12 @@
 		3B27C5DC144735E6005157C4 /* CharacterSetECI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CharacterSetECI.h; sourceTree = "<group>"; };
 		3B27C5DF144735E6005157C4 /* StringUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StringUtils.cpp; sourceTree = "<group>"; };
 		3B27C5E0144735E6005157C4 /* StringUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StringUtils.h; sourceTree = "<group>"; };
+		3B6C805317090ED300D22AB2 /* CodaBarReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CodaBarReader.cpp; sourceTree = "<group>"; };
+		3B6C805417090ED300D22AB2 /* CodaBarReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CodaBarReader.h; sourceTree = "<group>"; };
+		3B6C805517090ED300D22AB2 /* Code93Reader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Code93Reader.cpp; sourceTree = "<group>"; };
+		3B6C805617090ED300D22AB2 /* Code93Reader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Code93Reader.h; sourceTree = "<group>"; };
+		3B6C805B17090EFC00D22AB2 /* ChecksumException.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ChecksumException.cpp; sourceTree = "<group>"; };
+		3B6C805C17090EFC00D22AB2 /* ChecksumException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChecksumException.h; sourceTree = "<group>"; };
 		3B72D96D12130EF6007CEF32 /* ResultPointCallback.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ResultPointCallback.cpp; sourceTree = "<group>"; };
 		3B72D96E12130EF6007CEF32 /* ResultPointCallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ResultPointCallback.h; sourceTree = "<group>"; };
 		3B81AAC3120F07E40022E5D4 /* DecodeHints.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DecodeHints.cpp; sourceTree = "<group>"; };
@@ -566,7 +575,6 @@
 		E534593A11987396000CB77F /* Version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Version.h; sourceTree = "<group>"; };
 		E534593B11987396000CB77F /* Reader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Reader.cpp; sourceTree = "<group>"; };
 		E534593C11987396000CB77F /* Reader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reader.h; sourceTree = "<group>"; };
-		E534593D11987396000CB77F /* ReaderException.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ReaderException.cpp; sourceTree = "<group>"; };
 		E534593E11987396000CB77F /* ReaderException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReaderException.h; sourceTree = "<group>"; };
 		E534593F11987396000CB77F /* Result.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Result.cpp; sourceTree = "<group>"; };
 		E534594011987396000CB77F /* Result.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Result.h; sourceTree = "<group>"; };
@@ -746,8 +754,9 @@
 		E53458B411987396000CB77F /* zxing */ = {
 			isa = PBXGroup;
 			children = (
+				3B6C805B17090EFC00D22AB2 /* ChecksumException.cpp */,
+				3B6C805C17090EFC00D22AB2 /* ChecksumException.h */,
 				3B248F8314EF3A980065F0DA /* aztec */,
-				3B117EF4145B221D0035037B /* NotFoundException.cpp */,
 				3B27C5D6144735CE005157C4 /* FormatException.cpp */,
 				3B27C5D7144735CE005157C4 /* FormatException.h */,
 				3B72D96D12130EF6007CEF32 /* ResultPointCallback.cpp */,
@@ -772,7 +781,6 @@
 				E534591611987396000CB77F /* qrcode */,
 				E534593B11987396000CB77F /* Reader.cpp */,
 				E534593C11987396000CB77F /* Reader.h */,
-				E534593D11987396000CB77F /* ReaderException.cpp */,
 				E534593E11987396000CB77F /* ReaderException.h */,
 				E534593F11987396000CB77F /* Result.cpp */,
 				E534594011987396000CB77F /* Result.h */,
@@ -888,6 +896,10 @@
 		E53458FD11987396000CB77F /* oned */ = {
 			isa = PBXGroup;
 			children = (
+				3B6C805317090ED300D22AB2 /* CodaBarReader.cpp */,
+				3B6C805417090ED300D22AB2 /* CodaBarReader.h */,
+				3B6C805517090ED300D22AB2 /* Code93Reader.cpp */,
+				3B6C805617090ED300D22AB2 /* Code93Reader.h */,
 				E53458FE11987396000CB77F /* Code128Reader.cpp */,
 				E53458FF11987396000CB77F /* Code128Reader.h */,
 				E534590011987396000CB77F /* Code39Reader.cpp */,
@@ -1211,6 +1223,9 @@
 				3B248F9314EF3A980065F0DA /* Decoder.h in Headers */,
 				3B248F9514EF3A980065F0DA /* Detector.h in Headers */,
 				3B248F9814EF3AF80065F0DA /* AztecReader.h in Headers */,
+				3B6C805817090ED300D22AB2 /* CodaBarReader.h in Headers */,
+				3B6C805A17090ED300D22AB2 /* Code93Reader.h in Headers */,
+				3B6C805E17090EFC00D22AB2 /* ChecksumException.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1388,7 +1403,6 @@
 				E53459BC11987396000CB77F /* QRCodeReader.cpp in Sources */,
 				E53459BE11987396000CB77F /* Version.cpp in Sources */,
 				E53459C011987396000CB77F /* Reader.cpp in Sources */,
-				E53459C211987396000CB77F /* ReaderException.cpp in Sources */,
 				E53459C411987396000CB77F /* Result.cpp in Sources */,
 				E53459C611987396000CB77F /* ResultPoint.cpp in Sources */,
 				1F027FAC11A7BEAF006B06DE /* Decoder.mm in Sources */,
@@ -1450,7 +1464,6 @@
 				3B27C5E5144735E6005157C4 /* StringUtils.cpp in Sources */,
 				3B117EF1145B220A0035037B /* MonochromeRectangleDetector.cpp in Sources */,
 				3B117EF2145B220A0035037B /* WhiteRectangleDetector.cpp in Sources */,
-				3B117EF5145B221D0035037B /* NotFoundException.cpp in Sources */,
 				3B248F7D14EF3A660065F0DA /* GenericGF.cpp in Sources */,
 				3B248F7F14EF3A660065F0DA /* GenericGFPoly.cpp in Sources */,
 				3B248F8E14EF3A980065F0DA /* AztecDetectorResult.cpp in Sources */,
@@ -1458,6 +1471,9 @@
 				3B248F9214EF3A980065F0DA /* Decoder.cpp in Sources */,
 				3B248F9414EF3A980065F0DA /* Detector.cpp in Sources */,
 				3B248F9914EF3AF80065F0DA /* AztecReader.mm in Sources */,
+				3B6C805717090ED300D22AB2 /* CodaBarReader.cpp in Sources */,
+				3B6C805917090ED300D22AB2 /* Code93Reader.cpp in Sources */,
+				3B6C805D17090EFC00D22AB2 /* ChecksumException.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

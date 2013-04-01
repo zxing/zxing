@@ -19,6 +19,7 @@
 #include <zxing/BarcodeFormat.h>
 
 const char* zxing::BarcodeFormat::barcodeFormatNames[] = {
+  0,
   "AZTEC",
   "CODABAR",
   "CODE_39",
@@ -35,5 +36,5 @@ const char* zxing::BarcodeFormat::barcodeFormatNames[] = {
   "RSS_EXPANDED",
   "UPC_A",
   "UPC_E",
-  "UPC_EAN_EXTENSION",
+  "UPC_EAN_EXTENSION"
 };

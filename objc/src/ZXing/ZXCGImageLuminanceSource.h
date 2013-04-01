@@ -60,8 +60,8 @@ class CGImageLuminanceSource : public LuminanceSource {
   CGImageRef image() { return image_; }
   CGImageRef image(size_t width, size_t height);
 
-  unsigned char* getRow(int y, unsigned char* row);
-  unsigned char* getMatrix();
+  ArrayRef<char> getRow(int y, ArrayRef<char> row);
+  ArrayRef<char> getMatrix();
 
   bool isRotateSupported() const {
     return true;

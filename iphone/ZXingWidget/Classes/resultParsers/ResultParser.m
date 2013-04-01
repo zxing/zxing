@@ -76,7 +76,7 @@ static NSMutableSet *sResultParsers = nil;
 }
 
 + (ParsedResult *)parsedResultForString:(NSString *)s {
-  return [ResultParser parsedResultForString:s format:BarcodeFormat_None];
+  return [ResultParser parsedResultForString:s format:BarcodeFormat_NONE];
 }
 
 + (NSDictionary*)dictionaryForQueryString:(NSString *)queryString {
