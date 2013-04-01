@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3B5A492F17091807004E112F /* ChecksumException.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B5A492D17091807004E112F /* ChecksumException.cpp */; };
+		3B5A493017091807004E112F /* ChecksumException.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B5A492E17091807004E112F /* ChecksumException.h */; };
+		3B5A493517091826004E112F /* CodaBarReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B5A493117091826004E112F /* CodaBarReader.cpp */; };
+		3B5A493617091826004E112F /* CodaBarReader.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B5A493217091826004E112F /* CodaBarReader.h */; };
+		3B5A493717091826004E112F /* Code93Reader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B5A493317091826004E112F /* Code93Reader.cpp */; };
+		3B5A493817091826004E112F /* Code93Reader.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B5A493417091826004E112F /* Code93Reader.h */; };
 		3B83E992158E66C600A3B31F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B83E991158E66C600A3B31F /* Foundation.framework */; };
 		3B83EA63158E679000A3B31F /* AztecDetectorResult.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83E9A4158E679000A3B31F /* AztecDetectorResult.cpp */; };
 		3B83EA64158E679000A3B31F /* AztecDetectorResult.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83E9A5158E679000A3B31F /* AztecDetectorResult.h */; };
@@ -113,7 +119,6 @@
 		3B83EAC9158E679000A3B31F /* QRCodeMultiReader.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83EA15158E679000A3B31F /* QRCodeMultiReader.h */; };
 		3B83EACA158E679000A3B31F /* MultiFormatReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83EA16158E679000A3B31F /* MultiFormatReader.cpp */; };
 		3B83EACB158E679000A3B31F /* MultiFormatReader.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83EA17158E679000A3B31F /* MultiFormatReader.h */; };
-		3B83EACC158E679000A3B31F /* NotFoundException.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83EA18158E679000A3B31F /* NotFoundException.cpp */; };
 		3B83EACD158E679000A3B31F /* NotFoundException.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83EA19158E679000A3B31F /* NotFoundException.h */; };
 		3B83EACE158E679000A3B31F /* Code128Reader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83EA1B158E679000A3B31F /* Code128Reader.cpp */; };
 		3B83EACF158E679000A3B31F /* Code128Reader.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83EA1C158E679000A3B31F /* Code128Reader.h */; };
@@ -175,7 +180,6 @@
 		3B83EB07158E679000A3B31F /* Version.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83EA58158E679000A3B31F /* Version.h */; };
 		3B83EB08158E679000A3B31F /* Reader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83EA59158E679000A3B31F /* Reader.cpp */; };
 		3B83EB09158E679000A3B31F /* Reader.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83EA5A158E679000A3B31F /* Reader.h */; };
-		3B83EB0A158E679000A3B31F /* ReaderException.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83EA5B158E679000A3B31F /* ReaderException.cpp */; };
 		3B83EB0B158E679000A3B31F /* ReaderException.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83EA5C158E679000A3B31F /* ReaderException.h */; };
 		3B83EB0C158E679000A3B31F /* Result.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83EA5D158E679000A3B31F /* Result.cpp */; };
 		3B83EB0D158E679000A3B31F /* Result.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83EA5E158E679000A3B31F /* Result.h */; };
@@ -186,6 +190,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3B5A492D17091807004E112F /* ChecksumException.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ChecksumException.cpp; sourceTree = "<group>"; };
+		3B5A492E17091807004E112F /* ChecksumException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChecksumException.h; sourceTree = "<group>"; };
+		3B5A493117091826004E112F /* CodaBarReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CodaBarReader.cpp; sourceTree = "<group>"; };
+		3B5A493217091826004E112F /* CodaBarReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CodaBarReader.h; sourceTree = "<group>"; };
+		3B5A493317091826004E112F /* Code93Reader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Code93Reader.cpp; sourceTree = "<group>"; };
+		3B5A493417091826004E112F /* Code93Reader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Code93Reader.h; sourceTree = "<group>"; };
 		3B83E98E158E66C600A3B31F /* libzxing-cpp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libzxing-cpp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B83E991158E66C600A3B31F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		3B83E9A4158E679000A3B31F /* AztecDetectorResult.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AztecDetectorResult.cpp; sourceTree = "<group>"; };
@@ -293,7 +303,6 @@
 		3B83EA15158E679000A3B31F /* QRCodeMultiReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QRCodeMultiReader.h; sourceTree = "<group>"; };
 		3B83EA16158E679000A3B31F /* MultiFormatReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MultiFormatReader.cpp; sourceTree = "<group>"; };
 		3B83EA17158E679000A3B31F /* MultiFormatReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MultiFormatReader.h; sourceTree = "<group>"; };
-		3B83EA18158E679000A3B31F /* NotFoundException.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NotFoundException.cpp; sourceTree = "<group>"; };
 		3B83EA19158E679000A3B31F /* NotFoundException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotFoundException.h; sourceTree = "<group>"; };
 		3B83EA1B158E679000A3B31F /* Code128Reader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Code128Reader.cpp; sourceTree = "<group>"; };
 		3B83EA1C158E679000A3B31F /* Code128Reader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Code128Reader.h; sourceTree = "<group>"; };
@@ -356,7 +365,6 @@
 		3B83EA58158E679000A3B31F /* Version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Version.h; sourceTree = "<group>"; };
 		3B83EA59158E679000A3B31F /* Reader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Reader.cpp; sourceTree = "<group>"; };
 		3B83EA5A158E679000A3B31F /* Reader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reader.h; sourceTree = "<group>"; };
-		3B83EA5B158E679000A3B31F /* ReaderException.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ReaderException.cpp; sourceTree = "<group>"; };
 		3B83EA5C158E679000A3B31F /* ReaderException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReaderException.h; sourceTree = "<group>"; };
 		3B83EA5D158E679000A3B31F /* Result.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Result.cpp; sourceTree = "<group>"; };
 		3B83EA5E158E679000A3B31F /* Result.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Result.h; sourceTree = "<group>"; };
@@ -411,6 +419,8 @@
 		3B83E9A2158E679000A3B31F /* zxing */ = {
 			isa = PBXGroup;
 			children = (
+				3B5A492D17091807004E112F /* ChecksumException.cpp */,
+				3B5A492E17091807004E112F /* ChecksumException.h */,
 				3B83E9A3158E679000A3B31F /* aztec */,
 				3B83E9AE158E679000A3B31F /* BarcodeFormat.cpp */,
 				3B83E9AF158E679000A3B31F /* BarcodeFormat.h */,
@@ -431,13 +441,11 @@
 				3B83EA07158E679000A3B31F /* multi */,
 				3B83EA16158E679000A3B31F /* MultiFormatReader.cpp */,
 				3B83EA17158E679000A3B31F /* MultiFormatReader.h */,
-				3B83EA18158E679000A3B31F /* NotFoundException.cpp */,
 				3B83EA19158E679000A3B31F /* NotFoundException.h */,
 				3B83EA1A158E679000A3B31F /* oned */,
 				3B83EA33158E679000A3B31F /* qrcode */,
 				3B83EA59158E679000A3B31F /* Reader.cpp */,
 				3B83EA5A158E679000A3B31F /* Reader.h */,
-				3B83EA5B158E679000A3B31F /* ReaderException.cpp */,
 				3B83EA5C158E679000A3B31F /* ReaderException.h */,
 				3B83EA5D158E679000A3B31F /* Result.cpp */,
 				3B83EA5E158E679000A3B31F /* Result.h */,
@@ -634,6 +642,10 @@
 		3B83EA1A158E679000A3B31F /* oned */ = {
 			isa = PBXGroup;
 			children = (
+				3B5A493117091826004E112F /* CodaBarReader.cpp */,
+				3B5A493217091826004E112F /* CodaBarReader.h */,
+				3B5A493317091826004E112F /* Code93Reader.cpp */,
+				3B5A493417091826004E112F /* Code93Reader.h */,
 				3B83EA1B158E679000A3B31F /* Code128Reader.cpp */,
 				3B83EA1C158E679000A3B31F /* Code128Reader.h */,
 				3B83EA1D158E679000A3B31F /* Code39Reader.cpp */,
@@ -824,6 +836,9 @@
 				3B83EB0D158E679000A3B31F /* Result.h in Headers */,
 				3B83EB0F158E679000A3B31F /* ResultPoint.h in Headers */,
 				3B83EB11158E679000A3B31F /* ResultPointCallback.h in Headers */,
+				3B5A493017091807004E112F /* ChecksumException.h in Headers */,
+				3B5A493617091826004E112F /* CodaBarReader.h in Headers */,
+				3B5A493817091826004E112F /* Code93Reader.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -853,7 +868,7 @@
 		3B83E985158E66C600A3B31F /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0430;
+				LastUpgradeCheck = 0460;
 			};
 			buildConfigurationList = 3B83E988158E66C600A3B31F /* Build configuration list for PBXProject "zxing-cpp" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -929,7 +944,6 @@
 				3B83EAC6158E679000A3B31F /* MultiFinderPatternFinder.cpp in Sources */,
 				3B83EAC8158E679000A3B31F /* QRCodeMultiReader.cpp in Sources */,
 				3B83EACA158E679000A3B31F /* MultiFormatReader.cpp in Sources */,
-				3B83EACC158E679000A3B31F /* NotFoundException.cpp in Sources */,
 				3B83EACE158E679000A3B31F /* Code128Reader.cpp in Sources */,
 				3B83EAD0158E679000A3B31F /* Code39Reader.cpp in Sources */,
 				3B83EAD2158E679000A3B31F /* EAN13Reader.cpp in Sources */,
@@ -960,10 +974,12 @@
 				3B83EB04158E679000A3B31F /* QRCodeReader.cpp in Sources */,
 				3B83EB06158E679000A3B31F /* Version.cpp in Sources */,
 				3B83EB08158E679000A3B31F /* Reader.cpp in Sources */,
-				3B83EB0A158E679000A3B31F /* ReaderException.cpp in Sources */,
 				3B83EB0C158E679000A3B31F /* Result.cpp in Sources */,
 				3B83EB0E158E679000A3B31F /* ResultPoint.cpp in Sources */,
 				3B83EB10158E679000A3B31F /* ResultPointCallback.cpp in Sources */,
+				3B5A492F17091807004E112F /* ChecksumException.cpp in Sources */,
+				3B5A493517091826004E112F /* CodaBarReader.cpp in Sources */,
+				3B5A493717091826004E112F /* Code93Reader.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -980,6 +996,10 @@
 					armv7s,
 					armv7,
 				);
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -1017,6 +1037,10 @@
 					armv7s,
 					armv7,
 				);
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_THUMB_SUPPORT = NO;

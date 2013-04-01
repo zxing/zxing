@@ -28,7 +28,6 @@
   UIImage *image;
   CGRect cropRect;
   UIImage *subsetImage;
-  unsigned char *subsetData;
   size_t subsetWidth;
   size_t subsetHeight;
   size_t subsetBytesPerRow;
@@ -37,12 +36,14 @@
 
 @property(nonatomic, retain) UIImage *image;
 @property(nonatomic, retain) NSSet *readers;
+#if 0
 @property(nonatomic, assign) CGRect cropRect;
 @property(nonatomic, retain) UIImage *subsetImage;
-@property(nonatomic, assign) unsigned char *subsetData;
+@property(nonatomic, assign) char *subsetData;
 @property(assign) size_t subsetWidth;
 @property(assign) size_t subsetHeight;
 @property(assign) size_t subsetBytesPerRow;
+#endif
 @property(nonatomic, assign) id<DecoderDelegate> delegate;
 
 - (BOOL) decodeImage:(UIImage *)image;

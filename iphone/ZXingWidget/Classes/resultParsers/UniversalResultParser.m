@@ -88,7 +88,7 @@ static NSMutableArray *sTheResultParsers = nil;
 }
 
 + (ParsedResult *)parsedResultForString:(NSString *)theString {
-  return [self parsedResultForString:theString format:BarcodeFormat_None];
+  return [self parsedResultForString:theString format:BarcodeFormat_NONE];
 }
 
 @end

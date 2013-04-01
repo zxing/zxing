@@ -24,29 +24,42 @@ BarcodeFormat CBarcodeFormatConvert(zxing::BarcodeFormat value);
 // zxing::BarcodeFormat.
 BarcodeFormat CBarcodeFormatConvert(zxing::BarcodeFormat value) {
   switch (value) {
-  case zxing::BarcodeFormat_None:
-    return BarcodeFormat_None;
-  case zxing::BarcodeFormat_QR_CODE:
-    return BarcodeFormat_QR_CODE;
-  case zxing::BarcodeFormat_DATA_MATRIX:
-    return BarcodeFormat_DATA_MATRIX;
-  case zxing::BarcodeFormat_UPC_E:
-    return BarcodeFormat_UPC_E;
-  case zxing::BarcodeFormat_UPC_A:
-    return BarcodeFormat_UPC_A;
-  case zxing::BarcodeFormat_EAN_8:
-    return BarcodeFormat_EAN_8;
-  case zxing::BarcodeFormat_EAN_13:
-    return BarcodeFormat_EAN_13;
-  case zxing::BarcodeFormat_CODE_128:
-    return BarcodeFormat_CODE_128;
-  case zxing::BarcodeFormat_CODE_39:
-    return BarcodeFormat_CODE_39;
-  case zxing::BarcodeFormat_ITF:
-    return BarcodeFormat_ITF;
-  case zxing::BarcodeFormat_AZTEC:
+  case zxing::BarcodeFormat::NONE:
+    return BarcodeFormat_NONE;
+  case zxing::BarcodeFormat::AZTEC:
     return BarcodeFormat_AZTEC;
+  case zxing::BarcodeFormat::CODABAR:
+    return BarcodeFormat_CODABAR;
+  case zxing::BarcodeFormat::CODE_39:
+    return BarcodeFormat_CODE_39;
+  case zxing::BarcodeFormat::CODE_93:
+    return BarcodeFormat_CODE_93;
+  case zxing::BarcodeFormat::CODE_128:
+    return BarcodeFormat_CODE_128;
+  case zxing::BarcodeFormat::DATA_MATRIX:
+    return BarcodeFormat_DATA_MATRIX;
+  case zxing::BarcodeFormat::EAN_8:
+    return BarcodeFormat_EAN_8;
+  case zxing::BarcodeFormat::EAN_13:
+    return BarcodeFormat_EAN_13;
+  case zxing::BarcodeFormat::ITF:
+    return BarcodeFormat_ITF;
+  case zxing::BarcodeFormat::MAXICODE:
+    return BarcodeFormat_MAXICODE;
+  case zxing::BarcodeFormat::PDF_417:
+    return BarcodeFormat_PDF_417;
+  case zxing::BarcodeFormat::QR_CODE:
+    return BarcodeFormat_QR_CODE;
+  case zxing::BarcodeFormat::RSS_14:
+    return BarcodeFormat_RSS_14;
+  case zxing::BarcodeFormat::RSS_EXPANDED:
+    return BarcodeFormat_RSS_EXPANDED;
+  case zxing::BarcodeFormat::UPC_A:
+    return BarcodeFormat_UPC_A;
+  case zxing::BarcodeFormat::UPC_E:
+    return BarcodeFormat_UPC_E;
+  case zxing::BarcodeFormat::UPC_EAN_EXTENSION:
+    return BarcodeFormat_UPC_EAN_EXTENSION;
   }
-
-  return BarcodeFormat_None;
+  return BarcodeFormat_NONE;
 }

@@ -24,17 +24,24 @@
 
 // This must remain parallel to zxing::BarcodeFormat.
 typedef enum BarcodeFormat {
-    BarcodeFormat_None = 0,
-    BarcodeFormat_QR_CODE,
-    BarcodeFormat_DATA_MATRIX,
-    BarcodeFormat_UPC_E,
-    BarcodeFormat_UPC_A,
-    BarcodeFormat_EAN_8,
-    BarcodeFormat_EAN_13,
-    BarcodeFormat_CODE_128,
-    BarcodeFormat_CODE_39,
-    BarcodeFormat_ITF,
-    BarcodeFormat_AZTEC
+  BarcodeFormat_NONE,
+  BarcodeFormat_AZTEC,
+  BarcodeFormat_CODABAR,
+  BarcodeFormat_CODE_39,
+  BarcodeFormat_CODE_93,
+  BarcodeFormat_CODE_128,
+  BarcodeFormat_DATA_MATRIX,
+  BarcodeFormat_EAN_8,
+  BarcodeFormat_EAN_13,
+  BarcodeFormat_ITF,
+  BarcodeFormat_MAXICODE,
+  BarcodeFormat_PDF_417,
+  BarcodeFormat_QR_CODE,
+  BarcodeFormat_RSS_14,
+  BarcodeFormat_RSS_EXPANDED,
+  BarcodeFormat_UPC_A,
+  BarcodeFormat_UPC_E,
+  BarcodeFormat_UPC_EAN_EXTENSION
 } BarcodeFormat;
 
 #endif // __CBARCODE_FORMAT_H__

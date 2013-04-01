@@ -16,9 +16,15 @@
  */
 
 #import <ZXing/ZXCGImageLuminanceSource.h>
+#include <sstream>
 #include <zxing/common/IllegalArgumentException.h>
 
-namespace zxing {
+using std::string;
+using std::ostringstream;
+using zxing::CGImageLuminanceSource;
+using zxing::ArrayRef;
+using zxing::Ref;
+using zxing::LuminanceSource;
 
 CGImageRef CGImageLuminanceSource::createImageFromBuffer
   (CVPixelBufferRef buffer, int left, int top, int width, int height)
@@ -190,33 +196,38 @@ CGImageLuminanceSource::~CGImageLuminanceSource() {
   }
 }
 
-unsigned char* CGImageLuminanceSource::getRow(int y, unsigned char* row) {
+ArrayRef<char> CGImageLuminanceSource::getRow(int y, ArrayRef<char> row) {
   if (y < 0 || y >= this->getHeight()) {
-    throw IllegalArgumentException("Requested row is outside the image: " + y);
+    ostringstream msg;
+    msg << "Requested row is outside the image: " << y;
+    throw IllegalArgumentException(msg.str().c_str());
   }
   int width = getWidth();
   // TODO(flyashi): determine if row has enough size.
-  if (row == NULL) {
-    row = new unsigned char[width_];
+  if (!row) {
+    row = ArrayRef<char>(width_);
   }
   int offset = (y + top_) * dataWidth_ + left_;
-  CFDataGetBytes(data_, CFRangeMake(offset, width), row);
+  char* v = &row->values()[0];
+  CFDataGetBytes(data_, CFRangeMake(offset, width), (unsigned char*)v);
   return row;
 }
 
-unsigned char* CGImageLuminanceSource::getMatrix() {
+ArrayRef<char> CGImageLuminanceSource::getMatrix() {
   int size = width_ * height_;
-  unsigned char* result = new unsigned char[size];
+  ArrayRef<char> result (size);
   if (left_ == 0 &&
       top_ == 0 &&
       dataWidth_ == width_ &&
       dataHeight_ == height_) {
-    CFDataGetBytes(data_, CFRangeMake(0, size), result);
+    char* v = &result->values()[0];
+    CFDataGetBytes(data_, CFRangeMake(0, size), (unsigned char*)v);
   } else {
     for (int row = 0; row < height_; row++) {
+      char* v = &result->values()[0];
       CFDataGetBytes(data_,
                      CFRangeMake((top_ + row) * dataWidth_ + left_, width_),
-                     result + row * width_);
+                     (unsigned char*)v + row * width_);
     }
   }
   return result;
@@ -224,6 +235,4 @@ unsigned char* CGImageLuminanceSource::getMatrix() {
 
 Ref<LuminanceSource> CGImageLuminanceSource::rotateCounterClockwise() {
   return Ref<LuminanceSource>(0);
-}
-
 }

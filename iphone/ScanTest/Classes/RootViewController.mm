@@ -26,13 +26,20 @@
 #endif
 
 #ifndef ZXAZ
-#define ZXAZ 0
+#define ZXAZ 1
 #endif
 
 #if ZXAZ
 #import "AztecReader.h"
 #endif
 
+#ifndef ZX1D
+#define ZX1D 1
+#endif
+
+#if ZX1D
+#import "MultiFormatOneDReader.h"
+#endif
 
 @interface RootViewController()
 
@@ -53,7 +60,8 @@
 
 - (IBAction)scanPressed:(id)sender {
 	
-  ZXingWidgetController *widController = [[ZXingWidgetController alloc] initWithDelegate:self showCancel:YES OneDMode:NO];
+  ZXingWidgetController *widController =
+    [[ZXingWidgetController alloc] initWithDelegate:self showCancel:YES OneDMode:NO];
 
   NSMutableSet *readers = [[NSMutableSet alloc ] init];
 
@@ -67,6 +75,14 @@
   AztecReader *aztecReader = [[AztecReader alloc] init];
   [readers addObject:aztecReader];
   [aztecReader release];
+#endif
+    
+#if ZX1D
+  {
+    MultiFormatOneDReader* reader = [[MultiFormatOneDReader alloc] init];
+    [readers addObject:reader];
+    [reader release];
+  }
 #endif
     
   widController.readers = readers;

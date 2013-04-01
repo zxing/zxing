@@ -1,3 +1,4 @@
+// -*- Mode: ObjC; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*-
 //
 //  ProductResultParser.m
 //  ZXing
@@ -24,43 +25,47 @@
 #import "CBarcodeFormat.h"
 #include "../../../../cpp/core/src/zxing/oned/UPCEReader.h"
 
+using std::string;
+using zxing::String;
+using zxing::Ref;
+
 @implementation ProductResultParser
 
 + (void)load {
-    [ResultParser registerResultParserClass:self];
+  [ResultParser registerResultParserClass:self];
 }
 
 + (ParsedResult *)parsedResultForString:(NSString *)s format:(BarcodeFormat)format {
-    // Treat all UPC and EAN variants as UPCs, in the sense that they are all
-    // product barcodes.
-    if (format != BarcodeFormat_UPC_E &&
-        format != BarcodeFormat_UPC_A &&
-        format != BarcodeFormat_EAN_8 &&
-        format != BarcodeFormat_EAN_13) {
-        return nil;
-    }
+  // Treat all UPC and EAN variants as UPCs, in the sense that they are all
+  // product barcodes.
+  if (format != BarcodeFormat_UPC_E &&
+      format != BarcodeFormat_UPC_A &&
+      format != BarcodeFormat_EAN_8 &&
+      format != BarcodeFormat_EAN_13) {
+    return nil;
+  }
 
-    // Barcode must be all digits.
-    for (unsigned int i = 0; i < [s length]; i++) {
-        unichar c = [s characterAtIndex:i];
-        if (c < '0' || c > '9') {
-            return nil;
-        }
+  // Barcode must be all digits.
+  for (unsigned int i = 0; i < [s length]; i++) {
+    unichar c = [s characterAtIndex:i];
+    if (c < '0' || c > '9') {
+      return nil;
     }
+  }
 
-    NSString *normalizedProductID;
-    // Expand UPC-E for purposes of searching
-    if (format == BarcodeFormat_UPC_E) {
-        std::string textStr = std::string([s UTF8String]);
-        std::string normal = zxing::oned::UPCEReader::convertUPCEtoUPCA(textStr);
-        normalizedProductID = [NSString stringWithUTF8String:normal.c_str()];
-    } else {
-        normalizedProductID = s;
-    }
+  NSString *normalizedProductID;
+  // Expand UPC-E for purposes of searching
+  if (format == BarcodeFormat_UPC_E) {
+    Ref<String> textStr (new String([s UTF8String]));
+    string normal = zxing::oned::UPCEReader::convertUPCEtoUPCA(textStr)->getText();
+    normalizedProductID = [NSString stringWithUTF8String:normal.c_str()];
+  } else {
+    normalizedProductID = s;
+  }
 
-    return [[[ProductParsedResult alloc] initWithProductID:s
-                                       normalizedProductID:normalizedProductID]
-               autorelease];
+  return [[[ProductParsedResult alloc] initWithProductID:s
+                                     normalizedProductID:normalizedProductID]
+           autorelease];
 }
 
 @end
