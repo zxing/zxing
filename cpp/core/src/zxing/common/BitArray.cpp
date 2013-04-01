@@ -120,62 +120,61 @@ void BitArray::reverse() {
   bits = newBits;
 }
 
-/*
-  BitArray::Reverse::Reverse(Ref<BitArray> array_) : array(array_) {
+BitArray::Reverse::Reverse(Ref<BitArray> array_) : array(array_) {
   array->reverse();
-  }
+}
 
-  BitArray::Reverse::~Reverse() {
+BitArray::Reverse::~Reverse() {
   array->reverse();
-  }
+}
 
-  namespace {
+namespace {
+  // N.B.: This only works for 32 bit ints ...
   int numberOfTrailingZeros(int i) {
-  // HD, Figure 5-14
-  int y;
-  if (i == 0) return 32;
-  int n = 31;
-  y = i <<16; if (y != 0) { n = n -16; i = y; }
-  y = i << 8; if (y != 0) { n = n - 8; i = y; }
-  y = i << 4; if (y != 0) { n = n - 4; i = y; }
-  y = i << 2; if (y != 0) { n = n - 2; i = y; }
-  return n - (((unsigned int)(i << 1)) >> 31);
+    // HD, Figure 5-14
+    int y;
+    if (i == 0) return 32;
+    int n = 31;
+    y = i <<16; if (y != 0) { n = n -16; i = y; }
+    y = i << 8; if (y != 0) { n = n - 8; i = y; }
+    y = i << 4; if (y != 0) { n = n - 4; i = y; }
+    y = i << 2; if (y != 0) { n = n - 2; i = y; }
+    return n - (((unsigned int)(i << 1)) >> 31);
   }
-  }
+}
 
-  int BitArray::getNextSet(int from) {
-  if (from >= size_) {
-  return size_;
+int BitArray::getNextSet(int from) {
+  if (from >= size) {
+    return size;
   }
-  int bitsOffset = from >> 5;
-  int currentBits = bits_[bitsOffset];
+  int bitsOffset = from >> logBits;
+  int currentBits = bits[bitsOffset];
   // mask off lesser bits first
-  currentBits &= ~((1 << (from & 0x1F)) - 1);
+  currentBits &= ~((1 << (from & bitsMask)) - 1);
   while (currentBits == 0) {
-  if (++bitsOffset == (int)bits_.size()) {
-  return size_;
+    if (++bitsOffset == (int)bits.size()) {
+      return size;
+    }
+    currentBits = bits[bitsOffset];
   }
-  currentBits = bits_[bitsOffset];
-  }
-  int result = (bitsOffset << 5) + numberOfTrailingZeros(currentBits);
-  return result > size_ ? size_ : result;
-  }
+  int result = (bitsOffset << logBits) + numberOfTrailingZeros(currentBits);
+  return result > size ? size : result;
+}
 
-  int BitArray::getNextUnset(int from) {
-  if (from >= size_) {
-  return size_;
+int BitArray::getNextUnset(int from) {
+  if (from >= size) {
+    return size;
   }
-  int bitsOffset = from >> 5;
-  int currentBits = ~bits_[bitsOffset];
+  int bitsOffset = from >> logBits;
+  int currentBits = ~bits[bitsOffset];
   // mask off lesser bits first
-  currentBits &= ~((1 << (from & 0x1F)) - 1);
+  currentBits &= ~((1 << (from & bitsMask)) - 1);
   while (currentBits == 0) {
-  if (++bitsOffset == (int)bits_.size()) {
-  return size_;
+    if (++bitsOffset == (int)bits.size()) {
+      return size;
+    }
+    currentBits = ~bits[bitsOffset];
   }
-  currentBits = ~bits_[bitsOffset];
-  }
-  int result = (bitsOffset << 5) + numberOfTrailingZeros(currentBits);
-  return result > size_ ? size_ : result;
-  }
-*/
+  int result = (bitsOffset << logBits) + numberOfTrailingZeros(currentBits);
+  return result > size ? size : result;
+}
