@@ -38,7 +38,8 @@
            optimize="true"
            debug="true"
            deprecation="true"
-           includeantruntime="false">
+           includeantruntime="false"
+           encoding="UTF-8">
       <classpath>
         <pathelement location="../core/core.jar"/>
       </classpath>
