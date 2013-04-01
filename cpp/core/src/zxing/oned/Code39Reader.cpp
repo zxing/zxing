@@ -53,6 +53,15 @@ namespace {
   int ASTERISK_ENCODING = 0x094;
   const char* ALPHABET_STRING =
     "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. *$/+%";
+
+  std::string alphabet_string (ALPHABET_STRING);
+}
+
+void Code39Reader::init(bool usingCheckDigit_, bool extendedMode_) {
+  usingCheckDigit = usingCheckDigit_;
+  extendedMode = extendedMode_;
+  decodeRowResult.reserve(20);
+  counters.resize(9);
 }
 
 /**
@@ -60,9 +69,8 @@ namespace {
  * the final character as a check digit. It will not decoded "extended
  * Code 39" sequences.
  */
-Code39Reader::Code39Reader() : alphabet_string(ALPHABET_STRING),
-                               usingCheckDigit(false),
-                               extendedMode(false) {
+Code39Reader::Code39Reader() {
+  init();
 }
 
 /**
@@ -72,27 +80,26 @@ Code39Reader::Code39Reader() : alphabet_string(ALPHABET_STRING),
  * @param usingCheckDigit if true, treat the last data character as a check
  * digit, not data, and verify that the checksum passes.
  */
-Code39Reader::Code39Reader(bool usingCheckDigit_) :
-  alphabet_string(ALPHABET_STRING),
-  usingCheckDigit(usingCheckDigit_),
-  extendedMode(false) {
+Code39Reader::Code39Reader(bool usingCheckDigit_) {
+  init(usingCheckDigit_);
 }
 
-
-Code39Reader::Code39Reader(bool usingCheckDigit_, bool extendedMode_) :
-  alphabet_string(ALPHABET_STRING),
-  usingCheckDigit(usingCheckDigit_),
-  extendedMode(extendedMode_) {
-  }
+Code39Reader::Code39Reader(bool usingCheckDigit_, bool extendedMode_) {
+  init(usingCheckDigit_, extendedMode_);
+}
 
 Ref<Result> Code39Reader::decodeRow(int rowNumber, Ref<BitArray> row) {
-  vector<int> counters (9, 0);
+  { // Arrays.fill(counters, 0);
+    int size = counters.size();
+    counters.resize(0);
+    counters.resize(size); }
+  decodeRowResult.clear();
+
   vector<int> start (findAsteriskPattern(row, counters));
     // Read off white space
   int nextStart = row->getNextSet(start[1]);
   int end = row->getSize();
 
-  std::string result;
   char decodedChar;
   int lastStart;
   do {
@@ -102,7 +109,7 @@ Ref<Result> Code39Reader::decodeRow(int rowNumber, Ref<BitArray> row) {
       throw NotFoundException();;
     }
     decodedChar = patternToChar(pattern);
-    result.append(1, decodedChar);
+    decodeRowResult.append(1, decodedChar);
     lastStart = nextStart;
     for (int i = 0, end=counters.size(); i < end; i++) {
       nextStart += counters[i];
@@ -111,7 +118,7 @@ Ref<Result> Code39Reader::decodeRow(int rowNumber, Ref<BitArray> row) {
     
     nextStart = row->getNextSet(nextStart);
   } while (decodedChar != '*');
-  result.resize(result.length()-1);// remove asterisk
+  decodeRowResult.resize(decodeRowResult.length()-1);// remove asterisk
 
     // Look for whitespace after pattern:
   int lastPatternSize = 0;
@@ -126,27 +133,27 @@ Ref<Result> Code39Reader::decodeRow(int rowNumber, Ref<BitArray> row) {
   }
 
   if (usingCheckDigit) {
-    int max = result.length() - 1;
+    int max = decodeRowResult.length() - 1;
     int total = 0;
     for (int i = 0; i < max; i++) {
-      total += alphabet_string.find_first_of(result[i], 0);
+      total += alphabet_string.find_first_of(decodeRowResult[i], 0);
     }
-    if (result[max] != ALPHABET[total % 43]) {
+    if (decodeRowResult[max] != ALPHABET[total % 43]) {
       throw ChecksumException();
     }
-    result.resize(max);
+    decodeRowResult.resize(max);
   }
   
-  if (result.length() == 0) {
+  if (decodeRowResult.length() == 0) {
     // Almost false positive
     throw NotFoundException();
   }
   
   Ref<String> resultString;
   if (extendedMode) {
-    resultString = decodeExtended(result);
+    resultString = decodeExtended(decodeRowResult);
   } else {
-    resultString = Ref<String>(new String(result));
+    resultString = Ref<String>(new String(decodeRowResult));
   }
 
   float left = (float) (start[1] + start[0]) / 2.0f;
@@ -163,8 +170,7 @@ Ref<Result> Code39Reader::decodeRow(int rowNumber, Ref<BitArray> row) {
     );
 }
 
-vector<int> Code39Reader::findAsteriskPattern(Ref<BitArray> row,
-                                              vector<int>& counters){
+vector<int> Code39Reader::findAsteriskPattern(Ref<BitArray> row, vector<int>& counters){
   int width = row->getSize();
   int rowOffset = row->getNextSet(0);
 
