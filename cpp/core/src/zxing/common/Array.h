@@ -23,11 +23,6 @@
 
 #include <vector>
 
-#ifdef DEBUG_COUNTING
-#include <iostream>
-#include <typeinfo>
-#endif
-
 #include <zxing/common/Counted.h>
 
 namespace zxing {
@@ -58,23 +53,11 @@ public:
   virtual ~Array() {
   }
   Array<T>& operator=(const Array<T> &other) {
-#ifdef DEBUG_COUNTING
-    cout << "assigning values from Array " << &other << " to this Array " << this << ", ";
-#endif
     values_ = other.values_;
-#ifdef DEBUG_COUNTING
-    cout << "new size = " << values_.size() << "\n";
-#endif
     return *this;
   }
   Array<T>& operator=(const std::vector<T> &array) {
-#ifdef DEBUG_COUNTING
-    cout << "assigning values from Array " << &array << " to this Array " << this << ", ";
-#endif
     values_ = array;
-#ifdef DEBUG_COUNTING
-    cout << "new size = " << values_.size() << "\n";
-#endif
     return *this;
   }
   T operator[](int i) const {
@@ -103,53 +86,31 @@ public:
   Array<T> *array_;
   ArrayRef() :
       array_(0) {
-#ifdef DEBUG_COUNTING
-    cout << "instantiating empty ArrayRef " << this << "\n";
-#endif
   }
   explicit ArrayRef(int n) :
       array_(0) {
-#ifdef DEBUG_COUNTING
-    cout << "instantiating ArrayRef " << this << "with size " << n << "\n";
-#endif
     reset(new Array<T> (n));
   }
   ArrayRef(T *ts, int n) :
       array_(0) {
-#ifdef DEBUG_COUNTING
-    cout << "instantiating ArrayRef " << this << "with " << n << " elements at " << (void *)ts << "\n";
-#endif
     reset(new Array<T> (ts, n));
   }
   ArrayRef(Array<T> *a) :
       array_(0) {
-#ifdef DEBUG_COUNTING
-    cout << "instantiating ArrayRef " << this << " from pointer:\n";
-#endif
     reset(a);
   }
   ArrayRef(const ArrayRef &other) :
       Counted(), array_(0) {
-#ifdef DEBUG_COUNTING
-    cout << "instantiating ArrayRef " << this << " from ArrayRef " << &other << ":\n";
-#endif
     reset(other.array_);
   }
 
   template<class Y>
   ArrayRef(const ArrayRef<Y> &other) :
       array_(0) {
-#ifdef DEBUG_COUNTING
-    cout << "instantiating ArrayRef " << this << " from ArrayRef " << &other << ":\n";
-#endif
     reset(static_cast<const Array<T> *>(other.array_));
   }
 
   ~ArrayRef() {
-#ifdef DEBUG_COUNTING
-    cout << "destroying ArrayRef " << this << " with " << (array_ ? typeid(*array_).name() : "NULL") << " "
-         << array_ << "\n";
-#endif
     if (array_) {
       array_->release();
     }
@@ -167,10 +128,6 @@ public:
   }
 
   void reset(Array<T> *a) {
-#ifdef DEBUG_COUNTING
-    cout << "resetting ArrayRef " << this << " from " << (array_ ? typeid(*array_).name() : "NULL") << " "
-         << array_ << " to " << (a ? typeid(*a).name() : "NULL") << " " << a << "\n";
-#endif
     if (a) {
       a->retain();
     }

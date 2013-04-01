@@ -196,12 +196,6 @@ Ref<BitMatrix> Version::buildFunctionPattern() {
     functionPattern->setRegion(0, dimension - 11, 6, 3);
   }
 
-
-  //#ifdef DEBUG
-  //	cout << "version " << versionNumber_ << " built function pattern:\n";
-  //	cout << *functionPattern;
-  //#endif
-
   return functionPattern;
 }
 
