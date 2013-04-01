@@ -23,16 +23,19 @@
 
 #include <zxing/common/Counted.h>
 #include <zxing/common/BitArray.h>
+#include <zxing/common/Array.h>
 #include <limits>
 
 namespace zxing {
+  class BitMatrix;
+}
 
-class BitMatrix : public Counted {
+class zxing::BitMatrix : public Counted {
 private:
-  size_t width_;
-  size_t height_;
-  size_t words_;
-  unsigned int* bits_;
+  int width_;
+  int height_;
+  int words_;
+  ArrayRef<int> bits_;
 
 #define ZX_LOG_DIGITS(digits) \
     ((digits == 8) ? 3 : \
@@ -42,37 +45,37 @@ private:
         ((digits == 128) ? 7 : \
          (-1))))))
 
-  static const unsigned int bitsPerWord =
+  static const int bitsPerWord =
     std::numeric_limits<unsigned int>::digits;
-  static const unsigned int logBits = ZX_LOG_DIGITS(bitsPerWord);
-  static const unsigned int bitsMask = (1 << logBits) - 1;
+  static const int logBits = ZX_LOG_DIGITS(bitsPerWord);
+  static const int bitsMask = (1 << logBits) - 1;
 
 public:
-  BitMatrix(size_t dimension);
-  BitMatrix(size_t width, size_t height);
+  BitMatrix(int dimension);
+  BitMatrix(int width, int height);
 
   ~BitMatrix();
 
-  bool get(size_t x, size_t y) const {
-    size_t offset = x + width_ * y;
+  bool get(int x, int y) const {
+    int offset = x + width_ * y;
     return ((bits_[offset >> logBits] >> (offset & bitsMask)) & 0x01) != 0;
   }
 
-  void set(size_t x, size_t y) {
-    size_t offset = x + width_ * y;
+  void set(int x, int y) {
+    int offset = x + width_ * y;
     bits_[offset >> logBits] |= 1 << (offset & bitsMask);
   }
 
-  void flip(size_t x, size_t y);
+  void flip(int x, int y);
   void clear();
-  void setRegion(size_t left, size_t top, size_t width, size_t height);
+  void setRegion(int left, int top, int width, int height);
   Ref<BitArray> getRow(int y, Ref<BitArray> row);
 
-  size_t getDimension() const;
-  size_t getWidth() const;
-  size_t getHeight() const;
+  int getDimension() const;
+  int getWidth() const;
+  int getHeight() const;
 
-  unsigned int* getBits() const;
+  ArrayRef<int> getBits() const;
 
   friend std::ostream& operator<<(std::ostream &out, const BitMatrix &bm);
   const char *description();
@@ -81,7 +84,5 @@ private:
   BitMatrix(const BitMatrix&);
   BitMatrix& operator =(const BitMatrix&);
 };
-
-}
 
 #endif // __BIT_MATRIX_H__

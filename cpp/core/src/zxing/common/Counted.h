@@ -97,6 +97,7 @@ public:
     reset(o);
   }
 
+/*
   explicit Ref(const T &o) :
       object_(0) {
 #ifdef DEBUG_COUNTING
@@ -104,6 +105,7 @@ public:
 #endif
     reset(const_cast<T *>(&o));
   }
+*/
 
   Ref(const Ref &other) :
       object_(0) {

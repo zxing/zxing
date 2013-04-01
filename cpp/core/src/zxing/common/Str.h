@@ -1,3 +1,4 @@
+// -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
 #ifndef __STR_H__
 #define __STR_H__
 
@@ -25,16 +26,21 @@
 #include <zxing/common/Counted.h>
 
 namespace zxing {
+  class String;
+  std::ostream& operator << (std::ostream& out, String const& s);
+}
 
-class String : public Counted {
+class zxing::String : public Counted {
 private:
   std::string text_;
 public:
-  String(const std::string &text);
+  explicit String(const std::string &text);
+  char charAt(int) const;
+  Ref<String> substring(int) const;
   const std::string &getText() const;
-  friend std::ostream &operator<<(std::ostream &out, const String &s);
+  int size() const;
+  int length() const;
+  friend std::ostream& zxing::operator << (std::ostream& out, String const& s);
 };
-
-}
 
 #endif // __COMMON__STRING_H__

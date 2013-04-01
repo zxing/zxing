@@ -26,7 +26,7 @@ namespace datamatrix {
 
 using namespace std;
 
-DataBlock::DataBlock(int numDataCodewords, ArrayRef<unsigned char> codewords) :
+DataBlock::DataBlock(int numDataCodewords, ArrayRef<char> codewords) :
     numDataCodewords_(numDataCodewords), codewords_(codewords) {
 }
 
@@ -34,11 +34,11 @@ int DataBlock::getNumDataCodewords() {
   return numDataCodewords_;
 }
 
-ArrayRef<unsigned char> DataBlock::getCodewords() {
+ArrayRef<char> DataBlock::getCodewords() {
   return codewords_;
 }
 
-std::vector<Ref<DataBlock> > DataBlock::getDataBlocks(ArrayRef<unsigned char> rawCodewords, Version *version) {
+std::vector<Ref<DataBlock> > DataBlock::getDataBlocks(ArrayRef<char> rawCodewords, Version *version) {
   // Figure out the number and size of data blocks used by this version and
   // error correction level
   ECBlocks* ecBlocks = version->getECBlocks();
@@ -58,7 +58,7 @@ std::vector<Ref<DataBlock> > DataBlock::getDataBlocks(ArrayRef<unsigned char> ra
     for (int i = 0; i < ecBlock->getCount(); i++) {
       int numDataCodewords = ecBlock->getDataCodewords();
       int numBlockCodewords = ecBlocks->getECCodewords() + numDataCodewords;
-      ArrayRef<unsigned char> buffer(numBlockCodewords);
+      ArrayRef<char> buffer(numBlockCodewords);
       Ref<DataBlock> blockRef(new DataBlock(numDataCodewords, buffer));
       result[numResultBlocks++] = blockRef;
     }
@@ -102,7 +102,7 @@ std::vector<Ref<DataBlock> > DataBlock::getDataBlocks(ArrayRef<unsigned char> ra
     }
   }
 
-  if ((size_t)rawCodewordsOffset != rawCodewords.size()) {
+  if (rawCodewordsOffset != rawCodewords.size()) {
     throw IllegalArgumentException("rawCodewordsOffset != rawCodewords.length");
   }
 

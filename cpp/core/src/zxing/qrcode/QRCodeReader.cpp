@@ -49,8 +49,7 @@ namespace zxing {
 			cout << "(2) detected, have detectorResult " << detectorResult.object_ << "\n" << flush;
 #endif
 			
-			std::vector<Ref<ResultPoint> > points(detectorResult->getPoints());
-			
+			ArrayRef< Ref<ResultPoint> > points (detectorResult->getPoints());
 			
 #ifdef DEBUG
 			cout << "(3) extracted points " << &points << "\n" << flush;
@@ -68,7 +67,7 @@ namespace zxing {
 #endif
 			
 			Ref<Result> result(
-							   new Result(decoderResult->getText(), decoderResult->getRawBytes(), points, BarcodeFormat_QR_CODE));
+							   new Result(decoderResult->getText(), decoderResult->getRawBytes(), points, BarcodeFormat::QR_CODE));
 #ifdef DEBUG
 			cout << "(5) created result " << result.object_ << ", returning\n" << flush;
 #endif

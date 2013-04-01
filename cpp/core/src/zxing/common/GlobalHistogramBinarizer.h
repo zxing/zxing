@@ -1,3 +1,4 @@
+// -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
 #ifndef __GLOBALHISTOGRAMBINARIZER_H__
 #define __GLOBALHISTOGRAMBINARIZER_H__
 /*
@@ -19,29 +20,29 @@
  * limitations under the License.
  */
 
-#include <vector>
 #include <zxing/Binarizer.h>
 #include <zxing/common/BitArray.h>
 #include <zxing/common/BitMatrix.h>
+#include <zxing/common/Array.h>
 
 namespace zxing {
-	
-	class GlobalHistogramBinarizer : public Binarizer {
-	 private:
-    Ref<BitMatrix> cached_matrix_;
-	  Ref<BitArray> cached_row_;
-	  int cached_row_num_;
-
-	public:
-		GlobalHistogramBinarizer(Ref<LuminanceSource> source);
-		virtual ~GlobalHistogramBinarizer();
-		
-		virtual Ref<BitArray> getBlackRow(int y, Ref<BitArray> row);
-		virtual Ref<BitMatrix> getBlackMatrix();
-		static int estimate(std::vector<int> &histogram);
-		Ref<Binarizer> createBinarizer(Ref<LuminanceSource> source);
-	};
-	
+  class GlobalHistogramBinarizer;
 }
-
+	
+class zxing::GlobalHistogramBinarizer : public Binarizer {
+private:
+  ArrayRef<char> luminances;
+  ArrayRef<int> buckets;
+public:
+  GlobalHistogramBinarizer(Ref<LuminanceSource> source);
+  virtual ~GlobalHistogramBinarizer();
+		
+  virtual Ref<BitArray> getBlackRow(int y, Ref<BitArray> row);
+  virtual Ref<BitMatrix> getBlackMatrix();
+  static int estimateBlackPoint(ArrayRef<int> const& buckets);
+  Ref<Binarizer> createBinarizer(Ref<LuminanceSource> source);
+private:
+  void initArrays(int luminanceSize);
+};
+	
 #endif /* GLOBALHISTOGRAMBINARIZER_H_ */

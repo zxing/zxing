@@ -1,3 +1,4 @@
+// -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
 /*
  *  GreyscaleRotatedLuminanceSource.cpp
  *  zxing
@@ -21,15 +22,21 @@
 #include <zxing/common/GreyscaleRotatedLuminanceSource.h>
 #include <zxing/common/IllegalArgumentException.h>
 
-namespace zxing {
+using zxing::ArrayRef;
+using zxing::GreyscaleRotatedLuminanceSource;
 
-// Note that dataWidth and dataHeight are not reversed, as we need to be able to traverse the
-// greyData correctly, which does not get rotated.
-GreyscaleRotatedLuminanceSource::GreyscaleRotatedLuminanceSource(unsigned char* greyData,
-    int dataWidth, int dataHeight, int left, int top, int width, int height) : greyData_(greyData),
-    dataWidth_(dataWidth), left_(left), top_(top), width_(width),
+// Note that dataWidth and dataHeight are not reversed, as we need to
+// be able to traverse the greyData correctly, which does not get
+// rotated.
+GreyscaleRotatedLuminanceSource::
+GreyscaleRotatedLuminanceSource(ArrayRef<char> greyData,
+                                int dataWidth, int /* dataHeight */,
+                                int left, int top,
+                                int width, int height) 
+  : greyData_(greyData),
+    dataWidth_(dataWidth),
+    left_(left), top_(top), width_(width),
     height_(height) {
-
   // Intentionally comparing to the opposite dimension since we're rotated.
   if (left + width > dataHeight || top + height > dataWidth) {
     throw IllegalArgumentException("Crop rectangle does not fit within image data.");
@@ -37,29 +44,38 @@ GreyscaleRotatedLuminanceSource::GreyscaleRotatedLuminanceSource(unsigned char* 
 }
 
 // The API asks for rows, but we're rotated, so we return columns.
-unsigned char* GreyscaleRotatedLuminanceSource::getRow(int y, unsigned char* row) {
+ArrayRef<char>
+GreyscaleRotatedLuminanceSource::getRow(int y, ArrayRef<char> row) {
   if (y < 0 || y >= getHeight()) {
     throw IllegalArgumentException("Requested row is outside the image.");
   }
-  int width = getWidth();
-  if (row == NULL) {
-    row = new unsigned char[width];
+  if (!row || row.size() < width_) {
+    row = ArrayRef<char>(width_);
   }
   int offset = (left_ * dataWidth_) + (dataWidth_ - 1 - (y + top_));
-  for (int x = 0; x < width; x++) {
+  using namespace std;
+  if (false) {
+    cerr << offset << " = "
+         << top_ << " " << left_ << " "
+         << height_ << " " << width_ << " "
+         << y << endl;
+  }
+  for (int x = 0; x < width_; x++) {
     row[x] = greyData_[offset];
     offset += dataWidth_;
   }
   return row;
 }
 
-unsigned char* GreyscaleRotatedLuminanceSource::getMatrix() {
-  unsigned char* result = new unsigned char[width_ * height_];
-  // This depends on getRow() honoring its second parameter.
+ArrayRef<char> GreyscaleRotatedLuminanceSource::getMatrix() {
+  ArrayRef<char> result (width_ * height_);
   for (int y = 0; y < height_; y++) {
-    getRow(y, &result[y * width_]);
+    char* row = &result[y * width_];
+    int offset = (left_ * dataWidth_) + (dataWidth_ - 1 - (y + top_));
+    for (int x = 0; x < width_; x++) {
+      row[x] = greyData_[offset];
+      offset += dataWidth_;
+    }
   }
   return result;
 }
-
-} // namespace

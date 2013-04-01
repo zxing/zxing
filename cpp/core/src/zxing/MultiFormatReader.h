@@ -28,7 +28,6 @@
 
 namespace zxing {
   class MultiFormatReader : public Reader {
-    
   private:
     Ref<Result> decodeInternal(Ref<BinaryBitmap> image);
   

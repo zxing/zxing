@@ -1,11 +1,10 @@
 // -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
-#ifndef __MULTI_FORMAT_UPC_EAN_READER_H__
-#define __MULTI_FORMAT_UPC_EAN_READER_H__
+
+#ifndef __CHECKSUM_EXCEPTION_H__
+#define __NOT_FOUND_EXCEPTION_H__
+
 /*
- *  MultiFormatUPCEANReader.h
- *  ZXing
- *
- *  Copyright 2010 ZXing authors All rights reserved.
+ * Copyright 20011 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,21 +19,17 @@
  * limitations under the License.
  */
 
-#include <zxing/oned/OneDReader.h>
+#include <zxing/ReaderException.h>
 
 namespace zxing {
-  namespace oned {
-      class UPCEANReader;
-      class MultiFormatUPCEANReader;
-  }
+  class ChecksumException : public ReaderException {
+    typedef ReaderException Base;
+  public:
+    ChecksumException();
+    ChecksumException(const char *msg);
+    ~ChecksumException() throw();
+    static ChecksumException const& getChecksumInstance();
+  };
 }
 
-class zxing::oned::MultiFormatUPCEANReader : public OneDReader {
-private:
-    std::vector< Ref<UPCEANReader> > readers;
-public:
-    MultiFormatUPCEANReader(DecodeHints hints);
-    Ref<Result> decodeRow(int rowNumber, Ref<BitArray> row);
-};
-
-#endif
+#endif // __CHECKSUM_EXCEPTION_H__

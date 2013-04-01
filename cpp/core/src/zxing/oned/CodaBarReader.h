@@ -1,10 +1,7 @@
 // -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
-#ifndef __MULTI_FORMAT_UPC_EAN_READER_H__
-#define __MULTI_FORMAT_UPC_EAN_READER_H__
+#ifndef __CODA_BAR_READER_H__
+#define __CODA_BAR_READER_H__
 /*
- *  MultiFormatUPCEANReader.h
- *  ZXing
- *
  *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,20 +18,40 @@
  */
 
 #include <zxing/oned/OneDReader.h>
+#include <zxing/common/BitArray.h>
+#include <zxing/Result.h>
 
 namespace zxing {
-  namespace oned {
-      class UPCEANReader;
-      class MultiFormatUPCEANReader;
+	namespace oned {
+		class CodaBarReader;
   }
 }
 
-class zxing::oned::MultiFormatUPCEANReader : public OneDReader {
+class zxing::oned::CodaBarReader : public OneDReader {
 private:
-    std::vector< Ref<UPCEANReader> > readers;
+  static const int MAX_ACCEPTABLE;
+  static const int PADDING;
+
+  // Keep some instance variables to avoid reallocations
+  std::string decodeRowResult;
+  std::vector<int> counters;
+  int counterLength;
+
 public:
-    MultiFormatUPCEANReader(DecodeHints hints);
-    Ref<Result> decodeRow(int rowNumber, Ref<BitArray> row);
+  CodaBarReader();
+
+  Ref<Result> decodeRow(int rowNumber, Ref<BitArray> row);
+  
+  void validatePattern(int start);
+
+private:
+  void setCounters(Ref<BitArray> row);
+  void counterAppend(int e);
+  int findStartPattern();
+  
+  static bool arrayContains(char const array[], char key);
+
+  int toNarrowWidePattern(int position);
 };
 
 #endif

@@ -55,11 +55,11 @@ namespace {int GB2312_SUBSET = 1;}
 void DecodedBitStreamParser::append(std::string &result,
                                     string const& in,
                                     const char *src) {
-  append(result, (unsigned char const*)in.c_str(), in.length(), src);
+  append(result, (char const*)in.c_str(), in.length(), src);
 }
 
 void DecodedBitStreamParser::append(std::string &result,
-                                    const unsigned char *bufIn,
+                                    const char *bufIn,
                                     size_t nIn,
                                     const char *src) {
 #ifndef NO_ICONV
@@ -74,7 +74,7 @@ void DecodedBitStreamParser::append(std::string &result,
   }
 
   const int maxOut = 4 * nIn + 1;
-  unsigned char* bufOut = new unsigned char[maxOut];
+  char* bufOut = new char[maxOut];
 
   ICONV_CONST char *fromPtr = (ICONV_CONST char *)bufIn;
   size_t nFrom = nIn;
@@ -112,7 +112,7 @@ void DecodedBitStreamParser::decodeHanziSegment(Ref<BitSource> bits_,
     // Each character will require 2 bytes. Read the characters as 2-byte pairs
     // and decode as GB2312 afterwards
     size_t nBytes = 2 * count;
-    unsigned char* buffer = new unsigned char[nBytes];
+    char* buffer = new char[nBytes];
     int offset = 0;
     while (count > 0) {
       // Each 13 bits encodes a 2-byte character
@@ -125,8 +125,8 @@ void DecodedBitStreamParser::decodeHanziSegment(Ref<BitSource> bits_,
         // In the 0xB0A1 to 0xFAFE range
         assembledTwoBytes += 0x0A6A1;
       }
-      buffer[offset] = (unsigned char) ((assembledTwoBytes >> 8) & 0xFF);
-      buffer[offset + 1] = (unsigned char) (assembledTwoBytes & 0xFF);
+      buffer[offset] = (char) ((assembledTwoBytes >> 8) & 0xFF);
+      buffer[offset + 1] = (char) (assembledTwoBytes & 0xFF);
       offset += 2;
       count--;
     }
@@ -145,7 +145,7 @@ void DecodedBitStreamParser::decodeKanjiSegment(Ref<BitSource> bits, std::string
   // Each character will require 2 bytes. Read the characters as 2-byte pairs
   // and decode as Shift_JIS afterwards
   size_t nBytes = 2 * count;
-  unsigned char* buffer = new unsigned char[nBytes];
+  char* buffer = new char[nBytes];
   int offset = 0;
   while (count > 0) {
     // Each 13 bits encodes a 2-byte character
@@ -159,8 +159,8 @@ void DecodedBitStreamParser::decodeKanjiSegment(Ref<BitSource> bits, std::string
       // In the 0xE040 to 0xEBBF range
       assembledTwoBytes += 0x0C140;
     }
-    buffer[offset] = (unsigned char)(assembledTwoBytes >> 8);
-    buffer[offset + 1] = (unsigned char)assembledTwoBytes;
+    buffer[offset] = (char)(assembledTwoBytes >> 8);
+    buffer[offset + 1] = (char)assembledTwoBytes;
     offset += 2;
     count--;
   }
@@ -173,7 +173,7 @@ void DecodedBitStreamParser::decodeByteSegment(Ref<BitSource> bits_,
                                                string& result,
                                                int count,
                                                CharacterSetECI* currentCharacterSetECI,
-                                               ArrayRef< ArrayRef<unsigned char> >& byteSegments,
+                                               ArrayRef< ArrayRef<char> >& byteSegments,
                                                Hashtable const& hints) {
   int nBytes = count;
   BitSource& bits (*bits_);
@@ -182,10 +182,10 @@ void DecodedBitStreamParser::decodeByteSegment(Ref<BitSource> bits_,
     throw FormatException();
   }
 
-  ArrayRef<unsigned char> bytes_ (count);
-  unsigned char* readBytes = &(*bytes_)[0];
+  ArrayRef<char> bytes_ (count);
+  char* readBytes = &(*bytes_)[0];
   for (int i = 0; i < count; i++) {
-    readBytes[i] = (unsigned char) bits.readBits(8);
+    readBytes[i] = (char) bits.readBits(8);
   }
   string encoding;
   if (currentCharacterSetECI == 0) {
@@ -208,7 +208,7 @@ void DecodedBitStreamParser::decodeByteSegment(Ref<BitSource> bits_,
 
 void DecodedBitStreamParser::decodeNumericSegment(Ref<BitSource> bits, std::string &result, int count) {
   int nBytes = count;
-  unsigned char* bytes = new unsigned char[nBytes];
+  char* bytes = new char[nBytes];
   int i = 0;
   // Read three digits at a time
   while (count >= 3) {
@@ -335,7 +335,7 @@ namespace {
 }
 
 Ref<DecoderResult>
-DecodedBitStreamParser::decode(ArrayRef<unsigned char> bytes,
+DecodedBitStreamParser::decode(ArrayRef<char> bytes,
                                Version* version,
                                ErrorCorrectionLevel const& ecLevel,
                                Hashtable const& hints) {
@@ -344,7 +344,7 @@ DecodedBitStreamParser::decode(ArrayRef<unsigned char> bytes,
   string result;
   CharacterSetECI* currentCharacterSetECI = 0;
   bool fc1InEffect = false;
-  ArrayRef< ArrayRef<unsigned char> > byteSegments (size_t(0));
+  ArrayRef< ArrayRef<char> > byteSegments (0);
   Mode* mode = 0;
   do {
     // While still another segment to read...

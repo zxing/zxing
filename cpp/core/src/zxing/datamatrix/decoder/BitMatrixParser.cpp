@@ -57,9 +57,9 @@ Ref<Version> BitMatrixParser::readVersion(Ref<BitMatrix> bitMatrix) {
   throw ReaderException("Couldn't decode version");
 }
 
-ArrayRef<unsigned char> BitMatrixParser::readCodewords() {
-  	ArrayRef<unsigned char> result(parsedVersion_->getTotalCodewords());
-  	int resultOffset = 0;
+ArrayRef<char> BitMatrixParser::readCodewords() {
+    ArrayRef<char> result(parsedVersion_->getTotalCodewords());
+    int resultOffset = 0;
     int row = 4;
     int column = 0;
 
@@ -75,22 +75,22 @@ ArrayRef<unsigned char> BitMatrixParser::readCodewords() {
     do {
       // Check the four corner cases
       if ((row == numRows) && (column == 0) && !corner1Read) {
-        result[resultOffset++] = (unsigned char) readCorner1(numRows, numColumns);
+        result[resultOffset++] = (char) readCorner1(numRows, numColumns);
         row -= 2;
         column +=2;
         corner1Read = true;
       } else if ((row == numRows-2) && (column == 0) && ((numColumns & 0x03) != 0) && !corner2Read) {
-        result[resultOffset++] = (unsigned char) readCorner2(numRows, numColumns);
+        result[resultOffset++] = (char) readCorner2(numRows, numColumns);
         row -= 2;
         column +=2;
         corner2Read = true;
       } else if ((row == numRows+4) && (column == 2) && ((numColumns & 0x07) == 0) && !corner3Read) {
-        result[resultOffset++] = (unsigned char) readCorner3(numRows, numColumns);
+        result[resultOffset++] = (char) readCorner3(numRows, numColumns);
         row -= 2;
         column +=2;
         corner3Read = true;
       } else if ((row == numRows-2) && (column == 0) && ((numColumns & 0x07) == 4) && !corner4Read) {
-        result[resultOffset++] = (unsigned char) readCorner4(numRows, numColumns);
+        result[resultOffset++] = (char) readCorner4(numRows, numColumns);
         row -= 2;
         column +=2;
         corner4Read = true;
@@ -98,7 +98,7 @@ ArrayRef<unsigned char> BitMatrixParser::readCodewords() {
         // Sweep upward diagonally to the right
         do {
           if ((row < numRows) && (column >= 0) && !readBitMatrix_->get(column, row)) {
-            result[resultOffset++] = (unsigned char) readUtah(row, column, numRows, numColumns);
+            result[resultOffset++] = (char) readUtah(row, column, numRows, numColumns);
           }
           row -= 2;
           column +=2;
@@ -109,7 +109,7 @@ ArrayRef<unsigned char> BitMatrixParser::readCodewords() {
         // Sweep downward diagonally to the left
         do {
           if ((row >= 0) && (column < numColumns) && !readBitMatrix_->get(column, row)) {
-             result[resultOffset++] = (unsigned char) readUtah(row, column, numRows, numColumns);
+             result[resultOffset++] = (char) readUtah(row, column, numRows, numColumns);
           }
           row += 2;
           column -=2;

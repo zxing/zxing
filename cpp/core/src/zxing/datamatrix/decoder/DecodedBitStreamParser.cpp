@@ -51,11 +51,11 @@ const char DecodedBitStreamParser::TEXT_SHIFT3_SET_CHARS[] = {
     'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '{', '|', '}', '~', (char) 127
 };
 
-Ref<DecoderResult> DecodedBitStreamParser::decode(ArrayRef<unsigned char> bytes) {
+Ref<DecoderResult> DecodedBitStreamParser::decode(ArrayRef<char> bytes) {
   Ref<BitSource> bits(new BitSource(bytes));
   ostringstream result;
   ostringstream resultTrailer;
-  vector<unsigned char> byteSegments;
+  vector<char> byteSegments;
   int mode = ASCII_ENCODE;
   do {
     if (mode == ASCII_ENCODE) {
@@ -87,7 +87,7 @@ Ref<DecoderResult> DecodedBitStreamParser::decode(ArrayRef<unsigned char> bytes)
   if (resultTrailer.str().size() > 0) {
     result << resultTrailer.str();
   }
-  ArrayRef<unsigned char> rawBytes(bytes);
+  ArrayRef<char> rawBytes(bytes);
   Ref<String> text(new String(result.str()));
   return Ref<DecoderResult>(new DecoderResult(rawBytes, text));
 }
@@ -381,7 +381,7 @@ void DecodedBitStreamParser::decodeEdifactSegment(Ref<BitSource> bits, ostringst
   } while (bits->available() > 0);
 }
   
-void DecodedBitStreamParser::decodeBase256Segment(Ref<BitSource> bits, ostringstream& result, vector<unsigned char> byteSegments) {
+void DecodedBitStreamParser::decodeBase256Segment(Ref<BitSource> bits, ostringstream& result, vector<char> byteSegments) {
   // Figure out how long the Base 256 Segment is.
   int codewordPosition = 1 + bits->getByteOffset(); // position is 1-indexed
   int d1 = unrandomize255State(bits->readBits(8), codewordPosition++);
@@ -399,7 +399,7 @@ void DecodedBitStreamParser::decodeBase256Segment(Ref<BitSource> bits, ostringst
     throw FormatException("NegativeArraySizeException");
   }
 
-  unsigned char* bytes = new unsigned char[count];
+  char* bytes = new char[count];
   for (int i = 0; i < count; i++) {
     // Have seen this particular error in the wild, such as at
     // http://www.bcgen.com/demo/IDAutomationStreamingDataMatrix.aspx?MODE=3&D=Fred&PFMT=3&PT=F&X=0.3&O=0&LM=0.2

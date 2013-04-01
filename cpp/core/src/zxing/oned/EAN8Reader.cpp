@@ -18,55 +18,44 @@
 #include "EAN8Reader.h"
 #include <zxing/ReaderException.h>
 
-namespace zxing {
-  namespace oned {
+using std::vector;
+using zxing::oned::EAN8Reader;
 
-    EAN8Reader::EAN8Reader(){ }
+EAN8Reader::EAN8Reader() : decodeMiddleCounters(4, 0) { }
 
-    int EAN8Reader::decodeMiddle(Ref<BitArray> row, int startGuardBegin, int startGuardEnd,
-        std::string& resultString){
-      (void)startGuardBegin;
-      const int countersLen = 4;
-      int counters[countersLen] = { 0, 0, 0, 0 };
+int EAN8Reader::decodeMiddle(Ref<BitArray> row,
+                             Range const& startRange,
+                             std::string& result){
+  vector<int>& counters (decodeMiddleCounters);
+  counters[0] = 0;
+  counters[1] = 0;
+  counters[2] = 0;
+  counters[3] = 0;
 
-      int end = row->getSize();
-      int rowOffset = startGuardEnd;
+  int end = row->getSize();
+  int rowOffset = startRange[1];
 
-      for (int x = 0; x < 4 && rowOffset < end; x++) {
-        int bestMatch = decodeDigit(row, counters, countersLen, rowOffset,
-            UPC_EAN_PATTERNS_L_PATTERNS);
-        if (bestMatch < 0) {
-          return -1;
-        }
-        resultString.append(1, (char) ('0' + bestMatch));
-        for (int i = 0; i < countersLen; i++) {
-          rowOffset += counters[i];
-        }
-      }
-
-      int middleRangeStart;
-      int middleRangeEnd;
-      if (findGuardPattern(row, rowOffset, true, (int*)getMIDDLE_PATTERN(),
-            getMIDDLE_PATTERN_LEN(), &middleRangeStart, &middleRangeEnd)) {
-        rowOffset = middleRangeEnd;
-        for (int x = 0; x < 4 && rowOffset < end; x++) {
-          int bestMatch = decodeDigit(row, counters, countersLen, rowOffset,
-              UPC_EAN_PATTERNS_L_PATTERNS);
-          if (bestMatch < 0) {
-            return -1;
-          }
-          resultString.append(1, (char) ('0' + bestMatch));
-          for (int i = 0; i < countersLen; i++) {
-            rowOffset += counters[i];
-          }
-        }
-        return rowOffset;
-      }
-      return -1;
-    }
-
-    BarcodeFormat EAN8Reader::getBarcodeFormat(){
-      return BarcodeFormat_EAN_8;
+  for (int x = 0; x < 4 && rowOffset < end; x++) {
+    int bestMatch = decodeDigit(row, counters, rowOffset, L_PATTERNS);
+    result.append(1, (char) ('0' + bestMatch));
+    for (int i = 0, end = counters.size(); i < end; i++) {
+      rowOffset += counters[i];
     }
   }
+
+  Range middleRange =
+    findGuardPattern(row, rowOffset, true, MIDDLE_PATTERN);
+  rowOffset = middleRange[1];
+  for (int x = 0; x < 4 && rowOffset < end; x++) {
+    int bestMatch = decodeDigit(row, counters, rowOffset, L_PATTERNS);
+    result.append(1, (char) ('0' + bestMatch));
+    for (int i = 0, end = counters.size(); i < end; i++) {
+      rowOffset += counters[i];
+    }
+  }
+  return rowOffset;
+}
+
+zxing::BarcodeFormat EAN8Reader::getBarcodeFormat(){
+  return BarcodeFormat::EAN_8;
 }

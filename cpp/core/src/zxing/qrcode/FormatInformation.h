@@ -35,16 +35,16 @@ private:
   static int BITS_SET_IN_HALF_BYTE[];
 
   ErrorCorrectionLevel &errorCorrectionLevel_;
-  unsigned char dataMask_;
+  char dataMask_;
 
   FormatInformation(int formatInfo);
 
 public:
-  static int numBitsDiffering(unsigned int a, unsigned int b);
+  static int numBitsDiffering(int a, int b);
   static Ref<FormatInformation> decodeFormatInformation(int maskedFormatInfo1, int maskedFormatInfo2);
   static Ref<FormatInformation> doDecodeFormatInformation(int maskedFormatInfo1, int maskedFormatInfo2);
   ErrorCorrectionLevel &getErrorCorrectionLevel();
-  unsigned char getDataMask();
+  char getDataMask();
   friend bool operator==(const FormatInformation &a, const FormatInformation &b);
   friend std::ostream& operator<<(std::ostream& out, const FormatInformation& fi);
 };

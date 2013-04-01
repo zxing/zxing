@@ -51,16 +51,16 @@ private:
                                 std::string& result,
                                 int count,
                                 zxing::common::CharacterSetECI* currentCharacterSetECI,
-                                ArrayRef< ArrayRef<unsigned char> >& byteSegments,
+                                ArrayRef< ArrayRef<char> >& byteSegments,
                                 Hashtable const& hints);
   static void decodeAlphanumericSegment(Ref<BitSource> bits, std::string &result, int count, bool fc1InEffect);
   static void decodeNumericSegment(Ref<BitSource> bits, std::string &result, int count);
 
-  static void append(std::string &ost, const unsigned char *bufIn, size_t nIn, const char *src);
+  static void append(std::string &ost, const char *bufIn, size_t nIn, const char *src);
   static void append(std::string &ost, std::string const& in, const char *src);
 
 public:
-  static Ref<DecoderResult> decode(ArrayRef<unsigned char> bytes,
+  static Ref<DecoderResult> decode(ArrayRef<char> bytes,
                                    Version *version,
                                    ErrorCorrectionLevel const& ecLevel,
                                    Hashtable const& hints);

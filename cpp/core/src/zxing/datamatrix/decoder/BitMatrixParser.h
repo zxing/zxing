@@ -41,7 +41,7 @@ private:
 public:
   BitMatrixParser(Ref<BitMatrix> bitMatrix);
   Ref<Version> readVersion(Ref<BitMatrix> bitMatrix);
-  ArrayRef<unsigned char> readCodewords();
+  ArrayRef<char> readCodewords();
   bool readModule(int row, int column, int numRows, int numColumns);
 
 private:

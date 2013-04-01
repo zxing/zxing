@@ -1,11 +1,6 @@
 // -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
-#ifndef __MULTI_FORMAT_UPC_EAN_READER_H__
-#define __MULTI_FORMAT_UPC_EAN_READER_H__
 /*
- *  MultiFormatUPCEANReader.h
- *  ZXing
- *
- *  Copyright 2010 ZXing authors All rights reserved.
+ *  Copyright 2010 ZXing authors. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,21 +15,17 @@
  * limitations under the License.
  */
 
-#include <zxing/oned/OneDReader.h>
+#include <zxing/common/BitArray.h>
 
-namespace zxing {
-  namespace oned {
-      class UPCEANReader;
-      class MultiFormatUPCEANReader;
+using zxing::BitArray;
+using std::ostream;
+
+ostream& zxing::operator << (ostream& os, BitArray const& ba) {
+  for (int i = 0, size = ba.getSize(); i < size; i++) {
+    if ((i & 0x07) == 0) {
+      os << ' ';
+    }
+    os << (ba.get(i) ? 'X' : '.');
   }
+  return os;
 }
-
-class zxing::oned::MultiFormatUPCEANReader : public OneDReader {
-private:
-    std::vector< Ref<UPCEANReader> > readers;
-public:
-    MultiFormatUPCEANReader(DecodeHints hints);
-    Ref<Result> decodeRow(int rowNumber, Ref<BitArray> row);
-};
-
-#endif

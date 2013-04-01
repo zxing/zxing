@@ -29,10 +29,12 @@
 #include <zxing/common/detector/math_utils.h>
 #include <zxing/NotFoundException.h>
 
+using std::vector;
 using zxing::aztec::Detector;
 using zxing::aztec::Point;
 using zxing::aztec::AztecDetectorResult;
 using zxing::Ref;
+using zxing::ArrayRef;
 using zxing::ResultPoint;
 using zxing::BitArray;
 using zxing::BitMatrix;
@@ -52,10 +54,15 @@ Ref<AztecDetectorResult> Detector::detect() {
   std::vector<Ref<Point> > bullEyeCornerPoints = getBullEyeCornerPoints(pCenter);
             
   extractParameters(bullEyeCornerPoints);
+  
+  ArrayRef< Ref<ResultPoint> > corners = getMatrixCornerPoints(bullEyeCornerPoints);
             
-  std::vector<Ref<ResultPoint> > corners = getMatrixCornerPoints(bullEyeCornerPoints);
-            
-  Ref<BitMatrix> bits = sampleGrid(image_, corners[shift_%4], corners[(shift_+3)%4], corners[(shift_+2)%4], corners[(shift_+1)%4]);
+  Ref<BitMatrix> bits =
+    sampleGrid(image_,
+               corners[shift_%4],
+               corners[(shift_+3)%4],
+               corners[(shift_+2)%4],
+               corners[(shift_+1)%4]);
             
   // std::printf("------------\ndetected: compact:%s, nbDataBlocks:%d, nbLayers:%d\n------------\n",compact_?"YES":"NO", nbDataBlocks_, nbLayers_);
             
@@ -127,7 +134,8 @@ void Detector::extractParameters(std::vector<Ref<Point> > bullEyeCornerPoints) {
   getParameters(parameterData);
 }
         
-std::vector<Ref<ResultPoint> > Detector::getMatrixCornerPoints(std::vector<Ref<Point> > bullEyeCornerPoints) {
+ArrayRef< Ref<ResultPoint> >
+Detector::getMatrixCornerPoints(std::vector<Ref<Point> > bullEyeCornerPoints) {
   float ratio = (2 * nbLayers_ + (nbLayers_ > 4 ? 1 : 0) + (nbLayers_ - 4) / 8) / (2.0f * nbCenterLayers_);
             
   int dx = bullEyeCornerPoints[0]->x - bullEyeCornerPoints[2]->x;
@@ -157,14 +165,13 @@ std::vector<Ref<ResultPoint> > Detector::getMatrixCornerPoints(std::vector<Ref<P
       !isValid(targetdx, targetdy)) {
     throw ReaderException("matrix extends over image bounds");
   }
-  std::vector<Ref<ResultPoint> > returnValue;
+  Array< Ref<ResultPoint> >* array = new Array< Ref<ResultPoint> >();
+  vector< Ref<ResultPoint> >& returnValue (array->values());
   returnValue.push_back(Ref<ResultPoint>(new ResultPoint(targetax, targetay)));
   returnValue.push_back(Ref<ResultPoint>(new ResultPoint(targetbx, targetby)));
   returnValue.push_back(Ref<ResultPoint>(new ResultPoint(targetcx, targetcy)));
   returnValue.push_back(Ref<ResultPoint>(new ResultPoint(targetdx, targetdy)));
-                
-  return returnValue;
-            
+  return ArrayRef< Ref<ResultPoint> >(array);
 }
         
 void Detector::correctParameterData(Ref<zxing::BitArray> parameterData, bool compact) {

@@ -42,19 +42,19 @@ namespace zxing {
   private:
     // We'll be using one-D arrays because C++ can't dynamically allocate 2D
     // arrays
-    int* calculateBlackPoints(unsigned char* luminances,
-                              int subWidth,
-                              int subHeight,
-                              int width,
-                              int height);
-    void calculateThresholdForBlock(unsigned char* luminances,
+    ArrayRef<int> calculateBlackPoints(ArrayRef<char> luminances,
+                                       int subWidth,
+                                       int subHeight,
+                                       int width,
+                                       int height);
+    void calculateThresholdForBlock(ArrayRef<char> luminances,
                                     int subWidth,
                                     int subHeight,
                                     int width,
                                     int height,
-                                    int blackPoints[],
+                                    ArrayRef<int> blackPoints,
                                     Ref<BitMatrix> const& matrix);
-    void thresholdBlock(unsigned char* luminances,
+    void thresholdBlock(ArrayRef<char>luminances,
                         int xoffset,
                         int yoffset,
                         int threshold,

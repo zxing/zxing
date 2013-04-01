@@ -1,7 +1,10 @@
 // -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
-#ifndef __CODE_128_READER_H__
-#define __CODE_128_READER_H__
+#ifndef __CODE_93_READER_H__
+#define __CODE_93_READER_H__
 /*
+ *  Code93Reader.h
+ *  ZXing
+ *
  *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,27 +25,29 @@
 #include <zxing/Result.h>
 
 namespace zxing {
-	namespace oned {
-		class Code128Reader;
+  namespace oned {
+    class Code93Reader;
   }
 }
 
-class zxing::oned::Code128Reader : public OneDReader {
-private:
-  static const int MAX_AVG_VARIANCE;
-  static const int MAX_INDIVIDUAL_VARIANCE;
-
-  static std::vector<int> findStartPattern(Ref<BitArray> row);
-  static int decodeCode(Ref<BitArray> row,
-                        std::vector<int>& counters,
-                        int rowOffset);
-			
+/**
+ * <p>Decodes Code 93 barcodes. This does not support "Full ASCII Code 93" yet.</p>
+ * Ported form Java (author Sean Owen)
+ * @author Lukasz Warchol
+ */
+class zxing::oned::Code93Reader : public OneDReader {
 public:
   Ref<Result> decodeRow(int rowNumber, Ref<BitArray> row);
-  Code128Reader();
-  ~Code128Reader();
 
-  BarcodeFormat getBarcodeFormat();
+private:
+  static Range findAsteriskPattern(Ref<BitArray> row);
+  static int toPattern(std::vector<int>& counters);
+  static char patternToChar(int pattern);
+  static Ref<String> decodeExtended(std::string const& encoded);
+  static void checkChecksums(std::string const& result);
+  static void checkOneChecksum(std::string const& result,
+                               int checkPosition,
+                               int weightMax);
 };
 
 #endif

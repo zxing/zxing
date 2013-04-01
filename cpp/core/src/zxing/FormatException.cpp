@@ -32,4 +32,10 @@ FormatException::FormatException(const char *msg) :
 FormatException::~FormatException() throw() {
 }
 
+FormatException const&
+FormatException::getFormatInstance() {
+  static FormatException instance;
+  return instance;
+}
+
 }

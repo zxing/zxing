@@ -17,14 +17,18 @@
 
 #include <zxing/NotFoundException.h>
 
-namespace zxing {
+using zxing::NotFoundException;
 
-  NotFoundException::NotFoundException() {}
+NotFoundException::NotFoundException() {}
 
-  NotFoundException::NotFoundException(const char *msg)
-    : ReaderException(msg) {}
+NotFoundException::NotFoundException(const char *msg)
+  : ReaderException(msg) {}
 
-  NotFoundException::~NotFoundException() throw() {
-  }
+NotFoundException::~NotFoundException() throw() {}
 
+
+NotFoundException const&
+NotFoundException::getNotFoundInstance() {
+  static NotFoundException instance;
+  return instance;
 }

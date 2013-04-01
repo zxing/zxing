@@ -60,8 +60,8 @@ void GenericMultipleBarcodeReader::doDecodeMultiple(Ref<BinaryBitmap> image,
   }
   
   results.push_back(translateResultPoints(result, xOffset, yOffset));
-  const std::vector<Ref<ResultPoint> > resultPoints = result->getResultPoints();
-  if (resultPoints.empty()) {
+  ArrayRef< Ref<ResultPoint> > resultPoints = result->getResultPoints();
+  if (resultPoints->empty()) {
     return;
   }
 
@@ -71,7 +71,7 @@ void GenericMultipleBarcodeReader::doDecodeMultiple(Ref<BinaryBitmap> image,
   float minY = height;
   float maxX = 0.0f;
   float maxY = 0.0f;
-  for (unsigned int i = 0; i < resultPoints.size(); i++) {
+  for (int i = 0; i < resultPoints.size(); i++) {
     Ref<ResultPoint> point = resultPoints[i];
     float x = point->getX();
     float y = point->getY();
@@ -112,14 +112,14 @@ void GenericMultipleBarcodeReader::doDecodeMultiple(Ref<BinaryBitmap> image,
 }
 
 Ref<Result> GenericMultipleBarcodeReader::translateResultPoints(Ref<Result> result, int xOffset, int yOffset){
-  const std::vector<Ref<ResultPoint> > oldResultPoints = result->getResultPoints();
-  if (oldResultPoints.empty()) {
+    ArrayRef< Ref<ResultPoint> > oldResultPoints = result->getResultPoints();
+  if (oldResultPoints->empty()) {
     return result;
   }
-  std::vector<Ref<ResultPoint> > newResultPoints;
-  for (unsigned int i = 0; i < oldResultPoints.size(); i++) {
+  ArrayRef< Ref<ResultPoint> > newResultPoints;
+  for (int i = 0; i < oldResultPoints.size(); i++) {
     Ref<ResultPoint> oldPoint = oldResultPoints[i];
-    newResultPoints.push_back(Ref<ResultPoint>(new ResultPoint(oldPoint->getX() + xOffset, oldPoint->getY() + yOffset)));
+    newResultPoints->values().push_back(Ref<ResultPoint>(new ResultPoint(oldPoint->getX() + xOffset, oldPoint->getY() + yOffset)));
   }
   return Ref<Result>(new Result(result->getText(), result->getRawBytes(), newResultPoints, result->getBarcodeFormat()));
 }

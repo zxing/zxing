@@ -96,7 +96,7 @@ int test_image(Image& image, bool hybrid, string expected = "") {
     Ref<BinaryBitmap> binary(new BinaryBitmap(binarizer));
     Ref<Result> result(decode(binary, hints));
     cell_result = result->getText()->getText();
-    result_format = barcodeFormatNames[result->getBarcodeFormat()];
+    result_format = BarcodeFormat::barcodeFormatNames[result->getBarcodeFormat()];
     res = 0;
   } catch (ReaderException e) {
     cell_result = "zxing::ReaderException: " + string(e.what());
@@ -183,7 +183,7 @@ int test_image_multi(Image& image, bool hybrid){
     for (unsigned int i = 0; i < results.size(); i++){
       cout << "    "<<results[i]->getText()->getText();
       if (show_format) {
-        cout << " " << barcodeFormatNames[results[i]->getBarcodeFormat()];
+        cout << " " << BarcodeFormat::barcodeFormatNames[results[i]->getBarcodeFormat()];
       }
       cout << endl;
     }

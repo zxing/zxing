@@ -1,14 +1,12 @@
 {
-   zxing::common::CharacterSetECI::init_tables
-   Memcheck:Leak
-   fun:malloc
-   ...
-   fun:_ZN5zxing6common15CharacterSetECI11init_tablesEv
-}
+   dlsym
+   Memcheck:Value8
+   fun:_simple_salloc
+   fun:_ZN4dyld9mkstringfEPKcz
 
+}
 {
-   ImageMagick
-   Memcheck:Leak
-   ...
-   fun:AcquireImage
+   dlsym
+   Memcheck:Cond
+   fun:_ZN4dyld9mkstringfEPKcz
 }

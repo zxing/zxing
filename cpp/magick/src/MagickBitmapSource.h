@@ -1,3 +1,4 @@
+// -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
 #ifndef __MAGICK_BITMAP_SOURCE_H_
 #define __MAGICK_BITMAP_SOURCE_H_
 /*
@@ -20,8 +21,10 @@
 #include <zxing/LuminanceSource.h>
 
 namespace zxing {
+  class MagickBitmapSource;
+}
 
-class MagickBitmapSource : public LuminanceSource {
+class zxing::MagickBitmapSource : public LuminanceSource {
 private:
   Magick::Image image_;
   int width;
@@ -34,14 +37,12 @@ public:
 
   int getWidth() const;
   int getHeight() const;
-  unsigned char* getRow(int y, unsigned char* row);
-  unsigned char* getMatrix();
+  ArrayRef<char> getRow(int y, ArrayRef<char> row);
+  ArrayRef<char> getMatrix();
   bool isCropSupported() const;
   Ref<LuminanceSource> crop(int left, int top, int width, int height);
   bool isRotateSupported() const;
   Ref<LuminanceSource> rotateCounterClockwise();
 };
-
-}
 
 #endif /* MAGICKMONOCHROMEBITMAPSOURCE_H_ */

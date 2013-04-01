@@ -22,7 +22,8 @@
 #include <zxing/LuminanceSource.h>
 #include <zxing/common/IllegalArgumentException.h>
 
-namespace zxing {
+using zxing::Ref;
+using zxing::LuminanceSource;
 
 LuminanceSource::LuminanceSource() {
 }
@@ -51,7 +52,7 @@ Ref<LuminanceSource> LuminanceSource::rotateCounterClockwise() {
 }
 
 LuminanceSource::operator std::string() {
-  unsigned char* row = 0;
+  ArrayRef<char> row;
   std::ostringstream oss;
   for (int y = 0; y < getHeight(); y++) {
     row = getRow(y, row);
@@ -71,10 +72,5 @@ LuminanceSource::operator std::string() {
     }
     oss << '\n';
   }
-  delete [] row;
   return oss.str();
-}
-
-
-
 }
