@@ -106,11 +106,11 @@ bool BitArray::isRange(int start, int end, bool value) {
 }
 
 vector<int>& BitArray::getBitArray() {
-  return bits;
+  return bits->values();
 }
 
 void BitArray::reverse() {
-  vector<int> newBits(bits.size());
+  ArrayRef<int> newBits(bits.size());
   int size = this->size;
   for (int i = 0; i < size; i++) {
     if (get(size - i - 1)) {

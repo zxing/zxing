@@ -30,7 +30,6 @@
 
 #include <zxing/common/Counted.h>
 
-
 namespace zxing {
 
 template<typename T> class Array : public Counted {

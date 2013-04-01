@@ -18,7 +18,8 @@
  * limitations under the License.
  */
 
-#include "OneDReader.h"
+#include <zxing/ZXing.h>
+#include <zxing/oned/OneDReader.h>
 #include <zxing/ReaderException.h>
 #include <zxing/oned/OneDResultPoint.h>
 #include <zxing/NotFoundException.h>

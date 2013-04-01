@@ -98,16 +98,16 @@ int test_image(Image& image, bool hybrid, string expected = "") {
     cell_result = result->getText()->getText();
     result_format = BarcodeFormat::barcodeFormatNames[result->getBarcodeFormat()];
     res = 0;
-  } catch (ReaderException e) {
+  } catch (ReaderException const& e) {
     cell_result = "zxing::ReaderException: " + string(e.what());
     res = -2;
-  } catch (zxing::IllegalArgumentException& e) {
+  } catch (zxing::IllegalArgumentException const& e) {
     cell_result = "zxing::IllegalArgumentException: " + string(e.what());
     res = -3;
-  } catch (zxing::Exception& e) {
+  } catch (zxing::Exception const& e) {
     cell_result = "zxing::Exception: " + string(e.what());
     res = -4;
-  } catch (std::exception& e) {
+  } catch (std::exception const& e) {
     cell_result = "std::exception: " + string(e.what());
     res = -5;
   }
@@ -162,16 +162,16 @@ int test_image_multi(Image& image, bool hybrid){
     Ref<BinaryBitmap> binary(new BinaryBitmap(binarizer));
     results = decodeMultiple(binary, hints);
     res = 0;
-  } catch (ReaderException e) {
+  } catch (ReaderException const& e) {
     cell_result = "zxing::ReaderException: " + string(e.what());
     res = -2;
-  } catch (zxing::IllegalArgumentException& e) {
+  } catch (zxing::IllegalArgumentException const& e) {
     cell_result = "zxing::IllegalArgumentException: " + string(e.what());
     res = -3;
-  } catch (zxing::Exception& e) {
+  } catch (zxing::Exception const& e) {
     cell_result = "zxing::Exception: " + string(e.what());
     res = -4;
-  } catch (std::exception& e) {
+  } catch (std::exception const& e) {
     cell_result = "std::exception: " + string(e.what());
     res = -5;
   }

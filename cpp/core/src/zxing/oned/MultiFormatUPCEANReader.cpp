@@ -17,8 +17,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#include "MultiFormatUPCEANReader.h"
 
+#include <zxing/ZXing.h>
+#include <zxing/oned/MultiFormatUPCEANReader.h>
 #include <zxing/oned/EAN13Reader.h>
 #include <zxing/oned/EAN8Reader.h>
 #include <zxing/oned/UPCEReader.h>
@@ -59,12 +60,10 @@ MultiFormatUPCEANReader::MultiFormatUPCEANReader(DecodeHints hints) : readers() 
 Ref<Result> MultiFormatUPCEANReader::decodeRow(int rowNumber, Ref<BitArray> row) {
   // Compute this location once and reuse it on multiple implementations
   UPCEANReader::Range startGuardPattern = UPCEANReader::findStartGuardPattern(row);
-  // std::cerr << "sgp " << startGuardPattern[0] << " " << startGuardPattern[1] << std::endl;
   for (int i = 0, e = readers.size(); i < e; i++) {
     Ref<UPCEANReader> reader = readers[i];
     Ref<Result> result;
     try {
-      // std::cerr << typeid(*reader).name() << " " << rowNumber << std::endl;
       result = reader->decodeRow(rowNumber, row, startGuardPattern);
     } catch (ReaderException const& re) {
       continue;

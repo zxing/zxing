@@ -96,7 +96,7 @@ void ReedSolomonTest::testTooManyErrors() {
     checkQRRSDecode(received);
     cout << "expected exception!\n";
     CPPUNIT_FAIL("should not happen!");
-  } catch (ReedSolomonException e) {
+  } catch (ReedSolomonException const& e) {
     // expected
   } catch (...) {
     CPPUNIT_FAIL("unexpected exception!");

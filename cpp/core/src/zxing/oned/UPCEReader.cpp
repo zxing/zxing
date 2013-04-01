@@ -15,7 +15,8 @@
  * limitations under the License.
  */
 
-#include "UPCEReader.h"
+#include <zxing/ZXing.h>
+#include <zxing/oned/UPCEReader.h>
 #include <zxing/ReaderException.h>
 
 using std::string;

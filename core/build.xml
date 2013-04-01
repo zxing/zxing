@@ -34,7 +34,8 @@
            debug="true"
            deprecation="true"
            fork="true"
-           includeantruntime="false">
+           includeantruntime="false"
+           encoding="UTF-8">
     </javac>
     <jar jarfile="core.jar" basedir="build"/>
   </target>
@@ -51,7 +52,8 @@
            destdir="build-test"
            debug="true"
            deprecation="true"
-           includeantruntime="false">
+           includeantruntime="false"
+           encoding="UTF-8">
       <classpath>
         <pathelement location="core.jar"/>
         <pathelement location="lib/junit-4.11.jar"/>

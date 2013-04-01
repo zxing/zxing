@@ -365,7 +365,7 @@ DecodedBitStreamParser::decode(ArrayRef<char> bytes,
         fc1InEffect = true;
       } else if (mode == &Mode::STRUCTURED_APPEND) {
         if (bits.available() < 16) {
-          throw new FormatException();
+          throw FormatException();
         }
         // not really supported; all we do is ignore it
         // Read next 8 bits (symbol sequence #) and 8 bits (parity data), then continue

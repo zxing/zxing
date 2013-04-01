@@ -44,7 +44,7 @@ public:
     RSS_EXPANDED,
     UPC_A,
     UPC_E,
-    UPC_EAN_EXTENSION,
+    UPC_EAN_EXTENSION
   };
 
   BarcodeFormat(Value v) : value(v) {}  

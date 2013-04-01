@@ -23,13 +23,14 @@
 #include <zxing/Exception.h>
 
 namespace zxing {
+  class ReaderException;
+}
 
-class ReaderException : public Exception {
+class zxing::ReaderException : public Exception {
 public:
-  ReaderException();
-  ReaderException(const char *msg);
-  ~ReaderException() throw();
+  ReaderException() throw() {}
+  ReaderException(char const* msg) throw() : Exception(msg) {}
+  ~ReaderException() throw() {}
 };
 
-}
 #endif // __READER_EXCEPTION_H__
