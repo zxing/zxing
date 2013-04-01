@@ -24,7 +24,7 @@ namespace zxing {
 
 CPPUNIT_TEST_SUITE_REGISTRATION(BitSourceTest);
 
-typedef unsigned char byte;
+typedef char byte;
 
 void BitSourceTest::testSource() {
   byte rawBytes[] = {(byte) 1, (byte) 2, (byte) 3, (byte) 4, (byte) 5};

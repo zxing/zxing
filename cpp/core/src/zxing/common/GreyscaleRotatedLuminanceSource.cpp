@@ -30,7 +30,7 @@ using zxing::GreyscaleRotatedLuminanceSource;
 // rotated.
 GreyscaleRotatedLuminanceSource::
 GreyscaleRotatedLuminanceSource(ArrayRef<char> greyData,
-                                int dataWidth, int /* dataHeight */,
+                                int dataWidth, int dataHeight,
                                 int left, int top,
                                 int width, int height) 
   : greyData_(greyData),

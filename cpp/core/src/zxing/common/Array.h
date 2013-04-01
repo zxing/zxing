@@ -129,6 +129,7 @@ public:
 #endif
     reset(a);
   }
+  /*
   ArrayRef(const Array<T> &a) :
       array_(0) {
 #ifdef DEBUG_COUNTING
@@ -136,6 +137,7 @@ public:
 #endif
     reset(const_cast<Array<T> *>(&a));
   }
+  */
   ArrayRef(const ArrayRef &other) :
       Counted(), array_(0) {
 #ifdef DEBUG_COUNTING
