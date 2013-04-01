@@ -96,17 +96,6 @@ public:
 #endif
     reset(o);
   }
-
-/*
-  explicit Ref(const T &o) :
-      object_(0) {
-#ifdef DEBUG_COUNTING
-    cout << "instantiating Ref " << this << " from reference\n";
-#endif
-    reset(const_cast<T *>(&o));
-  }
-*/
-
   Ref(const Ref &other) :
       object_(0) {
 #ifdef DEBUG_COUNTING

@@ -129,15 +129,6 @@ public:
 #endif
     reset(a);
   }
-  /*
-  ArrayRef(const Array<T> &a) :
-      array_(0) {
-#ifdef DEBUG_COUNTING
-    cout << "instantiating ArrayRef " << this << " from reference to Array " << (void *)&a << ":\n";
-#endif
-    reset(const_cast<Array<T> *>(&a));
-  }
-  */
   ArrayRef(const ArrayRef &other) :
       Counted(), array_(0) {
 #ifdef DEBUG_COUNTING
