@@ -225,20 +225,20 @@ public final class HighLevelEncodeTestCase extends Assert {
 
     //231 shifts to Base256 encodation
 
-    String visualized = encodeHighLevel("«äöüé»");
+    String visualized = encodeHighLevel("\u00ABäöüé\u00BB");
     assertEquals("231 44 108 59 226 126 1 104", visualized);
-    visualized = encodeHighLevel("«äöüéà»");
+    visualized = encodeHighLevel("\u00ABäöüéà\u00BB");
     assertEquals("231 51 108 59 226 126 1 141 254 129", visualized);
-    visualized = encodeHighLevel("«äöüéàá»");
+    visualized = encodeHighLevel("\u00ABäöüéàá\u00BB");
     assertEquals("231 44 108 59 226 126 1 141 36 147", visualized);
 
     visualized = encodeHighLevel(" 23£"); //ASCII only (for reference)
     assertEquals("33 153 235 36 129", visualized);
 
-    visualized = encodeHighLevel("«äöüé» 234"); //Mixed Base256 + ASCII
+    visualized = encodeHighLevel("\u00ABäöüé\u00BB 234"); //Mixed Base256 + ASCII
     assertEquals("231 51 108 59 226 126 1 104 99 153 53 129", visualized);
 
-    visualized = encodeHighLevel("«äöüé» 23£ 1234567890123456789");
+    visualized = encodeHighLevel("\u00ABäöüé\u00BB 23£ 1234567890123456789");
     assertEquals("231 55 108 59 226 126 1 104 99 10 161 167 185 142 164 186 208"
                      + " 220 142 164 186 208 58 129 59 209 104 254 150 45", visualized);
 
@@ -260,11 +260,11 @@ public final class HighLevelEncodeTestCase extends Assert {
 
   private static String createBinaryMessage(int len) {
     StringBuilder sb = new StringBuilder();
-    sb.append("«äöüéàá-");
+    sb.append("\u00ABäöüéàá-");
     for (int i = 0; i < len - 9; i++) {
       sb.append('\u00B7');
     }
-    sb.append('»');
+    sb.append('\u00BB');
     return sb.toString();
   }
 
