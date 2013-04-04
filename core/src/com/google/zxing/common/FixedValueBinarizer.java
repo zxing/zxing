@@ -20,6 +20,7 @@ import com.google.zxing.Binarizer;
 import com.google.zxing.LuminanceSource;
 import com.google.zxing.NotFoundException;
 
+<<<<<<< Upstream, based on origin/master
 /**
  * @author Guenther Grau
  */
@@ -44,5 +45,34 @@ public class FixedValueBinarizer extends HybridBinarizer {
   @Override
   public Binarizer createBinarizer(LuminanceSource source) {
     return new FixedValueBinarizer(source);
+=======
+public class FixedValueBinarizer extends GlobalHistogramBinarizer {
+
+  private int blackPoint = -1;
+  LuminanceSource source;
+
+  public FixedValueBinarizer(LuminanceSource source) {
+    super(source);
+    this.source = source;
+  }
+
+  // Does not sharpen the data, as this call is intended to only be used by 2D Readers.
+  @Override
+  public BitMatrix getBlackMatrix() throws NotFoundException {
+    return new AdjustableBitMatrix(source);
+  }
+
+  @Override
+  public Binarizer createBinarizer(LuminanceSource source) {
+    return new FixedValueBinarizer(source);
+  }
+
+  public int getBlackPoint() {
+    return blackPoint;
+  }
+
+  public void setBlackPoint(int blackPoint) {
+    this.blackPoint = blackPoint;
+>>>>>>> 84c0c47 work in progress for a new PDF417 decoder
   }
 }
