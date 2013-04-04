@@ -160,7 +160,7 @@ final class DecodeWorker implements Callable<Integer> {
       BinaryBitmap bitmap = new BinaryBitmap(new FixedValueBinarizer(source));
       if (config.isDumpBlackPoint()) {
         dumpBlackPoint(uri, image, bitmap);
-      }
+      } 
       Result result = new MultiFormatReader().decode(bitmap, hints);
       if (config.isBrief()) {
         System.out.println(uri.toString() + ": Success");
