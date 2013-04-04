@@ -16,6 +16,8 @@
 
 package com.google.zxing.pdf417;
 
+import java.util.Map;
+
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.ChecksumException;
@@ -25,13 +27,14 @@ import com.google.zxing.NotFoundException;
 import com.google.zxing.Reader;
 import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
+import com.google.zxing.common.AdjustableBitMatrix;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.DecoderResult;
-import com.google.zxing.common.DetectorResult;
+import com.google.zxing.common.TransformableBitMatrix;
 import com.google.zxing.pdf417.decoder.Decoder;
+import com.google.zxing.pdf417.decoder.PDF417ScanningDecoder;
 import com.google.zxing.pdf417.detector.Detector;
-
-import java.util.Map;
+import com.google.zxing.pdf417.detector.PDF417DetectorResult;
 
 /**
  * This implementation can detect and decode PDF417 codes in an image.
@@ -57,8 +60,7 @@ public final class PDF417Reader implements Reader {
   }
 
   @Override
-  public Result decode(BinaryBitmap image, Map<DecodeHintType,?> hints)
-      throws NotFoundException, FormatException, ChecksumException {
+  public Result decode(BinaryBitmap image, Map<DecodeHintType, ?> hints) throws NotFoundException, FormatException, ChecksumException {
     DecoderResult decoderResult;
     ResultPoint[] points;
     if (hints != null && hints.containsKey(DecodeHintType.PURE_BARCODE)) {
@@ -66,12 +68,81 @@ public final class PDF417Reader implements Reader {
       decoderResult = decoder.decode(bits);
       points = NO_POINTS;
     } else {
-      DetectorResult detectorResult = new Detector(image).detect();
-      decoderResult = decoder.decode(detectorResult.getBits());
-      points = detectorResult.getPoints();
+      decoderResult = null;
+      points = null;
+      for (int blackpoint = 2; blackpoint < 255; blackpoint += 1) {
+        ((AdjustableBitMatrix) image.getBlackMatrix()).setBlackpoint(blackpoint);
+        try {
+          PDF417DetectorResult detectorResult = new Detector(image).detect(hints);
+          points = detectorResult.getPoints();
+          //printPoints(points);
+          TransformableBitMatrix bitMatrix = detectorResult.getBits();
+          System.out.println("Trying Blackpoint: " + blackpoint);
+          decoderResult = PDF417ScanningDecoder.decode(bitMatrix, points[4], points[5], points[6], points[7], getMinCodewordWidth(points),
+              getMaxCodewordWidth(points));
+          System.out.println("Successful Blackpoint: " + blackpoint);
+          break;
+        } catch (FormatException e) {
+          //System.out.println("Format Exception");
+        } catch (ChecksumException e) {
+          //System.out.println("Checksum Exception");
+        } catch (NotFoundException e) {
+          //System.out.println("NotFound Exception");
+        } catch (Exception e) {
+          e.printStackTrace();
+          throw new RuntimeException(e);
+        }
+      }
+      if (decoderResult == null) {
+        throw NotFoundException.getNotFoundInstance();
+      }
     }
-    return new Result(decoderResult.getText(), decoderResult.getRawBytes(), points,
-        BarcodeFormat.PDF_417);
+    return new Result(decoderResult.getText(), decoderResult.getRawBytes(), points, BarcodeFormat.PDF_417);
+  }
+
+  private void printPoints(ResultPoint[] points) {
+    if (points == null) {
+      System.out.println("Points is null");
+      return;
+    }
+    int i = 0;
+    for (ResultPoint point : points) {
+      if (point == null) {
+        System.out.println("Point[" + i + "] is null");
+        i++;
+        continue;
+      }
+      System.out.println("Point[" + i + "]: " + (int) point.getX() + ";" + (int) point.getY());
+      i++;
+    }
+  }
+
+  private static int getMaxWidth(ResultPoint p1, ResultPoint p2) {
+    if (p1 == null || p2 == null) {
+      return 0;
+    }
+    return (int) Math.abs(p1.getX() - p2.getX());
+  }
+
+  private static int getMinWidth(ResultPoint p1, ResultPoint p2) {
+    if (p1 == null || p2 == null) {
+      return Integer.MAX_VALUE;
+    }
+    return (int) Math.abs(p1.getX() - p2.getX());
+  }
+
+  // note, this is not 100% correct. The width of the stop bar on the right side is wider than the normal codeword width (18 instead
+  // of 17 modules)
+  private static int getMaxCodewordWidth(ResultPoint[] p) {
+    return Math.max(Math.max(getMaxWidth(p[0], p[4]), getMaxWidth(p[6], p[2]) * 17 / 18),
+        Math.max(getMaxWidth(p[1], p[5]), getMaxWidth(p[7], p[3]) * 17 / 18));
+  }
+
+  // note, this is not 100% correct. The width of the stop bar on the right side is wider than the normal codeword width (18 instead
+  // of 17 modules)
+  private static int getMinCodewordWidth(ResultPoint[] p) {
+    return Math.min(Math.min(getMinWidth(p[0], p[4]), getMinWidth(p[6], p[2]) * 17 / 18),
+        Math.min(getMinWidth(p[1], p[5]), getMinWidth(p[7], p[3]) * 17 / 18));
   }
 
   @Override

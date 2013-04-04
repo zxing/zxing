@@ -25,7 +25,7 @@ import java.util.List;
  *
  * @author Sean Owen
  */
-public final class DecoderResult {
+public class DecoderResult {
 
   private final byte[] rawBytes;
   private final String text;

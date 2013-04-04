@@ -14,59 +14,50 @@
  * limitations under the License.
  */
 
-package com.google.zxing.common;
+package com.google.zxing.pdf417.detector;
 
 import com.google.zxing.NotFoundException;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.common.DefaultGridSampler;
+import com.google.zxing.common.PerspectiveTransform;
 
 /**
- * @author Sean Owen
+ * @author Guenther Grau
  */
-public class DefaultGridSampler extends GridSampler {
+public final class PDF417GridSampler extends DefaultGridSampler {
 
   @Override
-  public BitMatrix sampleGrid(BitMatrix image,
-                              int dimensionX,
-                              int dimensionY,
-                              float p1ToX, float p1ToY,
-                              float p2ToX, float p2ToY,
-                              float p3ToX, float p3ToY,
-                              float p4ToX, float p4ToY,
-                              float p1FromX, float p1FromY,
-                              float p2FromX, float p2FromY,
-                              float p3FromX, float p3FromY,
-                              float p4FromX, float p4FromY) throws NotFoundException {
+  public BitMatrix sampleGrid(BitMatrix image, int dimensionX, int dimensionY, float p1ToX, float p1ToY, float p2ToX, float p2ToY,
+      float p3ToX, float p3ToY, float p4ToX, float p4ToY, float p1FromX, float p1FromY, float p2FromX, float p2FromY, float p3FromX,
+      float p3FromY, float p4FromX, float p4FromY) throws NotFoundException {
 
-    PerspectiveTransform transform = PerspectiveTransform.quadrilateralToQuadrilateral(
-        p1ToX, p1ToY, p2ToX, p2ToY, p3ToX, p3ToY, p4ToX, p4ToY,
-        p1FromX, p1FromY, p2FromX, p2FromY, p3FromX, p3FromY, p4FromX, p4FromY);
+    PerspectiveTransform transform = new PDF417PerspectiveTransform(p1ToX, p1ToY, p3ToX, p3ToY, p1FromX, p1FromY, p2FromX, p2FromY,
+        p3FromX, p3FromY, p4FromX, p4FromY);
 
     return sampleGrid(image, dimensionX, dimensionY, transform);
   }
 
   @Override
-  public BitMatrix sampleGrid(BitMatrix image,
-                              int dimensionX,
-                              int dimensionY,
-                              PerspectiveTransform transform) throws NotFoundException {
+  public BitMatrix sampleGrid(BitMatrix image, int dimensionX, int dimensionY, PerspectiveTransform transform) throws NotFoundException {
     if (dimensionX <= 0 || dimensionY <= 0) {
-      throw NotFoundException.getNotFoundInstance();      
+      throw NotFoundException.getNotFoundInstance();
     }
     BitMatrix bits = new BitMatrix(dimensionX, dimensionY);
-    float[] points = new float[dimensionX << 1];
+    //bits.setModuleWidth(image.getModuleWidth());
+    final int coordinateCount = dimensionX << 1;
+    float[] points = new float[coordinateCount];
     for (int y = 0; y < dimensionY; y++) {
-      int max = points.length;
-      float iValue = (float) y + 0.5f;
-      for (int x = 0; x < max; x += 2) {
-        points[x] = (float) (x >> 1) + 0.5f;
-        points[x + 1] = iValue;
+      for (int x = 0; x < coordinateCount; x += 2) {
+        points[x] = x >> 1;
+        points[x + 1] = y;
       }
       transform.transformPoints(points);
       // Quick check to see if points transformed to something inside the image;
       // sufficient to check the endpoints
       checkAndNudgePoints(image, points);
       try {
-        for (int x = 0; x < max; x += 2) {
-          if (image.get((int) points[x], (int) points[x + 1])) {
+        for (int x = 0; x < coordinateCount; x += 2) {
+          if (image.get(Math.round(points[x]), Math.round(points[x + 1]))) {
             // Black(-ish) pixel
             bits.set(x >> 1, y);
           }
@@ -79,6 +70,7 @@ public class DefaultGridSampler extends GridSampler {
         // This results in an ugly runtime exception despite our clever checks above -- can't have
         // that. We could check each point's coordinates but that feels duplicative. We settle for
         // catching and wrapping ArrayIndexOutOfBoundsException.
+        aioobe.printStackTrace();
         throw NotFoundException.getNotFoundInstance();
       }
     }

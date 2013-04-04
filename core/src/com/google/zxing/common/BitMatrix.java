@@ -31,12 +31,16 @@ package com.google.zxing.common;
  * @author Sean Owen
  * @author dswitkin@google.com (Daniel Switkin)
  */
-public final class BitMatrix {
+public class BitMatrix {
 
-  private final int width;
-  private final int height;
-  private final int rowSize;
-  private final int[] bits;
+  private int width;
+  private int height;
+  private int rowSize;
+  private int[] bits;
+
+  BitMatrix() {
+
+  }
 
   // A helper to construct a square matrix.
   public BitMatrix(int dimension) {

@@ -32,7 +32,7 @@ public final class Decoder {
 
   private static final int MAX_ERRORS = 3;
   private static final int MAX_EC_CODEWORDS = 512;
-  private final ErrorCorrection errorCorrection;
+  private static ErrorCorrection errorCorrection;
 
   public Decoder() {
     errorCorrection = new ErrorCorrection();
@@ -82,7 +82,7 @@ public final class Decoder {
     verifyCodewordCount(codewords, numECCodewords);
 
     // Decode the codewords
-    return DecodedBitStreamParser.decode(codewords);
+    return DecodedBitStreamParser.decode(codewords, String.valueOf(ecLevel), erasures.length);
   }
 
   /**
@@ -91,7 +91,7 @@ public final class Decoder {
    * @param codewords
    * @return an index to the first data codeword.
    */
-  private static void verifyCodewordCount(int[] codewords, int numECCodewords) throws FormatException {
+  public static void verifyCodewordCount(int[] codewords, int numECCodewords) throws FormatException {
     if (codewords.length < 4) {
       // Codeword array size should be at least 4 allowing for
       // Count CW, At least one Data CW, Error Correction CW, Error Correction CW
@@ -123,7 +123,7 @@ public final class Decoder {
    * @param numECCodewords number of error correction codewards that were available in codewords
    * @throws ChecksumException if error correction fails
    */
-  private void correctErrors(int[] codewords,
+  public static void correctErrors(int[] codewords,
                              int[] erasures,
                              int numECCodewords) throws ChecksumException {
     if (erasures.length > numECCodewords / 2 + MAX_ERRORS ||

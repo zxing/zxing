@@ -23,18 +23,22 @@ package com.google.zxing.common;
  *
  * @author Sean Owen
  */
-public final class PerspectiveTransform {
+public class PerspectiveTransform {
 
-  private final float a11;
-  private final float a12;
-  private final float a13;
-  private final float a21;
-  private final float a22;
-  private final float a23;
-  private final float a31;
-  private final float a32;
-  private final float a33;
+  private float a11;
+  private float a12;
+  private float a13;
+  private float a21;
+  private float a22;
+  private float a23;
+  private float a31;
+  private float a32;
+  private float a33;
 
+  protected PerspectiveTransform() {
+    
+  }
+  
   private PerspectiveTransform(float a11, float a21, float a31,
                                float a12, float a22, float a32,
                                float a13, float a23, float a33) {
