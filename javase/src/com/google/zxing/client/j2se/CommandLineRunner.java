@@ -43,6 +43,7 @@ import java.util.regex.Pattern;
  */
 public final class CommandLineRunner {
 
+  private static final String ARGUMENT_FORMAT = "--format=";
   private static final Pattern COMMA = Pattern.compile(",");
 
   private CommandLineRunner() {
@@ -80,6 +81,8 @@ public final class CommandLineRunner {
           crop[i] = Integer.parseInt(tokens[i]);
         }
         config.setCrop(crop);
+      } else if (arg.startsWith(ARGUMENT_FORMAT)) {
+        config.setFormat(COMMA.split(arg.substring(ARGUMENT_FORMAT.length())));
       } else if (arg.startsWith("-")) {
         System.err.println("Unknown command line option " + arg);
         printUsage();
@@ -130,7 +133,7 @@ public final class CommandLineRunner {
           if (filename.startsWith(".")) {
             continue;
           }
-          // Recur on nested directories if requested, otherwise skip them.
+          // Recurse on nested directories if requested, otherwise skip them.
           if (singleFile.isDirectory()) {
             if (config.isRecursive()) {
               addArgumentToInputs(singleFile.getAbsolutePath(), config, inputs);
@@ -152,28 +155,34 @@ public final class CommandLineRunner {
   }
 
   // Manually turn on all formats, even those not yet considered production quality.
-  private static Map<DecodeHintType,?> buildHints(Config config) {
-    Collection<BarcodeFormat> vector = new ArrayList<BarcodeFormat>(8);
-    vector.add(BarcodeFormat.UPC_A);
-    vector.add(BarcodeFormat.UPC_E);
-    vector.add(BarcodeFormat.EAN_13);
-    vector.add(BarcodeFormat.EAN_8);
-    vector.add(BarcodeFormat.RSS_14);
-    vector.add(BarcodeFormat.RSS_EXPANDED);
-    if (!config.isProductsOnly()) {
-      vector.add(BarcodeFormat.CODE_39);
-      vector.add(BarcodeFormat.CODE_93);
-      vector.add(BarcodeFormat.CODE_128);
-      vector.add(BarcodeFormat.ITF);
-      vector.add(BarcodeFormat.QR_CODE);
-      vector.add(BarcodeFormat.DATA_MATRIX);
-      vector.add(BarcodeFormat.AZTEC);
-      vector.add(BarcodeFormat.PDF_417);
-      vector.add(BarcodeFormat.CODABAR);
-      vector.add(BarcodeFormat.MAXICODE);
-    }
+  private static Map<DecodeHintType, ?> buildHints(Config config) {
     Map<DecodeHintType, Object> hints = new EnumMap<DecodeHintType, Object>(DecodeHintType.class);
-    hints.put(DecodeHintType.POSSIBLE_FORMATS, vector);
+    Collection<BarcodeFormat> barcodeFormats = new ArrayList<BarcodeFormat>(8);
+    if (config.getFormat() != null) {
+      for (String format : config.getFormat()) {
+        barcodeFormats.add(BarcodeFormat.valueOf(format));
+      }
+    } else {
+      barcodeFormats.add(BarcodeFormat.UPC_A);
+      barcodeFormats.add(BarcodeFormat.UPC_E);
+      barcodeFormats.add(BarcodeFormat.EAN_13);
+      barcodeFormats.add(BarcodeFormat.EAN_8);
+      barcodeFormats.add(BarcodeFormat.RSS_14);
+      barcodeFormats.add(BarcodeFormat.RSS_EXPANDED);
+      if (!config.isProductsOnly()) {
+        barcodeFormats.add(BarcodeFormat.CODE_39);
+        barcodeFormats.add(BarcodeFormat.CODE_93);
+        barcodeFormats.add(BarcodeFormat.CODE_128);
+        barcodeFormats.add(BarcodeFormat.ITF);
+        barcodeFormats.add(BarcodeFormat.QR_CODE);
+        barcodeFormats.add(BarcodeFormat.DATA_MATRIX);
+        barcodeFormats.add(BarcodeFormat.AZTEC);
+        barcodeFormats.add(BarcodeFormat.PDF_417);
+        barcodeFormats.add(BarcodeFormat.CODABAR);
+        barcodeFormats.add(BarcodeFormat.MAXICODE);
+      }
+    }
+    hints.put(DecodeHintType.POSSIBLE_FORMATS, barcodeFormats);
     if (config.isTryHarder()) {
       hints.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
     }
@@ -196,6 +205,11 @@ public final class CommandLineRunner {
     System.err.println("  --brief: Only output one line per file, omitting the contents");
     System.err.println("  --recursive: Descend into subdirectories");
     System.err.println("  --crop=left,top,width,height: Only examine cropped region of input image(s)");
+    StringBuilder builder = new StringBuilder("  --format=barcodeFormat[|,barcodeFormat] where barcodeFormat is any of the following\n");
+    for (BarcodeFormat format : BarcodeFormat.values()) {
+      builder.append(format).append(',');
+    }
+    builder.setLength(builder.length() - 1);
+    System.err.println(builder);
   }
-
 }

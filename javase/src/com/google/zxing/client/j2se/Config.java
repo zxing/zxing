@@ -32,6 +32,7 @@ final class Config {
   private boolean brief;
   private boolean recursive;
   private int[] crop;
+  private String[] format;
 
   Map<DecodeHintType,?> getHints() {
     return hints;
@@ -111,6 +112,14 @@ final class Config {
 
   void setCrop(int[] crop) {
     this.crop = crop;
+  }
+
+  public String[] getFormat() {
+    return format;
+  }
+
+  public void setFormat(String[] format) {
+    this.format = format;
   }
 
 }
