@@ -31,6 +31,7 @@ import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.multi.GenericMultipleBarcodeReader;
 
 import javax.imageio.ImageIO;
+
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -92,7 +93,6 @@ final class DecodeWorker implements Callable<Integer> {
     }
     return successful;
   }
-
 
   private static void dumpResult(File input, Result result) throws IOException {
     String name = input.getCanonicalPath();
@@ -171,7 +171,9 @@ final class DecodeWorker implements Callable<Integer> {
         System.out.println("Found " + result.getResultPoints().length + " result points.");
         for (int i = 0; i < result.getResultPoints().length; i++) {
           ResultPoint rp = result.getResultPoints()[i];
-          System.out.println("  Point " + i + ": (" + rp.getX() + ',' + rp.getY() + ')');
+          if (rp != null) {
+            System.out.println("  Point " + i + ": (" + rp.getX() + ',' + rp.getY() + ')');
+          }
         }
       }
 
