@@ -1,7 +1,7 @@
 package com.google.zxing.pdf417.decoder;
  
 public class PDF417CodewordDecoder {
-
+ 
   static AdjustmentResults adjustBitCount(int[] moduleBitCount) {
     return adjustBitCountFloat(moduleBitCount);
   }
