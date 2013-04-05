@@ -15,7 +15,7 @@
  */
 
 package com.google.zxing.pdf417;
- 
+
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.ChecksumException;
