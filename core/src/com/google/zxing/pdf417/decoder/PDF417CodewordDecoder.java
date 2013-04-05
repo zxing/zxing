@@ -4,20 +4,11 @@ import com.google.zxing.pdf417.PDF417Common;
 
 public class PDF417CodewordDecoder {
 
-  // TODO add testcases
-  //adjustBitCount(new int[] { 21, 5, 3, 4, 3, 12, 11, 4 });
-  //adjustBitCount(new int[] { 7, 4, 3, 5, 2, 5, 18, 19 });
-  //adjustBitCount(new int[] { 7, 2, 1, 2, 1, 3, 8, 1 });
-  //adjustBitCount(new int[] { 6, 1, 7, 2, 8, 1, 2, 1 });
-  //adjustBitCount(new int[] { 3, 5, 19, 5, 3, 4, 6, 15 });
-
-  public static void main(String[] args) {
-    adjustBitCount(new int[] { 20, 5, 3, 4, 3, 8, 9, 9 });
-  }
-
   static boolean adjustBitCount(int[] moduleBitCount) {
     // TODO might be worthwhile keeping track of how many modules don't have the correct bits
-    // int[] parameter = Arrays.copyOf(moduleBitCount, moduleBitCount.length);
+    //int[] parameter = Arrays.copyOf(moduleBitCount, moduleBitCount.length);
+    // TODO might be worthwhile remembering which columns had bits added or removed. This information
+    // could be used to remove bits from neighbor modules if required
     int bitCountSum = PDF417Common.getBitCountSum(moduleBitCount);
     int bitCountDifference = bitCountSum % PDF417Common.MODULES_IN_CODEWORD;
     int bitsPerModule = bitCountSum / PDF417Common.MODULES_IN_CODEWORD;
@@ -27,7 +18,8 @@ public class PDF417CodewordDecoder {
     if (checkBitCountDifference(moduleBitCount, bitCountDifference, bitsPerModule)) {
       return true;
     }
-    if (bitsPerModule == 1 || (bitCountDifference > 5) && (bitCountDifference < 13)) {
+    // TODO is this guaranteed to always stop eventually?
+    if (bitsPerModule == 1 || (bitCountDifference > 4) && (bitCountDifference < 13)) {
       for (int i = 0; i < moduleBitCount.length; i++) {
         moduleBitCount[i] <<= 1;
         //moduleBitCount[i] *= 5;
@@ -180,7 +172,8 @@ public class PDF417CodewordDecoder {
     throw new RuntimeException();
   }
 
-  private static boolean adjustWholeModule(int[] moduleBitCount, int bitsPerModule, boolean takeAway) {
+  private static boolean adjustWholeModule(int[] moduleBitCount, int bitsPerModule,
+                                           boolean takeAway) {
     int index = -1;
     int biggestModuleSize = -1;
     for (int i = 0; i < moduleBitCount.length; i++) {
@@ -196,7 +189,8 @@ public class PDF417CodewordDecoder {
     return false;
   }
 
-  private static boolean adjustBiggestModule(int[] moduleBitCount, int bitsPerModule, boolean takeAway) {
+  private static boolean adjustBiggestModule(int[] moduleBitCount, int bitsPerModule,
+                                             boolean takeAway) {
     int index = -1;
     int biggestModuleSize = -1;
     int moduleDifference = -1;
@@ -216,13 +210,15 @@ public class PDF417CodewordDecoder {
       }
     }
     if (index != -1) {
-      moduleBitCount[index] += takeAway ? -moduleDifference : bitsPerModule - moduleDifference;
+      moduleBitCount[index] += takeAway ? -moduleDifference : bitsPerModule -
+          moduleDifference;
       return true;
     }
     return false;
   }
 
-  private static boolean adjustHalfSizeModule(int[] moduleBitCount, int bitsPerModule, boolean takeAway) {
+  private static boolean adjustHalfSizeModule(int[] moduleBitCount, int bitsPerModule,
+                                              boolean takeAway) {
     int index = -1;
     int biggestModuleSize = -1;
     for (int i = 0; i < moduleBitCount.length; i++) {
@@ -254,7 +250,8 @@ public class PDF417CodewordDecoder {
     return bitCountSum - bitsPerModule * PDF417Common.MODULES_IN_CODEWORD;
   }
 
-  private static void adjustSmallDifference(int[] moduleBitCount, int bitsPerModule, boolean takeAway) {
+  private static void adjustSmallDifference(int[] moduleBitCount, int bitsPerModule,
+                                            boolean takeAway) {
     if (takeAway) {
       shrinkModulesWithSmallDifference(moduleBitCount, bitsPerModule);
     } else {
@@ -262,7 +259,8 @@ public class PDF417CodewordDecoder {
     }
   }
 
-  private static boolean checkBitCountDifference(int[] moduleBitCount, int bitCountDifference, int bitsPerModule) {
+  private static boolean checkBitCountDifference(int[] moduleBitCount,
+                                                 int bitCountDifference, int bitsPerModule) {
     int bitCountSum = 0;
     if (bitCountDifference == 0) {
       for (int i = 0; i < moduleBitCount.length; i++) {
@@ -282,7 +280,8 @@ public class PDF417CodewordDecoder {
     return false;
   }
 
-  private static void enlargeModulesWithSmallDifference(int[] moduleBitCount, int bitsPerModule) {
+  private static void enlargeModulesWithSmallDifference(int[] moduleBitCount,
+                                                        int bitsPerModule) {
     for (int i = 0; i < moduleBitCount.length; i++) {
       int bitDifference = moduleBitCount[i] % bitsPerModule;
       if (bitDifference == 0) {
@@ -296,10 +295,15 @@ public class PDF417CodewordDecoder {
     }
   }
 
-  private static void shrinkModulesWithSmallDifference(int[] moduleBitCount, int bitsPerModule) {
+  private static void shrinkModulesWithSmallDifference(int[] moduleBitCount,
+                                                       int bitsPerModule) {
     for (int i = 0; i < moduleBitCount.length; i++) {
       int bitDifference = moduleBitCount[i] % bitsPerModule;
       if (bitDifference == 0) {
+        continue;
+      }
+      if (moduleBitCount[i] < bitsPerModule) {
+        moduleBitCount[i] = bitsPerModule;
         continue;
       }
       if ((bitDifference << 1) < bitsPerModule) {
