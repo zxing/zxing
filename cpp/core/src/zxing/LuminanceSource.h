@@ -43,13 +43,13 @@ class LuminanceSource : public Counted {
   virtual ArrayRef<char> getMatrix() const = 0;
 
   virtual bool isCropSupported() const;
-  virtual Ref<LuminanceSource> crop(int left, int top, int width, int height);
+  virtual Ref<LuminanceSource> crop(int left, int top, int width, int height) const;
 
   virtual bool isRotateSupported() const;
 
-  static Ref<LuminanceSource> invert(Ref<LuminanceSource> const&);
-
-  virtual Ref<LuminanceSource> rotateCounterClockwise();
+  virtual Ref<LuminanceSource> invert() const;
+  
+  virtual Ref<LuminanceSource> rotateCounterClockwise() const;
 
   operator std::string () const;
 };
