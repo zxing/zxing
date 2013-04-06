@@ -30,13 +30,14 @@
   if (!url) return NO;
   if ([[url scheme] isEqualToString:@"zxing"]) {
     if ([[url host] isEqualToString:@"scan"]) {
-      NSArray *pairs = [[url query] componentsSeparatedByString:@"&amp;"];
+      NSArray *pairs = [[url query] componentsSeparatedByString:@"&"];
         
       for (NSString *pair in pairs) {
         NSArray *elements = [pair componentsSeparatedByString:@"="];
         NSString *key = [[elements objectAtIndex:0] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         NSString *val = [[elements objectAtIndex:1] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-            
+        // NSLog(@"%@ => %@\n", key, val);
+
         if ([key isEqualToString:@"ret"]) {
           [[NSUserDefaults standardUserDefaults] setObject:val forKey:@"returnURL"];
           [[NSUserDefaults standardUserDefaults] synchronize];
