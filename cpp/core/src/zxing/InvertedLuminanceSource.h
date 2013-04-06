@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 
+#include <zxing/ZXing.h>
 #include <zxing/LuminanceSource.h>
 
 namespace zxing {
@@ -31,6 +32,15 @@ public:
 
   ArrayRef<char> getRow(int y, ArrayRef<char> row) const;
   ArrayRef<char> getMatrix() const;
+
+  boolean isCropSupported() const;
+  Ref<LuminanceSource> crop(int left, int top, int width, int height) const;
+
+  boolean isRotateSupported() const;
+
+  virtual Ref<LuminanceSource> invert() const;
+
+  Ref<LuminanceSource> rotateCounterClockwise() const;
 };
 
 }

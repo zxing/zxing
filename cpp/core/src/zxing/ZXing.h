@@ -26,6 +26,7 @@
 namespace zxing {
 
 typedef char byte;
+typedef bool boolean;
 
 }
 
