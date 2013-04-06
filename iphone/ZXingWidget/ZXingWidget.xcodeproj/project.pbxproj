@@ -141,6 +141,8 @@
 		3B27C5E2144735E6005157C4 /* CharacterSetECI.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B27C5DC144735E6005157C4 /* CharacterSetECI.h */; };
 		3B27C5E5144735E6005157C4 /* StringUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B27C5DF144735E6005157C4 /* StringUtils.cpp */; };
 		3B27C5E6144735E6005157C4 /* StringUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B27C5E0144735E6005157C4 /* StringUtils.h */; };
+		3B6AA66C1710C34600DF84C0 /* InvertedLuminanceSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B6AA66A1710C34600DF84C0 /* InvertedLuminanceSource.cpp */; };
+		3B6AA66D1710C34600DF84C0 /* InvertedLuminanceSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B6AA66B1710C34600DF84C0 /* InvertedLuminanceSource.h */; };
 		3B6C805717090ED300D22AB2 /* CodaBarReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B6C805317090ED300D22AB2 /* CodaBarReader.cpp */; };
 		3B6C805817090ED300D22AB2 /* CodaBarReader.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B6C805417090ED300D22AB2 /* CodaBarReader.h */; };
 		3B6C805917090ED300D22AB2 /* Code93Reader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B6C805517090ED300D22AB2 /* Code93Reader.cpp */; };
@@ -435,6 +437,8 @@
 		3B27C5DC144735E6005157C4 /* CharacterSetECI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CharacterSetECI.h; sourceTree = "<group>"; };
 		3B27C5DF144735E6005157C4 /* StringUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StringUtils.cpp; sourceTree = "<group>"; };
 		3B27C5E0144735E6005157C4 /* StringUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StringUtils.h; sourceTree = "<group>"; };
+		3B6AA66A1710C34600DF84C0 /* InvertedLuminanceSource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InvertedLuminanceSource.cpp; sourceTree = "<group>"; };
+		3B6AA66B1710C34600DF84C0 /* InvertedLuminanceSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InvertedLuminanceSource.h; sourceTree = "<group>"; };
 		3B6C805317090ED300D22AB2 /* CodaBarReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CodaBarReader.cpp; sourceTree = "<group>"; };
 		3B6C805417090ED300D22AB2 /* CodaBarReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CodaBarReader.h; sourceTree = "<group>"; };
 		3B6C805517090ED300D22AB2 /* Code93Reader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Code93Reader.cpp; sourceTree = "<group>"; };
@@ -754,6 +758,8 @@
 		E53458B411987396000CB77F /* zxing */ = {
 			isa = PBXGroup;
 			children = (
+				3B6AA66A1710C34600DF84C0 /* InvertedLuminanceSource.cpp */,
+				3B6AA66B1710C34600DF84C0 /* InvertedLuminanceSource.h */,
 				3B6C805B17090EFC00D22AB2 /* ChecksumException.cpp */,
 				3B6C805C17090EFC00D22AB2 /* ChecksumException.h */,
 				3B248F8314EF3A980065F0DA /* aztec */,
@@ -1226,6 +1232,7 @@
 				3B6C805817090ED300D22AB2 /* CodaBarReader.h in Headers */,
 				3B6C805A17090ED300D22AB2 /* Code93Reader.h in Headers */,
 				3B6C805E17090EFC00D22AB2 /* ChecksumException.h in Headers */,
+				3B6AA66D1710C34600DF84C0 /* InvertedLuminanceSource.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1474,6 +1481,7 @@
 				3B6C805717090ED300D22AB2 /* CodaBarReader.cpp in Sources */,
 				3B6C805917090ED300D22AB2 /* Code93Reader.cpp in Sources */,
 				3B6C805D17090EFC00D22AB2 /* ChecksumException.cpp in Sources */,
+				3B6AA66C1710C34600DF84C0 /* InvertedLuminanceSource.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

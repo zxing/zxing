@@ -78,7 +78,7 @@
 }
 
 - (id)initWithBuffer:(CVPixelBufferRef)buffer {
-  self = [super initWithNative:new zxing::CGImageLuminanceSource(buffer)];
+  self = [super initWithNative:zxing::CGImageLuminanceSource::create(buffer)];
   return self;
 }
 
@@ -87,13 +87,5 @@
   zxing::CGImageLuminanceSource* typed = (zxing::CGImageLuminanceSource*)source;
   return typed->image();
 }
-
-/*
-- (CGImageRef)createImageWithWidth:(size_t)width andHeight:(size_t)height {
-  zxing::LuminanceSource* source = native;
-  zxing::CGImageLuminanceSource* typed = (zxing::CGImageLuminanceSource*)source;
-  return typed->createImage(width, height);
-}
-*/
 
 @end

@@ -21,14 +21,12 @@
 namespace zxing {
 
 class CGImageLuminanceSource : public LuminanceSource {
-
  private:
+  typedef LuminanceSource Super;
   CGImageRef image_;
   CFDataRef data_;
   int left_;
   int top_;
-  int width_;
-  int height_;
   int dataWidth_;
   int dataHeight_;
   int bytesPerRow_;
@@ -42,12 +40,13 @@ class CGImageLuminanceSource : public LuminanceSource {
                                           int width,
                                           int height);
 
+  static CGImageLuminanceSource* create(CVPixelBufferRef buffer);
+
   CGImageLuminanceSource(CVPixelBufferRef buffer,
                          int left,
                          int top,
                          int width,
                          int height);
-  CGImageLuminanceSource(CVPixelBufferRef buffer);
 
   CGImageLuminanceSource(CGImageRef image,
                          int left,
@@ -60,27 +59,12 @@ class CGImageLuminanceSource : public LuminanceSource {
   CGImageRef image() { return image_; }
   CGImageRef image(size_t width, size_t height);
 
-  ArrayRef<char> getRow(int y, ArrayRef<char> row);
-  ArrayRef<char> getMatrix();
-
-  bool isRotateSupported() const {
-    return true;
-  }
-
-  int getWidth() const {
-    return width_;
-  }
-
-  int getHeight() const {
-    return height_;
-  }
-
-  Ref<LuminanceSource> rotateCounterClockwise();
+  ArrayRef<char> getRow(int y, ArrayRef<char> row) const;
+  ArrayRef<char> getMatrix() const;
 
  private:
-  
   void init(CGImageRef image);
-  void init(CGImageRef image, int left, int top, int width, int height);
+  void init(CGImageRef image, int left, int top);
 };
 
 } /* namespace */

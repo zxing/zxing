@@ -45,8 +45,7 @@ public:
     return true;
   }
 
-  Ref<LuminanceSource> rotateCounterClockwise();
-
+  Ref<LuminanceSource> rotateCounterClockwise() const;
 };
 
 }
