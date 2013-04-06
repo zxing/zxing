@@ -23,6 +23,12 @@
 #define ZXING_DEBUG 0
 #endif
 
+namespace zxing {
+
+typedef char byte;
+
+}
+
 #if ZXING_DEBUG
 
 #include <iostream>
@@ -40,10 +46,8 @@ using std::ostream;
 #include <sys/time.h>
 
 namespace zxing {
-  class DebugTimer;
-}
 
-class zxing::DebugTimer {
+class DebugTimer {
 public:
   DebugTimer(char const* string_) : chars(string_) {
     gettimeofday(&start, 0);
@@ -79,6 +83,8 @@ private:
   std::string string;
   struct timeval start;
 };
+
+}
 
 #define ZXING_TIME(string) DebugTimer __timer__ (string)
 #define ZXING_TIME_MARK(string) __timer__.mark(string)

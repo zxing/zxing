@@ -20,16 +20,15 @@
 
 #include <sstream>
 #include <zxing/LuminanceSource.h>
+#include <zxing/InvertedLuminanceSource.h>
 #include <zxing/common/IllegalArgumentException.h>
 
 using zxing::Ref;
 using zxing::LuminanceSource;
 
-LuminanceSource::LuminanceSource() {
-}
+LuminanceSource::LuminanceSource(int width_, int height_) :width(width_), height(height_) {}
 
-LuminanceSource::~LuminanceSource() {
-}
+LuminanceSource::~LuminanceSource() {}
 
 bool LuminanceSource::isCropSupported() const {
   return false;
@@ -51,7 +50,7 @@ Ref<LuminanceSource> LuminanceSource::rotateCounterClockwise() {
   throw IllegalArgumentException("This luminance source does not support rotation.");
 }
 
-LuminanceSource::operator std::string() {
+LuminanceSource::operator std::string() const {
   ArrayRef<char> row;
   std::ostringstream oss;
   for (int y = 0; y < getHeight(); y++) {
@@ -73,4 +72,8 @@ LuminanceSource::operator std::string() {
     oss << '\n';
   }
   return oss.str();
+}
+
+Ref<LuminanceSource> LuminanceSource::invert(Ref<LuminanceSource> const& that) {
+  return Ref<LuminanceSource>(new InvertedLuminanceSource(that));
 }
