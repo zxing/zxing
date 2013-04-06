@@ -116,7 +116,20 @@
   [[NSUserDefaults standardUserDefaults] setObject:resultString forKey:@"lastScan"];
   NSString *returnUrl = [[NSUserDefaults standardUserDefaults] stringForKey:@"returnURL"];
   if (returnUrl != nil) {
-    NSURL *ourURL = [NSURL URLWithString:[returnUrl stringByReplacingOccurrencesOfString:@"{CODE}" withString:resultString]];
+    resultString = (NSString*)
+        CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
+                                                (CFStringRef)resultString,
+                                                NULL,
+                                                (CFStringRef)@"!*'();:@&=+$,/?%#[]",
+                                                kCFStringEncodingUTF8);
+
+    NSURL *ourURL =
+        [NSURL URLWithString:[returnUrl stringByReplacingOccurrencesOfString:@"{CODE}" withString:resultString]];
+
+    CFRelease(resultString);
+
+    // NSLog(@"%@", ourURL);
+
     [[UIApplication sharedApplication] openURL:ourURL];
     return;
   }
