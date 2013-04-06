@@ -143,8 +143,29 @@
   [self performResultAction];
 }
 
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+  NSString* returnUrl = [[NSUserDefaults standardUserDefaults] stringForKey:@"returnURL"];
+  // NSLog(@"%@ %d", returnUrl, buttonIndex);
+  if (returnUrl != nil && buttonIndex != 0) {
+    NSURL *ourURL =
+        [NSURL URLWithString:[returnUrl stringByReplacingOccurrencesOfString:@"{CODE}" withString:@""]];
+    // NSLog(@"%@ %@", ourURL, returnUrl);
+    [[UIApplication sharedApplication] openURL:ourURL];
+  }
+}
+
 - (void)zxingControllerDidCancel:(ZXingWidgetController*)controller {
   [self dismissModalViewControllerAnimated:YES];
+  NSString *returnUrl = [[NSUserDefaults standardUserDefaults] stringForKey:@"returnURL"];
+  if (returnUrl != nil) {
+    UIAlertView* alert = [[UIAlertView alloc]
+                           initWithTitle:@"Return to website?"
+                                 message:nil
+                                delegate:self
+                           cancelButtonTitle:@"Cancel"
+                           otherButtonTitles:@"Return", nil];
+    [alert show];
+  }
 }
 
 - (void)confirmAndPerformAction:(ResultAction *)action {
