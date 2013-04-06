@@ -172,8 +172,7 @@ public class PDF417CodewordDecoder {
     throw new RuntimeException();
   }
 
-  private static boolean adjustWholeModule(int[] moduleBitCount, int bitsPerModule,
-                                           boolean takeAway) {
+  private static boolean adjustWholeModule(int[] moduleBitCount, int bitsPerModule, boolean takeAway) {
     int index = -1;
     int biggestModuleSize = -1;
     for (int i = 0; i < moduleBitCount.length; i++) {
@@ -189,8 +188,7 @@ public class PDF417CodewordDecoder {
     return false;
   }
 
-  private static boolean adjustBiggestModule(int[] moduleBitCount, int bitsPerModule,
-                                             boolean takeAway) {
+  private static boolean adjustBiggestModule(int[] moduleBitCount, int bitsPerModule, boolean takeAway) {
     int index = -1;
     int biggestModuleSize = -1;
     int moduleDifference = -1;
@@ -210,15 +208,13 @@ public class PDF417CodewordDecoder {
       }
     }
     if (index != -1) {
-      moduleBitCount[index] += takeAway ? -moduleDifference : bitsPerModule -
-          moduleDifference;
+      moduleBitCount[index] += takeAway ? -moduleDifference : bitsPerModule - moduleDifference;
       return true;
     }
     return false;
   }
 
-  private static boolean adjustHalfSizeModule(int[] moduleBitCount, int bitsPerModule,
-                                              boolean takeAway) {
+  private static boolean adjustHalfSizeModule(int[] moduleBitCount, int bitsPerModule, boolean takeAway) {
     int index = -1;
     int biggestModuleSize = -1;
     for (int i = 0; i < moduleBitCount.length; i++) {
@@ -250,8 +246,7 @@ public class PDF417CodewordDecoder {
     return bitCountSum - bitsPerModule * PDF417Common.MODULES_IN_CODEWORD;
   }
 
-  private static void adjustSmallDifference(int[] moduleBitCount, int bitsPerModule,
-                                            boolean takeAway) {
+  private static void adjustSmallDifference(int[] moduleBitCount, int bitsPerModule, boolean takeAway) {
     if (takeAway) {
       shrinkModulesWithSmallDifference(moduleBitCount, bitsPerModule);
     } else {
@@ -259,29 +254,28 @@ public class PDF417CodewordDecoder {
     }
   }
 
-  private static boolean checkBitCountDifference(int[] moduleBitCount,
-                                                 int bitCountDifference, int bitsPerModule) {
+  private static boolean checkBitCountDifference(int[] moduleBitCount, int bitCountDifference,
+                                                 int bitsPerModule) {
+    if (bitCountDifference != 0) {
+      return false;
+    }
     int bitCountSum = 0;
-    if (bitCountDifference == 0) {
-      for (int i = 0; i < moduleBitCount.length; i++) {
-        if (moduleBitCount[i] % bitsPerModule != 0) {
-          return false;
-        }
-        bitCountSum += moduleBitCount[i];
-      }
-      if (bitCountSum / PDF417Common.MODULES_IN_CODEWORD != bitsPerModule) {
+    for (int i = 0; i < moduleBitCount.length; i++) {
+      if (moduleBitCount[i] % bitsPerModule != 0) {
         return false;
       }
-      for (int i = 0; i < moduleBitCount.length; i++) {
-        moduleBitCount[i] /= bitsPerModule;
-      }
-      return true;
+      bitCountSum += moduleBitCount[i];
     }
-    return false;
+    if (bitCountSum / PDF417Common.MODULES_IN_CODEWORD != bitsPerModule) {
+      return false;
+    }
+    for (int i = 0; i < moduleBitCount.length; i++) {
+      moduleBitCount[i] /= bitsPerModule;
+    }
+    return true;
   }
 
-  private static void enlargeModulesWithSmallDifference(int[] moduleBitCount,
-                                                        int bitsPerModule) {
+  private static void enlargeModulesWithSmallDifference(int[] moduleBitCount, int bitsPerModule) {
     for (int i = 0; i < moduleBitCount.length; i++) {
       int bitDifference = moduleBitCount[i] % bitsPerModule;
       if (bitDifference == 0) {
@@ -295,8 +289,7 @@ public class PDF417CodewordDecoder {
     }
   }
 
-  private static void shrinkModulesWithSmallDifference(int[] moduleBitCount,
-                                                       int bitsPerModule) {
+  private static void shrinkModulesWithSmallDifference(int[] moduleBitCount, int bitsPerModule) {
     for (int i = 0; i < moduleBitCount.length; i++) {
       int bitDifference = moduleBitCount[i] % bitsPerModule;
       if (bitDifference == 0) {

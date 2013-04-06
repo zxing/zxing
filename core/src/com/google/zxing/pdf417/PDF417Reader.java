@@ -30,7 +30,7 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.DecoderResult;
 import com.google.zxing.common.TransformableBitMatrix;
 import com.google.zxing.pdf417.decoder.Decoder;
-import com.google.zxing.pdf417.decoder.PDF417ScanningDecoder;
+import com.google.zxing.pdf417.decoder.PDF417ScanningDecoderV2;
 import com.google.zxing.pdf417.detector.Detector;
 import com.google.zxing.pdf417.detector.PDF417DetectorResult;
 
@@ -55,14 +55,13 @@ public final class PDF417Reader implements Reader {
    * @throws FormatException if a PDF417 cannot be decoded
    */
   @Override
-  public Result decode(BinaryBitmap image) throws NotFoundException, FormatException,
-      ChecksumException {
+  public Result decode(BinaryBitmap image) throws NotFoundException, FormatException, ChecksumException {
     return decode(image, null);
   }
 
   @Override
-  public Result decode(BinaryBitmap image, Map<DecodeHintType,?> hints)
-      throws NotFoundException, FormatException, ChecksumException {
+  public Result decode(BinaryBitmap image, Map<DecodeHintType,?> hints) throws NotFoundException,
+      FormatException, ChecksumException {
     DecoderResult decoderResult;
     ResultPoint[] points;
     if (hints != null && hints.containsKey(DecodeHintType.PURE_BARCODE)) {
@@ -72,7 +71,7 @@ public final class PDF417Reader implements Reader {
     } else {
       decoderResult = null;
       points = null;
-      for (int blackpoint = 2; blackpoint < 3; blackpoint += 1) {
+      for (int blackpoint = 2; blackpoint < 255; blackpoint += 1) {
         ((AdjustableBitMatrix) image.getBlackMatrix()).setBlackpoint(blackpoint);
         try {
           PDF417DetectorResult detectorResult = new Detector(image).detect(hints);
@@ -80,9 +79,9 @@ public final class PDF417Reader implements Reader {
           printPoints(points);
           TransformableBitMatrix bitMatrix = detectorResult.getBits();
           System.out.println("Trying Blackpoint: " + blackpoint);
-          decoderResult = PDF417ScanningDecoder.decode(bitMatrix, points[4], points[5],
-              points[6], points[7], getMinCodewordWidth(points),
-              getMaxCodewordWidth(points));
+          decoderResult = PDF417ScanningDecoderV2.decode(bitMatrix, points[4], points[5], points[6],
+              points[7], getMinCodewordWidth(points), getMaxCodewordWidth(points));
+          // TODO I could update the result points for compressed PDF417, which doesn't have stop pattern column
           System.out.println("Successful Blackpoint: " + blackpoint);
           break;
         } catch (FormatException e) {
@@ -100,8 +99,7 @@ public final class PDF417Reader implements Reader {
         throw NotFoundException.getNotFoundInstance();
       }
     }
-    return new Result(decoderResult.getText(), decoderResult.getRawBytes(), points,
-        BarcodeFormat.PDF_417);
+    return new Result(decoderResult.getText(), decoderResult.getRawBytes(), points, BarcodeFormat.PDF_417);
   }
 
   private void printPoints(ResultPoint[] points) {
@@ -116,8 +114,7 @@ public final class PDF417Reader implements Reader {
         i++;
         continue;
       }
-      System.out.println("Point[" + i + "]: " + (int) point.getX() + ";" +
-          (int) point.getY());
+      System.out.println("Point[" + i + "]: " + (int) point.getX() + ";" + (int) point.getY());
       i++;
     }
   }
@@ -205,8 +202,7 @@ public final class PDF417Reader implements Reader {
     return bits;
   }
 
-  private static int moduleSize(int[] leftTopBlack, BitMatrix image)
-      throws NotFoundException {
+  private static int moduleSize(int[] leftTopBlack, BitMatrix image) throws NotFoundException {
     int x = leftTopBlack[0];
     int y = leftTopBlack[1];
     int width = image.getWidth();
@@ -225,8 +221,7 @@ public final class PDF417Reader implements Reader {
     return moduleSize;
   }
 
-  private static int findPatternStart(int x, int y, BitMatrix image)
-      throws NotFoundException {
+  private static int findPatternStart(int x, int y, BitMatrix image) throws NotFoundException {
     int width = image.getWidth();
     int start = x;
     // start should be on black
