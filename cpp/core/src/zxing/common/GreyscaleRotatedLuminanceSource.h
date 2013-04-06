@@ -39,10 +39,6 @@ public:
 
   ArrayRef<char> getRow(int y, ArrayRef<char> row) const;
   ArrayRef<char> getMatrix() const;
-
-  bool isRotateSupported() const {
-    return false;
-  }
 };
 
 }
