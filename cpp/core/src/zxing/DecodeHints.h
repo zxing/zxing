@@ -53,9 +53,13 @@ class zxing::DecodeHints {
   static const DecodeHintType UPC_E_HINT = 1 << BarcodeFormat::UPC_E;
   static const DecodeHintType UPC_EAN_EXTENSION_HINT = 1 << BarcodeFormat::UPC_EAN_EXTENSION;
 
-  static const DecodeHintType CHARACTER_SET = 1 << 30;
   static const DecodeHintType TRYHARDER_HINT = 1 << 31;
-
+  static const DecodeHintType CHARACTER_SET = 1 << 30;
+  // static const DecodeHintType ALLOWED_LENGTHS = 1 << 29;
+  // static const DecodeHintType ASSUME_CODE_39_CHECK_DIGIT = 1 << 28;
+  static const DecodeHintType  ASSUME_GS1 = 1 << 27;
+  // static const DecodeHintType NEED_RESULT_POINT_CALLBACK = 1 << 26;
+  
   static const DecodeHints PRODUCT_HINT;
   static const DecodeHints ONED_HINT;
   static const DecodeHints DEFAULT_HINT;
