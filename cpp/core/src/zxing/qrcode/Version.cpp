@@ -20,13 +20,16 @@
 
 #include <zxing/qrcode/Version.h>
 #include <zxing/qrcode/FormatInformation.h>
+#include <zxing/FormatException.h>
 #include <limits>
 #include <iostream>
 #include <cstdarg>
 
+using std::vector;
+using std::numeric_limits;
+
 namespace zxing {
 namespace qrcode {
-using namespace std;
 
 ECB::ECB(int count, int dataCodewords) :
     count_(count), dataCodewords_(dataCodewords) {
@@ -94,9 +97,13 @@ ECBlocks& Version::getECBlocksForLevel(ErrorCorrectionLevel &ecLevel) {
 
 Version *Version::getProvisionalVersionForDimension(int dimension) {
   if (dimension % 4 != 1) {
-    throw ReaderException("Dimension must be 1 mod 4");
+    throw FormatException();
   }
-  return Version::getVersionForNumber((dimension - 17) >> 2);
+  try {
+    return Version::getVersionForNumber((dimension - 17) >> 2);
+  } catch (IllegalArgumentException const& ignored) {
+    throw FormatException();
+  }
 }
 
 Version *Version::getVersionForNumber(int versionNumber) {
@@ -547,5 +554,6 @@ int Version::buildVersions() {
                                                new ECB(61, 16)))));
   return VERSIONS.size();
 }
+
 }
 }

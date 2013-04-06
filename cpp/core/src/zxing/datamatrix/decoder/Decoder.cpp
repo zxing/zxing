@@ -24,17 +24,14 @@
 #include <zxing/datamatrix/decoder/DecodedBitStreamParser.h>
 #include <zxing/datamatrix/Version.h>
 #include <zxing/ReaderException.h>
+#include <zxing/ChecksumException.h>
 #include <zxing/common/reedsolomon/ReedSolomonException.h>
 
-namespace zxing {
-namespace datamatrix {
+using zxing::Ref;
+using zxing::DecoderResult;
+using zxing::datamatrix::Decoder;
 
-using namespace std;
-
-Decoder::Decoder() :
-    rsDecoder_(GenericGF::DATA_MATRIX_FIELD_256) {
-}
-
+Decoder::Decoder() : rsDecoder_(GenericGF::DATA_MATRIX_FIELD_256) {}
 
 void Decoder::correctErrors(ArrayRef<char> codewordBytes, int numDataCodewords) {
   int numCodewords = codewordBytes->size();
@@ -45,9 +42,8 @@ void Decoder::correctErrors(ArrayRef<char> codewordBytes, int numDataCodewords) 
   int numECCodewords = numCodewords - numDataCodewords;
   try {
     rsDecoder_.decode(codewordInts, numECCodewords);
-  } catch (ReedSolomonException const& ex) {
-    ReaderException rex(ex.what());
-    throw rex;
+  } catch (ReedSolomonException const& ignored) {
+    throw ChecksumException();
   }
   // Copy back into array of bytes -- only need to worry about the bytes that were data
   // We don't care about errors in the error-correction codewords
@@ -89,6 +85,4 @@ Ref<DecoderResult> Decoder::decode(Ref<BitMatrix> bits) {
   // Decode the contents of that stream of bytes
   DecodedBitStreamParser decodedBSParser;
   return Ref<DecoderResult> (decodedBSParser.decode(resultBytes));
-}
-}
 }

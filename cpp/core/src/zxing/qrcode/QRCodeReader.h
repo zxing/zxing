@@ -26,22 +26,23 @@
 #include <zxing/DecodeHints.h>
 
 namespace zxing {
-	namespace qrcode {
+namespace qrcode {
 		
-		class QRCodeReader : public Reader {
-		private:
-			Decoder decoder_;
+class QRCodeReader : public Reader {
+ private:
+  Decoder decoder_;
 			
-    protected:
-      Decoder& getDecoder();
+ protected:
+  Decoder& getDecoder();
 
-		public:
-			QRCodeReader();
-			virtual Ref<Result> decode(Ref<BinaryBitmap> image, DecodeHints hints);
-			virtual ~QRCodeReader();
+ public:
+  QRCodeReader();
+  virtual ~QRCodeReader();
 			
-		};
-	}
+  Ref<Result> decode(Ref<BinaryBitmap> image, DecodeHints hints);
+};
+
+}
 }
 
 #endif // __QR_CODE_READER_H__

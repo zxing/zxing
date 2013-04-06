@@ -279,6 +279,6 @@ void Code93Reader::checkOneChecksum(string const& result,
     }
   }
   if (result[checkPosition] != ALPHABET[total % 47]) {
-    throw ChecksumException::getChecksumInstance();
+    throw ChecksumException();
   }
 }
