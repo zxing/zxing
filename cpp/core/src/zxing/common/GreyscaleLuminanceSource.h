@@ -23,41 +23,32 @@
 #include <zxing/LuminanceSource.h>
 
 namespace zxing {
-  class GreyscaleLuminanceSource;
-}
 
-class zxing::GreyscaleLuminanceSource : public LuminanceSource {
+class GreyscaleLuminanceSource : public LuminanceSource {
 
 private:
+  typedef LuminanceSource Super;
   ArrayRef<char> greyData_;
-  int dataWidth_;
-  int dataHeight_;
-  int left_;
-  int top_;
-  int width_;
-  int height_;
+  const int dataWidth_;
+  const int dataHeight_;
+  const int left_;
+  const int top_;
 
 public:
   GreyscaleLuminanceSource(ArrayRef<char> greyData, int dataWidth, int dataHeight, int left,
                            int top, int width, int height);
 
-  ArrayRef<char> getRow(int y, ArrayRef<char> row);
-  ArrayRef<char> getMatrix();
+  ArrayRef<char> getRow(int y, ArrayRef<char> row) const;
+  ArrayRef<char> getMatrix() const;
 
   bool isRotateSupported() const {
     return true;
   }
 
-  int getWidth() const {
-    return width_;
-  }
-
-  int getHeight() const {
-    return height_;
-  }
-
   Ref<LuminanceSource> rotateCounterClockwise();
 
 };
+
+}
 
 #endif

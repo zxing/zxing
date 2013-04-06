@@ -26,27 +26,18 @@ using zxing::Ref;
 using zxing::LuminanceSource;
 using zxing::MagickBitmapSource;
 
-MagickBitmapSource::MagickBitmapSource(Image& image) : image_(image) {
-  width = image.columns();
-  height = image.rows();
-}
+MagickBitmapSource::MagickBitmapSource(Image& image)
+    : Super(image.columns(), image.rows()), image_(image) {}
 
 MagickBitmapSource::~MagickBitmapSource() {
 }
 
-int MagickBitmapSource::getWidth() const {
-  return width;
-}
+ArrayRef<char> MagickBitmapSource::getRow(int y, ArrayRef<char> row) const {
+  const int width = getWidth();
 
-int MagickBitmapSource::getHeight() const {
-  return height;
-}
-
-ArrayRef<char> MagickBitmapSource::getRow(int y, ArrayRef<char> row) {
   const Magick::PixelPacket* pixel_cache =
-    image_.getConstPixels(0, y, width, 1);
+      image_.getConstPixels(0, y, width, 1);
 
-  int width = getWidth();
   if (!row || row->size() < width) {
     row =ArrayRef<char>(width);
   }
@@ -62,10 +53,10 @@ ArrayRef<char> MagickBitmapSource::getRow(int y, ArrayRef<char> row) {
 }
 
 /** This is a more efficient implementation. */
-ArrayRef<char> MagickBitmapSource::getMatrix() {
+ArrayRef<char> MagickBitmapSource::getMatrix() const {
+  const int width = getWidth();
+  const int height =  getHeight();
   const Magick::PixelPacket* pixel_cache = image_.getConstPixels(0, 0, width, height);
-  int width = getWidth();
-  int height =  getHeight();
   ArrayRef<char> matrix = ArrayRef<char>(width*height);
   char* m = &matrix[0];
   const Magick::PixelPacket* p = pixel_cache;

@@ -60,7 +60,7 @@ public:
     values_ = array;
     return *this;
   }
-  T operator[](int i) const {
+  T const& operator[](int i) const {
     return values_[i];
   }
   T& operator[](int i) {
@@ -117,7 +117,7 @@ public:
     array_ = 0;
   }
 
-  T operator[](int i) const {
+  T const& operator[](int i) const {
     return (*array_)[i];
   }
   T& operator[](int i) {

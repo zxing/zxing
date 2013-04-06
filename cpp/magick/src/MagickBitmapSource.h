@@ -21,28 +21,26 @@
 #include <zxing/LuminanceSource.h>
 
 namespace zxing {
-  class MagickBitmapSource;
-}
 
-class zxing::MagickBitmapSource : public LuminanceSource {
+class MagickBitmapSource : public LuminanceSource {
 private:
+  typedef LuminanceSource Super;
   Magick::Image image_;
-  int width;
-  int height;
 
 public:
   MagickBitmapSource(Magick::Image& image);
 
   ~MagickBitmapSource();
 
-  int getWidth() const;
-  int getHeight() const;
-  ArrayRef<char> getRow(int y, ArrayRef<char> row);
-  ArrayRef<char> getMatrix();
+  ArrayRef<char> getRow(int y, ArrayRef<char> row) const;
+  ArrayRef<char> getMatrix() const;
+
   bool isCropSupported() const;
   Ref<LuminanceSource> crop(int left, int top, int width, int height);
   bool isRotateSupported() const;
   Ref<LuminanceSource> rotateCounterClockwise();
 };
+
+}
 
 #endif /* MAGICKMONOCHROMEBITMAPSOURCE_H_ */
