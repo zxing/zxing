@@ -133,7 +133,7 @@ void DecodedBitStreamParser::decodeHanziSegment(Ref<BitSource> bits_,
 
   try {
     append(result, buffer, nBytes, StringUtils::GB2312);
-  } catch (ReaderException const& re) {
+  } catch (ReaderException const& ignored) {
     delete [] buffer;
     throw FormatException();
   }
@@ -164,8 +164,12 @@ void DecodedBitStreamParser::decodeKanjiSegment(Ref<BitSource> bits, std::string
     offset += 2;
     count--;
   }
-
-  append(result, buffer, nBytes, StringUtils::SHIFT_JIS);
+  try {
+    append(result, buffer, nBytes, StringUtils::SHIFT_JIS);
+  } catch (ReaderException const& ignored) {
+    delete [] buffer;
+    throw FormatException();
+  }
   delete[] buffer;
 }
 
@@ -200,7 +204,7 @@ void DecodedBitStreamParser::decodeByteSegment(Ref<BitSource> bits_,
   }
   try {
     append(result, readBytes, nBytes, encoding.c_str());
-  } catch (ReaderException const& re) {
+  } catch (ReaderException const& ignored) {
     throw FormatException();
   }
   byteSegments->values().push_back(bytes_);

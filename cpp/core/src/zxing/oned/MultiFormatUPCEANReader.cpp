@@ -65,7 +65,7 @@ Ref<Result> MultiFormatUPCEANReader::decodeRow(int rowNumber, Ref<BitArray> row)
     Ref<Result> result;
     try {
       result = reader->decodeRow(rowNumber, row, startGuardPattern);
-    } catch (ReaderException const& re) {
+    } catch (ReaderException const& ignored) {
       continue;
     }
 

@@ -21,21 +21,8 @@
 
 #include <zxing/ChecksumException.h>
 
-namespace zxing {
+using zxing::ChecksumException;
 
-ChecksumException::ChecksumException() {}
-
-ChecksumException::ChecksumException(const char *msg) :
-    ReaderException(msg) {
-}
-
-ChecksumException::~ChecksumException() throw() {
-}
-
-ChecksumException const&
-ChecksumException::getChecksumInstance() {
-  static ChecksumException instance;
-  return instance;
-}
-
-}
+ChecksumException::ChecksumException() throw() {}
+ChecksumException::ChecksumException(const char *msg) throw() : ReaderException(msg) {}
+ChecksumException::~ChecksumException() throw() {}
