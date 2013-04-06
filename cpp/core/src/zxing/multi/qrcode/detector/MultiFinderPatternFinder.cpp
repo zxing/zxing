@@ -80,14 +80,7 @@ std::vector<Ref<FinderPatternInfo> > MultiFinderPatternFinder::findMulti(DecodeH
       } else { // White pixel
         if ((currentState & 1) == 0) { // Counting black pixels
           if (currentState == 4) { // A winner?
-            if (foundPatternCross(stateCount)) { // Yes
-              bool confirmed = handlePossibleCenter(stateCount, i, j);
-              if (!confirmed) {
-                do { // Advance to next black pixel
-                  j++;
-                } while (j < maxJ && !image->get(j, i));
-                  j--; // back up to that last white pixel
-              }
+            if (foundPatternCross(stateCount) && handlePossibleCenter(stateCount, i, j)) { // Yes
               // Clear state to start looking again
               currentState = 0;
               stateCount[0] = 0;
