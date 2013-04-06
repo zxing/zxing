@@ -115,6 +115,11 @@
   Scan * scan = [[Database sharedDatabase] addScanWithText:resultString];
   [[NSUserDefaults standardUserDefaults] setObject:resultString forKey:@"lastScan"];
   NSString *returnUrl = [[NSUserDefaults standardUserDefaults] stringForKey:@"returnURL"];
+
+  [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"returnURL"];
+  [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"scanFormats"];
+  [[NSUserDefaults standardUserDefaults] synchronize];
+
   if (returnUrl != nil) {
     resultString = (NSString*)
         CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
@@ -145,6 +150,11 @@
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
   NSString* returnUrl = [[NSUserDefaults standardUserDefaults] stringForKey:@"returnURL"];
+
+  [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"returnURL"];
+  [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"scanFormats"];
+  [[NSUserDefaults standardUserDefaults] synchronize];
+
   // NSLog(@"%@ %d", returnUrl, buttonIndex);
   if (returnUrl != nil && buttonIndex != 0) {
     NSURL *ourURL =
