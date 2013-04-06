@@ -25,29 +25,35 @@
 #include <string.h>
 
 namespace zxing {
-  class LuminanceSource;
-}
 
-class zxing::LuminanceSource : public Counted {
-public:
-  LuminanceSource();
+class LuminanceSource : public Counted {
+ private:
+  const int width;
+  const int height;
+
+ public:
+  LuminanceSource(int width, int height);
   virtual ~LuminanceSource();
 
-  virtual int getWidth() const = 0;
-  virtual int getHeight() const = 0;
+  int getWidth() const { return width; }
+  int getHeight() const { return height; }
 
   // Callers take ownership of the returned memory and must call delete [] on it themselves.
-  virtual ArrayRef<char> getRow(int y, ArrayRef<char> row) = 0;
-  virtual ArrayRef<char> getMatrix() = 0;
+  virtual ArrayRef<char> getRow(int y, ArrayRef<char> row) const = 0;
+  virtual ArrayRef<char> getMatrix() const = 0;
 
   virtual bool isCropSupported() const;
   virtual Ref<LuminanceSource> crop(int left, int top, int width, int height);
 
   virtual bool isRotateSupported() const;
+
+  static Ref<LuminanceSource> invert(Ref<LuminanceSource> const&);
+
   virtual Ref<LuminanceSource> rotateCounterClockwise();
 
-  operator std::string (); // should be const but don't want to make sure a
-  // large breaking change right now
+  operator std::string () const;
 };
+
+}
 
 #endif /* LUMINANCESOURCE_H_ */

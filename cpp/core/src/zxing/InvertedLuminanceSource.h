@@ -1,11 +1,8 @@
 // -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
-#ifndef __GREYSCALE_ROTATED_LUMINANCE_SOURCE__
-#define __GREYSCALE_ROTATED_LUMINANCE_SOURCE__
+#ifndef __INVERTEDLUMINANCESOURCE_H__
+#define __INVERTEDLUMINANCESOURCE_H__
 /*
- *  GreyscaleRotatedLuminanceSource.h
- *  zxing
- *
- *  Copyright 2010 ZXing authors All rights reserved.
+ *  Copyright 2013 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,31 +17,22 @@
  * limitations under the License.
  */
 
-
 #include <zxing/LuminanceSource.h>
 
 namespace zxing {
 
-class GreyscaleRotatedLuminanceSource : public LuminanceSource {
- private:
+class InvertedLuminanceSource : public LuminanceSource {
+private:
   typedef LuminanceSource Super;
-  ArrayRef<char> greyData_;
-  const int dataWidth_;
-  const int left_;
-  const int top_;
+  const Ref<LuminanceSource> delegate;
 
 public:
-  GreyscaleRotatedLuminanceSource(ArrayRef<char> greyData, int dataWidth, int dataHeight,
-      int left, int top, int width, int height);
+  InvertedLuminanceSource(Ref<LuminanceSource> const&);
 
   ArrayRef<char> getRow(int y, ArrayRef<char> row) const;
   ArrayRef<char> getMatrix() const;
-
-  bool isRotateSupported() const {
-    return false;
-  }
 };
 
 }
 
-#endif
+#endif /* INVERTEDLUMINANCESOURCE_H_ */
