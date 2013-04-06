@@ -105,7 +105,7 @@ Ref<Result> OneDReader::doDecode(Ref<BinaryBitmap> image, DecodeHints hints) {
     // Estimate black point for this row and load it:
     try {
       row = image->getBlackRow(rowNumber, row);
-    } catch (NotFoundException const& nfe) {
+    } catch (NotFoundException const& ignored) {
       continue;
     }
 

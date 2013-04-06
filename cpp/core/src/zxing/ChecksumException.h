@@ -25,10 +25,9 @@ namespace zxing {
   class ChecksumException : public ReaderException {
     typedef ReaderException Base;
   public:
-    ChecksumException();
-    ChecksumException(const char *msg);
+    ChecksumException() throw();
+    ChecksumException(const char *msg) throw();
     ~ChecksumException() throw();
-    static ChecksumException const& getChecksumInstance();
   };
 }
 

@@ -44,7 +44,7 @@ void GenericMultipleBarcodeReader::doDecodeMultiple(Ref<BinaryBitmap> image,
   Ref<Result> result;
   try {
     result = delegate_.decode(image, hints);
-  } catch (ReaderException const& re) {
+  } catch (ReaderException const& ignored) {
     return;
   }
   bool alreadyFound = false;

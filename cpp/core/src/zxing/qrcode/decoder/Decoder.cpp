@@ -26,6 +26,7 @@
 #include <zxing/qrcode/decoder/DataBlock.h>
 #include <zxing/qrcode/decoder/DecodedBitStreamParser.h>
 #include <zxing/ReaderException.h>
+#include <zxing/ChecksumException.h>
 #include <zxing/common/reedsolomon/ReedSolomonException.h>
 
 using zxing::qrcode::Decoder;
@@ -46,9 +47,8 @@ void Decoder::correctErrors(ArrayRef<char> codewordBytes, int numDataCodewords) 
 
   try {
     rsDecoder_.decode(codewordInts, numECCodewords);
-  } catch (ReedSolomonException const& ex) {
-    ReaderException rex(ex.what());
-    throw rex;
+  } catch (ReedSolomonException const& ignored) {
+    throw ChecksumException();
   }
 
   for (int i = 0; i < numDataCodewords; i++) {
