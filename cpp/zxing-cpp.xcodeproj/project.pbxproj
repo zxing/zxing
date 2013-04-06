@@ -13,6 +13,7 @@
 		3B5A493617091826004E112F /* CodaBarReader.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B5A493217091826004E112F /* CodaBarReader.h */; };
 		3B5A493717091826004E112F /* Code93Reader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B5A493317091826004E112F /* Code93Reader.cpp */; };
 		3B5A493817091826004E112F /* Code93Reader.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B5A493417091826004E112F /* Code93Reader.h */; };
+		3B6AA6711710C83200DF84C0 /* InvertedLuminanceSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B6AA6701710C83200DF84C0 /* InvertedLuminanceSource.cpp */; };
 		3B83E992158E66C600A3B31F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B83E991158E66C600A3B31F /* Foundation.framework */; };
 		3B83EA63158E679000A3B31F /* AztecDetectorResult.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B83E9A4158E679000A3B31F /* AztecDetectorResult.cpp */; };
 		3B83EA64158E679000A3B31F /* AztecDetectorResult.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B83E9A5158E679000A3B31F /* AztecDetectorResult.h */; };
@@ -196,6 +197,7 @@
 		3B5A493217091826004E112F /* CodaBarReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CodaBarReader.h; sourceTree = "<group>"; };
 		3B5A493317091826004E112F /* Code93Reader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Code93Reader.cpp; sourceTree = "<group>"; };
 		3B5A493417091826004E112F /* Code93Reader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Code93Reader.h; sourceTree = "<group>"; };
+		3B6AA6701710C83200DF84C0 /* InvertedLuminanceSource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InvertedLuminanceSource.cpp; sourceTree = "<group>"; };
 		3B83E98E158E66C600A3B31F /* libzxing-cpp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libzxing-cpp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B83E991158E66C600A3B31F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		3B83E9A4158E679000A3B31F /* AztecDetectorResult.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AztecDetectorResult.cpp; sourceTree = "<group>"; };
@@ -419,6 +421,7 @@
 		3B83E9A2158E679000A3B31F /* zxing */ = {
 			isa = PBXGroup;
 			children = (
+				3B6AA6701710C83200DF84C0 /* InvertedLuminanceSource.cpp */,
 				3B5A492D17091807004E112F /* ChecksumException.cpp */,
 				3B5A492E17091807004E112F /* ChecksumException.h */,
 				3B83E9A3158E679000A3B31F /* aztec */,
@@ -980,6 +983,7 @@
 				3B5A492F17091807004E112F /* ChecksumException.cpp in Sources */,
 				3B5A493517091826004E112F /* CodaBarReader.cpp in Sources */,
 				3B5A493717091826004E112F /* Code93Reader.cpp in Sources */,
+				3B6AA6711710C83200DF84C0 /* InvertedLuminanceSource.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
