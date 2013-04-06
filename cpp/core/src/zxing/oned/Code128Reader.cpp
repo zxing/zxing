@@ -39,133 +39,135 @@ const int Code128Reader::MAX_AVG_VARIANCE = int(PATTERN_MATCH_RESULT_SCALE_FACTO
 const int Code128Reader::MAX_INDIVIDUAL_VARIANCE = int(PATTERN_MATCH_RESULT_SCALE_FACTOR * 700/1000);
 
 namespace {
-  const int CODE_SHIFT = 98;
+
+const int CODE_SHIFT = 98;
 	
-  const int CODE_CODE_C = 99;
-  const int CODE_CODE_B = 100;
-  const int CODE_CODE_A = 101;
+const int CODE_CODE_C = 99;
+const int CODE_CODE_B = 100;
+const int CODE_CODE_A = 101;
 	
-  const int CODE_FNC_1 = 102;
-  const int CODE_FNC_2 = 97;
-  const int CODE_FNC_3 = 96;
-  const int CODE_FNC_4_A = 101;
-  const int CODE_FNC_4_B = 100;
+const int CODE_FNC_1 = 102;
+const int CODE_FNC_2 = 97;
+const int CODE_FNC_3 = 96;
+const int CODE_FNC_4_A = 101;
+const int CODE_FNC_4_B = 100;
 	
-  const int CODE_START_A = 103;
-  const int CODE_START_B = 104;
-  const int CODE_START_C = 105;
-  const int CODE_STOP = 106;
+const int CODE_START_A = 103;
+const int CODE_START_B = 104;
+const int CODE_START_C = 105;
+const int CODE_STOP = 106;
 			
-  const int CODE_PATTERNS_LENGTH = 107;
-  const int CODE_PATTERNS[CODE_PATTERNS_LENGTH][6] = {
-    {2, 1, 2, 2, 2, 2}, /* 0 */
-    {2, 2, 2, 1, 2, 2},
-    {2, 2, 2, 2, 2, 1},
-    {1, 2, 1, 2, 2, 3},
-    {1, 2, 1, 3, 2, 2},
-    {1, 3, 1, 2, 2, 2}, /* 5 */
-    {1, 2, 2, 2, 1, 3},
-    {1, 2, 2, 3, 1, 2},
-    {1, 3, 2, 2, 1, 2},
-    {2, 2, 1, 2, 1, 3},
-    {2, 2, 1, 3, 1, 2}, /* 10 */
-    {2, 3, 1, 2, 1, 2},
-    {1, 1, 2, 2, 3, 2},
-    {1, 2, 2, 1, 3, 2},
-    {1, 2, 2, 2, 3, 1},
-    {1, 1, 3, 2, 2, 2}, /* 15 */
-    {1, 2, 3, 1, 2, 2},
-    {1, 2, 3, 2, 2, 1},
-    {2, 2, 3, 2, 1, 1},
-    {2, 2, 1, 1, 3, 2},
-    {2, 2, 1, 2, 3, 1}, /* 20 */
-    {2, 1, 3, 2, 1, 2},
-    {2, 2, 3, 1, 1, 2},
-    {3, 1, 2, 1, 3, 1},
-    {3, 1, 1, 2, 2, 2},
-    {3, 2, 1, 1, 2, 2}, /* 25 */
-    {3, 2, 1, 2, 2, 1},
-    {3, 1, 2, 2, 1, 2},
-    {3, 2, 2, 1, 1, 2},
-    {3, 2, 2, 2, 1, 1},
-    {2, 1, 2, 1, 2, 3}, /* 30 */
-    {2, 1, 2, 3, 2, 1},
-    {2, 3, 2, 1, 2, 1},
-    {1, 1, 1, 3, 2, 3},
-    {1, 3, 1, 1, 2, 3},
-    {1, 3, 1, 3, 2, 1}, /* 35 */
-    {1, 1, 2, 3, 1, 3},
-    {1, 3, 2, 1, 1, 3},
-    {1, 3, 2, 3, 1, 1},
-    {2, 1, 1, 3, 1, 3},
-    {2, 3, 1, 1, 1, 3}, /* 40 */
-    {2, 3, 1, 3, 1, 1},
-    {1, 1, 2, 1, 3, 3},
-    {1, 1, 2, 3, 3, 1},
-    {1, 3, 2, 1, 3, 1},
-    {1, 1, 3, 1, 2, 3}, /* 45 */
-    {1, 1, 3, 3, 2, 1},
-    {1, 3, 3, 1, 2, 1},
-    {3, 1, 3, 1, 2, 1},
-    {2, 1, 1, 3, 3, 1},
-    {2, 3, 1, 1, 3, 1}, /* 50 */
-    {2, 1, 3, 1, 1, 3},
-    {2, 1, 3, 3, 1, 1},
-    {2, 1, 3, 1, 3, 1},
-    {3, 1, 1, 1, 2, 3},
-    {3, 1, 1, 3, 2, 1}, /* 55 */
-    {3, 3, 1, 1, 2, 1},
-    {3, 1, 2, 1, 1, 3},
-    {3, 1, 2, 3, 1, 1},
-    {3, 3, 2, 1, 1, 1},
-    {3, 1, 4, 1, 1, 1}, /* 60 */
-    {2, 2, 1, 4, 1, 1},
-    {4, 3, 1, 1, 1, 1},
-    {1, 1, 1, 2, 2, 4},
-    {1, 1, 1, 4, 2, 2},
-    {1, 2, 1, 1, 2, 4}, /* 65 */
-    {1, 2, 1, 4, 2, 1},
-    {1, 4, 1, 1, 2, 2},
-    {1, 4, 1, 2, 2, 1},
-    {1, 1, 2, 2, 1, 4},
-    {1, 1, 2, 4, 1, 2}, /* 70 */
-    {1, 2, 2, 1, 1, 4},
-    {1, 2, 2, 4, 1, 1},
-    {1, 4, 2, 1, 1, 2},
-    {1, 4, 2, 2, 1, 1},
-    {2, 4, 1, 2, 1, 1}, /* 75 */
-    {2, 2, 1, 1, 1, 4},
-    {4, 1, 3, 1, 1, 1},
-    {2, 4, 1, 1, 1, 2},
-    {1, 3, 4, 1, 1, 1},
-    {1, 1, 1, 2, 4, 2}, /* 80 */
-    {1, 2, 1, 1, 4, 2},
-    {1, 2, 1, 2, 4, 1},
-    {1, 1, 4, 2, 1, 2},
-    {1, 2, 4, 1, 1, 2},
-    {1, 2, 4, 2, 1, 1}, /* 85 */
-    {4, 1, 1, 2, 1, 2},
-    {4, 2, 1, 1, 1, 2},
-    {4, 2, 1, 2, 1, 1},
-    {2, 1, 2, 1, 4, 1},
-    {2, 1, 4, 1, 2, 1}, /* 90 */
-    {4, 1, 2, 1, 2, 1},
-    {1, 1, 1, 1, 4, 3},
-    {1, 1, 1, 3, 4, 1},
-    {1, 3, 1, 1, 4, 1},
-    {1, 1, 4, 1, 1, 3}, /* 95 */
-    {1, 1, 4, 3, 1, 1},
-    {4, 1, 1, 1, 1, 3},
-    {4, 1, 1, 3, 1, 1},
-    {1, 1, 3, 1, 4, 1},
-    {1, 1, 4, 1, 3, 1}, /* 100 */
-    {3, 1, 1, 1, 4, 1},
-    {4, 1, 1, 1, 3, 1},
-    {2, 1, 1, 4, 1, 2},
-    {2, 1, 1, 2, 1, 4},
-    {2, 1, 1, 2, 3, 2}, /* 105 */
-    {2, 3, 3, 1, 1, 1}
-  };
+const int CODE_PATTERNS_LENGTH = 107;
+const int CODE_PATTERNS[CODE_PATTERNS_LENGTH][6] = {
+  {2, 1, 2, 2, 2, 2}, /* 0 */
+  {2, 2, 2, 1, 2, 2},
+  {2, 2, 2, 2, 2, 1},
+  {1, 2, 1, 2, 2, 3},
+  {1, 2, 1, 3, 2, 2},
+  {1, 3, 1, 2, 2, 2}, /* 5 */
+  {1, 2, 2, 2, 1, 3},
+  {1, 2, 2, 3, 1, 2},
+  {1, 3, 2, 2, 1, 2},
+  {2, 2, 1, 2, 1, 3},
+  {2, 2, 1, 3, 1, 2}, /* 10 */
+  {2, 3, 1, 2, 1, 2},
+  {1, 1, 2, 2, 3, 2},
+  {1, 2, 2, 1, 3, 2},
+  {1, 2, 2, 2, 3, 1},
+  {1, 1, 3, 2, 2, 2}, /* 15 */
+  {1, 2, 3, 1, 2, 2},
+  {1, 2, 3, 2, 2, 1},
+  {2, 2, 3, 2, 1, 1},
+  {2, 2, 1, 1, 3, 2},
+  {2, 2, 1, 2, 3, 1}, /* 20 */
+  {2, 1, 3, 2, 1, 2},
+  {2, 2, 3, 1, 1, 2},
+  {3, 1, 2, 1, 3, 1},
+  {3, 1, 1, 2, 2, 2},
+  {3, 2, 1, 1, 2, 2}, /* 25 */
+  {3, 2, 1, 2, 2, 1},
+  {3, 1, 2, 2, 1, 2},
+  {3, 2, 2, 1, 1, 2},
+  {3, 2, 2, 2, 1, 1},
+  {2, 1, 2, 1, 2, 3}, /* 30 */
+  {2, 1, 2, 3, 2, 1},
+  {2, 3, 2, 1, 2, 1},
+  {1, 1, 1, 3, 2, 3},
+  {1, 3, 1, 1, 2, 3},
+  {1, 3, 1, 3, 2, 1}, /* 35 */
+  {1, 1, 2, 3, 1, 3},
+  {1, 3, 2, 1, 1, 3},
+  {1, 3, 2, 3, 1, 1},
+  {2, 1, 1, 3, 1, 3},
+  {2, 3, 1, 1, 1, 3}, /* 40 */
+  {2, 3, 1, 3, 1, 1},
+  {1, 1, 2, 1, 3, 3},
+  {1, 1, 2, 3, 3, 1},
+  {1, 3, 2, 1, 3, 1},
+  {1, 1, 3, 1, 2, 3}, /* 45 */
+  {1, 1, 3, 3, 2, 1},
+  {1, 3, 3, 1, 2, 1},
+  {3, 1, 3, 1, 2, 1},
+  {2, 1, 1, 3, 3, 1},
+  {2, 3, 1, 1, 3, 1}, /* 50 */
+  {2, 1, 3, 1, 1, 3},
+  {2, 1, 3, 3, 1, 1},
+  {2, 1, 3, 1, 3, 1},
+  {3, 1, 1, 1, 2, 3},
+  {3, 1, 1, 3, 2, 1}, /* 55 */
+  {3, 3, 1, 1, 2, 1},
+  {3, 1, 2, 1, 1, 3},
+  {3, 1, 2, 3, 1, 1},
+  {3, 3, 2, 1, 1, 1},
+  {3, 1, 4, 1, 1, 1}, /* 60 */
+  {2, 2, 1, 4, 1, 1},
+  {4, 3, 1, 1, 1, 1},
+  {1, 1, 1, 2, 2, 4},
+  {1, 1, 1, 4, 2, 2},
+  {1, 2, 1, 1, 2, 4}, /* 65 */
+  {1, 2, 1, 4, 2, 1},
+  {1, 4, 1, 1, 2, 2},
+  {1, 4, 1, 2, 2, 1},
+  {1, 1, 2, 2, 1, 4},
+  {1, 1, 2, 4, 1, 2}, /* 70 */
+  {1, 2, 2, 1, 1, 4},
+  {1, 2, 2, 4, 1, 1},
+  {1, 4, 2, 1, 1, 2},
+  {1, 4, 2, 2, 1, 1},
+  {2, 4, 1, 2, 1, 1}, /* 75 */
+  {2, 2, 1, 1, 1, 4},
+  {4, 1, 3, 1, 1, 1},
+  {2, 4, 1, 1, 1, 2},
+  {1, 3, 4, 1, 1, 1},
+  {1, 1, 1, 2, 4, 2}, /* 80 */
+  {1, 2, 1, 1, 4, 2},
+  {1, 2, 1, 2, 4, 1},
+  {1, 1, 4, 2, 1, 2},
+  {1, 2, 4, 1, 1, 2},
+  {1, 2, 4, 2, 1, 1}, /* 85 */
+  {4, 1, 1, 2, 1, 2},
+  {4, 2, 1, 1, 1, 2},
+  {4, 2, 1, 2, 1, 1},
+  {2, 1, 2, 1, 4, 1},
+  {2, 1, 4, 1, 2, 1}, /* 90 */
+  {4, 1, 2, 1, 2, 1},
+  {1, 1, 1, 1, 4, 3},
+  {1, 1, 1, 3, 4, 1},
+  {1, 3, 1, 1, 4, 1},
+  {1, 1, 4, 1, 1, 3}, /* 95 */
+  {1, 1, 4, 3, 1, 1},
+  {4, 1, 1, 1, 1, 3},
+  {4, 1, 1, 3, 1, 1},
+  {1, 1, 3, 1, 4, 1},
+  {1, 1, 4, 1, 3, 1}, /* 100 */
+  {3, 1, 1, 1, 4, 1},
+  {4, 1, 1, 1, 3, 1},
+  {2, 1, 1, 4, 1, 2},
+  {2, 1, 1, 2, 1, 4},
+  {2, 1, 1, 2, 3, 2}, /* 105 */
+  {2, 3, 3, 1, 1, 1}
+};
+
 }
 
 Code128Reader::Code128Reader(){}
@@ -245,17 +247,17 @@ Ref<Result> Code128Reader::decodeRow(int rowNumber, Ref<BitArray> row) {
   int startCode = startPatternInfo[2];
   int codeSet;
   switch (startCode) {
-  case CODE_START_A:
-    codeSet = CODE_CODE_A;
-    break;
-  case CODE_START_B:
-    codeSet = CODE_CODE_B;
-    break;
-  case CODE_START_C:
-    codeSet = CODE_CODE_C;
-    break;
-  default:
-    throw FormatException();
+    case CODE_START_A:
+      codeSet = CODE_CODE_A;
+      break;
+    case CODE_START_B:
+      codeSet = CODE_CODE_B;
+      break;
+    case CODE_START_C:
+      codeSet = CODE_CODE_C;
+      break;
+    default:
+      throw FormatException();
   }
 
   bool done = false;
@@ -305,107 +307,116 @@ Ref<Result> Code128Reader::decodeRow(int rowNumber, Ref<BitArray> row) {
 
     // Take care of illegal start codes
     switch (code) {
-    case CODE_START_A:
-    case CODE_START_B:
-    case CODE_START_C:
-      throw FormatException();
+      case CODE_START_A:
+      case CODE_START_B:
+      case CODE_START_C:
+        throw FormatException();
     }
 
     switch (codeSet) {
 
-    case CODE_CODE_A:
-      if (code < 64) {
-        result.append(1, (char) (' ' + code));
-      } else if (code < 96) {
-        result.append(1, (char) (code - 64));
-      } else {
-        // Don't let CODE_STOP, which always appears, affect whether whether we think the
-        // last code was printable or not.
-        if (code != CODE_STOP) {
-          lastCharacterWasPrintable = false;
+      case CODE_CODE_A:
+        if (code < 64) {
+          result.append(1, (char) (' ' + code));
+        } else if (code < 96) {
+          result.append(1, (char) (code - 64));
+        } else {
+          // Don't let CODE_STOP, which always appears, affect whether whether we think the
+          // last code was printable or not.
+          if (code != CODE_STOP) {
+            lastCharacterWasPrintable = false;
+          }
+          switch (code) {
+            case CODE_FNC_1:
+              if (result.length() == 0){
+                // GS1 specification 5.4.3.7. and 5.4.6.4. If the first char after the start code
+                // is FNC1 then this is GS1-128. We add the symbology identifier.
+                result.append("]C1");
+              } else {
+                // GS1 specification 5.4.7.5. Every subsequent FNC1 is returned as ASCII 29 (GS)
+                result.append(1, (char) 29);
+              }
+              break;
+            case CODE_FNC_2:
+            case CODE_FNC_3:
+            case CODE_FNC_4_A:
+              // do nothing?
+              break;
+            case CODE_SHIFT:
+              isNextShifted = true;
+              codeSet = CODE_CODE_B;
+              break;
+            case CODE_CODE_B:
+              codeSet = CODE_CODE_B;
+              break;
+            case CODE_CODE_C:
+              codeSet = CODE_CODE_C;
+              break;
+            case CODE_STOP:
+              done = true;
+              break;
+          }
         }
-        switch (code) {
-        case CODE_FNC_1:
-        case CODE_FNC_2:
-        case CODE_FNC_3:
-        case CODE_FNC_4_A:
-          // do nothing?
-          break;
-        case CODE_SHIFT:
-          isNextShifted = true;
-          codeSet = CODE_CODE_B;
-          break;
-        case CODE_CODE_B:
-          codeSet = CODE_CODE_B;
-          break;
-        case CODE_CODE_C:
-          codeSet = CODE_CODE_C;
-          break;
-        case CODE_STOP:
-          done = true;
-          break;
+        break;
+      case CODE_CODE_B:
+        if (code < 96) {
+          result.append(1, (char) (' ' + code));
+        } else {
+          if (code != CODE_STOP) {
+            lastCharacterWasPrintable = false;
+          }
+          switch (code) {
+            case CODE_FNC_1:
+            case CODE_FNC_2:
+            case CODE_FNC_3:
+            case CODE_FNC_4_B:
+              // do nothing?
+              break;
+            case CODE_SHIFT:
+              isNextShifted = true;
+              codeSet = CODE_CODE_A;
+              break;
+            case CODE_CODE_A:
+              codeSet = CODE_CODE_A;
+              break;
+            case CODE_CODE_C:
+              codeSet = CODE_CODE_C;
+              break;
+            case CODE_STOP:
+              done = true;
+              break;
+          }
         }
-      }
-      break;
-    case CODE_CODE_B:
-      if (code < 96) {
-        result.append(1, (char) (' ' + code));
-      } else {
-        if (code != CODE_STOP) {
-          lastCharacterWasPrintable = false;
+        break;
+      case CODE_CODE_C:
+        if (code < 100) {
+          if (code < 10) {
+            result.append(1, '0');
+          }
+          oss.clear();
+          oss.str("");
+          oss << code;
+          result.append(oss.str());
+        } else {
+          if (code != CODE_STOP) {
+            lastCharacterWasPrintable = false;
+          }
+          switch (code) {
+            case CODE_FNC_1:
+              // do nothing?
+              break;
+            case CODE_CODE_A:
+              codeSet = CODE_CODE_A;
+              break;
+            case CODE_CODE_B:
+              codeSet = CODE_CODE_B;
+              break;
+            case CODE_STOP:
+              done = true;
+              break;
+          }
         }
-        switch (code) {
-        case CODE_FNC_1:
-        case CODE_FNC_2:
-        case CODE_FNC_3:
-        case CODE_FNC_4_B:
-          // do nothing?
-          break;
-        case CODE_SHIFT:
-          isNextShifted = true;
-          codeSet = CODE_CODE_A;
-          break;
-        case CODE_CODE_A:
-          codeSet = CODE_CODE_A;
-          break;
-        case CODE_CODE_C:
-          codeSet = CODE_CODE_C;
-          break;
-        case CODE_STOP:
-          done = true;
-          break;
-        }
-      }
-      break;
-    case CODE_CODE_C:
-      if (code < 100) {
-        if (code < 10) {
-          result.append(1, '0');
-        }
-        oss.clear();
-        oss.str("");
-        oss << code;
-        result.append(oss.str());
-      } else {
-        if (code != CODE_STOP) {
-          lastCharacterWasPrintable = false;
-        }
-        switch (code) {
-        case CODE_FNC_1:
-          // do nothing?
-          break;
-        case CODE_CODE_A:
-          codeSet = CODE_CODE_A;
-          break;
-        case CODE_CODE_B:
-          codeSet = CODE_CODE_B;
-          break;
-        case CODE_STOP:
-          done = true;
-          break;
-        }
-      }
-      break;
+        break;
     }
 
     // Unshift back to another code set if we were shifted
@@ -460,9 +471,9 @@ Ref<Result> Code128Reader::decodeRow(int rowNumber, Ref<BitArray> row) {
 
   ArrayRef< Ref<ResultPoint> > resultPoints(2);
   resultPoints[0] =
-    Ref<OneDResultPoint>(new OneDResultPoint(left, (float) rowNumber));
+      Ref<OneDResultPoint>(new OneDResultPoint(left, (float) rowNumber));
   resultPoints[1] =
-    Ref<OneDResultPoint>(new OneDResultPoint(right, (float) rowNumber));
+      Ref<OneDResultPoint>(new OneDResultPoint(right, (float) rowNumber));
 
   return Ref<Result>(new Result(Ref<String>(new String(result)), rawBytes, resultPoints,
                                 BarcodeFormat::CODE_128));
