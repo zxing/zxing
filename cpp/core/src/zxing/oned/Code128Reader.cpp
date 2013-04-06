@@ -15,7 +15,8 @@
  * limitations under the License.
  */
 
-#include "Code128Reader.h"
+#include <zxing/ZXing.h>
+#include <zxing/oned/Code128Reader.h>
 #include <zxing/oned/OneDResultPoint.h>
 #include <zxing/common/Array.h>
 #include <zxing/ReaderException.h>
@@ -243,6 +244,8 @@ int Code128Reader::decodeCode(Ref<BitArray> row, vector<int>& counters, int rowO
 }
 
 Ref<Result> Code128Reader::decodeRow(int rowNumber, Ref<BitArray> row) {
+  // boolean convertFNC1 = hints != null && hints.containsKey(DecodeHintType.ASSUME_GS1);
+  boolean convertFNC1 = false;
   vector<int> startPatternInfo (findStartPattern(row));
   int startCode = startPatternInfo[2];
   int codeSet;
@@ -328,13 +331,15 @@ Ref<Result> Code128Reader::decodeRow(int rowNumber, Ref<BitArray> row) {
           }
           switch (code) {
             case CODE_FNC_1:
-              if (result.length() == 0){
-                // GS1 specification 5.4.3.7. and 5.4.6.4. If the first char after the start code
-                // is FNC1 then this is GS1-128. We add the symbology identifier.
-                result.append("]C1");
-              } else {
-                // GS1 specification 5.4.7.5. Every subsequent FNC1 is returned as ASCII 29 (GS)
-                result.append(1, (char) 29);
+              if (convertFNC1) {
+                if (result.length() == 0){
+                  // GS1 specification 5.4.3.7. and 5.4.6.4. If the first char after the start code
+                  // is FNC1 then this is GS1-128. We add the symbology identifier.
+                  result.append("]C1");
+                } else {
+                  // GS1 specification 5.4.7.5. Every subsequent FNC1 is returned as ASCII 29 (GS)
+                  result.append(1, (char) 29);
+                }
               }
               break;
             case CODE_FNC_2:
