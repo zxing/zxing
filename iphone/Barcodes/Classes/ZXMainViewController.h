@@ -16,7 +16,7 @@
 @class ResultAction;
 
 
-@interface ZXMainViewController : UIViewController <ZXingDelegate,UIActionSheetDelegate,ModalViewControllerDelegate> {
+@interface ZXMainViewController : UIViewController <ZXingDelegate,UIActionSheetDelegate,ModalViewControllerDelegate,UIAlertViewDelegate> {
   NSArray *actions;
   ParsedResult *result;
 }
