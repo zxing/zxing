@@ -37,9 +37,6 @@ public:
     return this;
   }
   void release() {
-    if (count_ == 0 || count_ == 54321) {
-      throw 4711;
-    }
     count_--;
     if (count_ == 0) {
       count_ = 0xDEADF001;

@@ -34,11 +34,7 @@ bool LuminanceSource::isCropSupported() const {
   return false;
 }
 
-Ref<LuminanceSource> LuminanceSource::crop(int left, int top, int width, int height) {
-  (void)left;
-  (void)top;
-  (void)width;
-  (void)height;
+Ref<LuminanceSource> LuminanceSource::crop(int, int, int, int) const {
   throw IllegalArgumentException("This luminance source does not support cropping.");
 }
 
@@ -46,7 +42,7 @@ bool LuminanceSource::isRotateSupported() const {
   return false;
 }
 
-Ref<LuminanceSource> LuminanceSource::rotateCounterClockwise() {
+Ref<LuminanceSource> LuminanceSource::rotateCounterClockwise() const {
   throw IllegalArgumentException("This luminance source does not support rotation.");
 }
 
@@ -74,6 +70,17 @@ LuminanceSource::operator std::string() const {
   return oss.str();
 }
 
-Ref<LuminanceSource> LuminanceSource::invert(Ref<LuminanceSource> const& that) {
-  return Ref<LuminanceSource>(new InvertedLuminanceSource(that));
+Ref<LuminanceSource> LuminanceSource::invert() const {
+
+  // N.B.: this only works because we use counted objects with the
+  // count in the object. This is _not_ how things like shared_ptr
+  // work. They do not allow you to make a smart pointer from a native
+  // pointer more than once. If we ever switch to (something like)
+  // shared_ptr's, the luminace source is going to have keep a weak
+  // pointer to itself from which it can create a strong pointer as
+  // needed. And, FWIW, that has nasty semantics in the face of
+  // exceptions during construction.
+
+  return Ref<LuminanceSource>
+      (new InvertedLuminanceSource(Ref<LuminanceSource>(const_cast<LuminanceSource*>(this))));
 }

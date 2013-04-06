@@ -18,7 +18,10 @@
 #include <zxing/ZXing.h>
 #include <zxing/InvertedLuminanceSource.h>
 
+using zxing::boolean;
+using zxing::Ref;
 using zxing::ArrayRef;
+using zxing::LuminanceSource;
 using zxing::InvertedLuminanceSource;
 
 InvertedLuminanceSource::InvertedLuminanceSource(Ref<LuminanceSource> const& delegate_)
@@ -42,3 +45,24 @@ ArrayRef<char> InvertedLuminanceSource::getMatrix() const {
   }
   return invertedMatrix;
 }
+
+zxing::boolean InvertedLuminanceSource::isCropSupported() const {
+  return delegate->isCropSupported();
+}
+
+Ref<LuminanceSource> InvertedLuminanceSource::crop(int left, int top, int width, int height) const {
+  return Ref<LuminanceSource>(new InvertedLuminanceSource(delegate->crop(left, top, width, height)));
+}
+
+boolean InvertedLuminanceSource::isRotateSupported() const {
+  return delegate->isRotateSupported();
+}
+
+Ref<LuminanceSource> InvertedLuminanceSource::invert() const {
+  return delegate;
+}
+
+Ref<LuminanceSource> InvertedLuminanceSource::rotateCounterClockwise() const {
+  return Ref<LuminanceSource>(new InvertedLuminanceSource(delegate->rotateCounterClockwise()));
+}
+
