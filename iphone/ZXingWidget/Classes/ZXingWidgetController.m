@@ -237,7 +237,7 @@
 // DecoderDelegate methods
 
 - (void)decoder:(Decoder *)decoder willDecodeImage:(UIImage *)image usingSubset:(UIImage *)subset{
-#ifdef ZXING_DEBUG
+#if ZXING_DEBUG
   NSLog(@"DecoderViewController MessageWhileDecodingWithDimensions: Decoding image (%.0fx%.0f) ...", image.size.width, image.size.height);
 #endif
 }
@@ -252,7 +252,7 @@
   if (beepSound != (SystemSoundID)-1) {
     AudioServicesPlaySystemSound(beepSound);
   }
-#ifdef ZXING_DEBUG
+#if ZXING_DEBUG
   NSLog(@"result string = %@", resultString);
 #endif
 }

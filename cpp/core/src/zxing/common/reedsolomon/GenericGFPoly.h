@@ -27,11 +27,10 @@
 #include <zxing/common/Counted.h>
 
 namespace zxing {
-  class GenericGF;
-  class GenericGFPoly;
-}
+
+class GenericGF;
   
-class zxing::GenericGFPoly : public Counted {
+class GenericGFPoly : public Counted {
 private:
   Ref<GenericGF> field_;
   ArrayRef<int> coefficients_;
@@ -49,7 +48,9 @@ public:
   Ref<GenericGFPoly> multiplyByMonomial(int degree, int coefficient);
   std::vector<Ref<GenericGFPoly> > divide(Ref<GenericGFPoly> other);
     
-  //#warning todo: add print method
+
 };
+
+}
 
 #endif //GENERICGFPOLY_H

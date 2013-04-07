@@ -27,23 +27,23 @@
 #define ZXingWidget_AztecReader_h
 
 namespace zxing {
-    namespace aztec {
+namespace aztec {
         
-        class AztecReader : public Reader {
-        private:
-            Decoder decoder_;
+class AztecReader : public Reader {
+ private:
+  Decoder decoder_;
             
-        protected:
-            Decoder &getDecoder();
+ protected:
+  Decoder &getDecoder();
             
-        public:
-            AztecReader();
-            virtual Ref<Result> decode(Ref<BinaryBitmap> image);
-            virtual Ref<Result> decode(Ref<BinaryBitmap> image, DecodeHints hints);
-            virtual ~AztecReader();
-        };
+ public:
+  AztecReader();
+  virtual Ref<Result> decode(Ref<BinaryBitmap> image);
+  virtual Ref<Result> decode(Ref<BinaryBitmap> image, DecodeHints hints);
+  virtual ~AztecReader();
+};
         
-    }
+}
 }
 
 #endif

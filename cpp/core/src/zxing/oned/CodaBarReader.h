@@ -22,12 +22,9 @@
 #include <zxing/Result.h>
 
 namespace zxing {
-	namespace oned {
-		class CodaBarReader;
-  }
-}
+namespace oned {
 
-class zxing::oned::CodaBarReader : public OneDReader {
+class CodaBarReader : public OneDReader {
 private:
   static const int MAX_ACCEPTABLE;
   static const int PADDING;
@@ -53,5 +50,8 @@ private:
 
   int toNarrowWidePattern(int position);
 };
+
+}
+}
 
 #endif

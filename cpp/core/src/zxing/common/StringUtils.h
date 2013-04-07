@@ -24,12 +24,9 @@
 #include <zxing/DecodeHints.h>
 
 namespace zxing {
-  namespace common {
-    class StringUtils;
-  }
-}
+namespace common {
 
-class zxing::common::StringUtils {
+class StringUtils {
 private:
   static char const* const PLATFORM_DEFAULT_ENCODING;
 
@@ -48,5 +45,8 @@ public:
 
   static std::string guessEncoding(char* bytes, int length, Hashtable const& hints);
 };
+
+}
+}
 
 #endif

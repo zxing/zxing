@@ -25,6 +25,7 @@
 
 namespace zxing {
 namespace multi {
+
 class MultipleBarcodeReader : public Counted {
   protected:
     MultipleBarcodeReader() {}
@@ -33,7 +34,8 @@ class MultipleBarcodeReader : public Counted {
     virtual std::vector<Ref<Result> > decodeMultiple(Ref<BinaryBitmap> image, DecodeHints hints) = 0;
     virtual ~MultipleBarcodeReader();
 };
-} // End zxing::multi namespace
-} // End zxing namespace
+
+}
+}
 
 #endif // __MULTIPLE_BARCODE_READER_H__

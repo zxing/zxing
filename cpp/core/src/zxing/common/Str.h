@@ -26,11 +26,11 @@
 #include <zxing/common/Counted.h>
 
 namespace zxing {
-  class String;
-  std::ostream& operator << (std::ostream& out, String const& s);
-}
 
-class zxing::String : public Counted {
+class String;
+std::ostream& operator << (std::ostream& out, String const& s);
+
+class String : public Counted {
 private:
   std::string text_;
 public:
@@ -42,5 +42,7 @@ public:
   int length() const;
   friend std::ostream& zxing::operator << (std::ostream& out, String const& s);
 };
+
+}
 
 #endif // __COMMON__STRING_H__

@@ -25,17 +25,14 @@
 #include <zxing/Result.h>
 
 namespace zxing {
-  namespace oned {
-    class Code93Reader;
-  }
-}
+namespace oned {
 
 /**
  * <p>Decodes Code 93 barcodes. This does not support "Full ASCII Code 93" yet.</p>
  * Ported form Java (author Sean Owen)
  * @author Lukasz Warchol
  */
-class zxing::oned::Code93Reader : public OneDReader {
+class Code93Reader : public OneDReader {
 public:
   Code93Reader();
   Ref<Result> decodeRow(int rowNumber, Ref<BitArray> row);
@@ -54,5 +51,8 @@ private:
                                int checkPosition,
                                int weightMax);
 };
+
+}
+}
 
 #endif

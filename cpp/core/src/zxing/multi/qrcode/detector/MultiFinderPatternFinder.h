@@ -23,6 +23,7 @@
 
 namespace zxing {
 namespace multi {
+
 class MultiFinderPatternFinder : zxing::qrcode::FinderPatternFinder {
   private:
     std::vector<std::vector<Ref<zxing::qrcode::FinderPattern> > > selectBestPatterns();
@@ -39,6 +40,7 @@ class MultiFinderPatternFinder : zxing::qrcode::FinderPatternFinder {
 
 
 };
+
 }
 }
 

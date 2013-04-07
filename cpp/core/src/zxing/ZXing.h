@@ -18,6 +18,13 @@
 #define __ZXING_H_
 
 #define ZXING_ARRAY_LEN(v) ((int)(sizeof(v)/sizeof(v[0])))
+#define ZX_LOG_DIGITS(digits) \
+    ((digits == 8) ? 3 : \
+     ((digits == 16) ? 4 : \
+      ((digits == 32) ? 5 : \
+       ((digits == 64) ? 6 : \
+        ((digits == 128) ? 7 : \
+         (-1))))))
 
 #ifndef ZXING_DEBUG
 #define ZXING_DEBUG 0

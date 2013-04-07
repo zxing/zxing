@@ -21,6 +21,7 @@
 
 #include <zxing/aztec/AztecReader.h>
 #include <zxing/aztec/detector/Detector.h>
+#include <zxing/common/DecoderResult.h>
 #include <iostream>
 
 using zxing::Ref;

@@ -27,10 +27,8 @@
 #include <limits>
 
 namespace zxing {
-  class BitMatrix;
-}
 
-class zxing::BitMatrix : public Counted {
+class BitMatrix : public Counted {
 public:
   static const int bitsPerWord = std::numeric_limits<unsigned int>::digits;
 
@@ -86,5 +84,7 @@ private:
   BitMatrix(const BitMatrix&);
   BitMatrix& operator =(const BitMatrix&);
 };
+
+}
 
 #endif // __BIT_MATRIX_H__
