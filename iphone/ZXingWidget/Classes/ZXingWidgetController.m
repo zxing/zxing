@@ -409,7 +409,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
   CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB(); 
   CGContextRef newContext =
       CGBitmapContextCreate(baseAddress, width, height, 8, bytesPerRow, colorSpace,
-                            kCGBitmapByteOrder32Little | kCGImageAlphaNoneSkipFirts);
+                            kCGBitmapByteOrder32Little | kCGImageAlphaNoneSkipFirst);
 
   CGImageRef capture = CGBitmapContextCreateImage(newContext); 
   CVPixelBufferUnlockBaseAddress(imageBuffer,0);
