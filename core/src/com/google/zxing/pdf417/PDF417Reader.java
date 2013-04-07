@@ -76,7 +76,7 @@ public final class PDF417Reader implements Reader {
         try {
           PDF417DetectorResult detectorResult = new Detector(image).detect(hints);
           points = detectorResult.getPoints();
-          printPoints(points);
+          // printPoints(points);
           TransformableBitMatrix bitMatrix = detectorResult.getBits();
           System.out.println("Trying Blackpoint: " + blackpoint);
           decoderResult = PDF417ScanningDecoder.decode(bitMatrix, points[4], points[5], points[6],
