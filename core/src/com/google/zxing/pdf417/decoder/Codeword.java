@@ -28,6 +28,10 @@ public class Codeword {
     rowNumber = (value / 30) * 3 + bucket / 3;
   }
 
+  public int getWidth() {
+    return endX - startX;
+  }
+
   public int getStartX() {
     return startX;
   }

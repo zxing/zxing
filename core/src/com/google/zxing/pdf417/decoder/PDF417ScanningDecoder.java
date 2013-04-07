@@ -43,7 +43,6 @@ public final class PDF417ScanningDecoder {
                                      final ResultPoint imageBottomRight, int minCodewordWidth,
                                      int maxCodewordWidth) throws NotFoundException, FormatException,
       ChecksumException {
-    // TODO update minCodewordWidth and maxCodewordWidth when valid codewords are found. maybe add them as properties to detection result 
     BoundingBox boundingBox = new BoundingBox(imageTopLeft, imageBottomLeft, imageTopRight, imageBottomRight,
         maxCodewordWidth);
     DetectionResultColumn detectionResultColumn = new DetectionResultColumn(boundingBox);
@@ -87,6 +86,8 @@ public final class PDF417ScanningDecoder {
         if (codeword != null) {
           detectionResultColumn.setCodeword(imageRow, codeword);
           previousStartColumn = startColumn;
+          minCodewordWidth = Math.min(minCodewordWidth, codeword.getWidth());
+          maxCodewordWidth = Math.max(maxCodewordWidth, codeword.getWidth());
         }
       }
     }
