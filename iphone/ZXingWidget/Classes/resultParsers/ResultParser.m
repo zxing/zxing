@@ -53,23 +53,23 @@ static NSMutableSet *sResultParsers = nil;
 
 + (ParsedResult *)parsedResultForString:(NSString *)s
                                  format:(BarcodeFormat)barcodeFormat {
-#ifdef DEBUG
+#ifdef ZXING_DEBUG
   NSLog(@"parsing result:\n<<<\n%@\n>>>\n", s);
 #endif
   for (Class c in [self resultParsers]) {
-#ifdef DEBUG
+#ifdef ZXING_DEBUG
     NSLog(@"trying %@", NSStringFromClass(c));
 #endif
     ParsedResult *result = [c parsedResultForString:s format:barcodeFormat];
     if (result != nil) {
-#ifdef DEBUG
+#ifdef ZXING_DEBUG
       NSLog(@"parsed as %@ %@", NSStringFromClass([result class]), result);
 #endif
       return result;
     }
   }
 
-#ifdef DEBUG
+#ifdef ZXING_DEBUG
   NSLog(@"No result parsers matched. Falling back to text.");
 #endif
   return [TextResultParser parsedResultForString:s format:barcodeFormat];

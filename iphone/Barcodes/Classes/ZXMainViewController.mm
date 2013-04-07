@@ -8,7 +8,7 @@
 //
 
 #import "ZXMainViewController.h"
-#import <QRCodeReader.h>
+#import <MultiFormatReader.h>
 #import <UniversalResultParser.h>
 #import <ParsedResult.h>
 #import <ResultAction.h>
@@ -52,7 +52,7 @@
 
 - (IBAction)scan:(id)sender {
   ZXingWidgetController *widController = [[ZXingWidgetController alloc] initWithDelegate:self showCancel:YES OneDMode:NO];
-  QRCodeReader* qrcodeReader = [[QRCodeReader alloc] init];
+  MultiFormatReader* qrcodeReader = [[MultiFormatReader alloc] init];
   NSSet *readers = [[NSSet alloc ] initWithObjects:qrcodeReader,nil];
   [qrcodeReader release];
   widController.readers = readers;
@@ -109,7 +109,7 @@
 #pragma mark ZXingDelegateMethods
 - (void)zxingController:(ZXingWidgetController*)controller didScanResult:(NSString *)resultString {
   [self dismissModalViewControllerAnimated:YES];
-#ifdef DEBUG  
+#ifdef ZXING_DEBUG
   NSLog(@"result has %d actions", actions ? 0 : actions.count);
 #endif
   Scan * scan = [[Database sharedDatabase] addScanWithText:resultString];
@@ -175,6 +175,7 @@
                            cancelButtonTitle:@"Cancel"
                            otherButtonTitles:@"Return", nil];
     [alert show];
+    [alert release];
   }
 }
 
@@ -195,7 +196,7 @@
   
   if (self.actions.count == 1) {
     ResultAction *action = [self.actions lastObject];
-#ifdef DEBUG
+#ifdef ZXING_DEBUG
     NSLog(@"Result has the single action, (%@)  '%@', performing it",
           NSStringFromClass([action class]), [action title]);
 #endif
@@ -203,7 +204,7 @@
                withObject:action
                afterDelay:0.0];
   } else {
-#ifdef DEBUG
+#ifdef ZXING_DEBUG
     NSLog(@"Result has multiple actions, popping up an action sheet");
 #endif
     UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithFrame:self.view.bounds];

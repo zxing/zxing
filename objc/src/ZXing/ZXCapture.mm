@@ -22,6 +22,7 @@
 #include <ZXing/ZXHybridBinarizer.h>
 #include <ZXing/ZXBinaryBitmap.h>
 #include <ZXing/ZXQRCodeReader.h>
+#include <ZXing/ZXMultiFormatReader.h>
 #include <ZXing/ZXDecodeHints.h>
 #include <ZXing/ZXResult.h>
 #include <ZXing/ZXReaderException.h>
@@ -36,6 +37,12 @@
 #define ZXCaptureConnection QTCaptureConnection
 #define ZXMediaTypeVideo QTMediaTypeVideo
 #endif
+
+namespace {
+
+const bool ZX_MULTI_READER = true;
+
+}
 
 #if ZXAV(1)+0
 static bool isIPad();
@@ -180,11 +187,9 @@ static bool isIPad();
             [UIScreen mainScreen].scale > 1 &&
             isIPad() && 
             [zxd supportsAVCaptureSessionPreset:AVCaptureSessionPresetiFrame960x540]) {
-          // NSLog(@"960");
           preset = AVCaptureSessionPresetiFrame960x540;
         }
         if (!preset) {
-          // NSLog(@"MED");
           preset = AVCaptureSessionPresetMedium;
         }
         session.sessionPreset = preset;
@@ -528,7 +533,12 @@ ZXAV(didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer)
         [[[ZXBinaryBitmap alloc] initWithBinarizer:binarizer] autorelease];
 
       @try {
-        ZXQRCodeReader* reader = [[[ZXQRCodeReader alloc] init] autorelease];
+        ZXReader* reader = nil;
+        if (ZX_MULTI_READER) {
+          reader = [[[ZXMultiFormatReader alloc] init] autorelease];
+        } else {
+          reader = [[[ZXQRCodeReader alloc] init] autorelease];
+        }
         // NSLog(@"started decode");
         ZXResult* result = [reader decode:bitmap hints:hints];
         // NSLog(@"finished decode");

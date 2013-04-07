@@ -1,9 +1,4 @@
-//
-//  Decoder.h
-//  ZXing
-//
-//  Created by Christian Brunschen on 31/03/2008.
-//
+// -*- mode:objc; c-basic-offset:2; indent-tabs-mode:nil -*-
 /*
  * Copyright 2008 ZXing authors
  *
@@ -36,14 +31,6 @@
 
 @property(nonatomic, retain) UIImage *image;
 @property(nonatomic, retain) NSSet *readers;
-#if 0
-@property(nonatomic, assign) CGRect cropRect;
-@property(nonatomic, retain) UIImage *subsetImage;
-@property(nonatomic, assign) char *subsetData;
-@property(assign) size_t subsetWidth;
-@property(assign) size_t subsetHeight;
-@property(assign) size_t subsetBytesPerRow;
-#endif
 @property(nonatomic, assign) id<DecoderDelegate> delegate;
 
 - (BOOL) decodeImage:(UIImage *)image;
