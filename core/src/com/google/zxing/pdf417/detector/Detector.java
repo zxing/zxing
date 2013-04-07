@@ -16,19 +16,18 @@
 
 package com.google.zxing.pdf417.detector;
 
-import java.util.Arrays;
-import java.util.Map;
-
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.ChecksumException;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.FormatException;
 import com.google.zxing.NotFoundException;
 import com.google.zxing.ResultPoint;
-import com.google.zxing.common.AdjustableBitMatrix;
+import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.RotationTransformer;
-import com.google.zxing.common.TransformableBitMatrix;
 import com.google.zxing.pdf417.PDF417Common;
+
+import java.util.Arrays;
+import java.util.Map;
 
 /**
  * <p>Encapsulates logic that can detect a PDF417 Code in an image, even if the
@@ -83,18 +82,20 @@ public final class Detector {
    * @throws ChecksumException 
    * @throws FormatException 
    */
-  public PDF417DetectorResult detect(Map<DecodeHintType, ?> hints) throws NotFoundException, FormatException, ChecksumException {
+  public PDF417DetectorResult detect(Map<DecodeHintType,?> hints) throws NotFoundException, FormatException,
+      ChecksumException {
     boolean tryHarder = hints != null && hints.containsKey(DecodeHintType.TRY_HARDER);
     // Fetch the 1 bit matrix once up front.
     // TODO detection improvement, tryHarder could try several different luminance thresholds or even different binarizers
     RotationTransformer rotationTransformer = new RotationTransformer();
-    TransformableBitMatrix matrix = new TransformableBitMatrix((AdjustableBitMatrix) image.getBlackMatrix(), rotationTransformer);
+    //    TransformableBitMatrix matrix = new TransformableBitMatrix((AdjustableBitMatrix) image.getBlackMatrix(),
+    //        rotationTransformer);
     // Try to find the vertices assuming the image is upright.
-    ResultPoint[] vertices = findVertices(matrix, tryHarder);
+    ResultPoint[] vertices = findVertices(image.getBlackMatrix(), tryHarder);
     if (vertices[0] == null) {
       // Maybe the image is rotated 180 degrees?
       rotationTransformer.setRotate(true);
-      vertices = findVertices(matrix, tryHarder);
+      vertices = findVertices(image.getBlackMatrix(), tryHarder);
     }
 
     if (vertices[0] == null) {
@@ -106,7 +107,7 @@ public final class Detector {
       throw NotFoundException.getNotFoundInstance();
     }
 
-    return new PDF417DetectorResult(matrix, vertices, codewordWidth);
+    return new PDF417DetectorResult(image.getBlackMatrix(), vertices, codewordWidth);
   }
 
   /**
@@ -126,7 +127,7 @@ public final class Detector {
    */
   // TODO Add additional start position on image to support finding multiple barcodes in a single image
   // should probably search from left to right, then top to bottom
-  private static ResultPoint[] findVertices(TransformableBitMatrix matrix, boolean tryHarder) {
+  private static ResultPoint[] findVertices(BitMatrix matrix, boolean tryHarder) {
     int height = matrix.getHeight();
     int width = matrix.getWidth();
 
@@ -145,7 +146,7 @@ public final class Detector {
     }
   }
 
-  private static ResultPoint[] findRowsWithPattern(TransformableBitMatrix matrix, int height, int width, int[] pattern) {
+  private static ResultPoint[] findRowsWithPattern(BitMatrix matrix, int height, int width, int[] pattern) {
     ResultPoint[] result = new ResultPoint[4];
     // A PDF471 barcode should have at least 3 rows, with each row being >= 3 times the module width. Therefore it should be at least
     // 9 pixels tall.
@@ -253,8 +254,9 @@ public final class Detector {
    * @param counters array of counters, as long as pattern, to re-use 
    * @return start/end horizontal offset of guard pattern, as an array of two ints.
    */
-  private static int[] findGuardPattern(TransformableBitMatrix matrix, int column, int row, int width, boolean whiteFirst, int[] pattern,
-      int[] counters) {
+  private static int[] findGuardPattern(BitMatrix matrix, int column, int row, int width,
+                                        boolean whiteFirst, int[] pattern,
+                                        int[] counters) {
     Arrays.fill(counters, 0, counters.length, 0);
     int patternLength = pattern.length;
     boolean isWhite = whiteFirst;

@@ -28,7 +28,6 @@ import com.google.zxing.ResultPoint;
 import com.google.zxing.common.AdjustableBitMatrix;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.DecoderResult;
-import com.google.zxing.common.TransformableBitMatrix;
 import com.google.zxing.pdf417.decoder.Decoder;
 import com.google.zxing.pdf417.decoder.PDF417ScanningDecoder;
 import com.google.zxing.pdf417.detector.Detector;
@@ -71,28 +70,48 @@ public final class PDF417Reader implements Reader {
     } else {
       decoderResult = null;
       points = null;
-      for (int blackpoint = 2; blackpoint < 255; blackpoint += 1) {
-        ((AdjustableBitMatrix) image.getBlackMatrix()).setBlackpoint(blackpoint);
-        try {
-          PDF417DetectorResult detectorResult = new Detector(image).detect(hints);
-          points = detectorResult.getPoints();
-          // printPoints(points);
-          TransformableBitMatrix bitMatrix = detectorResult.getBits();
-          System.out.println("Trying Blackpoint: " + blackpoint);
-          decoderResult = PDF417ScanningDecoder.decode(bitMatrix, points[4], points[5], points[6],
-              points[7], getMinCodewordWidth(points), getMaxCodewordWidth(points));
-          // TODO I could update the result points for compressed PDF417, which doesn't have stop pattern column
-          System.out.println("Successful Blackpoint: " + blackpoint);
-          break;
-        } catch (FormatException e) {
-          //System.out.println("Format Exception");
-        } catch (ChecksumException e) {
-          System.out.println("Checksum Exception");
-        } catch (NotFoundException e) {
-          //System.out.println("NotFound Exception");
-        } catch (Exception e) {
-          e.printStackTrace();
-          throw new RuntimeException(e);
+      if (!(image.getBlackMatrix() instanceof AdjustableBitMatrix)) {
+        System.err.println("Warning, not using AdjustableBitMatrix");
+        PDF417DetectorResult detectorResult = new Detector(image).detect(hints);
+        points = detectorResult.getPoints();
+        decoderResult = PDF417ScanningDecoder.decode(image.getBlackMatrix(), points[4], points[5], points[6],
+            points[7], getMinCodewordWidth(points), getMaxCodewordWidth(points));
+      } else {
+        AdjustableBitMatrix bitMatrix = (AdjustableBitMatrix) image.getBlackMatrix();
+        int estimatedBlackPoint = bitMatrix.getBlackpoint();
+        int maxRange = Math.min(estimatedBlackPoint, 255 - estimatedBlackPoint);
+        int range = 0;
+        boolean firstTime = true;
+        while (range < maxRange) {
+          int blackPoint;
+          if (firstTime) {
+            blackPoint = estimatedBlackPoint + range;
+          } else {
+            blackPoint = estimatedBlackPoint - range;
+          }
+          bitMatrix.setBlackpoint(blackPoint);
+          try {
+            PDF417DetectorResult detectorResult = new Detector(image).detect(hints);
+            points = detectorResult.getPoints();
+            decoderResult = PDF417ScanningDecoder.decode(image.getBlackMatrix(), points[4], points[5], points[6],
+                points[7], getMinCodewordWidth(points), getMaxCodewordWidth(points));
+            break;
+          } catch (FormatException e) {
+            //System.out.println("Format Exception");
+          } catch (ChecksumException e) {
+            System.out.println("Checksum Exception");
+          } catch (NotFoundException e) {
+            //System.out.println("NotFound Exception");
+          } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+          }
+          if (range == 0 || !firstTime) {
+            range++;
+            firstTime = true;
+          } else if (firstTime) {
+            firstTime = false;
+          }
         }
       }
       if (decoderResult == null) {

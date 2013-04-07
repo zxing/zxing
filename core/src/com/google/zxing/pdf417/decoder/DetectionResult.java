@@ -1,7 +1,7 @@
 package com.google.zxing.pdf417.decoder;
 
 import com.google.zxing.ResultPoint;
-import com.google.zxing.common.TransformableBitMatrix;
+import com.google.zxing.common.BitMatrix;
 import com.google.zxing.pdf417.decoder.SimpleLog.LEVEL;
 
 import java.util.Formatter;
@@ -14,7 +14,7 @@ public class DetectionResult implements SimpleLog.Loggable {
   private final DetectionResultColumn[] detectionResultColumns;
   private final BoundingBox boundingBox;
 
-  public DetectionResult(TransformableBitMatrix image, int barcodeColumnCount,
+  public DetectionResult(BitMatrix image, int barcodeColumnCount,
                          int barcodeRowCount,
                          int barcodeECLevel,
                          BoundingBox boundingBox) {

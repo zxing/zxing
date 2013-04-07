@@ -17,7 +17,7 @@
 package com.google.zxing.pdf417.detector;
 
 import com.google.zxing.ResultPoint;
-import com.google.zxing.common.TransformableBitMatrix;
+import com.google.zxing.common.BitMatrix;
 
 /**
  * Ideally, this class would extend DetectorResult. This is currently not possible, because TransformableBitMatrix doesn't have a
@@ -27,17 +27,17 @@ import com.google.zxing.common.TransformableBitMatrix;
  */
 public class PDF417DetectorResult {
 
-  private final TransformableBitMatrix bits;
+  private final BitMatrix bits;
   private final ResultPoint[] points;
   private final float codewordWidth;
 
-  public PDF417DetectorResult(TransformableBitMatrix bits, ResultPoint[] points, float codewordWidth) {
+  public PDF417DetectorResult(BitMatrix bits, ResultPoint[] points, float codewordWidth) {
     this.bits = bits;
     this.points = points;
     this.codewordWidth = codewordWidth;
   }
 
-  public final TransformableBitMatrix getBits() {
+  public final BitMatrix getBits() {
     return bits;
   }
 

@@ -156,6 +156,7 @@ final class DecodeWorker implements Callable<Integer> {
         int[] crop = config.getCrop();
         source = new BufferedImageLuminanceSource(image, crop[0], crop[1], crop[2], crop[3]);
       }
+      //BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
       BinaryBitmap bitmap = new BinaryBitmap(new FixedValueBinarizer(source));
       if (config.isDumpBlackPoint()) {
         dumpBlackPoint(uri, image, bitmap);

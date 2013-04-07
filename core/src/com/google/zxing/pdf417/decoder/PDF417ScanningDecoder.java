@@ -20,8 +20,8 @@ import com.google.zxing.ChecksumException;
 import com.google.zxing.FormatException;
 import com.google.zxing.NotFoundException;
 import com.google.zxing.ResultPoint;
+import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.DecoderResult;
-import com.google.zxing.common.TransformableBitMatrix;
 import com.google.zxing.pdf417.PDF417Common;
 import com.google.zxing.pdf417.decoder.SimpleLog.LEVEL;
 
@@ -38,7 +38,7 @@ public final class PDF417ScanningDecoder {
   private static final int MIN_BARCODE_ROWS = 3;
   private static final int MAX_BARCODE_ROWS = 90;
 
-  public static DecoderResult decode(TransformableBitMatrix image, final ResultPoint imageTopLeft,
+  public static DecoderResult decode(BitMatrix image, final ResultPoint imageTopLeft,
                                      final ResultPoint imageBottomLeft, final ResultPoint imageTopRight,
                                      final ResultPoint imageBottomRight, int minCodewordWidth,
                                      int maxCodewordWidth) throws NotFoundException, FormatException,
@@ -177,7 +177,7 @@ public final class PDF417ScanningDecoder {
   }
 
   // could add parameter to make it work for the right row indicator as well
-  private static DetectionResult getDetectionResult(TransformableBitMatrix image,
+  private static DetectionResult getDetectionResult(BitMatrix image,
                                                     DetectionResultColumn detectionResultColumn) {
     Codeword[] codewords = detectionResultColumn.getCodewords();
     BarcodeValue barcodeColumnCount = new BarcodeValue();
@@ -215,7 +215,7 @@ public final class PDF417ScanningDecoder {
         barcodeRowCountOffset.getValue(), barcodeECLevel.getValue(), detectionResultColumn.getBoundingBox());
   }
 
-  private static Codeword detectCodeword(TransformableBitMatrix image, int startColumn, int imageRow,
+  private static Codeword detectCodeword(BitMatrix image, int startColumn, int imageRow,
                                          int minCodewordWidth, int maxCodewordWidth) {
     startColumn = adjustCodewordStartColumn(image, startColumn, imageRow);
     int[] moduleBitCount = getModuleBitCount(image, startColumn, imageRow);
@@ -252,7 +252,7 @@ public final class PDF417ScanningDecoder {
     return new Codeword(startColumn, endColumn, getCodewordBucketNumber(moduleBitCount), codeword);
   }
 
-  private static int[] getModuleBitCount(TransformableBitMatrix image, int startColumn, int imageRow) {
+  private static int[] getModuleBitCount(BitMatrix image, int startColumn, int imageRow) {
     final int imageWidth = image.getWidth();
     int imageColumn = startColumn;
     int[] moduleBitCount = new int[8];
@@ -287,7 +287,7 @@ public final class PDF417ScanningDecoder {
     return 2 << barcodeECLevel;
   }
 
-  private static int adjustCodewordStartColumn(TransformableBitMatrix image, final int codewordStartColumn,
+  private static int adjustCodewordStartColumn(BitMatrix image, final int codewordStartColumn,
                                                final int imageRow) {
     int correctedStartColumn = codewordStartColumn;
     // there should be no black pixels before the start column. If there are, then we need to start earlier.
