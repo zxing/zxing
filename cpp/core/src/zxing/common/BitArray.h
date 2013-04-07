@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+#include <zxing/ZXing.h>
 #include <zxing/common/Counted.h>
 #include <zxing/common/IllegalArgumentException.h>
 #include <zxing/common/Array.h>
@@ -26,19 +27,8 @@
 #include <iostream>
 
 namespace zxing {
-  class BitArray;
-  std::ostream& operator << (std::ostream&, BitArray const&);
-}
 
-#define ZX_LOG_DIGITS(digits) \
-    ((digits == 8) ? 3 : \
-     ((digits == 16) ? 4 : \
-      ((digits == 32) ? 5 : \
-       ((digits == 64) ? 6 : \
-        ((digits == 128) ? 7 : \
-         (-1))))))
-
-class zxing::BitArray : public Counted {
+class BitArray : public Counted {
 public:
   static const int bitsPerWord = std::numeric_limits<unsigned int>::digits;
 
@@ -71,18 +61,21 @@ public:
   std::vector<int>& getBitArray();
   
   void reverse();
-  class Reverse;
+
+  class Reverse {
+   private:
+    Ref<BitArray> array;
+   public:
+    Reverse(Ref<BitArray> array);
+    ~Reverse();
+  };
 
 private:
   static int makeArraySize(int size);
 };
 
-class zxing::BitArray::Reverse {
-private:
-  Ref<BitArray> array;
-public:
-  Reverse(Ref<BitArray> array);
-  ~Reverse();
-};
+std::ostream& operator << (std::ostream&, BitArray const&);
+
+}
 
 #endif // __BIT_ARRAY_H__

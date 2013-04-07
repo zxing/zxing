@@ -26,10 +26,8 @@
 #include <zxing/common/Array.h>
 
 namespace zxing {
-  class GlobalHistogramBinarizer;
-}
 	
-class zxing::GlobalHistogramBinarizer : public Binarizer {
+class GlobalHistogramBinarizer : public Binarizer {
 private:
   ArrayRef<char> luminances;
   ArrayRef<int> buckets;
@@ -44,5 +42,7 @@ public:
 private:
   void initArrays(int luminanceSize);
 };
+
+}
 	
 #endif /* GLOBALHISTOGRAMBINARIZER_H_ */

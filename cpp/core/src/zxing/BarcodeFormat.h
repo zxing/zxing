@@ -22,11 +22,11 @@
  */
 
 namespace zxing {
-  class BarcodeFormat;
-}
 
-class zxing::BarcodeFormat {
+class BarcodeFormat {
 public:
+  // if you update the enum, update BarcodeFormat.cpp
+
   enum Value {
     NONE,
     AZTEC,
@@ -52,12 +52,9 @@ public:
   const Value value;
   operator Value () const {return value;}
 
-  /* if you update the enum, please update the name in BarcodeFormat.cpp */
   static char const* barcodeFormatNames[];
 };
 
-namespace zxing {
-  class BarcodeFormat;
 }
 
 #endif // __BARCODE_FORMAT_H__

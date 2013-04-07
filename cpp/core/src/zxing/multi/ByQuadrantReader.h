@@ -24,6 +24,7 @@
 
 namespace zxing {
 namespace multi {
+
 class ByQuadrantReader : public Reader {
   private:
     Reader& delegate_;
@@ -34,7 +35,8 @@ class ByQuadrantReader : public Reader {
     virtual Ref<Result> decode(Ref<BinaryBitmap> image);
     virtual Ref<Result> decode(Ref<BinaryBitmap> image, DecodeHints hints);
 };
-} // End zxing::multi namespace
-} // End zxing namespace
+
+}
+}
 
 #endif // __BY_QUADRANT_READER_H__

@@ -22,12 +22,9 @@
 #include <zxing/Result.h>
 
 namespace zxing {
-  namespace oned {
-    class UPCEReader;
-  }
-}
+namespace oned {
 
-class zxing::oned::UPCEReader : public UPCEANReader {
+class UPCEReader : public UPCEANReader {
 private:
   std::vector<int> decodeMiddleCounters;
   static bool determineNumSysAndCheckDigit(std::string& resultString, int lgPatternFound);
@@ -43,5 +40,8 @@ public:
 
   BarcodeFormat getBarcodeFormat();
 };
+
+}
+}
 
 #endif

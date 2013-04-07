@@ -25,10 +25,8 @@
 #include <exception>
 
 namespace zxing {
-  class Exception;
-}
 
-class zxing::Exception : public std::exception {
+class Exception : public std::exception {
 private:
   char const* const message;
 
@@ -47,5 +45,7 @@ private:
   static char const* copy(char const*);
   void deleteMessage();
 };
+
+}
 
 #endif // __EXCEPTION_H__

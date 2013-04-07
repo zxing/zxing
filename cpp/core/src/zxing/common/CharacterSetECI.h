@@ -23,12 +23,9 @@
 #include <zxing/DecodeHints.h>
 
 namespace zxing {
-  namespace common {
-    class CharacterSetECI;
-  }
-}
+namespace common {
 
-class zxing::common::CharacterSetECI {
+class CharacterSetECI {
 private:
   static std::map<int, CharacterSetECI*> VALUE_TO_ECI;
   static std::map<std::string, CharacterSetECI*> NAME_TO_ECI;
@@ -49,5 +46,8 @@ public:
   static CharacterSetECI* getCharacterSetECIByValue(int value);
   static CharacterSetECI* getCharacterSetECIByName(std::string const& name);
 };
+
+}
+}
 
 #endif

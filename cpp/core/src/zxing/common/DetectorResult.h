@@ -26,10 +26,8 @@
 #include <zxing/ResultPoint.h>
 
 namespace zxing {
-    class DetectorResult;
-}
 
-class zxing::DetectorResult : public Counted {
+class DetectorResult : public Counted {
 private:
   Ref<BitMatrix> bits_;
   ArrayRef< Ref<ResultPoint> > points_;
@@ -39,5 +37,7 @@ public:
   Ref<BitMatrix> getBits();
   ArrayRef< Ref<ResultPoint> > getPoints();
 };
+
+}
 
 #endif // __DETECTOR_RESULT_H__
