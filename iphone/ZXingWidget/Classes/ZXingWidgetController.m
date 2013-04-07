@@ -237,7 +237,7 @@
 // DecoderDelegate methods
 
 - (void)decoder:(Decoder *)decoder willDecodeImage:(UIImage *)image usingSubset:(UIImage *)subset{
-#ifdef DEBUG
+#ifdef ZXING_DEBUG
   NSLog(@"DecoderViewController MessageWhileDecodingWithDimensions: Decoding image (%.0fx%.0f) ...", image.size.width, image.size.height);
 #endif
 }
@@ -252,7 +252,7 @@
   if (beepSound != (SystemSoundID)-1) {
     AudioServicesPlaySystemSound(beepSound);
   }
-#ifdef DEBUG
+#ifdef ZXING_DEBUG
   NSLog(@"result string = %@", resultString);
 #endif
 }
@@ -307,7 +307,7 @@
 
 // Gross, I know. But you can't use the device idiom because it's not iPad when running
 // in zoomed iphone mode but the camera still acts like an ipad.
-#if HAS_AVFF
+#if 0 && HAS_AVFF
 static bool isIPad() {
   static int is_ipad = -1;
   if (is_ipad < 0) {
@@ -326,9 +326,9 @@ static bool isIPad() {
 - (void)initCapture {
 #if HAS_AVFF
   AVCaptureDevice* inputDevice =
-    [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+      [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
   AVCaptureDeviceInput *captureInput =
-    [AVCaptureDeviceInput deviceInputWithDevice:inputDevice error:nil];
+      [AVCaptureDeviceInput deviceInputWithDevice:inputDevice error:nil];
   AVCaptureVideoDataOutput *captureOutput = [[AVCaptureVideoDataOutput alloc] init]; 
   captureOutput.alwaysDiscardsLateVideoFrames = YES; 
   [captureOutput setSampleBufferDelegate:self queue:dispatch_get_main_queue()];
@@ -339,16 +339,24 @@ static bool isIPad() {
   self.captureSession = [[[AVCaptureSession alloc] init] autorelease];
 
   NSString* preset = 0;
-  if (NSClassFromString(@"NSOrderedSet") && // Proxy for "is this iOS 5" ...
-      [UIScreen mainScreen].scale > 1 &&
-      isIPad() && 
-      [inputDevice
-        supportsAVCaptureSessionPreset:AVCaptureSessionPresetiFrame960x540]) {
-    // NSLog(@"960");
-    preset = AVCaptureSessionPresetiFrame960x540;
+
+#if 0
+  // to be deleted when verified ...
+  if (isIPad()) {
+    if (NSClassFromString(@"NSOrderedSet") && // Proxy for "is this iOS 5" ...
+        [UIScreen mainScreen].scale > 1 &&
+        [inputDevice
+          supportsAVCaptureSessionPreset:AVCaptureSessionPresetiFrame960x540]) {
+      preset = AVCaptureSessionPresetiFrame960x540;
+    }
+    if (false && !preset &&
+        [inputDevice supportsAVCaptureSessionPreset:AVCaptureSessionPresetHigh]) {
+      preset = AVCaptureSessionPresetHigh;
+    }
   }
+#endif
+
   if (!preset) {
-    // NSLog(@"MED");
     preset = AVCaptureSessionPresetMedium;
   }
   self.captureSession.sessionPreset = preset;
@@ -357,44 +365,6 @@ static bool isIPad() {
   [self.captureSession addOutput:captureOutput];
 
   [captureOutput release];
-
-/*
-  [[NSNotificationCenter defaultCenter]
-  addObserver:self
-  selector:@selector(stopPreview:)
-  name:AVCaptureSessionDidStopRunningNotification
-  object:self.captureSession];
-
-  [[NSNotificationCenter defaultCenter]
-  addObserver:self
-  selector:@selector(notification:)
-  name:AVCaptureSessionDidStopRunningNotification
-  object:self.captureSession];
-
-  [[NSNotificationCenter defaultCenter]
-  addObserver:self
-  selector:@selector(notification:)
-  name:AVCaptureSessionRuntimeErrorNotification
-  object:self.captureSession];
-
-  [[NSNotificationCenter defaultCenter]
-  addObserver:self
-  selector:@selector(notification:)
-  name:AVCaptureSessionDidStartRunningNotification
-  object:self.captureSession];
-
-  [[NSNotificationCenter defaultCenter]
-  addObserver:self
-  selector:@selector(notification:)
-  name:AVCaptureSessionWasInterruptedNotification
-  object:self.captureSession];
-
-  [[NSNotificationCenter defaultCenter]
-  addObserver:self
-  selector:@selector(notification:)
-  name:AVCaptureSessionInterruptionEndedNotification
-  object:self.captureSession];
-*/
 
   if (!self.prevLayer) {
     self.prevLayer = [AVCaptureVideoPreviewLayer layerWithSession:self.captureSession];
@@ -424,6 +394,8 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
   size_t width = CVPixelBufferGetWidth(imageBuffer); 
   size_t height = CVPixelBufferGetHeight(imageBuffer); 
     
+  // NSLog(@"wxh: %lu x %lu", width, height);
+
   uint8_t* baseAddress = CVPixelBufferGetBaseAddress(imageBuffer); 
   void* free_me = 0;
   if (true) { // iOS bug?
@@ -436,8 +408,8 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 
   CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB(); 
   CGContextRef newContext =
-    CGBitmapContextCreate(baseAddress, width, height, 8, bytesPerRow, colorSpace,
-                          kCGBitmapByteOrder32Little | kCGImageAlphaNoneSkipFirst); 
+      CGBitmapContextCreate(baseAddress, width, height, 8, bytesPerRow, colorSpace,
+                            kCGBitmapByteOrder32Little | kCGImageAlphaNoneSkipFirts);
 
   CGImageRef capture = CGBitmapContextCreateImage(newContext); 
   CVPixelBufferUnlockBaseAddress(imageBuffer,0);
@@ -446,56 +418,84 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
   CGContextRelease(newContext); 
   CGColorSpaceRelease(colorSpace);
 
-  CGRect cropRect = [overlayView cropRect];
-  if (oneDMode) {
-    // let's just give the decoder a vertical band right above the red line
-    cropRect.origin.x = cropRect.origin.x + (cropRect.size.width / 2) - (ONE_D_BAND_HEIGHT + 1);
-    cropRect.size.width = ONE_D_BAND_HEIGHT;
-    // do a rotate
-    CGImageRef croppedImg = CGImageCreateWithImageInRect(capture, cropRect);
+  if (false) {
+    CGRect cropRect = [overlayView cropRect];
+    if (oneDMode) {
+      // let's just give the decoder a vertical band right above the red line
+      cropRect.origin.x = cropRect.origin.x + (cropRect.size.width / 2) - (ONE_D_BAND_HEIGHT + 1);
+      cropRect.size.width = ONE_D_BAND_HEIGHT;
+      // do a rotate
+      CGImageRef croppedImg = CGImageCreateWithImageInRect(capture, cropRect);
+      CGImageRelease(capture);
+      capture = [self CGImageRotated90:croppedImg];
+      capture = [self CGImageRotated180:capture];
+      //              UIImageWriteToSavedPhotosAlbum([UIImage imageWithCGImage:capture], nil, nil, nil);
+      CGImageRelease(croppedImg);
+      CGImageRetain(capture);
+      cropRect.origin.x = 0.0;
+      cropRect.origin.y = 0.0;
+      cropRect.size.width = CGImageGetWidth(capture);
+      cropRect.size.height = CGImageGetHeight(capture);
+    }
+
+    // N.B.
+    // - Won't work if the overlay becomes uncentered ...
+    // - iOS always takes videos in landscape
+    // - images are always 4x3; device is not
+    // - iOS uses virtual pixels for non-image stuff
+
+    {
+      float height = CGImageGetHeight(capture);
+      float width = CGImageGetWidth(capture);
+
+      NSLog(@"%f %f", width, height);
+
+      CGRect screen = UIScreen.mainScreen.bounds;
+      float tmp = screen.size.width;
+      screen.size.width = screen.size.height;;
+      screen.size.height = tmp;
+
+      cropRect.origin.x = (width-cropRect.size.width)/2;
+      cropRect.origin.y = (height-cropRect.size.height)/2;
+    }
+
+    NSLog(@"sb %@", NSStringFromCGRect(UIScreen.mainScreen.bounds));
+    NSLog(@"cr %@", NSStringFromCGRect(cropRect));
+
+    CGImageRef newImage = CGImageCreateWithImageInRect(capture, cropRect);
     CGImageRelease(capture);
-    capture = [self CGImageRotated90:croppedImg];
-    capture = [self CGImageRotated180:capture];
-    //              UIImageWriteToSavedPhotosAlbum([UIImage imageWithCGImage:capture], nil, nil, nil);
-    CGImageRelease(croppedImg);
-    CGImageRetain(capture);
-    cropRect.origin.x = 0.0;
-    cropRect.origin.y = 0.0;
-    cropRect.size.width = CGImageGetWidth(capture);
-    cropRect.size.height = CGImageGetHeight(capture);
+    capture = newImage;
   }
 
-  // N.B.
-  // - Won't work if the overlay becomes uncentered ...
-  // - iOS always takes videos in landscape
-  // - images are always 4x3; device is not
-  // - iOS uses virtual pixels for non-image stuff
+  UIImage* scrn = [[[UIImage alloc] initWithCGImage:capture] autorelease];
 
-  {
-    float height = CGImageGetHeight(capture);
-    float width = CGImageGetWidth(capture);
-
-    CGRect screen = UIScreen.mainScreen.bounds;
-    float tmp = screen.size.width;
-    screen.size.width = screen.size.height;;
-    screen.size.height = tmp;
-
-    cropRect.origin.x = (width-cropRect.size.width)/2;
-    cropRect.origin.y = (height-cropRect.size.height)/2;
-  }
-  CGImageRef newImage = CGImageCreateWithImageInRect(capture, cropRect);
   CGImageRelease(capture);
-  UIImage *scrn = [[UIImage alloc] initWithCGImage:newImage];
-  CGImageRelease(newImage);
-  Decoder *d = [[Decoder alloc] init];
+
+  Decoder* d = [[Decoder alloc] init];
   d.readers = readers;
   d.delegate = self;
-  cropRect.origin.x = 0.0;  
-  cropRect.origin.y = 0.0;
-  decoding = [d decodeImage:scrn cropRect:cropRect] == YES ? NO : YES;
+
+  decoding = [d decodeImage:scrn] == YES ? NO : YES;
+
   [d release];
-  [scrn release];
-} 
+
+  if (decoding) {
+
+    d = [[Decoder alloc] init];
+    d.readers = readers;
+    d.delegate = self;
+
+    scrn = [[[UIImage alloc] initWithCGImage:scrn.CGImage
+                                       scale:1.0
+                                 orientation:UIImageOrientationLeft] autorelease];
+
+    // NSLog(@"^ %@ %f", NSStringFromCGSize([scrn size]), scrn.scale);
+    decoding = [d decodeImage:scrn] == YES ? NO : YES;
+
+    [d release];
+  }
+
+}
 #endif
 
 - (void)stopCapture {
@@ -507,18 +507,6 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
   AVCaptureVideoDataOutput* output = (AVCaptureVideoDataOutput*)[captureSession.outputs objectAtIndex:0];
   [captureSession removeOutput:output];
   [self.prevLayer removeFromSuperlayer];
-
-/*
-// heebee jeebees here ... is iOS still writing into the layer?
-if (self.prevLayer) {
-layer.session = nil;
-AVCaptureVideoPreviewLayer* layer = prevLayer;
-[self.prevLayer retain];
-dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 12000000000), dispatch_get_main_queue(), ^{
-[layer release];
-});
-}
-*/
 
   self.prevLayer = nil;
   self.captureSession = nil;

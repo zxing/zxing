@@ -578,6 +578,7 @@
 					"-Objc",
 				);
 				PRODUCT_NAME = Barcodes;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = "armv7 armv7s";
 			};
 			name = Debug;
@@ -604,6 +605,7 @@
 				);
 				PRODUCT_NAME = Barcodes;
 				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VALID_ARCHS = "armv7 armv7s";
 			};
@@ -662,6 +664,7 @@
 					"-Objc",
 				);
 				PRODUCT_NAME = Barcodes;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VALID_ARCHS = "armv7 armv7s";
 			};
