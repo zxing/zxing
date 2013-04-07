@@ -56,18 +56,16 @@ public final class PDF417ScanningDecoder {
         startColumn = codeword.getStartX();
       }
     }
-    // TODO add checks for valid row indicator codewords. Bucket must match row number
-    // otherwise we have an invalid codeword, which should be removed.
     DetectionResult detectionResult = getDetectionResult(image, detectionResultColumn);
     if (detectionResult == null) {
-      // TODO if detectionResult is null, try the right row indicator column
+      // If detectionResult is null, we could try the right row indicator column. This should happen very
+      // rarely, though, as it means that the complete left row indicator column was unreadable. If someone
+      // provides a test PDF, I'll look into it.
       throw NotFoundException.getNotFoundInstance();
     }
 
     detectionResult.setDetectionResultColumn(barcodeColumn, detectionResultColumn);
     int maxBarcodeColumn = detectionResult.getBarcodeColumnCount() + 2;
-    // TODO add check for maxBarcodeColumn * minCodewordWidth + startPos against image width.
-    // allow for 3 columns to be cut off
     for (barcodeColumn = 1; barcodeColumn < maxBarcodeColumn; barcodeColumn++) {
       detectionResultColumn = new DetectionResultColumn(boundingBox);
       detectionResult.setDetectionResultColumn(barcodeColumn, detectionResultColumn);
@@ -178,7 +176,7 @@ public final class PDF417ScanningDecoder {
     return -1;
   }
 
-  // TODO add parameter to make it work for the right row indicator as well
+  // could add parameter to make it work for the right row indicator as well
   private static DetectionResult getDetectionResult(TransformableBitMatrix image,
                                                     DetectionResultColumn detectionResultColumn) {
     Codeword[] codewords = detectionResultColumn.getCodewords();
@@ -190,10 +188,8 @@ public final class PDF417ScanningDecoder {
       if (codeword == null) {
         continue;
       }
-      int rowIndicatorValue = codeword.getValue() % 30;
       codeword.setRowNumberAsRowIndicatorColumn();
-
-      // TODO simply add 1 (or 2?) to the codeword row number for the right row indicator  
+      int rowIndicatorValue = codeword.getValue() % 30;
       switch (codeword.getRowNumber() % 3) {
         case 0:
           barcodeRowCount.setValue(rowIndicatorValue * 3 + 1);
