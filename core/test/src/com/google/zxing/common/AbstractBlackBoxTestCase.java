@@ -172,16 +172,23 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
         float rotation = testResults.get(x).getRotation();
         BufferedImage rotatedImage = rotateImage(image, rotation);
         LuminanceSource source = new BufferedImageLuminanceSource(rotatedImage);
-        BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+        //BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+        BinaryBitmap bitmap = new BinaryBitmap(new FixedValueBinarizer(source));
+
+        String logText = String.format("rotation %f, file %s", rotation, testImageFileName);
         try {
           if (decode(bitmap, rotation, expectedText, expectedMetadata, false)) {
+            System.err.println("Passed " + logText);
             passedCounts[x]++;
           } else {
+            System.err.println("Failed: " + logText);
             misreadCounts[x]++;
           }
         } catch (ReaderException ignored) {
+          System.err.println("Failed: " + logText);
           log.fine(String.format("could not read at rotation %f", rotation));
         }
+        /*
         try {
           if (decode(bitmap, rotation, expectedText, expectedMetadata, true)) {
             tryHarderCounts[x]++;
@@ -191,6 +198,7 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
         } catch (ReaderException ignored) {
           log.fine(String.format("could not read at rotation %f w/TH", rotation));
         }
+        */
       }
     }
 

@@ -87,7 +87,7 @@ public final class PDF417Reader implements Reader {
         } catch (FormatException e) {
           //System.out.println("Format Exception");
         } catch (ChecksumException e) {
-          //System.out.println("Checksum Exception");
+          System.out.println("Checksum Exception");
         } catch (NotFoundException e) {
           //System.out.println("NotFound Exception");
         } catch (Exception e) {

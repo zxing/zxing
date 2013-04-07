@@ -38,6 +38,7 @@ import java.util.Map.Entry;
  */
 public final class PDF417ScanningDecoderV2 {
 
+  private static final int LOG_LEVEL = 3;
   private static final int STOP_PATTERN_VALUE = 130324;
   private static final int CODEWORD_SKEW_SIZE = 2;
   private static final int BARCODE_ROW_INDICATOR_COLUMN = -2;
@@ -174,7 +175,7 @@ public final class PDF417ScanningDecoderV2 {
     if (codeword != null) {
       return codeword.getEndX();
     }
-    log(3, "WARNING: Should calculate start column more accurately, Please fix code :-)", imageRow,
+    log(1, "WARNING: Should calculate start column more accurately, Please fix code :-)", imageRow,
         barcodeColumn);
     for (Codeword previousRowCodeword : detectionResult.getDetectionResultColumn(barcodeColumn - 1)
         .getCodewords()) {
@@ -182,8 +183,8 @@ public final class PDF417ScanningDecoderV2 {
         return previousRowCodeword.getEndX();
       }
     }
-
-    log(3, "ERROR: Estimated start column not found. Please fix the code. :-)", imageRow, barcodeColumn);
+    // FIXME this should really be fixed
+    log(2, "ERROR: Estimated start column not found. Please fix the code. :-)", imageRow, barcodeColumn);
     return -1;
   }
 
@@ -241,24 +242,28 @@ public final class PDF417ScanningDecoderV2 {
     }
 
     int[] bitCountCopy = Arrays.copyOf(moduleBitCount, moduleBitCount.length);
-    if (!PDF417CodewordDecoder.adjustBitCount(moduleBitCount)) {
+    AdjustmentResults adjustmentResults = PDF417CodewordDecoder.adjustBitCount(moduleBitCount);
+    if (adjustmentResults.isEmpty()) {
       log(2, "barcode symbol too small", imageRow, endColumn);
       // TODO maybe try to process next module? 
       return null;
     }
-    int bucket = getCodewordBucketNumber(moduleBitCount);
-    long decodedValue = getDecodedValue(moduleBitCount);
-    if (decodedValue == STOP_PATTERN_VALUE) {
-      return null;
+    int codeword = -1;
+    for (int resultIndex = 0; resultIndex < adjustmentResults.size() && codeword == -1; resultIndex++) {
+      moduleBitCount = adjustmentResults.get(resultIndex).getModuleCount();
+      long decodedValue = getDecodedValue(moduleBitCount);
+      if (decodedValue == STOP_PATTERN_VALUE) {
+        return null;
+      }
+      codeword = BitMatrixParser.getCodeword(decodedValue);
     }
-    int codeword = BitMatrixParser.getCodeword(decodedValue);
     if (codeword == -1) {
       // TODO could try to reinterpret the moduleBitCount using a different strategy
       log(1, "invalid barcode symbol for moduleBitCount " + getBitCounts(moduleBitCount) + ", original: " +
           getBitCounts(bitCountCopy) + "\n", imageRow, endColumn);
       return null;
     }
-
+    int bucket = getCodewordBucketNumber(moduleBitCount);
     return new Codeword(startColumn, endColumn, bucket, codeword, getBarcodeRowNumber(codeword, bucket,
         barcodeRow));
   }
@@ -266,9 +271,6 @@ public final class PDF417ScanningDecoderV2 {
   private static int getBarcodeRowNumber(int codeword, int bucket, int barcodeRow) {
     if (barcodeRow == BARCODE_ROW_INDICATOR_COLUMN) {
       return getRowIndicatorRowNumber(codeword) + bucket / 3;
-    }
-    if (bucket != ((barcodeRow % 3) * 3)) {
-      return BARCODE_ROW_UNKNOWN;
     }
     return barcodeRow;
   }
@@ -278,22 +280,17 @@ public final class PDF417ScanningDecoderV2 {
     int imageColumn = startColumn;
     int[] moduleBitCount = new int[8];
     int moduleNumber = 0;
-    try {
-      while (imageColumn < imageWidth && moduleNumber < moduleBitCount.length) {
-        while (imageColumn < imageWidth && image.get(imageColumn, imageRow)) {
-          moduleBitCount[moduleNumber]++;
-          imageColumn++;
-        }
-        moduleNumber++;
-        while (imageColumn < imageWidth && !image.get(imageColumn, imageRow)) {
-          moduleBitCount[moduleNumber]++;
-          imageColumn++;
-        }
-        moduleNumber++;
+    while (imageColumn < imageWidth && moduleNumber < moduleBitCount.length) {
+      while (imageColumn < imageWidth && image.get(imageColumn, imageRow)) {
+        moduleBitCount[moduleNumber]++;
+        imageColumn++;
       }
-    } catch (Throwable e) {
-      System.out.println("READ THIS");
-      e.printStackTrace();
+      moduleNumber++;
+      while (imageColumn < imageWidth && !image.get(imageColumn, imageRow)) {
+        moduleBitCount[moduleNumber]++;
+        imageColumn++;
+      }
+      moduleNumber++;
     }
     if (moduleNumber != moduleBitCount.length) {
       log(1, "incomplete codeword, stop processing current row", imageRow, imageColumn);
@@ -681,6 +678,9 @@ public final class PDF417ScanningDecoderV2 {
     }
 
     public void dump() {
+      if (LOG_LEVEL > 1) {
+        return;
+      }
       Formatter formatter = new Formatter();
       for (int row = 0; row <= maxRow; row++) {
         formatter.format("Row %2d: ", row);
@@ -733,6 +733,7 @@ public final class PDF417ScanningDecoderV2 {
   }
 
   private static class DetectionResult {
+    private static final int ADJUST_ROW_NUMBER_SKIP = 2;
     private final int barcodeColumnCount;
     private final int barcodeRowCount;
     private final int barcodeECLevel;
@@ -806,6 +807,9 @@ public final class PDF417ScanningDecoderV2 {
     }
 
     private void dumpDetectionResultColumns(String message) {
+      if (LOG_LEVEL > 1) {
+        return;
+      }
       System.err.println(message);
       boolean hasModeValues = true;
       int codewordsRow = -1;
@@ -840,6 +844,7 @@ public final class PDF417ScanningDecoderV2 {
     private void adjustRowNumbers() {
       adjustIndicatorColumnRowNumbers(detectionResultColumns[0]);
       adjustIndicatorColumnRowNumbers(detectionResultColumns[barcodeColumnCount + 1]);
+      adjustRowNumbersByRow();
       for (int barcodeColumn = 1; barcodeColumn < barcodeColumnCount + 1; barcodeColumn++) {
         Codeword[] codewords = detectionResultColumns[barcodeColumn].getCodewords();
         for (int codewordsRow = 0; codewordsRow < codewords.length; codewordsRow++) {
@@ -851,6 +856,66 @@ public final class PDF417ScanningDecoderV2 {
           }
         }
       }
+    }
+
+    private void adjustRowNumbersByRow() {
+      adjustRowNumbersFromLLI();
+      adjustRowNumbersFromRLI();
+    }
+
+    private void adjustRowNumbersFromRLI() {
+      if (detectionResultColumns[barcodeColumnCount + 1] == null) {
+        return;
+      }
+      Codeword[] codewords = detectionResultColumns[barcodeColumnCount + 1].getCodewords();
+      for (int codewordsRow = 0; codewordsRow < codewords.length; codewordsRow++) {
+        if (codewords[codewordsRow] == null) {
+          continue;
+        }
+        int rowIndicatorRowNumber = codewords[codewordsRow].getRowNumber();
+        int invalidRowCounts = 0;
+        for (int barcodeColumn = barcodeColumnCount + 1; barcodeColumn > 0 &&
+            invalidRowCounts < ADJUST_ROW_NUMBER_SKIP; barcodeColumn--) {
+          invalidRowCounts = adjustRowNumberIfValid(codewordsRow, rowIndicatorRowNumber, invalidRowCounts,
+              barcodeColumn);
+        }
+      }
+    }
+
+    private void adjustRowNumbersFromLLI() {
+      Codeword[] codewords = detectionResultColumns[0].getCodewords();
+      for (int codewordsRow = 0; codewordsRow < codewords.length; codewordsRow++) {
+        if (codewords[codewordsRow] == null) {
+          continue;
+        }
+        int rowIndicatorRowNumber = codewords[codewordsRow].getRowNumber();
+        int invalidRowCounts = 0;
+        for (int barcodeColumn = 1; barcodeColumn < barcodeColumnCount + 1 &&
+            invalidRowCounts < ADJUST_ROW_NUMBER_SKIP; barcodeColumn++) {
+          invalidRowCounts = adjustRowNumberIfValid(codewordsRow, rowIndicatorRowNumber, invalidRowCounts,
+              barcodeColumn);
+        }
+      }
+    }
+
+    private int adjustRowNumberIfValid(int codewordsRow, int rowIndicatorRowNumber, int invalidRowCounts,
+                                       int barcodeColumn) {
+      Codeword codeword = detectionResultColumns[barcodeColumn].getCodewords()[codewordsRow];
+      if (codeword == null) {
+        return invalidRowCounts;
+      }
+      if (codeword.getRowNumber() == BARCODE_ROW_UNKNOWN) {
+        if (codeword.isValidRowNumber(rowIndicatorRowNumber)) {
+          codeword.setRowNumber(rowIndicatorRowNumber);
+          invalidRowCounts = 0;
+        } else {
+          if (++invalidRowCounts >= ADJUST_ROW_NUMBER_SKIP) {
+            log(1, "to many consecutive invalid row counts, skipping further columns for this row",
+                codewordsRow, barcodeColumn);
+          }
+        }
+      }
+      return invalidRowCounts;
     }
 
     private int countUnadjusted() {
@@ -878,6 +943,9 @@ public final class PDF417ScanningDecoderV2 {
       }
 
       Codeword[] otherCodewords = new Codeword[14];
+
+      otherCodewords[2] = previousColumnCodewords[codewordsRow];
+      otherCodewords[3] = nextColumnCodewords[codewordsRow];
 
       if (codewordsRow > 0) {
         otherCodewords[0] = codewords[codewordsRow - 1];
@@ -1073,6 +1141,10 @@ public final class PDF417ScanningDecoderV2 {
       this.rowNumber = rowNumber;
     }
 
+    public boolean isValidRowNumber(int rowNumber) {
+      return bucket == (rowNumber % 3) * 3;
+    }
+
     public int getStartX() {
       return startX;
     }
@@ -1194,7 +1266,7 @@ public final class PDF417ScanningDecoderV2 {
   }
 
   private static void log(int level, String string, int imageRow, int imageColumn) {
-    if (level >= 4) {
+    if (level >= LOG_LEVEL) {
       if (imageRow != -1) {
         string += ", imageRow: " + imageRow;
       }

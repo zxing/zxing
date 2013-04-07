@@ -153,11 +153,13 @@ public final class PDF417ScanningDecoder {
           continue;
         }
         int[] bitCountCopy = Arrays.copyOf(moduleBitCount, moduleBitCount.length);
-        if (!PDF417CodewordDecoder.adjustBitCount(moduleBitCount)) {
+        AdjustmentResults adjustmentResults = PDF417CodewordDecoder.adjustBitCount(moduleBitCount);
+        if (adjustmentResults.isEmpty()) {
           log(2, "barcode symbol too small", imageRow, imageColumn);
           // TODO maybe try to process next module? 
           break;
         }
+        moduleBitCount = adjustmentResults.get(0).getModuleCount();
         long decodedValue = getDecodedValue(moduleBitCount);
         if (decodedValue == STOP_PATTERN_VALUE) {
           break;
