@@ -24,12 +24,12 @@
 #include <zxing/ResultPointCallback.h>
 
 namespace zxing {
-  typedef unsigned int DecodeHintType;
-  class DecodeHints;
-  DecodeHints operator | (DecodeHints const&, DecodeHints const&);
-}
 
-class zxing::DecodeHints {
+typedef unsigned int DecodeHintType;
+class DecodeHints;
+DecodeHints operator | (DecodeHints const&, DecodeHints const&);
+
+class DecodeHints {
  private:
   DecodeHintType hints;
   Ref<ResultPointCallback> callback;
@@ -77,5 +77,7 @@ class zxing::DecodeHints {
 
   friend DecodeHints operator | (DecodeHints const&, DecodeHints const&);
 };
+
+}
 
 #endif

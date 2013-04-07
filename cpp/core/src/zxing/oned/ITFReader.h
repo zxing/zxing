@@ -23,13 +23,9 @@
 #include <zxing/Result.h>
 
 namespace zxing {
-	namespace oned {
-		class ITFReader;
-  }
-}
+namespace oned {
 
-class zxing::oned::ITFReader : public OneDReader {
-			
+class ITFReader : public OneDReader {
 private:
   enum {MAX_AVG_VARIANCE = (unsigned int) (PATTERN_MATCH_RESULT_SCALE_FACTOR * 420/1000)};
   enum {MAX_INDIVIDUAL_VARIANCE = (int) (PATTERN_MATCH_RESULT_SCALE_FACTOR * 800/1000)};
@@ -51,5 +47,8 @@ public:
   ITFReader();
   ~ITFReader();
 };
+
+}
+}
 
 #endif

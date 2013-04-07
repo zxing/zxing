@@ -24,12 +24,9 @@
 #include <zxing/DecodeHints.h>
 
 namespace zxing {
-  namespace oned {
-    class UPCAReader;
-  }
-}
+namespace oned {
 
-class zxing::oned::UPCAReader : public UPCEANReader {
+class UPCAReader : public UPCEANReader {
 
 private:
   EAN13Reader ean13Reader;
@@ -46,5 +43,8 @@ public:
 
   BarcodeFormat getBarcodeFormat();
 };
+
+}
+}
 
 #endif

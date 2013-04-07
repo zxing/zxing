@@ -25,12 +25,9 @@
 #include <zxing/Result.h>
 
 namespace zxing {
-  namespace oned {
-    class EAN13Reader;
-  }
-}
+namespace oned {
 
-class zxing::oned::EAN13Reader : public UPCEANReader {
+class EAN13Reader : public UPCEANReader {
 private:
   std::vector<int> decodeMiddleCounters;
   static void determineFirstDigit(std::string& resultString,
@@ -45,5 +42,8 @@ public:
 
   BarcodeFormat getBarcodeFormat();
 };
+
+}
+}
 
 #endif

@@ -109,7 +109,7 @@
 #pragma mark ZXingDelegateMethods
 - (void)zxingController:(ZXingWidgetController*)controller didScanResult:(NSString *)resultString {
   [self dismissModalViewControllerAnimated:YES];
-#ifdef ZXING_DEBUG
+#if ZXING_DEBUG
   NSLog(@"result has %d actions", actions ? 0 : actions.count);
 #endif
   Scan * scan = [[Database sharedDatabase] addScanWithText:resultString];
@@ -190,13 +190,15 @@
   }
   
   if (self.actions == nil || self.actions.count == 0) {
+#if ZXING_DEBUG
     NSLog(@"result has no actions to perform!");
+#endif
     return;
   }
   
   if (self.actions.count == 1) {
     ResultAction *action = [self.actions lastObject];
-#ifdef ZXING_DEBUG
+#if ZXING_DEBUG
     NSLog(@"Result has the single action, (%@)  '%@', performing it",
           NSStringFromClass([action class]), [action title]);
 #endif
@@ -204,7 +206,7 @@
                withObject:action
                afterDelay:0.0];
   } else {
-#ifdef ZXING_DEBUG
+#if ZXING_DEBUG
     NSLog(@"Result has multiple actions, popping up an action sheet");
 #endif
     UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithFrame:self.view.bounds];

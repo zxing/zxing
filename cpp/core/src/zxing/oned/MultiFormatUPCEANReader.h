@@ -23,18 +23,19 @@
 #include <zxing/oned/OneDReader.h>
 
 namespace zxing {
-  namespace oned {
-      class UPCEANReader;
-      class MultiFormatUPCEANReader;
-  }
-}
+namespace oned {
 
-class zxing::oned::MultiFormatUPCEANReader : public OneDReader {
+class UPCEANReader;
+
+class MultiFormatUPCEANReader : public OneDReader {
 private:
     std::vector< Ref<UPCEANReader> > readers;
 public:
     MultiFormatUPCEANReader(DecodeHints hints);
     Ref<Result> decodeRow(int rowNumber, Ref<BitArray> row);
 };
+
+}
+}
 
 #endif

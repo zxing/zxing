@@ -25,15 +25,13 @@
 #include <zxing/Result.h>
 
 namespace zxing {
-  namespace oned {
-    class EAN8Reader;
-  }
-}
+namespace oned {
 
-class zxing::oned::EAN8Reader : public UPCEANReader {
+class EAN8Reader : public UPCEANReader {
+ private:
   std::vector<int> decodeMiddleCounters;
 
-public:
+ public:
   EAN8Reader();
 
   int decodeMiddle(Ref<BitArray> row,
@@ -42,5 +40,8 @@ public:
 
   BarcodeFormat getBarcodeFormat();
 };
+
+}
+}
 
 #endif

@@ -19,6 +19,8 @@
  * limitations under the License.
  */
 
+#ifndef __ZXING_AZTEC_DETECTOR_DETECTOR_H__
+#define __ZXING_AZTEC_DETECTOR_DETECTOR_H__
 
 #include <vector>
 
@@ -29,13 +31,9 @@
 #include <zxing/aztec/AztecDetectorResult.h>
 
 namespace zxing {
-  namespace aztec {
-    class Point;
-    class Detector;
-  }
-}
+namespace aztec {
 
-class zxing::aztec::Point : public Counted {
+class Point : public Counted {
 public:
   int x;
   int y;
@@ -48,7 +46,7 @@ public:
             
 };
         
-class zxing::aztec::Detector : public Counted {
+class Detector : public Counted {
             
 private:
   Ref<BitMatrix> image_;
@@ -84,3 +82,8 @@ public:
   Detector(Ref<BitMatrix> image);
   Ref<AztecDetectorResult> detect();
 };
+
+}
+}
+
+#endif

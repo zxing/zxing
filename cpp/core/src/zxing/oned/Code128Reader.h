@@ -22,12 +22,9 @@
 #include <zxing/Result.h>
 
 namespace zxing {
-	namespace oned {
-		class Code128Reader;
-  }
-}
+namespace oned {
 
-class zxing::oned::Code128Reader : public OneDReader {
+class Code128Reader : public OneDReader {
 private:
   static const int MAX_AVG_VARIANCE;
   static const int MAX_INDIVIDUAL_VARIANCE;
@@ -44,5 +41,8 @@ public:
 
   BarcodeFormat getBarcodeFormat();
 };
+
+}
+}
 
 #endif

@@ -24,12 +24,9 @@
 #include <zxing/Reader.h>
 
 namespace zxing {
-  namespace oned {
-    class OneDReader;
-  }
-}
+namespace oned {
 
-class zxing::oned::OneDReader : public Reader {
+class OneDReader : public Reader {
 private:
   Ref<Result> doDecode(Ref<BinaryBitmap> image, DecodeHints hints);
 
@@ -77,5 +74,8 @@ public:
                             std::vector<int>& counters);
   virtual ~OneDReader();
 };
+
+}
+}
 
 #endif

@@ -23,15 +23,10 @@
 #include <zxing/Result.h>
 
 namespace zxing {
-	namespace oned {
-    class MultiFormatUPCEANReader;
-		class UPCEANReader;
-  }
-}
+namespace oned {
 
-class zxing::oned::UPCEANReader : public OneDReader {
-  friend class MultiFormatUPCEANReader;
-private:
+class UPCEANReader : public OneDReader {
+ private:
   std::string decodeRowStringBuffer;
   // UPCEANExtensionSupport extensionReader;
   // EANManufacturerOrgSupport eanManSupport;
@@ -83,6 +78,11 @@ public:
 
   virtual BarcodeFormat getBarcodeFormat() = 0;
   virtual ~UPCEANReader();
+
+  friend class MultiFormatUPCEANReader;
 };
+
+}
+}
 
 #endif

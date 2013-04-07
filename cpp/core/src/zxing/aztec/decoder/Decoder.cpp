@@ -29,6 +29,7 @@
 #include <zxing/common/reedsolomon/ReedSolomonException.h>
 #include <zxing/common/reedsolomon/GenericGF.h>
 #include <zxing/common/IllegalArgumentException.h>
+#include <zxing/common/DecoderResult.h>
 
 using zxing::aztec::Decoder;
 using zxing::DecoderResult;

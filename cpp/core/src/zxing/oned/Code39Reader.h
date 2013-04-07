@@ -25,17 +25,14 @@
 #include <zxing/Result.h>
 
 namespace zxing {
-  namespace oned {
-    class Code39Reader;
-  }
-}
+namespace oned {
 
 /**
  * <p>Decodes Code 39 barcodes. This does not support "Full ASCII Code 39" yet.</p>
  * Ported form Java (author Sean Owen)
  * @author Lukasz Warchol
  */
-class zxing::oned::Code39Reader : public OneDReader {
+class Code39Reader : public OneDReader {
 private:
   bool usingCheckDigit;
   bool extendedMode;
@@ -59,5 +56,8 @@ public:
 			
   Ref<Result> decodeRow(int rowNumber, Ref<BitArray> row);
 };
+
+}
+}
 
 #endif

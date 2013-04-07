@@ -19,45 +19,51 @@
  * limitations under the License.
  */
 
-#include <zxing/common/DecoderResult.h>
+#ifndef __ZXING_AZTEC_DECODER_DECODER_H__
+#define __ZXING_AZTEC_DECODER_DECODER_H__
+
 #include <zxing/common/BitMatrix.h>
 #include <zxing/common/Str.h>
 #include <zxing/aztec/AztecDetectorResult.h>
 
 namespace zxing {
-    namespace aztec {
+
+class DecoderResult;
         
-        class Decoder : public Counted {
-        private:
-            enum Table {
-                UPPER,
-                LOWER,
-                MIXED,
-                DIGIT,
-                PUNCT,
-                BINARY
-            };
+namespace aztec {
+
+class Decoder : public Counted {
+ private:
+  enum Table {
+    UPPER,
+    LOWER,
+    MIXED,
+    DIGIT,
+    PUNCT,
+    BINARY
+  };
             
-            static Table getTable(char t);
-            static const char* getCharacter(Table table, int code);
+  static Table getTable(char t);
+  static const char* getCharacter(Table table, int code);
             
-            int numCodewords_;
-            int codewordSize_;
-            Ref<AztecDetectorResult> ddata_;
-            int invertedBitCount_;
+  int numCodewords_;
+  int codewordSize_;
+  Ref<AztecDetectorResult> ddata_;
+  int invertedBitCount_;
             
-            Ref<String> getEncodedData(Ref<BitArray> correctedBits);
-            Ref<BitArray> correctBits(Ref<BitArray> rawbits);
-            Ref<BitArray> extractBits(Ref<BitMatrix> matrix);
-            static Ref<BitMatrix> removeDashedLines(Ref<BitMatrix> matrix);
-            static int readCode(Ref<BitArray> rawbits, int startIndex, int length);
+  Ref<String> getEncodedData(Ref<BitArray> correctedBits);
+  Ref<BitArray> correctBits(Ref<BitArray> rawbits);
+  Ref<BitArray> extractBits(Ref<BitMatrix> matrix);
+  static Ref<BitMatrix> removeDashedLines(Ref<BitMatrix> matrix);
+  static int readCode(Ref<BitArray> rawbits, int startIndex, int length);
             
             
-        public:
-            Decoder();
-            Ref<DecoderResult> decode(Ref<AztecDetectorResult> detectorResult);
-        };
+ public:
+  Decoder();
+  Ref<DecoderResult> decode(Ref<AztecDetectorResult> detectorResult);
+};
         
-    }
+}
 }
 
+#endif
