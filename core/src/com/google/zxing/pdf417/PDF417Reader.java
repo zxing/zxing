@@ -30,7 +30,7 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.DecoderResult;
 import com.google.zxing.common.TransformableBitMatrix;
 import com.google.zxing.pdf417.decoder.Decoder;
-import com.google.zxing.pdf417.decoder.PDF417ScanningDecoderV2;
+import com.google.zxing.pdf417.decoder.PDF417ScanningDecoder;
 import com.google.zxing.pdf417.detector.Detector;
 import com.google.zxing.pdf417.detector.PDF417DetectorResult;
 
@@ -79,7 +79,7 @@ public final class PDF417Reader implements Reader {
           printPoints(points);
           TransformableBitMatrix bitMatrix = detectorResult.getBits();
           System.out.println("Trying Blackpoint: " + blackpoint);
-          decoderResult = PDF417ScanningDecoderV2.decode(bitMatrix, points[4], points[5], points[6],
+          decoderResult = PDF417ScanningDecoder.decode(bitMatrix, points[4], points[5], points[6],
               points[7], getMinCodewordWidth(points), getMaxCodewordWidth(points));
           // TODO I could update the result points for compressed PDF417, which doesn't have stop pattern column
           System.out.println("Successful Blackpoint: " + blackpoint);
