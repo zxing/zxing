@@ -22,9 +22,7 @@
 
 @interface View : UIView @end
 @implementation View
-- (CALayer*)capture_layer {
-  return [[self.layer sublayers] objectAtIndex:0];
-}
+
 - (UIView*)swap_view {
   if ([[self subviews] count]) {
     return [[self subviews] objectAtIndex:0];
@@ -32,18 +30,21 @@
     return nil;
   }
 }
+
 - (void)layoutSubviews {
   [super layoutSubviews];
   CGRect bounds = self.bounds;
-  self.capture_layer.frame = bounds;
+  for(int i=0; i < [[[self layer] sublayers] count]; ++i) {
+    CALayer* layer = (CALayer*)[[self.layer sublayers] objectAtIndex:i];
+    if (layer != [self swap_view].layer) {
+      layer.frame = bounds;
+    }
+  }
   CGRect frame = self.swap_view.bounds;
   frame.origin.x = bounds.size.width - frame.size.width - 10;
   frame.origin.y = 10;
   self.swap_view.frame = frame;
 }
-@end
-
-@interface ViewController ()
 
 @end
 
@@ -66,19 +67,25 @@
 - (void)loadView {
   self.view = [[[View alloc] init] autorelease];
   [self.view.layer addSublayer:self.capture.layer];
+
+  // self.capture.luminance = true;
+  // [self.view.layer addSublayer:self.capture.luminance];
+
+  // self.capture.binary = true;
+  //[ self.view.layer addSublayer:self.capture.binary];
+
   if (!swap && self.capture.hasFront && self.capture.hasBack) {
     swap = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [swap setTitle:@"swap" forState:UIControlStateNormal];
     [swap sizeToFit];
     [swap addTarget:self action:@selector(swap) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:swap];
   }
-  // NSLog(@"%@", swap);
-  [self.view addSubview:swap];
+  [self swap];
   [self.capture start];
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
   return YES;
 }
 

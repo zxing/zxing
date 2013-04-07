@@ -19,6 +19,7 @@
 		3B0A5DB91444C492000EC568 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3B0A5DB81444C492000EC568 /* Icon.png */; };
 		3B331CEE161BB74E007313B6 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3B331CED161BB74E007313B6 /* Default-568h@2x.png */; };
 		3B43FDCB15939575001CD5C9 /* libZXingWidget.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F027F7E11A7BAD4006B06DE /* libZXingWidget.a */; };
+		3B6AA67A1710EF3400DF84C0 /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3B6AA6791710EF3400DF84C0 /* MainWindow-iPad.xib */; };
 		3BCED5C8120F84C900131FA0 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BCED5C7120F84C900131FA0 /* AVFoundation.framework */; };
 		3BCED5CE120F84E000131FA0 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BCED5CD120F84E000131FA0 /* CoreVideo.framework */; };
 		3BCED5EB120F885C00131FA0 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BCED5EA120F885C00131FA0 /* CoreMedia.framework */; };
@@ -67,6 +68,7 @@
 		28F335F01007B36200424DE2 /* RootViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RootViewController.xib; sourceTree = "<group>"; };
 		3B0A5DB81444C492000EC568 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		3B331CED161BB74E007313B6 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		3B6AA6791710EF3400DF84C0 /* MainWindow-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "MainWindow-iPad.xib"; path = "iPad/MainWindow-iPad.xib"; sourceTree = "<group>"; };
 		3BCED5C7120F84C900131FA0 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		3BCED5CD120F84E000131FA0 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		3BCED5EA120F885C00131FA0 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
@@ -133,6 +135,7 @@
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
+				3B6AA6781710EF3400DF84C0 /* iPad */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
 			);
@@ -173,6 +176,14 @@
 				3BCED5EA120F885C00131FA0 /* CoreMedia.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		3B6AA6781710EF3400DF84C0 /* iPad */ = {
+			isa = PBXGroup;
+			children = (
+				3B6AA6791710EF3400DF84C0 /* MainWindow-iPad.xib */,
+			);
+			name = iPad;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -257,6 +268,7 @@
 				E548755C119C62B9001CC0F8 /* beep-beep.aiff in Resources */,
 				3B0A5DB91444C492000EC568 /* Icon.png in Resources */,
 				3B331CEE161BB74E007313B6 /* Default-568h@2x.png in Resources */,
+				3B6AA67A1710EF3400DF84C0 /* MainWindow-iPad.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -298,6 +310,7 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				"GCC_THUMB_SUPPORT[arch=armv6]" = NO;
 				INFOPLIST_FILE = "ScanTest-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "";
@@ -305,6 +318,7 @@
 				PRODUCT_NAME = ScanTest;
 				"PROVISIONING_PROFILE[sdk=*]" = "";
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -319,7 +333,9 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				"GCC_THUMB_SUPPORT[arch=armv6]" = NO;
 				INFOPLIST_FILE = "ScanTest-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				PRODUCT_NAME = ScanTest;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;

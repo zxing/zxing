@@ -16,35 +16,7 @@
  */
 
 #import "RootViewController.h"
-
-#ifndef ZXQR
-#define ZXQR 1
-#endif
-
-#if ZXQR
-#import "QRCodeReader.h"
-#endif
-
-#ifndef ZXAZ
-#define ZXAZ 1
-#endif
-
-#if ZXAZ
-#import "AztecReader.h"
-#endif
-
-#ifndef ZX1D
-#define ZX1D 1
-#endif
-
-#if ZX1D
-#import "MultiFormatOneDReader.h"
-#endif
-
-@interface RootViewController()
-
-@end
-
+#import "MultiFormatReader.h"
 
 @implementation RootViewController
 @synthesize resultsView;
@@ -65,25 +37,9 @@
 
   NSMutableSet *readers = [[NSMutableSet alloc ] init];
 
-#if ZXQR
-  QRCodeReader* qrcodeReader = [[QRCodeReader alloc] init];
-  [readers addObject:qrcodeReader];
-  [qrcodeReader release];
-#endif
-    
-#if ZXAZ
-  AztecReader *aztecReader = [[AztecReader alloc] init];
-  [readers addObject:aztecReader];
-  [aztecReader release];
-#endif
-    
-#if ZX1D
-  {
-    MultiFormatOneDReader* reader = [[MultiFormatOneDReader alloc] init];
-    [readers addObject:reader];
-    [reader release];
-  }
-#endif
+  MultiFormatReader* reader = [[MultiFormatReader alloc] init];
+  [readers addObject:reader];
+  [reader release];
     
   widController.readers = readers;
   [readers release];
@@ -91,7 +47,10 @@
   NSBundle *mainBundle = [NSBundle mainBundle];
   widController.soundToPlay =
     [NSURL fileURLWithPath:[mainBundle pathForResource:@"beep-beep" ofType:@"aiff"] isDirectory:NO];
+
   [self presentModalViewController:widController animated:YES];
+  // [self presentViewController:widController animated:YES completion:nil];
+
   [widController release];
 }
 
@@ -105,10 +64,12 @@
     [resultsView setNeedsDisplay];
   }
   [self dismissModalViewControllerAnimated:NO];
+  // [self dismissViewControllerAnimated:NO completion:nil];
 }
 
 - (void)zxingControllerDidCancel:(ZXingWidgetController*)controller {
-  [self dismissModalViewControllerAnimated:YES];
+  [self dismissModalViewControllerAnimated:NO];
+  // [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)viewDidUnload {
