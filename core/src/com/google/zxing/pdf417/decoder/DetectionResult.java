@@ -242,9 +242,16 @@ public class DetectionResult implements SimpleLog.Loggable {
       Codeword codeword = codewords[codewordsRow];
       codeword.setRowNumberAsRowIndicatorColumn();
 
-      if (codeword.getRowNumber() == barcodeRow || barcodeRow == -1) {
+      int rowDifference = codeword.getRowNumber() - barcodeRow;
+
+      // TODO deal with case where first row indicator doesn't start with 0
+
+      if (rowDifference == 0) {
         currentRowHeight++;
-      } else if (codeword.getRowNumber() < barcodeRow) {
+      } else if (rowDifference == 1) {
+        previousRowHeight = Math.max(previousRowHeight, currentRowHeight);
+        barcodeRow = codeword.getRowNumber();
+      } else if (rowDifference < 0) {
         SimpleLog.log(LEVEL.WARNING, "Removing codeword, rowNumber should not decrease, codeword[" + codewordsRow +
             "]: " + codeword.getRowNumber() + ", value: " + codeword.getValue());
         codewords[codewordsRow] = null;
@@ -252,16 +259,28 @@ public class DetectionResult implements SimpleLog.Loggable {
         SimpleLog.log(LEVEL.WARNING, "Removing codeword, rowNumber too big, codeword[" + codewordsRow + "]: " +
             codeword.getRowNumber() + ", value: " + codeword.getValue());
         codewords[codewordsRow] = null;
-      } else if (codeword.getRowNumber() == barcodeRow + 1) {
-        previousRowHeight = Math.max(previousRowHeight, currentRowHeight);
-        barcodeRow = codeword.getRowNumber();
+      } else if (rowDifference > codewordsRow) {
+        SimpleLog.log(
+            LEVEL.WARNING,
+            "Row number jump bigger than codeword row, codeword[" + codewordsRow +
+                "]: previous row: " + barcodeRow + ", new row: " + codeword.getRowNumber() + ", value: " +
+                codeword.getValue());
+        codewords[codewordsRow] = null;
       } else {
-        // the row number has increased by more than one
-
-        // TODO add proper check to prevent jumping of row numbers.
-        // Accept increase by more than 1 only if we have previous skipped codewords
-        SimpleLog.log(LEVEL.WARNING, "row number jump, codeword[" + codewordsRow + "]: previous row: " +
-            barcodeRow + ", new row: " + codeword.getRowNumber() + ", value: " + codeword.getValue());
+        boolean closePreviousCodewordFound = false;
+        for (int i = 1; i <= rowDifference; i++) {
+          // there must be (height * rowDifference) number of codewords missing. For now we assume height = 1.
+          // This should hopefully get rid of most problems already.
+          closePreviousCodewordFound |= (codewords[codewordsRow - i] != null);
+        }
+        if (closePreviousCodewordFound) {
+          SimpleLog.log(
+              LEVEL.WARNING,
+              "Row number jump bigger than codeword row gap, codeword[" + codewordsRow +
+                  "]: previous row: " + barcodeRow + ", new row: " + codeword.getRowNumber() + ", value: " +
+                  codeword.getValue());
+          codewords[codewordsRow] = null;
+        }
       }
     }
   }
