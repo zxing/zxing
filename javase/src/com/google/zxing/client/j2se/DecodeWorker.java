@@ -32,7 +32,6 @@ import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.multi.GenericMultipleBarcodeReader;
 
 import javax.imageio.ImageIO;
-
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -306,8 +305,12 @@ final class DecodeWorker implements Callable<Integer> {
     writeResultImage(stride, height, pixels, uri, inputName, ".mono.png");
   }
 
-  private static void writeResultImage(int stride, int height, int[] pixels, URI uri,
-                                       String inputName, String suffix) {
+  private static void writeResultImage(int stride,
+                                       int height,
+                                       int[] pixels,
+                                       URI uri,
+                                       String inputName,
+                                       String suffix) {
     // Write the result
     BufferedImage result = new BufferedImage(stride, height, BufferedImage.TYPE_INT_ARGB);
     result.setRGB(0, 0, stride, height, pixels, 0, stride);

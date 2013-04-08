@@ -155,7 +155,7 @@ public final class CommandLineRunner {
   }
 
   // Manually turn on all formats, even those not yet considered production quality.
-  private static Map<DecodeHintType, ?> buildHints(Config config) {
+  private static Map<DecodeHintType,?> buildHints(Config config) {
     Map<DecodeHintType, Object> hints = new EnumMap<DecodeHintType, Object>(DecodeHintType.class);
     Collection<BarcodeFormat> barcodeFormats = new ArrayList<BarcodeFormat>(8);
     if (config.getFormat() != null) {
