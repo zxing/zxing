@@ -39,6 +39,8 @@ public:
   Ref<String> substring(int) const;
   const std::string& getText() const;
   int size() const;
+  void append(std::string const& tail);
+  void append(char c);
   int length() const;
   friend std::ostream& zxing::operator << (std::ostream& out, String const& s);
 };

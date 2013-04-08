@@ -77,7 +77,7 @@ void GenericMultipleBarcodeReader::doDecodeMultiple(Ref<BinaryBitmap> image,
   float minY = height;
   float maxX = 0.0f;
   float maxY = 0.0f;
-  for (int i = 0; i < resultPoints.size(); i++) {
+  for (int i = 0; i < resultPoints->size(); i++) {
     Ref<ResultPoint> point = resultPoints[i];
     float x = point->getX();
     float y = point->getY();
@@ -123,7 +123,7 @@ Ref<Result> GenericMultipleBarcodeReader::translateResultPoints(Ref<Result> resu
     return result;
   }
   ArrayRef< Ref<ResultPoint> > newResultPoints;
-  for (int i = 0; i < oldResultPoints.size(); i++) {
+  for (int i = 0; i < oldResultPoints->size(); i++) {
     Ref<ResultPoint> oldPoint = oldResultPoints[i];
     newResultPoints->values().push_back(Ref<ResultPoint>(new ResultPoint(oldPoint->getX() + xOffset, oldPoint->getY() + yOffset)));
   }

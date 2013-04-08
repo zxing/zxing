@@ -49,7 +49,7 @@ Ref<Result> OneDReader::decode(Ref<BinaryBitmap> image, DecodeHints hints) {
       ArrayRef< Ref<ResultPoint> >& points (result->getResultPoints());
       if (points && !points->empty()) {
         int height = rotatedImage->getHeight();
-        for (int i = 0; i < points.size(); i++) {
+        for (int i = 0; i < points->size(); i++) {
           points[i].reset(new OneDResultPoint(height - points[i]->getY() - 1, points[i]->getX()));
         }
       }

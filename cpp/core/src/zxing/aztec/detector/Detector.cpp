@@ -26,7 +26,7 @@
 #include <zxing/common/reedsolomon/ReedSolomonException.h>
 #include <zxing/common/reedsolomon/GenericGF.h>
 #include <iostream>
-#include <zxing/common/detector/math_utils.h>
+#include <zxing/common/detector/MathUtils.h>
 #include <zxing/NotFoundException.h>
 
 using std::vector;
@@ -38,8 +38,9 @@ using zxing::ArrayRef;
 using zxing::ResultPoint;
 using zxing::BitArray;
 using zxing::BitMatrix;
+
 namespace math_utils = zxing::common::detector::math_utils;
-                
+
 Detector::Detector(Ref<BitMatrix> image):
   image_(image),
   nbLayers_(0),
