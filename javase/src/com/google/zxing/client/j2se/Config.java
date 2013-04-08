@@ -32,7 +32,7 @@ final class Config {
   private boolean brief;
   private boolean recursive;
   private int[] crop;
-  private String[] format;
+  private String[] possibleFormats;
 
   Map<DecodeHintType,?> getHints() {
     return hints;
@@ -114,12 +114,12 @@ final class Config {
     this.crop = crop;
   }
 
-  public String[] getFormat() {
-    return format;
+  String[] getPossibleFormats() {
+    return possibleFormats;
   }
 
-  public void setFormat(String[] format) {
-    this.format = format;
+  void setPossibleFormats(String[] possibleFormats) {
+    this.possibleFormats = possibleFormats;
   }
 
 }
