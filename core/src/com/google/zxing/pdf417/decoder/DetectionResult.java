@@ -109,6 +109,10 @@ public class DetectionResult implements SimpleLog.Loggable {
   }
 
   private int adjustRowNumbersByRow() {
+    // TODO we should only do full row adjustments if row numbers of left and right row indicator column match.
+    // Maybe it's even better to calculated the height (in codeword rows) and divide it by the number of barcode
+    // rows. This, together with the LRI and RRI row numbers should allow us to get a good estimate where a row
+    // number starts and ends.
     int unadjustedCount = adjustRowNumbersFromLRI();
     return unadjustedCount + adjustRowNumbersFromRRI();
   }
