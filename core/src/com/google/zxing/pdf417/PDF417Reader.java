@@ -121,6 +121,7 @@ public final class PDF417Reader implements Reader {
     return new Result(decoderResult.getText(), decoderResult.getRawBytes(), points, BarcodeFormat.PDF_417);
   }
 
+  /*
   private void printPoints(ResultPoint[] points) {
     if (points == null) {
       System.out.println("Points is null");
@@ -137,6 +138,7 @@ public final class PDF417Reader implements Reader {
       i++;
     }
   }
+  */
 
   private static int getMaxWidth(ResultPoint p1, ResultPoint p2) {
     if (p1 == null || p2 == null) {
