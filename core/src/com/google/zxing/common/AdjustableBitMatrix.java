@@ -33,34 +33,8 @@ public class AdjustableBitMatrix extends BitMatrix {
 
   @Override
   public boolean get(int x, int y) {
-<<<<<<< Upstream, based on origin/master
-    byte[] currentRow = source.getRow(y, null);
-    return isBlack(currentRow[x]);
-=======
-    try {
-
       byte[] currentRow = source.getRow(y, null);
       return isBlack(currentRow[x]);
-
-      //      if (x == 0 || x == source.getWidth() - 1) {
-      //        return isBlack(currentRow[x]);
-      //      }
-      //      if (isBlack(currentRow[x - 1]) == isBlack(currentRow[x + 1]) && isBlack(currentRow[x]) != isBlack(currentRow[x - 1])) {
-      //        return isBlack(currentRow[x - 1]);
-      //      } else {
-      //        return isBlack(currentRow[x]);
-      //      }
-      //
-      //      
-      //      byte[] previousRow = source.getRow(y - 1, null);
-      //      byte[] nextRow = source.getRow(y + 1, null);
-      //      
-      //      return (source.getRow(y, null)[x] ;
-    } catch (ArrayIndexOutOfBoundsException e) {
-      e.printStackTrace();
-    }
-    return false;
->>>>>>> 84c0c47 work in progress for a new PDF417 decoder
   }
 
   /**
