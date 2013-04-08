@@ -43,6 +43,7 @@ import java.util.regex.Pattern;
  */
 public final class CommandLineRunner {
 
+  private static final String POSSIBLE_FORMATS_ARG = "--possibleFormats=";
   private static final Pattern COMMA = Pattern.compile(",");
 
   private CommandLineRunner() {
@@ -80,6 +81,8 @@ public final class CommandLineRunner {
           crop[i] = Integer.parseInt(tokens[i]);
         }
         config.setCrop(crop);
+      } else if (arg.startsWith(POSSIBLE_FORMATS_ARG)) {
+        config.setPossibleFormats(COMMA.split(arg.substring(POSSIBLE_FORMATS_ARG.length())));
       } else if (arg.startsWith("-")) {
         System.err.println("Unknown command line option " + arg);
         printUsage();
@@ -153,27 +156,34 @@ public final class CommandLineRunner {
 
   // Manually turn on all formats, even those not yet considered production quality.
   private static Map<DecodeHintType,?> buildHints(Config config) {
-    Collection<BarcodeFormat> vector = new ArrayList<BarcodeFormat>(8);
-    vector.add(BarcodeFormat.UPC_A);
-    vector.add(BarcodeFormat.UPC_E);
-    vector.add(BarcodeFormat.EAN_13);
-    vector.add(BarcodeFormat.EAN_8);
-    vector.add(BarcodeFormat.RSS_14);
-    vector.add(BarcodeFormat.RSS_EXPANDED);
-    if (!config.isProductsOnly()) {
-      vector.add(BarcodeFormat.CODE_39);
-      vector.add(BarcodeFormat.CODE_93);
-      vector.add(BarcodeFormat.CODE_128);
-      vector.add(BarcodeFormat.ITF);
-      vector.add(BarcodeFormat.QR_CODE);
-      vector.add(BarcodeFormat.DATA_MATRIX);
-      vector.add(BarcodeFormat.AZTEC);
-      vector.add(BarcodeFormat.PDF_417);
-      vector.add(BarcodeFormat.CODABAR);
-      vector.add(BarcodeFormat.MAXICODE);
+    Collection<BarcodeFormat> possibleFormats = new ArrayList<BarcodeFormat>();
+    String[] possibleFormatsNames = config.getPossibleFormats();
+    if (possibleFormatsNames != null && possibleFormatsNames.length > 0) {
+      for (String format : possibleFormatsNames) {
+        possibleFormats.add(BarcodeFormat.valueOf(format));
+      }
+    } else {
+      possibleFormats.add(BarcodeFormat.UPC_A);
+      possibleFormats.add(BarcodeFormat.UPC_E);
+      possibleFormats.add(BarcodeFormat.EAN_13);
+      possibleFormats.add(BarcodeFormat.EAN_8);
+      possibleFormats.add(BarcodeFormat.RSS_14);
+      possibleFormats.add(BarcodeFormat.RSS_EXPANDED);
+      if (!config.isProductsOnly()) {
+        possibleFormats.add(BarcodeFormat.CODE_39);
+        possibleFormats.add(BarcodeFormat.CODE_93);
+        possibleFormats.add(BarcodeFormat.CODE_128);
+        possibleFormats.add(BarcodeFormat.ITF);
+        possibleFormats.add(BarcodeFormat.QR_CODE);
+        possibleFormats.add(BarcodeFormat.DATA_MATRIX);
+        possibleFormats.add(BarcodeFormat.AZTEC);
+        possibleFormats.add(BarcodeFormat.PDF_417);
+        possibleFormats.add(BarcodeFormat.CODABAR);
+        possibleFormats.add(BarcodeFormat.MAXICODE);
+      }
     }
     Map<DecodeHintType, Object> hints = new EnumMap<DecodeHintType, Object>(DecodeHintType.class);
-    hints.put(DecodeHintType.POSSIBLE_FORMATS, vector);
+    hints.put(DecodeHintType.POSSIBLE_FORMATS, possibleFormats);
     if (config.isTryHarder()) {
       hints.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
     }
@@ -196,6 +206,13 @@ public final class CommandLineRunner {
     System.err.println("  --brief: Only output one line per file, omitting the contents");
     System.err.println("  --recursive: Descend into subdirectories");
     System.err.println("  --crop=left,top,width,height: Only examine cropped region of input image(s)");
+    StringBuilder builder = new StringBuilder(
+        "  " + POSSIBLE_FORMATS_ARG + "barcodeFormat[,barcodeFormat2...] where barcodeFormat is any of: ");
+    for (BarcodeFormat format : BarcodeFormat.values()) {
+      builder.append(format).append(',');
+    }
+    builder.setLength(builder.length() - 1);
+    System.err.println(builder);
   }
 
 }
