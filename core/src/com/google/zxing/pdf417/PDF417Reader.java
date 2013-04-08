@@ -32,7 +32,7 @@ import com.google.zxing.pdf417.decoder.Decoder;
 import com.google.zxing.pdf417.decoder.PDF417ScanningDecoder;
 import com.google.zxing.pdf417.detector.Detector;
 import com.google.zxing.pdf417.detector.PDF417DetectorResult;
- 
+
 import java.util.Map;
 
 /**
