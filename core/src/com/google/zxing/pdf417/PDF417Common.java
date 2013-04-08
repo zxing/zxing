@@ -13,4 +13,5 @@ public class PDF417Common {
     }
     return bitCountSum;
   }
+
 }
