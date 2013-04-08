@@ -129,7 +129,7 @@ int read_image(Ref<LuminanceSource> source, bool hybrid, string expected) {
         cout << "  Format: "
              << BarcodeFormat::barcodeFormatNames[results[i]->getBarcodeFormat()]
              << endl;
-        for (size_t j = 0; j < results[i]->getResultPoints()->size(); j++) {
+        for (int j = 0; j < results[i]->getResultPoints()->size(); j++) {
           cout << "  Point[" << j <<  "]: "
                << results[i]->getResultPoints()[j]->getX() << " "
                << results[i]->getResultPoints()[j]->getY() << endl;

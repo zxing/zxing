@@ -26,7 +26,7 @@ else:
     cxxflags.append('-Wall -Wextra -Werror')
     # -Werror
   else:
-    cxxflags.append('-O3 -g3 -ggdb')
+    cxxflags.append('-O3 -g3 -ggdb -Wall -Wextra')
   if env['PIC']:
     cxxflags.append('-fPIC')
   compile_options['CXXFLAGS'] = ' '.join(cxxflags)
@@ -38,17 +38,22 @@ def all_files(dir, ext='.cpp', level=6):
     files += Glob(dir + ('/*' * i) + ext)
   return files
 
-def all_libs(name):
+def all_libs(name, dir):
   matches = []
-  for root, dirnames, filenames in os.walk('/usr/lib/'):
+  for root, dirnames, filenames in os.walk(dir):
     for filename in fnmatch.filter(filenames, name):
       matches.append(os.path.join(root, filename))
   return matches
 
 # Setup libiconv, if possible
+libiconv_include = []
 libiconv_libs = []
-if all_libs('libiconv.*'):
+if all_libs('libiconv.*', '/opt/local/lib'):
+  libiconv_include.append('/opt/local/include/')
   libiconv_libs.append('iconv')
+else:
+  if all_libs('libiconv.*', '/usr/lib'):
+    libiconv_libs.append('iconv')
 
 # Add libzxing library.
 libzxing_files = all_files('core/src')
@@ -60,10 +65,10 @@ libzxing = env.Library('zxing', source=libzxing_files,
   CPPPATH=libzxing_include + libiconv_libs, **compile_options)
 
 # Add cli.
-zxing_image_files = all_files('cli/src')
-zxing_image = env.Program('cli', zxing_image_files,
-  CPPPATH=libzxing_include + zxing_image_include,
-  LIBS=libzxing, **compile_options)
+zxing_files = all_files('cli/src')
+zxing = env.Program('zxing', zxing_files,
+  CPPPATH=libzxing_include,
+  LIBS=libzxing + libiconv_libs, **compile_options)
 
 # Setup CPPUnit.
 cppunit_include = ['/opt/local/include/']
@@ -77,5 +82,5 @@ test = env.Program('testrunner', test_files,
 
 # Setup some aliases.
 Alias('lib', libzxing)
-Alias('zxing', zxing_image)
+Alias('zxing', zxing)
 Alias('tests', test)

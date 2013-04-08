@@ -123,6 +123,8 @@ struct Row<0>
 {
   static void idct(int* pTemp, const jpgd_block_t* pSrc)
   {
+    (void)pTemp;
+    (void)pSrc;
 #ifdef _MSC_VER
     pTemp; pSrc;
 #endif
