@@ -26,6 +26,11 @@ public class AdjustmentResult {
     if (bitsPerModule == 0) {
       return null;
     }
+    for (int bitCount : moduleBitCount) {
+      if (bitCount == 0) {
+        return null;
+      }
+    }
     if ((bitCountDifference << 1) > PDF417Common.MODULES_IN_CODEWORD) {
       bitCountDifference = bitCountDifference - PDF417Common.MODULES_IN_CODEWORD;
       bitsPerModule++;

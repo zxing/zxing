@@ -1,7 +1,7 @@
 package com.google.zxing.pdf417.decoder;
 
 public class PDF417CodewordDecoder {
- 
+
   static AdjustmentResults adjustBitCount(int[] moduleBitCount) {
     return adjustBitCountFloat(moduleBitCount);
   }
@@ -9,25 +9,24 @@ public class PDF417CodewordDecoder {
   static AdjustmentResults adjustBitCountFloat(int[] moduleBitCount) {
     AdjustmentResults adjustmentResults = new AdjustmentResults();
     AdjustmentResultFloat resultFloat = AdjustmentResultFloat.getAdjustmentResultFloat(moduleBitCount);
-    AdjustmentResult result = AdjustmentResult.getAdjustmentResult(resultFloat.getModuleBitCount());
-    if (!result.isValid()) {
-      if (result.isToLarge()) {
-        reduceBitCount(adjustmentResults, result);
-      } else {
-        enlargeBitCount(adjustmentResults, result);
-      }
-    }
-    adjustmentResults.add(result);
-    result = AdjustmentResult.getAdjustmentResult(resultFloat.getClosestModuleBitCount());
-    if (!result.isValid()) {
-      if (result.isToLarge()) {
-        reduceBitCount(adjustmentResults, result);
-      } else {
-        enlargeBitCount(adjustmentResults, result);
-      }
-    }
-    adjustmentResults.add(result);
+    addToResult(adjustmentResults, AdjustmentResult.getAdjustmentResult(resultFloat.getModuleBitCount()));
+    addToResult(adjustmentResults, AdjustmentResult.getAdjustmentResult(resultFloat.getClosestModuleBitCount()));
+    addToResult(adjustmentResults, AdjustmentResult.getAdjustmentResult(moduleBitCount));
     return adjustmentResults;
+  }
+
+  private static void addToResult(AdjustmentResults adjustmentResults, AdjustmentResult result) {
+    if (result == null) {
+      return;
+    }
+    if (!result.isValid()) {
+      if (result.isToLarge()) {
+        reduceBitCount(adjustmentResults, result);
+      } else {
+        enlargeBitCount(adjustmentResults, result);
+      }
+    }
+    adjustmentResults.add(result);
   }
 
   static AdjustmentResults adjustBitCountManual(int[] moduleBitCount) {
