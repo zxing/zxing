@@ -61,7 +61,19 @@ public class DetectionResult implements SimpleLog.Loggable {
     return detectionResultColumns[barcodeColumn];
   }
 
+  private void setRowNumberInIndicatorColumn(DetectionResultColumn detectionResultColumn) {
+    if (detectionResultColumn == null) {
+      return;
+    }
+    for (Codeword codeword : detectionResultColumn.getCodewords()) {
+      if (codeword != null) {
+        codeword.setRowNumberAsRowIndicatorColumn();
+      }
+    }
+  }
+
   public DetectionResultColumn[] getDetectionResultColumns() {
+    setRowNumberInIndicatorColumn(detectionResultColumns[barcodeColumnCount + 1]);
     SimpleLog.log(LEVEL.DEBUG, "Before adjustRowNumbers");
     SimpleLog.log(LEVEL.DEBUG, this);
     adjustIndicatorColumnRowNumbers(detectionResultColumns[0]);
@@ -237,7 +249,7 @@ public class DetectionResult implements SimpleLog.Loggable {
     }
     Codeword[] codewords = detectionResultColumn.getCodewords();
     int barcodeRow = -1;
-    int previousRowHeight = 0;
+    int previousRowHeight = 1;
     int currentRowHeight = 0;
     for (int codewordsRow = 0; codewordsRow < codewords.length; codewordsRow++) {
       if (codewords[codewordsRow] == null) {
@@ -254,6 +266,7 @@ public class DetectionResult implements SimpleLog.Loggable {
         currentRowHeight++;
       } else if (rowDifference == 1) {
         previousRowHeight = Math.max(previousRowHeight, currentRowHeight);
+        currentRowHeight = 1;
         barcodeRow = codeword.getRowNumber();
       } else if (rowDifference < 0) {
         SimpleLog.log(LEVEL.WARNING, "Removing codeword, rowNumber should not decrease, codeword[" + codewordsRow +
@@ -271,11 +284,17 @@ public class DetectionResult implements SimpleLog.Loggable {
                 codeword.getValue());
         codewords[codewordsRow] = null;
       } else {
-        boolean closePreviousCodewordFound = false;
-        for (int i = 1; i <= rowDifference; i++) {
+        int checkedRows;
+        if (previousRowHeight > 2) {
+          checkedRows = (previousRowHeight - 2) * rowDifference;
+        } else {
+          checkedRows = previousRowHeight * rowDifference;
+        }
+        boolean closePreviousCodewordFound = checkedRows >= codewordsRow;
+        for (int i = 1; i <= checkedRows && !closePreviousCodewordFound; i++) {
           // there must be (height * rowDifference) number of codewords missing. For now we assume height = 1.
           // This should hopefully get rid of most problems already.
-          closePreviousCodewordFound |= (codewords[codewordsRow - i] != null);
+          closePreviousCodewordFound = (codewords[codewordsRow - i] != null);
         }
         if (closePreviousCodewordFound) {
           SimpleLog.log(
@@ -284,6 +303,14 @@ public class DetectionResult implements SimpleLog.Loggable {
                   "]: previous row: " + barcodeRow + ", new row: " + codeword.getRowNumber() + ", value: " +
                   codeword.getValue());
           codewords[codewordsRow] = null;
+        } else {
+          SimpleLog.log(
+              LEVEL.WARNING,
+              "Setting new row number after bigger jump, codeword[" + codewordsRow +
+                  "]: previous row: " + barcodeRow + ", new row: " + codeword.getRowNumber() + ", value: " +
+                  codeword.getValue());
+          barcodeRow = codeword.getRowNumber();
+          currentRowHeight = 1;
         }
       }
     }
