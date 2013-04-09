@@ -61,6 +61,7 @@
     </pathconvert>
     <compc output="${dist}/${libraryName}" include-classes="${classes}">
       <source-path path-element="${src}"/>
+	  <include-sources dir="${basedir}/core/src" includes="*" />
     </compc>
   </target>
 
