@@ -29,7 +29,8 @@ using zxing::Ref;
 using zxing::ArrayRef;
 using zxing::LuminanceSource;
 
-inline char ImageReaderSource::convertPixel(char const* pixel) const {
+inline char ImageReaderSource::convertPixel(char const* pixel_) const {
+  unsigned char const* pixel = (unsigned char const*)pixel_;
   if (comps == 1 || comps == 2) {
     // Gray or gray+alpha
     return pixel[0];
