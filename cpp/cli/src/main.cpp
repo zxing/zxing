@@ -51,6 +51,7 @@ bool try_harder = false;
 bool search_multi = false;
 bool use_hybrid = false;
 bool use_global = false;
+bool verbose = false;
 
 }
 
@@ -116,11 +117,11 @@ int read_image(Ref<LuminanceSource> source, bool hybrid, string expected) {
     }
   }
 
-  if (res != 0){
+  if (res != 0 && (verbose || (use_global ^ use_hybrid))) {
     cout << (hybrid ? "Hybrid" : "Global")
          << " binarizer failed: " << cell_result << endl;
   } else if (!test_mode) {
-    if (use_hybrid && use_global) {
+    if (verbose) {
       cout << (hybrid ? "Hybrid" : "Global")
            << " binarizer succeeded: " << endl;
     }
@@ -135,7 +136,7 @@ int read_image(Ref<LuminanceSource> source, bool hybrid, string expected) {
                << results[i]->getResultPoints()[j]->getY() << endl;
         }
       }
-      if (use_hybrid && use_global) {
+      if (verbose) {
         cout << "    ";
       }
       cout << results[i]->getText()->getText() << endl;
@@ -186,6 +187,7 @@ int main(int argc, char** argv) {
          << "Options:" << endl
          << "  (-h|--hybrid)             use the hybrid binarizer (default)" << endl
          << "  (-g|--global)             use the global binarizer" << endl
+         << "  (-v|--verbose)            chattier results printing" << endl
          << "  --more                    display more information about the barcode" << endl
          << "  --test-mode               compare IMAGEs against text files" << endl
          << "  --try-harder              spend more time to try to find a barcode" << endl
@@ -205,6 +207,11 @@ int main(int argc, char** argv) {
 
   for (int i = 1; i < argc; i++) {
     string filename = argv[i];
+    if (filename.compare("--verbose") == 0 ||
+        filename.compare("-v") == 0) {
+      verbose = true;
+      continue;
+    }
     if (filename.compare("--hybrid") == 0 ||
         filename.compare("-h") == 0) {
       use_hybrid = true;
@@ -239,7 +246,7 @@ int main(int argc, char** argv) {
     }
 
     if (!use_global && !use_hybrid) {
-      use_hybrid = true;
+      use_global = use_hybrid = true;
     }
 
     if (test_mode) {
@@ -261,8 +268,11 @@ int main(int argc, char** argv) {
     if (use_hybrid) {
       hresult = read_image(source, true, expected);
     }
-    if (use_global) {
+    if (use_global && (verbose || hresult != 0)) {
       gresult = read_image(source, false, expected);
+      if (!verbose && gresult != 0) {
+        cout << "decoding failed" << endl;
+      }
     }
     gresult = gresult == 0;
     hresult = hresult == 0;
