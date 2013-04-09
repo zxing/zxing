@@ -123,7 +123,7 @@ int test_image(Image& image, bool hybrid, string expected = "") {
     }
   }
 
-  if (raw_dump && !hybrid) {/* don't print twice, and global is a bit better */
+  if (res == 0) {
     cout << cell_result;
     if (show_format) {
       cout << " " << result_format;
@@ -304,7 +304,12 @@ int main(int argc, char** argv) {
       int gresult = 1;
       int hresult = 1;
       hresult = test_image_hybrid(image, expected);
-      gresult = test_image_global(image, expected);
+      if (!raw_dump || hresult != 0) {
+        gresult = test_image_global(image, expected);
+        if (raw_dump && gresult != 0) {
+          cout << "decoding failed" << endl;
+        }
+      }
       gresult = gresult == 0;
       hresult = hresult == 0;
 
@@ -324,5 +329,3 @@ int main(int argc, char** argv) {
 
   return 0;
 }
-
-
