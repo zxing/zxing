@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 blackboxpath="../core/test/data/blackbox"
 

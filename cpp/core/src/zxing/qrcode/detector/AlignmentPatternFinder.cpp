@@ -59,14 +59,14 @@ float AlignmentPatternFinder::crossCheckVertical(size_t startI, size_t centerJ, 
   }
   // If already too many modules in this state or ran off the edge:
   if (i < 0 || stateCount[1] > maxCount) {
-    return NAN;
+    return nan();
   }
   while (i >= 0 && !image_->get(centerJ, i) && stateCount[0] <= maxCount) {
     stateCount[0]++;
     i--;
   }
   if (stateCount[0] > maxCount) {
-    return NAN;
+    return nan();
   }
 
   // Now also count down from center
@@ -76,22 +76,22 @@ float AlignmentPatternFinder::crossCheckVertical(size_t startI, size_t centerJ, 
     i++;
   }
   if (i == maxI || stateCount[1] > maxCount) {
-    return NAN;
+    return nan();
   }
   while (i < maxI && !image_->get(centerJ, i) && stateCount[2] <= maxCount) {
     stateCount[2]++;
     i++;
   }
   if (stateCount[2] > maxCount) {
-    return NAN;
+    return nan();
   }
 
   int stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2];
   if (5 * abs(stateCountTotal - originalStateCountTotal) >= 2 * originalStateCountTotal) {
-    return NAN;
+    return nan();
   }
 
-  return foundPatternCross(stateCount) ? centerFromEnd(stateCount, i) : NAN;
+  return foundPatternCross(stateCount) ? centerFromEnd(stateCount, i) : nan();
 }
 
 Ref<AlignmentPattern> AlignmentPatternFinder::handlePossibleCenter(vector<int> &stateCount, size_t i, size_t j) {

@@ -69,6 +69,8 @@ class DecodeHints {
 
   void addFormat(BarcodeFormat toadd);
   bool containsFormat(BarcodeFormat tocheck) const;
+  bool isEmpty() const {return (hints==0);}
+  void clear() {hints=0;}
   void setTryHarder(bool toset);
   bool getTryHarder() const;
 

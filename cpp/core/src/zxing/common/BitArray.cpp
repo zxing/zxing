@@ -38,36 +38,8 @@ void BitArray::setBulk(int i, int newBits) {
   bits[i >> logBits] = newBits;
 }
 
-/*
-  void BitArray::setRange(int start, int end) {
-  if (end < start) {
-  throw IllegalArgumentException("invalid call to BitArray::setRange");
-  }
-  if (end == start) {
-  return;
-  }
-  end--; // will be easier to treat this as the last actually set bit -- inclusive
-  int firstInt = start >> 5;
-  int lastInt = end >> 5;
-  for (int i = firstInt; i <= lastInt; i++) {
-  int firstBit = i > firstInt ? 0 : start & 0x1F;
-  int lastBit = i < lastInt ? 31 : end & 0x1F;
-  int mask;
-  if (firstBit == 0 && lastBit == 31) {
-  mask = -1;
-  } else {
-  mask = 0;
-  for (int j = firstBit; j <= lastBit; j++) {
-  mask |= 1 << j;
-  }
-  }
-  bits_[i] |= mask;
-  }
-  }
-*/
-
 void BitArray::clear() {
-  int max = bits.size();
+  int max = bits->size();
   for (int i = 0; i < max; i++) {
     bits[i] = 0;
   }
@@ -110,7 +82,7 @@ vector<int>& BitArray::getBitArray() {
 }
 
 void BitArray::reverse() {
-  ArrayRef<int> newBits(bits.size());
+  ArrayRef<int> newBits(bits->size());
   int size = this->size;
   for (int i = 0; i < size; i++) {
     if (get(size - i - 1)) {
@@ -152,7 +124,7 @@ int BitArray::getNextSet(int from) {
   // mask off lesser bits first
   currentBits &= ~((1 << (from & bitsMask)) - 1);
   while (currentBits == 0) {
-    if (++bitsOffset == (int)bits.size()) {
+    if (++bitsOffset == (int)bits->size()) {
       return size;
     }
     currentBits = bits[bitsOffset];
@@ -170,7 +142,7 @@ int BitArray::getNextUnset(int from) {
   // mask off lesser bits first
   currentBits &= ~((1 << (from & bitsMask)) - 1);
   while (currentBits == 0) {
-    if (++bitsOffset == (int)bits.size()) {
+    if (++bitsOffset == (int)bits->size()) {
       return size;
     }
     currentBits = ~bits[bitsOffset];

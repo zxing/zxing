@@ -20,7 +20,7 @@
  */
 
 #include <zxing/ResultPoint.h>
-#include <zxing/common/detector/math_utils.h>
+#include <zxing/common/detector/MathUtils.h>
 
 namespace math_utils = zxing::common::detector::math_utils;
 

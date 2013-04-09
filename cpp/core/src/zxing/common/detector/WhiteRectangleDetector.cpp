@@ -21,13 +21,15 @@
 
 #include <zxing/NotFoundException.h>
 #include <zxing/common/detector/WhiteRectangleDetector.h>
-#include <zxing/common/detector/math_utils.h>
+#include <zxing/common/detector/MathUtils.h>
 #include <sstream>
 
 namespace math_utils = zxing::common::detector::math_utils;
 
-namespace zxing {
-using namespace std;
+using std::vector;
+using zxing::Ref;
+using zxing::ResultPoint;
+using zxing::WhiteRectangleDetector;
 
 int WhiteRectangleDetector::INIT_SIZE = 30;
 int WhiteRectangleDetector::CORR = 1;
@@ -322,5 +324,4 @@ bool WhiteRectangleDetector::containsBlackPoint(int a, int b, int fixed, bool ho
   }
 
   return false;
-}
 }
