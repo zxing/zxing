@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.zxing.aztec.encoder;
+package com.google.zxing.aztec;
 
 import java.nio.charset.Charset;
 import java.util.Map;
@@ -22,6 +22,8 @@ import java.util.Map;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.Writer;
+import com.google.zxing.aztec.encoder.AztecCode;
+import com.google.zxing.aztec.encoder.Encoder;
 import com.google.zxing.common.BitMatrix;
 
 public final class AztecWriter implements Writer {

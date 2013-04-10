@@ -25,7 +25,7 @@ import com.google.zxing.WriterException;
 /**
  * Top-level class for the logic part of the PDF417 implementation.
  */
-final class PDF417 {
+public final class PDF417 {
 
   /**
    * The start pattern (17 bits)
@@ -518,11 +518,11 @@ final class PDF417 {
   private int maxRows;
   private int minRows;
 
-  PDF417() {
+  public PDF417() {
     this(false);
   }
 
-  PDF417(boolean compact) {
+  public PDF417(boolean compact) {
     this.compact = compact;
     compaction = Compaction.AUTO;
     minCols = 2;
@@ -531,7 +531,7 @@ final class PDF417 {
     minRows = 2;
   }
 
-  BarcodeMatrix getBarcodeMatrix() {
+  public BarcodeMatrix getBarcodeMatrix() {
     return barcodeMatrix;
   }
 
@@ -638,7 +638,7 @@ final class PDF417 {
    *
    * @param msg        the message to encode
    */
-  void generateBarcodeLogic(String msg, int errorCorrectionLevel) throws WriterException {
+  public void generateBarcodeLogic(String msg, int errorCorrectionLevel) throws WriterException {
 
     //1. step: High-level encoding
     int errorCorrectionCodeWords = PDF417ErrorCorrection.getErrorCorrectionCodewordCount(errorCorrectionLevel);
@@ -683,7 +683,7 @@ final class PDF417 {
    * @param errorCorrectionCodeWords number of error correction code words
    * @return dimension object containing cols as width and rows as height
    */
-  int[] determineDimensions(int sourceCodeWords, int errorCorrectionCodeWords) throws WriterException {
+  private int[] determineDimensions(int sourceCodeWords, int errorCorrectionCodeWords) throws WriterException {
     float ratio = 0.0f;
     int[] dimension = null;
 
@@ -728,7 +728,7 @@ final class PDF417 {
   /**
    * Sets max/min row/col values
    */
-  void setDimensions(int maxCols, int minCols, int maxRows, int minRows) {
+  public void setDimensions(int maxCols, int minCols, int maxRows, int minRows) {
     this.maxCols = maxCols;
     this.minCols = minCols;
     this.maxRows = maxRows;
@@ -738,7 +738,7 @@ final class PDF417 {
   /**
    * Sets compaction to values stored in {@link Compaction} enum
    */
-  void setCompaction(Compaction compaction) {
+  public void setCompaction(Compaction compaction) {
     this.compaction = compaction;
   }
 
@@ -746,7 +746,7 @@ final class PDF417 {
    * Sets compact to be true or false
    * @param compact
    */
-  void setCompact(boolean compact) {
+  public void setCompact(boolean compact) {
     this.compact = compact;
   }
 

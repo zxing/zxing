@@ -21,7 +21,7 @@ package com.google.zxing.pdf417.encoder;
  *
  * @author Jacob Haynes
  */
-final class BarcodeMatrix {
+public final class BarcodeMatrix {
 
   private final BarcodeRow[] matrix;
   private int currentRow;
@@ -59,19 +59,19 @@ final class BarcodeMatrix {
     return matrix[currentRow];
   }
 
-  byte[][] getMatrix() {
+  public byte[][] getMatrix() {
     return getScaledMatrix(1, 1);
   }
 
-  byte[][] getScaledMatrix(int Scale) {
-    return getScaledMatrix(Scale, Scale);
+  public byte[][] getScaledMatrix(int scale) {
+    return getScaledMatrix(scale, scale);
   }
 
-  byte[][] getScaledMatrix(int xScale, int yScale) {
+  public byte[][] getScaledMatrix(int xScale, int yScale) {
     byte[][] matrixOut = new byte[height * yScale][width * xScale];
     int yMax = height * yScale;
-    for (int ii = 0; ii < yMax; ii++) {
-      matrixOut[yMax - ii - 1] = matrix[ii / yScale].getScaledRow(xScale);
+    for (int i = 0; i < yMax; i++) {
+      matrixOut[yMax - i - 1] = matrix[i / yScale].getScaledRow(xScale);
     }
     return matrixOut;
   }
