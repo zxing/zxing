@@ -1,6 +1,5 @@
 package com.google.zxing.pdf417.decoder;
 
-import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.pdf417.decoder.SimpleLog.LEVEL;
 
@@ -14,7 +13,8 @@ public class DetectionResult implements SimpleLog.Loggable {
   private final DetectionResultColumn[] detectionResultColumns;
   private final BoundingBox boundingBox;
 
-  public DetectionResult(BitMatrix image, int barcodeColumnCount,
+  public DetectionResult(BitMatrix image,
+                         int barcodeColumnCount,
                          int barcodeRowCount,
                          int barcodeECLevel,
                          BoundingBox boundingBox) {
@@ -23,13 +23,6 @@ public class DetectionResult implements SimpleLog.Loggable {
     this.barcodeECLevel = barcodeECLevel;
     this.boundingBox = boundingBox;
     detectionResultColumns = new DetectionResultColumn[barcodeColumnCount + 2];
-
-    if (boundingBox.getTopRight() == null) {
-      int rightX = Math.min(image.getWidth(),
-          boundingBox.getMinX() + (barcodeColumnCount + 1) * boundingBox.getMaxCodewordWidth());
-      boundingBox.setTopRight(new ResultPoint(rightX, boundingBox.getMinY()));
-      boundingBox.setBottomRight(new ResultPoint(rightX, boundingBox.getMaxY()));
-    }
   }
 
   public int getImageStartRow(int barcodeColumn) {
@@ -141,8 +134,7 @@ public class DetectionResult implements SimpleLog.Loggable {
       }
       int rowIndicatorRowNumber = codewords[codewordsRow].getRowNumber();
       int invalidRowCounts = 0;
-      for (int barcodeColumn = barcodeColumnCount + 1; barcodeColumn > 0 &&
-          invalidRowCounts < ADJUST_ROW_NUMBER_SKIP; barcodeColumn--) {
+      for (int barcodeColumn = barcodeColumnCount + 1; barcodeColumn > 0 && invalidRowCounts < ADJUST_ROW_NUMBER_SKIP; barcodeColumn--) {
         Codeword codeword = detectionResultColumns[barcodeColumn].getCodewords()[codewordsRow];
         if (codeword != null) {
           invalidRowCounts = adjustRowNumberIfValid(codewordsRow, rowIndicatorRowNumber, invalidRowCounts,
@@ -165,8 +157,7 @@ public class DetectionResult implements SimpleLog.Loggable {
       }
       int rowIndicatorRowNumber = codewords[codewordsRow].getRowNumber();
       int invalidRowCounts = 0;
-      for (int barcodeColumn = 1; barcodeColumn < barcodeColumnCount + 1 &&
-          invalidRowCounts < ADJUST_ROW_NUMBER_SKIP; barcodeColumn++) {
+      for (int barcodeColumn = 1; barcodeColumn < barcodeColumnCount + 1 && invalidRowCounts < ADJUST_ROW_NUMBER_SKIP; barcodeColumn++) {
         Codeword codeword = detectionResultColumns[barcodeColumn].getCodewords()[codewordsRow];
         if (codeword != null) {
           invalidRowCounts = adjustRowNumberIfValid(codewordsRow, rowIndicatorRowNumber, invalidRowCounts,
@@ -277,11 +268,9 @@ public class DetectionResult implements SimpleLog.Loggable {
             codeword.getRowNumber() + ", value: " + codeword.getValue());
         codewords[codewordsRow] = null;
       } else if (rowDifference > codewordsRow) {
-        SimpleLog.log(
-            LEVEL.WARNING,
-            "Row number jump bigger than codeword row, codeword[" + codewordsRow +
-                "]: previous row: " + barcodeRow + ", new row: " + codeword.getRowNumber() + ", value: " +
-                codeword.getValue());
+        SimpleLog.log(LEVEL.WARNING,
+            "Row number jump bigger than codeword row, codeword[" + codewordsRow + "]: previous row: " + barcodeRow +
+                ", new row: " + codeword.getRowNumber() + ", value: " + codeword.getValue());
         codewords[codewordsRow] = null;
       } else {
         int checkedRows;
@@ -297,18 +286,14 @@ public class DetectionResult implements SimpleLog.Loggable {
           closePreviousCodewordFound = (codewords[codewordsRow - i] != null);
         }
         if (closePreviousCodewordFound) {
-          SimpleLog.log(
-              LEVEL.WARNING,
-              "Row number jump bigger than codeword row gap, codeword[" + codewordsRow +
-                  "]: previous row: " + barcodeRow + ", new row: " + codeword.getRowNumber() + ", value: " +
-                  codeword.getValue());
+          SimpleLog.log(LEVEL.WARNING,
+              "Row number jump bigger than codeword row gap, codeword[" + codewordsRow + "]: previous row: " +
+                  barcodeRow + ", new row: " + codeword.getRowNumber() + ", value: " + codeword.getValue());
           codewords[codewordsRow] = null;
         } else {
-          SimpleLog.log(
-              LEVEL.WARNING,
-              "Setting new row number after bigger jump, codeword[" + codewordsRow +
-                  "]: previous row: " + barcodeRow + ", new row: " + codeword.getRowNumber() + ", value: " +
-                  codeword.getValue());
+          SimpleLog.log(LEVEL.WARNING,
+              "Setting new row number after bigger jump, codeword[" + codewordsRow + "]: previous row: " + barcodeRow +
+                  ", new row: " + codeword.getRowNumber() + ", value: " + codeword.getValue());
           barcodeRow = codeword.getRowNumber();
           currentRowHeight = 1;
         }

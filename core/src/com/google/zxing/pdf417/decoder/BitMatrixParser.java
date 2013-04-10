@@ -75,7 +75,7 @@ public final class BitMatrixParser {
       // Process Row
       next = processRow(rowNumber, codewords, next);
       rowNumber++;
-    }  
+    }
     erasures = trimArray(erasures, eraseCount);
     return trimArray(codewords, next);
   }
@@ -173,7 +173,7 @@ public final class BitMatrixParser {
     if (i == -1) {
       return -1;
     }
-    return (CODEWORD_TABLE[i] - 1) % 929; 
+    return (CODEWORD_TABLE[i] - 1) % 929;
   }
 
   /**
@@ -215,7 +215,7 @@ public final class BitMatrixParser {
    * specification. The index of a symbol in this table corresponds to the
    * index into the codeword table.
    */
-  public static final int[] SYMBOL_TABLE = {0x1025e, 0x1027a, 0x1029e,
+  public static final int[] SYMBOL_TABLE = { 0x1025e, 0x1027a, 0x1029e,
       0x102bc, 0x102f2, 0x102f4, 0x1032e, 0x1034e, 0x1035c, 0x10396,
       0x103a6, 0x103ac, 0x10422, 0x10428, 0x10436, 0x10442, 0x10444,
       0x10448, 0x10450, 0x1045e, 0x10466, 0x1046c, 0x1047a, 0x10482,
@@ -613,12 +613,12 @@ public final class BitMatrixParser {
       0x1fab8, 0x1fac2, 0x1fac4, 0x1fac8, 0x1fad0, 0x1fade, 0x1fae6,
       0x1faec, 0x1fb16, 0x1fb26, 0x1fb2c, 0x1fb3a, 0x1fb46, 0x1fb4c,
       0x1fb58, 0x1fb6e, 0x1fb72, 0x1fb74, 0x1fb8a, 0x1fb92, 0x1fb94,
-      0x1fba2, 0x1fba4, 0x1fba8, 0x1fbb6, 0x1fbda};
+      0x1fba2, 0x1fba4, 0x1fba8, 0x1fbb6, 0x1fbda };
 
   /**
    * This table contains to codewords for all symbols.
    */
-  private static final int[] CODEWORD_TABLE = {2627, 1819, 2622, 2621, 1813,
+  public static final int[] CODEWORD_TABLE = { 2627, 1819, 2622, 2621, 1813,
       1812, 2729, 2724, 2723, 2779, 2774, 2773, 902, 896, 908, 868, 865,
       861, 859, 2511, 873, 871, 1780, 835, 2493, 825, 2491, 842, 837, 844,
       1764, 1762, 811, 810, 809, 2483, 807, 2482, 806, 2480, 815, 814, 813,
@@ -846,5 +846,5 @@ public final class BitMatrixParser {
       2200, 1698, 1659, 1656, 1975, 1053, 1957, 1954, 1001, 998, 1924, 1921,
       1918, 1928, 937, 934, 931, 1879, 1876, 1873, 1870, 945, 1885, 1882,
       1323, 1273, 1270, 2105, 1202, 1199, 1196, 1211, 2061, 2057, 1576,
-      1543, 1540, 1484, 1481, 1478, 1491, 1700};
+      1543, 1540, 1484, 1481, 1478, 1491, 1700 };
 }

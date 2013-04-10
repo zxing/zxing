@@ -18,7 +18,7 @@ public class SimpleLog {
     FATAL
   }
 
-  protected static LEVEL LOG_LEVEL = LEVEL.WARNING;
+  protected static LEVEL LOG_LEVEL = LEVEL.DEBUG;
 
   public static void log(LEVEL level, String string, int imageRow, int imageColumn, int barcodeRow,
                          int barcodeColumn) {

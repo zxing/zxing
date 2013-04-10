@@ -79,6 +79,8 @@ public class PDF417CodewordDecoderTest {
 
   @Test
   public void testValues() {
+    System.out.println(BitMatrixParser.SYMBOL_TABLE.length);
+    System.out.println(BitMatrixParser.CODEWORD_TABLE.length);
     System.out.println(BitMatrixParser.getCodeword(getDecodedValue(new int[] { 5, 1, 1, 2, 1, 3, 2, 2 })));
   }
 

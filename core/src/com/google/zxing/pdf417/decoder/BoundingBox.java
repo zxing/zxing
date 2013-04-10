@@ -1,43 +1,50 @@
 package com.google.zxing.pdf417.decoder;
 
+import com.google.zxing.NotFoundException;
 import com.google.zxing.ResultPoint;
+import com.google.zxing.common.BitMatrix;
 
 public class BoundingBox {
-  private final ResultPoint topLeft;
-  private final ResultPoint bottomLeft;
+  private final BitMatrix image;
+  private ResultPoint topLeft;
+  private ResultPoint bottomLeft;
   private ResultPoint topRight;
   private ResultPoint bottomRight;
   private int minX;
   private int maxX;
   private int minY;
   private int maxY;
-  private final int maxCodewordWidth;
 
-  public BoundingBox(final ResultPoint topLeft,
+  public BoundingBox(BitMatrix image,
+                     final ResultPoint topLeft,
                      final ResultPoint bottomLeft,
                      final ResultPoint topRight,
-                     final ResultPoint bottomRight,
-                     int maxCodewordWidth) {
+                     final ResultPoint bottomRight) throws NotFoundException {
+    if ((topLeft == null && topRight == null) || (bottomLeft == null && bottomRight == null) ||
+        (topLeft != null && bottomLeft == null) || (topRight != null && bottomRight == null)) {
+      throw NotFoundException.getNotFoundInstance();
+    }
+    this.image = image;
     this.topLeft = topLeft;
     this.bottomLeft = bottomLeft;
     this.topRight = topRight;
     this.bottomRight = bottomRight;
-    this.maxCodewordWidth = maxCodewordWidth;
     calculateMinMaxValues();
   }
 
   private void calculateMinMaxValues() {
-    minX = (int) Math.min(topLeft.getX(), bottomLeft.getX());
-
-    if (topRight != null && bottomRight != null) {
-      maxX = (int) Math.max(topRight.getX(), bottomRight.getX());
-      minY = (int) Math.min(topLeft.getY(), topRight.getY());
-      maxY = (int) Math.max(bottomLeft.getY(), bottomRight.getY());
-    } else {
-      maxX = (int) topLeft.getX() + maxCodewordWidth;
-      minY = (int) topLeft.getY();
-      maxY = (int) bottomLeft.getY();
+    if (topLeft == null) {
+      topLeft = new ResultPoint(0, topRight.getX());
+      bottomLeft = new ResultPoint(0, bottomRight.getX());
+    } else if (topRight == null) {
+      topRight = new ResultPoint(image.getWidth() - 1, topLeft.getY());
+      bottomRight = new ResultPoint(image.getWidth() - 1, bottomLeft.getY());
     }
+
+    minX = (int) Math.min(topLeft.getX(), bottomLeft.getX());
+    maxX = (int) Math.max(topRight.getX(), bottomRight.getX());
+    minY = (int) Math.min(topLeft.getY(), topRight.getY());
+    maxY = (int) Math.max(bottomLeft.getY(), bottomRight.getY());
   }
 
   public void setTopRight(ResultPoint topRight) {
@@ -68,9 +75,5 @@ public class BoundingBox {
 
   public ResultPoint getTopRight() {
     return topRight;
-  }
-
-  public int getMaxCodewordWidth() {
-    return maxCodewordWidth;
   }
 }
