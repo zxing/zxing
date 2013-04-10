@@ -16,7 +16,6 @@
 
 package com.google.zxing.integration.android;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -207,18 +206,6 @@ public class IntentIntegrator {
   
   public Collection<String> getTargetApplications() {
     return targetApplications;
-  }
-
-  /**
-   * @deprecated call {@link #setTargetApplications(List)}
-   */
-  @Deprecated
-  public void setTargetApplications(Collection<String> targetApplications) {
-    List<String> list = new ArrayList<String>(targetApplications.size());
-    for (String app : targetApplications) {
-      list.add(app);
-    }
-    setTargetApplications(list);
   }
   
   public final void setTargetApplications(List<String> targetApplications) {
