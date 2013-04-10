@@ -96,7 +96,7 @@
   <string name="preferences_bulk_mode_summary">QRコードを連続スキャンして保存します</string>
   <string name="preferences_bulk_mode_title">連続スキャンモード</string>
   <string name="preferences_copy_to_clipboard_title">ｸﾘｯﾌﾟﾎﾞｰﾄﾞにｺﾋﾟｰ</string>
-  <string name="preferences_custom_product_search_summary">引数：%s=コンテンツ、%f=フォーマット、%t=タイプ</string>
+  <string name="preferences_custom_product_search_summary" formatted="false">引数：%s=コンテンツ、%f=フォーマット、%t=タイプ</string>
   <string name="preferences_custom_product_search_title">カスタムサーチ URL</string>
   <string name="preferences_decode_1D_title">1次元バーコード</string>
   <string name="preferences_decode_Data_Matrix_title">データマトリクス</string>
