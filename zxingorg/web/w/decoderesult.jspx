@@ -20,36 +20,18 @@
   com.google.zxing.Result,
   com.google.zxing.client.result.ResultParser,
   com.google.zxing.client.result.ParsedResult,
+  com.google.zxing.web.OutputUtils,
   org.apache.commons.lang3.StringEscapeUtils"/>
-<jsp:declaration>
-  private static String arrayToString(byte[] bytes) {
-    int length = bytes.length;
-    StringBuilder result = new StringBuilder(length &lt;&lt; 2);
-    int i = 0;
-    while (i &lt; length) {
-      int max = Math.min(i + 8, length);
-      for (int j = i; j &lt; max; j++) {
-        int value = bytes[j] &amp; 0xFF;
-        result.append(Integer.toHexString(value / 16));
-        result.append(Integer.toHexString(value % 16));
-        result.append(' ');
-      }
-      result.append('\n');
-      i += 8;
-    }
-    for (int j = i - 8; j &lt; length; j++) {
-      result.append(Integer.toHexString(bytes[j] &amp; 0xFF));
-      result.append(' ');
-    }
-    return result.toString();
-  }
-</jsp:declaration>
 <jsp:directive.page contentType="text/html" session="false"/>
-<jsp:scriptlet>response.setHeader("Cache-Control", "no-cache");</jsp:scriptlet>
+<jsp:scriptlet>
+  response.setHeader("Cache-Control", "no-cache");
+  response.setHeader("X-Robots-Tag", "none");
+</jsp:scriptlet>
 <jsp:text><![CDATA[<!DOCTYPE html>]]></jsp:text>
 <html>
   <head>
     <meta charset="UTF-8"/>
+    <meta name="robots" content="none"/>
     <title>Decode Succeeded</title>
     <link rel="stylesheet" href="style.css" type="text/css"/>    
     <style type="text/css">
@@ -67,8 +49,7 @@
         if (text == null) {
           text = "(Not applicable)";
         } else {
-          text = StringEscapeUtils.escapeXml(text);
-          text = text.replaceAll("\r?\n", "&lt;br/&gt;");
+          text = OutputUtils.escapeNewlineAsBR(StringEscapeUtils.escapeXml(text));
         }
 
         byte[] rawBytes = result.getRawBytes();
@@ -76,25 +57,24 @@
         if (rawBytes == null) {
           rawBytesString = "(Not applicable)";
         } else {
-          rawBytesString = arrayToString(rawBytes);
+          rawBytesString = OutputUtils.arrayToString(rawBytes);
         }
 
         String displayResult = parsedResult.getDisplayResult();
         if (displayResult == null) {
           displayResult = "(Not applicable)";
         } else {
-          displayResult = StringEscapeUtils.escapeXml(displayResult);
-          displayResult = displayResult.replaceAll("\r?\n", "&lt;br/&gt;");
+          displayResult = OutputUtils.escapeNewlineAsBR(StringEscapeUtils.escapeXml(displayResult));
         }
     </jsp:scriptlet>
-    <table>
+    <table style="width:100%">
       <tr>
         <td>Raw text</td>
         <td><jsp:expression>text</jsp:expression></td>
       </tr>
       <tr>
         <td>Raw bytes</td>
-        <td><jsp:expression>rawBytesString</jsp:expression></td>
+        <td><pre style="margin:0"><jsp:expression>rawBytesString</jsp:expression></pre></td>
       </tr>
       <tr>
         <td>Barcode format</td>
