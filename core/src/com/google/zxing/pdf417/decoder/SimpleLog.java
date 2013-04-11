@@ -20,10 +20,8 @@ public class SimpleLog {
 
   protected static LEVEL LOG_LEVEL = LEVEL.DEBUG;
 
-  public static void log(LEVEL level, String string, int imageRow, int imageColumn, int barcodeRow,
-                         int barcodeColumn) {
-    log(level, string + ", barcodeRow: " + barcodeRow + ", barcodeColumn: " + barcodeColumn, imageRow,
-        imageColumn);
+  public static void log(LEVEL level, String string, int imageRow, int imageColumn, int barcodeRow, int barcodeColumn) {
+    log(level, string + ", barcodeRow: " + barcodeRow + ", barcodeColumn: " + barcodeColumn, imageRow, imageColumn);
   }
 
   public static void log(LEVEL level, Loggable loggable) {

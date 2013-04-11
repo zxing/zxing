@@ -35,10 +35,7 @@ public final class ErrorCorrection {
     this.field = ModulusGF.PDF417_GF;
   }
 
-  public void decode(int[] received,
-                     int numECCodewords,
-                     int[] erasures) throws ChecksumException {
-
+  public void decode(int[] received, int numECCodewords, int[] erasures) throws ChecksumException {
     ModulusPoly poly = new ModulusPoly(field, received);
     int[] S = new int[numECCodewords];
     boolean error = false;
@@ -63,8 +60,8 @@ public final class ErrorCorrection {
       ModulusPoly syndrome = new ModulusPoly(field, S);
       //syndrome = syndrome.multiply(knownErrors);
 
-      ModulusPoly[] sigmaOmega =
-          runEuclideanAlgorithm(field.buildMonomial(numECCodewords, 1), syndrome, numECCodewords);
+      ModulusPoly[] sigmaOmega = runEuclideanAlgorithm(field.buildMonomial(numECCodewords, 1), syndrome, numECCodewords);
+
       ModulusPoly sigma = sigmaOmega[0];
       ModulusPoly omega = sigmaOmega[1];
 
@@ -72,6 +69,16 @@ public final class ErrorCorrection {
 
       int[] errorLocations = findErrorLocations(sigma);
       int[] errorMagnitudes = findErrorMagnitudes(omega, sigma, errorLocations);
+      System.err.println("ErrorLocations: " + errorLocations.length);
+      for (int errorLocation : errorLocations) {
+        System.err.print(errorLocation + ", ");
+      }
+      System.err.println();
+      System.err.println("ErrorMagnitudes: " + errorMagnitudes.length);
+      for (int errorMagnitude : errorMagnitudes) {
+        System.err.print(errorMagnitude + ", ");
+      }
+      System.err.println();
 
       for (int i = 0; i < errorLocations.length; i++) {
         int position = received.length - 1 - field.log(errorLocations[i]);
@@ -80,11 +87,12 @@ public final class ErrorCorrection {
         }
         received[position] = field.subtract(received[position], errorMagnitudes[i]);
       }
+    } else {
+      System.err.println("No errors detected.");
     }
   }
 
-  private ModulusPoly[] runEuclideanAlgorithm(ModulusPoly a, ModulusPoly b, int R)
-      throws ChecksumException {
+  private ModulusPoly[] runEuclideanAlgorithm(ModulusPoly a, ModulusPoly b, int R) throws ChecksumException {
     // Assume a's degree is >= b's
     if (a.getDegree() < b.getDegree()) {
       ModulusPoly temp = a;
@@ -131,7 +139,7 @@ public final class ErrorCorrection {
     int inverse = field.inverse(sigmaTildeAtZero);
     ModulusPoly sigma = t.multiply(inverse);
     ModulusPoly omega = r.multiply(inverse);
-    return new ModulusPoly[]{sigma, omega};
+    return new ModulusPoly[] { sigma, omega };
   }
 
   private int[] findErrorLocations(ModulusPoly errorLocator) throws ChecksumException {
@@ -145,20 +153,18 @@ public final class ErrorCorrection {
         e++;
       }
     }
+    System.err.println("e: " + e + ", numErrors: " + numErrors);
     if (e != numErrors) {
       throw ChecksumException.getChecksumInstance();
     }
     return result;
   }
 
-  private int[] findErrorMagnitudes(ModulusPoly errorEvaluator,
-                                    ModulusPoly errorLocator,
-                                    int[] errorLocations) {
+  private int[] findErrorMagnitudes(ModulusPoly errorEvaluator, ModulusPoly errorLocator, int[] errorLocations) {
     int errorLocatorDegree = errorLocator.getDegree();
     int[] formalDerivativeCoefficients = new int[errorLocatorDegree];
     for (int i = 1; i <= errorLocatorDegree; i++) {
-      formalDerivativeCoefficients[errorLocatorDegree - i] =
-          field.multiply(i, errorLocator.getCoefficient(i));
+      formalDerivativeCoefficients[errorLocatorDegree - i] = field.multiply(i, errorLocator.getCoefficient(i));
     }
     ModulusPoly formalDerivative = new ModulusPoly(field, formalDerivativeCoefficients);
 

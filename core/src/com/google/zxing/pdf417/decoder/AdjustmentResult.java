@@ -8,7 +8,7 @@ public class AdjustmentResult {
   private static final int BIT_COUNT_SIZE = 8;
 
   private final int[] moduleBitCount;
-  private final int bitsPerModule;
+  private int bitsPerModule;
   private int bitCountDifference;
 
   private AdjustmentResult(int[] moduleBitCount, int bitsPerModule, int bitCountDifference) {
@@ -129,8 +129,8 @@ public class AdjustmentResult {
         subtract(i, bitDifference);
         add(previousHalfSizeIndex, bitDifference);
       } else {
-        AdjustmentResult copy = new AdjustmentResult(Arrays.copyOf(moduleBitCount,
-            moduleBitCount.length), bitsPerModule, bitCountDifference);
+        AdjustmentResult copy = new AdjustmentResult(Arrays.copyOf(moduleBitCount, moduleBitCount.length),
+            bitsPerModule, bitCountDifference);
         adjustmentResults.add(copy);
         add(i, bitDifference);
         subtract(previousHalfSizeIndex, bitDifference);
@@ -154,7 +154,35 @@ public class AdjustmentResult {
    * @param results
    * @return true, if a module was changed, false otherwise
    */
-  public boolean adjustHalfSizeModule(AdjustmentResults results) {
+  public boolean adjustHalfSizeModule(AdjustmentResults adjustmentResults) {
+    for (int i = 0; i < moduleBitCount.length; i++) {
+      int bitDifference = moduleBitCount[i] % bitsPerModule;
+      if (bitDifference == 0) {
+        continue;
+      }
+      if ((bitDifference << 1) == bitsPerModule) {
+        AdjustmentResult copy = new AdjustmentResult(Arrays.copyOf(moduleBitCount, moduleBitCount.length),
+            bitsPerModule, bitCountDifference);
+        adjustmentResults.add(copy);
+        add(i, bitDifference);
+        copy.subtract(i, bitDifference);
+        if (copy.isToLarge()) {
+          PDF417CodewordDecoder.reduceBitCount(adjustmentResults, copy);
+        } else {
+          PDF417CodewordDecoder.enlargeBitCount(adjustmentResults, copy);
+        }
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * 
+   * @param results
+   * @return true, if a module was changed, false otherwise
+   */
+  public boolean adjustHalfSizeModuleOld(AdjustmentResults results) {
     if (bitCountDifference != 0) {
       // adjust biggest half size module
       int index = -1;
@@ -243,9 +271,13 @@ public class AdjustmentResult {
   }
 
   public int[] getModuleCount() {
-    for (int i = 0; i < moduleBitCount.length; i++) {
-      moduleBitCount[i] /= bitsPerModule;
+    if (bitsPerModule != 1) {
+      for (int i = 0; i < moduleBitCount.length; i++) {
+        moduleBitCount[i] /= bitsPerModule;
+      }
+      bitsPerModule = 1;
     }
+
     return moduleBitCount;
   }
 

@@ -33,8 +33,8 @@ public class AdjustableBitMatrix extends BitMatrix {
 
   @Override
   public boolean get(int x, int y) {
-      byte[] currentRow = source.getRow(y, null);
-      return isBlack(currentRow[x]);
+    byte[] currentRow = source.getRow(y, null);
+    return isBlack(currentRow[x]);
   }
 
   /**
@@ -151,4 +151,17 @@ public class AdjustableBitMatrix extends BitMatrix {
     this.blackpoint = blackpoint;
   }
 
+  public boolean isBlackWhite() {
+    final int width = source.getWidth();
+    byte[] bytes = source.getMatrix();
+    for (int y = 0; y < source.getHeight(); y++) {
+      for (int x = 0; x < width; x++) {
+        int value = bytes[y * width + x] & 0xff;
+        if (value > 0 && value < 255) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
 }

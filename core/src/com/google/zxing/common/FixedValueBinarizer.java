@@ -23,7 +23,7 @@ import com.google.zxing.NotFoundException;
 /**
  * @author Guenther Grau
  */
-public class FixedValueBinarizer extends HybridBinarizer {
+public class FixedValueBinarizer extends GlobalHistogramBinarizer {
 
   LuminanceSource source;
 

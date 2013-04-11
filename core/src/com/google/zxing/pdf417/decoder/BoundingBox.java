@@ -34,8 +34,8 @@ public class BoundingBox {
 
   private void calculateMinMaxValues() {
     if (topLeft == null) {
-      topLeft = new ResultPoint(0, topRight.getX());
-      bottomLeft = new ResultPoint(0, bottomRight.getX());
+      topLeft = new ResultPoint(0, topRight.getY());
+      bottomLeft = new ResultPoint(0, bottomRight.getY());
     } else if (topRight == null) {
       topRight = new ResultPoint(image.getWidth() - 1, topLeft.getY());
       bottomRight = new ResultPoint(image.getWidth() - 1, bottomLeft.getY());

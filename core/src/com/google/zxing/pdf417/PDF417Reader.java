@@ -28,9 +28,11 @@ import com.google.zxing.ResultPoint;
 import com.google.zxing.common.AdjustableBitMatrix;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.DecoderResult;
+import com.google.zxing.common.DetectorResult;
 import com.google.zxing.pdf417.decoder.Decoder;
 import com.google.zxing.pdf417.decoder.PDF417ScanningDecoder;
 import com.google.zxing.pdf417.detector.Detector;
+import com.google.zxing.pdf417.detector.DetectorNew;
 import com.google.zxing.pdf417.detector.PDF417DetectorResult;
 
 import java.util.Map;
@@ -59,20 +61,25 @@ public final class PDF417Reader implements Reader {
   }
 
   @Override
-  public Result decode(BinaryBitmap image, Map<DecodeHintType,?> hints) throws NotFoundException,
-      FormatException, ChecksumException {
+  public Result decode(BinaryBitmap image, Map<DecodeHintType,?> hints) throws NotFoundException, FormatException,
+      ChecksumException {
     DecoderResult decoderResult;
     ResultPoint[] points;
+    boolean old = false;
     if (hints != null && hints.containsKey(DecodeHintType.PURE_BARCODE)) {
       BitMatrix bits = extractPureBits(image.getBlackMatrix());
       decoderResult = decoder.decode(bits);
       points = NO_POINTS;
+    } else if (old) {
+      DetectorResult detectorResult = new Detector(image).detect();
+      decoderResult = decoder.decode(detectorResult.getBits());
+      points = detectorResult.getPoints();
     } else {
       decoderResult = null;
       points = null;
       if (!(image.getBlackMatrix() instanceof AdjustableBitMatrix)) {
         System.err.println("Warning, not using AdjustableBitMatrix");
-        PDF417DetectorResult detectorResult = new Detector(image).detect(hints);
+        PDF417DetectorResult detectorResult = new DetectorNew(image).detect(hints);
         points = detectorResult.getPoints();
         decoderResult = PDF417ScanningDecoder.decode(image.getBlackMatrix(), points[4], points[5], points[6],
             points[7], getMinCodewordWidth(points), getMaxCodewordWidth(points));
@@ -80,6 +87,10 @@ public final class PDF417Reader implements Reader {
         AdjustableBitMatrix bitMatrix = (AdjustableBitMatrix) image.getBlackMatrix();
         int estimatedBlackPoint = bitMatrix.getBlackpoint();
         int maxRange = Math.min(estimatedBlackPoint, 255 - estimatedBlackPoint);
+        if (bitMatrix.isBlackWhite()) {
+          System.out.println("Black and white");
+          maxRange = 1;
+        }
         int range = 0;
         boolean firstTime = true;
         while (range < maxRange) {
@@ -91,7 +102,8 @@ public final class PDF417Reader implements Reader {
           }
           bitMatrix.setBlackpoint(blackPoint);
           try {
-            PDF417DetectorResult detectorResult = new Detector(image).detect(hints);
+            System.err.println("Blackpoint: " + blackPoint);
+            PDF417DetectorResult detectorResult = new DetectorNew(image).detect(hints);
             points = detectorResult.getPoints();
             decoderResult = PDF417ScanningDecoder.decode(image.getBlackMatrix(), points[4], points[5], points[6],
                 points[7], getMinCodewordWidth(points), getMaxCodewordWidth(points));

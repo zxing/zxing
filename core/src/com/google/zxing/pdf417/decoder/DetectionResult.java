@@ -149,6 +149,9 @@ public class DetectionResult implements SimpleLog.Loggable {
   }
 
   private int adjustRowNumbersFromLRI() {
+    if (detectionResultColumns[0] == null) {
+      return 0;
+    }
     int unadjustedCount = 0;
     Codeword[] codewords = detectionResultColumns[0].getCodewords();
     for (int codewordsRow = 0; codewordsRow < codewords.length; codewordsRow++) {
@@ -339,7 +342,11 @@ public class DetectionResult implements SimpleLog.Loggable {
   @Override
   public String getLogString() {
     Formatter formatter = new Formatter();
-    for (int codewordsRow = 0; codewordsRow < detectionResultColumns[0].getCodewords().length; codewordsRow++) {
+    DetectionResultColumn rowIndicatorColumn = detectionResultColumns[0];
+    if (rowIndicatorColumn == null) {
+      rowIndicatorColumn = detectionResultColumns[barcodeColumnCount + 1];
+    }
+    for (int codewordsRow = 0; codewordsRow < rowIndicatorColumn.getCodewords().length; codewordsRow++) {
       formatter.format("CW %3d:", codewordsRow);
       for (int barcodeColumn = 0; barcodeColumn < barcodeColumnCount + 2; barcodeColumn++) {
         if (detectionResultColumns[barcodeColumn] == null) {
