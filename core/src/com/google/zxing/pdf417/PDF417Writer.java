@@ -14,13 +14,16 @@
  * limitations under the License.
  */
 
-package com.google.zxing.pdf417.encoder;
+package com.google.zxing.pdf417;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.Writer;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
+import com.google.zxing.pdf417.encoder.Compaction;
+import com.google.zxing.pdf417.encoder.Dimensions;
+import com.google.zxing.pdf417.encoder.PDF417;
 
 import java.util.Map;
 

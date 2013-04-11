@@ -24,6 +24,7 @@ import java.util.Random;
 import java.util.regex.Pattern;
 
 import com.google.zxing.FormatException;
+import com.google.zxing.aztec.AztecWriter;
 import org.junit.Assert;
 import org.junit.Test;
 
