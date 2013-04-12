@@ -175,6 +175,9 @@ public class AdjustableBitMatrix extends BitMatrix {
 
   public void setBlackpoint(int blackpoint) {
     this.blackpoint = blackpoint;
+    for (int y = 0; y < rows.length; y++) {
+      rows[y] = null;
+    }
   }
 
   public boolean isBlackWhite() {
