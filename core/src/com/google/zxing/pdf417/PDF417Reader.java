@@ -81,14 +81,13 @@ public final class PDF417Reader implements Reader {
         System.err.println("Warning, not using AdjustableBitMatrix");
         PDF417DetectorResult detectorResult = new DetectorNew(image).detect(hints);
         points = detectorResult.getPoints();
-        decoderResult = PDF417ScanningDecoder.decode(image.getBlackMatrix(), points[4], points[5], points[6],
+        decoderResult = PDF417ScanningDecoder.decode(detectorResult.getBits(), points[4], points[5], points[6],
             points[7], getMinCodewordWidth(points), getMaxCodewordWidth(points));
       } else {
         AdjustableBitMatrix bitMatrix = (AdjustableBitMatrix) image.getBlackMatrix();
         int estimatedBlackPoint = bitMatrix.getBlackpoint();
         int maxRange = Math.min(estimatedBlackPoint, 255 - estimatedBlackPoint);
         if (bitMatrix.isBlackWhite()) {
-          System.out.println("Black and white");
           maxRange = 1;
         }
         int range = 0;

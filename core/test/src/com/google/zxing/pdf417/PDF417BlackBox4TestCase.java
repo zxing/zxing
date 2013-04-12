@@ -20,11 +20,12 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.common.AbstractBlackBoxTestCase;
 
-public final class PDF417BlackBox3TestCase extends AbstractBlackBoxTestCase {
+public final class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
 
-  public PDF417BlackBox3TestCase() {
-    super("test/data/blackbox/pdf417-3", new MultiFormatReader(), BarcodeFormat.PDF_417);
-    addTest(18, 18, 0, 0, 0.0f);
-    addTest(17, 17, 0, 0, 180.0f);
+  public PDF417BlackBox4TestCase() {
+    super("D:/currentWorkInfo/Scanning/samples", new MultiFormatReader(), BarcodeFormat.PDF_417);
+    addTest(10, 10, 0, 0, 0.0f);
+    //addTest(10, 10, 0, 0, 180.0f);
   }
+
 }

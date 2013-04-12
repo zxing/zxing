@@ -22,8 +22,10 @@ import com.google.zxing.DecodeHintType;
 import com.google.zxing.FormatException;
 import com.google.zxing.NotFoundException;
 import com.google.zxing.ResultPoint;
+import com.google.zxing.common.BitArray;
 import com.google.zxing.common.BitMatrix;
-import com.google.zxing.common.RotationTransformer;
+import com.google.zxing.common.GridSampler;
+import com.google.zxing.common.PerspectiveTransform;
 import com.google.zxing.pdf417.PDF417Common;
 
 import java.util.Arrays;
@@ -87,15 +89,13 @@ public final class DetectorNew {
     boolean tryHarder = hints != null && hints.containsKey(DecodeHintType.TRY_HARDER);
     // Fetch the 1 bit matrix once up front.
     // TODO detection improvement, tryHarder could try several different luminance thresholds or even different binarizers
-    RotationTransformer rotationTransformer = new RotationTransformer();
-    //    TransformableBitMatrix matrix = new TransformableBitMatrix((AdjustableBitMatrix) image.getBlackMatrix(),
-    //        rotationTransformer);
     // Try to find the vertices assuming the image is upright.
-    ResultPoint[] vertices = findVertices(image.getBlackMatrix(), tryHarder);
+    BitMatrix bitMatrix = image.getBlackMatrix();
+    ResultPoint[] vertices = findVertices(bitMatrix, tryHarder);
     if (vertices[0] == null && vertices[3] == null) {
       // Maybe the image is rotated 180 degrees?
-      rotationTransformer.setRotate(true);
-      vertices = findVertices(image.getBlackMatrix(), tryHarder);
+      rotate180(bitMatrix);
+      vertices = findVertices(bitMatrix, tryHarder);
     }
 
     if (vertices[0] == null && vertices[3] == null) {
@@ -107,7 +107,38 @@ public final class DetectorNew {
       throw NotFoundException.getNotFoundInstance();
     }
 
-    return new PDF417DetectorResult(image.getBlackMatrix(), vertices, codewordWidth);
+    return new PDF417DetectorResult(bitMatrix, vertices, codewordWidth);
+  }
+
+  // introduces a lot of rounding errors
+  private BitMatrix rotate180Old(BitMatrix bitMatrix, int width, int height) throws NotFoundException {
+    PerspectiveTransform transform = PerspectiveTransform.quadrilateralToQuadrilateral(0.0f, 0.0f, width, 0.0f, 0.0f,
+        height, width, height, width, height, 0.0f, height, width, 0.0f, 0.0f, 0.0f);
+    return GridSampler.getInstance().sampleGrid(bitMatrix, width, height, transform);
+  }
+
+  protected static void rotate180(BitMatrix bitMatrix) throws NotFoundException {
+    final int width = bitMatrix.getWidth();
+    final int height = bitMatrix.getHeight();
+    BitArray firstRowBitArray = new BitArray(width);
+    BitArray secondRowBitArray = new BitArray(width);
+    BitArray tmpBitArray = new BitArray(width);
+    for (int y = 0; y < height + 1 >> 1; y++) {
+      firstRowBitArray = bitMatrix.getRow(y, firstRowBitArray);
+      bitMatrix.setRow(y, mirror(bitMatrix.getRow(height - 1 - y, secondRowBitArray), tmpBitArray));
+      bitMatrix.setRow(height - 1 - y, mirror(firstRowBitArray, tmpBitArray));
+    }
+  }
+
+  protected static BitArray mirror(BitArray bitArray, BitArray result) {
+    result.clear();
+    final int size = bitArray.getSize();
+    for (int i = 0; i < size; i++) {
+      if (bitArray.get(i)) {
+        result.set(size - 1 - i);
+      }
+    }
+    return result;
   }
 
   /**

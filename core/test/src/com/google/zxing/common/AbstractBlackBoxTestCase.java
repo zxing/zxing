@@ -26,6 +26,9 @@ import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 import com.google.zxing.ResultMetadataType;
 
+import org.junit.Assert;
+import org.junit.Test;
+
 import javax.imageio.ImageIO;
 
 import java.awt.Graphics2D;
@@ -48,9 +51,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Logger;
-
-import org.junit.Assert;
-import org.junit.Test;
 
 /**
  * @author Sean Owen
@@ -169,8 +169,8 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
         float rotation = testResults.get(x).getRotation();
         BufferedImage rotatedImage = rotateImage(image, rotation);
         LuminanceSource source = new BufferedImageLuminanceSource(rotatedImage);
-        //BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
-        BinaryBitmap bitmap = new BinaryBitmap(new FixedValueBinarizer(source));
+        BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+        //BinaryBitmap bitmap = new BinaryBitmap(new FixedValueBinarizer(source));
 
         String logText = String.format("rotation %f, file %s", rotation, testImageFileName);
         try {
@@ -185,7 +185,6 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
           System.err.println("Failed: " + logText);
           log.fine(String.format("could not read at rotation %f", rotation));
         }
-        /*
         try {
           if (decode(bitmap, rotation, expectedText, expectedMetadata, true)) {
             tryHarderCounts[x]++;
@@ -195,7 +194,6 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
         } catch (ReaderException ignored) {
           log.fine(String.format("could not read at rotation %f w/TH", rotation));
         }
-        */
       }
     }
 
