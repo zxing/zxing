@@ -82,7 +82,7 @@ public final class PDF417ScanningDecoder {
         startColumn = getStartColumn(detectionResult, barcodeColumn, imageRow, leftToRight);
         if (startColumn < 0 || startColumn > boundingBox.getMaxX()) {
           if (previousStartColumn == -1) {
-            SimpleLog.log(LEVEL.ERROR, "Cannot find startColumn, skipping column");
+            SimpleLog.log(LEVEL.WARNING, "Cannot find startColumn, skipping column");
             continue;
           }
           startColumn = previousStartColumn;
