@@ -23,8 +23,11 @@ public class AdjustableBitMatrix extends BitMatrix {
   private final LuminanceSource source;
   private int blackpoint = 127;
 
+  private final BitArray[] rows;
+
   public AdjustableBitMatrix(LuminanceSource source) {
     this.source = source;
+    rows = new BitArray[source.getHeight()];
   }
 
   private boolean isBlack(byte value) {
@@ -33,8 +36,23 @@ public class AdjustableBitMatrix extends BitMatrix {
 
   @Override
   public boolean get(int x, int y) {
-    byte[] currentRow = source.getRow(y, null);
-    return isBlack(currentRow[x]);
+    initRow(y);
+    return rows[y].get(x);
+  }
+
+  private void initRow(int y) {
+    if (rows[y] != null) {
+      return;
+    }
+
+    byte[] currentRowBytes = source.getRow(y, null);
+    BitArray row = new BitArray(currentRowBytes.length);
+    for (int i = 0; i < currentRowBytes.length; i++) {
+      if (isBlack(currentRowBytes[i])) {
+        row.set(i);
+      }
+    }
+    rows[y] = row;
   }
 
   /**
@@ -90,7 +108,12 @@ public class AdjustableBitMatrix extends BitMatrix {
    */
   @Override
   public BitArray getRow(int y, BitArray row) {
-    throw new RuntimeException();
+    initRow(y);
+    if (row == null) {
+      row = new BitArray(rows[y].getSize());
+    }
+    System.arraycopy(rows[y].getBitArray(), 0, row.getBitArray(), 0, rows[y].getBitArray().length);
+    return row;
   }
 
   /**
@@ -99,7 +122,10 @@ public class AdjustableBitMatrix extends BitMatrix {
    */
   @Override
   public void setRow(int y, BitArray row) {
-    throw new RuntimeException();
+    if (rows[y] == null) {
+      rows[y] = new BitArray();
+    }
+    System.arraycopy(row.getBitArray(), 0, rows[y].getBitArray(), 0, rows[y].getBitArray().length);
   }
 
   /**
