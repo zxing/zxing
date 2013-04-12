@@ -31,6 +31,8 @@ import com.google.zxing.common.DecoderResult;
 import com.google.zxing.common.DetectorResult;
 import com.google.zxing.pdf417.decoder.Decoder;
 import com.google.zxing.pdf417.decoder.PDF417ScanningDecoder;
+import com.google.zxing.pdf417.decoder.SimpleLog;
+import com.google.zxing.pdf417.decoder.SimpleLog.LEVEL;
 import com.google.zxing.pdf417.detector.Detector;
 import com.google.zxing.pdf417.detector.DetectorNew;
 import com.google.zxing.pdf417.detector.PDF417DetectorResult;
@@ -78,7 +80,7 @@ public final class PDF417Reader implements Reader {
       decoderResult = null;
       points = null;
       if (!(image.getBlackMatrix() instanceof AdjustableBitMatrix)) {
-        System.err.println("Warning, not using AdjustableBitMatrix");
+        SimpleLog.log(LEVEL.WARNING, "Warning, not using AdjustableBitMatrix");
         PDF417DetectorResult detectorResult = new DetectorNew(image).detect(hints);
         points = detectorResult.getPoints();
         decoderResult = PDF417ScanningDecoder.decode(detectorResult.getBits(), points[4], points[5], points[6],

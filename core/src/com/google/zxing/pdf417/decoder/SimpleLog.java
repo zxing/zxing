@@ -9,7 +9,7 @@ public class SimpleLog {
   // 3: More serious problems
   // 4: Really bad problems :-)
   // 5: GAU
-  static enum LEVEL {
+  public static enum LEVEL {
     ALL,
     DEBUG,
     INFO,
