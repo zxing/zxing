@@ -103,7 +103,7 @@ public final class PDF417Reader implements Reader {
           }
           bitMatrix.setBlackpoint(blackPoint);
           try {
-            System.err.println("Blackpoint: " + blackPoint);
+            SimpleLog.log(LEVEL.DEVEL, "Blackpoint: " + blackPoint);
             PDF417DetectorResult detectorResult = new DetectorNew(image).detect(hints);
             points = detectorResult.getPoints();
             decoderResult = PDF417ScanningDecoder.decode(image.getBlackMatrix(), points[4], points[5], points[6],
