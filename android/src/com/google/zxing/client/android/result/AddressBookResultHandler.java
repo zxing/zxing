@@ -82,7 +82,7 @@ public final class AddressBookResultHandler extends ResultHandler {
     super(activity, result);
     AddressBookParsedResult addressResult = (AddressBookParsedResult) result;
     String[] addresses = addressResult.getAddresses();
-    boolean hasAddress = addresses != null && addresses.length > 0 && addresses[0].length() > 0;
+    boolean hasAddress = addresses != null && addresses.length > 0 && addresses[0] != null && addresses[0].length() > 0;
     String[] phoneNumbers = addressResult.getPhoneNumbers();
     boolean hasPhoneNumber = phoneNumbers != null && phoneNumbers.length > 0;
     String[] emails = addressResult.getEmails();
