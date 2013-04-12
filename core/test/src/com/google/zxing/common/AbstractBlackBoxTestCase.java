@@ -87,8 +87,7 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
     this.barcodeReader = barcodeReader;
     this.expectedFormat = expectedFormat;
     testResults = new ArrayList<TestResult>();
-
-    System.setProperty("java.util.logging.SimpleFormatter.format", "%4$s: %5$s%6$s%n");
+    System.setProperty("java.util.logging.SimpleFormatter.format", "%5$s%6$s%n");
   }
 
   protected final void addTest(int mustPassCount, int tryHarderCount, float rotation) {
