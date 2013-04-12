@@ -138,7 +138,7 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
     int[] tryHaderMisreadCounts = new int[testCount];
 
     for (File testImage : imageFiles) {
-      log.info(String.format("Starting %s", testImage.getAbsolutePath()));
+      log.fine(String.format("Starting %s", testImage.getAbsolutePath()));
 
       BufferedImage image = ImageIO.read(testImage);
 
@@ -169,21 +169,19 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
         float rotation = testResults.get(x).getRotation();
         BufferedImage rotatedImage = rotateImage(image, rotation);
         LuminanceSource source = new BufferedImageLuminanceSource(rotatedImage);
-        BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
-        //BinaryBitmap bitmap = new BinaryBitmap(new FixedValueBinarizer(source));
+        //BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+        BinaryBitmap bitmap = new BinaryBitmap(new FixedValueBinarizer(source));
 
         String logText = String.format("rotation %f, file %s", rotation, testImageFileName);
         try {
           if (decode(bitmap, rotation, expectedText, expectedMetadata, false)) {
-            System.err.println("Passed " + logText);
             passedCounts[x]++;
           } else {
-            System.err.println("Failed: " + logText);
+            log.info("Failed: " + logText);
             misreadCounts[x]++;
           }
         } catch (ReaderException ignored) {
-          System.err.println("Failed: " + logText);
-          log.fine(String.format("could not read at rotation %f", rotation));
+          log.info("Failed: " + logText);
         }
         try {
           if (decode(bitmap, rotation, expectedText, expectedMetadata, true)) {
