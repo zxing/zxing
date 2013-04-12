@@ -67,8 +67,8 @@ public class DetectionResult implements SimpleLog.Loggable {
 
   public DetectionResultColumn[] getDetectionResultColumns() {
     setRowNumberInIndicatorColumn(detectionResultColumns[barcodeColumnCount + 1]);
-    SimpleLog.log(LEVEL.INFO, "Before adjustRowNumbers");
-    SimpleLog.log(LEVEL.INFO, this);
+    SimpleLog.log(LEVEL.DEVEL, "Before adjustRowNumbers");
+    SimpleLog.log(LEVEL.DEVEL, this);
     adjustIndicatorColumnRowNumbers(detectionResultColumns[0]);
     adjustIndicatorColumnRowNumbers(detectionResultColumns[barcodeColumnCount + 1]);
     int unadjustedCount = 900;
@@ -82,8 +82,8 @@ public class DetectionResult implements SimpleLog.Loggable {
       SimpleLog.log(LEVEL.INFO, unadjustedCount + " codewords without valid row number. Values will be ignored!");
     }
 
-    SimpleLog.log(LEVEL.INFO, "After adjustRowNumbers");
-    SimpleLog.log(LEVEL.INFO, this);
+    SimpleLog.log(LEVEL.DEVEL, "After adjustRowNumbers");
+    SimpleLog.log(LEVEL.DEVEL, this);
     return detectionResultColumns;
   }
 

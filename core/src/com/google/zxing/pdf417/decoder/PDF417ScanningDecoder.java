@@ -138,7 +138,7 @@ public final class PDF417ScanningDecoder {
   private static DecoderResult createDecoderResult(DetectionResult detectionResult) throws NotFoundException,
       FormatException, ChecksumException {
     BarcodeMatrix barcodeMatrix = createBarcodeMatrix(detectionResult);
-    SimpleLog.log(LEVEL.DEBUG, barcodeMatrix);
+    SimpleLog.log(LEVEL.DEVEL, barcodeMatrix);
     Integer numberOfCodewords = barcodeMatrix.getValue(0, 1);
     int calculatedNumberOfCodewords = detectionResult.getBarcodeColumnCount() * detectionResult.getBarcodeRowCount() -
         getNumberOfECCodeWords(detectionResult.getBarcodeECLevel());
@@ -375,7 +375,7 @@ public final class PDF417ScanningDecoder {
     for (int i = 0; i < 2; i++) {
       while (((leftToRight && correctedStartColumn >= minColumn) || (!leftToRight && correctedStartColumn < maxColumn)) &&
           leftToRight == image.get(correctedStartColumn, imageRow)) {
-        if ((codewordStartColumn - correctedStartColumn) > CODEWORD_SKEW_SIZE) {
+        if (Math.abs(codewordStartColumn - correctedStartColumn) > CODEWORD_SKEW_SIZE) {
           SimpleLog.log(LEVEL.INFO, "Corrected start position would deviate too much, using previous start position",
               imageRow, codewordStartColumn);
           return codewordStartColumn;
@@ -407,7 +407,7 @@ public final class PDF417ScanningDecoder {
     if (codewords.length == 0) {
       throw FormatException.getFormatInstance();
     }
-    SimpleLog.log(LEVEL.DEBUG, "Codewords: " + codewords.length + ", Erasures: " + erasures.length + ", ecLevel: " +
+    SimpleLog.log(LEVEL.DEVEL, "Codewords: " + codewords.length + ", Erasures: " + erasures.length + ", ecLevel: " +
         ecLevel);
 
     int numECCodewords = 1 << (ecLevel + 1);

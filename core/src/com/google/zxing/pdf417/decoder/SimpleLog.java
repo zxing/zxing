@@ -12,6 +12,7 @@ public class SimpleLog {
   public static enum LEVEL {
     ALL,
     DEBUG,
+    DEVEL,
     INFO,
     WARNING,
     ERROR,

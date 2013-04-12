@@ -155,24 +155,37 @@ public class AdjustmentResult {
    * @return true, if a module was changed, false otherwise
    */
   public boolean adjustHalfSizeModule(AdjustmentResults adjustmentResults) {
+    int biggestModuleIndex = -1;
+    int biggestModuleValue = -1;
     for (int i = 0; i < moduleBitCount.length; i++) {
       int bitDifference = moduleBitCount[i] % bitsPerModule;
-      if (bitDifference == 0) {
+      if ((bitDifference << 1) != bitsPerModule) {
         continue;
       }
-      if ((bitDifference << 1) == bitsPerModule) {
-        AdjustmentResult copy = new AdjustmentResult(Arrays.copyOf(moduleBitCount, moduleBitCount.length),
-            bitsPerModule, bitCountDifference);
-        adjustmentResults.add(copy);
-        add(i, bitDifference);
-        copy.subtract(i, bitDifference);
-        if (copy.isToLarge()) {
-          PDF417CodewordDecoder.reduceBitCount(adjustmentResults, copy);
-        } else {
-          PDF417CodewordDecoder.enlargeBitCount(adjustmentResults, copy);
-        }
-        return true;
+      if (biggestModuleValue < moduleBitCount[i]) {
+        biggestModuleValue = moduleBitCount[i];
+        biggestModuleIndex = i;
       }
+    }
+    if (biggestModuleIndex != -1) {
+      int bitDifference = bitsPerModule >> 1;
+      AdjustmentResult copy = new AdjustmentResult(Arrays.copyOf(moduleBitCount, moduleBitCount.length), bitsPerModule,
+          bitCountDifference);
+      adjustmentResults.add(copy);
+      if (isToSmall()) {
+        add(biggestModuleIndex, bitDifference);
+        copy.subtract(biggestModuleIndex, bitDifference);
+      } else {
+        subtract(biggestModuleIndex, bitDifference);
+        copy.add(biggestModuleIndex, bitDifference);
+      }
+
+      if (copy.isToLarge()) {
+        PDF417CodewordDecoder.reduceBitCount(adjustmentResults, copy);
+      } else {
+        PDF417CodewordDecoder.enlargeBitCount(adjustmentResults, copy);
+      }
+      return true;
     }
     return false;
   }
