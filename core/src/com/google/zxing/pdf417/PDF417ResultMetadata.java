@@ -8,6 +8,7 @@ public final class PDF417ResultMetadata {
   private boolean lastSegment;
 
   private int correctedErrorsCount;
+  private int erasureCount;
 
   public int getSegmentIndex() {
     return segmentIndex;
@@ -47,5 +48,13 @@ public final class PDF417ResultMetadata {
 
   public void setLastSegment(boolean lastSegment) {
     this.lastSegment = lastSegment;
+  }
+
+  public int getErasureCount() {
+    return erasureCount;
+  }
+
+  public void setErasureCount(int erasureCount) {
+    this.erasureCount = erasureCount;
   }
 }

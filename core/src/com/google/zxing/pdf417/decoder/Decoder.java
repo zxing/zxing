@@ -82,7 +82,7 @@ public final class Decoder {
     verifyCodewordCount(codewords, numECCodewords);
 
     // Decode the codewords
-    return DecodedBitStreamParser.decode(codewords, String.valueOf(ecLevel), erasures.length);
+    return DecodedBitStreamParser.decode(codewords, String.valueOf(ecLevel));
   }
 
   /**
@@ -123,15 +123,11 @@ public final class Decoder {
    * @param numECCodewords number of error correction codewards that were available in codewords
    * @throws ChecksumException if error correction fails
    */
-  public static void correctErrors(int[] codewords,
-                             int[] erasures,
-                             int numECCodewords) throws ChecksumException {
-    if (erasures.length > numECCodewords / 2 + MAX_ERRORS ||
-        numECCodewords < 0 || numECCodewords > MAX_EC_CODEWORDS) {
+  public static int correctErrors(int[] codewords, int[] erasures, int numECCodewords) throws ChecksumException {
+    if (erasures.length > numECCodewords / 2 + MAX_ERRORS || numECCodewords < 0 || numECCodewords > MAX_EC_CODEWORDS) {
       // Too many errors or EC Codewords is corrupted
       throw ChecksumException.getChecksumInstance();
     }
-    errorCorrection.decode(codewords, numECCodewords, erasures);
+    return errorCorrection.decode(codewords, numECCodewords, erasures);
   }
-
 }

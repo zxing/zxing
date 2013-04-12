@@ -16,13 +16,12 @@
 
 package com.google.zxing.pdf417.decoder;
 
-import java.math.BigInteger;
-import java.util.Arrays;
-
 import com.google.zxing.FormatException;
-import com.google.zxing.common.DecoderResult;
 import com.google.zxing.pdf417.PDF417DecoderResult;
 import com.google.zxing.pdf417.PDF417ResultMetadata;
+
+import java.math.BigInteger;
+import java.util.Arrays;
 
 /**
  * <p>This class contains the methods for decoding the PDF417 codewords.</p>
@@ -59,14 +58,12 @@ public final class DecodedBitStreamParser {
   private static final int PAL = 29;
 
   private static final char[] PUNCT_CHARS = {
-      ';', '<', '>', '@', '[', '\\', '}', '_', '`', '~', '!',
-      '\r', '\t', ',', ':', '\n', '-', '.', '$', '/', '"', '|', '*',
-      '(', ')', '?', '{', '}', '\''};
+      ';', '<', '>', '@', '[', '\\', '}', '_', '`', '~', '!', '\r', '\t', ',', ':', '\n', '-', '.', '$', '/', '"', '|',
+      '*', '(', ')', '?', '{', '}', '\'' };
 
   private static final char[] MIXED_CHARS = {
-      '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '&',
-      '\r', '\t', ',', ':', '#', '-', '.', '$', '/', '+', '%', '*',
-      '=', '^'};
+      '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '&', '\r', '\t', ',', ':', '#', '-', '.', '$', '/', '+', '%',
+      '*', '=', '^' };
 
   /**
    * Table containing values for the exponent of 900.
@@ -88,13 +85,12 @@ public final class DecodedBitStreamParser {
   private DecodedBitStreamParser() {
   }
 
-  public static DecoderResult decode(int[] codewords, String ecLevel, int correctedErrorsCount) throws FormatException {
+  public static PDF417DecoderResult decode(int[] codewords, String ecLevel) throws FormatException {
     StringBuilder result = new StringBuilder(codewords.length * 2);
     // Get compaction mode
     int codeIndex = 1;
     int code = codewords[codeIndex++];
     PDF417ResultMetadata resultMetadata = new PDF417ResultMetadata();
-    resultMetadata.setCorrectedErrorsCount(correctedErrorsCount);
     while (codeIndex < codewords[0]) {
       switch (code) {
         case TEXT_COMPACTION_MODE_LATCH:
@@ -135,8 +131,8 @@ public final class DecodedBitStreamParser {
     return new PDF417DecoderResult(null, result.toString(), null, ecLevel, resultMetadata);
   }
 
-  private static int decodeMacroBlock(int[] codewords, int codeIndex, PDF417ResultMetadata resultMetadata) throws NumberFormatException,
-      FormatException {
+  private static int decodeMacroBlock(int[] codewords, int codeIndex, PDF417ResultMetadata resultMetadata)
+      throws NumberFormatException, FormatException {
     boolean end = false;
     if (codeIndex + NUMBER_OF_SEQUENCE_CODEWORDS > codewords[0]) {
       // we must have at least two bytes left for the segment index
@@ -146,7 +142,8 @@ public final class DecodedBitStreamParser {
     for (int i = 0; i < NUMBER_OF_SEQUENCE_CODEWORDS; i++, codeIndex++) {
       segmentIndexArray[i] = codewords[codeIndex];
     }
-    resultMetadata.setSegmentIndex(Integer.parseInt(decodeBase900toBase10(segmentIndexArray, NUMBER_OF_SEQUENCE_CODEWORDS)));
+    resultMetadata.setSegmentIndex(Integer.parseInt(decodeBase900toBase10(segmentIndexArray,
+        NUMBER_OF_SEQUENCE_CODEWORDS)));
 
     StringBuilder fileId = new StringBuilder();
     codeIndex = textCompaction(codewords, codeIndex, fileId);
@@ -272,9 +269,7 @@ public final class DecodedBitStreamParser {
    * @param length             The size of the text compaction and byte compaction data.
    * @param result             The decoded data is appended to the result.
    */
-  private static void decodeTextCompaction(int[] textCompactionData,
-                                           int[] byteCompactionData,
-                                           int length,
+  private static void decodeTextCompaction(int[] textCompactionData, int[] byteCompactionData, int length,
                                            StringBuilder result) {
     // Beginning from an initial state of the Alpha sub-mode
     // The default compaction mode for PDF417 in effect at the start of each symbol shall always be Text
@@ -443,12 +438,9 @@ public final class DecodedBitStreamParser {
         value = 900 * value + nextCode;
         nextCode = codewords[codeIndex++];
         // perhaps it should be ok to check only nextCode >= TEXT_COMPACTION_MODE_LATCH
-        if (nextCode == TEXT_COMPACTION_MODE_LATCH ||
-            nextCode == BYTE_COMPACTION_MODE_LATCH ||
-            nextCode == NUMERIC_COMPACTION_MODE_LATCH ||
-            nextCode == BYTE_COMPACTION_MODE_LATCH_6 ||
-            nextCode == BEGIN_MACRO_PDF417_CONTROL_BLOCK ||
-            nextCode == BEGIN_MACRO_PDF417_OPTIONAL_FIELD ||
+        if (nextCode == TEXT_COMPACTION_MODE_LATCH || nextCode == BYTE_COMPACTION_MODE_LATCH ||
+            nextCode == NUMERIC_COMPACTION_MODE_LATCH || nextCode == BYTE_COMPACTION_MODE_LATCH_6 ||
+            nextCode == BEGIN_MACRO_PDF417_CONTROL_BLOCK || nextCode == BEGIN_MACRO_PDF417_OPTIONAL_FIELD ||
             nextCode == MACRO_PDF417_TERMINATOR) {
           codeIndex--;
           end = true;
@@ -463,20 +455,20 @@ public final class DecodedBitStreamParser {
             result.append(decodedData);
             count = 0;
           }
-       }
-     }
+        }
+      }
 
-     // if the end of all codewords is reached the last codeword needs to be added
-     if (codeIndex == codewords[0] && nextCode < TEXT_COMPACTION_MODE_LATCH) {
+      // if the end of all codewords is reached the last codeword needs to be added
+      if (codeIndex == codewords[0] && nextCode < TEXT_COMPACTION_MODE_LATCH) {
         byteCompactedCodewords[count++] = nextCode;
-     }
+      }
 
-     // If Byte Compaction mode is invoked with codeword 901,
-     // the last group of codewords is interpreted directly
-     // as one byte per codeword, without compaction.
-     for (int i = 0; i < count; i++) {
+      // If Byte Compaction mode is invoked with codeword 901,
+      // the last group of codewords is interpreted directly
+      // as one byte per codeword, without compaction.
+      for (int i = 0; i < count; i++) {
         result.append((char) byteCompactedCodewords[i]);
-     }
+      }
 
     } else if (mode == BYTE_COMPACTION_MODE_LATCH_6) {
       // Total number of Byte Compaction characters to be encoded
@@ -491,12 +483,9 @@ public final class DecodedBitStreamParser {
           // Base 900
           value = 900 * value + code;
         } else {
-          if (code == TEXT_COMPACTION_MODE_LATCH ||
-              code == BYTE_COMPACTION_MODE_LATCH ||
-              code == NUMERIC_COMPACTION_MODE_LATCH ||
-              code == BYTE_COMPACTION_MODE_LATCH_6 ||
-              code == BEGIN_MACRO_PDF417_CONTROL_BLOCK ||
-              code == BEGIN_MACRO_PDF417_OPTIONAL_FIELD ||
+          if (code == TEXT_COMPACTION_MODE_LATCH || code == BYTE_COMPACTION_MODE_LATCH ||
+              code == NUMERIC_COMPACTION_MODE_LATCH || code == BYTE_COMPACTION_MODE_LATCH_6 ||
+              code == BEGIN_MACRO_PDF417_CONTROL_BLOCK || code == BEGIN_MACRO_PDF417_OPTIONAL_FIELD ||
               code == MACRO_PDF417_TERMINATOR) {
             codeIndex--;
             end = true;
@@ -541,19 +530,14 @@ public final class DecodedBitStreamParser {
         numericCodewords[count] = code;
         count++;
       } else {
-        if (code == TEXT_COMPACTION_MODE_LATCH ||
-            code == BYTE_COMPACTION_MODE_LATCH ||
-            code == BYTE_COMPACTION_MODE_LATCH_6 ||
-            code == BEGIN_MACRO_PDF417_CONTROL_BLOCK ||
-            code == BEGIN_MACRO_PDF417_OPTIONAL_FIELD ||
-            code == MACRO_PDF417_TERMINATOR) {
+        if (code == TEXT_COMPACTION_MODE_LATCH || code == BYTE_COMPACTION_MODE_LATCH ||
+            code == BYTE_COMPACTION_MODE_LATCH_6 || code == BEGIN_MACRO_PDF417_CONTROL_BLOCK ||
+            code == BEGIN_MACRO_PDF417_OPTIONAL_FIELD || code == MACRO_PDF417_TERMINATOR) {
           codeIndex--;
           end = true;
         }
       }
-      if (count % MAX_NUMERIC_CODEWORDS == 0 ||
-          code == NUMERIC_COMPACTION_MODE_LATCH ||
-          end) {
+      if (count % MAX_NUMERIC_CODEWORDS == 0 || code == NUMERIC_COMPACTION_MODE_LATCH || end) {
         // Re-invoking Numeric Compaction mode (by using codeword 902
         // while in Numeric Compaction mode) serves  to terminate the
         // current Numeric Compaction mode grouping as described in 5.4.4.2,

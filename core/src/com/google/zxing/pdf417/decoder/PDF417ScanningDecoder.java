@@ -23,6 +23,7 @@ import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.DecoderResult;
 import com.google.zxing.pdf417.PDF417Common;
+import com.google.zxing.pdf417.PDF417DecoderResult;
 import com.google.zxing.pdf417.decoder.SimpleLog.LEVEL;
 
 import java.util.ArrayList;
@@ -411,11 +412,14 @@ public final class PDF417ScanningDecoder {
 
     int numECCodewords = 1 << (ecLevel + 1);
 
-    Decoder.correctErrors(codewords, erasures, numECCodewords);
+    int correctedErrorsCount = Decoder.correctErrors(codewords, erasures, numECCodewords);
     Decoder.verifyCodewordCount(codewords, numECCodewords);
 
     // Decode the codewords
-    return DecodedBitStreamParser.decode(codewords, String.valueOf(ecLevel), erasures.length);
+    PDF417DecoderResult decorderResult = DecodedBitStreamParser.decode(codewords, String.valueOf(ecLevel));
+    decorderResult.getResultMetadata().setCorrectedErrorsCount(correctedErrorsCount);
+    decorderResult.getResultMetadata().setErasureCount(erasures.length);
+    return decorderResult;
   }
 
   private static int getCodewordBucketNumber(int[] moduleBitCount) {

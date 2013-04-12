@@ -35,7 +35,7 @@ public final class ErrorCorrection {
     this.field = ModulusGF.PDF417_GF;
   }
 
-  public void decode(int[] received, int numECCodewords, int[] erasures) throws ChecksumException {
+  public int decode(int[] received, int numECCodewords, int[] erasures) throws ChecksumException {
     ModulusPoly poly = new ModulusPoly(field, received);
     int[] S = new int[numECCodewords];
     boolean error = false;
@@ -48,7 +48,6 @@ public final class ErrorCorrection {
     }
 
     if (error) {
-
       ModulusPoly knownErrors = field.getOne();
       for (int erasure : erasures) {
         int b = field.exp(received.length - 1 - erasure);
@@ -69,16 +68,6 @@ public final class ErrorCorrection {
 
       int[] errorLocations = findErrorLocations(sigma);
       int[] errorMagnitudes = findErrorMagnitudes(omega, sigma, errorLocations);
-      System.err.println("ErrorLocations: " + errorLocations.length);
-      for (int errorLocation : errorLocations) {
-        System.err.print(errorLocation + ", ");
-      }
-      System.err.println();
-      System.err.println("ErrorMagnitudes: " + errorMagnitudes.length);
-      for (int errorMagnitude : errorMagnitudes) {
-        System.err.print(errorMagnitude + ", ");
-      }
-      System.err.println();
 
       for (int i = 0; i < errorLocations.length; i++) {
         int position = received.length - 1 - field.log(errorLocations[i]);
@@ -87,9 +76,9 @@ public final class ErrorCorrection {
         }
         received[position] = field.subtract(received[position], errorMagnitudes[i]);
       }
-    } else {
-      System.err.println("No errors detected.");
+      return errorLocations.length;
     }
+    return 0;
   }
 
   private ModulusPoly[] runEuclideanAlgorithm(ModulusPoly a, ModulusPoly b, int R) throws ChecksumException {
@@ -153,7 +142,6 @@ public final class ErrorCorrection {
         e++;
       }
     }
-    System.err.println("e: " + e + ", numErrors: " + numErrors);
     if (e != numErrors) {
       throw ChecksumException.getChecksumInstance();
     }
