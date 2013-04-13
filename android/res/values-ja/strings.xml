@@ -28,7 +28,7 @@
   <string name="button_done">完了</string>
   <string name="button_email">メールの送信</string>
   <string name="button_get_directions">経路を検索</string>
-  <string name="button_google_shopper">Google ショッパー</string>
+  <string name="button_google_shopper">Google Shopper</string>
   <string name="button_mms">MMSの送信</string>
   <string name="button_ok">OK</string>
   <string name="button_open_browser">ブラウザで表示</string>
@@ -74,8 +74,8 @@
   <string name="msg_encode_contents_failed">このデータからQRコードを作成できませんでした</string>
   <string name="msg_google_books">Googleブックス</string>
   <string name="msg_google_product">Googleショッピング</string>
-  <string name="msg_google_shopper_missing">Google ショッパーがインストールされていません</string>
-  <string name="msg_install_google_shopper">Google ショッパーは、ブラウザを使わなくても、価格やレビューなどを見ることができます。試しますか？</string>
+  <string name="msg_google_shopper_missing">Google Shopperがインストールされていません</string>
+  <string name="msg_install_google_shopper">Google Shopperは、ブラウザを使わなくても、価格やレビューなどを見ることができます。試しますか？</string>
   <string name="msg_intent_failed">指定されたアプリケーションを起動できませんでした。QRコードの内容が無効である可能性があります。</string>
   <string name="msg_redirect">リダイレクト</string>
   <string name="msg_sbc_book_not_searchable">この書籍は検索できません</string>
@@ -91,15 +91,15 @@
   <string name="msg_share_text">またはテキストを入力してください</string>
   <string name="msg_sure">よろしいですか？</string>
   <string name="msg_unmount_usb">SDカードにアクセスできません</string>
-  <string name="preferences_actions_title">スキャンの対象</string>
+  <string name="preferences_actions_title">スキャン時の動作</string>
   <string name="preferences_auto_focus_title">ｵｰﾄﾌｫｰｶｽを使用</string>
   <string name="preferences_bulk_mode_summary">QRコードを連続スキャンして保存します</string>
   <string name="preferences_bulk_mode_title">連続スキャンモード</string>
   <string name="preferences_copy_to_clipboard_title">ｸﾘｯﾌﾟﾎﾞｰﾄﾞにｺﾋﾟｰ</string>
-  <string name="preferences_custom_product_search_summary" formatted="false">引数：%s=コンテンツ、%f=フォーマット、%t=タイプ</string>
+  <string name="preferences_custom_product_search_summary" formatted="false">引数：％s=コンテンツ、％f=フォーマット、％t=タイプ</string>
   <string name="preferences_custom_product_search_title">カスタムサーチ URL</string>
   <string name="preferences_decode_1D_title">1次元バーコード</string>
-  <string name="preferences_decode_Data_Matrix_title">データマトリクス</string>
+  <string name="preferences_decode_Data_Matrix_title">データマトリクスコード</string>
   <string name="preferences_decode_QR_title">QRコード</string>
   <string name="preferences_device_bug_workarounds_title">不具合対策</string>
   <string name="preferences_disable_continuous_focus_summary">標準フォーカスモードのみ使用します</string>
@@ -108,15 +108,15 @@
   <string name="preferences_front_light_auto">自動</string>
   <string name="preferences_front_light_off">ライトOFF</string>
   <string name="preferences_front_light_on">ライトON</string>
-  <string name="preferences_front_light_summary">暗い場所でのスキャンにライトを使います</string>
-  <string name="preferences_front_light_title">ライト</string>
+  <string name="preferences_front_light_summary">スキャン時のライトを制御します</string>
+  <string name="preferences_front_light_title">ライトの制御</string>
   <string name="preferences_general_title">一般設定</string>
   <string name="preferences_invert_scan_summary">黒地に白のバーコードをスキャン。一部のデバイスでは使用できません。</string>  
   <string name="preferences_invert_scan_title">スキャンを反転</string>
   <string name="preferences_name">設定</string>
   <string name="preferences_play_beep_title">通知音</string>
-  <string name="preferences_remember_duplicates_summary">同じQRコードでも履歴に記録します</string>
-  <string name="preferences_remember_duplicates_title">重複する履歴の記録</string>
+  <string name="preferences_remember_duplicates_summary">同じ内容でも重複して履歴に記録します</string>
+  <string name="preferences_remember_duplicates_title">重複するスキャン結果の記録</string>
   <string name="preferences_result_title">検索結果の設定</string>
   <string name="preferences_scanning_title">QRコードスキャン時</string>
   <string name="preferences_search_country">検索国コード</string>
@@ -124,7 +124,7 @@
   <string name="preferences_supplemental_title">詳細情報を取得</string>
   <string name="preferences_try_bsplus">QRコード+を試す</string>
   <string name="preferences_try_bsplus_summary">新機能と強化されたインターフェース</string>
-  <string name="preferences_vibrate_title">バイブ</string>
+  <string name="preferences_vibrate_title">バイブレーション</string>
   <string name="result_address_book">連絡先がヒットしました</string>
   <string name="result_calendar">カレンダーの予定がヒットしました</string>
   <string name="result_email_address">メールアドレスがヒットしました</string>
