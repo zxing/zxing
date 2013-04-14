@@ -48,9 +48,10 @@ public class AdjustmentResultFloat {
     boolean[] result = Arrays.copyOf(sampleArray, sampleArray.length);
     int smallestCornerDifferenceIndex = -1;
     double smallestCornerDifference = Double.MAX_VALUE;
-    for (int i = 1; i < PDF417Common.MODULES_IN_CODEWORD; i++) {
+    for (int i = 1; i < PDF417Common.MODULES_IN_CODEWORD - 1; i++) {
       double difference = Math.min(getLeftDifference(i), getRightDifference(i));
-      if (difference < smallestCornerDifference) {
+      if (difference < smallestCornerDifference &&
+          result[(int) sampleIndexes[i - 1]] != result[(int) sampleIndexes[i + 1]]) {
         smallestCornerDifference = difference;
         smallestCornerDifferenceIndex = i;
       }
@@ -87,6 +88,17 @@ public class AdjustmentResultFloat {
 
   public static AdjustmentResultFloat getAdjustmentResultFloat(int[] moduleBitCount) {
     int bitCountSum = PDF417Common.getBitCountSum(moduleBitCount);
+    /*
+    int[] moduleBitCount = new int[BIT_COUNT_SIZE];
+    int loop;
+    for (loop = 1; ((bitCountSum * loop) % PDF417Common.MODULES_IN_CODEWORD > 3) &&
+        ((bitCountSum * loop) % PDF417Common.MODULES_IN_CODEWORD < PDF417Common.MODULES_IN_CODEWORD - 3); loop++) {
+    }
+    bitCountSum *= loop;
+    for (int i = 0; i < BIT_COUNT_SIZE; i++) {
+      moduleBitCount[i] = tmpModuleBitCount[i] * loop;
+    }
+    */
     boolean[] sampleArray = new boolean[bitCountSum];
     int sampleIndex = 0;
     for (int i = 0; i < BIT_COUNT_SIZE - 1; i++) {
@@ -102,8 +114,7 @@ public class AdjustmentResultFloat {
     final double[] sampleIndexes = new double[PDF417Common.MODULES_IN_CODEWORD];
     for (int i = 0; i < PDF417Common.MODULES_IN_CODEWORD; i++) {
       sampleIndexes[i] = ((double) bitCountSum) / (2 * PDF417Common.MODULES_IN_CODEWORD) +
-          ((double) (i * bitCountSum)) /
-          PDF417Common.MODULES_IN_CODEWORD;
+          ((double) (i * bitCountSum)) / PDF417Common.MODULES_IN_CODEWORD;
       //      System.out.println(String.format("%2d: %f", i, sampleIndexes[i]));
     }
     return new AdjustmentResultFloat(sampleArray, sampleIndexes);
