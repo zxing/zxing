@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-#include <math.h>
+#include <cmath>
 
 namespace zxing { namespace common { namespace detector { namespace math_utils {
 
@@ -32,13 +32,13 @@ inline int round(float d) {
 inline float distance(float aX, float aY, float bX, float bY) {
   float xDiff = aX - bX;
   float yDiff = aY - bY;
-  return (float) sqrt(xDiff * xDiff + yDiff * yDiff);
+  return sqrt(xDiff * xDiff + yDiff * yDiff);
 }
 
 inline float distance(int aX, int aY, int bX, int bY) {
   int xDiff = aX - bX;
   int yDiff = aY - bY;
-  return (float) sqrt(xDiff * xDiff + yDiff * yDiff);
+  return sqrt(float(xDiff * xDiff + yDiff * yDiff));
 }
 
 }}}}

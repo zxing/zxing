@@ -25,12 +25,18 @@
 #include <zxing/NotFoundException.h>
 #include <zxing/ChecksumException.h>
 
+using std::vector;
+using std::string;
+
 using zxing::Ref;
 using zxing::Result;
 using zxing::NotFoundException;
 using zxing::ChecksumException;
 using zxing::oned::UPCEANReader;
-using namespace std; // remove
+
+// VC++
+using zxing::BitArray;
+using zxing::String;
 
 #define LEN(v) ((int)(sizeof(v)/sizeof(v[0])))
 

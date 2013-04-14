@@ -20,7 +20,7 @@
  */
 
 #include <zxing/ResultPoint.h>
-#include <zxing/common/detector/math_utils.h>
+#include <zxing/common/detector/MathUtils.h>
 
 namespace math_utils = zxing::common::detector::math_utils;
 
@@ -29,6 +29,8 @@ namespace zxing {
 ResultPoint::ResultPoint() : posX_(0), posY_(0) {}
 
 ResultPoint::ResultPoint(float x, float y) : posX_(x), posY_(y) {}
+
+ResultPoint::ResultPoint(int x, int y) : posX_(float(x)), posY_(float(y)) {}
   
 ResultPoint::~ResultPoint() {}
 

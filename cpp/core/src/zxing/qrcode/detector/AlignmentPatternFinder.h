@@ -37,21 +37,21 @@ private:
 
   Ref<BitMatrix> image_;
   std::vector<AlignmentPattern *> *possibleCenters_;
-  size_t startX_;
-  size_t startY_;
-  size_t width_;
-  size_t height_;
+  int startX_;
+  int startY_;
+  int width_;
+  int height_;
   float moduleSize_;
 
   static float centerFromEnd(std::vector<int> &stateCount, int end);
   bool foundPatternCross(std::vector<int> &stateCount);
 
-  float crossCheckVertical(size_t startI, size_t centerJ, int maxCount, int originalStateCountTotal);
+  float crossCheckVertical(int startI, int centerJ, int maxCount, int originalStateCountTotal);
 
-  Ref<AlignmentPattern> handlePossibleCenter(std::vector<int> &stateCount, size_t i, size_t j);
+  Ref<AlignmentPattern> handlePossibleCenter(std::vector<int> &stateCount, int i, int j);
 
 public:
-  AlignmentPatternFinder(Ref<BitMatrix> image, size_t startX, size_t startY, size_t width, size_t height,
+  AlignmentPatternFinder(Ref<BitMatrix> image, int startX, int startY, int width, int height,
                          float moduleSize, Ref<ResultPointCallback>const& callback);
   ~AlignmentPatternFinder();
   Ref<AlignmentPattern> find();

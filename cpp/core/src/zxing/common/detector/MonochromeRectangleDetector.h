@@ -1,3 +1,5 @@
+// -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
+
 #ifndef __MONOCHROMERECTANGLEDETECTOR_H__
 #define __MONOCHROMERECTANGLEDETECTOR_H__
 
@@ -28,33 +30,33 @@
 #include <zxing/common/Counted.h>
 #include <zxing/ResultPoint.h>
 
-
 namespace zxing {
 
 struct TwoInts: public Counted {
-	int start;
-	int end;
+  int start;
+  int end;
 };
 
 class MonochromeRectangleDetector : public Counted {
-private:
+ private:
   static const int MAX_MODULES = 32;
   Ref<BitMatrix> image_;
 
-public:
+ public:
   MonochromeRectangleDetector(Ref<BitMatrix> image) : image_(image) {  };
 
   std::vector<Ref<ResultPoint> > detect();
 
-private:
+ private:
   Ref<ResultPoint> findCornerFromCenter(int centerX, int deltaX, int left, int right,
-      int centerY, int deltaY, int top, int bottom, int maxWhiteRun);
+                                        int centerY, int deltaY, int top, int bottom, int maxWhiteRun);
 
   Ref<TwoInts> blackWhiteRange(int fixedDimension, int maxWhiteRun, int minDim, int maxDim,
-      bool horizontal);
+                               bool horizontal);
 
   int max(int a, float b) { return (float) a > b ? a : (int) b;};
 };
+
 }
 
 #endif // __MONOCHROMERECTANGLEDETECTOR_H__

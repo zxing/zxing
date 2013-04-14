@@ -29,6 +29,9 @@ using zxing::Ref;
 using zxing::BitArray;
 using zxing::BitMatrix;
 
+// VC++
+using zxing::LuminanceSource;
+
 namespace {
   const int LUMINANCE_BITS = 5;
   const int LUMINANCE_SHIFT = 8 - LUMINANCE_BITS;
@@ -42,7 +45,7 @@ GlobalHistogramBinarizer::GlobalHistogramBinarizer(Ref<LuminanceSource> source)
 GlobalHistogramBinarizer::~GlobalHistogramBinarizer() {}
 
 void GlobalHistogramBinarizer::initArrays(int luminanceSize) {
-  if (luminances.size() < luminanceSize) {
+  if (luminances->size() < luminanceSize) {
     luminances = ArrayRef<char>(luminanceSize);
   }
   for (int x = 0; x < LUMINANCE_BUCKETS; x++) {
@@ -133,7 +136,7 @@ using namespace std;
 
 int GlobalHistogramBinarizer::estimateBlackPoint(ArrayRef<int> const& buckets) {
   // Find tallest peak in histogram
-  int numBuckets = buckets.size();
+  int numBuckets = buckets->size();
   int maxBucketCount = 0;
   int firstPeak = 0;
   int firstPeakSize = 0;

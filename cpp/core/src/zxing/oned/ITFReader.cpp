@@ -33,6 +33,9 @@ using zxing::FormatException;
 using zxing::NotFoundException;
 using zxing::oned::ITFReader;
 
+// VC++
+using zxing::BitArray;
+
 #define VECTOR_INIT(v) v, v + sizeof(v)/sizeof(v[0])
 
 namespace {
@@ -114,9 +117,10 @@ Ref<Result> ITFReader::decodeRow(int rowNumber, Ref<BitArray> row) {
   }
 
   ArrayRef< Ref<ResultPoint> > resultPoints(2);
-  resultPoints[0] = Ref<OneDResultPoint>(new OneDResultPoint(startRange[1], (float) rowNumber));
-  resultPoints[1] = Ref<OneDResultPoint>(new OneDResultPoint(endRange[0], (float) rowNumber));
-
+  resultPoints[0] =
+      Ref<OneDResultPoint>(new OneDResultPoint(float(startRange[1]), float(rowNumber)));
+  resultPoints[1] =
+      Ref<OneDResultPoint>(new OneDResultPoint(float(endRange[0]), float(rowNumber)));
   return Ref<Result>(new Result(resultString, ArrayRef<char>(), resultPoints, BarcodeFormat::ITF));
 }
 

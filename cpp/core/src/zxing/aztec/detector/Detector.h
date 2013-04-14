@@ -39,7 +39,7 @@ public:
   int y;
             
   Ref<ResultPoint> toResultPoint() { 
-    return Ref<ResultPoint>(new ResultPoint(x, y));
+    return Ref<ResultPoint>(new ResultPoint(float(x), float(y)));
   }
             
   Point(int ax, int ay):x(ax),y(ay) {};

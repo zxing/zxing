@@ -120,11 +120,9 @@ public:
   T const& operator[](int i) const {
     return (*array_)[i];
   }
+
   T& operator[](int i) {
     return (*array_)[i];
-  }
-  int size() const {
-    return array_->size();
   }
 
   void reset(Array<T> *a) {
@@ -148,12 +146,14 @@ public:
     return *this;
   }
 
-  Array<T>& operator*() {
+  Array<T>& operator*() const {
     return *array_;
   }
-  Array<T>* operator->() {
+
+  Array<T>* operator->() const {
     return array_;
   }
+
   operator bool () const {
     return array_ != 0;
   }

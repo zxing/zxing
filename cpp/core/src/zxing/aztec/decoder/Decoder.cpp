@@ -332,9 +332,11 @@ Ref<BitArray> Decoder::correctBits(Ref<zxing::BitArray> rawbits) {
     ReedSolomonDecoder rsDecoder(gf);
     rsDecoder.decode(dataWords, numECCodewords);
   } catch (ReedSolomonException const& ignored) {
+    (void)ignored;
     // std::printf("got reed solomon exception:%s, throwing formatexception\n", rse.what());
     throw FormatException("rs decoding failed");
   } catch (IllegalArgumentException const& iae) {
+    (void)iae;
     // std::printf("illegal argument exception: %s", iae.what());
   }
             

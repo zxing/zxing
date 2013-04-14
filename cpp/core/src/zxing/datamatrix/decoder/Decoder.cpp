@@ -31,6 +31,10 @@ using zxing::Ref;
 using zxing::DecoderResult;
 using zxing::datamatrix::Decoder;
 
+// VC++
+using zxing::ArrayRef;
+using zxing::BitMatrix;
+
 Decoder::Decoder() : rsDecoder_(GenericGF::DATA_MATRIX_FIELD_256) {}
 
 void Decoder::correctErrors(ArrayRef<char> codewordBytes, int numDataCodewords) {
@@ -43,6 +47,7 @@ void Decoder::correctErrors(ArrayRef<char> codewordBytes, int numDataCodewords) 
   try {
     rsDecoder_.decode(codewordInts, numECCodewords);
   } catch (ReedSolomonException const& ignored) {
+    (void)ignored;
     throw ChecksumException();
   }
   // Copy back into array of bytes -- only need to worry about the bytes that were data
