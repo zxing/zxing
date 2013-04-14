@@ -33,6 +33,10 @@ using zxing::qrcode::Decoder;
 using zxing::DecoderResult;
 using zxing::Ref;
 
+// VC++
+using zxing::ArrayRef;
+using zxing::BitMatrix;
+
 Decoder::Decoder() :
   rsDecoder_(GenericGF::QR_CODE_FIELD_256) {
 }
@@ -48,6 +52,7 @@ void Decoder::correctErrors(ArrayRef<char> codewordBytes, int numDataCodewords) 
   try {
     rsDecoder_.decode(codewordInts, numECCodewords);
   } catch (ReedSolomonException const& ignored) {
+    (void)ignored;
     throw ChecksumException();
   }
 

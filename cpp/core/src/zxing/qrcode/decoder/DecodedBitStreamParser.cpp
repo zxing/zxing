@@ -134,6 +134,7 @@ void DecodedBitStreamParser::decodeHanziSegment(Ref<BitSource> bits_,
   try {
     append(result, buffer, nBytes, StringUtils::GB2312);
   } catch (ReaderException const& ignored) {
+    (void)ignored;
     delete [] buffer;
     throw FormatException();
   }
@@ -167,6 +168,7 @@ void DecodedBitStreamParser::decodeKanjiSegment(Ref<BitSource> bits, std::string
   try {
     append(result, buffer, nBytes, StringUtils::SHIFT_JIS);
   } catch (ReaderException const& ignored) {
+    (void)ignored;
     delete [] buffer;
     throw FormatException();
   }
@@ -205,6 +207,7 @@ void DecodedBitStreamParser::decodeByteSegment(Ref<BitSource> bits_,
   try {
     append(result, readBytes, nBytes, encoding.c_str());
   } catch (ReaderException const& ignored) {
+    (void)ignored;
     throw FormatException();
   }
   byteSegments->values().push_back(bytes_);
@@ -412,6 +415,7 @@ DecodedBitStreamParser::decode(ArrayRef<char> bytes,
       }
     } while (mode != &Mode::TERMINATOR);
   } catch (IllegalArgumentException const& iae) {
+    (void)iae;
     // from readBits() calls
     throw FormatException();
   }

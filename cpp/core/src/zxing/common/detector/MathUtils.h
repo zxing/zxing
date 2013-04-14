@@ -38,7 +38,7 @@ inline float distance(float aX, float aY, float bX, float bY) {
 inline float distance(int aX, int aY, int bX, int bY) {
   int xDiff = aX - bX;
   int yDiff = aY - bY;
-  return sqrt(xDiff * xDiff + yDiff * yDiff);
+  return sqrt(float(xDiff * xDiff + yDiff * yDiff));
 }
 
 }}}}

@@ -45,6 +45,12 @@ using zxing::DetectorResult;
 using zxing::PerspectiveTransform;
 using zxing::qrcode::AlignmentPattern;
 
+// VC++
+using zxing::DecodeHints;
+using zxing::qrcode::FinderPatternFinder;
+using zxing::qrcode::FinderPatternInfo;
+using zxing::ResultPoint;
+
 Detector::Detector(Ref<BitMatrix> image) :
   image_(image) {
 }
@@ -100,6 +106,7 @@ Ref<DetectorResult> Detector::processFinderPatternInfo(Ref<FinderPatternInfo> in
         alignmentPattern = findAlignmentInRegion(moduleSize, estAlignmentX, estAlignmentY, (float)i);
         break;
       } catch (zxing::ReaderException const& re) {
+        (void)re;
         // try next round
       }
     }

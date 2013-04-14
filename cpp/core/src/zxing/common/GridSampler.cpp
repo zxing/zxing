@@ -105,12 +105,12 @@ void GridSampler::checkAndNudgePoints(Ref<BitMatrix> image, vector<float> &point
     if (x == -1) {
       points[offset] = 0.0f;
     } else if (x == width) {
-      points[offset] = width - 1;
+      points[offset] = float(width - 1);
     }
     if (y == -1) {
       points[offset + 1] = 0.0f;
     } else if (y == height) {
-      points[offset + 1] = height - 1;
+      points[offset + 1] = float(height - 1);
     }
   }
 

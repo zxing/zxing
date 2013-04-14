@@ -1,8 +1,5 @@
 // -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
 /*
- *  OneDReader.cpp
- *  ZXing
- *
  *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,6 +28,11 @@ using zxing::Ref;
 using zxing::Result;
 using zxing::NotFoundException;
 using zxing::oned::OneDReader;
+
+// VC++
+using zxing::BinaryBitmap;
+using zxing::BitArray;
+using zxing::DecodeHints;
 
 OneDReader::OneDReader() {}
 
@@ -106,6 +108,7 @@ Ref<Result> OneDReader::doDecode(Ref<BinaryBitmap> image, DecodeHints hints) {
     try {
       row = image->getBlackRow(rowNumber, row);
     } catch (NotFoundException const& ignored) {
+      (void)ignored;
       continue;
     }
 
@@ -138,6 +141,7 @@ Ref<Result> OneDReader::doDecode(Ref<BinaryBitmap> image, DecodeHints hints) {
         }
         return result;
       } catch (ReaderException const& re) {
+        (void)re;
         continue;
       }
     }

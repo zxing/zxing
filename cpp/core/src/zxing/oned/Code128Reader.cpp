@@ -36,6 +36,9 @@ using zxing::Ref;
 using zxing::Result;
 using zxing::oned::Code128Reader;
 
+// VC++
+using zxing::BitArray;
+
 const int Code128Reader::MAX_AVG_VARIANCE = int(PATTERN_MATCH_RESULT_SCALE_FACTOR * 250/1000);
 const int Code128Reader::MAX_INDIVIDUAL_VARIANCE = int(PATTERN_MATCH_RESULT_SCALE_FACTOR * 700/1000);
 

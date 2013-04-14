@@ -29,6 +29,9 @@ using zxing::Ref;
 using zxing::BitArray;
 using zxing::BitMatrix;
 
+// VC++
+using zxing::LuminanceSource;
+
 namespace {
   const int LUMINANCE_BITS = 5;
   const int LUMINANCE_SHIFT = 8 - LUMINANCE_BITS;

@@ -163,7 +163,7 @@ string read_expected(string imagefilename) {
     return std::string();
   }
   file->seekg(0, ios_base::end);
-  size_t size = file->tellg();
+  size_t size = size_t(file->tellg());
   file->seekg(0, ios_base::beg);
 
   if (size == 0) {

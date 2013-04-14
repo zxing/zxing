@@ -32,6 +32,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/)
 # Suppress MSVC CRT warnings.
 if(MSVC)
     add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+    add_definitions(/Za)
 endif()
 
 # Add libzxing library.

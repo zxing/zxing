@@ -20,6 +20,9 @@
 using std::vector;
 using zxing::BitArray;
 
+// VC++
+using zxing::Ref;
+
 int BitArray::makeArraySize(int size) {
   return (size + bitsPerWord-1) >> logBits;
 }

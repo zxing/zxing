@@ -25,6 +25,9 @@ using zxing::Ref;
 using zxing::String;
 using zxing::oned::UPCEReader;
 
+// VC++
+using zxing::BitArray;
+
 #define VECTOR_INIT(v) v, v + sizeof(v)/sizeof(v[0])
 
 namespace {
