@@ -37,6 +37,7 @@ Ref<Result> ByQuadrantReader::decode(Ref<BinaryBitmap> image, DecodeHints hints)
   try {
     return delegate_.decode(topLeft, hints);
   } catch (ReaderException const& re) {
+    (void)re;
     // continue
   }
 
@@ -44,6 +45,7 @@ Ref<Result> ByQuadrantReader::decode(Ref<BinaryBitmap> image, DecodeHints hints)
   try {
     return delegate_.decode(topRight, hints);
   } catch (ReaderException const& re) {
+    (void)re;
     // continue
   }
 
@@ -51,6 +53,7 @@ Ref<Result> ByQuadrantReader::decode(Ref<BinaryBitmap> image, DecodeHints hints)
   try {
     return delegate_.decode(bottomLeft, hints);
   } catch (ReaderException const& re) {
+    (void)re;
     // continue
   }
 
@@ -58,6 +61,7 @@ Ref<Result> ByQuadrantReader::decode(Ref<BinaryBitmap> image, DecodeHints hints)
   try {
     return delegate_.decode(bottomRight, hints);
   } catch (ReaderException const& re) {
+    (void)re;
     // continue
   }
 

@@ -102,6 +102,7 @@ Version *Version::getProvisionalVersionForDimension(int dimension) {
   try {
     return Version::getVersionForNumber((dimension - 17) >> 2);
   } catch (IllegalArgumentException const& ignored) {
+    (void)ignored;
     throw FormatException();
   }
 }

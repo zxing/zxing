@@ -26,6 +26,9 @@ using zxing::ResultPointCallback;
 using zxing::DecodeHintType;
 using zxing::DecodeHints;
 
+// VC++
+using zxing::BarcodeFormat;
+
 const DecodeHintType DecodeHints::CHARACTER_SET;
 
 const DecodeHints DecodeHints::PRODUCT_HINT(
@@ -103,7 +106,7 @@ bool DecodeHints::containsFormat(BarcodeFormat tocheck) const {
   case BarcodeFormat::UPC_EAN_EXTENSION: checkAgainst |= UPC_EAN_EXTENSION_HINT; break;
   default: throw IllegalArgumentException("Unrecognizd barcode format");
   }
-  return (hints & checkAgainst);
+  return (hints & checkAgainst) != 0;
 }
 
 void DecodeHints::setTryHarder(bool toset) {
@@ -115,7 +118,7 @@ void DecodeHints::setTryHarder(bool toset) {
 }
 
 bool DecodeHints::getTryHarder() const {
-  return (hints & TRYHARDER_HINT);
+  return (hints & TRYHARDER_HINT) != 0;
 }
 
 void DecodeHints::setResultPointCallback(Ref<ResultPointCallback> const& _callback) {

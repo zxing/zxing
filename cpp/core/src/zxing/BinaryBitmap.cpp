@@ -1,8 +1,5 @@
 // -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
 /*
- *  BinaryBitmap.cpp
- *  zxing
- *
  *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,6 +23,9 @@ using zxing::BitMatrix;
 using zxing::LuminanceSource;
 using zxing::BinaryBitmap;
 	
+// VC++
+using zxing::Binarizer;
+
 BinaryBitmap::BinaryBitmap(Ref<Binarizer> binarizer) : binarizer_(binarizer) {
 }
 	

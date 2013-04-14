@@ -49,7 +49,7 @@ GreyscaleRotatedLuminanceSource::getRow(int y, ArrayRef<char> row) const {
   if (y < 0 || y >= getHeight()) {
     throw IllegalArgumentException("Requested row is outside the image.");
   }
-  if (!row || row.size() < getWidth()) {
+  if (!row || row->size() < getWidth()) {
     row = ArrayRef<char>(getWidth());
   }
   int offset = (left_ * dataWidth_) + (dataWidth_ - 1 - (y + top_));

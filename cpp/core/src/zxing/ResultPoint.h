@@ -34,6 +34,7 @@ protected:
 public:
   ResultPoint();
   ResultPoint(float x, float y);
+  ResultPoint(int x, int y);
   virtual ~ResultPoint();
 
   virtual float getX() const;

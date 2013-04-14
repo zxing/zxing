@@ -24,6 +24,11 @@ using zxing::Ref;
 using zxing::Result;
 using zxing::multi::GenericMultipleBarcodeReader;
 
+// VC++
+using zxing::Reader;
+using zxing::BinaryBitmap;
+using zxing::DecodeHints;
+
 GenericMultipleBarcodeReader::GenericMultipleBarcodeReader(Reader& delegate)
     : delegate_(delegate) {}
 
@@ -52,6 +57,7 @@ void GenericMultipleBarcodeReader::doDecodeMultiple(Ref<BinaryBitmap> image,
   try {
     result = delegate_.decode(image, hints);
   } catch (ReaderException const& ignored) {
+    (void)ignored;
     return;
   }
   bool alreadyFound = false;
@@ -73,11 +79,11 @@ void GenericMultipleBarcodeReader::doDecodeMultiple(Ref<BinaryBitmap> image,
 
   int width = image->getWidth();
   int height = image->getHeight();
-  float minX = width;
-  float minY = height;
+  float minX = float(width);
+  float minY = float(height);
   float maxX = 0.0f;
   float maxY = 0.0f;
-  for (int i = 0; i < resultPoints.size(); i++) {
+  for (int i = 0; i < resultPoints->size(); i++) {
     Ref<ResultPoint> point = resultPoints[i];
     float x = point->getX();
     float y = point->getY();
@@ -123,7 +129,7 @@ Ref<Result> GenericMultipleBarcodeReader::translateResultPoints(Ref<Result> resu
     return result;
   }
   ArrayRef< Ref<ResultPoint> > newResultPoints;
-  for (int i = 0; i < oldResultPoints.size(); i++) {
+  for (int i = 0; i < oldResultPoints->size(); i++) {
     Ref<ResultPoint> oldPoint = oldResultPoints[i];
     newResultPoints->values().push_back(Ref<ResultPoint>(new ResultPoint(oldPoint->getX() + xOffset, oldPoint->getY() + yOffset)));
   }

@@ -37,7 +37,7 @@ float AlignmentPatternFinder::centerFromEnd(vector<int> &stateCount, int end) {
 
 bool AlignmentPatternFinder::foundPatternCross(vector<int> &stateCount) {
   float maxVariance = moduleSize_ / 2.0f;
-  for (size_t i = 0; i < 3; i++) {
+  for (int i = 0; i < 3; i++) {
     if (abs(moduleSize_ - stateCount[i]) >= maxVariance) {
       return false;
     }
@@ -45,7 +45,7 @@ bool AlignmentPatternFinder::foundPatternCross(vector<int> &stateCount) {
   return true;
 }
 
-float AlignmentPatternFinder::crossCheckVertical(size_t startI, size_t centerJ, int maxCount,
+float AlignmentPatternFinder::crossCheckVertical(int startI, int centerJ, int maxCount,
     int originalStateCountTotal) {
   int maxI = image_->getHeight();
   vector<int> stateCount(3, 0);
@@ -59,14 +59,14 @@ float AlignmentPatternFinder::crossCheckVertical(size_t startI, size_t centerJ, 
   }
   // If already too many modules in this state or ran off the edge:
   if (i < 0 || stateCount[1] > maxCount) {
-    return NAN;
+    return nan();
   }
   while (i >= 0 && !image_->get(centerJ, i) && stateCount[0] <= maxCount) {
     stateCount[0]++;
     i--;
   }
   if (stateCount[0] > maxCount) {
-    return NAN;
+    return nan();
   }
 
   // Now also count down from center
@@ -76,25 +76,25 @@ float AlignmentPatternFinder::crossCheckVertical(size_t startI, size_t centerJ, 
     i++;
   }
   if (i == maxI || stateCount[1] > maxCount) {
-    return NAN;
+    return nan();
   }
   while (i < maxI && !image_->get(centerJ, i) && stateCount[2] <= maxCount) {
     stateCount[2]++;
     i++;
   }
   if (stateCount[2] > maxCount) {
-    return NAN;
+    return nan();
   }
 
   int stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2];
   if (5 * abs(stateCountTotal - originalStateCountTotal) >= 2 * originalStateCountTotal) {
-    return NAN;
+    return nan();
   }
 
-  return foundPatternCross(stateCount) ? centerFromEnd(stateCount, i) : NAN;
+  return foundPatternCross(stateCount) ? centerFromEnd(stateCount, i) : nan();
 }
 
-Ref<AlignmentPattern> AlignmentPatternFinder::handlePossibleCenter(vector<int> &stateCount, size_t i, size_t j) {
+Ref<AlignmentPattern> AlignmentPatternFinder::handlePossibleCenter(vector<int> &stateCount, int i, int j) {
   int stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2];
   float centerJ = centerFromEnd(stateCount, j);
   float centerI = crossCheckVertical(i, (int)centerJ, 2 * stateCount[1], stateCountTotal);
@@ -120,15 +120,15 @@ Ref<AlignmentPattern> AlignmentPatternFinder::handlePossibleCenter(vector<int> &
   return result;
 }
 
-AlignmentPatternFinder::AlignmentPatternFinder(Ref<BitMatrix> image, size_t startX, size_t startY, size_t width,
-                                               size_t height, float moduleSize, 
+AlignmentPatternFinder::AlignmentPatternFinder(Ref<BitMatrix> image, int startX, int startY, int width,
+                                               int height, float moduleSize, 
                                                Ref<ResultPointCallback>const& callback) :
     image_(image), possibleCenters_(new vector<AlignmentPattern *> ()), startX_(startX), startY_(startY),
     width_(width), height_(height), moduleSize_(moduleSize), callback_(callback) {
 }
 
 AlignmentPatternFinder::~AlignmentPatternFinder() {
-  for (size_t i = 0; i < possibleCenters_->size(); i++) {
+  for (int i = 0; i < int(possibleCenters_->size()); i++) {
     (*possibleCenters_)[i]->release();
     (*possibleCenters_)[i] = 0;
   }
@@ -136,20 +136,20 @@ AlignmentPatternFinder::~AlignmentPatternFinder() {
 }
 
 Ref<AlignmentPattern> AlignmentPatternFinder::find() {
-  size_t maxJ = startX_ + width_;
-  size_t middleI = startY_ + (height_ >> 1);
+  int maxJ = startX_ + width_;
+  int middleI = startY_ + (height_ >> 1);
   //      Ref<BitArray> luminanceRow(new BitArray(width_));
   // We are looking for black/white/black modules in 1:1:1 ratio;
   // this tracks the number of black/white/black modules seen so far
   vector<int> stateCount(3, 0);
-  for (size_t iGen = 0; iGen < height_; iGen++) {
+  for (int iGen = 0; iGen < height_; iGen++) {
     // Search from middle outwards
-    size_t i = middleI + ((iGen & 0x01) == 0 ? ((iGen + 1) >> 1) : -((iGen + 1) >> 1));
+    int i = middleI + ((iGen & 0x01) == 0 ? ((iGen + 1) >> 1) : -((iGen + 1) >> 1));
     //        image_->getBlackRow(i, luminanceRow, startX_, width_);
     stateCount[0] = 0;
     stateCount[1] = 0;
     stateCount[2] = 0;
-    size_t j = startX_;
+    int j = startX_;
     // Burn off leading white pixels before anything else; if we start in the middle of
     // a white run, it doesn't make sense to count its length, since we don't know if the
     // white run continued to the left of the start point

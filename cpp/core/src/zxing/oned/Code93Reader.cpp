@@ -34,6 +34,9 @@ using zxing::NotFoundException;
 using zxing::ChecksumException;
 using zxing::oned::Code93Reader;
 
+// VC++
+using zxing::BitArray;
+
 namespace {
   char const ALPHABET[] =
     "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. $/+%abcd*";

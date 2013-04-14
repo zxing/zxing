@@ -71,10 +71,10 @@ std::vector<Ref<DataBlock> > DataBlock::getDataBlocks(ArrayRef<char> rawCodeword
 
   // All blocks have the same amount of data, except that the last n
   // (where n may be 0) have 1 more byte. Figure out where these start.
-  int shorterBlocksTotalCodewords = result[0]->codewords_.size();
+  int shorterBlocksTotalCodewords = result[0]->codewords_->size();
   int longerBlocksStartAt = result.size() - 1;
   while (longerBlocksStartAt >= 0) {
-    int numCodewords = result[longerBlocksStartAt]->codewords_.size();
+    int numCodewords = result[longerBlocksStartAt]->codewords_->size();
     if (numCodewords == shorterBlocksTotalCodewords) {
       break;
     }
@@ -99,7 +99,7 @@ std::vector<Ref<DataBlock> > DataBlock::getDataBlocks(ArrayRef<char> rawCodeword
     result[j]->codewords_[shorterBlocksNumDataCodewords] = rawCodewords[rawCodewordsOffset++];
   }
   // Now add in error correction blocks
-  int max = result[0]->codewords_.size();
+  int max = result[0]->codewords_->size();
   for (int i = shorterBlocksNumDataCodewords; i < max; i++) {
     for (int j = 0; j < numResultBlocks; j++) {
       int iOffset = j < longerBlocksStartAt ? i : i + 1;
@@ -107,7 +107,7 @@ std::vector<Ref<DataBlock> > DataBlock::getDataBlocks(ArrayRef<char> rawCodeword
     }
   }
 
-  if (rawCodewordsOffset != rawCodewords.size()) {
+  if (rawCodewordsOffset != rawCodewords->size()) {
     throw IllegalArgumentException("rawCodewordsOffset != rawCodewords.length");
   }
 

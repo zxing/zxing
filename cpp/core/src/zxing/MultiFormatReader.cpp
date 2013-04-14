@@ -1,10 +1,5 @@
 // -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
 /*
- *  MultiFormatBarcodeReader.cpp
- *  ZXing
- *
- *  Created by Lukasz Warchol on 10-01-26.
- *  Modified by Luiz Silva on 09/02/2010.
  *  Copyright 2010 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,6 +27,10 @@
 using zxing::Ref;
 using zxing::Result;
 using zxing::MultiFormatReader;
+
+// VC++
+using zxing::DecodeHints;
+using zxing::BinaryBitmap;
 
 MultiFormatReader::MultiFormatReader() {}
   
@@ -114,6 +113,7 @@ Ref<Result> MultiFormatReader::decodeInternal(Ref<BinaryBitmap> image) {
     try {
       return readers_[i]->decode(image, hints_);
     } catch (ReaderException const& re) {
+      (void)re;
       // continue
     }
   }

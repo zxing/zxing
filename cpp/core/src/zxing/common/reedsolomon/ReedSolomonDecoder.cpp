@@ -1,8 +1,5 @@
 // -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
 /*
- *  ReedSolomonDecoder.cpp
- *  zxing
- *
  *  Created by Christian Brunschen on 05/05/2008.
  *  Copyright 2008 Google UK. All rights reserved.
  *
@@ -32,6 +29,9 @@ using zxing::Ref;
 using zxing::ArrayRef;
 using zxing::ReedSolomonDecoder;
 using zxing::GenericGFPoly;
+
+// VC++
+using zxing::GenericGF;
 
 ReedSolomonDecoder::ReedSolomonDecoder(Ref<GenericGF> field_) : field(field_) {}
 
@@ -147,7 +147,7 @@ ArrayRef<int> ReedSolomonDecoder::findErrorLocations(Ref<GenericGFPoly> errorLoc
 
 ArrayRef<int> ReedSolomonDecoder::findErrorMagnitudes(Ref<GenericGFPoly> errorEvaluator, ArrayRef<int> errorLocations) {
   // This is directly applying Forney's Formula
-  int s = errorLocations.size();
+  int s = errorLocations->size();
   ArrayRef<int> result(new Array<int>(s));
   for (int i = 0; i < s; i++) {
     int xiInverse = field->inverse(errorLocations[i]);

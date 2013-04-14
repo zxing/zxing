@@ -31,11 +31,33 @@
 #endif
 
 namespace zxing {
-
 typedef char byte;
 typedef bool boolean;
-
 }
+
+#include <limits>
+
+#if defined(_WIN32) || defined(_WIN64)
+
+#include <float.h>
+
+namespace zxing {
+inline bool isnan(float v) {return _isnan(v) != 0;}
+inline bool isnan(double v) {return _isnan(v) != 0;}
+inline float nan() {return std::numeric_limits<float>::quiet_NaN();}
+}
+
+#else
+
+#include <cmath>
+
+namespace zxing {
+inline bool isnan(float v) {return std::isnan(v);}
+inline bool isnan(double v) {return std::isnan(v);}
+inline float nan() {return std::numeric_limits<float>::quiet_NaN();}
+}
+
+#endif
 
 #if ZXING_DEBUG
 
