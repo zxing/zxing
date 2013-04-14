@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <!--
  Copyright (C) 2012 ZXing authors
 
@@ -24,11 +24,11 @@
   <string name="button_book_search">Szukaj książek</string>
   <string name="button_cancel">Anuluj</string>
   <string name="button_custom_product_search">Wyszukiwanie indywidualne</string>
-  <string name="button_dial">Wykręć numer</string>
+  <string name="button_dial">Zadzwoń</string>
   <string name="button_done">Gotowe</string>
   <string name="button_email">Wyślij email</string>
-  <string name="button_get_directions">Otrzymaj wskazówki</string>
-  <string name="button_google_shopper">Shopper</string>
+  <string name="button_get_directions">Wskazówki</string>
+  <string name="button_google_shopper">Sklep</string>
   <string name="button_mms">Wyślij MMS</string>
   <string name="button_ok">OK</string>
   <string name="button_open_browser">Otwórz przeglądarkę</string>
@@ -43,7 +43,7 @@
   <string name="button_show_map">Pokaż mapę</string>
   <string name="button_sms">Wyślij SMS</string>
   <string name="button_web_search">Szukaj w sieci</string>
-  <string name="button_wifi">Podłączyć do sieci</string>
+  <string name="button_wifi">Podłącz do sieci</string>
   <string name="contents_contact">Informacje o kontakcie</string>
   <string name="contents_email">Adres email</string>
   <string name="contents_location">Współrzędne geograficzne</string>
@@ -54,7 +54,7 @@
   <string name="history_clear_text">Wyczyść historię</string>
   <string name="history_email_title">Historia Skanera Kodów Paskowych</string>
   <string name="history_empty">Pusty</string>
-  <string name="history_empty_detail">Brak skanowania kodów kreskowych zostały zarejestrowane</string>
+  <string name="history_empty_detail">Brak zeskanowanych kodów</string>
   <string name="history_send">Wyślij historię</string>
   <string name="history_title">Historia</string>
   <string name="menu_encode_mecard">Użyj MECARD</string>
@@ -63,7 +63,7 @@
   <string name="menu_history">Historia</string>
   <string name="menu_settings">Ustawienia</string>
   <string name="menu_share">Udostępnij</string>
-  <string name="msg_bulk_mode_scanned">Tryb zbiorcze: skanowania kodów kreskowych i zapisaniu</string>
+  <string name="msg_bulk_mode_scanned">Tryb zbiorczy: skanowanie i zapisywanie kodów kreskowych w trybie ciągłym</string>
   <string name="msg_camera_framework_bug">Przepraszamy, aparat Android napotkał problem. Może wystąpić potrzeba ponownego uruchomienia urządzenia.</string>
   <string name="msg_default_format">Format</string>
   <string name="msg_default_meta">Metadanych</string>
@@ -75,7 +75,7 @@
   <string name="msg_google_books">Google Książki</string>
   <string name="msg_google_product">Wyszukiwarka produktów Google</string>
   <string name="msg_google_shopper_missing">Google Shopper nie jest zainstalowany</string>
-  <string name="msg_install_google_shopper">Google Shopper łączy skanowanie kodów paskowych z cenami, recenzjami, itp bez otwierania przeglądarki. Czy chciał/a byś go wypróbować?</string>
+  <string name="msg_install_google_shopper">Google Shopper łączy skanowanie kodów paskowych z cenami, recenzjami, itp. bez otwierania przeglądarki. Czy chcesz go wypróbować?</string>
   <string name="msg_intent_failed">Przepraszamy, żadana aplikacja nie może zostać uruchomiona. Zawartość kodu paskowego może być nieprawidłowa.</string>
   <string name="msg_redirect">Przekierowanie</string>
   <string name="msg_sbc_book_not_searchable">Przepraszamy, ta książka nie jest przeszukiwalna.</string>
@@ -86,15 +86,15 @@
   <string name="msg_sbc_searching_book">Przeszukiwanie książki\u2026</string>
   <string name="msg_sbc_snippet_unavailable">Wycinek niedostępny</string>
   <string name="msg_sbc_unknown_page">Nieznana strona</string>
-  <string name="msg_share_explanation">Możesz udostępniać dane wyświetlając kod paskowy na swoim ekranie, skanując go innym telefonem.</string>
+  <string name="msg_share_explanation">Możesz udostępniać dane wyświetlając kod paskowy na swoim ekranie i skanując go innym telefonem.</string>
   <string name="msg_share_subject_line">Oto zawartość kodu paskowego który został zeskanowany</string>
   <string name="msg_share_text">Albo wpisz tekst</string>
   <string name="msg_sure">Czy na pewno?</string>
-  <string name="msg_unmount_usb">Niestety, karta SD nie jest dostępny.</string>
-  <string name="preferences_actions_title">Kiedy kod paskowy zostaje odnaleziony\u2026</string>
-  <string name="preferences_auto_focus_title">Ustawić ostrość</string>
-  <string name="preferences_bulk_mode_summary">Skanowanie i zapisywanie wielu kodów kreskowych ciągle</string>
-  <string name="preferences_bulk_mode_title">Luzem tryb skanowania</string>
+  <string name="msg_unmount_usb">Niestety, karta SD nie jest dostępna.</string>
+  <string name="preferences_actions_title">Akcja po odnalezieniu kodu\u2026</string>
+  <string name="preferences_auto_focus_title">Ustaw ostrość</string>
+  <string name="preferences_bulk_mode_summary">Skanowanie i zapisywanie wielu kodów kreskowych jeden po drugim w trybie ciągłym</string>
+  <string name="preferences_bulk_mode_title">Tryb ciągłego skanowania</string>
   <string name="preferences_copy_to_clipboard_title">Kopiuj do schowka</string>
   <string name="preferences_custom_product_search_summary" formatted="false">Zastępstwa: %s = zawartość, %f = format, %t = typ</string>
   <string name="preferences_custom_product_search_title">Własny URL wyszukiwania</string>
@@ -103,30 +103,30 @@
   <string name="preferences_decode_QR_title">Dekoduj kody QR</string>
   <string name="preferences_device_bug_workarounds_title">Obejścia błędów urządzeń</string>
   <string name="preferences_disable_continuous_focus_summary">Używaj tylko standardowego trybu ostrości</string>
-  <string name="preferences_disable_continuous_focus_title">Nie ciągły nacisk</string>
-  <string name="preferences_disable_exposure_title">Żadna ekspozycja</string>
+  <string name="preferences_disable_continuous_focus_title">Ostrość</string>
+  <string name="preferences_disable_exposure_title">Bez ekspozycji</string>
   <string name="preferences_front_light_auto">Automatyczny</string>
   <string name="preferences_front_light_off">Nieaktywny</string>
   <string name="preferences_front_light_on">Aktywny</string>
   <string name="preferences_front_light_summary">Polepsza skanowanie przy małej ilości światła w niektórych telefonach, ale może powodować odbłysk. Nie działa na wszystkich telefonach.</string>
   <string name="preferences_front_light_title">Używaj lampy frontowej</string>
   <string name="preferences_general_title">Ustawienia ogólne</string>
-  <string name="preferences_invert_scan_summary">Skanowanie kodów kreskowych białego na czarnym tle. Nie dostępne w niektórych urządzeniach.</string>
+  <string name="preferences_invert_scan_summary">Skanowanie białych kodów kreskowych na czarnym tle. Nie dostępne w niektórych urządzeniach.</string>
   <string name="preferences_invert_scan_title">Odwróć skanowania</string>
   <string name="preferences_name">Ustawienia</string>
   <string name="preferences_play_beep_title">Piszcz</string>
-  <string name="preferences_remember_duplicates_summary">Przechowywanie wielu skanowanie kodów kreskowych w tej samej historii</string>
+  <string name="preferences_remember_duplicates_summary">Przechowuj zaskanowane kody w tej samej historii</string>
   <string name="preferences_remember_duplicates_title">Pamiętaj, duplikaty</string>
-  <string name="preferences_result_title">Ustawienia rezultatów</string>
+  <string name="preferences_result_title">Ustawienia wyników</string>
   <string name="preferences_scanning_title">Podczas skanowania kodów kreskowych\u2026</string>
   <string name="preferences_search_country">Szukaj kraju</string>
-  <string name="preferences_supplemental_summary">Prosimy spróbować wyszukać więcej informacji na temat kodów kreskowych treści</string>
+  <string name="preferences_supplemental_summary">Spróbuj wyszukać więcej informacji na temat kodów kreskowych</string>
   <string name="preferences_supplemental_title">Pobierz więcej informacji</string>
-  <string name="preferences_try_bsplus">Spróbuj Barcode Scanner+</string>
+  <string name="preferences_try_bsplus">Wypróbuj Barcode Scanner+</string>
   <string name="preferences_try_bsplus_summary">Wzbogacony o nowe funkcje i interfejs</string>
   <string name="preferences_vibrate_title">Wibruj</string>
   <string name="result_address_book">Znaleziono dane kontaktu</string>
-  <string name="result_calendar">Znaleziono wydarzenie kalendarza</string>
+  <string name="result_calendar">Znaleziono wydarzenie z kalendarza</string>
   <string name="result_email_address">Znaleziono adres email</string>
   <string name="result_geo">Znaleziono współrzędne geograficzne</string>
   <string name="result_isbn">Znaleziono książkę</string>
@@ -135,7 +135,7 @@
   <string name="result_tel">Znaleziono numer telefonu</string>
   <string name="result_text">Znaleziono zwykły tekst</string>
   <string name="result_uri">Znaleziono URL</string>
-  <string name="result_wifi">Znaleziono konfiguracji sieci</string>
+  <string name="result_wifi">Znaleziono konfiguracje sieci</string>
   <string name="sbc_name">Wyszukiwanie książek Google</string>
   <string name="wifi_changing_network">Ubiegającymi się o przyłączenie do sieci\u2026</string>
   <string name="wifi_ssid_label">Nazwa sieci</string>
