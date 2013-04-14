@@ -27,7 +27,6 @@ import com.google.zxing.client.result.ParsedResult;
 import com.google.zxing.client.result.ResultParser;
 import com.google.zxing.common.BitArray;
 import com.google.zxing.common.BitMatrix;
-import com.google.zxing.common.FixedValueBinarizer;
 import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.multi.GenericMultipleBarcodeReader;
 
@@ -156,8 +155,8 @@ final class DecodeWorker implements Callable<Integer> {
         int[] crop = config.getCrop();
         source = new BufferedImageLuminanceSource(image, crop[0], crop[1], crop[2], crop[3]);
       }
-      //BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
-      BinaryBitmap bitmap = new BinaryBitmap(new FixedValueBinarizer(source));
+      BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+      //BinaryBitmap bitmap = new BinaryBitmap(new FixedValueBinarizer(source));
       if (config.isDumpBlackPoint()) {
         dumpBlackPoint(uri, image, bitmap);
       }
