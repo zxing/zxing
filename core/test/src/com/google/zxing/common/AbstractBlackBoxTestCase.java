@@ -168,8 +168,8 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
         float rotation = testResults.get(x).getRotation();
         BufferedImage rotatedImage = rotateImage(image, rotation);
         LuminanceSource source = new BufferedImageLuminanceSource(rotatedImage);
-        //BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
-        BinaryBitmap bitmap = new BinaryBitmap(new FixedValueBinarizer(source));
+        BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+        //BinaryBitmap bitmap = new BinaryBitmap(new FixedValueBinarizer(source));
 
         String logText = String.format("rotation %f, file %s", rotation, testImageFileName);
         try {
