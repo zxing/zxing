@@ -41,11 +41,10 @@ public class BarcodeMatrix implements SimpleLog.Loggable {
       formatter.format("Row %2d: ", row);
       for (int column = 0; column <= maxColumn; column++) {
         BarcodeValue barcodeValue = values.get(getKey(row, column));
-        if (barcodeValue == null) {
+        if (barcodeValue == null || barcodeValue.getValue() == null) {
           formatter.format("        ", (Object[]) null);
         } else {
-          formatter.format("%4d(%2d)", barcodeValue.getValue(),
-              barcodeValue.getConfidence(barcodeValue.getValue()));
+          formatter.format("%4d(%2d)", barcodeValue.getValue(), barcodeValue.getConfidence(barcodeValue.getValue()));
         }
       }
       formatter.format("\n");
