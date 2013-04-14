@@ -11,6 +11,7 @@ public class PDF417CodewordDecoder {
     AdjustmentResultFloat resultFloat = AdjustmentResultFloat.getAdjustmentResultFloat(moduleBitCount);
     addToResult(adjustmentResults, AdjustmentResult.getAdjustmentResult(resultFloat.getModuleBitCount()));
     addToResult(adjustmentResults, AdjustmentResult.getAdjustmentResult(resultFloat.getClosestModuleBitCount()));
+    addToResult(adjustmentResults, AdjustmentResultDifferenceTracker.getAdjustmentResult(moduleBitCount));
     addToResult(adjustmentResults, AdjustmentResult.getAdjustmentResult(moduleBitCount));
     return adjustmentResults;
   }
