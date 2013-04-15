@@ -133,10 +133,8 @@ public:
   bool empty() const {
     return object_ == 0;
   }
-
-  template<class Y>
-  friend std::ostream& operator<<(std::ostream &out, Ref<Y>& ref);
 };
+
 }
 
 #endif // __COUNTED_H__

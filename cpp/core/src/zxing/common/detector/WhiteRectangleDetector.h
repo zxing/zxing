@@ -49,7 +49,7 @@ class WhiteRectangleDetector : public Counted {
     std::vector<Ref<ResultPoint> > detect();
 
   private: 
-    Ref<ResultPoint> getBlackPointOnSegment(float aX, float aY, float bX, float bY);
+    Ref<ResultPoint> getBlackPointOnSegment(int aX, int aY, int bX, int bY);
     std::vector<Ref<ResultPoint> > centerEdges(Ref<ResultPoint> y, Ref<ResultPoint> z,
                                     Ref<ResultPoint> x, Ref<ResultPoint> t);
     bool containsBlackPoint(int a, int b, int fixed, bool horizontal);

@@ -106,7 +106,7 @@ float FinderPatternFinder::crossCheckVertical(size_t startI, size_t centerJ, int
     i--;
   }
   if (i < 0) {
-    return NAN;
+    return nan();
   }
   while (i >= 0 && !image_->get(centerJ, i) && stateCount[1] <= maxCount) {
     stateCount[1]++;
@@ -114,14 +114,14 @@ float FinderPatternFinder::crossCheckVertical(size_t startI, size_t centerJ, int
   }
   // If already too many modules in this state or ran off the edge:
   if (i < 0 || stateCount[1] > maxCount) {
-    return NAN;
+    return nan();
   }
   while (i >= 0 && image_->get(centerJ, i) && stateCount[0] <= maxCount) {
     stateCount[0]++;
     i--;
   }
   if (stateCount[0] > maxCount) {
-    return NAN;
+    return nan();
   }
 
   // Now also count down from center
@@ -131,31 +131,31 @@ float FinderPatternFinder::crossCheckVertical(size_t startI, size_t centerJ, int
     i++;
   }
   if (i == maxI) {
-    return NAN;
+    return nan();
   }
   while (i < maxI && !image_->get(centerJ, i) && stateCount[3] < maxCount) {
     stateCount[3]++;
     i++;
   }
   if (i == maxI || stateCount[3] >= maxCount) {
-    return NAN;
+    return nan();
   }
   while (i < maxI && image_->get(centerJ, i) && stateCount[4] < maxCount) {
     stateCount[4]++;
     i++;
   }
   if (stateCount[4] >= maxCount) {
-    return NAN;
+    return nan();
   }
 
   // If we found a finder-pattern-like section, but its size is more than 40% different than
   // the original, assume it's a false positive
   int stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2] + stateCount[3] + stateCount[4];
   if (5 * abs(stateCountTotal - originalStateCountTotal) >= 2 * originalStateCountTotal) {
-    return NAN;
+    return nan();
   }
 
-  return foundPatternCross(stateCount) ? centerFromEnd(stateCount, i) : NAN;
+  return foundPatternCross(stateCount) ? centerFromEnd(stateCount, i) : nan();
 }
 
 float FinderPatternFinder::crossCheckHorizontal(size_t startJ, size_t centerI, int maxCount,
@@ -172,21 +172,21 @@ float FinderPatternFinder::crossCheckHorizontal(size_t startJ, size_t centerI, i
     j--;
   }
   if (j < 0) {
-    return NAN;
+    return nan();
   }
   while (j >= 0 && !image_->get(j, centerI) && stateCount[1] <= maxCount) {
     stateCount[1]++;
     j--;
   }
   if (j < 0 || stateCount[1] > maxCount) {
-    return NAN;
+    return nan();
   }
   while (j >= 0 && image_->get(j, centerI) && stateCount[0] <= maxCount) {
     stateCount[0]++;
     j--;
   }
   if (stateCount[0] > maxCount) {
-    return NAN;
+    return nan();
   }
 
   j = startJ + 1;
@@ -195,31 +195,31 @@ float FinderPatternFinder::crossCheckHorizontal(size_t startJ, size_t centerI, i
     j++;
   }
   if (j == maxJ) {
-    return NAN;
+    return nan();
   }
   while (j < maxJ && !image_->get(j, centerI) && stateCount[3] < maxCount) {
     stateCount[3]++;
     j++;
   }
   if (j == maxJ || stateCount[3] >= maxCount) {
-    return NAN;
+    return nan();
   }
   while (j < maxJ && image_->get(j, centerI) && stateCount[4] < maxCount) {
     stateCount[4]++;
     j++;
   }
   if (stateCount[4] >= maxCount) {
-    return NAN;
+    return nan();
   }
 
   // If we found a finder-pattern-like section, but its size is significantly different than
   // the original, assume it's a false positive
   int stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2] + stateCount[3] + stateCount[4];
   if (5 * abs(stateCountTotal - originalStateCountTotal) >= originalStateCountTotal) {
-    return NAN;
+    return nan();
   }
 
-  return foundPatternCross(stateCount) ? centerFromEnd(stateCount, j) : NAN;
+  return foundPatternCross(stateCount) ? centerFromEnd(stateCount, j) : nan();
 }
 
 bool FinderPatternFinder::handlePossibleCenter(int* stateCount, size_t i, size_t j) {

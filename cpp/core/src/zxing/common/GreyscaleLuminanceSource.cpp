@@ -47,7 +47,7 @@ ArrayRef<char> GreyscaleLuminanceSource::getRow(int y, ArrayRef<char> row) const
     throw IllegalArgumentException("Requested row is outside the image.");
   }
   int width = getWidth();
-  if (!row || row.size() < width) {
+  if (!row || row->size() < width) {
     ArrayRef<char> temp (width);
     row = temp;
   }

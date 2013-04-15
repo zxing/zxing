@@ -26,7 +26,7 @@
 #include <zxing/common/reedsolomon/ReedSolomonException.h>
 #include <zxing/common/reedsolomon/GenericGF.h>
 #include <iostream>
-#include <zxing/common/detector/math_utils.h>
+#include <zxing/common/detector/MathUtils.h>
 #include <zxing/NotFoundException.h>
 
 using std::vector;
@@ -38,8 +38,9 @@ using zxing::ArrayRef;
 using zxing::ResultPoint;
 using zxing::BitArray;
 using zxing::BitMatrix;
+
 namespace math_utils = zxing::common::detector::math_utils;
-                
+
 Detector::Detector(Ref<BitMatrix> image):
   image_(image),
   nbLayers_(0),
@@ -169,10 +170,10 @@ Detector::getMatrixCornerPoints(std::vector<Ref<Point> > bullEyeCornerPoints) {
   }
   Array< Ref<ResultPoint> >* array = new Array< Ref<ResultPoint> >();
   vector< Ref<ResultPoint> >& returnValue (array->values());
-  returnValue.push_back(Ref<ResultPoint>(new ResultPoint(targetax, targetay)));
-  returnValue.push_back(Ref<ResultPoint>(new ResultPoint(targetbx, targetby)));
-  returnValue.push_back(Ref<ResultPoint>(new ResultPoint(targetcx, targetcy)));
-  returnValue.push_back(Ref<ResultPoint>(new ResultPoint(targetdx, targetdy)));
+  returnValue.push_back(Ref<ResultPoint>(new ResultPoint(float(targetax), float(targetay))));
+  returnValue.push_back(Ref<ResultPoint>(new ResultPoint(float(targetbx), float(targetby))));
+  returnValue.push_back(Ref<ResultPoint>(new ResultPoint(float(targetcx), float(targetcy))));
+  returnValue.push_back(Ref<ResultPoint>(new ResultPoint(float(targetdx), float(targetdy))));
   return ArrayRef< Ref<ResultPoint> >(array);
 }
         
@@ -208,6 +209,7 @@ void Detector::correctParameterData(Ref<zxing::BitArray> parameterData, bool com
     ReedSolomonDecoder rsDecoder(GenericGF::AZTEC_PARAM);
     rsDecoder.decode(parameterWords, numECCodewords);
   } catch (ReedSolomonException const& ignored) {
+    (void)ignored;
     // std::printf("reed solomon decoding failed\n");
     throw ReaderException("failed to decode parameter data");
   }
@@ -311,6 +313,7 @@ Ref<Point> Detector::getMatrixCenter() {
     pointD = cornerPoints[3];
                 
   } catch (NotFoundException const& e) {
+    (void)e;
                 
     int cx = image_->getWidth() / 2;
     int cy = image_->getHeight() / 2;
@@ -334,6 +337,7 @@ Ref<Point> Detector::getMatrixCenter() {
     pointD = cornerPoints[3];
                 
   } catch (NotFoundException const& e) {
+    (void)e;
                 
     pointA = getFirstDifferent(Ref<Point>(new Point(cx+7, cy-7)), false,  1, -1)->toResultPoint();
     pointB = getFirstDifferent(Ref<Point>(new Point(cx+7, cy+7)), false,  1,  1)->toResultPoint();
@@ -425,11 +429,11 @@ Ref<BitArray> Detector::sampleLine(Ref<zxing::aztec::Point> p1, Ref<zxing::aztec
             
   float d = distance(p1, p2);
   float moduleSize = d / (size-1);
-  float dx = moduleSize * (p2->x - p1->x)/d;
-  float dy = moduleSize * (p2->y - p1->y)/d;
-            
-  float px = p1->x;
-  float py = p1->y;
+  float dx = moduleSize * float(p2->x - p1->x)/d;
+  float dy = moduleSize * float(p2->y - p1->y)/d;
+  
+  float px = float(p1->x);
+  float py = float(p1->y);
             
   for (int i = 0; i < size; i++) {
     if (image_->get(math_utils::round(px), math_utils::round(py))) res->set(i);
@@ -486,8 +490,8 @@ int Detector::getColor(Ref<zxing::aztec::Point> p1, Ref<zxing::aztec::Point> p2)
             
   int error = 0;
             
-  float px = p1->x;
-  float py = p1->y;
+  float px = float(p1->x);
+  float py = float(p1->y);
             
   bool colorModel = image_->get(p1->x, p1->y);
             

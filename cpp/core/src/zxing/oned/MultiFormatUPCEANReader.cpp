@@ -35,6 +35,10 @@ using zxing::Ref;
 using zxing::Result;
 using zxing::oned::MultiFormatUPCEANReader;
     
+// VC++
+using zxing::DecodeHints;
+using zxing::BitArray;
+
 MultiFormatUPCEANReader::MultiFormatUPCEANReader(DecodeHints hints) : readers() {
   if (hints.containsFormat(BarcodeFormat::EAN_13)) {
     readers.push_back(Ref<UPCEANReader>(new EAN13Reader()));
@@ -66,6 +70,7 @@ Ref<Result> MultiFormatUPCEANReader::decodeRow(int rowNumber, Ref<BitArray> row)
     try {
       result = reader->decodeRow(rowNumber, row, startGuardPattern);
     } catch (ReaderException const& ignored) {
+      (void)ignored;
       continue;
     }
 

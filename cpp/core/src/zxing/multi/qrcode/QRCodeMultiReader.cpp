@@ -44,7 +44,8 @@ std::vector<Ref<Result> > QRCodeMultiReader::decodeMultiple(Ref<BinaryBitmap> im
       // result->putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, decoderResult->getECLevel().toString());
       results.push_back(result);
     } catch (ReaderException const& re) {
-    // ignore and continue 
+      (void)re;
+      // ignore and continue 
     }
   }
   if (results.empty()){

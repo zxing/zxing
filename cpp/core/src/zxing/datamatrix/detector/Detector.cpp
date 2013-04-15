@@ -23,7 +23,7 @@
 #include <zxing/ResultPoint.h>
 #include <zxing/common/GridSampler.h>
 #include <zxing/datamatrix/detector/Detector.h>
-#include <zxing/common/detector/math_utils.h>
+#include <zxing/common/detector/MathUtils.h>
 #include <zxing/NotFoundException.h>
 #include <sstream>
 #include <cstdlib>
