@@ -13,11 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 package com.google.zxing.pdf417.detector;
 
 import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitMatrix;
+
+import java.util.List;
 
 /**
  * Ideally, this class would extend DetectorResult. This is currently not possible, because TransformableBitMatrix doesn't have a
@@ -28,24 +30,18 @@ import com.google.zxing.common.BitMatrix;
 public class PDF417DetectorResult {
 
   private final BitMatrix bits;
-  private final ResultPoint[] points;
-  private final float codewordWidth;
+  private final List<ResultPoint[]> points;
 
-  public PDF417DetectorResult(BitMatrix bits, ResultPoint[] points, float codewordWidth) {
+  public PDF417DetectorResult(BitMatrix bits, List<ResultPoint[]> points) {
     this.bits = bits;
     this.points = points;
-    this.codewordWidth = codewordWidth;
   }
 
   public final BitMatrix getBits() {
     return bits;
   }
 
-  public final ResultPoint[] getPoints() {
+  public final List<ResultPoint[]> getPoints() {
     return points;
-  }
-
-  public float getCodewordWidth() {
-    return codewordWidth;
   }
 }

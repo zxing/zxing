@@ -23,12 +23,15 @@ import com.google.zxing.DecodeHintType;
 import com.google.zxing.FormatException;
 import com.google.zxing.NotFoundException;
 import com.google.zxing.Reader;
+import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
+import com.google.zxing.ResultMetadataType;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.common.AdjustableBitMatrix;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.DecoderResult;
 import com.google.zxing.common.DetectorResult;
+import com.google.zxing.multi.MultipleBarcodeReader;
 import com.google.zxing.pdf417.decoder.Decoder;
 import com.google.zxing.pdf417.decoder.PDF417ScanningDecoder;
 import com.google.zxing.pdf417.decoder.SimpleLog;
@@ -37,6 +40,8 @@ import com.google.zxing.pdf417.detector.Detector;
 import com.google.zxing.pdf417.detector.DetectorNew;
 import com.google.zxing.pdf417.detector.PDF417DetectorResult;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -44,7 +49,7 @@ import java.util.Map;
  *
  * @author SITA Lab (kevin.osullivan@sita.aero)
  */
-public final class PDF417Reader implements Reader {
+public final class PDF417Reader implements Reader, MultipleBarcodeReader {
 
   private static final ResultPoint[] NO_POINTS = new ResultPoint[0];
 
@@ -65,73 +70,112 @@ public final class PDF417Reader implements Reader {
   @Override
   public Result decode(BinaryBitmap image, Map<DecodeHintType,?> hints) throws NotFoundException, FormatException,
       ChecksumException {
-    DecoderResult decoderResult;
-    ResultPoint[] points;
-    boolean old = false;
-    if (hints != null && hints.containsKey(DecodeHintType.PURE_BARCODE)) {
-      BitMatrix bits = extractPureBits(image.getBlackMatrix());
-      decoderResult = decoder.decode(bits);
-      points = NO_POINTS;
-    } else if (old) {
-      DetectorResult detectorResult = new Detector(image).detect();
-      decoderResult = decoder.decode(detectorResult.getBits());
-      points = detectorResult.getPoints();
-    } else {
-      decoderResult = null;
-      points = null;
-      if (!(image.getBlackMatrix() instanceof AdjustableBitMatrix)) {
-        SimpleLog.log(LEVEL.WARNING, "Warning, not using AdjustableBitMatrix");
-        PDF417DetectorResult detectorResult = new DetectorNew(image).detect(hints);
-        points = detectorResult.getPoints();
-        decoderResult = PDF417ScanningDecoder.decode(detectorResult.getBits(), points[4], points[5], points[6],
-            points[7], getMinCodewordWidth(points), getMaxCodewordWidth(points));
+    Result[] result = decode(image, hints, false);
+    if (result == null || result.length == 0 || result[0] == null) {
+      throw NotFoundException.getNotFoundInstance();
+    }
+    return result[0];
+  }
+
+  @Override
+  public Result[] decodeMultiple(BinaryBitmap image) throws NotFoundException {
+    return decodeMultiple(image, null);
+  }
+
+  @Override
+  public Result[] decodeMultiple(BinaryBitmap image, Map<DecodeHintType,?> hints) throws NotFoundException {
+    try {
+      return decode(image, hints, true);
+    } catch (ReaderException e) {
+      throw NotFoundException.getNotFoundInstance();
+    }
+  }
+
+  private Result[] decode(BinaryBitmap image, Map<DecodeHintType,?> hints, boolean multiple) throws NotFoundException,
+      FormatException, ChecksumException {
+    List<Result> results = new ArrayList<Result>();
+    do {
+      boolean old = false;
+      if (hints != null && hints.containsKey(DecodeHintType.PURE_BARCODE)) {
+        BitMatrix bits = extractPureBits(image.getBlackMatrix());
+        DecoderResult decoderResult = decoder.decode(bits);
+        results.add(new Result(decoderResult.getText(), decoderResult.getRawBytes(), NO_POINTS, BarcodeFormat.PDF_417));
+      } else if (old) {
+        DetectorResult detectorResult = new Detector(image).detect();
+        DecoderResult decoderResult = decoder.decode(detectorResult.getBits());
+        results.add(new Result(decoderResult.getText(), decoderResult.getRawBytes(), detectorResult.getPoints(),
+            BarcodeFormat.PDF_417));
       } else {
-        AdjustableBitMatrix bitMatrix = (AdjustableBitMatrix) image.getBlackMatrix();
-        int estimatedBlackPoint = bitMatrix.getBlackpoint();
-        int maxRange = Math.min(estimatedBlackPoint, 255 - estimatedBlackPoint);
-        if (bitMatrix.isBlackWhite()) {
-          maxRange = 1;
-        }
-        int range = 0;
-        boolean firstTime = true;
-        while (range < maxRange) {
-          int blackPoint;
-          if (firstTime) {
-            blackPoint = estimatedBlackPoint + range;
-          } else {
-            blackPoint = estimatedBlackPoint - range;
+        if (!(image.getBlackMatrix() instanceof AdjustableBitMatrix)) {
+          SimpleLog.log(LEVEL.WARNING, "Warning, not using AdjustableBitMatrix");
+          PDF417DetectorResult detectorResult = new DetectorNew(image).detect(multiple);
+          List<ResultPoint[]> barcodes = detectorResult.getPoints();
+          for (ResultPoint[] points : barcodes) {
+            PDF417DecoderResult decoderResult = PDF417ScanningDecoder.decode(detectorResult.getBits(), points[4],
+                points[5], points[6], points[7], getMinCodewordWidth(points), getMaxCodewordWidth(points));
+            if (decoderResult == null) {
+              throw NotFoundException.getNotFoundInstance();
+            }
+            Result result = new Result(decoderResult.getText(), decoderResult.getRawBytes(), points,
+                BarcodeFormat.PDF_417);
+            result.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, decoderResult.getECLevel());
+            result.putMetadata(ResultMetadataType.OTHER, decoderResult.getResultMetadata());
           }
-          bitMatrix.setBlackpoint(blackPoint);
-          try {
-            SimpleLog.log(LEVEL.DEVEL, "Blackpoint: " + blackPoint);
-            PDF417DetectorResult detectorResult = new DetectorNew(image).detect(hints);
-            points = detectorResult.getPoints();
-            decoderResult = PDF417ScanningDecoder.decode(image.getBlackMatrix(), points[4], points[5], points[6],
-                points[7], getMinCodewordWidth(points), getMaxCodewordWidth(points));
-            break;
-          } catch (FormatException e) {
-            //System.out.println("Format Exception");
-          } catch (ChecksumException e) {
-            SimpleLog.log(LEVEL.DEVEL, "Checksum Exception");
-          } catch (NotFoundException e) {
-            //System.out.println("NotFound Exception");
-          } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-          }
-          if (range == 0 || !firstTime) {
-            range++;
-            firstTime = true;
-          } else if (firstTime) {
-            firstTime = false;
-          }
+        } else {
+          results = decodeAdjustableBitMatrix(image, multiple);
         }
       }
-      if (decoderResult == null) {
-        throw NotFoundException.getNotFoundInstance();
+
+    } while (multiple);
+    return results.toArray(new Result[results.size()]);
+  }
+
+  private List<Result> decodeAdjustableBitMatrix(BinaryBitmap image, boolean multiple) throws NotFoundException {
+    List<Result> result = new ArrayList<Result>();
+    AdjustableBitMatrix bitMatrix = (AdjustableBitMatrix) image.getBlackMatrix();
+    DecoderResult decoderResult = null;
+    int estimatedBlackPoint = bitMatrix.getBlackpoint();
+    int maxRange = Math.min(estimatedBlackPoint, 255 - estimatedBlackPoint);
+    if (bitMatrix.isBlackWhite()) {
+      maxRange = 1;
+    }
+    int range = 0;
+    boolean firstTime = true;
+    while (range < maxRange) {
+      int blackPoint;
+      if (firstTime) {
+        blackPoint = estimatedBlackPoint + range;
+      } else {
+        blackPoint = estimatedBlackPoint - range;
+      }
+      bitMatrix.setBlackpoint(blackPoint);
+      try {
+        SimpleLog.log(LEVEL.DEVEL, "Blackpoint: " + blackPoint);
+        PDF417DetectorResult detectorResult = new DetectorNew(image).detect(multiple);
+        for (ResultPoint[] points : detectorResult.getPoints()) {
+          decoderResult = PDF417ScanningDecoder.decode(image.getBlackMatrix(), points[4], points[5], points[6],
+              points[7], getMinCodewordWidth(points), getMaxCodewordWidth(points));
+          result.add(new Result(decoderResult.getText(), decoderResult.getRawBytes(), points, BarcodeFormat.PDF_417));
+        }
+        break;
+      } catch (FormatException e) {
+        //System.out.println("Format Exception");
+      } catch (ChecksumException e) {
+        SimpleLog.log(LEVEL.DEVEL, "Checksum Exception");
+      } catch (NotFoundException e) {
+        //System.out.println("NotFound Exception");
+      } catch (Exception e) {
+        e.printStackTrace();
+        throw new RuntimeException(e);
+      }
+      if (range == 0 || !firstTime) {
+        range++;
+        firstTime = true;
+      } else if (firstTime) {
+        firstTime = false;
       }
     }
-    return new Result(decoderResult.getText(), decoderResult.getRawBytes(), points, BarcodeFormat.PDF_417);
+    return result;
   }
 
   private void printPoints(ResultPoint[] points) {
@@ -295,5 +339,4 @@ public final class PDF417Reader implements Reader {
     }
     return end;
   }
-
 }

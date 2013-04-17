@@ -21,7 +21,6 @@ import com.google.zxing.FormatException;
 import com.google.zxing.NotFoundException;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitMatrix;
-import com.google.zxing.common.DecoderResult;
 import com.google.zxing.pdf417.PDF417Common;
 import com.google.zxing.pdf417.PDF417DecoderResult;
 import com.google.zxing.pdf417.decoder.SimpleLog.LEVEL;
@@ -40,10 +39,11 @@ public final class PDF417ScanningDecoder {
   private static final int MIN_BARCODE_ROWS = 3;
   private static final int MAX_BARCODE_ROWS = 90;
 
-  public static DecoderResult decode(BitMatrix image, final ResultPoint imageTopLeft,
-                                     final ResultPoint imageBottomLeft, final ResultPoint imageTopRight,
-                                     final ResultPoint imageBottomRight, int minCodewordWidth, int maxCodewordWidth)
-      throws NotFoundException, FormatException, ChecksumException {
+  public static PDF417DecoderResult decode(BitMatrix image, final ResultPoint imageTopLeft,
+                                           final ResultPoint imageBottomLeft, final ResultPoint imageTopRight,
+                                           final ResultPoint imageBottomRight, int minCodewordWidth,
+                                           int maxCodewordWidth) throws NotFoundException, FormatException,
+      ChecksumException {
     BoundingBox boundingBox = new BoundingBox(image, imageTopLeft, imageBottomLeft, imageTopRight, imageBottomRight);
     DetectionResultColumn leftRowIndicatorColumn = null;
     DetectionResultColumn rightRowIndicatorColumn = null;
@@ -135,7 +135,7 @@ public final class PDF417ScanningDecoder {
     return rowIndicatorColumn;
   }
 
-  private static DecoderResult createDecoderResult(DetectionResult detectionResult) throws NotFoundException,
+  private static PDF417DecoderResult createDecoderResult(DetectionResult detectionResult) throws NotFoundException,
       FormatException, ChecksumException {
     BarcodeMatrix barcodeMatrix = createBarcodeMatrix(detectionResult);
     SimpleLog.log(LEVEL.DEVEL, barcodeMatrix);
@@ -402,8 +402,8 @@ public final class PDF417ScanningDecoder {
     return result;
   }
 
-  public static DecoderResult decodeCodewords(int[] codewords, int ecLevel, int[] erasures) throws FormatException,
-      ChecksumException {
+  public static PDF417DecoderResult decodeCodewords(int[] codewords, int ecLevel, int[] erasures)
+      throws FormatException, ChecksumException {
     if (codewords.length == 0) {
       throw FormatException.getFormatInstance();
     }

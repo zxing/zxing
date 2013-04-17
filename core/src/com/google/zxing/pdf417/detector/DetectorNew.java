@@ -26,9 +26,10 @@ import com.google.zxing.common.BitArray;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.GridSampler;
 import com.google.zxing.common.PerspectiveTransform;
-import com.google.zxing.pdf417.PDF417Common;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -53,9 +54,11 @@ public final class DetectorNew {
   private static final int[] START_PATTERN = { 8, 1, 1, 1, 1, 1, 1, 3 };
   // 1111111 0 1 000 1 0 1 00 1
   private static final int[] STOP_PATTERN = { 7, 1, 1, 3, 1, 1, 1, 2, 1 };
-  private static final int MODULE_COUNT_STOP_PATTERN = PDF417Common.getBitCountSum(STOP_PATTERN);
   private static final int MAX_PIXEL_DRIFT = 3;
-  private static final int SKIPPED_ROW_COUNT_MAX = 50;
+  private static final int SKIPPED_ROW_COUNT_MAX = 25;
+  // A PDF471 barcode should have at least 3 rows, with each row being >= 3 times the module width. Therefore it should be at least
+  // 9 pixels tall. To be conservative, we use about half the size to ensure we don't miss it.
+  private static final int ROW_STEP = 5;
 
   private final BinaryBitmap image;
 
@@ -71,52 +74,88 @@ public final class DetectorNew {
    * @throws ChecksumException 
    * @throws FormatException 
    */
-  public PDF417DetectorResult detect() throws NotFoundException, FormatException, ChecksumException {
-    return detect(null);
+  public PDF417DetectorResult detect(boolean multiple) throws NotFoundException, FormatException, ChecksumException {
+    return detect(null, multiple);
   }
 
   /**
    * <p>Detects a PDF417 Code in an image. Only checks 0 and 180 degree rotations.</p>
    *
    * @param hints optional hints to detector
+   * @param multiple 
    * @return {@link PDF417DetectorResult} encapsulating results of detecting a PDF417 Code
    * @throws NotFoundException if no PDF417 Code can be found
    * @throws ChecksumException 
    * @throws FormatException 
    */
-  public PDF417DetectorResult detect(Map<DecodeHintType,?> hints) throws NotFoundException, FormatException,
-      ChecksumException {
-    boolean tryHarder = hints != null && hints.containsKey(DecodeHintType.TRY_HARDER);
-    // Fetch the 1 bit matrix once up front.
-    // TODO detection improvement, tryHarder could try several different luminance thresholds or even different binarizers
-    // Try to find the vertices assuming the image is upright.
+  public PDF417DetectorResult detect(Map<DecodeHintType,?> hints, boolean multiple) throws NotFoundException,
+      FormatException, ChecksumException {
+    // TODO detection improvement, tryHarder could try several different luminance thresholds/blackpoints or even 
+    // different binarizers
+    //boolean tryHarder = hints != null && hints.containsKey(DecodeHintType.TRY_HARDER);
+
     BitMatrix bitMatrix = image.getBlackMatrix();
-    ResultPoint[] vertices = findVertices(bitMatrix, tryHarder);
-    if (vertices[0] == null && vertices[3] == null) {
-      // Maybe the image is rotated 180 degrees?
+    List<ResultPoint[]> barcodeCoordinates = new ArrayList<ResultPoint[]>();
+    detect(bitMatrix, barcodeCoordinates, multiple);
+    if (barcodeCoordinates.isEmpty()) {
       rotate180(bitMatrix);
-      vertices = findVertices(bitMatrix, tryHarder);
+      detect(bitMatrix, barcodeCoordinates, multiple);
     }
-
-    if (vertices[0] == null && vertices[3] == null) {
-      throw NotFoundException.getNotFoundInstance();
-    }
-
-    float codewordWidth = computeCodewordWidthFromStartStopPattern(vertices);
-    if (codewordWidth < PDF417Common.MODULES_IN_CODEWORD) {
-      throw NotFoundException.getNotFoundInstance();
-    }
-
-    return new PDF417DetectorResult(bitMatrix, vertices, codewordWidth);
+    return new PDF417DetectorResult(bitMatrix, barcodeCoordinates);
   }
 
-  // introduces a lot of rounding errors
+  private void detect(BitMatrix bitMatrix, List<ResultPoint[]> barcodeCoordinates, boolean multiple) {
+    int row = 0;
+    int column = 0;
+    boolean foundBarcodeInRow = false;
+    while (row < image.getHeight()) {
+      ResultPoint[] vertices = findVertices(bitMatrix, row, column);
+
+      if (vertices[0] == null && vertices[3] == null) {
+        if (!foundBarcodeInRow) {
+          // we didn't find any barcode so that's the end of searching 
+          break;
+        }
+        // we didn't find a barcode starting at the given column and row. Try again from the first column and slightly
+        // below the last barcode we found.
+        foundBarcodeInRow = false;
+        column = 0;
+        for (ResultPoint[] barcodeCoordinate : barcodeCoordinates) {
+          if (barcodeCoordinate[1] != null) {
+            row = (int) Math.max(row, barcodeCoordinate[1].getY());
+          }
+          if (barcodeCoordinate[3] != null) {
+            row = Math.max(row, (int) barcodeCoordinate[3].getY());
+          }
+        }
+        row += ROW_STEP;
+        continue;
+      }
+      foundBarcodeInRow = true;
+      barcodeCoordinates.add(vertices);
+      if (!multiple) {
+        break;
+      }
+      if (vertices[2] != null) {
+        column = (int) vertices[2].getX();
+        row = (int) vertices[2].getY();
+      } else {
+        column = (int) vertices[4].getX();
+        row = (int) vertices[4].getY();
+      }
+    }
+  }
+
+  // introduces rounding errors. Sometimes inverts/corrects the rounding errors created by rotating the test images
+  // in a similar fashion. So test cases might benefit, real life rotated images will not.
   private BitMatrix rotate180Old(BitMatrix bitMatrix, int width, int height) throws NotFoundException {
     PerspectiveTransform transform = PerspectiveTransform.quadrilateralToQuadrilateral(0.0f, 0.0f, width, 0.0f, 0.0f,
         height, width, height, width, height, 0.0f, height, width, 0.0f, 0.0f, 0.0f);
     return GridSampler.getInstance().sampleGrid(bitMatrix, width, height, transform);
   }
 
+  // The following could go to the BitMatrix class (maybe in a more efficient version using the BitMatrix internal
+  // data structures)
   protected static void rotate180(BitMatrix bitMatrix) throws NotFoundException {
     final int width = bitMatrix.getWidth();
     final int height = bitMatrix.getHeight();
@@ -158,39 +197,40 @@ public final class DetectorNew {
    */
   // TODO Add additional start position on image to support finding multiple barcodes in a single image
   // should probably search from left to right, then top to bottom
-  private static ResultPoint[] findVertices(BitMatrix matrix, boolean tryHarder) {
+  private static ResultPoint[] findVertices(BitMatrix matrix, int startRow, int startColumn) {
     int height = matrix.getHeight();
     int width = matrix.getWidth();
 
     ResultPoint[] result = new ResultPoint[8];
-    copyToResult(result, findRowsWithPattern(matrix, height, width, START_PATTERN), INDEXES_START_PATTERN);
+    copyToResult(result, findRowsWithPattern(matrix, height, width, startRow, startColumn, START_PATTERN),
+        INDEXES_START_PATTERN);
 
-    // TODO This should use the results from the start pattern and start the search in the same row after the 
-    // end of the starting pattern to support detection of several barcodes on a single image
-    copyToResult(result, findRowsWithPattern(matrix, height, width, STOP_PATTERN), INDEXES_STOP_PATTERN);
+    if (result[4] != null) {
+      startColumn = (int) result[4].getX();
+      startRow = (int) result[4].getY();
+    }
+    copyToResult(result, findRowsWithPattern(matrix, height, width, startRow, startColumn, STOP_PATTERN),
+        INDEXES_STOP_PATTERN);
     return result;
   }
 
-  private static void copyToResult(ResultPoint[] result, ResultPoint[] tmpResult, int[] indexesStartPattern) {
-    for (int i = 0; i < indexesStartPattern.length; i++) {
-      result[indexesStartPattern[i]] = tmpResult[i];
+  private static void copyToResult(ResultPoint[] result, ResultPoint[] tmpResult, int[] destinationIndexes) {
+    for (int i = 0; i < destinationIndexes.length; i++) {
+      result[destinationIndexes[i]] = tmpResult[i];
     }
   }
 
-  private static ResultPoint[] findRowsWithPattern(BitMatrix matrix, int height, int width, int[] pattern) {
+  private static ResultPoint[] findRowsWithPattern(BitMatrix matrix, int height, int width, int startRow,
+                                                   int startColumn, int[] pattern) {
     ResultPoint[] result = new ResultPoint[4];
-    // A PDF471 barcode should have at least 3 rows, with each row being >= 3 times the module width. Therefore it should be at least
-    // 9 pixels tall.
-    int rowStep = 5;
+    int rowStep = ROW_STEP;
     boolean found = false;
     int[] counters = new int[pattern.length];
-    // First row that contains pattern
-    int startRow = 0;
     for (; startRow < height; startRow += rowStep) {
-      int[] loc = findGuardPattern(matrix, 0, startRow, width, false, pattern, counters);
+      int[] loc = findGuardPattern(matrix, startColumn, startRow, width, false, pattern, counters);
       if (loc != null) {
         while (startRow > 0) {
-          int[] previousRowLoc = findGuardPattern(matrix, 0, --startRow, width, false, pattern, counters);
+          int[] previousRowLoc = findGuardPattern(matrix, startColumn, --startRow, width, false, pattern, counters);
           if (previousRowLoc != null) {
             loc = previousRowLoc;
           } else {
@@ -225,60 +265,6 @@ public final class DetectorNew {
       stopRow -= skippedRowCount;
       result[2] = new ResultPoint(previousRowLoc[0], stopRow);
       result[3] = new ResultPoint(previousRowLoc[1], stopRow);
-    }
-    return result;
-  }
-
-  private static float computeCodewordWidthFromPattern(ResultPoint[] vertices) throws NotFoundException {
-    return (ResultPoint.distance(vertices[0], vertices[1]) + ResultPoint.distance(vertices[2], vertices[3])) / 2.0f;
-  }
-
-  /**
-   * <p>Estimates module size (pixels in a module) based on the Start and End
-   * finder patterns.</p>
-   *
-   * @param vertices an array of vertices:
-   *           vertices[0] x, y top left barcode
-   *           vertices[1] x, y bottom left barcode
-   *           vertices[2] x, y top right barcode
-   *           vertices[3] x, y bottom right barcode
-   *           vertices[4] x, y top left codeword area
-   *           vertices[5] x, y bottom left codeword area
-   *           vertices[6] x, y top right codeword area
-   *           vertices[7] x, y bottom right codeword area
-   * @return the module size.
-   * @throws NotFoundException 
-   */
-  private static float computeCodewordWidthFromStartStopPattern(ResultPoint[] vertices) throws NotFoundException {
-    ResultPoint[] startPatternCoordinates = getPatternCoordinates(vertices, INDEXES_START_PATTERN);
-    ResultPoint[] endPatternCoordinates = getPatternCoordinates(vertices, INDEXES_STOP_PATTERN);
-    if (startPatternCoordinates == null && endPatternCoordinates == null) {
-      throw NotFoundException.getNotFoundInstance();
-    }
-
-    float startPatternWidth = 0;
-    float endPatternWidth = 0;
-    if (startPatternCoordinates != null) {
-      endPatternWidth = startPatternWidth = computeCodewordWidthFromPattern(startPatternCoordinates);
-    }
-    if (endPatternCoordinates != null) {
-      endPatternWidth = computeCodewordWidthFromPattern(endPatternCoordinates) * PDF417Common.MODULES_IN_CODEWORD /
-          MODULE_COUNT_STOP_PATTERN;
-      if (startPatternCoordinates == null) {
-        startPatternWidth = endPatternWidth;
-      }
-    }
-
-    return (startPatternWidth + endPatternWidth) / 2f;
-  }
-
-  private static ResultPoint[] getPatternCoordinates(ResultPoint[] vertices, int[] indexes) {
-    ResultPoint[] result = new ResultPoint[indexes.length];
-    for (int i = 0; i < indexes.length; i++) {
-      if (vertices[indexes[i]] == null) {
-        return null;
-      }
-      result[i] = vertices[indexes[i]];
     }
     return result;
   }
