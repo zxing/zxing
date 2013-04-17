@@ -120,6 +120,7 @@ public final class PDF417Reader implements Reader, MultipleBarcodeReader {
                 BarcodeFormat.PDF_417);
             result.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, decoderResult.getECLevel());
             result.putMetadata(ResultMetadataType.OTHER, decoderResult.getResultMetadata());
+            results.add(result);
           }
         } else {
           results = decodeAdjustableBitMatrix(image, multiple);
