@@ -167,7 +167,6 @@
 		E534594611987396000CB77F /* Binarizer.h in Headers */ = {isa = PBXBuildFile; fileRef = E53458B811987396000CB77F /* Binarizer.h */; };
 		E534594711987396000CB77F /* BinaryBitmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E53458B911987396000CB77F /* BinaryBitmap.cpp */; };
 		E534594811987396000CB77F /* BinaryBitmap.h in Headers */ = {isa = PBXBuildFile; fileRef = E53458BA11987396000CB77F /* BinaryBitmap.h */; };
-		E534594911987396000CB77F /* Array.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E53458BC11987396000CB77F /* Array.cpp */; };
 		E534594A11987396000CB77F /* Array.h in Headers */ = {isa = PBXBuildFile; fileRef = E53458BD11987396000CB77F /* Array.h */; };
 		E534594B11987396000CB77F /* BitArray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E53458BE11987396000CB77F /* BitArray.cpp */; };
 		E534594C11987396000CB77F /* BitArray.h in Headers */ = {isa = PBXBuildFile; fileRef = E53458BF11987396000CB77F /* BitArray.h */; };
@@ -175,14 +174,11 @@
 		E534594E11987396000CB77F /* BitMatrix.h in Headers */ = {isa = PBXBuildFile; fileRef = E53458C111987396000CB77F /* BitMatrix.h */; };
 		E534594F11987396000CB77F /* BitSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E53458C211987396000CB77F /* BitSource.cpp */; };
 		E534595011987396000CB77F /* BitSource.h in Headers */ = {isa = PBXBuildFile; fileRef = E53458C311987396000CB77F /* BitSource.h */; };
-		E534595111987396000CB77F /* Counted.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E53458C411987396000CB77F /* Counted.cpp */; };
 		E534595211987396000CB77F /* Counted.h in Headers */ = {isa = PBXBuildFile; fileRef = E53458C511987396000CB77F /* Counted.h */; };
 		E534595311987396000CB77F /* DecoderResult.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E53458C611987396000CB77F /* DecoderResult.cpp */; };
 		E534595411987396000CB77F /* DecoderResult.h in Headers */ = {isa = PBXBuildFile; fileRef = E53458C711987396000CB77F /* DecoderResult.h */; };
 		E534595511987396000CB77F /* DetectorResult.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E53458C811987396000CB77F /* DetectorResult.cpp */; };
 		E534595611987396000CB77F /* DetectorResult.h in Headers */ = {isa = PBXBuildFile; fileRef = E53458C911987396000CB77F /* DetectorResult.h */; };
-		E534595711987396000CB77F /* EdgeDetector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E53458CA11987396000CB77F /* EdgeDetector.cpp */; };
-		E534595811987396000CB77F /* EdgeDetector.h in Headers */ = {isa = PBXBuildFile; fileRef = E53458CB11987396000CB77F /* EdgeDetector.h */; };
 		E534595911987396000CB77F /* GlobalHistogramBinarizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E53458CC11987396000CB77F /* GlobalHistogramBinarizer.cpp */; };
 		E534595A11987396000CB77F /* GlobalHistogramBinarizer.h in Headers */ = {isa = PBXBuildFile; fileRef = E53458CD11987396000CB77F /* GlobalHistogramBinarizer.h */; };
 		E534595B11987396000CB77F /* GridSampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E53458CE11987396000CB77F /* GridSampler.cpp */; };
@@ -212,8 +208,6 @@
 		E534597911987396000CB77F /* CornerPoint.h in Headers */ = {isa = PBXBuildFile; fileRef = E53458F011987396000CB77F /* CornerPoint.h */; };
 		E534597A11987396000CB77F /* Detector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E53458F111987396000CB77F /* Detector.cpp */; };
 		E534597B11987396000CB77F /* Detector.h in Headers */ = {isa = PBXBuildFile; fileRef = E53458F211987396000CB77F /* Detector.h */; };
-		E534597C11987396000CB77F /* MonochromeRectangleDetector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E53458F311987396000CB77F /* MonochromeRectangleDetector.cpp */; };
-		E534597D11987396000CB77F /* MonochromeRectangleDetector.h in Headers */ = {isa = PBXBuildFile; fileRef = E53458F411987396000CB77F /* MonochromeRectangleDetector.h */; };
 		E534597E11987396000CB77F /* Version.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E53458F511987396000CB77F /* Version.cpp */; };
 		E534597F11987396000CB77F /* Version.h in Headers */ = {isa = PBXBuildFile; fileRef = E53458F611987396000CB77F /* Version.h */; };
 		E534598011987396000CB77F /* Exception.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E53458F711987396000CB77F /* Exception.cpp */; };
@@ -270,8 +264,6 @@
 		E53459B311987396000CB77F /* FinderPatternFinder.h in Headers */ = {isa = PBXBuildFile; fileRef = E534592E11987396000CB77F /* FinderPatternFinder.h */; };
 		E53459B411987396000CB77F /* FinderPatternInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E534592F11987396000CB77F /* FinderPatternInfo.cpp */; };
 		E53459B511987396000CB77F /* FinderPatternInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = E534593011987396000CB77F /* FinderPatternInfo.h */; };
-		E53459B611987396000CB77F /* QREdgeDetector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E534593111987396000CB77F /* QREdgeDetector.cpp */; };
-		E53459B711987396000CB77F /* QREdgeDetector.h in Headers */ = {isa = PBXBuildFile; fileRef = E534593211987396000CB77F /* QREdgeDetector.h */; };
 		E53459B811987396000CB77F /* ErrorCorrectionLevel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E534593311987396000CB77F /* ErrorCorrectionLevel.cpp */; };
 		E53459B911987396000CB77F /* ErrorCorrectionLevel.h in Headers */ = {isa = PBXBuildFile; fileRef = E534593411987396000CB77F /* ErrorCorrectionLevel.h */; };
 		E53459BA11987396000CB77F /* FormatInformation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E534593511987396000CB77F /* FormatInformation.cpp */; };
@@ -464,7 +456,6 @@
 		E53458B811987396000CB77F /* Binarizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Binarizer.h; sourceTree = "<group>"; };
 		E53458B911987396000CB77F /* BinaryBitmap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BinaryBitmap.cpp; sourceTree = "<group>"; };
 		E53458BA11987396000CB77F /* BinaryBitmap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BinaryBitmap.h; sourceTree = "<group>"; };
-		E53458BC11987396000CB77F /* Array.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Array.cpp; sourceTree = "<group>"; };
 		E53458BD11987396000CB77F /* Array.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Array.h; sourceTree = "<group>"; };
 		E53458BE11987396000CB77F /* BitArray.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BitArray.cpp; sourceTree = "<group>"; };
 		E53458BF11987396000CB77F /* BitArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BitArray.h; sourceTree = "<group>"; };
@@ -472,14 +463,11 @@
 		E53458C111987396000CB77F /* BitMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BitMatrix.h; sourceTree = "<group>"; };
 		E53458C211987396000CB77F /* BitSource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BitSource.cpp; sourceTree = "<group>"; };
 		E53458C311987396000CB77F /* BitSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BitSource.h; sourceTree = "<group>"; };
-		E53458C411987396000CB77F /* Counted.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Counted.cpp; sourceTree = "<group>"; };
 		E53458C511987396000CB77F /* Counted.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Counted.h; sourceTree = "<group>"; };
 		E53458C611987396000CB77F /* DecoderResult.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DecoderResult.cpp; sourceTree = "<group>"; };
 		E53458C711987396000CB77F /* DecoderResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DecoderResult.h; sourceTree = "<group>"; };
 		E53458C811987396000CB77F /* DetectorResult.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DetectorResult.cpp; sourceTree = "<group>"; };
 		E53458C911987396000CB77F /* DetectorResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetectorResult.h; sourceTree = "<group>"; };
-		E53458CA11987396000CB77F /* EdgeDetector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EdgeDetector.cpp; sourceTree = "<group>"; };
-		E53458CB11987396000CB77F /* EdgeDetector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EdgeDetector.h; sourceTree = "<group>"; };
 		E53458CC11987396000CB77F /* GlobalHistogramBinarizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GlobalHistogramBinarizer.cpp; sourceTree = "<group>"; };
 		E53458CD11987396000CB77F /* GlobalHistogramBinarizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GlobalHistogramBinarizer.h; sourceTree = "<group>"; };
 		E53458CE11987396000CB77F /* GridSampler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GridSampler.cpp; sourceTree = "<group>"; };
@@ -509,8 +497,6 @@
 		E53458F011987396000CB77F /* CornerPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CornerPoint.h; sourceTree = "<group>"; };
 		E53458F111987396000CB77F /* Detector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Detector.cpp; sourceTree = "<group>"; };
 		E53458F211987396000CB77F /* Detector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Detector.h; sourceTree = "<group>"; };
-		E53458F311987396000CB77F /* MonochromeRectangleDetector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MonochromeRectangleDetector.cpp; sourceTree = "<group>"; };
-		E53458F411987396000CB77F /* MonochromeRectangleDetector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MonochromeRectangleDetector.h; sourceTree = "<group>"; };
 		E53458F511987396000CB77F /* Version.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Version.cpp; sourceTree = "<group>"; };
 		E53458F611987396000CB77F /* Version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Version.h; sourceTree = "<group>"; };
 		E53458F711987396000CB77F /* Exception.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Exception.cpp; sourceTree = "<group>"; };
@@ -567,8 +553,6 @@
 		E534592E11987396000CB77F /* FinderPatternFinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FinderPatternFinder.h; sourceTree = "<group>"; };
 		E534592F11987396000CB77F /* FinderPatternInfo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FinderPatternInfo.cpp; sourceTree = "<group>"; };
 		E534593011987396000CB77F /* FinderPatternInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FinderPatternInfo.h; sourceTree = "<group>"; };
-		E534593111987396000CB77F /* QREdgeDetector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = QREdgeDetector.cpp; sourceTree = "<group>"; };
-		E534593211987396000CB77F /* QREdgeDetector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QREdgeDetector.h; sourceTree = "<group>"; };
 		E534593311987396000CB77F /* ErrorCorrectionLevel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ErrorCorrectionLevel.cpp; sourceTree = "<group>"; };
 		E534593411987396000CB77F /* ErrorCorrectionLevel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ErrorCorrectionLevel.h; sourceTree = "<group>"; };
 		E534593511987396000CB77F /* FormatInformation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FormatInformation.cpp; sourceTree = "<group>"; };
@@ -811,7 +795,6 @@
 				3B81AACC120F08170022E5D4 /* HybridBinarizer.h */,
 				3B81AAC7120F080D0022E5D4 /* GreyscaleLuminanceSource.cpp */,
 				3B81AAC8120F080D0022E5D4 /* GreyscaleLuminanceSource.h */,
-				E53458BC11987396000CB77F /* Array.cpp */,
 				E53458BD11987396000CB77F /* Array.h */,
 				E53458BE11987396000CB77F /* BitArray.cpp */,
 				E53458BF11987396000CB77F /* BitArray.h */,
@@ -819,14 +802,11 @@
 				E53458C111987396000CB77F /* BitMatrix.h */,
 				E53458C211987396000CB77F /* BitSource.cpp */,
 				E53458C311987396000CB77F /* BitSource.h */,
-				E53458C411987396000CB77F /* Counted.cpp */,
 				E53458C511987396000CB77F /* Counted.h */,
 				E53458C611987396000CB77F /* DecoderResult.cpp */,
 				E53458C711987396000CB77F /* DecoderResult.h */,
 				E53458C811987396000CB77F /* DetectorResult.cpp */,
 				E53458C911987396000CB77F /* DetectorResult.h */,
-				E53458CA11987396000CB77F /* EdgeDetector.cpp */,
-				E53458CB11987396000CB77F /* EdgeDetector.h */,
 				E53458CC11987396000CB77F /* GlobalHistogramBinarizer.cpp */,
 				E53458CD11987396000CB77F /* GlobalHistogramBinarizer.h */,
 				E53458CE11987396000CB77F /* GridSampler.cpp */,
@@ -893,8 +873,6 @@
 				E53458F011987396000CB77F /* CornerPoint.h */,
 				E53458F111987396000CB77F /* Detector.cpp */,
 				E53458F211987396000CB77F /* Detector.h */,
-				E53458F311987396000CB77F /* MonochromeRectangleDetector.cpp */,
-				E53458F411987396000CB77F /* MonochromeRectangleDetector.h */,
 			);
 			path = detector;
 			sourceTree = "<group>";
@@ -985,8 +963,6 @@
 				E534592E11987396000CB77F /* FinderPatternFinder.h */,
 				E534592F11987396000CB77F /* FinderPatternInfo.cpp */,
 				E534593011987396000CB77F /* FinderPatternInfo.h */,
-				E534593111987396000CB77F /* QREdgeDetector.cpp */,
-				E534593211987396000CB77F /* QREdgeDetector.h */,
 			);
 			path = detector;
 			sourceTree = "<group>";
@@ -1111,7 +1087,6 @@
 				E534595211987396000CB77F /* Counted.h in Headers */,
 				E534595411987396000CB77F /* DecoderResult.h in Headers */,
 				E534595611987396000CB77F /* DetectorResult.h in Headers */,
-				E534595811987396000CB77F /* EdgeDetector.h in Headers */,
 				E534595A11987396000CB77F /* GlobalHistogramBinarizer.h in Headers */,
 				E534595C11987396000CB77F /* GridSampler.h in Headers */,
 				E534595E11987396000CB77F /* IllegalArgumentException.h in Headers */,
@@ -1127,7 +1102,6 @@
 				E534597711987396000CB77F /* Decoder.h in Headers */,
 				E534597911987396000CB77F /* CornerPoint.h in Headers */,
 				E534597B11987396000CB77F /* Detector.h in Headers */,
-				E534597D11987396000CB77F /* MonochromeRectangleDetector.h in Headers */,
 				E534597F11987396000CB77F /* Version.h in Headers */,
 				E534598111987396000CB77F /* Exception.h in Headers */,
 				E534598311987396000CB77F /* LuminanceSource.h in Headers */,
@@ -1156,7 +1130,6 @@
 				E53459B111987396000CB77F /* FinderPattern.h in Headers */,
 				E53459B311987396000CB77F /* FinderPatternFinder.h in Headers */,
 				E53459B511987396000CB77F /* FinderPatternInfo.h in Headers */,
-				E53459B711987396000CB77F /* QREdgeDetector.h in Headers */,
 				E53459B911987396000CB77F /* ErrorCorrectionLevel.h in Headers */,
 				E53459BB11987396000CB77F /* FormatInformation.h in Headers */,
 				E53459BD11987396000CB77F /* QRCodeReader.h in Headers */,
@@ -1353,14 +1326,11 @@
 				E534594311987396000CB77F /* BarcodeFormat.cpp in Sources */,
 				E534594511987396000CB77F /* Binarizer.cpp in Sources */,
 				E534594711987396000CB77F /* BinaryBitmap.cpp in Sources */,
-				E534594911987396000CB77F /* Array.cpp in Sources */,
 				E534594B11987396000CB77F /* BitArray.cpp in Sources */,
 				E534594D11987396000CB77F /* BitMatrix.cpp in Sources */,
 				E534594F11987396000CB77F /* BitSource.cpp in Sources */,
-				E534595111987396000CB77F /* Counted.cpp in Sources */,
 				E534595311987396000CB77F /* DecoderResult.cpp in Sources */,
 				E534595511987396000CB77F /* DetectorResult.cpp in Sources */,
-				E534595711987396000CB77F /* EdgeDetector.cpp in Sources */,
 				E534595911987396000CB77F /* GlobalHistogramBinarizer.cpp in Sources */,
 				E534595B11987396000CB77F /* GridSampler.cpp in Sources */,
 				E534595D11987396000CB77F /* IllegalArgumentException.cpp in Sources */,
@@ -1375,7 +1345,6 @@
 				E534597611987396000CB77F /* Decoder.cpp in Sources */,
 				E534597811987396000CB77F /* CornerPoint.cpp in Sources */,
 				E534597A11987396000CB77F /* Detector.cpp in Sources */,
-				E534597C11987396000CB77F /* MonochromeRectangleDetector.cpp in Sources */,
 				E534597E11987396000CB77F /* Version.cpp in Sources */,
 				E534598011987396000CB77F /* Exception.cpp in Sources */,
 				E534598211987396000CB77F /* LuminanceSource.cpp in Sources */,
@@ -1404,7 +1373,6 @@
 				E53459B011987396000CB77F /* FinderPattern.cpp in Sources */,
 				E53459B211987396000CB77F /* FinderPatternFinder.cpp in Sources */,
 				E53459B411987396000CB77F /* FinderPatternInfo.cpp in Sources */,
-				E53459B611987396000CB77F /* QREdgeDetector.cpp in Sources */,
 				E53459B811987396000CB77F /* ErrorCorrectionLevel.cpp in Sources */,
 				E53459BA11987396000CB77F /* FormatInformation.cpp in Sources */,
 				E53459BC11987396000CB77F /* QRCodeReader.cpp in Sources */,

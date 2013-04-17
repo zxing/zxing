@@ -189,9 +189,9 @@ ZXingWidgetControllerCallback(Decoder* _decoder) : decoder(_decoder) {}
           Ref<String> resultText(result->getText());
           const char *cString = resultText->getText().c_str();
           const ArrayRef<Ref<ResultPoint> > &resultPoints = result->getResultPoints();
-          points = [[NSMutableArray alloc ] initWithCapacity:resultPoints.size()];
+          points = [[NSMutableArray alloc ] initWithCapacity:resultPoints->size()];
           
-          for (int i = 0; i < resultPoints.size(); i++) {
+          for (int i = 0; i < resultPoints->size(); i++) {
             const Ref<ResultPoint> &rp = resultPoints[i];
             CGPoint p = CGPointMake(rp->getX(), rp->getY());
             [points addObject:[NSValue valueWithCGPoint:p]];
