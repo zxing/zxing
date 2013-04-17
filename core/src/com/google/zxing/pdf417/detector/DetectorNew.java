@@ -59,6 +59,7 @@ public final class DetectorNew {
   // A PDF471 barcode should have at least 3 rows, with each row being >= 3 times the module width. Therefore it should be at least
   // 9 pixels tall. To be conservative, we use about half the size to ensure we don't miss it.
   private static final int ROW_STEP = 5;
+  private static final int BARCODE_MIN_HEIGHT = 10;
 
   private final BinaryBitmap image;
 
@@ -244,10 +245,10 @@ public final class DetectorNew {
         break;
       }
     }
+    int stopRow = startRow + 1;
     // Last row of the current symbol that contains pattern
     if (found) {
       int skippedRowCount = 0;
-      int stopRow = startRow + 1;
       int[] previousRowLoc = new int[] { (int) result[0].getX(), (int) result[1].getX() };
       for (; stopRow < height; stopRow++) {
         int[] loc = findGuardPattern(matrix, previousRowLoc[0], stopRow, width, false, pattern, counters);
@@ -265,6 +266,11 @@ public final class DetectorNew {
       stopRow -= skippedRowCount;
       result[2] = new ResultPoint(previousRowLoc[0], stopRow);
       result[3] = new ResultPoint(previousRowLoc[1], stopRow);
+    }
+    if (stopRow - startRow < BARCODE_MIN_HEIGHT) {
+      for (int i = 0; i < result.length; i++) {
+        result[i] = null;
+      }
     }
     return result;
   }
