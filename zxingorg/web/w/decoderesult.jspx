@@ -49,7 +49,7 @@
         if (text == null) {
           text = "(Not applicable)";
         } else {
-          text = OutputUtils.escapeNewlineAsBR(StringEscapeUtils.escapeXml(text));
+          text = StringEscapeUtils.escapeXml(text);
         }
 
         byte[] rawBytes = result.getRawBytes();
@@ -64,13 +64,13 @@
         if (displayResult == null) {
           displayResult = "(Not applicable)";
         } else {
-          displayResult = OutputUtils.escapeNewlineAsBR(StringEscapeUtils.escapeXml(displayResult));
+          displayResult = StringEscapeUtils.escapeXml(displayResult);
         }
     </jsp:scriptlet>
     <table style="width:100%">
       <tr>
         <td>Raw text</td>
-        <td><jsp:expression>text</jsp:expression></td>
+        <td><pre style="margin:0"><jsp:expression>text</jsp:expression></pre></td>
       </tr>
       <tr>
         <td>Raw bytes</td>
@@ -86,7 +86,7 @@
       </tr>
       <tr>
         <td>Parsed Result</td>
-        <td><jsp:expression>displayResult</jsp:expression></td>
+        <td><pre style="margin:0"><jsp:expression>displayResult</jsp:expression></pre></td>
       </tr>
     </table>
     <hr/>
