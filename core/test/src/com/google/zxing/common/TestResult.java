@@ -16,7 +16,7 @@
 
 package com.google.zxing.common;
 
-final class TestResult {
+public final class TestResult {
 
   private final int mustPassCount;
   private final int tryHarderCount;
@@ -32,23 +32,23 @@ final class TestResult {
     this.rotation = rotation;
   }
 
-  int getMustPassCount() {
+  public int getMustPassCount() {
     return mustPassCount;
   }
 
-  int getTryHarderCount() {
+  public int getTryHarderCount() {
     return tryHarderCount;
   }
-  
-  int getMaxMisreads() {
+
+  public int getMaxMisreads() {
     return maxMisreads;
   }
-  
-  int getMaxTryHarderMisreads() {
+
+  public int getMaxTryHarderMisreads() {
     return maxTryHarderMisreads;
   }
 
-  float getRotation() {
+  public float getRotation() {
     return rotation;
   }
 

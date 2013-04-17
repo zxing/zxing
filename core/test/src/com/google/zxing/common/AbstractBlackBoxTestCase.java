@@ -58,10 +58,10 @@ import java.util.logging.Logger;
  */
 public abstract class AbstractBlackBoxTestCase extends Assert {
 
-  private static final Logger log = Logger.getLogger(AbstractBlackBoxTestCase.class.getSimpleName());
+  protected static final Logger log = Logger.getLogger(AbstractBlackBoxTestCase.class.getSimpleName());
 
-  private static final Charset UTF8 = Charset.forName("UTF-8");
-  private static final Charset ISO88591 = Charset.forName("ISO-8859-1");
+  protected static final Charset UTF8 = Charset.forName("UTF-8");
+  protected static final Charset ISO88591 = Charset.forName("ISO-8859-1");
   private static final FilenameFilter IMAGE_NAME_FILTER = new FilenameFilter() {
     @Override
     public boolean accept(File dir, String name) {
@@ -71,10 +71,10 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
     }
   };
 
-  private final File testBase;
+  protected final File testBase;
   private final Reader barcodeReader;
-  private final BarcodeFormat expectedFormat;
-  private final List<TestResult> testResults;
+  protected final BarcodeFormat expectedFormat;
+  protected final List<TestResult> testResults;
 
   protected AbstractBlackBoxTestCase(String testBasePathSuffix, Reader barcodeReader, BarcodeFormat expectedFormat) {
     // A little workaround to prevent aggravation in my IDE
@@ -109,7 +109,7 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
     testResults.add(new TestResult(mustPassCount, tryHarderCount, maxMisreads, maxTryHarderMisreads, rotation));
   }
 
-  protected final File[] getImageFiles() {
+  protected File[] getImageFiles() {
     assertTrue("Please run from the 'core' directory", testBase.exists());
     return testBase.listFiles(IMAGE_NAME_FILTER);
   }
@@ -125,7 +125,7 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
     testBlackBoxCountingResults(true);
   }
 
-  public final SummaryResults testBlackBoxCountingResults(boolean assertOnFailure) throws IOException {
+  public SummaryResults testBlackBoxCountingResults(boolean assertOnFailure) throws IOException {
     assertFalse(testResults.isEmpty());
 
     File[] imageFiles = getImageFiles();
@@ -288,7 +288,7 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
     return true;
   }
 
-  private static String readFileAsString(File file, Charset charset) throws IOException {
+  protected static String readFileAsString(File file, Charset charset) throws IOException {
     StringBuilder result = new StringBuilder((int) file.length());
     InputStreamReader reader = new InputStreamReader(new FileInputStream(file), charset);
     try {
