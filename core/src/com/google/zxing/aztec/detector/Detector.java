@@ -164,26 +164,26 @@ public final class Detector {
     float ratio = (2 * nbLayers + (nbLayers > 4 ? 1 : 0) + (nbLayers - 4) / 8)
         / (2.0f * nbCenterLayers);
 
-    int dx = bullEyeCornerPoints[0].x-bullEyeCornerPoints[2].x;
+    int dx = bullEyeCornerPoints[0].getX() - bullEyeCornerPoints[2].getX();
     dx+=dx>0?1:-1;
-    int dy = bullEyeCornerPoints[0].y-bullEyeCornerPoints[2].y;
+    int dy = bullEyeCornerPoints[0].getY() - bullEyeCornerPoints[2].getY();
     dy+=dy>0?1:-1;
     
-    int targetcx = MathUtils.round(bullEyeCornerPoints[2].x - ratio * dx);
-    int targetcy = MathUtils.round(bullEyeCornerPoints[2].y - ratio * dy);
+    int targetcx = MathUtils.round(bullEyeCornerPoints[2].getX() - ratio * dx);
+    int targetcy = MathUtils.round(bullEyeCornerPoints[2].getY() - ratio * dy);
     
-    int targetax = MathUtils.round(bullEyeCornerPoints[0].x + ratio * dx);
-    int targetay = MathUtils.round(bullEyeCornerPoints[0].y + ratio * dy);
+    int targetax = MathUtils.round(bullEyeCornerPoints[0].getX() + ratio * dx);
+    int targetay = MathUtils.round(bullEyeCornerPoints[0].getY() + ratio * dy);
     
-    dx = bullEyeCornerPoints[1].x-bullEyeCornerPoints[3].x;
+    dx = bullEyeCornerPoints[1].getX() - bullEyeCornerPoints[3].getX();
     dx+=dx>0?1:-1;
-    dy = bullEyeCornerPoints[1].y-bullEyeCornerPoints[3].y;
+    dy = bullEyeCornerPoints[1].getY() - bullEyeCornerPoints[3].getY();
     dy+=dy>0?1:-1;
     
-    int targetdx = MathUtils.round(bullEyeCornerPoints[3].x - ratio * dx);
-    int targetdy = MathUtils.round(bullEyeCornerPoints[3].y - ratio * dy);
-    int targetbx = MathUtils.round(bullEyeCornerPoints[1].x + ratio * dx);
-    int targetby = MathUtils.round(bullEyeCornerPoints[1].y+ratio*dy);
+    int targetdx = MathUtils.round(bullEyeCornerPoints[3].getX() - ratio * dx);
+    int targetdy = MathUtils.round(bullEyeCornerPoints[3].getY() - ratio * dy);
+    int targetbx = MathUtils.round(bullEyeCornerPoints[1].getX() + ratio * dx);
+    int targetby = MathUtils.round(bullEyeCornerPoints[1].getY() +ratio*dy);
     
     if (!isValid(targetax, targetay) ||
         !isValid(targetbx, targetby) ||
@@ -299,20 +299,20 @@ public final class Detector {
     
     float ratio = 0.75f*2/(2*nbCenterLayers-3);
     
-    int dx = pina.x-pinc.x;
-    int dy = pina.y-pinc.y;
-    int targetcx = MathUtils.round(pinc.x-ratio*dx);
-    int targetcy = MathUtils.round(pinc.y-ratio*dy);
-    int targetax = MathUtils.round(pina.x+ratio*dx);
-    int targetay = MathUtils.round(pina.y+ratio*dy);
+    int dx = pina.getX() - pinc.getX();
+    int dy = pina.getY() - pinc.getY();
+    int targetcx = MathUtils.round(pinc.getX() -ratio*dx);
+    int targetcy = MathUtils.round(pinc.getY() -ratio*dy);
+    int targetax = MathUtils.round(pina.getX() +ratio*dx);
+    int targetay = MathUtils.round(pina.getY() +ratio*dy);
     
-    dx = pinb.x-pind.x;
-    dy = pinb.y-pind.y;
+    dx = pinb.getX() - pind.getX();
+    dy = pinb.getY() - pind.getY();
     
-    int targetdx = MathUtils.round(pind.x-ratio*dx);
-    int targetdy = MathUtils.round(pind.y-ratio*dy);
-    int targetbx = MathUtils.round(pinb.x+ratio*dx);
-    int targetby = MathUtils.round(pinb.y+ratio*dy);
+    int targetdx = MathUtils.round(pind.getX() -ratio*dx);
+    int targetdy = MathUtils.round(pind.getY() -ratio*dy);
+    int targetbx = MathUtils.round(pinb.getX() +ratio*dx);
+    int targetby = MathUtils.round(pinb.getY() +ratio*dy);
     
     if (!isValid(targetax, targetay) ||
         !isValid(targetbx, targetby) ||
@@ -484,11 +484,11 @@ public final class Detector {
     boolean[] res = new boolean[size];
     float d = distance(p1,p2);
     float moduleSize = d/(size-1);
-    float dx = moduleSize*(p2.x - p1.x)/d;
-    float dy = moduleSize*(p2.y - p1.y)/d;
+    float dx = moduleSize*(p2.getX() - p1.getX())/d;
+    float dy = moduleSize*(p2.getY() - p1.getY())/d;
 
-    float px = p1.x;
-    float py = p1.y;
+    float px = p1.getX();
+    float py = p1.getY();
 
     for (int i = 0; i < size; i++) {
       res[i] = image.get(MathUtils.round(px), MathUtils.round(py));
@@ -510,10 +510,10 @@ public final class Detector {
 
     int corr = 3;
 
-    p1 = new Point(p1.x-corr, p1.y+corr);
-    p2 = new Point(p2.x-corr, p2.y-corr);
-    p3 = new Point(p3.x+corr, p3.y-corr);
-    p4 = new Point(p4.x+corr, p4.y+corr);
+    p1 = new Point(p1.getX() -corr, p1.getY() +corr);
+    p2 = new Point(p2.getX() -corr, p2.getY() -corr);
+    p3 = new Point(p3.getX() +corr, p3.getY() -corr);
+    p4 = new Point(p4.getX() +corr, p4.getY() +corr);
 
     int cInit = getColor(p4, p1);
 
@@ -546,14 +546,14 @@ public final class Detector {
    */
   private int getColor(Point p1, Point p2) {
     float d = distance(p1,p2);
-    float dx = (p2.x - p1.x)/d;
-    float dy = (p2.y - p1.y)/d;
+    float dx = (p2.getX() - p1.getX())/d;
+    float dy = (p2.getY() - p1.getY())/d;
     int error = 0;
 
-    float px = p1.x;
-    float py = p1.y;
+    float px = p1.getX();
+    float py = p1.getY();
 
-    boolean colorModel = image.get(p1.x, p1.y);
+    boolean colorModel = image.get(p1.getX(), p1.getY());
 
     for (int i = 0; i < d; i++) {
       px+=dx;
@@ -576,8 +576,8 @@ public final class Detector {
    * Gets the coordinate of the first point with a different color in the given direction
    */
   private Point getFirstDifferent(Point init, boolean color, int dx, int dy) {
-    int x = init.x+dx;
-    int y = init.y+dy;
+    int x = init.getX() +dx;
+    int y = init.getY() +dy;
 
     while(isValid(x,y) && image.get(x,y) == color) {
       x+=dx;
@@ -605,20 +605,28 @@ public final class Detector {
   }
 
   private static float distance(Point a, Point b) {
-    return MathUtils.distance(a.x, a.y, b.x, b.y);
+    return MathUtils.distance(a.getX(), a.getY(), b.getX(), b.getY());
   }
 
   static final class Point {
-    final int x;
-    final int y;
+    private final int x;
+    private final int y;
 
     ResultPoint toResultPoint() {
-      return new ResultPoint(x, y);
+      return new ResultPoint(getX(), getY());
     }
 
     Point(int x, int y) {
       this.x = x;
       this.y = y;
+    }
+
+    int getX() {
+      return x;
+    }
+
+    int getY() {
+      return y;
     }
   }
 

@@ -524,9 +524,7 @@ public final class LinesSampler {
     return rowCount;
   }
 
-
-
-  private static class VoteResult {
+  private static final class VoteResult {
     private boolean indecisive;
     private int vote;
     boolean isIndecisive() {

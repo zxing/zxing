@@ -34,19 +34,6 @@ public final class BenchmarkActivity extends Activity {
   private TextView textView;
   private Thread benchmarkThread;
 
-  @Override
-  public void onCreate(Bundle icicle) {
-    super.onCreate(icicle);
-
-    setContentView(R.layout.benchmark);
-
-    runBenchmarkButton = (Button) findViewById(R.id.benchmark_run);
-    runBenchmarkButton.setOnClickListener(runBenchmark);
-    textView = (TextView) findViewById(R.id.benchmark_help);
-
-    benchmarkThread = null;
-  }
-
   private final Button.OnClickListener runBenchmark = new Button.OnClickListener() {
     @Override
     public void onClick(View v) {
@@ -59,35 +46,44 @@ public final class BenchmarkActivity extends Activity {
     }
   };
 
-  final Handler handler = new Handler() {
+  private final Handler handler = new Handler() {
     @Override
     public void handleMessage(Message message) {
-      switch (message.what) {
-        case R.id.benchmark_done:
-          handleBenchmarkDone(message);
-          benchmarkThread = null;
-          runBenchmarkButton.setEnabled(true);
-          break;
-        default:
-          break;
+      if (message.what == R.id.benchmark_done) {
+        Iterable<BenchmarkItem> items = (Iterable<BenchmarkItem>) message.obj;
+        int count = 0;
+        int time = 0;
+        for (BenchmarkItem item : items) {
+          if (item != null) {
+            Log.v(TAG, item.toString());
+            count++;
+            time += item.getAverageTime();
+          }
+        }
+        String totals = "TOTAL: Decoded " + count + " images in " + time + " us";
+        Log.v(TAG, totals);
+        textView.setText(totals + "\n\n" + getString(R.string.benchmark_help));
+        benchmarkThread = null;
+        runBenchmarkButton.setEnabled(true);
       }
     }
   };
+  
+  Handler getHandler() {
+    return handler;
+  }
+  
+  @Override
+  public void onCreate(Bundle icicle) {
+    super.onCreate(icicle);
 
-  private void handleBenchmarkDone(Message message) {
-    Iterable<BenchmarkItem> items = (Iterable<BenchmarkItem>) message.obj;
-    int count = 0;
-    int time = 0;
-    for (BenchmarkItem item : items) {
-      if (item != null) {
-        Log.v(TAG, item.toString());
-        count++;
-        time += item.getAverageTime();
-      }
-    }
-    String totals = "TOTAL: Decoded " + count + " images in " + time + " us";
-    Log.v(TAG, totals);
-    textView.setText(totals + "\n\n" + getString(R.string.benchmark_help));
+    setContentView(R.layout.benchmark);
+
+    runBenchmarkButton = (Button) findViewById(R.id.benchmark_run);
+    runBenchmarkButton.setOnClickListener(runBenchmark);
+    textView = (TextView) findViewById(R.id.benchmark_help);
+
+    benchmarkThread = null;
   }
 
 }

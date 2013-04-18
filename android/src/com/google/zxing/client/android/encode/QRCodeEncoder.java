@@ -326,10 +326,9 @@ final class QRCodeEncoder {
       hints = new EnumMap<EncodeHintType,Object>(EncodeHintType.class);
       hints.put(EncodeHintType.CHARACTER_SET, encoding);
     }
-    MultiFormatWriter writer = new MultiFormatWriter();
     BitMatrix result;
     try {
-      result = writer.encode(contentsToEncode, format, dimension, dimension, hints);
+      result = new MultiFormatWriter().encode(contentsToEncode, format, dimension, dimension, hints);
     } catch (IllegalArgumentException iae) {
       // Unsupported format
       return null;
