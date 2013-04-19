@@ -39,6 +39,10 @@ public final class PDF417ScanningDecoder {
   private static final int MIN_BARCODE_ROWS = 3;
   private static final int MAX_BARCODE_ROWS = 90;
 
+  // TODO don't pass in minCodewordWidth and maxCodewordWidth, pass in barcode columns for start and stop pattern
+  // columns. That way width can be deducted from the pattern column.
+  // This approach also allows to detect more details about the barcode, e.g. if a bar type (white or black) is wider 
+  // than it should be. This can happen if the scanner used a bad blackpoint.
   public static PDF417DecoderResult decode(BitMatrix image, final ResultPoint imageTopLeft,
                                            final ResultPoint imageBottomLeft, final ResultPoint imageTopRight,
                                            final ResultPoint imageBottomRight, int minCodewordWidth,
@@ -73,9 +77,7 @@ public final class PDF417ScanningDecoder {
         continue;
       }
       DetectionResultColumn detectionResultColumn = new DetectionResultColumn(boundingBox);
-      if (detectionResult.getDetectionResultColumn(barcodeColumn) == null) {
-        detectionResult.setDetectionResultColumn(barcodeColumn, detectionResultColumn);
-      }
+      detectionResult.setDetectionResultColumn(barcodeColumn, detectionResultColumn);
       int startColumn = -1;
       int previousStartColumn = startColumn;
       for (int imageRow = boundingBox.getMinY(); imageRow < boundingBox.getMaxY(); imageRow++) {
@@ -100,6 +102,9 @@ public final class PDF417ScanningDecoder {
     return createDecoderResult(detectionResult);
   }
 
+  // TODO should create a new detection result object.
+  // TODO should recalculate the bounding box. If the row indicator columns don't start with row number 0
+  // or end with the expected row number.
   private static DetectionResult merge(DetectionResult leftDetectionResult, DetectionResult rightDetectionResult) {
     if (leftDetectionResult == null) {
       return rightDetectionResult;
@@ -219,7 +224,6 @@ public final class PDF417ScanningDecoder {
     }
   }
 
-  // could add parameter to make it work for the right row indicator as well
   private static DetectionResult getDetectionResult(BitMatrix image, DetectionResultColumn rowIndicatorColumn,
                                                     boolean isLeftIndicatorColumn) {
     if (rowIndicatorColumn == null) {
