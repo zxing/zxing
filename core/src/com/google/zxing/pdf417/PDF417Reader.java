@@ -40,7 +40,9 @@ import com.google.zxing.pdf417.detector.Detector;
 import com.google.zxing.pdf417.detector.DetectorNew;
 import com.google.zxing.pdf417.detector.PDF417DetectorResult;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -93,6 +95,7 @@ public final class PDF417Reader implements Reader, MultipleBarcodeReader {
 
   private Result[] decode(BinaryBitmap image, Map<DecodeHintType,?> hints, boolean multiple) throws NotFoundException,
       FormatException, ChecksumException {
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss:SSSSSS");
     List<Result> results = new ArrayList<Result>();
     boolean old = false;
     if (hints != null && hints.containsKey(DecodeHintType.PURE_BARCODE)) {
@@ -100,18 +103,23 @@ public final class PDF417Reader implements Reader, MultipleBarcodeReader {
       DecoderResult decoderResult = decoder.decode(bits);
       results.add(new Result(decoderResult.getText(), decoderResult.getRawBytes(), NO_POINTS, BarcodeFormat.PDF_417));
     } else if (old) {
+      SimpleLog.log(LEVEL.DEVEL, "Before detect " + simpleDateFormat.format(new Date()));
       DetectorResult detectorResult = new Detector(image).detect();
+      SimpleLog.log(LEVEL.DEVEL, "Before decode " + simpleDateFormat.format(new Date()));
       DecoderResult decoderResult = decoder.decode(detectorResult.getBits());
+      SimpleLog.log(LEVEL.DEVEL, "After decode " + simpleDateFormat.format(new Date()));
       results.add(new Result(decoderResult.getText(), decoderResult.getRawBytes(), detectorResult.getPoints(),
           BarcodeFormat.PDF_417));
     } else {
       if (!(image.getBlackMatrix() instanceof AdjustableBitMatrix)) {
         SimpleLog.log(LEVEL.WARNING, "Warning, not using AdjustableBitMatrix");
+        SimpleLog.log(LEVEL.ERROR, "Before detect " + simpleDateFormat.format(new Date()));
         PDF417DetectorResult detectorResult = new DetectorNew(image).detect(multiple);
-        List<ResultPoint[]> barcodes = detectorResult.getPoints();
-        for (ResultPoint[] points : barcodes) {
+        for (ResultPoint[] points : detectorResult.getPoints()) {
+          SimpleLog.log(LEVEL.ERROR, "Before decode " + simpleDateFormat.format(new Date()));
           PDF417DecoderResult decoderResult = PDF417ScanningDecoder.decode(detectorResult.getBits(), points[4],
               points[5], points[6], points[7], getMinCodewordWidth(points), getMaxCodewordWidth(points));
+          SimpleLog.log(LEVEL.ERROR, "After decode " + simpleDateFormat.format(new Date()));
           if (decoderResult == null) {
             throw NotFoundException.getNotFoundInstance();
           }
