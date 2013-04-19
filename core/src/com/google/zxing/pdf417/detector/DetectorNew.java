@@ -55,6 +55,9 @@ public final class DetectorNew {
   // 1111111 0 1 000 1 0 1 00 1
   private static final int[] STOP_PATTERN = { 7, 1, 1, 3, 1, 1, 1, 2, 1 };
   private static final int MAX_PIXEL_DRIFT = 3;
+  private static final int MAX_PATTERN_DRIFT = 5;
+  // if we set the value too low, then we don't detect the correct height of the bar if the start patterns are damaged.
+  // if we set the value too high, then we might detect the start pattern from a neighbor barcode.
   private static final int SKIPPED_ROW_COUNT_MAX = 25;
   // A PDF471 barcode should have at least 3 rows, with each row being >= 3 times the module width. Therefore it should be at least
   // 9 pixels tall. To be conservative, we use about half the size to ensure we don't miss it.
@@ -118,7 +121,7 @@ public final class DetectorNew {
           break;
         }
         // we didn't find a barcode starting at the given column and row. Try again from the first column and slightly
-        // below the last barcode we found.
+        // below the lowest barcode we found so far.
         foundBarcodeInRow = false;
         column = 0;
         for (ResultPoint[] barcodeCoordinate : barcodeCoordinates) {
@@ -137,6 +140,8 @@ public final class DetectorNew {
       if (!multiple) {
         break;
       }
+      // if we didn't find a right row indicator column, then continue the search for the next barcode after the 
+      // start pattern of the barcode just found.
       if (vertices[2] != null) {
         column = (int) vertices[2].getX();
         row = (int) vertices[2].getY();
@@ -196,8 +201,6 @@ public final class DetectorNew {
    *           vertices[6] x, y top right codeword area
    *           vertices[7] x, y bottom right codeword area
    */
-  // TODO Add additional start position on image to support finding multiple barcodes in a single image
-  // should probably search from left to right, then top to bottom
   private static ResultPoint[] findVertices(BitMatrix matrix, int startRow, int startColumn) {
     int height = matrix.getHeight();
     int width = matrix.getWidth();
@@ -252,7 +255,12 @@ public final class DetectorNew {
       int[] previousRowLoc = new int[] { (int) result[0].getX(), (int) result[1].getX() };
       for (; stopRow < height; stopRow++) {
         int[] loc = findGuardPattern(matrix, previousRowLoc[0], stopRow, width, false, pattern, counters);
-        if (loc != null && Math.abs(previousRowLoc[0] - loc[0]) < 5 && Math.abs(previousRowLoc[1] - loc[1]) < 5) {
+        // a found pattern is only considered to belong to the same barcode if the start and end positions
+        // don't differ too much. Pattern drift should be not bigger than two for consecutive rows. With
+        // a higher number of skipped rows drift could be larger. To keep it simple for now, we allow a slightly
+        // larger drift and don't check for skipped rows.
+        if (loc != null && Math.abs(previousRowLoc[0] - loc[0]) < MAX_PATTERN_DRIFT &&
+            Math.abs(previousRowLoc[1] - loc[1]) < MAX_PATTERN_DRIFT) {
           previousRowLoc = loc;
           skippedRowCount = 0;
         } else {
@@ -299,11 +307,6 @@ public final class DetectorNew {
       patternStart--;
     }
     int x = patternStart;
-    //    // if the current pixel is white shift to the right, but only for MAX_PIXEL_DRIFT pixels 
-    //    pixelDrift = 0;
-    //    while (!matrix.get(x, row) && x < width && pixelDrift++ < MAX_PIXEL_DRIFT) {
-    //      x++;
-    //    }
     for (; x < width; x++) {
       boolean pixel = matrix.get(x, row);
       if (pixel ^ isWhite) {
