@@ -32,6 +32,8 @@ import com.google.zxing.common.TestResult;
 import javax.imageio.ImageIO;
 
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -43,14 +45,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.zip.InflaterInputStream;
 
 public final class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
   private final PDF417Reader barcodeReader = new PDF417Reader();
 
   public PDF417BlackBox4TestCase() {
     super("test/data/blackbox/pdf417-4", null, BarcodeFormat.PDF_417);
-    addTest(1, 1, 0, 0, 0.0f);
-    //addTest(10, 10, 0, 0, 180.0f);
+    addTest(3, 3, 0, 0, 0.0f);
   }
 
   @Override
@@ -106,15 +108,26 @@ public final class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
         StringBuilder resultText = new StringBuilder();
         String fileId = null;
         for (Result result : results) {
-          PDF417ResultMetadata resultMetadata = (PDF417ResultMetadata) result.getResultMetadata().get(
-              ResultMetadataType.OTHER);
+          PDF417ResultMetadata resultMetadata = getMeta(result);
+          assertNotNull("resultMetadata", resultMetadata);
           if (fileId == null) {
             fileId = resultMetadata.getFileId();
           }
           assertEquals("FileId", fileId, resultMetadata.getFileId());
           resultText.append(result.getText());
         }
+        //        FileOutputStream outputStream = new FileOutputStream(testBase.getCanonicalPath() + File.separatorChar +
+        //            fileBaseName + ".bin");
+        //        outputStream.write(resultText.toString().getBytes(ISO88591));
+        //        outputStream.flush();
+        //        outputStream.close();
+        //        outputStream = new FileOutputStream(testBase.getCanonicalPath() + File.separatorChar + fileBaseName + ".xml");
+        //        outputStream.write(decode(resultText.toString()));
+        //        outputStream.flush();
+        //        outputStream.close();
         assertEquals("ExpectedText", expectedText, resultText.toString());
+        passedCounts[x]++;
+        tryHarderCounts[x]++;
       }
     }
 
@@ -174,8 +187,27 @@ public final class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
     return new SummaryResults(totalFound, totalMustPass, totalTests);
   }
 
-  private PDF417ResultMetadata getMeta(Result arg0) {
-    return (PDF417ResultMetadata) arg0.getResultMetadata().get(ResultMetadataType.OTHER);
+  private byte[] decode(String input) {
+    InflaterInputStream inputStream = new InflaterInputStream(new ByteArrayInputStream(input.getBytes(ISO88591)));
+    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+    byte[] buffer = new byte[1024];
+    int readByteCount = 0;
+    try {
+      while ((readByteCount = inputStream.read(buffer)) >= 0) {
+        outputStream.write(buffer, 0, readByteCount);
+      }
+      outputStream.flush();
+      outputStream.close();
+      return outputStream.toByteArray();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
+
+  private PDF417ResultMetadata getMeta(Result result) {
+    return result.getResultMetadata() == null ? null : (PDF417ResultMetadata) result.getResultMetadata().get(
+        ResultMetadataType.OTHER);
   }
 
   private Result[] decode(BinaryBitmap source, boolean tryHarder) throws ReaderException {
