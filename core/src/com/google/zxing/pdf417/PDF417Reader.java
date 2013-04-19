@@ -94,40 +94,37 @@ public final class PDF417Reader implements Reader, MultipleBarcodeReader {
   private Result[] decode(BinaryBitmap image, Map<DecodeHintType,?> hints, boolean multiple) throws NotFoundException,
       FormatException, ChecksumException {
     List<Result> results = new ArrayList<Result>();
-    do {
-      boolean old = false;
-      if (hints != null && hints.containsKey(DecodeHintType.PURE_BARCODE)) {
-        BitMatrix bits = extractPureBits(image.getBlackMatrix());
-        DecoderResult decoderResult = decoder.decode(bits);
-        results.add(new Result(decoderResult.getText(), decoderResult.getRawBytes(), NO_POINTS, BarcodeFormat.PDF_417));
-      } else if (old) {
-        DetectorResult detectorResult = new Detector(image).detect();
-        DecoderResult decoderResult = decoder.decode(detectorResult.getBits());
-        results.add(new Result(decoderResult.getText(), decoderResult.getRawBytes(), detectorResult.getPoints(),
-            BarcodeFormat.PDF_417));
-      } else {
-        if (!(image.getBlackMatrix() instanceof AdjustableBitMatrix)) {
-          SimpleLog.log(LEVEL.WARNING, "Warning, not using AdjustableBitMatrix");
-          PDF417DetectorResult detectorResult = new DetectorNew(image).detect(multiple);
-          List<ResultPoint[]> barcodes = detectorResult.getPoints();
-          for (ResultPoint[] points : barcodes) {
-            PDF417DecoderResult decoderResult = PDF417ScanningDecoder.decode(detectorResult.getBits(), points[4],
-                points[5], points[6], points[7], getMinCodewordWidth(points), getMaxCodewordWidth(points));
-            if (decoderResult == null) {
-              throw NotFoundException.getNotFoundInstance();
-            }
-            Result result = new Result(decoderResult.getText(), decoderResult.getRawBytes(), points,
-                BarcodeFormat.PDF_417);
-            result.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, decoderResult.getECLevel());
-            result.putMetadata(ResultMetadataType.OTHER, decoderResult.getResultMetadata());
-            results.add(result);
+    boolean old = false;
+    if (hints != null && hints.containsKey(DecodeHintType.PURE_BARCODE)) {
+      BitMatrix bits = extractPureBits(image.getBlackMatrix());
+      DecoderResult decoderResult = decoder.decode(bits);
+      results.add(new Result(decoderResult.getText(), decoderResult.getRawBytes(), NO_POINTS, BarcodeFormat.PDF_417));
+    } else if (old) {
+      DetectorResult detectorResult = new Detector(image).detect();
+      DecoderResult decoderResult = decoder.decode(detectorResult.getBits());
+      results.add(new Result(decoderResult.getText(), decoderResult.getRawBytes(), detectorResult.getPoints(),
+          BarcodeFormat.PDF_417));
+    } else {
+      if (!(image.getBlackMatrix() instanceof AdjustableBitMatrix)) {
+        SimpleLog.log(LEVEL.WARNING, "Warning, not using AdjustableBitMatrix");
+        PDF417DetectorResult detectorResult = new DetectorNew(image).detect(multiple);
+        List<ResultPoint[]> barcodes = detectorResult.getPoints();
+        for (ResultPoint[] points : barcodes) {
+          PDF417DecoderResult decoderResult = PDF417ScanningDecoder.decode(detectorResult.getBits(), points[4],
+              points[5], points[6], points[7], getMinCodewordWidth(points), getMaxCodewordWidth(points));
+          if (decoderResult == null) {
+            throw NotFoundException.getNotFoundInstance();
           }
-        } else {
-          results = decodeAdjustableBitMatrix(image, multiple);
+          Result result = new Result(decoderResult.getText(), decoderResult.getRawBytes(), points,
+              BarcodeFormat.PDF_417);
+          result.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, decoderResult.getECLevel());
+          result.putMetadata(ResultMetadataType.OTHER, decoderResult.getResultMetadata());
+          results.add(result);
         }
+      } else {
+        results = decodeAdjustableBitMatrix(image, multiple);
       }
-
-    } while (multiple);
+    }
     return results.toArray(new Result[results.size()]);
   }
 
