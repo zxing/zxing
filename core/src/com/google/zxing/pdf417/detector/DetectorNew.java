@@ -17,9 +17,7 @@
 package com.google.zxing.pdf417.detector;
 
 import com.google.zxing.BinaryBitmap;
-import com.google.zxing.ChecksumException;
 import com.google.zxing.DecodeHintType;
-import com.google.zxing.FormatException;
 import com.google.zxing.NotFoundException;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitArray;
@@ -74,11 +72,9 @@ public final class DetectorNew {
    * <p>Detects a PDF417 Code in an image, simply.</p>
    *
    * @return {@link PDF417DetectorResult} encapsulating results of detecting a PDF417 Code
-   * @throws NotFoundException if no QR Code can be found
-   * @throws ChecksumException 
-   * @throws FormatException 
+   * @throws NotFoundException if no PDF417 Code can be found
    */
-  public PDF417DetectorResult detect(boolean multiple) throws NotFoundException, FormatException, ChecksumException {
+  public PDF417DetectorResult detect(boolean multiple) throws NotFoundException {
     return detect(null, multiple);
   }
 
@@ -86,29 +82,35 @@ public final class DetectorNew {
    * <p>Detects a PDF417 Code in an image. Only checks 0 and 180 degree rotations.</p>
    *
    * @param hints optional hints to detector
-   * @param multiple 
-   * @return {@link PDF417DetectorResult} encapsulating results of detecting a PDF417 Code
+   * @param multiple if true, then the image is searched for multiple codes. If false, then at most one code will
+   * be found and returned
+   * @return {@link PDF417DetectorResult} encapsulating results of detecting a PDF417 code
    * @throws NotFoundException if no PDF417 Code can be found
-   * @throws ChecksumException 
-   * @throws FormatException 
    */
-  public PDF417DetectorResult detect(Map<DecodeHintType,?> hints, boolean multiple) throws NotFoundException,
-      FormatException, ChecksumException {
+  public PDF417DetectorResult detect(Map<DecodeHintType,?> hints, boolean multiple) throws NotFoundException {
     // TODO detection improvement, tryHarder could try several different luminance thresholds/blackpoints or even 
     // different binarizers
     //boolean tryHarder = hints != null && hints.containsKey(DecodeHintType.TRY_HARDER);
 
     BitMatrix bitMatrix = image.getBlackMatrix();
-    List<ResultPoint[]> barcodeCoordinates = new ArrayList<ResultPoint[]>();
-    detect(bitMatrix, barcodeCoordinates, multiple);
+
+    List<ResultPoint[]> barcodeCoordinates = detect(multiple, bitMatrix);
     if (barcodeCoordinates.isEmpty()) {
       rotate180(bitMatrix);
-      detect(bitMatrix, barcodeCoordinates, multiple);
+      barcodeCoordinates = detect(multiple, bitMatrix);
     }
     return new PDF417DetectorResult(bitMatrix, barcodeCoordinates);
   }
 
-  private void detect(BitMatrix bitMatrix, List<ResultPoint[]> barcodeCoordinates, boolean multiple) {
+  /**
+   * Detects PDF417 codes in an image. Only checks 0 degree rotation
+   * @param multiple if true, then the image is searched for multiple codes. If false, then at most one code will
+   * be found and returned
+   * @param bitMatrix bit matrix to detect barcodes in
+   * @return List of ResultPoint arrays containing the coordinates of found barcodes
+   */
+  private List<ResultPoint[]> detect(boolean multiple, BitMatrix bitMatrix) {
+    List<ResultPoint[]> barcodeCoordinates = new ArrayList<ResultPoint[]>();
     int row = 0;
     int column = 0;
     boolean foundBarcodeInRow = false;
@@ -150,6 +152,7 @@ public final class DetectorNew {
         row = (int) vertices[4].getY();
       }
     }
+    return barcodeCoordinates;
   }
 
   // introduces rounding errors. Sometimes inverts/corrects the rounding errors created by rotating the test images
@@ -162,7 +165,11 @@ public final class DetectorNew {
 
   // The following could go to the BitMatrix class (maybe in a more efficient version using the BitMatrix internal
   // data structures)
-  protected static void rotate180(BitMatrix bitMatrix) throws NotFoundException {
+  /**
+   * Rotates a bit matrix by 180 degrees.
+   * @param bitMatrix bit matrix to rotate
+   */
+  protected static void rotate180(BitMatrix bitMatrix) {
     final int width = bitMatrix.getWidth();
     final int height = bitMatrix.getHeight();
     BitArray firstRowBitArray = new BitArray(width);
@@ -175,11 +182,17 @@ public final class DetectorNew {
     }
   }
 
-  protected static BitArray mirror(BitArray bitArray, BitArray result) {
+  /**
+   * Copies the bits from the input to the result BitArray in reverse order
+   * @param input
+   * @param result
+   * @return
+   */
+  protected static BitArray mirror(BitArray input, BitArray result) {
     result.clear();
-    final int size = bitArray.getSize();
+    final int size = input.getSize();
     for (int i = 0; i < size; i++) {
-      if (bitArray.get(i)) {
+      if (input.get(i)) {
         result.set(size - 1 - i);
       }
     }
