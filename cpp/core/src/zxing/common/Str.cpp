@@ -29,6 +29,10 @@ String::String(const std::string &text) :
   text_(text) {
 }
 
+String::String(int capacity) {
+  text_.reserve(capacity);
+}
+
 const std::string& String::getText() const {
   return text_;
 }

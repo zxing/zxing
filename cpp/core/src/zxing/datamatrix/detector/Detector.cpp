@@ -28,7 +28,6 @@
 #include <sstream>
 #include <cstdlib>
 
-namespace math_utils = zxing::common::detector::math_utils;
 
 using zxing::Ref;
 using zxing::BitMatrix;
@@ -38,6 +37,7 @@ using zxing::PerspectiveTransform;
 using zxing::NotFoundException;
 using zxing::datamatrix::Detector;
 using zxing::datamatrix::ResultPointsAndTransitions;
+using zxing::common::detector::MathUtils;
 
 namespace {
   typedef std::map<Ref<ResultPoint>, int> PointMap;
@@ -346,7 +346,7 @@ bool Detector::isValid(Ref<ResultPoint> p) {
 }
 
 int Detector::distance(Ref<ResultPoint> a, Ref<ResultPoint> b) {
-  return math_utils::round(ResultPoint::distance(a, b));
+  return MathUtils::round(ResultPoint::distance(a, b));
 }
 
 Ref<ResultPointsAndTransitions> Detector::transitionsBetween(Ref<ResultPoint> from,
