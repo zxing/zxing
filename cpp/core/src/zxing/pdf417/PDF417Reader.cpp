@@ -24,6 +24,11 @@ using zxing::BitMatrix;
 using zxing::pdf417::PDF417Reader;
 using zxing::pdf417::detector::Detector;
 
+// VC++
+using zxing::ArrayRef;
+using zxing::BinaryBitmap;
+using zxing::DecodeHints;
+
 Ref<Result> PDF417Reader::decode(Ref<BinaryBitmap> image, DecodeHints hints) {
   Ref<DecoderResult> decoderResult;
   /* 2012-05-30 hfn C++ DecodeHintType does not yet know a type "PURE_BARCODE", */
