@@ -159,6 +159,36 @@
 		3B81AACE120F08170022E5D4 /* HybridBinarizer.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B81AACC120F08170022E5D4 /* HybridBinarizer.h */; };
 		3B81AAF8120F0A7E0022E5D4 /* GreyscaleRotatedLuminanceSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B81AAF6120F0A7E0022E5D4 /* GreyscaleRotatedLuminanceSource.cpp */; };
 		3B81AAF9120F0A7E0022E5D4 /* GreyscaleRotatedLuminanceSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B81AAF7120F0A7E0022E5D4 /* GreyscaleRotatedLuminanceSource.h */; };
+		3BAC39C017242C2300473974 /* BitMatrixParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3BAC39AC17242C2200473974 /* BitMatrixParser.cpp */; };
+		3BAC39C117242C2300473974 /* BitMatrixParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 3BAC39AD17242C2200473974 /* BitMatrixParser.h */; };
+		3BAC39C217242C2300473974 /* DecodedBitStreamParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3BAC39AE17242C2200473974 /* DecodedBitStreamParser.cpp */; };
+		3BAC39C317242C2300473974 /* DecodedBitStreamParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 3BAC39AF17242C2200473974 /* DecodedBitStreamParser.h */; };
+		3BAC39C417242C2300473974 /* Decoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3BAC39B017242C2200473974 /* Decoder.cpp */; };
+		3BAC39C517242C2300473974 /* Decoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 3BAC39B117242C2200473974 /* Decoder.h */; };
+		3BAC39C617242C2300473974 /* ErrorCorrection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3BAC39B317242C2200473974 /* ErrorCorrection.cpp */; };
+		3BAC39C717242C2300473974 /* ErrorCorrection.h in Headers */ = {isa = PBXBuildFile; fileRef = 3BAC39B417242C2200473974 /* ErrorCorrection.h */; };
+		3BAC39C817242C2300473974 /* ModulusGF.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3BAC39B517242C2200473974 /* ModulusGF.cpp */; };
+		3BAC39C917242C2300473974 /* ModulusGF.h in Headers */ = {isa = PBXBuildFile; fileRef = 3BAC39B617242C2200473974 /* ModulusGF.h */; };
+		3BAC39CA17242C2300473974 /* ModulusPoly.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3BAC39B717242C2200473974 /* ModulusPoly.cpp */; };
+		3BAC39CB17242C2300473974 /* ModulusPoly.h in Headers */ = {isa = PBXBuildFile; fileRef = 3BAC39B817242C2200473974 /* ModulusPoly.h */; };
+		3BAC39CC17242C2300473974 /* Detector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3BAC39BA17242C2200473974 /* Detector.cpp */; };
+		3BAC39CD17242C2300473974 /* Detector.h in Headers */ = {isa = PBXBuildFile; fileRef = 3BAC39BB17242C2200473974 /* Detector.h */; };
+		3BAC39CE17242C2300473974 /* LinesSampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3BAC39BC17242C2200473974 /* LinesSampler.cpp */; };
+		3BAC39CF17242C2300473974 /* LinesSampler.h in Headers */ = {isa = PBXBuildFile; fileRef = 3BAC39BD17242C2300473974 /* LinesSampler.h */; };
+		3BAC39D017242C2300473974 /* PDF417Reader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3BAC39BE17242C2300473974 /* PDF417Reader.cpp */; };
+		3BAC39D117242C2300473974 /* PDF417Reader.h in Headers */ = {isa = PBXBuildFile; fileRef = 3BAC39BF17242C2300473974 /* PDF417Reader.h */; };
+		3BAC39E717242E5D00473974 /* BigInteger.cc in Sources */ = {isa = PBXBuildFile; fileRef = 3BAC39D817242E5D00473974 /* BigInteger.cc */; };
+		3BAC39E817242E5D00473974 /* BigInteger.hh in Headers */ = {isa = PBXBuildFile; fileRef = 3BAC39D917242E5D00473974 /* BigInteger.hh */; };
+		3BAC39E917242E5D00473974 /* BigIntegerAlgorithms.cc in Sources */ = {isa = PBXBuildFile; fileRef = 3BAC39DA17242E5D00473974 /* BigIntegerAlgorithms.cc */; };
+		3BAC39EA17242E5D00473974 /* BigIntegerAlgorithms.hh in Headers */ = {isa = PBXBuildFile; fileRef = 3BAC39DB17242E5D00473974 /* BigIntegerAlgorithms.hh */; };
+		3BAC39EB17242E5D00473974 /* BigIntegerLibrary.hh in Headers */ = {isa = PBXBuildFile; fileRef = 3BAC39DC17242E5D00473974 /* BigIntegerLibrary.hh */; };
+		3BAC39EC17242E5D00473974 /* BigIntegerUtils.cc in Sources */ = {isa = PBXBuildFile; fileRef = 3BAC39DD17242E5D00473974 /* BigIntegerUtils.cc */; };
+		3BAC39ED17242E5D00473974 /* BigIntegerUtils.hh in Headers */ = {isa = PBXBuildFile; fileRef = 3BAC39DE17242E5D00473974 /* BigIntegerUtils.hh */; };
+		3BAC39EE17242E5D00473974 /* BigUnsigned.cc in Sources */ = {isa = PBXBuildFile; fileRef = 3BAC39DF17242E5D00473974 /* BigUnsigned.cc */; };
+		3BAC39EF17242E5D00473974 /* BigUnsigned.hh in Headers */ = {isa = PBXBuildFile; fileRef = 3BAC39E017242E5D00473974 /* BigUnsigned.hh */; };
+		3BAC39F017242E5D00473974 /* BigUnsignedInABase.cc in Sources */ = {isa = PBXBuildFile; fileRef = 3BAC39E117242E5D00473974 /* BigUnsignedInABase.cc */; };
+		3BAC39F117242E5D00473974 /* BigUnsignedInABase.hh in Headers */ = {isa = PBXBuildFile; fileRef = 3BAC39E217242E5D00473974 /* BigUnsignedInABase.hh */; };
+		3BAC39F317242E5D00473974 /* NumberlikeArray.hh in Headers */ = {isa = PBXBuildFile; fileRef = 3BAC39E517242E5D00473974 /* NumberlikeArray.hh */; };
 		AA747D9F0F9514B9006C5449 /* ZXingWidget_Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = AA747D9E0F9514B9006C5449 /* ZXingWidget_Prefix.pch */; };
 		AACBBE4A0F95108600F1A2B1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AACBBE490F95108600F1A2B1 /* Foundation.framework */; };
 		E534594311987396000CB77F /* BarcodeFormat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E53458B511987396000CB77F /* BarcodeFormat.cpp */; };
@@ -447,6 +477,36 @@
 		3B81AACC120F08170022E5D4 /* HybridBinarizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HybridBinarizer.h; sourceTree = "<group>"; };
 		3B81AAF6120F0A7E0022E5D4 /* GreyscaleRotatedLuminanceSource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GreyscaleRotatedLuminanceSource.cpp; sourceTree = "<group>"; };
 		3B81AAF7120F0A7E0022E5D4 /* GreyscaleRotatedLuminanceSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GreyscaleRotatedLuminanceSource.h; sourceTree = "<group>"; };
+		3BAC39AC17242C2200473974 /* BitMatrixParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BitMatrixParser.cpp; sourceTree = "<group>"; };
+		3BAC39AD17242C2200473974 /* BitMatrixParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BitMatrixParser.h; sourceTree = "<group>"; };
+		3BAC39AE17242C2200473974 /* DecodedBitStreamParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DecodedBitStreamParser.cpp; sourceTree = "<group>"; };
+		3BAC39AF17242C2200473974 /* DecodedBitStreamParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DecodedBitStreamParser.h; sourceTree = "<group>"; };
+		3BAC39B017242C2200473974 /* Decoder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Decoder.cpp; sourceTree = "<group>"; };
+		3BAC39B117242C2200473974 /* Decoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Decoder.h; sourceTree = "<group>"; };
+		3BAC39B317242C2200473974 /* ErrorCorrection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ErrorCorrection.cpp; sourceTree = "<group>"; };
+		3BAC39B417242C2200473974 /* ErrorCorrection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ErrorCorrection.h; sourceTree = "<group>"; };
+		3BAC39B517242C2200473974 /* ModulusGF.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ModulusGF.cpp; sourceTree = "<group>"; };
+		3BAC39B617242C2200473974 /* ModulusGF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModulusGF.h; sourceTree = "<group>"; };
+		3BAC39B717242C2200473974 /* ModulusPoly.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ModulusPoly.cpp; sourceTree = "<group>"; };
+		3BAC39B817242C2200473974 /* ModulusPoly.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModulusPoly.h; sourceTree = "<group>"; };
+		3BAC39BA17242C2200473974 /* Detector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Detector.cpp; sourceTree = "<group>"; };
+		3BAC39BB17242C2200473974 /* Detector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Detector.h; sourceTree = "<group>"; };
+		3BAC39BC17242C2200473974 /* LinesSampler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LinesSampler.cpp; sourceTree = "<group>"; };
+		3BAC39BD17242C2300473974 /* LinesSampler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LinesSampler.h; sourceTree = "<group>"; };
+		3BAC39BE17242C2300473974 /* PDF417Reader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PDF417Reader.cpp; sourceTree = "<group>"; };
+		3BAC39BF17242C2300473974 /* PDF417Reader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PDF417Reader.h; sourceTree = "<group>"; };
+		3BAC39D817242E5D00473974 /* BigInteger.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BigInteger.cc; sourceTree = "<group>"; };
+		3BAC39D917242E5D00473974 /* BigInteger.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BigInteger.hh; sourceTree = "<group>"; };
+		3BAC39DA17242E5D00473974 /* BigIntegerAlgorithms.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BigIntegerAlgorithms.cc; sourceTree = "<group>"; };
+		3BAC39DB17242E5D00473974 /* BigIntegerAlgorithms.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BigIntegerAlgorithms.hh; sourceTree = "<group>"; };
+		3BAC39DC17242E5D00473974 /* BigIntegerLibrary.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BigIntegerLibrary.hh; sourceTree = "<group>"; };
+		3BAC39DD17242E5D00473974 /* BigIntegerUtils.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BigIntegerUtils.cc; sourceTree = "<group>"; };
+		3BAC39DE17242E5D00473974 /* BigIntegerUtils.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BigIntegerUtils.hh; sourceTree = "<group>"; };
+		3BAC39DF17242E5D00473974 /* BigUnsigned.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BigUnsigned.cc; sourceTree = "<group>"; };
+		3BAC39E017242E5D00473974 /* BigUnsigned.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BigUnsigned.hh; sourceTree = "<group>"; };
+		3BAC39E117242E5D00473974 /* BigUnsignedInABase.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BigUnsignedInABase.cc; sourceTree = "<group>"; };
+		3BAC39E217242E5D00473974 /* BigUnsignedInABase.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BigUnsignedInABase.hh; sourceTree = "<group>"; };
+		3BAC39E517242E5D00473974 /* NumberlikeArray.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = NumberlikeArray.hh; sourceTree = "<group>"; };
 		AA747D9E0F9514B9006C5449 /* ZXingWidget_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXingWidget_Prefix.pch; sourceTree = SOURCE_ROOT; };
 		AACBBE490F95108600F1A2B1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D2AAC07E0554694100DB518D /* libZXingWidget.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libZXingWidget.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -730,9 +790,78 @@
 			path = detector;
 			sourceTree = "<group>";
 		};
+		3BAC39AA17242C2200473974 /* pdf417 */ = {
+			isa = PBXGroup;
+			children = (
+				3BAC39AB17242C2200473974 /* decoder */,
+				3BAC39B917242C2200473974 /* detector */,
+				3BAC39BE17242C2300473974 /* PDF417Reader.cpp */,
+				3BAC39BF17242C2300473974 /* PDF417Reader.h */,
+			);
+			path = pdf417;
+			sourceTree = "<group>";
+		};
+		3BAC39AB17242C2200473974 /* decoder */ = {
+			isa = PBXGroup;
+			children = (
+				3BAC39AC17242C2200473974 /* BitMatrixParser.cpp */,
+				3BAC39AD17242C2200473974 /* BitMatrixParser.h */,
+				3BAC39AE17242C2200473974 /* DecodedBitStreamParser.cpp */,
+				3BAC39AF17242C2200473974 /* DecodedBitStreamParser.h */,
+				3BAC39B017242C2200473974 /* Decoder.cpp */,
+				3BAC39B117242C2200473974 /* Decoder.h */,
+				3BAC39B217242C2200473974 /* ec */,
+			);
+			path = decoder;
+			sourceTree = "<group>";
+		};
+		3BAC39B217242C2200473974 /* ec */ = {
+			isa = PBXGroup;
+			children = (
+				3BAC39B317242C2200473974 /* ErrorCorrection.cpp */,
+				3BAC39B417242C2200473974 /* ErrorCorrection.h */,
+				3BAC39B517242C2200473974 /* ModulusGF.cpp */,
+				3BAC39B617242C2200473974 /* ModulusGF.h */,
+				3BAC39B717242C2200473974 /* ModulusPoly.cpp */,
+				3BAC39B817242C2200473974 /* ModulusPoly.h */,
+			);
+			path = ec;
+			sourceTree = "<group>";
+		};
+		3BAC39B917242C2200473974 /* detector */ = {
+			isa = PBXGroup;
+			children = (
+				3BAC39BA17242C2200473974 /* Detector.cpp */,
+				3BAC39BB17242C2200473974 /* Detector.h */,
+				3BAC39BC17242C2200473974 /* LinesSampler.cpp */,
+				3BAC39BD17242C2300473974 /* LinesSampler.h */,
+			);
+			path = detector;
+			sourceTree = "<group>";
+		};
+		3BAC39D617242E5D00473974 /* bigint */ = {
+			isa = PBXGroup;
+			children = (
+				3BAC39D817242E5D00473974 /* BigInteger.cc */,
+				3BAC39D917242E5D00473974 /* BigInteger.hh */,
+				3BAC39DA17242E5D00473974 /* BigIntegerAlgorithms.cc */,
+				3BAC39DB17242E5D00473974 /* BigIntegerAlgorithms.hh */,
+				3BAC39DC17242E5D00473974 /* BigIntegerLibrary.hh */,
+				3BAC39DD17242E5D00473974 /* BigIntegerUtils.cc */,
+				3BAC39DE17242E5D00473974 /* BigIntegerUtils.hh */,
+				3BAC39DF17242E5D00473974 /* BigUnsigned.cc */,
+				3BAC39E017242E5D00473974 /* BigUnsigned.hh */,
+				3BAC39E117242E5D00473974 /* BigUnsignedInABase.cc */,
+				3BAC39E217242E5D00473974 /* BigUnsignedInABase.hh */,
+				3BAC39E517242E5D00473974 /* NumberlikeArray.hh */,
+			);
+			path = bigint;
+			sourceTree = "<group>";
+		};
 		E53458B311987396000CB77F /* CoreSrc */ = {
 			isa = PBXGroup;
 			children = (
+				3BAC39D617242E5D00473974 /* bigint */,
 				E53458B411987396000CB77F /* zxing */,
 			);
 			name = CoreSrc;
@@ -742,6 +871,7 @@
 		E53458B411987396000CB77F /* zxing */ = {
 			isa = PBXGroup;
 			children = (
+				3BAC39AA17242C2200473974 /* pdf417 */,
 				3B6AA66A1710C34600DF84C0 /* InvertedLuminanceSource.cpp */,
 				3B6AA66B1710C34600DF84C0 /* InvertedLuminanceSource.h */,
 				3B6C805B17090EFC00D22AB2 /* ChecksumException.cpp */,
@@ -1206,6 +1336,22 @@
 				3B6C805A17090ED300D22AB2 /* Code93Reader.h in Headers */,
 				3B6C805E17090EFC00D22AB2 /* ChecksumException.h in Headers */,
 				3B6AA66D1710C34600DF84C0 /* InvertedLuminanceSource.h in Headers */,
+				3BAC39C117242C2300473974 /* BitMatrixParser.h in Headers */,
+				3BAC39C317242C2300473974 /* DecodedBitStreamParser.h in Headers */,
+				3BAC39C517242C2300473974 /* Decoder.h in Headers */,
+				3BAC39C717242C2300473974 /* ErrorCorrection.h in Headers */,
+				3BAC39C917242C2300473974 /* ModulusGF.h in Headers */,
+				3BAC39CB17242C2300473974 /* ModulusPoly.h in Headers */,
+				3BAC39CD17242C2300473974 /* Detector.h in Headers */,
+				3BAC39CF17242C2300473974 /* LinesSampler.h in Headers */,
+				3BAC39D117242C2300473974 /* PDF417Reader.h in Headers */,
+				3BAC39E817242E5D00473974 /* BigInteger.hh in Headers */,
+				3BAC39EA17242E5D00473974 /* BigIntegerAlgorithms.hh in Headers */,
+				3BAC39EB17242E5D00473974 /* BigIntegerLibrary.hh in Headers */,
+				3BAC39ED17242E5D00473974 /* BigIntegerUtils.hh in Headers */,
+				3BAC39EF17242E5D00473974 /* BigUnsigned.hh in Headers */,
+				3BAC39F117242E5D00473974 /* BigUnsignedInABase.hh in Headers */,
+				3BAC39F317242E5D00473974 /* NumberlikeArray.hh in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1450,6 +1596,20 @@
 				3B6C805917090ED300D22AB2 /* Code93Reader.cpp in Sources */,
 				3B6C805D17090EFC00D22AB2 /* ChecksumException.cpp in Sources */,
 				3B6AA66C1710C34600DF84C0 /* InvertedLuminanceSource.cpp in Sources */,
+				3BAC39C017242C2300473974 /* BitMatrixParser.cpp in Sources */,
+				3BAC39C217242C2300473974 /* DecodedBitStreamParser.cpp in Sources */,
+				3BAC39C417242C2300473974 /* Decoder.cpp in Sources */,
+				3BAC39C617242C2300473974 /* ErrorCorrection.cpp in Sources */,
+				3BAC39C817242C2300473974 /* ModulusGF.cpp in Sources */,
+				3BAC39CA17242C2300473974 /* ModulusPoly.cpp in Sources */,
+				3BAC39CC17242C2300473974 /* Detector.cpp in Sources */,
+				3BAC39CE17242C2300473974 /* LinesSampler.cpp in Sources */,
+				3BAC39D017242C2300473974 /* PDF417Reader.cpp in Sources */,
+				3BAC39E717242E5D00473974 /* BigInteger.cc in Sources */,
+				3BAC39E917242E5D00473974 /* BigIntegerAlgorithms.cc in Sources */,
+				3BAC39EC17242E5D00473974 /* BigIntegerUtils.cc in Sources */,
+				3BAC39EE17242E5D00473974 /* BigUnsigned.cc in Sources */,
+				3BAC39F017242E5D00473974 /* BigUnsignedInABase.cc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
