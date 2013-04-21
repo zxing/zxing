@@ -21,18 +21,6 @@
 #include <zxing/pdf417/detector/LinesSampler.h>
 #include <zxing/common/GridSampler.h>
 
-/*
-#include <zxing/ResultPoint.h>
-#include <zxing/common/Point.h>
-#include <zxing/pdf417/PDF417Reader.h>
-#include <zxing/pdf417/decoder/BitMatrixParser.h>
-#include <cmath>
-#include <sstream>
-#include <cstdlib>
-#include <cfloat>
-#include <map>
-*/
-
 using std::vector;
 using std::max;
 using std::numeric_limits;
@@ -44,6 +32,12 @@ using zxing::ResultPoint;
 using zxing::Point;
 using zxing::BitMatrix;
 using zxing::GridSampler;
+
+// VC++
+
+using zxing::BinaryBitmap;
+using zxing::DecodeHints;
+using zxing::Line;
 
 /**
  * <p>Encapsulates logic that can detect a PDF417 Code in an image, even if the
@@ -515,7 +509,7 @@ void Detector::findWideBarTopBottom(Ref<BitMatrix> matrix,
   int y = yStart;
 
   // Find offset of thin bar to the right as additional safeguard.
-  int nextBarX = max(barStart, barEnd) + 1;
+  int nextBarX = int(max(barStart, barEnd) + 1);
   for (; nextBarX < matrix->getWidth(); nextBarX++)
     if (!matrix->get(nextBarX - 1, y) && matrix->get(nextBarX, y)) break;
   nextBarX -= x;
