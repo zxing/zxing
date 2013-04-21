@@ -35,7 +35,6 @@ using std::ostringstream;
 using std::abs;
 using std::min;
 using std::max;
-using zxing::isnan;
 using zxing::qrcode::Detector;
 using zxing::Ref;
 using zxing::BitMatrix;
@@ -196,10 +195,10 @@ float Detector::calculateModuleSizeOneWay(Ref<ResultPoint> pattern, Ref<ResultPo
                                                           (int)otherPattern->getX(), (int)otherPattern->getY());
   float moduleSizeEst2 = sizeOfBlackWhiteBlackRunBothWays((int)otherPattern->getX(), (int)otherPattern->getY(),
                                                           (int)pattern->getX(), (int)pattern->getY());
-  if (isnan(moduleSizeEst1)) {
+  if (zxing::isnan(moduleSizeEst1)) {
     return moduleSizeEst2;
   }
-  if (isnan(moduleSizeEst2)) {
+  if (zxing::isnan(moduleSizeEst2)) {
     return moduleSizeEst1;
   }
   // Average them, and divide by 7 since we've counted the width of 3 black modules,
