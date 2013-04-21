@@ -34,21 +34,24 @@ namespace zxing {
 namespace aztec {
 
 class Point : public Counted {
-public:
-  int x;
-  int y;
+ private:
+  const int x;
+  const int y;
             
+ public:
   Ref<ResultPoint> toResultPoint() { 
     return Ref<ResultPoint>(new ResultPoint(float(x), float(y)));
   }
             
-  Point(int ax, int ay):x(ax),y(ay) {};
-            
+  Point(int ax, int ay) : x(ax), y(ay) {}
+
+  int getX() const { return x; }
+  int getY() const { return y; }
 };
         
 class Detector : public Counted {
             
-private:
+ private:
   Ref<BitMatrix> image_;
             
   bool compact_;
@@ -78,7 +81,7 @@ private:
   bool isValid(int x, int y);
   static float distance(Ref<Point> a, Ref<Point> b);
             
-public:
+ public:
   Detector(Ref<BitMatrix> image);
   Ref<AztecDetectorResult> detect();
 };
