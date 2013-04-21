@@ -23,6 +23,7 @@
 #include <zxing/common/detector/MathUtils.h>
 
 using std::max;
+using std::abs;
 using std::numeric_limits;
 using zxing::pdf417::detector::Detector;
 using zxing::common::detector::Math;

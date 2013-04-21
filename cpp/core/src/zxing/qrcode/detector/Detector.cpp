@@ -31,8 +31,8 @@
 #include <sstream>
 #include <cstdlib>
 
-
 using std::ostringstream;
+using std::abs;
 using std::min;
 using std::max;
 using zxing::isnan;
