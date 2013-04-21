@@ -64,6 +64,7 @@
     <module>core</module>
     <module>javase</module>
     <module>android-integration</module>
+    <module>zxingorg</module>
   </modules>
 
   <build>
@@ -102,6 +103,18 @@
         <version>2.9</version>
         <configuration>
           <javadocVersion>1.7</javadocVersion>
+          <header><![CDATA[
+            <script type="text/javascript">
+               var _gaq = _gaq || [];
+               _gaq.push(['_setAccount', 'UA-788492-5']);
+               _gaq.push(['_trackPageview']);
+               (function() {
+                 var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                 ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+               })();
+            </script>
+          ]]></header>
         </configuration>
         <executions>
           <execution>
