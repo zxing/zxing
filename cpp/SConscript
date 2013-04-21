@@ -57,7 +57,7 @@ else:
     libiconv_libs.append('iconv')
 
 # Add libzxing library.
-libzxing_files = all_files('core/src')
+libzxing_files = all_files('core/src')+all_files('core/src', '.cc')
 libzxing_include = ['core/src']
 if platform.system() is 'Windows':
   libzxing_files += all_files('core/src/win32')
