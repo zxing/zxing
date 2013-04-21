@@ -35,6 +35,7 @@ private:
   std::string text_;
 public:
   explicit String(const std::string &text);
+  explicit String(int);
   char charAt(int) const;
   Ref<String> substring(int) const;
   const std::string& getText() const;

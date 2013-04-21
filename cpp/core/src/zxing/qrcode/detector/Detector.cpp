@@ -31,7 +31,6 @@
 #include <sstream>
 #include <cstdlib>
 
-namespace math_utils = zxing::common::detector::math_utils;
 
 using std::ostringstream;
 using std::min;
@@ -44,6 +43,7 @@ using zxing::ResultPointCallback;
 using zxing::DetectorResult;
 using zxing::PerspectiveTransform;
 using zxing::qrcode::AlignmentPattern;
+using zxing::common::detector::MathUtils;
 
 // VC++
 using zxing::DecodeHints;
@@ -166,9 +166,9 @@ Ref<BitMatrix> Detector::sampleGrid(Ref<BitMatrix> image, int dimension, Ref<Per
 int Detector::computeDimension(Ref<ResultPoint> topLeft, Ref<ResultPoint> topRight, Ref<ResultPoint> bottomLeft,
                                float moduleSize) {
   int tltrCentersDimension =
-    math_utils::round(ResultPoint::distance(topLeft, topRight) / moduleSize);
+    MathUtils::round(ResultPoint::distance(topLeft, topRight) / moduleSize);
   int tlblCentersDimension =
-    math_utils::round(ResultPoint::distance(topLeft, bottomLeft) / moduleSize);
+    MathUtils::round(ResultPoint::distance(topLeft, bottomLeft) / moduleSize);
   int dimension = ((tltrCentersDimension + tlblCentersDimension) >> 1) + 7;
   switch (dimension & 0x03) { // mod 4
   case 0:
@@ -269,7 +269,7 @@ float Detector::sizeOfBlackWhiteBlackRun(int fromX, int fromY, int toX, int toY)
     // Does current pixel mean we have moved white to black or vice versa?
     if (!((state == 1) ^ image_->get(realX, realY))) {
       if (state == 2) {
-        return math_utils::distance(x, y, fromX, fromY);
+        return MathUtils::distance(x, y, fromX, fromY);
       }
       state++;
     }
@@ -287,7 +287,7 @@ float Detector::sizeOfBlackWhiteBlackRun(int fromX, int fromY, int toX, int toY)
   // is "white" so this last point at (toX+xStep,toY) is the right ending. This is really a
   // small approximation; (toX+xStep,toY+yStep) might be really correct. Ignore this.
   if (state == 2) {
-    return math_utils::distance(toX + xstep, toY, fromX, fromY);
+    return MathUtils::distance(toX + xstep, toY, fromX, fromY);
   }
   // else we didn't find even black-white-black; no estimate is really possible
   return nan();

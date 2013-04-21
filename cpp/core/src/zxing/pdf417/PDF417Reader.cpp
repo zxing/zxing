@@ -118,12 +118,12 @@ int PDF417Reader::moduleSize(ArrayRef<int> leftTopBlack, Ref<BitMatrix> image) {
     throw NotFoundException("PDF417Reader::moduleSize: not found!");
   }
   
-  int nModuleSize = (int)(((unsigned)(x - leftTopBlack[0])) >> 3); // We've crossed left first bar, which is 8x
-  if (nModuleSize == 0) {
+  int moduleSize = (int)(((unsigned)(x - leftTopBlack[0])) >> 3); // We've crossed left first bar, which is 8x
+  if (moduleSize == 0) {
     throw NotFoundException("PDF417Reader::moduleSize: is zero!");
   }
   
-  return nModuleSize;
+  return moduleSize;
 }
 
 int PDF417Reader::findPatternStart(int x, int y, Ref<BitMatrix> image) {

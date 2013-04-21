@@ -61,8 +61,8 @@ class DecodedBitStreamParser {
   static const char PUNCT_CHARS[];
   static const char MIXED_CHARS[];
  
-  static ArrayRef<BigInteger> AExp900_;
-  static void InitExp900();
+  static ArrayRef<BigInteger> EXP900;
+  static ArrayRef<BigInteger> initEXP900();
   
   static int textCompaction(ArrayRef<int> codewords, int codeIndex, Ref<String> result);
   static void decodeTextCompaction(ArrayRef<int> textCompactionData,

@@ -28,8 +28,6 @@ using zxing::Ref;
 using zxing::DecoderResult;
 using zxing::String;
 
-// VC++
-
 const int DecodedBitStreamParser::TEXT_COMPACTION_MODE_LATCH = 900;
 const int DecodedBitStreamParser::BYTE_COMPACTION_MODE_LATCH = 901;
 const int DecodedBitStreamParser::NUMERIC_COMPACTION_MODE_LATCH = 902;
@@ -60,40 +58,27 @@ const char DecodedBitStreamParser::MIXED_CHARS[] = {
   '\r', '\t', ',', ':', '#', '-', '.', '$', '/', '+', '%', '*',
   '=', '^'};
 
-ArrayRef<BigInteger> DecodedBitStreamParser::AExp900_;
-
-/**
- * Table containing values for the exponent of 900.
- * This is used in the numeric compaction decode algorithm.
- * Hint: will be initialized only once (because of zero check), so it can be
- * called by the constructor.
- */
-void DecodedBitStreamParser::InitExp900()
-{
-  if(&(*AExp900_) == 0) {
-    BigInteger nineHundred(900);
-    AExp900_ = new Array<BigInteger>(EXP900_SIZE);
-    AExp900_[0] = BigInteger(1);
-    for (int i=1;i<AExp900_->size();i++) {
-      AExp900_[i] = AExp900_[i-1] * nineHundred;
-    }
+ArrayRef<BigInteger> DecodedBitStreamParser::initEXP900() {
+  ArrayRef<BigInteger> EXP900 (16);
+  EXP900[0] = BigInteger(1);
+  BigInteger nineHundred (900);
+  EXP900[1] = nineHundred;
+  for (int i = 2; i < EXP900->size(); i++) {
+    EXP900[i] = EXP900[i - 1] * nineHundred;
   }
+  return EXP900;
 }
 
-/**
- * Constructor will initialize exp900 table the first time.
- */
-DecodedBitStreamParser::DecodedBitStreamParser()
-{
-  InitExp900();
-}
+ArrayRef<BigInteger> DecodedBitStreamParser::EXP900 = initEXP900();
+
+DecodedBitStreamParser::DecodedBitStreamParser(){}
 
 /**
  * PDF417 main decoder.
  **/
 Ref<DecoderResult> DecodedBitStreamParser::decode(ArrayRef<int> codewords)
 {
-  Ref<String> result(new String(""));
+  Ref<String> result (new String(100));
   // Get compaction mode
   int codeIndex = 1;
   int code = codewords[codeIndex++];
@@ -125,13 +110,10 @@ Ref<DecoderResult> DecodedBitStreamParser::decode(ArrayRef<int> codewords)
     if (codeIndex < codewords->size()) {
       code = codewords[codeIndex++];
     } else {
-      throw FormatException("PDF417:DecodedBitStreamParser:decode: codeword overflow");
+      throw FormatException();
     }
   }
-  ArrayRef<char> dummybuf(1);
-  dummybuf[0]= '\0';
-
-  return Ref<DecoderResult>(new DecoderResult(dummybuf, result));
+  return Ref<DecoderResult>(new DecoderResult(ArrayRef<char>(), result));
 }
 
 /**
@@ -144,12 +126,13 @@ Ref<DecoderResult> DecodedBitStreamParser::decode(ArrayRef<int> codewords)
  * @param result    The decoded data is appended to the result.
  * @return The next index into the codeword array.
  */
-int DecodedBitStreamParser::textCompaction(ArrayRef<int> codewords, int codeIndex, Ref<String> result)
-{
+int DecodedBitStreamParser::textCompaction(ArrayRef<int> codewords,
+                                           int codeIndex,
+                                           Ref<String> result) {
   // 2 character per codeword
-  ArrayRef<int> textCompactionData = new Array<int>(codewords[0] << 1);
+  ArrayRef<int> textCompactionData (codewords[0] << 1);
   // Used to hold the byte compaction value if there is a mode shift
-  ArrayRef<int> byteCompactionData = new Array<int>(codewords[0] << 1);
+  ArrayRef<int> byteCompactionData (codewords[0] << 1);
   
   int index = 0;
   bool end = false;
@@ -162,8 +145,7 @@ int DecodedBitStreamParser::textCompaction(ArrayRef<int> codewords, int codeInde
     } else {
       switch (code) {
         case TEXT_COMPACTION_MODE_LATCH:
-          codeIndex--;
-          end = true;
+          textCompactionData[index++] = TEXT_COMPACTION_MODE_LATCH;
           break;
         case BYTE_COMPACTION_MODE_LATCH:
           codeIndex--;
@@ -246,10 +228,7 @@ void DecodedBitStreamParser::decodeTextCompaction(ArrayRef<int> textCompactionDa
             subMode = PUNCT_SHIFT;
           } else if (subModeCh == MODE_SHIFT_TO_BYTE_COMPACTION_MODE) {
             result->append((char) byteCompactionData[i]);
-            // 2012-11-27 hfn after fix by srowen in java code:
-            // the pdf417 specs say we have to return to the last latched
-            // sub-mode. But I checked different encoder implementations and
-            // all of them return to alpha sub-mode after Shift-to-Byte
+          } else if (subModeCh == TEXT_COMPACTION_MODE_LATCH) {
             subMode = ALPHA;
           }
         }
@@ -274,10 +253,7 @@ void DecodedBitStreamParser::decodeTextCompaction(ArrayRef<int> textCompactionDa
             subMode = PUNCT_SHIFT;
           } else if (subModeCh == MODE_SHIFT_TO_BYTE_COMPACTION_MODE) {
             result->append((char) byteCompactionData[i]);
-            // 2012-11-27 hfn after fix by srowen in java code:
-            // the pdf417 specs say we have to return to the last latched
-            // sub-mode. But I checked different encoder implementations and
-            // all of them return to alpha sub-mode after Shift-to-Byte
+          } else if (subModeCh == TEXT_COMPACTION_MODE_LATCH) {
             subMode = ALPHA;
           }
         }
@@ -302,10 +278,7 @@ void DecodedBitStreamParser::decodeTextCompaction(ArrayRef<int> textCompactionDa
             subMode = PUNCT_SHIFT;
           } else if (subModeCh == MODE_SHIFT_TO_BYTE_COMPACTION_MODE) {
             result->append((char) byteCompactionData[i]);
-            // 2012-11-27 hfn after fix by srowen in java code:
-            // the pdf417 specs say we have to return to the last latched
-            // sub-mode. But I checked different encoder implementations and
-            // all of them return to alpha sub-mode after Shift-to-Byte
+          } else if (subModeCh == TEXT_COMPACTION_MODE_LATCH) {
             subMode = ALPHA;
           }
         }
@@ -320,10 +293,7 @@ void DecodedBitStreamParser::decodeTextCompaction(ArrayRef<int> textCompactionDa
             subMode = ALPHA;
           } else if (subModeCh == MODE_SHIFT_TO_BYTE_COMPACTION_MODE) {
             result->append((char) byteCompactionData[i]);
-            // 2012-11-27 hfn after fix by srowen in java code:
-            // the pdf417 specs say we have to return to the last latched
-            // sub-mode. But I checked different encoder implementations and
-            // all of them return to alpha sub-mode after Shift-to-Byte
+          } else if (subModeCh == TEXT_COMPACTION_MODE_LATCH) {
             subMode = ALPHA;
           }
         }
@@ -338,7 +308,11 @@ void DecodedBitStreamParser::decodeTextCompaction(ArrayRef<int> textCompactionDa
           if (subModeCh == 26) {
             ch = ' ';
           } else {
-            // is this even possible?
+            if (subModeCh == 26) {
+              ch = ' ';
+            } else if (subModeCh == TEXT_COMPACTION_MODE_LATCH) {
+              subMode = ALPHA;
+            }
           }
         }
         break;
@@ -356,11 +330,6 @@ void DecodedBitStreamParser::decodeTextCompaction(ArrayRef<int> textCompactionDa
             // PS before Shift-to-Byte is used as a padding character,
             // see 5.4.2.4 of the specification
             result->append((char) byteCompactionData[i]);
-            // 2012-11-27 hfn after fix by srowen in java code:
-            // the pdf417 specs say we have to return to the last latched
-            // sub-mode. But I checked different encoder implementations and
-            // all of them return to alpha sub-mode after Shift-to-Byte
-            subMode = ALPHA;
           } else if (subModeCh == TEXT_COMPACTION_MODE_LATCH) {
             subMode = ALPHA;
           }
@@ -386,8 +355,9 @@ void DecodedBitStreamParser::decodeTextCompaction(ArrayRef<int> textCompactionDa
  * @param result    The decoded data is appended to the result.
  * @return The next index into the codeword array.
  */
-int DecodedBitStreamParser::byteCompaction(int mode, ArrayRef<int> codewords, int codeIndex, Ref<String> result)
-{
+int DecodedBitStreamParser::byteCompaction(int mode,
+                                           ArrayRef<int> codewords,
+                                           int codeIndex, Ref<String> result) {
   if (mode == BYTE_COMPACTION_MODE_LATCH) {
     // Total number of Byte Compaction characters to be encoded
     // is not a multiple of 6
@@ -491,8 +461,9 @@ int DecodedBitStreamParser::byteCompaction(int mode, ArrayRef<int> codewords, in
  * @param result    The decoded data is appended to the result.
  * @return The next index into the codeword array.
  */
-int DecodedBitStreamParser::numericCompaction(ArrayRef<int> codewords, int codeIndex, Ref<String> result)
-{
+int DecodedBitStreamParser::numericCompaction(ArrayRef<int> codewords,
+                                              int codeIndex,
+                                              Ref<String> result) {
   int count = 0;
   bool end = false;
   
@@ -577,10 +548,9 @@ int DecodedBitStreamParser::numericCompaction(ArrayRef<int> codewords, int codeI
 */
 Ref<String> DecodedBitStreamParser::decodeBase900toBase10(ArrayRef<int> codewords, int count)
 {
-  InitExp900();
   BigInteger result = BigInteger(0);
   for (int i = 0; i < count; i++) {
-    result = result + (AExp900_[count - i - 1] * BigInteger(codewords[i]));
+    result = result + (EXP900[count - i - 1] * BigInteger(codewords[i]));
   }
   string resultString = bigIntegerToString(result);
   if (resultString[0] != '1') {

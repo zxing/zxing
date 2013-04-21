@@ -24,12 +24,11 @@
 #include <zxing/common/detector/MathUtils.h>
 #include <sstream>
 
-namespace math_utils = zxing::common::detector::math_utils;
-
 using std::vector;
 using zxing::Ref;
 using zxing::ResultPoint;
 using zxing::WhiteRectangleDetector;
+using zxing::common::detector::MathUtils;
 
 // VC++
 using zxing::BitMatrix;
@@ -232,13 +231,13 @@ std::vector<Ref<ResultPoint> > WhiteRectangleDetector::detect() {
 Ref<ResultPoint>
 WhiteRectangleDetector::getBlackPointOnSegment(int aX_, int aY_, int bX_, int bY_) {
   float aX = float(aX_), aY = float(aY_), bX = float(bX_), bY = float(bY_);
-  int dist = math_utils::round(math_utils::distance(aX, aY, bX, bY));
+  int dist = MathUtils::round(MathUtils::distance(aX, aY, bX, bY));
   float xStep = (bX - aX) / dist;
   float yStep = (bY - aY) / dist;
 
   for (int i = 0; i < dist; i++) {
-    int x = math_utils::round(aX + i * xStep);
-    int y = math_utils::round(aY + i * yStep);
+    int x = MathUtils::round(aX + i * xStep);
+    int y = MathUtils::round(aY + i * yStep);
     if (image_->get(x, y)) {
       Ref<ResultPoint> point(new ResultPoint(float(x), float(y)));
       return point;
