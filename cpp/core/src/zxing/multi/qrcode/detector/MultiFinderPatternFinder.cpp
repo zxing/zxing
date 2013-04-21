@@ -1,3 +1,4 @@
+// -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
 /*
  *  Copyright 2011 ZXing authors
  *
@@ -14,31 +15,40 @@
  * limitations under the License.
  */
 
-#include <algorithm>
 #include <cmath>
-#include <stdlib.h>
 #include <zxing/multi/qrcode/detector/MultiFinderPatternFinder.h>
 #include <zxing/DecodeHints.h>
 #include <zxing/ReaderException.h>
 
-namespace zxing{
-namespace multi {
-using namespace zxing::qrcode;
+/*
+  #include <algorithm>
+  #include <stdlib.h>
+*/
+
+using std::abs;
+using zxing::multi::MultiFinderPatternFinder;
+using zxing::Ref;
+using zxing::qrcode::FinderPattern;
+using zxing::qrcode::FinderPatternInfo;
+using zxing::ReaderException;
 
 const float MultiFinderPatternFinder::MAX_MODULE_COUNT_PER_EDGE = 180;
 const float MultiFinderPatternFinder::MIN_MODULE_COUNT_PER_EDGE = 9;
 const float MultiFinderPatternFinder::DIFF_MODSIZE_CUTOFF_PERCENT = 0.05f;
 const float MultiFinderPatternFinder::DIFF_MODSIZE_CUTOFF = 0.5f;
 
+namespace {
+
 bool compareModuleSize(Ref<FinderPattern> a, Ref<FinderPattern> b){
-    float value = a->getEstimatedModuleSize() - b->getEstimatedModuleSize();
-    return value < 0.0;
+  float value = a->getEstimatedModuleSize() - b->getEstimatedModuleSize();
+  return value < 0.0;
 }
 
+}
 
 MultiFinderPatternFinder::MultiFinderPatternFinder(Ref<BitMatrix> image, 
-  Ref<ResultPointCallback> resultPointCallback) : 
-    FinderPatternFinder(image, resultPointCallback)
+                                                   Ref<ResultPointCallback> resultPointCallback)
+    : FinderPatternFinder(image, resultPointCallback)
 {
 }
 
@@ -100,7 +110,7 @@ std::vector<Ref<FinderPatternInfo> > MultiFinderPatternFinder::findMulti(DecodeH
             stateCount[++currentState]++;
           }
         } else { // Counting white pixels
-            stateCount[currentState]++;
+          stateCount[currentState]++;
         }
       }
     } // for j=...
@@ -132,8 +142,8 @@ std::vector<std::vector<Ref<FinderPattern> > > MultiFinderPatternFinder::selectB
   std::vector<std::vector<Ref<FinderPattern> > > results;
 
   /*
-  * Begin HE modifications to safely detect multiple codes of equal size
-  */
+   * Begin HE modifications to safely detect multiple codes of equal size
+   */
   if (size == 3) {
     results.push_back(possibleCenters_);
     return results;
@@ -144,19 +154,19 @@ std::vector<std::vector<Ref<FinderPattern> > > MultiFinderPatternFinder::selectB
   std::sort(possibleCenters.begin(), possibleCenters.end(), compareModuleSize);
 
   /*
-  * Now lets start: build a list of tuples of three finder locations that
-  *  - feature similar module sizes
-  *  - are placed in a distance so the estimated module count is within the QR specification
-  *  - have similar distance between upper left/right and left top/bottom finder patterns
-  *  - form a triangle with 90° angle (checked by comparing top right/bottom left distance
-  *    with pythagoras)
-  *
-  * Note: we allow each point to be used for more than one code region: this might seem
-  * counterintuitive at first, but the performance penalty is not that big. At this point,
-  * we cannot make a good quality decision whether the three finders actually represent
-  * a QR code, or are just by chance layouted so it looks like there might be a QR code there.
-  * So, if the layout seems right, lets have the decoder try to decode.     
-  */
+   * Now lets start: build a list of tuples of three finder locations that
+   *  - feature similar module sizes
+   *  - are placed in a distance so the estimated module count is within the QR specification
+   *  - have similar distance between upper left/right and left top/bottom finder patterns
+   *  - form a triangle with 90° angle (checked by comparing top right/bottom left distance
+   *    with pythagoras)
+   *
+   * Note: we allow each point to be used for more than one code region: this might seem
+   * counterintuitive at first, but the performance penalty is not that big. At this point,
+   * we cannot make a good quality decision whether the three finders actually represent
+   * a QR code, or are just by chance layouted so it looks like there might be a QR code there.
+   * So, if the layout seems right, lets have the decoder try to decode.
+   */
 
   for (int i1 = 0; i1 < (size - 2); i1++) {
     Ref<FinderPattern> p1 = possibleCenters[i1];
@@ -218,6 +228,3 @@ std::vector<std::vector<Ref<FinderPattern> > > MultiFinderPatternFinder::selectB
   }
   return results;
 }
-
-} // End zxing::multi namespace
-} // End zxing namespace
