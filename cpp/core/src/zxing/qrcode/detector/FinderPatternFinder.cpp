@@ -19,18 +19,28 @@
  * limitations under the License.
  */
 
+#include <algorithm>
 #include <zxing/qrcode/detector/FinderPatternFinder.h>
 #include <zxing/ReaderException.h>
 #include <zxing/DecodeHints.h>
-#include <vector>
-#include <cmath>
-#include <cstdlib>
-#include <algorithm>
 
-namespace zxing {
-namespace qrcode {
+using std::sort;
+using std::max;
+using std::abs;
+using std::vector;
+using zxing::Ref;
+using zxing::qrcode::FinderPatternFinder;
+using zxing::qrcode::FinderPattern;
+using zxing::qrcode::FinderPatternInfo;
 
-using namespace std;
+// VC++
+
+using zxing::BitMatrix;
+using zxing::ResultPointCallback;
+using zxing::ResultPoint;
+using zxing::DecodeHints;
+
+namespace {
 
 class FurthestFromAverageComparator {
 private:
@@ -63,6 +73,8 @@ public:
     }
   }
 };
+
+}
 
 int FinderPatternFinder::CENTER_QUORUM = 2;
 int FinderPatternFinder::MIN_SKIP = 3;
@@ -308,7 +320,7 @@ bool FinderPatternFinder::haveMultiplyConfirmedCenters() {
   return totalDeviation <= 0.05f * totalModuleSize;
 }
 
-vector<Ref<FinderPattern> > FinderPatternFinder::selectBestPatterns() {
+vector< Ref<FinderPattern> > FinderPatternFinder::selectBestPatterns() {
   size_t startSize = possibleCenters_.size();
 
   if (startSize < 3) {
@@ -542,9 +554,6 @@ Ref<BitMatrix> FinderPatternFinder::getImage() {
   return image_;
 }
 
-std::vector<Ref<FinderPattern> >& FinderPatternFinder::getPossibleCenters() {
+vector<Ref<FinderPattern> >& FinderPatternFinder::getPossibleCenters() {
   return possibleCenters_;
-}
-
-}
 }

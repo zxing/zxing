@@ -21,57 +21,49 @@
 
 #include <zxing/qrcode/detector/FinderPattern.h>
 
-namespace zxing {
-	namespace qrcode {
+using std::abs;
+using zxing::Ref;
+using zxing::qrcode::FinderPattern;		
+
+FinderPattern::FinderPattern(float posX, float posY, float estimatedModuleSize)
+    : ResultPoint(posX,posY), estimatedModuleSize_(estimatedModuleSize), count_(1) {}
 		
-		using namespace std;
+FinderPattern::FinderPattern(float posX, float posY, float estimatedModuleSize, int count)
+    : ResultPoint(posX,posY), estimatedModuleSize_(estimatedModuleSize), count_(count) {}
 		
-		FinderPattern::FinderPattern(float posX, float posY, float estimatedModuleSize) :
-		ResultPoint(posX,posY), estimatedModuleSize_(estimatedModuleSize), count_(1) {
-      // cerr << "fpc " << getX() << " " << getY() << " " << count_ << endl;
-      // cerr << "fp " << getX() << " " << getY() << endl;
-		}
+int FinderPattern::getCount() const {
+  return count_;
+}
 		
-		FinderPattern::FinderPattern(float posX, float posY, float estimatedModuleSize, int count) :
-		ResultPoint(posX,posY), estimatedModuleSize_(estimatedModuleSize), count_(count) {
-      // cerr << "fpc " << getX() << " " << getY() << " " << count << endl;
-		}
+float FinderPattern::getEstimatedModuleSize() const {
+  return estimatedModuleSize_;
+}
 		
-		int FinderPattern::getCount() const {
-			return count_;
-		}
-		
-		float FinderPattern::getEstimatedModuleSize() const {
-			return estimatedModuleSize_;
-		}
-		
-		void FinderPattern::incrementCount() {
-			count_++;
-      // cerr << "ic " << getX() << " " << getY() << " " << count_ << endl;
-		}
+void FinderPattern::incrementCount() {
+  count_++;
+  // cerr << "ic " << getX() << " " << getY() << " " << count_ << endl;
+}
 		
 /*
-		bool FinderPattern::aboutEquals(float moduleSize, float i, float j) const {
-			return abs(i - posY_) <= moduleSize && abs(j - posX_) <= moduleSize && (abs(moduleSize - estimatedModuleSize_)
-																					<= 1.0f || abs(moduleSize - estimatedModuleSize_) / estimatedModuleSize_ <= 0.1f);
-		}
+  bool FinderPattern::aboutEquals(float moduleSize, float i, float j) const {
+  return abs(i - posY_) <= moduleSize && abs(j - posX_) <= moduleSize && (abs(moduleSize - estimatedModuleSize_)
+  <= 1.0f || abs(moduleSize - estimatedModuleSize_) / estimatedModuleSize_ <= 0.1f);
+  }
 */
-    bool FinderPattern::aboutEquals(float moduleSize, float i, float j) const {
-      if (abs(i - getY()) <= moduleSize && abs(j - getX()) <= moduleSize) {
-        float moduleSizeDiff = abs(moduleSize - estimatedModuleSize_);
-        return moduleSizeDiff <= 1.0f || moduleSizeDiff <= estimatedModuleSize_;
-      }
-      return false;
-    }
+bool FinderPattern::aboutEquals(float moduleSize, float i, float j) const {
+  if (abs(i - getY()) <= moduleSize && abs(j - getX()) <= moduleSize) {
+    float moduleSizeDiff = abs(moduleSize - estimatedModuleSize_);
+    return moduleSizeDiff <= 1.0f || moduleSizeDiff <= estimatedModuleSize_;
+  }
+  return false;
+}
 		
-    Ref<FinderPattern> FinderPattern::combineEstimate(float i, float j, float newModuleSize) const {
-      // fprintf(stderr, "ce %f %f %f\n", i, j, newModuleSize);
+Ref<FinderPattern> FinderPattern::combineEstimate(float i, float j, float newModuleSize) const {
+  // fprintf(stderr, "ce %f %f %f\n", i, j, newModuleSize);
 
-      int combinedCount = count_ + 1;
-      float combinedX = (count_ * getX() + j) / combinedCount;
-      float combinedY = (count_ * getY() + i) / combinedCount;
-      float combinedModuleSize = (count_ * getEstimatedModuleSize() + newModuleSize) / combinedCount;
-      return Ref<FinderPattern>(new FinderPattern(combinedX, combinedY, combinedModuleSize, combinedCount));
-    }
-	}
+  int combinedCount = count_ + 1;
+  float combinedX = (count_ * getX() + j) / combinedCount;
+  float combinedY = (count_ * getY() + i) / combinedCount;
+  float combinedModuleSize = (count_ * getEstimatedModuleSize() + newModuleSize) / combinedCount;
+  return Ref<FinderPattern>(new FinderPattern(combinedX, combinedY, combinedModuleSize, combinedCount));
 }
