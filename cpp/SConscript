@@ -27,7 +27,7 @@ else:
     cxxflags.append('-Wall -Wextra -Werror')
     # -Werror
   else:
-    cxxflags.append('-O3 -g3 -ggdb -Wall -Wextra')
+    cxxflags.append('-Os -g3 -ggdb -Wall -Wextra')
   if env['PIC']:
     cxxflags.append('-fPIC')
   compile_options['CXXFLAGS'] = ' '.join(cxxflags)

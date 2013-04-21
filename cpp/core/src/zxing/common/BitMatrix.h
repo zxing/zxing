@@ -73,7 +73,8 @@ public:
   int getWidth() const;
   int getHeight() const;
 
-  // ArrayRef<int> getBits() const;
+  ArrayRef<int> getTopLeftOnBit() const;
+  ArrayRef<int> getBottomRightOnBit() const;
 
   friend std::ostream& operator<<(std::ostream &out, const BitMatrix &bm);
   const char *description();
