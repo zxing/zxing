@@ -58,7 +58,7 @@
         <executions>
           <execution>
             <id>copy-android</id>
-            <phase>install</phase>
+            <phase>package</phase>
             <goals>
               <goal>copy</goal>
             </goals>
@@ -77,7 +77,7 @@
           </execution>
           <execution>
             <id>copy-androidtest</id>
-            <phase>install</phase>
+            <phase>package</phase>
             <goals>
               <goal>copy</goal>
             </goals>
