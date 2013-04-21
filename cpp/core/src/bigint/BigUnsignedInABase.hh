@@ -100,8 +100,8 @@ public:
 	Base getBase() const { return base; }
 
 	// Expose these from NumberlikeArray directly.
-	NumberlikeArray<Digit>::getCapacity;
-	NumberlikeArray<Digit>::getLength;
+	using NumberlikeArray<Digit>::getCapacity;
+	using NumberlikeArray<Digit>::getLength;
 
 	/* Returns the requested digit, or 0 if it is beyond the length (as if
 	 * the number had 0s infinitely to the left). */
