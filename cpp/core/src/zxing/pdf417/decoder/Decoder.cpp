@@ -31,6 +31,12 @@ using zxing::pdf417::decoder::ec::ErrorCorrection;
 using zxing::Ref;
 using zxing::DecoderResult;
 
+// VC++
+
+using zxing::BitMatrix;
+using zxing::DecodeHints;
+using zxing::ArrayRef;
+
 const int Decoder::MAX_ERRORS = 3;
 const int Decoder::MAX_EC_CODEWORDS = 512;
 

@@ -15,6 +15,7 @@
  * limitations under the License.
  */
 
+#include <stdint.h>
 #include <bigint/BigIntegerUtils.hh>
 #include <zxing/FormatException.h>
 #include <zxing/pdf417/decoder/DecodedBitStreamParser.h>
@@ -26,6 +27,8 @@ using zxing::ArrayRef;
 using zxing::Ref;
 using zxing::DecoderResult;
 using zxing::String;
+
+// VC++
 
 const int DecodedBitStreamParser::TEXT_COMPACTION_MODE_LATCH = 900;
 const int DecodedBitStreamParser::BYTE_COMPACTION_MODE_LATCH = 901;
