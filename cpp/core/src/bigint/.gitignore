@@ -1,0 +1,6 @@
+*.o
+sample
+testsuite
+testsuite.expected
+testsuite.out
+testsuite.err

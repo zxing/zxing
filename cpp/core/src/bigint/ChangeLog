@@ -1,0 +1,146 @@
+                                   Change Log
+
+These entries tell you what was added, fixed, or improved in each version as
+compared to the previous one.  In case you haven't noticed, a version number
+roughly corresponds to the release date of that version in `YYYY.MM.DD[.N]'
+format, where `.N' goes `.2', `.3', etc. if there are multiple versions on the
+same day.  The topmost version listed is the one you have.
+
+2010.04.30
+----------
+- Strengthen the advice about build/IDE configuration in the README.
+
+2009.05.03
+----------
+- BigUnsigned::{get,set}Bit: Change two remaining `1 <<' to `Blk(1) <<' to work
+  on systems where sizeof(unsigned int) != sizeof(Blk).  Bug reported by Brad
+  Spencer.
+- dataToBigInteger: Change a `delete' to `delete []' to avoid leaking memory.
+  Bug reported by Nicolás Carrasco.
+
+2009.03.26
+----------
+- BigUnsignedInABase(std::string) Reject digits too big for the base.
+  Bug reported by Niakam Kazemi.
+
+2008.07.20
+----------
+Dennis Yew pointed out serious problems with ambiguities and unwanted
+conversions when mixing BigInteger/BigUnsigned and primitive integers.  To fix
+these, I removed the implicit conversions from BigInteger/BigUnsigned to
+primitive integers and from BigInteger to BigUnsigned.  Removing the
+BigInteger-to-BigUnsigned conversion required changing BigInteger to have a
+BigUnsigned field instead of inheriting from it; this was a complex task but
+ultimately gave a saner design.  At the same time, I went through the entire
+codebase, making the formatting and comments prettier and reworking anything I
+thought was unclear.  I also added a testsuite (currently for 32-bit systems
+only); it doesn't yet cover the entire library but should help to ensure that
+things work the way they should.
+
+A number of changes from version 2007.07.07 break compatibility with existing
+code that uses the library, but updating that code should be pretty easy:
+- BigInteger can no longer be implicitly converted to BigUnsigned.  Use
+  getMagnitude() instead.
+- BigUnsigned and BigInteger can no longer be implicitly converted to primitive
+  integers.  Use the toInt() family of functions instead.
+- The easy* functions have been renamed to more mature names:
+  bigUnsignedToString, bigIntegerToString, stringToBigUnsigned,
+  stringToBigInteger, dataToBigInteger.
+- BigInteger no longer supports bitwise operations.  Get the magnitude with
+  getMagnitude() and operate on that instead.
+- The old {BigUnsigned,BigInteger}::{divide,modulo} copy-less options have been
+  removed.  Use divideWithRemainder instead.
+- Added a base argument to BigUnsignedInABase's digit-array constructor.  I
+  ope no one used that constructor in its broken state anyway.
+
+Other notable changes:
+- Added BigUnsigned functions setBlock, bitLength, getBit, setBit.
+- The bit-shifting operations now support negative shift amounts, which shift in
+  the other direction.
+- Added some big-integer algorithms in BigIntegerAlgorithms.hh: gcd,
+  extendedEuclidean, modinv, modexp.
+
+2007.07.07
+----------
+Update the "Running the sample program produces this output:" comment in
+sample.cc for the bitwise operators.
+
+2007.06.14
+----------
+- Implement << and >> for BigUnsigned in response to email from Marco Schulze.
+- Fix name: DOTR_ALIASED -> DTRT_ALIASED.
+- Demonstrate all bitwise operators (&, |, ^, <<, >>) in sample.cc.
+
+2007.02.16
+----------
+Boris Dessy pointed out that the library threw an exception on "a *= a", so I changed all the put-here operations to handle aliased calls correctly using a temporary copy instead of throwing exceptions.
+
+2006.08.14
+----------
+In BigUnsigned::bitXor, change allocate(b2->len) to allocate(a2->len): we should allocate enough space for the longer number, not the shorter one!  Thanks to Sriram Sankararaman for pointing this out.
+
+2006.05.03
+----------
+I ran the sample program using valgrind and discovered a `delete s' that should be `delete [] s' and a `len++' before an `allocateAndCopy(len)' that should have been after an `allocateAndCopy(len + 1)'.  I fixed both.  Yay for valgrind!
+
+2006.05.01
+----------
+I fixed incorrect results reported by Mohand Mezmaz and related memory corruption on platforms where Blk is bigger than int.  I replaced (1 << x) with (Blk(1) << x) in two places in BigUnsigned.cc.
+
+2006.04.24
+----------
+Two bug fixes: BigUnsigned "++x" no longer segfaults when x grows in length, and BigUnsigned == and != are now redeclared so as to be usable.  I redid the Makefile: I removed the *.tag mechanism and hard-coded the library's header dependencies, I added comments, and I made the Makefile more useful for building one's own programs instead of just the sample.
+
+2006.02.26
+----------
+A few tweaks in preparation for a group to distribute the library.  The project Web site has moved; I updated the references.  I fixed a typo and added a missing function in NumberlikeArray.hh.  I'm using Eclipse now, so you get Eclipse project files.
+
+2005.03.30
+----------
+Sam Larkin found a bug in `BigInteger::subtract'; I fixed it.
+
+2005.01.18
+----------
+I fixed some problems with `easyDataToBI'.  Due to some multiply declared variables, this function would not compile.  However, it is a template function, so the compiler parses it and doesn't compile the parsed representation until something uses the function; this is how I missed the problems.  I also removed debugging output from this function.
+
+2005.01.17
+----------
+A fix to some out-of-bounds accesses reported by Milan Tomic (see the comment under `BigUnsigned::divideWithRemainder').  `BigUnsigned::multiply' and `BigUnsigned::divideWithRemainder' implementations neatened up a bit with the help of a function `getShiftedBlock'.  I (finally!) introduced a constant `BigUnsigned::N', the number of bits in a `BigUnsigned::Blk', which varies depending on machine word size.  In both code and comments, it replaces the much clunkier `8*sizeof(Blk)'.  Numerous other small changes.  There's a new conversion routine `easyDataToBI' that will convert almost any format of binary data to a `BigInteger'.
+
+I have inserted a significant number of new comments.  Most explain unobvious aspects of the code.
+
+2005.01.06
+----------
+Some changes to the way zero-length arrays are handled by `NumberlikeArray', which fixed a memory leak reported by Milan Tomic.
+
+2004.12.24.2
+------------
+I tied down a couple of loose ends involving division/modulo.  I added an explanation of put-here vs. overloaded operators in the sample program; this has confused too many people.  Miscellaneous other improvements.
+
+I believe that, at this point, the Big Integer Library makes no assumptions about the word size of the machine it is using.  `BigUnsigned::Blk' is always an `unsigned long', whatever that may be, and its size is computed with `sizeof' when necessary.  However, just in case, I would be interested to have someone test the library on a non-32-bit machine to see if it works.
+
+2004.12.24
+----------
+This is a _major_ upgrade to the library.  Among the things that have changed:
+
+I wrote the original version of the library, particularly the four ``classical algorithms'' in `BigUnsigned.cc', using array indexing.  Then I rewrote it to use pointers because I thought that would be faster.  But recently, I revisited the code in `BigUnsigned.cc' and found that I could not begin to understand what it was doing.
+
+I have decided that the drawbacks of pointers, increased coding difficulty and reduced code readability, far outweigh their speed benefits.  Plus, any modern optimizing compiler should produce fast code either way.  Therefore, I rewrote the library to use array indexing again.  (Thank goodness for regular-expression find-and-replace.  It saved me a lot of time.)
+
+The put-here operations `divide' and `modulo' of each of `BigUnsigned' and `BigInteger' have been supplanted by a single operation `divideWithRemainder'.  Read the profuse comments for more information on its exact behavior.
+
+There is a new class `BigUnsignedInABase' that is like `BigUnsigned' but uses a user-specified, small base instead of `256 ^ sizeof(unsigned long)'.  Much of the code common to the two has been factored out into `NumberlikeArray'.
+
+`BigUnsignedInABase' facilitates conversion between `BigUnsigned's and digit-by-digit string representations using `std::string'.  Convenience routines to do this conversion are in `BigIntegerUtils.hh'.  `iostream' compatibility has been improved.
+
+I would like to thank Chris Morbitzer for the e-mail message that catalyzed this major upgrade.  He wanted a way to convert a string to a BigInteger.  One thing just led to another, roughly in reverse order from how they are listed here.
+
+2004.1216
+---------
+Brad Spencer pointed out a memory leak in `BigUnsigned::divide'.  It is fixed in the December 16, 2004 version.
+
+2004.1205
+---------
+After months of inactivity, I fixed a bug in the `BigInteger' division routine; thanks to David Allen for reporting the bug.  I also added simple routines for decimal output to `std::ostream's, and there is a demo that prints out powers of 3.
+
+~~~~
