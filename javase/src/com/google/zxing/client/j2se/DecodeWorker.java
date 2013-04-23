@@ -137,16 +137,7 @@ final class DecodeWorker implements Callable<Integer> {
   }
 
   private Result decode(URI uri, Map<DecodeHintType,?> hints) throws IOException {
-    BufferedImage image;
-    try {
-      image = ImageIO.read(uri.toURL());
-    } catch (IllegalArgumentException ignored) {
-      throw new FileNotFoundException("Resource not found: " + uri);
-    }
-    if (image == null) {
-      System.err.println(uri.toString() + ": Could not load image");
-      return null;
-    }
+    BufferedImage image = ImageReader.readImage(uri);
     try {
       LuminanceSource source;
       if (config.getCrop() == null) {
@@ -183,16 +174,7 @@ final class DecodeWorker implements Callable<Integer> {
   }
 
   private Result[] decodeMulti(URI uri, Map<DecodeHintType,?> hints) throws IOException {
-    BufferedImage image;
-    try {
-      image = ImageIO.read(uri.toURL());
-    } catch (IllegalArgumentException ignored) {
-      throw new FileNotFoundException("Resource not found: " + uri);
-    }
-    if (image == null) {
-      System.err.println(uri.toString() + ": Could not load image");
-      return null;
-    }
+    BufferedImage image = ImageReader.readImage(uri);
     try {
       LuminanceSource source;
       if (config.getCrop() == null) {

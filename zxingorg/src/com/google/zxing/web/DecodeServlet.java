@@ -28,6 +28,7 @@ import com.google.zxing.Reader;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
+import com.google.zxing.client.j2se.ImageReader;
 import com.google.zxing.common.GlobalHistogramBinarizer;
 import com.google.zxing.common.HybridBinarizer;
 
@@ -126,13 +127,30 @@ public final class DecodeServlet extends HttpServlet {
       imageURIString = "http://" + imageURIString;
     }
 
-    URL imageURL;
+    URI imageURI;
     try {
-      imageURL = new URI(imageURIString).toURL();
+      imageURI = new URI(imageURIString);
     } catch (URISyntaxException ignored) {
       log.info("URI was not valid: " + imageURIString);
       response.sendRedirect("badurl.jspx");
       return;
+    }
+    
+    // Shortcut for data URI
+    if ("data".equals(imageURI.getScheme())) {
+      try {
+        BufferedImage image = ImageReader.readDataURIImage(imageURI);
+        processImage(image, request, response);
+      } catch (IOException ioe) {
+        log.info(ioe.toString());
+        response.sendRedirect("badurl.jspx");
+        return;
+      }
+    }
+    
+    URL imageURL;    
+    try {
+      imageURL = imageURI.toURL();
     } catch (MalformedURLException ignored) {
       log.info("URI was not valid: " + imageURIString);
       response.sendRedirect("badurl.jspx");
@@ -289,6 +307,13 @@ public final class DecodeServlet extends HttpServlet {
       response.sendRedirect("badimage.jspx");
       return;
     }
+    
+    processImage(image, request, response);
+  }
+  
+  private static void processImage(BufferedImage image,
+                                   ServletRequest request,
+                                   HttpServletResponse response) throws IOException, ServletException {
 
     Reader reader = new MultiFormatReader();
     LuminanceSource source = new BufferedImageLuminanceSource(image);
