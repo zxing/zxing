@@ -38,6 +38,9 @@ public:
   Array(T const* ts, int n) :
       Counted(), values_(ts, ts+n) {
   }
+  Array(T const* ts, T const* te) :
+      Counted(), values_(ts, te) {
+  }
   Array(T v, int n) :
       Counted(), values_(n, v) {
   }
