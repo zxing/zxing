@@ -123,15 +123,15 @@ public final class DecodeServlet extends HttpServlet {
 
     imageURIString = imageURIString.trim();
 
-    if (!(imageURIString.startsWith("http://") || imageURIString.startsWith("https://"))) {
-      imageURIString = "http://" + imageURIString;
-    }
-
     URI imageURI;
     try {
       imageURI = new URI(imageURIString);
-    } catch (URISyntaxException ignored) {
-      log.info("URI was not valid: " + imageURIString);
+      // Assume http: if not specified
+      if (imageURI.getScheme() == null) {
+        imageURI = new URI("http://" + imageURIString);
+      }
+    } catch (URISyntaxException urise) {
+      log.info("URI " + imageURIString + " was not valid: " + urise);
       response.sendRedirect("badurl.jspx");
       return;
     }
@@ -144,8 +144,8 @@ public final class DecodeServlet extends HttpServlet {
       } catch (IOException ioe) {
         log.info(ioe.toString());
         response.sendRedirect("badurl.jspx");
-        return;
       }
+      return;
     }
     
     URL imageURL;    
