@@ -51,6 +51,8 @@ public final class HttpHelper {
     HTML,
     /** JSON content */
     JSON,
+    /** XML */
+    XML,
     /** Plain text content */
     TEXT,
   }
@@ -80,6 +82,9 @@ public final class HttpHelper {
       case JSON:
         contentTypes = "application/json,text/*,*/*";
         break;
+      case XML:
+        contentTypes = "application/xml,text/*,*/*";
+        break;
       case TEXT:
       default:
         contentTypes = "text/*,*/*";
@@ -88,22 +93,35 @@ public final class HttpHelper {
   }
 
   private static CharSequence downloadViaHttp(String uri, String contentTypes, int maxChars) throws IOException {
-    Log.i(TAG, "Downloading " + uri);
-    URL url = new URL(uri);
-    HttpURLConnection connection = safelyOpenConnection(url);
-    connection.setRequestProperty("Accept", contentTypes);
-    connection.setRequestProperty("Accept-Charset", "utf-8,*");
-    connection.setRequestProperty("User-Agent", "ZXing (Android)");
-    try {
-      int responseCode = safelyConnect(uri, connection);
-      if (responseCode != HttpURLConnection.HTTP_OK) {
-        throw new IOException("Bad HTTP response: " + responseCode);
+    int redirects = 0;
+    while (redirects < 5) {
+      URL url = new URL(uri);
+      HttpURLConnection connection = safelyOpenConnection(url);
+      connection.setInstanceFollowRedirects(true); // Won't work HTTP -> HTTPS or vice versa
+      connection.setRequestProperty("Accept", contentTypes);
+      connection.setRequestProperty("Accept-Charset", "utf-8,*");
+      connection.setRequestProperty("User-Agent", "ZXing (Android)");
+      try {
+        int responseCode = safelyConnect(uri, connection);
+        switch (responseCode) {
+          case HttpURLConnection.HTTP_OK:
+            return consume(connection, maxChars);
+          case HttpURLConnection.HTTP_MOVED_TEMP:
+            String location = connection.getHeaderField("Location");
+            if (location != null) {
+              uri = location;
+              redirects++;
+              continue;
+            }
+            throw new IOException("No Location");
+          default:
+            throw new IOException("Bad HTTP response: " + responseCode);
+        }
+      } finally {
+        connection.disconnect();
       }
-      Log.i(TAG, "Consuming " + uri);
-      return consume(connection, maxChars);
-    } finally {
-      connection.disconnect();
     }
+    throw new IOException("Too many redirects");
   }
 
   private static String getEncoding(URLConnection connection) {
