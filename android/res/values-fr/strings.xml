@@ -76,7 +76,7 @@
   <string name="msg_google_product">Google Shopping</string>
   <string name="msg_google_shopper_missing">Google Shopper n\'est pas installé</string>
   <string name="msg_install_google_shopper">Google Shopper associe la lecture de codes-barres avec des prix en ligne et en magasin, des critiques et plus encore sans ouvrir le navigateur. Désirez-vous l\'essayer maintenant ?</string>
-  <string name="msg_intent_failed">Désolé, l\'application demandée n\'a pas pu être lancée. Le contenu du code-barres n'est peut-être pas valable.</string>
+  <string name="msg_intent_failed">Désolé, l\'application demandée n\'a pas pu être lancée. Le contenu du code-barres n\'est peut-être pas valable.</string>
   <string name="msg_redirect">Redirection</string>
   <string name="msg_sbc_book_not_searchable">Désolé, ce livre est introuvable.</string>
   <string name="msg_sbc_failed">Désolé, la recherche a rencontré un problème.</string>
@@ -117,7 +117,7 @@
   <string name="preferences_play_beep_title">Bip</string>
   <string name="preferences_remember_duplicates_summary">Enregistrer dans l\'historique les lectures multiples d\'un même code-barres</string>
   <string name="preferences_remember_duplicates_title">Enregistrer les doublons</string>
-  <string name="preferences_result_title">Paramètres d'un résultat</string>
+  <string name="preferences_result_title">Paramètres d\'un résultat</string>
   <string name="preferences_scanning_title">Pendant le scan de codes-barres, décoder\u2026</string>
   <string name="preferences_search_country">Pays de recherche</string>
   <string name="preferences_supplemental_summary">Essayer d\'obtenir plus d\'informations sur le contenu du code-barres</string>
