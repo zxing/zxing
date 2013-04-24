@@ -7,20 +7,14 @@ import java.util.Formatter;
 
 public class DetectionResult implements SimpleLog.Loggable {
   private static final int ADJUST_ROW_NUMBER_SKIP = 2;
-  private final int barcodeColumnCount;
-  private final int barcodeRowCount;
-  private final int barcodeECLevel;
+  private final BarcodeMetadata barcodeMetadata;
   private final DetectionResultColumn[] detectionResultColumns;
   private final BoundingBox boundingBox;
+  private final int barcodeColumnCount;
 
-  public DetectionResult(BitMatrix image,
-                         int barcodeColumnCount,
-                         int barcodeRowCount,
-                         int barcodeECLevel,
-                         BoundingBox boundingBox) {
-    this.barcodeColumnCount = barcodeColumnCount;
-    this.barcodeRowCount = barcodeRowCount;
-    this.barcodeECLevel = barcodeECLevel;
+  public DetectionResult(BitMatrix image, BarcodeMetadata barcodeMetadata, BoundingBox boundingBox) {
+    this.barcodeMetadata = barcodeMetadata;
+    this.barcodeColumnCount = barcodeMetadata.getColumnCount();
     this.boundingBox = boundingBox;
     detectionResultColumns = new DetectionResultColumn[barcodeColumnCount + 2];
   }
@@ -65,12 +59,18 @@ public class DetectionResult implements SimpleLog.Loggable {
     }
   }
 
+  private void adjustIndicatorColumnRowNumbers(DetectionResultColumn detectionResultColumn) {
+    if (detectionResultColumn == null) {
+      return;
+    }
+    ((DetectionResultRowIndicatorColumn) detectionResultColumn).adjustIndicatorColumnRowNumbers(barcodeMetadata);
+  }
+
   public DetectionResultColumn[] getDetectionResultColumns() {
-    setRowNumberInIndicatorColumn(detectionResultColumns[barcodeColumnCount + 1]);
-    SimpleLog.log(LEVEL.DEVEL, "Before adjustRowNumbers");
-    SimpleLog.log(LEVEL.DEVEL, this);
     adjustIndicatorColumnRowNumbers(detectionResultColumns[0]);
     adjustIndicatorColumnRowNumbers(detectionResultColumns[barcodeColumnCount + 1]);
+    SimpleLog.log(LEVEL.DEVEL, "Before adjustRowNumbers");
+    SimpleLog.log(LEVEL.DEVEL, this);
     int unadjustedCodewordCount = 900;
     int previousUnadjustedCount;
     do {
@@ -79,7 +79,8 @@ public class DetectionResult implements SimpleLog.Loggable {
     } while (unadjustedCodewordCount > 0 && unadjustedCodewordCount < previousUnadjustedCount);
 
     if (unadjustedCodewordCount > 0) {
-      SimpleLog.log(LEVEL.INFO, unadjustedCodewordCount + " codewords without valid row number. Values will be ignored!");
+      SimpleLog.log(LEVEL.INFO, unadjustedCodewordCount +
+          " codewords without valid row number. Values will be ignored!");
     }
 
     SimpleLog.log(LEVEL.DEVEL, "After adjustRowNumbers");
@@ -234,76 +235,6 @@ public class DetectionResult implements SimpleLog.Loggable {
     }
   }
 
-  // TODO maybe we should add missing codeword to store the correct row number to make
-  // finding row numbers for other columns easier
-  // use row height count to make detection of invalid row numbers more reliable
-  private void adjustIndicatorColumnRowNumbers(DetectionResultColumn detectionResultColumn) {
-    if (detectionResultColumn == null) {
-      return;
-    }
-    Codeword[] codewords = detectionResultColumn.getCodewords();
-    int barcodeRow = -1;
-    int previousRowHeight = 1;
-    int currentRowHeight = 0;
-    for (int codewordsRow = 0; codewordsRow < codewords.length; codewordsRow++) {
-      if (codewords[codewordsRow] == null) {
-        continue;
-      }
-      Codeword codeword = codewords[codewordsRow];
-      codeword.setRowNumberAsRowIndicatorColumn();
-
-      int rowDifference = codeword.getRowNumber() - barcodeRow;
-
-      // TODO deal with case where first row indicator doesn't start with 0
-
-      if (rowDifference == 0) {
-        currentRowHeight++;
-      } else if (rowDifference == 1) {
-        previousRowHeight = Math.max(previousRowHeight, currentRowHeight);
-        currentRowHeight = 1;
-        barcodeRow = codeword.getRowNumber();
-      } else if (rowDifference < 0) {
-        SimpleLog.log(LEVEL.WARNING, "Removing codeword, rowNumber should not decrease, codeword[" + codewordsRow +
-            "]: " + codeword.getRowNumber() + ", value: " + codeword.getValue());
-        codewords[codewordsRow] = null;
-      } else if (codeword.getRowNumber() > barcodeRowCount) {
-        SimpleLog.log(LEVEL.WARNING, "Removing codeword, rowNumber too big, codeword[" + codewordsRow + "]: " +
-            codeword.getRowNumber() + ", value: " + codeword.getValue());
-        codewords[codewordsRow] = null;
-      } else if (rowDifference > codewordsRow) {
-        SimpleLog.log(LEVEL.WARNING,
-            "Row number jump bigger than codeword row, codeword[" + codewordsRow + "]: previous row: " + barcodeRow +
-                ", new row: " + codeword.getRowNumber() + ", value: " + codeword.getValue());
-        codewords[codewordsRow] = null;
-      } else {
-        int checkedRows;
-        if (previousRowHeight > 2) {
-          checkedRows = (previousRowHeight - 2) * rowDifference;
-        } else {
-          checkedRows = previousRowHeight * rowDifference;
-        }
-        boolean closePreviousCodewordFound = checkedRows >= codewordsRow;
-        for (int i = 1; i <= checkedRows && !closePreviousCodewordFound; i++) {
-          // there must be (height * rowDifference) number of codewords missing. For now we assume height = 1.
-          // This should hopefully get rid of most problems already.
-          closePreviousCodewordFound = (codewords[codewordsRow - i] != null);
-        }
-        if (closePreviousCodewordFound) {
-          SimpleLog.log(LEVEL.WARNING,
-              "Row number jump bigger than codeword row gap, codeword[" + codewordsRow + "]: previous row: " +
-                  barcodeRow + ", new row: " + codeword.getRowNumber() + ", value: " + codeword.getValue());
-          codewords[codewordsRow] = null;
-        } else {
-          SimpleLog.log(LEVEL.WARNING,
-              "Setting new row number after bigger jump, codeword[" + codewordsRow + "]: previous row: " + barcodeRow +
-                  ", new row: " + codeword.getRowNumber() + ", value: " + codeword.getValue());
-          barcodeRow = codeword.getRowNumber();
-          currentRowHeight = 1;
-        }
-      }
-    }
-  }
-
   /**
    * 
    * @param codeword
@@ -328,11 +259,11 @@ public class DetectionResult implements SimpleLog.Loggable {
   }
 
   public int getBarcodeRowCount() {
-    return barcodeRowCount;
+    return barcodeMetadata.getRowCount();
   }
 
   public int getBarcodeECLevel() {
-    return barcodeECLevel;
+    return barcodeMetadata.getErrorCorrectionLevel();
   }
 
   public BoundingBox getBoundingBox() {

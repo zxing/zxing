@@ -5,7 +5,7 @@ import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitMatrix;
 
 public class BoundingBox {
-  private final BitMatrix image;
+  private BitMatrix image;
   private ResultPoint topLeft;
   private ResultPoint bottomLeft;
   private ResultPoint topRight;
@@ -24,11 +24,63 @@ public class BoundingBox {
         (topLeft != null && bottomLeft == null) || (topRight != null && bottomRight == null)) {
       throw NotFoundException.getNotFoundInstance();
     }
+    init(image, topLeft, bottomLeft, topRight, bottomRight);
+  }
+
+  public BoundingBox(BoundingBox boundingBox) {
+    init(boundingBox.image, boundingBox.topLeft, boundingBox.bottomLeft, boundingBox.topRight, boundingBox.bottomRight);
+  }
+
+  private void init(BitMatrix image, final ResultPoint topLeft, final ResultPoint bottomLeft,
+                    final ResultPoint topRight, final ResultPoint bottomRight) {
     this.image = image;
     this.topLeft = topLeft;
     this.bottomLeft = bottomLeft;
     this.topRight = topRight;
     this.bottomRight = bottomRight;
+    calculateMinMaxValues();
+  }
+
+  public static BoundingBox merge(BoundingBox leftBox, BoundingBox rightBox) throws NotFoundException {
+    if (leftBox == null) {
+      return rightBox;
+    }
+    if (rightBox == null) {
+      return leftBox;
+    }
+    return new BoundingBox(leftBox.image, leftBox.topLeft, leftBox.bottomLeft, rightBox.topRight, rightBox.bottomRight);
+  }
+
+  public void addMissingRows(int missingStartRows, int missingEndRows, boolean isLeft) {
+    if (missingStartRows > 0) {
+      ResultPoint top = isLeft ? topLeft : topRight;
+      int newMinY = (int) top.getY() - missingStartRows;
+      if (newMinY < 0) {
+        newMinY = 0;
+      }
+      // TODO use existing points to better interpolate the new x positions
+      ResultPoint newTop = new ResultPoint(top.getX(), newMinY);
+      if (isLeft) {
+        topLeft = newTop;
+      } else {
+        topRight = newTop;
+      }
+    }
+
+    if (missingEndRows > 0) {
+      ResultPoint bottom = isLeft ? bottomLeft : bottomRight;
+      int newMaxY = (int) bottom.getY() - missingStartRows;
+      if (newMaxY >= image.getHeight()) {
+        newMaxY = image.getHeight() - 1;
+      }
+      // TODO use existing points to better interpolate the new x positions
+      ResultPoint newBottom = new ResultPoint(bottom.getX(), newMaxY);
+      if (isLeft) {
+        bottomLeft = newBottom;
+      } else {
+        bottomRight = newBottom;
+      }
+    }
     calculateMinMaxValues();
   }
 
@@ -73,7 +125,19 @@ public class BoundingBox {
     return maxY;
   }
 
+  public ResultPoint getTopLeft() {
+    return topLeft;
+  }
+
   public ResultPoint getTopRight() {
     return topRight;
+  }
+
+  public ResultPoint getBottomLeft() {
+    return bottomLeft;
+  }
+
+  public ResultPoint getBottomRight() {
+    return bottomRight;
   }
 }

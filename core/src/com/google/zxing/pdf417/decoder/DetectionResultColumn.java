@@ -1,13 +1,17 @@
 package com.google.zxing.pdf417.decoder;
 
-public class DetectionResultColumn {
+import com.google.zxing.pdf417.decoder.SimpleLog.Loggable;
+
+import java.util.Formatter;
+
+public class DetectionResultColumn implements Loggable {
   private static final int MAX_NEARBY_DISTANCE = 5;
-  private final BoundingBox boundingBox;
+  protected final BoundingBox boundingBox;
   private final Codeword[] codewords;
 
   public DetectionResultColumn(final BoundingBox boundingBox) {
-    this.boundingBox = boundingBox;
-    codewords = new Codeword[boundingBox.getMaxY() - boundingBox.getMinY()];
+    this.boundingBox = new BoundingBox(boundingBox);
+    codewords = new Codeword[boundingBox.getMaxY() - boundingBox.getMinY() + 1];
   }
 
   public Codeword getCodewordNearby(int imageRow) {
@@ -34,7 +38,7 @@ public class DetectionResultColumn {
     return null;
   }
 
-  private int getCodewordsIndex(int imageRow) {
+  protected int getCodewordsIndex(int imageRow) {
     return imageRow - boundingBox.getMinY();
   }
 
@@ -56,5 +60,21 @@ public class DetectionResultColumn {
 
   public Codeword[] getCodewords() {
     return codewords;
+  }
+
+  @Override
+  public String getLogString() {
+    Formatter formatter = new Formatter();
+    int row = 0;
+    for (Codeword codeword : codewords) {
+      if (codeword == null) {
+        formatter.format("%3d:    |   \n", row++);
+        continue;
+      }
+      formatter.format("%3d: %3d|%3d\n", row++, codeword.getRowNumber(), codeword.getValue());
+    }
+    String result = formatter.toString();
+    formatter.close();
+    return result;
   }
 }
