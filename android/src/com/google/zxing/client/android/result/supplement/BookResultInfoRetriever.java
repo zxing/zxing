@@ -92,28 +92,9 @@ final class BookResultInfoRetriever extends SupplementalInfoRetriever {
     }
 
     Collection<String> newTexts = new ArrayList<String>();
-
-    if (title != null && title.length() > 0) {
-      newTexts.add(title);
-    }
-
-    if (authors != null && !authors.isEmpty()) {
-      boolean first = true;
-      StringBuilder authorsText = new StringBuilder();
-      for (String author : authors) {
-        if (first) {
-          first = false;
-        } else {
-          authorsText.append(", ");
-        }
-        authorsText.append(author);
-      }
-      newTexts.add(authorsText.toString());
-    }
-
-    if (pages != null && pages.length() > 0) {
-      newTexts.add(pages + "pp.");
-    }
+    maybeAddText(title, newTexts);
+    maybeAddTextSeries(authors, newTexts);
+    maybeAddText(pages == null || pages.length() == 0 ? null : pages + "pp.", newTexts);
     
     String baseBookUri = "http://www.google." + LocaleManager.getBookSearchCountryTLD(context)
         + "/search?tbm=bks&source=zxing&q=";

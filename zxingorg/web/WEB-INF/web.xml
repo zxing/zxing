@@ -37,10 +37,6 @@
     <servlet-name>DecodeServlet</servlet-name>
     <url-pattern>/w/decode</url-pattern>
   </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>jsp</servlet-name>
-    <url-pattern>*.jspx</url-pattern>
-  </servlet-mapping>
 
   <welcome-file-list>
     <welcome-file>index.jspx</welcome-file>
