@@ -1,3 +1,4 @@
+// -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
 /*
  *  Copyright 2011 ZXing authors
  *
@@ -14,37 +15,52 @@
  * limitations under the License.
  */
 
-#include <algorithm>
 #include <cmath>
-#include <stdlib.h>
+#include <algorithm>
 #include <zxing/multi/qrcode/detector/MultiFinderPatternFinder.h>
 #include <zxing/DecodeHints.h>
 #include <zxing/ReaderException.h>
 
-namespace zxing{
-namespace multi {
-using namespace zxing::qrcode;
+using std::abs;
+using std::min;
+using std::sort;
+using std::vector;
+using zxing::Ref;
+using zxing::BitMatrix;
+using zxing::ReaderException;
+using zxing::qrcode::FinderPattern;
+using zxing::qrcode::FinderPatternInfo;
+using zxing::multi::MultiFinderPatternFinder;
+
+// VC++
+
+using zxing::BitMatrix;
+using zxing::ResultPointCallback;
+using zxing::DecodeHints;
 
 const float MultiFinderPatternFinder::MAX_MODULE_COUNT_PER_EDGE = 180;
 const float MultiFinderPatternFinder::MIN_MODULE_COUNT_PER_EDGE = 9;
 const float MultiFinderPatternFinder::DIFF_MODSIZE_CUTOFF_PERCENT = 0.05f;
 const float MultiFinderPatternFinder::DIFF_MODSIZE_CUTOFF = 0.5f;
 
+namespace {
+
 bool compareModuleSize(Ref<FinderPattern> a, Ref<FinderPattern> b){
-    float value = a->getEstimatedModuleSize() - b->getEstimatedModuleSize();
-    return value < 0.0;
+  float value = a->getEstimatedModuleSize() - b->getEstimatedModuleSize();
+  return value < 0.0;
 }
 
+}
 
 MultiFinderPatternFinder::MultiFinderPatternFinder(Ref<BitMatrix> image, 
-  Ref<ResultPointCallback> resultPointCallback) : 
-    FinderPatternFinder(image, resultPointCallback)
+                                                   Ref<ResultPointCallback> resultPointCallback)
+    : FinderPatternFinder(image, resultPointCallback)
 {
 }
 
 MultiFinderPatternFinder::~MultiFinderPatternFinder(){}
 
-std::vector<Ref<FinderPatternInfo> > MultiFinderPatternFinder::findMulti(DecodeHints const& hints){
+vector<Ref<FinderPatternInfo> > MultiFinderPatternFinder::findMulti(DecodeHints const& hints){
   bool tryHarder = hints.getTryHarder();
   Ref<BitMatrix> image = image_; // Protected member
   int maxI = image->getHeight();
@@ -100,7 +116,7 @@ std::vector<Ref<FinderPatternInfo> > MultiFinderPatternFinder::findMulti(DecodeH
             stateCount[++currentState]++;
           }
         } else { // Counting white pixels
-            stateCount[currentState]++;
+          stateCount[currentState]++;
         }
       }
     } // for j=...
@@ -109,18 +125,18 @@ std::vector<Ref<FinderPatternInfo> > MultiFinderPatternFinder::findMulti(DecodeH
       handlePossibleCenter(stateCount, i, maxJ);
     } // end if foundPatternCross
   } // for i=iSkip-1 ...
-  std::vector<std::vector<Ref<FinderPattern> > > patternInfo = selectBestPatterns();
-  std::vector<Ref<FinderPatternInfo> > result;
+  vector<vector<Ref<FinderPattern> > > patternInfo = selectBestPatterns();
+  vector<Ref<FinderPatternInfo> > result;
   for (unsigned int i = 0; i < patternInfo.size(); i++) {
-    std::vector<Ref<FinderPattern> > pattern = patternInfo[i];
+    vector<Ref<FinderPattern> > pattern = patternInfo[i];
     pattern = FinderPatternFinder::orderBestPatterns(pattern);
     result.push_back(Ref<FinderPatternInfo>(new FinderPatternInfo(pattern)));
   }
   return result;
 }
 
-std::vector<std::vector<Ref<FinderPattern> > > MultiFinderPatternFinder::selectBestPatterns(){
-  std::vector<Ref<FinderPattern> > possibleCenters = possibleCenters_;
+vector<vector<Ref<FinderPattern> > > MultiFinderPatternFinder::selectBestPatterns(){
+  vector<Ref<FinderPattern> > possibleCenters = possibleCenters_;
   
   int size = possibleCenters.size();
 
@@ -129,11 +145,11 @@ std::vector<std::vector<Ref<FinderPattern> > > MultiFinderPatternFinder::selectB
     throw ReaderException("No code detected");
   }
   
-  std::vector<std::vector<Ref<FinderPattern> > > results;
+  vector<vector<Ref<FinderPattern> > > results;
 
   /*
-  * Begin HE modifications to safely detect multiple codes of equal size
-  */
+   * Begin HE modifications to safely detect multiple codes of equal size
+   */
   if (size == 3) {
     results.push_back(possibleCenters_);
     return results;
@@ -141,29 +157,29 @@ std::vector<std::vector<Ref<FinderPattern> > > MultiFinderPatternFinder::selectB
 
   // Sort by estimated module size to speed up the upcoming checks
   //TODO do a sort based on module size
-  std::sort(possibleCenters.begin(), possibleCenters.end(), compareModuleSize);
+  sort(possibleCenters.begin(), possibleCenters.end(), compareModuleSize);
 
   /*
-  * Now lets start: build a list of tuples of three finder locations that
-  *  - feature similar module sizes
-  *  - are placed in a distance so the estimated module count is within the QR specification
-  *  - have similar distance between upper left/right and left top/bottom finder patterns
-  *  - form a triangle with 90° angle (checked by comparing top right/bottom left distance
-  *    with pythagoras)
-  *
-  * Note: we allow each point to be used for more than one code region: this might seem
-  * counterintuitive at first, but the performance penalty is not that big. At this point,
-  * we cannot make a good quality decision whether the three finders actually represent
-  * a QR code, or are just by chance layouted so it looks like there might be a QR code there.
-  * So, if the layout seems right, lets have the decoder try to decode.     
-  */
+   * Now lets start: build a list of tuples of three finder locations that
+   *  - feature similar module sizes
+   *  - are placed in a distance so the estimated module count is within the QR specification
+   *  - have similar distance between upper left/right and left top/bottom finder patterns
+   *  - form a triangle with 90° angle (checked by comparing top right/bottom left distance
+   *    with pythagoras)
+   *
+   * Note: we allow each point to be used for more than one code region: this might seem
+   * counterintuitive at first, but the performance penalty is not that big. At this point,
+   * we cannot make a good quality decision whether the three finders actually represent
+   * a QR code, or are just by chance layouted so it looks like there might be a QR code there.
+   * So, if the layout seems right, lets have the decoder try to decode.
+   */
 
   for (int i1 = 0; i1 < (size - 2); i1++) {
     Ref<FinderPattern> p1 = possibleCenters[i1];
     for (int i2 = i1 + 1; i2 < (size - 1); i2++) {
       Ref<FinderPattern> p2 = possibleCenters[i2];
       // Compare the expected module sizes; if they are really off, skip
-      float vModSize12 = (p1->getEstimatedModuleSize() - p2->getEstimatedModuleSize()) / std::min(p1->getEstimatedModuleSize(), p2->getEstimatedModuleSize());
+      float vModSize12 = (p1->getEstimatedModuleSize() - p2->getEstimatedModuleSize()) / min(p1->getEstimatedModuleSize(), p2->getEstimatedModuleSize());
       float vModSize12A = abs(p1->getEstimatedModuleSize() - p2->getEstimatedModuleSize());
       if (vModSize12A > DIFF_MODSIZE_CUTOFF && vModSize12 >= DIFF_MODSIZE_CUTOFF_PERCENT) {
         // break, since elements are ordered by the module size deviation there cannot be
@@ -173,14 +189,14 @@ std::vector<std::vector<Ref<FinderPattern> > > MultiFinderPatternFinder::selectB
       for (int i3 = i2 + 1; i3 < size; i3++) {
         Ref<FinderPattern> p3 = possibleCenters[i3];
         // Compare the expected module sizes; if they are really off, skip
-        float vModSize23 = (p2->getEstimatedModuleSize() - p3->getEstimatedModuleSize()) / std::min(p2->getEstimatedModuleSize(), p3->getEstimatedModuleSize());
+        float vModSize23 = (p2->getEstimatedModuleSize() - p3->getEstimatedModuleSize()) / min(p2->getEstimatedModuleSize(), p3->getEstimatedModuleSize());
         float vModSize23A = abs(p2->getEstimatedModuleSize() - p3->getEstimatedModuleSize());
         if (vModSize23A > DIFF_MODSIZE_CUTOFF && vModSize23 >= DIFF_MODSIZE_CUTOFF_PERCENT) {
           // break, since elements are ordered by the module size deviation there cannot be
           // any more interesting elements for the given p1.
           break;
         }
-        std::vector<Ref<FinderPattern> > test;
+        vector<Ref<FinderPattern> > test;
         test.push_back(p1);
         test.push_back(p2);
         test.push_back(p3);
@@ -196,14 +212,14 @@ std::vector<std::vector<Ref<FinderPattern> > > MultiFinderPatternFinder::selectB
           continue;
         }
         // Calculate the difference of the edge lengths in percent
-        float vABBC = abs((dA - dB) / std::min(dA, dB));
+        float vABBC = abs((dA - dB) / min(dA, dB));
         if (vABBC >= 0.1f) {
           continue;
         }
         // Calculate the diagonal length by assuming a 90° angle at topleft
         float dCpy = (float) sqrt(dA * dA + dB * dB);
         // Compare to the real distance in %
-        float vPyC = abs((dC - dCpy) / std::min(dC, dCpy));
+        float vPyC = abs((dC - dCpy) / min(dC, dCpy));
         if (vPyC >= 0.1f) {
           continue;
         }
@@ -218,6 +234,3 @@ std::vector<std::vector<Ref<FinderPattern> > > MultiFinderPatternFinder::selectB
   }
   return results;
 }
-
-} // End zxing::multi namespace
-} // End zxing namespace

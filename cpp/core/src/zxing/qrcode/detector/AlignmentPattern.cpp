@@ -21,10 +21,9 @@
 
 #include <zxing/qrcode/detector/AlignmentPattern.h>
 
-namespace zxing {
-namespace qrcode {
-
-using namespace std;
+using std::abs;
+using zxing::Ref;
+using zxing::qrcode::AlignmentPattern;
 
 AlignmentPattern::AlignmentPattern(float posX, float posY, float estimatedModuleSize) :
     ResultPoint(posX,posY), estimatedModuleSize_(estimatedModuleSize) {
@@ -43,9 +42,6 @@ Ref<AlignmentPattern> AlignmentPattern::combineEstimate(float i, float j, float 
   float combinedY = (getY() + i) / 2.0f;
   float combinedModuleSize = (estimatedModuleSize_ + newModuleSize) / 2.0f;
   Ref<AlignmentPattern> result
-    (new AlignmentPattern(combinedX, combinedY, combinedModuleSize));
+      (new AlignmentPattern(combinedX, combinedY, combinedModuleSize));
   return result;
-}
-
-}
 }

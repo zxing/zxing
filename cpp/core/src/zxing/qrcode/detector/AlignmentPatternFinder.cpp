@@ -1,9 +1,5 @@
 // -*- mode:c++; tab-width:2; indent-tabs-mode:nil; c-basic-offset:2 -*-
 /*
- *  AlignmentPatternFinder.cpp
- *  zxing
- *
- *  Created by Christian Brunschen on 14/05/2008.
  *  Copyright 2008 ZXing authors All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,19 +15,25 @@
  * limitations under the License.
  */
 
-#include "AlignmentPatternFinder.h"
+#include <zxing/qrcode/detector/AlignmentPatternFinder.h>
 #include <zxing/ReaderException.h>
 #include <zxing/common/BitArray.h>
 #include <vector>
 #include <cmath>
 #include <cstdlib>
 
-namespace zxing {
-namespace qrcode {
+using std::abs;
+using std::vector;
+using zxing::Ref;
+using zxing::qrcode::AlignmentPatternFinder;
+using zxing::qrcode::AlignmentPattern;
 
-using namespace std;
+// VC++
 
-float AlignmentPatternFinder::centerFromEnd(vector<int> &stateCount, int end) {
+using zxing::BitMatrix;
+using zxing::ResultPointCallback;
+
+float AlignmentPatternFinder::centerFromEnd(vector<int>& stateCount, int end) {
   return (float)(end - stateCount[2]) - stateCount[1] / 2.0f;
 }
 
@@ -46,7 +48,7 @@ bool AlignmentPatternFinder::foundPatternCross(vector<int> &stateCount) {
 }
 
 float AlignmentPatternFinder::crossCheckVertical(int startI, int centerJ, int maxCount,
-    int originalStateCountTotal) {
+                                                 int originalStateCountTotal) {
   int maxI = image_->getHeight();
   vector<int> stateCount(3, 0);
 
@@ -203,7 +205,4 @@ Ref<AlignmentPattern> AlignmentPatternFinder::find() {
   }
 
   throw zxing::ReaderException("Could not find alignment pattern");
-}
-
-}
 }

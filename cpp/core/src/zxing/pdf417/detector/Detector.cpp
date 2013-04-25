@@ -19,10 +19,11 @@
 #include <zxing/pdf417/detector/Detector.h>
 #include <zxing/pdf417/detector/LinesSampler.h>
 #include <zxing/common/GridSampler.h>
-#include <zxing/common/detector/Math.h>
+#include <zxing/common/detector/JavaMath.h>
 #include <zxing/common/detector/MathUtils.h>
 
 using std::max;
+using std::abs;
 using std::numeric_limits;
 using zxing::pdf417::detector::Detector;
 using zxing::common::detector::Math;
