@@ -23,7 +23,7 @@ import com.google.zxing.common.AbstractBlackBoxTestCase;
 public final class PDF417BlackBox5TestCase extends AbstractBlackBoxTestCase {
 
   public PDF417BlackBox5TestCase() {
-    super("D:/currentWorkInfo/Scanning/samples", new MultiFormatReader(), BarcodeFormat.PDF_417);
+    super("D:/currentWorkInfo/barcode/samples", new MultiFormatReader(), BarcodeFormat.PDF_417);
     addTest(10, 10, 0, 0, 0.0f);
     //addTest(10, 10, 0, 0, 180.0f);
   }
