@@ -31,6 +31,9 @@ using zxing::BitMatrix;
 using zxing::NotFoundException;
 using zxing::Point;
 
+// VC++
+using zxing::Line;
+
 const int LinesSampler::MODULES_IN_SYMBOL;
 const int LinesSampler::BARS_IN_SYMBOL;
 const int LinesSampler::POSSIBLE_SYMBOLS;

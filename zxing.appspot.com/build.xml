@@ -16,13 +16,8 @@ limitations under the License.
 -->
 <project name="zxing.appspot.com" default="build" basedir=".">
 
-  <loadproperties srcFile="../build.properties" />
-
   <!-- Arguments to gwtc and devmode targets -->
   <property name="gwt.args" value="" />
-
-  <!-- Configure path to GWT SDK -->
-  <property name="gwt.sdk" location="${GWT-home}" />
 
   <path id="project.class.path">
     <pathelement location="war/WEB-INF/classes"/>

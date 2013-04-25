@@ -39,6 +39,8 @@ endif()
 file(GLOB_RECURSE LIBZXING_FILES
     "./core/src/*.cpp"
     "./core/src/*.h"
+    "./core/src/*.cc"
+    "./core/src/*.hh"
 )
 if(WIN32)
     file(GLOB LIBZXING_WIN32_FILES

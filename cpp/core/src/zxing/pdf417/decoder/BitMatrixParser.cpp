@@ -28,6 +28,11 @@
 using zxing::pdf417::decoder::BitMatrixParser;
 using zxing::ArrayRef;
 
+// VC++
+
+using zxing::Ref;
+using zxing::BitMatrix;
+
 const int BitMatrixParser::MAX_ROWS = 90;
 // Maximum Codewords (Data + Error)
 const int BitMatrixParser::MAX_CW_CAPACITY = 929;
@@ -98,8 +103,7 @@ ArrayRef<int> BitMatrixParser::readCodewords()
  * @return the next available index into the codeword array after processing
  *         this row.
  */
-int BitMatrixParser::processRow(int rowNumber, ArrayRef<int> codewords, int next)
-{
+int BitMatrixParser::processRow(int rowNumber, ArrayRef<int> codewords, int next) {
   int width = bitMatrix_->getWidth();
   int columnNumber = 0;
   int cwClusterNumber = -1;
@@ -107,7 +111,7 @@ int BitMatrixParser::processRow(int rowNumber, ArrayRef<int> codewords, int next
   for (int i = 0; i < width; i += MODULES_IN_SYMBOL) {
     for (int mask = MODULES_IN_SYMBOL - 1; mask >= 0; mask--) {
       if (bitMatrix_->get(i + (MODULES_IN_SYMBOL - 1 - mask), rowNumber)) {
-        symbol |= 1L << mask;
+        symbol |= int64_t(1) << mask;
       }
     }
     if (columnNumber > 0) {

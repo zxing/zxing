@@ -88,6 +88,31 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copy-androidtest</id>
+            <phase>install</phase>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>com.google.zxing</groupId>
+                  <artifactId>android-integration</artifactId>
+                  <version>2.2-SNAPSHOT</version>
+                  <type>jar</type>                   
+                </artifactItem>
+              </artifactItems>
+              <outputDirectory>../androidtest/libs</outputDirectory>
+              <overWriteIfNewer>true</overWriteIfNewer>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
 
