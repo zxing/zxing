@@ -592,11 +592,12 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
                                                   DEFAULT_INTENT_RESULT_DURATION_MS);
     }
 
-    // Since this message will only be shown for a second, just tell the user what kind of
-    // barcode was found (e.g. contact info) rather than the full contents, which they won't
-    // have time to read.
     if (resultDurationMS > 0) {
-      statusView.setText(getString(resultHandler.getDisplayTitle()));
+      String rawResultString = String.valueOf(rawResult);
+      if (rawResultString.length() > 32) {
+        rawResultString = rawResultString.substring(0, 32) + " ...";
+      }
+      statusView.setText(getString(resultHandler.getDisplayTitle()) + " : " + rawResultString);
     }
 
     if (copyToClipboard && !resultHandler.areContentsSecure()) {

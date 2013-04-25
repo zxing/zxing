@@ -16,8 +16,6 @@
 
 package com.google.zxing.web;
 
-import java.util.regex.Pattern;
-
 /**
  * Utility functions for {@code decoderesult.jspx}.
  * 
@@ -27,8 +25,6 @@ public final class OutputUtils {
 
   private static final int BYTES_PER_LINE = 16;
   private static final int HALF_BYTES_PER_LINE = BYTES_PER_LINE / 2;
-  
-  private static final Pattern NEWLINE = Pattern.compile("\r?\n");
 
   private OutputUtils() {
   }
@@ -57,10 +53,6 @@ public final class OutputUtils {
       throw new IllegalArgumentException();
     }
     return (char) (value < 10 ? ('0' + value) : ('a' + (value - 10)));
-  }
-  
-  public static String escapeNewlineAsBR(CharSequence in) {
-    return NEWLINE.matcher(in).replaceAll("&lt;br/&gt;");
   }
   
 }
