@@ -38,8 +38,7 @@ using zxing::ArrayRef;
 using zxing::ResultPoint;
 using zxing::BitArray;
 using zxing::BitMatrix;
-
-namespace math_utils = zxing::common::detector::math_utils;
+using zxing::common::detector::MathUtils;
 
 Detector::Detector(Ref<BitMatrix> image):
   image_(image),
@@ -145,21 +144,21 @@ Detector::getMatrixCornerPoints(std::vector<Ref<Point> > bullEyeCornerPoints) {
   int dy = bullEyeCornerPoints[0]->getY() - bullEyeCornerPoints[2]->getY();
   dy += dy > 0 ? 1 : -1;
             
-  int targetcx = math_utils::round(bullEyeCornerPoints[2]->getX() - ratio * dx);
-  int targetcy = math_utils::round(bullEyeCornerPoints[2]->getY() - ratio * dy);
+  int targetcx = MathUtils::round(bullEyeCornerPoints[2]->getX() - ratio * dx);
+  int targetcy = MathUtils::round(bullEyeCornerPoints[2]->getY() - ratio * dy);
             
-  int targetax = math_utils::round(bullEyeCornerPoints[0]->getX() + ratio * dx);
-  int targetay = math_utils::round(bullEyeCornerPoints[0]->getY() + ratio * dy);
+  int targetax = MathUtils::round(bullEyeCornerPoints[0]->getX() + ratio * dx);
+  int targetay = MathUtils::round(bullEyeCornerPoints[0]->getY() + ratio * dy);
             
   dx = bullEyeCornerPoints[1]->getX() - bullEyeCornerPoints[3]->getX();
   dx += dx > 0 ? 1 : -1;
   dy = bullEyeCornerPoints[1]->getY() - bullEyeCornerPoints[3]->getY();
   dy += dy > 0 ? 1 : -1;
             
-  int targetdx = math_utils::round(bullEyeCornerPoints[3]->getX() - ratio * dx);
-  int targetdy = math_utils::round(bullEyeCornerPoints[3]->getY() - ratio * dy);
-  int targetbx = math_utils::round(bullEyeCornerPoints[1]->getX() + ratio * dx);
-  int targetby = math_utils::round(bullEyeCornerPoints[1]->getY() + ratio * dy);
+  int targetdx = MathUtils::round(bullEyeCornerPoints[3]->getX() - ratio * dx);
+  int targetdy = MathUtils::round(bullEyeCornerPoints[3]->getY() - ratio * dy);
+  int targetbx = MathUtils::round(bullEyeCornerPoints[1]->getX() + ratio * dx);
+  int targetby = MathUtils::round(bullEyeCornerPoints[1]->getY() + ratio * dy);
             
   if (!isValid(targetax, targetay) ||
       !isValid(targetbx, targetby) ||
@@ -272,18 +271,18 @@ std::vector<Ref<Point> > Detector::getBullEyeCornerPoints(Ref<zxing::aztec::Poin
   int dx = pina->getX() - pind->getX();
   int dy = pina->getY() - pinc->getY();
             
-  int targetcx = math_utils::round(pinc->getX() - ratio * dx);
-  int targetcy = math_utils::round(pinc->getY() - ratio * dy);
-  int targetax = math_utils::round(pina->getX() + ratio * dx);
-  int targetay = math_utils::round(pina->getY() + ratio * dy);
+  int targetcx = MathUtils::round(pinc->getX() - ratio * dx);
+  int targetcy = MathUtils::round(pinc->getY() - ratio * dy);
+  int targetax = MathUtils::round(pina->getX() + ratio * dx);
+  int targetay = MathUtils::round(pina->getY() + ratio * dy);
             
   dx = pinb->getX() - pind->getX();
   dy = pinb->getY() - pind->getY();
             
-  int targetdx = math_utils::round(pind->getX() - ratio * dx);
-  int targetdy = math_utils::round(pind->getY() - ratio * dy);
-  int targetbx = math_utils::round(pinb->getX() + ratio * dx);
-  int targetby = math_utils::round(pinb->getY() + ratio * dy);
+  int targetdx = MathUtils::round(pind->getX() - ratio * dx);
+  int targetdy = MathUtils::round(pind->getY() - ratio * dy);
+  int targetbx = MathUtils::round(pinb->getX() + ratio * dx);
+  int targetby = MathUtils::round(pinb->getY() + ratio * dy);
             
   if (!isValid(targetax, targetay) ||
       !isValid(targetbx, targetby) ||
@@ -325,8 +324,8 @@ Ref<Point> Detector::getMatrixCenter() {
                                       
   }
             
-  int cx = math_utils::round((pointA->getX() + pointD->getX() + pointB->getX() + pointC->getX()) / 4.0f);
-  int cy = math_utils::round((pointA->getY() + pointD->getY() + pointB->getY() + pointC->getY()) / 4.0f);
+  int cx = MathUtils::round((pointA->getX() + pointD->getX() + pointB->getX() + pointC->getX()) / 4.0f);
+  int cy = MathUtils::round((pointA->getY() + pointD->getY() + pointB->getY() + pointC->getY()) / 4.0f);
             
   try {
                 
@@ -346,8 +345,8 @@ Ref<Point> Detector::getMatrixCenter() {
                 
   }
             
-  cx = math_utils::round((pointA->getX() + pointD->getX() + pointB->getX() + pointC->getX()) / 4.0f);
-  cy = math_utils::round((pointA->getY() + pointD->getY() + pointB->getY() + pointC->getY()) / 4.0f);
+  cx = MathUtils::round((pointA->getX() + pointD->getX() + pointB->getX() + pointC->getX()) / 4.0f);
+  cy = MathUtils::round((pointA->getY() + pointD->getY() + pointB->getY() + pointC->getY()) / 4.0f);
             
   return Ref<Point>(new Point(cx, cy));
             
@@ -436,7 +435,7 @@ Ref<BitArray> Detector::sampleLine(Ref<zxing::aztec::Point> p1, Ref<zxing::aztec
   float py = float(p1->getY());
             
   for (int i = 0; i < size; i++) {
-    if (image_->get(math_utils::round(px), math_utils::round(py))) res->set(i);
+    if (image_->get(MathUtils::round(px), MathUtils::round(py))) res->set(i);
     px+=dx;
     py+=dy;
   }
@@ -498,7 +497,7 @@ int Detector::getColor(Ref<zxing::aztec::Point> p1, Ref<zxing::aztec::Point> p2)
   for (int i = 0; i < d; i++) {
     px += dx;
     py += dy;
-    if (image_->get(math_utils::round(px), math_utils::round(py)) != colorModel) {
+    if (image_->get(MathUtils::round(px), MathUtils::round(py)) != colorModel) {
       error ++;
     }
   }

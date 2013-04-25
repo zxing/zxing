@@ -22,7 +22,7 @@
 #include <zxing/ResultPoint.h>
 #include <zxing/common/detector/MathUtils.h>
 
-namespace math_utils = zxing::common::detector::math_utils;
+using zxing::common::detector::MathUtils;
 
 namespace zxing {
 
@@ -88,10 +88,10 @@ void ResultPoint::orderBestPatterns(std::vector<Ref<ResultPoint> > &patterns) {
 }
 
   float ResultPoint::distance(Ref<ResultPoint> pattern1, Ref<ResultPoint> pattern2) {
-  return math_utils::distance(pattern1->posX_,
-                              pattern1->posY_,
-                              pattern2->posX_,
-                              pattern2->posY_);
+  return MathUtils::distance(pattern1->posX_,
+                             pattern1->posY_,
+                             pattern2->posX_,
+                             pattern2->posY_);
 }
 
 float ResultPoint::distance(float x1, float x2, float y1, float y2) {

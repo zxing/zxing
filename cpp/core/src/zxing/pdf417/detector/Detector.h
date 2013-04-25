@@ -32,22 +32,24 @@ namespace detector {
 
 class Detector {
 private:
+  static const int INTEGER_MATH_SHIFT = 8;
+  static const int PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
   static const int MAX_AVG_VARIANCE;
   static const int MAX_INDIVIDUAL_VARIANCE;
+
   static const int START_PATTERN[];
+  static const int START_PATTERN_LENGTH;
   static const int START_PATTERN_REVERSE[];
+  static const int START_PATTERN_REVERSE_LENGTH;
   static const int STOP_PATTERN[];
+  static const int STOP_PATTERN_LENGTH;
   static const int STOP_PATTERN_REVERSE[];
-  static const int SIZEOF_START_PATTERN;
-  static const int SIZEOF_START_PATTERN_REVERSE;
-  static const int SIZEOF_STOP_PATTERN;
-  static const int SIZEOF_STOP_PATTERN_REVERSE;
-  static const int COUNT_VERTICES;
+  static const int STOP_PATTERN_REVERSE_LENGTH;
 
   Ref<BinaryBitmap> image_;
   
-  static std::vector<Ref<ResultPoint> > findVertices(Ref<BitMatrix> matrix, int rowStep);
-  static std::vector<Ref<ResultPoint> > findVertices180(Ref<BitMatrix> matrix, int rowStep);
+  static ArrayRef< Ref<ResultPoint> > findVertices(Ref<BitMatrix> matrix, int rowStep);
+  static ArrayRef< Ref<ResultPoint> > findVertices180(Ref<BitMatrix> matrix, int rowStep);
 
   static ArrayRef<int> findGuardPattern(Ref<BitMatrix> matrix,
                                         int column,
@@ -56,41 +58,39 @@ private:
                                         bool whiteFirst,
                                         const int pattern[],
                                         int patternSize,
-                                        ArrayRef<int> counters);
-  static int patternMatchVariance(ArrayRef<int> counters, const int pattern[],
+                                        ArrayRef<int>& counters);
+  static int patternMatchVariance(ArrayRef<int>& counters, const int pattern[],
                                   int maxIndividualVariance);
 
   static void correctVertices(Ref<BitMatrix> matrix,
-                              std::vector<Ref<ResultPoint> > &vertices,
+                              ArrayRef< Ref<ResultPoint> >& vertices,
                               bool upsideDown);
   static void findWideBarTopBottom(Ref<BitMatrix> matrix,
-                                   std::vector<Ref<ResultPoint> > &vertices,
+                                   ArrayRef< Ref<ResultPoint> >& vertices,
                                    int offsetVertice,
                                    int startWideBar,
                                    int lenWideBar,
                                    int lenPattern,
                                    int nIncrement);
-  static void findCrossingPoint(std::vector<Ref<ResultPoint> > &vertices,
+  static void findCrossingPoint(ArrayRef< Ref<ResultPoint> >& vertices,
                                 int idxResult,
                                 int idxLineA1,int idxLineA2,
                                 int idxLineB1,int idxLineB2,
-                                Ref<BitMatrix> matrix);
+                                Ref<BitMatrix>& matrix);
   static Point intersection(Line a, Line b);
-  static float computeModuleWidth(std::vector<Ref<ResultPoint> > &vertices);
-  static int computeDimension(Ref<ResultPoint> topLeft,
-                              Ref<ResultPoint> topRight,
-                              Ref<ResultPoint> bottomLeft,
-                              Ref<ResultPoint> bottomRight,
+  static float computeModuleWidth(ArrayRef< Ref<ResultPoint> >& vertices);
+  static int computeDimension(Ref<ResultPoint> const& topLeft,
+                              Ref<ResultPoint> const& topRight,
+                              Ref<ResultPoint> const& bottomLeft,
+                              Ref<ResultPoint> const& bottomRight,
                               float moduleWidth);
-  int computeYDimension(Ref<ResultPoint> topLeft,
-                        Ref<ResultPoint> topRight,
-                        Ref<ResultPoint> bottomLeft,
-                        Ref<ResultPoint> bottomRight,
+  int computeYDimension(Ref<ResultPoint> const& topLeft,
+                        Ref<ResultPoint> const& topRight,
+                        Ref<ResultPoint> const& bottomLeft,
+                        Ref<ResultPoint> const& bottomRight,
                         float moduleWidth);
 
-  Ref<BitMatrix> sampleLines(const std::vector<Ref<ResultPoint> > &vertices, int dimensionY, int dimension);
-
-  static int round(float d);
+  Ref<BitMatrix> sampleLines(ArrayRef< Ref<ResultPoint> > const& vertices, int dimensionY, int dimension);
 
 public:
   Detector(Ref<BinaryBitmap> image);
