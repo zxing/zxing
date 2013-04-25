@@ -94,7 +94,7 @@
         <executions>
           <execution>
             <id>copy-androidtest</id>
-            <phase>install</phase>
+            <phase>package</phase>
             <goals>
               <goal>copy</goal>
             </goals>
