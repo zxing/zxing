@@ -204,10 +204,19 @@ public final class HistoryManager {
       }
 
       if (oldID != null) {
-        String newDetails = oldDetails == null ? itemDetails : oldDetails + " : " + itemDetails;
-        ContentValues values = new ContentValues();
-        values.put(DBHelper.DETAILS_COL, newDetails);
-        db.update(DBHelper.TABLE_NAME, values, DBHelper.ID_COL + "=?", new String[] { oldID });
+        String newDetails;
+        if (oldDetails == null) {
+          newDetails = itemDetails;
+        } else if (oldDetails.contains(itemDetails)) {
+          newDetails = null;
+        } else {
+          newDetails = oldDetails + " : " + itemDetails;
+        } 
+        if (newDetails != null) {
+          ContentValues values = new ContentValues();
+          values.put(DBHelper.DETAILS_COL, newDetails);
+          db.update(DBHelper.TABLE_NAME, values, DBHelper.ID_COL + "=?", new String[] { oldID });
+        }
       }
 
     } finally {

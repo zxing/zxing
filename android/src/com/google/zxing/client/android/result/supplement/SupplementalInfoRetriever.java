@@ -108,7 +108,7 @@ public abstract class SupplementalInfoRetriever extends AsyncTask<Object,Object,
     StringBuilder newTextCombined = new StringBuilder();
 
     if (source != null) {
-      newTextCombined.append(source).append(" : ");
+      newTextCombined.append(source).append(' ');
     }
 
     int linkStart = newTextCombined.length();
