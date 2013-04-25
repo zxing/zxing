@@ -87,12 +87,9 @@ public final class GUIRunner extends JFrame {
   private static String getDecodeText(File file) {
     BufferedImage image;
     try {
-      image = ImageIO.read(file);
+      image = ImageReader.readImage(file);
     } catch (IOException ioe) {
       return ioe.toString();
-    }
-    if (image == null) {
-      return "Could not decode image";
     }
     LuminanceSource source = new BufferedImageLuminanceSource(image);
     BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
