@@ -166,12 +166,6 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <version>2.14</version>
-        <configuration>
-          <!--<parallel>classes</parallel>-->
-          <systemPropertyVariables>
-            <explicitLuminanceConversion>true</explicitLuminanceConversion>
-          </systemPropertyVariables>
-        </configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

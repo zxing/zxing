@@ -29,6 +29,7 @@ import android.widget.TextView;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import com.google.zxing.client.android.common.executor.AsyncTaskExecInterface;
@@ -141,6 +142,28 @@ public abstract class SupplementalInfoRetriever extends AsyncTask<Object,Object,
 
     newContents.add(content);
     newHistories.add(new String[] {itemID, newText});
+  }
+  
+  static void maybeAddText(String text, Collection<String> texts) {
+    if (text != null && text.length() > 0) {
+      texts.add(text);
+    }
+  }
+  
+  static void maybeAddTextSeries(Collection<String> textSeries, Collection<String> texts) {
+    if (textSeries != null && !textSeries.isEmpty()) {
+      boolean first = true;
+      StringBuilder authorsText = new StringBuilder();
+      for (String author : textSeries) {
+        if (first) {
+          first = false;
+        } else {
+          authorsText.append(", ");
+        }
+        authorsText.append(author);
+      }
+      texts.add(authorsText.toString());
+    }
   }
 
 }
