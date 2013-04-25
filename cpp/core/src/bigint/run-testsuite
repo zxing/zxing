@@ -1,0 +1,37 @@
+#!/bin/bash
+
+bad=
+
+# If you encounter the following problem with Valgrind like I did:
+#     https://bugzilla.redhat.com/show_bug.cgi?id=455644
+# you can pass the environment variable NO_VALGRIND=1 to run the testsuite
+# without it.
+if [ "$NO_VALGRIND" ]; then
+	cmd=(./testsuite)
+else
+	cmd=(valgrind --error-exitcode=1 --leak-check=full ./testsuite)
+fi
+
+set -o pipefail
+# Stdout goes directly to testsuite.out; stderr goes down the pipe.
+if ! "${cmd[@]}" 2>&1 >testsuite.out | tee testsuite.err; then
+	echo >&2 'Memory errors!'
+	bad=1
+fi
+
+if grep 'LEAK SUMMARY' testsuite.err >/dev/null; then
+	echo >&2 'Memory leaks!'
+	bad=1
+fi
+
+if ! diff -u testsuite.expected testsuite.out; then
+	echo >&2 'Output is incorrect!'
+	bad=1
+fi
+
+if [ $bad ]; then
+	echo >&2 'Test suite failed!'
+	exit 1
+else
+	echo 'Test suite passed.'
+fi

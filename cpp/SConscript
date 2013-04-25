@@ -27,7 +27,7 @@ else:
     cxxflags.append('-Wall -Wextra -Werror')
     # -Werror
   else:
-    cxxflags.append('-O3 -g3 -ggdb -Wall -Wextra')
+    cxxflags.append('-Os -g3 -ggdb -Wall -Wextra')
   if env['PIC']:
     cxxflags.append('-fPIC')
   compile_options['CXXFLAGS'] = ' '.join(cxxflags)
@@ -57,7 +57,7 @@ else:
     libiconv_libs.append('iconv')
 
 # Add libzxing library.
-libzxing_files = all_files('core/src')
+libzxing_files = all_files('core/src')+all_files('core/src', '.cc')
 libzxing_include = ['core/src']
 if platform.system() is 'Windows':
   libzxing_files += all_files('core/src/win32')
