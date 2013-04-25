@@ -22,13 +22,14 @@
 #include <zxing/common/reedsolomon/ReedSolomonDecoder.h>
 #include <zxing/common/reedsolomon/ReedSolomonException.h>
 #include <zxing/common/IllegalArgumentException.h>
+#include <zxing/IllegalStateException.h>
 
-using namespace std; // remove
-
+using std::vector;
 using zxing::Ref;
 using zxing::ArrayRef;
 using zxing::ReedSolomonDecoder;
 using zxing::GenericGFPoly;
+using zxing::IllegalStateException;
 
 // VC++
 using zxing::GenericGF;
@@ -107,6 +108,10 @@ vector<Ref<GenericGFPoly> > ReedSolomonDecoder::runEuclideanAlgorithm(Ref<Generi
     }
 
     t = q->multiply(tLast)->addOrSubtract(tLastLast);
+
+    if (r->getDegree() >= rLast->getDegree()) {
+      throw IllegalStateException("Division algorithm failed to reduce polynomial?");
+    }
   }
 
   int sigmaTildeAtZero = t->getCoefficient(0);

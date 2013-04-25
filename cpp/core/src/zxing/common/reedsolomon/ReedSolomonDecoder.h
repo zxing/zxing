@@ -38,8 +38,9 @@ public:
   ReedSolomonDecoder(Ref<GenericGF> fld);
   ~ReedSolomonDecoder();
   void decode(ArrayRef<int> received, int twoS);
-private:
   std::vector<Ref<GenericGFPoly> > runEuclideanAlgorithm(Ref<GenericGFPoly> a, Ref<GenericGFPoly> b, int R);
+
+private:
   ArrayRef<int> findErrorLocations(Ref<GenericGFPoly> errorLocator);
   ArrayRef<int> findErrorMagnitudes(Ref<GenericGFPoly> errorEvaluator, ArrayRef<int> errorLocations);
 };
