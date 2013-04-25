@@ -95,7 +95,7 @@ public final class PDF417Reader implements Reader, MultipleBarcodeReader {
 
   private Result[] decode(BinaryBitmap image, Map<DecodeHintType,?> hints, boolean multiple) throws NotFoundException,
       FormatException, ChecksumException {
-    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss:SSSSSS");
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss:SSS");
     List<Result> results = new ArrayList<Result>();
     boolean old = false;
     if (hints != null && hints.containsKey(DecodeHintType.PURE_BARCODE)) {
@@ -103,11 +103,11 @@ public final class PDF417Reader implements Reader, MultipleBarcodeReader {
       DecoderResult decoderResult = decoder.decode(bits);
       results.add(new Result(decoderResult.getText(), decoderResult.getRawBytes(), NO_POINTS, BarcodeFormat.PDF_417));
     } else if (old) {
-      SimpleLog.log(LEVEL.DEVEL, "Before detect " + simpleDateFormat.format(new Date()));
+      SimpleLog.log(LEVEL.ERROR, "Before detect " + simpleDateFormat.format(new Date()));
       DetectorResult detectorResult = new Detector(image).detect();
-      SimpleLog.log(LEVEL.DEVEL, "Before decode " + simpleDateFormat.format(new Date()));
+      SimpleLog.log(LEVEL.ERROR, "Before decode " + simpleDateFormat.format(new Date()));
       DecoderResult decoderResult = decoder.decode(detectorResult.getBits());
-      SimpleLog.log(LEVEL.DEVEL, "After decode " + simpleDateFormat.format(new Date()));
+      SimpleLog.log(LEVEL.ERROR, "After decode " + simpleDateFormat.format(new Date()));
       results.add(new Result(decoderResult.getText(), decoderResult.getRawBytes(), detectorResult.getPoints(),
           BarcodeFormat.PDF_417));
     } else {
