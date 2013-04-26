@@ -34,6 +34,9 @@ public class BarcodeValue {
         ambigous = true;
       }
     }
+    // TODO This should probably take the row height into account as well. If row height is less than 3, then
+    // me might lose quite a few detected codewords. On the other hand, we cannot be sure which one is the right value.
+    // I guess we might have a look at decoded values left and right, but that needs to be done in DetectionResult.
     if (ambigous) {
       SimpleLog.log(LEVEL.DEVEL, "Ambigous: " + ambigous + " or underspecified value: " + maxConfidence +
           ", returning null instead");
