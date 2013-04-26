@@ -31,7 +31,6 @@ import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.multi.GenericMultipleBarcodeReader;
 
 import javax.imageio.ImageIO;
-
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -94,6 +93,7 @@ final class DecodeWorker implements Callable<Integer> {
     return successful;
   }
 
+
   private static void dumpResult(File input, Result result) throws IOException {
     String name = input.getCanonicalPath();
     int pos = name.lastIndexOf('.');
@@ -147,7 +147,6 @@ final class DecodeWorker implements Callable<Integer> {
         source = new BufferedImageLuminanceSource(image, crop[0], crop[1], crop[2], crop[3]);
       }
       BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
-      //BinaryBitmap bitmap = new BinaryBitmap(new FixedValueBinarizer(source));
       if (config.isDumpBlackPoint()) {
         dumpBlackPoint(uri, image, bitmap);
       }
@@ -192,7 +191,8 @@ final class DecodeWorker implements Callable<Integer> {
       }
 
       MultiFormatReader multiFormatReader = new MultiFormatReader();
-      GenericMultipleBarcodeReader reader = new GenericMultipleBarcodeReader(multiFormatReader);
+      GenericMultipleBarcodeReader reader = new GenericMultipleBarcodeReader(
+          multiFormatReader);
       Result[] results = reader.decodeMultiple(bitmap, hints);
 
       if (config.isBrief()) {
@@ -200,9 +200,11 @@ final class DecodeWorker implements Callable<Integer> {
       } else {
         for (Result result : results) {
           ParsedResult parsedResult = ResultParser.parseResult(result);
-          System.out.println(uri.toString() + " (format: " + result.getBarcodeFormat() + ", type: " +
-              parsedResult.getType() + "):\nRaw result:\n" + result.getText() + "\nParsed result:\n" +
-              parsedResult.getDisplayResult());
+          System.out.println(uri.toString() + " (format: "
+              + result.getBarcodeFormat() + ", type: "
+              + parsedResult.getType() + "):\nRaw result:\n"
+              + result.getText() + "\nParsed result:\n"
+              + parsedResult.getDisplayResult());
           System.out.println("Found " + result.getResultPoints().length + " result points.");
           for (int i = 0; i < result.getResultPoints().length; i++) {
             ResultPoint rp = result.getResultPoints()[i];
@@ -285,7 +287,12 @@ final class DecodeWorker implements Callable<Integer> {
     writeResultImage(stride, height, pixels, uri, inputName, ".mono.png");
   }
 
-  private static void writeResultImage(int stride, int height, int[] pixels, URI uri, String inputName, String suffix) {
+  private static void writeResultImage(int stride,
+                                       int height,
+                                       int[] pixels,
+                                       URI uri,
+                                       String inputName,
+                                       String suffix) {
     // Write the result
     BufferedImage result = new BufferedImage(stride, height, BufferedImage.TYPE_INT_ARGB);
     result.setRGB(0, 0, stride, height, pixels, 0, stride);
