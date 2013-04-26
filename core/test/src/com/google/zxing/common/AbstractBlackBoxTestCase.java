@@ -308,7 +308,12 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
     } finally {
       reader.close();
     }
-    return result.toString();
+    String stringContents = result.toString();
+    if (stringContents.endsWith("\n")) {
+      log.warning("String contents of file " + file + " end with a newline. " +
+                  "This may not be intended and cause a test failure");
+    }
+    return stringContents;
   }
 
   protected static BufferedImage rotateImage(BufferedImage original, float degrees) {
