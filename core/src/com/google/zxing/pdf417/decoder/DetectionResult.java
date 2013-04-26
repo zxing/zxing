@@ -48,17 +48,6 @@ public class DetectionResult implements SimpleLog.Loggable {
     return detectionResultColumns[barcodeColumn];
   }
 
-  private void setRowNumberInIndicatorColumn(DetectionResultColumn detectionResultColumn) {
-    if (detectionResultColumn == null) {
-      return;
-    }
-    for (Codeword codeword : detectionResultColumn.getCodewords()) {
-      if (codeword != null) {
-        codeword.setRowNumberAsRowIndicatorColumn();
-      }
-    }
-  }
-
   private void adjustIndicatorColumnRowNumbers(DetectionResultColumn detectionResultColumn) {
     if (detectionResultColumn == null) {
       return;
