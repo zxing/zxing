@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 ZXing authors
+ * Copyright 2007 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,32 @@
  * limitations under the License.
  */
 
-package com.google.zxing.pdf417;
+package com.google.zxing.pdf417.detector;
 
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.MultiFormatReader;
-import com.google.zxing.common.AbstractBlackBoxTestCase;
+import com.google.zxing.ResultPoint;
+import com.google.zxing.common.BitMatrix;
 
-public final class PDF417BlackBox3TestCase extends AbstractBlackBoxTestCase {
+import java.util.List;
 
-  public PDF417BlackBox3TestCase() {
-    super("test/data/blackbox/pdf417-3", new MultiFormatReader(), BarcodeFormat.PDF_417);
-    addTest(18, 18, 0, 0, 0.0f);
-    addTest(18, 18, 0, 0, 180.0f);
+/**
+ * @author Guenther Grau
+ */
+public final class PDF417DetectorResult {
+
+  private final BitMatrix bits;
+  private final List<ResultPoint[]> points;
+
+  public PDF417DetectorResult(BitMatrix bits, List<ResultPoint[]> points) {
+    this.bits = bits;
+    this.points = points;
+  }
+
+  public BitMatrix getBits() {
+    return bits;
+  }
+
+  public List<ResultPoint[]> getPoints() {
+    return points;
   }
 
 }

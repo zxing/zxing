@@ -162,7 +162,9 @@ final class DecodeWorker implements Callable<Integer> {
         System.out.println("Found " + result.getResultPoints().length + " result points.");
         for (int i = 0; i < result.getResultPoints().length; i++) {
           ResultPoint rp = result.getResultPoints()[i];
-          System.out.println("  Point " + i + ": (" + rp.getX() + ',' + rp.getY() + ')');
+          if (rp != null) {
+            System.out.println("  Point " + i + ": (" + rp.getX() + ',' + rp.getY() + ')');
+          }
         }
       }
 

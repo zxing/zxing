@@ -77,4 +77,9 @@ public enum ResultMetadataType {
    */
   UPC_EAN_EXTENSION,
 
+  /**
+   * PDF417-specific metadata
+   */
+  PDF417_EXTRA_METADATA,
+
 }
