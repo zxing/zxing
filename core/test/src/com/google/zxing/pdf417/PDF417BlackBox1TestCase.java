@@ -32,4 +32,5 @@ public final class PDF417BlackBox1TestCase extends AbstractBlackBoxTestCase {
     addTest(9, 9, 0.0f);
     addTest(9, 9, 180.0f);
   }
+
 }

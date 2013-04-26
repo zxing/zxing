@@ -27,4 +27,5 @@ public final class PDF417BlackBox3TestCase extends AbstractBlackBoxTestCase {
     addTest(18, 18, 0, 0, 0.0f);
     addTest(18, 18, 0, 0, 180.0f);
   }
+
 }

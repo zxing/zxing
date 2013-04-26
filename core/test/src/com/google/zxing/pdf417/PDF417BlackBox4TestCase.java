@@ -17,35 +17,7 @@
 package com.google.zxing.pdf417;
 
 import com.google.zxing.BarcodeFormat;
-import com.google.zxing.BinaryBitmap;
-import com.google.zxing.BufferedImageLuminanceSource;
-import com.google.zxing.DecodeHintType;
-import com.google.zxing.LuminanceSource;
-import com.google.zxing.ReaderException;
-import com.google.zxing.Result;
-import com.google.zxing.ResultMetadataType;
 import com.google.zxing.common.AbstractBlackBoxTestCase;
-import com.google.zxing.common.HybridBinarizer;
-import com.google.zxing.common.SummaryResults;
-import com.google.zxing.common.TestResult;
-
-import javax.imageio.ImageIO;
-
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.zip.InflaterInputStream;
 
 public final class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
   private final PDF417Reader barcodeReader = new PDF417Reader();
@@ -54,7 +26,7 @@ public final class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
     super("test/data/blackbox/pdf417-4", null, BarcodeFormat.PDF_417);
     addTest(3, 3, 0, 0, 0.0f);
   }
-
+/*
   @Override
   public SummaryResults testBlackBoxCountingResults(boolean assertOnFailure) throws IOException {
     assertFalse(testResults.isEmpty());
@@ -233,4 +205,5 @@ public final class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
     }
     return result;
   }
+  */
 }
