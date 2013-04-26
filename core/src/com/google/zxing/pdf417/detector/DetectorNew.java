@@ -40,8 +40,8 @@ import java.util.Map;
  */
 public final class DetectorNew {
 
-  private static final int[] INDEXES_START_PATTERN = new int[] { 0, 4, 1, 5 };
-  private static final int[] INDEXES_STOP_PATTERN = new int[] { 6, 2, 7, 3 };
+  private static final int[] INDEXES_START_PATTERN = new int[] {0, 4, 1, 5};
+  private static final int[] INDEXES_STOP_PATTERN = new int[] {6, 2, 7, 3};
   private static final int INTEGER_MATH_SHIFT = 8;
   private static final int PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
   private static final int MAX_AVG_VARIANCE = (int) (PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.42f);
@@ -49,9 +49,9 @@ public final class DetectorNew {
 
   // B S B S B S B S Bar/Space pattern
   // 11111111 0 1 0 1 0 1 000
-  private static final int[] START_PATTERN = { 8, 1, 1, 1, 1, 1, 1, 3 };
+  private static final int[] START_PATTERN = {8, 1, 1, 1, 1, 1, 1, 3};
   // 1111111 0 1 000 1 0 1 00 1
-  private static final int[] STOP_PATTERN = { 7, 1, 1, 3, 1, 1, 1, 2, 1 };
+  private static final int[] STOP_PATTERN = {7, 1, 1, 3, 1, 1, 1, 2, 1};
   private static final int MAX_PIXEL_DRIFT = 3;
   private static final int MAX_PATTERN_DRIFT = 5;
   // if we set the value too low, then we don't detect the correct height of the bar if the start patterns are damaged.
@@ -237,8 +237,13 @@ public final class DetectorNew {
     }
   }
 
-  private static ResultPoint[] findRowsWithPattern(BitMatrix matrix, int height, int width, int startRow,
-                                                   int startColumn, int[] pattern) {
+  private static ResultPoint[] findRowsWithPattern(
+                                                   BitMatrix matrix,
+                                                   int height,
+                                                   int width,
+                                                   int startRow,
+                                                   int startColumn,
+                                                   int[] pattern) {
     ResultPoint[] result = new ResultPoint[4];
     int rowStep = ROW_STEP;
     boolean found = false;
@@ -265,14 +270,15 @@ public final class DetectorNew {
     // Last row of the current symbol that contains pattern
     if (found) {
       int skippedRowCount = 0;
-      int[] previousRowLoc = new int[] { (int) result[0].getX(), (int) result[1].getX() };
+      int[] previousRowLoc = new int[] {(int) result[0].getX(), (int) result[1].getX()};
       for (; stopRow < height; stopRow++) {
         int[] loc = findGuardPattern(matrix, previousRowLoc[0], stopRow, width, false, pattern, counters);
         // a found pattern is only considered to belong to the same barcode if the start and end positions
         // don't differ too much. Pattern drift should be not bigger than two for consecutive rows. With
         // a higher number of skipped rows drift could be larger. To keep it simple for now, we allow a slightly
         // larger drift and don't check for skipped rows.
-        if (loc != null && Math.abs(previousRowLoc[0] - loc[0]) < MAX_PATTERN_DRIFT &&
+        if (loc != null &&
+            Math.abs(previousRowLoc[0] - loc[0]) < MAX_PATTERN_DRIFT &&
             Math.abs(previousRowLoc[1] - loc[1]) < MAX_PATTERN_DRIFT) {
           previousRowLoc = loc;
           skippedRowCount = 0;
@@ -284,7 +290,7 @@ public final class DetectorNew {
           }
         }
       }
-      stopRow -= skippedRowCount;
+      stopRow -= skippedRowCount + 1;
       result[2] = new ResultPoint(previousRowLoc[0], stopRow);
       result[3] = new ResultPoint(previousRowLoc[1], stopRow);
     }
@@ -306,8 +312,14 @@ public final class DetectorNew {
    * @param counters array of counters, as long as pattern, to re-use 
    * @return start/end horizontal offset of guard pattern, as an array of two ints.
    */
-  private static int[] findGuardPattern(BitMatrix matrix, int column, int row, int width, boolean whiteFirst,
-                                        int[] pattern, int[] counters) {
+  private static int[] findGuardPattern(
+                                        BitMatrix matrix,
+                                        int column,
+                                        int row,
+                                        int width,
+                                        boolean whiteFirst,
+                                        int[] pattern,
+                                        int[] counters) {
     Arrays.fill(counters, 0, counters.length, 0);
     int patternLength = pattern.length;
     boolean isWhite = whiteFirst;
@@ -327,7 +339,7 @@ public final class DetectorNew {
       } else {
         if (counterPosition == patternLength - 1) {
           if (patternMatchVariance(counters, pattern, MAX_INDIVIDUAL_VARIANCE) < MAX_AVG_VARIANCE) {
-            return new int[] { patternStart, x };
+            return new int[] {patternStart, x};
           }
           patternStart += counters[0] + counters[1];
           System.arraycopy(counters, 2, counters, 0, patternLength - 2);
@@ -343,7 +355,7 @@ public final class DetectorNew {
     }
     if (counterPosition == patternLength - 1) {
       if (patternMatchVariance(counters, pattern, MAX_INDIVIDUAL_VARIANCE) < MAX_AVG_VARIANCE) {
-        return new int[] { patternStart, x - 1 };
+        return new int[] {patternStart, x - 1};
       }
     }
     return null;
