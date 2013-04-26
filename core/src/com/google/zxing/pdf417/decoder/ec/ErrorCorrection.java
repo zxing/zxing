@@ -35,7 +35,17 @@ public final class ErrorCorrection {
     this.field = ModulusGF.PDF417_GF;
   }
 
+<<<<<<< HEAD
   public int decode(int[] received, int numECCodewords, int[] erasures) throws ChecksumException {
+=======
+  /**
+   * @return number of errors
+   */
+  public int decode(int[] received,
+                    int numECCodewords,
+                    int[] erasures) throws ChecksumException {
+
+>>>>>>> refs/remotes/zxing-main/http
     ModulusPoly poly = new ModulusPoly(field, received);
     int[] S = new int[numECCodewords];
     boolean error = false;
@@ -47,6 +57,7 @@ public final class ErrorCorrection {
       }
     }
 
+<<<<<<< HEAD
     if (error) {
       ModulusPoly knownErrors = field.getOne();
       for (int erasure : erasures) {
@@ -77,8 +88,45 @@ public final class ErrorCorrection {
         received[position] = field.subtract(received[position], errorMagnitudes[i]);
       }
       return errorLocations.length;
+=======
+    if (!error) {
+      return 0;
+>>>>>>> refs/remotes/zxing-main/http
     }
+<<<<<<< HEAD
     return 0;
+=======
+
+    ModulusPoly knownErrors = field.getOne();
+    for (int erasure : erasures) {
+      int b = field.exp(received.length - 1 - erasure);
+      // Add (1 - bx) term:
+      ModulusPoly term = new ModulusPoly(field, new int[] { field.subtract(0, b), 1 });
+      knownErrors = knownErrors.multiply(term);
+    }
+
+    ModulusPoly syndrome = new ModulusPoly(field, S);
+    //syndrome = syndrome.multiply(knownErrors);
+
+    ModulusPoly[] sigmaOmega =
+        runEuclideanAlgorithm(field.buildMonomial(numECCodewords, 1), syndrome, numECCodewords);
+    ModulusPoly sigma = sigmaOmega[0];
+    ModulusPoly omega = sigmaOmega[1];
+
+    //sigma = sigma.multiply(knownErrors);
+
+    int[] errorLocations = findErrorLocations(sigma);
+    int[] errorMagnitudes = findErrorMagnitudes(omega, sigma, errorLocations);
+
+    for (int i = 0; i < errorLocations.length; i++) {
+      int position = received.length - 1 - field.log(errorLocations[i]);
+      if (position < 0) {
+        throw ChecksumException.getChecksumInstance();
+      }
+      received[position] = field.subtract(received[position], errorMagnitudes[i]);
+    }
+    return errorLocations.length;
+>>>>>>> refs/remotes/zxing-main/http
   }
 
   private ModulusPoly[] runEuclideanAlgorithm(ModulusPoly a, ModulusPoly b, int R) throws ChecksumException {

@@ -1,10 +1,30 @@
+/*
+ * Copyright 2013 ZXing authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.google.zxing.pdf417.decoder;
 
 import com.google.zxing.NotFoundException;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.common.BitMatrix;
 
-public class BoundingBox {
+/**
+ * @author Guenther Grau
+ */
+final class BoundingBox {
+  
   private BitMatrix image;
   private ResultPoint topLeft;
   private ResultPoint bottomLeft;
@@ -15,11 +35,11 @@ public class BoundingBox {
   private int minY;
   private int maxY;
 
-  public BoundingBox(BitMatrix image,
-                     final ResultPoint topLeft,
-                     final ResultPoint bottomLeft,
-                     final ResultPoint topRight,
-                     final ResultPoint bottomRight) throws NotFoundException {
+  BoundingBox(BitMatrix image,
+              ResultPoint topLeft,
+              ResultPoint bottomLeft,
+              ResultPoint topRight,
+              ResultPoint bottomRight) throws NotFoundException {
     if ((topLeft == null && topRight == null) || (bottomLeft == null && bottomRight == null) ||
         (topLeft != null && bottomLeft == null) || (topRight != null && bottomRight == null)) {
       throw NotFoundException.getNotFoundInstance();
@@ -27,12 +47,16 @@ public class BoundingBox {
     init(image, topLeft, bottomLeft, topRight, bottomRight);
   }
 
-  public BoundingBox(BoundingBox boundingBox) {
+  BoundingBox(BoundingBox boundingBox) {
     init(boundingBox.image, boundingBox.topLeft, boundingBox.bottomLeft, boundingBox.topRight, boundingBox.bottomRight);
   }
 
-  private void init(BitMatrix image, final ResultPoint topLeft, final ResultPoint bottomLeft,
-                    final ResultPoint topRight, final ResultPoint bottomRight) {
+  private void init(BitMatrix image, 
+                    ResultPoint topLeft, 
+                    ResultPoint bottomLeft,
+                    
+                     ResultPoint topRight, 
+                    ResultPoint bottomRight) {
     this.image = image;
     this.topLeft = topLeft;
     this.bottomLeft = bottomLeft;
@@ -41,7 +65,7 @@ public class BoundingBox {
     calculateMinMaxValues();
   }
 
-  public static BoundingBox merge(BoundingBox leftBox, BoundingBox rightBox) throws NotFoundException {
+  static BoundingBox merge(BoundingBox leftBox, BoundingBox rightBox) throws NotFoundException {
     if (leftBox == null) {
       return rightBox;
     }
@@ -51,7 +75,7 @@ public class BoundingBox {
     return new BoundingBox(leftBox.image, leftBox.topLeft, leftBox.bottomLeft, rightBox.topRight, rightBox.bottomRight);
   }
 
-  public void addMissingRows(int missingStartRows, int missingEndRows, boolean isLeft) {
+  void addMissingRows(int missingStartRows, int missingEndRows, boolean isLeft) {
     if (missingStartRows > 0) {
       ResultPoint top = isLeft ? topLeft : topRight;
       int newMinY = (int) top.getY() - missingStartRows;
@@ -99,45 +123,46 @@ public class BoundingBox {
     maxY = (int) Math.max(bottomLeft.getY(), bottomRight.getY());
   }
 
-  public void setTopRight(ResultPoint topRight) {
+  void setTopRight(ResultPoint topRight) {
     this.topRight = topRight;
     calculateMinMaxValues();
   }
 
-  public void setBottomRight(ResultPoint bottomRight) {
+  void setBottomRight(ResultPoint bottomRight) {
     this.bottomRight = bottomRight;
     calculateMinMaxValues();
   }
 
-  public int getMinX() {
+  int getMinX() {
     return minX;
   }
 
-  public int getMaxX() {
+  int getMaxX() {
     return maxX;
   }
 
-  public int getMinY() {
+  int getMinY() {
     return minY;
   }
 
-  public int getMaxY() {
+  int getMaxY() {
     return maxY;
   }
 
-  public ResultPoint getTopLeft() {
+  ResultPoint getTopLeft() {
     return topLeft;
   }
 
-  public ResultPoint getTopRight() {
+  ResultPoint getTopRight() {
     return topRight;
   }
 
-  public ResultPoint getBottomLeft() {
+  ResultPoint getBottomLeft() {
     return bottomLeft;
   }
 
-  public ResultPoint getBottomRight() {
+  ResultPoint getBottomRight() {
     return bottomRight;
   }
+
 }

@@ -22,12 +22,9 @@ import com.google.zxing.common.BitMatrix;
 import java.util.List;
 
 /**
- * Ideally, this class would extend DetectorResult. This is currently not possible, because TransformableBitMatrix doesn't have a
- * common interface with BitMatrix. See comment in TransformableBitMatrix.
- *
  * @author Guenther Grau
  */
-public class PDF417DetectorResult {
+public final class PDF417DetectorResult {
 
   private final BitMatrix bits;
   private final List<ResultPoint[]> points;
@@ -37,11 +34,12 @@ public class PDF417DetectorResult {
     this.points = points;
   }
 
-  public final BitMatrix getBits() {
+  public BitMatrix getBits() {
     return bits;
   }
 
-  public final List<ResultPoint[]> getPoints() {
+  public List<ResultPoint[]> getPoints() {
     return points;
   }
+
 }

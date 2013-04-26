@@ -1,20 +1,37 @@
+/*
+ * Copyright 2013 ZXing authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.google.zxing.pdf417.decoder;
 
-import com.google.zxing.pdf417.decoder.SimpleLog.Loggable;
-
-import java.util.Formatter;
-
-public class DetectionResultColumn implements Loggable {
+/**
+ * @author Guenther Grau
+ */
+class DetectionResultColumn {
+  
   private static final int MAX_NEARBY_DISTANCE = 5;
-  protected final BoundingBox boundingBox;
+  
+  private final BoundingBox boundingBox;
   private final Codeword[] codewords;
 
-  public DetectionResultColumn(final BoundingBox boundingBox) {
+  DetectionResultColumn(BoundingBox boundingBox) {
     this.boundingBox = new BoundingBox(boundingBox);
     codewords = new Codeword[boundingBox.getMaxY() - boundingBox.getMinY() + 1];
   }
 
-  public Codeword getCodewordNearby(int imageRow) {
+  final Codeword getCodewordNearby(int imageRow) {
     Codeword codeword = getCodeword(imageRow);
     if (codeword != null) {
       return codeword;
@@ -38,43 +55,28 @@ public class DetectionResultColumn implements Loggable {
     return null;
   }
 
-  protected int getCodewordsIndex(int imageRow) {
+  final int getCodewordsIndex(int imageRow) {
     return imageRow - boundingBox.getMinY();
   }
 
-  public int getImageRow(int codewordIndex) {
+  final int getImageRow(int codewordIndex) {
     return boundingBox.getMinY() + codewordIndex;
   }
 
-  public void setCodeword(int imageRow, Codeword codeword) {
+  final void setCodeword(int imageRow, Codeword codeword) {
     codewords[getCodewordsIndex(imageRow)] = codeword;
   }
 
-  public Codeword getCodeword(int imageRow) {
+  final Codeword getCodeword(int imageRow) {
     return codewords[getCodewordsIndex(imageRow)];
   }
 
-  public BoundingBox getBoundingBox() {
+  final BoundingBox getBoundingBox() {
     return boundingBox;
   }
 
-  public Codeword[] getCodewords() {
+  final Codeword[] getCodewords() {
     return codewords;
   }
 
-  @Override
-  public String getLogString() {
-    Formatter formatter = new Formatter();
-    int row = 0;
-    for (Codeword codeword : codewords) {
-      if (codeword == null) {
-        formatter.format("%3d:    |   \n", row++);
-        continue;
-      }
-      formatter.format("%3d: %3d|%3d\n", row++, codeword.getRowNumber(), codeword.getValue());
-    }
-    String result = formatter.toString();
-    formatter.close();
-    return result;
-  }
 }

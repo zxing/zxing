@@ -1,7 +1,27 @@
+/*
+ * Copyright 2013 ZXing authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.google.zxing.pdf417.decoder;
 
-public class Codeword {
-  protected static final int BARCODE_ROW_UNKNOWN = -1;
+/**
+ * @author Guenther Grau
+ */
+final class Codeword {
+
+  private static final int BARCODE_ROW_UNKNOWN = -1;
 
   private final int startX;
   private final int endX;
@@ -9,50 +29,51 @@ public class Codeword {
   private final int value;
   private int rowNumber = BARCODE_ROW_UNKNOWN;
 
-  public Codeword(int startX, int endX, int bucket, int value) {
+  Codeword(int startX, int endX, int bucket, int value) {
     this.startX = startX;
     this.endX = endX;
     this.bucket = bucket;
     this.value = value;
   }
 
-  public boolean hasValidRowNumber() {
+  boolean hasValidRowNumber() {
     return isValidRowNumber(rowNumber);
   }
 
-  public boolean isValidRowNumber(int rowNumber) {
-    return BARCODE_ROW_UNKNOWN != rowNumber && bucket == (rowNumber % 3) * 3;
+  boolean isValidRowNumber(int rowNumber) {
+    return rowNumber != BARCODE_ROW_UNKNOWN && bucket == (rowNumber % 3) * 3;
   }
 
-  public void setRowNumberAsRowIndicatorColumn() {
+  void setRowNumberAsRowIndicatorColumn() {
     rowNumber = (value / 30) * 3 + bucket / 3;
   }
 
-  public int getWidth() {
+  int getWidth() {
     return endX - startX;
   }
 
-  public int getStartX() {
+  int getStartX() {
     return startX;
   }
 
-  public int getEndX() {
+  int getEndX() {
     return endX;
   }
 
-  public int getBucket() {
+  int getBucket() {
     return bucket;
   }
 
-  public int getValue() {
+  int getValue() {
     return value;
   }
 
-  public int getRowNumber() {
+  int getRowNumber() {
     return rowNumber;
   }
 
-  public void setRowNumber(int rowNumber) {
+  void setRowNumber(int rowNumber) {
     this.rowNumber = rowNumber;
   }
+
 }

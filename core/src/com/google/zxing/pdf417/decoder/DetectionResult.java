@@ -1,28 +1,43 @@
+/*
+ * Copyright 2013 ZXing authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.google.zxing.pdf417.decoder;
 
-import com.google.zxing.common.BitMatrix;
-import com.google.zxing.pdf417.decoder.SimpleLog.LEVEL;
-
-import java.util.Formatter;
-
-public class DetectionResult implements SimpleLog.Loggable {
+/**
+ * @author Guenther Grau
+ */
+final class DetectionResult {
+  
   private static final int ADJUST_ROW_NUMBER_SKIP = 2;
+  
   private final BarcodeMetadata barcodeMetadata;
   private final DetectionResultColumn[] detectionResultColumns;
   private final BoundingBox boundingBox;
   private final int barcodeColumnCount;
 
-  public DetectionResult(BitMatrix image, BarcodeMetadata barcodeMetadata, BoundingBox boundingBox) {
+  DetectionResult(BarcodeMetadata barcodeMetadata, BoundingBox boundingBox) {
     this.barcodeMetadata = barcodeMetadata;
     this.barcodeColumnCount = barcodeMetadata.getColumnCount();
     this.boundingBox = boundingBox;
     detectionResultColumns = new DetectionResultColumn[barcodeColumnCount + 2];
   }
 
-  public int getImageStartRow(int barcodeColumn) {
-    DetectionResultColumn detectionResultColumn = null;
+  int getImageStartRow(int barcodeColumn) {
     while (barcodeColumn > 0) {
-      detectionResultColumn = detectionResultColumns[--barcodeColumn];
+      DetectionResultColumn detectionResultColumn = detectionResultColumns[--barcodeColumn];
       // TODO compare start row with previous result columns
       // Could try detecting codewords from right to left
       // if all else fails, could calculate estimate
@@ -40,40 +55,29 @@ public class DetectionResult implements SimpleLog.Loggable {
     return -1;
   }
 
-  public void setDetectionResultColumn(int barcodeColumn, DetectionResultColumn detectionResultColumn) {
+  void setDetectionResultColumn(int barcodeColumn, DetectionResultColumn detectionResultColumn) {
     detectionResultColumns[barcodeColumn] = detectionResultColumn;
   }
 
-  public DetectionResultColumn getDetectionResultColumn(int barcodeColumn) {
+  DetectionResultColumn getDetectionResultColumn(int barcodeColumn) {
     return detectionResultColumns[barcodeColumn];
   }
 
   private void adjustIndicatorColumnRowNumbers(DetectionResultColumn detectionResultColumn) {
-    if (detectionResultColumn == null) {
-      return;
+    if (detectionResultColumn != null) {
+      ((DetectionResultRowIndicatorColumn) detectionResultColumn).adjustIndicatorColumnRowNumbers(barcodeMetadata);
     }
-    ((DetectionResultRowIndicatorColumn) detectionResultColumn).adjustIndicatorColumnRowNumbers(barcodeMetadata);
   }
 
-  public DetectionResultColumn[] getDetectionResultColumns() {
+  DetectionResultColumn[] getDetectionResultColumns() {
     adjustIndicatorColumnRowNumbers(detectionResultColumns[0]);
     adjustIndicatorColumnRowNumbers(detectionResultColumns[barcodeColumnCount + 1]);
-    SimpleLog.log(LEVEL.DEVEL, "Before adjustRowNumbers");
-    SimpleLog.log(LEVEL.DEVEL, this);
     int unadjustedCodewordCount = 900;
     int previousUnadjustedCount;
     do {
       previousUnadjustedCount = unadjustedCodewordCount;
       unadjustedCodewordCount = adjustRowNumbers();
     } while (unadjustedCodewordCount > 0 && unadjustedCodewordCount < previousUnadjustedCount);
-
-    if (unadjustedCodewordCount > 0) {
-      SimpleLog.log(LEVEL.INFO, unadjustedCodewordCount +
-          " codewords without valid row number. Values will be ignored!");
-    }
-
-    SimpleLog.log(LEVEL.DEVEL, "After adjustRowNumbers");
-    SimpleLog.log(LEVEL.DEVEL, this);
     return detectionResultColumns;
   }
 
@@ -124,11 +128,12 @@ public class DetectionResult implements SimpleLog.Loggable {
       }
       int rowIndicatorRowNumber = codewords[codewordsRow].getRowNumber();
       int invalidRowCounts = 0;
-      for (int barcodeColumn = barcodeColumnCount + 1; barcodeColumn > 0 && invalidRowCounts < ADJUST_ROW_NUMBER_SKIP; barcodeColumn--) {
+      for (int barcodeColumn = barcodeColumnCount + 1; 
+           barcodeColumn > 0 && invalidRowCounts < ADJUST_ROW_NUMBER_SKIP; 
+           barcodeColumn--) {
         Codeword codeword = detectionResultColumns[barcodeColumn].getCodewords()[codewordsRow];
         if (codeword != null) {
-          invalidRowCounts = adjustRowNumberIfValid(codewordsRow, rowIndicatorRowNumber, invalidRowCounts,
-              barcodeColumn, codeword);
+          invalidRowCounts = adjustRowNumberIfValid(rowIndicatorRowNumber, invalidRowCounts, codeword);
           if (!codeword.hasValidRowNumber()) {
             unadjustedCount++;
           }
@@ -150,11 +155,12 @@ public class DetectionResult implements SimpleLog.Loggable {
       }
       int rowIndicatorRowNumber = codewords[codewordsRow].getRowNumber();
       int invalidRowCounts = 0;
-      for (int barcodeColumn = 1; barcodeColumn < barcodeColumnCount + 1 && invalidRowCounts < ADJUST_ROW_NUMBER_SKIP; barcodeColumn++) {
+      for (int barcodeColumn = 1; 
+           barcodeColumn < barcodeColumnCount + 1 && invalidRowCounts < ADJUST_ROW_NUMBER_SKIP; 
+           barcodeColumn++) {
         Codeword codeword = detectionResultColumns[barcodeColumn].getCodewords()[codewordsRow];
         if (codeword != null) {
-          invalidRowCounts = adjustRowNumberIfValid(codewordsRow, rowIndicatorRowNumber, invalidRowCounts,
-              barcodeColumn, codeword);
+          invalidRowCounts = adjustRowNumberIfValid(rowIndicatorRowNumber, invalidRowCounts, codeword);
           if (!codeword.hasValidRowNumber()) {
             unadjustedCount++;
           }
@@ -164,8 +170,7 @@ public class DetectionResult implements SimpleLog.Loggable {
     return unadjustedCount;
   }
 
-  private int adjustRowNumberIfValid(int codewordsRow, int rowIndicatorRowNumber, int invalidRowCounts,
-                                     int barcodeColumn, Codeword codeword) {
+  private static int adjustRowNumberIfValid(int rowIndicatorRowNumber, int invalidRowCounts, Codeword codeword) {
 
     if (codeword == null) {
       return invalidRowCounts;
@@ -175,10 +180,7 @@ public class DetectionResult implements SimpleLog.Loggable {
         codeword.setRowNumber(rowIndicatorRowNumber);
         invalidRowCounts = 0;
       } else {
-        if (++invalidRowCounts >= ADJUST_ROW_NUMBER_SKIP) {
-          SimpleLog.log(LEVEL.INFO, "to many consecutive invalid row counts, skipping further columns for this row",
-              codewordsRow, barcodeColumn);
-        }
+        ++invalidRowCounts;
       }
     }
     return invalidRowCounts;
@@ -225,65 +227,33 @@ public class DetectionResult implements SimpleLog.Loggable {
   }
 
   /**
-   * 
-   * @param codeword
-   * @param otherCodeword
    * @return true, if row number was adjusted, false otherwise
    */
-  private boolean adjustRowNumber(Codeword codeword, Codeword otherCodeword) {
+  private static boolean adjustRowNumber(Codeword codeword, Codeword otherCodeword) {
     if (otherCodeword == null) {
       return false;
     }
     if (otherCodeword.hasValidRowNumber() && otherCodeword.getBucket() == codeword.getBucket()) {
       codeword.setRowNumber(otherCodeword.getRowNumber());
-      SimpleLog.log(LEVEL.ALL,
-          "corrected rowNumber: codeword: " + codeword.getRowNumber() + ", value: " + codeword.getValue());
       return true;
     }
     return false;
   }
 
-  public int getBarcodeColumnCount() {
+  int getBarcodeColumnCount() {
     return barcodeColumnCount;
   }
 
-  public int getBarcodeRowCount() {
+  int getBarcodeRowCount() {
     return barcodeMetadata.getRowCount();
   }
 
-  public int getBarcodeECLevel() {
+  int getBarcodeECLevel() {
     return barcodeMetadata.getErrorCorrectionLevel();
   }
 
-  public BoundingBox getBoundingBox() {
+  BoundingBox getBoundingBox() {
     return boundingBox;
   }
 
-  @Override
-  public String getLogString() {
-    Formatter formatter = new Formatter();
-    DetectionResultColumn rowIndicatorColumn = detectionResultColumns[0];
-    if (rowIndicatorColumn == null) {
-      rowIndicatorColumn = detectionResultColumns[barcodeColumnCount + 1];
-    }
-    for (int codewordsRow = 0; codewordsRow < rowIndicatorColumn.getCodewords().length; codewordsRow++) {
-      formatter.format("CW %3d:", codewordsRow);
-      for (int barcodeColumn = 0; barcodeColumn < barcodeColumnCount + 2; barcodeColumn++) {
-        if (detectionResultColumns[barcodeColumn] == null) {
-          formatter.format("    |   ");
-          continue;
-        }
-        Codeword codeword = detectionResultColumns[barcodeColumn].getCodewords()[codewordsRow];
-        if (codeword == null) {
-          formatter.format("    |   ");
-          continue;
-        }
-        formatter.format(" %3d|%3d", codeword.getRowNumber(), codeword.getValue());
-      }
-      formatter.format("\n");
-    }
-    String result = formatter.toString();
-    formatter.close();
-    return result;
-  }
 }

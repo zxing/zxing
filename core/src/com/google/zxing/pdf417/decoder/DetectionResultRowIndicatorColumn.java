@@ -1,21 +1,39 @@
+/*
+ * Copyright 2013 ZXing authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.google.zxing.pdf417.decoder;
 
 import com.google.zxing.ResultPoint;
-import com.google.zxing.pdf417.decoder.SimpleLog.LEVEL;
 
-public class DetectionResultRowIndicatorColumn extends DetectionResultColumn {
+/**
+ * @author Guenther Grau
+ */
+final class DetectionResultRowIndicatorColumn extends DetectionResultColumn {
 
   private static final int MIN_BARCODE_ROWS = 3;
   private static final int MAX_BARCODE_ROWS = 90;
 
   private final boolean isLeft;
 
-  public DetectionResultRowIndicatorColumn(final BoundingBox boundingBox, boolean isLeft) {
+  DetectionResultRowIndicatorColumn(BoundingBox boundingBox, boolean isLeft) {
     super(boundingBox);
     this.isLeft = isLeft;
   }
 
-  public void setRowNumbers() {
+  void setRowNumbers() {
     for (Codeword codeword : getCodewords()) {
       if (codeword != null) {
         codeword.setRowNumberAsRowIndicatorColumn();
@@ -23,7 +41,7 @@ public class DetectionResultRowIndicatorColumn extends DetectionResultColumn {
     }
   }
 
-  public int[] getRowHeights() {
+  int[] getRowHeights() {
     BarcodeMetadata barcodeMetadata = getBarcodeMetadata();
     if (barcodeMetadata == null) {
       return null;
@@ -41,7 +59,8 @@ public class DetectionResultRowIndicatorColumn extends DetectionResultColumn {
   // TODO maybe we should add missing codewords to store the correct row number to make
   // finding row numbers for other columns easier
   // use row height count to make detection of invalid row numbers more reliable
-  public int adjustIndicatorColumnRowNumbers(BarcodeMetadata barcodeMetadata) {
+  int adjustIndicatorColumnRowNumbers(BarcodeMetadata barcodeMetadata) {
+    BoundingBox boundingBox = getBoundingBox();
     ResultPoint top = isLeft ? boundingBox.getTopLeft() : boundingBox.getTopRight();
     ResultPoint bottom = isLeft ? boundingBox.getBottomLeft() : boundingBox.getBottomRight();
     int firstRow = getCodewordsIndex((int) top.getY());
@@ -59,7 +78,7 @@ public class DetectionResultRowIndicatorColumn extends DetectionResultColumn {
 
       codeword.setRowNumberAsRowIndicatorColumn();
 
-      // This only works if we have a complete RI column. If the column is cut off at the beginning or end, it
+      // This only works if we have a complete RI column. If the RI column is cut off at the top or bottom, it
       // will calculate the wrong numbers and delete correct codewords. Could be used once the barcode height has
       // been calculated properly.
       //      float expectedRowNumber = (codewordsRow - firstRow) / averageRowHeight;
@@ -72,7 +91,7 @@ public class DetectionResultRowIndicatorColumn extends DetectionResultColumn {
 
       int rowDifference = codeword.getRowNumber() - barcodeRow;
 
-      // TODO deal with case where first row indicator doesn't start with 0
+      // TODO improve handling with case where first row indicator doesn't start with 0
 
       if (rowDifference == 0) {
         currentRowHeight++;
@@ -81,17 +100,10 @@ public class DetectionResultRowIndicatorColumn extends DetectionResultColumn {
         currentRowHeight = 1;
         barcodeRow = codeword.getRowNumber();
       } else if (rowDifference < 0) {
-        SimpleLog.log(LEVEL.WARNING, "Removing codeword, rowNumber should not decrease, codeword[" + codewordsRow +
-            "]: " + codeword.getRowNumber() + ", value: " + codeword.getValue());
         codewords[codewordsRow] = null;
       } else if (codeword.getRowNumber() >= barcodeMetadata.getRowCount()) {
-        SimpleLog.log(LEVEL.WARNING, "Removing codeword, rowNumber too big, codeword[" + codewordsRow + "]: " +
-            codeword.getRowNumber() + ", value: " + codeword.getValue());
         codewords[codewordsRow] = null;
       } else if (rowDifference > codewordsRow) {
-        SimpleLog.log(LEVEL.WARNING,
-            "Row number jump bigger than codeword row, codeword[" + codewordsRow + "]: previous row: " + barcodeRow +
-                ", new row: " + codeword.getRowNumber() + ", value: " + codeword.getValue());
         codewords[codewordsRow] = null;
       } else {
         int checkedRows;
@@ -104,26 +116,20 @@ public class DetectionResultRowIndicatorColumn extends DetectionResultColumn {
         for (int i = 1; i <= checkedRows && !closePreviousCodewordFound; i++) {
           // there must be (height * rowDifference) number of codewords missing. For now we assume height = 1.
           // This should hopefully get rid of most problems already.
-          closePreviousCodewordFound = (codewords[codewordsRow - i] != null);
+          closePreviousCodewordFound = codewords[codewordsRow - i] != null;
         }
         if (closePreviousCodewordFound) {
-          SimpleLog.log(LEVEL.WARNING,
-              "Row number jump bigger than codeword row gap, codeword[" + codewordsRow + "]: previous row: " +
-                  barcodeRow + ", new row: " + codeword.getRowNumber() + ", value: " + codeword.getValue());
           codewords[codewordsRow] = null;
         } else {
-          SimpleLog.log(LEVEL.WARNING,
-              "Setting new row number after bigger jump, codeword[" + codewordsRow + "]: previous row: " + barcodeRow +
-                  ", new row: " + codeword.getRowNumber() + ", value: " + codeword.getValue());
           barcodeRow = codeword.getRowNumber();
           currentRowHeight = 1;
         }
       }
     }
-    return (int) (averageRowHeight + .5);
+    return (int) (averageRowHeight + 0.5);
   }
 
-  protected BarcodeMetadata getBarcodeMetadata() {
+  BarcodeMetadata getBarcodeMetadata() {
     Codeword[] codewords = getCodewords();
     BarcodeValue barcodeColumnCount = new BarcodeValue();
     BarcodeValue barcodeRowCountUpperPart = new BarcodeValue();
@@ -203,12 +209,8 @@ public class DetectionResultRowIndicatorColumn extends DetectionResultColumn {
     }
   }
 
-  public boolean isLeft() {
+  boolean isLeft() {
     return isLeft;
   }
 
-  @Override
-  public String getLogString() {
-    return "IsLeft: " + isLeft + "\n" + super.getLogString();
-  }
 }
