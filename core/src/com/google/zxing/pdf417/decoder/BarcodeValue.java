@@ -30,7 +30,7 @@ public class BarcodeValue {
         maxConfidence = entry.getValue();
         result = entry.getKey();
         ambigous = false;
-      } else if (entry.getValue() > maxConfidence) {
+      } else if (entry.getValue() == maxConfidence) {
         ambigous = true;
       }
     }

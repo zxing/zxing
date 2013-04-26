@@ -4,9 +4,8 @@ import com.google.zxing.NotFoundException;
 import com.google.zxing.common.BitArray;
 import com.google.zxing.common.BitMatrix;
 
+import org.junit.Assert;
 import org.junit.Test;
-
-import junit.framework.Assert;
 
 public class DetectorTest {
 
@@ -23,7 +22,7 @@ public class DetectorTest {
   public void testMirror(int size) {
     BitArray result = new BitArray(size);
     DetectorNew.mirror(getInput(size), result);
-    Assert.assertEquals(getExpected(size), result);
+    Assert.assertArrayEquals(getExpected(size).getBitArray(), result.getBitArray());
   }
 
   @Test
@@ -65,7 +64,7 @@ public class DetectorTest {
   private BitArray getExpected(final int size) {
     BitArray expected = new BitArray(size);
     for (int index : bitSetIndex) {
-      expected.set(size - index);
+      expected.set(size - index -1);
     }
     return expected;
   }
