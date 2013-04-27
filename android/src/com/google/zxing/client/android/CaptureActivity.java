@@ -479,11 +479,13 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   }
 
   private static void drawLine(Canvas canvas, Paint paint, ResultPoint a, ResultPoint b, float scaleFactor) {
-    canvas.drawLine(scaleFactor * a.getX(), 
-                    scaleFactor * a.getY(), 
-                    scaleFactor * b.getX(), 
-                    scaleFactor * b.getY(), 
-                    paint);
+    if (a != null && b != null) {
+      canvas.drawLine(scaleFactor * a.getX(), 
+                      scaleFactor * a.getY(), 
+                      scaleFactor * b.getX(), 
+                      scaleFactor * b.getY(), 
+                      paint);
+    }
   }
 
   // Put up our own UI for how to handle the decoded contents.

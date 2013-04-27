@@ -32,6 +32,10 @@
 #-keep class com.google.zxing.client.android.camera.exposure.**
 -keep class com.google.zxing.client.android.common.executor.**
 
+# ADDED 
+-dontobfuscate
+-useuniqueclassmembernames
+
 # For native methods, see http://proguard.sourceforge.net/manual/examples.html#native
 -keepclasseswithmembernames class * {
     native <methods>;
