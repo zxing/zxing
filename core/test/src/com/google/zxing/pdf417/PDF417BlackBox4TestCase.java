@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 ZXing authors
+ * Copyright 2013 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,6 +49,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Logger;
 
+/**
+ * This class tests Macro PDF417 barcode specific functionality. It ensures that information, which is split into
+ * several barcodes can be properly combined again to yield the original data content.
+ * 
+ * @author Guenther Grau
+ *
+ */
 public final class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
   private static final Logger log = Logger.getLogger(AbstractBlackBoxTestCase.class.getSimpleName());
 
