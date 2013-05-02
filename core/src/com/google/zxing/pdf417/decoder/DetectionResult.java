@@ -16,16 +16,22 @@
 
 package com.google.zxing.pdf417.decoder;
 
+import com.google.zxing.pdf417.PDF417Common;
+
+import java.util.Formatter;
+import java.util.logging.Logger;
+
 /**
  * @author Guenther Grau
  */
 final class DetectionResult {
-  
+  private static final Logger LOG = Logger.getLogger(DetectionResult.class.getSimpleName());
+
   private static final int ADJUST_ROW_NUMBER_SKIP = 2;
-  
+
   private final BarcodeMetadata barcodeMetadata;
   private final DetectionResultColumn[] detectionResultColumns;
-  private final BoundingBox boundingBox;
+  private BoundingBox boundingBox;
   private final int barcodeColumnCount;
 
   DetectionResult(BarcodeMetadata barcodeMetadata, BoundingBox boundingBox) {
@@ -35,50 +41,23 @@ final class DetectionResult {
     detectionResultColumns = new DetectionResultColumn[barcodeColumnCount + 2];
   }
 
-  int getImageStartRow(int barcodeColumn) {
-    while (barcodeColumn > 0) {
-      DetectionResultColumn detectionResultColumn = detectionResultColumns[--barcodeColumn];
-      // TODO compare start row with previous result columns
-      // Could try detecting codewords from right to left
-      // if all else fails, could calculate estimate
-      Codeword[] codewords = detectionResultColumn.getCodewords();
-      for (int rowNumber = 0; rowNumber < codewords.length; rowNumber++) {
-        if (codewords[rowNumber] != null) {
-          // next column might start earlier if barcode is not aligned with image
-          if (rowNumber > 0) {
-            rowNumber--;
-          }
-          return detectionResultColumn.getImageRow(rowNumber);
-        }
-      }
-    }
-    return -1;
-  }
-
-  void setDetectionResultColumn(int barcodeColumn, DetectionResultColumn detectionResultColumn) {
-    detectionResultColumns[barcodeColumn] = detectionResultColumn;
-  }
-
-  DetectionResultColumn getDetectionResultColumn(int barcodeColumn) {
-    return detectionResultColumns[barcodeColumn];
-  }
-
-  private void adjustIndicatorColumnRowNumbers(DetectionResultColumn detectionResultColumn) {
-    if (detectionResultColumn != null) {
-      ((DetectionResultRowIndicatorColumn) detectionResultColumn).adjustIndicatorColumnRowNumbers(barcodeMetadata);
-    }
-  }
-
   DetectionResultColumn[] getDetectionResultColumns() {
     adjustIndicatorColumnRowNumbers(detectionResultColumns[0]);
     adjustIndicatorColumnRowNumbers(detectionResultColumns[barcodeColumnCount + 1]);
-    int unadjustedCodewordCount = 900;
+    int unadjustedCodewordCount = PDF417Common.MAX_CODEWORDS_IN_BARCODE;
     int previousUnadjustedCount;
     do {
       previousUnadjustedCount = unadjustedCodewordCount;
       unadjustedCodewordCount = adjustRowNumbers();
     } while (unadjustedCodewordCount > 0 && unadjustedCodewordCount < previousUnadjustedCount);
     return detectionResultColumns;
+  }
+
+  private void adjustIndicatorColumnRowNumbers(DetectionResultColumn detectionResultColumn) {
+    if (detectionResultColumn != null) {
+      ((DetectionResultRowIndicatorColumn) detectionResultColumn)
+          .adjustCompleteIndicatorColumnRowNumbers(barcodeMetadata);
+    }
   }
 
   // TODO ensure that no detected codewords with unknown row number are left
@@ -108,12 +87,39 @@ final class DetectionResult {
   }
 
   private int adjustRowNumbersByRow() {
+    adjustRowNumbersFromBothRI();
     // TODO we should only do full row adjustments if row numbers of left and right row indicator column match.
     // Maybe it's even better to calculated the height (in codeword rows) and divide it by the number of barcode
     // rows. This, together with the LRI and RRI row numbers should allow us to get a good estimate where a row
     // number starts and ends.
     int unadjustedCount = adjustRowNumbersFromLRI();
     return unadjustedCount + adjustRowNumbersFromRRI();
+  }
+
+  private int adjustRowNumbersFromBothRI() {
+    if (detectionResultColumns[0] == null || detectionResultColumns[barcodeColumnCount + 1] == null) {
+      return 0;
+    }
+    Codeword[] LRIcodewords = detectionResultColumns[0].getCodewords();
+    Codeword[] RRIcodewords = detectionResultColumns[barcodeColumnCount + 1].getCodewords();
+    for (int codewordsRow = 0; codewordsRow < LRIcodewords.length; codewordsRow++) {
+      if (LRIcodewords[codewordsRow] != null &&
+          RRIcodewords[codewordsRow] != null &&
+          LRIcodewords[codewordsRow].getRowNumber() == RRIcodewords[codewordsRow].getRowNumber()) {
+        for (int barcodeColumn = 1; barcodeColumn <= barcodeColumnCount; barcodeColumn++) {
+          Codeword codeword = detectionResultColumns[barcodeColumn].getCodewords()[codewordsRow];
+          if (codeword == null) {
+            continue;
+          }
+          codeword.setRowNumber(LRIcodewords[codewordsRow].getRowNumber());
+          if (!codeword.hasValidRowNumber()) {
+            LOG.info("Removing codeword with invalid row number, cw[" + codewordsRow + "][" + barcodeColumn + "]");
+            detectionResultColumns[barcodeColumn].getCodewords()[codewordsRow] = null;
+          }
+        }
+      }
+    }
+    return 0;
   }
 
   private int adjustRowNumbersFromRRI() {
@@ -128,9 +134,7 @@ final class DetectionResult {
       }
       int rowIndicatorRowNumber = codewords[codewordsRow].getRowNumber();
       int invalidRowCounts = 0;
-      for (int barcodeColumn = barcodeColumnCount + 1; 
-           barcodeColumn > 0 && invalidRowCounts < ADJUST_ROW_NUMBER_SKIP; 
-           barcodeColumn--) {
+      for (int barcodeColumn = barcodeColumnCount + 1; barcodeColumn > 0 && invalidRowCounts < ADJUST_ROW_NUMBER_SKIP; barcodeColumn--) {
         Codeword codeword = detectionResultColumns[barcodeColumn].getCodewords()[codewordsRow];
         if (codeword != null) {
           invalidRowCounts = adjustRowNumberIfValid(rowIndicatorRowNumber, invalidRowCounts, codeword);
@@ -155,9 +159,7 @@ final class DetectionResult {
       }
       int rowIndicatorRowNumber = codewords[codewordsRow].getRowNumber();
       int invalidRowCounts = 0;
-      for (int barcodeColumn = 1; 
-           barcodeColumn < barcodeColumnCount + 1 && invalidRowCounts < ADJUST_ROW_NUMBER_SKIP; 
-           barcodeColumn++) {
+      for (int barcodeColumn = 1; barcodeColumn < barcodeColumnCount + 1 && invalidRowCounts < ADJUST_ROW_NUMBER_SKIP; barcodeColumn++) {
         Codeword codeword = detectionResultColumns[barcodeColumn].getCodewords()[codewordsRow];
         if (codeword != null) {
           invalidRowCounts = adjustRowNumberIfValid(rowIndicatorRowNumber, invalidRowCounts, codeword);
@@ -254,6 +256,46 @@ final class DetectionResult {
 
   BoundingBox getBoundingBox() {
     return boundingBox;
+  }
+
+  void setDetectionResultColumn(int barcodeColumn, DetectionResultColumn detectionResultColumn) {
+    detectionResultColumns[barcodeColumn] = detectionResultColumn;
+  }
+
+  DetectionResultColumn getDetectionResultColumn(int barcodeColumn) {
+    return detectionResultColumns[barcodeColumn];
+  }
+
+  @Override
+  public String toString() {
+    Formatter formatter = new Formatter();
+    DetectionResultColumn rowIndicatorColumn = detectionResultColumns[0];
+    if (rowIndicatorColumn == null) {
+      rowIndicatorColumn = detectionResultColumns[barcodeColumnCount + 1];
+    }
+    for (int codewordsRow = 0; codewordsRow < rowIndicatorColumn.getCodewords().length; codewordsRow++) {
+      formatter.format("CW %3d:", codewordsRow);
+      for (int barcodeColumn = 0; barcodeColumn < barcodeColumnCount + 2; barcodeColumn++) {
+        if (detectionResultColumns[barcodeColumn] == null) {
+          formatter.format("    |   ");
+          continue;
+        }
+        Codeword codeword = detectionResultColumns[barcodeColumn].getCodewords()[codewordsRow];
+        if (codeword == null) {
+          formatter.format("    |   ");
+          continue;
+        }
+        formatter.format(" %3d|%3d", codeword.getRowNumber(), codeword.getValue());
+      }
+      formatter.format("\n");
+    }
+    String result = formatter.toString();
+    formatter.close();
+    return result;
+  }
+
+  public void setBoundingBox(BoundingBox boundingBox) {
+    this.boundingBox = boundingBox;
   }
 
 }

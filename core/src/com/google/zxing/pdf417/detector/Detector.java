@@ -60,22 +60,6 @@ public final class Detector {
   private static final int ROW_STEP = 5;
   private static final int BARCODE_MIN_HEIGHT = 10;
 
-  private final BinaryBitmap image;
-
-  public Detector(BinaryBitmap image) {
-    this.image = image;
-  }
-
-  /**
-   * <p>Detects a PDF417 Code in an image, simply.</p>
-   *
-   * @return {@link PDF417DetectorResult} encapsulating results of detecting a PDF417 Code
-   * @throws NotFoundException if no PDF417 Code can be found
-   */
-  public PDF417DetectorResult detect(boolean multiple) throws NotFoundException {
-    return detect(null, multiple);
-  }
-
   /**
    * <p>Detects a PDF417 Code in an image. Only checks 0 and 180 degree rotations.</p>
    *
@@ -85,7 +69,7 @@ public final class Detector {
    * @return {@link PDF417DetectorResult} encapsulating results of detecting a PDF417 code
    * @throws NotFoundException if no PDF417 Code can be found
    */
-  PDF417DetectorResult detect(Map<DecodeHintType,?> hints, boolean multiple) throws NotFoundException {
+  public static PDF417DetectorResult detect(BinaryBitmap image,Map<DecodeHintType,?> hints, boolean multiple) throws NotFoundException {
     // TODO detection improvement, tryHarder could try several different luminance thresholds/blackpoints or even 
     // different binarizers
     //boolean tryHarder = hints != null && hints.containsKey(DecodeHintType.TRY_HARDER);
@@ -107,12 +91,12 @@ public final class Detector {
    * @param bitMatrix bit matrix to detect barcodes in
    * @return List of ResultPoint arrays containing the coordinates of found barcodes
    */
-  private List<ResultPoint[]> detect(boolean multiple, BitMatrix bitMatrix) {
+  private static List<ResultPoint[]> detect(boolean multiple, BitMatrix bitMatrix) {
     List<ResultPoint[]> barcodeCoordinates = new ArrayList<ResultPoint[]>();
     int row = 0;
     int column = 0;
     boolean foundBarcodeInRow = false;
-    while (row < image.getHeight()) {
+    while (row < bitMatrix.getHeight()) {
       ResultPoint[] vertices = findVertices(bitMatrix, row, column);
 
       if (vertices[0] == null && vertices[3] == null) {

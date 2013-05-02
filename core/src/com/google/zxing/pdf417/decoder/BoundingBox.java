@@ -24,7 +24,7 @@ import com.google.zxing.common.BitMatrix;
  * @author Guenther Grau
  */
 final class BoundingBox {
-  
+
   private BitMatrix image;
   private ResultPoint topLeft;
   private ResultPoint bottomLeft;
@@ -40,8 +40,10 @@ final class BoundingBox {
               ResultPoint bottomLeft,
               ResultPoint topRight,
               ResultPoint bottomRight) throws NotFoundException {
-    if ((topLeft == null && topRight == null) || (bottomLeft == null && bottomRight == null) ||
-        (topLeft != null && bottomLeft == null) || (topRight != null && bottomRight == null)) {
+    if ((topLeft == null && topRight == null) ||
+        (bottomLeft == null && bottomRight == null) ||
+        (topLeft != null && bottomLeft == null) ||
+        (topRight != null && bottomRight == null)) {
       throw NotFoundException.getNotFoundInstance();
     }
     init(image, topLeft, bottomLeft, topRight, bottomRight);
@@ -51,11 +53,10 @@ final class BoundingBox {
     init(boundingBox.image, boundingBox.topLeft, boundingBox.bottomLeft, boundingBox.topRight, boundingBox.bottomRight);
   }
 
-  private void init(BitMatrix image, 
-                    ResultPoint topLeft, 
+  private void init(BitMatrix image,
+                    ResultPoint topLeft,
                     ResultPoint bottomLeft,
-                    
-                     ResultPoint topRight, 
+                    ResultPoint topRight,
                     ResultPoint bottomRight) {
     this.image = image;
     this.topLeft = topLeft;
@@ -75,7 +76,12 @@ final class BoundingBox {
     return new BoundingBox(leftBox.image, leftBox.topLeft, leftBox.bottomLeft, rightBox.topRight, rightBox.bottomRight);
   }
 
-  void addMissingRows(int missingStartRows, int missingEndRows, boolean isLeft) {
+  BoundingBox addMissingRows(int missingStartRows, int missingEndRows, boolean isLeft) throws NotFoundException {
+    ResultPoint newTopLeft = topLeft;
+    ResultPoint newBottomLeft = bottomLeft;
+    ResultPoint newTopRight = topRight;
+    ResultPoint newBottomRight = bottomRight;
+
     if (missingStartRows > 0) {
       ResultPoint top = isLeft ? topLeft : topRight;
       int newMinY = (int) top.getY() - missingStartRows;
@@ -85,27 +91,29 @@ final class BoundingBox {
       // TODO use existing points to better interpolate the new x positions
       ResultPoint newTop = new ResultPoint(top.getX(), newMinY);
       if (isLeft) {
-        topLeft = newTop;
+        newTopLeft = newTop;
       } else {
-        topRight = newTop;
+        newTopRight = newTop;
       }
     }
 
     if (missingEndRows > 0) {
       ResultPoint bottom = isLeft ? bottomLeft : bottomRight;
-      int newMaxY = (int) bottom.getY() - missingStartRows;
+      int newMaxY = (int) bottom.getY() + missingEndRows;
       if (newMaxY >= image.getHeight()) {
         newMaxY = image.getHeight() - 1;
       }
       // TODO use existing points to better interpolate the new x positions
       ResultPoint newBottom = new ResultPoint(bottom.getX(), newMaxY);
       if (isLeft) {
-        bottomLeft = newBottom;
+        newBottomLeft = newBottom;
       } else {
-        bottomRight = newBottom;
+        newBottomRight = newBottom;
       }
     }
+
     calculateMinMaxValues();
+    return new BoundingBox(image, newTopLeft, newBottomLeft, newTopRight, newBottomRight);
   }
 
   private void calculateMinMaxValues() {
