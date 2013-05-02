@@ -69,7 +69,8 @@ public final class Detector {
    * @return {@link PDF417DetectorResult} encapsulating results of detecting a PDF417 code
    * @throws NotFoundException if no PDF417 Code can be found
    */
-  public static PDF417DetectorResult detect(BinaryBitmap image,Map<DecodeHintType,?> hints, boolean multiple) throws NotFoundException {
+  public static PDF417DetectorResult detect(BinaryBitmap image, Map<DecodeHintType,?> hints, boolean multiple)
+      throws NotFoundException {
     // TODO detection improvement, tryHarder could try several different luminance thresholds/blackpoints or even 
     // different binarizers
     //boolean tryHarder = hints != null && hints.containsKey(DecodeHintType.TRY_HARDER);
@@ -208,8 +209,7 @@ public final class Detector {
     }
   }
 
-  private static ResultPoint[] findRowsWithPattern(
-                                                   BitMatrix matrix,
+  private static ResultPoint[] findRowsWithPattern(BitMatrix matrix,
                                                    int height,
                                                    int width,
                                                    int startRow,
@@ -282,8 +282,7 @@ public final class Detector {
    * @param counters array of counters, as long as pattern, to re-use 
    * @return start/end horizontal offset of guard pattern, as an array of two ints.
    */
-  private static int[] findGuardPattern(
-                                        BitMatrix matrix,
+  private static int[] findGuardPattern(BitMatrix matrix,
                                         int column,
                                         int row,
                                         int width,
