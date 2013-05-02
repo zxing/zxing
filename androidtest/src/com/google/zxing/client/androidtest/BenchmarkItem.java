@@ -18,7 +18,7 @@ package com.google.zxing.client.androidtest;
 
 import com.google.zxing.BarcodeFormat;
 
-public final class BenchmarkItem {
+final class BenchmarkItem {
 
   private final String path;
   private final int[] times;
@@ -26,7 +26,7 @@ public final class BenchmarkItem {
   private boolean decoded;
   private BarcodeFormat format;
 
-  public BenchmarkItem(String path, int runs) {
+  BenchmarkItem(String path, int runs) {
     if (runs <= 0) {
       throw new IllegalArgumentException();
     }
@@ -37,16 +37,16 @@ public final class BenchmarkItem {
     format = null;
   }
 
-  public void addResult(int microseconds) {
+  void addResult(int microseconds) {
     times[position] = microseconds;
     position++;
   }
 
-  public void setDecoded(boolean decoded) {
+  void setDecoded(boolean decoded) {
     this.decoded = decoded;
   }
 
-  public void setFormat(BarcodeFormat format) {
+  void setFormat(BarcodeFormat format) {
     this.format = format;
   }
 
@@ -66,7 +66,7 @@ public final class BenchmarkItem {
    *
    * @return The average decoding time in microseconds.
    */
-  public int getAverageTime() {
+  int getAverageTime() {
     int size = times.length;
     int total = 0;
     int max = times[0];

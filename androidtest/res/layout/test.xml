@@ -18,7 +18,7 @@
              android:layout_width="fill_parent"
              android:layout_height="fill_parent"
              android:gravity="center_horizontal"
-             android:padding="10px">
+             android:padding="10dip">
   <TableRow>
     <Button android:id="@+id/run_benchmark"
             android:layout_width="fill_parent"

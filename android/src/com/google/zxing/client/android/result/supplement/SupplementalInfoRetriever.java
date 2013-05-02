@@ -55,10 +55,19 @@ public abstract class SupplementalInfoRetriever extends AsyncTask<Object,Object,
     } else if (result instanceof ProductParsedResult) {
       String productID = ((ProductParsedResult) result).getProductID();
       taskExec.execute(new ProductResultInfoRetriever(textView, productID, historyManager, context));
+      switch (productID.length()) {
+        case 12:
+          taskExec.execute(new AmazonInfoRetriever(textView, "UPC", productID, historyManager, context));      
+          break;
+        case 13:
+          taskExec.execute(new AmazonInfoRetriever(textView, "EAN", productID, historyManager, context)); 
+          break;
+      }
     } else if (result instanceof ISBNParsedResult) {
       String isbn = ((ISBNParsedResult) result).getISBN();
       taskExec.execute(new ProductResultInfoRetriever(textView, isbn, historyManager, context));
       taskExec.execute(new BookResultInfoRetriever(textView, isbn, historyManager, context));
+      taskExec.execute(new AmazonInfoRetriever(textView, "ISBN", isbn, historyManager, context));      
     }
   }
 

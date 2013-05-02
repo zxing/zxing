@@ -18,6 +18,7 @@ package com.google.zxing.client.androidtest;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -28,7 +29,7 @@ import android.widget.TextView;
 public final class BenchmarkActivity extends Activity {
 
   private static final String TAG = BenchmarkActivity.class.getSimpleName();
-  private static final String PATH = "/sdcard/zxingbenchmark";
+  private static final String PATH = Environment.getExternalStorageDirectory().getPath() + "/zxingbenchmark";
 
   private Button runBenchmarkButton;
   private TextView textView;
