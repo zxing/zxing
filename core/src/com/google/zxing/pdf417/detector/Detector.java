@@ -60,6 +60,9 @@ public final class Detector {
   private static final int ROW_STEP = 5;
   private static final int BARCODE_MIN_HEIGHT = 10;
 
+  private Detector() {
+  }
+
   /**
    * <p>Detects a PDF417 Code in an image. Only checks 0 and 180 degree rotations.</p>
    *
