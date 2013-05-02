@@ -297,7 +297,8 @@ public final class PDF417ScanningDecoder {
       throws FormatException, ChecksumException {
     int[] ambiguousIndexCount = new int[ambiguousIndexes.length];
 
-    while (true) {
+    int tries = 100;
+    while (tries-- > 0) {
       for (int i = 0; i < ambiguousIndexCount.length; i++) {
         codewords[ambiguousIndexes[i]] = ambiguousIndexValues[i][ambiguousIndexCount[i]];
       }
@@ -321,6 +322,7 @@ public final class PDF417ScanningDecoder {
         }
       }
     }
+    throw ChecksumException.getChecksumInstance();
   }
 
   private static BarcodeValue[][] createBarcodeMatrix(DetectionResult detectionResult) {
