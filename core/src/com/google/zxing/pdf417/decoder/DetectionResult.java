@@ -173,7 +173,6 @@ final class DetectionResult {
   }
 
   private static int adjustRowNumberIfValid(int rowIndicatorRowNumber, int invalidRowCounts, Codeword codeword) {
-
     if (codeword == null) {
       return invalidRowCounts;
     }
@@ -254,6 +253,10 @@ final class DetectionResult {
     return barcodeMetadata.getErrorCorrectionLevel();
   }
 
+  public void setBoundingBox(BoundingBox boundingBox) {
+    this.boundingBox = boundingBox;
+  }
+
   BoundingBox getBoundingBox() {
     return boundingBox;
   }
@@ -292,10 +295,6 @@ final class DetectionResult {
     String result = formatter.toString();
     formatter.close();
     return result;
-  }
-
-  public void setBoundingBox(BoundingBox boundingBox) {
-    this.boundingBox = boundingBox;
   }
 
 }
