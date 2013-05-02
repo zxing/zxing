@@ -24,6 +24,7 @@ import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.Menu;
@@ -40,12 +41,14 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
 import java.util.Arrays;
+import java.util.regex.Pattern;
 
 public final class ZXingTestActivity extends Activity {
 
   private static final String TAG = ZXingTestActivity.class.getSimpleName();
   private static final int ABOUT_ID = Menu.FIRST;
   private static final String PACKAGE_NAME = ZXingTestActivity.class.getPackage().getName();
+  private static final Pattern SEMICOLON = Pattern.compile(";");
 
   @Override
   public void onCreate(Bundle icicle) {
@@ -305,7 +308,7 @@ public final class ZXingTestActivity extends Activity {
     result.append("VERSION.SDK_INT=").append(Build.VERSION.SDK_INT).append('\n');
 
     String flattened = getFlattenedParams();
-    String[] params = flattened.split(";");
+    String[] params = SEMICOLON.split(flattened);
     Arrays.sort(params);
     for (String param : params) {
       result.append(param).append('\n');
@@ -318,10 +321,10 @@ public final class ZXingTestActivity extends Activity {
   }
 
   private static void writeStats(String resultString) {
+    File cameraParamsFile = new File(Environment.getExternalStorageDirectory().getPath() + "/CameraParameters.txt");
     Writer out = null;
     try {
-      out = new OutputStreamWriter(new FileOutputStream(new File("/sdcard/CameraParameters.txt")), 
-                                   Charset.forName("UTF-8"));
+      out = new OutputStreamWriter(new FileOutputStream(cameraParamsFile), Charset.forName("UTF-8"));
       out.write(resultString);
     } catch (IOException e) {
       Log.e(TAG, "Cannot write parameters file ", e);

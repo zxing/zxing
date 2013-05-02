@@ -16,16 +16,12 @@
  -->
 <resources>
   <string name="about_menu">About</string>
-  <string name="about_message">A utility written by the ZXing Team to help with the development
-    of Barcode Scanner.</string>
+  <string name="about_message">A utility written by the ZXing Team to help with the development of Barcode Scanner. http://code.google.com/p/zxing</string>
   <string name="app_name">ZXing Test</string>
-
   <string name="benchmark_name">ZXing Benchmark</string>
-  <string name="benchmark_help">Place images in /sdcard/zxingbenchmark, then check \"adb logcat\"
-    for results. Turn on Airplane Mode first for more reliable results.</string>
+  <string name="benchmark_help">Place images in /sdcard/zxingbenchmark, then check \"adb logcat\" for results. Turn on Airplane Mode first for more reliable results.</string>
   <string name="benchmark_run">Run benchmark</string>
   <string name="benchmark_running">Benchmark running\u2026</string>
-
   <string name="encode_bad_data">Encode bad data</string>
   <string name="encode_contact">Encode contact</string>
   <string name="encode_email">Encode email</string>
@@ -34,23 +30,14 @@
   <string name="encode_phone">Encode phone</string>
   <string name="encode_sms">Encode SMS</string>
   <string name="encode_url">Encode URL</string>
-
   <string name="get_camera_parameters">Get camera parameters</string>
   <string name="ok_button">OK</string>
-  <string name="parameters_message">Collecting camera parameters to email to ZXing Team\u2026</string>
-
   <string name="result_failed">No barcode found</string>
   <string name="result_failed_why">"The user gave up and pressed Back"</string>
   <string name="result_succeeded">Found barcode</string>
-
-  <string name="save_failed">Save failed - is the SD card installed?</string>
-  <string name="save_succeeded">Save succeeded</string>
   <string name="scan_anything">Scan anything</string>
   <string name="scan_product">Scan product</string>
   <string name="scan_qr_code">Scan QR Code</string>
   <string name="search_book_contents">Search Book Contents</string>
   <string name="share_via_barcode">Share via barcode</string>
-  <string name="status_message">Press the shutter button or Search to save test images to the
-    SD card. Press DPAD_CENTER to trigger autofocus.</string>
-  <string name="take_test_photos">Take test photos</string>
 </resources>
