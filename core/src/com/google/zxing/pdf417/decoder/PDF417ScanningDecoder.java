@@ -29,14 +29,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Formatter;
 import java.util.List;
-import java.util.logging.Logger;
 
 /**
  * @author Guenther Grau
  */
 public final class PDF417ScanningDecoder {
-
-  private static final Logger LOG = Logger.getLogger(PDF417ScanningDecoder.class.getSimpleName());
 
   private static final int CODEWORD_SKEW_SIZE = 2;
 
@@ -66,16 +63,10 @@ public final class PDF417ScanningDecoder {
       if (imageTopLeft != null) {
         leftRowIndicatorColumn = getRowIndicatorColumn(image, boundingBox, imageTopLeft, true, minCodewordWidth,
             maxCodewordWidth);
-        LOG.finer("Before setRowNumbers\n" + leftRowIndicatorColumn);
-        leftRowIndicatorColumn.setRowNumbers();
-        LOG.fine("After setRowNumbers\n" + leftRowIndicatorColumn);
       }
       if (imageTopRight != null) {
         rightRowIndicatorColumn = getRowIndicatorColumn(image, boundingBox, imageTopRight, false, minCodewordWidth,
             maxCodewordWidth);
-        LOG.finer("Before setRowNumbers\n" + rightRowIndicatorColumn);
-        rightRowIndicatorColumn.setRowNumbers();
-        LOG.fine("After setRowNumbers\n" + rightRowIndicatorColumn);
       }
       detectionResult = merge(leftRowIndicatorColumn, rightRowIndicatorColumn);
       if (detectionResult == null) {
@@ -244,10 +235,7 @@ public final class PDF417ScanningDecoder {
 
   private static DecoderResult createDecoderResult(DetectionResult detectionResult) throws NotFoundException,
       FormatException, ChecksumException {
-    LOG.fine("Before createBarcodeMatrix\n" + detectionResult);
     BarcodeValue[][] barcodeMatrix = createBarcodeMatrix(detectionResult);
-    LOG.fine("After createBarcodeMatrix\n" + detectionResult);
-    LOG.fine("BarcodeMatrix\n" + toString(barcodeMatrix));
     int[] numberOfCodewords = barcodeMatrix[0][1].getValue();
     int calculatedNumberOfCodewords = detectionResult.getBarcodeColumnCount() *
         detectionResult.getBarcodeRowCount() -
@@ -259,7 +247,6 @@ public final class PDF417ScanningDecoder {
       barcodeMatrix[0][1].setValue(calculatedNumberOfCodewords);
     } else if (numberOfCodewords[0] != calculatedNumberOfCodewords) {
       // The calculated one is more reliable as it is derived from the row indicator columns
-      LOG.info("numberOfCodewords didn't match calculatedNumberOfCodewords, using calculatedNumberOfCodewords");
       barcodeMatrix[0][1].setValue(calculatedNumberOfCodewords);
     }
     return detectRecursive(detectionResult, barcodeMatrix);
@@ -318,39 +305,7 @@ public final class PDF417ScanningDecoder {
         }
       }
     }
-    if (decoderResult.getErrorsCorrected() > 0) {
-      logCorrectedOutput(detectionResult, barcodeMatrix, codewords);
-    }
     return decoderResult;
-  }
-
-  private static void logCorrectedOutput(DetectionResult detectionResult,
-                                         BarcodeValue[][] barcodeMatrix,
-                                         int[] codewords) {
-    Formatter differences = new Formatter();
-    differences.format("%s\n", "Corrected values");
-    Formatter formatter = new Formatter();
-    formatter.format("%s", "After error correction");
-    int row = -1;
-    for (int i = 0; i < codewords.length; i++) {
-      int column = i % detectionResult.getBarcodeColumnCount();
-      if (column == 0) {
-        formatter.format("\nRow %2d:         ", ++row);
-      }
-      formatter.format("%4d    ", codewords[i]);
-      int[] barcodeValue = barcodeMatrix[row][column + 1].getValue();
-      if (barcodeValue.length == 0) {
-        differences.format("barcode[%2d][%2d] was null, new value %3d\n", row, column + 1, codewords[i]);
-      } else if (barcodeValue[0] != codewords[i]) {
-        differences.format("barcode[%2d][%2d] was %3d, corrected value %3d\n", row, column + 1, barcodeValue[0],
-            codewords[i]);
-      }
-    }
-    formatter.format("\n", "");
-    LOG.fine(differences.toString());
-    differences.close();
-    LOG.finer(formatter.toString());
-    formatter.close();
   }
 
   private static BarcodeValue[][] createBarcodeMatrix(DetectionResult detectionResult) {
@@ -546,10 +501,7 @@ public final class PDF417ScanningDecoder {
     }
 
     int numECCodewords = 1 << (ecLevel + 1);
-    LOG.info("EC level: " + ecLevel + ", ec codewords: " + numECCodewords);
-
     int correctedErrorsCount = correctErrors(codewords, erasures, numECCodewords);
-    LOG.info("Corrected errors: " + correctedErrorsCount);
     verifyCodewordCount(codewords, numECCodewords);
 
     // Decode the codewords

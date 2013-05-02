@@ -19,13 +19,11 @@ package com.google.zxing.pdf417.decoder;
 import com.google.zxing.pdf417.PDF417Common;
 
 import java.util.Formatter;
-import java.util.logging.Logger;
 
 /**
  * @author Guenther Grau
  */
 final class DetectionResult {
-  private static final Logger LOG = Logger.getLogger(DetectionResult.class.getSimpleName());
 
   private static final int ADJUST_ROW_NUMBER_SKIP = 2;
 
@@ -113,7 +111,6 @@ final class DetectionResult {
           }
           codeword.setRowNumber(LRIcodewords[codewordsRow].getRowNumber());
           if (!codeword.hasValidRowNumber()) {
-            LOG.info("Removing codeword with invalid row number, cw[" + codewordsRow + "][" + barcodeColumn + "]");
             detectionResultColumns[barcodeColumn].getCodewords()[codewordsRow] = null;
           }
         }
