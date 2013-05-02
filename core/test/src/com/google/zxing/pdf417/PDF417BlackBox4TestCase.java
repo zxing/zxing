@@ -17,18 +17,67 @@
 package com.google.zxing.pdf417;
 
 import com.google.zxing.BarcodeFormat;
+import com.google.zxing.BinaryBitmap;
+import com.google.zxing.BufferedImageLuminanceSource;
+import com.google.zxing.DecodeHintType;
+import com.google.zxing.LuminanceSource;
+import com.google.zxing.ReaderException;
+import com.google.zxing.Result;
+import com.google.zxing.ResultMetadataType;
 import com.google.zxing.common.AbstractBlackBoxTestCase;
+import com.google.zxing.common.HybridBinarizer;
+import com.google.zxing.common.SummaryResults;
+
+import org.junit.Test;
+
+import javax.imageio.ImageIO;
+
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.logging.Logger;
 
 public final class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
+  private static final Logger log = Logger.getLogger(AbstractBlackBoxTestCase.class.getSimpleName());
+
+  private static final Charset UTF8 = Charset.forName("UTF-8");
+  private static final Charset ISO88591 = Charset.forName("ISO-8859-1");
+  private static final String TEST_BASE_PATH_SUFFIX = "test/data/blackbox/pdf417-4";
   private final PDF417Reader barcodeReader = new PDF417Reader();
 
+  private final List<TestResult> testResults = new ArrayList<TestResult>();
+  private File testBase;
+
   public PDF417BlackBox4TestCase() {
-    super("test/data/blackbox/pdf417-4", null, BarcodeFormat.PDF_417);
-    addTest(3, 3, 0, 0, 0.0f);
+    super(TEST_BASE_PATH_SUFFIX, null, BarcodeFormat.PDF_417);
+    // A little workaround to prevent aggravation in my IDE
+    testBase = new File(TEST_BASE_PATH_SUFFIX);
+    if (!testBase.exists()) {
+      // try starting with 'core' since the test base is often given as the project root
+      testBase = new File("core/" + TEST_BASE_PATH_SUFFIX);
+    }
+    testResults.add(new TestResult(2, 2, 0, 0, 0.0f));
   }
-/*
+
+  @Test
   @Override
-  public SummaryResults testBlackBoxCountingResults(boolean assertOnFailure) throws IOException {
+  public void testBlackBox() throws IOException {
+    testPDF417BlackBoxCountingResults(true);
+  }
+
+  public SummaryResults testPDF417BlackBoxCountingResults(boolean assertOnFailure) throws IOException {
     assertFalse(testResults.isEmpty());
 
     Map<String,List<File>> imageFiles = getImageFileLists();
@@ -61,7 +110,6 @@ public final class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
           BufferedImage rotatedImage = rotateImage(image, rotation);
           LuminanceSource source = new BufferedImageLuminanceSource(rotatedImage);
           BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
-          //BinaryBitmap bitmap = new BinaryBitmap(new FixedValueBinarizer(source));
 
           try {
             results.addAll(Arrays.asList(decode(bitmap, false)));
@@ -88,15 +136,6 @@ public final class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
           assertEquals("FileId", fileId, resultMetadata.getFileId());
           resultText.append(result.getText());
         }
-        //        FileOutputStream outputStream = new FileOutputStream(testBase.getCanonicalPath() + File.separatorChar +
-        //            fileBaseName + ".bin");
-        //        outputStream.write(resultText.toString().getBytes(ISO88591));
-        //        outputStream.flush();
-        //        outputStream.close();
-        //        outputStream = new FileOutputStream(testBase.getCanonicalPath() + File.separatorChar + fileBaseName + ".xml");
-        //        outputStream.write(decode(resultText.toString()));
-        //        outputStream.flush();
-        //        outputStream.close();
         assertEquals("ExpectedText", expectedText, resultText.toString());
         passedCounts[x]++;
         tryHarderCounts[x]++;
@@ -130,7 +169,8 @@ public final class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
     }
 
     int totalTests = numberOfTests * testCount * 2;
-    log.info(String.format("Decoded %d images out of %d (%d%%, %d required)", totalFound, totalTests, totalFound * 100 /
+    log.info(String.format("Decoded %d images out of %d (%d%%, %d required)", totalFound, totalTests, totalFound *
+        100 /
         totalTests, totalMustPass));
     if (totalFound > totalMustPass) {
       log.warning(String.format("+++ Test too lax by %d images", totalFound - totalMustPass));
@@ -159,27 +199,9 @@ public final class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
     return new SummaryResults(totalFound, totalMustPass, totalTests);
   }
 
-  private byte[] decode(String input) {
-    InflaterInputStream inputStream = new InflaterInputStream(new ByteArrayInputStream(input.getBytes(ISO88591)));
-    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-    byte[] buffer = new byte[1024];
-    int readByteCount = 0;
-    try {
-      while ((readByteCount = inputStream.read(buffer)) >= 0) {
-        outputStream.write(buffer, 0, readByteCount);
-      }
-      outputStream.flush();
-      outputStream.close();
-      return outputStream.toByteArray();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    return null;
-  }
-
   private PDF417ResultMetadata getMeta(Result result) {
     return result.getResultMetadata() == null ? null : (PDF417ResultMetadata) result.getResultMetadata().get(
-        ResultMetadataType.OTHER);
+        ResultMetadataType.PDF417_EXTRA_METADATA);
   }
 
   private Result[] decode(BinaryBitmap source, boolean tryHarder) throws ReaderException {
@@ -205,5 +227,27 @@ public final class PDF417BlackBox4TestCase extends AbstractBlackBoxTestCase {
     }
     return result;
   }
-  */
+
+  private static String readFileAsString(File file, Charset charset) throws IOException {
+    StringBuilder result = new StringBuilder((int) file.length());
+    InputStreamReader reader = new InputStreamReader(new FileInputStream(file), charset);
+    try {
+      char[] buffer = new char[256];
+      int charsRead;
+      while ((charsRead = reader.read(buffer)) > 0) {
+        result.append(buffer, 0, charsRead);
+      }
+    } finally {
+      reader.close();
+    }
+    String stringContents = result.toString();
+    if (stringContents.endsWith("\n")) {
+      log.warning("String contents of file " +
+          file +
+          " end with a newline. " +
+          "This may not be intended and cause a test failure");
+    }
+    return stringContents;
+  }
+
 }
