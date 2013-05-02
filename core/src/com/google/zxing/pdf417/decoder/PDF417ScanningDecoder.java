@@ -133,17 +133,9 @@ public final class PDF417ScanningDecoder {
     if (barcodeMetadata == null) {
       return null;
     }
-    BoundingBox boundingBox = getBoundingBox(leftRowIndicatorColumn, rightRowIndicatorColumn);
+    BoundingBox boundingBox = BoundingBox.merge(adjustBoundingBox(leftRowIndicatorColumn),
+        adjustBoundingBox(rightRowIndicatorColumn));
     return new DetectionResult(barcodeMetadata, boundingBox);
-  }
-
-  private static BoundingBox getBoundingBox(DetectionResultRowIndicatorColumn leftRowIndicatorColumn,
-                                            DetectionResultRowIndicatorColumn rightRowIndicatorColumn)
-      throws NotFoundException {
-    BoundingBox box1 = adjustBoundingBox(leftRowIndicatorColumn);
-    BoundingBox box2 = adjustBoundingBox(rightRowIndicatorColumn);
-
-    return BoundingBox.merge(box1, box2);
   }
 
   private static BoundingBox adjustBoundingBox(DetectionResultRowIndicatorColumn rowIndicatorColumn)
@@ -233,9 +225,8 @@ public final class PDF417ScanningDecoder {
     return rowIndicatorColumn;
   }
 
-  private static DecoderResult createDecoderResult(DetectionResult detectionResult) throws NotFoundException,
-      FormatException, ChecksumException {
-    BarcodeValue[][] barcodeMatrix = createBarcodeMatrix(detectionResult);
+  private static void adjustCodewordCount(DetectionResult detectionResult, BarcodeValue[][] barcodeMatrix)
+      throws NotFoundException {
     int[] numberOfCodewords = barcodeMatrix[0][1].getValue();
     int calculatedNumberOfCodewords = detectionResult.getBarcodeColumnCount() *
         detectionResult.getBarcodeRowCount() -
@@ -249,11 +240,12 @@ public final class PDF417ScanningDecoder {
       // The calculated one is more reliable as it is derived from the row indicator columns
       barcodeMatrix[0][1].setValue(calculatedNumberOfCodewords);
     }
-    return detectRecursive(detectionResult, barcodeMatrix);
   }
 
-  private static DecoderResult detectRecursive(DetectionResult detectionResult, BarcodeValue[][] barcodeMatrix)
-      throws FormatException, ChecksumException {
+  private static DecoderResult createDecoderResult(DetectionResult detectionResult) throws FormatException,
+      ChecksumException, NotFoundException {
+    BarcodeValue[][] barcodeMatrix = createBarcodeMatrix(detectionResult);
+    adjustCodewordCount(detectionResult, barcodeMatrix);
     Collection<Integer> erasures = new ArrayList<Integer>();
     int[] codewords = new int[detectionResult.getBarcodeRowCount() * detectionResult.getBarcodeColumnCount()];
     List<int[]> ambiguousIndexValuesList = new ArrayList<int[]>();
@@ -272,21 +264,45 @@ public final class PDF417ScanningDecoder {
         }
       }
     }
-    int[] erasureArray = PDF417Common.toIntArray(erasures);
-    int[] ambiguousIndexes = PDF417Common.toIntArray(ambiguousIndexesList);
     int[][] ambiguousIndexValues = new int[ambiguousIndexValuesList.size()][];
     for (int i = 0; i < ambiguousIndexValues.length; i++) {
       ambiguousIndexValues[i] = ambiguousIndexValuesList.get(i);
     }
-    int[] ambiguousIndexCount = new int[ambiguousIndexesList.size()];
-    DecoderResult decoderResult = null;
+    return createDecoderResultFromAmbiguousValues(detectionResult.getBarcodeECLevel(), codewords,
+        PDF417Common.toIntArray(erasures), PDF417Common.toIntArray(ambiguousIndexesList), ambiguousIndexValues);
+  }
+
+  /**
+   * This method deals with the fact, that the decoding process doesn't always yield a single most likely value. The
+   * current error correction implementation doesn't deal with erasures very well, so it's better to provide a value
+   * for these ambiguous codewords instead of treating it as an erasure. The problem is that we don't know which of
+   * the ambiguous values to choose. We try decode using the first value, and if that fails, we use another of the
+   * ambiguous values and try to decode again. This usually only happens on very hard to read and decode barcodes,
+   * so decoding the normal barcodes is not affected by this. 
+   * @param ecLevel
+   * @param codewords
+   * @param erasureArray contains the indexes of erasures
+   * @param ambiguousIndexes array with the indexes that have more than one most likely value
+   * @param ambiguousIndexValues two dimensional array that contains the ambiguous values. The first dimension must
+   * be the same length as the ambiguousIndexes array
+   * @return
+   * @throws FormatException
+   * @throws ChecksumException
+   */
+  private static DecoderResult createDecoderResultFromAmbiguousValues(int ecLevel,
+                                                                      int[] codewords,
+                                                                      int[] erasureArray,
+                                                                      int[] ambiguousIndexes,
+                                                                      int[][] ambiguousIndexValues)
+      throws FormatException, ChecksumException {
+    int[] ambiguousIndexCount = new int[ambiguousIndexes.length];
+
     while (true) {
       for (int i = 0; i < ambiguousIndexCount.length; i++) {
         codewords[ambiguousIndexes[i]] = ambiguousIndexValues[i][ambiguousIndexCount[i]];
       }
       try {
-        decoderResult = decodeCodewords(codewords, detectionResult.getBarcodeECLevel(), erasureArray);
-        break;
+        return decodeCodewords(codewords, ecLevel, erasureArray);
       } catch (ChecksumException ignored) {
         //
       }
@@ -294,7 +310,7 @@ public final class PDF417ScanningDecoder {
         throw ChecksumException.getChecksumInstance();
       }
       for (int i = 0; i < ambiguousIndexCount.length; i++) {
-        if (ambiguousIndexCount[i] < ambiguousIndexValuesList.get(i).length - 1) {
+        if (ambiguousIndexCount[i] < ambiguousIndexValues[i].length - 1) {
           ambiguousIndexCount[i]++;
           break;
         } else {
@@ -305,7 +321,6 @@ public final class PDF417ScanningDecoder {
         }
       }
     }
-    return decoderResult;
   }
 
   private static BarcodeValue[][] createBarcodeMatrix(DetectionResult detectionResult) {
