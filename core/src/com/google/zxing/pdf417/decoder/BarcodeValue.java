@@ -34,7 +34,7 @@ final class BarcodeValue {
    * Add an occurrence of a value
    * @param value
    */
-  public void setValue(int value) {
+  void setValue(int value) {
     Integer confidence = values.get(value);
     if (confidence == null) {
       confidence = 0;
@@ -47,7 +47,7 @@ final class BarcodeValue {
    * Determines the maximum occurrence of a set value and returns all values which were set with this occurrence. 
    * @return an array of int, containing the values with the highest occurrence, or null, if no value was set
    */
-  public int[] getValue() {
+  int[] getValue() {
     int maxConfidence = -1;
     List<Integer> result = new ArrayList<Integer>();
     for (Entry<Integer,Integer> entry : values.entrySet()) {
