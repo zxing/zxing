@@ -49,11 +49,13 @@ import java.util.regex.Pattern;
  * who should be forced to retranslate.
  * Usage: {@code StringsResourceTranslator android/res/ [key_1 ...]}</p>
  *
+ * <p>You must set your Google Translate API key into the environment with -DtranslateAPI.key=...</p>
+ *
  * @author Sean Owen
  */
 public final class StringsResourceTranslator {
 
-  private static final String API_KEY = "INSERT-YOUR-KEY";
+  private static final String API_KEY = System.getProperty("translateAPI.key");
   
   private static final Charset UTF8 = Charset.forName("UTF-8");
   private static final Pattern ENTRY_PATTERN = Pattern.compile("<string name=\"([^\"]+)\".*>([^<]+)</string>");
@@ -182,6 +184,10 @@ public final class StringsResourceTranslator {
       language = massagedLanguage;
     }
     System.out.println("  Need translation for " + english);
+
+    if (API_KEY == null) {
+      throw new IllegalArgumentException("translateAPI.key is not specified");
+    }
 
     URL translateURL = new URL(
         "https://www.googleapis.com/language/translate/v2?key=" + API_KEY + "&q=" +
