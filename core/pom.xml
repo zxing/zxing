@@ -26,7 +26,6 @@
   <artifactId>core</artifactId>
   <packaging>jar</packaging>
   <name>ZXing Core</name>
-  <version>2.2-SNAPSHOT</version>
   <description>Core barcode encoding/decoding library</description>
 
   <dependencies>
