@@ -296,7 +296,7 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
     return true;
   }
 
-  private static String readFileAsString(File file, Charset charset) throws IOException {
+  protected static String readFileAsString(File file, Charset charset) throws IOException {
     StringBuilder result = new StringBuilder((int) file.length());
     InputStreamReader reader = new InputStreamReader(new FileInputStream(file), charset);
     try {

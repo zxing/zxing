@@ -16,6 +16,10 @@
 
 package com.google.zxing.pdf417.decoder;
 
+import com.google.zxing.pdf417.PDF417Common;
+
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -24,10 +28,13 @@ import java.util.Map.Entry;
  * @author Guenther Grau
  */
 final class BarcodeValue {
-  
   private final Map<Integer,Integer> values = new HashMap<Integer,Integer>();
 
-  public void setValue(int value) {
+  /**
+   * Add an occurrence of a value
+   * @param value
+   */
+  void setValue(int value) {
     Integer confidence = values.get(value);
     if (confidence == null) {
       confidence = 0;
@@ -36,24 +43,23 @@ final class BarcodeValue {
     values.put(value, confidence);
   }
 
-  public Integer getValue() {
+  /**
+   * Determines the maximum occurrence of a set value and returns all values which were set with this occurrence. 
+   * @return an array of int, containing the values with the highest occurrence, or null, if no value was set
+   */
+  int[] getValue() {
     int maxConfidence = -1;
-    Integer result = null;
-    boolean ambiguous = false;
+    Collection<Integer> result = new ArrayList<Integer>();
     for (Entry<Integer,Integer> entry : values.entrySet()) {
       if (entry.getValue() > maxConfidence) {
         maxConfidence = entry.getValue();
-        result = entry.getKey();
-        ambiguous = false;
-      // TODO fix this clause?
-      //} else if (entry.getValue() > maxConfidence) {
-      //  ambigous = true;
+        result.clear();
+        result.add(entry.getKey());
+      } else if (entry.getValue() == maxConfidence) {
+        result.add(entry.getKey());
       }
     }
-    if (ambiguous) {
-      return null;
-    }
-    return result;
+    return PDF417Common.toIntArray(result);
   }
 
   public Integer getConfidence(int value) {

@@ -17,14 +17,12 @@
 package com.google.zxing.pdf417.decoder;
 
 import com.google.zxing.ResultPoint;
+import com.google.zxing.pdf417.PDF417Common;
 
 /**
  * @author Guenther Grau
  */
 final class DetectionResultRowIndicatorColumn extends DetectionResultColumn {
-
-  private static final int MIN_BARCODE_ROWS = 3;
-  private static final int MAX_BARCODE_ROWS = 90;
 
   private final boolean isLeft;
 
@@ -41,32 +39,22 @@ final class DetectionResultRowIndicatorColumn extends DetectionResultColumn {
     }
   }
 
-  int[] getRowHeights() {
-    BarcodeMetadata barcodeMetadata = getBarcodeMetadata();
-    if (barcodeMetadata == null) {
-      return null;
-    }
-    adjustIndicatorColumnRowNumbers(barcodeMetadata);
-    int[] result = new int[barcodeMetadata.getRowCount()];
-    for (Codeword codeword : getCodewords()) {
-      if (codeword != null) {
-        result[codeword.getRowNumber()]++;
-      }
-    }
-    return result;
-  }
-
+  // TODO implement properly
   // TODO maybe we should add missing codewords to store the correct row number to make
   // finding row numbers for other columns easier
   // use row height count to make detection of invalid row numbers more reliable
-  int adjustIndicatorColumnRowNumbers(BarcodeMetadata barcodeMetadata) {
+  int adjustCompleteIndicatorColumnRowNumbers(BarcodeMetadata barcodeMetadata) {
+    Codeword[] codewords = getCodewords();
+    setRowNumbers();
+    removeIncorrectCodewords(codewords, barcodeMetadata);
     BoundingBox boundingBox = getBoundingBox();
     ResultPoint top = isLeft ? boundingBox.getTopLeft() : boundingBox.getTopRight();
     ResultPoint bottom = isLeft ? boundingBox.getBottomLeft() : boundingBox.getBottomRight();
-    int firstRow = getCodewordsIndex((int) top.getY());
-    int lastRow = getCodewordsIndex((int) bottom.getY());
+    int firstRow = imageRowToCodewordIndex((int) top.getY());
+    int lastRow = imageRowToCodewordIndex((int) bottom.getY());
+    // We need to be careful using the average row height. Barcode could be skewed so that we have smaller and 
+    // taller rows
     float averageRowHeight = (lastRow - firstRow) / (float) barcodeMetadata.getRowCount();
-    Codeword[] codewords = getCodewords();
     int barcodeRow = -1;
     int maxRowHeight = 1;
     int currentRowHeight = 0;
@@ -76,11 +64,6 @@ final class DetectionResultRowIndicatorColumn extends DetectionResultColumn {
       }
       Codeword codeword = codewords[codewordsRow];
 
-      codeword.setRowNumberAsRowIndicatorColumn();
-
-      // This only works if we have a complete RI column. If the RI column is cut off at the top or bottom, it
-      // will calculate the wrong numbers and delete correct codewords. Could be used once the barcode height has
-      // been calculated properly.
       //      float expectedRowNumber = (codewordsRow - firstRow) / averageRowHeight;
       //      if (Math.abs(codeword.getRowNumber() - expectedRowNumber) > 2) {
       //        SimpleLog.log(LEVEL.WARNING,
@@ -129,6 +112,63 @@ final class DetectionResultRowIndicatorColumn extends DetectionResultColumn {
     return (int) (averageRowHeight + 0.5);
   }
 
+  int[] getRowHeights() {
+    BarcodeMetadata barcodeMetadata = getBarcodeMetadata();
+    if (barcodeMetadata == null) {
+      return null;
+    }
+    adjustIncompleteIndicatorColumnRowNumbers(barcodeMetadata);
+    int[] result = new int[barcodeMetadata.getRowCount()];
+    for (Codeword codeword : getCodewords()) {
+      if (codeword != null) {
+        result[codeword.getRowNumber()]++;
+      }
+    }
+    return result;
+  }
+
+  // TODO maybe we should add missing codewords to store the correct row number to make
+  // finding row numbers for other columns easier
+  // use row height count to make detection of invalid row numbers more reliable
+  int adjustIncompleteIndicatorColumnRowNumbers(BarcodeMetadata barcodeMetadata) {
+    BoundingBox boundingBox = getBoundingBox();
+    ResultPoint top = isLeft ? boundingBox.getTopLeft() : boundingBox.getTopRight();
+    ResultPoint bottom = isLeft ? boundingBox.getBottomLeft() : boundingBox.getBottomRight();
+    int firstRow = imageRowToCodewordIndex((int) top.getY());
+    int lastRow = imageRowToCodewordIndex((int) bottom.getY());
+    float averageRowHeight = (lastRow - firstRow) / (float) barcodeMetadata.getRowCount();
+    Codeword[] codewords = getCodewords();
+    int barcodeRow = -1;
+    int maxRowHeight = 1;
+    int currentRowHeight = 0;
+    for (int codewordsRow = firstRow; codewordsRow < lastRow; codewordsRow++) {
+      if (codewords[codewordsRow] == null) {
+        continue;
+      }
+      Codeword codeword = codewords[codewordsRow];
+
+      codeword.setRowNumberAsRowIndicatorColumn();
+
+      int rowDifference = codeword.getRowNumber() - barcodeRow;
+
+      // TODO improve handling with case where first row indicator doesn't start with 0
+
+      if (rowDifference == 0) {
+        currentRowHeight++;
+      } else if (rowDifference == 1) {
+        maxRowHeight = Math.max(maxRowHeight, currentRowHeight);
+        currentRowHeight = 1;
+        barcodeRow = codeword.getRowNumber();
+      } else if (codeword.getRowNumber() >= barcodeMetadata.getRowCount()) {
+        codewords[codewordsRow] = null;
+      } else {
+        barcodeRow = codeword.getRowNumber();
+        currentRowHeight = 1;
+      }
+    }
+    return (int) (averageRowHeight + 0.5);
+  }
+
   BarcodeMetadata getBarcodeMetadata() {
     Codeword[] codewords = getCodewords();
     BarcodeValue barcodeColumnCount = new BarcodeValue();
@@ -158,15 +198,18 @@ final class DetectionResultRowIndicatorColumn extends DetectionResultColumn {
           break;
       }
     }
-    if ((barcodeColumnCount.getValue() == null) || (barcodeRowCountUpperPart.getValue() == null) ||
-        (barcodeRowCountLowerPart.getValue() == null) || (barcodeECLevel.getValue() == null) ||
-        barcodeColumnCount.getValue() < 1 ||
-        barcodeRowCountUpperPart.getValue() + barcodeRowCountLowerPart.getValue() < MIN_BARCODE_ROWS ||
-        barcodeRowCountUpperPart.getValue() + barcodeRowCountLowerPart.getValue() > MAX_BARCODE_ROWS) {
+    // Maybe we should check if we have ambiguous values?
+    if ((barcodeColumnCount.getValue().length == 0) ||
+        (barcodeRowCountUpperPart.getValue().length == 0) ||
+        (barcodeRowCountLowerPart.getValue().length == 0) ||
+        (barcodeECLevel.getValue().length == 0) ||
+        barcodeColumnCount.getValue()[0] < 1 ||
+        barcodeRowCountUpperPart.getValue()[0] + barcodeRowCountLowerPart.getValue()[0] < PDF417Common.MIN_ROWS_IN_BARCODE ||
+        barcodeRowCountUpperPart.getValue()[0] + barcodeRowCountLowerPart.getValue()[0] > PDF417Common.MAX_ROWS_IN_BARCODE) {
       return null;
     }
-    BarcodeMetadata barcodeMetadata = new BarcodeMetadata(barcodeColumnCount.getValue(),
-        barcodeRowCountUpperPart.getValue(), barcodeRowCountLowerPart.getValue(), barcodeECLevel.getValue());
+    BarcodeMetadata barcodeMetadata = new BarcodeMetadata(barcodeColumnCount.getValue()[0],
+        barcodeRowCountUpperPart.getValue()[0], barcodeRowCountLowerPart.getValue()[0], barcodeECLevel.getValue()[0]);
     removeIncorrectCodewords(codewords, barcodeMetadata);
     return barcodeMetadata;
   }
@@ -211,6 +254,11 @@ final class DetectionResultRowIndicatorColumn extends DetectionResultColumn {
 
   boolean isLeft() {
     return isLeft;
+  }
+
+  @Override
+  public String toString() {
+    return "IsLeft: " + isLeft + '\n' + super.toString();
   }
 
 }
