@@ -26,7 +26,6 @@
   <artifactId>javase</artifactId>
   <packaging>jar</packaging>
   <name>ZXing Java SE extensions</name>
-  <version>2.2-SNAPSHOT</version>
   <description>Java SE-specific extensions to core ZXing library</description>
 
   <dependencies>
