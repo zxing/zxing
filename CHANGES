@@ -303,3 +303,16 @@
   - Many small updates to the Android app, Barcode Scanner, including rare bug fixes and translation updates.
     The 2.1 release corresponds substantially to v4.3.1.
   - Many ports of Java updates to C++ port
+  
+2.2 (X May 2013)
+
+  - Improved PDF417 decoding, including macro PDF417
+  - Added Aztec and Data Matrix encoders
+  - Added RSS Expanded decoder
+  - Java, C++ and iPhone build system updates, including migration to Maven for most Java modules
+  - Many small fixes and improvements
+  - Many small updates to the Android app, Barcode Scanner, including rare bug fixes and translation updates.
+    The 2.2 release corresponds substantially to v4.3.2.
+  - Update zxing.org web-based decoder for Amazon Elastic Beanstalk (and redeployed there)
+  - Many ports of Java updates to C++ and C# ports
+  - Standardize test system image processing and image format for reproducibility
