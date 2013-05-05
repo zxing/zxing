@@ -43,9 +43,11 @@ import org.apache.commons.io.FileCleaningTracker;
 
 import java.awt.color.CMMException;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.HttpURLConnection;
@@ -60,6 +62,7 @@ import java.util.Collection;
 import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
@@ -98,9 +101,10 @@ public final class DecodeServlet extends HttpServlet {
   }
 
   private DiskFileItemFactory diskFileItemFactory;
+  private Collection<String> blockedURLSubstrings;
 
   @Override
-  public void init(ServletConfig servletConfig) {
+  public void init(ServletConfig servletConfig) throws ServletException {
     Logger logger = Logger.getLogger("com.google.zxing");
     ServletContext context = servletConfig.getServletContext();
     logger.addHandler(new ServletContextLogHandler(context));
@@ -108,6 +112,25 @@ public final class DecodeServlet extends HttpServlet {
     FileCleaningTracker fileCleaningTracker = FileCleanerCleanup.getFileCleaningTracker(context);
     diskFileItemFactory = new DiskFileItemFactory(1 << 16, repository);
     diskFileItemFactory.setFileCleaningTracker(fileCleaningTracker);
+    
+    blockedURLSubstrings = new ArrayList<String>();
+    InputStream in = DecodeServlet.class.getResourceAsStream("/private/uri-block-substrings.txt");
+    if (in != null) {
+      try {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(in, Charset.forName("UTF-8")));
+        try {
+          String line;
+          while ((line = reader.readLine()) != null) {
+            blockedURLSubstrings.add(line);
+          }
+        } finally {
+          reader.close();
+        }
+      } catch (IOException ioe) {
+        throw new ServletException(ioe);
+      }
+    }
+    log.info("Blocking URIs containing: " + blockedURLSubstrings);
   }
 
   @Override
@@ -122,6 +145,13 @@ public final class DecodeServlet extends HttpServlet {
     }
 
     imageURIString = imageURIString.trim();
+    for (String substring : blockedURLSubstrings) {
+      if (imageURIString.contains(substring)) {
+        log.info("Disallowed URI " + imageURIString);        
+        response.sendRedirect("badurl.jspx");
+        return;
+      }
+    }
 
     URI imageURI;
     try {
@@ -322,56 +352,64 @@ public final class DecodeServlet extends HttpServlet {
     ReaderException savedException = null;
 
     try {
-      // Look for multiple barcodes
-      MultipleBarcodeReader multiReader = new GenericMultipleBarcodeReader(reader);
-      Result[] theResults = multiReader.decodeMultiple(bitmap, HINTS);
-      if (theResults != null) {
-        results.addAll(Arrays.asList(theResults));
-      }
-    } catch (ReaderException re) {
-      savedException = re;
-    }
 
-    if (results.isEmpty()) {
       try {
-        // Look for pure barcode
-        Result theResult = reader.decode(bitmap, HINTS_PURE);
-        if (theResult != null) {
-          results.add(theResult);
+        // Look for multiple barcodes
+        MultipleBarcodeReader multiReader = new GenericMultipleBarcodeReader(reader);
+        Result[] theResults = multiReader.decodeMultiple(bitmap, HINTS);
+        if (theResults != null) {
+          results.addAll(Arrays.asList(theResults));
         }
       } catch (ReaderException re) {
         savedException = re;
       }
-    }
-
-    if (results.isEmpty()) {
-      try {
-        // Look for normal barcode in photo
-        Result theResult = reader.decode(bitmap, HINTS);
-        if (theResult != null) {
-          results.add(theResult);
+  
+      if (results.isEmpty()) {
+        try {
+          // Look for pure barcode
+          Result theResult = reader.decode(bitmap, HINTS_PURE);
+          if (theResult != null) {
+            results.add(theResult);
+          }
+        } catch (ReaderException re) {
+          savedException = re;
         }
-      } catch (ReaderException re) {
-        savedException = re;
       }
-    }
-
-    if (results.isEmpty()) {
-      try {
-        // Try again with other binarizer
-        BinaryBitmap hybridBitmap = new BinaryBitmap(new HybridBinarizer(source));
-        Result theResult = reader.decode(hybridBitmap, HINTS);
-        if (theResult != null) {
-          results.add(theResult);
+  
+      if (results.isEmpty()) {
+        try {
+          // Look for normal barcode in photo
+          Result theResult = reader.decode(bitmap, HINTS);
+          if (theResult != null) {
+            results.add(theResult);
+          }
+        } catch (ReaderException re) {
+          savedException = re;
         }
-      } catch (ReaderException re) {
-        savedException = re;
       }
-    }
+  
+      if (results.isEmpty()) {
+        try {
+          // Try again with other binarizer
+          BinaryBitmap hybridBitmap = new BinaryBitmap(new HybridBinarizer(source));
+          Result theResult = reader.decode(hybridBitmap, HINTS);
+          if (theResult != null) {
+            results.add(theResult);
+          }
+        } catch (ReaderException re) {
+          savedException = re;
+        }
+      }
+  
+      if (results.isEmpty()) {
+        handleException(savedException, response);
+        return;
+      }
 
-    if (results.isEmpty()) {
-      handleException(savedException, response);
-      return;
+    } catch (RuntimeException re) {
+      // Call out unexpected errors in the log clearly
+      log.log(Level.WARNING, "Unexpected exception from library", re);
+      throw new ServletException(re);
     }
 
     String fullParameter = request.getParameter("full");

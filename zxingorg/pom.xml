@@ -83,12 +83,6 @@
                    <version>2.2-SNAPSHOT</version>
                    <type>javadoc</type>                   
                  </artifactItem>
-                 <artifactItem>
-                    <groupId>com.google.zxing</groupId>
-                    <artifactId>javase</artifactId>
-                    <version>2.2-SNAPSHOT</version>
-                    <type>javadoc</type>                   
-                  </artifactItem>
                </artifactItems>
                <outputDirectory>web/w/docs/javadoc</outputDirectory>
                <overWriteIfNewer>true</overWriteIfNewer>

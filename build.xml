@@ -59,6 +59,7 @@
         <include name="zxingorg/**"/>
         <exclude name="zxingorg/build/**"/>
         <exclude name="zxingorg/target/**"/>
+        <exclude name="zxingorg/resources/private/**"/>        
       </zipfileset>
     </zip>
     <!-- Separate out test data files now to make download more manageable -->
