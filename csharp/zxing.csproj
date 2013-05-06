@@ -5,13 +5,9 @@
     <SchemaVersion>2.0</SchemaVersion>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ApplicationIcon>
-    </ApplicationIcon>
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
     <AssemblyName>zxing</AssemblyName>
-    <AssemblyOriginatorKeyFile>
-    </AssemblyOriginatorKeyFile>
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
@@ -20,8 +16,6 @@
     <RootNamespace>zxing</RootNamespace>
     <NoStandardLibraries>false</NoStandardLibraries>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
-    <StartupObject>
-    </StartupObject>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <ProjectGuid>{6431CF13-7A7B-4602-B96A-47CDA6F0B008}</ProjectGuid>
@@ -30,52 +24,39 @@
     <OldToolsVersion>3.5</OldToolsVersion>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile />
+    <ProductVersion>10.0.0</ProductVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>bin\Debug\</OutputPath>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <BaseAddress>285212672</BaseAddress>
-    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
-    <DefineConstants>
-    </DefineConstants>
     <DocumentationFile>
     </DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
     <FileAlignment>4096</FileAlignment>
-    <NoStdLib>false</NoStdLib>
-    <NoWarn>
-    </NoWarn>
     <RegisterForComInterop>false</RegisterForComInterop>
     <RemoveIntegerChecks>false</RemoveIntegerChecks>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningLevel>4</WarningLevel>
     <DebugType>full</DebugType>
     <ErrorReport>prompt</ErrorReport>
+    <Optimize>false</Optimize>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <OutputPath>.\</OutputPath>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <OutputPath>.</OutputPath>
     <BaseAddress>285212672</BaseAddress>
-    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
-    <DefineConstants>
-    </DefineConstants>
     <DocumentationFile>
     </DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
     <FileAlignment>4096</FileAlignment>
-    <NoStdLib>false</NoStdLib>
-    <NoWarn>
-    </NoWarn>
     <RegisterForComInterop>false</RegisterForComInterop>
     <RemoveIntegerChecks>false</RemoveIntegerChecks>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningLevel>4</WarningLevel>
     <DebugType>full</DebugType>
     <ErrorReport>prompt</ErrorReport>
+    <Optimize>false</Optimize>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="mscorlib">
@@ -114,7 +95,6 @@
     <Compile Include="BarcodeFormat.cs" />
     <Compile Include="Binarizer.cs" />
     <Compile Include="BinaryBitmap.cs" />
-    <Compile Include="ChecksumException.cs" />
     <Compile Include="client\result\AbstractDoCoMoResultParser.cs" />
     <Compile Include="client\result\AddressBookAUResultParser.cs" />
     <Compile Include="client\result\AddressBookDoCoMoResultParser.cs" />
@@ -183,7 +163,6 @@
     <Compile Include="datamatrix\detector\Detector.cs" />
     <Compile Include="DecodeHintType.cs" />
     <Compile Include="EncodeHintType.cs" />
-    <Compile Include="FormatException.cs" />
     <Compile Include="LuminanceSource.cs" />
     <Compile Include="maxicode\decoder\BitMatrixParser.cs" />
     <Compile Include="maxicode\decoder\DecodedBitStreamParser.cs" />
@@ -197,7 +176,6 @@
     <Compile Include="multi\qrcode\detector\MultiDetector.cs" />
     <Compile Include="multi\qrcode\detector\MultiFinderPatternFinder.cs" />
     <Compile Include="multi\qrcode\QRCodeMultiReader.cs" />
-    <Compile Include="NotFoundException.cs" />
     <Compile Include="oned\CodaBarReader.cs" />
     <Compile Include="oned\CodaBarWriter.cs" />
     <Compile Include="oned\Code128Reader.cs" />
@@ -252,7 +230,6 @@
     <Compile Include="oned\UPCEANReader.cs" />
     <Compile Include="oned\UPCEANWriter.cs" />
     <Compile Include="oned\UPCEReader.cs" />
-    <Compile Include="pdf417\decoder\BitMatrixParser.cs" />
     <Compile Include="pdf417\decoder\DecodedBitStreamParser.cs" />
     <Compile Include="pdf417\decoder\Decoder.cs" />
     <Compile Include="pdf417\decoder\ec\ErrorCorrection.cs" />
@@ -266,10 +243,7 @@
     <Compile Include="pdf417\encoder\PDF417.cs" />
     <Compile Include="pdf417\encoder\PDF417ErrorCorrection.cs" />
     <Compile Include="pdf417\encoder\PDF417HighLevelEncoder.cs" />
-    <Compile Include="pdf417\encoder\PDF417Writer.cs" />
     <Compile Include="pdf417\PDF417Reader.cs" />
-    <Compile Include="pdf417\RectangularArrays.cs" />
-    <Compile Include="PlanarYUVLuminanceSource.cs" />
     <Compile Include="qrcode\decoder\BitMatrixParser.cs" />
     <Compile Include="qrcode\decoder\DataBlock.cs" />
     <Compile Include="qrcode\decoder\DataMask.cs" />
@@ -304,6 +278,21 @@
     <Compile Include="Writer.cs" />
     <Compile Include="WriterException.cs" />
     <Compile Include="oned\Code39Writer.cs" />
+    <Compile Include="pdf417\PDF417Common.cs" />
+    <Compile Include="pdf417\PDF417ResultMetadata.cs" />
+    <Compile Include="pdf417\PDF417Writer.cs" />
+    <Compile Include="pdf417\decoder\BarcodeMetadata.cs" />
+    <Compile Include="pdf417\decoder\BarcodeValue.cs" />
+    <Compile Include="pdf417\decoder\BoundingBox.cs" />
+    <Compile Include="pdf417\decoder\Codeword.cs" />
+    <Compile Include="pdf417\decoder\DetectionResult.cs" />
+    <Compile Include="pdf417\decoder\DetectionResultColumn.cs" />
+    <Compile Include="pdf417\decoder\DetectionResultRowIndicatorColumn.cs" />
+    <Compile Include="pdf417\decoder\PDF417CodewordDecoder.cs" />
+    <Compile Include="pdf417\decoder\PDF417ScanningDecoder.cs" />
+    <Compile Include="pdf417\detector\BitMatrixExtensions.cs" />
+    <Compile Include="pdf417\detector\PDF417DetectorResult.cs" />
+    <Compile Include="pdf417\encoder\PDF417EncodingOptions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="client\result\optional\" />
