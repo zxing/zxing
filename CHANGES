@@ -306,6 +306,7 @@
   
 2.2 (X May 2013)
 
+  - Retire Symbian port
   - Improved PDF417 decoding, including macro PDF417
   - Added Aztec and Data Matrix encoders
   - Added RSS Expanded decoder
