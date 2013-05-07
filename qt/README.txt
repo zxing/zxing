@@ -1,0 +1,1 @@
+For a port to the Qt framework, see the QZXing project at http://projects.developer.nokia.com/QZXing

@@ -46,6 +46,7 @@
         <include name="javase/**"/>
         <include name="jruby/**"/>
         <include name="objc/**"/>
+        <include name="qt/**"/>
         <include name="zxing.appspot.com/**"/>
         <include name="zxingorg/**"/>
         <exclude name="zxingorg/resources/private/**"/>
