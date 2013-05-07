@@ -37,6 +37,7 @@ final class MECARDContactEncoder extends ContactEncoder {
     }
   };
   private static final char TERMINATOR = ';';
+  private static final Pattern NOT_DIGITS = Pattern.compile("[^0-9]+");
 
   @Override
   public String[] encode(Iterable<String> names,
@@ -60,7 +61,7 @@ final class MECARDContactEncoder extends ContactEncoder {
     appendUpToUnique(newContents, newDisplayContents, "TEL", phones, Integer.MAX_VALUE, new Formatter() {
       @Override
       public String format(String source) {
-        return PhoneNumberUtils.formatNumber(source);
+        return keepOnlyDigits(PhoneNumberUtils.formatNumber(source));
       }
     });
     appendUpToUnique(newContents, newDisplayContents, "EMAIL", emails, Integer.MAX_VALUE, null);
@@ -68,6 +69,10 @@ final class MECARDContactEncoder extends ContactEncoder {
     append(newContents, newDisplayContents, "NOTE", note);
     newContents.append(';');
     return new String[] { newContents.toString(), newDisplayContents.toString() };
+  }
+  
+  private static String keepOnlyDigits(CharSequence s) {
+    return s == null ? null : NOT_DIGITS.matcher(s).replaceAll("");
   }
   
   private static void append(StringBuilder newContents, 
