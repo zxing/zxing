@@ -65,6 +65,7 @@
     <module>javase</module>
     <module>android-integration</module>
     <module>zxingorg</module>
+    <module>zxing.appspot.com</module>    
   </modules>
 
   <build>
