@@ -54,7 +54,7 @@
   <string name="history_clear_text">Cancella cronologia</string>
   <string name="history_email_title">Cronologia scansioni codici a barre</string>
   <string name="history_empty">Vuoto</string>
-  <string name="history_empty_detail">Nessun scansioni di codici a barre sono stati registrati</string>
+  <string name="history_empty_detail">Nessuna scansione di codici a barre è stata registrata</string>
   <string name="history_send">Invia cronologia</string>
   <string name="history_title">Cronologia</string>
   <string name="menu_encode_mecard">Usa MECARD</string>
@@ -103,7 +103,7 @@
   <string name="preferences_decode_QR_title">Codici QR</string>
   <string name="preferences_device_bug_workarounds_title">Soluzioni alternative dispositivo Bug</string>
   <string name="preferences_disable_continuous_focus_summary">Utilizzare solo modalità standard messa a fuoco</string>
-  <string name="preferences_disable_continuous_focus_title">No continua attenzione</string>
+  <string name="preferences_disable_continuous_focus_title">No messa a fuoco continua</string>
   <string name="preferences_disable_exposure_title">Nessuna esposizione</string>
   <string name="preferences_front_light_auto">Automatico</string>
   <string name="preferences_front_light_off">Inattivo</string>
