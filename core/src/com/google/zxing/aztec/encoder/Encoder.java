@@ -183,9 +183,12 @@ public final class Encoder {
 
     // pad the end
     int messageSizeInWords = (stuffedBits.getSize() + wordSize - 1) / wordSize;
+    // This seems to be redundant? 
+    /*    
     for (int i = messageSizeInWords * wordSize - stuffedBits.getSize(); i > 0; i--) {
       stuffedBits.appendBit(true);
     }
+     */
 
     // generate check words
     ReedSolomonEncoder rs = new ReedSolomonEncoder(getGF(wordSize));
@@ -413,6 +416,8 @@ public final class Encoder {
     }
     
     // 2. pad last word to wordSize
+    // This seems to be redundant?
+    /*
     n = out.getSize();
     int remainder = n % wordSize;
     if (remainder != 0) {
@@ -427,6 +432,7 @@ public final class Encoder {
       }
       out.appendBit(j == 0);
     }
+     */
     return out;
   }
   
