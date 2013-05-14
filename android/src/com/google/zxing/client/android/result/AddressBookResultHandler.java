@@ -187,7 +187,9 @@ public final class AddressBookResultHandler extends ResultHandler {
     String[] numbers = result.getPhoneNumbers();
     if (numbers != null) {
       for (String number : numbers) {
-        ParsedResult.maybeAppend(PhoneNumberUtils.formatNumber(number), contents);
+        if (number != null) {
+          ParsedResult.maybeAppend(PhoneNumberUtils.formatNumber(number), contents);
+        }
       }
     }
     ParsedResult.maybeAppend(result.getEmails(), contents);
