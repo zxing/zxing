@@ -28,7 +28,12 @@
   <name>ZXing zxing.org web app</name>
   <version>2.2-SNAPSHOT</version>
   <description>The web application behind zxing.org</description>
-
+  <scm>
+    <connection>scm:svn:http://zxing.googlecode.com/svn/trunk/zxingorg</connection>
+    <developerConnection>scm:svn:https://zxing.googlecode.com/svn/trunk/zxingorg</developerConnection>
+    <url>http://zxing.googlecode.com/svn/trunk/zxingorg</url>
+  </scm>
+  
   <dependencies>
     <dependency>
       <groupId>com.google.zxing</groupId>

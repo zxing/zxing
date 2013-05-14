@@ -28,7 +28,12 @@
   <name>ZXing Appspot-based encoder</name>
   <version>2.2-SNAPSHOT</version>
   <description>GWT-based encoder app hosted at zxing.appspot.com</description>
-
+  <scm>
+    <connection>scm:svn:http://zxing.googlecode.com/svn/trunk/zxing.appspot.com</connection>
+    <developerConnection>scm:svn:https://zxing.googlecode.com/svn/trunk/zxing.appspot.com</developerConnection>
+    <url>http://zxing.googlecode.com/svn/trunk/zxing.appspot.com</url>
+  </scm>
+  
   <dependencies>
     <dependency>
       <groupId>com.google.gwt</groupId>

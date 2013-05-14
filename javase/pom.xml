@@ -28,7 +28,12 @@
   <name>ZXing Java SE extensions</name>
   <version>2.2-SNAPSHOT</version>
   <description>Java SE-specific extensions to core ZXing library</description>
-
+  <scm>
+    <connection>scm:svn:http://zxing.googlecode.com/svn/trunk/javase</connection>
+    <developerConnection>scm:svn:https://zxing.googlecode.com/svn/trunk/javase</developerConnection>
+    <url>http://zxing.googlecode.com/svn/trunk/javase</url>
+  </scm>
+  
   <dependencies>
     <dependency>
       <groupId>com.google.zxing</groupId>

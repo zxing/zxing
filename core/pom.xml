@@ -28,7 +28,12 @@
   <name>ZXing Core</name>
   <version>2.2-SNAPSHOT</version>
   <description>Core barcode encoding/decoding library</description>
-
+  <scm>
+    <connection>scm:svn:http://zxing.googlecode.com/svn/trunk/core</connection>
+    <developerConnection>scm:svn:https://zxing.googlecode.com/svn/trunk/core</developerConnection>
+    <url>http://zxing.googlecode.com/svn/trunk/core</url>
+  </scm>
+  
   <dependencies>
     <dependency>
       <groupId>junit</groupId>

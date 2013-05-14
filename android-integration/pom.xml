@@ -28,7 +28,12 @@
   <name>ZXing Android Integration lib</name>
   <version>2.2-SNAPSHOT</version>
   <description>Integration helper classes for Android applications wanting to create/scan bar codes</description>
-
+  <scm>
+    <connection>scm:svn:http://zxing.googlecode.com/svn/trunk/android-integration</connection>
+    <developerConnection>scm:svn:https://zxing.googlecode.com/svn/trunk/android-integration</developerConnection>
+    <url>http://zxing.googlecode.com/svn/trunk/android-integration</url>
+  </scm>
+  
   <dependencies>
     <dependency>
       <groupId>com.google.android</groupId>
