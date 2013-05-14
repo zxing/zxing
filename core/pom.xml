@@ -26,7 +26,7 @@
   <artifactId>core</artifactId>
   <packaging>jar</packaging>
   <name>ZXing Core</name>
-  <version>2.2-SNAPSHOT</version>
+  <version>2.2</version>
   <description>Core barcode encoding/decoding library</description>
   
   <inceptionYear>2007</inceptionYear>
@@ -43,9 +43,9 @@
   </licenses>
   
   <scm>
-    <connection>scm:svn:http://zxing.googlecode.com/svn/trunk/core</connection>
-    <developerConnection>scm:svn:https://zxing.googlecode.com/svn/trunk/core</developerConnection>
-    <url>http://zxing.googlecode.com/svn/trunk/core</url>
+    <connection>scm:svn:http://zxing.googlecode.com/svn/tags/core-2.2</connection>
+    <developerConnection>scm:svn:https://zxing.googlecode.com/svn/tags/core-2.2</developerConnection>
+    <url>http://zxing.googlecode.com/svn/tags/core-2.2</url>
   </scm>
   
   <properties>
