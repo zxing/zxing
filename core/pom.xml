@@ -23,10 +23,11 @@
   </parent>
   
   <modelVersion>4.0.0</modelVersion>
+  <groupId>com.google.zxing</groupId>
   <artifactId>core</artifactId>
   <packaging>jar</packaging>
   <name>ZXing Core</name>
-  <version>2.3-SNAPSHOT</version>
+  <version>2.2-SNAPSHOT</version>
   <description>Core barcode encoding/decoding library</description>
   
   <inceptionYear>2007</inceptionYear>

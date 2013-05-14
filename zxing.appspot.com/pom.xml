@@ -23,6 +23,7 @@
   </parent>
   
   <modelVersion>4.0.0</modelVersion>
+  <groupId>com.google.zxing</groupId>  
   <artifactId>zxing.appspot.com</artifactId>
   <packaging>jar</packaging>
   <name>ZXing Appspot-based encoder</name>

@@ -23,6 +23,7 @@
   </parent>
   
   <modelVersion>4.0.0</modelVersion>  
+  <groupId>com.google.zxing</groupId>  
   <artifactId>android-integration</artifactId>
   <packaging>jar</packaging>
   <name>ZXing Android Integration lib</name>
