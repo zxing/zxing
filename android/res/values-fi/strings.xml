@@ -106,13 +106,13 @@
   <string name="preferences_disable_continuous_focus_title">Ei jatkuvaa tarkennusta</string>
   <string name="preferences_disable_exposure_title">Ei valotusta</string>
   <string name="preferences_front_light_auto">Automaattinen</string>
-  <string name="preferences_front_light_off">Toimeton</string>
-  <string name="preferences_front_light_on">Aktiivinen</string>
+  <string name="preferences_front_light_off">Pois</string>
+  <string name="preferences_front_light_on">Päällä</string>
   <string name="preferences_front_light_summary">Salamavalon käyttö saattaa auttaa hämärässä, mutta se saattaa aiheuttaa myös häikäisyä. Ei toimi kaikissa puhelimissa.</string>
   <string name="preferences_front_light_title">Käytä valoa</string>
   <string name="preferences_general_title">Yleiset asetukset</string>
-  <string name="preferences_invert_scan_summary">Etsi valkoinen viivakoodeja mustalla taustalla. Ole käytettävissä kaikissa laitteissa.</string>
-  <string name="preferences_invert_scan_title">Invert skannata</string>
+  <string name="preferences_invert_scan_summary">Etsi valkoisia viivakoodeja mustalla taustalla. Ei toimi kaikilla laitteilla.</string>
+  <string name="preferences_invert_scan_title">Käänteinen skannaus</string>
   <string name="preferences_name">Asetukset</string>
   <string name="preferences_play_beep_title">Piippaus</string>
   <string name="preferences_remember_duplicates_summary">Jos sama viivakoodi skannetaan useasti, tallenna jokainen skannauskerta historiaan</string>
