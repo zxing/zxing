@@ -44,9 +44,9 @@
   </licenses>
   
   <scm>
-    <connection>scm:svn:http://zxing.googlecode.com/svn/tags/javase-2.2</connection>
-    <developerConnection>scm:svn:https://zxing.googlecode.com/svn/tags/javase-2.2</developerConnection>
-    <url>http://zxing.googlecode.com/svn/tags/javase-2.2</url>
+    <connection>scm:svn:http://zxing.googlecode.com/svn/trunk/javase</connection>
+    <developerConnection>scm:svn:https://zxing.googlecode.com/svn/trunk/javase</developerConnection>
+    <url>http://zxing.googlecode.com/svn/trunk/javase</url>
   </scm>
   
   <properties>
