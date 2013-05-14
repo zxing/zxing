@@ -63,14 +63,6 @@
   <prerequisites>
     <maven>3.0</maven>
   </prerequisites>
-  
-  <modules>
-    <module>core</module>
-    <module>javase</module>
-    <module>android-integration</module>
-    <module>zxingorg</module>
-    <module>zxing.appspot.com</module>    
-  </modules>
 
   <build>
     <sourceDirectory>src</sourceDirectory>
@@ -166,6 +158,19 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-release-plugin</artifactId>
         <version>2.4.1</version>
+        <!-- Does this fix DirectoryScanner bug? -->
+        <dependencies>
+          <dependency>
+            <groupId>org.apache.maven.scm</groupId>
+           	<artifactId>maven-scm-provider-svnexe</artifactId>
+           	<version>1.8.1</version>
+          </dependency>
+          <dependency>
+          	<groupId>org.codehaus.plexus</groupId>
+          	<artifactId>plexus-utils</artifactId>
+          	<version>3.0.10</version>
+          </dependency>
+        </dependencies>
       </plugin>
       <plugin>
         <artifactId>maven-deploy-plugin</artifactId>
