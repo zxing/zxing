@@ -46,6 +46,8 @@ final class CameraConfigurationManager {
   // accidental selection of very low resolution on some devices.
   private static final int MIN_PREVIEW_PIXELS = 470 * 320; // normal screen
   private static final int MAX_PREVIEW_PIXELS = 1280 * 800;
+  //private static final float MAX_EXPOSURE_COMPENSATION = 1.5f;
+  //private static final float MIN_EXPOSURE_COMPENSATION = 0.0f;
 
   private final Context context;
   private Point screenResolution;
@@ -180,8 +182,23 @@ final class CameraConfigurationManager {
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
     if (!prefs.getBoolean(PreferencesActivity.KEY_DISABLE_EXPOSURE, false)) {
       if (!safeMode) {
-        ExposureInterface exposure = new ExposureManager().build();
-        exposure.setExposure(parameters, newSetting);
+        int minExposure = parameters.getMinExposureCompensation();
+        int maxExposure = parameters.getMaxExposureCompensation();
+        if (minExposure != 0 || maxExposure != 0) {
+          float step = parameters.getExposureCompensationStep();
+          int desiredCompensation;
+          if (newSetting) {
+            // Light on; set low exposue compensation
+            desiredCompensation = Math.max((int) (MIN_EXPOSURE_COMPENSATION / step), minExposure);
+          } else {
+            // Light off; set high compensation
+            desiredCompensation = Math.min((int) (MAX_EXPOSURE_COMPENSATION / step), maxExposure);
+          }
+          Log.i(TAG, "Setting exposure compensation to " + desiredCompensation + " / " + (step * desiredCompensation));
+          parameters.setExposureCompensation(desiredCompensation);
+        } else {
+          Log.i(TAG, "Camera does not support exposure compensation");
+        }
       }
     }
      */

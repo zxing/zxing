@@ -16,8 +16,8 @@
  -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.google.zxing.client.android"
-          android:versionName="4.3.2"
-          android:versionCode="88"
+          android:versionName="4.4 beta 1"
+          android:versionCode="89"
           android:installLocation="auto">
 
   <uses-permission android:name="android.permission.CAMERA"/>
@@ -30,7 +30,7 @@
   <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
   <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
 
-  <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="10"/>
+  <uses-sdk android:minSdkVersion="10" android:targetSdkVersion="17"/>
 
   <!-- Don't require camera, as this requires a rear camera. This allows it to work on the Nexus 7 -->
   <uses-feature android:name="android.hardware.camera" android:required="false"/>
@@ -45,7 +45,6 @@
   <uses-feature android:name="android.hardware.touchscreen"/>
   <!-- TODO make this not required again after android.hardware.camera.any is available -->
 
-  <!-- Donut-specific flags which allow us to run on any dpi screens. -->
   <supports-screens android:xlargeScreens="true"
                     android:largeScreens="true"
                     android:normalScreens="true"
@@ -55,14 +54,13 @@
   <application android:icon="@drawable/launcher_icon"
                android:logo="@drawable/launcher_icon"
                android:label="@string/app_name"
-               android:hardwareAccelerated="true"
                android:allowBackup="true">
     <activity android:name=".CaptureActivity"
               android:screenOrientation="landscape"
               android:clearTaskOnLaunch="true"
               android:stateNotNeeded="true"
               android:configChanges="orientation|keyboardHidden"
-              android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+              android:theme="@style/CaptureTheme"
               android:windowSoftInputMode="stateAlwaysHidden">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
@@ -136,8 +134,7 @@
     </activity>
     <activity android:name=".share.ShareActivity"
               android:stateNotNeeded="true"
-              android:screenOrientation="user"
-              android:theme="@android:style/Theme.Light">
+              android:screenOrientation="user">
       <intent-filter>
         <action android:name="com.google.zxing.client.android.SHARE"/>
         <category android:name="android.intent.category.DEFAULT"/>

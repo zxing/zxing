@@ -14,15 +14,11 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  -->
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-  <item android:id="@+id/menu_history_send"
-        android:title="@string/history_send"
-        android:icon="@android:drawable/ic_menu_share"
-        android:orderInCategory="1"
-        android:showAsAction="withText|ifRoom"/>
-  <item android:id="@+id/menu_history_clear_text"
-        android:title="@string/history_clear_text"
-        android:icon="@android:drawable/ic_menu_delete"
-        android:orderInCategory="2"
-        android:showAsAction="withText|ifRoom"/>
-</menu>
+<resources>
+  <style name="CaptureTheme" parent="android:Theme.Holo">
+    <item name="android:windowFullscreen">true</item>
+    <item name="android:windowContentOverlay">@null</item>
+    <item name="android:windowActionBarOverlay">true</item>
+    <item name="android:windowActionModeOverlay">true</item>
+  </style>
+</resources>

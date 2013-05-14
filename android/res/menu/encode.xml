@@ -18,9 +18,11 @@
   <item android:id="@+id/menu_share"
         android:title="@string/menu_share"
         android:icon="@android:drawable/ic_menu_share"
-        android:orderInCategory="1"/>
+        android:orderInCategory="1"
+        android:showAsAction="withText|ifRoom"/>
   <item android:id="@+id/menu_encode"
         android:title="@string/menu_encode_vcard"
         android:icon="@android:drawable/ic_menu_sort_alphabetically"
-        android:orderInCategory="2"/>
+        android:orderInCategory="2"
+        android:showAsAction="withText|ifRoom"/>
 </menu>
