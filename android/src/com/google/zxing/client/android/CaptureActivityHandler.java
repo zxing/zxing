@@ -120,7 +120,7 @@ public final class CaptureActivityHandler extends Handler {
         ResolveInfo resolveInfo =
             activity.getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
         String browserPackageName = null;
-        if (resolveInfo.activityInfo != null) {
+        if (resolveInfo != null && resolveInfo.activityInfo != null) {
           browserPackageName = resolveInfo.activityInfo.packageName;
           Log.d(TAG, "Using browser in package " + browserPackageName);
         }
