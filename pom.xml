@@ -44,9 +44,9 @@
     </license>
   </licenses>
   <scm>
-    <connection>scm:svn:http://zxing.googlecode.com/svn/trunk/android-integration</connection>
-    <developerConnection>scm:svn:https://zxing.googlecode.com/svn/trunk/android-integration</developerConnection>
-    <url>http://zxing.googlecode.com/svn/trunk/android-integration</url>
+    <connection>scm:svn:http://zxing.googlecode.com/svn/trunk</connection>
+    <developerConnection>scm:svn:https://zxing.googlecode.com/svn/trunk</developerConnection>
+    <url>http://zxing.googlecode.com/svn/trunk</url>
   </scm>
   <developers>
     <!-- I am listing myself only, merely because I would be the most likely point of contact for pom.xml -->
@@ -63,6 +63,14 @@
   <prerequisites>
     <maven>3.0</maven>
   </prerequisites>
+  
+  <modules>
+    <module>core</module>
+    <module>javase</module>
+    <module>android-integration</module>
+    <module>zxingorg</module>
+    <module>zxing.appspot.com</module>    
+  </modules>
 
   <build>
     <sourceDirectory>src</sourceDirectory>
