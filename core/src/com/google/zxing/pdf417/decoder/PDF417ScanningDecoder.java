@@ -279,15 +279,11 @@ public final class PDF417ScanningDecoder {
    * the ambiguous values to choose. We try decode using the first value, and if that fails, we use another of the
    * ambiguous values and try to decode again. This usually only happens on very hard to read and decode barcodes,
    * so decoding the normal barcodes is not affected by this. 
-   * @param ecLevel
-   * @param codewords
+   *
    * @param erasureArray contains the indexes of erasures
    * @param ambiguousIndexes array with the indexes that have more than one most likely value
    * @param ambiguousIndexValues two dimensional array that contains the ambiguous values. The first dimension must
    * be the same length as the ambiguousIndexes array
-   * @return
-   * @throws FormatException
-   * @throws ChecksumException
    */
   private static DecoderResult createDecoderResultFromAmbiguousValues(int ecLevel,
                                                                       int[] codewords,
