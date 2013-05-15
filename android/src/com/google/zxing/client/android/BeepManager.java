@@ -31,7 +31,7 @@ import java.io.IOException;
 /**
  * Manages beeps and vibrations for {@link CaptureActivity}.
  */
-final class BeepManager {
+final class BeepManager implements MediaPlayer.OnCompletionListener, MediaPlayer.OnErrorListener {
 
   private static final String TAG = BeepManager.class.getSimpleName();
 
@@ -49,7 +49,7 @@ final class BeepManager {
     updatePrefs();
   }
 
-  void updatePrefs() {
+  synchronized void updatePrefs() {
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
     playBeep = shouldBeep(prefs, activity);
     vibrate = prefs.getBoolean(PreferencesActivity.KEY_VIBRATE, false);
@@ -61,7 +61,7 @@ final class BeepManager {
     }
   }
 
-  void playBeepSoundAndVibrate() {
+  synchronized void playBeepSoundAndVibrate() {
     if (playBeep && mediaPlayer != null) {
       mediaPlayer.start();
     }
@@ -83,16 +83,11 @@ final class BeepManager {
     return shouldPlayBeep;
   }
 
-  private static MediaPlayer buildMediaPlayer(Context activity) {
+  private MediaPlayer buildMediaPlayer(Context activity) {
     MediaPlayer mediaPlayer = new MediaPlayer();
     mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-    // When the beep has finished playing, rewind to queue up another one.
-    mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-      @Override
-      public void onCompletion(MediaPlayer player) {
-        player.seekTo(0);
-      }
-    });
+    mediaPlayer.setOnCompletionListener(this);
+    mediaPlayer.setOnErrorListener(this);
 
     AssetFileDescriptor file = activity.getResources().openRawResourceFd(R.raw.beep);
     try {
@@ -105,6 +100,26 @@ final class BeepManager {
       mediaPlayer = null;
     }
     return mediaPlayer;
+  }
+
+  @Override
+  public void onCompletion(MediaPlayer mp) {
+    // When the beep has finished playing, rewind to queue up another one.      
+    mp.seekTo(0);
+  }
+
+  @Override
+  public synchronized boolean onError(MediaPlayer mp, int what, int extra) {
+    if (what == MediaPlayer.MEDIA_ERROR_SERVER_DIED) {
+      // we are finished, so put up an appropriate error toast if required and finish
+      activity.finish();
+    } else {
+      // possibly media player error, so release and recreate
+      mp.release();
+      mediaPlayer = null;
+      updatePrefs();
+    }
+    return true;
   }
 
 }
