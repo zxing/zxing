@@ -14,12 +14,12 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  -->
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="fill_parent"
-             android:layout_height="fill_parent"
-             android:gravity="center_horizontal"
-             android:padding="10dip">
-  <TableRow>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+  <LinearLayout android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="vertical">
     <Button android:id="@+id/run_benchmark"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -28,8 +28,6 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/get_camera_parameters"/>
-  </TableRow>
-  <TableRow>
     <Button android:id="@+id/scan_product"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -38,8 +36,6 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/scan_qr_code"/>
-  </TableRow>
-  <TableRow>
     <Button android:id="@+id/scan_anything"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -48,8 +44,6 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/search_book_contents"/>
-  </TableRow>
-  <TableRow>
     <Button android:id="@+id/encode_url"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -58,8 +52,6 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/encode_email"/>
-  </TableRow>
-  <TableRow>
     <Button android:id="@+id/encode_phone"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -68,8 +60,6 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/encode_sms"/>
-  </TableRow>
-  <TableRow>
     <Button android:id="@+id/encode_contact"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -78,8 +68,6 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/encode_location"/>
-  </TableRow>
-  <TableRow>
     <Button android:id="@+id/encode_hidden_data"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -88,11 +76,9 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/encode_bad_data"/>
-  </TableRow>
-  <TableRow>
     <Button android:id="@+id/share_via_barcode"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/share_via_barcode"/>
-  </TableRow>
-</TableLayout>
+  </LinearLayout>
+</ScrollView>

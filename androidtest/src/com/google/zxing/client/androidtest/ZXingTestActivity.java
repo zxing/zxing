@@ -28,6 +28,7 @@ import android.os.Environment;
 import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -46,7 +47,6 @@ import java.util.regex.Pattern;
 public final class ZXingTestActivity extends Activity {
 
   private static final String TAG = ZXingTestActivity.class.getSimpleName();
-  private static final int ABOUT_ID = Menu.FIRST;
   private static final String PACKAGE_NAME = ZXingTestActivity.class.getPackage().getName();
   private static final Pattern SEMICOLON = Pattern.compile(";");
 
@@ -73,14 +73,14 @@ public final class ZXingTestActivity extends Activity {
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
-    super.onCreateOptionsMenu(menu);
-    menu.add(0, ABOUT_ID, 0, R.string.about_menu).setIcon(android.R.drawable.ic_menu_info_details);
-    return true;
+    MenuInflater menuInflater = getMenuInflater();
+    menuInflater.inflate(R.menu.main, menu);
+    return super.onCreateOptionsMenu(menu);
   }
 
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
-    if (item.getItemId() == ABOUT_ID) {
+    if (item.getItemId() == R.id.menu_about) {
       int versionCode;
       String versionName;
       try {

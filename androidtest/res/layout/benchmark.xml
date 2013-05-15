@@ -14,22 +14,18 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  -->
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="fill_parent"
-             android:layout_height="fill_parent"
-             android:gravity="center_horizontal"
-             android:padding="10dip">
-  <TableRow>
-    <Button android:id="@+id/benchmark_run"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/benchmark_run"/>
-  </TableRow>
-  <TableRow>
-    <TextView android:id="@+id/benchmark_help"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:singleLine="false"
-            android:text="@string/benchmark_help"/>
-  </TableRow>
-</TableLayout>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:orientation="vertical">
+  <Button android:id="@+id/benchmark_run"
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:text="@string/benchmark_run"/>
+  <TextView android:id="@+id/benchmark_help"
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:singleLine="false"
+          android:text="@string/benchmark_help"
+          android:padding="5dip"/>
+</LinearLayout>
