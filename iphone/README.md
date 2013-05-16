@@ -82,7 +82,8 @@ C++.
     library. Alternately, you can try setting the C++ library to the
     LLVM version int the `XingWidget` project but this is not
     well-tested.
-
+ 12. Change C++ Language Dialect to Compiler Default
+ 13. Change C++ Standard Library to Compiler Default
 ## Known issues for above steps to include: ##
 
 * If you have building error like " ... : No such file or directory",
