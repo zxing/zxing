@@ -73,13 +73,13 @@ public class SymbolInfo {
   }
 
   private final boolean rectangular;
-  final int dataCapacity;
-  final int errorCodewords;
+  private final int dataCapacity;
+  private final int errorCodewords;
   public final int matrixWidth;
   public final int matrixHeight;
   private final int dataRegions;
-  int rsBlockData;
-  int rsBlockError;
+  private int rsBlockData;
+  private int rsBlockError;
 
   public SymbolInfo(boolean rectangular, int dataCapacity, int errorCodewords,
                     int matrixWidth, int matrixHeight, int dataRegions) {
@@ -87,9 +87,9 @@ public class SymbolInfo {
          dataCapacity, errorCodewords);
   }
 
-  private SymbolInfo(boolean rectangular, int dataCapacity, int errorCodewords,
-                     int matrixWidth, int matrixHeight, int dataRegions,
-                     int rsBlockData, int rsBlockError) {
+  SymbolInfo(boolean rectangular, int dataCapacity, int errorCodewords,
+             int matrixWidth, int matrixHeight, int dataRegions,
+             int rsBlockData, int rsBlockError) {
     this.rectangular = rectangular;
     this.dataCapacity = dataCapacity;
     this.errorCodewords = errorCodewords;
@@ -208,6 +208,14 @@ public class SymbolInfo {
 
   public int getInterleavedBlockCount() {
     return dataCapacity / rsBlockData;
+  }
+  
+  public int getDataCapacity() {
+    return dataCapacity;
+  }
+  
+  public int getErrorCodewords() {
+    return errorCodewords;
   }
 
   public int getDataLengthForInterleavedBlock(int index) {

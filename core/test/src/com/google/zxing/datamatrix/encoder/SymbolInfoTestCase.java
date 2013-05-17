@@ -28,28 +28,28 @@ public final class SymbolInfoTestCase extends Assert {
   @Test
   public void testSymbolInfo() {
     SymbolInfo info = SymbolInfo.lookup(3);
-    assertEquals(5, info.errorCodewords);
+    assertEquals(5, info.getErrorCodewords());
     assertEquals(8, info.matrixWidth);
     assertEquals(8, info.matrixHeight);
     assertEquals(10, info.getSymbolWidth());
     assertEquals(10, info.getSymbolHeight());
 
     info = SymbolInfo.lookup(3, SymbolShapeHint.FORCE_RECTANGLE);
-    assertEquals(7, info.errorCodewords);
+    assertEquals(7, info.getErrorCodewords());
     assertEquals(16, info.matrixWidth);
     assertEquals(6, info.matrixHeight);
     assertEquals(18, info.getSymbolWidth());
     assertEquals(8, info.getSymbolHeight());
 
     info = SymbolInfo.lookup(9);
-    assertEquals(11, info.errorCodewords);
+    assertEquals(11, info.getErrorCodewords());
     assertEquals(14, info.matrixWidth);
     assertEquals(6, info.matrixHeight);
     assertEquals(32, info.getSymbolWidth());
     assertEquals(8, info.getSymbolHeight());
 
     info = SymbolInfo.lookup(9, SymbolShapeHint.FORCE_SQUARE);
-    assertEquals(12, info.errorCodewords);
+    assertEquals(12, info.getErrorCodewords());
     assertEquals(14, info.matrixWidth);
     assertEquals(14, info.matrixHeight);
     assertEquals(16, info.getSymbolWidth());

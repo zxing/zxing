@@ -22,14 +22,14 @@ import java.nio.charset.Charset;
 
 final class EncoderContext {
 
-  String msg;
+  private final String msg;
   private SymbolShapeHint shape;
   private Dimension minSize;
   private Dimension maxSize;
-  StringBuilder codewords;
+  private final StringBuilder codewords;
   int pos;
-  int newEncoding;
-  SymbolInfo symbolInfo;
+  private int newEncoding;
+  private SymbolInfo symbolInfo;
   private int skipAtEnd;
 
   EncoderContext(String msg) {
@@ -73,6 +73,10 @@ final class EncoderContext {
   public char getCurrent() {
     return msg.charAt(pos);
   }
+  
+  public StringBuilder getCodewords() {
+    return codewords;
+  }
 
   public void writeCodewords(String codewords) {
     this.codewords.append(codewords);
@@ -84,6 +88,10 @@ final class EncoderContext {
 
   public int getCodewordCount() {
     return this.codewords.length();
+  }
+  
+  public int getNewEncoding() {
+    return newEncoding;
   }
 
   public void signalEncoderChange(int encoding) {
@@ -105,13 +113,17 @@ final class EncoderContext {
   public int getRemainingCharacters() {
     return getTotalMessageCharCount() - pos;
   }
+  
+  public SymbolInfo getSymbolInfo() {
+    return symbolInfo;
+  }
 
   public void updateSymbolInfo() {
     updateSymbolInfo(getCodewordCount());
   }
 
   public void updateSymbolInfo(int len) {
-    if (this.symbolInfo == null || len > this.symbolInfo.dataCapacity) {
+    if (this.symbolInfo == null || len > this.symbolInfo.getDataCapacity()) {
       this.symbolInfo = SymbolInfo.lookup(len, shape, minSize, maxSize, true);
     }
   }
