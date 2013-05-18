@@ -72,7 +72,7 @@ public final class PDF417ScanningDecoder {
       if (detectionResult == null) {
         throw NotFoundException.getNotFoundInstance();
       }
-      if (i == 0 &&
+      if (i == 0 && detectionResult.getBoundingBox() != null &&
           (detectionResult.getBoundingBox().getMinY() < boundingBox.getMinY() || detectionResult.getBoundingBox()
               .getMaxY() > boundingBox.getMaxY())) {
         boundingBox = detectionResult.getBoundingBox();
