@@ -54,6 +54,9 @@ public final class Code39Writer extends OneDimensionalCodeWriter {
     int codeWidth = 24 + 1 + length;
     for (int i = 0; i < length; i++) {
       int indexInString = Code39Reader.ALPHABET_STRING.indexOf(contents.charAt(i));
+      if (indexInString < 0) {
+        throw new IllegalArgumentException("Bad contents: " + contents);
+      }
       toIntArray(Code39Reader.CHARACTER_ENCODINGS[indexInString], widths);
       for (int width : widths) {
         codeWidth += width;
