@@ -114,7 +114,7 @@ public abstract class AbstractBlackBoxTestCase extends Assert {
   }
 
   protected final File[] getImageFiles() {
-    assertTrue("Please run from the 'core' directory", testBase.exists());
+    assertTrue("Please download and install test images, and run from the 'core' directory", testBase.exists());
     return testBase.listFiles(IMAGE_NAME_FILTER);
   }
 

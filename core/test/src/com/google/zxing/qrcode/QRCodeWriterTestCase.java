@@ -45,7 +45,7 @@ public final class QRCodeWriterTestCase extends Assert {
       // try starting with 'core' since the test base is often given as the project root
       file = new File("core/" + BASE_IMAGE_PATH + fileName);
     }
-    assertTrue("Please run from the 'core' directory", file.exists());
+    assertTrue("Please download and install test images, and run from the 'core' directory", file.exists());
     return ImageIO.read(file);
   }
 
