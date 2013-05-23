@@ -114,6 +114,10 @@ final class DecodedBitStreamParser {
         case BEGIN_MACRO_PDF417_CONTROL_BLOCK:
           codeIndex = decodeMacroBlock(codewords, codeIndex, resultMetadata);
           break;
+        case BEGIN_MACRO_PDF417_OPTIONAL_FIELD:
+        case MACRO_PDF417_TERMINATOR:
+          // Should not see these outside a macro block
+          throw FormatException.getFormatInstance();
         default:
           // Default to text compaction. During testing numerous barcodes
           // appeared to be missing the starting mode. In these cases defaulting
