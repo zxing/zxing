@@ -37,8 +37,8 @@ public final class AztecWriter implements Writer {
 
   @Override
   public BitMatrix encode(String contents, BarcodeFormat format, int width, int height, Map<EncodeHintType,?> hints) {
-    String charset = (String) hints.get(EncodeHintType.CHARACTER_SET);
-    Number eccPercent = (Number) hints.get(EncodeHintType.ERROR_CORRECTION);
+    String charset = hints == null ? null : (String) hints.get(EncodeHintType.CHARACTER_SET);
+    Number eccPercent = hints == null ? null : (Number) hints.get(EncodeHintType.ERROR_CORRECTION);
     return encode(contents, 
                   format, 
                   charset == null ? DEFAULT_CHARSET : Charset.forName(charset),
