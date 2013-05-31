@@ -84,6 +84,10 @@ public final class Detector {
    * @throws NotFoundException in case of too many errors or invalid parameters
    */
   private void extractParameters(ResultPoint[] bullsEyeCorners) throws NotFoundException {
+    if (!isValid(bullsEyeCorners[0]) || !isValid(bullsEyeCorners[1]) || 
+        !isValid(bullsEyeCorners[2]) || !isValid(bullsEyeCorners[3])) {
+       throw NotFoundException.getNotFoundInstance();
+    }
     int twoCenterLayers = 2 * nbCenterLayers;
     // Get the bits around the bull's eye
     boolean[] resab = sampleLine(bullsEyeCorners[0], bullsEyeCorners[1], twoCenterLayers+1);
@@ -560,9 +564,6 @@ public final class Detector {
     ResultPoint result1 = new ResultPoint(centerx + ratio * dx, centery + ratio * dy);
     ResultPoint result3 = new ResultPoint(centerx - ratio * dx, centery - ratio * dy);
 
-    if (!isValid(result0) || !isValid(result1) || !isValid(result2) || !isValid(result3)) {
-      throw NotFoundException.getNotFoundInstance();
-    }
     return new ResultPoint[] { result0, result1, result2, result3 };
   }
 
