@@ -113,12 +113,19 @@ public final class Decoder {
    * @throws FormatException if the input is not valid
    */
   private String getEncodedData(boolean[] correctedBits) throws FormatException {
-
     int endIndex = codewordSize * ddata.getNbDatablocks() - invertedBitCount;
     if (endIndex > correctedBits.length) {
       throw FormatException.getFormatInstance();
     }
+    return getEncodedData(correctedBits, endIndex);
+  }
 
+  // This method is used for testing the high-level encoder
+  public static String highLevelDecode(boolean[] correctedBits) {
+    return getEncodedData(correctedBits, correctedBits.length);
+  }
+
+  private static String getEncodedData(boolean[] correctedBits, int endIndex) {
     Table lastTable = Table.UPPER;
     Table table = Table.UPPER;
     int startIndex = 0;
