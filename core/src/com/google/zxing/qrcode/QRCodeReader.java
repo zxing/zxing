@@ -30,6 +30,7 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.DecoderResult;
 import com.google.zxing.common.DetectorResult;
 import com.google.zxing.qrcode.decoder.Decoder;
+import com.google.zxing.qrcode.decoder.QRCodeDecoderMetaData;
 import com.google.zxing.qrcode.detector.Detector;
 
 import java.util.List;
@@ -76,6 +77,11 @@ public class QRCodeReader implements Reader {
       DetectorResult detectorResult = new Detector(image.getBlackMatrix()).detect(hints);
       decoderResult = decoder.decode(detectorResult.getBits(), hints);
       points = detectorResult.getPoints();
+    }
+
+    // If the code was mirrored: swap the bottom-left and the top-right points.
+    if (decoderResult.getOther() instanceof QRCodeDecoderMetaData) {
+      ((QRCodeDecoderMetaData) decoderResult.getOther()).applyMirroredCorrection(points);
     }
 
     Result result = new Result(decoderResult.getText(), decoderResult.getRawBytes(), points, BarcodeFormat.QR_CODE);

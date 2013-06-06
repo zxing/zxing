@@ -29,6 +29,7 @@ import com.google.zxing.common.DetectorResult;
 import com.google.zxing.multi.MultipleBarcodeReader;
 import com.google.zxing.multi.qrcode.detector.MultiDetector;
 import com.google.zxing.qrcode.QRCodeReader;
+import com.google.zxing.qrcode.decoder.QRCodeDecoderMetaData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +58,10 @@ public final class QRCodeMultiReader extends QRCodeReader implements MultipleBar
       try {
         DecoderResult decoderResult = getDecoder().decode(detectorResult.getBits(), hints);
         ResultPoint[] points = detectorResult.getPoints();
+        // If the code was mirrored: swap the bottom-left and the top-right points.
+        if (decoderResult.getOther() instanceof QRCodeDecoderMetaData) {
+          ((QRCodeDecoderMetaData) decoderResult.getOther()).applyMirroredCorrection(points);
+        }
         Result result = new Result(decoderResult.getText(), decoderResult.getRawBytes(), points,
                                    BarcodeFormat.QR_CODE);
         List<byte[]> byteSegments = decoderResult.getByteSegments();

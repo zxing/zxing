@@ -27,6 +27,7 @@ final class BitMatrixParser {
   private final BitMatrix bitMatrix;
   private Version parsedVersion;
   private FormatInformation parsedFormatInfo;
+  private boolean mirror;
 
   /**
    * @param bitMatrix {@link BitMatrix} to parse
@@ -137,12 +138,13 @@ final class BitMatrixParser {
   }
 
   private int copyBit(int i, int j, int versionBits) {
-    return bitMatrix.get(i, j) ? (versionBits << 1) | 0x1 : versionBits << 1;
+    boolean bit = mirror ? bitMatrix.get(j, i) : bitMatrix.get(i, j);
+    return bit ? (versionBits << 1) | 0x1 : versionBits << 1;
   }
 
   /**
    * <p>Reads the bits in the {@link BitMatrix} representing the finder pattern in the
-   * correct order in order to reconstitute the codewords bytes contained within the
+   * correct order in order to reconstruct the codewords bytes contained within the
    * QR Code.</p>
    *
    * @return bytes encoded within the QR Code
@@ -155,7 +157,7 @@ final class BitMatrixParser {
 
     // Get the data mask for the format used in this QR Code. This will exclude
     // some bits from reading as we wind through the bit matrix.
-    DataMask dataMask = DataMask.forReference((int) formatInfo.getDataMask());
+    DataMask dataMask = DataMask.forReference(formatInfo.getDataMask());
     int dimension = bitMatrix.getHeight();
     dataMask.unmaskBitMatrix(bitMatrix, dimension);
 
@@ -200,6 +202,44 @@ final class BitMatrixParser {
       throw FormatException.getFormatInstance();
     }
     return result;
+  }
+
+  /**
+   * Revert the mask removal done while reading the code words. The bit matrix should revert to its original state.
+   */
+  void remask() {
+    if (parsedFormatInfo == null) {
+      return; // We have no format information, and have no data mask
+    }
+    DataMask dataMask = DataMask.forReference(parsedFormatInfo.getDataMask());
+    int dimension = bitMatrix.getHeight();
+    dataMask.unmaskBitMatrix(bitMatrix, dimension);
+  }
+
+  /**
+   * Prepare the parser for a mirrored operation.
+   * This flag has effect only on the {@link #readFormatInformation()} and the
+   * {@link #readVersion()}. Before proceeding with {@link #readCodewords()} the
+   * {@link #mirror()} method should be called.
+   * 
+   * @param mirror Whether to read version and format information mirrored.
+   */
+  void setMirror(boolean mirror) {
+    parsedVersion = null;
+    parsedFormatInfo = null;
+    this.mirror = mirror;
+  }
+
+  /** Mirror the bit matrix in order to attempt a second reading. */
+  void mirror() {
+    for (int x = 0; x < bitMatrix.getWidth(); x++) {
+      for (int y = x + 1; y < bitMatrix.getHeight(); y++) {
+        if (bitMatrix.get(x, y) != bitMatrix.get(y, x)) {
+          bitMatrix.flip(y, x);
+          bitMatrix.flip(x, y);          
+        }
+      }
+    }
   }
 
 }
