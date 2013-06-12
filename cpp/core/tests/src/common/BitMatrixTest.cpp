@@ -21,7 +21,8 @@
 #include "BitMatrixTest.h"
 #include <limits>
 #include <stdlib.h>
-
+#include <sys/types.h>
+#include <unistd.h>
 namespace zxing {
 using namespace std;
 

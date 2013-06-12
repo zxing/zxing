@@ -35,7 +35,7 @@ if(MSVC)
     add_definitions(/Za)
 endif()
 
-# Add libzxing library.
+#Add libzxing library.
 file(GLOB_RECURSE LIBZXING_FILES
     "./core/src/*.cpp"
     "./core/src/*.h"
@@ -51,7 +51,7 @@ if(WIN32)
     include_directories(SYSTEM "./core/lib/win32/")
 endif()
 include_directories("./core/src/")
-add_library(libzxing STATIC ${LIBZXING_FILES})
+add_library(libzxing SHARED ${LIBZXING_FILES})
 set_target_properties(libzxing PROPERTIES PREFIX "")
 find_package(Iconv)
 if(ICONV_FOUND)
@@ -82,3 +82,9 @@ if(CPPUNIT_FOUND)
 else()
     message(WARNING "Not building testrunner, because CppUnit is missing")
 endif()
+
+INSTALL(DIRECTORY ./core/src/ DESTINATION include
+          FILES_MATCHING PATTERN "*.h")
+INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/libzxing.so DESTINATION lib)  
+INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/zxing DESTINATION bin) 
+INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/testrunner DESTINATION bin)  
