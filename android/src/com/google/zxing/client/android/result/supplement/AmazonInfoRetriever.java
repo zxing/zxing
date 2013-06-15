@@ -65,7 +65,8 @@ final class AmazonInfoRetriever extends SupplementalInfoRetriever {
     String detailPageURL = null;
     Collection<String> authors = new ArrayList<String>();
     String title = null;
-    String formattedPrice = null;
+    String formattedNewPrice = null;
+    String formattedUsedPrice = null;
     boolean error = false;
 
     try {
@@ -73,6 +74,8 @@ final class AmazonInfoRetriever extends SupplementalInfoRetriever {
 
       boolean seenItem = false;
       boolean seenLowestNewPrice = false;
+      boolean seenLowestUsedPrice = false;
+      
       for (int eventType = xpp.getEventType(); eventType != XmlPullParser.END_DOCUMENT; eventType = xpp.next()) {
         if (eventType == XmlPullParser.START_TAG) {
           String name = xpp.getName();
@@ -93,11 +96,21 @@ final class AmazonInfoRetriever extends SupplementalInfoRetriever {
             title = xpp.getText();
           } else if ("LowestNewPrice".equals(name)) {
             seenLowestNewPrice = true;
+            seenLowestUsedPrice = false;
+          } else if ("LowestUsedPrice".equals(name)) {
+            seenLowestNewPrice = false;
+            seenLowestUsedPrice = true;
           } else if ("FormattedPrice".equals(name)) {
-            if (seenLowestNewPrice) {
+            if (seenLowestNewPrice || seenLowestUsedPrice) {
               assertTextNext(xpp);
-              formattedPrice = xpp.getText();
+              String theText = xpp.getText();
+              if (seenLowestNewPrice) {
+                formattedNewPrice = theText;
+              } else {
+                formattedUsedPrice = theText;
+              }
               seenLowestNewPrice = false;
+              seenLowestUsedPrice = false;
             }
           } else if ("Errors".equals(name)) {
             error = true;
@@ -117,7 +130,11 @@ final class AmazonInfoRetriever extends SupplementalInfoRetriever {
     Collection<String> newTexts = new ArrayList<String>();
     maybeAddText(title, newTexts);
     maybeAddTextSeries(authors, newTexts);
-    maybeAddText(formattedPrice, newTexts);
+    if (formattedNewPrice != null) {
+      maybeAddText(formattedNewPrice, newTexts);
+    } else if (formattedUsedPrice != null) {
+      maybeAddText(formattedUsedPrice, newTexts);      
+    }
 
     append(productID, "Amazon", newTexts.toArray(new String[newTexts.size()]), detailPageURL);
   }
