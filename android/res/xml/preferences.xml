@@ -102,8 +102,8 @@
      -->
   </PreferenceCategory>
   <PreferenceCategory android:title="@string/preferences_try_bsplus">
-    <com.google.zxing.client.android.pref.BSPlusPreference
-        android:title="@string/preferences_try_bsplus"
-        android:summary="@string/preferences_try_bsplus_summary"/>
+    <Preference android:title="@string/preferences_try_bsplus" >
+      <intent android:action="android.intent.action.VIEW" android:data="market://details?id=com.srowen.bs.android" />
+    </Preference>
   </PreferenceCategory>
 </PreferenceScreen>

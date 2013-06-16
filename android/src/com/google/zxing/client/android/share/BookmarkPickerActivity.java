@@ -46,21 +46,27 @@ public final class BookmarkPickerActivity extends ListActivity {
   private static final String BOOKMARK_SELECTION = 
       Browser.BookmarkColumns.BOOKMARK + " = 1 AND " + Browser.BookmarkColumns.URL + " IS NOT NULL";
 
-  private Cursor cursor = null;
+  private Cursor cursor;
 
   @Override
   protected void onCreate(Bundle icicle) {
     super.onCreate(icicle);
-
     cursor = getContentResolver().query(Browser.BOOKMARKS_URI, BOOKMARK_PROJECTION,
         BOOKMARK_SELECTION, null, null);
     if (cursor == null) {
       Log.w(TAG, "No cursor returned for bookmark query");
       finish();
-    } else {
-      startManagingCursor(cursor);
-      setListAdapter(new BookmarkAdapter(this, cursor));
+      return;
     }
+    setListAdapter(new BookmarkAdapter(this, cursor));
+  }
+  
+  @Override
+  protected void onDestroy() {
+    if (cursor != null) {
+      cursor.close();
+    }
+    super.onDestroy();
   }
 
   @Override
