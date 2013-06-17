@@ -47,7 +47,7 @@ public abstract class ParsedResult {
   }
 
   public static void maybeAppend(String value, StringBuilder result) {
-    if (value != null && value.length() > 0) {
+    if (value != null && !value.isEmpty()) {
       // Don't add a newline before the first value
       if (result.length() > 0) {
         result.append('\n');

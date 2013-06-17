@@ -51,7 +51,7 @@ public final class PhoneNumberGenerator implements GeneratorSource {
 
   private String getTelField() throws GeneratorException {
     String input = number.getText();
-    if (input.length() < 1) {
+    if (input.isEmpty()) {
       throw new GeneratorException("Phone number must be present.");
     }
     input = Validators.filterNumber(input);

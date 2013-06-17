@@ -51,7 +51,7 @@ public final class QRCodeWriter implements Writer {
                           int height,
                           Map<EncodeHintType,?> hints) throws WriterException {
 
-    if (contents.length() == 0) {
+    if (contents.isEmpty()) {
       throw new IllegalArgumentException("Found empty contents");
     }
 

@@ -191,7 +191,7 @@ final class FieldParser {
   }
 
   static String parseFieldsInGeneralPurpose(String rawInformation) throws NotFoundException{
-    if(rawInformation.length() == 0) {
+    if (rawInformation.isEmpty()) {
       return null;
     }
 

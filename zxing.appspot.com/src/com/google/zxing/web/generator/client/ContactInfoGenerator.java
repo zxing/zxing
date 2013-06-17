@@ -170,7 +170,7 @@ public final class ContactInfoGenerator implements GeneratorSource {
   
   private String getNameField() throws GeneratorException {
     String input = name.getText();
-    if (input.length() < 1) {
+    if (input.isEmpty()) {
       throw new GeneratorException("Name must be at least 1 character.");
     }
     return input;
@@ -186,7 +186,7 @@ public final class ContactInfoGenerator implements GeneratorSource {
 
   private String getTelField() throws GeneratorException {
     String input = Validators.filterNumber(tel.getText());
-    if (input.length() < 1) {
+    if (input.isEmpty()) {
       return "";
     }
     Validators.validateNumber(input);
@@ -206,7 +206,7 @@ public final class ContactInfoGenerator implements GeneratorSource {
   
   private String getEmailField() throws GeneratorException {
     String input = email.getText();
-    if (input.length() < 1) {
+    if (input.isEmpty()) {
       return "";
     }
     Validators.validateEmail(input);

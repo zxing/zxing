@@ -57,7 +57,7 @@ public final class GeoLocationGenerator implements GeneratorSource {
   @Override
   public String getText() throws GeneratorException {
     String que = getQueryField();
-    if (que != null && que.length() > 0) {
+    if (que != null && !que.isEmpty()) {
       if (getLatitudeField() == null) {
         latitude.setText("0");
       }
@@ -68,7 +68,7 @@ public final class GeoLocationGenerator implements GeneratorSource {
     String lat = getLatitudeField();
     String lon = getLongitudeField();
     
-    if (que != null && que.length() > 0) {
+    if (que != null && !que.isEmpty()) {
       return "geo:" + lat + ',' + lon + "?q=" + que;
     }
     return "geo:" + lat + ',' + lon;

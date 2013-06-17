@@ -54,7 +54,7 @@ public final class SmsAddressGenerator implements GeneratorSource {
     
     String output = inputNumber;
     // we add the text only if there actually is something in the field.
-    if (inputMessage.length() > 0) {
+    if (!inputMessage.isEmpty()) {
       output += ':' + inputMessage;
     }
     
@@ -63,7 +63,7 @@ public final class SmsAddressGenerator implements GeneratorSource {
 
   private String getTelField() throws GeneratorException {
     String input = number.getText();
-    if (input.length() < 1) {
+    if (input.isEmpty()) {
       throw new GeneratorException("Phone number must be present.");
     }
     input = Validators.filterNumber(input);

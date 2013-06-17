@@ -76,7 +76,7 @@ public final class HelpActivity extends Activity {
       webView.restoreState(icicle);
     } else if (intent != null) {
       String page = intent.getStringExtra(REQUESTED_PAGE_KEY);
-      if (page != null && page.length() > 0) {
+      if (page != null && !page.isEmpty()) {
         webView.loadUrl(BASE_URL + page);
       } else {
         webView.loadUrl(BASE_URL + DEFAULT_PAGE);
@@ -94,7 +94,7 @@ public final class HelpActivity extends Activity {
   @Override
   protected void onSaveInstanceState(Bundle state) {
     String url = webView.getUrl();
-    if (url != null && url.length() > 0) {
+    if (url != null && !url.isEmpty()) {
       webView.saveState(state);
       state.putBoolean(WEBVIEW_STATE_PRESENT, true);
     }

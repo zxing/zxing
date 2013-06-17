@@ -69,7 +69,7 @@ public final class WifiGenerator implements GeneratorSource {
     StringBuilder output = new StringBuilder(100);
     output.append("WIFI:");
     output.append("S:").append(ssid).append(';');
-    if (type != null && type.length() > 0 && !"nopass".equals(type)) {
+    if (type != null && !type.isEmpty() && !"nopass".equals(type)) {
       maybeAppend(output, "T:", type);
     }
     maybeAppend(output, "P:", password);
@@ -81,14 +81,14 @@ public final class WifiGenerator implements GeneratorSource {
   }
 
   private static void maybeAppend(StringBuilder output, String prefix, String value) {
-    if (value != null && value.length() > 0) {
+    if (value != null && !value.isEmpty()) {
       output.append(prefix).append(value).append(';');
     }
   }
 
   private static String parseTextField(String name, HasText textBox) throws GeneratorException {
     String input = textBox.getText();
-    if (input.length() < 1) {
+    if (input.isEmpty()) {
       return "";
     }
     if (input.contains("\n")) {
@@ -99,7 +99,7 @@ public final class WifiGenerator implements GeneratorSource {
   
   private String getSsidField() throws GeneratorException {
     String input = ssid.getText();
-    if (input.length() < 1) {
+    if (input.isEmpty()) {
       throw new GeneratorException("SSID must be at least 1 character.");
     }
     String parsed = parseTextField("SSID", ssid);

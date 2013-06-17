@@ -46,7 +46,7 @@ public final class DataMatrixWriter implements Writer {
   @Override
   public BitMatrix encode(String contents, BarcodeFormat format, int width, int height, Map<EncodeHintType,?> hints) {
 
-    if (contents.length() == 0) {
+    if (contents.isEmpty()) {
       throw new IllegalArgumentException("Found empty contents");
     }
     

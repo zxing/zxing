@@ -278,7 +278,7 @@ public final class VCardResultParser extends ResultParser {
     List<String> result = new ArrayList<String>(lists.size());
     for (List<String> list : lists) {
       String value = list.get(0);
-      if (value != null && value.length() > 0) {
+      if (value != null && !value.isEmpty()) {
         result.add(value);
       }
     }

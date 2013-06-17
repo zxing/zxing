@@ -198,7 +198,7 @@ public final class CalendarEventGenerator implements GeneratorSource {
 
   private String getEventNameField() throws GeneratorException {
     String inputName = eventName.getText();
-    if (inputName.length() < 1) {
+    if (inputName.isEmpty()) {
       throw new GeneratorException("Event name must be at least 1 character.");
     }
     if (inputName.contains("\n")) {
@@ -216,7 +216,7 @@ public final class CalendarEventGenerator implements GeneratorSource {
 
   private String getLocationField() throws GeneratorException {
     String locationString = location.getText();
-    if (locationString.length() < 1) {
+    if (locationString.isEmpty()) {
       return "";
     }
     if (locationString.contains("\n")) {
@@ -228,7 +228,7 @@ public final class CalendarEventGenerator implements GeneratorSource {
 
   private String getDescriptionField() throws GeneratorException {
     String descriptionString = description.getText();
-    if (descriptionString.length() < 1) {
+    if (descriptionString.isEmpty()) {
       return "";
     }
     if (descriptionString.contains("\n")) {

@@ -44,7 +44,7 @@ public final class EmailAddressResultParser extends ResultParser {
       String subject = null;
       String body = null;
       if (nameValues != null) {
-        if (emailAddress.length() == 0) {
+        if (emailAddress.isEmpty()) {
           emailAddress = nameValues.get("to");
         }
         subject = nameValues.get("subject");

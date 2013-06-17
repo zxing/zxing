@@ -262,7 +262,7 @@ public abstract class ResultHandler {
     StringBuilder aggregatedNotes = new StringBuilder();
     if (urls != null) {
       for (String url : urls) {
-        if (url != null && url.length() > 0) {
+        if (url != null && !url.isEmpty()) {
           aggregatedNotes.append('\n').append(url);
         }
       }
@@ -274,7 +274,7 @@ public abstract class ResultHandler {
     }
     if (nicknames != null) {
       for (String nickname : nicknames) {
-        if (nickname != null && nickname.length() > 0) {
+        if (nickname != null && !nickname.isEmpty()) {
           aggregatedNotes.append('\n').append(nickname);
         }
       }
@@ -371,7 +371,7 @@ public abstract class ResultHandler {
   final void sendMMSFromUri(String uri, String subject, String body) {
     Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse(uri));
     // The Messaging app needs to see a valid subject or else it will treat this an an SMS.
-    if (subject == null || subject.length() == 0) {
+    if (subject == null || subject.isEmpty()) {
       putExtra(intent, "subject", activity.getString(R.string.msg_default_mms_subject));
     } else {
       putExtra(intent, "subject", subject);
@@ -399,9 +399,9 @@ public abstract class ResultHandler {
    * @param address The address to find
    * @param title An optional title, e.g. the name of the business at this address
    */
-  final void searchMap(String address, CharSequence title) {
+  final void searchMap(String address, String title) {
     String query = address;
-    if (title != null && title.length() > 0) {
+    if (title != null && !title.isEmpty()) {
       query += " (" + title + ')';
     }
     launchIntent(new Intent(Intent.ACTION_VIEW, Uri.parse("geo:0,0?q=" + Uri.encode(query))));
@@ -510,7 +510,7 @@ public abstract class ResultHandler {
   }
 
   private static void putExtra(Intent intent, String key, String value) {
-    if (value != null && value.length() > 0) {
+    if (value != null && !value.isEmpty()) {
       intent.putExtra(key, value);
     }
   }
@@ -519,7 +519,7 @@ public abstract class ResultHandler {
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
     String customProductSearch = prefs.getString(PreferencesActivity.KEY_CUSTOM_PRODUCT_SEARCH,
         null);
-    if (customProductSearch != null && customProductSearch.trim().length() == 0) {
+    if (customProductSearch != null && customProductSearch.trim().isEmpty()) {
       return null;
     }
     return customProductSearch;

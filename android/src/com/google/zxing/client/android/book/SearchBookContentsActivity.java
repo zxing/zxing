@@ -121,7 +121,7 @@ public final class SearchBookContentsActivity extends Activity {
     queryTextView = (EditText) findViewById(R.id.query_text_view);
 
     String initialQuery = intent.getStringExtra(Intents.SearchBookContents.QUERY);
-    if (initialQuery != null && initialQuery.length() > 0) {
+    if (initialQuery != null && !initialQuery.isEmpty()) {
       // Populate the search box but don't trigger the search
       queryTextView.setText(initialQuery);
     }
@@ -155,7 +155,7 @@ public final class SearchBookContentsActivity extends Activity {
 
   private void launchSearch() {
     String query = queryTextView.getText().toString();
-    if (query != null && query.length() > 0) {
+    if (query != null && !query.isEmpty()) {
       NetworkTask oldTask = networkTask;
       if (oldTask != null) {
         oldTask.cancel(true);
@@ -244,25 +244,25 @@ public final class SearchBookContentsActivity extends Activity {
       try {
         String pageId = json.getString("page_id");
         String pageNumber = json.getString("page_number");
-        if (pageNumber.length() > 0) {
-          pageNumber = getString(R.string.msg_sbc_page) + ' ' + pageNumber;
-        } else {
+        if (pageNumber.isEmpty()) {
           // This can happen for text on the jacket, and possibly other reasons.
           pageNumber = getString(R.string.msg_sbc_unknown_page);
+        } else {
+          pageNumber = getString(R.string.msg_sbc_page) + ' ' + pageNumber;
         }
 
         // Remove all HTML tags and encoded characters. Ideally the server would do this.
         String snippet = json.optString("snippet_text");
         boolean valid = true;
-        if (snippet.length() > 0) {
+        if (snippet.isEmpty()) {
+          snippet = '(' + getString(R.string.msg_sbc_snippet_unavailable) + ')';
+          valid = false;
+        } else {
           snippet = TAG_PATTERN.matcher(snippet).replaceAll("");
           snippet = LT_ENTITY_PATTERN.matcher(snippet).replaceAll("<");
           snippet = GT_ENTITY_PATTERN.matcher(snippet).replaceAll(">");
           snippet = QUOTE_ENTITY_PATTERN.matcher(snippet).replaceAll("'");
           snippet = QUOT_ENTITY_PATTERN.matcher(snippet).replaceAll("\"");
-        } else {
-          snippet = '(' + getString(R.string.msg_sbc_snippet_unavailable) + ')';
-          valid = false;
         }
         return new SearchBookContentsResult(pageId, pageNumber, snippet, valid);
       } catch (JSONException e) {

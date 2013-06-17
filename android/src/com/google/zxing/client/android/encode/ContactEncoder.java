@@ -47,7 +47,7 @@ abstract class ContactEncoder {
       return null;
     }
     String result = s.trim();
-    return result.length() == 0 ? null : result;
+    return result.isEmpty() ? null : result;
   }
 
   static void doAppend(StringBuilder newContents,
@@ -78,7 +78,7 @@ abstract class ContactEncoder {
     Collection<String> uniques = new HashSet<String>(2);
     for (String value : values) {
       String trimmed = trim(value);
-      if (trimmed != null && trimmed.length() > 0 && !uniques.contains(trimmed)) {
+      if (trimmed != null && !trimmed.isEmpty() && !uniques.contains(trimmed)) {
         newContents.append(prefix).append(':').append(fieldFormatter.format(trimmed)).append(terminator);
         String display = formatter == null ? trimmed : formatter.format(trimmed);
         newDisplayContents.append(display).append('\n');

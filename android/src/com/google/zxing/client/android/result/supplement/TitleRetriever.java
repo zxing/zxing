@@ -55,7 +55,7 @@ final class TitleRetriever extends SupplementalInfoRetriever {
       Matcher m = TITLE_PATTERN.matcher(contents);
       if (m.find()) {
         String title = m.group(1);
-        if (title != null && title.length() > 0) {
+        if (title != null && !title.isEmpty()) {
           if (title.length() > MAX_TITLE_LEN) {
             title = title.substring(0, MAX_TITLE_LEN) + "...";
           }

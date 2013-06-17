@@ -50,7 +50,7 @@ public final class EmailGenerator implements GeneratorSource {
 
   private String getEmailField() throws GeneratorException {
     String input = email.getText();
-    if (input.length() < 1) {
+    if (input.isEmpty()) {
       throw new GeneratorException("Email must be present.");
     }
     Validators.validateEmail(input);

@@ -49,7 +49,7 @@ public final class TextGenerator implements GeneratorSource {
   
   String getTextField() throws GeneratorException {
     String input = text.getText();
-    if (input.length() == 0) {
+    if (input.isEmpty()) {
       throw new GeneratorException("Text should be at least 1 character.");
     }
     return input;

@@ -94,7 +94,7 @@ final class BookResultInfoRetriever extends SupplementalInfoRetriever {
     Collection<String> newTexts = new ArrayList<String>();
     maybeAddText(title, newTexts);
     maybeAddTextSeries(authors, newTexts);
-    maybeAddText(pages == null || pages.length() == 0 ? null : pages + "pp.", newTexts);
+    maybeAddText(pages == null || pages.isEmpty() ? null : pages + "pp.", newTexts);
     
     String baseBookUri = "http://www.google." + LocaleManager.getBookSearchCountryTLD(context)
         + "/search?tbm=bks&source=zxing&q=";
