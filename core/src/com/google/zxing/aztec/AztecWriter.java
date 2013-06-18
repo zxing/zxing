@@ -32,7 +32,7 @@ public final class AztecWriter implements Writer {
 
   @Override
   public BitMatrix encode(String contents, BarcodeFormat format, int width, int height) {
-    return encode(contents, format, DEFAULT_CHARSET, Encoder.DEFAULT_EC_PERCENT);
+    return encode(contents, format, width, height, DEFAULT_CHARSET, Encoder.DEFAULT_EC_PERCENT);
   }
 
   @Override
@@ -41,16 +41,51 @@ public final class AztecWriter implements Writer {
     Number eccPercent = hints == null ? null : (Number) hints.get(EncodeHintType.ERROR_CORRECTION);
     return encode(contents, 
                   format, 
+                  width,
+                  height,
                   charset == null ? DEFAULT_CHARSET : Charset.forName(charset),
                   eccPercent == null ? Encoder.DEFAULT_EC_PERCENT : eccPercent.intValue());
   }
 
-  private static BitMatrix encode(String contents, BarcodeFormat format, Charset charset, int eccPercent) {
+  private static BitMatrix encode(String contents,
+                                  BarcodeFormat format,
+                                  int width,
+                                  int height,
+                                  Charset charset,
+                                  int eccPercent) {
     if (format != BarcodeFormat.AZTEC) {
       throw new IllegalArgumentException("Can only encode AZTEC, but got " + format);
     }
     AztecCode aztec = Encoder.encode(contents.getBytes(charset), eccPercent);
-    return aztec.getMatrix();
+    return renderResult(aztec, width, height);
+  }
+
+  private static BitMatrix renderResult(AztecCode code, int width, int height) {
+    BitMatrix input = code.getMatrix();
+    if (input == null) {
+      throw new IllegalStateException();
+    }
+    int inputWidth = input.getWidth();
+    int inputHeight = input.getHeight();
+    int outputWidth = Math.max(width, inputWidth);
+    int outputHeight = Math.max(height, inputHeight);
+
+    int multiple = Math.min(outputWidth / inputWidth, outputHeight / inputHeight);
+    int leftPadding = (outputWidth - (inputWidth * multiple)) / 2;
+    int topPadding = (outputHeight - (inputHeight * multiple)) / 2;
+
+    BitMatrix output = new BitMatrix(outputWidth, outputHeight);
+
+    for (int inputY = 0, outputY = topPadding; inputY < inputHeight; inputY++, outputY += multiple) {
+      // Write the contents of this row of the barcode
+      for (int inputX = 0, outputX = leftPadding; inputX < inputWidth; inputX++, outputX += multiple) {
+        if (input.get(inputX, inputY)) {
+          output.setRegion(outputX, outputY, multiple, multiple);
+        }
+      }
+    }
+
+    return output;
   }
 
 }

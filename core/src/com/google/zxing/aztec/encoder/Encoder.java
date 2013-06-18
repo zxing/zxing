@@ -29,20 +29,8 @@ import com.google.zxing.common.reedsolomon.ReedSolomonEncoder;
 public final class Encoder {
 
   public static final int DEFAULT_EC_PERCENT = 33; // default minimal percentage of error check words
-  private static final int[] NB_BITS; // total bits per compact symbol for a given number of layers
-  private static final int[] NB_BITS_COMPACT; // total bits per full symbol for a given number of layers
+  private static final int MAX_NB_BITS = 32;
 
-  static {
-    NB_BITS_COMPACT = new int[5];
-    for (int i = 1; i < NB_BITS_COMPACT.length; i++) {
-      NB_BITS_COMPACT[i] = (88 + 16 * i) * i;
-    }
-    NB_BITS = new int[33];
-    for (int i = 1; i < NB_BITS.length; i++) {
-      NB_BITS[i] = (112 + 16 * i) * i;
-    }
-  }
-  
   private static final int[] WORD_SIZE = {
     4, 6, 6, 8, 8, 8, 8, 8, 8, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,
     12, 12, 12, 12, 12, 12, 12, 12, 12, 12
@@ -65,8 +53,8 @@ public final class Encoder {
    * Encodes the given binary content as an Aztec symbol
    * 
    * @param data input data string
-   * @param minECCPercent minimal percentange of error check words (According to ISO/IEC 24778:2008,
-   * a minimum of 23% + 3 words is recommended)
+   * @param minECCPercent minimal percentage of error check words (According to ISO/IEC 24778:2008,
+   *                      a minimum of 23% + 3 words is recommended)
    * @return Aztec symbol matrix with metadata
    */
   public static AztecCode encode(byte[] data, int minECCPercent) {
@@ -77,56 +65,46 @@ public final class Encoder {
     // stuff bits and choose symbol size
     int eccBits = bits.getSize() * minECCPercent / 100 + 11;
     int totalSizeBits = bits.getSize() + eccBits;
+    boolean compact;
     int layers;
+    int totalBitsInLayer;
     int wordSize = 0;
-    int totalSymbolBits = 0;
     BitArray stuffedBits = null;
-    for (layers = 1; layers < NB_BITS_COMPACT.length; layers++) {
-      if (NB_BITS_COMPACT[layers] >= totalSizeBits) {
-        if (wordSize != WORD_SIZE[layers]) {
-          wordSize = WORD_SIZE[layers];
-          stuffedBits = stuffBits(bits, wordSize);
-        }
-        totalSymbolBits = NB_BITS_COMPACT[layers];
-        if (stuffedBits.getSize() + eccBits <= NB_BITS_COMPACT[layers]) {
-          break;
-        }
+    // We look at the possible table sizes in the order Compact1, Compact2, Compact3,
+    // Compact4, Normal4,...  Normal(i) for i < 4 isn't typically used since Compact(i+1)
+    // is the same size, but has more data.
+    for (int i = 0; ; i++) {
+      if (i > MAX_NB_BITS) {
+        throw new IllegalArgumentException("Data too large for an Aztec code");
       }
-    }
-    boolean compact = true;
-    if (layers == NB_BITS_COMPACT.length) {
-      compact = false;
-      for (layers = 1; layers < NB_BITS.length; layers++) {
-        if (NB_BITS[layers] >= totalSizeBits) {
-          if (wordSize != WORD_SIZE[layers]) {
-            wordSize = WORD_SIZE[layers];
-            stuffedBits = stuffBits(bits, wordSize);
-          }
-          totalSymbolBits = NB_BITS[layers];
-          if (stuffedBits.getSize() + eccBits <= NB_BITS[layers]) {
-            break;
-          }
-        }
+      compact = i <= 3;
+      layers = compact ? i + 1 : i;
+      totalBitsInLayer = totalBitsInLayer(layers, compact);
+      if (totalSizeBits > totalBitsInLayer) {
+        continue;
       }
-    }
-    if (layers == NB_BITS.length) {
-      throw new IllegalArgumentException("Data too large for an Aztec code");
+      // [Re]stuff the bits if this is the first opportunity, or if the
+      // wordSize has changed
+      if (wordSize != WORD_SIZE[layers]) {
+        wordSize = WORD_SIZE[layers];
+        stuffedBits = stuffBits(bits, wordSize);
+      }
+      int usableBitsInLayers = totalBitsInLayer - (totalBitsInLayer % wordSize);
+      if (stuffedBits.getSize() + eccBits <= usableBitsInLayers) {
+        break;
+      }
     }
 
-    // pad the end
-    int messageSizeInWords = (stuffedBits.getSize() + wordSize - 1) / wordSize;
-    for (int i = messageSizeInWords * wordSize - stuffedBits.getSize(); i > 0; i--) {
-      stuffedBits.appendBit(true);
-    }
+    int messageSizeInWords = stuffedBits.getSize() / wordSize;
 
     // generate check words
     ReedSolomonEncoder rs = new ReedSolomonEncoder(getGF(wordSize));
-    int totalSizeInFullWords = totalSymbolBits / wordSize;
-    int[] messageWords = bitsToWords(stuffedBits, wordSize, totalSizeInFullWords);
-    rs.encode(messageWords, totalSizeInFullWords - messageSizeInWords);
+    int totalWordsInLayer = totalBitsInLayer / wordSize;
+    int[] messageWords = bitsToWords(stuffedBits, wordSize, totalWordsInLayer);
+    rs.encode(messageWords, totalWordsInLayer - messageSizeInWords);
     
     // convert to bit array and pad in the beginning
-    int startPad = totalSymbolBits % wordSize;
+    int startPad = totalBitsInLayer % wordSize;
     BitArray messageBits = new BitArray();
     messageBits.appendBits(0, startPad);
     for (int messageWord : messageWords) {
@@ -158,7 +136,7 @@ public final class Encoder {
     }
     BitMatrix matrix = new BitMatrix(matrixSize);
     
-    // draw mode and data bits
+    // draw data bits
     for (int i = 0, rowOffset = 0; i < layers; i++) {
       int rowSize = compact ? (layers - i) * 4 + 9 : (layers - i) * 4 + 12;
       for (int j = 0; j < rowSize; j++) {
@@ -180,6 +158,8 @@ public final class Encoder {
       }
       rowOffset += rowSize * 8;
     }
+
+    // draw mode message
     drawModeMessage(matrix, compact, matrixSize, modeMessage);
     
     // draw alignment marks
@@ -238,49 +218,50 @@ public final class Encoder {
   }
   
   private static void drawModeMessage(BitMatrix matrix, boolean compact, int matrixSize, BitArray modeMessage) {
+    int center = matrixSize / 2;
     if (compact) {
       for (int i = 0; i < 7; i++) {
+        int offset = center - 3 + i;
         if (modeMessage.get(i)) {
-          matrix.set(matrixSize / 2 - 3 + i, matrixSize / 2 - 5);
+          matrix.set(offset, center - 5);
         }
         if (modeMessage.get(i + 7)) {
-          matrix.set(matrixSize / 2 + 5, matrixSize / 2 - 3 + i);
+          matrix.set(center + 5, offset);
         }
         if (modeMessage.get(20 - i)) {
-          matrix.set(matrixSize / 2 - 3 + i, matrixSize / 2 + 5);
+          matrix.set(offset, center + 5);
         }
         if (modeMessage.get(27 - i)) {
-          matrix.set(matrixSize / 2 - 5, matrixSize / 2 - 3 + i);
+          matrix.set(center - 5, offset);
         }
       }
     } else {
       for (int i = 0; i < 10; i++) {
+        int offset = center - 5 + i + i / 5;
         if (modeMessage.get(i)) {
-          matrix.set(matrixSize / 2 - 5 + i + i / 5, matrixSize / 2 - 7);
+          matrix.set(offset, center - 7);
         }
         if (modeMessage.get(i + 10)) {
-          matrix.set(matrixSize / 2 + 7, matrixSize / 2 - 5 + i + i / 5);
+          matrix.set(center + 7, offset);
         }
         if (modeMessage.get(29 - i)) {
-          matrix.set(matrixSize / 2 - 5 + i + i / 5, matrixSize / 2 + 7);
+          matrix.set(offset, center + 7);
         }
         if (modeMessage.get(39 - i)) {
-          matrix.set(matrixSize / 2 - 7, matrixSize / 2 - 5 + i + i / 5);
+          matrix.set(center - 7, offset);
         }
       }
     }
   }
   
-  private static BitArray generateCheckWords(BitArray stuffedBits, int totalSymbolBits, int wordSize) {
-    int messageSizeInWords = (stuffedBits.getSize() + wordSize - 1) / wordSize;
-    for (int i = messageSizeInWords * wordSize - stuffedBits.getSize(); i > 0; i--) {
-      stuffedBits.appendBit(true);
-    }
+  private static BitArray generateCheckWords(BitArray stuffedBits, int totalBits, int wordSize) {
+    // stuffedBits is guaranteed to be a multiple of the wordSize, so no padding needed
+    int messageSizeInWords = stuffedBits.getSize() / wordSize;
     ReedSolomonEncoder rs = new ReedSolomonEncoder(getGF(wordSize));
-    int totalSizeInFullWords = totalSymbolBits / wordSize;
-    int[] messageWords = bitsToWords(stuffedBits, wordSize, totalSizeInFullWords);
-    rs.encode(messageWords, totalSizeInFullWords - messageSizeInWords);
-    int startPad = totalSymbolBits % wordSize;
+    int totalWords = totalBits / wordSize;
+    int[] messageWords = bitsToWords(stuffedBits, wordSize, totalWords);
+    rs.encode(messageWords, totalWords - messageSizeInWords);
+    int startPad = totalBits % wordSize;
     BitArray messageBits = new BitArray();
     messageBits.appendBits(0, startPad);
     for (int messageWord : messageWords) {
@@ -343,22 +324,10 @@ public final class Encoder {
         out.appendBits(word, wordSize);
       }
     }
-    
-    // 2. pad last word to wordSize
-    n = out.getSize();
-    int remainder = n % wordSize;
-    if (remainder != 0) {
-      int j = 1;
-      for (int i = 0; i < remainder; i++) {
-        if (!out.get(n - 1 - i)) {
-          j = 0;
-        }
-      }
-      for (int i = remainder; i < wordSize - 1; i++) {
-        out.appendBit(true);
-      }
-      out.appendBit(j == 0);
-    }
     return out;
+  }
+
+  private static int totalBitsInLayer(int layers, boolean compact) {
+    return ((compact ? 88 : 112) + 16 * layers) * layers;
   }
 }
